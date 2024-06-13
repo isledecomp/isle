@@ -25,8 +25,8 @@ enum NotificationId {
 	c_notificationDrag = 14,
 	c_notificationTimer = 15, // 100d6aa0
 	c_notificationControl = 17,
-	c_notificationEndAnim = 18, // 100d7e80
-	c_notificationType19 = 19,  // 100d6230
+	c_notificationEndAnim = 18,    // 100d7e80
+	c_notificationPathStruct = 19, // 100d6230
 	c_notificationType20 = 20,
 	c_notificationNewPresenter = 21,
 	c_notificationType22 = 22,
@@ -48,9 +48,8 @@ public:
 
 	inline NotificationId GetNotification() const { return m_type; }
 	inline MxCore* GetSender() const { return m_sender; }
-	inline NotificationId GetType() const { return m_type; }
 
-	inline void SetType(NotificationId p_type) { m_type = p_type; }
+	inline void SetNotification(NotificationId p_type) { m_type = p_type; }
 	inline void SetSender(MxCore* p_sender) { m_sender = p_sender; }
 
 protected:

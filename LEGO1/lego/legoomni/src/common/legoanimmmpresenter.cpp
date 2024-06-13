@@ -216,7 +216,7 @@ MxLong LegoAnimMMPresenter::Notify(MxParam& p_param)
 {
 	AUTOLOCK(m_criticalSection);
 
-	if (((MxNotificationParam&) p_param).GetType() == c_notificationEndAction &&
+	if (((MxNotificationParam&) p_param).GetNotification() == c_notificationEndAction &&
 		((MxNotificationParam&) p_param).GetSender() == m_presenter) {
 		m_presenter = NULL;
 	}

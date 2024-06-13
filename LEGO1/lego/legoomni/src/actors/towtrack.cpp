@@ -89,7 +89,7 @@ MxLong TowTrack::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 }
 
 // STUB: LEGO1 0x1004d330
-MxLong TowTrack::HandleNotification19(MxType19NotificationParam& p_param)
+MxLong TowTrack::HandlePathStruct(LegoPathStructEvent& p_param)
 {
 	// TODO
 	return 0;

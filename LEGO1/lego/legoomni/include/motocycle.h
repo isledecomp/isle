@@ -23,12 +23,12 @@ public:
 		return !strcmp(p_name, Motocycle::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override;                 // vtable+0x18
-	void VTable0x70(float p_float) override;                          // vtable+0x70
-	MxLong HandleClick() override;                                    // vtable+0xcc
-	MxLong HandleControl(LegoControlManagerEvent& p_param) override;  // vtable+0xd4
-	MxLong HandleNotification19(MxType19NotificationParam&) override; // vtable+0xdc
-	void Exit() override;                                             // vtable+0xe4
+	MxResult Create(MxDSAction& p_dsAction) override;                // vtable+0x18
+	void VTable0x70(float p_float) override;                         // vtable+0x70
+	MxLong HandleClick() override;                                   // vtable+0xcc
+	MxLong HandleControl(LegoControlManagerEvent& p_param) override; // vtable+0xd4
+	MxLong HandlePathStruct(LegoPathStructEvent&) override;          // vtable+0xdc
+	void Exit() override;                                            // vtable+0xe4
 
 	void FUN_10035e10();
 

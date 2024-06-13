@@ -48,27 +48,27 @@ void IslePathActor::Destroy(MxBool p_fromDestructor)
 // FUNCTION: LEGO1 0x1001a2c0
 MxLong IslePathActor::Notify(MxParam& p_param)
 {
-	MxLong ret = 0;
+	MxLong result = 0;
 
-	switch (((MxNotificationParam&) p_param).GetType()) {
+	switch (((MxNotificationParam&) p_param).GetNotification()) {
 	case c_notificationType0:
-		ret = HandleNotification0();
+		result = HandleNotification0();
 		break;
 	case c_notificationClick:
-		ret = HandleClick();
+		result = HandleClick();
 		break;
 	case c_notificationControl:
-		ret = HandleControl((LegoControlManagerEvent&) p_param);
+		result = HandleControl((LegoControlManagerEvent&) p_param);
 		break;
 	case c_notificationEndAnim:
-		ret = HandleEndAnim((LegoEndAnimNotificationParam&) p_param);
+		result = HandleEndAnim((LegoEndAnimNotificationParam&) p_param);
 		break;
-	case c_notificationType19:
-		ret = HandleNotification19((MxType19NotificationParam&) p_param);
+	case c_notificationPathStruct:
+		result = HandlePathStruct((LegoPathStructEvent&) p_param);
 		break;
 	}
 
-	return ret;
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1001a350

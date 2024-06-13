@@ -10,6 +10,7 @@
 #include "legoinputmanager.h"
 #include "legomain.h"
 #include "legonamedtexture.h"
+#include "legopathstruct.h"
 #include "legosoundmanager.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
@@ -20,7 +21,6 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxstreamer.h"
-#include "mxtype19notificationparam.h"
 #include "mxtypes.h"
 #include "mxutilities.h"
 #include "mxvariabletable.h"
@@ -367,7 +367,7 @@ void PlayCamAnim(LegoPathActor* p_actor, MxBool p_unused, MxU32 p_location, MxBo
 	MxLong result = 0;
 
 	if (world != NULL) {
-		MxType19NotificationParam param(c_notificationType19, p_actor, 0x43, p_location);
+		LegoPathStructEvent param(c_notificationPathStruct, p_actor, LegoPathStruct::c_camAnim, p_location);
 		result = world->Notify(param);
 	}
 

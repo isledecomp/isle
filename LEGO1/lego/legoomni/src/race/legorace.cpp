@@ -36,7 +36,7 @@ LegoRace::LegoRace()
 }
 
 // FUNCTION: LEGO1 0x10015b70
-MxLong LegoRace::HandleType19Notification(MxType19NotificationParam&)
+MxLong LegoRace::HandlePathStruct(LegoPathStructEvent&)
 {
 	return 0;
 }
@@ -101,8 +101,8 @@ MxLong LegoRace::Notify(MxParam& p_param)
 		case c_notificationClick:
 			result = HandleClick((LegoEventNotificationParam&) p_param);
 			break;
-		case c_notificationType19:
-			result = HandleType19Notification((MxType19NotificationParam&) p_param);
+		case c_notificationPathStruct:
+			result = HandlePathStruct((LegoPathStructEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
 			GameState()->SwitchArea(m_destLocation);

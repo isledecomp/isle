@@ -9,7 +9,7 @@
 class LegoControlManagerEvent;
 class LegoEndAnimNotificationParam;
 class LegoWorld;
-class MxType19NotificationParam;
+class LegoPathStructEvent;
 
 // VTABLE: LEGO1 0x100d4398
 // SIZE 0x160
@@ -119,7 +119,7 @@ public:
 	virtual MxLong HandleEndAnim(LegoEndAnimNotificationParam&) { return 0; } // vtable+0xd8
 
 	// FUNCTION: LEGO1 0x10002e00
-	virtual MxLong HandleNotification19(MxType19NotificationParam&) { return 0; } // vtable+0xdc
+	virtual MxLong HandlePathStruct(LegoPathStructEvent&) { return 0; } // vtable+0xdc
 
 	virtual void Enter();                                                                        // vtable+0xe0
 	virtual void Exit();                                                                         // vtable+0xe4

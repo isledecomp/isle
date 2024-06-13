@@ -26,7 +26,7 @@ MxLong JetskiRace::HandleClick(LegoEventNotificationParam&)
 }
 
 // STUB: LEGO1 0x100166a0
-MxLong JetskiRace::HandleType19Notification(MxType19NotificationParam&)
+MxLong JetskiRace::HandlePathStruct(LegoPathStructEvent&)
 {
 	return 0;
 }

@@ -10,7 +10,6 @@
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
-#include "mxtype19notificationparam.h"
 #include "scripts.h"
 
 DECOMP_SIZE_ASSERT(LegoPathStructBase, 0x0c)
@@ -52,7 +51,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 		case c_d: {
 			p_actor->VTable0x58(p_data);
 
-			MxType19NotificationParam param(c_notificationType19, p_actor, m_name[2], p_data);
+			LegoPathStructEvent param(c_notificationPathStruct, p_actor, m_name[2], p_data);
 			p_actor->Notify(param);
 
 			LegoWorld* world = CurrentWorld();
@@ -68,7 +67,6 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 			break;
 		case c_h: {
 			LegoHideAnimPresenter* presenter = m_world->GetHideAnimPresenter();
-
 			if (presenter != NULL) {
 				presenter->FUN_1006db40(p_data * 100);
 			}
@@ -82,7 +80,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 		case c_s: {
 			LegoWorld* world = CurrentWorld();
 			if (world != NULL) {
-				MxType19NotificationParam param(c_notificationType19, p_actor, m_name[2], p_data);
+				LegoPathStructEvent param(c_notificationPathStruct, p_actor, m_name[2], p_data);
 
 				if (world->Notify(param) != 0) {
 					break;
@@ -95,7 +93,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 		case c_w: {
 			LegoWorld* world = CurrentWorld();
 			if (world != NULL) {
-				MxType19NotificationParam param(c_notificationType19, p_actor, m_name[2], p_data);
+				LegoPathStructEvent param(c_notificationPathStruct, p_actor, m_name[2], p_data);
 				NotificationManager()->Send(world, param);
 			}
 			break;

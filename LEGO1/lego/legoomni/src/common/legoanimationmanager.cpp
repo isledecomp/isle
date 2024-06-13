@@ -1366,11 +1366,11 @@ LegoTranInfo* LegoAnimationManager::GetTranInfo(MxU32 p_index)
 MxLong LegoAnimationManager::Notify(MxParam& p_param)
 {
 	if (((MxNotificationParam&) p_param).GetSender() == this) {
-		if (((MxNotificationParam&) p_param).GetType() == c_notificationEndAnim) {
+		if (((MxNotificationParam&) p_param).GetNotification() == c_notificationEndAnim) {
 			FUN_100605e0(m_unk0x18, TRUE, NULL, TRUE, NULL, FALSE, TRUE, TRUE, TRUE);
 		}
 	}
-	else if (((MxNotificationParam&) p_param).GetType() == c_notificationEndAnim && m_tranInfoList != NULL) {
+	else if (((MxNotificationParam&) p_param).GetNotification() == c_notificationEndAnim && m_tranInfoList != NULL) {
 		LegoTranInfoListCursor cursor(m_tranInfoList);
 		LegoTranInfo* tranInfo;
 

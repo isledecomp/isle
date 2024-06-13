@@ -103,7 +103,7 @@ MxLong RegistrationBook::Notify(MxParam& p_param)
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetType()) {
+		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationEndAction:
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;
@@ -117,7 +117,7 @@ MxLong RegistrationBook::Notify(MxParam& p_param)
 		case c_notificationControl:
 			result = HandleControl((LegoControlManagerEvent&) p_param);
 			break;
-		case c_notificationType19:
+		case c_notificationPathStruct:
 			result = HandleNotification19(p_param);
 			break;
 		case c_notificationTransitioned:

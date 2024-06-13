@@ -58,7 +58,7 @@ MxLong ElevatorBottom::Notify(MxParam& p_param)
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetType()) {
+		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationControl:
 			ret = HandleControl((LegoControlManagerEvent&) p_param);
 			break;

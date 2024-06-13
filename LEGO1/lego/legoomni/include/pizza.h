@@ -18,7 +18,7 @@ public:
 		undefined2 m_unk0x00;      // 0x00
 		MxU8 m_id;                 // 0x02
 		undefined m_unk0x03[0x15]; // 0x03
-		MxU16 m_score;             // 0x18
+		MxS16 m_score;             // 0x18
 		undefined m_unk0x18[6];    // 0x1a
 	};
 
@@ -39,7 +39,7 @@ public:
 
 	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
 
-	inline MxU16 GetScore(MxU8 p_id) { return GetState(p_id)->m_score; }
+	inline MxS16 GetHighScore(MxU8 p_id) { return GetState(p_id)->m_score; }
 
 	// SYNTHETIC: LEGO1 0x10039350
 	// PizzaMissionState::`scalar deleting destructor'
