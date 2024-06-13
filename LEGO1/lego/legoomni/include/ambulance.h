@@ -87,7 +87,7 @@ public:
 
 	MxResult Create(MxDSAction& p_dsAction) override;                         // vtable+0x18
 	void Destroy(MxBool p_fromDestructor) override;                           // vtable+0x1c
-	void VTable0x70(float p_float) override;                                  // vtable+0x70
+	void VTable0x70(float p_time) override;                                   // vtable+0x70
 	MxLong HandleClick() override;                                            // vtable+0xcc
 	MxLong HandleControl(LegoControlManagerEvent& p_param) override;          // vtable+0xd4
 	MxLong HandleNotification19(MxType19NotificationParam& p_param) override; // vtable+0xdc
@@ -119,7 +119,7 @@ private:
 	MxS16 m_unk0x172;                   // 0x172
 	IsleScript::Script m_lastAction;    // 0x174
 	IsleScript::Script m_lastAnimation; // 0x178
-	MxFloat m_unk0x17c;                 // 0x17c
+	MxFloat m_fuel;                     // 0x17c
 	MxFloat m_time;                     // 0x180
 };
 

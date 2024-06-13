@@ -16,6 +16,10 @@ DECOMP_SIZE_ASSERT(CursorVariable, 0x24)
 DECOMP_SIZE_ASSERT(WhoAmIVariable, 0x24)
 DECOMP_SIZE_ASSERT(CustomizeAnimFileVariable, 0x24)
 
+// GLOBAL: LEGO1 0x100f39b8
+// STRING: LEGO1 0x100f39ac
+const char* g_varAMBULSPEED = "ambulSPEED";
+
 // GLOBAL: LEGO1 0x100f39bc
 // STRING: LEGO1 0x100f39a0
 const char* g_varAMBULFUEL = "ambulFUEL";

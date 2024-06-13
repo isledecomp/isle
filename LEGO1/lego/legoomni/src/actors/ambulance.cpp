@@ -7,6 +7,7 @@
 #include "legoanimationmanager.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
+#include "legonavcontroller.h"
 #include "legoutils.h"
 #include "legovariables.h"
 #include "legoworld.h"
@@ -37,7 +38,7 @@ Ambulance::Ambulance()
 	m_lastAction = IsleScript::c_noneIsle;
 	m_unk0x172 = 0;
 	m_lastAnimation = IsleScript::c_noneIsle;
-	m_unk0x17c = 1.0;
+	m_fuel = 1.0;
 }
 
 // FUNCTION: LEGO1 0x10035f90
@@ -75,16 +76,34 @@ MxResult Ambulance::Create(MxDSAction& p_dsAction)
 	}
 
 	VariableTable()->SetVariable(g_varAMBULFUEL, "1.0");
-	m_unk0x17c = 1.0;
+	m_fuel = 1.0;
 	m_time = Timer()->GetTime();
 	return result;
 }
 
-// STUB: LEGO1 0x10036300
-void Ambulance::VTable0x70(float p_float)
+// FUNCTION: LEGO1 0x10036300
+void Ambulance::VTable0x70(float p_time)
 {
-	// TODO
-	IslePathActor::VTable0x70(p_float);
+	IslePathActor::VTable0x70(p_time);
+
+	if (UserActor() == this) {
+		char buf[200];
+		float speed = abs(m_worldSpeed);
+		float maxLinearVel = NavController()->GetMaxLinearVel();
+
+		sprintf(buf, "%g", speed / maxLinearVel);
+		VariableTable()->SetVariable(g_varAMBULSPEED, buf);
+
+		m_fuel += (p_time - m_time) * -3.333333333e-06f;
+		if (m_fuel < 0) {
+			m_fuel = 0;
+		}
+
+		m_time = p_time;
+
+		sprintf(buf, "%g", m_fuel);
+		VariableTable()->SetVariable(g_varAMBULFUEL, buf);
+	}
 }
 
 // FUNCTION: LEGO1 0x100363f0
