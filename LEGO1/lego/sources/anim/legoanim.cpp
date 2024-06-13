@@ -148,7 +148,7 @@ LegoResult LegoAnimScene::FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix)
 	Vector3 local54(localb0[2]);
 	Vector3 localb8(localb0[3]);
 
-	Mx3DPointFloat(localcc);
+	Mx3DPointFloat localcc;
 
 	localb0.SetIdentity();
 
