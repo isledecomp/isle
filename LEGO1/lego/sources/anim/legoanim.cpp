@@ -140,8 +140,8 @@ done:
 // FUNCTION: BETA10 0x10181a83
 LegoResult LegoAnimScene::FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix)
 {
-	MxMatrix(localb0);
-	MxMatrix(local4c);
+	MxMatrix localb0;
+	MxMatrix local4c;
 
 	Vector3 local5c(localb0[0]);
 	Vector3 local68(localb0[1]);
