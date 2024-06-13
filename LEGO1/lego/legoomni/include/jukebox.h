@@ -21,6 +21,8 @@ public:
 		e_torpedos
 	};
 
+	JukeBoxState() : m_music(e_pasquell), m_active(FALSE) {}
+
 	// FUNCTION: LEGO1 0x1000f310
 	inline const char* ClassName() const override // vtable+0x0c
 	{

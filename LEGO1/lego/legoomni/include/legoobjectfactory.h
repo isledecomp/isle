@@ -8,13 +8,13 @@
 	X(LegoActorPresenter)                                                                                              \
 	X(LegoWorldPresenter)                                                                                              \
 	X(LegoWorld)                                                                                                       \
-	X(LegoAnimPresenter)                                                                                               \
 	X(LegoModelPresenter)                                                                                              \
 	X(LegoTexturePresenter)                                                                                            \
 	X(LegoPhonemePresenter)                                                                                            \
 	X(LegoFlcTexturePresenter)                                                                                         \
 	X(LegoPalettePresenter)                                                                                            \
 	X(LegoPathPresenter)                                                                                               \
+	X(LegoAnimPresenter)                                                                                               \
 	X(LegoLoopingAnimPresenter)                                                                                        \
 	X(LegoLocomotionAnimPresenter)                                                                                     \
 	X(LegoHideAnimPresenter)                                                                                           \
@@ -49,6 +49,10 @@
 	X(LegoAct2)                                                                                                        \
 	X(LegoAct2State)                                                                                                   \
 	X(CarRace)                                                                                                         \
+	X(LegoRaceCarBuildState)                                                                                           \
+	X(LegoCopterBuildState)                                                                                            \
+	X(LegoDuneCarBuildState)                                                                                           \
+	X(LegoJetskiBuildState)                                                                                            \
 	X(HospitalState)                                                                                                   \
 	X(InfocenterState)                                                                                                 \
 	X(PoliceState)                                                                                                     \
@@ -61,7 +65,7 @@
 	X(PizzaMissionState)                                                                                               \
 	X(Act2Actor)                                                                                                       \
 	X(Act2Brick)                                                                                                       \
-	/*X(Act2GenActor)*/                                                                                                \
+	X(Act2GenActor)                                                                                                    \
 	X(Act2PoliceStation)                                                                                               \
 	X(Act3)                                                                                                            \
 	X(Act3State)                                                                                                       \
@@ -75,8 +79,8 @@
 	X(AmbulanceMissionState)                                                                                           \
 	X(TowTrack)                                                                                                        \
 	X(TowTrackMissionState)                                                                                            \
-	/*X(Act3Cop)*/                                                                                                     \
-	/*X(Act3Brickster)*/                                                                                               \
+	X(Act3Cop)                                                                                                         \
+	X(Act3Brickster)                                                                                                   \
 	X(Act3Shark)                                                                                                       \
 	X(BumpBouy)                                                                                                        \
 	X(Act3Actor)                                                                                                       \

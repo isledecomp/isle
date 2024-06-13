@@ -9,6 +9,8 @@
 // SIZE 0x0c
 class HelicopterState : public LegoState {
 public:
+	HelicopterState() : m_unk0x08(0) {}
+
 	// FUNCTION: LEGO1 0x1000e0d0
 	inline const char* ClassName() const override // vtable+0x0c
 	{

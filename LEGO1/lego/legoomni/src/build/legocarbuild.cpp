@@ -64,7 +64,7 @@ MxBool LegoCarBuild::Escape()
 }
 
 // FUNCTION: LEGO1 0x10025f30
-LegoVehicleBuildState::LegoVehicleBuildState(char* p_classType)
+LegoVehicleBuildState::LegoVehicleBuildState(const char* p_classType)
 {
 	m_className = p_classType;
 	m_unk0x4c = 0;

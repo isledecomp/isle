@@ -8,7 +8,7 @@
 // SIZE 0x50
 class LegoVehicleBuildState : public LegoState {
 public:
-	LegoVehicleBuildState(char* p_classType);
+	LegoVehicleBuildState(const char* p_classType);
 
 	// FUNCTION: LEGO1 0x10025ff0
 	inline const char* ClassName() const override // vtable+0x0c
@@ -48,6 +48,11 @@ public:
 	MxBool m_unk0x4e;       // 0x4e
 	MxU8 m_placedPartCount; // 0x4f
 };
+
+typedef LegoVehicleBuildState LegoRaceCarBuildState;
+typedef LegoVehicleBuildState LegoCopterBuildState;
+typedef LegoVehicleBuildState LegoDuneCarBuildState;
+typedef LegoVehicleBuildState LegoJetskiBuildState;
 
 // VTABLE: LEGO1 0x100d6658
 // SIZE 0x34c

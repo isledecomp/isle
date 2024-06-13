@@ -8,7 +8,7 @@
 #include "mxticklemanager.h"
 
 DECOMP_SIZE_ASSERT(Pizza, 0x9c)
-DECOMP_SIZE_ASSERT(PizzaMissionState, 0xb0)
+DECOMP_SIZE_ASSERT(PizzaMissionState, 0xb4)
 DECOMP_SIZE_ASSERT(PizzaMissionState::Entry, 0x20)
 
 // FUNCTION: LEGO1 0x10037ef0
@@ -97,6 +97,12 @@ undefined4 Pizza::HandleEndAction(MxEndActionNotificationParam&)
 {
 	// TODO
 	return 0;
+}
+
+// STUB: LEGO1 0x10039030
+PizzaMissionState::PizzaMissionState()
+{
+	// TODO
 }
 
 // STUB: LEGO1 0x100393c0

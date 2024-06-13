@@ -7,6 +7,8 @@
 // SIZE 0x1f8
 class Doors : public LegoPathActor {
 public:
+	Doors() : m_unk0x154(0), m_unk0x15c(0), m_unk0x160(0), m_unk0x1f4(0) {}
+
 	// FUNCTION: LEGO1 0x1000e430
 	inline const char* ClassName() const override // vtable+0x0c
 	{

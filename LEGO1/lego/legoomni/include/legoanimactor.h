@@ -62,6 +62,9 @@ protected:
 };
 
 // clang-format off
+// GLOBAL: LEGO1 0x100d5438
+// LegoAnimActor::`vbtable'
+
 // TEMPLATE: LEGO1 0x1000da20
 // vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *> >::~vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *> >
 
