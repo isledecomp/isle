@@ -183,9 +183,9 @@ inline int UnknownMx4DPointFloat::FUN_100040a0(Vector4& p_v, float p_f)
 		if (d1 + 1.0 > 0.00001) {
 			if (1.0 - d1 > 0.00001) {
 				double d = acos(d1);
-				sin(d);
-				d1 = sin((1.0 - p_f) * d) / sin(d);
-				d2 = sin(p_f * d) / sin(d);
+				double s = sin(d);
+				d1 = sin((1.0 - p_f) * d) / s;
+				d2 = sin(p_f * d) / s;
 			}
 			else {
 				d1 = 1.0 - p_f;

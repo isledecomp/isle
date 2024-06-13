@@ -2790,7 +2790,7 @@ void LegoAnimationManager::FUN_10064b50(MxLong p_time)
 	if (m_unk0x430 && m_unk0x42c != NULL) {
 		MxMatrix mat;
 
-		if (p_time < 0 || p_time <= m_unk0x438) {
+		if (p_time < 0 || m_unk0x438 <= p_time) {
 			m_unk0x430 = FALSE;
 			m_unk0x42c->m_flags &= ~LegoTranInfo::c_bit1;
 			m_unk0x42c = NULL;
@@ -2807,7 +2807,7 @@ void LegoAnimationManager::FUN_10064b50(MxLong p_time)
 			m_unk0x4cc.Unknown6(mat, (float) (p_time - m_unk0x434) / 1000.0f);
 
 			VPV3(mat[3], m_unk0x43c[3], sub);
-			mat[3][4] = 1.0f;
+			mat[3][3] = 1.0f;
 		}
 
 		LegoROI* viewROI = VideoManager()->GetViewROI();
