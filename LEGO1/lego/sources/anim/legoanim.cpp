@@ -184,7 +184,6 @@ LegoResult LegoAnimScene::FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix)
 			if (m_unk0x10 != 0) {
 				LegoU32 locald0 = -1;
 				LegoU32 locald8;
-				LegoFloat z;
 				locald0 = GetUnknown0x20();
 
 				LegoU32 localdc =
