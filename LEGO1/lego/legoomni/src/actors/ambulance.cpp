@@ -16,6 +16,7 @@
 #include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
+#include "mxsoundpresenter.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
@@ -24,6 +25,9 @@
 
 DECOMP_SIZE_ASSERT(Ambulance, 0x184)
 DECOMP_SIZE_ASSERT(AmbulanceMissionState, 0x24)
+
+// Flags used in isle.cpp
+extern MxU32 g_isleFlags;
 
 // FUNCTION: LEGO1 0x10035ee0
 // FUNCTION: BETA10 0x10022820
@@ -278,7 +282,7 @@ MxLong Ambulance::HandlePathStruct(LegoPathStructEvent& p_param)
 					InvokeAction(Extra::e_stop, *g_isleScript, m_lastAction, NULL);
 				}
 
-				FUN_10036ec0();
+				Leave();
 				MxLong time = Timer()->GetTime() - m_state->m_unk0x0c;
 
 				if (time < 300000) {
@@ -323,7 +327,7 @@ MxLong Ambulance::HandlePathStruct(LegoPathStructEvent& p_param)
 			InvokeAction(Extra::e_stop, *g_isleScript, m_lastAction, NULL);
 		}
 
-		FUN_10036ec0();
+		Leave();
 
 		if (m_actorId < LegoActor::c_pepper || m_actorId > LegoActor::c_laura) {
 			m_actorId = LegoActor::c_laura;
@@ -353,7 +357,7 @@ MxLong Ambulance::HandlePathStruct(LegoPathStructEvent& p_param)
 			InvokeAction(Extra::e_stop, *g_isleScript, m_lastAction, NULL);
 		}
 
-		FUN_10036ec0();
+		Leave();
 		PlayAnimation(IsleScript::c_hps116bd_RunAnim);
 	}
 
@@ -406,23 +410,60 @@ void Ambulance::FUN_10036e60()
 	m_lastAnimation = IsleScript::c_noneIsle;
 }
 
-// STUB: LEGO1 0x10036e90
+// FUNCTION: LEGO1 0x10036e90
 void Ambulance::Exit()
 {
-	// TODO
+	GameState()->m_currentArea = LegoGameState::e_hospitalExterior;
+	StopActions();
+	FUN_10037250();
+	Leave();
 }
 
-// STUB: LEGO1 0x10036ec0
-void Ambulance::FUN_10036ec0()
+// FUNCTION: LEGO1 0x10036ec0
+void Ambulance::Leave()
 {
-	// TODO
+	IslePathActor::Exit();
+	CurrentWorld()->RemoveActor(this);
+	m_roi->SetVisibility(FALSE);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_AmbulanceDashboard_Bitmap);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_AmbulanceArms_Ctl);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_AmbulanceHorn_Ctl);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_AmbulanceHorn_Sound);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_AmbulanceInfo_Ctl);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_AmbulanceSpeedMeter);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_AmbulanceFuelMeter);
+	ControlManager()->Unregister(this);
+	TickleManager()->UnregisterClient(this);
 }
 
-// STUB: LEGO1 0x10036f90
+// FUNCTION: LEGO1 0x10036f90
 MxLong Ambulance::HandleControl(LegoControlManagerEvent& p_param)
 {
-	// TODO
-	return 0;
+	MxLong result = 0;
+
+	if (p_param.GetUnknown0x28() == 1) {
+		switch (p_param.GetClickedObjectId()) {
+		case IsleScript::c_AmbulanceArms_Ctl:
+			Exit();
+			GameState()->m_currentArea = LegoGameState::e_unk66;
+			result = 1;
+			break;
+		case IsleScript::c_AmbulanceInfo_Ctl:
+			((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_infomain);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			Exit();
+			GameState()->m_currentArea = LegoGameState::e_unk66;
+			result = 1;
+			break;
+		case IsleScript::c_AmbulanceHorn_Ctl:
+			MxSoundPresenter* presenter =
+				(MxSoundPresenter*) CurrentWorld()->Find("MxSoundPresenter", "AmbulanceHorn_Sound");
+			presenter->Enable(p_param.GetUnknown0x28());
+			break;
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10037060
@@ -533,10 +574,20 @@ void Ambulance::StopActions()
 	StopAction(IsleScript::c_pns018rd_RunAnim);
 }
 
-// STUB: LEGO1 0x10037250
+// FUNCTION: LEGO1 0x10037250
 void Ambulance::FUN_10037250()
 {
-	// TODO
+	StopAction(m_lastAction);
+	BackgroundAudioManager()->RaiseVolume();
+	((Act1State*) GameState()->GetState("Act1State"))->m_unk0x018 = 0;
+	m_state->m_unk0x08 = 0;
+	m_unk0x16e = 0;
+	m_unk0x16c = 0;
+	g_isleFlags |= Isle::c_playMusic;
+	AnimationManager()->EnableCamAnims(TRUE);
+	AnimationManager()->FUN_1005f6d0(TRUE);
+	m_state->m_unk0x0c = INT_MIN;
+	m_state = NULL;
 }
 
 // FUNCTION: LEGO1 0x100372e0

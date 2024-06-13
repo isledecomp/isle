@@ -16,40 +16,6 @@ public:
 		e_red
 	};
 
-	// FUNCTION: LEGO1 0x10005f40
-	~LegoState() override {}
-
-	// FUNCTION: LEGO1 0x100060d0
-	inline const char* ClassName() const override // vtable+0x0c
-	{
-		// STRING: LEGO1 0x100f01b8
-		return "LegoState";
-	}
-
-	// FUNCTION: LEGO1 0x100060e0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
-	{
-		return !strcmp(p_name, LegoState::ClassName()) || MxCore::IsA(p_name);
-	}
-
-	// FUNCTION: LEGO1 0x10005f90
-	virtual MxBool IsSerializable() { return TRUE; } // vtable+0x14
-
-	// FUNCTION: LEGO1 0x10005fa0
-	virtual MxBool SetFlag() { return FALSE; } // vtable+0x18
-
-	// FUNCTION: LEGO1 0x10005fb0
-	virtual MxResult Serialize(LegoFile* p_legoFile)
-	{
-		if (p_legoFile->IsWriteMode()) {
-			p_legoFile->WriteString(ClassName());
-		}
-		return SUCCESS;
-	} // vtable+0x1c
-
-	// SYNTHETIC: LEGO1 0x10006160
-	// LegoState::`scalar deleting destructor'
-
 	// SIZE 0x0c
 	class Playlist {
 	public:
@@ -98,6 +64,40 @@ public:
 		MxS16 m_mode;       // 0x06
 		MxS16 m_nextIndex;  // 0x08
 	};
+
+	// FUNCTION: LEGO1 0x10005f40
+	~LegoState() override {}
+
+	// FUNCTION: LEGO1 0x100060d0
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		// STRING: LEGO1 0x100f01b8
+		return "LegoState";
+	}
+
+	// FUNCTION: LEGO1 0x100060e0
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	{
+		return !strcmp(p_name, LegoState::ClassName()) || MxCore::IsA(p_name);
+	}
+
+	// FUNCTION: LEGO1 0x10005f90
+	virtual MxBool IsSerializable() { return TRUE; } // vtable+0x14
+
+	// FUNCTION: LEGO1 0x10005fa0
+	virtual MxBool SetFlag() { return FALSE; } // vtable+0x18
+
+	// FUNCTION: LEGO1 0x10005fb0
+	virtual MxResult Serialize(LegoFile* p_legoFile)
+	{
+		if (p_legoFile->IsWriteMode()) {
+			p_legoFile->WriteString(ClassName());
+		}
+		return SUCCESS;
+	} // vtable+0x1c
+
+	// SYNTHETIC: LEGO1 0x10006160
+	// LegoState::`scalar deleting destructor'
 };
 
 #endif // LEGOSTATE_H
