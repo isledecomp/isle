@@ -9,6 +9,13 @@
 // SIZE 0x08
 class LegoState : public MxCore {
 public:
+	enum ScoreColor {
+		e_grey = 0,
+		e_yellow,
+		e_blue,
+		e_red
+	};
+
 	// FUNCTION: LEGO1 0x10005f40
 	~LegoState() override {}
 

@@ -48,7 +48,7 @@ MxLong IsleActor::Notify(MxParam& p_param)
 	case c_notificationEndAnim:
 		result = VTable0x70();
 		break;
-	case c_notificationType19:
+	case c_notificationPathStruct:
 		result = VTable0x80(p_param);
 		break;
 	}

@@ -45,7 +45,7 @@ MxLong DuneBuggy::HandleControl(LegoControlManagerEvent& p_param)
 }
 
 // STUB: LEGO1 0x10068270
-MxLong DuneBuggy::HandleNotification19(MxType19NotificationParam& p_param)
+MxLong DuneBuggy::HandlePathStruct(LegoPathStructEvent& p_param)
 {
 	// TODO
 	return 0;

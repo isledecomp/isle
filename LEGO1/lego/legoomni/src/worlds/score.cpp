@@ -266,21 +266,21 @@ void Score::Paint()
 			m_surface = (MxU8*) desc.lpSurface;
 
 			for (MxU8 actor = 1; actor <= 5; actor++) {
-				MxU16 score;
+				MxS16 score;
 
-				score = carRaceState ? carRaceState->GetState(actor)->GetScore() : 0;
+				score = carRaceState ? carRaceState->GetState(actor)->GetHighScore() : 0;
 				FillArea(0, actor - 1, score);
 
-				score = jetskiRaceState ? jetskiRaceState->GetState(actor)->GetScore() : 0;
+				score = jetskiRaceState ? jetskiRaceState->GetState(actor)->GetHighScore() : 0;
 				FillArea(1, actor - 1, score);
 
-				score = pizzaMissionState ? pizzaMissionState->GetScore(actor) : 0;
+				score = pizzaMissionState ? pizzaMissionState->GetHighScore(actor) : 0;
 				FillArea(2, actor - 1, score);
 
-				score = towTrackMissionState ? towTrackMissionState->GetScore(actor) : 0;
+				score = towTrackMissionState ? towTrackMissionState->GetHighScore(actor) : 0;
 				FillArea(3, actor - 1, score);
 
-				score = ambulanceMissionState ? ambulanceMissionState->GetScore(actor) : 0;
+				score = ambulanceMissionState ? ambulanceMissionState->GetHighScore(actor) : 0;
 				FillArea(4, actor - 1, score);
 			}
 
@@ -299,14 +299,14 @@ void Score::FillArea(MxU32 i_activity, MxU32 i_actor, MxS16 score)
 	MxS32 local14[] = {0x2a, 0x27, 0x29, 0x29, 0x2a};
 	MxS32 local50[] = {0x2f, 0x56, 0x81, 0xaa, 0xd4};
 	MxS32 local28[] = {0x25, 0x29, 0x27, 0x28, 0x28};
-	MxS32 local60[] = {0x11, 0x0f, 0x08, 0x05};
+	MxS32 colors[] = {0x11, 0x0f, 0x08, 0x05};
 
 	MxU8* ptr = m_surface + local3c[i_actor] + local50[i_activity];
-	MxS32 val = local60[score];
+	MxS32 color = colors[score];
 	MxS32 size = local28[i_activity];
 
 	for (MxS32 i = 0; i < local14[i_actor]; i++) {
-		memset(ptr, val, size);
+		memset(ptr, color, size);
 		ptr += 0x100;
 	}
 }

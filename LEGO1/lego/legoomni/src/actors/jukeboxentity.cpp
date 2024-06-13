@@ -32,7 +32,7 @@ JukeBoxEntity::~JukeBoxEntity()
 // FUNCTION: LEGO1 0x10085e40
 MxLong JukeBoxEntity::Notify(MxParam& p_param)
 {
-	if (((MxNotificationParam&) p_param).GetType() == c_notificationClick) {
+	if (((MxNotificationParam&) p_param).GetNotification() == c_notificationClick) {
 		if (!FUN_1003ef60()) {
 			return 1;
 		}

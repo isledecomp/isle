@@ -45,7 +45,7 @@ MxLong Motocycle::HandleControl(LegoControlManagerEvent& p_param)
 }
 
 // STUB: LEGO1 0x10035df0
-MxLong Motocycle::HandleNotification19(MxType19NotificationParam& p_param)
+MxLong Motocycle::HandlePathStruct(LegoPathStructEvent& p_param)
 {
 	// TODO
 	return 0;

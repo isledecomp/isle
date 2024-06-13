@@ -86,7 +86,7 @@ MxLong Radio::Notify(MxParam& p_param)
 	MxLong result = 0;
 
 	if (m_unk0x0c) {
-		switch (((MxNotificationParam&) p_param).GetType()) {
+		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationEndAction:
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;

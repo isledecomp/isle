@@ -18,6 +18,7 @@
 #include "legoinputmanager.h"
 #include "legomain.h"
 #include "legonamedtexture.h"
+#include "legopathstruct.h"
 #include "legoutils.h"
 #include "legovariables.h"
 #include "legovideomanager.h"
@@ -29,7 +30,6 @@
 #include "mxnotificationmanager.h"
 #include "mxstillpresenter.h"
 #include "mxtransitionmanager.h"
-#include "mxtype19notificationparam.h"
 #include "mxvariabletable.h"
 #include "pizza.h"
 #include "pizzeria.h"
@@ -167,8 +167,8 @@ MxLong Isle::Notify(MxParam& p_param)
 				break;
 			}
 			break;
-		case c_notificationType19:
-			result = HandleType19Notification((MxType19NotificationParam&) p_param);
+		case c_notificationPathStruct:
+			result = HandlePathStruct((LegoPathStructEvent&) p_param);
 			break;
 		case c_notificationType20:
 			Enable(TRUE);
@@ -469,7 +469,7 @@ void Isle::UpdateGlobe()
 }
 
 // FUNCTION: LEGO1 0x100315f0
-MxLong Isle::HandleType19Notification(MxType19NotificationParam& p_param)
+MxLong Isle::HandlePathStruct(LegoPathStructEvent& p_param)
 {
 	MxLong result = 0;
 
@@ -495,7 +495,8 @@ MxLong Isle::HandleType19Notification(MxType19NotificationParam& p_param)
 	}
 
 	if (result == 0) {
-		switch (p_param.GetUnknown0x0c()) {
+		// These values correspond to certain paths on the island
+		switch (p_param.GetData()) {
 		case 0x12c:
 			AnimationManager()->FUN_10064670(NULL);
 			result = 1;

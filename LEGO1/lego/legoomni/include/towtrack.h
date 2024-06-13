@@ -26,7 +26,7 @@ public:
 
 	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
 
-	inline MxU16 GetScore(MxU8 p_id)
+	inline MxS16 GetHighScore(MxU8 p_id)
 	{
 		switch (p_id) {
 		case 1:
@@ -50,16 +50,16 @@ public:
 	undefined4 m_unk0x08; // 0x08
 	undefined4 m_unk0x0c; // 0x0c
 	MxU8 m_unk0x10;       // 0x10
-	MxU16 m_unk0x12;      // 0x12
-	MxU16 m_unk0x14;      // 0x14
-	MxU16 m_unk0x16;      // 0x16
-	MxU16 m_unk0x18;      // 0x18
-	MxU16 m_unk0x1a;      // 0x1a
-	MxU16 m_score1;       // 0x1c
-	MxU16 m_score2;       // 0x1e
-	MxU16 m_score3;       // 0x20
-	MxU16 m_score4;       // 0x22
-	MxU16 m_score5;       // 0x24
+	MxS16 m_unk0x12;      // 0x12
+	MxS16 m_unk0x14;      // 0x14
+	MxS16 m_unk0x16;      // 0x16
+	MxS16 m_unk0x18;      // 0x18
+	MxS16 m_unk0x1a;      // 0x1a
+	MxS16 m_score1;       // 0x1c
+	MxS16 m_score2;       // 0x1e
+	MxS16 m_score3;       // 0x20
+	MxS16 m_score4;       // 0x22
+	MxS16 m_score5;       // 0x24
 };
 
 // VTABLE: LEGO1 0x100d7ee0
@@ -82,14 +82,14 @@ public:
 		return !strcmp(p_name, TowTrack::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
-	MxLong Notify(MxParam& p_param) override;                                 // vtable+0x04
-	MxResult Create(MxDSAction& p_dsAction) override;                         // vtable+0x18
-	void VTable0x70(float p_float) override;                                  // vtable+0x70
-	MxLong HandleClick() override;                                            // vtable+0xcc
-	MxLong HandleControl(LegoControlManagerEvent& p_param) override;          // vtable+0xd4
-	MxLong HandleEndAnim(LegoEndAnimNotificationParam& p_param) override;     // vtable+0xd8
-	MxLong HandleNotification19(MxType19NotificationParam& p_param) override; // vtable+0xdc
-	void Exit() override;                                                     // vtable+0xe4
+	MxLong Notify(MxParam& p_param) override;                             // vtable+0x04
+	MxResult Create(MxDSAction& p_dsAction) override;                     // vtable+0x18
+	void VTable0x70(float p_float) override;                              // vtable+0x70
+	MxLong HandleClick() override;                                        // vtable+0xcc
+	MxLong HandleControl(LegoControlManagerEvent& p_param) override;      // vtable+0xd4
+	MxLong HandleEndAnim(LegoEndAnimNotificationParam& p_param) override; // vtable+0xd8
+	MxLong HandlePathStruct(LegoPathStructEvent& p_param) override;       // vtable+0xdc
+	void Exit() override;                                                 // vtable+0xe4
 
 	void CreateState();
 	void FUN_1004dab0();

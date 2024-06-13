@@ -13,7 +13,7 @@ class LegoEventNotificationParam;
 class LegoPathActor;
 class MxEndActionNotificationParam;
 class MxNotificationParam;
-class MxType19NotificationParam;
+class LegoPathStructEvent;
 
 // VTABLE: LEGO1 0x100d5e30
 // SIZE 0x2c
@@ -23,12 +23,12 @@ public:
 	struct Entry {
 	public:
 		inline MxS16 GetUnknown0x02() { return m_unk0x02; }
-		inline MxU16 GetScore() { return m_score; }
+		inline MxS16 GetHighScore() { return m_score; }
 
 		// TODO: Possibly private
 		MxU8 m_id;       // 0x00
 		MxS16 m_unk0x02; // 0x02
-		MxU16 m_score;   // 0x04
+		MxS16 m_score;   // 0x04
 	};
 
 	RaceState();
@@ -98,11 +98,11 @@ public:
 	// FUNCTION: LEGO1 0x1000dae0
 	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
 
-	MxBool Escape() override;                                            // vtable+0x64
-	void Enable(MxBool p_enable) override;                               // vtable+0x68
-	virtual MxLong HandleClick(LegoEventNotificationParam&) = 0;         // vtable+0x6c
-	virtual MxLong HandleType19Notification(MxType19NotificationParam&); // vtable+0x70
-	virtual MxLong HandleEndAction(MxEndActionNotificationParam&);       // vtable+0x74
+	MxBool Escape() override;                                      // vtable+0x64
+	void Enable(MxBool p_enable) override;                         // vtable+0x68
+	virtual MxLong HandleClick(LegoEventNotificationParam&) = 0;   // vtable+0x6c
+	virtual MxLong HandlePathStruct(LegoPathStructEvent&);         // vtable+0x70
+	virtual MxLong HandleEndAction(MxEndActionNotificationParam&); // vtable+0x74
 
 	// FUNCTION: LEGO1 0x1000dab0
 	virtual MxLong HandleType0Notification(MxNotificationParam&) { return 0; } // vtable+0x78

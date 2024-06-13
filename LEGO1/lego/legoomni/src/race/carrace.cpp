@@ -32,7 +32,7 @@ MxLong CarRace::HandleEndAction(MxEndActionNotificationParam&)
 }
 
 // STUB: LEGO1 0x100170e0
-MxLong CarRace::HandleType19Notification(MxType19NotificationParam&)
+MxLong CarRace::HandlePathStruct(LegoPathStructEvent&)
 {
 	// TODO
 	return 0;

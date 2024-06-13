@@ -178,13 +178,13 @@ MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* 
 MxBool MxControlPresenter::FUN_10044480(LegoControlManagerEvent* p_event, MxPresenter* p_presenter)
 {
 	if (IsEnabled()) {
-		switch (p_event->GetType()) {
+		switch (p_event->GetNotification()) {
 		case c_notificationButtonUp:
 			if (m_unk0x4c == 0 || m_unk0x4c == 2 || m_unk0x4c == 3) {
 				p_event->SetClickedObjectId(m_action->GetObjectId());
 				p_event->SetClickedAtom(m_action->GetAtomId().GetInternal());
 				VTable0x6c(0);
-				p_event->SetType(c_notificationControl);
+				p_event->SetNotification(c_notificationControl);
 				p_event->SetUnknown0x28(m_unk0x4e);
 				return TRUE;
 			}
@@ -194,7 +194,7 @@ MxBool MxControlPresenter::FUN_10044480(LegoControlManagerEvent* p_event, MxPres
 				p_event->SetClickedObjectId(m_action->GetObjectId());
 				p_event->SetClickedAtom(m_action->GetAtomId().GetInternal());
 				VTable0x6c(m_unk0x56);
-				p_event->SetType(c_notificationControl);
+				p_event->SetNotification(c_notificationControl);
 				p_event->SetUnknown0x28(m_unk0x4e);
 				return TRUE;
 			}

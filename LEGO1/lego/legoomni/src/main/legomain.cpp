@@ -564,7 +564,7 @@ MxLong LegoOmni::Notify(MxParam& p_param)
 {
 	MxBool isCD = FALSE;
 
-	if (((MxNotificationParam&) p_param).GetType() == c_notificationEndAction &&
+	if (((MxNotificationParam&) p_param).GetNotification() == c_notificationEndAction &&
 		((MxActionNotificationParam&) p_param).GetAction()->GetAtomId() == *g_nocdSourceName) {
 		isCD = TRUE;
 	}

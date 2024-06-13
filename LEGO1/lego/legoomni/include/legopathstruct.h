@@ -3,10 +3,37 @@
 
 #include "decomp.h"
 #include "mxatom.h"
+#include "mxnotificationparam.h"
 #include "mxtypes.h"
 
 class LegoPathActor;
 class LegoWorld;
+
+// VTABLE: LEGO1 0x100d6230
+// SIZE 0x10
+class LegoPathStructEvent : public MxNotificationParam {
+public:
+	LegoPathStructEvent(NotificationId p_type, MxCore* p_sender, MxU8 p_trigger, MxS16 p_data) : MxNotificationParam()
+	{
+		m_type = p_type;
+		m_sender = p_sender;
+		m_data = p_data;
+		m_trigger = p_trigger;
+	}
+
+	// FUNCTION: LEGO1 0x1001bac0
+	MxNotificationParam* Clone() const override
+	{
+		return new LegoPathStructEvent(m_type, m_sender, m_trigger, m_data);
+	} // vtable+0x04
+
+	inline MxU8 GetTrigger() { return m_trigger; }
+	inline MxS16 GetData() { return m_data; }
+
+protected:
+	MxS16 m_data;   // 0x0c
+	MxU8 m_trigger; // 0x0e
+};
 
 // VTABLE: LEGO1 0x100d7d9c
 // SIZE 0x0c
@@ -70,6 +97,12 @@ private:
 	LegoWorld* m_world; // 0x0c
 	MxAtomId m_atomId;  // 0x10
 };
+
+// SYNTHETIC: LEGO1 0x1001bb80
+// LegoPathStructEvent::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1001bbf0
+// LegoPathStructEvent::~LegoPathStructEvent
 
 // SYNTHETIC: LEGO1 0x10047440
 // LegoPathStructBase::`scalar deleting destructor'

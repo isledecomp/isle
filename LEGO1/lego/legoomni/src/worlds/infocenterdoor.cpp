@@ -61,7 +61,7 @@ MxLong InfocenterDoor::Notify(MxParam& p_param)
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetType()) {
+		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationEndAction:
 			if (((MxEndActionNotificationParam&) p_param).GetAction()->GetAtomId() == m_atom) {
 				BackgroundAudioManager()->RaiseVolume();

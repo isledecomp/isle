@@ -58,15 +58,16 @@ MxBool LegoControlManager::FUN_10029210(LegoEventNotificationParam& p_param, MxP
 	if (m_presenterList != NULL && m_presenterList->GetCount() != 0) {
 		m_unk0x14 = p_presenter;
 
-		if (p_param.GetType() == c_notificationButtonUp || p_param.GetType() == c_notificationButtonDown) {
-			m_event.SetType(p_param.GetType());
+		if (p_param.GetNotification() == c_notificationButtonUp ||
+			p_param.GetNotification() == c_notificationButtonDown) {
+			m_event.SetNotification(p_param.GetNotification());
 			m_event.SetSender(p_param.GetSender());
 			m_event.SetModifier(p_param.GetModifier());
 			m_event.SetX(p_param.GetX());
 			m_event.SetY(p_param.GetY());
 			m_event.SetKey(p_param.GetKey());
 
-			if (p_param.GetType() == c_notificationButtonUp) {
+			if (p_param.GetNotification() == c_notificationButtonUp) {
 				if (m_unk0x10 == TRUE) {
 					m_unk0x10 = FALSE;
 					return TRUE;
@@ -82,7 +83,7 @@ MxBool LegoControlManager::FUN_10029210(LegoEventNotificationParam& p_param, MxP
 					}
 				}
 			}
-			else if (p_param.GetType() == c_notificationButtonDown) {
+			else if (p_param.GetNotification() == c_notificationButtonDown) {
 				if (m_unk0x0c == 1) {
 					m_unk0x10 = TRUE;
 					return TRUE;
@@ -163,7 +164,7 @@ MxControlPresenter* LegoControlManager::FUN_100294e0(MxS32 p_x, MxS32 p_y)
 MxResult LegoControlManager::Tickle()
 {
 	if (m_unk0x08 == 2 && m_unk0x0c == 1) {
-		m_event.SetType(c_notificationButtonUp);
+		m_event.SetNotification(c_notificationButtonUp);
 		FUN_10029750();
 		return 0;
 	}
