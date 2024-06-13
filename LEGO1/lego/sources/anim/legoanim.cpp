@@ -18,7 +18,7 @@ DECOMP_SIZE_ASSERT(LegoAnim, 0x18)
 // FUNCTION: LEGO1 0x1009f000
 LegoUnknownKey::LegoUnknownKey()
 {
-	m_unk0x08 = 0;
+	m_z = 0.0f;
 }
 
 // FUNCTION: LEGO1 0x1009f020
@@ -30,7 +30,7 @@ LegoResult LegoUnknownKey::Read(LegoStorage* p_storage)
 		return result;
 	}
 
-	result = p_storage->Read(&m_unk0x08, sizeof(m_unk0x08));
+	result = p_storage->Read(&m_z, sizeof(m_z));
 	return result == SUCCESS ? SUCCESS : result;
 }
 
@@ -136,11 +136,88 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x1009f490
-undefined4 LegoAnimScene::FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix)
+// FUNCTION: LEGO1 0x1009f490
+// FUNCTION: BETA10 0x10181a83
+LegoResult LegoAnimScene::FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix)
 {
-	// TODO
-	return 0;
+	MxMatrix localb0;
+	MxMatrix local4c;
+
+	Vector3 local5c(localb0[0]);
+	Vector3 local68(localb0[1]);
+	Vector3 local54(localb0[2]);
+	Vector3 localb8(localb0[3]);
+
+	Mx3DPointFloat localcc;
+
+	localb0.SetIdentity();
+
+	LegoU32 local60;
+	if (m_unk0x08 != 0) {
+		local60 = GetUnknown0x18();
+		LegoAnimNodeData::GetTranslation(m_unk0x08, m_unk0x0c, p_time, localb0, local60);
+		SetUnknown0x18(local60);
+		localcc = localb8;
+		localb8.Clear();
+	}
+
+	if (m_unk0x00 != 0) {
+		local60 = GetUnknown0x1c();
+		LegoAnimNodeData::GetTranslation(m_unk0x00, m_unk0x04, p_time, localb0, local60);
+		SetUnknown0x1c(local60);
+	}
+
+	local54 = localcc;
+	((Vector3&) local54).Sub(localb8);
+
+	if (local54.Unitize() == 0) {
+		local5c.EqualsCross(&local68, &local54);
+
+		if (local5c.Unitize() == 0) {
+			local68.EqualsCross(&local54, &local5c);
+
+			localcc = p_matrix[3];
+			((Vector3&) localcc).Add(localb0[3]);
+
+			p_matrix[3][0] = p_matrix[3][1] = p_matrix[3][2] = localb0[3][0] = localb0[3][1] = localb0[3][2] = 0;
+
+			if (m_unk0x10 != 0) {
+				LegoU32 locald0 = -1;
+				LegoU32 locald8;
+				locald0 = GetUnknown0x20();
+
+				LegoU32 localdc =
+					LegoAnimNodeData::FindKeys(p_time, m_unk0x10, m_unk0x14, sizeof(*m_unk0x14), locald8, locald0);
+
+				SetUnknown0x20(locald0);
+
+				switch (localdc) {
+				case 1:
+					p_matrix.RotateZ(m_unk0x14[locald8].GetZ());
+					break;
+				case 2:
+					// Seems to be unused
+					LegoFloat z = LegoAnimNodeData::Interpolate(
+						p_time,
+						m_unk0x14[locald8],
+						m_unk0x14[locald8].GetZ(),
+						m_unk0x14[locald8 + 1],
+						m_unk0x14[locald8 + 1].GetZ()
+					);
+					p_matrix.RotateZ(m_unk0x14[locald8].GetZ());
+					break;
+				}
+			}
+
+			local4c = p_matrix;
+			p_matrix.Product(local4c.GetData(), localb0.GetData());
+			p_matrix[3][0] = localcc[0];
+			p_matrix[3][1] = localcc[1];
+			p_matrix[3][2] = localcc[2];
+		}
+	}
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x1009f900

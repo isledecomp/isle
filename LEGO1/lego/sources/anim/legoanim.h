@@ -103,8 +103,10 @@ public:
 	LegoUnknownKey();
 	LegoResult Read(LegoStorage* p_storage);
 
+	inline LegoFloat GetZ() { return m_z; }
+
 protected:
-	undefined4 m_unk0x08; // 0x08
+	LegoFloat m_z; // 0x08
 };
 
 // VTABLE: LEGO1 0x100db8c8
@@ -212,7 +214,15 @@ public:
 	LegoAnimScene();
 	~LegoAnimScene();
 	LegoResult Read(LegoStorage* p_storage);
-	undefined4 FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix);
+	LegoResult FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix);
+
+	inline LegoU32 GetUnknown0x18() { return m_unk0x18; }
+	inline LegoU32 GetUnknown0x1c() { return m_unk0x1c; }
+	inline LegoU32 GetUnknown0x20() { return m_unk0x20; }
+
+	inline void SetUnknown0x18(LegoU32 p_unk0x18) { m_unk0x18 = p_unk0x18; }
+	inline void SetUnknown0x1c(LegoU32 p_unk0x1c) { m_unk0x1c = p_unk0x1c; }
+	inline void SetUnknown0x20(LegoU32 p_unk0x20) { m_unk0x20 = p_unk0x20; }
 
 private:
 	LegoU16 m_unk0x00;             // 0x00
@@ -221,9 +231,9 @@ private:
 	LegoTranslationKey* m_unk0x0c; // 0x0c
 	LegoU16 m_unk0x10;             // 0x10
 	LegoUnknownKey* m_unk0x14;     // 0x14
-	undefined4 m_unk0x18;          // 0x18
-	undefined4 m_unk0x1c;          // 0x1c
-	undefined4 m_unk0x20;          // 0x20
+	LegoU32 m_unk0x18;             // 0x18
+	LegoU32 m_unk0x1c;             // 0x1c
+	LegoU32 m_unk0x20;             // 0x20
 };
 
 // VTABLE: LEGO1 0x100db8d8
