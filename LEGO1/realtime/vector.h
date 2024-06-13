@@ -138,7 +138,7 @@ public:
 	virtual void Mul(const float& p_value) { MulScalarImpl((float*) &p_value); } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x10002240
-	virtual void Div(float& p_value) { DivScalarImpl(&p_value); } // vtable+0x68
+	virtual void Div(const float& p_value) { DivScalarImpl((float*) &p_value); } // vtable+0x68
 
 	// FUNCTION: LEGO1 0x10002250
 	virtual void SetVector(float* p_other) { EqualsImpl(p_other); } // vtable+0x70

@@ -706,12 +706,10 @@ void TimeROI::FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time)
 		m_time = p_time;
 
 		Mx3DPointFloat targetPosition(p_matrix[3]);
+		Vector3 vec(m_local2world[3]);
 
-		// TODO: Figure out how to get type right for the call
-		((Vector3&) targetPosition).Sub(Vector3(m_local2world[3]));
-
-		float division = time * 0.001;
-		((Vector3&) targetPosition).Div(division);
+		((Vector3&) targetPosition).Sub(vec);
+		((Vector3&) targetPosition).Div(time * 0.001);
 
 		FUN_100a5a30(targetPosition);
 	}
