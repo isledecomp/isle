@@ -145,7 +145,7 @@ void LegoMeterPresenter::DrawMeter()
 		case e_bottomToTop:
 			bottomTopEnd = m_meterRect.GetBottom() - (MxS16) (m_meterRect.GetHeight() * m_curPercent);
 
-			for (row = m_meterRect.GetBottom(); row < bottomTopEnd; row--) {
+			for (row = m_meterRect.GetBottom(); row > bottomTopEnd; row--) {
 				MxU8* line = m_frameBitmap->GetStart(m_meterRect.GetLeft(), row);
 
 				for (bottomTopCol = 0; bottomTopCol < m_meterRect.GetWidth(); bottomTopCol++, line++) {
