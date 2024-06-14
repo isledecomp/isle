@@ -2826,10 +2826,10 @@ void LegoAnimationManager::FUN_10064b50(MxLong p_time)
 // FUNCTION: LEGO1 0x10064ff0
 AnimState::AnimState()
 {
-	m_arrayOfUnknownShortsLength = 0;
-	m_arrayOfUnknownShorts = NULL;
-	m_arrayOfUnknownBytesLength = 0;
-	m_arrayOfUnknownBytes = NULL;
+	m_unk0x0c = 0;
+	m_unk0x10 = NULL;
+	m_unk0x14 = 0;
+	m_unk0x18 = NULL;
 }
 
 // STUB: LEGO1 0x10065150
@@ -2867,45 +2867,45 @@ MxResult AnimState::Serialize(LegoFile* p_file)
 		Read(p_file, &m_unk0x08);
 
 		// m_unk0x10_len and m_unk0x10
-		if (m_arrayOfUnknownShorts) {
-			delete[] m_arrayOfUnknownShorts;
+		if (m_unk0x10) {
+			delete[] m_unk0x10;
 		}
-		Read(p_file, &m_arrayOfUnknownShortsLength);
-		if (m_arrayOfUnknownShortsLength != 0) {
-			m_arrayOfUnknownShorts = new undefined2[m_arrayOfUnknownShortsLength];
+		Read(p_file, &m_unk0x0c);
+		if (m_unk0x0c != 0) {
+			m_unk0x10 = new undefined2[m_unk0x0c];
 		}
 		else {
-			m_arrayOfUnknownShorts = NULL;
+			m_unk0x10 = NULL;
 		}
-		for (int i = 0; i < m_arrayOfUnknownShortsLength; i++) {
-			Read(p_file, &m_arrayOfUnknownShorts[i]);
+		for (int i = 0; i < m_unk0x0c; i++) {
+			Read(p_file, &m_unk0x10[i]);
 		}
 
 		// m_unk0x18_len and m_unk0x18
 		// Note that here we read first and then free memory in contrast to above
-		Read(p_file, &m_arrayOfUnknownBytesLength);
-		if (m_arrayOfUnknownBytes) {
-			delete[] m_arrayOfUnknownBytes;
+		Read(p_file, &m_unk0x14);
+		if (m_unk0x18) {
+			delete[] m_unk0x18;
 		}
-		if (m_arrayOfUnknownBytesLength != 0) {
-			m_arrayOfUnknownBytes = new undefined[m_arrayOfUnknownBytesLength];
+		if (m_unk0x14 != 0) {
+			m_unk0x18 = new undefined[m_unk0x14];
 		}
 		else {
-			m_arrayOfUnknownBytes = NULL;
+			m_unk0x18 = NULL;
 		}
-		for (int j = 0; j < m_arrayOfUnknownBytesLength; j++) {
-			Read(p_file, &m_arrayOfUnknownBytes[j]);
+		for (int j = 0; j < m_unk0x14; j++) {
+			Read(p_file, &m_unk0x18[j]);
 		}
 	}
 	else if (p_file->IsWriteMode()) {
 		Write(p_file, m_unk0x08);
-		Write(p_file, m_arrayOfUnknownShortsLength);
-		for (int i = 0; i < m_arrayOfUnknownShortsLength; i++) {
-			Write(p_file, m_arrayOfUnknownShorts[i]);
+		Write(p_file, m_unk0x0c);
+		for (int i = 0; i < m_unk0x0c; i++) {
+			Write(p_file, m_unk0x10[i]);
 		}
-		Write(p_file, m_arrayOfUnknownBytesLength);
-		for (int j = 0; j < m_arrayOfUnknownBytesLength; j++) {
-			Write(p_file, m_arrayOfUnknownBytes[j]);
+		Write(p_file, m_unk0x14);
+		for (int j = 0; j < m_unk0x14; j++) {
+			Write(p_file, m_unk0x18[j]);
 		}
 	}
 

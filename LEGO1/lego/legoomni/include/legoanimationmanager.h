@@ -78,11 +78,15 @@ public:
 	// AnimState::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x08;                    // 0x08
-	undefined4 m_arrayOfUnknownShortsLength; // 0x0c
-	undefined2* m_arrayOfUnknownShorts;      // 0x10
-	undefined4 m_arrayOfUnknownBytesLength;  // 0x14
-	undefined* m_arrayOfUnknownBytes;        // 0x18
+	undefined4 m_unk0x08; // 0x08
+	// appears to store the length of m_unk0x10
+	undefined4 m_unk0x0c; // 0x0c
+	// dynamically sized array of two-byte elements
+	undefined2* m_unk0x10; // 0x10
+	// appears to store the length of m_unk0x18
+	undefined4 m_unk0x14; // 0x14
+	// dynamically sized array of one-byte elements
+	undefined* m_unk0x18; // 0x18
 };
 
 // VTABLE: LEGO1 0x100d8c18
