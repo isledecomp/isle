@@ -660,7 +660,6 @@ MxResult AmbulanceMissionState::Serialize(LegoFile* p_file)
 		Read(p_file, &m_laHighScore);
 	}
 	else if (p_file->IsWriteMode()) {
-		MxS16 write;
 		Write(p_file, m_peScore);
 		Write(p_file, m_maScore);
 		Write(p_file, m_paScore);
