@@ -25,6 +25,22 @@ public:
 		inline MxS16 GetUnknown0x02() { return m_unk0x02; }
 		inline MxS16 GetHighScore() { return m_score; }
 
+		inline MxResult Serialize(LegoFile* p_file)
+		{
+			if (p_file->IsReadMode()) {
+				Read(p_file, &m_id);
+				Read(p_file, &m_unk0x02);
+				Read(p_file, &m_score);
+			}
+			else if (p_file->IsWriteMode()) {
+				Write(p_file, m_id);
+				Write(p_file, m_unk0x02);
+				Write(p_file, m_score);
+			}
+
+			return SUCCESS;
+		}
+
 		// TODO: Possibly private
 		MxU8 m_id;       // 0x00
 		MxS16 m_unk0x02; // 0x02
@@ -46,7 +62,7 @@ public:
 		return !strcmp(p_name, RaceState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
 	Entry* GetState(MxU8 p_id);
 

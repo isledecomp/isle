@@ -642,9 +642,35 @@ AmbulanceMissionState::AmbulanceMissionState()
 	m_laHighScore = 0;
 }
 
-// STUB: LEGO1 0x10037440
-MxResult AmbulanceMissionState::Serialize(LegoFile* p_legoFile)
+// FUNCTION: LEGO1 0x10037440
+MxResult AmbulanceMissionState::Serialize(LegoFile* p_file)
 {
-	// TODO
-	return LegoState::Serialize(p_legoFile);
+	LegoState::Serialize(p_file);
+
+	if (p_file->IsReadMode()) {
+		Read(p_file, &m_peScore);
+		Read(p_file, &m_maScore);
+		Read(p_file, &m_paScore);
+		Read(p_file, &m_niScore);
+		Read(p_file, &m_laScore);
+		Read(p_file, &m_peHighScore);
+		Read(p_file, &m_maHighScore);
+		Read(p_file, &m_paHighScore);
+		Read(p_file, &m_niHighScore);
+		Read(p_file, &m_laHighScore);
+	}
+	else if (p_file->IsWriteMode()) {
+		Write(p_file, m_peScore);
+		Write(p_file, m_maScore);
+		Write(p_file, m_paScore);
+		Write(p_file, m_niScore);
+		Write(p_file, m_laScore);
+		Write(p_file, m_peHighScore);
+		Write(p_file, m_maHighScore);
+		Write(p_file, m_paHighScore);
+		Write(p_file, m_niHighScore);
+		Write(p_file, m_laHighScore);
+	}
+
+	return SUCCESS;
 }

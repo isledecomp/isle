@@ -1314,138 +1314,138 @@ Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x
 }
 
 // FUNCTION: LEGO1 0x10033ac0
-MxResult Act1State::Serialize(LegoFile* p_legoFile)
+MxResult Act1State::Serialize(LegoFile* p_file)
 {
-	LegoState::Serialize(p_legoFile);
+	LegoState::Serialize(p_file);
 
-	m_unk0x024.Serialize(p_legoFile);
-	m_unk0x070.Serialize(p_legoFile);
-	m_unk0x0bc.Serialize(p_legoFile);
-	m_unk0x108.Serialize(p_legoFile);
-	m_unk0x164.Serialize(p_legoFile);
-	m_unk0x1bc.Serialize(p_legoFile);
-	m_unk0x210.Serialize(p_legoFile);
+	m_unk0x024.Serialize(p_file);
+	m_unk0x070.Serialize(p_file);
+	m_unk0x0bc.Serialize(p_file);
+	m_unk0x108.Serialize(p_file);
+	m_unk0x164.Serialize(p_file);
+	m_unk0x1bc.Serialize(p_file);
+	m_unk0x210.Serialize(p_file);
 
-	if (p_legoFile->IsWriteMode()) {
+	if (p_file->IsWriteMode()) {
 		if (m_unk0x108.GetName()->Compare("") != 0) {
 			if (m_unk0x154) {
-				WriteNamedTexture(p_legoFile, m_unk0x154);
+				WriteNamedTexture(p_file, m_unk0x154);
 			}
 			else {
-				FUN_1003f540(p_legoFile, "chwind.gif");
+				FUN_1003f540(p_file, "chwind.gif");
 			}
 			if (m_unk0x158) {
-				WriteNamedTexture(p_legoFile, m_unk0x158);
+				WriteNamedTexture(p_file, m_unk0x158);
 			}
 			else {
-				FUN_1003f540(p_legoFile, "chjetl.gif");
+				FUN_1003f540(p_file, "chjetl.gif");
 			}
 			if (m_unk0x15c) {
-				WriteNamedTexture(p_legoFile, m_unk0x15c);
+				WriteNamedTexture(p_file, m_unk0x15c);
 			}
 			else {
-				FUN_1003f540(p_legoFile, "chjetr.gif");
+				FUN_1003f540(p_file, "chjetr.gif");
 			}
 		}
 		if (m_unk0x164.GetName()->Compare("") != 0) {
 			if (m_unk0x1b0) {
-				WriteNamedTexture(p_legoFile, m_unk0x1b0);
+				WriteNamedTexture(p_file, m_unk0x1b0);
 			}
 			else {
-				FUN_1003f540(p_legoFile, "jsfrnt.gif");
+				FUN_1003f540(p_file, "jsfrnt.gif");
 			}
 			if (m_unk0x1b4) {
-				WriteNamedTexture(p_legoFile, m_unk0x1b4);
+				WriteNamedTexture(p_file, m_unk0x1b4);
 			}
 			else {
-				FUN_1003f540(p_legoFile, "jswnsh.gif");
+				FUN_1003f540(p_file, "jswnsh.gif");
 			}
 		}
 		if (m_unk0x1bc.GetName()->Compare("") != 0) {
 			if (m_unk0x208) {
-				WriteNamedTexture(p_legoFile, m_unk0x208);
+				WriteNamedTexture(p_file, m_unk0x208);
 			}
 			else {
-				FUN_1003f540(p_legoFile, "dbfrfn.gif");
+				FUN_1003f540(p_file, "dbfrfn.gif");
 			}
 		}
 		if (m_unk0x210.GetName()->Compare("") != 0) {
 			if (m_unk0x25c) {
-				WriteNamedTexture(p_legoFile, m_unk0x25c);
+				WriteNamedTexture(p_file, m_unk0x25c);
 			}
 			else {
-				FUN_1003f540(p_legoFile, "rcfrnt.gif");
+				FUN_1003f540(p_file, "rcfrnt.gif");
 			}
 			if (m_unk0x260) {
-				WriteNamedTexture(p_legoFile, m_unk0x260);
+				WriteNamedTexture(p_file, m_unk0x260);
 			}
 			else {
-				FUN_1003f540(p_legoFile, "rcback.gif");
+				FUN_1003f540(p_file, "rcback.gif");
 			}
 			if (m_unk0x264) {
-				WriteNamedTexture(p_legoFile, m_unk0x264);
+				WriteNamedTexture(p_file, m_unk0x264);
 			}
 			else {
-				FUN_1003f540(p_legoFile, "rctail.gif");
+				FUN_1003f540(p_file, "rctail.gif");
 			}
 		}
 
-		p_legoFile->Write(&m_unk0x010, sizeof(m_unk0x010));
-		p_legoFile->Write(&m_unk0x022, sizeof(m_unk0x022));
+		Write(p_file, m_unk0x010);
+		Write(p_file, m_unk0x022);
 	}
-	else if (p_legoFile->IsReadMode()) {
+	else if (p_file->IsReadMode()) {
 		if (m_unk0x108.GetName()->Compare("") != 0) {
-			m_unk0x154 = ReadNamedTexture(p_legoFile);
+			m_unk0x154 = ReadNamedTexture(p_file);
 			if (m_unk0x154 == NULL) {
 				return FAILURE;
 			}
 
-			m_unk0x158 = ReadNamedTexture(p_legoFile);
+			m_unk0x158 = ReadNamedTexture(p_file);
 			if (m_unk0x158 == NULL) {
 				return FAILURE;
 			}
 
-			m_unk0x15c = ReadNamedTexture(p_legoFile);
+			m_unk0x15c = ReadNamedTexture(p_file);
 			if (m_unk0x15c == NULL) {
 				return FAILURE;
 			}
 		}
 		if (m_unk0x164.GetName()->Compare("") != 0) {
-			m_unk0x1b0 = ReadNamedTexture(p_legoFile);
+			m_unk0x1b0 = ReadNamedTexture(p_file);
 			if (m_unk0x1b0 == NULL) {
 				return FAILURE;
 			}
 
-			m_unk0x1b4 = ReadNamedTexture(p_legoFile);
+			m_unk0x1b4 = ReadNamedTexture(p_file);
 			if (m_unk0x1b4 == NULL) {
 				return FAILURE;
 			}
 		}
 		if (m_unk0x1bc.GetName()->Compare("") != 0) {
-			m_unk0x208 = ReadNamedTexture(p_legoFile);
+			m_unk0x208 = ReadNamedTexture(p_file);
 			if (m_unk0x208 == NULL) {
 				return FAILURE;
 			}
 		}
 		if (m_unk0x210.GetName()->Compare("") != 0) {
-			m_unk0x25c = ReadNamedTexture(p_legoFile);
+			m_unk0x25c = ReadNamedTexture(p_file);
 			if (m_unk0x25c == NULL) {
 				return FAILURE;
 			}
 
-			m_unk0x260 = ReadNamedTexture(p_legoFile);
+			m_unk0x260 = ReadNamedTexture(p_file);
 			if (m_unk0x260 == NULL) {
 				return FAILURE;
 			}
 
-			m_unk0x264 = ReadNamedTexture(p_legoFile);
+			m_unk0x264 = ReadNamedTexture(p_file);
 			if (m_unk0x264 == NULL) {
 				return FAILURE;
 			}
 		}
 
-		p_legoFile->Read(&m_unk0x010, sizeof(m_unk0x010));
-		p_legoFile->Read(&m_unk0x022, sizeof(m_unk0x022));
+		Read(p_file, &m_unk0x010);
+		Read(p_file, &m_unk0x022);
 	}
 
 	// TODO

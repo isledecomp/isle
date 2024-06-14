@@ -15,11 +15,35 @@ public:
 	// SIZE 0x20
 	struct Entry {
 	public:
-		undefined2 m_unk0x00;      // 0x00
-		MxU8 m_id;                 // 0x02
-		undefined m_unk0x03[0x15]; // 0x03
-		MxS16 m_score;             // 0x18
-		undefined m_unk0x18[6];    // 0x1a
+		inline MxResult WriteToFile(LegoFile* p_file)
+		{
+			Write(p_file, m_unk0x06);
+			Write(p_file, m_unk0x14);
+			Write(p_file, m_unk0x16);
+			Write(p_file, m_score);
+			return SUCCESS;
+		}
+
+		inline MxResult ReadFromFile(LegoFile* p_file)
+		{
+			Read(p_file, &m_unk0x06);
+			Read(p_file, &m_unk0x14);
+			Read(p_file, &m_unk0x16);
+			Read(p_file, &m_score);
+			return SUCCESS;
+		}
+
+		undefined2 m_unk0x00;   // 0x00
+		MxU8 m_id;              // 0x02
+		undefined m_unk0x03[3]; // 0x03
+		MxS16 m_unk0x06;        // 0x06
+		undefined m_unk0x08[8]; // 0x08
+		MxS16 m_unk0x10;        // 0x10
+		MxS16 m_unk0x12;        // 0x12
+		MxS16 m_unk0x14;        // 0x14
+		MxS16 m_unk0x16;        // 0x16
+		MxS16 m_score;          // 0x18
+		undefined m_unk0x1a[6]; // 0x1a
 	};
 
 	PizzaMissionState();
@@ -37,7 +61,7 @@ public:
 		return !strcmp(p_name, PizzaMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
 	inline MxS16 GetHighScore(MxU8 p_id) { return GetState(p_id)->m_score; }
 

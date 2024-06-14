@@ -2850,11 +2850,66 @@ void AnimState::FUN_10065240(MxU32, AnimInfo*, MxU32)
 	// TODO
 }
 
-// STUB: LEGO1 0x100652d0
-MxResult AnimState::Serialize(LegoFile* p_legoFile)
+// FUNCTION: LEGO1 0x100652d0
+// FUNCTION: BETA10 0x10046621
+MxResult AnimState::Serialize(LegoFile* p_file)
 {
-	// TODO
-	return LegoState::Serialize(p_legoFile);
+	// These two are equivalent up to the order of some deallocation.
+	// Choose as needed to get 100 %.
+	// Option 1:
+	// LegoState::Serialize(p_file);
+	// Option 2:
+	if (p_file->IsWriteMode()) {
+		p_file->WriteString(ClassName());
+	}
+
+	if (p_file->IsReadMode()) {
+		Read(p_file, &m_unk0x08);
+
+		// m_unk0x10_len and m_unk0x10
+		if (m_unk0x10) {
+			delete[] m_unk0x10;
+		}
+		Read(p_file, &m_unk0x0c);
+		if (m_unk0x0c != 0) {
+			m_unk0x10 = new undefined2[m_unk0x0c];
+		}
+		else {
+			m_unk0x10 = NULL;
+		}
+		for (MxS32 i = 0; i < m_unk0x0c; i++) {
+			Read(p_file, &m_unk0x10[i]);
+		}
+
+		// m_unk0x18_len and m_unk0x18
+		// Note that here we read first and then free memory in contrast to above
+		Read(p_file, &m_unk0x14);
+		if (m_unk0x18) {
+			delete[] m_unk0x18;
+		}
+		if (m_unk0x14 != 0) {
+			m_unk0x18 = new undefined[m_unk0x14];
+		}
+		else {
+			m_unk0x18 = NULL;
+		}
+		for (MxS32 j = 0; j < m_unk0x14; j++) {
+			Read(p_file, &m_unk0x18[j]);
+		}
+	}
+	else if (p_file->IsWriteMode()) {
+		Write(p_file, m_unk0x08);
+		Write(p_file, m_unk0x0c);
+		for (MxS32 i = 0; i < m_unk0x0c; i++) {
+			Write(p_file, m_unk0x10[i]);
+		}
+		Write(p_file, m_unk0x14);
+		for (MxS32 j = 0; j < m_unk0x14; j++) {
+			Write(p_file, m_unk0x18[j]);
+		}
+	}
+
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x100654f0

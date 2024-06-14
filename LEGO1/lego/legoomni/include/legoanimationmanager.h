@@ -68,8 +68,8 @@ public:
 		return !strcmp(p_name, AnimState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxBool SetFlag() override;                         // vtable+0x18
-	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxBool SetFlag() override;                     // vtable+0x18
+	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
 	void FUN_100651d0(MxU32, AnimInfo*, MxU32&);
 	void FUN_10065240(MxU32, AnimInfo*, MxU32);
@@ -79,10 +79,14 @@ public:
 
 private:
 	undefined4 m_unk0x08; // 0x08
+	// appears to store the length of m_unk0x10
 	undefined4 m_unk0x0c; // 0x0c
-	void* m_unk0x10;      // 0x10
+	// dynamically sized array of two-byte elements
+	undefined2* m_unk0x10; // 0x10
+	// appears to store the length of m_unk0x18
 	undefined4 m_unk0x14; // 0x14
-	void* m_unk0x18;      // 0x18
+	// dynamically sized array of one-byte elements
+	undefined* m_unk0x18; // 0x18
 };
 
 // VTABLE: LEGO1 0x100d8c18

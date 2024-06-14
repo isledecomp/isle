@@ -158,52 +158,33 @@ TowTrackMissionState::TowTrackMissionState()
 }
 
 // FUNCTION: LEGO1 0x1004dde0
-MxResult TowTrackMissionState::Serialize(LegoFile* p_legoFile)
+MxResult TowTrackMissionState::Serialize(LegoFile* p_file)
 {
-	LegoState::Serialize(p_legoFile);
+	LegoState::Serialize(p_file);
 
-	if (p_legoFile->IsReadMode()) {
-		p_legoFile->Read(&m_unk0x12, sizeof(m_unk0x12));
-		p_legoFile->Read(&m_unk0x14, sizeof(m_unk0x14));
-		p_legoFile->Read(&m_unk0x16, sizeof(m_unk0x16));
-		p_legoFile->Read(&m_unk0x18, sizeof(m_unk0x18));
-		p_legoFile->Read(&m_unk0x1a, sizeof(m_unk0x1a));
-		p_legoFile->Read(&m_score1, sizeof(m_score1));
-		p_legoFile->Read(&m_score2, sizeof(m_score2));
-		p_legoFile->Read(&m_score3, sizeof(m_score3));
-		p_legoFile->Read(&m_score4, sizeof(m_score4));
-		p_legoFile->Read(&m_score5, sizeof(m_score5));
+	if (p_file->IsReadMode()) {
+		Read(p_file, &m_unk0x12);
+		Read(p_file, &m_unk0x14);
+		Read(p_file, &m_unk0x16);
+		Read(p_file, &m_unk0x18);
+		Read(p_file, &m_unk0x1a);
+		Read(p_file, &m_score1);
+		Read(p_file, &m_score2);
+		Read(p_file, &m_score3);
+		Read(p_file, &m_score4);
+		Read(p_file, &m_score5);
 	}
-	else if (p_legoFile->IsWriteMode()) {
-		MxU16 write = m_unk0x12;
-		p_legoFile->Write(&write, sizeof(m_unk0x12));
-
-		write = m_unk0x14;
-		p_legoFile->Write(&write, sizeof(m_unk0x12));
-
-		write = m_unk0x16;
-		p_legoFile->Write(&write, sizeof(m_unk0x12));
-
-		write = m_unk0x18;
-		p_legoFile->Write(&write, sizeof(m_unk0x12));
-
-		write = m_unk0x1a;
-		p_legoFile->Write(&write, sizeof(m_unk0x12));
-
-		write = m_score1;
-		p_legoFile->Write(&write, sizeof(m_unk0x12));
-
-		write = m_score2;
-		p_legoFile->Write(&write, sizeof(m_unk0x12));
-
-		write = m_score3;
-		p_legoFile->Write(&write, sizeof(m_unk0x12));
-
-		write = m_score4;
-		p_legoFile->Write(&write, sizeof(m_unk0x12));
-
-		write = m_score5;
-		p_legoFile->Write(&write, sizeof(m_unk0x12));
+	else if (p_file->IsWriteMode()) {
+		Write(p_file, m_unk0x12);
+		Write(p_file, m_unk0x14);
+		Write(p_file, m_unk0x16);
+		Write(p_file, m_unk0x18);
+		Write(p_file, m_unk0x1a);
+		Write(p_file, m_score1);
+		Write(p_file, m_score2);
+		Write(p_file, m_score3);
+		Write(p_file, m_score4);
+		Write(p_file, m_score5);
 	}
 
 	return SUCCESS;

@@ -684,35 +684,25 @@ HospitalState::HospitalState()
 }
 
 // FUNCTION: LEGO1 0x10076530
-MxResult HospitalState::Serialize(LegoFile* p_legoFile)
+MxResult HospitalState::Serialize(LegoFile* p_file)
 {
-	LegoState::Serialize(p_legoFile);
+	LegoState::Serialize(p_file);
 
-	if (p_legoFile->IsWriteMode()) {
-		// A write variable needs to be used here, otherwise
-		// the compiler aggresively optimizes the function
-		MxS16 write;
-
-		write = m_unk0x0c;
-		p_legoFile->Write(&write, sizeof(m_unk0x0c));
-		write = m_unk0x0e;
-		p_legoFile->Write(&write, sizeof(m_unk0x0e));
-		write = m_unk0x10;
-		p_legoFile->Write(&write, sizeof(m_unk0x10));
-		write = m_unk0x12;
-		p_legoFile->Write(&write, sizeof(m_unk0x12));
-		write = m_unk0x14;
-		p_legoFile->Write(&write, sizeof(m_unk0x14));
-		write = m_unk0x16;
-		p_legoFile->Write(&write, sizeof(m_unk0x16));
+	if (p_file->IsWriteMode()) {
+		Write(p_file, m_unk0x0c);
+		Write(p_file, m_unk0x0e);
+		Write(p_file, m_unk0x10);
+		Write(p_file, m_unk0x12);
+		Write(p_file, m_unk0x14);
+		Write(p_file, m_unk0x16);
 	}
-	else if (p_legoFile->IsReadMode()) {
-		p_legoFile->Read(&m_unk0x0c, sizeof(m_unk0x0c));
-		p_legoFile->Read(&m_unk0x0e, sizeof(m_unk0x0e));
-		p_legoFile->Read(&m_unk0x10, sizeof(m_unk0x10));
-		p_legoFile->Read(&m_unk0x12, sizeof(m_unk0x12));
-		p_legoFile->Read(&m_unk0x14, sizeof(m_unk0x14));
-		p_legoFile->Read(&m_unk0x16, sizeof(m_unk0x16));
+	else if (p_file->IsReadMode()) {
+		Read(p_file, &m_unk0x0c);
+		Read(p_file, &m_unk0x0e);
+		Read(p_file, &m_unk0x10);
+		Read(p_file, &m_unk0x12);
+		Read(p_file, &m_unk0x14);
+		Read(p_file, &m_unk0x16);
 	}
 
 	return SUCCESS;

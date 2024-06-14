@@ -76,9 +76,22 @@ MxU32 PizzeriaState::FUN_10017d70()
 	return 0;
 }
 
-// STUB: LEGO1 0x10017da0
-MxResult PizzeriaState::Serialize(LegoFile* p_legoFile)
+// FUNCTION: LEGO1 0x10017da0
+// FUNCTION: BETA10 0x100efe33
+MxResult PizzeriaState::Serialize(LegoFile* p_file)
 {
-	// TODO
-	return LegoState::Serialize(p_legoFile);
+	MxResult res = LegoState::Serialize(p_file);
+
+	if (p_file->IsReadMode()) {
+		for (MxS16 i = 0; i < 5; i++) {
+			m_unk0x08[i].ReadFromFile(p_file);
+		}
+	}
+	else {
+		for (MxS16 i = 0; i < 5; i++) {
+			m_unk0x08[i].WriteToFile(p_file);
+		}
+	}
+
+	return res;
 }

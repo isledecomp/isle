@@ -31,7 +31,7 @@ public:
 		return !strcmp(p_name, PoliceState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x1005e920
 	// PoliceState::`scalar deleting destructor'

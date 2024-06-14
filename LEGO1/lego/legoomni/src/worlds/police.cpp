@@ -206,16 +206,15 @@ PoliceState::PoliceState()
 }
 
 // FUNCTION: LEGO1 0x1005e990
-MxResult PoliceState::Serialize(LegoFile* p_legoFile)
+MxResult PoliceState::Serialize(LegoFile* p_file)
 {
-	LegoState::Serialize(p_legoFile);
+	LegoState::Serialize(p_file);
 
-	if (p_legoFile->IsReadMode()) {
-		p_legoFile->Read(&m_policeScript, sizeof(m_policeScript));
+	if (p_file->IsReadMode()) {
+		Read(p_file, &m_policeScript);
 	}
 	else {
-		PoliceScript::Script policeScript = m_policeScript;
-		p_legoFile->Write(&policeScript, sizeof(m_policeScript));
+		Write(p_file, m_policeScript);
 	}
 
 	return SUCCESS;
