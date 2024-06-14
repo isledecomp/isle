@@ -2877,7 +2877,7 @@ MxResult AnimState::Serialize(LegoFile* p_file)
 		else {
 			m_unk0x10 = NULL;
 		}
-		for (int i = 0; i < m_unk0x0c; i++) {
+		for (MxS32 i = 0; i < m_unk0x0c; i++) {
 			Read(p_file, &m_unk0x10[i]);
 		}
 
@@ -2893,18 +2893,18 @@ MxResult AnimState::Serialize(LegoFile* p_file)
 		else {
 			m_unk0x18 = NULL;
 		}
-		for (int j = 0; j < m_unk0x14; j++) {
+		for (MxS32 j = 0; j < m_unk0x14; j++) {
 			Read(p_file, &m_unk0x18[j]);
 		}
 	}
 	else if (p_file->IsWriteMode()) {
 		Write(p_file, m_unk0x08);
 		Write(p_file, m_unk0x0c);
-		for (int i = 0; i < m_unk0x0c; i++) {
+		for (MxS32 i = 0; i < m_unk0x0c; i++) {
 			Write(p_file, m_unk0x10[i]);
 		}
 		Write(p_file, m_unk0x14);
-		for (int j = 0; j < m_unk0x14; j++) {
+		for (MxS32 j = 0; j < m_unk0x14; j++) {
 			Write(p_file, m_unk0x18[j]);
 		}
 	}
