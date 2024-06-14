@@ -211,10 +211,10 @@ MxResult PoliceState::Serialize(LegoFile* p_file)
 	LegoState::Serialize(p_file);
 
 	if (p_file->IsReadMode()) {
-		ReadFromStorage(p_file, &m_policeScript);
+		Read(p_file, &m_policeScript);
 	}
 	else {
-		WriteToStorage(p_file, m_policeScript);
+		Write(p_file, m_policeScript);
 	}
 
 	return SUCCESS;

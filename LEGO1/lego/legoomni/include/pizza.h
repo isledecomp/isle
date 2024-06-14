@@ -17,19 +17,19 @@ public:
 	public:
 		inline MxResult WriteToFile(LegoFile* p_file)
 		{
-			WriteToStorage(p_file, m_unk0x06);
-			WriteToStorage(p_file, m_unk0x14);
-			WriteToStorage(p_file, m_unk0x16);
-			WriteToStorage(p_file, m_score);
+			Write(p_file, m_unk0x06);
+			Write(p_file, m_unk0x14);
+			Write(p_file, m_unk0x16);
+			Write(p_file, m_score);
 			return SUCCESS;
 		}
 
 		inline MxResult ReadFromFile(LegoFile* p_file)
 		{
-			ReadFromStorage(p_file, &m_unk0x06);
-			ReadFromStorage(p_file, &m_unk0x14);
-			ReadFromStorage(p_file, &m_unk0x16);
-			ReadFromStorage(p_file, &m_score);
+			Read(p_file, &m_unk0x06);
+			Read(p_file, &m_unk0x14);
+			Read(p_file, &m_unk0x16);
+			Read(p_file, &m_score);
 			return SUCCESS;
 		}
 

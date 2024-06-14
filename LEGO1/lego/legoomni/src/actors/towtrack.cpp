@@ -163,28 +163,28 @@ MxResult TowTrackMissionState::Serialize(LegoFile* p_file)
 	LegoState::Serialize(p_file);
 
 	if (p_file->IsReadMode()) {
-		ReadFromStorage(p_file, &m_unk0x12);
-		ReadFromStorage(p_file, &m_unk0x14);
-		ReadFromStorage(p_file, &m_unk0x16);
-		ReadFromStorage(p_file, &m_unk0x18);
-		ReadFromStorage(p_file, &m_unk0x1a);
-		ReadFromStorage(p_file, &m_score1);
-		ReadFromStorage(p_file, &m_score2);
-		ReadFromStorage(p_file, &m_score3);
-		ReadFromStorage(p_file, &m_score4);
-		ReadFromStorage(p_file, &m_score5);
+		Read(p_file, &m_unk0x12);
+		Read(p_file, &m_unk0x14);
+		Read(p_file, &m_unk0x16);
+		Read(p_file, &m_unk0x18);
+		Read(p_file, &m_unk0x1a);
+		Read(p_file, &m_score1);
+		Read(p_file, &m_score2);
+		Read(p_file, &m_score3);
+		Read(p_file, &m_score4);
+		Read(p_file, &m_score5);
 	}
 	else if (p_file->IsWriteMode()) {
-		WriteToStorage(p_file, m_unk0x12);
-		WriteToStorage(p_file, m_unk0x14);
-		WriteToStorage(p_file, m_unk0x16);
-		WriteToStorage(p_file, m_unk0x18);
-		WriteToStorage(p_file, m_unk0x1a);
-		WriteToStorage(p_file, m_score1);
-		WriteToStorage(p_file, m_score2);
-		WriteToStorage(p_file, m_score3);
-		WriteToStorage(p_file, m_score4);
-		WriteToStorage(p_file, m_score5);
+		Write(p_file, m_unk0x12);
+		Write(p_file, m_unk0x14);
+		Write(p_file, m_unk0x16);
+		Write(p_file, m_unk0x18);
+		Write(p_file, m_unk0x1a);
+		Write(p_file, m_score1);
+		Write(p_file, m_score2);
+		Write(p_file, m_score3);
+		Write(p_file, m_score4);
+		Write(p_file, m_score5);
 	}
 
 	return SUCCESS;
