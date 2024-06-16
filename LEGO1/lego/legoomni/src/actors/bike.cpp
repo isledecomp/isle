@@ -77,7 +77,7 @@ MxLong Bike::HandleClick()
 }
 
 // FUNCTION: LEGO1 0x10076aa0
-MxLong Bike::HandleControl(LegoControlManagerEvent& p_param)
+MxLong Bike::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	MxLong result = 0;
 

@@ -122,15 +122,15 @@ public:
 		return !strcmp(p_name, Ambulance::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override;                      // vtable+0x18
-	void Destroy(MxBool p_fromDestructor) override;                        // vtable+0x1c
-	void VTable0x70(float p_time) override;                                // vtable+0x70
-	MxLong HandleClick() override;                                         // vtable+0xcc
-	MxLong HandleControl(LegoControlManagerEvent& p_param) override;       // vtable+0xd4
-	MxLong HandlePathStruct(LegoPathStructEvent& p_param) override;        // vtable+0xdc
-	void Exit() override;                                                  // vtable+0xe4
-	virtual MxLong HandleButtonDown(LegoControlManagerEvent& p_param);     // vtable+0xf0
-	virtual MxLong HandleEndAction(MxEndActionNotificationParam& p_param); // vtable+0xf4
+	MxResult Create(MxDSAction& p_dsAction) override;                              // vtable+0x18
+	void Destroy(MxBool p_fromDestructor) override;                                // vtable+0x1c
+	void VTable0x70(float p_time) override;                                        // vtable+0x70
+	MxLong HandleClick() override;                                                 // vtable+0xcc
+	MxLong HandleControl(LegoControlManagerNotificationParam& p_param) override;   // vtable+0xd4
+	MxLong HandlePathStruct(LegoPathStructNotificationParam& p_param) override;    // vtable+0xdc
+	void Exit() override;                                                          // vtable+0xe4
+	virtual MxLong HandleButtonDown(LegoControlManagerNotificationParam& p_param); // vtable+0xf0
+	virtual MxLong HandleEndAction(MxEndActionNotificationParam& p_param);         // vtable+0xf4
 
 	void CreateState();
 	void FUN_10036e60();

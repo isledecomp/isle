@@ -99,9 +99,9 @@ public:
 	}
 
 	MxResult Create(MxDSAction& p_dsAction) override;                   // vtable+0x18
-	undefined4 HandleClick() override;                                  // vtable+0x68
-	undefined4 HandleEndAction(MxEndActionNotificationParam&) override; // vtable+0x74
-	undefined4 VTable0x80(MxParam&) override;                           // vtable+0x80
+	MxLong HandleClick() override;                                      // vtable+0x68
+	MxLong HandleEndAction(MxEndActionNotificationParam&) override;     // vtable+0x74
+	MxLong HandlePathStruct(LegoPathStructNotificationParam&) override; // vtable+0x80
 
 	void CreateState();
 	void FUN_10038220(MxU32 p_objectId);

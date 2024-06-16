@@ -83,7 +83,7 @@ MxLong Police::Notify(MxParam& p_param)
 			result = HandleKeyPress(((LegoEventNotificationParam&) p_param));
 			break;
 		case c_notificationControl:
-			result = HandleControl((LegoControlManagerEvent&) p_param);
+			result = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;
 		case c_notificationTransitioned:
 			GameState()->SwitchArea(m_destLocation);
@@ -103,7 +103,7 @@ void Police::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x1005e550
-MxLong Police::HandleControl(LegoControlManagerEvent& p_param)
+MxLong Police::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	if (p_param.GetUnknown0x28() == 1) {
 		switch (p_param.GetClickedObjectId()) {

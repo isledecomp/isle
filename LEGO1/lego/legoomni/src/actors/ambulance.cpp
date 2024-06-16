@@ -139,16 +139,16 @@ MxLong Ambulance::Notify(MxParam& p_param)
 		result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 		break;
 	case c_notificationButtonDown:
-		result = HandleButtonDown((LegoControlManagerEvent&) p_param);
+		result = HandleButtonDown((LegoControlManagerNotificationParam&) p_param);
 		break;
 	case c_notificationClick:
 		result = HandleClick();
 		break;
 	case c_notificationControl:
-		result = HandleControl((LegoControlManagerEvent&) p_param);
+		result = HandleControl((LegoControlManagerNotificationParam&) p_param);
 		break;
 	case c_notificationPathStruct:
-		result = HandlePathStruct((LegoPathStructEvent&) p_param);
+		result = HandlePathStruct((LegoPathStructNotificationParam&) p_param);
 		break;
 	}
 
@@ -243,7 +243,7 @@ MxLong Ambulance::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 // FUNCTION: LEGO1 0x100367c0
 // FUNCTION: BETA10 0x100230bf
-MxLong Ambulance::HandleButtonDown(LegoControlManagerEvent& p_param)
+MxLong Ambulance::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 {
 	if (m_unk0x170 == 1) {
 		LegoROI* roi = PickROI(p_param.GetX(), p_param.GetY());
@@ -266,7 +266,7 @@ MxLong Ambulance::HandleButtonDown(LegoControlManagerEvent& p_param)
 
 // FUNCTION: LEGO1 0x10036860
 // FUNCTION: BETA10 0x100231bf
-MxLong Ambulance::HandlePathStruct(LegoPathStructEvent& p_param)
+MxLong Ambulance::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 {
 	// 0x168 corresponds to the path at the gas station
 	if (p_param.GetData() == 0x168) {
@@ -437,7 +437,7 @@ void Ambulance::Leave()
 }
 
 // FUNCTION: LEGO1 0x10036f90
-MxLong Ambulance::HandleControl(LegoControlManagerEvent& p_param)
+MxLong Ambulance::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	MxLong result = 0;
 

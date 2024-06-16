@@ -10,9 +10,9 @@ class MxControlPresenter;
 
 // VTABLE: LEGO1 0x100d6a98
 // SIZE 0x2c
-class LegoControlManagerEvent : public LegoEventNotificationParam {
+class LegoControlManagerNotificationParam : public LegoEventNotificationParam {
 public:
-	inline LegoControlManagerEvent() : LegoEventNotificationParam()
+	inline LegoControlManagerNotificationParam() : LegoEventNotificationParam()
 	{
 		m_clickedObjectId = -1;
 		m_clickedAtom = NULL;
@@ -34,10 +34,10 @@ public:
 };
 
 // SYNTHETIC: LEGO1 0x10028bf0
-// LegoControlManagerEvent::`scalar deleting destructor'
+// LegoControlManagerNotificationParam::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x10028c60
-// LegoControlManagerEvent::~LegoControlManagerEvent
+// LegoControlManagerNotificationParam::~LegoControlManagerNotificationParam
 
 // VTABLE: LEGO1 0x100d6a80
 class LegoControlManager : public MxCore {
@@ -84,13 +84,13 @@ public:
 	// LegoControlManager::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x08;             // 0x08
-	undefined4 m_unk0x0c;             // 0x0c
-	MxBool m_unk0x10;                 // 0x10
-	MxPresenter* m_unk0x14;           // 0x14
-	LegoControlManagerEvent m_event;  // 0x18
-	MxPresenterList* m_presenterList; // 0x44
-	LegoNotifyList m_notifyList;      // 0x48
+	undefined4 m_unk0x08;                        // 0x08
+	undefined4 m_unk0x0c;                        // 0x0c
+	MxBool m_unk0x10;                            // 0x10
+	MxPresenter* m_unk0x14;                      // 0x14
+	LegoControlManagerNotificationParam m_event; // 0x18
+	MxPresenterList* m_presenterList;            // 0x44
+	LegoNotifyList m_notifyList;                 // 0x48
 };
 
 #endif // LEGOCONTROLMANAGER_H

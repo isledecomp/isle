@@ -13,7 +13,7 @@ class LegoEventNotificationParam;
 class LegoPathActor;
 class MxEndActionNotificationParam;
 class MxNotificationParam;
-class LegoPathStructEvent;
+class LegoPathStructNotificationParam;
 
 // VTABLE: LEGO1 0x100d5e30
 // SIZE 0x2c
@@ -114,11 +114,11 @@ public:
 	// FUNCTION: LEGO1 0x1000dae0
 	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
 
-	MxBool Escape() override;                                      // vtable+0x64
-	void Enable(MxBool p_enable) override;                         // vtable+0x68
-	virtual MxLong HandleClick(LegoEventNotificationParam&) = 0;   // vtable+0x6c
-	virtual MxLong HandlePathStruct(LegoPathStructEvent&);         // vtable+0x70
-	virtual MxLong HandleEndAction(MxEndActionNotificationParam&); // vtable+0x74
+	MxBool Escape() override;                                          // vtable+0x64
+	void Enable(MxBool p_enable) override;                             // vtable+0x68
+	virtual MxLong HandleClick(LegoEventNotificationParam&) = 0;       // vtable+0x6c
+	virtual MxLong HandlePathStruct(LegoPathStructNotificationParam&); // vtable+0x70
+	virtual MxLong HandleEndAction(MxEndActionNotificationParam&);     // vtable+0x74
 
 	// FUNCTION: LEGO1 0x1000dab0
 	virtual MxLong HandleType0Notification(MxNotificationParam&) { return 0; } // vtable+0x78

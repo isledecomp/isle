@@ -62,7 +62,7 @@
 #include "legoworld.h"
 #include "legoworldpresenter.h"
 #include "misc.h"
-#include "motocycle.h"
+#include "motorcycle.h"
 #include "mxcompositemediapresenter.h"
 #include "mxcontrolpresenter.h"
 #include "pizza.h"

@@ -105,7 +105,7 @@ MxLong Score::Notify(MxParam& p_param)
 			ret = 1;
 			break;
 		case c_notificationControl:
-			ret = FUN_100016d0((LegoControlManagerEvent&) p_param);
+			ret = FUN_100016d0((LegoControlManagerNotificationParam&) p_param);
 			break;
 		case c_notificationTransitioned:
 			DeleteObjects(g_infoscorScript, InfoscorScript::c_LegoBox1_Flc, InfoscorScript::c_LegoBox3_Flc);
@@ -166,7 +166,7 @@ void Score::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x100016d0
-MxLong Score::FUN_100016d0(LegoControlManagerEvent& p_param)
+MxLong Score::FUN_100016d0(LegoControlManagerNotificationParam& p_param)
 {
 	MxS16 unk0x28 = p_param.GetUnknown0x28();
 

@@ -111,10 +111,10 @@ MxLong GasStation::Notify(MxParam& p_param)
 			result = HandleKeyPress((((LegoEventNotificationParam&) p_param)).GetKey());
 			break;
 		case c_notificationButtonDown:
-			result = HandleButtonDown(((LegoControlManagerEvent&) p_param));
+			result = HandleButtonDown(((LegoControlManagerNotificationParam&) p_param));
 			break;
 		case c_notificationControl:
-			result = HandleControl((LegoControlManagerEvent&) p_param);
+			result = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;
 		case c_notificationTransitioned:
 			GameState()->SwitchArea(m_destLocation);
@@ -306,14 +306,14 @@ MxLong GasStation::HandleKeyPress(MxS8 p_key)
 }
 
 // STUB: LEGO1 0x10005960
-MxLong GasStation::HandleButtonDown(LegoControlManagerEvent& p_param)
+MxLong GasStation::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 {
 	// TODO
 	return 0;
 }
 
 // FUNCTION: LEGO1 0x10005b20
-MxLong GasStation::HandleControl(LegoControlManagerEvent& p_param)
+MxLong GasStation::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	if (p_param.GetUnknown0x28() == 1) {
 		MxDSAction action;

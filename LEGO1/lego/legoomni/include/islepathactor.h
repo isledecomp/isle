@@ -6,10 +6,10 @@
 #include "mxtypes.h"
 #include "roi/legoroi.h"
 
-class LegoControlManagerEvent;
+class LegoControlManagerNotificationParam;
 class LegoEndAnimNotificationParam;
 class LegoWorld;
-class LegoPathStructEvent;
+class LegoPathStructNotificationParam;
 
 // VTABLE: LEGO1 0x100d4398
 // SIZE 0x160
@@ -113,13 +113,13 @@ public:
 	virtual MxLong HandleNotification0() { return 0; } // vtable+0xd0
 
 	// FUNCTION: LEGO1 0x10002e80
-	virtual MxLong HandleControl(LegoControlManagerEvent&) { return 0; } // vtable+0xd4
+	virtual MxLong HandleControl(LegoControlManagerNotificationParam&) { return 0; } // vtable+0xd4
 
 	// FUNCTION: LEGO1 0x10002e90
 	virtual MxLong HandleEndAnim(LegoEndAnimNotificationParam&) { return 0; } // vtable+0xd8
 
 	// FUNCTION: LEGO1 0x10002e00
-	virtual MxLong HandlePathStruct(LegoPathStructEvent&) { return 0; } // vtable+0xdc
+	virtual MxLong HandlePathStruct(LegoPathStructNotificationParam&) { return 0; } // vtable+0xdc
 
 	virtual void Enter();                                                                        // vtable+0xe0
 	virtual void Exit();                                                                         // vtable+0xe4

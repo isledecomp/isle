@@ -3,6 +3,8 @@
 
 #include "legoactor.h"
 
+class LegoControlManagerNotificationParam;
+class LegoPathStructNotificationParam;
 class LegoWorld;
 class MxEndActionNotificationParam;
 class MxNotificationParam;
@@ -29,25 +31,25 @@ public:
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 
 	// FUNCTION: LEGO1 0x1000e5f0
-	virtual undefined4 HandleClick() { return 0; } // vtable+0x68
+	virtual MxLong HandleClick() { return 0; } // vtable+0x68
 
 	// FUNCTION: LEGO1 0x1000e600
-	virtual undefined4 VTable0x6c() { return 0; } // vtable+0x6c
+	virtual MxLong VTable0x6c() { return 0; } // vtable+0x6c
 
 	// FUNCTION: LEGO1 0x1000e610
-	virtual undefined4 VTable0x70() { return 0; } // vtable+0x70
+	virtual MxLong HandleEndAnim() { return 0; } // vtable+0x70
 
 	// FUNCTION: LEGO1 0x1000e620
-	virtual undefined4 HandleEndAction(MxEndActionNotificationParam&) { return 0; } // vtable+0x74
+	virtual MxLong HandleEndAction(MxEndActionNotificationParam&) { return 0; } // vtable+0x74
 
 	// FUNCTION: LEGO1 0x1000e630
-	virtual undefined4 HandleButtonDown(MxNotificationParam&) { return 0; } // vtable+0x78
+	virtual MxLong HandleButtonDown(LegoControlManagerNotificationParam&) { return 0; } // vtable+0x78
 
 	// FUNCTION: LEGO1 0x1000e640
-	virtual undefined4 HandleButtonUp(MxNotificationParam&) { return 0; } // vtable+0x7c
+	virtual MxLong HandleButtonUp(LegoControlManagerNotificationParam&) { return 0; } // vtable+0x7c
 
 	// FUNCTION: LEGO1 0x1000e650
-	virtual undefined4 VTable0x80(MxParam&) { return 0; } // vtable+0x80
+	virtual MxLong HandlePathStruct(LegoPathStructNotificationParam&) { return 0; } // vtable+0x80
 
 protected:
 	LegoWorld* m_world; // 0x78

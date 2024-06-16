@@ -152,7 +152,7 @@ MxLong Helicopter::HandleClick()
 }
 
 // FUNCTION: LEGO1 0x100035e0
-MxLong Helicopter::HandleControl(LegoControlManagerEvent& p_param)
+MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	MxU32 ret = 0;
 	MxAtomId script;

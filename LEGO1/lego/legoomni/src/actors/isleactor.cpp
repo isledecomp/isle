@@ -37,19 +37,19 @@ MxLong IsleActor::Notify(MxParam& p_param)
 		result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 		break;
 	case c_notificationButtonUp:
-		result = HandleButtonUp((MxNotificationParam&) p_param);
+		result = HandleButtonUp((LegoControlManagerNotificationParam&) p_param);
 		break;
 	case c_notificationButtonDown:
-		result = HandleButtonDown((MxNotificationParam&) p_param);
+		result = HandleButtonDown((LegoControlManagerNotificationParam&) p_param);
 		break;
 	case c_notificationClick:
 		result = HandleClick();
 		break;
 	case c_notificationEndAnim:
-		result = VTable0x70();
+		result = HandleEndAnim();
 		break;
 	case c_notificationPathStruct:
-		result = VTable0x80(p_param);
+		result = HandlePathStruct((LegoPathStructNotificationParam&) p_param);
 		break;
 	}
 

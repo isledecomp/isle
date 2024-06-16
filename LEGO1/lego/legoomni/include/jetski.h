@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "islepathactor.h"
 
-class LegoControlManagerEvent;
+class LegoControlManagerNotificationParam;
 
 // VTABLE: LEGO1 0x100d9ec8
 // SIZE 0x164
@@ -25,11 +25,11 @@ public:
 		return !strcmp(p_name, Jetski::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override;        // vtable+0x18
-	void VTable0x70(float p_float) override;                 // vtable+0x70
-	MxLong HandleClick() override;                           // vtable+0xcc
-	MxLong HandleControl(LegoControlManagerEvent&) override; // vtable+0xd4
-	void Exit() override;                                    // vtable+0xe4
+	MxResult Create(MxDSAction& p_dsAction) override;                    // vtable+0x18
+	void VTable0x70(float p_float) override;                             // vtable+0x70
+	MxLong HandleClick() override;                                       // vtable+0xcc
+	MxLong HandleControl(LegoControlManagerNotificationParam&) override; // vtable+0xd4
+	void Exit() override;                                                // vtable+0xe4
 
 	void FUN_1007e990();
 

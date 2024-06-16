@@ -11,9 +11,10 @@ class LegoWorld;
 
 // VTABLE: LEGO1 0x100d6230
 // SIZE 0x10
-class LegoPathStructEvent : public MxNotificationParam {
+class LegoPathStructNotificationParam : public MxNotificationParam {
 public:
-	LegoPathStructEvent(NotificationId p_type, MxCore* p_sender, MxU8 p_trigger, MxS16 p_data) : MxNotificationParam()
+	LegoPathStructNotificationParam(NotificationId p_type, MxCore* p_sender, MxU8 p_trigger, MxS16 p_data)
+		: MxNotificationParam()
 	{
 		m_type = p_type;
 		m_sender = p_sender;
@@ -24,7 +25,7 @@ public:
 	// FUNCTION: LEGO1 0x1001bac0
 	MxNotificationParam* Clone() const override
 	{
-		return new LegoPathStructEvent(m_type, m_sender, m_trigger, m_data);
+		return new LegoPathStructNotificationParam(m_type, m_sender, m_trigger, m_data);
 	} // vtable+0x04
 
 	inline MxU8 GetTrigger() { return m_trigger; }
@@ -99,10 +100,10 @@ private:
 };
 
 // SYNTHETIC: LEGO1 0x1001bb80
-// LegoPathStructEvent::`scalar deleting destructor'
+// LegoPathStructNotificationParam::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x1001bbf0
-// LegoPathStructEvent::~LegoPathStructEvent
+// LegoPathStructNotificationParam::~LegoPathStructNotificationParam
 
 // SYNTHETIC: LEGO1 0x10047440
 // LegoPathStructBase::`scalar deleting destructor'

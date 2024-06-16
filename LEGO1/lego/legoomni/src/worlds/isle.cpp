@@ -23,7 +23,7 @@
 #include "legovariables.h"
 #include "legovideomanager.h"
 #include "misc.h"
-#include "motocycle.h"
+#include "motorcycle.h"
 #include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
@@ -152,7 +152,7 @@ MxLong Isle::Notify(MxParam& p_param)
 			}
 			break;
 		case c_notificationControl:
-			result = HandleControl((LegoControlManagerEvent&) p_param);
+			result = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;
 		case c_notificationEndAnim:
 			switch (m_act1state->m_unk0x018) {
@@ -168,7 +168,7 @@ MxLong Isle::Notify(MxParam& p_param)
 			}
 			break;
 		case c_notificationPathStruct:
-			result = HandlePathStruct((LegoPathStructEvent&) p_param);
+			result = HandlePathStruct((LegoPathStructNotificationParam&) p_param);
 			break;
 		case c_notificationType20:
 			Enable(TRUE);
@@ -287,7 +287,7 @@ void Isle::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x10031030
-MxLong Isle::HandleControl(LegoControlManagerEvent& p_param)
+MxLong Isle::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	if (p_param.GetUnknown0x28() == 1) {
 		MxDSAction action;
@@ -469,7 +469,7 @@ void Isle::UpdateGlobe()
 }
 
 // FUNCTION: LEGO1 0x100315f0
-MxLong Isle::HandlePathStruct(LegoPathStructEvent& p_param)
+MxLong Isle::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 {
 	MxLong result = 0;
 
@@ -1006,7 +1006,7 @@ MxLong Isle::HandleTransitionEnd()
 		FUN_10032d30(IsleScript::c_MotoBikeDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
-			m_motocycle->FUN_10035e10();
+			m_motocycle->ActivateSceneActions();
 		}
 		break;
 	case LegoGameState::e_copter:

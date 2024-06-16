@@ -5,7 +5,7 @@
 #include "legostate.h"
 #include "legoworld.h"
 
-class LegoControlManagerEvent;
+class LegoControlManagerNotificationParam;
 class MxEndActionNotificationParam;
 
 // VTABLE: LEGO1 0x100d53f8
@@ -80,7 +80,7 @@ public:
 
 	void Paint();
 	MxLong FUN_10001510(MxEndActionNotificationParam& p_param);
-	MxLong FUN_100016d0(LegoControlManagerEvent& p_param);
+	MxLong FUN_100016d0(LegoControlManagerNotificationParam& p_param);
 	void FillArea(MxU32 i_activity, MxU32 i_actor, MxS16 score);
 
 protected:

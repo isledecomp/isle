@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxcompositepresenter.h"
 
-class LegoControlManagerEvent;
+class LegoControlManagerNotificationParam;
 class MxVideoPresenter;
 
 // VTABLE: LEGO1 0x100d7b88
@@ -39,7 +39,7 @@ public:
 	virtual void VTable0x68(MxBool p_unk0x50);                       // vtable+0x68
 	virtual void VTable0x6c(MxS16 p_unk0x4e);                        // vtable+0x6c
 
-	MxBool FUN_10044480(LegoControlManagerEvent* p_event, MxPresenter* p_presenter);
+	MxBool FUN_10044480(LegoControlManagerNotificationParam* p_param, MxPresenter* p_presenter);
 	MxBool FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* p_presenter);
 
 	inline MxS16 GetUnknown0x4e() { return m_unk0x4e; }

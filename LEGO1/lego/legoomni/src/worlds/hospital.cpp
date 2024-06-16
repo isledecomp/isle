@@ -120,10 +120,10 @@ MxLong Hospital::Notify(MxParam& p_param)
 			result = HandleKeyPress((((LegoEventNotificationParam&) p_param)).GetKey());
 			break;
 		case c_notificationButtonDown:
-			result = HandleButtonDown(((LegoControlManagerEvent&) p_param));
+			result = HandleButtonDown(((LegoControlManagerNotificationParam&) p_param));
 			break;
 		case c_notificationControl:
-			result = HandleControl((LegoControlManagerEvent&) p_param);
+			result = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;
 		case c_notificationTransitioned:
 			if (m_destLocation != LegoGameState::e_undefined) {
@@ -396,7 +396,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10075710
-MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
+MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 {
 	if (m_unk0x100 == 1) {
 		LegoROI* roi = PickROI(p_param.GetX(), p_param.GetY());
@@ -552,7 +552,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 }
 
 // FUNCTION: LEGO1 0x10075f90
-MxBool Hospital::HandleControl(LegoControlManagerEvent& p_param)
+MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	if (p_param.GetUnknown0x28() == 1) {
 		switch (p_param.GetClickedObjectId()) {

@@ -10,7 +10,7 @@
 #include "mxticklemanager.h"
 
 DECOMP_SIZE_ASSERT(LegoControlManager, 0x60)
-DECOMP_SIZE_ASSERT(LegoControlManagerEvent, 0x2c)
+DECOMP_SIZE_ASSERT(LegoControlManagerNotificationParam, 0x2c)
 
 // FUNCTION: LEGO1 0x10028520
 LegoControlManager::LegoControlManager()

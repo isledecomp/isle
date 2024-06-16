@@ -7,7 +7,7 @@
 #include "legoworld.h"
 #include "radio.h"
 
-class LegoControlManagerEvent;
+class LegoControlManagerNotificationParam;
 class LegoEventNotificationParam;
 class MxDSAction;
 
@@ -79,7 +79,7 @@ public:
 	// Police::`scalar deleting destructor'
 
 private:
-	MxLong HandleControl(LegoControlManagerEvent& p_param);
+	MxLong HandleControl(LegoControlManagerNotificationParam& p_param);
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleKeyPress(LegoEventNotificationParam& p_param);
 
