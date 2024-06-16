@@ -17,6 +17,7 @@ from lego_util.pdb_extraction import (
     CppStackSymbol,
 )
 from lego_util.ghidra_helper import (
+    add_pointer_type,
     get_ghidra_namespace,
     sanitize_name,
 )
@@ -82,7 +83,20 @@ class PdbFunctionImporter:
         """Checks whether this function declaration already matches the description in Ghidra"""
         name_match = self.name == ghidra_function.getName(False)
         namespace_match = self.namespace == ghidra_function.getParentNamespace()
-        return_type_match = self.return_type == ghidra_function.getReturnType()
+        ghidra_return_type = ghidra_function.getReturnType()
+        return_type_match = self.return_type == ghidra_return_type
+
+        # Handle edge case: Return type X that is larger than the return register.
+        # In that case, the function returns `X*` and has another argument `X* __return_storage_ptr`.
+        if (
+            (not return_type_match)
+            and (self.return_type.getLength() > 4)
+            and (add_pointer_type(self.api, self.return_type) == ghidra_return_type)
+            and any(param for param in ghidra_function.getParameters() if param.getName() == "__return_storage_ptr__")
+        ):
+            logger.debug("%s has a return type larger than 4 bytes", self.get_full_name())
+            return_type_match = True
+
         # match arguments: decide if thiscall or not
         thiscall_matches = (
             self.signature.call_type == ghidra_function.getCallingConventionName()
@@ -128,6 +142,14 @@ class PdbFunctionImporter:
         return self._parameter_lists_match(ghidra_params)
 
     def _parameter_lists_match(self, ghidra_params: "list[Parameter]") -> bool:
+        # Remove return storage pointer from comparison if present.
+        # This is relevant to returning values larger than 4 bytes, and is not mentioned in the PDB
+        ghidra_params = [
+            param
+            for param in ghidra_params
+            if param.getName() != "__return_storage_ptr__"
+        ]
+
         if len(self.arguments) != len(ghidra_params):
             logger.info("Mismatching argument count")
             return False
