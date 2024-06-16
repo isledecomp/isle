@@ -72,14 +72,14 @@ void Pizza::FUN_10038380()
 }
 
 // STUB: LEGO1 0x100383f0
-undefined4 Pizza::HandleClick()
+MxLong Pizza::HandleClick()
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x100384f0
-undefined4 Pizza::HandlePathStruct(LegoPathStructNotificationParam&)
+MxLong Pizza::HandlePathStruct(LegoPathStructNotificationParam&)
 {
 	// TODO
 	return 0;
@@ -93,7 +93,7 @@ MxResult Pizza::Tickle()
 }
 
 // STUB: LEGO1 0x10038b10
-undefined4 Pizza::HandleEndAction(MxEndActionNotificationParam&)
+MxLong Pizza::HandleEndAction(MxEndActionNotificationParam&)
 {
 	// TODO
 	return 0;

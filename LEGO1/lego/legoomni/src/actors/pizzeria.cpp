@@ -46,7 +46,7 @@ void Pizzeria::CreateState()
 }
 
 // FUNCTION: LEGO1 0x10017a50
-undefined4 Pizzeria::HandleClick()
+MxLong Pizzeria::HandleClick()
 {
 	if (FUN_1003ef60() && m_pizzaMissionState->m_unk0x0c == 0) {
 		if (UserActor()->GetActorId() != GameState()->GetActorId()) {

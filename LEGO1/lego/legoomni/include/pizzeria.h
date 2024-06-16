@@ -68,7 +68,7 @@ public:
 	}
 
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	undefined4 HandleClick() override;                // vtable+0x68
+	MxLong HandleClick() override;                    // vtable+0x68
 
 	void CreateState();
 
