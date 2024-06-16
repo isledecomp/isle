@@ -28,7 +28,7 @@ public:
 	MxLong HandleControl(LegoControlManagerEvent& p_param) override; // vtable+0xd4
 	void Exit() override;                                            // vtable+0xe4
 
-	void FUN_10076b60();
+	void ActivateSceneActions();
 
 	// SYNTHETIC: LEGO1 0x10076880
 	// Bike::`scalar deleting destructor'
