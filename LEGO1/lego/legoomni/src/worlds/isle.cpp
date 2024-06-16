@@ -990,7 +990,7 @@ MxLong Isle::HandleTransitionEnd()
 		FUN_10032d30(IsleScript::c_BikeDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
-			m_bike->FUN_10076b60();
+			m_bike->ActivateSceneActions();
 		}
 		break;
 	case LegoGameState::e_dunecar:
