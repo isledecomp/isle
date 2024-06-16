@@ -92,9 +92,15 @@ class PdbFunctionImporter:
             (not return_type_match)
             and (self.return_type.getLength() > 4)
             and (add_pointer_type(self.api, self.return_type) == ghidra_return_type)
-            and any(param for param in ghidra_function.getParameters() if param.getName() == "__return_storage_ptr__")
+            and any(
+                param
+                for param in ghidra_function.getParameters()
+                if param.getName() == "__return_storage_ptr__"
+            )
         ):
-            logger.debug("%s has a return type larger than 4 bytes", self.get_full_name())
+            logger.debug(
+                "%s has a return type larger than 4 bytes", self.get_full_name()
+            )
             return_type_match = True
 
         # match arguments: decide if thiscall or not

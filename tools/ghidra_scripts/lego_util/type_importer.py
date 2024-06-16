@@ -269,7 +269,6 @@ class PdbTypeImporter:
     def _get_or_create_enum_data_type(
         self, enum_type_name: str, enum_type_size: int
     ) -> Enum:
-
         if (known_enum := self.handled_enums.get(enum_type_name, None)) is not None:
             return known_enum
 
@@ -325,7 +324,9 @@ class PdbTypeImporter:
             data_type = (
                 self.api.getCurrentProgram()
                 .getDataTypeManager()
-                .addDataType(new_instance_callback(), DataTypeConflictHandler.KEEP_HANDLER)
+                .addDataType(
+                    new_instance_callback(), DataTypeConflictHandler.KEEP_HANDLER
+                )
             )
             logger.info(
                 "Created new %s data type %s", readable_name_of_type_category, type_name
