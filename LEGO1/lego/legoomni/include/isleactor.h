@@ -34,7 +34,7 @@ public:
 	virtual MxLong HandleClick() { return 0; } // vtable+0x68
 
 	// FUNCTION: LEGO1 0x1000e600
-	virtual undefined4 VTable0x6c() { return 0; } // vtable+0x6c
+	virtual MxLong VTable0x6c() { return 0; } // vtable+0x6c
 
 	// FUNCTION: LEGO1 0x1000e610
 	virtual MxLong HandleEndAnim() { return 0; } // vtable+0x70
