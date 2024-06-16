@@ -146,7 +146,7 @@ MxLong Motocycle::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10035e10
-void Motocycle::FUN_10035e10()
+void Motocycle::ActivateSceneActions()
 {
 	PlayMusic(JukeboxScript::c_PoliceStation_Music);
 

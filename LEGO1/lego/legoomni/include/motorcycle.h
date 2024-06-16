@@ -30,7 +30,7 @@ public:
 	MxLong HandlePathStruct(LegoPathStructNotificationParam&) override;          // vtable+0xdc
 	void Exit() override;                                                        // vtable+0xe4
 
-	void FUN_10035e10();
+	void ActivateSceneActions();
 
 	// SYNTHETIC: LEGO1 0x100359d0
 	// Motocycle::`scalar deleting destructor'

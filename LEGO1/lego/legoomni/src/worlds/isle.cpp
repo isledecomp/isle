@@ -1006,7 +1006,7 @@ MxLong Isle::HandleTransitionEnd()
 		FUN_10032d30(IsleScript::c_MotoBikeDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
-			m_motocycle->FUN_10035e10();
+			m_motocycle->ActivateSceneActions();
 		}
 		break;
 	case LegoGameState::e_copter:
