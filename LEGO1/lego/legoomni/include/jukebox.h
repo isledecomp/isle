@@ -6,7 +6,7 @@
 #include "legostate.h"
 #include "legoworld.h"
 
-class LegoControlManagerEvent;
+class LegoControlManagerNotificationParam;
 
 // VTABLE: LEGO1 0x100d4a90
 // SIZE 0x10
@@ -79,7 +79,7 @@ public:
 	// JukeBox::`scalar deleting destructor'
 
 private:
-	MxBool HandleControl(LegoControlManagerEvent& p_param);
+	MxBool HandleControl(LegoControlManagerNotificationParam& p_param);
 
 	LegoGameState::Area m_destLocation; // 0xf8
 	JukeBoxState* m_state;              // 0xfc

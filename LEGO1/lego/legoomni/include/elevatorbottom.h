@@ -5,7 +5,7 @@
 #include "legogamestate.h"
 #include "legoworld.h"
 
-class LegoControlManagerEvent;
+class LegoControlManagerNotificationParam;
 
 // VTABLE: LEGO1 0x100d5f20
 // SIZE 0xfc
@@ -44,7 +44,7 @@ public:
 private:
 	LegoGameState::Area m_destLocation; // 0xf8
 
-	MxLong HandleControl(LegoControlManagerEvent& p_param);
+	MxLong HandleControl(LegoControlManagerNotificationParam& p_param);
 };
 
 #endif // ELEVATORBOTTOM_H

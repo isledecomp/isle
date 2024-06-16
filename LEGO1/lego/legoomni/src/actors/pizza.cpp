@@ -79,7 +79,7 @@ undefined4 Pizza::HandleClick()
 }
 
 // STUB: LEGO1 0x100384f0
-undefined4 Pizza::VTable0x80(MxParam&)
+undefined4 Pizza::HandlePathStruct(MxParam&)
 {
 	// TODO
 	return 0;

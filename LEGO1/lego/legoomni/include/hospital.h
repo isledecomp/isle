@@ -7,7 +7,7 @@
 #include "legostate.h"
 #include "legoworld.h"
 
-class LegoControlManagerEvent;
+class LegoControlManagerNotificationParam;
 class MxEndActionNotificationParam;
 class MxStillPresenter;
 
@@ -89,8 +89,8 @@ public:
 private:
 	MxLong HandleKeyPress(MxS8 p_key);
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
-	MxLong HandleButtonDown(LegoControlManagerEvent& p_param);
-	MxBool HandleControl(LegoControlManagerEvent& p_param);
+	MxLong HandleButtonDown(LegoControlManagerNotificationParam& p_param);
+	MxBool HandleControl(LegoControlManagerNotificationParam& p_param);
 
 	MxS16 m_currentActorId;                 // 0xf8
 	LegoGameState::Area m_destLocation;     // 0xfc

@@ -37,7 +37,7 @@ MxLong Jetski::HandleClick()
 }
 
 // STUB: LEGO1 0x1007e8e0
-MxLong Jetski::HandleControl(LegoControlManagerEvent& p_param)
+MxLong Jetski::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	// TODO
 	return 0;

@@ -3,6 +3,8 @@
 
 #include "legoactor.h"
 
+class LegoControlManagerNotificationParam;
+class LegoPathStructNotificationParam;
 class LegoWorld;
 class MxEndActionNotificationParam;
 class MxNotificationParam;
@@ -35,19 +37,19 @@ public:
 	virtual undefined4 VTable0x6c() { return 0; } // vtable+0x6c
 
 	// FUNCTION: LEGO1 0x1000e610
-	virtual undefined4 VTable0x70() { return 0; } // vtable+0x70
+	virtual undefined4 HandleEndAnim() { return 0; } // vtable+0x70
 
 	// FUNCTION: LEGO1 0x1000e620
 	virtual undefined4 HandleEndAction(MxEndActionNotificationParam&) { return 0; } // vtable+0x74
 
 	// FUNCTION: LEGO1 0x1000e630
-	virtual undefined4 HandleButtonDown(MxNotificationParam&) { return 0; } // vtable+0x78
+	virtual undefined4 HandleButtonDown(LegoControlManagerNotificationParam&) { return 0; } // vtable+0x78
 
 	// FUNCTION: LEGO1 0x1000e640
-	virtual undefined4 HandleButtonUp(MxNotificationParam&) { return 0; } // vtable+0x7c
+	virtual undefined4 HandleButtonUp(LegoControlManagerNotificationParam&) { return 0; } // vtable+0x7c
 
 	// FUNCTION: LEGO1 0x1000e650
-	virtual undefined4 VTable0x80(MxParam&) { return 0; } // vtable+0x80
+	virtual undefined4 HandlePathStruct(LegoPathStructNotificationParam&) { return 0; } // vtable+0x80
 
 protected:
 	LegoWorld* m_world; // 0x78

@@ -15,7 +15,7 @@ class Jetski;
 class JukeBoxEntity;
 class LegoNamedTexture;
 class Motocycle;
-class LegoPathStructEvent;
+class LegoPathStructNotificationParam;
 class Pizza;
 class Pizzeria;
 class RaceCar;
@@ -198,8 +198,8 @@ public:
 
 protected:
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
-	MxLong HandleControl(LegoControlManagerEvent& p_param);
-	MxLong HandlePathStruct(LegoPathStructEvent& p_param);
+	MxLong HandleControl(LegoControlManagerNotificationParam& p_param);
+	MxLong HandlePathStruct(LegoPathStructNotificationParam& p_param);
 	MxLong HandleTransitionEnd();
 	void HandleElevatorEndAction();
 	void UpdateGlobe();

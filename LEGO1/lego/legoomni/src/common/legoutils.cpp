@@ -367,7 +367,7 @@ void PlayCamAnim(LegoPathActor* p_actor, MxBool p_unused, MxU32 p_location, MxBo
 	MxLong result = 0;
 
 	if (world != NULL) {
-		LegoPathStructEvent param(c_notificationPathStruct, p_actor, LegoPathStruct::c_camAnim, p_location);
+		LegoPathStructNotificationParam param(c_notificationPathStruct, p_actor, LegoPathStruct::c_camAnim, p_location);
 		result = world->Notify(param);
 	}
 

@@ -75,12 +75,12 @@ public:
 		return !strcmp(p_name, GasStation::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override;               // vtable+0x18
-	void ReadyWorld() override;                                     // vtable+0x50
-	MxBool VTable0x5c() override;                                   // vtable+0x5c
-	MxBool Escape() override;                                       // vtable+0x64
-	void Enable(MxBool p_enable) override;                          // vtable+0x68
-	virtual MxLong HandleControl(LegoControlManagerEvent& p_param); // vtable+0x6c
+	MxResult Create(MxDSAction& p_dsAction) override;                           // vtable+0x18
+	void ReadyWorld() override;                                                 // vtable+0x50
+	MxBool VTable0x5c() override;                                               // vtable+0x5c
+	MxBool Escape() override;                                                   // vtable+0x64
+	void Enable(MxBool p_enable) override;                                      // vtable+0x68
+	virtual MxLong HandleControl(LegoControlManagerNotificationParam& p_param); // vtable+0x6c
 
 	inline void PlayAction(MxU32 p_objectId);
 
@@ -90,7 +90,7 @@ public:
 private:
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleKeyPress(MxS8 p_key);
-	MxLong HandleButtonDown(LegoControlManagerEvent& p_param);
+	MxLong HandleButtonDown(LegoControlManagerNotificationParam& p_param);
 
 	MxS16 m_currentActorId;             // 0xf8
 	undefined2 m_unk0xfa;               // 0xfa

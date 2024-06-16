@@ -89,7 +89,7 @@ MxLong TowTrack::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 }
 
 // STUB: LEGO1 0x1004d330
-MxLong TowTrack::HandlePathStruct(LegoPathStructEvent& p_param)
+MxLong TowTrack::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 {
 	// TODO
 	return 0;
@@ -109,7 +109,7 @@ void TowTrack::Exit()
 }
 
 // STUB: LEGO1 0x1004d9e0
-MxLong TowTrack::HandleControl(LegoControlManagerEvent& p_param)
+MxLong TowTrack::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	// TODO
 	return 0;

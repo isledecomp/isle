@@ -26,11 +26,11 @@ public:
 		return !strcmp(p_name, SkateBoard::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override;                // vtable+0x18
-	MxLong HandleClick() override;                                   // vtable+0xcc
-	MxLong HandleNotification0() override;                           // vtable+0xd0
-	MxLong HandleControl(LegoControlManagerEvent& p_param) override; // vtable+0xd4
-	void Exit() override;                                            // vtable+0xe4
+	MxResult Create(MxDSAction& p_dsAction) override;                            // vtable+0x18
+	MxLong HandleClick() override;                                               // vtable+0xcc
+	MxLong HandleNotification0() override;                                       // vtable+0xd0
+	MxLong HandleControl(LegoControlManagerNotificationParam& p_param) override; // vtable+0xd4
+	void Exit() override;                                                        // vtable+0xe4
 
 	inline void SetUnknown0x160(MxBool p_unk0x160) { m_unk0x160 = p_unk0x160; }
 

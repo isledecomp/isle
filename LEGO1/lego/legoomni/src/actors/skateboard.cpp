@@ -106,7 +106,7 @@ MxLong SkateBoard::HandleClick()
 }
 
 // FUNCTION: LEGO1 0x10010230
-MxLong SkateBoard::HandleControl(LegoControlManagerEvent& p_param)
+MxLong SkateBoard::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	MxU32 result = 0;
 

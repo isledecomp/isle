@@ -115,7 +115,7 @@ MxLong RegistrationBook::Notify(MxParam& p_param)
 			m_registerDialogueTimer = Timer()->GetTime();
 			break;
 		case c_notificationControl:
-			result = HandleControl((LegoControlManagerEvent&) p_param);
+			result = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;
 		case c_notificationPathStruct:
 			result = HandleNotification19(p_param);
@@ -210,7 +210,7 @@ MxLong RegistrationBook::HandleKeyPress(MxU8 p_key)
 }
 
 // FUNCTION: LEGO1 0x100774a0
-MxLong RegistrationBook::HandleControl(LegoControlManagerEvent& p_param)
+MxLong RegistrationBook::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	MxS16 unk0x28 = p_param.GetUnknown0x28();
 

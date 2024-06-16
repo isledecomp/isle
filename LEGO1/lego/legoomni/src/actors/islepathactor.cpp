@@ -58,13 +58,13 @@ MxLong IslePathActor::Notify(MxParam& p_param)
 		result = HandleClick();
 		break;
 	case c_notificationControl:
-		result = HandleControl((LegoControlManagerEvent&) p_param);
+		result = HandleControl((LegoControlManagerNotificationParam&) p_param);
 		break;
 	case c_notificationEndAnim:
 		result = HandleEndAnim((LegoEndAnimNotificationParam&) p_param);
 		break;
 	case c_notificationPathStruct:
-		result = HandlePathStruct((LegoPathStructEvent&) p_param);
+		result = HandlePathStruct((LegoPathStructNotificationParam&) p_param);
 		break;
 	}
 

@@ -4,7 +4,7 @@
 #include "legostate.h"
 #include "mxcore.h"
 
-class LegoControlManagerEvent;
+class LegoControlManagerNotificationParam;
 class MxAtomId;
 class MxEndActionNotificationParam;
 
@@ -84,7 +84,7 @@ private:
 	MxBool m_audioEnabled; // 0x0d
 
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
-	MxLong HandleControl(LegoControlManagerEvent& p_param);
+	MxLong HandleControl(LegoControlManagerNotificationParam& p_param);
 };
 
 #endif // RADIO_H

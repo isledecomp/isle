@@ -76,7 +76,7 @@ MxLong JukeBox::Notify(MxParam& p_param)
 	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationControl:
-			result = HandleControl((LegoControlManagerEvent&) p_param);
+			result = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;
 		case c_notificationTransitioned:
 			GameState()->SwitchArea(m_destLocation);
@@ -123,7 +123,7 @@ void JukeBox::ReadyWorld()
 
 // FUNCTION: LEGO1 0x1005da70
 // FUNCTION: BETA10 0x10037f6d
-MxBool JukeBox::HandleControl(LegoControlManagerEvent& p_param)
+MxBool JukeBox::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	MxStillPresenter* presenter;
 

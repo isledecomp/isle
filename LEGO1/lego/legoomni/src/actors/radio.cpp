@@ -91,7 +91,7 @@ MxLong Radio::Notify(MxParam& p_param)
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;
 		case c_notificationControl:
-			result = HandleControl((LegoControlManagerEvent&) p_param);
+			result = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;
 		}
 	}
@@ -139,7 +139,7 @@ void Radio::Stop()
 }
 
 // FUNCTION: LEGO1 0x1002cbc0
-MxLong Radio::HandleControl(LegoControlManagerEvent& p_param)
+MxLong Radio::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	MxDSAction action; // Unused
 	MxS32 objectId = p_param.GetClickedObjectId();

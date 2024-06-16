@@ -51,7 +51,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 		case c_d: {
 			p_actor->VTable0x58(p_data);
 
-			LegoPathStructEvent param(c_notificationPathStruct, p_actor, m_name[2], p_data);
+			LegoPathStructNotificationParam param(c_notificationPathStruct, p_actor, m_name[2], p_data);
 			p_actor->Notify(param);
 
 			LegoWorld* world = CurrentWorld();
@@ -80,7 +80,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 		case c_s: {
 			LegoWorld* world = CurrentWorld();
 			if (world != NULL) {
-				LegoPathStructEvent param(c_notificationPathStruct, p_actor, m_name[2], p_data);
+				LegoPathStructNotificationParam param(c_notificationPathStruct, p_actor, m_name[2], p_data);
 
 				if (world->Notify(param) != 0) {
 					break;
@@ -93,7 +93,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 		case c_w: {
 			LegoWorld* world = CurrentWorld();
 			if (world != NULL) {
-				LegoPathStructEvent param(c_notificationPathStruct, p_actor, m_name[2], p_data);
+				LegoPathStructNotificationParam param(c_notificationPathStruct, p_actor, m_name[2], p_data);
 				NotificationManager()->Send(world, param);
 			}
 			break;

@@ -10,7 +10,7 @@
 
 class MxNotificationParam;
 class MxStillPresenter;
-class LegoControlManagerEvent;
+class LegoControlManagerNotificationParam;
 
 // VTABLE: LEGO1 0x100d93a8
 // SIZE 0x94
@@ -129,7 +129,7 @@ private:
 	MxLong HandleKeyPress(MxS8 p_key);
 	MxU8 HandleMouseMove(MxS32 p_x, MxS32 p_y);
 	MxU8 HandleButtonUp(MxS32 p_x, MxS32 p_y);
-	MxU8 HandleControl(LegoControlManagerEvent& p_param);
+	MxU8 HandleControl(LegoControlManagerNotificationParam& p_param);
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleNotification0(MxNotificationParam& p_param);
 
