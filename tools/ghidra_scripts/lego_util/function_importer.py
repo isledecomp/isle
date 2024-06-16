@@ -11,10 +11,8 @@ from ghidra.program.flatapi import FlatProgramAPI
 from ghidra.program.model.listing import ParameterImpl
 from ghidra.program.model.symbol import SourceType
 
-from isledecomp.compare.db import MatchInfo
-
 from lego_util.pdb_extraction import (
-    FunctionSignature,
+    PdbFunction,
     CppRegisterSymbol,
     CppStackSymbol,
 )
@@ -37,28 +35,28 @@ class PdbFunctionImporter:
     def __init__(
         self,
         api: FlatProgramAPI,
-        match_info: MatchInfo,
-        signature: FunctionSignature,
+        func: PdbFunction,
         type_importer: "PdbTypeImporter",
     ):
         self.api = api
-        self.match_info = match_info
-        self.signature = signature
+        self.match_info = func.match_info
+        self.signature = func.signature
+        self.is_stub = func.is_stub
         self.type_importer = type_importer
 
-        if signature.class_type is not None:
+        if self.signature.class_type is not None:
             # Import the base class so the namespace exists
-            self.type_importer.import_pdb_type_into_ghidra(signature.class_type)
+            self.type_importer.import_pdb_type_into_ghidra(self.signature.class_type)
 
-        assert match_info.name is not None
+        assert self.match_info.name is not None
 
-        colon_split = sanitize_name(match_info.name).split("::")
+        colon_split = sanitize_name(self.match_info.name).split("::")
         self.name = colon_split.pop()
         namespace_hierachy = colon_split
         self.namespace = get_ghidra_namespace(api, namespace_hierachy)
 
         self.return_type = type_importer.import_pdb_type_into_ghidra(
-            signature.return_type
+            self.signature.return_type
         )
         self.arguments = [
             ParameterImpl(
@@ -66,7 +64,7 @@ class PdbFunctionImporter:
                 type_importer.import_pdb_type_into_ghidra(type_name),
                 api.getCurrentProgram(),
             )
-            for (index, type_name) in enumerate(signature.arglist)
+            for (index, type_name) in enumerate(self.signature.arglist)
         ]
 
     @property
