@@ -135,9 +135,7 @@ class PdbFunctionExtractor:
         )
         return [signature for signature in handled if signature is not None]
 
-    def handle_matched_function(
-        self, match_info: MatchInfo
-    ) -> Optional[PdbFunction]:
+    def handle_matched_function(self, match_info: MatchInfo) -> Optional[PdbFunction]:
         assert match_info.orig_addr is not None
         match_options = self.compare.get_match_options(match_info.orig_addr)
         assert match_options is not None
@@ -171,9 +169,5 @@ class PdbFunctionExtractor:
             return None
 
         is_stub = match_options.get("stub", False)
-
-        # TODO: Remove when implementing stubs
-        if is_stub:
-            return None
 
         return PdbFunction(match_info, function_signature, is_stub)
