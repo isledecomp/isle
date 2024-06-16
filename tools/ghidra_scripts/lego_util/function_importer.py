@@ -11,10 +11,8 @@ from ghidra.program.flatapi import FlatProgramAPI
 from ghidra.program.model.listing import ParameterImpl
 from ghidra.program.model.symbol import SourceType
 
-from isledecomp.compare.db import MatchInfo
-
 from lego_util.pdb_extraction import (
-    FunctionSignature,
+    PdbFunction,
     CppRegisterSymbol,
     CppStackSymbol,
 )
@@ -37,28 +35,28 @@ class PdbFunctionImporter:
     def __init__(
         self,
         api: FlatProgramAPI,
-        match_info: MatchInfo,
-        signature: FunctionSignature,
+        func: PdbFunction,
         type_importer: "PdbTypeImporter",
     ):
         self.api = api
-        self.match_info = match_info
-        self.signature = signature
+        self.match_info = func.match_info
+        self.signature = func.signature
+        self.is_stub = func.is_stub
         self.type_importer = type_importer
 
-        if signature.class_type is not None:
+        if self.signature.class_type is not None:
             # Import the base class so the namespace exists
-            self.type_importer.import_pdb_type_into_ghidra(signature.class_type)
+            self.type_importer.import_pdb_type_into_ghidra(self.signature.class_type)
 
-        assert match_info.name is not None
+        assert self.match_info.name is not None
 
-        colon_split = sanitize_name(match_info.name).split("::")
+        colon_split = sanitize_name(self.match_info.name).split("::")
         self.name = colon_split.pop()
         namespace_hierachy = colon_split
         self.namespace = get_ghidra_namespace(api, namespace_hierachy)
 
         self.return_type = type_importer.import_pdb_type_into_ghidra(
-            signature.return_type
+            self.signature.return_type
         )
         self.arguments = [
             ParameterImpl(
@@ -66,7 +64,7 @@ class PdbFunctionImporter:
                 type_importer.import_pdb_type_into_ghidra(type_name),
                 api.getCurrentProgram(),
             )
-            for (index, type_name) in enumerate(signature.arglist)
+            for (index, type_name) in enumerate(self.signature.arglist)
         ]
 
     @property
@@ -90,7 +88,10 @@ class PdbFunctionImporter:
             self.signature.call_type == ghidra_function.getCallingConventionName()
         )
 
-        if thiscall_matches:
+        if self.is_stub:
+            # We do not import the argument list for stubs, so it should be excluded in matches
+            args_match = True
+        elif thiscall_matches:
             if self.signature.call_type == "__thiscall":
                 args_match = self._matches_thiscall_parameters(ghidra_function)
             else:
@@ -104,7 +105,7 @@ class PdbFunctionImporter:
             name_match,
             return_type_match,
             thiscall_matches,
-            args_match,
+            "ignored" if self.is_stub else args_match,
         )
 
         return (
@@ -165,16 +166,25 @@ class PdbFunctionImporter:
         ghidra_function.setReturnType(self.return_type, SourceType.USER_DEFINED)
         ghidra_function.setCallingConvention(self.call_type)
 
+        if self.is_stub:
+            logger.debug(
+                "%s is a stub, skipping parameter import", self.get_full_name()
+            )
+            return
+
         ghidra_function.replaceParameters(
             Function.FunctionUpdateType.DYNAMIC_STORAGE_ALL_PARAMS,
-            True,
+            True,  # force
             SourceType.USER_DEFINED,
             self.arguments,
         )
 
-        # When we set the parameters, Ghidra will generate the layout.
-        # Now we read them again and match them against the stack layout in the PDB,
-        # both to verify and to set the parameter names.
+        self._import_parameter_names(ghidra_function)
+
+    def _import_parameter_names(self, ghidra_function: Function):
+        # When we call `ghidra_function.replaceParameters`, Ghidra will generate the layout.
+        # Now we read the parameters again and match them against the stack layout in the PDB,
+        # both to verify the layout and to set the parameter names.
         ghidra_parameters: list[Parameter] = ghidra_function.getParameters()
 
         # Try to add Ghidra function names
@@ -188,7 +198,9 @@ class PdbFunctionImporter:
 
                 # Appears to never happen - could in theory be relevant to __fastcall__ functions,
                 # which we haven't seen yet
-                logger.warning("Unhandled register variable in %s", self.get_full_name)
+                logger.warning(
+                    "Unhandled register variable in %s", self.get_full_name()
+                )
                 continue
 
     def _rename_stack_parameter(self, index: int, param: Parameter):

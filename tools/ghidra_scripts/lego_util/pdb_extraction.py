@@ -38,6 +38,13 @@ class FunctionSignature:
     stack_symbols: list[CppStackOrRegisterSymbol]
 
 
+@dataclass
+class PdbFunction:
+    match_info: MatchInfo
+    signature: FunctionSignature
+    is_stub: bool
+
+
 class PdbFunctionExtractor:
     """
     Extracts all information on a given function from the parsed PDB
@@ -121,20 +128,18 @@ class PdbFunctionExtractor:
             stack_symbols=stack_symbols,
         )
 
-    def get_function_list(self) -> list[tuple[MatchInfo, FunctionSignature]]:
+    def get_function_list(self) -> list[PdbFunction]:
         handled = (
             self.handle_matched_function(match)
             for match in self.compare.get_functions()
         )
         return [signature for signature in handled if signature is not None]
 
-    def handle_matched_function(
-        self, match_info: MatchInfo
-    ) -> Optional[tuple[MatchInfo, FunctionSignature]]:
+    def handle_matched_function(self, match_info: MatchInfo) -> Optional[PdbFunction]:
         assert match_info.orig_addr is not None
         match_options = self.compare.get_match_options(match_info.orig_addr)
         assert match_options is not None
-        if match_options.get("skip", False) or match_options.get("stub", False):
+        if match_options.get("skip", False):
             return None
 
         function_data = next(
@@ -163,4 +168,6 @@ class PdbFunctionExtractor:
         if function_signature is None:
             return None
 
-        return match_info, function_signature
+        is_stub = match_options.get("stub", False)
+
+        return PdbFunction(match_info, function_signature, is_stub)

@@ -125,16 +125,15 @@ def add_python_path(path: str):
 # We need to quote the types here because they might not exist when running without Ghidra
 def import_function_into_ghidra(
     api: "FlatProgramAPI",
-    match_info: "MatchInfo",
-    signature: "FunctionSignature",
+    pdb_function: "PdbFunction",
     type_importer: "PdbTypeImporter",
 ):
-    hex_original_address = f"{match_info.orig_addr:x}"
+    hex_original_address = f"{pdb_function.match_info.orig_addr:x}"
 
     # Find the Ghidra function at that address
     ghidra_address = getAddressFactory().getAddress(hex_original_address)
     # pylint: disable=possibly-used-before-assignment
-    function_importer = PdbFunctionImporter(api, match_info, signature, type_importer)
+    function_importer = PdbFunctionImporter(api, pdb_function, type_importer)
 
     ghidra_function = getFunctionAt(ghidra_address)
     if ghidra_function is None:
@@ -165,7 +164,7 @@ def import_function_into_ghidra(
 
 
 def process_functions(extraction: "PdbFunctionExtractor"):
-    func_signatures = extraction.get_function_list()
+    pdb_functions = extraction.get_function_list()
 
     if not GLOBALS.running_from_ghidra:
         logger.info("Completed the dry run outside Ghidra.")
@@ -175,12 +174,13 @@ def process_functions(extraction: "PdbFunctionExtractor"):
     # pylint: disable=possibly-used-before-assignment
     type_importer = PdbTypeImporter(api, extraction)
 
-    for match_info, signature in func_signatures:
+    for pdb_func in pdb_functions:
+        func_name = pdb_func.match_info.name
         try:
-            import_function_into_ghidra(api, match_info, signature, type_importer)
+            import_function_into_ghidra(api, pdb_func, type_importer)
             GLOBALS.statistics.successes += 1
         except Lego1Exception as e:
-            log_and_track_failure(match_info.name, e)
+            log_and_track_failure(func_name, e)
         except RuntimeError as e:
             cause = e.args[0]
             if CancelledException is not None and isinstance(cause, CancelledException):
@@ -188,10 +188,10 @@ def process_functions(extraction: "PdbFunctionExtractor"):
                 logging.critical("Import aborted by the user.")
                 return
 
-            log_and_track_failure(match_info.name, cause, unexpected=True)
+            log_and_track_failure(func_name, cause, unexpected=True)
             logger.error(traceback.format_exc())
         except Exception as e:  # pylint: disable=broad-exception-caught
-            log_and_track_failure(match_info.name, e, unexpected=True)
+            log_and_track_failure(func_name, e, unexpected=True)
             logger.error(traceback.format_exc())
 
 
@@ -257,7 +257,6 @@ try:
     from isledecomp.compare import Compare as IsleCompare
 
     reload_module("isledecomp.compare.db")
-    from isledecomp.compare.db import MatchInfo
 
     reload_module("lego_util.exceptions")
     from lego_util.exceptions import Lego1Exception
@@ -265,7 +264,7 @@ try:
     reload_module("lego_util.pdb_extraction")
     from lego_util.pdb_extraction import (
         PdbFunctionExtractor,
-        FunctionSignature,
+        PdbFunction,
     )
 
     if GLOBALS.running_from_ghidra:
