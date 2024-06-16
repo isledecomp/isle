@@ -84,13 +84,13 @@ public:
 	// LegoControlManager::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x08;             // 0x08
-	undefined4 m_unk0x0c;             // 0x0c
-	MxBool m_unk0x10;                 // 0x10
-	MxPresenter* m_unk0x14;           // 0x14
-	LegoControlManagerNotificationParam m_event;  // 0x18
-	MxPresenterList* m_presenterList; // 0x44
-	LegoNotifyList m_notifyList;      // 0x48
+	undefined4 m_unk0x08;                        // 0x08
+	undefined4 m_unk0x0c;                        // 0x0c
+	MxBool m_unk0x10;                            // 0x10
+	MxPresenter* m_unk0x14;                      // 0x14
+	LegoControlManagerNotificationParam m_event; // 0x18
+	MxPresenterList* m_presenterList;            // 0x44
+	LegoNotifyList m_notifyList;                 // 0x48
 };
 
 #endif // LEGOCONTROLMANAGER_H
