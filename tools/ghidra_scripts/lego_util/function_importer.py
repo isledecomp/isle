@@ -168,11 +168,16 @@ class PdbFunctionImporter:
             if stack_match is None:
                 logger.debug("Not found on stack: %s", ghidra_arg)
                 return False
-            # "__formal" is the placeholder for arguments without a name
-            if (
-                stack_match.name != ghidra_arg.getName()
-                and not stack_match.name.startswith("__formal")
-            ):
+
+            if stack_match.name.startswith("__formal"):
+                # "__formal" is the placeholder for arguments without a name
+                continue
+
+            if stack_match.name == "__$ReturnUdt":
+                # These appear in templates and cannot be set automatically, as they are a NOTYPE
+                continue
+
+            if stack_match.name != ghidra_arg.getName():
                 logger.debug(
                     "Argument name mismatch: expected %s, found %s",
                     stack_match.name,
