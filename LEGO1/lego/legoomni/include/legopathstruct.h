@@ -100,10 +100,10 @@ private:
 };
 
 // SYNTHETIC: LEGO1 0x1001bb80
-// LegoPathStructEvent::`scalar deleting destructor'
+// LegoPathStructNotificationParam::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x1001bbf0
-// LegoPathStructEvent::~LegoPathStructEvent
+// LegoPathStructNotificationParam::~LegoPathStructNotificationParam
 
 // SYNTHETIC: LEGO1 0x10047440
 // LegoPathStructBase::`scalar deleting destructor'

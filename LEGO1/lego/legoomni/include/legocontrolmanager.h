@@ -34,10 +34,10 @@ public:
 };
 
 // SYNTHETIC: LEGO1 0x10028bf0
-// LegoControlManagerEvent::`scalar deleting destructor'
+// LegoControlManagerNotificationParam::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x10028c60
-// LegoControlManagerEvent::~LegoControlManagerEvent
+// LegoControlManagerNotificationParam::~LegoControlManagerNotificationParam
 
 // VTABLE: LEGO1 0x100d6a80
 class LegoControlManager : public MxCore {
