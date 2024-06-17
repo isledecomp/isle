@@ -22,12 +22,12 @@ struct LegoBuildingInfo {
 	};
 
 	LegoEntity* m_entity;         // 0x00
-	const char* m_hausName;       // 0x04
+	const char* m_variant;        // 0x04
 	MxU32 m_sound;                // 0x08
 	MxU32 m_move;                 // 0x0c
 	MxU8 m_mood;                  // 0x10
 	MxS8 m_unk0x11;               // 0x11
-	MxS8 m_initialUnk0x11;        // 0x12 = initial value loaded to m_unk0x11
+	MxS8 m_initialUnk0x11;        // 0x12 - initial value loaded to m_unk0x11
 	MxU8 m_flags;                 // 0x13
 	float m_unk0x014;             // 0x14
 	const char* m_unk0x18;        // 0x18
