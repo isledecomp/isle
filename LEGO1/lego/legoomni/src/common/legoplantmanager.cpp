@@ -1,11 +1,16 @@
 #include "legoplantmanager.h"
 
 #include "legoentity.h"
+#include "legoplants.h"
 
 DECOMP_SIZE_ASSERT(LegoPlantManager, 0x2c)
+DECOMP_SIZE_ASSERT(LegoPlantInfo, 0x54)
 
 // GLOBAL: LEGO1 0x100f3188
 char* LegoPlantManager::g_customizeAnimFile = NULL;
+
+// GLOBAL: LEGO1 0x10103180
+LegoPlantInfo g_plantInfo[81];
 
 // FUNCTION: LEGO1 0x10026220
 LegoPlantManager::LegoPlantManager()
@@ -13,19 +18,27 @@ LegoPlantManager::LegoPlantManager()
 	Init();
 }
 
-// STUB: LEGO1 0x100262c0
+// FUNCTION: LEGO1 0x100262c0
 LegoPlantManager::~LegoPlantManager()
 {
-	// TODO
+	delete[] g_customizeAnimFile;
 }
 
-// STUB: LEGO1 0x10026330
+// FUNCTION: LEGO1 0x10026330
+// FUNCTION: BETA10 0x100c4f90
 void LegoPlantManager::Init()
 {
-	// TODO
+	for (MxS32 i = 0; i < sizeOfArray(g_plantInfo); i++) {
+		g_plantInfo[i] = g_plantInfoInit[i];
+	}
+
+	m_unk0x08 = -1;
+	m_unk0x0c = 0;
+	m_unk0x24 = 0;
 }
 
 // STUB: LEGO1 0x10026360
+// FUNCTION: BETA10 0x100c5032
 void LegoPlantManager::FUN_10026360(MxS32 p_scriptIndex)
 {
 	// TODO
@@ -38,14 +51,18 @@ void LegoPlantManager::FUN_100263a0(undefined4 p_und)
 }
 
 // STUB: LEGO1 0x10026720
-void LegoPlantManager::Write(LegoStorage* p_storage)
+// FUNCTION: BETA10 0x100c5918
+MxResult LegoPlantManager::Write(LegoStorage* p_storage)
 {
 	// TODO
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x100267b0
+// FUNCTION: BETA10 0x100c5a76
 MxResult LegoPlantManager::Read(LegoStorage* p_storage)
 {
+	// TODO
 	return SUCCESS;
 }
 
@@ -127,7 +144,6 @@ void LegoPlantManager::FUN_10026c50(LegoEntity* p_entity)
 MxResult LegoPlantManager::Tickle()
 {
 	// TODO
-
 	return 0;
 }
 

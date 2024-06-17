@@ -18,7 +18,7 @@ DECOMP_SIZE_ASSERT(LegoBuildingInfo, 0x2c)
 DECOMP_SIZE_ASSERT(LegoBuildingManager::AnimEntry, 0x14)
 
 // GLOBAL: LEGO1 0x100f3410
-const char* g_buildingInfoHausName[5] = {
+const char* g_buildingInfoVariants[5] = {
 	"haus1",
 	"haus4",
 	"haus5",
@@ -238,7 +238,7 @@ LegoBuildingManager::LegoBuildingManager()
 // FUNCTION: LEGO1 0x1002f960
 LegoBuildingManager::~LegoBuildingManager()
 {
-	delete g_customizeAnimFile;
+	delete[] g_customizeAnimFile;
 }
 
 // FUNCTION: LEGO1 0x1002f9d0
@@ -267,15 +267,15 @@ void LegoBuildingManager::FUN_1002fa00()
 	}
 
 	if (g_buildingManagerConfig <= 1) {
-		LegoEntity* entity = (LegoEntity*) world->Find("MxEntity", g_buildingInfoHausName[0]);
+		LegoEntity* entity = (LegoEntity*) world->Find("MxEntity", g_buildingInfoVariants[0]);
 		if (entity) {
 			entity->GetROI()->SetVisibility(TRUE);
 			m_unk0x09 = 0;
 		}
 	}
 	else {
-		for (i = 0; i < sizeOfArray(g_buildingInfoHausName); i++) {
-			LegoEntity* entity = (LegoEntity*) world->Find("MxEntity", g_buildingInfoHausName[i]);
+		for (i = 0; i < sizeOfArray(g_buildingInfoVariants); i++) {
+			LegoEntity* entity = (LegoEntity*) world->Find("MxEntity", g_buildingInfoVariants[i]);
 			if (entity) {
 				entity->GetROI()->SetVisibility(m_nextVariant == i);
 			}
@@ -289,7 +289,7 @@ void LegoBuildingManager::FUN_1002fa00()
 // FUNCTION: BETA10 0x10063b88
 void LegoBuildingManager::UpdatePosition(MxS32 p_index, LegoWorld* p_world)
 {
-	LegoEntity* entity = (LegoEntity*) p_world->Find("MxEntity", g_buildingInfo[p_index].m_hausName);
+	LegoEntity* entity = (LegoEntity*) p_world->Find("MxEntity", g_buildingInfo[p_index].m_variant);
 
 	if (entity) {
 		entity->SetType(LegoEntity::e_building);
@@ -451,12 +451,12 @@ MxBool LegoBuildingManager::SwitchVariant(LegoEntity* p_entity)
 
 	if (info != NULL && info->m_flags & LegoBuildingInfo::c_hasVariants && info->m_unk0x11 == -1) {
 		LegoROI* roi = p_entity->GetROI();
-		if (++m_nextVariant >= sizeOfArray(g_buildingInfoHausName)) {
+		if (++m_nextVariant >= sizeOfArray(g_buildingInfoVariants)) {
 			m_nextVariant = 0;
 		}
 
 		roi->SetVisibility(FALSE);
-		info->m_hausName = g_buildingInfoHausName[m_nextVariant];
+		info->m_variant = g_buildingInfoVariants[m_nextVariant];
 		UpdatePosition(12, CurrentWorld());
 
 		if (info->m_entity != NULL) {

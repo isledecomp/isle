@@ -22,7 +22,7 @@ struct LegoBuildingInfo {
 	};
 
 	LegoEntity* m_entity;         // 0x00
-	const char* m_hausName;       // 0x04
+	const char* m_variant;        // 0x04
 	MxU32 m_sound;                // 0x08
 	MxU32 m_move;                 // 0x0c
 	MxU8 m_mood;                  // 0x10

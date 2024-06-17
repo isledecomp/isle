@@ -5,6 +5,7 @@
 #include "mxcore.h"
 
 class LegoEntity;
+class LegoPathBoundary;
 class LegoROI;
 class LegoStorage;
 
@@ -27,7 +28,7 @@ public:
 	void Init();
 	void FUN_10026360(MxS32 p_scriptIndex);
 	void FUN_100263a0(undefined4 p_und);
-	void Write(LegoStorage* p_storage);
+	MxResult Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);
 	MxBool SwitchColor(LegoEntity* p_entity);
 	MxBool SwitchVariant(LegoEntity* p_entity);
@@ -48,7 +49,11 @@ public:
 private:
 	static char* g_customizeAnimFile;
 
-	undefined m_unk0x08[0x24]; // 0x08
+	undefined4 m_unk0x08;      // 0x08
+	undefined m_unk0x0c;       // 0x0c
+	undefined m_unk0x10[0x17]; // 0x10
+	undefined m_unk0x24;       // 0x24
+	undefined4 m_unk0x28;      // 0x28
 };
 
 #endif // LEGOPLANTMANAGER_H
