@@ -4,7 +4,6 @@
 #include "legoplants.h"
 
 DECOMP_SIZE_ASSERT(LegoPlantManager, 0x2c)
-DECOMP_SIZE_ASSERT(LegoPlantInfo, 0x54)
 
 // GLOBAL: LEGO1 0x100f3188
 char* LegoPlantManager::g_customizeAnimFile = NULL;
