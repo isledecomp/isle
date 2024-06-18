@@ -38,17 +38,17 @@ public:
 	};
 
 	// SIZE 0x1c
-	struct ScriptContainer {
+	struct WorldContainer {
 		// FUNCTION: LEGO1 0x1005ac40
-		ScriptContainer()
+		WorldContainer()
 		{
-			m_index = -1;
+			m_id = -1;
 			m_atomId = NULL;
 		}
 
-		ScriptContainer(MxS32 p_index, const char* p_key, MxAtomId* p_atomId)
+		WorldContainer(MxS32 p_id, const char* p_key, MxAtomId* p_atomId)
 		{
-			m_index = p_index;
+			m_id = p_id;
 
 			if (p_key) {
 				strcpy(m_key, p_key);
@@ -58,18 +58,18 @@ public:
 		}
 
 		// FUNCTION: LEGO1 0x1005ac50
-		ScriptContainer& operator=(const ScriptContainer& p_container)
+		WorldContainer& operator=(const WorldContainer& p_container)
 		{
-			m_index = p_container.m_index;
+			m_id = p_container.m_id;
 			strcpy(m_key, p_container.m_key);
 			m_atomId = p_container.m_atomId;
 			return *this;
 		}
 
-		inline MxS32 GetIndex() { return m_index; }
+		inline MxS32 GetId() { return m_id; }
 		inline const char* GetKey() { return m_key; }
 
-		MxS32 m_index;      // 0x00
+		MxS32 m_id;         // 0x00
 		char m_key[20];     // 0x04
 		MxAtomId* m_atomId; // 0x18
 	};
@@ -110,10 +110,10 @@ public:
 	void FUN_1005b4f0(MxBool p_disable, MxU16 p_flags);
 	void CreateBackgroundAudio();
 	void RemoveWorld(const MxAtomId& p_atom, MxLong p_objectId);
-	MxResult RegisterScripts();
+	MxResult RegisterWorlds();
 	const char* GetScriptName(MxU32 p_index);
 	MxAtomId* GetScriptAtom(MxU32 p_index);
-	MxS32 GetScriptIndex(const char* p_key);
+	MxS32 GetWorldId(const char* p_key);
 	void DeleteAction();
 
 	static MxS32 GetCurrPathInfo(LegoPathBoundary**, MxS32&);
@@ -154,7 +154,7 @@ public:
 	// LegoOmni::`scalar deleting destructor'
 
 private:
-	ScriptContainer* m_scripts;                  // 0x68
+	WorldContainer* m_worlds;                    // 0x68
 	ViewLODListManager* m_viewLODListManager;    // 0x6c
 	LegoInputManager* m_inputManager;            // 0x70
 	LegoTextureContainer* m_textureContainer;    // 0x74

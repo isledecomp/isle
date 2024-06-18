@@ -90,12 +90,12 @@ public:
 
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
 	inline LegoEntityList* GetEntityList() { return m_entityList; }
-	inline MxS32 GetScriptIndex() { return m_scriptIndex; }
+	inline MxS32 GetWorldId() { return m_worldId; }
 	inline MxBool GetUnknown0xd0Empty() { return m_set0xd0.empty(); }
 	inline list<LegoROI*>& GetROIList() { return m_roiList; }
 	inline LegoHideAnimPresenter* GetHideAnimPresenter() { return m_hideAnimPresenter; }
 
-	inline void SetScriptIndex(MxS32 p_scriptIndex) { m_scriptIndex = p_scriptIndex; }
+	inline void SetScriptIndex(MxS32 p_worldId) { m_worldId = p_worldId; }
 
 	// SYNTHETIC: LEGO1 0x1001dee0
 	// LegoWorld::`scalar deleting destructor'
@@ -111,7 +111,7 @@ protected:
 	MxPresenterList m_controlPresenters;        // 0xb8
 	MxCoreSet m_set0xd0;                        // 0xd0
 	list<LegoROI*> m_roiList;                   // 0xe0
-	MxS32 m_scriptIndex;                        // 0xec
+	MxS32 m_worldId;                            // 0xec
 	LegoHideAnimPresenter* m_hideAnimPresenter; // 0xf0
 	MxS16 m_startupTicks;                       // 0xf4
 	MxBool m_worldStarted;                      // 0xf6

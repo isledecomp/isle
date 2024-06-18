@@ -415,7 +415,7 @@ void LegoAnimationManager::Suspend()
 		m_animState = (AnimState*) GameState()->CreateState("AnimState");
 	}
 
-	if (m_scriptIndex == 0) {
+	if (m_worldId == 0) {
 		m_animState->FUN_10065240(m_animCount, m_anims, m_lastExtraCharacterId);
 	}
 
@@ -494,7 +494,7 @@ void LegoAnimationManager::Resume()
 void LegoAnimationManager::Init()
 {
 	m_unk0x402 = FALSE;
-	m_scriptIndex = -1;
+	m_worldId = -1;
 	m_animCount = 0;
 	m_anims = NULL;
 	m_unk0x18 = 0;
@@ -579,12 +579,12 @@ void LegoAnimationManager::EnableCamAnims(MxBool p_enableCamAnims)
 }
 
 // FUNCTION: LEGO1 0x1005f720
-MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
+MxResult LegoAnimationManager::LoadWorldInfo(MxS32 p_worldId)
 {
 	MxResult result = FAILURE;
 	MxS32 i, j, k;
 
-	if (m_scriptIndex != p_scriptIndex) {
+	if (m_worldId != p_worldId) {
 		if (m_tranInfoList != NULL) {
 			delete m_tranInfoList;
 			m_tranInfoList = NULL;
@@ -614,7 +614,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			m_animState = (AnimState*) GameState()->CreateState("AnimState");
 		}
 
-		if (m_scriptIndex == 0) {
+		if (m_worldId == 0) {
 			m_animState->FUN_10065240(m_animCount, m_anims, m_lastExtraCharacterId);
 		}
 
@@ -622,14 +622,14 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 
 		LegoFile file;
 
-		if (p_scriptIndex == -1) {
+		if (p_worldId == -1) {
 			result = SUCCESS;
 			goto done;
 		}
 
 		char filename[128];
 		char path[1024];
-		sprintf(filename, "lego\\data\\%sinf.dta", Lego()->GetScriptName(p_scriptIndex));
+		sprintf(filename, "lego\\data\\%sinf.dta", Lego()->GetScriptName(p_worldId));
 		sprintf(path, "%s", MxOmni::GetHD());
 
 		if (path[strlen(path) - 1] != '\\') {
@@ -708,7 +708,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			}
 		}
 
-		m_scriptIndex = p_scriptIndex;
+		m_worldId = p_worldId;
 		m_tranInfoList = new LegoTranInfoList();
 		m_tranInfoList2 = new LegoTranInfoList();
 
@@ -726,7 +726,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			m_unk0x402 = FALSE;
 		}
 
-		if (p_scriptIndex == 0) {
+		if (p_worldId == 0) {
 			m_animState->FUN_100651d0(m_animCount, m_anims, m_lastExtraCharacterId);
 		}
 	}
@@ -934,7 +934,7 @@ MxResult LegoAnimationManager::FUN_100605e0(
 {
 	MxResult result = FAILURE;
 
-	if (m_scriptIndex != -1 && p_index < m_animCount && m_tranInfoList != NULL) {
+	if (m_worldId != -1 && p_index < m_animCount && m_tranInfoList != NULL) {
 		PurgeExtra(FALSE);
 		FUN_10062770();
 
@@ -983,7 +983,7 @@ MxResult LegoAnimationManager::FUN_100605e0(
 		char buf[256];
 		sprintf(buf, "%s:%d", g_strANIMMAN_ID, tranInfo->m_index);
 
-		action.SetAtomId(*Lego()->GetScriptAtom(m_scriptIndex));
+		action.SetAtomId(*Lego()->GetScriptAtom(m_worldId));
 		action.SetObjectId(animInfo.m_objectId);
 		action.SetUnknown24(-1);
 		action.AppendExtra(strlen(buf) + 1, buf);
@@ -1050,7 +1050,7 @@ MxResult LegoAnimationManager::FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix
 	char buf[256];
 	sprintf(buf, "%s:%d", g_strANIMMAN_ID, info->m_index);
 
-	action.SetAtomId(*Lego()->GetScriptAtom(m_scriptIndex));
+	action.SetAtomId(*Lego()->GetScriptAtom(m_worldId));
 	action.SetObjectId(p_objectId);
 	action.SetUnknown24(-1);
 	action.AppendExtra(strlen(buf) + 1, buf);

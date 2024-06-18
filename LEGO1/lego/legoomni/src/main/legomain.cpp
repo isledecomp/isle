@@ -34,7 +34,7 @@
 #include "viewmanager/viewmanager.h"
 
 DECOMP_SIZE_ASSERT(LegoOmni, 0x140)
-DECOMP_SIZE_ASSERT(LegoOmni::ScriptContainer, 0x1c)
+DECOMP_SIZE_ASSERT(LegoOmni::WorldContainer, 0x1c)
 DECOMP_SIZE_ASSERT(LegoWorldList, 0x18)
 DECOMP_SIZE_ASSERT(LegoWorldListCursor, 0x10)
 
@@ -58,7 +58,7 @@ LegoOmni::~LegoOmni()
 void LegoOmni::Init()
 {
 	MxOmni::Init();
-	m_scripts = NULL;
+	m_worlds = NULL;
 	m_inputManager = NULL;
 	m_viewLODListManager = NULL;
 	m_textureContainer = NULL;
@@ -145,8 +145,8 @@ void LegoOmni::Destroy()
 	m_action.ClearAtom();
 	DestroyScripts();
 
-	if (m_scripts) {
-		delete[] m_scripts;
+	if (m_worlds) {
+		delete[] m_worlds;
 	}
 
 	MxOmni::Destroy();
@@ -235,7 +235,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 
 	CreateScripts();
 	IslePathActor::RegisterSpawnLocations();
-	result = RegisterScripts();
+	result = RegisterWorlds();
 
 	if (result != SUCCESS) {
 		goto done;
@@ -264,33 +264,33 @@ done:
 }
 
 // FUNCTION: LEGO1 0x1005a5f0
-MxResult LegoOmni::RegisterScripts()
+MxResult LegoOmni::RegisterWorlds()
 {
-	m_scripts = new ScriptContainer[19];
+	m_worlds = new WorldContainer[19];
 
-	if (!m_scripts) {
+	if (!m_worlds) {
 		return FAILURE;
 	}
 
-	m_scripts[0] = ScriptContainer();
-	m_scripts[1] = ScriptContainer(0, "ACT1", g_isleScript);
-	m_scripts[2] = ScriptContainer(1, "IMAIN", g_infomainScript);
-	m_scripts[3] = ScriptContainer(2, "ICUBE", g_infoscorScript);
-	m_scripts[4] = ScriptContainer(3, "IREG", g_regbookScript);
-	m_scripts[5] = ScriptContainer(4, "IELEV", g_elevbottScript);
-	m_scripts[6] = ScriptContainer(5, "IISLE", g_infodoorScript);
-	m_scripts[7] = ScriptContainer(6, "HOSP", g_hospitalScript);
-	m_scripts[8] = ScriptContainer(7, "POLICE", g_policeScript);
-	m_scripts[9] = ScriptContainer(8, "GMAIN", g_garageScript);
-	m_scripts[10] = ScriptContainer(9, "BLDH", g_copterScript);
-	m_scripts[11] = ScriptContainer(10, "BLDD", g_dunecarScript);
-	m_scripts[12] = ScriptContainer(11, "BLDJ", g_jetskiScript);
-	m_scripts[13] = ScriptContainer(12, "BLDR", g_racecarScript);
-	m_scripts[14] = ScriptContainer(13, "RACC", g_carraceScript);
-	m_scripts[15] = ScriptContainer(14, "RACJ", g_jetraceScript);
-	m_scripts[16] = ScriptContainer(15, "ACT2", g_act2mainScript);
-	m_scripts[17] = ScriptContainer(16, "ACT3", g_act3Script);
-	m_scripts[18] = ScriptContainer(17, "TEST", g_testScript);
+	m_worlds[0] = WorldContainer();
+	m_worlds[1] = WorldContainer(0, "ACT1", g_isleScript);
+	m_worlds[2] = WorldContainer(1, "IMAIN", g_infomainScript);
+	m_worlds[3] = WorldContainer(2, "ICUBE", g_infoscorScript);
+	m_worlds[4] = WorldContainer(3, "IREG", g_regbookScript);
+	m_worlds[5] = WorldContainer(4, "IELEV", g_elevbottScript);
+	m_worlds[6] = WorldContainer(5, "IISLE", g_infodoorScript);
+	m_worlds[7] = WorldContainer(6, "HOSP", g_hospitalScript);
+	m_worlds[8] = WorldContainer(7, "POLICE", g_policeScript);
+	m_worlds[9] = WorldContainer(8, "GMAIN", g_garageScript);
+	m_worlds[10] = WorldContainer(9, "BLDH", g_copterScript);
+	m_worlds[11] = WorldContainer(10, "BLDD", g_dunecarScript);
+	m_worlds[12] = WorldContainer(11, "BLDJ", g_jetskiScript);
+	m_worlds[13] = WorldContainer(12, "BLDR", g_racecarScript);
+	m_worlds[14] = WorldContainer(13, "RACC", g_carraceScript);
+	m_worlds[15] = WorldContainer(14, "RACJ", g_jetraceScript);
+	m_worlds[16] = WorldContainer(15, "ACT2", g_act2mainScript);
+	m_worlds[17] = WorldContainer(16, "ACT3", g_act3Script);
+	m_worlds[18] = WorldContainer(17, "TEST", g_testScript);
 
 	return SUCCESS;
 }
@@ -477,8 +477,8 @@ MxS32 LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 const char* LegoOmni::GetScriptName(MxU32 p_index)
 {
 	for (MxS32 i = 0; i < 19; i++) {
-		if (m_scripts[i].m_index == p_index) {
-			return m_scripts[i].m_key;
+		if (m_worlds[i].m_id == p_index) {
+			return m_worlds[i].m_key;
 		}
 	}
 
@@ -489,8 +489,8 @@ const char* LegoOmni::GetScriptName(MxU32 p_index)
 MxAtomId* LegoOmni::GetScriptAtom(MxU32 p_index)
 {
 	for (MxS32 i = 0; i < 19; i++) {
-		if (m_scripts[i].m_index == p_index) {
-			return m_scripts[i].m_atomId;
+		if (m_worlds[i].m_id == p_index) {
+			return m_worlds[i].m_atomId;
 		}
 	}
 
@@ -498,11 +498,11 @@ MxAtomId* LegoOmni::GetScriptAtom(MxU32 p_index)
 }
 
 // FUNCTION: LEGO1 0x1005b490
-MxS32 LegoOmni::GetScriptIndex(const char* p_key)
+MxS32 LegoOmni::GetWorldId(const char* p_key)
 {
 	for (MxS32 i = 0; i < 19; i++) {
-		if ((MxS32) &m_scripts[i] != -4 && !strcmpi(m_scripts[i].GetKey(), p_key)) {
-			return m_scripts[i].GetIndex();
+		if ((MxS32) &m_worlds[i] != -4 && !strcmpi(m_worlds[i].GetKey(), p_key)) {
+			return m_worlds[i].GetId();
 		}
 	}
 

@@ -151,7 +151,7 @@ public:
 	void Resume();
 	void FUN_1005f6d0(MxBool p_unk0x400);
 	void EnableCamAnims(MxBool p_enableCamAnims);
-	MxResult LoadScriptInfo(MxS32 p_scriptIndex);
+	MxResult LoadWorldInfo(MxS32 p_worldId);
 	MxBool FindVehicle(const char* p_name, MxU32& p_index);
 	MxResult ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info);
 	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
@@ -244,7 +244,7 @@ private:
 	void FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x404);
 	void FUN_10064b50(MxLong p_time);
 
-	MxS32 m_scriptIndex;               // 0x08
+	MxS32 m_worldId;                   // 0x08
 	MxU16 m_animCount;                 // 0x0c
 	MxU16 m_unk0x0e;                   // 0x0e
 	MxU16 m_unk0x10;                   // 0x10

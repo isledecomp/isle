@@ -9,13 +9,14 @@ class LegoPathBoundary;
 
 // SIZE 0x54
 struct LegoPlantInfo {
-	enum {
-		c_flag1 = 0x01,
-		c_flag2 = 0x02,
-		c_flag5 = 0x10,
-		c_flag6 = 0x20,
-		c_flag16 = 0x8000,
-		c_flag17 = 0x10000
+	// See LegoOmni::RegisterWorlds for IDs
+	enum Worlds {
+		c_act1 = 1 << 0,
+		c_imain = 1 << 1,
+		c_ielev = 1 << 4,
+		c_iisle = 1 << 5,
+		c_act2 = 1 << 15,
+		c_act3 = 1 << 16
 	};
 
 	enum Variant {
@@ -34,8 +35,8 @@ struct LegoPlantInfo {
 	};
 
 	LegoEntity* m_entity;         // 0x00
-	MxU32 m_flags;                // 0x04
-	Variant m_variant;            // 0x08
+	MxU32 m_worlds;               // 0x04 - see enum for possible bit flags
+	MxU8 m_variant;               // 0x08 - see enum for possible values
 	MxU32 m_sound;                // 0x0c
 	MxU32 m_move;                 // 0x10
 	MxU8 m_mood;                  // 0x14
