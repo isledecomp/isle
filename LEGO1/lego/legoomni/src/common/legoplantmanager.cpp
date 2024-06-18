@@ -6,6 +6,8 @@
 #include "legoworld.h"
 #include "misc.h"
 
+#include <stdio.H>
+
 DECOMP_SIZE_ASSERT(LegoPlantManager, 0x2c)
 
 // GLOBAL: LEGO1 0x100f1660
