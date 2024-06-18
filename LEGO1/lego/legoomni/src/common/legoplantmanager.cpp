@@ -6,7 +6,7 @@
 #include "legoworld.h"
 #include "misc.h"
 
-#include <stdio.H>
+#include <stdio.h>
 
 DECOMP_SIZE_ASSERT(LegoPlantManager, 0x2c)
 
