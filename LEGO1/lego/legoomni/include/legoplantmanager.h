@@ -8,6 +8,7 @@ class LegoEntity;
 class LegoPathBoundary;
 class LegoROI;
 class LegoStorage;
+class LegoWorld;
 
 // VTABLE: LEGO1 0x100d6758
 // SIZE 0x2c
@@ -26,7 +27,7 @@ public:
 	}
 
 	void Init();
-	void FUN_10026360(MxS32 p_scriptIndex);
+	void LoadWorldInfo(MxS32 p_worldId);
 	void FUN_100263a0(undefined4 p_und);
 	MxResult Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);
@@ -47,9 +48,11 @@ public:
 	// LegoPlantManager::`scalar deleting destructor'
 
 private:
+	LegoEntity* CreatePlant(MxS32 p_index, LegoWorld* p_world, MxS32 p_worldId);
+
 	static char* g_customizeAnimFile;
 
-	undefined4 m_unk0x08;      // 0x08
+	MxS32 m_worldId;           // 0x08
 	undefined m_unk0x0c;       // 0x0c
 	undefined m_unk0x10[0x17]; // 0x10
 	undefined m_unk0x24;       // 0x24

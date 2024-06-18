@@ -263,7 +263,7 @@ void LegoBuildingManager::FUN_1002fa00()
 	LegoWorld* world = CurrentWorld();
 
 	for (i = 0; i < sizeOfArray(g_buildingInfo); i++) {
-		UpdatePosition(i, world);
+		CreateBuilding(i, world);
 	}
 
 	if (g_buildingManagerConfig <= 1) {
@@ -287,7 +287,7 @@ void LegoBuildingManager::FUN_1002fa00()
 
 // FUNCTION: LEGO1 0x1002fa90
 // FUNCTION: BETA10 0x10063b88
-void LegoBuildingManager::UpdatePosition(MxS32 p_index, LegoWorld* p_world)
+void LegoBuildingManager::CreateBuilding(MxS32 p_index, LegoWorld* p_world)
 {
 	LegoEntity* entity = (LegoEntity*) p_world->Find("MxEntity", g_buildingInfo[p_index].m_variant);
 
@@ -457,7 +457,7 @@ MxBool LegoBuildingManager::SwitchVariant(LegoEntity* p_entity)
 
 		roi->SetVisibility(FALSE);
 		info->m_variant = g_buildingInfoVariants[m_nextVariant];
-		UpdatePosition(12, CurrentWorld());
+		CreateBuilding(12, CurrentWorld());
 
 		if (info->m_entity != NULL) {
 			info->m_entity->GetROI()->SetVisibility(TRUE);

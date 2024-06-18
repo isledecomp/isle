@@ -1,9 +1,22 @@
 #include "legoplantmanager.h"
 
+#include "legocharactermanager.h"
 #include "legoentity.h"
 #include "legoplants.h"
+#include "legoworld.h"
+#include "misc.h"
+
+#include <stdio.h>
 
 DECOMP_SIZE_ASSERT(LegoPlantManager, 0x2c)
+
+// GLOBAL: LEGO1 0x100f1660
+const char* g_plantLodNames[4][5] = {
+	{"flwrwht", "flwrblk", "flwryel", "flwrred", "flwrgrn"},
+	{"treewht", "treeblk", "treeyel", "treered", "tree"},
+	{"bushwht", "bushblk", "bushyel", "bushred", "bush"},
+	{"palmwht", "palmblk", "palmyel", "palmred", "palm"}
+};
 
 // GLOBAL: LEGO1 0x100f3188
 char* LegoPlantManager::g_customizeAnimFile = NULL;
@@ -31,22 +44,68 @@ void LegoPlantManager::Init()
 		g_plantInfo[i] = g_plantInfoInit[i];
 	}
 
-	m_unk0x08 = -1;
+	m_worldId = -1;
 	m_unk0x0c = 0;
 	m_unk0x24 = 0;
 }
 
-// STUB: LEGO1 0x10026360
+// FUNCTION: LEGO1 0x10026360
 // FUNCTION: BETA10 0x100c5032
-void LegoPlantManager::FUN_10026360(MxS32 p_scriptIndex)
+void LegoPlantManager::LoadWorldInfo(MxS32 p_worldId)
 {
-	// TODO
+	m_worldId = p_worldId;
+	LegoWorld* world = CurrentWorld();
+
+	for (MxS32 i = 0; i < sizeOfArray(g_plantInfo); i++) {
+		CreatePlant(i, world, p_worldId);
+	}
+
+	m_unk0x0c = 0;
 }
 
 // STUB: LEGO1 0x100263a0
 void LegoPlantManager::FUN_100263a0(undefined4 p_und)
 {
 	// TODO
+}
+
+// FUNCTION: LEGO1 0x10026590
+// FUNCTION: BETA10 0x100c561e
+LegoEntity* LegoPlantManager::CreatePlant(MxS32 p_index, LegoWorld* p_world, MxS32 p_worldId)
+{
+	LegoEntity* entity = NULL;
+
+	if (p_index < sizeOfArray(g_plantInfo)) {
+		MxU32 world = 1 << (MxU8) p_worldId;
+
+		if (g_plantInfo[p_index].m_worlds & world && g_plantInfo[p_index].m_unk0x16 != 0) {
+			if (g_plantInfo[p_index].m_entity == NULL) {
+				char name[256];
+				char lodName[256];
+
+				sprintf(name, "plant%d", p_index);
+				sprintf(lodName, "%s", g_plantLodNames[g_plantInfo[p_index].m_variant][g_plantInfo[p_index].m_color]);
+
+				LegoROI* roi = CharacterManager()->CreateAutoROI(name, lodName, TRUE);
+				roi->SetVisibility(TRUE);
+
+				entity = roi->GetEntity();
+				entity->SetLocation(
+					g_plantInfo[p_index].m_position,
+					g_plantInfo[p_index].m_direction,
+					g_plantInfo[p_index].m_up,
+					FALSE
+				);
+				entity->SetType(LegoEntity::e_plant);
+				g_plantInfo[p_index].m_entity = entity;
+			}
+			else {
+				entity = g_plantInfo[p_index].m_entity;
+			}
+		}
+	}
+
+	return entity;
 }
 
 // STUB: LEGO1 0x10026720
