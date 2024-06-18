@@ -95,7 +95,7 @@ public:
 	inline list<LegoROI*>& GetROIList() { return m_roiList; }
 	inline LegoHideAnimPresenter* GetHideAnimPresenter() { return m_hideAnimPresenter; }
 
-	inline void SetScriptIndex(MxS32 p_worldId) { m_worldId = p_worldId; }
+	inline void SetWorldId(MxS32 p_worldId) { m_worldId = p_worldId; }
 
 	// SYNTHETIC: LEGO1 0x1001dee0
 	// LegoWorld::`scalar deleting destructor'
