@@ -111,8 +111,8 @@ public:
 	void CreateBackgroundAudio();
 	void RemoveWorld(const MxAtomId& p_atom, MxLong p_objectId);
 	MxResult RegisterWorlds();
-	const char* GetScriptName(MxU32 p_index);
-	MxAtomId* GetScriptAtom(MxU32 p_index);
+	const char* GetWorldName(MxU32 p_id);
+	MxAtomId* GetWorldAtom(MxU32 p_id);
 	MxS32 GetWorldId(const char* p_key);
 	void DeleteAction();
 

@@ -629,7 +629,7 @@ MxResult LegoAnimationManager::LoadWorldInfo(MxS32 p_worldId)
 
 		char filename[128];
 		char path[1024];
-		sprintf(filename, "lego\\data\\%sinf.dta", Lego()->GetScriptName(p_worldId));
+		sprintf(filename, "lego\\data\\%sinf.dta", Lego()->GetWorldName(p_worldId));
 		sprintf(path, "%s", MxOmni::GetHD());
 
 		if (path[strlen(path) - 1] != '\\') {
@@ -983,7 +983,7 @@ MxResult LegoAnimationManager::FUN_100605e0(
 		char buf[256];
 		sprintf(buf, "%s:%d", g_strANIMMAN_ID, tranInfo->m_index);
 
-		action.SetAtomId(*Lego()->GetScriptAtom(m_worldId));
+		action.SetAtomId(*Lego()->GetWorldAtom(m_worldId));
 		action.SetObjectId(animInfo.m_objectId);
 		action.SetUnknown24(-1);
 		action.AppendExtra(strlen(buf) + 1, buf);
@@ -1050,7 +1050,7 @@ MxResult LegoAnimationManager::FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix
 	char buf[256];
 	sprintf(buf, "%s:%d", g_strANIMMAN_ID, info->m_index);
 
-	action.SetAtomId(*Lego()->GetScriptAtom(m_worldId));
+	action.SetAtomId(*Lego()->GetWorldAtom(m_worldId));
 	action.SetObjectId(p_objectId);
 	action.SetUnknown24(-1);
 	action.AppendExtra(strlen(buf) + 1, buf);
