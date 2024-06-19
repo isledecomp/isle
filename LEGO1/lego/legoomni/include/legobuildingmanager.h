@@ -68,7 +68,7 @@ public:
 	void Init();
 	void FUN_1002fa00();
 	void CreateBuilding(MxS32 p_index, LegoWorld* p_world);
-	void FUN_1002fb30();
+	void Reset();
 	MxResult Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);
 	LegoBuildingInfo* GetInfo(LegoEntity* p_entity);

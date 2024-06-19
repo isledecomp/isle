@@ -28,7 +28,7 @@ public:
 
 	void Init();
 	void LoadWorldInfo(MxS32 p_worldId);
-	void FUN_100263a0(undefined4 p_und);
+	void Reset(MxS32 p_worldId);
 	MxResult Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);
 	MxBool SwitchColor(LegoEntity* p_entity);
@@ -49,14 +49,16 @@ public:
 
 private:
 	LegoEntity* CreatePlant(MxS32 p_index, LegoWorld* p_world, MxS32 p_worldId);
+	void RemovePlant(MxS32 p_index, MxS32 p_worldId);
+	void FUN_10026860(MxS32 p_index);
 
 	static char* g_customizeAnimFile;
 
-	MxS32 m_worldId;           // 0x08
-	undefined m_unk0x0c;       // 0x0c
-	undefined m_unk0x10[0x17]; // 0x10
-	undefined m_unk0x24;       // 0x24
-	undefined4 m_unk0x28;      // 0x28
+	MxS32 m_worldId;         // 0x08
+	undefined m_unk0x0c;     // 0x0c
+	undefined* m_unk0x10[5]; // 0x10
+	MxS8 m_unk0x24;          // 0x24
+	undefined4 m_unk0x28;    // 0x28
 };
 
 #endif // LEGOPLANTMANAGER_H
