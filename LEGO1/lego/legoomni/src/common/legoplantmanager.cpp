@@ -1,13 +1,16 @@
 #include "legoplantmanager.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "legocharactermanager.h"
 #include "legoentity.h"
 #include "legoplants.h"
+#include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc.h"
 #include "misc/legostorage.h"
 #include "scripts.h"
 #include "sndanim_actions.h"
+#include "viewmanager/viewmanager.h"
 
 #include <stdio.h>
 
@@ -26,6 +29,21 @@ float g_unk0x100f16b0[] = {0.1f, 0.7f, 0.5f, 0.9f};
 
 // GLOBAL: LEGO1 0x100f16c0
 MxU8 g_unk0x100f16c0[] = {1, 2, 2, 3};
+
+// GLOBAL: LEGO1 0x100f315c
+MxU32 LegoPlantManager::g_maxSound = 8;
+
+// GLOBAL: LEGO1 0x100f3160
+MxU32 g_unk0x100f3160 = 56;
+
+// GLOBAL: LEGO1 0x100f3164
+MxU32 g_unk0x100f3164 = 66;
+
+// GLOBAL: LEGO1 0x100f3168
+MxS32 LegoPlantManager::g_maxMove[4] = {3, 3, 3, 3};
+
+// GLOBAL: LEGO1 0x100f3178
+MxU32 g_plantAnimationId[4] = {30, 33, 36, 39};
 
 // GLOBAL: LEGO1 0x100f3188
 char* LegoPlantManager::g_customizeAnimFile = NULL;
@@ -233,52 +251,175 @@ void LegoPlantManager::FUN_10026860(MxS32 p_index)
 	}
 }
 
-// STUB: LEGO1 0x10026920
+// FUNCTION: LEGO1 0x100268e0
+// FUNCTION: BETA10 0x100c5c95
+LegoPlantInfo* LegoPlantManager::GetInfo(LegoEntity* p_entity)
+{
+	MxS32 i;
+
+	for (i = 0; i < sizeOfArray(g_plantInfo); i++) {
+		if (g_plantInfo[i].m_entity == p_entity) {
+			break;
+		}
+	}
+
+	if (i < sizeOfArray(g_plantInfo)) {
+		return &g_plantInfo[i];
+	}
+
+	return NULL;
+}
+
+// FUNCTION: LEGO1 0x10026920
+// FUNCTION: BETA10 0x100c5dc9
 MxBool LegoPlantManager::SwitchColor(LegoEntity* p_entity)
 {
-	// TODO
-	return FALSE;
+	LegoPlantInfo* info = GetInfo(p_entity);
+
+	if (info == NULL) {
+		return FALSE;
+	}
+
+	LegoROI* roi = p_entity->GetROI();
+	info->m_color++;
+
+	if (info->m_color > LegoPlantInfo::e_green) {
+		info->m_color = LegoPlantInfo::e_white;
+	}
+
+	ViewLODList* lodList = GetViewLODListManager()->Lookup(g_plantLodNames[info->m_variant][info->m_color]);
+
+	if (roi->GetUnknown0xe0() >= 0) {
+		VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveROIDetailFromScene(roi);
+	}
+
+	roi->SetLODList(lodList);
+	lodList->Release();
+	CharacterManager()->FUN_10085870(roi);
+	return TRUE;
 }
 
-// STUB: LEGO1 0x100269e0
+// FUNCTION: LEGO1 0x100269e0
+// FUNCTION: BETA10 0x100c5ee2
 MxBool LegoPlantManager::SwitchVariant(LegoEntity* p_entity)
 {
-	// TODO
-	return FALSE;
+	LegoPlantInfo* info = GetInfo(p_entity);
+
+	if (info == NULL || info->m_unk0x16 != -1) {
+		return FALSE;
+	}
+
+	LegoROI* roi = p_entity->GetROI();
+	info->m_variant++;
+
+	if (info->m_variant > LegoPlantInfo::e_palm) {
+		info->m_variant = LegoPlantInfo::e_flower;
+	}
+
+	ViewLODList* lodList = GetViewLODListManager()->Lookup(g_plantLodNames[info->m_variant][info->m_color]);
+
+	if (roi->GetUnknown0xe0() >= 0) {
+		VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveROIDetailFromScene(roi);
+	}
+
+	roi->SetLODList(lodList);
+	lodList->Release();
+	CharacterManager()->FUN_10085870(roi);
+
+	if (info->m_move != 0 && info->m_move >= g_maxMove[info->m_variant]) {
+		info->m_move = g_maxMove[info->m_variant] - 1;
+	}
+
+	return TRUE;
 }
 
-// STUB: LEGO1 0x10026ad0
+// FUNCTION: LEGO1 0x10026ad0
+// FUNCTION: BETA10 0x100c6049
 MxBool LegoPlantManager::SwitchSound(LegoEntity* p_entity)
 {
-	// TODO
-	return FALSE;
+	MxBool result = FALSE;
+	LegoPlantInfo* info = GetInfo(p_entity);
+
+	if (info != NULL) {
+		info->m_sound++;
+
+		if (info->m_sound >= g_maxSound) {
+			info->m_sound = 0;
+		}
+
+		result = TRUE;
+	}
+
+	return result;
 }
 
-// STUB: LEGO1 0x10026b00
+// FUNCTION: LEGO1 0x10026b00
+// FUNCTION: BETA10 0x100c60a7
 MxBool LegoPlantManager::SwitchMove(LegoEntity* p_entity)
 {
-	// TODO
-	return FALSE;
+	MxBool result = FALSE;
+	LegoPlantInfo* info = GetInfo(p_entity);
+
+	if (info != NULL) {
+		info->m_move++;
+
+		if (info->m_move >= g_maxMove[info->m_variant]) {
+			info->m_move = 0;
+		}
+
+		result = TRUE;
+	}
+
+	return result;
 }
 
-// STUB: LEGO1 0x10026b40
+// FUNCTION: LEGO1 0x10026b40
+// FUNCTION: BETA10 0x100c610e
 MxBool LegoPlantManager::SwitchMood(LegoEntity* p_entity)
 {
-	// TODO
-	return FALSE;
+	MxBool result = FALSE;
+	LegoPlantInfo* info = GetInfo(p_entity);
+
+	if (info != NULL) {
+		info->m_mood++;
+
+		if (info->m_mood > 3) {
+			info->m_mood = 0;
+		}
+
+		result = TRUE;
+	}
+
+	return result;
 }
 
-// STUB: LEGO1 0x10026b70
-MxU32 LegoPlantManager::FUN_10026b70(LegoEntity* p_entity)
+// FUNCTION: LEGO1 0x10026b70
+// FUNCTION: BETA10 0x100c6168
+MxU32 LegoPlantManager::GetAnimationId(LegoEntity* p_entity)
 {
-	// TODO
+	LegoPlantInfo* info = GetInfo(p_entity);
+
+	if (info != NULL) {
+		return g_plantAnimationId[info->m_variant] + info->m_move;
+	}
+
 	return 0;
 }
 
-// STUB: LEGO1 0x10026ba0
-MxU32 LegoPlantManager::FUN_10026ba0(LegoEntity* p_entity, MxBool)
+// FUNCTION: LEGO1 0x10026ba0
+// FUNCTION: BETA10 0x100c61ba
+MxU32 LegoPlantManager::GetSoundId(LegoEntity* p_entity, MxBool p_state)
 {
-	// TODO
+	LegoPlantInfo* info = GetInfo(p_entity);
+
+	if (p_state) {
+		return (info->m_mood & 1) + g_unk0x100f3164;
+	}
+
+	if (info != NULL) {
+		return info->m_sound + g_unk0x100f3160;
+	}
+
 	return 0;
 }
 

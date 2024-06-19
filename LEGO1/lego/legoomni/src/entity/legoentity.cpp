@@ -256,15 +256,15 @@ void LegoEntity::ClickSound(MxBool p_und)
 
 		switch (m_type) {
 		case e_actor:
-			objectId = CharacterManager()->FUN_10085140(m_roi, p_und);
+			objectId = CharacterManager()->GetSoundId(m_roi, p_und);
 			break;
 		case e_unk1:
 			break;
 		case e_plant:
-			objectId = PlantManager()->FUN_10026ba0(this, p_und);
+			objectId = PlantManager()->GetSoundId(this, p_und);
 			break;
 		case e_building:
-			objectId = BuildingManager()->FUN_1002ff40(this, p_und);
+			objectId = BuildingManager()->GetSoundId(this, p_und);
 			break;
 		}
 
@@ -290,19 +290,19 @@ void LegoEntity::ClickAnimation()
 
 		switch (m_type) {
 		case e_actor:
-			objectId = LegoOmni::GetInstance()->GetCharacterManager()->FUN_10085120(m_roi);
+			objectId = LegoOmni::GetInstance()->GetCharacterManager()->GetAnimationId(m_roi);
 			action.SetAtomId(MxAtomId(LegoCharacterManager::GetCustomizeAnimFile(), e_lowerCase2));
 			sprintf(extra, "SUBST:actor_01:%s", name);
 			break;
 		case e_unk1:
 			break;
 		case e_plant:
-			objectId = LegoOmni::GetInstance()->GetPlantManager()->FUN_10026b70(this);
+			objectId = LegoOmni::GetInstance()->GetPlantManager()->GetAnimationId(this);
 			action.SetAtomId(MxAtomId(LegoPlantManager::GetCustomizeAnimFile(), e_lowerCase2));
 			sprintf(extra, "SUBST:bush:%s:tree:%s:flwrred:%s:palm:%s", name, name, name, name);
 			break;
 		case e_building:
-			objectId = LegoOmni::GetInstance()->GetBuildingManager()->GetBuildingEntityId(this);
+			objectId = LegoOmni::GetInstance()->GetBuildingManager()->GetAnimationId(this);
 			action.SetAtomId(MxAtomId(BuildingManager()->GetCustomizeAnimFile(), e_lowerCase2));
 			sprintf(extra, "SUBST:haus1:%s", name);
 			break;
