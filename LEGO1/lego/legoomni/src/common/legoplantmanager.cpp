@@ -5,6 +5,9 @@
 #include "legoplants.h"
 #include "legoworld.h"
 #include "misc.h"
+#include "misc/legostorage.h"
+#include "scripts.h"
+#include "sndanim_actions.h"
 
 #include <stdio.h>
 
@@ -17,6 +20,12 @@ const char* g_plantLodNames[4][5] = {
 	{"bushwht", "bushblk", "bushyel", "bushred", "bush"},
 	{"palmwht", "palmblk", "palmyel", "palmred", "palm"}
 };
+
+// GLOBAL: LEGO1 0x100f16b0
+float g_unk0x100f16b0[] = {0.1f, 0.7f, 0.5f, 0.9f};
+
+// GLOBAL: LEGO1 0x100f16c0
+MxU8 g_unk0x100f16c0[] = {1, 2, 2, 3};
 
 // GLOBAL: LEGO1 0x100f3188
 char* LegoPlantManager::g_customizeAnimFile = NULL;
@@ -63,10 +72,24 @@ void LegoPlantManager::LoadWorldInfo(MxS32 p_worldId)
 	m_unk0x0c = 0;
 }
 
-// STUB: LEGO1 0x100263a0
-void LegoPlantManager::FUN_100263a0(undefined4 p_und)
+// FUNCTION: LEGO1 0x100263a0
+void LegoPlantManager::Reset(MxS32 p_worldId)
 {
-	// TODO
+	MxU32 i;
+	DeleteObjects(g_sndAnimScript, SndanimScript::c_AnimC1, SndanimScript::c_AnimBld18);
+
+	for (i = 0; i < m_unk0x24; i++) {
+		delete m_unk0x10[i];
+	}
+
+	m_unk0x24 = 0;
+
+	for (i = 0; i < sizeOfArray(g_plantInfo); i++) {
+		RemovePlant(i, p_worldId);
+	}
+
+	m_worldId = -1;
+	m_unk0x0c = 0;
 }
 
 // FUNCTION: LEGO1 0x10026590
@@ -108,20 +131,106 @@ LegoEntity* LegoPlantManager::CreatePlant(MxS32 p_index, LegoWorld* p_world, MxS
 	return entity;
 }
 
-// STUB: LEGO1 0x10026720
+// FUNCTION: LEGO1 0x100266c0
+// FUNCTION: BETA10 0x100c5859
+void LegoPlantManager::RemovePlant(MxS32 p_index, MxS32 p_worldId)
+{
+	if (p_index < sizeOfArray(g_plantInfo)) {
+		MxU32 world = 1 << (MxU8) p_worldId;
+
+		if (g_plantInfo[p_index].m_worlds & world && g_plantInfo[p_index].m_entity != NULL) {
+			CharacterManager()->ReleaseAutoROI(g_plantInfo[p_index].m_entity->GetROI());
+			g_plantInfo[p_index].m_entity = NULL;
+		}
+	}
+}
+
+// FUNCTION: LEGO1 0x10026720
 // FUNCTION: BETA10 0x100c5918
 MxResult LegoPlantManager::Write(LegoStorage* p_storage)
 {
-	// TODO
-	return SUCCESS;
+	MxResult result = FAILURE;
+
+	for (MxS32 i = 0; i < sizeOfArray(g_plantInfo); i++) {
+		LegoPlantInfo* info = &g_plantInfo[i];
+
+		if (p_storage->Write(&info->m_variant, sizeof(info->m_variant)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Write(&info->m_sound, sizeof(info->m_sound)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Write(&info->m_move, sizeof(info->m_move)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Write(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Write(&info->m_color, sizeof(info->m_color)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Write(&info->m_initialUnk0x16, sizeof(info->m_initialUnk0x16)) != SUCCESS) {
+			goto done;
+		}
+	}
+
+	result = SUCCESS;
+
+done:
+	return result;
 }
 
-// STUB: LEGO1 0x100267b0
+// FUNCTION: LEGO1 0x100267b0
 // FUNCTION: BETA10 0x100c5a76
 MxResult LegoPlantManager::Read(LegoStorage* p_storage)
 {
-	// TODO
-	return SUCCESS;
+	MxResult result = FAILURE;
+
+	for (MxS32 i = 0; i < sizeOfArray(g_plantInfo); i++) {
+		LegoPlantInfo* info = &g_plantInfo[i];
+
+		if (p_storage->Read(&info->m_variant, sizeof(info->m_variant)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&info->m_sound, sizeof(info->m_sound)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&info->m_move, sizeof(info->m_move)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&info->m_color, sizeof(info->m_color)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&info->m_unk0x16, sizeof(info->m_unk0x16)) != SUCCESS) {
+			goto done;
+		}
+
+		info->m_initialUnk0x16 = info->m_unk0x16;
+		FUN_10026860(i);
+	}
+
+	result = SUCCESS;
+
+done:
+	return result;
+}
+
+// FUNCTION: LEGO1 0x10026860
+// FUNCTION: BETA10 0x100c5be0
+void LegoPlantManager::FUN_10026860(MxS32 p_index)
+{
+	MxU8 variant = g_plantInfo[p_index].m_variant;
+
+	if (g_plantInfo[p_index].m_unk0x16 >= 0) {
+		float value = g_unk0x100f16c0[variant] - g_plantInfo[p_index].m_unk0x16;
+		g_plantInfo[p_index].m_position[1] = g_plantInfoInit[p_index].m_position[1] - value * g_unk0x100f16b0[variant];
+	}
+	else {
+		g_plantInfo[p_index].m_position[1] = g_plantInfoInit[p_index].m_position[1];
+	}
 }
 
 // STUB: LEGO1 0x10026920

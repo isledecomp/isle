@@ -178,8 +178,8 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 	}
 
 	if (m_worldId != -1 && m_set0xd0.empty()) {
-		PlantManager()->FUN_100263a0(m_worldId);
-		BuildingManager()->FUN_1002fb30();
+		PlantManager()->Reset(m_worldId);
+		BuildingManager()->Reset();
 	}
 
 	if (m_entityList) {
@@ -715,8 +715,8 @@ void LegoWorld::Enable(MxBool p_enable)
 		m_set0xd0.insert(this);
 
 		if (m_worldId != -1) {
-			PlantManager()->FUN_100263a0(m_worldId);
-			BuildingManager()->FUN_1002fb30();
+			PlantManager()->Reset(m_worldId);
+			BuildingManager()->Reset();
 		}
 
 		MxPresenterListCursor controlPresenterCursor(&m_controlPresenters);

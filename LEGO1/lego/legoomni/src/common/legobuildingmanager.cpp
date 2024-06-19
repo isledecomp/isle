@@ -304,7 +304,7 @@ void LegoBuildingManager::CreateBuilding(MxS32 p_index, LegoWorld* p_world)
 }
 
 // FUNCTION: LEGO1 0x1002fb30
-void LegoBuildingManager::FUN_1002fb30()
+void LegoBuildingManager::Reset()
 {
 	MxU32 i;
 
