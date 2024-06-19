@@ -28,7 +28,7 @@ MxU32 LegoCharacterManager::g_maxMove = 4;
 MxU32 LegoCharacterManager::g_maxSound = 9;
 
 // GLOBAL: LEGO1 0x100fc4e0
-MxU32 g_unk0x100fc4e0 = 10;
+MxU32 g_characterAnimationId = 10;
 
 // GLOBAL: LEGO1 0x100fc4e4
 char* LegoCharacterManager::g_customizeAnimFile = NULL;
@@ -884,19 +884,19 @@ MxBool LegoCharacterManager::SwitchMood(LegoROI* p_roi)
 
 // FUNCTION: LEGO1 0x10085120
 // FUNCTION: BETA10 0x1007680c
-MxU32 LegoCharacterManager::FUN_10085120(LegoROI* p_roi)
+MxU32 LegoCharacterManager::GetAnimationId(LegoROI* p_roi)
 {
 	LegoActorInfo* info = GetActorInfo(p_roi);
 
 	if (info != NULL) {
-		return info->m_move + g_unk0x100fc4e0;
+		return info->m_move + g_characterAnimationId;
 	}
 
 	return 0;
 }
 
 // FUNCTION: LEGO1 0x10085140
-MxU32 LegoCharacterManager::FUN_10085140(LegoROI* p_roi, MxBool p_und)
+MxU32 LegoCharacterManager::GetSoundId(LegoROI* p_roi, MxBool p_und)
 {
 	LegoActorInfo* info = GetActorInfo(p_roi);
 

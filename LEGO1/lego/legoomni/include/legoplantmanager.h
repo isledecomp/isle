@@ -6,6 +6,7 @@
 
 class LegoEntity;
 class LegoPathBoundary;
+struct LegoPlantInfo;
 class LegoROI;
 class LegoStorage;
 class LegoWorld;
@@ -36,8 +37,8 @@ public:
 	MxBool SwitchSound(LegoEntity* p_entity);
 	MxBool SwitchMove(LegoEntity* p_entity);
 	MxBool SwitchMood(LegoEntity* p_entity);
-	MxU32 FUN_10026b70(LegoEntity* p_entity);
-	MxU32 FUN_10026ba0(LegoEntity* p_entity, MxBool);
+	MxU32 GetAnimationId(LegoEntity* p_entity);
+	MxU32 GetSoundId(LegoEntity* p_entity, MxBool p_state);
 	void FUN_10026c50(LegoEntity* p_entity);
 	void FUN_10027120();
 
@@ -51,8 +52,11 @@ private:
 	LegoEntity* CreatePlant(MxS32 p_index, LegoWorld* p_world, MxS32 p_worldId);
 	void RemovePlant(MxS32 p_index, MxS32 p_worldId);
 	void FUN_10026860(MxS32 p_index);
+	LegoPlantInfo* GetInfo(LegoEntity* p_entity);
 
 	static char* g_customizeAnimFile;
+	static MxS32 g_maxMove[4];
+	static MxU32 g_maxSound;
 
 	MxS32 m_worldId;         // 0x08
 	undefined m_unk0x0c;     // 0x0c

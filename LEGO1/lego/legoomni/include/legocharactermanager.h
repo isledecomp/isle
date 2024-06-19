@@ -74,10 +74,11 @@ public:
 	MxBool SwitchSound(LegoROI* p_roi);
 	MxBool SwitchMove(LegoROI* p_roi);
 	MxBool SwitchMood(LegoROI* p_roi);
-	MxU32 FUN_10085120(LegoROI* p_roi);
-	MxU32 FUN_10085140(LegoROI* p_roi, MxBool p_und);
+	MxU32 GetAnimationId(LegoROI* p_roi);
+	MxU32 GetSoundId(LegoROI* p_roi, MxBool p_und);
 	MxU8 GetMood(LegoROI* p_roi);
 	LegoROI* CreateAutoROI(const char* p_name, const char* p_lodName, MxBool p_createEntity);
+	MxResult FUN_10085870(LegoROI* p_roi);
 	LegoROI* FUN_10085a80(const char* p_name, const char* p_lodName, MxBool p_createEntity);
 
 	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }
@@ -86,7 +87,6 @@ private:
 	LegoROI* CreateActorROI(const char* p_key);
 	void RemoveROI(LegoROI* p_roi);
 	LegoROI* FindChildROI(LegoROI* p_roi, const char* p_name);
-	MxResult FUN_10085870(LegoROI* p_roi);
 
 	static char* g_customizeAnimFile;
 	static MxU32 g_maxMove;

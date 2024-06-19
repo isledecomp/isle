@@ -196,14 +196,14 @@ LegoBuildingInfo g_buildingInfoInit[16] = {
 MxU32 LegoBuildingManager::g_maxSound = 6;
 
 // GLOBAL: LEGO1 0x100f373c
-MxU32 g_cycleLengthOffset1 = 0x3c;
+MxU32 g_unk0x100f373c = 0x3c;
 
 // GLOBAL: LEGO1 0x100f3740
-MxU32 g_cycleLengthOffset3 = 0x42;
+MxU32 g_unk0x100f3740 = 0x42;
 
 // clang-format off
 // GLOBAL: LEGO1 0x100f3788
-MxU32 g_buildingEntityId[16] = {
+MxU32 g_buildingAnimationId[16] = {
 	0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00,
 	0x00, 0x46, 0x49, 0x4c,
@@ -531,12 +531,12 @@ MxBool LegoBuildingManager::SwitchMood(LegoEntity* p_entity)
 
 // FUNCTION: LEGO1 0x1002ff00
 // FUNCTION: BETA10 0x1006432d
-MxU32 LegoBuildingManager::GetBuildingEntityId(LegoEntity* p_entity)
+MxU32 LegoBuildingManager::GetAnimationId(LegoEntity* p_entity)
 {
 	LegoBuildingInfo* info = GetInfo(p_entity);
 
 	if (info != NULL && info->m_flags & LegoBuildingInfo::c_hasMoves) {
-		return g_buildingEntityId[info - g_buildingInfo] + info->m_move;
+		return g_buildingAnimationId[info - g_buildingInfo] + info->m_move;
 	}
 
 	return 0;
@@ -544,7 +544,7 @@ MxU32 LegoBuildingManager::GetBuildingEntityId(LegoEntity* p_entity)
 
 // FUNCTION: LEGO1 0x1002ff40
 // FUNCTION: BETA10 0x10064398
-MxU32 LegoBuildingManager::FUN_1002ff40(LegoEntity* p_entity, MxBool p_state)
+MxU32 LegoBuildingManager::GetSoundId(LegoEntity* p_entity, MxBool p_state)
 {
 	LegoBuildingInfo* info = GetInfo(p_entity);
 
@@ -553,11 +553,11 @@ MxU32 LegoBuildingManager::FUN_1002ff40(LegoEntity* p_entity, MxBool p_state)
 	}
 
 	if (p_state) {
-		return info->m_mood + g_cycleLengthOffset3;
+		return info->m_mood + g_unk0x100f3740;
 	}
 
 	if (info != NULL) {
-		return info->m_sound + g_cycleLengthOffset1;
+		return info->m_sound + g_unk0x100f373c;
 	}
 
 	return 0;
