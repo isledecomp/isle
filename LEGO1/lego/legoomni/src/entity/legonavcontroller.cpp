@@ -482,6 +482,12 @@ LegoLocation* LegoNavController::GetLocation(MxU32 p_location)
 	return NULL;
 }
 
+// FUNCTION: LEGO1 0x10055740
+MxS32 LegoNavController::GetNumLocations(void)
+{
+	return sizeOfArray(g_locations);
+}
+
 // FUNCTION: LEGO1 0x10055750
 MxResult LegoNavController::ProcessJoystickInput(MxBool& p_und)
 {

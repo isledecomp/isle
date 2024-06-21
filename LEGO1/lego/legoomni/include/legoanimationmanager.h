@@ -13,6 +13,7 @@ class LegoAnimPresenter;
 class LegoEntity;
 class LegoExtraActor;
 class LegoFile;
+class LegoNavController;
 class LegoPathActor;
 class LegoPathBoundary;
 class LegoROIList;
@@ -71,22 +72,23 @@ public:
 	MxBool SetFlag() override;                     // vtable+0x18
 	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
-	void FUN_100651d0(MxU32, AnimInfo*, MxU32&);
-	void FUN_10065240(MxU32, AnimInfo*, MxU32);
+	void CopyToAnims(MxU32 p_unused, AnimInfo* p_anims, MxU32& out_extraCharacterId);
+	void InitFromAnims(MxU32 p_animsLength, AnimInfo* p_anims, MxU32 p_extraCharacterId);
 
 	// SYNTHETIC: LEGO1 0x10065130
 	// AnimState::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x08; // 0x08
+	MxU32 m_extraCharacterId; // 0x08
+
 	// appears to store the length of m_unk0x10
-	undefined4 m_unk0x0c; // 0x0c
-	// dynamically sized array of two-byte elements
-	undefined2* m_unk0x10; // 0x10
-	// appears to store the length of m_unk0x18
-	undefined4 m_unk0x14; // 0x14
-	// dynamically sized array of one-byte elements
-	undefined* m_unk0x18; // 0x18
+	MxU32 m_unk0x0c; // 0x0c
+	// dynamically sized array of MxU16, corresponding to AnimInfo::m_unk0x22
+	MxU16* m_unk0x10; // 0x10
+
+	MxU32 m_locationsFlagsLength; // 0x14
+	// dynamically sized array of bools, corresponding to LegoLocation.m_unk0x5c
+	MxBool* m_locationsFlags; // 0x18
 };
 
 // VTABLE: LEGO1 0x100d8c18

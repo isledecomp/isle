@@ -74,6 +74,7 @@ public:
 	);
 	static MxResult UpdateLocation(MxU32 p_location);
 	static MxResult UpdateLocation(const char* p_location);
+	static MxS32 GetNumLocations(void);
 	static LegoLocation* GetLocation(MxU32 p_location);
 
 	inline void SetLinearVel(MxFloat p_linearVel) { m_linearVel = p_linearVel; }
