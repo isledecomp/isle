@@ -71,7 +71,7 @@ public:
 	MxBool SetFlag() override;                     // vtable+0x18
 	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
-	void CopyToAnims(MxU32 p_unused, AnimInfo* p_anims, MxU32& p_outExtraCharacterId);
+	void CopyToAnims(MxU32, AnimInfo* p_anims, MxU32& p_outExtraCharacterId);
 	void InitFromAnims(MxU32 p_animsLength, AnimInfo* p_anims, MxU32 p_extraCharacterId);
 
 	// SYNTHETIC: LEGO1 0x10065130

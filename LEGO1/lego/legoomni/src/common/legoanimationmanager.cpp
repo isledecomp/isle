@@ -2840,7 +2840,7 @@ AnimState::~AnimState()
 }
 
 // FUNCTION: LEGO1 0x100651d0
-void AnimState::CopyToAnims(MxU32 p_unused, AnimInfo* p_anims, MxU32& p_outExtraCharacterId)
+void AnimState::CopyToAnims(MxU32, AnimInfo* p_anims, MxU32& p_outExtraCharacterId)
 {
 	if (m_unk0x10 != NULL) {
 		for (MxS32 i = 0; i < m_unk0x0c; i++) {
@@ -2869,7 +2869,7 @@ void AnimState::InitFromAnims(MxU32 p_animsLength, AnimInfo* p_anims, MxU32 p_ex
 		m_locationsFlags = new MxBool[numLocations];
 	}
 
-	this->m_extraCharacterId = p_extraCharacterId;
+	m_extraCharacterId = p_extraCharacterId;
 
 	for (MxS32 i = 0; i < m_unk0x0c; i++) {
 		m_unk0x10[i] = p_anims[i].m_unk0x22;
@@ -2878,7 +2878,7 @@ void AnimState::InitFromAnims(MxU32 p_animsLength, AnimInfo* p_anims, MxU32 p_ex
 	for (MxS32 j = 0; j < m_locationsFlagsLength; j++) {
 		LegoLocation* location = LegoNavController::GetLocation(j);
 		if (location != NULL) {
-			this->m_locationsFlags[j] = location->m_unk0x5c;
+			m_locationsFlags[j] = location->m_unk0x5c;
 		}
 	}
 }
@@ -2968,5 +2968,6 @@ MxBool AnimState::SetFlag()
 
 		return TRUE;
 	}
+
 	return FALSE;
 }
