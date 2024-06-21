@@ -694,7 +694,7 @@ void LegoWorld::Enable(MxBool p_enable)
 			if (m_worldId != -1) {
 				PlantManager()->LoadWorldInfo(m_worldId);
 				AnimationManager()->LoadWorldInfo(m_worldId);
-				BuildingManager()->FUN_1002fa00();
+				BuildingManager()->LoadWorldInfo();
 				AnimationManager()->Resume();
 			}
 

@@ -57,7 +57,7 @@ LegoWorldPresenter::~LegoWorldPresenter()
 		MxS32 worldId = ((LegoWorld*) m_entity)->GetWorldId();
 		PlantManager()->LoadWorldInfo(worldId);
 		AnimationManager()->LoadWorldInfo(worldId);
-		BuildingManager()->FUN_1002fa00();
+		BuildingManager()->LoadWorldInfo();
 		result = ((LegoWorld*) m_entity)->VTable0x5c();
 	}
 

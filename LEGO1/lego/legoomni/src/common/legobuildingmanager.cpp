@@ -257,7 +257,7 @@ void LegoBuildingManager::Init()
 
 // FUNCTION: LEGO1 0x1002fa00
 // FUNCTION: BETA10 0x10063ad1
-void LegoBuildingManager::FUN_1002fa00()
+void LegoBuildingManager::LoadWorldInfo()
 {
 	MxS32 i;
 	LegoWorld* world = CurrentWorld();

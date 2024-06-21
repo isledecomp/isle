@@ -66,7 +66,7 @@ public:
 	static void SetCustomizeAnimFile(const char* p_value);
 
 	void Init();
-	void FUN_1002fa00();
+	void LoadWorldInfo();
 	void CreateBuilding(MxS32 p_index, LegoWorld* p_world);
 	void Reset();
 	MxResult Write(LegoStorage* p_storage);
