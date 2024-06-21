@@ -13,7 +13,6 @@ class LegoAnimPresenter;
 class LegoEntity;
 class LegoExtraActor;
 class LegoFile;
-class LegoNavController;
 class LegoPathActor;
 class LegoPathBoundary;
 class LegoROIList;
