@@ -50,7 +50,7 @@ Result ViewImpl::ViewportCreateAppData(IDirect3DRM2* pDevice, IDirect3DRMViewpor
 {
 	ViewportAppData* data = new ViewportAppData(pDevice);
 	data->m_pCamera = pCamera;
-	Result result = ResultVal(pView->SetAppData(reinterpret_cast<unsigned long>(data)));
+	Result result = ResultVal(pView->SetAppData(reinterpret_cast<LPD3DRM_APPDATA>(data)));
 	if (Succeeded(result)) {
 		result = ResultVal(pView->AddDestroyCallback(ViewportDestroyCallback, data));
 	}

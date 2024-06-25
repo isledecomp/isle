@@ -5,6 +5,12 @@
 
 #include <d3drm.h>
 
+#ifdef DIRECTX5_SDK
+typedef DWORD LPD3DRM_APPDATA;
+#else
+typedef LPVOID LPD3DRM_APPDATA;
+#endif
+
 // Forward declare D3D types
 struct IDirect3DRM2;
 struct IDirect3DRMDevice2;
