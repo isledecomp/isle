@@ -1054,6 +1054,7 @@ int MxDeviceEnumerate::SupportsCPUID()
 {
 	int has_cpuid;
 #ifdef _MSC_VER
+#if defined(_M_IX86)
 	__asm {
 		xor eax, eax                    ; Zero EAX register
 		pushfd                          ; Push EFLAGS register value on the stack
@@ -1065,7 +1066,13 @@ int MxDeviceEnumerate::SupportsCPUID()
 		popfd                           ; Push EFLAGS register value on the stack (again, and makes sure the stack remains the same)
 		mov has_cpuid, eax              ; Save eax into C variable
 	}
+#elif defined(_M_X64)
+	has_cpuid = 1;
 #else
+	has_cpuid = 0;
+#endif
+#else
+#if defined(__i386__)
 	__asm__("xorl %%eax, %%eax\n\t"      // Zero EAX register
 			"pushfl\n\t"                 // Push EFLAGS register value on the stack
 			"orl $0x200000, (%%esp)\n\t" // Set bit 0x200000: Able to use CPUID instruction (Pentium+)
@@ -1076,6 +1083,11 @@ int MxDeviceEnumerate::SupportsCPUID()
 			"popfl" // Push EFLAGS register value on the stack (again, and makes sure the stack remains the same)
 			: "=a"(has_cpuid) // has_cpuid == EAX
 	);
+#elif defined(__x86_64__) || defined(__amd64__)
+	has_cpuid = 1;
+#else
+	has_cpuid = 0;
+#endif
 #endif
 	return has_cpuid;
 }
