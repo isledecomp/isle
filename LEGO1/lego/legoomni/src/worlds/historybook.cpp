@@ -15,9 +15,9 @@ DECOMP_SIZE_ASSERT(HistoryBook, 0x3e4)
 // FUNCTION: LEGO1 0x100822f0
 HistoryBook::HistoryBook()
 {
-	memset(m_alphabet, NULL, sizeof(m_alphabet));
-	memset(m_names, NULL, sizeof(m_names));
-	memset(m_scores, NULL, sizeof(m_scores));
+	memset(m_alphabet, 0, sizeof(m_alphabet));
+	memset(m_names, 0, sizeof(m_names));
+	memset(m_scores, 0, sizeof(m_scores));
 	NotificationManager()->Register(this);
 }
 
