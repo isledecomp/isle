@@ -9,6 +9,16 @@
 // but this assert will enforce the size if we decide to change that.
 DECOMP_SIZE_ASSERT(MXIOINFO, sizeof(MMIOINFO));
 
+#ifdef MXIO_MINFO_MFILE
+#define ASSIGN_M_FILE(X) m_info.hmmio = (HMMIO) (X)
+#define M_FILE (HFILE)(m_info.hmmio)
+#define RAW_M_FILE m_info.hmmio
+#else
+#define ASSIGN_M_FILE(X) m_file = (X)
+#define M_FILE (m_file)
+#define RAW_M_FILE m_file
+#endif
+
 // FUNCTION: LEGO1 0x100cc800
 // FUNCTION: BETA10 0x1015e140
 MXIOINFO::MXIOINFO()
@@ -33,9 +43,10 @@ MxU16 MXIOINFO::Open(const char* p_filename, MxULong p_flags)
 	m_info.lDiskOffset = m_info.lBufOffset = 0;
 
 	// DECOMP: Cast of p_flags to u16 forces the `movzx` instruction
-	m_info.hmmio = (HMMIO) OpenFile(p_filename, &unused, (MxU16) p_flags);
+	// original: m_info.hmmio = OpenFile(p_filename, &unused, (MxU16) p_flags);
+	ASSIGN_M_FILE(OpenFile(p_filename, &unused, (MxU16) p_flags));
 
-	if ((HFILE) m_info.hmmio != HFILE_ERROR) {
+	if (M_FILE != HFILE_ERROR) {
 		m_info.dwFlags = p_flags;
 		if (m_info.dwFlags & MMIO_ALLOCBUF) {
 
@@ -75,10 +86,10 @@ MxU16 MXIOINFO::Close(MxLong p_unused)
 {
 	MxU16 result = 0;
 
-	if (m_info.hmmio) {
+	if (RAW_M_FILE) {
 		result = Flush(0);
-		_lclose((HFILE) m_info.hmmio);
-		m_info.hmmio = 0;
+		_lclose(M_FILE);
+		ASSIGN_M_FILE(0);
 
 		if (m_info.dwFlags & MMIO_ALLOCBUF) {
 			delete[] m_info.pchBuffer;
@@ -127,12 +138,12 @@ MxLong MXIOINFO::Read(void* p_buf, MxLong p_len)
 			}
 		}
 	}
-	else if (m_info.hmmio && p_len > 0) {
-		bytesRead = _hread((HFILE) m_info.hmmio, p_buf, p_len);
+	else if (RAW_M_FILE && p_len > 0) {
+		bytesRead = _hread(M_FILE, p_buf, p_len);
 
 		if (bytesRead == -1) {
 			bytesRead = 0;
-			m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+			m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 		}
 		else {
 			m_info.lDiskOffset += bytesRead;
@@ -180,12 +191,12 @@ MxLong MXIOINFO::Write(void* p_buf, MxLong p_len)
 			}
 		}
 	}
-	else if (m_info.hmmio && p_len > 0) {
-		bytesWritten = _hwrite((HFILE) m_info.hmmio, (const char*) p_buf, p_len);
+	else if (RAW_M_FILE && p_len > 0) {
+		bytesWritten = _hwrite(M_FILE, (const char*) p_buf, p_len);
 
 		if (bytesWritten == -1) {
 			bytesWritten = 0;
-			m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+			m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 		}
 		else {
 			m_info.lDiskOffset += bytesWritten;
@@ -234,11 +245,11 @@ MxLong MXIOINFO::Seek(MxLong p_offset, MxLong p_origin)
 		}
 		else {
 			// we have to read another chunk from disk.
-			if (m_info.hmmio && !Flush(0)) {
-				m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, p_offset, p_origin);
+			if (RAW_M_FILE && !Flush(0)) {
+				m_info.lDiskOffset = _llseek(M_FILE, p_offset, p_origin);
 
 				if (m_info.lDiskOffset == -1) {
-					m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+					m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 				}
 				else {
 
@@ -248,10 +259,10 @@ MxLong MXIOINFO::Seek(MxLong p_offset, MxLong p_origin)
 					// do we need to seek again?
 					// (i.e. are we already aligned to buffer size?)
 					if (p_offset != m_info.lBufOffset) {
-						m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, m_info.lBufOffset, SEEK_SET);
+						m_info.lDiskOffset = _llseek(M_FILE, m_info.lBufOffset, SEEK_SET);
 
 						if (m_info.lDiskOffset == -1) {
-							m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+							m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 						}
 					}
 
@@ -259,10 +270,10 @@ MxLong MXIOINFO::Seek(MxLong p_offset, MxLong p_origin)
 						// is the file open for writing only?
 						if ((m_info.dwFlags & MMIO_RWMODE) == 0 || (m_info.dwFlags & MMIO_RWMODE) == MMIO_READWRITE) {
 							// We can read from the file. Fill the buffer.
-							bytesRead = _hread((HFILE) m_info.hmmio, m_info.pchBuffer, m_info.cchBuffer);
+							bytesRead = _hread(M_FILE, m_info.pchBuffer, m_info.cchBuffer);
 
 							if (bytesRead == -1) {
-								m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+								m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 							}
 							else {
 								m_info.lDiskOffset += bytesRead;
@@ -283,19 +294,19 @@ MxLong MXIOINFO::Seek(MxLong p_offset, MxLong p_origin)
 			}
 		}
 	}
-	else if (m_info.hmmio) {
+	else if (RAW_M_FILE) {
 		// No buffer so just seek the file directly (if we have a valid handle)
 		// i.e. if we just want to get the current file position
 		if (p_origin == SEEK_CUR && p_offset == 0) {
 			return m_info.lDiskOffset;
 		}
 
-		m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, p_offset, p_origin);
+		m_info.lDiskOffset = _llseek(M_FILE, p_offset, p_origin);
 
 		result = m_info.lDiskOffset;
 
 		if (result == -1) {
-			m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+			m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 		}
 	}
 
@@ -334,25 +345,25 @@ MxU16 MXIOINFO::Flush(MxU16 p_unused)
 		// if we have allocated an IO buffer
 		if (m_info.pchBuffer) {
 			// if we have a file open for writing
-			if (m_info.hmmio && (m_info.dwFlags & MMIO_RWMODE)) {
+			if (RAW_M_FILE && (m_info.dwFlags & MMIO_RWMODE)) {
 				// DECOMP: pulling this value out into a variable forces it into EBX
 				MxLong cchBuffer = m_info.cchBuffer;
 				if (cchBuffer > 0) {
 					if (m_info.lBufOffset != m_info.lDiskOffset) {
-						m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, m_info.lBufOffset, SEEK_SET);
+						m_info.lDiskOffset = _llseek(M_FILE, m_info.lBufOffset, SEEK_SET);
 					}
 
 					// Was the previous seek (if required) successful?
 					if (m_info.lBufOffset != m_info.lDiskOffset) {
 						result = MMIOERR_CANNOTSEEK;
-						m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+						m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 					}
 					else {
-						bytesWritten = _hwrite((HFILE) m_info.hmmio, m_info.pchBuffer, cchBuffer);
+						bytesWritten = _hwrite(M_FILE, m_info.pchBuffer, cchBuffer);
 
 						if (bytesWritten == -1 || bytesWritten != cchBuffer) {
 							result = MMIOERR_CANNOTWRITE;
-							m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+							m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 						}
 						else {
 							m_info.lDiskOffset += bytesWritten;
@@ -392,19 +403,19 @@ MxU16 MXIOINFO::Advance(MxU16 p_option)
 			((p_option & MMIO_WRITE) || (rwmode == MMIO_READWRITE)) && cch > 0) {
 
 			if (m_info.lBufOffset != m_info.lDiskOffset) {
-				m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, m_info.lBufOffset, SEEK_SET);
+				m_info.lDiskOffset = _llseek(M_FILE, m_info.lBufOffset, SEEK_SET);
 			}
 
 			if (m_info.lBufOffset != m_info.lDiskOffset) {
 				result = MMIOERR_CANNOTSEEK;
-				m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+				m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 			}
 			else {
-				bytesCounter = _hwrite((HFILE) m_info.hmmio, m_info.pchBuffer, cch);
+				bytesCounter = _hwrite(M_FILE, m_info.pchBuffer, cch);
 
 				if (bytesCounter == -1 || bytesCounter != cch) {
 					result = MMIOERR_CANNOTWRITE;
-					m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+					m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 				}
 				else {
 					m_info.lDiskOffset += bytesCounter;
@@ -418,20 +429,20 @@ MxU16 MXIOINFO::Advance(MxU16 p_option)
 		m_info.lBufOffset += cch;
 		if ((!rwmode || rwmode == MMIO_READWRITE) && cch > 0) {
 			if (m_info.lBufOffset != m_info.lDiskOffset) {
-				m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, m_info.lBufOffset, SEEK_SET);
+				m_info.lDiskOffset = _llseek(M_FILE, m_info.lBufOffset, SEEK_SET);
 			}
 
 			// if previous seek failed
 			if (m_info.lBufOffset != m_info.lDiskOffset) {
 				result = MMIOERR_CANNOTSEEK;
-				m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+				m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 			}
 			else {
-				bytesCounter = _hread((HFILE) m_info.hmmio, m_info.pchBuffer, cch);
+				bytesCounter = _hread(M_FILE, m_info.pchBuffer, cch);
 
 				if (bytesCounter == -1) {
 					result = MMIOERR_CANNOTREAD;
-					m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+					m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 				}
 				else {
 					m_info.lDiskOffset += bytesCounter;
@@ -574,11 +585,11 @@ MxU16 MXIOINFO::Ascend(MMCKINFO* p_chunkInfo, MxU16 p_ascend)
 				m_info.dwFlags |= MMIO_DIRTY;
 			}
 			else {
-				m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, ofs, SEEK_SET);
+				m_info.lDiskOffset = _llseek(M_FILE, ofs, SEEK_SET);
 
 				if (m_info.lDiskOffset == ofs) {
-					if (_lwrite((HFILE) m_info.hmmio, (char*) &size, 4) != 4) {
-						m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+					if (_lwrite(M_FILE, (char*) &size, 4) != 4) {
+						m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 						result = MMIOERR_CANNOTWRITE;
 					}
 					else {
@@ -586,7 +597,7 @@ MxU16 MXIOINFO::Ascend(MMCKINFO* p_chunkInfo, MxU16 p_ascend)
 					}
 				}
 				else {
-					m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
+					m_info.lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 					result = MMIOERR_CANNOTSEEK;
 				}
 			}
