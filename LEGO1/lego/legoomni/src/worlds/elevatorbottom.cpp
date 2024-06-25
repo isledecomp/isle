@@ -135,7 +135,7 @@ void ElevatorBottom::Enable(MxBool p_enable)
 // FUNCTION: LEGO1 0x10018310
 MxBool ElevatorBottom::Escape()
 {
-	DeleteObjects(&m_atom, 500, 999);
+	DeleteObjects(&m_atom, ElevbottScript::c_iica31in_PlayWav, 999);
 	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;
 }
