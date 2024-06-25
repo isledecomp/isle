@@ -29,7 +29,7 @@ float g_unk0x1010105c = 0.000125F;
 // GLOBAL: LEGO1 0x10101060
 float g_elapsedSeconds = 0;
 
-inline void SetAppData(ViewROI* p_roi, DWORD data);
+inline void SetAppData(ViewROI* p_roi, LPD3DRM_APPDATA data);
 inline undefined4 GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
 inline undefined4 GetFrame(IDirect3DRMFrame2*& frame, Tgl::Group* scene);
 
@@ -165,7 +165,7 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_und)
 
 		if (lod->GetUnknown0x08() & ViewLOD::c_bit4) {
 			scene->Add((Tgl::MeshBuilder*) group);
-			SetAppData(p_roi, (DWORD) p_roi);
+			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
 		}
 	}
 	else {
@@ -187,7 +187,7 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_und)
 
 		if (meshBuilder != NULL) {
 			group->Add(meshBuilder);
-			SetAppData(p_roi, (DWORD) p_roi);
+			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
 			p_roi->SetUnknown0xe0(p_und);
 			return;
 		}
@@ -533,7 +533,7 @@ ViewROI* ViewManager::Pick(Tgl::View* p_view, unsigned long x, unsigned long y)
 	return result;
 }
 
-inline void SetAppData(ViewROI* p_roi, DWORD data)
+inline void SetAppData(ViewROI* p_roi, LPD3DRM_APPDATA data)
 {
 	IDirect3DRMFrame2* frame = NULL;
 

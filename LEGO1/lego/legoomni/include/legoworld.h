@@ -12,8 +12,17 @@ class LegoEntityList;
 class LegoPathBoundary;
 class LegoHideAnimPresenter;
 
+#if defined(_M_IX86) || defined(__i386__)
+#define COMPARE_POINTER_TYPE MxS32
+#else
+#define COMPARE_POINTER_TYPE MxS32*
+#endif
+
 struct CoreSetCompare {
-	MxS32 operator()(MxCore* const& p_a, MxCore* const& p_b) const { return (MxS32) p_a < (MxS32) p_b; }
+	MxS32 operator()(MxCore* const& p_a, MxCore* const& p_b) const
+	{
+		return (COMPARE_POINTER_TYPE) p_a < (COMPARE_POINTER_TYPE) p_b;
+	}
 };
 
 typedef set<MxCore*, CoreSetCompare> MxCoreSet;

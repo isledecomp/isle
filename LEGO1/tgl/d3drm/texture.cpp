@@ -15,16 +15,16 @@ void TextureDestroyCallback(IDirect3DRMObject* pObject, void* pArg);
 // FUNCTION: LEGO1 0x100a12a0
 Result TextureImpl::SetImage(IDirect3DRMTexture* pSelf, TglD3DRMIMAGE* pImage)
 {
-	unsigned long appData;
+	void* appData;
 	Result result;
 
-	appData = reinterpret_cast<unsigned long>(pImage);
+	appData = pImage;
 
 	// This is here because in the original code they asserted
 	// on the return value being NULL.
 	TextureGetImage(pSelf);
 
-	result = ResultVal(pSelf->SetAppData(appData));
+	result = ResultVal(pSelf->SetAppData((LPD3DRM_APPDATA) appData));
 	if (Succeeded(result) && pImage) {
 		result = ResultVal(pSelf->AddDestroyCallback(TextureDestroyCallback, NULL));
 		if (!Succeeded(result)) {

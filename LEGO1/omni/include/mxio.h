@@ -9,6 +9,10 @@
 #include <mmsystem.h>
 // clang-format on
 
+#if defined(_M_IX86) || defined(__i386__)
+#define MXIO_MINFO_MFILE
+#endif
+
 // SIZE 0x48
 class MXIOINFO {
 public:
@@ -29,6 +33,9 @@ public:
 	// NOTE: In MXIOINFO, the `hmmio` member of MMIOINFO is used like
 	// an HFILE (int) instead of an HMMIO (WORD).
 	MMIOINFO m_info;
+#ifndef MXIO_MINFO_MFILE
+	HFILE m_file;
+#endif
 };
 
 #endif // MXIO_H

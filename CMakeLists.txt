@@ -430,6 +430,7 @@ if (ISLE_USE_SMARTHEAP)
 endif()
 foreach(tgt IN LISTS lego1_targets)
   target_link_libraries(${tgt} PRIVATE $<$<BOOL:${ISLE_USE_DX5}>:DirectX5::DirectX5>)
+  target_compile_definitions(${tgt} PRIVATE $<$<BOOL:${ISLE_USE_DX5}>:DIRECTX5_SDK>)
 endforeach()
 
 # Make sure filenames are ALL CAPS
