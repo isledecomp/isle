@@ -7,17 +7,23 @@
 #include "mxstl/stlcompat.h"
 #include "mxtypes.h"
 
+#if defined(_M_IX86) || defined(__i386__)
+#define COMPARE_POINTER_TYPE MxS32
+#else
+#define COMPARE_POINTER_TYPE MxS32*
+#endif
+
 struct LegoPathActorSetCompare {
 	MxU32 operator()(const LegoPathActor* p_lhs, const LegoPathActor* p_rhs) const
 	{
-		return (MxS32) p_lhs < (MxS32) p_rhs;
+		return (COMPARE_POINTER_TYPE) p_lhs < (COMPARE_POINTER_TYPE) p_rhs;
 	}
 };
 
 struct LegoAnimPresenterSetCompare {
 	MxBool operator()(const LegoAnimPresenter* p_lhs, const LegoAnimPresenter* p_rhs) const
 	{
-		return (MxS32) p_lhs < (MxS32) p_rhs;
+		return (COMPARE_POINTER_TYPE) p_lhs < (COMPARE_POINTER_TYPE) p_rhs;
 	}
 };
 

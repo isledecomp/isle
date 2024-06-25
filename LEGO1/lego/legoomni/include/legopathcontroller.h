@@ -14,6 +14,12 @@ class LegoWorld;
 class MxAtomId;
 class Vector3;
 
+#if defined(_M_IX86) || defined(__i386__)
+#define COMPARE_POINTER_TYPE MxS32
+#else
+#define COMPARE_POINTER_TYPE MxS32*
+#endif
+
 // VTABLE: LEGO1 0x100d7da8
 // SIZE 0x40
 struct LegoPathCtrlEdge : public LegoUnknown100db7f4 {};
@@ -21,7 +27,7 @@ struct LegoPathCtrlEdge : public LegoUnknown100db7f4 {};
 struct LegoPathCtrlEdgeCompare {
 	MxU32 operator()(const LegoPathCtrlEdge* p_lhs, const LegoPathCtrlEdge* p_rhs) const
 	{
-		return (MxS32) p_lhs < (MxS32) p_rhs;
+		return (COMPARE_POINTER_TYPE) p_lhs < (COMPARE_POINTER_TYPE) p_rhs;
 	}
 };
 
