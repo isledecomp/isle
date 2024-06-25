@@ -96,7 +96,7 @@ class LegoAnimationManager : public MxCore {
 public:
 	// SIZE 0x18
 	struct Character {
-		char* m_name;        // 0x00
+		const char* m_name;  // 0x00
 		MxBool m_inExtras;   // 0x04
 		MxS8 m_vehicleId;    // 0x05
 		undefined m_unk0x06; // 0x06 (unused?)
@@ -112,9 +112,9 @@ public:
 
 	// SIZE 0x08
 	struct Vehicle {
-		char* m_name;     // 0x00
-		MxBool m_unk0x04; // 0x04
-		MxBool m_unk0x05; // 0x05
+		const char* m_name; // 0x00
+		MxBool m_unk0x04;   // 0x04
+		MxBool m_unk0x05;   // 0x05
 	};
 
 	// SIZE 0x18
