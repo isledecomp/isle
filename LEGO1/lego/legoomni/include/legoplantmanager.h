@@ -39,7 +39,7 @@ public:
 	MxBool SwitchMood(LegoEntity* p_entity);
 	MxU32 GetAnimationId(LegoEntity* p_entity);
 	MxU32 GetSoundId(LegoEntity* p_entity, MxBool p_state);
-	void FUN_10026c50(LegoEntity* p_entity);
+	MxBool FUN_10026c50(LegoEntity* p_entity);
 	void FUN_10027120();
 
 	static void SetCustomizeAnimFile(const char* p_value);
@@ -53,6 +53,7 @@ private:
 	void RemovePlant(MxS32 p_index, MxS32 p_worldId);
 	void FUN_10026860(MxS32 p_index);
 	LegoPlantInfo* GetInfo(LegoEntity* p_entity);
+	MxBool FUN_10026c80(MxS32 p_index);
 
 	static char* g_customizeAnimFile;
 	static MxS32 g_maxMove[4];

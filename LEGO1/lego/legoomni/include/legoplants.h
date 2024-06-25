@@ -10,7 +10,7 @@ class LegoPathBoundary;
 // SIZE 0x54
 struct LegoPlantInfo {
 	// See LegoOmni::RegisterWorlds for IDs
-	enum Worlds {
+	enum World {
 		c_act1 = 1 << 0,
 		c_imain = 1 << 1,
 		c_ielev = 1 << 4,

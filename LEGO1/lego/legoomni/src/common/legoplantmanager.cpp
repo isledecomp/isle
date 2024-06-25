@@ -424,6 +424,7 @@ MxU32 LegoPlantManager::GetSoundId(LegoEntity* p_entity, MxBool p_state)
 }
 
 // FUNCTION: LEGO1 0x10026be0
+// FUNCTION: BETA10 0x100c62bc
 void LegoPlantManager::SetCustomizeAnimFile(const char* p_value)
 {
 	if (g_customizeAnimFile != NULL) {
@@ -442,10 +443,60 @@ void LegoPlantManager::SetCustomizeAnimFile(const char* p_value)
 	}
 }
 
-// STUB: LEGO1 0x10026c50
-void LegoPlantManager::FUN_10026c50(LegoEntity* p_entity)
+// FUNCTION: LEGO1 0x10026c50
+// FUNCTION: BETA10 0x100c6349
+MxBool LegoPlantManager::FUN_10026c50(LegoEntity* p_entity)
 {
-	// TODO
+	LegoPlantInfo* info = GetInfo(p_entity);
+
+	if (info == NULL) {
+		return FALSE;
+	}
+
+	return FUN_10026c80(info - g_plantInfo);
+}
+
+// FUNCTION: LEGO1 0x10026c80
+// FUNCTION: BETA10 0x100c63eb
+MxBool LegoPlantManager::FUN_10026c80(MxS32 p_index)
+{
+	if (p_index >= sizeOfArray(g_plantInfo)) {
+		return FALSE;
+	}
+
+	LegoPlantInfo* info = &g_plantInfo[p_index];
+
+	if (info == NULL) {
+		return FALSE;
+	}
+
+	MxBool result = TRUE;
+
+	if (info->m_unk0x16 < 0) {
+		info->m_unk0x16 = g_unk0x100f16c0[info->m_variant];
+	}
+
+	if (info->m_unk0x16 > 0) {
+		LegoROI* roi = info->m_entity->GetROI();
+		info->m_unk0x16--;
+
+		if (info->m_unk0x16 == 1) {
+			info->m_unk0x16 = 0;
+		}
+
+		if (info->m_unk0x16 == 0) {
+			roi->SetVisibility(FALSE);
+		}
+		else {
+			FUN_10026860(info - g_plantInfo);
+			info->m_entity->SetLocation(info->m_position, info->m_direction, info->m_up, FALSE);
+		}
+	}
+	else {
+		result = FALSE;
+	}
+
+	return result;
 }
 
 // STUB: LEGO1 0x10026e00
