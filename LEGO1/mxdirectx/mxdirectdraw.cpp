@@ -1097,12 +1097,14 @@ const char* MxDirectDraw::ErrorToString(HRESULT p_error)
 }
 
 // FUNCTION: LEGO1 0x1009efb0
+// FUNCTION: BETA10 0x10122ee2
 MxDirectDraw::DeviceModesInfo::DeviceModesInfo()
 {
 	memset(this, 0, sizeof(*this));
 }
 
 // FUNCTION: LEGO1 0x1009efd0
+// FUNCTION: BETA10 0x10122f0e
 MxDirectDraw::DeviceModesInfo::~DeviceModesInfo()
 {
 	if (m_guid != NULL) {

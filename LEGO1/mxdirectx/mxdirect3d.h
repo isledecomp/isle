@@ -27,6 +27,9 @@ public:
 
 	friend class MxDirect3D;
 
+	// SYNTHETIC: BETA10 0x1011c130
+	// MxAssignedDevice::`scalar deleting destructor'
+
 private:
 	GUID m_guid;                                 // 0x00
 	unsigned int m_flags;                        // 0x10
@@ -156,10 +159,12 @@ struct MxDriver {
 
 // TEMPLATE: CONFIG 0x4010e0
 // TEMPLATE: LEGO1 0x1009b9e0
+// TEMPLATE: BETA10 0x1011f3d0
 // List<Direct3DDeviceInfo>::~List<Direct3DDeviceInfo>
 
 // TEMPLATE: CONFIG 0x401130
 // TEMPLATE: LEGO1 0x1009ba30
+// TEMPLATE: BETA10 0x1011f430
 // List<MxDisplayMode>::~List<MxDisplayMode>
 
 // clang-format off
@@ -170,6 +175,7 @@ struct MxDriver {
 
 // TEMPLATE: CONFIG 0x4016c0
 // TEMPLATE: LEGO1 0x1009bfc0
+// TEMPLATE: BETA10 0x1011f6f0
 // List<MxDriver>::~List<MxDriver>
 
 // Compiler-generated copy ctor
@@ -193,6 +199,7 @@ struct MxDriver {
 
 // VTABLE: CONFIG 0x00406000
 // VTABLE: LEGO1 0x100db814
+// VTABLE: BETA10 0x101c1b0c
 // SIZE 0x14
 class MxDeviceEnumerate {
 public:
@@ -215,7 +222,7 @@ public:
 	int ProcessDeviceBytes(int p_deviceNum, GUID& p_guid);
 	int GetDevice(int p_deviceNum, MxDriver*& p_driver, Direct3DDeviceInfo*& p_device);
 
-#if defined(MXDIRECTX_FOR_CONFIG)
+#if defined(MXDIRECTX_FOR_CONFIG) || defined(_DEBUG)
 	int FormatDeviceName(char* p_buffer, const MxDriver* p_driver, const Direct3DDeviceInfo* p_device) const;
 #endif
 
@@ -243,16 +250,24 @@ public:
 
 	const list<MxDriver>& GetDriverList() const { return m_list; }
 
+	// FUNCTION: BETA10 0x1011d320
+	unsigned char IsInitialized() const { return m_initialized; }
+
 private:
 	list<MxDriver> m_list;       // 0x04
 	unsigned char m_initialized; // 0x10
 };
 
 // VTABLE: LEGO1 0x100d9cc8
+// VTABLE: BETA10 0x101befb4
 // SIZE 0x14
 class MxDeviceEnumerate100d9cc8 : public MxDeviceEnumerate {};
 
+// SYNTHETIC: BETA10 0x100d8d10
+// MxDeviceEnumerate100d9cc8::MxDeviceEnumerate100d9cc8
+
 // SYNTHETIC: LEGO1 0x1007b590
+// SYNTHETIC: BETA10 0x100d8da0
 // MxDeviceEnumerate100d9cc8::~MxDeviceEnumerate100d9cc8
 
 #endif // MXDIRECT3D_H

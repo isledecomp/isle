@@ -32,6 +32,9 @@ public:
 		int m_count;       // 0x08
 		DDCAPS m_ddcaps;   // 0x0c
 		void* m_unk0x178;  // 0x178
+
+		// SYNTHETIC: BETA10 0x1011c650
+		// MxDirectDraw::DeviceModesInfo::`scalar deleting destructor'
 	};
 
 	static int GetPrimaryBitDepth();
