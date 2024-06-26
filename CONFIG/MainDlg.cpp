@@ -4,7 +4,7 @@
 #include "config.h"
 #include "res/resource.h"
 
-#include <mxdirectx/mxdirect3d.h>
+#include <mxdirectx/mxdirectxinfo.h>
 
 DECOMP_SIZE_ASSERT(CDialog, 0x60)
 DECOMP_SIZE_ASSERT(CMainDialog, 0x70)

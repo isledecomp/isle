@@ -2,8 +2,7 @@
 
 #include "decomp.h"
 
-DECOMP_SIZE_ASSERT(MxDirectDraw, 0x880);
-DECOMP_SIZE_ASSERT(MxDirectDraw::DeviceModesInfo, 0x17c);
+DECOMP_SIZE_ASSERT(MxDirectDraw, 0x880)
 
 #define RELEASE(x)                                                                                                     \
 	if (x != NULL) {                                                                                                   \
@@ -271,7 +270,7 @@ BOOL MxDirectDraw::DDInit(BOOL fullscreen)
 // FUNCTION: LEGO1 0x1009d9d0
 BOOL MxDirectDraw::IsSupportedMode(int width, int height, int bpp)
 {
-	Mode mode = {width, height, bpp};
+	DeviceModesInfo::Mode mode = {width, height, bpp};
 
 	for (int i = 0; i < m_pCurrentDeviceModesList->m_count; i++) {
 		if (m_pCurrentDeviceModesList->m_modeArray[i] == mode) {
@@ -1093,25 +1092,5 @@ const char* MxDirectDraw::ErrorToString(HRESULT p_error)
 		return "Rectangle provided was not horizontally aligned on required boundary.";
 	default:
 		return "Unrecognized error value.";
-	}
-}
-
-// FUNCTION: LEGO1 0x1009efb0
-// FUNCTION: BETA10 0x10122ee2
-MxDirectDraw::DeviceModesInfo::DeviceModesInfo()
-{
-	memset(this, 0, sizeof(*this));
-}
-
-// FUNCTION: LEGO1 0x1009efd0
-// FUNCTION: BETA10 0x10122f0e
-MxDirectDraw::DeviceModesInfo::~DeviceModesInfo()
-{
-	if (m_guid != NULL) {
-		delete m_guid;
-	}
-
-	if (m_modeArray != NULL) {
-		delete[] m_modeArray;
 	}
 }

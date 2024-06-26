@@ -130,6 +130,7 @@ target_link_libraries(viewmanager PRIVATE Vec::Vec)
 add_library(mxdirectx STATIC
   LEGO1/mxdirectx/mxdirect3d.cpp
   LEGO1/mxdirectx/mxdirectdraw.cpp
+  LEGO1/mxdirectx/mxdirectxinfo.cpp
 )
 register_lego1_target(mxdirectx)
 set_property(TARGET mxdirectx PROPERTY ARCHIVE_OUTPUT_NAME "MxDirectX$<$<CONFIG:Debug>:d>")
@@ -463,7 +464,7 @@ endif()
 
 if (ISLE_BUILD_CONFIG)
   add_executable(config WIN32
-    LEGO1/mxdirectx/mxdirect3d.cpp
+    LEGO1/mxdirectx/mxdirectxinfo.cpp
     CONFIG/config.cpp
     CONFIG/ConfigCommandLineInfo.cpp
     CONFIG/AboutDlg.cpp
