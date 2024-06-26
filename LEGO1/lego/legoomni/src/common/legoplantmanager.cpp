@@ -506,8 +506,23 @@ MxResult LegoPlantManager::Tickle()
 	return 0;
 }
 
-// STUB: LEGO1 0x10027120
+// FUNCTION: LEGO1 0x10027120
 void LegoPlantManager::FUN_10027120()
 {
-	// TODO
+	LegoWorld* world = CurrentWorld();
+
+	for (MxS32 i = 0; i < sizeOfArray(g_plantInfo); i++) {
+		g_plantInfo[i].m_unk0x16 = -1;
+		g_plantInfo[i].m_initialUnk0x16 = -1;
+		FUN_10026860(i);
+
+		if (g_plantInfo[i].m_entity != NULL) {
+			g_plantInfo[i].m_entity->SetLocation(
+				g_plantInfo[i].m_position,
+				g_plantInfo[i].m_direction,
+				g_plantInfo[i].m_up,
+				FALSE
+			);
+		}
+	}
 }
