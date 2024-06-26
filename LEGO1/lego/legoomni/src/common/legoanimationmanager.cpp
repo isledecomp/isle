@@ -2954,7 +2954,7 @@ MxResult AnimState::Serialize(LegoFile* p_file)
 MxBool AnimState::SetFlag()
 {
 	if (m_unk0x10 != NULL) {
-		m_extraCharacterId = NULL;
+		m_extraCharacterId = 0;
 
 		for (MxS32 i = 0; i < m_unk0x0c; i++) {
 			m_unk0x10[i] = 0;
