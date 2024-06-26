@@ -88,6 +88,7 @@ void MxDriver::Init(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
 	}
 }
 
+// FUNCTION: CONFIG 0x401420
 // FUNCTION: LEGO1 0x1009bd20
 // FUNCTION: BETA10 0x1011dbd0
 Direct3DDeviceInfo::Direct3DDeviceInfo(
@@ -119,6 +120,7 @@ Direct3DDeviceInfo::~Direct3DDeviceInfo()
 	}
 }
 
+// FUNCTION: CONFIG 0x4014a0
 // FUNCTION: LEGO1 0x1009bda0
 // FUNCTION: BETA10 0x1011dca6
 void Direct3DDeviceInfo::Initialize(

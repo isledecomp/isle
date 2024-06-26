@@ -165,9 +165,11 @@ struct MxDriver {
 // SYNTHETIC: LEGO1 0x1009c460
 // list<MxDisplayMode,allocator<MxDisplayMode> >::insert
 
+// SYNTHETIC: CONFIG 0x402be0
 // SYNTHETIC: LEGO1 0x1009d450
 // MxDriver::`scalar deleting destructor'
 
+// SYNTHETIC: CONFIG 0x402c00
 // SYNTHETIC: LEGO1 0x1009d470
 // Direct3DDeviceInfo::`scalar deleting destructor'
 
