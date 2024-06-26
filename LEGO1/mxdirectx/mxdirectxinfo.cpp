@@ -28,6 +28,16 @@ MxAssignedDevice::~MxAssignedDevice()
 	}
 }
 
+// FUNCTION: BETA10 0x1011d7f0
+MxDriver::MxDriver(LPGUID p_guid)
+{
+	m_guid = NULL;
+	m_driverDesc = NULL;
+	m_driverName = NULL;
+	memset(&m_ddCaps, 0, sizeof(m_ddCaps));
+	// TODO: ret vs ret 4
+}
+
 // FUNCTION: CONFIG 0x00401180
 // FUNCTION: LEGO1 0x1009ba80
 // FUNCTION: BETA10 0x1011d8b6
@@ -225,7 +235,7 @@ BOOL MxDeviceEnumerate::EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc
 					BuildErrorString("D3D enum devices failed: %s\n", EnumerateErrorToString(result));
 				}
 				else {
-					if (newDevice.m_devices.empty()) {
+					if (!newDevice.m_devices.size()) {
 						m_list.pop_back();
 					}
 				}
@@ -296,11 +306,11 @@ HRESULT CALLBACK MxDeviceEnumerate::DevicesEnumerateCallback(
 // FUNCTION: BETA10 0x1011e27f
 HRESULT MxDeviceEnumerate::EnumDisplayModesCallback(LPDDSURFACEDESC p_ddsd)
 {
-	MxDisplayMode displayMode;
-	displayMode.m_width = p_ddsd->dwWidth;
-	displayMode.m_height = p_ddsd->dwHeight;
-	displayMode.m_bitsPerPixel = p_ddsd->ddpfPixelFormat.dwRGBBitCount;
+	assert(m_list.size() > 0);
+	assert(p_ddsd);
 
+	// TODO: compat_mode?
+	MxDisplayMode displayMode(p_ddsd->dwWidth, p_ddsd->dwHeight, p_ddsd->ddpfPixelFormat.dwRGBBitCount);
 	m_list.back().m_displayModes.push_back(displayMode);
 	return DDENUMRET_OK;
 }
@@ -605,19 +615,12 @@ int MxDeviceEnumerate::ProcessDeviceBytes(int p_deviceNum, GUID& p_guid)
 	int i = 0;
 	int j = 0;
 
-	struct GUID4 {
-		int m_data1;
-		int m_data2;
-		int m_data3;
-		int m_data4;
-	};
-
 	static_assert(sizeof(GUID4) == sizeof(GUID), "Equal size");
 
 	GUID4 deviceGuid;
 	memcpy(&deviceGuid, &p_guid, sizeof(GUID4));
 
-	for (list<MxDriver>::iterator it = m_list.begin(); it != m_list.end(); it++) {
+	for (list<MxDriver>::iterator it = m_list.begin(); it != m_list.end(); it++, i++) {
 		if (p_deviceNum >= 0 && p_deviceNum < i) {
 			return -1;
 		}
@@ -625,18 +628,17 @@ int MxDeviceEnumerate::ProcessDeviceBytes(int p_deviceNum, GUID& p_guid)
 		GUID4 compareGuid;
 		MxDriver& driver = *it;
 		for (list<Direct3DDeviceInfo>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
-			memcpy(&compareGuid, (*it2).m_guid, sizeof(GUID4));
+			Direct3DDeviceInfo& md3d = *it2;
+			assert(md3d.m_guid);
 
-			if (compareGuid.m_data1 == deviceGuid.m_data1 && compareGuid.m_data2 == deviceGuid.m_data2 &&
-				compareGuid.m_data3 == deviceGuid.m_data3 && compareGuid.m_data4 == deviceGuid.m_data4 &&
-				i == p_deviceNum) {
+			memcpy(&compareGuid, md3d.m_guid, sizeof(GUID4));
+
+			if (GUID4::Compare(compareGuid, deviceGuid) && i == p_deviceNum) {
 				return j;
 			}
 
 			j++;
 		}
-
-		i++;
 	}
 
 	return -1;
@@ -669,23 +671,24 @@ int MxDeviceEnumerate::GetDevice(int p_deviceNum, MxDriver*& p_driver, Direct3DD
 	return -1;
 }
 
-#if defined(MXDIRECTX_FOR_CONFIG) || defined(_DEBUG)
 // FUNCTION: CONFIG 0x004027d0
 // FUNCTION: BETA10 0x1011cb70
-int MxDeviceEnumerate::FormatDeviceName(char* p_buffer, const MxDriver* p_driver, const Direct3DDeviceInfo* p_device)
+int MxDeviceEnumerate::FormatDeviceName(char* p_buffer, const MxDriver* p_ddInfo, const Direct3DDeviceInfo* p_d3dInfo)
 	const
 {
 	int number = 0;
+	assert(p_ddInfo && p_d3dInfo);
+
 	for (list<MxDriver>::const_iterator it = m_list.begin(); it != m_list.end(); it++) {
-		if (&(*it) == p_driver) {
+		if (&(*it) == p_ddInfo) {
 			sprintf(
 				p_buffer,
 				"%d 0x%x 0x%x 0x%x 0x%x",
 				number,
-				((DWORD*) (p_device->m_guid))[0],
-				((DWORD*) (p_device->m_guid))[1],
-				((DWORD*) (p_device->m_guid))[2],
-				((DWORD*) (p_device->m_guid))[3]
+				((DWORD*) (p_d3dInfo->m_guid))[0],
+				((DWORD*) (p_d3dInfo->m_guid))[1],
+				((DWORD*) (p_d3dInfo->m_guid))[2],
+				((DWORD*) (p_d3dInfo->m_guid))[3]
 			);
 			return 0;
 		}
@@ -693,17 +696,17 @@ int MxDeviceEnumerate::FormatDeviceName(char* p_buffer, const MxDriver* p_driver
 	}
 	return -1;
 }
-#endif
 
 // FUNCTION: CONFIG 0x00402860
 // FUNCTION: LEGO1 0x1009d0d0
+// FUNCTION: BETA10 0x1011cdb4
 int MxDeviceEnumerate::FUN_1009d0d0()
 {
-	if (!m_initialized) {
+	if (!IsInitialized()) {
 		return -1;
 	}
 
-	if (m_list.empty()) {
+	if (m_list.size() == 0) {
 		return -1;
 	}
 
@@ -712,30 +715,32 @@ int MxDeviceEnumerate::FUN_1009d0d0()
 	int k = -1;
 	int cpu_mmx = SupportsMMX();
 
-	for (list<MxDriver>::iterator it = m_list.begin();; it++) {
-		if (it == m_list.end()) {
-			return k;
-		}
+	for (list<MxDriver>::iterator it = m_list.begin(); it != m_list.end(); it++, i++) {
 
-		for (list<Direct3DDeviceInfo>::iterator it2 = (*it).m_devices.begin(); it2 != (*it).m_devices.end(); it2++) {
+		MxDriver& driver = *it;
+		for (list<Direct3DDeviceInfo>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
 			if ((*it2).m_HWDesc.dcmColorModel) {
 				return j;
 			}
-
-			if ((cpu_mmx && (*it2).m_HELDesc.dcmColorModel == D3DCOLOR_RGB && i == 0) ||
-				((*it2).m_HELDesc.dcmColorModel == D3DCOLOR_MONO && i == 0 && k < 0)) {
-				k = j;
+			else {
+				if (cpu_mmx && (*it2).m_HELDesc.dcmColorModel == D3DCOLOR_RGB && i == 0) {
+					k = j;
+				}
+				else if ((*it2).m_HELDesc.dcmColorModel == D3DCOLOR_MONO && i == 0 && k < 0) {
+					k = j;
+				}
 			}
 
 			j++;
 		}
-
-		i++;
 	}
+
+	return k;
 }
 
 // FUNCTION: CONFIG 0x00402930
 // FUNCTION: LEGO1 0x1009d1a0
+// FUNCTION: BETA10 0x1011cf54
 int MxDeviceEnumerate::SupportsMMX()
 {
 	if (!SupportsCPUID()) {
@@ -779,6 +784,7 @@ int MxDeviceEnumerate::SupportsMMX()
 
 // FUNCTION: CONFIG 0x00402970
 // FUNCTION: LEGO1 0x1009d1e0
+// FUNCTION: BETA10 0x1011cf97
 int MxDeviceEnumerate::SupportsCPUID()
 {
 	int has_cpuid;
@@ -823,44 +829,48 @@ int MxDeviceEnumerate::SupportsCPUID()
 
 // FUNCTION: CONFIG 0x004029a0
 // FUNCTION: LEGO1 0x1009d210
+// FUNCTION: BETA10 0x1011cfc4
 int MxDeviceEnumerate::FUN_1009d210()
 {
-	if (!m_initialized) {
+	if (!IsInitialized()) {
 		return -1;
 	}
 
 	for (list<MxDriver>::iterator it = m_list.begin(); it != m_list.end();) {
+		if (!DriverSupportsRequiredDisplayMode(*it)) {
+			m_list.erase(it++);
+			continue;
+		}
+
 		MxDriver& driver = *it;
 
-		if (!DriverSupportsRequiredDisplayMode(driver)) {
+		for (list<Direct3DDeviceInfo>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end();) {
+			if (!FUN_1009d3d0(*it2)) {
+				driver.m_devices.erase(it2++);
+			}
+			else {
+				it2++;
+			}
+		}
+
+		if (!driver.m_devices.size()) {
 			m_list.erase(it++);
 		}
 		else {
-			for (list<Direct3DDeviceInfo>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end();) {
-				Direct3DDeviceInfo& device = *it2;
-
-				if (!FUN_1009d3d0(device)) {
-					driver.m_devices.erase(it2++);
-				}
-				else {
-					it2++;
-				}
-			}
-
-			if (driver.m_devices.empty()) {
-				m_list.erase(it++);
-			}
-			else {
-				it++;
-			}
+			it++;
 		}
 	}
 
-	return m_list.empty() ? -1 : 0;
+	if (!m_list.size()) {
+		return -1;
+	}
+
+	return 0;
 }
 
 // FUNCTION: CONFIG 0x00402b00
 // FUNCTION: LEGO1 0x1009d370
+// FUNCTION: BETA10 0x1011d176
 unsigned char MxDeviceEnumerate::DriverSupportsRequiredDisplayMode(MxDriver& p_driver)
 {
 	for (list<MxDisplayMode>::iterator it = p_driver.m_displayModes.begin(); it != p_driver.m_displayModes.end();
@@ -877,6 +887,7 @@ unsigned char MxDeviceEnumerate::DriverSupportsRequiredDisplayMode(MxDriver& p_d
 
 // FUNCTION: CONFIG 0x00402b60
 // FUNCTION: LEGO1 0x1009d3d0
+// FUNCTION: BETA10 0x1011d235
 unsigned char MxDeviceEnumerate::FUN_1009d3d0(Direct3DDeviceInfo& p_device)
 {
 	if (m_list.size() <= 0) {
@@ -884,12 +895,17 @@ unsigned char MxDeviceEnumerate::FUN_1009d3d0(Direct3DDeviceInfo& p_device)
 	}
 
 	if (p_device.m_HWDesc.dcmColorModel) {
-		return p_device.m_HWDesc.dwDeviceZBufferBitDepth & DDBD_16 &&
-			   p_device.m_HWDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_PERSPECTIVE;
+		if (p_device.m_HWDesc.dwDeviceZBufferBitDepth & DDBD_16 &&
+			p_device.m_HWDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_PERSPECTIVE) {
+			return TRUE;
+		}
+		else {
+			return FALSE;
+		}
 	}
 
-	for (list<Direct3DDeviceInfo>::iterator it = m_list.front().m_devices.begin(); it != m_list.front().m_devices.end();
-		 it++) {
+	MxDriver& front = m_list.front();
+	for (list<Direct3DDeviceInfo>::iterator it = front.m_devices.begin(); it != front.m_devices.end(); it++) {
 		if ((&*it) == &p_device) {
 			return TRUE;
 		}

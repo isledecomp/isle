@@ -30,7 +30,7 @@ struct DeviceModesInfo {
 	void* m_unk0x178;  // 0x178
 
 	// SYNTHETIC: BETA10 0x1011c650
-	// MxDirectDraw::DeviceModesInfo::`scalar deleting destructor'
+	// DeviceModesInfo::`scalar deleting destructor'
 };
 
 // SIZE 0xe4
@@ -92,18 +92,28 @@ struct Direct3DDeviceInfo {
 
 // SIZE 0x0c
 struct MxDisplayMode {
-	DWORD m_width;        // 0x00
-	DWORD m_height;       // 0x04
-	DWORD m_bitsPerPixel; // 0x08
+	MxDisplayMode() {}
+	// FUNCTION: BETA10 0x1011f920
+	MxDisplayMode(DWORD p_width, DWORD p_height, DWORD p_bitsPerPixel)
+	{
+		m_width = p_width;
+		m_height = p_height;
+		m_bitsPerPixel = p_bitsPerPixel;
+	}
 
 	int operator==(MxDisplayMode) const { return 0; }
 	int operator<(MxDisplayMode) const { return 0; }
+
+	DWORD m_width;        // 0x00
+	DWORD m_height;       // 0x04
+	DWORD m_bitsPerPixel; // 0x08
 };
 
 // SIZE 0x190
 struct MxDriver {
 	MxDriver() {}
 	~MxDriver();
+	MxDriver(LPGUID p_guid);
 	MxDriver(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
 
 	void Init(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
@@ -119,17 +129,15 @@ struct MxDriver {
 	int operator<(MxDriver) const { return 0; }
 };
 
-// clang-format off
 // TEMPLATE: CONFIG 0x401000
 // TEMPLATE: LEGO1 0x1009b900
+// TEMPLATE: BETA10 0x1011ee40
 // list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::~list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >
-// clang-format on
 
-// clang-format off
 // TEMPLATE: CONFIG 0x401070
 // TEMPLATE: LEGO1 0x1009b970
+// TEMPLATE: BETA10 0x1011f0a0
 // list<MxDisplayMode,allocator<MxDisplayMode> >::~list<MxDisplayMode,allocator<MxDisplayMode> >
-// clang-format on
 
 // TEMPLATE: CONFIG 0x4010e0
 // TEMPLATE: LEGO1 0x1009b9e0
@@ -141,11 +149,10 @@ struct MxDriver {
 // TEMPLATE: BETA10 0x1011f430
 // List<MxDisplayMode>::~List<MxDisplayMode>
 
-// clang-format off
 // TEMPLATE: CONFIG 0x401650
 // TEMPLATE: LEGO1 0x1009bf50
+// TEMPLATE: BETA10 0x1011f550
 // list<MxDriver,allocator<MxDriver> >::~list<MxDriver,allocator<MxDriver> >
-// clang-format on
 
 // TEMPLATE: CONFIG 0x4016c0
 // TEMPLATE: LEGO1 0x1009bfc0
@@ -157,12 +164,14 @@ struct MxDriver {
 // SYNTHETIC: LEGO1 0x1009c290
 // MxDriver::MxDriver
 
-// SYNTHETIC: CONFIG 0x401b00
-// SYNTHETIC: LEGO1 0x1009c400
+// TEMPLATE: CONFIG 0x401b00
+// TEMPLATE: LEGO1 0x1009c400
+// TEMPLATE: BETA10 0x1011fad0
 // list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::insert
 
-// SYNTHETIC: CONFIG 0x401b60
-// SYNTHETIC: LEGO1 0x1009c460
+// TEMPLATE: CONFIG 0x401b60
+// TEMPLATE: LEGO1 0x1009c460
+// TEMPLATE: BETA10 0x1011f9a0
 // list<MxDisplayMode,allocator<MxDisplayMode> >::insert
 
 // SYNTHETIC: CONFIG 0x402be0
@@ -197,10 +206,7 @@ public:
 	int ParseDeviceName(const char* p_deviceId);
 	int ProcessDeviceBytes(int p_deviceNum, GUID& p_guid);
 	int GetDevice(int p_deviceNum, MxDriver*& p_driver, Direct3DDeviceInfo*& p_device);
-
-#if defined(MXDIRECTX_FOR_CONFIG) || defined(_DEBUG)
-	int FormatDeviceName(char* p_buffer, const MxDriver* p_driver, const Direct3DDeviceInfo* p_device) const;
-#endif
+	int FormatDeviceName(char* p_buffer, const MxDriver* p_ddInfo, const Direct3DDeviceInfo* p_d3dInfo) const;
 
 	int FUN_1009d0d0();
 	int FUN_1009d210();
@@ -226,6 +232,21 @@ public:
 
 	const list<MxDriver>& GetDriverList() const { return m_list; }
 
+	// SIZE 0x10
+	struct GUID4 {
+		int m_data1;
+		int m_data2;
+		int m_data3;
+		int m_data4;
+
+		// FUNCTION: BETA10 0x1011d340
+		static unsigned char Compare(const GUID4& p_a, const GUID4& p_b)
+		{
+			return p_a.m_data1 == p_b.m_data1 && p_a.m_data2 == p_b.m_data2 && p_a.m_data3 == p_b.m_data3 &&
+				   p_a.m_data4 == p_b.m_data4;
+		}
+	};
+
 	// FUNCTION: BETA10 0x1011d320
 	unsigned char IsInitialized() const { return m_initialized; }
 
@@ -245,5 +266,80 @@ class MxDeviceEnumerate100d9cc8 : public MxDeviceEnumerate {};
 // SYNTHETIC: LEGO1 0x1007b590
 // SYNTHETIC: BETA10 0x100d8da0
 // MxDeviceEnumerate100d9cc8::~MxDeviceEnumerate100d9cc8
+
+// TEMPLATE: BETA10 0x1011c1b0
+// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::iterator::operator*
+
+// TEMPLATE: BETA10 0x1011c200
+// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::iterator::operator++
+
+// TEMPLATE: BETA10 0x1011c290
+// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::begin
+
+// TEMPLATE: BETA10 0x1011c300
+// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::end
+
+// TEMPLATE: BETA10 0x1011c4d0
+// list<MxDriver,allocator<MxDriver> >::iterator::operator*
+
+// TEMPLATE: BETA10 0x1011c520
+// list<MxDriver,allocator<MxDriver> >::iterator::operator++
+
+// TEMPLATE: BETA10 0x1011c560
+// list<MxDriver,allocator<MxDriver> >::iterator::operator++
+
+// TEMPLATE: BETA10 0x1011c590
+// list<MxDriver,allocator<MxDriver> >::_Acc::_Next
+
+// TEMPLATE: BETA10 0x1011c5b0
+// list<MxDriver,allocator<MxDriver> >::begin
+
+// TEMPLATE: BETA10 0x1011c5f0
+// list<MxDriver,allocator<MxDriver> >::iterator::iterator
+
+// TEMPLATE: BETA10 0x1011c620
+// list<MxDriver,allocator<MxDriver> >::end
+
+// TEMPLATE: BETA10 0x1011c690
+// ??9@YAHABViterator@?$list@UMxDriver@@V?$allocator@UMxDriver@@@@@@0@Z
+
+// TEMPLATE: BETA10 0x1011c770
+// ??9@YAHABViterator@?$list@UDirect3DDeviceInfo@@V?$allocator@UDirect3DDeviceInfo@@@@@@0@Z
+
+// TEMPLATE: BETA10 0x1011d3a0
+// list<MxDriver,allocator<MxDriver> >::size
+
+// TEMPLATE: BETA10 0x1011d3c0
+// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::size
+
+// TEMPLATE: BETA10 0x1011d3e0
+// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::erase
+
+// TEMPLATE: BETA10 0x1011d570
+// list<MxDriver,allocator<MxDriver> >::erase
+
+// TEMPLATE: BETA10 0x1011d6a0
+// list<MxDriver,allocator<MxDriver> >::_Freenode
+
+// TEMPLATE: BETA10 0x1011d700
+// list<MxDriver,allocator<MxDriver> >::front
+
+// TEMPLATE: BETA10 0x1011f750
+// list<MxDriver,allocator<MxDriver> >::back
+
+// TEMPLATE: BETA10 0x1011f780
+// list<MxDriver,allocator<MxDriver> >::iterator::operator--
+
+// TEMPLATE: BETA10 0x1011f7b0
+// list<MxDriver,allocator<MxDriver> >::push_back
+
+// TEMPLATE: BETA10 0x1011f830
+// list<MxDriver,allocator<MxDriver> >::insert
+
+// TEMPLATE: BETA10 0x1011f960
+// list<MxDisplayMode,allocator<MxDisplayMode> >::push_back
+
+// TEMPLATE: BETA10 0x1011fa90
+// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::push_back
 
 #endif // MXDIRECTXINFO_H
