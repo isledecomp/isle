@@ -256,17 +256,18 @@ private:
 	unsigned char m_initialized; // 0x10
 };
 
+// VTABLE: CONFIG 0x4060e4
 // VTABLE: LEGO1 0x100d9cc8
 // VTABLE: BETA10 0x101befb4
 // SIZE 0x14
-class MxDeviceEnumerate100d9cc8 : public MxDeviceEnumerate {};
+class LegoDeviceEnumerate : public MxDeviceEnumerate {};
 
 // SYNTHETIC: BETA10 0x100d8d10
-// MxDeviceEnumerate100d9cc8::MxDeviceEnumerate100d9cc8
+// LegoDeviceEnumerate::LegoDeviceEnumerate
 
 // SYNTHETIC: LEGO1 0x1007b590
 // SYNTHETIC: BETA10 0x100d8da0
-// MxDeviceEnumerate100d9cc8::~MxDeviceEnumerate100d9cc8
+// LegoDeviceEnumerate::~LegoDeviceEnumerate
 
 // TEMPLATE: BETA10 0x1011c1b0
 // list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::iterator::operator*

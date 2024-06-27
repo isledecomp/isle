@@ -47,7 +47,7 @@ BOOL CConfigApp::InitInstance()
 	if (_stricmp(afxCurrentAppName, "config") == 0) {
 		m_run_config_dialog = TRUE;
 	}
-	m_device_enumerator = new MxDeviceEnumerate;
+	m_device_enumerator = new LegoDeviceEnumerate;
 	if (m_device_enumerator->DoEnumerate()) {
 		return FALSE;
 	}

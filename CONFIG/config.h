@@ -7,7 +7,7 @@
 
 #include <d3d.h>
 
-class MxDeviceEnumerate;
+class LegoDeviceEnumerate;
 struct Direct3DDeviceInfo;
 struct MxDriver;
 
@@ -54,23 +54,23 @@ private:
 	BOOL IsLegoNotRunning();
 
 public:
-	MxDeviceEnumerate* m_device_enumerator; // 0x0c4
-	MxDriver* m_driver;                     // 0x0c8
-	Direct3DDeviceInfo* m_device;           // 0x0cc
-	int m_display_bit_depth;                // 0x0d0
-	BOOL m_flip_surfaces;                   // 0x0d4
-	BOOL m_full_screen;                     // 0x0d8
-	BOOL m_3d_video_ram;                    // 0x0dc
-	BOOL m_wide_view_angle;                 // 0x0e0
-	BOOL m_3d_sound;                        // 0x0e4
-	BOOL m_draw_cursor;                     // 0x0e8
-	BOOL m_use_joystick;                    // 0x0ec
-	int m_joystick_index;                   // 0x0f0
-	BOOL m_run_config_dialog;               // 0x0f4
-	int m_model_quality;                    // 0x0f8
-	int m_texture_quality;                  // 0x0fc
-	undefined m_unk0x100[4];                // 0x100
-	BOOL m_music;                           // 0x104
+	LegoDeviceEnumerate* m_device_enumerator; // 0x0c4
+	MxDriver* m_driver;                       // 0x0c8
+	Direct3DDeviceInfo* m_device;             // 0x0cc
+	int m_display_bit_depth;                  // 0x0d0
+	BOOL m_flip_surfaces;                     // 0x0d4
+	BOOL m_full_screen;                       // 0x0d8
+	BOOL m_3d_video_ram;                      // 0x0dc
+	BOOL m_wide_view_angle;                   // 0x0e0
+	BOOL m_3d_sound;                          // 0x0e4
+	BOOL m_draw_cursor;                       // 0x0e8
+	BOOL m_use_joystick;                      // 0x0ec
+	int m_joystick_index;                     // 0x0f0
+	BOOL m_run_config_dialog;                 // 0x0f4
+	int m_model_quality;                      // 0x0f8
+	int m_texture_quality;                    // 0x0fc
+	undefined m_unk0x100[4];                  // 0x100
+	BOOL m_music;                             // 0x104
 };
 
 // SYNTHETIC: CONFIG 0x00402cd0
