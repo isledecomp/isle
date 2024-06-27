@@ -159,10 +159,10 @@ struct MxDriver {
 // TEMPLATE: BETA10 0x1011f6f0
 // List<MxDriver>::~List<MxDriver>
 
-// Compiler-generated copy ctor
+// Compiler-generated copy ctor for MxDriver
 // SYNTHETIC: CONFIG 0x401990
 // SYNTHETIC: LEGO1 0x1009c290
-// MxDriver::MxDriver
+// ??0MxDriver@@QAE@ABU0@@Z
 
 // TEMPLATE: CONFIG 0x401b00
 // TEMPLATE: LEGO1 0x1009c400
@@ -207,6 +207,7 @@ public:
 	int ProcessDeviceBytes(int p_deviceNum, GUID& p_guid);
 	int GetDevice(int p_deviceNum, MxDriver*& p_driver, Direct3DDeviceInfo*& p_device);
 	int FormatDeviceName(char* p_buffer, const MxDriver* p_ddInfo, const Direct3DDeviceInfo* p_d3dInfo) const;
+	int BETA_1011cc65(int p_idx, char* p_buffer);
 
 	int FUN_1009d0d0();
 	int FUN_1009d210();

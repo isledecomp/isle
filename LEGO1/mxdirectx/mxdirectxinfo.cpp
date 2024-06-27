@@ -679,21 +679,44 @@ int MxDeviceEnumerate::FormatDeviceName(char* p_buffer, const MxDriver* p_ddInfo
 	int number = 0;
 	assert(p_ddInfo && p_d3dInfo);
 
-	for (list<MxDriver>::const_iterator it = m_list.begin(); it != m_list.end(); it++) {
+	for (list<MxDriver>::const_iterator it = m_list.begin(); it != m_list.end(); it++, number++) {
 		if (&(*it) == p_ddInfo) {
-			sprintf(
-				p_buffer,
-				"%d 0x%x 0x%x 0x%x 0x%x",
-				number,
-				((DWORD*) (p_d3dInfo->m_guid))[0],
-				((DWORD*) (p_d3dInfo->m_guid))[1],
-				((DWORD*) (p_d3dInfo->m_guid))[2],
-				((DWORD*) (p_d3dInfo->m_guid))[3]
-			);
+			GUID4 guid;
+			memcpy(&guid, p_d3dInfo->m_guid, sizeof(GUID4));
+
+			sprintf(p_buffer, "%d 0x%x 0x%x 0x%x 0x%x", number, guid.m_data1, guid.m_data2, guid.m_data3, guid.m_data4);
 			return 0;
 		}
-		number++;
 	}
+
+	return -1;
+}
+
+// FUNCTION: BETA10 0x1011cc65
+int MxDeviceEnumerate::BETA_1011cc65(int p_idx, char* p_buffer)
+{
+	if (p_idx < 0 || !IsInitialized()) {
+		return -1;
+	}
+
+	int i = 0;
+	int j = 0;
+
+	for (list<MxDriver>::iterator it = m_list.begin(); it != m_list.end(); it++, i++) {
+		MxDriver& driver = *it;
+		for (list<Direct3DDeviceInfo>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
+
+			if (j == p_idx) {
+				GUID4 guid;
+				memcpy(&guid, &((Direct3DDeviceInfo&) *it2).m_guid, sizeof(GUID4));
+				sprintf(p_buffer, "%d 0x%x 0x%x 0x%x 0x%x", i, guid.m_data1, guid.m_data2, guid.m_data3, guid.m_data4);
+				return 0;
+			}
+
+			j++;
+		}
+	}
+
 	return -1;
 }
 
