@@ -75,7 +75,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	MxS32 deviceNum = -1;
 	Direct3DDeviceInfo* device = NULL;
 	MxDriver* driver = NULL;
-	MxDeviceEnumerate100d9cc8 deviceEnumerate;
+	LegoDeviceEnumerate deviceEnumerate;
 	Mx3DPointFloat posVec(0.0, 1.25, -50.0);
 	Mx3DPointFloat dirVec(0.0, 0.0, 1.0);
 	Mx3DPointFloat upVec(0.0, 1.0, 0.0);

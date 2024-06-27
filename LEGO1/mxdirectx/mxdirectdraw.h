@@ -1,6 +1,8 @@
 #ifndef MXDIRECTDRAW_H
 #define MXDIRECTDRAW_H
 
+#include "mxdirectxinfo.h"
+
 #include <ddraw.h>
 #include <windows.h>
 
@@ -9,30 +11,6 @@
 class MxDirectDraw {
 public:
 	typedef void (*ErrorHandler)(const char*, HRESULT, void*);
-
-	// SIZE 0x0c
-	struct Mode {
-		int operator==(const Mode& p_mode) const
-		{
-			return ((width == p_mode.width) && (height == p_mode.height) && (bitsPerPixel == p_mode.bitsPerPixel));
-		}
-
-		int width;        // 0x00
-		int height;       // 0x04
-		int bitsPerPixel; // 0x08
-	};
-
-	// SIZE 0x17c
-	struct DeviceModesInfo {
-		DeviceModesInfo();
-		~DeviceModesInfo();
-
-		GUID* m_guid;      // 0x00
-		Mode* m_modeArray; // 0x04
-		int m_count;       // 0x08
-		DDCAPS m_ddcaps;   // 0x0c
-		void* m_unk0x178;  // 0x178
-	};
 
 	static int GetPrimaryBitDepth();
 
@@ -125,7 +103,7 @@ protected:
 	void* m_pFatalErrorHandlerArg;              // 0x868
 	int m_pauseCount;                           // 0x86c
 	DeviceModesInfo* m_pCurrentDeviceModesList; // 0x870
-	Mode m_currentMode;                         // 0x874
+	DeviceModesInfo::Mode m_currentMode;        // 0x874
 };
 
 #endif // MXDIRECTDRAW_H
