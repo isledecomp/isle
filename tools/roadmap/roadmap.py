@@ -415,7 +415,9 @@ def main():
             displacement = None
             module_name = None
 
-            if match.recomp_addr is not None and recomp_bin.is_valid_vaddr(match.recomp_addr):
+            if match.recomp_addr is not None and recomp_bin.is_valid_vaddr(
+                match.recomp_addr
+            ):
                 if (module_ref := module_map.get_module(match.recomp_addr)) is not None:
                     (_, module_name) = module_ref
 
