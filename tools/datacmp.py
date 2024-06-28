@@ -188,24 +188,33 @@ def do_the_comparison(args: argparse.Namespace) -> Iterable[ComparisonItem]:
             orig_raw = origfile.read(var.orig_addr, data_size)
             recomp_raw = recompfile.read(var.recomp_addr, data_size)
 
-            # If either read exceeded the raw data size for the section,
-            # assume the entire variable is uninitialized.
-            # TODO: This is not correct, strictly speaking. However,
-            # it is probably impossible for a variable to exceed
-            # the virtual size of the section, so all that is left is
-            # the uninitialized data.
-            # If the variable falls at the end of the section like this,
-            # it is highly likely to be uninitialized.
+            # The IMAGE_SECTION_HEADER defines the SizeOfRawData and VirtualSize for the section.
+            # If VirtualSize > SizeOfRawData, the section is comprised of the initialized data
+            # corresponding to bytes in the file, and the rest is padded with zeroes when
+            # Windows loads the image.
+            # The linker might place variables initialized to zero on the threshold between
+            # physical data and the virtual (uninitialized) data.
+            # If this happens (i.e. we get an incomplete read) we just do the same padding
+            # to prepare for the comparison.
             if orig_raw is not None and len(orig_raw) < data_size:
-                orig_raw = None
+                orig_raw = orig_raw.ljust(data_size, b"\x00")
 
             if recomp_raw is not None and len(recomp_raw) < data_size:
-                recomp_raw = None
+                recomp_raw = recomp_raw.ljust(data_size, b"\x00")
 
-            # If both variables are uninitialized, we consider them equal.
-            # Otherwise, this is a diff but there is nothing to compare.
+            # If one or both variables are entirely uninitialized
             if orig_raw is None or recomp_raw is None:
+                # If both variables are uninitialized, we consider them equal.
                 match = orig_raw is None and recomp_raw is None
+
+                # We can match a variable initialized to all zeroes with
+                # an uninitialized variable, but this may or may not actually
+                # be correct, so we flag it for the user.
+                uninit_force_match = not match and (
+                    (orig_raw is None and all(b == 0 for b in recomp_raw))
+                    or (recomp_raw is None and all(b == 0 for b in orig_raw))
+                )
+
                 orig_value = "(uninitialized)" if orig_raw is None else "(initialized)"
                 recomp_value = (
                     "(uninitialized)" if recomp_raw is None else "(initialized)"
@@ -220,6 +229,7 @@ def do_the_comparison(args: argparse.Namespace) -> Iterable[ComparisonItem]:
                             values=(orig_value, recomp_value),
                         )
                     ],
+                    raw_only=uninit_force_match,
                 )
                 continue
 
