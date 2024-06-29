@@ -178,7 +178,8 @@ public:
 	// in reverse order of appearance.
 
 	// FUNCTION: LEGO1 0x10002270
-	virtual void EqualsCrossImpl(float* p_a, float* p_b)
+	// FUNCTION: BETA10 0x100064a1
+	inline virtual void EqualsCrossImpl(float* p_a, float* p_b)
 	{
 		m_data[0] = p_a[1] * p_b[2] - p_a[2] * p_b[1];
 		m_data[1] = p_a[2] * p_b[0] - p_a[0] * p_b[2];
@@ -229,7 +230,7 @@ public:
 	} // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10003b20
-	void MulScalarImpl(float* p_value) override
+	inline void MulScalarImpl(float* p_value) override
 	{
 		m_data[0] *= *p_value;
 		m_data[1] *= *p_value;
@@ -274,6 +275,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d45a0
+// VTABLE: BETA10 0x101bac38
 // SIZE 0x08
 class Vector4 : public Vector3 {
 public:
@@ -294,8 +296,8 @@ public:
 	// FUNCTION: LEGO1 0x10002ae0
 	virtual void SetMatrixProduct(Vector4* p_a, float* p_b) { SetMatrixProduct(p_a->m_data, p_b); } // vtable+0x88
 
-	inline virtual int NormalizeQuaternion();                            // vtable+0x90
-	inline virtual void UnknownQuaternionOp(Vector4* p_a, Vector4* p_b); // vtable+0x94
+	inline virtual int NormalizeQuaternion();                             // vtable+0x90
+	inline virtual int EqualsHamiltonProduct(Vector4* p_a, Vector4* p_b); // vtable+0x94
 
 	// Vector3 overrides
 
@@ -383,40 +385,42 @@ public:
 	friend class Mx4DPointFloat;
 };
 
-// Note close yet, included because I'm at least confident I know what operation
-// it's trying to do.
-// STUB: LEGO1 0x10002b70
+// FUNCTION: BETA10 0x10048c20
+// FUNCTION: LEGO1 0x10002b70
 inline int Vector4::NormalizeQuaternion()
 {
 	float* v = m_data;
-	float magnitude = v[1] * v[1] + v[2] * v[2] + v[0] * v[0];
+	float magnitude = v[0] * v[0] + v[2] * v[2] + v[1] * v[1];
 	if (magnitude > 0.0f) {
 		float theta = v[3] * 0.5f;
 		v[3] = cos(theta);
-		float frac = sin(theta);
-		magnitude = frac / sqrt(magnitude);
-		v[0] *= magnitude;
-		v[1] *= magnitude;
-		v[2] *= magnitude;
+		magnitude = sin(theta) / sqrt(magnitude);
+		Vector3::MulScalarImpl(&magnitude);
 		return 0;
 	}
 	return -1;
 }
 
-// FUNCTION: LEGO1 0x10002bf0
-inline void Vector4::UnknownQuaternionOp(Vector4* p_a, Vector4* p_b)
+inline static float QuaternionProductScalarPart(float* bDat, float* aDat)
 {
-	float* bDat = p_b->m_data;
-	float* aDat = p_a->m_data;
+	// We have no indication from the beta that this function exists,
+	// but it helps with the stack layout of Vector4::EqualsHamiltonProduct()
+	return aDat[3] * bDat[3] - (aDat[0] * bDat[0] + aDat[2] * bDat[2] + aDat[1] * bDat[1]);
+}
 
-	this->m_data[3] = aDat[3] * bDat[3] - (bDat[0] * aDat[0] + aDat[2] * bDat[2] + aDat[1] * aDat[1]);
-	this->m_data[0] = bDat[2] * aDat[1] - bDat[1] * aDat[2];
-	this->m_data[1] = aDat[2] * bDat[0] - bDat[2] * aDat[0];
-	this->m_data[2] = bDat[1] * aDat[0] - aDat[1] * bDat[0];
+// FUNCTION: BETA10 0x10048c20
+// FUNCTION: LEGO1 0x10002bf0
+inline int Vector4::EqualsHamiltonProduct(Vector4* p_a, Vector4* p_b)
+{
+	m_data[3] = QuaternionProductScalarPart(p_a->m_data, p_b->m_data);
+
+	Vector3::EqualsCrossImpl(p_a->m_data, p_b->m_data);
 
 	m_data[0] = p_b->m_data[3] * p_a->m_data[0] + p_a->m_data[3] * p_b->m_data[0] + m_data[0];
 	m_data[1] = p_b->m_data[1] * p_a->m_data[3] + p_a->m_data[1] * p_b->m_data[3] + m_data[1];
 	m_data[2] = p_b->m_data[2] * p_a->m_data[3] + p_a->m_data[2] * p_b->m_data[3] + m_data[2];
+
+	return 0;
 }
 
 #endif // VECTOR_H
