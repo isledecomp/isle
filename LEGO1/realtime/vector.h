@@ -385,7 +385,7 @@ public:
 	friend class Mx4DPointFloat;
 };
 
-// FUNCTION: BETA10 0x10048c20
+// FUNCTION: BETA10 0x10048ad0
 // FUNCTION: LEGO1 0x10002b70
 inline int Vector4::NormalizeQuaternion()
 {
