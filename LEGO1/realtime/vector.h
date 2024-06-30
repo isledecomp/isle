@@ -385,8 +385,8 @@ public:
 	friend class Mx4DPointFloat;
 };
 
-// FUNCTION: BETA10 0x10048ad0
 // FUNCTION: LEGO1 0x10002b70
+// FUNCTION: BETA10 0x10048ad0
 inline int Vector4::NormalizeQuaternion()
 {
 	float* v = m_data;
@@ -408,8 +408,8 @@ inline static float QuaternionProductScalarPart(float* bDat, float* aDat)
 	return aDat[3] * bDat[3] - (aDat[0] * bDat[0] + aDat[2] * bDat[2] + aDat[1] * bDat[1]);
 }
 
-// FUNCTION: BETA10 0x10048c20
 // FUNCTION: LEGO1 0x10002bf0
+// FUNCTION: BETA10 0x10048c20
 inline int Vector4::EqualsHamiltonProduct(Vector4* p_a, Vector4* p_b)
 {
 	m_data[3] = QuaternionProductScalarPart(p_a->m_data, p_b->m_data);
