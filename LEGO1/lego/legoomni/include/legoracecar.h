@@ -87,13 +87,13 @@ public:
 	// LegoRaceCar::`scalar deleting destructor'
 
 private:
-	undefined m_unk0x54;         // 0x54
-	undefined4 m_unk0x58;        // 0x58
-	Mx3DPointFloat m_unk0x5c;    // 0x5c
-	undefined4 m_unk0x70;        // 0x70
-	undefined4 m_unk0x74;        // 0x74
-	LegoPathBoundary* m_unk0x78; // 0x78
-	LegoPathBoundary* m_unk0x7c; // 0x7c
+	undefined m_unk0x54;            // 0x54
+	undefined4 m_unk0x58;           // 0x58
+	Mx3DPointFloat m_unk0x5c;       // 0x5c
+	LegoAnimActorStruct* m_unk0x70; // 0x70
+	LegoAnimActorStruct* m_unk0x74; // 0x74
+	LegoPathBoundary* m_unk0x78;    // 0x78
+	LegoPathBoundary* m_unk0x7c;    // 0x7c
 };
 
 #endif // LEGORACECAR_H

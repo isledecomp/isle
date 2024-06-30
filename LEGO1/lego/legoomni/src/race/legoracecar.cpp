@@ -63,29 +63,36 @@ void LegoRaceCar::SetMaxLinearVelocity(float p_maxLinearVelocity)
 // FUNCTION: LEGO1 0x10012ef0
 void LegoRaceCar::ParseAction(char* p_extra)
 {
-	char local_100[256];
+	char buffer[256];
+
 	LegoAnimActor::ParseAction(p_extra);
 	LegoRaceMap::ParseAction(p_extra);
 	LegoRace* current_world = (LegoRace*) CurrentWorld();
-	if (KeyValueStringParse(local_100, g_strCOMP, p_extra) && current_world) {
-		current_world->VTable0x7c(this, atoi(local_100));
+
+	if (KeyValueStringParse(buffer, g_strCOMP, p_extra) && current_world) {
+		current_world->VTable0x7c(this, atoi(buffer));
 	}
-	if (!m_userNavFlag) {
-		for (MxU32 i = 0; i++;) {
-			size_t temp = LegoAnimActor::m_animMaps.size();
-			if (!temp
-			) {
-				break;
+
+	if (m_userNavFlag) {
+		for (MxU32 i = 0; i < m_animMaps.size(); i++) {
+			LegoAnimActorStruct* animMap = m_animMaps[i];
+
+			if (animMap->m_unk0x00 == -1.0f) {
+				m_unk0x70 = animMap;
+			}
+			else if (animMap->m_unk0x00 == -2.0f) {
+				m_unk0x74 = animMap;
 			}
 		}
-	}
-	// STRING: LEGO1 0x100f0bc4
-	m_unk0x78 = current_world->FindPathBoundary("EDG03_44");
-	// STRING: LEGO1 0x100f0bb8
-	m_unk0x7c = current_world->FindPathBoundary("EDG03_54");
 
-	for (MxS32 i = 0; i < sizeOfArray(g_edgeReferences); i++) {
-		g_edgeReferences[i].data = current_world->FindPathBoundary(g_edgeReferences[i].name);
+		// STRING: LEGO1 0x100f0bc4
+		m_unk0x78 = current_world->FindPathBoundary("EDG03_44");
+		// STRING: LEGO1 0x100f0bb8
+		m_unk0x7c = current_world->FindPathBoundary("EDG03_54");
+
+		for (MxS32 j = 0; j < sizeOfArray(g_edgeReferences); j++) {
+			g_edgeReferences[j].data = current_world->FindPathBoundary(g_edgeReferences[j].name);
+		}
 	}
 }
 
