@@ -43,6 +43,7 @@ private:
 };
 
 // VTABLE: LEGO1 0x100d41e8
+// VTABLE: BETA10 0x101bab78
 // SIZE 0x18
 class Mx4DPointFloat : public Vector4 {
 public:
