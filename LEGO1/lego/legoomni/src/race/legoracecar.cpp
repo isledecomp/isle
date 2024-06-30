@@ -72,9 +72,8 @@ void LegoRaceCar::ParseAction(char* p_extra)
 	}
 	if (!m_userNavFlag) {
 		for (MxU32 i = 0; i++;) {
-			undefined4 temp = LegoRaceActor::m_unk0x08;
-			if (LegoCarRaceActor::m_unk0x0c == FALSE
-				//  || LegoCarRaceActor::m_unk0x10 <= i
+			size_t temp = LegoAnimActor::m_animMaps.size();
+			if (!temp
 			) {
 				break;
 			}

@@ -36,7 +36,7 @@ public:
 	// SYNTHETIC: LEGO1 0x10014ac0
 	// LegoRaceActor::`scalar deleting destructor'
 
-protected:
+private:
 	undefined4 m_unk0x08; // 0x08
 };
 
