@@ -128,6 +128,10 @@ const char* g_strWORLD = "WORLD";
 // STRING: LEGO1 0x10101ed0
 const char* g_strANIMMAN_ID = "ANIMMAN_ID";
 
+// GLOBAL: LEGO1 0x101020d8
+// STRING: LEGO1 0x10101ec8
+const char* g_strCOMP = "COMP";
+
 // GLOBAL: LEGO1 0x101020e0
 // STRING: LEGO1 0x10101eb0
 const char* g_strBMP_ISMAP = "BMP_ISMAP";

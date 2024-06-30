@@ -1,7 +1,11 @@
 #include "legoracecar.h"
 
+#include "define.h"
+#include "legorace.h"
+#include "misc.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
+#include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(LegoRaceCar, 0x200)
 
@@ -56,10 +60,34 @@ void LegoRaceCar::SetMaxLinearVelocity(float p_maxLinearVelocity)
 	}
 }
 
-// STUB: LEGO1 0x10012ef0
-void LegoRaceCar::ParseAction(char*)
+// FUNCTION: LEGO1 0x10012ef0
+void LegoRaceCar::ParseAction(char* p_extra)
 {
-	// TODO
+	char local_100[256];
+	LegoAnimActor::ParseAction(p_extra);
+	LegoRaceMap::ParseAction(p_extra);
+	LegoRace* current_world = (LegoRace*) CurrentWorld();
+	if (KeyValueStringParse(local_100, g_strCOMP, p_extra) && current_world) {
+		current_world->VTable0x7c(this, atoi(local_100));
+	}
+	if (!m_userNavFlag) {
+		for (MxU32 i = 0; i++;) {
+			undefined4 temp = LegoRaceActor::m_unk0x08;
+			if (LegoCarRaceActor::m_unk0x0c == FALSE
+				//  || LegoCarRaceActor::m_unk0x10 <= i
+			) {
+				break;
+			}
+		}
+	}
+	// STRING: LEGO1 0x100f0bc4
+	m_unk0x78 = current_world->FindPathBoundary("EDG03_44");
+	// STRING: LEGO1 0x100f0bb8
+	m_unk0x7c = current_world->FindPathBoundary("EDG03_54");
+
+	for (MxS32 i = 0; i < sizeOfArray(g_edgeReferences); i++) {
+		g_edgeReferences[i].data = current_world->FindPathBoundary(g_edgeReferences[i].name);
+	}
 }
 
 // STUB: LEGO1 0x10012ff0

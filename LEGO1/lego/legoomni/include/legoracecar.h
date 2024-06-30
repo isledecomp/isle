@@ -4,6 +4,39 @@
 #include "legocarraceactor.h"
 #include "legoracemap.h"
 
+struct EdgeReference {
+	char* name;
+	LegoPathBoundary* data;
+};
+
+// GLOBAL: LEGO1 0x100f0a20
+static EdgeReference g_edgeReferences[] = {
+	{// STRING: LEGO1 0x100f0a10
+	 "EDG03_772",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f0a04
+	 "EDG03_773",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f09f8
+	 "EDG03_774",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f09ec
+	 "EDG03_775",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f09e0
+	 "EDG03_776",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f09d4
+	 "EDG03_777",
+	 NULL
+	}
+};
+
 // VTABLE: LEGO1 0x100d58a0 LegoRaceActor
 // VTABLE: LEGO1 0x100d58a8 LegoAnimActor
 // VTABLE: LEGO1 0x100d58b8 LegoPathActor
@@ -54,13 +87,13 @@ public:
 	// LegoRaceCar::`scalar deleting destructor'
 
 private:
-	undefined m_unk0x54;      // 0x54
-	undefined4 m_unk0x58;     // 0x58
-	Mx3DPointFloat m_unk0x5c; // 0x5c
-	undefined4 m_unk0x70;     // 0x70
-	undefined4 m_unk0x74;     // 0x74
-	undefined4 m_unk0x78;     // 0x78
-	undefined4 m_unk0x7c;     // 0x7c
+	undefined m_unk0x54;         // 0x54
+	undefined4 m_unk0x58;        // 0x58
+	Mx3DPointFloat m_unk0x5c;    // 0x5c
+	undefined4 m_unk0x70;        // 0x70
+	undefined4 m_unk0x74;        // 0x74
+	LegoPathBoundary* m_unk0x78; // 0x78
+	LegoPathBoundary* m_unk0x7c; // 0x7c
 };
 
 #endif // LEGORACECAR_H

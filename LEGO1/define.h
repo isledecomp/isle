@@ -31,6 +31,7 @@ extern const char* g_strBOTTOM_TO_TOP;
 extern const char* g_strTOP_TO_BOTTOM;
 extern const char* g_strFILLER_INDEX;
 extern const char* g_strVARIABLE;
+extern const char* g_strCOMP;
 extern const char* g_strBMP_ISMAP;
 extern const char* g_strAUTO_CREATE;
 extern const char* g_strDB_CREATE;
