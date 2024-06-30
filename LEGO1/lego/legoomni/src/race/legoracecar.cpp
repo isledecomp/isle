@@ -18,35 +18,41 @@ LegoRaceCar::LegoRaceCar()
 	NotificationManager()->Register(this);
 }
 
-// STUB: LEGO1 0x10012c80
+// FUNCTION: LEGO1 0x10012c80
 LegoRaceCar::~LegoRaceCar()
 {
-	// TODO
+	NotificationManager()->Unregister(this);
 }
 
-// STUB: LEGO1 0x10012d90
+// FUNCTION: LEGO1 0x10012d90
 MxLong LegoRaceCar::Notify(MxParam& p_param)
 {
-	// TODO
-	return 0;
+	return LegoRaceMap::Notify(p_param);
 }
 
-// STUB: LEGO1 0x10012e60
+// FUNCTION: LEGO1 0x10012e60
 void LegoRaceCar::SetWorldSpeed(MxFloat p_worldSpeed)
 {
-	// TODO
+	if (!m_userNavFlag) {
+		if (!LegoCarRaceActor::m_unk0x0c) {
+			m_maxLinearVel = p_worldSpeed;
+		}
+		LegoAnimActor::SetWorldSpeed(p_worldSpeed);
+		return;
+	}
+	m_worldSpeed = p_worldSpeed;
 }
 
 // FUNCTION: LEGO1 0x10012ea0
-void LegoRaceCar::FUN_10012ea0(float p_worldSpeed)
+void LegoRaceCar::SetMaxLinearVelocity(float p_maxLinearVelocity)
 {
-	if (p_worldSpeed < 0) {
+	if (p_maxLinearVelocity < 0) {
 		LegoCarRaceActor::m_unk0x0c = 2;
 		m_maxLinearVel = 0;
 		SetWorldSpeed(0);
 	}
 	else {
-		m_maxLinearVel = p_worldSpeed;
+		m_maxLinearVel = p_maxLinearVelocity;
 	}
 }
 

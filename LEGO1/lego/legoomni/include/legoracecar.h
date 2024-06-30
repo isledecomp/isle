@@ -46,7 +46,7 @@ public:
 		override;                   // vtable+0x98
 	MxResult VTable0x9c() override; // vtable+0x9c
 
-	virtual void FUN_10012ea0(float p_worldSpeed);
+	virtual void SetMaxLinearVelocity(float p_maxLinearVelocity);
 	virtual void FUN_10012ff0(float);
 	virtual MxBool FUN_10013130(float);
 
