@@ -5,8 +5,8 @@
 #include "legoracemap.h"
 
 struct EdgeReference {
-	char* name;
-	LegoPathBoundary* data;
+	char* m_name;
+	LegoPathBoundary* m_data;
 };
 
 // GLOBAL: LEGO1 0x100f0a20

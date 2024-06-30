@@ -67,10 +67,10 @@ void LegoRaceCar::ParseAction(char* p_extra)
 
 	LegoAnimActor::ParseAction(p_extra);
 	LegoRaceMap::ParseAction(p_extra);
-	LegoRace* current_world = (LegoRace*) CurrentWorld();
+	LegoRace* currentWorld = (LegoRace*) CurrentWorld();
 
-	if (KeyValueStringParse(buffer, g_strCOMP, p_extra) && current_world) {
-		current_world->VTable0x7c(this, atoi(buffer));
+	if (KeyValueStringParse(buffer, g_strCOMP, p_extra) && currentWorld) {
+		currentWorld->VTable0x7c(this, atoi(buffer));
 	}
 
 	if (m_userNavFlag) {
@@ -86,12 +86,12 @@ void LegoRaceCar::ParseAction(char* p_extra)
 		}
 
 		// STRING: LEGO1 0x100f0bc4
-		m_unk0x78 = current_world->FindPathBoundary("EDG03_44");
+		m_unk0x78 = currentWorld->FindPathBoundary("EDG03_44");
 		// STRING: LEGO1 0x100f0bb8
-		m_unk0x7c = current_world->FindPathBoundary("EDG03_54");
+		m_unk0x7c = currentWorld->FindPathBoundary("EDG03_54");
 
 		for (MxS32 j = 0; j < sizeOfArray(g_edgeReferences); j++) {
-			g_edgeReferences[j].data = current_world->FindPathBoundary(g_edgeReferences[j].name);
+			g_edgeReferences[j].m_data = currentWorld->FindPathBoundary(g_edgeReferences[j].m_name);
 		}
 	}
 }

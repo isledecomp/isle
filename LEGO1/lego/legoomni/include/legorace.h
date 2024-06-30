@@ -3,8 +3,8 @@
 
 #include "decomp.h"
 #include "legogamestate.h"
-#include "legostate.h"
 #include "legoracemap.h"
+#include "legostate.h"
 #include "legoworld.h"
 #include "mxrect32.h"
 #include "mxtypes.h"
@@ -125,7 +125,7 @@ public:
 	virtual MxLong HandleType0Notification(MxNotificationParam&) { return 0; } // vtable+0x78
 
 	// STUB: LEGO1 0x1000dac0
-	virtual void VTable0x7c(LegoRaceMap *, undefined4) {} // vtable+0x7c
+	virtual void VTable0x7c(LegoRaceMap*, undefined4) {} // vtable+0x7c
 
 	// SYNTHETIC: LEGO1 0x10015cc0
 	// LegoRace::`scalar deleting destructor'
