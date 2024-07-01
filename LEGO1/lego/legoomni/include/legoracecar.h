@@ -4,37 +4,10 @@
 #include "legocarraceactor.h"
 #include "legoracemap.h"
 
+// SIZE 0x08
 struct EdgeReference {
-	char* m_name;
-	LegoPathBoundary* m_data;
-};
-
-// GLOBAL: LEGO1 0x100f0a20
-static EdgeReference g_edgeReferences[] = {
-	{// STRING: LEGO1 0x100f0a10
-	 "EDG03_772",
-	 NULL
-	},
-	{// STRING: LEGO1 0x100f0a04
-	 "EDG03_773",
-	 NULL
-	},
-	{// STRING: LEGO1 0x100f09f8
-	 "EDG03_774",
-	 NULL
-	},
-	{// STRING: LEGO1 0x100f09ec
-	 "EDG03_775",
-	 NULL
-	},
-	{// STRING: LEGO1 0x100f09e0
-	 "EDG03_776",
-	 NULL
-	},
-	{// STRING: LEGO1 0x100f09d4
-	 "EDG03_777",
-	 NULL
-	}
+	const char* m_name;       // 0x00
+	LegoPathBoundary* m_data; // 0x04
 };
 
 // VTABLE: LEGO1 0x100d58a0 LegoRaceActor
@@ -94,6 +67,12 @@ private:
 	LegoAnimActorStruct* m_unk0x74; // 0x74
 	LegoPathBoundary* m_unk0x78;    // 0x78
 	LegoPathBoundary* m_unk0x7c;    // 0x7c
+
+	// GLOBAL: LEGO1 0x100f0a20
+	static EdgeReference g_edgeReferences[];
+
+	// GLOBAL: LEGO1 0x100f0a50
+	static const EdgeReference* g_pEdgeReferences;
 };
 
 #endif // LEGORACECAR_H

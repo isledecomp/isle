@@ -7,7 +7,37 @@
 #include "mxnotificationmanager.h"
 #include "mxutilities.h"
 
+DECOMP_SIZE_ASSERT(EdgeReference, 0x08)
 DECOMP_SIZE_ASSERT(LegoRaceCar, 0x200)
+
+EdgeReference LegoRaceCar::g_edgeReferences[] = {
+	{// STRING: LEGO1 0x100f0a10
+	 "EDG03_772",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f0a04
+	 "EDG03_773",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f09f8
+	 "EDG03_774",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f09ec
+	 "EDG03_775",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f09e0
+	 "EDG03_776",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f09d4
+	 "EDG03_777",
+	 NULL
+	}
+};
+
+const EdgeReference* LegoRaceCar::g_pEdgeReferences = g_edgeReferences;
 
 // FUNCTION: LEGO1 0x10012950
 LegoRaceCar::LegoRaceCar()
@@ -42,9 +72,10 @@ void LegoRaceCar::SetWorldSpeed(MxFloat p_worldSpeed)
 			m_maxLinearVel = p_worldSpeed;
 		}
 		LegoAnimActor::SetWorldSpeed(p_worldSpeed);
-		return;
 	}
-	m_worldSpeed = p_worldSpeed;
+	else {
+		m_worldSpeed = p_worldSpeed;
+	}
 }
 
 // FUNCTION: LEGO1 0x10012ea0
@@ -86,9 +117,11 @@ void LegoRaceCar::ParseAction(char* p_extra)
 		}
 
 		// STRING: LEGO1 0x100f0bc4
-		m_unk0x78 = currentWorld->FindPathBoundary("EDG03_44");
+		const char* EDGE_03_44 = "EDG03_44";
+		m_unk0x78 = currentWorld->FindPathBoundary(EDGE_03_44);
 		// STRING: LEGO1 0x100f0bb8
-		m_unk0x7c = currentWorld->FindPathBoundary("EDG03_54");
+		const char* EDGE_03_54 = "EDG03_54";
+		m_unk0x7c = currentWorld->FindPathBoundary(EDGE_03_54);
 
 		for (MxS32 j = 0; j < sizeOfArray(g_edgeReferences); j++) {
 			g_edgeReferences[j].m_data = currentWorld->FindPathBoundary(g_edgeReferences[j].m_name);
