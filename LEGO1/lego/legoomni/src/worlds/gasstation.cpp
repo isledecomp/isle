@@ -292,7 +292,7 @@ inline void GasStation::PlayAction(GarageScript::Script p_objectId)
 // FUNCTION: BETA10 0x10029f00
 inline void GasStation::StopAction(GarageScript::Script p_objectId)
 {
-	if (p_objectId != -1) {
+	if (p_objectId != GarageScript::c_noneGarage) {
 		InvokeAction(Extra::e_stop, *g_garageScript, p_objectId, NULL);
 		BackgroundAudioManager()->RaiseVolume();
 		m_state->FUN_10006460(p_objectId);
