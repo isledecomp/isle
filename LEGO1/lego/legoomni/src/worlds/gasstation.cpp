@@ -8,6 +8,7 @@
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legomain.h"
+#include "legoutils.h"
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
@@ -276,7 +277,8 @@ void GasStation::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x10005590
-inline void GasStation::PlayAction(MxU32 p_objectId)
+// FUNCTION: BETA10 0x10029e30
+inline void GasStation::PlayAction(GarageScript::Script p_objectId)
 {
 	MxDSAction action;
 	action.SetAtomId(*g_garageScript);
@@ -285,6 +287,16 @@ inline void GasStation::PlayAction(MxU32 p_objectId)
 	BackgroundAudioManager()->LowerVolume();
 	Start(&action);
 	m_state->FUN_10006430(p_objectId);
+}
+
+// FUNCTION: BETA10 0x10029f00
+inline void GasStation::StopAction(GarageScript::Script p_objectId)
+{
+	if (p_objectId != GarageScript::c_noneGarage) {
+		InvokeAction(Extra::e_stop, *g_garageScript, p_objectId, NULL);
+		BackgroundAudioManager()->RaiseVolume();
+		m_state->FUN_10006460(p_objectId);
+	}
 }
 
 // STUB: LEGO1 0x10005660
@@ -305,10 +317,32 @@ MxLong GasStation::HandleKeyPress(MxS8 p_key)
 	return 0;
 }
 
-// STUB: LEGO1 0x10005960
+// FUNCTION: LEGO1 0x10005960
+// FUNCTION: BETA10 0x10029319
 MxLong GasStation::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 {
-	// TODO
+	if (m_unk0x104 == 1 || m_unk0x104 == 2) {
+		LegoROI* roi = PickROI(p_param.GetX(), p_param.GetY());
+
+		if (roi != NULL) {
+			if (!strnicmp(roi->GetName(), "capdb", 5) || !strnicmp(roi->GetName(), "*capdb", 6)) {
+				m_unk0x104 = 3;
+				m_unk0x114 = FALSE;
+
+				if (m_state->m_unk0x14.m_unk0x00 == 7) {
+					m_state->m_unk0x14.m_unk0x00 = 8;
+					PlayAction(GarageScript::c_wgs029nu_RunAnim);
+					m_unk0x106 = 1;
+				}
+				else {
+					StopAction(GarageScript::c_wgs023nu_RunAnim);
+				}
+
+				return 1;
+			}
+		}
+	}
+
 	return 0;
 }
 
@@ -459,7 +493,13 @@ MxResult GasStationState::Serialize(LegoFile* p_file)
 }
 
 // STUB: LEGO1 0x10006430
-void GasStationState::FUN_10006430(undefined4)
+void GasStationState::FUN_10006430(GarageScript::Script)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10006460
+void GasStationState::FUN_10006460(GarageScript::Script)
 {
 	// TODO
 }
