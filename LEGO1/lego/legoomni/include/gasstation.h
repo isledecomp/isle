@@ -38,7 +38,8 @@ public:
 	// SYNTHETIC: LEGO1 0x10006290
 	// GasStationState::`scalar deleting destructor'
 
-	void FUN_10006430(undefined4);
+	void FUN_10006430(GarageScript::Script);
+	void FUN_10006460(GarageScript::Script);
 	void FUN_10006490();
 
 	// TODO: Most likely getters/setters are not used according to BETA.
@@ -82,12 +83,13 @@ public:
 	void Enable(MxBool p_enable) override;                                      // vtable+0x68
 	virtual MxLong HandleControl(LegoControlManagerNotificationParam& p_param); // vtable+0x6c
 
-	inline void PlayAction(MxU32 p_objectId);
-
 	// SYNTHETIC: LEGO1 0x100048a0
 	// GasStation::`scalar deleting destructor'
 
 private:
+	inline void PlayAction(GarageScript::Script p_objectId);
+	inline void StopAction(GarageScript::Script p_objectId);
+
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleKeyPress(MxS8 p_key);
 	MxLong HandleButtonDown(LegoControlManagerNotificationParam& p_param);
