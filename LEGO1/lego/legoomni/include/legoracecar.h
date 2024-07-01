@@ -68,10 +68,7 @@ private:
 	LegoPathBoundary* m_unk0x78;    // 0x78
 	LegoPathBoundary* m_unk0x7c;    // 0x7c
 
-	// GLOBAL: LEGO1 0x100f0a20
 	static EdgeReference g_edgeReferences[];
-
-	// GLOBAL: LEGO1 0x100f0a50
 	static const EdgeReference* g_pEdgeReferences;
 };
 

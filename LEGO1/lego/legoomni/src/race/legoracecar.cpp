@@ -10,6 +10,7 @@
 DECOMP_SIZE_ASSERT(EdgeReference, 0x08)
 DECOMP_SIZE_ASSERT(LegoRaceCar, 0x200)
 
+// GLOBAL: LEGO1 0x100f0a20
 EdgeReference LegoRaceCar::g_edgeReferences[] = {
 	{// STRING: LEGO1 0x100f0a10
 	 "EDG03_772",
@@ -37,6 +38,7 @@ EdgeReference LegoRaceCar::g_edgeReferences[] = {
 	}
 };
 
+// GLOBAL: LEGO1 0x100f0a50
 const EdgeReference* LegoRaceCar::g_pEdgeReferences = g_edgeReferences;
 
 // FUNCTION: LEGO1 0x10012950
