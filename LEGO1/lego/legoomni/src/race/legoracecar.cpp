@@ -1,9 +1,45 @@
 #include "legoracecar.h"
 
+#include "define.h"
+#include "legorace.h"
+#include "misc.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
+#include "mxutilities.h"
 
+DECOMP_SIZE_ASSERT(EdgeReference, 0x08)
 DECOMP_SIZE_ASSERT(LegoRaceCar, 0x200)
+
+// GLOBAL: LEGO1 0x100f0a20
+EdgeReference LegoRaceCar::g_edgeReferences[] = {
+	{// STRING: LEGO1 0x100f0a10
+	 "EDG03_772",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f0a04
+	 "EDG03_773",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f09f8
+	 "EDG03_774",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f09ec
+	 "EDG03_775",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f09e0
+	 "EDG03_776",
+	 NULL
+	},
+	{// STRING: LEGO1 0x100f09d4
+	 "EDG03_777",
+	 NULL
+	}
+};
+
+// GLOBAL: LEGO1 0x100f0a50
+const EdgeReference* LegoRaceCar::g_pEdgeReferences = g_edgeReferences;
 
 // FUNCTION: LEGO1 0x10012950
 LegoRaceCar::LegoRaceCar()
@@ -18,42 +54,81 @@ LegoRaceCar::LegoRaceCar()
 	NotificationManager()->Register(this);
 }
 
-// STUB: LEGO1 0x10012c80
+// FUNCTION: LEGO1 0x10012c80
 LegoRaceCar::~LegoRaceCar()
 {
-	// TODO
+	NotificationManager()->Unregister(this);
 }
 
-// STUB: LEGO1 0x10012d90
+// FUNCTION: LEGO1 0x10012d90
 MxLong LegoRaceCar::Notify(MxParam& p_param)
 {
-	// TODO
-	return 0;
+	return LegoRaceMap::Notify(p_param);
 }
 
-// STUB: LEGO1 0x10012e60
+// FUNCTION: LEGO1 0x10012e60
 void LegoRaceCar::SetWorldSpeed(MxFloat p_worldSpeed)
 {
-	// TODO
+	if (!m_userNavFlag) {
+		if (!LegoCarRaceActor::m_unk0x0c) {
+			m_maxLinearVel = p_worldSpeed;
+		}
+		LegoAnimActor::SetWorldSpeed(p_worldSpeed);
+	}
+	else {
+		m_worldSpeed = p_worldSpeed;
+	}
 }
 
 // FUNCTION: LEGO1 0x10012ea0
-void LegoRaceCar::FUN_10012ea0(float p_worldSpeed)
+void LegoRaceCar::SetMaxLinearVelocity(float p_maxLinearVelocity)
 {
-	if (p_worldSpeed < 0) {
+	if (p_maxLinearVelocity < 0) {
 		LegoCarRaceActor::m_unk0x0c = 2;
 		m_maxLinearVel = 0;
 		SetWorldSpeed(0);
 	}
 	else {
-		m_maxLinearVel = p_worldSpeed;
+		m_maxLinearVel = p_maxLinearVelocity;
 	}
 }
 
-// STUB: LEGO1 0x10012ef0
-void LegoRaceCar::ParseAction(char*)
+// FUNCTION: LEGO1 0x10012ef0
+void LegoRaceCar::ParseAction(char* p_extra)
 {
-	// TODO
+	char buffer[256];
+
+	LegoAnimActor::ParseAction(p_extra);
+	LegoRaceMap::ParseAction(p_extra);
+	LegoRace* currentWorld = (LegoRace*) CurrentWorld();
+
+	if (KeyValueStringParse(buffer, g_strCOMP, p_extra) && currentWorld) {
+		currentWorld->VTable0x7c(this, atoi(buffer));
+	}
+
+	if (m_userNavFlag) {
+		for (MxU32 i = 0; i < m_animMaps.size(); i++) {
+			LegoAnimActorStruct* animMap = m_animMaps[i];
+
+			if (animMap->m_unk0x00 == -1.0f) {
+				m_unk0x70 = animMap;
+			}
+			else if (animMap->m_unk0x00 == -2.0f) {
+				m_unk0x74 = animMap;
+			}
+		}
+
+		// STRING: LEGO1 0x100f0bc4
+		const char* edge0344 = "EDG03_44";
+		m_unk0x78 = currentWorld->FindPathBoundary(edge0344);
+		// STRING: LEGO1 0x100f0bb8
+		const char* edge0354 = "EDG03_54";
+		m_unk0x7c = currentWorld->FindPathBoundary(edge0354);
+
+		for (MxS32 j = 0; j < sizeOfArray(g_edgeReferences); j++) {
+			g_edgeReferences[j].m_data = currentWorld->FindPathBoundary(g_edgeReferences[j].m_name);
+		}
+	}
 }
 
 // STUB: LEGO1 0x10012ff0

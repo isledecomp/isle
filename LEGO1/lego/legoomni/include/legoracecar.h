@@ -4,6 +4,12 @@
 #include "legocarraceactor.h"
 #include "legoracemap.h"
 
+// SIZE 0x08
+struct EdgeReference {
+	const char* m_name;       // 0x00
+	LegoPathBoundary* m_data; // 0x04
+};
+
 // VTABLE: LEGO1 0x100d58a0 LegoRaceActor
 // VTABLE: LEGO1 0x100d58a8 LegoAnimActor
 // VTABLE: LEGO1 0x100d58b8 LegoPathActor
@@ -46,7 +52,7 @@ public:
 		override;                   // vtable+0x98
 	MxResult VTable0x9c() override; // vtable+0x9c
 
-	virtual void FUN_10012ea0(float p_worldSpeed);
+	virtual void SetMaxLinearVelocity(float p_maxLinearVelocity);
 	virtual void FUN_10012ff0(float);
 	virtual MxBool FUN_10013130(float);
 
@@ -54,13 +60,16 @@ public:
 	// LegoRaceCar::`scalar deleting destructor'
 
 private:
-	undefined m_unk0x54;      // 0x54
-	undefined4 m_unk0x58;     // 0x58
-	Mx3DPointFloat m_unk0x5c; // 0x5c
-	undefined4 m_unk0x70;     // 0x70
-	undefined4 m_unk0x74;     // 0x74
-	undefined4 m_unk0x78;     // 0x78
-	undefined4 m_unk0x7c;     // 0x7c
+	undefined m_unk0x54;            // 0x54
+	undefined4 m_unk0x58;           // 0x58
+	Mx3DPointFloat m_unk0x5c;       // 0x5c
+	LegoAnimActorStruct* m_unk0x70; // 0x70
+	LegoAnimActorStruct* m_unk0x74; // 0x74
+	LegoPathBoundary* m_unk0x78;    // 0x78
+	LegoPathBoundary* m_unk0x7c;    // 0x7c
+
+	static EdgeReference g_edgeReferences[];
+	static const EdgeReference* g_pEdgeReferences;
 };
 
 #endif // LEGORACECAR_H
