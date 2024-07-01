@@ -117,11 +117,11 @@ void LegoRaceCar::ParseAction(char* p_extra)
 		}
 
 		// STRING: LEGO1 0x100f0bc4
-		const char* EDGE0344 = "EDG03_44";
-		m_unk0x78 = currentWorld->FindPathBoundary(EDGE0344);
+		const char* edge0344 = "EDG03_44";
+		m_unk0x78 = currentWorld->FindPathBoundary(edge0344);
 		// STRING: LEGO1 0x100f0bb8
-		const char* EDGE0354 = "EDG03_54";
-		m_unk0x7c = currentWorld->FindPathBoundary(EDGE0354);
+		const char* edge0354 = "EDG03_54";
+		m_unk0x7c = currentWorld->FindPathBoundary(edge0354);
 
 		for (MxS32 j = 0; j < sizeOfArray(g_edgeReferences); j++) {
 			g_edgeReferences[j].m_data = currentWorld->FindPathBoundary(g_edgeReferences[j].m_name);
