@@ -91,6 +91,7 @@ public:
 
 // SIZE 0x38
 struct ModelDbModel {
+	void Free();
 	MxResult Read(FILE* p_file);
 
 	char* m_modelName;     // 0x00
