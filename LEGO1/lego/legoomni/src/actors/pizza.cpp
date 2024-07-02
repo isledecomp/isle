@@ -56,7 +56,7 @@ void Pizza::CreateState()
 	}
 }
 
-// STUB: LEGO1 0x10038220
+// FUNCTION: LEGO1 0x10038220
 void Pizza::FUN_10038220(MxU32 p_objectId)
 {
 }

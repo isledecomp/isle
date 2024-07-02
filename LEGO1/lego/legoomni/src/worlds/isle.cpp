@@ -998,7 +998,7 @@ MxLong Isle::HandleTransitionEnd()
 		FUN_10032d30(IsleScript::c_DuneCarFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
-			m_dunebuggy->FUN_10068350();
+			m_dunebuggy->ActivateSceneActions();
 		}
 		break;
 	case LegoGameState::e_motocycle:
