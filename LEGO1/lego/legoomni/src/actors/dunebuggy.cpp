@@ -22,7 +22,7 @@ DECOMP_SIZE_ASSERT(DuneBuggy, 0x16c)
 
 // GLOBAL: LEGO1 0x100f7660
 // STRING: LEGO1 0x100f7634
-const char* g_varC_DBFRFNY4 = "C_DBFRFNY4";
+const char* g_varDBFRFNY4 = "C_DBFRFNY4";
 
 // FUNCTION: LEGO1 0x10067bb0
 DuneBuggy::DuneBuggy()
@@ -102,7 +102,7 @@ MxLong DuneBuggy::HandleClick()
 	}
 
 	m_time = Timer()->GetTime();
-	m_dashboard = IsleScript::c_DuneCarSpeedMeter + GetDashboardOffset(g_varC_DBFRFNY4);
+	m_dashboard = IsleScript::c_DuneCarSpeedMeter + GetDashboardOffset(g_varDBFRFNY4);
 
 	InvokeAction(Extra::ActionType::e_start, *g_isleScript, m_dashboard, NULL);
 	InvokeAction(Extra::ActionType::e_start, *g_isleScript, IsleScript::c_DuneCarDashboard, NULL);
