@@ -1,11 +1,13 @@
 #include "mxstreamer.h"
 
+#include "mxdebug.h"
 #include "mxdiskstreamcontroller.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxramstreamcontroller.h"
 
 #include <algorithm>
+#include <assert.h>
 
 DECOMP_SIZE_ASSERT(MxStreamer, 0x2c);
 DECOMP_SIZE_ASSERT(MxMemoryPool64, 0x0c);
@@ -14,12 +16,14 @@ DECOMP_SIZE_ASSERT(MxBitset<22>, 0x04);
 DECOMP_SIZE_ASSERT(MxBitset<2>, 0x04);
 
 // FUNCTION: LEGO1 0x100b8f00
+// FUNCTION: BETA10 0x10145150
 MxStreamer::MxStreamer()
 {
 	NotificationManager()->Register(this);
 }
 
 // FUNCTION: LEGO1 0x100b9190
+// FUNCTION: BETA10 0x10145220
 MxResult MxStreamer::Create()
 {
 	if (m_pool64.Allocate() || m_pool128.Allocate()) {
@@ -30,42 +34,66 @@ MxResult MxStreamer::Create()
 }
 
 // FUNCTION: LEGO1 0x100b91d0
+// FUNCTION: BETA10 0x10145268
 MxStreamer::~MxStreamer()
 {
 	while (!m_openStreams.empty()) {
-		MxStreamController* c = m_openStreams.front();
+		MxStreamController* controller = m_openStreams.front();
+
+#ifdef COMPAT_MODE
+		{
+			MxDSAction action;
+			assert(controller->IsStoped(&action));
+		}
+#else
+		assert(controller->IsStoped(&MxDSAction()));
+#endif
+
 		m_openStreams.pop_front();
-		delete c;
+		delete controller;
 	}
 
 	NotificationManager()->Unregister(this);
 }
 
 // FUNCTION: LEGO1 0x100b92c0
+// FUNCTION: BETA10 0x1014542d
 MxStreamController* MxStreamer::Open(const char* p_name, MxU16 p_lookupType)
 {
+	MxTrace("Open %s as %s controller\n", p_name, !p_lookupType ? "disk" : "RAM");
+	MxTrace("Heap before: %d\n", DebugHeapState());
+
 	MxStreamController* stream = NULL;
 
-	if (!GetOpenStream(p_name)) {
-		switch (p_lookupType) {
-		case e_diskStream:
-			stream = new MxDiskStreamController();
-			break;
-		case e_RAMStream:
-			stream = new MxRAMStreamController();
-			break;
-		}
-
-		if (stream && (stream->Open(p_name) != SUCCESS || AddStreamControllerToOpenList(stream) != SUCCESS)) {
-			delete stream;
-			stream = NULL;
-		}
+	if (GetOpenStream(p_name)) {
+		goto done;
 	}
 
+	switch (p_lookupType) {
+	case e_diskStream:
+		stream = new MxDiskStreamController();
+		break;
+	case e_RAMStream:
+		stream = new MxRAMStreamController();
+		break;
+	}
+
+	if (stream == NULL) {
+		goto done;
+	}
+
+	if (stream->Open(p_name) != SUCCESS || AddStreamControllerToOpenList(stream) != SUCCESS) {
+		delete stream;
+		stream = NULL;
+	}
+
+done:
+	MxTrace("Heap after: %d\n", DebugHeapState());
 	return stream;
 }
 
 // FUNCTION: LEGO1 0x100b9570
+// FUNCTION: BETA10 0x10145638
 MxLong MxStreamer::Close(const char* p_name)
 {
 	MxDSAction ds;
@@ -77,7 +105,7 @@ MxLong MxStreamer::Close(const char* p_name)
 		if (!p_name || !strcmp(p_name, c->GetAtom().GetInternal())) {
 			m_openStreams.erase(it);
 
-			if (c->FUN_100c20d0(ds)) {
+			if (c->IsStoped(&ds)) {
 				delete c;
 			}
 			else {
@@ -98,6 +126,7 @@ MxNotificationParam* MxStreamerNotification::Clone() const
 }
 
 // FUNCTION: LEGO1 0x100b9870
+// FUNCTION: BETA10 0x1014584b
 MxStreamController* MxStreamer::GetOpenStream(const char* p_name)
 {
 	for (list<MxStreamController*>::iterator it = m_openStreams.begin(); it != m_openStreams.end(); it++) {
@@ -178,7 +207,7 @@ MxBool MxStreamer::FUN_100b9b30(MxDSObject& p_dsObject)
 {
 	MxStreamController* controller = GetOpenStream(p_dsObject.GetAtomId().GetInternal());
 	if (controller) {
-		return controller->FUN_100c20d0(p_dsObject);
+		return controller->IsStoped(&p_dsObject);
 	}
 	return TRUE;
 }
@@ -193,7 +222,7 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 
 		MxStreamController* c = static_cast<MxStreamerNotification&>(p_param).GetController();
 
-		if (c->FUN_100c20d0(ds)) {
+		if (c->IsStoped(&ds)) {
 			delete c;
 		}
 		else {

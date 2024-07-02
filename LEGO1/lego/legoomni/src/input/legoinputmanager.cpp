@@ -8,6 +8,7 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "mxautolock.h"
+#include "mxdebug.h"
 #include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(LegoInputManager, 0x338)
@@ -111,17 +112,19 @@ void LegoInputManager::Destroy()
 }
 
 // FUNCTION: LEGO1 0x1005c030
+// FUNCTION: BETA10 0x10088f6e
 void LegoInputManager::CreateAndAcquireKeyboard(HWND p_hwnd)
 {
 	HINSTANCE hinstance = (HINSTANCE) GetWindowLong(p_hwnd, GWL_HINSTANCE);
-	HRESULT hresult = DirectInputCreate(hinstance, 0x500, &m_directInput, NULL); // 0x500 for DX5
 
-	if (hresult == DI_OK) {
-		HRESULT createdeviceresult = m_directInput->CreateDevice(GUID_SysKeyboard, &m_directInputDevice, NULL);
-		if (createdeviceresult == DI_OK) {
+	// 0x500 for DX5
+	if (DirectInputCreate(hinstance, 0x500, &m_directInput, NULL) == DI_OK) {
+		if (m_directInput->CreateDevice(GUID_SysKeyboard, &m_directInputDevice, NULL) == DI_OK) {
 			m_directInputDevice->SetCooperativeLevel(p_hwnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 			m_directInputDevice->SetDataFormat(&c_dfDIKeyboard);
-			m_directInputDevice->Acquire();
+			if (m_directInputDevice->Acquire()) {
+				MxTrace("Can't acquire the keyboard!\n");
+			}
 		}
 	}
 }

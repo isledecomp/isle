@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "mxbitset.h"
+#include "mxdebug.h"
 #include "mxtypes.h"
 
 #include <assert.h>
@@ -49,11 +50,7 @@ MxU8* MxMemoryPool<BS, NB>::Get()
 		if (!m_blockRef[i]) {
 			m_blockRef[i].Flip();
 
-#ifdef _DEBUG
-			// TODO: This is actually some debug print function, but
-			// we just need any func with variatic args to eliminate diff noise.
-			printf("Get> %d pool: busy %d blocks\n", m_blockSize, m_blockRef.Count());
-#endif
+			MxTrace("Get> %d pool: busy %d blocks\n", m_blockSize, m_blockRef.Count());
 
 			return &m_pool[i * m_blockSize * 1024];
 		}
@@ -78,9 +75,7 @@ void MxMemoryPool<BS, NB>::Release(MxU8* p_buf)
 		m_blockRef[i].Flip();
 	}
 
-#ifdef _DEBUG
-	printf("Release> %d pool: busy %d blocks\n", m_blockSize, m_blockRef.Count());
-#endif
+	MxTrace("Release> %d pool: busy %d blocks\n", m_blockSize, m_blockRef.Count());
 }
 
 #endif // MXMEMORYPOOL_H

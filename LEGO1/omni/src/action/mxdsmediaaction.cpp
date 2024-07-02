@@ -1,5 +1,6 @@
 #include "mxdsmediaaction.h"
 
+#include "mxdebug.h"
 #include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(MxDSMediaAction, 0xb8)
@@ -86,6 +87,8 @@ void MxDSMediaAction::CopyMediaSrcPath(const char* p_mediaSrcPath)
 		if (m_mediaSrcPath) {
 			strcpy(m_mediaSrcPath, p_mediaSrcPath);
 		}
+
+		MxTrace("MxDSMediaAction: name allocation failed: %s.\n", p_mediaSrcPath);
 	}
 	else {
 		m_mediaSrcPath = NULL;

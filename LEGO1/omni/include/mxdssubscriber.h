@@ -34,7 +34,10 @@ public:
 	MxStreamChunk* PeekData();
 	void FreeDataChunk(MxStreamChunk* p_chunk);
 
+	// FUNCTION: BETA10 0x101354f0
 	inline MxU32 GetObjectId() { return m_objectId; }
+
+	// FUNCTION: BETA10 0x10135510
 	inline MxS16 GetUnknown48() { return m_unk0x48; }
 
 private:
