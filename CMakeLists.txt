@@ -220,6 +220,7 @@ add_library(omni STATIC
   LEGO1/omni/src/common/mxatom.cpp
   LEGO1/omni/src/common/mxcompositepresenter.cpp
   LEGO1/omni/src/common/mxcore.cpp
+  LEGO1/omni/src/common/mxdebug.cpp
   LEGO1/omni/src/common/mxmediamanager.cpp
   LEGO1/omni/src/common/mxmediapresenter.cpp
   LEGO1/omni/src/common/mxmisc.cpp

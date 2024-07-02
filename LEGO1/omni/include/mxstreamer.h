@@ -35,6 +35,7 @@ private:
 };
 
 // VTABLE: LEGO1 0x100dc710
+// VTABLE: BETA10 0x101c2378
 // SIZE 0x2c
 class MxStreamer : public MxCore {
 public:
@@ -115,6 +116,7 @@ private:
 
 // clang-format off
 // TEMPLATE: LEGO1 0x100b9090
+// TEMPLATE: BETA10 0x10146720
 // list<MxStreamController *,allocator<MxStreamController *> >::~list<MxStreamController *,allocator<MxStreamController *> >
 // clang-format on
 

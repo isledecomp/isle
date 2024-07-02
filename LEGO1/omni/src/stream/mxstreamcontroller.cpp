@@ -1,6 +1,7 @@
 #include "mxstreamcontroller.h"
 
 #include "mxautolock.h"
+#include "mxdebug.h"
 #include "mxdsmultiaction.h"
 #include "mxdsstreamingaction.h"
 #include "mxmisc.h"
@@ -41,8 +42,10 @@ MxStreamController::MxStreamController()
 }
 
 // FUNCTION: LEGO1 0x100c1290
+// FUNCTION: BETA10 0x1014e354
 MxStreamController::~MxStreamController()
 {
+	MxTrace("Destroy %s controller.\n", m_atom.GetInternal());
 	AUTOLOCK(m_criticalSection);
 
 	MxDSSubscriber* subscriber;
@@ -313,19 +316,27 @@ MxNextActionDataStart* MxStreamController::FindNextActionDataStartFromStreamingA
 }
 
 // FUNCTION: LEGO1 0x100c20d0
-MxBool MxStreamController::FUN_100c20d0(MxDSObject& p_obj)
+// FUNCTION: BETA10 0x1014f3b5
+MxBool MxStreamController::IsStoped(MxDSObject* p_obj)
 {
-	if (m_subscriberList.Find(&p_obj)) {
+	MxDSSubscriber* subscriber = m_subscriberList.Find(p_obj);
+
+	if (subscriber) {
+		MxTrace(
+			"Subscriber for action (stream %d, instance %d) from %s is still here.\n",
+			subscriber->GetObjectId(),
+			subscriber->GetUnknown48(),
+			GetAtom().GetInternal()
+		);
 		return FALSE;
 	}
 
-	if (p_obj.IsA("MxDSMultiAction")) {
-		MxDSActionList* actions = ((MxDSMultiAction&) p_obj).GetActionList();
-		MxDSActionListCursor cursor(actions);
+	if (p_obj->IsA("MxDSMultiAction")) {
+		MxDSActionListCursor cursor(((MxDSMultiAction*) p_obj)->GetActionList());
 		MxDSAction* action;
 
 		while (cursor.Next(action)) {
-			if (!FUN_100c20d0(*action)) {
+			if (!IsStoped(action)) {
 				return FALSE;
 			}
 		}
