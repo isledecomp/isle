@@ -6,6 +6,14 @@ DECOMP_SIZE_ASSERT(ModelDbModel, 0x38)
 DECOMP_SIZE_ASSERT(ModelDbPartList, 0x1c)
 DECOMP_SIZE_ASSERT(ModelDbPartListCursor, 0x10)
 
+// FUNCTION: LEGO1 0x10027690
+// FUNCTION: BETA10 0x100e5620
+void ModelDbModel::Free()
+{
+	delete[] m_modelName;
+	delete[] m_presenterName;
+}
+
 // FUNCTION: LEGO1 0x100276b0
 MxResult ModelDbModel::Read(FILE* p_file)
 {
@@ -130,8 +138,32 @@ MxResult ReadModelDbWorlds(FILE* p_file, ModelDbWorld*& p_worlds, MxS32& p_numWo
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10028080
+// FUNCTION: LEGO1 0x10028080
+// FUNCTION: BETA10 0x100e6431
 void FreeModelDbWorlds(ModelDbWorld*& p_worlds, MxS32 p_numWorlds)
 {
-	// TODO
+	ModelDbWorld* worlds = p_worlds;
+
+	for (MxS32 i = 0; i < p_numWorlds; i++) {
+		delete[] worlds[i].m_worldName;
+
+		ModelDbPartListCursor cursor(worlds[i].m_partList);
+		ModelDbPart* part;
+
+		while (cursor.Next(part)) {
+			delete part;
+		}
+
+		delete worlds[i].m_partList;
+
+		ModelDbModel* models = worlds[i].m_models;
+		for (MxS32 j = 0; j < worlds[i].m_numModels; j++) {
+			models[j].Free();
+		}
+
+		delete[] worlds[i].m_models;
+	}
+
+	delete[] p_worlds;
+	p_worlds = NULL;
 }
