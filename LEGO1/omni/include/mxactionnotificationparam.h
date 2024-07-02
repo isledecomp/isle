@@ -19,37 +19,37 @@ public:
 		: MxNotificationParam(p_type, p_sender)
 	{
 		MxDSAction* oldAction = p_action;
-		this->m_realloc = p_reallocAction;
+		m_realloc = p_reallocAction;
 
 		if (p_reallocAction) {
-			this->m_action = new MxDSAction();
+			m_action = new MxDSAction();
 		}
 		else {
-			this->m_action = oldAction;
+			m_action = oldAction;
 			return;
 		}
 
-		this->m_action->SetAtomId(oldAction->GetAtomId());
-		this->m_action->SetObjectId(oldAction->GetObjectId());
-		this->m_action->SetUnknown24(oldAction->GetUnknown24());
+		m_action->SetAtomId(oldAction->GetAtomId());
+		m_action->SetObjectId(oldAction->GetObjectId());
+		m_action->SetUnknown24(oldAction->GetUnknown24());
 	}
 
 	// FUNCTION: LEGO1 0x10051050
 	inline ~MxActionNotificationParam() override
 	{
-		if (!this->m_realloc) {
+		if (!m_realloc) {
 			return;
 		}
 
-		if (this->m_action) {
-			delete this->m_action;
+		if (m_action) {
+			delete m_action;
 		}
 	}
 
 	// FUNCTION: LEGO1 0x100510c0
 	MxNotificationParam* Clone() const override
 	{
-		return new MxActionNotificationParam(this->m_type, this->m_sender, this->m_action, this->m_realloc);
+		return new MxActionNotificationParam(m_type, m_sender, m_action, m_realloc);
 	} // vtable+0x04
 
 	inline MxDSAction* GetAction() { return m_action; }
@@ -93,12 +93,7 @@ public:
 	// FUNCTION: LEGO1 0x10051270
 	MxNotificationParam* Clone() const override
 	{
-		return new MxEndActionNotificationParam(
-			c_notificationEndAction,
-			this->m_sender,
-			this->m_action,
-			this->m_realloc
-		);
+		return new MxEndActionNotificationParam(c_notificationEndAction, m_sender, m_action, m_realloc);
 	} // vtable+0x04
 };
 
