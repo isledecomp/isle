@@ -3,6 +3,8 @@
 
 #include "mxvariable.h"
 
+extern const char* g_varDUNESPEED;
+extern const char* g_varDUNEFUEL;
 extern const char* g_varMOTOSPEED;
 extern const char* g_varMOTOFUEL;
 extern const char* g_varAMBULSPEED;
