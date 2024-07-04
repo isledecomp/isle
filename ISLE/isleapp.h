@@ -36,15 +36,15 @@ public:
 	void Tick(BOOL sleepIfNotNextFrame);
 	void SetupCursor(WPARAM wParam);
 
-	inline HWND GetWindowHandle() { return m_windowHandle; }
-	inline MxLong GetFrameDelta() { return m_frameDelta; }
-	inline BOOL GetFullScreen() { return m_fullScreen; }
-	inline HCURSOR GetCursorCurrent() { return m_cursorCurrent; }
-	inline HCURSOR GetCursorBusy() { return m_cursorBusy; }
-	inline HCURSOR GetCursorNo() { return m_cursorNo; }
-	inline BOOL GetDrawCursor() { return m_drawCursor; }
+	HWND GetWindowHandle() { return m_windowHandle; }
+	MxLong GetFrameDelta() { return m_frameDelta; }
+	BOOL GetFullScreen() { return m_fullScreen; }
+	HCURSOR GetCursorCurrent() { return m_cursorCurrent; }
+	HCURSOR GetCursorBusy() { return m_cursorBusy; }
+	HCURSOR GetCursorNo() { return m_cursorNo; }
+	BOOL GetDrawCursor() { return m_drawCursor; }
 
-	inline void SetWindowActive(BOOL p_windowActive) { m_windowActive = p_windowActive; }
+	void SetWindowActive(BOOL p_windowActive) { m_windowActive = p_windowActive; }
 
 private:
 	LPSTR m_hdPath;            // 0x00
