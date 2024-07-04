@@ -24,14 +24,14 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100142a0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0548
 		return "LegoRaceCar";
 	}
 
 	// FUNCTION: LEGO1 0x100142c0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoRaceCar::ClassName()) || LegoCarRaceActor::IsA(p_name);
 	}

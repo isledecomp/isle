@@ -19,7 +19,7 @@ public:
 		return new LegoEndAnimNotificationParam(m_type, m_sender, m_index);
 	} // vtable+0x04
 
-	inline MxU32 GetIndex() { return m_index; }
+	MxU32 GetIndex() { return m_index; }
 
 protected:
 	MxU32 m_index; // 0x0c

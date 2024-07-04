@@ -15,14 +15,14 @@ public:
 	MxDSMultiAction& operator=(MxDSMultiAction& p_dsMultiAction);
 
 	// FUNCTION: LEGO1 0x100c9f50
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10101dbc
 		return "MxDSMultiAction";
 	}
 
 	// FUNCTION: LEGO1 0x100c9f60
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSMultiAction::ClassName()) || MxDSAction::IsA(p_name);
 	}
@@ -36,7 +36,7 @@ public:
 	MxBool HasId(MxU32 p_objectId) override;                     // vtable+34;
 	void SetUnknown90(MxLong p_unk0x90) override;                // vtable+38;
 
-	inline MxDSActionList* GetActionList() const { return m_actions; }
+	MxDSActionList* GetActionList() const { return m_actions; }
 
 	// SYNTHETIC: LEGO1 0x100ca040
 	// MxDSMultiAction::`scalar deleting destructor'

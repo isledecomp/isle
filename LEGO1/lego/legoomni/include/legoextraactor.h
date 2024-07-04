@@ -20,14 +20,14 @@ public:
 	~LegoExtraActor() override;
 
 	// FUNCTION: LEGO1 0x1002b7b0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f3204
 		return "LegoExtraActor";
 	}
 
 	// FUNCTION: LEGO1 0x1002b7d0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoExtraActor::ClassName()) || LegoAnimActor::IsA(p_name);
 	}
@@ -55,7 +55,7 @@ public:
 	void Restart();
 	inline void FUN_1002ad8a();
 
-	inline void SetUnknown0x0c(undefined p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
+	void SetUnknown0x0c(undefined p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
 
 	// SYNTHETIC: LEGO1 0x1002b760
 	// LegoExtraActor::`scalar deleting destructor'

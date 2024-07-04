@@ -10,19 +10,19 @@ class MxTickleClient {
 public:
 	MxTickleClient(MxCore* p_client, MxTime p_interval);
 
-	inline MxCore* GetClient() const { return m_client; }
+	MxCore* GetClient() const { return m_client; }
 
-	inline MxTime GetTickleInterval() const { return m_interval; }
+	MxTime GetTickleInterval() const { return m_interval; }
 
-	inline MxTime GetLastUpdateTime() const { return m_lastUpdateTime; }
+	MxTime GetLastUpdateTime() const { return m_lastUpdateTime; }
 
-	inline MxU16 GetFlags() const { return m_flags; }
+	MxU16 GetFlags() const { return m_flags; }
 
-	inline void SetTickleInterval(MxTime p_interval) { m_interval = p_interval; }
+	void SetTickleInterval(MxTime p_interval) { m_interval = p_interval; }
 
-	inline void SetLastUpdateTime(MxTime p_lastUpdateTime) { m_lastUpdateTime = p_lastUpdateTime; }
+	void SetLastUpdateTime(MxTime p_lastUpdateTime) { m_lastUpdateTime = p_lastUpdateTime; }
 
-	inline void SetFlags(MxU16 p_flags) { m_flags = p_flags; }
+	void SetFlags(MxU16 p_flags) { m_flags = p_flags; }
 
 private:
 	MxCore* m_client;        // 0x00
@@ -37,7 +37,7 @@ typedef list<MxTickleClient*> MxTickleClientPtrList;
 // SIZE 0x14
 class MxTickleManager : public MxCore {
 public:
-	inline MxTickleManager() {}
+	MxTickleManager() {}
 	~MxTickleManager() override;
 
 	MxResult Tickle() override;                                                // vtable+0x08

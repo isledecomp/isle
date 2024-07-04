@@ -46,14 +46,14 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1001d690
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0058
 		return "LegoWorld";
 	}
 
 	// FUNCTION: LEGO1 0x1001d6a0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoWorld::ClassName()) || LegoEntity::IsA(p_name);
 	}
@@ -97,14 +97,14 @@ public:
 	MxCore* Find(const char* p_class, const char* p_name);
 	MxCore* Find(const MxAtomId& p_atom, MxS32 p_entityId);
 
-	inline LegoCameraController* GetCamera() { return m_cameraController; }
-	inline LegoEntityList* GetEntityList() { return m_entityList; }
-	inline MxS32 GetWorldId() { return m_worldId; }
-	inline MxBool GetUnknown0xd0Empty() { return m_set0xd0.empty(); }
-	inline list<LegoROI*>& GetROIList() { return m_roiList; }
-	inline LegoHideAnimPresenter* GetHideAnimPresenter() { return m_hideAnimPresenter; }
+	LegoCameraController* GetCamera() { return m_cameraController; }
+	LegoEntityList* GetEntityList() { return m_entityList; }
+	MxS32 GetWorldId() { return m_worldId; }
+	MxBool GetUnknown0xd0Empty() { return m_set0xd0.empty(); }
+	list<LegoROI*>& GetROIList() { return m_roiList; }
+	LegoHideAnimPresenter* GetHideAnimPresenter() { return m_hideAnimPresenter; }
 
-	inline void SetWorldId(MxS32 p_worldId) { m_worldId = p_worldId; }
+	void SetWorldId(MxS32 p_worldId) { m_worldId = p_worldId; }
 
 	// SYNTHETIC: LEGO1 0x1001dee0
 	// LegoWorld::`scalar deleting destructor'

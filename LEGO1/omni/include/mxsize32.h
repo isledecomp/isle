@@ -8,11 +8,11 @@ public:
 	MxSize32() {}
 	MxSize32(MxS32 p_width, MxS32 p_height) { CopyFrom(p_width, p_height); }
 
-	inline MxS32 GetWidth() const { return m_width; }
-	inline MxS32 GetHeight() const { return m_height; }
+	MxS32 GetWidth() const { return m_width; }
+	MxS32 GetHeight() const { return m_height; }
 
 private:
-	inline void CopyFrom(MxS32 p_width, MxS32 p_height)
+	void CopyFrom(MxS32 p_width, MxS32 p_height)
 	{
 		this->m_width = p_width;
 		this->m_height = p_height;

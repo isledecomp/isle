@@ -38,13 +38,13 @@ public:
 
 	// FUNCTION: LEGO1 0x1004a950
 	// FUNCTION: BETA10 0x1004d810
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1004a960
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoAnimMMPresenter::ClassName()) || MxCompositePresenter::IsA(p_name);
 	}
@@ -66,7 +66,7 @@ public:
 	MxBool FUN_1004b8b0();
 	void FUN_1004b8c0();
 
-	inline LegoAnimPresenter* GetPresenter() { return m_presenter; }
+	LegoAnimPresenter* GetPresenter() { return m_presenter; }
 
 private:
 	MxBool FUN_1004b450();

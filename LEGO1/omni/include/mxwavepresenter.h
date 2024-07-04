@@ -24,13 +24,13 @@ public:
 
 	// FUNCTION: LEGO1 0x1000d6c0
 	// FUNCTION: BETA10 0x1008ccd0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000d6d0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxWavePresenter::ClassName()) || MxSoundPresenter::IsA(p_name);
 	}

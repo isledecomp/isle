@@ -16,7 +16,7 @@ class MxDSStreamingAction;
 // SIZE 0x1c
 class MxDiskStreamProviderThread : public MxThread {
 public:
-	inline MxDiskStreamProviderThread() : MxThread() { m_target = NULL; }
+	MxDiskStreamProviderThread() : MxThread() { m_target = NULL; }
 
 	MxResult Run() override;
 	MxResult StartWithTarget(MxDiskStreamProvider* p_target);
@@ -30,14 +30,14 @@ public:
 	~MxDiskStreamProvider() override;
 
 	// FUNCTION: LEGO1 0x100d1160
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x1010287c
 		return "MxDiskStreamProvider";
 	}
 
 	// FUNCTION: LEGO1 0x100d1170
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDiskStreamProvider::ClassName()) || MxStreamProvider::IsA(p_name);
 	}

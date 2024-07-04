@@ -29,7 +29,7 @@ public:
 	void Dec();
 
 	// FUNCTION: BETA10 0x101236d0
-	inline MxString& GetKey() { return m_key; }
+	MxString& GetKey() { return m_key; }
 
 	// SYNTHETIC: BETA10 0x10124a50
 	// MxAtom::`scalar deleting destructor'
@@ -66,12 +66,12 @@ public:
 	MxAtomId& operator=(const MxAtomId& p_atomId);
 
 	// FUNCTION: BETA10 0x100178d0
-	inline MxBool operator==(const MxAtomId& p_atomId) const { return this->m_internal == p_atomId.m_internal; }
+	MxBool operator==(const MxAtomId& p_atomId) const { return this->m_internal == p_atomId.m_internal; }
 
 #ifdef COMPAT_MODE
 	// Required for modern compilers.
 	// MSVC 4.20 uses a synthetic function from INCLUDE/UTILITY that inverts operator==
-	inline MxBool operator!=(const MxAtomId& p_atomId) const { return this->m_internal != p_atomId.m_internal; }
+	MxBool operator!=(const MxAtomId& p_atomId) const { return this->m_internal != p_atomId.m_internal; }
 #endif
 
 	// FUNCTION: BETA10 0x10025d40

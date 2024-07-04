@@ -14,14 +14,14 @@ public:
 	~LegoCacheSound() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10006580
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f01c4
 		return "LegoCacheSound";
 	}
 
 	// FUNCTION: LEGO1 0x10006590
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoCacheSound::ClassName()) || MxCore::IsA(p_name);
 	}
@@ -36,8 +36,8 @@ public:
 	virtual void Destroy();                            // vtable+0x18
 	virtual void FUN_10006cd0(undefined4, undefined4); // vtable+0x1c
 
-	inline const MxString& GetUnknown0x48() const { return m_unk0x48; }
-	inline const MxBool GetUnknown0x58() const { return m_unk0x58; }
+	const MxString& GetUnknown0x48() const { return m_unk0x48; }
+	const MxBool GetUnknown0x58() const { return m_unk0x58; }
 
 	LegoCacheSound* Clone();
 	MxResult Play(const char* p_name, MxBool p_looping);

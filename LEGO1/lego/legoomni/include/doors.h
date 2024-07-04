@@ -10,14 +10,14 @@ public:
 	Doors() : m_unk0x154(0), m_unk0x15c(0), m_unk0x160(0), m_unk0x1f4(0) {}
 
 	// FUNCTION: LEGO1 0x1000e430
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03e8
 		return "Doors";
 	}
 
 	// FUNCTION: LEGO1 0x1000e440
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Doors::ClassName()) || LegoPathActor::IsA(p_name);
 	}

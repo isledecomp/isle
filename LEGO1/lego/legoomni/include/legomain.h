@@ -66,8 +66,8 @@ public:
 			return *this;
 		}
 
-		inline MxS32 GetId() { return m_id; }
-		inline const char* GetKey() { return m_key; }
+		MxS32 GetId() { return m_id; }
+		const char* GetKey() { return m_key; }
 
 		MxS32 m_id;         // 0x00
 		char m_key[20];     // 0x04
@@ -80,14 +80,14 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10058aa0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f671c
 		return "LegoOmni";
 	}
 
 	// FUNCTION: LEGO1 0x10058ab0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoOmni::ClassName()) || MxOmni::IsA(p_name);
 	}
@@ -138,17 +138,14 @@ public:
 	LegoCharacterManager* GetCharacterManager() { return m_characterManager; }
 	LegoWorldList* GetWorldList() { return m_worldList; }
 
-	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
-	inline void SetUserActor(LegoPathActor* p_userActor) { m_userActor = p_userActor; }
-	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
-	inline void SetExit(MxBool p_exit) { m_exit = p_exit; }
-	inline MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction)
-	{
-		return m_unk0x13c ? Start(&p_dsAction) : SUCCESS;
-	}
-	inline void SetUnknown13c(MxBool p_unk0x13c) { m_unk0x13c = p_unk0x13c; }
+	void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
+	void SetUserActor(LegoPathActor* p_userActor) { m_userActor = p_userActor; }
+	void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
+	void SetExit(MxBool p_exit) { m_exit = p_exit; }
+	MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction) { return m_unk0x13c ? Start(&p_dsAction) : SUCCESS; }
+	void SetUnknown13c(MxBool p_unk0x13c) { m_unk0x13c = p_unk0x13c; }
 
-	inline void CloseMainWindow() { PostMessageA(m_windowHandle, WM_CLOSE, 0, 0); }
+	void CloseMainWindow() { PostMessageA(m_windowHandle, WM_CLOSE, 0, 0); }
 
 	// SYNTHETIC: LEGO1 0x10058b30
 	// LegoOmni::`scalar deleting destructor'

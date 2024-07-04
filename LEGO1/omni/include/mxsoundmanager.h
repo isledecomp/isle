@@ -20,7 +20,7 @@ public:
 	virtual void Pause();                                                // vtable+0x34
 	virtual void Resume();                                               // vtable+0x38
 
-	inline LPDIRECTSOUND GetDirectSound() { return m_directSound; }
+	LPDIRECTSOUND GetDirectSound() { return m_directSound; }
 
 	MxS32 GetAttenuation(MxU32 p_volume);
 

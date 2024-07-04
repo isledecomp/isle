@@ -11,7 +11,7 @@ class MxDSSubscriber;
 // SIZE 0x50
 class MxMediaPresenter : public MxPresenter {
 public:
-	inline MxMediaPresenter() { Init(); }
+	MxMediaPresenter() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000c550
 	~MxMediaPresenter() override { Destroy(TRUE); }
@@ -27,13 +27,13 @@ public:
 
 	// FUNCTION: LEGO1 0x1000c5c0
 	// FUNCTION: BETA10 0x10054f20
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000c5d0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxMediaPresenter::ClassName()) || MxPresenter::IsA(p_name);
 	}

@@ -17,8 +17,8 @@ public:
 	void SetVolume(MxS32 p_volume) override;                             // vtable+2c
 	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+30
 
-	inline MxBool GetMIDIInitialized() { return m_midiInitialized; }
-	inline void GetMIDIVolume(DWORD& p_volume)
+	MxBool GetMIDIInitialized() { return m_midiInitialized; }
+	void GetMIDIVolume(DWORD& p_volume)
 	{
 		if (midiOutGetVolume((HMIDIOUT) m_midiStreamH, &p_volume)) {
 			p_volume = CalculateVolume(100);

@@ -18,7 +18,7 @@ public:
 
 	// FUNCTION: LEGO1 0x100c8be0
 	// FUNCTION: BETA10 0x1015c700
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f7624
 		return "MxDSMediaAction";
@@ -26,7 +26,7 @@ public:
 
 	// FUNCTION: LEGO1 0x100c8bf0
 	// FUNCTION: BETA10 0x1015c6a0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSMediaAction::ClassName()) || MxDSAction::IsA(p_name);
 	}
@@ -43,19 +43,19 @@ public:
 	void CopyMediaSrcPath(const char* p_mediaSrcPath);
 
 	// FUNCTION: LEGO1 0x100186e0
-	inline const char* GetMediaSrcPath() { return m_mediaSrcPath; }
+	const char* GetMediaSrcPath() { return m_mediaSrcPath; }
 
 	// FUNCTION: BETA10 0x1013c2e0
-	inline MxS32 GetFramesPerSecond() const { return m_framesPerSecond; }
+	MxS32 GetFramesPerSecond() const { return m_framesPerSecond; }
 
 	// FUNCTION: BETA10 0x1012efd0
-	inline MxS32 GetMediaFormat() const { return m_mediaFormat; }
+	MxS32 GetMediaFormat() const { return m_mediaFormat; }
 
 	// FUNCTION: BETA10 0x1013b860
-	inline MxS32 GetPaletteManagement() const { return m_paletteManagement; }
+	MxS32 GetPaletteManagement() const { return m_paletteManagement; }
 
 	// FUNCTION: BETA10 0x1005ab60
-	inline MxLong GetSustainTime() const { return m_sustainTime; }
+	MxLong GetSustainTime() const { return m_sustainTime; }
 
 private:
 	struct Unk0x9cStruct {

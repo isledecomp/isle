@@ -9,33 +9,33 @@ struct MxRect16 {
 	MxRect16() {}
 
 	// FUNCTION: BETA10 0x100981f0
-	inline void SetLeft(MxS16 p_left) { m_left = p_left; }
+	void SetLeft(MxS16 p_left) { m_left = p_left; }
 
 	// FUNCTION: BETA10 0x10098220
-	inline void SetTop(MxS16 p_top) { m_top = p_top; }
+	void SetTop(MxS16 p_top) { m_top = p_top; }
 
 	// FUNCTION: BETA10 0x10098250
-	inline void SetRight(MxS16 p_right) { m_right = p_right; }
+	void SetRight(MxS16 p_right) { m_right = p_right; }
 
 	// FUNCTION: BETA10 0x10098280
-	inline void SetBottom(MxS16 p_bottom) { m_bottom = p_bottom; }
+	void SetBottom(MxS16 p_bottom) { m_bottom = p_bottom; }
 
 	// FUNCTION: BETA10 0x10098300
-	inline MxS16 GetLeft() const { return m_left; }
+	MxS16 GetLeft() const { return m_left; }
 
 	// FUNCTION: BETA10 0x10098330
-	inline MxS16 GetTop() const { return m_top; }
+	MxS16 GetTop() const { return m_top; }
 
 	// There is no GetRight()
 
 	// FUNCTION: BETA10 0x10098360
-	inline MxS16 GetBottom() const { return m_bottom; }
+	MxS16 GetBottom() const { return m_bottom; }
 
 	// FUNCTION: BETA10 0x10098390
-	inline MxS16 GetWidth() const { return m_right - m_left + 1; }
+	MxS16 GetWidth() const { return m_right - m_left + 1; }
 
 	// FUNCTION: BETA10 0x100983c0
-	inline MxS16 GetHeight() const { return m_bottom - m_top + 1; }
+	MxS16 GetHeight() const { return m_bottom - m_top + 1; }
 
 private:
 	MxS16 m_left;   // 0x00

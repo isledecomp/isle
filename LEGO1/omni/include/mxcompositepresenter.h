@@ -27,13 +27,13 @@ public:
 
 	// FUNCTION: LEGO1 0x100b6210
 	// FUNCTION: BETA10 0x1004da00
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x100b6220
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxCompositePresenter::ClassName()) || MxPresenter::IsA(p_name);
 	}
@@ -56,7 +56,7 @@ public:
 		return TRUE;
 	} // vtable+0x64
 
-	inline MxCompositePresenterList* GetList() { return &m_list; }
+	MxCompositePresenterList* GetList() { return &m_list; }
 
 protected:
 	MxCompositePresenterList m_list; // 0x40

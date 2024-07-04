@@ -8,17 +8,17 @@
 // SIZE 0x0c
 class Act3State : public LegoState {
 public:
-	inline Act3State() { m_unk0x08 = 0; }
+	Act3State() { m_unk0x08 = 0; }
 
 	// FUNCTION: LEGO1 0x1000e300
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03f0
 		return "Act3State";
 	}
 
 	// FUNCTION: LEGO1 0x1000e310
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Act3State::ClassName()) || LegoState::IsA(p_name);
 	}
@@ -29,7 +29,7 @@ public:
 	// SYNTHETIC: LEGO1 0x1000e3c0
 	// Act3State::`scalar deleting destructor'
 
-	inline undefined4 GetUnknown0x08() { return m_unk0x08; }
+	undefined4 GetUnknown0x08() { return m_unk0x08; }
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
@@ -48,14 +48,14 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10072510
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f013c
 		return "Act3";
 	}
 
 	// FUNCTION: LEGO1 0x10072520
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Act3::ClassName()) || LegoWorld::IsA(p_name);
 	}
@@ -68,8 +68,8 @@ public:
 	MxBool Escape() override;                         // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
-	inline void SetUnknown420c(MxEntity* p_entity) { m_unk0x420c = p_entity; }
-	inline void SetUnknown4270(MxU32 p_unk0x4270) { m_unk0x4270 = p_unk0x4270; }
+	void SetUnknown420c(MxEntity* p_entity) { m_unk0x420c = p_entity; }
+	void SetUnknown4270(MxU32 p_unk0x4270) { m_unk0x4270 = p_unk0x4270; }
 
 	// SYNTHETIC: LEGO1 0x10072630
 	// Act3::`scalar deleting destructor'

@@ -11,13 +11,13 @@ public:
 	LegoVehicleBuildState(const char* p_classType);
 
 	// FUNCTION: LEGO1 0x10025ff0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return this->m_className.GetData();
 	}
 
 	// FUNCTION: LEGO1 0x10026000
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, this->m_className.GetData()) || LegoState::IsA(p_name);
 	}
@@ -65,14 +65,14 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10022940
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0504
 		return "LegoCarBuild";
 	}
 
 	// FUNCTION: LEGO1 0x10022950
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoCarBuild::ClassName()) || LegoWorld::IsA(p_name);
 	}

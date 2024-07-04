@@ -112,8 +112,8 @@ public:
 	int GetLODCount() const { return lods ? lods->Size() : 0; }
 	const CompoundObject* GetComp() const { return comp; }
 
-	inline unsigned char GetVisibility() { return m_visible; }
-	inline void SetVisibility(unsigned char p_visible) { m_visible = p_visible; }
+	unsigned char GetVisibility() { return m_visible; }
+	void SetVisibility(unsigned char p_visible) { m_visible = p_visible; }
 
 	// SYNTHETIC: LEGO1 0x100a5d60
 	// ROI::`scalar deleting destructor'

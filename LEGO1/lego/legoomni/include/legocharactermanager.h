@@ -27,8 +27,8 @@ struct LegoCharacter {
 	}
 	~LegoCharacter() { delete m_roi; }
 
-	inline void AddRef() { m_refCount++; }
-	inline MxU32 RemoveRef()
+	void AddRef() { m_refCount++; }
+	MxU32 RemoveRef()
 	{
 		if (m_refCount != 0) {
 			m_refCount--;

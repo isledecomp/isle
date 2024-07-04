@@ -27,16 +27,16 @@ public:
 	static void CharSwap(char* p_a, char* p_b);
 
 	// FUNCTION: BETA10 0x10017c50
-	inline char* GetData() const { return m_data; }
+	char* GetData() const { return m_data; }
 
 	// FUNCTION: BETA10 0x10067630
-	inline const MxU16 GetLength() const { return m_length; }
+	const MxU16 GetLength() const { return m_length; }
 
 	// FUNCTION: BETA10 0x100d8a30
-	inline MxBool Equal(const MxString& p_str) const { return strcmp(m_data, p_str.m_data) == 0; }
+	MxBool Equal(const MxString& p_str) const { return strcmp(m_data, p_str.m_data) == 0; }
 
 	// FUNCTION: BETA10 0x1012a810
-	inline MxS8 Compare(const MxString& p_str) const { return strcmp(m_data, p_str.m_data); }
+	MxS8 Compare(const MxString& p_str) const { return strcmp(m_data, p_str.m_data); }
 
 	// SYNTHETIC: LEGO1 0x100ae280
 	// SYNTHETIC: BETA10 0x1012c9d0

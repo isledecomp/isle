@@ -25,14 +25,14 @@ public:
 	~LegoPathActor() override;
 
 	// FUNCTION: LEGO1 0x1000c430
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0114
 		return "LegoPathActor";
 	}
 
 	// FUNCTION: LEGO1 0x1000c440
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoPathActor::ClassName()) || LegoActor::IsA(p_name);
 	}
@@ -123,14 +123,14 @@ public:
 	// FUNCTION: LEGO1 0x10002de0
 	virtual void VTable0xc8(MxU8 p_unk0x148) { m_unk0x148 = p_unk0x148; } // vtable+0xc8
 
-	inline LegoPathBoundary* GetBoundary() { return m_boundary; }
-	inline MxU32 GetState() { return m_state; }
-	inline LegoPathController* GetController() { return m_controller; }
-	inline MxBool GetCollideBox() { return m_collideBox; }
+	LegoPathBoundary* GetBoundary() { return m_boundary; }
+	MxU32 GetState() { return m_state; }
+	LegoPathController* GetController() { return m_controller; }
+	MxBool GetCollideBox() { return m_collideBox; }
 
-	inline void SetBoundary(LegoPathBoundary* p_boundary) { m_boundary = p_boundary; }
-	inline void SetState(MxU32 p_state) { m_state = p_state; }
-	inline void SetController(LegoPathController* p_controller) { m_controller = p_controller; }
+	void SetBoundary(LegoPathBoundary* p_boundary) { m_boundary = p_boundary; }
+	void SetState(MxU32 p_state) { m_state = p_state; }
+	void SetController(LegoPathController* p_controller) { m_controller = p_controller; }
 
 	// SYNTHETIC: LEGO1 0x1002d800
 	// LegoPathActor::`scalar deleting destructor'

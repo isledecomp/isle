@@ -56,15 +56,15 @@ public:
 		MxU32 Next();
 		MxBool Contains(MxU32 p_objectId);
 
-		inline void SetUnknown0x08(MxS16 p_unk0x08) { m_nextIndex = p_unk0x08; }
+		void SetUnknown0x08(MxS16 p_unk0x08) { m_nextIndex = p_unk0x08; }
 
-		inline MxResult ReadFromFile(LegoFile* p_file)
+		MxResult ReadFromFile(LegoFile* p_file)
 		{
 			Read(p_file, &m_nextIndex);
 			return SUCCESS;
 		}
 
-		inline MxResult WriteToFile(LegoFile* p_file)
+		MxResult WriteToFile(LegoFile* p_file)
 		{
 			Write(p_file, m_nextIndex);
 			return SUCCESS;
@@ -81,14 +81,14 @@ public:
 	~LegoState() override {}
 
 	// FUNCTION: LEGO1 0x100060d0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f01b8
 		return "LegoState";
 	}
 
 	// FUNCTION: LEGO1 0x100060e0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoState::ClassName()) || MxCore::IsA(p_name);
 	}

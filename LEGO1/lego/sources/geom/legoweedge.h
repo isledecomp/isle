@@ -15,11 +15,11 @@ public:
 
 	virtual LegoResult VTable0x04(); // vtable+0x04
 
-	inline LegoU8 GetNumEdges() { return m_numEdges; }
-	inline LegoEdge** GetEdges() { return m_edges; }
-	inline LegoU32 IsEqual(LegoWEEdge& p_other) { return this == &p_other; }
+	LegoU8 GetNumEdges() { return m_numEdges; }
+	LegoEdge** GetEdges() { return m_edges; }
+	LegoU32 IsEqual(LegoWEEdge& p_other) { return this == &p_other; }
 
-	inline void SetEdges(LegoEdge** p_edges, LegoU8 p_numEdges)
+	void SetEdges(LegoEdge** p_edges, LegoU8 p_numEdges)
 	{
 		m_edges = p_edges;
 		m_numEdges = p_numEdges;

@@ -28,13 +28,13 @@ public:
 
 	// FUNCTION: LEGO1 0x1000ccb0
 	// FUNCTION: BETA10 0x100a7150
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000ccc0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
@@ -45,7 +45,7 @@ public:
 
 	MxResult FUN_1007ff70(MxDSChunk& p_chunk, LegoEntity* p_entity, MxBool p_roiVisible, LegoWorld* p_world);
 
-	inline void Reset()
+	void Reset()
 	{
 		m_roi = NULL;
 		m_addedToView = FALSE;

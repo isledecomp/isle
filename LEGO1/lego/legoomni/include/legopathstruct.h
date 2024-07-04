@@ -28,8 +28,8 @@ public:
 		return new LegoPathStructNotificationParam(m_type, m_sender, m_trigger, m_data);
 	} // vtable+0x04
 
-	inline MxU8 GetTrigger() { return m_trigger; }
-	inline MxS16 GetData() { return m_data; }
+	MxU8 GetTrigger() { return m_trigger; }
+	MxS16 GetData() { return m_data; }
 
 protected:
 	MxS16 m_data;   // 0x0c
@@ -87,8 +87,8 @@ public:
 
 	virtual void HandleTrigger(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data); // vtable+0x04
 
-	inline void SetWorld(LegoWorld* p_world) { m_world = p_world; }
-	inline void SetAtomId(const MxAtomId& p_atomId) { m_atomId = p_atomId; }
+	void SetWorld(LegoWorld* p_world) { m_world = p_world; }
+	void SetAtomId(const MxAtomId& p_atomId) { m_atomId = p_atomId; }
 
 private:
 	MxBool HandleTrigger(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data, MxBool p_bool);

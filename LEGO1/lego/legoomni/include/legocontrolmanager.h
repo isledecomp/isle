@@ -12,7 +12,7 @@ class MxControlPresenter;
 // SIZE 0x2c
 class LegoControlManagerNotificationParam : public LegoEventNotificationParam {
 public:
-	inline LegoControlManagerNotificationParam() : LegoEventNotificationParam()
+	LegoControlManagerNotificationParam() : LegoEventNotificationParam()
 	{
 		m_clickedObjectId = -1;
 		m_clickedAtom = NULL;
@@ -20,13 +20,13 @@ public:
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
-	inline MxS32 GetClickedObjectId() const { return m_clickedObjectId; }
-	inline const char* GetClickedAtom() const { return m_clickedAtom; }
-	inline MxS16 GetUnknown0x28() const { return m_unk0x28; }
+	MxS32 GetClickedObjectId() const { return m_clickedObjectId; }
+	const char* GetClickedAtom() const { return m_clickedAtom; }
+	MxS16 GetUnknown0x28() const { return m_unk0x28; }
 
-	inline void SetClickedObjectId(MxS32 p_clickedObjectId) { m_clickedObjectId = p_clickedObjectId; }
-	inline void SetClickedAtom(const char* p_clickedAtom) { m_clickedAtom = p_clickedAtom; }
-	inline void SetUnknown0x28(MxS16 p_unk0x28) { m_unk0x28 = p_unk0x28; }
+	void SetClickedObjectId(MxS32 p_clickedObjectId) { m_clickedObjectId = p_clickedObjectId; }
+	void SetClickedAtom(const char* p_clickedAtom) { m_clickedAtom = p_clickedAtom; }
+	void SetUnknown0x28(MxS16 p_unk0x28) { m_unk0x28 = p_unk0x28; }
 
 	MxS32 m_clickedObjectId;   // 0x20
 	const char* m_clickedAtom; // 0x24
@@ -56,13 +56,13 @@ public:
 
 	// FUNCTION: LEGO1 0x10028cb0
 	// FUNCTION: BETA10 0x1008af40
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x10028cc0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoControlManager::ClassName()) || MxCore::IsA(p_name);
 	}
@@ -77,8 +77,8 @@ public:
 	MxBool FUN_10029750();
 	void FUN_100292e0();
 
-	inline undefined4 GetUnknown0x0c() { return m_unk0x0c; }
-	inline undefined GetUnknown0x10() { return m_unk0x10; }
+	undefined4 GetUnknown0x0c() { return m_unk0x0c; }
+	undefined GetUnknown0x10() { return m_unk0x10; }
 
 	// SYNTHETIC: LEGO1 0x10028d40
 	// LegoControlManager::`scalar deleting destructor'

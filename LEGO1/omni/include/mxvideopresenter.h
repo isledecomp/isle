@@ -26,13 +26,13 @@ public:
 
 	// FUNCTION: LEGO1 0x1000c820
 	// FUNCTION: BETA10 0x10055180
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000c830
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxVideoPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
@@ -99,20 +99,20 @@ public:
 	};
 
 	inline MxS32 PrepareRects(RECT& p_rectDest, RECT& p_rectSrc);
-	inline MxBitmap* GetBitmap() { return m_frameBitmap; }
-	inline AlphaMask* GetAlphaMask() { return m_alpha; }
+	MxBitmap* GetBitmap() { return m_frameBitmap; }
+	AlphaMask* GetAlphaMask() { return m_alpha; }
 
-	inline void SetBit0(BOOL p_e) { m_flags.m_bit0 = p_e; }
-	inline void SetBit1(BOOL p_e) { m_flags.m_bit1 = p_e; }
-	inline void SetBit2(BOOL p_e) { m_flags.m_bit2 = p_e; }
-	inline void SetBit3(BOOL p_e) { m_flags.m_bit3 = p_e; }
-	inline void SetBit4(BOOL p_e) { m_flags.m_bit4 = p_e; }
+	void SetBit0(BOOL p_e) { m_flags.m_bit0 = p_e; }
+	void SetBit1(BOOL p_e) { m_flags.m_bit1 = p_e; }
+	void SetBit2(BOOL p_e) { m_flags.m_bit2 = p_e; }
+	void SetBit3(BOOL p_e) { m_flags.m_bit3 = p_e; }
+	void SetBit4(BOOL p_e) { m_flags.m_bit4 = p_e; }
 
-	inline BYTE GetBit0() { return m_flags.m_bit0; }
-	inline BYTE GetBit1() { return m_flags.m_bit1; }
-	inline BYTE GetBit2() { return m_flags.m_bit2; }
-	inline BYTE GetBit3() { return m_flags.m_bit3; }
-	inline BYTE GetBit4() { return m_flags.m_bit4; }
+	BYTE GetBit0() { return m_flags.m_bit0; }
+	BYTE GetBit1() { return m_flags.m_bit1; }
+	BYTE GetBit2() { return m_flags.m_bit2; }
+	BYTE GetBit3() { return m_flags.m_bit3; }
+	BYTE GetBit4() { return m_flags.m_bit4; }
 
 	// SYNTHETIC: LEGO1 0x1000c910
 	// MxVideoPresenter::`scalar deleting destructor'

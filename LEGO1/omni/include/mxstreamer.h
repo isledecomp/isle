@@ -20,7 +20,7 @@ typedef MxMemoryPool<128, 2> MxMemoryPool128;
 // SIZE 0x10
 class MxStreamerNotification : public MxNotificationParam {
 public:
-	inline MxStreamerNotification(NotificationId p_type, MxCore* p_sender, MxStreamController* p_ctrlr)
+	MxStreamerNotification(NotificationId p_type, MxCore* p_sender, MxStreamController* p_ctrlr)
 		: MxNotificationParam(p_type, p_sender)
 	{
 		m_controller = p_ctrlr;
@@ -53,14 +53,14 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100b9000
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x1010210c
 		return "MxStreamer";
 	}
 
 	// FUNCTION: LEGO1 0x100b9010
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxStreamer::ClassName()) || MxCore::IsA(p_name);
 	}

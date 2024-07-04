@@ -44,8 +44,8 @@ public:
 		// FUNCTION: LEGO1 0x10033800
 		NamedPlane() {}
 
-		inline void SetName(const char* p_name) { m_name = p_name; }
-		inline const MxString* GetName() const { return &m_name; }
+		void SetName(const char* p_name) { m_name = p_name; }
+		const MxString* GetName() const { return &m_name; }
 
 		// FUNCTION: LEGO1 0x100344d0
 		MxResult Serialize(LegoFile* p_file)
@@ -76,14 +76,14 @@ public:
 	Act1State();
 
 	// FUNCTION: LEGO1 0x100338a0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0154
 		return "Act1State";
 	}
 
 	// FUNCTION: LEGO1 0x100338b0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Act1State::ClassName()) || LegoState::IsA(p_name);
 	}
@@ -96,13 +96,13 @@ public:
 	void FUN_10034b60();
 	void FUN_10034d00();
 
-	inline MxU32 GetUnknown18() { return m_unk0x018; }
-	inline ElevatorFloor GetElevatorFloor() { return (ElevatorFloor) m_elevFloor; }
-	inline MxU8 GetUnknown21() { return m_unk0x021; }
+	MxU32 GetUnknown18() { return m_unk0x018; }
+	ElevatorFloor GetElevatorFloor() { return (ElevatorFloor) m_elevFloor; }
+	MxU8 GetUnknown21() { return m_unk0x021; }
 
-	inline void SetUnknown18(MxU32 p_unk0x18) { m_unk0x018 = p_unk0x18; }
-	inline void SetElevatorFloor(ElevatorFloor p_elevFloor) { m_elevFloor = p_elevFloor; }
-	inline void SetUnknown21(MxU8 p_unk0x21) { m_unk0x021 = p_unk0x21; }
+	void SetUnknown18(MxU32 p_unk0x18) { m_unk0x018 = p_unk0x18; }
+	void SetElevatorFloor(ElevatorFloor p_elevFloor) { m_elevFloor = p_elevFloor; }
+	void SetUnknown21(MxU8 p_unk0x21) { m_unk0x021 = p_unk0x21; }
 
 	// SYNTHETIC: LEGO1 0x10033960
 	// Act1State::`scalar deleting destructor'
@@ -163,14 +163,14 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10030910
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0458
 		return "Isle";
 	}
 
 	// FUNCTION: LEGO1 0x10030920
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Isle::ClassName()) || LegoWorld::IsA(p_name);
 	}
@@ -189,7 +189,7 @@ public:
 	void Enable(MxBool p_enable) override;           // vtable+68
 	virtual void VTable0x6c(LegoPathActor* p_actor); // vtable+6c
 
-	inline void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
+	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
 
 	void FUN_10033350();
 

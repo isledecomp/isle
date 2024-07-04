@@ -12,16 +12,16 @@ class MxDSFile;
 // SIZE 0x10
 class MxStreamProvider : public MxCore {
 public:
-	inline MxStreamProvider() : m_pLookup(NULL), m_pFile(NULL) {}
+	MxStreamProvider() : m_pLookup(NULL), m_pFile(NULL) {}
 
 	// FUNCTION: LEGO1 0x100d07e0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return "MxStreamProvider";
 	}
 
 	// FUNCTION: LEGO1 0x100d07f0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxStreamProvider::ClassName()) || MxCore::IsA(p_name);
 	}

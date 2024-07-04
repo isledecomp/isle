@@ -13,14 +13,14 @@ public:
 	MxDSEvent& operator=(MxDSEvent& p_dsEvent);
 
 	// FUNCTION: LEGO1 0x100c9660
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101025f0
 		return "MxDSEvent";
 	}
 
 	// FUNCTION: LEGO1 0x100c9670
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSEvent::ClassName()) || MxDSMediaAction::IsA(p_name);
 	}

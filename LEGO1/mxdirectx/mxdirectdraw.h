@@ -31,10 +31,10 @@ public:
 	virtual void Destroy();                 // vtable+0x08
 	virtual void DestroyButNotDirectDraw(); // vtable+0x0c
 
-	inline IDirectDraw* DirectDraw() { return m_pDirectDraw; }
-	inline IDirectDrawSurface* FrontBuffer() { return m_pFrontBuffer; }
-	inline IDirectDrawSurface* BackBuffer() { return m_pBackBuffer; }
-	inline IDirectDrawClipper* Clipper() { return m_pClipper; }
+	IDirectDraw* DirectDraw() { return m_pDirectDraw; }
+	IDirectDrawSurface* FrontBuffer() { return m_pFrontBuffer; }
+	IDirectDrawSurface* BackBuffer() { return m_pBackBuffer; }
+	IDirectDrawClipper* Clipper() { return m_pClipper; }
 
 	BOOL IsFullScreen() { return m_bFullScreen; }
 

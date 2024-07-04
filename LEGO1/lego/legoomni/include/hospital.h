@@ -24,14 +24,14 @@ public:
 	~HospitalState() override {}
 
 	// FUNCTION: LEGO1 0x10076400
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0480
 		return "HospitalState";
 	}
 
 	// FUNCTION: LEGO1 0x10076410
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, HospitalState::ClassName()) || LegoState::IsA(p_name);
 	}
@@ -63,14 +63,14 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x100746b0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0490
 		return "Hospital";
 	}
 
 	// FUNCTION: LEGO1 0x100746c0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Hospital::ClassName()) || LegoWorld::IsA(p_name);
 	}

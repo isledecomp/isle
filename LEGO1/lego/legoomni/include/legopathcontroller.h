@@ -69,14 +69,14 @@ public:
 	MxResult Tickle() override; // vtable+08
 
 	// FUNCTION: LEGO1 0x10045110
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f11b8
 		return "LegoPathController";
 	}
 
 	// FUNCTION: LEGO1 0x10045120
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoPathController::ClassName()) || MxCore::IsA(p_name);
 	}

@@ -21,14 +21,14 @@ public:
 	MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x100c7360
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102144
 		return "MxDiskStreamController";
 	}
 
 	// FUNCTION: LEGO1 0x100c7370
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDiskStreamController::ClassName()) || MxStreamController::IsA(p_name);
 	}
@@ -41,7 +41,7 @@ public:
 	MxResult VTable0x30(MxDSAction* p_action) override;   // vtable+0x30
 	virtual MxResult VTable0x34(undefined4);              // vtable+0x34
 
-	inline MxBool GetUnk0xc4() const { return m_unk0xc4; }
+	MxBool GetUnk0xc4() const { return m_unk0xc4; }
 
 	MxResult FUN_100c7890(MxDSStreamingAction* p_action);
 	void FUN_100c7cb0(MxDSStreamingAction* p_action);

@@ -30,7 +30,7 @@ public:
 		c_altBit1 = 0x01
 	};
 
-	inline LegoEntity() { Init(); }
+	LegoEntity() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000c290
 	~LegoEntity() override { Destroy(TRUE); }
@@ -38,14 +38,14 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x1000c2f0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0064
 		return "LegoEntity";
 	}
 
 	// FUNCTION: LEGO1 0x1000c300
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoEntity::ClassName()) || MxEntity::IsA(p_name);
 	}
@@ -79,19 +79,19 @@ public:
 	Mx3DPointFloat GetWorldUp();
 	Mx3DPointFloat GetWorldPosition();
 
-	inline MxBool GetUnknown0x10IsSet(MxU8 p_flag) { return m_unk0x10 & p_flag; }
-	inline MxBool GetFlagsIsSet(MxU8 p_flag) { return m_flags & p_flag; }
-	inline MxU8 GetFlags() { return m_flags; }
-	inline MxFloat GetWorldSpeed() { return m_worldSpeed; }
-	inline LegoROI* GetROI() { return m_roi; }
-	inline MxU8 GetType() { return m_type; }
-	inline MxBool GetCameraFlag() { return m_cameraFlag; }
+	MxBool GetUnknown0x10IsSet(MxU8 p_flag) { return m_unk0x10 & p_flag; }
+	MxBool GetFlagsIsSet(MxU8 p_flag) { return m_flags & p_flag; }
+	MxU8 GetFlags() { return m_flags; }
+	MxFloat GetWorldSpeed() { return m_worldSpeed; }
+	LegoROI* GetROI() { return m_roi; }
+	MxU8 GetType() { return m_type; }
+	MxBool GetCameraFlag() { return m_cameraFlag; }
 
-	inline void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
-	inline void SetFlag(MxU8 p_flag) { m_flags |= p_flag; }
-	inline void ClearFlag(MxU8 p_flag) { m_flags &= ~p_flag; }
-	inline void SetUnknown0x10Flag(MxU8 p_flag) { m_unk0x10 |= p_flag; }
-	inline void ClearUnknown0x10Flag(MxU8 p_flag) { m_unk0x10 &= ~p_flag; }
+	void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
+	void SetFlag(MxU8 p_flag) { m_flags |= p_flag; }
+	void ClearFlag(MxU8 p_flag) { m_flags &= ~p_flag; }
+	void SetUnknown0x10Flag(MxU8 p_flag) { m_unk0x10 |= p_flag; }
+	void ClearUnknown0x10Flag(MxU8 p_flag) { m_unk0x10 &= ~p_flag; }
 
 protected:
 	void Init();

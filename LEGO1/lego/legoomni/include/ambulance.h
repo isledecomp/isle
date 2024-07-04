@@ -13,21 +13,21 @@ public:
 	AmbulanceMissionState();
 
 	// FUNCTION: LEGO1 0x10037600
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f00e8
 		return "AmbulanceMissionState";
 	}
 
 	// FUNCTION: LEGO1 0x10037610
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, AmbulanceMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
 	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
-	inline MxS16 GetHighScore(MxU8 p_actorId)
+	MxS16 GetHighScore(MxU8 p_actorId)
 	{
 		switch (p_actorId) {
 		case LegoActor::c_pepper:
@@ -46,7 +46,7 @@ public:
 	}
 
 	// FUNCTION: BETA10 0x100242d0
-	inline void UpdateScore(ScoreColor p_score, MxS16 p_actorId)
+	void UpdateScore(ScoreColor p_score, MxS16 p_actorId)
 	{
 		switch (p_actorId) {
 		case LegoActor::c_pepper:
@@ -110,14 +110,14 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10035fa0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03c4
 		return "Ambulance";
 	}
 
 	// FUNCTION: LEGO1 0x10035fb0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Ambulance::ClassName()) || IslePathActor::IsA(p_name);
 	}

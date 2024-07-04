@@ -85,12 +85,12 @@ public:
 	// vtable+0x30
 	Result SetTextureDefaultColorCount(unsigned long) override;
 
-	inline HRESULT CreateTextureFromSurface(LPDIRECTDRAWSURFACE pSurface, LPDIRECT3DRMTEXTURE2* pTexture2)
+	HRESULT CreateTextureFromSurface(LPDIRECTDRAWSURFACE pSurface, LPDIRECT3DRMTEXTURE2* pTexture2)
 	{
 		return m_data->CreateTextureFromSurface(pSurface, pTexture2);
 	}
 
-	inline IDirect3DRM2* ImplementationData() const { return m_data; }
+	IDirect3DRM2* ImplementationData() const { return m_data; }
 
 public:
 	inline Result Create();
@@ -148,7 +148,7 @@ public:
 	void InitFromD3DDevice(Device*) override;
 	void InitFromWindowsDevice(Device*) override;
 
-	inline IDirect3DRMDevice2* ImplementationData() const { return m_data; }
+	IDirect3DRMDevice2* ImplementationData() const { return m_data; }
 
 	friend class RendererImpl;
 
@@ -198,7 +198,7 @@ public:
 		int& rPickedGroupCount
 	) override;
 
-	inline IDirect3DRMViewport* ImplementationData() const { return m_data; }
+	IDirect3DRMViewport* ImplementationData() const { return m_data; }
 
 	static Result ViewportCreateAppData(IDirect3DRM2*, IDirect3DRMViewport*, IDirect3DRMFrame2*);
 
@@ -225,7 +225,7 @@ public:
 	// vtable+0x08
 	Result SetTransformation(FloatMatrix4&) override;
 
-	inline IDirect3DRMFrame2* ImplementationData() const { return m_data; }
+	IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
 	friend class RendererImpl;
 
@@ -251,7 +251,7 @@ public:
 	Result SetTransformation(FloatMatrix4&) override;
 	Result SetColor(float r, float g, float b) override;
 
-	inline IDirect3DRMFrame2* ImplementationData() const { return m_data; }
+	IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
 	friend class RendererImpl;
 
@@ -293,8 +293,8 @@ public:
 
 	typedef MeshData* MeshDataType;
 
-	inline const MeshDataType& ImplementationData() const { return m_data; }
-	inline MeshDataType& ImplementationData() { return m_data; }
+	const MeshDataType& ImplementationData() const { return m_data; }
+	MeshDataType& ImplementationData() { return m_data; }
 
 	friend class RendererImpl;
 
@@ -335,7 +335,7 @@ public:
 	// vtable+0x30
 	Result Unknown() override;
 
-	inline IDirect3DRMFrame2* ImplementationData() const { return m_data; }
+	IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
 	friend class RendererImpl;
 
@@ -373,7 +373,7 @@ public:
 	// vtable+0x10
 	MeshBuilder* Clone() override;
 
-	inline IDirect3DRMMesh* ImplementationData() const { return m_data; }
+	IDirect3DRMMesh* ImplementationData() const { return m_data; }
 
 	friend class RendererImpl;
 
@@ -446,8 +446,8 @@ public:
 	) override;
 	Result SetPalette(int entryCount, PaletteEntry* entries) override;
 
-	inline IDirect3DRMTexture* ImplementationData() const { return m_data; }
-	inline void SetImplementation(IDirect3DRMTexture* pData) { m_data = pData; }
+	IDirect3DRMTexture* ImplementationData() const { return m_data; }
+	void SetImplementation(IDirect3DRMTexture* pData) { m_data = pData; }
 
 	friend class RendererImpl;
 

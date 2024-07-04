@@ -24,14 +24,14 @@ public:
 #endif
 
 	// FUNCTION: LEGO1 0x100c0120
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102594
 		return "MxDSFile";
 	}
 
 	// FUNCTION: LEGO1 0x100c0130
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSFile::ClassName()) || MxDSSource::IsA(p_name);
 	}
@@ -43,9 +43,9 @@ public:
 	MxULong GetBufferSize() override;                // vtable+0x28
 	MxULong GetStreamBuffersNum() override;          // vtable+0x2c
 
-	inline void SetFileName(const char* p_filename) { m_filename = p_filename; }
+	void SetFileName(const char* p_filename) { m_filename = p_filename; }
 
-	inline MxS32 CalcFileSize() { return GetFileSize(m_io.m_info.hmmio, NULL); }
+	MxS32 CalcFileSize() { return GetFileSize(m_io.m_info.hmmio, NULL); }
 
 	// SYNTHETIC: LEGO1 0x100c01e0
 	// MxDSFile::`scalar deleting destructor'

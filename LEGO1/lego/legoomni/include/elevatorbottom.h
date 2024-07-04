@@ -17,14 +17,14 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10017f20
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f04ac
 		return "ElevatorBottom";
 	}
 
 	// FUNCTION: LEGO1 0x10017f30
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, ElevatorBottom::ClassName()) || LegoWorld::IsA(p_name);
 	}

@@ -14,7 +14,7 @@ public:
 	static void UpdateMaxLOD();
 	static void SetUserMaxLOD(float);
 
-	inline static float GetUserMaxLodPower() { return g_userMaxLodPower; }
+	static float GetUserMaxLodPower() { return g_userMaxLodPower; }
 };
 
 #endif // REALTIMEVIEW_H

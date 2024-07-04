@@ -14,14 +14,14 @@ public:
 	~SkateBoard() override;
 
 	// FUNCTION: LEGO1 0x1000fdd0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f041c
 		return "SkateBoard";
 	}
 
 	// FUNCTION: LEGO1 0x1000fde0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, SkateBoard::ClassName()) || IslePathActor::IsA(p_name);
 	}
@@ -32,7 +32,7 @@ public:
 	MxLong HandleControl(LegoControlManagerNotificationParam& p_param) override; // vtable+0xd4
 	void Exit() override;                                                        // vtable+0xe4
 
-	inline void SetUnknown0x160(MxBool p_unk0x160) { m_unk0x160 = p_unk0x160; }
+	void SetUnknown0x160(MxBool p_unk0x160) { m_unk0x160 = p_unk0x160; }
 
 	void ActivateSceneActions();
 

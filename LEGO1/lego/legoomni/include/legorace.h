@@ -23,10 +23,10 @@ public:
 	// SIZE 0x06
 	struct Entry {
 	public:
-		inline MxS16 GetUnknown0x02() { return m_unk0x02; }
-		inline MxS16 GetHighScore() { return m_score; }
+		MxS16 GetUnknown0x02() { return m_unk0x02; }
+		MxS16 GetHighScore() { return m_score; }
 
-		inline MxResult Serialize(LegoFile* p_file)
+		MxResult Serialize(LegoFile* p_file)
 		{
 			if (p_file->IsReadMode()) {
 				Read(p_file, &m_id);
@@ -51,14 +51,14 @@ public:
 	RaceState();
 
 	// FUNCTION: LEGO1 0x10016010
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f07d0
 		return "RaceState";
 	}
 
 	// FUNCTION: LEGO1 0x10016020
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, RaceState::ClassName()) || LegoState::IsA(p_name);
 	}
@@ -67,7 +67,7 @@ public:
 
 	Entry* GetState(MxU8 p_id);
 
-	inline undefined4 GetUnknown0x28() { return m_unk0x28; }
+	undefined4 GetUnknown0x28() { return m_unk0x28; }
 
 	// SYNTHETIC: LEGO1 0x1000f6f0
 	// RaceState::~RaceState
@@ -99,13 +99,13 @@ public:
 
 	// FUNCTION: LEGO1 0x10015ba0
 	// FUNCTION: BETA10 0x100a8940
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x10015bb0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoRace::ClassName()) || LegoWorld::IsA(p_name);
 	}

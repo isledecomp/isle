@@ -14,7 +14,7 @@ public:
 
 	MxLong GetRealTime();
 
-	inline MxLong GetTime()
+	MxLong GetTime()
 	{
 		if (this->m_isRunning) {
 			return g_lastTimeTimerStarted;

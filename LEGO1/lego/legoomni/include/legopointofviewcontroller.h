@@ -89,8 +89,8 @@ public:
 	MxResult Create(Lego3DView* p_lego3DView);
 	void OnViewSize(int p_width, int p_height);
 
-	inline LegoEntity* GetEntity() { return m_entity; }
-	inline LegoNavController* GetNavController() { return m_nav; }
+	LegoEntity* GetEntity() { return m_entity; }
+	LegoNavController* GetNavController() { return m_nav; }
 
 protected:
 	void AffectPointOfView();

@@ -13,7 +13,7 @@ struct LegoAnimActorStruct {
 
 	float GetDuration();
 
-	inline float GetUnknown0x00() { return m_unk0x00; }
+	float GetUnknown0x00() { return m_unk0x00; }
 
 	float m_unk0x00;              // 0x00
 	LegoAnim* m_AnimTreePtr;      // 0x04
@@ -31,14 +31,14 @@ public:
 	~LegoAnimActor() override;
 
 	// FUNCTION: LEGO1 0x1000fba0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f057c
 		return "LegoAnimActor";
 	}
 
 	// FUNCTION: LEGO1 0x1000fbc0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoAnimActor::ClassName()) || LegoPathActor::IsA(p_name);
 	}

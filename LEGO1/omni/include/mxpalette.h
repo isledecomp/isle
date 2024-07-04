@@ -30,7 +30,7 @@ public:
 	void SetPalette(LPDIRECTDRAWPALETTE p_palette);
 
 	// FUNCTION: BETA10 0x100d92c0
-	inline void SetOverrideSkyColor(MxBool p_value) { m_overrideSkyColor = p_value; }
+	void SetOverrideSkyColor(MxBool p_value) { m_overrideSkyColor = p_value; }
 
 	// SYNTHETIC: LEGO1 0x100beeb0
 	// SYNTHETIC: BETA10 0x10144640

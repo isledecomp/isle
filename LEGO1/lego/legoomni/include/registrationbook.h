@@ -20,14 +20,14 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10076e10
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f04c8
 		return "RegistrationBook";
 	}
 
 	// FUNCTION: LEGO1 0x10076e20
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, RegistrationBook::ClassName()) || LegoWorld::IsA(p_name);
 	}

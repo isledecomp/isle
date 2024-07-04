@@ -56,8 +56,8 @@ public:
 	MxU32 FUN_10057fe0(LegoAnimPresenter* p_presenter);
 	MxU32 FUN_100586e0(LegoAnimPresenter* p_presenter);
 
-	inline LegoPathActorSet& GetActors() { return m_actors; }
-	inline LegoAnimPresenterSet& GetPresenters() { return m_presenters; }
+	LegoPathActorSet& GetActors() { return m_actors; }
+	LegoAnimPresenterSet& GetPresenters() { return m_presenters; }
 
 	// SYNTHETIC: LEGO1 0x10047a80
 	// LegoPathBoundary::`vector deleting destructor'

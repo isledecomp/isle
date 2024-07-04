@@ -17,7 +17,7 @@ struct UnknownMatrixType {
 class Matrix4 {
 public:
 	// FUNCTION: LEGO1 0x10004500
-	inline Matrix4(float (*p_data)[4]) { SetData(p_data); }
+	Matrix4(float (*p_data)[4]) { SetData(p_data); }
 
 	// Note: virtual function overloads appear in the virtual table
 	// in reverse order of appearance.
@@ -112,7 +112,7 @@ public:
 	inline virtual int FromQuaternion(const Vector4& p_vec); // vtable+0x44
 
 	// FUNCTION: LEGO1 0x100a0ff0
-	inline void Scale(const float& p_x, const float& p_y, const float& p_z)
+	void Scale(const float& p_x, const float& p_y, const float& p_z)
 	{
 		for (int i = 0; i < 4; i++) {
 			m_data[i][0] *= p_x;
@@ -121,7 +121,7 @@ public:
 		}
 	}
 
-	inline void RotateX(const float& p_angle)
+	void RotateX(const float& p_angle)
 	{
 		float s = sin(p_angle);
 		float c = cos(p_angle);
@@ -134,7 +134,7 @@ public:
 	}
 
 	// FUNCTION: BETA10 0x1001fd60
-	inline void RotateY(const float& p_angle)
+	void RotateY(const float& p_angle)
 	{
 		float s = sin(p_angle);
 		float c = cos(p_angle);
@@ -147,7 +147,7 @@ public:
 	}
 
 	// FUNCTION: BETA10 0x1006ab10
-	inline void RotateZ(const float& p_angle)
+	void RotateZ(const float& p_angle)
 	{
 		float s = sin(p_angle);
 		float c = cos(p_angle);
@@ -162,7 +162,7 @@ public:
 	inline int Unknown(Matrix4& p_mat);
 
 	// FUNCTION: LEGO1 0x1006b500
-	inline void Swap(int p_d1, int p_d2)
+	void Swap(int p_d1, int p_d2)
 	{
 		for (int i = 0; i < 4; i++) {
 			float e = m_data[p_d1][i];

@@ -15,14 +15,14 @@ public:
 	~MxDSSubscriber() override;
 
 	// FUNCTION: LEGO1 0x100b7d50
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101020f8
 		return "MxDSSubscriber";
 	}
 
 	// FUNCTION: LEGO1 0x100b7d60
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSSubscriber::ClassName()) || MxCore::IsA(p_name);
 	}
@@ -35,10 +35,10 @@ public:
 	void FreeDataChunk(MxStreamChunk* p_chunk);
 
 	// FUNCTION: BETA10 0x101354f0
-	inline MxU32 GetObjectId() { return m_objectId; }
+	MxU32 GetObjectId() { return m_objectId; }
 
 	// FUNCTION: BETA10 0x10135510
-	inline MxS16 GetUnknown48() { return m_unk0x48; }
+	MxS16 GetUnknown48() { return m_unk0x48; }
 
 private:
 	MxStreamChunkList m_pendingChunks;              // 0x08

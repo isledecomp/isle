@@ -12,21 +12,21 @@ public:
 	TowTrackMissionState();
 
 	// FUNCTION: LEGO1 0x1004dfa0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f00bc
 		return "TowTrackMissionState";
 	}
 
 	// FUNCTION: LEGO1 0x1004dfb0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, TowTrackMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
 	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
-	inline MxS16 GetHighScore(MxU8 p_id)
+	MxS16 GetHighScore(MxU8 p_id)
 	{
 		switch (p_id) {
 		case 1:
@@ -70,14 +70,14 @@ public:
 	~TowTrack() override;
 
 	// FUNCTION: LEGO1 0x1004c7c0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03b8
 		return "TowTrack";
 	}
 
 	// FUNCTION: LEGO1 0x1004c7d0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, TowTrack::ClassName()) || IslePathActor::IsA(p_name);
 	}

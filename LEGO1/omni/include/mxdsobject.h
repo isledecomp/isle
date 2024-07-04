@@ -39,11 +39,11 @@ public:
 
 	// FUNCTION: LEGO1 0x100bf730
 	// FUNCTION: BETA10 0x1012bdd0
-	inline const char* ClassName() const override { return "MxDSObject"; } // vtable+0c
+	const char* ClassName() const override { return "MxDSObject"; } // vtable+0c
 
 	// FUNCTION: LEGO1 0x100bf740
 	// FUNCTION: BETA10 0x1012bd70
-	inline MxBool IsA(const char* p_name) const override
+	MxBool IsA(const char* p_name) const override
 	{
 		return !strcmp(p_name, MxDSObject::ClassName()) || MxCore::IsA(p_name);
 	} // vtable+10;
@@ -55,31 +55,31 @@ public:
 	// FUNCTION: ISLE 0x401c40
 	// FUNCTION: LEGO1 0x10005530
 	// FUNCTION: BETA10 0x100152e0
-	inline virtual void SetAtomId(MxAtomId p_atomId) { m_atomId = p_atomId; } // vtable+20;
+	virtual void SetAtomId(MxAtomId p_atomId) { m_atomId = p_atomId; } // vtable+20;
 
 	// FUNCTION: BETA10 0x1012ef90
-	inline Type GetType() const { return (Type) m_type; }
+	Type GetType() const { return (Type) m_type; }
 
 	// FUNCTION: BETA10 0x1012efb0
-	inline const char* GetSourceName() const { return m_sourceName; }
+	const char* GetSourceName() const { return m_sourceName; }
 
-	inline const char* GetObjectName() const { return m_objectName; }
-	inline MxU32 GetObjectId() { return m_objectId; }
-	inline const MxAtomId& GetAtomId() { return m_atomId; }
-	inline MxS16 GetUnknown24() { return m_unk0x24; }
-	inline MxPresenter* GetUnknown28() { return m_unk0x28; }
+	const char* GetObjectName() const { return m_objectName; }
+	MxU32 GetObjectId() { return m_objectId; }
+	const MxAtomId& GetAtomId() { return m_atomId; }
+	MxS16 GetUnknown24() { return m_unk0x24; }
+	MxPresenter* GetUnknown28() { return m_unk0x28; }
 
-	inline void SetType(Type p_type) { m_type = p_type; }
+	void SetType(Type p_type) { m_type = p_type; }
 
 	// FUNCTION: BETA10 0x100152b0
-	inline void SetObjectId(MxU32 p_objectId) { m_objectId = p_objectId; }
+	void SetObjectId(MxU32 p_objectId) { m_objectId = p_objectId; }
 
 	// FUNCTION: BETA10 0x10039570
-	inline void SetUnknown24(MxS16 p_unk0x24) { m_unk0x24 = p_unk0x24; }
+	void SetUnknown24(MxS16 p_unk0x24) { m_unk0x24 = p_unk0x24; }
 
-	inline void SetUnknown28(MxPresenter* p_unk0x28) { m_unk0x28 = p_unk0x28; }
+	void SetUnknown28(MxPresenter* p_unk0x28) { m_unk0x28 = p_unk0x28; }
 
-	inline void ClearAtom() { m_atomId.Clear(); }
+	void ClearAtom() { m_atomId.Clear(); }
 
 	// SYNTHETIC: LEGO1 0x100bf7c0
 	// SYNTHETIC: BETA10 0x10148770

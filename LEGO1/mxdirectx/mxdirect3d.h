@@ -29,9 +29,9 @@ public:
 	void Destroy() override;                 // vtable+0x08
 	void DestroyButNotDirectDraw() override; // vtable+0x0c
 
-	inline MxAssignedDevice* AssignedDevice() { return this->m_assignedDevice; }
-	inline IDirect3D2* Direct3D() { return this->m_pDirect3d; }
-	inline IDirect3DDevice2* Direct3DDevice() { return this->m_pDirect3dDevice; }
+	MxAssignedDevice* AssignedDevice() { return this->m_assignedDevice; }
+	IDirect3D2* Direct3D() { return this->m_pDirect3d; }
+	IDirect3DDevice2* Direct3DDevice() { return this->m_pDirect3dDevice; }
 
 	BOOL SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, Direct3DDeviceInfo* p_device);
 

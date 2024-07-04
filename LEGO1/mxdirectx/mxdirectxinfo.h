@@ -44,9 +44,9 @@ public:
 	MxAssignedDevice();
 	~MxAssignedDevice();
 
-	inline unsigned int GetFlags() { return m_flags; }
-	inline BOOL GetHardwareMode() { return ((int) m_flags << 31) >> 31; }
-	inline D3DDEVICEDESC& GetDesc() { return m_desc; }
+	unsigned int GetFlags() { return m_flags; }
+	BOOL GetHardwareMode() { return ((int) m_flags << 31) >> 31; }
+	D3DDEVICEDESC& GetDesc() { return m_desc; }
 
 	friend class MxDirect3D;
 

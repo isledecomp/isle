@@ -29,7 +29,7 @@ public:
 	virtual void Init();                                 // vtable+0x1c
 	virtual void VTable0x20(undefined4);                 // vtable+0x20
 
-	inline MxString& GetName() { return m_name; }
+	MxString& GetName() { return m_name; }
 
 private:
 	MxString m_name;            // 0x04

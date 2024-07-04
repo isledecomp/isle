@@ -23,7 +23,7 @@ public:
 
 	// FUNCTION: LEGO1 0x100144c0
 	// FUNCTION: BETA10 0x100126d0
-	inline virtual const char* ClassName() const // vtable+0c
+	virtual const char* ClassName() const // vtable+0c
 	{
 		// STRING: LEGO1 0x100f007c
 		return "MxCore";
@@ -31,12 +31,12 @@ public:
 
 	// FUNCTION: LEGO1 0x100140d0
 	// FUNCTION: BETA10 0x10012680
-	inline virtual MxBool IsA(const char* p_name) const // vtable+10
+	virtual MxBool IsA(const char* p_name) const // vtable+10
 	{
 		return !strcmp(p_name, MxCore::ClassName());
 	}
 
-	inline MxU32 GetId() { return m_id; }
+	MxU32 GetId() { return m_id; }
 
 	// SYNTHETIC: LEGO1 0x100ae1c0
 	// SYNTHETIC: BETA10 0x1012c0d0
