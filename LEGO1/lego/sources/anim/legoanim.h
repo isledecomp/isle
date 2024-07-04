@@ -103,7 +103,7 @@ public:
 	LegoUnknownKey();
 	LegoResult Read(LegoStorage* p_storage);
 
-	inline LegoFloat GetZ() { return m_z; }
+	LegoFloat GetZ() { return m_z; }
 
 protected:
 	LegoFloat m_z; // 0x08
@@ -216,13 +216,13 @@ public:
 	LegoResult Read(LegoStorage* p_storage);
 	LegoResult FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix);
 
-	inline LegoU32 GetUnknown0x18() { return m_unk0x18; }
-	inline LegoU32 GetUnknown0x1c() { return m_unk0x1c; }
-	inline LegoU32 GetUnknown0x20() { return m_unk0x20; }
+	LegoU32 GetUnknown0x18() { return m_unk0x18; }
+	LegoU32 GetUnknown0x1c() { return m_unk0x1c; }
+	LegoU32 GetUnknown0x20() { return m_unk0x20; }
 
-	inline void SetUnknown0x18(LegoU32 p_unk0x18) { m_unk0x18 = p_unk0x18; }
-	inline void SetUnknown0x1c(LegoU32 p_unk0x1c) { m_unk0x1c = p_unk0x1c; }
-	inline void SetUnknown0x20(LegoU32 p_unk0x20) { m_unk0x20 = p_unk0x20; }
+	void SetUnknown0x18(LegoU32 p_unk0x18) { m_unk0x18 = p_unk0x18; }
+	void SetUnknown0x1c(LegoU32 p_unk0x1c) { m_unk0x1c = p_unk0x1c; }
+	void SetUnknown0x20(LegoU32 p_unk0x20) { m_unk0x20 = p_unk0x20; }
 
 private:
 	LegoU16 m_unk0x00;             // 0x00
@@ -250,7 +250,7 @@ public:
 	const LegoChar* GetActorName(LegoU32 p_index);
 	undefined4 GetActorUnknown0x04(LegoU32 p_index);
 
-	inline LegoAnimScene* GetScene() { return m_scene; }
+	LegoAnimScene* GetScene() { return m_scene; }
 
 	// SYNTHETIC: LEGO1 0x100a0ba0
 	// LegoAnim::`scalar deleting destructor'

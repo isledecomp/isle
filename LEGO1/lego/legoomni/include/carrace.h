@@ -9,14 +9,14 @@
 class CarRaceState : public RaceState {
 public:
 	// FUNCTION: LEGO1 0x1000dd30
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f009c
 		return "CarRaceState";
 	}
 
 	// FUNCTION: LEGO1 0x1000dd40
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, CarRaceState::ClassName()) || RaceState::IsA(p_name);
 	}
@@ -32,14 +32,14 @@ public:
 	CarRace();
 
 	// FUNCTION: LEGO1 0x10016b20
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0528
 		return "CarRace";
 	}
 
 	// FUNCTION: LEGO1 0x10016b30
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, CarRace::ClassName()) || LegoRace::IsA(p_name);
 	}

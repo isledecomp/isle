@@ -22,13 +22,13 @@ public:
 
 	// FUNCTION: LEGO1 0x1000cf70
 	// FUNCTION: BETA10 0x100a75a0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000cf80
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoPartPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
@@ -42,7 +42,7 @@ public:
 	// SYNTHETIC: LEGO1 0x1000d060
 	// LegoPartPresenter::`scalar deleting destructor'
 
-	inline void Reset() { m_parts = NULL; }
+	void Reset() { m_parts = NULL; }
 
 	MxResult Read(MxDSChunk& p_chunk);
 	void Store();

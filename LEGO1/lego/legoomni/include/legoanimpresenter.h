@@ -50,13 +50,13 @@ public:
 
 	// FUNCTION: LEGO1 0x10068530
 	// FUNCTION: BETA10 0x100552d0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x10068540
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoAnimPresenter::ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
@@ -91,11 +91,11 @@ public:
 	void FUN_1006c7a0();
 	const char* GetActionObjectName();
 
-	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
-	inline void SetUnknown0x0cTo1() { m_unk0x9c = 1; }
-	inline void SetUnknown0xa0(MxMatrix* p_unk0xa0) { m_unk0xa0 = p_unk0xa0; }
+	void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
+	void SetUnknown0x0cTo1() { m_unk0x9c = 1; }
+	void SetUnknown0xa0(MxMatrix* p_unk0xa0) { m_unk0xa0 = p_unk0xa0; }
 
-	inline LegoAnim* GetAnimation() { return m_anim; }
+	LegoAnim* GetAnimation() { return m_anim; }
 
 protected:
 	void Init();

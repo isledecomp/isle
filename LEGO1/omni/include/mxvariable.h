@@ -39,7 +39,7 @@ public:
 	virtual void Destroy() { delete this; } // vtable+0x08
 
 	// FUNCTION: BETA10 0x1012a7f0
-	inline const MxString* GetKey() const { return &m_key; }
+	const MxString* GetKey() const { return &m_key; }
 
 protected:
 	MxString m_key;   // 0x04

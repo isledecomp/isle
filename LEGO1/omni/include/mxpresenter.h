@@ -42,13 +42,13 @@ public:
 
 	// FUNCTION: LEGO1 0x1000bfe0
 	// FUNCTION: BETA10 0x1004d9b0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000bff0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxPresenter::ClassName()) || MxCore::IsA(p_name);
 	}
@@ -81,7 +81,7 @@ protected:
 
 	virtual void ParseExtra(); // vtable+0x30
 
-	inline void ProgressTickleState(TickleState p_tickleState)
+	void ProgressTickleState(TickleState p_tickleState)
 	{
 		m_previousTickleStates |= 1 << (MxU8) m_currentTickleState;
 		m_currentTickleState = p_tickleState;
@@ -118,20 +118,20 @@ public:
 	void SendToCompositePresenter(MxOmni* p_omni);
 	MxBool IsEnabled();
 
-	inline MxS32 GetCurrentTickleState() const { return this->m_currentTickleState; }
-	inline MxPoint32 GetLocation() const { return this->m_location; }
-	inline MxS32 GetX() const { return this->m_location.GetX(); }
-	inline MxS32 GetY() const { return this->m_location.GetY(); }
-	inline MxS32 GetDisplayZ() const { return this->m_displayZ; }
-	inline MxDSAction* GetAction() const { return this->m_action; }
-	inline void SetAction(MxDSAction* p_action) { m_action = p_action; }
+	MxS32 GetCurrentTickleState() const { return this->m_currentTickleState; }
+	MxPoint32 GetLocation() const { return this->m_location; }
+	MxS32 GetX() const { return this->m_location.GetX(); }
+	MxS32 GetY() const { return this->m_location.GetY(); }
+	MxS32 GetDisplayZ() const { return this->m_displayZ; }
+	MxDSAction* GetAction() const { return this->m_action; }
+	void SetAction(MxDSAction* p_action) { m_action = p_action; }
 
-	inline void SetCompositePresenter(MxCompositePresenter* p_compositePresenter)
+	void SetCompositePresenter(MxCompositePresenter* p_compositePresenter)
 	{
 		m_compositePresenter = p_compositePresenter;
 	}
 
-	inline void SetDisplayZ(MxS32 p_displayZ) { m_displayZ = p_displayZ; }
+	void SetDisplayZ(MxS32 p_displayZ) { m_displayZ = p_displayZ; }
 
 	// SYNTHETIC: LEGO1 0x1000c070
 	// MxPresenter::`scalar deleting destructor'

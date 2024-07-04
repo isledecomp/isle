@@ -13,14 +13,14 @@ public:
 	Jetski();
 
 	// FUNCTION: LEGO1 0x1007e430
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03d8
 		return "Jetski";
 	}
 
 	// FUNCTION: LEGO1 0x1007e440
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Jetski::ClassName()) || IslePathActor::IsA(p_name);
 	}
@@ -33,7 +33,7 @@ public:
 
 	void FUN_1007e990();
 
-	inline MxS16 GetUnknown0x160() { return m_unk0x160; }
+	MxS16 GetUnknown0x160() { return m_unk0x160; }
 
 	// SYNTHETIC: LEGO1 0x1007e5c0
 	// Jetski::`scalar deleting destructor'

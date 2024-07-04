@@ -47,15 +47,15 @@ public:
 
 	void FUN_1007c520();
 
-	inline Tgl::Renderer* GetRenderer() { return m_renderer; }
-	inline Lego3DManager* Get3DManager() { return m_3dManager; }
-	inline LegoROI* GetViewROI() { return m_viewROI; }
-	inline MxDirect3D* GetDirect3D() { return m_direct3d; }
-	inline MxBool GetRender3D() { return m_render3d; }
-	inline double GetElapsedSeconds() { return m_elapsedSeconds; }
+	Tgl::Renderer* GetRenderer() { return m_renderer; }
+	Lego3DManager* Get3DManager() { return m_3dManager; }
+	LegoROI* GetViewROI() { return m_viewROI; }
+	MxDirect3D* GetDirect3D() { return m_direct3d; }
+	MxBool GetRender3D() { return m_render3d; }
+	double GetElapsedSeconds() { return m_elapsedSeconds; }
 
-	inline void SetRender3D(MxBool p_render3d) { m_render3d = p_render3d; }
-	inline void SetUnk0x554(MxBool p_unk0x554) { m_unk0x554 = p_unk0x554; }
+	void SetRender3D(MxBool p_render3d) { m_render3d = p_render3d; }
+	void SetUnk0x554(MxBool p_unk0x554) { m_unk0x554 = p_unk0x554; }
 
 private:
 	MxResult CreateDirect3D();

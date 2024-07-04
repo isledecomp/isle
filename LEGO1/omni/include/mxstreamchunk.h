@@ -10,23 +10,23 @@ class MxStreamListMxDSSubscriber;
 // SIZE 0x20
 class MxStreamChunk : public MxDSChunk {
 public:
-	inline MxStreamChunk() : m_buffer(NULL) {}
+	MxStreamChunk() : m_buffer(NULL) {}
 	~MxStreamChunk() override;
 
 	// FUNCTION: LEGO1 0x100b1fe0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10101e5c
 		return "MxStreamChunk";
 	}
 
 	// FUNCTION: LEGO1 0x100b1ff0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxStreamChunk::ClassName()) || MxDSChunk::IsA(p_name);
 	}
 
-	inline MxDSBuffer* GetBuffer() { return m_buffer; }
+	MxDSBuffer* GetBuffer() { return m_buffer; }
 
 	MxResult ReadChunk(MxDSBuffer* p_buffer, MxU8* p_chunkData);
 	MxU32 ReadChunkHeader(MxU8* p_chunkData);

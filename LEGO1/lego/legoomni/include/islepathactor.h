@@ -86,19 +86,19 @@ public:
 	IslePathActor();
 
 	// FUNCTION: LEGO1 0x10002e10
-	inline ~IslePathActor() override { IslePathActor::Destroy(TRUE); }
+	~IslePathActor() override { IslePathActor::Destroy(TRUE); }
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10002ea0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0104
 		return "IslePathActor";
 	}
 
 	// FUNCTION: LEGO1 0x10002eb0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, IslePathActor::ClassName()) || LegoPathActor::IsA(p_name);
 	}

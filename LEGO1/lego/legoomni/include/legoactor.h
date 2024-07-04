@@ -24,14 +24,14 @@ public:
 	~LegoActor() override;
 
 	// FUNCTION: LEGO1 0x1002d210
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0124
 		return "LegoActor";
 	}
 
 	// FUNCTION: LEGO1 0x1002d220
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoActor::ClassName()) || LegoEntity::IsA(p_name);
 	}

@@ -15,7 +15,7 @@ public:
 	// SIZE 0x20
 	struct Entry {
 	public:
-		inline MxResult WriteToFile(LegoFile* p_file)
+		MxResult WriteToFile(LegoFile* p_file)
 		{
 			Write(p_file, m_unk0x06);
 			Write(p_file, m_unk0x14);
@@ -24,7 +24,7 @@ public:
 			return SUCCESS;
 		}
 
-		inline MxResult ReadFromFile(LegoFile* p_file)
+		MxResult ReadFromFile(LegoFile* p_file)
 		{
 			Read(p_file, &m_unk0x06);
 			Read(p_file, &m_unk0x14);
@@ -49,21 +49,21 @@ public:
 	PizzaMissionState();
 
 	// FUNCTION: LEGO1 0x10039290
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f00d4
 		return "PizzaMissionState";
 	}
 
 	// FUNCTION: LEGO1 0x100392a0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, PizzaMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
 	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
-	inline MxS16 GetHighScore(MxU8 p_id) { return GetState(p_id)->m_score; }
+	MxS16 GetHighScore(MxU8 p_id) { return GetState(p_id)->m_score; }
 
 	// SYNTHETIC: LEGO1 0x10039350
 	// PizzaMissionState::`scalar deleting destructor'
@@ -86,14 +86,14 @@ public:
 	MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10037f90
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f038c
 		return "Pizza";
 	}
 
 	// FUNCTION: LEGO1 0x10037fa0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Pizza::ClassName()) || IsleActor::IsA(p_name);
 	}
@@ -108,7 +108,7 @@ public:
 	void FUN_100382b0();
 	void FUN_10038380();
 
-	inline void SetSkateboard(SkateBoard* p_skateboard) { m_skateboard = p_skateboard; }
+	void SetSkateboard(SkateBoard* p_skateboard) { m_skateboard = p_skateboard; }
 
 	// SYNTHETIC: LEGO1 0x100380e0
 	// Pizza::`scalar deleting destructor'

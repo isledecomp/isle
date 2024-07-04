@@ -13,13 +13,13 @@ struct MxRegionLeftRight {
 
 	MxRegionLeftRight* Clone() { return new MxRegionLeftRight(m_left, m_right); }
 
-	inline MxS32 GetLeft() { return m_left; }
-	inline MxS32 GetRight() { return m_right; }
+	MxS32 GetLeft() { return m_left; }
+	MxS32 GetRight() { return m_right; }
 
-	inline void SetLeft(MxS32 p_left) { m_left = p_left; }
-	inline void SetRight(MxS32 p_right) { m_right = p_right; }
+	void SetLeft(MxS32 p_left) { m_left = p_left; }
+	void SetRight(MxS32 p_right) { m_right = p_right; }
 
-	inline MxBool IntersectsWith(MxRect32& p_rect) { return m_left < p_rect.GetRight() && p_rect.GetTop() < m_right; }
+	MxBool IntersectsWith(MxRect32& p_rect) { return m_left < p_rect.GetRight() && p_rect.GetTop() < m_right; }
 
 private:
 	MxS32 m_left;  // 0x00
@@ -67,13 +67,13 @@ struct MxRegionTopBottom {
 	void MergeOrExpandRegions(MxS32 p_left, MxS32 p_right);
 	MxBool CheckHorizontalOverlap(MxRect32& p_rect);
 
-	inline MxS32 GetTop() { return m_top; }
-	inline MxS32 GetBottom() { return m_bottom; }
+	MxS32 GetTop() { return m_top; }
+	MxS32 GetBottom() { return m_bottom; }
 
-	inline void SetTop(MxS32 p_top) { m_top = p_top; }
-	inline void SetBottom(MxS32 p_bottom) { m_bottom = p_bottom; }
+	void SetTop(MxS32 p_top) { m_top = p_top; }
+	void SetBottom(MxS32 p_bottom) { m_bottom = p_bottom; }
 
-	inline MxBool IntersectsWith(MxRect32& p_rect) { return m_top < p_rect.GetBottom() && p_rect.GetTop() < m_bottom; }
+	MxBool IntersectsWith(MxRect32& p_rect) { return m_top < p_rect.GetBottom() && p_rect.GetTop() < m_bottom; }
 
 	friend class MxRegionTopBottomList;
 	friend class MxRegionCursor;

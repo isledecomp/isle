@@ -60,13 +60,13 @@ public:
 	);
 	static LegoBool FUN_100a9cf0(const LegoChar* p_param, unsigned char* paletteEntries, LegoU32 p_numEntries);
 
-	inline const LegoChar* GetName() const { return m_name; }
-	inline LegoEntity* GetEntity() { return m_entity; }
+	const LegoChar* GetName() const { return m_name; }
+	LegoEntity* GetEntity() { return m_entity; }
 
-	inline void SetEntity(LegoEntity* p_entity) { m_entity = p_entity; }
-	inline void SetComp(CompoundObject* p_comp) { comp = p_comp; }
-	inline void SetBoundingSphere(const BoundingSphere& p_sphere) { m_sphere = m_world_bounding_sphere = p_sphere; }
-	inline void SetUnknown0x80(const BoundingBox& p_unk0x80) { m_unk0x80 = p_unk0x80; }
+	void SetEntity(LegoEntity* p_entity) { m_entity = p_entity; }
+	void SetComp(CompoundObject* p_comp) { comp = p_comp; }
+	void SetBoundingSphere(const BoundingSphere& p_sphere) { m_sphere = m_world_bounding_sphere = p_sphere; }
+	void SetUnknown0x80(const BoundingBox& p_unk0x80) { m_unk0x80 = p_unk0x80; }
 
 	// SYNTHETIC: LEGO1 0x100a82b0
 	// LegoROI::`scalar deleting destructor'

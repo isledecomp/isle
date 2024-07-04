@@ -18,19 +18,19 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1007eb70
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f7ac4
 		return "MxBackgroundAudioManager";
 	}
 
 	// FUNCTION: LEGO1 0x1007eb80
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxBackgroundAudioManager::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	inline MxBool GetEnabled() { return m_enabled; }
+	MxBool GetEnabled() { return m_enabled; }
 
 	void StartAction(MxParam& p_param);
 	void StopAction(MxParam& p_param);

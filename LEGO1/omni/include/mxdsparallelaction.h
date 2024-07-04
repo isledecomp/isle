@@ -14,14 +14,14 @@ public:
 	MxDSParallelAction& operator=(MxDSParallelAction& p_dsParallelAction);
 
 	// FUNCTION: LEGO1 0x100caf00
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102608
 		return "MxDSParallelAction";
 	}
 
 	// FUNCTION: LEGO1 0x100caf10
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSParallelAction::ClassName()) || MxDSMultiAction::IsA(p_name);
 	}

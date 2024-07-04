@@ -13,8 +13,8 @@ public:
 	MxNotification(MxCore* p_target, const MxNotificationParam& p_param);
 	~MxNotification();
 
-	inline MxCore* GetTarget() { return m_target; }
-	inline MxNotificationParam* GetParam() { return m_param; }
+	MxCore* GetTarget() { return m_target; }
+	MxNotificationParam* GetParam() { return m_param; }
 
 private:
 	MxCore* m_target;             // 0x00
@@ -46,13 +46,13 @@ public:
 	void Unregister(MxCore* p_listener);
 	MxResult Send(MxCore* p_listener, const MxNotificationParam& p_param);
 
-	inline MxNotificationPtrList* GetQueue() { return m_queue; }
+	MxNotificationPtrList* GetQueue() { return m_queue; }
 
 	// FUNCTION: BETA10 0x10132270
-	inline void SetActive(MxBool p_active) { m_active = p_active; }
+	void SetActive(MxBool p_active) { m_active = p_active; }
 
 	// FUNCTION: BETA10 0x10132230
-	inline MxBool IsEmpty() const { return m_queue ? m_queue->empty() : TRUE; }
+	MxBool IsEmpty() const { return m_queue ? m_queue->empty() : TRUE; }
 
 	// SYNTHETIC: LEGO1 0x100ac390
 	// MxNotificationManager::`scalar deleting destructor'

@@ -14,7 +14,7 @@
 class Vector2 {
 public:
 	// FUNCTION: LEGO1 0x1000c0f0
-	inline Vector2(float* p_data) { SetData(p_data); }
+	Vector2(float* p_data) { SetData(p_data); }
 
 	// Note: virtual function overloads appear in the virtual table
 	// in reverse order of appearance.
@@ -149,13 +149,13 @@ public:
 	// SYNTHETIC: LEGO1 0x10010be0
 	// Vector3::operator=
 
-	inline Vector2& operator=(const Vector2& p_other)
+	Vector2& operator=(const Vector2& p_other)
 	{
 		Vector2::SetVector(&p_other);
 		return *this;
 	}
-	inline float& operator[](int idx) { return m_data[idx]; }
-	inline const float& operator[](int idx) const { return m_data[idx]; }
+	float& operator[](int idx) { return m_data[idx]; }
+	const float& operator[](int idx) const { return m_data[idx]; }
 
 protected:
 	float* m_data; // 0x04
@@ -166,20 +166,20 @@ protected:
 class Vector3 : public Vector2 {
 public:
 	// FUNCTION: LEGO1 0x1001d150
-	inline Vector3(float* p_data) : Vector2(p_data) {}
+	Vector3(float* p_data) : Vector2(p_data) {}
 
 	// Hack: Some code initializes a Vector3 from a (most likely) const float* source.
 	// Example: LegoCameraController::GetWorldUp
 	// Vector3 however is a class that can mutate its underlying source, making
 	// initialization with a const source fundamentally incompatible.
-	inline Vector3(const float* p_data) : Vector2((float*) p_data) {}
+	Vector3(const float* p_data) : Vector2((float*) p_data) {}
 
 	// Note: virtual function overloads appear in the virtual table
 	// in reverse order of appearance.
 
 	// FUNCTION: LEGO1 0x10002270
 	// FUNCTION: BETA10 0x100064a1
-	inline virtual void EqualsCrossImpl(float* p_a, float* p_b)
+	virtual void EqualsCrossImpl(float* p_a, float* p_b)
 	{
 		m_data[0] = p_a[1] * p_b[2] - p_a[2] * p_b[1];
 		m_data[1] = p_a[2] * p_b[0] - p_a[0] * p_b[2];
@@ -230,7 +230,7 @@ public:
 	} // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10003b20
-	inline void MulScalarImpl(float* p_value) override
+	void MulScalarImpl(float* p_value) override
 	{
 		m_data[0] *= *p_value;
 		m_data[1] *= *p_value;
@@ -279,7 +279,7 @@ public:
 // SIZE 0x08
 class Vector4 : public Vector3 {
 public:
-	inline Vector4(float* p_data) : Vector3(p_data) {}
+	Vector4(float* p_data) : Vector3(p_data) {}
 
 	// Note: virtual function overloads appear in the virtual table
 	// in reverse order of appearance.

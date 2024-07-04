@@ -11,7 +11,7 @@ public:
 	Act3Actor();
 
 	// FUNCTION: LEGO1 0x100431b0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03ac
 		return "Act3Actor";

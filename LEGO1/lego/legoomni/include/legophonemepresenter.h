@@ -24,7 +24,7 @@ public:
 
 	// FUNCTION: LEGO1 0x1004e310
 	// FUNCTION: BETA10 0x100c41f0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}

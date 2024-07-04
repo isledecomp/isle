@@ -15,14 +15,14 @@ public:
 	RadioState();
 
 	// FUNCTION: LEGO1 0x1002cf60
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f04f8
 		return "RadioState";
 	}
 
 	// FUNCTION: LEGO1 0x1002cf70
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, RadioState::ClassName()) || LegoState::IsA(p_name);
 	}
@@ -32,9 +32,9 @@ public:
 	// SYNTHETIC: LEGO1 0x1002d020
 	// RadioState::`scalar deleting destructor'
 
-	inline MxBool IsActive() { return m_active; }
+	MxBool IsActive() { return m_active; }
 
-	inline void SetActive(MxBool p_active) { m_active = p_active; }
+	void SetActive(MxBool p_active) { m_active = p_active; }
 
 	undefined4 FUN_1002d090();
 	MxBool FUN_1002d0c0(const MxAtomId& p_atom, MxU32 p_objectId);
@@ -56,14 +56,14 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x1002c8e0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f328c
 		return "Radio";
 	}
 
 	// FUNCTION: LEGO1 0x1002c8f0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Radio::ClassName()) || MxCore::IsA(p_name);
 	}
@@ -73,7 +73,7 @@ public:
 	void Play();
 	void Stop();
 
-	inline RadioState* GetState() { return m_state; }
+	RadioState* GetState() { return m_state; }
 
 	// SYNTHETIC: LEGO1 0x1002c970
 	// Radio::`scalar deleting destructor'

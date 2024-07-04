@@ -12,14 +12,14 @@ public:
 	HelicopterState() : m_unk0x08(0) {}
 
 	// FUNCTION: LEGO1 0x1000e0d0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0144
 		return "HelicopterState";
 	}
 
 	// FUNCTION: LEGO1 0x1000e0e0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, HelicopterState::ClassName()) || LegoState::IsA(p_name);
 	}
@@ -34,8 +34,8 @@ public:
 		return TRUE;
 	} // vtable+0x18
 
-	inline void SetUnknown8(MxU32 p_unk0x08) { m_unk0x08 = p_unk0x08; }
-	inline MxU32 GetUnkown8() { return m_unk0x08; }
+	void SetUnknown8(MxU32 p_unk0x08) { m_unk0x08 = p_unk0x08; }
+	MxU32 GetUnkown8() { return m_unk0x08; }
 
 	// SYNTHETIC: LEGO1 0x1000e190
 	// HelicopterState::`scalar deleting destructor'
@@ -53,14 +53,14 @@ public:
 	~Helicopter() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10003070
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0130
 		return "Helicopter";
 	}
 
 	// FUNCTION: LEGO1 0x10003080
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Helicopter::ClassName()) || IslePathActor::IsA(p_name);
 	}

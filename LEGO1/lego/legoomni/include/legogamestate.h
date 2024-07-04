@@ -108,8 +108,8 @@ public:
 	// SIZE 0x0e
 	struct Username {
 		Username();
-		inline Username(Username& p_other) { Set(p_other); }
-		inline void Set(Username& p_other) { memcpy(m_letters, p_other.m_letters, sizeof(m_letters)); }
+		Username(Username& p_other) { Set(p_other); }
+		void Set(Username& p_other) { memcpy(m_letters, p_other.m_letters, sizeof(m_letters)); }
 
 		MxResult ReadWrite(LegoStorage* p_storage);
 		Username& operator=(const Username& p_other);
@@ -131,7 +131,7 @@ public:
 		void WriteScoreHistory();
 		void FUN_1003ccf0(LegoFile&);
 
-		inline ScoreItem* GetScore(MxS16 p_index) { return p_index >= m_count ? NULL : &m_scores[p_index]; }
+		ScoreItem* GetScore(MxS16 p_index) { return p_index >= m_count ? NULL : &m_scores[p_index]; }
 
 		MxS16 m_count;          // 0x00
 		ScoreItem m_scores[20]; // 0x02
@@ -165,26 +165,26 @@ public:
 	void SwitchArea(Area p_area);
 	void Init();
 
-	inline MxU8 GetActorId() { return m_actorId; }
+	MxU8 GetActorId() { return m_actorId; }
 
 	// FUNCTION: BETA10 0x1004a2d0
-	inline const char* GetActorName() { return g_actorNames[GetActorId()]; }
+	const char* GetActorName() { return g_actorNames[GetActorId()]; }
 
-	inline Act GetCurrentAct() { return m_currentAct; }
-	inline Act GetLoadedAct() { return m_loadedAct; }
-	inline Area GetCurrentArea() { return m_currentArea; }
-	inline Area GetPreviousArea() { return m_previousArea; }
-	inline Area GetUnknown0x42c() { return m_unk0x42c; }
-	inline History* GetHistory() { return &m_history; }
+	Act GetCurrentAct() { return m_currentAct; }
+	Act GetLoadedAct() { return m_loadedAct; }
+	Area GetCurrentArea() { return m_currentArea; }
+	Area GetPreviousArea() { return m_previousArea; }
+	Area GetUnknown0x42c() { return m_unk0x42c; }
+	History* GetHistory() { return &m_history; }
 
-	inline void SetDirty(MxBool p_isDirty) { m_isDirty = p_isDirty; }
-	inline void SetCurrentArea(Area p_currentArea) { m_currentArea = p_currentArea; }
-	inline void SetPreviousArea(Area p_previousArea) { m_previousArea = p_previousArea; }
-	inline void SetActorId(MxU8 p_actorId) { m_actorId = p_actorId; }
-	inline void SetUnknown0x42c(Area p_unk0x42c) { m_unk0x42c = p_unk0x42c; }
-	inline Username* GetPlayersIndex(MxS32 p_index) { return &m_players[p_index]; }
-	inline MxS16 GetPlayerCount() { return m_playerCount; }
-	inline LegoBackgroundColor* GetBackgroundColor() { return m_backgroundColor; }
+	void SetDirty(MxBool p_isDirty) { m_isDirty = p_isDirty; }
+	void SetCurrentArea(Area p_currentArea) { m_currentArea = p_currentArea; }
+	void SetPreviousArea(Area p_previousArea) { m_previousArea = p_previousArea; }
+	void SetActorId(MxU8 p_actorId) { m_actorId = p_actorId; }
+	void SetUnknown0x42c(Area p_unk0x42c) { m_unk0x42c = p_unk0x42c; }
+	Username* GetPlayersIndex(MxS32 p_index) { return &m_players[p_index]; }
+	MxS16 GetPlayerCount() { return m_playerCount; }
+	LegoBackgroundColor* GetBackgroundColor() { return m_backgroundColor; }
 
 	void SetCurrentAct(Act p_currentAct);
 	void FindLoadedAct();

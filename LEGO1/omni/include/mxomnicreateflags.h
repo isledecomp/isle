@@ -9,46 +9,46 @@ public:
 	MxOmniCreateFlags();
 
 	// FUNCTION: BETA10 0x10092b50
-	inline void CreateObjectFactory(MxBool p_enable) { m_flags1.m_bit0 = p_enable; }
+	void CreateObjectFactory(MxBool p_enable) { m_flags1.m_bit0 = p_enable; }
 
 	// FUNCTION: BETA10 0x10092b90
-	inline void CreateTickleManager(MxBool p_enable) { m_flags1.m_bit2 = p_enable; }
+	void CreateTickleManager(MxBool p_enable) { m_flags1.m_bit2 = p_enable; }
 
 	// FUNCTION: BETA10 0x10092bd0
-	inline void CreateVideoManager(MxBool p_enable) { m_flags1.m_bit4 = p_enable; }
+	void CreateVideoManager(MxBool p_enable) { m_flags1.m_bit4 = p_enable; }
 
 	// FUNCTION: BETA10 0x10092c10
-	inline void CreateSoundManager(MxBool p_enable) { m_flags1.m_bit5 = p_enable; }
+	void CreateSoundManager(MxBool p_enable) { m_flags1.m_bit5 = p_enable; }
 
 	// FUNCTION: BETA10 0x10130cd0
-	inline const MxBool CreateObjectFactory() const { return m_flags1.m_bit0; }
+	const MxBool CreateObjectFactory() const { return m_flags1.m_bit0; }
 
 	// FUNCTION: BETA10 0x10130cf0
-	inline const MxBool CreateVariableTable() const { return m_flags1.m_bit1; }
+	const MxBool CreateVariableTable() const { return m_flags1.m_bit1; }
 
 	// FUNCTION: BETA10 0x10130d10
-	inline const MxBool CreateTickleManager() const { return m_flags1.m_bit2; }
+	const MxBool CreateTickleManager() const { return m_flags1.m_bit2; }
 
 	// FUNCTION: BETA10 0x10130d30
-	inline const MxBool CreateNotificationManager() const { return m_flags1.m_bit3; }
+	const MxBool CreateNotificationManager() const { return m_flags1.m_bit3; }
 
 	// FUNCTION: BETA10 0x10130d50
-	inline const MxBool CreateVideoManager() const { return m_flags1.m_bit4; }
+	const MxBool CreateVideoManager() const { return m_flags1.m_bit4; }
 
 	// FUNCTION: BETA10 0x10130d70
-	inline const MxBool CreateSoundManager() const { return m_flags1.m_bit5; }
+	const MxBool CreateSoundManager() const { return m_flags1.m_bit5; }
 
 	// FUNCTION: BETA10 0x10130d90
-	inline const MxBool CreateMusicManager() const { return m_flags1.m_bit6; }
+	const MxBool CreateMusicManager() const { return m_flags1.m_bit6; }
 
 	// FUNCTION: BETA10 0x10130db0
-	inline const MxBool CreateEventManager() const { return m_flags1.m_bit7; }
+	const MxBool CreateEventManager() const { return m_flags1.m_bit7; }
 
 	// FUNCTION: BETA10 0x10130dd0
-	inline const MxBool CreateTimer() const { return m_flags2.m_bit1; }
+	const MxBool CreateTimer() const { return m_flags2.m_bit1; }
 
 	// FUNCTION: BETA10 0x10130e00
-	inline const MxBool CreateStreamer() const { return m_flags2.m_bit2; }
+	const MxBool CreateStreamer() const { return m_flags2.m_bit2; }
 
 private:
 	FlagBitfield m_flags1;

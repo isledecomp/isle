@@ -40,10 +40,10 @@ public:
 	void SortPresenterList();
 	void UpdateRegion();
 
-	inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
-	inline LPDIRECTDRAW GetDirectDraw() { return this->m_pDirectDraw; }
-	inline MxDisplaySurface* GetDisplaySurface() { return this->m_displaySurface; }
-	inline MxRegion* GetRegion() { return this->m_region; }
+	MxVideoParam& GetVideoParam() { return this->m_videoParam; }
+	LPDIRECTDRAW GetDirectDraw() { return this->m_pDirectDraw; }
+	MxDisplaySurface* GetDisplaySurface() { return this->m_displaySurface; }
+	MxRegion* GetRegion() { return this->m_region; }
 
 	// SYNTHETIC: LEGO1 0x100be280
 	// MxVideoManager::`scalar deleting destructor'

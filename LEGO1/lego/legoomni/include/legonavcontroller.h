@@ -22,14 +22,14 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10054b80
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f66d8
 		return "LegoNavController";
 	}
 
 	// FUNCTION: LEGO1 0x10054b90
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, ClassName()) || MxCore::IsA(p_name);
 	}
@@ -77,11 +77,11 @@ public:
 	static MxS32 GetNumLocations();
 	static LegoLocation* GetLocation(MxU32 p_location);
 
-	inline void SetLinearVel(MxFloat p_linearVel) { m_linearVel = p_linearVel; }
-	inline MxFloat GetLinearVel() { return m_linearVel; }
-	inline MxFloat GetRotationalVel() { return m_rotationalVel; }
-	inline MxFloat GetMaxLinearVel() { return m_maxLinearVel; }
-	inline void ResetMaxLinearVel(MxFloat p_maxLinearVel)
+	void SetLinearVel(MxFloat p_linearVel) { m_linearVel = p_linearVel; }
+	MxFloat GetLinearVel() { return m_linearVel; }
+	MxFloat GetRotationalVel() { return m_rotationalVel; }
+	MxFloat GetMaxLinearVel() { return m_maxLinearVel; }
+	void ResetMaxLinearVel(MxFloat p_maxLinearVel)
 	{
 		m_maxLinearVel = p_maxLinearVel;
 		m_trackDefault = 0;

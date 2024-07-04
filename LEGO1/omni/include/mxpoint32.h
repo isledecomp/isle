@@ -16,14 +16,14 @@ public:
 		this->m_y = p_point.m_y;
 	}
 
-	inline MxS32 GetX() const { return m_x; }
-	inline MxS32 GetY() const { return m_y; }
+	MxS32 GetX() const { return m_x; }
+	MxS32 GetY() const { return m_y; }
 
-	inline void SetX(MxS32 p_x) { m_x = p_x; }
-	inline void SetY(MxS32 p_y) { m_y = p_y; }
+	void SetX(MxS32 p_x) { m_x = p_x; }
+	void SetY(MxS32 p_y) { m_y = p_y; }
 
 private:
-	inline void CopyFrom(MxS32 p_x, MxS32 p_y)
+	void CopyFrom(MxS32 p_x, MxS32 p_y)
 	{
 		this->m_x = p_x;
 		this->m_y = p_y;

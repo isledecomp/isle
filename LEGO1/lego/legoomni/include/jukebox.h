@@ -24,14 +24,14 @@ public:
 	JukeBoxState() : m_music(e_pasquell), m_active(FALSE) {}
 
 	// FUNCTION: LEGO1 0x1000f310
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f02bc
 		return "JukeBoxState";
 	}
 
 	// FUNCTION: LEGO1 0x1000f320
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, JukeBoxState::ClassName()) || LegoState::IsA(p_name);
 	}
@@ -57,14 +57,14 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1005d6f0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f02cc
 		return "JukeBox";
 	}
 
 	// FUNCTION: LEGO1 0x1005d700
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, JukeBox::ClassName()) || LegoWorld::IsA(p_name);
 	}

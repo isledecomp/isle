@@ -16,7 +16,7 @@
 // SIZE 0xe4
 class ViewROI : public OrientableROI {
 public:
-	inline ViewROI(Tgl::Renderer* pRenderer, ViewLODList* lodList)
+	ViewROI(Tgl::Renderer* pRenderer, ViewLODList* lodList)
 	{
 		SetLODList(lodList);
 		geometry = pRenderer->CreateGroup();
@@ -24,14 +24,14 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100a9e20
-	inline ~ViewROI() override
+	~ViewROI() override
 	{
 		// SetLODList() will decrease refCount of LODList
 		SetLODList(0);
 		delete geometry;
 	}
 
-	inline void SetLODList(ViewLODList* lodList)
+	void SetLODList(ViewLODList* lodList)
 	{
 		// ??? inherently type unsafe - kind of... because, now, ROI
 		//     does not expose SetLODs() ...
@@ -56,8 +56,8 @@ public:
 	virtual Tgl::Group* GetGeometry();                           // vtable+0x30
 	virtual const Tgl::Group* GetGeometry() const;               // vtable+0x34
 
-	inline int GetUnknown0xe0() { return m_unk0xe0; }
-	inline void SetUnknown0xe0(int p_unk0xe0) { m_unk0xe0 = p_unk0xe0; }
+	int GetUnknown0xe0() { return m_unk0xe0; }
+	void SetUnknown0xe0(int p_unk0xe0) { m_unk0xe0 = p_unk0xe0; }
 
 	static undefined SetUnk101013d8(undefined p_flag);
 

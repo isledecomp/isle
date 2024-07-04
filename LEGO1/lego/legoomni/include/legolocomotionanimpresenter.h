@@ -20,13 +20,13 @@ public:
 
 	// FUNCTION: LEGO1 0x1006ce50
 	// FUNCTION: BETA10 0x1005c4b0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1006ce60
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, ClassName()) || LegoLoopingAnimPresenter::IsA(p_name);
 	}
@@ -45,14 +45,14 @@ public:
 
 	void FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value);
 
-	inline void DecrementUnknown0xd4()
+	void DecrementUnknown0xd4()
 	{
 		if (m_unk0xd4) {
 			--m_unk0xd4;
 		}
 	}
 
-	inline undefined2 GetUnknown0xd4() { return m_unk0xd4; }
+	undefined2 GetUnknown0xd4() { return m_unk0xd4; }
 
 private:
 	void Init();

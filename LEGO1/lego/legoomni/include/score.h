@@ -15,14 +15,14 @@ public:
 	ScoreState() : m_playCubeTutorial(TRUE) {}
 
 	// FUNCTION: LEGO1 0x1000de40
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0084
 		return "ScoreState";
 	}
 
 	// FUNCTION: LEGO1 0x1000de50
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, ScoreState::ClassName()) || LegoState::IsA(p_name);
 	}
@@ -37,8 +37,8 @@ public:
 		return TRUE;
 	} // vtable+0x18
 
-	inline MxBool GetTutorialFlag() { return m_playCubeTutorial; }
-	inline void SetTutorialFlag(MxBool p_playCubeTutorial) { m_playCubeTutorial = p_playCubeTutorial; }
+	MxBool GetTutorialFlag() { return m_playCubeTutorial; }
+	void SetTutorialFlag(MxBool p_playCubeTutorial) { m_playCubeTutorial = p_playCubeTutorial; }
 
 	// SYNTHETIC: LEGO1 0x1000df00
 	// ScoreState::`scalar deleting destructor'
@@ -57,14 +57,14 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100010c0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0050
 		return "Score";
 	}
 
 	// FUNCTION: LEGO1 0x100010d0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Score::ClassName()) || LegoWorld::IsA(p_name);
 	}

@@ -39,8 +39,8 @@ public:
 	inline static int Unknown2(float p_und1, float p_und2, ViewROI* p_roi);
 	inline static int Unknown3(ViewROI* p_roi);
 
-	inline const CompoundObject& GetROIs() { return rois; }
-	inline void Add(ViewROI* p_roi) { rois.push_back(p_roi); }
+	const CompoundObject& GetROIs() { return rois; }
+	void Add(ViewROI* p_roi) { rois.push_back(p_roi); }
 
 	// SYNTHETIC: LEGO1 0x100a6000
 	// ViewManager::`scalar deleting destructor'

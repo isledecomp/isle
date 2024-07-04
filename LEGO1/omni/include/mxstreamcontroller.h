@@ -20,14 +20,14 @@ public:
 	~MxStreamController() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x100c0f10
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102130
 		return "MxStreamController";
 	}
 
 	// FUNCTION: LEGO1 0x100c0f20
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxStreamController::ClassName()) || MxCore::IsA(p_name);
 	}
@@ -51,11 +51,11 @@ public:
 	MxResult InsertActionToList54(MxDSAction* p_action);
 	MxNextActionDataStart* FindNextActionDataStartFromStreamingAction(MxDSStreamingAction* p_action);
 
-	inline MxAtomId& GetAtom() { return m_atom; }
-	inline MxStreamProvider* GetProvider() { return m_provider; }
-	inline MxStreamListMxDSAction& GetUnk0x3c() { return m_unk0x3c; }
-	inline MxStreamListMxDSAction& GetUnk0x54() { return m_unk0x54; }
-	inline MxStreamListMxDSSubscriber& GetSubscriberList() { return m_subscriberList; }
+	MxAtomId& GetAtom() { return m_atom; }
+	MxStreamProvider* GetProvider() { return m_provider; }
+	MxStreamListMxDSAction& GetUnk0x3c() { return m_unk0x3c; }
+	MxStreamListMxDSAction& GetUnk0x54() { return m_unk0x54; }
+	MxStreamListMxDSSubscriber& GetSubscriberList() { return m_subscriberList; }
 
 protected:
 	MxCriticalSection m_criticalSection;                // 0x08

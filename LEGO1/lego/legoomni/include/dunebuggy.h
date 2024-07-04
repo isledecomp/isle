@@ -11,14 +11,14 @@ public:
 	DuneBuggy();
 
 	// FUNCTION: LEGO1 0x10067c30
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0410
 		return "DuneBuggy";
 	}
 
 	// FUNCTION: LEGO1 0x10067c40
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, DuneBuggy::ClassName()) || IslePathActor::IsA(p_name);
 	}

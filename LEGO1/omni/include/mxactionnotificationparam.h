@@ -10,7 +10,7 @@ class MxPresenter;
 // SIZE 0x14
 class MxActionNotificationParam : public MxNotificationParam {
 public:
-	inline MxActionNotificationParam(
+	MxActionNotificationParam(
 		NotificationId p_type,
 		MxCore* p_sender,
 		MxDSAction* p_action,
@@ -35,7 +35,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10051050
-	inline ~MxActionNotificationParam() override
+	~MxActionNotificationParam() override
 	{
 		if (!m_realloc) {
 			return;
@@ -52,7 +52,7 @@ public:
 		return new MxActionNotificationParam(m_type, m_sender, m_action, m_realloc);
 	} // vtable+0x04
 
-	inline MxDSAction* GetAction() { return m_action; }
+	MxDSAction* GetAction() { return m_action; }
 
 protected:
 	MxDSAction* m_action; // 0x0c
@@ -63,7 +63,7 @@ protected:
 // SIZE 0x14
 class MxStartActionNotificationParam : public MxActionNotificationParam {
 public:
-	inline MxStartActionNotificationParam(
+	MxStartActionNotificationParam(
 		NotificationId p_type,
 		MxCore* p_sender,
 		MxDSAction* p_action,
@@ -80,7 +80,7 @@ public:
 // SIZE 0x14
 class MxEndActionNotificationParam : public MxActionNotificationParam {
 public:
-	inline MxEndActionNotificationParam(
+	MxEndActionNotificationParam(
 		NotificationId p_type,
 		MxCore* p_sender,
 		MxDSAction* p_action,
@@ -101,7 +101,7 @@ public:
 // SIZE 0x18
 class MxType4NotificationParam : public MxActionNotificationParam {
 public:
-	inline MxType4NotificationParam(MxCore* p_sender, MxDSAction* p_action, MxPresenter* p_unk0x14)
+	MxType4NotificationParam(MxCore* p_sender, MxDSAction* p_action, MxPresenter* p_unk0x14)
 		: MxActionNotificationParam(c_notificationType4, p_sender, p_action, FALSE)
 	{
 		m_unk0x14 = p_unk0x14;

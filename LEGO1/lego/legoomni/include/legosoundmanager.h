@@ -21,7 +21,7 @@ public:
 
 	void UpdateListener(const float* p_position, const float* p_direction, const float* p_up, const float* p_velocity);
 
-	inline LegoCacheSoundManager* GetCacheSoundManager() { return m_cacheSoundManager; }
+	LegoCacheSoundManager* GetCacheSoundManager() { return m_cacheSoundManager; }
 
 private:
 	void Init();

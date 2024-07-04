@@ -9,8 +9,8 @@
 // SIZE 0x14
 class Mx3DPointFloat : public Vector3 {
 public:
-	inline Mx3DPointFloat() : Vector3(m_elements) {}
-	inline Mx3DPointFloat(float p_x, float p_y, float p_z) : Vector3(m_elements)
+	Mx3DPointFloat() : Vector3(m_elements) {}
+	Mx3DPointFloat(float p_x, float p_y, float p_z) : Vector3(m_elements)
 	{
 		m_elements[0] = p_x;
 		m_elements[1] = p_y;
@@ -18,9 +18,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100343a0
-	inline Mx3DPointFloat(const Mx3DPointFloat& p_other) : Vector3(m_elements) { EqualsImpl(p_other.m_data); }
+	Mx3DPointFloat(const Mx3DPointFloat& p_other) : Vector3(m_elements) { EqualsImpl(p_other.m_data); }
 
-	inline Mx3DPointFloat(const Vector3& p_other) : Vector3(m_elements) { EqualsImpl(p_other.m_data); }
+	Mx3DPointFloat(const Vector3& p_other) : Vector3(m_elements) { EqualsImpl(p_other.m_data); }
 
 	// SYNTHETIC: LEGO1 0x1001d170
 	// Mx3DPointFloat::Mx3DPointFloat
@@ -28,12 +28,12 @@ public:
 	// FUNCTION: LEGO1 0x10003c10
 	virtual void operator=(const Vector3& p_impl) { EqualsImpl(p_impl.m_data); } // vtable+0x88
 
-	inline float GetX() { return m_data[0]; }
-	inline float GetY() { return m_data[1]; }
-	inline float GetZ() { return m_data[2]; }
+	float GetX() { return m_data[0]; }
+	float GetY() { return m_data[1]; }
+	float GetZ() { return m_data[2]; }
 
-	inline float& operator[](int idx) { return m_data[idx]; }
-	inline const float& operator[](int idx) const { return m_data[idx]; }
+	float& operator[](int idx) { return m_data[idx]; }
+	const float& operator[](int idx) const { return m_data[idx]; }
 
 	// SYNTHETIC: LEGO1 0x10010c00
 	// Mx3DPointFloat::operator=
@@ -48,9 +48,9 @@ private:
 class Mx4DPointFloat : public Vector4 {
 public:
 	// FUNCTION: LEGO1 0x10048290
-	inline Mx4DPointFloat() : Vector4(m_elements) {}
+	Mx4DPointFloat() : Vector4(m_elements) {}
 
-	inline Mx4DPointFloat(float p_x, float p_y, float p_z, float p_a) : Vector4(m_elements)
+	Mx4DPointFloat(float p_x, float p_y, float p_z, float p_a) : Vector4(m_elements)
 	{
 		m_elements[0] = p_x;
 		m_elements[1] = p_y;
@@ -58,13 +58,13 @@ public:
 		m_elements[3] = p_a;
 	}
 
-	inline Mx4DPointFloat(const Mx4DPointFloat& p_other) : Vector4(m_elements) { EqualsImpl(p_other.m_data); }
+	Mx4DPointFloat(const Mx4DPointFloat& p_other) : Vector4(m_elements) { EqualsImpl(p_other.m_data); }
 
 	// FUNCTION: LEGO1 0x10003200
 	virtual void operator=(const Vector4& p_impl) { EqualsImpl(p_impl.m_data); } // vtable+0x98
 
-	inline float& operator[](int idx) { return m_data[idx]; }
-	inline const float& operator[](int idx) const { return m_data[idx]; }
+	float& operator[](int idx) { return m_data[idx]; }
+	const float& operator[](int idx) const { return m_data[idx]; }
 
 	// SYNTHETIC: LEGO1 0x10064b20
 	// Mx4DPointFloat::operator=
@@ -84,35 +84,35 @@ public:
 	UnknownMx4DPointFloat() : m_unk0x30(0) {}
 
 	// FUNCTION: BETA10 0x1004a9b0
-	inline void Unknown1(Matrix4& p_m1, Matrix4& p_m2)
+	void Unknown1(Matrix4& p_m1, Matrix4& p_m2)
 	{
 		Unknown2(p_m1);
 		Unknown3(p_m2);
 	}
 
 	// FUNCTION: BETA10 0x1004a9f0
-	inline void Unknown2(Matrix4& p_m)
+	void Unknown2(Matrix4& p_m)
 	{
 		p_m.ToQuaternion(m_unk0x00);
 		m_unk0x30 |= c_bit1;
 	}
 
 	// FUNCTION: BETA10 0x1004aa30
-	inline void Unknown3(Matrix4& p_m)
+	void Unknown3(Matrix4& p_m)
 	{
 		p_m.ToQuaternion(m_unk0x18);
 		m_unk0x30 |= c_bit2;
 	}
 
 	// FUNCTION: BETA10 0x10180b80
-	inline void Unknown4(Vector4& p_v)
+	void Unknown4(Vector4& p_v)
 	{
 		m_unk0x00 = p_v;
 		m_unk0x30 |= c_bit1;
 	}
 
 	// FUNCTION: BETA10 0x10180bc0
-	inline void Unknown5(Vector4& p_v)
+	void Unknown5(Vector4& p_v)
 	{
 		m_unk0x18 = p_v;
 		m_unk0x30 |= c_bit2;

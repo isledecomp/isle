@@ -8,7 +8,7 @@
 class MxNextActionDataStart : public MxCore {
 public:
 	// inlined constructor at 0x100c1847
-	inline MxNextActionDataStart(MxU32 p_objectId, MxS16 p_unk0x24, MxU32 p_data)
+	MxNextActionDataStart(MxU32 p_objectId, MxS16 p_unk0x24, MxU32 p_data)
 	{
 		m_objectId = p_objectId;
 		m_unk0x24 = p_unk0x24;
@@ -16,22 +16,22 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100c1900
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101025a0
 		return "MxNextActionDataStart";
 	}
 
 	// FUNCTION: LEGO1 0x100c1910
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxNextActionDataStart::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	inline MxU32 GetObjectId() const { return m_objectId; }
-	inline MxS16 GetUnknown24() const { return m_unk0x24; }
-	inline MxU32 GetData() const { return m_data; }
-	inline void SetData(MxU32 p_data) { m_data = p_data; }
+	MxU32 GetObjectId() const { return m_objectId; }
+	MxS16 GetUnknown24() const { return m_unk0x24; }
+	MxU32 GetData() const { return m_data; }
+	void SetData(MxU32 p_data) { m_data = p_data; }
 
 	// SYNTHETIC: LEGO1 0x100c1990
 	// MxNextActionDataStart::`scalar deleting destructor'

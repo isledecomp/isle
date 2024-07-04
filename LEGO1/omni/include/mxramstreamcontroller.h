@@ -10,17 +10,17 @@ class MxDSStreamingAction;
 // SIZE 0x98
 class MxRAMStreamController : public MxStreamController {
 public:
-	inline MxRAMStreamController() {}
+	MxRAMStreamController() {}
 
 	// FUNCTION: LEGO1 0x100b9430
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102118
 		return "MxRAMStreamController";
 	}
 
 	// FUNCTION: LEGO1 0x100b9440
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxRAMStreamController::ClassName()) ||
 			   !strcmp(p_name, MxStreamController::ClassName()) || MxCore::IsA(p_name);

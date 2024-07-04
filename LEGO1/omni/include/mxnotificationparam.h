@@ -38,19 +38,19 @@ enum NotificationId {
 // SIZE 0x0c
 class MxNotificationParam : public MxParam {
 public:
-	inline MxNotificationParam() : m_type(c_notificationType0), m_sender(NULL) {}
-	inline MxNotificationParam(NotificationId p_type, MxCore* p_sender) : MxParam(), m_type(p_type), m_sender(p_sender)
+	MxNotificationParam() : m_type(c_notificationType0), m_sender(NULL) {}
+	MxNotificationParam(NotificationId p_type, MxCore* p_sender) : MxParam(), m_type(p_type), m_sender(p_sender)
 	{
 	}
 
 	// FUNCTION: LEGO1 0x10010390
 	virtual MxNotificationParam* Clone() const { return new MxNotificationParam(m_type, m_sender); } // vtable+0x04
 
-	inline NotificationId GetNotification() const { return m_type; }
-	inline MxCore* GetSender() const { return m_sender; }
+	NotificationId GetNotification() const { return m_type; }
+	MxCore* GetSender() const { return m_sender; }
 
-	inline void SetNotification(NotificationId p_type) { m_type = p_type; }
-	inline void SetSender(MxCore* p_sender) { m_sender = p_sender; }
+	void SetNotification(NotificationId p_type) { m_type = p_type; }
+	void SetSender(MxCore* p_sender) { m_sender = p_sender; }
 
 protected:
 	NotificationId m_type; // 0x04

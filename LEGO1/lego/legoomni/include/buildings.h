@@ -9,14 +9,14 @@ class LegoEventNotificationParam;
 // SIZE 0x68
 class RaceStandsEntity : public BuildingEntity {
 	// FUNCTION: LEGO1 0x1000efa0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0300
 		return "RaceStandsEntity";
 	}
 
 	// FUNCTION: LEGO1 0x1000efb0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, RaceStandsEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
@@ -32,14 +32,14 @@ class RaceStandsEntity : public BuildingEntity {
 class BeachHouseEntity : public BuildingEntity {
 public:
 	// FUNCTION: LEGO1 0x1000ee80
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0314
 		return "BeachHouseEntity";
 	}
 
 	// FUNCTION: LEGO1 0x1000ee90
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, BeachHouseEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
@@ -55,14 +55,14 @@ public:
 class PoliceEntity : public BuildingEntity {
 public:
 	// FUNCTION: LEGO1 0x1000ed60
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0328
 		return "PoliceEntity";
 	}
 
 	// FUNCTION: LEGO1 0x1000ed70
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, PoliceEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
@@ -78,14 +78,14 @@ public:
 class InfoCenterEntity : public BuildingEntity {
 public:
 	// FUNCTION: LEGO1 0x1000ea00
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f035c
 		return "InfoCenterEntity";
 	}
 
 	// FUNCTION: LEGO1 0x1000ea10
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, InfoCenterEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
@@ -101,14 +101,14 @@ public:
 class HospitalEntity : public BuildingEntity {
 public:
 	// FUNCTION: LEGO1 0x1000ec40
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0338
 		return "HospitalEntity";
 	}
 
 	// FUNCTION: LEGO1 0x1000ec50
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, HospitalEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
@@ -123,14 +123,14 @@ public:
 // SIZE 0x68
 class CaveEntity : public BuildingEntity {
 	// FUNCTION: LEGO1 0x1000f1e0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0300
 		return "RaceStandsEntity";
 	}
 
 	// FUNCTION: LEGO1 0x1000f1f0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, CaveEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
@@ -145,14 +145,14 @@ class CaveEntity : public BuildingEntity {
 // SIZE 0x68
 class JailEntity : public BuildingEntity {
 	// FUNCTION: LEGO1 0x1000f0c0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0300
 		return "RaceStandsEntity";
 	}
 
 	// FUNCTION: LEGO1 0x1000f0d0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, JailEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
@@ -168,14 +168,14 @@ class JailEntity : public BuildingEntity {
 class GasStationEntity : public BuildingEntity {
 public:
 	// FUNCTION: LEGO1 0x1000eb20
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0348
 		return "GasStationEntity";
 	}
 
 	// FUNCTION: LEGO1 0x1000eb30
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, GasStationEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}

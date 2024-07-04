@@ -56,14 +56,14 @@ public:
 	~AnimState() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10065070
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0460
 		return "AnimState";
 	}
 
 	// FUNCTION: LEGO1 0x10065080
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, AnimState::ClassName()) || LegoState::IsA(p_name);
 	}
@@ -135,14 +135,14 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1005ec80
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f7508
 		return "LegoAnimationManager";
 	}
 
 	// FUNCTION: LEGO1 0x1005ec90
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, ClassName()) || MxCore::IsA(p_name);
 	}

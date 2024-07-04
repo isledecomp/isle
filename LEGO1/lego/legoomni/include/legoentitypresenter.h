@@ -22,13 +22,13 @@ public:
 
 	// FUNCTION: LEGO1 0x100534b0
 	// FUNCTION: BETA10 0x10080750
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x100534c0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoEntityPresenter::ClassName()) || MxCompositePresenter::IsA(p_name);
 	}
@@ -43,8 +43,8 @@ public:
 
 	void SetEntityLocation(const Vector3& p_location, const Vector3& p_direction, const Vector3& p_up);
 
-	inline LegoEntity* GetInternalEntity() { return m_entity; }
-	inline void SetInternalEntity(LegoEntity* p_entity) { m_entity = p_entity; }
+	LegoEntity* GetInternalEntity() { return m_entity; }
+	void SetInternalEntity(LegoEntity* p_entity) { m_entity = p_entity; }
 
 	// SYNTHETIC: LEGO1 0x100535a0
 	// LegoEntityPresenter::`scalar deleting destructor'

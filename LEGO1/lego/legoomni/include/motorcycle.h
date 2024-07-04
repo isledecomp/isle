@@ -11,14 +11,14 @@ public:
 	Motocycle();
 
 	// FUNCTION: LEGO1 0x10035840
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f38e8
 		return "Motorcycle";
 	}
 
 	// FUNCTION: LEGO1 0x10035850
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Motocycle::ClassName()) || IslePathActor::IsA(p_name);
 	}

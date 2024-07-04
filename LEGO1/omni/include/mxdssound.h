@@ -14,14 +14,14 @@ public:
 	MxDSSound& operator=(MxDSSound& p_dsSound);
 
 	// FUNCTION: LEGO1 0x100c9330
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101025e4
 		return "MxDSSound";
 	}
 
 	// FUNCTION: LEGO1 0x100c9340
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSSound::ClassName()) || MxDSMediaAction::IsA(p_name);
 	}
@@ -30,7 +30,7 @@ public:
 	void Deserialize(MxU8*& p_source, MxS16 p_unk0x24) override; // vtable+1c;
 	MxDSAction* Clone() override;                                // vtable+2c;
 
-	inline MxS32 GetVolume() const { return m_volume; }
+	MxS32 GetVolume() const { return m_volume; }
 
 	// SYNTHETIC: LEGO1 0x100c9450
 	// MxDSSound::`scalar deleting destructor'

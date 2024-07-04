@@ -58,7 +58,7 @@ public:
 	}
 
 	// FUNCTION: BETA10 0x1007bc00
-	inline T* Get(const char* p_name)
+	T* Get(const char* p_name)
 	{
 		T* value = NULL;
 
@@ -75,7 +75,7 @@ public:
 		return value;
 	}
 
-	inline void Add(const char* p_name, T* p_value)
+	void Add(const char* p_name, T* p_value)
 	{
 #ifdef COMPAT_MODE
 		typename LegoContainerInfo<T>::iterator it = m_map.find(p_name);
@@ -99,7 +99,7 @@ public:
 		m_map[name] = p_value;
 	}
 
-	inline void SetOwnership(LegoBool p_ownership) { m_ownership = p_ownership; }
+	void SetOwnership(LegoBool p_ownership) { m_ownership = p_ownership; }
 
 protected:
 	LegoBool m_ownership;       // 0x04

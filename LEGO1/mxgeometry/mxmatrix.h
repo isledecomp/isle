@@ -8,12 +8,12 @@
 class MxMatrix : public Matrix4 {
 public:
 	// FUNCTION: LEGO1 0x1006b120
-	inline MxMatrix() : Matrix4(m_elements) {}
+	MxMatrix() : Matrix4(m_elements) {}
 
 	// FUNCTION: LEGO1 0x10032770
-	inline MxMatrix(const MxMatrix& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
+	MxMatrix(const MxMatrix& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
 
-	inline MxMatrix(const Matrix4& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
+	MxMatrix(const Matrix4& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
 
 	float* operator[](int idx) { return m_data[idx]; }
 	const float* operator[](int idx) const { return m_data[idx]; }

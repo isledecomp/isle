@@ -23,14 +23,14 @@ public:
 	PizzeriaState();
 
 	// FUNCTION: LEGO1 0x10017c20
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0370
 		return "PizzeriaState";
 	}
 
 	// FUNCTION: LEGO1 0x10017c30
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, PizzeriaState::ClassName()) || LegoState::IsA(p_name);
 	}
@@ -55,14 +55,14 @@ public:
 	Pizzeria() : m_pizzeriaState(NULL) {}
 
 	// FUNCTION: LEGO1 0x1000e780
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0380
 		return "Pizzeria";
 	}
 
 	// FUNCTION: LEGO1 0x1000e790
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Pizzeria::ClassName()) || IsleActor::IsA(p_name);
 	}

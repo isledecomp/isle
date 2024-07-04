@@ -21,14 +21,14 @@ public:
 	GasStationState();
 
 	// FUNCTION: LEGO1 0x100061d0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0174
 		return "GasStationState";
 	}
 
 	// FUNCTION: LEGO1 0x100061e0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, GasStationState::ClassName()) || LegoState::IsA(p_name);
 	}
@@ -64,14 +64,14 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10004780
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0168
 		return "GasStation";
 	}
 
 	// FUNCTION: LEGO1 0x10004790
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, GasStation::ClassName()) || LegoWorld::IsA(p_name);
 	}

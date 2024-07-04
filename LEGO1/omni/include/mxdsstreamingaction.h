@@ -31,18 +31,18 @@ public:
 	void SetInternalAction(MxDSAction* p_dsAction);
 	void FUN_100cd2d0();
 
-	inline MxU32 GetUnknown94() { return m_unk0x94; }
-	inline MxS32 GetUnknown9c() { return m_unk0x9c; }
-	inline MxDSBuffer* GetUnknowna0() { return m_unk0xa0; }
-	inline MxDSBuffer* GetUnknowna4() { return m_unk0xa4; }
-	inline MxLong GetUnknowna8() { return m_unk0xa8; }
-	inline MxDSAction* GetInternalAction() { return m_internalAction; }
-	inline MxU32 GetBufferOffset() { return m_bufferOffset; }
-	inline void SetUnknown94(MxU32 p_unk0x94) { m_unk0x94 = p_unk0x94; }
-	inline void SetUnknown9c(MxS32 p_unk0x9c) { m_unk0x9c = p_unk0x9c; }
-	inline void SetUnknowna0(MxDSBuffer* p_unk0xa0) { m_unk0xa0 = p_unk0xa0; }
-	inline void SetUnknowna4(MxDSBuffer* p_unk0xa4) { m_unk0xa4 = p_unk0xa4; }
-	inline void SetBufferOffset(MxU32 p_bufferOffset) { m_bufferOffset = p_bufferOffset; }
+	MxU32 GetUnknown94() { return m_unk0x94; }
+	MxS32 GetUnknown9c() { return m_unk0x9c; }
+	MxDSBuffer* GetUnknowna0() { return m_unk0xa0; }
+	MxDSBuffer* GetUnknowna4() { return m_unk0xa4; }
+	MxLong GetUnknowna8() { return m_unk0xa8; }
+	MxDSAction* GetInternalAction() { return m_internalAction; }
+	MxU32 GetBufferOffset() { return m_bufferOffset; }
+	void SetUnknown94(MxU32 p_unk0x94) { m_unk0x94 = p_unk0x94; }
+	void SetUnknown9c(MxS32 p_unk0x9c) { m_unk0x9c = p_unk0x9c; }
+	void SetUnknowna0(MxDSBuffer* p_unk0xa0) { m_unk0xa0 = p_unk0xa0; }
+	void SetUnknowna4(MxDSBuffer* p_unk0xa4) { m_unk0xa4 = p_unk0xa4; }
+	void SetBufferOffset(MxU32 p_bufferOffset) { m_bufferOffset = p_bufferOffset; }
 
 	// SYNTHETIC: LEGO1 0x100cd0b0
 	// MxDSStreamingAction::`scalar deleting destructor'

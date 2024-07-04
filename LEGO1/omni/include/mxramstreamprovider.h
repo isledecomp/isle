@@ -11,14 +11,14 @@ public:
 	~MxRAMStreamProvider() override;
 
 	// FUNCTION: LEGO1 0x100d0970
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102864
 		return "MxRAMStreamProvider";
 	}
 
 	// FUNCTION: LEGO1 0x100d0980
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxRAMStreamProvider::ClassName()) || MxStreamProvider::IsA(p_name);
 	}
@@ -29,7 +29,7 @@ public:
 	MxU32 GetLengthInDWords() override;                                 // vtable+0x24
 	MxU32* GetBufferForDWords() override;                               // vtable+0x28
 
-	inline MxU8* GetBufferOfFileSize() { return m_pBufferOfFileSize; }
+	MxU8* GetBufferOfFileSize() { return m_pBufferOfFileSize; }
 
 protected:
 	MxU32 m_bufferSize;        // 0x10

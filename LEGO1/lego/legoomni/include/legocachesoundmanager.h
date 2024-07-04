@@ -25,8 +25,8 @@ struct LegoCacheSoundEntry {
 	bool operator==(LegoCacheSoundEntry) const { return 0; }
 	bool operator<(LegoCacheSoundEntry) const { return 0; }
 
-	inline LegoCacheSound* GetSound() const { return m_sound; }
-	inline const char* GetName() const { return m_name; }
+	LegoCacheSound* GetSound() const { return m_sound; }
+	const char* GetName() const { return m_name; }
 
 	friend struct Set100d6b4cComparator;
 

@@ -11,7 +11,7 @@ public:
 	Act3Shark();
 
 	// FUNCTION: LEGO1 0x100430d0
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03a0
 		return "Act3Shark";

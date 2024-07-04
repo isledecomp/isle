@@ -15,14 +15,14 @@ public:
 	~MxControlPresenter() override;
 
 	// FUNCTION: LEGO1 0x10044000
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0514
 		return "MxControlPresenter";
 	}
 
 	// FUNCTION: LEGO1 0x10044010
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxControlPresenter::ClassName()) || MxCompositePresenter::IsA(p_name);
 	}
@@ -42,7 +42,7 @@ public:
 	MxBool FUN_10044480(LegoControlManagerNotificationParam* p_param, MxPresenter* p_presenter);
 	MxBool FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* p_presenter);
 
-	inline MxS16 GetUnknown0x4e() { return m_unk0x4e; }
+	MxS16 GetUnknown0x4e() { return m_unk0x4e; }
 
 private:
 	undefined2 m_unk0x4c; // 0x4c

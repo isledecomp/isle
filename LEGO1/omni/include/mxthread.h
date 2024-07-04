@@ -19,7 +19,7 @@ public:
 	void Terminate();
 	void Sleep(MxS32 p_milliseconds);
 
-	inline MxBool IsRunning() { return m_running; }
+	MxBool IsRunning() { return m_running; }
 
 	// SYNTHETIC: LEGO1 0x100bf580
 	// MxThread::`scalar deleting destructor'

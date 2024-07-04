@@ -15,14 +15,14 @@ public:
 	~MxDSSource() override { delete[] m_pBuffer; }
 
 	// FUNCTION: LEGO1 0x100c0010
-	inline const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102588
 		return "MxDSSource";
 	}
 
 	// FUNCTION: LEGO1 0x100c0020
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSSource::ClassName()) || MxCore::IsA(p_name);
 	}
@@ -36,7 +36,7 @@ public:
 	virtual MxULong GetStreamBuffersNum() = 0;           // vtable+0x2c
 	virtual MxLong GetLengthInDWords();                  // vtable+0x30
 	virtual MxU32* GetBuffer();                          // vtable+0x34
-	inline MxLong GetPosition() const { return m_position; }
+	MxLong GetPosition() const { return m_position; }
 
 protected:
 	MxULong m_lengthInDWords; // 0x08
