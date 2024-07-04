@@ -18,24 +18,24 @@ MxU32 g_unk0x1010215c = 0;
 // FUNCTION: LEGO1 0x100ba500
 MxDisplaySurface::MxDisplaySurface()
 {
-	this->Init();
+	Init();
 }
 
 // FUNCTION: LEGO1 0x100ba5a0
 MxDisplaySurface::~MxDisplaySurface()
 {
-	this->Destroy();
+	Destroy();
 }
 
 // FUNCTION: LEGO1 0x100ba610
 void MxDisplaySurface::Init()
 {
-	this->m_ddSurface1 = NULL;
-	this->m_ddSurface2 = NULL;
-	this->m_ddClipper = NULL;
-	this->m_16bitPal = NULL;
-	this->m_initialized = FALSE;
-	memset(&this->m_surfaceDesc, 0, sizeof(this->m_surfaceDesc));
+	m_ddSurface1 = NULL;
+	m_ddSurface2 = NULL;
+	m_ddClipper = NULL;
+	m_16bitPal = NULL;
+	m_initialized = FALSE;
+	memset(&m_surfaceDesc, 0, sizeof(m_surfaceDesc));
 }
 
 // FUNCTION: LEGO1 0x100ba640
@@ -115,16 +115,16 @@ MxResult MxDisplaySurface::Init(
 {
 	MxResult result = SUCCESS;
 
-	this->m_videoParam = p_videoParam;
-	this->m_ddSurface1 = p_ddSurface1;
-	this->m_ddSurface2 = p_ddSurface2;
-	this->m_ddClipper = p_ddClipper;
-	this->m_initialized = FALSE;
+	m_videoParam = p_videoParam;
+	m_ddSurface1 = p_ddSurface1;
+	m_ddSurface2 = p_ddSurface2;
+	m_ddClipper = p_ddClipper;
+	m_initialized = FALSE;
 
-	memset(&this->m_surfaceDesc, 0, sizeof(this->m_surfaceDesc));
-	this->m_surfaceDesc.dwSize = sizeof(this->m_surfaceDesc);
+	memset(&m_surfaceDesc, 0, sizeof(m_surfaceDesc));
+	m_surfaceDesc.dwSize = sizeof(m_surfaceDesc);
 
-	if (this->m_ddSurface2->GetSurfaceDesc(&this->m_surfaceDesc)) {
+	if (m_ddSurface2->GetSurfaceDesc(&m_surfaceDesc)) {
 		result = FAILURE;
 	}
 
@@ -139,32 +139,32 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 	LPDIRECTDRAW lpDirectDraw = MVideoManager()->GetDirectDraw();
 	HWND hWnd = MxOmni::GetInstance()->GetWindowHandle();
 
-	this->m_initialized = TRUE;
-	this->m_videoParam = p_videoParam;
+	m_initialized = TRUE;
+	m_videoParam = p_videoParam;
 
-	if (!this->m_videoParam.Flags().GetFullScreen()) {
-		this->m_videoParam.Flags().SetFlipSurfaces(FALSE);
+	if (!m_videoParam.Flags().GetFullScreen()) {
+		m_videoParam.Flags().SetFlipSurfaces(FALSE);
 	}
 
-	if (!this->m_videoParam.Flags().GetFlipSurfaces()) {
-		this->m_videoParam.SetBackBuffers(1);
+	if (!m_videoParam.Flags().GetFlipSurfaces()) {
+		m_videoParam.SetBackBuffers(1);
 	}
 	else {
-		MxU32 backBuffers = this->m_videoParam.GetBackBuffers();
+		MxU32 backBuffers = m_videoParam.GetBackBuffers();
 
 		if (backBuffers < 1) {
-			this->m_videoParam.SetBackBuffers(1);
+			m_videoParam.SetBackBuffers(1);
 		}
 		else if (backBuffers > 2) {
-			this->m_videoParam.SetBackBuffers(2);
+			m_videoParam.SetBackBuffers(2);
 		}
 
-		this->m_videoParam.Flags().SetBackBuffers(TRUE);
+		m_videoParam.Flags().SetBackBuffers(TRUE);
 	}
 
-	if (this->m_videoParam.Flags().GetFullScreen()) {
-		MxS32 width = this->m_videoParam.GetRect().GetWidth();
-		MxS32 height = this->m_videoParam.GetRect().GetHeight();
+	if (m_videoParam.Flags().GetFullScreen()) {
+		MxS32 width = m_videoParam.GetRect().GetWidth();
+		MxS32 height = m_videoParam.GetRect().GetHeight();
 
 		if (lpDirectDraw->SetCooperativeLevel(hWnd, DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN)) {
 			goto done;
@@ -177,7 +177,7 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 			goto done;
 		}
 
-		MxS32 bitdepth = !this->m_videoParam.Flags().Get16Bit() ? 8 : 16;
+		MxS32 bitdepth = !m_videoParam.Flags().Get16Bit() ? 8 : 16;
 
 		if (ddsd.dwWidth != width || ddsd.dwHeight != height || ddsd.ddpfPixelFormat.dwRGBBitCount != bitdepth) {
 			if (lpDirectDraw->SetDisplayMode(width, height, bitdepth)) {
@@ -186,20 +186,20 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		}
 	}
 
-	if (this->m_videoParam.Flags().GetFlipSurfaces()) {
+	if (m_videoParam.Flags().GetFlipSurfaces()) {
 		memset(&ddsd, 0, sizeof(ddsd));
 		ddsd.dwSize = sizeof(ddsd);
-		ddsd.dwBackBufferCount = this->m_videoParam.GetBackBuffers();
+		ddsd.dwBackBufferCount = m_videoParam.GetBackBuffers();
 		ddsd.dwFlags = DDSD_CAPS | DDSD_BACKBUFFERCOUNT;
 		ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE | DDSCAPS_PRIMARYSURFACE | DDSCAPS_FLIP | DDSCAPS_COMPLEX;
 
-		if (lpDirectDraw->CreateSurface(&ddsd, &this->m_ddSurface1, NULL)) {
+		if (lpDirectDraw->CreateSurface(&ddsd, &m_ddSurface1, NULL)) {
 			goto done;
 		}
 
 		ddsd.ddsCaps.dwCaps = DDSCAPS_BACKBUFFER;
 
-		if (this->m_ddSurface1->GetAttachedSurface(&ddsd.ddsCaps, &this->m_ddSurface2)) {
+		if (m_ddSurface1->GetAttachedSurface(&ddsd.ddsCaps, &m_ddSurface2)) {
 			goto done;
 		}
 	}
@@ -209,32 +209,32 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		ddsd.dwFlags = DDSD_CAPS;
 		ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
 
-		if (lpDirectDraw->CreateSurface(&ddsd, &this->m_ddSurface1, NULL)) {
+		if (lpDirectDraw->CreateSurface(&ddsd, &m_ddSurface1, NULL)) {
 			goto done;
 		}
 
 		memset(&ddsd, 0, sizeof(ddsd));
 		ddsd.dwSize = sizeof(ddsd);
 		ddsd.dwFlags = DDSD_HEIGHT | DDSD_WIDTH | DDSD_CAPS;
-		ddsd.dwWidth = this->m_videoParam.GetRect().GetWidth();
-		ddsd.dwHeight = this->m_videoParam.GetRect().GetHeight();
+		ddsd.dwWidth = m_videoParam.GetRect().GetWidth();
+		ddsd.dwHeight = m_videoParam.GetRect().GetHeight();
 		ddsd.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_3DDEVICE | DDSCAPS_OFFSCREENPLAIN;
 
-		if (!this->m_videoParam.Flags().GetBackBuffers()) {
+		if (!m_videoParam.Flags().GetBackBuffers()) {
 			ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE | DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
 		}
 
-		if (lpDirectDraw->CreateSurface(&ddsd, &this->m_ddSurface2, NULL)) {
+		if (lpDirectDraw->CreateSurface(&ddsd, &m_ddSurface2, NULL)) {
 			goto done;
 		}
 	}
 
-	memset(&this->m_surfaceDesc, 0, sizeof(this->m_surfaceDesc));
-	this->m_surfaceDesc.dwSize = sizeof(this->m_surfaceDesc);
+	memset(&m_surfaceDesc, 0, sizeof(m_surfaceDesc));
+	m_surfaceDesc.dwSize = sizeof(m_surfaceDesc);
 
-	if (!this->m_ddSurface2->GetSurfaceDesc(&this->m_surfaceDesc)) {
-		if (!lpDirectDraw->CreateClipper(0, &this->m_ddClipper, NULL) && !this->m_ddClipper->SetHWnd(0, hWnd) &&
-			!this->m_ddSurface1->SetClipper(this->m_ddClipper)) {
+	if (!m_ddSurface2->GetSurfaceDesc(&m_surfaceDesc)) {
+		if (!lpDirectDraw->CreateClipper(0, &m_ddClipper, NULL) && !m_ddClipper->SetHWnd(0, hWnd) &&
+			!m_ddSurface1->SetClipper(m_ddClipper)) {
 			result = SUCCESS;
 		}
 	}
@@ -246,25 +246,25 @@ done:
 // FUNCTION: LEGO1 0x100baa90
 void MxDisplaySurface::Destroy()
 {
-	if (this->m_initialized) {
-		if (this->m_ddSurface2) {
-			this->m_ddSurface2->Release();
+	if (m_initialized) {
+		if (m_ddSurface2) {
+			m_ddSurface2->Release();
 		}
 
-		if (this->m_ddSurface1) {
-			this->m_ddSurface1->Release();
+		if (m_ddSurface1) {
+			m_ddSurface1->Release();
 		}
 
-		if (this->m_ddClipper) {
-			this->m_ddClipper->Release();
+		if (m_ddClipper) {
+			m_ddClipper->Release();
 		}
 	}
 
-	if (this->m_16bitPal) {
-		delete[] this->m_16bitPal;
+	if (m_16bitPal) {
+		delete[] m_16bitPal;
 	}
 
-	this->Init();
+	Init();
 }
 
 // FUNCTION: LEGO1 0x100baae0
@@ -659,7 +659,7 @@ void MxDisplaySurface::Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p
 // FUNCTION: LEGO1 0x100bbc10
 void MxDisplaySurface::GetDC(HDC* p_hdc)
 {
-	if (this->m_ddSurface2 && !this->m_ddSurface2->GetDC(p_hdc)) {
+	if (m_ddSurface2 && !m_ddSurface2->GetDC(p_hdc)) {
 		return;
 	}
 
@@ -669,8 +669,8 @@ void MxDisplaySurface::GetDC(HDC* p_hdc)
 // FUNCTION: LEGO1 0x100bbc40
 void MxDisplaySurface::ReleaseDC(HDC p_hdc)
 {
-	if (this->m_ddSurface2 && p_hdc) {
-		this->m_ddSurface2->ReleaseDC(p_hdc);
+	if (m_ddSurface2 && p_hdc) {
+		m_ddSurface2->ReleaseDC(p_hdc);
 	}
 }
 
