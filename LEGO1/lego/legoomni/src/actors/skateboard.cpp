@@ -82,7 +82,7 @@ MxLong SkateBoard::HandleClick()
 	FUN_10015820(TRUE, 0);
 
 	((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::Area::e_skateboard);
-	TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, TRUE);
+	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, TRUE);
 
 	if (GameState()->GetActorId() != UserActor()->GetActorId()) {
 		if (!UserActor()->IsA("SkateBoard")) {
