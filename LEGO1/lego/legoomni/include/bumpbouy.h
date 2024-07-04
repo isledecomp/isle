@@ -30,4 +30,7 @@ public:
 	// BumpBouy::`scalar deleting destructor'
 };
 
+// GLOBAL: LEGO1 0x100d6788
+// BumpBouy::`vbtable'
+
 #endif // BUMPBOUY_H
