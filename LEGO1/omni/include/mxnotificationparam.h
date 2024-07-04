@@ -39,9 +39,7 @@ enum NotificationId {
 class MxNotificationParam : public MxParam {
 public:
 	MxNotificationParam() : m_type(c_notificationType0), m_sender(NULL) {}
-	MxNotificationParam(NotificationId p_type, MxCore* p_sender) : MxParam(), m_type(p_type), m_sender(p_sender)
-	{
-	}
+	MxNotificationParam(NotificationId p_type, MxCore* p_sender) : MxParam(), m_type(p_type), m_sender(p_sender) {}
 
 	// FUNCTION: LEGO1 0x10010390
 	virtual MxNotificationParam* Clone() const { return new MxNotificationParam(m_type, m_sender); } // vtable+0x04

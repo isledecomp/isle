@@ -142,10 +142,7 @@ public:
 	void SetUserActor(LegoPathActor* p_userActor) { m_userActor = p_userActor; }
 	void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
 	void SetExit(MxBool p_exit) { m_exit = p_exit; }
-	MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction)
-	{
-		return m_unk0x13c ? Start(&p_dsAction) : SUCCESS;
-	}
+	MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction) { return m_unk0x13c ? Start(&p_dsAction) : SUCCESS; }
 	void SetUnknown13c(MxBool p_unk0x13c) { m_unk0x13c = p_unk0x13c; }
 
 	void CloseMainWindow() { PostMessageA(m_windowHandle, WM_CLOSE, 0, 0); }

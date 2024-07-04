@@ -10,12 +10,7 @@ class MxPresenter;
 // SIZE 0x14
 class MxActionNotificationParam : public MxNotificationParam {
 public:
-	MxActionNotificationParam(
-		NotificationId p_type,
-		MxCore* p_sender,
-		MxDSAction* p_action,
-		MxBool p_reallocAction
-	)
+	MxActionNotificationParam(NotificationId p_type, MxCore* p_sender, MxDSAction* p_action, MxBool p_reallocAction)
 		: MxNotificationParam(p_type, p_sender)
 	{
 		MxDSAction* oldAction = p_action;
@@ -80,12 +75,7 @@ public:
 // SIZE 0x14
 class MxEndActionNotificationParam : public MxActionNotificationParam {
 public:
-	MxEndActionNotificationParam(
-		NotificationId p_type,
-		MxCore* p_sender,
-		MxDSAction* p_action,
-		MxBool p_reallocAction
-	)
+	MxEndActionNotificationParam(NotificationId p_type, MxCore* p_sender, MxDSAction* p_action, MxBool p_reallocAction)
 		: MxActionNotificationParam(p_type, p_sender, p_action, p_reallocAction)
 	{
 	}
