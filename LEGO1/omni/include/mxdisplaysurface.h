@@ -95,11 +95,11 @@ public:
 	static LPDIRECTDRAWSURFACE CreateCursorSurface();
 	static LPDIRECTDRAWSURFACE CopySurface(LPDIRECTDRAWSURFACE p_src);
 
-	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface1() { return this->m_ddSurface1; }
-	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface2() { return this->m_ddSurface2; }
-	inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
+	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface1() { return m_ddSurface1; }
+	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface2() { return m_ddSurface2; }
+	inline MxVideoParam& GetVideoParam() { return m_videoParam; }
 
-	static void FUN_100bb500(
+	void FUN_100bb500(
 		MxU8** p_bitmapData,
 		MxU8** p_surfaceData,
 		MxU32 p_bitmapSize,

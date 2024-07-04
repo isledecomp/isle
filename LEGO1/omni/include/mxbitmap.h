@@ -94,6 +94,7 @@ public:
 	// FUNCTION: BETA10 0x1002c690
 	static MxLong HeightAbs(MxLong p_value) { return p_value > 0 ? p_value : -p_value; }
 
+	// FUNCTION: BETA10 0x10142030
 	inline BITMAPINFOHEADER* GetBmiHeader() const { return m_bmiHeader; }
 
 	// FUNCTION: BETA10 0x1002c440
@@ -124,15 +125,9 @@ public:
 		}
 	}
 
-	inline MxLong GetAdjustedStride()
-	{
-		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0) {
-			return GetBmiStride();
-		}
-		else {
-			return -GetBmiStride();
-		}
-	}
+#define GetAdjustedStride(p_bitmap)                                                                                    \
+	(p_bitmap->IsTopDown() ? p_bitmap->AlignToFourByte(p_bitmap->GetBmiWidth())                                        \
+						   : -p_bitmap->AlignToFourByte(p_bitmap->GetBmiWidth()))
 
 	// FUNCTION: BETA10 0x1002c320
 	inline MxU8* GetStart(MxS32 p_left, MxS32 p_top)
