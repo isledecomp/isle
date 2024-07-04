@@ -20,6 +20,7 @@ EmptyLineBeforeAccessModifier: Always
 IncludeBlocks: Regroup
 IndentAccessModifiers: false
 IndentWidth: 4
+InsertBraces: true
 InsertNewlineAtEOF: true
 PointerAlignment: Left
 QualifierAlignment: Custom
