@@ -274,14 +274,11 @@ void MxBitmap::BitBlt(
 	MxS32 p_height
 )
 {
-	MxLong dstHeight = GetBmiHeightAbs();
-	MxLong srcHeight = p_src->GetBmiHeightAbs();
-
-	if (GetRectIntersection(
+	if (!GetRectIntersection(
 			p_src->GetBmiWidth(),
-			srcHeight,
+			p_src->GetBmiHeightAbs(),
 			GetBmiWidth(),
-			dstHeight,
+			GetBmiHeightAbs(),
 			&p_srcLeft,
 			&p_srcTop,
 			&p_dstLeft,
@@ -289,16 +286,18 @@ void MxBitmap::BitBlt(
 			&p_width,
 			&p_height
 		)) {
-		MxU8* srcStart = p_src->GetStart(p_srcLeft, p_srcTop);
-		MxU8* dstStart = GetStart(p_dstLeft, p_dstTop);
-		MxLong srcStride = p_src->GetAdjustedStride();
-		MxLong dstStride = GetAdjustedStride();
+		return;
+	}
 
-		while (p_height--) {
-			memcpy(dstStart, srcStart, p_width);
-			dstStart += dstStride;
-			srcStart += srcStride;
-		}
+	MxU8* srcStart = p_src->GetStart(p_srcLeft, p_srcTop);
+	MxU8* dstStart = GetStart(p_dstLeft, p_dstTop);
+	MxLong srcStride = GetAdjustedStride(p_src);
+	MxLong dstStride = GetAdjustedStride(this);
+
+	while (p_height--) {
+		memcpy(dstStart, srcStart, p_width);
+		dstStart += dstStride;
+		srcStart += srcStride;
 	}
 }
 
@@ -314,14 +313,11 @@ void MxBitmap::BitBltTransparent(
 	MxS32 p_height
 )
 {
-	MxLong dstHeight = GetBmiHeightAbs();
-	MxLong srcHeight = p_src->GetBmiHeightAbs();
-
-	if (GetRectIntersection(
+	if (!GetRectIntersection(
 			p_src->GetBmiWidth(),
-			srcHeight,
+			p_src->GetBmiHeightAbs(),
 			GetBmiWidth(),
-			dstHeight,
+			GetBmiHeightAbs(),
 			&p_srcLeft,
 			&p_srcTop,
 			&p_dstLeft,
@@ -329,23 +325,25 @@ void MxBitmap::BitBltTransparent(
 			&p_width,
 			&p_height
 		)) {
-		MxU8* srcStart = p_src->GetStart(p_srcLeft, p_srcTop);
-		MxU8* dstStart = GetStart(p_dstLeft, p_dstTop);
-		MxLong srcStride = p_src->GetAdjustedStride() - p_width;
-		MxLong dstStride = GetAdjustedStride() - p_width;
+		return;
+	}
 
-		for (MxS32 h = 0; h < p_height; h++) {
-			for (MxS32 w = 0; w < p_width; w++) {
-				if (*srcStart) {
-					*dstStart = *srcStart;
-				}
-				srcStart++;
-				dstStart++;
+	MxU8* srcStart = p_src->GetStart(p_srcLeft, p_srcTop);
+	MxU8* dstStart = GetStart(p_dstLeft, p_dstTop);
+	MxLong srcStride = -p_width + GetAdjustedStride(p_src);
+	MxLong dstStride = -p_width + GetAdjustedStride(this);
+
+	for (MxS32 h = 0; h < p_height; h++) {
+		for (MxS32 w = 0; w < p_width; w++) {
+			if (*srcStart) {
+				*dstStart = *srcStart;
 			}
-
-			srcStart += srcStride;
-			dstStart += dstStride;
+			srcStart++;
+			dstStart++;
 		}
+
+		srcStart += srcStride;
+		dstStart += dstStride;
 	}
 }
 
