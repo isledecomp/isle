@@ -1,5 +1,6 @@
 Checks: >
   -*,
+  readability-redundant-inline-specifier,
   modernize-use-override
-WarningsAsErrors: '-*,modernize-use-override'
+WarningsAsErrors: '-*,readability-redundant-inline-specifier,modernize-use-override'
 HeaderFilterRegex: ".*"
