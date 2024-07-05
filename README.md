@@ -10,7 +10,7 @@ This is a **work-in-progress** decompilation of LEGO Island (Version 1.1, Englis
 
 Currently, `ISLE.EXE` is completely decompiled and behaves identically to the original. A handful of stubborn instructions are not yet matching; however, we anticipate they will as more of the overall codebase is implemented.
 
-`LEGO1.DLL` is still incomplete and cannot be used for gameplay at this time. If you would like to use this, it is instead recommended to pair the recompiled `ISLE.EXE` with the `LEGO1.DLL` from the original game.
+`LEGO1.DLL` is still lacking some gameplay features but is generally workable. If you would like to use this, make sure to do so without interacting with save files created by the retail version, as there might still be some incompatibilities.
 
 ## Building
 
