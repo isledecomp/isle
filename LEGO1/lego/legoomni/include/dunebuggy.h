@@ -32,12 +32,12 @@ public:
 
 	void ActivateSceneActions();
 
+	static MxS32 GetColorOffset(const char* p_variable);
+
 	// SYNTHETIC: LEGO1 0x10067dc0
 	// DuneBuggy::`scalar deleting destructor'
 
 private:
-	static MxS32 GetDashboardOffset(const char* p_variable);
-
 	MxS16 m_dashboard; // 0x160
 	MxFloat m_fuel;    // 0x164
 	MxFloat m_time;    // 0x168

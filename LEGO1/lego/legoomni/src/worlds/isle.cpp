@@ -1044,7 +1044,7 @@ MxLong Isle::HandleTransitionEnd()
 		FUN_10032d30((IsleScript::Script) m_jetski->GetUnknown0x160(), JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
-			m_jetski->FUN_1007e990();
+			m_jetski->ActivateSceneActions();
 		}
 		break;
 	default:
