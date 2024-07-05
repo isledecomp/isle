@@ -47,7 +47,7 @@ If you have a CMake-compatible IDE, it should be pretty straightforward to use t
 
 ## Usage
 
-Simply place the compiled `ISLE.EXE` into LEGO Island's install folder (usually `C:\Program Files\LEGO Island` or `C:\Program Files (x86)\LEGO Island`). Unless you're a developer, disregard the compiled `LEGO1.DLL` for now as it is too incomplete to be usable. Alternatively, LEGO Island can run from any directory as long as `ISLE.EXE` and `LEGO1.DLL` are in the same directory, and the registry keys (usually `HKEY_LOCAL_MACHINE\Software\Mindscape\LEGO Island` or `HKEY_LOCAL_MACHINE\Software\Wow6432Node\Mindscape\LEGO Island`) point to the correct location for the asset files.
+Simply place the compiled `ISLE.EXE` and `LEGO1.DLL` into LEGO Island's install folder (usually `C:\Program Files\LEGO Island` or `C:\Program Files (x86)\LEGO Island`). Alternatively, LEGO Island can run from any directory as long as `ISLE.EXE` and `LEGO1.DLL` are in the same directory, and the registry keys (usually `HKEY_LOCAL_MACHINE\Software\Mindscape\LEGO Island` or `HKEY_LOCAL_MACHINE\Software\Wow6432Node\Mindscape\LEGO Island`) point to the correct location for the asset files.
 
 ## Contributing
 
