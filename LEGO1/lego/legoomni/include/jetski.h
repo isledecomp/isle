@@ -26,12 +26,12 @@ public:
 	}
 
 	MxResult Create(MxDSAction& p_dsAction) override;                    // vtable+0x18
-	void VTable0x70(float p_float) override;                             // vtable+0x70
+	void VTable0x70(float p_time) override;                              // vtable+0x70
 	MxLong HandleClick() override;                                       // vtable+0xcc
 	MxLong HandleControl(LegoControlManagerNotificationParam&) override; // vtable+0xd4
 	void Exit() override;                                                // vtable+0xe4
 
-	void FUN_1007e990();
+	void ActivateSceneActions();
 
 	MxS16 GetUnknown0x160() { return m_unk0x160; }
 
@@ -39,9 +39,9 @@ public:
 	// Jetski::`scalar deleting destructor'
 
 private:
-	// TODO: Jetski fields
-	MxS16 m_unk0x160;        // 0x160
-	undefined m_unk0x162[2]; // 0x162
+	void RemoveFromWorld();
+
+	MxS16 m_unk0x160; // 0x160
 };
 
 #endif // JETSKI_H

@@ -102,7 +102,7 @@ MxLong DuneBuggy::HandleClick()
 	}
 
 	m_time = Timer()->GetTime();
-	m_dashboard = IsleScript::c_DuneCarSpeedMeter + GetDashboardOffset(g_varDBFRFNY4);
+	m_dashboard = IsleScript::c_DuneCarSpeedMeter + GetColorOffset(g_varDBFRFNY4);
 
 	InvokeAction(Extra::ActionType::e_start, *g_isleScript, m_dashboard, NULL);
 	InvokeAction(Extra::ActionType::e_start, *g_isleScript, IsleScript::c_DuneCarDashboard, NULL);
@@ -157,30 +157,30 @@ MxLong DuneBuggy::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10068290
-MxS32 DuneBuggy::GetDashboardOffset(const char* p_variable)
+MxS32 DuneBuggy::GetColorOffset(const char* p_variable)
 {
-	MxS32 color = 1;
+	MxS32 offset = 1;
 	const char* colorName = VariableTable()->GetVariable(p_variable);
 
 	if (strcmpi(colorName, "lego green")) {
 		if (!strcmpi(colorName, "lego red")) {
-			color = 2;
+			offset = 2;
 		}
 		else if (!strcmpi(colorName, "lego yellow")) {
-			color = 3;
+			offset = 3;
 		}
 		else if (!strcmpi(colorName, "lego black")) {
-			color = 4;
+			offset = 4;
 		}
 		else if (!strcmpi(colorName, "lego blue")) {
-			color = 5;
+			offset = 5;
 		}
 		else if (!strcmpi(colorName, "lego white")) {
-			color = 6;
+			offset = 6;
 		}
 	}
 
-	return color;
+	return offset;
 }
 
 // FUNCTION: LEGO1 0x10068350
