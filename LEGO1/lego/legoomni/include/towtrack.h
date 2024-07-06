@@ -48,8 +48,8 @@ public:
 	// TowTrackMissionState::`scalar deleting destructor'
 
 	undefined4 m_unk0x08; // 0x08
-	undefined4 m_unk0x0c; // 0x0c
-	MxU8 m_unk0x10;       // 0x10
+	MxS32 m_unk0x0c;      // 0x0c
+	MxBool m_unk0x10;     // 0x10
 	MxS16 m_unk0x12;      // 0x12
 	MxS16 m_unk0x14;      // 0x14
 	MxS16 m_unk0x16;      // 0x16
@@ -84,7 +84,7 @@ public:
 
 	MxLong Notify(MxParam& p_param) override;                                    // vtable+0x04
 	MxResult Create(MxDSAction& p_dsAction) override;                            // vtable+0x18
-	void VTable0x70(float p_float) override;                                     // vtable+0x70
+	void VTable0x70(float p_time) override;                                      // vtable+0x70
 	MxLong HandleClick() override;                                               // vtable+0xcc
 	MxLong HandleControl(LegoControlManagerNotificationParam& p_param) override; // vtable+0xd4
 	MxLong HandleEndAnim(LegoEndAnimNotificationParam& p_param) override;        // vtable+0xd8
@@ -101,6 +101,8 @@ public:
 	// TowTrack::`scalar deleting destructor'
 
 private:
+	void FUN_1004dcf0(IsleScript::Script);
+
 	undefined4 m_unk0x160;         // 0x160
 	TowTrackMissionState* m_state; // 0x164
 	MxS16 m_unk0x168;              // 0x168
@@ -109,7 +111,7 @@ private:
 	MxS16 m_unk0x16e;              // 0x16e
 	MxS32 m_unk0x170;              // 0x170
 	MxS32 m_unk0x174;              // 0x174
-	MxFloat m_unk0x178;            // 0x178
+	MxFloat m_fuel;                // 0x178
 	MxFloat m_time;                // 0x17c
 };
 

@@ -1,7 +1,9 @@
 #include "towtrack.h"
 
+#include "isle_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
+#include "legonavcontroller.h"
 #include "legovariables.h"
 #include "legoworld.h"
 #include "misc.h"
@@ -23,7 +25,7 @@ TowTrack::TowTrack()
 	m_unk0x16e = 0;
 	m_unk0x174 = -1;
 	m_maxLinearVel = 40.0;
-	m_unk0x178 = 1.0;
+	m_fuel = 1.0;
 }
 
 // FUNCTION: LEGO1 0x1004c970
@@ -54,15 +56,39 @@ MxResult TowTrack::Create(MxDSAction& p_dsAction)
 	}
 
 	VariableTable()->SetVariable(g_varTOWFUEL, "1.0");
-	m_unk0x178 = 1.0;
+	m_fuel = 1.0;
 	m_time = Timer()->GetTime();
 	return result;
 }
 
-// STUB: LEGO1 0x1004cb10
-void TowTrack::VTable0x70(float p_float)
+// FUNCTION: LEGO1 0x1004cb10
+void TowTrack::VTable0x70(float p_time)
 {
-	// TODO
+	IslePathActor::VTable0x70(p_time);
+
+	if (UserActor() == this) {
+		char buf[200];
+		float speed = abs(m_worldSpeed);
+		float maxLinearVel = NavController()->GetMaxLinearVel();
+
+		sprintf(buf, "%g", speed / maxLinearVel);
+		VariableTable()->SetVariable(g_varTOWSPEED, buf);
+
+		m_fuel += (p_time - m_time) * -3.333333333e-06f;
+		if (m_fuel < 0) {
+			m_fuel = 0;
+		}
+
+		m_time = p_time;
+
+		sprintf(buf, "%g", m_fuel);
+		VariableTable()->SetVariable(g_varTOWFUEL, buf);
+
+		if (p_time - m_state->m_unk0x0c > 100000.0f && m_state->m_unk0x08 == 1 && !m_state->m_unk0x10) {
+			FUN_1004dcf0(IsleScript::c_Avo909In_PlayWav);
+			m_state->m_unk0x10 = TRUE;
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1004cc40
@@ -139,6 +165,12 @@ void TowTrack::FUN_1004dbe0()
 	// TODO
 }
 
+// STUB: LEGO1 0x1004dcf0
+void TowTrack::FUN_1004dcf0(IsleScript::Script)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1004dd30
 TowTrackMissionState::TowTrackMissionState()
 {
@@ -149,7 +181,7 @@ TowTrackMissionState::TowTrackMissionState()
 	m_unk0x18 = 0;
 	m_unk0x0c = 0;
 	m_unk0x1a = 0;
-	m_unk0x10 = 0;
+	m_unk0x10 = FALSE;
 	m_score1 = 0;
 	m_score2 = 0;
 	m_score3 = 0;
