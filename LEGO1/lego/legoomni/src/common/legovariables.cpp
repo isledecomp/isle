@@ -48,6 +48,10 @@ const char* g_varAMBULSPEED = "ambulSPEED";
 // STRING: LEGO1 0x100f39a0
 const char* g_varAMBULFUEL = "ambulFUEL";
 
+// GLOBAL: LEGO1 0x100f43b0
+// STRING: LEGO1 0x100f43a4
+const char* g_varTOWSPEED = "towSPEED";
+
 // GLOBAL: LEGO1 0x100f43b4
 // STRING: LEGO1 0x100f439c
 const char* g_varTOWFUEL = "towFUEL";

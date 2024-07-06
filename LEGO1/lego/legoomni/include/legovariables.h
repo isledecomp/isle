@@ -11,6 +11,7 @@ extern const char* g_varMOTOSPEED;
 extern const char* g_varMOTOFUEL;
 extern const char* g_varAMBULSPEED;
 extern const char* g_varAMBULFUEL;
+extern const char* g_varTOWSPEED;
 extern const char* g_varTOWFUEL;
 extern const char* g_varVISIBILITY;
 extern const char* g_varCAMERALOCATION;
