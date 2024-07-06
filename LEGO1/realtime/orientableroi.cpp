@@ -98,6 +98,7 @@ void OrientableROI::GetLocalTransform(Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x100a58f0
+// FUNCTION: BETA10 0x10167b77
 void OrientableROI::FUN_100a58f0(const Matrix4& p_transform)
 {
 	m_local2world = p_transform;

@@ -29,8 +29,10 @@ LegoAnimActorStruct::~LegoAnimActorStruct()
 }
 
 // FUNCTION: LEGO1 0x1001c130
+// FUNCTION: BETA10 0x1003df5f
 float LegoAnimActorStruct::GetDuration()
 {
+	assert(m_AnimTreePtr);
 	return m_AnimTreePtr->GetDuration();
 }
 

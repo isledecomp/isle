@@ -16,7 +16,10 @@ public:
 	virtual LegoResult VTable0x04(); // vtable+0x04
 
 	LegoU8 GetNumEdges() { return m_numEdges; }
+
+	// FUNCTION: BETA10 0x1001cc30
 	LegoEdge** GetEdges() { return m_edges; }
+
 	LegoU32 IsEqual(LegoWEEdge& p_other) { return this == &p_other; }
 
 	void SetEdges(LegoEdge** p_edges, LegoU8 p_numEdges)

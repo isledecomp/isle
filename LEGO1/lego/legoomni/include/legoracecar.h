@@ -60,8 +60,8 @@ public:
 	// LegoRaceCar::`scalar deleting destructor'
 
 private:
-	undefined m_unk0x54;            // 0x54
-	undefined4 m_unk0x58;           // 0x58
+	undefined m_userState;          // 0x54
+	float m_unk0x58;                // 0x58
 	Mx3DPointFloat m_unk0x5c;       // 0x5c
 	LegoAnimActorStruct* m_unk0x70; // 0x70
 	LegoAnimActorStruct* m_unk0x74; // 0x74

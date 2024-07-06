@@ -47,6 +47,7 @@ public:
 
 	void SetParentROI(OrientableROI* p_parentROI) { m_parentROI = p_parentROI; }
 
+	// FUNCTION: BETA10 0x10168800
 	void ToggleUnknown0xd8(BOOL p_enable)
 	{
 		if (p_enable) {

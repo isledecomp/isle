@@ -208,6 +208,7 @@ struct LegoAnimActorEntry {
 	undefined4 m_unk0x04; // 0x04
 };
 
+// TODO: Possibly called `LegoCameraAnim(ation)`?
 // SIZE 0x24
 class LegoAnimScene {
 public:
@@ -242,7 +243,10 @@ class LegoAnim : public LegoTree {
 public:
 	LegoAnim();
 	~LegoAnim() override;
+
+	// FUNCTION: BETA10 0x100284c0
 	LegoTime GetDuration() { return m_duration; }
+
 	LegoU32 GetNumActors() { return m_numActors; }
 	LegoResult Write(LegoStorage* p_storage) override;                     // vtable+0x08
 	virtual LegoResult Read(LegoStorage* p_storage, LegoS32 p_parseScene); // vtable+0x10
@@ -250,7 +254,8 @@ public:
 	const LegoChar* GetActorName(LegoU32 p_index);
 	undefined4 GetActorUnknown0x04(LegoU32 p_index);
 
-	LegoAnimScene* GetScene() { return m_scene; }
+	// FUNCTION: BETA10 0x1005abf0
+	LegoAnimScene* GetCamAnim() { return m_camAnim; }
 
 	// SYNTHETIC: LEGO1 0x100a0ba0
 	// LegoAnim::`scalar deleting destructor'
@@ -259,7 +264,7 @@ protected:
 	LegoTime m_duration;          // 0x08
 	LegoAnimActorEntry* m_actors; // 0x0c
 	LegoU32 m_numActors;          // 0x10
-	LegoAnimScene* m_scene;       // 0x14
+	LegoAnimScene* m_camAnim;     // 0x14
 
 	// FUNCTION: LEGO1 0x100a1040
 	LegoTreeNodeData* CreateData() override { return new LegoAnimNodeData(); } // vtable+0x0c

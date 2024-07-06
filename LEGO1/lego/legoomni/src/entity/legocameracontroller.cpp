@@ -140,6 +140,7 @@ void LegoCameraController::FUN_10012320(float p_angle)
 }
 
 // FUNCTION: LEGO1 0x100123e0
+// FUNCTION: BETA10 0x10068cb2
 void LegoCameraController::FUN_100123e0(const Matrix4& p_transform, MxU32 p_und)
 {
 	if (m_lego3DView != NULL) {

@@ -922,9 +922,9 @@ void LegoAnimPresenter::FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p
 		}
 	}
 
-	if (p_anim->GetScene() != NULL) {
+	if (p_anim->GetCamAnim() != NULL) {
 		MxMatrix transform(mat);
-		p_anim->GetScene()->FUN_1009f490(p_time, transform);
+		p_anim->GetCamAnim()->FUN_1009f490(p_time, transform);
 
 		if (m_currentWorld != NULL && m_currentWorld->GetCamera() != NULL) {
 			m_currentWorld->GetCamera()->FUN_100123e0(transform, 0);
