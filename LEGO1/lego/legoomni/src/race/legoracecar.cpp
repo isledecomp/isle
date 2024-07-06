@@ -145,8 +145,8 @@ void LegoRaceCar::FUN_10012ff0(float p_param)
 	}
 	else {
 		// TODO: Possibly an enum?
-		const char LEGORACECAR_KICK2 = 4;
-		assert(m_userState == LEGORACECAR_KICK2);
+		const char legoracecarKick2 = 4; // original name: LEGORACECAR_KICK2
+		assert(m_userState == legoracecarKick2);
 		a = m_unk0x74;
 	}
 
@@ -172,16 +172,16 @@ void LegoRaceCar::FUN_10012ff0(float p_param)
 		else if (a->GetAnimTreePtr()->GetCamAnim()) {
 			MxMatrix transformationMatrix;
 
-			LegoWorld* current_world = CurrentWorld(); // called `r` in BETA10
-			assert(current_world);
+			LegoWorld* currentWorld = CurrentWorld(); // called `r` in BETA10
+			assert(currentWorld);
 
 			transformationMatrix.SetIdentity();
 
 			// Possible bug in the original code: The first argument is not initialized
 			a->GetAnimTreePtr()->GetCamAnim()->FUN_1009f490(deltaTime, transformationMatrix);
 
-			if (current_world->GetCamera()) {
-				current_world->GetCamera()->FUN_100123e0(transformationMatrix, 0);
+			if (currentWorld->GetCamera()) {
+				currentWorld->GetCamera()->FUN_100123e0(transformationMatrix, 0);
 			}
 
 			m_roi->FUN_100a58f0(transformationMatrix);
