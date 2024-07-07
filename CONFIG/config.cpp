@@ -5,6 +5,7 @@
 #include "detectdx5.h"
 
 #include <direct.h> // _chdir
+#include <mxdirectx/legodxinfo.h>
 #include <mxdirectx/mxdirect3d.h>
 #include <process.h> // _spawnl
 

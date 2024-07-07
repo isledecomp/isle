@@ -26,6 +26,39 @@ int LegoDeviceEnumerate::FormatDeviceName(char* p_buffer, const MxDriver* p_ddIn
 	return -1;
 }
 
+// FUNCTION: CONFIG 0x00402560
+// FUNCTION: LEGO1 0x1009ce60
+// FUNCTION: BETA10 0x1011c7e0
+int LegoDeviceEnumerate::ParseDeviceName(const char* p_deviceId)
+{
+	if (!IsInitialized()) {
+		return -1;
+	}
+
+	int unknown = -1;
+	int num = -1;
+	int hex[4];
+
+	if (sscanf(p_deviceId, "%d 0x%x 0x%x 0x%x 0x%x", &num, &hex[0], &hex[1], &hex[2], &hex[3]) != 5) {
+		return -1;
+	}
+
+	if (num < 0) {
+		return -1;
+	}
+
+	GUID guid;
+	memcpy(&guid, hex, sizeof(guid));
+
+	int result = ProcessDeviceBytes(num, guid);
+
+	if (result < 0) {
+		result = ProcessDeviceBytes(-1, guid);
+	}
+
+	return result;
+}
+
 // FUNCTION: CONFIG 0x00402620
 // FUNCTION: LEGO1 0x1009cf20
 // FUNCTION: BETA10 0x1011c8b3

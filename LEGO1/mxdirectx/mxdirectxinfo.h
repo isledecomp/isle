@@ -203,7 +203,6 @@ public:
 		LPD3DDEVICEDESC p_HELDesc
 	);
 	const char* EnumerateErrorToString(HRESULT p_error);
-	int ParseDeviceName(const char* p_deviceId);
 	int GetDevice(int p_deviceNum, MxDriver*& p_driver, Direct3DDeviceInfo*& p_device);
 	int BETA_1011cc65(int p_idx, char* p_buffer);
 

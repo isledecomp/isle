@@ -8,7 +8,9 @@
 // VTABLE: BETA10 0x101befb4
 // SIZE 0x14
 class LegoDeviceEnumerate : public MxDeviceEnumerate {
+public:
 	int ProcessDeviceBytes(int p_deviceNum, GUID& p_guid);
+	int ParseDeviceName(const char* p_deviceId);
 	int FormatDeviceName(char* p_buffer, const MxDriver* p_ddInfo, const Direct3DDeviceInfo* p_d3dInfo) const;
 
 	// SYNTHETIC: BETA10 0x100d8d10
