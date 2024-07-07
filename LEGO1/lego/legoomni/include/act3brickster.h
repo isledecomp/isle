@@ -1,7 +1,7 @@
 #ifndef ACT3BRICKSTER_H
 #define ACT3BRICKSTER_H
 
-#include "act3actor.h"
+#include "act3actors.h"
 
 // VTABLE: LEGO1 0x100d7838 LegoPathActor
 // VTABLE: LEGO1 0x100d7908 LegoAnimActor

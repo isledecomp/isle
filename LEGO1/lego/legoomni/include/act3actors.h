@@ -1,10 +1,13 @@
-#ifndef ACT3ACTOR_H
-#define ACT3ACTOR_H
+#ifndef ACT3ACTORS_H
+#define ACT3ACTORS_H
 
 #include "legoanimactor.h"
 
+// File name verified by multiple assertions, e.g. BETA10 0x10018391
+
 // VTABLE: LEGO1 0x100d7668 LegoPathActor
 // VTABLE: LEGO1 0x100d7738 LegoAnimActor
+// VTABLE: BETA10 0x101b8a98 LegoPathActor
 // SIZE 0x178
 class Act3Actor : public LegoAnimActor {
 public:
@@ -30,4 +33,4 @@ private:
 	undefined4 m_unk0x1c; // 0x1c
 };
 
-#endif // ACT3ACTOR_H
+#endif // ACT3ACTORS_H

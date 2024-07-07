@@ -5,7 +5,7 @@
 #include "act2genactor.h"
 #include "act2policestation.h"
 #include "act3.h"
-#include "act3actor.h"
+#include "act3actors.h"
 #include "act3brickster.h"
 #include "act3cop.h"
 #include "act3shark.h"

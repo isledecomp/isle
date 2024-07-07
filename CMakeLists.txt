@@ -131,6 +131,7 @@ add_library(mxdirectx STATIC
   LEGO1/mxdirectx/mxdirect3d.cpp
   LEGO1/mxdirectx/mxdirectdraw.cpp
   LEGO1/mxdirectx/mxdirectxinfo.cpp
+  LEGO1/mxdirectx/legodxinfo.cpp
 )
 register_lego1_target(mxdirectx)
 set_property(TARGET mxdirectx PROPERTY ARCHIVE_OUTPUT_NAME "MxDirectX$<$<CONFIG:Debug>:d>")
@@ -288,7 +289,7 @@ add_library(lego1 SHARED
   LEGO1/define.cpp
   LEGO1/lego/legoomni/src/actors/act2actor.cpp
   LEGO1/lego/legoomni/src/actors/act2genactor.cpp
-  LEGO1/lego/legoomni/src/actors/act3actor.cpp
+  LEGO1/lego/legoomni/src/actors/act3actors.cpp
   LEGO1/lego/legoomni/src/actors/act3brickster.cpp
   LEGO1/lego/legoomni/src/actors/act3cop.cpp
   LEGO1/lego/legoomni/src/actors/act3shark.cpp
@@ -466,6 +467,7 @@ endif()
 if (ISLE_BUILD_CONFIG)
   add_executable(config WIN32
     LEGO1/mxdirectx/mxdirectxinfo.cpp
+    LEGO1/mxdirectx/legodxinfo.cpp
     CONFIG/config.cpp
     CONFIG/ConfigCommandLineInfo.cpp
     CONFIG/AboutDlg.cpp

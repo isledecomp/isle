@@ -1,4 +1,4 @@
-#include "act3actor.h"
+#include "act3actors.h"
 
 DECOMP_SIZE_ASSERT(Act3Actor, 0x178)
 

@@ -1,7 +1,7 @@
 #ifndef ACT3COP_H
 #define ACT3COP_H
 
-#include "act3actor.h"
+#include "act3actors.h"
 
 // VTABLE: LEGO1 0x100d7750 LegoPathActor
 // VTABLE: LEGO1 0x100d7820 LegoAnimActor
