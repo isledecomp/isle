@@ -785,7 +785,7 @@ LegoAnim::LegoAnim()
 	m_duration = 0;
 	m_actors = NULL;
 	m_numActors = 0;
-	m_scene = NULL;
+	m_camAnim = NULL;
 }
 
 // FUNCTION: LEGO1 0x100a0bc0
@@ -799,8 +799,8 @@ LegoAnim::~LegoAnim()
 		delete[] m_actors;
 	}
 
-	if (m_scene != NULL) {
-		delete m_scene;
+	if (m_camAnim != NULL) {
+		delete m_camAnim;
 	}
 }
 
@@ -845,9 +845,9 @@ LegoResult LegoAnim::Read(LegoStorage* p_storage, LegoS32 p_parseScene)
 	}
 
 	if (p_parseScene) {
-		m_scene = new LegoAnimScene();
+		m_camAnim = new LegoAnimScene();
 
-		result = m_scene->Read(p_storage);
+		result = m_camAnim->Read(p_storage);
 
 		if (result != SUCCESS) {
 			goto done;

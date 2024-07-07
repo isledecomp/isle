@@ -1,5 +1,5 @@
-#ifndef LEGORACECAR_H
-#define LEGORACECAR_H
+#ifndef LEGORACERS_H
+#define LEGORACERS_H
 
 #include "legocarraceactor.h"
 #include "legoracemap.h"
@@ -15,6 +15,11 @@ struct EdgeReference {
 // VTABLE: LEGO1 0x100d58b8 LegoPathActor
 // VTABLE: LEGO1 0x100d5984 LegoRaceMap
 // VTABLE: LEGO1 0x100d5988 LegoCarRaceActor
+// VTABLE: BETA10 0x101be6ec LegoRaceActor
+// VTABLE: BETA10 0x101be6f0 LegoAnimActor
+// VTABLE: BETA10 0x101be708 LegoPathActor
+// VTABLE: BETA10 0x101be7f8 LegoRaceMap
+// VTABLE: BETA10 0x101be800 LegoCarRaceActor
 // SIZE 0x200
 class LegoRaceCar : public LegoCarRaceActor, public LegoRaceMap {
 public:
@@ -60,8 +65,8 @@ public:
 	// LegoRaceCar::`scalar deleting destructor'
 
 private:
-	undefined m_unk0x54;            // 0x54
-	undefined4 m_unk0x58;           // 0x58
+	undefined m_userState;          // 0x54
+	float m_unk0x58;                // 0x58
 	Mx3DPointFloat m_unk0x5c;       // 0x5c
 	LegoAnimActorStruct* m_unk0x70; // 0x70
 	LegoAnimActorStruct* m_unk0x74; // 0x74
@@ -72,4 +77,4 @@ private:
 	static const EdgeReference* g_pEdgeReferences;
 };
 
-#endif // LEGORACECAR_H
+#endif // LEGORACERS_H

@@ -13,6 +13,7 @@ struct UnknownMatrixType {
 // The class needs to undergo a very careful refactoring to fix that (no matches should break).
 
 // VTABLE: LEGO1 0x100d4350
+// VTABLE: BETA10 0x101b8340
 // SIZE 0x08
 class Matrix4 {
 public:

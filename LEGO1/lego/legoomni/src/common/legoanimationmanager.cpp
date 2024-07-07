@@ -1220,7 +1220,7 @@ void LegoAnimationManager::FUN_10061010(MxBool p_und)
 
 					if (tranInfo->m_presenter->GetPresenter() != NULL &&
 						(anim = tranInfo->m_presenter->GetPresenter()->GetAnimation()) != NULL &&
-						anim->GetScene() != NULL) {
+						anim->GetCamAnim() != NULL) {
 						if (flags & LegoTranInfo::c_bit2) {
 							BackgroundAudioManager()->RaiseVolume();
 							tranInfo->m_flags &= ~LegoTranInfo::c_bit2;

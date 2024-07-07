@@ -1,6 +1,8 @@
-#include "legoracecar.h"
+#include "legoracers.h"
 
+#include "anim/legoanim.h"
 #include "define.h"
+#include "legocameracontroller.h"
 #include "legorace.h"
 #include "misc.h"
 #include "mxmisc.h"
@@ -44,7 +46,7 @@ const EdgeReference* LegoRaceCar::g_pEdgeReferences = g_edgeReferences;
 // FUNCTION: LEGO1 0x10012950
 LegoRaceCar::LegoRaceCar()
 {
-	m_unk0x54 = 0;
+	m_userState = 0;
 	m_unk0x70 = 0;
 	m_unk0x74 = 0;
 	m_unk0x5c.Clear();
@@ -131,10 +133,60 @@ void LegoRaceCar::ParseAction(char* p_extra)
 	}
 }
 
-// STUB: LEGO1 0x10012ff0
-void LegoRaceCar::FUN_10012ff0(float)
+// FUNCTION: LEGO1 0x10012ff0
+// FUNCTION: BETA10 0x100cb60e
+void LegoRaceCar::FUN_10012ff0(float p_param)
 {
-	// TODO
+	LegoAnimActorStruct* a; // called `a` in BETA10
+	float deltaTime;
+
+	if (m_userState == 2) {
+		a = m_unk0x70;
+	}
+	else {
+		// TODO: Possibly an enum?
+		const char legoracecarKick2 = 4; // original name: LEGORACECAR_KICK2
+		assert(m_userState == legoracecarKick2);
+		a = m_unk0x74;
+	}
+
+	assert(a && a->GetAnimTreePtr() && a->GetAnimTreePtr()->GetCamAnim());
+
+	if (a->GetAnimTreePtr()) {
+		deltaTime = p_param - m_unk0x58;
+
+		if (a->GetDuration() <= deltaTime || deltaTime < 0.0) {
+			if (m_userState == 2) {
+				LegoEdge** edges = m_unk0x78->GetEdges();
+				m_destEdge = (LegoUnknown100db7f4*) (edges[2]);
+				m_boundary = m_unk0x78;
+			}
+			else {
+				LegoEdge** edges = m_unk0x78->GetEdges();
+				m_destEdge = (LegoUnknown100db7f4*) (edges[1]);
+				m_boundary = m_unk0x7c;
+			}
+
+			m_userState = 0;
+		}
+		else if (a->GetAnimTreePtr()->GetCamAnim()) {
+			MxMatrix transformationMatrix;
+
+			LegoWorld* r = CurrentWorld(); // called `r` in BETA10
+			assert(r);
+
+			transformationMatrix.SetIdentity();
+
+			// Possible bug in the original code: The first argument is not initialized
+			a->GetAnimTreePtr()->GetCamAnim()->FUN_1009f490(deltaTime, transformationMatrix);
+
+			if (r->GetCamera()) {
+				r->GetCamera()->FUN_100123e0(transformationMatrix, 0);
+			}
+
+			m_roi->FUN_100a58f0(transformationMatrix);
+		}
+	}
 }
 
 // STUB: LEGO1 0x10013130

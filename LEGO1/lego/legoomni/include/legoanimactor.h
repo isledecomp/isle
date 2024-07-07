@@ -15,6 +15,10 @@ struct LegoAnimActorStruct {
 
 	float GetUnknown0x00() { return m_unk0x00; }
 
+	// FUNCTION: BETA10 0x10012210
+	LegoAnim* GetAnimTreePtr() { return m_AnimTreePtr; }
+
+	// TODO: Possibly private
 	float m_unk0x00;              // 0x00
 	LegoAnim* m_AnimTreePtr;      // 0x04
 	LegoROI** m_roiMap;           // 0x08

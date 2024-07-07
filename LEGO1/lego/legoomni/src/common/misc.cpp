@@ -73,8 +73,10 @@ LegoPathActor* UserActor()
 }
 
 // FUNCTION: LEGO1 0x100157a0
+// FUNCTION: BETA10 0x100e4a46
 LegoWorld* CurrentWorld()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetCurrentWorld();
 }
 

@@ -4,6 +4,7 @@
 #include "realtime/matrix.h"
 
 // VTABLE: LEGO1 0x100d4300
+// VTABLE: BETA10 0x101b82e0
 // SIZE 0x48
 class MxMatrix : public Matrix4 {
 public:
