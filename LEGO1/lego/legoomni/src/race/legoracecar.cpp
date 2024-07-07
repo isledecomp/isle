@@ -172,16 +172,16 @@ void LegoRaceCar::FUN_10012ff0(float p_param)
 		else if (a->GetAnimTreePtr()->GetCamAnim()) {
 			MxMatrix transformationMatrix;
 
-			LegoWorld* currentWorld = CurrentWorld(); // called `r` in BETA10
-			assert(currentWorld);
+			LegoWorld* r = CurrentWorld(); // called `r` in BETA10
+			assert(r);
 
 			transformationMatrix.SetIdentity();
 
 			// Possible bug in the original code: The first argument is not initialized
 			a->GetAnimTreePtr()->GetCamAnim()->FUN_1009f490(deltaTime, transformationMatrix);
 
-			if (currentWorld->GetCamera()) {
-				currentWorld->GetCamera()->FUN_100123e0(transformationMatrix, 0);
+			if (r->GetCamera()) {
+				r->GetCamera()->FUN_100123e0(transformationMatrix, 0);
 			}
 
 			m_roi->FUN_100a58f0(transformationMatrix);

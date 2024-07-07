@@ -15,6 +15,11 @@ struct EdgeReference {
 // VTABLE: LEGO1 0x100d58b8 LegoPathActor
 // VTABLE: LEGO1 0x100d5984 LegoRaceMap
 // VTABLE: LEGO1 0x100d5988 LegoCarRaceActor
+// VTABLE: BETA10 0x101be6ec LegoRaceActor
+// VTABLE: BETA10 0x101be6f0 LegoAnimActor
+// VTABLE: BETA10 0x101be708 LegoPathActor
+// VTABLE: BETA10 0x101be7f8 LegoRaceMap
+// VTABLE: BETA10 0x101be800 LegoCarRaceActor
 // SIZE 0x200
 class LegoRaceCar : public LegoCarRaceActor, public LegoRaceMap {
 public:
