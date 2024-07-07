@@ -1,4 +1,4 @@
-#include "mxdirectxinfo.h"
+#include "legodxinfo.h"
 
 #include <assert.h>
 #include <stdio.h> // for vsprintf
@@ -7,7 +7,7 @@
 
 // FUNCTION: CONFIG 0x004027d0
 // FUNCTION: BETA10 0x1011cb70
-int MxDeviceEnumerate::FormatDeviceName(char* p_buffer, const MxDriver* p_ddInfo, const Direct3DDeviceInfo* p_d3dInfo)
+int LegoDeviceEnumerate::FormatDeviceName(char* p_buffer, const MxDriver* p_ddInfo, const Direct3DDeviceInfo* p_d3dInfo)
 	const
 {
 	int number = 0;
@@ -29,7 +29,7 @@ int MxDeviceEnumerate::FormatDeviceName(char* p_buffer, const MxDriver* p_ddInfo
 // FUNCTION: CONFIG 0x00402620
 // FUNCTION: LEGO1 0x1009cf20
 // FUNCTION: BETA10 0x1011c8b3
-int MxDeviceEnumerate::ProcessDeviceBytes(int p_deviceNum, GUID& p_guid)
+int LegoDeviceEnumerate::ProcessDeviceBytes(int p_deviceNum, GUID& p_guid)
 {
 	if (!IsInitialized()) {
 		return -1;
