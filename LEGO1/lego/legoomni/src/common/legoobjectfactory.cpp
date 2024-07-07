@@ -57,7 +57,7 @@
 #include "legopathactor.h"
 #include "legopathpresenter.h"
 #include "legophonemepresenter.h"
-#include "legoracecar.h"
+#include "legoracers.h"
 #include "legotexturepresenter.h"
 #include "legoworld.h"
 #include "legoworldpresenter.h"

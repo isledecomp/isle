@@ -1,5 +1,5 @@
-#ifndef LEGORACECAR_H
-#define LEGORACECAR_H
+#ifndef LEGORACERS_H
+#define LEGORACERS_H
 
 #include "legocarraceactor.h"
 #include "legoracemap.h"
@@ -77,4 +77,4 @@ private:
 	static const EdgeReference* g_pEdgeReferences;
 };
 
-#endif // LEGORACECAR_H
+#endif // LEGORACERS_H
