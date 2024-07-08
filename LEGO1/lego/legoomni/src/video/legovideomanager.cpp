@@ -4,6 +4,7 @@
 #include "legoinputmanager.h"
 #include "legomain.h"
 #include "misc.h"
+#include "mxdirectx/legodxinfo.h"
 #include "mxdirectx/mxdirect3d.h"
 #include "mxdirectx/mxstopwatch.h"
 #include "mxdisplaysurface.h"

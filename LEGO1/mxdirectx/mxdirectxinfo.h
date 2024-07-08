@@ -203,17 +203,6 @@ public:
 		LPD3DDEVICEDESC p_HELDesc
 	);
 	const char* EnumerateErrorToString(HRESULT p_error);
-	int ParseDeviceName(const char* p_deviceId);
-	int ProcessDeviceBytes(int p_deviceNum, GUID& p_guid);
-	int GetDevice(int p_deviceNum, MxDriver*& p_driver, Direct3DDeviceInfo*& p_device);
-	int FormatDeviceName(char* p_buffer, const MxDriver* p_ddInfo, const Direct3DDeviceInfo* p_d3dInfo) const;
-	int BETA_1011cc65(int p_idx, char* p_buffer);
-
-	int FUN_1009d0d0();
-	int FUN_1009d210();
-	unsigned char DriverSupportsRequiredDisplayMode(MxDriver& p_driver);
-	unsigned char FUN_1009d3d0(Direct3DDeviceInfo& p_device);
-
 	static void BuildErrorString(const char*, ...);
 	static BOOL CALLBACK
 	DirectDrawEnumerateCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_context);
@@ -226,8 +215,6 @@ public:
 		LPD3DDEVICEDESC p_HELDesc,
 		LPVOID p_context
 	);
-	static int SupportsMMX();
-	static int SupportsCPUID();
 
 	friend class MxDirect3D;
 
@@ -251,23 +238,10 @@ public:
 	// FUNCTION: BETA10 0x1011d320
 	unsigned char IsInitialized() const { return m_initialized; }
 
-private:
+protected:
 	list<MxDriver> m_list;       // 0x04
 	unsigned char m_initialized; // 0x10
 };
-
-// VTABLE: CONFIG 0x4060e4
-// VTABLE: LEGO1 0x100d9cc8
-// VTABLE: BETA10 0x101befb4
-// SIZE 0x14
-class LegoDeviceEnumerate : public MxDeviceEnumerate {};
-
-// SYNTHETIC: BETA10 0x100d8d10
-// LegoDeviceEnumerate::LegoDeviceEnumerate
-
-// SYNTHETIC: LEGO1 0x1007b590
-// SYNTHETIC: BETA10 0x100d8da0
-// LegoDeviceEnumerate::~LegoDeviceEnumerate
 
 // TEMPLATE: BETA10 0x1011c1b0
 // list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::iterator::operator*
