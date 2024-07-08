@@ -203,14 +203,6 @@ public:
 		LPD3DDEVICEDESC p_HELDesc
 	);
 	const char* EnumerateErrorToString(HRESULT p_error);
-	int GetDevice(int p_deviceNum, MxDriver*& p_driver, Direct3DDeviceInfo*& p_device);
-	int BETA_1011cc65(int p_idx, char* p_buffer);
-
-	int FUN_1009d0d0();
-	int FUN_1009d210();
-	unsigned char DriverSupportsRequiredDisplayMode(MxDriver& p_driver);
-	unsigned char FUN_1009d3d0(Direct3DDeviceInfo& p_device);
-
 	static void BuildErrorString(const char*, ...);
 	static BOOL CALLBACK
 	DirectDrawEnumerateCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_context);
@@ -223,8 +215,6 @@ public:
 		LPD3DDEVICEDESC p_HELDesc,
 		LPVOID p_context
 	);
-	static int SupportsMMX();
-	static int SupportsCPUID();
 
 	friend class MxDirect3D;
 

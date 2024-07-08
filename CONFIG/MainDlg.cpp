@@ -57,7 +57,7 @@ BOOL CMainDialog::OnInitDialog()
 	}
 	SendMessage(WM_SETICON, ICON_BIG, (LPARAM) m_icon);
 	SendMessage(WM_SETICON, ICON_SMALL, (LPARAM) m_icon);
-	MxDeviceEnumerate* enumerator = currentConfigApp->m_device_enumerator;
+	LegoDeviceEnumerate* enumerator = currentConfigApp->m_device_enumerator;
 	enumerator->FUN_1009d210();
 	m_modified = currentConfigApp->ReadRegisterSettings();
 	CWnd* list_3d_devices = GetDlgItem(IDC_LIST_3DDEVICES);
@@ -131,7 +131,7 @@ HCURSOR CMainDialog::OnQueryDragIcon()
 // FUNCTION: CONFIG 0x00404240
 void CMainDialog::OnList3DevicesSelectionChanged()
 {
-	MxDeviceEnumerate* device_enumerator = currentConfigApp->m_device_enumerator;
+	LegoDeviceEnumerate* device_enumerator = currentConfigApp->m_device_enumerator;
 	int selected = ::SendMessage(GetDlgItem(IDC_LIST_3DDEVICES)->m_hWnd, LB_GETCURSEL, 0, 0);
 	device_enumerator->GetDevice(selected, currentConfigApp->m_driver, currentConfigApp->m_device);
 	if (currentConfigApp->GetHardwareDeviceColorModel()) {
