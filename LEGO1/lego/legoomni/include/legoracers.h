@@ -4,10 +4,22 @@
 #include "legocarraceactor.h"
 #include "legoracemap.h"
 
+#define LEGORACECAR_UNKNOWN_STATE 0
+#define LEGORACECAR_KICK1 2 // name guessed
+#define LEGORACECAR_KICK2 4 // name validated by BETA10 0x100cb659
+
 // SIZE 0x08
 struct EdgeReference {
 	const char* m_name;       // 0x00
 	LegoPathBoundary* m_data; // 0x04
+};
+
+// SIZE 0x10
+struct SkeletonKickPhase {
+	EdgeReference* m_edgeRef;
+	float m_lower;
+	float m_upper;
+	unsigned char m_userState;
 };
 
 // VTABLE: LEGO1 0x100d58a0 LegoRaceActor
@@ -59,7 +71,7 @@ public:
 
 	virtual void SetMaxLinearVelocity(float p_maxLinearVelocity);
 	virtual void FUN_10012ff0(float);
-	virtual MxBool FUN_10013130(float);
+	virtual MxS32 HandleSkeletonKicks(float);
 
 	// SYNTHETIC: LEGO1 0x10014240
 	// LegoRaceCar::`scalar deleting destructor'
@@ -74,7 +86,9 @@ private:
 	LegoPathBoundary* m_unk0x7c;    // 0x7c
 
 	static EdgeReference g_edgeReferences[];
-	static const EdgeReference* g_pEdgeReferences;
+	static const SkeletonKickPhase g_skeletonKickPhases[]; // TODO: better name
+
+	static const char* g_soundSke13;
 };
 
 #endif // LEGORACERS_H

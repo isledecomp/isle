@@ -1,15 +1,21 @@
 #include "legoracers.h"
 
 #include "anim/legoanim.h"
+#include "carrace.h"
 #include "define.h"
+#include "legocachesoundmanager.h"
 #include "legocameracontroller.h"
 #include "legorace.h"
+#include "legosoundmanager.h"
 #include "misc.h"
+#include "mxdebug.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxutilities.h"
+#include "raceskel.h"
 
 DECOMP_SIZE_ASSERT(EdgeReference, 0x08)
+DECOMP_SIZE_ASSERT(SkeletonKickPhase, 0x10)
 DECOMP_SIZE_ASSERT(LegoRaceCar, 0x200)
 
 // GLOBAL: LEGO1 0x100f0a20
@@ -41,7 +47,24 @@ EdgeReference LegoRaceCar::g_edgeReferences[] = {
 };
 
 // GLOBAL: LEGO1 0x100f0a50
-const EdgeReference* LegoRaceCar::g_pEdgeReferences = g_edgeReferences;
+const SkeletonKickPhase LegoRaceCar::g_skeletonKickPhases[] = {
+	{&LegoRaceCar::g_edgeReferences[0], 0.1, 0.2, LEGORACECAR_KICK2},
+	{&LegoRaceCar::g_edgeReferences[1], 0.2, 0.3, LEGORACECAR_KICK2},
+	{&LegoRaceCar::g_edgeReferences[2], 0.3, 0.4, LEGORACECAR_KICK2},
+	{&LegoRaceCar::g_edgeReferences[2], 0.6, 0.7, LEGORACECAR_KICK1},
+	{&LegoRaceCar::g_edgeReferences[1], 0.7, 0.8, LEGORACECAR_KICK1},
+	{&LegoRaceCar::g_edgeReferences[0], 0.8, 0.9, LEGORACECAR_KICK1},
+	{&LegoRaceCar::g_edgeReferences[3], 0.1, 0.2, LEGORACECAR_KICK1},
+	{&LegoRaceCar::g_edgeReferences[4], 0.2, 0.3, LEGORACECAR_KICK1},
+	{&LegoRaceCar::g_edgeReferences[5], 0.3, 0.4, LEGORACECAR_KICK1},
+	{&LegoRaceCar::g_edgeReferences[5], 0.6, 0.7, LEGORACECAR_KICK2},
+	{&LegoRaceCar::g_edgeReferences[4], 0.7, 0.8, LEGORACECAR_KICK2},
+	{&LegoRaceCar::g_edgeReferences[3], 0.8, 0.9, LEGORACECAR_KICK2},
+};
+
+// GLOBAL: LEGO1 0x100f0b70
+// STRING: LEGO1 0x100f08bc
+const char* LegoRaceCar::g_soundSke13 = "ske13";
 
 // FUNCTION: LEGO1 0x10012950
 LegoRaceCar::LegoRaceCar()
@@ -140,13 +163,11 @@ void LegoRaceCar::FUN_10012ff0(float p_param)
 	LegoAnimActorStruct* a; // called `a` in BETA10
 	float deltaTime;
 
-	if (m_userState == 2) {
+	if (m_userState == LEGORACECAR_KICK1) {
 		a = m_unk0x70;
 	}
 	else {
-		// TODO: Possibly an enum?
-		const char legoracecarKick2 = 4; // original name: LEGORACECAR_KICK2
-		assert(m_userState == legoracecarKick2);
+		assert(m_userState == LEGORACECAR_KICK2);
 		a = m_unk0x74;
 	}
 
@@ -156,7 +177,7 @@ void LegoRaceCar::FUN_10012ff0(float p_param)
 		deltaTime = p_param - m_unk0x58;
 
 		if (a->GetDuration() <= deltaTime || deltaTime < 0.0) {
-			if (m_userState == 2) {
+			if (m_userState == LEGORACECAR_KICK1) {
 				LegoEdge** edges = m_unk0x78->GetEdges();
 				m_destEdge = (LegoUnknown100db7f4*) (edges[2]);
 				m_boundary = m_unk0x78;
@@ -167,7 +188,7 @@ void LegoRaceCar::FUN_10012ff0(float p_param)
 				m_boundary = m_unk0x7c;
 			}
 
-			m_userState = 0;
+			m_userState = LEGORACECAR_UNKNOWN_STATE;
 		}
 		else if (a->GetAnimTreePtr()->GetCamAnim()) {
 			MxMatrix transformationMatrix;
@@ -189,10 +210,50 @@ void LegoRaceCar::FUN_10012ff0(float p_param)
 	}
 }
 
-// STUB: LEGO1 0x10013130
-MxBool LegoRaceCar::FUN_10013130(float)
+// FUNCTION: LEGO1 0x10013130
+// FUNCTION: BETA10 0x100cce50
+MxS32 LegoRaceCar::HandleSkeletonKicks(float p_param1)
 {
-	// TODO
+	const SkeletonKickPhase* current = g_skeletonKickPhases;
+
+	// TODO: Type is guesswork so far
+	CarRace* r = (CarRace*) CurrentWorld(); // called `r` in BETA10
+	assert(r);
+
+	RaceSkel* s = (RaceSkel*) r->GetUnk0x150(); // called `s` in BETA10
+	assert(s);
+
+	float skeletonCurAnimPosition;
+	float skeletonCurAnimDuration;
+
+	s->GetCurrentAnimData(&skeletonCurAnimPosition, &skeletonCurAnimDuration);
+
+	float skeletonCurAnimPhase = skeletonCurAnimPosition / skeletonCurAnimDuration;
+
+	for (MxS32 i = 0; i < sizeOfArray(g_skeletonKickPhases); i++) {
+		if (m_boundary == current->m_edgeRef->m_data && current->m_lower <= skeletonCurAnimPhase &&
+			skeletonCurAnimPhase <= current->m_upper) {
+			m_userState = current->m_userState;
+		}
+		current = &current[1];
+	}
+
+	if (m_userState != LEGORACECAR_KICK1 && m_userState != LEGORACECAR_KICK2) {
+		MxTrace(
+			// STRING: BETA10 0x101f64c8
+			"Got kicked in boundary %s %d %g:%g %g\n",
+			// TODO: same as in above comparison
+			m_boundary->GetName(),
+			skeletonCurAnimPosition,
+			skeletonCurAnimDuration,
+			skeletonCurAnimPhase
+		);
+		return FALSE;
+	}
+
+	m_unk0x58 = p_param1;
+	SoundManager()->GetCacheSoundManager()->Play(g_soundSke13, NULL, FALSE);
+
 	return TRUE;
 }
 

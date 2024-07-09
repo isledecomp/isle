@@ -52,6 +52,9 @@ public:
 	MxLong HandleEndAction(MxEndActionNotificationParam&) override;     // vtable+0x74
 	MxLong HandleType0Notification(MxNotificationParam&) override;      // vtable+0x78
 
+	// FUNCTION: BETA10 0x100cd060
+	undefined4 GetUnk0x150() { return m_unk0x150; }
+
 	// SYNTHETIC: LEGO1 0x10016c70
 	// CarRace::`scalar deleting destructor'
 
