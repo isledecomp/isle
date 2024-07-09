@@ -64,7 +64,7 @@ const SkeletonKickPhase LegoRaceCar::g_skeletonKickPhases[] = {
 
 // GLOBAL: LEGO1 0x100f0b70
 // STRING: LEGO1 0x100f08bc
-const char* LegoRaceCar::g_soundSke13 = "ske13";
+const char* LegoRaceCar::g_soundSkel3 = "skel3";
 
 // FUNCTION: LEGO1 0x10012950
 LegoRaceCar::LegoRaceCar()
@@ -252,7 +252,7 @@ MxS32 LegoRaceCar::HandleSkeletonKicks(float p_param1)
 	}
 
 	m_unk0x58 = p_param1;
-	SoundManager()->GetCacheSoundManager()->Play(g_soundSke13, NULL, FALSE);
+	SoundManager()->GetCacheSoundManager()->Play(g_soundSkel3, NULL, FALSE);
 
 	return TRUE;
 }

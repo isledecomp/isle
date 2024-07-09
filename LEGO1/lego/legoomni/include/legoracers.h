@@ -88,7 +88,7 @@ private:
 	static EdgeReference g_edgeReferences[];
 	static const SkeletonKickPhase g_skeletonKickPhases[]; // TODO: better name
 
-	static const char* g_soundSke13;
+	static const char* g_soundSkel3;
 };
 
 #endif // LEGORACERS_H
