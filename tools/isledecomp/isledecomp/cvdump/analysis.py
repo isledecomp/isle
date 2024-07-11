@@ -5,7 +5,7 @@ from isledecomp.cvdump import SymbolsEntry
 from isledecomp.types import SymbolType
 from .parser import CvdumpParser
 from .demangler import demangle_string_const, demangle_vtable
-from .types import CvdumpKeyError, CvdumpIntegrityError
+from .types import CvdumpKeyError, CvdumpIntegrityError, TypeInfo
 
 
 class CvdumpNode:
@@ -35,6 +35,8 @@ class CvdumpNode:
     section_contribution: Optional[int] = None
     addr: Optional[int] = None
     symbol_entry: Optional[SymbolsEntry] = None
+    # Preliminary - only used for non-static variables at the moment
+    data_type: Optional[TypeInfo] = None
 
     def __init__(self, section: int, offset: int) -> None:
         self.section = section
@@ -127,6 +129,7 @@ class CvdumpAnalysis:
                 # get information for built-in "T_" types.
                 g_info = parser.types.get(glo.type)
                 node_dict[key].confirmed_size = g_info.size
+                node_dict[key].data_type = g_info
                 # Previously we set the symbol type to POINTER here if
                 # the variable was known to be a pointer. We can derive this
                 # information later when it's time to compare the variable,

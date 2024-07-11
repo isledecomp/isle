@@ -8,6 +8,7 @@ from typing import Any, Callable, Iterable, List, Optional
 from isledecomp.bin import Bin as IsleBin, InvalidVirtualAddressError
 from isledecomp.cvdump.demangler import demangle_string_const
 from isledecomp.cvdump import Cvdump, CvdumpAnalysis
+from isledecomp.cvdump.types import scalar_type_pointer
 from isledecomp.parser import DecompCodebase
 from isledecomp.dir import walk_source_dir
 from isledecomp.types import SymbolType
@@ -220,7 +221,62 @@ class Compare:
                     var.offset, var.name, var.parent_function
                 )
             else:
-                self._db.match_variable(var.offset, var.name)
+                if not self._db.match_variable(var.offset, var.name):
+                    continue
+                # retrieve compare address
+                matchinfo = self._db.get_by_orig(var.offset)
+                if matchinfo is None or matchinfo.recomp_addr is None:
+                    continue
+
+                var_recomp_addr = matchinfo.recomp_addr
+
+                node = next(
+                    (
+                        x
+                        for x in self.cvdump_analysis.nodes
+                        if x.addr == var_recomp_addr
+                    ),
+                    None,
+                )
+                if node is None or node.data_type is None:
+                    continue
+
+                if not node.data_type.key.startswith("0x"):
+                    # scalar type, no further processing needed
+                    continue
+
+                data_type = self.cv.types.keys[node.data_type.key.lower()]
+
+                if data_type["type"] == "LF_ARRAY":
+                    array_size_bytes = data_type["size"]
+
+                    array_type = self.cv.types.get(data_type["array_type"])
+
+                    assert array_type.size is not None
+                    array_type_size = array_type.size
+
+                    array_length, modulus = divmod(array_size_bytes, array_type_size)
+                    assert modulus == 0
+
+                    # 0 is already matched when we get here
+                    for i in range(1, array_length):
+                        orig_element_base_addr = var.offset + i * array_type_size
+                        recomp_element_base_addr = var_recomp_addr + i * array_type_size
+                        if array_type.members is None:
+                            self._add_match_in_array(
+                                f"{var.name}[{i}]",
+                                array_type.key,
+                                orig_element_base_addr,
+                                recomp_element_base_addr,
+                            )
+                        else:
+                            for member in array_type.members:
+                                self._add_match_in_array(
+                                    f"{var.name}[{i}].{member.name}",
+                                    array_type.key,
+                                    orig_element_base_addr + member.offset,
+                                    recomp_element_base_addr + member.offset,
+                                )
 
         for tbl in codebase.iter_vtables():
             self._db.match_vtable(tbl.offset, tbl.name, tbl.base_class)
@@ -244,6 +300,18 @@ class Compare:
                 continue
 
             self._db.match_string(string.offset, string.name)
+
+    def _add_match_in_array(
+        self, name: str, type_id: str, orig_addr: int, recomp_addr: int
+    ):
+        self._db.set_recomp_symbol(
+            recomp_addr,
+            SymbolType.POINTER if scalar_type_pointer(type_id) else SymbolType.DATA,
+            name,
+            name,
+            4,
+        )
+        self._db.set_pair(orig_addr, recomp_addr)
 
     def _find_original_strings(self):
         """Go to the original binary and look for the specified string constants
