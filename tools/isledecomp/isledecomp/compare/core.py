@@ -287,7 +287,6 @@ class Compare:
         data_type = self.cv.types.keys[node.data_type.key.lower()]
 
         if data_type["type"] == "LF_ARRAY":
-
             array_element_type = self.cv.types.get(data_type["array_type"])
 
             assert node.data_type.members is not None
