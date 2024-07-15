@@ -263,7 +263,8 @@ class Compare:
                 SymbolType.POINTER if scalar_type_pointer(type_id) else SymbolType.DATA,
                 name,
                 name,
-                4,
+                # we only need the matches when they are referenced elsewhere, hence we don't need the size
+                size=None,
             )
             self._db.set_pair(orig_addr, recomp_addr)
 
@@ -286,31 +287,26 @@ class Compare:
         data_type = self.cv.types.keys[node.data_type.key.lower()]
 
         if data_type["type"] == "LF_ARRAY":
-            array_size_bytes = data_type["size"]
 
-            array_type = self.cv.types.get(data_type["array_type"])
+            array_element_type = self.cv.types.get(data_type["array_type"])
 
-            assert array_type.size is not None
-            array_type_size = array_type.size
+            assert node.data_type.members is not None
 
-            array_length, modulus = divmod(array_size_bytes, array_type_size)
-            assert modulus == 0
-
-            for i in range(array_length):
-                orig_element_base_addr = orig_addr + i * array_type_size
-                recomp_element_base_addr = recomp_addr + i * array_type_size
-                if array_type.members is None:
+            for i, array_element in enumerate(node.data_type.members):
+                orig_element_base_addr = orig_addr + array_element.offset
+                recomp_element_base_addr = recomp_addr + array_element.offset
+                if array_element_type.members is None:
                     _add_match_in_array(
                         f"{name}[{i}]",
-                        array_type.key,
+                        array_element_type.key,
                         orig_element_base_addr,
                         recomp_element_base_addr,
                     )
                 else:
-                    for member in array_type.members:
+                    for member in array_element_type.members:
                         _add_match_in_array(
                             f"{name}[{i}].{member.name}",
-                            array_type.key,
+                            array_element_type.key,
                             orig_element_base_addr + member.offset,
                             recomp_element_base_addr + member.offset,
                         )
