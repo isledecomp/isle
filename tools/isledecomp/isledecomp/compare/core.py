@@ -291,12 +291,12 @@ class Compare:
 
             assert node.data_type.members is not None
 
-            for i, array_element in enumerate(node.data_type.members):
+            for array_element in node.data_type.members:
                 orig_element_base_addr = orig_addr + array_element.offset
                 recomp_element_base_addr = recomp_addr + array_element.offset
                 if array_element_type.members is None:
                     _add_match_in_array(
-                        f"{name}[{i}]",
+                        f"{name}{array_element.name}",
                         array_element_type.key,
                         orig_element_base_addr,
                         recomp_element_base_addr,
@@ -304,7 +304,7 @@ class Compare:
                 else:
                     for member in array_element_type.members:
                         _add_match_in_array(
-                            f"{name}[{i}].{member.name}",
+                            f"{name}{array_element.name}.{member.name}",
                             array_element_type.key,
                             orig_element_base_addr + member.offset,
                             recomp_element_base_addr + member.offset,

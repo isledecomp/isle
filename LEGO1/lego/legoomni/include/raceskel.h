@@ -12,7 +12,7 @@ class RaceSkel : public LegoAnimActor {
 public:
 	RaceSkel();
 
-	void GetCurrentAnimData(float*, float*);
+	void GetCurrentAnimData(float* p_outCurAnimPosition, float* p_outCurAnimDuration);
 
 private:
 	float m_animPosition; // 0x1c
