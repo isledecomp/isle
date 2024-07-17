@@ -212,7 +212,7 @@ void LegoRaceCar::FUN_10012ff0(float p_param)
 
 // FUNCTION: LEGO1 0x10013130
 // FUNCTION: BETA10 0x100cce50
-MxS32 LegoRaceCar::HandleSkeletonKicks(float p_param1)
+MxU32 LegoRaceCar::HandleSkeletonKicks(float p_param1)
 {
 	const SkeletonKickPhase* current = g_skeletonKickPhases;
 

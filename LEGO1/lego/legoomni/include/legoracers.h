@@ -16,10 +16,10 @@ struct EdgeReference {
 
 // SIZE 0x10
 struct SkeletonKickPhase {
-	EdgeReference* m_edgeRef;  // 0x00
-	float m_lower;             // 0x04
-	float m_upper;             // 0x08
-	unsigned char m_userState; // 0x0c
+	EdgeReference* m_edgeRef; // 0x00
+	float m_lower;            // 0x04
+	float m_upper;            // 0x08
+	MxU8 m_userState;         // 0x0c
 };
 
 // VTABLE: LEGO1 0x100d58a0 LegoRaceActor
@@ -71,7 +71,7 @@ public:
 
 	virtual void SetMaxLinearVelocity(float p_maxLinearVelocity);
 	virtual void FUN_10012ff0(float p_param);
-	virtual MxS32 HandleSkeletonKicks(float p_param1);
+	virtual MxU32 HandleSkeletonKicks(float p_param1);
 
 	// SYNTHETIC: LEGO1 0x10014240
 	// LegoRaceCar::`scalar deleting destructor'
