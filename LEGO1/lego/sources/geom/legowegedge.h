@@ -43,6 +43,8 @@ public:
 	LegoU32 GetFlag0x10() { return m_flags & c_bit5 ? FALSE : TRUE; }
 	Mx4DPointFloat* GetUnknown0x14() { return &m_unk0x14; }
 	Mx4DPointFloat* GetEdgeNormal(int index) { return &m_edgeNormals[index]; }
+
+	// FUNCTION: BETA10 0x1001c9b0
 	LegoChar* GetName() { return m_name; }
 
 	void SetFlag0x10(LegoU32 p_disable)
