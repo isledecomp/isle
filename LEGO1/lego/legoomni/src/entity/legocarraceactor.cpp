@@ -28,7 +28,7 @@ LegoCarRaceActor::LegoCarRaceActor()
 }
 
 // STUB: LEGO1 0x10080590
-void LegoCarRaceActor::FUN_10080590()
+void LegoCarRaceActor::FUN_10080590(float)
 {
 }
 

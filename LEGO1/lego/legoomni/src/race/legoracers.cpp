@@ -5,6 +5,7 @@
 #include "define.h"
 #include "legocachesoundmanager.h"
 #include "legocameracontroller.h"
+#include "legonavcontroller.h"
 #include "legorace.h"
 #include "legosoundmanager.h"
 #include "misc.h"
@@ -12,6 +13,7 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxutilities.h"
+#include "mxvariabletable.h"
 #include "raceskel.h"
 
 DECOMP_SIZE_ASSERT(EdgeReference, 0x08)
@@ -62,9 +64,25 @@ const SkeletonKickPhase LegoRaceCar::g_skeletonKickPhases[] = {
 	{&LegoRaceCar::g_edgeReferences[3], 0.8, 0.9, LEGORACECAR_KICK2},
 };
 
+// GLOBAL: LEGO1 0x100f0b10
+// STRING: LEGO1 0x100f09cc
+const char* LegoRaceCar::g_strSpeedCopy = "SPEED";
+
+// GLOBAL: LEGO1 0x100f0b6c
+// STRING: LEGO1 0x100f08c4
+const char* LegoRaceCar::g_srt001ra = "srt001ra";
+
 // GLOBAL: LEGO1 0x100f0b70
 // STRING: LEGO1 0x100f08bc
 const char* LegoRaceCar::g_soundSkel3 = "skel3";
+
+// GLOBAL: LEGO1 0x100f0b88
+// GLOBAL: BETA10 0x101f5f94
+MxS32 LegoRaceCar::g_unk0x100f0b88 = 0;
+
+// GLOBAL: LEGO1 0x100f0b8c
+// GLOBAL: BETA10 0x101f5f98
+MxBool LegoRaceCar::g_unk0x100f0b8c = TRUE;
 
 // FUNCTION: LEGO1 0x10012950
 LegoRaceCar::LegoRaceCar()
@@ -188,7 +206,7 @@ void LegoRaceCar::FUN_10012ff0(float p_param)
 				m_boundary = m_unk0x7c;
 			}
 
-			m_userState = LEGORACECAR_UNKNOWN_STATE;
+			m_userState = LEGORACECAR_UNKNOWN_0;
 		}
 		else if (a->GetAnimTreePtr()->GetCamAnim()) {
 			MxMatrix transformationMatrix;
@@ -257,10 +275,61 @@ MxU32 LegoRaceCar::HandleSkeletonKicks(float p_param1)
 	return TRUE;
 }
 
-// STUB: LEGO1 0x100131f0
+// FUNCTION: LEGO1 0x100131f0
+// FUNCTION: BETA10 0x100cb88a
 void LegoRaceCar::VTable0x70(float p_float)
 {
-	// TODO
+	if (m_userNavFlag && (m_userState == LEGORACECAR_KICK1 || m_userState == LEGORACECAR_KICK2)) {
+		FUN_10012ff0(p_float);
+		return;
+	}
+
+	LegoCarRaceActor::VTable0x70(p_float);
+
+	if (m_userNavFlag && m_userState == LEGORACECAR_UNKNOWN_1) {
+		if (HandleSkeletonKicks(p_float)) {
+			return;
+		}
+	}
+
+	if (LegoCarRaceActor::m_unk0x0c == 1) {
+		FUN_1005d4b0();
+
+		if (!m_userNavFlag) {
+			FUN_10080590(p_float);
+			return;
+		}
+
+		float absoluteSpeed = abs(m_worldSpeed);
+		float maximumSpeed = NavController()->GetMaxLinearVel();
+		char buffer[200];
+
+		sprintf(buffer, "%g", absoluteSpeed / maximumSpeed);
+
+		VariableTable()->SetVariable(g_strSpeedCopy, buffer);
+
+		if (m_sound) {
+			// pitches up the engine sound based on the velocity
+			if (absoluteSpeed > 0.83 * maximumSpeed) {
+				m_frequencyFactor = 1.9f;
+			}
+			else {
+				// this value seems to simulate RPM based on the gear
+				MxS32 gearRpmFactor = (MxS32) (6.0 * absoluteSpeed) % 100;
+				m_frequencyFactor = gearRpmFactor / 80.0 + 0.7;
+			}
+		}
+
+		if (absoluteSpeed != 0.0f) {
+			g_unk0x100f0b88 = p_float;
+			g_unk0x100f0b8c = FALSE;
+		}
+
+		if (p_float - g_unk0x100f0b88 > 5000.0f && !g_unk0x100f0b8c) {
+			SoundManager()->GetCacheSoundManager()->Play(g_srt001ra, NULL, 0);
+			g_unk0x100f0b8c = TRUE;
+		}
+	}
 }
 
 // STUB: LEGO1 0x100133c0
