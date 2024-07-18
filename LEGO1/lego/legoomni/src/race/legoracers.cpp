@@ -65,7 +65,8 @@ const SkeletonKickPhase LegoRaceCar::g_skeletonKickPhases[] = {
 };
 
 // GLOBAL: LEGO1 0x100f0b10
-const char* LegoRaceCar::g_strSpeedCopy = g_strSPEED;
+// STRING: LEGO1 0x100f09cc
+const char* LegoRaceCar::g_strSpeedCopy = "SPEED";
 
 // GLOBAL: LEGO1 0x100f0b6c
 // STRING: LEGO1 0x100f08c4
@@ -81,7 +82,7 @@ int LegoRaceCar::g_unk0x100f0b88 = 0;
 
 // GLOBAL: LEGO1 0x100f0b8c
 // GLOBAL: BETA10 0x101f5f98
-MxBool LegoRaceCar::g_unk0x100f0b8c = FALSE;
+MxBool LegoRaceCar::g_unk0x100f0b8c = TRUE;
 
 // FUNCTION: LEGO1 0x10012950
 LegoRaceCar::LegoRaceCar()
