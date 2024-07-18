@@ -4,7 +4,8 @@
 #include "legocarraceactor.h"
 #include "legoracemap.h"
 
-#define LEGORACECAR_UNKNOWN_STATE 0
+#define LEGORACECAR_UNKNOWN_0 0
+#define LEGORACECAR_UNKNOWN_1 1 // name guessed
 #define LEGORACECAR_KICK1 2 // name guessed
 #define LEGORACECAR_KICK2 4 // name validated by BETA10 0x100cb659
 
@@ -86,9 +87,12 @@ private:
 	LegoPathBoundary* m_unk0x7c;    // 0x7c
 
 	static EdgeReference g_edgeReferences[];
-	static const SkeletonKickPhase g_skeletonKickPhases[]; // TODO: better name
-
+	static const SkeletonKickPhase g_skeletonKickPhases[];
+	static const char* g_strSpeedCopy;
+	static const char* g_srt001ra;
 	static const char* g_soundSkel3;
+	static MxS32 g_unk0x100f0b88;
+	static MxBool g_unk0x100f0b8c;
 };
 
 #endif // LEGORACERS_H
