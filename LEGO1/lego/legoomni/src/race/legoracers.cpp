@@ -315,8 +315,8 @@ void LegoRaceCar::VTable0x70(float p_float)
 			}
 			else {
 				// this value seems to simulate RPM based on the gear
-				int gear_rpm_factor = (int) (6.0 * absoluteSpeed) % 100;
-				m_frequencyFactor = gear_rpm_factor / 80.0 + 0.7;
+				int gearRpmFactor = (int) (6.0 * absoluteSpeed) % 100;
+				m_frequencyFactor = gearRpmFactor / 80.0 + 0.7;
 			}
 		}
 
