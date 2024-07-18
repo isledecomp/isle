@@ -5,7 +5,7 @@
 #include "legoracemap.h"
 
 #define LEGORACECAR_UNKNOWN_0 0
-#define LEGORACECAR_UNKNOWN_1 1 // name guessed
+#define LEGORACECAR_UNKNOWN_1 1
 #define LEGORACECAR_KICK1 2 // name guessed
 #define LEGORACECAR_KICK2 4 // name validated by BETA10 0x100cb659
 
