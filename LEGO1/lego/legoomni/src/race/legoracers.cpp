@@ -78,7 +78,7 @@ const char* LegoRaceCar::g_soundSkel3 = "skel3";
 
 // GLOBAL: LEGO1 0x100f0b88
 // GLOBAL: BETA10 0x101f5f94
-int LegoRaceCar::g_unk0x100f0b88 = 0;
+MxS32 LegoRaceCar::g_unk0x100f0b88 = 0;
 
 // GLOBAL: LEGO1 0x100f0b8c
 // GLOBAL: BETA10 0x101f5f98
@@ -310,12 +310,12 @@ void LegoRaceCar::VTable0x70(float p_float)
 
 		if (m_sound) {
 			// pitches up the engine sound based on the velocity
-			if (0.83 * maximumSpeed < absoluteSpeed) {
+			if (absoluteSpeed > 0.83 * maximumSpeed) {
 				m_frequencyFactor = 1.9f;
 			}
 			else {
 				// this value seems to simulate RPM based on the gear
-				int gearRpmFactor = (int) (6.0 * absoluteSpeed) % 100;
+				MxS32 gearRpmFactor = (MxS32) (6.0 * absoluteSpeed) % 100;
 				m_frequencyFactor = gearRpmFactor / 80.0 + 0.7;
 			}
 		}
@@ -325,7 +325,7 @@ void LegoRaceCar::VTable0x70(float p_float)
 			g_unk0x100f0b8c = FALSE;
 		}
 
-		if (5000.0f < p_float - g_unk0x100f0b88 && !g_unk0x100f0b8c) {
+		if (p_float - g_unk0x100f0b88 > 5000.0f && !g_unk0x100f0b8c) {
 			SoundManager()->GetCacheSoundManager()->Play(g_srt001ra, NULL, 0);
 			g_unk0x100f0b8c = TRUE;
 		}
