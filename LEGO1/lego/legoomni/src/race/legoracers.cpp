@@ -279,14 +279,14 @@ MxU32 LegoRaceCar::HandleSkeletonKicks(float p_param1)
 // FUNCTION: BETA10 0x100cb88a
 void LegoRaceCar::VTable0x70(float p_float)
 {
-	if (m_userNavFlag != 0 && (m_userState == LEGORACECAR_KICK1 || m_userState == LEGORACECAR_KICK2)) {
+	if (m_userNavFlag && (m_userState == LEGORACECAR_KICK1 || m_userState == LEGORACECAR_KICK2)) {
 		FUN_10012ff0(p_float);
 		return;
 	}
 
 	LegoCarRaceActor::VTable0x70(p_float);
 
-	if (m_userNavFlag != 0 && m_userState == LEGORACECAR_UNKNOWN_1) {
+	if (m_userNavFlag && m_userState == LEGORACECAR_UNKNOWN_1) {
 		if (HandleSkeletonKicks(p_float)) {
 			return;
 		}
@@ -295,7 +295,7 @@ void LegoRaceCar::VTable0x70(float p_float)
 	if (LegoCarRaceActor::m_unk0x0c == 1) {
 		FUN_1005d4b0();
 
-		if (m_userNavFlag == 0) {
+		if (!m_userNavFlag) {
 			FUN_10080590(p_float);
 			return;
 		}
