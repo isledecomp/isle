@@ -13,6 +13,8 @@ struct LegoPathEdgeContainer;
 struct LegoUnknown100db7f4;
 class LegoWEEdge;
 
+extern MxLong g_unk0x100f3308;
+
 // VTABLE: LEGO1 0x100d6e28
 // SIZE 0x154
 class LegoPathActor : public LegoActor {

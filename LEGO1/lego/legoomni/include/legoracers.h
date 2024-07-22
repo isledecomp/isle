@@ -102,7 +102,6 @@ private:
 	static MxLong g_timeLastSoundPlayed;
 	static MxS32 g_unk0x100f0b88;
 	static MxBool g_unk0x100f0b8c;
-	static MxLong g_unk0x100f3308;
 	static Mx3DPointFloat g_vector020;
 };
 

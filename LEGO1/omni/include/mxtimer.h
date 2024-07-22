@@ -20,7 +20,7 @@ public:
 			return g_lastTimeTimerStarted;
 		}
 		else {
-			return g_lastTimeCalculated - this->m_startTime;
+			return GetTimeElapsed();
 		}
 	}
 
@@ -29,7 +29,7 @@ public:
 	static MxLong GetLastTimeCalculated() { return g_lastTimeCalculated; }
 	static MxLong GetLastTimeTimerStarted() { return g_lastTimeTimerStarted; }
 
-	// FUNCTION: BETA10 0x1000f320
+	// FUNCTION: BETA10 0x10017810
 	MxLong GetTimeElapsed() { return g_lastTimeCalculated - m_startTime; }
 
 	// SYNTHETIC: LEGO1 0x100ae0d0

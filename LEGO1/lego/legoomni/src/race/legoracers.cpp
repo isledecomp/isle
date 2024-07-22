@@ -125,11 +125,6 @@ MxS32 LegoRaceCar::g_unk0x100f0b88 = 0;
 // GLOBAL: BETA10 0x101f5f98
 MxBool LegoRaceCar::g_unk0x100f0b8c = TRUE;
 
-// Not sure why the next two are so far away from the rest in address space
-
-// GLOBAL: LEGO1 0x100f3308
-MxLong LegoRaceCar::g_unk0x100f3308 = 0;
-
 // Initialized at LEGO1 0x10012db0
 // GLOBAL: LEGO1 0x10102af0
 Mx3DPointFloat LegoRaceCar::g_vector020 = Mx3DPointFloat(0.0f, 2.0f, 0.0f);
