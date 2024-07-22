@@ -62,6 +62,7 @@ public:
 
 	// FUNCTION: BETA10 0x1000f320
 	const LegoChar* GetName() const { return m_name; }
+
 	LegoEntity* GetEntity() { return m_entity; }
 
 	void SetEntity(LegoEntity* p_entity) { m_entity = p_entity; }

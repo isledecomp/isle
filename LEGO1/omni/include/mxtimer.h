@@ -20,22 +20,20 @@ public:
 			return g_lastTimeTimerStarted;
 		}
 		else {
-			return GetTimeElapsed();
+			return GetTimeSinceStart();
 		}
 	}
-
-	MxLong GetStartTime() { return m_startTime; }
-	MxBool IsRunning() { return m_isRunning; }
-	static MxLong GetLastTimeCalculated() { return g_lastTimeCalculated; }
-	static MxLong GetLastTimeTimerStarted() { return g_lastTimeTimerStarted; }
-
-	// FUNCTION: BETA10 0x10017810
-	MxLong GetTimeElapsed() { return g_lastTimeCalculated - m_startTime; }
 
 	// SYNTHETIC: LEGO1 0x100ae0d0
 	// MxTimer::`scalar deleting destructor'
 
 private:
+	// This function appears to be public in BETA10; this function may also be
+	// an older version of GetTime() instead of a private subroutine.
+	// None of this matters for the release build since these functions are inlined.
+	// FUNCTION: BETA10 0x10017810
+	MxLong GetTimeSinceStart() { return g_lastTimeCalculated - m_startTime; }
+
 	MxLong m_startTime; // 0x08
 	MxBool m_isRunning; // 0x0c
 

@@ -129,6 +129,7 @@ public:
 
 	// FUNCTION: BETA10 0x1001c860
 	MxU32 GetState() { return m_state; }
+
 	LegoPathController* GetController() { return m_controller; }
 	MxBool GetCollideBox() { return m_collideBox; }
 
@@ -136,6 +137,7 @@ public:
 
 	// FUNCTION: BETA10 0x10013430
 	void SetState(MxU32 p_state) { m_state = p_state; }
+
 	void SetController(LegoPathController* p_controller) { m_controller = p_controller; }
 
 	// SYNTHETIC: LEGO1 0x1002d800

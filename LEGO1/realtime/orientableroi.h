@@ -41,6 +41,7 @@ public:
 
 	// FUNCTION: BETA10 0x1000fbf0
 	const Matrix4& GetLocal2World() const { return m_local2world; }
+
 	const float* GetWorldPosition() const { return m_local2world[3]; }
 	const float* GetWorldDirection() const { return m_local2world[2]; }
 	const float* GetWorldUp() const { return m_local2world[1]; }

@@ -86,6 +86,7 @@ public:
 
 	// FUNCTION: BETA10 0x1000f2f0
 	LegoROI* GetROI() { return m_roi; }
+
 	MxU8 GetType() { return m_type; }
 	MxBool GetCameraFlag() { return m_cameraFlag; }
 
