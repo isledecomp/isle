@@ -103,13 +103,13 @@ const char* LegoRaceCar::g_srt001ra = "srt001ra";
 const char* LegoRaceCar::g_soundSkel3 = "skel3";
 
 // GLOBAL: LEGO1 0x100f0b74
-undefined4 LegoRaceCar::g_srtsl18to29Index = 0;
+MxU32 LegoRaceCar::g_srtsl18to29Index = 0;
 
 // GLOBAL: LEGO1 0x100f0b78
-undefined4 LegoRaceCar::g_srtsl6to10Index = 0;
+MxU32 LegoRaceCar::g_srtsl6to10Index = 0;
 
 // GLOBAL: LEGO1 0x100f0b7c
-undefined4 LegoRaceCar::g_emptySoundKeyListIndex = 0;
+MxU32 LegoRaceCar::g_emptySoundKeyListIndex = 0;
 
 // GLOBAL: LEGO1 0x100f0b80
 MxU32 LegoRaceCar::g_srtrhIndex = 0;
