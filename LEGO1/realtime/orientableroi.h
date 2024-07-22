@@ -39,6 +39,7 @@ public:
 	void FUN_100a58f0(const Matrix4& p_transform);
 	void FUN_100a5a30(const Vector3& p_world_velocity);
 
+	// FUNCTION: BETA10 0x1000fbf0
 	const Matrix4& GetLocal2World() const { return m_local2world; }
 	const float* GetWorldPosition() const { return m_local2world[3]; }
 	const float* GetWorldDirection() const { return m_local2world[2]; }

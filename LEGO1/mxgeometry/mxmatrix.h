@@ -16,6 +16,7 @@ public:
 
 	MxMatrix(const Matrix4& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
 
+	// FUNCTION: BETA10 0x10010860
 	float* operator[](int idx) { return m_data[idx]; }
 	const float* operator[](int idx) const { return m_data[idx]; }
 

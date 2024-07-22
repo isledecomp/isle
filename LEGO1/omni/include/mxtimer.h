@@ -24,6 +24,14 @@ public:
 		}
 	}
 
+	MxLong GetStartTime() { return m_startTime; }
+	MxBool IsRunning() { return m_isRunning; }
+	inline static MxLong GetLastTimeCalculated() { return g_lastTimeCalculated; }
+	inline static MxLong GetLastTimeTimerStarted() { return g_lastTimeTimerStarted; }
+
+	// FUNCTION: BETA10 0x1000f320
+	inline MxLong GetTimeElapsed() { return g_lastTimeCalculated - m_startTime; }
+
 	// SYNTHETIC: LEGO1 0x100ae0d0
 	// MxTimer::`scalar deleting destructor'
 

@@ -83,6 +83,8 @@ public:
 	MxBool GetFlagsIsSet(MxU8 p_flag) { return m_flags & p_flag; }
 	MxU8 GetFlags() { return m_flags; }
 	MxFloat GetWorldSpeed() { return m_worldSpeed; }
+
+	// FUNCTION: BETA10 0x1000f2f0
 	LegoROI* GetROI() { return m_roi; }
 	MxU8 GetType() { return m_type; }
 	MxBool GetCameraFlag() { return m_cameraFlag; }

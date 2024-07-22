@@ -124,11 +124,15 @@ public:
 	virtual void VTable0xc8(MxU8 p_unk0x148) { m_unk0x148 = p_unk0x148; } // vtable+0xc8
 
 	LegoPathBoundary* GetBoundary() { return m_boundary; }
+
+	// FUNCTION: BETA10 0x1001c860
 	MxU32 GetState() { return m_state; }
 	LegoPathController* GetController() { return m_controller; }
 	MxBool GetCollideBox() { return m_collideBox; }
 
 	void SetBoundary(LegoPathBoundary* p_boundary) { m_boundary = p_boundary; }
+
+	// FUNCTION: BETA10 0x10013430
 	void SetState(MxU32 p_state) { m_state = p_state; }
 	void SetController(LegoPathController* p_controller) { m_controller = p_controller; }
 
