@@ -14,13 +14,15 @@ public:
 
 	MxLong GetRealTime();
 
+	// FUNCTION: BETA10 0x10017810
 	MxLong GetTime()
 	{
+		// Note that the BETA10 implementation differs - it only consists of the second branch of this `if` call
 		if (this->m_isRunning) {
 			return g_lastTimeTimerStarted;
 		}
 		else {
-			return GetTimeSinceStart();
+			return g_lastTimeCalculated - this->m_startTime;
 		}
 	}
 
@@ -28,12 +30,6 @@ public:
 	// MxTimer::`scalar deleting destructor'
 
 private:
-	// This function appears to be public in BETA10; this function may also be
-	// an older version of GetTime() instead of a private subroutine.
-	// None of this matters for the release build since these functions are inlined.
-	// FUNCTION: BETA10 0x10017810
-	MxLong GetTimeSinceStart() { return g_lastTimeCalculated - m_startTime; }
-
 	MxLong m_startTime; // 0x08
 	MxBool m_isRunning; // 0x0c
 

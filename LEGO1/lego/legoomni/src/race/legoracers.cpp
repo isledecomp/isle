@@ -127,7 +127,7 @@ MxBool LegoRaceCar::g_unk0x100f0b8c = TRUE;
 
 // Initialized at LEGO1 0x10012db0
 // GLOBAL: LEGO1 0x10102af0
-Mx3DPointFloat LegoRaceCar::g_vector020 = Mx3DPointFloat(0.0f, 2.0f, 0.0f);
+Mx3DPointFloat LegoRaceCar::g_unk0x10102af0 = Mx3DPointFloat(0.0f, 2.0f, 0.0f);
 
 // FUNCTION: LEGO1 0x10012950
 LegoRaceCar::LegoRaceCar()
@@ -391,7 +391,7 @@ MxResult LegoRaceCar::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 			MxMatrix matr;
 			matr = roi->GetLocal2World();
 
-			Vector3(matr[3]).Add(g_vector020);
+			Vector3(matr[3]).Add(g_unk0x10102af0);
 			roi->FUN_100a58f0(matr);
 
 			p_actor->SetState(2);
@@ -400,8 +400,7 @@ MxResult LegoRaceCar::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 		if (m_userNavFlag) {
 			MxBool actorIsStuds = strcmpi(p_actor->GetROI()->GetName(), "studs") == 0;
 			MxBool actorIsRhoda = strcmpi(p_actor->GetROI()->GetName(), "rhoda") == 0;
-			MxTimer* timer = Timer();
-			MxLong time = timer->GetTime();
+			MxLong time = Timer()->GetTime();
 
 			const char* soundKey = NULL;
 			MxLong timeElapsed = time - g_timeLastSoundPlayed;
