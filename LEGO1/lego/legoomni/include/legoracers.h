@@ -88,11 +88,21 @@ private:
 
 	static EdgeReference g_edgeReferences[];
 	static const SkeletonKickPhase g_skeletonKickPhases[];
-	static const char* g_strSpeedCopy;
+	static const char* g_strSpeed;
+	static const char* g_srtsl18to29[];
+	static const char* g_srtsl6to10[];
+	static const char* g_emptySoundKeyList[];
+	static const char* g_srtrh[];
 	static const char* g_srt001ra;
 	static const char* g_soundSkel3;
+	static MxU32 g_srtsl18to29Index;
+	static MxU32 g_srtsl6to10Index;
+	static MxU32 g_emptySoundKeyListIndex;
+	static MxU32 g_srtrhIndex;
+	static MxLong g_timeLastSoundPlayed;
 	static MxS32 g_unk0x100f0b88;
 	static MxBool g_unk0x100f0b8c;
+	static Mx3DPointFloat g_unk0x10102af0;
 };
 
 #endif // LEGORACERS_H

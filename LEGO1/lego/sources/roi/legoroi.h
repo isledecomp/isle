@@ -60,7 +60,9 @@ public:
 	);
 	static LegoBool FUN_100a9cf0(const LegoChar* p_param, unsigned char* paletteEntries, LegoU32 p_numEntries);
 
+	// FUNCTION: BETA10 0x1000f320
 	const LegoChar* GetName() const { return m_name; }
+
 	LegoEntity* GetEntity() { return m_entity; }
 
 	void SetEntity(LegoEntity* p_entity) { m_entity = p_entity; }

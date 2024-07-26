@@ -12,6 +12,7 @@
 #include "mxdebug.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
+#include "mxtimer.h"
 #include "mxutilities.h"
 #include "mxvariabletable.h"
 #include "raceskel.h"
@@ -66,7 +67,32 @@ const SkeletonKickPhase LegoRaceCar::g_skeletonKickPhases[] = {
 
 // GLOBAL: LEGO1 0x100f0b10
 // STRING: LEGO1 0x100f09cc
-const char* LegoRaceCar::g_strSpeedCopy = "SPEED";
+const char* LegoRaceCar::g_strSpeed = "SPEED";
+
+// GLOBAL: LEGO1 0x100f0b18
+const char* LegoRaceCar::g_srtsl18to29[] = {
+	"srt018sl",
+	"srt019sl",
+	"srt020sl",
+	"srt021sl",
+	"srt022sl",
+	"srt023sl",
+	"srt024sl",
+	"srt025sl",
+	"srt026sl",
+	"srt027sl",
+	"srt028sl",
+	"srt029sl"
+};
+
+// GLOBAL: LEGO1 0x100f0b48
+const char* LegoRaceCar::g_srtsl6to10[] = {"srt006sl", "srt007sl", "srt008sl", "srt009sl", "srt010sl"};
+
+// GLOBAL: LEGO1 0x100f0b5c
+const char* LegoRaceCar::g_emptySoundKeyList[] = {NULL};
+
+// GLOBAL: LEGO1 0x100f0b60
+const char* LegoRaceCar::g_srtrh[] = {"srt004rh", "srt005rh", "srt006rh"};
 
 // GLOBAL: LEGO1 0x100f0b6c
 // STRING: LEGO1 0x100f08c4
@@ -76,6 +102,21 @@ const char* LegoRaceCar::g_srt001ra = "srt001ra";
 // STRING: LEGO1 0x100f08bc
 const char* LegoRaceCar::g_soundSkel3 = "skel3";
 
+// GLOBAL: LEGO1 0x100f0b74
+MxU32 LegoRaceCar::g_srtsl18to29Index = 0;
+
+// GLOBAL: LEGO1 0x100f0b78
+MxU32 LegoRaceCar::g_srtsl6to10Index = 0;
+
+// GLOBAL: LEGO1 0x100f0b7c
+MxU32 LegoRaceCar::g_emptySoundKeyListIndex = 0;
+
+// GLOBAL: LEGO1 0x100f0b80
+MxU32 LegoRaceCar::g_srtrhIndex = 0;
+
+// GLOBAL: LEGO1 0x100f0b84
+MxLong LegoRaceCar::g_timeLastSoundPlayed = 0;
+
 // GLOBAL: LEGO1 0x100f0b88
 // GLOBAL: BETA10 0x101f5f94
 MxS32 LegoRaceCar::g_unk0x100f0b88 = 0;
@@ -83,6 +124,10 @@ MxS32 LegoRaceCar::g_unk0x100f0b88 = 0;
 // GLOBAL: LEGO1 0x100f0b8c
 // GLOBAL: BETA10 0x101f5f98
 MxBool LegoRaceCar::g_unk0x100f0b8c = TRUE;
+
+// Initialized at LEGO1 0x10012db0
+// GLOBAL: LEGO1 0x10102af0
+Mx3DPointFloat LegoRaceCar::g_unk0x10102af0 = Mx3DPointFloat(0.0f, 2.0f, 0.0f);
 
 // FUNCTION: LEGO1 0x10012950
 LegoRaceCar::LegoRaceCar()
@@ -260,7 +305,6 @@ MxU32 LegoRaceCar::HandleSkeletonKicks(float p_param1)
 		MxTrace(
 			// STRING: BETA10 0x101f64c8
 			"Got kicked in boundary %s %d %g:%g %g\n",
-			// TODO: same as in above comparison
 			m_boundary->GetName(),
 			skeletonCurAnimPosition,
 			skeletonCurAnimDuration,
@@ -306,7 +350,7 @@ void LegoRaceCar::VTable0x70(float p_float)
 
 		sprintf(buffer, "%g", absoluteSpeed / maximumSpeed);
 
-		VariableTable()->SetVariable(g_strSpeedCopy, buffer);
+		VariableTable()->SetVariable(g_strSpeed, buffer);
 
 		if (m_sound) {
 			// pitches up the engine sound based on the velocity
@@ -332,11 +376,79 @@ void LegoRaceCar::VTable0x70(float p_float)
 	}
 }
 
-// STUB: LEGO1 0x100133c0
+// FUNCTION: LEGO1 0x100133c0
+// FUNCTION: BETA10 0x100cbb84
 MxResult LegoRaceCar::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 {
-	// TODO
-	return 0;
+	if (!p_actor->GetUserNavFlag()) {
+		if (p_actor->GetState()) {
+			return FAILURE;
+		}
+
+		if (p_bool) {
+			LegoROI* roi = p_actor->GetROI(); // name verified by BETA10 0x100cbbf5
+			assert(roi);
+			MxMatrix matr;
+			matr = roi->GetLocal2World();
+
+			Vector3(matr[3]).Add(g_unk0x10102af0);
+			roi->FUN_100a58f0(matr);
+
+			p_actor->SetState(2);
+		}
+
+		if (m_userNavFlag) {
+			MxBool actorIsStuds = strcmpi(p_actor->GetROI()->GetName(), "studs") == 0;
+			MxBool actorIsRhoda = strcmpi(p_actor->GetROI()->GetName(), "rhoda") == 0;
+			MxLong time = Timer()->GetTime();
+
+			const char* soundKey = NULL;
+			MxLong timeElapsed = time - g_timeLastSoundPlayed;
+
+			if (timeElapsed > 3000) {
+				if (p_bool) {
+					if (actorIsStuds) {
+						soundKey = g_srtsl18to29[g_srtsl18to29Index++];
+						if (g_srtsl18to29Index >= sizeOfArray(g_srtsl18to29)) {
+							g_srtsl18to29Index = 0;
+						}
+					}
+					else if (actorIsRhoda) {
+						soundKey = g_emptySoundKeyList[g_emptySoundKeyListIndex++];
+						if (g_emptySoundKeyListIndex >= sizeOfArray(g_emptySoundKeyList)) {
+							g_emptySoundKeyListIndex = 0;
+						}
+					}
+				}
+				else {
+					if (actorIsStuds) {
+						soundKey = g_srtsl6to10[g_srtsl6to10Index++];
+						if (g_srtsl6to10Index >= sizeOfArray(g_srtsl6to10)) {
+							g_srtsl6to10Index = 0;
+						}
+					}
+					else if (actorIsRhoda) {
+						soundKey = g_srtrh[g_srtrhIndex++];
+						if (g_srtrhIndex >= sizeOfArray(g_srtrh)) {
+							g_srtrhIndex = 0;
+						}
+					}
+				}
+
+				if (soundKey) {
+					SoundManager()->GetCacheSoundManager()->Play(soundKey, NULL, FALSE);
+					g_timeLastSoundPlayed = g_unk0x100f3308 = time;
+				}
+			}
+
+			if (p_bool && m_worldSpeed != 0) {
+				return SUCCESS;
+			}
+
+			return FAILURE;
+		}
+	}
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x10013600
