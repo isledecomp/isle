@@ -62,6 +62,7 @@ public:
 	virtual void ResetWorldTransform(MxBool p_cameraFlag); // vtable+0x2c
 
 	// FUNCTION: LEGO1 0x10001090
+	// FUNCTION: BETA10 0x10013260
 	virtual void SetWorldSpeed(MxFloat p_worldSpeed) { m_worldSpeed = p_worldSpeed; } // vtable+0x30
 
 	virtual void ClickSound(MxBool p_und);    // vtable+0x34

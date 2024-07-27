@@ -33,6 +33,7 @@ DECOMP_SIZE_ASSERT(LegoPathEdgeContainer, 0x3c)
 const char* g_strHIT_WALL_SOUND = "HIT_WALL_SOUND";
 
 // GLOBAL: LEGO1 0x100f3308
+// GLOBAL: BETA10 0x101f1e1c
 MxLong g_unk0x100f3308 = 0;
 
 // FUNCTION: LEGO1 0x1002d700

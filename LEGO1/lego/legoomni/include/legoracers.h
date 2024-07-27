@@ -79,15 +79,23 @@ public:
 	// LegoRaceCar::`scalar deleting destructor'
 
 private:
-	undefined m_userState;          // 0x54
-	float m_unk0x58;                // 0x58
-	Mx3DPointFloat m_unk0x5c;       // 0x5c
-	LegoAnimActorStruct* m_unk0x70; // 0x70
-	LegoAnimActorStruct* m_unk0x74; // 0x74
-	LegoPathBoundary* m_unk0x78;    // 0x78
-	LegoPathBoundary* m_unk0x7c;    // 0x7c
+	undefined m_userState;    // 0x54
+	float m_unk0x58;          // 0x58
+	Mx3DPointFloat m_unk0x5c; // 0x5c
 
-	static EdgeReference g_skBMap[]; // name verified by BETA10 0x100cbee6
+	// Names verified by BETA10 0x100cb4a9
+	LegoAnimActorStruct* m_skelKick1Anim; // 0x70
+	LegoAnimActorStruct* m_skelKick2Anim; // 0x74
+
+	// Name verified by BETA10 0x100cb4f0
+	LegoPathBoundary* m_kick1B; // 0x78
+
+	// Name verified by BETA10 0x100cb537
+	LegoPathBoundary* m_kick2B; // 0x7c
+
+	// name verified by BETA10 0x100cbee6
+	static EdgeReference g_skBMap[];
+
 	static const SkeletonKickPhase g_skeletonKickPhases[];
 	static const char* g_strSpeed;
 	static const char* g_srtsl18to29[];
