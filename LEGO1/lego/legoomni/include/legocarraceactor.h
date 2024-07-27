@@ -60,6 +60,9 @@ public:
 
 	virtual void VTable0x1c(); // vtable+0x1c
 
+	// SYNTHETIC: LEGO1 0x10012c30
+	// LegoCarRaceActor::`vbase destructor'
+
 	// SYNTHETIC: LEGO1 0x10081620
 	// LegoCarRaceActor::`scalar deleting destructor'
 

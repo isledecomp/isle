@@ -33,6 +33,9 @@ public:
 	// FUNCTION: LEGO1 0x10014aa0
 	virtual MxResult FUN_10014aa0() { return SUCCESS; }
 
+	// SYNTHETIC: LEGO1 0x10012c10
+	// LegoRaceActor::`vbase destructor'
+
 	// SYNTHETIC: LEGO1 0x10014ac0
 	// LegoRaceActor::`scalar deleting destructor'
 
