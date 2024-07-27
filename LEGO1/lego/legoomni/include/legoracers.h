@@ -11,8 +11,9 @@
 
 // SIZE 0x08
 struct EdgeReference {
-	const char* m_name;       // 0x00
-	LegoPathBoundary* m_data; // 0x04
+	const char* m_name; // 0x00
+	// name verified by BETA10 0x100cbee6
+	LegoPathBoundary* m_b; // 0x04
 };
 
 // SIZE 0x10
@@ -86,7 +87,7 @@ private:
 	LegoPathBoundary* m_unk0x78;    // 0x78
 	LegoPathBoundary* m_unk0x7c;    // 0x7c
 
-	static EdgeReference g_edgeReferences[];
+	static EdgeReference g_skBMap[]; // name verified by BETA10 0x100cbee6
 	static const SkeletonKickPhase g_skeletonKickPhases[];
 	static const char* g_strSpeed;
 	static const char* g_srtsl18to29[];
