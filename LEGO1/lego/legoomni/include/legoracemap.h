@@ -21,6 +21,9 @@ public:
 	// LegoRaceMap vtable
 	virtual void FUN_1005d4b0(); // vtable+0x00
 
+	// SYNTHETIC: LEGO1 0x10012c50
+	// LegoRaceMap::`vbase destructor'
+
 	// SYNTHETIC: LEGO1 0x1005d5d0
 	// LegoRaceMap::`scalar deleting destructor'
 
