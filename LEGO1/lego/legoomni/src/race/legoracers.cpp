@@ -484,9 +484,9 @@ MxResult LegoRaceCar::VTable0x9c()
 
 	if (m_userNavFlag) {
 		result = LegoCarRaceActor::VTable0x9c();
-		MxS32 bVar2 = 0;
 
 		if (m_boundary) {
+			MxS32 bVar2 = 0;
 
 			for (MxS32 i = 0; i < sizeOfArray(g_skBMap); i++) {
 				assert(g_skBMap[i].m_b);
