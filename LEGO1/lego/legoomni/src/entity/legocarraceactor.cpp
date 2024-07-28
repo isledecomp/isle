@@ -36,7 +36,7 @@ LegoCarRaceActor::LegoCarRaceActor()
 void LegoCarRaceActor::FUN_10080590(float p_float)
 {
 	MxFloat maxSpeed = m_maxLinearVel;
-	Mx3DPointFloat destEdgeUnknownVector = Mx3DPointFloat();
+	Mx3DPointFloat destEdgeUnknownVector;
 	Mx3DPointFloat worldDirection = Mx3DPointFloat(m_roi->GetWorldDirection());
 
 	m_destEdge->FUN_1002ddc0(*m_boundary, destEdgeUnknownVector);
@@ -49,7 +49,8 @@ void LegoCarRaceActor::FUN_10080590(float p_float)
 	LegoPathActor* userActor = UserActor();
 
 	if (userActor) {
-		deltaUnk0x70 = m_unk0x70 - userActor->GetUnk0x70();
+		// All known implementations of LegoPathActor->VTable0x5c() return LegoPathActor::m_unk0x70
+		deltaUnk0x70 = m_unk0x70 - userActor->VTable0x5c();
 	}
 	else {
 		deltaUnk0x70 = 0;

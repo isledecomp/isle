@@ -52,7 +52,7 @@ public:
 	virtual void VTable0x58(MxFloat p_unk0x70) { m_unk0x70 = p_unk0x70; } // vtable+0x58
 
 	// FUNCTION: LEGO1 0x10002cf0
-	virtual MxFloat GetUnk0x70() { return m_unk0x70; } // vtable+0x5c
+	virtual MxFloat VTable0x5c() { return m_unk0x70; } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x10002d00
 	virtual MxU8 GetActorId() { return m_actorId; } // vtable+0x60
