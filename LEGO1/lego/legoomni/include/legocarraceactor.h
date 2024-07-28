@@ -74,7 +74,7 @@ public:
 
 protected:
 	MxFloat m_unk0x08; // 0x08
-	MxU8 m_unk0x0c;  // 0x0c
+	MxU8 m_unk0x0c;    // 0x0c
 
 	// Could be a multiplier for the maximum speed when going straight
 	MxFloat m_unk0x10; // 0x10
@@ -87,5 +87,14 @@ protected:
 	// Could be the current timestamp for time-based movement
 	MxFloat m_unk0x1c; // 0x1c
 };
+
+// GLOBAL: LEGO1 0x100da0b0
+// LegoCarRaceActor::`vbtable'
+
+// GLOBAL: LEGO1 0x100da0a8
+// LegoCarRaceActor::`vbtable'{for `LegoAnimActor'}
+
+// GLOBAL: LEGO1 0x100da098
+// LegoCarRaceActor::`vbtable'{for `LegoRaceActor'}
 
 #endif // LEGOCARRACEACTOR_H
