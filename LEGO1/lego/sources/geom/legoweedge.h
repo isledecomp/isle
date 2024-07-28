@@ -20,6 +20,8 @@ public:
 	// FUNCTION: BETA10 0x1001cc30
 	LegoEdge** GetEdges() { return m_edges; }
 
+	// TODO: The assertion at BETA10 0x10037352 suggests that this function might take a pointer instead of a reference
+	// FUNCTION: BETA10 0x100373f0
 	LegoU32 IsEqual(LegoWEEdge& p_other) { return this == &p_other; }
 
 	void SetEdges(LegoEdge** p_edges, LegoU8 p_numEdges)

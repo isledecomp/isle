@@ -1,6 +1,6 @@
 #include "raceskel.h"
 
-#include <cassert>
+#include <assert.h>
 
 DECOMP_SIZE_ASSERT(RaceSkel, 0x178)
 

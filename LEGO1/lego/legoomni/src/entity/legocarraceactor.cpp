@@ -1,5 +1,8 @@
 #include "legocarraceactor.h"
 
+#include "geom/legounkown100db7f4.h"
+#include "legopathboundary.h"
+#include "misc.h"
 #include "mxmisc.h"
 #include "mxvariabletable.h"
 
@@ -10,6 +13,7 @@ DECOMP_SIZE_ASSERT(LegoCarRaceActor, 0x1a0)
 const char* g_fuel = "FUEL";
 
 // FUNCTION: LEGO1 0x10080350
+// FUNCTION: BETA10 0x100cd6b0
 LegoCarRaceActor::LegoCarRaceActor()
 {
 	m_unk0x08 = 1.0f;
@@ -27,9 +31,56 @@ LegoCarRaceActor::LegoCarRaceActor()
 	VariableTable()->SetVariable(g_fuel, "0.8");
 }
 
-// STUB: LEGO1 0x10080590
-void LegoCarRaceActor::FUN_10080590(float)
+// FUNCTION: LEGO1 0x10080590
+// FUNCTION: BETA10 0x101beb80
+void LegoCarRaceActor::FUN_10080590(float p_float)
 {
+	MxFloat maxSpeed = m_maxLinearVel;
+	Mx3DPointFloat destEdgeUnknownVector = Mx3DPointFloat();
+	Mx3DPointFloat worldDirection = Mx3DPointFloat(m_roi->GetWorldDirection());
+
+	m_destEdge->FUN_1002ddc0(*m_boundary, destEdgeUnknownVector);
+
+	if (abs(destEdgeUnknownVector.Dot(destEdgeUnknownVector.GetData(), worldDirection.GetData())) > 0.5) {
+		maxSpeed *= m_unk0x10;
+	}
+
+	MxS32 deltaUnk0x70;
+	LegoPathActor* userActor = UserActor();
+
+	if (userActor) {
+		deltaUnk0x70 = m_unk0x70 - userActor->GetUnk0x70();
+	}
+	else {
+		deltaUnk0x70 = 0;
+	}
+
+	if (deltaUnk0x70 > 1) {
+		if (deltaUnk0x70 > 3) {
+			deltaUnk0x70 = 3;
+		}
+
+		maxSpeed *= (m_unk0x18 * (--deltaUnk0x70) * -0.25f + 1.0f);
+	}
+	else if (deltaUnk0x70 < -1) {
+		maxSpeed *= 1.3;
+	}
+
+	MxFloat deltaSpeed = maxSpeed - m_worldSpeed;
+	MxFloat changeInSpeed = (p_float - m_unk0x1c) * m_unk0x14;
+	m_unk0x1c = p_float;
+
+	if (deltaSpeed < 0.0f) {
+		changeInSpeed = -changeInSpeed;
+	}
+
+	MxFloat newWorldSpeed = changeInSpeed + m_worldSpeed;
+
+	if (newWorldSpeed > maxSpeed) {
+		newWorldSpeed = maxSpeed;
+	}
+
+	SetWorldSpeed(newWorldSpeed);
 }
 
 // STUB: LEGO1 0x10080740
@@ -37,10 +88,11 @@ void LegoCarRaceActor::VTable0x1c()
 {
 }
 
-// STUB: LEGO1 0x10080b40
+// FUNCTION: LEGO1 0x10080b40
+// FUNCTION: BETA10 0x100cdb3c
 void LegoCarRaceActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
 {
-	// TODO
+	LegoPathActor::SwitchBoundary(m_boundary, m_destEdge, m_unk0xe4);
 }
 
 // STUB: LEGO1 0x10080b70

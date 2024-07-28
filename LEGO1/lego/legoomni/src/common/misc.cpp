@@ -67,8 +67,10 @@ LegoNavController* NavController()
 }
 
 // FUNCTION: LEGO1 0x10015790
+// FUNCTION: BETA10 0x100e49ff
 LegoPathActor* UserActor()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetUserActor();
 }
 

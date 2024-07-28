@@ -5,6 +5,8 @@
 #include "legowegedge.h"
 #include "mxgeometry/mxgeometry3d.h"
 
+#include <assert.h>
+
 // VTABLE: LEGO1 0x100db7f4
 // SIZE 0x40
 struct LegoUnknown100db7f4 : public LegoEdge {
@@ -28,6 +30,8 @@ public:
 			p_point[2] = -m_unk0x28[2];
 		}
 		else {
+			// FIXME: There is no * dereference in the original assertion
+			assert(p_f.IsEqual( *m_faceB ));
 			p_point = m_unk0x28;
 		}
 

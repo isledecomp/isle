@@ -7,12 +7,17 @@
 // VTABLE: LEGO1 0x100da0c8 LegoAnimActor
 // VTABLE: LEGO1 0x100da0d8 LegoPathActor
 // VTABLE: LEGO1 0x100da1a8 LegoCarRaceActor
+// VTABLE: BETA10 0x101bea74 LegoRaceActor
+// VTABLE: BETA10 0x101bea78 LegoAnimActor
+// VTABLE: BETA10 0x101bea90 LegoPathActor
+// VTABLE: BETA10 0x101beb80 LegoCarRaceActor
 // SIZE 0x1a0
 class LegoCarRaceActor : public virtual LegoRaceActor {
 public:
 	LegoCarRaceActor();
 
 	// FUNCTION: LEGO1 0x10081660
+	// FUNCTION: BETA10 0x0x100da0d8
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0568
@@ -20,6 +25,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10081680
+	// FUNCTION: BETA10 0x100aa9e0
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoCarRaceActor::ClassName()) || LegoRaceActor::IsA(p_name);
@@ -38,7 +44,7 @@ public:
 		override;                   // vtable+0x98
 	MxResult VTable0x9c() override; // vtable+0x9c
 
-	virtual void FUN_10080590(float);
+	virtual void FUN_10080590(float p_float);
 
 	// FUNCTION: LEGO1 0x10012bb0
 	virtual void FUN_10012bb0(float p_unk0x14) { m_unk0x14 = p_unk0x14; }
@@ -67,12 +73,19 @@ public:
 	// LegoCarRaceActor::`scalar deleting destructor'
 
 protected:
-	float m_unk0x08;      // 0x08
-	MxU8 m_unk0x0c;       // 0x0c
-	float m_unk0x10;      // 0x10
-	float m_unk0x14;      // 0x14
-	float m_unk0x18;      // 0x18
-	undefined4 m_unk0x1c; // 0x1c
+	MxFloat m_unk0x08; // 0x08
+	MxU8 m_unk0x0c;  // 0x0c
+
+	// Could be a multiplier for the maximum speed when going straight
+	MxFloat m_unk0x10; // 0x10
+
+	// Could be the acceleration
+	MxFloat m_unk0x14; // 0x14
+
+	MxFloat m_unk0x18; // 0x18
+
+	// Could be the current timestamp for time-based movement
+	MxFloat m_unk0x1c; // 0x1c
 };
 
 #endif // LEGOCARRACEACTOR_H
