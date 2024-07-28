@@ -30,8 +30,10 @@ public:
 			p_point[2] = -m_unk0x28[2];
 		}
 		else {
+			// clang-format off
 			// FIXME: There is no * dereference in the original assertion
 			assert(p_f.IsEqual( *m_faceB ));
+			// clang-format on
 			p_point = m_unk0x28;
 		}
 
