@@ -32,7 +32,7 @@ LegoCarRaceActor::LegoCarRaceActor()
 }
 
 // FUNCTION: LEGO1 0x10080590
-// FUNCTION: BETA10 0x101beb80
+// FUNCTION: BETA10 0x100cd8cf
 void LegoCarRaceActor::FUN_10080590(float p_float)
 {
 	MxFloat maxSpeed = m_maxLinearVel;

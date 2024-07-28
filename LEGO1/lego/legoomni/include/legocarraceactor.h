@@ -17,7 +17,7 @@ public:
 	LegoCarRaceActor();
 
 	// FUNCTION: LEGO1 0x10081660
-	// FUNCTION: BETA10 0x0x100da0d8
+	// FUNCTION: BETA10 0x100aab10
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0568
