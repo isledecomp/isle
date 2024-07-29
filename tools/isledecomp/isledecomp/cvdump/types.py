@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import re
 import logging
 from typing import Any, Dict, List, NamedTuple, Optional
@@ -24,6 +25,19 @@ class FieldListItem(NamedTuple):
     offset: int
     name: str
     type: str
+
+
+@dataclass
+class VirtualBaseClass:
+    type: str
+    index: int
+    direct: bool
+
+
+@dataclass
+class VirtualBasePointer:
+    vboffset: int
+    bases: list[VirtualBaseClass]
 
 
 class ScalarType(NamedTuple):
@@ -157,6 +171,16 @@ class CvdumpTypesParser:
         r"^\s+list\[\d+\] = LF_BCLASS, (?P<scope>\w+), type = (?P<type>.*), offset = (?P<offset>\d+)"
     )
 
+    # LF_FIELDLIST virtual direct/indirect base pointer, line 1/2
+    VBCLASS_RE = re.compile(
+        r"^\s+list\[\d+\] = LF_(?P<indirect>I?)VBCLASS, .* base type = (?P<type>.*)$"
+    )
+
+    # LF_FIELDLIST virtual direct/indirect base pointer, line 2/2
+    VBCLASS_LINE_2_RE = re.compile(
+        r"^\s+virtual base ptr = .+, vbpoff = (?P<vboffset>\d+), vbind = (?P<vbindex>\d+)$"
+    )
+
     # LF_FIELDLIST member name (2/2)
     MEMBER_RE = re.compile(r"^\s+member name = '(?P<name>.*)'$")
 
@@ -282,12 +306,12 @@ class CvdumpTypesParser:
 
         members: List[FieldListItem] = []
 
-        super_id = field_obj.get("super")
-        if super_id is not None:
+        super_ids = field_obj.get("super", [])
+        for super_id in super_ids:
             # May need to resolve forward ref.
             superclass = self.get(super_id)
             if superclass.members is not None:
-                members = superclass.members
+                members += superclass.members
 
         raw_members = field_obj.get("members", [])
         members += [
@@ -526,7 +550,58 @@ class CvdumpTypesParser:
 
         # Superclass is set here in the fieldlist rather than in LF_CLASS
         elif (match := self.SUPERCLASS_RE.match(line)) is not None:
-            self._set("super", normalize_type_id(match.group("type")))
+            superclass_list: dict[str, int] = self.keys[self.last_key].setdefault(
+                "super", {}
+            )
+            superclass_list[normalize_type_id(match.group("type"))] = int(
+                match.group("offset")
+            )
+
+        # virtual base class (direct or indirect)
+        elif (match := self.VBCLASS_RE.match(line)) is not None:
+
+            virtual_base_pointer = self.keys[self.last_key].setdefault(
+                "vbase",
+                VirtualBasePointer(
+                    vboffset=-1,  # default to -1 until we parse the correct value
+                    bases=[],
+                ),
+            )
+            assert isinstance(
+                virtual_base_pointer, VirtualBasePointer
+            )  # type checker only
+
+            virtual_base_pointer.bases.append(
+                VirtualBaseClass(
+                    type=match.group("type"),
+                    index=-1,  # default to -1 until we parse the correct value
+                    direct=match.group("indirect") != "I",
+                )
+            )
+
+        elif (match := self.VBCLASS_LINE_2_RE.match(line)) is not None:
+            virtual_base_pointer = self.keys[self.last_key].get("vbase", None)
+            assert isinstance(
+                virtual_base_pointer, VirtualBasePointer
+            ), "Parsed the second line of an (I)VBCLASS without the first one"
+            vboffset = int(match.group("vboffset"))
+
+            if virtual_base_pointer.vboffset == -1:
+                # default value
+                virtual_base_pointer.vboffset = vboffset
+            elif virtual_base_pointer.vboffset != vboffset:
+                # vboffset is always equal to 4 in our examples. We are not sure if there can be multiple
+                # virtual base pointers, and if so, how the layout is supposed to look.
+                # We therefore assume that there is always only one virtual base pointer.
+                logger.error(
+                    "Unhandled: Found multiple virtual base pointers at offsets %d and %d",
+                    virtual_base_pointer.vboffset,
+                    vboffset,
+                )
+
+            virtual_base_pointer.bases[-1].index = int(match.group("vbindex"))
+            # these come out of order, and the lists are so short that it's fine to sort them every time
+            virtual_base_pointer.bases.sort(key=lambda x: x.index)
 
         # Member offset and type given on the first of two lines.
         elif (match := self.LIST_RE.match(line)) is not None:
@@ -579,7 +654,7 @@ class CvdumpTypesParser:
         else:
             logger.error("Unmatched line in arglist: %s", line[:-1])
 
-    def read_pointer_line(self, line):
+    def read_pointer_line(self, line: str):
         if (match := self.LF_POINTER_ELEMENT.match(line)) is not None:
             self._set("element_type", match.group("element_type"))
         else:
