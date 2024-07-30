@@ -17,7 +17,7 @@ from lego_util.pdb_extraction import (
     CppStackSymbol,
 )
 from lego_util.ghidra_helper import (
-    add_pointer_type,
+    get_or_add_pointer_type,
     get_ghidra_namespace,
     sanitize_name,
 )
@@ -91,7 +91,10 @@ class PdbFunctionImporter:
         if (
             (not return_type_match)
             and (self.return_type.getLength() > 4)
-            and (add_pointer_type(self.api, self.return_type) == ghidra_return_type)
+            and (
+                get_or_add_pointer_type(self.api, self.return_type)
+                == ghidra_return_type
+            )
             and any(
                 param
                 for param in ghidra_function.getParameters()

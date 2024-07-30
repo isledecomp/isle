@@ -11,10 +11,8 @@ from lego_util.exceptions import (
 # Disable spurious warnings in vscode / pylance
 # pyright: reportMissingModuleSource=false
 
-from ghidra.program.model.data import PointerDataType
-from ghidra.program.model.data import DataTypeConflictHandler
 from ghidra.program.flatapi import FlatProgramAPI
-from ghidra.program.model.data import DataType
+from ghidra.program.model.data import DataType, DataTypeConflictHandler, PointerDataType
 from ghidra.program.model.symbol import Namespace
 
 logger = logging.getLogger(__name__)
@@ -37,9 +35,15 @@ def get_ghidra_type(api: FlatProgramAPI, type_name: str):
     raise MultipleTypesFoundInGhidraError(type_name, result)
 
 
-def add_pointer_type(api: FlatProgramAPI, pointee: DataType) -> DataType:
-    new_data_type = PointerDataType(pointee)
-    new_data_type.setCategoryPath(pointee.getCategoryPath())
+def get_or_add_pointer_type(api: FlatProgramAPI, pointee: DataType) -> DataType:
+    new_pointer_data_type = PointerDataType(pointee)
+    new_pointer_data_type.setCategoryPath(pointee.getCategoryPath())
+    return add_data_type_or_reuse_existing(api, new_pointer_data_type)
+
+
+def add_data_type_or_reuse_existing(
+    api: FlatProgramAPI, new_data_type: DataType
+) -> DataType:
     result_data_type = (
         api.getCurrentProgram()
         .getDataTypeManager()
@@ -47,7 +51,7 @@ def add_pointer_type(api: FlatProgramAPI, pointee: DataType) -> DataType:
     )
     if result_data_type is not new_data_type:
         logger.debug(
-            "New pointer replaced by existing one. Fresh pointer: %s (class: %s)",
+            "Reusing existing data type instead of new one: %s (class: %s)",
             result_data_type,
             result_data_type.__class__,
         )

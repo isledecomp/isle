@@ -16,7 +16,8 @@ from lego_util.exceptions import (
     StructModificationError,
 )
 from lego_util.ghidra_helper import (
-    add_pointer_type,
+    add_data_type_or_reuse_existing,
+    get_or_add_pointer_type,
     create_ghidra_namespace,
     get_ghidra_namespace,
     get_ghidra_type,
@@ -34,6 +35,8 @@ from ghidra.program.model.data import (
     EnumDataType,
     StructureDataType,
     StructureInternal,
+    TypedefDataType,
+    ComponentOffsetSettingsDefinition,
 )
 from ghidra.util.task import ConsoleTaskMonitor
 
@@ -91,7 +94,7 @@ class PdbTypeImporter:
             )
 
         if type_category == "LF_POINTER":
-            return add_pointer_type(
+            return get_or_add_pointer_type(
                 self.api,
                 self.import_pdb_type_into_ghidra(
                     type_pdb["element_type"], slim_for_vbase
@@ -308,7 +311,7 @@ class PdbTypeImporter:
         vbasepointer: Optional[VirtualBasePointer] = field_list.get("vbase", None)
 
         if vbasepointer is not None and any(x.direct for x in vbasepointer.bases):
-            vbaseptr_type = add_pointer_type(
+            vbaseptr_type = get_or_add_pointer_type(
                 self.api,
                 self._import_vbaseptr(
                     current_type, class_name_with_namespace, vbasepointer
@@ -326,26 +329,43 @@ class PdbTypeImporter:
         class_name_with_namespace: str,
         vbasepointer: VirtualBasePointer,
     ) -> StructureInternal:
-        pointer_size = 4
+        pointer_size = 4  # hard-code to 4 because of 32 bit
 
         components = [
             {
                 "offset": 0,
-                "type": add_pointer_type(self.api, current_type),
+                "type": get_or_add_pointer_type(self.api, current_type),
                 "name": "o_self",
             }
         ]
         for vbase in vbasepointer.bases:
             vbase_ghidra_type = self.import_pdb_type_into_ghidra(vbase.type)
 
+            type_name = vbase_ghidra_type.getName()
+
+            vbase_ghidra_pointer = get_or_add_pointer_type(self.api, vbase_ghidra_type)
+            vbase_ghidra_pointer_typedef = TypedefDataType(
+                vbase_ghidra_pointer.getCategoryPath(),
+                f"{type_name}PtrOffset",
+                vbase_ghidra_pointer,
+            )
+            # Set a default value of -4 for the pointer offset. While this appears to be correct in many cases,
+            # it does not always lead to the best decompile. It can be fine-tuned by hand; the next function call
+            # makes sure that we don't overwrite this value on re-running the import.
+            ComponentOffsetSettingsDefinition.DEF.setValue(vbase_ghidra_pointer_typedef.getDefaultSettings(), -4)
+
+            vbase_ghidra_pointer_typedef = add_data_type_or_reuse_existing(
+                self.api, vbase_ghidra_pointer_typedef
+            )
+
             components.append(
                 {
                     "offset": vbase.index * pointer_size,
-                    "type": add_pointer_type(self.api, vbase_ghidra_type),
-                    "name": f"o_{vbase_ghidra_type.getName()}",
+                    "type": vbase_ghidra_pointer_typedef,
+                    "name": f"o_{type_name}",
                 }
             )
-            
+
         size = len(components) * pointer_size
 
         new_ghidra_struct = self._get_or_create_struct_data_type(
