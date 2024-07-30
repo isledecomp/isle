@@ -36,6 +36,8 @@ class FunctionSignature:
     return_type: str
     class_type: Optional[str]
     stack_symbols: list[CppStackOrRegisterSymbol]
+    # if non-zero: an offset to the `this` parameter in a __thiscall
+    this_adjust: int
 
 
 @dataclass
@@ -119,6 +121,9 @@ class PdbFunctionExtractor:
 
         call_type = self._call_type_map[function_type["call_type"]]
 
+        # parse as hex number, default to 0
+        this_adjust = int(function_type.get("this_adjust", "0"), 16)
+
         return FunctionSignature(
             original_function_symbol=fn,
             call_type=call_type,
@@ -126,6 +131,7 @@ class PdbFunctionExtractor:
             return_type=function_type["return_type"],
             class_type=class_type,
             stack_symbols=stack_symbols,
+            this_adjust=this_adjust,
         )
 
     def get_function_list(self) -> list[PdbFunction]:

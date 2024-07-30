@@ -6,6 +6,9 @@ from isledecomp.cvdump.types import (
     CvdumpTypesParser,
     CvdumpKeyError,
     CvdumpIntegrityError,
+    FieldListItem,
+    VirtualBaseClass,
+    VirtualBasePointer,
 )
 
 TEST_LINES = """
@@ -245,10 +248,111 @@ NESTED,     enum name = JukeBox::JukeBoxScript, UDT(0x00003cc2)
     list[12] = LF_MEMBER, private, type = T_USHORT(0021), offset = 12
         member name = 'm_length'
 
+
+0x4dee : Length = 406, Leaf = 0x1203 LF_FIELDLIST
+	list[0] = LF_VBCLASS, public, direct base type = 0x15EA
+		virtual base ptr = 0x43E9, vbpoff = 4, vbind = 3
+	list[1] = LF_IVBCLASS, public, indirect base type = 0x1183
+		virtual base ptr = 0x43E9, vbpoff = 4, vbind = 1
+	list[2] = LF_IVBCLASS, public, indirect base type = 0x1468
+		virtual base ptr = 0x43E9, vbpoff = 4, vbind = 2
+	list[3] = LF_VFUNCTAB, type = 0x2B95
+	list[4] = LF_ONEMETHOD, public, VANILLA, index = 0x15C2, name = 'LegoRaceMap'
+	list[5] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15C3, name = '~LegoRaceMap'
+	list[6] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15C5, name = 'Notify'
+	list[7] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15C4, name = 'ParseAction'
+	list[8] = LF_ONEMETHOD, public, VIRTUAL, index = 0x4DED, name = 'VTable0x70'
+	list[9] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x15C2,
+		vfptr offset = 0, name = 'FUN_1005d4b0'
+	list[10] = LF_MEMBER, private, type = T_UCHAR(0020), offset = 8
+		member name = 'm_parentClass2Field1'
+	list[11] = LF_MEMBER, private, type = T_32PVOID(0403), offset = 12
+		member name = 'm_parentClass2Field2'
+
+0x4def : Length = 34, Leaf = 0x1504 LF_CLASS
+	# members = 21,  field list type 0x4dee, CONSTRUCTOR,
+	Derivation list type 0x0000, VT shape type 0x12a0
+	Size = 436, class name = LegoRaceMap, UDT(0x00004def)
+
 0x4db6 : Length = 30, Leaf = 0x1504 LF_CLASS
     # members = 16,  field list type 0x4db5, CONSTRUCTOR, OVERLOAD,
     Derivation list type 0x0000, VT shape type 0x1266
     Size = 16, class name = MxString, UDT(0x00004db6)
+
+0x5591 : Length = 570, Leaf = 0x1203 LF_FIELDLIST
+	list[0] = LF_VBCLASS, public, direct base type = 0x15EA
+		virtual base ptr = 0x43E9, vbpoff = 4, vbind = 3
+	list[1] = LF_IVBCLASS, public, indirect base type = 0x1183
+		virtual base ptr = 0x43E9, vbpoff = 4, vbind = 1
+	list[2] = LF_IVBCLASS, public, indirect base type = 0x1468
+		virtual base ptr = 0x43E9, vbpoff = 4, vbind = 2
+	list[3] = LF_VFUNCTAB, type = 0x4E11
+	list[4] = LF_ONEMETHOD, public, VANILLA, index = 0x1ABD, name = 'LegoCarRaceActor'
+	list[5] = LF_ONEMETHOD, public, VIRTUAL, index = 0x1AE0, name = 'ClassName'
+	list[6] = LF_ONEMETHOD, public, VIRTUAL, index = 0x1AE1, name = 'IsA'
+	list[7] = LF_ONEMETHOD, public, VIRTUAL, index = 0x1ADD, name = 'VTable0x6c'
+	list[8] = LF_ONEMETHOD, public, VIRTUAL, index = 0x1ADB, name = 'VTable0x70'
+	list[9] = LF_ONEMETHOD, public, VIRTUAL, index = 0x1ADA, name = 'SwitchBoundary'
+	list[10] = LF_ONEMETHOD, public, VIRTUAL, index = 0x1ADC, name = 'VTable0x9c'
+	list[11] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x558E,
+		vfptr offset = 0, name = 'FUN_10080590'
+	list[12] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x1AD8,
+		vfptr offset = 4, name = 'FUN_10012bb0'
+	list[13] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x1AD9,
+		vfptr offset = 8, name = 'FUN_10012bc0'
+	list[14] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x1AD8,
+		vfptr offset = 12, name = 'FUN_10012bd0'
+	list[15] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x1AD9,
+		vfptr offset = 16, name = 'FUN_10012be0'
+	list[16] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x1AD8,
+		vfptr offset = 20, name = 'FUN_10012bf0'
+	list[17] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x1AD9,
+		vfptr offset = 24, name = 'FUN_10012c00'
+	list[18] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x1ABD,
+		vfptr offset = 28, name = 'VTable0x1c'
+	list[19] = LF_MEMBER, protected, type = T_REAL32(0040), offset = 8
+		member name = 'm_parentClass1Field1'
+	list[25] = LF_ONEMETHOD, public, VIRTUAL, (compgenx), index = 0x15D1, name = '~LegoCarRaceActor'
+
+0x5592 : Length = 38, Leaf = 0x1504 LF_CLASS
+	# members = 26,  field list type 0x5591, CONSTRUCTOR,
+	Derivation list type 0x0000, VT shape type 0x34c7
+	Size = 416, class name = LegoCarRaceActor, UDT(0x00005592)
+
+0x5593 : Length = 638, Leaf = 0x1203 LF_FIELDLIST
+	list[0] = LF_BCLASS, public, type = 0x5592, offset = 0
+	list[1] = LF_BCLASS, public, type = 0x4DEF, offset = 32
+	list[2] = LF_IVBCLASS, public, indirect base type = 0x1183
+		virtual base ptr = 0x43E9, vbpoff = 4, vbind = 1
+	list[3] = LF_IVBCLASS, public, indirect base type = 0x1468
+		virtual base ptr = 0x43E9, vbpoff = 4, vbind = 2
+	list[4] = LF_IVBCLASS, public, indirect base type = 0x15EA
+		virtual base ptr = 0x43E9, vbpoff = 4, vbind = 3
+	list[5] = LF_ONEMETHOD, public, VANILLA, index = 0x15CD, name = 'LegoRaceCar'
+	list[6] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15CE, name = '~LegoRaceCar'
+	list[7] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15D2, name = 'Notify'
+	list[8] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15E8, name = 'ClassName'
+	list[9] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15E9, name = 'IsA'
+	list[10] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15D5, name = 'ParseAction'
+	list[11] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15D3, name = 'SetWorldSpeed'
+	list[12] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15DF, name = 'VTable0x6c'
+	list[13] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15D3, name = 'VTable0x70'
+	list[14] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15DC, name = 'VTable0x94'
+	list[15] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15E5, name = 'SwitchBoundary'
+	list[16] = LF_ONEMETHOD, public, VIRTUAL, index = 0x15DD, name = 'VTable0x9c'
+	list[17] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x15D4,
+		vfptr offset = 32, name = 'SetMaxLinearVelocity'
+	list[18] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x15D4,
+		vfptr offset = 36, name = 'FUN_10012ff0'
+	list[19] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x5588,
+		vfptr offset = 40, name = 'HandleSkeletonKicks'
+	list[20] = LF_MEMBER, private, type = T_UCHAR(0020), offset = 84
+		member name = 'm_childClassField'
+
+0x5594 : Length = 34, Leaf = 0x1504 LF_CLASS
+	# members = 30,  field list type 0x5593, CONSTRUCTOR,
+	Derivation list type 0x0000, VT shape type 0x2d1e
+	Size = 512, class name = LegoRaceCar, UDT(0x000055bb)
 """
 
 
@@ -308,6 +412,31 @@ def test_members(parser: CvdumpTypesParser):
         (8, "m_data", "T_32PRCHAR"),
         (12, "m_length", "T_USHORT"),
     ]
+
+    # LegoRaceCar with multiple superclasses
+    assert parser.get("0x5594").members == [
+        FieldListItem(offset=0, name="vftable", type="T_32PVOID"),
+        FieldListItem(offset=0, name="vftable", type="T_32PVOID"),
+        FieldListItem(offset=8, name="m_parentClass1Field1", type="T_REAL32"),
+        FieldListItem(offset=8, name="m_parentClass2Field1", type="T_UCHAR"),
+        FieldListItem(offset=12, name="m_parentClass2Field2", type="T_32PVOID"),
+        FieldListItem(offset=84, name="m_childClassField", type="T_UCHAR"),
+    ]
+
+
+def test_virtual_base_classes(parser: CvdumpTypesParser):
+    """Make sure that virtual base classes are parsed correctly."""
+
+    lego_car_race_actor = parser.keys.get("0x5591")
+    assert lego_car_race_actor is not None
+    assert lego_car_race_actor["vbase"] == VirtualBasePointer(
+        vboffset=4,
+        bases=[
+            VirtualBaseClass(type="0x1183", index=1, direct=False),
+            VirtualBaseClass(type="0x1468", index=2, direct=False),
+            VirtualBaseClass(type="0x15EA", index=3, direct=True),
+        ],
+    )
 
 
 def test_members_recursive(parser: CvdumpTypesParser):

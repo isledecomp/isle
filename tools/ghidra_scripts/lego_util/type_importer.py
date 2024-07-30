@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Callable, TypeVar
+from typing import Any, Callable, Iterator, Optional, TypeVar
 
 # Disable spurious warnings in vscode / pylance
 # pyright: reportMissingModuleSource=false
@@ -7,6 +7,7 @@ from typing import Any, Callable, TypeVar
 # pylint: disable=too-many-return-statements # a `match` would be better, but for now we are stuck with Python 3.9
 # pylint: disable=no-else-return # Not sure why this rule even is a thing, this is great for checking exhaustiveness
 
+from isledecomp.cvdump.types import VirtualBasePointer
 from lego_util.exceptions import (
     ClassOrNamespaceNotFoundInGhidraError,
     TypeNotFoundError,
@@ -15,7 +16,8 @@ from lego_util.exceptions import (
     StructModificationError,
 )
 from lego_util.ghidra_helper import (
-    add_pointer_type,
+    add_data_type_or_reuse_existing,
+    get_or_add_pointer_type,
     create_ghidra_namespace,
     get_ghidra_namespace,
     get_ghidra_type,
@@ -33,6 +35,8 @@ from ghidra.program.model.data import (
     EnumDataType,
     StructureDataType,
     StructureInternal,
+    TypedefDataType,
+    ComponentOffsetSettingsDefinition,
 )
 from ghidra.util.task import ConsoleTaskMonitor
 
@@ -56,10 +60,19 @@ class PdbTypeImporter:
     def types(self):
         return self.extraction.compare.cv.types
 
-    def import_pdb_type_into_ghidra(self, type_index: str) -> DataType:
+    def import_pdb_type_into_ghidra(
+        self, type_index: str, slim_for_vbase: bool = False
+    ) -> DataType:
         """
         Recursively imports a type from the PDB into Ghidra.
         @param type_index Either a scalar type like `T_INT4(...)` or a PDB reference like `0x10ba`
+        @param slim_for_vbase If true, the current invocation
+            imports a superclass of some class where virtual inheritance is involved (directly or indirectly).
+            This case requires special handling: Let's say we have `class C: B` and `class B: virtual A`. Then cvdump
+            reports a size for B that includes both B's fields as well as the A contained at an offset within B,
+            which is not the correct structure to be contained in C. Therefore, we need to create a "slim" version of B
+            that fits inside C.
+            This value should always be `False` when the referenced type is not (a pointer to) a class.
         """
         type_index_lower = type_index.lower()
         if type_index_lower.startswith("t_"):
@@ -76,14 +89,19 @@ class PdbTypeImporter:
 
         # follow forward reference (class, struct, union)
         if type_pdb.get("is_forward_ref", False):
-            return self._import_forward_ref_type(type_index_lower, type_pdb)
+            return self._import_forward_ref_type(
+                type_index_lower, type_pdb, slim_for_vbase
+            )
 
         if type_category == "LF_POINTER":
-            return add_pointer_type(
-                self.api, self.import_pdb_type_into_ghidra(type_pdb["element_type"])
+            return get_or_add_pointer_type(
+                self.api,
+                self.import_pdb_type_into_ghidra(
+                    type_pdb["element_type"], slim_for_vbase
+                ),
             )
         elif type_category in ["LF_CLASS", "LF_STRUCTURE"]:
-            return self._import_class_or_struct(type_pdb)
+            return self._import_class_or_struct(type_pdb, slim_for_vbase)
         elif type_category == "LF_ARRAY":
             return self._import_array(type_pdb)
         elif type_category == "LF_ENUM":
@@ -120,7 +138,10 @@ class PdbTypeImporter:
         return get_ghidra_type(self.api, scalar_cpp_type)
 
     def _import_forward_ref_type(
-        self, type_index, type_pdb: dict[str, Any]
+        self,
+        type_index,
+        type_pdb: dict[str, Any],
+        slim_for_vbase: bool = False,
     ) -> DataType:
         referenced_type = type_pdb.get("udt") or type_pdb.get("modifies")
         if referenced_type is None:
@@ -136,7 +157,7 @@ class PdbTypeImporter:
             type_index,
             referenced_type,
         )
-        return self.import_pdb_type_into_ghidra(referenced_type)
+        return self.import_pdb_type_into_ghidra(referenced_type, slim_for_vbase)
 
     def _import_array(self, type_pdb: dict[str, Any]) -> DataType:
         inner_type = self.import_pdb_type_into_ghidra(type_pdb["array_type"])
@@ -182,12 +203,18 @@ class PdbTypeImporter:
 
         return result
 
-    def _import_class_or_struct(self, type_in_pdb: dict[str, Any]) -> DataType:
+    def _import_class_or_struct(
+        self,
+        type_in_pdb: dict[str, Any],
+        slim_for_vbase: bool = False,
+    ) -> DataType:
         field_list_type: str = type_in_pdb["field_list_type"]
         field_list = self.types.keys[field_list_type.lower()]
 
         class_size: int = type_in_pdb["size"]
         class_name_with_namespace: str = sanitize_name(type_in_pdb["name"])
+        if slim_for_vbase:
+            class_name_with_namespace += "_vbase_slim"
 
         if class_name_with_namespace in self.handled_structs:
             logger.debug(
@@ -205,11 +232,11 @@ class PdbTypeImporter:
 
         self._get_or_create_namespace(class_name_with_namespace)
 
-        data_type = self._get_or_create_struct_data_type(
+        new_ghidra_struct = self._get_or_create_struct_data_type(
             class_name_with_namespace, class_size
         )
 
-        if (old_size := data_type.getLength()) != class_size:
+        if (old_size := new_ghidra_struct.getLength()) != class_size:
             logger.warning(
                 "Existing class %s had incorrect size %d. Setting to %d...",
                 class_name_with_namespace,
@@ -220,39 +247,189 @@ class PdbTypeImporter:
         logger.info("Adding class data type %s", class_name_with_namespace)
         logger.debug("Class information: %s", type_in_pdb)
 
-        data_type.deleteAll()
-        data_type.growStructure(class_size)
+        components: list[dict[str, Any]] = []
+        components.extend(self._get_components_from_base_classes(field_list))
+        # can be missing when no new fields are declared
+        components.extend(self._get_components_from_members(field_list))
+        components.extend(
+            self._get_components_from_vbase(
+                field_list, class_name_with_namespace, new_ghidra_struct
+            )
+        )
+
+        components.sort(key=lambda c: c["offset"])
+
+        if slim_for_vbase:
+            # Make a "slim" version: shrink the size to the fields that are actually present.
+            # This makes a difference when the current class uses virtual inheritance
+            assert (
+                len(components) > 0
+            ), f"Error: {class_name_with_namespace} should not be empty. There must be at least one direct or indirect vbase pointer."
+            last_component = components[-1]
+            class_size = last_component["offset"] + last_component["type"].getLength()
+
+        self._overwrite_struct(
+            class_name_with_namespace,
+            new_ghidra_struct,
+            class_size,
+            components,
+        )
+
+        logger.info("Finished importing class %s", class_name_with_namespace)
+
+        return new_ghidra_struct
+
+    def _get_components_from_base_classes(self, field_list) -> Iterator[dict[str, Any]]:
+        non_virtual_base_classes: dict[str, int] = field_list.get("super", {})
+
+        for super_type, offset in non_virtual_base_classes.items():
+            # If we have virtual inheritance _and_ a non-virtual base class here, we play safe and import slim version.
+            # This is technically not needed if only one of the superclasses uses virtual inheritance, but I am not aware of any instance.
+            import_slim_vbase_version_of_superclass = "vbase" in field_list
+            ghidra_type = self.import_pdb_type_into_ghidra(
+                super_type, slim_for_vbase=import_slim_vbase_version_of_superclass
+            )
+
+            yield {
+                "type": ghidra_type,
+                "offset": offset,
+                "name": "base" if offset == 0 else f"base_{ghidra_type.getName()}",
+            }
+
+    def _get_components_from_members(self, field_list: dict[str, Any]):
+        members: list[dict[str, Any]] = field_list.get("members") or []
+        for member in members:
+            yield member | {"type": self.import_pdb_type_into_ghidra(member["type"])}
+
+    def _get_components_from_vbase(
+        self,
+        field_list: dict[str, Any],
+        class_name_with_namespace: str,
+        current_type: StructureInternal,
+    ) -> Iterator[dict[str, Any]]:
+        vbasepointer: Optional[VirtualBasePointer] = field_list.get("vbase", None)
+
+        if vbasepointer is not None and any(x.direct for x in vbasepointer.bases):
+            vbaseptr_type = get_or_add_pointer_type(
+                self.api,
+                self._import_vbaseptr(
+                    current_type, class_name_with_namespace, vbasepointer
+                ),
+            )
+            yield {
+                "type": vbaseptr_type,
+                "offset": vbasepointer.vboffset,
+                "name": "vbase_offset",
+            }
+
+    def _import_vbaseptr(
+        self,
+        current_type: StructureInternal,
+        class_name_with_namespace: str,
+        vbasepointer: VirtualBasePointer,
+    ) -> StructureInternal:
+        pointer_size = 4  # hard-code to 4 because of 32 bit
+
+        components = [
+            {
+                "offset": 0,
+                "type": get_or_add_pointer_type(self.api, current_type),
+                "name": "o_self",
+            }
+        ]
+        for vbase in vbasepointer.bases:
+            vbase_ghidra_type = self.import_pdb_type_into_ghidra(vbase.type)
+
+            type_name = vbase_ghidra_type.getName()
+
+            vbase_ghidra_pointer = get_or_add_pointer_type(self.api, vbase_ghidra_type)
+            vbase_ghidra_pointer_typedef = TypedefDataType(
+                vbase_ghidra_pointer.getCategoryPath(),
+                f"{type_name}PtrOffset",
+                vbase_ghidra_pointer,
+            )
+            # Set a default value of -4 for the pointer offset. While this appears to be correct in many cases,
+            # it does not always lead to the best decompile. It can be fine-tuned by hand; the next function call
+            # makes sure that we don't overwrite this value on re-running the import.
+            ComponentOffsetSettingsDefinition.DEF.setValue(
+                vbase_ghidra_pointer_typedef.getDefaultSettings(), -4
+            )
+
+            vbase_ghidra_pointer_typedef = add_data_type_or_reuse_existing(
+                self.api, vbase_ghidra_pointer_typedef
+            )
+
+            components.append(
+                {
+                    "offset": vbase.index * pointer_size,
+                    "type": vbase_ghidra_pointer_typedef,
+                    "name": f"o_{type_name}",
+                }
+            )
+
+        size = len(components) * pointer_size
+
+        new_ghidra_struct = self._get_or_create_struct_data_type(
+            f"{class_name_with_namespace}::VBasePtr", size
+        )
+
+        self._overwrite_struct(
+            f"{class_name_with_namespace}::VBasePtr",
+            new_ghidra_struct,
+            size,
+            components,
+        )
+
+        return new_ghidra_struct
+
+    def _overwrite_struct(
+        self,
+        class_name_with_namespace: str,
+        new_ghidra_struct: StructureInternal,
+        class_size: int,
+        components: list[dict[str, Any]],
+    ):
+        new_ghidra_struct.deleteAll()
+        new_ghidra_struct.growStructure(class_size)
 
         # this case happened e.g. for IUnknown, which linked to an (incorrect) existing library, and some other types as well.
         # Unfortunately, we don't get proper error handling for read-only types.
         # However, we really do NOT want to do this every time because the type might be self-referential and partially imported.
-        if data_type.getLength() != class_size:
-            data_type = self._delete_and_recreate_struct_data_type(
-                class_name_with_namespace, class_size, data_type
+        if new_ghidra_struct.getLength() != class_size:
+            new_ghidra_struct = self._delete_and_recreate_struct_data_type(
+                class_name_with_namespace, class_size, new_ghidra_struct
             )
 
-        # can be missing when no new fields are declared
-        components: list[dict[str, Any]] = field_list.get("members") or []
-
-        super_type = field_list.get("super")
-        if super_type is not None:
-            components.insert(0, {"type": super_type, "offset": 0, "name": "base"})
-
         for component in components:
-            ghidra_type = self.import_pdb_type_into_ghidra(component["type"])
-            logger.debug("Adding component to class: %s", component)
+            offset: int = component["offset"]
+            logger.debug(
+                "Adding component %s to class: %s", component, class_name_with_namespace
+            )
 
             try:
-                # for better logs
-                data_type.replaceAtOffset(
-                    component["offset"], ghidra_type, -1, component["name"], None
+                # Make sure there is room for the new structure and that we have no collision.
+                existing_type = new_ghidra_struct.getComponentAt(offset)
+                assert (
+                    existing_type is not None
+                ), f"Struct collision: Offset {offset} in {class_name_with_namespace} is overlapped by another component"
+
+                if existing_type.getDataType().getName() != "undefined":
+                    # collision of structs beginning in the same place -> likely due to unions
+                    logger.warning(
+                        "Struct collision: Offset %d of %s already has a field (likely an inline union)",
+                        offset,
+                        class_name_with_namespace,
+                    )
+
+                new_ghidra_struct.replaceAtOffset(
+                    offset,
+                    component["type"],
+                    -1,  # set to -1 for fixed-size components
+                    component["name"],  # name
+                    None,  # comment
                 )
             except Exception as e:
-                raise StructModificationError(type_in_pdb) from e
-
-        logger.info("Finished importing class %s", class_name_with_namespace)
-
-        return data_type
+                raise StructModificationError(class_name_with_namespace) from e
 
     def _get_or_create_namespace(self, class_name_with_namespace: str):
         colon_split = class_name_with_namespace.split("::")
