@@ -215,7 +215,7 @@ class PdbFunctionImporter:
         """Replace the function declaration in Ghidra by the one derived from C++."""
 
         if ghidra_function.hasCustomVariableStorage():
-            # Unfortunately, Ghidra has a bug where setting custom variable storage back to `False`
+            # Unfortunately, calling `ghidra_function.setCustomVariableStorage(False)`
             # leads to two `this` parameters. Therefore, we first need to remove all `this` parameters
             # and then re-generate a new one
             ghidra_function.replaceParameters(
@@ -330,7 +330,7 @@ class PdbFunctionImporter:
         ghidra_function: Function,
     ):
         """
-        Then `this adjust` is non-zero, the pointer type of `this` needs to be replaced by an offset version.
+        When `this adjust` is non-zero, the pointer type of `this` needs to be replaced by an offset version.
         The offset can only be set on a typedef on the pointer. We also must enable custom storage so we can modify
         the auto-generated `this` parameter.
         """
