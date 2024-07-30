@@ -214,7 +214,7 @@ class PdbTypeImporter:
         class_size: int = type_in_pdb["size"]
         class_name_with_namespace: str = sanitize_name(type_in_pdb["name"])
         if slim_for_vbase:
-            class_name_with_namespace += "::_vbase_slim"
+            class_name_with_namespace += "_vbase_slim"
 
         if class_name_with_namespace in self.handled_structs:
             logger.debug(
