@@ -10,6 +10,12 @@ from ghidra.program.model.listing import Function, Parameter
 from ghidra.program.flatapi import FlatProgramAPI
 from ghidra.program.model.listing import ParameterImpl
 from ghidra.program.model.symbol import SourceType
+from ghidra.program.model.data import (
+    TypeDef,
+    TypedefDataType,
+    Pointer,
+    ComponentOffsetSettingsDefinition,
+)
 
 from lego_util.pdb_extraction import (
     PdbFunction,
@@ -17,12 +23,13 @@ from lego_util.pdb_extraction import (
     CppStackSymbol,
 )
 from lego_util.ghidra_helper import (
+    add_data_type_or_reuse_existing,
     get_or_add_pointer_type,
     get_ghidra_namespace,
     sanitize_name,
 )
 
-from lego_util.exceptions import StackOffsetMismatchError
+from lego_util.exceptions import StackOffsetMismatchError, Lego1Exception
 from lego_util.type_importer import PdbTypeImporter
 
 
@@ -106,19 +113,22 @@ class PdbFunctionImporter:
             )
             return_type_match = True
 
-        # match arguments: decide if thiscall or not
+        # match arguments: decide if thiscall or not, and whether the `this` type matches
         thiscall_matches = (
             self.signature.call_type == ghidra_function.getCallingConventionName()
         )
+
+        ghidra_params_without_this = list(ghidra_function.getParameters())
+
+        if thiscall_matches and self.signature.call_type == "__thiscall":
+            this_argument = ghidra_params_without_this.pop(0)
+            thiscall_matches = self._this_type_match(this_argument)
 
         if self.is_stub:
             # We do not import the argument list for stubs, so it should be excluded in matches
             args_match = True
         elif thiscall_matches:
-            if self.signature.call_type == "__thiscall":
-                args_match = self._matches_thiscall_parameters(ghidra_function)
-            else:
-                args_match = self._matches_non_thiscall_parameters(ghidra_function)
+            args_match = self._parameter_lists_match(ghidra_params_without_this)
         else:
             args_match = False
 
@@ -139,16 +149,22 @@ class PdbFunctionImporter:
             and args_match
         )
 
-    def _matches_non_thiscall_parameters(self, ghidra_function: Function) -> bool:
-        return self._parameter_lists_match(ghidra_function.getParameters())
+    def _this_type_match(self, this_parameter: Parameter) -> bool:
+        if this_parameter.getName() != "this":
+            logger.info("Expected first argument to be `this` in __thiscall")
+            return False
 
-    def _matches_thiscall_parameters(self, ghidra_function: Function) -> bool:
-        ghidra_params = list(ghidra_function.getParameters())
+        if self.signature.this_adjust != 0:
+            # In this case, the `this` argument should be custom defined
+            if not isinstance(this_parameter.getDataType(), TypeDef):
+                logger.info(
+                    "`this` argument is not a typedef while `this adjust` = %d",
+                    self.signature.this_adjust,
+                )
+                return False
+            # We are not checking for the _correct_ `this` type here, which we could do in the future
 
-        # remove the `this` argument which we don't generate ourselves
-        ghidra_params.pop(0)
-
-        return self._parameter_lists_match(ghidra_params)
+        return True
 
     def _parameter_lists_match(self, ghidra_params: "list[Parameter]") -> bool:
         # Remove return storage pointer from comparison if present.
@@ -197,6 +213,25 @@ class PdbFunctionImporter:
 
     def overwrite_ghidra_function(self, ghidra_function: Function):
         """Replace the function declaration in Ghidra by the one derived from C++."""
+
+        if ghidra_function.hasCustomVariableStorage():
+            # Unfortunately, Ghidra has a bug where setting custom variable storage back to `False`
+            # leads to two `this` parameters. Therefore, we first need to remove all `this` parameters
+            # and then re-generate a new one
+            ghidra_function.replaceParameters(
+                Function.FunctionUpdateType.DYNAMIC_STORAGE_ALL_PARAMS,  # this implicitly sets custom variable storage to False
+                True,
+                SourceType.USER_DEFINED,
+                [
+                    param
+                    for param in ghidra_function.getParameters()
+                    if param.getName() != "this"
+                ],
+            )
+
+        if ghidra_function.hasCustomVariableStorage():
+            raise Lego1Exception("Failed to disable custom variable storage.")
+
         ghidra_function.setName(self.name, SourceType.USER_DEFINED)
         ghidra_function.setParentNamespace(self.namespace)
         ghidra_function.setReturnType(self.return_type, SourceType.USER_DEFINED)
@@ -206,16 +241,18 @@ class PdbFunctionImporter:
             logger.debug(
                 "%s is a stub, skipping parameter import", self.get_full_name()
             )
-            return
+        else:
+            ghidra_function.replaceParameters(
+                Function.FunctionUpdateType.DYNAMIC_STORAGE_ALL_PARAMS,
+                True,  # force
+                SourceType.USER_DEFINED,
+                self.arguments,
+            )
+            self._import_parameter_names(ghidra_function)
 
-        ghidra_function.replaceParameters(
-            Function.FunctionUpdateType.DYNAMIC_STORAGE_ALL_PARAMS,
-            True,  # force
-            SourceType.USER_DEFINED,
-            self.arguments,
-        )
-
-        self._import_parameter_names(ghidra_function)
+        # Special handling for `this adjust` and virtual inheritance
+        if self.signature.this_adjust != 0:
+            self._set_this_adjust(ghidra_function)
 
     def _import_parameter_names(self, ghidra_function: Function):
         # When we call `ghidra_function.replaceParameters`, Ghidra will generate the layout.
@@ -287,3 +324,50 @@ class PdbFunctionImporter:
             ),
             None,
         )
+
+    def _set_this_adjust(
+        self,
+        ghidra_function: Function,
+    ):
+        """
+        Then `this adjust` is non-zero, the pointer type of `this` needs to be replaced by an offset version.
+        The offset can only be set on a typedef on the pointer. We also must enable custom storage so we can modify
+        the auto-generated `this` parameter.
+        """
+
+        # Necessary in order to overwite the auto-generated `this`
+        ghidra_function.setCustomVariableStorage(True)
+
+        this_parameter = next(
+            (
+                param
+                for param in ghidra_function.getParameters()
+                if param.isRegisterVariable() and param.getName() == "this"
+            ),
+            None,
+        )
+
+        if this_parameter is None:
+            logger.error(
+                "Failed to find `this` parameter in a function with `this adjust = %d`",
+                self.signature.this_adjust,
+            )
+        else:
+            current_ghidra_type = this_parameter.getDataType()
+            assert isinstance(current_ghidra_type, Pointer)
+            class_name = current_ghidra_type.getDataType().getName()
+            typedef_name = f"{class_name}PtrOffset0x{self.signature.this_adjust:x}"
+
+            typedef_ghidra_type = TypedefDataType(
+                current_ghidra_type.getCategoryPath(),
+                typedef_name,
+                current_ghidra_type,
+            )
+            ComponentOffsetSettingsDefinition.DEF.setValue(
+                typedef_ghidra_type.getDefaultSettings(), self.signature.this_adjust
+            )
+            typedef_ghidra_type = add_data_type_or_reuse_existing(
+                self.api, typedef_ghidra_type
+            )
+
+            this_parameter.setDataType(typedef_ghidra_type, SourceType.USER_DEFINED)

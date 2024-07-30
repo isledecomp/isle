@@ -262,19 +262,18 @@ class PdbTypeImporter:
         if slim_for_vbase:
             # Make a "slim" version: shrink the size to the fields that are actually present.
             # This makes a difference when the current class uses virtual inheritance
-
             assert (
                 len(components) > 0
             ), f"Error: {class_name_with_namespace} should not be empty. There must be at least one direct or indirect vbase pointer."
             last_component = components[-1]
             class_size = last_component["offset"] + last_component["type"].getLength()
 
-            self._overwrite_struct(
-                class_name_with_namespace,
-                new_ghidra_struct,
-                class_size,
-                components,
-            )
+        self._overwrite_struct(
+            class_name_with_namespace,
+            new_ghidra_struct,
+            class_size,
+            components,
+        )
 
         logger.info("Finished importing class %s", class_name_with_namespace)
 
@@ -352,7 +351,9 @@ class PdbTypeImporter:
             # Set a default value of -4 for the pointer offset. While this appears to be correct in many cases,
             # it does not always lead to the best decompile. It can be fine-tuned by hand; the next function call
             # makes sure that we don't overwrite this value on re-running the import.
-            ComponentOffsetSettingsDefinition.DEF.setValue(vbase_ghidra_pointer_typedef.getDefaultSettings(), -4)
+            ComponentOffsetSettingsDefinition.DEF.setValue(
+                vbase_ghidra_pointer_typedef.getDefaultSettings(), -4
+            )
 
             vbase_ghidra_pointer_typedef = add_data_type_or_reuse_existing(
                 self.api, vbase_ghidra_pointer_typedef
@@ -400,7 +401,6 @@ class PdbTypeImporter:
             )
 
         for component in components:
-
             offset: int = component["offset"]
             logger.debug(
                 "Adding component %s to class: %s", component, class_name_with_namespace

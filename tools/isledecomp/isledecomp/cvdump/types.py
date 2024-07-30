@@ -230,7 +230,7 @@ class CvdumpTypesParser:
         re.compile(r"\s*Arg list type = (?P<arg_list_type>[\w()]+)$"),
         re.compile(
             r"\s*This adjust = (?P<this_adjust>[\w()]+)$"
-        ),  # TODO: figure out the meaning
+        ),  # By how much the incoming pointers are shifted in virtual inheritance; hex value without `0x` prefix
         re.compile(
             r"\s*Func attr = (?P<func_attr>[\w()]+)$"
         ),  # Only for completeness, is always `none`
@@ -559,7 +559,6 @@ class CvdumpTypesParser:
 
         # virtual base class (direct or indirect)
         elif (match := self.VBCLASS_RE.match(line)) is not None:
-
             virtual_base_pointer = self.keys[self.last_key].setdefault(
                 "vbase",
                 VirtualBasePointer(
