@@ -406,6 +406,8 @@ void LegoRaceCar::VTable0x70(float p_float)
 MxResult LegoRaceCar::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 {
 	if (!p_actor->GetUserNavFlag()) {
+		// TODO: Note how this code is almost, but not quite identical to LegoRaceActor::VTable0x94.
+		// Maybe there is some code reuse here? The use of different globals is notable.
 		if (p_actor->GetState()) {
 			return FAILURE;
 		}

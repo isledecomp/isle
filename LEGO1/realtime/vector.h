@@ -162,6 +162,7 @@ protected:
 };
 
 // VTABLE: LEGO1 0x100d4518
+// VTABLE: BETA10 0x101b8398
 // SIZE 0x08
 class Vector3 : public Vector2 {
 public:
@@ -263,6 +264,7 @@ public:
 	void EqualsImpl(float* p_data) override { memcpy(m_data, p_data, sizeof(float) * 3); } // vtable+0x20
 
 	// FUNCTION: LEGO1 0x10003bc0
+	// FUNCTION: BETA10 0x101b84fc
 	void Clear() override { memset(m_data, 0, sizeof(float) * 3); } // vtable+0x2c
 
 	// FUNCTION: LEGO1 0x10003bd0

@@ -122,6 +122,7 @@ public:
 		}
 	}
 
+	// FUNCTION: BETA10 0x1001c6a0
 	void RotateX(const float& p_angle)
 	{
 		float s = sin(p_angle);
