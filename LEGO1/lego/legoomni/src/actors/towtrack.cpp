@@ -3,6 +3,7 @@
 #include "isle.h"
 #include "isle_actions.h"
 #include "jukebox_actions.h"
+#include "legoanimationmanager.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legonavcontroller.h"
@@ -19,6 +20,9 @@
 
 DECOMP_SIZE_ASSERT(TowTrack, 0x180)
 DECOMP_SIZE_ASSERT(TowTrackMissionState, 0x28)
+
+// Flags used in isle.cpp
+extern MxU32 g_isleFlags;
 
 // FUNCTION: LEGO1 0x1004c720
 TowTrack::TowTrack()
@@ -297,10 +301,23 @@ void TowTrack::StopActions()
 	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_pns123pr_RunAnim, NULL);
 }
 
-// STUB: LEGO1 0x1004dbe0
+// FUNCTION: LEGO1 0x1004dbe0
 void TowTrack::FUN_1004dbe0()
 {
-	// TODO
+	if (m_lastAction != -1) {
+		InvokeAction(Extra::e_stop, *g_isleScript, m_lastAction, NULL);
+	}
+
+	((Act1State*) GameState()->GetState("Act1State"))->m_unk0x018 = 0;
+	m_state->m_unk0x08 = 0;
+	g_isleFlags |= Isle::c_playMusic;
+	AnimationManager()->EnableCamAnims(TRUE);
+	AnimationManager()->FUN_1005f6d0(TRUE);
+	m_state->m_unk0x0c = INT_MIN;
+	m_state->m_unk0x10 = FALSE;
+	m_state = NULL;
+	m_unk0x16c = 0;
+	m_unk0x16e = 0;
 }
 
 // FUNCTION: LEGO1 0x1004dcf0
