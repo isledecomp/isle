@@ -96,7 +96,7 @@ public:
 
 	void CreateState();
 	void FUN_1004dab0();
-	void FUN_1004dad0();
+	void ActivateSceneActions();
 	void StopActions();
 	void FUN_1004dbe0();
 
@@ -105,7 +105,7 @@ public:
 
 private:
 	void Leave();
-	void FUN_1004dcf0(IsleScript::Script);
+	void PlayAction(IsleScript::Script);
 
 	undefined4 m_unk0x160;         // 0x160
 	TowTrackMissionState* m_state; // 0x164

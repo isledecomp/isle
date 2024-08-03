@@ -1036,7 +1036,7 @@ MxLong Isle::HandleTransitionEnd()
 		FUN_10032d30(IsleScript::c_TowFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
-			m_towtrack->FUN_1004dad0();
+			m_towtrack->ActivateSceneActions();
 		}
 		break;
 	case LegoGameState::e_jetski:
