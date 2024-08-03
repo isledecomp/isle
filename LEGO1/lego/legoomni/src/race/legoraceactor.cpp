@@ -47,9 +47,7 @@ MxS32 LegoRaceActor::VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3)
 // FUNCTION: BETA10 0x100c9c93
 MxU32 LegoRaceActor::VTable0x90(float p_float, Matrix4& p_transform)
 {
-	// TODO: Note the similarity to LegoExtraActor::VTable0x90.
-	// Code duplication or is there something deeper going on?
-
+	// Note: Code duplication with LegoExtraActor::VTable0x90
 	switch (m_state) {
 	case 0:
 	case 1:
