@@ -105,18 +105,18 @@ public:
 
 private:
 	void Leave();
-	void PlayAction(IsleScript::Script);
+	void PlayAction(IsleScript::Script p_objectId);
 
-	undefined4 m_unk0x160;         // 0x160
-	TowTrackMissionState* m_state; // 0x164
-	MxS16 m_unk0x168;              // 0x168
-	MxS16 m_actorId;               // 0x16a
-	MxS16 m_unk0x16c;              // 0x16c
-	MxS16 m_unk0x16e;              // 0x16e
-	MxS32 m_unk0x170;              // 0x170
-	MxS32 m_unk0x174;              // 0x174
-	MxFloat m_fuel;                // 0x178
-	MxFloat m_time;                // 0x17c
+	undefined4 m_unk0x160;           // 0x160
+	TowTrackMissionState* m_state;   // 0x164
+	MxS16 m_unk0x168;                // 0x168
+	MxS16 m_actorId;                 // 0x16a
+	MxS16 m_unk0x16c;                // 0x16c
+	MxS16 m_unk0x16e;                // 0x16e
+	IsleScript::Script m_lastAction; // 0x170
+	MxS32 m_unk0x174;                // 0x174
+	MxFloat m_fuel;                  // 0x178
+	MxFloat m_time;                  // 0x17c
 };
 
 #endif // TOWTRACK_H

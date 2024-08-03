@@ -10,6 +10,7 @@
 #include "legovariables.h"
 #include "legoworld.h"
 #include "misc.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxsoundpresenter.h"
 #include "mxtimer.h"
@@ -26,7 +27,7 @@ TowTrack::TowTrack()
 	m_actorId = -1;
 	m_state = NULL;
 	m_unk0x16c = 0;
-	m_unk0x170 = -1;
+	m_lastAction = IsleScript::c_noneIsle;
 	m_unk0x16e = 0;
 	m_unk0x174 = -1;
 	m_maxLinearVel = 40.0;
@@ -190,7 +191,7 @@ MxLong TowTrack::HandleClick()
 	}
 	else {
 		SpawnPlayer(LegoGameState::e_unk28, TRUE, 0);
-		m_unk0x170 = -1;
+		m_lastAction = IsleScript::c_noneIsle;
 		m_unk0x174 = -1;
 		m_state->m_unk0x0c = Timer()->GetTime();
 		m_state->m_unk0x10 = FALSE;
@@ -302,10 +303,15 @@ void TowTrack::FUN_1004dbe0()
 	// TODO
 }
 
-// STUB: LEGO1 0x1004dcf0
-void TowTrack::PlayAction(IsleScript::Script)
+// FUNCTION: LEGO1 0x1004dcf0
+void TowTrack::PlayAction(IsleScript::Script p_objectId)
 {
-	// TODO
+	if (p_objectId != -1) {
+		InvokeAction(Extra::e_start, *g_isleScript, p_objectId, NULL);
+	}
+
+	m_lastAction = p_objectId;
+	BackgroundAudioManager()->LowerVolume();
 }
 
 // FUNCTION: LEGO1 0x1004dd30
