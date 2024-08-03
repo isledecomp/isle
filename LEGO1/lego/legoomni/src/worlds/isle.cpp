@@ -1196,7 +1196,7 @@ MxBool Isle::Escape()
 		break;
 	case 8:
 		if (UserActor() != NULL && !UserActor()->IsA("TowTrack")) {
-			m_towtrack->FUN_1004db10();
+			m_towtrack->StopActions();
 			m_towtrack->FUN_1004dbe0();
 		}
 		break;
@@ -1250,7 +1250,7 @@ void Isle::FUN_10033350()
 
 	if (m_act1state->m_unk0x018 == 8) {
 		if (UserActor() != NULL && !UserActor()->IsA("TowTrack")) {
-			m_towtrack->FUN_1004db10();
+			m_towtrack->StopActions();
 			m_towtrack->FUN_1004dbe0();
 		}
 	}

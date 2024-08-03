@@ -97,13 +97,14 @@ public:
 	void CreateState();
 	void FUN_1004dab0();
 	void FUN_1004dad0();
-	void FUN_1004db10();
+	void StopActions();
 	void FUN_1004dbe0();
 
 	// SYNTHETIC: LEGO1 0x1004c950
 	// TowTrack::`scalar deleting destructor'
 
 private:
+	void Leave();
 	void FUN_1004dcf0(IsleScript::Script);
 
 	undefined4 m_unk0x160;         // 0x160
