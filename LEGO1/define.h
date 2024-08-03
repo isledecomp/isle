@@ -38,5 +38,6 @@ extern const char* g_strDB_CREATE;
 extern const char* g_strPERMIT_NAVIGATE;
 extern const char* g_strPATH;
 extern const char* g_strCOLLIDEBOX;
+extern const char* g_strHIT_ACTOR_SOUND;
 
 #endif // DEFINE_H
