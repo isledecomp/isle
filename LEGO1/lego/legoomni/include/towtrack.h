@@ -5,6 +5,8 @@
 #include "islepathactor.h"
 #include "legostate.h"
 
+class MxEndActionNotificationParam;
+
 // VTABLE: LEGO1 0x100d7fd8
 // SIZE 0x28
 class TowTrackMissionState : public LegoState {
@@ -48,7 +50,7 @@ public:
 	// TowTrackMissionState::`scalar deleting destructor'
 
 	undefined4 m_unk0x08; // 0x08
-	MxS32 m_unk0x0c;      // 0x0c
+	MxLong m_unk0x0c;     // 0x0c
 	MxBool m_unk0x10;     // 0x10
 	MxS16 m_unk0x12;      // 0x12
 	MxS16 m_unk0x14;      // 0x14
@@ -90,6 +92,7 @@ public:
 	MxLong HandleEndAnim(LegoEndAnimNotificationParam& p_param) override;        // vtable+0xd8
 	MxLong HandlePathStruct(LegoPathStructNotificationParam& p_param) override;  // vtable+0xdc
 	void Exit() override;                                                        // vtable+0xe4
+	virtual MxLong HandleEndAction(MxEndActionNotificationParam& p_param);       // vtable+0xf0
 
 	void CreateState();
 	void FUN_1004dab0();
@@ -106,7 +109,7 @@ private:
 	undefined4 m_unk0x160;         // 0x160
 	TowTrackMissionState* m_state; // 0x164
 	MxS16 m_unk0x168;              // 0x168
-	MxS16 m_unk0x16a;              // 0x16a
+	MxS16 m_actorId;               // 0x16a
 	MxS16 m_unk0x16c;              // 0x16c
 	MxS16 m_unk0x16e;              // 0x16e
 	MxS32 m_unk0x170;              // 0x170
