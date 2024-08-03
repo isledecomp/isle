@@ -204,10 +204,29 @@ MxLong TowTrack::HandleClick()
 	return 1;
 }
 
-// STUB: LEGO1 0x1004d8f0
+// FUNCTION: LEGO1 0x1004d8f0
 void TowTrack::Exit()
 {
-	// TODO
+	GameState()->m_currentArea = LegoGameState::e_garageExterior;
+	StopActions();
+	FUN_1004dbe0();
+	Leave();
+}
+
+// FUNCTION: LEGO1 0x1004d920
+void TowTrack::Leave()
+{
+	IslePathActor::Exit();
+	CurrentWorld()->RemoveActor(this);
+	m_roi->SetVisibility(FALSE);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_TowTrackDashboard_Bitmap);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_TowTrackArms_Ctl);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_TowHorn_Ctl);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_TowHorn_Sound);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_TowInfo_Ctl);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_TowSpeedMeter);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_TowFuelMeter);
+	ControlManager()->Unregister(this);
 }
 
 // STUB: LEGO1 0x1004d9e0
@@ -229,10 +248,18 @@ void TowTrack::FUN_1004dad0()
 	// TODO
 }
 
-// STUB: LEGO1 0x1004db10
-void TowTrack::FUN_1004db10()
+// FUNCTION: LEGO1 0x1004db10
+void TowTrack::StopActions()
 {
-	// TODO
+	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_wns050p1_RunAnim, NULL);
+	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_wns046mg_RunAnim, NULL);
+	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_wns057rd_RunAnim, NULL);
+	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_wns048p1_RunAnim, NULL);
+	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_wns049p1_RunAnim, NULL);
+	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_wns051bd_RunAnim, NULL);
+	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_wns053pr_RunAnim, NULL);
+	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_wns045di_RunAnim, NULL);
+	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_pns123pr_RunAnim, NULL);
 }
 
 // STUB: LEGO1 0x1004dbe0
