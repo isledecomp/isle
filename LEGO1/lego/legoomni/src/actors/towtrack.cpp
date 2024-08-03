@@ -2,6 +2,7 @@
 
 #include "isle.h"
 #include "isle_actions.h"
+#include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legonavcontroller.h"
@@ -9,7 +10,9 @@
 #include "legovariables.h"
 #include "legoworld.h"
 #include "misc.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
+#include "mxsoundpresenter.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "mxvariabletable.h"
@@ -24,7 +27,7 @@ TowTrack::TowTrack()
 	m_actorId = -1;
 	m_state = NULL;
 	m_unk0x16c = 0;
-	m_unk0x170 = -1;
+	m_lastAction = IsleScript::c_noneIsle;
 	m_unk0x16e = 0;
 	m_unk0x174 = -1;
 	m_maxLinearVel = 40.0;
@@ -88,7 +91,7 @@ void TowTrack::VTable0x70(float p_time)
 		VariableTable()->SetVariable(g_varTOWFUEL, buf);
 
 		if (p_time - m_state->m_unk0x0c > 100000.0f && m_state->m_unk0x08 == 1 && !m_state->m_unk0x10) {
-			FUN_1004dcf0(IsleScript::c_Avo909In_PlayWav);
+			PlayAction(IsleScript::c_Avo909In_PlayWav);
 			m_state->m_unk0x10 = TRUE;
 		}
 	}
@@ -188,7 +191,7 @@ MxLong TowTrack::HandleClick()
 	}
 	else {
 		SpawnPlayer(LegoGameState::e_unk28, TRUE, 0);
-		m_unk0x170 = -1;
+		m_lastAction = IsleScript::c_noneIsle;
 		m_unk0x174 = -1;
 		m_state->m_unk0x0c = Timer()->GetTime();
 		m_state->m_unk0x10 = FALSE;
@@ -229,23 +232,55 @@ void TowTrack::Leave()
 	ControlManager()->Unregister(this);
 }
 
-// STUB: LEGO1 0x1004d9e0
+// FUNCTION: LEGO1 0x1004d9e0
 MxLong TowTrack::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
-	// TODO
-	return 0;
+	MxLong result = 0;
+
+	if (p_param.GetUnknown0x28() == 1) {
+		switch (p_param.GetClickedObjectId()) {
+		case IsleScript::c_TowTrackArms_Ctl:
+			Exit();
+			GameState()->m_currentArea = LegoGameState::e_unk66;
+			result = 1;
+			break;
+		case IsleScript::c_TowInfo_Ctl:
+			((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_infomain);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			Exit();
+			GameState()->m_currentArea = LegoGameState::e_unk66;
+			result = 1;
+			break;
+		case IsleScript::c_TowHorn_Ctl:
+			MxSoundPresenter* presenter = (MxSoundPresenter*) CurrentWorld()->Find("MxSoundPresenter", "TowHorn_Sound");
+			presenter->Enable(p_param.GetUnknown0x28());
+			break;
+		}
+	}
+
+	return result;
 }
 
-// STUB: LEGO1 0x1004dab0
+// FUNCTION: LEGO1 0x1004dab0
 void TowTrack::FUN_1004dab0()
 {
-	// TODO
+	m_state->m_unk0x08 = 1;
+	HandleClick();
 }
 
-// STUB: LEGO1 0x1004dad0
-void TowTrack::FUN_1004dad0()
+// FUNCTION: LEGO1 0x1004dad0
+void TowTrack::ActivateSceneActions()
 {
-	// TODO
+	PlayMusic(JukeboxScript::c_JBMusic2);
+
+	if (m_state->m_unk0x08 != 0) {
+		if (m_state->m_unk0x08 == 2) {
+			PlayAction(IsleScript::c_wrt082na_PlayWav);
+		}
+		else {
+			PlayAction(IsleScript::c_wgs032nu_PlayWav);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1004db10
@@ -268,10 +303,15 @@ void TowTrack::FUN_1004dbe0()
 	// TODO
 }
 
-// STUB: LEGO1 0x1004dcf0
-void TowTrack::FUN_1004dcf0(IsleScript::Script)
+// FUNCTION: LEGO1 0x1004dcf0
+void TowTrack::PlayAction(IsleScript::Script p_objectId)
 {
-	// TODO
+	if (p_objectId != -1) {
+		InvokeAction(Extra::e_start, *g_isleScript, p_objectId, NULL);
+	}
+
+	m_lastAction = p_objectId;
+	BackgroundAudioManager()->LowerVolume();
 }
 
 // FUNCTION: LEGO1 0x1004dd30
