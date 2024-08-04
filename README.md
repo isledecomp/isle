@@ -6,9 +6,11 @@ This is a **work-in-progress** decompilation of LEGO Island (Version 1.1, Englis
 
 ## Status
 
-<img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="50%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="50%">
+<img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="33%"><img src="https://legoisland.org/progress/CONFIGPROGRESS.SVG" width="33%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="33%">
 
 Currently, `ISLE.EXE` is completely decompiled and behaves identically to the original. A handful of stubborn instructions are not yet matching; however, we anticipate they will as more of the overall codebase is implemented.
+
+`CONFIG.EXE` is also completely decompiled and behaves identically to the original. Some of it's instructions are not yet matching.
 
 `LEGO1.DLL` is still lacking some gameplay features but is generally workable. If you would like to use this, make sure to do so without interacting with save files created by the retail version, as there might still be some incompatibilities.
 
