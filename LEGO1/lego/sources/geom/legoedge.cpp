@@ -52,14 +52,14 @@ LegoEdge* LegoEdge::GetCounterclockwiseEdge(LegoWEEdge& p_face)
 }
 
 // FUNCTION: LEGO1 0x1009a510
-// FUNCTION: BETA10 0x10182498
+// FUNCTION: BETA10 0x10182433
 Vector3* LegoEdge::CWVertex(LegoWEEdge& p_face)
 {
 	if (m_faceA == &p_face) {
 		return m_pointB;
 	}
 	else {
-		assert(m_faceA == &p_face);
+		assert(m_faceB == &p_face);
 		return m_pointA;
 	}
 }
