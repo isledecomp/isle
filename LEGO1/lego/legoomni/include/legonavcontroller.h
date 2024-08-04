@@ -13,6 +13,7 @@ class Vector3;
 // LegoMouseController
 
 // VTABLE: LEGO1 0x100d85b8
+// VTABLE: BETA10 0x101bcc80
 // SIZE 0x70
 class LegoNavController : public MxCore {
 public:
@@ -22,6 +23,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10054b80
+	// FUNCTION: BETA10 0x1009e5f0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f66d8
@@ -77,7 +79,9 @@ public:
 	static MxS32 GetNumLocations();
 	static LegoLocation* GetLocation(MxU32 p_location);
 
+	// FUNCTION: BETA10 0x100b0f40
 	void SetLinearVel(MxFloat p_linearVel) { m_linearVel = p_linearVel; }
+
 	MxFloat GetLinearVel() { return m_linearVel; }
 	MxFloat GetRotationalVel() { return m_rotationalVel; }
 	MxFloat GetMaxLinearVel() { return m_maxLinearVel; }

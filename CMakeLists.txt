@@ -350,7 +350,6 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/entity/legoactor.cpp
   LEGO1/lego/legoomni/src/entity/legoactorpresenter.cpp
   LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
-  LEGO1/lego/legoomni/src/entity/legocarraceactor.cpp
   LEGO1/lego/legoomni/src/entity/legoentity.cpp
   LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
   LEGO1/lego/legoomni/src/entity/legojetski.cpp
@@ -375,8 +374,9 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/race/jetskirace.cpp
   LEGO1/lego/legoomni/src/race/legorace.cpp
   LEGO1/lego/legoomni/src/race/legoraceactor.cpp
-  LEGO1/lego/legoomni/src/race/legoracers.cpp
   LEGO1/lego/legoomni/src/race/legoracemap.cpp
+  LEGO1/lego/legoomni/src/race/legoracers.cpp
+  LEGO1/lego/legoomni/src/race/legoracespecial.cpp
   LEGO1/lego/legoomni/src/race/raceskel.cpp
   LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp
   LEGO1/lego/legoomni/src/video/legoflctexturepresenter.cpp

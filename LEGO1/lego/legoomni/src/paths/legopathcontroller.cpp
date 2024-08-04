@@ -19,13 +19,15 @@ MxU32 g_unk0x100d7cc8[] = {2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0};
 MxU32 g_unk0x100d7d08[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 // GLOBAL: LEGO1 0x100f42e8
-LegoPathController::CtrlBoundary* g_ctrlBoundariesA = NULL;
+// GLOBAL: BETA10 0x101f25f0
+LegoPathController::CtrlBoundary* LegoPathController::g_ctrlBoundariesA = NULL;
 
 // GLOBAL: LEGO1 0x100f42ec
-LegoPathController::CtrlEdge* g_ctrlEdgesA = NULL;
+// GLOBAL: BETA10 0x101f25f4
+LegoPathController::CtrlEdge* LegoPathController::g_ctrlEdgesA = NULL;
 
 // GLOBAL: LEGO1 0x100f42f0
-const char* g_unk0x100f42f0[] = {
+const char* LegoPathController::g_unk0x100f42f0[] = {
 	"edg03_21",
 	"edg03_23",
 	"edg03_30",
@@ -45,7 +47,7 @@ const char* g_unk0x100f42f0[] = {
 };
 
 // GLOBAL: LEGO1 0x100f4330
-const char* g_unk0x100f4330[] = {
+const char* LegoPathController::g_unk0x100f4330[] = {
 	"edg03_06",
 	"edg03_21",
 	"edg03_30",
@@ -59,10 +61,10 @@ const char* g_unk0x100f4330[] = {
 };
 
 // GLOBAL: LEGO1 0x100f4358
-LegoPathController::CtrlBoundary* g_ctrlBoundariesB = NULL;
+LegoPathController::CtrlBoundary* LegoPathController::g_ctrlBoundariesB = NULL;
 
 // GLOBAL: LEGO1 0x100f435c
-LegoPathController::CtrlEdge* g_ctrlEdgesB = NULL;
+LegoPathController::CtrlEdge* LegoPathController::g_ctrlEdgesB = NULL;
 
 // FUNCTION: LEGO1 0x10044f40
 // FUNCTION: BETA10 0x100b6860
@@ -620,7 +622,7 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 
 		boundary.m_edgeNormals = new Mx4DPointFloat[numE];
 
-		LegoEdge** edges = new LegoEdge*[numE];
+		LegoUnknown100db7f4** edges = new LegoUnknown100db7f4*[numE];
 		boundary.SetEdges(edges, numE);
 
 		for (j = 0; j < numE; j++) {

@@ -12,7 +12,7 @@ public:
 	LegoUnknown();
 	~LegoUnknown();
 
-	void FUN_1009a140(Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, Vector3& p_point4);
+	void FUN_1009a140(const Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, Vector3& p_point4);
 	LegoResult FUN_1009a1e0(float p_f1, Matrix4& p_mat, Vector3& p_v, LegoU32 p_und);
 
 private:

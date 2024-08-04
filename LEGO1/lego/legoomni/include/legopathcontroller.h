@@ -60,7 +60,7 @@ public:
 		}
 
 		LegoPathController* m_controller; // 0x00
-		LegoEdge* m_edge;                 // 0x04
+		LegoUnknown100db7f4* m_edge;      // 0x04
 	};
 
 	LegoPathController();
@@ -121,6 +121,16 @@ public:
 	static MxResult Init();
 	static MxResult Reset();
 
+	// FUNCTION: BETA10 0x100cf580
+	static LegoUnknown100db7f4* GetControlEdgeA(MxS32 p_index) { return g_ctrlEdgesA[p_index].m_edge; }
+
+	// FUNCTION: BETA10 0x100cf5b0
+	static LegoPathBoundary* GetControlBoundaryA(MxS32 p_index) { return g_ctrlBoundariesA[p_index].m_boundary; }
+
+	// These two are an educated guess because BETA10 does not have the g_ctrl.*B globals
+	static LegoUnknown100db7f4* GetControlEdgeB(MxS32 p_index) { return g_ctrlEdgesB[p_index].m_edge; }
+	static LegoPathBoundary* GetControlBoundaryB(MxS32 p_index) { return g_ctrlBoundariesB[p_index].m_boundary; }
+
 private:
 	void FUN_10046970();
 	MxResult Read(LegoStorage* p_storage);
@@ -140,6 +150,15 @@ private:
 	MxU16 m_numT;                   // 0x1e
 	LegoPathCtrlEdgeSet m_pfsE;     // 0x20
 	LegoPathActorSet m_actors;      // 0x30
+
+	// Names verified by BETA10
+	static CtrlBoundary* g_ctrlBoundariesA;
+	static CtrlEdge* g_ctrlEdgesA;
+
+	static const char* g_unk0x100f42f0[];
+	static const char* g_unk0x100f4330[];
+	static CtrlBoundary* g_ctrlBoundariesB;
+	static CtrlEdge* g_ctrlEdgesB;
 };
 
 // clang-format off

@@ -59,7 +59,7 @@ public:
 	virtual MxBool GetUserNavFlag() { return m_userNavFlag; } // vtable+0x7c
 
 	virtual MxResult VTable0x80(
-		Vector3& p_point1,
+		const Vector3& p_point1,
 		Vector3& p_point2,
 		Vector3& p_point3,
 		Vector3& p_point4
@@ -165,7 +165,7 @@ protected:
 	LegoUnknown100db7f4* m_destEdge;  // 0xe0
 	MxFloat m_unk0xe4;                // 0xe4
 	MxBool m_collideBox;              // 0xe8
-	undefined m_unk0xe9;              // 0xe9
+	MxBool m_unk0xe9;                 // 0xe9
 	MxBool m_userNavFlag;             // 0xea
 	MxMatrix m_unk0xec;               // 0xec
 	LegoPathEdgeContainer* m_grec;    // 0x134

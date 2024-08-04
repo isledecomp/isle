@@ -64,7 +64,7 @@ LegoPathActor::~LegoPathActor()
 }
 
 // FUNCTION: LEGO1 0x1002d8d0
-MxResult LegoPathActor::VTable0x80(Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, Vector3& p_point4)
+MxResult LegoPathActor::VTable0x80(const Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, Vector3& p_point4)
 {
 	Mx3DPointFloat p1, p2, p3;
 

@@ -1,5 +1,6 @@
 #include "legoedge.h"
 
+#include "assert.h"
 #include "decomp.h"
 
 DECOMP_SIZE_ASSERT(LegoEdge, 0x24)
@@ -51,13 +52,27 @@ LegoEdge* LegoEdge::GetCounterclockwiseEdge(LegoWEEdge& p_face)
 }
 
 // FUNCTION: LEGO1 0x1009a510
+// FUNCTION: BETA10 0x10182433
 Vector3* LegoEdge::CWVertex(LegoWEEdge& p_face)
 {
-	return &p_face == m_faceA ? m_pointB : m_pointA;
+	if (m_faceA == &p_face) {
+		return m_pointB;
+	}
+	else {
+		assert(m_faceB == &p_face);
+		return m_pointA;
+	}
 }
 
 // FUNCTION: LEGO1 0x1009a530
+// FUNCTION: BETA10 0x10182498
 Vector3* LegoEdge::CCWVertex(LegoWEEdge& p_face)
 {
-	return &p_face == m_faceB ? m_pointB : m_pointA;
+	if (m_faceB == &p_face) {
+		return m_pointB;
+	}
+	else {
+		assert(m_faceA == &p_face);
+		return m_pointA;
+	}
 }

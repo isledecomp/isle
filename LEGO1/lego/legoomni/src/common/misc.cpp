@@ -61,8 +61,10 @@ LegoAnimationManager* AnimationManager()
 }
 
 // FUNCTION: LEGO1 0x10015780
+// FUNCTION: BETA10 0x100e49b8
 LegoNavController* NavController()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetNavController();
 }
 
