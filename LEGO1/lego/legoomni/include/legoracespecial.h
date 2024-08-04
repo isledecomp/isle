@@ -64,7 +64,7 @@ public:
 	// FUNCTION: LEGO1 0x10012c00
 	virtual float FUN_10012c00() { return m_unk0x18; }
 
-	virtual MxS32 VTable0x1c(undefined4 param_1, LegoEdge* p_edge); // vtable+0x1c
+	virtual MxS32 VTable0x1c(undefined4 p_param1, LegoEdge* p_edge); // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x10012c30
 	// LegoCarRaceActor::`vbase destructor'

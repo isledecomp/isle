@@ -93,9 +93,9 @@ void LegoCarRaceActor::FUN_10080590(float p_float)
 
 // FUNCTION: LEGO1 0x10080740
 // FUNCTION: BETA10 0x100cece0
-MxS32 LegoCarRaceActor::VTable0x1c(undefined4 param_1, LegoEdge* p_edge)
+MxS32 LegoCarRaceActor::VTable0x1c(undefined4 p_param1, LegoEdge* p_edge)
 {
-	Mx3DPointFloat unknownPoint;
+	Mx3DPointFloat pointUnknown;
 	Mx3DPointFloat destEdgeUnknownVector;
 	Mx3DPointFloat crossProduct;
 
@@ -148,9 +148,9 @@ MxS32 LegoCarRaceActor::VTable0x1c(undefined4 param_1, LegoEdge* p_edge)
 			Vector3* v2 = m_destEdge->CWVertex(*m_boundary);
 			assert(v1 && v2);
 
-			unknownPoint[0] = (*v1)[0] + ((*v2)[0] - (*v1)[0]) * m_unk0xe4;
-			unknownPoint[1] = (*v1)[1] + ((*v2)[1] - (*v1)[1]) * m_unk0xe4;
-			unknownPoint[2] = (*v1)[2] + ((*v2)[2] - (*v1)[2]) * m_unk0xe4;
+			pointUnknown[0] = (*v1)[0] + ((*v2)[0] - (*v1)[0]) * m_unk0xe4;
+			pointUnknown[1] = (*v1)[1] + ((*v2)[1] - (*v1)[1]) * m_unk0xe4;
+			pointUnknown[2] = (*v1)[2] + ((*v2)[2] - (*v1)[2]) * m_unk0xe4;
 
 			m_destEdge->FUN_1002ddc0(*m_boundary, destEdgeUnknownVector);
 
@@ -167,7 +167,7 @@ MxS32 LegoCarRaceActor::VTable0x1c(undefined4 param_1, LegoEdge* p_edge)
 			((Vector3*) &crossProduct)->Mul(5.0f);
 
 			MxResult callResult =
-				VTable0x80(Vector3(m_roi->GetWorldPosition()), worldDirection, unknownPoint, crossProduct);
+				VTable0x80(Vector3(m_roi->GetWorldPosition()), worldDirection, pointUnknown, crossProduct);
 
 			if (callResult) {
 				m_unk0x7c = 0;

@@ -122,15 +122,14 @@ public:
 	static MxResult Reset();
 
 	// FUNCTION: BETA10 0x100cf580
-	static LegoUnknown100db7f4* GetControlEdgeA(MxS32 index) { return g_ctrlEdgesA[index].m_edge; }
+	static LegoUnknown100db7f4* GetControlEdgeA(MxS32 p_index) { return g_ctrlEdgesA[p_index].m_edge; }
 
 	// FUNCTION: BETA10 0x100cf5b0
-	static LegoPathBoundary* GetControlBoundaryA(MxS32 index) { return g_ctrlBoundariesA[index].m_boundary; }
+	static LegoPathBoundary* GetControlBoundaryA(MxS32 p_index) { return g_ctrlBoundariesA[p_index].m_boundary; }
 
 	// These two are an educated guess because BETA10 does not have the g_ctrl.*B globals
-	static LegoUnknown100db7f4* GetControlEdgeB(MxS32 index) { return g_ctrlEdgesB[index].m_edge; }
-
-	static LegoPathBoundary* GetControlBoundaryB(MxS32 index) { return g_ctrlBoundariesB[index].m_boundary; }
+	static LegoUnknown100db7f4* GetControlEdgeB(MxS32 p_index) { return g_ctrlEdgesB[p_index].m_edge; }
+	static LegoPathBoundary* GetControlBoundaryB(MxS32 p_index) { return g_ctrlBoundariesB[p_index].m_boundary; }
 
 private:
 	void FUN_10046970();

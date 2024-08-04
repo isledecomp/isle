@@ -324,8 +324,7 @@ MxCore* LegoObjectFactory::Create(const char* p_name)
 	else if (m_idCarRace == atom) {
 		object = new CarRace();
 	}
-	else if (m_idLegoRaceCarBuildState == atom || m_idLegoCopterBuildState == atom ||
-			 m_idLegoDuneCarBuildState == atom || m_idLegoJetskiBuildState == atom) {
+	else if (m_idLegoRaceCarBuildState == atom || m_idLegoCopterBuildState == atom || m_idLegoDuneCarBuildState == atom || m_idLegoJetskiBuildState == atom) {
 		object = new LegoVehicleBuildState(p_name);
 	}
 	else if (m_idHospitalState == atom) {
