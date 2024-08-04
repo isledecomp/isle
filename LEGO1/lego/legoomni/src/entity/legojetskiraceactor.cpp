@@ -12,9 +12,10 @@ LegoJetskiRaceActor::LegoJetskiRaceActor()
 }
 
 // STUB: LEGO1 0x10081120
-void LegoJetskiRaceActor::VTable0x1c()
+MxS32 LegoJetskiRaceActor::VTable0x1c(undefined4 param_1, LegoEdge* p_edge)
 {
 	// TODO
+	return 0;
 }
 
 // STUB: LEGO1 0x10081550

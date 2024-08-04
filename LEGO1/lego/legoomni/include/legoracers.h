@@ -1,8 +1,8 @@
 #ifndef LEGORACERS_H
 #define LEGORACERS_H
 
-#include "legocarraceactor.h"
 #include "legoracemap.h"
+#include "legoracespecial.h"
 
 #define LEGORACECAR_UNKNOWN_0 0
 #define LEGORACECAR_UNKNOWN_1 1

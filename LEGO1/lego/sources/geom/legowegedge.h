@@ -41,7 +41,10 @@ public:
 	LegoResult VTable0x04() override; // vtable+0x04
 
 	LegoU32 GetFlag0x10() { return m_flags & c_bit5 ? FALSE : TRUE; }
+
+	// FUNCTION: BETA10 0x1001ff80
 	Mx4DPointFloat* GetUnknown0x14() { return &m_unk0x14; }
+
 	Mx4DPointFloat* GetEdgeNormal(int index) { return &m_edgeNormals[index]; }
 
 	// FUNCTION: BETA10 0x1001c9b0

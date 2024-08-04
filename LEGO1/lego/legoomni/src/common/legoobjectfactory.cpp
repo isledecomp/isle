@@ -40,7 +40,7 @@
 #include "legoanimpresenter.h"
 #include "legocarbuild.h"
 #include "legocarbuildpresenter.h"
-#include "legocarraceactor.h"
+#include "legoracespecial.h"
 #include "legoentity.h"
 #include "legoentitypresenter.h"
 #include "legoflctexturepresenter.h"

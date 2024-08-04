@@ -10,10 +10,12 @@
 // The class needs to undergo a very careful refactoring to fix that (no matches should break).
 
 // VTABLE: LEGO1 0x100d4288
+// VTABLE: BETA10 0x101b8440
 // SIZE 0x08
 class Vector2 {
 public:
 	// FUNCTION: LEGO1 0x1000c0f0
+	// FUNCTION: BETA10 0x100116a0
 	Vector2(float* p_data) { SetData(p_data); }
 
 	// Note: virtual function overloads appear in the virtual table
@@ -68,6 +70,7 @@ public:
 	virtual float DotImpl(float* p_a, float* p_b) const { return p_b[0] * p_a[0] + p_b[1] * p_a[1]; } // vtable+0x18
 
 	// FUNCTION: LEGO1 0x10002060
+	// FUNCTION: BETA10 0x10010c90
 	virtual void SetData(float* p_data) { m_data = p_data; } // vtable+0x1c
 
 	// FUNCTION: LEGO1 0x10002070
@@ -86,6 +89,7 @@ public:
 	virtual float Dot(float* p_a, float* p_b) const { return DotImpl(p_a, p_b); } // vtable+0x3c
 
 	// FUNCTION: LEGO1 0x100020f0
+	// FUNCTION: BETA10 0x100028f6
 	virtual float Dot(Vector2* p_a, Vector2* p_b) const { return DotImpl(p_a->m_data, p_b->m_data); } // vtable+0x38
 
 	// FUNCTION: LEGO1 0x10002110
@@ -98,6 +102,7 @@ public:
 	virtual float LenSquared() const { return m_data[0] * m_data[0] + m_data[1] * m_data[1]; } // vtable+0x40
 
 	// FUNCTION: LEGO1 0x10002160
+	// FUNCTION: BETA10 0x10010900
 	virtual int Unitize()
 	{
 		float sq = LenSquared();
@@ -154,7 +159,11 @@ public:
 		Vector2::SetVector(&p_other);
 		return *this;
 	}
+
+	// FUNCTION: BETA10 0x10013460
 	float& operator[](int idx) { return m_data[idx]; }
+
+	// FUNCTION: BETA10 0x1001d140
 	const float& operator[](int idx) const { return m_data[idx]; }
 
 protected:
@@ -188,6 +197,7 @@ public:
 	} // vtable+0x74
 
 	// FUNCTION: LEGO1 0x100022c0
+	// FUNCTION: BETA10 0x10011430
 	virtual void EqualsCross(Vector3* p_a, Vector3* p_b) { EqualsCrossImpl(p_a->m_data, p_b->m_data); } // vtable+0x80
 
 	// FUNCTION: LEGO1 0x100022e0
@@ -261,10 +271,11 @@ public:
 	} // vtable+0x18
 
 	// FUNCTION: LEGO1 0x10003ba0
+	// FUNCTION: BETA10 0x100113f0
 	void EqualsImpl(float* p_data) override { memcpy(m_data, p_data, sizeof(float) * 3); } // vtable+0x20
 
 	// FUNCTION: LEGO1 0x10003bc0
-	// FUNCTION: BETA10 0x101b84fc
+	// FUNCTION: BETA10 0x1000132a
 	void Clear() override { memset(m_data, 0, sizeof(float) * 3); } // vtable+0x2c
 
 	// FUNCTION: LEGO1 0x10003bd0

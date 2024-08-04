@@ -2,8 +2,9 @@
 #define __LEGOWEEDGE_H
 
 #include "decomp.h"
-#include "legoedge.h"
 #include "misc/legotypes.h"
+
+struct LegoUnknown100db7f4;
 
 // might be a struct with public members
 // VTABLE: LEGO1 0x100db7c0
@@ -18,13 +19,13 @@ public:
 	LegoU8 GetNumEdges() { return m_numEdges; }
 
 	// FUNCTION: BETA10 0x1001cc30
-	LegoEdge** GetEdges() { return m_edges; }
+	LegoUnknown100db7f4** GetEdges() { return m_edges; }
 
 	// TODO: The assertion at BETA10 0x10037352 suggests that this function might take a pointer instead of a reference
 	// FUNCTION: BETA10 0x100373f0
 	LegoU32 IsEqual(LegoWEEdge& p_other) { return this == &p_other; }
 
-	void SetEdges(LegoEdge** p_edges, LegoU8 p_numEdges)
+	void SetEdges(LegoUnknown100db7f4** p_edges, LegoU8 p_numEdges)
 	{
 		m_edges = p_edges;
 		m_numEdges = p_numEdges;
@@ -34,8 +35,8 @@ public:
 	// LegoWEEdge::`scalar deleting destructor'
 
 protected:
-	LegoU8 m_numEdges;  // 0x04
-	LegoEdge** m_edges; // 0x08
+	LegoU8 m_numEdges;             // 0x04
+	LegoUnknown100db7f4** m_edges; // 0x08
 };
 
 #endif // __LEGOWEEDGE_H
