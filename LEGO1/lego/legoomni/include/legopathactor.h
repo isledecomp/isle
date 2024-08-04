@@ -59,7 +59,7 @@ public:
 	virtual MxBool GetUserNavFlag() { return m_userNavFlag; } // vtable+0x7c
 
 	virtual MxResult VTable0x80(
-		Vector3& p_point1,
+		const Vector3& p_point1,
 		Vector3& p_point2,
 		Vector3& p_point3,
 		Vector3& p_point4
