@@ -12,9 +12,17 @@
 
 DECOMP_SIZE_ASSERT(LegoCarRaceActor, 0x1a0)
 
+// GLOBAL: LEGO1 0x100f0c68
+// STRING: LEGO1 0x100f0c5c
+const char* g_raceState = "RACE_STATE";
+
 // GLOBAL: LEGO1 0x100f7af0
 // STRING: LEGO1 0x100f7ae4
 const char* g_fuel = "FUEL";
+
+// GLOBAL: LEGO1 0x100f0c6c
+// STRING: LEGO1 0x100f0c54
+const char* g_racing = "RACING";
 
 // GLOBAL: LEGO1 0x100f7aec
 MxFloat LegoCarRaceActor::g_unk0x100f7aec = 8.0f;
@@ -200,10 +208,24 @@ void LegoCarRaceActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown
 	LegoPathActor::SwitchBoundary(m_boundary, m_destEdge, m_unk0xe4);
 }
 
-// STUB: LEGO1 0x10080b70
+// FUNCTION: LEGO1 0x10080b70
+// FUNCTION: BETA10 0x1000366b
 void LegoCarRaceActor::VTable0x70(float p_float)
 {
-	// TODO
+	// m_unk0x0c is not an MxBool, there are places where it is set to 2 or higher
+	if (m_unk0x0c == 0) {
+		const char* value = VariableTable()->GetVariable(g_raceState);
+
+		if (strcmpi(value, g_racing) == 0) {
+			m_unk0x0c = 1;
+			m_lastTime = p_float - 1.0f;
+			m_unk0x1c = p_float;
+		}
+	}
+
+	if (m_unk0x0c == 1) {
+		LegoAnimActor::VTable0x70(p_float);
+	}
 }
 
 // STUB: LEGO1 0x10080be0
