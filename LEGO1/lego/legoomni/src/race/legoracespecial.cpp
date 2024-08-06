@@ -256,24 +256,23 @@ MxResult LegoCarRaceActor::VTable0x9c()
 		m_destEdge->FUN_1002ddc0(*m_boundary, local_50);
 		m_destEdge->FUN_1002ddc0(*m_boundary, local_20);
 
-
 		local_3c.EqualsCross(&local_50, m_boundary->GetUnknown0x14());
 		local_78.EqualsCross(m_boundary->GetUnknown0x14(), &local_20);
 
 		local_3c.Unitize();
 		local_78.Unitize();
 
-
 		((Vector3*) &local_3c)->Mul(5.0f);
 		((Vector3*) &local_78)->Mul(5.0f);
 
+		MxResult res = VTable0x80(Vector3(m_roi->GetWorldPosition()), local_3c, local_64, local_78);
 
-		MxResult res = LegoPathActor::VTable0x80(Vector3(m_roi->GetWorldPosition()), local_3c, local_64, local_78);
-		// BETA10 only?
+#ifndef NDEBUG // BETA10 only
 		if (res) {
 			assert(0);
 			return -1;
 		}
+#endif
 
 		// Proceed here
 	}
