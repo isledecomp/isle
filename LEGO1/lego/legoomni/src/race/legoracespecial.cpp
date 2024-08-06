@@ -232,8 +232,53 @@ void LegoCarRaceActor::VTable0x70(float p_float)
 // FUNCTION: BETA10 0x100cdc54
 MxResult LegoCarRaceActor::VTable0x9c()
 {
-	VTable0x1c(m_boundary, m_destEdge);
+	MxS32 iVar4 = VTable0x1c(m_boundary, m_destEdge);
 
+	if (iVar4) {
+		SwitchBoundary(m_boundary, m_destEdge, m_unk0xe4);
+		assert(m_boundary && m_destEdge);
+
+		// variable names verified by BETA10
+		Vector3* v1 = m_destEdge->CWVertex(*m_boundary);
+		Vector3* v2 = m_destEdge->CCWVertex(*m_boundary);
+		assert(v1 && v2);
+
+		Mx3DPointFloat local_64;
+		local_64[0] = (*v1)[0] + ((*v2)[0] - (*v1)[0]) * m_unk0xe4;
+		local_64[1] = (*v1)[1] + ((*v2)[1] - (*v1)[1]) * m_unk0xe4;
+		local_64[2] = (*v1)[2] + ((*v2)[2] - (*v1)[2]) * m_unk0xe4;
+
+		Mx3DPointFloat local_50;
+		Mx3DPointFloat local_20;
+		Mx3DPointFloat local_3c;
+		Mx3DPointFloat local_78;
+
+		m_destEdge->FUN_1002ddc0(*m_boundary, local_50);
+		m_destEdge->FUN_1002ddc0(*m_boundary, local_20);
+
+
+		local_3c.EqualsCross(&local_50, m_boundary->GetUnknown0x14());
+		local_78.EqualsCross(m_boundary->GetUnknown0x14(), &local_20);
+
+		local_3c.Unitize();
+		local_78.Unitize();
+
+
+		((Vector3*) &local_3c)->Mul(5.0f);
+		((Vector3*) &local_78)->Mul(5.0f);
+
+
+		MxResult res = LegoPathActor::VTable0x80(Vector3(m_roi->GetWorldPosition()), local_3c, local_64, local_78);
+		// BETA10 only?
+		if (res) {
+			assert(0);
+			return -1;
+		}
+
+		// Proceed here
+	}
+
+	m_unk0x7c = 0;
 
 	return SUCCESS;
 }
