@@ -8,127 +8,136 @@ DECOMP_SIZE_ASSERT(SmackTag, 0x390);
 DECOMP_SIZE_ASSERT(MxSmack, 0x6b8);
 
 // FUNCTION: LEGO1 0x100c5a90
+// FUNCTION: BETA10 0x10151e70
 MxResult MxSmack::LoadHeader(MxU8* p_data, MxSmack* p_mxSmack)
 {
 // Macros for readability
-#define FRAME_COUNT(mxSmack) (p_mxSmack->m_smackTag.Frames + (p_mxSmack->m_smackTag.SmackerType & 1))
+// If bit0 of SmackerType is set, there is an extra frame ("ring frame")
+// at the end. It is a duplicate of the first frame to simplify looping.
+#define FRAME_COUNT(_tag) (_tag->Frames + (_tag->SmackerType & 1))
 
 	MxResult result = SUCCESS;
+	MxU32* frameSizes = NULL;
 	MxU8* frameTypes = NULL;
 	MxU8* huffmanTrees = NULL;
+	MxU32 sizetables = 0;
+
+	// Forced to declare here because of the gotos.
+	MxU32 i;
+	MxU32 treeSize;
+	MxU32* data;
+	MxU32 size;
+	MxS32 width;
 
 	if (!p_data || !p_mxSmack) {
+		return FAILURE;
+	}
+
+	SmackTag* smackTag = &p_mxSmack->m_smackTag;
+	p_mxSmack->m_frameTypes = NULL;
+	p_mxSmack->m_frameSizes = NULL;
+	p_mxSmack->m_huffmanTrees = NULL;
+	p_mxSmack->m_huffmanTables = NULL;
+
+	memcpy(smackTag, p_data, SmackHeaderSize(smackTag));
+	p_data += SmackHeaderSize(smackTag);
+
+	frameSizes = new MxU32[FRAME_COUNT(smackTag)];
+
+	if (!frameSizes) {
 		result = FAILURE;
-	}
-	else {
-		p_mxSmack->m_frameTypes = NULL;
-		p_mxSmack->m_frameSizes = NULL;
-		p_mxSmack->m_huffmanTrees = NULL;
-		p_mxSmack->m_huffmanTables = NULL;
-
-		memcpy(&p_mxSmack->m_smackTag, p_data, SmackHeaderSize(&p_mxSmack->m_smackTag));
-		p_data += SmackHeaderSize(&p_mxSmack->m_smackTag);
-
-		MxU32* frameSizes = new MxU32[FRAME_COUNT(p_mxSmack)];
-
-		if (!frameSizes) {
-			result = FAILURE;
-		}
-		else {
-			memcpy(frameSizes, p_data, FRAME_COUNT(p_mxSmack) * sizeof(MxU32));
-
-			p_data += FRAME_COUNT(p_mxSmack) * sizeof(MxU32);
-			p_mxSmack->m_maxFrameSize = 0;
-
-			// TODO
-			for (MxU32 i = 0; i < FRAME_COUNT(p_mxSmack); i++) {
-				if (p_mxSmack->m_maxFrameSize < frameSizes[i]) {
-					p_mxSmack->m_maxFrameSize = frameSizes[i];
-				}
-			}
-
-			frameTypes = new MxU8[FRAME_COUNT(p_mxSmack)];
-
-			if (!frameTypes) {
-				result = FAILURE;
-			}
-			else {
-				memcpy(frameTypes, p_data, FRAME_COUNT(p_mxSmack));
-				p_data += FRAME_COUNT(p_mxSmack);
-
-				MxU32 treeSize = p_mxSmack->m_smackTag.tablesize + 0x1000;
-				if (treeSize <= 0x2000) {
-					treeSize = 0x2000;
-				}
-
-				huffmanTrees = new MxU8[treeSize];
-
-				if (!huffmanTrees) {
-					result = FAILURE;
-				}
-				else {
-					memcpy(huffmanTrees + 0x1000, p_data, p_mxSmack->m_smackTag.tablesize);
-
-					p_mxSmack->m_huffmanTables = new MxU8
-						[p_mxSmack->m_smackTag.codesize + p_mxSmack->m_smackTag.absize +
-						 p_mxSmack->m_smackTag.detailsize + p_mxSmack->m_smackTag.typesize + SmackGetSizeTables()];
-
-					if (!p_mxSmack->m_huffmanTables) {
-						result = FAILURE;
-					}
-					else {
-						SmackDoTables(
-							huffmanTrees,
-							p_mxSmack->m_huffmanTables,
-							p_mxSmack->m_smackTag.codesize,
-							p_mxSmack->m_smackTag.absize,
-							p_mxSmack->m_smackTag.detailsize,
-							p_mxSmack->m_smackTag.typesize
-						);
-
-						MxU32 size = SmackGetSizeDeltas(p_mxSmack->m_smackTag.Width, p_mxSmack->m_smackTag.Height) + 32;
-						p_mxSmack->m_unk0x6b4 = new MxU8[size];
-						memset(p_mxSmack->m_unk0x6b4, 0, size);
-
-						MxS32 width = p_mxSmack->m_smackTag.Width;
-						MxU32* data = (MxU32*) p_mxSmack->m_unk0x6b4;
-
-						*data = 1;
-						data++;
-						*data = NULL; // MxU8* bitmapData
-						data++;
-						*data = p_mxSmack->m_smackTag.Width / 4;
-						data++;
-						*data = p_mxSmack->m_smackTag.Height / 4;
-						data++;
-						*data = width - 4;
-						data++;
-						*data = width * 3;
-						data++;
-						*data = width;
-						data++;
-						*data = width * 4 - p_mxSmack->m_smackTag.Width;
-						data++;
-						data++;
-						*data = p_mxSmack->m_smackTag.Width;
-						data++;
-						*data = p_mxSmack->m_smackTag.Height;
-					}
-				}
-			}
-		}
-
-		p_mxSmack->m_frameTypes = frameTypes;
-		p_mxSmack->m_frameSizes = frameSizes;
-		p_mxSmack->m_huffmanTrees = huffmanTrees;
+		goto done;
 	}
 
+	memcpy(frameSizes, p_data, FRAME_COUNT(smackTag) * sizeof(MxU32));
+
+	p_data += FRAME_COUNT(smackTag) * sizeof(MxU32);
+	p_mxSmack->m_maxFrameSize = 0;
+
+	for (i = 0; i < FRAME_COUNT(smackTag); i++) {
+		if (p_mxSmack->m_maxFrameSize < frameSizes[i]) {
+			p_mxSmack->m_maxFrameSize = frameSizes[i];
+		}
+	}
+
+	frameTypes = new MxU8[FRAME_COUNT(smackTag)];
+
+	if (!frameTypes) {
+		result = FAILURE;
+		goto done;
+	}
+
+	memcpy(frameTypes, p_data, FRAME_COUNT(smackTag));
+	p_data += FRAME_COUNT(smackTag);
+
+	treeSize = smackTag->tablesize + 0x1000;
+	huffmanTrees = new MxU8[treeSize <= 0x2000 ? 0x2000 : treeSize];
+
+	if (!huffmanTrees) {
+		result = FAILURE;
+		goto done;
+	}
+
+	memcpy(huffmanTrees + 0x1000, p_data, smackTag->tablesize);
+	p_data += smackTag->tablesize;
+
+	sizetables = SmackGetSizeTables();
+	p_mxSmack->m_huffmanTables =
+		new MxU8[smackTag->codesize + smackTag->detailsize + smackTag->typesize + smackTag->absize + sizetables];
+
+	if (!p_mxSmack->m_huffmanTables) {
+		result = FAILURE;
+		goto done;
+	}
+
+	SmackDoTables(
+		huffmanTrees,
+		p_mxSmack->m_huffmanTables,
+		smackTag->codesize,
+		smackTag->absize,
+		smackTag->detailsize,
+		smackTag->typesize
+	);
+
+	size = SmackGetSizeDeltas(smackTag->Width, smackTag->Height) + 32;
+	p_mxSmack->m_unk0x6b4 = new MxU8[size];
+	memset(p_mxSmack->m_unk0x6b4, 0, size);
+
+	width = p_mxSmack->m_smackTag.Width;
+	data = (MxU32*) p_mxSmack->m_unk0x6b4;
+
+	*data = 1;
+	data++;
+	*data = NULL; // MxU8* bitmapData
+	data++;
+	*data = smackTag->Width / 4;
+	data++;
+	*data = smackTag->Height / 4;
+	data++;
+	*data = width - 4;
+	data++;
+	*data = width * 3;
+	data++;
+	*data = width;
+	data++;
+	*data = width * 3 + (width - smackTag->Width);
+	data++;
+	data++;
+	*data = smackTag->Width;
+	data++;
+	*data = smackTag->Height;
+
+done:
+	p_mxSmack->m_frameTypes = frameTypes;
+	p_mxSmack->m_frameSizes = frameSizes;
+	p_mxSmack->m_huffmanTrees = huffmanTrees;
 	return result;
 
 #undef FRAME_COUNT
 }
 
 // FUNCTION: LEGO1 0x100c5d40
+// FUNCTION: BETA10 0x10152298
 void MxSmack::Destroy(MxSmack* p_mxSmack)
 {
 	if (p_mxSmack->m_frameSizes) {
@@ -148,13 +157,8 @@ void MxSmack::Destroy(MxSmack* p_mxSmack)
 	}
 }
 
-// This should be refactored to somewhere else
-inline MxLong AbsFlipped(MxLong p_value)
-{
-	return p_value > 0 ? p_value : -p_value;
-}
-
 // FUNCTION: LEGO1 0x100c5db0
+// FUNCTION: BETA10 0x10152391
 MxResult MxSmack::LoadFrame(
 	MxBITMAPINFO* p_bitmapInfo,
 	MxU8* p_bitmapData,
@@ -164,7 +168,7 @@ MxResult MxSmack::LoadFrame(
 	MxRectList* p_list
 )
 {
-	p_bitmapInfo->m_bmiHeader.biHeight = -AbsFlipped(p_bitmapInfo->m_bmiHeader.biHeight);
+	p_bitmapInfo->m_bmiHeader.biHeight = -MxBitmap::HeightAbs(p_bitmapInfo->m_bmiHeader.biHeight);
 	*(MxU8**) (p_mxSmack->m_unk0x6b4 + 4) = p_bitmapData;
 
 	// Reference: https://wiki.multimedia.cx/index.php/Smacker#Palette_Chunk
@@ -228,6 +232,7 @@ MxResult MxSmack::LoadFrame(
 }
 
 // FUNCTION: LEGO1 0x100c6050
+// FUNCTION: BETA10 0x10152739
 MxBool MxSmack::GetRect(MxU8* p_unk0x6b4, MxU16* p_und, u32* p_smackRect, MxRect32* p_rect)
 {
 	u32 left, bottom, top, right;
