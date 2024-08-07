@@ -243,29 +243,29 @@ MxResult LegoCarRaceActor::VTable0x9c()
 		Vector3* v2 = m_destEdge->CCWVertex(*m_boundary);
 		assert(v1 && v2);
 
-		Mx3DPointFloat local_64;
-		local_64[0] = (*v1)[0] + ((*v2)[0] - (*v1)[0]) * m_unk0xe4;
-		local_64[1] = (*v1)[1] + ((*v2)[1] - (*v1)[1]) * m_unk0xe4;
-		local_64[2] = (*v1)[2] + ((*v2)[2] - (*v1)[2]) * m_unk0xe4;
+		Mx3DPointFloat point1;
+		point1[0] = (*v1)[0] + ((*v2)[0] - (*v1)[0]) * m_unk0xe4;
+		point1[1] = (*v1)[1] + ((*v2)[1] - (*v1)[1]) * m_unk0xe4;
+		point1[2] = (*v1)[2] + ((*v2)[2] - (*v1)[2]) * m_unk0xe4;
 
-		Mx3DPointFloat local_50;
-		Mx3DPointFloat local_20;
-		Mx3DPointFloat local_3c;
-		Mx3DPointFloat local_78;
+		Mx3DPointFloat point2;
+		Mx3DPointFloat point3;
+		Mx3DPointFloat point4;
+		Mx3DPointFloat point5;
 
-		m_destEdge->FUN_1002ddc0(*m_boundary, local_50);
-		m_destEdge->FUN_1002ddc0(*m_boundary, local_20);
+		m_destEdge->FUN_1002ddc0(*m_boundary, point2);
+		m_destEdge->FUN_1002ddc0(*m_boundary, point3);
 
-		local_3c.EqualsCross(&local_50, m_boundary->GetUnknown0x14());
-		local_78.EqualsCross(m_boundary->GetUnknown0x14(), &local_20);
+		point4.EqualsCross(&point2, m_boundary->GetUnknown0x14());
+		point5.EqualsCross(m_boundary->GetUnknown0x14(), &point3);
 
-		local_3c.Unitize();
-		local_78.Unitize();
+		point4.Unitize();
+		point5.Unitize();
 
-		((Vector3*) &local_3c)->Mul(5.0f);
-		((Vector3*) &local_78)->Mul(5.0f);
+		((Vector3*) &point4)->Mul(5.0f);
+		((Vector3*) &point5)->Mul(5.0f);
 
-		MxResult res = VTable0x80(Vector3(m_roi->GetWorldPosition()), local_3c, local_64, local_78);
+		MxResult res = VTable0x80(Vector3(m_roi->GetWorldPosition()), point4, point1, point5);
 
 #ifndef NDEBUG // BETA10 only
 		if (res) {
