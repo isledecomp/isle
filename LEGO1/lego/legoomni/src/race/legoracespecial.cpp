@@ -277,7 +277,6 @@ MxResult LegoCarRaceActor::VTable0x9c()
 		m_unk0x7c = 0;
 	}
 
-
 	return SUCCESS;
 }
 
