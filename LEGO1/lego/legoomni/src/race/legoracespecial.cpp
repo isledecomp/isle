@@ -7,7 +7,8 @@
 #include "misc.h"
 #include "mxmisc.h"
 #include "mxvariabletable.h"
-#include "vec.h"
+
+#include <vec.h>
 
 // File name verified by BETA10 0x100cedf7
 
@@ -280,6 +281,7 @@ MxResult LegoCarRaceActor::VTable0x9c()
 }
 
 // STUB: LEGO1 0x10081840
+// FUNCTION: BETA10 0x100cf680
 MxU32 LegoCarRaceActor::VTable0x6c(
 	LegoPathBoundary* p_boundary,
 	Vector3& p_v1,
@@ -289,6 +291,11 @@ MxU32 LegoCarRaceActor::VTable0x6c(
 	Vector3& p_v3
 )
 {
+	// LegoAnimPresenterSet& presenters = p_boundary->GetPresenters();
+
+	// Significant overlap with parent function -> Try to copy-paste LegoPathActor::VTable0x6c here
+	// and see by how much we diverge
+
 	// TODO
 	return 0;
 }
