@@ -8,13 +8,23 @@
 #include "mxmisc.h"
 #include "mxvariabletable.h"
 
+#include <vec.h>
+
 // File name verified by BETA10 0x100cedf7
 
 DECOMP_SIZE_ASSERT(LegoCarRaceActor, 0x1a0)
 
+// GLOBAL: LEGO1 0x100f0c68
+// STRING: LEGO1 0x100f0c5c
+const char* g_raceState = "RACE_STATE";
+
 // GLOBAL: LEGO1 0x100f7af0
 // STRING: LEGO1 0x100f7ae4
 const char* g_fuel = "FUEL";
+
+// GLOBAL: LEGO1 0x100f0c6c
+// STRING: LEGO1 0x100f0c54
+const char* g_racing = "RACING";
 
 // GLOBAL: LEGO1 0x100f7aec
 MxFloat LegoCarRaceActor::g_unk0x100f7aec = 8.0f;
@@ -93,7 +103,7 @@ void LegoCarRaceActor::FUN_10080590(float p_float)
 
 // FUNCTION: LEGO1 0x10080740
 // FUNCTION: BETA10 0x100cece0
-MxS32 LegoCarRaceActor::VTable0x1c(undefined4 p_param1, LegoEdge* p_edge)
+MxS32 LegoCarRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edge)
 {
 	Mx3DPointFloat pointUnknown;
 	Mx3DPointFloat destEdgeUnknownVector;
@@ -148,9 +158,7 @@ MxS32 LegoCarRaceActor::VTable0x1c(undefined4 p_param1, LegoEdge* p_edge)
 			Vector3* v2 = m_destEdge->CWVertex(*m_boundary);
 			assert(v1 && v2);
 
-			pointUnknown[0] = (*v1)[0] + ((*v2)[0] - (*v1)[0]) * m_unk0xe4;
-			pointUnknown[1] = (*v1)[1] + ((*v2)[1] - (*v1)[1]) * m_unk0xe4;
-			pointUnknown[2] = (*v1)[2] + ((*v2)[2] - (*v1)[2]) * m_unk0xe4;
+			LERP3(pointUnknown, *v1, *v2, m_unk0xe4);
 
 			m_destEdge->FUN_1002ddc0(*m_boundary, destEdgeUnknownVector);
 
@@ -200,20 +208,80 @@ void LegoCarRaceActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown
 	LegoPathActor::SwitchBoundary(m_boundary, m_destEdge, m_unk0xe4);
 }
 
-// STUB: LEGO1 0x10080b70
+// FUNCTION: LEGO1 0x10080b70
+// FUNCTION: BETA10 0x1000366b
 void LegoCarRaceActor::VTable0x70(float p_float)
 {
-	// TODO
+	// m_unk0x0c is not an MxBool, there are places where it is set to 2 or higher
+	if (m_unk0x0c == 0) {
+		const char* value = VariableTable()->GetVariable(g_raceState);
+
+		if (strcmpi(value, g_racing) == 0) {
+			m_unk0x0c = 1;
+			m_lastTime = p_float - 1.0f;
+			m_unk0x1c = p_float;
+		}
+	}
+
+	if (m_unk0x0c == 1) {
+		LegoAnimActor::VTable0x70(p_float);
+	}
 }
 
-// STUB: LEGO1 0x10080be0
+// FUNCTION: LEGO1 0x10080be0
+// FUNCTION: BETA10 0x100cdc54
 MxResult LegoCarRaceActor::VTable0x9c()
 {
-	// TODO
+	LegoUnknown100db7f4* d = m_destEdge;
+
+	if (VTable0x1c(m_boundary, m_destEdge)) {
+		LegoPathBoundary* b = m_boundary;
+
+		SwitchBoundary(m_boundary, m_destEdge, m_unk0xe4);
+		assert(m_boundary && m_destEdge);
+
+		// variable names verified by BETA10
+		Vector3* v1 = m_destEdge->CWVertex(*m_boundary);
+		Vector3* v2 = m_destEdge->CCWVertex(*m_boundary);
+		assert(v1 && v2);
+
+		Mx3DPointFloat point1;
+		LERP3(point1, *v1, *v2, m_unk0xe4);
+
+		Mx3DPointFloat point2;
+		Mx3DPointFloat point3;
+		Mx3DPointFloat point4;
+		Mx3DPointFloat point5;
+
+		d->FUN_1002ddc0(*b, point2);
+		m_destEdge->FUN_1002ddc0(*m_boundary, point3);
+
+		point4.EqualsCross(&point2, m_boundary->GetUnknown0x14());
+		point5.EqualsCross(m_boundary->GetUnknown0x14(), &point3);
+
+		point4.Unitize();
+		point5.Unitize();
+
+		((Vector3*) &point4)->Mul(5.0f);
+		((Vector3*) &point5)->Mul(5.0f);
+
+		MxResult res = VTable0x80(m_roi->GetWorldPosition(), point4, point1, point5);
+
+#ifndef NDEBUG // BETA10 only
+		if (res) {
+			assert(0);
+			return -1;
+		}
+#endif
+
+		m_unk0x7c = 0;
+	}
+
 	return SUCCESS;
 }
 
 // STUB: LEGO1 0x10081840
+// FUNCTION: BETA10 0x100cf680
 MxU32 LegoCarRaceActor::VTable0x6c(
 	LegoPathBoundary* p_boundary,
 	Vector3& p_v1,
@@ -223,6 +291,11 @@ MxU32 LegoCarRaceActor::VTable0x6c(
 	Vector3& p_v3
 )
 {
+	// LegoAnimPresenterSet& presenters = p_boundary->GetPresenters();
+
+	// Significant overlap with parent function -> Try to copy-paste LegoPathActor::VTable0x6c here
+	// and see by how much we diverge
+
 	// TODO
 	return 0;
 }
