@@ -7,6 +7,7 @@
 #include "misc.h"
 #include "mxmisc.h"
 #include "mxvariabletable.h"
+#include "vec.h"
 
 // File name verified by BETA10 0x100cedf7
 
@@ -156,9 +157,7 @@ MxS32 LegoCarRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 			Vector3* v2 = m_destEdge->CWVertex(*m_boundary);
 			assert(v1 && v2);
 
-			pointUnknown[0] = (*v1)[0] + ((*v2)[0] - (*v1)[0]) * m_unk0xe4;
-			pointUnknown[1] = (*v1)[1] + ((*v2)[1] - (*v1)[1]) * m_unk0xe4;
-			pointUnknown[2] = (*v1)[2] + ((*v2)[2] - (*v1)[2]) * m_unk0xe4;
+			LERP3(pointUnknown, *v1, *v2, m_unk0xe4);
 
 			m_destEdge->FUN_1002ddc0(*m_boundary, destEdgeUnknownVector);
 
@@ -232,9 +231,11 @@ void LegoCarRaceActor::VTable0x70(float p_float)
 // FUNCTION: BETA10 0x100cdc54
 MxResult LegoCarRaceActor::VTable0x9c()
 {
-	MxS32 iVar4 = VTable0x1c(m_boundary, m_destEdge);
+	LegoUnknown100db7f4* d = m_destEdge;
 
-	if (iVar4) {
+	if (VTable0x1c(m_boundary, m_destEdge)) {
+		LegoPathBoundary* b = m_boundary;
+
 		SwitchBoundary(m_boundary, m_destEdge, m_unk0xe4);
 		assert(m_boundary && m_destEdge);
 
@@ -244,16 +245,14 @@ MxResult LegoCarRaceActor::VTable0x9c()
 		assert(v1 && v2);
 
 		Mx3DPointFloat point1;
-		point1[0] = (*v1)[0] + ((*v2)[0] - (*v1)[0]) * m_unk0xe4;
-		point1[1] = (*v1)[1] + ((*v2)[1] - (*v1)[1]) * m_unk0xe4;
-		point1[2] = (*v1)[2] + ((*v2)[2] - (*v1)[2]) * m_unk0xe4;
+		LERP3(point1, *v1, *v2, m_unk0xe4);
 
 		Mx3DPointFloat point2;
 		Mx3DPointFloat point3;
 		Mx3DPointFloat point4;
 		Mx3DPointFloat point5;
 
-		m_destEdge->FUN_1002ddc0(*m_boundary, point2);
+		d->FUN_1002ddc0(*b, point2);
 		m_destEdge->FUN_1002ddc0(*m_boundary, point3);
 
 		point4.EqualsCross(&point2, m_boundary->GetUnknown0x14());
@@ -265,7 +264,7 @@ MxResult LegoCarRaceActor::VTable0x9c()
 		((Vector3*) &point4)->Mul(5.0f);
 		((Vector3*) &point5)->Mul(5.0f);
 
-		MxResult res = VTable0x80(Vector3(m_roi->GetWorldPosition()), point4, point1, point5);
+		MxResult res = VTable0x80(m_roi->GetWorldPosition(), point4, point1, point5);
 
 #ifndef NDEBUG // BETA10 only
 		if (res) {
