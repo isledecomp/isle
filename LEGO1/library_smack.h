@@ -1,18 +1,23 @@
 #ifdef 0
 
 // LIBRARY: LEGO1 0x100cd782
+// LIBRARY: BETA10 0x1015fb82
 // _SmackGetSizeTables
 
 // LIBRARY: LEGO1 0x100cd7e8
+// LIBRARY: BETA10 0x1015fbe8
 // _SmackDoTables
 
 // LIBRARY: LEGO1 0x100cda83
+// LIBRARY: BETA10 0x1015fe83
 // _SmackDoFrameToBuffer
 
 // LIBRARY: LEGO1 0x100d052c
+// LIBRARY: BETA10 0x1016292c
 // _SmackGetSizeDeltas
 
 // LIBRARY: LEGO1 0x100d0543
+// LIBRARY: BETA10 0x10162943
 // _SmackGetRect
 
 #endif
