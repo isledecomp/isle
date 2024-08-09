@@ -28,21 +28,58 @@ public:
 
 	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
-	MxS16 GetHighScore(MxU8 p_id)
+	MxS16 GetHighScore(MxU8 p_actorId)
 	{
-		switch (p_id) {
-		case 1:
-			return m_score1;
-		case 2:
-			return m_score2;
-		case 3:
-			return m_score3;
-		case 4:
-			return m_score4;
-		case 5:
-			return m_score5;
+		switch (p_actorId) {
+		case LegoActor::c_pepper:
+			return m_peHighScore;
+		case LegoActor::c_mama:
+			return m_maHighScore;
+		case LegoActor::c_papa:
+			return m_paHighScore;
+		case LegoActor::c_nick:
+			return m_niHighScore;
+		case LegoActor::c_laura:
+			return m_laHighScore;
 		default:
 			return 0;
+		}
+	}
+
+	// FUNCTION: BETA10 0x100242d0
+	void UpdateScore(ScoreColor p_score, MxS16 p_actorId)
+	{
+		switch (p_actorId) {
+		case LegoActor::c_pepper:
+			m_peScore = p_score;
+			if (m_peHighScore < p_score) {
+				m_peHighScore = p_score;
+			}
+			break;
+		case LegoActor::c_mama:
+			m_maScore = p_score;
+			if (m_maHighScore < p_score) {
+				m_maHighScore = p_score;
+			}
+			break;
+		case LegoActor::c_papa:
+			m_paScore = p_score;
+			if (m_paHighScore < p_score) {
+				m_paHighScore = p_score;
+			}
+			break;
+		case LegoActor::c_nick:
+			m_niScore = p_score;
+			if (m_niHighScore < p_score) {
+				m_niHighScore = p_score;
+			}
+			break;
+		case LegoActor::c_laura:
+			m_laScore = p_score;
+			if (m_laHighScore < p_score) {
+				m_laHighScore = p_score;
+			}
+			break;
 		}
 	}
 
@@ -52,16 +89,16 @@ public:
 	undefined4 m_unk0x08; // 0x08
 	MxLong m_startTime;   // 0x0c
 	MxBool m_unk0x10;     // 0x10
-	MxS16 m_unk0x12;      // 0x12
-	MxS16 m_unk0x14;      // 0x14
-	MxS16 m_unk0x16;      // 0x16
-	MxS16 m_unk0x18;      // 0x18
-	MxS16 m_unk0x1a;      // 0x1a
-	MxS16 m_score1;       // 0x1c
-	MxS16 m_score2;       // 0x1e
-	MxS16 m_score3;       // 0x20
-	MxS16 m_score4;       // 0x22
-	MxS16 m_score5;       // 0x24
+	MxS16 m_peScore;      // 0x12
+	MxS16 m_maScore;      // 0x14
+	MxS16 m_paScore;      // 0x16
+	MxS16 m_niScore;      // 0x18
+	MxS16 m_laScore;      // 0x1a
+	MxS16 m_peHighScore;  // 0x1c
+	MxS16 m_maHighScore;  // 0x1e
+	MxS16 m_paHighScore;  // 0x20
+	MxS16 m_niHighScore;  // 0x22
+	MxS16 m_laHighScore;  // 0x24
 };
 
 // VTABLE: LEGO1 0x100d7ee0
@@ -106,6 +143,7 @@ public:
 private:
 	void Leave();
 	void PlayFinalAnimation(IsleScript::Script p_objectId);
+	void FUN_1004dcb0(IsleScript::Script p_objectId);
 	void PlayAction(IsleScript::Script p_objectId);
 
 	undefined4 m_unk0x160;              // 0x160
