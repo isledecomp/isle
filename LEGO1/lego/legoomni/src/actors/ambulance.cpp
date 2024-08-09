@@ -283,7 +283,7 @@ MxLong Ambulance::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				}
 
 				Leave();
-				MxLong time = Timer()->GetTime() - m_state->m_unk0x0c;
+				MxLong time = Timer()->GetTime() - m_state->m_startTime;
 
 				if (time < 300000) {
 					m_state->UpdateScore(LegoState::e_red, m_actorId);
@@ -393,7 +393,7 @@ MxLong Ambulance::HandleClick()
 
 	if (m_state->m_unk0x08 == 1) {
 		SpawnPlayer(LegoGameState::e_unk31, TRUE, 0);
-		m_state->m_unk0x0c = Timer()->GetTime();
+		m_state->m_startTime = Timer()->GetTime();
 		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_pns018rd_RunAnim, NULL);
 	}
 
@@ -586,7 +586,7 @@ void Ambulance::FUN_10037250()
 	g_isleFlags |= Isle::c_playMusic;
 	AnimationManager()->EnableCamAnims(TRUE);
 	AnimationManager()->FUN_1005f6d0(TRUE);
-	m_state->m_unk0x0c = INT_MIN;
+	m_state->m_startTime = INT_MIN;
 	m_state = NULL;
 }
 
@@ -629,7 +629,7 @@ void Ambulance::PlayAction(IsleScript::Script p_objectId)
 AmbulanceMissionState::AmbulanceMissionState()
 {
 	m_unk0x08 = 0;
-	m_unk0x0c = 0;
+	m_startTime = 0;
 	m_peScore = 0;
 	m_maScore = 0;
 	m_paScore = 0;
