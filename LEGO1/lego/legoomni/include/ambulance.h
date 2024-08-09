@@ -86,7 +86,7 @@ public:
 	// AmbulanceMissionState::`scalar deleting destructor'
 
 	undefined4 m_unk0x08; // 0x08
-	MxLong m_unk0x0c;     // 0x0c
+	MxLong m_startTime;   // 0x0c
 	MxS16 m_peScore;      // 0x10
 	MxS16 m_maScore;      // 0x12
 	MxS16 m_paScore;      // 0x14
