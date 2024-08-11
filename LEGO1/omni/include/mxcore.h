@@ -48,4 +48,7 @@ private:
 	MxU32 m_id; // 0x04
 };
 
+// SYNTHETIC: BETA10 0x10096940
+// MxCore::operator=
+
 #endif // MXCORE_H

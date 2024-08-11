@@ -41,15 +41,19 @@ private:
 };
 
 // SYNTHETIC: LEGO1 0x100cbbd0
+// SYNTHETIC: BETA10 0x1015bb60
 // MxStringListCursor::`scalar deleting destructor'
 
 // TEMPLATE: LEGO1 0x100cbc40
+// TEMPLATE: BETA10 0x1015bba0
 // MxListCursor<MxString>::~MxListCursor<MxString>
 
 // SYNTHETIC: LEGO1 0x100cbc90
+// SYNTHETIC: BETA10 0x1015bc00
 // MxListCursor<MxString>::`scalar deleting destructor'
 
 // FUNCTION: LEGO1 0x100cbd00
+// FUNCTION: BETA10 0x1015bc40
 // MxStringListCursor::~MxStringListCursor
 
 #endif // MXDSSELECTACTION_H

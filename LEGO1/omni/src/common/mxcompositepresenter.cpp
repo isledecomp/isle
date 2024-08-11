@@ -23,6 +23,7 @@ MxCompositePresenter::~MxCompositePresenter()
 }
 
 // FUNCTION: LEGO1 0x100b6410
+// FUNCTION: BETA10 0x100e9d37
 MxResult MxCompositePresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
@@ -76,6 +77,7 @@ MxResult MxCompositePresenter::StartAction(MxStreamController* p_controller, MxD
 }
 
 // FUNCTION: LEGO1 0x100b65e0
+// FUNCTION: BETA10 0x101375bc
 void MxCompositePresenter::EndAction()
 {
 	AUTOLOCK(m_criticalSection);
@@ -84,7 +86,7 @@ void MxCompositePresenter::EndAction()
 		return;
 	}
 
-	((MxDSMultiAction*) m_action)->GetActionList()->DeleteAll(FALSE);
+	((MxDSMultiAction*) m_action)->GetActionList()->Empty();
 
 	while (!m_list.empty()) {
 		MxPresenter* presenter = m_list.front();
