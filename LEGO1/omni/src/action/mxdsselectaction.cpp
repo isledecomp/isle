@@ -26,6 +26,7 @@ MxDSSelectAction::~MxDSSelectAction()
 }
 
 // FUNCTION: LEGO1 0x100cb950
+// FUNCTION: BETA10 0x1015a6ae
 void MxDSSelectAction::CopyFrom(MxDSSelectAction& p_dsSelectAction)
 {
 	this->m_unk0x9c = p_dsSelectAction.m_unk0x9c;
@@ -82,6 +83,7 @@ MxU32 MxDSSelectAction::GetSizeOnDisk()
 }
 
 // FUNCTION: LEGO1 0x100cbf60
+// FUNCTION: BETA10 0x1015aa30
 void MxDSSelectAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
 {
 	MxString string;

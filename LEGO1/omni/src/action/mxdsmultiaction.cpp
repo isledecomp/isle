@@ -22,6 +22,7 @@ MxDSMultiAction::~MxDSMultiAction()
 }
 
 // FUNCTION: LEGO1 0x100ca0d0
+// FUNCTION: BETA10 0x101595ad
 void MxDSMultiAction::CopyFrom(MxDSMultiAction& p_dsMultiAction)
 {
 	this->m_actions->DeleteAll();

@@ -36,6 +36,7 @@ public:
 	MxBool HasId(MxU32 p_objectId) override;                     // vtable+34;
 	void SetUnknown90(MxLong p_unk0x90) override;                // vtable+38;
 
+	// FUNCTION: BETA10 0x1004e180
 	MxDSActionList* GetActionList() const { return m_actions; }
 
 	// SYNTHETIC: LEGO1 0x100ca040
@@ -47,15 +48,19 @@ protected:
 };
 
 // SYNTHETIC: LEGO1 0x1004ad10
+// SYNTHETIC: BETA10 0x1004dc50
 // MxDSActionListCursor::`scalar deleting destructor'
 
 // TEMPLATE: LEGO1 0x1004ad80
+// TEMPLATE: BETA10 0x1004dca0
 // MxListCursor<MxDSAction *>::~MxListCursor<MxDSAction *>
 
 // SYNTHETIC: LEGO1 0x1004add0
+// SYNTHETIC: BETA10 0x1004dd20
 // MxListCursor<MxDSAction *>::`scalar deleting destructor'
 
 // FUNCTION: LEGO1 0x1004ae40
+// FUNCTION: BETA10 0x1004dd70
 // MxDSActionListCursor::~MxDSActionListCursor
 
 #endif // MXDSMULTIACTION_H

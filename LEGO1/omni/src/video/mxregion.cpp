@@ -7,6 +7,7 @@ DECOMP_SIZE_ASSERT(MxRegionTopBottom, 0x0c);
 DECOMP_SIZE_ASSERT(MxRegionLeftRight, 0x08);
 
 // FUNCTION: LEGO1 0x100c31c0
+// FUNCTION: BETA10 0x10148f00
 MxRegion::MxRegion()
 {
 	m_list = new MxRegionTopBottomList;
@@ -28,6 +29,7 @@ MxRegion::~MxRegion()
 }
 
 // FUNCTION: LEGO1 0x100c3700
+// FUNCTION: BETA10 0x1014907a
 void MxRegion::Reset()
 {
 	m_list->DeleteAll();
@@ -35,6 +37,7 @@ void MxRegion::Reset()
 }
 
 // FUNCTION: LEGO1 0x100c3750
+// FUNCTION: BETA10 0x101490bd
 void MxRegion::VTable0x18(MxRect32& p_rect)
 {
 	MxRect32 rect(p_rect);
@@ -117,6 +120,7 @@ MxRegionTopBottom::MxRegionTopBottom(MxS32 p_top, MxS32 p_bottom)
 }
 
 // FUNCTION: LEGO1 0x100c50e0
+// FUNCTION: BETA10 0x1014a2d6
 MxRegionTopBottom::MxRegionTopBottom(MxRect32& p_rect)
 {
 	m_top = p_rect.GetTop();
@@ -128,6 +132,7 @@ MxRegionTopBottom::MxRegionTopBottom(MxRect32& p_rect)
 }
 
 // FUNCTION: LEGO1 0x100c5280
+// FUNCTION: BETA10 0x1014a3fc
 void MxRegionTopBottom::MergeOrExpandRegions(MxS32 p_left, MxS32 p_right)
 {
 	MxRegionLeftRightListCursor a(m_leftRightList);

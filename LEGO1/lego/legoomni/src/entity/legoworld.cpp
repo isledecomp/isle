@@ -106,6 +106,7 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x1001e9d0
+// FUNCTION: BETA10 0x100d99ea
 void LegoWorld::Destroy(MxBool p_fromDestructor)
 {
 	m_destroyed = TRUE;

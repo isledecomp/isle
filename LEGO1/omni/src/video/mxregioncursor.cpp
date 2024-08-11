@@ -3,6 +3,7 @@
 DECOMP_SIZE_ASSERT(MxRegionCursor, 0x18);
 
 // FUNCTION: LEGO1 0x100c3f70
+// FUNCTION: BETA10 0x10149663
 MxRegionCursor::MxRegionCursor(MxRegion* p_region)
 {
 	m_region = p_region;
