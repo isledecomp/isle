@@ -86,7 +86,7 @@ void MxCompositePresenter::EndAction()
 		return;
 	}
 
-	((MxDSMultiAction*) m_action)->GetActionList()->DeleteAll(FALSE);
+	((MxDSMultiAction*) m_action)->GetActionList()->Empty();
 
 	while (!m_list.empty()) {
 		MxPresenter* presenter = m_list.front();

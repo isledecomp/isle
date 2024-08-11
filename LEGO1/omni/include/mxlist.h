@@ -45,17 +45,14 @@ private:
 template <class T>
 class MxList : protected MxCollection<T> {
 public:
-	MxList()
-	{
-		m_last = NULL;
-		m_first = NULL;
-	}
+	MxList() { m_first = m_last = NULL; }
 
 	~MxList() override;
 
 	void Append(T p_obj) { InsertEntry(p_obj, this->m_last, NULL); }
 	void Prepend(T p_obj) { InsertEntry(p_obj, NULL, this->m_first); }
-	void DeleteAll(MxBool p_destroy = TRUE);
+	void DeleteAll();
+	void Empty();
 	MxU32 GetCount() { return this->m_count; }
 
 	friend class MxListCursor<T>;
@@ -136,27 +133,33 @@ MxList<T>::~MxList()
 	DeleteAll();
 }
 
+// Delete entries and values
 template <class T>
-inline void MxList<T>::DeleteAll(MxBool p_destroy)
+inline void MxList<T>::DeleteAll()
 {
-	for (MxListEntry<T>* t = m_first;;) {
-		if (!t) {
-			break;
-		}
-
-		MxListEntry<T>* next = t->GetNext();
-
-		if (p_destroy) {
-			this->m_customDestructor(t->GetValue());
-		}
-
+	MxListEntry<T>* next;
+	for (MxListEntry<T>* t = m_first; t; t = next) {
+		next = t->GetNext();
+		this->m_customDestructor(t->GetValue());
 		delete t;
-		t = next;
 	}
 
 	this->m_count = 0;
-	m_last = NULL;
-	m_first = NULL;
+	m_first = m_last = NULL;
+}
+
+// Delete entries only
+template <class T>
+inline void MxList<T>::Empty()
+{
+	MxListEntry<T>* next;
+	for (MxListEntry<T>* t = m_first; t; t = next) {
+		next = t->GetNext();
+		delete t;
+	}
+
+	this->m_count = 0;
+	m_first = m_last = NULL;
 }
 
 template <class T>
