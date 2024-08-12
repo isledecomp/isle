@@ -309,7 +309,7 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 	if (result == 0) {
 		MxDSAction* action = p_param.GetAction();
 
-		if (action->GetAtomId() == m_atom && action->GetObjectId()) {
+		if (action->GetAtomId() == m_atomId && action->GetObjectId()) {
 			m_state->FUN_10006460((GarageScript::Script) action->GetObjectId());
 			m_unk0x106 = 0;
 

@@ -126,7 +126,7 @@ void Radio::Stop()
 	if (m_state->IsActive()) {
 		LegoWorld* world = CurrentWorld();
 
-		MxControlPresenter* presenter = (MxControlPresenter*) world->Find(world->GetAtom(), IsleScript::c_Radio_Ctl);
+		MxControlPresenter* presenter = (MxControlPresenter*) world->Find(world->GetAtomId(), IsleScript::c_Radio_Ctl);
 
 		if (presenter) {
 			presenter->VTable0x6c(0);

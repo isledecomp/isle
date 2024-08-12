@@ -894,7 +894,7 @@ void Isle::FUN_10032620()
 MxLong Isle::HandleTransitionEnd()
 {
 	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_Avo917In_PlayWav, NULL);
-	DeleteObjects(&m_atom, IsleScript::c_Avo900Ps_PlayWav, IsleScript::c_Avo907Ps_PlayWav);
+	DeleteObjects(&m_atomId, IsleScript::c_Avo900Ps_PlayWav, IsleScript::c_Avo907Ps_PlayWav);
 
 	if (m_destLocation != LegoGameState::e_skateboard) {
 		m_act1state->m_unk0x018 = 0;
@@ -915,7 +915,7 @@ MxLong Isle::HandleTransitionEnd()
 		FUN_10032d30(IsleScript::c_ElevRide_Background_Bitmap, JukeboxScript::c_Elevator_Music, "LCAMZI2,90", FALSE);
 
 		if (m_destLocation == LegoGameState::e_undefined) {
-			((MxStillPresenter*) Find(m_atom, IsleScript::c_Meter3_Bitmap))->Enable(TRUE);
+			((MxStillPresenter*) Find(m_atomId, IsleScript::c_Meter3_Bitmap))->Enable(TRUE);
 		}
 		break;
 	case LegoGameState::e_elevopen:
@@ -1064,7 +1064,7 @@ void Isle::FUN_10032d30(
 )
 {
 	if (m_act1state->m_unk0x01f) {
-		MxPresenter* presenter = (MxPresenter*) Find(m_atom, p_script);
+		MxPresenter* presenter = (MxPresenter*) Find(m_atomId, p_script);
 
 		if (presenter != NULL && presenter->GetCurrentTickleState() == MxPresenter::e_repeating) {
 			if (p_music != JukeboxScript::c_MusicTheme1) {
@@ -1216,7 +1216,7 @@ MxBool Isle::Escape()
 	m_act1state->m_elevFloor = Act1State::c_floor1;
 
 	AnimationManager()->FUN_10061010(FALSE);
-	DeleteObjects(&m_atom, IsleScript::c_sba001bu_RunAnim, IsleScript::c_FNS018EN_Wav_518);
+	DeleteObjects(&m_atomId, IsleScript::c_sba001bu_RunAnim, IsleScript::c_FNS018EN_Wav_518);
 
 	if (UserActor()) {
 		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
@@ -1297,19 +1297,19 @@ Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x
 	m_unk0x154 = NULL;
 	m_unk0x158 = NULL;
 	m_unk0x15c = NULL;
-	m_unk0x160 = NULL;
+	m_helicopter = NULL;
 	m_unk0x1b0 = NULL;
 	m_unk0x021 = 1;
 	m_elevFloor = Act1State::c_floor1;
 	m_unk0x00c = sizeOfArray(g_unk0x100f37f0);
 	m_unk0x1b4 = NULL;
-	m_unk0x1b8 = NULL;
+	m_jetski = NULL;
 	m_unk0x208 = NULL;
-	m_unk0x20c = NULL;
+	m_dunebuggy = NULL;
 	m_unk0x25c = NULL;
 	m_unk0x260 = NULL;
 	m_unk0x264 = NULL;
-	m_unk0x268 = NULL;
+	m_racecar = NULL;
 	SetFlag();
 }
 
@@ -1491,9 +1491,9 @@ MxBool Act1State::SetFlag()
 		m_unk0x15c = NULL;
 	}
 
-	if (m_unk0x160) {
-		delete m_unk0x160;
-		m_unk0x160 = NULL;
+	if (m_helicopter) {
+		delete m_helicopter;
+		m_helicopter = NULL;
 	}
 
 	m_unk0x164.SetName("");
@@ -1508,9 +1508,9 @@ MxBool Act1State::SetFlag()
 		m_unk0x1b4 = NULL;
 	}
 
-	if (m_unk0x1b8) {
-		delete m_unk0x1b8;
-		m_unk0x1b8 = NULL;
+	if (m_jetski) {
+		delete m_jetski;
+		m_jetski = NULL;
 	}
 
 	m_unk0x1bc.SetName("");
@@ -1520,9 +1520,9 @@ MxBool Act1State::SetFlag()
 		m_unk0x208 = NULL;
 	}
 
-	if (m_unk0x20c) {
-		delete m_unk0x20c;
-		m_unk0x20c = NULL;
+	if (m_dunebuggy) {
+		delete m_dunebuggy;
+		m_dunebuggy = NULL;
 	}
 
 	m_unk0x210.SetName("");
@@ -1542,9 +1542,9 @@ MxBool Act1State::SetFlag()
 		m_unk0x264 = NULL;
 	}
 
-	if (m_unk0x268) {
-		delete m_unk0x268;
-		m_unk0x268 = NULL;
+	if (m_racecar) {
+		delete m_racecar;
+		m_racecar = NULL;
 	}
 
 	return TRUE;

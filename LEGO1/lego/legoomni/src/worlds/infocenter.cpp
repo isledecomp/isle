@@ -285,11 +285,11 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		return 1;
 	}
 
-	if (action->GetAtomId() == m_atom && (action->GetObjectId() == InfomainScript::c_Mama_All_Movie ||
-										  action->GetObjectId() == InfomainScript::c_Papa_All_Movie ||
-										  action->GetObjectId() == InfomainScript::c_Pepper_All_Movie ||
-										  action->GetObjectId() == InfomainScript::c_Nick_All_Movie ||
-										  action->GetObjectId() == InfomainScript::c_Laura_All_Movie)) {
+	if (action->GetAtomId() == m_atomId && (action->GetObjectId() == InfomainScript::c_Mama_All_Movie ||
+											action->GetObjectId() == InfomainScript::c_Papa_All_Movie ||
+											action->GetObjectId() == InfomainScript::c_Pepper_All_Movie ||
+											action->GetObjectId() == InfomainScript::c_Nick_All_Movie ||
+											action->GetObjectId() == InfomainScript::c_Laura_All_Movie)) {
 		if (m_unk0x1d4) {
 			m_unk0x1d4--;
 		}
@@ -324,7 +324,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 	MxLong result = m_radio.Notify(p_param);
 
-	if (result || (action->GetAtomId() != m_atom && action->GetAtomId() != *g_introScript)) {
+	if (result || (action->GetAtomId() != m_atomId && action->GetAtomId() != *g_introScript)) {
 		return result;
 	}
 
@@ -614,21 +614,21 @@ void Infocenter::InitializeBitmaps()
 {
 	m_radio.Initialize(TRUE);
 
-	((MxPresenter*) Find(m_atom, InfomainScript::c_LeftArrow_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_RightArrow_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_Info_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_Boat_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_Race_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_Pizza_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_Gas_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_Med_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_Cop_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_Mama_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_Papa_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_Pepper_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_Nick_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_Laura_Ctl))->Enable(TRUE);
-	((MxPresenter*) Find(m_atom, InfomainScript::c_Radio_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_LeftArrow_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_RightArrow_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_Info_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_Boat_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_Race_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_Pizza_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_Gas_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_Med_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_Cop_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_Mama_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_Papa_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_Pepper_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_Nick_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_Laura_Ctl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atomId, InfomainScript::c_Radio_Ctl))->Enable(TRUE);
 
 	m_mapAreas[0].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Info_A_Bitmap");
 	m_mapAreas[0].m_area.SetLeft(391);
@@ -1120,7 +1120,7 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 		}
 
 		if (characterBitmap != InfomainScript::c_noneInfomain) {
-			m_unk0x11c = (MxStillPresenter*) Find(m_atom, characterBitmap);
+			m_unk0x11c = (MxStillPresenter*) Find(m_atomId, characterBitmap);
 		}
 	}
 
@@ -1241,16 +1241,16 @@ MxResult Infocenter::Tickle()
 		m_unk0x1d6 += 100;
 
 		if (m_unk0x1d6 > 3400 && m_unk0x1d6 < 3650) {
-			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atom.GetInternal(), 1);
+			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atomId.GetInternal(), 1);
 		}
 		else if (m_unk0x1d6 > 3650 && m_unk0x1d6 < 3900) {
-			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atom.GetInternal(), 0);
+			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atomId.GetInternal(), 0);
 		}
 		else if (m_unk0x1d6 > 3900 && m_unk0x1d6 < 4150) {
-			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atom.GetInternal(), 1);
+			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atomId.GetInternal(), 1);
 		}
 		else if (m_unk0x1d6 > 4400) {
-			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atom.GetInternal(), 0);
+			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atomId.GetInternal(), 0);
 			m_unk0x1d6 = 0;
 		}
 	}

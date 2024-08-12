@@ -110,7 +110,7 @@ MxLong Police::HandleControl(LegoControlManagerNotificationParam& p_param)
 		case PoliceScript::c_LeftArrow_Ctl:
 		case PoliceScript::c_RightArrow_Ctl:
 			if (m_policeState->GetUnknown0x0c() == 1) {
-				DeleteObjects(&m_atom, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
+				DeleteObjects(&m_atomId, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
 			}
 
 			BackgroundAudioManager()->Stop();
@@ -119,7 +119,7 @@ MxLong Police::HandleControl(LegoControlManagerNotificationParam& p_param)
 			break;
 		case PoliceScript::c_Info_Ctl:
 			if (m_policeState->GetUnknown0x0c() == 1) {
-				DeleteObjects(&m_atom, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
+				DeleteObjects(&m_atomId, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
 			}
 
 			BackgroundAudioManager()->Stop();
@@ -128,7 +128,7 @@ MxLong Police::HandleControl(LegoControlManagerNotificationParam& p_param)
 			break;
 		case PoliceScript::c_Door_Ctl:
 			if (m_policeState->GetUnknown0x0c() == 1) {
-				DeleteObjects(&m_atom, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
+				DeleteObjects(&m_atomId, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
 			}
 
 			BackgroundAudioManager()->Stop();
@@ -148,7 +148,7 @@ MxLong Police::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
 	MxDSAction* action = p_param.GetAction();
 
-	if (m_radio.Notify(p_param) == 0 && m_atom == action->GetAtomId()) {
+	if (m_radio.Notify(p_param) == 0 && m_atomId == action->GetAtomId()) {
 		if (m_policeState->GetUnknown0x0c() == 1) {
 			m_policeState->SetUnknown0x0c(0);
 			return 1;
@@ -166,7 +166,7 @@ MxLong Police::HandleKeyPress(LegoEventNotificationParam& p_param)
 	MxLong result = 0;
 
 	if (p_param.GetKey() == VK_SPACE && m_policeState->GetUnknown0x0c() == 1) {
-		DeleteObjects(&m_atom, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
+		DeleteObjects(&m_atomId, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
 		m_policeState->SetUnknown0x0c(0);
 		return 1;
 	}
@@ -193,7 +193,7 @@ void Police::Enable(MxBool p_enable)
 // FUNCTION: LEGO1 0x1005e790
 MxBool Police::Escape()
 {
-	DeleteObjects(&m_atom, PoliceScript::c_nps001ni_RunAnim, 510);
+	DeleteObjects(&m_atomId, PoliceScript::c_nps001ni_RunAnim, 510);
 	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;
 }

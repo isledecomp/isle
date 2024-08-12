@@ -608,7 +608,7 @@ MxCore* LegoWorld::Find(const MxAtomId& p_atom, MxS32 p_entityId)
 	LegoEntity* entity;
 
 	while (entityCursor.Next(entity)) {
-		if (entity->GetAtom() == p_atom && entity->GetEntityId() == p_entityId) {
+		if (entity->GetAtomId() == p_atom && entity->GetEntityId() == p_entityId) {
 			return entity;
 		}
 	}

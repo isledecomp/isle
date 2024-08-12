@@ -8,6 +8,7 @@ class MxControlPresenter;
 class MxEndActionNotificationParam;
 class MxStillPresenter;
 class LegoControlManagerNotificationParam;
+class LegoPathStructNotificationParam;
 
 // VTABLE: LEGO1 0x100d9928
 // SIZE 0x2d0
@@ -65,7 +66,7 @@ private:
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleKeyPress(MxU8 p_key);
 	MxLong HandleControl(LegoControlManagerNotificationParam& p_param);
-	MxLong HandleNotification19(MxParam& p_param);
+	MxLong HandlePathStruct(LegoPathStructNotificationParam& p_param);
 	void FUN_100775c0(MxS16 p_playerIndex);
 	void WriteInfocenterLetters(MxS16);
 	void FUN_100778c0();

@@ -130,19 +130,19 @@ public:
 	LegoNamedTexture* m_unk0x154; // 0x154
 	LegoNamedTexture* m_unk0x158; // 0x158
 	LegoNamedTexture* m_unk0x15c; // 0x15c
-	MxCore* m_unk0x160;           // 0x160
+	Helicopter* m_helicopter;     // 0x160
 	NamedPlane m_unk0x164;        // 0x164
 	LegoNamedTexture* m_unk0x1b0; // 0x1b0
 	LegoNamedTexture* m_unk0x1b4; // 0x1b4
-	MxCore* m_unk0x1b8;           // 0x1b8
+	Jetski* m_jetski;             // 0x1b8
 	NamedPlane m_unk0x1bc;        // 0x1bc
 	LegoNamedTexture* m_unk0x208; // 0x208
-	MxCore* m_unk0x20c;           // 0x20c
+	DuneBuggy* m_dunebuggy;       // 0x20c
 	NamedPlane m_unk0x210;        // 0x210
 	LegoNamedTexture* m_unk0x25c; // 0x25c
 	LegoNamedTexture* m_unk0x260; // 0x260
 	LegoNamedTexture* m_unk0x264; // 0x264
-	MxCore* m_unk0x268;           // 0x268
+	RaceCar* m_racecar;           // 0x268
 };
 
 // FUNCTION: LEGO1 0x10033a70
