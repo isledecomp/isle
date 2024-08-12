@@ -125,7 +125,7 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 {
 	MxDSAction* action = p_param.GetAction();
 
-	if (m_atom == action->GetAtomId()) {
+	if (m_atomId == action->GetAtomId()) {
 		switch (action->GetObjectId()) {
 		case InfoscorScript::c_GoTo_HistBook:
 			m_destLocation = LegoGameState::e_histbook;
@@ -148,7 +148,7 @@ void Score::ReadyWorld()
 
 	MxDSAction action;
 	action.SetObjectId(InfoscorScript::c_nin001pr_RunAnim);
-	action.SetAtomId(m_atom);
+	action.SetAtomId(m_atomId);
 	action.SetUnknown84(this);
 	Start(&action);
 

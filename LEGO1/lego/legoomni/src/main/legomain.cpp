@@ -346,7 +346,7 @@ void LegoOmni::RemoveWorld(const MxAtomId& p_atom, MxLong p_objectId)
 			b.Next();
 
 			if ((p_objectId == -1 || world->GetEntityId() == p_objectId) &&
-				(!p_atom.GetInternal() || world->GetAtom() == p_atom)) {
+				(!p_atom.GetInternal() || world->GetAtomId() == p_atom)) {
 				a.Detach();
 				delete world;
 			}
@@ -365,7 +365,7 @@ LegoWorld* LegoOmni::FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
 
 		while (cursor.Next(world)) {
 			if ((p_entityid == -1 || world->GetEntityId() == p_entityid) &&
-				(!p_atom.GetInternal() || world->GetAtom() == p_atom)) {
+				(!p_atom.GetInternal() || world->GetAtomId() == p_atom)) {
 				return world;
 			}
 		}

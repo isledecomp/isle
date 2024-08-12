@@ -227,7 +227,7 @@ MxLong Hospital::HandleKeyPress(MxS8 p_key)
 	MxLong result = 0;
 
 	if (p_key == VK_SPACE && g_unk0x100f7918 == 0) {
-		DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+		DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 		result = 1;
 	}
 
@@ -241,7 +241,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 	MxDSAction* action = p_param.GetAction();
 	Act1State* act1State;
 
-	if (action->GetAtomId() != m_atom) {
+	if (action->GetAtomId() != m_atomId) {
 		return result;
 	}
 
@@ -375,7 +375,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 			m_unk0x128 = 1;
 			m_destLocation = LegoGameState::e_unk31;
 
-			DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+			DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		}
 		break;
@@ -384,7 +384,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 			m_unk0x128 = 1;
 			m_destLocation = LegoGameState::e_infomain;
 
-			DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+			DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		}
 		break;
@@ -425,7 +425,11 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 						act1State->SetUnknown18(9);
 
 						m_destLocation = LegoGameState::e_unk31;
-						DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+						DeleteObjects(
+							&m_atomId,
+							HospitalScript::c_hho002cl_RunAnim,
+							HospitalScript::c_hho006cl_RunAnim
+						);
 						TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 					}
 				}
@@ -434,7 +438,11 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 						m_hospitalState->m_unk0x08.m_unk0x00 = 11;
 
 						BackgroundAudioManager()->RaiseVolume();
-						DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+						DeleteObjects(
+							&m_atomId,
+							HospitalScript::c_hho002cl_RunAnim,
+							HospitalScript::c_hho006cl_RunAnim
+						);
 					}
 					else {
 						switch (m_currentActorId) {
@@ -558,7 +566,7 @@ MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 		switch (p_param.GetClickedObjectId()) {
 		case HospitalScript::c_Info_Ctl:
 			BackgroundAudioManager()->RaiseVolume();
-			DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+			DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 
 			if (m_unk0x100 == 1) {
 				m_hospitalState->m_unk0x08.m_unk0x00 = 14;
@@ -572,14 +580,14 @@ MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 				m_hospitalState->m_unk0x08.m_unk0x00 = 13;
 				m_destLocation = LegoGameState::e_infomain;
 
-				DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+				DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			}
 
 			break;
 
 		case HospitalScript::c_Door_Ctl:
-			DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+			DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 
 			if (m_unk0x100 == 1) {
 				m_hospitalState->m_unk0x08.m_unk0x00 = 15;
@@ -593,7 +601,7 @@ MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 				m_hospitalState->m_unk0x08.m_unk0x00 = 13;
 				m_destLocation = LegoGameState::e_unk31;
 
-				DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+				DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			}
 
@@ -664,7 +672,7 @@ MxResult Hospital::Tickle()
 // FUNCTION: LEGO1 0x10076330
 MxBool Hospital::Escape()
 {
-	DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, 999);
+	DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, 999);
 	m_hospitalState->m_unk0x08.m_unk0x00 = 0;
 
 	m_destLocation = LegoGameState::e_infomain;

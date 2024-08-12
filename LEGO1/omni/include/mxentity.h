@@ -12,7 +12,7 @@
 class MxEntity : public MxCore {
 public:
 	// FUNCTION: LEGO1 0x1001d190
-	MxEntity() { this->m_mxEntityId = -1; }
+	MxEntity() { m_entityId = -1; }
 
 	// FUNCTION: LEGO1 0x1000c110
 	~MxEntity() override {}
@@ -31,29 +31,32 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10001070
-	virtual MxResult Create(MxS32 p_id, const MxAtomId& p_atom)
+	virtual MxResult Create(MxS32 p_entityId, const MxAtomId& p_atomId)
 	{
-		this->m_mxEntityId = p_id;
-		this->m_atom = p_atom;
+		m_entityId = p_entityId;
+		m_atomId = p_atomId;
 		return SUCCESS;
 	} // vtable+0x14
 
 	MxResult Create(MxDSAction& p_dsAction)
 	{
-		m_mxEntityId = p_dsAction.GetObjectId();
-		m_atom = p_dsAction.GetAtomId();
+		m_entityId = p_dsAction.GetObjectId();
+		m_atomId = p_dsAction.GetAtomId();
 		return SUCCESS;
 	}
 
-	MxS32 GetEntityId() { return m_mxEntityId; }
-	MxAtomId& GetAtom() { return m_atom; }
+	MxS32 GetEntityId() { return m_entityId; }
+	MxAtomId& GetAtomId() { return m_atomId; }
+
+	void SetEntityId(MxS32 p_entityId) { m_entityId = p_entityId; }
+	void SetAtomId(const MxAtomId& p_atomId) { m_atomId = p_atomId; }
 
 	// SYNTHETIC: LEGO1 0x1000c210
 	// MxEntity::`scalar deleting destructor'
 
 protected:
-	MxS32 m_mxEntityId; // 0x08
-	MxAtomId m_atom;    // 0x0c
+	MxS32 m_entityId;  // 0x08
+	MxAtomId m_atomId; // 0x0c
 };
 
 #endif // MXENTITY_H

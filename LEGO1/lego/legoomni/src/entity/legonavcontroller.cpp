@@ -689,7 +689,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 						if (world) {
 							MxDSAction action;
 							action.SetObjectId(1);
-							action.SetAtomId(world->GetAtom());
+							action.SetAtomId(world->GetAtomId());
 							LegoOmni::GetInstance()->Start(&action);
 						}
 					}

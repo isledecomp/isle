@@ -36,7 +36,7 @@ MxResult Pizza::Create(MxDSAction& p_dsAction)
 
 	if (result == SUCCESS) {
 		CreateState();
-		m_skateboard = (SkateBoard*) m_world->Find(m_atom, IsleScript::c_SkateBoard_Actor);
+		m_skateboard = (SkateBoard*) m_world->Find(m_atomId, IsleScript::c_SkateBoard_Actor);
 	}
 
 	return result;

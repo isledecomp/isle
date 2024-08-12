@@ -80,8 +80,8 @@ void LegoEntity::SetWorldTransform(const Vector3& p_location, const Vector3& p_d
 // FUNCTION: LEGO1 0x100107e0
 MxResult LegoEntity::Create(MxDSAction& p_dsAction)
 {
-	m_mxEntityId = p_dsAction.GetObjectId();
-	m_atom = p_dsAction.GetAtomId();
+	m_entityId = p_dsAction.GetObjectId();
+	m_atomId = p_dsAction.GetAtomId();
 	SetWorld();
 	return SUCCESS;
 }

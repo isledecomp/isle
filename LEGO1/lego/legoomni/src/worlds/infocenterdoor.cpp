@@ -63,7 +63,7 @@ MxLong InfocenterDoor::Notify(MxParam& p_param)
 	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationEndAction:
-			if (((MxEndActionNotificationParam&) p_param).GetAction()->GetAtomId() == m_atom) {
+			if (((MxEndActionNotificationParam&) p_param).GetAction()->GetAtomId() == m_atomId) {
 				BackgroundAudioManager()->RaiseVolume();
 				result = 1;
 			}
@@ -95,7 +95,7 @@ MxLong InfocenterDoor::HandleControl(LegoControlManagerNotificationParam& p_para
 	MxLong result = 0;
 
 	if (p_param.GetUnknown0x28() == 1) {
-		DeleteObjects(&m_atom, InfodoorScript::c_iic037in_PlayWav, 510);
+		DeleteObjects(&m_atomId, InfodoorScript::c_iic037in_PlayWav, 510);
 
 		switch (p_param.GetClickedObjectId()) {
 		case InfodoorScript::c_LeftArrow_Ctl:
@@ -167,7 +167,7 @@ void InfocenterDoor::Enable(MxBool p_enable)
 // FUNCTION: LEGO1 0x10037cd0
 MxBool InfocenterDoor::Escape()
 {
-	DeleteObjects(&m_atom, InfodoorScript::c_iic037in_PlayWav, 510);
+	DeleteObjects(&m_atomId, InfodoorScript::c_iic037in_PlayWav, 510);
 	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;
 }

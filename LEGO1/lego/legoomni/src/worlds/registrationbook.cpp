@@ -1,10 +1,18 @@
 #include "registrationbook.h"
 
+#include "copter_actions.h"
+#include "dunebuggy.h"
+#include "dunecar_actions.h"
+#include "helicopter.h"
 #include "infocenter.h"
+#include "isle.h"
+#include "jetski.h"
+#include "jetski_actions.h"
 #include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
+#include "legopathstruct.h"
 #include "misc.h"
 #include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
@@ -15,6 +23,8 @@
 #include "mxstillpresenter.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
+#include "racecar.h"
+#include "racecar_actions.h"
 #include "regbook_actions.h"
 #include "scripts.h"
 
@@ -44,7 +54,7 @@ RegistrationBook::RegistrationBook() : m_registerDialogueTimer(0x80000000), m_un
 
 	NotificationManager()->Register(this);
 
-	m_unk0x2c1 = 0;
+	m_unk0x2c1 = FALSE;
 	m_checkboxHilite = NULL;
 	m_checkboxSurface = NULL;
 	m_checkboxNormal = NULL;
@@ -118,7 +128,7 @@ MxLong RegistrationBook::Notify(MxParam& p_param)
 			result = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;
 		case c_notificationPathStruct:
-			result = HandleNotification19(p_param);
+			result = HandlePathStruct((LegoPathStructNotificationParam&) p_param);
 			break;
 		case c_notificationTransitioned:
 			GameState()->SwitchArea(LegoGameState::e_infomain);
@@ -132,13 +142,13 @@ MxLong RegistrationBook::Notify(MxParam& p_param)
 // FUNCTION: LEGO1 0x10077210
 MxLong RegistrationBook::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
-	if (p_param.GetAction()->GetAtomId() != m_atom) {
+	if (p_param.GetAction()->GetAtomId() != m_atomId) {
 		return 0;
 	}
 
 	switch ((MxS32) p_param.GetAction()->GetObjectId()) {
 	case RegbookScript::c_Textures:
-		m_unk0x2c1 = 0;
+		m_unk0x2c1 = FALSE;
 
 		if (m_unk0x2b8 == 0) {
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
@@ -168,7 +178,7 @@ MxLong RegistrationBook::HandleKeyPress(MxU8 p_key)
 
 	if ((key < 'A' || key > 'Z') && key != VK_BACK) {
 		if (key == VK_SPACE) {
-			DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
+			DeleteObjects(&m_atomId, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 			BackgroundAudioManager()->RaiseVolume();
 		}
 	}
@@ -217,7 +227,7 @@ MxLong RegistrationBook::HandleControl(LegoControlManagerNotificationParam& p_pa
 	if (unk0x28 >= 1 && unk0x28 <= 28) {
 		if (p_param.GetClickedObjectId() == RegbookScript::c_Alphabet_Ctl) {
 			if (unk0x28 == 28) {
-				DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
+				DeleteObjects(&m_atomId, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 
 				if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 					m_infocenterState->SetUnknown0x74(15);
@@ -238,7 +248,7 @@ MxLong RegistrationBook::HandleControl(LegoControlManagerNotificationParam& p_pa
 		}
 		else {
 			InputManager()->DisableInputProcessing();
-			DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
+			DeleteObjects(&m_atomId, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 
 			MxS16 i;
 			for (i = 0; i < 10; i++) {
@@ -278,7 +288,7 @@ void RegistrationBook::FUN_100775c0(MxS16 p_playerIndex)
 
 		PlayAction(RegbookScript::c_Textures);
 
-		m_unk0x2c1 = 1;
+		m_unk0x2c1 = TRUE;
 
 		// TOOD: structure incorrect
 		GameState()->AddPlayer(*(LegoGameState::Username*) &m_unk0x280.m_letters);
@@ -293,7 +303,7 @@ void RegistrationBook::FUN_100775c0(MxS16 p_playerIndex)
 
 		PlayAction(RegbookScript::c_Textures);
 
-		m_unk0x2c1 = 1;
+		m_unk0x2c1 = TRUE;
 
 		GameState()->SwitchPlayer(player);
 
@@ -304,8 +314,8 @@ void RegistrationBook::FUN_100775c0(MxS16 p_playerIndex)
 	}
 
 	m_infocenterState->SetUnknown0x74(4);
-	if (m_unk0x2b8 == 0 && m_unk0x2c1 == 0) {
-		DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
+	if (m_unk0x2b8 == 0 && !m_unk0x2c1) {
+		DeleteObjects(&m_atomId, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 	}
 }
@@ -454,10 +464,62 @@ void RegistrationBook::Enable(MxBool p_enable)
 	}
 }
 
-// STUB: LEGO1 0x100781d0
-MxLong RegistrationBook::HandleNotification19(MxParam& p_param)
+// FUNCTION: LEGO1 0x100781d0
+MxLong RegistrationBook::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 {
-	return 0;
+	LegoPathActor* actor = NULL;
+	Act1State* act1state = (Act1State*) GameState()->GetState("Act1State");
+
+	switch (p_param.GetData()) {
+	case CopterScript::c_Helicopter_Actor:
+		actor = (LegoPathActor*) Find(m_atomId, CopterScript::c_Helicopter_Actor);
+		act1state->m_helicopter = (Helicopter*) actor;
+		if (actor != NULL) {
+			actor->SetAtomId(*g_copterScript);
+			actor->SetEntityId(CopterScript::c_Helicopter_Actor);
+		}
+		break;
+	case DunecarScript::c_DuneBugy_Actor:
+		actor = (LegoPathActor*) Find(m_atomId, DunecarScript::c_DuneBugy_Actor);
+		act1state->m_dunebuggy = (DuneBuggy*) actor;
+		if (actor != NULL) {
+			actor->SetAtomId(*g_dunecarScript);
+			actor->SetEntityId(DunecarScript::c_DuneBugy_Actor);
+		}
+		break;
+	case JetskiScript::c_Jetski_Actor:
+		actor = (LegoPathActor*) Find(m_atomId, JetskiScript::c_Jetski_Actor);
+		act1state->m_jetski = (Jetski*) actor;
+		if (actor != NULL) {
+			actor->SetAtomId(*g_jetskiScript);
+			actor->SetEntityId(JetskiScript::c_Jetski_Actor);
+		}
+		break;
+	case RacecarScript::c_RaceCar_Actor:
+		actor = (LegoPathActor*) Find(m_atomId, RacecarScript::c_RaceCar_Actor);
+		act1state->m_racecar = (RaceCar*) actor;
+		if (actor != NULL) {
+			actor->SetAtomId(*g_racecarScript);
+			actor->SetEntityId(RacecarScript::c_RaceCar_Actor);
+		}
+		break;
+	}
+
+	if (actor == NULL) {
+		NotificationManager()->Send(this, p_param);
+	}
+	else {
+		RemoveActor(actor);
+		Remove(actor);
+		m_unk0x2b8--;
+	}
+
+	if (m_unk0x2b8 == 0 && !m_unk0x2c1) {
+		DeleteObjects(&m_atomId, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
+		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+	}
+
+	return 1;
 }
 
 // FUNCTION: LEGO1 0x10078350
@@ -495,6 +557,6 @@ MxBool RegistrationBook::CreateSurface()
 // FUNCTION: LEGO1 0x100783e0
 MxBool RegistrationBook::Escape()
 {
-	DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
+	DeleteObjects(&m_atomId, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 	return TRUE;
 }
