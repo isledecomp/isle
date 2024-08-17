@@ -411,12 +411,12 @@ MxPresenter* LegoVideoManager::GetPresenterAt(MxS32 p_x, MxS32 p_y)
 
 // FUNCTION: LEGO1 0x1007c180
 // FUNCTION: BETA10 0x100d6df4
-MxPresenter* LegoVideoManager::GetPresenterByActionObjectName(char *p_actionObjectName) {
-
+MxPresenter* LegoVideoManager::GetPresenterByActionObjectName(const char* p_actionObjectName)
+{
 	MxPresenterListCursor cursor(m_presenters);
 	MxPresenter* presenter;
 
-	while (true) {
+	while (TRUE) {
 		if (!cursor.Prev(presenter)) {
 			return NULL;
 		}

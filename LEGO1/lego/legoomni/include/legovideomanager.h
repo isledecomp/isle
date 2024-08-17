@@ -34,12 +34,9 @@ public:
 	MxResult Tickle() override;                                                                       // vtable+0x08
 	void Destroy() override;                                                                          // vtable+0x18
 	MxResult Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread) override; // vtable+0x2c
-
-	MxPresenter* GetPresenterByActionObjectName(char* p_char);
-
-	MxResult RealizePalette(MxPalette*) override;                                  // vtable+0x30
-	void UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height) override; // vtable+0x34
-	virtual MxPresenter* GetPresenterAt(MxS32 p_x, MxS32 p_y);                     // vtable+0x38
+	MxResult RealizePalette(MxPalette*) override;                                                     // vtable+0x30
+	void UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height) override;                    // vtable+0x34
+	virtual MxPresenter* GetPresenterAt(MxS32 p_x, MxS32 p_y);                                        // vtable+0x38
 
 	// FUNCTION: LEGO1 0x1007ab10
 	virtual LegoPhonemeList* GetPhonemeList() { return m_phonemeRefList; } // vtable+0x3c
@@ -47,6 +44,7 @@ public:
 	void SetSkyColor(float p_red, float p_green, float p_blue);
 	void OverrideSkyColor(MxBool p_shouldOverride);
 	MxResult ResetPalette(MxBool p_ignoreSkyColor);
+	MxPresenter* GetPresenterByActionObjectName(const char* p_char);
 
 	void FUN_1007c520();
 

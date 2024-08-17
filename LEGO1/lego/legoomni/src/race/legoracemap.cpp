@@ -30,11 +30,11 @@ LegoRaceMap::~LegoRaceMap()
 
 // GLOBAL: LEGO1 0x1010208c
 // STRING: LEGO1 0x10101f88
-const char* g_MAP_LOCATOR = "MAP_LOCATOR";
+const char* g_mapLocator = "MAP_LOCATOR";
 
 // GLOBAL: LEGO1 0x10102090
 // STRING: LEGO1 0x10101f78
-const char* g_MAP_GEOMETRY = "MAP_GEOMETRY";
+const char* g_mapGeometry = "MAP_GEOMETRY";
 
 // FUNCTION: LEGO1 0x1005d310
 // FUNCTION: BETA10 0x100ca543
@@ -42,7 +42,7 @@ void LegoRaceMap::ParseAction(char* p_extra)
 {
 	char value[256];
 
-	if (KeyValueStringParse(value, g_MAP_LOCATOR, p_extra)) {
+	if (KeyValueStringParse(value, g_mapLocator, p_extra)) {
 		// variable name verified by BETA10 0x100ca5ac
 		MxStillPresenter* p = (MxStillPresenter*) VideoManager()->GetPresenterByActionObjectName(value);
 
@@ -51,7 +51,7 @@ void LegoRaceMap::ParseAction(char* p_extra)
 		m_stillPresenter = p;
 	}
 
-	if (KeyValueStringParse(value, g_MAP_GEOMETRY, p_extra)) {
+	if (KeyValueStringParse(value, g_mapGeometry, p_extra)) {
 		char* token = strtok(value, g_parseExtraTokens);
 		if (token != NULL) {
 			m_unk0x14 = atof(token);

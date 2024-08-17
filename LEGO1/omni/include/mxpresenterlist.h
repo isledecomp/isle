@@ -23,8 +23,6 @@ public:
 	// MxPresenterList::`scalar deleting destructor'
 };
 
-DECOMP_SIZE_ASSERT(MxPresenterList, 0x18)
-
 // VTABLE: LEGO1 0x100d6488
 // class MxListCursor<MxPresenter *>
 
@@ -38,8 +36,6 @@ public:
 	// FUNCTION: BETA10 0x1007d130
 	MxPresenterListCursor(MxPresenterList* p_list) : MxPtrListCursor<MxPresenter>(p_list) {}
 };
-
-DECOMP_SIZE_ASSERT(MxPresenterListCursor, 0x10)
 
 // VTABLE: LEGO1 0x100d6350
 // class MxCollection<MxPresenter *>
