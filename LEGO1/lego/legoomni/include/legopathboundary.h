@@ -56,7 +56,10 @@ public:
 	MxU32 FUN_10057fe0(LegoAnimPresenter* p_presenter);
 	MxU32 FUN_100586e0(LegoAnimPresenter* p_presenter);
 
+	// FUNCTION: BETA10 0x1001ffb0
 	LegoPathActorSet& GetActors() { return m_actors; }
+
+	// FUNCTION: BETA10 0x10082b10
 	LegoAnimPresenterSet& GetPresenters() { return m_presenters; }
 
 	// SYNTHETIC: LEGO1 0x10047a80
@@ -169,6 +172,9 @@ private:
 
 // TEMPLATE: LEGO1 0x100589a0
 // _Distance
+
+// TEMPLATE: LEGO1 0x10081cd0
+// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::lower_bound
 
 // GLOBAL: LEGO1 0x100f11a4
 // _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Nil

@@ -110,6 +110,8 @@ public:
 		return (*lods)[i];
 	}
 	int GetLODCount() const { return lods ? lods->Size() : 0; }
+
+	// FUNCTION: BETA10 0x10027110
 	const CompoundObject* GetComp() const { return comp; }
 
 	unsigned char GetVisibility() { return m_visible; }
