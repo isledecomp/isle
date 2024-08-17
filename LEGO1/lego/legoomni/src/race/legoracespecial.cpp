@@ -292,7 +292,7 @@ MxU32 LegoCarRaceActor::VTable0x6c(
 )
 {
 	// STRING: LEGO1 0x100f7af4
-	const char* g_rcdor = "rcdor";
+	const char* str_rcdor = "rcdor";
 
 	LegoAnimPresenterSet& presenters = p_boundary->GetPresenters();
 
@@ -313,7 +313,7 @@ MxU32 LegoCarRaceActor::VTable0x6c(
 				LegoROI* roi = actor->GetROI();
 
 				if (roi != NULL && (roi->GetVisibility() || actor->GetCameraFlag())) {
-					if (strncmp(roi->GetName(), g_rcdor, 5) == 0) {
+					if (strncmp(roi->GetName(), str_rcdor, 5) == 0) {
 						const CompoundObject* co = roi->GetComp(); // name verified by BETA10 0x100cf8ba
 
 						if (co) {
