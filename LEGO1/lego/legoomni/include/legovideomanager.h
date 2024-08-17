@@ -44,6 +44,7 @@ public:
 	void SetSkyColor(float p_red, float p_green, float p_blue);
 	void OverrideSkyColor(MxBool p_shouldOverride);
 	MxResult ResetPalette(MxBool p_ignoreSkyColor);
+	MxPresenter* GetPresenterByActionObjectName(const char* p_char);
 
 	void FUN_1007c520();
 

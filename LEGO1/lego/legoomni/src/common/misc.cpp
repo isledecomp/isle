@@ -43,8 +43,10 @@ LegoInputManager* InputManager()
 }
 
 // FUNCTION: LEGO1 0x10015750
+// FUNCTION: BETA10 0x100e48dc
 LegoControlManager* ControlManager()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetInputManager()->GetControlManager();
 }
 

@@ -118,7 +118,9 @@ public:
 		m_unk0x336 = FALSE;
 	}
 
+	// FUNCTION: BETA10 0x10031ba0
 	LegoControlManager* GetControlManager() { return m_controlManager; }
+
 	LegoWorld* GetWorld() { return m_world; }
 	LegoCameraController* GetCamera() { return m_camera; }
 

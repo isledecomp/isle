@@ -30,8 +30,10 @@ public:
 // class MxPtrListCursor<MxPresenter>
 
 // VTABLE: LEGO1 0x100d6470
+// SIZE 0x10
 class MxPresenterListCursor : public MxPtrListCursor<MxPresenter> {
 public:
+	// FUNCTION: BETA10 0x1007d130
 	MxPresenterListCursor(MxPresenterList* p_list) : MxPtrListCursor<MxPresenter>(p_list) {}
 };
 
@@ -97,5 +99,14 @@ public:
 
 // TEMPLATE: LEGO1 0x100225e0
 // MxList<MxPresenter *>::DeleteEntry
+
+// TEMPLATE: BETA10 0x1007d1d0
+// MxPtrListCursor<MxPresenter>::MxPtrListCursor<MxPresenter>
+
+// TEMPLATE: BETA10 0x1007d270
+// MxListCursor<MxPresenter>::MxListCursor<MxPresenter>
+
+// TEMPLATE: BETA10 0x100d9420
+// MxListCursor<MxPresenter>::Prev
 
 #endif // MXPRESENTERLIST_H

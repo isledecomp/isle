@@ -63,8 +63,12 @@ public:
 	// FUNCTION: BETA10 0x1012efb0
 	const char* GetSourceName() const { return m_sourceName; }
 
+	// FUNCTION: BETA10 0x10028460
 	const char* GetObjectName() const { return m_objectName; }
+
+	// FUNCTION: BETA10 0x10017910
 	MxU32 GetObjectId() { return m_objectId; }
+
 	const MxAtomId& GetAtomId() { return m_atomId; }
 	MxS16 GetUnknown24() { return m_unk0x24; }
 	MxPresenter* GetUnknown28() { return m_unk0x28; }
