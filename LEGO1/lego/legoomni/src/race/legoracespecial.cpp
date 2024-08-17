@@ -280,7 +280,7 @@ MxResult LegoCarRaceActor::VTable0x9c()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10081840
+// FUNCTION: LEGO1 0x10081840
 // FUNCTION: BETA10 0x100cf680
 MxU32 LegoCarRaceActor::VTable0x6c(
 	LegoPathBoundary* p_boundary,
@@ -291,11 +291,90 @@ MxU32 LegoCarRaceActor::VTable0x6c(
 	Vector3& p_v3
 )
 {
-	// LegoAnimPresenterSet& presenters = p_boundary->GetPresenters();
+	// STRING: LEGO1 0x100f7af4
+	const char* g_rcdor = "rcdor";
 
-	// Significant overlap with parent function -> Try to copy-paste LegoPathActor::VTable0x6c here
-	// and see by how much we diverge
+	LegoAnimPresenterSet& presenters = p_boundary->GetPresenters();
 
-	// TODO
+	for (LegoAnimPresenterSet::iterator itap = presenters.begin(); itap != presenters.end(); itap++) {
+		if ((*itap)->VTable0x94(p_v1, p_v2, p_f1, p_f2, p_v3)) {
+			return 1;
+		}
+	}
+
+	LegoPathActorSet& plpas = p_boundary->GetActors();
+	LegoPathActorSet lpas(plpas);
+
+	for (LegoPathActorSet::iterator itpa = lpas.begin(); itpa != lpas.end(); itpa++) {
+		if (plpas.end() != plpas.find(*itpa)) {
+			LegoPathActor* actor = *itpa;
+
+			if (actor != this) {
+				LegoROI* roi = actor->GetROI();
+
+				if (roi != NULL && (roi->GetVisibility() || actor->GetCameraFlag())) {
+					if (strncmp(roi->GetName(), g_rcdor, 5) == 0) {
+						const CompoundObject* co = roi->GetComp(); // name verified by BETA10 0x100cf8ba
+
+						if (co) {
+							assert(co->size() == 2);
+
+							LegoROI* firstROI = (LegoROI*) co->front();
+
+							if (firstROI->FUN_100a9410(
+									p_v1,
+									p_v2,
+									p_f1,
+									p_f2,
+									p_v3,
+									m_collideBox && actor->GetCollideBox()
+								)) {
+								VTable0x94(actor, TRUE);
+
+								if (actor->VTable0x94(this, FALSE) < 0) {
+									return 0;
+								}
+								else {
+									return 2;
+								}
+							}
+
+							LegoROI* lastROI = (LegoROI*) co->back();
+
+							if (lastROI->FUN_100a9410(
+									p_v1,
+									p_v2,
+									p_f1,
+									p_f2,
+									p_v3,
+									m_collideBox && actor->GetCollideBox()
+								)) {
+								VTable0x94(actor, TRUE);
+
+								if (actor->VTable0x94(this, FALSE) < 0) {
+									return 0;
+								}
+								else {
+									return 2;
+								}
+							}
+						}
+					}
+					else {
+						if (roi->FUN_100a9410(p_v1, p_v2, p_f1, p_f2, p_v3, m_collideBox && actor->GetCollideBox())) {
+							VTable0x94(actor, TRUE);
+							if (actor->VTable0x94(this, FALSE) < 0) {
+								return 0;
+							}
+							else {
+								return 2;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return 0;
 }

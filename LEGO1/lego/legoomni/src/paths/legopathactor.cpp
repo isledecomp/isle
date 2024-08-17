@@ -424,6 +424,7 @@ void LegoPathActor::VTable0x70(float p_time)
 // FUNCTION: BETA10 0x100af2f7
 void LegoPathActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
 {
+	assert(m_boundary);
 	m_boundary->SwitchBoundary(this, p_boundary, p_edge, p_unk0xe4);
 }
 
