@@ -331,10 +331,10 @@ void MxWavePresenter::ParseExtra()
 	char* extraData;
 	m_action->GetExtra(extraLength, extraData);
 
-	if (extraLength & USHRT_MAX) {
+	if (extraLength) {
 		char extraCopy[512];
-		memcpy(extraCopy, extraData, extraLength & USHRT_MAX);
-		extraCopy[extraLength & USHRT_MAX] = '\0';
+		memcpy(extraCopy, extraData, extraLength);
+		extraCopy[extraLength] = '\0';
 
 		char soundValue[512];
 		if (KeyValueStringParse(soundValue, g_strSOUND, extraCopy)) {

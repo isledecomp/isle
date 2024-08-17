@@ -297,11 +297,11 @@ void LegoModelPresenter::ParseExtra()
 	char* extraData;
 	m_action->GetExtra(extraLength, extraData);
 
-	if (extraLength & USHRT_MAX) {
+	if (extraLength) {
 		char extraCopy[1024], output[1024];
 		output[0] = '\0';
-		memcpy(extraCopy, extraData, extraLength & USHRT_MAX);
-		extraCopy[extraLength & USHRT_MAX] = '\0';
+		memcpy(extraCopy, extraData, extraLength);
+		extraCopy[extraLength] = '\0';
 
 		if (KeyValueStringParse(output, g_strAUTO_CREATE, extraCopy) != 0) {
 			char* token = strtok(output, g_parseExtraTokens);
