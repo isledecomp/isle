@@ -123,7 +123,10 @@ public:
 	MxS32 GetX() const { return this->m_location.GetX(); }
 	MxS32 GetY() const { return this->m_location.GetY(); }
 	MxS32 GetDisplayZ() const { return this->m_displayZ; }
+
+	// FUNCTION: BETA10 0x10028430
 	MxDSAction* GetAction() const { return this->m_action; }
+
 	void SetAction(MxDSAction* p_action) { m_action = p_action; }
 
 	void SetCompositePresenter(MxCompositePresenter* p_compositePresenter)

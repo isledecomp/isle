@@ -122,7 +122,10 @@ public:
 
 	LegoVideoManager* GetVideoManager() { return (LegoVideoManager*) m_videoManager; }
 	LegoSoundManager* GetSoundManager() { return (LegoSoundManager*) m_soundManager; }
+
+	// FUNCTION: BETA10 0x1009e7a0
 	LegoInputManager* GetInputManager() { return m_inputManager; }
+
 	LegoTextureContainer* GetTextureContainer() { return m_textureContainer; }
 	ViewLODListManager* GetViewLODListManager() { return m_viewLODListManager; }
 	LegoWorld* GetCurrentWorld() { return m_currentWorld; }

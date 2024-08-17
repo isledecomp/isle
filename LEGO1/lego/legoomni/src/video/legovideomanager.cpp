@@ -409,6 +409,28 @@ MxPresenter* LegoVideoManager::GetPresenterAt(MxS32 p_x, MxS32 p_y)
 	return NULL;
 }
 
+// FUNCTION: LEGO1 0x1007c180
+// FUNCTION: BETA10 0x100d6df4
+MxPresenter* LegoVideoManager::GetPresenterByActionObjectName(char *p_actionObjectName) {
+
+	MxPresenterListCursor cursor(m_presenters);
+	MxPresenter* presenter;
+
+	while (true) {
+		if (!cursor.Prev(presenter)) {
+			return NULL;
+		}
+
+		if (!presenter->GetAction()) {
+			continue;
+		}
+
+		if (strcmpi(presenter->GetAction()->GetObjectName(), p_actionObjectName) == 0) {
+			return presenter;
+		}
+	}
+}
+
 // FUNCTION: LEGO1 0x1007c290
 MxResult LegoVideoManager::RealizePalette(MxPalette* p_pallete)
 {
