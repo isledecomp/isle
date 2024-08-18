@@ -21,14 +21,17 @@ RaceSkel::~RaceSkel()
 	// Removing this empty destructor leads to a mismatch in RaceSkel::`scalar deleting destructor'
 }
 
-// FUNCTION: LEGO1 0x10071cb0
-// FUNCTION: BETA10 0x100f158b
-void RaceSkel::GetCurrentAnimData(float* p_outCurAnimPosition, float* p_outCurAnimDuration)
+// FUNCTION: LEGO1 0x10071b50
+// FUNCTION: BETA10 0x100f13cf
+MxResult RaceSkel::FUN_1001c360(float p_und, Matrix4& p_transform)
 {
-	*p_outCurAnimPosition = m_animPosition;
+	p_transform[3][0] = -630.0f;
+	p_transform[3][1] = -4.688f;
+	p_transform[3][2] = 323.0f;
 
-	assert(m_curAnim >= 0);
-	*p_outCurAnimDuration = m_animMaps[m_curAnim]->GetDuration();
+	m_animPosition = p_und;
+
+	return LegoAnimActor::FUN_1001c360(p_und, p_transform);
 }
 
 // FUNCTION: LEGO1 0x10071b90
@@ -48,15 +51,12 @@ void RaceSkel::ParseAction(char* p_extra)
 	m_roi->SetBoundingSphere(sphere);
 }
 
-// FUNCTION: LEGO1 0x10071b50
-// FUNCTION: BETA10 0x100f13cf
-MxResult RaceSkel::FUN_1001c360(float p_und, Matrix4& p_transform)
+// FUNCTION: LEGO1 0x10071cb0
+// FUNCTION: BETA10 0x100f158b
+void RaceSkel::GetCurrentAnimData(float* p_outCurAnimPosition, float* p_outCurAnimDuration)
 {
-	p_transform[3][0] = -630.0f;
-	p_transform[3][1] = -4.688f;
-	p_transform[3][2] = 323.0f;
+	*p_outCurAnimPosition = m_animPosition;
 
-	m_animPosition = p_und;
-
-	return LegoAnimActor::FUN_1001c360(p_und, p_transform);
+	assert(m_curAnim >= 0);
+	*p_outCurAnimDuration = m_animMaps[m_curAnim]->GetDuration();
 }
