@@ -71,7 +71,7 @@ public:
 
 private:
 	undefined m_unk0x144[12]; // 0x144
-	RaceSkel* m_skeleton;    // 0x150
+	RaceSkel* m_skeleton;     // 0x150
 };
 
 #endif // CARRACE_H

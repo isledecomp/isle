@@ -215,8 +215,7 @@ void LegoAnimActor::ParseAction(char* p_extra)
 
 			while (token) {
 				// name verified by BETA10 0x1003e9f5
-				LegoLocomotionAnimPresenter* p =
-					(LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", token);
+				LegoLocomotionAnimPresenter* p = (LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", token);
 
 				assert(p);
 
