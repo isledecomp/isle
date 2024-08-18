@@ -64,6 +64,7 @@ public:
 	const LegoChar* GetName() const { return m_name; }
 
 	LegoEntity* GetEntity() { return m_entity; }
+	BoundingSphere& GetBoundingSphere() { return m_sphere; }
 
 	void SetEntity(LegoEntity* p_entity) { m_entity = p_entity; }
 	void SetComp(CompoundObject* p_comp) { comp = p_comp; }

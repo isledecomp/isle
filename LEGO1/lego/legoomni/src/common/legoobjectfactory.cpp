@@ -184,6 +184,7 @@ LegoObjectFactory::LegoObjectFactory()
 }
 
 // FUNCTION: LEGO1 0x10009a90
+// FUNCTION: BETA10 0x100a1021
 MxCore* LegoObjectFactory::Create(const char* p_name)
 {
 	MxCore* object = NULL;
@@ -490,6 +491,10 @@ MxCore* LegoObjectFactory::Create(const char* p_name)
 	else {
 		object = MxObjectFactory::Create(p_name);
 	}
+
+	// clang-format off
+	assert(object!=NULL);
+	// clang-format on
 
 	return object;
 }

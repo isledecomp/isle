@@ -28,13 +28,17 @@ struct LegoAnimActorStruct {
 
 // VTABLE: LEGO1 0x100d5440 LegoPathActor
 // VTABLE: LEGO1 0x100d5510 LegoAnimActor
+// VTABLE: BETA10 0x101b81d8 LegoPathActor
+// VTABLE: BETA10 0x101b82c8 LegoAnimActor
 // SIZE 0x174
 class LegoAnimActor : public virtual LegoPathActor {
 public:
+	// FUNCTION: BETA10 0x1000f6c0
 	LegoAnimActor() { m_curAnim = -1; }
 	~LegoAnimActor() override;
 
 	// FUNCTION: LEGO1 0x1000fba0
+	// FUNCTION: BETA10 0x10012400
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f057c
@@ -42,6 +46,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000fbc0
+	// FUNCTION: BETA10 0x10012440
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoAnimActor::ClassName()) || LegoPathActor::IsA(p_name);

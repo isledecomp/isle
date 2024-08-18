@@ -19,6 +19,7 @@
 	X(MxLoopingMIDIPresenter)
 
 // VTABLE: LEGO1 0x100dc220
+// VTABLE: BETA10 0x101c2280
 class MxObjectFactory : public MxCore {
 public:
 	MxObjectFactory();

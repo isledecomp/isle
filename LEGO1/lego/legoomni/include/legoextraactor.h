@@ -6,6 +6,7 @@
 // VTABLE: LEGO1 0x100d6c00 LegoAnimActor
 // VTABLE: LEGO1 0x100d6c10 LegoPathActor
 // VTABLE: LEGO1 0x100d6cdc LegoExtraActor
+// VTABLE: BETA10 0x101bc2b8 LegoAnimActor
 // SIZE 0x1dc
 class LegoExtraActor : public virtual LegoAnimActor {
 public:
