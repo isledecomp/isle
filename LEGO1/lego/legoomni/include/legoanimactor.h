@@ -35,6 +35,7 @@ class LegoAnimActor : public virtual LegoPathActor {
 public:
 	// FUNCTION: BETA10 0x1000f6c0
 	LegoAnimActor() { m_curAnim = -1; }
+
 	~LegoAnimActor() override;
 
 	// FUNCTION: LEGO1 0x1000fba0

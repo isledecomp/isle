@@ -13,7 +13,7 @@ public:
 	RaceSkel();
 	~RaceSkel() override;
 
-	void ParseAction(char* p_extra) override;
+	void ParseAction(char* p_extra) override; // vtable+0x20
 
 	MxResult FUN_1001c360(float p_und, Matrix4& p_transform) override;
 

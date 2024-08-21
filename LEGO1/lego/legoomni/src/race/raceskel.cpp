@@ -18,7 +18,6 @@ RaceSkel::RaceSkel()
 // FUNCTION: LEGO1 0x10071ad0
 RaceSkel::~RaceSkel()
 {
-	// Removing this empty destructor leads to a mismatch in RaceSkel::`scalar deleting destructor'
 }
 
 // FUNCTION: LEGO1 0x10071b50
