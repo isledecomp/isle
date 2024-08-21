@@ -4,6 +4,8 @@
 #include "decomp.h"
 #include "legorace.h"
 
+class RaceSkel;
+
 // VTABLE: LEGO1 0x100d4b70
 // VTABLE: BETA10 0x101bd5f0
 // SIZE 0x2c
@@ -59,14 +61,17 @@ public:
 	MxLong HandleType0Notification(MxNotificationParam&) override;      // vtable+0x78
 
 	// FUNCTION: BETA10 0x100cd060
-	undefined4 GetUnk0x150() { return m_unk0x150; }
+	RaceSkel* GetSkeleton() { return m_skeleton; }
+
+	// FUNCTION: BETA10 0x100f16f0
+	void SetSkeleton(RaceSkel* p_skeleton) { m_skeleton = p_skeleton; }
 
 	// SYNTHETIC: LEGO1 0x10016c70
 	// CarRace::`scalar deleting destructor'
 
 private:
 	undefined m_unk0x144[12]; // 0x144
-	undefined4 m_unk0x150;    // 0x150
+	RaceSkel* m_skeleton;     // 0x150
 };
 
 #endif // CARRACE_H

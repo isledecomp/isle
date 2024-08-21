@@ -106,6 +106,7 @@
 	X(AnimState)
 
 // VTABLE: LEGO1 0x100d4768
+// VTABLE: BETA10 0x101bccd8
 // SIZE 0x1c8
 class LegoObjectFactory : public MxObjectFactory {
 public:

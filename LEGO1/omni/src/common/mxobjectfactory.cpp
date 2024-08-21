@@ -25,6 +25,7 @@ MxObjectFactory::MxObjectFactory()
 }
 
 // FUNCTION: LEGO1 0x100b12c0
+// FUNCTION: BETA10 0x10143177
 MxCore* MxObjectFactory::Create(const char* p_name)
 {
 	MxCore* object = NULL;
@@ -43,6 +44,7 @@ MxCore* MxObjectFactory::Create(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x100b1a30
+// FUNCTION: BETA10 0x10143814
 void MxObjectFactory::Destroy(MxCore* p_object)
 {
 	delete p_object;

@@ -304,11 +304,10 @@ MxU32 LegoRaceCar::HandleSkeletonKicks(float p_param1)
 {
 	const SkeletonKickPhase* current = g_skeletonKickPhases;
 
-	// TODO: Type is guesswork so far
 	CarRace* r = (CarRace*) CurrentWorld(); // called `r` in BETA10
 	assert(r);
 
-	RaceSkel* s = (RaceSkel*) r->GetUnk0x150(); // called `s` in BETA10
+	RaceSkel* s = r->GetSkeleton(); // called `s` in BETA10
 	assert(s);
 
 	float skeletonCurAnimPosition;

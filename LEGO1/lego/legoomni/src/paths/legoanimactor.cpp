@@ -37,6 +37,7 @@ float LegoAnimActorStruct::GetDuration()
 }
 
 // FUNCTION: LEGO1 0x1001c140
+// FUNCTION: BETA10 0x1003dfe4
 LegoAnimActor::~LegoAnimActor()
 {
 	for (MxS32 i = 0; i < m_animMaps.size(); i++) {
@@ -89,9 +90,12 @@ void LegoAnimActor::VTable0x70(float p_float)
 }
 
 // FUNCTION: LEGO1 0x1001c360
+// FUNCTION: BETA10 0x1003e2d3
 MxResult LegoAnimActor::FUN_1001c360(float p_und, Matrix4& p_transform)
 {
 	if (p_und >= 0) {
+		assert((m_curAnim >= 0) && (m_curAnim < m_animMaps.size()));
+
 		LegoROI** roiMap = m_animMaps[m_curAnim]->m_roiMap;
 		MxU32 numROIs = m_animMaps[m_curAnim]->m_numROIs;
 
@@ -108,7 +112,11 @@ MxResult LegoAnimActor::FUN_1001c360(float p_und, Matrix4& p_transform)
 			}
 		}
 		else {
-			LegoTreeNode* root = m_animMaps[m_curAnim]->m_AnimTreePtr->GetRoot();
+			// name verified by BETA10 0x1003e407
+			LegoTreeNode* n = m_animMaps[m_curAnim]->m_AnimTreePtr->GetRoot();
+
+			assert(roiMap && n && m_roi && m_boundary);
+
 			m_roi->SetVisibility(TRUE);
 
 			for (MxU32 i = 0; i < numROIs; i++) {
@@ -119,8 +127,8 @@ MxResult LegoAnimActor::FUN_1001c360(float p_und, Matrix4& p_transform)
 				}
 			}
 
-			for (MxS32 j = 0; j < root->GetNumChildren(); j++) {
-				LegoROI::FUN_100a8e80(root->GetChild(j), p_transform, p_und, roiMap);
+			for (MxS32 j = 0; j < n->GetNumChildren(); j++) {
+				LegoROI::FUN_100a8e80(n->GetChild(j), p_transform, p_und, roiMap);
 			}
 
 			if (m_cameraFlag) {
@@ -192,6 +200,7 @@ void LegoAnimActor::SetWorldSpeed(MxFloat p_worldSpeed)
 }
 
 // FUNCTION: LEGO1 0x1001c920
+// FUNCTION: BETA10 0x1003e914
 void LegoAnimActor::ParseAction(char* p_extra)
 {
 	LegoPathActor::ParseAction(p_extra);
@@ -201,17 +210,20 @@ void LegoAnimActor::ParseAction(char* p_extra)
 
 	if (world) {
 		if (KeyValueStringParse(value, g_strANIMATION, p_extra)) {
+			// name verified by BETA10 0x1003ea46
 			char* token = strtok(value, g_parseExtraTokens);
 
 			while (token) {
-				LegoLocomotionAnimPresenter* presenter =
-					(LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", token);
+				// name verified by BETA10 0x1003e9f5
+				LegoLocomotionAnimPresenter* p = (LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", token);
 
-				if (presenter != NULL) {
+				assert(p);
+
+				if (p != NULL) {
 					token = strtok(NULL, g_parseExtraTokens);
 
 					if (token) {
-						presenter->FUN_1006d680(this, atof(token));
+						p->FUN_1006d680(this, atof(token));
 					}
 				}
 

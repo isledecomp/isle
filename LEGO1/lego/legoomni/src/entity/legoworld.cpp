@@ -541,6 +541,7 @@ void LegoWorld::Remove(MxCore* p_object)
 }
 
 // FUNCTION: LEGO1 0x100213a0
+// FUNCTION: BETA10 0x100db027
 MxCore* LegoWorld::Find(const char* p_class, const char* p_name)
 {
 	if (!strcmp(p_class, "MxControlPresenter")) {
