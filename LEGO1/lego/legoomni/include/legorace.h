@@ -23,6 +23,14 @@ public:
 	// SIZE 0x06
 	struct Entry {
 	public:
+		// FUNCTION: LEGO1 0x10016000
+		Entry()
+		{
+			m_id = 0;
+			m_unk0x02 = 0;
+			m_score = 0;
+		}
+
 		MxS16 GetUnknown0x02() { return m_unk0x02; }
 		MxS16 GetHighScore() { return m_score; }
 

@@ -36,10 +36,10 @@ LegoJetski::LegoJetski()
 	NotificationManager()->Register(this);
 }
 
-// STUB: LEGO1 0x10013aa0
+// FUNCTION: LEGO1 0x10013aa0
 LegoJetski::~LegoJetski()
 {
-	// TODO
+	NotificationManager()->Unregister(this);
 }
 
 // STUB: LEGO1 0x10013bb0

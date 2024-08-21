@@ -72,6 +72,9 @@ public:
 	// SYNTHETIC: LEGO1 0x10081620
 	// LegoCarRaceActor::`scalar deleting destructor'
 
+	// SYNTHETIC: LEGO1 0x10012d80
+	// LegoCarRaceActor::~LegoCarRaceActor
+
 protected:
 	MxFloat m_unk0x08; // 0x08
 	MxU8 m_unk0x0c;    // 0x0c

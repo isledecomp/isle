@@ -4,7 +4,7 @@
 #include "legojetskiraceactor.h"
 #include "legoracemap.h"
 
-// VTABLE: LEGO1 0x100d5a08 LegoJetskiRaceActor
+// VTABLE: LEGO1 0x100d5a08 LegoCarRaceActor
 // VTABLE: LEGO1 0x100d5a28 LegoRaceActor
 // VTABLE: LEGO1 0x100d5a30 LegoAnimActor
 // VTABLE: LEGO1 0x100d5a40 LegoPathActor
@@ -51,5 +51,20 @@ public:
 	// SYNTHETIC: LEGO1 0x10013e30
 	// LegoJetski::`scalar deleting destructor'
 };
+
+// GLOBAL: LEGO1 0x100d59b8
+// LegoJetski::`vbtable'{for `LegoCarRaceActor'}
+
+// GLOBAL: LEGO1 0x100d59c8
+// LegoJetski::`vbtable'{for `LegoRaceActor'}
+
+// GLOBAL: LEGO1 0x100d59d8
+// LegoJetski::`vbtable'{for `LegoAnimActor'}
+
+// GLOBAL: LEGO1 0x100d59e0
+// LegoJetski::`vbtable'
+
+// GLOBAL: LEGO1 0x100d59f0
+// LegoJetski::`vbtable'{for `LegoJetskiRaceActor'}
 
 #endif // LEGOJETSKI_H

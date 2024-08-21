@@ -36,8 +36,14 @@ public:
 	void VTable0x70(float p_float) override;                                   // vtable+0x70
 	MxS32 VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edge) override; // vtable+0x1c
 
+	// SYNTHETIC: LEGO1 0x10013a80
+	// LegoJetskiRaceActor::`vbase destructor'
+
 	// SYNTHETIC: LEGO1 0x10081d50
 	// LegoJetskiRaceActor::`scalar deleting destructor'
+
+	// SYNTHETIC: LEGO1 0x10013ba0
+	// LegoJetskiRaceActor::~LegoJetskiRaceActor
 };
 
 #endif // LEGOJETSKIRACEACTOR_H

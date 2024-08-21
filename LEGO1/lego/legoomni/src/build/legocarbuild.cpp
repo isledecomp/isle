@@ -28,6 +28,42 @@ MxResult LegoCarBuild::Create(MxDSAction& p_dsAction)
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x10022fc0
+void LegoCarBuild::VTable0x6c()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10023020
+void LegoCarBuild::VTable0x70()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10023500
+void LegoCarBuild::VTable0x74()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10023570
+void LegoCarBuild::VTable0x78()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10023620
+void LegoCarBuild::VTable0x7c()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100236a0
+void LegoCarBuild::VTable0x80()
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x100238b0
 MxResult LegoCarBuild::Tickle()
 {
