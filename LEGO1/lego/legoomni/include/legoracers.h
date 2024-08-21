@@ -115,3 +115,15 @@ private:
 };
 
 #endif // LEGORACERS_H
+
+// GLOBAL: LEGO1 0x100d5890
+// LegoRaceCar::`vbtable'{for `LegoCarRaceActor'}
+
+// GLOBAL: LEGO1 0x100d5880
+// LegoRaceCar::`vbtable'{for `LegoRaceMap'}
+
+// GLOBAL: LEGO1 0x100d5878
+// LegoRaceCar::`vbtable'{for `LegoAnimActor'}
+
+// GLOBAL: LEGO1 0x100d5868
+// LegoRaceCar::`vbtable'{for `LegoRaceActor'}

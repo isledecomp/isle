@@ -128,10 +128,25 @@ void LegoRace::Enable(MxBool p_enable)
 	LegoWorld::Enable(p_enable);
 }
 
-// STUB: LEGO1 0x10015f30
+// FUNCTION: LEGO1 0x10015f30
 RaceState::RaceState()
 {
-	// TODO
+	m_state[0].m_id = 1;
+	m_state[0].m_unk0x02 = 0;
+	m_state[0].m_score = 0;
+	m_state[1].m_id = 2;
+	m_state[1].m_unk0x02 = 0;
+	m_state[1].m_score = 0;
+	m_state[2].m_id = 3;
+	m_state[2].m_unk0x02 = 0;
+	m_state[2].m_score = 0;
+	m_state[3].m_id = 4;
+	m_state[3].m_unk0x02 = 0;
+	m_state[3].m_score = 0;
+	m_state[4].m_id = 5;
+	m_state[4].m_unk0x02 = 0;
+	m_state[4].m_score = 0;
+	m_unk0x28 = 0;
 }
 
 // FUNCTION: LEGO1 0x10016140
