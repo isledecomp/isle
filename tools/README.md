@@ -101,7 +101,7 @@ public:
 	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+0x28
 ```
 
-## Class size (**WIP**)
+## Class size
 
 Classes should be annotated using the `SIZE` marker to indicate their size. If you are unsure about the class size in the original binary, please use the currently available information (known member variables) and detail the circumstances in an extra comment if necessary.
 
@@ -114,7 +114,9 @@ public:
 	static void SetDoMutex();
 ```
 
-## Member variables (**WIP**)
+Furthermore, add `DECOMP_SIZE_ASSERT(MxCriticalSection, 0x1c)` to the respective `.cpp` file (if the class has no dedicated `.cpp` file, use any appropriate `.cpp` file where the class is used).
+
+## Member variables
 
 Member variables should be annotated with their relative offsets.
 
@@ -162,14 +164,23 @@ Use `pip` to install the required packages to be able to use the Python tools fo
 pip install -r tools/requirements.txt
 ```
 
+The example usages below assume that the current working directory is this repository's root and that the retail binaries have been copied to `./legobin`.
+
 * [`decomplint`](/tools/decomplint): Checks the decompilation annotations (see above)
+    * e.g. `py -m tools.decomplint.decomplint --module LEGO1 LEGO1`
 * [`isledecomp`](/tools/isledecomp): A library that implements a parser to identify the decompilation annotations (see above)
 * [`ncc`](/tools/ncc): Checks naming conventions based on a set of rules
-* [`reccmp`](/tools/reccmp): Compares an original binary with a recompiled binary, provided a PDB file
+* [`reccmp`](/tools/reccmp): Compares an original binary with a recompiled binary, provided a PDB file. For example:
+    * Display the diff for a single function: `py -m tools.reccmp.reccmp --verbose 0x100ae1a0 legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
+    * Generate an HTML report: `py -m tools.reccmp.reccmp --html output.html legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
+    * Create a base file for diffs: `py -m tools.reccmp.reccmp --json base.json --silent legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
+    * Diff against a base file: `py -m tools.reccmp.reccmp --diff base.json legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
 * [`roadmap`](/tools/roadmap): Compares symbol locations in an original binary with the same symbol locations of a recompiled binary
 * [`verexp`](/tools/verexp): Verifies exports by comparing the exports of the original DLL and the recompiled DLL
 * [`vtable`](/tools/vtable): Asserts virtual table correctness by comparing a recompiled binary with the original
-* [`datacmp.py`](/tools/datacmp.py): Compares global data found in the original with the recompiled version 
+    * e.g. `py -m tools.vtable.vtable legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
+* [`datacmp.py`](/tools/datacmp.py): Compares global data found in the original with the recompiled version
+    * e.g. `py -m tools.datacmp legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
 * [`patch_c2.py`](/tools/patch_c2.py): Patches `C2.EXE` (part of MSVC 4.20) to get rid of a bugged warning
 
 ## Testing
@@ -181,9 +192,9 @@ pip install pytest
 pytest tools/isledecomp/tests/
 ```
 
-## Development
+## Tool Development
 
-In order to keep the code clean and consistent, we use `pylint` and `black`:
+In order to keep the Python code clean and consistent, we use `pylint` and `black`:
 
 `pip install black pylint`
 
@@ -191,10 +202,54 @@ In order to keep the code clean and consistent, we use `pylint` and `black`:
 
 `pylint tools/ --ignore=build,ncc`
 
-### Check code formatting without rewriting files
+### Check Python code formatting without rewriting files
 
 `black --check tools/`
 
-### Apply code formatting
+### Apply Python code formatting
 
 `black tools/`
+
+# Modules
+The following is a list of all the modules found in the annotations (e.g. `// FUNCTION: [module] [address]`) and which binaries they refer to. See [this list of all known versions of the game](https://www.legoisland.org/wiki/LEGO_Island#Download).
+
+## Retail v1.1.0.0 (v1.1)
+* `LEGO1` -> `LEGO1.DLL`
+* `CONFIG`-> `CONFIG.EXE`
+* `ISLE` -> `ISLE.EXE`
+
+These modules are the most important ones and refer to the English retail version 1.1.0.0 (often shortened to v1.1), which is the most widely released one. These are the ones we attempt to decompile and match as best as possible.
+
+## BETA v1.0
+
+* `BETA10` -> `LEGO1D.DLL`
+
+The Beta 1.0 version contains a debug build of the game. While it does not have debug symbols, it still has a number of benefits:
+* It is built with less or no optimisation, leading to better decompilations in Ghidra
+* Far fewer functions are inlined by the compiler, so it can be used to recognise inlined functions
+* It contains assertions that tell us original variable names and code file paths
+
+It is therefore advisable to search for the corresponding function in `BETA10` when decompiling a function in `LEGO1`. Finding the correct function can be tricky, but is usually worth it, especially for longer functions.
+
+Unfortunately, some code has been changed after this beta version was created. Therefore, we are not aiming for a perfect binary match of `BETA10`. In case of discrepancies, `LEGO1` (as defined above) is our "gold standard" for matching.
+
+### Re-compiling a beta build (**WIP**)
+
+If you want to match the code against `BETA10`, use the following `cmake` setup to create a debug build:
+```
+cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_BUILD_TYPE=Debug -DISLE_USE_SMARTHEAP=OFF
+```
+**TODO**: If you can figure out how to make a debug build with SmartHeap enabled, please add it here.
+
+If you want to run scripts to compare your debug build to `BETA10` (e.g. `reccmp`), it is advisable to add a copy of `LEGO1D.DLL` to `/legobin` and rename it to `BETA10.DLL`.
+
+### Finding matching functions
+
+This is not a recipe, but rather a list of things you can try.
+* If you are working on a virtual function in a class, try to find the class' vtable. Many (but not all) classes implement `ClassName()`. These functions are usually easy to find by searching the memory for the string consisting of the class name. Keep in mind that not all child classes overwrite this function, so if the function you found is used in multiple vtables (or if you found multiple `ClassName()`-like functions), make sure you actually have the parent's vtable.
+* If that does not help, you can try to walk up the call tree and try to locate a function that calls the function you are interested in.
+* Assertions can also help you - most `.cpp` file names have already been matched based on `BETA10`, so you can search for the name of your `.cpp` file and check all the assertions in that file. While that does not find all functions in a given source file, it usually finds the more complex ones.
+* _If you have found any other strategies, please add them here._
+
+## Others (**WIP**)
+* `ALPHA` (only used twice)
