@@ -17,4 +17,4 @@ def getFunctionAt(
 def createFunction(
     entryPoint: ghidra.program.model.address.Address, name: str
 ) -> ghidra.program.model.listing.Function: ...
-def getProgramFile() -> Any: ... # actually java.io.File
+def getProgramFile() -> Any: ...  # actually java.io.File

@@ -39,6 +39,7 @@ logger = logging.getLogger(__name__)
 
 class PdbFunctionImporter(ABC):
     """A representation of a function from the PDB with each type replaced by a Ghidra type instance."""
+
     def __init__(
         self,
         api: FlatProgramAPI,
@@ -71,10 +72,12 @@ class PdbFunctionImporter(ABC):
         )
 
     @abstractmethod
-    def matches_ghidra_function(self, ghidra_function: Function) -> bool: ...
+    def matches_ghidra_function(self, ghidra_function: Function) -> bool:
+        ...
 
     @abstractmethod
-    def overwrite_ghidra_function(self, ghidra_function: Function): ...
+    def overwrite_ghidra_function(self, ghidra_function: Function):
+        ...
 
 
 class ThunkPdbFunctionImport(PdbFunctionImporter):
@@ -101,6 +104,7 @@ class ThunkPdbFunctionImport(PdbFunctionImporter):
 # pylint: disable=too-many-instance-attributes
 class FullPdbFunctionImporter(PdbFunctionImporter):
     """For importing functions into Ghidra where all information are available."""
+
     def __init__(
         self,
         api: FlatProgramAPI,

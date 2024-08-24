@@ -80,8 +80,10 @@ def create_ghidra_namespace(
             namespace = api.createNamespace(namespace, part)
     return namespace
 
+
 # These appear in debug builds
 THUNK_OF_RE = re.compile(r"^Thunk of '(.*)'$")
+
 
 def sanitize_name(name: str) -> str:
     """

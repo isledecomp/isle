@@ -228,7 +228,6 @@ def log_and_track_failure(
 
 
 def main():
-
     if GLOBALS.running_from_ghidra:
         origfile_name = getProgramFile().getName()
 
@@ -237,7 +236,9 @@ def main():
         elif origfile_name in ["LEGO1D.DLL", "BETA10.DLL"]:
             module = SupportedModules.BETA10
         else:
-            raise Lego1Exception(f"Unsupported file name in import script: {origfile_name}")
+            raise Lego1Exception(
+                f"Unsupported file name in import script: {origfile_name}"
+            )
     else:
         module = SupportedModules.LEGO1
 
@@ -262,7 +263,9 @@ def main():
     with Bin(str(origfile_path), find_str=True) as origfile, Bin(
         str(recompiledfile_path)
     ) as recompfile:
-        isle_compare = IsleCompare(origfile, recompfile, str(pdbfile_path), str(repo_root))
+        isle_compare = IsleCompare(
+            origfile, recompfile, str(pdbfile_path), str(repo_root)
+        )
 
     logger.info("Comparison complete.")
 
