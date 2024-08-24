@@ -5,6 +5,7 @@
 
 import logging
 from typing import Optional
+from abc import ABC, abstractmethod
 
 from ghidra.program.model.listing import Function, Parameter
 from ghidra.program.flatapi import FlatProgramAPI
@@ -24,6 +25,7 @@ from lego_util.pdb_extraction import (
 )
 from lego_util.ghidra_helper import (
     add_data_type_or_reuse_existing,
+    create_ghidra_namespace,
     get_or_add_pointer_type,
     get_ghidra_namespace,
     sanitize_name,
@@ -32,14 +34,11 @@ from lego_util.ghidra_helper import (
 from lego_util.exceptions import StackOffsetMismatchError, Lego1Exception
 from lego_util.type_importer import PdbTypeImporter
 
-
 logger = logging.getLogger(__name__)
 
 
-# pylint: disable=too-many-instance-attributes
-class PdbFunctionImporter:
+class PdbFunctionImporter(ABC):
     """A representation of a function from the PDB with each type replaced by a Ghidra type instance."""
-
     def __init__(
         self,
         api: FlatProgramAPI,
@@ -48,20 +47,76 @@ class PdbFunctionImporter:
     ):
         self.api = api
         self.match_info = func.match_info
-        self.signature = func.signature
-        self.is_stub = func.is_stub
         self.type_importer = type_importer
-
-        if self.signature.class_type is not None:
-            # Import the base class so the namespace exists
-            self.type_importer.import_pdb_type_into_ghidra(self.signature.class_type)
 
         assert self.match_info.name is not None
 
         colon_split = sanitize_name(self.match_info.name).split("::")
         self.name = colon_split.pop()
         namespace_hierachy = colon_split
-        self.namespace = get_ghidra_namespace(api, namespace_hierachy)
+        self.namespace = self._do_get_namespace(namespace_hierachy)
+
+    def _do_get_namespace(self, namespace_hierarchy: list[str]):
+        return get_ghidra_namespace(self.api, namespace_hierarchy)
+
+    def get_full_name(self) -> str:
+        return f"{self.namespace.getName()}::{self.name}"
+
+    @staticmethod
+    def build(api: FlatProgramAPI, func: PdbFunction, type_importer: "PdbTypeImporter"):
+        return (
+            ThunkPdbFunctionImport(api, func, type_importer)
+            if func.signature is None
+            else FullPdbFunctionImporter(api, func, type_importer)
+        )
+
+    @abstractmethod
+    def matches_ghidra_function(self, ghidra_function: Function) -> bool: ...
+
+    @abstractmethod
+    def overwrite_ghidra_function(self, ghidra_function: Function): ...
+
+
+class ThunkPdbFunctionImport(PdbFunctionImporter):
+    """For importing thunk functions (like vtordisp or debug build thunks) into Ghidra.
+    Only the name of the function will be imported."""
+
+    def _do_get_namespace(self, namespace_hierarchy: list[str]):
+        """We need to create the namespace because we don't import the return type here"""
+        return create_ghidra_namespace(self.api, namespace_hierarchy)
+
+    def matches_ghidra_function(self, ghidra_function: Function) -> bool:
+        name_match = self.name == ghidra_function.getName(False)
+        namespace_match = self.namespace == ghidra_function.getParentNamespace()
+
+        logger.debug("Matches: namespace=%s name=%s", namespace_match, name_match)
+
+        return name_match and namespace_match
+
+    def overwrite_ghidra_function(self, ghidra_function: Function):
+        ghidra_function.setName(self.name, SourceType.USER_DEFINED)
+        ghidra_function.setParentNamespace(self.namespace)
+
+
+# pylint: disable=too-many-instance-attributes
+class FullPdbFunctionImporter(PdbFunctionImporter):
+    """For importing functions into Ghidra where all information are available."""
+    def __init__(
+        self,
+        api: FlatProgramAPI,
+        func: PdbFunction,
+        type_importer: "PdbTypeImporter",
+    ):
+        super().__init__(api, func, type_importer)
+
+        assert func.signature is not None
+        self.signature = func.signature
+
+        self.is_stub = func.is_stub
+
+        if self.signature.class_type is not None:
+            # Import the base class so the namespace exists
+            self.type_importer.import_pdb_type_into_ghidra(self.signature.class_type)
 
         self.return_type = type_importer.import_pdb_type_into_ghidra(
             self.signature.return_type
@@ -74,17 +129,6 @@ class PdbFunctionImporter:
             )
             for (index, type_name) in enumerate(self.signature.arglist)
         ]
-
-    @property
-    def call_type(self):
-        return self.signature.call_type
-
-    @property
-    def stack_symbols(self):
-        return self.signature.stack_symbols
-
-    def get_full_name(self) -> str:
-        return f"{self.namespace.getName()}::{self.name}"
 
     def matches_ghidra_function(self, ghidra_function: Function) -> bool:
         """Checks whether this function declaration already matches the description in Ghidra"""
@@ -235,7 +279,7 @@ class PdbFunctionImporter:
         ghidra_function.setName(self.name, SourceType.USER_DEFINED)
         ghidra_function.setParentNamespace(self.namespace)
         ghidra_function.setReturnType(self.return_type, SourceType.USER_DEFINED)
-        ghidra_function.setCallingConvention(self.call_type)
+        ghidra_function.setCallingConvention(self.signature.call_type)
 
         if self.is_stub:
             logger.debug(
@@ -306,7 +350,7 @@ class PdbFunctionImporter:
         return next(
             (
                 symbol
-                for symbol in self.stack_symbols
+                for symbol in self.signature.stack_symbols
                 if isinstance(symbol, CppStackSymbol)
                 and symbol.stack_offset == stack_offset
             ),
@@ -319,7 +363,7 @@ class PdbFunctionImporter:
         return next(
             (
                 symbol
-                for symbol in self.stack_symbols
+                for symbol in self.signature.stack_symbols
                 if isinstance(symbol, CppRegisterSymbol) and symbol.register == register
             ),
             None,

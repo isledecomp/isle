@@ -3,6 +3,7 @@ import re
 from typing import Any, Optional
 import logging
 
+from isledecomp.bin import InvalidVirtualAddressError
 from isledecomp.cvdump.symbols import SymbolsEntry
 from isledecomp.compare import Compare as IsleCompare
 from isledecomp.compare.db import MatchInfo
@@ -43,7 +44,7 @@ class FunctionSignature:
 @dataclass
 class PdbFunction:
     match_info: MatchInfo
-    signature: FunctionSignature
+    signature: Optional[FunctionSignature]
     is_stub: bool
 
 
@@ -74,9 +75,7 @@ class PdbFunctionExtractor:
     def get_func_signature(self, fn: SymbolsEntry) -> Optional[FunctionSignature]:
         function_type_str = fn.func_type
         if function_type_str == "T_NOTYPE(0000)":
-            logger.debug(
-                "Skipping a NOTYPE (synthetic or template + synthetic): %s", fn.name
-            )
+            logger.debug("Treating NOTYPE function as thunk: %s", fn.name)
             return None
 
         # get corresponding function type
@@ -145,8 +144,6 @@ class PdbFunctionExtractor:
         assert match_info.orig_addr is not None
         match_options = self.compare.get_match_options(match_info.orig_addr)
         assert match_options is not None
-        if match_options.get("skip", False):
-            return None
 
         function_data = next(
             (
@@ -156,11 +153,19 @@ class PdbFunctionExtractor:
             ),
             None,
         )
-        if not function_data:
-            logger.error(
-                "Did not find function in nodes, skipping: %s", match_info.name
-            )
-            return None
+        if function_data is None:
+            try:
+                # this can be either a thunk (which we want) or an external function
+                # (which we don't want), so we tell them apart based on the validity of their address.
+                self.compare.orig_bin.get_relative_addr(match_info.orig_addr)
+                return PdbFunction(match_info, None, False)
+            except InvalidVirtualAddressError:
+                logger.debug(
+                    "Skipping external function %s (address 0x%x not in original binary)",
+                    match_info.name,
+                    match_info.orig_addr,
+                )
+                return None
 
         function_symbol = function_data.symbol_entry
         if function_symbol is None:
@@ -171,8 +176,6 @@ class PdbFunctionExtractor:
             return None
 
         function_signature = self.get_func_signature(function_symbol)
-        if function_signature is None:
-            return None
 
         is_stub = match_options.get("stub", False)
 

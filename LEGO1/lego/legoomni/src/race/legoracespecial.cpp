@@ -209,7 +209,7 @@ void LegoCarRaceActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown
 }
 
 // FUNCTION: LEGO1 0x10080b70
-// FUNCTION: BETA10 0x1000366b
+// FUNCTION: BETA10 0x100cdbae
 void LegoCarRaceActor::VTable0x70(float p_float)
 {
 	// m_unk0x0c is not an MxBool, there are places where it is set to 2 or higher

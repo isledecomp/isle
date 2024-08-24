@@ -1,5 +1,6 @@
 """Wrapper for database (here an in-memory sqlite database) that collects the
 addresses/symbols that we want to compare between the original and recompiled binaries."""
+
 import sqlite3
 import logging
 from typing import Any, List, Optional
@@ -363,6 +364,10 @@ class CompareDb:
         if "`vtordisp" in name:
             return True
 
+        if decorated_name is None:
+            # happens in debug builds, e.g. for "Thunk of 'LegoAnimActor::ClassName'"
+            return False
+
         new_name = get_vtordisp_name(decorated_name)
         if new_name is None:
             return False
@@ -375,6 +380,18 @@ class CompareDb:
         )
 
         return True
+
+    def is_thunk_of(self, recomp_addr: int) -> bool:
+        """Check whether this function is a thunk of a debug build based on its name."""
+
+        name = self._db.execute(
+            """SELECT name
+            FROM `symbols`
+            WHERE recomp_addr = ?""",
+            (recomp_addr,),
+        ).fetchone()[0]
+
+        return name.startswith("Thunk of")
 
     def _find_potential_match(
         self, name: str, compare_type: SymbolType

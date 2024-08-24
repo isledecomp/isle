@@ -21,6 +21,7 @@
 # Disable spurious warnings in vscode / pylance
 # pyright: reportMissingModuleSource=false
 
+from enum import Enum
 import importlib
 from dataclasses import dataclass, field
 import logging.handlers
@@ -62,6 +63,25 @@ class Globals:
     running_from_ghidra: bool = False
     # statistics
     statistics: Statistics = field(default_factory=Statistics)
+
+
+class SupportedModules(Enum):
+    LEGO1 = 1
+    BETA10 = 2
+
+    def orig_filename(self):
+        if self == self.LEGO1:
+            return "LEGO1.DLL"
+        return "BETA10.DLL"
+
+    def recomp_filename_without_extension(self):
+        # in case we want to support more functions
+        return "LEGO1"
+
+    def build_dir_name(self):
+        if self == self.BETA10:
+            return "build_debug"
+        return "build"
 
 
 # hard-coded settings that we don't want to prompt in Ghidra every time
@@ -133,7 +153,7 @@ def import_function_into_ghidra(
     # Find the Ghidra function at that address
     ghidra_address = getAddressFactory().getAddress(hex_original_address)
     # pylint: disable=possibly-used-before-assignment
-    function_importer = PdbFunctionImporter(api, pdb_function, type_importer)
+    function_importer = PdbFunctionImporter.build(api, pdb_function, type_importer)
 
     ghidra_function = getFunctionAt(ghidra_address)
     if ghidra_function is None:
@@ -208,11 +228,28 @@ def log_and_track_failure(
 
 
 def main():
+
+    if GLOBALS.running_from_ghidra:
+        origfile_name = getProgramFile().getName()
+
+        if origfile_name == "LEGO1.DLL":
+            module = SupportedModules.LEGO1
+        elif origfile_name in ["LEGO1D.DLL", "BETA10.DLL"]:
+            module = SupportedModules.BETA10
+        else:
+            raise Lego1Exception(f"Unsupported file name in import script: {origfile_name}")
+    else:
+        module = SupportedModules.LEGO1
+
+    logger.info("Importing file: %s", module.orig_filename())
+
     repo_root = get_repository_root()
-    origfile_path = repo_root.joinpath("LEGO1.DLL")
-    build_path = repo_root.joinpath("build")
-    recompiledfile_path = build_path.joinpath("LEGO1.DLL")
-    pdb_path = build_path.joinpath("LEGO1.pdb")
+    origfile_path = repo_root.joinpath("legobin").joinpath(module.orig_filename())
+    build_directory = repo_root.joinpath(module.build_dir_name())
+    recompiledfile_name = f"{module.recomp_filename_without_extension()}.DLL"
+    recompiledfile_path = build_directory.joinpath(recompiledfile_name)
+    pdbfile_name = f"{module.recomp_filename_without_extension()}.PDB"
+    pdbfile_path = build_directory.joinpath(pdbfile_name)
 
     if not GLOBALS.verbose:
         logging.getLogger("isledecomp.bin").setLevel(logging.WARNING)
@@ -225,7 +262,7 @@ def main():
     with Bin(str(origfile_path), find_str=True) as origfile, Bin(
         str(recompiledfile_path)
     ) as recompfile:
-        isle_compare = IsleCompare(origfile, recompfile, str(pdb_path), str(repo_root))
+        isle_compare = IsleCompare(origfile, recompfile, str(pdbfile_path), str(repo_root))
 
     logger.info("Comparison complete.")
 
