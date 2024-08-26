@@ -381,18 +381,6 @@ class CompareDb:
 
         return True
 
-    def is_thunk_of(self, recomp_addr: int) -> bool:
-        """Check whether this function is a thunk of a debug build based on its name."""
-
-        name = self._db.execute(
-            """SELECT name
-            FROM `symbols`
-            WHERE recomp_addr = ?""",
-            (recomp_addr,),
-        ).fetchone()[0]
-
-        return name.startswith("Thunk of")
-
     def _find_potential_match(
         self, name: str, compare_type: SymbolType
     ) -> Optional[int]:

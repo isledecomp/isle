@@ -508,8 +508,6 @@ class Compare:
 
                 if self._db.is_vtordisp(recomp_addr):
                     self._match_vtordisp_in_vtable(orig_addr, recomp_addr)
-                elif self._db.is_thunk_of(recomp_addr):
-                    self._match_thunk_in_vtable(orig_addr, recomp_addr)
 
     def _match_vtordisp_in_vtable(self, orig_addr, recomp_addr):
         thunk_fn = self.get_by_recomp(recomp_addr)
@@ -558,52 +556,6 @@ class Compare:
                     orig_addr,
                 )
             self._db.set_function_pair(orig_addr, recomp_addr)
-
-    def _match_thunk_in_vtable(self, orig_addr, recomp_addr):
-        thunk_fn = self.get_by_recomp(recomp_addr)
-        assert thunk_fn is not None
-
-        # These thunks always consist of one jump instruction, which is 5 bytes long.
-        thunk_size = 5
-        assert thunk_fn.size == thunk_size
-
-        orig_thunk_bin = self.orig_bin.read(orig_addr, thunk_size)
-        recomp_thunk_bin = self.recomp_bin.read(recomp_addr, thunk_size)
-        assert orig_thunk_bin is not None and recomp_thunk_bin is not None
-
-        # Read jump opcode and displacement (1+4 bytes)
-        (orig_jmp, orig_disp) = struct.unpack("<Bi", orig_thunk_bin)
-        (recomp_jmp, recomp_disp) = struct.unpack("<Bi", recomp_thunk_bin)
-
-        # Make sure it's a JMP
-        if orig_jmp != 0xE9 or recomp_jmp != 0xE9:
-            logger.warning(
-                "Not a jump in Thunk at (0x%x, 0x%x)", orig_addr, recomp_addr
-            )
-            return
-
-        # Calculate jump destination from the end of the JMP instruction
-        # i.e. the end of the function
-        orig_jump_target = orig_addr + len(orig_thunk_bin) + orig_disp
-        recomp_jump_target = recomp_addr + len(recomp_thunk_bin) + recomp_disp
-
-        # If they are thunking the same function, then this must be a match.
-        pointer_match = self._db.get_by_orig(orig_jump_target)
-        if pointer_match is None:
-            logger.info(
-                "Thunk at 0x%x jumps to 0x%x which is not annotated",
-                orig_addr,
-                orig_jump_target,
-            )
-            return
-
-        if pointer_match.recomp_addr != recomp_jump_target:
-            logger.warning(
-                "Thunk jump target mismatch at (%x, %x)", orig_addr, recomp_addr
-            )
-
-        logger.debug("Thunk match at (%x, %x)", orig_addr, recomp_addr)
-        self._db.set_function_pair(orig_addr, recomp_addr)
 
     def _dump_asm(self, orig_combined, recomp_combined):
         """Append the provided assembly output to the debug files"""
