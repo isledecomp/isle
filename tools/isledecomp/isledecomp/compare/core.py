@@ -479,14 +479,31 @@ class Compare:
         construct the name of the vtordisp function and match based on that."""
 
         for match in self._db.get_matches_by_type(SymbolType.VTABLE):
+            assert (
+                match.name is not None
+                and match.orig_addr is not None
+                and match.recomp_addr is not None
+                and match.size is not None
+            )
             # We need some method of identifying vtables that
             # might have thunks, and this ought to work okay.
             if "{for" not in match.name:
                 continue
 
+            next_orig = self._db.get_next_orig_addr(match.orig_addr)
+            assert next_orig is not None
+            orig_upper_size_limit = next_orig - match.orig_addr
+            if orig_upper_size_limit < match.size:
+                # This could happen in debug builds due to code changes between BETA10 and LEGO1,
+                # but we have not seen it yet as of 2024-08-28.
+                logger.warning(
+                    "Recomp vtable is larger than orig vtable for %s",
+                    match.name,
+                )
+
             # TODO: We might want to fix this at the source (cvdump) instead.
             # Any problem will be logged later when we compare the vtable.
-            vtable_size = 4 * (match.size // 4)
+            vtable_size = 4 * (min(match.size, orig_upper_size_limit) // 4)
             orig_table = self.orig_bin.read(match.orig_addr, vtable_size)
             recomp_table = self.recomp_bin.read(match.recomp_addr, vtable_size)
 
