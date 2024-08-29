@@ -72,35 +72,35 @@ void FUN_1003dde0(LegoROI* p_param1, MxFloat p_param2)
 // FUNCTION: BETA10 0x100d3802
 MxBool FUN_1003ded0(MxFloat p_param1[3], MxFloat p_param2[3], MxFloat p_param3[3])
 {
-	MxFloat local_1c[4];
-	MxFloat local_10[3];
+	MxFloat local1c[4];
+	MxFloat local10[3];
 
 	Tgl::View* view = VideoManager()->Get3DManager()->GetLego3DView()->GetView();
 
-	local_1c[0] = p_param1[0];
-	local_1c[1] = p_param1[1];
-	local_1c[2] = 1.0f;
-	local_1c[3] = 1.0f;
+	local1c[0] = p_param1[0];
+	local1c[1] = p_param1[1];
+	local1c[2] = 1.0f;
+	local1c[3] = 1.0f;
 
-	view->TransformScreenToWorld(local_1c, p_param3);
+	view->TransformScreenToWorld(local1c, p_param3);
 
-	local_1c[0] *= 2.0;
-	local_1c[1] *= 2.0;
-	local_1c[3] = 2.0;
+	local1c[0] *= 2.0;
+	local1c[1] *= 2.0;
+	local1c[3] = 2.0;
 
-	view->TransformScreenToWorld(local_1c, local_10);
+	view->TransformScreenToWorld(local1c, local10);
 
-	p_param2[0] = local_10[0] - p_param3[0];
-	p_param2[1] = local_10[1] - p_param3[1];
-	p_param2[2] = local_10[2] - p_param3[2];
+	p_param2[0] = local10[0] - p_param3[0];
+	p_param2[1] = local10[1] - p_param3[1];
+	p_param2[2] = local10[2] - p_param3[2];
 	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x1003df70
 // FUNCTION: BETA10 0x100d38cb
-MxBool TransformWorldToScreen(const MxFloat world[3], MxFloat screen[4])
+MxBool TransformWorldToScreen(const MxFloat p_world[3], MxFloat p_screen[4])
 {
-	VideoManager()->Get3DManager()->GetLego3DView()->GetView()->TransformWorldToScreen(world, screen);
+	VideoManager()->Get3DManager()->GetLego3DView()->GetView()->TransformWorldToScreen(p_world, p_screen);
 	return TRUE;
 }
 

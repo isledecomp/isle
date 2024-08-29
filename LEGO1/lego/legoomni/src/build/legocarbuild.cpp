@@ -27,7 +27,6 @@ MxFloat LegoCarBuild::g_unk0x100d65a8 = 0.07;
 // GLOBAL: LEGO1 0x100f11cc
 MxS16 LegoCarBuild::g_unk0x100f11cc = -1;
 
-
 // STUB: LEGO1 0x100226d0
 // FUNCTION: BETA10 0x1006ac10
 LegoCarBuild::LegoCarBuild()
@@ -236,14 +235,14 @@ void LegoCarBuild::VTable0x70()
 void LegoCarBuild::VTable0x74(MxFloat p_param1[3], MxFloat p_param2[3])
 {
 	MxFloat fVar1;
-	MxFloat local_20[3];
-	MxFloat local_14[3];
+	MxFloat local20[3];
+	MxFloat local14[3];
 
-	FUN_1003ded0(p_param1, local_14, local_20);
+	FUN_1003ded0(p_param1, local14, local20);
 
-	fVar1 = (m_unk0x2a4[2] - local_20[2]) / local_14[2];
-	p_param2[0] = (fVar1 * local_14[0] + local_20[0]) - m_unk0x2a4[0];
-	p_param2[1] = (fVar1 * local_14[1] + local_20[1]) - m_unk0x2a4[1];
+	fVar1 = (m_unk0x2a4[2] - local20[2]) / local14[2];
+	p_param2[0] = (fVar1 * local14[0] + local20[0]) - m_unk0x2a4[0];
+	p_param2[1] = (fVar1 * local14[1] + local20[1]) - m_unk0x2a4[1];
 	p_param2[2] = 0.0;
 	return;
 }
@@ -253,16 +252,16 @@ void LegoCarBuild::VTable0x74(MxFloat p_param1[3], MxFloat p_param2[3])
 void LegoCarBuild::VTable0x78(MxFloat p_param1[3], MxFloat p_param2[3])
 {
 	MxFloat fVar1;
-	MxFloat local_18[3];
-	MxFloat local_c[3];
+	MxFloat local18[3];
+	MxFloat localc[3];
 
-	FUN_1003ded0(p_param1, local_18, local_c);
+	FUN_1003ded0(p_param1, local18, localc);
 
 	p_param2[2] =
 		m_unk0x2a4[2] + (m_unk0x2bc[2] - m_unk0x2a4[2]) * ((p_param1[1] - m_unk0x294) / (m_unk0x29c - m_unk0x294));
-	fVar1 = (p_param2[2] - local_c[2]) / local_18[2];
-	p_param2[0] = fVar1 * local_18[0] - m_unk0x2a4[0] + local_c[0];
-	p_param2[1] = fVar1 * local_18[1] - m_unk0x2a4[1] + local_c[1];
+	fVar1 = (p_param2[2] - localc[2]) / local18[2];
+	p_param2[0] = fVar1 * local18[0] - m_unk0x2a4[0] + localc[0];
+	p_param2[1] = fVar1 * local18[1] - m_unk0x2a4[1] + localc[1];
 	p_param2[2] = p_param2[2] - m_unk0x2a4[2];
 }
 
@@ -270,22 +269,20 @@ void LegoCarBuild::VTable0x78(MxFloat p_param1[3], MxFloat p_param2[3])
 // FUNCTION: BETA10 0x1006bfb5
 void LegoCarBuild::VTable0x7c(MxFloat p_param1[3], MxFloat p_param2[3])
 {
-	MxFloat local_18[3];
-	MxFloat local_c[3];
-	FUN_1003ded0(p_param1, local_18, local_c);
+	MxFloat local18[3];
+	MxFloat localc[3];
+	FUN_1003ded0(p_param1, local18, localc);
 
-	MxFloat fVar1 = (m_unk0x2bc[1] - local_c[1]) / local_18[1];
-	p_param2[0] = fVar1 * local_18[0] - m_unk0x2a4[0] + local_c[0];
+	MxFloat fVar1 = (m_unk0x2bc[1] - localc[1]) / local18[1];
+	p_param2[0] = fVar1 * local18[0] - m_unk0x2a4[0] + localc[0];
 	p_param2[1] = m_unk0x2bc[1] - m_unk0x2a4[1];
-	p_param2[2] = fVar1 * local_18[2] - m_unk0x2a4[2] + local_c[2];
+	p_param2[2] = fVar1 * local18[2] - m_unk0x2a4[2] + localc[2];
 }
 
 // FUNCTION: LEGO1 0x100236a0
 // FUNCTION: BETA10 0x100701f0
 void LegoCarBuild::VTable0x80(MxFloat p_param1[2], MxFloat p_param2[2], MxFloat p_param3, MxFloat p_param4[2])
 {
-	// The code does the right thing and matches BETA10 perfectly, but mismatches LEGO1.
-	// Maybe compiler entropy?
 	if (p_param1[1] == 0.0f) {
 		return;
 	}
@@ -298,7 +295,6 @@ void LegoCarBuild::VTable0x80(MxFloat p_param1[2], MxFloat p_param2[2], MxFloat 
 		FUN_10025db0(str, dTime - subtract);                                                                           \
 		return SUCCESS;                                                                                                \
 	}
-
 
 // FUNCTION: LEGO1 0x100238b0
 // FUNCTION: BETA10 0x1006c18f
@@ -451,7 +447,6 @@ void LegoCarBuild::FUN_10024ef0()
 	m_buildState->m_unk0x4c += 1;
 	FUN_10015820(FALSE, 7);
 }
-
 
 // FUNCTION: LEGO1 0x10024f50
 // FUNCTION: BETA10 0x1006dfce
