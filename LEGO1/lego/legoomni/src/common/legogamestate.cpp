@@ -3,6 +3,7 @@
 #include "3dmanager/lego3dmanager.h"
 #include "act2main_actions.h"
 #include "act3_actions.h"
+#include "assert.h"
 #include "carrace_actions.h"
 #include "carracer_actions.h"
 #include "copter_actions.h"
@@ -613,6 +614,7 @@ MxS16 LegoGameState::FindPlayer(Username& p_player)
 }
 
 // FUNCTION: LEGO1 0x1003a720
+// FUNCTION: BETA10 0x10085211
 void LegoGameState::StopArea(Area p_area)
 {
 	if (p_area == e_previousArea) {
@@ -1031,6 +1033,7 @@ MxBool ROIHandlerFunction(const char* p_input, char* p_output, MxU32 p_copyLen)
 }
 
 // FUNCTION: LEGO1 0x1003bbb0
+// FUNCTION: BETA10 0x10086280
 LegoState* LegoGameState::GetState(const char* p_stateName)
 {
 	for (MxS32 i = 0; i < m_stateCount; ++i) {
@@ -1042,12 +1045,16 @@ LegoState* LegoGameState::GetState(const char* p_stateName)
 }
 
 // FUNCTION: LEGO1 0x1003bc00
+// FUNCTION: BETA10 0x100862fc
 LegoState* LegoGameState::CreateState(const char* p_stateName)
 {
-	LegoState* newState = (LegoState*) ObjectFactory()->Create(p_stateName);
-	RegisterState(newState);
+	// variable name verified by BETA10 0x10086341
+	LegoState* state = (LegoState*) ObjectFactory()->Create(p_stateName);
+	assert(state);
 
-	return newState;
+	RegisterState(state);
+
+	return state;
 }
 
 // FUNCTION: LEGO1 0x1003bc30

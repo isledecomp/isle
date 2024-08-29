@@ -47,6 +47,7 @@ public:
 
 	// FUNCTION: BETA10 0x100d5570
 	Tgl::View* GetView() const { return m_pView; }
+
 	Tgl::Group* GetScene() const { return m_pScene; }
 
 	// FUNCTION: BETA10 0x1017cbc0

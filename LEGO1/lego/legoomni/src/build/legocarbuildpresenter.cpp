@@ -43,3 +43,18 @@ void LegoCarBuildAnimPresenter::EndAction()
 {
 	// TODO
 }
+
+// STUB: LEGO1 0x10079920
+// STUB: BETA10 0x1007225d
+void LegoCarBuildAnimPresenter::FUN_10079920(float param_1)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10079ca0
+// STUB: BETA10 0x10072740
+MxBool LegoCarBuildAnimPresenter::FUN_10079ca0(const char* param_1)
+{
+	// TODO; pretty short
+	return FALSE;
+}

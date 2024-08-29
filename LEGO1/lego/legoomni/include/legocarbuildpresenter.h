@@ -37,6 +37,9 @@ public:
 	void EndAction() override;       // vtable+0x40
 	void PutFrame() override;        // vtable+0x6c
 
+	void FUN_10079920(float param_1);
+	MxBool FUN_10079ca0(const char* param_1);
+
 	// SYNTHETIC: LEGO1 0x10078660
 	// LegoCarBuildAnimPresenter::`scalar deleting destructor'
 

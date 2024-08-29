@@ -25,8 +25,10 @@ LegoSoundManager* SoundManager()
 }
 
 // FUNCTION: LEGO1 0x10015720
+// FUNCTION: BETA10 0x100e4807
 LegoVideoManager* VideoManager()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetVideoManager();
 }
 
