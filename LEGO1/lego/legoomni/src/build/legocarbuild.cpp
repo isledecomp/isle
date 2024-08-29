@@ -259,7 +259,7 @@ void LegoCarBuild::VTable0x78(MxFloat param_1[3], MxFloat param_2[3])
 }
 
 // FUNCTION: LEGO1 0x10023620
-// FUNCTION: BETA10 0x1006be91
+// FUNCTION: BETA10 0x1006bfb5
 void LegoCarBuild::VTable0x7c(MxFloat param_1[3], MxFloat param_2[3])
 {
 	MxFloat local_18[3];
