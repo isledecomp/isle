@@ -1,6 +1,7 @@
 """A collection of helper functions for the interaction with Ghidra."""
 
 import logging
+import re
 
 from lego_util.exceptions import (
     ClassOrNamespaceNotFoundInGhidraError,
@@ -80,25 +81,42 @@ def create_ghidra_namespace(
     return namespace
 
 
+# These appear in debug builds
+THUNK_OF_RE = re.compile(r"^Thunk of '(.*)'$")
+
+
 def sanitize_name(name: str) -> str:
     """
     Takes a full class or function name and replaces characters not accepted by Ghidra.
-    Applies mostly to templates and names like `vbase destructor`.
+    Applies mostly to templates, names like `vbase destructor`, and thunks in debug build.
     """
-    new_class_name = (
+    if (match := THUNK_OF_RE.fullmatch(name)) is not None:
+        is_thunk = True
+        name = match.group(1)
+    else:
+        is_thunk = False
+
+    # Replace characters forbidden in Ghidra
+    new_name = (
         name.replace("<", "[")
         .replace(">", "]")
         .replace("*", "#")
         .replace(" ", "_")
         .replace("`", "'")
     )
-    if "<" in name:
-        new_class_name = "_template_" + new_class_name
 
-    if new_class_name != name:
-        logger.warning(
-            "Class or function name contains characters forbidden by Ghidra, changing from '%s' to '%s'",
+    if "<" in name:
+        new_name = "_template_" + new_name
+
+    if is_thunk:
+        split = new_name.split("::")
+        split[-1] = "_thunk_" + split[-1]
+        new_name = "::".join(split)
+
+    if new_name != name:
+        logger.info(
+            "Changed class or function name from '%s' to '%s' to avoid Ghidra issues",
             name,
-            new_class_name,
+            new_name,
         )
-    return new_class_name
+    return new_name

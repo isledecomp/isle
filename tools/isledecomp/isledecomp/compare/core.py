@@ -479,14 +479,31 @@ class Compare:
         construct the name of the vtordisp function and match based on that."""
 
         for match in self._db.get_matches_by_type(SymbolType.VTABLE):
+            assert (
+                match.name is not None
+                and match.orig_addr is not None
+                and match.recomp_addr is not None
+                and match.size is not None
+            )
             # We need some method of identifying vtables that
             # might have thunks, and this ought to work okay.
             if "{for" not in match.name:
                 continue
 
+            next_orig = self._db.get_next_orig_addr(match.orig_addr)
+            assert next_orig is not None
+            orig_upper_size_limit = next_orig - match.orig_addr
+            if orig_upper_size_limit < match.size:
+                # This could happen in debug builds due to code changes between BETA10 and LEGO1,
+                # but we have not seen it yet as of 2024-08-28.
+                logger.warning(
+                    "Recomp vtable is larger than orig vtable for %s",
+                    match.name,
+                )
+
             # TODO: We might want to fix this at the source (cvdump) instead.
             # Any problem will be logged later when we compare the vtable.
-            vtable_size = 4 * (match.size // 4)
+            vtable_size = 4 * (min(match.size, orig_upper_size_limit) // 4)
             orig_table = self.orig_bin.read(match.orig_addr, vtable_size)
             recomp_table = self.recomp_bin.read(match.recomp_addr, vtable_size)
 
@@ -497,51 +514,65 @@ class Compare:
 
             # Now walk both vtables looking for thunks.
             for orig_addr, recomp_addr in raw_addrs:
-                if not self._db.is_vtordisp(recomp_addr):
-                    continue
+                if orig_addr == 0:
+                    # This happens in debug builds due to code changes between BETA10 and LEGO1.
+                    # Note that there is a risk of running into the next vtable if there is no gap in between,
+                    # which we cannot protect against at the moment.
+                    logger.warning(
+                        "Recomp vtable is larger than orig vtable for %s", match.name
+                    )
+                    break
 
-                thunk_fn = self.get_by_recomp(recomp_addr)
+                if self._db.is_vtordisp(recomp_addr):
+                    self._match_vtordisp_in_vtable(orig_addr, recomp_addr)
 
-                # Read the function bytes here.
-                # In practice, the adjuster thunk will be under 16 bytes.
-                # If we have thunks of unequal size, we can still tell whether
-                # they are thunking the same function by grabbing the
-                # JMP instruction at the end.
-                thunk_presumed_size = max(thunk_fn.size, 16)
+    def _match_vtordisp_in_vtable(self, orig_addr, recomp_addr):
+        thunk_fn = self.get_by_recomp(recomp_addr)
+        assert thunk_fn is not None
+        assert thunk_fn.size is not None
 
-                # Strip off MSVC padding 0xcc bytes.
-                # This should be safe to do; it is highly unlikely that
-                # the MSB of the jump displacement would be 0xcc. (huge jump)
-                orig_thunk_bin = self.orig_bin.read(
-                    orig_addr, thunk_presumed_size
-                ).rstrip(b"\xcc")
+        # Read the function bytes here.
+        # In practice, the adjuster thunk will be under 16 bytes.
+        # If we have thunks of unequal size, we can still tell whether they are thunking
+        # the same function by grabbing the JMP instruction at the end.
+        thunk_presumed_size = max(thunk_fn.size, 16)
 
-                recomp_thunk_bin = self.recomp_bin.read(
-                    recomp_addr, thunk_presumed_size
-                ).rstrip(b"\xcc")
+        # Strip off MSVC padding 0xcc bytes.
+        # This should be safe to do; it is highly unlikely that
+        # the MSB of the jump displacement would be 0xcc. (huge jump)
+        orig_thunk_bin = self.orig_bin.read(orig_addr, thunk_presumed_size).rstrip(
+            b"\xcc"
+        )
 
-                # Read jump opcode and displacement (last 5 bytes)
-                (orig_jmp, orig_disp) = struct.unpack("<Bi", orig_thunk_bin[-5:])
-                (recomp_jmp, recomp_disp) = struct.unpack("<Bi", recomp_thunk_bin[-5:])
+        recomp_thunk_bin = self.recomp_bin.read(
+            recomp_addr, thunk_presumed_size
+        ).rstrip(b"\xcc")
 
-                # Make sure it's a JMP
-                if orig_jmp != 0xE9 or recomp_jmp != 0xE9:
-                    continue
+        # Read jump opcode and displacement (last 5 bytes)
+        (orig_jmp, orig_disp) = struct.unpack("<Bi", orig_thunk_bin[-5:])
+        (recomp_jmp, recomp_disp) = struct.unpack("<Bi", recomp_thunk_bin[-5:])
 
-                # Calculate jump destination from the end of the JMP instruction
-                # i.e. the end of the function
-                orig_actual = orig_addr + len(orig_thunk_bin) + orig_disp
-                recomp_actual = recomp_addr + len(recomp_thunk_bin) + recomp_disp
+        # Make sure it's a JMP
+        if orig_jmp != 0xE9 or recomp_jmp != 0xE9:
+            logger.warning(
+                "Not a jump in vtordisp at (0x%x, 0x%x)", orig_addr, recomp_addr
+            )
+            return
 
-                # If they are thunking the same function, then this must be a match.
-                if self.is_pointer_match(orig_actual, recomp_actual):
-                    if len(orig_thunk_bin) != len(recomp_thunk_bin):
-                        logger.warning(
-                            "Adjuster thunk %s (0x%x) is not exact",
-                            thunk_fn.name,
-                            orig_addr,
-                        )
-                    self._db.set_function_pair(orig_addr, recomp_addr)
+        # Calculate jump destination from the end of the JMP instruction
+        # i.e. the end of the function
+        orig_actual = orig_addr + len(orig_thunk_bin) + orig_disp
+        recomp_actual = recomp_addr + len(recomp_thunk_bin) + recomp_disp
+
+        # If they are thunking the same function, then this must be a match.
+        if self.is_pointer_match(orig_actual, recomp_actual):
+            if len(orig_thunk_bin) != len(recomp_thunk_bin):
+                logger.warning(
+                    "Adjuster thunk %s (0x%x) is not exact",
+                    thunk_fn.name,
+                    orig_addr,
+                )
+            self._db.set_function_pair(orig_addr, recomp_addr)
 
     def _dump_asm(self, orig_combined, recomp_combined):
         """Append the provided assembly output to the debug files"""

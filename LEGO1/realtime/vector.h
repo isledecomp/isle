@@ -89,7 +89,7 @@ public:
 	virtual float Dot(float* p_a, float* p_b) const { return DotImpl(p_a, p_b); } // vtable+0x3c
 
 	// FUNCTION: LEGO1 0x100020f0
-	// FUNCTION: BETA10 0x100028f6
+	// FUNCTION: BETA10 0x100108c0
 	virtual float Dot(Vector2* p_a, Vector2* p_b) const { return DotImpl(p_a->m_data, p_b->m_data); } // vtable+0x38
 
 	// FUNCTION: LEGO1 0x10002110
@@ -188,7 +188,7 @@ public:
 	// in reverse order of appearance.
 
 	// FUNCTION: LEGO1 0x10002270
-	// FUNCTION: BETA10 0x100064a1
+	// FUNCTION: BETA10 0x10011350
 	virtual void EqualsCrossImpl(float* p_a, float* p_b)
 	{
 		m_data[0] = p_a[1] * p_b[2] - p_a[2] * p_b[1];
@@ -275,7 +275,7 @@ public:
 	void EqualsImpl(float* p_data) override { memcpy(m_data, p_data, sizeof(float) * 3); } // vtable+0x20
 
 	// FUNCTION: LEGO1 0x10003bc0
-	// FUNCTION: BETA10 0x1000132a
+	// FUNCTION: BETA10 0x100114f0
 	void Clear() override { memset(m_data, 0, sizeof(float) * 3); } // vtable+0x2c
 
 	// FUNCTION: LEGO1 0x10003bd0

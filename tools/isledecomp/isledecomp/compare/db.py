@@ -1,5 +1,6 @@
 """Wrapper for database (here an in-memory sqlite database) that collects the
 addresses/symbols that we want to compare between the original and recompiled binaries."""
+
 import sqlite3
 import logging
 from typing import Any, List, Optional
@@ -362,6 +363,10 @@ class CompareDb:
         (name, decorated_name) = row
         if "`vtordisp" in name:
             return True
+
+        if decorated_name is None:
+            # happens in debug builds, e.g. for "Thunk of 'LegoAnimActor::ClassName'"
+            return False
 
         new_name = get_vtordisp_name(decorated_name)
         if new_name is None:

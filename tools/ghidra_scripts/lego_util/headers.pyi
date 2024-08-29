@@ -1,4 +1,4 @@
-from typing import TypeVar
+from typing import TypeVar, Any
 import ghidra
 
 # pylint: disable=invalid-name,unused-argument
@@ -17,3 +17,4 @@ def getFunctionAt(
 def createFunction(
     entryPoint: ghidra.program.model.address.Address, name: str
 ) -> ghidra.program.model.listing.Function: ...
+def getProgramFile() -> Any: ...  # actually java.io.File

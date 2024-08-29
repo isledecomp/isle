@@ -1,6 +1,12 @@
 #ifndef DECOMP_H
 #define DECOMP_H
 
+#ifndef NDEBUG
+// Disable size assertions for debug builds because the sizes differ between debug and release builds.
+// The release LEGO1.DLL is what we ultimately want to decompile, so this is what we assert against.
+#undef ENABLE_DECOMP_ASSERTS
+#endif
+
 #if defined(ENABLE_DECOMP_ASSERTS)
 #define DECOMP_STATIC_ASSERT(V)                                                                                        \
 	namespace                                                                                                          \

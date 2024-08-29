@@ -12,11 +12,16 @@ ENV/
 VENV/
 env.bak/
 venv.bak/
-ISLE.EXE
-LEGO1.DLL
 /build/
+/build_debug/
+/legobin/
 *.swp
 LEGO1PROGRESS.*
 ISLEPROGRESS.*
 *.pyc
 tools/ghidra_scripts/import.log
+
+# By convention we put the retail binaries into ./legobin.
+# These entries are kept for now since that convention has not always been around.
+ISLE.EXE
+LEGO1.DLL
