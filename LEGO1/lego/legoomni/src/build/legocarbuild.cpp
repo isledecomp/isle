@@ -18,7 +18,15 @@
 DECOMP_SIZE_ASSERT(LegoCarBuild, 0x34c)
 DECOMP_SIZE_ASSERT(LegoVehicleBuildState, 0x50)
 
+// GLOBAL: LEGO1 0x100d65a4
+MxFloat LegoCarBuild::g_unk0x100d65a4 = -0.1f;
+
+// GLOBAL: LEGO1 0x100d65a8
+MxFloat LegoCarBuild::g_unk0x100d65a8 = 0.07;
+
+// GLOBAL: LEGO1 0x100f11cc
 MxS16 LegoCarBuild::g_unk0x100f11cc = -1;
+
 
 // STUB: LEGO1 0x100226d0
 // FUNCTION: BETA10 0x1006ac10
@@ -291,8 +299,6 @@ void LegoCarBuild::VTable0x80(MxFloat param_1[2], MxFloat param_2[2], MxFloat pa
 		return SUCCESS;                                                                                                \
 	}
 
-// GLOBAL: LEGO1 0x100d65a4
-const MxFloat MINUS_ZEROPOINTONE = -0.1f;
 
 // FUNCTION: LEGO1 0x100238b0
 // FUNCTION: BETA10 0x1006c18f
@@ -317,7 +323,7 @@ MxResult LegoCarBuild::Tickle()
 	}
 
 	if (m_unk0x100 == 5 && m_unk0x110) {
-		FUN_1003dde0(m_unk0x110, MINUS_ZEROPOINTONE);
+		FUN_1003dde0(m_unk0x110, g_unk0x100d65a4);
 	}
 
 	if (m_unk0x10a) {
@@ -446,15 +452,13 @@ void LegoCarBuild::FUN_10024ef0()
 	FUN_10015820(FALSE, 7);
 }
 
-// GLOBAL: LEGO1 0x100d65a8
-const MxFloat POINTZEROZEROSEVEN = 0.07;
 
 // FUNCTION: LEGO1 0x10024f50
 // FUNCTION: BETA10 0x1006dfce
 void LegoCarBuild::FUN_10024f50()
 {
 	m_unk0x2d4 = FALSE;
-	m_unk0x258->FUN_10079920(POINTZEROZEROSEVEN);
+	m_unk0x258->FUN_10079920(g_unk0x100d65a8);
 }
 
 // FUNCTION: LEGO1 0x10024fa0

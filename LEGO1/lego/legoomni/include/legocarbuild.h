@@ -173,8 +173,9 @@ private:
 	undefined4 m_unk0x344;          // 0x344
 	MxU8 m_presentersEnabled;       // 0x348
 
-	// GLOBAL: LEGO1 0x100f11cc
 	static MxS16 g_unk0x100f11cc;
+	static MxFloat g_unk0x100d65a4;
+	static MxFloat g_unk0x100d65a8;
 };
 
 #endif // LEGOCARBUILD_H
