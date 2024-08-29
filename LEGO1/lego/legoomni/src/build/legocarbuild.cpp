@@ -551,8 +551,8 @@ void LegoCarBuild::FUN_10025db0(const char* p_param1, undefined4 p_param2)
 MxBool LegoCarBuild::Escape()
 {
 	BackgroundAudioManager()->Init();
-	MxS32 p_targetEntityId = FUN_10025ee0(m_unk0x330);
-	InvokeAction(Extra::ActionType::e_stop, *g_jukeboxScript, p_targetEntityId, NULL);
+	MxS32 targetEntityId = FUN_10025ee0(m_unk0x330);
+	InvokeAction(Extra::ActionType::e_stop, *g_jukeboxScript, targetEntityId, NULL);
 	DeleteObjects(&m_atomId, 500, 999);
 
 	m_buildState->m_animationState = 0;
