@@ -41,10 +41,10 @@ LegoCarBuild::LegoCarBuild()
 	m_colorBookBitmap = 0;
 	m_yellowCtl = 0;
 	m_redCtl = 0;
-	m_BlueCtl = 0;
-	m_GreenCtl = 0;
-	m_GrayCtl = 0;
-	m_BlackCtl = 0;
+	m_blueCtl = 0;
+	m_greenCtl = 0;
+	m_grayCtl = 0;
+	m_blackCtl = 0;
 	m_shelfSound = 0;
 	m_placeBrickSound = 0;
 	m_getBrickSound = 0;
@@ -157,10 +157,10 @@ void LegoCarBuild::InitPresenters()
 	m_colorBookBitmap = (MxStillPresenter*) Find("MxStillPresenter", "ColorBook_Bitmap");
 	m_yellowCtl = (MxControlPresenter*) Find("MxControlPresenter", "Yellow_Ctl");
 	m_redCtl = (MxControlPresenter*) Find("MxControlPresenter", "Red_Ctl");
-	m_BlueCtl = (MxControlPresenter*) Find("MxControlPresenter", "Blue_Ctl");
-	m_GreenCtl = (MxControlPresenter*) Find("MxControlPresenter", "Green_Ctl");
-	m_GrayCtl = (MxControlPresenter*) Find("MxControlPresenter", "Gray_Ctl");
-	m_BlackCtl = (MxControlPresenter*) Find("MxControlPresenter", "Black_Ctl");
+	m_blueCtl = (MxControlPresenter*) Find("MxControlPresenter", "Blue_Ctl");
+	m_greenCtl = (MxControlPresenter*) Find("MxControlPresenter", "Green_Ctl");
+	m_grayCtl = (MxControlPresenter*) Find("MxControlPresenter", "Gray_Ctl");
+	m_blackCtl = (MxControlPresenter*) Find("MxControlPresenter", "Black_Ctl");
 	m_shelfSound = (MxSoundPresenter*) Find("MxSoundPresenter", "Shelf_Sound");
 	m_placeBrickSound = (MxSoundPresenter*) Find("MxSoundPresenter", "PlaceBrick_Sound");
 	m_getBrickSound = (MxSoundPresenter*) Find("MxSoundPresenter", "GetBrick_Sound");
@@ -233,64 +233,64 @@ void LegoCarBuild::VTable0x70()
 
 // FUNCTION: LEGO1 0x10023500
 // FUNCTION: BETA10 0x1006bdf6
-void LegoCarBuild::VTable0x74(MxFloat param_1[3], MxFloat param_2[3])
+void LegoCarBuild::VTable0x74(MxFloat p_param1[3], MxFloat p_param2[3])
 {
 	MxFloat fVar1;
 	MxFloat local_20[3];
 	MxFloat local_14[3];
 
-	FUN_1003ded0(param_1, local_14, local_20);
+	FUN_1003ded0(p_param1, local_14, local_20);
 
 	fVar1 = (m_unk0x2a4[2] - local_20[2]) / local_14[2];
-	param_2[0] = (fVar1 * local_14[0] + local_20[0]) - m_unk0x2a4[0];
-	param_2[1] = (fVar1 * local_14[1] + local_20[1]) - m_unk0x2a4[1];
-	param_2[2] = 0.0;
+	p_param2[0] = (fVar1 * local_14[0] + local_20[0]) - m_unk0x2a4[0];
+	p_param2[1] = (fVar1 * local_14[1] + local_20[1]) - m_unk0x2a4[1];
+	p_param2[2] = 0.0;
 	return;
 }
 
 // FUNCTION: LEGO1 0x10023570
 // FUNCTION: BETA10 0x1006be91
-void LegoCarBuild::VTable0x78(MxFloat param_1[3], MxFloat param_2[3])
+void LegoCarBuild::VTable0x78(MxFloat p_param1[3], MxFloat p_param2[3])
 {
 	MxFloat fVar1;
 	MxFloat local_18[3];
 	MxFloat local_c[3];
 
-	FUN_1003ded0(param_1, local_18, local_c);
+	FUN_1003ded0(p_param1, local_18, local_c);
 
-	param_2[2] =
-		m_unk0x2a4[2] + (m_unk0x2bc[2] - m_unk0x2a4[2]) * ((param_1[1] - m_unk0x294) / (m_unk0x29c - m_unk0x294));
-	fVar1 = (param_2[2] - local_c[2]) / local_18[2];
-	param_2[0] = fVar1 * local_18[0] - m_unk0x2a4[0] + local_c[0];
-	param_2[1] = fVar1 * local_18[1] - m_unk0x2a4[1] + local_c[1];
-	param_2[2] = param_2[2] - m_unk0x2a4[2];
+	p_param2[2] =
+		m_unk0x2a4[2] + (m_unk0x2bc[2] - m_unk0x2a4[2]) * ((p_param1[1] - m_unk0x294) / (m_unk0x29c - m_unk0x294));
+	fVar1 = (p_param2[2] - local_c[2]) / local_18[2];
+	p_param2[0] = fVar1 * local_18[0] - m_unk0x2a4[0] + local_c[0];
+	p_param2[1] = fVar1 * local_18[1] - m_unk0x2a4[1] + local_c[1];
+	p_param2[2] = p_param2[2] - m_unk0x2a4[2];
 }
 
 // FUNCTION: LEGO1 0x10023620
 // FUNCTION: BETA10 0x1006bfb5
-void LegoCarBuild::VTable0x7c(MxFloat param_1[3], MxFloat param_2[3])
+void LegoCarBuild::VTable0x7c(MxFloat p_param1[3], MxFloat p_param2[3])
 {
 	MxFloat local_18[3];
 	MxFloat local_c[3];
-	FUN_1003ded0(param_1, local_18, local_c);
+	FUN_1003ded0(p_param1, local_18, local_c);
 
 	MxFloat fVar1 = (m_unk0x2bc[1] - local_c[1]) / local_18[1];
-	param_2[0] = fVar1 * local_18[0] - m_unk0x2a4[0] + local_c[0];
-	param_2[1] = m_unk0x2bc[1] - m_unk0x2a4[1];
-	param_2[2] = fVar1 * local_18[2] - m_unk0x2a4[2] + local_c[2];
+	p_param2[0] = fVar1 * local_18[0] - m_unk0x2a4[0] + local_c[0];
+	p_param2[1] = m_unk0x2bc[1] - m_unk0x2a4[1];
+	p_param2[2] = fVar1 * local_18[2] - m_unk0x2a4[2] + local_c[2];
 }
 
 // FUNCTION: LEGO1 0x100236a0
 // FUNCTION: BETA10 0x100701f0
-void LegoCarBuild::VTable0x80(MxFloat param_1[2], MxFloat param_2[2], MxFloat param_3, MxFloat param_4[2])
+void LegoCarBuild::VTable0x80(MxFloat p_param1[2], MxFloat p_param2[2], MxFloat p_param3, MxFloat p_param4[2])
 {
 	// The code does the right thing and matches BETA10 perfectly, but mismatches LEGO1.
 	// Maybe compiler entropy?
-	if (param_1[1] == 0.0f) {
+	if (p_param1[1] == 0.0f) {
 		return;
 	}
-	param_4[0] = ((param_3 - param_2[1]) / param_1[1]) * param_1[0] + param_2[0];
-	param_4[1] = param_3;
+	p_param4[0] = ((p_param3 - p_param2[1]) / p_param1[1]) * p_param1[0] + p_param2[0];
+	p_param4[1] = p_param3;
 }
 
 #define LEGOCARBUILD_TICKLE_CASE(subtract, start, end, str)                                                            \
@@ -469,10 +469,10 @@ void LegoCarBuild::SetPresentersEnabled(MxBool p_enabled)
 	m_colorBookBitmap->Enable(p_enabled);
 	m_yellowCtl->Enable(p_enabled);
 	m_redCtl->Enable(p_enabled);
-	m_BlueCtl->Enable(p_enabled);
-	m_GreenCtl->Enable(p_enabled);
-	m_GrayCtl->Enable(p_enabled);
-	m_BlackCtl->Enable(p_enabled);
+	m_blueCtl->Enable(p_enabled);
+	m_greenCtl->Enable(p_enabled);
+	m_grayCtl->Enable(p_enabled);
+	m_blackCtl->Enable(p_enabled);
 }
 
 // FUNCTION: LEGO1 0x10025010
@@ -481,10 +481,10 @@ void LegoCarBuild::TogglePresentersEnabled()
 	m_colorBookBitmap->Enable(!m_colorBookBitmap->IsEnabled());
 	m_yellowCtl->Enable(!m_yellowCtl->IsEnabled());
 	m_redCtl->Enable(!m_redCtl->IsEnabled());
-	m_BlueCtl->Enable(!m_BlueCtl->IsEnabled());
-	m_GreenCtl->Enable(!m_GreenCtl->IsEnabled());
-	m_GrayCtl->Enable(!m_GrayCtl->IsEnabled());
-	m_BlackCtl->Enable(!m_BlackCtl->IsEnabled());
+	m_blueCtl->Enable(!m_blueCtl->IsEnabled());
+	m_greenCtl->Enable(!m_greenCtl->IsEnabled());
+	m_grayCtl->Enable(!m_grayCtl->IsEnabled());
+	m_blackCtl->Enable(!m_blackCtl->IsEnabled());
 }
 
 // FUNCTION: LEGO1 0x100256c0
@@ -506,7 +506,7 @@ void LegoCarBuild::Enable(MxBool p_enable)
 }
 
 // STUB: LEGO1 0x10025720
-undefined4 LegoCarBuild::FUN_10025720(undefined4 param_1)
+undefined4 LegoCarBuild::FUN_10025720(undefined4 p_param1)
 {
 	// TODO
 	return 0;
@@ -529,11 +529,11 @@ MxS32 LegoCarBuild::FUN_10025d70()
 
 // FUNCTION: LEGO1 0x10025db0
 // FUNCTION: BETA10 0x1006ed18
-void LegoCarBuild::FUN_10025db0(const char* param_1, undefined4 param_2)
+void LegoCarBuild::FUN_10025db0(const char* p_param1, undefined4 p_param2)
 {
-	m_unk0x33c = (MxControlPresenter*) Find("MxControlPresenter", param_1);
+	m_unk0x33c = (MxControlPresenter*) Find("MxControlPresenter", p_param1);
 
-	MxS16 sVar3 = 1 - ((param_2 / 5) & 1);
+	MxS16 sVar3 = 1 - ((p_param2 / 5) & 1);
 
 	if (m_yellowCtl == m_unk0x33c) {
 		if (sVar3 != g_unk0x100f11cc) {
@@ -566,10 +566,10 @@ MxBool LegoCarBuild::Escape()
 }
 
 // FUNCTION: LEGO1 0x10025ee0
-MxS32 LegoCarBuild::FUN_10025ee0(undefined4 param_1)
+MxS32 LegoCarBuild::FUN_10025ee0(undefined4 p_param1)
 {
 	// TODO: Work out constants
-	switch (param_1) {
+	switch (p_param1) {
 	case 1:
 		return 0x2f;
 	case 2:

@@ -80,19 +80,24 @@ public:
 		return !strcmp(p_name, LegoCarBuild::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
-	MxLong Notify(MxParam& p_param) override;                                                             // vtable+0x04
-	MxResult Tickle() override;                                                                           // vtable+0x08
-	MxResult Create(MxDSAction& p_dsAction) override;                                                     // vtable+0x18
-	void ReadyWorld() override;                                                                           // vtable+0x50
-	MxBool VTable0x5c() override;                                                                         // vtable+0x5c
-	MxBool Escape() override;                                                                             // vtable+0x64
-	void Enable(MxBool p_enable) override;                                                                // vtable+0x68
-	virtual void VTable0x6c();                                                                            // vtable+0x6c
-	virtual void VTable0x70();                                                                            // vtable+0x70
-	virtual void VTable0x74(MxFloat param_1[3], MxFloat param_2[3]);                                      // vtable+0x74
-	virtual void VTable0x78(MxFloat param_1[3], MxFloat param_2[3]);                                      // vtable+0x78
-	virtual void VTable0x7c(MxFloat param_1[3], MxFloat param_2[3]);                                      // vtable+0x7c
-	virtual void VTable0x80(MxFloat param_1[2], MxFloat param_2[2], MxFloat param_3, MxFloat param_4[2]); // vtable+0x80
+	MxLong Notify(MxParam& p_param) override;                          // vtable+0x04
+	MxResult Tickle() override;                                        // vtable+0x08
+	MxResult Create(MxDSAction& p_dsAction) override;                  // vtable+0x18
+	void ReadyWorld() override;                                        // vtable+0x50
+	MxBool VTable0x5c() override;                                      // vtable+0x5c
+	MxBool Escape() override;                                          // vtable+0x64
+	void Enable(MxBool p_enable) override;                             // vtable+0x68
+	virtual void VTable0x6c();                                         // vtable+0x6c
+	virtual void VTable0x70();                                         // vtable+0x70
+	virtual void VTable0x74(MxFloat p_param1[3], MxFloat p_param2[3]); // vtable+0x74
+	virtual void VTable0x78(MxFloat p_param1[3], MxFloat p_param2[3]); // vtable+0x78
+	virtual void VTable0x7c(MxFloat p_param1[3], MxFloat p_param2[3]); // vtable+0x7c
+	virtual void VTable0x80(
+		MxFloat p_param1[2],
+		MxFloat p_param2[2],
+		MxFloat p_param3,
+		MxFloat p_param4[2]
+	); // vtable+0x80
 
 	void InitPresenters();
 	void FUN_10022f30();
@@ -100,10 +105,10 @@ public:
 	void FUN_10024f50();
 	void SetPresentersEnabled(MxBool p_enabled);
 	void TogglePresentersEnabled();
-	undefined4 FUN_10025720(undefined4 param_1);
+	undefined4 FUN_10025720(undefined4 p_param1);
 	MxS32 FUN_10025d70();
-	void FUN_10025db0(const char* param_1, undefined4 param_2);
-	MxS32 FUN_10025ee0(undefined4 param_1);
+	void FUN_10025db0(const char* p_param1, undefined4 p_param2);
+	MxS32 FUN_10025ee0(undefined4 p_param1);
 
 	// SYNTHETIC: LEGO1 0x10022a60
 	// LegoCarBuild::`scalar deleting destructor'
@@ -143,10 +148,10 @@ private:
 	MxStillPresenter* m_colorBookBitmap; // 0x2dc
 	MxControlPresenter* m_yellowCtl;     // 0x2e0
 	MxControlPresenter* m_redCtl;        // 0x2e4
-	MxControlPresenter* m_BlueCtl;       // 0x2e8
-	MxControlPresenter* m_GreenCtl;      // 0x2ec
-	MxControlPresenter* m_GrayCtl;       // 0x2f0
-	MxControlPresenter* m_BlackCtl;      // 0x2f4
+	MxControlPresenter* m_blueCtl;       // 0x2e8
+	MxControlPresenter* m_greenCtl;      // 0x2ec
+	MxControlPresenter* m_grayCtl;       // 0x2f0
+	MxControlPresenter* m_blackCtl;      // 0x2f4
 	MxSoundPresenter* m_shelfSound;      // 0x2f8
 	MxSoundPresenter* m_placeBrickSound; // 0x2fc
 	MxSoundPresenter* m_getBrickSound;   // 0x300
