@@ -61,7 +61,7 @@ class PdbFunctionExtractor:
 
     _call_type_map = {
         "ThisCall": "__thiscall",
-        "C Near": "__thiscall",
+        "C Near": "default",
         "STD Near": "__stdcall",
     }
 
