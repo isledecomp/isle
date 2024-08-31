@@ -141,31 +141,33 @@ private:
 	MxS32 m_unk0x298; // 0x298
 	MxS32 m_unk0x29c; // 0x29c
 
-	MxFloat m_unk0x2a0;                  // 0x2a0
-	Mx4DPointFloat m_unk0x2a4;           // 0x2a4
-	Mx4DPointFloat m_unk0x2bc;           // 0x2bc
-	MxBool m_unk0x2d4;                   // 0x2d4
-	MxStillPresenter* m_colorBookBitmap; // 0x2dc
-	MxControlPresenter* m_yellowCtl;     // 0x2e0
-	MxControlPresenter* m_redCtl;        // 0x2e4
-	MxControlPresenter* m_blueCtl;       // 0x2e8
-	MxControlPresenter* m_greenCtl;      // 0x2ec
-	MxControlPresenter* m_grayCtl;       // 0x2f0
-	MxControlPresenter* m_blackCtl;      // 0x2f4
-	MxSoundPresenter* m_shelfSound;      // 0x2f8
-	MxSoundPresenter* m_placeBrickSound; // 0x2fc
-	MxSoundPresenter* m_getBrickSound;   // 0x300
-	MxSoundPresenter* m_paintSound;      // 0x304
-	MxSoundPresenter* m_decalSound;      // 0x308
-	MxStillPresenter* m_decalBitmap;     // 0x30c
-	MxControlPresenter* m_decalsCtl0;    // 0x310
-	MxControlPresenter* m_decalsCtl1;    // 0x314
-	MxControlPresenter* m_decalsCtl2;    // 0x318
-	MxControlPresenter* m_decalsCtl3;    // 0x31c
-	MxControlPresenter* m_decalsCtl4;    // 0x320
-	MxControlPresenter* m_decalsCtl5;    // 0x324
-	MxControlPresenter* m_decalsCtl6;    // 0x328
-	MxControlPresenter* m_decalsCtl7;    // 0x32c
+	MxFloat m_unk0x2a0;        // 0x2a0
+	Mx4DPointFloat m_unk0x2a4; // 0x2a4
+	Mx4DPointFloat m_unk0x2bc; // 0x2bc
+	MxBool m_unk0x2d4;         // 0x2d4
+
+	// variable names verified by BETA10 0x1006b27a
+	MxStillPresenter* m_ColorBook_Bitmap; // 0x2dc
+	MxControlPresenter* m_Yellow_Ctl;     // 0x2e0
+	MxControlPresenter* m_Red_Ctl;        // 0x2e4
+	MxControlPresenter* m_Blue_Ctl;       // 0x2e8
+	MxControlPresenter* m_Green_Ctl;      // 0x2ec
+	MxControlPresenter* m_Gray_Ctl;       // 0x2f0
+	MxControlPresenter* m_Black_Ctl;      // 0x2f4
+	MxSoundPresenter* m_Shelf_Sound;      // 0x2f8
+	MxSoundPresenter* m_PlaceBrick_Sound; // 0x2fc
+	MxSoundPresenter* m_GetBrick_Sound;   // 0x300
+	MxSoundPresenter* m_Paint_Sound;      // 0x304
+	MxSoundPresenter* m_Decal_Sound;      // 0x308
+	MxStillPresenter* m_Decal_Bitmap;     // 0x30c
+	MxControlPresenter* m_Decals_Ctl;     // 0x310
+	MxControlPresenter* m_Decals_Ctl1;    // 0x314
+	MxControlPresenter* m_Decals_Ctl2;    // 0x318
+	MxControlPresenter* m_Decals_Ctl3;    // 0x31c
+	MxControlPresenter* m_Decals_Ctl4;    // 0x320
+	MxControlPresenter* m_Decals_Ctl5;    // 0x324
+	MxControlPresenter* m_Decals_Ctl6;    // 0x328
+	MxControlPresenter* m_Decals_Ctl7;    // 0x32c
 
 	// variable name verified by BETA10 0x1006b219
 	LegoVehicleBuildState* m_buildState; // 0x32c

@@ -666,4 +666,7 @@
 // GLOBAL: LEGO1 0x1010a730
 // __nstream
 
+// LIBRARY: BETA10 0x100f9060
+// _assert
+
 #endif

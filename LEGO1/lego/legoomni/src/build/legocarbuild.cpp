@@ -37,27 +37,27 @@ LegoCarBuild::LegoCarBuild()
 	m_unk0xf8 = 0xffffffff;
 	m_unk0x2d4 = '\0';
 	m_unk0x258 = 0;
-	m_colorBookBitmap = 0;
-	m_yellowCtl = 0;
-	m_redCtl = 0;
-	m_blueCtl = 0;
-	m_greenCtl = 0;
-	m_grayCtl = 0;
-	m_blackCtl = 0;
-	m_shelfSound = 0;
-	m_placeBrickSound = 0;
-	m_getBrickSound = 0;
-	m_paintSound = 0;
-	m_decalSound = 0;
-	m_decalBitmap = 0;
-	m_decalsCtl0 = 0;
-	m_decalsCtl1 = 0;
-	m_decalsCtl2 = 0;
-	m_decalsCtl3 = 0;
-	m_decalsCtl4 = 0;
-	m_decalsCtl5 = 0;
-	m_decalsCtl6 = 0;
-	m_decalsCtl7 = NULL;
+	m_ColorBook_Bitmap = 0;
+	m_Yellow_Ctl = 0;
+	m_Red_Ctl = 0;
+	m_Blue_Ctl = 0;
+	m_Green_Ctl = 0;
+	m_Gray_Ctl = 0;
+	m_Black_Ctl = 0;
+	m_Shelf_Sound = 0;
+	m_PlaceBrick_Sound = 0;
+	m_GetBrick_Sound = 0;
+	m_Paint_Sound = 0;
+	m_Decal_Sound = 0;
+	m_Decal_Bitmap = 0;
+	m_Decals_Ctl = 0;
+	m_Decals_Ctl1 = 0;
+	m_Decals_Ctl2 = 0;
+	m_Decals_Ctl3 = 0;
+	m_Decals_Ctl4 = 0;
+	m_Decals_Ctl5 = 0;
+	m_Decals_Ctl6 = 0;
+	m_Decals_Ctl7 = NULL;
 	m_unk0x33c = 0;
 	m_buildState = 0;
 	m_unk0x104 = 0;
@@ -151,32 +151,49 @@ MxResult LegoCarBuild::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10022d10
+// FUNCTION: BETA10 0x1006b27a
 void LegoCarBuild::InitPresenters()
 {
-	m_colorBookBitmap = (MxStillPresenter*) Find("MxStillPresenter", "ColorBook_Bitmap");
-	m_yellowCtl = (MxControlPresenter*) Find("MxControlPresenter", "Yellow_Ctl");
-	m_redCtl = (MxControlPresenter*) Find("MxControlPresenter", "Red_Ctl");
-	m_blueCtl = (MxControlPresenter*) Find("MxControlPresenter", "Blue_Ctl");
-	m_greenCtl = (MxControlPresenter*) Find("MxControlPresenter", "Green_Ctl");
-	m_grayCtl = (MxControlPresenter*) Find("MxControlPresenter", "Gray_Ctl");
-	m_blackCtl = (MxControlPresenter*) Find("MxControlPresenter", "Black_Ctl");
-	m_shelfSound = (MxSoundPresenter*) Find("MxSoundPresenter", "Shelf_Sound");
-	m_placeBrickSound = (MxSoundPresenter*) Find("MxSoundPresenter", "PlaceBrick_Sound");
-	m_getBrickSound = (MxSoundPresenter*) Find("MxSoundPresenter", "GetBrick_Sound");
-	m_paintSound = (MxSoundPresenter*) Find("MxSoundPresenter", "Paint_Sound");
-	m_decalSound = (MxSoundPresenter*) Find("MxSoundPresenter", "Decal_Sound");
-	m_decalsCtl0 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl");
-	m_decalsCtl1 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl1");
-	m_decalsCtl2 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl2");
-	m_decalBitmap = (MxStillPresenter*) Find("MxStillPresenter", "Decal_Bitmap");
-	if (m_decalBitmap) {
-		m_decalsCtl3 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl3");
-		m_decalsCtl4 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl4");
-		m_decalsCtl5 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl5");
-		m_decalsCtl6 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl6");
-		m_decalsCtl7 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl7");
+	m_ColorBook_Bitmap = (MxStillPresenter*) Find("MxStillPresenter", "ColorBook_Bitmap");
+	assert(m_ColorBook_Bitmap);
+	m_Yellow_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Yellow_Ctl");
+	assert(m_Yellow_Ctl);
+	m_Red_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Red_Ctl");
+	assert(m_Red_Ctl);
+	m_Blue_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Blue_Ctl");
+	assert(m_Blue_Ctl);
+	m_Green_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Green_Ctl");
+	assert(m_Green_Ctl);
+	m_Gray_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Gray_Ctl");
+	assert(m_Gray_Ctl);
+	m_Black_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Black_Ctl");
+	assert(m_Black_Ctl);
+	m_Shelf_Sound = (MxSoundPresenter*) Find("MxSoundPresenter", "Shelf_Sound");
+	assert(m_Shelf_Sound);
+	m_PlaceBrick_Sound = (MxSoundPresenter*) Find("MxSoundPresenter", "PlaceBrick_Sound");
+	assert(m_PlaceBrick_Sound);
+	m_GetBrick_Sound = (MxSoundPresenter*) Find("MxSoundPresenter", "GetBrick_Sound");
+	assert(m_GetBrick_Sound);
+	m_Paint_Sound = (MxSoundPresenter*) Find("MxSoundPresenter", "Paint_Sound");
+	assert(m_Paint_Sound);
+	m_Decal_Sound = (MxSoundPresenter*) Find("MxSoundPresenter", "Decal_Sound");
+	m_Decals_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl");
+	m_Decals_Ctl1 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl1");
+	m_Decals_Ctl2 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl2");
+	m_Decal_Bitmap = (MxStillPresenter*) Find("MxStillPresenter", "Decal_Bitmap");
+	assert(m_Decal_Bitmap);
+	if (m_Decal_Bitmap) {
+		m_Decals_Ctl3 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl3");
+		assert(m_Decals_Ctl3);
+		m_Decals_Ctl4 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl4");
+		assert(m_Decals_Ctl4);
+		m_Decals_Ctl5 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl5");
+		assert(m_Decals_Ctl5);
+		m_Decals_Ctl6 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl6");
+		assert(m_Decals_Ctl6);
+		m_Decals_Ctl7 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl7");
+		assert(m_Decals_Ctl7);
 	}
-	return;
 }
 
 // STUB: LEGO1 0x10022f30
@@ -461,25 +478,25 @@ void LegoCarBuild::FUN_10024f50()
 void LegoCarBuild::SetPresentersEnabled(MxBool p_enabled)
 {
 	m_presentersEnabled = p_enabled;
-	m_colorBookBitmap->Enable(p_enabled);
-	m_yellowCtl->Enable(p_enabled);
-	m_redCtl->Enable(p_enabled);
-	m_blueCtl->Enable(p_enabled);
-	m_greenCtl->Enable(p_enabled);
-	m_grayCtl->Enable(p_enabled);
-	m_blackCtl->Enable(p_enabled);
+	m_ColorBook_Bitmap->Enable(p_enabled);
+	m_Yellow_Ctl->Enable(p_enabled);
+	m_Red_Ctl->Enable(p_enabled);
+	m_Blue_Ctl->Enable(p_enabled);
+	m_Green_Ctl->Enable(p_enabled);
+	m_Gray_Ctl->Enable(p_enabled);
+	m_Black_Ctl->Enable(p_enabled);
 }
 
 // FUNCTION: LEGO1 0x10025010
 void LegoCarBuild::TogglePresentersEnabled()
 {
-	m_colorBookBitmap->Enable(!m_colorBookBitmap->IsEnabled());
-	m_yellowCtl->Enable(!m_yellowCtl->IsEnabled());
-	m_redCtl->Enable(!m_redCtl->IsEnabled());
-	m_blueCtl->Enable(!m_blueCtl->IsEnabled());
-	m_greenCtl->Enable(!m_greenCtl->IsEnabled());
-	m_grayCtl->Enable(!m_grayCtl->IsEnabled());
-	m_blackCtl->Enable(!m_blackCtl->IsEnabled());
+	m_ColorBook_Bitmap->Enable(!m_ColorBook_Bitmap->IsEnabled());
+	m_Yellow_Ctl->Enable(!m_Yellow_Ctl->IsEnabled());
+	m_Red_Ctl->Enable(!m_Red_Ctl->IsEnabled());
+	m_Blue_Ctl->Enable(!m_Blue_Ctl->IsEnabled());
+	m_Green_Ctl->Enable(!m_Green_Ctl->IsEnabled());
+	m_Gray_Ctl->Enable(!m_Gray_Ctl->IsEnabled());
+	m_Black_Ctl->Enable(!m_Black_Ctl->IsEnabled());
 }
 
 // FUNCTION: LEGO1 0x100256c0
@@ -530,7 +547,7 @@ void LegoCarBuild::FUN_10025db0(const char* p_param1, undefined4 p_param2)
 
 	MxS16 sVar3 = 1 - ((p_param2 / 5) & 1);
 
-	if (m_yellowCtl == m_unk0x33c) {
+	if (m_Yellow_Ctl == m_unk0x33c) {
 		if (sVar3 != g_unk0x100f11cc) {
 			TogglePresentersEnabled();
 			g_unk0x100f11cc = sVar3;
