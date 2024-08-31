@@ -162,30 +162,30 @@ class FullPdbFunctionImporter(PdbFunctionImporter):
             return_type_match = True
 
         # match arguments: decide if thiscall or not, and whether the `this` type matches
-        thiscall_matches = (
+        calling_convention_match = (
             self.signature.call_type == ghidra_function.getCallingConventionName()
         )
 
         ghidra_params_without_this = list(ghidra_function.getParameters())
 
-        if thiscall_matches and self.signature.call_type == "__thiscall":
+        if calling_convention_match and self.signature.call_type == "__thiscall":
             this_argument = ghidra_params_without_this.pop(0)
-            thiscall_matches = self._this_type_match(this_argument)
+            calling_convention_match = self._this_type_match(this_argument)
 
         if self.is_stub:
             # We do not import the argument list for stubs, so it should be excluded in matches
             args_match = True
-        elif thiscall_matches:
+        elif calling_convention_match:
             args_match = self._parameter_lists_match(ghidra_params_without_this)
         else:
             args_match = False
 
         logger.debug(
-            "Matches: namespace=%s name=%s return_type=%s thiscall=%s args=%s",
+            "Matches: namespace=%s name=%s return_type=%s calling_convention=%s args=%s",
             namespace_match,
             name_match,
             return_type_match,
-            thiscall_matches,
+            calling_convention_match,
             "ignored" if self.is_stub else args_match,
         )
 
@@ -193,7 +193,7 @@ class FullPdbFunctionImporter(PdbFunctionImporter):
             name_match
             and namespace_match
             and return_type_match
-            and thiscall_matches
+            and calling_convention_match
             and args_match
         )
 
