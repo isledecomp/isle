@@ -82,8 +82,9 @@ class Compare:
 
         self._load_cvdump()
         self._load_markers()
-        self._find_original_strings()
+        # Detect floats first to eliminate potential overlap with string data
         self._find_float_const()
+        self._find_original_strings()
         self._match_imports()
         self._match_exports()
         self._match_thunks()
@@ -314,7 +315,7 @@ class Compare:
         """Go to the original binary and look for the specified string constants
         to find a match. This is a (relatively) expensive operation so we only
         look at strings that we have not already matched via a STRING annotation."""
-
+        # Release builds give each de-duped string a symbol so they are easy to find and match.
         for string in self._db.get_unmatched_strings():
             addr = self.orig_bin.find_string(string.encode("latin1"))
             if addr is None:
@@ -323,6 +324,40 @@ class Compare:
                 continue
 
             self._db.match_string(addr, string)
+
+        def is_real_string(s: str) -> bool:
+            """Heuristic to ignore values that only look like strings.
+            This is mostly about short strings (len <= 4) that could be byte or word values.
+            """
+            # 0x10 is the MSB of the address space for DLLs (LEGO1), so this is a pointer
+            if len(s) == 0 or "\x10" in s:
+                return False
+
+            # assert(0) is common
+            if len(s) == 1 and s[0] != "0":
+                return False
+
+            # Hack because str.isprintable() will fail on strings with newlines or tabs
+            if len(s) <= 4 and "\\x" in repr(s):
+                return False
+
+            return True
+
+        # Debug builds do not de-dupe the strings, so we need to find them via brute force scan.
+        # We could try to match the string addrs if there is only one in orig and recomp.
+        # When we sanitize the asm, the result is the same regardless.
+        if self.orig_bin.is_debug:
+            for addr, string in self.orig_bin.iter_string("latin1"):
+                if is_real_string(string):
+                    self._db.set_orig_symbol(
+                        addr, SymbolType.STRING, string, len(string)
+                    )
+
+            for addr, string in self.recomp_bin.iter_string("latin1"):
+                if is_real_string(string):
+                    self._db.set_recomp_symbol(
+                        addr, SymbolType.STRING, string, None, len(string)
+                    )
 
     def _find_float_const(self):
         """Add floating point constants in each binary to the database.
