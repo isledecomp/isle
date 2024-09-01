@@ -354,7 +354,6 @@ class Compare:
                         addr, SymbolType.STRING, string, len(string)
                     )
 
-        if self.recomp_bin.is_debug:
             for addr, string in self.recomp_bin.iter_string("latin1"):
                 if is_real_string(string):
                     self._db.set_recomp_symbol(
