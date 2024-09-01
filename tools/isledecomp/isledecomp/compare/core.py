@@ -325,20 +325,38 @@ class Compare:
 
             self._db.match_string(addr, string)
 
+        def is_real_string(s: str) -> bool:
+            """Heuristic to ignore values that only look like strings.
+            This is mostly about short strings (len <= 4) that could be byte or word values.
+            """
+            # 0x10 is the MSB of the address space for DLLs (LEGO1), so this is a pointer
+            if len(s) == 0 or "\x10" in s:
+                return False
+
+            # assert(0) is common
+            if len(s) == 1 and s[0] != "0":
+                return False
+
+            # Hack because str.isprintable() will fail on strings with newlines or tabs
+            if len(s) <= 4 and "\\x" in repr(s):
+                return False
+
+            return True
+
         # Debug builds do not de-dupe the strings, so we need to find them via brute force scan.
         # We could try to match the string addrs if there is only one in orig and recomp.
         # When we sanitize the asm, the result is the same regardless.
         if self.orig_bin.is_debug:
             for addr, string in self.orig_bin.iter_string("latin1"):
                 # Arbitrary threshold of 4, but I think this is what Ghidra does too
-                if len(string) > 4 and string[0].isalnum():
+                if is_real_string(string):
                     self._db.set_orig_symbol(
                         addr, SymbolType.STRING, string, len(string)
                     )
 
         if self.recomp_bin.is_debug:
             for addr, string in self.recomp_bin.iter_string("latin1"):
-                if len(string) > 4 and string[0].isalnum():
+                if is_real_string(string):
                     self._db.set_recomp_symbol(
                         addr, SymbolType.STRING, string, None, len(string)
                     )
