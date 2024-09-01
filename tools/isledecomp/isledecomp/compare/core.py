@@ -348,7 +348,6 @@ class Compare:
         # When we sanitize the asm, the result is the same regardless.
         if self.orig_bin.is_debug:
             for addr, string in self.orig_bin.iter_string("latin1"):
-                # Arbitrary threshold of 4, but I think this is what Ghidra does too
                 if is_real_string(string):
                     self._db.set_orig_symbol(
                         addr, SymbolType.STRING, string, len(string)
