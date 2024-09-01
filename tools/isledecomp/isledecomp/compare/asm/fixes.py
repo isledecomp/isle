@@ -300,3 +300,15 @@ def find_effective_match(
     )
 
     return corrections.issuperset(recomp_lines_disputed)
+
+
+def assert_fixup(asm: List[Tuple[str, str]]):
+    """Detect assert calls and replace the code filename and line number
+    values with macros (from assert.h)."""
+    for i, (_, line) in enumerate(asm):
+        if "_assert" in line and line.startswith("call"):
+            try:
+                asm[i - 3] = (asm[i - 3][0], "push __LINE__")
+                asm[i - 2] = (asm[i - 2][0], "push __FILE__")
+            except IndexError:
+                continue

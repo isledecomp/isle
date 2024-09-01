@@ -13,7 +13,7 @@ from isledecomp.parser import DecompCodebase
 from isledecomp.dir import walk_source_dir
 from isledecomp.types import SymbolType
 from isledecomp.compare.asm import ParseAsm
-from isledecomp.compare.asm.fixes import find_effective_match
+from isledecomp.compare.asm.fixes import assert_fixup, find_effective_match
 from .db import CompareDb, MatchInfo
 from .diff import combined_diff
 from .lines import LinesDb
@@ -660,6 +660,11 @@ class Compare:
 
         if self.debug:
             self._dump_asm(orig_combined, recomp_combined)
+
+        # Check for assert calls only if we expect to find them
+        if self.orig_bin.is_debug or self.recomp_bin.is_debug:
+            assert_fixup(orig_combined)
+            assert_fixup(recomp_combined)
 
         # Detach addresses from asm lines for the text diff.
         orig_asm = [x[1] for x in orig_combined]
