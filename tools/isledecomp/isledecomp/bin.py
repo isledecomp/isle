@@ -465,6 +465,22 @@ class Bin:
             for (func_addr, name_addr) in combined
         ]
 
+    def iter_string(self, encoding: str = "ascii") -> Iterator[Tuple[int, str]]:
+        """Search for possible strings at each verified address in .data."""
+        section = self.get_section_by_name(".data")
+        for addr in self._relocated_addrs:
+            if section.contains_vaddr(addr):
+                raw = self.read_string(addr)
+                if raw is None:
+                    continue
+
+                try:
+                    string = raw.decode(encoding)
+                except UnicodeDecodeError:
+                    continue
+
+                yield (addr, string)
+
     def get_section_by_name(self, name: str) -> Section:
         section = next(
             filter(lambda section: section.match_name(name), self.sections),
