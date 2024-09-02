@@ -1,6 +1,7 @@
 #include "mxdsfile.h"
 
 #include "decomp.h"
+#include "mxdebug.h"
 
 #include <stdio.h>
 
@@ -11,42 +12,44 @@ DECOMP_SIZE_ASSERT(MxDSFile::ChunkHeader, 0x0c)
 DECOMP_SIZE_ASSERT(MxDSFile, 0x7c)
 
 // FUNCTION: LEGO1 0x100cc4b0
+// FUNCTION: BETA10 0x1015db90
 MxDSFile::MxDSFile(const char* p_filename, MxULong p_skipReadingChunks)
 {
-	m_filename = p_filename;
+	SetFileName(p_filename);
 	m_skipReadingChunks = p_skipReadingChunks;
 }
 
 // FUNCTION: LEGO1 0x100cc590
-MxLong MxDSFile::Open(MxULong p_uStyle)
+// FUNCTION: BETA10 0x1015dc57
+MxResult MxDSFile::Open(MxULong p_uStyle)
 {
-	MXIOINFO& io = m_io;
-	MxLong longResult = 1;
-	memset(&io, 0, sizeof(MXIOINFO));
+	MxResult result = -FAILURE; // Non-standard value of 1 here
+	memset(&m_io, 0, sizeof(MXIOINFO));
 
-	if (io.Open(m_filename.GetData(), p_uStyle) != 0) {
+	if (m_io.Open(m_filename.GetData(), p_uStyle) != 0) {
 		return -1;
 	}
 
-	io.SetBuffer(NULL, 0, 0);
+	m_io.SetBuffer(NULL, 0, 0);
 	m_position = 0;
 
 	if (m_skipReadingChunks == 0) {
-		longResult = ReadChunks();
+		result = ReadChunks();
 	}
 
-	if (longResult != 0) {
+	if (result != SUCCESS) {
 		Close();
 	}
 	else {
 		Seek(0, 0);
 	}
 
-	return longResult;
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100cc620
-MxLong MxDSFile::ReadChunks()
+// FUNCTION: BETA10 0x1015dd18
+MxResult MxDSFile::ReadChunks()
 {
 	_MMCKINFO topChunk;
 	_MMCKINFO childChunk;
@@ -54,33 +57,37 @@ MxLong MxDSFile::ReadChunks()
 
 	topChunk.fccType = FOURCC('O', 'M', 'N', 'I');
 	if (m_io.Descend(&topChunk, NULL, MMIO_FINDRIFF) != 0) {
-		return -1;
+		MxTrace("Unable to find Streamer RIFF chunk in file: %s\n", m_filename);
+		return FAILURE;
 	}
+
 	childChunk.ckid = FOURCC('M', 'x', 'H', 'd');
 	if (m_io.Descend(&childChunk, &topChunk, 0) != 0) {
-		return -1;
+		MxTrace("Unable to find Header chunk in file: %s\n", m_filename);
+		return FAILURE;
 	}
 
 	m_io.Read(&m_header, 0x0c);
-	if ((m_header.m_majorVersion == SI_MAJOR_VERSION) && (m_header.m_minorVersion == SI_MINOR_VERSION)) {
-		childChunk.ckid = FOURCC('M', 'x', 'O', 'f');
-		if (m_io.Descend(&childChunk, &topChunk, 0) != 0) {
-			return -1;
-		}
-		MxULong* pLengthInDWords = &m_lengthInDWords;
-		m_io.Read(pLengthInDWords, 4);
-		m_pBuffer = new MxU32[*pLengthInDWords];
-		m_io.Read(m_pBuffer, *pLengthInDWords * 4);
-		return 0;
-	}
-	else {
+	if ((m_header.m_majorVersion != SI_MAJOR_VERSION) || (m_header.m_minorVersion != SI_MINOR_VERSION)) {
 		sprintf(tempBuffer, "Wrong SI file version. %d.%d expected.", SI_MAJOR_VERSION, SI_MINOR_VERSION);
 		MessageBoxA(NULL, tempBuffer, NULL, MB_ICONERROR);
-		return -1;
+		return FAILURE;
 	}
+
+	childChunk.ckid = FOURCC('M', 'x', 'O', 'f');
+	if (m_io.Descend(&childChunk, &topChunk, 0) != 0) {
+		MxTrace("Unable to find Header chunk in file: %s\n", m_filename);
+		return FAILURE;
+	}
+
+	m_io.Read(&m_lengthInDWords, 4);
+	m_pBuffer = new MxU32[m_lengthInDWords];
+	m_io.Read(m_pBuffer, m_lengthInDWords * 4);
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100cc740
+// FUNCTION: BETA10 0x1015ded2
 MxLong MxDSFile::Close()
 {
 	m_io.Close(0);
@@ -91,10 +98,12 @@ MxLong MxDSFile::Close()
 		delete[] m_pBuffer;
 		m_pBuffer = NULL;
 	}
-	return 0;
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100cc780
+// FUNCTION: BETA10 0x1015df50
 MxResult MxDSFile::Read(unsigned char* p_buf, MxULong p_nbytes)
 {
 	if (m_io.Read(p_buf, p_nbytes) != p_nbytes) {
@@ -106,18 +115,26 @@ MxResult MxDSFile::Read(unsigned char* p_buf, MxULong p_nbytes)
 }
 
 // FUNCTION: LEGO1 0x100cc7b0
-MxLong MxDSFile::Seek(MxLong p_lOffset, MxS32 p_iOrigin)
+// FUNCTION: BETA10 0x1015dfee
+MxResult MxDSFile::Seek(MxLong p_lOffset, MxS32 p_iOrigin)
 {
-	return (m_position = m_io.Seek(p_lOffset, p_iOrigin)) == -1 ? -1 : 0;
+	m_position = m_io.Seek(p_lOffset, p_iOrigin);
+	if (m_position == -1) {
+		return FAILURE;
+	}
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100cc7e0
+// FUNCTION: BETA10 0x10148d80
 MxULong MxDSFile::GetBufferSize()
 {
 	return m_header.m_bufferSize;
 }
 
 // FUNCTION: LEGO1 0x100cc7f0
+// FUNCTION: BETA10 0x10148da0
 MxULong MxDSFile::GetStreamBuffersNum()
 {
 	return m_header.m_streamBuffersNum;
