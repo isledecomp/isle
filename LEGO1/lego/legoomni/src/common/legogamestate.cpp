@@ -3,7 +3,6 @@
 #include "3dmanager/lego3dmanager.h"
 #include "act2main_actions.h"
 #include "act3_actions.h"
-#include "assert.h"
 #include "carrace_actions.h"
 #include "carracer_actions.h"
 #include "copter_actions.h"
@@ -57,6 +56,7 @@
 #include "scripts.h"
 #include "sndanim_actions.h"
 
+#include <assert.h>
 #include <stdio.h>
 
 DECOMP_SIZE_ASSERT(LegoGameState::Username, 0x0e)

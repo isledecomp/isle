@@ -74,14 +74,15 @@ public:
 		return "LegoCarBuild";
 	}
 
+	MxLong Notify(MxParam& p_param) override; // vtable+0x04
+	MxResult Tickle() override;               // vtable+0x08
+
 	// FUNCTION: LEGO1 0x10022950
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoCarBuild::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
-	MxLong Notify(MxParam& p_param) override;                          // vtable+0x04
-	MxResult Tickle() override;                                        // vtable+0x08
 	MxResult Create(MxDSAction& p_dsAction) override;                  // vtable+0x18
 	void ReadyWorld() override;                                        // vtable+0x50
 	MxBool VTable0x5c() override;                                      // vtable+0x5c

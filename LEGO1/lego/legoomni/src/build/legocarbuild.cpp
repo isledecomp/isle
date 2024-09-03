@@ -261,7 +261,6 @@ void LegoCarBuild::VTable0x74(MxFloat p_param1[3], MxFloat p_param2[3])
 	p_param2[0] = (fVar1 * local14[0] + local20[0]) - m_unk0x2a4[0];
 	p_param2[1] = (fVar1 * local14[1] + local20[1]) - m_unk0x2a4[1];
 	p_param2[2] = 0.0;
-	return;
 }
 
 // FUNCTION: LEGO1 0x10023570
@@ -317,7 +316,6 @@ void LegoCarBuild::VTable0x80(MxFloat p_param1[2], MxFloat p_param2[2], MxFloat 
 // FUNCTION: BETA10 0x1006c18f
 MxResult LegoCarBuild::Tickle()
 {
-
 	if (!m_worldStarted) {
 		LegoWorld::Tickle();
 		return SUCCESS;
@@ -551,7 +549,6 @@ void LegoCarBuild::FUN_10025db0(const char* p_param1, undefined4 p_param2)
 		if (sVar3 != g_unk0x100f11cc) {
 			TogglePresentersEnabled();
 			g_unk0x100f11cc = sVar3;
-			return;
 		}
 	}
 	else {
