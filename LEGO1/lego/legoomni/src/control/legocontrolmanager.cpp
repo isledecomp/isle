@@ -38,6 +38,7 @@ void LegoControlManager::FUN_10028df0(MxPresenterList* p_presenterList)
 }
 
 // FUNCTION: LEGO1 0x10028e10
+// FUNCTION: BETA10 0x1007c232
 void LegoControlManager::Register(MxCore* p_listener)
 {
 	m_notifyList.Append(p_listener);

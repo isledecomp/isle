@@ -1,102 +1,595 @@
 #include "legocarbuild.h"
 
+#include "legocarbuildpresenter.h"
+#include "legocontrolmanager.h"
+#include "legogamestate.h"
+#include "legoinputmanager.h"
+#include "legoutils.h"
+#include "misc.h"
+#include "mxbackgroundaudiomanager.h"
+#include "mxcontrolpresenter.h"
+#include "mxmisc.h"
+#include "mxnotificationmanager.h"
+#include "mxsoundpresenter.h"
+#include "mxstillpresenter.h"
+#include "mxticklemanager.h"
+#include "scripts.h"
+
 DECOMP_SIZE_ASSERT(LegoCarBuild, 0x34c)
 DECOMP_SIZE_ASSERT(LegoVehicleBuildState, 0x50)
 
+// GLOBAL: LEGO1 0x100d65a4
+MxFloat LegoCarBuild::g_unk0x100d65a4 = -0.1f;
+
+// GLOBAL: LEGO1 0x100d65a8
+MxFloat LegoCarBuild::g_unk0x100d65a8 = 0.07;
+
+// GLOBAL: LEGO1 0x100f11cc
+MxS16 LegoCarBuild::g_unk0x100f11cc = -1;
+
 // STUB: LEGO1 0x100226d0
+// FUNCTION: BETA10 0x1006ac10
 LegoCarBuild::LegoCarBuild()
 {
-	// TODO
+	// Not close yet - might be getting there when more of this class is implemented
+	m_unk0x100 = 0;
+	m_unk0x110 = 0;
+	m_unk0xf8 = 0xffffffff;
+	m_unk0x2d4 = '\0';
+	m_unk0x258 = 0;
+	m_ColorBook_Bitmap = 0;
+	m_Yellow_Ctl = 0;
+	m_Red_Ctl = 0;
+	m_Blue_Ctl = 0;
+	m_Green_Ctl = 0;
+	m_Gray_Ctl = 0;
+	m_Black_Ctl = 0;
+	m_Shelf_Sound = 0;
+	m_PlaceBrick_Sound = 0;
+	m_GetBrick_Sound = 0;
+	m_Paint_Sound = 0;
+	m_Decal_Sound = 0;
+	m_Decal_Bitmap = 0;
+	m_Decals_Ctl = 0;
+	m_Decals_Ctl1 = 0;
+	m_Decals_Ctl2 = 0;
+	m_Decals_Ctl3 = 0;
+	m_Decals_Ctl4 = 0;
+	m_Decals_Ctl5 = 0;
+	m_Decals_Ctl6 = 0;
+	m_Decals_Ctl7 = NULL;
+	m_unk0x33c = 0;
+	m_buildState = 0;
+	m_unk0x104 = 0;
+	m_unk0x109 = '\0';
+	m_unk0x108 = '\0';
+	m_unk0x338 = 0;
+	m_unk0x334 = 0;
+	m_unk0x344 = 0xffffffff;
+	m_unk0x174 = '\0';
+	NotificationManager()->Register(this);
 }
 
 // FUNCTION: LEGO1 0x10022930
+// FUNCTION: BETA10 0x10070070
 MxBool LegoCarBuild::VTable0x5c()
 {
 	return TRUE;
 }
 
 // STUB: LEGO1 0x10022a80
+// FUNCTION: BETA10 0x1006aea3
 LegoCarBuild::~LegoCarBuild()
 {
 	// TODO
+	// ...
+	NotificationManager()->Unregister(this);
 }
 
-// STUB: LEGO1 0x10022b70
+// FUNCTION: LEGO1 0x10022b70
+// FUNCTION: BETA10 0x1006afd9
 MxResult LegoCarBuild::Create(MxDSAction& p_dsAction)
 {
-	// TODO
-	return SUCCESS;
+	MxResult result = LegoWorld::Create(p_dsAction);
+
+	if (!result) {
+		// TickleManager()->RegisterClient(this, 100);
+		InputManager()->SetWorld(this);
+		ControlManager()->Register(this);
+
+		SetIsWorldActive(FALSE);
+
+		InputManager()->Register(this);
+
+		// variable name verified by BETA10 0x1006b1a6
+		const char* buildStateClassName = NULL;
+
+		if (m_atomId == *g_copterScript) {
+			buildStateClassName = "LegoCopterBuildState";
+			GameState()->SetCurrentArea(LegoGameState::Area::e_copterbuild);
+			m_unk0x330 = 1;
+		}
+		else if (m_atomId == *g_dunecarScript) {
+			buildStateClassName = "LegoDuneCarBuildState";
+			GameState()->SetCurrentArea(LegoGameState::Area::e_dunecarbuild);
+			m_unk0x330 = 2;
+		}
+		else if (m_atomId == *g_jetskiScript) {
+			buildStateClassName = "LegoJetskiBuildState";
+			GameState()->SetCurrentArea(LegoGameState::Area::e_jetskibuild);
+			m_unk0x330 = 3;
+		}
+		else if (m_atomId == *g_racecarScript) {
+			buildStateClassName = "LegoRaceCarBuildState";
+			GameState()->SetCurrentArea(LegoGameState::Area::e_racecarbuild);
+			m_unk0x330 = 4;
+		}
+
+		LegoGameState* gameState = GameState();
+
+		LegoVehicleBuildState* buildState = (LegoVehicleBuildState*) gameState->GetState(buildStateClassName);
+
+		if (!buildState) {
+			buildState = (LegoVehicleBuildState*) gameState->CreateState(buildStateClassName);
+		}
+
+		m_buildState = buildState;
+		m_unk0x174 = m_buildState->m_unk0x4d;
+
+		GameState()->StopArea(LegoGameState::Area::e_previousArea);
+
+		m_buildState->m_animationState = 1;
+		m_unk0x100 = 0;
+
+		BackgroundAudioManager()->Stop();
+		EnableAnimations(FALSE);
+
+		result = SUCCESS;
+	}
+
+	return result;
 }
 
-// STUB: LEGO1 0x10022fc0
-void LegoCarBuild::VTable0x6c()
+// FUNCTION: LEGO1 0x10022d10
+// FUNCTION: BETA10 0x1006b27a
+void LegoCarBuild::InitPresenters()
+{
+	m_ColorBook_Bitmap = (MxStillPresenter*) Find("MxStillPresenter", "ColorBook_Bitmap");
+	assert(m_ColorBook_Bitmap);
+	m_Yellow_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Yellow_Ctl");
+	assert(m_Yellow_Ctl);
+	m_Red_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Red_Ctl");
+	assert(m_Red_Ctl);
+	m_Blue_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Blue_Ctl");
+	assert(m_Blue_Ctl);
+	m_Green_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Green_Ctl");
+	assert(m_Green_Ctl);
+	m_Gray_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Gray_Ctl");
+	assert(m_Gray_Ctl);
+	m_Black_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Black_Ctl");
+	assert(m_Black_Ctl);
+	m_Shelf_Sound = (MxSoundPresenter*) Find("MxSoundPresenter", "Shelf_Sound");
+	assert(m_Shelf_Sound);
+	m_PlaceBrick_Sound = (MxSoundPresenter*) Find("MxSoundPresenter", "PlaceBrick_Sound");
+	assert(m_PlaceBrick_Sound);
+	m_GetBrick_Sound = (MxSoundPresenter*) Find("MxSoundPresenter", "GetBrick_Sound");
+	assert(m_GetBrick_Sound);
+	m_Paint_Sound = (MxSoundPresenter*) Find("MxSoundPresenter", "Paint_Sound");
+	assert(m_Paint_Sound);
+	m_Decal_Sound = (MxSoundPresenter*) Find("MxSoundPresenter", "Decal_Sound");
+	m_Decals_Ctl = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl");
+	m_Decals_Ctl1 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl1");
+	m_Decals_Ctl2 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl2");
+	m_Decal_Bitmap = (MxStillPresenter*) Find("MxStillPresenter", "Decal_Bitmap");
+	assert(m_Decal_Bitmap);
+	if (m_Decal_Bitmap) {
+		m_Decals_Ctl3 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl3");
+		assert(m_Decals_Ctl3);
+		m_Decals_Ctl4 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl4");
+		assert(m_Decals_Ctl4);
+		m_Decals_Ctl5 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl5");
+		assert(m_Decals_Ctl5);
+		m_Decals_Ctl6 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl6");
+		assert(m_Decals_Ctl6);
+		m_Decals_Ctl7 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl7");
+		assert(m_Decals_Ctl7);
+	}
+}
+
+// STUB: LEGO1 0x10022f30
+// STUB: BETA10 0x1006b835
+void LegoCarBuild::FUN_10022f30()
 {
 	// TODO
+}
+
+// FUNCTION: LEGO1 0x10022fc0
+// FUNCTION: BETA10 0x1006b90b
+void LegoCarBuild::VTable0x6c()
+{
+	m_unk0x178 = m_unk0x1c0;
+	m_unk0x110->WrappedSetLocalTransform(m_unk0x178);
+	m_unk0x2a4 = Vector4(m_unk0x110->GetWorldPosition());
+
+	VTable0x70();
 }
 
 // STUB: LEGO1 0x10023020
+// FUNCTION: BETA10 0x1006b991
 void LegoCarBuild::VTable0x70()
 {
-	// TODO
+	MxFloat worldPos[3];
+	MxFloat screenPos[4];
+
+	worldPos[0] = m_unk0x2a4[0];
+	worldPos[1] = m_unk0x2a4[1];
+	worldPos[2] = m_unk0x2a4[2];
+
+	TransformWorldToScreen(worldPos, screenPos);
+
+	m_unk0x290 = screenPos[0] / screenPos[3];
+	m_unk0x294 = screenPos[1] / screenPos[3];
+
+	worldPos[0] = m_unk0x2bc[0];
+	worldPos[1] = m_unk0x2bc[1];
+	worldPos[2] = m_unk0x2bc[2];
+
+	TransformWorldToScreen(worldPos, screenPos);
+
+	m_unk0x298 = screenPos[0] / screenPos[3];
+	m_unk0x29c = screenPos[1] / screenPos[3];
+
+	m_unk0x2a0 = sqrt(
+		(MxFloat) (m_unk0x298 - m_unk0x290) * (m_unk0x298 - m_unk0x290) +
+		(m_unk0x29c - m_unk0x294) * (m_unk0x29c - m_unk0x294)
+	);
+
+	m_unk0x25c.Unknown1(m_unk0x178, m_unk0x208);
 }
 
-// STUB: LEGO1 0x10023500
-void LegoCarBuild::VTable0x74()
+// FUNCTION: LEGO1 0x10023500
+// FUNCTION: BETA10 0x1006bdf6
+void LegoCarBuild::VTable0x74(MxFloat p_param1[3], MxFloat p_param2[3])
 {
-	// TODO
+	MxFloat fVar1;
+	MxFloat local20[3];
+	MxFloat local14[3];
+
+	FUN_1003ded0(p_param1, local14, local20);
+
+	fVar1 = (m_unk0x2a4[2] - local20[2]) / local14[2];
+	p_param2[0] = (fVar1 * local14[0] + local20[0]) - m_unk0x2a4[0];
+	p_param2[1] = (fVar1 * local14[1] + local20[1]) - m_unk0x2a4[1];
+	p_param2[2] = 0.0;
 }
 
-// STUB: LEGO1 0x10023570
-void LegoCarBuild::VTable0x78()
+// FUNCTION: LEGO1 0x10023570
+// FUNCTION: BETA10 0x1006be91
+void LegoCarBuild::VTable0x78(MxFloat p_param1[3], MxFloat p_param2[3])
 {
-	// TODO
+	MxFloat fVar1;
+	MxFloat local18[3];
+	MxFloat localc[3];
+
+	FUN_1003ded0(p_param1, local18, localc);
+
+	p_param2[2] =
+		m_unk0x2a4[2] + (m_unk0x2bc[2] - m_unk0x2a4[2]) * ((p_param1[1] - m_unk0x294) / (m_unk0x29c - m_unk0x294));
+	fVar1 = (p_param2[2] - localc[2]) / local18[2];
+	p_param2[0] = fVar1 * local18[0] - m_unk0x2a4[0] + localc[0];
+	p_param2[1] = fVar1 * local18[1] - m_unk0x2a4[1] + localc[1];
+	p_param2[2] = p_param2[2] - m_unk0x2a4[2];
 }
 
-// STUB: LEGO1 0x10023620
-void LegoCarBuild::VTable0x7c()
+// FUNCTION: LEGO1 0x10023620
+// FUNCTION: BETA10 0x1006bfb5
+void LegoCarBuild::VTable0x7c(MxFloat p_param1[3], MxFloat p_param2[3])
 {
-	// TODO
+	MxFloat local18[3];
+	MxFloat localc[3];
+	FUN_1003ded0(p_param1, local18, localc);
+
+	MxFloat fVar1 = (m_unk0x2bc[1] - localc[1]) / local18[1];
+	p_param2[0] = fVar1 * local18[0] - m_unk0x2a4[0] + localc[0];
+	p_param2[1] = m_unk0x2bc[1] - m_unk0x2a4[1];
+	p_param2[2] = fVar1 * local18[2] - m_unk0x2a4[2] + localc[2];
 }
 
-// STUB: LEGO1 0x100236a0
-void LegoCarBuild::VTable0x80()
+// FUNCTION: LEGO1 0x100236a0
+// FUNCTION: BETA10 0x100701f0
+void LegoCarBuild::VTable0x80(MxFloat p_param1[2], MxFloat p_param2[2], MxFloat p_param3, MxFloat p_param4[2])
 {
-	// TODO
+	if (p_param1[1] == 0.0f) {
+		return;
+	}
+	p_param4[0] = ((p_param3 - p_param2[1]) / p_param1[1]) * p_param1[0] + p_param2[0];
+	p_param4[1] = p_param3;
 }
 
-// STUB: LEGO1 0x100238b0
+#define LEGOCARBUILD_TICKLE_CASE(subtract, start, end, str)                                                            \
+	if (start < dTime && dTime < end) {                                                                                \
+		FUN_10025db0(str, dTime - subtract);                                                                           \
+		return SUCCESS;                                                                                                \
+	}
+
+// FUNCTION: LEGO1 0x100238b0
+// FUNCTION: BETA10 0x1006c18f
 MxResult LegoCarBuild::Tickle()
 {
-	// TODO
+	if (!m_worldStarted) {
+		LegoWorld::Tickle();
+		return SUCCESS;
+	}
+
+	if (m_unk0xf8 == 8) {
+		if (m_unk0xfc == 1) {
+			FUN_10024f50();
+		}
+
+		if (m_unk0x110) {
+			if (m_unk0x258->FUN_10079ca0(m_unk0x110->GetName())) {
+				FUN_10022f30();
+			}
+		}
+	}
+
+	if (m_unk0x100 == 5 && m_unk0x110) {
+		FUN_1003dde0(m_unk0x110, g_unk0x100d65a4);
+	}
+
+	if (m_unk0x10a) {
+		DWORD time = timeGetTime();
+		DWORD dTime = (time - m_unk0x10c) / 100;
+
+		if (m_unk0x330 == 4) {
+			switch (m_unk0x10a) {
+			// TODO: Work out constants
+			case 500:
+				LEGOCARBUILD_TICKLE_CASE(160, 160, 180, "Exit_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(260, 260, 280, "ShelfUp_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(330, 330, 340, "Yellow_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(340, 340, 360, "Platform_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(390, 390, 410, "Exit_Ctl")
+			case 503:
+				LEGOCARBUILD_TICKLE_CASE(50, 50, 60, "ShelfUp_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(63, 65, 70, "Yellow_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(70, 70, 80, "Platform_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(95, 95, 105, "Exit_Ctl")
+			case 504:
+				LEGOCARBUILD_TICKLE_CASE(22, 24, 29, "Exit_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(33, 35, 40, "ShelfUp_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(43, 45, 50, "Yellow_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(56, 58, 63, "Platform_Ctl")
+			default:
+				return SUCCESS;
+			}
+		}
+		else if (m_unk0x330 == 3) {
+			switch (m_unk0x10a) {
+			case 500:
+				LEGOCARBUILD_TICKLE_CASE(291, 291, 311, "Exit_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(311, 311, 331, "ShelfUp_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(412, 412, 432, "Yellow_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(437, 437, 457, "Platform_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(485, 485, 505, "Exit_Ctl")
+			case 501:
+				LEGOCARBUILD_TICKLE_CASE(32, 34, 39, "Exit_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(68, 70, 75, "ShelfUp_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(105, 105, 115, "Yellow_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(133, 135, 140, "Platform_Ctl")
+			case 504:
+				LEGOCARBUILD_TICKLE_CASE(78, 78, 98, "Exit_Ctl")
+			case 505:
+				LEGOCARBUILD_TICKLE_CASE(93, 93, 113, "Exit_Ctl")
+				// default: // not sure if present
+				// 	return SUCCESS;
+			}
+		}
+		else if (m_unk0x330 == 2) {
+			switch (m_unk0x10a) {
+			case 500:
+				LEGOCARBUILD_TICKLE_CASE(155, 155, 175, "Exit_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(215, 215, 235, "ShelfUp_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(285, 285, 305, "Yellow_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(300, 300, 320, "Platform_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(340, 340, 360, "Exit_Ctl")
+			case 501:
+				LEGOCARBUILD_TICKLE_CASE(23, 23, 33, "Exit_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(37, 39, 44, "ShelfUp_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(105, 105, 115, "Yellow_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(122, 124, 129, "Platform_Ctl")
+			default:
+				return SUCCESS;
+			}
+		}
+		else if (m_unk0x330 == 1) {
+			switch (m_unk0x10a) {
+			case 500:
+				LEGOCARBUILD_TICKLE_CASE(185, 185, 205, "Exit_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(235, 235, 255, "ShelfUp_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(292, 292, 312, "Yellow_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(315, 315, 335, "Platform_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(353, 353, 373, "Exit_Ctl")
+			case 501:
+				LEGOCARBUILD_TICKLE_CASE(43, 45, 50, "Exit_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(72, 74, 79, "ShelfUp_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(114, 116, 121, "Yellow_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(128, 130, 135, "Platform_Ctl")
+			case 505:
+				LEGOCARBUILD_TICKLE_CASE(30, 30, 40, "ShelfUp_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(60, 60, 70, "Yellow_Ctl")
+				LEGOCARBUILD_TICKLE_CASE(48, 48, 58, "Platform_Ctl")
+			default:
+				return SUCCESS;
+			}
+		}
+	}
 
 	return 0;
 }
 
 // STUB: LEGO1 0x10024050
+// FUNCTION: BETA10 0x1006c976
 MxLong LegoCarBuild::Notify(MxParam& p_param)
 {
 	// TODO
-
 	return 0;
 }
 
 // STUB: LEGO1 0x100242c0
 void LegoCarBuild::ReadyWorld()
 {
-	// TODO
+	m_presentersEnabled = FALSE;
+	InitPresenters();
+	if (BackgroundAudioManager()->GetEnabled()) {
+		InvokeAction(Extra::ActionType::e_start, *g_jukeboxScript, FUN_10025ee0(m_unk0x330), NULL);
+		m_buildState->m_animationState = 2;
+		MxNotificationParam param;
+		param.SetNotification(c_notificationStartAction);
+		NotificationManager()->Send(this, param);
+	}
+	else {
+		FUN_10024ef0();
+	}
 }
 
-// STUB: LEGO1 0x100256c0
+// FUNCTION: LEGO1 0x10024ef0
+void LegoCarBuild::FUN_10024ef0()
+{
+	FUN_1003eda0();
+	m_buildState->m_animationState = 3;
+	FUN_10025720(FUN_10025d70());
+	m_buildState->m_unk0x4c += 1;
+	FUN_10015820(FALSE, 7);
+}
+
+// FUNCTION: LEGO1 0x10024f50
+// FUNCTION: BETA10 0x1006dfce
+void LegoCarBuild::FUN_10024f50()
+{
+	m_unk0x2d4 = FALSE;
+	m_unk0x258->FUN_10079920(g_unk0x100d65a8);
+}
+
+// FUNCTION: LEGO1 0x10024fa0
+// FUNCTION: BETA10 0x1006e04f
+void LegoCarBuild::SetPresentersEnabled(MxBool p_enabled)
+{
+	m_presentersEnabled = p_enabled;
+	m_ColorBook_Bitmap->Enable(p_enabled);
+	m_Yellow_Ctl->Enable(p_enabled);
+	m_Red_Ctl->Enable(p_enabled);
+	m_Blue_Ctl->Enable(p_enabled);
+	m_Green_Ctl->Enable(p_enabled);
+	m_Gray_Ctl->Enable(p_enabled);
+	m_Black_Ctl->Enable(p_enabled);
+}
+
+// FUNCTION: LEGO1 0x10025010
+void LegoCarBuild::TogglePresentersEnabled()
+{
+	m_ColorBook_Bitmap->Enable(!m_ColorBook_Bitmap->IsEnabled());
+	m_Yellow_Ctl->Enable(!m_Yellow_Ctl->IsEnabled());
+	m_Red_Ctl->Enable(!m_Red_Ctl->IsEnabled());
+	m_Blue_Ctl->Enable(!m_Blue_Ctl->IsEnabled());
+	m_Green_Ctl->Enable(!m_Green_Ctl->IsEnabled());
+	m_Gray_Ctl->Enable(!m_Gray_Ctl->IsEnabled());
+	m_Black_Ctl->Enable(!m_Black_Ctl->IsEnabled());
+}
+
+// FUNCTION: LEGO1 0x100256c0
+// FUNCTION: BETA10 0x1006e96c
 void LegoCarBuild::Enable(MxBool p_enable)
 {
-	// TODO
+	LegoWorld::Enable(p_enable);
+
+	if (p_enable) {
+		InputManager()->SetWorld(this);
+		SetIsWorldActive(FALSE);
+	}
+	else {
+		BackgroundAudioManager()->Init();
+		if (InputManager()->GetWorld() == this) {
+			InputManager()->ClearWorld();
+		}
+	}
 }
 
-// STUB: LEGO1 0x10025e70
-MxBool LegoCarBuild::Escape()
+// STUB: LEGO1 0x10025720
+undefined4 LegoCarBuild::FUN_10025720(undefined4 p_param1)
 {
 	// TODO
-	return FALSE;
+	return 0;
+}
+
+// FUNCTION: LEGO1 0x10025d70
+MxS32 LegoCarBuild::FUN_10025d70()
+{
+	switch (m_buildState->m_unk0x4c % 3) {
+	case 1:
+		return 1;
+	case 2:
+		return 2;
+	case 3:
+		return 3;
+	default:
+		return 0;
+	}
+}
+
+// FUNCTION: LEGO1 0x10025db0
+// FUNCTION: BETA10 0x1006ed18
+void LegoCarBuild::FUN_10025db0(const char* p_param1, undefined4 p_param2)
+{
+	m_unk0x33c = (MxControlPresenter*) Find("MxControlPresenter", p_param1);
+
+	MxS16 sVar3 = 1 - ((p_param2 / 5) & 1);
+
+	if (m_Yellow_Ctl == m_unk0x33c) {
+		if (sVar3 != g_unk0x100f11cc) {
+			TogglePresentersEnabled();
+			g_unk0x100f11cc = sVar3;
+		}
+	}
+	else {
+		if (m_unk0x33c->GetUnknown0x4e() != sVar3) {
+			m_unk0x33c->VTable0x6c(sVar3);
+		}
+
+		g_unk0x100f11cc = -1;
+		SetPresentersEnabled(m_presentersEnabled);
+	}
+}
+
+// FUNCTION: LEGO1 0x10025e70
+MxBool LegoCarBuild::Escape()
+{
+	BackgroundAudioManager()->Init();
+	MxS32 targetEntityId = FUN_10025ee0(m_unk0x330);
+	InvokeAction(Extra::ActionType::e_stop, *g_jukeboxScript, targetEntityId, NULL);
+	DeleteObjects(&m_atomId, 500, 999);
+
+	m_buildState->m_animationState = 0;
+	m_unk0x334 = 2;
+	return TRUE;
+}
+
+// FUNCTION: LEGO1 0x10025ee0
+MxS32 LegoCarBuild::FUN_10025ee0(undefined4 p_param1)
+{
+	// TODO: Work out constants
+	switch (p_param1) {
+	case 1:
+		return 0x2f;
+	case 2:
+		return 0x31;
+	case 3:
+		return 0x33;
+	case 4:
+		return 0x35;
+	default:
+		return -1;
+	}
 }
 
 // FUNCTION: LEGO1 0x10025f30

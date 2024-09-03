@@ -294,6 +294,12 @@ class Vector4 : public Vector3 {
 public:
 	Vector4(float* p_data) : Vector3(p_data) {}
 
+	// Hack: Some code initializes a Vector4 from a (most likely) const float* source.
+	// Example: LegoCarBuild::VTable0x6c
+	// Vector4 however is a class that can mutate its underlying source, making
+	// initialization with a const source fundamentally incompatible.
+	Vector4(const float* p_data) : Vector3((float*) p_data) {}
+
 	// Note: virtual function overloads appear in the virtual table
 	// in reverse order of appearance.
 

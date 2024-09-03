@@ -43,6 +43,7 @@ public:
 	void Enable(MxBool p_enable);
 	virtual MxResult Create(MxAtomId& p_script, MxU32 p_frequencyMS);
 
+	void Init();
 	void Stop();
 	void LowerVolume();
 	void RaiseVolume();
@@ -51,7 +52,6 @@ public:
 	// MxBackgroundAudioManager::`scalar deleting destructor'
 
 private:
-	void Init();
 	MxResult OpenMusic(MxAtomId& p_script);
 	void DestroyMusic();
 

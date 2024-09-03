@@ -273,6 +273,7 @@ MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_
 }
 
 // FUNCTION: LEGO1 0x1007f470
+// FUNCTION: BETA10 0x100e9388
 void MxBackgroundAudioManager::Stop()
 {
 	if (m_action2.GetObjectId() != -1) {

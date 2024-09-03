@@ -113,6 +113,7 @@ inline Tgl::Group* Lego3DManager::GetScene()
 	return m_pLego3DView->GetScene();
 }
 
+// FUNCTION: BETA10 0x10011840
 inline Lego3DView* Lego3DManager::GetLego3DView()
 {
 	return m_pLego3DView;

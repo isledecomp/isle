@@ -49,7 +49,10 @@ public:
 	void FUN_1007c520();
 
 	Tgl::Renderer* GetRenderer() { return m_renderer; }
+
+	// FUNCTION: BETA10 0x100117e0
 	Lego3DManager* Get3DManager() { return m_3dManager; }
+
 	LegoROI* GetViewROI() { return m_viewROI; }
 	MxDirect3D* GetDirect3D() { return m_direct3d; }
 	MxBool GetRender3D() { return m_render3d; }

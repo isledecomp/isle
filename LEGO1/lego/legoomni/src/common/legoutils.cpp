@@ -61,6 +61,49 @@ LegoEntity* PickEntity(MxLong, MxLong)
 	return NULL;
 }
 
+// STUB: LEGO1 0x1003dde0
+// STUB: BETA10 0x100d358e
+void FUN_1003dde0(LegoROI* p_param1, MxFloat p_param2)
+{
+	// TODO
+}
+
+// FUNCTION: LEGO1 0x1003ded0
+// FUNCTION: BETA10 0x100d3802
+MxBool FUN_1003ded0(MxFloat p_param1[3], MxFloat p_param2[3], MxFloat p_param3[3])
+{
+	MxFloat local1c[4];
+	MxFloat local10[3];
+
+	Tgl::View* view = VideoManager()->Get3DManager()->GetLego3DView()->GetView();
+
+	local1c[0] = p_param1[0];
+	local1c[1] = p_param1[1];
+	local1c[2] = 1.0f;
+	local1c[3] = 1.0f;
+
+	view->TransformScreenToWorld(local1c, p_param3);
+
+	local1c[0] *= 2.0;
+	local1c[1] *= 2.0;
+	local1c[3] = 2.0;
+
+	view->TransformScreenToWorld(local1c, local10);
+
+	p_param2[0] = local10[0] - p_param3[0];
+	p_param2[1] = local10[1] - p_param3[1];
+	p_param2[2] = local10[2] - p_param3[2];
+	return TRUE;
+}
+
+// FUNCTION: LEGO1 0x1003df70
+// FUNCTION: BETA10 0x100d38cb
+MxBool TransformWorldToScreen(const MxFloat p_world[3], MxFloat p_screen[4])
+{
+	VideoManager()->Get3DManager()->GetLego3DView()->GetView()->TransformWorldToScreen(p_world, p_screen);
+	return TRUE;
+}
+
 // FUNCTION: LEGO1 0x1003df90
 MxS16 CountTotalTreeNodes(LegoTreeNode* p_node)
 {
@@ -454,6 +497,7 @@ MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_wor
 }
 
 // FUNCTION: LEGO1 0x1003ef00
+// FUNCTION: BETA10 0x100d4e1e
 void EnableAnimations(MxBool p_enable)
 {
 	if (p_enable) {
