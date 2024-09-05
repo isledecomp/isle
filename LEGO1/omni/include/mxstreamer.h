@@ -116,7 +116,7 @@ public:
 	}
 
 private:
-	list<MxStreamController*> m_openStreams; // 0x08
+	list<MxStreamController*> m_controllers; // 0x08
 	MxMemoryPool64 m_pool64;                 // 0x14
 	MxMemoryPool128 m_pool128;               // 0x20
 };

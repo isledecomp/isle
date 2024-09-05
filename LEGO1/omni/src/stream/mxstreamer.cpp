@@ -37,8 +37,8 @@ MxResult MxStreamer::Create()
 // FUNCTION: BETA10 0x10145268
 MxStreamer::~MxStreamer()
 {
-	while (!m_openStreams.empty()) {
-		MxStreamController* controller = m_openStreams.front();
+	while (!m_controllers.empty()) {
+		MxStreamController* controller = m_controllers.front();
 
 #ifdef COMPAT_MODE
 		{
@@ -49,7 +49,7 @@ MxStreamer::~MxStreamer()
 		assert(controller->IsStoped(&MxDSAction()));
 #endif
 
-		m_openStreams.pop_front();
+		m_controllers.pop_front();
 		delete controller;
 	}
 
@@ -99,11 +99,11 @@ MxLong MxStreamer::Close(const char* p_name)
 	MxDSAction ds;
 	ds.SetUnknown24(-2);
 
-	for (list<MxStreamController*>::iterator it = m_openStreams.begin(); it != m_openStreams.end(); it++) {
+	for (list<MxStreamController*>::iterator it = m_controllers.begin(); it != m_controllers.end(); it++) {
 		MxStreamController* c = *it;
 
 		if (!p_name || c->GetAtom() == p_name) {
-			m_openStreams.erase(it);
+			m_controllers.erase(it);
 
 			if (c->IsStoped(&ds)) {
 				delete c;
@@ -130,7 +130,7 @@ MxNotificationParam* MxStreamerNotification::Clone() const
 // FUNCTION: BETA10 0x1014584b
 MxStreamController* MxStreamer::GetOpenStream(const char* p_name)
 {
-	for (list<MxStreamController*>::iterator it = m_openStreams.begin(); it != m_openStreams.end(); it++) {
+	for (list<MxStreamController*>::iterator it = m_controllers.begin(); it != m_controllers.end(); it++) {
 		if ((*it)->GetAtom() == p_name) {
 			return *it;
 		}
@@ -152,13 +152,13 @@ void MxStreamer::FUN_100b98f0(MxDSAction* p_action)
 // FUNCTION: BETA10 0x101458e5
 MxResult MxStreamer::AddStreamControllerToOpenList(MxStreamController* p_stream)
 {
-	list<MxStreamController*>::iterator it = find(m_openStreams.begin(), m_openStreams.end(), p_stream);
+	list<MxStreamController*>::iterator i = find(m_controllers.begin(), m_controllers.end(), p_stream);
 
-	assert(it == m_openStreams.end());
+	assert(i == m_controllers.end());
 
 	// DECOMP: Retail is missing the optimization that skips this check if find() reaches the end.
-	if (it == m_openStreams.end()) {
-		m_openStreams.push_back(p_stream);
+	if (i == m_controllers.end()) {
+		m_controllers.push_back(p_stream);
 		return SUCCESS;
 	}
 
@@ -198,7 +198,7 @@ MxResult MxStreamer::DeleteObject(MxDSAction* p_dsAction)
 	}
 
 	MxResult result = FAILURE;
-	for (list<MxStreamController*>::iterator it = m_openStreams.begin(); it != m_openStreams.end(); it++) {
+	for (list<MxStreamController*>::iterator it = m_controllers.begin(); it != m_controllers.end(); it++) {
 		// TODO: MxAtomId operator== used here for NULL test. BETA10 0x1007dc20
 		if (p_dsAction->GetAtomId().GetInternal() == NULL || p_dsAction->GetAtomId() == (*it)->GetAtom()) {
 			tempAction.SetAtomId((*it)->GetAtom());
