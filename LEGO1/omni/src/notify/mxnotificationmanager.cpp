@@ -63,6 +63,7 @@ MxResult MxNotificationManager::Create(MxU32 p_frequencyMS, MxBool p_createThrea
 }
 
 // FUNCTION: LEGO1 0x100ac6c0
+// FUNCTION: BETA10 0x10125b57
 MxResult MxNotificationManager::Send(MxCore* p_listener, const MxNotificationParam& p_param)
 {
 	AUTOLOCK(m_lock);
