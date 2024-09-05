@@ -3,16 +3,22 @@
 
 // VTABLE: ISLE 0x40f018
 // VTABLE: LEGO1 0x100d56e8
+// VTABLE: BETA10 0x101b86b4
 // SIZE 0x04
 class MxParam {
 public:
 	// FUNCTION: ISLE 0x401530
 	// FUNCTION: LEGO1 0x10010360
+	// FUNCTION: BETA10 0x10013540
 	virtual ~MxParam() {}
 };
 
+// SYNTHETIC: BETA10 0x10013710
+// MxParam::MxParam
+
 // SYNTHETIC: ISLE 0x401540
 // SYNTHETIC: LEGO1 0x10010370
+// SYNTHETIC: BETA10 0x10013570
 // MxParam::`scalar deleting destructor'
 
 #endif // MXPARAM_H

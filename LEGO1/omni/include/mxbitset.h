@@ -92,4 +92,76 @@ private:
 	MxU32 m_blocks[e_blocksRequired + 1]; // 0x00
 };
 
+// TEMPLATE: BETA10 0x10146600
+// MxBitset<2>::MxBitset<2>
+
+// TEMPLATE: BETA10 0x101464e0
+// MxBitset<22>::MxBitset<22>
+
+// TEMPLATE: BETA10 0x10146510
+// MxBitset<22>::Tidy
+
+// TEMPLATE: BETA10 0x10146570
+// MxBitset<22>::Trim
+
+// TEMPLATE: BETA10 0x10146630
+// MxBitset<2>::Tidy
+
+// TEMPLATE: BETA10 0x10146690
+// MxBitset<2>::Trim
+
+// TEMPLATE: BETA10 0x10146880
+// MxBitset<22>::Size
+
+// TEMPLATE: BETA10 0x101469d0
+// MxBitset<2>::Size
+
+// TEMPLATE: BETA10 0x101587a0
+// MxBitset<22>::Reference::Flip
+
+// TEMPLATE: BETA10 0x101587d0
+// MxBitset<22>::Reference::operator int
+
+// TEMPLATE: BETA10 0x10158800
+// MxBitset<22>::operator[]
+
+// TEMPLATE: BETA10 0x10158830
+// MxBitset<22>::Reference::Reference
+
+// TEMPLATE: BETA10 0x10158860
+// MxBitset<22>::Flip
+
+// STUB: BETA10 0x101588b0
+// MxBitset<22>::Count
+
+// TEMPLATE: BETA10 0x10158930
+// MxBitset<22>::Test
+
+// TEMPLATE: BETA10 0x10158990
+// MxBitset<22>::Xran
+
+// TEMPLATE: BETA10 0x10158b70
+// MxBitset<2>::Reference::Flip
+
+// TEMPLATE: BETA10 0x10158ba0
+// MxBitset<2>::Reference::operator int
+
+// TEMPLATE: BETA10 0x10158bd0
+// MxBitset<2>::operator[]
+
+// TEMPLATE: BETA10 0x10158c00
+// MxBitset<2>::Reference::Reference
+
+// TEMPLATE: BETA10 0x10158c30
+// MxBitset<2>::Flip
+
+// STUB: BETA10 0x10158c80
+// MxBitset<2>::Count
+
+// TEMPLATE: BETA10 0x10158d00
+// MxBitset<2>::Test
+
+// TEMPLATE: BETA10 0x10158d60
+// MxBitset<2>::Xran
+
 #endif // MXBITSET_H
