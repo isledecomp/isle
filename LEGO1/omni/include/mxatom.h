@@ -74,6 +74,13 @@ public:
 	MxBool operator!=(const MxAtomId& p_atomId) const { return this->m_internal != p_atomId.m_internal; }
 #endif
 
+	// TODO:
+	// BETA10 0x1007dc20 operator==
+	// BETA10 0x10096970 operator!=
+
+	// FUNCTION: BETA10 0x10146dd0
+	MxBool operator==(const char* p_internal) const { return p_internal && !strcmp(m_internal, p_internal); }
+
 	// FUNCTION: BETA10 0x10025d40
 	MxAtomId() { this->m_internal = 0; }
 
