@@ -158,6 +158,9 @@ private:
 // TEMPLATE: BETA10 0x10147020
 // list<MxStreamController *,allocator<MxStreamController *> >::iterator::operator==
 
+// TEMPLATE: BETA10 0x10147060
+// list<MxStreamController *,allocator<MxStreamController *> >::push_back
+
 // TEMPLATE: BETA10 0x10147200
 // ??9@YAHABViterator@?$list@PAVMxStreamController@@V?$allocator@PAVMxStreamController@@@@@@0@Z
 

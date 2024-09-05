@@ -156,6 +156,7 @@ MxResult MxStreamer::AddStreamControllerToOpenList(MxStreamController* p_stream)
 
 	assert(it == m_openStreams.end());
 
+	// DECOMP: Retail is missing the optimization that skips this check if find() reaches the end.
 	if (it == m_openStreams.end()) {
 		m_openStreams.push_back(p_stream);
 		return SUCCESS;
@@ -199,7 +200,7 @@ MxResult MxStreamer::DeleteObject(MxDSAction* p_dsAction)
 	MxResult result = FAILURE;
 	for (list<MxStreamController*>::iterator it = m_openStreams.begin(); it != m_openStreams.end(); it++) {
 		// TODO: MxAtomId operator== used here for NULL test. BETA10 0x1007dc20
-		if (p_dsAction->GetAtomId().GetInternal() != NULL || p_dsAction->GetAtomId() == (*it)->GetAtom()) {
+		if (p_dsAction->GetAtomId().GetInternal() == NULL || p_dsAction->GetAtomId() == (*it)->GetAtom()) {
 			tempAction.SetAtomId((*it)->GetAtom());
 			result = (*it)->VTable0x24(&tempAction);
 		}
