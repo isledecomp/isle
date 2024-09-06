@@ -60,4 +60,10 @@ public:
 	MxDSSubscriber* Find(MxDSObject* p_object);
 };
 
+// TEMPLATE: BETA10 0x10150950
+// MxStreamList<MxDSAction *>::PopFront
+
+// TEMPLATE: BETA10 0x10150a70
+// MxStreamList<MxDSSubscriber *>::PopFront
+
 #endif // MXSTREAMLIST_H
