@@ -144,7 +144,7 @@ void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 		do {
 			{
 				AUTOLOCK(m_criticalSection);
-				action = (MxDSStreamingAction*) m_list.Find(p_action, TRUE);
+				action = (MxDSStreamingAction*) m_list.FindAndErase(p_action);
 			}
 
 			if (!action) {

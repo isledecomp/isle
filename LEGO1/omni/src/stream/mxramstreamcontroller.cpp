@@ -43,20 +43,20 @@ MxResult MxRAMStreamController::VTable0x20(MxDSAction* p_action)
 
 	if (p_action->GetUnknown24() == -1) {
 		p_action->SetUnknown24(-3);
-		MxDSAction* action = m_unk0x54.Find(p_action, FALSE);
+		MxDSAction* action = m_unk0x54.Find(p_action);
 		if (action != NULL) {
 			unk0x24 = action->GetUnknown24() + 1;
 		}
 		p_action->SetUnknown24(unk0x24);
 	}
 	else {
-		if (m_unk0x54.Find(p_action, FALSE)) {
+		if (m_unk0x54.Find(p_action)) {
 			return FAILURE;
 		}
 	}
 
 	if (MxStreamController::VTable0x20(p_action) == SUCCESS) {
-		MxDSStreamingAction* action = (MxDSStreamingAction*) m_unk0x3c.Find(p_action, FALSE);
+		MxDSStreamingAction* action = (MxDSStreamingAction*) m_unk0x3c.Find(p_action);
 		MxDSStreamingAction streamingaction(*action);
 		result = DeserializeObject(streamingaction);
 	}
@@ -89,7 +89,7 @@ MxResult MxRAMStreamController::DeserializeObject(MxDSStreamingAction& p_action)
 		m_buffer.FUN_100c6f80(p_action.GetUnknown94());
 		// Probably not MxResult, see below
 		result = m_buffer.FUN_100c67b0(this, &p_action, &value);
-	} while (m_unk0x3c.Find(&p_action, FALSE) != NULL);
+	} while (m_unk0x3c.Find(&p_action) != NULL);
 
 	return result == SUCCESS ? SUCCESS : FAILURE;
 }

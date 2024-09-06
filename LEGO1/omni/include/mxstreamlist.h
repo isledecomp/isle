@@ -24,7 +24,11 @@ public:
 // SIZE 0x0c
 class MxStreamListMxDSAction : public MxStreamList<MxDSAction*> {
 public:
-	MxDSAction* Find(MxDSAction* p_action, MxBool p_delete);
+	// FUNCTION: BETA10 0x10150e30
+	MxDSAction* FindAndErase(MxDSAction* p_action) { return FindInternal(p_action, TRUE); }
+
+	// FUNCTION: BETA10 0x10150fc0
+	MxDSAction* Find(MxDSAction* p_action) { return FindInternal(p_action, FALSE); }
 
 	// There chance this list actually holds MxDSStreamingListAction
 	// instead of MxDSAction. Until then, we use this helper.
@@ -38,6 +42,9 @@ public:
 		pop_front();
 		return TRUE;
 	}
+
+private:
+	MxDSAction* FindInternal(MxDSAction* p_action, MxBool p_delete);
 };
 
 // SIZE 0x0c
@@ -52,5 +59,11 @@ class MxStreamListMxDSSubscriber : public MxStreamList<MxDSSubscriber*> {
 public:
 	MxDSSubscriber* Find(MxDSObject* p_object);
 };
+
+// TEMPLATE: BETA10 0x10150950
+// MxStreamList<MxDSAction *>::PopFront
+
+// TEMPLATE: BETA10 0x10150a70
+// MxStreamList<MxDSSubscriber *>::PopFront
 
 #endif // MXSTREAMLIST_H
