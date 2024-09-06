@@ -103,7 +103,7 @@ MxResult MxDSBuffer::FUN_100c67b0(
 {
 	MxResult result = FAILURE;
 
-	m_unk0x30 = (MxDSStreamingAction*) p_controller->GetUnk0x3c().Find(p_action, FALSE);
+	m_unk0x30 = (MxDSStreamingAction*) p_controller->GetUnk0x3c().Find(p_action);
 	if (m_unk0x30 == NULL) {
 		return FAILURE;
 	}

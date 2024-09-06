@@ -135,7 +135,7 @@ MxResult MxStreamController::VTable0x24(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
 	VTable0x30(p_action);
-	m_action0x60 = m_unk0x54.Find(p_action, TRUE);
+	m_action0x60 = m_unk0x54.FindAndErase(p_action);
 	if (m_action0x60 == NULL) {
 		return FAILURE;
 	}
@@ -198,7 +198,7 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 		p_action->SetUnknown24(newUnknown24 + 1);
 	}
 	else {
-		if (m_unk0x3c.Find(p_action, FALSE)) {
+		if (m_unk0x3c.Find(p_action)) {
 			return FAILURE;
 		}
 	}
@@ -235,7 +235,7 @@ MxResult MxStreamController::VTable0x30(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
 	MxResult result = FAILURE;
-	MxDSAction* action = m_unk0x3c.Find(p_action, TRUE);
+	MxDSAction* action = m_unk0x3c.FindAndErase(p_action);
 	if (action != NULL) {
 		MxNextActionDataStart* data = m_nextActionList.FindAndErase(action->GetObjectId(), action->GetUnknown24());
 		delete action;
@@ -266,7 +266,7 @@ MxPresenter* MxStreamController::FUN_100c1e70(MxDSAction& p_action)
 	AUTOLOCK(m_criticalSection);
 	MxPresenter* result = NULL;
 	if (p_action.GetObjectId() != -1) {
-		MxDSAction* action = m_unk0x3c.Find(&p_action, FALSE);
+		MxDSAction* action = m_unk0x3c.Find(&p_action);
 		if (action != NULL) {
 			result = action->GetUnknown28();
 		}

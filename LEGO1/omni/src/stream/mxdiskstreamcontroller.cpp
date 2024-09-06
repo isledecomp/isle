@@ -187,7 +187,7 @@ MxResult MxDiskStreamController::VTable0x30(MxDSAction* p_action)
 
 	MxDSStreamingAction* item;
 	while (TRUE) {
-		item = (MxDSStreamingAction*) m_list0x90.Find(p_action, TRUE);
+		item = (MxDSStreamingAction*) m_list0x90.FindAndErase(p_action);
 		if (item == NULL) {
 			break;
 		}
@@ -195,7 +195,7 @@ MxResult MxDiskStreamController::VTable0x30(MxDSAction* p_action)
 	}
 
 	while (TRUE) {
-		item = (MxDSStreamingAction*) m_list0x64.Find(p_action, TRUE);
+		item = (MxDSStreamingAction*) m_list0x64.FindAndErase(p_action);
 		if (item == NULL) {
 			break;
 		}
@@ -286,8 +286,7 @@ void MxDiskStreamController::FUN_100c7f40(MxDSStreamingAction* p_streamingaction
 MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
-	MxDSStreamingAction* entry =
-		(MxDSStreamingAction*) m_list0x80.Find(p_action, FALSE); // TODO: is this a seperate class?
+	MxDSStreamingAction* entry = (MxDSStreamingAction*) m_list0x80.Find(p_action); // TODO: is this a seperate class?
 	if (entry) {
 		MxDSStreamingAction* action = new MxDSStreamingAction(*p_action, 0);
 		action->SetUnknown28(entry->GetUnknown28());
@@ -320,7 +319,7 @@ void MxDiskStreamController::FUN_100c8120(MxDSAction* p_action)
 	}
 
 	while (TRUE) {
-		MxDSAction* found = m_unk0x54.Find(p_action, TRUE);
+		MxDSAction* found = m_unk0x54.FindAndErase(p_action);
 		if (!found) {
 			break;
 		}
@@ -332,7 +331,7 @@ void MxDiskStreamController::FUN_100c8120(MxDSAction* p_action)
 MxResult MxDiskStreamController::VTable0x24(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
-	if (m_unk0x54.Find(p_action, FALSE) == NULL) {
+	if (m_unk0x54.Find(p_action) == NULL) {
 		if (VTable0x30(p_action) == SUCCESS) {
 			MxOmni::GetInstance()->NotifyCurrentEntity(
 				MxEndActionNotificationParam(c_notificationEndAction, NULL, p_action, TRUE)
@@ -368,7 +367,7 @@ MxResult MxDiskStreamController::FUN_100c8360(MxDSStreamingAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
 	MxDSBuffer* buffer = p_action->GetUnknowna0();
-	MxDSStreamingAction* action2 = (MxDSStreamingAction*) m_list0x90.Find(p_action, TRUE);
+	MxDSStreamingAction* action2 = (MxDSStreamingAction*) m_list0x90.FindAndErase(p_action);
 	buffer->FUN_100c6f80(p_action->GetUnknown94() - p_action->GetBufferOffset());
 	buffer->FUN_100c67b0(this, p_action, &action2);
 
