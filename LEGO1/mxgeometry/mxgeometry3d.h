@@ -169,36 +169,36 @@ inline void UnknownMx4DPointFloat::Unknown7()
 // FUNCTION: BETA10 0x1004ab10
 inline int UnknownMx4DPointFloat::FUN_100040a0(Vector4& p_v, float p_f)
 {
-	undefined4 state = m_unk0x30;
-
-	if (state == 1) {
+	if (m_unk0x30 == 1) {
 		p_v = m_unk0x00;
-		p_v[3] = (1.0 - p_f) * acos(p_v[3]) * 2.0;
+		p_v[3] = (1.0 - p_f) * acos((double) p_v[3]) * 2.0;
 		return p_v.NormalizeQuaternion();
 	}
-	else if (state == 2) {
+	else if (m_unk0x30 == 2) {
 		p_v = m_unk0x18;
-		p_v[3] = p_f * acos(p_v[3]) * 2.0;
+		p_v[3] = p_f * acos((double) p_v[3]) * 2.0;
 		return p_v.NormalizeQuaternion();
 	}
-	else if (state == 3) {
+	else if (m_unk0x30 == 3) {
+		int i;
 		double d1 = p_v.Dot(&m_unk0x00, &m_unk0x18);
-		double d2;
+		double a;
+		double b;
 
 		if (d1 + 1.0 > 0.00001) {
 			if (1.0 - d1 > 0.00001) {
-				double d = acos(d1);
-				double s = sin(d);
-				d1 = sin((1.0 - p_f) * d) / s;
-				d2 = sin(p_f * d) / s;
+				double d2 = acos(d1);
+				double denominator = sin(d2);
+				a = sin((1.0 - p_f) * d2) / denominator;
+				b = sin(p_f * d2) / denominator;
 			}
 			else {
-				d1 = 1.0 - p_f;
-				d2 = p_f;
+				a = 1.0 - p_f;
+				b = p_f;
 			}
 
-			for (int i = 0; i < 4; i++) {
-				p_v[i] = m_unk0x18[i] * d2 + m_unk0x00[i] * d1;
+			for (i = 0; i < 4; i++) {
+				p_v[i] = m_unk0x00[i] * a + m_unk0x18[i] * b;
 			}
 		}
 		else {
@@ -206,11 +206,11 @@ inline int UnknownMx4DPointFloat::FUN_100040a0(Vector4& p_v, float p_f)
 			p_v[1] = m_unk0x00[0];
 			p_v[2] = -m_unk0x00[3];
 			p_v[3] = m_unk0x00[2];
-			d1 = sin((1.0 - p_f) * 1.570796326794895);
-			d2 = sin(p_f * 1.570796326794895);
+			a = sin((1.0 - p_f) * 1.570796326794895);
+			b = sin(p_f * 1.570796326794895);
 
-			for (int i = 0; i < 3; i++) {
-				p_v[i] = m_unk0x00[i] * d1 + p_v[i] * d2;
+			for (i = 0; i < 3; i++) {
+				p_v[i] = m_unk0x00[i] * a + p_v[i] * b;
 			}
 		}
 

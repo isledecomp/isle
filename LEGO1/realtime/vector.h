@@ -154,13 +154,19 @@ public:
 	// SYNTHETIC: LEGO1 0x10010be0
 	// Vector3::operator=
 
+	// SYNTHETIC: BETA10 0x1004af40
+	// Vector4::operator=
+
 	Vector2& operator=(const Vector2& p_other)
 	{
 		Vector2::SetVector(&p_other);
 		return *this;
 	}
 
-	// FUNCTION: BETA10 0x10013460
+	// SYNTHETIC: BETA10 0x10013460
+	// Vector3::operator[]
+
+	// FUNCTION: BETA10 0x10010890
 	float& operator[](int idx) { return m_data[idx]; }
 
 	// FUNCTION: BETA10 0x1001d140
