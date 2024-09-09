@@ -669,4 +669,10 @@
 // LIBRARY: BETA10 0x100f9060
 // _assert
 
+// LIBRARY: BETA10 0x100fa2fa
+// _acos
+
+// LIBRARY: BETA10 0x100f9a50
+// _sin
+
 #endif
