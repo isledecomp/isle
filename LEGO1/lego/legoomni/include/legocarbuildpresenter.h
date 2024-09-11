@@ -54,7 +54,7 @@ public:
 
 	MxBool StringEndsOnYOrN(const LegoChar* p_string);
 
-	const BoundingSphere& LegoCarBuildAnimPresenter::FUN_10079e20();
+	const BoundingSphere& FUN_10079e20();
 
 	// SYNTHETIC: LEGO1 0x10078660
 	// LegoCarBuildAnimPresenter::`scalar deleting destructor'
