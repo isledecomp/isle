@@ -35,10 +35,16 @@ public:
 	LegoTreeNodeData* GetData() { return m_data; }
 	void SetData(LegoTreeNodeData* p_data) { m_data = p_data; }
 	LegoU32 GetNumChildren() { return m_numChildren; }
+
+	// FUNCTION: BETA10 0x10073370
 	void SetNumChildren(LegoU32 p_numChildren) { m_numChildren = p_numChildren; }
+
 	LegoTreeNode* GetChild(LegoU32 p_i) { return m_children[p_i]; }
 	void SetChild(LegoU32 p_i, LegoTreeNode* p_child) { m_children[p_i] = p_child; }
+
+	// FUNCTION: BETA10 0x100733a0
 	LegoTreeNode** GetChildren() { return m_children; }
+
 	void SetChildren(LegoTreeNode** p_children) { m_children = p_children; }
 
 	// SYNTHETIC: LEGO1 0x10099d80
@@ -56,7 +62,10 @@ class LegoTree {
 public:
 	LegoTree();
 	virtual ~LegoTree();
+
+	// FUNCTION: BETA10 0x100121b0
 	LegoTreeNode* GetRoot() { return m_root; }
+
 	void SetRoot(LegoTreeNode* p_root) { m_root = p_root; }
 	virtual LegoResult Read(LegoStorage* p_storage);  // vtable+0x04
 	virtual LegoResult Write(LegoStorage* p_storage); // vtable+0x08

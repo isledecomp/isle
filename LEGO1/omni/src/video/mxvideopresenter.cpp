@@ -542,6 +542,7 @@ MxResult MxVideoPresenter::AddToManager()
 }
 
 // FUNCTION: LEGO1 0x100b31d0
+// FUNCTION: BETA10 0x101396d9
 void MxVideoPresenter::EndAction()
 {
 	if (m_action) {

@@ -52,6 +52,7 @@ public:
 	// FUNCTION: LEGO1 0x10048290
 	Mx4DPointFloat() : Vector4(m_elements) {}
 
+	// FUNCTION: BETA10 0x10073bb0
 	Mx4DPointFloat(float p_x, float p_y, float p_z, float p_a) : Vector4(m_elements)
 	{
 		m_elements[0] = p_x;
