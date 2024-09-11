@@ -52,7 +52,7 @@ public:
 	// FUNCTION: BETA10 0x10070180
 	void SetUnknown0xbc(undefined2 p_unk0xbc) { m_unk0xbc = p_unk0xbc; }
 
-	MxBool StringEndsOnYOrN(const LegoChar* param_1);
+	MxBool StringEndsOnYOrN(const LegoChar* p_string);
 
 	const BoundingSphere& LegoCarBuildAnimPresenter::FUN_10079e20();
 
