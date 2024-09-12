@@ -3,7 +3,7 @@
 #include "legoentity.h"
 #include "mxautolock.h"
 
-DECOMP_SIZE_ASSERT(LegoCarBuildAnimPresenterUnknownListEntry, 0xc)
+DECOMP_SIZE_ASSERT(LegoCarBuildAnimPresenter::UnknownListEntry, 0x0c)
 DECOMP_SIZE_ASSERT(LegoCarBuildAnimPresenter, 0x150)
 
 // FUNCTION: LEGO1 0x10078400
