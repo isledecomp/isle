@@ -102,7 +102,6 @@ MxBool LegoCarBuildAnimPresenter::StringEndsOnYOrN(const LegoChar* p_string)
 // FUNCTION: BETA10 0x10072740
 MxBool LegoCarBuildAnimPresenter::FUN_10079ca0(const char* p_param1)
 {
-	// not quite correct yet; something going on with word pointers
 	for (MxS16 i = 0; i < m_unk0xc0; i++) {
 		if (strcmpi(p_param1, m_unk0x128[i].m_unk0x00) == 0) {
 			return TRUE;
