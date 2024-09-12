@@ -30,6 +30,7 @@ typedef map<const char*, LegoAnimStruct, LegoAnimStructComparator> LegoAnimStruc
 typedef map<const char*, const char*, LegoAnimSubstComparator> LegoAnimSubstMap;
 
 // VTABLE: LEGO1 0x100d90c8
+// VTABLE: BETA10 0x101baf90
 // SIZE 0xbc
 class LegoAnimPresenter : public MxVideoPresenter {
 public:

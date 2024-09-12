@@ -675,4 +675,31 @@
 // LIBRARY: BETA10 0x100f9a50
 // _sin
 
+// LIBRARY: BETA10 0x100f95d0
+// _sqrt
+
+// LIBRARY: BETA10 0x100f9780
+// strlen
+
+// LIBRARY: BETA10 0x100f8a88
+// operator new
+
+// LIBRARY: BETA10 0x100f9420
+// memcpy
+
+// LIBRARY: BETA10 0x100fb080
+// _stricmp
+
+// LIBRARY: BETA10 0x100fb050
+// fopen
+
+// LIBRARY: BETA10 0x100fae70
+// fprintf
+
+// LIBRARY: BETA10 0x100fad10
+// fclose
+
+// LIBRARY: BETA10 0x100fe5a0
+// abort
+
 #endif
