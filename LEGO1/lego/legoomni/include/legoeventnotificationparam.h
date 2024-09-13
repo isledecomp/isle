@@ -46,9 +46,11 @@ public:
 	MxU8 GetKey() const { return m_key; }
 
 	// FUNCTION: LEGO1 0x10012190
+	// FUNCTION: BETA10 0x10024210
 	MxS32 GetX() const { return m_x; }
 
 	// FUNCTION: LEGO1 0x100121a0
+	// FUNCTION: BETA10 0x10024240
 	MxS32 GetY() const { return m_y; }
 
 	void SetROI(LegoROI* p_roi) { m_roi = p_roi; }

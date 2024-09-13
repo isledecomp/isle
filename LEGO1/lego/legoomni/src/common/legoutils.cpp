@@ -70,7 +70,7 @@ void FUN_1003dde0(LegoROI* p_param1, MxFloat p_param2)
 
 // FUNCTION: LEGO1 0x1003ded0
 // FUNCTION: BETA10 0x100d3802
-MxBool FUN_1003ded0(MxFloat p_param1[3], MxFloat p_param2[3], MxFloat p_param3[3])
+MxBool FUN_1003ded0(MxFloat p_param1[2], MxFloat p_param2[3], MxFloat p_param3[3])
 {
 	MxFloat local1c[4];
 	MxFloat local10[3];
