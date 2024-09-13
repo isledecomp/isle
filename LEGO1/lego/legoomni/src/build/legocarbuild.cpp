@@ -6,6 +6,7 @@
 #include "legoinputmanager.h"
 #include "legoutils.h"
 #include "misc.h"
+#include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxcontrolpresenter.h"
 #include "mxmisc.h"
@@ -13,6 +14,7 @@
 #include "mxsoundpresenter.h"
 #include "mxstillpresenter.h"
 #include "mxticklemanager.h"
+#include "mxtransitionmanager.h"
 #include "scripts.h"
 
 DECOMP_SIZE_ASSERT(LegoCarBuild, 0x34c)
@@ -64,7 +66,7 @@ LegoCarBuild::LegoCarBuild()
 	m_unk0x109 = '\0';
 	m_unk0x108 = '\0';
 	m_unk0x338 = 0;
-	m_unk0x334 = 0;
+	m_destLocation = LegoGameState::e_undefined;
 	m_unk0x344 = 0xffffffff;
 	m_unk0x174 = '\0';
 	NotificationManager()->Register(this);
@@ -78,7 +80,7 @@ MxBool LegoCarBuild::VTable0x5c()
 }
 
 // STUB: LEGO1 0x10022a80
-// FUNCTION: BETA10 0x1006aea3
+// STUB: BETA10 0x1006aea3
 LegoCarBuild::~LegoCarBuild()
 {
 	// TODO
@@ -106,22 +108,22 @@ MxResult LegoCarBuild::Create(MxDSAction& p_dsAction)
 
 		if (m_atomId == *g_copterScript) {
 			buildStateClassName = "LegoCopterBuildState";
-			GameState()->SetCurrentArea(LegoGameState::Area::e_copterbuild);
+			GameState()->SetCurrentArea(LegoGameState::e_copterbuild);
 			m_unk0x330 = 1;
 		}
 		else if (m_atomId == *g_dunecarScript) {
 			buildStateClassName = "LegoDuneCarBuildState";
-			GameState()->SetCurrentArea(LegoGameState::Area::e_dunecarbuild);
+			GameState()->SetCurrentArea(LegoGameState::e_dunecarbuild);
 			m_unk0x330 = 2;
 		}
 		else if (m_atomId == *g_jetskiScript) {
 			buildStateClassName = "LegoJetskiBuildState";
-			GameState()->SetCurrentArea(LegoGameState::Area::e_jetskibuild);
+			GameState()->SetCurrentArea(LegoGameState::e_jetskibuild);
 			m_unk0x330 = 3;
 		}
 		else if (m_atomId == *g_racecarScript) {
 			buildStateClassName = "LegoRaceCarBuildState";
-			GameState()->SetCurrentArea(LegoGameState::Area::e_racecarbuild);
+			GameState()->SetCurrentArea(LegoGameState::e_racecarbuild);
 			m_unk0x330 = 4;
 		}
 
@@ -136,7 +138,7 @@ MxResult LegoCarBuild::Create(MxDSAction& p_dsAction)
 		m_buildState = buildState;
 		m_unk0x174 = m_buildState->m_unk0x4d;
 
-		GameState()->StopArea(LegoGameState::Area::e_previousArea);
+		GameState()->StopArea(LegoGameState::e_previousArea);
 
 		m_buildState->m_animationState = 1;
 		m_unk0x100 = 0;
@@ -249,7 +251,7 @@ void LegoCarBuild::VTable0x70()
 
 // FUNCTION: LEGO1 0x10023500
 // FUNCTION: BETA10 0x1006bdf6
-void LegoCarBuild::VTable0x74(MxFloat p_param1[3], MxFloat p_param2[3])
+void LegoCarBuild::VTable0x74(MxFloat p_param1[2], MxFloat p_param2[3])
 {
 	MxFloat fVar1;
 	MxFloat local20[3];
@@ -265,7 +267,7 @@ void LegoCarBuild::VTable0x74(MxFloat p_param1[3], MxFloat p_param2[3])
 
 // FUNCTION: LEGO1 0x10023570
 // FUNCTION: BETA10 0x1006be91
-void LegoCarBuild::VTable0x78(MxFloat p_param1[3], MxFloat p_param2[3])
+void LegoCarBuild::VTable0x78(MxFloat p_param1[2], MxFloat p_param2[3])
 {
 	MxFloat fVar1;
 	MxFloat local18[3];
@@ -283,7 +285,7 @@ void LegoCarBuild::VTable0x78(MxFloat p_param1[3], MxFloat p_param2[3])
 
 // FUNCTION: LEGO1 0x10023620
 // FUNCTION: BETA10 0x1006bfb5
-void LegoCarBuild::VTable0x7c(MxFloat p_param1[3], MxFloat p_param2[3])
+void LegoCarBuild::VTable0x7c(MxFloat p_param1[2], MxFloat p_param2[3])
 {
 	MxFloat local18[3];
 	MxFloat localc[3];
@@ -570,7 +572,7 @@ MxBool LegoCarBuild::Escape()
 	DeleteObjects(&m_atomId, 500, 999);
 
 	m_buildState->m_animationState = 0;
-	m_unk0x334 = 2;
+	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;
 }
 
