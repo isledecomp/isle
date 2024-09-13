@@ -598,7 +598,6 @@ void LegoCarBuild::FUN_100243a0()
 }
 
 // FUNCTION: LEGO1 0x10024480
-// FUNCTION: BETA10 0x1006cc48
 undefined4 LegoCarBuild::FUN_10024480(MxActionNotificationParam* p_param)
 {
 	MxS32 result = 0;
