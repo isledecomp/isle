@@ -198,11 +198,24 @@ void LegoCarBuild::InitPresenters()
 	}
 }
 
-// STUB: LEGO1 0x10022f30
-// STUB: BETA10 0x1006b835
+// FUNCTION: LEGO1 0x10022f30
+// FUNCTION: BETA10 0x1006b835
 void LegoCarBuild::FUN_10022f30()
 {
-	// TODO
+	if (m_unk0x110) {
+		FUN_10024f70(FALSE);
+		FUN_100250e0(FALSE);
+
+		if (m_unk0x258->FUN_10079ca0(m_unk0x110->GetName())) {
+			m_PlaceBrick_Sound->Enable(FALSE);
+			m_PlaceBrick_Sound->Enable(TRUE);
+		}
+
+		m_unk0x258->SetUnknown0xbc(1);
+		m_unk0x258->PutFrame();
+		m_unk0x110 = NULL;
+		m_unk0x100 = 0;
+	}
 }
 
 // FUNCTION: LEGO1 0x10022fc0
@@ -247,6 +260,13 @@ void LegoCarBuild::VTable0x70()
 	);
 
 	m_unk0x25c.Unknown1(m_unk0x178, m_unk0x208);
+}
+
+// STUB: LEGO1 0x10023130
+// STUB: BETA10 0x1006bb22
+void LegoCarBuild::FUN_10023130(MxLong p_x, MxLong p_y)
+{
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x10023500
@@ -430,11 +450,104 @@ MxResult LegoCarBuild::Tickle()
 	return 0;
 }
 
-// STUB: LEGO1 0x10024050
+// FUNCTION: LEGO1 0x10024050
 // FUNCTION: BETA10 0x1006c976
 MxLong LegoCarBuild::Notify(MxParam& p_param)
 {
-	// TODO
+	MxLong result = LegoWorld::Notify(p_param);
+
+	if (m_worldStarted) {
+		switch (((MxNotificationParam*) &p_param)->GetNotification()) {
+		case c_notificationType0:
+			FUN_10024c20((LegoEventNotificationParam*) &p_param);
+			result = 1;
+			break;
+		case c_notificationEndAction:
+			result = FUN_10024480((MxActionNotificationParam*) &p_param);
+			break;
+		case c_notificationKeyPress:
+			result = FUN_10024250((LegoEventNotificationParam*) &p_param);
+			break;
+		case c_notificationButtonUp:
+			result = FUN_100246e0(
+				((LegoEventNotificationParam&) p_param).GetX(),
+				((LegoEventNotificationParam&) p_param).GetY()
+			);
+
+			if (result || m_unk0x10a || m_buildState->m_animationState == 4 || m_buildState->m_animationState == 6) {
+				m_unk0x109 = 0;
+				break;
+			}
+
+			if (++m_unk0x109 > 2) {
+				FUN_10025720(6);
+				m_unk0x109 = 0;
+			}
+
+			break;
+		case c_notificationButtonDown:
+			assert(m_buildState);
+			if (((m_buildState->m_animationState != 4) && (m_buildState->m_animationState != 6)) &&
+				(m_buildState->m_animationState != 2)) {
+				m_buildState->m_animationState = 0;
+				result = FUN_100244e0(
+					((LegoEventNotificationParam&) p_param).GetX(),
+					((LegoEventNotificationParam&) p_param).GetY()
+				);
+			}
+
+			break;
+		case c_notificationMouseMove:
+			result = FUN_10024850(
+				((LegoEventNotificationParam&) p_param).GetX(),
+				((LegoEventNotificationParam&) p_param).GetY()
+			);
+
+			if (result == 1) {
+				m_unk0x109 = 0;
+			}
+
+			break;
+		case c_notificationControl:
+			result = FUN_10024890((LegoEventNotificationParam*) &p_param);
+
+			if (result == 1) {
+				m_unk0x109 = 0;
+			}
+
+			break;
+		case c_notificationEndAnim:
+			if (m_unk0x108 > 0) {
+				m_unk0x108 -= 1;
+			}
+
+			FUN_10025e40();
+			m_unk0x10a = 0;
+			result = 1;
+			break;
+		case c_notificationTransitioned:
+			assert(m_destLocation != LegoGameState::e_undefined);
+			GameState()->SwitchArea(m_destLocation);
+		}
+	}
+
+	return result;
+}
+
+// FUNCTION: LEGO1 0x10024250
+// FUNCTION: BETA10 0x1006cc48
+undefined4 LegoCarBuild::FUN_10024250(LegoEventNotificationParam* p_param)
+{
+	if (p_param->GetKey() == ' ' && m_buildState->m_animationState != 4 && m_buildState->m_animationState != 2) {
+		if (m_unk0x108 > 0) {
+			DeleteObjects(&m_atomId, 500, 0x1fe);
+			BackgroundAudioManager()->RaiseVolume();
+			m_unk0x109 = 0;
+		}
+
+		return 1;
+	}
+
 	return 0;
 }
 
@@ -455,6 +568,107 @@ void LegoCarBuild::ReadyWorld()
 	}
 }
 
+// FUNCTION: LEGO1 0x100243a0
+void LegoCarBuild::FUN_100243a0()
+{
+	switch (m_unk0x330) {
+	case 1:
+		if (GameState()->GetCurrentAct() == LegoGameState::Act::e_act2) {
+			m_destLocation = LegoGameState::Area::e_act3script;
+			TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
+			break;
+		}
+		else {
+			m_destLocation = LegoGameState::Area::e_polidoor;
+			TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
+			break;
+		}
+	case 2:
+		m_destLocation = LegoGameState::Area::e_garadoor;
+		TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
+		break;
+	case 3:
+		m_destLocation = LegoGameState::Area::e_unk17;
+		TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
+		break;
+	case 4:
+		m_destLocation = LegoGameState::Area::e_unk20;
+		TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
+	}
+}
+
+// FUNCTION: LEGO1 0x10024480
+// FUNCTION: BETA10 0x1006cc48
+undefined4 LegoCarBuild::FUN_10024480(MxActionNotificationParam* p_param)
+{
+	MxS32 result = 0;
+
+	switch (m_buildState->m_animationState) {
+	case 3:
+		BackgroundAudioManager()->RaiseVolume();
+		m_buildState->m_animationState = 0;
+		result = 1;
+		break;
+	case 6:
+		if (p_param->GetAction()->GetObjectId() == m_unk0x344) {
+			FUN_100243a0();
+			result = 1;
+			break;
+		}
+	}
+
+	return result;
+}
+
+// STUB: LEGO1 0x100244e0
+// STUB: BETA10 0x1006cfb6
+undefined4 LegoCarBuild::FUN_100244e0(MxLong p_x, MxLong p_y)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x100246e0
+undefined4 LegoCarBuild::FUN_100246e0(MxLong p_x, MxLong p_y)
+{
+	// TODO
+	return 0;
+}
+
+// FUNCTION: LEGO1 0x10024850
+// FUNCTION: BETA10 0x1006d48e
+MxS32 LegoCarBuild::FUN_10024850(MxLong p_x, MxLong p_y)
+{
+	MxS32 result = 0;
+
+	switch (m_unk0x100) {
+	case 3:
+	case 4:
+		m_unk0x100 = 6;
+	case 6:
+		FUN_10023130(p_x, p_y);
+		result = 1;
+		break;
+	}
+
+	return result;
+}
+
+// STUB: LEGO1 0x10024890
+// STUB: BETA10 0x1006d512
+undefined4 LegoCarBuild::FUN_10024890(LegoEventNotificationParam* p_param)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x10024c20
+// STUB: BETA10 0x1006db21
+void LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10024ef0
 void LegoCarBuild::FUN_10024ef0()
 {
@@ -471,6 +685,15 @@ void LegoCarBuild::FUN_10024f50()
 {
 	m_unk0x2d4 = FALSE;
 	m_unk0x258->FUN_10079920(g_unk0x100d65a8);
+}
+
+// FUNCTION: LEGO1 0x10024f70
+// FUNCTION: BETA10 0x1006e002
+void LegoCarBuild::FUN_10024f70(MxBool p_enabled)
+{
+	if (m_unk0x258->FUN_10079cf0(m_unk0x110->GetName())) {
+		SetPresentersEnabled(p_enabled);
+	}
 }
 
 // FUNCTION: LEGO1 0x10024fa0
@@ -497,6 +720,13 @@ void LegoCarBuild::TogglePresentersEnabled()
 	m_Green_Ctl->Enable(!m_Green_Ctl->IsEnabled());
 	m_Gray_Ctl->Enable(!m_Gray_Ctl->IsEnabled());
 	m_Black_Ctl->Enable(!m_Black_Ctl->IsEnabled());
+}
+
+// STUB: LEGO1 0x100250e0
+// STUB: BETA10 0x1006e124
+void LegoCarBuild::FUN_100250e0(MxBool p_enabled)
+{
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x100256c0
@@ -560,6 +790,15 @@ void LegoCarBuild::FUN_10025db0(const char* p_param1, undefined4 p_param2)
 
 		g_unk0x100f11cc = -1;
 		SetPresentersEnabled(m_presentersEnabled);
+	}
+}
+
+// FUNCTION: LEGO1 0x10025e40
+void LegoCarBuild::FUN_10025e40()
+{
+	SetPresentersEnabled(m_presentersEnabled);
+	if (m_unk0x33c && m_Yellow_Ctl != m_unk0x33c) {
+		m_unk0x33c->VTable0x6c(0);
 	}
 }
 
