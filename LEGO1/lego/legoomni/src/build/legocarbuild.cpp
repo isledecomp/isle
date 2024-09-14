@@ -16,7 +16,8 @@
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
 #include "scripts.h"
-#include "vec.h"
+
+#include <vec.h>
 
 DECOMP_SIZE_ASSERT(LegoCarBuild, 0x34c)
 DECOMP_SIZE_ASSERT(LegoVehicleBuildState, 0x50)
@@ -265,8 +266,8 @@ void LegoCarBuild::FUN_10023130(MxLong p_x, MxLong p_y)
 {
 	if (m_unk0x110) {
 		MxFloat pfVar3[2];
-		MxFloat local_30[3];
-		MxFloat local_84[3];
+		MxFloat local30[3];
+		MxFloat local84[3];
 
 		p_x += (m_unk0x290[0] - m_unk0x250[0]);
 		p_y += (m_unk0x290[1] - m_unk0x250[1]);
@@ -274,44 +275,44 @@ void LegoCarBuild::FUN_10023130(MxLong p_x, MxLong p_y)
 		pfVar3[0] = p_x;
 		pfVar3[1] = p_y;
 
-		if (FUN_1003ded0(pfVar3, local_30, local_84)) {
-			MxFloat local_18[3];
-			MxFloat local_8c[2];
+		if (FUN_1003ded0(pfVar3, local30, local84)) {
+			MxFloat local18[3];
+			MxFloat local8c[2];
 
-			local_8c[0] = p_x;
-			local_8c[1] = p_y;
+			local8c[0] = p_x;
+			local8c[1] = p_y;
 
-			local_18[0] = 0;
-			local_18[1] = 0;
-			local_18[2] = 0;
+			local18[0] = 0;
+			local18[1] = 0;
+			local18[2] = 0;
 
-			MxMatrix local_78;
+			MxMatrix local78;
 
 			if (p_y < m_unk0x290[1]) {
-				VTable0x74(local_8c, local_18);
+				VTable0x74(local8c, local18);
 			}
 			else if (p_y > m_unk0x298[1]) {
-				VTable0x7c(local_8c, local_18);
+				VTable0x7c(local8c, local18);
 			}
 			else if (p_y >= m_unk0x290[1]) {
-				VTable0x78(local_8c, local_18);
+				VTable0x78(local8c, local18);
 			}
 
-			MxS32 local_20[2];
+			MxS32 local20[2];
 
-			local_20[0] = p_x - m_unk0x290[0];
-			local_20[1] = p_y - m_unk0x290[1];
+			local20[0] = p_x - m_unk0x290[0];
+			local20[1] = p_y - m_unk0x290[1];
 
-			MxFloat local_1c = sqrt((double) (NORMSQRD2(local_20))) / m_unk0x2a0;
+			MxFloat local1c = sqrt((double) (NORMSQRD2(local20))) / m_unk0x2a0;
 
-			m_unk0x25c.Unknown6(local_78, local_1c);
+			m_unk0x25c.Unknown6(local78, local1c);
 
-			local_78[3][0] = m_unk0x178[3][0] + local_18[0];
-			local_78[3][1] = m_unk0x178[3][1] + local_18[1];
-			local_78[3][2] = m_unk0x178[3][2] + local_18[2];
-			local_78[3][3] = 1.0;
+			local78[3][0] = m_unk0x178[3][0] + local18[0];
+			local78[3][1] = m_unk0x178[3][1] + local18[1];
+			local78[3][2] = m_unk0x178[3][2] + local18[2];
+			local78[3][3] = 1.0;
 
-			m_unk0x110->WrappedSetLocalTransform(local_78);
+			m_unk0x110->WrappedSetLocalTransform(local78);
 		}
 	}
 }
