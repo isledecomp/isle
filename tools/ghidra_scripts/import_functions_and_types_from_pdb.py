@@ -21,9 +21,7 @@
 # Disable spurious warnings in vscode / pylance
 # pyright: reportMissingModuleSource=false
 
-from enum import Enum
 import importlib
-from dataclasses import dataclass, field
 import logging.handlers
 import sys
 import logging
@@ -53,44 +51,8 @@ def reload_module(module: str):
 
 
 reload_module("lego_util.statistics")
-from lego_util.statistics import Statistics
-
-
-@dataclass
-class Globals:
-    verbose: bool
-    loglevel: int
-    running_from_ghidra: bool = False
-    # statistics
-    statistics: Statistics = field(default_factory=Statistics)
-
-
-class SupportedModules(Enum):
-    LEGO1 = 1
-    BETA10 = 2
-
-    def orig_filename(self):
-        if self == self.LEGO1:
-            return "LEGO1.DLL"
-        return "BETA10.DLL"
-
-    def recomp_filename_without_extension(self):
-        # in case we want to support more functions
-        return "LEGO1"
-
-    def build_dir_name(self):
-        if self == self.BETA10:
-            return "build_debug"
-        return "build"
-
-
-# hard-coded settings that we don't want to prompt in Ghidra every time
-GLOBALS = Globals(
-    verbose=False,
-    # loglevel=logging.INFO,
-    loglevel=logging.DEBUG,
-)
-
+reload_module("lego_util.globals")
+from lego_util.globals import GLOBALS, SupportedModules
 
 def setup_logging():
     logging.root.handlers.clear()
@@ -232,24 +194,22 @@ def main():
         origfile_name = getProgramFile().getName()
 
         if origfile_name == "LEGO1.DLL":
-            module = SupportedModules.LEGO1
+            GLOBALS.module = SupportedModules.LEGO1
         elif origfile_name in ["LEGO1D.DLL", "BETA10.DLL"]:
-            module = SupportedModules.BETA10
+            GLOBALS.module = SupportedModules.BETA10
         else:
             raise Lego1Exception(
                 f"Unsupported file name in import script: {origfile_name}"
             )
-    else:
-        module = SupportedModules.LEGO1
 
-    logger.info("Importing file: %s", module.orig_filename())
+    logger.info("Importing file: %s", GLOBALS.module.orig_filename())
 
     repo_root = get_repository_root()
-    origfile_path = repo_root.joinpath("legobin").joinpath(module.orig_filename())
-    build_directory = repo_root.joinpath(module.build_dir_name())
-    recompiledfile_name = f"{module.recomp_filename_without_extension()}.DLL"
+    origfile_path = repo_root.joinpath("legobin").joinpath(GLOBALS.module.orig_filename())
+    build_directory = repo_root.joinpath(GLOBALS.module.build_dir_name())
+    recompiledfile_name = f"{GLOBALS.module.recomp_filename_without_extension()}.DLL"
     recompiledfile_path = build_directory.joinpath(recompiledfile_name)
-    pdbfile_name = f"{module.recomp_filename_without_extension()}.PDB"
+    pdbfile_name = f"{GLOBALS.module.recomp_filename_without_extension()}.PDB"
     pdbfile_path = build_directory.joinpath(pdbfile_name)
 
     if not GLOBALS.verbose:

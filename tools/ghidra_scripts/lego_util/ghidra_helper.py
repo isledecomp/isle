@@ -8,6 +8,7 @@ from lego_util.exceptions import (
     TypeNotFoundInGhidraError,
     MultipleTypesFoundInGhidraError,
 )
+from lego_util.globals import GLOBALS, SupportedModules
 
 # Disable spurious warnings in vscode / pylance
 # pyright: reportMissingModuleSource=false
@@ -104,6 +105,12 @@ def sanitize_name(name: str) -> str:
         .replace(" ", "_")
         .replace("`", "'")
     )
+
+    # Importing function names like `FUN_10001234` into BETA10 can be confusing
+    # because Ghidra's auto-generated functions look exactly the same.
+    # Therefore, such function names are replaced by `LEGO_10001234` in the BETA10 import.
+    if GLOBALS.module == SupportedModules.BETA10:
+        new_name = re.sub(r"FUN_([0-9a-f]{8})", r"LEGO1_\1", new_name)
 
     if "<" in name:
         new_name = "_template_" + new_name
