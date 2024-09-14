@@ -18,6 +18,7 @@ struct UnknownMatrixType {
 class Matrix4 {
 public:
 	// FUNCTION: LEGO1 0x10004500
+	// FUNCTION: BETA10 0x1000fc70
 	Matrix4(float (*p_data)[4]) { SetData(p_data); }
 
 	// Note: virtual function overloads appear in the virtual table
@@ -27,6 +28,7 @@ public:
 	virtual void Equals(float (*p_data)[4]) { memcpy(m_data, p_data, sizeof(float) * 4 * 4); } // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10002340
+	// FUNCTION: BETA10 0x1000fcf0
 	virtual void Equals(const Matrix4& p_matrix)
 	{
 		memcpy(m_data, p_matrix.m_data, sizeof(float) * 4 * 4);

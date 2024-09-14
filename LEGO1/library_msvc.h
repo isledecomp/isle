@@ -52,6 +52,7 @@
 // _sprintf
 
 // LIBRARY: LEGO1 0x1008b608
+// LIBRARY: BETA10 0x100f9660
 // __ftol
 
 // LIBRARY: LEGO1 0x1008b630
@@ -701,5 +702,8 @@
 
 // LIBRARY: BETA10 0x100fe5a0
 // abort
+
+// LIBRARY: BETA10 0x100ff82b
+// __ctrandisp1
 
 #endif

@@ -792,6 +792,7 @@ inline void LoadIsle()
 }
 
 // FUNCTION: LEGO1 0x1003b060
+// FUNCTION: BETA10 0x10085adf
 void LegoGameState::SwitchArea(Area p_area)
 {
 	m_previousArea = m_currentArea;

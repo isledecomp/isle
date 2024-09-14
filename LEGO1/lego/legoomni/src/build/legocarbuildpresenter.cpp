@@ -98,12 +98,20 @@ MxBool LegoCarBuildAnimPresenter::StringEndsOnYOrN(const LegoChar* p_string)
 		   (p_string[strlen(p_string) - 2] == 'Y') || (p_string[strlen(p_string) - 2] == 'y');
 }
 
+// STUB: LEGO1 0x10079c30
+// STUB: BETA10 0x100726a6
+MxBool LegoCarBuildAnimPresenter::FUN_10079c30(const LegoChar* p_name)
+{
+	// TODO
+	return FALSE;
+}
+
 // FUNCTION: LEGO1 0x10079ca0
 // FUNCTION: BETA10 0x10072740
-MxBool LegoCarBuildAnimPresenter::FUN_10079ca0(const char* p_param1)
+MxBool LegoCarBuildAnimPresenter::FUN_10079ca0(const LegoChar* p_name)
 {
 	for (MxS16 i = 0; i < m_unk0xc0; i++) {
-		if (strcmpi(p_param1, m_unk0x128[i].m_unk0x00) == 0) {
+		if (strcmpi(p_name, m_unk0x128[i].m_unk0x00) == 0) {
 			return TRUE;
 		}
 	}
@@ -119,6 +127,7 @@ MxBool LegoCarBuildAnimPresenter::FUN_10079cf0(const LegoChar* p_string)
 }
 
 // FUNCTION: LEGO1 0x10079e20
+// FUNCTION: BETA10 0x10072959
 const BoundingSphere& LegoCarBuildAnimPresenter::FUN_10079e20()
 {
 	LegoROI* roi = m_unk0x140->GetROI();

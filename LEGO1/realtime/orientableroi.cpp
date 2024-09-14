@@ -22,6 +22,7 @@ OrientableROI::OrientableROI()
 
 // Maybe an overload based on MxMatrix type
 // FUNCTION: LEGO1 0x100a46a0
+// FUNCTION: BETA10 0x10165268
 void OrientableROI::WrappedSetLocalTransform(const Matrix4& p_transform)
 {
 	SetLocalTransform(p_transform);

@@ -9,6 +9,7 @@
 class MxMatrix : public Matrix4 {
 public:
 	// FUNCTION: LEGO1 0x1006b120
+	// FUNCTION: BETA10 0x10015370
 	MxMatrix() : Matrix4(m_elements) {}
 
 	// FUNCTION: LEGO1 0x10032770

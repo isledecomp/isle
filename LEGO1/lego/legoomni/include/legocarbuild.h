@@ -1,13 +1,16 @@
 #ifndef LEGOCARBUILD_H
 #define LEGOCARBUILD_H
 
+#include "legogamestate.h"
 #include "legostate.h"
 #include "legoworld.h"
 
 class LegoCarBuildAnimPresenter;
+class LegoEventNotificationParam;
 class MxControlPresenter;
 class MxStillPresenter;
 class MxSoundPresenter;
+class MxActionNotificationParam;
 
 // VTABLE: LEGO1 0x100d66e0
 // SIZE 0x50
@@ -90,9 +93,9 @@ public:
 	void Enable(MxBool p_enable) override;                             // vtable+0x68
 	virtual void VTable0x6c();                                         // vtable+0x6c
 	virtual void VTable0x70();                                         // vtable+0x70
-	virtual void VTable0x74(MxFloat p_param1[3], MxFloat p_param2[3]); // vtable+0x74
-	virtual void VTable0x78(MxFloat p_param1[3], MxFloat p_param2[3]); // vtable+0x78
-	virtual void VTable0x7c(MxFloat p_param1[3], MxFloat p_param2[3]); // vtable+0x7c
+	virtual void VTable0x74(MxFloat p_param1[2], MxFloat p_param2[3]); // vtable+0x74
+	virtual void VTable0x78(MxFloat p_param1[2], MxFloat p_param2[3]); // vtable+0x78
+	virtual void VTable0x7c(MxFloat p_param1[2], MxFloat p_param2[3]); // vtable+0x7c
 	virtual void VTable0x80(
 		MxFloat p_param1[2],
 		MxFloat p_param2[2],
@@ -102,45 +105,58 @@ public:
 
 	void InitPresenters();
 	void FUN_10022f30();
+	void FUN_10023130(MxLong p_x, MxLong p_y);
+	undefined4 FUN_10024250(LegoEventNotificationParam* p_param);
+	void FUN_100243a0();
+	undefined4 FUN_10024480(MxActionNotificationParam* p_param);
+	undefined4 FUN_100244e0(MxLong p_x, MxLong p_y);
+	undefined4 FUN_100246e0(MxLong p_x, MxLong p_y);
+	MxS32 FUN_10024850(MxLong p_x, MxLong p_y);
+	undefined4 FUN_10024890(LegoEventNotificationParam* p_param);
+	void FUN_10024c20(LegoEventNotificationParam* p_param);
 	void FUN_10024ef0();
 	void FUN_10024f50();
+	void FUN_10024f70(MxBool p_enabled);
 	void SetPresentersEnabled(MxBool p_enabled);
 	void TogglePresentersEnabled();
+	void FUN_100250e0(MxBool p_param);
+	void FUN_10025450();
 	undefined4 FUN_10025720(undefined4 p_param1);
 	MxS32 FUN_10025d70();
 	void FUN_10025db0(const char* p_param1, undefined4 p_param2);
+	void FUN_10025e40();
 	MxS32 FUN_10025ee0(undefined4 p_param1);
 
 	// SYNTHETIC: LEGO1 0x10022a60
 	// LegoCarBuild::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0xf8;                  // 0xf8
-	MxS16 m_unk0xfc;                       // 0xfc
-	undefined m_unk0xfe[2];                // 0xfe
-	undefined4 m_unk0x100;                 // 0x100
-	undefined4 m_unk0x104;                 // 0x104
-	undefined m_unk0x108;                  // 0x108
-	undefined m_unk0x109;                  // 0x109
-	MxU16 m_unk0x10a;                      // 0x10a
-	DWORD m_unk0x10c;                      // 0x10c
-	LegoROI* m_unk0x110;                   // 0x110
-	Mx3DPointFloat m_unk0x114;             // 0x114
-	undefined4 m_unk0x128;                 // 0x128
-	MxMatrix m_unk0x12c;                   // 0x12c
-	undefined m_unk0x174;                  // 0x174
-	MxMatrix m_unk0x178;                   // 0x178
-	MxMatrix m_unk0x1c0;                   // 0x1c0
-	MxMatrix m_unk0x208;                   // 0x208
-	undefined m_unk0x250[0x08];            // 0x250
+	undefined4 m_unk0xf8;      // 0xf8
+	MxS16 m_unk0xfc;           // 0xfc
+	undefined m_unk0xfe[2];    // 0xfe
+	MxS32 m_unk0x100;          // 0x100
+	undefined4 m_unk0x104;     // 0x104
+	MxS8 m_unk0x108;           // 0x108
+	MxU8 m_unk0x109;           // 0x109
+	MxU16 m_unk0x10a;          // 0x10a
+	DWORD m_unk0x10c;          // 0x10c
+	LegoROI* m_unk0x110;       // 0x110
+	BoundingSphere m_unk0x114; // 0x114
+	MxMatrix m_unk0x12c;       // 0x12c
+	undefined m_unk0x174;      // 0x174
+	MxMatrix m_unk0x178;       // 0x178
+	MxMatrix m_unk0x1c0;       // 0x1c0
+	MxMatrix m_unk0x208;       // 0x208
+
+	// This is likely a location in pixel space
+	MxS32 m_unk0x250[2]; // 0x250
+
 	LegoCarBuildAnimPresenter* m_unk0x258; // 0x258
 	UnknownMx4DPointFloat m_unk0x25c;      // 0x25c
 
-	// These four are likely locations in pixel space
-	MxS32 m_unk0x290; // 0x290
-	MxS32 m_unk0x294; // 0x294
-	MxS32 m_unk0x298; // 0x298
-	MxS32 m_unk0x29c; // 0x29c
+	// These two are likely locations in pixel space
+	MxS32 m_unk0x290[2]; // 0x290
+	MxS32 m_unk0x298[2]; // 0x298
 
 	MxFloat m_unk0x2a0;        // 0x2a0
 	Mx4DPointFloat m_unk0x2a4; // 0x2a4
@@ -173,8 +189,11 @@ private:
 	// variable name verified by BETA10 0x1006b219
 	LegoVehicleBuildState* m_buildState; // 0x32c
 
-	undefined4 m_unk0x330;          // 0x330
-	undefined4 m_unk0x334;          // 0x334
+	undefined4 m_unk0x330; // 0x330
+
+	// variable name verified by BETA10 0x1006cba7
+	LegoGameState::Area m_destLocation; // 0x334
+
 	undefined4 m_unk0x338;          // 0x338
 	MxControlPresenter* m_unk0x33c; // 0x33c
 	undefined4 m_unk0x340;          // 0x340

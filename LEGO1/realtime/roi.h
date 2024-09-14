@@ -36,6 +36,9 @@ public:
 	const float& Radius() const { return radius; }
 	float& Radius() { return radius; }
 
+	// SYNTHETIC: BETA10 0x1001fb90
+	// BoundingSphere::operator=
+
 private:
 	Mx3DPointFloat center; // 0x00
 	float radius;          // 0x14

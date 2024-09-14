@@ -46,8 +46,9 @@ public:
 	void PutFrame() override;        // vtable+0x6c
 
 	void FUN_10079920(float p_param1);
-	MxBool FUN_10079ca0(const char* p_param1);
-	MxBool FUN_10079cf0(const LegoChar* p_name);
+	MxBool FUN_10079c30(const LegoChar* p_name);
+	MxBool FUN_10079ca0(const LegoChar* p_name);
+	MxBool FUN_10079cf0(const LegoChar* p_string);
 
 	// FUNCTION: BETA10 0x10070180
 	void SetUnknown0xbc(undefined2 p_unk0xbc) { m_unk0xbc = p_unk0xbc; }
