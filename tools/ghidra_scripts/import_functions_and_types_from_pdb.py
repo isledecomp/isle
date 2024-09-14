@@ -54,6 +54,7 @@ reload_module("lego_util.statistics")
 reload_module("lego_util.globals")
 from lego_util.globals import GLOBALS, SupportedModules
 
+
 def setup_logging():
     logging.root.handlers.clear()
     formatter = logging.Formatter("%(levelname)-8s %(message)s")
@@ -205,7 +206,9 @@ def main():
     logger.info("Importing file: %s", GLOBALS.module.orig_filename())
 
     repo_root = get_repository_root()
-    origfile_path = repo_root.joinpath("legobin").joinpath(GLOBALS.module.orig_filename())
+    origfile_path = repo_root.joinpath("legobin").joinpath(
+        GLOBALS.module.orig_filename()
+    )
     build_directory = repo_root.joinpath(GLOBALS.module.build_dir_name())
     recompiledfile_name = f"{GLOBALS.module.recomp_filename_without_extension()}.DLL"
     recompiledfile_path = build_directory.joinpath(recompiledfile_name)
