@@ -32,6 +32,7 @@
 #include <vec.h>
 
 // FUNCTION: LEGO1 0x1003dd70
+// FUNCTION: BETA10 0x100d3410
 LegoROI* PickROI(MxLong p_a, MxLong p_b)
 {
 	LegoVideoManager* videoManager = VideoManager();

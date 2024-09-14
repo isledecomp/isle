@@ -47,6 +47,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d82e0
+// VTABLE: BETA10 0x101ba898
 // SIZE 0x1154
 class LegoAct2 : public LegoWorld {
 public:

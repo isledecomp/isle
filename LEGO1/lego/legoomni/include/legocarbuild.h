@@ -120,6 +120,7 @@ public:
 	void SetPresentersEnabled(MxBool p_enabled);
 	void TogglePresentersEnabled();
 	void FUN_100250e0(MxBool p_param);
+	void FUN_10025450();
 	undefined4 FUN_10025720(undefined4 p_param1);
 	MxS32 FUN_10025d70();
 	void FUN_10025db0(const char* p_param1, undefined4 p_param2);
@@ -140,26 +141,22 @@ private:
 	MxU16 m_unk0x10a;          // 0x10a
 	DWORD m_unk0x10c;          // 0x10c
 	LegoROI* m_unk0x110;       // 0x110
-	Mx3DPointFloat m_unk0x114; // 0x114
-	undefined4 m_unk0x128;     // 0x128
+	BoundingSphere m_unk0x114; // 0x114
 	MxMatrix m_unk0x12c;       // 0x12c
 	undefined m_unk0x174;      // 0x174
 	MxMatrix m_unk0x178;       // 0x178
 	MxMatrix m_unk0x1c0;       // 0x1c0
 	MxMatrix m_unk0x208;       // 0x208
 
-	// These are likely locations in pixel space
-	MxS32 m_unk0x250; // 0x250
-	MxS32 m_unk0x254; // 0x254
+	// This is likely a location in pixel space
+	MxS32 m_unk0x250[2]; // 0x250
 
 	LegoCarBuildAnimPresenter* m_unk0x258; // 0x258
 	UnknownMx4DPointFloat m_unk0x25c;      // 0x25c
 
-	// These four are likely locations in pixel space
-	MxS32 m_unk0x290; // 0x290
-	MxS32 m_unk0x294; // 0x294
-	MxS32 m_unk0x298; // 0x298
-	MxS32 m_unk0x29c; // 0x29c
+	// These two are likely locations in pixel space
+	MxS32 m_unk0x290[2]; // 0x290
+	MxS32 m_unk0x298[2]; // 0x298
 
 	MxFloat m_unk0x2a0;        // 0x2a0
 	Mx4DPointFloat m_unk0x2a4; // 0x2a4
