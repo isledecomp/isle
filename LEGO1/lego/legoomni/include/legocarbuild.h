@@ -130,27 +130,27 @@ public:
 	// LegoCarBuild::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0xf8;                  // 0xf8
-	MxS16 m_unk0xfc;                       // 0xfc
-	undefined m_unk0xfe[2];                // 0xfe
-	MxS32 m_unk0x100;                      // 0x100
-	undefined4 m_unk0x104;                 // 0x104
-	MxS8 m_unk0x108;                       // 0x108
-	MxU8 m_unk0x109;                       // 0x109
-	MxU16 m_unk0x10a;                      // 0x10a
-	DWORD m_unk0x10c;                      // 0x10c
-	LegoROI* m_unk0x110;                   // 0x110
-	Mx3DPointFloat m_unk0x114;             // 0x114
-	undefined4 m_unk0x128;                 // 0x128
-	MxMatrix m_unk0x12c;                   // 0x12c
-	undefined m_unk0x174;                  // 0x174
-	MxMatrix m_unk0x178;                   // 0x178
-	MxMatrix m_unk0x1c0;                   // 0x1c0
-	MxMatrix m_unk0x208;                   // 0x208
+	undefined4 m_unk0xf8;      // 0xf8
+	MxS16 m_unk0xfc;           // 0xfc
+	undefined m_unk0xfe[2];    // 0xfe
+	MxS32 m_unk0x100;          // 0x100
+	undefined4 m_unk0x104;     // 0x104
+	MxS8 m_unk0x108;           // 0x108
+	MxU8 m_unk0x109;           // 0x109
+	MxU16 m_unk0x10a;          // 0x10a
+	DWORD m_unk0x10c;          // 0x10c
+	LegoROI* m_unk0x110;       // 0x110
+	Mx3DPointFloat m_unk0x114; // 0x114
+	undefined4 m_unk0x128;     // 0x128
+	MxMatrix m_unk0x12c;       // 0x12c
+	undefined m_unk0x174;      // 0x174
+	MxMatrix m_unk0x178;       // 0x178
+	MxMatrix m_unk0x1c0;       // 0x1c0
+	MxMatrix m_unk0x208;       // 0x208
 
 	// These are likely locations in pixel space
-	MxS32 m_unk0x250;                      // 0x250
-	MxS32 m_unk0x254;                      // 0x254
+	MxS32 m_unk0x250; // 0x250
+	MxS32 m_unk0x254; // 0x254
 
 	LegoCarBuildAnimPresenter* m_unk0x258; // 0x258
 	UnknownMx4DPointFloat m_unk0x25c;      // 0x25c
