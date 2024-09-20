@@ -9,19 +9,19 @@
 DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 
 // GLOBAL: LEGO1 0x100dbc78
-int g_unk0x100dbc78[8][3] = {{0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}, {1, 1, 1}};
+int g_boundingBoxCornerMap[8][3] = {{0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}, {1, 1, 1}};
 
 // GLOBAL: LEGO1 0x100dbcd8
-int g_unk0x100dbcd8[18] = {0, 1, 5, 6, 2, 3, 3, 0, 4, 1, 2, 6, 0, 3, 2, 4, 5, 6};
+int g_planePointIndexMap[18] = {0, 1, 5, 6, 2, 3, 3, 0, 4, 1, 2, 6, 0, 3, 2, 4, 5, 6};
 
 // GLOBAL: LEGO1 0x10101050
-float g_unk0x10101050 = 4.0F;
+float g_LODScaleFactor = 4.0F;
 
 // GLOBAL: LEGO1 0x10101054
-float g_unk0x10101054 = 0.00097656297;
+float g_minLODThreshold = 0.00097656297;
 
 // GLOBAL: LEGO1 0x10101058
-int g_unk0x10101058 = 6;
+int g_maxLODLevels = 6;
 
 // GLOBAL: LEGO1 0x1010105c
 float g_unk0x1010105c = 0.000125F;
@@ -38,7 +38,7 @@ ViewManager::ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const Orie
 	: scene(scene), flags(c_bit1 | c_bit2 | c_bit3 | c_bit4)
 {
 	SetPOVSource(point_of_view);
-	unk0x28 = 0.09;
+	prevRenderTime = 0.09;
 	GetD3DRM(d3drm, pRenderer);
 	GetFrame(frame, scene);
 	width = 0.0;
@@ -48,7 +48,7 @@ ViewManager::ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const Orie
 	front = 0.0;
 	back = 0.0;
 
-	memset(unk0xf0, 0, sizeof(unk0xf0));
+	memset(transformedPoints, 0, sizeof(transformedPoints));
 	seconds_allowed = 1.0;
 }
 
@@ -60,7 +60,7 @@ ViewManager::~ViewManager()
 
 // FUNCTION: LEGO1 0x100a6150
 // FUNCTION: BETA10 0x10172164
-unsigned int ViewManager::FUN_100a6150(const BoundingBox& p_bounding_box)
+unsigned int ViewManager::IsBoundingBoxInFrustum(const BoundingBox& p_bounding_box)
 {
 	const Vector3* box[] = {&p_bounding_box.Min(), &p_bounding_box.Max()};
 
@@ -69,13 +69,13 @@ unsigned int ViewManager::FUN_100a6150(const BoundingBox& p_bounding_box)
 
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 3; j++) {
-			und[i][j] = box[g_unk0x100dbc78[i][j]]->operator[](j);
+			und[i][j] = box[g_boundingBoxCornerMap[i][j]]->operator[](j);
 		}
 	}
 
 	for (i = 0; i < 6; i++) {
 		for (k = 0; k < 8; k++) {
-			if (unk0x150[i][0] * und[k][0] + unk0x150[i][2] * und[k][2] + unk0x150[i][1] * und[k][1] + unk0x150[i][3] >=
+			if (frustumPlanes[i][0] * und[k][0] + frustumPlanes[i][2] * und[k][2] + frustumPlanes[i][1] * und[k][1] + frustumPlanes[i][3] >=
 				0.0f) {
 				break;
 			}
@@ -239,7 +239,7 @@ inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_roi, in
 					return;
 				}
 
-				p_und = Unknown2(und, RealtimeView::GetUserMaxLodPower() * seconds_allowed, p_roi);
+				p_und = CalculateLODLevel(und, RealtimeView::GetUserMaxLodPower() * seconds_allowed, p_roi);
 			}
 		}
 
@@ -277,11 +277,11 @@ void ViewManager::Update(float p_previousRenderTime, float)
 	MxStopWatch stopWatch;
 	stopWatch.Start();
 
-	unk0x28 = p_previousRenderTime;
+	prevRenderTime = p_previousRenderTime;
 	flags |= c_bit1;
 
 	if (flags & c_bit3) {
-		Unknown();
+		CalculateFrustumTransformations();
 	}
 	else if (flags & c_bit2) {
 		UpdateViewTransformations();
@@ -295,7 +295,7 @@ void ViewManager::Update(float p_previousRenderTime, float)
 	g_elapsedSeconds = stopWatch.ElapsedSeconds();
 }
 
-inline int ViewManager::Unknown()
+inline int ViewManager::CalculateFrustumTransformations()
 {
 	flags &= ~c_bit3;
 
@@ -314,33 +314,33 @@ inline int ViewManager::Unknown()
 		float fVar5 = fVar4 * fVar1;
 		fVar4 = fVar4 * fVar2;
 
-		float* unk0x90 = (float*) this->unk0x90;
+		float* frustumVertices = (float*) this->frustumVertices;
 
 		// clang-format off
-		*unk0x90 = fVar2; unk0x90++;
-		*unk0x90 = fVar1; unk0x90++;
-		*unk0x90 = uVar6; unk0x90++;
-		*unk0x90 = fVar2; unk0x90++;
-		*unk0x90 = -fVar1; unk0x90++;
-		*unk0x90 = uVar6; unk0x90++;
-		*unk0x90 = -fVar2; unk0x90++;
-		*unk0x90 = -fVar1; unk0x90++;
-		*unk0x90 = uVar6; unk0x90++;
-		*unk0x90 = -fVar2; unk0x90++;
-		*unk0x90 = fVar1; unk0x90++;
-		*unk0x90 = uVar6; unk0x90++;
-		*unk0x90 = fVar4; unk0x90++;
-		*unk0x90 = fVar5; unk0x90++;
-		*unk0x90 = fVar3; unk0x90++;
-		*unk0x90 = fVar4; unk0x90++;
-		*unk0x90 = -fVar5; unk0x90++;
-		*unk0x90 = fVar3; unk0x90++;
-		*unk0x90 = -fVar4; unk0x90++;
-		*unk0x90 = -fVar5; unk0x90++;
-		*unk0x90 = fVar3; unk0x90++;
-		*unk0x90 = -fVar4; unk0x90++;
-		*unk0x90 = fVar5; unk0x90++;
-		*unk0x90 = fVar3;
+		*frustumVertices = fVar2; frustumVertices++;
+		*frustumVertices = fVar1; frustumVertices++;
+		*frustumVertices = uVar6; frustumVertices++;
+		*frustumVertices = fVar2; frustumVertices++;
+		*frustumVertices = -fVar1; frustumVertices++;
+		*frustumVertices = uVar6; frustumVertices++;
+		*frustumVertices = -fVar2; frustumVertices++;
+		*frustumVertices = -fVar1; frustumVertices++;
+		*frustumVertices = uVar6; frustumVertices++;
+		*frustumVertices = -fVar2; frustumVertices++;
+		*frustumVertices = fVar1; frustumVertices++;
+		*frustumVertices = uVar6; frustumVertices++;
+		*frustumVertices = fVar4; frustumVertices++;
+		*frustumVertices = fVar5; frustumVertices++;
+		*frustumVertices = fVar3; frustumVertices++;
+		*frustumVertices = fVar4; frustumVertices++;
+		*frustumVertices = -fVar5; frustumVertices++;
+		*frustumVertices = fVar3; frustumVertices++;
+		*frustumVertices = -fVar4; frustumVertices++;
+		*frustumVertices = -fVar5; frustumVertices++;
+		*frustumVertices = fVar3; frustumVertices++;
+		*frustumVertices = -fVar4; frustumVertices++;
+		*frustumVertices = fVar5; frustumVertices++;
+		*frustumVertices = fVar3;
 		// clang-format on
 
 		UpdateViewTransformations();
@@ -348,13 +348,13 @@ inline int ViewManager::Unknown()
 	}
 }
 
-inline int ViewManager::Unknown2(float p_und1, float p_und2, ViewROI* p_roi)
+inline int ViewManager::CalculateLODLevel(float p_und1, float p_und2, ViewROI* p_roi)
 {
 	int result;
 	float i;
 
-	if (Unknown3(p_roi) != 0) {
-		if (p_und1 < g_unk0x10101054) {
+	if (IsROIVisibleAtLOD(p_roi) != 0) {
+		if (p_und1 < g_minLODThreshold) {
 			return 0;
 		}
 
@@ -364,14 +364,14 @@ inline int ViewManager::Unknown2(float p_und1, float p_und2, ViewROI* p_roi)
 		result = 0;
 	}
 
-	for (i = p_und2; result < g_unk0x10101058 && p_und1 >= i; i *= g_unk0x10101050) {
+	for (i = p_und2; result < g_maxLODLevels && p_und1 >= i; i *= g_LODScaleFactor) {
 		result++;
 	}
 
 	return result;
 }
 
-inline int ViewManager::Unknown3(ViewROI* p_roi)
+inline int ViewManager::IsROIVisibleAtLOD(ViewROI* p_roi)
 {
 	const LODListBase* lods = p_roi->GetLODs();
 
@@ -411,21 +411,21 @@ void ViewManager::UpdateViewTransformations()
 
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 3; j++) {
-			unk0xf0[i][j] = pov[3][j];
+			transformedPoints[i][j] = pov[3][j];
 
 			for (k = 0; k < 3; k++) {
-				unk0xf0[i][j] += pov[k][j] * unk0x90[i][k];
+				transformedPoints[i][j] += pov[k][j] * frustumVertices[i][k];
 			}
 		}
 	}
 
 	for (i = 0; i < 6; i++) {
-		Vector3 a(unk0xf0[g_unk0x100dbcd8[i * 3]]);
-		Vector3 b(unk0xf0[g_unk0x100dbcd8[i * 3 + 1]]);
-		Vector3 c(unk0xf0[g_unk0x100dbcd8[i * 3 + 2]]);
+		Vector3 a(transformedPoints[g_planePointIndexMap[i * 3]]);
+		Vector3 b(transformedPoints[g_planePointIndexMap[i * 3 + 1]]);
+		Vector3 c(transformedPoints[g_planePointIndexMap[i * 3 + 2]]);
 		Mx3DPointFloat x;
 		Mx3DPointFloat y;
-		Vector3 u(unk0x150[i]);
+		Vector3 normal(frustumPlanes[i]);
 
 		x = c;
 		((Vector3&) x).Sub(b); // TODO: Fix call
@@ -433,10 +433,10 @@ void ViewManager::UpdateViewTransformations()
 		y = a;
 		((Vector3&) y).Sub(b); // TODO: Fix call
 
-		u.EqualsCross(&x, &y);
-		u.Unitize();
+		normal.EqualsCross(&x, &y);
+		normal.Unitize();
 
-		unk0x150[i][3] = -u.Dot(&u, &a);
+		frustumPlanes[i][3] = -normal.Dot(&normal, &a);
 	}
 
 	flags |= c_bit4;
