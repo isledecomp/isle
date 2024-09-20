@@ -1566,7 +1566,7 @@ MxU16 LegoAnimationManager::FUN_10062110(
 	LegoPathActor* actor = (LegoPathActor*) p_roi->GetEntity();
 
 	if (actor != NULL && actor->GetBoundary() == p_boundary && actor->GetState() == 0) {
-		if (GetViewManager()->FUN_100a6150(p_roi->GetWorldBoundingBox())) {
+		if (GetViewManager()->IsBoundingBoxInFrustum(p_roi->GetWorldBoundingBox())) {
 			Mx3DPointFloat direction(p_roi->GetWorldDirection());
 
 			if (direction.Dot(&direction, &p_direction) > 0.707) {
@@ -1814,7 +1814,7 @@ void LegoAnimationManager::PurgeExtra(MxBool p_und)
 				if ((p_und && !maOrPa) ||
 					(g_characters[m_extras[i].m_characterId].m_unk0x10 >= 0 && time - m_extras[i].m_unk0x08 > und &&
 					 CharacterManager()->GetRefCount(roi) == 1 &&
-					 !viewManager->FUN_100a6150(roi->GetWorldBoundingBox()))) {
+					 !viewManager->IsBoundingBoxInFrustum(roi->GetWorldBoundingBox()))) {
 					m_unk0x414--;
 
 					LegoPathActor* actor = CharacterManager()->GetExtraActor(roi->GetName());
@@ -2469,7 +2469,7 @@ MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoUnkn
 	boundingBox.Min().Sub(vec);
 	boundingBox.Max() = p1;
 	boundingBox.Max().Add(vec);
-	return GetViewManager()->FUN_100a6150(boundingBox) == FALSE;
+	return GetViewManager()->IsBoundingBoxInFrustum(boundingBox) == FALSE;
 }
 
 // FUNCTION: LEGO1 0x10064120

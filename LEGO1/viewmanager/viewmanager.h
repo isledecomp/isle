@@ -23,7 +23,7 @@ public:
 
 	void Remove(ViewROI* p_roi);
 	void RemoveAll(ViewROI* p_roi);
-	unsigned int FUN_100a6150(const BoundingBox& p_bounding_box);
+	unsigned int IsBoundingBoxInFrustum(const BoundingBox& p_bounding_box);
 	void UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_und);
 	void RemoveROIDetailFromScene(ViewROI* p_roi);
 	void SetPOVSource(const OrientableROI* point_of_view);
@@ -33,11 +33,11 @@ public:
 	void SetFrustrum(float fov, float front, float back);
 	inline void ManageVisibilityAndDetailRecursively(ViewROI* p_roi, int p_und);
 	void Update(float p_previousRenderTime, float);
-	inline int Unknown();
+	inline int CalculateFrustumTransformations();
 	void UpdateViewTransformations();
 
-	inline static int Unknown2(float p_und1, float p_und2, ViewROI* p_roi);
-	inline static int Unknown3(ViewROI* p_roi);
+	inline static int CalculateLODLevel(float p_und1, float p_und2, ViewROI* p_roi);
+	inline static int IsROIVisibleAtLOD(ViewROI* p_roi);
 
 	const CompoundObject& GetROIs() { return rois; }
 	void Add(ViewROI* p_roi) { rois.push_back(p_roi); }
@@ -46,25 +46,25 @@ public:
 	// ViewManager::`scalar deleting destructor'
 
 private:
-	Tgl::Group* scene;        // 0x04
-	CompoundObject rois;      // 0x08
-	RealtimeView rt_view;     // 0x14
-	ROIList visible_rois;     // 0x18
-	float unk0x28;            // 0x28
-	float view_area_at_one;   // 0x2c
-	unsigned int flags;       // 0x30
-	float width;              // 0x34
-	float height;             // 0x38
-	float view_angle;         // 0x3c
-	MxMatrix pov;             // 0x40
-	float front;              // 0x88
-	float back;               // 0x8c
-	float unk0x90[8][3];      // 0x90
-	float unk0xf0[8][3];      // 0xf0
-	float unk0x150[6][4];     // 0x150
-	IDirect3DRM2* d3drm;      // 0x1b0
-	IDirect3DRMFrame2* frame; // 0x1b4
-	float seconds_allowed;    // 0x1b8
+	Tgl::Group* scene;              // 0x04
+	CompoundObject rois;            // 0x08
+	RealtimeView rt_view;           // 0x14
+	ROIList visible_rois;           // 0x18
+	float prev_render_time;         // 0x28
+	float view_area_at_one;         // 0x2c
+	unsigned int flags;             // 0x30
+	float width;                    // 0x34
+	float height;                   // 0x38
+	float view_angle;               // 0x3c
+	MxMatrix pov;                   // 0x40
+	float front;                    // 0x88
+	float back;                     // 0x8c
+	float frustum_vertices[8][3];   // 0x90
+	float transformed_points[8][3]; // 0xf0
+	float frustum_planes[6][4];     // 0x150
+	IDirect3DRM2* d3drm;            // 0x1b0
+	IDirect3DRMFrame2* frame;       // 0x1b4
+	float seconds_allowed;          // 0x1b8
 };
 
 // TEMPLATE: LEGO1 0x10022030
