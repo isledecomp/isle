@@ -39,7 +39,7 @@ ViewManager::ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const Orie
 	: scene(scene), flags(c_bit1 | c_bit2 | c_bit3 | c_bit4)
 {
 	SetPOVSource(point_of_view);
-	prevRenderTime = 0.09;
+	prev_render_time = 0.09;
 	GetD3DRM(d3drm, pRenderer);
 	GetFrame(frame, scene);
 	width = 0.0;
@@ -49,7 +49,7 @@ ViewManager::ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const Orie
 	front = 0.0;
 	back = 0.0;
 
-	memset(transformedPoints, 0, sizeof(transformedPoints));
+	memset(transformed_points, 0, sizeof(transformed_points));
 	seconds_allowed = 1.0;
 }
 
@@ -76,8 +76,8 @@ unsigned int ViewManager::IsBoundingBoxInFrustum(const BoundingBox& p_bounding_b
 
 	for (i = 0; i < 6; i++) {
 		for (k = 0; k < 8; k++) {
-			if (frustumPlanes[i][0] * und[k][0] + frustumPlanes[i][2] * und[k][2] + frustumPlanes[i][1] * und[k][1] +
-					frustumPlanes[i][3] >=
+			if (frustum_planes[i][0] * und[k][0] + frustum_planes[i][2] * und[k][2] + frustum_planes[i][1] * und[k][1] +
+					frustum_planes[i][3] >=
 				0.0f) {
 				break;
 			}
@@ -279,7 +279,7 @@ void ViewManager::Update(float p_previousRenderTime, float)
 	MxStopWatch stopWatch;
 	stopWatch.Start();
 
-	prevRenderTime = p_previousRenderTime;
+	prev_render_time = p_previousRenderTime;
 	flags |= c_bit1;
 
 	if (flags & c_bit3) {
@@ -316,7 +316,7 @@ inline int ViewManager::CalculateFrustumTransformations()
 		float fVar5 = fVar4 * fVar1;
 		fVar4 = fVar4 * fVar2;
 
-		float* frustumVertices = (float*) this->frustumVertices;
+		float* frustumVertices = (float*) this->frustum_vertices;
 
 		// clang-format off
 		*frustumVertices = fVar2; frustumVertices++;
@@ -413,21 +413,21 @@ void ViewManager::UpdateViewTransformations()
 
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 3; j++) {
-			transformedPoints[i][j] = pov[3][j];
+			transformed_points[i][j] = pov[3][j];
 
 			for (k = 0; k < 3; k++) {
-				transformedPoints[i][j] += pov[k][j] * frustumVertices[i][k];
+				transformed_points[i][j] += pov[k][j] * frustum_vertices[i][k];
 			}
 		}
 	}
 
 	for (i = 0; i < 6; i++) {
-		Vector3 a(transformedPoints[g_planePointIndexMap[i * 3]]);
-		Vector3 b(transformedPoints[g_planePointIndexMap[i * 3 + 1]]);
-		Vector3 c(transformedPoints[g_planePointIndexMap[i * 3 + 2]]);
+		Vector3 a(transformed_points[g_planePointIndexMap[i * 3]]);
+		Vector3 b(transformed_points[g_planePointIndexMap[i * 3 + 1]]);
+		Vector3 c(transformed_points[g_planePointIndexMap[i * 3 + 2]]);
 		Mx3DPointFloat x;
 		Mx3DPointFloat y;
-		Vector3 normal(frustumPlanes[i]);
+		Vector3 normal(frustum_planes[i]);
 
 		x = c;
 		((Vector3&) x).Sub(b); // TODO: Fix call
@@ -438,7 +438,7 @@ void ViewManager::UpdateViewTransformations()
 		normal.EqualsCross(&x, &y);
 		normal.Unitize();
 
-		frustumPlanes[i][3] = -normal.Dot(&normal, &a);
+		frustum_planes[i][3] = -normal.Dot(&normal, &a);
 	}
 
 	flags |= c_bit4;
