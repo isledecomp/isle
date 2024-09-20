@@ -9,7 +9,8 @@
 DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 
 // GLOBAL: LEGO1 0x100dbc78
-int g_boundingBoxCornerMap[8][3] = {{0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}, {1, 1, 1}};
+int g_boundingBoxCornerMap[8][3] =
+	{{0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}, {1, 1, 1}};
 
 // GLOBAL: LEGO1 0x100dbcd8
 int g_planePointIndexMap[18] = {0, 1, 5, 6, 2, 3, 3, 0, 4, 1, 2, 6, 0, 3, 2, 4, 5, 6};
@@ -75,7 +76,8 @@ unsigned int ViewManager::IsBoundingBoxInFrustum(const BoundingBox& p_bounding_b
 
 	for (i = 0; i < 6; i++) {
 		for (k = 0; k < 8; k++) {
-			if (frustumPlanes[i][0] * und[k][0] + frustumPlanes[i][2] * und[k][2] + frustumPlanes[i][1] * und[k][1] + frustumPlanes[i][3] >=
+			if (frustumPlanes[i][0] * und[k][0] + frustumPlanes[i][2] * und[k][2] + frustumPlanes[i][1] * und[k][1] +
+					frustumPlanes[i][3] >=
 				0.0f) {
 				break;
 			}
