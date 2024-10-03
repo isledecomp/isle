@@ -38,8 +38,7 @@ public:
 		undefined m_unk0x03[3]; // 0x03
 		MxS16 m_unk0x06;        // 0x06
 		undefined m_unk0x08[8]; // 0x08
-		MxS16 m_unk0x10;        // 0x10
-		MxS16 m_unk0x12;        // 0x12
+		undefined4 m_unk0x10;   // 0x10
 		MxS16 m_unk0x14;        // 0x14
 		MxS16 m_unk0x16;        // 0x16
 		MxS16 m_score;          // 0x18
@@ -107,6 +106,7 @@ public:
 	void FUN_10038220(MxU32 p_objectId);
 	void FUN_100382b0();
 	void FUN_10038380();
+	void FUN_10038fe0(MxU32 p_objectId, MxBool);
 
 	void SetSkateboard(SkateBoard* p_skateboard) { m_skateboard = p_skateboard; }
 
@@ -114,14 +114,14 @@ public:
 	// Pizza::`scalar deleting destructor'
 
 private:
-	PizzaMissionState* m_state; // 0x7c
-	undefined4 m_unk0x80;       // 0x80
-	SkateBoard* m_skateboard;   // 0x84
-	Act1State* m_act1state;     // 0x88
-	undefined4 m_unk0x8c;       // 0x8c
-	undefined4 m_unk0x90;       // 0x90
-	undefined4 m_unk0x94;       // 0x94
-	undefined m_unk0x98;        // 0x98
+	PizzaMissionState* m_state;        // 0x7c
+	PizzaMissionState::Entry* m_entry; // 0x80
+	SkateBoard* m_skateboard;          // 0x84
+	Act1State* m_act1state;            // 0x88
+	undefined4 m_unk0x8c;              // 0x8c
+	undefined4 m_unk0x90;              // 0x90
+	undefined4 m_unk0x94;              // 0x94
+	undefined m_unk0x98;               // 0x98
 };
 
 #endif // PIZZA_H
