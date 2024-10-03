@@ -1,6 +1,8 @@
 #include "pizza.h"
 
+#include "isle.h"
 #include "isle_actions.h"
+#include "legoanimationmanager.h"
 #include "legogamestate.h"
 #include "legoworld.h"
 #include "misc.h"
@@ -11,11 +13,14 @@ DECOMP_SIZE_ASSERT(Pizza, 0x9c)
 DECOMP_SIZE_ASSERT(PizzaMissionState, 0xb4)
 DECOMP_SIZE_ASSERT(PizzaMissionState::Entry, 0x20)
 
+// Flags used in isle.cpp
+extern MxU32 g_isleFlags;
+
 // FUNCTION: LEGO1 0x10037ef0
 Pizza::Pizza()
 {
 	m_state = NULL;
-	m_unk0x80 = 0;
+	m_entry = NULL;
 	m_skateboard = NULL;
 	m_act1state = NULL;
 	m_unk0x8c = -1;
@@ -56,9 +61,19 @@ void Pizza::CreateState()
 	}
 }
 
-// STUB: LEGO1 0x10038220
+// FUNCTION: LEGO1 0x10038220
 void Pizza::FUN_10038220(MxU32 p_objectId)
 {
+	AnimationManager()->FUN_10064740(NULL);
+	m_entry = m_state->GetState(GameState()->GetActorId());
+	m_state->m_unk0x0c = 1;
+	m_act1state->m_unk0x018 = 3;
+	m_entry->m_unk0x10 = 0x80000000;
+	g_isleFlags &= ~Isle::c_playMusic;
+	AnimationManager()->EnableCamAnims(FALSE);
+	AnimationManager()->FUN_1005f6d0(FALSE);
+	FUN_10038fe0(p_objectId, FALSE);
+	m_unk0x8c = -1;
 }
 
 // STUB: LEGO1 0x100382b0
@@ -97,6 +112,12 @@ MxLong Pizza::HandleEndAction(MxEndActionNotificationParam&)
 {
 	// TODO
 	return 0;
+}
+
+// STUB: LEGO1 0x10038fe0
+void Pizza::FUN_10038fe0(MxU32 p_objectId, MxBool)
+{
+	// TODO
 }
 
 // STUB: LEGO1 0x10039030
