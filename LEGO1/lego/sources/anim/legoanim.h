@@ -28,10 +28,10 @@ public:
 	void FUN_100739a0(MxS32 p_param)
 	{
 		if (p_param) {
-			m_flags |= 0x01;
+			m_flags |= c_bit1;
 		}
 		else {
-			m_flags &= 0xfe;
+			m_flags &= ~c_bit1;
 		}
 	}
 
