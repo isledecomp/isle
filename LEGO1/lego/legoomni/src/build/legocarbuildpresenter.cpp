@@ -97,7 +97,8 @@ void LegoCarBuildAnimPresenter::RotateAroundYAxis(MxFloat p_angle)
 	if (m_unk0xc4) {
 		LegoRotationKey* rotationKey = m_unk0xc4->GetRotationKey(0);
 
-		Mx4DPointFloat currentRotation(rotationKey->GetX(), rotationKey->GetY(), rotationKey->GetZ(), rotationKey->GetAngle());
+		Mx4DPointFloat
+			currentRotation(rotationKey->GetX(), rotationKey->GetY(), rotationKey->GetZ(), rotationKey->GetAngle());
 		Mx4DPointFloat additionalRotation(0.0f, 1.0f, 0.0f, -p_angle);
 		Mx4DPointFloat newRotation;
 
@@ -106,7 +107,8 @@ void LegoCarBuildAnimPresenter::RotateAroundYAxis(MxFloat p_angle)
 
 		if (newRotation[3] < 0.9999) {
 			rotationKey->FUN_100739a0(TRUE);
-		} else {
+		}
+		else {
 			rotationKey->FUN_100739a0(FALSE);
 		}
 
