@@ -24,6 +24,17 @@ public:
 	LegoU32 TestBit2() { return m_flags & c_bit2; }
 	LegoU32 TestBit3() { return m_flags & c_bit3; }
 
+	// FUNCTION: BETA10 0x100739a0
+	void FUN_100739a0(MxS32 p_param)
+	{
+		if (p_param) {
+			m_flags |= 0x01;
+		}
+		else {
+			m_flags &= 0xfe;
+		}
+	}
+
 protected:
 	LegoU8 m_flags;   // 0x00
 	LegoFloat m_time; // 0x04
@@ -52,13 +63,29 @@ class LegoRotationKey : public LegoAnimKey {
 public:
 	LegoRotationKey();
 	LegoResult Read(LegoStorage* p_storage);
+
+	// FUNCTION: BETA10 0x10073a00
 	LegoFloat GetAngle() { return m_angle; }
+
+	// FUNCTION: BETA10 0x10073a30
 	void SetAngle(LegoFloat p_angle) { m_angle = p_angle; }
+
+	// FUNCTION: BETA10 0x10073a60
 	LegoFloat GetX() { return m_x; }
+
+	// FUNCTION: BETA10 0x10073a90
 	void SetX(LegoFloat p_x) { m_x = p_x; }
+
+	// FUNCTION: BETA10 0x10073ac0
 	LegoFloat GetY() { return m_y; }
+
+	// FUNCTION: BETA10 0x10073af0
 	void SetY(LegoFloat p_y) { m_y = p_y; }
+
+	// FUNCTION: BETA10 0x10073b20
 	LegoFloat GetZ() { return m_z; }
+
+	// FUNCTION: BETA10 0x10073b50
 	void SetZ(LegoFloat p_z) { m_z = p_z; }
 
 protected:
@@ -128,6 +155,9 @@ public:
 	LegoU32 GetMorphIndex() { return m_morphIndex; }
 	LegoU16 GetUnknown0x20() { return m_unk0x20; }
 	LegoU16 GetUnknown0x22() { return m_unk0x22; }
+
+	// FUNCTION: BETA10 0x10073b80
+	LegoRotationKey* GetRotationKey(MxS32 index) { return &m_rotationKeys[index]; }
 
 	void SetTranslationIndex(LegoU32 p_translationIndex) { m_translationIndex = p_translationIndex; }
 	void SetRotationIndex(LegoU32 p_rotationIndex) { m_rotationIndex = p_rotationIndex; }

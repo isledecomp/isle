@@ -182,6 +182,7 @@ protected:
 class Vector3 : public Vector2 {
 public:
 	// FUNCTION: LEGO1 0x1001d150
+	// FUNCTION: BETA10 0x10011660
 	Vector3(float* p_data) : Vector2(p_data) {}
 
 	// Hack: Some code initializes a Vector3 from a (most likely) const float* source.
@@ -298,6 +299,7 @@ public:
 // SIZE 0x08
 class Vector4 : public Vector3 {
 public:
+	// FUNCTION: BETA10 0x10048780
 	Vector4(float* p_data) : Vector3(p_data) {}
 
 	// Hack: Some code initializes a Vector4 from a (most likely) const float* source.

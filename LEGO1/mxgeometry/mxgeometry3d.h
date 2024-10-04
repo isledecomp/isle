@@ -50,6 +50,7 @@ private:
 class Mx4DPointFloat : public Vector4 {
 public:
 	// FUNCTION: LEGO1 0x10048290
+	// FUNCTION: BETA10 0x100484c0
 	Mx4DPointFloat() : Vector4(m_elements) {}
 
 	// FUNCTION: BETA10 0x10073bb0

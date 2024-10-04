@@ -202,7 +202,7 @@ private:
 
 	static MxS16 g_unk0x100f11cc;
 	static MxFloat g_unk0x100d65a4;
-	static MxFloat g_unk0x100d65a8;
+	static MxFloat g_rotationAngleStepYAxis;
 };
 
 #endif // LEGOCARBUILD_H

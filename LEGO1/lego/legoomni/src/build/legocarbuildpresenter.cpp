@@ -14,7 +14,7 @@ LegoCarBuildAnimPresenter::LegoCarBuildAnimPresenter()
 	m_unk0xbe = 0;
 	m_unk0xc0 = 0;
 	m_unk0x128 = NULL;
-	m_unk0xc4 = 0;
+	m_unk0xc4 = NULL;
 	m_unk0x130 = 0;
 	m_unk0x12c = 0;
 	m_unk0x134 = 0;
@@ -83,11 +83,42 @@ void LegoCarBuildAnimPresenter::EndAction()
 	}
 }
 
-// STUB: LEGO1 0x10079920
-// STUB: BETA10 0x1007225d
-void LegoCarBuildAnimPresenter::FUN_10079920(float p_param1)
+// STUB: LEGO1 0x10079160
+void LegoCarBuildAnimPresenter::FUN_10079160()
 {
+	// called from LegoCarBuildAnimPresenter::StreamingTickle()
 	// TODO
+}
+
+// FUNCTION: LEGO1 0x10079920
+// FUNCTION: BETA10 0x1007225d
+void LegoCarBuildAnimPresenter::RotateAroundYAxis(MxFloat p_angle)
+{
+	if (m_unk0xc4) {
+		LegoRotationKey* rotationKey = m_unk0xc4->GetRotationKey(0);
+
+		Mx4DPointFloat currentRotation(rotationKey->GetX(), rotationKey->GetY(), rotationKey->GetZ(), rotationKey->GetAngle());
+		Mx4DPointFloat additionalRotation(0.0f, 1.0f, 0.0f, -p_angle);
+		Mx4DPointFloat newRotation;
+
+		additionalRotation.NormalizeQuaternion();
+		newRotation.EqualsHamiltonProduct(&currentRotation, &additionalRotation);
+
+		if (newRotation[3] < 0.9999) {
+			rotationKey->FUN_100739a0(TRUE);
+		} else {
+			rotationKey->FUN_100739a0(FALSE);
+		}
+
+		m_unk0xc4->GetRotationKey(0)->SetX(newRotation[0]);
+		m_unk0xc4->GetRotationKey(0)->SetY(newRotation[1]);
+		m_unk0xc4->GetRotationKey(0)->SetZ(newRotation[2]);
+		m_unk0xc4->GetRotationKey(0)->SetAngle(newRotation[3]);
+
+		if (m_unk0x140->GetROI()) {
+			FUN_1006b9a0(&m_unk0xc8, m_unk0x12c, NULL);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x10079b80

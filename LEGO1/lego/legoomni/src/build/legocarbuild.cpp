@@ -26,7 +26,7 @@ DECOMP_SIZE_ASSERT(LegoVehicleBuildState, 0x50)
 MxFloat LegoCarBuild::g_unk0x100d65a4 = -0.1f;
 
 // GLOBAL: LEGO1 0x100d65a8
-MxFloat LegoCarBuild::g_unk0x100d65a8 = 0.07;
+MxFloat LegoCarBuild::g_rotationAngleStepYAxis = 0.07;
 
 // GLOBAL: LEGO1 0x100f11cc
 MxS16 LegoCarBuild::g_unk0x100f11cc = -1;
@@ -783,7 +783,7 @@ void LegoCarBuild::FUN_10024ef0()
 void LegoCarBuild::FUN_10024f50()
 {
 	m_unk0x2d4 = FALSE;
-	m_unk0x258->FUN_10079920(g_unk0x100d65a8);
+	m_unk0x258->RotateAroundYAxis(g_rotationAngleStepYAxis);
 }
 
 // FUNCTION: LEGO1 0x10024f70
