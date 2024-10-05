@@ -54,7 +54,7 @@ LegoCarBuildAnimPresenter::~LegoCarBuildAnimPresenter()
 	*m_unk0xc8.GetRoot()->GetChildren() = NULL;
 
 	if (m_mainSourceId) {
-		delete m_mainSourceId;
+		delete[] m_mainSourceId;
 	}
 }
 
