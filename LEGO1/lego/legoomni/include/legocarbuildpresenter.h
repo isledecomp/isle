@@ -45,7 +45,11 @@ public:
 	void EndAction() override;       // vtable+0x40
 	void PutFrame() override;        // vtable+0x6c
 
+	void FUN_10079050(MxS16 p_index);
+	void FUN_10079090(LegoChar* p_param1, LegoChar* p_param2);
 	void FUN_10079160();
+	void FUN_100795d0(LegoChar* p_param);
+	void FUN_10079680(LegoChar* p_param);
 	void RotateAroundYAxis(MxFloat p_angle);
 	MxBool FUN_10079c30(const LegoChar* p_name);
 	MxBool FUN_10079ca0(const LegoChar* p_name);
@@ -77,7 +81,9 @@ private:
 	LegoEntity* m_unk0x140;       // 0x140
 	MxS32 m_unk0x144;             // 0x144
 	MxS32 m_unk0x148;             // 0x148
-	undefined* m_unk0x14c;        // 0x14c
+
+	// name verified by BETA10 0x10070d63
+	LegoChar* m_mainSourceId; // 0x14c
 };
 
 #endif // LEGOCARBUILDPRESENTER_H

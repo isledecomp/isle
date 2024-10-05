@@ -69,7 +69,9 @@ public:
 	// FUNCTION: BETA10 0x10017910
 	MxU32 GetObjectId() { return m_objectId; }
 
+	// FUNCTION: BETA10 0x10017940
 	const MxAtomId& GetAtomId() { return m_atomId; }
+
 	MxS16 GetUnknown24() { return m_unk0x24; }
 	MxPresenter* GetUnknown28() { return m_unk0x28; }
 

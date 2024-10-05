@@ -1,7 +1,13 @@
 #include "legocarbuildpresenter.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "legoentity.h"
+#include "legogamestate.h"
+#include "legoutils.h"
+#include "legovideomanager.h"
+#include "misc.h"
 #include "mxautolock.h"
+#include "realtime/realtime.h"
 
 DECOMP_SIZE_ASSERT(LegoCarBuildAnimPresenter::UnknownListEntry, 0x0c)
 DECOMP_SIZE_ASSERT(LegoCarBuildAnimPresenter, 0x150)
@@ -23,7 +29,7 @@ LegoCarBuildAnimPresenter::LegoCarBuildAnimPresenter()
 	m_unk0x140 = NULL;
 	m_unk0x144 = -1;
 	m_unk0x148 = -1;
-	m_unk0x14c = NULL;
+	m_mainSourceId = NULL;
 }
 
 // FUNCTION: LEGO1 0x10078500
@@ -47,8 +53,8 @@ LegoCarBuildAnimPresenter::~LegoCarBuildAnimPresenter()
 	m_unk0xc8.GetRoot()->SetNumChildren(0);
 	*m_unk0xc8.GetRoot()->GetChildren() = NULL;
 
-	if (m_unk0x14c) {
-		delete m_unk0x14c;
+	if (m_mainSourceId) {
+		delete[] m_mainSourceId;
 	}
 }
 
@@ -65,11 +71,103 @@ void LegoCarBuildAnimPresenter::ReadyTickle()
 	// TODO
 }
 
-// STUB: LEGO1 0x100789e0
-// STUB: BETA10 0x10070cdd
+// FUNCTION: LEGO1 0x100789e0
+// FUNCTION: BETA10 0x10070cdd
 void LegoCarBuildAnimPresenter::StreamingTickle()
 {
-	// TODO
+	if (!m_unk0x140->GetROI()) {
+		return;
+	}
+
+	m_mainSourceId = new LegoChar[strlen(m_action->GetAtomId().GetInternal()) + 1];
+	assert(m_mainSourceId);
+
+	strcpy(m_mainSourceId, m_action->GetAtomId().GetInternal());
+	m_mainSourceId[strlen(m_mainSourceId) - 1] = 'M';
+
+	FUN_10079160();
+
+	if (GameState()->GetCurrentAct() == LegoGameState::e_act2) {
+		m_unk0xc0 = 10;
+	}
+
+	MxS16 i;
+
+	for (i = 0; i < m_unk0xbe; i++) {
+		if (m_unk0xc0 == i) {
+			FUN_10079680(m_unk0x128[i].m_unk0x04);
+		}
+		else {
+			FUN_100795d0(m_unk0x128[i].m_unk0x04);
+		}
+
+		if (i < m_unk0xc0) {
+			FUN_10079050(i);
+			FUN_10079680(m_unk0x128[i].m_unk0x00);
+		}
+
+		LegoChar* name = m_unk0x128[i].m_unk0x04;
+
+		if (name) {
+			for (MxS32 j = 0; j <= m_roiMapSize; j++) {
+				LegoROI* roi = m_roiMap[j];
+
+				if (roi && roi->GetName() && (strcmpi(name, roi->GetName()) == 0)) {
+					roi->FUN_100a9dd0();
+					roi->FUN_100a9350("lego red");
+				}
+			}
+		}
+	}
+
+	LegoVideoManager* videoManager = VideoManager();
+	assert(videoManager); // verifies variable name 'videoManager'
+
+	Lego3DView* lego3dview = videoManager->Get3DManager()->GetLego3DView();
+	LegoROI* videoManagerROI = videoManager->GetViewROI();
+	LegoROI* local60 = m_unk0x140->GetROI();
+	LegoROI* camera = NULL;
+	MxFloat fov;
+
+	MxS16 totalNodes = CountTotalTreeNodes(m_anim->GetRoot());
+
+	for (i = 0; i < totalNodes; i++) {
+		LegoAnimNodeData* animNodeData = (LegoAnimNodeData*) GetTreeNode(m_anim->GetRoot(), i)->GetData();
+
+		if (strnicmp(animNodeData->GetName(), "CAM", strlen("CAM")) == 0) {
+			camera = local60->FindChildROI(animNodeData->GetName(), local60);
+			fov = atof(&animNodeData->GetName()[strlen(animNodeData->GetName()) - 2]);
+			break;
+		}
+	}
+
+	assert(camera); // verifies variable name 'camera'
+
+	LegoROI* targetROI = local60->FindChildROI("TARGET", local60);
+
+	Mx3DPointFloat dirVec;
+
+	Vector3 cameraPosition(camera->GetWorldPosition());
+	Vector3 upVec(camera->GetWorldUp());
+	Vector3 targetPosition(targetROI->GetWorldPosition());
+
+	MxMatrix localTransform;
+
+	dirVec[0] = targetPosition[0] - cameraPosition[0];
+	dirVec[1] = targetPosition[1] - cameraPosition[1];
+	dirVec[2] = targetPosition[2] - cameraPosition[2];
+	dirVec.Unitize();
+
+	CalcLocalTransform(cameraPosition, dirVec, upVec, localTransform);
+
+	videoManagerROI->WrappedSetLocalTransform(localTransform);
+	lego3dview->Moved(*videoManagerROI);
+	videoManager->Get3DManager()->SetFrustrum(fov, 0.1, 250.0);
+
+	m_unk0xe0 = local60->FindChildROI("VIEW", local60)->GetLocal2World();
+
+	m_previousTickleStates |= 1 << m_currentTickleState;
+	m_currentTickleState = e_repeating;
 }
 
 // FUNCTION: LEGO1 0x10078db0
@@ -83,10 +181,40 @@ void LegoCarBuildAnimPresenter::EndAction()
 	}
 }
 
+// FUNCTION: LEGO1 0x10079050
+// FUNCTION: BETA10 0x1007151e
+void LegoCarBuildAnimPresenter::FUN_10079050(MxS16 p_index)
+{
+	FUN_10079090(m_unk0x128[p_index].m_unk0x04, m_unk0x128[p_index].m_unk0x00);
+	FUN_100795d0(m_unk0x128[p_index].m_unk0x04);
+}
+
+// STUB: LEGO1 0x10079090
+// STUB: BETA10 0x10071584
+void LegoCarBuildAnimPresenter::FUN_10079090(LegoChar* p_param1, LegoChar* p_param2)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10079160
+// STUB: BETA10 0x1007165d
 void LegoCarBuildAnimPresenter::FUN_10079160()
 {
 	// called from LegoCarBuildAnimPresenter::StreamingTickle()
+	// TODO
+}
+
+// STUB: LEGO1 0x100795d0
+// STUB: BETA10 0x10071d96
+void LegoCarBuildAnimPresenter::FUN_100795d0(LegoChar* p_param)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10079680
+// STUB: BETA10 0x10071ec5
+void LegoCarBuildAnimPresenter::FUN_10079680(LegoChar* p_param)
+{
 	// TODO
 }
 

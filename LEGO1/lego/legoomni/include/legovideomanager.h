@@ -53,7 +53,9 @@ public:
 	// FUNCTION: BETA10 0x100117e0
 	Lego3DManager* Get3DManager() { return m_3dManager; }
 
+	// FUNCTION: BETA10 0x1003a380
 	LegoROI* GetViewROI() { return m_viewROI; }
+
 	MxDirect3D* GetDirect3D() { return m_direct3d; }
 	MxBool GetRender3D() { return m_render3d; }
 	double GetElapsedSeconds() { return m_elapsedSeconds; }

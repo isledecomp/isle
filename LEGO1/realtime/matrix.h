@@ -183,6 +183,7 @@ protected:
 };
 
 // FUNCTION: LEGO1 0x10002550
+// FUNCTION: BETA10 0x100101c0
 inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 {
 	float trace = m_data[0][0] + m_data[1][1] + m_data[2][2];
@@ -223,6 +224,7 @@ inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 }
 
 // FUNCTION: LEGO1 0x10002710
+// FUNCTION: BETA10 0x10010550
 inline int Matrix4::FromQuaternion(const Vector4& p_vec)
 {
 	float len = p_vec.LenSquared();

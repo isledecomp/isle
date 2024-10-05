@@ -341,6 +341,7 @@ LegoResult LegoROI::FUN_100a8cb0(LegoAnimNodeData* p_data, LegoTime p_time, Matr
 }
 
 // FUNCTION: LEGO1 0x100a8ce0
+// FUNCTION: BETA10 0x1018a815
 LegoROI* LegoROI::FindChildROI(const LegoChar* p_name, LegoROI* p_roi)
 {
 	CompoundObject::iterator it;
@@ -549,6 +550,18 @@ LegoResult LegoROI::GetTexture(LegoTextureInfo*& p_textureInfo)
 	}
 
 	return FAILURE;
+}
+
+// FUNCTION: LEGO1 0x100a9350
+// FUNCTION: BETA10 0x1018b25c
+LegoResult LegoROI::FUN_100a9350(const LegoChar* p_color)
+{
+	MxFloat red, green, blue, alpha;
+	if (ColorAliasLookup(p_color, red, green, blue, alpha)) {
+		return FUN_100a9170(red, green, blue, alpha);
+	}
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100a9410
@@ -776,6 +789,13 @@ void LegoROI::SetName(const LegoChar* p_name)
 	else {
 		m_name = NULL;
 	}
+}
+
+// STUB: LEGO1 0x100a9dd0
+// STUB: BETA10 0x1018bfdb
+void LegoROI::FUN_100a9dd0()
+{
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x100a9e10

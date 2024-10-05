@@ -106,6 +106,7 @@ MxBool TransformWorldToScreen(const MxFloat p_world[3], MxFloat p_screen[4])
 }
 
 // FUNCTION: LEGO1 0x1003df90
+// FUNCTION: BETA10 0x100d39a3
 MxS16 CountTotalTreeNodes(LegoTreeNode* p_node)
 {
 	MxS16 result = 1;
@@ -118,6 +119,7 @@ MxS16 CountTotalTreeNodes(LegoTreeNode* p_node)
 }
 
 // FUNCTION: LEGO1 0x1003dfd0
+// FUNCTION: BETA10 0x100d3a09
 LegoTreeNode* GetTreeNode(LegoTreeNode* p_node, MxU32 p_index)
 {
 	LegoTreeNode* result = NULL;

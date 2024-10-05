@@ -213,6 +213,7 @@ Mx3DPointFloat LegoEntity::GetWorldUp()
 }
 
 // FUNCTION: LEGO1 0x10010d80
+// FUNCTION: BETA10 0x1007ebbe
 Mx3DPointFloat LegoEntity::GetWorldPosition()
 {
 	if (m_roi != NULL) {
