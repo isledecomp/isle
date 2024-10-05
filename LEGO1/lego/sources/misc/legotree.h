@@ -32,14 +32,21 @@ class LegoTreeNode {
 public:
 	LegoTreeNode();
 	virtual ~LegoTreeNode();
+
+	// FUNCTION: BETA10 0x100595a0
 	LegoTreeNodeData* GetData() { return m_data; }
+
 	void SetData(LegoTreeNodeData* p_data) { m_data = p_data; }
+
+	// FUNCTION: BETA10 0x10012150
 	LegoU32 GetNumChildren() { return m_numChildren; }
 
 	// FUNCTION: BETA10 0x10073370
 	void SetNumChildren(LegoU32 p_numChildren) { m_numChildren = p_numChildren; }
 
+	// FUNCTION: BETA10 0x10012180
 	LegoTreeNode* GetChild(LegoU32 p_i) { return m_children[p_i]; }
+
 	void SetChild(LegoU32 p_i, LegoTreeNode* p_child) { m_children[p_i] = p_child; }
 
 	// FUNCTION: BETA10 0x100733a0

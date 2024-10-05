@@ -43,6 +43,7 @@ void FUN_1003dde0(LegoROI* p_param1, MxFloat p_param2);
 MxBool FUN_1003ded0(MxFloat p_param1[2], MxFloat p_param2[3], MxFloat p_param3[3]);
 MxBool TransformWorldToScreen(const MxFloat p_world[3], MxFloat p_screen[4]);
 MxS16 CountTotalTreeNodes(LegoTreeNode* p_node);
+LegoTreeNode* GetTreeNode(LegoTreeNode* p_node, MxU32 p_index);
 void FUN_1003e050(LegoAnimPresenter* p_presenter);
 Extra::ActionType MatchActionString(const char*);
 void InvokeAction(Extra::ActionType p_actionId, const MxAtomId& p_pAtom, MxS32 p_targetEntityId, LegoEntity* p_sender);

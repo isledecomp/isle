@@ -3,6 +3,7 @@
 #include <vec.h>
 
 // FUNCTION: LEGO1 0x100a5b40
+// FUNCTION: BETA10 0x10168127
 void CalcLocalTransform(const Vector3& p_posVec, const Vector3& p_dirVec, const Vector3& p_upVec, Matrix4& p_outMatrix)
 {
 	float x_axis[3], y_axis[3], z_axis[3];

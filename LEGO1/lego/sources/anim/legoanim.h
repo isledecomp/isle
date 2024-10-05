@@ -148,7 +148,9 @@ public:
 	LegoResult CreateLocalTransform(LegoFloat p_time, Matrix4& p_matrix);
 	LegoBool FUN_100a0990(LegoFloat p_time);
 
+	// FUNCTION: BETA10 0x100595d0
 	const LegoChar* GetName() { return m_name; }
+
 	LegoU32 GetTranslationIndex() { return m_translationIndex; }
 	LegoU32 GetRotationIndex() { return m_rotationIndex; }
 	LegoU32 GetScaleIndex() { return m_scaleIndex; }
@@ -164,6 +166,8 @@ public:
 	void SetScaleIndex(LegoU32 p_scaleIndex) { m_scaleIndex = p_scaleIndex; }
 	void SetMorphIndex(LegoU32 p_morphIndex) { m_morphIndex = p_morphIndex; }
 	void SetUnknown0x20(LegoU16 p_unk0x20) { m_unk0x20 = p_unk0x20; }
+
+	// FUNCTION: BETA10 0x1005f2e0
 	void SetUnknown0x22(LegoU16 p_unk0x22) { m_unk0x22 = p_unk0x22; }
 
 	LegoResult CreateLocalTransform(LegoTime p_time, Matrix4& p_matrix)

@@ -163,13 +163,18 @@ public:
 		return *this;
 	}
 
-	// SYNTHETIC: BETA10 0x10013460
-	// Vector3::operator[]
-
-	// FUNCTION: BETA10 0x10010890
-	float& operator[](int idx) { return m_data[idx]; }
+	// There is another candidate for `Vector2::operator[]` at BETA10 0x10010890, which is called from only three
+	// functions in BETA10:
+	// - `Matrix4::FromQuaternion()`
+	// - `Matrix4::ToQuaternion()`
+	// - `UnknownMx4DPointFloat::FUN_100040a0()`
+	// Maybe there is another subclass of `Vector4` involved that has the same VTABLE but a different `operator[]`.
+	// It is also interesting that `Matrix4::operator[]` is located right above at BETA10 0x10010860.
 
 	// FUNCTION: BETA10 0x1001d140
+	float& operator[](int idx) { return m_data[idx]; }
+
+	// FUNCTION: BETA10 0x1001d170
 	const float& operator[](int idx) const { return m_data[idx]; }
 
 protected:
@@ -189,6 +194,8 @@ public:
 	// Example: LegoCameraController::GetWorldUp
 	// Vector3 however is a class that can mutate its underlying source, making
 	// initialization with a const source fundamentally incompatible.
+
+	// FUNCTION: BETA10 0x100109a0
 	Vector3(const float* p_data) : Vector2((float*) p_data) {}
 
 	// Note: virtual function overloads appear in the virtual table

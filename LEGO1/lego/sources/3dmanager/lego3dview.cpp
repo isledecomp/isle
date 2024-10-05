@@ -119,6 +119,7 @@ BOOL Lego3DView::SetPointOfView(ViewROI& rROI)
 }
 
 // FUNCTION: LEGO1 0x100ab210
+// FUNCTION: BETA10 0x1017d230
 BOOL Lego3DView::Moved(ViewROI& rROI)
 {
 	assert(m_pViewManager);

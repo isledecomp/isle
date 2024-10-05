@@ -380,6 +380,7 @@ void LegoWorld::AddPath(LegoPathController* p_controller)
 }
 
 // FUNCTION: LEGO1 0x10020020
+// FUNCTION: BETA10 0x100da77c
 LegoPathBoundary* LegoWorld::FindPathBoundary(const char* p_name)
 {
 	LegoPathControllerListCursor cursor(&m_list0x68);
