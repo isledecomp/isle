@@ -125,7 +125,7 @@ void LegoCarBuildAnimPresenter::StreamingTickle()
 
 	Lego3DView* lego3dview = videoManager->Get3DManager()->GetLego3DView();
 	LegoROI* videoManagerROI = videoManager->GetViewROI();
-	LegoROI* local_60 = m_unk0x140->GetROI();
+	LegoROI* local60 = m_unk0x140->GetROI();
 	LegoROI* camera = NULL;
 	MxFloat fov;
 
@@ -135,7 +135,7 @@ void LegoCarBuildAnimPresenter::StreamingTickle()
 		LegoAnimNodeData* animNodeData = (LegoAnimNodeData*) GetTreeNode(m_anim->GetRoot(), i)->GetData();
 
 		if (strnicmp(animNodeData->GetName(), "CAM", strlen("CAM")) == 0) {
-			camera = local_60->FindChildROI(animNodeData->GetName(), local_60);
+			camera = local60->FindChildROI(animNodeData->GetName(), local60);
 			fov = atof(&animNodeData->GetName()[strlen(animNodeData->GetName()) - 2]);
 			break;
 		}
@@ -143,7 +143,7 @@ void LegoCarBuildAnimPresenter::StreamingTickle()
 
 	assert(camera); // verifies variable name 'camera'
 
-	LegoROI* targetROI = local_60->FindChildROI("TARGET", local_60);
+	LegoROI* targetROI = local60->FindChildROI("TARGET", local60);
 
 	Mx3DPointFloat dirVec;
 
@@ -164,7 +164,7 @@ void LegoCarBuildAnimPresenter::StreamingTickle()
 	lego3dview->Moved(*videoManagerROI);
 	videoManager->Get3DManager()->SetFrustrum(fov, 0.1, 250.0);
 
-	m_unk0xe0 = local_60->FindChildROI("VIEW", local_60)->GetLocal2World();
+	m_unk0xe0 = local60->FindChildROI("VIEW", local60)->GetLocal2World();
 
 	m_previousTickleStates |= 1 << m_currentTickleState;
 	m_currentTickleState = e_repeating;
