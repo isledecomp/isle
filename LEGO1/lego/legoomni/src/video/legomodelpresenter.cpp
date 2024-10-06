@@ -50,6 +50,7 @@ void LegoModelPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // FUNCTION: LEGO1 0x1007f6b0
+// FUNCTION: BETA10 0x1009845e
 MxResult LegoModelPresenter::CreateROI(MxDSChunk* p_chunk)
 {
 	MxResult result = FAILURE;
@@ -171,13 +172,9 @@ MxResult LegoModelPresenter::CreateROI(MxDSChunk* p_chunk)
 	// Get scripted location, direction and up vectors
 
 	CalcLocalTransform(
-		Mx3DPointFloat(m_action->GetLocation().GetX(), m_action->GetLocation().GetY(), m_action->GetLocation().GetZ()),
-		Mx3DPointFloat(
-			m_action->GetDirection().GetX(),
-			m_action->GetDirection().GetY(),
-			m_action->GetDirection().GetZ()
-		),
-		Mx3DPointFloat(m_action->GetUp().GetX(), m_action->GetUp().GetY(), m_action->GetUp().GetZ()),
+		Mx3DPointFloat(m_action->GetLocation()[0], m_action->GetLocation()[1], m_action->GetLocation()[2]),
+		Mx3DPointFloat(m_action->GetDirection()[0], m_action->GetDirection()[1], m_action->GetDirection()[2]),
+		Mx3DPointFloat(m_action->GetUp()[0], m_action->GetUp()[1], m_action->GetUp()[2]),
 		mat
 	);
 	m_roi->UpdateTransformationRelativeToParent(mat);
@@ -234,6 +231,7 @@ MxResult LegoModelPresenter::FUN_1007ff70(
 }
 
 // FUNCTION: LEGO1 0x10080050
+// FUNCTION: BETA10 0x100991c2
 void LegoModelPresenter::ReadyTickle()
 {
 	if (m_compositePresenter != NULL && m_compositePresenter->IsA("LegoEntityPresenter") &&

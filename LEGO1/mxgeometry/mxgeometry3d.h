@@ -32,14 +32,15 @@ public:
 	// FUNCTION: LEGO1 0x10003c10
 	virtual void operator=(const Vector3& p_impl) { EqualsImpl(p_impl.m_data); } // vtable+0x88
 
-	float GetX() { return m_data[0]; }
-	float GetY() { return m_data[1]; }
-	float GetZ() { return m_data[2]; }
-
 	// FUNCTION: BETA10 0x10013460
 	float& operator[](int idx) { return m_data[idx]; }
 
-	const float& operator[](int idx) const { return m_data[idx]; }
+	// According to the PDB, BETA10 will not link this one if it is never used
+	// const float& operator[](int idx) const { return m_data[idx]; }
+
+	// only used by LegoUnknown100db7f4::FUN_1002ddc0() for some unknown reason
+	// FUNCTION: BETA10 0x100373c0
+	float& index_operator(int idx) { return m_data[idx]; }
 
 	// SYNTHETIC: LEGO1 0x10010c00
 	// Mx3DPointFloat::operator=

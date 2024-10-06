@@ -25,9 +25,9 @@ public:
 	LegoResult FUN_1002ddc0(LegoWEEdge& p_f, Vector3& p_point)
 	{
 		if (p_f.IsEqual(*m_faceA)) {
-			p_point[0] = -m_unk0x28[0];
-			p_point[1] = -m_unk0x28[1];
-			p_point[2] = -m_unk0x28[2];
+			p_point[0] = -m_unk0x28.index_operator(0);
+			p_point[1] = -m_unk0x28.index_operator(1);
+			p_point[2] = -m_unk0x28.index_operator(2);
 		}
 		else {
 			// clang-format off

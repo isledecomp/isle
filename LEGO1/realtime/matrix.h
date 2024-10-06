@@ -25,6 +25,7 @@ public:
 	// in reverse order of appearance.
 
 	// FUNCTION: LEGO1 0x10002320
+	// FUNCTION: BETA10 0x1000fcb0
 	virtual void Equals(float (*p_data)[4]) { memcpy(m_data, p_data, sizeof(float) * 4 * 4); } // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10002340
@@ -35,27 +36,35 @@ public:
 	} // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10002360
+	// FUNCTION: BETA10 0x1000fd30
 	virtual void SetData(float (*p_data)[4]) { m_data = p_data; } // vtable+0x0c
 
 	// FUNCTION: LEGO1 0x10002370
+	// FUNCTION: BETA10 0x1000fd60
 	virtual void SetData(UnknownMatrixType& p_matrix) { m_data = p_matrix.m_data; } // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10002380
+	// FUNCTION: BETA10 0x1000fd90
 	virtual float (*GetData())[4] { return m_data; } // vtable+0x14
 
 	// FUNCTION: LEGO1 0x10002390
+	// FUNCTION: BETA10 0x1000fdc0
 	virtual float (*GetData() const)[4] { return m_data; } // vtable+0x10
 
 	// FUNCTION: LEGO1 0x100023a0
+	// FUNCTION: BETA10 0x1000fdf0
 	virtual float* Element(int p_row, int p_col) { return &m_data[p_row][p_col]; } // vtable+0x1c
 
 	// FUNCTION: LEGO1 0x100023c0
+	// FUNCTION: BETA10 0x1000fe30
 	virtual const float* Element(int p_row, int p_col) const { return &m_data[p_row][p_col]; } // vtable+0x18
 
 	// FUNCTION: LEGO1 0x100023e0
+	// FUNCTION: BETA10 0x1000fe70
 	virtual void Clear() { memset(m_data, 0, 16 * sizeof(float)); } // vtable+0x20
 
 	// FUNCTION: LEGO1 0x100023f0
+	// FUNCTION: BETA10 0x1000feb0
 	virtual void SetIdentity()
 	{
 		Clear();
@@ -66,9 +75,11 @@ public:
 	} // vtable+0x24
 
 	// FUNCTION: LEGO1 0x10002420
+	// FUNCTION: BETA10 0x1000ff20
 	virtual void operator=(const Matrix4& p_matrix) { Equals(p_matrix); } // vtable+0x28
 
 	// FUNCTION: LEGO1 0x10002430
+	// FUNCTION: BETA10 0x1000ff50
 	virtual Matrix4& operator+=(float (*p_data)[4])
 	{
 		for (int i = 0; i < 16; i++) {
@@ -78,6 +89,7 @@ public:
 	} // vtable+0x2c
 
 	// FUNCTION: LEGO1 0x10002460
+	// FUNCTION: BETA10 0x1000ffc0
 	virtual void TranslateBy(const float& p_x, const float& p_y, const float& p_z)
 	{
 		m_data[3][0] += p_x;
@@ -86,6 +98,7 @@ public:
 	} // vtable+0x30
 
 	// FUNCTION: LEGO1 0x100024a0
+	// FUNCTION: BETA10 0x10010040
 	virtual void SetTranslation(const float& p_x, const float& p_y, const float& p_z)
 	{
 		m_data[3][0] = p_x;
@@ -94,6 +107,7 @@ public:
 	} // vtable+0x34
 
 	// FUNCTION: LEGO1 0x100024d0
+	// FUNCTION: BETA10 0x100100a0
 	virtual void Product(float (*p_a)[4], float (*p_b)[4])
 	{
 		float* cur = (float*) m_data;
@@ -109,6 +123,7 @@ public:
 	} // vtable+0x3c
 
 	// FUNCTION: LEGO1 0x10002530
+	// FUNCTION: BETA10 0x10010180
 	virtual void Product(const Matrix4& p_a, const Matrix4& p_b) { Product(p_a.m_data, p_b.m_data); } // vtable+0x38
 
 	inline virtual void ToQuaternion(Vector4& p_resultQuat); // vtable+0x40
