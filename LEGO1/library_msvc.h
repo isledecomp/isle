@@ -710,14 +710,17 @@
 // LIBRARY: BETA10 0x100fa0e0
 // atof
 
-// // LIBRARY: BETA10 0x1005a9c0
-// // fabs
-//
-// // LIBRARY: BETA10 0x1005a9f0
-// // fabsf
-//
-// // LIBRARY: BETA10 0x100f9bb0
-// // _fabs
+// LIBRARY: BETA10 0x1005a9c0
+// fabs
+
+// LIBRARY: BETA10 0x1005a9f0
+// fabsf
+
+// LIBRARY: BETA10 0x100f9bb0
+// _fabs
+
+// LIBRARY: BETA10 0x100f9570
+// memset
 
 // LIBRARY: BETA10 0x100ff82b
 // __ctrandisp1
