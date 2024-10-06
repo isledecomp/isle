@@ -9,6 +9,7 @@ class LegoEntity;
 class MxDSChunk;
 
 // VTABLE: LEGO1 0x100d4e50
+// VTABLE: BETA10 0x101bcd88
 // SIZE 0x6c
 class LegoModelPresenter : public MxVideoPresenter {
 public:

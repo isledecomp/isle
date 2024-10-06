@@ -416,6 +416,11 @@ public:
 		m_data[3] = p_value;
 	} // vtable+0x84
 
+	float& operator[](int idx) { return m_data[idx]; }
+
+	// FUNCTION: BETA10 0x10010890
+	const float& operator[](int idx) const { return m_data[idx]; }
+
 	friend class Mx4DPointFloat;
 };
 
