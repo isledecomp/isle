@@ -103,6 +103,7 @@ public:
 		MxFloat p_param4[2]
 	); // vtable+0x80
 
+	MxS16 GetPlacedPartCount();
 	void InitPresenters();
 	void FUN_10022f30();
 	void FUN_10023130(MxLong p_x, MxLong p_y);
@@ -126,6 +127,9 @@ public:
 	void FUN_10025db0(const char* p_param1, undefined4 p_param2);
 	void FUN_10025e40();
 	MxS32 FUN_10025ee0(undefined4 p_param1);
+
+	// FUNCTION: BETA10 0x100735b0
+	void SetUnknown0x258(LegoCarBuildAnimPresenter* p_unk0x258) { m_unk0x258 = p_unk0x258; }
 
 	// SYNTHETIC: LEGO1 0x10022a60
 	// LegoCarBuild::`scalar deleting destructor'

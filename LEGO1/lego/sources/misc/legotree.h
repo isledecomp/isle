@@ -9,6 +9,7 @@
 class LegoStorage;
 
 // VTABLE: LEGO1 0x100db778
+// VTABLE: BETA10 0x101c37f4
 // SIZE 0x04
 class LegoTreeNodeData {
 public:
@@ -36,6 +37,7 @@ public:
 	// FUNCTION: BETA10 0x100595a0
 	LegoTreeNodeData* GetData() { return m_data; }
 
+	// FUNCTION: BETA10 0x100736f0
 	void SetData(LegoTreeNodeData* p_data) { m_data = p_data; }
 
 	// FUNCTION: BETA10 0x10012150
@@ -52,6 +54,7 @@ public:
 	// FUNCTION: BETA10 0x100733a0
 	LegoTreeNode** GetChildren() { return m_children; }
 
+	// FUNCTION: BETA10 0x10073720
 	void SetChildren(LegoTreeNode** p_children) { m_children = p_children; }
 
 	// SYNTHETIC: LEGO1 0x10099d80
@@ -73,7 +76,9 @@ public:
 	// FUNCTION: BETA10 0x100121b0
 	LegoTreeNode* GetRoot() { return m_root; }
 
+	// FUNCTION: BETA10 0x10073750
 	void SetRoot(LegoTreeNode* p_root) { m_root = p_root; }
+
 	virtual LegoResult Read(LegoStorage* p_storage);  // vtable+0x04
 	virtual LegoResult Write(LegoStorage* p_storage); // vtable+0x08
 

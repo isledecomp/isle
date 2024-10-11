@@ -8,6 +8,7 @@ DECOMP_SIZE_ASSERT(LegoTreeNode, 0x010)
 DECOMP_SIZE_ASSERT(LegoTree, 0x08)
 
 // FUNCTION: LEGO1 0x10099d60
+// FUNCTION: BETA10 0x10187dd0
 LegoTreeNode::LegoTreeNode()
 {
 	m_data = NULL;

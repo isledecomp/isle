@@ -153,6 +153,17 @@ MxResult LegoCarBuild::Create(MxDSAction& p_dsAction)
 	return result;
 }
 
+// FUNCTION: LEGO1 0x10022cd0
+MxS16 LegoCarBuild::GetPlacedPartCount()
+{
+	if (m_buildState) {
+		return m_buildState->m_placedPartCount;
+	}
+	else {
+		return 0;
+	}
+}
+
 // FUNCTION: LEGO1 0x10022d10
 // FUNCTION: BETA10 0x1006b27a
 void LegoCarBuild::InitPresenters()

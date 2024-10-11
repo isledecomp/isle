@@ -279,6 +279,7 @@ LegoResult LegoTranslationKey::Read(LegoStorage* p_storage)
 }
 
 // FUNCTION: LEGO1 0x1009faa0
+// FUNCTION: BETA10 0x1017e2b3
 LegoRotationKey::LegoRotationKey()
 {
 	m_angle = 1.0F;
@@ -356,6 +357,7 @@ LegoResult LegoScaleKey::Read(LegoStorage* p_storage)
 }
 
 // FUNCTION: LEGO1 0x1009fcf0
+// FUNCTION: BETA10 0x1017e71a
 LegoAnimNodeData::LegoAnimNodeData()
 {
 	m_numTranslationKeys = 0;
@@ -492,6 +494,13 @@ LegoResult LegoAnimNodeData::Write(LegoStorage* p_storage)
 {
 	// TODO
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100a0360
+// STUB: BETA10 0x1017f1e5
+void LegoAnimNodeData::FUN_100a0360(LegoChar* p_param)
+{
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x100a03c0
