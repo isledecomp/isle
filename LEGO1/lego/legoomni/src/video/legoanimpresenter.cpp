@@ -750,6 +750,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x1006b550
+// FUNCTION: BETA10 0x10050a9c
 void LegoAnimPresenter::ReadyTickle()
 {
 	m_currentWorld = CurrentWorld();

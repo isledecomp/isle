@@ -145,17 +145,37 @@ public:
 	LegoResult Read(LegoStorage* p_storage) override;  // vtable+0x04
 	LegoResult Write(LegoStorage* p_storage) override; // vtable+0x08
 
+	void FUN_100a0360(LegoChar* p_param);
 	LegoResult CreateLocalTransform(LegoFloat p_time, Matrix4& p_matrix);
 	LegoBool FUN_100a0990(LegoFloat p_time);
 
 	// FUNCTION: BETA10 0x100595d0
-	const LegoChar* GetName() { return m_name; }
+	LegoChar* GetName() { return m_name; }
+
+	// FUNCTION: BETA10 0x10073780
+	LegoU16 GetNumTranslationKeys() { return m_numTranslationKeys; }
+
+	// FUNCTION: BETA10 0x100737b0
+	LegoU16 GetNumRotationKeys() { return m_numRotationKeys; }
+
+	// FUNCTION: BETA10 0x100737e0
+	void SetNumRotationKeys(LegoU16 p_numRotationKeys) { m_numRotationKeys = p_numRotationKeys; }
+
+	// FUNCTION: BETA10 0x10073810
+	void SetRotationKeys(LegoRotationKey* p_keys)
+	{
+		m_rotationKeys = p_keys;
+		m_rotationIndex = 0;
+	}
 
 	LegoU32 GetTranslationIndex() { return m_translationIndex; }
 	LegoU32 GetRotationIndex() { return m_rotationIndex; }
 	LegoU32 GetScaleIndex() { return m_scaleIndex; }
 	LegoU32 GetMorphIndex() { return m_morphIndex; }
+
+	// FUNCTION: BETA10 0x1005abc0
 	LegoU16 GetUnknown0x20() { return m_unk0x20; }
+
 	LegoU16 GetUnknown0x22() { return m_unk0x22; }
 
 	// FUNCTION: BETA10 0x10073b80
@@ -165,6 +185,8 @@ public:
 	void SetRotationIndex(LegoU32 p_rotationIndex) { m_rotationIndex = p_rotationIndex; }
 	void SetScaleIndex(LegoU32 p_scaleIndex) { m_scaleIndex = p_scaleIndex; }
 	void SetMorphIndex(LegoU32 p_morphIndex) { m_morphIndex = p_morphIndex; }
+
+	// FUNCTION: BETA10 0x10059600
 	void SetUnknown0x20(LegoU16 p_unk0x20) { m_unk0x20 = p_unk0x20; }
 
 	// FUNCTION: BETA10 0x1005f2e0

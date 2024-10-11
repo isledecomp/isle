@@ -112,6 +112,7 @@ void MxPresenter::ParseExtra()
 }
 
 // FUNCTION: LEGO1 0x100b5120
+// FUNCTION: BETA10 0x1012e5d8
 void MxPresenter::SendToCompositePresenter(MxOmni* p_omni)
 {
 	if (m_compositePresenter) {
