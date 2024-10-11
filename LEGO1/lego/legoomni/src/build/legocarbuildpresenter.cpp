@@ -386,6 +386,7 @@ LegoAnimNodeData* LegoCarBuildAnimPresenter::FindNodeDataByName(LegoTreeNode* p_
 			}
 		}
 	}
+
 	return NULL;
 }
 
@@ -411,6 +412,7 @@ LegoTreeNode* LegoCarBuildAnimPresenter::FindNodeByName(LegoTreeNode* p_treeNode
 			}
 		}
 	}
+
 	return NULL;
 }
 

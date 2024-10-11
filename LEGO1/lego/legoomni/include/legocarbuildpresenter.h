@@ -11,14 +11,6 @@ class LegoCarBuildAnimPresenter : public LegoAnimPresenter {
 public:
 	// SIZE 0x0c
 	struct UnknownListEntry {
-		// variable name verified by BETA10 0x10071b56
-		LegoChar* m_name; // 0x00
-
-		// variable name verified by BETA10 0x100719f0
-		LegoChar* m_wiredName; // 0x04
-
-		undefined2 m_unk0x08; // 0x08
-
 		// FUNCTION: LEGO1 0x100795c0
 		// FUNCTION: BETA10 0x10073850
 		UnknownListEntry()
@@ -27,6 +19,14 @@ public:
 			m_wiredName = NULL;
 			m_unk0x08 = 0;
 		}
+
+		// variable name verified by BETA10 0x10071b56
+		LegoChar* m_name; // 0x00
+
+		// variable name verified by BETA10 0x100719f0
+		LegoChar* m_wiredName; // 0x04
+
+		undefined2 m_unk0x08; // 0x08
 	};
 
 	LegoCarBuildAnimPresenter();
