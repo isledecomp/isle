@@ -216,7 +216,7 @@ def compare_function_stacks(udiff: CombinedDiffOutput, fn_symbol: SymbolsEntry):
             warnings.error_map_not_bijective = True
 
     # Show offsets from the debug symbols that we have not encountered in the diff
-    all_recomp_offsets = set(x.orig.offset for x in stack_pairs).union(
+    all_recomp_offsets = set(x.recomp.offset for x in stack_pairs).union(
         stack_symbols.keys()
     )
 
