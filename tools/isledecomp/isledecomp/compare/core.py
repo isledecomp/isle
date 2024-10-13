@@ -15,7 +15,7 @@ from isledecomp.types import SymbolType
 from isledecomp.compare.asm import ParseAsm
 from isledecomp.compare.asm.fixes import assert_fixup, find_effective_match
 from .db import CompareDb, MatchInfo
-from .diff import combined_diff
+from .diff import combined_diff, CombinedDiffOutput
 from .lines import LinesDb
 
 
@@ -29,7 +29,7 @@ class DiffReport:
     orig_addr: int
     recomp_addr: int
     name: str
-    udiff: Optional[List[str]] = None
+    udiff: Optional[CombinedDiffOutput] = None
     ratio: float = 0.0
     is_effective_match: bool = False
     is_stub: bool = False

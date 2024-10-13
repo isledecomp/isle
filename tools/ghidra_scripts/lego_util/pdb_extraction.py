@@ -96,7 +96,8 @@ class PdbFunctionExtractor:
 
         stack_symbols: list[CppStackOrRegisterSymbol] = []
 
-        # for some unexplained reason, the reported stack is offset by 4 when this flag is set
+        # for some unexplained reason, the reported stack is offset by 4 when this flag is set.
+        # Note that this affects the arguments (ebp + ...) but not the function stack (ebp - ...)
         stack_offset_delta = -4 if fn.frame_pointer_present else 0
 
         for symbol in fn.stack_symbols:
