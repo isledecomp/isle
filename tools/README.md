@@ -175,6 +175,8 @@ The example usages below assume that the current working directory is this repos
     * Generate an HTML report: `py -m tools.reccmp.reccmp --html output.html legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
     * Create a base file for diffs: `py -m tools.reccmp.reccmp --json base.json --silent legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
     * Diff against a base file: `py -m tools.reccmp.reccmp --diff base.json legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
+* [`stackcmp`](/tools/stackcmp): Compares the stack layout for a given function that almost matches.
+    * e.g. `py -m tools.stackcmp.stackcmp legobin/BETA10.DLL build_debug/LEGO1.DLL build_debug/LEGO1.pdb . 0x1007165d`
 * [`roadmap`](/tools/roadmap): Compares symbol locations in an original binary with the same symbol locations of a recompiled binary
 * [`verexp`](/tools/verexp): Verifies exports by comparing the exports of the original DLL and the recompiled DLL
 * [`vtable`](/tools/vtable): Asserts virtual table correctness by comparing a recompiled binary with the original

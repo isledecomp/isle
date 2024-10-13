@@ -2,7 +2,13 @@ from difflib import SequenceMatcher
 from typing import Dict, List, Tuple
 
 CombinedDiffInput = List[Tuple[str, str]]
-CombinedDiffOutput = List[Tuple[str, List[Dict[str, Tuple[str, str]]]]]
+# from inner to outer:
+# Tuple[str, ...]: either (orig_addr, instruction, recomp_addr) or (addr, instruction)
+# List[...]: a contiguous block of instructions, all matching or all mismatching
+# Dict[...]: either {"both": List[...]} or {"orig": [...], "recomp": [...]}
+# Tuple[str, List[...]]: One contiguous part of the diff (without skipping matching code)
+# List[...]: The list of all the contiguous diffs of a given function
+CombinedDiffOutput = List[Tuple[str, List[Dict[str, List[Tuple[str, ...]]]]]]
 
 
 def combined_diff(
