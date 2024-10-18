@@ -428,11 +428,6 @@ class Compare:
         points at a function we have already matched, we can find the matching
         thunk in recomp because it points to the same place."""
 
-        # Turn this one inside out for easy lookup
-        recomp_thunks = {
-            func_addr: thunk_addr for (thunk_addr, func_addr) in self.recomp_bin.thunks
-        }
-
         # Mark all recomp thunks first. This allows us to use their name
         # when we sanitize the asm.
         for recomp_thunk, recomp_addr in self.recomp_bin.thunks:
@@ -442,16 +437,28 @@ class Compare:
 
             self._db.create_recomp_thunk(recomp_thunk, recomp_func.name)
 
+        # Thunks may be non-unique, so use a list as dict value when
+        # inverting the list of tuples from self.recomp_bin.
+        recomp_thunks = {}
+        for thunk_addr, func_addr in self.recomp_bin.thunks:
+            recomp_thunks.setdefault(func_addr, []).append(thunk_addr)
+
+        # Now match the thunks from orig where we can.
         for orig_thunk, orig_addr in self.orig_bin.thunks:
             orig_func = self._db.get_by_orig(orig_addr)
             if orig_func is None:
                 continue
 
             # Check whether the thunk destination is a matched symbol
-            recomp_thunk = recomp_thunks.get(orig_func.recomp_addr)
-            if recomp_thunk is None:
+            if orig_func.recomp_addr not in recomp_thunks:
                 self._db.create_orig_thunk(orig_thunk, orig_func.name)
                 continue
+
+            # If there are multiple thunks, they are already in v.addr order.
+            # Pop the earliest one and match it.
+            recomp_thunk = recomp_thunks[orig_func.recomp_addr].pop(0)
+            if len(recomp_thunks[orig_func.recomp_addr]) == 0:
+                del recomp_thunks[orig_func.recomp_addr]
 
             self._db.set_function_pair(orig_thunk, recomp_thunk)
 
