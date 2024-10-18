@@ -107,6 +107,10 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
     - uses: actions/download-artifact@master
       with:
        name: Win32
@@ -125,12 +129,17 @@ jobs:
       run: |
         pip install -r tools/requirements.txt
 
+    - name: Detect binaries
+      run: |
+        reccmp-project detect --what original   --search-path legobin
+        reccmp-project detect --what recompiled --search-path build
+
     - name: Summarize Accuracy
       shell: bash
       run: |
-        python3 tools/reccmp/reccmp.py -S CONFIGPROGRESS.SVG --svg-icon tools/reccmp/config.png -H CONFIGPROGRESS.HTML legobin/CONFIG.EXE build/CONFIG.EXE build/CONFIG.PDB . | tee CONFIGPROGRESS.TXT
-        python3 tools/reccmp/reccmp.py -S ISLEPROGRESS.SVG --svg-icon tools/reccmp/isle.png -H ISLEPROGRESS.HTML legobin/ISLE.EXE build/ISLE.EXE build/ISLE.PDB . | tee ISLEPROGRESS.TXT
-        python3 tools/reccmp/reccmp.py -S LEGO1PROGRESS.SVG -T 4252 --svg-icon tools/reccmp/lego1.png -H LEGO1PROGRESS.HTML legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB . | tee LEGO1PROGRESS.TXT
+        reccmp-reccmp -S CONFIGPROGRESS.SVG --svg-icon assets/config.png --target CONFIG | tee CONFIGPROGRESS.TXT
+        reccmp-reccmp -S ISLEPROGRESS.SVG --svg-icon assets/isle.png --target ISLE | tee ISLEPROGRESS.TXT
+        reccmp-reccmp -S LEGO1PROGRESS.SVG -T 4252 --svg-icon assets/lego1.png --target LEGO1 | tee LEGO1PROGRESS.TXT
 
     - name: Compare Accuracy With Current Master
       shell: bash
@@ -147,21 +156,21 @@ jobs:
     - name: Test Exports
       shell: bash
       run: |
-        tools/verexp/verexp.py legobin/LEGO1.DLL build/LEGO1.DLL
+        reccmp-verexp --target LEGO1
 
     - name: Check Vtables
       shell: bash
       run: |
-        python3 tools/vtable/vtable.py legobin/CONFIG.EXE build/CONFIG.EXE build/CONFIG.PDB .
-        python3 tools/vtable/vtable.py legobin/ISLE.EXE build/ISLE.EXE build/ISLE.PDB .
-        python3 tools/vtable/vtable.py legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .
+        reccmp-vtable --target CONFIG
+        reccmp-vtable --target ISLE
+        reccmp-vtable --target LEGO1
 
     - name: Check Variables
       shell: bash
       run: |
-        python3 tools/datacmp.py legobin/CONFIG.EXE build/CONFIG.EXE build/CONFIG.PDB .
-        python3 tools/datacmp.py legobin/ISLE.EXE build/ISLE.EXE build/ISLE.PDB .
-        python3 tools/datacmp.py legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .
+       reccmp-datacmp --target CONFIG
+       reccmp-datacmp --target ISLE
+       reccmp-datacmp --target LEGO1
 
     - name: Upload Artifact
       uses: actions/upload-artifact@master

@@ -8,6 +8,7 @@ project(isle CXX)
 include(CheckCXXSourceCompiles)
 include(CMakeDependentOption)
 include(CMakePushCheckState)
+include("${CMAKE_CURRENT_LIST_DIR}/cmake/reccmp.cmake")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 option(ENABLE_CLANG_TIDY "Enable clang-tidy")
@@ -405,6 +406,7 @@ add_library(lego1 SHARED
   LEGO1/main.cpp
   LEGO1/modeldb/modeldb.cpp
 )
+reccmp_add_target(lego1 ID LEGO1)
 register_lego1_target(lego1)
 
 if (MINGW)
@@ -447,6 +449,7 @@ if (ISLE_BUILD_APP)
     ISLE/res/isle.rc
     ISLE/isleapp.cpp
   )
+  reccmp_add_target(isle ID ISLE)
 
   target_compile_definitions(isle PRIVATE ISLE_APP)
 
@@ -477,6 +480,7 @@ if (ISLE_BUILD_CONFIG)
     CONFIG/StdAfx.cpp
     CONFIG/res/config.rc
   )
+  reccmp_add_target(config ID CONFIG)
   target_compile_definitions(config PRIVATE _AFXDLL MXDIRECTX_FOR_CONFIG)
   target_include_directories(config PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/util" "${CMAKE_CURRENT_SOURCE_DIR}/LEGO1")
   if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 14)
@@ -603,3 +607,5 @@ if(EXISTS "${CLANGFORMAT_BIN}")
     endif()
   endif()
 endif()
+
+reccmp_configure()

@@ -160,57 +160,41 @@ inline virtual const char* ClassName() const override // vtable+0x0c
 
 Use `pip` to install the required packages to be able to use the Python tools found in this folder:
 
-```
+```sh
 pip install -r tools/requirements.txt
+```
+
+Run the following command to allow reccmp to detect the original LEGO binaries:
+
+```sh
+reccmp-project detect --what original --search-path <paths-to-directories0containing-lego-binaries>
+```
+
+After building recompiled binaries, run the following command in this repository's root:
+
+```sh
+reccmp-project detect --what recompiled --search-path <paths-to-build-directories>
 ```
 
 The example usages below assume that the current working directory is this repository's root and that the retail binaries have been copied to `./legobin`.
 
-* [`decomplint`](/tools/decomplint): Checks the decompilation annotations (see above)
-    * e.g. `py -m tools.decomplint.decomplint --module LEGO1 LEGO1`
-* [`isledecomp`](/tools/isledecomp): A library that implements a parser to identify the decompilation annotations (see above)
+* `reccmp-decomplint`: Checks the decompilation annotations (see above)
+    * e.g. `reccmp-decomplint --module LEGO1 LEGO1`
 * [`ncc`](/tools/ncc): Checks naming conventions based on a set of rules
-* [`reccmp`](/tools/reccmp): Compares an original binary with a recompiled binary, provided a PDB file. For example:
+* `reccmp-reccmp`: Compares an original binary with a recompiled binary, provided a PDB file. For example:
     * Display the diff for a single function: `py -m tools.reccmp.reccmp --verbose 0x100ae1a0 legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
     * Generate an HTML report: `py -m tools.reccmp.reccmp --html output.html legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
     * Create a base file for diffs: `py -m tools.reccmp.reccmp --json base.json --silent legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
     * Diff against a base file: `py -m tools.reccmp.reccmp --diff base.json legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
-* [`stackcmp`](/tools/stackcmp): Compares the stack layout for a given function that almost matches.
-    * e.g. `py -m tools.stackcmp.stackcmp legobin/BETA10.DLL build_debug/LEGO1.DLL build_debug/LEGO1.pdb . 0x1007165d`
-* [`roadmap`](/tools/roadmap): Compares symbol locations in an original binary with the same symbol locations of a recompiled binary
-* [`verexp`](/tools/verexp): Verifies exports by comparing the exports of the original DLL and the recompiled DLL
-* [`vtable`](/tools/vtable): Asserts virtual table correctness by comparing a recompiled binary with the original
-    * e.g. `py -m tools.vtable.vtable legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
-* [`datacmp.py`](/tools/datacmp.py): Compares global data found in the original with the recompiled version
-    * e.g. `py -m tools.datacmp legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
+* `reccmp-stackcmp`: Compares the stack layout for a given function that almost matches.
+    * e.g. `reccmp-stackcmp legobin/BETA10.DLL build_debug/LEGO1.DLL build_debug/LEGO1.pdb . 0x1007165d`
+* `reccmp-roadmap`: Compares symbol locations in an original binary with the same symbol locations of a recompiled binary
+* `reccmp-verexp`: Verifies exports by comparing the exports of the original DLL and the recompiled DLL
+* `reccmp-vtable`: Asserts virtual table correctness by comparing a recompiled binary with the original
+    * e.g. `reccmp-vtable legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
+* `reccmp-datacmp`: Compares global data found in the original with the recompiled version
+    * e.g. `reccmp-datacmp legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .`
 * [`patch_c2.py`](/tools/patch_c2.py): Patches `C2.EXE` (part of MSVC 4.20) to get rid of a bugged warning
-
-## Testing
-
-`isledecomp` comes with a suite of tests. Install `pytest` and run it, passing in the directory:
-
-```
-pip install pytest
-pytest tools/isledecomp/tests/
-```
-
-## Tool Development
-
-In order to keep the Python code clean and consistent, we use `pylint` and `black`:
-
-`pip install black pylint`
-
-### Run pylint (ignores build and virtualenv)
-
-`pylint tools/ --ignore=build,ncc`
-
-### Check Python code formatting without rewriting files
-
-`black --check tools/`
-
-### Apply Python code formatting
-
-`black tools/`
 
 # Modules
 The following is a list of all the modules found in the annotations (e.g. `// FUNCTION: [module] [address]`) and which binaries they refer to. See [this list of all known versions of the game](https://www.legoisland.org/wiki/LEGO_Island#Download).
@@ -243,7 +227,7 @@ cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo -D
 ```
 **TODO**: If you can figure out how to make a debug build with SmartHeap enabled, please add it here.
 
-If you want to run scripts to compare your debug build to `BETA10` (e.g. `reccmp`), it is advisable to add a copy of `LEGO1D.DLL` to `/legobin` and rename it to `BETA10.DLL`.
+If you want to run scripts to compare your debug build to `BETA10` (e.g. `reccmp-reccmp`), it is advisable to add a copy of `LEGO1D.DLL` to `/legobin` and rename it to `BETA10.DLL`.
 
 ### Finding matching functions
 

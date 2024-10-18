@@ -17,10 +17,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
     - name: Install python libraries
       run: |
-        python -m pip install -r tools/requirements.txt
+        pip install -r tools/requirements.txt
 
     - name: Run decomplint.py
       run: |
-        tools/decomplint/decomplint.py ${{ matrix.who }} --module ${{ matrix.who }} --warnfail
+        reccmp-decomplint ${{ matrix.who }} --module ${{ matrix.who }} --warnfail
