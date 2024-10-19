@@ -85,7 +85,7 @@ public:
 	// LegoCarBuildAnimPresenter::`scalar deleting destructor'
 
 private:
-	void BETA10_100733d0();
+	void Beta10Inline0x100733d0();
 
 	MxU16 m_unk0xbc; // 0xbc
 

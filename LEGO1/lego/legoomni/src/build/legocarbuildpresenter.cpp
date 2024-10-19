@@ -65,7 +65,7 @@ LegoCarBuildAnimPresenter::~LegoCarBuildAnimPresenter()
 }
 
 // FUNCTION: BETA10 0x100733d0
-inline void LegoCarBuildAnimPresenter::BETA10_100733d0()
+inline void LegoCarBuildAnimPresenter::Beta10Inline0x100733d0()
 {
 	MxLong time = Timer()->GetTime();
 	MxLong bvar5;
@@ -132,7 +132,7 @@ void LegoCarBuildAnimPresenter::PutFrame()
 		break;
 	}
 
-	BETA10_100733d0();
+	Beta10Inline0x100733d0();
 }
 
 // FUNCTION: LEGO1 0x100788c0
