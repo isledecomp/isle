@@ -263,6 +263,7 @@ MxEntity* MxPresenter::CreateEntity(const char* p_defaultName)
 }
 
 // FUNCTION: LEGO1 0x100b54c0
+// FUNCTION: BETA10 0x1012ebaf
 MxBool MxPresenter::IsEnabled()
 {
 	return this->m_action && this->m_action->GetFlags() & MxDSAction::c_enabled;

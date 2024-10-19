@@ -176,6 +176,7 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // FUNCTION: LEGO1 0x100b28b0
+// FUNCTION: BETA10 0x101389c1
 void MxVideoPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
@@ -191,6 +192,7 @@ void MxVideoPresenter::NextFrame()
 }
 
 // FUNCTION: LEGO1 0x100b2900
+// FUNCTION: BETA10 0x10138a3a
 MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 {
 	MxDSAction* action = GetAction();
@@ -563,6 +565,7 @@ void MxVideoPresenter::EndAction()
 }
 
 // FUNCTION: LEGO1 0x100b3280
+// FUNCTION: BETA10 0x101397c0
 MxResult MxVideoPresenter::PutData()
 {
 	AUTOLOCK(m_criticalSection);

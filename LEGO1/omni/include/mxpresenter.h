@@ -98,6 +98,7 @@ public:
 	virtual void EndAction();                                       // vtable+0x40
 
 	// FUNCTION: LEGO1 0x1000bf90
+	// FUNCTION: BETA10 0x10054a50
 	virtual void SetTickleState(TickleState p_tickleState) { ProgressTickleState(p_tickleState); } // vtable+0x44
 
 	// FUNCTION: LEGO1 0x1000bfb0

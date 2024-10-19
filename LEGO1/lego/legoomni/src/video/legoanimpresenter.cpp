@@ -904,6 +904,7 @@ void LegoAnimPresenter::FUN_1006b900(LegoAnim* p_anim, MxLong p_time, Matrix4* p
 }
 
 // FUNCTION: LEGO1 0x1006b9a0
+// FUNCTION: BETA10 0x1005118b
 void LegoAnimPresenter::FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p_matrix)
 {
 	LegoTreeNode* root = p_anim->GetRoot();

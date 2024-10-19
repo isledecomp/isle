@@ -118,6 +118,8 @@ public:
 	const CompoundObject* GetComp() const { return comp; }
 
 	unsigned char GetVisibility() { return m_visible; }
+
+	// FUNCTION: BETA10 0x10011720
 	void SetVisibility(unsigned char p_visible) { m_visible = p_visible; }
 
 	// SYNTHETIC: LEGO1 0x100a5d60

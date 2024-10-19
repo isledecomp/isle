@@ -67,7 +67,8 @@ public:
 	LegoTreeNode* FindNodeByName(LegoTreeNode* p_treeNode, const LegoChar* p_name);
 	void RotateAroundYAxis(MxFloat p_angle);
 	MxBool FUN_10079c30(const LegoChar* p_name);
-	MxBool FUN_10079ca0(const LegoChar* p_name);
+	MxBool PartIsPlaced(const LegoChar* p_name);
+	void FUN_10079a90();
 	MxBool StringEqualsPlatform(const LegoChar* p_string);
 	MxBool StringEqualsShelf(const LegoChar* p_string);
 	MxBool FUN_10079cf0(const LegoChar* p_string);
@@ -84,7 +85,9 @@ public:
 	// LegoCarBuildAnimPresenter::`scalar deleting destructor'
 
 private:
-	undefined2 m_unk0xbc; // 0xbc
+	void BETA10_100733d0();
+
+	MxU16 m_unk0xbc; // 0xbc
 
 	// variable name verified by BETA10 0x1007184f
 	MxS16 m_numberOfParts; // 0xbe
@@ -100,10 +103,10 @@ private:
 	UnknownListEntry* m_parts; // 0x128
 
 	MxFloat m_unk0x12c;     // 0x12c
-	undefined4 m_unk0x130;  // 0x130
+	MxFloat m_unk0x130;     // 0x130
 	MxFloat m_unk0x134;     // 0x134
 	MxFloat m_unk0x138;     // 0x138
-	undefined4 m_unk0x13c;  // 0x13c
+	MxLong m_unk0x13c;      // 0x13c
 	LegoEntity* m_unk0x140; // 0x140
 	MxS32 m_unk0x144;       // 0x144
 	MxS32 m_unk0x148;       // 0x148

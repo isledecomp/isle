@@ -7,10 +7,13 @@ class MxDSBuffer;
 class MxStreamListMxDSSubscriber;
 
 // VTABLE: LEGO1 0x100dc2a8
+// VTABLE: BETA10 0x101c1d20
 // SIZE 0x20
 class MxStreamChunk : public MxDSChunk {
 public:
+	// FUNCTION: BETA10 0x10134420
 	MxStreamChunk() : m_buffer(NULL) {}
+
 	~MxStreamChunk() override;
 
 	// FUNCTION: LEGO1 0x100b1fe0
