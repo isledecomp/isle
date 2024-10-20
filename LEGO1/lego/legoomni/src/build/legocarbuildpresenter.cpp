@@ -71,11 +71,11 @@ inline void LegoCarBuildAnimPresenter::Beta10Inline0x100733d0()
 	MxLong bvar5;
 
 	if (m_unk0x13c < time) {
-		bvar5 = 0;
+		bvar5 = FALSE;
 
 		// I have no idea why this conditional is so convoluted
-		if (m_unk0x13c & 1) {
-			bvar5 = 1;
+		if (m_unk0x13c & c_bit1) {
+			bvar5 = TRUE;
 			m_unk0x13c = time + 400;
 		}
 		else {
@@ -83,10 +83,10 @@ inline void LegoCarBuildAnimPresenter::Beta10Inline0x100733d0()
 		}
 
 		if (bvar5) {
-			m_unk0x13c &= ~1;
+			m_unk0x13c &= ~c_bit1;
 		}
 		else {
-			m_unk0x13c |= 1;
+			m_unk0x13c |= c_bit1;
 		}
 
 		if (m_placedPartCount < m_numberOfParts) {

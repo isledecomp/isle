@@ -9,6 +9,10 @@
 // SIZE 0x150
 class LegoCarBuildAnimPresenter : public LegoAnimPresenter {
 public:
+	enum {
+		c_bit1 = 0x01
+	};
+
 	// SIZE 0x0c
 	struct UnknownListEntry {
 		// FUNCTION: LEGO1 0x100795c0
