@@ -9,11 +9,11 @@
 class LegoStorage;
 
 // VTABLE: LEGO1 0x100db778
-// VTABLE: BETA10 0x101c37f4
 // SIZE 0x04
 class LegoTreeNodeData {
 public:
 	LegoTreeNodeData() {}
+
 	// FUNCTION: LEGO1 0x1009a0e0
 	virtual ~LegoTreeNodeData() {}
 
@@ -28,6 +28,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100db764
+// VTABLE: BETA10 0x101c37f4
 // SIZE 0x10
 class LegoTreeNode {
 public:
@@ -58,6 +59,7 @@ public:
 	void SetChildren(LegoTreeNode** p_children) { m_children = p_children; }
 
 	// SYNTHETIC: LEGO1 0x10099d80
+	// SYNTHETIC: BETA10 0x10188cb0
 	// LegoTreeNode::`scalar deleting destructor'
 
 protected:

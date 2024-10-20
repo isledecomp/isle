@@ -17,6 +17,7 @@ LegoTreeNode::LegoTreeNode()
 }
 
 // FUNCTION: LEGO1 0x10099da0
+// FUNCTION: BETA10 0x10187e10
 LegoTreeNode::~LegoTreeNode()
 {
 	if (m_data) {
