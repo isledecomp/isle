@@ -11,6 +11,8 @@
 #include "misc.h"
 #include "mxautolock.h"
 #include "mxcompositepresenter.h"
+#include "mxmisc.h"
+#include "mxtimer.h"
 #include "realtime/realtime.h"
 
 DECOMP_SIZE_ASSERT(LegoCarBuildAnimPresenter::UnknownListEntry, 0x0c)
@@ -62,10 +64,75 @@ LegoCarBuildAnimPresenter::~LegoCarBuildAnimPresenter()
 	}
 }
 
-// STUB: LEGO1 0x10078790
+// FUNCTION: BETA10 0x100733d0
+inline void LegoCarBuildAnimPresenter::Beta10Inline0x100733d0()
+{
+	MxLong time = Timer()->GetTime();
+	MxLong bvar5;
+
+	if (m_unk0x13c < time) {
+		bvar5 = FALSE;
+
+		// I have no idea why this conditional is so convoluted
+		if (m_unk0x13c & c_bit1) {
+			bvar5 = TRUE;
+			m_unk0x13c = time + 400;
+		}
+		else {
+			m_unk0x13c = time + 200;
+		}
+
+		if (bvar5) {
+			m_unk0x13c &= ~c_bit1;
+		}
+		else {
+			m_unk0x13c |= c_bit1;
+		}
+
+		if (m_placedPartCount < m_numberOfParts) {
+
+			const LegoChar* wiredName = m_parts[m_placedPartCount].m_wiredName;
+
+			if (wiredName) {
+				for (MxS32 i = 1; i <= m_roiMapSize; i++) {
+					LegoROI* roi = m_roiMap[i];
+
+					if (roi) {
+						const LegoChar* name = roi->GetName();
+
+						if (name && stricmp(wiredName, name) == 0) {
+							if (bvar5) {
+								roi->SetVisibility(TRUE);
+							}
+							else {
+								roi->SetVisibility(FALSE);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+// FUNCTION: LEGO1 0x10078790
+// FUNCTION: BETA10 0x10070ab1
 void LegoCarBuildAnimPresenter::PutFrame()
 {
-	// TODO
+	switch (m_unk0xbc) {
+	case 0:
+		break;
+	case 2:
+		FUN_10079a90();
+	case 1:
+		if (m_unk0x140->GetROI()) {
+			FUN_1006b9a0(m_anim, m_unk0x12c, NULL);
+		}
+	default:
+		break;
+	}
+
+	Beta10Inline0x100733d0();
 }
 
 // FUNCTION: LEGO1 0x100788c0
@@ -351,18 +418,42 @@ void LegoCarBuildAnimPresenter::FUN_10079160()
 	m_unk0xc8.SetRoot(destNode);
 }
 
-// STUB: LEGO1 0x100795d0
-// STUB: BETA10 0x10071d96
+// FUNCTION: LEGO1 0x100795d0
+// FUNCTION: BETA10 0x10071d96
 void LegoCarBuildAnimPresenter::FUN_100795d0(LegoChar* p_param)
 {
-	// TODO
+	LegoAnimNodeData* data = FindNodeDataByName(m_anim->GetRoot(), p_param);
+
+	if (data) {
+		LegoMorphKey* oldMorphKeys = data->GetMorphKeys();
+
+		LegoMorphKey* newHideKey = new LegoMorphKey();
+		assert(newHideKey);
+
+		newHideKey->SetTime(0);
+		newHideKey->SetUnknown0x08(FALSE);
+
+		data->SetNumMorphKeys(1);
+		data->SetMorphKeys(newHideKey);
+
+		delete oldMorphKeys;
+	}
 }
 
-// STUB: LEGO1 0x10079680
-// STUB: BETA10 0x10071ec5
+// FUNCTION: LEGO1 0x10079680
+// FUNCTION: BETA10 0x10071ec5
 void LegoCarBuildAnimPresenter::FUN_10079680(LegoChar* p_param)
 {
-	// TODO
+	LegoAnimNodeData* data = FindNodeDataByName(m_anim->GetRoot(), p_param);
+
+	if (data) {
+		LegoMorphKey* oldMorphKeys = data->GetMorphKeys();
+
+		data->SetNumMorphKeys(0);
+		data->SetMorphKeys(NULL);
+
+		delete oldMorphKeys;
+	}
 }
 
 // FUNCTION: LEGO1 0x100796b0
@@ -449,6 +540,25 @@ void LegoCarBuildAnimPresenter::RotateAroundYAxis(MxFloat p_angle)
 	}
 }
 
+// FUNCTION: LEGO1 0x10079a90
+// FUNCTION: BETA10 0x10072412
+void LegoCarBuildAnimPresenter::FUN_10079a90()
+{
+	if (m_unk0x12c >= m_unk0x134) {
+		m_unk0x130 = 0.0;
+		m_unk0x12c = m_unk0x130;
+		m_unk0xbc = 1;
+	}
+	else if (m_unk0x12c >= m_unk0x138 + m_unk0x130) {
+		m_unk0x130 = m_unk0x138 + m_unk0x130;
+		m_unk0x12c = m_unk0x130;
+		m_unk0xbc = 1;
+	}
+	else {
+		m_unk0x12c = m_unk0x138 / 10.0f + m_unk0x12c;
+	}
+}
+
 // FUNCTION: LEGO1 0x10079b20
 // FUNCTION: BETA10 0x100724fa
 MxBool LegoCarBuildAnimPresenter::StringEqualsPlatform(const LegoChar* p_string)
@@ -478,17 +588,21 @@ MxBool LegoCarBuildAnimPresenter::StringEqualsShelf(const LegoChar* p_string)
 	return strnicmp(p_string, "SHELF", strlen("SHELF")) == 0;
 }
 
-// STUB: LEGO1 0x10079c30
-// STUB: BETA10 0x100726a6
+// FUNCTION: LEGO1 0x10079c30
+// FUNCTION: BETA10 0x100726a6
 MxBool LegoCarBuildAnimPresenter::FUN_10079c30(const LegoChar* p_name)
 {
-	// TODO
-	return FALSE;
+	if (PartIsPlaced(p_name)) {
+		return FALSE;
+	}
+
+	return m_placedPartCount < m_numberOfParts &&
+		   strnicmp(p_name, m_parts[m_placedPartCount].m_name, strlen(p_name) - 3) == 0;
 }
 
 // FUNCTION: LEGO1 0x10079ca0
 // FUNCTION: BETA10 0x10072740
-MxBool LegoCarBuildAnimPresenter::FUN_10079ca0(const LegoChar* p_name)
+MxBool LegoCarBuildAnimPresenter::PartIsPlaced(const LegoChar* p_name)
 {
 	for (MxS16 i = 0; i < m_placedPartCount; i++) {
 		if (strcmpi(p_name, m_parts[i].m_name) == 0) {

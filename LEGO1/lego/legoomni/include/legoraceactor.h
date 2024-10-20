@@ -35,6 +35,7 @@ public:
 	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override;    // vtable+0x94
 
 	// FUNCTION: LEGO1 0x10014aa0
+	// FUNCTION: BETA10 0x100ca038
 	virtual MxResult FUN_10014aa0() { return SUCCESS; }
 
 	// SYNTHETIC: LEGO1 0x10012c10

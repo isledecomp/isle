@@ -19,7 +19,11 @@ public:
 	LegoAnimKey();
 	LegoResult Read(LegoStorage* p_storage);
 	LegoFloat GetTime() { return m_time; }
-	void SetTime(LegoFloat p_time) { m_time = p_time; }
+
+	// The different types (LegoFloat vs. MxS32) are correct according to BETA10
+	// FUNCTION: BETA10 0x100738a0
+	void SetTime(MxS32 p_time) { m_time = p_time; }
+
 	LegoU32 TestBit1() { return m_flags & c_bit1; }
 	LegoU32 TestBit2() { return m_flags & c_bit2; }
 	LegoU32 TestBit3() { return m_flags & c_bit3; }
@@ -120,6 +124,9 @@ public:
 	LegoResult Read(LegoStorage* p_storage);
 	LegoBool GetUnknown0x08() { return m_unk0x08; }
 
+	// FUNCTION: BETA10 0x100738d0
+	void SetUnknown0x08(LegoBool p_unk0x08) { m_unk0x08 = p_unk0x08; }
+
 protected:
 	LegoBool m_unk0x08; // 0x08
 };
@@ -185,6 +192,19 @@ public:
 	void SetRotationIndex(LegoU32 p_rotationIndex) { m_rotationIndex = p_rotationIndex; }
 	void SetScaleIndex(LegoU32 p_scaleIndex) { m_scaleIndex = p_scaleIndex; }
 	void SetMorphIndex(LegoU32 p_morphIndex) { m_morphIndex = p_morphIndex; }
+
+	// FUNCTION: BETA10 0x10073930
+	LegoMorphKey* GetMorphKeys() { return m_morphKeys; }
+
+	// FUNCTION: BETA10 0x10073960
+	void SetMorphKeys(LegoMorphKey* p_morphKeys)
+	{
+		m_morphKeys = p_morphKeys;
+		m_morphIndex = 0;
+	}
+
+	// FUNCTION: BETA10 0x10073900
+	void SetNumMorphKeys(LegoU16 p_numMorphKeys) { m_numMorphKeys = p_numMorphKeys; }
 
 	// FUNCTION: BETA10 0x10059600
 	void SetUnknown0x20(LegoU16 p_unk0x20) { m_unk0x20 = p_unk0x20; }

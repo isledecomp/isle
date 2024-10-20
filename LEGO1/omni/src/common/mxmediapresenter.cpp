@@ -229,6 +229,7 @@ void MxMediaPresenter::DoneTickle()
 }
 
 // FUNCTION: LEGO1 0x100b5f10
+// FUNCTION: BETA10 0x101366e9
 void MxMediaPresenter::LoopChunk(MxStreamChunk* p_chunk)
 {
 	MxStreamChunk* chunk = new MxStreamChunk;
@@ -243,6 +244,7 @@ void MxMediaPresenter::LoopChunk(MxStreamChunk* p_chunk)
 }
 
 // FUNCTION: LEGO1 0x100b6030
+// FUNCTION: BETA10 0x10136814
 void MxMediaPresenter::Enable(MxBool p_enable)
 {
 	if (IsEnabled() != p_enable) {

@@ -52,14 +52,17 @@ public:
 	MxBool IsHit(MxS32 p_x, MxS32 p_y) override; // vtable+0x50
 
 	// FUNCTION: LEGO1 0x1000c700
+	// FUNCTION: BETA10 0x10054a80
 	virtual void LoadHeader(MxStreamChunk* p_chunk) {} // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x1000c710
+	// FUNCTION: BETA10 0x10054aa0
 	virtual void CreateBitmap() {} // vtable+0x60
 
 	virtual void NextFrame(); // vtable+0x64
 
 	// FUNCTION: LEGO1 0x1000c720
+	// FUNCTION: BETA10 0x10054ac0
 	virtual void LoadFrame(MxStreamChunk* p_chunk) {} // vtable+0x68
 
 	virtual void PutFrame(); // vtable+0x6c

@@ -221,10 +221,11 @@ LegoResult LegoAnimScene::FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix)
 }
 
 // FUNCTION: LEGO1 0x1009f900
+// FUNCTION: BETA10 0x1017df90
 LegoAnimKey::LegoAnimKey()
 {
-	m_flags = 0;
 	m_time = 0;
+	m_flags = 0;
 }
 
 // FUNCTION: LEGO1 0x1009f910
@@ -907,6 +908,7 @@ undefined4 LegoAnim::GetActorUnknown0x04(LegoU32 p_index)
 }
 
 // FUNCTION: LEGO1 0x100a0f60
+// FUNCTION: BETA10 0x1018027c
 LegoMorphKey::LegoMorphKey()
 {
 	m_unk0x08 = 0;

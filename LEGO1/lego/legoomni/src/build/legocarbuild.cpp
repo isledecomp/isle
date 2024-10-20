@@ -218,7 +218,7 @@ void LegoCarBuild::FUN_10022f30()
 		FUN_10024f70(FALSE);
 		FUN_100250e0(FALSE);
 
-		if (m_unk0x258->FUN_10079ca0(m_unk0x110->GetName())) {
+		if (m_unk0x258->PartIsPlaced(m_unk0x110->GetName())) {
 			m_PlaceBrick_Sound->Enable(FALSE);
 			m_PlaceBrick_Sound->Enable(TRUE);
 		}
@@ -408,7 +408,7 @@ MxResult LegoCarBuild::Tickle()
 		}
 
 		if (m_unk0x110) {
-			if (m_unk0x258->FUN_10079ca0(m_unk0x110->GetName())) {
+			if (m_unk0x258->PartIsPlaced(m_unk0x110->GetName())) {
 				FUN_10022f30();
 			}
 		}
@@ -697,7 +697,7 @@ undefined4 LegoCarBuild::FUN_100244e0(MxLong p_x, MxLong p_y)
 		FUN_100250e0(TRUE);
 	}
 
-	if (m_unk0x100 == 5 && m_unk0x258->FUN_10079ca0(m_unk0x110->GetName())) {
+	if (m_unk0x100 == 5 && m_unk0x258->PartIsPlaced(m_unk0x110->GetName())) {
 		m_unk0x2d4 = TRUE;
 	}
 	else {
@@ -706,7 +706,7 @@ undefined4 LegoCarBuild::FUN_100244e0(MxLong p_x, MxLong p_y)
 	FUN_10025450();
 	VTable0x70();
 
-	if (m_unk0x258->FUN_10079ca0(m_unk0x110->GetName())) {
+	if (m_unk0x258->PartIsPlaced(m_unk0x110->GetName())) {
 		if (m_unk0x100 != 5) {
 			m_unk0x250[0] += m_unk0x290[0] - m_unk0x298[0];
 			m_unk0x250[1] += m_unk0x290[1] - m_unk0x298[1];
