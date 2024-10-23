@@ -8,7 +8,7 @@ This is a **work-in-progress** decompilation of LEGO Island (Version 1.1, Englis
 
 <img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="50%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="50%">
 
-Currently, `ISLE.EXE` is completely decompiled and behaves identically to the original. A handful of stubborn instructions are not yet matching; however, we anticipate they will as more of the overall codebase is implemented.
+Currently, `ISLE.EXE` is completely decompiled and behaves identically to the original. A handful of stubborn instructions are not yet matching, however, we anticipate they will as more of the overall codebase is implemented.
 
 `LEGO1.DLL` is still lacking some gameplay features but is generally workable. If you would like to use this, make sure to do so without interacting with save files created by the retail version, as there might still be some incompatibilities.
 
@@ -24,7 +24,7 @@ These instructions will outline how to compile this repository into accurate ins
 You will need the following software installed:
 
 - Microsoft Visual C++ 4.2. This can be found on many abandonware sites, but the installer can be a little iffy on modern versions of Windows. For convenience, a [portable version](https://github.com/itsmattkc/msvc420) is available that can be downloaded and used quickly instead.
-- [CMake](https://cmake.org/). A copy is often included with the "Desktop development with C++" workload in newer versions of Visual Studio; however, it can also be installed as a standalone app.
+- [CMake](https://cmake.org/). A copy is often included with the "Desktop development with C++" workload in newer versions of Visual Studio, however, it can also be installed as a standalone app.
 
 #### Compiling
 
@@ -58,7 +58,7 @@ If you're interested in helping or contributing to this project, check out the [
 
 ### Which version of LEGO Island do I have?
 
-Right click on `LEGO1.DLL`, select `Properties`, and switch to the `Details` tab. Under `Version` you should either see `1.0.0.0` (1.0) or `1.1.0.0` (1.1). Additionally, you can look at the game disc files; 1.0's files will all say August 8, 1997, and 1.1's files will all say September 8, 1997. Version 1.1 is by far the most common, especially if you're not using the English or Japanese versions, so that's most likely the version you have. Please note that some localized versions of LEGO Island were recompiled with small changes despite maintaining a version number parallel with other versions; this decompilation is specifically targeting the English release of version 1.1 of LEGO Island. You can verify you have the correct version using the checksums below:
+Right click on `LEGO1.DLL`, select `Properties`, and switch to the `Details` tab. Under `Version` you should either see `1.0.0.0` (1.0) or `1.1.0.0` (1.1). Additionally, you can look at the game disc files, 1.0's files will all say August 8, 1997, and 1.1's files will all say September 8, 1997. Version 1.1 is by far the most common, especially if you're not using the English or Japanese versions, so that's most likely the version you have. Please note that some localized versions of LEGO Island were recompiled with small changes despite maintaining a version number parallel with other versions, this decompilation is specifically targeting the English release of version 1.1 of LEGO Island. You can verify you have the correct version using the checksums below:
 
 * ISLE.EXE `md5: f6da12249e03eed1c74810cd23beb9f5`
 * LEGO1.DLL `md5: 4e2f6d969ea2ef8655ba3fc221a0c8fe`
