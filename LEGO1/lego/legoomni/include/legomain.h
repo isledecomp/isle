@@ -134,7 +134,10 @@ public:
 	LegoPlantManager* GetPlantManager() { return m_plantManager; }
 	LegoAnimationManager* GetAnimationManager() { return m_animationManager; }
 	LegoBuildingManager* GetBuildingManager() { return m_buildingManager; }
+
+	// FUNCTION: BETA10 0x100e52b0
 	LegoGameState* GetGameState() { return m_gameState; }
+
 	MxBackgroundAudioManager* GetBackgroundAudioManager() { return m_bkgAudioManager; }
 	MxTransitionManager* GetTransitionManager() { return m_transitionManager; }
 	MxDSAction& GetCurrentAction() { return m_action; }

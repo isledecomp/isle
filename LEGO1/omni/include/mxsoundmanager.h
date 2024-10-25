@@ -24,10 +24,11 @@ public:
 
 	MxS32 GetAttenuation(MxU32 p_volume);
 
+	MxPresenter* FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_objectId);
+
 protected:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
-	MxPresenter* FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_objectId);
 
 	LPDIRECTSOUND m_directSound;    // 0x30
 	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x34

@@ -615,9 +615,16 @@ MxBool LegoCarBuildAnimPresenter::PartIsPlaced(const LegoChar* p_name)
 
 // FUNCTION: LEGO1 0x10079cf0
 // FUNCTION: BETA10 0x100727b3
-MxBool LegoCarBuildAnimPresenter::FUN_10079cf0(const LegoChar* p_string)
+MxBool LegoCarBuildAnimPresenter::StringEndsOnY(const LegoChar* p_string)
 {
 	return (p_string[strlen(p_string) - 2] == 'Y') || (p_string[strlen(p_string) - 2] == 'y');
+}
+
+// FUNCTION: LEGO1 0x10079d30
+// FUNCTION: BETA10 0x1007280e
+MxBool LegoCarBuildAnimPresenter::StringEndsOnZero(const LegoChar* p_string)
+{
+	return (p_string[strlen(p_string) - 2] != '0');
 }
 
 // FUNCTION: LEGO1 0x10079e20

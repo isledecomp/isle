@@ -600,7 +600,7 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_enter, MxU8
 			MxDSAction action;
 			action.SetAtomId(*g_jukeboxScript);
 			action.SetObjectId(g_spawnLocations[i].m_music);
-			BackgroundAudioManager()->PlayMusic(action, 5, 4);
+			BackgroundAudioManager()->PlayMusic(action, 5, MxPresenter::e_repeating);
 		}
 	}
 }

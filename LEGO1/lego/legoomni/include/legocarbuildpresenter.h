@@ -75,7 +75,8 @@ public:
 	void FUN_10079a90();
 	MxBool StringEqualsPlatform(const LegoChar* p_string);
 	MxBool StringEqualsShelf(const LegoChar* p_string);
-	MxBool FUN_10079cf0(const LegoChar* p_string);
+	MxBool StringEndsOnY(const LegoChar* p_string);
+	MxBool StringEndsOnZero(const LegoChar* p_string);
 
 	// FUNCTION: BETA10 0x10070180
 	void SetUnknown0xbc(undefined2 p_unk0xbc) { m_unk0xbc = p_unk0xbc; }
@@ -117,6 +118,8 @@ private:
 
 	// name verified by BETA10 0x10070d63
 	LegoChar* m_mainSourceId; // 0x14c
+
+	friend class LegoCarBuild;
 };
 
 #endif // LEGOCARBUILDPRESENTER_H

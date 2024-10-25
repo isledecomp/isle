@@ -30,6 +30,7 @@ public:
 	void Deserialize(MxU8*& p_source, MxS16 p_unk0x24) override; // vtable+1c;
 	MxDSAction* Clone() override;                                // vtable+2c;
 
+	// FUNCTION: BETA10 0x1008d060
 	MxS32 GetVolume() const { return m_volume; }
 
 	// SYNTHETIC: LEGO1 0x100c9450

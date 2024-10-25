@@ -39,6 +39,7 @@ enum NotificationId {
 // SIZE 0x0c
 class MxNotificationParam : public MxParam {
 public:
+	// FUNCTION: BETA10 0x100702d0
 	MxNotificationParam() : m_type(c_notificationType0), m_sender(NULL) {}
 
 	// FUNCTION: BETA10 0x10013490

@@ -115,7 +115,7 @@ void Radio::Play()
 			BackgroundAudioManager()->Enable(TRUE);
 		}
 
-		BackgroundAudioManager()->PlayMusic(action, 3, 4);
+		BackgroundAudioManager()->PlayMusic(action, 3, MxPresenter::e_repeating);
 		m_state->SetActive(TRUE);
 	}
 }
@@ -178,7 +178,7 @@ MxLong Radio::HandleEndAction(MxEndActionNotificationParam& p_param)
 		action.SetObjectId(m_state->FUN_1002d090());
 		action.SetLoopCount(1);
 
-		BackgroundAudioManager()->PlayMusic(action, 3, 4);
+		BackgroundAudioManager()->PlayMusic(action, 3, MxPresenter::e_repeating);
 		return 1;
 	}
 

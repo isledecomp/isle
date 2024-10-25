@@ -161,6 +161,6 @@ void LegoPathStruct::PlayMusic(MxBool p_direction, MxU32 p_data)
 	}
 
 	if (action.GetObjectId() != -1) {
-		BackgroundAudioManager()->PlayMusic(action, 5, 4);
+		BackgroundAudioManager()->PlayMusic(action, 5, MxPresenter::e_repeating);
 	}
 }

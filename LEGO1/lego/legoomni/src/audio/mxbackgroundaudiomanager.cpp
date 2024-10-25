@@ -20,7 +20,7 @@ MxBackgroundAudioManager::MxBackgroundAudioManager()
 	NotificationManager()->Register(this);
 	m_unk0xa0 = 0;
 	m_unk0x138 = 0;
-	m_unk0x13c = 0;
+	m_tickleState = MxPresenter::e_idle;
 	m_unk0x140 = 0;
 	m_targetVolume = 0;
 	m_unk0x148 = 0;
@@ -81,7 +81,7 @@ void MxBackgroundAudioManager::DestroyMusic()
 // FUNCTION: LEGO1 0x1007ee40
 MxResult MxBackgroundAudioManager::Tickle()
 {
-	switch (m_unk0x13c) {
+	switch (m_tickleState) {
 	case MxPresenter::e_starting:
 		FadeInOrFadeOut();
 		break;
@@ -108,7 +108,7 @@ void MxBackgroundAudioManager::FUN_1007ee70()
 		m_unk0x138 = NULL;
 		m_action2.SetObjectId(-1);
 		m_action2.SetAtomId(MxAtomId());
-		m_unk0x13c = 0;
+		m_tickleState = MxPresenter::e_idle;
 	}
 }
 
@@ -141,7 +141,7 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 				m_unk0x138 = NULL;
 				m_action2.SetObjectId(-1);
 				m_action2.SetAtomId(MxAtomId());
-				m_unk0x13c = 0;
+				m_tickleState = MxPresenter::e_idle;
 			}
 		}
 	}
@@ -187,11 +187,11 @@ void MxBackgroundAudioManager::FadeInOrFadeOut()
 		}
 		else {
 			m_unk0xa0->SetVolume(volume);
-			m_unk0x13c = 0;
+			m_tickleState = MxPresenter::e_idle;
 		}
 	}
 	else {
-		m_unk0x13c = 0;
+		m_tickleState = MxPresenter::e_idle;
 	}
 }
 
@@ -238,7 +238,11 @@ void MxBackgroundAudioManager::StopAction(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1007f2f0
-MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_unk0x140, undefined4 p_unk0x13c)
+MxResult MxBackgroundAudioManager::PlayMusic(
+	MxDSAction& p_action,
+	undefined4 p_unk0x140,
+	MxPresenter::TickleState p_tickleState
+)
 {
 	if (!m_enabled) {
 		return SUCCESS;
@@ -262,7 +266,7 @@ MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_
 		GetCurrentAction().SetUnknown24(action.GetUnknown24());
 
 		if (result == SUCCESS) {
-			m_unk0x13c = p_unk0x13c;
+			m_tickleState = p_tickleState;
 			m_unk0x140 = p_unk0x140;
 		}
 
@@ -292,15 +296,15 @@ void MxBackgroundAudioManager::Stop()
 	m_action1.SetAtomId(MxAtomId());
 	m_unk0x148 = 0;
 	m_action1.SetObjectId(-1);
-	m_unk0x13c = 0;
+	m_tickleState = MxPresenter::e_idle;
 }
 
 // FUNCTION: LEGO1 0x1007f570
 void MxBackgroundAudioManager::LowerVolume()
 {
 	if (m_unk0x148 == 0) {
-		if (m_unk0x13c == 0) {
-			m_unk0x13c = 2;
+		if (m_tickleState == 0) {
+			m_tickleState = MxPresenter::e_starting;
 		}
 		m_unk0x140 = 20;
 	}
@@ -313,8 +317,8 @@ void MxBackgroundAudioManager::RaiseVolume()
 	if (m_unk0x148 != 0) {
 		m_unk0x148--;
 		if (m_unk0x148 == 0) {
-			if (m_unk0x13c == 0) {
-				m_unk0x13c = 2;
+			if (m_tickleState == 0) {
+				m_tickleState = MxPresenter::e_starting;
 			}
 			m_unk0x140 = 10;
 		}
@@ -333,9 +337,28 @@ void MxBackgroundAudioManager::Enable(MxBool p_enable)
 	}
 }
 
+// FUNCTION: LEGO1 0x1007f610
+// FUNCTION: BETA10 0x100e95ee
+undefined4 MxBackgroundAudioManager::FUN_1007f610(
+	MxPresenter* p_unk0x138,
+	MxS32 p_unk0x140,
+	MxPresenter::TickleState p_tickleState
+)
+
+{
+	m_unk0x138 = (MxAudioPresenter*) p_unk0x138;
+	m_targetVolume = ((MxDSSound*) m_unk0x138->GetAction())->GetVolume();
+
+	((MxCompositePresenter*) m_unk0x138)->VTable0x60(NULL);
+
+	m_unk0x140 = p_unk0x140;
+	m_tickleState = p_tickleState;
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x1007f650
 void MxBackgroundAudioManager::Init()
 {
 	this->m_unk0xa0 = 0;
-	this->m_unk0x13c = 0;
+	this->m_tickleState = MxPresenter::e_idle;
 }
