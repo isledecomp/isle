@@ -92,7 +92,7 @@ void JukeBoxEntity::StartAction()
 		BackgroundAudioManager()->Enable(TRUE);
 	}
 
-	BackgroundAudioManager()->PlayMusic(action, 5, 4);
+	BackgroundAudioManager()->PlayMusic(action, 5, MxPresenter::e_repeating);
 }
 
 // FUNCTION: LEGO1 0x100860f0

@@ -53,8 +53,10 @@ LegoControlManager* ControlManager()
 }
 
 // FUNCTION: LEGO1 0x10015760
+// FUNCTION: BETA10 0x100e492a
 LegoGameState* GameState()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetGameState();
 }
 
@@ -166,8 +168,10 @@ void DeleteAction()
 }
 
 // FUNCTION: LEGO1 0x100158c0
+// FUNCTION: BETA10 0x100e4e18
 LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->FindWorld(p_atom, p_entityid);
 }
 
@@ -196,7 +200,7 @@ void PlayMusic(JukeboxScript::Script p_script)
 	action.SetAtomId(*g_jukeboxScript);
 	action.SetObjectId(p_script);
 
-	LegoOmni::GetInstance()->GetBackgroundAudioManager()->PlayMusic(action, 5, 4);
+	LegoOmni::GetInstance()->GetBackgroundAudioManager()->PlayMusic(action, 5, MxPresenter::e_repeating);
 }
 
 // FUNCTION: LEGO1 0x100159c0

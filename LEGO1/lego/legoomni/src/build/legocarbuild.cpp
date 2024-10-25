@@ -1,9 +1,14 @@
 #include "legocarbuild.h"
 
+#include "dunebuggy.h"
+#include "helicopter.h"
+#include "jetski.h"
+#include "jukebox_actions.h"
 #include "legocarbuildpresenter.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
+#include "legosoundmanager.h"
 #include "legoutils.h"
 #include "misc.h"
 #include "mxactionnotificationparam.h"
@@ -15,8 +20,10 @@
 #include "mxstillpresenter.h"
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
+#include "racecar.h"
 #include "scripts.h"
 
+#include <isle.h>
 #include <vec.h>
 
 DECOMP_SIZE_ASSERT(LegoCarBuild, 0x34c)
@@ -772,11 +779,108 @@ undefined4 LegoCarBuild::FUN_10024890(LegoEventNotificationParam* p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x10024c20
-// STUB: BETA10 0x1006db21
-void LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
+// FUNCTION: LEGO1 0x10024c20
+// FUNCTION: BETA10 0x1006db21
+undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 {
-	// TODO
+	LegoEntity* entity;
+	assert(m_buildState);
+
+	switch (m_buildState->m_animationState) {
+	case 4:
+		entity = (LegoEntity*) Find(m_atomId, m_unk0x330);
+
+		if (entity && entity->GetROI()) {
+
+			// This function was changed between BETA10 and LEGO1.
+			// These lines looks like a relic from older code.
+			LegoWorld* destWorld = NULL;
+			destWorld = FindWorld(*g_isleScript, 0);
+
+			Act1State* gameState = (Act1State*) GameState()->GetState("Act1State");
+
+			switch (GameState()->GetCurrentArea()) {
+			case LegoGameState::e_copterbuild:
+				if (gameState->m_helicopter) {
+					delete gameState->m_helicopter;
+				}
+
+				gameState->m_helicopter = (Helicopter*) entity;
+				gameState->m_unk0x108.SetName("");
+				break;
+			case LegoGameState::e_dunecarbuild:
+				if (gameState->m_dunebuggy) {
+					delete gameState->m_dunebuggy;
+				}
+
+				gameState->m_dunebuggy = (DuneBuggy*) entity;
+				gameState->m_unk0x1bc.SetName("");
+				break;
+			case LegoGameState::e_jetskibuild:
+				if (gameState->m_jetski) {
+					delete gameState->m_jetski;
+				}
+
+				gameState->m_jetski = (Jetski*) entity;
+				gameState->m_unk0x164.SetName("");
+				break;
+			case LegoGameState::e_racecarbuild:
+				if (gameState->m_racecar) {
+					delete gameState->m_racecar;
+				}
+
+				gameState->m_racecar = (RaceCar*) entity;
+				gameState->m_unk0x210.SetName("");
+				break;
+			}
+
+			assert(destWorld);
+			m_buildState->m_animationState = 6;
+
+			if (m_unk0x258->m_numberOfParts != m_unk0x258->m_placedPartCount) {
+				FUN_100243a0();
+			}
+			else {
+				FUN_10025720(5);
+			}
+		}
+		else {
+			MxNotificationParam param;
+			NotificationManager()->Send(this, param);
+		}
+		break;
+	case 2:
+		MxU32 jukeboxScript;
+
+		switch (m_unk0x330) {
+		case 1:
+			jukeboxScript = JukeboxScript::c_HelicopterBuild_Music;
+			break;
+		case 2:
+			jukeboxScript = JukeboxScript::c_DuneCarBuild_Music;
+			break;
+		case 3:
+			jukeboxScript = JukeboxScript::c_JetskiBuild_Music;
+			break;
+		case 4:
+			jukeboxScript = JukeboxScript::c_RaceCarBuild_Music;
+		}
+
+		m_unk0x338 = SoundManager()->FUN_100aebd0(*g_jukeboxScript, jukeboxScript);
+
+		if (m_unk0x338) {
+			BackgroundAudioManager()->FUN_1007f610(m_unk0x338, 5, MxPresenter::e_repeating);
+			FUN_10024ef0();
+		}
+		else {
+			MxNotificationParam p;
+			// In BETA10, NotificationManager->Send() also takes __FILE__ and __LINE__ arguments
+			NotificationManager()->Send(this, p);
+		}
+		break;
+	}
+
+	return 1;
 }
 
 // FUNCTION: LEGO1 0x10024ef0
@@ -801,7 +905,7 @@ void LegoCarBuild::FUN_10024f50()
 // FUNCTION: BETA10 0x1006e002
 void LegoCarBuild::FUN_10024f70(MxBool p_enabled)
 {
-	if (m_unk0x258->FUN_10079cf0(m_unk0x110->GetName())) {
+	if (m_unk0x258->StringEndsOnY(m_unk0x110->GetName())) {
 		SetPresentersEnabled(p_enabled);
 	}
 }
@@ -832,11 +936,41 @@ void LegoCarBuild::TogglePresentersEnabled()
 	m_Black_Ctl->Enable(!m_Black_Ctl->IsEnabled());
 }
 
-// STUB: LEGO1 0x100250e0
-// STUB: BETA10 0x1006e124
+// FUNCTION: LEGO1 0x100250e0
+// FUNCTION: BETA10 0x1006e124
 void LegoCarBuild::FUN_100250e0(MxBool p_enabled)
 {
-	// TODO
+	if (m_unk0x258->StringEndsOnZero(m_unk0x110->GetName()) && m_Decals_Ctl) {
+		if (strnicmp(m_unk0x110->GetName(), "JSFRNT", strlen("JSFRNT")) == 0) {
+			m_Decal_Bitmap->Enable(p_enabled);
+			m_Decals_Ctl->Enable(p_enabled);
+			m_Decals_Ctl1->Enable(p_enabled);
+			m_Decals_Ctl2->Enable(p_enabled);
+			m_Decals_Ctl3->Enable(p_enabled);
+		}
+		else if (strnicmp(m_unk0x110->GetName(), "JSWNSH", strlen("JSWNSH")) == 0) {
+			m_Decal_Bitmap->Enable(p_enabled);
+			m_Decals_Ctl4->Enable(p_enabled);
+			m_Decals_Ctl5->Enable(p_enabled);
+			m_Decals_Ctl6->Enable(p_enabled);
+			m_Decals_Ctl7->Enable(p_enabled);
+		}
+		else if (strnicmp(m_unk0x110->GetName(), "RCBACK", strlen("RCBACK")) == 0) {
+			m_Decals_Ctl1->Enable(p_enabled);
+		}
+		else if (strnicmp(m_unk0x110->GetName(), "RCTAIL", strlen("RCTAIL")) == 0) {
+			m_Decals_Ctl2->Enable(p_enabled);
+		}
+		else if (m_Decals_Ctl1 && strnicmp(m_unk0x110->GetName(), "chljety", strlen("chljety")) == 0) {
+			m_Decals_Ctl1->Enable(p_enabled);
+		}
+		else if (m_Decals_Ctl2 && strnicmp(m_unk0x110->GetName(), "chrjety", strlen("chrjety")) == 0) {
+			m_Decals_Ctl2->Enable(p_enabled);
+		}
+		else if (m_Decals_Ctl) {
+			m_Decals_Ctl->Enable(p_enabled);
+		}
+	}
 }
 
 // STUB: LEGO1 0x10025450

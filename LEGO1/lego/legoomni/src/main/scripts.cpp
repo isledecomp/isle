@@ -27,6 +27,7 @@ MxAtomId* g_jetraceScript = NULL;
 MxAtomId* g_jetracerScript = NULL;
 
 // GLOBAL: LEGO1 0x100f453c
+// GLOBAL: BETA10 0x10211534
 MxAtomId* g_isleScript = NULL;
 
 // GLOBAL: LEGO1 0x100f4540

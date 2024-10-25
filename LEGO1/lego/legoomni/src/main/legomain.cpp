@@ -357,6 +357,7 @@ void LegoOmni::RemoveWorld(const MxAtomId& p_atom, MxLong p_objectId)
 }
 
 // FUNCTION: LEGO1 0x1005b0c0
+// FUNCTION: BETA10 0x1008e827
 LegoWorld* LegoOmni::FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
 {
 	if (m_worldList) {

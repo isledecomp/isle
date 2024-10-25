@@ -48,7 +48,9 @@ public:
 
 	// Known States:
 	// * 1 == enter(ing) build screen
+	// * 2 == ?
 	// * 3 == cutscene/dialogue
+	// * 4 == ?
 	// * 6 == exit(ing) build screen
 	MxU32 m_animationState; // 0x48
 	undefined m_unk0x4c;    // 0x4c
@@ -114,7 +116,7 @@ public:
 	undefined4 FUN_100246e0(MxLong p_x, MxLong p_y);
 	MxS32 FUN_10024850(MxLong p_x, MxLong p_y);
 	undefined4 FUN_10024890(LegoEventNotificationParam* p_param);
-	void FUN_10024c20(LegoEventNotificationParam* p_param);
+	undefined4 FUN_10024c20(LegoEventNotificationParam* p_param);
 	void FUN_10024ef0();
 	void FUN_10024f50();
 	void FUN_10024f70(MxBool p_enabled);
@@ -198,7 +200,7 @@ private:
 	// variable name verified by BETA10 0x1006cba7
 	LegoGameState::Area m_destLocation; // 0x334
 
-	undefined4 m_unk0x338;          // 0x338
+	MxPresenter* m_unk0x338;        // 0x338
 	MxControlPresenter* m_unk0x33c; // 0x33c
 	undefined4 m_unk0x340;          // 0x340
 	undefined4 m_unk0x344;          // 0x344
