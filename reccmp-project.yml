@@ -14,3 +14,8 @@ targets:
     source-root: CONFIG
     hash:
       sha256: 864766d024d78330fed5e1f6efb2faf815f1b1c3405713a9718059dc9a54e52c
+  BETA10:
+    filename: BETA10.DLL
+    source-root: LEGO1
+    hash:
+      sha256: d91435a40fa31f405fba33b03bd3bd40dcd4ca36ccf8ef6162c6c5ca0d7190e7
