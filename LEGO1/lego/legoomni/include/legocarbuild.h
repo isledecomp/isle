@@ -16,6 +16,14 @@ class MxActionNotificationParam;
 // SIZE 0x50
 class LegoVehicleBuildState : public LegoState {
 public:
+	enum AnimationState {
+		e_unknown0 = 0,
+		e_entering = 1,
+		e_unknown2 = 2,
+		e_cutscene = 3,
+		e_exiting = 6
+	};
+
 	LegoVehicleBuildState(const char* p_classType);
 
 	// FUNCTION: LEGO1 0x10025ff0
@@ -46,17 +54,11 @@ public:
 	// * LegoJetskiBuildState
 	MxString m_className; // 0x38
 
-	// Known States:
-	// * 1 == enter(ing) build screen
-	// * 2 == ?
-	// * 3 == cutscene/dialogue
-	// * 4 == ?
-	// * 6 == exit(ing) build screen
-	MxU32 m_animationState; // 0x48
-	undefined m_unk0x4c;    // 0x4c
-	MxBool m_unk0x4d;       // 0x4d
-	MxBool m_unk0x4e;       // 0x4e
-	MxU8 m_placedPartCount; // 0x4f
+	AnimationState m_animationState; // 0x48
+	undefined m_unk0x4c;             // 0x4c
+	MxBool m_unk0x4d;                // 0x4d
+	MxBool m_unk0x4e;                // 0x4e
+	MxU8 m_placedPartCount;          // 0x4f
 };
 
 typedef LegoVehicleBuildState LegoRaceCarBuildState;

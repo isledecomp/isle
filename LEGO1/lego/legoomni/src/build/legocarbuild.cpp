@@ -148,7 +148,7 @@ MxResult LegoCarBuild::Create(MxDSAction& p_dsAction)
 
 		GameState()->StopArea(LegoGameState::e_previousArea);
 
-		m_buildState->m_animationState = 1;
+		m_buildState->m_animationState = LegoVehicleBuildState::e_entering;
 		m_unk0x100 = 0;
 
 		BackgroundAudioManager()->Stop();
@@ -555,7 +555,7 @@ MxLong LegoCarBuild::Notify(MxParam& p_param)
 			assert(m_buildState);
 			if (((m_buildState->m_animationState != 4) && (m_buildState->m_animationState != 6)) &&
 				(m_buildState->m_animationState != 2)) {
-				m_buildState->m_animationState = 0;
+				m_buildState->m_animationState = LegoVehicleBuildState::e_unknown0;
 				result = FUN_100244e0(
 					((LegoEventNotificationParam&) p_param).GetX(),
 					((LegoEventNotificationParam&) p_param).GetY()
@@ -625,7 +625,7 @@ void LegoCarBuild::ReadyWorld()
 
 	if (BackgroundAudioManager()->GetEnabled()) {
 		InvokeAction(Extra::ActionType::e_start, *g_jukeboxScript, FUN_10025ee0(m_unk0x330), NULL);
-		m_buildState->m_animationState = 2;
+		m_buildState->m_animationState = LegoVehicleBuildState::e_unknown2;
 		NotificationManager()->Send(this, MxNotificationParam());
 	}
 	else {
@@ -670,7 +670,7 @@ undefined4 LegoCarBuild::FUN_10024480(MxActionNotificationParam* p_param)
 	switch (m_buildState->m_animationState) {
 	case 3:
 		BackgroundAudioManager()->RaiseVolume();
-		m_buildState->m_animationState = 0;
+		m_buildState->m_animationState = LegoVehicleBuildState::e_unknown0;
 		result = 1;
 		break;
 	case 6:
@@ -835,7 +835,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 			}
 
 			assert(destWorld);
-			m_buildState->m_animationState = 6;
+			m_buildState->m_animationState = LegoVehicleBuildState::e_exiting;
 
 			if (m_unk0x258->m_numberOfParts != m_unk0x258->m_placedPartCount) {
 				FUN_100243a0();
@@ -887,7 +887,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 void LegoCarBuild::FUN_10024ef0()
 {
 	FUN_1003eda0();
-	m_buildState->m_animationState = 3;
+	m_buildState->m_animationState = LegoVehicleBuildState::e_cutscene;
 	FUN_10025720(FUN_10025d70());
 	m_buildState->m_unk0x4c += 1;
 	FUN_10015820(FALSE, 7);
@@ -1061,7 +1061,7 @@ MxBool LegoCarBuild::Escape()
 	InvokeAction(Extra::ActionType::e_stop, *g_jukeboxScript, targetEntityId, NULL);
 	DeleteObjects(&m_atomId, 500, 999);
 
-	m_buildState->m_animationState = 0;
+	m_buildState->m_animationState = LegoVehicleBuildState::e_unknown0;
 	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;
 }
