@@ -35,13 +35,12 @@ public:
 	void SetUnknown0x160(MxBool p_unk0x160) { m_unk0x160 = p_unk0x160; }
 
 	void ActivateSceneActions();
+	void EnableScenePresentation(MxBool p_enable);
 
 	// SYNTHETIC: LEGO1 0x1000ff60
 	// SkateBoard::`scalar deleting destructor'
 
 private:
-	void EnableScenePresentation(MxBool p_enable);
-
 	MxBool m_unk0x160;      // 0x160
 	Act1State* m_act1state; // 0x164
 };

@@ -58,7 +58,7 @@ void SkateBoard::Exit()
 {
 	if (m_act1state->m_unk0x018 == 3) {
 		Pizza* pizza = (Pizza*) CurrentWorld()->Find(*g_isleScript, IsleScript::c_Pizza_Actor);
-		pizza->FUN_10038380();
+		pizza->StopActions();
 		pizza->FUN_100382b0();
 		m_unk0x160 = FALSE;
 	}
