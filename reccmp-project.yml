@@ -1,0 +1,21 @@
+targets:
+  ISLE:
+    filename: ISLE.EXE
+    source-root: ISLE
+    hash:
+      sha256: 5cf57c284973fce9d14f5677a2e4435fd989c5e938970764d00c8932ed5128ca
+  LEGO1:
+    filename: LEGO1.DLL
+    source-root: LEGO1
+    hash:
+      sha256: 14645225bbe81212e9bc1919cd8a692b81b8622abb6561280d99b0fc4151ce17
+  CONFIG:
+    filename: CONFIG.EXE
+    source-root: CONFIG
+    hash:
+      sha256: 864766d024d78330fed5e1f6efb2faf815f1b1c3405713a9718059dc9a54e52c
+  BETA10:
+    filename: BETA10.DLL
+    source-root: LEGO1
+    hash:
+      sha256: d91435a40fa31f405fba33b03bd3bd40dcd4ca36ccf8ef6162c6c5ca0d7190e7

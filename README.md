@@ -62,3 +62,4 @@ Right click on `LEGO1.DLL`, select `Properties`, and switch to the `Details` tab
 
 * ISLE.EXE `md5: f6da12249e03eed1c74810cd23beb9f5`
 * LEGO1.DLL `md5: 4e2f6d969ea2ef8655ba3fc221a0c8fe`
+* CONFIG.DLL `md5: 92d958a64a273662c591c88b09100f4a`

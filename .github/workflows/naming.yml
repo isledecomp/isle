@@ -15,6 +15,10 @@ jobs:
       with:
         version: "16"
 
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
     - name: Install python libraries
       run: |
         pip install -r tools/requirements.txt
