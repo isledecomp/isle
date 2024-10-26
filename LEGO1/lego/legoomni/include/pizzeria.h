@@ -40,6 +40,7 @@ public:
 	// SYNTHETIC: LEGO1 0x10017ce0
 	// PizzeriaState::`scalar deleting destructor'
 
+	MxS16 FUN_10017d50();
 	MxU32 FUN_10017d70();
 
 	// TODO: Most likely getters/setters are not used according to BETA.

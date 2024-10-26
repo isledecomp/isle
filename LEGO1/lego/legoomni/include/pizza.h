@@ -7,6 +7,7 @@
 #include "legostate.h"
 
 class Act1State;
+class PizzeriaState;
 class SkateBoard;
 
 // VTABLE: LEGO1 0x100d7408
@@ -69,11 +70,12 @@ public:
 	// PizzaMissionState::`scalar deleting destructor'
 
 	Mission* GetState(MxU8 p_id);
+	MxS16 FUN_10039540();
 
-	undefined4 m_unk0x08; // 0x08
-	undefined4 m_unk0x0c; // 0x0c
-	Mission m_state[5];   // 0x10
-	undefined4 m_unk0xb0; // 0xb0
+	PizzeriaState* m_pizzeriaState; // 0x08
+	undefined4 m_unk0x0c;           // 0x0c
+	Mission m_state[5];             // 0x10
+	undefined4 m_unk0xb0;           // 0xb0
 };
 
 // VTABLE: LEGO1 0x100d7380
