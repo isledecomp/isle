@@ -2,6 +2,7 @@
 
 #include "isle.h"
 #include "isle_actions.h"
+#include "jukebox_actions.h"
 #include "legoanimationmanager.h"
 #include "legogamestate.h"
 #include "legoutils.h"
@@ -10,6 +11,8 @@
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxticklemanager.h"
+#include "mxtimer.h"
+#include "pizzeria.h"
 #include "skateboard.h"
 
 DECOMP_SIZE_ASSERT(Pizza, 0x9c)
@@ -121,10 +124,42 @@ void Pizza::StopActions()
 	}
 }
 
-// STUB: LEGO1 0x100383f0
+// FUNCTION: LEGO1 0x100383f0
 MxLong Pizza::HandleClick()
 {
-	// TODO
+	if (m_state->m_unk0x0c == 1) {
+		m_state->m_unk0x0c = 2;
+		m_mission->m_startTime = Timer()->GetTime();
+		TickleManager()->RegisterClient(this, 200);
+		AnimationManager()->FUN_10061010(FALSE);
+	}
+
+	if (m_state->m_unk0x0c == 2) {
+		m_act1state->m_unk0x018 = 3;
+
+		if (m_skateBoard == NULL) {
+			m_skateBoard = (SkateBoard*) m_world->Find(m_atomId, IsleScript::c_SkateBoard_Actor);
+		}
+
+		IsleScript::Script action;
+
+		switch (m_state->FUN_10039540()) {
+		case 0:
+			action = m_mission->m_actions[m_mission->m_numActions + 3];
+			break;
+		case 1:
+			action = m_mission->m_actions[m_mission->m_numActions + 4];
+			break;
+		default:
+			action = m_mission->m_actions[m_mission->m_numActions + 5];
+		}
+
+		FUN_10038fe0(action, TRUE);
+		m_state->m_unk0x0c = 3;
+		PlayMusic(JukeboxScript::c_PizzaMission_Music);
+		return 1;
+	}
+
 	return 0;
 }
 
@@ -190,4 +225,10 @@ PizzaMissionState::Mission* PizzaMissionState::GetState(MxU8 p_id)
 	}
 
 	return NULL;
+}
+
+// FUNCTION: LEGO1 0x10039540
+MxS16 PizzaMissionState::FUN_10039540()
+{
+	return m_pizzeriaState->FUN_10017d50();
 }
