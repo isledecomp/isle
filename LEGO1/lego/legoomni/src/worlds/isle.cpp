@@ -1190,7 +1190,7 @@ MxBool Isle::Escape()
 	switch (m_act1state->m_unk0x018) {
 	case 3:
 		if (UserActor() != NULL) {
-			m_pizza->FUN_10038380();
+			m_pizza->StopActions();
 			m_pizza->FUN_100382b0();
 		}
 		break;
@@ -1257,7 +1257,7 @@ void Isle::FUN_10033350()
 
 	if (m_act1state->m_unk0x018 == 3) {
 		if (UserActor() != NULL) {
-			m_pizza->FUN_10038380();
+			m_pizza->StopActions();
 			m_pizza->FUN_100382b0();
 		}
 	}
