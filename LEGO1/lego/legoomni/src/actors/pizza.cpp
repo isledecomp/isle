@@ -24,7 +24,7 @@ DECOMP_SIZE_ASSERT(PizzaMissionState::Mission, 0x20)
 extern MxU32 g_isleFlags;
 
 // GLOBAL: LEGO1 0x100f3a80
-IsleScript::Script pepperActions[] = {
+IsleScript::Script g_pepperActions[] = {
 	IsleScript::c_pnsx48pr_RunAnim,
 	IsleScript::c_pnsx69pr_RunAnim,
 	IsleScript::c_pns125ni_RunAnim,
@@ -32,10 +32,10 @@ IsleScript::Script pepperActions[] = {
 };
 
 // GLOBAL: LEGO1 0x100f3ab8
-MxLong pepperFinishTimes[] = {100000, 200000, 300000, 350000};
+MxLong g_pepperFinishTimes[] = {100000, 200000, 300000, 350000};
 
 // GLOBAL: LEGO1 0x100f3ac8
-IsleScript::Script lauraActions[] = {
+IsleScript::Script g_lauraActions[] = {
 	IsleScript::c_pns096pr_RunAnim,
 	IsleScript::c_pns097pr_RunAnim,
 	IsleScript::c_pns098pr_RunAnim,
@@ -43,10 +43,10 @@ IsleScript::Script lauraActions[] = {
 };
 
 // GLOBAL: LEGO1 0x100f3b00
-MxLong lauraFinishTimes[] = {100000, 200000, 300000, 350000};
+MxLong g_lauraFinishTimes[] = {100000, 200000, 300000, 350000};
 
 // GLOBAL: LEGO1 0x100f3b10
-IsleScript::Script nickActions[] = {
+IsleScript::Script g_nickActions[] = {
 	IsleScript::c_pns042bm_RunAnim,
 	IsleScript::c_pns043en_RunAnim,
 	IsleScript::c_pns045p1_RunAnim,
@@ -54,10 +54,10 @@ IsleScript::Script nickActions[] = {
 };
 
 // GLOBAL: LEGO1 0x100f3b48
-MxLong nickFinishTimes[] = {100000, 200000, 300000, 350000};
+MxLong g_nickFinishTimes[] = {100000, 200000, 300000, 350000};
 
 // GLOBAL: LEGO1 0x100f3b58
-IsleScript::Script mamaActions[] = {
+IsleScript::Script g_mamaActions[] = {
 	IsleScript::c_pns022pr_RunAnim,
 	IsleScript::c_pns021dl_RunAnim,
 	IsleScript::c_pns018rd_RunAnim,
@@ -65,10 +65,10 @@ IsleScript::Script mamaActions[] = {
 };
 
 // GLOBAL: LEGO1 0x100f3b90
-MxLong mamaFinishTimes[] = {100000, 200000, 300000, 350000};
+MxLong g_mamaFinishTimes[] = {100000, 200000, 300000, 350000};
 
 // GLOBAL: LEGO1 0x100f3ba0
-IsleScript::Script papaActions[] = {
+IsleScript::Script g_papaActions[] = {
 	IsleScript::c_pns065rd_RunAnim,
 	IsleScript::c_pns066db_RunAnim,
 	IsleScript::c_pns067gd_RunAnim,
@@ -76,7 +76,7 @@ IsleScript::Script papaActions[] = {
 };
 
 // GLOBAL: LEGO1 0x100f3bd8
-MxLong papaFinishTimes[] = {100000, 200000, 300000, 350000};
+MxLong g_papaFinishTimes[] = {100000, 200000, 300000, 350000};
 
 // FUNCTION: LEGO1 0x10037ef0
 Pizza::Pizza()
@@ -253,11 +253,11 @@ void Pizza::FUN_10038fe0(MxU32 p_objectId, MxBool)
 PizzaMissionState::PizzaMissionState()
 {
 	m_unk0x0c = 0;
-	m_missions[0] = Mission(LegoActor::c_pepper, 2, pepperFinishTimes, pepperActions, sizeOfArray(pepperActions));
-	m_missions[1] = Mission(LegoActor::c_mama, 2, mamaFinishTimes, mamaActions, sizeOfArray(mamaActions));
-	m_missions[2] = Mission(LegoActor::c_papa, 2, papaFinishTimes, papaActions, sizeOfArray(papaActions));
-	m_missions[3] = Mission(LegoActor::c_nick, 2, nickFinishTimes, nickActions, sizeOfArray(nickActions));
-	m_missions[4] = Mission(LegoActor::c_laura, 2, lauraFinishTimes, lauraActions, sizeOfArray(lauraActions));
+	m_missions[0] = Mission(LegoActor::c_pepper, 2, g_pepperFinishTimes, g_pepperActions, sizeOfArray(g_pepperActions));
+	m_missions[1] = Mission(LegoActor::c_mama, 2, g_mamaFinishTimes, g_mamaActions, sizeOfArray(g_mamaActions));
+	m_missions[2] = Mission(LegoActor::c_papa, 2, g_papaFinishTimes, g_papaActions, sizeOfArray(g_papaActions));
+	m_missions[3] = Mission(LegoActor::c_nick, 2, g_nickFinishTimes, g_nickActions, sizeOfArray(g_nickActions));
+	m_missions[4] = Mission(LegoActor::c_laura, 2, g_lauraFinishTimes, g_lauraActions, sizeOfArray(g_lauraActions));
 	m_pizzeriaState = (PizzeriaState*) GameState()->GetState("PizzeriaState");
 	m_unk0xb0 = -1;
 }
