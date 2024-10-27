@@ -5,6 +5,7 @@
 #include "jukebox_actions.h"
 #include "legoanimationmanager.h"
 #include "legogamestate.h"
+#include "legopathstruct.h"
 #include "legoutils.h"
 #include "legoworld.h"
 #include "misc.h"
@@ -22,6 +23,61 @@ DECOMP_SIZE_ASSERT(PizzaMissionState::Mission, 0x20)
 // Flags used in isle.cpp
 extern MxU32 g_isleFlags;
 
+// GLOBAL: LEGO1 0x100f3a80
+IsleScript::Script g_pepperActions[] = {
+	IsleScript::c_pnsx48pr_RunAnim,
+	IsleScript::c_pnsx69pr_RunAnim,
+	IsleScript::c_pns125ni_RunAnim,
+	IsleScript::c_pns122pr_RunAnim
+};
+
+// GLOBAL: LEGO1 0x100f3ab8
+MxLong g_pepperFinishTimes[] = {100000, 200000, 300000, 350000};
+
+// GLOBAL: LEGO1 0x100f3ac8
+IsleScript::Script g_lauraActions[] = {
+	IsleScript::c_pns096pr_RunAnim,
+	IsleScript::c_pns097pr_RunAnim,
+	IsleScript::c_pns098pr_RunAnim,
+	IsleScript::c_pns099pr_RunAnim
+};
+
+// GLOBAL: LEGO1 0x100f3b00
+MxLong g_lauraFinishTimes[] = {100000, 200000, 300000, 350000};
+
+// GLOBAL: LEGO1 0x100f3b10
+IsleScript::Script g_nickActions[] = {
+	IsleScript::c_pns042bm_RunAnim,
+	IsleScript::c_pns043en_RunAnim,
+	IsleScript::c_pns045p1_RunAnim,
+	IsleScript::c_pns048pr_RunAnim
+};
+
+// GLOBAL: LEGO1 0x100f3b48
+MxLong g_nickFinishTimes[] = {100000, 200000, 300000, 350000};
+
+// GLOBAL: LEGO1 0x100f3b58
+IsleScript::Script g_mamaActions[] = {
+	IsleScript::c_pns022pr_RunAnim,
+	IsleScript::c_pns021dl_RunAnim,
+	IsleScript::c_pns018rd_RunAnim,
+	IsleScript::c_pns019pr_RunAnim
+};
+
+// GLOBAL: LEGO1 0x100f3b90
+MxLong g_mamaFinishTimes[] = {100000, 200000, 300000, 350000};
+
+// GLOBAL: LEGO1 0x100f3ba0
+IsleScript::Script g_papaActions[] = {
+	IsleScript::c_pns065rd_RunAnim,
+	IsleScript::c_pns066db_RunAnim,
+	IsleScript::c_pns067gd_RunAnim,
+	IsleScript::c_pns069pr_RunAnim
+};
+
+// GLOBAL: LEGO1 0x100f3bd8
+MxLong g_papaFinishTimes[] = {100000, 200000, 300000, 350000};
+
 // FUNCTION: LEGO1 0x10037ef0
 Pizza::Pizza()
 {
@@ -30,7 +86,7 @@ Pizza::Pizza()
 	m_skateBoard = NULL;
 	m_act1state = NULL;
 	m_unk0x8c = -1;
-	m_unk0x98 = 0;
+	m_unk0x98 = FALSE;
 	m_unk0x90 = INT_MIN;
 }
 
@@ -73,7 +129,7 @@ void Pizza::CreateState()
 void Pizza::FUN_10038220(MxU32 p_objectId)
 {
 	AnimationManager()->FUN_10064740(NULL);
-	m_mission = m_state->GetState(GameState()->GetActorId());
+	m_mission = m_state->GetMission(GameState()->GetActorId());
 	m_state->m_unk0x0c = 1;
 	m_act1state->m_unk0x018 = 3;
 	m_mission->m_startTime = INT_MIN;
@@ -100,7 +156,7 @@ void Pizza::FUN_100382b0()
 		AnimationManager()->FUN_1005f6d0(TRUE);
 		m_mission->m_startTime = INT_MIN;
 		m_mission = NULL;
-		m_unk0x98 = 0;
+		m_unk0x98 = FALSE;
 		m_unk0x8c = -1;
 		BackgroundAudioManager()->RaiseVolume();
 		TickleManager()->UnregisterClient(this);
@@ -125,6 +181,7 @@ void Pizza::StopActions()
 }
 
 // FUNCTION: LEGO1 0x100383f0
+// FUNCTION: BETA10 0x100edd10
 MxLong Pizza::HandleClick()
 {
 	if (m_state->m_unk0x0c == 1) {
@@ -164,7 +221,8 @@ MxLong Pizza::HandleClick()
 }
 
 // STUB: LEGO1 0x100384f0
-MxLong Pizza::HandlePathStruct(LegoPathStructNotificationParam&)
+// FUNCTION: BETA10 0x100ede53
+MxLong Pizza::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 {
 	// TODO
 	return 0;
@@ -190,10 +248,18 @@ void Pizza::FUN_10038fe0(MxU32 p_objectId, MxBool)
 	// TODO
 }
 
-// STUB: LEGO1 0x10039030
+// FUNCTION: LEGO1 0x10039030
+// FUNCTION: BETA10 0x100eea25
 PizzaMissionState::PizzaMissionState()
 {
-	// TODO
+	m_unk0x0c = 0;
+	m_missions[0] = Mission(LegoActor::c_pepper, 2, g_pepperFinishTimes, g_pepperActions, sizeOfArray(g_pepperActions));
+	m_missions[1] = Mission(LegoActor::c_mama, 2, g_mamaFinishTimes, g_mamaActions, sizeOfArray(g_mamaActions));
+	m_missions[2] = Mission(LegoActor::c_papa, 2, g_papaFinishTimes, g_papaActions, sizeOfArray(g_papaActions));
+	m_missions[3] = Mission(LegoActor::c_nick, 2, g_nickFinishTimes, g_nickActions, sizeOfArray(g_nickActions));
+	m_missions[4] = Mission(LegoActor::c_laura, 2, g_lauraFinishTimes, g_lauraActions, sizeOfArray(g_lauraActions));
+	m_pizzeriaState = (PizzeriaState*) GameState()->GetState("PizzeriaState");
+	m_unk0xb0 = -1;
 }
 
 // FUNCTION: LEGO1 0x100393c0
@@ -203,12 +269,12 @@ MxResult PizzaMissionState::Serialize(LegoFile* p_file)
 
 	if (p_file->IsReadMode()) {
 		for (MxS16 i = 0; i < 5; i++) {
-			m_state[i].ReadFromFile(p_file);
+			m_missions[i].ReadFromFile(p_file);
 		}
 	}
 	else if (p_file->IsWriteMode()) {
 		for (MxS16 i = 0; i < 5; i++) {
-			m_state[i].WriteToFile(p_file);
+			m_missions[i].WriteToFile(p_file);
 		}
 	}
 
@@ -216,11 +282,11 @@ MxResult PizzaMissionState::Serialize(LegoFile* p_file)
 }
 
 // FUNCTION: LEGO1 0x10039510
-PizzaMissionState::Mission* PizzaMissionState::GetState(MxU8 p_id)
+PizzaMissionState::Mission* PizzaMissionState::GetMission(MxU8 p_actorId)
 {
 	for (MxS16 i = 0; i < 5; i++) {
-		if (m_state[i].m_id == p_id) {
-			return m_state + i;
+		if (m_missions[i].m_actorId == p_actorId) {
+			return m_missions + i;
 		}
 	}
 
