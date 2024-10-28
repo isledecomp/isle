@@ -37,8 +37,8 @@ public:
 			m_finishTimes = p_finishTimes;
 			m_startTime = INT_MIN;
 			m_unk0x14 = 1;
-			m_unk0x16 = 0;
-			m_score = 0;
+			m_score = LegoState::e_grey;
+			m_hiScore = LegoState::e_grey;
 			m_actions = p_actions;
 		}
 
@@ -52,19 +52,43 @@ public:
 			m_finishTimes = p_mission.m_finishTimes;
 			m_startTime = p_mission.m_startTime;
 			m_unk0x14 = p_mission.m_unk0x14;
-			m_unk0x16 = p_mission.m_unk0x16;
 			m_score = p_mission.m_score;
+			m_hiScore = p_mission.m_hiScore;
 			m_actions = p_mission.m_actions;
 			m_numActions = p_mission.m_numActions;
 			return *this;
+		}
+
+		// FUNCTION: BETA10 0x100ef610
+		IsleScript::Script GetRedFinishAction() { return m_actions[m_numActions + 6]; }
+
+		// FUNCTION: BETA10 0x100ef640
+		IsleScript::Script GetBlueFinishAction() { return m_actions[m_numActions + 7]; }
+
+		// FUNCTION: BETA10 0x100ef670
+		IsleScript::Script GetYellowFinishAction() { return m_actions[m_numActions + 8]; }
+
+		// FUNCTION: BETA10 0x100ef6a0
+		MxLong GetRedFinishTime() { return m_finishTimes[0]; }
+
+		// FUNCTION: BETA10 0x100ef6d0
+		MxLong GetBlueFinishTime() { return m_finishTimes[1]; }
+
+		// FUNCTION: BETA10 0x100ef700
+		void UpdateScore(ScoreColor p_score)
+		{
+			m_score = p_score;
+			if (m_hiScore < p_score) {
+				m_hiScore = p_score;
+			}
 		}
 
 		MxResult WriteToFile(LegoFile* p_file)
 		{
 			Write(p_file, m_unk0x06);
 			Write(p_file, m_unk0x14);
-			Write(p_file, m_unk0x16);
 			Write(p_file, m_score);
+			Write(p_file, m_hiScore);
 			return SUCCESS;
 		}
 
@@ -72,8 +96,8 @@ public:
 		{
 			Read(p_file, &m_unk0x06);
 			Read(p_file, &m_unk0x14);
-			Read(p_file, &m_unk0x16);
 			Read(p_file, &m_score);
+			Read(p_file, &m_hiScore);
 			return SUCCESS;
 		}
 
@@ -85,8 +109,8 @@ public:
 		MxLong* m_finishTimes;         // 0x0c
 		MxLong m_startTime;            // 0x10
 		MxS16 m_unk0x14;               // 0x14
-		MxS16 m_unk0x16;               // 0x16
-		MxS16 m_score;                 // 0x18
+		MxS16 m_score;                 // 0x16
+		MxS16 m_hiScore;               // 0x18
 		IsleScript::Script* m_actions; // 0x1c
 	};
 
@@ -110,7 +134,7 @@ public:
 	// FUNCTION: BETA10 0x100ef470
 	void SetUnknown0xb0(undefined4 p_unk0xb0) { m_unk0xb0 = p_unk0xb0; }
 
-	MxS16 GetHighScore(MxU8 p_actorId) { return GetMission(p_actorId)->m_score; }
+	MxS16 GetHighScore(MxU8 p_actorId) { return GetMission(p_actorId)->m_hiScore; }
 
 	// SYNTHETIC: LEGO1 0x10039350
 	// PizzaMissionState::`scalar deleting destructor'
@@ -155,7 +179,7 @@ public:
 	void FUN_10038220(MxU32 p_objectId);
 	void FUN_100382b0();
 	void StopActions();
-	void FUN_10038fe0(MxU32 p_objectId, MxBool);
+	void PlayAction(MxU32 p_objectId, MxBool);
 
 	void SetSkateboard(SkateBoard* p_skateBoard) { m_skateBoard = p_skateBoard; }
 
@@ -168,7 +192,7 @@ private:
 	SkateBoard* m_skateBoard;              // 0x84
 	Act1State* m_act1state;                // 0x88
 	undefined4 m_unk0x8c;                  // 0x8c
-	undefined4 m_unk0x90;                  // 0x90
+	MxLong m_unk0x90;                      // 0x90
 	undefined4 m_unk0x94;                  // 0x94
 	MxBool m_unk0x98;                      // 0x98
 };

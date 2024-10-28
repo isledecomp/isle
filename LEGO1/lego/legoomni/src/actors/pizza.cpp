@@ -28,7 +28,16 @@ IsleScript::Script g_pepperActions[] = {
 	IsleScript::c_pnsx48pr_RunAnim,
 	IsleScript::c_pnsx69pr_RunAnim,
 	IsleScript::c_pns125ni_RunAnim,
-	IsleScript::c_pns122pr_RunAnim
+	IsleScript::c_pns122pr_RunAnim,
+	IsleScript::c_noneIsle,
+	IsleScript::c_noneIsle,
+	IsleScript::c_ppz120pa_RunAnim,
+	IsleScript::c_ppz117ma_RunAnim,
+	IsleScript::c_ppz118ma_RunAnim,
+	IsleScript::c_ppz119ma_RunAnim,
+	IsleScript::c_nja001pr_RunAnim,
+	IsleScript::c_nja001pr_RunAnim,
+	IsleScript::c_nja001pr_RunAnim
 };
 
 // GLOBAL: LEGO1 0x100f3ab8
@@ -39,7 +48,16 @@ IsleScript::Script g_lauraActions[] = {
 	IsleScript::c_pns096pr_RunAnim,
 	IsleScript::c_pns097pr_RunAnim,
 	IsleScript::c_pns098pr_RunAnim,
-	IsleScript::c_pns099pr_RunAnim
+	IsleScript::c_pns099pr_RunAnim,
+	IsleScript::c_noneIsle,
+	IsleScript::c_ppz086bs_RunAnim,
+	IsleScript::c_ppz090ma_RunAnim,
+	IsleScript::c_ppz088ma_RunAnim,
+	IsleScript::c_ppz089ma_RunAnim,
+	IsleScript::c_ppz095pe_RunAnim,
+	IsleScript::c_pho104re_RunAnim,
+	IsleScript::c_pho105re_RunAnim,
+	IsleScript::c_pho106re_RunAnim
 };
 
 // GLOBAL: LEGO1 0x100f3b00
@@ -50,7 +68,16 @@ IsleScript::Script g_nickActions[] = {
 	IsleScript::c_pns042bm_RunAnim,
 	IsleScript::c_pns043en_RunAnim,
 	IsleScript::c_pns045p1_RunAnim,
-	IsleScript::c_pns048pr_RunAnim
+	IsleScript::c_pns048pr_RunAnim,
+	IsleScript::c_ppz029rd_RunAnim,
+	IsleScript::c_noneIsle,
+	IsleScript::c_ppz038ma_RunAnim,
+	IsleScript::c_ppz037ma_RunAnim,
+	IsleScript::c_ppz037ma_RunAnim,
+	IsleScript::c_ppz037ma_RunAnim,
+	IsleScript::c_pgs050nu_RunAnim,
+	IsleScript::c_pgs051nu_RunAnim,
+	IsleScript::c_pgs052nu_RunAnim
 };
 
 // GLOBAL: LEGO1 0x100f3b48
@@ -61,7 +88,16 @@ IsleScript::Script g_mamaActions[] = {
 	IsleScript::c_pns022pr_RunAnim,
 	IsleScript::c_pns021dl_RunAnim,
 	IsleScript::c_pns018rd_RunAnim,
-	IsleScript::c_pns019pr_RunAnim
+	IsleScript::c_pns019pr_RunAnim,
+	IsleScript::c_ppz008rd_RunAnim,
+	IsleScript::c_noneIsle,
+	IsleScript::c_ppz013pa_RunAnim,
+	IsleScript::c_ppz010pa_RunAnim,
+	IsleScript::c_ppz011pa_RunAnim,
+	IsleScript::c_ppz016pe_RunAnim,
+	IsleScript::c_pps025ni_RunAnim,
+	IsleScript::c_pps026ni_RunAnim,
+	IsleScript::c_pps027ni_RunAnim
 };
 
 // GLOBAL: LEGO1 0x100f3b90
@@ -72,7 +108,16 @@ IsleScript::Script g_papaActions[] = {
 	IsleScript::c_pns065rd_RunAnim,
 	IsleScript::c_pns066db_RunAnim,
 	IsleScript::c_pns067gd_RunAnim,
-	IsleScript::c_pns069pr_RunAnim
+	IsleScript::c_pns069pr_RunAnim,
+	IsleScript::c_noneIsle,
+	IsleScript::c_noneIsle,
+	IsleScript::c_ppz061ma_RunAnim,
+	IsleScript::c_ppz059ma_RunAnim,
+	IsleScript::c_ppz060ma_RunAnim,
+	IsleScript::c_ppz064ma_RunAnim,
+	IsleScript::c_prt072sl_RunAnim,
+	IsleScript::c_prt073sl_RunAnim,
+	IsleScript::c_prt074sl_RunAnim
 };
 
 // GLOBAL: LEGO1 0x100f3bd8
@@ -136,7 +181,7 @@ void Pizza::FUN_10038220(MxU32 p_objectId)
 	g_isleFlags &= ~Isle::c_playMusic;
 	AnimationManager()->EnableCamAnims(FALSE);
 	AnimationManager()->FUN_1005f6d0(FALSE);
-	FUN_10038fe0(p_objectId, FALSE);
+	PlayAction(p_objectId, FALSE);
 	m_unk0x8c = -1;
 }
 
@@ -211,7 +256,7 @@ MxLong Pizza::HandleClick()
 			action = m_mission->m_actions[m_mission->m_numActions + 5];
 		}
 
-		FUN_10038fe0(action, TRUE);
+		PlayAction(action, TRUE);
 		m_state->m_unk0x0c = 3;
 		PlayMusic(JukeboxScript::c_PizzaMission_Music);
 		return 1;
@@ -220,11 +265,95 @@ MxLong Pizza::HandleClick()
 	return 0;
 }
 
-// STUB: LEGO1 0x100384f0
+// FUNCTION: LEGO1 0x100384f0
 // FUNCTION: BETA10 0x100ede53
 MxLong Pizza::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 {
-	// TODO
+	if (m_state->m_unk0x0c == 4) {
+		MxLong time = Timer()->GetTime() - m_mission->m_startTime;
+
+		if (p_param.GetTrigger() == LegoPathStruct::c_s && p_param.GetData() == 0x12e &&
+			GameState()->GetActorId() == LegoActor::c_pepper) {
+			m_state->m_unk0x0c = 5;
+			m_state->SetUnknown0xb0(0x12e);
+
+			if (time < m_mission->GetRedFinishTime()) {
+				m_mission->UpdateScore(LegoState::e_red);
+			}
+			else if (time < m_mission->GetBlueFinishTime()) {
+				m_mission->UpdateScore(LegoState::e_blue);
+			}
+			else {
+				m_mission->UpdateScore(LegoState::e_yellow);
+			}
+		}
+		else if ((p_param.GetTrigger() == LegoPathStruct::c_camAnim && (
+			((p_param.GetData() == 0x24 || p_param.GetData() == 0x22) && GameState()->GetActorId() == LegoActor::c_mama) ||
+			(p_param.GetData() == 0x33 && GameState()->GetActorId() == LegoActor::c_papa) ||
+			((p_param.GetData() == 0x08 || p_param.GetData() == 0x09) && GameState()->GetActorId() == LegoActor::c_nick) ||
+			(p_param.GetData() == 0x0b && GameState()->GetActorId() == LegoActor::c_laura)
+		)) || (p_param.GetTrigger() == LegoPathStruct::c_w && p_param.GetData() == 0x169 && GameState()->GetActorId() == LegoActor::c_nick)) {
+			IsleScript::Script action;
+
+			if (time < m_mission->GetRedFinishTime()) {
+				action = m_mission->GetRedFinishAction();
+				m_mission->UpdateScore(LegoState::e_red);
+			}
+			else if (time < m_mission->GetBlueFinishTime()) {
+				action = m_mission->GetBlueFinishAction();
+				m_mission->UpdateScore(LegoState::e_blue);
+			}
+			else {
+				action = m_mission->GetYellowFinishAction();
+				m_mission->UpdateScore(LegoState::e_yellow);
+			}
+
+			StopActions();
+
+			switch (action) {
+			case IsleScript::c_pps025ni_RunAnim:
+			case IsleScript::c_pps026ni_RunAnim:
+			case IsleScript::c_pps027ni_RunAnim:
+				m_unk0x90 = Timer()->GetTime();
+				m_unk0x94 = 3800;
+				break;
+			case IsleScript::c_pgs050nu_RunAnim:
+			case IsleScript::c_pgs051nu_RunAnim:
+			case IsleScript::c_pgs052nu_RunAnim:
+				m_unk0x90 = Timer()->GetTime();
+				m_unk0x94 = 6400;
+				break;
+			case IsleScript::c_prt072sl_RunAnim:
+			case IsleScript::c_prt073sl_RunAnim:
+			case IsleScript::c_prt074sl_RunAnim:
+				m_unk0x90 = Timer()->GetTime();
+				m_unk0x94 = 7000;
+				break;
+			case IsleScript::c_pho104re_RunAnim:
+			case IsleScript::c_pho105re_RunAnim:
+			case IsleScript::c_pho106re_RunAnim:
+				m_unk0x90 = Timer()->GetTime();
+				m_unk0x94 = 6500;
+				break;
+			}
+
+			m_state->m_unk0x0c = 5;
+			PlayAction(action, TRUE);
+		}
+		else if (p_param.GetTrigger() == LegoPathStruct::c_w) {
+			if (p_param.GetData() == 0x15e && GameState()->GetActorId() == LegoActor::c_pepper) {
+				if (!m_unk0x98) {
+					m_unk0x98 = TRUE;
+					InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_pns050p1_RunAnim, NULL);
+				}
+			}
+			else if (p_param.GetData() == 0x15f && GameState()->GetActorId() == LegoActor::c_papa && !m_unk0x98) {
+				m_unk0x98 = TRUE;
+				InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_wns050p1_RunAnim, NULL);
+			}
+		}
+	}
+
 	return 0;
 }
 
@@ -243,7 +372,7 @@ MxLong Pizza::HandleEndAction(MxEndActionNotificationParam&)
 }
 
 // STUB: LEGO1 0x10038fe0
-void Pizza::FUN_10038fe0(MxU32 p_objectId, MxBool)
+void Pizza::PlayAction(MxU32 p_objectId, MxBool)
 {
 	// TODO
 }
@@ -253,11 +382,11 @@ void Pizza::FUN_10038fe0(MxU32 p_objectId, MxBool)
 PizzaMissionState::PizzaMissionState()
 {
 	m_unk0x0c = 0;
-	m_missions[0] = Mission(LegoActor::c_pepper, 2, g_pepperFinishTimes, g_pepperActions, sizeOfArray(g_pepperActions));
-	m_missions[1] = Mission(LegoActor::c_mama, 2, g_mamaFinishTimes, g_mamaActions, sizeOfArray(g_mamaActions));
-	m_missions[2] = Mission(LegoActor::c_papa, 2, g_papaFinishTimes, g_papaActions, sizeOfArray(g_papaActions));
-	m_missions[3] = Mission(LegoActor::c_nick, 2, g_nickFinishTimes, g_nickActions, sizeOfArray(g_nickActions));
-	m_missions[4] = Mission(LegoActor::c_laura, 2, g_lauraFinishTimes, g_lauraActions, sizeOfArray(g_lauraActions));
+	m_missions[0] = Mission(LegoActor::c_pepper, 2, g_pepperFinishTimes, g_pepperActions, 4);
+	m_missions[1] = Mission(LegoActor::c_mama, 2, g_mamaFinishTimes, g_mamaActions, 4);
+	m_missions[2] = Mission(LegoActor::c_papa, 2, g_papaFinishTimes, g_papaActions, 4);
+	m_missions[3] = Mission(LegoActor::c_nick, 2, g_nickFinishTimes, g_nickActions, 4);
+	m_missions[4] = Mission(LegoActor::c_laura, 2, g_lauraFinishTimes, g_lauraActions, 4);
 	m_pizzeriaState = (PizzeriaState*) GameState()->GetState("PizzeriaState");
 	m_unk0xb0 = -1;
 }
