@@ -79,7 +79,7 @@ MxLong Pizzeria::HandleClick()
 		AnimationManager()->FUN_10061010(FALSE);
 
 		Pizza* pizza = (Pizza*) CurrentWorld()->Find(*g_isleScript, IsleScript::c_Pizza_Actor);
-		pizza->FUN_10038220((IsleScript::Script) m_pizzeriaState->FUN_10017d70());
+		pizza->FUN_10038220((IsleScript::Script) m_pizzeriaState->NextAction());
 	}
 
 	return 1;
@@ -97,17 +97,23 @@ PizzeriaState::PizzeriaState()
 	memset(m_unk0x44, -1, sizeof(m_unk0x44));
 }
 
-// STUB: LEGO1 0x10017d50
+// FUNCTION: LEGO1 0x10017d50
 MxS16 PizzeriaState::FUN_10017d50()
 {
-	return 0;
+	return m_unk0x44[GameState()->GetActorId() - 1];
 }
 
-// STUB: LEGO1 0x10017d70
+// FUNCTION: LEGO1 0x10017d70
 // FUNCTION: BETA10 0x100effc0
-MxU32 PizzeriaState::FUN_10017d70()
+MxU32 PizzeriaState::NextAction()
 {
-	return 0;
+	MxU8 actorId = GameState()->GetActorId();
+
+	if (m_unk0x44[actorId - 1] < 2) {
+		m_unk0x44[actorId - 1]++;
+	}
+
+	return m_unk0x08[actorId - 1].Next();
 }
 
 // FUNCTION: LEGO1 0x10017da0

@@ -32,12 +32,12 @@ public:
 	// PizzeriaState::`scalar deleting destructor'
 
 	MxS16 FUN_10017d50();
-	MxU32 FUN_10017d70();
+	MxU32 NextAction();
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
-	Playlist m_unk0x08[5];   // 0x08
-	undefined4 m_unk0x44[5]; // 0x44
+	Playlist m_unk0x08[5]; // 0x08
+	MxS32 m_unk0x44[5];    // 0x44
 };
 
 // VTABLE: LEGO1 0x100d5520
