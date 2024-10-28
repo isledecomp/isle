@@ -11,15 +11,6 @@ class PizzaMissionState;
 // SIZE 0x58
 class PizzeriaState : public LegoState {
 public:
-	// SIZE 0x14
-	struct StateStruct {
-		undefined4 m_unk0x00; // 0x00
-		undefined4 m_unk0x04; // 0x04
-		undefined4 m_unk0x08; // 0x08
-		undefined4 m_unk0x0c; // 0x0c
-		undefined4 m_unk0x10; // 0x10
-	};
-
 	PizzeriaState();
 
 	// FUNCTION: LEGO1 0x10017c20
@@ -45,8 +36,8 @@ public:
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
-	Playlist m_unk0x08[5]; // 0x08
-	StateStruct m_unk0x44; // 0x44
+	Playlist m_unk0x08[5];   // 0x08
+	undefined4 m_unk0x44[5]; // 0x44
 };
 
 // VTABLE: LEGO1 0x100d5520
