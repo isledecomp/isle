@@ -33,6 +33,7 @@
 #include "mxvariabletable.h"
 #include "pizza.h"
 #include "pizzeria.h"
+#include "racecar.h"
 #include "scripts.h"
 #include "skateboard.h"
 #include "towtrack.h"

@@ -132,7 +132,7 @@ public:
 	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
 	// FUNCTION: BETA10 0x100ef470
-	void SetUnknown0xb0(undefined4 p_unk0xb0) { m_unk0xb0 = p_unk0xb0; }
+	void SetUnknown0xb0(MxU32 p_unk0xb0) { m_unk0xb0 = p_unk0xb0; }
 
 	MxS16 GetHighScore(MxU8 p_actorId) { return GetMission(p_actorId)->m_hiScore; }
 
@@ -145,7 +145,7 @@ public:
 	PizzeriaState* m_pizzeriaState; // 0x08
 	undefined4 m_unk0x0c;           // 0x0c
 	Mission m_missions[5];          // 0x10
-	undefined4 m_unk0xb0;           // 0xb0
+	MxU32 m_unk0xb0;                // 0xb0
 };
 
 // VTABLE: LEGO1 0x100d7380
@@ -176,10 +176,10 @@ public:
 	MxLong HandlePathStruct(LegoPathStructNotificationParam& p_param) override; // vtable+0x80
 
 	void CreateState();
-	void FUN_10038220(MxU32 p_objectId);
+	void FUN_10038220(IsleScript::Script p_objectId);
 	void FUN_100382b0();
 	void StopActions();
-	void PlayAction(MxU32 p_objectId, MxBool);
+	void PlayAction(MxU32 p_objectId, MxBool p_param7);
 
 	void SetSkateboard(SkateBoard* p_skateBoard) { m_skateBoard = p_skateBoard; }
 
@@ -191,7 +191,7 @@ private:
 	PizzaMissionState::Mission* m_mission; // 0x80
 	SkateBoard* m_skateBoard;              // 0x84
 	Act1State* m_act1state;                // 0x88
-	undefined4 m_unk0x8c;                  // 0x8c
+	IsleScript::Script m_unk0x8c;          // 0x8c
 	MxLong m_unk0x90;                      // 0x90
 	undefined4 m_unk0x94;                  // 0x94
 	MxBool m_unk0x98;                      // 0x98

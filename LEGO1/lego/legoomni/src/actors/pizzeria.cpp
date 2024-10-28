@@ -58,7 +58,7 @@ MxLong Pizzeria::HandleClick()
 		AnimationManager()->FUN_10061010(FALSE);
 
 		Pizza* pizza = (Pizza*) CurrentWorld()->Find(*g_isleScript, IsleScript::c_Pizza_Actor);
-		pizza->FUN_10038220(m_pizzeriaState->FUN_10017d70());
+		pizza->FUN_10038220((IsleScript::Script) m_pizzeriaState->FUN_10017d70());
 	}
 
 	return 1;
