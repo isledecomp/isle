@@ -1108,7 +1108,7 @@ MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEnt
 // FUNCTION: LEGO1 0x10060dc0
 // FUNCTION: BETA10 0x10041f2c
 MxResult LegoAnimationManager::FUN_10060dc0(
-	IsleScript::Script p_objectId,
+	MxU32 p_objectId,
 	MxMatrix* p_matrix,
 	MxBool p_param3,
 	MxBool p_param4,
