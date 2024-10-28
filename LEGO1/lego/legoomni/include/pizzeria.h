@@ -35,8 +35,6 @@ public:
 	MxS16 FUN_10017d50();
 	MxU32 NextAction();
 
-	// TODO: Most likely getters/setters are not used according to BETA.
-
 	Playlist m_unk0x08[5]; // 0x08
 	MxS32 m_unk0x44[5];    // 0x44
 
