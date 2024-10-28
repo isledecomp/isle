@@ -25,7 +25,7 @@ DECOMP_SIZE_ASSERT(PizzaMissionState::Mission, 0x20)
 extern MxU32 g_isleFlags;
 
 // GLOBAL: LEGO1 0x100f3a80
-IsleScript::Script g_pepperActions[] = {
+IsleScript::Script PizzaMissionState::g_pepperActions[] = {
 	IsleScript::c_pnsx48pr_RunAnim,
 	IsleScript::c_pnsx69pr_RunAnim,
 	IsleScript::c_pns125ni_RunAnim,
@@ -42,10 +42,10 @@ IsleScript::Script g_pepperActions[] = {
 };
 
 // GLOBAL: LEGO1 0x100f3ab8
-MxLong g_pepperFinishTimes[] = {100000, 200000, 300000, 350000};
+MxLong PizzaMissionState::g_pepperFinishTimes[] = {100000, 200000, 300000, 350000};
 
 // GLOBAL: LEGO1 0x100f3ac8
-IsleScript::Script g_lauraActions[] = {
+IsleScript::Script PizzaMissionState::g_lauraActions[] = {
 	IsleScript::c_pns096pr_RunAnim,
 	IsleScript::c_pns097pr_RunAnim,
 	IsleScript::c_pns098pr_RunAnim,
@@ -62,10 +62,10 @@ IsleScript::Script g_lauraActions[] = {
 };
 
 // GLOBAL: LEGO1 0x100f3b00
-MxLong g_lauraFinishTimes[] = {100000, 200000, 300000, 350000};
+MxLong PizzaMissionState::g_lauraFinishTimes[] = {100000, 200000, 300000, 350000};
 
 // GLOBAL: LEGO1 0x100f3b10
-IsleScript::Script g_nickActions[] = {
+IsleScript::Script PizzaMissionState::g_nickActions[] = {
 	IsleScript::c_pns042bm_RunAnim,
 	IsleScript::c_pns043en_RunAnim,
 	IsleScript::c_pns045p1_RunAnim,
@@ -82,10 +82,10 @@ IsleScript::Script g_nickActions[] = {
 };
 
 // GLOBAL: LEGO1 0x100f3b48
-MxLong g_nickFinishTimes[] = {100000, 200000, 300000, 350000};
+MxLong PizzaMissionState::g_nickFinishTimes[] = {100000, 200000, 300000, 350000};
 
 // GLOBAL: LEGO1 0x100f3b58
-IsleScript::Script g_mamaActions[] = {
+IsleScript::Script PizzaMissionState::g_mamaActions[] = {
 	IsleScript::c_pns022pr_RunAnim,
 	IsleScript::c_pns021dl_RunAnim,
 	IsleScript::c_pns018rd_RunAnim,
@@ -102,10 +102,10 @@ IsleScript::Script g_mamaActions[] = {
 };
 
 // GLOBAL: LEGO1 0x100f3b90
-MxLong g_mamaFinishTimes[] = {100000, 200000, 300000, 350000};
+MxLong PizzaMissionState::g_mamaFinishTimes[] = {100000, 200000, 300000, 350000};
 
 // GLOBAL: LEGO1 0x100f3ba0
-IsleScript::Script g_papaActions[] = {
+IsleScript::Script PizzaMissionState::g_papaActions[] = {
 	IsleScript::c_pns065rd_RunAnim,
 	IsleScript::c_pns066db_RunAnim,
 	IsleScript::c_pns067gd_RunAnim,
@@ -122,7 +122,7 @@ IsleScript::Script g_papaActions[] = {
 };
 
 // GLOBAL: LEGO1 0x100f3bd8
-MxLong g_papaFinishTimes[] = {100000, 200000, 300000, 350000};
+MxLong PizzaMissionState::g_papaFinishTimes[] = {100000, 200000, 300000, 350000};
 
 // FUNCTION: LEGO1 0x10037ef0
 Pizza::Pizza()
