@@ -15,23 +15,23 @@ DECOMP_SIZE_ASSERT(Pizzeria, 0x84)
 DECOMP_SIZE_ASSERT(PizzeriaState, 0x58)
 
 // GLOBAL: LEGO1 0x100f0ce8
-IsleScript::Script g_unk0x100f0ce8[] =
+IsleScript::Script g_pepperActions[] =
 	{IsleScript::c_ppz107ma_RunAnim, IsleScript::c_ppz114pa_RunAnim, IsleScript::c_ppz114pa_RunAnim};
 
 // GLOBAL: LEGO1 0x100f0cf8
-IsleScript::Script g_unk0x100f0cf8[] =
+IsleScript::Script g_mamaActions[] =
 	{IsleScript::c_ppz001pe_RunAnim, IsleScript::c_ppz006pa_RunAnim, IsleScript::c_ppz007pa_RunAnim};
 
 // GLOBAL: LEGO1 0x100f0d08
-IsleScript::Script g_unk0x100f0d08[] =
+IsleScript::Script g_papaActions[] =
 	{IsleScript::c_ppz054ma_RunAnim, IsleScript::c_ppz055ma_RunAnim, IsleScript::c_ppz056ma_RunAnim};
 
 // GLOBAL: LEGO1 0x100f0d18
-IsleScript::Script g_unk0x100f0d18[] =
+IsleScript::Script g_nickActions[] =
 	{IsleScript::c_ppz031ma_RunAnim, IsleScript::c_ppz035pa_RunAnim, IsleScript::c_ppz036pa_RunAnim};
 
 // GLOBAL: LEGO1 0x100f0d28
-IsleScript::Script g_unk0x100f0d28[] =
+IsleScript::Script g_lauraActions[] =
 	{IsleScript::c_ppz075pa_RunAnim, IsleScript::c_ppz082pa_RunAnim, IsleScript::c_ppz084pa_RunAnim};
 
 // FUNCTION: LEGO1 0x100179c0
@@ -89,11 +89,11 @@ MxLong Pizzeria::HandleClick()
 // FUNCTION: BETA10 0x100efd14
 PizzeriaState::PizzeriaState()
 {
-	m_unk0x08[0] = Playlist((MxU32*) g_unk0x100f0ce8, sizeOfArray(g_unk0x100f0ce8), Playlist::e_once);
-	m_unk0x08[1] = Playlist((MxU32*) g_unk0x100f0cf8, sizeOfArray(g_unk0x100f0cf8), Playlist::e_once);
-	m_unk0x08[2] = Playlist((MxU32*) g_unk0x100f0d08, sizeOfArray(g_unk0x100f0d08), Playlist::e_once);
-	m_unk0x08[3] = Playlist((MxU32*) g_unk0x100f0d18, sizeOfArray(g_unk0x100f0d18), Playlist::e_once);
-	m_unk0x08[4] = Playlist((MxU32*) g_unk0x100f0d28, sizeOfArray(g_unk0x100f0d28), Playlist::e_once);
+	m_unk0x08[0] = Playlist((MxU32*) g_pepperActions, sizeOfArray(g_pepperActions), Playlist::e_once);
+	m_unk0x08[1] = Playlist((MxU32*) g_mamaActions, sizeOfArray(g_mamaActions), Playlist::e_once);
+	m_unk0x08[2] = Playlist((MxU32*) g_papaActions, sizeOfArray(g_papaActions), Playlist::e_once);
+	m_unk0x08[3] = Playlist((MxU32*) g_nickActions, sizeOfArray(g_nickActions), Playlist::e_once);
+	m_unk0x08[4] = Playlist((MxU32*) g_lauraActions, sizeOfArray(g_lauraActions), Playlist::e_once);
 	memset(m_unk0x44, -1, sizeof(m_unk0x44));
 }
 
