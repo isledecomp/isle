@@ -146,6 +146,18 @@ public:
 	undefined4 m_unk0x0c;           // 0x0c
 	Mission m_missions[5];          // 0x10
 	MxU32 m_unk0xb0;                // 0xb0
+
+	static IsleScript::Script g_pepperActions[];
+	static IsleScript::Script g_mamaActions[];
+	static IsleScript::Script g_papaActions[];
+	static IsleScript::Script g_nickActions[];
+	static IsleScript::Script g_lauraActions[];
+
+	static MxLong g_pepperFinishTimes[];
+	static MxLong g_mamaFinishTimes[];
+	static MxLong g_papaFinishTimes[];
+	static MxLong g_nickFinishTimes[];
+	static MxLong g_lauraFinishTimes[];
 };
 
 // VTABLE: LEGO1 0x100d7380

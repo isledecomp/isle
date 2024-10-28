@@ -15,23 +15,23 @@ DECOMP_SIZE_ASSERT(Pizzeria, 0x84)
 DECOMP_SIZE_ASSERT(PizzeriaState, 0x58)
 
 // GLOBAL: LEGO1 0x100f0ce8
-IsleScript::Script g_pepperActions[] =
+IsleScript::Script PizzeriaState::g_pepperActions[] =
 	{IsleScript::c_ppz107ma_RunAnim, IsleScript::c_ppz114pa_RunAnim, IsleScript::c_ppz114pa_RunAnim};
 
 // GLOBAL: LEGO1 0x100f0cf8
-IsleScript::Script g_mamaActions[] =
+IsleScript::Script PizzeriaState::g_mamaActions[] =
 	{IsleScript::c_ppz001pe_RunAnim, IsleScript::c_ppz006pa_RunAnim, IsleScript::c_ppz007pa_RunAnim};
 
 // GLOBAL: LEGO1 0x100f0d08
-IsleScript::Script g_papaActions[] =
+IsleScript::Script PizzeriaState::g_papaActions[] =
 	{IsleScript::c_ppz054ma_RunAnim, IsleScript::c_ppz055ma_RunAnim, IsleScript::c_ppz056ma_RunAnim};
 
 // GLOBAL: LEGO1 0x100f0d18
-IsleScript::Script g_nickActions[] =
+IsleScript::Script PizzeriaState::g_nickActions[] =
 	{IsleScript::c_ppz031ma_RunAnim, IsleScript::c_ppz035pa_RunAnim, IsleScript::c_ppz036pa_RunAnim};
 
 // GLOBAL: LEGO1 0x100f0d28
-IsleScript::Script g_lauraActions[] =
+IsleScript::Script PizzeriaState::g_lauraActions[] =
 	{IsleScript::c_ppz075pa_RunAnim, IsleScript::c_ppz082pa_RunAnim, IsleScript::c_ppz084pa_RunAnim};
 
 // FUNCTION: LEGO1 0x100179c0
