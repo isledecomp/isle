@@ -18,7 +18,7 @@ DECOMP_SIZE_ASSERT(Radio, 0x10)
 DECOMP_SIZE_ASSERT(RadioState, 0x30)
 
 // GLOBAL: LEGO1 0x100f3218
-JukeboxScript::Script g_unk0x100f3218[6] = {
+JukeboxScript::Script g_unk0x100f3218[] = {
 	JukeboxScript::c_sns002ra_Audio,
 	JukeboxScript::c_sns001ja_Audio,
 	JukeboxScript::c_snsc01js_Audio,
@@ -28,7 +28,7 @@ JukeboxScript::Script g_unk0x100f3218[6] = {
 };
 
 // GLOBAL: LEGO1 0x100f3230
-JukeboxScript::Script g_unk0x100f3230[14] = {
+JukeboxScript::Script g_unk0x100f3230[] = {
 	JukeboxScript::c_ham035ra_Audio,
 	JukeboxScript::c_ham039ra_Audio,
 	JukeboxScript::c_sns005ra_Audio,
@@ -46,7 +46,7 @@ JukeboxScript::Script g_unk0x100f3230[14] = {
 };
 
 // GLOBAL: LEGO1 0x100f3268
-JukeboxScript::Script g_unk0x100f3268[9] = {
+JukeboxScript::Script g_unk0x100f3268[] = {
 	JukeboxScript::c_CentralRoads_Music,
 	JukeboxScript::c_BeachBlvd_Music,
 	JukeboxScript::c_ResidentalArea_Music,
@@ -214,14 +214,14 @@ RadioState::RadioState()
 	MxS32 random = rand();
 	m_unk0x2c = random % 3;
 
-	m_unk0x08[0] = LegoState::Playlist((MxU32*) g_unk0x100f3218, sizeof(g_unk0x100f3218) / sizeof(g_unk0x100f3218[0]));
-	m_unk0x08[0].SetUnknown0x08(rand() % (sizeof(g_unk0x100f3218) / sizeof(g_unk0x100f3218[0])));
+	m_unk0x08[0] = Playlist((MxU32*) g_unk0x100f3218, sizeOfArray(g_unk0x100f3218), Playlist::e_loop);
+	m_unk0x08[0].SetNextIndex(rand() % sizeOfArray(g_unk0x100f3218));
 
-	m_unk0x08[1] = LegoState::Playlist((MxU32*) g_unk0x100f3230, sizeof(g_unk0x100f3230) / sizeof(g_unk0x100f3230[0]));
-	m_unk0x08[1].SetUnknown0x08(rand() % (sizeof(g_unk0x100f3230) / sizeof(g_unk0x100f3230[0])));
+	m_unk0x08[1] = Playlist((MxU32*) g_unk0x100f3230, sizeOfArray(g_unk0x100f3230), Playlist::e_loop);
+	m_unk0x08[1].SetNextIndex(rand() % sizeOfArray(g_unk0x100f3230));
 
-	m_unk0x08[2] = LegoState::Playlist((MxU32*) g_unk0x100f3268, sizeof(g_unk0x100f3268) / sizeof(g_unk0x100f3268[0]));
-	m_unk0x08[2].SetUnknown0x08(rand() % (sizeof(g_unk0x100f3268) / sizeof(g_unk0x100f3268[0])));
+	m_unk0x08[2] = Playlist((MxU32*) g_unk0x100f3268, sizeOfArray(g_unk0x100f3268), Playlist::e_loop);
+	m_unk0x08[2].SetNextIndex(rand() % sizeOfArray(g_unk0x100f3268));
 
 	m_active = FALSE;
 }

@@ -13,7 +13,26 @@
 
 DECOMP_SIZE_ASSERT(Pizzeria, 0x84)
 DECOMP_SIZE_ASSERT(PizzeriaState, 0x58)
-DECOMP_SIZE_ASSERT(PizzeriaState::StateStruct, 0x14)
+
+// GLOBAL: LEGO1 0x100f0ce8
+IsleScript::Script g_unk0x100f0ce8[] =
+	{IsleScript::c_ppz107ma_RunAnim, IsleScript::c_ppz114pa_RunAnim, IsleScript::c_ppz114pa_RunAnim};
+
+// GLOBAL: LEGO1 0x100f0cf8
+IsleScript::Script g_unk0x100f0cf8[] =
+	{IsleScript::c_ppz001pe_RunAnim, IsleScript::c_ppz006pa_RunAnim, IsleScript::c_ppz007pa_RunAnim};
+
+// GLOBAL: LEGO1 0x100f0d08
+IsleScript::Script g_unk0x100f0d08[] =
+	{IsleScript::c_ppz054ma_RunAnim, IsleScript::c_ppz055ma_RunAnim, IsleScript::c_ppz056ma_RunAnim};
+
+// GLOBAL: LEGO1 0x100f0d18
+IsleScript::Script g_unk0x100f0d18[] =
+	{IsleScript::c_ppz031ma_RunAnim, IsleScript::c_ppz035pa_RunAnim, IsleScript::c_ppz036pa_RunAnim};
+
+// GLOBAL: LEGO1 0x100f0d28
+IsleScript::Script g_unk0x100f0d28[] =
+	{IsleScript::c_ppz075pa_RunAnim, IsleScript::c_ppz082pa_RunAnim, IsleScript::c_ppz084pa_RunAnim};
 
 // FUNCTION: LEGO1 0x100179c0
 MxResult Pizzeria::Create(MxDSAction& p_dsAction)
@@ -28,6 +47,7 @@ MxResult Pizzeria::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x100179f0
+// FUNCTION: BETA10 0x100efbfc
 void Pizzeria::CreateState()
 {
 	LegoGameState* gameState = GameState();
@@ -46,6 +66,7 @@ void Pizzeria::CreateState()
 }
 
 // FUNCTION: LEGO1 0x10017a50
+// FUNCTION: BETA10 0x100efc91
 MxLong Pizzeria::HandleClick()
 {
 	if (FUN_1003ef60() && m_pizzaMissionState->m_unk0x0c == 0) {
@@ -64,10 +85,16 @@ MxLong Pizzeria::HandleClick()
 	return 1;
 }
 
-// STUB: LEGO1 0x10017af0
+// FUNCTION: LEGO1 0x10017af0
+// FUNCTION: BETA10 0x100efd14
 PizzeriaState::PizzeriaState()
 {
-	// TODO
+	m_unk0x08[0] = Playlist((MxU32*) g_unk0x100f0ce8, sizeOfArray(g_unk0x100f0ce8), Playlist::e_once);
+	m_unk0x08[1] = Playlist((MxU32*) g_unk0x100f0cf8, sizeOfArray(g_unk0x100f0cf8), Playlist::e_once);
+	m_unk0x08[2] = Playlist((MxU32*) g_unk0x100f0d08, sizeOfArray(g_unk0x100f0d08), Playlist::e_once);
+	m_unk0x08[3] = Playlist((MxU32*) g_unk0x100f0d18, sizeOfArray(g_unk0x100f0d18), Playlist::e_once);
+	m_unk0x08[4] = Playlist((MxU32*) g_unk0x100f0d28, sizeOfArray(g_unk0x100f0d28), Playlist::e_once);
+	memset(m_unk0x44, -1, sizeof(m_unk0x44));
 }
 
 // STUB: LEGO1 0x10017d50
@@ -77,6 +104,7 @@ MxS16 PizzeriaState::FUN_10017d50()
 }
 
 // STUB: LEGO1 0x10017d70
+// FUNCTION: BETA10 0x100effc0
 MxU32 PizzeriaState::FUN_10017d70()
 {
 	return 0;
