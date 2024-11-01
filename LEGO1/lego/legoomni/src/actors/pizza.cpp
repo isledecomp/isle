@@ -358,10 +358,67 @@ MxLong Pizza::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x100388a0
+// FUNCTION: LEGO1 0x100388a0
+// FUNCTION: BETA10 0x100ee2d9
 MxResult Pizza::Tickle()
 {
-	// TODO
+	MxLong time = Timer()->GetTime();
+
+	if (m_unk0x90 != INT_MIN && m_unk0x94 + m_unk0x90 <= time) {
+		m_unk0x90 = INT_MIN;
+		m_skateBoard->EnableScenePresentation(FALSE);
+		m_skateBoard->SetUnknown0x160(FALSE);
+		TickleManager()->UnregisterClient(this);
+	}
+
+	if (m_mission != NULL && m_mission->m_startTime != INT_MIN) {
+		if (m_state->m_unk0x0c == 4) {
+			if (time > m_mission->m_startTime + m_mission->GetTimeoutTime()) {
+				StopActions();
+				m_mission->UpdateScore(LegoState::e_grey);
+				FUN_100382b0();
+				BackgroundAudioManager()->LowerVolume();
+				InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_Avo917In_PlayWav, NULL);
+			}
+			else if (time >= m_mission->m_startTime + 35000 && m_unk0x8c == IsleScript::c_noneIsle) {
+				switch (GameState()->GetActorId()) {
+				case LegoActor::c_pepper:
+					m_unk0x8c = IsleScript::c_Avo914In_PlayWav;
+					break;
+				case LegoActor::c_mama:
+					m_unk0x8c = IsleScript::c_Avo910In_PlayWav;
+					break;
+				case LegoActor::c_papa:
+					m_unk0x8c = IsleScript::c_Avo912In_PlayWav;
+					break;
+				case LegoActor::c_nick:
+					m_unk0x8c = IsleScript::c_Avo911In_PlayWav;
+					break;
+				case LegoActor::c_laura:
+					m_unk0x8c = IsleScript::c_Avo913In_PlayWav;
+					break;
+				}
+
+				BackgroundAudioManager()->LowerVolume();
+
+				if (m_unk0x8c != IsleScript::c_noneIsle) {
+					InvokeAction(Extra::e_start, *g_isleScript, m_unk0x8c, NULL);
+				}
+			}
+		}
+		else if (m_state->m_unk0x0c == 2) {
+			if (Timer()->GetTime() > m_mission->m_startTime + 5000) {
+				m_skateBoard->SetUnknown0x160(FALSE);
+				m_skateBoard->EnableScenePresentation(FALSE);
+				TickleManager()->UnregisterClient(this);
+				m_mission->UpdateScore(LegoState::e_grey);
+				m_state->m_unk0x0c = 9;
+				AnimationManager()->FUN_1005f6d0(TRUE);
+				PlayAction(m_mission->GetUnknownFinishAction(), TRUE);
+			}
+		}
+	}
+
 	return SUCCESS;
 }
 
