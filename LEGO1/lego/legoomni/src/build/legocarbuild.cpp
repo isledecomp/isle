@@ -2,8 +2,10 @@
 
 #include "copter_actions.h"
 #include "dunebuggy.h"
+#include "dunecar_actions.h"
 #include "helicopter.h"
 #include "jetski.h"
+#include "jetski_actions.h"
 #include "jukebox_actions.h"
 #include "legocarbuildpresenter.h"
 #include "legocontrolmanager.h"
@@ -22,16 +24,18 @@
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
 #include "racecar.h"
+#include "racecar_actions.h"
 #include "scripts.h"
 
 #include <isle.h>
 #include <vec.h>
 
-// names and values verified by BETA10 0x1006d742
-#define Helicopter_Actor 1
-#define DuneBugy_Actor 2
-#define Jetski_Actor 3
-#define RaceCar_Actor 4
+// Names and values verified by BETA10 0x1006d742.
+// Note that these were probably hard-coded numbers in the original.
+#define Helicopter_Actor CopterScript::c_Helicopter_Actor
+#define DuneBugy_Actor DunecarScript::c_DuneBugy_Actor
+#define Jetski_Actor JetskiScript::c_Jetski_Actor
+#define RaceCar_Actor RacecarScript::c_RaceCar_Actor
 
 DECOMP_SIZE_ASSERT(LegoCarBuild, 0x34c)
 DECOMP_SIZE_ASSERT(LegoVehicleBuildState, 0x50)

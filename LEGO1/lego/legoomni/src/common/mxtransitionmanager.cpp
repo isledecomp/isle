@@ -47,20 +47,20 @@ MxTransitionManager::~MxTransitionManager()
 MxResult MxTransitionManager::GetDDrawSurfaceFromVideoManager() // vtable+0x14
 {
 	LegoVideoManager* videoManager = VideoManager();
-	this->m_ddSurface = videoManager->GetDisplaySurface()->GetDirectDrawSurface2();
+	m_ddSurface = videoManager->GetDisplaySurface()->GetDirectDrawSurface2();
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x1004bac0
 MxResult MxTransitionManager::Tickle()
 {
-	if (this->m_animationSpeed + this->m_systemTime > timeGetTime()) {
+	if (m_animationSpeed + m_systemTime > timeGetTime()) {
 		return SUCCESS;
 	}
 
-	this->m_systemTime = timeGetTime();
+	m_systemTime = timeGetTime();
 
-	switch (this->m_mode) {
+	switch (m_mode) {
 	case e_noAnimation:
 		NoTransition();
 		break;
@@ -94,13 +94,13 @@ MxResult MxTransitionManager::StartTransition(
 {
 	assert(m_mode == e_idle);
 
-	if (this->m_mode == e_idle) {
+	if (m_mode == e_idle) {
 		if (!p_playMusicInAnim) {
 			MxBackgroundAudioManager* backgroundAudioManager = BackgroundAudioManager();
 			backgroundAudioManager->Stop();
 		}
 
-		this->m_mode = p_animationType;
+		m_mode = p_animationType;
 
 		m_copyFlags.m_bit0 = p_doCopy;
 
@@ -113,9 +113,9 @@ MxResult MxTransitionManager::StartTransition(
 		}
 
 		MxU32 time = timeGetTime();
-		this->m_systemTime = time;
+		m_systemTime = time;
 
-		this->m_animationSpeed = p_speed;
+		m_animationSpeed = p_speed;
 
 		MxTickleManager* tickleManager = TickleManager();
 		tickleManager->RegisterClient(this, p_speed);
