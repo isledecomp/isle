@@ -112,8 +112,8 @@ MxResult Isle::Create(MxDSAction& p_dsAction)
 			m_destLocation = LegoGameState::e_infomain;
 		}
 
-		if (GameState()->GetCurrentArea() == LegoGameState::e_isle) {
-			GameState()->SetCurrentArea(LegoGameState::e_undefined);
+		if (GameState()->m_currentArea == LegoGameState::e_isle) {
+			GameState()->m_currentArea = LegoGameState::e_undefined;
 		}
 
 		LegoGameState* gameState = GameState();

@@ -63,7 +63,7 @@ MxResult Police::Create(MxDSAction& p_dsAction)
 	}
 
 	m_policeState = policeState;
-	GameState()->SetCurrentArea(LegoGameState::e_police);
+	GameState()->m_currentArea = LegoGameState::e_police;
 	GameState()->StopArea(LegoGameState::e_previousArea);
 	return ret;
 }

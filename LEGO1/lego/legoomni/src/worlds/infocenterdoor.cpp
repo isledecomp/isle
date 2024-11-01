@@ -48,7 +48,7 @@ MxResult InfocenterDoor::Create(MxDSAction& p_dsAction)
 
 	SetIsWorldActive(FALSE);
 
-	GameState()->SetCurrentArea(LegoGameState::e_infodoor);
+	GameState()->m_currentArea = LegoGameState::e_infodoor;
 	GameState()->StopArea(LegoGameState::e_previousArea);
 
 	return result;

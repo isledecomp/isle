@@ -63,7 +63,7 @@ MxResult Score::Create(MxDSAction& p_dsAction)
 		LegoGameState* gameState = GameState();
 		ScoreState* state = (ScoreState*) gameState->GetState("ScoreState");
 		m_state = state ? state : (ScoreState*) gameState->CreateState("ScoreState");
-		GameState()->SetCurrentArea(LegoGameState::e_infoscor);
+		GameState()->m_currentArea = LegoGameState::e_infoscor;
 		GameState()->StopArea(LegoGameState::e_previousArea);
 	}
 

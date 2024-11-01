@@ -138,22 +138,22 @@ MxResult LegoCarBuild::Create(MxDSAction& p_dsAction)
 
 		if (m_atomId == *g_copterScript) {
 			buildStateClassName = "LegoCopterBuildState";
-			GameState()->SetCurrentArea(LegoGameState::e_copterbuild);
+			GameState()->m_currentArea = LegoGameState::e_copterbuild;
 			m_carId = Helicopter_Actor;
 		}
 		else if (m_atomId == *g_dunecarScript) {
 			buildStateClassName = "LegoDuneCarBuildState";
-			GameState()->SetCurrentArea(LegoGameState::e_dunecarbuild);
+			GameState()->m_currentArea = LegoGameState::e_dunecarbuild;
 			m_carId = DuneBugy_Actor;
 		}
 		else if (m_atomId == *g_jetskiScript) {
 			buildStateClassName = "LegoJetskiBuildState";
-			GameState()->SetCurrentArea(LegoGameState::e_jetskibuild);
+			GameState()->m_currentArea = LegoGameState::e_jetskibuild;
 			m_carId = Jetski_Actor;
 		}
 		else if (m_atomId == *g_racecarScript) {
 			buildStateClassName = "LegoRaceCarBuildState";
-			GameState()->SetCurrentArea(LegoGameState::e_racecarbuild);
+			GameState()->m_currentArea = LegoGameState::e_racecarbuild;
 			m_carId = Helicopter_Actor;
 		}
 
@@ -821,7 +821,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 
 			Act1State* gameState = (Act1State*) GameState()->GetState("Act1State");
 
-			switch (GameState()->GetCurrentArea()) {
+			switch (GameState()->m_currentArea) {
 			case LegoGameState::e_copterbuild:
 				if (gameState->m_helicopter) {
 					delete gameState->m_helicopter;

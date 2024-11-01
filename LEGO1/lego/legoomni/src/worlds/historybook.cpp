@@ -39,7 +39,7 @@ MxResult HistoryBook::Create(MxDSAction& p_dsAction)
 	InputManager()->SetCamera(NULL);
 	InputManager()->Register(this);
 
-	GameState()->SetCurrentArea(LegoGameState::Area::e_histbook);
+	GameState()->m_currentArea = LegoGameState::Area::e_histbook;
 	GameState()->StopArea(LegoGameState::Area::e_previousArea);
 	return result;
 }

@@ -96,7 +96,7 @@ MxResult Hospital::Create(MxDSAction& p_dsAction)
 		m_hospitalState->m_unk0x08.m_unk0x00 = 3;
 	}
 
-	GameState()->SetCurrentArea(LegoGameState::e_hospital);
+	GameState()->m_currentArea = LegoGameState::e_hospital;
 	GameState()->StopArea(LegoGameState::e_previousArea);
 
 	InputManager()->Register(this);

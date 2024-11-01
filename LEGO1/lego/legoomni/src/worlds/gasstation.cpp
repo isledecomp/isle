@@ -91,7 +91,7 @@ MxResult GasStation::Create(MxDSAction& p_dsAction)
 		m_state->m_unk0x14.m_unk0x00 = 3;
 	}
 
-	GameState()->SetCurrentArea(LegoGameState::e_garage);
+	GameState()->m_currentArea = LegoGameState::e_garage;
 	GameState()->StopArea(LegoGameState::e_previousArea);
 
 	InputManager()->Register(this);
