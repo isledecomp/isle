@@ -21,7 +21,7 @@ public:
 		{
 			m_name = NULL;
 			m_wiredName = NULL;
-			m_unk0x08 = 0;
+			m_objectId = 0;
 		}
 
 		// variable name verified by BETA10 0x10071b56
@@ -30,7 +30,8 @@ public:
 		// variable name verified by BETA10 0x100719f0
 		LegoChar* m_wiredName; // 0x04
 
-		undefined2 m_unk0x08; // 0x08
+		// variable name guessed based on the setter at LEGO1 0x0x10079dc0 and its use in LEGO1 0x10024890
+		MxS16 m_objectId; // 0x08
 	};
 
 	LegoCarBuildAnimPresenter();
@@ -77,14 +78,32 @@ public:
 	MxBool StringEqualsShelf(const LegoChar* p_string);
 	MxBool StringEndsOnY(const LegoChar* p_string);
 	MxBool StringEndsOnZero(const LegoChar* p_string);
+	const LegoChar* GetWiredNameByPartName(const LegoChar* p_name);
+	void SetPartObjectIdByName(const LegoChar* p_name, MxS16 p_objectId);
 
 	// FUNCTION: BETA10 0x10070180
 	void SetUnknown0xbc(undefined2 p_unk0xbc) { m_unk0xbc = p_unk0xbc; }
+
+	// FUNCTION: BETA10 0x100703b0
+	MxMatrix& GetUnknown0xe0() { return m_unk0xe0; }
 
 	MxBool StringEndsOnW(LegoChar* p_param);
 	MxBool StringEndsOnYOrN(const LegoChar* p_string);
 
 	const BoundingSphere& FUN_10079e20();
+
+	// FUNCTION: BETA10 0x100703e0
+	const LegoChar* GetWiredNameOfLastPlacedPart() { return m_parts[m_placedPartCount].m_wiredName; }
+
+	MxS16 GetNumberOfParts() { return m_numberOfParts; }
+	MxS16 GetPlacedPartCount() { return m_placedPartCount; }
+
+	// FUNCTION: BETA10 0x10070270
+	MxBool AllPartsPlaced()
+	{
+		// this function differs in BETA10
+		return m_placedPartCount == m_numberOfParts;
+	}
 
 	// SYNTHETIC: LEGO1 0x10078660
 	// LegoCarBuildAnimPresenter::`scalar deleting destructor'
@@ -118,8 +137,6 @@ private:
 
 	// name verified by BETA10 0x10070d63
 	LegoChar* m_mainSourceId; // 0x14c
-
-	friend class LegoCarBuild;
 };
 
 #endif // LEGOCARBUILDPRESENTER_H

@@ -40,7 +40,7 @@ MxResult Bike::Create(MxDSAction& p_dsAction)
 void Bike::Exit()
 {
 	IslePathActor::Exit();
-	GameState()->SetCurrentArea(LegoGameState::Area::e_bike);
+	GameState()->m_currentArea = LegoGameState::Area::e_bike;
 	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_BikeDashboard_Bitmap);
 	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_BikeArms_Ctl);
 	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_BikeHorn_Ctl);

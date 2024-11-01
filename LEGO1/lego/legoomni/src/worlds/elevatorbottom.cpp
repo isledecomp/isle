@@ -45,7 +45,7 @@ MxResult ElevatorBottom::Create(MxDSAction& p_dsAction)
 
 	SetIsWorldActive(FALSE);
 
-	GameState()->SetCurrentArea(LegoGameState::e_elevbott);
+	GameState()->m_currentArea = LegoGameState::e_elevbott;
 	GameState()->StopArea(LegoGameState::e_previousArea);
 
 	return result;

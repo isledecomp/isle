@@ -51,6 +51,7 @@ public:
 	// FUNCTION: BETA10 0x1004aa70
 	const float* GetWorldUp() const { return m_local2world[1]; }
 
+	// FUNCTION: BETA10 0x10070380
 	OrientableROI* GetParentROI() const { return m_parentROI; }
 
 	void SetParentROI(OrientableROI* p_parentROI) { m_parentROI = p_parentROI; }

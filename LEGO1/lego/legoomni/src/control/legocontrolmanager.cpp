@@ -45,6 +45,7 @@ void LegoControlManager::Register(MxCore* p_listener)
 }
 
 // FUNCTION: LEGO1 0x10028ea0
+// FUNCTION: BETA10 0x1007c330
 void LegoControlManager::Unregister(MxCore* p_listener)
 {
 	LegoNotifyListCursor cursor(&m_notifyList);

@@ -21,7 +21,7 @@ RECT g_fullScreenRect = {0, 0, 640, 480};
 MxTransitionManager::MxTransitionManager()
 {
 	m_animationTimer = 0;
-	m_transitionType = e_notTransitioning;
+	m_mode = e_idle;
 	m_ddSurface = NULL;
 	m_waitIndicator = NULL;
 	m_copyBuffer = NULL;
@@ -47,20 +47,20 @@ MxTransitionManager::~MxTransitionManager()
 MxResult MxTransitionManager::GetDDrawSurfaceFromVideoManager() // vtable+0x14
 {
 	LegoVideoManager* videoManager = VideoManager();
-	this->m_ddSurface = videoManager->GetDisplaySurface()->GetDirectDrawSurface2();
+	m_ddSurface = videoManager->GetDisplaySurface()->GetDirectDrawSurface2();
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x1004bac0
 MxResult MxTransitionManager::Tickle()
 {
-	if (this->m_animationSpeed + this->m_systemTime > timeGetTime()) {
+	if (m_animationSpeed + m_systemTime > timeGetTime()) {
 		return SUCCESS;
 	}
 
-	this->m_systemTime = timeGetTime();
+	m_systemTime = timeGetTime();
 
-	switch (this->m_transitionType) {
+	switch (m_mode) {
 	case e_noAnimation:
 		NoTransition();
 		break;
@@ -84,6 +84,7 @@ MxResult MxTransitionManager::Tickle()
 }
 
 // FUNCTION: LEGO1 0x1004bb70
+// FUNCTION: BETA10 0x100ec4c1
 MxResult MxTransitionManager::StartTransition(
 	TransitionType p_animationType,
 	MxS32 p_speed,
@@ -91,13 +92,15 @@ MxResult MxTransitionManager::StartTransition(
 	MxBool p_playMusicInAnim
 )
 {
-	if (this->m_transitionType == e_notTransitioning) {
+	assert(m_mode == e_idle);
+
+	if (m_mode == e_idle) {
 		if (!p_playMusicInAnim) {
 			MxBackgroundAudioManager* backgroundAudioManager = BackgroundAudioManager();
 			backgroundAudioManager->Stop();
 		}
 
-		this->m_transitionType = p_animationType;
+		m_mode = p_animationType;
 
 		m_copyFlags.m_bit0 = p_doCopy;
 
@@ -110,9 +113,9 @@ MxResult MxTransitionManager::StartTransition(
 		}
 
 		MxU32 time = timeGetTime();
-		this->m_systemTime = time;
+		m_systemTime = time;
 
-		this->m_animationSpeed = p_speed;
+		m_animationSpeed = p_speed;
 
 		MxTickleManager* tickleManager = TickleManager();
 		tickleManager->RegisterClient(this, p_speed);
@@ -133,8 +136,8 @@ MxResult MxTransitionManager::StartTransition(
 // FUNCTION: LEGO1 0x1004bc30
 void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
 {
-	if (m_transitionType != e_notTransitioning) {
-		m_transitionType = e_notTransitioning;
+	if (m_mode != e_idle) {
+		m_mode = e_idle;
 
 		m_copyFlags.m_bit0 = FALSE;
 

@@ -285,7 +285,7 @@ void LegoVideoManager::ToggleFPS(MxBool p_visible)
 MxResult LegoVideoManager::Tickle()
 {
 	if (m_unk0x554 && !m_videoParam.Flags().GetFlipSurfaces() &&
-		TransitionManager()->GetTransitionType() == MxTransitionManager::e_notTransitioning) {
+		TransitionManager()->GetTransitionType() == MxTransitionManager::e_idle) {
 		Sleep(30);
 	}
 

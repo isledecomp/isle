@@ -210,7 +210,7 @@ MxResult Infocenter::Create(MxDSAction& p_dsAction)
 		}
 	}
 
-	GameState()->SetCurrentArea(LegoGameState::e_infomain);
+	GameState()->m_currentArea = LegoGameState::e_infomain;
 	GameState()->StopArea(LegoGameState::e_previousArea);
 
 	if (m_infocenterState->GetUnknown0x74() == 4) {
@@ -523,9 +523,9 @@ void Infocenter::ReadyWorld()
 			bgRed->Enable(TRUE);
 
 			if (GameState()->GetCurrentAct() == GameState()->GetLoadedAct()) {
-				GameState()->SetCurrentArea(LegoGameState::e_act2main);
+				GameState()->m_currentArea = LegoGameState::e_act2main;
 				GameState()->StopArea(LegoGameState::e_act2main);
-				GameState()->SetCurrentArea(LegoGameState::e_infomain);
+				GameState()->m_currentArea = LegoGameState::e_infomain;
 			}
 
 			m_infocenterState->SetUnknown0x74(5);
@@ -579,9 +579,9 @@ void Infocenter::ReadyWorld()
 			bgRed->Enable(TRUE);
 
 			if (GameState()->GetCurrentAct() == GameState()->GetLoadedAct()) {
-				GameState()->SetCurrentArea(LegoGameState::e_act3script);
+				GameState()->m_currentArea = LegoGameState::e_act3script;
 				GameState()->StopArea(LegoGameState::e_act3script);
-				GameState()->SetCurrentArea(LegoGameState::e_infomain);
+				GameState()->m_currentArea = LegoGameState::e_infomain;
 			}
 
 			m_infocenterState->SetUnknown0x74(5);

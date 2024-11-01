@@ -76,7 +76,7 @@ void Helicopter::Exit()
 	IslePathActor::Exit();
 
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
-		GameState()->SetCurrentArea(LegoGameState::e_copter);
+		GameState()->m_currentArea = LegoGameState::e_copter;
 		if (UserActor() && UserActor()->IsA("IslePathActor")) {
 			((IslePathActor*) UserActor())
 				->SpawnPlayer(
@@ -180,7 +180,7 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 				break;
 			}
 			Exit();
-			GameState()->SetCurrentArea(LegoGameState::e_unk66);
+			GameState()->m_currentArea = LegoGameState::e_unk66;
 			ret = 1;
 			break;
 		case IsleScript::c_Helicopter_TakeOff_Ctl: {

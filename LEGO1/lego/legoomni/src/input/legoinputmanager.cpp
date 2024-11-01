@@ -339,6 +339,7 @@ void LegoInputManager::SetWorld(LegoWorld* p_world)
 }
 
 // FUNCTION: LEGO1 0x1005c730
+// FUNCTION: BETA10 0x100896dc
 void LegoInputManager::ClearWorld()
 {
 	m_world = NULL;

@@ -172,13 +172,11 @@ public:
 
 	Act GetCurrentAct() { return m_currentAct; }
 	Act GetLoadedAct() { return m_loadedAct; }
-	Area GetCurrentArea() { return m_currentArea; }
 	Area GetPreviousArea() { return m_previousArea; }
 	Area GetUnknown0x42c() { return m_unk0x42c; }
 	History* GetHistory() { return &m_history; }
 
 	void SetDirty(MxBool p_isDirty) { m_isDirty = p_isDirty; }
-	void SetCurrentArea(Area p_currentArea) { m_currentArea = p_currentArea; }
 	void SetPreviousArea(Area p_previousArea) { m_previousArea = p_previousArea; }
 	void SetActorId(MxU8 p_actorId) { m_actorId = p_actorId; }
 	void SetUnknown0x42c(Area p_unk0x42c) { m_unk0x42c = p_unk0x42c; }

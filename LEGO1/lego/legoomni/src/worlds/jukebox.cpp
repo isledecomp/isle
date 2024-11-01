@@ -61,7 +61,7 @@ MxResult JukeBox::Create(MxDSAction& p_dsAction)
 		m_state->m_music = JukeBoxState::e_pasquell;
 	}
 
-	GameState()->SetCurrentArea(LegoGameState::e_jukeboxw);
+	GameState()->m_currentArea = LegoGameState::e_jukeboxw;
 	GameState()->StopArea(LegoGameState::e_previousArea);
 	TickleManager()->RegisterClient(this, 2000);
 	return ret;

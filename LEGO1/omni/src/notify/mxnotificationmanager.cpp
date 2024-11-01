@@ -178,6 +178,7 @@ void MxNotificationManager::Register(MxCore* p_listener)
 }
 
 // FUNCTION: LEGO1 0x100acdf0
+// FUNCTION: BETA10 0x10126785
 void MxNotificationManager::Unregister(MxCore* p_listener)
 {
 	AUTOLOCK(m_lock);
