@@ -124,7 +124,7 @@ public:
 	undefined4 FUN_100244e0(MxLong p_x, MxLong p_y);
 	undefined4 FUN_100246e0(MxLong p_x, MxLong p_y);
 	MxS32 FUN_10024850(MxLong p_x, MxLong p_y);
-	undefined4 FUN_10024890(MxParam* p_param2);
+	undefined4 FUN_10024890(MxParam* p_param);
 	undefined4 FUN_10024c20(LegoEventNotificationParam* p_param);
 	void FUN_10024ef0();
 	void FUN_10024f30();

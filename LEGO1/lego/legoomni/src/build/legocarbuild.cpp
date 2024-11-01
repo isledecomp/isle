@@ -793,13 +793,213 @@ MxS32 LegoCarBuild::FUN_10024850(MxLong p_x, MxLong p_y)
 	return result;
 }
 
-// STUB: LEGO1 0x10024890
-// STUB: BETA10 0x1006d512
-undefined4 LegoCarBuild::FUN_10024890(LegoEventNotificationParam* p_param)
+#ifdef NDEBUG
+
+// FUNCTION: LEGO1 0x10024890
+undefined4 LegoCarBuild::FUN_10024890(MxParam* p_param)
 {
-	// TODO
-	return 0;
+	undefined4 result = 0;
+	LegoControlManagerNotificationParam* param = (LegoControlManagerNotificationParam*) p_param;
+	assert(m_buildState);
+
+	if (param->m_unk0x28) {
+		switch (param->m_clickedObjectId) {
+		// The enum values are all identical between CopterScript, DunecarScript, JetskiScript, and RacecarScript
+		case CopterScript::c_Info_Ctl:
+			if (m_buildState->m_animationState != LegoVehicleBuildState::e_unknown4 &&
+				m_buildState->m_animationState != LegoVehicleBuildState::e_unknown2 &&
+				m_buildState->m_animationState != LegoVehicleBuildState::e_exiting &&
+				GameState()->GetCurrentAct() != LegoGameState::e_act2) {
+				if (m_unk0x108 > 0) {
+					DeleteObjects(&m_atomId, 500, 510);
+				}
+
+				m_unk0x258->SetUnknown0xbc(0);
+				m_destLocation = LegoGameState::e_infomain;
+				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+				result = 1;
+			}
+
+			break;
+		case CopterScript::c_Exit_Ctl:
+			if (m_buildState->m_animationState != LegoVehicleBuildState::e_exiting &&
+				m_buildState->m_animationState != LegoVehicleBuildState::e_unknown4) {
+				if (m_unk0x108 > 0) {
+					DeleteObjects(&m_atomId, 500, 510);
+				}
+
+				m_unk0x258->SetUnknown0xbc(0);
+
+				if (GameState()->GetCurrentAct() == LegoGameState::e_act2) {
+					FUN_100243a0();
+				}
+				else if (m_unk0x258->AllPartsPlaced() || m_buildState->m_unk0x4d) {
+					m_buildState->m_unk0x4d = TRUE;
+					InvokeAction(Extra::e_start, m_atomId, m_carId, NULL);
+
+					{
+						// This pattern is suggested by BETA10 and also improves the LEGO1 match
+						MxNotificationParam param;
+						NotificationManager()->Send(this, param);
+					}
+
+					m_buildState->m_animationState = LegoVehicleBuildState::e_unknown4;
+				}
+				else {
+					FUN_10025720(4);
+					m_buildState->m_animationState = LegoVehicleBuildState::e_exiting;
+				}
+
+				result = 1;
+			}
+			break;
+		case CopterScript::c_ShelfUp_Ctl:
+			FUN_10024f30();
+			m_Shelf_Sound->Enable(FALSE);
+			m_Shelf_Sound->Enable(TRUE);
+			result = 1;
+			break;
+		case CopterScript::c_Platform_Ctl:
+			FUN_10024f50();
+			m_unk0xf8 = c_unknown8;
+			m_unk0xfc = param->m_unk0x28;
+			result = 1;
+			break;
+		default:
+			if ((m_Decals_Ctl && m_Decals_Ctl->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl1 && m_Decals_Ctl1->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl2 && m_Decals_Ctl2->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl3 && m_Decals_Ctl3->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl4 && m_Decals_Ctl4->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl5 && m_Decals_Ctl5->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl6 && m_Decals_Ctl6->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl7 && m_Decals_Ctl7->GetAction()->GetObjectId() == param->m_clickedObjectId)) {
+				m_unk0x258->FUN_10079dc0(m_unk0x110->GetName(), param->m_clickedObjectId);
+				m_Decal_Sound->Enable(FALSE);
+				m_Decal_Sound->Enable(TRUE);
+			}
+			else {
+				FUN_10025350(param->m_clickedObjectId);
+			}
+
+			result = 1;
+		}
+	}
+	else {
+		m_unk0xf8 = c_unknownminusone;
+		m_unk0xfc = -1;
+	}
+
+	// It is a bit unexpected that LEGO1 and BETA10 match so well with the `return 1`
+	// and ignoring the `result` variable, but the match is hard to argue with
+	return 1;
 }
+
+#else
+
+// FUNCTION: BETA10 0x1006d512
+undefined4 LegoCarBuild::FUN_10024890(MxParam* p_param)
+{
+	undefined4 result = 0;
+	LegoControlManagerNotificationParam* param = (LegoControlManagerNotificationParam*) p_param;
+	assert(m_buildState);
+
+	if (param->m_unk0x28) {
+		switch (param->m_clickedObjectId) {
+		case CopterScript::c_Info_Ctl:
+			m_unk0x258->SetUnknown0xbc(0);
+			m_destLocation = LegoGameState::e_infomain;
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			result = 1;
+			break;
+		case CopterScript::c_Exit_Ctl:
+			if (m_buildState->m_animationState != LegoVehicleBuildState::e_exiting) {
+				m_unk0x258->SetUnknown0xbc(0);
+
+				if (m_unk0x258->AllPartsPlaced() || m_buildState->m_unk0x4d) {
+					m_buildState->m_unk0x4d = TRUE;
+
+					// GameState()->GetCurrentAct() returns an MxS16 in BETA10
+					if (GameState()->GetCurrentAct() == 0) {
+						InvokeAction(Extra::e_start, m_atomId, m_carId, NULL);
+
+						{
+							MxNotificationParam param;
+							NotificationManager()->Send(this, param);
+						}
+
+						assert(m_buildState);
+						m_buildState->m_animationState = LegoVehicleBuildState::e_unknown4;
+					}
+
+					else {
+						FUN_10025720(5);
+						m_buildState->m_animationState = LegoVehicleBuildState::e_exiting;
+					}
+				}
+				else {
+					FUN_10025720(4);
+					m_buildState->m_animationState = LegoVehicleBuildState::e_exiting;
+				}
+
+				switch (GameState()->m_currentArea) {
+				case LegoGameState::e_copterbuild:
+					assert(m_carId == Helicopter_Actor);
+					break;
+				case LegoGameState::e_dunecarbuild:
+					assert(m_carId == DuneBugy_Actor);
+					break;
+				case LegoGameState::e_jetskibuild:
+					assert(m_carId == Jetski_Actor);
+					break;
+				case LegoGameState::e_racecarbuild:
+					assert(m_carId == RaceCar_Actor);
+					break;
+				}
+
+				result = 1;
+			}
+			break;
+		case CopterScript::c_ShelfUp_Ctl:
+			FUN_10024f30();
+			m_Shelf_Sound->Enable(FALSE);
+			m_Shelf_Sound->Enable(TRUE);
+			result = 1;
+			break;
+		case CopterScript::c_Platform_Ctl:
+			FUN_10024f50();
+			m_unk0xf8 = c_unknown8;
+			m_unk0xfc = param->m_unk0x28;
+			result = 1;
+			break;
+		default:
+			if ((m_Decals_Ctl && m_Decals_Ctl->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl1 && m_Decals_Ctl1->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl2 && m_Decals_Ctl2->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl3 && m_Decals_Ctl3->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl4 && m_Decals_Ctl4->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl5 && m_Decals_Ctl5->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl6 && m_Decals_Ctl6->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
+				(m_Decals_Ctl7 && m_Decals_Ctl7->GetAction()->GetObjectId() == param->m_clickedObjectId)) {
+				m_unk0x258->FUN_10079dc0(m_unk0x110->GetName(), param->m_clickedObjectId);
+				m_Decal_Sound->Enable(FALSE);
+				m_Decal_Sound->Enable(TRUE);
+			}
+			else {
+				FUN_10025350(param->m_clickedObjectId);
+			}
+			result = 1;
+		}
+	}
+	else {
+		m_unk0xf8 = c_unknownminusone;
+		m_unk0xfc = -1;
+	}
+
+	return 1;
+}
+
+#endif
 
 // FUNCTION: LEGO1 0x10024c20
 // FUNCTION: BETA10 0x1006db21
