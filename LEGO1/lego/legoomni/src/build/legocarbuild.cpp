@@ -51,7 +51,7 @@ LegoCarBuild::LegoCarBuild()
 {
 	m_unk0x100 = 0;
 	m_unk0x110 = 0;
-	m_unk0xf8 = 0xffffffff;
+	m_unk0xf8 = c_unknownminusone;
 	m_unk0x2d4 = FALSE;
 	m_unk0x258 = 0;
 	m_ColorBook_Bitmap = NULL;
@@ -431,7 +431,7 @@ MxResult LegoCarBuild::Tickle()
 		return SUCCESS;
 	}
 
-	if (m_unk0xf8 == 8) {
+	if (m_unk0xf8 == c_unknown8) {
 		if (m_unk0xfc == 1) {
 			FUN_10024f50();
 		}

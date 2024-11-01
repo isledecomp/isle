@@ -73,6 +73,11 @@ typedef LegoVehicleBuildState LegoJetskiBuildState;
 // SIZE 0x34c
 class LegoCarBuild : public LegoWorld {
 public:
+	enum Unknown0xf8 {
+		c_unknownminusone = -1,
+		c_unknown8 = 8
+	};
+
 	LegoCarBuild();
 	~LegoCarBuild() override;
 
@@ -143,7 +148,7 @@ public:
 	// LegoCarBuild::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0xf8;      // 0xf8
+	Unknown0xf8 m_unk0xf8;     // 0xf8
 	MxS16 m_unk0xfc;           // 0xfc
 	undefined m_unk0xfe[2];    // 0xfe
 	MxS32 m_unk0x100;          // 0x100
