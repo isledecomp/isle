@@ -34,7 +34,7 @@ public:
 	virtual MxResult GetDDrawSurfaceFromVideoManager(); // vtable+0x14
 
 	enum TransitionType {
-		e_notTransitioning = 0,
+		e_idle = 0, // name verified by BETA10 0x100ec4e6
 		e_noAnimation,
 		e_dissolve,
 		e_mosaic,
@@ -45,7 +45,7 @@ public:
 
 	MxResult StartTransition(TransitionType p_animationType, MxS32 p_speed, MxBool p_doCopy, MxBool p_playMusicInAnim);
 
-	TransitionType GetTransitionType() { return m_transitionType; }
+	TransitionType GetTransitionType() { return m_mode; }
 
 	// SYNTHETIC: LEGO1 0x1004b9e0
 	// MxTransitionManager::`scalar deleting destructor'
@@ -68,13 +68,16 @@ private:
 	FlagBitfield m_copyFlags;          // 0x20
 	undefined4 m_unk0x24;              // 0x24
 	FlagBitfield m_unk0x28;            // 0x28
-	TransitionType m_transitionType;   // 0x2c
-	LPDIRECTDRAWSURFACE m_ddSurface;   // 0x30
-	MxU16 m_animationTimer;            // 0x34
-	MxU16 m_columnOrder[640];          // 0x36
-	MxU16 m_randomShift[480];          // 0x536
-	MxULong m_systemTime;              // 0x8f8
-	MxS32 m_animationSpeed;            // 0x8fc
+
+	// name verified by BETA10 0x100ec4e6
+	TransitionType m_mode; // 0x2c
+
+	LPDIRECTDRAWSURFACE m_ddSurface; // 0x30
+	MxU16 m_animationTimer;          // 0x34
+	MxU16 m_columnOrder[640];        // 0x36
+	MxU16 m_randomShift[480];        // 0x536
+	MxULong m_systemTime;            // 0x8f8
+	MxS32 m_animationSpeed;          // 0x8fc
 };
 
 #endif // MXTRANSITIONMANAGER_H

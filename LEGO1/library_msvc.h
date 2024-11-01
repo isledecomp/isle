@@ -19,6 +19,7 @@
 // _free
 
 // LIBRARY: LEGO1 0x1008b020
+// LIBRARY: BETA10 0x100f8d20
 // ___CxxFrameHandler
 
 // LIBRARY: LEGO1 0x1008b24c

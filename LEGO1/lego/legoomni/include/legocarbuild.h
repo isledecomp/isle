@@ -6,6 +6,7 @@
 #include "legoworld.h"
 
 class LegoCarBuildAnimPresenter;
+class LegoControlManagerNotificationParam;
 class LegoEventNotificationParam;
 class MxControlPresenter;
 class MxStillPresenter;
@@ -21,6 +22,7 @@ public:
 		e_entering = 1,
 		e_unknown2 = 2,
 		e_cutscene = 3,
+		e_unknown4 = 4,
 		e_exiting = 6
 	};
 
@@ -117,14 +119,16 @@ public:
 	undefined4 FUN_100244e0(MxLong p_x, MxLong p_y);
 	undefined4 FUN_100246e0(MxLong p_x, MxLong p_y);
 	MxS32 FUN_10024850(MxLong p_x, MxLong p_y);
-	undefined4 FUN_10024890(LegoEventNotificationParam* p_param);
+	undefined4 FUN_10024890(MxParam* p_param2);
 	undefined4 FUN_10024c20(LegoEventNotificationParam* p_param);
 	void FUN_10024ef0();
+	void FUN_10024f30();
 	void FUN_10024f50();
 	void FUN_10024f70(MxBool p_enabled);
 	void SetPresentersEnabled(MxBool p_enabled);
 	void TogglePresentersEnabled();
 	void FUN_100250e0(MxBool p_param);
+	void FUN_10025350(MxS32 p_param);
 	void FUN_10025450();
 	undefined4 FUN_10025720(undefined4 p_param1);
 	MxS32 FUN_10025d70();
@@ -197,7 +201,8 @@ private:
 	// variable name verified by BETA10 0x1006b219
 	LegoVehicleBuildState* m_buildState; // 0x32c
 
-	undefined4 m_unk0x330; // 0x330
+	// variable name verified by BETA10 0x1006d742
+	undefined4 m_carId; // 0x330
 
 	// variable name verified by BETA10 0x1006cba7
 	LegoGameState::Area m_destLocation; // 0x334

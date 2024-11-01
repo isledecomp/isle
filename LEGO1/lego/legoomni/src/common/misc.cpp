@@ -188,8 +188,10 @@ void SetCurrentWorld(LegoWorld* p_world)
 }
 
 // FUNCTION: LEGO1 0x10015900
+// FUNCTION: BETA10 0x100e4f02
 MxTransitionManager* TransitionManager()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetTransitionManager();
 }
 

@@ -78,6 +78,7 @@ public:
 	const float& operator[](int idx) const { return m_data[idx]; }
 
 	// SYNTHETIC: LEGO1 0x10064b20
+	// SYNTHETIC: BETA10 0x10070420
 	// Mx4DPointFloat::operator=
 
 private:

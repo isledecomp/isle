@@ -152,6 +152,7 @@ public:
 	virtual void SetVector(const Vector2* p_other) { EqualsImpl(p_other->m_data); } // vtable+0x6c
 
 	// SYNTHETIC: LEGO1 0x10010be0
+	// SYNTHETIC: BETA10 0x100121e0
 	// Vector3::operator=
 
 	// SYNTHETIC: BETA10 0x1004af40
@@ -301,10 +302,14 @@ public:
 	// FUNCTION: BETA10 0x10048780
 	Vector4(float* p_data) : Vector3(p_data) {}
 
-	// Hack: Some code initializes a Vector4 from a (most likely) const float* source.
-	// Example: LegoCarBuild::VTable0x6c
+	// Some code initializes a Vector4 from a `const float*` source.
+	// Example: `LegoCarBuild::VTable0x6c`
 	// Vector4 however is a class that can mutate its underlying source, making
 	// initialization with a const source fundamentally incompatible.
+	// BETA10 appears to have two separate constructors for Vector4 as well,
+	// supporting the theory that this decompilation is correct.
+
+	// FUNCTION: BETA10 0x100701b0
 	Vector4(const float* p_data) : Vector3((float*) p_data) {}
 
 	// Note: virtual function overloads appear in the virtual table

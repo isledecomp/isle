@@ -1,5 +1,6 @@
 #include "legocarbuild.h"
 
+#include "copter_actions.h"
 #include "dunebuggy.h"
 #include "helicopter.h"
 #include "jetski.h"
@@ -25,6 +26,12 @@
 
 #include <isle.h>
 #include <vec.h>
+
+// names and values verified by BETA10 0x1006d742
+#define Helicopter_Actor 1
+#define DuneBugy_Actor 2
+#define Jetski_Actor 3
+#define RaceCar_Actor 4
 
 DECOMP_SIZE_ASSERT(LegoCarBuild, 0x34c)
 DECOMP_SIZE_ASSERT(LegoVehicleBuildState, 0x50)
@@ -87,12 +94,27 @@ MxBool LegoCarBuild::VTable0x5c()
 	return TRUE;
 }
 
-// STUB: LEGO1 0x10022a80
-// STUB: BETA10 0x1006aea3
+// FUNCTION: LEGO1 0x10022a80
+// FUNCTION: BETA10 0x1006aea3
 LegoCarBuild::~LegoCarBuild()
 {
-	// TODO
-	// ...
+	m_unk0x100 = 0;
+	m_unk0x110 = NULL;
+
+	if (m_unk0x258) {
+		m_unk0x258->SetUnknown0xbc(0);
+		m_unk0x258->SetTickleState(MxPresenter::e_idle);
+		m_unk0x258 = NULL;
+	}
+
+	ControlManager()->Unregister(this);
+	TickleManager()->UnregisterClient(this);
+
+	if (InputManager()->GetWorld() == this) {
+		InputManager()->ClearWorld();
+	}
+
+	InputManager()->UnRegister(this);
 	NotificationManager()->Unregister(this);
 }
 
@@ -117,22 +139,22 @@ MxResult LegoCarBuild::Create(MxDSAction& p_dsAction)
 		if (m_atomId == *g_copterScript) {
 			buildStateClassName = "LegoCopterBuildState";
 			GameState()->SetCurrentArea(LegoGameState::e_copterbuild);
-			m_unk0x330 = 1;
+			m_carId = Helicopter_Actor;
 		}
 		else if (m_atomId == *g_dunecarScript) {
 			buildStateClassName = "LegoDuneCarBuildState";
 			GameState()->SetCurrentArea(LegoGameState::e_dunecarbuild);
-			m_unk0x330 = 2;
+			m_carId = DuneBugy_Actor;
 		}
 		else if (m_atomId == *g_jetskiScript) {
 			buildStateClassName = "LegoJetskiBuildState";
 			GameState()->SetCurrentArea(LegoGameState::e_jetskibuild);
-			m_unk0x330 = 3;
+			m_carId = Jetski_Actor;
 		}
 		else if (m_atomId == *g_racecarScript) {
 			buildStateClassName = "LegoRaceCarBuildState";
 			GameState()->SetCurrentArea(LegoGameState::e_racecarbuild);
-			m_unk0x330 = 4;
+			m_carId = Helicopter_Actor;
 		}
 
 		LegoGameState* gameState = GameState();
@@ -429,7 +451,7 @@ MxResult LegoCarBuild::Tickle()
 		DWORD time = timeGetTime();
 		DWORD dTime = (time - m_unk0x10c) / 100;
 
-		if (m_unk0x330 == 4) {
+		if (m_carId == Helicopter_Actor) {
 			switch (m_unk0x10a) {
 			// TODO: Work out constants
 			case 500:
@@ -452,7 +474,7 @@ MxResult LegoCarBuild::Tickle()
 				return SUCCESS;
 			}
 		}
-		else if (m_unk0x330 == 3) {
+		else if (m_carId == Jetski_Actor) {
 			switch (m_unk0x10a) {
 			case 500:
 				LEGOCARBUILD_TICKLE_CASE(291, 291, 311, "Exit_Ctl")
@@ -473,7 +495,7 @@ MxResult LegoCarBuild::Tickle()
 				// 	return SUCCESS;
 			}
 		}
-		else if (m_unk0x330 == 2) {
+		else if (m_carId == DuneBugy_Actor) {
 			switch (m_unk0x10a) {
 			case 500:
 				LEGOCARBUILD_TICKLE_CASE(155, 155, 175, "Exit_Ctl")
@@ -490,7 +512,7 @@ MxResult LegoCarBuild::Tickle()
 				return SUCCESS;
 			}
 		}
-		else if (m_unk0x330 == 1) {
+		else if (m_carId == Helicopter_Actor) {
 			switch (m_unk0x10a) {
 			case 500:
 				LEGOCARBUILD_TICKLE_CASE(185, 185, 205, "Exit_Ctl")
@@ -575,7 +597,7 @@ MxLong LegoCarBuild::Notify(MxParam& p_param)
 
 			break;
 		case c_notificationControl:
-			result = FUN_10024890((LegoEventNotificationParam*) &p_param);
+			result = FUN_10024890(&p_param);
 
 			if (result == 1) {
 				m_unk0x109 = 0;
@@ -624,7 +646,7 @@ void LegoCarBuild::ReadyWorld()
 	InitPresenters();
 
 	if (BackgroundAudioManager()->GetEnabled()) {
-		InvokeAction(Extra::ActionType::e_start, *g_jukeboxScript, FUN_10025ee0(m_unk0x330), NULL);
+		InvokeAction(Extra::ActionType::e_start, *g_jukeboxScript, FUN_10025ee0(m_carId), NULL);
 		m_buildState->m_animationState = LegoVehicleBuildState::e_unknown2;
 		NotificationManager()->Send(this, MxNotificationParam());
 	}
@@ -636,8 +658,8 @@ void LegoCarBuild::ReadyWorld()
 // FUNCTION: LEGO1 0x100243a0
 void LegoCarBuild::FUN_100243a0()
 {
-	switch (m_unk0x330) {
-	case 1:
+	switch (m_carId) {
+	case Helicopter_Actor:
 		if (GameState()->GetCurrentAct() == LegoGameState::Act::e_act2) {
 			m_destLocation = LegoGameState::Area::e_act3script;
 			TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
@@ -648,15 +670,15 @@ void LegoCarBuild::FUN_100243a0()
 			TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
 			break;
 		}
-	case 2:
+	case DuneBugy_Actor:
 		m_destLocation = LegoGameState::Area::e_garadoor;
 		TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
 		break;
-	case 3:
+	case Jetski_Actor:
 		m_destLocation = LegoGameState::Area::e_unk17;
 		TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
 		break;
-	case 4:
+	case RaceCar_Actor:
 		m_destLocation = LegoGameState::Area::e_unk20;
 		TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
 	}
@@ -788,7 +810,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 
 	switch (m_buildState->m_animationState) {
 	case 4:
-		entity = (LegoEntity*) Find(m_atomId, m_unk0x330);
+		entity = (LegoEntity*) Find(m_atomId, m_carId);
 
 		if (entity && entity->GetROI()) {
 
@@ -837,7 +859,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 			assert(destWorld);
 			m_buildState->m_animationState = LegoVehicleBuildState::e_exiting;
 
-			if (m_unk0x258->m_numberOfParts != m_unk0x258->m_placedPartCount) {
+			if (m_unk0x258->AllPartsPlaced()) {
 				FUN_100243a0();
 			}
 			else {
@@ -852,17 +874,17 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 	case 2:
 		MxU32 jukeboxScript;
 
-		switch (m_unk0x330) {
-		case 1:
+		switch (m_carId) {
+		case Helicopter_Actor:
 			jukeboxScript = JukeboxScript::c_HelicopterBuild_Music;
 			break;
-		case 2:
+		case DuneBugy_Actor:
 			jukeboxScript = JukeboxScript::c_DuneCarBuild_Music;
 			break;
-		case 3:
+		case Jetski_Actor:
 			jukeboxScript = JukeboxScript::c_JetskiBuild_Music;
 			break;
-		case 4:
+		case RaceCar_Actor:
 			jukeboxScript = JukeboxScript::c_RaceCarBuild_Music;
 		}
 
@@ -891,6 +913,14 @@ void LegoCarBuild::FUN_10024ef0()
 	FUN_10025720(FUN_10025d70());
 	m_buildState->m_unk0x4c += 1;
 	FUN_10015820(FALSE, 7);
+}
+
+// FUNCTION: LEGO1 0x10024f30
+// FUNCTION: BETA10 0x1006dfa0
+void LegoCarBuild::FUN_10024f30()
+{
+	FUN_10022f30();
+	m_unk0x258->SetUnknown0xbc(2);
 }
 
 // FUNCTION: LEGO1 0x10024f50
@@ -973,11 +1003,62 @@ void LegoCarBuild::FUN_100250e0(MxBool p_enabled)
 	}
 }
 
-// STUB: LEGO1 0x10025450
-// STUB: BETA10 0x1006e599
-void LegoCarBuild::FUN_10025450()
+// STUB: LEGO1 0x10025350
+// STUB: BETA10 0x1006e3c0
+void LegoCarBuild::FUN_10025350(MxS32 p_param)
 {
 	// TODO
+}
+
+// FUNCTION: LEGO1 0x10025450
+// FUNCTION: BETA10 0x1006e599
+void LegoCarBuild::FUN_10025450()
+{
+	m_unk0x12c = m_unk0x110->GetLocal2World();
+	m_unk0x1c0 = m_unk0x12c;
+
+	Vector3 local_c(m_unk0x1c0[3]);
+	local_c = Vector3(m_unk0x258->GetUnknown0xe0()[3]);
+
+	// This looks odd, but it improves the LEGO1 match while breaking the BETA10 match.
+	// I don't know whether this is due to compiler entropy.
+	// Feel free to replace unk0x178 -> m_unk0x178 and remove this variable if it improves the LEGO1 match
+	// in the future.
+	MxMatrix* unk0x178 = &m_unk0x178;
+	*unk0x178 = m_unk0x12c;
+
+	if (m_unk0x258->PartIsPlaced(m_unk0x110->GetName())) {
+		m_unk0x2a4 = Vector4(m_unk0x110->GetWorldPosition());
+
+		if (!m_unk0x2d4) {
+			m_unk0x2bc = m_unk0x2a4;
+
+			m_unk0x208 = m_unk0x12c;
+			m_unk0x2a4[0] += m_unk0x1c0[3][0] - m_unk0x208[3][0];
+			m_unk0x2a4[1] += m_unk0x1c0[3][1] - m_unk0x208[3][1];
+			m_unk0x2a4[2] += m_unk0x1c0[3][2] - m_unk0x208[3][2];
+		}
+
+		*unk0x178 = m_unk0x1c0;
+	}
+	else {
+		const LegoChar* wiredName;
+
+		if (!m_unk0x258->FUN_10079c30(m_unk0x110->GetName())) {
+			wiredName = m_unk0x258->GetWiredNameByPartName(m_unk0x110->GetName());
+		}
+		else {
+			wiredName = m_unk0x258->GetWiredNameOfLastPlacedPart();
+		}
+
+		LegoROI* parentROI = (LegoROI*) m_unk0x110->GetParentROI();
+		m_unk0x208 = parentROI->FindChildROI(wiredName, parentROI)->GetLocal2World();
+		m_unk0x2bc = Vector4(parentROI->FindChildROI(wiredName, parentROI)->GetWorldPosition());
+		m_unk0x2a4 = Vector4(m_unk0x110->GetWorldPosition());
+
+		m_unk0x2a4[2] += (m_unk0x1c0[3][2] - m_unk0x12c[3][2]);
+		m_unk0x178[3][2] = m_unk0x1c0[3][2];
+	}
 }
 
 // FUNCTION: LEGO1 0x100256c0
@@ -999,6 +1080,7 @@ void LegoCarBuild::Enable(MxBool p_enable)
 }
 
 // STUB: LEGO1 0x10025720
+// STUB: BETA10 0x1006e9df
 undefined4 LegoCarBuild::FUN_10025720(undefined4 p_param1)
 {
 	// TODO
@@ -1057,7 +1139,7 @@ void LegoCarBuild::FUN_10025e40()
 MxBool LegoCarBuild::Escape()
 {
 	BackgroundAudioManager()->Init();
-	MxS32 targetEntityId = FUN_10025ee0(m_unk0x330);
+	MxS32 targetEntityId = FUN_10025ee0(m_carId);
 	InvokeAction(Extra::ActionType::e_stop, *g_jukeboxScript, targetEntityId, NULL);
 	DeleteObjects(&m_atomId, 500, 999);
 

@@ -627,6 +627,20 @@ MxBool LegoCarBuildAnimPresenter::StringEndsOnZero(const LegoChar* p_string)
 	return (p_string[strlen(p_string) - 2] != '0');
 }
 
+// FUNCTION: LEGO1 0x10079d60
+// FUNCTION: BETA10 0x1007284c
+const LegoChar* LegoCarBuildAnimPresenter::GetWiredNameByPartName(const LegoChar* p_name)
+{
+	for (MxS16 i = 0; i < m_numberOfParts; i++) {
+		if (strcmpi(p_name, m_parts[i].m_name) == 0) {
+			return m_parts[i].m_wiredName;
+		}
+	}
+
+	return NULL;
+}
+
+
 // FUNCTION: LEGO1 0x10079e20
 // FUNCTION: BETA10 0x10072959
 const BoundingSphere& LegoCarBuildAnimPresenter::FUN_10079e20()
