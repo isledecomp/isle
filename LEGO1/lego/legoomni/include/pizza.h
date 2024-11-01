@@ -83,6 +83,9 @@ public:
 			}
 		}
 
+		// FUNCTION: BETA10 0x100ef780
+		IsleScript::Script* GetActions() { return m_actions; }
+
 		// FUNCTION: BETA10 0x100ef7b0
 		IsleScript::Script GetUnknownFinishAction() { return m_actions[m_numActions + 2]; }
 
@@ -140,6 +143,9 @@ public:
 	// FUNCTION: BETA10 0x100ef470
 	void SetUnknown0xb0(MxU32 p_unk0xb0) { m_unk0xb0 = p_unk0xb0; }
 
+	// FUNCTION: BETA10 0x100ef850
+	MxU32 GetUnknown0xb0() { return m_unk0xb0; }
+
 	MxS16 GetHighScore(MxU8 p_actorId) { return GetMission(p_actorId)->m_hiScore; }
 
 	// SYNTHETIC: LEGO1 0x10039350
@@ -190,7 +196,7 @@ public:
 
 	MxResult Create(MxDSAction& p_dsAction) override;                           // vtable+0x18
 	MxLong HandleClick() override;                                              // vtable+0x68
-	MxLong HandleEndAction(MxEndActionNotificationParam&) override;             // vtable+0x74
+	MxLong HandleEndAction(MxEndActionNotificationParam& p_param) override;     // vtable+0x74
 	MxLong HandlePathStruct(LegoPathStructNotificationParam& p_param) override; // vtable+0x80
 
 	void CreateState();

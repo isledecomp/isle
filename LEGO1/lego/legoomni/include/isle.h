@@ -190,6 +190,7 @@ public:
 	virtual void VTable0x6c(LegoPathActor* p_actor); // vtable+6c
 
 	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
+	MxBool HasHelicopter() { return m_helicopter != NULL; }
 
 	void FUN_10033350();
 

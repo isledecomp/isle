@@ -4,15 +4,20 @@
 #include "isle_actions.h"
 #include "jukebox_actions.h"
 #include "legoanimationmanager.h"
+#include "legoeventnotificationparam.h"
 #include "legogamestate.h"
+#include "legoinputmanager.h"
 #include "legopathstruct.h"
 #include "legoutils.h"
 #include "legoworld.h"
 #include "misc.h"
+#include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxdebug.h"
 #include "mxmisc.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
+#include "mxtransitionmanager.h"
 #include "pizzeria.h"
 #include "skateboard.h"
 #include "sndanim_actions.h"
@@ -187,6 +192,7 @@ void Pizza::FUN_10038220(IsleScript::Script p_objectId)
 }
 
 // FUNCTION: LEGO1 0x100382b0
+// FUNCTION: BETA10 0x100edc9b
 void Pizza::FUN_100382b0()
 {
 	if (m_state->m_unk0x0c != 8) {
@@ -209,6 +215,7 @@ void Pizza::FUN_100382b0()
 		m_unk0x90 = INT_MIN;
 		m_skateBoard->EnableScenePresentation(FALSE);
 		m_skateBoard->SetUnknown0x160(FALSE);
+		MxTrace("Pizza mission: idle\n");
 	}
 }
 
@@ -221,7 +228,7 @@ void Pizza::StopActions()
 	PizzaMissionState::Mission* mission = m_mission;
 	if (mission != NULL) {
 		for (MxS32 i = 0; i < mission->m_numActions; i++) {
-			InvokeAction(Extra::e_stop, *g_isleScript, mission->m_actions[i], NULL);
+			InvokeAction(Extra::e_stop, *g_isleScript, mission->GetActions()[i], NULL);
 		}
 	}
 }
@@ -242,6 +249,7 @@ MxLong Pizza::HandleClick()
 
 		if (m_skateBoard == NULL) {
 			m_skateBoard = (SkateBoard*) m_world->Find(m_atomId, IsleScript::c_SkateBoard_Actor);
+			assert(m_skateBoard);
 		}
 
 		IsleScript::Script action;
@@ -287,6 +295,8 @@ MxLong Pizza::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 			else {
 				m_mission->UpdateScore(LegoState::e_yellow);
 			}
+
+			MxTrace("Pizza mission: ending\n");
 		}
 		else if ((p_param.GetTrigger() == LegoPathStruct::c_camAnim && (
 			((p_param.GetData() == 0x24 || p_param.GetData() == 0x22) && GameState()->GetActorId() == LegoActor::c_mama) ||
@@ -340,6 +350,8 @@ MxLong Pizza::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 			m_state->m_unk0x0c = 5;
 			PlayAction(action, TRUE);
+
+			MxTrace("Pizza mission: ending\n");
 		}
 		else if (p_param.GetTrigger() == LegoPathStruct::c_w) {
 			if (p_param.GetData() == 0x15e && GameState()->GetActorId() == LegoActor::c_pepper) {
@@ -373,12 +385,15 @@ MxResult Pizza::Tickle()
 
 	if (m_mission != NULL && m_mission->m_startTime != INT_MIN) {
 		if (m_state->m_unk0x0c == 4) {
+			assert(m_mission);
+
 			if (time > m_mission->m_startTime + m_mission->GetTimeoutTime()) {
 				StopActions();
 				m_mission->UpdateScore(LegoState::e_grey);
 				FUN_100382b0();
 				BackgroundAudioManager()->LowerVolume();
 				InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_Avo917In_PlayWav, NULL);
+				MxTrace("Pizza mission: timeout, stop\n");
 			}
 			else if (time >= m_mission->m_startTime + 35000 && m_unk0x8c == IsleScript::c_noneIsle) {
 				switch (GameState()->GetActorId()) {
@@ -407,6 +422,8 @@ MxResult Pizza::Tickle()
 			}
 		}
 		else if (m_state->m_unk0x0c == 2) {
+			assert(m_mission);
+
 			if (Timer()->GetTime() > m_mission->m_startTime + 5000) {
 				m_skateBoard->SetUnknown0x160(FALSE);
 				m_skateBoard->EnableScenePresentation(FALSE);
@@ -415,6 +432,7 @@ MxResult Pizza::Tickle()
 				m_state->m_unk0x0c = 9;
 				AnimationManager()->FUN_1005f6d0(TRUE);
 				PlayAction(m_mission->GetUnknownFinishAction(), TRUE);
+				MxTrace("Pizza mission: timeout, declining\n");
 			}
 		}
 	}
@@ -422,11 +440,141 @@ MxResult Pizza::Tickle()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10038b10
-MxLong Pizza::HandleEndAction(MxEndActionNotificationParam&)
+// FUNCTION: LEGO1 0x10038b10
+// FUNCTION: BETA10 0x100ee4f5
+MxLong Pizza::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
-	// TODO
-	return 0;
+	MxLong result = 0;
+	MxU32 objectId = p_param.GetAction()->GetObjectId();
+
+	if (m_unk0x8c == objectId) {
+		BackgroundAudioManager()->RaiseVolume();
+		result = 1;
+	}
+	else {
+		switch (m_state->m_unk0x0c) {
+		case 1:
+			if (m_state->GetUnknown0xb0() == objectId) {
+				m_state->m_unk0x0c = 2;
+				m_mission->m_startTime = Timer()->GetTime();
+				TickleManager()->RegisterClient(this, 200);
+				MxTrace("Pizza mission: proposed\n");
+			}
+			break;
+		case 3: {
+			if (m_state->GetUnknown0xb0() == objectId) {
+				m_mission->m_startTime = Timer()->GetTime();
+
+				for (MxS32 i = 0; i < m_mission->m_numActions; i++) {
+					InvokeAction(Extra::e_start, *g_isleScript, m_mission->GetActions()[i], NULL);
+				}
+
+				m_state->m_unk0x0c = 4;
+				m_state->SetUnknown0xb0(IsleScript::c_noneIsle);
+				UserActor()->SetState(0);
+				m_skateBoard->SetUnknown0x160(TRUE);
+				m_world->PlaceActor(m_skateBoard, "int37", 2, 0.5, 3, 0.5);
+
+#ifdef COMPAT_MODE
+				{
+					LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
+					m_skateBoard->Notify(param);
+				}
+#else
+				m_skateBoard->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
+#endif
+
+				MxTrace("Pizza mission: continues\n");
+				result = 1;
+			}
+			break;
+		}
+		case 5:
+			if (m_state->GetUnknown0xb0() == objectId) {
+				StopActions();
+
+				if (GameState()->GetActorId() == LegoActor::c_pepper) {
+					IsleScript::Script action = IsleScript::c_noneIsle;
+
+					if (!((Isle*) CurrentWorld())->HasHelicopter()) {
+						switch (m_mission->m_unk0x14) {
+						case 1:
+							action = IsleScript::c_pja126br_RunAnim;
+							m_mission->m_unk0x14++;
+							m_state->m_unk0x0c = 6;
+							MxTrace("Pizza mission: succeeds\n");
+							break;
+						case 2:
+							action = IsleScript::c_pja129br_RunAnim;
+							m_unk0x90 = Timer()->GetTime();
+							m_unk0x94 = 500;
+							m_mission->m_unk0x14++;
+							m_state->m_unk0x0c = 6;
+							MxTrace("Pizza mission: succeeds\n");
+							break;
+						case 3:
+							action = IsleScript::c_pja131br_RunAnim;
+							m_unk0x90 = Timer()->GetTime();
+							m_unk0x94 = 500;
+							m_state->m_unk0x0c = 6;
+							break;
+						}
+					}
+					else {
+						action = IsleScript::c_pja132br_RunAnim;
+						m_unk0x90 = Timer()->GetTime();
+						m_unk0x94 = 2300;
+						m_state->m_unk0x0c = 8;
+						InputManager()->DisableInputProcessing();
+						InputManager()->SetUnknown336(TRUE);
+						MxTrace("Pizza mission: go to Act2\n");
+					}
+
+					PlayAction(action, TRUE);
+				}
+				else {
+					FUN_100382b0();
+					m_state->m_unk0x0c = 0;
+					m_state->SetUnknown0xb0(IsleScript::c_noneIsle);
+				}
+			}
+			break;
+		case 6:
+			if (m_state->GetUnknown0xb0() == objectId) {
+				if (objectId == IsleScript::c_pja126br_RunAnim) {
+					PlayAction(IsleScript::c_pja127br_RunAnim, TRUE);
+					m_unk0x90 = Timer()->GetTime();
+					m_unk0x94 = 700;
+				}
+				else if (objectId == IsleScript::c_pja129br_RunAnim) {
+					PlayAction(IsleScript::c_pja130br_RunAnim, TRUE);
+				}
+				else {
+					FUN_100382b0();
+					m_state->m_unk0x0c = 0;
+					m_state->SetUnknown0xb0(IsleScript::c_noneIsle);
+				}
+			}
+			break;
+		case 8:
+			if (m_state->GetUnknown0xb0() == objectId) {
+				m_act1state->m_unk0x018 = 0;
+				m_state->m_unk0x0c = 0;
+				GameState()->m_currentArea = LegoGameState::e_isle;
+				TickleManager()->UnregisterClient(this);
+				((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_act2main);
+				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			}
+			break;
+		case 9:
+			if (m_state->GetUnknown0xb0() == objectId) {
+				FUN_100382b0();
+			}
+			break;
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10038fe0
