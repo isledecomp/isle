@@ -1217,8 +1217,8 @@ void LegoCarBuild::FUN_10025450()
 	m_unk0x12c = m_unk0x110->GetLocal2World();
 	m_unk0x1c0 = m_unk0x12c;
 
-	Vector3 local_c(m_unk0x1c0[3]);
-	local_c = Vector3(m_unk0x258->GetUnknown0xe0()[3]);
+	Vector3 lastColumnOfUnk0x1c0(m_unk0x1c0[3]);
+	lastColumnOfUnk0x1c0 = Vector3(m_unk0x258->GetUnknown0xe0()[3]);
 
 	// This looks odd, but it improves the LEGO1 match while breaking the BETA10 match.
 	// I don't know whether this is due to compiler entropy.
