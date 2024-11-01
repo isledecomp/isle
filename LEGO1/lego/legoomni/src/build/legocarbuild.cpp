@@ -874,7 +874,7 @@ undefined4 LegoCarBuild::FUN_10024890(MxParam* p_param)
 				(m_Decals_Ctl5 && m_Decals_Ctl5->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
 				(m_Decals_Ctl6 && m_Decals_Ctl6->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
 				(m_Decals_Ctl7 && m_Decals_Ctl7->GetAction()->GetObjectId() == param->m_clickedObjectId)) {
-				m_unk0x258->FUN_10079dc0(m_unk0x110->GetName(), param->m_clickedObjectId);
+				m_unk0x258->SetPartObjectIdByName(m_unk0x110->GetName(), param->m_clickedObjectId);
 				m_Decal_Sound->Enable(FALSE);
 				m_Decal_Sound->Enable(TRUE);
 			}
@@ -981,7 +981,7 @@ undefined4 LegoCarBuild::FUN_10024890(MxParam* p_param)
 				(m_Decals_Ctl5 && m_Decals_Ctl5->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
 				(m_Decals_Ctl6 && m_Decals_Ctl6->GetAction()->GetObjectId() == param->m_clickedObjectId) ||
 				(m_Decals_Ctl7 && m_Decals_Ctl7->GetAction()->GetObjectId() == param->m_clickedObjectId)) {
-				m_unk0x258->FUN_10079dc0(m_unk0x110->GetName(), param->m_clickedObjectId);
+				m_unk0x258->SetPartObjectIdByName(m_unk0x110->GetName(), param->m_clickedObjectId);
 				m_Decal_Sound->Enable(FALSE);
 				m_Decal_Sound->Enable(TRUE);
 			}

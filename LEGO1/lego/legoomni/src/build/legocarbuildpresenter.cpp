@@ -640,6 +640,17 @@ const LegoChar* LegoCarBuildAnimPresenter::GetWiredNameByPartName(const LegoChar
 	return NULL;
 }
 
+// FUNCTION: LEGO1 0x10079dc0
+// FUNCTION: BETA10 0x100728d1
+void LegoCarBuildAnimPresenter::SetPartObjectIdByName(const LegoChar* p_name, MxS16 p_objectId)
+{
+	for (MxS16 i = 0; i < m_numberOfParts; i++) {
+		if (strcmpi(p_name, m_parts[i].m_name) == 0) {
+			m_parts[i].m_objectId = p_objectId;
+			return;
+		}
+	}
+}
 
 // FUNCTION: LEGO1 0x10079e20
 // FUNCTION: BETA10 0x10072959
