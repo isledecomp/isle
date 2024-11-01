@@ -841,11 +841,7 @@ undefined4 LegoCarBuild::FUN_10024890(MxParam* p_param)
 					m_buildState->m_unk0x4d = TRUE;
 					InvokeAction(Extra::e_start, m_atomId, m_carId, NULL);
 
-					{
-						// This pattern is suggested by BETA10 and also improves the LEGO1 match
-						MxNotificationParam param;
-						NotificationManager()->Send(this, param);
-					}
+					NotificationManager()->Send(this, MxNotificationParam());
 
 					m_buildState->m_animationState = LegoVehicleBuildState::e_unknown4;
 				}
@@ -927,10 +923,7 @@ undefined4 LegoCarBuild::FUN_10024890(MxParam* p_param)
 					if (GameState()->GetCurrentAct() == 0) {
 						InvokeAction(Extra::e_start, m_atomId, m_carId, NULL);
 
-						{
-							MxNotificationParam param;
-							NotificationManager()->Send(this, param);
-						}
+						NotificationManager()->Send(this, MxNotificationParam());
 
 						assert(m_buildState);
 						m_buildState->m_animationState = LegoVehicleBuildState::e_unknown4;
