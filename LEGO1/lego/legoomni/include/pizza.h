@@ -83,6 +83,12 @@ public:
 			}
 		}
 
+		// FUNCTION: BETA10 0x100ef7b0
+		IsleScript::Script GetUnknownFinishAction() { return m_actions[m_numActions + 2]; }
+
+		// FUNCTION: BETA10 0x100ef7e0
+		MxLong GetTimeoutTime() { return m_finishTimes[3]; }
+
 		MxResult WriteToFile(LegoFile* p_file)
 		{
 			Write(p_file, m_unk0x06);
@@ -205,7 +211,7 @@ private:
 	Act1State* m_act1state;                // 0x88
 	IsleScript::Script m_unk0x8c;          // 0x8c
 	MxLong m_unk0x90;                      // 0x90
-	undefined4 m_unk0x94;                  // 0x94
+	MxLong m_unk0x94;                      // 0x94
 	MxBool m_unk0x98;                      // 0x98
 };
 
