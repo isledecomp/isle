@@ -46,7 +46,7 @@ DECOMP_SIZE_ASSERT(Isle, 0x140)
 MxU32 g_isleFlags = 0x7f;
 
 // GLOBAL: LEGO1 0x100f37f0
-IsleScript::Script g_unk0x100f37f0[] =
+IsleScript::Script g_cptClickDialogue[] =
 	{IsleScript::c_Avo905Ps_PlayWav, IsleScript::c_Avo906Ps_PlayWav, IsleScript::c_Avo907Ps_PlayWav};
 
 // FUNCTION: LEGO1 0x10030820
@@ -362,14 +362,14 @@ MxLong Isle::HandleControl(LegoControlManagerNotificationParam& p_param)
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case IsleScript::c_Observe_LeftArrow_Ctl:
-			m_act1state->FUN_100346a0();
+			m_act1state->StopCptClickDialogue();
 			m_radio.Stop();
 		case IsleScript::c_SeaView_RightArrow_Ctl:
 			m_destLocation = LegoGameState::e_elevopen;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case IsleScript::c_Observe_RightArrow_Ctl:
-			m_act1state->FUN_100346a0();
+			m_act1state->StopCptClickDialogue();
 			m_radio.Stop();
 		case IsleScript::c_SeaView_LeftArrow_Ctl:
 			m_destLocation = LegoGameState::e_elevdown;
@@ -420,7 +420,7 @@ MxLong Isle::HandleControl(LegoControlManagerNotificationParam& p_param)
 			break;
 		case IsleScript::c_Observe_Draw1_Ctl:
 		case IsleScript::c_Observe_Draw2_Ctl:
-			m_act1state->FUN_10034660();
+			m_act1state->PlayCptClickDialogue();
 			break;
 		case IsleScript::c_ElevDown_Elevator_Ctl:
 			m_destLocation = LegoGameState::e_elevride2;
@@ -1287,10 +1287,10 @@ Act1State::Act1State()
 	m_elevFloor = Act1State::c_floor1;
 	m_unk0x018 = 1;
 	m_unk0x01e = FALSE;
-	m_unk0x008 = Playlist((MxU32*) g_unk0x100f37f0, sizeOfArray(g_unk0x100f37f0), Playlist::e_loop);
+	m_cptClickDialogue = Playlist((MxU32*) g_cptClickDialogue, sizeOfArray(g_cptClickDialogue), Playlist::e_loop);
 	m_unk0x01f = FALSE;
 	m_planeActive = FALSE;
-	m_unk0x014 = -1;
+	m_currentCptClickDialogue = IsleScript::c_noneIsle;
 	m_unk0x022 = FALSE;
 	m_unk0x154 = NULL;
 	m_unk0x158 = NULL;
@@ -1386,7 +1386,7 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 			}
 		}
 
-		Write(p_file, m_unk0x008.m_nextIndex);
+		Write(p_file, m_cptClickDialogue.m_nextIndex);
 		Write(p_file, m_unk0x022);
 	}
 	else if (p_file->IsReadMode()) {
@@ -1440,7 +1440,7 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 			}
 		}
 
-		Read(p_file, &m_unk0x008.m_nextIndex);
+		Read(p_file, &m_cptClickDialogue.m_nextIndex);
 		Read(p_file, &m_unk0x022);
 	}
 
@@ -1448,18 +1448,24 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10034660
-void Act1State::FUN_10034660()
+// FUNCTION: LEGO1 0x10034660
+void Act1State::PlayCptClickDialogue()
 {
-	// TODO
+	StopCptClickDialogue();
+	m_currentCptClickDialogue = (IsleScript::Script) m_cptClickDialogue.Next();
+	BackgroundAudioManager()->LowerVolume();
+
+	if (m_currentCptClickDialogue != IsleScript::c_noneIsle) {
+		InvokeAction(Extra::e_start, *g_isleScript, m_currentCptClickDialogue, NULL);
+	}
 }
 
 // FUNCTION: LEGO1 0x100346a0
-void Act1State::FUN_100346a0()
+void Act1State::StopCptClickDialogue()
 {
-	if (m_unk0x014 != -1) {
-		InvokeAction(Extra::e_stop, *g_isleScript, m_unk0x014, NULL);
-		m_unk0x014 = -1;
+	if (m_currentCptClickDialogue != IsleScript::c_noneIsle) {
+		InvokeAction(Extra::e_stop, *g_isleScript, m_currentCptClickDialogue, NULL);
+		m_currentCptClickDialogue = IsleScript::c_noneIsle;
 	}
 }
 
