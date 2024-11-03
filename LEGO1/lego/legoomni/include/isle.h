@@ -101,9 +101,6 @@ public:
 	RaceCar* m_racecar;                           // 0x268
 };
 
-// FUNCTION: LEGO1 0x10033a70
-// Act1State::LegoNamedPlane::~LegoNamedPlane
-
 // VTABLE: LEGO1 0x100d6fb8
 // SIZE 0x140
 class Isle : public LegoWorld {

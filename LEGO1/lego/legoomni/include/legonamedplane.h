@@ -11,6 +11,9 @@ public:
 	// FUNCTION: LEGO1 0x10033800
 	LegoNamedPlane() {}
 
+	// FUNCTION: LEGO1 0x10033a70
+	// LegoNamedPlane::~LegoNamedPlane
+
 	void SetName(const char* p_name) { m_name = p_name; }
 	const MxString* GetName() const { return &m_name; }
 
