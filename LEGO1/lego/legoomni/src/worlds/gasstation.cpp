@@ -288,7 +288,7 @@ inline void GasStation::PlayAction(GarageScript::Script p_objectId)
 
 	BackgroundAudioManager()->LowerVolume();
 	Start(&action);
-	m_state->FUN_10006430(p_objectId);
+	m_state->PlayAction(p_objectId);
 }
 
 // FUNCTION: BETA10 0x10029f00
@@ -297,7 +297,7 @@ inline void GasStation::StopAction(GarageScript::Script p_objectId)
 	if (p_objectId != GarageScript::c_noneGarage) {
 		InvokeAction(Extra::e_stop, *g_garageScript, p_objectId, NULL);
 		BackgroundAudioManager()->RaiseVolume();
-		m_state->FUN_10006460(p_objectId);
+		m_state->StopAction(p_objectId);
 	}
 }
 
@@ -310,7 +310,7 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 		MxDSAction* action = p_param.GetAction();
 
 		if (action->GetAtomId() == m_atomId && action->GetObjectId()) {
-			m_state->FUN_10006460((GarageScript::Script) action->GetObjectId());
+			m_state->StopAction((GarageScript::Script) action->GetObjectId());
 			m_unk0x106 = 0;
 
 			switch (m_state->m_unk0x14.m_unk0x00) {
@@ -357,7 +357,7 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 MxLong GasStation::HandleKeyPress(MxS8 p_key)
 {
 	if (p_key == VK_SPACE && g_unk0x100f0160 == 0 && m_unk0x106 != 0) {
-		m_state->FUN_10006490();
+		m_state->StopActions();
 		return 1;
 	}
 
@@ -394,6 +394,7 @@ MxLong GasStation::HandleButtonDown(LegoControlManagerNotificationParam& p_param
 }
 
 // FUNCTION: LEGO1 0x10005b20
+// FUNCTION: BETA10 0x10029445
 MxLong GasStation::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	if (p_param.GetUnknown0x28() == 1) {
@@ -405,7 +406,7 @@ MxLong GasStation::HandleControl(LegoControlManagerNotificationParam& p_param)
 			m_state->m_unk0x14.m_unk0x00 = 0;
 			m_destLocation = LegoGameState::Area::e_garadoor;
 
-			m_state->FUN_10006490();
+			m_state->StopActions();
 			m_radio.Stop();
 			BackgroundAudioManager()->Stop();
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
@@ -414,7 +415,7 @@ MxLong GasStation::HandleControl(LegoControlManagerNotificationParam& p_param)
 			m_state->m_unk0x14.m_unk0x00 = 0;
 			m_destLocation = LegoGameState::Area::e_infomain;
 
-			m_state->FUN_10006490();
+			m_state->StopActions();
 			m_radio.Stop();
 			BackgroundAudioManager()->Stop();
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
@@ -423,7 +424,7 @@ MxLong GasStation::HandleControl(LegoControlManagerNotificationParam& p_param)
 			m_state->m_unk0x14.m_unk0x00 = 0;
 			m_destLocation = LegoGameState::Area::e_dunecarbuild;
 
-			m_state->FUN_10006490();
+			m_state->StopActions();
 			m_radio.Stop();
 			BackgroundAudioManager()->Stop();
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
@@ -435,6 +436,7 @@ MxLong GasStation::HandleControl(LegoControlManagerNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10005c40
+// FUNCTION: BETA10 0x10029551
 void GasStation::Enable(MxBool p_enable)
 {
 	LegoWorld::Enable(p_enable);
@@ -451,6 +453,7 @@ void GasStation::Enable(MxBool p_enable)
 }
 
 // FUNCTION: LEGO1 0x10005c90
+// FUNCTION: BETA10 0x100295c6
 MxResult GasStation::Tickle()
 {
 	if (!m_worldStarted) {
@@ -495,13 +498,14 @@ MxResult GasStation::Tickle()
 MxBool GasStation::Escape()
 {
 	m_radio.Stop();
-	m_state->FUN_10006490();
+	m_state->StopActions();
 	m_state->m_unk0x14.m_unk0x00 = 0;
 	m_destLocation = LegoGameState::Area::e_infomain;
 	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x10005eb0
+// FUNCTION: BETA10 0x100296b8
 GasStationState::GasStationState()
 {
 	m_unk0x18 = 0;
@@ -509,14 +513,11 @@ GasStationState::GasStationState()
 	m_unk0x1c = 0;
 	m_unk0x1e = 0;
 	m_unk0x20 = 0;
-
-	undefined4* unk0x08 = m_unk0x08;
-	unk0x08[0] = -1;
-	unk0x08[1] = -1;
-	unk0x08[2] = -1;
+	memset(m_actions, GarageScript::c_noneGarage, sizeof(m_actions));
 }
 
 // FUNCTION: LEGO1 0x10006300
+// FUNCTION: BETA10 0x10029754
 MxResult GasStationState::Serialize(LegoFile* p_file)
 {
 	LegoState::Serialize(p_file);
@@ -539,20 +540,37 @@ MxResult GasStationState::Serialize(LegoFile* p_file)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10006430
-void GasStationState::FUN_10006430(GarageScript::Script)
+// FUNCTION: LEGO1 0x10006430
+void GasStationState::PlayAction(GarageScript::Script p_objectId)
 {
-	// TODO
+	for (MxS32 i = 0; i < (MxS32) sizeOfArray(m_actions); i++) {
+		if (m_actions[i] == GarageScript::c_noneGarage) {
+			m_actions[i] = p_objectId;
+			return;
+		}
+	}
 }
 
-// STUB: LEGO1 0x10006460
-void GasStationState::FUN_10006460(GarageScript::Script)
+// FUNCTION: LEGO1 0x10006460
+void GasStationState::StopAction(GarageScript::Script p_objectId)
 {
-	// TODO
+	for (MxS32 i = 0; i < (MxS32) sizeOfArray(m_actions); i++) {
+		if (m_actions[i] == p_objectId) {
+			m_actions[i] = GarageScript::c_noneGarage;
+			return;
+		}
+	}
 }
 
-// STUB: LEGO1 0x10006490
-void GasStationState::FUN_10006490()
+// FUNCTION: LEGO1 0x10006490
+void GasStationState::StopActions()
 {
-	// TODO
+	for (MxS32 i = 0; i < (MxS32) sizeOfArray(m_actions); i++) {
+		if (m_actions[i] != GarageScript::c_noneGarage) {
+			InvokeAction(Extra::e_stop, *g_garageScript, m_actions[i], NULL);
+			m_actions[i] = GarageScript::c_noneGarage;
+		}
+	}
+
+	BackgroundAudioManager()->RaiseVolume();
 }
