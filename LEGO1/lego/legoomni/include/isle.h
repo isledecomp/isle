@@ -32,12 +32,6 @@ public:
 		c_floor3
 	};
 
-	enum {
-		e_unk953 = 953,
-		e_unk954 = 954,
-		e_unk955 = 955,
-	};
-
 	// SIZE 0x4c
 	class NamedPlane {
 	public:
