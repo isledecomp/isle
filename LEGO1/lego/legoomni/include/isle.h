@@ -85,8 +85,8 @@ public:
 	MxBool SetFlag() override;                     // vtable+0x18
 	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
-	void FUN_10034660();
-	void FUN_100346a0();
+	void PlayCptClickDialogue();
+	void StopCptClickDialogue();
 	void FUN_10034b60();
 	void FUN_10034d00();
 
@@ -103,36 +103,36 @@ public:
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
-	Playlist m_unk0x008;          // 0x008
-	MxS32 m_unk0x014;             // 0x014
-	MxU32 m_unk0x018;             // 0x018
-	MxS16 m_elevFloor;            // 0x01c
-	MxBool m_unk0x01e;            // 0x01e
-	MxBool m_unk0x01f;            // 0x01f
-	MxBool m_planeActive;         // 0x020
-	undefined m_unk0x021;         // 0x021
-	MxBool m_unk0x022;            // 0x022
-	undefined m_unk0x023;         // 0x023
-	NamedPlane m_unk0x024;        // 0x024
-	NamedPlane m_unk0x070;        // 0x070
-	NamedPlane m_unk0x0bc;        // 0x0bc
-	NamedPlane m_unk0x108;        // 0x108
-	LegoNamedTexture* m_unk0x154; // 0x154
-	LegoNamedTexture* m_unk0x158; // 0x158
-	LegoNamedTexture* m_unk0x15c; // 0x15c
-	Helicopter* m_helicopter;     // 0x160
-	NamedPlane m_unk0x164;        // 0x164
-	LegoNamedTexture* m_unk0x1b0; // 0x1b0
-	LegoNamedTexture* m_unk0x1b4; // 0x1b4
-	Jetski* m_jetski;             // 0x1b8
-	NamedPlane m_unk0x1bc;        // 0x1bc
-	LegoNamedTexture* m_unk0x208; // 0x208
-	DuneBuggy* m_dunebuggy;       // 0x20c
-	NamedPlane m_unk0x210;        // 0x210
-	LegoNamedTexture* m_unk0x25c; // 0x25c
-	LegoNamedTexture* m_unk0x260; // 0x260
-	LegoNamedTexture* m_unk0x264; // 0x264
-	RaceCar* m_racecar;           // 0x268
+	Playlist m_cptClickDialogue;                  // 0x008
+	IsleScript::Script m_currentCptClickDialogue; // 0x014
+	MxU32 m_unk0x018;                             // 0x018
+	MxS16 m_elevFloor;                            // 0x01c
+	MxBool m_unk0x01e;                            // 0x01e
+	MxBool m_unk0x01f;                            // 0x01f
+	MxBool m_planeActive;                         // 0x020
+	undefined m_unk0x021;                         // 0x021
+	MxBool m_unk0x022;                            // 0x022
+	undefined m_unk0x023;                         // 0x023
+	NamedPlane m_unk0x024;                        // 0x024
+	NamedPlane m_unk0x070;                        // 0x070
+	NamedPlane m_unk0x0bc;                        // 0x0bc
+	NamedPlane m_unk0x108;                        // 0x108
+	LegoNamedTexture* m_unk0x154;                 // 0x154
+	LegoNamedTexture* m_unk0x158;                 // 0x158
+	LegoNamedTexture* m_unk0x15c;                 // 0x15c
+	Helicopter* m_helicopter;                     // 0x160
+	NamedPlane m_unk0x164;                        // 0x164
+	LegoNamedTexture* m_unk0x1b0;                 // 0x1b0
+	LegoNamedTexture* m_unk0x1b4;                 // 0x1b4
+	Jetski* m_jetski;                             // 0x1b8
+	NamedPlane m_unk0x1bc;                        // 0x1bc
+	LegoNamedTexture* m_unk0x208;                 // 0x208
+	DuneBuggy* m_dunebuggy;                       // 0x20c
+	NamedPlane m_unk0x210;                        // 0x210
+	LegoNamedTexture* m_unk0x25c;                 // 0x25c
+	LegoNamedTexture* m_unk0x260;                 // 0x260
+	LegoNamedTexture* m_unk0x264;                 // 0x264
+	RaceCar* m_racecar;                           // 0x268
 };
 
 // FUNCTION: LEGO1 0x10033a70
