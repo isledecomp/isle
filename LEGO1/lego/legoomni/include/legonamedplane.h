@@ -17,6 +17,10 @@ public:
 	void SetName(const char* p_name) { m_name = p_name; }
 	const MxString* GetName() const { return &m_name; }
 
+	void SetPosition(const Mx3DPointFloat& p_position) { m_position = p_position; }
+	void SetDirection(const Mx3DPointFloat& p_direction) { m_direction = p_direction; }
+	void SetUp(const Mx3DPointFloat& p_up) { m_up = p_up; }
+
 	// FUNCTION: LEGO1 0x100344d0
 	MxResult Serialize(LegoFile* p_file)
 	{

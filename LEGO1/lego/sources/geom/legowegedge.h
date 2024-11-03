@@ -48,7 +48,7 @@ public:
 	Mx4DPointFloat* GetEdgeNormal(int index) { return &m_edgeNormals[index]; }
 
 	// FUNCTION: BETA10 0x1001c9b0
-	LegoChar* GetName() { return m_name; }
+	const LegoChar* GetName() { return m_name; }
 
 	void SetFlag0x10(LegoU32 p_disable)
 	{
