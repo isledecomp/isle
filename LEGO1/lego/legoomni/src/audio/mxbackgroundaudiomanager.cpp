@@ -300,6 +300,7 @@ void MxBackgroundAudioManager::Stop()
 }
 
 // FUNCTION: LEGO1 0x1007f570
+// FUNCTION: BETA10 0x100e94e6
 void MxBackgroundAudioManager::LowerVolume()
 {
 	if (m_unk0x148 == 0) {

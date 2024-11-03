@@ -475,6 +475,7 @@ LegoResult LegoROI::SetFrame(LegoAnim* p_anim, LegoTime p_time)
 }
 
 // FUNCTION: LEGO1 0x100a9170
+// FUNCTION: BETA10 0x1018ae09
 LegoResult LegoROI::FUN_100a9170(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
 {
 	LegoResult result = SUCCESS;
@@ -552,6 +553,13 @@ LegoResult LegoROI::GetTexture(LegoTextureInfo*& p_textureInfo)
 	return FAILURE;
 }
 
+// FUNCTION: LEGO1 0x100a9330
+// FUNCTION: BETA10 0x1018b22c
+LegoResult LegoROI::FUN_100a9330(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
+{
+	return FUN_100a9170(p_red, p_green, p_blue, p_alpha);
+}
+
 // FUNCTION: LEGO1 0x100a9350
 // FUNCTION: BETA10 0x1018b25c
 LegoResult LegoROI::FUN_100a9350(const LegoChar* p_color)
@@ -562,6 +570,18 @@ LegoResult LegoROI::FUN_100a9350(const LegoChar* p_color)
 	}
 
 	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100a93b0
+// FUNCTION: BETA10 0x1018b2c0
+LegoResult LegoROI::FUN_100a93b0(const LegoChar* p_color)
+{
+	MxFloat red, green, blue, alpha;
+	if (ColorAliasLookup(p_color, red, green, blue, alpha)) {
+		return FUN_100a9330(red, green, blue, alpha);
+	}
+
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x100a9410
@@ -746,6 +766,7 @@ LegoBool LegoROI::FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_g
 }
 
 // FUNCTION: LEGO1 0x100a9c50
+// FUNCTION: BETA10 0x1018bdd9
 LegoBool LegoROI::ColorAliasLookup(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha)
 {
 	for (LegoU32 i = 0; i < sizeOfArray(g_roiColorAliases); i++) {

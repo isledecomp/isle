@@ -33,8 +33,10 @@ LegoVideoManager* VideoManager()
 }
 
 // FUNCTION: LEGO1 0x10015730
+// FUNCTION: BETA10 0x100e484e
 MxBackgroundAudioManager* BackgroundAudioManager()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetBackgroundAudioManager();
 }
 

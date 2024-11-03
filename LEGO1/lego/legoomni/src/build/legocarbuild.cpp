@@ -23,6 +23,7 @@
 #include "mxstillpresenter.h"
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
+#include "mxvariabletable.h"
 #include "racecar.h"
 #include "racecar_actions.h"
 #include "scripts.h"
@@ -39,6 +40,42 @@
 
 DECOMP_SIZE_ASSERT(LegoCarBuild, 0x34c)
 DECOMP_SIZE_ASSERT(LegoVehicleBuildState, 0x50)
+DECOMP_SIZE_ASSERT(LegoCarBuild::LookupTableData, 0x1c);
+
+// These four structs can be matched to the vehicle types using BETA10 0x10070520
+
+// GLOBAL: LEGO1 0x100d65b0
+// GLOBAL: BETA10 0x101bb7c0
+LegoCarBuild::LookupTableData LegoCarBuild::g_unk0x100d65b0[] = {
+	{DunecarScript::c_igs001d3_RunAnim,
+	 DunecarScript::c_igs002d3_RunAnim,
+	 DunecarScript::c_igs003d3_RunAnim,
+	 DunecarScript::c_igs004d3_RunAnim,
+	 DunecarScript::c_igs005d3_RunAnim,
+	 DunecarScript::c_igs004d3_RunAnim,
+	 DunecarScript::c_igsxx1d3_RunAnim},
+	{JetskiScript::c_ijs001d4_RunAnim,
+	 JetskiScript::c_ijs003d4_RunAnim,
+	 JetskiScript::c_ijs004d4_RunAnim,
+	 JetskiScript::c_ijs005d4_RunAnim,
+	 JetskiScript::c_ijs006d4_RunAnim,
+	 JetskiScript::c_ijs007d4_RunAnim,
+	 JetskiScript::c_ijsxx2d4_RunAnim},
+	{CopterScript::c_ips001d2_RunAnim,
+	 CopterScript::c_ips002d2_RunAnim,
+	 CopterScript::c_ips003d2_RunAnim,
+	 CopterScript::c_ips005d2_RunAnim,
+	 CopterScript::c_ips004d2_RunAnim,
+	 CopterScript::c_ips004d2_RunAnim,
+	 CopterScript::c_ipsxx1d2_RunAnim},
+	{RacecarScript::c_irt001d1_RunAnim,
+	 RacecarScript::c_irt002d1_RunAnim,
+	 RacecarScript::c_irt003d1_RunAnim,
+	 RacecarScript::c_irt004d1_RunAnim,
+	 RacecarScript::c_irt005d1_RunAnim,
+	 RacecarScript::c_irt004d1_RunAnim,
+	 RacecarScript::c_irtxx4d1_RunAnim}
+};
 
 // GLOBAL: LEGO1 0x100d65a4
 MxFloat LegoCarBuild::g_unk0x100d65a4 = -0.1f;
@@ -83,10 +120,10 @@ LegoCarBuild::LegoCarBuild()
 	m_buildState = NULL;
 	m_unk0x104 = 0;
 	m_unk0x109 = 0;
-	m_unk0x108 = 0;
+	m_numAnimsRun = 0;
 	m_unk0x338 = 0;
 	m_destLocation = LegoGameState::e_undefined;
-	m_unk0x344 = 0xffffffff;
+	m_unk0x344 = DS_NOT_A_STREAM;
 	m_unk0x174 = 0;
 	NotificationManager()->Register(this);
 }
@@ -609,8 +646,8 @@ MxLong LegoCarBuild::Notify(MxParam& p_param)
 
 			break;
 		case c_notificationEndAnim:
-			if (m_unk0x108 > 0) {
-				m_unk0x108 -= 1;
+			if (m_numAnimsRun > 0) {
+				m_numAnimsRun -= 1;
 			}
 
 			FUN_10025e40();
@@ -631,7 +668,7 @@ MxLong LegoCarBuild::Notify(MxParam& p_param)
 undefined4 LegoCarBuild::FUN_10024250(LegoEventNotificationParam* p_param)
 {
 	if (p_param->GetKey() == ' ' && m_buildState->m_animationState != 4 && m_buildState->m_animationState != 2) {
-		if (m_unk0x108 > 0) {
+		if (m_numAnimsRun > 0) {
 			DeleteObjects(&m_atomId, 500, 0x1fe);
 			BackgroundAudioManager()->RaiseVolume();
 			m_unk0x109 = 0;
@@ -814,7 +851,7 @@ undefined4 LegoCarBuild::FUN_10024890(MxParam* p_param)
 				m_buildState->m_animationState != LegoVehicleBuildState::e_unknown2 &&
 				m_buildState->m_animationState != LegoVehicleBuildState::e_exiting &&
 				GameState()->GetCurrentAct() != LegoGameState::e_act2) {
-				if (m_unk0x108 > 0) {
+				if (m_numAnimsRun > 0) {
 					DeleteObjects(&m_atomId, 500, 510);
 				}
 
@@ -828,7 +865,7 @@ undefined4 LegoCarBuild::FUN_10024890(MxParam* p_param)
 		case CopterScript::c_Exit_Ctl:
 			if (m_buildState->m_animationState != LegoVehicleBuildState::e_exiting &&
 				m_buildState->m_animationState != LegoVehicleBuildState::e_unknown4) {
-				if (m_unk0x108 > 0) {
+				if (m_numAnimsRun > 0) {
 					DeleteObjects(&m_atomId, 500, 510);
 				}
 
@@ -1200,11 +1237,44 @@ void LegoCarBuild::FUN_100250e0(MxBool p_enabled)
 	}
 }
 
-// STUB: LEGO1 0x10025350
-// STUB: BETA10 0x1006e3c0
-void LegoCarBuild::FUN_10025350(MxS32 p_param)
+// FUNCTION: LEGO1 0x10025350
+// FUNCTION: BETA10 0x1006e3c0
+void LegoCarBuild::FUN_10025350(MxS32 p_objectId)
 {
-	// TODO
+	const LegoChar* color;
+	LegoChar buffer[256];
+
+	if (!m_unk0x110) {
+		return;
+	}
+
+	if (m_Yellow_Ctl->GetAction()->GetObjectId() == p_objectId) {
+		color = "lego yellow";
+	}
+	else if (m_Red_Ctl->GetAction()->GetObjectId() == p_objectId) {
+		color = "lego red";
+	}
+	else if (m_Blue_Ctl->GetAction()->GetObjectId() == p_objectId) {
+		color = "lego blue";
+	}
+	else if (m_Green_Ctl->GetAction()->GetObjectId() == p_objectId) {
+		color = "lego green";
+	}
+	else if (m_Gray_Ctl->GetAction()->GetObjectId() == p_objectId) {
+		color = "lego white";
+	}
+	else if (m_Black_Ctl->GetAction()->GetObjectId() == p_objectId) {
+		color = "lego black";
+	}
+	else {
+		return;
+	}
+
+	m_Paint_Sound->Enable(FALSE);
+	m_Paint_Sound->Enable(TRUE);
+	m_unk0x110->FUN_100a93b0(color);
+	sprintf(buffer, "c_%s", m_unk0x110->GetName());
+	VariableTable()->SetVariable(buffer, color);
 }
 
 // FUNCTION: LEGO1 0x10025450
@@ -1276,12 +1346,179 @@ void LegoCarBuild::Enable(MxBool p_enable)
 	}
 }
 
-// STUB: LEGO1 0x10025720
-// STUB: BETA10 0x1006e9df
-undefined4 LegoCarBuild::FUN_10025720(undefined4 p_param1)
+// FUNCTION: BETA10 0x10070520
+inline MxU32 LegoCarBuild::Beta0x10070520()
 {
-	// TODO
-	return 0;
+	switch (m_carId) {
+	case Helicopter_Actor:
+		return 2;
+		break;
+	case DuneBugy_Actor:
+		return 0;
+		break;
+	case Jetski_Actor:
+		return 1;
+		break;
+	case RaceCar_Actor:
+		return 3;
+		break;
+	default:
+		assert(0);
+		return 0;
+	}
+}
+
+inline void LegoCarBuild::StopActionIn0x344()
+{
+	// There is no direct evidence for this inline function in LEGO1,
+	// but some code doesn't make much sense otherwise. For example,
+	// sometimes `m_unk0x344` is set to another value right below this call,
+	// which the original developer would likely have refactored.
+	if (m_unk0x344 != DS_NOT_A_STREAM) {
+		InvokeAction(Extra::ActionType::e_stop, m_atomId, m_unk0x344, NULL);
+		m_unk0x344 = DS_NOT_A_STREAM;
+	}
+}
+
+// FUNCTION: LEGO1 0x10025720
+// FUNCTION: BETA10 0x1006e9df
+void LegoCarBuild::FUN_10025720(undefined4 p_param)
+{
+	m_numAnimsRun++;
+	m_unk0x10a = 0;
+	MxS32 uVar6;
+
+#ifdef NDEBUG
+
+	if (GameState()->GetCurrentAct() == LegoGameState::e_act2) {
+		// This is most likely related to the helicopter rebuild in Act 2
+		switch (p_param) {
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+			switch (rand() % 3) {
+			case 0:
+				m_unk0x10a = CopterScript::c_ips004d2_RunAnim;
+				StopActionIn0x344();
+				m_unk0x344 = CopterScript::c_ips004d2_RunAnim;
+				BackgroundAudioManager()->LowerVolume();
+				InvokeAction(Extra::ActionType::e_start, m_atomId, CopterScript::c_ips004d2_RunAnim, NULL);
+				break;
+			case 1:
+				m_unk0x10a = CopterScript::c_ips006d2_RunAnim;
+				StopActionIn0x344();
+				m_unk0x344 = CopterScript::c_ips006d2_RunAnim;
+				BackgroundAudioManager()->LowerVolume();
+				InvokeAction(Extra::ActionType::e_start, m_atomId, CopterScript::c_ips006d2_RunAnim, NULL);
+				break;
+			case 2:
+				m_unk0x10a = CopterScript::c_slp01xd2_RunAnim;
+				StopActionIn0x344();
+				m_unk0x344 = CopterScript::c_slp01xd2_RunAnim;
+				BackgroundAudioManager()->LowerVolume();
+				InvokeAction(Extra::ActionType::e_start, m_atomId, CopterScript::c_slp01xd2_RunAnim, NULL);
+				break;
+			}
+			break;
+		case 4:
+			FUN_10025d10(g_unk0x100d65b0[Beta0x10070520()].m_unk0x04);
+			break;
+		case 5:
+			FUN_10025d10(g_unk0x100d65b0[Beta0x10070520()].m_unk0x08);
+			break;
+		case 6:
+			// This part doesn't match to 100 % yet
+			uVar6 = g_unk0x100d65b0[Beta0x10070520()].m_unk0x18;
+			m_unk0x10a = uVar6;
+			StopActionIn0x344();
+
+			if (uVar6 != -1) {
+				m_unk0x344 = uVar6;
+				BackgroundAudioManager()->LowerVolume();
+				InvokeAction(Extra::ActionType::e_start, m_atomId, uVar6, NULL);
+			}
+
+			FUN_10025d10(uVar6);
+
+			break;
+		default:
+			m_numAnimsRun--;
+			return;
+		}
+	}
+	else {
+#endif
+		// This part doesn't match BETA10 perfectly, but it's the closest we get without hundreds of #ifdef's
+		switch (p_param) {
+		case 0:
+			m_unk0x10a = g_unk0x100d65b0[Beta0x10070520()].m_unk0x00;
+			FUN_10025d10(m_unk0x10a);
+			break;
+		case 1:
+			m_unk0x10a = g_unk0x100d65b0[Beta0x10070520()].m_unk0x0c;
+			FUN_10025d10(m_unk0x10a);
+
+			if (m_carId == 2) {
+				m_unk0x10a = 0;
+			}
+
+			break;
+		case 2:
+			m_unk0x10a = g_unk0x100d65b0[Beta0x10070520()].m_unk0x10;
+			FUN_10025d10(m_unk0x10a);
+
+			if (m_carId != 3) {
+				m_unk0x10a = 0;
+			}
+
+			break;
+		case 3:
+			FUN_10025d10(g_unk0x100d65b0[Beta0x10070520()].m_unk0x14);
+			break;
+		case 4:
+			FUN_10025d10(g_unk0x100d65b0[Beta0x10070520()].m_unk0x04);
+			break;
+		case 5:
+			FUN_10025d10(g_unk0x100d65b0[Beta0x10070520()].m_unk0x08);
+			break;
+		case 6:
+			m_unk0x10a = g_unk0x100d65b0[Beta0x10070520()].m_unk0x18;
+			FUN_10025d10(m_unk0x10a);
+			break;
+		default:
+			assert(0);
+			m_numAnimsRun--;
+
+			// Weird: This assertion can never be executed. The `assert(0)` above was probably introduced later.
+			assert(m_numAnimsRun >= 0);
+			return;
+		}
+#ifdef NDEBUG
+	}
+#endif
+
+	if (m_unk0x10a != 0) {
+		m_unk0x10c = timeGetTime();
+	}
+}
+
+// FUNCTION: LEGO1 0x10025d10
+// FUNCTION: BETA10 0x10070490
+void LegoCarBuild::FUN_10025d10(MxS32 p_param)
+{
+	// this function has a different signature and partially different body in BETA10, but it is called in the same
+	// places
+	if (m_unk0x344 != DS_NOT_A_STREAM) {
+		InvokeAction(Extra::ActionType::e_stop, m_atomId, m_unk0x344, NULL);
+		m_unk0x344 = DS_NOT_A_STREAM;
+	}
+
+	if (p_param != DS_NOT_A_STREAM) {
+		m_unk0x344 = p_param;
+		BackgroundAudioManager()->LowerVolume();
+		InvokeAction(Extra::ActionType::e_start, m_atomId, p_param, NULL);
+	}
 }
 
 // FUNCTION: LEGO1 0x10025d70
