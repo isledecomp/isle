@@ -138,7 +138,7 @@ void GasStation::ReadyWorld()
 
 	switch (m_currentActorId) {
 	case LegoActor::c_pepper:
-		switch (m_state->m_unk0x18) {
+		switch (m_state->m_pepperAction) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
 			PlayAction(GarageScript::c_wgs002nu_RunAnim);
@@ -162,14 +162,14 @@ void GasStation::ReadyWorld()
 			break;
 		}
 
-		if (m_state->m_unk0x18 < 5) {
-			m_state->m_unk0x18++;
+		if (m_state->m_pepperAction < 5) {
+			m_state->m_pepperAction++;
 		}
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
 	case LegoActor::c_mama:
-		switch (m_state->m_unk0x1a) {
+		switch (m_state->m_mamaAction) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
 			PlayAction(GarageScript::c_wgs006nu_RunAnim);
@@ -188,14 +188,14 @@ void GasStation::ReadyWorld()
 			break;
 		}
 
-		if (m_state->m_unk0x1a < 5) {
-			m_state->m_unk0x1a++;
+		if (m_state->m_mamaAction < 5) {
+			m_state->m_mamaAction++;
 		}
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
 	case LegoActor::c_papa:
-		switch (m_state->m_unk0x1c) {
+		switch (m_state->m_papaAction) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
 			PlayAction(GarageScript::c_wgs012nu_RunAnim);
@@ -214,14 +214,14 @@ void GasStation::ReadyWorld()
 			break;
 		}
 
-		if (m_state->m_unk0x1c < 5) {
-			m_state->m_unk0x1c++;
+		if (m_state->m_papaAction < 5) {
+			m_state->m_papaAction++;
 		}
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
 	case LegoActor::c_nick:
-		switch (m_state->m_unk0x1e) {
+		switch (m_state->m_nickAction) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
 			PlayAction(GarageScript::c_wgs009nu_RunAnim);
@@ -240,14 +240,14 @@ void GasStation::ReadyWorld()
 			break;
 		}
 
-		if (m_state->m_unk0x1e < 5) {
-			m_state->m_unk0x1e++;
+		if (m_state->m_nickAction < 5) {
+			m_state->m_nickAction++;
 		}
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
 	case LegoActor::c_laura:
-		switch (m_state->m_unk0x20) {
+		switch (m_state->m_lauraAction) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
 			PlayAction(GarageScript::c_wgs020nu_RunAnim);
@@ -266,8 +266,8 @@ void GasStation::ReadyWorld()
 			break;
 		}
 
-		if (m_state->m_unk0x20 < 5) {
-			m_state->m_unk0x20++;
+		if (m_state->m_lauraAction < 5) {
+			m_state->m_lauraAction++;
 		}
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
@@ -508,11 +508,11 @@ MxBool GasStation::Escape()
 // FUNCTION: BETA10 0x100296b8
 GasStationState::GasStationState()
 {
-	m_unk0x18 = 0;
-	m_unk0x1a = 0;
-	m_unk0x1c = 0;
-	m_unk0x1e = 0;
-	m_unk0x20 = 0;
+	m_pepperAction = 0;
+	m_mamaAction = 0;
+	m_papaAction = 0;
+	m_nickAction = 0;
+	m_lauraAction = 0;
 	memset(m_actions, GarageScript::c_noneGarage, sizeof(m_actions));
 }
 
@@ -523,18 +523,18 @@ MxResult GasStationState::Serialize(LegoFile* p_file)
 	LegoState::Serialize(p_file);
 
 	if (p_file->IsWriteMode()) {
-		Write(p_file, m_unk0x18);
-		Write(p_file, m_unk0x1a);
-		Write(p_file, m_unk0x1c);
-		Write(p_file, m_unk0x1e);
-		Write(p_file, m_unk0x20);
+		Write(p_file, m_pepperAction);
+		Write(p_file, m_mamaAction);
+		Write(p_file, m_papaAction);
+		Write(p_file, m_nickAction);
+		Write(p_file, m_lauraAction);
 	}
 	else if (p_file->IsReadMode()) {
-		Read(p_file, &m_unk0x18);
-		Read(p_file, &m_unk0x1a);
-		Read(p_file, &m_unk0x1c);
-		Read(p_file, &m_unk0x1e);
-		Read(p_file, &m_unk0x20);
+		Read(p_file, &m_pepperAction);
+		Read(p_file, &m_mamaAction);
+		Read(p_file, &m_papaAction);
+		Read(p_file, &m_nickAction);
+		Read(p_file, &m_lauraAction);
 	}
 
 	return SUCCESS;

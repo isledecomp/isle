@@ -46,11 +46,11 @@ public:
 
 	GarageScript::Script m_actions[3]; // 0x08
 	Unknown0x14 m_unk0x14;             // 0x14
-	MxS16 m_unk0x18;                   // 0x18
-	MxS16 m_unk0x1a;                   // 0x1a
-	MxS16 m_unk0x1c;                   // 0x1c
-	MxS16 m_unk0x1e;                   // 0x1e
-	MxS16 m_unk0x20;                   // 0x20
+	MxS16 m_pepperAction;              // 0x18
+	MxS16 m_mamaAction;                // 0x1a
+	MxS16 m_papaAction;                // 0x1c
+	MxS16 m_nickAction;                // 0x1e
+	MxS16 m_lauraAction;               // 0x20
 };
 
 // VTABLE: LEGO1 0x100d4650
