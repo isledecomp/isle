@@ -32,12 +32,6 @@ public:
 		c_floor3
 	};
 
-	enum {
-		e_unk953 = 953,
-		e_unk954 = 954,
-		e_unk955 = 955,
-	};
-
 	// SIZE 0x4c
 	class NamedPlane {
 	public:
@@ -109,11 +103,7 @@ public:
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
-	MxS32* m_unk0x008;            // 0x008 FIXME: count for m_unk0x008
-	MxS16 m_unk0x00c;             // 0x00c
-	undefined2 m_unk0x00e;        // 0x00e
-	undefined2 m_unk0x010;        // 0x010
-	undefined m_unk0x012;         // 0x012
+	Playlist m_unk0x008;          // 0x008
 	MxS32 m_unk0x014;             // 0x014
 	MxU32 m_unk0x018;             // 0x018
 	MxS16 m_elevFloor;            // 0x01c
