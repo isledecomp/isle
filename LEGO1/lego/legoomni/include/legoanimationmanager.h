@@ -67,7 +67,7 @@ public:
 		return !strcmp(p_name, AnimState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxBool SetFlag() override;                     // vtable+0x18
+	MxBool Reset() override;                       // vtable+0x18
 	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
 	void CopyToAnims(MxU32, AnimInfo* p_anims, MxU32& p_outExtraCharacterId);

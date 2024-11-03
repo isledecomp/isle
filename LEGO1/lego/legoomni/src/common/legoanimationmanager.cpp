@@ -383,7 +383,7 @@ void LegoAnimationManager::Reset(MxBool p_und)
 	m_unk0x402 = FALSE;
 
 	if (p_und && m_animState != NULL) {
-		m_animState->SetFlag();
+		m_animState->Reset();
 	}
 
 	MxBool suspended = m_suspended;
@@ -2951,7 +2951,7 @@ MxResult AnimState::Serialize(LegoFile* p_file)
 }
 
 // FUNCTION: LEGO1 0x100654f0
-MxBool AnimState::SetFlag()
+MxBool AnimState::Reset()
 {
 	if (m_unk0x10 != NULL) {
 		m_extraCharacterId = 0;

@@ -99,7 +99,7 @@ public:
 	virtual MxBool IsSerializable() { return TRUE; } // vtable+0x14
 
 	// FUNCTION: LEGO1 0x10005fa0
-	virtual MxBool SetFlag() { return FALSE; } // vtable+0x18
+	virtual MxBool Reset() { return FALSE; } // vtable+0x18
 
 	// FUNCTION: LEGO1 0x10005fb0
 	virtual MxResult Serialize(LegoFile* p_file)

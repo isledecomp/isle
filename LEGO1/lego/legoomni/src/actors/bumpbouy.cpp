@@ -1,6 +1,7 @@
 #include "bumpbouy.h"
 
 #include "isle.h"
+#include "isle_actions.h"
 #include "islepathactor.h"
 #include "legogamestate.h"
 #include "legovideomanager.h"
@@ -44,7 +45,7 @@ MxLong BumpBouy::Notify(MxParam& p_param)
 		assert(isleState);
 		isleState->m_unk0x018 = 5;
 
-		Isle* isle = (Isle*) FindWorld(*g_isleScript, 0);
+		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 		assert(isle);
 		isle->SetDestLocation(LegoGameState::e_jetrace);
 

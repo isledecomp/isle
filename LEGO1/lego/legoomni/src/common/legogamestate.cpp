@@ -302,7 +302,7 @@ MxResult LegoGameState::DeleteState()
 	m_stateArray = NULL;
 
 	for (MxS32 count = 0; count < stateCount; count++) {
-		if (!stateArray[count]->SetFlag() && stateArray[count]->IsSerializable()) {
+		if (!stateArray[count]->Reset() && stateArray[count]->IsSerializable()) {
 			delete stateArray[count];
 		}
 		else {
@@ -780,7 +780,7 @@ void LegoGameState::StopArea(Area p_area)
 
 inline void LoadIsle()
 {
-	LegoWorld* world = FindWorld(*g_isleScript, 0);
+	LegoWorld* world = FindWorld(*g_isleScript, IsleScript::c__Isle);
 	if (world != NULL) {
 		if (!world->GetUnknown0xd0Empty()) {
 			NotificationManager()->Send(world, MxNotificationParam(c_notificationType20, NULL));
@@ -957,7 +957,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		InvokeAction(Extra::ActionType::e_opendisk, *g_racecarScript, RacecarScript::c__StartUp, NULL);
 		break;
 	case e_act2main: {
-		LegoWorld* act2main = FindWorld(*g_act2mainScript, 0);
+		LegoWorld* act2main = FindWorld(*g_act2mainScript, Act2mainScript::c__Act2Main);
 
 		if (act2main == NULL) {
 			InvokeAction(Extra::ActionType::e_opendisk, *g_act2mainScript, Act2mainScript::c__Act2Main, NULL);
@@ -969,7 +969,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		break;
 	}
 	case e_act3script: {
-		LegoWorld* act3 = FindWorld(*g_act3Script, 0);
+		LegoWorld* act3 = FindWorld(*g_act3Script, Act3Script::c__Act3);
 
 		if (act3 == NULL) {
 			InvokeAction(Extra::ActionType::e_opendisk, *g_act3Script, Act3Script::c__Act3, NULL);
@@ -1105,7 +1105,7 @@ void LegoGameState::Init()
 	SetCurrentAct(e_act1);
 
 	if (m_loadedAct == e_act1) {
-		Isle* isle = (Isle*) FindWorld(*g_isleScript, 0);
+		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 
 		Helicopter* copter = (Helicopter*) isle->Find(*g_copterScript, CopterScript::c_Helicopter_Actor);
 		if (copter) {
@@ -1215,13 +1215,13 @@ void LegoGameState::SetCurrentAct(Act p_currentAct)
 // FUNCTION: LEGO1 0x1003ceb0
 void LegoGameState::FindLoadedAct()
 {
-	if (FindWorld(*g_isleScript, 0)) {
+	if (FindWorld(*g_isleScript, IsleScript::c__Isle)) {
 		m_loadedAct = e_act1;
 	}
-	else if (FindWorld(*g_act2mainScript, 0)) {
+	else if (FindWorld(*g_act2mainScript, Act2mainScript::c__Act2Main)) {
 		m_loadedAct = e_act2;
 	}
-	else if (FindWorld(*g_act3Script, 0)) {
+	else if (FindWorld(*g_act3Script, Act3Script::c__Act3)) {
 		m_loadedAct = e_act3;
 	}
 	else {

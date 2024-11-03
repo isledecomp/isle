@@ -4,6 +4,7 @@
 #include "dunebuggy.h"
 #include "dunecar_actions.h"
 #include "helicopter.h"
+#include "isle_actions.h"
 #include "jetski.h"
 #include "jetski_actions.h"
 #include "jukebox_actions.h"
@@ -1014,7 +1015,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 			// This function was changed between BETA10 and LEGO1.
 			// These lines looks like a relic from older code.
 			LegoWorld* destWorld = NULL;
-			destWorld = FindWorld(*g_isleScript, 0);
+			destWorld = FindWorld(*g_isleScript, IsleScript::c__Isle);
 
 			Act1State* gameState = (Act1State*) GameState()->GetState("Act1State");
 
@@ -1025,7 +1026,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 				}
 
 				gameState->m_helicopter = (Helicopter*) entity;
-				gameState->m_unk0x108.SetName("");
+				gameState->m_helicopterPlane.SetName("");
 				break;
 			case LegoGameState::e_dunecarbuild:
 				if (gameState->m_dunebuggy) {
@@ -1033,7 +1034,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 				}
 
 				gameState->m_dunebuggy = (DuneBuggy*) entity;
-				gameState->m_unk0x1bc.SetName("");
+				gameState->m_dunebuggyPlane.SetName("");
 				break;
 			case LegoGameState::e_jetskibuild:
 				if (gameState->m_jetski) {
@@ -1041,7 +1042,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 				}
 
 				gameState->m_jetski = (Jetski*) entity;
-				gameState->m_unk0x164.SetName("");
+				gameState->m_jetskiPlane.SetName("");
 				break;
 			case LegoGameState::e_racecarbuild:
 				if (gameState->m_racecar) {
@@ -1049,7 +1050,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 				}
 
 				gameState->m_racecar = (RaceCar*) entity;
-				gameState->m_unk0x210.SetName("");
+				gameState->m_racecarPlane.SetName("");
 				break;
 			}
 

@@ -3,6 +3,7 @@
 
 #include "actionsfwd.h"
 #include "legogamestate.h"
+#include "legonamedplane.h"
 #include "legostate.h"
 #include "legoworld.h"
 #include "radio.h"
@@ -32,41 +33,6 @@ public:
 		c_floor3
 	};
 
-	// SIZE 0x4c
-	class NamedPlane {
-	public:
-		// FUNCTION: LEGO1 0x10033800
-		NamedPlane() {}
-
-		void SetName(const char* p_name) { m_name = p_name; }
-		const MxString* GetName() const { return &m_name; }
-
-		// FUNCTION: LEGO1 0x100344d0
-		MxResult Serialize(LegoFile* p_file)
-		{
-			if (p_file->IsWriteMode()) {
-				p_file->WriteString(m_name);
-				p_file->WriteVector3(m_point1);
-				p_file->WriteVector3(m_point2);
-				p_file->WriteVector3(m_point3);
-			}
-			else if (p_file->IsReadMode()) {
-				p_file->ReadString(m_name);
-				p_file->ReadVector3(m_point1);
-				p_file->ReadVector3(m_point2);
-				p_file->ReadVector3(m_point3);
-			}
-
-			return SUCCESS;
-		}
-
-	private:
-		MxString m_name;         // 0x00
-		Mx3DPointFloat m_point1; // 0x10
-		Mx3DPointFloat m_point2; // 0x24
-		Mx3DPointFloat m_point3; // 0x38
-	};
-
 	Act1State();
 
 	// FUNCTION: LEGO1 0x100338a0
@@ -82,12 +48,12 @@ public:
 		return !strcmp(p_name, Act1State::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxBool SetFlag() override;                     // vtable+0x18
+	MxBool Reset() override;                       // vtable+0x18
 	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
 	void PlayCptClickDialogue();
 	void StopCptClickDialogue();
-	void FUN_10034b60();
+	void RemoveActors();
 	void FUN_10034d00();
 
 	MxU32 GetUnknown18() { return m_unk0x018; }
@@ -113,22 +79,22 @@ public:
 	undefined m_unk0x021;                         // 0x021
 	MxBool m_unk0x022;                            // 0x022
 	undefined m_unk0x023;                         // 0x023
-	NamedPlane m_unk0x024;                        // 0x024
-	NamedPlane m_unk0x070;                        // 0x070
-	NamedPlane m_unk0x0bc;                        // 0x0bc
-	NamedPlane m_unk0x108;                        // 0x108
+	LegoNamedPlane m_motocyclePlane;              // 0x024
+	LegoNamedPlane m_bikePlane;                   // 0x070
+	LegoNamedPlane m_skateboardPlane;             // 0x0bc
+	LegoNamedPlane m_helicopterPlane;             // 0x108
 	LegoNamedTexture* m_unk0x154;                 // 0x154
 	LegoNamedTexture* m_unk0x158;                 // 0x158
 	LegoNamedTexture* m_unk0x15c;                 // 0x15c
 	Helicopter* m_helicopter;                     // 0x160
-	NamedPlane m_unk0x164;                        // 0x164
+	LegoNamedPlane m_jetskiPlane;                 // 0x164
 	LegoNamedTexture* m_unk0x1b0;                 // 0x1b0
 	LegoNamedTexture* m_unk0x1b4;                 // 0x1b4
 	Jetski* m_jetski;                             // 0x1b8
-	NamedPlane m_unk0x1bc;                        // 0x1bc
+	LegoNamedPlane m_dunebuggyPlane;              // 0x1bc
 	LegoNamedTexture* m_unk0x208;                 // 0x208
 	DuneBuggy* m_dunebuggy;                       // 0x20c
-	NamedPlane m_unk0x210;                        // 0x210
+	LegoNamedPlane m_racecarPlane;                // 0x210
 	LegoNamedTexture* m_unk0x25c;                 // 0x25c
 	LegoNamedTexture* m_unk0x260;                 // 0x260
 	LegoNamedTexture* m_unk0x264;                 // 0x264
@@ -136,7 +102,7 @@ public:
 };
 
 // FUNCTION: LEGO1 0x10033a70
-// Act1State::NamedPlane::~NamedPlane
+// Act1State::LegoNamedPlane::~LegoNamedPlane
 
 // VTABLE: LEGO1 0x100d6fb8
 // SIZE 0x140
@@ -183,6 +149,8 @@ public:
 	MxBool HasHelicopter() { return m_helicopter != NULL; }
 
 	void FUN_10033350();
+
+	friend class Act1State;
 
 	// SYNTHETIC: LEGO1 0x10030a30
 	// Isle::`scalar deleting destructor'

@@ -3,6 +3,7 @@
 #include "3dmanager/lego3dmanager.h"
 #include "anim/legoanim.h"
 #include "isle.h"
+#include "isle_actions.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
@@ -333,7 +334,7 @@ void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender
 // FUNCTION: LEGO1 0x1003eab0
 void SetCameraControllerFromIsle()
 {
-	InputManager()->SetCamera(FindWorld(*g_isleScript, 0)->GetCamera());
+	InputManager()->SetCamera(FindWorld(*g_isleScript, IsleScript::c__Isle)->GetCamera());
 }
 
 // FUNCTION: LEGO1 0x1003eae0

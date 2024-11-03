@@ -7,6 +7,7 @@
 #include "mxtypes.h"
 
 struct LegoEdge;
+class LegoNamedPlane;
 class LegoPathBoundary;
 class LegoPathController;
 struct LegoPathEdgeContainer;
@@ -139,6 +140,8 @@ public:
 	void SetState(MxU32 p_state) { m_state = p_state; }
 
 	void SetController(LegoPathController* p_controller) { m_controller = p_controller; }
+
+	void UpdatePlane(LegoNamedPlane& p_namedPlane);
 
 	// SYNTHETIC: LEGO1 0x1002d800
 	// LegoPathActor::`scalar deleting destructor'

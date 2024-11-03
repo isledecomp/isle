@@ -31,7 +31,7 @@ public:
 	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
 
 	// FUNCTION: LEGO1 0x1000de30
-	MxBool SetFlag() override
+	MxBool Reset() override
 	{
 		m_playCubeTutorial = TRUE;
 		return TRUE;

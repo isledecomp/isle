@@ -1404,7 +1404,7 @@ void Infocenter::Reset()
 	HelicopterState* state = (HelicopterState*) GameState()->GetState("HelicopterState");
 
 	if (state) {
-		state->SetFlag();
+		state->Reset();
 	}
 }
 
