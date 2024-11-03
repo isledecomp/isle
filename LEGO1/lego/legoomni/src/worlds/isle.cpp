@@ -46,11 +46,8 @@ DECOMP_SIZE_ASSERT(Isle, 0x140)
 MxU32 g_isleFlags = 0x7f;
 
 // GLOBAL: LEGO1 0x100f37f0
-MxS32 g_unk0x100f37f0[] = {
-	Act1State::e_unk953,
-	Act1State::e_unk954,
-	Act1State::e_unk955,
-};
+IsleScript::Script g_unk0x100f37f0[] =
+	{IsleScript::c_Avo905Ps_PlayWav, IsleScript::c_Avo906Ps_PlayWav, IsleScript::c_Avo907Ps_PlayWav};
 
 // FUNCTION: LEGO1 0x10030820
 Isle::Isle()
@@ -1283,16 +1280,16 @@ void Isle::FUN_10033350()
 	m_destLocation = LegoGameState::e_infomain;
 }
 
-// STUB: LEGO1 0x100334b0
-Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x010(0)
+// FUNCTION: LEGO1 0x100334b0
+// FUNCTION: BETA10 0x10035197
+Act1State::Act1State()
 {
-	m_unk0x01e = FALSE;
+	m_elevFloor = Act1State::c_floor1;
 	m_unk0x018 = 1;
-	m_unk0x010 = 0;
-	m_planeActive = FALSE;
-	m_unk0x00e = 0;
+	m_unk0x01e = FALSE;
+	m_unk0x008 = Playlist((MxU32*) g_unk0x100f37f0, sizeOfArray(g_unk0x100f37f0), Playlist::e_loop);
 	m_unk0x01f = FALSE;
-	m_unk0x008 = g_unk0x100f37f0;
+	m_planeActive = FALSE;
 	m_unk0x014 = -1;
 	m_unk0x022 = FALSE;
 	m_unk0x154 = NULL;
@@ -1301,8 +1298,6 @@ Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x
 	m_helicopter = NULL;
 	m_unk0x1b0 = NULL;
 	m_unk0x021 = 1;
-	m_elevFloor = Act1State::c_floor1;
-	m_unk0x00c = sizeOfArray(g_unk0x100f37f0);
 	m_unk0x1b4 = NULL;
 	m_jetski = NULL;
 	m_unk0x208 = NULL;
@@ -1391,7 +1386,7 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 			}
 		}
 
-		Write(p_file, m_unk0x010);
+		Write(p_file, m_unk0x008.m_nextIndex);
 		Write(p_file, m_unk0x022);
 	}
 	else if (p_file->IsReadMode()) {
@@ -1445,7 +1440,7 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 			}
 		}
 
-		Read(p_file, &m_unk0x010);
+		Read(p_file, &m_unk0x008.m_nextIndex);
 		Read(p_file, &m_unk0x022);
 	}
 
