@@ -41,7 +41,7 @@ MxLong JukeBoxEntity::Notify(MxParam& p_param)
 			((IslePathActor*) UserActor())->Exit();
 		}
 
-		((Isle*) FindWorld(*g_isleScript, 0))->SetDestLocation(LegoGameState::e_jukeboxw);
+		((Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle))->SetDestLocation(LegoGameState::e_jukeboxw);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		return 1;
 	}

@@ -718,3 +718,9 @@ void LegoPathActor::VTable0xa8()
 		FUN_10010c30();
 	}
 }
+
+// STUB: LEGO1 0x1002f770
+void LegoPathActor::UpdatePlane(LegoNamedPlane& p_namedPlane)
+{
+	// TODO
+}

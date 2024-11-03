@@ -39,7 +39,7 @@
 #include "towtrack.h"
 
 DECOMP_SIZE_ASSERT(Act1State, 0x26c)
-DECOMP_SIZE_ASSERT(Act1State::NamedPlane, 0x4c)
+DECOMP_SIZE_ASSERT(LegoNamedPlane, 0x4c)
 DECOMP_SIZE_ASSERT(Isle, 0x140)
 
 // GLOBAL: LEGO1 0x100f1198
@@ -851,7 +851,7 @@ void Isle::Enable(MxBool p_enable)
 			InputManager()->ClearWorld();
 		}
 
-		m_act1state->FUN_10034b60();
+		m_act1state->RemoveActors();
 	}
 }
 
@@ -1306,24 +1306,25 @@ Act1State::Act1State()
 	m_unk0x260 = NULL;
 	m_unk0x264 = NULL;
 	m_racecar = NULL;
-	SetFlag();
+	Reset();
 }
 
 // FUNCTION: LEGO1 0x10033ac0
+// FUNCTION: BETA10 0x1003524f
 MxResult Act1State::Serialize(LegoFile* p_file)
 {
 	LegoState::Serialize(p_file);
 
-	m_unk0x024.Serialize(p_file);
-	m_unk0x070.Serialize(p_file);
-	m_unk0x0bc.Serialize(p_file);
-	m_unk0x108.Serialize(p_file);
-	m_unk0x164.Serialize(p_file);
-	m_unk0x1bc.Serialize(p_file);
-	m_unk0x210.Serialize(p_file);
+	m_motocyclePlane.Serialize(p_file);
+	m_bikePlane.Serialize(p_file);
+	m_skateboardPlane.Serialize(p_file);
+	m_helicopterPlane.Serialize(p_file);
+	m_jetskiPlane.Serialize(p_file);
+	m_dunebuggyPlane.Serialize(p_file);
+	m_racecarPlane.Serialize(p_file);
 
 	if (p_file->IsWriteMode()) {
-		if (m_unk0x108.GetName()->Compare("") != 0) {
+		if (m_helicopterPlane.GetName()->Compare("") != 0) {
 			if (m_unk0x154) {
 				WriteNamedTexture(p_file, m_unk0x154);
 			}
@@ -1343,7 +1344,7 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 				FUN_1003f540(p_file, "chjetr.gif");
 			}
 		}
-		if (m_unk0x164.GetName()->Compare("") != 0) {
+		if (m_jetskiPlane.GetName()->Compare("") != 0) {
 			if (m_unk0x1b0) {
 				WriteNamedTexture(p_file, m_unk0x1b0);
 			}
@@ -1357,7 +1358,7 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 				FUN_1003f540(p_file, "jswnsh.gif");
 			}
 		}
-		if (m_unk0x1bc.GetName()->Compare("") != 0) {
+		if (m_dunebuggyPlane.GetName()->Compare("") != 0) {
 			if (m_unk0x208) {
 				WriteNamedTexture(p_file, m_unk0x208);
 			}
@@ -1365,7 +1366,7 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 				FUN_1003f540(p_file, "dbfrfn.gif");
 			}
 		}
-		if (m_unk0x210.GetName()->Compare("") != 0) {
+		if (m_racecarPlane.GetName()->Compare("") != 0) {
 			if (m_unk0x25c) {
 				WriteNamedTexture(p_file, m_unk0x25c);
 			}
@@ -1390,7 +1391,7 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 		Write(p_file, m_unk0x022);
 	}
 	else if (p_file->IsReadMode()) {
-		if (m_unk0x108.GetName()->Compare("") != 0) {
+		if (m_helicopterPlane.GetName()->Compare("") != 0) {
 			m_unk0x154 = ReadNamedTexture(p_file);
 			if (m_unk0x154 == NULL) {
 				return FAILURE;
@@ -1406,7 +1407,7 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 				return FAILURE;
 			}
 		}
-		if (m_unk0x164.GetName()->Compare("") != 0) {
+		if (m_jetskiPlane.GetName()->Compare("") != 0) {
 			m_unk0x1b0 = ReadNamedTexture(p_file);
 			if (m_unk0x1b0 == NULL) {
 				return FAILURE;
@@ -1417,13 +1418,13 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 				return FAILURE;
 			}
 		}
-		if (m_unk0x1bc.GetName()->Compare("") != 0) {
+		if (m_dunebuggyPlane.GetName()->Compare("") != 0) {
 			m_unk0x208 = ReadNamedTexture(p_file);
 			if (m_unk0x208 == NULL) {
 				return FAILURE;
 			}
 		}
-		if (m_unk0x210.GetName()->Compare("") != 0) {
+		if (m_racecarPlane.GetName()->Compare("") != 0) {
 			m_unk0x25c = ReadNamedTexture(p_file);
 			if (m_unk0x25c == NULL) {
 				return FAILURE;
@@ -1470,13 +1471,13 @@ void Act1State::StopCptClickDialogue()
 }
 
 // FUNCTION: LEGO1 0x100346d0
-MxBool Act1State::SetFlag()
+MxBool Act1State::Reset()
 {
-	m_unk0x024.SetName("");
-	m_unk0x070.SetName("");
-	m_unk0x0bc.SetName("");
+	m_motocyclePlane.SetName("");
+	m_bikePlane.SetName("");
+	m_skateboardPlane.SetName("");
 	m_unk0x022 = FALSE;
-	m_unk0x108.SetName("");
+	m_helicopterPlane.SetName("");
 
 	if (m_unk0x154) {
 		delete m_unk0x154;
@@ -1498,7 +1499,7 @@ MxBool Act1State::SetFlag()
 		m_helicopter = NULL;
 	}
 
-	m_unk0x164.SetName("");
+	m_jetskiPlane.SetName("");
 
 	if (m_unk0x1b0) {
 		delete m_unk0x1b0;
@@ -1515,7 +1516,7 @@ MxBool Act1State::SetFlag()
 		m_jetski = NULL;
 	}
 
-	m_unk0x1bc.SetName("");
+	m_dunebuggyPlane.SetName("");
 
 	if (m_unk0x208) {
 		delete m_unk0x208;
@@ -1527,7 +1528,7 @@ MxBool Act1State::SetFlag()
 		m_dunebuggy = NULL;
 	}
 
-	m_unk0x210.SetName("");
+	m_racecarPlane.SetName("");
 
 	if (m_unk0x25c) {
 		delete m_unk0x25c;
@@ -1552,10 +1553,50 @@ MxBool Act1State::SetFlag()
 	return TRUE;
 }
 
-// STUB: LEGO1 0x10034b60
-void Act1State::FUN_10034b60()
+// FUNCTION: LEGO1 0x10034b60
+void Act1State::RemoveActors()
 {
-	// TODO
+	Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
+
+	isle->m_motocycle->UpdatePlane(m_motocyclePlane);
+	isle->m_bike->UpdatePlane(m_bikePlane);
+	isle->m_skateboard->UpdatePlane(m_skateboardPlane);
+
+	if (isle->m_helicopter != NULL) {
+		isle->m_helicopter->UpdatePlane(m_helicopterPlane);
+		m_helicopter = isle->m_helicopter;
+		isle->RemoveActor(m_helicopter);
+		isle->VTable0x6c(m_helicopter);
+		m_helicopter->SetBoundary(NULL);
+		m_helicopter->SetController(NULL);
+	}
+
+	if (isle->m_jetski != NULL) {
+		isle->m_jetski->UpdatePlane(m_jetskiPlane);
+		m_jetski = isle->m_jetski;
+		isle->RemoveActor(m_jetski);
+		isle->VTable0x6c(m_jetski);
+		m_jetski->SetBoundary(NULL);
+		m_jetski->SetController(NULL);
+	}
+
+	if (isle->m_dunebuggy != NULL) {
+		isle->m_dunebuggy->UpdatePlane(m_dunebuggyPlane);
+		m_dunebuggy = isle->m_dunebuggy;
+		isle->RemoveActor(m_dunebuggy);
+		isle->VTable0x6c(m_dunebuggy);
+		m_dunebuggy->SetBoundary(NULL);
+		m_dunebuggy->SetController(NULL);
+	}
+
+	if (isle->m_racecar != NULL) {
+		isle->m_racecar->UpdatePlane(m_racecarPlane);
+		m_racecar = isle->m_racecar;
+		isle->RemoveActor(m_racecar);
+		isle->VTable0x6c(m_racecar);
+		m_racecar->SetBoundary(NULL);
+		m_racecar->SetController(NULL);
+	}
 }
 
 // STUB: LEGO1 0x10034d00
