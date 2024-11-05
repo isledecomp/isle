@@ -74,14 +74,14 @@ typedef LegoVehicleBuildState LegoJetskiBuildState;
 class LegoCarBuild : public LegoWorld {
 public:
 	// SIZE 0x1c
-	struct LookupTableData {
-		undefined2 m_unk0x00; // 0x00
+	struct LookupTableActions {
+		undefined4 m_unk0x00; // 0x00
 		undefined4 m_unk0x04; // 0x04
 		undefined4 m_unk0x08; // 0x08
 		undefined4 m_unk0x0c; // 0x0c
 		undefined4 m_unk0x10; // 0x10
 		undefined4 m_unk0x14; // 0x14
-		MxU16 m_unk0x18;      // 0x18
+		undefined4 m_unk0x18; // 0x18
 	};
 
 	enum Unknown0xf8 {
@@ -239,7 +239,7 @@ private:
 	static MxS16 g_unk0x100f11cc;
 	static MxFloat g_unk0x100d65a4;
 	static MxFloat g_rotationAngleStepYAxis;
-	static LookupTableData g_unk0x100d65b0[];
+	static LookupTableActions g_unk0x100d65b0[];
 };
 
 #endif // LEGOCARBUILD_H

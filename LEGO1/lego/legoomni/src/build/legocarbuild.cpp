@@ -40,13 +40,13 @@
 
 DECOMP_SIZE_ASSERT(LegoCarBuild, 0x34c)
 DECOMP_SIZE_ASSERT(LegoVehicleBuildState, 0x50)
-DECOMP_SIZE_ASSERT(LegoCarBuild::LookupTableData, 0x1c);
+DECOMP_SIZE_ASSERT(LegoCarBuild::LookupTableActions, 0x1c);
 
 // These four structs can be matched to the vehicle types using BETA10 0x10070520
 
 // GLOBAL: LEGO1 0x100d65b0
 // GLOBAL: BETA10 0x101bb7c0
-LegoCarBuild::LookupTableData LegoCarBuild::g_unk0x100d65b0[] = {
+LegoCarBuild::LookupTableActions LegoCarBuild::g_unk0x100d65b0[] = {
 	{DunecarScript::c_igs001d3_RunAnim,
 	 DunecarScript::c_igs002d3_RunAnim,
 	 DunecarScript::c_igs003d3_RunAnim,
@@ -1352,16 +1352,12 @@ inline MxU32 LegoCarBuild::Beta0x10070520()
 	switch (m_carId) {
 	case Helicopter_Actor:
 		return 2;
-		break;
 	case DuneBugy_Actor:
 		return 0;
-		break;
 	case Jetski_Actor:
 		return 1;
-		break;
 	case RaceCar_Actor:
 		return 3;
-		break;
 	default:
 		assert(0);
 		return 0;
@@ -1428,18 +1424,15 @@ void LegoCarBuild::FUN_10025720(undefined4 p_param)
 			FUN_10025d10(g_unk0x100d65b0[Beta0x10070520()].m_unk0x08);
 			break;
 		case 6:
-			// This part doesn't match to 100 % yet
-			uVar6 = g_unk0x100d65b0[Beta0x10070520()].m_unk0x18;
-			m_unk0x10a = uVar6;
+			m_unk0x10a = g_unk0x100d65b0[Beta0x10070520()].m_unk0x18;
+			uVar6 = m_unk0x10a;
 			StopActionIn0x344();
 
-			if (uVar6 != -1) {
+			if (uVar6 != DS_NOT_A_STREAM) {
 				m_unk0x344 = uVar6;
 				BackgroundAudioManager()->LowerVolume();
 				InvokeAction(Extra::ActionType::e_start, m_atomId, uVar6, NULL);
 			}
-
-			FUN_10025d10(uVar6);
 
 			break;
 		default:
