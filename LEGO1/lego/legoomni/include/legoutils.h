@@ -10,6 +10,9 @@
 
 #define WM_ISLE_SETCURSOR 0x5400
 
+// name verified by BETA10 0x100d4054
+#define DS_NOT_A_STREAM -1
+
 enum Cursor {
 	e_cursorArrow = 0,
 	e_cursorBusy,
@@ -46,7 +49,7 @@ MxS16 CountTotalTreeNodes(LegoTreeNode* p_node);
 LegoTreeNode* GetTreeNode(LegoTreeNode* p_node, MxU32 p_index);
 void FUN_1003e050(LegoAnimPresenter* p_presenter);
 Extra::ActionType MatchActionString(const char*);
-void InvokeAction(Extra::ActionType p_actionId, const MxAtomId& p_pAtom, MxS32 p_targetEntityId, LegoEntity* p_sender);
+void InvokeAction(Extra::ActionType p_actionId, const MxAtomId& p_pAtom, MxS32 p_streamId, LegoEntity* p_sender);
 void SetCameraControllerFromIsle();
 void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bOut, float* p_gOut);
 void PlayCamAnim(LegoPathActor* p_actor, MxBool p_unused, MxU32 p_location, MxBool p_bool);

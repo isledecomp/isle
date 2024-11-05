@@ -732,6 +732,12 @@
 // LIBRARY: BETA10 0x1018ed70
 // _strupr
 
+// LIBRARY: BETA10 0x100f9690
+// sprintf
+
+// LIBRARY: BETA10 0x100fb150
+// _spawnl
+
 // LIBRARY: BETA10 0x1001d1a0
 // `vector constructor iterator'
 

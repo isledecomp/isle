@@ -240,24 +240,30 @@ void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender
 
 // FUNCTION: LEGO1 0x1003e430
 // FUNCTION: BETA10 0x100d3fda
-void InvokeAction(Extra::ActionType p_actionId, const MxAtomId& p_pAtom, MxS32 p_targetEntityId, LegoEntity* p_sender)
+void InvokeAction(Extra::ActionType p_actionId, const MxAtomId& p_pAtom, MxS32 p_streamId, LegoEntity* p_sender)
 {
 	MxDSAction action;
 	action.SetAtomId(p_pAtom);
-	action.SetObjectId(p_targetEntityId);
+	action.SetObjectId(p_streamId);
 
 	switch (p_actionId) {
 	case Extra::ActionType::e_opendisk:
-		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId)) {
+		assert(p_streamId != DS_NOT_A_STREAM);
+
+		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_streamId)) {
 			Streamer()->Open(p_pAtom.GetInternal(), MxStreamer::e_diskStream);
 			Start(&action);
 		}
+
 		break;
 	case Extra::ActionType::e_openram:
-		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId)) {
+		assert(p_streamId != DS_NOT_A_STREAM);
+
+		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_streamId)) {
 			Streamer()->Open(p_pAtom.GetInternal(), MxStreamer::e_RAMStream);
 			Start(&action);
 		}
+
 		break;
 	case Extra::ActionType::e_close:
 		action.SetUnknown24(-2);
@@ -265,35 +271,47 @@ void InvokeAction(Extra::ActionType p_actionId, const MxAtomId& p_pAtom, MxS32 p
 		Streamer()->Close(p_pAtom.GetInternal());
 		break;
 	case Extra::ActionType::e_start:
-		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId)) {
+		assert(p_streamId != DS_NOT_A_STREAM);
+
+		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_streamId)) {
 			Start(&action);
 		}
+
 		break;
 	case Extra::ActionType::e_stop:
+		assert(p_streamId != DS_NOT_A_STREAM);
 		action.SetUnknown24(-2);
-		if (!RemoveFromCurrentWorld(p_pAtom, p_targetEntityId)) {
+
+		if (!RemoveFromCurrentWorld(p_pAtom, p_streamId)) {
 			DeleteObject(action);
 		}
+
 		break;
 	case Extra::ActionType::e_run:
 		_spawnl(0, "\\lego\\sources\\main\\main.exe", "\\lego\\sources\\main\\main.exe", "/script", &p_pAtom, 0);
 		break;
+	case Extra::ActionType::e_enable:
+		assert(p_streamId != DS_NOT_A_STREAM);
+		CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_streamId);
+		break;
+	case Extra::ActionType::e_disable:
+		assert(p_streamId != DS_NOT_A_STREAM);
+		CheckIfEntityExists(FALSE, p_pAtom.GetInternal(), p_streamId);
+		break;
 	case Extra::ActionType::e_exit:
 		Lego()->SetExit(TRUE);
 		break;
-	case Extra::ActionType::e_enable:
-		CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId);
-		break;
-	case Extra::ActionType::e_disable:
-		CheckIfEntityExists(FALSE, p_pAtom.GetInternal(), p_targetEntityId);
-		break;
 	case Extra::ActionType::e_notify:
-		NotifyEntity(p_pAtom.GetInternal(), p_targetEntityId, p_sender);
+		assert(p_streamId != DS_NOT_A_STREAM);
+		NotifyEntity(p_pAtom.GetInternal(), p_streamId, p_sender);
 		break;
+	default:
+		assert("Invalid Action Control" == NULL);
 	}
 }
 
 // FUNCTION: LEGO1 0x1003e670
+// FUNCTION: BETA10 0x100d43f2
 MxBool CheckIfEntityExists(MxBool p_enable, const char* p_filename, MxS32 p_entityId)
 {
 	LegoWorld* world = FindWorld(MxAtomId(p_filename, e_lowerCase2), p_entityId);
@@ -308,6 +326,7 @@ MxBool CheckIfEntityExists(MxBool p_enable, const char* p_filename, MxS32 p_enti
 }
 
 // FUNCTION: LEGO1 0x1003e700
+// FUNCTION: BETA10 0x100d448a
 void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender)
 {
 	MxAtomId atom(p_filename, e_lowerCase2);
@@ -444,6 +463,7 @@ void FUN_1003eda0()
 }
 
 // FUNCTION: LEGO1 0x1003ee00
+// FUNCTION: BETA10 0x100d4c6f
 MxBool RemoveFromCurrentWorld(const MxAtomId& p_atomId, MxS32 p_id)
 {
 	LegoWorld* world = CurrentWorld();

@@ -73,6 +73,17 @@ typedef LegoVehicleBuildState LegoJetskiBuildState;
 // SIZE 0x34c
 class LegoCarBuild : public LegoWorld {
 public:
+	// SIZE 0x1c
+	struct LookupTableActions {
+		undefined4 m_unk0x00; // 0x00
+		undefined4 m_unk0x04; // 0x04
+		undefined4 m_unk0x08; // 0x08
+		undefined4 m_unk0x0c; // 0x0c
+		undefined4 m_unk0x10; // 0x10
+		undefined4 m_unk0x14; // 0x14
+		undefined4 m_unk0x18; // 0x18
+	};
+
 	enum Unknown0xf8 {
 		c_unknownminusone = -1,
 		c_unknown8 = 8
@@ -133,9 +144,10 @@ public:
 	void SetPresentersEnabled(MxBool p_enabled);
 	void TogglePresentersEnabled();
 	void FUN_100250e0(MxBool p_param);
-	void FUN_10025350(MxS32 p_param);
+	void FUN_10025350(MxS32 p_objectId);
 	void FUN_10025450();
-	undefined4 FUN_10025720(undefined4 p_param1);
+	void FUN_10025720(undefined4 p_param1);
+	void FUN_10025d10(MxS32 p_param);
 	MxS32 FUN_10025d70();
 	void FUN_10025db0(const char* p_param1, undefined4 p_param2);
 	void FUN_10025e40();
@@ -148,12 +160,18 @@ public:
 	// LegoCarBuild::`scalar deleting destructor'
 
 private:
-	Unknown0xf8 m_unk0xf8;     // 0xf8
-	MxS16 m_unk0xfc;           // 0xfc
-	undefined m_unk0xfe[2];    // 0xfe
-	MxS32 m_unk0x100;          // 0x100
-	undefined4 m_unk0x104;     // 0x104
-	MxS8 m_unk0x108;           // 0x108
+	// inline functions
+	MxU32 Beta0x10070520();
+	void StopActionIn0x344();
+
+	Unknown0xf8 m_unk0xf8; // 0xf8
+	MxS16 m_unk0xfc;       // 0xfc
+	MxS32 m_unk0x100;      // 0x100
+	undefined4 m_unk0x104; // 0x104
+
+	// name verified by BETA10 0x1006ebba
+	MxS8 m_numAnimsRun; // 0x108
+
 	MxU8 m_unk0x109;           // 0x109
 	MxU16 m_unk0x10a;          // 0x10a
 	DWORD m_unk0x10c;          // 0x10c
@@ -221,6 +239,7 @@ private:
 	static MxS16 g_unk0x100f11cc;
 	static MxFloat g_unk0x100d65a4;
 	static MxFloat g_rotationAngleStepYAxis;
+	static LookupTableActions g_unk0x100d65b0[];
 };
 
 #endif // LEGOCARBUILD_H
