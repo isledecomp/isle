@@ -40,6 +40,7 @@ public:
 
 	LegoResult VTable0x04() override; // vtable+0x04
 
+	// FUNCTION: BETA10 0x100270c0
 	LegoU32 GetFlag0x10() { return m_flags & c_bit5 ? FALSE : TRUE; }
 
 	// FUNCTION: BETA10 0x1001ff80
