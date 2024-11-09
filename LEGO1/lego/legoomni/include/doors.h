@@ -7,7 +7,7 @@
 // SIZE 0x1f8
 class Doors : public LegoPathActor {
 public:
-	Doors() : m_unk0x154(0), m_unk0x15c(0), m_unk0x160(0), m_unk0x1f4(0) {}
+	Doors() : m_unk0x154(0), m_unk0x15c(NULL), m_unk0x160(NULL), m_unk0x1f4(0) {}
 
 	// FUNCTION: LEGO1 0x1000e430
 	const char* ClassName() const override // vtable+0x0c
@@ -31,12 +31,12 @@ public:
 
 private:
 	undefined4 m_unk0x154; // 0x154
-	undefined4 m_unk0x158; // 0x158
-	undefined4 m_unk0x15c; // 0x15c
-	undefined4 m_unk0x160; // 0x160
+	MxFloat m_unk0x158;    // 0x158
+	Matrix4* m_unk0x15c;   // 0x15c
+	Matrix4* m_unk0x160;   // 0x160
 	MxMatrix m_unk0x164;   // 0x164
 	MxMatrix m_unk0x1ac;   // 0x1ac
-	undefined4 m_unk0x1f4; // 0x1f4
+	MxFloat m_unk0x1f4;    // 0x1f4
 };
 
 #endif // DOORS_H
