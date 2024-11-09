@@ -10,18 +10,12 @@ MxResult Doors::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 {
 	if (m_unk0x154 == 1) {
 		m_unk0x154 = 2;
-
 		m_unk0x158 = Timer()->GetTime();
-
-		m_unk0x164 = *m_unk0x15c;
-		m_unk0x1ac = *m_unk0x160;
+		m_unk0x164 = m_unk0x15c[2];
+		m_unk0x1ac = m_unk0x160[2];
 	}
 
-	if (m_unk0x1f4 < 0.001) {
-		return SUCCESS;
-	}
-
-	return FAILURE;
+	return m_unk0x1f4 < 0.001 ? SUCCESS : FAILURE;
 }
 
 // STUB: LEGO1 0x10066250
