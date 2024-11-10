@@ -92,7 +92,7 @@ public:
 	LegoNamedTexture* m_jetskiWindshield;         // 0x1b4
 	Jetski* m_jetski;                             // 0x1b8
 	LegoNamedPlane m_dunebuggyPlane;              // 0x1bc
-	LegoNamedTexture* dunebuggyFront;             // 0x208
+	LegoNamedTexture* m_dunebuggyFront;           // 0x208
 	DuneBuggy* m_dunebuggy;                       // 0x20c
 	LegoNamedPlane m_racecarPlane;                // 0x210
 	LegoNamedTexture* m_racecarFront;             // 0x25c

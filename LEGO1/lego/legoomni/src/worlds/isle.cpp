@@ -1301,7 +1301,7 @@ Act1State::Act1State()
 	m_unk0x021 = 1;
 	m_jetskiWindshield = NULL;
 	m_jetski = NULL;
-	dunebuggyFront = NULL;
+	m_dunebuggyFront = NULL;
 	m_dunebuggy = NULL;
 	m_racecarFront = NULL;
 	m_racecarBack = NULL;
@@ -1365,8 +1365,8 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 		}
 
 		if (m_dunebuggyPlane.IsPresent()) {
-			if (dunebuggyFront) {
-				WriteNamedTexture(p_file, dunebuggyFront);
+			if (m_dunebuggyFront) {
+				WriteNamedTexture(p_file, m_dunebuggyFront);
 			}
 			else {
 				FUN_1003f540(p_file, "dbfrfn.gif");
@@ -1430,8 +1430,8 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 		}
 
 		if (m_dunebuggyPlane.IsPresent()) {
-			dunebuggyFront = ReadNamedTexture(p_file);
-			if (dunebuggyFront == NULL) {
+			m_dunebuggyFront = ReadNamedTexture(p_file);
+			if (m_dunebuggyFront == NULL) {
 				return FAILURE;
 			}
 		}
@@ -1528,9 +1528,9 @@ MxBool Act1State::Reset()
 	}
 
 	m_dunebuggyPlane.Reset();
-	if (dunebuggyFront) {
-		delete dunebuggyFront;
-		dunebuggyFront = NULL;
+	if (m_dunebuggyFront) {
+		delete m_dunebuggyFront;
+		m_dunebuggyFront = NULL;
 	}
 
 	if (m_dunebuggy) {
@@ -1725,10 +1725,10 @@ void Act1State::PlaceActors()
 		m_dunebuggyPlane.Reset();
 		m_dunebuggy = NULL;
 
-		if (dunebuggyFront != NULL) {
-			FUN_1003f930(dunebuggyFront);
-			delete dunebuggyFront;
-			dunebuggyFront = NULL;
+		if (m_dunebuggyFront != NULL) {
+			FUN_1003f930(m_dunebuggyFront);
+			delete m_dunebuggyFront;
+			m_dunebuggyFront = NULL;
 		}
 	}
 
