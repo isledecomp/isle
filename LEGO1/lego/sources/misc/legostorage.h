@@ -91,6 +91,7 @@ class LegoFile : public LegoStorage {
 public:
 	LegoFile();
 	~LegoFile() override;
+
 	LegoResult Read(void* p_buffer, LegoU32 p_size) override;        // vtable+0x04
 	LegoResult Write(const void* p_buffer, LegoU32 p_size) override; // vtable+0x08
 	LegoResult GetPosition(LegoU32& p_position) override;            // vtable+0x0c
@@ -100,23 +101,18 @@ public:
 	// FUNCTION: LEGO1 0x100343d0
 	LegoStorage* WriteVector3(Mx3DPointFloat p_vec3)
 	{
-		float data = p_vec3[0];
-		Write(&data, sizeof(float));
-
-		data = p_vec3[1];
-		Write(&data, sizeof(float));
-
-		data = p_vec3[2];
-		Write(&data, sizeof(float));
+		::Write(this, p_vec3[0]);
+		::Write(this, p_vec3[1]);
+		::Write(this, p_vec3[2]);
 		return this;
 	}
 
 	// FUNCTION: LEGO1 0x10034430
 	LegoStorage* ReadVector3(Mx3DPointFloat& p_vec3)
 	{
-		Read(&p_vec3[0], sizeof(float));
-		Read(&p_vec3[1], sizeof(float));
-		Read(&p_vec3[2], sizeof(float));
+		::Read(this, &p_vec3[0]);
+		::Read(this, &p_vec3[1]);
+		::Read(this, &p_vec3[2]);
 		return this;
 	}
 

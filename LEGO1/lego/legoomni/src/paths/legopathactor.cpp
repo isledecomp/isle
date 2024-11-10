@@ -732,9 +732,9 @@ void LegoPathActor::UpdatePlane(LegoNamedPlane& p_namedPlane)
 // FUNCTION: LEGO1 0x1002f830
 void LegoPathActor::PlaceActor(LegoNamedPlane& p_namedPlane)
 {
-	if (strcmp(p_namedPlane.GetName()->GetData(), "") != 0) {
+	if (p_namedPlane.IsPresent()) {
 		LegoWorld* world = CurrentWorld();
-		world->PlaceActor(this, p_namedPlane.GetName()->GetData(), 0, 0.5f, 1, 0.5f);
+		world->PlaceActor(this, p_namedPlane.GetName(), 0, 0.5f, 1, 0.5f);
 		SetLocation(p_namedPlane.GetPosition(), p_namedPlane.GetDirection(), p_namedPlane.GetUp(), TRUE);
 	}
 }
