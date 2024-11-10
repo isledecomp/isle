@@ -461,7 +461,7 @@ void LegoCarBuild::VTable0x80(MxFloat p_param1[2], MxFloat p_param2[2], MxFloat 
 #define LEGOCARBUILD_TICKLE_CASE(subtract, start, end, str)                                                            \
 	if (start < dTime && dTime < end) {                                                                                \
 		FUN_10025db0(str, dTime - subtract);                                                                           \
-		return SUCCESS;                                                                                                \
+		break;                                                                                                         \
 	}
 
 // FUNCTION: LEGO1 0x100238b0
@@ -493,91 +493,94 @@ MxResult LegoCarBuild::Tickle()
 		DWORD time = timeGetTime();
 		DWORD dTime = (time - m_unk0x10c) / 100;
 
-		if (m_carId == Helicopter_Actor) {
+		if (m_carId == RaceCar_Actor) {
 			switch (m_unk0x10a) {
-			// TODO: Work out constants
-			case 500:
+			case RacecarScript::c_irt001d1_RunAnim:
 				LEGOCARBUILD_TICKLE_CASE(160, 160, 180, "Exit_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(260, 260, 280, "ShelfUp_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(330, 330, 340, "Yellow_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(340, 340, 360, "Platform_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(390, 390, 410, "Exit_Ctl")
-			case 503:
+				break;
+			case RacecarScript::c_irt004d1_RunAnim:
 				LEGOCARBUILD_TICKLE_CASE(50, 50, 60, "ShelfUp_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(63, 65, 70, "Yellow_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(70, 70, 80, "Platform_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(95, 95, 105, "Exit_Ctl")
-			case 504:
+				break;
+			case RacecarScript::c_irtxx4d1_RunAnim:
 				LEGOCARBUILD_TICKLE_CASE(22, 24, 29, "Exit_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(33, 35, 40, "ShelfUp_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(43, 45, 50, "Yellow_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(56, 58, 63, "Platform_Ctl")
-			default:
-				return SUCCESS;
+				break;
 			}
 		}
 		else if (m_carId == Jetski_Actor) {
 			switch (m_unk0x10a) {
-			case 500:
+			case JetskiScript::c_ijs001d4_RunAnim:
 				LEGOCARBUILD_TICKLE_CASE(291, 291, 311, "Exit_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(311, 311, 331, "ShelfUp_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(412, 412, 432, "Yellow_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(437, 437, 457, "Platform_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(485, 485, 505, "Exit_Ctl")
-			case 501:
+				break;
+			case JetskiScript::c_ijsxx2d4_RunAnim:
 				LEGOCARBUILD_TICKLE_CASE(32, 34, 39, "Exit_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(68, 70, 75, "ShelfUp_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(105, 105, 115, "Yellow_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(133, 135, 140, "Platform_Ctl")
-			case 504:
+				break;
+			case JetskiScript::c_ijs005d4_RunAnim:
 				LEGOCARBUILD_TICKLE_CASE(78, 78, 98, "Exit_Ctl")
-			case 505:
+				break;
+			case JetskiScript::c_ijs006d4_RunAnim:
 				LEGOCARBUILD_TICKLE_CASE(93, 93, 113, "Exit_Ctl")
-				// default: // not sure if present
-				// 	return SUCCESS;
+				break;
 			}
 		}
 		else if (m_carId == DuneBugy_Actor) {
 			switch (m_unk0x10a) {
-			case 500:
+			case DunecarScript::c_igs001d3_RunAnim:
 				LEGOCARBUILD_TICKLE_CASE(155, 155, 175, "Exit_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(215, 215, 235, "ShelfUp_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(285, 285, 305, "Yellow_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(300, 300, 320, "Platform_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(340, 340, 360, "Exit_Ctl")
-			case 501:
+				break;
+			case DunecarScript::c_igsxx1d3_RunAnim:
 				LEGOCARBUILD_TICKLE_CASE(23, 23, 33, "Exit_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(37, 39, 44, "ShelfUp_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(105, 105, 115, "Yellow_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(122, 124, 129, "Platform_Ctl")
-			default:
-				return SUCCESS;
+				break;
 			}
 		}
 		else if (m_carId == Helicopter_Actor) {
 			switch (m_unk0x10a) {
-			case 500:
+			case CopterScript::c_ips001d2_RunAnim:
 				LEGOCARBUILD_TICKLE_CASE(185, 185, 205, "Exit_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(235, 235, 255, "ShelfUp_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(292, 292, 312, "Yellow_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(315, 315, 335, "Platform_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(353, 353, 373, "Exit_Ctl")
-			case 501:
+				break;
+			case CopterScript::c_ipsxx1d2_RunAnim:
 				LEGOCARBUILD_TICKLE_CASE(43, 45, 50, "Exit_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(72, 74, 79, "ShelfUp_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(114, 116, 121, "Yellow_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(128, 130, 135, "Platform_Ctl")
-			case 505:
+				break;
+			case CopterScript::c_ips005d2_RunAnim:
 				LEGOCARBUILD_TICKLE_CASE(30, 30, 40, "ShelfUp_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(60, 60, 70, "Yellow_Ctl")
 				LEGOCARBUILD_TICKLE_CASE(48, 48, 58, "Platform_Ctl")
-			default:
-				return SUCCESS;
+				break;
 			}
 		}
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10024050
