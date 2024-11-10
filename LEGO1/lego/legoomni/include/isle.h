@@ -83,21 +83,21 @@ public:
 	LegoNamedPlane m_bikePlane;                   // 0x070
 	LegoNamedPlane m_skateboardPlane;             // 0x0bc
 	LegoNamedPlane m_helicopterPlane;             // 0x108
-	LegoNamedTexture* m_unk0x154;                 // 0x154
-	LegoNamedTexture* m_unk0x158;                 // 0x158
-	LegoNamedTexture* m_unk0x15c;                 // 0x15c
+	LegoNamedTexture* m_helicopterWindshield;     // 0x154
+	LegoNamedTexture* m_helicopterJetLeft;        // 0x158
+	LegoNamedTexture* m_helicopterJetRight;       // 0x15c
 	Helicopter* m_helicopter;                     // 0x160
 	LegoNamedPlane m_jetskiPlane;                 // 0x164
-	LegoNamedTexture* m_unk0x1b0;                 // 0x1b0
-	LegoNamedTexture* m_unk0x1b4;                 // 0x1b4
+	LegoNamedTexture* m_jetskiFront;              // 0x1b0
+	LegoNamedTexture* m_jetskiWindshield;         // 0x1b4
 	Jetski* m_jetski;                             // 0x1b8
 	LegoNamedPlane m_dunebuggyPlane;              // 0x1bc
-	LegoNamedTexture* m_unk0x208;                 // 0x208
+	LegoNamedTexture* m_dunebuggyFront;           // 0x208
 	DuneBuggy* m_dunebuggy;                       // 0x20c
 	LegoNamedPlane m_racecarPlane;                // 0x210
-	LegoNamedTexture* m_unk0x25c;                 // 0x25c
-	LegoNamedTexture* m_unk0x260;                 // 0x260
-	LegoNamedTexture* m_unk0x264;                 // 0x264
+	LegoNamedTexture* m_racecarFront;             // 0x25c
+	LegoNamedTexture* m_racecarBack;              // 0x260
+	LegoNamedTexture* m_racecarTail;              // 0x264
 	RaceCar* m_racecar;                           // 0x268
 };
 

@@ -73,6 +73,7 @@ public:
 			return SUCCESS;
 		}
 
+	private:
 		MxU32* m_objectIds; // 0x00
 		MxS16 m_length;     // 0x04
 		MxS16 m_mode;       // 0x06

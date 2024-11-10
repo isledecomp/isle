@@ -337,7 +337,7 @@ void RegistrationBook::FUN_100778c0()
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 		Act1State* act1state = (Act1State*) GameState()->GetState("Act1State");
 
-		if (strcmp(act1state->m_helicopterPlane.GetName()->GetData(), "") != 0) {
+		if (act1state->m_helicopterPlane.IsPresent()) {
 			InvokeAction(Extra::e_start, m_atomId, CopterScript::c_Helicopter_Actor, NULL);
 			NotificationManager()->Send(
 				this,
@@ -347,7 +347,7 @@ void RegistrationBook::FUN_100778c0()
 			m_unk0x2b8++;
 		}
 
-		if (strcmp(act1state->m_jetskiPlane.GetName()->GetData(), "") != 0) {
+		if (act1state->m_jetskiPlane.IsPresent()) {
 			InvokeAction(Extra::e_start, m_atomId, JetskiScript::c_Jetski_Actor, NULL);
 			NotificationManager()->Send(
 				this,
@@ -357,7 +357,7 @@ void RegistrationBook::FUN_100778c0()
 			m_unk0x2b8++;
 		}
 
-		if (strcmp(act1state->m_dunebuggyPlane.GetName()->GetData(), "") != 0) {
+		if (act1state->m_dunebuggyPlane.IsPresent()) {
 			InvokeAction(Extra::e_start, m_atomId, DunecarScript::c_DuneBugy_Actor, NULL);
 			NotificationManager()->Send(
 				this,
@@ -367,7 +367,7 @@ void RegistrationBook::FUN_100778c0()
 			m_unk0x2b8++;
 		}
 
-		if (strcmp(act1state->m_racecarPlane.GetName()->GetData(), "") != 0) {
+		if (act1state->m_racecarPlane.IsPresent()) {
 			InvokeAction(Extra::e_start, m_atomId, RacecarScript::c_RaceCar_Actor, NULL);
 			NotificationManager()->Send(
 				this,
