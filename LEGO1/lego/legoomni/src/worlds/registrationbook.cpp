@@ -13,6 +13,7 @@
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legopathstruct.h"
+#include "legoutils.h"
 #include "misc.h"
 #include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
@@ -330,10 +331,58 @@ void RegistrationBook::WriteInfocenterLetters(MxS16 p_user)
 	}
 }
 
-// STUB: LEGO1 0x100778c0
+// FUNCTION: LEGO1 0x100778c0
 void RegistrationBook::FUN_100778c0()
 {
-	// TODO
+	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
+		Act1State* act1state = (Act1State*) GameState()->GetState("Act1State");
+
+		if (strcmp(act1state->m_helicopterPlane.GetName()->GetData(), "") != 0) {
+			InvokeAction(Extra::e_start, m_atomId, CopterScript::c_Helicopter_Actor, NULL);
+			NotificationManager()->Send(
+				this,
+				LegoPathStructNotificationParam(c_notificationPathStruct, NULL, 0, CopterScript::c_Helicopter_Actor)
+			);
+
+			m_unk0x2b8++;
+		}
+
+		if (strcmp(act1state->m_jetskiPlane.GetName()->GetData(), "") != 0) {
+			InvokeAction(Extra::e_start, m_atomId, JetskiScript::c_Jetski_Actor, NULL);
+			NotificationManager()->Send(
+				this,
+				LegoPathStructNotificationParam(c_notificationPathStruct, NULL, 0, JetskiScript::c_Jetski_Actor)
+			);
+
+			m_unk0x2b8++;
+		}
+
+		if (strcmp(act1state->m_dunebuggyPlane.GetName()->GetData(), "") != 0) {
+			InvokeAction(Extra::e_start, m_atomId, DunecarScript::c_DuneBugy_Actor, NULL);
+			NotificationManager()->Send(
+				this,
+				LegoPathStructNotificationParam(c_notificationPathStruct, NULL, 0, DunecarScript::c_DuneBugy_Actor)
+			);
+
+			m_unk0x2b8++;
+		}
+
+		if (strcmp(act1state->m_racecarPlane.GetName()->GetData(), "") != 0) {
+			InvokeAction(Extra::e_start, m_atomId, RacecarScript::c_RaceCar_Actor, NULL);
+			NotificationManager()->Send(
+				this,
+				LegoPathStructNotificationParam(c_notificationPathStruct, NULL, 0, RacecarScript::c_RaceCar_Actor)
+			);
+
+			m_unk0x2b8++;
+		}
+
+		if (m_unk0x2b8 != 0) {
+			DeleteObjects(&m_atomId, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
+			InputManager()->DisableInputProcessing();
+			SetAppCursor(e_cursorBusy);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x10077cc0
