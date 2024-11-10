@@ -17,6 +17,8 @@
 #include "legoworld.h"
 #include "legoworldlist.h"
 #include "misc.h"
+#include "misc/legocontainer.h"
+#include "misc/legoimage.h"
 #include "misc/legotree.h"
 #include "mxdsaction.h"
 #include "mxmisc.h"
@@ -664,8 +666,18 @@ void FUN_1003f540(LegoFile* p_file, const char* p_filename)
 }
 
 // FUNCTION: LEGO1 0x1003f8a0
-void WriteNamedTexture(LegoFile* p_file, LegoNamedTexture* p_texture)
+void WriteNamedTexture(LegoFile* p_file, LegoNamedTexture* p_namedTexture)
 {
-	p_file->WriteString(*p_texture->GetName());
-	p_texture->GetTexture()->Write(p_file);
+	p_file->WriteString(*p_namedTexture->GetName());
+	p_namedTexture->GetTexture()->Write(p_file);
+}
+
+// FUNCTION: LEGO1 0x1003f930
+void FUN_1003f930(LegoNamedTexture* p_namedTexture)
+{
+	LegoTextureInfo* p_textureInfo = TextureContainer()->Get(p_namedTexture->GetName()->GetData());
+
+	if (p_textureInfo != NULL) {
+		p_textureInfo->FUN_10066010(p_namedTexture->GetTexture()->GetImage()->GetBits());
+	}
 }

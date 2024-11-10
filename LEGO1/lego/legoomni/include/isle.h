@@ -54,7 +54,7 @@ public:
 	void PlayCptClickDialogue();
 	void StopCptClickDialogue();
 	void RemoveActors();
-	void FUN_10034d00();
+	void PlaceActors();
 
 	MxU32 GetUnknown18() { return m_unk0x018; }
 	ElevatorFloor GetElevatorFloor() { return (ElevatorFloor) m_elevFloor; }
@@ -129,18 +129,18 @@ public:
 	}
 
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	void ReadyWorld() override;                       // vtable+50
-	void Add(MxCore* p_object) override;              // vtable+58
+	void ReadyWorld() override;                       // vtable+0x50
+	void Add(MxCore* p_object) override;              // vtable+0x58
 
 	// FUNCTION: LEGO1 0x10030900
-	MxBool VTable0x5c() override { return TRUE; } // vtable+5c
+	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x10033170
 	void VTable0x60() override {} // vtable+60
 
-	MxBool Escape() override;                        // vtable+64
-	void Enable(MxBool p_enable) override;           // vtable+68
-	virtual void VTable0x6c(LegoPathActor* p_actor); // vtable+6c
+	MxBool Escape() override;                        // vtable+0x64
+	void Enable(MxBool p_enable) override;           // vtable+0x68
+	virtual void VTable0x6c(LegoPathActor* p_actor); // vtable+0x6c
 
 	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
 	MxBool HasHelicopter() { return m_helicopter != NULL; }

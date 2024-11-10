@@ -142,6 +142,7 @@ public:
 	void SetController(LegoPathController* p_controller) { m_controller = p_controller; }
 
 	void UpdatePlane(LegoNamedPlane& p_namedPlane);
+	void PlaceActor(LegoNamedPlane& p_namedPlane);
 
 	// SYNTHETIC: LEGO1 0x1002d800
 	// LegoPathActor::`scalar deleting destructor'

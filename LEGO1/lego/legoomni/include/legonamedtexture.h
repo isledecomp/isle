@@ -21,7 +21,7 @@ public:
 
 private:
 	MxString m_name;        // 0x00
-	LegoTexture* m_texture; // 0x04
+	LegoTexture* m_texture; // 0x10
 };
 
 #endif // LEGONAMEDTEXTURE_H
