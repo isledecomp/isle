@@ -388,6 +388,13 @@ LegoBool LegoLOD::FUN_100aae20(const LegoChar* p_name)
 	return FALSE;
 }
 
+// FUNCTION: LEGO1 0x100aae60
+// FUNCTION: BETA10 0x1018e50f
+void LegoLOD::FUN_100aae60()
+{
+	m_unk0x1c = 0;
+}
+
 inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* pMesh)
 {
 	mesh = ((TglImpl::MeshImpl*) pMesh)->ImplementationData()->groupMesh;

@@ -812,11 +812,15 @@ void LegoROI::SetName(const LegoChar* p_name)
 	}
 }
 
-// STUB: LEGO1 0x100a9dd0
-// STUB: BETA10 0x1018bfdb
+// FUNCTION: LEGO1 0x100a9dd0
+// FUNCTION: BETA10 0x1018bfdb
 void LegoROI::FUN_100a9dd0()
 {
-	// TODO
+	int lodCount = GetLODCount();
+	for (LegoS32 i = 0; i < lodCount; i++) {
+		LegoLOD* lod = (LegoLOD*) GetLOD(i);
+		lod->FUN_100aae60();
+	}
 }
 
 // FUNCTION: LEGO1 0x100a9e10
