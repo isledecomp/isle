@@ -675,9 +675,9 @@ void WriteNamedTexture(LegoFile* p_file, LegoNamedTexture* p_namedTexture)
 // FUNCTION: LEGO1 0x1003f930
 void FUN_1003f930(LegoNamedTexture* p_namedTexture)
 {
-	LegoTextureInfo* p_textureInfo = TextureContainer()->Get(p_namedTexture->GetName()->GetData());
+	LegoTextureInfo* textureInfo = TextureContainer()->Get(p_namedTexture->GetName()->GetData());
 
-	if (p_textureInfo != NULL) {
-		p_textureInfo->FUN_10066010(p_namedTexture->GetTexture()->GetImage()->GetBits());
+	if (textureInfo != NULL) {
+		textureInfo->FUN_10066010(p_namedTexture->GetTexture()->GetImage()->GetBits());
 	}
 }
