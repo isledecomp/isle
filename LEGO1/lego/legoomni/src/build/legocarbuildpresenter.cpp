@@ -662,7 +662,7 @@ MxBool LegoCarBuildAnimPresenter::StringEndsOnY(const LegoChar* p_string)
 // FUNCTION: BETA10 0x1007280e
 MxBool LegoCarBuildAnimPresenter::StringEndsOnZero(const LegoChar* p_string)
 {
-	return (p_string[strlen(p_string) - 2] != '0');
+	return (p_string[strlen(p_string) - 1] != '0');
 }
 
 // FUNCTION: LEGO1 0x10079d60
