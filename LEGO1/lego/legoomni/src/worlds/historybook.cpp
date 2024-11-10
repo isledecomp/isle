@@ -21,10 +21,33 @@ HistoryBook::HistoryBook()
 	NotificationManager()->Register(this);
 }
 
-// STUB: LEGO1 0x100824d0
+// FUNCTION: LEGO1 0x100824d0
+// FUNCTION: BETA10 0x1002b63e
 HistoryBook::~HistoryBook()
 {
-	// TODO
+	for (MxS16 scoreIndex = 0; scoreIndex < GameState()->m_history.GetCount(); scoreIndex++) {
+		if (m_scores[scoreIndex]) {
+			delete m_scores[scoreIndex]->GetAction();
+			delete m_scores[scoreIndex];
+			m_scores[scoreIndex] = NULL;
+		}
+
+		for (MxS16 letterIndex = 0; letterIndex < (MxS16) sizeOfArray(m_names[0]); letterIndex++) {
+			if (m_names[scoreIndex][letterIndex]) {
+				delete m_names[scoreIndex][letterIndex]->GetAction();
+				delete m_names[scoreIndex][letterIndex];
+				m_names[scoreIndex][letterIndex] = NULL;
+			}
+		}
+	}
+
+	InputManager()->UnRegister(this);
+	if (InputManager()->GetWorld() == this) {
+		InputManager()->ClearWorld();
+	}
+
+	ControlManager()->Unregister(this);
+	NotificationManager()->Unregister(this);
 }
 
 // FUNCTION: LEGO1 0x10082610
