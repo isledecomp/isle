@@ -235,6 +235,14 @@ MxS16 LegoCarBuild::GetPlacedPartCount()
 	}
 }
 
+// FUNCTION: LEGO1 0x10022cf0
+void LegoCarBuild::SetPlacedPartCount(MxU8 p_placedPartCount)
+{
+	if (m_buildState) {
+		m_buildState->m_placedPartCount = p_placedPartCount;
+	}
+}
+
 // FUNCTION: LEGO1 0x10022d10
 // FUNCTION: BETA10 0x1006b27a
 void LegoCarBuild::InitPresenters()
@@ -278,6 +286,16 @@ void LegoCarBuild::InitPresenters()
 		assert(m_Decals_Ctl6);
 		m_Decals_Ctl7 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl7");
 		assert(m_Decals_Ctl7);
+	}
+}
+
+// FUNCTION: LEGO1 0x10022f00
+void LegoCarBuild::FUN_10022f00()
+{
+	if (m_unk0x110) {
+		VTable0x6c();
+		m_unk0x258->SetUnknown0xbc(0);
+		m_unk0x100 = 5;
 	}
 }
 
@@ -456,6 +474,55 @@ void LegoCarBuild::VTable0x80(MxFloat p_param1[2], MxFloat p_param2[2], MxFloat 
 	}
 	p_param4[0] = ((p_param3 - p_param2[1]) / p_param1[1]) * p_param1[0] + p_param2[0];
 	p_param4[1] = p_param3;
+}
+
+// FUNCTION: LEGO1 0x100236d0
+// FUNCTION: BETA10 0x1006c076
+void LegoCarBuild::FUN_100236d0()
+{
+	MxS32 pLVar2;
+
+	FUN_10024f70(FALSE);
+	FUN_100250e0(FALSE);
+	m_unk0x258->FUN_10079790(m_unk0x110->GetName());
+	m_unk0x258->SetUnknown0xbc(1);
+	m_unk0x110 = NULL;
+	m_unk0x100 = 0;
+
+	if (m_unk0x258->AllPartsPlaced()) {
+		// Note the code duplication with LEGO1 0x10025ee0
+		switch (m_carId) {
+		case 1:
+			pLVar2 = 0x2f;
+			break;
+		case 2:
+			pLVar2 = 0x31;
+			break;
+		case 3:
+			pLVar2 = 0x33;
+			break;
+		case 4:
+			pLVar2 = 0x35;
+		}
+
+		BackgroundAudioManager()->Init();
+		InvokeAction(Extra::e_stop, *g_jukeboxScript, pLVar2, NULL);
+
+		if (m_numAnimsRun > 0) {
+			DeleteObjects(&m_atomId, 500, 510);
+		}
+
+		if (GameState()->GetCurrentAct() == LegoGameState::e_act2) {
+			FUN_100243a0();
+		}
+		else {
+			m_buildState->m_unk0x4d = TRUE;
+			InvokeAction(Extra::e_start, m_atomId, m_carId, NULL);
+			NotificationManager()->Send(this, MxNotificationParam());
+			m_buildState->m_animationState = LegoVehicleBuildState::e_unknown4;
+			m_buildState->m_placedPartCount = 0;
+		}
+	}
 }
 
 #define LEGOCARBUILD_TICKLE_CASE(subtract, start, end, str)                                                            \
@@ -812,11 +879,49 @@ undefined4 LegoCarBuild::FUN_100244e0(MxLong p_x, MxLong p_y)
 	return 1;
 }
 
-// STUB: LEGO1 0x100246e0
+// FUNCTION: LEGO1 0x100246e0
 undefined4 LegoCarBuild::FUN_100246e0(MxLong p_x, MxLong p_y)
 {
-	// TODO
-	return 0;
+	switch (m_unk0x100) {
+	case 3:
+		FUN_10022f30();
+		return 1;
+	case 4:
+		FUN_10022f00();
+		return 1;
+	case 6:
+		if (m_unk0x258->PartIsPlaced(m_unk0x110->GetName())) {
+			if (SpheresIntersect(m_unk0x114, m_unk0x110->GetWorldBoundingSphere())) {
+				FUN_10024f70(FALSE);
+				FUN_100250e0(FALSE);
+				m_unk0x100 = 0;
+				m_unk0x110 = NULL;
+				m_PlaceBrick_Sound->Enable(FALSE);
+				m_PlaceBrick_Sound->Enable(TRUE);
+				m_unk0x258->SetUnknown0xbc(1);
+				return 1;
+			}
+		}
+
+		if (m_unk0x258->FUN_10079c30(m_unk0x110->GetName())) {
+			if (SpheresIntersect(m_unk0x114, m_unk0x110->GetWorldBoundingSphere())) {
+				m_PlaceBrick_Sound->Enable(FALSE);
+				m_PlaceBrick_Sound->Enable(TRUE);
+				FUN_100236d0();
+				return 1;
+			}
+
+			VTable0x6c();
+			m_unk0x100 = 5;
+			return 1;
+		}
+
+		VTable0x6c();
+		m_unk0x100 = 5;
+		return 1;
+	default:
+		return 0;
+	}
 }
 
 // FUNCTION: LEGO1 0x10024850

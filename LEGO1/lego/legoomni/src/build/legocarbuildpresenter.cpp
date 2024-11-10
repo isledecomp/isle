@@ -507,6 +507,44 @@ LegoTreeNode* LegoCarBuildAnimPresenter::FindNodeByName(LegoTreeNode* p_treeNode
 	return NULL;
 }
 
+// FUNCTION: BETA10 0x10073c20
+inline void Exchange(MxS16* p_value1, MxS16* p_value2)
+{
+	MxS16 temp = *p_value1;
+	*p_value1 = *p_value2;
+	*p_value2 = temp;
+}
+
+// FUNCTION: LEGO1 0x10079790
+// FUNCTION: BETA10 0x100720a3
+void LegoCarBuildAnimPresenter::FUN_10079790(const LegoChar* p_name)
+{
+	MxS16 i;
+	LegoChar buffer[40];
+
+	if (strcmpi(m_parts[m_placedPartCount].m_name, p_name) != 0) {
+		// Something is still of by 1 here
+		for (i = m_placedPartCount + 1; i < m_numberOfParts; i++) {
+			if (stricmp(m_parts[i].m_name, p_name) == 0) {
+				break;
+			}
+		}
+
+		strcpy(buffer, m_parts[m_placedPartCount].m_name);
+		strcpy(m_parts[m_placedPartCount].m_name, m_parts[i].m_name);
+		strcpy(m_parts[i].m_name, buffer);
+		Exchange(&m_parts[m_placedPartCount].m_objectId, &m_parts[i].m_objectId);
+	}
+	FUN_10079050(m_placedPartCount);
+	m_placedPartCount++;
+
+	((LegoCarBuild*)m_currentWorld)->SetPlacedPartCount(m_placedPartCount);
+
+	if (m_placedPartCount < m_numberOfParts) {
+		FUN_10079680(m_parts[m_placedPartCount].m_wiredName);
+	}
+}
+
 // FUNCTION: LEGO1 0x10079920
 // FUNCTION: BETA10 0x1007225d
 void LegoCarBuildAnimPresenter::RotateAroundYAxis(MxFloat p_angle)

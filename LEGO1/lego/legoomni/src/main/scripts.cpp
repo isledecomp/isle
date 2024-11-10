@@ -64,6 +64,7 @@ MxAtomId* g_act2mainScript = NULL;
 MxAtomId* g_act3Script = NULL;
 
 // GLOBAL: LEGO1 0x100f456c
+// GLOBAL: BETA10 0x102114e0
 MxAtomId* g_jukeboxScript = NULL;
 
 // GLOBAL: LEGO1 0x100f4570

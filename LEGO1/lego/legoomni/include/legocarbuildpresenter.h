@@ -70,6 +70,7 @@ public:
 	void FUN_10079680(LegoChar* p_param);
 	LegoAnimNodeData* FindNodeDataByName(LegoTreeNode* p_treeNode, const LegoChar* p_name);
 	LegoTreeNode* FindNodeByName(LegoTreeNode* p_treeNode, const LegoChar* p_name);
+	void FUN_10079790(const LegoChar* p_name);
 	void RotateAroundYAxis(MxFloat p_angle);
 	MxBool FUN_10079c30(const LegoChar* p_name);
 	MxBool PartIsPlaced(const LegoChar* p_name);

@@ -72,6 +72,14 @@ void FUN_1003dde0(LegoROI* p_param1, MxFloat p_param2)
 	// TODO
 }
 
+// FUNCTION: LEGO1 0x1003de80
+MxBool SpheresIntersect(const BoundingSphere& p_sphere1, const BoundingSphere& p_sphere2)
+{
+	// This doesn't look clean, but it matches.
+	// p_sphere1.Center().GetData() doesn't work out
+	return sqrt(DISTSQRD3(&p_sphere1.Center()[0], &p_sphere2.Center()[0])) < p_sphere1.Radius() + p_sphere2.Radius();
+}
+
 // FUNCTION: LEGO1 0x1003ded0
 // FUNCTION: BETA10 0x100d3802
 MxBool FUN_1003ded0(MxFloat p_param1[2], MxFloat p_param2[3], MxFloat p_param3[3])

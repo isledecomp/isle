@@ -126,9 +126,12 @@ public:
 	); // vtable+0x80
 
 	MxS16 GetPlacedPartCount();
+	void SetPlacedPartCount(MxU8 p_placedPartCount);
 	void InitPresenters();
+	void FUN_10022f00();
 	void FUN_10022f30();
 	void FUN_10023130(MxLong p_x, MxLong p_y);
+	void FUN_100236d0();
 	undefined4 FUN_10024250(LegoEventNotificationParam* p_param);
 	void FUN_100243a0();
 	undefined4 FUN_10024480(MxActionNotificationParam* p_param);

@@ -358,6 +358,7 @@ undefined4 MxBackgroundAudioManager::FUN_1007f610(
 }
 
 // FUNCTION: LEGO1 0x1007f650
+// FUNCTION: BETA10 0x100e9663
 void MxBackgroundAudioManager::Init()
 {
 	this->m_unk0xa0 = 0;
