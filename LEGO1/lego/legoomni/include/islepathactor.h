@@ -137,6 +137,8 @@ public:
 		SetState(0);
 	}
 
+	void SetWorld(LegoWorld* p_world) { m_world = p_world; }
+
 	static void RegisterSpawnLocations();
 
 protected:
