@@ -5,6 +5,7 @@
 #include "viewmanager/viewroi.h"
 
 typedef unsigned char (*ROIHandler)(const char*, char*, unsigned int);
+typedef unsigned char (*TextureHandler)(const char*, unsigned char*, unsigned int);
 
 class LegoEntity;
 class LegoTextureContainer;

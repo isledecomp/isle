@@ -53,6 +53,9 @@ const char* g_unk0x10101390[] = {"rcuser", "jsuser", "dunebugy", "chtrblad", "ch
 // GLOBAL: LEGO1 0x101013ac
 ROIHandler g_unk0x101013ac = NULL;
 
+// GLOBAL: LEGO1 0x101013b0
+TextureHandler g_unk0x101013b0 = NULL;
+
 // FUNCTION: LEGO1 0x100a81b0
 void LegoROI::FUN_100a81b0(const LegoChar* p_error, const LegoChar* p_name)
 {
@@ -757,7 +760,7 @@ LegoBool LegoROI::FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_g
 
 	if (g_unk0x101013ac) {
 		char buf[32];
-		if (g_unk0x101013ac(p_param, buf, 32)) {
+		if (g_unk0x101013ac(p_param, buf, sizeof(buf))) {
 			p_param = buf;
 		}
 	}
@@ -782,10 +785,18 @@ LegoBool LegoROI::ColorAliasLookup(const LegoChar* p_param, float& p_red, float&
 	return FALSE;
 }
 
-// STUB: LEGO1 0x100a9cf0
+// FUNCTION: LEGO1 0x100a9cf0
 LegoBool LegoROI::FUN_100a9cf0(const LegoChar* p_param, unsigned char* paletteEntries, LegoU32 p_numEntries)
 {
-	// TODO
+	if (p_param == NULL) {
+		return FALSE;
+	}
+
+	if (g_unk0x101013b0 != NULL) {
+		return g_unk0x101013b0(p_param, paletteEntries, p_numEntries);
+	}
+
+	paletteEntries[0] = '\0';
 	return FALSE;
 }
 
@@ -812,11 +823,15 @@ void LegoROI::SetName(const LegoChar* p_name)
 	}
 }
 
-// STUB: LEGO1 0x100a9dd0
-// STUB: BETA10 0x1018bfdb
+// FUNCTION: LEGO1 0x100a9dd0
+// FUNCTION: BETA10 0x1018bfdb
 void LegoROI::FUN_100a9dd0()
 {
-	// TODO
+	int lodCount = GetLODCount();
+	for (LegoS32 i = 0; i < lodCount; i++) {
+		LegoLOD* lod = (LegoLOD*) GetLOD(i);
+		lod->FUN_100aae60();
+	}
 }
 
 // FUNCTION: LEGO1 0x100a9e10
