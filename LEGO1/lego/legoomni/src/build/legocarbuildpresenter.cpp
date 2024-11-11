@@ -9,6 +9,7 @@
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc.h"
+#include "misc/legoutil.h"
 #include "mxautolock.h"
 #include "mxcompositepresenter.h"
 #include "mxmisc.h"
@@ -507,6 +508,35 @@ LegoTreeNode* LegoCarBuildAnimPresenter::FindNodeByName(LegoTreeNode* p_treeNode
 	return NULL;
 }
 
+// FUNCTION: LEGO1 0x10079790
+// FUNCTION: BETA10 0x100720a3
+void LegoCarBuildAnimPresenter::FUN_10079790(const LegoChar* p_name)
+{
+	MxS16 i;
+	LegoChar buffer[40];
+
+	if (strcmpi(m_parts[m_placedPartCount].m_name, p_name) != 0) {
+		for (i = m_placedPartCount + 1; i < m_numberOfParts; i++) {
+			if (stricmp(m_parts[i].m_name, p_name) == 0) {
+				break;
+			}
+		}
+
+		strcpy(buffer, m_parts[m_placedPartCount].m_name);
+		strcpy(m_parts[m_placedPartCount].m_name, m_parts[i].m_name);
+		strcpy(m_parts[i].m_name, buffer);
+		Swap(m_parts[m_placedPartCount].m_objectId, m_parts[i].m_objectId);
+	}
+	FUN_10079050(m_placedPartCount);
+	m_placedPartCount++;
+
+	((LegoCarBuild*) m_currentWorld)->SetPlacedPartCount(m_placedPartCount);
+
+	if (m_placedPartCount < m_numberOfParts) {
+		FUN_10079680(m_parts[m_placedPartCount].m_wiredName);
+	}
+}
+
 // FUNCTION: LEGO1 0x10079920
 // FUNCTION: BETA10 0x1007225d
 void LegoCarBuildAnimPresenter::RotateAroundYAxis(MxFloat p_angle)
@@ -622,9 +652,9 @@ MxBool LegoCarBuildAnimPresenter::StringEndsOnY(const LegoChar* p_string)
 
 // FUNCTION: LEGO1 0x10079d30
 // FUNCTION: BETA10 0x1007280e
-MxBool LegoCarBuildAnimPresenter::StringEndsOnZero(const LegoChar* p_string)
+MxBool LegoCarBuildAnimPresenter::StringDoesNotEndOnZero(const LegoChar* p_string)
 {
-	return (p_string[strlen(p_string) - 2] != '0');
+	return (p_string[strlen(p_string) - 1] != '0');
 }
 
 // FUNCTION: LEGO1 0x10079d60

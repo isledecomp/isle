@@ -70,6 +70,7 @@ public:
 	void FUN_10079680(LegoChar* p_param);
 	LegoAnimNodeData* FindNodeDataByName(LegoTreeNode* p_treeNode, const LegoChar* p_name);
 	LegoTreeNode* FindNodeByName(LegoTreeNode* p_treeNode, const LegoChar* p_name);
+	void FUN_10079790(const LegoChar* p_name);
 	void RotateAroundYAxis(MxFloat p_angle);
 	MxBool FUN_10079c30(const LegoChar* p_name);
 	MxBool PartIsPlaced(const LegoChar* p_name);
@@ -77,7 +78,7 @@ public:
 	MxBool StringEqualsPlatform(const LegoChar* p_string);
 	MxBool StringEqualsShelf(const LegoChar* p_string);
 	MxBool StringEndsOnY(const LegoChar* p_string);
-	MxBool StringEndsOnZero(const LegoChar* p_string);
+	MxBool StringDoesNotEndOnZero(const LegoChar* p_string);
 	const LegoChar* GetWiredNameByPartName(const LegoChar* p_name);
 	void SetPartObjectIdByName(const LegoChar* p_name, MxS16 p_objectId);
 
@@ -130,7 +131,7 @@ private:
 	MxFloat m_unk0x130;     // 0x130
 	MxFloat m_unk0x134;     // 0x134
 	MxFloat m_unk0x138;     // 0x138
-	MxLong m_unk0x13c;      // 0x13c
+	MxULong m_unk0x13c;     // 0x13c
 	LegoEntity* m_unk0x140; // 0x140
 	MxS32 m_unk0x144;       // 0x144
 	MxS32 m_unk0x148;       // 0x148
