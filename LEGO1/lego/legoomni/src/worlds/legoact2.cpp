@@ -130,10 +130,10 @@ void LegoAct2::FUN_10051900()
 	}
 }
 
-// STUB: LEGO1 0x100519c0
+// FUNCTION: LEGO1 0x100519c0
 void LegoAct2::VTable0x60()
 {
-	// TODO
+	// empty
 }
 
 // FUNCTION: LEGO1 0x100519d0
