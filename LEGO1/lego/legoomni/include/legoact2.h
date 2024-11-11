@@ -78,7 +78,7 @@ private:
 	undefined m_unk0x10c2;       // 0x10c2
 	undefined4 m_unk0x10c4;      // 0x10c4
 	undefined4 m_unk0x10c8;      // 0x10c8
-	undefined4 m_unk0x10cc;      // 0x10cc
+	LegoAct2State* m_gameState;  // 0x10cc
 	undefined4 m_unk0x10d0;      // 0x10d0
 	char* m_unk0x10d4;           // 0x10d4
 	undefined4 m_unk0x10d8;      // 0x10d8
