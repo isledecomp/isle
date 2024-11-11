@@ -196,7 +196,7 @@ MxResult LegoCarBuild::Create(MxDSAction& p_dsAction)
 		else if (m_atomId == *g_racecarScript) {
 			buildStateClassName = "LegoRaceCarBuildState";
 			GameState()->m_currentArea = LegoGameState::e_racecarbuild;
-			m_carId = Helicopter_Actor;
+			m_carId = RaceCar_Actor;
 		}
 
 		LegoGameState* gameState = GameState();
