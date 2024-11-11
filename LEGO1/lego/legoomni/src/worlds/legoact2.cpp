@@ -1,6 +1,7 @@
 #include "legoact2.h"
 
 #include "legoanimationmanager.h"
+#include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "misc.h"
 #include "mxmisc.h"
@@ -40,11 +41,50 @@ LegoAct2::~LegoAct2()
 	NotificationManager()->Unregister(this);
 }
 
-// STUB: LEGO1 0x1004ff20
+// FUNCTION: LEGO1 0x1004ff20
+// FUNCTION: BETA10 0x1003a7ff
 MxResult LegoAct2::Create(MxDSAction& p_dsAction)
 {
-	// TODO
-	return SUCCESS;
+	GameState()->FindLoadedAct();
+
+	MxResult result = LegoWorld::Create(p_dsAction);
+	if (result == SUCCESS) {
+		AnimationManager()->EnableCamAnims(FALSE);
+
+		LegoGameState* gameState = GameState();
+		LegoAct2State* state = (LegoAct2State*) gameState->GetState("LegoAct2State");
+
+		if (state == NULL) {
+			state = (LegoAct2State*) gameState->CreateState("LegoAct2State");
+		}
+
+		m_gameState = state;
+		m_gameState->m_unk0x08 = 0;
+
+		switch (GameState()->GetLoadedAct()) {
+		case LegoGameState::e_act2:
+			GameState()->StopArea(LegoGameState::e_infomain);
+			GameState()->StopArea(LegoGameState::e_act2main);
+			break;
+		case LegoGameState::e_act3:
+			GameState()->StopArea(LegoGameState::e_infomain);
+			GameState()->StopArea(LegoGameState::e_act3script);
+			break;
+		case LegoGameState::e_act1:
+		case LegoGameState::e_actNotFound:
+			GameState()->StopArea(LegoGameState::e_undefined);
+			if (GameState()->GetPreviousArea() == LegoGameState::e_infomain) {
+				GameState()->StopArea(LegoGameState::e_isle);
+			}
+		}
+
+		GameState()->m_currentArea = LegoGameState::e_act2main;
+		GameState()->SetCurrentAct(LegoGameState::e_act2);
+		InputManager()->Register(this);
+		GameState()->SetDirty(TRUE);
+	}
+
+	return result;
 }
 
 // STUB: LEGO1 0x10050040
