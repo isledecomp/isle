@@ -1,9 +1,12 @@
 #include "legoact2.h"
 
+#include "act2main_actions.h"
+#include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "misc.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxticklemanager.h"
@@ -127,15 +130,29 @@ void LegoAct2::FUN_10051900()
 	}
 }
 
-// STUB: LEGO1 0x100519c0
+// FUNCTION: LEGO1 0x100519c0
 void LegoAct2::VTable0x60()
 {
-	// TODO
+	// empty
 }
 
-// STUB: LEGO1 0x100519d0
+// FUNCTION: LEGO1 0x100519d0
 MxBool LegoAct2::Escape()
 {
-	// TODO
-	return FALSE;
+	BackgroundAudioManager()->Stop();
+	AnimationManager()->FUN_10061010(FALSE);
+	DeleteObjects(&m_atomId, Act2mainScript::c_snsx50bu_RunAnim, 999);
+
+	if (UserActor() != NULL) {
+		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
+			((IslePathActor*) UserActor())->Exit();
+		}
+	}
+
+	if (m_gameState != NULL) {
+		m_gameState->m_unk0x0c = 0;
+	}
+
+	m_unk0x1150 = 2;
+	return TRUE;
 }
