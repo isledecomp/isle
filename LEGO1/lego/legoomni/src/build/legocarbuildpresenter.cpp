@@ -9,6 +9,7 @@
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc.h"
+#include "misc/legoutil.h"
 #include "mxautolock.h"
 #include "mxcompositepresenter.h"
 #include "mxmisc.h"
@@ -507,14 +508,6 @@ LegoTreeNode* LegoCarBuildAnimPresenter::FindNodeByName(LegoTreeNode* p_treeNode
 	return NULL;
 }
 
-// FUNCTION: BETA10 0x10073c20
-inline void Exchange(MxS16* p_value1, MxS16* p_value2)
-{
-	MxS16 temp = *p_value1;
-	*p_value1 = *p_value2;
-	*p_value2 = temp;
-}
-
 // FUNCTION: LEGO1 0x10079790
 // FUNCTION: BETA10 0x100720a3
 void LegoCarBuildAnimPresenter::FUN_10079790(const LegoChar* p_name)
@@ -523,7 +516,6 @@ void LegoCarBuildAnimPresenter::FUN_10079790(const LegoChar* p_name)
 	LegoChar buffer[40];
 
 	if (strcmpi(m_parts[m_placedPartCount].m_name, p_name) != 0) {
-		// Something is still of by 1 here
 		for (i = m_placedPartCount + 1; i < m_numberOfParts; i++) {
 			if (stricmp(m_parts[i].m_name, p_name) == 0) {
 				break;
@@ -533,12 +525,12 @@ void LegoCarBuildAnimPresenter::FUN_10079790(const LegoChar* p_name)
 		strcpy(buffer, m_parts[m_placedPartCount].m_name);
 		strcpy(m_parts[m_placedPartCount].m_name, m_parts[i].m_name);
 		strcpy(m_parts[i].m_name, buffer);
-		Exchange(&m_parts[m_placedPartCount].m_objectId, &m_parts[i].m_objectId);
+		Swap(m_parts[m_placedPartCount].m_objectId, m_parts[i].m_objectId);
 	}
 	FUN_10079050(m_placedPartCount);
 	m_placedPartCount++;
 
-	((LegoCarBuild*)m_currentWorld)->SetPlacedPartCount(m_placedPartCount);
+	((LegoCarBuild*) m_currentWorld)->SetPlacedPartCount(m_placedPartCount);
 
 	if (m_placedPartCount < m_numberOfParts) {
 		FUN_10079680(m_parts[m_placedPartCount].m_wiredName);
@@ -660,7 +652,7 @@ MxBool LegoCarBuildAnimPresenter::StringEndsOnY(const LegoChar* p_string)
 
 // FUNCTION: LEGO1 0x10079d30
 // FUNCTION: BETA10 0x1007280e
-MxBool LegoCarBuildAnimPresenter::StringEndsOnZero(const LegoChar* p_string)
+MxBool LegoCarBuildAnimPresenter::StringDoesNotEndOnZero(const LegoChar* p_string)
 {
 	return (p_string[strlen(p_string) - 1] != '0');
 }

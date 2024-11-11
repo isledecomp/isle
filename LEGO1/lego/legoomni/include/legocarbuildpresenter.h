@@ -78,7 +78,7 @@ public:
 	MxBool StringEqualsPlatform(const LegoChar* p_string);
 	MxBool StringEqualsShelf(const LegoChar* p_string);
 	MxBool StringEndsOnY(const LegoChar* p_string);
-	MxBool StringEndsOnZero(const LegoChar* p_string);
+	MxBool StringDoesNotEndOnZero(const LegoChar* p_string);
 	const LegoChar* GetWiredNameByPartName(const LegoChar* p_name);
 	void SetPartObjectIdByName(const LegoChar* p_name, MxS16 p_objectId);
 

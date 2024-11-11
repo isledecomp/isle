@@ -1312,7 +1312,7 @@ void LegoCarBuild::TogglePresentersEnabled()
 // FUNCTION: BETA10 0x1006e124
 void LegoCarBuild::FUN_100250e0(MxBool p_enabled)
 {
-	if (m_unk0x258->StringEndsOnZero(m_unk0x110->GetName()) && m_Decals_Ctl) {
+	if (m_unk0x258->StringDoesNotEndOnZero(m_unk0x110->GetName()) && m_Decals_Ctl) {
 		if (strnicmp(m_unk0x110->GetName(), "JSFRNT", strlen("JSFRNT")) == 0) {
 			m_Decal_Bitmap->Enable(p_enabled);
 			m_Decals_Ctl->Enable(p_enabled);

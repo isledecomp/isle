@@ -39,6 +39,9 @@ inline void Swap(T& p_t1, T& p_t2)
 	p_t2 = t;
 }
 
+// TEMPLATE: BETA10 0x10073c20
+// Swap
+
 template <class T>
 inline T DToR(T p_d)
 {
