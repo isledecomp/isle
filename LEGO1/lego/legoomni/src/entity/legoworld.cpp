@@ -42,15 +42,17 @@ LegoWorld::LegoWorld() : m_list0x68(TRUE)
 	m_entityList = NULL;
 	m_cacheSoundList = NULL;
 	m_destroyed = FALSE;
-	m_hideAnimPresenter = NULL;
+	m_hideAnim = NULL;
 	m_worldStarted = FALSE;
 
 	NotificationManager()->Register(this);
 }
 
 // FUNCTION: LEGO1 0x1001d670
+// FUNCTION: BETA10 0x10017530
 MxBool LegoWorld::VTable0x5c()
 {
+	// The BETA10 match could also be LegoWorld::Escape(), only the child classes might be able to tell
 	return FALSE;
 }
 
@@ -245,6 +247,7 @@ MxLong LegoWorld::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1001f630
+// FUNCTION: BETA10 0x100d9fc2
 LegoCameraController* LegoWorld::VTable0x54()
 {
 	MxBool success = FALSE;
@@ -413,6 +416,7 @@ MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_boundaries, MxS32& p_nu
 }
 
 // FUNCTION: LEGO1 0x10020220
+// FUNCTION: BETA10 0x100da90b
 void LegoWorld::Add(MxCore* p_object)
 {
 	if (p_object && !p_object->IsA("LegoWorld") && !p_object->IsA("LegoWorldPresenter")) {
@@ -443,7 +447,8 @@ void LegoWorld::Add(MxCore* p_object)
 
 			m_entityList->Append((LegoEntity*) p_object);
 		}
-		else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
+		else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") ||
+				 p_object->IsA("LegoLoopingAnimPresenter")) {
 			MxPresenterListCursor cursor(&m_animPresenters);
 
 			if (cursor.Find((MxPresenter*) p_object)) {
@@ -454,7 +459,7 @@ void LegoWorld::Add(MxCore* p_object)
 			m_animPresenters.Append(((MxPresenter*) p_object));
 
 			if (p_object->IsA("LegoHideAnimPresenter")) {
-				m_hideAnimPresenter = (LegoHideAnimPresenter*) p_object;
+				m_hideAnim = (LegoHideAnimPresenter*) p_object;
 			}
 		}
 		else if (p_object->IsA("LegoCacheSound")) {
@@ -497,7 +502,8 @@ void LegoWorld::Remove(MxCore* p_object)
 				((MxControlPresenter*) p_object)->VTable0x68(TRUE);
 			}
 		}
-		else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
+		else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") ||
+				 p_object->IsA("LegoLoopingAnimPresenter")) {
 			MxPresenterListCursor cursor(&m_animPresenters);
 
 			if (cursor.Find((MxPresenter*) p_object)) {
@@ -505,7 +511,7 @@ void LegoWorld::Remove(MxCore* p_object)
 			}
 
 			if (p_object->IsA("LegoHideAnimPresenter")) {
-				m_hideAnimPresenter = NULL;
+				m_hideAnim = NULL;
 			}
 		}
 		else if (p_object->IsA("MxEntity")) {
@@ -654,6 +660,7 @@ MxCore* LegoWorld::Find(const MxAtomId& p_atom, MxS32 p_entityId)
 }
 
 // FUNCTION: LEGO1 0x10021a70
+// FUNCTION: BETA10 0x100db758
 void LegoWorld::Enable(MxBool p_enable)
 {
 	if (p_enable && !m_set0xd0.empty()) {

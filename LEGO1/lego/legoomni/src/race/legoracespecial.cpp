@@ -12,6 +12,18 @@
 
 // File name verified by BETA10 0x100cedf7
 
+
+// FUNCTION: LEGO1 0x10012de0
+void LegoCarRaceActor::FUN_10012de0()
+{
+	// This function is probably in the wrong place.
+	// According to the address it should be in legoracespecial.h.
+	// However, if we put it there, it gets inlined instead of called.
+	g_unk0x100f0b8c = TRUE;
+	g_timeLastSoundPlayed = 0;
+	g_unk0x100f0b88 = 0;
+}
+
 DECOMP_SIZE_ASSERT(LegoCarRaceActor, 0x1a0)
 
 // GLOBAL: LEGO1 0x100f0c68
@@ -25,6 +37,18 @@ const char* g_fuel = "FUEL";
 // GLOBAL: LEGO1 0x100f0c6c
 // STRING: LEGO1 0x100f0c54
 const char* g_racing = "RACING";
+
+// GLOBAL: LEGO1 0x100f0b84
+// GLOBAL: BETA10 0x101f5f90
+MxLong LegoCarRaceActor::g_timeLastSoundPlayed = 0;
+
+// GLOBAL: LEGO1 0x100f0b88
+// GLOBAL: BETA10 0x101f5f94
+MxS32 LegoCarRaceActor::g_unk0x100f0b88 = 0;
+
+// GLOBAL: LEGO1 0x100f0b8c
+// GLOBAL: BETA10 0x101f5f98
+MxBool LegoCarRaceActor::g_unk0x100f0b8c = TRUE;
 
 // GLOBAL: LEGO1 0x100f7aec
 MxFloat LegoCarRaceActor::g_unk0x100f7aec = 8.0f;

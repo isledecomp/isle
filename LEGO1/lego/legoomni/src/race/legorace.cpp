@@ -23,10 +23,10 @@ LegoRace::LegoRace()
 	m_unk0x104 = 0;
 	m_unk0x108 = 0;
 	m_unk0x10c = 0;
-	m_unk0x140 = 0;
-	m_unk0x110 = 0;
-	m_unk0x114 = 0;
-	m_unk0x118 = 0;
+	m_raceState = NULL;
+	m_unk0x110[0] = NULL;
+	m_unk0x110[1] = NULL;
+	m_unk0x110[2] = NULL;
 	m_unk0x128 = 0;
 	m_unk0x12c = 0;
 	m_pathActor = 0;
@@ -54,6 +54,7 @@ MxBool LegoRace::Escape()
 }
 
 // FUNCTION: LEGO1 0x10015ce0
+// FUNCTION: BETA10 0x100c7a71
 MxResult LegoRace::Create(MxDSAction& p_dsAction)
 {
 	MxResult result = LegoWorld::Create(p_dsAction);
@@ -150,6 +151,7 @@ RaceState::RaceState()
 }
 
 // FUNCTION: LEGO1 0x10016140
+// FUNCTION: BETA10 0x100c7d9f
 MxResult RaceState::Serialize(LegoFile* p_file)
 {
 	LegoState::Serialize(p_file);

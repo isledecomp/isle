@@ -741,4 +741,7 @@
 // LIBRARY: BETA10 0x1001d1a0
 // `vector constructor iterator'
 
+// LIBRARY: BETA10 0x100f8ad0
+// strcmp
+
 #endif

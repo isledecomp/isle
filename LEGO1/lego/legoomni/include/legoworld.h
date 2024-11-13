@@ -28,6 +28,7 @@ struct CoreSetCompare {
 typedef set<MxCore*, CoreSetCompare> MxCoreSet;
 
 // VTABLE: LEGO1 0x100d6280
+// VTABLE: BETA10 0x101befd8
 // SIZE 0xf8
 class LegoWorld : public LegoEntity {
 public:
@@ -46,6 +47,7 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1001d690
+	// FUNCTION: BETA10 0x10017660
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0058
@@ -53,6 +55,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1001d6a0
+	// FUNCTION: BETA10 0x100175f0
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoWorld::ClassName()) || LegoEntity::IsA(p_name);
@@ -104,7 +107,7 @@ public:
 	MxS32 GetWorldId() { return m_worldId; }
 	MxBool GetUnknown0xd0Empty() { return m_set0xd0.empty(); }
 	list<LegoROI*>& GetROIList() { return m_roiList; }
-	LegoHideAnimPresenter* GetHideAnimPresenter() { return m_hideAnimPresenter; }
+	LegoHideAnimPresenter* GetHideAnimPresenter() { return m_hideAnim; }
 
 	void SetWorldId(MxS32 p_worldId) { m_worldId = p_worldId; }
 
@@ -112,21 +115,24 @@ public:
 	// LegoWorld::`scalar deleting destructor'
 
 protected:
-	LegoPathControllerList m_list0x68;          // 0x68
-	MxPresenterList m_animPresenters;           // 0x80
-	LegoCameraController* m_cameraController;   // 0x98
-	LegoEntityList* m_entityList;               // 0x9c
-	LegoCacheSoundList* m_cacheSoundList;       // 0xa0
-	MxBool m_destroyed;                         // 0xa4
-	MxCoreSet m_set0xa8;                        // 0xa8
-	MxPresenterList m_controlPresenters;        // 0xb8
-	MxCoreSet m_set0xd0;                        // 0xd0
-	list<LegoROI*> m_roiList;                   // 0xe0
-	MxS32 m_worldId;                            // 0xec
-	LegoHideAnimPresenter* m_hideAnimPresenter; // 0xf0
-	MxS16 m_startupTicks;                       // 0xf4
-	MxBool m_worldStarted;                      // 0xf6
-	undefined m_unk0xf7;                        // 0xf7
+	LegoPathControllerList m_list0x68;        // 0x68
+	MxPresenterList m_animPresenters;         // 0x80
+	LegoCameraController* m_cameraController; // 0x98
+	LegoEntityList* m_entityList;             // 0x9c
+	LegoCacheSoundList* m_cacheSoundList;     // 0xa0
+	MxBool m_destroyed;                       // 0xa4
+	MxCoreSet m_set0xa8;                      // 0xa8
+	MxPresenterList m_controlPresenters;      // 0xb8
+	MxCoreSet m_set0xd0;                      // 0xd0
+	list<LegoROI*> m_roiList;                 // 0xe0
+	MxS32 m_worldId;                          // 0xec
+
+	// name verified by BETA10 0x100c7f59
+	LegoHideAnimPresenter* m_hideAnim; // 0xf0
+
+	MxS16 m_startupTicks;  // 0xf4
+	MxBool m_worldStarted; // 0xf6
+	undefined m_unk0xf7;   // 0xf7
 };
 
 // clang-format off

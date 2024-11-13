@@ -66,6 +66,8 @@ public:
 
 	virtual MxS32 VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edge); // vtable+0x1c
 
+	static void FUN_10012de0();
+
 	// SYNTHETIC: LEGO1 0x10012c30
 	// LegoCarRaceActor::`vbase destructor'
 
@@ -91,6 +93,9 @@ protected:
 	MxFloat m_unk0x1c; // 0x1c
 
 	static MxFloat g_unk0x100f7aec;
+	static MxLong g_timeLastSoundPlayed;
+	static MxS32 g_unk0x100f0b88;
+	static MxBool g_unk0x100f0b8c;
 };
 
 // GLOBAL: LEGO1 0x100da0b0

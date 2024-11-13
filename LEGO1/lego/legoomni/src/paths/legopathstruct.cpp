@@ -19,6 +19,7 @@ DECOMP_SIZE_ASSERT(LegoPathStruct, 0x14)
 extern MxU32 g_isleFlags;
 
 // GLOBAL: LEGO1 0x100f119c
+// GLOBAL: BETA10 0x100f119c
 MxBool g_unk0x100f119c = FALSE;
 
 // FUNCTION: LEGO1 0x1001b700

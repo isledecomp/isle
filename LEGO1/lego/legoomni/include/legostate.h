@@ -6,6 +6,7 @@
 #include "mxcore.h"
 
 // VTABLE: LEGO1 0x100d46c0
+// VTABLE: BETA10 0x101b89d8
 // SIZE 0x08
 class LegoState : public MxCore {
 public:
@@ -84,13 +85,16 @@ public:
 	~LegoState() override {}
 
 	// FUNCTION: LEGO1 0x100060d0
+	// FUNCTION: BETA10 0x10017d20
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f01b8
+		// STRING: BETA10 0x101dcdac
 		return "LegoState";
 	}
 
 	// FUNCTION: LEGO1 0x100060e0
+	// FUNCTION: BETA10 0x100a9000
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoState::ClassName()) || MxCore::IsA(p_name);
@@ -103,6 +107,7 @@ public:
 	virtual MxBool Reset() { return FALSE; } // vtable+0x18
 
 	// FUNCTION: LEGO1 0x10005fb0
+	// FUNCTION: BETA10 0x10017af0
 	virtual MxResult Serialize(LegoFile* p_file)
 	{
 		if (p_file->IsWriteMode()) {
