@@ -75,6 +75,8 @@ public:
 	virtual void FUN_10012ff0(float p_param);
 	virtual MxU32 HandleSkeletonKicks(float p_param1);
 
+	static void FUN_10013670();
+
 	// SYNTHETIC: LEGO1 0x10014240
 	// LegoRaceCar::`scalar deleting destructor'
 

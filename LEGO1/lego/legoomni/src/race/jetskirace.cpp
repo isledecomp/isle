@@ -9,6 +9,7 @@
 #include "legohideanimpresenter.h"
 #include "legomain.h"
 #include "legopathstruct.h"
+#include "legoracers.h"
 #include "legoracespecial.h"
 #include "legoutils.h"
 #include "misc.h"
@@ -33,12 +34,6 @@ extern const char* g_racing;
 
 // Defined in legopathactor.cpp
 extern const char* g_strHIT_WALL_SOUND;
-
-// GLOBAL: LEGO1 0x100f0bac
-static undefined4 g_unk0x100f0bac = 0;
-
-// GLOBAL: LEGO1 0x100f0bb0
-static undefined4 g_unk0x100f0bb0 = 0;
 
 DECOMP_SIZE_ASSERT(JetskiRace, 0x144)
 
@@ -68,7 +63,7 @@ MxResult JetskiRace::Create(MxDSAction& p_dsAction)
 	m_unk0x130.SetTop(317);
 	m_unk0x130.SetRight(543);
 	m_unk0x130.SetBottom(333);
-	FUN_10013670();
+	LegoRaceCar::FUN_10013670();
 	InvokeAction(
 		Extra::e_start,
 		m_atomId,
@@ -79,16 +74,6 @@ MxResult JetskiRace::Create(MxDSAction& p_dsAction)
 	g_unk0x100f119c = TRUE;
 
 	return result;
-}
-
-// FUNCTION: LEGO1 0x10013670
-void JetskiRace::FUN_10013670()
-{
-	g_unk0x100f0bac = (rand() & 0xc) >> 2;
-
-	// Inlining the `rand()` causes this function to mismatch
-	MxU32 uVar1 = rand();
-	g_unk0x100f0bb0 = uVar1 % 0xc >> 2;
 }
 
 // FUNCTION: LEGO1 0x100163b0

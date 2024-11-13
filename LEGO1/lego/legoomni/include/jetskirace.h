@@ -61,8 +61,6 @@ public:
 	MxLong HandleClick(LegoEventNotificationParam&) override;           // vtable+0x6c
 	MxLong HandlePathStruct(LegoPathStructNotificationParam&) override; // vtable+0x70
 	MxLong HandleEndAction(MxEndActionNotificationParam&) override;     // vtable+0x74
-
-	void FUN_10013670();
 };
 
 // SYNTHETIC: LEGO1 0x1000f530
