@@ -1,0 +1,37 @@
+name: Format
+
+on: [push, pull_request]
+
+jobs:
+  clang-format:
+    name: 'C++'
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Run clang-format
+      run: |
+        find CONFIG LEGO1 ISLE -iname '*.h' -o -iname '*.cpp' | xargs \
+        pipx run "clang-format>=17,<18" \
+          --style=file \
+          -i
+        git diff --exit-code
+
+  python-format:
+    name: 'Python'
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install python libraries
+      shell: bash
+      run: |
+        pip install black==23.* pylint==3.2.7 pytest==7.* -r tools/requirements.txt
+
+    - name: Run pylint and black
+      shell: bash
+      run: |
+        pylint tools --ignore=build,ncc
+        black --check tools --exclude=ncc
