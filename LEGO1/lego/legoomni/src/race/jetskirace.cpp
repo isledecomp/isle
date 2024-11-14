@@ -1,6 +1,7 @@
 #include "jetskirace.h"
 
 #include "actions/jetrace_actions.h"
+#include "actions/jetski_actions.h"
 #include "actions/jukebox_actions.h"
 #include "dunebuggy.h"
 #include "isle.h"
@@ -70,7 +71,7 @@ MxResult JetskiRace::Create(MxDSAction& p_dsAction)
 		DuneBuggy::GetColorOffset(g_varJSFRNTY5) + (DuneBuggy::GetColorOffset(g_varJSWNSHY5) * 5 + 0xf) * 2,
 		NULL
 	);
-	InvokeAction(Extra::e_start, m_atomId, 0x61, NULL);
+	InvokeAction(Extra::e_start, m_atomId, JetskiScript::c_JSFRNT_T1_Up_Bitmap, NULL);
 	g_unk0x100f119c = TRUE;
 
 	return result;
@@ -133,7 +134,7 @@ MxLong JetskiRace::HandleClick(LegoEventNotificationParam& p_param)
 			LegoRaceCar::FUN_10012de0();
 			m_destLocation = LegoGameState::e_jetraceExterior;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
-			return 0;
+			break;
 		case JetraceScript::c_JetskiInfo_Ctl:
 			m_act1State->m_unk0x018 = 0;
 			VariableTable()->SetVariable(g_raceState, "");
@@ -144,7 +145,7 @@ MxLong JetskiRace::HandleClick(LegoEventNotificationParam& p_param)
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		default:
-			return 0;
+			break;
 		}
 	}
 	return result;
