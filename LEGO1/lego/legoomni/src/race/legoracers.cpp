@@ -142,9 +142,6 @@ MxS32 LegoRaceCar::g_unk0x100f0b88 = 0;
 // GLOBAL: BETA10 0x101f5f98
 MxBool LegoRaceCar::g_unk0x100f0b8c = TRUE;
 
-// GLOBAL: LEGO1 0x100f7aec
-MxFloat LegoRaceCar::g_unk0x100f7aec = 8.0f;
-
 // Initialized at LEGO1 0x10012db0
 // GLOBAL: LEGO1 0x10102af0
 // GLOBAL: BETA10 0x102114c0

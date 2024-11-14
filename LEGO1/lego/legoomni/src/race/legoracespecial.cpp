@@ -26,6 +26,9 @@ const char* g_fuel = "FUEL";
 // STRING: LEGO1 0x100f0c54
 const char* g_racing = "RACING";
 
+// GLOBAL: LEGO1 0x100f7aec
+MxFloat LegoCarRaceActor::g_unk0x100f7aec = 8.0f;
+
 // FUNCTION: LEGO1 0x10080350
 // FUNCTION: BETA10 0x100cd6b0
 LegoCarRaceActor::LegoCarRaceActor()
