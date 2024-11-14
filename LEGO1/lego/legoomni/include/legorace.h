@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "legogamestate.h"
+#include "legoraceactor.h"
 #include "legoracemap.h"
 #include "legostate.h"
 #include "legoworld.h"
@@ -17,6 +18,7 @@ class MxNotificationParam;
 class LegoPathStructNotificationParam;
 
 // VTABLE: LEGO1 0x100d5e30
+// VTABLE: BETA10 0x101be270
 // SIZE 0x2c
 class RaceState : public LegoState {
 public:
@@ -34,6 +36,7 @@ public:
 		MxS16 GetUnknown0x02() { return m_unk0x02; }
 		MxS16 GetHighScore() { return m_score; }
 
+		// FUNCTION: BETA10 0x100c96f0
 		MxResult Serialize(LegoFile* p_file)
 		{
 			if (p_file->IsReadMode()) {
@@ -59,13 +62,16 @@ public:
 	RaceState();
 
 	// FUNCTION: LEGO1 0x10016010
+	// FUNCTION: BETA10 0x100a9040
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f07d0
+		// STRING: BETA10 0x101f1d20
 		return "RaceState";
 	}
 
 	// FUNCTION: LEGO1 0x10016020
+	// FUNCTION: BETA10 0x100a8fd0
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, RaceState::ClassName()) || LegoState::IsA(p_name);
@@ -90,6 +96,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d5db0
+// VTABLE: BETA10 0x101be1e0
 // SIZE 0x144
 class LegoRace : public LegoWorld {
 public:
@@ -113,6 +120,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10015bb0
+	// FUNCTION: BETA10 0x100a88d0
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoRace::ClassName()) || LegoWorld::IsA(p_name);
@@ -132,8 +140,12 @@ public:
 	// FUNCTION: LEGO1 0x1000dab0
 	virtual MxLong HandleType0Notification(MxNotificationParam&) { return 0; } // vtable+0x78
 
-	// STUB: LEGO1 0x1000dac0
-	virtual void VTable0x7c(LegoRaceMap*, undefined4) {} // vtable+0x7c
+	// FUNCTION: LEGO1 0x1000dac0
+	// FUNCTION: BETA10 0x100a87d0
+	virtual void VTable0x7c(LegoRaceActor* p_map, MxU32 p_index) // vtable+0x7c
+	{
+		m_unk0x110[p_index] = (LegoRaceActor*) p_map;
+	}
 
 	// SYNTHETIC: LEGO1 0x10015cc0
 	// LegoRace::`scalar deleting destructor'
@@ -145,16 +157,14 @@ protected:
 	undefined4 m_unk0x104;              // 0x104
 	undefined4 m_unk0x108;              // 0x108
 	undefined4 m_unk0x10c;              // 0x10c
-	undefined4 m_unk0x110;              // 0x110
-	undefined4 m_unk0x114;              // 0x114
-	undefined4 m_unk0x118;              // 0x118
+	LegoRaceActor* m_unk0x110[3];       // 0x110
 	LegoGameState::Area m_destLocation; // 0x11c
 	LegoPathActor* m_pathActor;         // 0x120
 	Act1State* m_act1State;             // 0x124
-	undefined4 m_unk0x128;              // 0x128
-	undefined4 m_unk0x12c;              // 0x12c
+	MxStillPresenter* m_unk0x128;       // 0x128
+	MxStillPresenter* m_unk0x12c;       // 0x12c
 	MxRect32 m_unk0x130;                // 0x130
-	undefined4 m_unk0x140;              // 0x140
+	RaceState* m_raceState;             // 0x140
 };
 
 #endif // LEGORACE_H

@@ -21,7 +21,7 @@ MxBackgroundAudioManager::MxBackgroundAudioManager()
 	m_unk0xa0 = 0;
 	m_unk0x138 = 0;
 	m_tickleState = MxPresenter::e_idle;
-	m_unk0x140 = 0;
+	m_speed = 0;
 	m_targetVolume = 0;
 	m_unk0x148 = 0;
 	m_enabled = FALSE;
@@ -128,8 +128,8 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 
 			volume = m_unk0x138->GetVolume();
 			if (volume < compare) {
-				if (m_unk0x140 + m_unk0x138->GetVolume() <= compare) {
-					compare = m_unk0x140 + m_unk0x138->GetVolume();
+				if (m_speed + m_unk0x138->GetVolume() <= compare) {
+					compare = m_speed + m_unk0x138->GetVolume();
 				}
 
 				m_unk0x138->SetVolume(compare);
@@ -150,8 +150,8 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 			DeleteObject(*m_unk0xa0->GetAction());
 		}
 		else {
-			if (m_unk0xa0->GetVolume() - m_unk0x140 > 0) {
-				volume = m_unk0xa0->GetVolume() - m_unk0x140;
+			if (m_unk0xa0->GetVolume() - m_speed > 0) {
+				volume = m_unk0xa0->GetVolume() - m_speed;
 			}
 			else {
 				volume = 0;
@@ -178,11 +178,11 @@ void MxBackgroundAudioManager::FadeInOrFadeOut()
 		}
 
 		if (volume < compare) {
-			volume = Min(volume + m_unk0x140, compare);
+			volume = Min(volume + m_speed, compare);
 			m_unk0xa0->SetVolume(volume);
 		}
 		else if (compare < volume) {
-			volume = Max(volume - m_unk0x140, compare);
+			volume = Max(volume - m_speed, compare);
 			m_unk0xa0->SetVolume(volume);
 		}
 		else {
@@ -238,12 +238,15 @@ void MxBackgroundAudioManager::StopAction(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1007f2f0
+// FUNCTION: BETA10 0x100e90fc
 MxResult MxBackgroundAudioManager::PlayMusic(
 	MxDSAction& p_action,
-	undefined4 p_unk0x140,
+	undefined4 p_speed,
 	MxPresenter::TickleState p_tickleState
 )
 {
+	assert(p_speed > 0);
+
 	if (!m_enabled) {
 		return SUCCESS;
 	}
@@ -267,7 +270,7 @@ MxResult MxBackgroundAudioManager::PlayMusic(
 
 		if (result == SUCCESS) {
 			m_tickleState = p_tickleState;
-			m_unk0x140 = p_unk0x140;
+			m_speed = p_speed;
 		}
 
 		return result;
@@ -307,7 +310,7 @@ void MxBackgroundAudioManager::LowerVolume()
 		if (m_tickleState == 0) {
 			m_tickleState = MxPresenter::e_starting;
 		}
-		m_unk0x140 = 20;
+		m_speed = 20;
 	}
 	m_unk0x148++;
 }
@@ -321,7 +324,7 @@ void MxBackgroundAudioManager::RaiseVolume()
 			if (m_tickleState == 0) {
 				m_tickleState = MxPresenter::e_starting;
 			}
-			m_unk0x140 = 10;
+			m_speed = 10;
 		}
 	}
 }
@@ -342,7 +345,7 @@ void MxBackgroundAudioManager::Enable(MxBool p_enable)
 // FUNCTION: BETA10 0x100e95ee
 undefined4 MxBackgroundAudioManager::FUN_1007f610(
 	MxPresenter* p_unk0x138,
-	MxS32 p_unk0x140,
+	MxS32 p_speed,
 	MxPresenter::TickleState p_tickleState
 )
 
@@ -352,7 +355,7 @@ undefined4 MxBackgroundAudioManager::FUN_1007f610(
 
 	((MxCompositePresenter*) m_unk0x138)->VTable0x60(NULL);
 
-	m_unk0x140 = p_unk0x140;
+	m_speed = p_speed;
 	m_tickleState = p_tickleState;
 	return 0;
 }

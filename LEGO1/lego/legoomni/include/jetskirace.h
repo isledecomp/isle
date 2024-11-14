@@ -4,27 +4,33 @@
 #include "legorace.h"
 
 // VTABLE: LEGO1 0x100d4fa8
+// VTABLE: BETA10 0x101bd5d0
 // SIZE 0x2c
 class JetskiRaceState : public RaceState {
 public:
 	// FUNCTION: LEGO1 0x1000dc40
+	// FUNCTION: BETA10 0x100a8f30
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f00ac
+		// STRING: BETA10 0x101f1d0c
 		return "JetskiRaceState";
 	}
 
 	// FUNCTION: LEGO1 0x1000dc50
+	// FUNCTION: BETA10 0x100a8f60
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, JetskiRaceState::ClassName()) || RaceState::IsA(p_name);
 	}
 
 	// SYNTHETIC: LEGO1 0x1000f680
+	// SYNTHETIC: BETA10 0x100a9d10
 	// JetskiRaceState::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100d4fe8
+// VTABLE: BETA10 0x101bd268
 // SIZE 0x144
 class JetskiRace : public LegoRace {
 public:
@@ -43,6 +49,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000db00
+	// FUNCTION: BETA10 0x100a8860
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, JetskiRace::ClassName()) || LegoRace::IsA(p_name);

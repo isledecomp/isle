@@ -18,6 +18,7 @@ public:
 	~MxEntity() override {}
 
 	// FUNCTION: LEGO1 0x1000c180
+	// FUNCTION: BETA10 0x10012700
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0070
@@ -25,6 +26,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000c190
+	// FUNCTION: BETA10 0x10012610
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxEntity::ClassName()) || MxCore::IsA(p_name);

@@ -21,6 +21,12 @@ DECOMP_SIZE_ASSERT(EdgeReference, 0x08)
 DECOMP_SIZE_ASSERT(SkeletonKickPhase, 0x10)
 DECOMP_SIZE_ASSERT(LegoRaceCar, 0x200)
 
+// GLOBAL: LEGO1 0x100f0bac
+static undefined4 g_unk0x100f0bac = 0;
+
+// GLOBAL: LEGO1 0x100f0bb0
+static undefined4 g_unk0x100f0bb0 = 0;
+
 // GLOBAL: LEGO1 0x100f0a20
 // GLOBAL: BETA10 0x101f5e34
 EdgeReference LegoRaceCar::g_skBMap[] = {
@@ -164,6 +170,14 @@ LegoRaceCar::~LegoRaceCar()
 MxLong LegoRaceCar::Notify(MxParam& p_param)
 {
 	return LegoRaceMap::Notify(p_param);
+}
+
+// FUNCTION: LEGO1 0x10012de0
+void LegoRaceCar::FUN_10012de0()
+{
+	g_unk0x100f0b8c = TRUE;
+	g_timeLastSoundPlayed = 0;
+	g_unk0x100f0b88 = 0;
 }
 
 // FUNCTION: LEGO1 0x10012e60
@@ -511,6 +525,16 @@ MxResult LegoRaceCar::VTable0x9c()
 	}
 
 	return result;
+}
+
+// FUNCTION: LEGO1 0x10013670
+void LegoRaceCar::FUN_10013670()
+{
+	g_unk0x100f0bac = (rand() & 0xc) >> 2;
+
+	// Inlining the `rand()` causes this function to mismatch
+	MxU32 uVar1 = rand();
+	g_unk0x100f0bb0 = uVar1 % 0xc >> 2;
 }
 
 // FUNCTION: LEGO1 0x10014500

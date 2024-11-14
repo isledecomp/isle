@@ -63,8 +63,10 @@ LegoGameState* GameState()
 }
 
 // FUNCTION: LEGO1 0x10015770
+// FUNCTION: BETA10 0x100e4971
 LegoAnimationManager* AnimationManager()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetAnimationManager();
 }
 
