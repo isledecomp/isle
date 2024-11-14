@@ -71,7 +71,7 @@ MxResult JetskiRace::Create(MxDSAction& p_dsAction)
 		DuneBuggy::GetColorOffset(g_varJSFRNTY5) + (DuneBuggy::GetColorOffset(g_varJSWNSHY5) * 5 + 0xf) * 2,
 		NULL
 	);
-	InvokeAction(Extra::e_start, m_atomId, JetskiScript::c_JSFRNT_T1_Up_Bitmap, NULL);
+	InvokeAction(Extra::e_start, m_atomId, JetraceScript::c_JetskiDashboard, NULL);
 	g_unk0x100f119c = TRUE;
 
 	return result;
