@@ -75,6 +75,7 @@ public:
 	virtual void FUN_10012ff0(float p_param);
 	virtual MxU32 HandleSkeletonKicks(float p_param1);
 
+	static void FUN_10012de0();
 	static void FUN_10013670();
 
 	// SYNTHETIC: LEGO1 0x10014240
@@ -111,6 +112,9 @@ private:
 	static MxU32 g_emptySoundKeyListIndex;
 	static MxU32 g_srtrhIndex;
 	static Mx3DPointFloat g_unk0x10102af0;
+	static MxLong g_timeLastSoundPlayed;
+	static MxS32 g_unk0x100f0b88;
+	static MxBool g_unk0x100f0b8c;
 };
 
 #endif // LEGORACERS_H

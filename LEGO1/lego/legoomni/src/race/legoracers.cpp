@@ -130,6 +130,21 @@ MxU32 LegoRaceCar::g_emptySoundKeyListIndex = 0;
 // GLOBAL: BETA10 0x101f5f8c
 MxU32 LegoRaceCar::g_srtrhIndex = 0;
 
+// GLOBAL: LEGO1 0x100f0b84
+// GLOBAL: BETA10 0x101f5f90
+MxLong LegoRaceCar::g_timeLastSoundPlayed = 0;
+
+// GLOBAL: LEGO1 0x100f0b88
+// GLOBAL: BETA10 0x101f5f94
+MxS32 LegoRaceCar::g_unk0x100f0b88 = 0;
+
+// GLOBAL: LEGO1 0x100f0b8c
+// GLOBAL: BETA10 0x101f5f98
+MxBool LegoRaceCar::g_unk0x100f0b8c = TRUE;
+
+// GLOBAL: LEGO1 0x100f7aec
+MxFloat LegoRaceCar::g_unk0x100f7aec = 8.0f;
+
 // Initialized at LEGO1 0x10012db0
 // GLOBAL: LEGO1 0x10102af0
 // GLOBAL: BETA10 0x102114c0
@@ -158,6 +173,14 @@ LegoRaceCar::~LegoRaceCar()
 MxLong LegoRaceCar::Notify(MxParam& p_param)
 {
 	return LegoRaceMap::Notify(p_param);
+}
+
+// FUNCTION: LEGO1 0x10012de0
+void LegoRaceCar::FUN_10012de0()
+{
+	g_unk0x100f0b8c = TRUE;
+	g_timeLastSoundPlayed = 0;
+	g_unk0x100f0b88 = 0;
 }
 
 // FUNCTION: LEGO1 0x10012e60
