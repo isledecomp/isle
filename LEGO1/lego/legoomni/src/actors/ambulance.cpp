@@ -253,7 +253,7 @@ MxLong Ambulance::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 			return 1;
 		}
 
-		roi = PickParentROI(p_param.GetX(), p_param.GetY());
+		roi = PickRootROI(p_param.GetX(), p_param.GetY());
 
 		if (roi != NULL && !strcmpi(roi->GetName(), "gd")) {
 			m_unk0x170 = 3;
