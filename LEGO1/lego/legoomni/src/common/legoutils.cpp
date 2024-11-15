@@ -65,11 +65,23 @@ LegoEntity* PickEntity(MxLong, MxLong)
 	return NULL;
 }
 
-// STUB: LEGO1 0x1003dde0
-// STUB: BETA10 0x100d358e
-void FUN_1003dde0(LegoROI* p_param1, MxFloat p_param2)
+// FUNCTION: LEGO1 0x1003dde0
+// FUNCTION: BETA10 0x100d358e
+void RotateY(LegoROI* p_roi, MxFloat p_angle)
 {
-	// TODO
+	MxMatrix mat;
+	const Matrix4& local2world = p_roi->GetLocal2World();
+	mat = local2world;
+
+	float fsin = sin(p_angle);
+	float fcos = cos(p_angle);
+
+	for (MxS32 i = 0; i < 3; i++) {
+		mat[i][0] = (local2world[i][0] * fcos) + (local2world[i][2] * fsin);
+		mat[i][2] = (local2world[i][2] * fcos) - (local2world[i][0] * fsin);
+	}
+
+	p_roi->WrappedSetLocalTransform(mat);
 }
 
 // FUNCTION: LEGO1 0x1003de80

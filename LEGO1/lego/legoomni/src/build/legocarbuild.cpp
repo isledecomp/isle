@@ -553,7 +553,7 @@ MxResult LegoCarBuild::Tickle()
 	}
 
 	if (m_unk0x100 == 5 && m_unk0x110) {
-		FUN_1003dde0(m_unk0x110, g_unk0x100d65a4);
+		RotateY(m_unk0x110, g_unk0x100d65a4);
 	}
 
 	if (m_unk0x10a) {
