@@ -36,20 +36,20 @@
 
 // FUNCTION: LEGO1 0x1003dd70
 // FUNCTION: BETA10 0x100d3410
-LegoROI* PickROI(MxLong p_a, MxLong p_b)
+LegoROI* PickROI(MxLong p_x, MxLong p_y)
 {
 	LegoVideoManager* videoManager = VideoManager();
 	Lego3DView* view = videoManager->Get3DManager()->GetLego3DView();
-	return (LegoROI*) view->Pick(p_a, p_b);
+	return (LegoROI*) view->Pick(p_x, p_y);
 }
 
 // FUNCTION: LEGO1 0x1003dd90
 // FUNCTION: BETA10 0x100d3449
-LegoROI* PickParentROI(MxLong p_a, MxLong p_b)
+LegoROI* PickParentROI(MxLong p_x, MxLong p_y)
 {
 	LegoVideoManager* videoManager = VideoManager();
 	Lego3DView* view = videoManager->Get3DManager()->GetLego3DView();
-	LegoROI* roi = (LegoROI*) view->Pick(p_a, p_b);
+	LegoROI* roi = (LegoROI*) view->Pick(p_x, p_y);
 
 	while (roi != NULL && roi->GetParentROI() != NULL) {
 		roi = (LegoROI*) roi->GetParentROI();
@@ -58,11 +58,16 @@ LegoROI* PickParentROI(MxLong p_a, MxLong p_b)
 	return roi;
 }
 
-// STUB: LEGO1 0x1003ddc0
-LegoEntity* PickEntity(MxLong, MxLong)
+// FUNCTION: LEGO1 0x1003ddc0
+LegoEntity* PickEntity(MxLong p_x, MxLong p_y)
 {
-	// TODO
-	return NULL;
+	LegoROI* roi = PickParentROI(p_x, p_y);
+
+	if (roi == NULL) {
+		return NULL;
+	}
+
+	return roi->GetEntity();
 }
 
 // FUNCTION: LEGO1 0x1003dde0
