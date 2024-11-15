@@ -13,6 +13,8 @@
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 
+#include <vec.h>
+
 DECOMP_SIZE_ASSERT(LegoBuildingManager, 0x30)
 DECOMP_SIZE_ASSERT(LegoBuildingInfo, 0x2c)
 DECOMP_SIZE_ASSERT(LegoBuildingManager::AnimEntry, 0x14)
@@ -682,18 +684,77 @@ void LegoBuildingManager::ScheduleAnimation(LegoEntity* p_entity, MxLong p_lengt
 	FUN_100307b0(p_entity, -2);
 }
 
-// STUB: LEGO1 0x10030220
+// FUNCTION: LEGO1 0x10030220
 MxResult LegoBuildingManager::Tickle()
 {
-	// WIP, included some of this to understand the AnimEntry array.
-	LegoTime time = Timer()->GetTime();
+	MxLong time = Timer()->GetTime();
 
 	if (m_numEntries != 0) {
-		if (m_numEntries > 0) {
-			for (MxS32 i = 0; i < m_numEntries; i++) {
-				AnimEntry* entry = m_entries[i];
-				if (entry->m_time <= time) {
-					// Code to animate and play sounds
+		for (MxS32 i = 0; i < m_numEntries; i++) {
+			AnimEntry** ppEntry = &m_entries[i];
+			AnimEntry* entry = *ppEntry;
+
+			if (m_world != CurrentWorld() || !entry->m_entity) {
+				delete entry;
+				m_numEntries--;
+
+				if (m_numEntries != i) {
+					m_entries[i] = m_entries[m_numEntries];
+					m_entries[m_numEntries] = NULL;
+				}
+
+				break;
+			}
+
+			if (entry->m_time - time > 1000) {
+				break;
+			}
+
+			if (!entry->m_muted) {
+				entry->m_muted = TRUE;
+				SoundManager()->GetCacheSoundManager()->Play(m_sound, entry->m_roi->GetName(), FALSE);
+			}
+
+			MxMatrix local48;
+			MxMatrix locald8;
+
+			MxMatrix local120(entry->m_roi->GetLocal2World());
+			Mx3DPointFloat local134(local120[3]);
+
+			ZEROVEC3(local120[3]);
+
+			locald8.SetIdentity();
+			local48 = local120;
+
+			local134[1] = sin(((entry->m_time - time) * 10) * 0.0062831999f) * 0.4 + (entry->m_unk0x0c -= 0.05);
+			SET3(local120[3], local134);
+
+			entry->m_roi->UpdateTransformationRelativeToParent(local120);
+			VideoManager()->Get3DManager()->Moved(*entry->m_roi);
+
+			if (entry->m_time < time) {
+				LegoBuildingInfo* info = GetInfo(entry->m_entity);
+
+				if (info->m_unk0x11 && !m_unk0x28) {
+					MxS32 index = info - g_buildingInfo;
+					AdjustHeight(index);
+					MxMatrix mat = entry->m_roi->GetLocal2World();
+					mat[3][1] = g_buildingInfo[index].m_unk0x014;
+					entry->m_roi->UpdateTransformationRelativeToParent(mat);
+					VideoManager()->Get3DManager()->Moved(*entry->m_roi);
+				}
+				else {
+					info->m_unk0x11 = 0;
+					entry->m_roi->SetVisibility(FALSE);
+				}
+
+				delete entry;
+				m_numEntries--;
+
+				if (m_numEntries != i) {
+					i--;
+					*ppEntry = m_entries[m_numEntries];
+					m_entries[m_numEntries] = NULL;
 				}
 			}
 		}

@@ -115,6 +115,8 @@ private:
 	static MxLong g_timeLastSoundPlayed;
 	static MxS32 g_unk0x100f0b88;
 	static MxBool g_unk0x100f0b8c;
+	static undefined4 g_unk0x100f0bac;
+	static undefined4 g_unk0x100f0bb0;
 };
 
 #endif // LEGORACERS_H

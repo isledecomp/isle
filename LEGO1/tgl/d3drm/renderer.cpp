@@ -46,12 +46,12 @@ Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& data)
 	return device;
 }
 
-// GLOBAL: LEGO1 0x10101040
-static int g_SetBufferCount = 1;
-
 // FUNCTION: LEGO1 0x100a1900
 Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data)
 {
+	// GLOBAL: LEGO1 0x10101040
+	static int g_SetBufferCount = 1;
+
 	DeviceImpl* device = new DeviceImpl();
 	HRESULT result = m_data->CreateDeviceFromSurface(
 		const_cast<LPGUID>(data.m_driverGUID),
