@@ -152,7 +152,7 @@ public:
 	LegoResult Read(LegoStorage* p_storage) override;  // vtable+0x04
 	LegoResult Write(LegoStorage* p_storage) override; // vtable+0x08
 
-	void FUN_100a0360(LegoChar* p_param);
+	void SetName(LegoChar* p_name);
 	LegoResult CreateLocalTransform(LegoFloat p_time, Matrix4& p_matrix);
 	LegoBool FUN_100a0990(LegoFloat p_time);
 

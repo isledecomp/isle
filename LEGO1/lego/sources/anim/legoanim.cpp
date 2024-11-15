@@ -497,11 +497,16 @@ LegoResult LegoAnimNodeData::Write(LegoStorage* p_storage)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100a0360
-// STUB: BETA10 0x1017f1e5
-void LegoAnimNodeData::FUN_100a0360(LegoChar* p_param)
+// FUNCTION: LEGO1 0x100a0360
+// FUNCTION: BETA10 0x1017f1e5
+void LegoAnimNodeData::SetName(LegoChar* p_name)
 {
-	// TODO
+	if (m_name != NULL) {
+		delete[] m_name;
+	}
+
+	m_name = new LegoChar[strlen(p_name) + 1];
+	strcpy(m_name, p_name);
 }
 
 // FUNCTION: LEGO1 0x100a03c0

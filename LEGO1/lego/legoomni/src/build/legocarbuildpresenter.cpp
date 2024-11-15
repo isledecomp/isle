@@ -408,7 +408,7 @@ void LegoCarBuildAnimPresenter::FUN_10079160()
 
 	root = m_anim->GetRoot();
 	data2 = (LegoAnimNodeData*) root->GetData();
-	destData->FUN_100a0360(data2->GetName());
+	destData->SetName(data2->GetName());
 
 	destNode->SetNumChildren(1);
 	children = new LegoTreeNode*;
