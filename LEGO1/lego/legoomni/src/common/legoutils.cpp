@@ -45,7 +45,7 @@ LegoROI* PickROI(MxLong p_x, MxLong p_y)
 
 // FUNCTION: LEGO1 0x1003dd90
 // FUNCTION: BETA10 0x100d3449
-LegoROI* PickParentROI(MxLong p_x, MxLong p_y)
+LegoROI* PickRootROI(MxLong p_x, MxLong p_y)
 {
 	LegoVideoManager* videoManager = VideoManager();
 	Lego3DView* view = videoManager->Get3DManager()->GetLego3DView();
@@ -61,7 +61,7 @@ LegoROI* PickParentROI(MxLong p_x, MxLong p_y)
 // FUNCTION: LEGO1 0x1003ddc0
 LegoEntity* PickEntity(MxLong p_x, MxLong p_y)
 {
-	LegoROI* roi = PickParentROI(p_x, p_y);
+	LegoROI* roi = PickRootROI(p_x, p_y);
 
 	if (roi == NULL) {
 		return NULL;
