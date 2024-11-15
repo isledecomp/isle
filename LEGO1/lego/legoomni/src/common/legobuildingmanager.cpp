@@ -594,10 +594,54 @@ MxBool LegoBuildingManager::FUN_10030000(LegoEntity* p_entity)
 	return FUN_10030030(info - g_buildingInfo);
 }
 
-// STUB: LEGO1 0x10030030
+inline LegoBuildingInfo* GetBuildingInfo(MxS32 p_index)
+{
+	if (p_index >= sizeOfArray(g_buildingInfo)) {
+		return NULL;
+	}
+
+	return &g_buildingInfo[p_index];
+}
+
+// FUNCTION: LEGO1 0x10030030
 MxBool LegoBuildingManager::FUN_10030030(MxS32 p_index)
 {
-	return TRUE;
+	if (p_index >= sizeOfArray(g_buildingInfo)) {
+		return FALSE;
+	}
+
+	LegoBuildingInfo* info = GetBuildingInfo(p_index);
+	if (!info) {
+		return FALSE;
+	}
+
+	MxBool result = TRUE;
+
+	if (info->m_unk0x11 < 0) {
+		info->m_unk0x11 = g_buildingInfoDownshift[p_index];
+	}
+
+	if (info->m_unk0x11 <= 0) {
+		result = FALSE;
+	}
+	else {
+		LegoROI* roi = info->m_entity->GetROI();
+
+		info->m_unk0x11 -= 2;
+		if (info->m_unk0x11 == 1) {
+			info->m_unk0x11 = 0;
+			roi->SetVisibility(FALSE);
+		}
+		else {
+			AdjustHeight(p_index);
+			MxMatrix mat = roi->GetLocal2World();
+			mat[3][1] = g_buildingInfo[p_index].m_unk0x014;
+			roi->UpdateTransformationRelativeToParent(mat);
+			VideoManager()->Get3DManager()->Moved(*roi);
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10030110
