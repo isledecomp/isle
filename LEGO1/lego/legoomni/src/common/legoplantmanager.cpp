@@ -16,6 +16,7 @@
 #include "viewmanager/viewmanager.h"
 
 #include <stdio.h>
+#include <vec.h>
 
 DECOMP_SIZE_ASSERT(LegoPlantManager, 0x2c)
 DECOMP_SIZE_ASSERT(LegoPlantManager::AnimEntry, 0x0c)
@@ -521,9 +522,75 @@ void LegoPlantManager::ScheduleAnimation(LegoEntity* p_entity, MxLong p_length)
 	FUN_100271b0(p_entity, -1);
 }
 
-// STUB: LEGO1 0x10026e00
+// FUNCTION: LEGO1 0x10026e00
 MxResult LegoPlantManager::Tickle()
 {
+	MxLong time = Timer()->GetTime();
+
+	if (m_numEntries != 0) {
+		for (MxS32 i = 0; i < m_numEntries; i++) {
+			AnimEntry** ppEntry = &m_entries[i];
+			AnimEntry* entry = *ppEntry;
+
+			if (m_world != CurrentWorld() || !entry->m_entity) {
+				delete entry;
+				m_numEntries--;
+
+				if (m_numEntries != i) {
+					m_entries[i] = m_entries[m_numEntries];
+					m_entries[m_numEntries] = NULL;
+				}
+
+				break;
+			}
+
+			if (entry->m_time - time > 1000) {
+				break;
+			}
+
+			MxMatrix local90;
+			MxMatrix local48;
+
+			MxMatrix locald8(entry->m_roi->GetLocal2World());
+			Mx3DPointFloat localec(locald8[3]);
+
+			ZEROVEC3(locald8[3]);
+
+			locald8[1][0] = sin(((entry->m_time - time) * 2) * 0.0062832f) * 0.2;
+			locald8[1][2] = sin(((entry->m_time - time) * 4) * 0.0062832f) * 0.2;
+			locald8.Scale(1.03f, 0.95f, 1.03f);
+
+			SET3(locald8[3], localec);
+
+			entry->m_roi->FUN_100a58f0(locald8);
+			entry->m_roi->VTable0x14();
+
+			if (entry->m_time < time) {
+				LegoPlantInfo* info = GetInfo(entry->m_entity);
+
+				if (info->m_unk0x16 == 0) {
+					entry->m_roi->SetVisibility(FALSE);
+				}
+				else {
+					FUN_10026860(info - g_plantInfo);
+					info->m_entity->SetLocation(info->m_position, info->m_direction, info->m_up, FALSE);
+				}
+
+				delete entry;
+				m_numEntries--;
+
+				if (m_numEntries != i) {
+					i--;
+					*ppEntry = m_entries[m_numEntries];
+					m_entries[m_numEntries] = NULL;
+				}
+			}
+		}
+	}
+	else {
+		TickleManager()->UnregisterClient(this);
+	}
+
 	return SUCCESS;
 }
 
