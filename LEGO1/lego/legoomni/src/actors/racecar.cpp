@@ -1,7 +1,12 @@
 #include "racecar.h"
 
+#include "isle.h"
+#include "isle_actions.h"
 #include "legocontrolmanager.h"
+#include "legoutils.h"
+#include "legoworld.h"
 #include "misc.h"
+#include "mxtransitionmanager.h"
 
 DECOMP_SIZE_ASSERT(RaceCar, 0x164)
 
@@ -18,16 +23,29 @@ RaceCar::~RaceCar()
 	Exit();
 }
 
-// STUB: LEGO1 0x10028490
+// FUNCTION: LEGO1 0x10028490
 MxResult RaceCar::Create(MxDSAction& p_dsAction)
 {
-	// TODO
-	return SUCCESS;
+	MxResult result = IslePathActor::Create(p_dsAction);
+	m_world = CurrentWorld();
+
+	if (m_world) {
+		m_world->Add(this);
+	}
+
+	ControlManager()->Register(this);
+	return result;
 }
 
-// STUB: LEGO1 0x100284d0
+// FUNCTION: LEGO1 0x100284d0
 MxLong RaceCar::HandleClick()
 {
-	// TODO
-	return 0;
+	if (!FUN_1003ef60()) {
+		return 1;
+	}
+
+	Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
+	isle->SetDestLocation(LegoGameState::Area::e_carrace);
+	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+	return 1;
 }
