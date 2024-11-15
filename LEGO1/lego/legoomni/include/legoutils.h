@@ -43,7 +43,7 @@ extern MxAtomId* g_isleScript;
 LegoEntity* PickEntity(MxLong, MxLong);
 LegoROI* PickROI(MxLong, MxLong);
 LegoROI* PickParentROI(MxLong p_a, MxLong p_b);
-void FUN_1003dde0(LegoROI* p_param1, MxFloat p_param2);
+void RotateY(LegoROI* p_roi, MxFloat p_angle);
 MxBool SpheresIntersect(const BoundingSphere& p_sphere1, const BoundingSphere& p_sphere2);
 MxBool FUN_1003ded0(MxFloat p_param1[2], MxFloat p_param2[3], MxFloat p_param3[3]);
 MxBool TransformWorldToScreen(const MxFloat p_world[3], MxFloat p_screen[4]);
