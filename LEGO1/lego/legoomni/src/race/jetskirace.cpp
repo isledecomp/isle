@@ -128,6 +128,7 @@ MxLong JetskiRace::HandleEndAction(MxEndActionNotificationParam& p_param)
 MxLong JetskiRace::HandleClick(LegoEventNotificationParam& p_param)
 {
 	MxLong result = 0;
+
 	if (((LegoControlManagerNotificationParam*) &p_param)->m_unk0x28 == 1) {
 		switch (((LegoControlManagerNotificationParam*) &p_param)->m_clickedObjectId) {
 		case JetraceScript::c_JetskiArms_Ctl:
@@ -151,46 +152,40 @@ MxLong JetskiRace::HandleClick(LegoEventNotificationParam& p_param)
 			break;
 		}
 	}
+
 	return result;
 }
 
 inline MxS32 JetskiRace::PossiblyGetPlaceOfPlayer()
 {
-	if (m_unk0xfc <= m_unk0xf8) {
-		if (m_unk0x100 < m_unk0xf8) {
-			return 3;
-		}
+	if (m_unk0xfc < m_unk0xf8 && m_unk0x100 < m_unk0xf8) {
+		return 3;
+	}
+	else if (m_unk0xfc < m_unk0xf8 || m_unk0x100 < m_unk0xf8) {
+		return 2;
 	}
 
-	if (m_unk0xfc > m_unk0xf8) {
-		if (m_unk0x100 >= m_unk0xf8) {
-			return 1;
-		}
-	}
-
-	return 2;
+	return 1;
 }
 
 // FUNCTION: LEGO1 0x100166a0
 // FUNCTION: BETA10 0x100c8085
 MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 {
-	LegoChar buffer[20];
-	RaceState::Entry* raceStateEntry;
 	MxLong result = 0;
-	MxS16 sVar6;
-	MxS32 paramData;
+	MxEntity* sender = (MxEntity*) p_param.GetSender();
 
 	if (p_param.GetTrigger() == 68) {
-		paramData = p_param.GetData();
+		MxS32 paramData = p_param.GetData();
 
-		switch (((MxEntity*) p_param.GetSender())->GetEntityId()) {
+		switch (sender->GetEntityId()) {
 		case 10:
-			if (m_unk0x104 >= paramData || m_unk0x104 + 5 <= paramData) {
+			if (paramData <= m_unk0x104 || paramData >= m_unk0x104 + 5) {
 				break;
 			}
 
 			m_unk0x104 = paramData;
+			LegoChar buffer[20];
 			sprintf(buffer, "%g", 0.032 + 0.936 * (m_unk0xf8 * 20.0 + m_unk0x104) / (g_unk0x100f0c78 * 20.0));
 			VariableTable()->SetVariable("DISTANCE", buffer);
 
@@ -199,15 +194,14 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				m_unk0xf8++;
 
 				if (g_unk0x100f0c78 == m_unk0xf8) {
-
-					sVar6 = PossiblyGetPlaceOfPlayer();
+					MxS16 sVar6 = PossiblyGetPlaceOfPlayer();
 
 					VariableTable()->SetVariable(g_raceState, "");
 					VariableTable()->SetVariable(g_strHIT_WALL_SOUND, "");
 					LegoRaceCar::FUN_10012de0();
 					m_raceState->SetUnknown0x28(2);
 
-					raceStateEntry = m_raceState->GetState(GameState()->GetActorId());
+					RaceState::Entry* raceStateEntry = m_raceState->GetState(GameState()->GetActorId());
 					raceStateEntry->m_unk0x02 = sVar6;
 
 					if (raceStateEntry->m_score < sVar6) {
@@ -220,41 +214,31 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				}
 
 				result = 1;
-				break;
 			}
-			else {
-				if (m_unk0x104 == 0xf) {
-					m_hideAnim->FUN_1006db40(m_unk0xf8 * 200 + 100);
-					result = 1;
-					break;
-				}
-
-				break;
+			else if (m_unk0x104 == 0xf) {
+				m_hideAnim->FUN_1006db40(m_unk0xf8 * 200 + 100);
+				result = 1;
 			}
-
+			break;
 		case 11:
-			if (m_unk0x108 >= paramData || m_unk0x108 + 5 <= paramData) {
+			if (paramData <= m_unk0x108 || paramData >= m_unk0x108 + 5) {
 				break;
 			}
 
 			FUN_10016930(0xb, paramData);
 			m_unk0x108 = paramData;
 
-			if (m_unk0x108 != 0x14) {
-				break;
+			if (m_unk0x108 == 0x14) {
+				m_unk0x108 = 0;
+				m_unk0xfc++;
+
+				if (g_unk0x100f0c78 == m_unk0xfc) {
+					((LegoPathActor*) p_param.GetSender())->SetMaxLinearVel(0.1);
+				}
 			}
-
-			m_unk0x108 = 0;
-			m_unk0xfc++;
-
-			if (g_unk0x100f0c78 != m_unk0xfc) {
-				break;
-			}
-
-			((LegoPathActor*) p_param.GetSender())->SetMaxLinearVel(0.1);
 			break;
 		case 12:
-			if (m_unk0x10c >= paramData || m_unk0x10c + 5 <= paramData) {
+			if (paramData <= m_unk0x10c || paramData >= m_unk0x10c + 5) {
 				break;
 			}
 
@@ -262,20 +246,14 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 			m_unk0x10c = paramData;
 
-			if (m_unk0x10c != 0x14) {
-				break;
+			if (m_unk0x10c == 0x14) {
+				m_unk0x10c = 0;
+				m_unk0x100++;
+
+				if (g_unk0x100f0c78 == m_unk0x100) {
+					((LegoPathActor*) p_param.GetSender())->SetMaxLinearVel(0.1);
+				}
 			}
-
-			m_unk0x10c = 0;
-			m_unk0x100++;
-
-			if (g_unk0x100f0c78 != m_unk0x100) {
-				break;
-			}
-
-			((LegoPathActor*) p_param.GetSender())->SetMaxLinearVel(0.1);
-			break;
-		default:
 			break;
 		}
 	}
