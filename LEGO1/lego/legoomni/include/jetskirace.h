@@ -71,6 +71,10 @@ private:
 };
 
 // SYNTHETIC: LEGO1 0x1000f530
+// SYNTHETIC: BETA10 0x100a9b70
 // JetskiRace::`scalar deleting destructor'
+
+// SYNTHETIC: BETA10 0x100aa150
+// JetskiRace::~JetskiRace
 
 #endif // JETSKIRACE_H
