@@ -28,7 +28,10 @@ public:
 		return new LegoPathStructNotificationParam(m_type, m_sender, m_trigger, m_data);
 	} // vtable+0x04
 
+	// FUNCTION: BETA10 0x10024270
 	MxU8 GetTrigger() { return m_trigger; }
+
+	// FUNCTION: BETA10 0x100242a0
 	MxS16 GetData() { return m_data; }
 
 protected:

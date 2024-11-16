@@ -81,8 +81,6 @@ public:
 
 	Entry* GetState(MxU8 p_id);
 
-	undefined4 GetUnknown0x28() { return m_unk0x28; }
-
 	// SYNTHETIC: LEGO1 0x1000f6f0
 	// RaceState::~RaceState
 
@@ -151,12 +149,12 @@ public:
 	// LegoRace::`scalar deleting destructor'
 
 protected:
-	undefined4 m_unk0xf8;               // 0xf8
-	undefined4 m_unk0xfc;               // 0xfc
-	undefined4 m_unk0x100;              // 0x100
-	undefined4 m_unk0x104;              // 0x104
-	undefined4 m_unk0x108;              // 0x108
-	undefined4 m_unk0x10c;              // 0x10c
+	MxS32 m_unk0xf8;                    // 0xf8
+	MxS32 m_unk0xfc;                    // 0xfc
+	MxS32 m_unk0x100;                   // 0x100
+	MxS32 m_unk0x104;                   // 0x104
+	MxS32 m_unk0x108;                   // 0x108
+	MxS32 m_unk0x10c;                   // 0x10c
 	LegoRaceActor* m_unk0x110[3];       // 0x110
 	LegoGameState::Area m_destLocation; // 0x11c
 	LegoPathActor* m_pathActor;         // 0x120

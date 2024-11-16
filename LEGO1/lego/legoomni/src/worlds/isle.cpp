@@ -529,6 +529,7 @@ MxLong Isle::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10031820
+// FUNCTION: BETA10 0x10034158
 void Isle::Enable(MxBool p_enable)
 {
 	if (m_set0xd0.empty() == p_enable) {
@@ -595,7 +596,7 @@ void Isle::Enable(MxBool p_enable)
 			SetIsWorldActive(FALSE);
 			break;
 		case LegoGameState::e_jetrace2:
-			if (((JetskiRaceState*) GameState()->GetState("JetskiRaceState"))->GetUnknown0x28() == 2) {
+			if (((JetskiRaceState*) GameState()->GetState("JetskiRaceState"))->m_unk0x28 == 2) {
 				m_act1state->m_unk0x018 = 5;
 			}
 
@@ -738,7 +739,7 @@ void Isle::Enable(MxBool p_enable)
 				);
 			JetskiRaceState* raceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
 
-			if (raceState->GetUnknown0x28() == 2) {
+			if (raceState->m_unk0x28 == 2) {
 				IsleScript::Script script = IsleScript::c_noneIsle;
 
 				switch (raceState->GetState(GameState()->GetActorId())->GetUnknown0x02()) {
@@ -771,7 +772,7 @@ void Isle::Enable(MxBool p_enable)
 				);
 			CarRaceState* raceState = (CarRaceState*) GameState()->GetState("CarRaceState");
 
-			if (raceState->GetUnknown0x28() == 2) {
+			if (raceState->m_unk0x28 == 2) {
 				IsleScript::Script script = IsleScript::c_noneIsle;
 
 				switch (raceState->GetState(GameState()->GetActorId())->GetUnknown0x02()) {

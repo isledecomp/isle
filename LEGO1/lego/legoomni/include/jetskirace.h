@@ -61,9 +61,20 @@ public:
 	MxLong HandleClick(LegoEventNotificationParam&) override;           // vtable+0x6c
 	MxLong HandlePathStruct(LegoPathStructNotificationParam&) override; // vtable+0x70
 	MxLong HandleEndAction(MxEndActionNotificationParam&) override;     // vtable+0x74
+
+	void FUN_10016930(MxS32 p_param1, MxS16 p_param2);
+
+private:
+	inline MxS32 PossiblyGetPlaceOfPlayer();
+
+	static MxS32 g_unk0x100f0c78;
 };
 
 // SYNTHETIC: LEGO1 0x1000f530
+// SYNTHETIC: BETA10 0x100a9b70
 // JetskiRace::`scalar deleting destructor'
+
+// SYNTHETIC: BETA10 0x100aa150
+// JetskiRace::~JetskiRace
 
 #endif // JETSKIRACE_H
