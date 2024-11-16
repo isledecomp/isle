@@ -81,9 +81,6 @@ public:
 
 	Entry* GetState(MxU8 p_id);
 
-	undefined4 GetUnknown0x28() { return m_unk0x28; }
-	void SetUnknown0x28(undefined4 p_unk0x28) { m_unk0x28 = p_unk0x28; }
-
 	// SYNTHETIC: LEGO1 0x1000f6f0
 	// RaceState::~RaceState
 

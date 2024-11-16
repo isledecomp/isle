@@ -199,7 +199,7 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 					VariableTable()->SetVariable(g_raceState, "");
 					VariableTable()->SetVariable(g_strHIT_WALL_SOUND, "");
 					LegoRaceCar::FUN_10012de0();
-					m_raceState->SetUnknown0x28(2);
+					m_raceState->m_unk0x28 = 2;
 
 					RaceState::Entry* raceStateEntry = m_raceState->GetState(GameState()->GetActorId());
 					raceStateEntry->m_unk0x02 = sVar6;

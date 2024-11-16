@@ -102,6 +102,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d6fb8
+// VTABLE: BETA10 0x101b9cc8
 // SIZE 0x140
 class Isle : public LegoWorld {
 public:
@@ -116,6 +117,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10030910
+	// FUNCTION: BETA10 0x10035d70
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0458
