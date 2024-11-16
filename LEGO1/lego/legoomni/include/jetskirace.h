@@ -64,10 +64,10 @@ public:
 
 	void FUN_10016930(MxS32 p_param1, MxS16 p_param2);
 
-	static MxS32 g_unk0x100f0c78;
-
 private:
 	inline MxS32 PossiblyGetPlaceOfPlayer();
+
+	static MxS32 g_unk0x100f0c78;
 };
 
 // SYNTHETIC: LEGO1 0x1000f530
