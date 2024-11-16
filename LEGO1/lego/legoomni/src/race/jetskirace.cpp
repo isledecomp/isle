@@ -282,10 +282,30 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 	return result;
 }
 
-// STUB: LEGO1 0x10016930
-void JetskiRace::FUN_10016930(undefined4 p_param1, undefined4 p_param2)
+// FUNCTION: LEGO1 0x10016930
+void JetskiRace::FUN_10016930(MxS32 p_param1, MxS16 p_param2)
 {
-	// TODO
+	MxS32 local_4;
+	MxStillPresenter* piVar1;
+	MxS32 x, y;
+
+	if (p_param1 == 11) {
+		piVar1 = m_unk0x128;
+		local_4 = m_unk0xfc;
+	}
+	else if (p_param1 == 12) {
+		piVar1 = m_unk0x12c;
+		local_4 = m_unk0x100;
+	}
+
+	if (piVar1) {
+		x = m_unk0x130.GetLeft() + 0.5 +
+			(m_unk0x130.GetRight() - m_unk0x130.GetLeft() + 1) * (local_4 * 20.0 + p_param2) / (g_unk0x100f0c78 * 20.0);
+		y = m_unk0x130.GetTop() + 0.5 +
+			(m_unk0x130.GetBottom() - m_unk0x130.GetTop() + 1) * (local_4 * 20.0 + p_param2) / (g_unk0x100f0c78 * 20.0);
+
+		piVar1->SetPosition(x, y);
+	}
 }
 
 // FUNCTION: LEGO1 0x10016a10

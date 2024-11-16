@@ -62,7 +62,7 @@ public:
 	MxLong HandlePathStruct(LegoPathStructNotificationParam&) override; // vtable+0x70
 	MxLong HandleEndAction(MxEndActionNotificationParam&) override;     // vtable+0x74
 
-	void FUN_10016930(undefined4 p_param1, undefined4 p_param2);
+	void FUN_10016930(MxS32 p_param1, MxS16 p_param2);
 
 	static MxS32 g_unk0x100f0c78;
 
