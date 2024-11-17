@@ -11,7 +11,7 @@ DECOMP_SIZE_ASSERT(LegoJetskiRaceActor, 0x1a8)
 
 // GLOBAL: LEGO1 0x100da044
 // GLOBAL: BETA10 0x101be9fc
-const MxFloat eight = 8.0f;
+const MxFloat g_eight = 8.0f;
 
 // FUNCTION: LEGO1 0x10080ef0
 // FUNCTION: BETA10 0x100a8990
@@ -38,7 +38,6 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 
 	if (m_state == 1) {
 		if (m_destEdge == LegoPathController::GetControlEdgeA(13)) {
-			// TODO: Not sure about this typecast (multiple instances)
 			m_boundary = (LegoPathBoundary*) m_destEdge->OtherFace(LegoPathController::GetControlBoundaryA(13));
 		}
 		else if (m_destEdge == LegoPathController::GetControlEdgeA(15)) {
@@ -60,8 +59,8 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 		if (p_edge == LegoPathController::GetControlEdgeA(12)) {
 			m_state = 1;
 
-			if (m_worldSpeed < eight) {
-				m_worldSpeed = eight;
+			if (m_worldSpeed < g_eight) {
+				m_worldSpeed = g_eight;
 			}
 
 			m_destEdge = LegoPathController::GetControlEdgeA(13);
@@ -70,8 +69,8 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 		else if (p_edge == LegoPathController::GetControlEdgeA(14)) {
 			m_state = 1;
 
-			if (m_worldSpeed < eight) {
-				m_worldSpeed = eight;
+			if (m_worldSpeed < g_eight) {
+				m_worldSpeed = g_eight;
 			}
 
 			m_destEdge = LegoPathController::GetControlEdgeA(15);
@@ -95,14 +94,13 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 			c.EqualsCross(&bbb, m_boundary->GetUnknown0x14());
 			c.Unitize();
 
-			// TODO Weird - missing a Vector3 constructor in BETA10
-			Mx3DPointFloat local_5c(m_roi->GetWorldDirection());
+			Mx3DPointFloat worldDirection(m_roi->GetWorldDirection());
 
 			if (!m_userNavFlag) {
-				((Vector2*) &local_5c)->Mul(-1.0f);
+				((Vector2*) &worldDirection)->Mul(-1.0f);
 			}
 
-			if (VTable0x80(m_roi->GetWorldPosition(), local_5c, a, c)) {
+			if (VTable0x80(m_roi->GetWorldPosition(), worldDirection, a, c)) {
 #ifdef NDEBUG
 				m_unk0x7c = 0;
 				return 0;
