@@ -29,10 +29,6 @@ extern MxBool g_unk0x100f119c;
 extern const char* g_varJSFRNTY5;
 extern const char* g_varJSWNSHY5;
 
-// Defined in legoracespecial.cpp
-extern const char* g_raceState;
-extern const char* g_racing;
-
 // Defined in legopathactor.cpp
 extern const char* g_strHIT_WALL_SOUND;
 
