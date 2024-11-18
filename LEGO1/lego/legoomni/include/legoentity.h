@@ -90,6 +90,8 @@ public:
 	LegoROI* GetROI() { return m_roi; }
 
 	MxU8 GetType() { return m_type; }
+
+	// FUNCTION: BETA10 0x1007ff00
 	MxBool GetCameraFlag() { return m_cameraFlag; }
 
 	void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
