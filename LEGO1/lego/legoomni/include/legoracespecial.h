@@ -3,6 +3,10 @@
 
 #include "legoraceactor.h"
 
+extern const char* g_raceState;
+extern const char* g_fuel;
+extern const char* g_racing;
+
 // VTABLE: LEGO1 0x100da0c0 LegoRaceActor
 // VTABLE: LEGO1 0x100da0c8 LegoAnimActor
 // VTABLE: LEGO1 0x100da0d8 LegoPathActor
