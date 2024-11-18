@@ -6,6 +6,8 @@
 #include "mxmisc.h"
 #include "mxvariabletable.h"
 
+#include <vec.h>
+
 DECOMP_SIZE_ASSERT(LegoJetskiRaceActor, 0x1a8)
 
 // GLOBAL: LEGO1 0x100da044
@@ -85,9 +87,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 			v2 = m_destEdge->CWVertex(*m_boundary);
 			assert(v1 && v2);
 
-			a[0] = (*v1)[0] + ((*v2)[0] - (*v1)[0]) * m_unk0xe4;
-			a[1] = (*v1)[1] + ((*v2)[1] - (*v1)[1]) * m_unk0xe4;
-			a[2] = (*v1)[2] + ((*v2)[2] - (*v1)[2]) * m_unk0xe4;
+			LERP3(a, *v1, *v2, m_unk0xe4);
 
 			m_destEdge->FUN_1002ddc0(*m_boundary, bbb);
 			c.EqualsCross(&bbb, m_boundary->GetUnknown0x14());
@@ -123,7 +123,7 @@ void LegoJetskiRaceActor::VTable0x70(float p_float)
 {
 	if (m_unk0x0c == 0) {
 		const LegoChar* raceState = VariableTable()->GetVariable(g_raceState);
-		if (stricmp(raceState, g_racing) == 0x0) {
+		if (!stricmp(raceState, g_racing)) {
 			m_unk0x0c = 1;
 			m_lastTime = p_float - 1.0f;
 			m_unk0x1c = p_float;
