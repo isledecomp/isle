@@ -2,10 +2,9 @@
 
 #include "legonavcontroller.h"
 #include "legopathcontroller.h"
+#include "misc.h"
 #include "mxmisc.h"
 #include "mxvariabletable.h"
-
-#include <misc.h>
 
 DECOMP_SIZE_ASSERT(LegoJetskiRaceActor, 0x1a8)
 
