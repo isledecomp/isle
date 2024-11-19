@@ -117,6 +117,7 @@ public:
 	// FUNCTION: BETA10 0x10027110
 	const CompoundObject* GetComp() const { return comp; }
 
+	// FUNCTION: BETA10 0x10049e10
 	unsigned char GetVisibility() { return m_visible; }
 
 	// FUNCTION: BETA10 0x10011720

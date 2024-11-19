@@ -138,7 +138,7 @@ void LegoJetskiRaceActor::VTable0x70(float p_float)
 	}
 }
 
-// STUB: LEGO1 0x10081fd0
+// FUNCTION: LEGO1 0x10081fd0
 MxU32 LegoJetskiRaceActor::VTable0x6c(
 	LegoPathBoundary* p_boundary,
 	Vector3& p_v1,
@@ -148,6 +148,39 @@ MxU32 LegoJetskiRaceActor::VTable0x6c(
 	Vector3& p_v3
 )
 {
-	// TODO
+	LegoAnimPresenterSet& presenters = p_boundary->GetPresenters();
+
+	for (LegoAnimPresenterSet::iterator itap = presenters.begin(); itap != presenters.end(); itap++) {
+		if ((*itap)->VTable0x94(p_v1, p_v2, p_f1, p_f2, p_v3)) {
+			return 1;
+		}
+	}
+
+	LegoPathActorSet& plpas = p_boundary->GetActors();
+	LegoPathActorSet lpas(plpas);
+
+	for (LegoPathActorSet::iterator itpa = lpas.begin(); itpa != lpas.end(); itpa++) {
+		if (plpas.find(*itpa) != plpas.end()) {
+			LegoPathActor* actor = *itpa;
+
+			if (this != actor) {
+				LegoROI* roi = actor->GetROI();
+
+				if (roi != NULL && (roi->GetVisibility() || actor->GetCameraFlag())) {
+					if (roi->FUN_100a9410(p_v1, p_v2, p_f1, p_f2, p_v3, m_collideBox && actor->GetCollideBox())) {
+						VTable0x94(actor, TRUE);
+
+						if (actor->VTable0x94(this, FALSE) < 0) {
+							return 0;
+						}
+						else {
+							return 2;
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return 0;
 }
