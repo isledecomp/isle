@@ -73,22 +73,22 @@ cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libr
 add_cxx_warning(parentheses)
 
 add_library(DirectX5::DirectX5 INTERFACE IMPORTED)
-target_include_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
+target_include_directories(DirectX5::DirectX5 INTERFACE "${PROJECT_SOURCE_DIR}/3rdparty/dx5/inc")
 if(ISLE_USE_DX5_LIBS)
-    target_link_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+    target_link_directories(DirectX5::DirectX5 INTERFACE "${PROJECT_SOURCE_DIR}/3rdparty/dx5/lib")
 endif()
 
 add_library(Smacker::Smacker STATIC IMPORTED)
-set_property(TARGET Smacker::Smacker PROPERTY IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smacker/smack.lib")
-set_property(TARGET Smacker::Smacker PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/smacker")
+set_property(TARGET Smacker::Smacker PROPERTY IMPORTED_LOCATION "${PROJECT_SOURCE_DIR}/3rdparty/smacker/smack.lib")
+set_property(TARGET Smacker::Smacker PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${PROJECT_SOURCE_DIR}/3rdparty/smacker")
 
 add_library(Vec::Vec INTERFACE IMPORTED)
-target_include_directories(Vec::Vec INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/vec")
+target_include_directories(Vec::Vec INTERFACE "${PROJECT_SOURCE_DIR}/3rdparty/vec")
 
 add_library(SmartHeap::SmartHeap STATIC IMPORTED)
-set_property(TARGET SmartHeap::SmartHeap PROPERTY IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SHLW32MT.LIB")
-set_property(TARGET SmartHeap::SmartHeap PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
-set_property(TARGET SmartHeap::SmartHeap PROPERTY INTERFACE_COMPILE_OPTIONS "/FI${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
+set_property(TARGET SmartHeap::SmartHeap PROPERTY IMPORTED_LOCATION "${PROJECT_SOURCE_DIR}/3rdparty/smartheap/SHLW32MT.LIB")
+set_property(TARGET SmartHeap::SmartHeap PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${PROJECT_SOURCE_DIR}/3rdparty/smartheap")
+set_property(TARGET SmartHeap::SmartHeap PROPERTY INTERFACE_COMPILE_OPTIONS "/FI${PROJECT_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
 
 add_library(tglrl STATIC
   LEGO1/tgl/d3drm/camera.cpp
@@ -103,7 +103,7 @@ add_library(tglrl STATIC
 )
 register_lego1_target(tglrl)
 set_property(TARGET tglrl PROPERTY ARCHIVE_OUTPUT_NAME "tglrl40$<$<CONFIG:Debug>:d>")
-target_include_directories(tglrl PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(tglrl PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
 target_link_libraries(tglrl PRIVATE d3drm)
 
 add_library(realtime STATIC
@@ -115,7 +115,7 @@ add_library(realtime STATIC
 )
 register_lego1_target(realtime)
 set_property(TARGET realtime PROPERTY ARCHIVE_OUTPUT_NAME "realtime$<$<CONFIG:Debug>:d>")
-target_include_directories(realtime PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(realtime PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
 target_link_libraries(realtime PRIVATE Vec::Vec)
 
 add_library(viewmanager STATIC
@@ -126,7 +126,7 @@ add_library(viewmanager STATIC
 )
 register_lego1_target(viewmanager)
 set_property(TARGET viewmanager PROPERTY ARCHIVE_OUTPUT_NAME "viewmanager$<$<CONFIG:Debug>:d>")
-target_include_directories(viewmanager PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(viewmanager PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
 target_link_libraries(viewmanager PRIVATE Vec::Vec)
 
 add_library(mxdirectx STATIC
@@ -137,7 +137,7 @@ add_library(mxdirectx STATIC
 )
 register_lego1_target(mxdirectx)
 set_property(TARGET mxdirectx PROPERTY ARCHIVE_OUTPUT_NAME "MxDirectX$<$<CONFIG:Debug>:d>")
-target_include_directories(mxdirectx PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(mxdirectx PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
 target_link_libraries(mxdirectx PRIVATE ddraw)
 
 add_library(roi STATIC
@@ -146,7 +146,7 @@ add_library(roi STATIC
 )
 register_lego1_target(roi)
 set_property(TARGET roi PROPERTY ARCHIVE_OUTPUT_NAME "roi$<$<CONFIG:Debug>:d>")
-target_include_directories(roi PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(roi PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
 target_link_libraries(roi PRIVATE viewmanager Vec::Vec)
 
 add_library(geom STATIC
@@ -161,7 +161,7 @@ add_library(geom STATIC
 )
 register_lego1_target(geom)
 set_property(TARGET geom PROPERTY ARCHIVE_OUTPUT_NAME "geom$<$<CONFIG:Debug>:d>")
-target_include_directories(geom PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(geom PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
 target_link_libraries(geom PRIVATE)
 
 add_library(anim STATIC
@@ -169,7 +169,7 @@ add_library(anim STATIC
 )
 register_lego1_target(anim)
 set_property(TARGET anim PROPERTY ARCHIVE_OUTPUT_NAME "anim$<$<CONFIG:Debug>:d>")
-target_include_directories(anim PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(anim PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
 target_link_libraries(anim PRIVATE)
 
 add_library(misc STATIC
@@ -183,7 +183,7 @@ add_library(misc STATIC
 )
 register_lego1_target(misc)
 set_property(TARGET misc PROPERTY ARCHIVE_OUTPUT_NAME "misc$<$<CONFIG:Debug>:d>")
-target_include_directories(misc PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(misc PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
 target_link_libraries(misc PRIVATE)
 
 add_library(3dmanager STATIC
@@ -194,7 +194,7 @@ add_library(3dmanager STATIC
 )
 register_lego1_target(3dmanager)
 set_property(TARGET 3dmanager PROPERTY ARCHIVE_OUTPUT_NAME "3dmanager$<$<CONFIG:Debug>:d>")
-target_include_directories(3dmanager PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(3dmanager PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
 target_link_libraries(3dmanager PRIVATE Vec::Vec)
 
 add_library(omni STATIC
@@ -284,7 +284,7 @@ add_library(omni STATIC
 )
 register_lego1_target(omni)
 set_property(TARGET omni PROPERTY ARCHIVE_OUTPUT_NAME "omni$<$<CONFIG:Debug>:d>")
-target_include_directories(omni PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(omni PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
 target_link_libraries(omni PRIVATE dsound winmm Smacker::Smacker)
 
 add_library(lego1 SHARED
@@ -419,12 +419,12 @@ else()
   target_sources(lego1 PRIVATE LEGO1/LegoOmni.mingw.def)
 endif()
 
-target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/util")
-target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1")
-target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
-target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
-target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
-target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include/actions")
+target_include_directories(lego1 PUBLIC "${PROJECT_SOURCE_DIR}/util")
+target_include_directories(lego1 PUBLIC "${PROJECT_SOURCE_DIR}/LEGO1")
+target_include_directories(lego1 PUBLIC "${PROJECT_SOURCE_DIR}/LEGO1/omni/include")
+target_include_directories(lego1 PUBLIC "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources")
+target_include_directories(lego1 PUBLIC "${PROJECT_SOURCE_DIR}/LEGO1/lego/legoomni/include")
+target_include_directories(lego1 PUBLIC "${PROJECT_SOURCE_DIR}/LEGO1/lego/legoomni/include/actions")
 
 # Link libraries
 target_link_libraries(lego1 PRIVATE tglrl viewmanager realtime mxdirectx roi geom anim Vec::Vec dinput dxguid misc 3dmanager omni)
