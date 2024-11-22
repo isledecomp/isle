@@ -44,6 +44,7 @@ void MxFlcPresenter::CreateBitmap()
 }
 
 // FUNCTION: LEGO1 0x100b3570
+// FUNCTION: BETA10 0x1013a10f
 void MxFlcPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
 	MxU8* data = p_chunk->GetData();

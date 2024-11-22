@@ -7,6 +7,7 @@
 #include <flic.h>
 
 // VTABLE: LEGO1 0x100dc2c0
+// VTABLE: BETA10 0x101c1eb0
 // SIZE 0x68
 class MxFlcPresenter : public MxVideoPresenter {
 public:
