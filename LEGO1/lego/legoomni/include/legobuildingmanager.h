@@ -29,8 +29,8 @@ struct LegoBuildingInfo {
 	MxS8 m_unk0x11;               // 0x11
 	MxS8 m_initialUnk0x11;        // 0x12 - initial value loaded to m_unk0x11
 	MxU8 m_flags;                 // 0x13
-	float m_unk0x014;             // 0x14
-	const char* m_unk0x18;        // 0x18
+	float m_unk0x14;              // 0x14
+	const char* m_boundaryName;   // 0x18
 	float m_x;                    // 0x1c
 	float m_y;                    // 0x20
 	float m_z;                    // 0x24
@@ -100,7 +100,7 @@ private:
 	static MxU32 g_maxSound;
 
 	MxU8 m_nextVariant;      // 0x08
-	MxU8 m_unk0x09;          // 0x09
+	MxBool m_unk0x09;        // 0x09
 	AnimEntry* m_entries[5]; // 0x0c
 	MxS8 m_numEntries;       // 0x20
 	LegoCacheSound* m_sound; // 0x24
