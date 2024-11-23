@@ -24,7 +24,7 @@
 DECOMP_SIZE_ASSERT(CarRace, 0x154)
 
 // GLOBAL: LEGO1 0x100d5d10
-const MxS32 CarRace::g_unk0x100d5d10[] = {
+MxS32 CarRace::g_unk0x100d5d10[] = {
 	CarraceScript::c_srt001sl_RunAnim,
 	CarraceScript::c_srt002sl_RunAnim,
 	CarraceScript::c_srt003sl_RunAnim,
@@ -36,7 +36,7 @@ const MxS32 CarRace::g_unk0x100d5d10[] = {
 };
 
 // GLOBAL: LEGO1 0x100d5d30
-const MxS32 CarRace::g_unk0x100d5d30[] = {
+MxS32 CarRace::g_unk0x100d5d30[] = {
 	CarraceScript::c_srt011sl_RunAnim,
 	CarraceScript::c_srt012sl_RunAnim,
 	CarraceScript::c_srt013sl_RunAnim,
@@ -44,24 +44,24 @@ const MxS32 CarRace::g_unk0x100d5d30[] = {
 };
 
 // GLOBAL: LEGO1 0x100d5d40
-const MxS32 CarRace::g_unk0x100d5d40[] =
+MxS32 CarRace::g_unk0x100d5d40[] =
 	{CarraceScript::c_srt015sl_RunAnim, CarraceScript::c_srt016sl_RunAnim, CarraceScript::c_srt017sl_RunAnim};
 
 // GLOBAL: LEGO1 0x100d5d50
-const MxS32 CarRace::g_unk0x100d5d50[] =
+MxS32 CarRace::g_unk0x100d5d50[] =
 	{CarraceScript::c_srt007rh_RunAnim, CarraceScript::c_srt008rh_RunAnim, CarraceScript::c_srt009rh_RunAnim};
 
 // GLOBAL: LEGO1 0x100d5d60
-const MxS32 CarRace::g_unk0x100d5d60[] =
+MxS32 CarRace::g_unk0x100d5d60[] =
 	{CarraceScript::c_srt010rh_RunAnim, CarraceScript::c_srt011rh_RunAnim, CarraceScript::c_srt012rh_RunAnim};
 
 // GLOBAL: LEGO1 0x100f0c70
 // STRING: LEGO1 0x100f0c48
-const LegoChar* g_strCRCFRNTY6 = "C_RCFRNTY6";
+LegoChar* g_strCRCFRNTY6 = "C_RCFRNTY6";
 
 // GLOBAL: LEGO1 0x100f0c74
 // STRING: LEGO1 0x100f0c3c
-const LegoChar* g_strCRCEDGEY0 = "C_RCEDGEY0";
+LegoChar* g_strCRCEDGEY0 = "C_RCEDGEY0";
 
 // GLOBAL: LEGO1 0x100f0c7c
 static MxS32 g_unk0x100f0c7c = 2;
@@ -237,7 +237,7 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 						m_unk0x14c = g_unk0x100d5d50[rand() % 3];
 					}
 
-					InputManager()->Reset88and336();
+					InputManager()->DisableInputProcessing();
 					InputManager()->SetUnknown336(TRUE);
 					VariableTable()->SetVariable(g_strHIT_WALL_SOUND, "");
 					NavController()->SetDeadZone(NavController()->GetDefaultDeadZone());

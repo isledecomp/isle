@@ -12,15 +12,15 @@ DECOMP_SIZE_ASSERT(Doors, 0x1f8)
 
 // GLOBAL: LEGO1 0x100d8e7c
 // GLOBAL: BETA10 0x101b954c
-const MxFloat g_unk0x100d8e7c = 1000.0f;
+MxFloat g_unk0x100d8e7c = 1000.0f;
 
 // GLOBAL: LEGO1 0x100d8e80
 // GLOBAL: BETA10 0x101b9550
-const MxFloat g_unk0x100d8e80 = 4000.0f;
+MxFloat g_unk0x100d8e80 = 4000.0f;
 
 // GLOBAL: LEGO1 0x100d8e84
 // GLOBAL: BETA10 0x101b9554
-const MxFloat g_unk0x100d8e84 = 6000.0f;
+MxFloat g_unk0x100d8e84 = 6000.0f;
 
 // FUNCTION: LEGO1 0x10066100
 // FUNCTION: BETA10 0x10026850

@@ -72,11 +72,11 @@ public:
 	// CarRace::`scalar deleting destructor'
 
 private:
-	static const MxS32 g_unk0x100d5d10[];
-	static const MxS32 g_unk0x100d5d30[];
-	static const MxS32 g_unk0x100d5d40[];
-	static const MxS32 g_unk0x100d5d50[];
-	static const MxS32 g_unk0x100d5d60[];
+	static MxS32 g_unk0x100d5d10[];
+	static MxS32 g_unk0x100d5d30[];
+	static MxS32 g_unk0x100d5d40[];
+	static MxS32 g_unk0x100d5d50[];
+	static MxS32 g_unk0x100d5d60[];
 
 	MxS32 m_unk0x144;     // 0x144
 	MxS32 m_unk0x148;     // 0x148
