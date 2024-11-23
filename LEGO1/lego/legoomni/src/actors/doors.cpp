@@ -4,10 +4,23 @@
 #include "mxmisc.h"
 #include "mxtimer.h"
 #include "roi/legoroi.h"
+#include "tgl/tglvector.h"
 
 #include <assert.h>
 
 DECOMP_SIZE_ASSERT(Doors, 0x1f8)
+
+// GLOBAL: LEGO1 0x100d8e7c
+// GLOBAL: BETA10 0x101b954c
+MxFloat g_unk0x100d8e7c = 1000.0f;
+
+// GLOBAL: LEGO1 0x100d8e80
+// GLOBAL: BETA10 0x101b9550
+MxFloat g_unk0x100d8e80 = 4000.0f;
+
+// GLOBAL: LEGO1 0x100d8e84
+// GLOBAL: BETA10 0x101b9554
+MxFloat g_unk0x100d8e84 = 6000.0f;
 
 // FUNCTION: LEGO1 0x10066100
 // FUNCTION: BETA10 0x10026850
@@ -25,11 +38,29 @@ MxResult Doors::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 	return m_unk0x1f4 < 0.001 ? SUCCESS : FAILURE;
 }
 
-// STUB: LEGO1 0x10066190
+// FUNCTION: LEGO1 0x10066190
 // FUNCTION: BETA10 0x1002696b
-double Doors::VTable0xcc(float p_float)
+MxFloat Doors::VTable0xcc(float p_float)
 {
-	return 0.0;
+	MxFloat fVar1;
+
+	fVar1 = p_float - m_unk0x158;
+
+	if (fVar1 <= 0.0f) {
+		return 0.0f;
+	}
+
+	if (fVar1 <= g_unk0x100d8e7c) {
+		return fVar1 * 1.570796 / g_unk0x100d8e7c;
+	}
+	else if (fVar1 <= g_unk0x100d8e7c + g_unk0x100d8e80) {
+		return 1.570796012878418; // Pi / 2
+	}
+	else if (fVar1 <= g_unk0x100d8e84) {
+		return (1.0 - ((fVar1 - g_unk0x100d8e80) - g_unk0x100d8e7c) / g_unk0x100d8e7c) * 1.570796;
+	}
+
+	return 0.0f;
 }
 
 // FUNCTION: LEGO1 0x10066250
@@ -71,7 +102,7 @@ void Doors::VTable0x70(float p_float)
 			m_unk0x1f4 = local8;
 		}
 
-		if (m_unk0x158 + 6000.0f < p_float) {
+		if (m_unk0x158 + g_unk0x100d8e84 < p_float) {
 			m_ltDoor->FUN_100a58f0(m_ltDoorLocal);
 			m_rtDoor->FUN_100a58f0(m_rtDoorLocal);
 			m_ltDoor->VTable0x14();

@@ -82,6 +82,12 @@ public:
 	// FUNCTION: BETA10 0x100b0f40
 	void SetLinearVel(MxFloat p_linearVel) { m_linearVel = p_linearVel; }
 
+	// FUNCTION: BETA10 0x100c99e0
+	void SetDeadZone(MxS32 p_deadZone) { m_deadZone = p_deadZone; }
+
+	// FUNCTION: BETA10 0x100c7880
+	void SetTrackDefault(MxS32 p_trackDefault) { m_trackDefault = p_trackDefault; }
+
 	MxFloat GetLinearVel() { return m_linearVel; }
 	MxFloat GetRotationalVel() { return m_rotationalVel; }
 	MxFloat GetMaxLinearVel() { return m_maxLinearVel; }
@@ -90,6 +96,9 @@ public:
 		m_maxLinearVel = p_maxLinearVel;
 		m_trackDefault = 0;
 	}
+
+	// FUNCTION: BETA10 0x100c9a10
+	int GetDefaultDeadZone() { return g_defdeadZone; }
 
 	// SYNTHETIC: LEGO1 0x10054c10
 	// LegoNavController::`scalar deleting destructor'

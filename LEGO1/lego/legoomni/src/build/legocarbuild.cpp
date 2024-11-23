@@ -12,6 +12,7 @@
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
+#include "legomain.h"
 #include "legosoundmanager.h"
 #include "legoutils.h"
 #include "misc.h"
@@ -1254,7 +1255,7 @@ void LegoCarBuild::FUN_10024ef0()
 	m_buildState->m_animationState = LegoVehicleBuildState::e_cutscene;
 	FUN_10025720(FUN_10025d70());
 	m_buildState->m_unk0x4c += 1;
-	FUN_10015820(FALSE, 7);
+	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
 // FUNCTION: LEGO1 0x10024f30

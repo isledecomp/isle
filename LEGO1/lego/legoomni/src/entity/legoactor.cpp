@@ -140,6 +140,7 @@ void LegoActor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 }
 
 // FUNCTION: LEGO1 0x1002d6e0
+// FUNCTION: BETA10 0x1003d6f2
 void LegoActor::Mute(MxBool p_muted)
 {
 	if (m_sound != NULL) {

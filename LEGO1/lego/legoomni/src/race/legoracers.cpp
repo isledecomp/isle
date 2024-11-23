@@ -180,6 +180,18 @@ void LegoRaceCar::FUN_10012de0()
 	g_unk0x100f0b88 = 0;
 }
 
+// FUNCTION: LEGO1 0x10012e00
+// FUNCTION: BETA10 0x100cb129
+void LegoRaceCar::FUN_10012e00()
+{
+	// Note the (likely unintentional) order of operations: `%` is executed before `/`,
+	// so the division is performed at runtime.
+	g_srtsl18to29Index = rand() % sizeof(g_srtsl18to29) / sizeof(g_srtsl18to29[0]);
+	g_srtsl6to10Index = rand() % sizeof(g_srtsl6to10) / sizeof(g_srtsl6to10[0]);
+	g_emptySoundKeyListIndex = rand() % sizeof(g_emptySoundKeyList) / sizeof(g_emptySoundKeyList[0]);
+	g_srtrhIndex = rand() % sizeof(g_srtrh) / sizeof(g_srtrh[0]);
+}
+
 // FUNCTION: LEGO1 0x10012e60
 // FUNCTION: BETA10 0x100cb191
 void LegoRaceCar::SetWorldSpeed(MxFloat p_worldSpeed)
