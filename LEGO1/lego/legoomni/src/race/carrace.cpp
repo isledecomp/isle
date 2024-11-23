@@ -36,16 +36,24 @@ const MxS32 CarRace::g_unk0x100d5d10[] = {
 };
 
 // GLOBAL: LEGO1 0x100d5d30
-const MxS32 CarRace::g_unk0x100d5d30[] = {514, 516, 517, 518};
+const MxS32 CarRace::g_unk0x100d5d30[] = {
+	CarraceScript::c_srt011sl_RunAnim,
+	CarraceScript::c_srt012sl_RunAnim,
+	CarraceScript::c_srt013sl_RunAnim,
+	CarraceScript::c_srt014sl_RunAnim
+};
 
 // GLOBAL: LEGO1 0x100d5d40
-const MxS32 CarRace::g_unk0x100d5d40[] = {519, 520, 521};
+const MxS32 CarRace::g_unk0x100d5d40[] =
+	{CarraceScript::c_srt015sl_RunAnim, CarraceScript::c_srt016sl_RunAnim, CarraceScript::c_srt017sl_RunAnim};
 
 // GLOBAL: LEGO1 0x100d5d50
-const MxS32 CarRace::g_unk0x100d5d50[] = {509, 510, 511};
+const MxS32 CarRace::g_unk0x100d5d50[] =
+	{CarraceScript::c_srt007rh_RunAnim, CarraceScript::c_srt008rh_RunAnim, CarraceScript::c_srt009rh_RunAnim};
 
 // GLOBAL: LEGO1 0x100d5d60
-const MxS32 CarRace::g_unk0x100d5d60[] = {512, 513, 515};
+const MxS32 CarRace::g_unk0x100d5d60[] =
+	{CarraceScript::c_srt010rh_RunAnim, CarraceScript::c_srt011rh_RunAnim, CarraceScript::c_srt012rh_RunAnim};
 
 // GLOBAL: LEGO1 0x100f0c70
 // STRING: LEGO1 0x100f0c48
