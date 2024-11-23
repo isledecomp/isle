@@ -150,7 +150,7 @@ function(add_lego_libraries NAME)
   list(APPEND list_targets roi${ARG_SUFFIX})
   set_property(TARGET roi${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "roi$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
   target_include_directories(roi${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
-  target_link_libraries(roi${ARG_SUFFIX} PRIVATE viewmanager Vec::Vec)
+  target_link_libraries(roi${ARG_SUFFIX} PRIVATE viewmanager${ARG_SUFFIX} Vec::Vec)
 
   add_library(geom${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/geom/legobox.cpp
