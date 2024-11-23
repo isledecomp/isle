@@ -57,11 +57,11 @@ const MxS32 CarRace::g_unk0x100d5d60[] =
 
 // GLOBAL: LEGO1 0x100f0c70
 // STRING: LEGO1 0x100f0c48
-const LegoChar* g_CRCFRNTY6 = "C_RCFRNTY6";
+const LegoChar* g_strCRCFRNTY6 = "C_RCFRNTY6";
 
 // GLOBAL: LEGO1 0x100f0c74
 // STRING: LEGO1 0x100f0c3c
-const LegoChar* g_CRCEDGEY0 = "C_RCEDGEY0";
+const LegoChar* g_strCRCEDGEY0 = "C_RCEDGEY0";
 
 // GLOBAL: LEGO1 0x100f0c7c
 static MxS32 g_unk0x100f0c7c = 2;
@@ -101,7 +101,8 @@ MxResult CarRace::Create(MxDSAction& p_dsAction)
 
 	LegoRaceCar::FUN_10012e00();
 
-	MxS32 streamId = DuneBuggy::GetColorOffset(g_CRCEDGEY0) + (DuneBuggy::GetColorOffset(g_CRCFRNTY6) * 5 + 15) * 2;
+	MxS32 streamId =
+		DuneBuggy::GetColorOffset(g_strCRCEDGEY0) + (DuneBuggy::GetColorOffset(g_strCRCFRNTY6) * 5 + 15) * 2;
 	InvokeAction(Extra::e_start, m_atomId, streamId, NULL);
 	InvokeAction(Extra::e_start, m_atomId, CarraceScript::c_RaceCarDashboard, NULL);
 
@@ -116,12 +117,12 @@ void CarRace::ReadyWorld()
 	assert(m_hideAnim);
 	LegoWorld::ReadyWorld();
 	m_hideAnim->FUN_1006db40(0);
-	MxDSAction local_ac;
 
-	local_ac.SetAtomId(*g_jukeboxScript);
-	local_ac.SetObjectId(16);
+	MxDSAction action;
+	action.SetAtomId(*g_jukeboxScript);
+	action.SetObjectId(16);
 
-	BackgroundAudioManager()->PlayMusic(local_ac, 5, MxPresenter::e_repeating);
+	BackgroundAudioManager()->PlayMusic(action, 5, MxPresenter::e_repeating);
 	AnimationManager()->Resume();
 	FUN_10015820(FALSE, 7);
 
