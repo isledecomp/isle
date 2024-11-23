@@ -36,16 +36,16 @@ const MxS32 CarRace::g_unk0x100d5d10[] = {
 };
 
 // GLOBAL: LEGO1 0x100d5d30
-const MxS32 CarRace::g_unk0x100d5d30[] = {202, 204, 205, 206};
+const MxS32 CarRace::g_unk0x100d5d30[] = {514, 516, 517, 518};
 
 // GLOBAL: LEGO1 0x100d5d40
-const MxS32 CarRace::g_unk0x100d5d40[] = {207, 208, 209};
+const MxS32 CarRace::g_unk0x100d5d40[] = {519, 520, 521};
 
 // GLOBAL: LEGO1 0x100d5d50
 const MxS32 CarRace::g_unk0x100d5d50[] = {509, 510, 511};
 
 // GLOBAL: LEGO1 0x100d5d60
-const MxS32 CarRace::g_unk0x100d5d60[] = {200, 201, 203};
+const MxS32 CarRace::g_unk0x100d5d60[] = {512, 513, 515};
 
 // GLOBAL: LEGO1 0x100f0c70
 // STRING: LEGO1 0x100f0c48
