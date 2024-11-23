@@ -220,7 +220,7 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				break;
 			}
 
-			FUN_10016930(0xb, paramData);
+			FUN_10016930(11, paramData);
 			m_unk0x108 = paramData;
 
 			if (m_unk0x108 == 0x14) {
@@ -238,7 +238,7 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				break;
 			}
 
-			FUN_10016930(0xc, paramData);
+			FUN_10016930(12, paramData);
 
 			m_unk0x10c = paramData;
 

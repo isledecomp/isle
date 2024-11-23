@@ -1,12 +1,14 @@
 #include "carrace.h"
 
 #include "actions/carrace_actions.h"
+#include "actions/jukebox_actions.h"
 #include "dunebuggy.h"
 #include "isle.h"
 #include "legoanimationmanager.h"
 #include "legobackgroundcolor.h"
 #include "legocontrolmanager.h"
 #include "legohideanimpresenter.h"
+#include "legomain.h"
 #include "legonavcontroller.h"
 #include "legopathstruct.h"
 #include "legoracers.h"
@@ -106,8 +108,7 @@ MxResult CarRace::Create(MxDSAction& p_dsAction)
 	InvokeAction(Extra::e_start, m_atomId, streamId, NULL);
 	InvokeAction(Extra::e_start, m_atomId, CarraceScript::c_RaceCarDashboard, NULL);
 
-	// TODO
-	return SUCCESS;
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10016dd0
@@ -120,11 +121,11 @@ void CarRace::ReadyWorld()
 
 	MxDSAction action;
 	action.SetAtomId(*g_jukeboxScript);
-	action.SetObjectId(16);
+	action.SetObjectId(JukeboxScript::c_RaceTrackRoad_Music);
 
 	BackgroundAudioManager()->PlayMusic(action, 5, MxPresenter::e_repeating);
 	AnimationManager()->Resume();
-	FUN_10015820(FALSE, 7);
+	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 
 	m_unk0x144 = g_unk0x100d5d10[rand() & 7];
 
@@ -264,7 +265,7 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				break;
 			}
 
-			FUN_10017820(0xb, paramData);
+			FUN_10017820(11, paramData);
 			m_unk0x108 = paramData;
 
 			if (m_unk0x108 == 0x14) {
@@ -291,7 +292,7 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				break;
 			}
 
-			FUN_10017820(0xc, paramData);
+			FUN_10017820(12, paramData);
 
 			m_unk0x10c = paramData;
 
