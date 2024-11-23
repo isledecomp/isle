@@ -93,12 +93,8 @@ MxResult CarRace::Create(MxDSAction& p_dsAction)
 
 	LegoRaceCar::FUN_10012e00();
 
-	InvokeAction(
-		Extra::e_start,
-		m_atomId,
-		DuneBuggy::GetColorOffset(g_CRCEDGEY0) + (DuneBuggy::GetColorOffset(g_CRCFRNTY6) * 5 + 15) * 2,
-		NULL
-	);
+	MxS32 streamId = DuneBuggy::GetColorOffset(g_CRCEDGEY0) + (DuneBuggy::GetColorOffset(g_CRCFRNTY6) * 5 + 15) * 2;
+	InvokeAction(Extra::e_start, m_atomId, streamId, NULL);
 	InvokeAction(Extra::e_start, m_atomId, CarraceScript::c_RaceCarDashboard, NULL);
 
 	// TODO
