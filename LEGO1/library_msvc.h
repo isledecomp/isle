@@ -744,4 +744,7 @@
 // LIBRARY: BETA10 0x100f8ad0
 // strcmp
 
+// LIBRARY: BETA10 0x100f9610
+// rand
+
 #endif

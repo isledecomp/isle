@@ -28,7 +28,7 @@ void LegoEntity::Init()
 	m_worldSpeed = 0;
 	m_roi = NULL;
 	m_cameraFlag = FALSE;
-	m_filename = NULL;
+	m_siFile = NULL;
 	m_unk0x10 = 0;
 	m_flags = 0;
 	m_actionType = Extra::ActionType::e_unknown;
@@ -37,6 +37,7 @@ void LegoEntity::Init()
 }
 
 // FUNCTION: LEGO1 0x10010650
+// FUNCTION: BETA10 0x1007e39a
 void LegoEntity::ResetWorldTransform(MxBool p_cameraFlag)
 {
 	LegoWorld* world = CurrentWorld();
@@ -66,6 +67,7 @@ void LegoEntity::ResetWorldTransform(MxBool p_cameraFlag)
 }
 
 // FUNCTION: LEGO1 0x10010790
+// FUNCTION: BETA10 0x1007e4f6
 void LegoEntity::SetWorldTransform(const Vector3& p_location, const Vector3& p_direction, const Vector3& p_up)
 {
 	LegoWorld* world = CurrentWorld();
@@ -78,6 +80,7 @@ void LegoEntity::SetWorldTransform(const Vector3& p_location, const Vector3& p_d
 }
 
 // FUNCTION: LEGO1 0x100107e0
+// FUNCTION: BETA10 0x1007e572
 MxResult LegoEntity::Create(MxDSAction& p_dsAction)
 {
 	m_entityId = p_dsAction.GetObjectId();
@@ -87,6 +90,7 @@ MxResult LegoEntity::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10010810
+// FUNCTION: BETA10 0x1007e5b9
 void LegoEntity::Destroy(MxBool p_fromDestructor)
 {
 	if (m_roi) {
@@ -103,11 +107,12 @@ void LegoEntity::Destroy(MxBool p_fromDestructor)
 		}
 	}
 
-	delete[] m_filename;
+	delete[] m_siFile;
 	Init();
 }
 
 // FUNCTION: LEGO1 0x10010880
+// FUNCTION: BETA10 0x1007e6e1
 void LegoEntity::SetWorld()
 {
 	LegoWorld* world = CurrentWorld();
@@ -118,6 +123,7 @@ void LegoEntity::SetWorld()
 }
 
 // FUNCTION: LEGO1 0x100108a0
+// FUNCTION: BETA10 0x1007e724
 void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 {
 	m_roi = p_roi;
@@ -225,6 +231,7 @@ Mx3DPointFloat LegoEntity::GetWorldPosition()
 }
 
 // FUNCTION: LEGO1 0x10010e10
+// FUNCTION: BETA10 0x1007ec97
 void LegoEntity::ParseAction(char* p_extra)
 {
 	char copy[1024];
@@ -232,16 +239,22 @@ void LegoEntity::ParseAction(char* p_extra)
 	strcpy(copy, p_extra);
 
 	if (KeyValueStringParse(actionValue, g_strACTION, copy)) {
-		m_actionType = MatchActionString(strtok(actionValue, g_parseExtraTokens));
+		char* token = strtok(actionValue, g_parseExtraTokens);
+		assert(token);
+		m_actionType = MatchActionString(token);
 
 		if (m_actionType != Extra::ActionType::e_exit) {
-			char* token = strtok(NULL, g_parseExtraTokens);
+			token = strtok(NULL, g_parseExtraTokens);
+			assert(token);
 
-			m_filename = new char[strlen(token) + 1];
-			strcpy(m_filename, token);
+			m_siFile = new char[strlen(token) + 1];
+			assert(m_siFile);
+			strcpy(m_siFile, token);
 
 			if (m_actionType != Extra::ActionType::e_run) {
-				m_targetEntityId = atoi(strtok(NULL, g_parseExtraTokens));
+				token = strtok(NULL, g_parseExtraTokens);
+				assert(token);
+				m_targetEntityId = atoi(token);
 			}
 		}
 	}
@@ -458,7 +471,7 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 	}
 
 	if (m_actionType != Extra::e_unknown) {
-		InvokeAction(m_actionType, MxAtomId(m_filename, e_lowerCase2), m_targetEntityId, this);
+		InvokeAction(m_actionType, MxAtomId(m_siFile, e_lowerCase2), m_targetEntityId, this);
 	}
 	else {
 		switch (GameState()->GetActorId()) {

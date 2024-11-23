@@ -132,6 +132,13 @@ public:
 	void GetKeyboardState();
 	MxResult GetNavigationKeyStates(MxU32& p_keyFlags);
 
+	void Reset88and336()
+	{
+		// This function is hypothesized based on LEGO1 0x100173f5
+		m_unk0x88 = TRUE;
+		m_unk0x336 = FALSE;
+	}
+
 	// SYNTHETIC: LEGO1 0x1005b8d0
 	// LegoInputManager::`scalar deleting destructor'
 

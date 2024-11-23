@@ -10,6 +10,7 @@ class MxDSAction;
 class Vector3;
 
 // VTABLE: LEGO1 0x100d4858
+// VTABLE: BETA10 0x101b9388
 // SIZE 0x68
 class LegoEntity : public MxEntity {
 public:
@@ -38,6 +39,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x1000c2f0
+	// FUNCTION: BETA10 0x10012730
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0064
@@ -116,8 +118,11 @@ protected:
 	// For tokens from the extra string that look like this:
 	// "Action:openram;\lego\scripts\Race\CarRaceR;0"
 	Extra::ActionType m_actionType; // 0x5c
-	char* m_filename;               // 0x60
-	MxS32 m_targetEntityId;         // 0x64
+
+	// variable name verified by BETA10 0x1007eddf
+	char* m_siFile; // 0x60
+
+	MxS32 m_targetEntityId; // 0x64
 };
 
 // SYNTHETIC: LEGO1 0x1000c3b0

@@ -47,6 +47,7 @@ public:
 		return new MxActionNotificationParam(m_type, m_sender, m_action, m_realloc);
 	} // vtable+0x04
 
+	// FUNCTION: BETA10 0x10017970
 	MxDSAction* GetAction() { return m_action; }
 
 protected:

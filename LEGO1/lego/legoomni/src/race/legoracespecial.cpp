@@ -16,6 +16,8 @@ DECOMP_SIZE_ASSERT(LegoCarRaceActor, 0x1a0)
 
 // GLOBAL: LEGO1 0x100f0c68
 // STRING: LEGO1 0x100f0c5c
+// GLOBAL: BETA10 0x101f5b04
+// STRING: BETA10 0x101f5b14
 const char* g_raceState = "RACE_STATE";
 
 // GLOBAL: LEGO1 0x100f7af0
@@ -24,6 +26,8 @@ const char* g_fuel = "FUEL";
 
 // GLOBAL: LEGO1 0x100f0c6c
 // STRING: LEGO1 0x100f0c54
+// GLOBAL: BETA10 0x101f5b08
+// STRING: BETA10 0x101f5b20
 const char* g_racing = "RACING";
 
 // GLOBAL: LEGO1 0x100f7aec

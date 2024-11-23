@@ -41,8 +41,10 @@ MxBackgroundAudioManager* BackgroundAudioManager()
 }
 
 // FUNCTION: LEGO1 0x10015740
+// FUNCTION: BETA10 0x100e4895
 LegoInputManager* InputManager()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetInputManager();
 }
 
@@ -95,8 +97,10 @@ LegoWorld* CurrentWorld()
 }
 
 // FUNCTION: LEGO1 0x100157b0
+// FUNCTION: BETA10 0x100e4a8d
 LegoCharacterManager* CharacterManager()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetCharacterManager();
 }
 
@@ -131,8 +135,10 @@ ViewLODListManager* GetViewLODListManager()
 }
 
 // FUNCTION: LEGO1 0x10015820
+// FUNCTION: BETA10 0x100e4c92
 void FUN_10015820(MxBool p_disable, MxU16 p_flags)
 {
+	assert(LegoOmni::GetInstance());
 	LegoOmni::GetInstance()->FUN_1005b4f0(p_disable, p_flags);
 }
 

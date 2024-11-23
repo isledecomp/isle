@@ -180,6 +180,13 @@ void LegoRaceCar::FUN_10012de0()
 	g_unk0x100f0b88 = 0;
 }
 
+// STUB: LEGO1 0x10012e00
+// STUB: BETA10 0x100cb129
+void LegoRaceCar::FUN_10012e00()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10012e60
 // FUNCTION: BETA10 0x100cb191
 void LegoRaceCar::SetWorldSpeed(MxFloat p_worldSpeed)

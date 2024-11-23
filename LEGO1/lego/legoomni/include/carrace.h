@@ -66,12 +66,22 @@ public:
 	// FUNCTION: BETA10 0x100f16f0
 	void SetSkeleton(RaceSkel* p_skeleton) { m_skeleton = p_skeleton; }
 
+	void FUN_10017820(MxS32 p_param1, MxS16 p_param2);
+
 	// SYNTHETIC: LEGO1 0x10016c70
 	// CarRace::`scalar deleting destructor'
 
 private:
-	undefined m_unk0x144[12]; // 0x144
-	RaceSkel* m_skeleton;     // 0x150
+	static const MxS32 g_unk0x100d5d10[];
+	static const MxS32 g_unk0x100d5d30[];
+	static const MxS32 g_unk0x100d5d40[];
+	static const MxS32 g_unk0x100d5d50[];
+	static const MxS32 g_unk0x100d5d60[];
+
+	MxS32 m_unk0x144;     // 0x144
+	MxS32 m_unk0x148;     // 0x148
+	MxS32 m_unk0x14c;     // 0x14c
+	RaceSkel* m_skeleton; // 0x150
 };
 
 #endif // CARRACE_H

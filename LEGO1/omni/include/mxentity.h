@@ -8,6 +8,7 @@
 #include "mxtypes.h"
 
 // VTABLE: LEGO1 0x100d5390
+// VTABLE: BETA10 0x101b93e8
 // SIZE 0x10
 class MxEntity : public MxCore {
 public:
@@ -33,6 +34,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10001070
+	// FUNCTION: BETA10 0x1000f3a0
 	virtual MxResult Create(MxS32 p_entityId, const MxAtomId& p_atomId)
 	{
 		m_entityId = p_entityId;
@@ -47,7 +49,9 @@ public:
 		return SUCCESS;
 	}
 
+	// FUNCTION: BETA10 0x10031c60
 	MxS32 GetEntityId() { return m_entityId; }
+
 	MxAtomId& GetAtomId() { return m_atomId; }
 
 	void SetEntityId(MxS32 p_entityId) { m_entityId = p_entityId; }
