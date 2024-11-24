@@ -87,6 +87,7 @@ MxResult LegoEntity::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10010810
+// FUNCTION: BETA10 0x1007e5b9
 void LegoEntity::Destroy(MxBool p_fromDestructor)
 {
 	if (m_roi) {
