@@ -15,6 +15,7 @@ MxAtomId* g_jetskiScript = NULL;
 MxAtomId* g_racecarScript = NULL;
 
 // GLOBAL: LEGO1 0x100f452c
+// GLOBAL: BETA10 0x10211514
 MxAtomId* g_carraceScript = NULL;
 
 // GLOBAL: LEGO1 0x100f4530

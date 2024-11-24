@@ -152,18 +152,6 @@ MxLong JetskiRace::HandleClick(LegoEventNotificationParam& p_param)
 	return result;
 }
 
-inline MxS32 JetskiRace::PossiblyGetPlaceOfPlayer()
-{
-	if (m_unk0xfc < m_unk0xf8 && m_unk0x100 < m_unk0xf8) {
-		return 3;
-	}
-	else if (m_unk0xfc < m_unk0xf8 || m_unk0x100 < m_unk0xf8) {
-		return 2;
-	}
-
-	return 1;
-}
-
 // FUNCTION: LEGO1 0x100166a0
 // FUNCTION: BETA10 0x100c8085
 MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
@@ -190,7 +178,17 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				m_unk0xf8++;
 
 				if (g_unk0x100f0c78 == m_unk0xf8) {
-					MxS16 sVar6 = PossiblyGetPlaceOfPlayer();
+					MxS32 position;
+
+					if (m_unk0xfc < m_unk0xf8 && m_unk0x100 < m_unk0xf8) {
+						position = 3;
+					}
+					else if (m_unk0xfc < m_unk0xf8 || m_unk0x100 < m_unk0xf8) {
+						position = 2;
+					}
+					else {
+						position = 1;
+					}
 
 					VariableTable()->SetVariable(g_raceState, "");
 					VariableTable()->SetVariable(g_strHIT_WALL_SOUND, "");
@@ -198,10 +196,10 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 					m_raceState->m_unk0x28 = 2;
 
 					RaceState::Entry* raceStateEntry = m_raceState->GetState(GameState()->GetActorId());
-					raceStateEntry->m_unk0x02 = sVar6;
+					raceStateEntry->m_unk0x02 = position;
 
-					if (raceStateEntry->m_score < sVar6) {
-						raceStateEntry->m_score = sVar6;
+					if (raceStateEntry->m_score < (MxS16) position) {
+						raceStateEntry->m_score = position;
 					}
 
 					m_destLocation = LegoGameState::e_jetrace2;
@@ -215,13 +213,14 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				m_hideAnim->FUN_1006db40(m_unk0xf8 * 200 + 100);
 				result = 1;
 			}
+
 			break;
 		case 11:
 			if (paramData <= m_unk0x108 || paramData >= m_unk0x108 + 5) {
 				break;
 			}
 
-			FUN_10016930(0xb, paramData);
+			FUN_10016930(11, paramData);
 			m_unk0x108 = paramData;
 
 			if (m_unk0x108 == 0x14) {
@@ -232,13 +231,14 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 					((LegoPathActor*) p_param.GetSender())->SetMaxLinearVel(0.1);
 				}
 			}
+
 			break;
 		case 12:
 			if (paramData <= m_unk0x10c || paramData >= m_unk0x10c + 5) {
 				break;
 			}
 
-			FUN_10016930(0xc, paramData);
+			FUN_10016930(12, paramData);
 
 			m_unk0x10c = paramData;
 
@@ -250,6 +250,7 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 					((LegoPathActor*) p_param.GetSender())->SetMaxLinearVel(0.1);
 				}
 			}
+
 			break;
 		}
 	}

@@ -77,6 +77,7 @@ public:
 	virtual MxU32 HandleSkeletonKicks(float p_param1);
 
 	static void FUN_10012de0();
+	static void FUN_10012e00();
 	static void FUN_10013670();
 
 	// SYNTHETIC: LEGO1 0x10014240

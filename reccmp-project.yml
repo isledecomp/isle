@@ -19,3 +19,14 @@ targets:
     source-root: LEGO1
     hash:
       sha256: d91435a40fa31f405fba33b03bd3bd40dcd4ca36ccf8ef6162c6c5ca0d7190e7
+    ghidra:
+      ignore-types:
+        # these classes have been changed by hand to account for changes between LEGO1 and BETA10
+        - LegoCarBuild
+        - LegoCarBuildAnimPresenter
+        - LegoRace
+        - LegoWorld
+      ignore-functions:
+        # strcpy, strlen, ... (arguments are imported incorrectly)
+        - 0x100fa200
+        - 0x100f9780

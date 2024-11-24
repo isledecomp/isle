@@ -65,8 +65,6 @@ public:
 	void FUN_10016930(MxS32 p_param1, MxS16 p_param2);
 
 private:
-	inline MxS32 PossiblyGetPlaceOfPlayer();
-
 	static MxS32 g_unk0x100f0c78;
 };
 
