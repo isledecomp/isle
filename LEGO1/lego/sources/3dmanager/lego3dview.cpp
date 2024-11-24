@@ -74,6 +74,7 @@ void Lego3DView::Destroy()
 }
 
 // FUNCTION: LEGO1 0x100ab100
+// FUNCTION: BETA10 0x1017d038
 BOOL Lego3DView::Add(ViewROI& rROI)
 {
 	assert(m_pViewManager);
@@ -84,6 +85,7 @@ BOOL Lego3DView::Add(ViewROI& rROI)
 }
 
 // FUNCTION: LEGO1 0x100ab170
+// FUNCTION: BETA10 0x1017d096
 BOOL Lego3DView::Remove(ViewROI& rROI)
 {
 	assert(m_pViewManager);
@@ -99,6 +101,7 @@ BOOL Lego3DView::Remove(ViewROI& rROI)
 }
 
 // FUNCTION: LEGO1 0x100ab1b0
+// FUNCTION: BETA10 0x1017d123
 BOOL Lego3DView::SetPointOfView(ViewROI& rROI)
 {
 	Tgl::FloatMatrix4 transformation;

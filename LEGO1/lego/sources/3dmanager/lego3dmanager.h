@@ -73,6 +73,7 @@ private:
 //
 // Lego3DManager implementaion
 
+// FUNCTION: BETA10 0x10079bd0
 inline BOOL Lego3DManager::Add(ViewROI& rROI)
 {
 	assert(m_pLego3DView);
@@ -80,6 +81,7 @@ inline BOOL Lego3DManager::Add(ViewROI& rROI)
 	return m_pLego3DView->Add(rROI);
 }
 
+// FUNCTION: BETA10 0x10037430
 inline BOOL Lego3DManager::Remove(ViewROI& rROI)
 {
 	assert(m_pLego3DView);
@@ -87,6 +89,7 @@ inline BOOL Lego3DManager::Remove(ViewROI& rROI)
 	return m_pLego3DView->Remove(rROI);
 }
 
+// FUNCTION: BETA10 0x100d8990
 inline BOOL Lego3DManager::SetPointOfView(ViewROI& rROI)
 {
 	assert(m_pLego3DView);
@@ -94,6 +97,7 @@ inline BOOL Lego3DManager::SetPointOfView(ViewROI& rROI)
 	return m_pLego3DView->SetPointOfView(rROI);
 }
 
+// FUNCTION: BETA10 0x1004af70
 inline BOOL Lego3DManager::Moved(ViewROI& rROI)
 {
 	assert(m_pLego3DView);
