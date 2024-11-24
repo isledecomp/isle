@@ -403,6 +403,7 @@ MxBool LegoNavController::CalculateNewPosDir(
 }
 
 // FUNCTION: LEGO1 0x10055500
+// FUNCTION: BETA10 0x1009bff8
 MxResult LegoNavController::UpdateLocation(const char* p_location)
 {
 	MxResult result = FAILURE;
@@ -436,6 +437,7 @@ MxResult LegoNavController::UpdateLocation(const char* p_location)
 }
 
 // FUNCTION: LEGO1 0x10055620
+// FUNCTION: BETA10 0x1009c145
 MxResult LegoNavController::UpdateLocation(MxU32 p_location)
 {
 	MxResult result = FAILURE;

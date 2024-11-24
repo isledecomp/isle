@@ -222,6 +222,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x10083500
+// FUNCTION: BETA10 0x10074345
 LegoROI* LegoCharacterManager::GetActorROI(const char* p_name, MxBool p_createEntity)
 {
 	LegoCharacter* character = NULL;
@@ -428,6 +429,7 @@ void LegoCharacterManager::ReleaseAutoROI(LegoROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x10084010
+// FUNCTION: BETA10 0x10074e20
 void LegoCharacterManager::RemoveROI(LegoROI* p_roi)
 {
 	VideoManager()->Get3DManager()->Remove(*p_roi);
@@ -944,6 +946,7 @@ void LegoCharacterManager::SetCustomizeAnimFile(const char* p_value)
 }
 
 // FUNCTION: LEGO1 0x10085210
+// FUNCTION: BETA10 0x10076995
 LegoROI* LegoCharacterManager::CreateAutoROI(const char* p_name, const char* p_lodName, MxBool p_createEntity)
 {
 	LegoROI* roi = NULL;

@@ -99,7 +99,7 @@ void LegoEntity::Destroy(MxBool p_fromDestructor)
 			CharacterManager()->ReleaseActor(m_roi);
 		}
 		else {
-			VideoManager()->Get3DManager()->GetLego3DView()->Remove(*m_roi);
+			VideoManager()->Get3DManager()->Remove(*m_roi);
 			delete m_roi;
 		}
 	}
@@ -119,6 +119,7 @@ void LegoEntity::SetWorld()
 }
 
 // FUNCTION: LEGO1 0x100108a0
+// FUNCTION: BETA10 0x1007e724
 void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 {
 	m_roi = p_roi;
@@ -137,7 +138,7 @@ void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 		}
 
 		m_roi->SetEntity(this);
-		VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_roi);
+		VideoManager()->Get3DManager()->Moved(*m_roi);
 
 		if (p_bool1) {
 			ClearFlag(c_bit1);
@@ -149,6 +150,7 @@ void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 }
 
 // FUNCTION: LEGO1 0x100109b0
+// FUNCTION: BETA10 0x1007e8b8
 void LegoEntity::SetLocation(const Vector3& p_location, const Vector3& p_direction, const Vector3& p_up, MxBool p_und)
 {
 	Mx3DPointFloat direction;
@@ -174,7 +176,7 @@ void LegoEntity::SetLocation(const Vector3& p_location, const Vector3& p_directi
 		);
 
 		m_roi->UpdateTransformationRelativeToParent(mat);
-		VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_roi);
+		VideoManager()->Get3DManager()->Moved(*m_roi);
 
 		if (p_und) {
 			FUN_10010c30();

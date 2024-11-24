@@ -172,6 +172,7 @@ LegoTreeNode* GetTreeNode(LegoTreeNode* p_node, MxU32 p_index)
 }
 
 // FUNCTION: LEGO1 0x1003e050
+// FUNCTION: BETA10 0x100d3abc
 void FUN_1003e050(LegoAnimPresenter* p_presenter)
 {
 	MxMatrix viewMatrix;
