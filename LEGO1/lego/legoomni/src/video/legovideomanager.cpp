@@ -69,6 +69,7 @@ MxResult LegoVideoManager::CreateDirect3D()
 }
 
 // FUNCTION: LEGO1 0x1007ac40
+// FUNCTION: BETA10 0x100d5cf4
 MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread)
 {
 	MxResult result = FAILURE;
@@ -219,6 +220,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x1007b5e0
+// FUNCTION: BETA10 0x100d6816
 void LegoVideoManager::Destroy()
 {
 	if (m_cursorSurface != NULL) {

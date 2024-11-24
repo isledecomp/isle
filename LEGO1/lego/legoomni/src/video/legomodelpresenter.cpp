@@ -199,6 +199,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x1007ff70
+// FUNCTION: BETA10 0x10099061
 MxResult LegoModelPresenter::FUN_1007ff70(
 	MxDSChunk& p_chunk,
 	LegoEntity* p_entity,
@@ -211,8 +212,8 @@ MxResult LegoModelPresenter::FUN_1007ff70(
 	ParseExtra();
 
 	if (m_roi == NULL && (result = CreateROI(&p_chunk)) == SUCCESS && p_entity != NULL) {
-		VideoManager()->Get3DManager()->GetLego3DView()->Add(*m_roi);
-		VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_roi);
+		VideoManager()->Get3DManager()->Add(*m_roi);
+		VideoManager()->Get3DManager()->Moved(*m_roi);
 	}
 
 	if (m_roi != NULL) {
@@ -266,8 +267,8 @@ void LegoModelPresenter::ReadyTickle()
 			m_subscriber->FreeDataChunk(chunk);
 
 			if (result == SUCCESS) {
-				VideoManager()->Get3DManager()->GetLego3DView()->Add(*m_roi);
-				VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_roi);
+				VideoManager()->Get3DManager()->Add(*m_roi);
+				VideoManager()->Get3DManager()->Moved(*m_roi);
 
 				if (m_compositePresenter != NULL && m_compositePresenter->IsA("LegoEntityPresenter")) {
 					((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->SetROI(m_roi, TRUE, TRUE);
@@ -289,6 +290,7 @@ void LegoModelPresenter::ReadyTickle()
 }
 
 // FUNCTION: LEGO1 0x100801b0
+// FUNCTION: BETA10 0x10099443
 void LegoModelPresenter::ParseExtra()
 {
 	MxU16 extraLength;
@@ -319,8 +321,8 @@ void LegoModelPresenter::ParseExtra()
 					roiList.erase(it);
 
 					m_addedToView = TRUE;
-					VideoManager()->Get3DManager()->GetLego3DView()->Add(*m_roi);
-					VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_roi);
+					VideoManager()->Get3DManager()->Add(*m_roi);
+					VideoManager()->Get3DManager()->Moved(*m_roi);
 					break;
 				}
 			}

@@ -138,6 +138,7 @@ void LegoPointOfViewController::AffectPointOfView()
 }
 
 // FUNCTION: LEGO1 0x10065930
+// FUNCTION: BETA10 0x100c724d
 MxResult LegoPointOfViewController::Tickle()
 {
 	ViewROI* pov = m_lego3DView->GetPointOfView();

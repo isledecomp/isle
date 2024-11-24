@@ -206,6 +206,7 @@ void LegoGameState::RemoveActor()
 }
 
 // FUNCTION: LEGO1 0x10039940
+// FUNCTION: BETA10 0x10084069
 void LegoGameState::ResetROI()
 {
 	if (m_actorId) {
@@ -215,8 +216,8 @@ void LegoGameState::ResetROI()
 			LegoROI* roi = actor->GetROI();
 
 			if (roi) {
-				VideoManager()->Get3DManager()->GetLego3DView()->Remove(*roi);
-				VideoManager()->Get3DManager()->GetLego3DView()->Add(*roi);
+				VideoManager()->Get3DManager()->Remove(*roi);
+				VideoManager()->Get3DManager()->Add(*roi);
 			}
 		}
 	}
