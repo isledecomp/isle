@@ -455,7 +455,7 @@ MxU32 LegoPathActor::VTable0x6c(
 		if (plpas.find(*itpa) != plpas.end()) {
 			LegoPathActor* actor = *itpa;
 
-			if (this != actor && !(actor->GetState() & 0x100)) {
+			if (this != actor && !(actor->GetState() & LegoPathActor::c_bit9)) {
 				LegoROI* roi = actor->GetROI();
 
 				if (roi != NULL && (roi->GetVisibility() || actor->GetCameraFlag())) {

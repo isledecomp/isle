@@ -74,6 +74,13 @@ MxS32 Act2Actor::VTable0xa0()
 	return 0;
 }
 
+// STUB: LEGO1 0x10019520
+// STUB: BETA10 0x1000d4d6
+void Act2Actor::FUN_10019520()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1001a180
 MxS32 Act2Actor::VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3)
 {
