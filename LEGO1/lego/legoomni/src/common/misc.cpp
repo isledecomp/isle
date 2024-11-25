@@ -143,8 +143,10 @@ void FUN_10015820(MxBool p_disable, MxU16 p_flags)
 }
 
 // FUNCTION: LEGO1 0x10015840
+// FUNCTION: BETA10 0x100e4ce4
 LegoROI* FindROI(const char* p_name)
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->FindROI(p_name);
 }
 

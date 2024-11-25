@@ -22,7 +22,8 @@ extern const char* g_strHIT_WALL_SOUND;
 class LegoPathActor : public LegoActor {
 public:
 	enum {
-		c_bit3 = 0x04
+		c_bit3 = 0x04,
+		c_bit9 = 0x100
 	};
 
 	LegoPathActor();

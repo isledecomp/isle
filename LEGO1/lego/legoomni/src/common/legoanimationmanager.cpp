@@ -878,6 +878,13 @@ void LegoAnimationManager::DeleteAnimations()
 	m_suspended = suspended;
 }
 
+// STUB: LEGO1 0x10060480
+// STUB: BETA10 0x100412a9
+void LegoAnimationManager::FUN_10060480(LegoChar* p_param1[], undefined4 p_param2)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x100604d0
 // FUNCTION: BETA10 0x10041335
 void LegoAnimationManager::FUN_100604d0(MxBool p_unk0x08)
@@ -885,6 +892,13 @@ void LegoAnimationManager::FUN_100604d0(MxBool p_unk0x08)
 	for (MxS32 i = 0; i < (MxS32) sizeOfArray(g_characters); i++) {
 		g_characters[i].m_unk0x08 = p_unk0x08;
 	}
+}
+
+// STUB: LEGO1 0x100604f0
+// STUB: BETA10 0x1004137b
+void LegoAnimationManager::FUN_100604f0(MxS32* p_param1, undefined4 p_param2)
+{
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x10060540
@@ -1001,7 +1015,7 @@ MxResult LegoAnimationManager::FUN_100605e0(
 				LegoPathActor* actor = UserActor();
 
 				if (actor != NULL) {
-					actor->SetState(4);
+					actor->SetState(LegoPathActor::c_bit3);
 					actor->SetWorldSpeed(0.0f);
 				}
 			}
@@ -2762,7 +2776,7 @@ void LegoAnimationManager::FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x
 
 		LegoPathActor* actor = UserActor();
 		if (actor != NULL) {
-			actor->SetState(4);
+			actor->SetState(LegoPathActor::c_bit3);
 			actor->SetWorldSpeed(0.0f);
 		}
 
@@ -2821,6 +2835,13 @@ void LegoAnimationManager::FUN_10064b50(MxLong p_time)
 			viewROI->GetWorldVelocity()
 		);
 	}
+}
+
+// STUB: LEGO1 0x10064ee0
+undefined LegoAnimationManager::FUN_10064ee0(MxU32 p_param)
+{
+	// TODO
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x10064ff0

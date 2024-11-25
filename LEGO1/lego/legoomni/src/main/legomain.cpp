@@ -405,6 +405,7 @@ void LegoOmni::DeleteObject(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x1005b270
+// FUNCTION: BETA10 0x1008ea6d
 LegoROI* LegoOmni::FindROI(const char* p_name)
 {
 	ViewManager* viewManager = GetVideoManager()->Get3DManager()->GetLego3DView()->GetViewManager();

@@ -18,6 +18,8 @@ public:
 	MxResult VTable0x9c() override;                                         // vtable+0x9c
 	MxS32 VTable0xa0() override;                                            // vtable+0xa0
 
+	void FUN_10019520();
+
 	// SYNTHETIC: LEGO1 0x1001a0a0
 	// Act2Actor::`scalar deleting destructor'
 

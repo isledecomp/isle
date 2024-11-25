@@ -66,6 +66,15 @@ public:
 	void SetUnknown0x1138(Act2Actor* p_unk0x1138) { m_unk0x1138 = p_unk0x1138; }
 	void SetUnknown0x1150(undefined4 p_unk0x1150) { m_unk0x1150 = p_unk0x1150; }
 
+	undefined4 FUN_10052560(
+		undefined4 p_param1,
+		MxBool p_param2,
+		MxBool p_param3,
+		Mx3DPointFloat* p_param4,
+		Mx3DPointFloat* p_param5,
+		Mx3DPointFloat* p_param6
+	);
+
 	// SYNTHETIC: LEGO1 0x1004fe20
 	// LegoAct2::`scalar deleting destructor'
 
@@ -79,9 +88,9 @@ private:
 	undefined4 m_unk0x10c4;      // 0x10c4
 	undefined4 m_unk0x10c8;      // 0x10c8
 	LegoAct2State* m_gameState;  // 0x10cc
-	undefined4 m_unk0x10d0;      // 0x10d0
+	MxS32 m_unk0x10d0;           // 0x10d0
 	char* m_unk0x10d4;           // 0x10d4
-	undefined4 m_unk0x10d8;      // 0x10d8
+	LegoROI* m_unk0x10d8;        // 0x10d8
 	MxMatrix m_unk0x10dc;        // 0x10dc
 	undefined4 m_unk0x1124;      // 0x1124
 	undefined4 m_unk0x1128;      // 0x1128
