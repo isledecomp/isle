@@ -67,18 +67,18 @@ void Act2Actor::SetWorldSpeed(MxFloat p_worldSpeed)
 	m_unk0x44 = 0;
 }
 
-// STUB: LEGO1 0x100195a0
-MxS32 Act2Actor::VTable0xa0()
-{
-	// TODO
-	return 0;
-}
-
 // STUB: LEGO1 0x10019520
 // STUB: BETA10 0x1000d4d6
 void Act2Actor::FUN_10019520()
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x100195a0
+MxS32 Act2Actor::VTable0xa0()
+{
+	// TODO
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x1001a180

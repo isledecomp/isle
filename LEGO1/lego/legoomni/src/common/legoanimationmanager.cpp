@@ -894,6 +894,13 @@ void LegoAnimationManager::FUN_100604d0(MxBool p_unk0x08)
 	}
 }
 
+// STUB: LEGO1 0x100604f0
+// STUB: BETA10 0x1004137b
+void LegoAnimationManager::FUN_100604f0(MxS32* p_param1, undefined4 p_param2)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10060540
 // FUNCTION: BETA10 0x1004140f
 void LegoAnimationManager::FUN_10060540(MxBool p_unk0x29)
@@ -2477,13 +2484,6 @@ MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoUnkn
 	boundingBox.Max() = p1;
 	boundingBox.Max().Add(vec);
 	return GetViewManager()->IsBoundingBoxInFrustum(boundingBox) == FALSE;
-}
-
-// STUB: LEGO1 0x100604f0
-// STUB: BETA10 0x1004137b
-void LegoAnimationManager::FUN_100604f0(MxS32* p_param1, undefined4 p_param2)
-{
-	// TODO
 }
 
 // FUNCTION: LEGO1 0x10064120
