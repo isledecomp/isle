@@ -95,7 +95,7 @@ MxLong Act2Brick::Notify(MxParam& p_param)
 void Act2Brick::FUN_1007a9d0()
 {
 	if (m_unk0x154 != NULL) {
-		SoundManager()->GetCacheSoundManager()->FUN_1003db80(m_unk0x154);
+		SoundManager()->GetCacheSoundManager()->Stop(m_unk0x154);
 		m_unk0x154 = NULL;
 	}
 }

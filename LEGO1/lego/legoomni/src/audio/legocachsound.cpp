@@ -181,7 +181,7 @@ MxResult LegoCacheSound::Play(const char* p_name, MxBool p_looping)
 }
 
 // FUNCTION: LEGO1 0x10006b80
-void LegoCacheSound::FUN_10006b80()
+void LegoCacheSound::Stop()
 {
 	DWORD dwStatus;
 	m_dsBuffer->GetStatus(&dwStatus);

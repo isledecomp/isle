@@ -14,14 +14,14 @@ LegoCacheSoundManager::~LegoCacheSoundManager()
 	while (!m_set.empty()) {
 		sound = (*m_set.begin()).GetSound();
 		m_set.erase(m_set.begin());
-		sound->FUN_10006b80();
+		sound->Stop();
 		delete sound;
 	}
 
 	while (!m_list.empty()) {
 		sound = (*m_list.begin()).GetSound();
 		m_list.erase(m_list.begin());
-		sound->FUN_10006b80();
+		sound->Stop();
 		// DECOMP: delete should not be inlined here
 		delete sound;
 	}
@@ -51,7 +51,7 @@ MxResult LegoCacheSoundManager::Tickle()
 			listIter++;
 		}
 		else {
-			sound->FUN_10006b80();
+			sound->Stop();
 			m_list.erase(listIter++);
 			delete sound;
 		}
@@ -134,7 +134,7 @@ LegoCacheSound* LegoCacheSoundManager::Play(LegoCacheSound* p_sound, const char*
 
 // FUNCTION: LEGO1 0x1003db80
 // FUNCTION: BETA10 0x100656a7
-void LegoCacheSoundManager::FUN_1003db80(LegoCacheSound*& p_sound)
+void LegoCacheSoundManager::Stop(LegoCacheSound*& p_sound)
 {
 #ifdef COMPAT_MODE
 	Set100d6b4c::iterator setIter;
@@ -143,7 +143,7 @@ void LegoCacheSoundManager::FUN_1003db80(LegoCacheSound*& p_sound)
 	for (Set100d6b4c::iterator setIter = m_set.begin(); setIter != m_set.end(); setIter++) {
 #endif
 		if ((*setIter).GetSound() == p_sound) {
-			p_sound->FUN_10006b80();
+			p_sound->Stop();
 			return;
 		}
 	}
@@ -160,7 +160,7 @@ void LegoCacheSoundManager::FUN_1003db80(LegoCacheSound*& p_sound)
 
 		LegoCacheSound* sound = (*listIter).GetSound();
 		if (sound == p_sound) {
-			p_sound->FUN_10006b80();
+			p_sound->Stop();
 			return;
 		}
 	}
@@ -176,7 +176,7 @@ void LegoCacheSoundManager::Destroy(LegoCacheSound*& p_sound)
 	for (Set100d6b4c::iterator setIter = m_set.begin(); setIter != m_set.end(); setIter++) {
 #endif
 		if ((*setIter).GetSound() == p_sound) {
-			p_sound->FUN_10006b80();
+			p_sound->Stop();
 
 			delete p_sound;
 			m_set.erase(setIter);
@@ -196,7 +196,7 @@ void LegoCacheSoundManager::Destroy(LegoCacheSound*& p_sound)
 
 		LegoCacheSound* sound = (*listIter).GetSound();
 		if (sound == p_sound) {
-			p_sound->FUN_10006b80();
+			p_sound->Stop();
 
 			delete sound;
 			m_list.erase(listIter);

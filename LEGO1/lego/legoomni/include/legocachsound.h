@@ -41,7 +41,7 @@ public:
 
 	LegoCacheSound* Clone();
 	MxResult Play(const char* p_name, MxBool p_looping);
-	void FUN_10006b80();
+	void Stop();
 	void FUN_10006be0();
 	void SetDistance(MxS32 p_min, MxS32 p_max);
 	void Mute(MxBool p_mute);
