@@ -22,7 +22,7 @@ MxLong Act2Brick::g_lastHitActorTime = 0;
 // FUNCTION: BETA10 0x10012a30
 Act2Brick::Act2Brick()
 {
-	m_unk0x154 = NULL;
+	m_whistleSound = NULL;
 	m_unk0x164 = 0;
 }
 
@@ -78,8 +78,8 @@ MxLong Act2Brick::Notify(MxParam& p_param)
 	if (((MxNotificationParam&) p_param).GetNotification() == c_notificationClick && m_roi->GetVisibility()) {
 		m_roi->SetVisibility(FALSE);
 
-		if (m_unk0x154 != NULL) {
-			FUN_1007a9d0();
+		if (m_whistleSound != NULL) {
+			StopSound();
 		}
 
 		MxNotificationParam param(c_notificationType22, this);
@@ -92,10 +92,10 @@ MxLong Act2Brick::Notify(MxParam& p_param)
 
 // FUNCTION: LEGO1 0x1007a9d0
 // FUNCTION: BETA10 0x1001300f
-void Act2Brick::FUN_1007a9d0()
+void Act2Brick::StopSound()
 {
-	if (m_unk0x154 != NULL) {
-		SoundManager()->GetCacheSoundManager()->Stop(m_unk0x154);
-		m_unk0x154 = NULL;
+	if (m_whistleSound != NULL) {
+		SoundManager()->GetCacheSoundManager()->Stop(m_whistleSound);
+		m_whistleSound = NULL;
 	}
 }
