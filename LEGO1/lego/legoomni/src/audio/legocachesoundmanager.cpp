@@ -132,6 +132,40 @@ LegoCacheSound* LegoCacheSoundManager::Play(LegoCacheSound* p_sound, const char*
 	return NULL;
 }
 
+// FUNCTION: LEGO1 0x1003db80
+// FUNCTION: BETA10 0x100656a7
+void LegoCacheSoundManager::FUN_1003db80(LegoCacheSound*& p_sound)
+{
+#ifdef COMPAT_MODE
+	Set100d6b4c::iterator setIter;
+	for (setIter = m_set.begin(); setIter != m_set.end(); setIter++) {
+#else
+	for (Set100d6b4c::iterator setIter = m_set.begin(); setIter != m_set.end(); setIter++) {
+#endif
+		if ((*setIter).GetSound() == p_sound) {
+			p_sound->FUN_10006b80();
+			return;
+		}
+	}
+
+#ifdef COMPAT_MODE
+	List100d6b4c::iterator listIter;
+	for (listIter = m_list.begin();; listIter++) {
+#else
+	for (List100d6b4c::iterator listIter = m_list.begin();; listIter++) {
+#endif
+		if (listIter == m_list.end()) {
+			return;
+		}
+
+		LegoCacheSound* sound = (*listIter).GetSound();
+		if (sound == p_sound) {
+			p_sound->FUN_10006b80();
+			return;
+		}
+	}
+}
+
 // FUNCTION: LEGO1 0x1003dc40
 void LegoCacheSoundManager::Destroy(LegoCacheSound*& p_sound)
 {

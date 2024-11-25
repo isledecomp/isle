@@ -58,6 +58,7 @@ public:
 	LegoCacheSound* ManageSoundEntry(LegoCacheSound* p_sound);
 	LegoCacheSound* Play(const char* p_key, const char* p_name, MxBool p_looping);
 	LegoCacheSound* Play(LegoCacheSound* p_sound, const char* p_name, MxBool p_looping);
+	void FUN_1003db80(LegoCacheSound*& p_sound);
 	void Destroy(LegoCacheSound*& p_sound);
 
 private:
