@@ -26,7 +26,7 @@ LegoActor::LegoActor()
 LegoActor::~LegoActor()
 {
 	if (m_sound) {
-		m_sound->FUN_10006b80();
+		m_sound->Stop();
 	}
 }
 
