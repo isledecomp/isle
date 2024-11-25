@@ -880,7 +880,7 @@ void LegoAnimationManager::DeleteAnimations()
 
 // STUB: LEGO1 0x10060480
 // STUB: BETA10 0x100412a9
-void LegoAnimationManager::FUN_10060480(LegoChar* p_param1[], int p_param2)
+void LegoAnimationManager::FUN_10060480(LegoChar* p_param1[], undefined4 p_param2)
 {
 	// TODO
 }

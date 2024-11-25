@@ -137,7 +137,7 @@ MxResult LegoAct2::Tickle()
 
 	if (!m_worldStarted) {
 		LegoWorld::Tickle();
-		return 0;
+		return SUCCESS;
 	}
 
 	switch (m_unk0x10c4) {
@@ -181,7 +181,7 @@ MxResult LegoAct2::Tickle()
 
 		AnimationManager()->EnableCamAnims(TRUE);
 		AnimationManager()->FUN_1005f6d0(TRUE);
-		AnimationManager()->FUN_100604f0(&g_unk0x100f43f0[0], sizeOfArray(g_unk0x100f43f0));
+		AnimationManager()->FUN_100604f0(g_unk0x100f43f0, sizeOfArray(g_unk0x100f43f0));
 		AnimationManager()->FUN_10060480(g_unk0x100f4410, sizeOfArray(g_unk0x100f4410));
 		break;
 	case 4:
@@ -234,7 +234,7 @@ MxResult LegoAct2::Tickle()
 		break;
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x10050380
