@@ -44,12 +44,12 @@ LegoAct2::LegoAct2()
 {
 	m_unk0x10c4 = 0;
 	m_gameState = NULL;
-	m_unk0x10d8 = 0;
+	m_unk0x10d8 = NULL;
 	m_unk0x1128 = 0;
-	m_unk0x10c2 = '\0';
+	m_unk0x10c2 = 0;
 	m_unk0x1130 = 0;
-	m_unk0x10c0 = '\0';
-	m_unk0x10c1 = '\0';
+	m_unk0x10c0 = 0;
+	m_unk0x10c1 = 0;
 	m_unk0x1138 = NULL;
 	m_unk0x1140 = 0;
 	m_unk0x1144 = 0;
