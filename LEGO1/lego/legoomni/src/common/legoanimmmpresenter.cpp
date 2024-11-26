@@ -466,6 +466,12 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 	return TRUE;
 }
 
+// FUNCTION: LEGO1 0x1004b830
+MxBool LegoAnimMMPresenter::FUN_1004b830()
+{
+	return !(m_unk0x58 < 6);
+}
+
 // FUNCTION: LEGO1 0x1004b840
 // FUNCTION: BETA10 0x1004d033
 void LegoAnimMMPresenter::FUN_1004b840()
