@@ -20,23 +20,23 @@ DECOMP_SIZE_ASSERT(LegoAct2, 0x1154)
 DECOMP_SIZE_ASSERT(LegoAct2State, 0x10)
 
 // GLOBAL: LEGO1 0x100f4474
-static undefined4 g_unk0x100f4474 = 0;
+undefined4 g_unk0x100f4474 = 0;
 
 // GLOBAL: LEGO1 0x100f43f0
 // GLOBAL: BETA10 0x101e14a8
-static MxS32 g_unk0x100f43f0[] = {
+MxS32 g_unk0x100f43f0[] = {
 	Act2mainScript::c_tns030bd_RunAnim,
 	Act2mainScript::c_tns030pg_RunAnim,
 	Act2mainScript::c_tns030rd_RunAnim,
 	Act2mainScript::c_tns030sy_RunAnim,
-	Act2mainScript::c_tns051in_RunAnim,
-	Act2mainScript::c_tra045la_RunAnim,
-	Act2mainScript::c_tns030bd_RunAnim,
+	Act2mainScript::c_snsx35ro_RunAnim,
+	Act2mainScript::c_snsx36ro_RunAnim,
+	Act2mainScript::c_snsx37ro_RunAnim,
 	Act2mainScript::c_snsx48cl_RunAnim
 };
 
 // GLOBAL: LEGO1 0x100f4410
-static LegoChar* g_unk0x100f4410[] = {"bd", "pg", "rd", "sy", "ro", "cl"};
+LegoChar* g_unk0x100f4410[] = {"bd", "pg", "rd", "sy", "ro", "cl"};
 
 // FUNCTION: LEGO1 0x1004fce0
 // FUNCTION: BETA10 0x1003a5a0
