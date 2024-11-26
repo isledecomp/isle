@@ -12,7 +12,7 @@ DECOMP_SIZE_ASSERT(LegoJetskiRaceActor, 0x1a8)
 
 // GLOBAL: LEGO1 0x100da044
 // GLOBAL: BETA10 0x101be9fc
-const MxFloat g_eight = 8.0f;
+MxFloat g_unk0x100da044 = 8.0f;
 
 // FUNCTION: LEGO1 0x10080ef0
 // FUNCTION: BETA10 0x100a8990
@@ -60,8 +60,8 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 		if (p_edge == LegoPathController::GetControlEdgeA(12)) {
 			m_state = 1;
 
-			if (m_worldSpeed < g_eight) {
-				m_worldSpeed = g_eight;
+			if (m_worldSpeed < g_unk0x100da044) {
+				m_worldSpeed = g_unk0x100da044;
 			}
 
 			m_destEdge = LegoPathController::GetControlEdgeA(13);
@@ -70,8 +70,8 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 		else if (p_edge == LegoPathController::GetControlEdgeA(14)) {
 			m_state = 1;
 
-			if (m_worldSpeed < g_eight) {
-				m_worldSpeed = g_eight;
+			if (m_worldSpeed < g_unk0x100da044) {
+				m_worldSpeed = g_unk0x100da044;
 			}
 
 			m_destEdge = LegoPathController::GetControlEdgeA(15);
