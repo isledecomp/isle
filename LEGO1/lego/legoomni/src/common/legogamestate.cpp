@@ -647,55 +647,55 @@ void LegoGameState::StopArea(Area p_area)
 		break;
 	case e_elevride:
 	case e_elevride2:
-		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevRide_Background_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevRide_Info_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevRide_Two_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevRide_Three_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter1_3_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter2_3_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter3_1_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter3_2_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter2_1_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter1_2_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter3_Bitmap, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevRide_Background_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevRide_Info_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevRide_Two_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevRide_Three_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter1_3_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter2_3_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter3_1_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter3_2_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter2_1_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter1_2_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Meter3_Bitmap, *g_isleScript, IsleScript::c__Isle);
 		break;
 	case e_elevopen:
-		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevOpen_Background_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevOpen_LeftArrow_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevOpen_RightArrow_Ctl, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevOpen_Background_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevOpen_LeftArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevOpen_RightArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
 		break;
 	case e_seaview:
-		RemoveFromWorld(*g_isleScript, IsleScript::c_SeaView_Background_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_SeaView_LeftArrow_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_SeaView_RightArrow_Ctl, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_SeaView_Background_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_SeaView_LeftArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_SeaView_RightArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
 		break;
 	case e_observe:
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Background_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_LeftArrow_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_RightArrow_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Plane_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Sun_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Moon_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_SkyColor_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_LCab_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_RCab_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_GlobeRArrow_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_GlobeLArrow_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Globe1_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Globe2_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Globe3_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Globe4_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Globe5_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Globe6_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Draw1_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Draw2_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_Radio_Ctl, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Background_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_LeftArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_RightArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Plane_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Sun_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Moon_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_SkyColor_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_LCab_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_RCab_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_GlobeRArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_GlobeLArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Globe1_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Globe2_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Globe3_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Globe4_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Globe5_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Globe6_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Draw1_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Observe_Draw2_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_Radio_Ctl, *g_isleScript, IsleScript::c__Isle);
 		break;
 	case e_elevdown:
-		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevDown_Background_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevDown_LeftArrow_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevDown_RightArrow_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevDown_Elevator_Ctl, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevDown_Background_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevDown_LeftArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevDown_RightArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_ElevDown_Elevator_Ctl, *g_isleScript, IsleScript::c__Isle);
 		break;
 	case e_regbook:
 		InvokeAction(Extra::e_stop, *g_regbookScript, RegbookScript::c__StartUp, NULL);
@@ -721,10 +721,10 @@ void LegoGameState::StopArea(Area p_area)
 		InvokeAction(Extra::e_close, *g_garageScript, GarageScript::c__StartUp, NULL);
 		break;
 	case e_garadoor:
-		RemoveFromWorld(*g_isleScript, IsleScript::c_GaraDoor_Background_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_GaraDoor_LeftArrow_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_GaraDoor_RightArrow_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_GaraDoor_Door_Ctl, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_GaraDoor_Background_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_GaraDoor_LeftArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_GaraDoor_RightArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_GaraDoor_Door_Ctl, *g_isleScript, IsleScript::c__Isle);
 		break;
 	case e_hospital:
 		InvokeAction(Extra::e_stop, *g_hospitalScript, HospitalScript::c__StartUp, NULL);
@@ -735,10 +735,10 @@ void LegoGameState::StopArea(Area p_area)
 		InvokeAction(Extra::e_close, *g_policeScript, PoliceScript::c__StartUp, NULL);
 		break;
 	case e_polidoor:
-		RemoveFromWorld(*g_isleScript, IsleScript::c_PoliDoor_Background_Bitmap, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_PoliDoor_LeftArrow_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_PoliDoor_RightArrow_Ctl, *g_isleScript, 0);
-		RemoveFromWorld(*g_isleScript, IsleScript::c_PoliDoor_Door_Ctl, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_PoliDoor_Background_Bitmap, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_PoliDoor_LeftArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_PoliDoor_RightArrow_Ctl, *g_isleScript, IsleScript::c__Isle);
+		RemoveFromWorld(*g_isleScript, IsleScript::c_PoliDoor_Door_Ctl, *g_isleScript, IsleScript::c__Isle);
 		break;
 	case e_copterbuild:
 		InvokeAction(Extra::e_stop, *g_jukeboxScript, JukeboxScript::c_HelicopterBuild_Movie, NULL);
