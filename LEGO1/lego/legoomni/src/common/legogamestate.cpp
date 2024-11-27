@@ -761,13 +761,13 @@ void LegoGameState::StopArea(Area p_area)
 		InvokeAction(Extra::e_close, *g_racecarScript, RacecarScript::c__StartUp, NULL);
 		break;
 	case e_act2main:
-		if (m_currentArea != 2) {
+		if (m_currentArea != e_infomain) {
 			InvokeAction(Extra::e_stop, *g_act2mainScript, Act2mainScript::c__Act2Main, NULL);
 			InvokeAction(Extra::e_close, *g_act2mainScript, Act2mainScript::c__Act2Main, NULL);
 		}
 		break;
 	case e_act3script:
-		if (m_currentArea != 2) {
+		if (m_currentArea != e_infomain) {
 			InvokeAction(Extra::e_stop, *g_act3Script, Act3Script::c__Act3, NULL);
 			InvokeAction(Extra::e_close, *g_act3Script, Act3Script::c__Act3, NULL);
 		}
