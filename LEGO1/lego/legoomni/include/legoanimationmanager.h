@@ -155,9 +155,9 @@ public:
 	MxBool FindVehicle(const char* p_name, MxU32& p_index);
 	MxResult ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info);
 	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
-	void FUN_10060480(LegoChar* p_param1[], undefined4 p_param2);
+	void FUN_10060480(LegoChar* p_characterNames[], MxU32 p_numCharacterNames);
 	void FUN_100604d0(MxBool p_unk0x08);
-	void FUN_100604f0(MxS32* p_param1, undefined4 p_param2);
+	void FUN_100604f0(MxS32 p_objectIds[], undefined4 p_numObjectIds);
 	void FUN_10060540(MxBool p_unk0x29);
 	void FUN_10060570(MxBool p_unk0x1a);
 	MxResult StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity);
@@ -183,7 +183,7 @@ public:
 	MxResult FUN_10064670(Vector3* p_position);
 	MxResult FUN_10064740(Vector3* p_position);
 	MxResult FUN_10064880(const char* p_name, MxS32 p_unk0x0c, MxS32 p_unk0x10);
-	undefined FUN_10064ee0(MxU32 p_param);
+	MxBool FUN_10064ee0(MxU32 p_objectId);
 
 	static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
 
