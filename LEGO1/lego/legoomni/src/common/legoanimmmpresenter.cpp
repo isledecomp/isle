@@ -469,7 +469,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 // FUNCTION: LEGO1 0x1004b830
 MxBool LegoAnimMMPresenter::FUN_1004b830()
 {
-	return !(m_unk0x58 < 6);
+	return m_unk0x58 >= e_unk6;
 }
 
 // FUNCTION: LEGO1 0x1004b840
