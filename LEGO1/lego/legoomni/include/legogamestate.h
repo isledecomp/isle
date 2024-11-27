@@ -111,7 +111,7 @@ public:
 		Username(Username& p_other) { Set(p_other); }
 		void Set(Username& p_other) { memcpy(m_letters, p_other.m_letters, sizeof(m_letters)); }
 
-		MxResult ReadWrite(LegoStorage* p_storage);
+		MxResult Serialize(LegoStorage* p_storage);
 		Username& operator=(const Username& p_other);
 
 		MxS16 m_letters[7]; // 0x00
@@ -119,8 +119,10 @@ public:
 
 	// SIZE 0x2c
 	struct ScoreItem {
-		undefined2 m_unk0x00; // 0x00
-		MxU8 m_state[5][5];   // 0x02
+		MxResult Serialize(LegoFile* p_file);
+
+		MxS16 m_totalScore;   // 0x00
+		MxU8 m_scores[5][5];  // 0x02
 		Username m_name;      // 0x1c
 		undefined2 m_unk0x2a; // 0x2a
 	};
@@ -129,7 +131,8 @@ public:
 	struct History {
 		History();
 		void WriteScoreHistory();
-		void FUN_1003ccf0(LegoFile&);
+		MxResult Serialize(LegoFile* p_file);
+		ScoreItem* FUN_1003cc90(Username* p_player, MxU16 p_unk0x24, MxS32& p_unk0x2c);
 
 		// FUNCTION: BETA10 0x1002c2b0
 		MxS16 GetCount() { return m_count; }
@@ -207,11 +210,11 @@ private:
 	LegoBackgroundColor* m_backgroundColor;     // 0x18
 	LegoBackgroundColor* m_tempBackgroundColor; // 0x1c
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
-	MxU16 m_unk0x24;                            // 0x24
 
 	// TODO: Most likely getters/setters are not used according to BETA for the following members:
 
 public:
+	MxU16 m_unk0x24;                      // 0x24
 	MxS16 m_playerCount;                  // 0x26
 	Username m_players[9];                // 0x28
 	History m_history;                    // 0xa6
