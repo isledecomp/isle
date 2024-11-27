@@ -1276,7 +1276,7 @@ void LegoGameState::History::WriteScoreHistory()
 
 		MxU8 scoresTmp[5][5];
 		Username playerTmp;
-		undefined2 unk0x2aTmp;
+		undefined2 unk2aTmp;
 
 		// TODO: Match bubble sort loops
 		for (MxS32 i = m_count - 1; i > 0; i--) {
@@ -1284,7 +1284,7 @@ void LegoGameState::History::WriteScoreHistory()
 				if (m_scores[j - 1].m_totalScore < m_scores[j].m_totalScore) {
 					memcpy(scoresTmp, m_scores[j - 1].m_scores, sizeof(scoresTmp));
 					playerTmp = m_scores[j - 1].m_name;
-					unk0x2aTmp = m_scores[j - 1].m_unk0x2a;
+					unk2aTmp = m_scores[j - 1].m_unk0x2a;
 
 					memcpy(m_scores[j - 1].m_scores, m_scores[j].m_scores, sizeof(m_scores[j - 1].m_scores));
 					m_scores[j - 1].m_name = m_scores[j].m_name;
@@ -1292,7 +1292,7 @@ void LegoGameState::History::WriteScoreHistory()
 
 					memcpy(m_scores[j].m_scores, scoresTmp, sizeof(m_scores[j].m_scores));
 					m_scores[j].m_name = playerTmp;
-					m_scores[j].m_unk0x2a = unk0x2aTmp;
+					m_scores[j].m_unk0x2a = unk2aTmp;
 				}
 			}
 		}
