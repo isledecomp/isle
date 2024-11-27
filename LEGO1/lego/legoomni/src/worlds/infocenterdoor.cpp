@@ -121,7 +121,7 @@ MxLong InfocenterDoor::HandleControl(LegoControlManagerNotificationParam& p_para
 				}
 				else {
 					MxDSAction action;
-					action.SetObjectId(503);
+					action.SetObjectId(InfodoorScript::c_iic007in_PlayWav);
 					action.SetAtomId(*g_infodoorScript);
 					BackgroundAudioManager()->LowerVolume();
 					Start(&action);
@@ -130,7 +130,7 @@ MxLong InfocenterDoor::HandleControl(LegoControlManagerNotificationParam& p_para
 			}
 			else {
 				MxDSAction action;
-				action.SetObjectId(500);
+				action.SetObjectId(InfodoorScript::c_iic037in_PlayWav);
 				action.SetAtomId(*g_infodoorScript);
 				BackgroundAudioManager()->LowerVolume();
 				Start(&action);

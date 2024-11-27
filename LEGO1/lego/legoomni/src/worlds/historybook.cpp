@@ -139,7 +139,7 @@ void HistoryBook::ReadyWorld()
 
 		for (; scoreboxRow > 0; scoreboxRow--) {
 			for (MxS32 scoreBoxColumn = 0, scoreboxY = 1; scoreBoxColumn < 5; scoreBoxColumn++, scoreboxY += 5) {
-				SetColor(*scorebox, score->m_state[scoreState][scoreBoxColumn], scoreColors, scoreboxX, scoreboxY);
+				SetColor(*scorebox, score->m_scores[scoreState][scoreBoxColumn], scoreColors, scoreboxX, scoreboxY);
 			}
 
 			scoreState++;

@@ -3,6 +3,8 @@
 #include "3dmanager/lego3dmanager.h"
 #include "act2main_actions.h"
 #include "act3_actions.h"
+#include "ambulance.h"
+#include "carrace.h"
 #include "carrace_actions.h"
 #include "carracer_actions.h"
 #include "copter_actions.h"
@@ -25,6 +27,7 @@
 #include "jetracer_actions.h"
 #include "jetski.h"
 #include "jetski_actions.h"
+#include "jetskirace.h"
 #include "jukebox_actions.h"
 #include "jukeboxw_actions.h"
 #include "legoanimationmanager.h"
@@ -48,6 +51,7 @@
 #include "mxstring.h"
 #include "mxutilities.h"
 #include "mxvariabletable.h"
+#include "pizza.h"
 #include "police_actions.h"
 #include "racecar.h"
 #include "racecar_actions.h"
@@ -55,6 +59,7 @@
 #include "roi/legoroi.h"
 #include "scripts.h"
 #include "sndanim_actions.h"
+#include "towtrack.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -539,7 +544,7 @@ void LegoGameState::SerializePlayersInfo(MxS16 p_flags)
 		}
 
 		for (MxS16 i = 0; i < m_playerCount; i++) {
-			m_players[i].ReadWrite(&fileStorage);
+			m_players[i].Serialize(&fileStorage);
 		}
 	}
 }
@@ -1079,11 +1084,11 @@ void LegoGameState::RegisterState(LegoState* p_state)
 
 		newBuffer[m_stateCount++] = p_state;
 		m_stateArray = newBuffer;
-		return;
 	}
-
-	delete m_stateArray[targetIndex];
-	m_stateArray[targetIndex] = p_state;
+	else {
+		delete m_stateArray[targetIndex];
+		m_stateArray[targetIndex] = p_state;
+	}
 }
 
 // FUNCTION: LEGO1 0x1003bd00
@@ -1147,17 +1152,17 @@ LegoGameState::Username::Username()
 }
 
 // FUNCTION: LEGO1 0x1003c690
-MxResult LegoGameState::Username::ReadWrite(LegoStorage* p_storage)
+// FUNCTION: BETA10 0x10086c57
+MxResult LegoGameState::Username::Serialize(LegoStorage* p_storage)
 {
 	if (p_storage->IsReadMode()) {
-		for (MxS16 i = 0; i < 7; i++) {
-			p_storage->Read(&m_letters[i], sizeof(m_letters[i]));
+		for (MxS16 i = 0; i < (MxS16) sizeOfArray(m_letters); i++) {
+			Read(p_storage, &m_letters[i]);
 		}
 	}
 	else if (p_storage->IsWriteMode()) {
-		for (MxS16 i = 0; i < 7; i++) {
-			MxS16 letter = m_letters[i];
-			p_storage->Write(&letter, sizeof(letter));
+		for (MxS16 i = 0; i < (MxS16) sizeOfArray(m_letters); i++) {
+			Write(p_storage, m_letters[i]);
 		}
 	}
 
@@ -1165,29 +1170,184 @@ MxResult LegoGameState::Username::ReadWrite(LegoStorage* p_storage)
 }
 
 // FUNCTION: LEGO1 0x1003c710
+// FUNCTION: BETA10 0x10086d0c
 LegoGameState::Username& LegoGameState::Username::operator=(const Username& p_other)
 {
 	memcpy(m_letters, p_other.m_letters, sizeof(m_letters));
 	return *this;
 }
 
+// FUNCTION: LEGO1 0x1003c740
+// FUNCTION: BETA10 0x10086d39
+MxResult LegoGameState::ScoreItem::Serialize(LegoFile* p_file)
+{
+	if (p_file->IsReadMode()) {
+		Read(p_file, &m_totalScore);
+
+		for (MxS32 i = 0; i < 5; i++) {
+			for (MxS32 j = 0; j < 5; j++) {
+				Read(p_file, &m_scores[i][j]);
+			}
+		}
+
+		m_name.Serialize(p_file);
+		Read(p_file, &m_unk0x2a);
+	}
+	else if (p_file->IsWriteMode()) {
+		Write(p_file, m_totalScore);
+
+		for (MxS32 i = 0; i < 5; i++) {
+			for (MxS32 j = 0; j < 5; j++) {
+				Write(p_file, m_scores[i][j]);
+			}
+		}
+
+		m_name.Serialize(p_file);
+		Write(p_file, m_unk0x2a);
+	}
+
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x1003c830
+// FUNCTION: BETA10 0x10086e87
 LegoGameState::History::History()
 {
 	m_count = 0;
 	m_unk0x372 = 0;
 }
 
-// STUB: LEGO1 0x1003c870
+// FUNCTION: LEGO1 0x1003c870
+// FUNCTION: BETA10 0x10086ec9
 void LegoGameState::History::WriteScoreHistory()
 {
-	// TODO
+	MxS16 totalScore = 0;
+	MxU8 scores[5][5];
+
+	InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
+	if (state->m_letters[0]) {
+		JetskiRaceState* jetskiRaceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
+		CarRaceState* carRaceState = (CarRaceState*) GameState()->GetState("CarRaceState");
+		TowTrackMissionState* towTrackMissionState =
+			(TowTrackMissionState*) GameState()->GetState("TowTrackMissionState");
+		PizzaMissionState* pizzaMissionState = (PizzaMissionState*) GameState()->GetState("PizzaMissionState");
+		AmbulanceMissionState* ambulanceMissionState =
+			(AmbulanceMissionState*) GameState()->GetState("AmbulanceMissionState");
+
+		for (MxS32 actor = 1; actor <= 5; actor++) {
+			scores[0][actor - 1] = carRaceState ? carRaceState->GetState(actor)->GetHighScore() : 0;
+			totalScore += scores[0][actor - 1];
+
+			scores[1][actor - 1] = jetskiRaceState ? jetskiRaceState->GetState(actor)->GetHighScore() : 0;
+			totalScore += scores[1][actor - 1];
+
+			scores[2][actor - 1] = pizzaMissionState ? pizzaMissionState->GetHighScore(actor) : 0;
+			totalScore += scores[2][actor - 1];
+
+			scores[3][actor - 1] = towTrackMissionState ? towTrackMissionState->GetHighScore(actor) : 0;
+			totalScore += scores[3][actor - 1];
+
+			scores[4][actor - 1] = ambulanceMissionState ? ambulanceMissionState->GetHighScore(actor) : 0;
+			totalScore += scores[4][actor - 1];
+		}
+
+		MxS32 unk0x2c;
+		ScoreItem* p_scorehist = FUN_1003cc90(&GameState()->m_players[0], GameState()->m_unk0x24, unk0x2c);
+
+		if (p_scorehist != NULL) {
+			p_scorehist->m_totalScore = totalScore;
+			memcpy(p_scorehist->m_scores, scores, sizeof(p_scorehist->m_scores));
+		}
+		else {
+			if (m_count < (MxS16) sizeOfArray(m_scores)) {
+				m_scores[m_count].m_totalScore = totalScore;
+				memcpy(m_scores[m_count].m_scores, scores, sizeof(m_scores[m_count].m_scores));
+				m_scores[m_count].m_name = GameState()->m_players[0];
+				m_scores[m_count].m_unk0x2a = GameState()->m_unk0x24;
+				m_count++;
+			}
+			else if (m_scores[19].m_totalScore <= totalScore) {
+				m_scores[19].m_totalScore = totalScore;
+				memcpy(m_scores[19].m_scores, scores, sizeof(m_scores[19].m_scores));
+				m_scores[19].m_name = GameState()->m_players[0];
+				m_scores[19].m_unk0x2a = GameState()->m_unk0x24;
+			}
+		}
+
+		MxU8 scoresTmp[5][5];
+		Username playerTmp;
+		undefined2 unk0x2aTmp;
+
+		// TODO: Match bubble sort loops
+		for (MxS32 i = m_count - 1; i > 0; i--) {
+			for (MxS32 j = 1; j <= i; j++) {
+				if (m_scores[j - 1].m_totalScore < m_scores[j].m_totalScore) {
+					memcpy(scoresTmp, m_scores[j - 1].m_scores, sizeof(scoresTmp));
+					playerTmp = m_scores[j - 1].m_name;
+					unk0x2aTmp = m_scores[j - 1].m_unk0x2a;
+
+					memcpy(m_scores[j - 1].m_scores, m_scores[j].m_scores, sizeof(m_scores[j - 1].m_scores));
+					m_scores[j - 1].m_name = m_scores[j].m_name;
+					m_scores[j - 1].m_unk0x2a = m_scores[j].m_unk0x2a;
+
+					memcpy(m_scores[j].m_scores, scoresTmp, sizeof(m_scores[j].m_scores));
+					m_scores[j].m_name = playerTmp;
+					m_scores[j].m_unk0x2a = unk0x2aTmp;
+				}
+			}
+		}
+	}
 }
 
-// STUB: LEGO1 0x1003ccf0
-void LegoGameState::History::FUN_1003ccf0(LegoFile&)
+// FUNCTION: LEGO1 0x1003cc90
+// FUNCTION: BETA10 0x1008732a
+LegoGameState::ScoreItem* LegoGameState::History::FUN_1003cc90(
+	LegoGameState::Username* p_player,
+	MxU16 p_unk0x24,
+	MxS32& p_unk0x2c
+)
 {
-	// TODO
+	MxS32 i = 0;
+	for (; i < m_count; i++) {
+		if (!memcmp(p_player, &m_scores[i].m_name, sizeof(*p_player)) && m_scores[i].m_unk0x2a == p_unk0x24) {
+			break;
+		}
+	}
+
+	p_unk0x2c = i;
+
+	if (i >= m_count) {
+		return NULL;
+	}
+
+	return &m_scores[i];
+}
+
+// FUNCTION: LEGO1 0x1003ccf0
+// FUNCTION: BETA10 0x100873e7
+MxResult LegoGameState::History::Serialize(LegoFile* p_file)
+{
+	if (p_file->IsReadMode()) {
+		Read(p_file, &m_unk0x372);
+		Read(p_file, &m_count);
+
+		for (MxS16 i = 0; i < m_count; i++) {
+			MxS16 j;
+			Read(p_file, &j);
+			m_scores[i].Serialize(p_file);
+		}
+	}
+	else if (p_file->IsWriteMode()) {
+		Write(p_file, m_unk0x372);
+		Write(p_file, m_count);
+
+		for (MxS16 i = 0; i < m_count; i++) {
+			Write(p_file, i);
+			m_scores[i].Serialize(p_file);
+		}
+	}
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x1003cdd0
@@ -1203,7 +1363,7 @@ void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
 	}
 
 	if (stream.Open(savePath.GetData(), p_flags) == SUCCESS) {
-		m_history.FUN_1003ccf0(stream);
+		m_history.Serialize(&stream);
 	}
 }
 
