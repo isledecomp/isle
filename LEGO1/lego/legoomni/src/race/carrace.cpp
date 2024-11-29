@@ -1,9 +1,9 @@
 #include "carrace.h"
 
-#include "actions/carrace_actions.h"
-#include "actions/jukebox_actions.h"
+#include "carrace_actions.h"
 #include "dunebuggy.h"
 #include "isle.h"
+#include "jukebox_actions.h"
 #include "legoanimationmanager.h"
 #include "legobackgroundcolor.h"
 #include "legocontrolmanager.h"
