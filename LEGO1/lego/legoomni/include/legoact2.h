@@ -67,11 +67,11 @@ public:
 	void SetUnknown0x1150(undefined4 p_unk0x1150) { m_unk0x1150 = p_unk0x1150; }
 
 	undefined4 FUN_10052560(
-		undefined4 p_param1,
+		MxS32 p_param1,
 		MxBool p_param2,
 		MxBool p_param3,
-		Mx3DPointFloat* p_param4,
-		Mx3DPointFloat* p_param5,
+		Mx3DPointFloat* p_location,
+		Mx3DPointFloat* p_direction,
 		Mx3DPointFloat* p_param6
 	);
 
@@ -81,15 +81,18 @@ public:
 private:
 	void FUN_10051900();
 
-	Act2Brick m_bricks[10];      // 0x00f8
-	undefined m_unk0x10c0;       // 0x10c0
-	undefined m_unk0x10c1;       // 0x10c1
-	undefined m_unk0x10c2;       // 0x10c2
-	undefined4 m_unk0x10c4;      // 0x10c4
-	undefined4 m_unk0x10c8;      // 0x10c8
-	LegoAct2State* m_gameState;  // 0x10cc
-	MxS32 m_unk0x10d0;           // 0x10d0
-	char* m_unk0x10d4;           // 0x10d4
+	Act2Brick m_bricks[10];     // 0x00f8
+	undefined m_unk0x10c0;      // 0x10c0
+	undefined m_unk0x10c1;      // 0x10c1
+	undefined m_unk0x10c2;      // 0x10c2
+	undefined4 m_unk0x10c4;     // 0x10c4
+	undefined4 m_unk0x10c8;     // 0x10c8
+	LegoAct2State* m_gameState; // 0x10cc
+	MxS32 m_unk0x10d0;          // 0x10d0
+
+	// variable name verified by BETA10 0x10014633
+	char* m_siFile; // 0x10d4
+
 	LegoROI* m_unk0x10d8;        // 0x10d8
 	MxMatrix m_unk0x10dc;        // 0x10dc
 	undefined4 m_unk0x1124;      // 0x1124

@@ -3,6 +3,7 @@
 #include "act2actor.h"
 #include "act2main_actions.h"
 #include "actions/act2main_actions.h"
+#include "actions/infomain_actions.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legogamestate.h"
@@ -55,7 +56,7 @@ LegoAct2::LegoAct2()
 	m_unk0x1144 = 0;
 	m_unk0x1150 = 0;
 	m_unk0x10c8 = 0;
-	m_unk0x10d4 = "";
+	m_siFile = "";
 	m_unk0x113c = 5;
 	NotificationManager()->Register(this);
 }
@@ -299,17 +300,94 @@ MxBool LegoAct2::Escape()
 	return TRUE;
 }
 
-// STUB: LEGO1 0x10052560
-// STUB: BETA10 0x100145c6
+// FUNCTION: LEGO1 0x10052560
+// FUNCTION: BETA10 0x100145c6
 undefined4 LegoAct2::FUN_10052560(
-	undefined4 p_param1,
+	MxS32 p_param1,
 	MxBool p_param2,
 	MxBool p_param3,
-	Mx3DPointFloat* p_param4,
-	Mx3DPointFloat* p_param5,
+	Mx3DPointFloat* p_location,
+	Mx3DPointFloat* p_direction,
 	Mx3DPointFloat* p_param6
 )
 {
-	// TODO
+
+	if (m_unk0x1140 == 0 || p_param3) {
+		assert(strlen(m_siFile));
+
+		if (!p_param2) {
+			MxDSAction action;
+
+			action.SetObjectId(p_param1);
+			// not entirely sure about the constant
+			action.SetAtomId(*Lego()->GetWorldAtom(InfomainScript::c_Cop_Ctl));
+
+			if (p_location) {
+				action.SetUp(Mx3DPointFloat(0.0f, 1.0f, 0.0f));
+				action.SetLocation(*p_location);
+			}
+
+			if (p_direction) {
+				action.SetDirection(*p_direction);
+			}
+
+			StartActionIfUnknown0x13c(action);
+		}
+		else {
+			MxMatrix matrix;
+
+			matrix.SetIdentity();
+			MxBool oneVectorNotNull = FALSE;
+
+			if (p_location) {
+				matrix[3][0] = (*p_location)[0];
+				matrix[3][1] = (*p_location)[1];
+				matrix[3][2] = (*p_location)[2];
+				oneVectorNotNull = TRUE;
+			}
+
+			if (p_direction) {
+				matrix[2][0] = (*p_direction)[0];
+				matrix[2][1] = (*p_direction)[1];
+				matrix[2][2] = (*p_direction)[2];
+				oneVectorNotNull = TRUE;
+			}
+
+			if (p_param6) {
+				matrix[1][0] = (*p_param6)[0];
+				matrix[1][1] = (*p_param6)[1];
+				matrix[1][2] = (*p_param6)[2];
+				oneVectorNotNull = TRUE;
+			}
+
+			Vector3 firstColumn(matrix[0]);
+			Vector3 secondColumn(matrix[1]);
+			Vector3 thirdColumn(matrix[2]);
+
+			firstColumn.EqualsCross(&secondColumn, &thirdColumn);
+			firstColumn.Unitize();
+
+			MxMatrix* pmatrix = NULL;
+
+			if (oneVectorNotNull) {
+				pmatrix = &matrix;
+			}
+
+			MxResult result;
+
+			if (p_param1 == Act2mainScript::c_tja009ni_RunAnim) {
+				result = AnimationManager()->FUN_10060dc0(p_param1, pmatrix, TRUE, FALSE, NULL, TRUE, TRUE, TRUE, TRUE);
+			}
+			else {
+				result =
+					AnimationManager()->FUN_10060dc0(p_param1, pmatrix, TRUE, FALSE, NULL, TRUE, TRUE, TRUE, FALSE);
+			}
+
+			if (result == SUCCESS) {
+				m_unk0x1140 = p_param1;
+			}
+		}
+	}
+
 	return 0;
 }
