@@ -58,7 +58,7 @@ MxLong InfoCenterEntity::HandleClick(LegoEventNotificationParam& p_param)
 	}
 	case LegoGameState::Act::e_act2: {
 		LegoAct2* act2 = (LegoAct2*) FindWorld(*g_act2mainScript, Act2mainScript::c__Act2Main);
-		act2->SetUnknown0x1150(2);
+		act2->SetDestLocation(LegoGameState::e_infomain);
 
 		LegoAct2State* act2state = (LegoAct2State*) GameState()->GetState("LegoAct2State");
 		if (act2state) {

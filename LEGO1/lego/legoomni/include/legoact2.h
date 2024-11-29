@@ -2,6 +2,7 @@
 #define LEGOACT2_H
 
 #include "act2brick.h"
+#include "legogamestate.h"
 #include "legostate.h"
 #include "legoworld.h"
 
@@ -66,7 +67,7 @@ public:
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	void SetUnknown0x1138(Act2Actor* p_unk0x1138) { m_unk0x1138 = p_unk0x1138; }
-	void SetUnknown0x1150(undefined4 p_unk0x1150) { m_unk0x1150 = p_unk0x1150; }
+	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
 
 	undefined4 FUN_10052560(
 		MxS32 p_param1,
@@ -98,19 +99,19 @@ private:
 	// variable name verified by BETA10 0x10014633
 	char* m_siFile; // 0x10d4
 
-	LegoROI* m_unk0x10d8;        // 0x10d8
-	MxMatrix m_unk0x10dc;        // 0x10dc
-	undefined4 m_unk0x1124;      // 0x1124
-	LegoROI* m_ambulance;        // 0x1128
-	undefined4 m_unk0x112c;      // 0x112c
-	undefined4 m_unk0x1130;      // 0x1130
-	undefined4 m_unk0x1134;      // 0x1134
-	Act2Actor* m_unk0x1138;      // 0x1138
-	undefined m_unk0x113c;       // 0x113c
-	undefined4 m_unk0x1140;      // 0x1140
-	undefined4 m_unk0x1144;      // 0x1144
-	undefined m_unk0x1148[0x08]; // 0x1148
-	undefined4 m_unk0x1150;      // 0x1150
+	LegoROI* m_unk0x10d8;               // 0x10d8
+	MxMatrix m_unk0x10dc;               // 0x10dc
+	undefined4 m_unk0x1124;             // 0x1124
+	LegoROI* m_ambulance;               // 0x1128
+	undefined4 m_unk0x112c;             // 0x112c
+	undefined4 m_unk0x1130;             // 0x1130
+	undefined4 m_unk0x1134;             // 0x1134
+	Act2Actor* m_unk0x1138;             // 0x1138
+	undefined m_unk0x113c;              // 0x113c
+	undefined4 m_unk0x1140;             // 0x1140
+	undefined4 m_unk0x1144;             // 0x1144
+	undefined m_unk0x1148[0x08];        // 0x1148
+	LegoGameState::Area m_destLocation; // 0x1150
 };
 
 #endif // LEGOACT2_H

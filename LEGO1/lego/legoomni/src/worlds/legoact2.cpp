@@ -58,7 +58,7 @@ LegoAct2::LegoAct2()
 	m_unk0x1138 = NULL;
 	m_unk0x1140 = 0;
 	m_unk0x1144 = 0;
-	m_unk0x1150 = 0;
+	m_destLocation = LegoGameState::e_undefined;
 	m_unk0x10c8 = 0;
 	m_siFile = "";
 	m_unk0x113c = 5;
@@ -328,11 +328,15 @@ MxLong LegoAct2::HandleEndAction(MxEndActionNotificationParam& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x10050a50
+// FUNCTION: LEGO1 0x10050a50
 MxLong LegoAct2::HandleTransitionEnd()
 {
-	// TODO
-	return 0;
+	if (m_destLocation != LegoGameState::e_undefined) {
+		GameState()->SwitchArea(m_destLocation);
+		m_destLocation = LegoGameState::e_undefined;
+	}
+
+	return 1;
 }
 
 // STUB: LEGO1 0x10050a80
@@ -393,7 +397,7 @@ MxBool LegoAct2::Escape()
 		m_gameState->m_unk0x0c = 0;
 	}
 
-	m_unk0x1150 = 2;
+	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;
 }
 
