@@ -2,7 +2,6 @@
 
 #include "act2actor.h"
 #include "act2main_actions.h"
-#include "actions/act2main_actions.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legocachesoundmanager.h"

@@ -1,10 +1,10 @@
 #include "jetskirace.h"
 
-#include "actions/jetrace_actions.h"
-#include "actions/jetski_actions.h"
-#include "actions/jukebox_actions.h"
 #include "dunebuggy.h"
 #include "isle.h"
+#include "jetrace_actions.h"
+#include "jetski_actions.h"
+#include "jukebox_actions.h"
 #include "legoanimationmanager.h"
 #include "legocontrolmanager.h"
 #include "legohideanimpresenter.h"
