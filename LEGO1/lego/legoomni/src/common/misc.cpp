@@ -208,11 +208,11 @@ MxTransitionManager* TransitionManager()
 }
 
 // FUNCTION: LEGO1 0x10015910
-void PlayMusic(JukeboxScript::Script p_script)
+void PlayMusic(JukeboxScript::Script p_objectId)
 {
 	MxDSAction action;
 	action.SetAtomId(*g_jukeboxScript);
-	action.SetObjectId(p_script);
+	action.SetObjectId(p_objectId);
 
 	LegoOmni::GetInstance()->GetBackgroundAudioManager()->PlayMusic(action, 5, MxPresenter::e_repeating);
 }

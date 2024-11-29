@@ -17,7 +17,7 @@ public:
 	LegoAct2State()
 	{
 		m_unk0x08 = 0;
-		m_unk0x0c = 0;
+		m_enabled = 0;
 	}
 	~LegoAct2State() override {}
 
@@ -41,12 +41,11 @@ public:
 	// LegoAct2State::`scalar deleting destructor'
 
 	undefined4 GetUnknown0x08() { return m_unk0x08; }
-	void SetUnknown0x0c(undefined p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
 	undefined4 m_unk0x08; // 0x08
-	undefined m_unk0x0c;  // 0x0c
+	MxBool m_enabled;     // 0x0c
 };
 
 // VTABLE: LEGO1 0x100d82e0
@@ -85,23 +84,26 @@ private:
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleTransitionEnd();
 	MxLong HandlePathStruct(LegoPathStructNotificationParam& p_param);
+	void PlayMusic(JukeboxScript::Script p_objectId);
 	void FUN_10051900();
+	void InitBricks();
+	void UninitBricks();
 
-	Act2Brick m_bricks[10];     // 0x00f8
-	undefined m_unk0x10c0;      // 0x10c0
-	undefined m_unk0x10c1;      // 0x10c1
-	undefined m_unk0x10c2;      // 0x10c2
-	undefined4 m_unk0x10c4;     // 0x10c4
-	undefined4 m_unk0x10c8;     // 0x10c8
-	LegoAct2State* m_gameState; // 0x10cc
-	MxS32 m_unk0x10d0;          // 0x10d0
+	Act2Brick m_bricks[10];        // 0x00f8
+	undefined m_unk0x10c0;         // 0x10c0
+	undefined m_unk0x10c1;         // 0x10c1
+	undefined m_unk0x10c2;         // 0x10c2
+	undefined4 m_unk0x10c4;        // 0x10c4
+	JukeboxScript::Script m_music; // 0x10c8
+	LegoAct2State* m_gameState;    // 0x10cc
+	MxS32 m_unk0x10d0;             // 0x10d0
 
 	// variable name verified by BETA10 0x10014633
 	char* m_siFile; // 0x10d4
 
-	LegoROI* m_unk0x10d8;               // 0x10d8
+	LegoROI* m_pepper;                  // 0x10d8
 	MxMatrix m_unk0x10dc;               // 0x10dc
-	undefined4 m_unk0x1124;             // 0x1124
+	LegoPathBoundary* m_unk0x1124;      // 0x1124
 	LegoROI* m_ambulance;               // 0x1128
 	undefined4 m_unk0x112c;             // 0x112c
 	undefined4 m_unk0x1130;             // 0x1130
@@ -109,7 +111,7 @@ private:
 	Act2Actor* m_unk0x1138;             // 0x1138
 	undefined m_unk0x113c;              // 0x113c
 	undefined4 m_unk0x1140;             // 0x1140
-	undefined4 m_unk0x1144;             // 0x1144
+	Act2mainScript::Script m_unk0x1144; // 0x1144
 	undefined m_unk0x1148[0x08];        // 0x1148
 	LegoGameState::Area m_destLocation; // 0x1150
 };
