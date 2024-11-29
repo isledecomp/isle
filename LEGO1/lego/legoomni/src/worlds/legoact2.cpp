@@ -373,7 +373,7 @@ undefined4 LegoAct2::FUN_10052560(
 				p_matrix = &matrix;
 			}
 
-            // This part does not match perfectly
+			// This part does not match perfectly
 			MxBool arg9 = FALSE;
 			if (p_param1 == Act2mainScript::c_tja009ni_RunAnim) {
 				arg9 = TRUE;
