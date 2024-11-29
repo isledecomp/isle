@@ -49,7 +49,7 @@ Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& data)
 // FUNCTION: LEGO1 0x100a1900
 Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data)
 {
-	// GLOBAL: LEGO1 0x10101040
+	// at LEGO1 0x10101040, needs no annotation
 	static int g_SetBufferCount = 1;
 
 	DeviceImpl* device = new DeviceImpl();
