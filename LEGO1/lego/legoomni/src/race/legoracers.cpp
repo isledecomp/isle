@@ -67,8 +67,8 @@ const SkeletonKickPhase LegoRaceCar::g_skeletonKickPhases[] = {
 	{&LegoRaceCar::g_skBMap[3], 0.8, 0.9, LEGORACECAR_KICK2},
 };
 
+// the STRING is already declared at LEGO1 0x101020b8
 // GLOBAL: LEGO1 0x100f0b10
-// STRING: LEGO1 0x100f09cc
 const char* LegoRaceCar::g_strSpeed = "SPEED";
 
 // GLOBAL: LEGO1 0x100f0b18

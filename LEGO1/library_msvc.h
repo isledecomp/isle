@@ -281,9 +281,6 @@
 // LIBRARY: LEGO1 0x1008fdd0
 // __dosmaperr
 
-// LIBRARY: LEGO1 0x1008fe30
-// __unlock_file
-
 // LIBRARY: LEGO1 0x1008fe50
 // __errno
 

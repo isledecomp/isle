@@ -11,7 +11,7 @@ class RaceStandsEntity : public BuildingEntity {
 	// FUNCTION: LEGO1 0x1000efa0
 	const char* ClassName() const override // vtable+0x0c
 	{
-		// STRING: LEGO1 0x100f0300
+		// at LEGO1 0x100f0300, needs no annotation
 		return "RaceStandsEntity";
 	}
 
@@ -125,7 +125,7 @@ class CaveEntity : public BuildingEntity {
 	// FUNCTION: LEGO1 0x1000f1e0
 	const char* ClassName() const override // vtable+0x0c
 	{
-		// STRING: LEGO1 0x100f0300
+		// at LEGO1 0x100f0300, needs no annotation
 		return "RaceStandsEntity";
 	}
 
@@ -147,7 +147,7 @@ class JailEntity : public BuildingEntity {
 	// FUNCTION: LEGO1 0x1000f0c0
 	const char* ClassName() const override // vtable+0x0c
 	{
-		// STRING: LEGO1 0x100f0300
+		// at LEGO1 0x100f0300, needs no annotation
 		return "RaceStandsEntity";
 	}
 

@@ -56,8 +56,8 @@ const char* g_varTOWSPEED = "towSPEED";
 // STRING: LEGO1 0x100f439c
 const char* g_varTOWFUEL = "towFUEL";
 
+// the STRING is already declared for GLOBAL 0x101020cc
 // GLOBAL: LEGO1 0x100f3a40
-// STRING: LEGO1 0x100f3808
 const char* g_varVISIBILITY = "VISIBILITY";
 
 // GLOBAL: LEGO1 0x100f3a44
@@ -72,8 +72,8 @@ const char* g_varCURSOR = "CURSOR";
 // STRING: LEGO1 0x100f3a1c
 const char* g_varWHOAMI = "WHO_AM_I";
 
+// the STRING is already declared at LEGO1 0x100f3fb0
 // GLOBAL: LEGO1 0x100f3a50
-// STRING: LEGO1 0x100f3a18
 const char* g_delimiter2 = " \t";
 
 // GLOBAL: LEGO1 0x100f3a54
