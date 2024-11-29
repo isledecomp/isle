@@ -79,7 +79,7 @@ MxLong Act2Brick::Notify(MxParam& p_param)
 		m_roi->SetVisibility(FALSE);
 
 		if (m_whistleSound != NULL) {
-			StopSound();
+			StopWhistleSound();
 		}
 
 		MxNotificationParam param(c_notificationType22, this);
@@ -90,9 +90,18 @@ MxLong Act2Brick::Notify(MxParam& p_param)
 	return 0;
 }
 
+// FUNCTION: LEGO1 0x1007a990
+// FUNCTION: BETA10 0x10012fca
+void Act2Brick::PlayWhistleSound()
+{
+	if (m_whistleSound == NULL) {
+		m_whistleSound = SoundManager()->GetCacheSoundManager()->Play("xwhistle", m_roi->GetName(), TRUE);
+	}
+}
+
 // FUNCTION: LEGO1 0x1007a9d0
 // FUNCTION: BETA10 0x1001300f
-void Act2Brick::StopSound()
+void Act2Brick::StopWhistleSound()
 {
 	if (m_whistleSound != NULL) {
 		SoundManager()->GetCacheSoundManager()->Stop(m_whistleSound);

@@ -173,7 +173,7 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 		switch (p_param.GetClickedObjectId()) {
 		case IsleScript::c_HelicopterArms_Ctl:
 			if (*g_act3Script == script) {
-				((Act3*) CurrentWorld())->SetUnknown4270(2);
+				((Act3*) CurrentWorld())->SetDestLocation(LegoGameState::e_infomain);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			}
 			else if (m_state->GetUnkown8() != 0) {

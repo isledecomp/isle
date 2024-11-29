@@ -58,7 +58,7 @@ LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
 MxDSAction& GetCurrentAction();
 void SetCurrentWorld(LegoWorld* p_world);
 MxTransitionManager* TransitionManager();
-void PlayMusic(JukeboxScript::Script p_script);
+void PlayMusic(JukeboxScript::Script p_objectId);
 void SetIsWorldActive(MxBool p_isWorldActive);
 void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last);
 

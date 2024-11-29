@@ -1,6 +1,7 @@
 #ifndef ACT3_H
 #define ACT3_H
 
+#include "legogamestate.h"
 #include "legostate.h"
 #include "legoworld.h"
 
@@ -69,7 +70,7 @@ public:
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	void SetUnknown420c(MxEntity* p_entity) { m_unk0x420c = p_entity; }
-	void SetUnknown4270(MxU32 p_unk0x4270) { m_unk0x4270 = p_unk0x4270; }
+	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
 
 	// SYNTHETIC: LEGO1 0x10072630
 	// Act3::`scalar deleting destructor'
@@ -80,10 +81,10 @@ public:
 	void FUN_10073430();
 
 protected:
-	undefined m_unk0xf8[0x4114]; // 0xf8
-	MxEntity* m_unk0x420c;       // 0x420c
-	undefined m_unk0x4210[0x60]; // 0x4210
-	MxU32 m_unk0x4270;           // 0x4270
+	undefined m_unk0xf8[0x4114];        // 0xf8
+	MxEntity* m_unk0x420c;              // 0x420c
+	undefined m_unk0x4210[0x60];        // 0x4210
+	LegoGameState::Area m_destLocation; // 0x4270
 };
 
 #endif // ACT3_H
