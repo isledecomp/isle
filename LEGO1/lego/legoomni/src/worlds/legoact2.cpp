@@ -360,17 +360,17 @@ undefined4 LegoAct2::FUN_10052560(
 				oneVectorNotNull = TRUE;
 			}
 
-			Vector3 local_114(matrix[0]);
-			Vector3 local_124(matrix[1]);
-			Vector3 local_10c(matrix[2]);
+			Vector3 firstColumn(matrix[0]);
+			Vector3 secondColumn(matrix[1]);
+			Vector3 thirdColumn(matrix[2]);
 
-			local_114.EqualsCross(&local_124, &local_10c);
-			local_114.Unitize();
+			firstColumn.EqualsCross(&secondColumn, &thirdColumn);
+			firstColumn.Unitize();
 
-			MxMatrix* p_matrix = NULL;
+			MxMatrix* pmatrix = NULL;
 
 			if (oneVectorNotNull) {
-				p_matrix = &matrix;
+				pmatrix = &matrix;
 			}
 
 			// This part does not match perfectly
@@ -379,7 +379,7 @@ undefined4 LegoAct2::FUN_10052560(
 				arg9 = TRUE;
 			}
 
-			if (!AnimationManager()->FUN_10060dc0(p_param1, p_matrix, TRUE, FALSE, NULL, TRUE, TRUE, TRUE, arg9)) {
+			if (!AnimationManager()->FUN_10060dc0(p_param1, pmatrix, TRUE, FALSE, NULL, TRUE, TRUE, TRUE, arg9)) {
 				m_unk0x1140 = p_param1;
 			}
 		}
