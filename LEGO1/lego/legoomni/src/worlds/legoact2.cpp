@@ -373,13 +373,17 @@ undefined4 LegoAct2::FUN_10052560(
 				pmatrix = &matrix;
 			}
 
-			// This part does not match perfectly
-			MxBool arg9 = FALSE;
+			MxResult result;
+
 			if (p_param1 == Act2mainScript::c_tja009ni_RunAnim) {
-				arg9 = TRUE;
+				result = AnimationManager()->FUN_10060dc0(p_param1, pmatrix, TRUE, FALSE, NULL, TRUE, TRUE, TRUE, TRUE);
+			}
+			else {
+				result =
+					AnimationManager()->FUN_10060dc0(p_param1, pmatrix, TRUE, FALSE, NULL, TRUE, TRUE, TRUE, FALSE);
 			}
 
-			if (!AnimationManager()->FUN_10060dc0(p_param1, pmatrix, TRUE, FALSE, NULL, TRUE, TRUE, TRUE, arg9)) {
+			if (result == SUCCESS) {
 				m_unk0x1140 = p_param1;
 			}
 		}
