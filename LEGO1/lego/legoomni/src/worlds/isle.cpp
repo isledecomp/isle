@@ -532,7 +532,7 @@ MxLong Isle::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 // FUNCTION: BETA10 0x10034158
 void Isle::Enable(MxBool p_enable)
 {
-	if (m_set0xd0.empty() == p_enable) {
+	if ((MxBool) m_set0xd0.empty() == p_enable) {
 		return;
 	}
 
