@@ -6,6 +6,8 @@
 #include "legoworld.h"
 
 class Act2Actor;
+class LegoPathStructNotificationParam;
+class MxEndActionNotificationParam;
 
 // VTABLE: LEGO1 0x100d4a70
 // SIZE 0x10
@@ -79,6 +81,9 @@ public:
 	// LegoAct2::`scalar deleting destructor'
 
 private:
+	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
+	MxLong HandleTransitionEnd();
+	MxLong HandlePathStruct(LegoPathStructNotificationParam& p_param);
 	void FUN_10051900();
 
 	Act2Brick m_bricks[10];      // 0x00f8
@@ -93,7 +98,7 @@ private:
 	LegoROI* m_unk0x10d8;        // 0x10d8
 	MxMatrix m_unk0x10dc;        // 0x10dc
 	undefined4 m_unk0x1124;      // 0x1124
-	undefined4 m_unk0x1128;      // 0x1128
+	LegoROI* m_ambulance;        // 0x1128
 	undefined4 m_unk0x112c;      // 0x112c
 	undefined4 m_unk0x1130;      // 0x1130
 	undefined4 m_unk0x1134;      // 0x1134

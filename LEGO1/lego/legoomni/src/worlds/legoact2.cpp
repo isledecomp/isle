@@ -5,11 +5,16 @@
 #include "actions/act2main_actions.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
+#include "legocachesoundmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legomain.h"
+#include "legopathstruct.h"
+#include "legosoundmanager.h"
 #include "misc.h"
+#include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxdebug.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxticklemanager.h"
@@ -45,7 +50,7 @@ LegoAct2::LegoAct2()
 	m_unk0x10c4 = 0;
 	m_gameState = NULL;
 	m_unk0x10d8 = NULL;
-	m_unk0x1128 = 0;
+	m_ambulance = NULL;
 	m_unk0x10c2 = 0;
 	m_unk0x1130 = 0;
 	m_unk0x10c0 = 0;
@@ -237,9 +242,94 @@ MxResult LegoAct2::Tickle()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10050380
-// STUB: BETA10 0x1003b049
+// FUNCTION: LEGO1 0x10050380
+// FUNCTION: BETA10 0x1003b049
 MxLong LegoAct2::Notify(MxParam& p_param)
+{
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
+	MxLong result = 0;
+
+	LegoWorld::Notify(p_param);
+
+	if (m_worldStarted) {
+		switch (param.GetNotification()) {
+		case c_notificationEndAction:
+			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
+			break;
+		case c_notificationPathStruct: {
+			MxTrace("trigger %d\n", ((LegoPathStructNotificationParam&) p_param).GetData());
+
+			LegoPathStructNotificationParam& param = (LegoPathStructNotificationParam&) p_param;
+			LegoEntity* entity = (LegoEntity*) param.GetSender();
+
+			if (m_ambulance == NULL) {
+				m_ambulance = FindROI("ambul");
+			}
+
+			if (entity->GetROI() == m_unk0x10d8) {
+				HandlePathStruct(param);
+			}
+
+			result = 1;
+			break;
+		}
+		case c_notificationType22:
+			SoundManager()->GetCacheSoundManager()->Play("28bng", NULL, FALSE);
+
+			m_unk0x10c1++;
+			if (m_unk0x10c1 == 10 && m_unk0x10c4 == 13) {
+				m_unk0x10c4 = 14;
+
+				LegoEntity* entity = (LegoEntity*) param.GetSender();
+
+				Mx3DPointFloat entityPosition(entity->GetROI()->GetWorldPosition());
+				Mx3DPointFloat unk0x10d8Position(m_unk0x10d8->GetWorldPosition());
+				Mx3DPointFloat locala4(unk0x10d8Position);
+
+				((Vector3&) entityPosition).Sub(unk0x10d8Position);
+
+				MxMatrix local2world(m_unk0x10d8->GetLocal2World());
+				Vector3 local30(local2world[0]);
+				Vector3 localac(local2world[1]);
+				Vector3 local28(local2world[2]);
+
+				local28 = entityPosition;
+				local28.Unitize();
+
+				Mx3DPointFloat local90(local28);
+				((Vector3&) local90).Mul(1.25f);
+				((Vector3&) locala4).Add(local90);
+				locala4[1] += 0.25;
+				local30.EqualsCross(&localac, &local28);
+				local30.Unitize();
+
+				Mx3DPointFloat locald4(local2world[2]);
+				Mx3DPointFloat localc0(local2world[1]);
+				FUN_10052560(Act2mainScript::c_tns051in_RunAnim, TRUE, TRUE, &localc0, &locald4, NULL);
+
+				m_unk0x10c4 = 14;
+				m_unk0x10d0 = 0;
+				((LegoPathActor*) m_unk0x10d8->GetEntity())->SetState(LegoPathActor::c_bit3);
+			}
+			break;
+		case c_notificationTransitioned:
+			result = HandleTransitionEnd();
+			break;
+		}
+	}
+
+	return result;
+}
+
+// STUB: LEGO1 0x100506f0
+MxLong LegoAct2::HandleEndAction(MxEndActionNotificationParam& p_param)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x10050a50
+MxLong LegoAct2::HandleTransitionEnd()
 {
 	// TODO
 	return 0;
@@ -256,6 +346,14 @@ void LegoAct2::ReadyWorld()
 void LegoAct2::Enable(MxBool p_enable)
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x10051460
+// STUB: BETA10 0x1003bb72
+MxLong LegoAct2::HandlePathStruct(LegoPathStructNotificationParam& p_param)
+{
+	// TODO
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x10051900

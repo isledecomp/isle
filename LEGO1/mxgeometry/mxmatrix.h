@@ -15,6 +15,7 @@ public:
 	// FUNCTION: LEGO1 0x10032770
 	MxMatrix(const MxMatrix& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
 
+	// FUNCTION: BETA10 0x1000fc20
 	MxMatrix(const Matrix4& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
 
 	// FUNCTION: BETA10 0x10010860
