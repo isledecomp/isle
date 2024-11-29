@@ -94,9 +94,15 @@ public:
 	// FUNCTION: BETA10 0x1003dbb0
 	Vector3& GetUp() { return m_up; }
 
+	// FUNCTION: BETA10 0x100153b0
 	void SetLocation(const Vector3& p_location) { m_location = p_location; }
+
+	// FUNCTION: BETA10 0x100153f0
 	void SetDirection(const Vector3& p_direction) { m_direction = p_direction; }
+
+	// FUNCTION: BETA10 0x10015430
 	void SetUp(const Vector3& p_up) { m_up = p_up; }
+
 	MxCore* GetUnknown84() { return m_unk0x84; }
 	void SetUnknown84(MxCore* p_unk0x84) { m_unk0x84 = p_unk0x84; }
 	MxCore* GetOrigin() { return m_origin; }
