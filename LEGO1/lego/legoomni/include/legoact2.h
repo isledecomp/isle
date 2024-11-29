@@ -17,7 +17,7 @@ public:
 	LegoAct2State()
 	{
 		m_unk0x08 = 0;
-		m_enabled = 0;
+		m_enabled = FALSE;
 	}
 	~LegoAct2State() override {}
 
