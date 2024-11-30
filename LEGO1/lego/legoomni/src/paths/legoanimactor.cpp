@@ -48,6 +48,7 @@ LegoAnimActor::~LegoAnimActor()
 }
 
 // FUNCTION: LEGO1 0x1001c1f0
+// FUNCTION: BETA10 0x1003f240
 MxResult LegoAnimActor::FUN_1001c1f0(float& p_und)
 {
 	float duration = (float) m_animMaps[m_curAnim]->m_AnimTreePtr->GetDuration();
@@ -144,6 +145,7 @@ MxResult LegoAnimActor::FUN_1001c360(float p_und, Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x1001c450
+// FUNCTION: BETA10 0x1003e590
 MxResult LegoAnimActor::FUN_1001c450(LegoAnim* p_animTreePtr, float p_unk0x00, LegoROI** p_roiMap, MxU32 p_numROIs)
 {
 	LegoAnimActorStruct* laas = new LegoAnimActorStruct(p_unk0x00, p_animTreePtr, p_roiMap, p_numROIs);
@@ -162,6 +164,7 @@ MxResult LegoAnimActor::FUN_1001c450(LegoAnim* p_animTreePtr, float p_unk0x00, L
 }
 
 // FUNCTION: LEGO1 0x1001c800
+// FUNCTION: BETA10 0x1003e747
 void LegoAnimActor::ClearMaps()
 {
 	for (MxU32 i = 0; i < m_animMaps.size(); i++) {
