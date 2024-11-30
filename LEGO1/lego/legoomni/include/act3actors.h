@@ -30,7 +30,12 @@ public:
 	// Act3Actor::~Act3Actor
 
 private:
-	undefined4 m_unk0x1c; // 0x1c
+	MxFloat m_unk0x1c; // 0x1c
+
+	static Mx3DPointFloat g_unk0x10104ef0;
 };
+
+// GLOBAL: LEGO1 0x100d7660
+// Act3Actor::`vbtable'
 
 #endif // ACT3ACTORS_H

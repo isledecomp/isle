@@ -1,23 +1,88 @@
 #include "act3actors.h"
 
+#include "roi/legoroi.h"
+
 DECOMP_SIZE_ASSERT(Act3Actor, 0x178)
 
-// STUB: LEGO1 0x1003fa50
+// Initialized at LEGO1 0x1003fa20
+// GLOBAL: LEGO1 0x10104ef0
+Mx3DPointFloat Act3Actor::g_unk0x10104ef0 = Mx3DPointFloat(0.0, 5.0, 0.0);
+
+// FUNCTION: LEGO1 0x1003fa50
 Act3Actor::Act3Actor()
 {
 	m_unk0x1c = 0;
 }
 
-// STUB: LEGO1 0x1003fb70
-MxU32 Act3Actor::VTable0x90(float, Matrix4&)
+// FUNCTION: LEGO1 0x1003fb70
+MxU32 Act3Actor::VTable0x90(float p_float, Matrix4& p_transform)
 {
-	// TODO
-	return FALSE;
+	// Note: Code duplication with LegoExtraActor::VTable0x90
+	switch (m_state & 0xff) {
+	case 0:
+	case 1:
+		return 1;
+
+	case 2:
+		m_unk0x1c = p_float + 2000.0f;
+		m_state = 3;
+		m_actorTime += (p_float - m_lastTime) * m_worldSpeed;
+		m_lastTime = p_float;
+		return 0;
+
+	case 3:
+		assert(!m_userNavFlag);
+		Vector3 positionRef(p_transform[3]);
+
+		p_transform = m_roi->GetLocal2World();
+
+		if (m_unk0x1c > p_float) {
+			Mx3DPointFloat position;
+
+			position = positionRef;
+			positionRef.Clear();
+			p_transform.RotateX(0.6);
+			positionRef = position;
+
+			m_actorTime += (p_float - m_lastTime) * m_worldSpeed;
+			m_lastTime = p_float;
+
+			VTable0x74(p_transform);
+			return 0;
+		}
+		else {
+			m_state = 0;
+			m_unk0x1c = 0;
+
+			((Vector3&) positionRef).Sub(g_unk0x10104ef0);
+			m_roi->FUN_100a58f0(p_transform);
+			m_roi->VTable0x14();
+			return 1;
+		}
+	}
+
+	return 0;
 }
 
-// STUB: LEGO1 0x1003fd90
-MxResult Act3Actor::VTable0x94(LegoPathActor*, MxBool)
+// FUNCTION: LEGO1 0x1003fd90
+MxResult Act3Actor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 {
-	// TODO
-	return 0;
+	if (!p_actor->GetUserNavFlag() && p_bool) {
+		if (p_actor->GetState()) {
+			return FAILURE;
+		}
+
+		LegoROI* roi = p_actor->GetROI();
+		MxMatrix matr;
+		matr = roi->GetLocal2World();
+
+		Vector3 vector(matr[3]);
+		Vector3(matr[3]).Add(g_unk0x10104ef0);
+
+		roi->FUN_100a58f0(matr);
+		roi->VTable0x14();
+
+		p_actor->SetState(c_bit2 | c_bit9);
+	}
+	return SUCCESS;
 }
