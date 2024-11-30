@@ -20,8 +20,8 @@ public:
 		return "Act3Actor";
 	}
 
-	MxU32 VTable0x90(float, Matrix4&) override;           // vtable+0x90
-	MxResult VTable0x94(LegoPathActor*, MxBool) override; // vtable+0x94
+	MxU32 VTable0x90(float p_float, Matrix4& p_transform) override;      // vtable+0x90
+	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 
 	// SYNTHETIC: LEGO1 0x10043330
 	// Act3Actor::`scalar deleting destructor'
@@ -30,7 +30,12 @@ public:
 	// Act3Actor::~Act3Actor
 
 private:
-	undefined4 m_unk0x1c; // 0x1c
+	MxFloat m_unk0x1c; // 0x1c
+
+	static Mx3DPointFloat g_unk0x10104ef0;
 };
+
+// GLOBAL: LEGO1 0x100d7660
+// Act3Actor::`vbtable'
 
 #endif // ACT3ACTORS_H
