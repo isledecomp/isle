@@ -5,9 +5,17 @@
 
 // VTABLE: LEGO1 0x100d6078 LegoPathActor
 // VTABLE: LEGO1 0x100d6148 LegoAnimActor
+// VTABLE: BETA10 0x101b80c0 LegoPathActor
+// VTABLE: BETA10 0x101b81b0 LegoAnimActor
 // SIZE 0x1a8
 class Act2Actor : public LegoAnimActor {
 public:
+	struct UnknownListStructure {
+		undefined m_unk0x00[28];
+		undefined m_unk0x1c;
+		undefined m_unk0x1d[3];
+	};
+
 	Act2Actor();
 
 	void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2) override;   // vtable+0x24
@@ -23,6 +31,10 @@ public:
 	// SYNTHETIC: LEGO1 0x1001a0a0
 	// Act2Actor::`scalar deleting destructor'
 
+	// GLOBAL: LEGO1 0x100d6070
+	// GLOBAL: BETA10 0x101b80b0
+	// `vbtable'
+
 private:
 	undefined m_unk0x1c;  // 0x1c
 	undefined m_unk0x1d;  // 0x1d
@@ -30,7 +42,7 @@ private:
 	MxBool m_unk0x1f;     // 0x1f
 	undefined4 m_unk0x20; // 0x20
 	undefined4 m_unk0x24; // 0x24
-	undefined4 m_unk0x28; // 0x28
+	undefined m_unk0x28;  // 0x28
 	undefined4 m_unk0x2c; // 0x2c
 	undefined4 m_unk0x30; // 0x30
 	undefined4 m_unk0x34; // 0x34

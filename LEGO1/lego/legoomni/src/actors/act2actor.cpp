@@ -6,8 +6,14 @@
 #include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(Act2Actor, 0x1a8)
+DECOMP_SIZE_ASSERT(Act2Actor::UnknownListStructure, 0x20)
 
-// STUB: LEGO1 0x100187e0
+// TODO: Copy the data once we know more about its fields. Total: 10 entries
+// GLOBAL: LEGO1 0x100f0db8
+static Act2Actor::UnknownListStructure g_unk0x100f0db8[] = {{{0}, 0, {0}}};
+
+// FUNCTION: LEGO1 0x100187e0
+// FUNCTION: BETA10 0x1000c7fb
 Act2Actor::Act2Actor()
 {
 	m_unk0x1c = 0;
@@ -26,6 +32,11 @@ Act2Actor::Act2Actor()
 	m_unk0x4c = 0;
 	m_unk0x38 = 0;
 	m_unk0x3c = 0;
+
+	// TODO replace 10 by sizeOfArray once the data are there
+	for (MxS32 i = 0; i < 10; i++) {
+		g_unk0x100f0db8[i].m_unk0x1c = 0;
+	}
 }
 
 // FUNCTION: LEGO1 0x10018940
@@ -55,6 +66,7 @@ MxResult Act2Actor::VTable0x9c()
 }
 
 // STUB: LEGO1 0x10018c30
+// STUB: BETA10 0x1000cb52
 void Act2Actor::VTable0x70(float p_und)
 {
 	// TODO
