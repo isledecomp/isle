@@ -21,15 +21,13 @@ MxU32 Act3Actor::VTable0x90(float p_float, Matrix4& p_transform)
 	switch (m_state & 0xff) {
 	case 0:
 	case 1:
-		return 1;
-
+		return TRUE;
 	case 2:
 		m_unk0x1c = p_float + 2000.0f;
 		m_state = 3;
 		m_actorTime += (p_float - m_lastTime) * m_worldSpeed;
 		m_lastTime = p_float;
-		return 0;
-
+		return FALSE;
 	case 3:
 		assert(!m_userNavFlag);
 		Vector3 positionRef(p_transform[3]);
@@ -48,7 +46,7 @@ MxU32 Act3Actor::VTable0x90(float p_float, Matrix4& p_transform)
 			m_lastTime = p_float;
 
 			VTable0x74(p_transform);
-			return 0;
+			return FALSE;
 		}
 		else {
 			m_state = 0;
@@ -57,11 +55,11 @@ MxU32 Act3Actor::VTable0x90(float p_float, Matrix4& p_transform)
 			((Vector3&) positionRef).Sub(g_unk0x10104ef0);
 			m_roi->FUN_100a58f0(p_transform);
 			m_roi->VTable0x14();
-			return 1;
+			return TRUE;
 		}
 	}
 
-	return 0;
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x1003fd90
@@ -73,16 +71,17 @@ MxResult Act3Actor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 		}
 
 		LegoROI* roi = p_actor->GetROI();
-		MxMatrix matr;
-		matr = roi->GetLocal2World();
 
-		Vector3 vector(matr[3]);
-		Vector3(matr[3]).Add(g_unk0x10104ef0);
+		MxMatrix local2world;
+		local2world = roi->GetLocal2World();
 
-		roi->FUN_100a58f0(matr);
+		Vector3(local2world[3]).Add(g_unk0x10104ef0);
+
+		roi->FUN_100a58f0(local2world);
 		roi->VTable0x14();
 
 		p_actor->SetState(c_bit2 | c_bit9);
 	}
+
 	return SUCCESS;
 }
