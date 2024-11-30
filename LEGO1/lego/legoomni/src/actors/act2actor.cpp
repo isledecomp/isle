@@ -89,11 +89,13 @@ void Act2Actor::FUN_100192a0(undefined4 p_param)
 	// TODO
 }
 
-// STUB: LEGO1 0x10019520
-// STUB: BETA10 0x1000d4d6
+// FUNCTION: LEGO1 0x10019520
+// FUNCTION: BETA10 0x1000d4d6
 void Act2Actor::FUN_10019520()
 {
-	// TODO
+	m_unk0x1e = 4;
+	SetWorldSpeed(m_unk0x28 + 3);
+	FUN_100192a0(10);
 }
 
 // FUNCTION: LEGO1 0x100195a0
