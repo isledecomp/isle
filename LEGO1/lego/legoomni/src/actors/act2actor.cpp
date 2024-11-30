@@ -9,7 +9,7 @@ DECOMP_SIZE_ASSERT(Act2Actor, 0x1a8)
 DECOMP_SIZE_ASSERT(Act2Actor::UnknownListStructure, 0x20)
 
 // TODO: Copy the data once we know more about its fields. Total: 10 entries
-// GLOBAL: LEGO1 0x100f0db8
+// // GLOBAL: LEGO1 0x100f0db8
 Act2Actor::UnknownListStructure g_unk0x100f0db8[] = {{{0}, 0, {0}}};
 
 // FUNCTION: LEGO1 0x100187e0
