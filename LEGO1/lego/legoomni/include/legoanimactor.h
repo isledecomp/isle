@@ -82,6 +82,7 @@ protected:
 // Vector<LegoAnimActorStruct *>::~Vector<LegoAnimActorStruct *>
 
 // SYNTHETIC: LEGO1 0x10012b90
+// SYNTHETIC: BETA10 0x1000fad0
 // LegoAnimActor::`vbase destructor'
 
 // TEMPLATE: LEGO1 0x1001c010

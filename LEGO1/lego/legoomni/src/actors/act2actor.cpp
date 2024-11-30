@@ -6,8 +6,14 @@
 #include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(Act2Actor, 0x1a8)
+DECOMP_SIZE_ASSERT(Act2Actor::UnknownListStructure, 0x20)
 
-// STUB: LEGO1 0x100187e0
+// TODO: Copy the data once we know more about its fields. Total: 10 entries
+// // GLOBAL: LEGO1 0x100f0db8
+Act2Actor::UnknownListStructure g_unk0x100f0db8[] = {{{0}, 0, {0}}};
+
+// FUNCTION: LEGO1 0x100187e0
+// FUNCTION: BETA10 0x1000c7fb
 Act2Actor::Act2Actor()
 {
 	m_unk0x1c = 0;
@@ -26,9 +32,15 @@ Act2Actor::Act2Actor()
 	m_unk0x4c = 0;
 	m_unk0x38 = 0;
 	m_unk0x3c = 0;
+
+	// TODO replace 10 by sizeOfArray once the data are there
+	for (MxS32 i = 0; i < 10; i++) {
+		g_unk0x100f0db8[i].m_unk0x1c = 0;
+	}
 }
 
 // FUNCTION: LEGO1 0x10018940
+// FUNCTION: BETA10 0x1003d65f
 void Act2Actor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 {
 	LegoAnimActor::SetROI(p_roi, p_bool1, p_bool2);
@@ -36,6 +48,7 @@ void Act2Actor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 }
 
 // FUNCTION: LEGO1 0x100189f0
+// FUNCTION: BETA10 0x1000ca64
 MxResult Act2Actor::VTable0x94(LegoPathActor*, MxBool)
 {
 	if (m_unk0x1f == FALSE) {
@@ -55,12 +68,14 @@ MxResult Act2Actor::VTable0x9c()
 }
 
 // STUB: LEGO1 0x10018c30
+// STUB: BETA10 0x1000cb52
 void Act2Actor::VTable0x70(float p_und)
 {
 	// TODO
 }
 
 // FUNCTION: LEGO1 0x10019280
+// FUNCTION: BETA10 0x1000d4a6
 void Act2Actor::SetWorldSpeed(MxFloat p_worldSpeed)
 {
 	LegoAnimActor::SetWorldSpeed(p_worldSpeed);
@@ -75,6 +90,7 @@ void Act2Actor::FUN_10019520()
 }
 
 // STUB: LEGO1 0x100195a0
+// STUB: BETA10 0x1000d7d3
 MxS32 Act2Actor::VTable0xa0()
 {
 	// TODO

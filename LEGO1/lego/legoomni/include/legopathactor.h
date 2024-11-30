@@ -18,6 +18,7 @@ extern MxLong g_unk0x100f3308;
 extern const char* g_strHIT_WALL_SOUND;
 
 // VTABLE: LEGO1 0x100d6e28
+// VTABLE: BETA10 0x101bdc08
 // SIZE 0x154
 class LegoPathActor : public LegoActor {
 public:

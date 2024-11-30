@@ -38,6 +38,7 @@ const char* g_strHIT_WALL_SOUND = "HIT_WALL_SOUND";
 MxLong g_unk0x100f3308 = 0;
 
 // FUNCTION: LEGO1 0x1002d700
+// FUNCTION: BETA10 0x100ae6e0
 LegoPathActor::LegoPathActor()
 {
 	m_boundary = NULL;
@@ -57,6 +58,7 @@ LegoPathActor::LegoPathActor()
 }
 
 // FUNCTION: LEGO1 0x1002d820
+// FUNCTION: BETA10 0x100ae80e
 LegoPathActor::~LegoPathActor()
 {
 	if (m_grec) {
