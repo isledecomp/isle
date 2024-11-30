@@ -12,6 +12,7 @@ DECOMP_SIZE_ASSERT(LegoAnimActor, 0x174)
 DECOMP_SIZE_ASSERT(LegoAnimActorStruct, 0x20)
 
 // FUNCTION: LEGO1 0x1001bf80
+// FUNCTION: BETA10 0x1003dc10
 LegoAnimActorStruct::LegoAnimActorStruct(float p_unk0x00, LegoAnim* p_AnimTreePtr, LegoROI** p_roiMap, MxU32 p_numROIs)
 {
 	m_unk0x00 = p_unk0x00;
@@ -146,9 +147,12 @@ MxResult LegoAnimActor::FUN_1001c360(float p_und, Matrix4& p_transform)
 
 // FUNCTION: LEGO1 0x1001c450
 // FUNCTION: BETA10 0x1003e590
-MxResult LegoAnimActor::FUN_1001c450(LegoAnim* p_animTreePtr, float p_unk0x00, LegoROI** p_roiMap, MxU32 p_numROIs)
+MxResult LegoAnimActor::FUN_1001c450(LegoAnim* p_AnimTreePtr, float p_unk0x00, LegoROI** p_roiMap, MxU32 p_numROIs)
 {
-	LegoAnimActorStruct* laas = new LegoAnimActorStruct(p_unk0x00, p_animTreePtr, p_roiMap, p_numROIs);
+	// the capitalization of `p_AnimTreePtr` was taken from BETA10
+	assert(p_AnimTreePtr && p_roiMap);
+
+	LegoAnimActorStruct* laas = new LegoAnimActorStruct(p_unk0x00, p_AnimTreePtr, p_roiMap, p_numROIs);
 
 	for (vector<LegoAnimActorStruct*>::iterator it = m_animMaps.begin(); it != m_animMaps.end(); it++) {
 		if (p_unk0x00 < (*it)->m_unk0x00) {
