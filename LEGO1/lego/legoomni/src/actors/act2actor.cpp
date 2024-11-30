@@ -9,7 +9,8 @@ DECOMP_SIZE_ASSERT(Act2Actor, 0x1a8)
 DECOMP_SIZE_ASSERT(Act2Actor::UnknownListStructure, 0x20)
 
 // TODO: Copy the data once we know more about its fields. Total: 10 entries
-// // GLOBAL: LEGO1 0x100f0db8
+// GLOBAL: LEGO1 0x100f0db8
+// GLOBAL: BETA10 0x101dbd00
 Act2Actor::UnknownListStructure g_unk0x100f0db8[] = {{{0}, 0, {0}}};
 
 // FUNCTION: LEGO1 0x100187e0
@@ -82,6 +83,12 @@ void Act2Actor::SetWorldSpeed(MxFloat p_worldSpeed)
 	m_unk0x44 = 0;
 }
 
+// FUNCTION: LEGO1 0x100192a0
+void Act2Actor::FUN_100192a0(undefined4 p_param)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10019520
 // STUB: BETA10 0x1000d4d6
 void Act2Actor::FUN_10019520()
@@ -89,12 +96,118 @@ void Act2Actor::FUN_10019520()
 	// TODO
 }
 
-// STUB: LEGO1 0x100195a0
-// STUB: BETA10 0x1000d7d3
+// FUNCTION: LEGO1 0x100195a0
+// FUNCTION: BETA10 0x1000d7d3
 MxS32 Act2Actor::VTable0xa0()
 {
-	// TODO
-	return 0;
+	undefined4 newLocation;
+
+	CurrentWorld();
+	MxU16 randomVal = rand() / (RAND_MAX / 2) + 1;
+
+	if (m_unk0x48 == 8 && m_unk0x1d != 8) {
+		newLocation = 8;
+	}
+	else {
+		switch (m_unk0x1d) {
+		case 0:
+			if (randomVal == 1) {
+				newLocation = 3;
+			}
+			else {
+				newLocation = 7;
+			}
+			break;
+		case 1:
+			if (randomVal == 1) {
+				newLocation = 2;
+			}
+			else {
+				newLocation = 4;
+			}
+			break;
+		case 2:
+			if (randomVal == 1) {
+				newLocation = 3;
+			}
+			else {
+				newLocation = 6;
+			}
+			break;
+		case 3:
+			if (randomVal == 1) {
+				newLocation = 5;
+			}
+			else {
+				newLocation = 1;
+			}
+			break;
+		case 4:
+			if (randomVal == 1) {
+				newLocation = 7;
+			}
+			else {
+				newLocation = 0;
+			}
+			break;
+		case 5:
+			if (randomVal == 1) {
+				newLocation = 6;
+			}
+			else {
+				newLocation = 1;
+			}
+			break;
+		case 6:
+			if (randomVal == 1) {
+				newLocation = 0;
+			}
+			else {
+				newLocation = 4;
+			}
+			break;
+		case 7:
+			if (randomVal == 1) {
+				newLocation = 2;
+			}
+			else {
+				newLocation = 5;
+			}
+			break;
+		case 8:
+			if (randomVal == 1) {
+				newLocation = 0;
+			}
+			else {
+				newLocation = 4;
+			}
+		}
+	}
+
+	undefined4 firstChoice = newLocation;
+
+	if (m_unk0x48 < 7 || g_unk0x100f0db8[m_unk0x1d].m_unk0x1c) {
+		while (g_unk0x100f0db8[newLocation].m_unk0x1c || m_unk0x1d == newLocation) {
+			if (newLocation == 7) {
+				newLocation = 0;
+			}
+			else {
+				newLocation++;
+			}
+
+			assert(newLocation != firstChoice);
+		}
+	}
+
+	m_unk0x1d = newLocation;
+	FUN_100192a0(newLocation);
+
+	if (m_grec) {
+		return SUCCESS;
+	}
+	else {
+		return FAILURE;
+	}
 }
 
 // FUNCTION: LEGO1 0x1001a180

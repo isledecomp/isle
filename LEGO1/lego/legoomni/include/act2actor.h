@@ -2,6 +2,7 @@
 #define ACT2ACTOR_H
 
 #include "legoanimactor.h"
+#include "legopathedgecontainer.h"
 
 // VTABLE: LEGO1 0x100d6078 LegoPathActor
 // VTABLE: LEGO1 0x100d6148 LegoAnimActor
@@ -27,6 +28,7 @@ public:
 	MxS32 VTable0xa0() override;                                            // vtable+0xa0
 
 	void FUN_10019520();
+	void FUN_100192a0(undefined4 p_param);
 
 	// SYNTHETIC: LEGO1 0x1001a0a0
 	// Act2Actor::`scalar deleting destructor'
@@ -37,7 +39,7 @@ public:
 
 private:
 	undefined m_unk0x1c;  // 0x1c
-	undefined m_unk0x1d;  // 0x1d
+	MxS8 m_unk0x1d;       // 0x1d
 	undefined m_unk0x1e;  // 0x1e
 	MxBool m_unk0x1f;     // 0x1f
 	undefined4 m_unk0x20; // 0x20
@@ -50,7 +52,7 @@ private:
 	undefined4 m_unk0x3c; // 0x3c
 	undefined m_unk0x40;  // 0x40
 	undefined4 m_unk0x44; // 0x44
-	undefined m_unk0x48;  // 0x48
+	MxS8 m_unk0x48;       // 0x48
 	undefined4 m_unk0x4c; // 0x4c
 };
 
