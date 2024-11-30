@@ -40,6 +40,7 @@ Act2Actor::Act2Actor()
 }
 
 // FUNCTION: LEGO1 0x10018940
+// FUNCTION: BETA10 0x1003d65f
 void Act2Actor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 {
 	LegoAnimActor::SetROI(p_roi, p_bool1, p_bool2);
@@ -47,6 +48,7 @@ void Act2Actor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 }
 
 // FUNCTION: LEGO1 0x100189f0
+// FUNCTION: BETA10 0x1000ca64
 MxResult Act2Actor::VTable0x94(LegoPathActor*, MxBool)
 {
 	if (m_unk0x1f == FALSE) {
@@ -73,6 +75,7 @@ void Act2Actor::VTable0x70(float p_und)
 }
 
 // FUNCTION: LEGO1 0x10019280
+// FUNCTION: BETA10 0x1000d4a6
 void Act2Actor::SetWorldSpeed(MxFloat p_worldSpeed)
 {
 	LegoAnimActor::SetWorldSpeed(p_worldSpeed);
@@ -87,6 +90,7 @@ void Act2Actor::FUN_10019520()
 }
 
 // STUB: LEGO1 0x100195a0
+// STUB: BETA10 0x1000d7d3
 MxS32 Act2Actor::VTable0xa0()
 {
 	// TODO
