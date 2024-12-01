@@ -737,11 +737,11 @@ MxResult LegoPathController::ReadVector(LegoStorage* p_storage, Mx4DPointFloat& 
 // STUB: BETA10 0x100b8911
 MxResult LegoPathController::FUN_10048310(
 	LegoPathEdgeContainer* p_grec,
-	Vector3& p_position,
-	Vector3& p_direction,
+	const Vector3& p_position,
+	const Vector3& p_direction,
 	LegoPathBoundary* p_boundary1,
-	Vector3& p_param5,
-	Vector3& p_param6,
+	const Vector3& p_param5,
+	const Vector3& p_param6,
 	LegoPathBoundary* p_boundary2,
 	MxBool p_param8,
 	MxFloat* p_param9
