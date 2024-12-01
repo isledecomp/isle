@@ -1,6 +1,7 @@
 #include "act2actor.h"
 
 #include "legocachesoundmanager.h"
+#include "legopathcontroller.h"
 #include "legosoundmanager.h"
 #include "misc.h"
 #include "roi/legoroi.h"
@@ -8,10 +9,21 @@
 DECOMP_SIZE_ASSERT(Act2Actor, 0x1a8)
 DECOMP_SIZE_ASSERT(Act2Actor::UnknownListStructure, 0x20)
 
-// TODO: Copy the data once we know more about its fields. Total: 10 entries
 // GLOBAL: LEGO1 0x100f0db8
 // GLOBAL: BETA10 0x101dbd00
-Act2Actor::UnknownListStructure g_unk0x100f0db8[] = {{{0}, 0, {0}}};
+Act2Actor::UnknownListStructure g_unk0x100f0db8[] = {
+	{{-47.92, 7.0699968, -31.58}, {-0.999664, 0.0, -0.025916}, "edg01_27", FALSE},
+	{{-70.393349, 8.07, 3.151935}, {-0.90653503, 0.0, 0.422131}, "int06", FALSE},
+	{{-47.74, 4.079995, -52.3}, {-0.98293, 0.0, -0.18398}, "edg01_08", FALSE},
+	{{-26.273487, 0.069, 12.170015}, {0.987199, 0.0, -0.159491}, "INT14", FALSE},
+	{{26.16499, 0.069, 5.61}, {0.027719, 0.0, 0.999616}, "INT22", FALSE},
+	{{66.383446, 4.07, 32.387417}, {0.979487, 0.0, -0.201506}, "edg02_27", FALSE},
+	{{71.843285, 0.069, -49.524852}, {0.99031502, 0.0, 0.13884}, "edg02_39", FALSE},
+	{{26.470566, 0.069, -44.670845}, {0.004602, 0.0, -0.99998897}, "int26", FALSE},
+	{{-6.323625, 0.069, -47.96045}, {-0.982068, 0.0, 0.188529}, "edg02_53", FALSE},
+	{{-36.689, -0.978409, 31.449}, {0.083792, -0.94303, -0.66398698}, "edg00_157", FALSE},
+	{{-44.6, 0.1, 45.3}, {0.95, 0.0, -0.3}, "edg00_154", FALSE},
+};
 
 // FUNCTION: LEGO1 0x100187e0
 // FUNCTION: BETA10 0x1000c7fb
@@ -34,7 +46,7 @@ Act2Actor::Act2Actor()
 	m_unk0x38 = 0;
 	m_unk0x3c = 0;
 
-	// TODO replace 10 by sizeOfArray once the data are there
+	// Odd: The code says < 10, but there are 11 entries in the array
 	for (MxS32 i = 0; i < 10; i++) {
 		g_unk0x100f0db8[i].m_unk0x1c = 0;
 	}
@@ -84,13 +96,45 @@ void Act2Actor::SetWorldSpeed(MxFloat p_worldSpeed)
 }
 
 // FUNCTION: LEGO1 0x100192a0
+// FUNCTION: BETA10 0x1000d4d6
 void Act2Actor::FUN_100192a0(undefined4 p_param)
 {
-	// TODO
+	Mx3DPointFloat local38(0.0, 0.0, 0.0);
+	Mx3DPointFloat local4c(0.0, 0.0, 0.0);
+
+	if (m_grec) {
+		delete m_grec;
+	}
+
+	m_grec = new LegoPathEdgeContainer();
+	assert(m_grec);
+
+	local38 = Vector3(g_unk0x100f0db8[p_param].m_unk0x00);
+	local4c = Vector3(g_unk0x100f0db8[p_param].m_unk0x0c);
+
+	LegoPathBoundary* otherBoundary = m_controller->GetPathBoundary(g_unk0x100f0db8[p_param].m_unk0x18);
+
+	MxResult sts = m_controller->FUN_10048310(
+		m_grec,
+		Vector3(m_roi->GetWorldPosition()),
+		Vector3(m_roi->GetWorldDirection()),
+		m_boundary,
+		local38,
+		local4c,
+		otherBoundary,
+		TRUE,
+		NULL
+	);
+
+	assert(!sts);
+
+	if (sts) {
+		delete m_grec;
+		m_grec = NULL;
+	}
 }
 
 // FUNCTION: LEGO1 0x10019520
-// FUNCTION: BETA10 0x1000d4d6
 void Act2Actor::FUN_10019520()
 {
 	m_unk0x1e = 4;

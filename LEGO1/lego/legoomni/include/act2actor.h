@@ -12,9 +12,10 @@
 class Act2Actor : public LegoAnimActor {
 public:
 	struct UnknownListStructure {
-		undefined m_unk0x00[28];
-		undefined m_unk0x1c;
-		undefined m_unk0x1d[3];
+		MxFloat m_unk0x00[3];      // 0x00
+		MxFloat m_unk0x0c[3];      // 0x0c
+		const LegoChar* m_unk0x18; // 0x18
+		undefined m_unk0x1c;       // 0x1c
 	};
 
 	Act2Actor();
@@ -55,5 +56,8 @@ private:
 	MxS8 m_unk0x48;       // 0x48
 	undefined4 m_unk0x4c; // 0x4c
 };
+
+// TEMPLATE: LEGO1 0x100194f0
+// list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >::list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >
 
 #endif // ACT2ACTOR_H
