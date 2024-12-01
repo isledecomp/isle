@@ -117,6 +117,17 @@ public:
 		LegoUnknown100db7f4*& p_edge,
 		LegoPathBoundary*& p_boundary
 	);
+	MxResult FUN_10048310(
+		LegoPathEdgeContainer* p_grec,
+		const Vector3& p_position,
+		const Vector3& p_direction,
+		LegoPathBoundary* p_boundary1,
+		const Vector3& p_param5,
+		const Vector3& p_param6,
+		LegoPathBoundary* p_boundary2,
+		MxBool p_param8,
+		MxFloat* p_param9
+	);
 
 	static MxResult Init();
 	static MxResult Reset();

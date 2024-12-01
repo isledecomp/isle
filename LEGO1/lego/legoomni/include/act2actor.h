@@ -11,9 +11,10 @@
 class Act2Actor : public LegoAnimActor {
 public:
 	struct UnknownListStructure {
-		undefined m_unk0x00[28];
-		undefined m_unk0x1c;
-		undefined m_unk0x1d[3];
+		MxFloat m_unk0x00[3];  // 0x00
+		MxFloat m_unk0x0c[3];  // 0x0c
+		const char* m_unk0x18; // 0x18
+		undefined m_unk0x1c;   // 0x1c
 	};
 
 	Act2Actor();
@@ -27,6 +28,7 @@ public:
 	MxS32 VTable0xa0() override;                                            // vtable+0xa0
 
 	void FUN_10019520();
+	void FUN_100192a0(undefined4 p_param);
 
 	// SYNTHETIC: LEGO1 0x1001a0a0
 	// Act2Actor::`scalar deleting destructor'
@@ -37,12 +39,12 @@ public:
 
 private:
 	undefined m_unk0x1c;  // 0x1c
-	undefined m_unk0x1d;  // 0x1d
+	MxS8 m_unk0x1d;       // 0x1d
 	undefined m_unk0x1e;  // 0x1e
 	MxBool m_unk0x1f;     // 0x1f
 	undefined4 m_unk0x20; // 0x20
 	undefined4 m_unk0x24; // 0x24
-	undefined m_unk0x28;  // 0x28
+	MxS8 m_unk0x28;       // 0x28
 	undefined4 m_unk0x2c; // 0x2c
 	undefined4 m_unk0x30; // 0x30
 	undefined4 m_unk0x34; // 0x34
@@ -50,8 +52,11 @@ private:
 	undefined4 m_unk0x3c; // 0x3c
 	undefined m_unk0x40;  // 0x40
 	undefined4 m_unk0x44; // 0x44
-	undefined m_unk0x48;  // 0x48
+	MxS8 m_unk0x48;       // 0x48
 	undefined4 m_unk0x4c; // 0x4c
 };
+
+// TEMPLATE: LEGO1 0x100194f0
+// list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >::list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >
 
 #endif // ACT2ACTOR_H
