@@ -2,7 +2,6 @@
 #define ACT2ACTOR_H
 
 #include "legoanimactor.h"
-#include "legopathedgecontainer.h"
 
 // VTABLE: LEGO1 0x100d6078 LegoPathActor
 // VTABLE: LEGO1 0x100d6148 LegoAnimActor

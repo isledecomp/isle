@@ -2,6 +2,7 @@
 
 #include "legocachesoundmanager.h"
 #include "legopathcontroller.h"
+#include "legopathedgecontainer.h"
 #include "legosoundmanager.h"
 #include "misc.h"
 #include "roi/legoroi.h"
@@ -109,15 +110,15 @@ void Act2Actor::FUN_100192a0(undefined4 p_param)
 	m_grec = new LegoPathEdgeContainer();
 	assert(m_grec);
 
-	local38 = Vector3(g_unk0x100f0db8[p_param].m_unk0x00);
-	local4c = Vector3(g_unk0x100f0db8[p_param].m_unk0x0c);
+	local38 = g_unk0x100f0db8[p_param].m_unk0x00;
+	local4c = g_unk0x100f0db8[p_param].m_unk0x0c;
 
 	LegoPathBoundary* otherBoundary = m_controller->GetPathBoundary(g_unk0x100f0db8[p_param].m_unk0x18);
 
 	MxResult sts = m_controller->FUN_10048310(
 		m_grec,
-		Vector3(m_roi->GetWorldPosition()),
-		Vector3(m_roi->GetWorldDirection()),
+		m_roi->GetWorldPosition(),
+		m_roi->GetWorldDirection(),
 		m_boundary,
 		local38,
 		local4c,
