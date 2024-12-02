@@ -43,8 +43,8 @@ public:
 	MxResult Play(const char* p_name, MxBool p_looping);
 	void Stop();
 	void FUN_10006be0();
-	void MuteSilence(MxBool p_muted);
 	void SetDistance(MxS32 p_min, MxS32 p_max);
+	void MuteSilence(MxBool p_muted);
 	void MuteStop(MxBool p_mute);
 
 	// SYNTHETIC: LEGO1 0x10006610
