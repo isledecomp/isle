@@ -197,7 +197,7 @@ void LegoGameState::SetActor(MxU8 p_actorId)
 		delete oldActor;
 	}
 
-	newActor->ClearFlag(0x02);
+	newActor->ClearFlag(LegoEntity::c_managerOwned);
 	SetUserActor(newActor);
 }
 
