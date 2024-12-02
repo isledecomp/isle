@@ -44,7 +44,8 @@ public:
 	void Stop();
 	void FUN_10006be0();
 	void SetDistance(MxS32 p_min, MxS32 p_max);
-	void Mute(MxBool p_mute);
+	void MuteSilence(MxBool p_muted);
+	void MuteStop(MxBool p_mute);
 
 	// SYNTHETIC: LEGO1 0x10006610
 	// LegoCacheSound::`scalar deleting destructor'

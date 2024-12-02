@@ -1,6 +1,7 @@
 #include "act2brick.h"
 
 #include "legocachesoundmanager.h"
+#include "legocharactermanager.h"
 #include "legosoundmanager.h"
 #include "legoworld.h"
 #include "misc.h"
@@ -30,6 +31,21 @@ Act2Brick::Act2Brick()
 Act2Brick::~Act2Brick()
 {
 	TickleManager()->UnregisterClient(this);
+}
+
+// FUNCTION: LEGO1 0x1007a620
+// FUNCTION: BETA10 0x10012ba2
+void Act2Brick::Remove()
+{
+	StopWhistleSound();
+	CurrentWorld()->Remove(this);
+
+	if (m_roi != NULL) {
+		CharacterManager()->ReleaseActor(m_roi->GetName());
+		m_roi = NULL;
+	}
+
+	m_unk0x164 = 0;
 }
 
 // FUNCTION: LEGO1 0x1007a750
@@ -106,5 +122,13 @@ void Act2Brick::StopWhistleSound()
 	if (m_whistleSound != NULL) {
 		SoundManager()->GetCacheSoundManager()->Stop(m_whistleSound);
 		m_whistleSound = NULL;
+	}
+}
+
+// FUNCTION: LEGO1 0x1007aa00
+void Act2Brick::Mute(MxBool p_muted)
+{
+	if (m_whistleSound != NULL) {
+		m_whistleSound->MuteSilence(p_muted);
 	}
 }

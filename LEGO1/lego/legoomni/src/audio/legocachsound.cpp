@@ -253,9 +253,26 @@ void LegoCacheSound::FUN_10006cd0(undefined4, undefined4)
 {
 }
 
+// FUNCTION: LEGO1 0x10006ce0
+void LegoCacheSound::MuteSilence(MxBool p_muted)
+{
+	if (m_muted != p_muted) {
+		m_muted = p_muted;
+
+		if (m_muted) {
+			m_dsBuffer->SetVolume(-3000);
+		}
+		else {
+			MxS32 volume = m_volume * SoundManager()->GetVolume() / 100;
+			MxS32 attenuation = SoundManager()->GetAttenuation(volume);
+			m_dsBuffer->SetVolume(attenuation);
+		}
+	}
+}
+
 // FUNCTION: LEGO1 0x10006d40
 // FUNCTION: BETA10 0x10066ec8
-void LegoCacheSound::Mute(MxBool p_muted)
+void LegoCacheSound::MuteStop(MxBool p_muted)
 {
 	if (m_muted != p_muted) {
 		m_muted = p_muted;

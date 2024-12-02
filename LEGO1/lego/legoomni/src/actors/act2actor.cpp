@@ -39,12 +39,12 @@ Act2Actor::Act2Actor()
 	m_unk0x28 = 4;
 	m_unk0x2c = 0;
 	m_unk0x30 = 0;
-	m_unk0x34 = 0;
+	m_shootAnim = NULL;
 	m_unk0x44 = 0;
 	m_unk0x40 = 1;
 	m_unk0x48 = 0;
 	m_unk0x4c = 0;
-	m_unk0x38 = 0;
+	m_unk0x38 = NULL;
 	m_unk0x3c = 0;
 
 	// Odd: The code says < 10, but there are 11 entries in the array
@@ -59,6 +59,23 @@ void Act2Actor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 {
 	LegoAnimActor::SetROI(p_roi, p_bool1, p_bool2);
 	m_roi->SetVisibility(FALSE);
+}
+
+// FUNCTION: LEGO1 0x10018980
+// FUNCTION: BETA10 0x1000c963
+void Act2Actor::FUN_10018980()
+{
+	for (MxS32 i = 0; i < m_animMaps.size(); i++) {
+		if (m_animMaps[i]->GetUnknown0x00() == -1.0f) {
+			m_shootAnim = m_animMaps[i];
+		}
+	}
+
+	assert(m_shootAnim);
+
+	m_unk0x38 = SoundManager()->GetCacheSoundManager()->FindSoundByKey("xarrow");
+	m_unk0x38->SetDistance(45, 55);
+	m_roi->SetVisibility(TRUE);
 }
 
 // FUNCTION: LEGO1 0x100189f0

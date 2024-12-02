@@ -903,7 +903,7 @@ void LegoAnimationManager::FUN_100604d0(MxBool p_unk0x08)
 
 // FUNCTION: LEGO1 0x100604f0
 // FUNCTION: BETA10 0x1004137b
-void LegoAnimationManager::FUN_100604f0(MxS32 p_objectIds[], undefined4 p_numObjectIds)
+void LegoAnimationManager::FUN_100604f0(MxS32 p_objectIds[], MxU32 p_numObjectIds)
 {
 	for (MxS32 i = 0; i < p_numObjectIds; i++) {
 		for (MxS32 j = 0; j < m_animCount; j++) {
