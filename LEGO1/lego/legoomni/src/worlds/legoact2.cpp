@@ -1,5 +1,6 @@
 #include "legoact2.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "act2actor.h"
 #include "act2main_actions.h"
 #include "infomain_actions.h"
@@ -14,6 +15,7 @@
 #include "legopathstruct.h"
 #include "legosoundmanager.h"
 #include "legoutils.h"
+#include "legovideomanager.h"
 #include "misc.h"
 #include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
@@ -76,7 +78,7 @@ LegoAct2::LegoAct2()
 	m_gameState = NULL;
 	m_pepper = NULL;
 	m_ambulance = NULL;
-	m_unk0x10c2 = 0;
+	m_ready = FALSE;
 	m_unk0x1130 = 0;
 	m_unk0x10c0 = 0;
 	m_unk0x10c1 = 0;
@@ -100,7 +102,7 @@ MxBool LegoAct2::VTable0x5c()
 // FUNCTION: BETA10 0x1003a6f0
 LegoAct2::~LegoAct2()
 {
-	if (m_unk0x10c2) {
+	if (m_ready) {
 		TickleManager()->UnregisterClient(this);
 	}
 
@@ -477,10 +479,49 @@ MxLong LegoAct2::HandleTransitionEnd()
 	return 1;
 }
 
-// STUB: LEGO1 0x10050a80
+// FUNCTION: LEGO1 0x10050a80
 void LegoAct2::ReadyWorld()
 {
-	// TODO
+	LegoWorld::ReadyWorld();
+
+	AnimationManager()->Resume();
+	TickleManager()->RegisterClient(this, 20);
+
+	m_ready = TRUE;
+	m_siFile = VariableTable()->GetVariable("ACT2_ANIMS_FILE");
+
+	GameState()->SetActor(LegoActor::c_pepper);
+	m_pepper = FindROI("pepper");
+	IslePathActor* pepper = (IslePathActor*) m_pepper->GetEntity();
+	pepper->SpawnPlayer(
+		LegoGameState::e_unk50,
+		TRUE,
+		IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+	);
+
+	LegoROI* roi = FindROI("Block01");
+	BoundingSphere sphere = roi->GetBoundingSphere();
+	sphere.Radius() *= 1.5;
+	roi->SetBoundingSphere(sphere);
+	LegoPathActor* actor = (LegoPathActor*) roi->GetEntity();
+	PlaceActor(actor, "EDG01_04", 1, 0.5f, 3, 0.5f);
+
+	MxMatrix local2world = roi->GetLocal2World();
+	local2world[3][0] -= 1.5;
+	roi->FUN_100a58f0(local2world);
+	roi->VTable0x14();
+
+	roi = FindROI("Block02");
+	sphere = roi->GetBoundingSphere();
+	sphere.Radius() *= 1.5;
+	roi->SetBoundingSphere(sphere);
+	actor = (LegoPathActor*) roi->GetEntity();
+	PlaceActor(actor, "EDG00_149", 0, 0.5f, 2, 0.5f);
+
+	PlayMusic(JukeboxScript::c_Jail_Music);
+	FUN_10051900();
+	VideoManager()->Get3DManager()->SetFrustrum(90.0f, 0.1f, 250.f);
+	m_gameState->m_enabled = TRUE;
 }
 
 // FUNCTION: LEGO1 0x10050cf0
