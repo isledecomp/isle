@@ -157,7 +157,7 @@ public:
 	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
 	void FUN_10060480(LegoChar* p_characterNames[], MxU32 p_numCharacterNames);
 	void FUN_100604d0(MxBool p_unk0x08);
-	void FUN_100604f0(MxS32 p_objectIds[], undefined4 p_numObjectIds);
+	void FUN_100604f0(MxS32 p_objectIds[], MxU32 p_numObjectIds);
 	void FUN_10060540(MxBool p_unk0x29);
 	void FUN_10060570(MxBool p_unk0x1a);
 	MxResult StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity);

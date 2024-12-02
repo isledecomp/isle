@@ -27,6 +27,7 @@ public:
 	MxResult VTable0x9c() override;                                         // vtable+0x9c
 	MxS32 VTable0xa0() override;                                            // vtable+0xa0
 
+	void FUN_10018980();
 	void FUN_10019520();
 	void FUN_100192a0(undefined4 p_param);
 
@@ -38,22 +39,22 @@ public:
 	// `vbtable'
 
 private:
-	undefined m_unk0x1c;  // 0x1c
-	MxS8 m_unk0x1d;       // 0x1d
-	undefined m_unk0x1e;  // 0x1e
-	MxBool m_unk0x1f;     // 0x1f
-	undefined4 m_unk0x20; // 0x20
-	undefined4 m_unk0x24; // 0x24
-	MxS8 m_unk0x28;       // 0x28
-	undefined4 m_unk0x2c; // 0x2c
-	undefined4 m_unk0x30; // 0x30
-	undefined4 m_unk0x34; // 0x34
-	undefined4 m_unk0x38; // 0x38
-	undefined4 m_unk0x3c; // 0x3c
-	undefined m_unk0x40;  // 0x40
-	undefined4 m_unk0x44; // 0x44
-	MxS8 m_unk0x48;       // 0x48
-	undefined4 m_unk0x4c; // 0x4c
+	undefined m_unk0x1c;              // 0x1c
+	MxS8 m_unk0x1d;                   // 0x1d
+	undefined m_unk0x1e;              // 0x1e
+	MxBool m_unk0x1f;                 // 0x1f
+	undefined4 m_unk0x20;             // 0x20
+	undefined4 m_unk0x24;             // 0x24
+	MxS8 m_unk0x28;                   // 0x28
+	undefined4 m_unk0x2c;             // 0x2c
+	undefined4 m_unk0x30;             // 0x30
+	LegoAnimActorStruct* m_shootAnim; // 0x34
+	LegoCacheSound* m_unk0x38;        // 0x38
+	undefined4 m_unk0x3c;             // 0x3c
+	undefined m_unk0x40;              // 0x40
+	undefined4 m_unk0x44;             // 0x44
+	MxS8 m_unk0x48;                   // 0x48
+	undefined4 m_unk0x4c;             // 0x4c
 };
 
 // TEMPLATE: LEGO1 0x100194f0

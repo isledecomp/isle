@@ -68,15 +68,6 @@ public:
 	void SetUnknown0x1138(Act2Actor* p_unk0x1138) { m_unk0x1138 = p_unk0x1138; }
 	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
 
-	undefined4 FUN_10052560(
-		MxS32 p_param1,
-		MxBool p_param2,
-		MxBool p_param3,
-		Mx3DPointFloat* p_location,
-		Mx3DPointFloat* p_direction,
-		Mx3DPointFloat* p_param6
-	);
-
 	// SYNTHETIC: LEGO1 0x1004fe20
 	// LegoAct2::`scalar deleting destructor'
 
@@ -86,8 +77,19 @@ private:
 	MxLong HandlePathStruct(LegoPathStructNotificationParam& p_param);
 	void PlayMusic(JukeboxScript::Script p_objectId);
 	void FUN_10051900();
+	void FUN_10051960();
 	void InitBricks();
 	void UninitBricks();
+	void FUN_10051ac0();
+	MxResult FUN_10052560(
+		Act2mainScript::Script p_objectId,
+		MxBool p_param2,
+		MxBool p_param3,
+		Mx3DPointFloat* p_location,
+		Mx3DPointFloat* p_direction,
+		Mx3DPointFloat* p_param6
+	);
+	MxResult FUN_10052800();
 
 	Act2Brick m_bricks[10];        // 0x00f8
 	undefined m_unk0x10c0;         // 0x10c0
@@ -110,7 +112,7 @@ private:
 	undefined4 m_unk0x1134;             // 0x1134
 	Act2Actor* m_unk0x1138;             // 0x1138
 	undefined m_unk0x113c;              // 0x113c
-	undefined4 m_unk0x1140;             // 0x1140
+	Act2mainScript::Script m_unk0x1140; // 0x1140
 	Act2mainScript::Script m_unk0x1144; // 0x1144
 	undefined m_unk0x1148[0x08];        // 0x1148
 	LegoGameState::Area m_destLocation; // 0x1150

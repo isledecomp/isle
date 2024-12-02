@@ -31,8 +31,10 @@ public:
 	// SYNTHETIC: LEGO1 0x1007a450
 	// Act2Brick::`scalar deleting destructor'
 
+	void Remove();
 	void PlayWhistleSound();
 	void StopWhistleSound();
+	void Mute(MxBool p_muted);
 
 private:
 	static MxLong g_lastHitActorTime;

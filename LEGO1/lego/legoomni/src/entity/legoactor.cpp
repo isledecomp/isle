@@ -144,6 +144,6 @@ void LegoActor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 void LegoActor::Mute(MxBool p_muted)
 {
 	if (m_sound != NULL) {
-		m_sound->Mute(p_muted);
+		m_sound->MuteStop(p_muted);
 	}
 }
