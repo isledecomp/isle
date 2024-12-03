@@ -68,12 +68,14 @@ MxResult HistoryBook::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10082680
+// FUNCTION: BETA10 0x1002b907
 MxLong HistoryBook::Notify(MxParam& p_param)
 {
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		switch (param.GetNotification()) {
 		case c_notificationButtonUp:
 			m_destLocation = LegoGameState::Area::e_infoscor;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);

@@ -55,13 +55,15 @@ MxResult InfocenterDoor::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x100379e0
+// FUNCTION: BETA10 0x10032227
 MxLong InfocenterDoor::Notify(MxParam& p_param)
 {
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 	MxLong result = 0;
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		switch (param.GetNotification()) {
 		case c_notificationEndAction:
 			if (((MxEndActionNotificationParam&) p_param).GetAction()->GetAtomId() == m_atomId) {
 				BackgroundAudioManager()->RaiseVolume();

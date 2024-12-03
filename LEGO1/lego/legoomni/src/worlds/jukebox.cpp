@@ -68,13 +68,15 @@ MxResult JukeBox::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x1005d980
+// FUNCTION: BETA10 0x10037daf
 MxLong JukeBox::Notify(MxParam& p_param)
 {
 	MxLong result = 0;
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		switch (param.GetNotification()) {
 		case c_notificationControl:
 			result = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;

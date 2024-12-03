@@ -129,13 +129,15 @@ MxResult Isle::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10030c10
+// FUNCTION: BETA10 0x10032b63
 MxLong Isle::Notify(MxParam& p_param)
 {
 	MxLong result = 0;
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		switch (param.GetNotification()) {
 		case c_notificationEndAction:
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;
@@ -468,6 +470,7 @@ void Isle::UpdateGlobe()
 }
 
 // FUNCTION: LEGO1 0x100315f0
+// FUNCTION: BETA10 0x10033e46
 MxLong Isle::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 {
 	MxLong result = 0;

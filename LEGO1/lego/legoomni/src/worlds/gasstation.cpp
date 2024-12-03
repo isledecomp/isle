@@ -100,13 +100,15 @@ MxResult GasStation::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10004a60
+// FUNCTION: BETA10 0x10028883
 MxLong GasStation::Notify(MxParam& p_param)
 {
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 	MxResult result = 0;
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		switch (param.GetNotification()) {
 		case c_notificationEndAction:
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;

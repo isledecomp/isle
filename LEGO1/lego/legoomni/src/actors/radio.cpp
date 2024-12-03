@@ -81,12 +81,14 @@ Radio::~Radio()
 }
 
 // FUNCTION: LEGO1 0x1002ca30
+// FUNCTION: BETA10 0x100f19e8
 MxLong Radio::Notify(MxParam& p_param)
 {
 	MxLong result = 0;
 
 	if (m_unk0x0c) {
-		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		MxNotificationParam& param = (MxNotificationParam&) p_param;
+		switch (param.GetNotification()) {
 		case c_notificationEndAction:
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;

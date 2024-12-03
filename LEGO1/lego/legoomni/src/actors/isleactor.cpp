@@ -25,11 +25,13 @@ MxResult IsleActor::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x1002c7b0
+// FUNCTION: BETA10 0x1003622e
 MxLong IsleActor::Notify(MxParam& p_param)
 {
 	MxLong result = 0;
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 
-	switch (((MxNotificationParam&) p_param).GetNotification()) {
+	switch (param.GetNotification()) {
 	case c_notificationType0:
 		result = VTable0x6c();
 		break;
