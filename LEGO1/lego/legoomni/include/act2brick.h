@@ -31,7 +31,7 @@ public:
 	// SYNTHETIC: LEGO1 0x1007a450
 	// Act2Brick::`scalar deleting destructor'
 
-	MxResult FUN_1007a4e0(undefined4 p_param1);
+	MxResult Create(MxS32 p_index);
 	void Remove();
 	void FUN_1007a670(MxMatrix& p_param1, MxMatrix& p_param2, LegoPathBoundary* p_boundary);
 	void PlayWhistleSound();
@@ -39,6 +39,7 @@ public:
 	void Mute(MxBool p_muted);
 
 private:
+	static LegoChar* g_lodNames[];
 	static MxLong g_lastHitActorTime;
 
 	LegoCacheSound* m_whistleSound; // 0x154

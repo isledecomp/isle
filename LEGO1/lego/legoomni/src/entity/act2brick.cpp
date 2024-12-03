@@ -16,6 +16,10 @@
 
 DECOMP_SIZE_ASSERT(Act2Brick, 0x194)
 
+// GLOBAL: LEGO1 0x100f7a38
+LegoChar* Act2Brick::g_lodNames[] =
+	{"xchbase1", "xchblad1", "xchseat1", "xchtail1", "xhback1", "xhljet1", "xhmidl1", "xhmotr1", "xhsidl1", "xhsidr1"};
+
 // GLOBAL: LEGO1 0x100f7a60
 MxLong Act2Brick::g_lastHitActorTime = 0;
 
@@ -33,11 +37,33 @@ Act2Brick::~Act2Brick()
 	TickleManager()->UnregisterClient(this);
 }
 
-// STUB: LEGO1 0x1007a4e0
-// STUB: BETA10 0x10012ad5
-MxResult Act2Brick::FUN_1007a4e0(undefined4 p_param1)
+// FUNCTION: LEGO1 0x1007a4e0
+// FUNCTION: BETA10 0x10012ad5
+MxResult Act2Brick::Create(MxS32 p_index)
 {
-	// TODO
+	if (m_roi != NULL) {
+		return FAILURE;
+	}
+
+	char name[12];
+	sprintf(name, "chbrick%d", p_index);
+
+	m_roi = CharacterManager()->CreateAutoROI(name, g_lodNames[p_index], FALSE);
+
+	BoundingSphere sphere = m_roi->GetBoundingSphere();
+	sphere.Center()[1] -= 0.3;
+
+	if (p_index < 6) {
+		sphere.Radius() = m_roi->GetBoundingSphere().Radius() * 0.5f;
+	}
+	else {
+		sphere.Radius() = m_roi->GetBoundingSphere().Radius() * 2.0f;
+	}
+
+	m_roi->SetBoundingSphere(sphere);
+	m_roi->SetEntity(this);
+	CurrentWorld()->Add(this);
+	m_unk0x164 = 1;
 	return SUCCESS;
 }
 

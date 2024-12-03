@@ -642,7 +642,7 @@ MxLong LegoAct2::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 		m_unk0x10d0 = 0;
 
 		if (m_unk0x10c0 < 6) {
-			m_bricks[m_unk0x10c0].FUN_1007a4e0(m_unk0x10c0);
+			m_bricks[m_unk0x10c0].Create(m_unk0x10c0);
 			m_unk0x10c0++;
 		}
 
