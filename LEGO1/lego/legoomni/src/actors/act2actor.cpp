@@ -91,11 +91,28 @@ MxResult Act2Actor::VTable0x94(LegoPathActor*, MxBool)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10018a20
+// FUNCTION: LEGO1 0x10018a20
 MxResult Act2Actor::VTable0x9c()
 {
-	// TODO
-	return SUCCESS;
+	if (m_grec && !(m_grec->m_flags & LegoPathEdgeContainer::c_bit1)) {
+		delete m_grec;
+		m_grec = NULL;
+		return SUCCESS;
+	}
+	else {
+		if (m_unk0x1f) {
+			MxMatrix matrix = m_roi->GetLocal2World();
+			matrix[3][1] -= 3.0f;
+			m_roi->UpdateTransformationRelativeToParent(matrix);
+
+			LegoROI* brickstrROI = FindROI("brickstr");
+			MxMatrix brickstrMatrix = brickstrROI->GetLocal2World();
+			brickstrMatrix[3][1] -= 3.0f;
+			brickstrROI->UpdateTransformationRelativeToParent(brickstrMatrix);
+		}
+
+		return LegoPathActor::VTable0x9c();
+	}
 }
 
 // STUB: LEGO1 0x10018c30
