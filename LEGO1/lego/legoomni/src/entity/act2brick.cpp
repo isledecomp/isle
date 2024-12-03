@@ -56,11 +56,26 @@ void Act2Brick::Remove()
 	m_unk0x164 = 0;
 }
 
-// STUB: LEGO1 0x1007a670
-// STUB: BETA10 0x10012c04
+// FUNCTION: LEGO1 0x1007a670
+// FUNCTION: BETA10 0x10012c04
 void Act2Brick::FUN_1007a670(MxMatrix& p_param1, MxMatrix& p_param2, LegoPathBoundary* p_boundary)
 {
-	// TODO
+	m_unk0x17c = p_param2[3];
+	m_unk0x168 = p_param2[3];
+	((Vector3&) m_unk0x168).Sub(p_param1[3]);
+	((Vector3&) m_unk0x168).Div(8.0f);
+
+	m_unk0x190 = 0;
+	TickleManager()->RegisterClient(this, 20);
+
+	m_unk0x164 = 2;
+	CurrentWorld()->PlaceActor(this);
+	p_boundary->AddActor(this);
+
+	SetState(LegoPathActor::c_bit3);
+	m_roi->FUN_100a58f0(p_param1);
+	m_roi->VTable0x14();
+	m_roi->SetVisibility(TRUE);
 }
 
 // FUNCTION: LEGO1 0x1007a750
