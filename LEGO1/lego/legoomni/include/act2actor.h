@@ -29,6 +29,7 @@ public:
 
 	void FUN_10018980();
 	void FUN_10019520();
+	void FUN_10019560();
 	void FUN_100192a0(undefined4 p_param);
 
 	// SYNTHETIC: LEGO1 0x1001a0a0

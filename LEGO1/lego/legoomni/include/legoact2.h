@@ -81,6 +81,8 @@ private:
 	void InitBricks();
 	void UninitBricks();
 	void FUN_10051ac0();
+	void FUN_10051fa0(MxS32 p_param1);
+	void FUN_100521f0(MxS32 p_param1);
 	MxResult FUN_10052560(
 		Act2mainScript::Script p_objectId,
 		MxBool p_param2,
@@ -92,7 +94,7 @@ private:
 	MxResult FUN_10052800();
 
 	Act2Brick m_bricks[10];        // 0x00f8
-	undefined m_unk0x10c0;         // 0x10c0
+	undefined m_nextBrick;         // 0x10c0
 	undefined m_unk0x10c1;         // 0x10c1
 	MxBool m_ready;                // 0x10c2
 	undefined4 m_unk0x10c4;        // 0x10c4
