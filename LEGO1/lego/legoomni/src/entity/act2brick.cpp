@@ -12,6 +12,7 @@
 #include "mxtimer.h"
 #include "roi/legoroi.h"
 
+#include <stdio.h>
 #include <vec.h>
 
 DECOMP_SIZE_ASSERT(Act2Brick, 0x194)
