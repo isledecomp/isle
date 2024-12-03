@@ -80,7 +80,7 @@ LegoAct2::LegoAct2()
 	m_ambulance = NULL;
 	m_ready = FALSE;
 	m_unk0x1130 = 0;
-	m_unk0x10c0 = 0;
+	m_nextBrick = 0;
 	m_unk0x10c1 = 0;
 	m_unk0x1138 = NULL;
 	m_unk0x1140 = (Act2mainScript::Script) 0;
@@ -246,7 +246,7 @@ MxResult LegoAct2::Tickle()
 		m_unk0x10d0 += 50;
 
 		if (m_unk0x10d0 >= 200) {
-			if (m_unk0x10c0 < 5) {
+			if (m_nextBrick < 5) {
 				m_unk0x10c4 = 7;
 			}
 			else {
@@ -412,7 +412,7 @@ MxLong LegoAct2::HandleEndAction(MxEndActionNotificationParam& p_param)
 			break;
 		}
 		case 11:
-			m_bricks[m_unk0x10c0 - 1].Mute(TRUE);
+			m_bricks[m_nextBrick - 1].Mute(TRUE);
 			m_unk0x10c4 = 12;
 			m_unk0x10d0 = 0;
 
@@ -446,7 +446,7 @@ MxLong LegoAct2::HandleEndAction(MxEndActionNotificationParam& p_param)
 				roi->SetVisibility(FALSE);
 			}
 
-			m_bricks[m_unk0x10c0 - 1].Mute(FALSE);
+			m_bricks[m_nextBrick - 1].Mute(FALSE);
 			m_unk0x10c4 = 13;
 			FUN_10051ac0();
 			PlayMusic(JukeboxScript::c_BrickHunt);
@@ -552,7 +552,7 @@ void LegoAct2::Enable(MxBool p_enable)
 			PlayMusic(m_music);
 		}
 
-		if (m_unk0x10c4 == 10 && m_unk0x10c0 == 6 && m_bricks[5].GetROI() != NULL) {
+		if (m_unk0x10c4 == 10 && m_nextBrick == 6 && m_bricks[5].GetROI() != NULL) {
 			m_bricks[5].PlayWhistleSound();
 		}
 		else if (m_unk0x10c4 == 13) {
@@ -641,9 +641,9 @@ MxLong LegoAct2::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 		m_unk0x10c4 = 11;
 		m_unk0x10d0 = 0;
 
-		if (m_unk0x10c0 < 6) {
-			m_bricks[m_unk0x10c0].Create(m_unk0x10c0);
-			m_unk0x10c0++;
+		if (m_nextBrick < 6) {
+			m_bricks[m_nextBrick].Create(m_nextBrick);
+			m_nextBrick++;
 		}
 
 		MxMatrix local2world = m_ambulance->GetLocal2World();
@@ -653,7 +653,7 @@ MxLong LegoAct2::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 		local2world[3][1] += 1.5;
 		local2world2[3][1] -= 0.1;
 
-		m_bricks[m_unk0x10c0 - 1].FUN_1007a670(local2world, local2world2, boundary);
+		m_bricks[m_nextBrick - 1].FUN_1007a670(local2world, local2world2, boundary);
 	}
 
 	return 0;
