@@ -124,7 +124,9 @@ MxLong LegoRaceMap::Notify(MxParam& p_param)
 		return 1;
 	}
 
-	if (((MxNotificationParam&) p_param).GetNotification() == c_notificationControl &&
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
+
+	if (param.GetNotification() == c_notificationControl &&
 		m_Map_Ctl->GetAction()->GetObjectId() ==
 			((LegoControlManagerNotificationParam&) p_param).GetClickedObjectId()) {
 

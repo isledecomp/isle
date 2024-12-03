@@ -19,9 +19,12 @@ BuildingEntity::~BuildingEntity()
 }
 
 // FUNCTION: LEGO1 0x100150a0
+// FUNCTION: BETA10 0x10024e37
 MxLong BuildingEntity::Notify(MxParam& p_param)
 {
-	if (((MxNotificationParam&) p_param).GetNotification() == c_notificationClick) {
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
+
+	if (param.GetNotification() == c_notificationClick) {
 		return HandleClick((LegoEventNotificationParam&) p_param);
 	}
 

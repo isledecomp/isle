@@ -225,13 +225,15 @@ MxResult Infocenter::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x1006ef10
+// FUNCTION: BETA10 0x1002eaca
 MxLong Infocenter::Notify(MxParam& p_param)
 {
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 	MxLong result = 0;
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		switch (param.GetNotification()) {
 		case c_notificationType0:
 			result = HandleNotification0((MxNotificationParam&) p_param);
 			break;

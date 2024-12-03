@@ -69,13 +69,15 @@ MxResult Police::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x1005e480
+// FUNCTION: BETA10 0x100f04a3
 MxLong Police::Notify(MxParam& p_param)
 {
 	MxLong result = 0;
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		switch (param.GetNotification()) {
 		case c_notificationEndAction:
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;

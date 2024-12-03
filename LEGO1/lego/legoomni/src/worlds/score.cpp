@@ -84,13 +84,16 @@ void Score::DeleteScript()
 }
 
 // FUNCTION: LEGO1 0x10001410
+// FUNCTION: BETA10 0x100f4398
 MxLong Score::Notify(MxParam& p_param)
 {
 	MxLong ret = 0;
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
+
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		switch (param.GetNotification()) {
 		case c_notificationStartAction:
 			Paint();
 			ret = 1;

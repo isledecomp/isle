@@ -130,8 +130,9 @@ void Ambulance::CreateState()
 MxLong Ambulance::Notify(MxParam& p_param)
 {
 	MxLong result = 0;
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 
-	switch (((MxNotificationParam&) p_param).GetNotification()) {
+	switch (param.GetNotification()) {
 	case c_notificationType0:
 		result = HandleNotification0();
 		break;

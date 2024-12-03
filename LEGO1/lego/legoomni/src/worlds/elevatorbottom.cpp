@@ -52,13 +52,15 @@ MxResult ElevatorBottom::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10018150
+// FUNCTION: BETA10 0x10027d60
 MxLong ElevatorBottom::Notify(MxParam& p_param)
 {
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 	MxLong ret = 0;
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		switch (param.GetNotification()) {
 		case c_notificationControl:
 			ret = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;

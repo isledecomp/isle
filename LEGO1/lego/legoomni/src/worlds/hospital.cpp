@@ -106,13 +106,15 @@ MxResult Hospital::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10074990
+// FUNCTION: BETA10 0x1002ca3b
 MxLong Hospital::Notify(MxParam& p_param)
 {
 	MxLong result = 0;
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		switch (param.GetNotification()) {
 		case c_notificationEndAction:
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;

@@ -46,11 +46,13 @@ void IslePathActor::Destroy(MxBool p_fromDestructor)
 }
 
 // FUNCTION: LEGO1 0x1001a2c0
+// FUNCTION: BETA10 0x100364ca
 MxLong IslePathActor::Notify(MxParam& p_param)
 {
 	MxLong result = 0;
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 
-	switch (((MxNotificationParam&) p_param).GetNotification()) {
+	switch (param.GetNotification()) {
 	case c_notificationType0:
 		result = HandleNotification0();
 		break;

@@ -38,6 +38,7 @@ MxResult LegoCameraController::Create()
 }
 
 // FUNCTION: LEGO1 0x10012020
+// FUNCTION: BETA10 0x10067852
 MxLong LegoCameraController::Notify(MxParam& p_param)
 {
 	switch (((MxNotificationParam&) p_param).GetNotification()) {
