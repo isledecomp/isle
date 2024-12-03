@@ -656,9 +656,10 @@ MxResult LegoCarBuild::Tickle()
 MxLong LegoCarBuild::Notify(MxParam& p_param)
 {
 	MxLong result = LegoWorld::Notify(p_param);
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 
 	if (m_worldStarted) {
-		switch (((MxNotificationParam*) &p_param)->GetNotification()) {
+		switch (param.GetNotification()) {
 		case c_notificationType0:
 			FUN_10024c20((LegoEventNotificationParam*) &p_param);
 			result = 1;

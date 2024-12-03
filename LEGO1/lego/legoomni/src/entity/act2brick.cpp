@@ -12,6 +12,7 @@
 #include "mxtimer.h"
 #include "roi/legoroi.h"
 
+#include <assert.h>
 #include <stdio.h>
 #include <vec.h>
 
@@ -148,7 +149,9 @@ MxResult Act2Brick::Tickle()
 // FUNCTION: BETA10 0x10012ec4
 MxLong Act2Brick::Notify(MxParam& p_param)
 {
-	if (((MxNotificationParam&) p_param).GetNotification() == c_notificationClick && m_roi->GetVisibility()) {
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
+
+	if (param.GetNotification() == c_notificationClick && m_roi->GetVisibility()) {
 		m_roi->SetVisibility(FALSE);
 
 		if (m_whistleSound != NULL) {
@@ -160,6 +163,7 @@ MxLong Act2Brick::Notify(MxParam& p_param)
 		return 1;
 	}
 
+	assert(0);
 	return 0;
 }
 

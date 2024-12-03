@@ -196,9 +196,12 @@ void MxBackgroundAudioManager::FadeInOrFadeOut()
 }
 
 // FUNCTION: LEGO1 0x1007f170
+// FUNCTION: BETA10 0x100e8eb6
 MxLong MxBackgroundAudioManager::Notify(MxParam& p_param)
 {
-	switch (((MxNotificationParam&) p_param).GetNotification()) {
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
+
+	switch (param.GetNotification()) {
 	case c_notificationStartAction:
 		StartAction(p_param);
 		return 1;

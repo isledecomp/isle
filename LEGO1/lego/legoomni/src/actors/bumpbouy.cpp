@@ -33,10 +33,12 @@ BumpBouy::~BumpBouy()
 MxLong BumpBouy::Notify(MxParam& p_param)
 {
 	MxLong result = 0;
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
+
 	IslePathActor* user = (IslePathActor*) UserActor();
 	assert(user);
 
-	if (user->IsA("Jetski") && ((MxNotificationParam&) p_param).GetNotification() == c_notificationClick) {
+	if (user->IsA("Jetski") && param.GetNotification() == c_notificationClick) {
 		VideoManager()->SetRender3D(FALSE);
 		user->SetWorldSpeed(0);
 		user->Exit();

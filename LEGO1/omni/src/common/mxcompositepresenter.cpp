@@ -8,6 +8,8 @@
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(MxCompositePresenter, 0x4c);
 
 // FUNCTION: LEGO1 0x100b60b0
@@ -107,16 +109,22 @@ void MxCompositePresenter::EndAction()
 }
 
 // FUNCTION: LEGO1 0x100b6760
+// FUNCTION: BETA10 0x1013771e
 MxLong MxCompositePresenter::Notify(MxParam& p_param)
 {
 	AUTOLOCK(m_criticalSection);
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 
-	switch (((MxNotificationParam&) p_param).GetNotification()) {
+	switch (param.GetNotification()) {
 	case c_notificationEndAction:
 		VTable0x58((MxEndActionNotificationParam&) p_param);
 		break;
 	case c_notificationPresenter:
 		VTable0x5c((MxNotificationParam&) p_param);
+		break;
+	default:
+		assert(0);
+		break;
 	}
 
 	return 0;

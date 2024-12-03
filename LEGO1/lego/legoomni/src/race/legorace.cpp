@@ -89,10 +89,11 @@ LegoRace::~LegoRace()
 MxLong LegoRace::Notify(MxParam& p_param)
 {
 	LegoWorld::Notify(p_param);
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 
 	MxLong result = 0;
 	if (m_worldStarted) {
-		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		switch (param.GetNotification()) {
 		case c_notificationType0:
 			HandleType0Notification((MxNotificationParam&) p_param);
 			break;

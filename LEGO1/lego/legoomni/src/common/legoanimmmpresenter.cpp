@@ -215,9 +215,9 @@ void LegoAnimMMPresenter::DoneTickle()
 MxLong LegoAnimMMPresenter::Notify(MxParam& p_param)
 {
 	AUTOLOCK(m_criticalSection);
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
 
-	if (((MxNotificationParam&) p_param).GetNotification() == c_notificationEndAction &&
-		((MxNotificationParam&) p_param).GetSender() == m_presenter) {
+	if (param.GetNotification() == c_notificationEndAction && param.GetSender() == m_presenter) {
 		m_presenter = NULL;
 	}
 
