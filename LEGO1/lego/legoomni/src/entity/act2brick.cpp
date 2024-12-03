@@ -33,6 +33,14 @@ Act2Brick::~Act2Brick()
 	TickleManager()->UnregisterClient(this);
 }
 
+// STUB: LEGO1 0x1007a4e0
+// STUB: BETA10 0x10012ad5
+MxResult Act2Brick::FUN_1007a4e0(undefined4 p_param1)
+{
+	// TODO
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x1007a620
 // FUNCTION: BETA10 0x10012ba2
 void Act2Brick::Remove()
@@ -46,6 +54,13 @@ void Act2Brick::Remove()
 	}
 
 	m_unk0x164 = 0;
+}
+
+// STUB: LEGO1 0x1007a670
+// STUB: BETA10 0x10012c04
+void Act2Brick::FUN_1007a670(MxMatrix& p_param1, MxMatrix& p_param2, LegoPathBoundary* p_boundary)
+{
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x1007a750

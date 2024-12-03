@@ -177,6 +177,14 @@ void Act2Actor::FUN_10019520()
 	FUN_100192a0(10);
 }
 
+// FUNCTION: LEGO1 0x10019560
+void Act2Actor::FUN_10019560()
+{
+	m_unk0x1e = 5;
+	SetWorldSpeed(m_unk0x28 + 5);
+	FUN_100192a0(9);
+}
+
 // FUNCTION: LEGO1 0x100195a0
 // FUNCTION: BETA10 0x1000d7d3
 MxS32 Act2Actor::VTable0xa0()
