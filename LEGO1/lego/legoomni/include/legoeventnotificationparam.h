@@ -57,6 +57,8 @@ public:
 
 	// FUNCTION: BETA10 0x1007d620
 	void SetModifier(MxU8 p_modifier) { m_modifier = p_modifier; }
+
+	// FUNCTION: BETA10 0x1007d6b0
 	void SetKey(MxU8 p_key) { m_key = p_key; }
 
 	// FUNCTION: BETA10 0x1007d650

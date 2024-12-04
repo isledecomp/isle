@@ -57,6 +57,8 @@ public:
 
 	// FUNCTION: BETA10 0x1007d5c0
 	void SetNotification(NotificationId p_type) { m_type = p_type; }
+
+	// FUNCTION: BETA10 0x1007d5f0
 	void SetSender(MxCore* p_sender) { m_sender = p_sender; }
 
 protected:
