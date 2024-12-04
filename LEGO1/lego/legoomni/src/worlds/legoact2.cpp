@@ -448,7 +448,7 @@ MxLong LegoAct2::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 			m_bricks[m_nextBrick - 1].Mute(FALSE);
 			m_unk0x10c4 = 13;
-			FUN_10051ac0();
+			SpawnBricks();
 			PlayMusic(JukeboxScript::c_BrickHunt);
 			((LegoPathActor*) m_pepper->GetEntity())->SetState(0);
 			break;
@@ -755,11 +755,136 @@ void LegoAct2::UninitBricks()
 	}
 }
 
-// STUB: LEGO1 0x10051ac0
-// STUB: BETA10 0x100138c0
-void LegoAct2::FUN_10051ac0()
+// FUNCTION: LEGO1 0x10051ac0
+// FUNCTION: BETA10 0x100138c0
+void LegoAct2::SpawnBricks()
 {
-	// TODO
+	MxFloat infobridge[] = {79.0625f, 0.5f, -19.75f};
+	MxFloat palmTreeInPark[] = {67.62728f, 0.917197f, 11.49833f};
+	MxFloat store[] = {-53.9328f, 2.372259f, -61.2073f};
+	MxFloat postOffice[] = {-30.9856f, 0.30453f, -47.4378f};
+	MxFloat h3[] = {-71.2397f, 7.319758f, -23.0f};
+	MxFloat ht[] = {-59.5102f, 14.37329f, 24.70311f};
+	MxFloat posta[] = {74.0625f, 1.5f, -91.125f};
+	MxFloat ptree[] = {-20.4375f, 0.5f, -82.5625f};
+	MxFloat jail[] = {80.46174f, 0.6f, -59.50533f};
+	MxFloat hospital[] = {84.0f, 4.5f, 26.0f};
+
+	InitBricks();
+
+	Act2Brick* brick = &m_bricks[m_nextBrick];
+	brick->Create(m_nextBrick);
+	LegoROI* roi = brick->GetROI();
+	MxMatrix local2world = roi->GetLocal2World();
+	MxFloat* location;
+
+	// Unused but present in BETA
+	LegoEntity* entity;
+
+	if ((MxS16) (rand() % 2) == 1) {
+		m_unk0x114c = 0;
+		location = infobridge;
+		MxTrace("infobridge\n");
+	}
+	else {
+		m_unk0x114c = 1;
+		location = palmTreeInPark;
+		MxTrace("palm tree in park\n");
+	}
+
+	SET3(local2world[3], location);
+	roi->FUN_100a58f0(local2world);
+	roi->SetVisibility(TRUE);
+	roi->VTable0x14();
+	entity = roi->GetEntity();
+	brick->PlayWhistleSound();
+	m_nextBrick++;
+
+	brick = &m_bricks[m_nextBrick];
+	brick->Create(m_nextBrick);
+	roi = brick->GetROI();
+	local2world = roi->GetLocal2World();
+
+	if ((MxS16) (rand() % 2) == 1) {
+		m_unk0x114d = 2;
+		location = store;
+		MxTrace("store\n");
+	}
+	else {
+		m_unk0x114d = 3;
+		location = postOffice;
+		MxTrace("p.o.\n");
+	}
+
+	SET3(local2world[3], location);
+	roi->FUN_100a58f0(local2world);
+	roi->SetVisibility(TRUE);
+	roi->VTable0x14();
+	entity = roi->GetEntity();
+	brick->PlayWhistleSound();
+	m_nextBrick++;
+
+	brick = &m_bricks[m_nextBrick];
+	brick->Create(m_nextBrick);
+	roi = brick->GetROI();
+	local2world = roi->GetLocal2World();
+
+	if ((MxS16) (rand() % 2) == 1) {
+		m_unk0x114e = 4;
+		location = h3;
+		MxTrace("h3\n");
+	}
+	else {
+		m_unk0x114e = 5;
+		location = ht;
+		MxTrace("ht\n");
+	}
+
+	SET3(local2world[3], location);
+	roi->FUN_100a58f0(local2world);
+	roi->SetVisibility(TRUE);
+	roi->VTable0x14();
+	entity = roi->GetEntity();
+	brick->PlayWhistleSound();
+	m_nextBrick++;
+
+	brick = &m_bricks[m_nextBrick];
+	brick->Create(m_nextBrick);
+	roi = brick->GetROI();
+	local2world = roi->GetLocal2World();
+
+	if ((MxS16) (rand() % 2) == 1) {
+		if ((MxS16) (rand() % 2) == 1) {
+			m_unk0x114f = 6;
+			location = posta;
+			MxTrace("po.sta.\n");
+		}
+		else {
+			m_unk0x114f = 7;
+			location = ptree;
+			MxTrace("p.tree\n");
+		}
+	}
+	else {
+		if ((MxS16) (rand() % 2) == 1) {
+			m_unk0x114f = 8;
+			location = jail;
+			MxTrace("jail\n");
+		}
+		else {
+			m_unk0x114f = 9;
+			location = hospital;
+			MxTrace("hospi\n");
+		}
+	}
+
+	SET3(local2world[3], location);
+	roi->FUN_100a58f0(local2world);
+	roi->SetVisibility(TRUE);
+	roi->VTable0x14();
+	entity = roi->GetEntity();
+	brick->PlayWhistleSound();
+	m_nextBrick++;
 }
 
 // STUB: LEGO1 0x10051fa0
