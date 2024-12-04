@@ -20,9 +20,9 @@ enum NotificationId {
 	c_notificationButtonDown = 9, // 100d6aa0
 	c_notificationMouseMove = 10, // 100d6aa0
 	c_notificationClick = 11,     // 100d6aa0
-	c_notificationDragEnd = 12,
-	c_notificationDragStart = 13,
-	c_notificationDrag = 14,
+	c_notificationDragStart = 12,
+	c_notificationDrag = 13,
+	c_notificationDragEnd = 14,
 	c_notificationTimer = 15, // 100d6aa0
 	c_notificationControl = 17,
 	c_notificationEndAnim = 18,    // 100d7e80

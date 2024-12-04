@@ -42,7 +42,7 @@ MxResult LegoCameraController::Create()
 MxLong LegoCameraController::Notify(MxParam& p_param)
 {
 	switch (((MxNotificationParam&) p_param).GetNotification()) {
-	case c_notificationDrag: {
+	case c_notificationDragEnd: {
 		if (((((LegoEventNotificationParam&) p_param).GetModifier()) & LegoEventNotificationParam::c_lButtonState) ==
 			0) {
 			OnLButtonUp(MxPoint32(
@@ -57,7 +57,7 @@ MxLong LegoCameraController::Notify(MxParam& p_param)
 			));
 		}
 	} break;
-	case c_notificationDragEnd: {
+	case c_notificationDragStart: {
 		if ((((LegoEventNotificationParam&) p_param).GetModifier()) & LegoEventNotificationParam::c_lButtonState) {
 			OnLButtonDown(MxPoint32(
 				((LegoEventNotificationParam&) p_param).GetX(),
@@ -71,7 +71,7 @@ MxLong LegoCameraController::Notify(MxParam& p_param)
 			));
 		}
 	} break;
-	case c_notificationDragStart: {
+	case c_notificationDrag: {
 		OnMouseMove(
 			((LegoEventNotificationParam&) p_param).GetModifier(),
 			MxPoint32(((LegoEventNotificationParam&) p_param).GetX(), ((LegoEventNotificationParam&) p_param).GetY())

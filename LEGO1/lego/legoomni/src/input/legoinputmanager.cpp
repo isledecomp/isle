@@ -379,7 +379,7 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 			if (p_param.GetKey() == VK_SHIFT) {
 				if (m_unk0x195) {
 					m_unk0x80 = FALSE;
-					p_param.SetNotification(c_notificationDrag);
+					p_param.SetNotification(c_notificationDragEnd);
 
 					if (m_camera) {
 						m_camera->Notify(p_param);
@@ -506,7 +506,7 @@ MxBool LegoInputManager::FUN_1005cdf0(LegoEventNotificationParam& p_param)
 		StopAutoDragTimer();
 
 		if (m_unk0x80) {
-			p_param.SetNotification(c_notificationDrag);
+			p_param.SetNotification(c_notificationDragEnd);
 			result = TRUE;
 		}
 		else if (m_unk0x81) {
@@ -538,14 +538,14 @@ MxBool LegoInputManager::FUN_1005cdf0(LegoEventNotificationParam& p_param)
 				if (m_unk0x195 || t > m_unk0x74) {
 					StopAutoDragTimer();
 					m_unk0x80 = TRUE;
-					p_param.SetNotification(c_notificationDragEnd);
+					p_param.SetNotification(c_notificationDragStart);
 					result = TRUE;
 					p_param.SetX(m_x);
 					p_param.SetY(m_y);
 				}
 			}
 			else {
-				p_param.SetNotification(c_notificationDragStart);
+				p_param.SetNotification(c_notificationDrag);
 				result = TRUE;
 			}
 		}
@@ -559,7 +559,7 @@ MxBool LegoInputManager::FUN_1005cdf0(LegoEventNotificationParam& p_param)
 				p_param.SetX(m_x);
 				p_param.SetY(m_y);
 				p_param.SetModifier(LegoEventNotificationParam::c_lButtonState);
-				p_param.SetNotification(c_notificationDragEnd);
+				p_param.SetNotification(c_notificationDragStart);
 				result = TRUE;
 			}
 			else {
