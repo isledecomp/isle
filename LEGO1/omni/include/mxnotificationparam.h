@@ -55,6 +55,7 @@ public:
 	// FUNCTION: BETA10 0x1003c960
 	MxCore* GetSender() const { return m_sender; }
 
+	// FUNCTION: BETA10 0x1007d5c0
 	void SetNotification(NotificationId p_type) { m_type = p_type; }
 	void SetSender(MxCore* p_sender) { m_sender = p_sender; }
 

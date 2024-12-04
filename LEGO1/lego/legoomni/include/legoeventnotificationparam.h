@@ -54,9 +54,15 @@ public:
 	MxS32 GetY() const { return m_y; }
 
 	void SetROI(LegoROI* p_roi) { m_roi = p_roi; }
+
+	// FUNCTION: BETA10 0x1007d620
 	void SetModifier(MxU8 p_modifier) { m_modifier = p_modifier; }
 	void SetKey(MxU8 p_key) { m_key = p_key; }
+
+	// FUNCTION: BETA10 0x1007d650
 	void SetX(MxS32 p_x) { m_x = p_x; }
+
+	// FUNCTION: BETA10 0x1007d680
 	void SetY(MxS32 p_y) { m_y = p_y; }
 
 protected:
