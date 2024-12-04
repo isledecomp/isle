@@ -975,11 +975,60 @@ void LegoAct2::FUN_10051fa0(MxS32 p_param1)
 	}
 }
 
-// STUB: LEGO1 0x100521f0
-// STUB: BETA10 0x100142f1
+// FUNCTION: LEGO1 0x100521f0
+// FUNCTION: BETA10 0x100142f1
 void LegoAct2::FUN_100521f0(MxS32 p_param1)
 {
-	// TODO
+	Act2mainScript::Script objectId = (Act2mainScript::Script) 0;
+	Mx3DPointFloat vec;
+
+	switch (p_param1) {
+	case 0x02: {
+		vec = Mx3DPointFloat(-9.1f, 0.0f, -16.5f);
+		VariableTable()->SetVariable("ACTOR_01", "bd");
+		objectId = Act2mainScript::c_tns030bd_RunAnim;
+		break;
+	}
+	case 0x2a: {
+		vec = Mx3DPointFloat(-9.67f, 0.0f, -44.3f);
+		VariableTable()->SetVariable("ACTOR_01", "rd");
+		objectId = Act2mainScript::c_tns030rd_RunAnim;
+		break;
+	}
+	case 0x133: {
+		vec = Mx3DPointFloat(25.75f, 0.0f, -13.0f);
+		VariableTable()->SetVariable("ACTOR_01", "pg");
+		objectId = Act2mainScript::c_tns030pg_RunAnim;
+		break;
+	}
+	case 0x134: {
+		vec = Mx3DPointFloat(43.63f, 0.0f, -46.33f);
+		VariableTable()->SetVariable("ACTOR_01", "sy");
+		objectId = Act2mainScript::c_tns030sy_RunAnim;
+		break;
+	}
+	case 0x135: {
+		vec = Mx3DPointFloat(50.0f, 0.0f, -34.6f);
+		VariableTable()->SetVariable("ACTOR_01", "rd");
+		objectId = Act2mainScript::c_tns030rd_RunAnim;
+		break;
+	}
+	case 0x138: {
+		vec = Mx3DPointFloat(-41.15f, 4.0f, 31.0f);
+		VariableTable()->SetVariable("ACTOR_01", "sy");
+		objectId = Act2mainScript::c_tns030sy_RunAnim;
+		break;
+	}
+	}
+
+	if (objectId != (Act2mainScript::Script) 0) {
+		Mx3DPointFloat local30(vec);
+		Mx3DPointFloat position(m_pepper->GetWorldPosition());
+		((Vector3&) local30).Sub(position);
+		Mx3DPointFloat local44 = local30;
+		local30.Unitize();
+		FUN_10052560(objectId, TRUE, TRUE, &vec, &local30, NULL);
+	}
 }
 
 // FUNCTION: LEGO1 0x10052560
