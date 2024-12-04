@@ -332,7 +332,7 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 
 				Mx3DPointFloat direction(local2world[2]);
 				Mx3DPointFloat location(local2world[1]);
-				FUN_10052560(Act2mainScript::c_tns051in_RunAnim, TRUE, TRUE, &location, &direction, NULL);
+				FUN_10052560(Act2mainScript::c_tns051in_RunAnim, TRUE, TRUE, &local90, &direction, NULL);
 
 				m_unk0x10c4 = 14;
 				m_unk0x10d0 = 0;
