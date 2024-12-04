@@ -20,9 +20,9 @@ enum NotificationId {
 	c_notificationButtonDown = 9, // 100d6aa0
 	c_notificationMouseMove = 10, // 100d6aa0
 	c_notificationClick = 11,     // 100d6aa0
-	c_notificationDragEnd = 12,
-	c_notificationDragStart = 13,
-	c_notificationDrag = 14,
+	c_notificationDragStart = 12,
+	c_notificationDrag = 13,
+	c_notificationDragEnd = 14,
 	c_notificationTimer = 15, // 100d6aa0
 	c_notificationControl = 17,
 	c_notificationEndAnim = 18,    // 100d7e80
@@ -55,7 +55,10 @@ public:
 	// FUNCTION: BETA10 0x1003c960
 	MxCore* GetSender() const { return m_sender; }
 
+	// FUNCTION: BETA10 0x1007d5c0
 	void SetNotification(NotificationId p_type) { m_type = p_type; }
+
+	// FUNCTION: BETA10 0x1007d5f0
 	void SetSender(MxCore* p_sender) { m_sender = p_sender; }
 
 protected:
