@@ -80,7 +80,7 @@ private:
 	void FUN_10051960();
 	void InitBricks();
 	void UninitBricks();
-	void FUN_10051ac0();
+	void SpawnBricks();
 	void FUN_10051fa0(MxS32 p_param1);
 	void FUN_100521f0(MxS32 p_param1);
 	MxResult FUN_10052560(
@@ -94,7 +94,7 @@ private:
 	MxResult FUN_10052800();
 
 	Act2Brick m_bricks[10];        // 0x00f8
-	undefined m_nextBrick;         // 0x10c0
+	MxU8 m_nextBrick;              // 0x10c0
 	undefined m_unk0x10c1;         // 0x10c1
 	MxBool m_ready;                // 0x10c2
 	undefined4 m_unk0x10c4;        // 0x10c4
@@ -116,7 +116,11 @@ private:
 	undefined m_unk0x113c;              // 0x113c
 	Act2mainScript::Script m_unk0x1140; // 0x1140
 	Act2mainScript::Script m_unk0x1144; // 0x1144
-	undefined m_unk0x1148[0x08];        // 0x1148
+	undefined4 m_unk0x1148;             // 0x1148
+	undefined m_firstBrick;             // 0x114c
+	undefined m_secondBrick;            // 0x114d
+	undefined m_thirdBrick;             // 0x114e
+	undefined m_fourthBrick;            // 0x114e
 	LegoGameState::Area m_destLocation; // 0x1150
 };
 

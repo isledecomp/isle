@@ -448,7 +448,7 @@ MxLong LegoAct2::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 			m_bricks[m_nextBrick - 1].Mute(FALSE);
 			m_unk0x10c4 = 13;
-			FUN_10051ac0();
+			SpawnBricks();
 			PlayMusic(JukeboxScript::c_BrickHunt);
 			((LegoPathActor*) m_pepper->GetEntity())->SetState(0);
 			break;
@@ -755,25 +755,280 @@ void LegoAct2::UninitBricks()
 	}
 }
 
-// STUB: LEGO1 0x10051ac0
-// STUB: BETA10 0x100138c0
-void LegoAct2::FUN_10051ac0()
+// FUNCTION: LEGO1 0x10051ac0
+// FUNCTION: BETA10 0x100138c0
+void LegoAct2::SpawnBricks()
 {
-	// TODO
+	MxFloat infobridge[] = {79.0625f, 0.5f, -19.75f};
+	MxFloat palmTreeInPark[] = {67.62728f, 0.917197f, 11.49833f};
+	MxFloat store[] = {-53.9328f, 2.372259f, -61.2073f};
+	MxFloat postOffice[] = {-30.9856f, 0.30453f, -47.4378f};
+	MxFloat h3[] = {-71.2397f, 7.319758f, -23.0f};
+	MxFloat ht[] = {-59.5102f, 14.37329f, 24.70311f};
+	MxFloat posta[] = {74.0625f, 1.5f, -91.125f};
+	MxFloat ptree[] = {-20.4375f, 0.5f, -82.5625f};
+	MxFloat jail[] = {80.46174f, 0.6f, -59.50533f};
+	MxFloat hospital[] = {84.0f, 4.5f, 26.0f};
+
+	InitBricks();
+
+	Act2Brick* brick = &m_bricks[m_nextBrick];
+	brick->Create(m_nextBrick);
+	LegoROI* roi = brick->GetROI();
+	MxMatrix local2world = roi->GetLocal2World();
+	MxFloat* location;
+
+	// Unused but present in BETA
+	LegoEntity* entity;
+
+	if ((MxS16) (rand() % 2) == 1) {
+		m_firstBrick = 0;
+		location = infobridge;
+		MxTrace("infobridge\n");
+	}
+	else {
+		m_firstBrick = 1;
+		location = palmTreeInPark;
+		MxTrace("palm tree in park\n");
+	}
+
+	SET3(local2world[3], location);
+	roi->FUN_100a58f0(local2world);
+	roi->SetVisibility(TRUE);
+	roi->VTable0x14();
+	entity = roi->GetEntity();
+	brick->PlayWhistleSound();
+	m_nextBrick++;
+
+	brick = &m_bricks[m_nextBrick];
+	brick->Create(m_nextBrick);
+	roi = brick->GetROI();
+	local2world = roi->GetLocal2World();
+
+	if ((MxS16) (rand() % 2) == 1) {
+		m_secondBrick = 2;
+		location = store;
+		MxTrace("store\n");
+	}
+	else {
+		m_secondBrick = 3;
+		location = postOffice;
+		MxTrace("p.o.\n");
+	}
+
+	SET3(local2world[3], location);
+	roi->FUN_100a58f0(local2world);
+	roi->SetVisibility(TRUE);
+	roi->VTable0x14();
+	entity = roi->GetEntity();
+	brick->PlayWhistleSound();
+	m_nextBrick++;
+
+	brick = &m_bricks[m_nextBrick];
+	brick->Create(m_nextBrick);
+	roi = brick->GetROI();
+	local2world = roi->GetLocal2World();
+
+	if ((MxS16) (rand() % 2) == 1) {
+		m_thirdBrick = 4;
+		location = h3;
+		MxTrace("h3\n");
+	}
+	else {
+		m_thirdBrick = 5;
+		location = ht;
+		MxTrace("ht\n");
+	}
+
+	SET3(local2world[3], location);
+	roi->FUN_100a58f0(local2world);
+	roi->SetVisibility(TRUE);
+	roi->VTable0x14();
+	entity = roi->GetEntity();
+	brick->PlayWhistleSound();
+	m_nextBrick++;
+
+	brick = &m_bricks[m_nextBrick];
+	brick->Create(m_nextBrick);
+	roi = brick->GetROI();
+	local2world = roi->GetLocal2World();
+
+	if ((MxS16) (rand() % 2) == 1) {
+		if ((MxS16) (rand() % 2) == 1) {
+			m_fourthBrick = 6;
+			location = posta;
+			MxTrace("po.sta.\n");
+		}
+		else {
+			m_fourthBrick = 7;
+			location = ptree;
+			MxTrace("p.tree\n");
+		}
+	}
+	else {
+		if ((MxS16) (rand() % 2) == 1) {
+			m_fourthBrick = 8;
+			location = jail;
+			MxTrace("jail\n");
+		}
+		else {
+			m_fourthBrick = 9;
+			location = hospital;
+			MxTrace("hospi\n");
+		}
+	}
+
+	SET3(local2world[3], location);
+	roi->FUN_100a58f0(local2world);
+	roi->SetVisibility(TRUE);
+	roi->VTable0x14();
+	entity = roi->GetEntity();
+	brick->PlayWhistleSound();
+	m_nextBrick++;
 }
 
-// STUB: LEGO1 0x10051fa0
-// STUB: BETA10 0x10013fd3
+// FUNCTION: LEGO1 0x10051fa0
+// FUNCTION: BETA10 0x10013fd3
 void LegoAct2::FUN_10051fa0(MxS32 p_param1)
 {
-	// TODO
+	MxU8 randN = rand() / (RAND_MAX / 3);
+	randN++;
+
+	switch (p_param1) {
+	case 2:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx50bu_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx51bu_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 8:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx29nu_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx30nu_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 9:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx33na_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx34na_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 14:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx46cl_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx48cl_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 23:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx58va_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx60va_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 24:
+	case 25:
+		FUN_10052560(Act2mainScript::c_snsx31sh_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		break;
+	case 26:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx52sn_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx53sn_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 34:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx15la_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx16la_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 36:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx10ni_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx11ni_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 38:
+	case 42:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx03ma_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx04ma_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	}
 }
 
-// STUB: LEGO1 0x100521f0
-// STUB: BETA10 0x100142f1
+// FUNCTION: LEGO1 0x100521f0
+// FUNCTION: BETA10 0x100142f1
 void LegoAct2::FUN_100521f0(MxS32 p_param1)
 {
-	// TODO
+	Act2mainScript::Script objectId = (Act2mainScript::Script) 0;
+	Mx3DPointFloat vec;
+
+	switch (p_param1) {
+	case 0x02: {
+		vec = Mx3DPointFloat(-9.1f, 0.0f, -16.5f);
+		VariableTable()->SetVariable("ACTOR_01", "bd");
+		objectId = Act2mainScript::c_tns030bd_RunAnim;
+		break;
+	}
+	case 0x2a: {
+		vec = Mx3DPointFloat(-9.67f, 0.0f, -44.3f);
+		VariableTable()->SetVariable("ACTOR_01", "rd");
+		objectId = Act2mainScript::c_tns030rd_RunAnim;
+		break;
+	}
+	case 0x133: {
+		vec = Mx3DPointFloat(25.75f, 0.0f, -13.0f);
+		VariableTable()->SetVariable("ACTOR_01", "pg");
+		objectId = Act2mainScript::c_tns030pg_RunAnim;
+		break;
+	}
+	case 0x134: {
+		vec = Mx3DPointFloat(43.63f, 0.0f, -46.33f);
+		VariableTable()->SetVariable("ACTOR_01", "sy");
+		objectId = Act2mainScript::c_tns030sy_RunAnim;
+		break;
+	}
+	case 0x135: {
+		vec = Mx3DPointFloat(50.0f, 0.0f, -34.6f);
+		VariableTable()->SetVariable("ACTOR_01", "rd");
+		objectId = Act2mainScript::c_tns030rd_RunAnim;
+		break;
+	}
+	case 0x138: {
+		vec = Mx3DPointFloat(-41.15f, 4.0f, 31.0f);
+		VariableTable()->SetVariable("ACTOR_01", "sy");
+		objectId = Act2mainScript::c_tns030sy_RunAnim;
+		break;
+	}
+	}
+
+	if (objectId != (Act2mainScript::Script) 0) {
+		Mx3DPointFloat local30(vec);
+		Mx3DPointFloat position(m_pepper->GetWorldPosition());
+		((Vector3&) local30).Sub(position);
+		Mx3DPointFloat local44 = local30;
+		local30.Unitize();
+		FUN_10052560(objectId, TRUE, TRUE, &vec, &local30, NULL);
+	}
 }
 
 // FUNCTION: LEGO1 0x10052560
