@@ -782,12 +782,12 @@ void LegoAct2::SpawnBricks()
 	LegoEntity* entity;
 
 	if ((MxS16) (rand() % 2) == 1) {
-		m_unk0x114c = 0;
+		m_firstBrick = 0;
 		location = infobridge;
 		MxTrace("infobridge\n");
 	}
 	else {
-		m_unk0x114c = 1;
+		m_firstBrick = 1;
 		location = palmTreeInPark;
 		MxTrace("palm tree in park\n");
 	}
@@ -806,12 +806,12 @@ void LegoAct2::SpawnBricks()
 	local2world = roi->GetLocal2World();
 
 	if ((MxS16) (rand() % 2) == 1) {
-		m_unk0x114d = 2;
+		m_secondBrick = 2;
 		location = store;
 		MxTrace("store\n");
 	}
 	else {
-		m_unk0x114d = 3;
+		m_secondBrick = 3;
 		location = postOffice;
 		MxTrace("p.o.\n");
 	}
@@ -830,12 +830,12 @@ void LegoAct2::SpawnBricks()
 	local2world = roi->GetLocal2World();
 
 	if ((MxS16) (rand() % 2) == 1) {
-		m_unk0x114e = 4;
+		m_thirdBrick = 4;
 		location = h3;
 		MxTrace("h3\n");
 	}
 	else {
-		m_unk0x114e = 5;
+		m_thirdBrick = 5;
 		location = ht;
 		MxTrace("ht\n");
 	}
@@ -855,24 +855,24 @@ void LegoAct2::SpawnBricks()
 
 	if ((MxS16) (rand() % 2) == 1) {
 		if ((MxS16) (rand() % 2) == 1) {
-			m_unk0x114f = 6;
+			m_fourthBrick = 6;
 			location = posta;
 			MxTrace("po.sta.\n");
 		}
 		else {
-			m_unk0x114f = 7;
+			m_fourthBrick = 7;
 			location = ptree;
 			MxTrace("p.tree\n");
 		}
 	}
 	else {
 		if ((MxS16) (rand() % 2) == 1) {
-			m_unk0x114f = 8;
+			m_fourthBrick = 8;
 			location = jail;
 			MxTrace("jail\n");
 		}
 		else {
-			m_unk0x114f = 9;
+			m_fourthBrick = 9;
 			location = hospital;
 			MxTrace("hospi\n");
 		}

@@ -117,10 +117,10 @@ private:
 	Act2mainScript::Script m_unk0x1140; // 0x1140
 	Act2mainScript::Script m_unk0x1144; // 0x1144
 	undefined4 m_unk0x1148;             // 0x1148
-	undefined m_unk0x114c;              // 0x114c
-	undefined m_unk0x114d;              // 0x114d
-	undefined m_unk0x114e;              // 0x114e
-	undefined m_unk0x114f;              // 0x114e
+	undefined m_firstBrick;             // 0x114c
+	undefined m_secondBrick;            // 0x114d
+	undefined m_thirdBrick;             // 0x114e
+	undefined m_fourthBrick;            // 0x114e
 	LegoGameState::Area m_destLocation; // 0x1150
 };
 
