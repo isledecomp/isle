@@ -887,11 +887,92 @@ void LegoAct2::SpawnBricks()
 	m_nextBrick++;
 }
 
-// STUB: LEGO1 0x10051fa0
-// STUB: BETA10 0x10013fd3
+// FUNCTION: LEGO1 0x10051fa0
+// FUNCTION: BETA10 0x10013fd3
 void LegoAct2::FUN_10051fa0(MxS32 p_param1)
 {
-	// TODO
+	MxU8 randN = rand() / (RAND_MAX / 3);
+	randN++;
+
+	switch (p_param1) {
+	case 2:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx50bu_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx51bu_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 8:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx29nu_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx30nu_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 9:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx33na_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx34na_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 14:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx46cl_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx48cl_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 23:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx58va_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx60va_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 24:
+	case 25:
+		FUN_10052560(Act2mainScript::c_snsx31sh_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		break;
+	case 26:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx52sn_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx53sn_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 34:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx15la_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx16la_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 36:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx10ni_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx11ni_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	case 38:
+	case 42:
+		if (randN == 1) {
+			FUN_10052560(Act2mainScript::c_snsx03ma_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		else {
+			FUN_10052560(Act2mainScript::c_snsx04ma_RunAnim, TRUE, FALSE, NULL, NULL, NULL);
+		}
+		break;
+	}
 }
 
 // STUB: LEGO1 0x100521f0
