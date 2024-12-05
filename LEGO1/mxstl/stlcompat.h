@@ -16,6 +16,7 @@
 #include <vector>
 using std::list;
 using std::map;
+using std::multiset;
 using std::pair;
 using std::set;
 using std::vector;
