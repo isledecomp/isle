@@ -79,9 +79,9 @@ struct LegoPathEdgeContainer : public list<LegoBoundaryEdge> {
 	}
 
 	// FUNCTION: BETA10 0x100bd660
-	void SetBit1(MxU32 p_bool)
+	void SetBit1(MxU32 p_set)
 	{
-		if (p_bool) {
+		if (p_set) {
 			m_flags |= c_bit1;
 		}
 		else {
