@@ -11,10 +11,10 @@
 class Act2Actor : public LegoAnimActor {
 public:
 	struct UnknownListStructure {
-		MxFloat m_unk0x00[3];  // 0x00
-		MxFloat m_unk0x0c[3];  // 0x0c
-		const char* m_unk0x18; // 0x18
-		undefined m_unk0x1c;   // 0x1c
+		MxFloat m_position[3];  // 0x00
+		MxFloat m_direction[3]; // 0x0c
+		const char* m_boundary; // 0x18
+		undefined m_unk0x1c;    // 0x1c
 	};
 
 	Act2Actor();

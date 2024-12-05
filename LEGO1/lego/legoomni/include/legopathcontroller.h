@@ -119,13 +119,13 @@ public:
 	);
 	MxResult FUN_10048310(
 		LegoPathEdgeContainer* p_grec,
-		const Vector3& p_position,
-		const Vector3& p_direction,
-		LegoPathBoundary* p_boundary1,
-		const Vector3& p_param5,
-		const Vector3& p_param6,
-		LegoPathBoundary* p_boundary2,
-		MxBool p_param8,
+		const Vector3& p_oldPosition,
+		const Vector3& p_oldDirection,
+		LegoPathBoundary* p_oldBoundary,
+		const Vector3& p_newPosition,
+		const Vector3& p_newDirection,
+		LegoPathBoundary* p_newBoundary,
+		LegoU8 p_mask,
 		MxFloat* p_param9
 	);
 

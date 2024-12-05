@@ -134,8 +134,8 @@ void Act2Actor::SetWorldSpeed(MxFloat p_worldSpeed)
 // FUNCTION: BETA10 0x1000d4d6
 void Act2Actor::FUN_100192a0(undefined4 p_param)
 {
-	Mx3DPointFloat local38(0.0, 0.0, 0.0);
-	Mx3DPointFloat local4c(0.0, 0.0, 0.0);
+	Mx3DPointFloat newPosition(0.0, 0.0, 0.0);
+	Mx3DPointFloat newDirection(0.0, 0.0, 0.0);
 
 	if (m_grec) {
 		delete m_grec;
@@ -144,26 +144,25 @@ void Act2Actor::FUN_100192a0(undefined4 p_param)
 	m_grec = new LegoPathEdgeContainer();
 	assert(m_grec);
 
-	local38 = g_unk0x100f0db8[p_param].m_unk0x00;
-	local4c = g_unk0x100f0db8[p_param].m_unk0x0c;
-
-	LegoPathBoundary* otherBoundary = m_controller->GetPathBoundary(g_unk0x100f0db8[p_param].m_unk0x18);
+	newPosition = g_unk0x100f0db8[p_param].m_position;
+	newDirection = g_unk0x100f0db8[p_param].m_direction;
+	LegoPathBoundary* newBoundary = m_controller->GetPathBoundary(g_unk0x100f0db8[p_param].m_boundary);
 
 	MxResult sts = m_controller->FUN_10048310(
 		m_grec,
 		m_roi->GetWorldPosition(),
 		m_roi->GetWorldDirection(),
 		m_boundary,
-		local38,
-		local4c,
-		otherBoundary,
-		TRUE,
+		newPosition,
+		newDirection,
+		newBoundary,
+		LegoUnknown100db7f4::c_bit1,
 		NULL
 	);
 
-	assert(!sts);
+	assert(!sts); // == SUCCESS
 
-	if (sts) {
+	if (sts != SUCCESS) {
 		delete m_grec;
 		m_grec = NULL;
 	}

@@ -64,6 +64,17 @@ public:
 		}
 	}
 
+	// FUNCTION: BETA10 0x100bd4a0
+	LegoFloat DistanceToMidpoint(const Vector3& p_vec)
+	{
+		Mx3DPointFloat point(*m_pointA);
+		((Vector3&) point).Add(*m_pointB);
+		((Vector3&) point).Mul(0.5f);
+		((Vector3&) point).Sub(p_vec);
+		return sqrt(point.LenSquared());
+	}
+
+	// FUNCTION: BETA10 0x1001cc60
 	LegoU32 GetMask0x03() { return m_flags & (c_bit1 | c_bit2); }
 
 	// SYNTHETIC: LEGO1 0x1009a6c0

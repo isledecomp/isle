@@ -286,6 +286,7 @@ public:
 	void Clear() override { memset(m_data, 0, sizeof(float) * 3); } // vtable+0x2c
 
 	// FUNCTION: LEGO1 0x10003bd0
+	// FUNCTION: BETA10 0x10011530
 	float LenSquared() const override
 	{
 		return m_data[0] * m_data[0] + m_data[1] * m_data[1] + m_data[2] * m_data[2];
