@@ -92,7 +92,7 @@ void LegoPathBoundary::SwitchBoundary(
 {
 	LegoUnknown100db7f4* e = p_edge;
 
-	if (p_edge->Unknown2(*p_boundary)) {
+	if (p_edge->BETA_100b53b0(*p_boundary)) {
 		LegoPathBoundary* newBoundary = (LegoPathBoundary*) p_edge->OtherFace(p_boundary);
 
 		if (newBoundary == NULL) {
@@ -102,7 +102,7 @@ void LegoPathBoundary::SwitchBoundary(
 		MxS32 local10 = 0;
 		MxU8 userNavFlag;
 
-		if (e->Unknown(*newBoundary, 1)) {
+		if (e->BETA_1004a830(*newBoundary, 1)) {
 			userNavFlag = p_actor->GetUserNavFlag();
 		}
 		else {
@@ -113,7 +113,7 @@ void LegoPathBoundary::SwitchBoundary(
 			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*newBoundary);
 			LegoPathBoundary* local20 = (LegoPathBoundary*) p_edge->OtherFace(newBoundary);
 
-			if (p_edge->GetMask0x03() && (userNavFlag || p_edge->Unknown(*local20, 1))) {
+			if (p_edge->GetMask0x03() && (userNavFlag || p_edge->BETA_1004a830(*local20, 1))) {
 				local10++;
 			}
 		} while (p_edge != e);
@@ -141,7 +141,7 @@ void LegoPathBoundary::SwitchBoundary(
 
 			LegoPathBoundary* local20 = (LegoPathBoundary*) p_edge->OtherFace(newBoundary);
 
-			if (p_edge->GetMask0x03() && (userNavFlag || p_edge->Unknown(*local20, 1))) {
+			if (p_edge->GetMask0x03() && (userNavFlag || p_edge->BETA_1004a830(*local20, 1))) {
 				local8--;
 			}
 		}

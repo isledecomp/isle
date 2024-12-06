@@ -22,7 +22,9 @@ class Vector3;
 
 // VTABLE: LEGO1 0x100d7da8
 // SIZE 0x40
-struct LegoPathCtrlEdge : public LegoUnknown100db7f4 {};
+struct LegoPathCtrlEdge : public LegoUnknown100db7f4 {
+	undefined4 FUN_10048c40(const Vector3&);
+};
 
 struct LegoPathCtrlEdgeCompare {
 	MxU32 operator()(const LegoPathCtrlEdge* p_lhs, const LegoPathCtrlEdge* p_rhs) const
@@ -119,13 +121,13 @@ public:
 	);
 	MxResult FUN_10048310(
 		LegoPathEdgeContainer* p_grec,
-		const Vector3& p_position,
-		const Vector3& p_direction,
-		LegoPathBoundary* p_boundary1,
-		const Vector3& p_param5,
-		const Vector3& p_param6,
-		LegoPathBoundary* p_boundary2,
-		MxBool p_param8,
+		const Vector3& p_oldPosition,
+		const Vector3& p_oldDirection,
+		LegoPathBoundary* p_oldBoundary,
+		const Vector3& p_newPosition,
+		const Vector3& p_newDirection,
+		LegoPathBoundary* p_newBoundary,
+		LegoU8 p_mask,
 		MxFloat* p_param9
 	);
 
@@ -182,6 +184,15 @@ private:
 // TEMPLATE: LEGO1 0x100451a0
 // _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::~_Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathControl
 
+// TEMPLATE: LEGO1 0x10045270
+// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::iterator::_Inc
+
+// TEMPLATE: LEGO1 0x100452b0
+// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::erase
+
+// TEMPLATE: LEGO1 0x10045700
+// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Erase
+
 // TEMPLATE: LEGO1 0x100457e0
 // Set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare>::~Set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare>
 
@@ -221,14 +232,74 @@ private:
 // SYNTHETIC: LEGO1 0x10047ae0
 // LegoUnknown100db7f4::~LegoUnknown100db7f4
 
+// TEMPLATE: LEGO1 0x10048f00
+// list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >::begin
+
+// TEMPLATE: LEGO1 0x10048f10
+// list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >::insert
+
 // TEMPLATE: LEGO1 0x10048f70
 // list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >::erase
+
+// TEMPLATE: LEGO1 0x10048fc0
+// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,Le
+
+// TEMPLATE: LEGO1 0x10049160
+// ?erase@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QAEIABQAULegoPathCtrlEdge@@@Z
+
+// TEMPLATE: LEGO1 0x10049290
+// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::find
+
+// TEMPLATE: LEGO1 0x100492f0
+// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Copy
+
+// TEMPLATE: LEGO1 0x10049370
+// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Ubound
+
+// TEMPLATE: LEGO1 0x10049410
+// list<LegoBEWithFloat,allocator<LegoBEWithFloat> >::insert
+
+// TEMPLATE: LEGO1 0x10049470
+// list<LegoBEWithFloat,allocator<LegoBEWithFloat> >::_Buynode
+
+// TEMPLATE: LEGO1 0x100494a0
+// _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::iterator::_Inc
+
+// TEMPLATE: LEGO1 0x100495b0
+// _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::insert
+
+// TEMPLATE: LEGO1 0x10049840
+// _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::iterator::_Dec
+
+// TEMPLATE: LEGO1 0x10049890
+// _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::erase
+
+// TEMPLATE: LEGO1 0x10049cf0
+// _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Buynode
+
+// TEMPLATE: LEGO1 0x10049d50
+// _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Init
+
+// TEMPLATE: LEGO1 0x10049e00
+// _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Insert
+
+// TEMPLATE: LEGO1 0x1004a090
+// _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Lrotate
+
+// TEMPLATE: LEGO1 0x1004a0f0
+// _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Rrotate
+
+// TEMPLATE: LEGO1 0x1004a760
+// _Construct
 
 // TEMPLATE: LEGO1 0x1004a780
 // _Construct
 
 // GLOBAL: LEGO1 0x100f4360
 // _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Nil
+
+// GLOBAL: LEGO1 0x100f4364
+// _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Nil
 // clang-format on
 
 #endif // LEGOPATHCONTROLLER_H
