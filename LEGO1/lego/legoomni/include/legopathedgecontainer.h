@@ -7,20 +7,19 @@
 
 class LegoPathBoundary;
 struct LegoPathCtrlEdge;
-struct LegoUnknown100db7f4;
 
 // SIZE 0x08
 struct LegoBoundaryEdge {
 	LegoBoundaryEdge() {}
 
 	// FUNCTION: BETA10 0x100bd620
-	LegoBoundaryEdge(LegoUnknown100db7f4* p_edge, LegoPathBoundary* p_boundary)
+	LegoBoundaryEdge(LegoPathCtrlEdge* p_edge, LegoPathBoundary* p_boundary)
 	{
 		m_edge = p_edge;
 		m_boundary = p_boundary;
 	}
 
-	LegoUnknown100db7f4* m_edge;  // 0x00
+	LegoPathCtrlEdge* m_edge;     // 0x00
 	LegoPathBoundary* m_boundary; // 0x04
 
 	int operator==(LegoBoundaryEdge) const { return 0; }

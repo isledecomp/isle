@@ -820,7 +820,21 @@ MxResult LegoPathController::FUN_10048310(
 
 					if (e->Unknown(*bOther, p_mask)) {
 						if (bOther == p_newBoundary) {
-							// TODO
+							shouldRemove = FALSE;
+
+							LegoBoundaryEdgeWithFloat* pfs = *boundarySetItA;
+							assert(pfs);
+
+							float dist = pfs->m_edge->DistanceToMidpoint(p_newPosition) + pfs->m_unk0x0c;
+
+							if (dist < local70) {
+								local70 = dist;
+								edgeWithFloat.m_edge = NULL;
+
+								if (dist < local14) {
+									// TODO
+								}
+							}
 						}
 						else {
 							// TODO
@@ -853,10 +867,40 @@ MxResult LegoPathController::FUN_10048310(
 			return FAILURE;
 		}
 
-		// TODO
+		if (p_grec->size() != 0) {
+			LegoPathCtrlEdge* edge = p_grec->front().m_edge;
+
+			if (edge->FUN_10048c40(p_oldPosition)) {
+				p_grec->pop_front();
+			}
+		}
+
+		if (p_grec->size() != 0) {
+			LegoPathCtrlEdge* edge = p_grec->back().m_edge;
+
+			if (edge->FUN_10048c40(p_newPosition)) {
+				if (edge->OtherFace(p_grec->back().m_boundary) != NULL &&
+					edge->OtherFace(p_grec->back().m_boundary)->IsEqual(*p_newBoundary)) {
+					p_grec->m_boundary = p_grec->back().m_boundary;
+					p_grec->pop_back();
+				}
+			}
+		}
+
+		if (p_param9 != NULL) {
+			*p_param9 = local14;
+		}
 	}
 
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x10048c40
+// STUB: BETA10 0x1001cc90
+undefined4 LegoPathCtrlEdge::FUN_10048c40(const Vector3&)
+{
+	// TODO
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x1004a240

@@ -22,7 +22,9 @@ class Vector3;
 
 // VTABLE: LEGO1 0x100d7da8
 // SIZE 0x40
-struct LegoPathCtrlEdge : public LegoUnknown100db7f4 {};
+struct LegoPathCtrlEdge : public LegoUnknown100db7f4 {
+	undefined4 FUN_10048c40(const Vector3&);
+};
 
 struct LegoPathCtrlEdgeCompare {
 	MxU32 operator()(const LegoPathCtrlEdge* p_lhs, const LegoPathCtrlEdge* p_rhs) const
