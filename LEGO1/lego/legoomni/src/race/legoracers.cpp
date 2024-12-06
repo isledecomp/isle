@@ -442,7 +442,7 @@ MxResult LegoRaceCar::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 			MxMatrix matr;
 			matr = roi->GetLocal2World();
 
-			Vector3(matr[3]).Add(g_unk0x10102af0);
+			Vector3(matr[3]) += g_unk0x10102af0;
 			roi->FUN_100a58f0(matr);
 
 			p_actor->SetState(2);

@@ -52,7 +52,7 @@ MxU32 Act3Actor::VTable0x90(float p_float, Matrix4& p_transform)
 			m_state = 0;
 			m_unk0x1c = 0;
 
-			((Vector3&) positionRef).Sub(g_unk0x10104ef0);
+			positionRef -= g_unk0x10104ef0;
 			m_roi->FUN_100a58f0(p_transform);
 			m_roi->VTable0x14();
 			return TRUE;
@@ -75,7 +75,7 @@ MxResult Act3Actor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 		MxMatrix local2world;
 		local2world = roi->GetLocal2World();
 
-		Vector3(local2world[3]).Add(g_unk0x10104ef0);
+		Vector3(local2world[3]) += g_unk0x10104ef0;
 
 		roi->FUN_100a58f0(local2world);
 		roi->VTable0x14();

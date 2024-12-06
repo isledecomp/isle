@@ -96,7 +96,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 			Mx3DPointFloat worldDirection(m_roi->GetWorldDirection());
 
 			if (!m_userNavFlag) {
-				((Vector2*) &worldDirection)->Mul(-1.0f);
+				worldDirection *= -1.0f;
 			}
 
 			if (VTable0x80(m_roi->GetWorldPosition(), worldDirection, a, c)) {

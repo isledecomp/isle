@@ -313,7 +313,7 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 				Mx3DPointFloat unk0x10d8(m_pepper->GetWorldPosition());
 				Mx3DPointFloat locala4(unk0x10d8);
 
-				((Vector3&) entityPosition).Sub(unk0x10d8);
+				entityPosition -= unk0x10d8;
 
 				MxMatrix local2world(m_pepper->GetLocal2World());
 				Vector3 local30(local2world[0]);
@@ -324,8 +324,8 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 				local28.Unitize();
 
 				Mx3DPointFloat local90(local28);
-				((Vector3&) local90).Mul(1.25f);
-				((Vector3&) locala4).Add(local90);
+				local90 *= 1.25f;
+				locala4 += local90;
 				locala4[1] += 0.25;
 				local30.EqualsCross(&localac, &local28);
 				local30.Unitize();
@@ -1024,7 +1024,7 @@ void LegoAct2::FUN_100521f0(MxS32 p_param1)
 	if (objectId != (Act2mainScript::Script) 0) {
 		Mx3DPointFloat local30(vec);
 		Mx3DPointFloat position(m_pepper->GetWorldPosition());
-		((Vector3&) local30).Sub(position);
+		local30 -= position;
 		Mx3DPointFloat local44 = local30;
 		local30.Unitize();
 		FUN_10052560(objectId, TRUE, TRUE, &vec, &local30, NULL);

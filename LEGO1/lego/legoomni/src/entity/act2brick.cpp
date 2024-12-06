@@ -90,8 +90,8 @@ void Act2Brick::FUN_1007a670(MxMatrix& p_param1, MxMatrix& p_param2, LegoPathBou
 {
 	m_unk0x17c = p_param2[3];
 	m_unk0x168 = p_param2[3];
-	((Vector3&) m_unk0x168).Sub(p_param1[3]);
-	((Vector3&) m_unk0x168).Div(8.0f);
+	m_unk0x168 -= p_param1[3];
+	m_unk0x168 /= 8.0f;
 
 	m_unk0x190 = 0;
 	TickleManager()->RegisterClient(this, 20);
