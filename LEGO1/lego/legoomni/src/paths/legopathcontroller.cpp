@@ -890,7 +890,7 @@ MxResult LegoPathController::FUN_10048310(
 			return FAILURE;
 		}
 
-		if (p_grec->size() != 0) {
+		if (p_grec->size() > 0) {
 			LegoPathCtrlEdge* edge = p_grec->front().m_edge;
 
 			if (edge->FUN_10048c40(p_oldPosition)) {
@@ -898,7 +898,7 @@ MxResult LegoPathController::FUN_10048310(
 			}
 		}
 
-		if (p_grec->size() != 0) {
+		if (p_grec->size() > 0) {
 			LegoPathCtrlEdge* edge = p_grec->back().m_edge;
 
 			if (edge->FUN_10048c40(p_newPosition)) {
