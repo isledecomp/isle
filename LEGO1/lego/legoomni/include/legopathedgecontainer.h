@@ -27,8 +27,8 @@ struct LegoBoundaryEdge {
 };
 
 // SIZE 0x10
-struct LegoBoundaryEdgeWithFloat {
-	LegoBoundaryEdgeWithFloat()
+struct LegoBEWithFloat {
+	LegoBEWithFloat()
 	{
 		m_edge = NULL;
 		m_boundary = NULL;
@@ -37,7 +37,7 @@ struct LegoBoundaryEdgeWithFloat {
 	}
 
 	// FUNCTION: BETA10 0x100bd9a0
-	LegoBoundaryEdgeWithFloat(LegoPathCtrlEdge* p_edge, LegoPathBoundary* p_boundary, MxFloat p_unk0x0c)
+	LegoBEWithFloat(LegoPathCtrlEdge* p_edge, LegoPathBoundary* p_boundary, MxFloat p_unk0x0c)
 	{
 		m_edge = p_edge;
 		m_boundary = p_boundary;
@@ -46,12 +46,7 @@ struct LegoBoundaryEdgeWithFloat {
 	}
 
 	// FUNCTION: BETA10 0x100bd9f0
-	LegoBoundaryEdgeWithFloat(
-		LegoPathCtrlEdge* p_edge,
-		LegoPathBoundary* p_boundary,
-		LegoBoundaryEdgeWithFloat* p_next,
-		MxFloat p_unk0x0c
-	)
+	LegoBEWithFloat(LegoPathCtrlEdge* p_edge, LegoPathBoundary* p_boundary, LegoBEWithFloat* p_next, MxFloat p_unk0x0c)
 	{
 		m_edge = p_edge;
 		m_boundary = p_boundary;
@@ -59,24 +54,24 @@ struct LegoBoundaryEdgeWithFloat {
 		m_unk0x0c = p_unk0x0c;
 	}
 
-	LegoPathCtrlEdge* m_edge;          // 0x00
-	LegoPathBoundary* m_boundary;      // 0x04
-	LegoBoundaryEdgeWithFloat* m_next; // 0x08
-	MxFloat m_unk0x0c;                 // 0x0c
+	LegoPathCtrlEdge* m_edge;     // 0x00
+	LegoPathBoundary* m_boundary; // 0x04
+	LegoBEWithFloat* m_next;      // 0x08
+	MxFloat m_unk0x0c;            // 0x0c
 
-	int operator==(LegoBoundaryEdgeWithFloat) const { return 0; }
-	int operator<(LegoBoundaryEdgeWithFloat) const { return 0; }
+	int operator==(LegoBEWithFloat) const { return 0; }
+	int operator<(LegoBEWithFloat) const { return 0; }
 };
 
-struct LegoBoundaryEdgeWithFloatComparator {
+struct LegoBEWithFloatComparator {
 	// FUNCTION: BETA10 0x100bef80
-	bool operator()(LegoBoundaryEdgeWithFloat* const& p_a, LegoBoundaryEdgeWithFloat* const& p_b) const
+	bool operator()(LegoBEWithFloat* const& p_a, LegoBEWithFloat* const& p_b) const
 	{
 		return p_a->m_unk0x0c < p_b->m_unk0x0c;
 	}
 };
 
-typedef multiset<LegoBoundaryEdgeWithFloat*, LegoBoundaryEdgeWithFloatComparator> LegoBoundaryEdgeWithFloatSet;
+typedef multiset<LegoBEWithFloat*, LegoBEWithFloatComparator> LegoBEWithFloatSet;
 
 // SIZE 0x3c
 struct LegoPathEdgeContainer : public list<LegoBoundaryEdge> {

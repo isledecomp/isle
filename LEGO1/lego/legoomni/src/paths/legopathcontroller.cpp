@@ -755,12 +755,12 @@ MxResult LegoPathController::FUN_10048310(
 		p_grec->SetBit1(TRUE);
 	}
 	else {
-		list<LegoBoundaryEdgeWithFloat> boundaryList;
-		list<LegoBoundaryEdgeWithFloat>::iterator boundaryListIt;
+		list<LegoBEWithFloat> boundaryList;
+		list<LegoBEWithFloat>::iterator boundaryListIt;
 
-		LegoBoundaryEdgeWithFloatSet boundarySet;
-		LegoBoundaryEdgeWithFloatSet::iterator boundarySetItA;
-		LegoBoundaryEdgeWithFloatSet::iterator boundarySetItB;
+		LegoBEWithFloatSet boundarySet;
+		LegoBEWithFloatSet::iterator boundarySetItA;
+		LegoBEWithFloatSet::iterator boundarySetItB;
 
 		LegoPathCtrlEdgeSet pathCtrlEdgeSet(m_pfsE);
 
@@ -787,7 +787,7 @@ MxResult LegoPathController::FUN_10048310(
 					}
 					else {
 						boundaryList.push_back(
-							LegoBoundaryEdgeWithFloat(edge, p_oldBoundary, edge->DistanceToMidpoint(p_oldPosition))
+							LegoBEWithFloat(edge, p_oldBoundary, edge->DistanceToMidpoint(p_oldPosition))
 						);
 						boundarySet.insert(&boundaryList.back());
 					}
@@ -798,8 +798,8 @@ MxResult LegoPathController::FUN_10048310(
 		}
 
 		if (!p_grec->GetBit1()) {
-			while (pathCtrlEdgeSet.size() != 0) {
-				LegoBoundaryEdgeWithFloat edgeWithFloat;
+			while (pathCtrlEdgeSet.size() > 0) {
+				LegoBEWithFloat edgeWithFloat;
 				MxFloat local70 = 999999.0f;
 
 				boundarySetItA = boundarySetItB = boundarySet.begin();
@@ -822,7 +822,7 @@ MxResult LegoPathController::FUN_10048310(
 						if (bOther == p_newBoundary) {
 							shouldRemove = FALSE;
 
-							LegoBoundaryEdgeWithFloat* pfs = *boundarySetItA;
+							LegoBEWithFloat* pfs = *boundarySetItA;
 							assert(pfs);
 
 							float dist = pfs->m_edge->DistanceToMidpoint(p_newPosition) + pfs->m_unk0x0c;
@@ -855,8 +855,7 @@ MxResult LegoPathController::FUN_10048310(
 
 										if (dist < local70) {
 											local70 = dist;
-											edgeWithFloat =
-												LegoBoundaryEdgeWithFloat(edge, bOther, *boundarySetItA, dist);
+											edgeWithFloat = LegoBEWithFloat(edge, bOther, *boundarySetItA, dist);
 										}
 									}
 								}

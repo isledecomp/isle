@@ -81,7 +81,7 @@ public:
 		Mx3DPointFloat point2(*p_other.m_pointA);
 		((Vector3&) point1).Add(*m_pointB);
 		((Vector3&) point1).Mul(0.5f);
-		((Vector3&) point2).Add(*m_pointB);
+		((Vector3&) point2).Add(*p_other.m_pointB);
 		((Vector3&) point2).Mul(0.5f);
 		((Vector3&) point1).Sub(point2);
 		return sqrt(point1.LenSquared());
