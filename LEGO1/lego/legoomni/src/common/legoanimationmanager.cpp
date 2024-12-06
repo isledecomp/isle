@@ -2553,7 +2553,7 @@ MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, Mx
 
 	while (local2c--) {
 		if (local34 != NULL) {
-			if (local34->Unknown(*boundary, LegoWEGEdge::c_bit1) && FUN_10064010(boundary, local34, destScale) &&
+			if (local34->BETA_1004a830(*boundary, LegoWEGEdge::c_bit1) && FUN_10064010(boundary, local34, destScale) &&
 				(!p_bool2 || FUN_10064010(boundary, local8, destScale))) {
 				p_boundary->m_srcScale = p_boundary->m_destScale = destScale;
 				p_boundary->m_name = boundary->GetName();

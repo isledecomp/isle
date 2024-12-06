@@ -62,6 +62,7 @@ public:
 		}
 	}
 
+	// FUNCTION: BETA10 0x1004a980
 	LegoU8 GetMask0x03() { return m_flags & (c_bit1 | c_bit2); }
 
 	// SYNTHETIC: LEGO1 0x1009a7e0
