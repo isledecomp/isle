@@ -845,7 +845,7 @@ MxResult LegoPathController::FUN_10048310(
 						}
 						else {
 							for (MxS32 i = 0; i < bOther->GetNumEdges(); i++) {
-								LegoPathCtrlEdge* edge = (LegoPathCtrlEdge*) p_oldBoundary->GetEdges()[i];
+								LegoPathCtrlEdge* edge = (LegoPathCtrlEdge*) bOther->GetEdges()[i];
 
 								if (edge->GetMask0x03()) {
 									if (pathCtrlEdgeSet.find(edge) != pathCtrlEdgeSet.end()) {
