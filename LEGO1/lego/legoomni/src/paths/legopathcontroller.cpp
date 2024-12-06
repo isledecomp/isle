@@ -832,12 +832,35 @@ MxResult LegoPathController::FUN_10048310(
 								edgeWithFloat.m_edge = NULL;
 
 								if (dist < local14) {
-									// TODO
+									local14 = dist;
+									p_grec->erase(p_grec->begin(), p_grec->end());
+									p_grec->SetBit1(TRUE);
+
+									do {
+										p_grec->push_front(LegoBoundaryEdge(pfs->m_edge, pfs->m_boundary));
+										pfs = pfs->m_next;
+									} while (pfs != NULL);
 								}
 							}
 						}
 						else {
-							// TODO
+							for (MxS32 i = 0; i < bOther->GetNumEdges(); i++) {
+								LegoPathCtrlEdge* edge = (LegoPathCtrlEdge*) p_oldBoundary->GetEdges()[i];
+
+								if (edge->GetMask0x03()) {
+									if (pathCtrlEdgeSet.find(edge) != pathCtrlEdgeSet.end()) {
+										shouldRemove = FALSE;
+
+										float dist = edge->DistanceBetweenMidpoints(*e) + (*boundarySetItA)->m_unk0x0c;
+
+										if (dist < local70) {
+											local70 = dist;
+											edgeWithFloat =
+												LegoBoundaryEdgeWithFloat(edge, bOther, *boundarySetItA, dist);
+										}
+									}
+								}
+							}
 						}
 					}
 

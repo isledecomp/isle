@@ -74,6 +74,19 @@ public:
 		return sqrt(point.LenSquared());
 	}
 
+	// FUNCTION: BETA10 0x100bd540
+	LegoFloat DistanceBetweenMidpoints(const LegoUnknown100db7f4& p_other)
+	{
+		Mx3DPointFloat point1(*m_pointA);
+		Mx3DPointFloat point2(*p_other.m_pointA);
+		((Vector3&) point1).Add(*m_pointB);
+		((Vector3&) point1).Mul(0.5f);
+		((Vector3&) point2).Add(*m_pointB);
+		((Vector3&) point2).Mul(0.5f);
+		((Vector3&) point1).Sub(point2);
+		return sqrt(point1.LenSquared());
+	}
+
 	// FUNCTION: BETA10 0x1001cc60
 	LegoU32 GetMask0x03() { return m_flags & (c_bit1 | c_bit2); }
 

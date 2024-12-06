@@ -32,7 +32,7 @@ struct LegoBoundaryEdgeWithFloat {
 	{
 		m_edge = NULL;
 		m_boundary = NULL;
-		m_unk0x08 = 0;
+		m_next = NULL;
 		m_unk0x0c = 0.0f;
 	}
 
@@ -41,14 +41,28 @@ struct LegoBoundaryEdgeWithFloat {
 	{
 		m_edge = p_edge;
 		m_boundary = p_boundary;
-		m_unk0x08 = 0;
+		m_next = NULL;
 		m_unk0x0c = p_unk0x0c;
 	}
 
-	LegoPathCtrlEdge* m_edge;     // 0x00
-	LegoPathBoundary* m_boundary; // 0x04
-	undefined4 m_unk0x08;         // 0x08
-	MxFloat m_unk0x0c;            // 0x0c
+	// FUNCTION: BETA10 0x100bd9f0
+	LegoBoundaryEdgeWithFloat(
+		LegoPathCtrlEdge* p_edge,
+		LegoPathBoundary* p_boundary,
+		LegoBoundaryEdgeWithFloat* p_next,
+		MxFloat p_unk0x0c
+	)
+	{
+		m_edge = p_edge;
+		m_boundary = p_boundary;
+		m_next = p_next;
+		m_unk0x0c = p_unk0x0c;
+	}
+
+	LegoPathCtrlEdge* m_edge;          // 0x00
+	LegoPathBoundary* m_boundary;      // 0x04
+	LegoBoundaryEdgeWithFloat* m_next; // 0x08
+	MxFloat m_unk0x0c;                 // 0x0c
 
 	int operator==(LegoBoundaryEdgeWithFloat) const { return 0; }
 	int operator<(LegoBoundaryEdgeWithFloat) const { return 0; }
