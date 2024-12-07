@@ -8,6 +8,24 @@
 
 class Helicopter;
 
+// SIZE 0x0c
+struct Act3ListElement {
+	undefined4 m_unk0x00[3]; // 0x00
+
+	int operator==(Act3ListElement) const { return 0; }
+	int operator<(Act3ListElement) const { return 0; }
+};
+
+// SIZE 0x10
+class Act3List {
+public:
+	Act3List() { m_unk0x04 = 0; }
+
+private:
+	list<Act3ListElement> m_unk0x00; // 0x00
+	undefined4 m_unk0x04;            // 0x0c
+};
+
 // VTABLE: LEGO1 0x100d4fc8
 // SIZE 0x0c
 class Act3State : public LegoState {
@@ -38,24 +56,6 @@ public:
 	// TODO: Most likely getters/setters are not used according to BETA.
 
 	undefined4 m_unk0x08; // 0x08
-};
-
-// SIZE 0x0c
-struct Act3ListElement {
-	undefined4 m_unk0x00[3]; // 0x00
-
-	int operator==(Act3ListElement) const { return 0; }
-	int operator<(Act3ListElement) const { return 0; }
-};
-
-// SIZE 0x10
-class Act3List {
-public:
-	Act3List() { m_unk0x04 = 0; }
-
-private:
-	list<Act3ListElement> m_unk0x00; // 0x00
-	undefined4 m_unk0x04;            // 0x0c
 };
 
 // VTABLE: LEGO1 0x100d9628
