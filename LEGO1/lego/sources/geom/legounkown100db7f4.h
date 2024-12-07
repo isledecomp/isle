@@ -74,7 +74,7 @@ public:
 		((Vector3&) point).Add(*m_pointB);
 		((Vector3&) point).Mul(0.5f);
 		((Vector3&) point).Sub(p_vec);
-		return sqrt(point.LenSquared());
+		return sqrt((double) point.LenSquared());
 	}
 
 	// FUNCTION: BETA10 0x100bd540
@@ -87,7 +87,7 @@ public:
 		((Vector3&) point2).Add(*p_other.m_pointB);
 		((Vector3&) point2).Mul(0.5f);
 		((Vector3&) point1).Sub(point2);
-		return sqrt(point1.LenSquared());
+		return sqrt((double) point1.LenSquared());
 	}
 
 	// FUNCTION: BETA10 0x1001cc60

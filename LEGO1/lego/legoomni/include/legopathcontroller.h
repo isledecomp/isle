@@ -23,7 +23,7 @@ class Vector3;
 // VTABLE: LEGO1 0x100d7da8
 // SIZE 0x40
 struct LegoPathCtrlEdge : public LegoUnknown100db7f4 {
-	undefined4 FUN_10048c40(const Vector3&);
+	inline MxU32 FUN_10048c40(const Vector3& p_position);
 };
 
 struct LegoPathCtrlEdgeCompare {
