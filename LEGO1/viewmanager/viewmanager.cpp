@@ -430,10 +430,10 @@ void ViewManager::UpdateViewTransformations()
 		Vector3 normal(frustum_planes[i]);
 
 		x = c;
-		((Vector3&) x).Sub(b); // TODO: Fix call
+		x -= b;
 
 		y = a;
-		((Vector3&) y).Sub(b); // TODO: Fix call
+		y -= b;
 
 		normal.EqualsCross(&x, &y);
 		normal.Unitize();

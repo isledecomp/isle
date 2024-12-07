@@ -1599,8 +1599,7 @@ MxU16 LegoAnimationManager::FUN_10062110(
 			if (direction.Dot(&direction, &p_direction) > 0.707) {
 				Mx3DPointFloat position(p_roi->GetWorldPosition());
 
-				// TODO: Fix call
-				((Vector3&) position).Sub(p_position);
+				position -= p_position;
 				float len = position.LenSquared();
 				float min, max;
 
@@ -1764,9 +1763,7 @@ MxBool LegoAnimationManager::FUN_10062650(Vector3& p_position, float p_und, Lego
 {
 	if (p_roi != NULL) {
 		Mx3DPointFloat position(p_position);
-
-		// TODO: Fix call
-		((Vector3&) position).Sub(p_roi->GetWorldPosition());
+		position -= p_roi->GetWorldPosition();
 
 		float len = position.LenSquared();
 		if (len <= 0.0f) {
@@ -2174,7 +2171,7 @@ MxBool LegoAnimationManager::FUN_10062e20(LegoROI* p_roi, LegoAnimPresenter* p_p
 			position = p_roi->GetWorldPosition();
 			direction = p_roi->GetWorldDirection();
 
-			((Vector3&) direction).Mul(-1.0f);
+			direction *= -1.0f;
 			m_extras[i].m_speed = -1.0f;
 
 			if (inExtras) {
@@ -2485,17 +2482,17 @@ MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoUnkn
 	Vector3* v2 = p_edge->CCWVertex(*p_boundary);
 
 	p1 = *v2;
-	((Vector3&) p1).Sub(*v1);
-	((Vector3&) p1).Mul(p_destScale);
-	((Vector3&) p1).Add(*v1);
+	p1 -= *v1;
+	p1 *= p_destScale;
+	p1 += *v1;
 
 	BoundingBox boundingBox;
 	Mx3DPointFloat vec(1.0f, 1.0f, 1.0f);
 
 	boundingBox.Min() = p1;
-	boundingBox.Min().Sub(vec);
+	boundingBox.Min() -= vec;
 	boundingBox.Max() = p1;
-	boundingBox.Max().Add(vec);
+	boundingBox.Max() += vec;
 	return GetViewManager()->IsBoundingBoxInFrustum(boundingBox) == FALSE;
 }
 
@@ -2704,7 +2701,7 @@ MxResult LegoAnimationManager::FUN_10064670(Vector3* p_position)
 
 	if (p_position != NULL) {
 		Mx3DPointFloat vec(98.875f, 0.0f, -46.1564f);
-		((Vector3&) vec).Sub(*p_position);
+		vec -= *p_position;
 
 		if (vec.LenSquared() < 800.0f) {
 			success = TRUE;
@@ -2728,7 +2725,7 @@ MxResult LegoAnimationManager::FUN_10064740(Vector3* p_position)
 
 	if (p_position != NULL) {
 		Mx3DPointFloat vec(-21.375f, 0.0f, -41.75f);
-		((Vector3&) vec).Sub(*p_position);
+		vec -= *p_position;
 
 		if (vec.LenSquared() < 1000.0f) {
 			success = TRUE;

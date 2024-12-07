@@ -97,7 +97,7 @@ MxU32 LegoExtraActor::VTable0x90(float p_time, Matrix4& p_transform)
 		else {
 			m_state = 0;
 			m_scheduledTime = 0.0f;
-			((Vector3&) positionRef).Sub(g_unk0x10104c18); // TODO: Fix call
+			positionRef -= g_unk0x10104c18;
 			m_roi->FUN_100a58f0(p_transform);
 			return TRUE;
 		}
@@ -136,8 +136,7 @@ MxResult LegoExtraActor::FUN_1002aae0()
 	Vector3 dirRef(m_unk0xec[2]);
 	Vector3 positionRef(m_unk0xec[3]);
 
-	// TODO: Fix call
-	((Vector3&) dirRef).Mul(-1.0f);
+	dirRef *= -1.0f;
 	rightRef.EqualsCross(&upRef, &dirRef);
 
 	if (m_boundary == m_destEdge->m_faceA) {
@@ -216,9 +215,8 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 			Vector3 positionRef(matrix2[3]);
 			Mx3DPointFloat dir(matrix[2]);
 
-			// TODO: Fix calls
-			((Mx3DPointFloat&) dir).Mul(2.0f);
-			((Vector3&) positionRef).Add(dir);
+			dir *= 2.0f;
+			positionRef += dir;
 
 			for (MxS32 i = 0; i < m_boundary->GetNumEdges(); i++) {
 				Mx4DPointFloat* normal = m_boundary->GetEdgeNormal(i);
@@ -251,7 +249,7 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 			Mx3DPointFloat dir = p_actor->GetWorldDirection();
 			MxMatrix matrix3 = MxMatrix(roi->GetLocal2World());
 			Vector3 positionRef(matrix3[3]);
-			((Vector3&) positionRef).Add(g_unk0x10104c18);
+			positionRef += g_unk0x10104c18;
 			roi->FUN_100a58f0(matrix3);
 
 #ifdef COMPAT_MODE
@@ -463,7 +461,7 @@ MxU32 LegoExtraActor::VTable0x6c(
 						Vector3 local60(local2world[3]);
 						Mx3DPointFloat local54(p_v1);
 
-						((Vector3&) local54).Sub(local60);
+						local54 -= local60;
 						float local1c = p_v2.Dot(&p_v2, &p_v2);
 						float local24 = p_v2.Dot(&p_v2, &local54) * 2.0f;
 						float local20 = local54.Dot(&local54, &local54);

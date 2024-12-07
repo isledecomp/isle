@@ -168,7 +168,7 @@ LegoResult LegoAnimScene::FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix)
 	}
 
 	local54 = localcc;
-	((Vector3&) local54).Sub(localb8);
+	local54 -= localb8;
 
 	if (local54.Unitize() == 0) {
 		local5c.EqualsCross(&local68, &local54);
@@ -177,7 +177,7 @@ LegoResult LegoAnimScene::FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix)
 			local68.EqualsCross(&local54, &local5c);
 
 			localcc = p_matrix[3];
-			((Vector3&) localcc).Add(localb0[3]);
+			localcc += localb0[3];
 
 			p_matrix[3][0] = p_matrix[3][1] = p_matrix[3][2] = localb0[3][0] = localb0[3][1] = localb0[3][2] = 0;
 

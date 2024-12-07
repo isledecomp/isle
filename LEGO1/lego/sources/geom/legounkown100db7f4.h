@@ -71,9 +71,9 @@ public:
 	LegoFloat DistanceToMidpoint(const Vector3& p_vec)
 	{
 		Mx3DPointFloat point(*m_pointA);
-		((Vector3&) point).Add(*m_pointB);
-		((Vector3&) point).Mul(0.5f);
-		((Vector3&) point).Sub(p_vec);
+		point += *m_pointB;
+		point *= 0.5f;
+		point -= p_vec;
 		return sqrt(point.LenSquared());
 	}
 
@@ -82,11 +82,11 @@ public:
 	{
 		Mx3DPointFloat point1(*m_pointA);
 		Mx3DPointFloat point2(*p_other.m_pointA);
-		((Vector3&) point1).Add(*m_pointB);
-		((Vector3&) point1).Mul(0.5f);
-		((Vector3&) point2).Add(*p_other.m_pointB);
-		((Vector3&) point2).Mul(0.5f);
-		((Vector3&) point1).Sub(point2);
+		point1 += *m_pointB;
+		point1 *= 0.5f;
+		point2 += *p_other.m_pointB;
+		point2 *= 0.5f;
+		point1 -= point2;
 		return sqrt(point1.LenSquared());
 	}
 

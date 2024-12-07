@@ -721,13 +721,13 @@ void Isle::Enable(MxBool p_enable)
 				Mx3DPointFloat position(UserActor()->GetROI()->GetWorldPosition());
 
 				Mx3DPointFloat sub(-21.375f, 0.0f, -41.75f);
-				((Vector3&) sub).Sub(position);
+				sub -= position;
 				if (sub.LenSquared() < 1024.0f) {
 					AnimationManager()->FUN_10064740(NULL);
 				}
 
 				Mx3DPointFloat sub2(98.874992f, 0.0f, -46.156292f);
-				((Vector3&) sub2).Sub(position);
+				sub2 -= position;
 				if (sub2.LenSquared() < 1024.0f) {
 					AnimationManager()->FUN_10064670(NULL);
 				}

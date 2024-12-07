@@ -95,8 +95,7 @@ MxResult LegoPathController::Create(MxU8* p_data, const Vector3& p_location, con
 		}
 
 		for (i = 0; i < m_numN; i++) {
-			// TODO: Fix call
-			((Vector3&) m_unk0x10[i]).Add(p_location);
+			m_unk0x10[i] += p_location;
 		}
 
 		for (i = 0; i < m_numL; i++) {
@@ -950,9 +949,9 @@ MxS32 LegoPathController::FUN_1004a240(
 
 	Mx3DPointFloat vec;
 	p_v1 = *p_edge->CCWVertex(*p_boundary);
-	p_v1.Sub(*p_edge->CWVertex(*p_boundary));
-	p_v1.Mul(p_f1);
-	p_v1.Add(*p_edge->CWVertex(*p_boundary));
+	p_v1 -= *p_edge->CWVertex(*p_boundary);
+	p_v1 *= p_f1;
+	p_v1 += *p_edge->CWVertex(*p_boundary);
 	p_edge->FUN_1002ddc0(*p_boundary, vec);
 	p_v2.EqualsCross(p_boundary->GetUnknown0x14(), &vec);
 	return 0;

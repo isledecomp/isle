@@ -66,14 +66,14 @@ void LegoLoopingAnimPresenter::PutFrame()
 
 				up = und;
 
-				((Vector3&) up).Sub(m_currentWorld->GetCamera()->GetWorldLocation());
-				((Vector3&) dir).Div(dirsqr);
+				up -= m_currentWorld->GetCamera()->GetWorldLocation();
+				dir /= dirsqr;
 				pos.EqualsCross(&dir, &up);
 				pos.Unitize();
 				up.EqualsCross(&pos, &dir);
-				((Vector3&) pos).Mul(possqr);
-				((Vector3&) dir).Mul(dirsqr);
-				((Vector3&) up).Mul(upsqr);
+				pos *= possqr;
+				dir *= dirsqr;
+				up *= upsqr;
 
 				m_unk0x8c[i]->FUN_100a58f0(mat);
 				m_unk0x8c[i]->VTable0x14();
