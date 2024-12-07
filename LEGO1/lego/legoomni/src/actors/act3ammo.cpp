@@ -30,7 +30,7 @@ void Act3Ammo::Destroy(MxBool p_fromDestructor)
 	if (!p_fromDestructor) {
 		assert(0);
 	}
-	else {
+	else if (m_roi != NULL) {
 		CharacterManager()->ReleaseActor(m_roi->GetName());
 		m_roi = NULL;
 	}
