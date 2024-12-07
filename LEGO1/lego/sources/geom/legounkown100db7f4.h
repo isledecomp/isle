@@ -74,7 +74,7 @@ public:
 		point += *m_pointB;
 		point *= 0.5f;
 		point -= p_vec;
-		return sqrt(point.LenSquared());
+		return sqrt((double) point.LenSquared());
 	}
 
 	// FUNCTION: BETA10 0x100bd540
@@ -87,7 +87,7 @@ public:
 		point2 += *p_other.m_pointB;
 		point2 *= 0.5f;
 		point1 -= point2;
-		return sqrt(point1.LenSquared());
+		return sqrt((double) point1.LenSquared());
 	}
 
 	// FUNCTION: BETA10 0x1001cc60

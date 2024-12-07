@@ -817,7 +817,10 @@ MxResult LegoPathController::FUN_10048310(
 				LegoPathBoundary* bOther = (LegoPathBoundary*) e->OtherFace(b);
 				assert(bOther);
 
-				if (e->BETA_1004a830(*bOther, p_mask)) {
+				if (!e->BETA_1004a830(*bOther, p_mask)) {
+					// This branch is empty, but present in the BETA - probably had comments only
+				}
+				else {
 					if (bOther == p_newBoundary) {
 						shouldRemove = FALSE;
 
@@ -826,9 +829,10 @@ MxResult LegoPathController::FUN_10048310(
 
 						float dist;
 						if ((dist = pfs->m_edge->DistanceToMidpoint(p_newPosition) + pfs->m_unk0x0c) < local70) {
-							local70 = dist;
 							edgeWithFloat.m_edge = NULL;
+							local70 = dist;
 
+							// TODO: Match
 							if (dist < local14) {
 								local14 = dist;
 								p_grec->erase(p_grec->begin(), p_grec->end());
@@ -916,12 +920,66 @@ MxResult LegoPathController::FUN_10048310(
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x10048c40
-// STUB: BETA10 0x1001cc90
-undefined4 LegoPathCtrlEdge::FUN_10048c40(const Vector3&)
+// FUNCTION: LEGO1 0x10048c40
+// FUNCTION: BETA10 0x1001cc90
+inline MxU32 LegoPathCtrlEdge::FUN_10048c40(const Vector3& p_position)
 {
-	// TODO
-	return 0;
+	MxFloat localc, local10;
+	MxU32 result = FALSE;
+
+	if (m_unk0x28[0] > 0.001 || m_unk0x28[0] < -0.001) {
+		localc = (p_position[0] - (*m_pointA)[0]) / m_unk0x28[0];
+
+		if (localc < 0 || localc > 1) {
+			return FALSE;
+		}
+
+		result = TRUE;
+	}
+	else {
+		if (p_position[0] > (*m_pointA)[0] + 0.001 || p_position[0] < (*m_pointA)[0] - 0.001) {
+			return FALSE;
+		}
+	}
+
+	if (m_unk0x28[1] > 0.001 || m_unk0x28[1] < -0.001) {
+		local10 = (p_position[1] - (*m_pointA)[1]) / m_unk0x28[1];
+
+		if (result) {
+			if (localc > local10 + 0.001 || localc < local10 - 0.001) {
+				return FALSE;
+			}
+		}
+		else {
+			result = TRUE;
+			localc = local10;
+		}
+	}
+	else {
+		if (p_position[1] > (*m_pointA)[1] + 0.001 || p_position[1] < (*m_pointA)[1] - 0.001) {
+			return FALSE;
+		}
+	}
+
+	if (m_unk0x28[2] > 0.001 || m_unk0x28[2] < -0.001) {
+		local10 = (p_position[2] - (*m_pointA)[2]) / m_unk0x28[2];
+
+		if (result) {
+			if (localc > local10 + 0.001 || localc < local10 - 0.001) {
+				return FALSE;
+			}
+		}
+		else {
+			return TRUE;
+		}
+	}
+	else {
+		if (p_position[2] > (*m_pointA)[2] + 0.001 || p_position[2] < (*m_pointA)[2] - 0.001) {
+			return FALSE;
+		}
+	}
+
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x1004a240
