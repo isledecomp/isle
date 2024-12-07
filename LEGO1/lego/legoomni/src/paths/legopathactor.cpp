@@ -72,7 +72,7 @@ MxResult LegoPathActor::VTable0x80(const Vector3& p_point1, Vector3& p_point2, V
 	Mx3DPointFloat p1, p2, p3;
 
 	p1 = p_point3;
-	((Vector3&) p1).Sub(p_point1);
+	p1 -= p_point1;
 	m_BADuration = p1.LenSquared();
 
 	if (m_BADuration > 0.0f) {
@@ -106,14 +106,14 @@ MxResult LegoPathActor::VTable0x88(
 	Mx3DPointFloat p1, p2, p3, p4, p5;
 
 	p1 = *v2;
-	((Vector3&) p1).Sub(*v1);
-	((Vector3&) p1).Mul(p_srcScale);
-	((Vector3&) p1).Add(*v1);
+	p1 -= *v1;
+	p1 *= p_srcScale;
+	p1 += *v1;
 
 	p2 = *v4;
-	((Vector3&) p2).Sub(*v3);
-	((Vector3&) p2).Mul(p_destScale);
-	((Vector3&) p2).Add(*v3);
+	p2 -= *v3;
+	p2 *= p_destScale;
+	p2 += *v3;
 
 	m_boundary = p_boundary;
 	m_destEdge = &p_destEdge;
@@ -124,7 +124,7 @@ MxResult LegoPathActor::VTable0x88(
 	p_destEdge.FUN_1002ddc0(*p_boundary, p3);
 
 	p4 = p2;
-	((Vector3&) p4).Sub(p1);
+	p4 -= p1;
 	p4.Unitize();
 
 	MxMatrix matrix;
@@ -139,7 +139,7 @@ MxResult LegoPathActor::VTable0x88(
 	up = *m_boundary->GetUnknown0x14();
 
 	if (!m_cameraFlag || !m_userNavFlag) {
-		((Vector3&) dir).Mul(-1.0f);
+		dir *= -1.0f;
 	}
 
 	right.EqualsCross(&up, &dir);
@@ -181,9 +181,9 @@ MxResult LegoPathActor::VTable0x84(
 	Mx3DPointFloat p2, p3, p5;
 
 	p2 = *v4;
-	((Vector3&) p2).Sub(*v3);
-	((Vector3&) p2).Mul(p_destScale);
-	((Vector3&) p2).Add(*v3);
+	p2 -= *v3;
+	p2 *= p_destScale;
+	p2 += *v3;
 
 	m_boundary = p_boundary;
 	m_destEdge = &p_destEdge;
@@ -205,7 +205,7 @@ MxResult LegoPathActor::VTable0x84(
 	up = *m_boundary->GetUnknown0x14();
 
 	if (!m_cameraFlag || !m_userNavFlag) {
-		((Vector3&) dir).Mul(-1.0f);
+		dir *= -1.0f;
 	}
 
 	right.EqualsCross(&up, &dir);
@@ -289,12 +289,12 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 					m_worldSpeed *= m_unk0x144;
 					nav->SetLinearVel(m_worldSpeed);
 					Mx3DPointFloat p7(p2);
-					((Vector3&) p7).Sub(p6);
+					p7 -= p6;
 
 					if (p7.Unitize() == 0) {
 						float f = sqrt(p1.LenSquared()) * m_unk0x140;
-						((Vector3&) p7).Mul(f);
-						((Vector3&) p1).Add(p7);
+						p7 *= f;
+						p1 += p7;
 					}
 				}
 			}
@@ -479,7 +479,7 @@ MxU32 LegoPathActor::VTable0x6c(
 MxS32 LegoPathActor::VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3)
 {
 	Mx3DPointFloat v2(p_v2);
-	((Vector3&) v2).Sub(p_v1);
+	v2 -= p_v1;
 
 	float len = v2.LenSquared();
 
@@ -488,7 +488,7 @@ MxS32 LegoPathActor::VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3)
 	}
 
 	len = sqrt(len);
-	((Vector3&) v2).Div(len);
+	v2 /= len;
 
 	float radius = m_roi->GetWorldBoundingSphere().Radius();
 	list<LegoPathBoundary*> boundaries;
@@ -655,16 +655,16 @@ MxResult LegoPathActor::VTable0x9c()
 	Mx3DPointFloat local84(m_unk0xec[2]);
 	Mx3DPointFloat local70(local34);
 
-	((Vector3&) local70).Sub(localc0);
+	local70 -= localc0;
 	float len = local70.LenSquared();
 	if (len >= 0.0f) {
 		len = sqrt(len);
-		((Vector3&) local84).Mul(len);
-		((Vector3&) local48).Mul(len);
+		local84 *= len;
+		local48 *= len;
 	}
 
 	if (!m_userNavFlag) {
-		((Vector3&) local84).Mul(-1.0f);
+		local84 *= -1.0f;
 	}
 
 	if (VTable0x80(localc0, local84, local34, local48) != SUCCESS) {

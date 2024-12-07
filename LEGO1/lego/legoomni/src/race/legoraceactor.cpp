@@ -84,7 +84,7 @@ MxU32 LegoRaceActor::VTable0x90(float p_float, Matrix4& p_transform)
 			m_state = 0;
 			m_unk0x08 = 0;
 
-			((Vector3&) positionRef).Sub(g_unk0x10102b08);
+			positionRef -= g_unk0x10102b08;
 			m_roi->FUN_100a58f0(p_transform);
 			return 1;
 		}
@@ -108,7 +108,7 @@ MxResult LegoRaceActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 			MxMatrix matr;
 			matr = roi->GetLocal2World();
 
-			Vector3(matr[3]).Add(g_unk0x10102b08);
+			Vector3(matr[3]) += g_unk0x10102b08;
 
 			roi->FUN_100a58f0(matr);
 

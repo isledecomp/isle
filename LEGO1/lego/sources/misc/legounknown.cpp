@@ -42,9 +42,9 @@ LegoResult LegoUnknown::FUN_1009a1e0(float p_f1, Matrix4& p_mat, Vector3& p_v, L
 	}
 	else if (p_f1 >= 0.999) {
 		v1 = m_unk0x00[0];
-		((Vector3&) v1).Add(m_unk0x00[1]);
-		((Vector3&) v1).Add(m_unk0x00[2]);
-		((Vector3&) v1).Add(m_unk0x00[3]);
+		v1 += m_unk0x00[1];
+		v1 += m_unk0x00[2];
+		v1 += m_unk0x00[3];
 
 		for (LegoS32 i = 0; i < 3; i++) {
 			v4[i] = m_unk0x00[1][i] + m_unk0x00[2][i] * 2.0f + m_unk0x00[3][i] * 3.0f;
@@ -61,7 +61,7 @@ LegoResult LegoUnknown::FUN_1009a1e0(float p_f1, Matrix4& p_mat, Vector3& p_v, L
 	}
 
 	if (p_und) {
-		((Vector3&) v4).Mul(-1.0f);
+		v4 *= -1.0f;
 	}
 
 	if (v4.Unitize() != 0) {

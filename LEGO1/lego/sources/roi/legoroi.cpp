@@ -600,8 +600,8 @@ LegoU32 LegoROI::FUN_100a9410(
 {
 	if (p_collideBox) {
 		Mx3DPointFloat v2(p_v2);
-		((Vector3&) v2).Mul(p_f1);
-		((Vector3&) v2).Add(p_v1);
+		v2 *= p_f1;
+		v2 += p_v1;
 
 		Mx4DPointFloat localc0;
 		Mx4DPointFloat local9c;
@@ -621,8 +621,8 @@ LegoU32 LegoROI::FUN_100a9410(
 		localc0[3] = local9c[3] = local168[3] = 1.0f;
 
 		local38 = local58;
-		((Vector3&) local38).Add(locala8);
-		((Vector3&) local38).Mul(0.5f);
+		local38 += locala8;
+		local38 *= 0.5f;
 
 		local70 = localc0;
 		localc0.SetMatrixProduct(&local70, (float*) m_local2world.GetData());
@@ -647,7 +647,7 @@ LegoU32 LegoROI::FUN_100a9410(
 			}
 
 			if (local150[i][3] + local38.Dot(&local38, &local150[i]) < 0.0f) {
-				((Vector4&) local150[i]).Mul(-1.0f);
+				local150[i] *= -1.0f;
 			}
 		}
 
@@ -659,8 +659,8 @@ LegoU32 LegoROI::FUN_100a9410(
 
 				if (local50 >= 0.0f && local50 <= p_f1) {
 					Mx3DPointFloat local17c(p_v2);
-					((Vector3&) local17c).Mul(local50);
-					((Vector3&) local17c).Add(local4c);
+					local17c *= local50;
+					local17c += local4c;
 
 					LegoS32 j;
 					for (j = 0; j < 6; j++) {
@@ -680,7 +680,7 @@ LegoU32 LegoROI::FUN_100a9410(
 	}
 	else {
 		Mx3DPointFloat v1(p_v1);
-		((Vector3&) v1).Sub(GetWorldBoundingSphere().Center());
+		v1 -= GetWorldBoundingSphere().Center();
 
 		float local10 = GetWorldBoundingSphere().Radius();
 		float local8 = p_v2.Dot(&p_v2, &p_v2);
@@ -716,8 +716,8 @@ LegoU32 LegoROI::FUN_100a9410(
 
 				if (local1c >= 0.0f && p_f1 >= local1c) {
 					p_v3 = p_v2;
-					p_v3.Mul(local1c);
-					p_v3.Add(p_v1);
+					p_v3 *= local1c;
+					p_v3 += p_v1;
 					return 1;
 				}
 			}
@@ -744,8 +744,8 @@ void TimeROI::FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time)
 		Mx3DPointFloat targetPosition(p_matrix[3]);
 		Vector3 vec(m_local2world[3]);
 
-		((Vector3&) targetPosition).Sub(vec);
-		((Vector3&) targetPosition).Div(time * 0.001);
+		targetPosition -= vec;
+		targetPosition /= time * 0.001;
 
 		FUN_100a5a30(targetPosition);
 	}

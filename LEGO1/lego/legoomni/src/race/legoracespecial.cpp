@@ -172,11 +172,11 @@ MxS32 LegoCarRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 			Mx3DPointFloat worldDirection(Vector3(m_roi->GetWorldDirection()));
 
 			if (!m_userNavFlag) {
-				((Vector3*) &worldDirection)->Mul(-1.0f);
+				worldDirection *= -1.0f;
 			}
 
-			((Vector3*) &worldDirection)->Mul(5.0f);
-			((Vector3*) &crossProduct)->Mul(5.0f);
+			worldDirection *= 5.0f;
+			crossProduct *= 5.0f;
 
 			MxResult callResult =
 				VTable0x80(Vector3(m_roi->GetWorldPosition()), worldDirection, pointUnknown, crossProduct);
@@ -266,8 +266,8 @@ MxResult LegoCarRaceActor::VTable0x9c()
 		point4.Unitize();
 		point5.Unitize();
 
-		((Vector3*) &point4)->Mul(5.0f);
-		((Vector3*) &point5)->Mul(5.0f);
+		point4 *= 5.0f;
+		point5 *= 5.0f;
 
 		MxResult res = VTable0x80(m_roi->GetWorldPosition(), point4, point1, point5);
 

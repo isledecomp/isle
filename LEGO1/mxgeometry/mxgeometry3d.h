@@ -163,13 +163,13 @@ inline void UnknownMx4DPointFloat::Unknown7()
 		Mx4DPointFloat v2;
 
 		v1 = m_unk0x00;
-		((Vector4&) v1).Add(m_unk0x18);
+		v1 += m_unk0x18;
 
 		v2 = m_unk0x00;
-		((Vector4&) v2).Sub(m_unk0x18);
+		v2 -= m_unk0x18;
 
 		if (v1.Dot(&v1, &v1) < v2.Dot(&v2, &v2)) {
-			((Vector4&) m_unk0x18).Mul(-1.0f);
+			m_unk0x18 *= -1.0f;
 		}
 	}
 }

@@ -287,6 +287,7 @@ MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
 	MxDSStreamingAction* entry = (MxDSStreamingAction*) m_list0x80.Find(p_action); // TODO: is this a seperate class?
+
 	if (entry) {
 		MxDSStreamingAction* action = new MxDSStreamingAction(*p_action, 0);
 		action->SetUnknown28(entry->GetUnknown28());

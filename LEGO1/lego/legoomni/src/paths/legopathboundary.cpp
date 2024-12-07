@@ -53,11 +53,11 @@ void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPa
 		Mx3DPointFloat v;
 
 		v = p_point1;
-		((Vector3&) v).Sub(*ccwV);
+		v -= *ccwV;
 		float dot1 = v.Dot(&v, m_unk0x50);
 
 		v = p_point2;
-		((Vector3&) v).Sub(*ccwV);
+		v -= *ccwV;
 		float dot2 = v.Dot(&v, m_unk0x50);
 
 		if (dot2 > dot1) {
@@ -201,7 +201,7 @@ MxU32 LegoPathBoundary::Intersect(
 			if (local10 == 0) {
 				local10 = 1;
 				vec = p_point2;
-				((Vector3&) vec).Sub(p_point1);
+				vec -= p_point1;
 
 				len = vec.LenSquared();
 				if (len <= 0.0f) {
@@ -209,7 +209,7 @@ MxU32 LegoPathBoundary::Intersect(
 				}
 
 				len = sqrt(len);
-				((Vector3&) vec).Div(len);
+				vec /= len;
 			}
 
 			float dot = vec.Dot(&vec, &m_edgeNormals[i]);
@@ -234,11 +234,11 @@ MxU32 LegoPathBoundary::Intersect(
 		Vector3* local5c = e->CWVertex(*this);
 
 		p_point3 = vec;
-		p_point3.Mul(localc);
-		p_point3.Add(p_point1);
+		p_point3 *= localc;
+		p_point3 += p_point1;
 
 		local50 = p_point2;
-		((Vector3&) local50).Sub(*local5c);
+		local50 -= *local5c;
 
 		e->FUN_1002ddc0(*this, local70);
 
@@ -258,7 +258,7 @@ MxU32 LegoPathBoundary::Intersect(
 
 				Vector3* local90 = local88->CWVertex(*this);
 				Mx3DPointFloat locala4(p_point3);
-				((Vector3&) locala4).Sub(*local90);
+				locala4 -= *local90;
 
 				float local8c = locala4.Dot(&locala4, &local84);
 
@@ -285,7 +285,7 @@ MxU32 LegoPathBoundary::Intersect(
 
 					Vector3* localc4 = locala8->CWVertex(*this);
 					Mx3DPointFloat locald8(p_point3);
-					((Vector3&) locald8).Sub(*localc4);
+					locald8 -= *localc4;
 
 					float localc0 = locald8.Dot(&locald8, &localbc);
 
@@ -316,8 +316,8 @@ MxU32 LegoPathBoundary::Intersect(
 		}
 		else if (local58 > 0.0f && e->m_unk0x3c > local58) {
 			p_point3 = local70;
-			p_point3.Mul(local58);
-			p_point3.Add(*local5c);
+			p_point3 *= local58;
+			p_point3 += *local5c;
 			p_edge = e;
 			return 1;
 		}
@@ -345,7 +345,7 @@ MxU32 LegoPathBoundary::FUN_10057fe0(LegoAnimPresenter* p_presenter)
 	Mx3DPointFloat unk0x30;
 
 	unk0x30 = m_unk0x30;
-	((Vector3&) unk0x30).Sub(p_presenter->m_unk0xa8);
+	unk0x30 -= p_presenter->m_unk0xa8;
 
 	float len = unk0x30.LenSquared();
 	float local20 = p_presenter->m_unk0xa4 + m_unk0x44;

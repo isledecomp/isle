@@ -118,6 +118,7 @@ public:
 		return -1;
 	} // vtable+0x44
 
+private:
 	// FUNCTION: LEGO1 0x100021c0
 	virtual void Add(float p_value) { AddImpl(p_value); } // vtable+0x50
 
@@ -145,6 +146,7 @@ public:
 	// FUNCTION: LEGO1 0x10002240
 	virtual void Div(const float& p_value) { DivScalarImpl((float*) &p_value); } // vtable+0x68
 
+public:
 	// FUNCTION: LEGO1 0x10002250
 	virtual void SetVector(float* p_other) { EqualsImpl(p_other); } // vtable+0x70
 
@@ -169,6 +171,19 @@ public:
 
 	// FUNCTION: BETA10 0x1001d170
 	const float& operator[](int idx) const { return m_data[idx]; }
+
+	void operator+=(float p_value) { Add(p_value); }
+	void operator+=(float* p_other) { Add(p_other); }
+	void operator+=(const Vector2& p_other) { Add(p_other); }
+
+	void operator-=(const float* p_other) { Sub(p_other); }
+	void operator-=(const Vector2& p_other) { Sub(p_other); }
+
+	void operator*=(float* p_other) { Mul(p_other); }
+	void operator*=(Vector2* p_other) { Mul(p_other); }
+	void operator*=(const float& p_value) { Mul(p_value); }
+
+	void operator/=(const float& p_value) { Div(p_value); }
 
 protected:
 	float* m_data; // 0x04
