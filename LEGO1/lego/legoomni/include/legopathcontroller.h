@@ -256,6 +256,9 @@ private:
 // TEMPLATE: LEGO1 0x10049370
 // _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Ubound
 
+// TEMPLATE: LEGO1 0x100493a0
+// list<LegoBEWithFloat,allocator<LegoBEWithFloat> >::~list<LegoBEWithFloat,allocator<LegoBEWithFloat> >
+
 // TEMPLATE: LEGO1 0x10049410
 // list<LegoBEWithFloat,allocator<LegoBEWithFloat> >::insert
 
@@ -264,6 +267,9 @@ private:
 
 // TEMPLATE: LEGO1 0x100494a0
 // _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::iterator::_Inc
+
+// TEMPLATE: LEGO1 0x100494e0
+// _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::~_Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFlo
 
 // TEMPLATE: LEGO1 0x100495b0
 // _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::insert
@@ -283,11 +289,23 @@ private:
 // TEMPLATE: LEGO1 0x10049e00
 // _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Insert
 
+// TEMPLATE: LEGO1 0x10049d10
+// _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Erase
+
 // TEMPLATE: LEGO1 0x1004a090
 // _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Lrotate
 
 // TEMPLATE: LEGO1 0x1004a0f0
 // _Tree<LegoBEWithFloat *,LegoBEWithFloat *,multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Kfn,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::_Rrotate
+
+// TEMPLATE: LEGO1 0x1004a150
+// List<LegoBEWithFloat>::~List<LegoBEWithFloat>
+
+// TEMPLATE: LEGO1 0x1004a1a0
+// Multiset<LegoBEWithFloat *,LegoBEWithFloatComparator>::~Multiset<LegoBEWithFloat *,LegoBEWithFloatComparator>
+
+// TEMPLATE: LEGO1 0x1004a1f0
+// multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >::~multiset<LegoBEWithFloat *,LegoBEWithFloatComparator,allocator<LegoBEWithFloat *> >
 
 // TEMPLATE: LEGO1 0x1004a760
 // _Construct

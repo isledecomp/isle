@@ -829,9 +829,10 @@ MxResult LegoPathController::FUN_10048310(
 
 						float dist;
 						if ((dist = pfs->m_edge->DistanceToMidpoint(p_newPosition) + pfs->m_unk0x0c) < local70) {
-							local70 = dist;
 							edgeWithFloat.m_edge = NULL;
+							local70 = dist;
 
+							// TODO: Match
 							if (dist < local14) {
 								local14 = dist;
 								p_grec->erase(p_grec->begin(), p_grec->end());
