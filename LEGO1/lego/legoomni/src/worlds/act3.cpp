@@ -1,12 +1,34 @@
 #include "act3.h"
 
+#include "legonavcontroller.h"
+#include "misc.h"
+#include "mxmisc.h"
+#include "mxnotificationmanager.h"
+
 DECOMP_SIZE_ASSERT(Act3, 0x4274)
 DECOMP_SIZE_ASSERT(Act3State, 0x0c)
+DECOMP_SIZE_ASSERT(Act3ListElement, 0x0c)
+DECOMP_SIZE_ASSERT(Act3List, 0x10)
 
-// STUB: LEGO1 0x10072270
+// FUNCTION: LEGO1 0x10072270
+// FUNCTION: BETA10 0x10015470
 Act3::Act3()
 {
-	// TODO
+	m_unk0xf8 = 0;
+	m_unk0x41fc = 0;
+	m_unk0x4200 = 0;
+	m_unk0x4204 = 0;
+	m_unk0x4208 = 0;
+	m_helicopter = NULL;
+	m_unk0x4210 = 0;
+	m_unk0x4214 = -1;
+	m_unk0x421e = 0;
+
+	memset(m_unk0x4230, 0, sizeof(m_unk0x4230));
+
+	NavController()->ResetMaxLinearAccel(NavController()->GetMaxLinearAccel() * 30.0f);
+	NavController()->ResetMaxLinearDeccel(NavController()->GetMaxLinearDeccel() * 30.0f);
+	NotificationManager()->Register(this);
 }
 
 // FUNCTION: LEGO1 0x10072500

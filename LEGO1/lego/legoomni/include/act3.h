@@ -1,9 +1,30 @@
 #ifndef ACT3_H
 #define ACT3_H
 
+#include "act3ammo.h"
 #include "legogamestate.h"
 #include "legostate.h"
 #include "legoworld.h"
+
+class Helicopter;
+
+// SIZE 0x0c
+struct Act3ListElement {
+	undefined4 m_unk0x00[3]; // 0x00
+
+	int operator==(Act3ListElement) const { return 0; }
+	int operator<(Act3ListElement) const { return 0; }
+};
+
+// SIZE 0x10
+class Act3List {
+public:
+	Act3List() { m_unk0x04 = 0; }
+
+private:
+	list<Act3ListElement> m_unk0x00; // 0x00
+	undefined4 m_unk0x04;            // 0x0c
+};
 
 // VTABLE: LEGO1 0x100d4fc8
 // SIZE 0x0c
@@ -42,8 +63,7 @@ public:
 class Act3 : public LegoWorld {
 public:
 	Act3();
-
-	~Act3() override; // vtable+00
+	~Act3() override;
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 	MxResult Tickle() override;               // vtable+0x08
@@ -69,7 +89,7 @@ public:
 	MxBool Escape() override;                         // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
-	void SetUnknown420c(MxEntity* p_entity) { m_unk0x420c = p_entity; }
+	void SetHelicopter(Helicopter* p_helicopter) { m_helicopter = p_helicopter; }
 	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
 
 	// SYNTHETIC: LEGO1 0x10072630
@@ -81,10 +101,33 @@ public:
 	void FUN_10073430();
 
 protected:
-	undefined m_unk0xf8[0x4114];        // 0xf8
-	MxEntity* m_unk0x420c;              // 0x420c
-	undefined m_unk0x4210[0x60];        // 0x4210
+	undefined4 m_unk0xf8;               // 0xf8
+	Act3Ammo m_unk0xfc[20];             // 0xfc
+	Act3Ammo m_unk0x217c[20];           // 0x217c
+	undefined m_unk0x41fc;              // 0x41fc
+	undefined4 m_unk0x4200;             // 0x4200
+	undefined4 m_unk0x4204;             // 0x4204
+	undefined4 m_unk0x4208;             // 0x4208
+	Helicopter* m_helicopter;           // 0x420c
+	undefined4 m_unk0x4210;             // 0x4210
+	MxFloat m_unk0x4214;                // 0x4214
+	undefined4 m_unk0x4218;             // 0x4218
+	undefined m_unk0x421c;              // 0x421c
+	undefined m_unk0x421d;              // 0x421d
+	undefined m_unk0x421e;              // 0x421e
+	Act3List m_unk0x4220;               // 0x4220
+	undefined4 m_unk0x4230[15];         // 0x4230
+	undefined4 m_unk0x426c;             // 0x426c
 	LegoGameState::Area m_destLocation; // 0x4270
 };
+
+// TEMPLATE: LEGO1 0x10072440
+// list<Act3ListElement,allocator<Act3ListElement> >::~list<Act3ListElement,allocator<Act3ListElement> >
+
+// TEMPLATE: LEGO1 0x100724b0
+// List<Act3ListElement>::~List<Act3ListElement>
+
+// FUNCTION: LEGO1 0x10072650
+// Act3List::~Act3List
 
 #endif // ACT3_H
