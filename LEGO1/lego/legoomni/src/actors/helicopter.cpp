@@ -42,7 +42,7 @@ MxResult Helicopter::Create(MxDSAction& p_dsAction)
 
 	m_world = CurrentWorld();
 	if (m_world->IsA("Act3")) {
-		((Act3*) m_world)->SetUnknown420c(this);
+		((Act3*) m_world)->SetHelicopter(this);
 	}
 
 	if (m_world != NULL) {

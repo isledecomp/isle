@@ -91,9 +91,21 @@ public:
 	MxFloat GetLinearVel() { return m_linearVel; }
 	MxFloat GetRotationalVel() { return m_rotationalVel; }
 	MxFloat GetMaxLinearVel() { return m_maxLinearVel; }
+	MxFloat GetMaxLinearAccel() { return m_maxLinearAccel; }
+	MxFloat GetMaxLinearDeccel() { return m_maxLinearDeccel; }
 	void ResetMaxLinearVel(MxFloat p_maxLinearVel)
 	{
 		m_maxLinearVel = p_maxLinearVel;
+		m_trackDefault = 0;
+	}
+	void ResetMaxLinearAccel(MxFloat p_maxLinearAccel)
+	{
+		m_maxLinearAccel = p_maxLinearAccel;
+		m_trackDefault = 0;
+	}
+	void ResetMaxLinearDeccel(MxFloat p_maxLinearDeccel)
+	{
+		m_maxLinearDeccel = p_maxLinearDeccel;
 		m_trackDefault = 0;
 	}
 
