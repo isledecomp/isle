@@ -31,7 +31,7 @@ public:
 	}
 
 	MxS32 VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3) override; // vtable+0x68
-	MxU32 VTable0x90(float p_float, Matrix4& p_matrix) override;            // vtable+0x90
+	MxU32 VTable0x90(float p_time, Matrix4& p_matrix) override;             // vtable+0x90
 	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override;    // vtable+0x94
 
 	// FUNCTION: LEGO1 0x10014aa0
