@@ -80,7 +80,7 @@ public:
 	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'
 
-	// m_state is access directly from Act3; confirmed by BETA10
+	// m_state is accessed directly from Act3; confirmed by BETA10
 	friend class Act3;
 
 protected:
