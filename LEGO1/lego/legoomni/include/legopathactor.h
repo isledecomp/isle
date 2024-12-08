@@ -137,6 +137,8 @@ public:
 
 	LegoPathController* GetController() { return m_controller; }
 	MxBool GetCollideBox() { return m_collideBox; }
+	MxFloat GetLastTime() { return m_lastTime; }
+	MxFloat GetActorTime() { return m_actorTime; }
 
 	void SetBoundary(LegoPathBoundary* p_boundary) { m_boundary = p_boundary; }
 
@@ -144,13 +146,8 @@ public:
 	void SetState(MxU32 p_state) { m_state = p_state; }
 
 	void SetController(LegoPathController* p_controller) { m_controller = p_controller; }
-
-	// This inline function is speculation; it might have been structured differently.
-	void ApplyTimeDelta(MxFloat p_delta)
-	{
-		m_lastTime += p_delta;
-		m_actorTime += p_delta;
-	}
+	void SetLastTime(MxFloat p_lastTime) { m_lastTime = p_lastTime; }
+	void SetActorTime(MxFloat p_actorTime) { m_actorTime = p_actorTime; }
 
 	void UpdatePlane(LegoNamedPlane& p_namedPlane);
 	void PlaceActor(LegoNamedPlane& p_namedPlane);

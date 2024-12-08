@@ -18,10 +18,10 @@ public:
 	void Destroy(MxBool p_fromDestructor) override; // vtable+0x1c
 	void VTable0x70(float p_time) override;         // vtable+0x70
 
-	MxBool TestBit4() { return m_flags & c_bit4; }
+	MxU16 GetFlags() { return m_flags; }
+	MxFloat GetUnknown0x158() { return m_unk0x158; }
 
-	// This inline function is speculation; it might have been structured differently.
-	void AddToUnknown0x158(MxFloat p_delta) { m_unk0x158 += p_delta; }
+	void SetUnknown0x158(MxFloat p_unk0x158) { m_unk0x158 = p_unk0x158; }
 
 	// SYNTHETIC: LEGO1 0x10053880
 	// Act3Ammo::`scalar deleting destructor'

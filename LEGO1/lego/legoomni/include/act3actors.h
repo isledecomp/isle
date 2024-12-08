@@ -23,8 +23,9 @@ public:
 	MxU32 VTable0x90(float p_time, Matrix4& p_transform) override;       // vtable+0x90
 	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 
-	// This inline function is speculation; it might have been structured differently.
-	void AddToUnknown0x1c(MxFloat p_delta) { m_unk0x1c += p_delta; }
+	MxFloat GetUnknown0x1c() { return m_unk0x1c; }
+
+	void SetUnknown0x1c(MxFloat p_unk0x1c) { m_unk0x1c = p_unk0x1c; }
 
 	// SYNTHETIC: LEGO1 0x10043330
 	// Act3Actor::`scalar deleting destructor'

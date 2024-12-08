@@ -232,37 +232,44 @@ void Act3::Enable(MxBool p_enable)
 			MxFloat delta = Timer()->GetTime() - m_time - 100.0f;
 			m_time = -1.0f;
 
-			m_cop1->ApplyTimeDelta(delta);
-			m_cop1->AddToUnknown0x20(delta);
-			m_cop1->AddToUnknown0x1c(delta);
+			m_cop1->SetLastTime(m_cop1->GetLastTime() + delta);
+			m_cop1->SetActorTime(m_cop1->GetActorTime() + delta);
+			m_cop1->SetUnknown0x20(m_cop1->GetUnknown0x20() + delta);
+			m_cop1->SetUnknown0x1c(m_cop1->GetUnknown0x1c() + delta);
 
-			m_cop2->ApplyTimeDelta(delta);
-			m_cop2->AddToUnknown0x20(delta);
-			m_cop2->AddToUnknown0x1c(delta);
+			m_cop2->SetLastTime(m_cop2->GetLastTime() + delta);
+			m_cop2->SetActorTime(m_cop2->GetActorTime() + delta);
+			m_cop2->SetUnknown0x20(m_cop2->GetUnknown0x20() + delta);
+			m_cop2->SetUnknown0x1c(m_cop2->GetUnknown0x1c() + delta);
 
-			m_brickster->ApplyTimeDelta(delta);
-			m_brickster->AddToUnknown0x20(delta);
-			m_brickster->AddToUnknown0x24(delta);
-			m_brickster->AddToUnknown0x50(delta);
-			m_brickster->AddToUnknown0x1c(delta);
+			m_brickster->SetLastTime(m_brickster->GetLastTime() + delta);
+			m_brickster->SetActorTime(m_brickster->GetActorTime() + delta);
+			m_brickster->SetUnknown0x20(m_brickster->GetUnknown0x20() + delta);
+			m_brickster->SetUnknown0x24(m_brickster->GetUnknown0x24() + delta);
+			m_brickster->SetUnknown0x50(m_brickster->GetUnknown0x50() + delta);
+			m_brickster->SetUnknown0x1c(m_brickster->GetUnknown0x1c() + delta);
 
-			m_copter->ApplyTimeDelta(delta);
+			m_copter->SetLastTime(m_copter->GetLastTime() + delta);
+			m_copter->SetActorTime(m_copter->GetActorTime() + delta);
 
-			m_shark->ApplyTimeDelta(delta);
-			m_shark->AddToUnknown0x2c(delta);
+			m_shark->SetLastTime(m_shark->GetLastTime() + delta);
+			m_shark->SetActorTime(m_shark->GetActorTime() + delta);
+			m_shark->SetUnknown0x2c(m_shark->GetUnknown0x2c() + delta);
 
 			MxS32 i;
 			for (i = 0; i < (MxS32) sizeOfArray(m_pizzas); i++) {
-				if (m_pizzas[i].TestBit4()) {
-					m_pizzas[i].ApplyTimeDelta(delta);
-					m_pizzas[i].AddToUnknown0x158(delta);
+				if (m_pizzas[i].GetFlags() & Act3Ammo::c_bit4) {
+					m_pizzas[i].SetLastTime(m_pizzas[i].GetLastTime() + delta);
+					m_pizzas[i].SetActorTime(m_pizzas[i].GetActorTime() + delta);
+					m_pizzas[i].SetUnknown0x158(m_pizzas[i].GetUnknown0x158() + delta);
 				}
 			}
 
 			for (i = 0; i < (MxS32) sizeOfArray(m_donuts); i++) {
-				if (m_donuts[i].TestBit4()) {
-					m_donuts[i].ApplyTimeDelta(delta);
-					m_donuts[i].AddToUnknown0x158(delta);
+				if (m_donuts[i].GetFlags() & Act3Ammo::c_bit4) {
+					m_donuts[i].SetLastTime(m_donuts[i].GetLastTime() + delta);
+					m_donuts[i].SetActorTime(m_donuts[i].GetActorTime() + delta);
+					m_donuts[i].SetUnknown0x158(m_donuts[i].GetUnknown0x158() + delta);
 				}
 			}
 

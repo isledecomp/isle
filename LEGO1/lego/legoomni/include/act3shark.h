@@ -23,8 +23,9 @@ public:
 	// LegoAnimActor vtable
 	virtual MxResult FUN_10042ce0(void*); // vtable+0x10
 
-	// This inline function is speculation; it might have been structured differently.
-	void AddToUnknown0x2c(MxFloat p_delta) { m_unk0x2c += p_delta; }
+	MxFloat GetUnknown0x2c() { return m_unk0x2c; }
+
+	void SetUnknown0x2c(MxFloat p_unk0x2c) { m_unk0x2c = p_unk0x2c; }
 
 	// SYNTHETIC: LEGO1 0x10043030
 	// Act3Shark::`scalar deleting destructor'
