@@ -11,6 +11,7 @@ class Act3Cop;
 class Act3Shark;
 class Helicopter;
 
+// Macros confirmed by BETA10
 #define MAX_PIZZAS 20
 #define MAX_DONUTS 20
 
