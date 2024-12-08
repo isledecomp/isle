@@ -30,7 +30,7 @@ Act3Script::Script g_unk0x100d95e8[] =
 // FUNCTION: BETA10 0x10015470
 Act3::Act3()
 {
-	m_gameState = NULL;
+	m_state = NULL;
 	m_unk0x41fc = 0;
 	m_cop1 = NULL;
 	m_cop2 = NULL;
@@ -110,7 +110,8 @@ MxResult Act3::Create(MxDSAction& p_dsAction)
 			state = (Act3State*) gameState->CreateState("Act3State");
 		}
 
-		m_gameState = state;
+		m_state = state;
+		assert(m_state);
 
 		GameState()->m_currentArea = LegoGameState::e_act3script;
 		GameState()->SetCurrentAct(LegoGameState::e_act3);
@@ -165,7 +166,7 @@ void Act3::ReadyWorld()
 	m_unk0x426c = g_unk0x100d95e8[rand() % 3];
 	AnimationManager()->FUN_10060dc0(m_unk0x426c, NULL, TRUE, FALSE, NULL, TRUE, FALSE, FALSE, FALSE);
 
-	m_gameState->m_unk0x08 = 1;
+	m_state->m_unk0x08 = 1;
 }
 
 // FUNCTION: LEGO1 0x10073300
@@ -190,7 +191,7 @@ MxResult Act3::Tickle()
 // FUNCTION: LEGO1 0x10073400
 void Act3::FUN_10073400()
 {
-	m_gameState->m_unk0x08 = 2;
+	m_state->m_unk0x08 = 2;
 	m_destLocation = LegoGameState::e_infomain;
 	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 }
@@ -198,7 +199,7 @@ void Act3::FUN_10073400()
 // FUNCTION: LEGO1 0x10073430
 void Act3::FUN_10073430()
 {
-	m_gameState->m_unk0x08 = 3;
+	m_state->m_unk0x08 = 3;
 	m_destLocation = LegoGameState::e_infomain;
 	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 }

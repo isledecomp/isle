@@ -108,7 +108,7 @@ public:
 	void FUN_10073430();
 
 protected:
-	Act3State* m_gameState;             // 0xf8
+	Act3State* m_state;                 // 0xf8
 	Act3Ammo m_pizzas[MAX_PIZZAS];      // 0xfc
 	Act3Ammo m_donuts[MAX_DONUTS];      // 0x217c
 	undefined m_unk0x41fc;              // 0x41fc
