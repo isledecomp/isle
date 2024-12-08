@@ -33,6 +33,14 @@ MxResult Act3Brickster::VTable0x94(LegoPathActor*, MxBool)
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x100417c0
+// STUB: BETA10 0x1001a407
+MxResult Act3Brickster::FUN_100417c0()
+{
+	// TODO
+	return SUCCESS;
+}
+
 // STUB: LEGO1 0x10042990
 void Act3Brickster::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
 {

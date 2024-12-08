@@ -5,6 +5,8 @@
 #include "legostate.h"
 #include "realtime/matrix.h"
 
+class Act3;
+
 // VTABLE: LEGO1 0x100d5418
 // SIZE 0x0c
 class HelicopterState : public LegoState {
@@ -77,6 +79,9 @@ public:
 
 	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'
+
+	// m_state is accessed directly from Act3; confirmed by BETA10
+	friend class Act3;
 
 protected:
 	MxMatrix m_unk0x160;              // 0x160

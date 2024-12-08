@@ -24,13 +24,14 @@ struct Act3ListElement {
 };
 
 // SIZE 0x10
-class Act3List {
+class Act3List : private list<Act3ListElement> {
 public:
 	Act3List() { m_unk0x04 = 0; }
 
+	void FUN_100720d0(MxU32 p_objectId);
+
 private:
-	list<Act3ListElement> m_unk0x00; // 0x00
-	undefined4 m_unk0x04;            // 0x0c
+	undefined4 m_unk0x04; // 0x0c
 };
 
 // VTABLE: LEGO1 0x100d4fc8
@@ -108,6 +109,8 @@ public:
 	void FUN_10073430();
 
 protected:
+	MxLong HandleTransitionEnd();
+
 	Act3State* m_state;                 // 0xf8
 	Act3Ammo m_pizzas[MAX_PIZZAS];      // 0xfc
 	Act3Ammo m_donuts[MAX_DONUTS];      // 0x217c
@@ -118,12 +121,15 @@ protected:
 	Helicopter* m_copter;               // 0x420c
 	Act3Shark* m_shark;                 // 0x4210
 	MxFloat m_time;                     // 0x4214
-	undefined4 m_unk0x4218;             // 0x4218
+	undefined m_unk0x4218;              // 0x4218
+	undefined m_unk0x4219;              // 0x4219
+	undefined m_unk0x421a;              // 0x421a
+	undefined m_unk0x421b;              // 0x421b
 	undefined m_unk0x421c;              // 0x421c
 	undefined m_unk0x421d;              // 0x421d
 	undefined m_unk0x421e;              // 0x421e
 	Act3List m_unk0x4220;               // 0x4220
-	undefined4 m_unk0x4230[15];         // 0x4230
+	MxPresenter* m_helicopterDots[15];  // 0x4230
 	Act3Script::Script m_unk0x426c;     // 0x426c
 	LegoGameState::Area m_destLocation; // 0x4270
 };
