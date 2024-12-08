@@ -73,10 +73,18 @@ public:
 	MxLong HandleEndAnim(LegoEndAnimNotificationParam& p_param) override;        // vtable+0xd8
 	void Exit() override;                                                        // vtable+0xe4
 
+	void CreateState();
+
+	// This inline function is speculation; it might have been structured differently.
+	// See the other ApplyTimeDelta functions
+	void ApplyTimeDelta(MxFloat p_delta)
+	{
+		m_lastTime += p_delta;
+		m_actorTime += p_delta;
+	}
+
 	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'
-
-	void CreateState();
 
 protected:
 	MxMatrix m_unk0x160;              // 0x160

@@ -117,7 +117,7 @@ protected:
 	Act3Brickster* m_brickster;         // 0x4208
 	Helicopter* m_copter;               // 0x420c
 	Act3Shark* m_shark;                 // 0x4210
-	MxFloat m_unk0x4214;                // 0x4214
+	MxFloat m_time;                     // 0x4214
 	undefined4 m_unk0x4218;             // 0x4218
 	undefined m_unk0x421c;              // 0x421c
 	undefined m_unk0x421d;              // 0x421d

@@ -145,6 +145,13 @@ public:
 
 	void SetController(LegoPathController* p_controller) { m_controller = p_controller; }
 
+	// This inline function is speculation; it might have been structured differently.
+	void ApplyTimeDelta(MxFloat p_delta)
+	{
+		m_lastTime += p_delta;
+		m_actorTime += p_delta;
+	}
+
 	void UpdatePlane(LegoNamedPlane& p_namedPlane);
 	void PlaceActor(LegoNamedPlane& p_namedPlane);
 

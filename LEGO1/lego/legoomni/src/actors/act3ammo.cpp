@@ -12,7 +12,7 @@ DECOMP_SIZE_ASSERT(Act3Ammo, 0x1a0)
 // FUNCTION: BETA10 0x1001d648
 Act3Ammo::Act3Ammo()
 {
-	m_unk0x154 = 0;
+	m_flags = 0;
 	m_unk0x15c = 0;
 }
 
