@@ -38,7 +38,6 @@ public:
 
 	void SetTargets(int p_hPos, int p_vPos, MxBool p_accel);
 	void SetControlMax(int p_hMax, int p_vMax);
-	void SetTrackDefaultParams(MxBool p_state) { m_trackDefault = p_state; }
 	void SetToDefaultParams();
 	MxBool CalculateNewPosDir(
 		const Vector3& p_curPos,
@@ -88,6 +87,13 @@ public:
 	// FUNCTION: BETA10 0x100c7880
 	void SetTrackDefault(MxS32 p_trackDefault) { m_trackDefault = p_trackDefault; }
 
+	// FUNCTION: BETA10 0x100178a0
+	void Reset()
+	{
+		m_trackDefault = TRUE;
+		SetToDefaultParams();
+	}
+
 	MxFloat GetLinearVel() { return m_linearVel; }
 	MxFloat GetRotationalVel() { return m_rotationalVel; }
 	MxFloat GetMaxLinearVel() { return m_maxLinearVel; }
@@ -96,17 +102,17 @@ public:
 	void ResetMaxLinearVel(MxFloat p_maxLinearVel)
 	{
 		m_maxLinearVel = p_maxLinearVel;
-		m_trackDefault = 0;
+		m_trackDefault = FALSE;
 	}
 	void ResetMaxLinearAccel(MxFloat p_maxLinearAccel)
 	{
 		m_maxLinearAccel = p_maxLinearAccel;
-		m_trackDefault = 0;
+		m_trackDefault = FALSE;
 	}
 	void ResetMaxLinearDeccel(MxFloat p_maxLinearDeccel)
 	{
 		m_maxLinearDeccel = p_maxLinearDeccel;
-		m_trackDefault = 0;
+		m_trackDefault = FALSE;
 	}
 
 	// FUNCTION: BETA10 0x100c9a10

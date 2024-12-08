@@ -54,7 +54,7 @@ LegoCarRaceActor::LegoCarRaceActor()
 
 // FUNCTION: LEGO1 0x10080590
 // FUNCTION: BETA10 0x100cd8cf
-void LegoCarRaceActor::FUN_10080590(float p_float)
+void LegoCarRaceActor::FUN_10080590(float p_time)
 {
 	MxFloat maxSpeed = m_maxLinearVel;
 	Mx3DPointFloat destEdgeUnknownVector;
@@ -89,8 +89,8 @@ void LegoCarRaceActor::FUN_10080590(float p_float)
 	}
 
 	MxFloat deltaSpeed = maxSpeed - m_worldSpeed;
-	MxFloat changeInSpeed = (p_float - m_unk0x1c) * m_unk0x14;
-	m_unk0x1c = p_float;
+	MxFloat changeInSpeed = (p_time - m_unk0x1c) * m_unk0x14;
+	m_unk0x1c = p_time;
 
 	if (deltaSpeed < 0.0f) {
 		changeInSpeed = -changeInSpeed;
@@ -214,7 +214,7 @@ void LegoCarRaceActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown
 
 // FUNCTION: LEGO1 0x10080b70
 // FUNCTION: BETA10 0x100cdbae
-void LegoCarRaceActor::VTable0x70(float p_float)
+void LegoCarRaceActor::VTable0x70(float p_time)
 {
 	// m_unk0x0c is not an MxBool, there are places where it is set to 2 or higher
 	if (m_unk0x0c == 0) {
@@ -222,13 +222,13 @@ void LegoCarRaceActor::VTable0x70(float p_float)
 
 		if (strcmpi(value, g_racing) == 0) {
 			m_unk0x0c = 1;
-			m_lastTime = p_float - 1.0f;
-			m_unk0x1c = p_float;
+			m_lastTime = p_time - 1.0f;
+			m_unk0x1c = p_time;
 		}
 	}
 
 	if (m_unk0x0c == 1) {
-		LegoAnimActor::VTable0x70(p_float);
+		LegoAnimActor::VTable0x70(p_time);
 	}
 }
 

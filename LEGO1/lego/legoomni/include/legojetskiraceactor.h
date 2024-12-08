@@ -39,7 +39,7 @@ public:
 		float p_f2,
 		Vector3& p_v3
 	) override;                                                                // vtable+0x6c
-	void VTable0x70(float p_float) override;                                   // vtable+0x70
+	void VTable0x70(float p_time) override;                                    // vtable+0x70
 	MxS32 VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edge) override; // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x10013a80

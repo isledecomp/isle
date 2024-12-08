@@ -117,7 +117,7 @@ MxResult Act2Actor::VTable0x9c()
 
 // STUB: LEGO1 0x10018c30
 // STUB: BETA10 0x1000cb52
-void Act2Actor::VTable0x70(float p_und)
+void Act2Actor::VTable0x70(float p_time)
 {
 	// TODO
 }

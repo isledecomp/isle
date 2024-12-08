@@ -889,7 +889,7 @@ void LegoBuildingManager::FUN_100307b0(LegoEntity* p_entity, MxS32 p_adjust)
 // FUNCTION: LEGO1 0x10030800
 void LegoBuildingManager::FUN_10030800()
 {
-	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
+	for (MxU32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		g_buildingInfo[i].m_initialUnk0x11 = g_buildingInfo[i].m_unk0x11;
 	}
 }

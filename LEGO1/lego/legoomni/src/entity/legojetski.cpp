@@ -25,7 +25,7 @@ void LegoJetski::FUN_100136f0(float p_worldSpeed)
 }
 
 // STUB: LEGO1 0x10013740
-void LegoJetski::VTable0x70(float p_float)
+void LegoJetski::VTable0x70(float p_time)
 {
 	// TODO
 }

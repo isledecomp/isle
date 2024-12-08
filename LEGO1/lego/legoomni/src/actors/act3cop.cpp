@@ -22,7 +22,7 @@ void Act3Cop::ParseAction(char* p_extra)
 }
 
 // STUB: LEGO1 0x100401f0
-void Act3Cop::VTable0x70(float p_und)
+void Act3Cop::VTable0x70(float p_time)
 {
 	// TODO
 }

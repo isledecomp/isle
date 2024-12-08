@@ -21,7 +21,7 @@ void Act3Brickster::ParseAction(char* p_extra)
 }
 
 // STUB: LEGO1 0x10041050
-void Act3Brickster::VTable0x70(float p_und)
+void Act3Brickster::VTable0x70(float p_time)
 {
 	// TODO
 }

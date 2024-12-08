@@ -40,11 +40,11 @@ MxResult Doors::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 
 // FUNCTION: LEGO1 0x10066190
 // FUNCTION: BETA10 0x1002696b
-MxFloat Doors::VTable0xcc(float p_float)
+MxFloat Doors::VTable0xcc(float p_time)
 {
 	MxFloat fVar1;
 
-	fVar1 = p_float - m_unk0x158;
+	fVar1 = p_time - m_unk0x158;
 
 	if (fVar1 <= 0.0f) {
 		return 0.0f;
@@ -65,7 +65,7 @@ MxFloat Doors::VTable0xcc(float p_float)
 
 // FUNCTION: LEGO1 0x10066250
 // FUNCTION: BETA10 0x10026a45
-void Doors::VTable0x70(float p_float)
+void Doors::VTable0x70(float p_time)
 {
 	assert(m_ltDoor && m_rtDoor);
 
@@ -80,7 +80,7 @@ void Doors::VTable0x70(float p_float)
 	case 1:
 		break;
 	case 2:
-		float local8 = VTable0xcc(p_float);
+		float local8 = VTable0xcc(p_time);
 
 		if (local8 > 0.0f) {
 			MxMatrix local58(m_ltDoorLocal);
@@ -102,7 +102,7 @@ void Doors::VTable0x70(float p_float)
 			m_unk0x1f4 = local8;
 		}
 
-		if (m_unk0x158 + g_unk0x100d8e84 < p_float) {
+		if (m_unk0x158 + g_unk0x100d8e84 < p_time) {
 			m_ltDoor->FUN_100a58f0(m_ltDoorLocal);
 			m_rtDoor->FUN_100a58f0(m_rtDoorLocal);
 			m_ltDoor->VTable0x14();

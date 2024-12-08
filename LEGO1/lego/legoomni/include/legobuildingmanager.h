@@ -87,8 +87,8 @@ public:
 	MxResult FUN_10030630();
 	LegoBuildingInfo* GetInfoArray(MxS32& p_length);
 	void FUN_100307b0(LegoEntity* p_entity, MxS32 p_adjust);
+	void FUN_10030800();
 
-	static void FUN_10030800();
 	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }
 
 	// SYNTHETIC: LEGO1 0x1002f940

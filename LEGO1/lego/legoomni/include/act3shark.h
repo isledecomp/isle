@@ -17,8 +17,8 @@ public:
 		return "Act3Shark";
 	}
 
-	void ParseAction(char*) override;        // vtable+0x20
-	void VTable0x70(float p_float) override; // vtable+0x70
+	void ParseAction(char*) override;       // vtable+0x20
+	void VTable0x70(float p_time) override; // vtable+0x70
 
 	// LegoAnimActor vtable
 	virtual MxResult FUN_10042ce0(void*); // vtable+0x10

@@ -16,7 +16,7 @@ MxResult Act3Shark::FUN_10042ce0(void*)
 }
 
 // STUB: LEGO1 0x10042d40
-void Act3Shark::VTable0x70(float p_float)
+void Act3Shark::VTable0x70(float p_time)
 {
 	// TODO
 }

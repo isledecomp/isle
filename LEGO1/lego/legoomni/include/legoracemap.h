@@ -21,9 +21,9 @@ public:
 	~LegoRaceMap() override;
 
 	// LegoPathActor vtable
-	MxLong Notify(MxParam& p_param) override;  // vtable+0x04
-	void ParseAction(char* p_extra) override;  // vtable+0x20
-	void VTable0x70(float p_und) override = 0; // vtable+0x70
+	MxLong Notify(MxParam& p_param) override;   // vtable+0x04
+	void ParseAction(char* p_extra) override;   // vtable+0x20
+	void VTable0x70(float p_time) override = 0; // vtable+0x70
 
 	// LegoRaceMap vtable
 	virtual void FUN_1005d4b0(); // vtable+0x00

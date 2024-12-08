@@ -354,16 +354,16 @@ void Helicopter::VTable0x74(Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x10003ee0
-void Helicopter::VTable0x70(float p_float)
+void Helicopter::VTable0x70(float p_time)
 {
 	MxU32 state = m_state->GetUnkown8();
 	switch (state) {
 	default:
-		LegoPathActor::VTable0x70(p_float);
+		LegoPathActor::VTable0x70(p_time);
 		return;
 	case 4:
 	case 5:
-		float f = m_unk0x1f0 - p_float + 3000;
+		float f = m_unk0x1f0 - p_time + 3000;
 		if (f >= 0) {
 			float f2 = f / 3000 + 1;
 			if (f2 < 0) {

@@ -633,3 +633,11 @@ void LegoPlantManager::FUN_100271b0(LegoEntity* p_entity, MxS32 p_adjust)
 		}
 	}
 }
+
+// FUNCTION: LEGO1 0x10027200
+void LegoPlantManager::FUN_10027200()
+{
+	for (MxU32 i = 0; i < sizeOfArray(g_plantInfo); i++) {
+		g_plantInfo[i].m_initialUnk0x16 = g_plantInfo[i].m_unk0x16;
+	}
+}

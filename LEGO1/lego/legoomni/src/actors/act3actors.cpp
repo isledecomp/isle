@@ -15,7 +15,7 @@ Act3Actor::Act3Actor()
 }
 
 // FUNCTION: LEGO1 0x1003fb70
-MxU32 Act3Actor::VTable0x90(float p_float, Matrix4& p_transform)
+MxU32 Act3Actor::VTable0x90(float p_time, Matrix4& p_transform)
 {
 	// Note: Code duplication with LegoExtraActor::VTable0x90
 	switch (m_state & 0xff) {
@@ -23,10 +23,10 @@ MxU32 Act3Actor::VTable0x90(float p_float, Matrix4& p_transform)
 	case 1:
 		return TRUE;
 	case 2:
-		m_unk0x1c = p_float + 2000.0f;
+		m_unk0x1c = p_time + 2000.0f;
 		m_state = 3;
-		m_actorTime += (p_float - m_lastTime) * m_worldSpeed;
-		m_lastTime = p_float;
+		m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
+		m_lastTime = p_time;
 		return FALSE;
 	case 3:
 		assert(!m_userNavFlag);
@@ -34,7 +34,7 @@ MxU32 Act3Actor::VTable0x90(float p_float, Matrix4& p_transform)
 
 		p_transform = m_roi->GetLocal2World();
 
-		if (m_unk0x1c > p_float) {
+		if (m_unk0x1c > p_time) {
 			Mx3DPointFloat position;
 
 			position = positionRef;
@@ -42,8 +42,8 @@ MxU32 Act3Actor::VTable0x90(float p_float, Matrix4& p_transform)
 			p_transform.RotateX(0.6);
 			positionRef = position;
 
-			m_actorTime += (p_float - m_lastTime) * m_worldSpeed;
-			m_lastTime = p_float;
+			m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
+			m_lastTime = p_time;
 
 			VTable0x74(p_transform);
 			return FALSE;

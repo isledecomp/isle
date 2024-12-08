@@ -20,7 +20,7 @@ public:
 		return "Act3Actor";
 	}
 
-	MxU32 VTable0x90(float p_float, Matrix4& p_transform) override;      // vtable+0x90
+	MxU32 VTable0x90(float p_time, Matrix4& p_transform) override;       // vtable+0x90
 	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 
 	// SYNTHETIC: LEGO1 0x10043330
