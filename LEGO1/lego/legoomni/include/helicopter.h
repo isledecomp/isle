@@ -75,14 +75,6 @@ public:
 
 	void CreateState();
 
-	// This inline function is speculation; it might have been structured differently.
-	// See the other ApplyTimeDelta functions
-	void ApplyTimeDelta(MxFloat p_delta)
-	{
-		m_lastTime += p_delta;
-		m_actorTime += p_delta;
-	}
-
 	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'
 
