@@ -29,6 +29,8 @@ public:
 	void SetUnknown0x24(MxFloat p_unk0x24) { m_unk0x24 = p_unk0x24; }
 	void SetUnknown0x50(MxFloat p_unk0x50) { m_unk0x50 = p_unk0x50; }
 
+	MxResult FUN_100417c0();
+
 	// SYNTHETIC: LEGO1 0x10043250
 	// Act3Brickster::`scalar deleting destructor'
 

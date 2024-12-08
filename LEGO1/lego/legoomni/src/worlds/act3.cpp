@@ -16,12 +16,14 @@
 #include "legoutils.h"
 #include "legovideomanager.h"
 #include "misc.h"
+#include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(Act3, 0x4274)
 DECOMP_SIZE_ASSERT(Act3State, 0x0c)
@@ -31,6 +33,12 @@ DECOMP_SIZE_ASSERT(Act3List, 0x10)
 // GLOBAL: LEGO1 0x100d95e8
 Act3Script::Script g_unk0x100d95e8[] =
 	{Act3Script::c_tlp053in_RunAnim, Act3Script::c_tlp064la_RunAnim, Act3Script::c_tlp068in_RunAnim};
+
+// STUB: LEGO1 0x100720d0
+void Act3List::FUN_100720d0(MxU32 p_objectId)
+{
+	// TODO
+}
 
 // FUNCTION: LEGO1 0x10072270
 // FUNCTION: BETA10 0x10015470
@@ -46,7 +54,7 @@ Act3::Act3()
 	m_time = -1;
 	m_unk0x421e = 0;
 
-	memset(m_unk0x4230, 0, sizeof(m_unk0x4230));
+	memset(m_helicopterDots, 0, sizeof(m_helicopterDots));
 
 	NavController()->ResetMaxLinearAccel(NavController()->GetMaxLinearAccel() * 30.0f);
 	NavController()->ResetMaxLinearDeccel(NavController()->GetMaxLinearDeccel() * 30.0f);
@@ -153,12 +161,128 @@ void Act3::Destroy(MxBool p_fromDestructor)
 	}
 }
 
-// STUB: LEGO1 0x10072de0
-// STUB: BETA10 0x10016322
+// FUNCTION: LEGO1 0x10072de0
+// FUNCTION: BETA10 0x10016322
 MxLong Act3::Notify(MxParam& p_param)
 {
-	// TODO
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
+	LegoWorld::Notify(p_param);
+
+	if (m_worldStarted) {
+		switch (param.GetNotification()) {
+		case c_notificationEndAction: {
+			MxEndActionNotificationParam& param = (MxEndActionNotificationParam&) p_param;
+
+			if (param.GetAction() != NULL && param.GetAction()->GetAtomId() == *g_act3Script) {
+				if (param.GetAction()->GetObjectId() == Act3Script::c_HelicopterDashboard) {
+					MxDSAction action;
+					FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+					SetAppCursor(e_cursorArrow);
+					VideoManager()->Get3DManager()->SetFrustrum(45.0f, 0.1f, 125.0f);
+
+					m_brickster->SetWorldSpeed(5.0f);
+					m_brickster->SetState(0);
+					assert(BackgroundAudioManager());
+
+					action.SetAtomId(*g_jukeboxScript);
+					action.SetObjectId(Act3Script::c_pzhitdn_PlayWav);
+
+					BackgroundAudioManager()->PlayMusic(action, 5, MxPresenter::e_repeating);
+					m_brickster->FUN_100417c0();
+
+					m_cop1->SetState(0);
+					m_cop1->SetWorldSpeed(2.0f);
+					m_cop1->VTable0xa8();
+
+					m_cop2->SetState(0);
+					m_cop2->SetWorldSpeed(2.0f);
+					m_cop2->VTable0xa8();
+
+					m_brickster->VTable0xa8();
+
+					m_unk0x4218 = 0;
+					m_unk0x4219 = 0;
+					m_unk0x421a = 0;
+					m_unk0x421b = 0;
+					m_unk0x421c = 0;
+					m_unk0x421d = 0;
+
+					MxS32 length;
+					LegoBuildingInfo* info = BuildingManager()->GetInfoArray(length);
+					m_unk0x421e = 0;
+
+					while (--length >= 0) {
+						if (info[length].m_unk0x11 < 0 && info[length].m_boundary != NULL &&
+							info[length].m_entity != NULL) {
+							m_unk0x421e++;
+						}
+					}
+
+					length = 0;
+					m_unk0x421e--;
+					char buf[80];
+
+					do {
+						sprintf(buf, "HelicopterDotOn%d_Bitmap", length + 1);
+						m_helicopterDots[length] = (MxPresenter*) Find("MxPresenter", buf);
+
+						if (m_unk0x421e > length) {
+							m_helicopterDots[length]->Enable(TRUE);
+						}
+						else {
+							m_helicopterDots[length]->Enable(FALSE);
+						}
+
+						length++;
+					} while (length < (MxS32) sizeOfArray(m_helicopterDots));
+				}
+				else {
+					m_unk0x4220.FUN_100720d0(param.GetAction()->GetObjectId());
+				}
+			}
+			break;
+		}
+		case c_notificationKeyPress:
+			if (m_state->m_unk0x08 == 1 && ((LegoEventNotificationParam&) p_param).GetKey() == ' ') {
+				AnimationManager()->FUN_10061010(FALSE);
+				return 1;
+			}
+			break;
+		case c_notificationButtonUp:
+		case c_notificationButtonDown:
+			if (m_state->m_unk0x08 == 1) {
+				return 1;
+			}
+			break;
+		case c_notificationEndAnim:
+			if (m_state->m_unk0x08 == 1) {
+				assert(m_copter && m_brickster && m_cop1 && m_cop2);
+				m_unk0x4220.FUN_100720d0(NULL);
+				m_state->m_unk0x08 = 0;
+				FUN_10015820(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+				m_copter->HandleClick();
+				m_copter->m_state->m_unk0x08 = 1;
+				m_copter->HandleEndAnim((LegoEndAnimNotificationParam&) param);
+			}
+			break;
+		case c_notificationTransitioned:
+			HandleTransitionEnd();
+			return 1;
+		}
+	}
+
 	return 0;
+}
+
+// FUNCTION: LEGO1 0x10073240
+MxLong Act3::HandleTransitionEnd()
+{
+	if (m_destLocation != LegoGameState::e_undefined) {
+		GameState()->SwitchArea(m_destLocation);
+		m_destLocation = LegoGameState::e_undefined;
+	}
+
+	return 1;
 }
 
 // FUNCTION: LEGO1 0x10073270
