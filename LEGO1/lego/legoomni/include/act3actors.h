@@ -33,7 +33,7 @@ public:
 	// SYNTHETIC: LEGO1 0x10040fa0
 	// Act3Actor::~Act3Actor
 
-protected:
+private:
 	MxFloat m_unk0x1c; // 0x1c
 
 	static Mx3DPointFloat g_unk0x10104ef0;
