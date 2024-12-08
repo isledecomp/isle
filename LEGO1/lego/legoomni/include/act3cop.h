@@ -15,11 +15,16 @@ public:
 	MxResult VTable0x94(LegoPathActor*, MxBool) override; // vtable+0x94
 	MxResult VTable0x9c() override;                       // vtable+0x9c
 
+	MxFloat GetUnknown0x20() { return m_unk0x20; }
+
+	void SetUnknown0x20(MxFloat p_unk0x20) { m_unk0x20 = p_unk0x20; }
+
 	// SYNTHETIC: LEGO1 0x10043120
 	// Act3Cop::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x20[4]; // 0x20
+	MxFloat m_unk0x20;       // 0x20
+	undefined4 m_unk0x24[3]; // 0x24
 };
 
 #endif // ACT3COP_H

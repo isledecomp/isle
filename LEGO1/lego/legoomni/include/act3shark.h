@@ -23,13 +23,17 @@ public:
 	// LegoAnimActor vtable
 	virtual MxResult FUN_10042ce0(void*); // vtable+0x10
 
+	MxFloat GetUnknown0x2c() { return m_unk0x2c; }
+
+	void SetUnknown0x2c(MxFloat p_unk0x2c) { m_unk0x2c = p_unk0x2c; }
+
 	// SYNTHETIC: LEGO1 0x10043030
 	// Act3Shark::`scalar deleting destructor'
 
 private:
 	list<void*> m_unk0x1c;     // 0x1c
 	undefined4 m_unk0x28;      // 0x28
-	undefined4 m_unk0x2c;      // 0x2c
+	MxFloat m_unk0x2c;         // 0x2c
 	undefined m_unk0x30[0x0c]; // 0x30
 	Mx3DPointFloat m_unk0x3c;  // 0x3c
 };

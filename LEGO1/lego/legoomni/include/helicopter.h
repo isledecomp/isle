@@ -73,10 +73,10 @@ public:
 	MxLong HandleEndAnim(LegoEndAnimNotificationParam& p_param) override;        // vtable+0xd8
 	void Exit() override;                                                        // vtable+0xe4
 
+	void CreateState();
+
 	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'
-
-	void CreateState();
 
 protected:
 	MxMatrix m_unk0x160;              // 0x160
