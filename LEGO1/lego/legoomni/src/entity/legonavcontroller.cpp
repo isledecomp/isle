@@ -142,6 +142,7 @@ void LegoNavController::SetControlMax(int p_hMax, int p_vMax)
 }
 
 // FUNCTION: LEGO1 0x10054cd0
+// FUNCTION: BETA10 0x1009ad76
 void LegoNavController::SetToDefaultParams()
 {
 	m_deadZone = g_defdeadZone;

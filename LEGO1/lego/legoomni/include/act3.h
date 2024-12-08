@@ -6,6 +6,9 @@
 #include "legostate.h"
 #include "legoworld.h"
 
+class Act3Brickster;
+class Act3Cop;
+class Act3Shark;
 class Helicopter;
 
 // SIZE 0x0c
@@ -89,7 +92,7 @@ public:
 	MxBool Escape() override;                         // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
-	void SetHelicopter(Helicopter* p_helicopter) { m_helicopter = p_helicopter; }
+	void SetHelicopter(Helicopter* p_copter) { m_copter = p_copter; }
 	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
 
 	// SYNTHETIC: LEGO1 0x10072630
@@ -101,15 +104,15 @@ public:
 	void FUN_10073430();
 
 protected:
-	undefined4 m_unk0xf8;               // 0xf8
+	Act3State* m_gameState;             // 0xf8
 	Act3Ammo m_unk0xfc[20];             // 0xfc
 	Act3Ammo m_unk0x217c[20];           // 0x217c
 	undefined m_unk0x41fc;              // 0x41fc
-	undefined4 m_unk0x4200;             // 0x4200
-	undefined4 m_unk0x4204;             // 0x4204
-	undefined4 m_unk0x4208;             // 0x4208
-	Helicopter* m_helicopter;           // 0x420c
-	undefined4 m_unk0x4210;             // 0x4210
+	Act3Cop* m_cop1;                    // 0x4200
+	Act3Cop* m_cop2;                    // 0x4204
+	Act3Brickster* m_brickster;         // 0x4208
+	Helicopter* m_copter;               // 0x420c
+	Act3Shark* m_shark;                 // 0x4210
 	MxFloat m_unk0x4214;                // 0x4214
 	undefined4 m_unk0x4218;             // 0x4218
 	undefined m_unk0x421c;              // 0x421c
@@ -117,7 +120,7 @@ protected:
 	undefined m_unk0x421e;              // 0x421e
 	Act3List m_unk0x4220;               // 0x4220
 	undefined4 m_unk0x4230[15];         // 0x4230
-	undefined4 m_unk0x426c;             // 0x426c
+	Act3Script::Script m_unk0x426c;     // 0x426c
 	LegoGameState::Area m_destLocation; // 0x4270
 };
 

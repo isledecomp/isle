@@ -43,7 +43,7 @@ public:
 		float p_f2,
 		Vector3& p_v3
 	) override;                                                          // vtable+0x6c
-	void VTable0x70(float) override;                                     // vtable+0x70
+	void VTable0x70(float p_time) override;                              // vtable+0x70
 	void VTable0x74(Matrix4& p_transform) override;                      // vtable+0x74
 	MxU32 VTable0x90(float p_float, Matrix4& p_matrix) override;         // vtable+0x90
 	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94

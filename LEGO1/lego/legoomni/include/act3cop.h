@@ -11,7 +11,7 @@ public:
 	Act3Cop();
 
 	void ParseAction(char* p_extra) override;             // vtable+0x20
-	void VTable0x70(float p_und) override;                // vtable+0x70
+	void VTable0x70(float p_time) override;               // vtable+0x70
 	MxResult VTable0x94(LegoPathActor*, MxBool) override; // vtable+0x94
 	MxResult VTable0x9c() override;                       // vtable+0x9c
 

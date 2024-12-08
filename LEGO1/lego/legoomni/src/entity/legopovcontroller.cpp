@@ -106,7 +106,7 @@ MxResult LegoPointOfViewController::Create(Lego3DView* p_lego3DView)
 	m_lego3DView = p_lego3DView;
 	m_nav = new LegoNavController();
 	LegoOmni::GetInstance()->SetNavController(m_nav);
-	m_nav->SetTrackDefaultParams(TRUE);
+	m_nav->SetTrackDefault(TRUE);
 	TickleManager()->RegisterClient(this, 10);
 	return SUCCESS;
 }

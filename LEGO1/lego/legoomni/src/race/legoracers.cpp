@@ -371,17 +371,17 @@ MxU32 LegoRaceCar::HandleSkeletonKicks(float p_param1)
 
 // FUNCTION: LEGO1 0x100131f0
 // FUNCTION: BETA10 0x100cb88a
-void LegoRaceCar::VTable0x70(float p_float)
+void LegoRaceCar::VTable0x70(float p_time)
 {
 	if (m_userNavFlag && (m_userState == LEGORACECAR_KICK1 || m_userState == LEGORACECAR_KICK2)) {
-		FUN_10012ff0(p_float);
+		FUN_10012ff0(p_time);
 		return;
 	}
 
-	LegoCarRaceActor::VTable0x70(p_float);
+	LegoCarRaceActor::VTable0x70(p_time);
 
 	if (m_userNavFlag && m_userState == LEGORACECAR_UNKNOWN_1) {
-		if (HandleSkeletonKicks(p_float)) {
+		if (HandleSkeletonKicks(p_time)) {
 			return;
 		}
 	}
@@ -390,7 +390,7 @@ void LegoRaceCar::VTable0x70(float p_float)
 		FUN_1005d4b0();
 
 		if (!m_userNavFlag) {
-			FUN_10080590(p_float);
+			FUN_10080590(p_time);
 			return;
 		}
 
@@ -415,11 +415,11 @@ void LegoRaceCar::VTable0x70(float p_float)
 		}
 
 		if (absoluteSpeed != 0.0f) {
-			g_unk0x100f0b88 = p_float;
+			g_unk0x100f0b88 = p_time;
 			g_unk0x100f0b8c = FALSE;
 		}
 
-		if (p_float - g_unk0x100f0b88 > 5000.0f && !g_unk0x100f0b8c) {
+		if (p_time - g_unk0x100f0b88 > 5000.0f && !g_unk0x100f0b8c) {
 			SoundManager()->GetCacheSoundManager()->Play(g_srt001ra, NULL, 0);
 			g_unk0x100f0b8c = TRUE;
 		}

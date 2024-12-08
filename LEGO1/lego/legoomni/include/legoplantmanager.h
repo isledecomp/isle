@@ -49,6 +49,7 @@ public:
 	MxBool FUN_10026c50(LegoEntity* p_entity);
 	void ScheduleAnimation(LegoEntity* p_entity, MxLong p_length);
 	void FUN_10027120();
+	void FUN_10027200();
 
 	static void SetCustomizeAnimFile(const char* p_value);
 	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }
