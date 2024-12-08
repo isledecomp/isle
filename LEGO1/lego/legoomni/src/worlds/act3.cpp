@@ -75,6 +75,7 @@ MxBool Act3::FUN_10072980(LegoPathController*, Mx3DPointFloat& p_loc, Mx3DPointF
 }
 
 // FUNCTION: LEGO1 0x10072c30
+// FUNCTION: BETA10 0x100160fb
 MxResult Act3::Create(MxDSAction& p_dsAction)
 {
 	GameState()->FindLoadedAct();
