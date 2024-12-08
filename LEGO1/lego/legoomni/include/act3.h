@@ -11,6 +11,9 @@ class Act3Cop;
 class Act3Shark;
 class Helicopter;
 
+#define MAX_PIZZAS 20
+#define MAX_DONUTS 20
+
 // SIZE 0x0c
 struct Act3ListElement {
 	undefined4 m_unk0x00[3]; // 0x00
@@ -105,8 +108,8 @@ public:
 
 protected:
 	Act3State* m_gameState;             // 0xf8
-	Act3Ammo m_unk0xfc[20];             // 0xfc
-	Act3Ammo m_unk0x217c[20];           // 0x217c
+	Act3Ammo m_pizzas[MAX_PIZZAS];      // 0xfc
+	Act3Ammo m_donuts[MAX_DONUTS];      // 0x217c
 	undefined m_unk0x41fc;              // 0x41fc
 	Act3Cop* m_cop1;                    // 0x4200
 	Act3Cop* m_cop2;                    // 0x4204
