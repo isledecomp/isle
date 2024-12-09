@@ -46,7 +46,7 @@ private:
 //
 // Lego3DView implementation
 
-// FUNCTION: BETA10 0x100576b0
+// FUNCTION: BETA10 0x10011810
 inline ViewManager* Lego3DView::GetViewManager()
 {
 	return m_pViewManager;

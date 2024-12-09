@@ -380,6 +380,7 @@ void LegoPathActor::VTable0x74(Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x1002e790
+// FUNCTION: BETA10 0x100af208
 void LegoPathActor::VTable0x70(float p_time)
 {
 	MxMatrix transform;

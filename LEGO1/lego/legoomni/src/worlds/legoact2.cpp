@@ -659,6 +659,20 @@ MxLong LegoAct2::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 	return 0;
 }
 
+// STUB: LEGO1 0x100516b0
+// STUB: BETA10 0x1003bcbc
+MxResult LegoAct2::FUN_100516b0()
+{
+	// TODO
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100517b0
+void LegoAct2::FUN_100517b0()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10051840
 void LegoAct2::PlayMusic(JukeboxScript::Script p_objectId)
 {

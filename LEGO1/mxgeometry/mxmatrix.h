@@ -13,6 +13,7 @@ public:
 	MxMatrix() : Matrix4(m_elements) {}
 
 	// FUNCTION: LEGO1 0x10032770
+	// FUNCTION: BETA10 0x1001ff30
 	MxMatrix(const MxMatrix& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
 
 	// FUNCTION: BETA10 0x1000fc20

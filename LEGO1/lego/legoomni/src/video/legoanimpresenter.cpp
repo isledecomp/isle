@@ -289,6 +289,7 @@ void LegoAnimPresenter::FUN_100692b0()
 }
 
 // FUNCTION: LEGO1 0x100695c0
+// FUNCTION: BETA10 0x1004f359
 void LegoAnimPresenter::FUN_100695c0()
 {
 	m_unk0x70 = new LegoROIList();

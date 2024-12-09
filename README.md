@@ -58,8 +58,10 @@ If you're interested in helping or contributing to this project, check out the [
 
 ### Which version of LEGO Island do I have?
 
-Right click on `LEGO1.DLL`, select `Properties`, and switch to the `Details` tab. Under `Version` you should either see `1.0.0.0` (1.0) or `1.1.0.0` (1.1). Additionally, you can look at the game disc files; 1.0's files will all say August 8, 1997, and 1.1's files will all say September 8, 1997. Version 1.1 is by far the most common, especially if you're not using the English or Japanese versions, so that's most likely the version you have. Please note that some localized versions of LEGO Island were recompiled with small changes despite maintaining a version number parallel with other versions; this decompilation is specifically targeting the English release of version 1.1 of LEGO Island. You can verify you have the correct version using the checksums below:
+Right click on `LEGO1.DLL`, select `Properties`, and switch to the `Details` tab. Under `Version` you should either see `1.0.0.0` (1.0) or `1.1.0.0` (1.1). Additionally, you can look at the game disc files; 1.0's files will all say August 8, 1997, and 1.1's files will all say September 8, 1997. Version 1.1 is by far the most common, especially if you're not using the English or Japanese versions, so that's most likely the version you have.
+
+Please note that some localized versions of LEGO Island were recompiled with small changes despite maintaining a version number parallel with other versions; this decompilation is specifically targeting the English release of version 1.1 of LEGO Island. You can verify you have the correct version using the checksums below:
 
 * ISLE.EXE `md5: f6da12249e03eed1c74810cd23beb9f5`
 * LEGO1.DLL `md5: 4e2f6d969ea2ef8655ba3fc221a0c8fe`
-* CONFIG.DLL `md5: 92d958a64a273662c591c88b09100f4a`
+* CONFIG.EXE `md5: 92d958a64a273662c591c88b09100f4a`

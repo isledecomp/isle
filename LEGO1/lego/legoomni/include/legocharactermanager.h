@@ -101,7 +101,7 @@ private:
 // list<ROI *,allocator<ROI *> >::_Buynode
 
 // TEMPLATE: LEGO1 0x10035790
-// _Construct
+// ?_Construct@@YAXPAPAVROI@@ABQAV1@@Z
 
 // TEMPLATE: LEGO1 0x10082b90
 // _Tree<char *,pair<char * const,LegoCharacter *>,map<char *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::~_Tree<char *,pair<char * const,LegoCharacter *>,map<char *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >

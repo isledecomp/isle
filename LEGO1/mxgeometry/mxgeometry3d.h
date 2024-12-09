@@ -44,7 +44,7 @@ public:
 	float& index_operator(int idx) { return m_data[idx]; }
 
 	// SYNTHETIC: LEGO1 0x10010c00
-	// Mx3DPointFloat::operator=
+	// ??4Mx3DPointFloat@@QAEAAV0@ABV0@@Z
 
 private:
 	float m_elements[3]; // 0x08
@@ -80,7 +80,7 @@ public:
 
 	// SYNTHETIC: LEGO1 0x10064b20
 	// SYNTHETIC: BETA10 0x10070420
-	// Mx4DPointFloat::operator=
+	// ??4Mx4DPointFloat@@QAEAAV0@ABV0@@Z
 
 private:
 	float m_elements[4]; // 0x08

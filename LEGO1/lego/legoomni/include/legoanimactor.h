@@ -101,7 +101,7 @@ protected:
 // uninitialized_fill_n
 
 // TEMPLATE: LEGO1 0x1001ca10
-// uninitialized_copy
+// ?uninitialized_copy@@YAPAPAULegoAnimActorStruct@@PAPAU1@00@Z
 // clang-format on
 
 #endif // LEGOANIMACTOR_H
