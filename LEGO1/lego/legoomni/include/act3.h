@@ -17,7 +17,9 @@ class Helicopter;
 
 // SIZE 0x0c
 struct Act3ListElement {
-	undefined4 m_unk0x00[3]; // 0x00
+	MxU32 m_objectId;     // 0x00
+	undefined4 m_unk0x04; // 0x04
+	undefined m_unk0x08;  // 0x08
 
 	int operator==(Act3ListElement) const { return 0; }
 	int operator<(Act3ListElement) const { return 0; }
@@ -26,12 +28,13 @@ struct Act3ListElement {
 // SIZE 0x10
 class Act3List : private list<Act3ListElement> {
 public:
-	Act3List() { m_unk0x04 = 0; }
+	Act3List() { m_unk0x0c = 0; }
 
+	void FUN_10071fa0();
 	void FUN_100720d0(MxU32 p_objectId);
 
 private:
-	undefined4 m_unk0x04; // 0x0c
+	undefined4 m_unk0x0c; // 0x0c
 };
 
 // VTABLE: LEGO1 0x100d4fc8
@@ -103,8 +106,8 @@ public:
 	// SYNTHETIC: LEGO1 0x10072630
 	// Act3::`scalar deleting destructor'
 
-	MxBool FUN_100727e0(LegoPathController*, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up);
-	MxBool FUN_10072980(LegoPathController*, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up);
+	MxResult ShootPizza(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
+	MxResult ShootDonut(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
 	void FUN_10073400();
 	void FUN_10073430();
 

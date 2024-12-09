@@ -344,9 +344,9 @@ void Act2Actor::FUN_100192a0(undefined4 p_param)
 
 	newPosition = g_unk0x100f0db8[p_param].m_position;
 	newDirection = g_unk0x100f0db8[p_param].m_direction;
-	LegoPathBoundary* newBoundary = m_controller->GetPathBoundary(g_unk0x100f0db8[p_param].m_boundary);
+	LegoPathBoundary* newBoundary = m_pathController->GetPathBoundary(g_unk0x100f0db8[p_param].m_boundary);
 
-	MxResult sts = m_controller->FUN_10048310(
+	MxResult sts = m_pathController->FUN_10048310(
 		m_grec,
 		m_roi->GetWorldPosition(),
 		m_roi->GetWorldDirection(),
