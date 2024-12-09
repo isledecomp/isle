@@ -145,7 +145,7 @@ public:
 	// FUNCTION: BETA10 0x10013430
 	void SetState(MxU32 p_state) { m_state = p_state; }
 
-	void SetController(LegoPathController* p_controller) { m_pathController = p_controller; }
+	void SetController(LegoPathController* p_pathController) { m_pathController = p_pathController; }
 	void SetLastTime(MxFloat p_lastTime) { m_lastTime = p_lastTime; }
 	void SetActorTime(MxFloat p_actorTime) { m_actorTime = p_actorTime; }
 
