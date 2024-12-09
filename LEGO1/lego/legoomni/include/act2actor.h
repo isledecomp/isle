@@ -32,7 +32,7 @@ public:
 	void FUN_10019520();
 	void FUN_10019560();
 	undefined4 FUN_10019700(MxFloat p_param);
-	void FUN_100199f0(undefined p_param);
+	void FUN_100199f0(MxS8 p_param);
 	void FUN_100192a0(undefined4 p_param);
 
 	// SYNTHETIC: LEGO1 0x1001a0a0

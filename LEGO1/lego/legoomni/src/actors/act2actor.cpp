@@ -1,6 +1,7 @@
 #include "act2actor.h"
 
 #include "3dmanager/lego3dmanager.h"
+#include "actions/act2main_actions.h"
 #include "legoact2.h"
 #include "legocachesoundmanager.h"
 #include "legopathcontroller.h"
@@ -32,6 +33,21 @@ Act2Actor::UnknownListStructure g_unk0x100f0db8[] = {
 	{{-36.689, -0.978409, 31.449}, {0.083792, -0.94303, -0.66398698}, "edg00_157", FALSE},
 	{{-44.6, 0.1, 45.3}, {0.95, 0.0, -0.3}, "edg00_154", FALSE},
 };
+
+// GLOBAL: LEGO1 0x100f0f1c
+MxFloat g_unk0x100f0f1c = 0.0f;
+
+// GLOBAL: LEGO1 0x10102b1c
+// GLOBAL: BETA10 0x10209f60
+undefined4 g_unk0x10102b1c = 0;
+
+// GLOBAL: LEGO1 0x10102b20
+// GLOBAL: BETA10 0x10209f64
+undefined4 g_unk0x10102b20 = 0;
+
+// GLOBAL: LEGO1 0x10102b24
+// GLOBAL: BETA10 0x10209f68
+undefined4 g_unk0x10102b24 = 0;
 
 // FUNCTION: LEGO1 0x100187e0
 // FUNCTION: BETA10 0x1000c7fb
@@ -121,9 +137,6 @@ MxResult Act2Actor::VTable0x9c()
 		return LegoPathActor::VTable0x9c();
 	}
 }
-
-// GLOBAL: LEGO1 0x100f0f1c
-MxFloat g_unk0x100f0f1c = 0.0f;
 
 // FUNCTION: LEGO1 0x10018c30
 // FUNCTION: BETA10 0x1000cb52
@@ -276,7 +289,7 @@ void Act2Actor::VTable0x70(float p_time)
 								distance3 = DISTSQRD3(pepperWorldPosition, childPosition);
 
 								if (distance3 > distance2) {
-									FUN_100199f0(FALSE);
+									FUN_100199f0(0);
 								}
 								else
 #ifdef NDEBUG
@@ -289,7 +302,7 @@ void Act2Actor::VTable0x70(float p_time)
 										m_unk0x24 = distance2;
 
 										if (!((LegoAct2*) CurrentWorld())->FUN_100516b0()) {
-											FUN_100199f0(TRUE);
+											FUN_100199f0(1);
 										}
 #ifdef NDEBUG
 									}
@@ -502,11 +515,74 @@ undefined4 Act2Actor::FUN_10019700(MxFloat p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x100199f0
-// STUB: BETA10 0x1000e11a
-void Act2Actor::FUN_100199f0(undefined p_param)
+// FUNCTION: LEGO1 0x100199f0
+// FUNCTION: BETA10 0x1000e11a
+void Act2Actor::FUN_100199f0(MxS8 p_param)
 {
-	// TODO
+	switch (p_param) {
+	case 0:
+		switch (g_unk0x10102b1c) {
+		case 0:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VOhead0_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+
+			g_unk0x10102b1c++;
+			break;
+		default:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VOhead1_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+			g_unk0x10102b1c = 0;
+			break;
+		}
+		break;
+	case 1:
+		switch (g_unk0x10102b20) {
+		case 0:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VObehind0_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
+			g_unk0x10102b20++;
+			break;
+		case 1:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VObehind1_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
+			g_unk0x10102b20++;
+			break;
+		case 2:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VObehind2_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
+			g_unk0x10102b20++;
+			break;
+		default:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VObehind3_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
+			g_unk0x10102b20 = 0;
+			break;
+		}
+		break;
+	case 2:
+		switch (g_unk0x10102b24) {
+		case 0:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VOinterrupt0_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+			g_unk0x10102b24++;
+			break;
+		case 1:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VOinterrupt1_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+			g_unk0x10102b24++;
+			break;
+		case 2:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VOinterrupt2_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+			g_unk0x10102b24++;
+			break;
+		default:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VOinterrupt3_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+			g_unk0x10102b24 = 0;
+			break;
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1001a180

@@ -70,6 +70,14 @@ public:
 
 	MxResult FUN_100516b0();
 	void FUN_100517b0();
+	MxResult FUN_10052560(
+		Act2mainScript::Script p_objectId,
+		MxBool p_param2,
+		MxBool p_param3,
+		Mx3DPointFloat* p_location,
+		Mx3DPointFloat* p_direction,
+		Mx3DPointFloat* p_param6
+	);
 
 	// SYNTHETIC: LEGO1 0x1004fe20
 	// LegoAct2::`scalar deleting destructor'
@@ -86,14 +94,6 @@ private:
 	void SpawnBricks();
 	void FUN_10051fa0(MxS32 p_param1);
 	void FUN_100521f0(MxS32 p_param1);
-	MxResult FUN_10052560(
-		Act2mainScript::Script p_objectId,
-		MxBool p_param2,
-		MxBool p_param3,
-		Mx3DPointFloat* p_location,
-		Mx3DPointFloat* p_direction,
-		Mx3DPointFloat* p_param6
-	);
 	MxResult FUN_10052800();
 
 	Act2Brick m_bricks[10];        // 0x00f8
