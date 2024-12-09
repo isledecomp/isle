@@ -287,15 +287,15 @@ void Act2Actor::VTable0x70(float p_time)
 #ifdef NDEBUG
 									if (p_time - m_unk0x24 > 3000.0f) {
 #endif
-										SetWorldSpeed(m_unk0x28 - 1);
-										m_unk0x1e = 3;
-										m_unk0x24 = p_time;
+									SetWorldSpeed(m_unk0x28 - 1);
+									m_unk0x1e = 3;
+									m_unk0x24 = p_time;
 
-										if (!((LegoAct2*) CurrentWorld())->FUN_100516b0()) {
-											FUN_100199f0(1);
-										}
-#ifdef NDEBUG
+									if (!((LegoAct2*) CurrentWorld())->FUN_100516b0()) {
+										FUN_100199f0(1);
 									}
+#ifdef NDEBUG
+								}
 #endif
 							}
 						}
