@@ -87,6 +87,6 @@ private:
 // vector<unsigned char *,allocator<unsigned char *> >::size
 
 // TEMPLATE: LEGO1 0x1002b720
-// uninitialized_copy
+// ?uninitialized_copy@@YAPAPAEPAPAE00@Z
 
 #endif // LEGOEXTRAACTOR_H

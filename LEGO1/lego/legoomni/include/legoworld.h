@@ -193,7 +193,7 @@ protected:
 // _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::find
 
 // TEMPLATE: LEGO1 0x10022360
-// ?_Construct@@YAXPAPAVMxCore@@ABQAV1@@Z
+// ?_Construct@@YAXPAPAVLegoPathActor@@ABQAV1@@Z
 
 // GLOBAL: LEGO1 0x100f11a0
 // _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Nil
