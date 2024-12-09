@@ -126,7 +126,7 @@ Act3::~Act3()
 
 // FUNCTION: LEGO1 0x100727e0
 // FUNCTION: BETA10 0x100158e2
-MxResult Act3::LaunchPizza(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up)
+MxResult Act3::ShootPizza(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up)
 {
 	MxS32 nextPizza;
 	for (nextPizza = 0; nextPizza < (MxS32) sizeOfArray(m_pizzas); nextPizza++) {
@@ -182,7 +182,7 @@ MxResult Act3::LaunchPizza(LegoPathController* p_controller, Vector3& p_location
 
 // FUNCTION: LEGO1 0x10072980
 // FUNCTION: BETA10 0x10015c69
-MxResult Act3::LaunchDonut(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up)
+MxResult Act3::ShootDonut(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up)
 {
 	MxS32 nextDonut;
 	for (nextDonut = 0; nextDonut < (MxS32) sizeOfArray(m_donuts); nextDonut++) {

@@ -249,13 +249,13 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 				up.EqualsCross(&va4, &v90);
 
 				if (isPizza) {
-					if (((Act3*) m_world)->LaunchPizza(m_pathController, location, direction, up) != SUCCESS) {
+					if (((Act3*) m_world)->ShootPizza(m_pathController, location, direction, up) != SUCCESS) {
 						MxTrace("Shoot pizza failed\n");
 						break;
 					}
 				}
 				else {
-					if (((Act3*) m_world)->LaunchDonut(m_pathController, location, direction, up) != SUCCESS) {
+					if (((Act3*) m_world)->ShootDonut(m_pathController, location, direction, up) != SUCCESS) {
 						MxTrace("Shoot donut failed\n");
 						break;
 					}

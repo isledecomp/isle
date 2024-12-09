@@ -106,8 +106,8 @@ public:
 	// SYNTHETIC: LEGO1 0x10072630
 	// Act3::`scalar deleting destructor'
 
-	MxResult LaunchPizza(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
-	MxResult LaunchDonut(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
+	MxResult ShootPizza(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
+	MxResult ShootDonut(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
 	void FUN_10073400();
 	void FUN_10073430();
 
