@@ -135,7 +135,7 @@ public:
 	// FUNCTION: BETA10 0x1001c860
 	MxU32 GetState() { return m_state; }
 
-	LegoPathController* GetController() { return m_controller; }
+	LegoPathController* GetController() { return m_pathController; }
 	MxBool GetCollideBox() { return m_collideBox; }
 	MxFloat GetLastTime() { return m_lastTime; }
 	MxFloat GetActorTime() { return m_actorTime; }
@@ -145,7 +145,7 @@ public:
 	// FUNCTION: BETA10 0x10013430
 	void SetState(MxU32 p_state) { m_state = p_state; }
 
-	void SetController(LegoPathController* p_controller) { m_controller = p_controller; }
+	void SetController(LegoPathController* p_controller) { m_pathController = p_controller; }
 	void SetLastTime(MxFloat p_lastTime) { m_lastTime = p_lastTime; }
 	void SetActorTime(MxFloat p_actorTime) { m_actorTime = p_actorTime; }
 
@@ -167,27 +167,27 @@ protected:
 		MxS32 p_und
 	);
 
-	MxFloat m_BADuration;             // 0x78
-	MxFloat m_unk0x7c;                // 0x7c
-	MxFloat m_actorTime;              // 0x80
-	MxFloat m_lastTime;               // 0x84
-	LegoPathBoundary* m_boundary;     // 0x88
-	LegoUnknown m_unk0x8c;            // 0x8c
-	MxU32 m_state;                    // 0xdc
-	LegoUnknown100db7f4* m_destEdge;  // 0xe0
-	MxFloat m_unk0xe4;                // 0xe4
-	MxBool m_collideBox;              // 0xe8
-	MxBool m_unk0xe9;                 // 0xe9
-	MxBool m_userNavFlag;             // 0xea
-	MxMatrix m_unk0xec;               // 0xec
-	LegoPathEdgeContainer* m_grec;    // 0x134
-	LegoPathController* m_controller; // 0x138
-	MxFloat m_maxLinearVel;           // 0x13c
-	MxFloat m_unk0x140;               // 0x140
-	MxFloat m_unk0x144;               // 0x144
-	MxU8 m_unk0x148;                  // 0x148
-	MxS32 m_unk0x14c;                 // 0x14c
-	MxFloat m_unk0x150;               // 0x150
+	MxFloat m_BADuration;                 // 0x78
+	MxFloat m_unk0x7c;                    // 0x7c
+	MxFloat m_actorTime;                  // 0x80
+	MxFloat m_lastTime;                   // 0x84
+	LegoPathBoundary* m_boundary;         // 0x88
+	LegoUnknown m_unk0x8c;                // 0x8c
+	MxU32 m_state;                        // 0xdc
+	LegoUnknown100db7f4* m_destEdge;      // 0xe0
+	MxFloat m_unk0xe4;                    // 0xe4
+	MxBool m_collideBox;                  // 0xe8
+	MxBool m_unk0xe9;                     // 0xe9
+	MxBool m_userNavFlag;                 // 0xea
+	MxMatrix m_unk0xec;                   // 0xec
+	LegoPathEdgeContainer* m_grec;        // 0x134
+	LegoPathController* m_pathController; // 0x138
+	MxFloat m_maxLinearVel;               // 0x13c
+	MxFloat m_unk0x140;                   // 0x140
+	MxFloat m_unk0x144;                   // 0x144
+	MxU8 m_unk0x148;                      // 0x148
+	MxS32 m_unk0x14c;                     // 0x14c
+	MxFloat m_unk0x150;                   // 0x150
 };
 
 // TEMPLATE: LEGO1 0x10018b70
