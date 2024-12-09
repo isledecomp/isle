@@ -39,15 +39,15 @@ MxFloat g_unk0x100f0f1c = 0.0f;
 
 // GLOBAL: LEGO1 0x10102b1c
 // GLOBAL: BETA10 0x10209f60
-undefined4 g_unk0x10102b1c = 0;
+undefined4 g_nextHeadWavIndex = 0;
 
 // GLOBAL: LEGO1 0x10102b20
 // GLOBAL: BETA10 0x10209f64
-undefined4 g_unk0x10102b20 = 0;
+undefined4 g_nextBehindWavIndex = 0;
 
 // GLOBAL: LEGO1 0x10102b24
 // GLOBAL: BETA10 0x10209f68
-undefined4 g_unk0x10102b24 = 0;
+undefined4 g_nextInterruptWavIndex = 0;
 
 // FUNCTION: LEGO1 0x100187e0
 // FUNCTION: BETA10 0x1000c7fb
@@ -521,65 +521,65 @@ void Act2Actor::FUN_100199f0(MxS8 p_param)
 {
 	switch (p_param) {
 	case 0:
-		switch (g_unk0x10102b1c) {
+		switch (g_nextHeadWavIndex) {
 		case 0:
 			((LegoAct2*) CurrentWorld())
 				->FUN_10052560(Act2mainScript::c_VOhead0_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
 
-			g_unk0x10102b1c++;
+			g_nextHeadWavIndex++;
 			break;
 		default:
 			((LegoAct2*) CurrentWorld())
 				->FUN_10052560(Act2mainScript::c_VOhead1_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
-			g_unk0x10102b1c = 0;
+			g_nextHeadWavIndex = 0;
 			break;
 		}
 		break;
 	case 1:
-		switch (g_unk0x10102b20) {
+		switch (g_nextBehindWavIndex) {
 		case 0:
 			((LegoAct2*) CurrentWorld())
 				->FUN_10052560(Act2mainScript::c_VObehind0_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
-			g_unk0x10102b20++;
+			g_nextBehindWavIndex++;
 			break;
 		case 1:
 			((LegoAct2*) CurrentWorld())
 				->FUN_10052560(Act2mainScript::c_VObehind1_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
-			g_unk0x10102b20++;
+			g_nextBehindWavIndex++;
 			break;
 		case 2:
 			((LegoAct2*) CurrentWorld())
 				->FUN_10052560(Act2mainScript::c_VObehind2_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
-			g_unk0x10102b20++;
+			g_nextBehindWavIndex++;
 			break;
 		default:
 			((LegoAct2*) CurrentWorld())
 				->FUN_10052560(Act2mainScript::c_VObehind3_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
-			g_unk0x10102b20 = 0;
+			g_nextBehindWavIndex = 0;
 			break;
 		}
 		break;
 	case 2:
-		switch (g_unk0x10102b24) {
+		switch (g_nextInterruptWavIndex) {
 		case 0:
 			((LegoAct2*) CurrentWorld())
 				->FUN_10052560(Act2mainScript::c_VOinterrupt0_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
-			g_unk0x10102b24++;
+			g_nextInterruptWavIndex++;
 			break;
 		case 1:
 			((LegoAct2*) CurrentWorld())
 				->FUN_10052560(Act2mainScript::c_VOinterrupt1_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
-			g_unk0x10102b24++;
+			g_nextInterruptWavIndex++;
 			break;
 		case 2:
 			((LegoAct2*) CurrentWorld())
 				->FUN_10052560(Act2mainScript::c_VOinterrupt2_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
-			g_unk0x10102b24++;
+			g_nextInterruptWavIndex++;
 			break;
 		default:
 			((LegoAct2*) CurrentWorld())
 				->FUN_10052560(Act2mainScript::c_VOinterrupt3_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
-			g_unk0x10102b24 = 0;
+			g_nextInterruptWavIndex = 0;
 			break;
 		}
 	}
