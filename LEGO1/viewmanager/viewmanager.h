@@ -39,7 +39,9 @@ public:
 	inline static int CalculateLODLevel(float p_und1, float p_und2, ViewROI* p_roi);
 	inline static int IsROIVisibleAtLOD(ViewROI* p_roi);
 
+	// FUNCTION: BETA10 0x100576b0
 	const CompoundObject& GetROIs() { return rois; }
+
 	void Add(ViewROI* p_roi) { rois.push_back(p_roi); }
 
 	// SYNTHETIC: LEGO1 0x100a6000

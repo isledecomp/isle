@@ -339,6 +339,7 @@ MxResult LegoWorld::PlaceActor(
 }
 
 // FUNCTION: LEGO1 0x1001fc80
+// FUNCTION: BETA10 0x100da4bf
 void LegoWorld::RemoveActor(LegoPathActor* p_actor)
 {
 	LegoPathControllerListCursor cursor(&m_list0x68);

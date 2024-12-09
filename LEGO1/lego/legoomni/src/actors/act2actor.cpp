@@ -1,11 +1,19 @@
 #include "act2actor.h"
 
+#include "3dmanager/lego3dmanager.h"
+#include "act2main_actions.h"
+#include "legoact2.h"
 #include "legocachesoundmanager.h"
 #include "legopathcontroller.h"
 #include "legopathedgecontainer.h"
 #include "legosoundmanager.h"
+#include "legovideomanager.h"
+#include "legoworld.h"
 #include "misc.h"
 #include "roi/legoroi.h"
+#include "viewmanager/viewmanager.h"
+
+#include <vec.h>
 
 DECOMP_SIZE_ASSERT(Act2Actor, 0x1a8)
 DECOMP_SIZE_ASSERT(Act2Actor::UnknownListStructure, 0x20)
@@ -25,6 +33,21 @@ Act2Actor::UnknownListStructure g_unk0x100f0db8[] = {
 	{{-36.689, -0.978409, 31.449}, {0.083792, -0.94303, -0.66398698}, "edg00_157", FALSE},
 	{{-44.6, 0.1, 45.3}, {0.95, 0.0, -0.3}, "edg00_154", FALSE},
 };
+
+// GLOBAL: LEGO1 0x100f0f1c
+MxFloat g_unk0x100f0f1c = 0.0f;
+
+// GLOBAL: LEGO1 0x10102b1c
+// GLOBAL: BETA10 0x10209f60
+undefined4 g_nextHeadWavIndex = 0;
+
+// GLOBAL: LEGO1 0x10102b20
+// GLOBAL: BETA10 0x10209f64
+undefined4 g_nextBehindWavIndex = 0;
+
+// GLOBAL: LEGO1 0x10102b24
+// GLOBAL: BETA10 0x10209f68
+undefined4 g_nextInterruptWavIndex = 0;
 
 // FUNCTION: LEGO1 0x100187e0
 // FUNCTION: BETA10 0x1000c7fb
@@ -115,11 +138,186 @@ MxResult Act2Actor::VTable0x9c()
 	}
 }
 
-// STUB: LEGO1 0x10018c30
-// STUB: BETA10 0x1000cb52
+// FUNCTION: LEGO1 0x10018c30
+// FUNCTION: BETA10 0x1000cb52
 void Act2Actor::VTable0x70(float p_time)
 {
-	// TODO
+	int dummy1; // for BETA10, not sure what it is being used for
+
+#ifdef NDEBUG
+	MxFloat local48float = 0.0f;
+	if (g_unk0x100f0f1c != 0.0f) {
+		local48float = p_time - g_unk0x100f0f1c;
+	}
+
+	g_unk0x100f0f1c = p_time;
+#endif
+
+	LegoAnimActor::VTable0x70(p_time);
+
+	if (m_unk0x44 != 0.0f && m_unk0x44 < p_time) {
+		SetWorldSpeed(m_unk0x28);
+	}
+
+	if (m_unk0x1f) {
+		if (m_unk0x20 > 600.0f) {
+			m_unk0x1f = FALSE;
+			m_unk0x20 = 0;
+		}
+		else {
+#ifdef NDEBUG
+			m_unk0x20 += local48float;
+#endif
+			MxMatrix matrix = m_roi->GetLocal2World();
+			matrix[3][1] += 3.0f;
+			m_roi->UpdateTransformationRelativeToParent(matrix);
+
+#ifdef NDEBUG
+			LegoROI* brickstrROI = FindROI("brickstr");
+			MxMatrix brickstrMatrix = brickstrROI->GetLocal2World();
+			brickstrMatrix[3][1] += 3.0f;
+			brickstrROI->UpdateTransformationRelativeToParent(brickstrMatrix);
+#endif
+			return;
+		}
+	}
+
+	if (!m_grec) {
+		if (m_unk0x1e == 2) {
+			m_unk0x1e = 0;
+			m_unk0x2c = m_shootAnim->GetDuration() + p_time;
+			m_unk0x30 = m_unk0x2c - 1300.0f;
+			SetWorldSpeed(0);
+			m_unk0x1c = FALSE;
+		}
+		else if (m_unk0x1e == 1) {
+			FindROI("pwrbrik")->SetVisibility(FALSE);
+			FindROI("debrick")->SetVisibility(FALSE);
+			FindROI("ray")->SetVisibility(FALSE);
+			m_unk0x4c = 0;
+			m_unk0x1e = 2;
+			VTable0xa0();
+			FUN_10019250(m_unk0x28 + 3, p_time + 3000.0f);
+		}
+		else if (m_unk0x1e == 0) {
+			if (m_unk0x40) {
+				m_unk0x40 = 0;
+				m_unk0x2c = m_shootAnim->GetDuration() + p_time;
+				m_unk0x30 = m_unk0x2c - 1300.0f;
+			}
+
+			if (FUN_10019700(p_time) == 1) {
+				return;
+			}
+		}
+		else if (m_unk0x1e == 5) {
+			FindROI("brickstr")->SetVisibility(FALSE);
+			GetROI()->SetVisibility(FALSE);
+			CurrentWorld()->RemoveActor(this);
+			return;
+		}
+#ifdef NDEBUG
+		else if (m_unk0x1e == 4) {
+			if (m_worldSpeed == 0.0f) {
+				return;
+			}
+
+			SetWorldSpeed(0.0f);
+			((LegoAct2*) CurrentWorld())->FUN_100517b0();
+			return;
+		}
+#endif
+	}
+
+	if (m_unk0x1e == 5 || m_unk0x1e == 4) {
+		return;
+	}
+
+	if (m_unk0x1e == 3) {
+		if (p_time - m_unk0x24 > 600.0f) {
+			m_unk0x1e = 2;
+			FUN_10019250(m_unk0x28 + 4, p_time + 15000.0f);
+		}
+	}
+	else {
+		LegoROI* roiPepper = FindROI("pepper");
+
+		if (roiPepper) {
+			ViewManager* vm = VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager();
+			assert(vm);
+
+			MxU32 inFrustum = vm->IsBoundingBoxInFrustum(m_roi->GetWorldBoundingBox());
+
+			if (inFrustum) {
+				Mx3DPointFloat local18(roiPepper->GetWorldDirection());
+				Mx3DPointFloat local30(m_roi->GetWorldPosition());
+				Mx3DPointFloat local60(roiPepper->GetWorldPosition());
+				local30 -= local60;
+				local30.Unitize();
+
+				MxFloat dotproduct = local18.Dot(&local30, &local18);
+
+				if (dotproduct >= 0.0) {
+					const MxFloat* pepperWorldPosition = roiPepper->GetWorldPosition();
+					const MxFloat* worldPosition = m_roi->GetWorldPosition();
+
+					MxFloat distance1 = DISTSQRD3(pepperWorldPosition, worldPosition);
+
+					if (distance1 < 75.0f) {
+						if (!m_unk0x1c) {
+							m_unk0x1c = 1;
+
+							if (!m_unk0x1e) {
+								FUN_100199f0(2);
+								m_unk0x1e = 1;
+							}
+							else {
+								LegoROI* childROI = m_roi->FindChildROI("windsd", m_roi);
+								const MxFloat* childPosition = childROI->GetWorldPosition();
+								MxFloat distance2 = DISTSQRD3(pepperWorldPosition, childPosition);
+
+								childROI = m_roi->FindChildROI("reardr", m_roi);
+								childPosition = childROI->GetWorldPosition();
+								MxFloat distance3 = DISTSQRD3(pepperWorldPosition, childPosition);
+
+								if (distance3 > distance2) {
+									FUN_100199f0(0);
+								}
+								else
+#ifdef NDEBUG
+									if (p_time - m_unk0x24 > 3000.0f) {
+#endif
+									SetWorldSpeed(m_unk0x28 - 1);
+									m_unk0x1e = 3;
+									m_unk0x24 = p_time;
+
+									if (!((LegoAct2*) CurrentWorld())->FUN_100516b0()) {
+										FUN_100199f0(1);
+									}
+#ifdef NDEBUG
+								}
+#endif
+							}
+						}
+					}
+					else {
+						if (m_unk0x1c) {
+							m_unk0x1c = 0;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+// FUNCTION: LEGO1 0x10019250
+// FUNCTION: BETA10 0x1000d45c
+void Act2Actor::FUN_10019250(MxFloat p_speed, MxFloat p_param2)
+{
+	// The arguments have been changed from BETA10 to LEGO1
+	SetWorldSpeed(p_speed);
+	m_unk0x44 = p_param2;
 }
 
 // FUNCTION: LEGO1 0x10019280
@@ -295,6 +493,84 @@ MxS32 Act2Actor::VTable0xa0()
 	}
 	else {
 		return FAILURE;
+	}
+}
+
+// STUB: LEGO1 0x10019700
+// STUB: BETA10 0x1000dd27
+undefined4 Act2Actor::FUN_10019700(MxFloat p_param)
+{
+	// TODO
+	return 0;
+}
+
+// FUNCTION: LEGO1 0x100199f0
+// FUNCTION: BETA10 0x1000e11a
+void Act2Actor::FUN_100199f0(MxS8 p_param)
+{
+	switch (p_param) {
+	case 0:
+		switch (g_nextHeadWavIndex) {
+		case 0:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VOhead0_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+
+			g_nextHeadWavIndex++;
+			break;
+		default:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VOhead1_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+			g_nextHeadWavIndex = 0;
+			break;
+		}
+		break;
+	case 1:
+		switch (g_nextBehindWavIndex) {
+		case 0:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VObehind0_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
+			g_nextBehindWavIndex++;
+			break;
+		case 1:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VObehind1_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
+			g_nextBehindWavIndex++;
+			break;
+		case 2:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VObehind2_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
+			g_nextBehindWavIndex++;
+			break;
+		default:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VObehind3_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
+			g_nextBehindWavIndex = 0;
+			break;
+		}
+		break;
+	case 2:
+		switch (g_nextInterruptWavIndex) {
+		case 0:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VOinterrupt0_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+			g_nextInterruptWavIndex++;
+			break;
+		case 1:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VOinterrupt1_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+			g_nextInterruptWavIndex++;
+			break;
+		case 2:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VOinterrupt2_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+			g_nextInterruptWavIndex++;
+			break;
+		default:
+			((LegoAct2*) CurrentWorld())
+				->FUN_10052560(Act2mainScript::c_VOinterrupt3_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+			g_nextInterruptWavIndex = 0;
+			break;
+		}
 	}
 }
 

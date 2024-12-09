@@ -28,8 +28,11 @@ public:
 	MxS32 VTable0xa0() override;                                            // vtable+0xa0
 
 	void FUN_10018980();
+	void FUN_10019250(MxFloat p_speed, MxFloat p_param2);
 	void FUN_10019520();
 	void FUN_10019560();
+	undefined4 FUN_10019700(MxFloat p_param);
+	void FUN_100199f0(MxS8 p_param);
 	void FUN_100192a0(undefined4 p_param);
 
 	// SYNTHETIC: LEGO1 0x1001a0a0
@@ -44,16 +47,16 @@ private:
 	MxS8 m_unk0x1d;                   // 0x1d
 	undefined m_unk0x1e;              // 0x1e
 	MxBool m_unk0x1f;                 // 0x1f
-	undefined4 m_unk0x20;             // 0x20
-	undefined4 m_unk0x24;             // 0x24
+	MxFloat m_unk0x20;                // 0x20
+	MxFloat m_unk0x24;                // 0x24
 	MxS8 m_unk0x28;                   // 0x28
-	undefined4 m_unk0x2c;             // 0x2c
-	undefined4 m_unk0x30;             // 0x30
+	MxFloat m_unk0x2c;                // 0x2c
+	MxFloat m_unk0x30;                // 0x30
 	LegoAnimActorStruct* m_shootAnim; // 0x34
 	LegoCacheSound* m_unk0x38;        // 0x38
 	undefined4 m_unk0x3c;             // 0x3c
 	undefined m_unk0x40;              // 0x40
-	undefined4 m_unk0x44;             // 0x44
+	MxFloat m_unk0x44;                // 0x44
 	MxS8 m_unk0x48;                   // 0x48
 	undefined4 m_unk0x4c;             // 0x4c
 };
