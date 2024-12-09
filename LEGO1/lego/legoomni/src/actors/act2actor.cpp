@@ -1,7 +1,7 @@
 #include "act2actor.h"
 
 #include "3dmanager/lego3dmanager.h"
-#include "actions/act2main_actions.h"
+#include "act2main_actions.h"
 #include "legoact2.h"
 #include "legocachesoundmanager.h"
 #include "legopathcontroller.h"
@@ -143,14 +143,6 @@ MxResult Act2Actor::VTable0x9c()
 void Act2Actor::VTable0x70(float p_time)
 {
 	int dummy1; // for BETA10, not sure what it is being used for
-	ViewManager* vm;
-	LegoROI* roiPepper;
-	LegoROI* childROI;
-	const MxFloat* childPosition;
-	const MxFloat* pepperWorldPosition;
-	const MxFloat* worldPosition;
-	MxFloat distance2;
-	MxFloat distance3;
 
 #ifdef NDEBUG
 	MxFloat local48float = 0.0f;
@@ -248,10 +240,10 @@ void Act2Actor::VTable0x70(float p_time)
 		}
 	}
 	else {
-		roiPepper = FindROI("pepper");
+		LegoROI* roiPepper = FindROI("pepper");
 
 		if (roiPepper) {
-			vm = VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager();
+			ViewManager* vm = VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager();
 			assert(vm);
 
 			MxU32 inFrustum = vm->IsBoundingBoxInFrustum(m_roi->GetWorldBoundingBox());
@@ -266,8 +258,8 @@ void Act2Actor::VTable0x70(float p_time)
 				MxFloat dotproduct = local18.Dot(&local30, &local18);
 
 				if (dotproduct >= 0.0) {
-					pepperWorldPosition = roiPepper->GetWorldPosition();
-					worldPosition = m_roi->GetWorldPosition();
+					const MxFloat* pepperWorldPosition = roiPepper->GetWorldPosition();
+					const MxFloat* worldPosition = m_roi->GetWorldPosition();
 
 					MxFloat distance1 = DISTSQRD3(pepperWorldPosition, worldPosition);
 
@@ -280,26 +272,24 @@ void Act2Actor::VTable0x70(float p_time)
 								m_unk0x1e = 1;
 							}
 							else {
-								childROI = m_roi->FindChildROI("windsd", m_roi);
-								childPosition = childROI->GetWorldPosition();
-								distance2 = DISTSQRD3(pepperWorldPosition, childPosition);
+								LegoROI* childROI = m_roi->FindChildROI("windsd", m_roi);
+								const MxFloat* childPosition = childROI->GetWorldPosition();
+								MxFloat distance2 = DISTSQRD3(pepperWorldPosition, childPosition);
 
 								childROI = m_roi->FindChildROI("reardr", m_roi);
 								childPosition = childROI->GetWorldPosition();
-								distance3 = DISTSQRD3(pepperWorldPosition, childPosition);
+								MxFloat distance3 = DISTSQRD3(pepperWorldPosition, childPosition);
 
 								if (distance3 > distance2) {
 									FUN_100199f0(0);
 								}
 								else
 #ifdef NDEBUG
-									// `distance2` is guessed, looks promising
-									if (distance2 - m_unk0x24 > 3000.0f) {
+									if (p_time - m_unk0x24 > 3000.0f) {
 #endif
 										SetWorldSpeed(m_unk0x28 - 1);
 										m_unk0x1e = 3;
-										// guessed
-										m_unk0x24 = distance2;
+										m_unk0x24 = p_time;
 
 										if (!((LegoAct2*) CurrentWorld())->FUN_100516b0()) {
 											FUN_100199f0(1);
@@ -311,7 +301,6 @@ void Act2Actor::VTable0x70(float p_time)
 						}
 					}
 					else {
-
 						if (m_unk0x1c) {
 							m_unk0x1c = 0;
 						}
