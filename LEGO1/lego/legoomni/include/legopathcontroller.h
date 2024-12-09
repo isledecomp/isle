@@ -111,14 +111,6 @@ public:
 	LegoPathBoundary* GetPathBoundary(const char* p_name);
 	void Enable(MxBool p_enable);
 	void FUN_10046bb0(LegoWorld* p_world);
-	MxS32 FUN_1004a240(
-		LegoPathEdgeContainer& p_grec,
-		Vector3& p_v1,
-		Vector3& p_v2,
-		float p_f1,
-		LegoUnknown100db7f4*& p_edge,
-		LegoPathBoundary*& p_boundary
-	);
 	MxResult FUN_10048310(
 		LegoPathEdgeContainer* p_grec,
 		const Vector3& p_oldPosition,
@@ -129,6 +121,21 @@ public:
 		LegoPathBoundary* p_newBoundary,
 		LegoU8 p_mask,
 		MxFloat* p_param9
+	);
+	MxS32 FUN_1004a240(
+		LegoPathEdgeContainer& p_grec,
+		Vector3& p_v1,
+		Vector3& p_v2,
+		float p_f1,
+		LegoUnknown100db7f4*& p_edge,
+		LegoPathBoundary*& p_boundary
+	);
+	undefined4 FUN_1004a380(
+		Vector3& p_param1,
+		Vector3& p_param2,
+		Mx3DPointFloat* p_param3,
+		LegoPathBoundary*& p_boundary,
+		MxFloat& p_param5
 	);
 
 	static MxResult Init();

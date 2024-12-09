@@ -233,10 +233,10 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 				va4.EqualsCross(&v68, &dir);
 				v7c.EqualsCross(&va4, &v90);
 				if (ret) {
-					if (((Act3*) m_world)->FUN_100727e0(m_controller, loc, dir, v7c)) {
+					if (((Act3*) m_world)->LaunchPizza(m_controller, loc, dir, v7c)) {
 						break;
 					}
-					else if (((Act3*) m_world)->FUN_10072980(m_controller, loc, dir, v7c)) {
+					else if (((Act3*) m_world)->LaunchDonut(m_controller, loc, dir, v7c)) {
 						break;
 					}
 				}

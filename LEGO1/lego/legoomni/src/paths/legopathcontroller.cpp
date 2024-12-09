@@ -1014,3 +1014,17 @@ MxS32 LegoPathController::FUN_1004a240(
 	p_v2.EqualsCross(p_boundary->GetUnknown0x14(), &vec);
 	return 0;
 }
+
+// STUB: LEGO1 0x1004a380
+// STUB: BETA10 0x100b957f
+undefined4 LegoPathController::FUN_1004a380(
+	Vector3& p_param1,
+	Vector3& p_param2,
+	Mx3DPointFloat* p_param3,
+	LegoPathBoundary*& p_boundary,
+	MxFloat& p_param5
+)
+{
+	// TODO
+	return 0;
+}

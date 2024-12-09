@@ -34,10 +34,58 @@ DECOMP_SIZE_ASSERT(Act3List, 0x10)
 Act3Script::Script g_unk0x100d95e8[] =
 	{Act3Script::c_tlp053in_RunAnim, Act3Script::c_tlp064la_RunAnim, Act3Script::c_tlp068in_RunAnim};
 
-// STUB: LEGO1 0x100720d0
+// FUNCTION: LEGO1 0x10071fa0
+void Act3List::FUN_10071fa0()
+{
+	DeleteAction();
+}
+
+// FUNCTION: LEGO1 0x100720d0
 void Act3List::FUN_100720d0(MxU32 p_objectId)
 {
-	// TODO
+	if (m_unk0x0c == 0) {
+		MxU32 removed = FALSE;
+
+		if (!empty()) {
+			if (p_objectId != 0) {
+				for (Act3List::iterator it = begin(); it != end(); it++) {
+					if ((*it).m_unk0x08 && (*it).m_objectId == p_objectId) {
+						erase(it);
+						removed = TRUE;
+						break;
+					}
+				}
+			}
+			else {
+				pop_front();
+				removed = TRUE;
+			}
+
+			if (removed && size() > 0) {
+				// TODO: Match
+				Act3List::iterator it = begin();
+				Act3ListElement& item = *(it++);
+
+				for (; it != end(); it++) {
+					if ((*it).m_unk0x04 == 1) {
+						for (Act3List::iterator it2 = begin(); it2 != it;) {
+							if ((*it2).m_unk0x08) {
+								FUN_10071fa0();
+								return;
+							}
+
+							it2 = erase(it2);
+						}
+					}
+				}
+
+				if (!item.m_unk0x08) {
+					item.m_unk0x08 = TRUE;
+					InvokeAction(Extra::e_start, *g_act3Script, item.m_objectId, NULL);
+				}
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x10072270
@@ -76,16 +124,101 @@ Act3::~Act3()
 	TickleManager()->UnregisterClient(this);
 }
 
-// STUB: LEGO1 0x100727e0
-MxBool Act3::FUN_100727e0(LegoPathController*, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up)
+// FUNCTION: LEGO1 0x100727e0
+// FUNCTION: BETA10 0x100158e2
+MxResult Act3::LaunchPizza(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up)
 {
-	return FALSE;
+	MxS32 nextPizza;
+	for (nextPizza = 0; nextPizza < (MxS32) sizeOfArray(m_pizzas); nextPizza++) {
+		if (!m_pizzas[nextPizza].IsPlaced()) {
+			LegoPathBoundary* boundary = NULL;
+			MxU32 local18 = TRUE;
+
+			m_pizzas[nextPizza].FUN_10053980(this, TRUE, nextPizza);
+
+			if (m_pizzas[nextPizza].FUN_10053b40(p_location, p_direction, p_up) != SUCCESS) {
+				return FAILURE;
+			}
+
+			MxFloat unk0x19c = *m_pizzas[nextPizza].GetUnknown0x19c();
+			if (p_controller->FUN_1004a380(
+					p_location,
+					p_direction,
+					m_pizzas[nextPizza].GetUnknown0x160(),
+					boundary,
+					unk0x19c
+				) == SUCCESS) {
+				Mx3DPointFloat direction;
+
+				direction = p_direction;
+				direction *= unk0x19c;
+				direction += p_location;
+
+				assert(m_brickster && m_brickster->GetROI());
+
+				direction -= m_brickster->GetROI()->GetLocal2World()[3];
+
+				local18 = FALSE;
+				if (m_pizzas[nextPizza].FUN_10053cb0(p_controller, boundary, unk0x19c) == SUCCESS) {
+					p_controller->PlaceActor(&m_pizzas[nextPizza]);
+					boundary->AddActor(&m_pizzas[nextPizza]);
+					m_pizzas[nextPizza].SetWorldSpeed(10.0f);
+					return SUCCESS;
+				}
+			}
+
+			if (local18 && m_pizzas[nextPizza].FUN_10053d30(p_controller, unk0x19c) == SUCCESS) {
+				p_controller->PlaceActor(&m_pizzas[nextPizza]);
+				m_pizzas[nextPizza].SetWorldSpeed(10.0f);
+				return SUCCESS;
+			}
+
+			break;
+		}
+	}
+
+	return FAILURE;
 }
 
-// STUB: LEGO1 0x10072980
-MxBool Act3::FUN_10072980(LegoPathController*, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up)
+// FUNCTION: LEGO1 0x10072980
+// FUNCTION: BETA10 0x10015c69
+MxResult Act3::LaunchDonut(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up)
 {
-	return FALSE;
+	MxS32 nextDonut;
+	for (nextDonut = 0; nextDonut < (MxS32) sizeOfArray(m_donuts); nextDonut++) {
+		if (!m_donuts[nextDonut].IsPlaced()) {
+			LegoPathBoundary* boundary = NULL;
+
+			m_donuts[nextDonut].FUN_10053980(this, FALSE, nextDonut);
+
+			if (m_donuts[nextDonut].FUN_10053b40(p_location, p_direction, p_up) != SUCCESS) {
+				return FAILURE;
+			}
+
+			MxFloat unk0x19c = *m_donuts[nextDonut].GetUnknown0x19c();
+			if (p_controller->FUN_1004a380(
+					p_location,
+					p_direction,
+					m_donuts[nextDonut].GetUnknown0x160(),
+					boundary,
+					unk0x19c
+				) == SUCCESS) {
+				if (m_donuts[nextDonut].FUN_10053cb0(p_controller, boundary, unk0x19c) == SUCCESS) {
+					p_controller->PlaceActor(&m_donuts[nextDonut]);
+					boundary->AddActor(&m_donuts[nextDonut]);
+					m_donuts[nextDonut].SetWorldSpeed(10.0f);
+					return SUCCESS;
+				}
+			}
+			else if (m_donuts[nextDonut].FUN_10053d30(p_controller, unk0x19c) == SUCCESS) {
+				p_controller->PlaceActor(&m_donuts[nextDonut]);
+				m_donuts[nextDonut].SetWorldSpeed(10.0f);
+				return SUCCESS;
+			}
+		}
+	}
+
+	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x10072c30
@@ -382,7 +515,7 @@ void Act3::Enable(MxBool p_enable)
 
 			MxS32 i;
 			for (i = 0; i < (MxS32) sizeOfArray(m_pizzas); i++) {
-				if (m_pizzas[i].GetFlags() & Act3Ammo::c_bit4) {
+				if (m_pizzas[i].IsPlaced()) {
 					m_pizzas[i].SetLastTime(m_pizzas[i].GetLastTime() + delta);
 					m_pizzas[i].SetActorTime(m_pizzas[i].GetActorTime() + delta);
 					m_pizzas[i].SetUnknown0x158(m_pizzas[i].GetUnknown0x158() + delta);
@@ -390,7 +523,7 @@ void Act3::Enable(MxBool p_enable)
 			}
 
 			for (i = 0; i < (MxS32) sizeOfArray(m_donuts); i++) {
-				if (m_donuts[i].GetFlags() & Act3Ammo::c_bit4) {
+				if (m_donuts[i].IsPlaced()) {
 					m_donuts[i].SetLastTime(m_donuts[i].GetLastTime() + delta);
 					m_donuts[i].SetActorTime(m_donuts[i].GetActorTime() + delta);
 					m_donuts[i].SetUnknown0x158(m_donuts[i].GetUnknown0x158() + delta);
