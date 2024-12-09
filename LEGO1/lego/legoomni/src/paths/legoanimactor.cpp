@@ -30,7 +30,7 @@ LegoAnimActorStruct::~LegoAnimActorStruct()
 }
 
 // FUNCTION: LEGO1 0x1001c130
-// FUNCTION: BETA10 0x1003df5f
+// FUNCTION: BETA10 0x1003df3a
 float LegoAnimActorStruct::GetDuration()
 {
 	assert(m_AnimTreePtr);
@@ -70,8 +70,11 @@ void LegoAnimActor::VTable0x74(Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x1001c290
+// FUNCTION: BETA10 0x1003e144
 void LegoAnimActor::VTable0x70(float p_time)
 {
+	assert(m_roi);
+
 	if (m_lastTime == 0) {
 		m_lastTime = p_time - 1.0f;
 	}
