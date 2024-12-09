@@ -667,6 +667,12 @@ MxResult LegoAct2::FUN_100516b0()
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x100517b0
+void LegoAct2::FUN_100517b0()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10051840
 void LegoAct2::PlayMusic(JukeboxScript::Script p_objectId)
 {
@@ -714,12 +720,6 @@ void LegoAct2::FUN_10051960()
 	}
 
 	((LegoPathActor*) m_pepper->GetEntity())->SetState(0);
-}
-
-// STUB: LEGO1 0x100517b0
-void LegoAct2::FUN_100517b0()
-{
-	// TODO
 }
 
 // FUNCTION: LEGO1 0x100519c0

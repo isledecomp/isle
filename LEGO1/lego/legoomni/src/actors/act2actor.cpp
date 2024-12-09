@@ -309,21 +309,21 @@ void Act2Actor::VTable0x70(float p_time)
 	}
 }
 
+// FUNCTION: LEGO1 0x10019250
+// FUNCTION: BETA10 0x1000d45c
+void Act2Actor::FUN_10019250(MxFloat p_speed, MxFloat p_param2)
+{
+	// The arguments have been changed from BETA10 to LEGO1
+	SetWorldSpeed(p_speed);
+	m_unk0x44 = p_param2;
+}
+
 // FUNCTION: LEGO1 0x10019280
 // FUNCTION: BETA10 0x1000d4a6
 void Act2Actor::SetWorldSpeed(MxFloat p_worldSpeed)
 {
 	LegoAnimActor::SetWorldSpeed(p_worldSpeed);
 	m_unk0x44 = 0;
-}
-
-// FUNCTION: LEGO1 0x10019250
-// FUNCTION: BETA10 0x1000d45c
-void Act2Actor::FUN_10019250(MxFloat p_speed, MxFloat p_unk)
-{
-	// The arguments have been changed from BETA10 to LEGO1
-	SetWorldSpeed(p_speed);
-	m_unk0x44 = p_unk;
 }
 
 // FUNCTION: LEGO1 0x100192a0

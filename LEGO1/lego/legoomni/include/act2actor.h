@@ -28,7 +28,7 @@ public:
 	MxS32 VTable0xa0() override;                                            // vtable+0xa0
 
 	void FUN_10018980();
-	void FUN_10019250(MxFloat p_speed, MxFloat p_unk);
+	void FUN_10019250(MxFloat p_speed, MxFloat p_param2);
 	void FUN_10019520();
 	void FUN_10019560();
 	undefined4 FUN_10019700(MxFloat p_param);
