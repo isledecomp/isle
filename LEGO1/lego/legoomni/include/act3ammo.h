@@ -11,7 +11,10 @@ class Act3;
 class Act3Ammo : public LegoPathActor {
 public:
 	enum {
-		c_placed = 0x04
+		c_pizza = 0x01,
+		c_donut = 0x02,
+		c_valid = 0x04,
+		c_bit4 = 0x08
 	};
 
 	Act3Ammo();
@@ -21,9 +24,7 @@ public:
 	void VTable0x70(float p_time) override;         // vtable+0x70
 
 	// FUNCTION: BETA10 0x10017750
-	MxU32 IsPlaced() { return m_ammoFlag & c_placed; }
-
-	MxFloat GetUnknown0x158() { return m_unk0x158; }
+	MxU32 IsValid() { return m_ammoFlag & c_valid; }
 
 	// FUNCTION: BETA10 0x100177b0
 	Mx3DPointFloat* GetUnknown0x160() { return m_unk0x160; }
@@ -31,12 +32,39 @@ public:
 	// FUNCTION: BETA10 0x100177e0
 	MxFloat* GetUnknown0x19c() { return &m_unk0x19c; }
 
+	// FUNCTION: BETA10 0x1001fbd0
+	void SetValid(MxBool p_valid)
+	{
+		if (p_valid) {
+			m_ammoFlag |= c_valid;
+		}
+		else {
+			m_ammoFlag &= ~c_valid;
+		}
+	}
+
+	// FUNCTION: BETA10 0x1001fc80
+	MxU32 IsPizza() { return m_ammoFlag & c_pizza; }
+
+	// FUNCTION: BETA10 0x1001fcb0
+	void SetBit4(MxBool p_bit4)
+	{
+		if (p_bit4) {
+			m_ammoFlag |= c_bit4;
+		}
+		else {
+			m_ammoFlag &= ~c_bit4;
+		}
+	}
+
+	MxFloat GetUnknown0x158() { return m_unk0x158; }
+
 	void SetUnknown0x158(MxFloat p_unk0x158) { m_unk0x158 = p_unk0x158; }
 
-	MxResult FUN_10053980(Act3* p_a3, MxU32 p_isDonut, MxS32 p_index);
+	MxResult Create(Act3* p_a3, MxU32 p_isPizza, MxS32 p_index);
 	MxResult FUN_10053b40(Vector3& p_srcLoc, Vector3& p_srcDir, Vector3& p_srcUp);
-	MxResult FUN_10053cb0(LegoPathController* p_controller, LegoPathBoundary* p_boundary, MxFloat p_unk0x19c);
-	MxResult FUN_10053d30(LegoPathController* p_controller, MxFloat p_unk0x19c);
+	MxResult FUN_10053cb0(LegoPathController* p_p, LegoPathBoundary* p_boundary, MxFloat p_unk0x19c);
+	MxResult FUN_10053d30(LegoPathController* p_p, MxFloat p_unk0x19c);
 
 	// SYNTHETIC: LEGO1 0x10053880
 	// Act3Ammo::`scalar deleting destructor'

@@ -130,11 +130,11 @@ MxResult Act3::ShootPizza(LegoPathController* p_controller, Vector3& p_location,
 {
 	MxS32 nextPizza;
 	for (nextPizza = 0; nextPizza < (MxS32) sizeOfArray(m_pizzas); nextPizza++) {
-		if (!m_pizzas[nextPizza].IsPlaced()) {
+		if (!m_pizzas[nextPizza].IsValid()) {
 			LegoPathBoundary* boundary = NULL;
 			MxU32 local18 = TRUE;
 
-			m_pizzas[nextPizza].FUN_10053980(this, TRUE, nextPizza);
+			m_pizzas[nextPizza].Create(this, TRUE, nextPizza);
 
 			if (m_pizzas[nextPizza].FUN_10053b40(p_location, p_direction, p_up) != SUCCESS) {
 				return FAILURE;
@@ -186,10 +186,10 @@ MxResult Act3::ShootDonut(LegoPathController* p_controller, Vector3& p_location,
 {
 	MxS32 nextDonut;
 	for (nextDonut = 0; nextDonut < (MxS32) sizeOfArray(m_donuts); nextDonut++) {
-		if (!m_donuts[nextDonut].IsPlaced()) {
+		if (!m_donuts[nextDonut].IsValid()) {
 			LegoPathBoundary* boundary = NULL;
 
-			m_donuts[nextDonut].FUN_10053980(this, FALSE, nextDonut);
+			m_donuts[nextDonut].Create(this, FALSE, nextDonut);
 
 			if (m_donuts[nextDonut].FUN_10053b40(p_location, p_direction, p_up) != SUCCESS) {
 				return FAILURE;
@@ -515,7 +515,7 @@ void Act3::Enable(MxBool p_enable)
 
 			MxS32 i;
 			for (i = 0; i < (MxS32) sizeOfArray(m_pizzas); i++) {
-				if (m_pizzas[i].IsPlaced()) {
+				if (m_pizzas[i].IsValid()) {
 					m_pizzas[i].SetLastTime(m_pizzas[i].GetLastTime() + delta);
 					m_pizzas[i].SetActorTime(m_pizzas[i].GetActorTime() + delta);
 					m_pizzas[i].SetUnknown0x158(m_pizzas[i].GetUnknown0x158() + delta);
@@ -523,7 +523,7 @@ void Act3::Enable(MxBool p_enable)
 			}
 
 			for (i = 0; i < (MxS32) sizeOfArray(m_donuts); i++) {
-				if (m_donuts[i].IsPlaced()) {
+				if (m_donuts[i].IsValid()) {
 					m_donuts[i].SetLastTime(m_donuts[i].GetLastTime() + delta);
 					m_donuts[i].SetActorTime(m_donuts[i].GetActorTime() + delta);
 					m_donuts[i].SetUnknown0x158(m_donuts[i].GetUnknown0x158() + delta);

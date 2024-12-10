@@ -1,10 +1,13 @@
 #include "act3ammo.h"
 
+#include "legocachesoundmanager.h"
 #include "legocharactermanager.h"
+#include "legosoundmanager.h"
 #include "misc.h"
 #include "roi/legoroi.h"
 
 #include <assert.h>
+#include <stdio.h>
 
 DECOMP_SIZE_ASSERT(Act3Ammo, 0x1a0)
 
@@ -36,11 +39,44 @@ void Act3Ammo::Destroy(MxBool p_fromDestructor)
 	}
 }
 
-// STUB: LEGO1 0x10053980
-// STUB: BETA10 0x1001d8b3
-MxResult Act3Ammo::FUN_10053980(Act3* p_a3, MxU32 p_isDonut, MxS32 p_index)
+// FUNCTION: LEGO1 0x10053980
+// FUNCTION: BETA10 0x1001d8b3
+MxResult Act3Ammo::Create(Act3* p_a3, MxU32 p_isPizza, MxS32 p_index)
 {
-	// TODO
+	assert(m_ammoFlag);
+	char name[12];
+
+	if (p_isPizza) {
+		sprintf(name, "pammo%d", p_index);
+		m_roi = CharacterManager()->CreateAutoROI(name, "pizpie", FALSE);
+		m_roi->SetVisibility(TRUE);
+
+		BoundingSphere sphere;
+
+		sphere.Center()[0] = sphere.Center()[1] = sphere.Center()[2] = 0.0f;
+		sphere.Radius() = m_roi->GetBoundingSphere().Radius() * 2.0f;
+		m_roi->SetBoundingSphere(sphere);
+
+		m_ammoFlag = c_pizza;
+		assert(m_roi);
+	}
+	else {
+		sprintf(name, "dammo%d", p_index);
+		m_roi = CharacterManager()->CreateAutoROI(name, "donut", FALSE);
+		m_roi->SetVisibility(TRUE);
+
+		BoundingSphere sphere;
+
+		sphere.Center()[0] = sphere.Center()[1] = sphere.Center()[2] = 0.0f;
+		sphere.Radius() = m_roi->GetBoundingSphere().Radius() * 5.0f;
+		m_roi->SetBoundingSphere(sphere);
+
+		m_ammoFlag = c_donut;
+		assert(m_roi);
+	}
+
+	m_a3 = p_a3;
+	SetValid(TRUE);
 	return SUCCESS;
 }
 
@@ -52,19 +88,56 @@ MxResult Act3Ammo::FUN_10053b40(Vector3& p_srcLoc, Vector3& p_srcDir, Vector3& p
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10053cb0
-// STUB: BETA10 0x1001ddf4
-MxResult Act3Ammo::FUN_10053cb0(LegoPathController* p_controller, LegoPathBoundary* p_boundary, MxFloat p_unk0x19c)
+// FUNCTION: LEGO1 0x10053cb0
+// FUNCTION: BETA10 0x1001ddf4
+MxResult Act3Ammo::FUN_10053cb0(LegoPathController* p_p, LegoPathBoundary* p_boundary, MxFloat p_unk0x19c)
 {
-	// TODO
+	assert(p_p);
+	assert(IsValid());
+
+	if (IsPizza()) {
+		assert(SoundManager()->GetCacheSoundManager());
+		SoundManager()->GetCacheSoundManager()->Play("shootpz", NULL, FALSE);
+	}
+	else {
+		assert(SoundManager()->GetCacheSoundManager());
+		SoundManager()->GetCacheSoundManager()->Play("shootdn", NULL, FALSE);
+	}
+
+	m_pathController = p_p;
+	m_boundary = p_boundary;
+	m_BADuration = 10000.0f;
+	m_unk0x19c = p_unk0x19c;
+	m_unk0x7c = 0.0f;
+	m_lastTime = -1.0f;
+	m_state = 1;
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10053d30
-// STUB: BETA10 0x1001df73
-MxResult Act3Ammo::FUN_10053d30(LegoPathController* p_controller, MxFloat p_unk0x19c)
+// FUNCTION: LEGO1 0x10053d30
+// FUNCTION: BETA10 0x1001df73
+MxResult Act3Ammo::FUN_10053d30(LegoPathController* p_p, MxFloat p_unk0x19c)
 {
-	// TODO
+	assert(p_p);
+	assert(IsValid());
+
+	SetBit4(TRUE);
+
+	if (IsPizza()) {
+		assert(SoundManager()->GetCacheSoundManager());
+		SoundManager()->GetCacheSoundManager()->Play("shootpz", NULL, FALSE);
+	}
+	else {
+		assert(SoundManager()->GetCacheSoundManager());
+		SoundManager()->GetCacheSoundManager()->Play("shootdn", NULL, FALSE);
+	}
+
+	m_pathController = p_p;
+	m_BADuration = 10000.0f;
+	m_unk0x19c = p_unk0x19c;
+	m_unk0x7c = 0.0f;
+	m_lastTime = -1.0f;
+	m_state = 1;
 	return SUCCESS;
 }
 
