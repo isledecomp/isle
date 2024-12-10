@@ -37,7 +37,7 @@ public:
 		}
 	}
 
-	// FUNCTION: BETA10 0x1001fbd0
+	// FUNCTION: BETA10 0x1001fcb0
 	void SetBit4(MxBool p_bit4)
 	{
 		if (p_bit4) {
