@@ -659,18 +659,45 @@ MxLong LegoAct2::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x100516b0
-// STUB: BETA10 0x1003bcbc
+// FUNCTION: LEGO1 0x100516b0
+// FUNCTION: BETA10 0x1003bcbc
 MxResult LegoAct2::FUN_100516b0()
 {
-	// TODO
+	if (m_nextBrick > 4) {
+		return FAILURE;
+	}
+
+	Act2Brick& brick = m_bricks[m_nextBrick];
+	brick.Create(m_nextBrick);
+
+	MxMatrix local2world = m_ambulance->GetLocal2World();
+	MxMatrix local2world2 = local2world;
+
+	LegoPathBoundary* boundary = m_unk0x1138->GetBoundary();
+	local2world[3][1] += 1.3;
+	local2world2[3][1] -= 0.1;
+
+	brick.FUN_1007a670(local2world, local2world2, boundary);
+	m_nextBrick++;
+	m_unk0x10c4 = 9;
+	m_unk0x10d0 = 0;
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100517b0
+// FUNCTION: LEGO1 0x100517b0
 void LegoAct2::FUN_100517b0()
 {
-	// TODO
+	Act2Brick& brick = m_bricks[m_nextBrick];
+	brick.Create(m_nextBrick);
+
+	MxMatrix local2world = m_ambulance->GetLocal2World();
+	local2world[3][1] += 1.5;
+
+	LegoROI* roi = brick.GetROI();
+	roi->FUN_100a58f0(local2world);
+	roi->VTable0x14();
+	brick.PlayWhistleSound();
+	m_nextBrick++;
 }
 
 // FUNCTION: LEGO1 0x10051840

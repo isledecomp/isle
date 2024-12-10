@@ -291,7 +291,7 @@ void Act2Actor::VTable0x70(float p_time)
 									m_unk0x1e = 3;
 									m_unk0x24 = p_time;
 
-									if (!((LegoAct2*) CurrentWorld())->FUN_100516b0()) {
+									if (((LegoAct2*) CurrentWorld())->FUN_100516b0() == SUCCESS) {
 										FUN_100199f0(1);
 									}
 #ifdef NDEBUG
