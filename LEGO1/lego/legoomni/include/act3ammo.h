@@ -26,6 +26,12 @@ public:
 	// FUNCTION: BETA10 0x10017750
 	MxU32 IsValid() { return m_ammoFlag & c_valid; }
 
+	// FUNCTION: BETA10 0x100177b0
+	Mx3DPointFloat* GetUnknown0x160() { return m_unk0x160; }
+
+	// FUNCTION: BETA10 0x100177e0
+	MxFloat* GetUnknown0x19c() { return &m_unk0x19c; }
+
 	// FUNCTION: BETA10 0x1001fbd0
 	void SetValid(MxBool p_valid)
 	{
@@ -52,12 +58,6 @@ public:
 	}
 
 	MxFloat GetUnknown0x158() { return m_unk0x158; }
-
-	// FUNCTION: BETA10 0x100177b0
-	Mx3DPointFloat* GetUnknown0x160() { return m_unk0x160; }
-
-	// FUNCTION: BETA10 0x100177e0
-	MxFloat* GetUnknown0x19c() { return &m_unk0x19c; }
 
 	void SetUnknown0x158(MxFloat p_unk0x158) { m_unk0x158 = p_unk0x158; }
 
