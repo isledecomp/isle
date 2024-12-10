@@ -37,6 +37,9 @@ public:
 		}
 	}
 
+	// FUNCTION: BETA10 0x1001fc80
+	MxU32 IsPizza() { return m_ammoFlag & c_pizza; }
+
 	// FUNCTION: BETA10 0x1001fcb0
 	void SetBit4(MxBool p_bit4)
 	{
@@ -47,9 +50,6 @@ public:
 			m_ammoFlag &= ~c_bit4;
 		}
 	}
-
-	// FUNCTION: BETA10 0x1001fc80
-	MxU32 IsPizza() { return m_ammoFlag & c_pizza; }
 
 	MxFloat GetUnknown0x158() { return m_unk0x158; }
 
