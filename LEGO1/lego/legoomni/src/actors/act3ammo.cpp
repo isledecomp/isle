@@ -7,6 +7,7 @@
 #include "roi/legoroi.h"
 
 #include <assert.h>
+#include <stdio.h>
 
 DECOMP_SIZE_ASSERT(Act3Ammo, 0x1a0)
 
