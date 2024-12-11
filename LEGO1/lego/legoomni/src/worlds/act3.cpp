@@ -182,6 +182,33 @@ Act3::~Act3()
 	TickleManager()->UnregisterClient(this);
 }
 
+// FUNCTION: LEGO1 0x100727a0
+// FUNCTION: BETA10 0x1001570d
+void Act3::EatDonut(MxS32 p_index)
+{
+	assert(p_index < MAX_DONUTS);
+	RemoveDonut(m_donuts[p_index]);
+}
+
+// FUNCTION: LEGO1 0x100727d0
+// FUNCTION: BETA10 0x10015828
+void Act3::RemoveDonut(Act3Ammo& p_p)
+{
+#ifdef _DEBUG
+	MxS32 i;
+	for (i = 0; i < MAX_DONUTS; i++) {
+		if (&m_donuts[i] == &p_p) {
+			break;
+		}
+	}
+
+	assert(i != MAX_DONUTS);
+#endif
+
+	assert(p_p.IsValid());
+	p_p.Remove();
+}
+
 // FUNCTION: LEGO1 0x100727e0
 // FUNCTION: BETA10 0x100158e2
 MxResult Act3::ShootPizza(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up)
@@ -523,6 +550,20 @@ void Act3::FUN_10073430()
 	m_state->m_unk0x08 = 3;
 	m_destLocation = LegoGameState::e_infomain;
 	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+}
+
+// STUB: LEGO1 0x10073460
+// STUB: BETA10 0x10016bc6
+void Act3::GoodEnding(const Matrix4& p_matrix)
+{
+	// TODO
+	DebugPrintf("In Good Ending...");
+}
+
+// FUNCTION: LEGO1 0x10073500
+void Act3::DebugPrintf(const char* p_format, ...)
+{
+	// empty
 }
 
 // FUNCTION: LEGO1 0x10073a90
