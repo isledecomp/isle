@@ -5,7 +5,6 @@
 #include "legogamestate.h"
 #include "legostate.h"
 #include "legoworld.h"
-#include "mxgeometry/mxmatrix.h"
 
 class Act3Brickster;
 class Act3Cop;
