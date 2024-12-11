@@ -2,6 +2,8 @@
 
 #include "legocachesoundmanager.h"
 #include "legocharactermanager.h"
+#include "legopathboundary.h"
+#include "legopathcontroller.h"
 #include "legosoundmanager.h"
 #include "misc.h"
 #include "roi/legoroi.h"
@@ -37,6 +39,25 @@ void Act3Ammo::Destroy(MxBool p_fromDestructor)
 		CharacterManager()->ReleaseActor(m_roi->GetName());
 		m_roi = NULL;
 	}
+}
+
+// FUNCTION: LEGO1 0x10053930
+// FUNCTION: BETA10 0x1001d7d0
+MxResult Act3Ammo::Remove()
+{
+	assert(IsValid());
+	assert(m_roi && m_pathController);
+
+	CharacterManager()->ReleaseActor(m_roi->GetName());
+	m_roi = NULL;
+
+	if (m_boundary != NULL) {
+		m_boundary->RemoveActor(this);
+	}
+
+	m_pathController->RemoveActor(this);
+	m_ammoFlag = 0;
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10053980
@@ -80,11 +101,39 @@ MxResult Act3Ammo::Create(Act3* p_a3, MxU32 p_isPizza, MxS32 p_index)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10053b40
-// STUB: BETA10 0x1001db2a
+// FUNCTION: LEGO1 0x10053b40
+// FUNCTION: BETA10 0x1001db2a
 MxResult Act3Ammo::FUN_10053b40(Vector3& p_srcLoc, Vector3& p_srcDir, Vector3& p_srcUp)
 {
-	// TODO
+	assert(p_srcDir[1] != 0);
+
+	MxFloat local1c = -(p_srcLoc[1] / p_srcDir[1]);
+	Mx3DPointFloat local18(p_srcDir);
+	Mx3DPointFloat local34;
+
+	local18 *= local1c;
+	local18 += p_srcLoc;
+
+	local34[0] = local34[2] = 0.0f;
+	local34[1] = -1.0f;
+
+	m_eq[1] = p_srcUp;
+	m_eq[2] = p_srcLoc;
+
+	Mx3DPointFloat local48(local34);
+	local48 -= m_eq[1];
+
+	for (MxS32 i = 0; i < 3; i++) {
+		if (local18[0] == p_srcLoc[0]) {
+			return FAILURE;
+		}
+
+		m_eq[0][i] = (local48[i] * local48[i] + local48[i] * m_eq[1][i] * 2.0f) / ((local18[i] - p_srcLoc[i]) * 4.0f);
+	}
+
+	assert(m_eq[0][0] > 0.000001 || m_eq[0][0] < -0.000001);
+
+	m_unk0x19c = local48[0] / (m_eq[0][0] * 2.0f);
 	return SUCCESS;
 }
 
