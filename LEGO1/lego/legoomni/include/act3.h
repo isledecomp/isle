@@ -21,6 +21,13 @@ struct Act3ListElement {
 	undefined4 m_unk0x04; // 0x04
 	undefined m_unk0x08;  // 0x08
 
+	Act3ListElement() {}
+
+	Act3ListElement(MxU32 p_objectId, undefined4 p_unk0x04, undefined p_unk0x08)
+		: m_objectId(p_objectId), m_unk0x04(p_unk0x04), m_unk0x08(p_unk0x08)
+	{
+	}
+
 	int operator==(Act3ListElement) const { return 0; }
 	int operator<(Act3ListElement) const { return 0; }
 };
@@ -30,7 +37,9 @@ class Act3List : private list<Act3ListElement> {
 public:
 	Act3List() { m_unk0x0c = 0; }
 
+	void Insert(MxS32 p_objectId, MxS32 p_option);
 	void FUN_10071fa0();
+	void Clear();
 	void FUN_100720d0(MxU32 p_objectId);
 
 private:
@@ -136,6 +145,15 @@ protected:
 	Act3Script::Script m_unk0x426c;     // 0x426c
 	LegoGameState::Area m_destLocation; // 0x4270
 };
+
+// TEMPLATE: LEGO1 0x10071f10
+// list<Act3ListElement,allocator<Act3ListElement> >::insert
+
+// TEMPLATE: LEGO1 0x10071f70
+// list<Act3ListElement,allocator<Act3ListElement> >::_Buynode
+
+// TEMPLATE: LEGO1 0x10072220
+// list<Act3ListElement,allocator<Act3ListElement> >::erase
 
 // TEMPLATE: LEGO1 0x10072440
 // list<Act3ListElement,allocator<Act3ListElement> >::~list<Act3ListElement,allocator<Act3ListElement> >

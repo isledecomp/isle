@@ -34,10 +34,68 @@ DECOMP_SIZE_ASSERT(Act3List, 0x10)
 Act3Script::Script g_unk0x100d95e8[] =
 	{Act3Script::c_tlp053in_RunAnim, Act3Script::c_tlp064la_RunAnim, Act3Script::c_tlp068in_RunAnim};
 
+// FUNCTION: LEGO1 0x10071d40
+void Act3List::Insert(MxS32 p_objectId, MxS32 p_option)
+{
+	if (m_unk0x0c) {
+		return;
+	}
+
+	switch (p_option) {
+	case 1:
+		if (!empty()) {
+			FUN_10071fa0();
+			push_back(Act3ListElement(p_objectId, p_option, FALSE));
+		}
+		else {
+			InvokeAction(Extra::e_start, *g_act3Script, p_objectId, NULL);
+			push_back(Act3ListElement(p_objectId, p_option, TRUE));
+		}
+		break;
+	case 2:
+		if (empty()) {
+			push_back(Act3ListElement(p_objectId, p_option, TRUE));
+			InvokeAction(Extra::e_start, *g_act3Script, p_objectId, NULL);
+		}
+		else {
+			push_back(Act3ListElement(p_objectId, p_option, FALSE));
+		}
+		break;
+	case 3:
+		if (empty()) {
+			push_back(Act3ListElement(p_objectId, p_option, TRUE));
+			InvokeAction(Extra::e_start, *g_act3Script, p_objectId, NULL);
+		}
+		break;
+	}
+}
+
 // FUNCTION: LEGO1 0x10071fa0
 void Act3List::FUN_10071fa0()
 {
 	DeleteAction();
+}
+
+// FUNCTION: LEGO1 0x10071fb0
+void Act3List::Clear()
+{
+	m_unk0x0c = 1;
+	BackgroundAudioManager()->Stop();
+
+	if (empty()) {
+		return;
+	}
+
+	for (Act3List::iterator it = begin(); it != end();) {
+		if ((*it).m_unk0x08) {
+			MxDSAction ds;
+			ds.SetAtomId(*g_act3Script);
+			ds.SetObjectId((*it).m_objectId);
+			DeleteObject(ds);
+		}
+
+		erase(it++);
+	}
 }
 
 // FUNCTION: LEGO1 0x100720d0
