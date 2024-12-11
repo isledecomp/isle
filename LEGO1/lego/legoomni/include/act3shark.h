@@ -24,7 +24,7 @@ public:
 	void VTable0x70(float p_time) override; // vtable+0x70
 
 	// LegoAnimActor vtable
-	virtual MxResult FUN_10042ce0(Act3Ammo*); // vtable+0x10
+	virtual MxResult FUN_10042ce0(Act3Ammo* p_ammo); // vtable+0x10
 
 	MxFloat GetUnknown0x2c() { return m_unk0x2c; }
 
