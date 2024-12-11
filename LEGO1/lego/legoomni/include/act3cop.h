@@ -1,8 +1,9 @@
 #ifndef ACT3COP_H
 #define ACT3COP_H
 
-#include "act3.h"
 #include "act3actors.h"
+
+class LegoWorld;
 
 // VTABLE: LEGO1 0x100d7750 LegoPathActor
 // VTABLE: LEGO1 0x100d7820 LegoAnimActor
@@ -27,7 +28,7 @@ public:
 
 private:
 	MxFloat m_unk0x20;       // 0x20
-	Act3* m_world;           // 0x24
+	LegoWorld* m_world;      // 0x24
 	undefined4 m_unk0x24[2]; // 0x28
 };
 

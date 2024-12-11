@@ -1,5 +1,6 @@
 #include "act3cop.h"
 
+#include "act3.h"
 #include "act3brickster.h"
 #include "legocachesoundmanager.h"
 #include "legosoundmanager.h"
@@ -28,7 +29,7 @@ MxResult Act3Cop::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 		}
 
 		assert(m_world);
-		m_world->EatDonut(count);
+		((Act3*) m_world)->EatDonut(count);
 		m_unk0x20 = m_lastTime + 2000;
 		SetWorldSpeed(6.0);
 
@@ -37,13 +38,13 @@ MxResult Act3Cop::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 		FUN_10040360();
 	}
 	else {
-		if (m_world->GetBrickster()->GetROI() != roi) {
+		if (((Act3*) m_world)->GetBrickster()->GetROI() != roi) {
 			if (p_bool) {
 				return Act3Actor::VTable0x94(p_actor, p_bool);
 			}
 		}
 		else {
-			m_world->GoodEnding(roi->GetLocal2World());
+			((Act3*) m_world)->GoodEnding(roi->GetLocal2World());
 		}
 	}
 
