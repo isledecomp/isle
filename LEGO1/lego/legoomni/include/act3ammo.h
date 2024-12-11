@@ -14,7 +14,8 @@ public:
 		c_pizza = 0x01,
 		c_donut = 0x02,
 		c_valid = 0x04,
-		c_bit4 = 0x08
+		c_bit4 = 0x08,
+		c_bit5 = 0x10
 	};
 
 	Act3Ammo();
@@ -54,6 +55,16 @@ public:
 		}
 		else {
 			m_ammoFlag &= ~c_bit4;
+		}
+	}
+
+	void SetBit5(MxBool p_bit5)
+	{
+		if (p_bit5) {
+			m_ammoFlag |= c_bit5;
+		}
+		else {
+			m_ammoFlag &= ~c_bit5;
 		}
 	}
 
