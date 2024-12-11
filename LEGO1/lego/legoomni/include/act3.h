@@ -5,6 +5,7 @@
 #include "legogamestate.h"
 #include "legostate.h"
 #include "legoworld.h"
+#include "mxgeometry/mxmatrix.h"
 
 class Act3Brickster;
 class Act3Cop;
@@ -112,13 +113,19 @@ public:
 	void SetHelicopter(Helicopter* p_copter) { m_copter = p_copter; }
 	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
 
+	Act3Brickster* GetBrickster() { return m_brickster; }
+
 	// SYNTHETIC: LEGO1 0x10072630
 	// Act3::`scalar deleting destructor'
 
+	void EatDonut(MxS32 p_index);
+	void RemoveDonut(Act3Ammo& p_p);
 	MxResult ShootPizza(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
 	MxResult ShootDonut(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
 	void FUN_10073400();
 	void FUN_10073430();
+	void GoodEnding(const Matrix4& p_matrix);
+	static void DebugPrintf(const char* p_format, ...);
 
 protected:
 	MxLong HandleTransitionEnd();
