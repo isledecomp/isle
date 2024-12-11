@@ -21,10 +21,12 @@ struct Act3ListElement {
 	undefined4 m_unk0x04; // 0x04
 	undefined m_unk0x08;  // 0x08
 
-	Act3ListElement(){};
+	Act3ListElement() {}
 
 	Act3ListElement(MxU32 p_objectId, undefined4 p_unk0x04, undefined p_unk0x08)
-		: m_objectId(p_objectId), m_unk0x04(p_unk0x04), m_unk0x08(p_unk0x08){};
+		: m_objectId(p_objectId), m_unk0x04(p_unk0x04), m_unk0x08(p_unk0x08)
+	{
+	}
 
 	int operator==(Act3ListElement) const { return 0; }
 	int operator<(Act3ListElement) const { return 0; }
