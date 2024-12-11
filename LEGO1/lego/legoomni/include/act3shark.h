@@ -3,6 +3,9 @@
 
 #include "legoanimactor.h"
 
+class Act3;
+class Act3Ammo;
+
 // VTABLE: LEGO1 0x100d7920 LegoPathActor
 // VTABLE: LEGO1 0x100d79f0 LegoAnimActor
 // SIZE 0x1a8
@@ -21,7 +24,7 @@ public:
 	void VTable0x70(float p_time) override; // vtable+0x70
 
 	// LegoAnimActor vtable
-	virtual MxResult FUN_10042ce0(void*); // vtable+0x10
+	virtual MxResult FUN_10042ce0(Act3Ammo* p_ammo); // vtable+0x10
 
 	MxFloat GetUnknown0x2c() { return m_unk0x2c; }
 
@@ -31,16 +34,22 @@ public:
 	// Act3Shark::`scalar deleting destructor'
 
 private:
-	list<void*> m_unk0x1c;     // 0x1c
-	undefined4 m_unk0x28;      // 0x28
-	MxFloat m_unk0x2c;         // 0x2c
-	undefined m_unk0x30[0x0c]; // 0x30
-	Mx3DPointFloat m_unk0x3c;  // 0x3c
+	list<Act3Ammo*> m_unk0x1c;      // 0x1c
+	undefined4 m_unk0x28;           // 0x28
+	MxFloat m_unk0x2c;              // 0x2c
+	Act3* m_a3;                     // 0x30
+	LegoAnimActorStruct* m_unk0x34; // 0x34
+	LegoROI* m_unk0x38;             // 0x38
+	Mx3DPointFloat m_unk0x3c;       // 0x3c
 };
 
-// STUB: LEGO1 0x10042c90
-// List<void *>::~List<void *>
-// TODO: Update once type is known.
-// STUB to resolve diff in scalar dtor and not create a new one.
+// TEMPLATE: LEGO1 0x10042c20
+// list<Act3Ammo *,allocator<Act3Ammo *> >::~list<Act3Ammo *,allocator<Act3Ammo *> >
+
+// TEMPLATE: LEGO1 0x10042c90
+// List<Act3Ammo *>::~List<Act3Ammo *>
+
+// GLOBAL: LEGO1 0x100d7918
+// Act3Shark::`vbtable'
 
 #endif // ACT3SHARK_H

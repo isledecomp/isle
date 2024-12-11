@@ -110,6 +110,7 @@ public:
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	void SetHelicopter(Helicopter* p_copter) { m_copter = p_copter; }
+	void SetShark(Act3Shark* p_shark) { m_shark = p_shark; }
 	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
 
 	// SYNTHETIC: LEGO1 0x10072630
