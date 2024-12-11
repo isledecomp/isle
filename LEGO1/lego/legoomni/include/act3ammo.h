@@ -61,6 +61,7 @@ public:
 
 	void SetUnknown0x158(MxFloat p_unk0x158) { m_unk0x158 = p_unk0x158; }
 
+	MxResult Remove();
 	MxResult Create(Act3* p_a3, MxU32 p_isPizza, MxS32 p_index);
 	MxResult FUN_10053b40(Vector3& p_srcLoc, Vector3& p_srcDir, Vector3& p_srcUp);
 	MxResult FUN_10053cb0(LegoPathController* p_p, LegoPathBoundary* p_boundary, MxFloat p_unk0x19c);

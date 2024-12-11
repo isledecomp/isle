@@ -2,6 +2,8 @@
 
 #include "legocachesoundmanager.h"
 #include "legocharactermanager.h"
+#include "legopathboundary.h"
+#include "legopathcontroller.h"
 #include "legosoundmanager.h"
 #include "misc.h"
 #include "roi/legoroi.h"
@@ -37,6 +39,25 @@ void Act3Ammo::Destroy(MxBool p_fromDestructor)
 		CharacterManager()->ReleaseActor(m_roi->GetName());
 		m_roi = NULL;
 	}
+}
+
+// FUNCTION: LEGO1 0x10053930
+// FUNCTION: BETA10 0x1001d7d0
+MxResult Act3Ammo::Remove()
+{
+	assert(IsValid());
+	assert(m_roi && m_pathController);
+
+	CharacterManager()->ReleaseActor(m_roi->GetName());
+	m_roi = NULL;
+
+	if (m_boundary != NULL) {
+		m_boundary->RemoveActor(this);
+	}
+
+	m_pathController->RemoveActor(this);
+	m_ammoFlag = 0;
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10053980
