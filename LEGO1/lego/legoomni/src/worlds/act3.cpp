@@ -2,9 +2,7 @@
 
 #include "3dmanager/lego3dmanager.h"
 #include "act3_actions.h"
-#include "act3brickster.h"
-#include "act3cop.h"
-#include "act3shark.h"
+#include "act3actors.h"
 #include "helicopter.h"
 #include "jukebox_actions.h"
 #include "legoanimationmanager.h"
