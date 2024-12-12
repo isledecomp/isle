@@ -660,6 +660,7 @@ MxBool LegoBuildingManager::FUN_10030110(LegoBuildingInfo* p_data)
 }
 
 // FUNCTION: LEGO1 0x10030150
+// FUNCTION: BETA10 0x100644ff
 void LegoBuildingManager::ScheduleAnimation(LegoEntity* p_entity, MxLong p_length, MxBool p_haveSound, MxBool p_unk0x28)
 {
 	m_world = CurrentWorld();

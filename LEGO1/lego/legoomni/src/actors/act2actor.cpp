@@ -2,14 +2,18 @@
 
 #include "3dmanager/lego3dmanager.h"
 #include "act2main_actions.h"
+#include "anim/legoanim.h"
 #include "legoact2.h"
+#include "legobuildingmanager.h"
 #include "legocachesoundmanager.h"
 #include "legopathcontroller.h"
 #include "legopathedgecontainer.h"
+#include "legoplantmanager.h"
 #include "legosoundmanager.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc.h"
+#include "mxdebug.h"
 #include "roi/legoroi.h"
 #include "viewmanager/viewmanager.h"
 
@@ -36,6 +40,17 @@ Act2Actor::UnknownListStructure g_unk0x100f0db8[] = {
 
 // GLOBAL: LEGO1 0x100f0f1c
 MxFloat g_unk0x100f0f1c = 0.0f;
+
+// GLOBAL: LEGO1 0x100f0f20
+// GLOBAL: BETA10 0x101dbe40
+MxBool g_unk0x100f0f20 = FALSE;
+
+// GLOBAL: LEGO1 0x100f0f24
+MxBool g_unk0x100f0f24 = FALSE;
+
+// GLOBAL: LEGO1 0x100f0f28
+// GLOBAL: BETA10 0x101dbe44
+MxBool g_unk0x100f0f28 = FALSE;
 
 // GLOBAL: LEGO1 0x10102b1c
 // GLOBAL: BETA10 0x10209f60
@@ -66,7 +81,7 @@ Act2Actor::Act2Actor()
 	m_unk0x44 = 0;
 	m_unk0x40 = 1;
 	m_unk0x48 = 0;
-	m_unk0x4c = 0;
+	m_unk0x4c = NULL;
 	m_unk0x38 = NULL;
 	m_unk0x3c = 0;
 
@@ -194,7 +209,7 @@ void Act2Actor::VTable0x70(float p_time)
 			FindROI("pwrbrik")->SetVisibility(FALSE);
 			FindROI("debrick")->SetVisibility(FALSE);
 			FindROI("ray")->SetVisibility(FALSE);
-			m_unk0x4c = 0;
+			m_unk0x4c = NULL;
 			m_unk0x1e = 2;
 			VTable0xa0();
 			FUN_10019250(m_unk0x28 + 3, p_time + 3000.0f);
@@ -496,11 +511,80 @@ MxS32 Act2Actor::VTable0xa0()
 	}
 }
 
-// STUB: LEGO1 0x10019700
-// STUB: BETA10 0x1000dd27
+// FUNCTION: LEGO1 0x10019700
+// FUNCTION: BETA10 0x1000dd27
 undefined4 Act2Actor::FUN_10019700(MxFloat p_param)
 {
-	// TODO
+	if (!m_unk0x4c) {
+		g_unk0x100f0f20 = FALSE;
+		m_unk0x4c = FUN_10019b90(&g_unk0x100f0f20);
+		g_unk0x100f0f24 = FALSE;
+		g_unk0x100f0f28 = FALSE;
+	}
+
+	if (!m_unk0x4c) {
+		MxTrace("nothing left to destroy at location %d\n", m_unk0x1d);
+		m_unk0x1e = 1;
+
+		if (m_unk0x1d == 8) {
+			((LegoAct2*) CurrentWorld())->FUN_10051f20();
+		}
+
+		return 1;
+	}
+
+	if ((!g_unk0x100f0f28) && (m_unk0x30 < p_param)) {
+		g_unk0x100f0f28 = TRUE;
+		assert(SoundManager()->GetCacheSoundManager());
+		SoundManager()->GetCacheSoundManager()->Play(m_unk0x38, "brickstr", FALSE);
+
+		if (g_unk0x100f0f20) {
+			BuildingManager()->ScheduleAnimation(m_unk0x4c, 800, TRUE, FALSE);
+		}
+		else {
+			PlantManager()->ScheduleAnimation(m_unk0x4c, 800);
+		}
+	}
+
+	if (m_unk0x2c < p_param) {
+		g_unk0x100f0f20 = FALSE;
+		m_unk0x4c = FUN_10019b90(&g_unk0x100f0f20);
+		m_unk0x2c = m_shootAnim->GetDuration() + p_param;
+		m_unk0x30 = m_unk0x2c - 1300.0f;
+		g_unk0x100f0f24 = FALSE;
+		g_unk0x100f0f28 = FALSE;
+		return 0;
+	}
+
+	m_lastTime = p_param;
+	LegoROI* brickstrROI = FindROI("brickstr");
+
+	MxMatrix matrix = m_roi->GetLocal2World();
+	matrix[3][1] += 1.0f;
+	brickstrROI->FUN_100a58f0(matrix);
+	brickstrROI->VTable0x14();
+
+	Vector3 col0(matrix[0]);
+	Vector3 col1(matrix[1]);
+	Vector3 col2(matrix[2]);
+	Vector3 col3(matrix[3]);
+
+	col2 = col3;
+	col2 -= m_unk0x4c->GetROI()->GetWorldPosition();
+	col2.Unitize();
+	col0.EqualsCross(&col1, &col2);
+	col0.Unitize();
+	col1.EqualsCross(&col2, &col3);
+
+	assert(!m_cameraFlag);
+
+	LegoTreeNode* root = m_shootAnim->GetAnimTreePtr()->GetRoot();
+	MxFloat time = p_param - (m_unk0x2c - m_shootAnim->GetDuration());
+
+	for (MxS32 i = 0; i < root->GetNumChildren(); i++) {
+		LegoROI::FUN_100a8e80(root->GetChild(i), matrix, time, m_shootAnim->GetROIMap());
+	}
+
 	return 0;
 }
 
@@ -572,6 +656,14 @@ void Act2Actor::FUN_100199f0(MxS8 p_param)
 			break;
 		}
 	}
+}
+
+// STUB: LEGO1 0x10019b90
+// STUB: BETA10 0x1000e374
+LegoEntity* Act2Actor::FUN_10019b90(undefined* p_param)
+{
+	// TODO
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x1001a180

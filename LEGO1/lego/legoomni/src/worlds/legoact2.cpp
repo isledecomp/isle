@@ -901,6 +901,14 @@ void LegoAct2::SpawnBricks()
 	m_nextBrick++;
 }
 
+// STUB: LEGO1 0x10051f20
+// STUB: BETA10 0x10013f48
+undefined4 LegoAct2::FUN_10051f20()
+{
+	// TODO
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x10051fa0
 // FUNCTION: BETA10 0x10013fd3
 void LegoAct2::FUN_10051fa0(MxS32 p_param1)

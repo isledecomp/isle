@@ -34,6 +34,7 @@ public:
 	undefined4 FUN_10019700(MxFloat p_param);
 	void FUN_100199f0(MxS8 p_param);
 	void FUN_100192a0(undefined4 p_param);
+	LegoEntity* FUN_10019b90(undefined* p_param);
 
 	// SYNTHETIC: LEGO1 0x1001a0a0
 	// Act2Actor::`scalar deleting destructor'
@@ -58,7 +59,7 @@ private:
 	undefined m_unk0x40;              // 0x40
 	MxFloat m_unk0x44;                // 0x44
 	MxS8 m_unk0x48;                   // 0x48
-	undefined4 m_unk0x4c;             // 0x4c
+	LegoEntity* m_unk0x4c;            // 0x4c
 };
 
 // TEMPLATE: LEGO1 0x100194f0

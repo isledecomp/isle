@@ -111,14 +111,18 @@ ViewManager* GetViewManager()
 }
 
 // FUNCTION: LEGO1 0x100157e0
+// FUNCTION: BETA10 0x100e4b29
 LegoPlantManager* PlantManager()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetPlantManager();
 }
 
 // FUNCTION: LEGO1 0x100157f0
+// FUNCTION: BETA10 0x100e4b70
 LegoBuildingManager* BuildingManager()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetBuildingManager();
 }
 

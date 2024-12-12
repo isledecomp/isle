@@ -21,6 +21,7 @@ public:
 
 	void UpdateListener(const float* p_position, const float* p_direction, const float* p_up, const float* p_velocity);
 
+	// FUNCTION: BETA10 0x1000f350
 	LegoCacheSoundManager* GetCacheSoundManager() { return m_cacheSoundManager; }
 
 private:
