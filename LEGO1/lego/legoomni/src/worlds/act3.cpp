@@ -534,6 +534,13 @@ MxResult Act3::Tickle()
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x100733f0
+// STUB: BETA10 0x10016ba2
+void Act3::SetBrickster(Act3Brickster* p_brickster)
+{
+	m_brickster = p_brickster;
+}
+
 // FUNCTION: LEGO1 0x10073400
 void Act3::FUN_10073400()
 {
