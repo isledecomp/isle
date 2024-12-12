@@ -109,9 +109,9 @@ MxLong JetskiRace::HandleEndAction(MxEndActionNotificationParam& p_param)
 	MxLong result = 0;
 
 	if ((p_param.GetAction()) && (p_param.GetAction()->GetObjectId() == JetraceScript::c_AirHorn_PlayWav)) {
-		m_unk0x110[0]->Mute(FALSE);
-		m_unk0x110[1]->Mute(FALSE);
-		m_unk0x110[2]->Mute(FALSE);
+		m_maps[0]->Mute(FALSE);
+		m_maps[1]->Mute(FALSE);
+		m_maps[2]->Mute(FALSE);
 
 		VariableTable()->SetVariable(g_raceState, g_racing);
 		result = 1;
