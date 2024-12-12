@@ -1334,21 +1334,21 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 				WriteNamedTexture(p_file, m_helicopterWindshield);
 			}
 			else {
-				FUN_1003f540(p_file, "chwind.gif");
+				WriteDefaultTexture(p_file, "chwind.gif");
 			}
 
 			if (m_helicopterJetLeft) {
 				WriteNamedTexture(p_file, m_helicopterJetLeft);
 			}
 			else {
-				FUN_1003f540(p_file, "chjetl.gif");
+				WriteDefaultTexture(p_file, "chjetl.gif");
 			}
 
 			if (m_helicopterJetRight) {
 				WriteNamedTexture(p_file, m_helicopterJetRight);
 			}
 			else {
-				FUN_1003f540(p_file, "chjetr.gif");
+				WriteDefaultTexture(p_file, "chjetr.gif");
 			}
 		}
 
@@ -1357,14 +1357,14 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 				WriteNamedTexture(p_file, m_jetskiFront);
 			}
 			else {
-				FUN_1003f540(p_file, "jsfrnt.gif");
+				WriteDefaultTexture(p_file, "jsfrnt.gif");
 			}
 
 			if (m_jetskiWindshield) {
 				WriteNamedTexture(p_file, m_jetskiWindshield);
 			}
 			else {
-				FUN_1003f540(p_file, "jswnsh.gif");
+				WriteDefaultTexture(p_file, "jswnsh.gif");
 			}
 		}
 
@@ -1373,7 +1373,7 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 				WriteNamedTexture(p_file, m_dunebuggyFront);
 			}
 			else {
-				FUN_1003f540(p_file, "dbfrfn.gif");
+				WriteDefaultTexture(p_file, "dbfrfn.gif");
 			}
 		}
 
@@ -1382,21 +1382,21 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 				WriteNamedTexture(p_file, m_racecarFront);
 			}
 			else {
-				FUN_1003f540(p_file, "rcfrnt.gif");
+				WriteDefaultTexture(p_file, "rcfrnt.gif");
 			}
 
 			if (m_racecarBack) {
 				WriteNamedTexture(p_file, m_racecarBack);
 			}
 			else {
-				FUN_1003f540(p_file, "rcback.gif");
+				WriteDefaultTexture(p_file, "rcback.gif");
 			}
 
 			if (m_racecarTail) {
 				WriteNamedTexture(p_file, m_racecarTail);
 			}
 			else {
-				FUN_1003f540(p_file, "rctail.gif");
+				WriteDefaultTexture(p_file, "rctail.gif");
 			}
 		}
 

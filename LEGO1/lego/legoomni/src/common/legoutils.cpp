@@ -686,9 +686,75 @@ LegoNamedTexture* ReadNamedTexture(LegoFile* p_file)
 	return namedTexture;
 }
 
-// STUB: LEGO1 0x1003f540
-void FUN_1003f540(LegoFile* p_file, const char* p_filename)
+// FUNCTION: LEGO1 0x1003f540
+void WriteDefaultTexture(LegoFile* p_file, const char* p_name)
 {
+	MxString name(p_name);
+	LegoTextureInfo* textureInfo = TextureContainer()->Get(p_name);
+
+	if (textureInfo != NULL) {
+		DDSURFACEDESC desc;
+		LegoPaletteEntry paletteEntries[256];
+
+		LPDIRECTDRAWSURFACE surface = textureInfo->m_surface;
+		memset(&desc, 0, sizeof(desc));
+		desc.dwSize = sizeof(desc);
+
+		if (surface->Lock(NULL, &desc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
+			LegoImage* image = new LegoImage(desc.dwWidth, desc.dwHeight);
+
+			if (image != NULL) {
+				if (desc.dwWidth == desc.lPitch) {
+					memcpy(desc.lpSurface, image->GetBits(), desc.dwWidth * desc.dwHeight);
+				}
+				else {
+					MxU8* surface = (MxU8*) desc.lpSurface;
+					LegoU8* bits = image->GetBits();
+
+					for (MxS32 i = 0; i < desc.dwHeight; i++) {
+						memcpy(surface, bits, desc.dwWidth);
+						surface += desc.lPitch;
+						bits += desc.dwWidth;
+					}
+				}
+
+				surface->Unlock(desc.lpSurface);
+
+				PALETTEENTRY entries[256];
+				if (textureInfo->m_palette->GetEntries(0, 0, sizeOfArray(entries), entries) == DD_OK) {
+					MxS32 i;
+					for (i = 0; i < sizeOfArray(entries); i++) {
+						if (entries[i].peFlags != 0) {
+							break;
+						}
+
+						paletteEntries[i].SetRed(entries[i].peRed);
+						paletteEntries[i].SetGreen(entries[i].peGreen);
+						paletteEntries[i].SetBlue(entries[i].peBlue);
+					}
+
+					image->SetCount(i);
+
+					if (i > 0) {
+						// Note: this appears to be a bug. size should be i * sizeof(LegoPaletteEntry)
+						memcpy(image->GetPalette(), paletteEntries, i);
+					}
+
+					LegoTexture texture;
+					texture.SetImage(image);
+
+					p_file->WriteString(name);
+					texture.Write(p_file);
+				}
+				else {
+					delete image;
+				}
+			}
+			else {
+				surface->Unlock(desc.lpSurface);
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1003f8a0
