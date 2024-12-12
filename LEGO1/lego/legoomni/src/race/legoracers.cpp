@@ -499,6 +499,7 @@ MxResult LegoRaceCar::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			return FAILURE;
 		}
 	}
+
 	return SUCCESS;
 }
 

@@ -115,5 +115,6 @@ MxResult LegoRaceActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			p_actor->SetState(2);
 		}
 	}
-	return 0;
+
+	return SUCCESS;
 }
