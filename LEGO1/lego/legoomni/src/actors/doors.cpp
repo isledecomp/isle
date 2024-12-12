@@ -24,7 +24,7 @@ MxFloat g_unk0x100d8e84 = 6000.0f;
 
 // FUNCTION: LEGO1 0x10066100
 // FUNCTION: BETA10 0x10026850
-MxResult Doors::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
+MxResult Doors::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
 	assert(m_ltDoor && m_rtDoor);
 

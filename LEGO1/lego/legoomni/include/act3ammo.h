@@ -68,6 +68,8 @@ public:
 		}
 	}
 
+	MxU32 IsBit5() { return m_ammoFlag & c_bit5; }
+
 	MxFloat GetUnknown0x158() { return m_unk0x158; }
 
 	void SetUnknown0x158(MxFloat p_unk0x158) { m_unk0x158 = p_unk0x158; }

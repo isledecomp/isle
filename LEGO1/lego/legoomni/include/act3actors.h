@@ -23,8 +23,8 @@ public:
 		return "Act3Actor";
 	}
 
-	MxU32 VTable0x90(float p_time, Matrix4& p_transform) override;       // vtable+0x90
-	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
+	MxU32 VTable0x90(float p_time, Matrix4& p_transform) override;     // vtable+0x90
+	MxResult HitActor(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 
 	MxFloat GetUnknown0x1c() { return m_unk0x1c; }
 
@@ -37,9 +37,9 @@ public:
 	// Act3Actor::~Act3Actor
 
 private:
-	MxFloat m_unk0x1c; // 0x1c
-
 	static Mx3DPointFloat g_unk0x10104ef0;
+
+	MxFloat m_unk0x1c; // 0x1c
 };
 
 // VTABLE: LEGO1 0x100d7750 LegoPathActor
@@ -49,10 +49,10 @@ class Act3Cop : public Act3Actor {
 public:
 	Act3Cop();
 
-	void ParseAction(char* p_extra) override;             // vtable+0x20
-	void VTable0x70(float p_time) override;               // vtable+0x70
-	MxResult VTable0x94(LegoPathActor*, MxBool) override; // vtable+0x94
-	MxResult VTable0x9c() override;                       // vtable+0x9c
+	void ParseAction(char* p_extra) override;           // vtable+0x20
+	void VTable0x70(float p_time) override;             // vtable+0x70
+	MxResult HitActor(LegoPathActor*, MxBool) override; // vtable+0x94
+	MxResult VTable0x9c() override;                     // vtable+0x9c
 
 	MxFloat GetUnknown0x20() { return m_unk0x20; }
 
@@ -66,7 +66,7 @@ public:
 private:
 	MxFloat m_unk0x20;       // 0x20
 	LegoWorld* m_world;      // 0x24
-	undefined4 m_unk0x24[2]; // 0x28
+	undefined4 m_unk0x28[2]; // 0x28
 };
 
 // VTABLE: LEGO1 0x100d7838 LegoPathActor
@@ -77,9 +77,9 @@ public:
 	Act3Brickster();
 	~Act3Brickster() override;
 
-	void ParseAction(char* p_extra) override;             // vtable+0x20
-	void VTable0x70(float p_time) override;               // vtable+0x70
-	MxResult VTable0x94(LegoPathActor*, MxBool) override; // vtable+0x94
+	void ParseAction(char* p_extra) override;                          // vtable+0x20
+	void VTable0x70(float p_time) override;                            // vtable+0x70
+	MxResult HitActor(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 	void SwitchBoundary(
 		LegoPathBoundary*& p_boundary,
 		LegoUnknown100db7f4*& p_edge,

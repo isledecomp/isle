@@ -39,9 +39,9 @@ public:
 		float p_f1,
 		float p_f2,
 		Vector3& p_v3
-	) override;                                                          // vtable+0x6c
-	void VTable0x70(float p_time) override;                              // vtable+0x70
-	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
+	) override;                                                        // vtable+0x6c
+	void VTable0x70(float p_time) override;                            // vtable+0x70
+	MxResult HitActor(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 	void SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
 		override;                   // vtable+0x98
 	MxResult VTable0x9c() override; // vtable+0x9c

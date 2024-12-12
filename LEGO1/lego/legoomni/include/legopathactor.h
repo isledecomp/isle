@@ -91,7 +91,7 @@ public:
 	virtual MxU32 VTable0x90(float, Matrix4&) { return FALSE; } // vtable+0x90
 
 	// FUNCTION: LEGO1 0x10002d50
-	virtual MxResult VTable0x94(LegoPathActor*, MxBool) { return 0; } // vtable+0x94
+	virtual MxResult HitActor(LegoPathActor*, MxBool) { return 0; } // vtable+0x94
 
 	virtual void SwitchBoundary(
 		LegoPathBoundary*& p_boundary,

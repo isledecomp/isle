@@ -103,7 +103,7 @@ void Act2Actor::FUN_10018980()
 
 // FUNCTION: LEGO1 0x100189f0
 // FUNCTION: BETA10 0x1000ca64
-MxResult Act2Actor::VTable0x94(LegoPathActor*, MxBool)
+MxResult Act2Actor::HitActor(LegoPathActor*, MxBool)
 {
 	if (m_unk0x1f == FALSE) {
 		m_unk0x1f = TRUE;
@@ -117,7 +117,7 @@ MxResult Act2Actor::VTable0x94(LegoPathActor*, MxBool)
 // FUNCTION: LEGO1 0x10018a20
 MxResult Act2Actor::VTable0x9c()
 {
-	if (m_grec && !(m_grec->m_flags & LegoPathEdgeContainer::c_bit1)) {
+	if (m_grec && !m_grec->GetBit1()) {
 		delete m_grec;
 		m_grec = NULL;
 		return SUCCESS;

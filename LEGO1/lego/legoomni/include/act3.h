@@ -113,12 +113,12 @@ public:
 	void SetShark(Act3Shark* p_shark) { m_shark = p_shark; }
 	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
 
-	Act3Brickster* GetBrickster() { return m_brickster; }
-
 	// SYNTHETIC: LEGO1 0x10072630
 	// Act3::`scalar deleting destructor'
 
+	void EatPizza(MxS32 p_index);
 	void EatDonut(MxS32 p_index);
+	void RemovePizza(Act3Ammo& p_p);
 	void RemoveDonut(Act3Ammo& p_p);
 	MxResult ShootPizza(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
 	MxResult ShootDonut(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
@@ -127,6 +127,11 @@ public:
 	void FUN_10073430();
 	void GoodEnding(const Matrix4& p_matrix);
 	static void DebugPrintf(const char* p_format, ...);
+
+	// BETA indicates that the actors access certain members directly.
+	friend class Act3Brickster;
+	friend class Act3Cop;
+	friend class Act3Shark;
 
 protected:
 	MxLong HandleTransitionEnd();

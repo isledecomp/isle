@@ -428,7 +428,7 @@ void LegoRaceCar::VTable0x70(float p_time)
 
 // FUNCTION: LEGO1 0x100133c0
 // FUNCTION: BETA10 0x100cbb84
-MxResult LegoRaceCar::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
+MxResult LegoRaceCar::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
 	// Note: Code duplication with LegoRaceActor::VTable0x94
 	if (!p_actor->GetUserNavFlag()) {

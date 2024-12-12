@@ -5,8 +5,11 @@
 #include "define.h"
 #include "legocachesoundmanager.h"
 #include "legolocomotionanimpresenter.h"
+#include "legopathedgecontainer.h"
 #include "legosoundmanager.h"
 #include "misc.h"
+#include "mxmisc.h"
+#include "mxtimer.h"
 #include "mxutilities.h"
 #include "roi/legoroi.h"
 
@@ -76,7 +79,7 @@ MxU32 Act3Actor::VTable0x90(float p_time, Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x1003fd90
-MxResult Act3Actor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
+MxResult Act3Actor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
 	if (!p_actor->GetUserNavFlag() && p_bool) {
 		if (p_actor->GetState()) {
@@ -110,9 +113,10 @@ Act3Cop::Act3Cop()
 
 // FUNCTION: LEGO1 0x1003ff70
 // FUNCTION: BETA10 0x10018526
-MxResult Act3Cop::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
+MxResult Act3Cop::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
 	LegoROI* roi = p_actor->GetROI();
+
 	if (p_bool && !strncmp(roi->GetName(), "dammo", 5)) {
 		MxS32 count = -1;
 		if (sscanf(roi->GetName(), "dammo%d", &count) != 1) {
@@ -129,9 +133,9 @@ MxResult Act3Cop::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 		FUN_10040360();
 	}
 	else {
-		if (((Act3*) m_world)->GetBrickster()->GetROI() != roi) {
+		if (((Act3*) m_world)->m_brickster->GetROI() != roi) {
 			if (p_bool) {
-				return Act3Actor::VTable0x94(p_actor, p_bool);
+				return Act3Actor::HitActor(p_actor, p_bool);
 			}
 		}
 		else {
@@ -220,10 +224,39 @@ void Act3Brickster::VTable0x70(float p_time)
 	// TODO
 }
 
-// STUB: LEGO1 0x100416b0
-MxResult Act3Brickster::VTable0x94(LegoPathActor*, MxBool)
+// FUNCTION: LEGO1 0x100416b0
+// FUNCTION: BETA10 0x1001a299
+MxResult Act3Brickster::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
-	// TODO
+	if (!p_bool) {
+		return FAILURE;
+	}
+
+	Act3* a3 = (Act3*) m_world;
+	LegoROI* r = p_actor->GetROI();
+	assert(r);
+
+	if (a3->m_cop1->GetROI() != r && a3->m_cop2->GetROI() != r) {
+		if (!strncmp(r->GetName(), "pammo", 5)) {
+			MxS32 count = -1;
+			if (sscanf(r->GetName(), "pammo%d", &count) != 1) {
+				assert(0);
+			}
+
+			assert(m_world);
+
+			if (a3->m_pizzas[count].IsValid() && !a3->m_pizzas[count].IsBit5()) {
+				a3->EatPizza(count);
+			}
+
+			m_unk0x38 = 2;
+			return SUCCESS;
+		}
+		else {
+			return Act3Actor::HitActor(p_actor, p_bool);
+		}
+	}
+
 	return SUCCESS;
 }
 
@@ -235,17 +268,27 @@ MxResult Act3Brickster::FUN_100417c0()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10042990
+// FUNCTION: LEGO1 0x10042990
+// FUNCTION: BETA10 0x1001b6e2
 void Act3Brickster::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
 {
-	// TODO
+	if (m_unk0x38 != 8) {
+		m_boundary->SwitchBoundary(this, p_boundary, p_edge, p_unk0xe4);
+	}
 }
 
-// STUB: LEGO1 0x100429d0
+// FUNCTION: LEGO1 0x100429d0
+// FUNCTION: BETA10 0x1001b75b
 MxResult Act3Brickster::VTable0x9c()
 {
-	// TODO
-	return SUCCESS;
+	if (m_grec && !m_grec->GetBit1()) {
+		delete m_grec;
+		m_grec = NULL;
+		m_lastTime = Timer()->GetTime();
+		return SUCCESS;
+	}
+
+	return Act3Actor::VTable0x9c();
 }
 
 // FUNCTION: LEGO1 0x10042ab0
