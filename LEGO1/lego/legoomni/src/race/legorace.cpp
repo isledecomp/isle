@@ -24,9 +24,9 @@ LegoRace::LegoRace()
 	m_unk0x108 = 0;
 	m_unk0x10c = 0;
 	m_raceState = NULL;
-	m_unk0x110[0] = NULL;
-	m_unk0x110[1] = NULL;
-	m_unk0x110[2] = NULL;
+	m_maps[0] = NULL;
+	m_maps[1] = NULL;
+	m_maps[2] = NULL;
 	m_unk0x128 = 0;
 	m_unk0x12c = 0;
 	m_pathActor = 0;

@@ -140,9 +140,9 @@ public:
 
 	// FUNCTION: LEGO1 0x1000dac0
 	// FUNCTION: BETA10 0x100a87d0
-	virtual void VTable0x7c(LegoRaceActor* p_map, MxU32 p_index) // vtable+0x7c
+	virtual void VTable0x7c(LegoRaceMap* p_map, MxU32 p_index) // vtable+0x7c
 	{
-		m_unk0x110[p_index] = (LegoRaceActor*) p_map;
+		m_maps[p_index] = p_map;
 	}
 
 	// SYNTHETIC: LEGO1 0x10015cc0
@@ -155,7 +155,7 @@ protected:
 	MxS32 m_unk0x104;                   // 0x104
 	MxS32 m_unk0x108;                   // 0x108
 	MxS32 m_unk0x10c;                   // 0x10c
-	LegoRaceActor* m_unk0x110[3];       // 0x110
+	LegoRaceMap* m_maps[3];             // 0x110
 	LegoGameState::Area m_destLocation; // 0x11c
 	LegoPathActor* m_pathActor;         // 0x120
 	Act1State* m_act1State;             // 0x124

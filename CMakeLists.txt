@@ -353,7 +353,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
     LEGO1/lego/legoomni/src/entity/legoentity.cpp
     LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
-    LEGO1/lego/legoomni/src/entity/legojetski.cpp
     LEGO1/lego/legoomni/src/entity/legojetskiraceactor.cpp
     LEGO1/lego/legoomni/src/entity/legolocations.cpp
     LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp

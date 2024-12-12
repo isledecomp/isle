@@ -3,10 +3,12 @@
 #include "anim/legoanim.h"
 #include "carrace.h"
 #include "define.h"
+#include "jetskirace.h"
 #include "legocachesoundmanager.h"
 #include "legocameracontroller.h"
 #include "legonavcontroller.h"
 #include "legorace.h"
+#include "legoracers.h"
 #include "legosoundmanager.h"
 #include "misc.h"
 #include "mxdebug.h"
@@ -20,6 +22,7 @@
 DECOMP_SIZE_ASSERT(EdgeReference, 0x08)
 DECOMP_SIZE_ASSERT(SkeletonKickPhase, 0x10)
 DECOMP_SIZE_ASSERT(LegoRaceCar, 0x200)
+DECOMP_SIZE_ASSERT(LegoJetski, 0x1dc)
 
 // GLOBAL: LEGO1 0x100f0a20
 // GLOBAL: BETA10 0x101f5e34
@@ -70,6 +73,9 @@ const SkeletonKickPhase LegoRaceCar::g_skeletonKickPhases[] = {
 // the STRING is already declared at LEGO1 0x101020b8
 // GLOBAL: LEGO1 0x100f0b10
 const char* LegoRaceCar::g_strSpeed = "SPEED";
+
+// GLOBAL: LEGO1 0x100f0b14
+const char* LegoRaceCar::g_strJetSpeed = "jetSPEED";
 
 // GLOBAL: LEGO1 0x100f0b18
 // GLOBAL: BETA10 0x101f5f28
@@ -430,7 +436,7 @@ void LegoRaceCar::VTable0x70(float p_time)
 // FUNCTION: BETA10 0x100cbb84
 MxResult LegoRaceCar::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
-	// Note: Code duplication with LegoRaceActor::VTable0x94
+	// Note: Code duplication with LegoRaceActor::HitActor
 	if (!p_actor->GetUserNavFlag()) {
 		if (p_actor->GetState()) {
 			return FAILURE;
@@ -548,6 +554,129 @@ void LegoRaceCar::FUN_10013670()
 	// Inlining the `rand()` causes this function to mismatch
 	MxU32 uVar1 = rand();
 	g_unk0x100f0bb0 = uVar1 % 0xc >> 2;
+}
+
+// FUNCTION: LEGO1 0x100136a0
+// FUNCTION: BETA10 0x100cbf7e
+void LegoJetski::SetWorldSpeed(MxFloat p_worldSpeed)
+{
+	if (!m_userNavFlag) {
+		if (!LegoCarRaceActor::m_unk0x0c) {
+			m_maxLinearVel = p_worldSpeed;
+		}
+		LegoAnimActor::SetWorldSpeed(p_worldSpeed);
+	}
+	else {
+		LegoEntity::SetWorldSpeed(p_worldSpeed);
+	}
+}
+
+// FUNCTION: LEGO1 0x100136f0
+// FUNCTION: BETA10 0x100cc01a
+void LegoJetski::FUN_100136f0(float p_worldSpeed)
+{
+	if (p_worldSpeed < 0) {
+		LegoCarRaceActor::m_unk0x0c = 2;
+		m_maxLinearVel = 0;
+		SetWorldSpeed(0);
+	}
+	else {
+		m_maxLinearVel = p_worldSpeed;
+	}
+}
+
+// FUNCTION: LEGO1 0x10013740
+// FUNCTION: BETA10 0x100cc0ae
+void LegoJetski::VTable0x70(float p_time)
+{
+	LegoJetskiRaceActor::VTable0x70(p_time);
+
+	if (LegoCarRaceActor::m_unk0x0c == 1) {
+		FUN_1005d4b0();
+
+		if (!m_userNavFlag) {
+			FUN_10080590(p_time);
+			return;
+		}
+
+		float absoluteSpeed = abs(m_worldSpeed);
+		float speedRatio = absoluteSpeed / NavController()->GetMaxLinearVel();
+		char buffer[200];
+
+		sprintf(buffer, "%g", speedRatio);
+
+		VariableTable()->SetVariable(LegoRaceCar::g_strJetSpeed, buffer);
+
+		if (m_sound) {
+			m_frequencyFactor = speedRatio * 1.2 + 0.7;
+		}
+	}
+}
+
+// FUNCTION: LEGO1 0x10013820
+LegoJetski::LegoJetski()
+{
+	NotificationManager()->Register(this);
+}
+
+// FUNCTION: LEGO1 0x10013aa0
+LegoJetski::~LegoJetski()
+{
+	NotificationManager()->Unregister(this);
+}
+
+// FUNCTION: LEGO1 0x10013bb0
+// FUNCTION: BETA10 0x100cc6df
+void LegoJetski::ParseAction(char* p_extra)
+{
+	char buffer[256];
+
+	LegoAnimActor::ParseAction(p_extra);
+	LegoRaceMap::ParseAction(p_extra);
+	JetskiRace* currentWorld = (JetskiRace*) CurrentWorld();
+
+	if (KeyValueStringParse(buffer, g_strCOMP, p_extra) && currentWorld) {
+		currentWorld->VTable0x7c(this, atoi(buffer));
+	}
+}
+
+// FUNCTION: LEGO1 0x10013c30
+// FUNCTION: BETA10 0x100cc76a
+MxLong LegoJetski::Notify(MxParam& p_param)
+{
+	return LegoRaceMap::Notify(p_param);
+}
+
+// STUB: LEGO1 0x10013c40
+MxResult LegoJetski::HitActor(LegoPathActor* p_actor, MxBool p_bool)
+{
+	// very similar to LegoRaceCar::HitActor
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x10014150
+MxU32 LegoJetski::VTable0x6c(
+	LegoPathBoundary* p_boundary,
+	Vector3& p_v1,
+	Vector3& p_v2,
+	float p_f1,
+	float p_f2,
+	Vector3& p_v3
+)
+{
+	return LegoJetskiRaceActor::VTable0x6c(p_boundary, p_v1, p_v2, p_f1, p_f2, p_v3);
+}
+
+// FUNCTION: LEGO1 0x100141d0
+void LegoJetski::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
+{
+	LegoJetskiRaceActor::SwitchBoundary(p_boundary, p_edge, p_unk0xe4);
+}
+
+// FUNCTION: LEGO1 0x10014210
+MxResult LegoJetski::VTable0x9c()
+{
+	return LegoJetskiRaceActor::VTable0x9c();
 }
 
 // FUNCTION: LEGO1 0x10014500

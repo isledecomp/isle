@@ -154,9 +154,9 @@ MxLong CarRace::HandleEndAction(MxEndActionNotificationParam& p_param)
 			result = 1;
 		}
 		else if (objectId == CarraceScript::c_irtx08ra_PlayWav && m_destLocation == LegoGameState::e_undefined) {
-			m_unk0x110[0]->Mute(FALSE);
-			m_unk0x110[1]->Mute(FALSE);
-			m_unk0x110[2]->Mute(FALSE);
+			m_maps[0]->Mute(FALSE);
+			m_maps[1]->Mute(FALSE);
+			m_maps[2]->Mute(FALSE);
 
 			VariableTable()->SetVariable(g_raceState, g_racing);
 			result = 1;
@@ -200,19 +200,19 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				if (g_unk0x100f0c7c == m_unk0xf8) {
 					VariableTable()->SetVariable(g_raceState, "");
 
-					m_unk0x110[0]->Mute(TRUE);
-					m_unk0x110[1]->Mute(TRUE);
-					m_unk0x110[2]->Mute(TRUE);
+					m_maps[0]->Mute(TRUE);
+					m_maps[1]->Mute(TRUE);
+					m_maps[2]->Mute(TRUE);
 
-					m_unk0x110[0]->SetMaxLinearVel(-1.0);
-					m_unk0x110[1]->SetMaxLinearVel(-1.0);
-					m_unk0x110[2]->SetMaxLinearVel(-1.0);
+					m_maps[0]->SetMaxLinearVel(-1.0);
+					m_maps[1]->SetMaxLinearVel(-1.0);
+					m_maps[2]->SetMaxLinearVel(-1.0);
 
-					RemoveActor(m_unk0x110[1]);
-					m_unk0x110[1]->ClearMaps();
+					RemoveActor(m_maps[1]);
+					// m_unk0x110[1]->ClearMaps();
 
-					RemoveActor(m_unk0x110[2]);
-					m_unk0x110[2]->ClearMaps();
+					RemoveActor(m_maps[2]);
+					// m_unk0x110[2]->ClearMaps();
 
 					MxS32 position;
 
@@ -273,10 +273,10 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				m_unk0xfc++;
 
 				if (g_unk0x100f0c7c == m_unk0xfc) {
-					m_unk0x110[1]->SetMaxLinearVel(-1.0);
-					RemoveActor(m_unk0x110[1]);
-					m_unk0x110[1]->ClearMaps();
-					m_unk0x110[1]->GetROI()->SetVisibility(FALSE);
+					m_maps[1]->SetMaxLinearVel(-1.0);
+					RemoveActor(m_maps[1]);
+					// m_unk0x110[1]->ClearMaps();
+					m_maps[1]->GetROI()->SetVisibility(FALSE);
 
 					LegoROI* roi = FindROI("rcblack");
 
@@ -301,10 +301,10 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				m_unk0x100++;
 
 				if (g_unk0x100f0c7c == m_unk0x100) {
-					m_unk0x110[2]->SetMaxLinearVel(-1.0);
-					RemoveActor(m_unk0x110[2]);
-					m_unk0x110[2]->ClearMaps();
-					m_unk0x110[2]->GetROI()->SetVisibility(FALSE);
+					m_maps[2]->SetMaxLinearVel(-1.0);
+					RemoveActor(m_maps[2]);
+					// m_unk0x110[2]->ClearMaps();
+					m_maps[2]->GetROI()->SetVisibility(FALSE);
 
 					LegoROI* roi = FindROI("rcgreen");
 
