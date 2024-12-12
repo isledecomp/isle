@@ -101,12 +101,17 @@ public:
 	// Act3Brickster::`scalar deleting destructor'
 
 private:
-	MxFloat m_unk0x20;        // 0x20
-	MxFloat m_unk0x24;        // 0x24
-	undefined4 m_unk0x28[10]; // 0x28
-	MxFloat m_unk0x50;        // 0x50
-	undefined4 m_unk0x54;     // 0x54
-	undefined4 m_unk0x58;     // 0x58
+	MxFloat m_unk0x20;                // 0x20
+	MxFloat m_unk0x24;                // 0x24
+	LegoWorld* m_world;               // 0x28
+	undefined4 m_unk0x2c;             // 0x2c
+	undefined4 m_unk0x30;             // 0x30
+	LegoAnimActorStruct* m_shootAnim; // 0x34
+	undefined4 m_unk0x38;             // 0x38
+	Mx3DPointFloat m_unk0x3c;         // 0x3c
+	MxFloat m_unk0x50;                // 0x50
+	undefined4 m_unk0x54;             // 0x54
+	undefined m_unk0x58;              // 0x58
 };
 
 // VTABLE: LEGO1 0x100d7920 LegoPathActor
@@ -146,6 +151,9 @@ private:
 	Mx3DPointFloat m_unk0x3c;       // 0x3c
 };
 
+// FUNCTION: LEGO1 0x1003ff10
+// Act3Actor::`vbase destructor'
+
 // TEMPLATE: LEGO1 0x10042c20
 // list<Act3Ammo *,allocator<Act3Ammo *> >::~list<Act3Ammo *,allocator<Act3Ammo *> >
 
@@ -154,6 +162,12 @@ private:
 
 // GLOBAL: LEGO1 0x100d7660
 // Act3Actor::`vbtable'
+
+// GLOBAL: LEGO1 0x100d7748
+// Act3Cop::`vbtable'
+
+// GLOBAL: LEGO1 0x100d7830
+// Act3Brickster::`vbtable'
 
 // GLOBAL: LEGO1 0x100d7918
 // Act3Shark::`vbtable'

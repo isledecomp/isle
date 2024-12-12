@@ -122,6 +122,7 @@ public:
 	void RemoveDonut(Act3Ammo& p_p);
 	MxResult ShootPizza(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
 	MxResult ShootDonut(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
+	void SetBrickster(Act3Brickster* p_brickster);
 	void FUN_10073400();
 	void FUN_10073430();
 	void GoodEnding(const Matrix4& p_matrix);

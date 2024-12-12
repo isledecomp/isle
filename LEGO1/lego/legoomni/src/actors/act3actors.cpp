@@ -99,10 +99,13 @@ MxResult Act3Actor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1003fe30
+// FUNCTION: LEGO1 0x1003fe30
+// FUNCTION: BETA10 0x10018412
 Act3Cop::Act3Cop()
 {
-	// TODO
+	m_unk0x20 = -1.0f;
+	m_world = NULL;
+	SetState(c_bit3);
 }
 
 // FUNCTION: LEGO1 0x1003ff70
@@ -140,6 +143,7 @@ MxResult Act3Cop::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 }
 
 // STUB: LEGO1 0x10040060
+// STUB: BETA10 0x100186fa
 void Act3Cop::ParseAction(char* p_extra)
 {
 	// TODO
@@ -165,22 +169,49 @@ MxResult Act3Cop::VTable0x9c()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10040e10
+// FUNCTION: LEGO1 0x10040e10
+// FUNCTION: BETA10 0x10019516
 Act3Brickster::Act3Brickster()
 {
-	// TODO
+	m_world = NULL;
+	m_unk0x2c = 0;
+	m_unk0x30 = 0;
+	m_shootAnim = NULL;
+	m_unk0x38 = 0;
+	m_unk0x20 = 0.0f;
+	m_unk0x24 = 0.0f;
+	m_unk0x54 = 0;
+
+	SetState(c_bit3);
+	m_unk0x58 = 0;
+
+	m_unk0x3c.Clear();
 }
 
 // FUNCTION: LEGO1 0x10040f20
+// FUNCTION: BETA10 0x10019663
 Act3Brickster::~Act3Brickster()
 {
-	// TODO
+	// empty
 }
 
-// STUB: LEGO1 0x10040ff0
+// FUNCTION: LEGO1 0x10040ff0
+// FUNCTION: BETA10 0x100196ff
 void Act3Brickster::ParseAction(char* p_extra)
 {
-	// TODO
+	m_world = CurrentWorld();
+
+	LegoAnimActor::ParseAction(p_extra);
+
+	((Act3*) m_world)->SetBrickster(this);
+
+	for (MxS32 i = 0; i < m_animMaps.size(); i++) {
+		if (m_animMaps[i]->GetUnknown0x00() == -1.0f) {
+			m_shootAnim = m_animMaps[i];
+		}
+	}
+
+	assert(m_shootAnim);
 }
 
 // STUB: LEGO1 0x10041050
