@@ -166,11 +166,19 @@ void Act3Cop::FUN_10040360()
 	// TODO
 }
 
-// STUB: LEGO1 0x10040d20
+// FUNCTION: LEGO1 0x10040d20
+// FUNCTION: BETA10 0x1001942c
 MxResult Act3Cop::VTable0x9c()
 {
-	// TODO
-	return SUCCESS;
+	if (m_grec && !m_grec->GetBit1()) {
+		delete m_grec;
+		m_grec = NULL;
+		m_lastTime = Timer()->GetTime();
+		FUN_10040360();
+		return SUCCESS;
+	}
+
+	return Act3Actor::VTable0x9c();
 }
 
 // FUNCTION: LEGO1 0x10040e10
