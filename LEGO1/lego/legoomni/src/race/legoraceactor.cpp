@@ -95,7 +95,7 @@ MxU32 LegoRaceActor::VTable0x90(float p_time, Matrix4& p_transform)
 
 // FUNCTION: LEGO1 0x10014a00
 // FUNCTION: BETA10 0x100c9f5c
-MxResult LegoRaceActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
+MxResult LegoRaceActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
 	if (!p_actor->GetUserNavFlag()) {
 		if (p_actor->GetState()) {
@@ -115,5 +115,6 @@ MxResult LegoRaceActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 			p_actor->SetState(2);
 		}
 	}
-	return 0;
+
+	return SUCCESS;
 }

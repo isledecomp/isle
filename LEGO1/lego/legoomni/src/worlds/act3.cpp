@@ -180,12 +180,39 @@ Act3::~Act3()
 	TickleManager()->UnregisterClient(this);
 }
 
+// FUNCTION: LEGO1 0x10072780
+// FUNCTION: BETA10 0x100156ac
+void Act3::EatPizza(MxS32 p_index)
+{
+	assert(p_index < MAX_PIZZAS);
+	RemovePizza(m_pizzas[p_index]);
+}
+
 // FUNCTION: LEGO1 0x100727a0
 // FUNCTION: BETA10 0x1001570d
 void Act3::EatDonut(MxS32 p_index)
 {
 	assert(p_index < MAX_DONUTS);
 	RemoveDonut(m_donuts[p_index]);
+}
+
+// FUNCTION: LEGO1 0x100727c0
+// FUNCTION: BETA10 0x1001576e
+void Act3::RemovePizza(Act3Ammo& p_p)
+{
+#ifdef _DEBUG
+	MxS32 i;
+	for (i = 0; i < MAX_PIZZAS; i++) {
+		if (&m_pizzas[i] == &p_p) {
+			break;
+		}
+	}
+
+	assert(i != MAX_PIZZAS);
+#endif
+
+	assert(p_p.IsValid());
+	p_p.Remove();
 }
 
 // FUNCTION: LEGO1 0x100727d0
@@ -534,8 +561,8 @@ MxResult Act3::Tickle()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100733f0
-// STUB: BETA10 0x10016ba2
+// FUNCTION: LEGO1 0x100733f0
+// FUNCTION: BETA10 0x10016ba2
 void Act3::SetBrickster(Act3Brickster* p_brickster)
 {
 	m_brickster = p_brickster;

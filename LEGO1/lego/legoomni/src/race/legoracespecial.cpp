@@ -333,9 +333,9 @@ MxU32 LegoCarRaceActor::VTable0x6c(
 									p_v3,
 									m_collideBox && actor->GetCollideBox()
 								)) {
-								VTable0x94(actor, TRUE);
+								HitActor(actor, TRUE);
 
-								if (actor->VTable0x94(this, FALSE) < 0) {
+								if (actor->HitActor(this, FALSE) < 0) {
 									return 0;
 								}
 								else {
@@ -353,9 +353,9 @@ MxU32 LegoCarRaceActor::VTable0x6c(
 									p_v3,
 									m_collideBox && actor->GetCollideBox()
 								)) {
-								VTable0x94(actor, TRUE);
+								HitActor(actor, TRUE);
 
-								if (actor->VTable0x94(this, FALSE) < 0) {
+								if (actor->HitActor(this, FALSE) < 0) {
 									return 0;
 								}
 								else {
@@ -366,8 +366,9 @@ MxU32 LegoCarRaceActor::VTable0x6c(
 					}
 					else {
 						if (roi->FUN_100a9410(p_v1, p_v2, p_f1, p_f2, p_v3, m_collideBox && actor->GetCollideBox())) {
-							VTable0x94(actor, TRUE);
-							if (actor->VTable0x94(this, FALSE) < 0) {
+							HitActor(actor, TRUE);
+
+							if (actor->HitActor(this, FALSE) < 0) {
 								return 0;
 							}
 							else {

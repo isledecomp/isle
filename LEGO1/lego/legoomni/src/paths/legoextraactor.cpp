@@ -190,7 +190,7 @@ inline void LegoExtraActor::FUN_1002ad8a()
 }
 
 // FUNCTION: LEGO1 0x1002aba0
-MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
+MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
 	if (p_actor->GetState() != 0 || m_state != 0) {
 		return FAILURE;
@@ -497,11 +497,11 @@ MxU32 LegoExtraActor::VTable0x6c(
 									(local20X <= -0.01 && p_f1 + 0.01 <= local1cX)) {
 									p_v3 = p_v1;
 
-									if (VTable0x94(actor, TRUE) < 0) {
+									if (HitActor(actor, TRUE) < 0) {
 										return 0;
 									}
 
-									actor->VTable0x94(this, FALSE);
+									actor->HitActor(this, FALSE);
 									return 2;
 								}
 							}
@@ -509,11 +509,11 @@ MxU32 LegoExtraActor::VTable0x6c(
 					}
 					else {
 						if (roi->FUN_100a9410(p_v1, p_v2, p_f1, p_f2, p_v3, m_collideBox && actor->GetCollideBox())) {
-							if (VTable0x94(actor, TRUE) < 0) {
+							if (HitActor(actor, TRUE) < 0) {
 								return 0;
 							}
 
-							actor->VTable0x94(this, FALSE);
+							actor->HitActor(this, FALSE);
 							return 2;
 						}
 					}

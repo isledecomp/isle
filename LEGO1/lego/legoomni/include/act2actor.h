@@ -23,7 +23,7 @@ public:
 	void SetWorldSpeed(MxFloat p_worldSpeed) override;                      // vtable+0x30
 	MxS32 VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3) override; // vtable+0x68
 	void VTable0x70(float p_time) override;                                 // vtable+0x70
-	MxResult VTable0x94(LegoPathActor*, MxBool) override;                   // vtable+0x94
+	MxResult HitActor(LegoPathActor*, MxBool) override;                     // vtable+0x94
 	MxResult VTable0x9c() override;                                         // vtable+0x9c
 	MxS32 VTable0xa0() override;                                            // vtable+0xa0
 

@@ -14,7 +14,7 @@ MxLong Act2GenActor::g_lastHitActorTime = 0;
 
 // FUNCTION: LEGO1 0x10018740
 // FUNCTION: BETA10 0x1000c7a0
-MxResult Act2GenActor::VTable0x94(LegoPathActor* p_actor, MxBool)
+MxResult Act2GenActor::HitActor(LegoPathActor* p_actor, MxBool)
 {
 	MxLong time = Timer()->GetTime();
 	MxLong diff = time - g_lastHitActorTime;

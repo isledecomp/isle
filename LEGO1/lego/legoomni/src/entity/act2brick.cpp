@@ -107,7 +107,7 @@ void Act2Brick::FUN_1007a670(MxMatrix& p_param1, MxMatrix& p_param2, LegoPathBou
 }
 
 // FUNCTION: LEGO1 0x1007a750
-MxResult Act2Brick::VTable0x94(LegoPathActor* p_actor, MxBool)
+MxResult Act2Brick::HitActor(LegoPathActor* p_actor, MxBool)
 {
 	MxLong time = Timer()->GetTime();
 	MxLong diff = time - g_lastHitActorTime;

@@ -56,7 +56,7 @@ MxLong LegoJetski::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10013c40
-MxResult LegoJetski::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
+MxResult LegoJetski::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
 	// TODO
 	return 0;
