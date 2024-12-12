@@ -64,7 +64,7 @@ MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_wor
 MxS32 UpdateLightPosition(MxS32 p_increase);
 void SetLightPosition(MxS32 p_index);
 LegoNamedTexture* ReadNamedTexture(LegoFile* p_file);
-void FUN_1003f540(LegoFile* p_file, const char* p_filename);
+void WriteDefaultTexture(LegoFile* p_file, const char* p_name);
 void WriteNamedTexture(LegoFile* p_file, LegoNamedTexture* p_namedTexture);
 void FUN_1003f930(LegoNamedTexture* p_namedTexture);
 
