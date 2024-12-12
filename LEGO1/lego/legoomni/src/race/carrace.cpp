@@ -209,10 +209,10 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 					m_maps[2]->SetMaxLinearVel(-1.0);
 
 					RemoveActor(m_maps[1]);
-					// m_unk0x110[1]->ClearMaps();
+					m_maps[1]->ClearMaps();
 
 					RemoveActor(m_maps[2]);
-					// m_unk0x110[2]->ClearMaps();
+					m_maps[2]->ClearMaps();
 
 					MxS32 position;
 
@@ -275,7 +275,7 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				if (g_unk0x100f0c7c == m_unk0xfc) {
 					m_maps[1]->SetMaxLinearVel(-1.0);
 					RemoveActor(m_maps[1]);
-					// m_unk0x110[1]->ClearMaps();
+					m_maps[1]->ClearMaps();
 					m_maps[1]->GetROI()->SetVisibility(FALSE);
 
 					LegoROI* roi = FindROI("rcblack");
@@ -303,7 +303,7 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				if (g_unk0x100f0c7c == m_unk0x100) {
 					m_maps[2]->SetMaxLinearVel(-1.0);
 					RemoveActor(m_maps[2]);
-					// m_unk0x110[2]->ClearMaps();
+					m_maps[2]->ClearMaps();
 					m_maps[2]->GetROI()->SetVisibility(FALSE);
 
 					LegoROI* roi = FindROI("rcgreen");
