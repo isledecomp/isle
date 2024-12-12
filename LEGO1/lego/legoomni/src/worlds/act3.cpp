@@ -207,9 +207,10 @@ void Act3::RemovePizza(Act3Ammo& p_p)
 			break;
 		}
 	}
-#endif
 
 	assert(i != MAX_PIZZAS);
+#endif
+
 	assert(p_p.IsValid());
 	p_p.Remove();
 }
@@ -225,9 +226,10 @@ void Act3::RemoveDonut(Act3Ammo& p_p)
 			break;
 		}
 	}
-#endif
 
 	assert(i != MAX_DONUTS);
+#endif
+
 	assert(p_p.IsValid());
 	p_p.Remove();
 }
