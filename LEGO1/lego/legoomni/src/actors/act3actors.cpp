@@ -120,13 +120,13 @@ MxResult Act3Cop::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 	LegoROI* roi = p_actor->GetROI();
 
 	if (p_bool && !strncmp(roi->GetName(), "dammo", 5)) {
-		MxS32 count = -1;
-		if (sscanf(roi->GetName(), "dammo%d", &count) != 1) {
+		MxS32 index = -1;
+		if (sscanf(roi->GetName(), "dammo%d", &index) != 1) {
 			assert(0);
 		}
 
 		assert(m_world);
-		((Act3*) m_world)->EatDonut(count);
+		((Act3*) m_world)->EatDonut(index);
 		m_unk0x20 = m_lastTime + 2000;
 		SetWorldSpeed(6.0);
 
@@ -256,15 +256,15 @@ MxResult Act3Brickster::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 
 	if (a3->m_cop1->GetROI() != r && a3->m_cop2->GetROI() != r) {
 		if (!strncmp(r->GetName(), "pammo", 5)) {
-			MxS32 count = -1;
-			if (sscanf(r->GetName(), "pammo%d", &count) != 1) {
+			MxS32 index = -1;
+			if (sscanf(r->GetName(), "pammo%d", &index) != 1) {
 				assert(0);
 			}
 
 			assert(m_world);
 
-			if (a3->m_pizzas[count].IsValid() && !a3->m_pizzas[count].IsBit5()) {
-				a3->EatPizza(count);
+			if (a3->m_pizzas[index].IsValid() && !a3->m_pizzas[index].IsBit5()) {
+				a3->EatPizza(index);
 			}
 
 			m_unk0x38 = 2;

@@ -372,15 +372,15 @@ void Act3Ammo::Animate(float p_time)
 
 						float radius = r->GetWorldBoundingSphere().Radius();
 						if (local1b4.LenSquared() <= radius * radius) {
-							MxS32 count = -1;
-							if (sscanf(r->GetName(), "pammo%d", &count) != 1) {
+							MxS32 index = -1;
+							if (sscanf(r->GetName(), "pammo%d", &index) != 1) {
 								assert(0);
 							}
 
 							assert(m_world);
 
-							if (m_world->m_pizzas[count].IsValid() && !m_world->m_pizzas[count].IsBit5()) {
-								m_world->EatPizza(count);
+							if (m_world->m_pizzas[index].IsValid() && !m_world->m_pizzas[index].IsBit5()) {
+								m_world->EatPizza(index);
 								m_world->m_brickster->FUN_100417c0();
 							}
 
@@ -404,14 +404,14 @@ void Act3Ammo::Animate(float p_time)
 
 						float radius = r->GetWorldBoundingSphere().Radius();
 						if (local1e4.LenSquared() <= radius * radius) {
-							MxS32 count = -1;
-							if (sscanf(r->GetName(), "dammo%d", &count) != 1) {
+							MxS32 index = -1;
+							if (sscanf(r->GetName(), "dammo%d", &index) != 1) {
 								assert(0);
 							}
 
 							assert(m_world);
 
-							m_world->EatDonut(count);
+							m_world->EatDonut(index);
 
 							if (IsPizza()) {
 								assert(SoundManager()->GetCacheSoundManager());
