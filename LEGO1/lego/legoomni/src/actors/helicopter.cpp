@@ -134,7 +134,7 @@ MxLong Helicopter::HandleClick()
 		((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_copter);
 		FUN_10015820(TRUE, 0);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, TRUE);
-		SetState(LegoPathActor::c_bit3);
+		SetState(LegoPathActor::c_disable);
 		PlayMusic(JukeboxScript::c_Jail_Music);
 		break;
 	case LegoGameState::e_act2:
@@ -214,7 +214,7 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 				m_state->m_unk0x08 = 3;
 				m_world->RemoveActor(this);
 				InvokeAction(Extra::ActionType::e_start, script, IsleScript::c_HelicopterLand_Anim, NULL);
-				SetState(LegoPathActor::c_bit3);
+				SetState(LegoPathActor::c_disable);
 			}
 
 			result = 1;
@@ -421,5 +421,20 @@ void Helicopter::VTable0x70(float p_time)
 			}
 			LegoPathActor::m_state = 4;
 		}
+	}
+}
+
+// STUB: LEGO1 0x100042a0
+void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
+{
+	// TODO
+}
+
+// FUNCTION: LEGO1 0x10004640
+void Helicopter::FUN_10004640(const Matrix4& p_matrix)
+{
+	if (m_state->m_unk0x08 != 4 && m_state->m_unk0x08 != 5) {
+		m_state->m_unk0x08 = 4;
+		FUN_100042a0(p_matrix);
 	}
 }

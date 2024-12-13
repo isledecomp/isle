@@ -24,7 +24,7 @@ class LegoPathActor : public LegoActor {
 public:
 	enum {
 		c_bit2 = 0x02,
-		c_bit3 = 0x04,
+		c_disable = 0x04,
 		c_bit9 = 0x100
 	};
 

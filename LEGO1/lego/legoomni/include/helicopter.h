@@ -76,6 +76,7 @@ public:
 	void Exit() override;                                                        // vtable+0xe4
 
 	void CreateState();
+	void FUN_10004640(const Matrix4& p_matrix);
 
 	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'
@@ -84,6 +85,8 @@ public:
 	friend class Act3;
 
 protected:
+	void FUN_100042a0(const Matrix4& p_matrix);
+
 	MxMatrix m_unk0x160;              // 0x160
 	MxMatrix m_unk0x1a8;              // 0x1a8
 	float m_unk0x1f0;                 // 0x1f0
