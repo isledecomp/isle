@@ -527,7 +527,7 @@ undefined4 Act2Actor::FUN_10019700(MxFloat p_param)
 		m_unk0x1e = 1;
 
 		if (m_unk0x1d == 8) {
-			((LegoAct2*) CurrentWorld())->FUN_10051f20();
+			((LegoAct2*) CurrentWorld())->BadEnding();
 		}
 
 		return 1;

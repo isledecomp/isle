@@ -40,9 +40,12 @@ public:
 	// SYNTHETIC: LEGO1 0x1000e040
 	// LegoAct2State::`scalar deleting destructor'
 
+	// FUNCTION: BETA10 0x100151b0
+	void SetUnknown0x08(undefined4 p_unk0x08) { m_unk0x08 = p_unk0x08; }
+
 	undefined4 GetUnknown0x08() { return m_unk0x08; }
 
-	// TODO: Most likely getters/setters are not used according to BETA.
+	// TODO: Most likely getters/setters are not used according to BETA. (?)
 
 	undefined4 m_unk0x08; // 0x08
 	MxBool m_enabled;     // 0x0c
@@ -70,7 +73,7 @@ public:
 
 	MxResult FUN_100516b0();
 	void FUN_100517b0();
-	undefined4 FUN_10051f20();
+	MxResult BadEnding();
 	MxResult FUN_10052560(
 		Act2mainScript::Script p_objectId,
 		MxBool p_param2,
