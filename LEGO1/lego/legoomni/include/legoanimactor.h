@@ -18,6 +18,9 @@ struct LegoAnimActorStruct {
 	// FUNCTION: BETA10 0x10012210
 	LegoAnim* GetAnimTreePtr() { return m_AnimTreePtr; }
 
+	// FUNCTION: BETA10 0x10012240
+	LegoROI** GetROIMap() { return m_roiMap; }
+
 	// TODO: Possibly private
 	float m_unk0x00;              // 0x00
 	LegoAnim* m_AnimTreePtr;      // 0x04

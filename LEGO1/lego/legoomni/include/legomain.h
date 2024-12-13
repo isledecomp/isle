@@ -131,8 +131,13 @@ public:
 	LegoWorld* GetCurrentWorld() { return m_currentWorld; }
 	LegoNavController* GetNavController() { return m_navController; }
 	LegoPathActor* GetUserActor() { return m_userActor; }
+
+	// FUNCTION: BETA10 0x100e53a0
 	LegoPlantManager* GetPlantManager() { return m_plantManager; }
+
 	LegoAnimationManager* GetAnimationManager() { return m_animationManager; }
+
+	// FUNCTION: BETA10 0x100e53d0
 	LegoBuildingManager* GetBuildingManager() { return m_buildingManager; }
 
 	// FUNCTION: BETA10 0x100e52b0

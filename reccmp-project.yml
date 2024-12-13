@@ -22,6 +22,7 @@ targets:
     ghidra:
       ignore-types:
         # these classes have been changed by hand to account for changes between LEGO1 and BETA10
+        - Act2Actor
         - Act2Brick
         - LegoAct2
         - LegoCarBuild

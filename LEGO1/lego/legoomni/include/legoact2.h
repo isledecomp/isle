@@ -70,6 +70,7 @@ public:
 
 	MxResult FUN_100516b0();
 	void FUN_100517b0();
+	undefined4 FUN_10051f20();
 	MxResult FUN_10052560(
 		Act2mainScript::Script p_objectId,
 		MxBool p_param2,

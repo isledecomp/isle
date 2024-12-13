@@ -409,6 +409,7 @@ LegoResult LegoROI::FUN_100a8da0(LegoTreeNode* p_node, const Matrix4& p_matrix, 
 }
 
 // FUNCTION: LEGO1 0x100a8e80
+// FUNCTION: BETA10 0x1018ab3a
 void LegoROI::FUN_100a8e80(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap)
 {
 	MxMatrix mat;
