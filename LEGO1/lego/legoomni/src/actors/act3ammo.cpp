@@ -190,9 +190,9 @@ MxResult Act3Ammo::FUN_10053d30(LegoPathController* p_p, MxFloat p_unk0x19c)
 	return SUCCESS;
 }
 
-// FUNCTION: LEGO1 0x10054050
-// FUNCTION: BETA10 0x1001e362
+// STUB: LEGO1 0x10054050
+// STUB: BETA10 0x1001e362
 void Act3Ammo::UpdateState(float p_time)
 {
-	assert(IsValid());
+	// TODO
 }
