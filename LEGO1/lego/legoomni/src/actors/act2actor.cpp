@@ -533,7 +533,7 @@ undefined4 Act2Actor::FUN_10019700(MxFloat p_param)
 		return 1;
 	}
 
-	if ((!g_unk0x100f0f28) && (m_unk0x30 < p_param)) {
+	if (!g_unk0x100f0f28 && m_unk0x30 < p_param) {
 		g_unk0x100f0f28 = TRUE;
 		assert(SoundManager()->GetCacheSoundManager());
 		SoundManager()->GetCacheSoundManager()->Play(m_unk0x38, "brickstr", FALSE);
@@ -574,7 +574,7 @@ undefined4 Act2Actor::FUN_10019700(MxFloat p_param)
 	col2.Unitize();
 	col0.EqualsCross(&col1, &col2);
 	col0.Unitize();
-	col1.EqualsCross(&col2, &col3);
+	col1.EqualsCross(&col2, &col0);
 
 	assert(!m_cameraFlag);
 
