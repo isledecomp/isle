@@ -58,7 +58,7 @@ public:
 
 	void ParseAction(char* p_extra) override;          // vtable+0x20
 	void SetWorldSpeed(MxFloat p_worldSpeed) override; // vtable+0x30
-	void VTable0x70(float p_time) override;            // vtable+0x70
+	void UpdateState(float p_time) override;           // vtable+0x70
 	void VTable0x74(Matrix4& p_transform) override;    // vtable+0x74
 
 	virtual MxResult FUN_1001c1f0(float& p_und);

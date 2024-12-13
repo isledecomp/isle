@@ -148,7 +148,7 @@ void IslePathActor::Exit()
 			m_previousActor->SetLocation(GetWorldPosition(), GetWorldDirection(), GetWorldUp(), TRUE);
 		}
 
-		m_previousActor->SetState(0);
+		m_previousActor->SetActorFlags(0);
 		GameState()->m_currentArea = LegoGameState::Area::e_unk66;
 	}
 

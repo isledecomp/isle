@@ -123,7 +123,7 @@ public:
 
 	MxLong Notify(MxParam& p_param) override;                                    // vtable+0x04
 	MxResult Create(MxDSAction& p_dsAction) override;                            // vtable+0x18
-	void VTable0x70(float p_time) override;                                      // vtable+0x70
+	void UpdateState(float p_time) override;                                     // vtable+0x70
 	MxLong HandleClick() override;                                               // vtable+0xcc
 	MxLong HandleControl(LegoControlManagerNotificationParam& p_param) override; // vtable+0xd4
 	MxLong HandleEndAnim(LegoEndAnimNotificationParam& p_param) override;        // vtable+0xd8

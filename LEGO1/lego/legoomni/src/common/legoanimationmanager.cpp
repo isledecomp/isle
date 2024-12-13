@@ -1028,7 +1028,7 @@ MxResult LegoAnimationManager::FUN_100605e0(
 				LegoPathActor* actor = UserActor();
 
 				if (actor != NULL) {
-					actor->SetState(LegoPathActor::c_disable);
+					actor->SetActorFlags(LegoPathActor::c_disable);
 					actor->SetWorldSpeed(0.0f);
 				}
 			}
@@ -1592,7 +1592,7 @@ MxU16 LegoAnimationManager::FUN_10062110(
 {
 	LegoPathActor* actor = (LegoPathActor*) p_roi->GetEntity();
 
-	if (actor != NULL && actor->GetBoundary() == p_boundary && actor->GetState() == 0) {
+	if (actor != NULL && actor->GetBoundary() == p_boundary && actor->GetActorFlags() == 0) {
 		if (GetViewManager()->IsBoundingBoxInFrustum(p_roi->GetWorldBoundingBox())) {
 			Mx3DPointFloat direction(p_roi->GetWorldDirection());
 
@@ -2786,7 +2786,7 @@ void LegoAnimationManager::FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x
 
 		LegoPathActor* actor = UserActor();
 		if (actor != NULL) {
-			actor->SetState(LegoPathActor::c_disable);
+			actor->SetActorFlags(LegoPathActor::c_disable);
 			actor->SetWorldSpeed(0.0f);
 		}
 

@@ -159,7 +159,7 @@ MxResult Act3Ammo::FUN_10053cb0(LegoPathController* p_p, LegoPathBoundary* p_bou
 	m_unk0x19c = p_unk0x19c;
 	m_unk0x7c = 0.0f;
 	m_lastTime = -1.0f;
-	m_state = 1;
+	m_actorFlags = 1;
 	return SUCCESS;
 }
 
@@ -186,13 +186,13 @@ MxResult Act3Ammo::FUN_10053d30(LegoPathController* p_p, MxFloat p_unk0x19c)
 	m_unk0x19c = p_unk0x19c;
 	m_unk0x7c = 0.0f;
 	m_lastTime = -1.0f;
-	m_state = 1;
+	m_actorFlags = 1;
 	return SUCCESS;
 }
 
 // STUB: LEGO1 0x10054050
 // STUB: BETA10 0x1001e362
-void Act3Ammo::VTable0x70(float p_time)
+void Act3Ammo::UpdateState(float p_time)
 {
 	// TODO
 }
