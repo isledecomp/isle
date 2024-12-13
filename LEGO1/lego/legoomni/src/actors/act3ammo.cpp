@@ -68,7 +68,7 @@ MxResult Act3Ammo::Remove()
 
 // FUNCTION: LEGO1 0x10053980
 // FUNCTION: BETA10 0x1001d8b3
-MxResult Act3Ammo::Create(Act3* p_a3, MxU32 p_isPizza, MxS32 p_index)
+MxResult Act3Ammo::Create(Act3* p_world, MxU32 p_isPizza, MxS32 p_index)
 {
 	assert(m_ammoFlag);
 	char name[12];
@@ -102,7 +102,7 @@ MxResult Act3Ammo::Create(Act3* p_a3, MxU32 p_isPizza, MxS32 p_index)
 		assert(m_roi);
 	}
 
-	m_world = p_a3;
+	m_world = p_world;
 	SetValid(TRUE);
 	return SUCCESS;
 }
