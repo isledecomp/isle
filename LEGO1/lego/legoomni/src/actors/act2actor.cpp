@@ -20,11 +20,11 @@
 #include <vec.h>
 
 DECOMP_SIZE_ASSERT(Act2Actor, 0x1a8)
-DECOMP_SIZE_ASSERT(Act2Actor::UnknownListStructure, 0x20)
+DECOMP_SIZE_ASSERT(Act2Actor::Location, 0x20)
 
 // GLOBAL: LEGO1 0x100f0db8
 // GLOBAL: BETA10 0x101dbd00
-Act2Actor::UnknownListStructure g_unk0x100f0db8[] = {
+Act2Actor::Location g_brickstrLocations[] = {
 	{{-47.92, 7.0699968, -31.58}, {-0.999664, 0.0, -0.025916}, "edg01_27", FALSE},
 	{{-70.393349, 8.07, 3.151935}, {-0.90653503, 0.0, 0.422131}, "int06", FALSE},
 	{{-47.74, 4.079995, -52.3}, {-0.98293, 0.0, -0.18398}, "edg01_08", FALSE},
@@ -87,7 +87,7 @@ Act2Actor::Act2Actor()
 
 	// Odd: The code says < 10, but there are 11 entries in the array
 	for (MxS32 i = 0; i < 10; i++) {
-		g_unk0x100f0db8[i].m_unk0x1c = 0;
+		g_brickstrLocations[i].m_unk0x1c = FALSE;
 	}
 }
 
@@ -221,7 +221,7 @@ void Act2Actor::VTable0x70(float p_time)
 				m_unk0x30 = m_unk0x2c - 1300.0f;
 			}
 
-			if (FUN_10019700(p_time) == 1) {
+			if (FUN_10019700(p_time) == TRUE) {
 				return;
 			}
 		}
@@ -345,7 +345,7 @@ void Act2Actor::SetWorldSpeed(MxFloat p_worldSpeed)
 
 // FUNCTION: LEGO1 0x100192a0
 // FUNCTION: BETA10 0x1000d4d6
-void Act2Actor::FUN_100192a0(undefined4 p_param)
+void Act2Actor::FUN_100192a0(undefined4 p_location)
 {
 	Mx3DPointFloat newPosition(0.0, 0.0, 0.0);
 	Mx3DPointFloat newDirection(0.0, 0.0, 0.0);
@@ -357,9 +357,9 @@ void Act2Actor::FUN_100192a0(undefined4 p_param)
 	m_grec = new LegoPathEdgeContainer();
 	assert(m_grec);
 
-	newPosition = g_unk0x100f0db8[p_param].m_position;
-	newDirection = g_unk0x100f0db8[p_param].m_direction;
-	LegoPathBoundary* newBoundary = m_pathController->GetPathBoundary(g_unk0x100f0db8[p_param].m_boundary);
+	newPosition = g_brickstrLocations[p_location].m_position;
+	newDirection = g_brickstrLocations[p_location].m_direction;
+	LegoPathBoundary* newBoundary = m_pathController->GetPathBoundary(g_brickstrLocations[p_location].m_boundary);
 
 	MxResult sts = m_pathController->FUN_10048310(
 		m_grec,
@@ -487,8 +487,8 @@ MxS32 Act2Actor::VTable0xa0()
 
 	undefined4 firstChoice = newLocation;
 
-	if (m_unk0x48 < 7 || g_unk0x100f0db8[m_unk0x1d].m_unk0x1c) {
-		while (g_unk0x100f0db8[newLocation].m_unk0x1c || m_unk0x1d == newLocation) {
+	if (m_unk0x48 < 7 || g_brickstrLocations[m_unk0x1d].m_unk0x1c) {
+		while (g_brickstrLocations[newLocation].m_unk0x1c || m_unk0x1d == newLocation) {
 			if (newLocation == 7) {
 				newLocation = 0;
 			}
@@ -513,7 +513,7 @@ MxS32 Act2Actor::VTable0xa0()
 
 // FUNCTION: LEGO1 0x10019700
 // FUNCTION: BETA10 0x1000dd27
-undefined4 Act2Actor::FUN_10019700(MxFloat p_param)
+MxU32 Act2Actor::FUN_10019700(MxFloat p_param)
 {
 	if (!m_unk0x4c) {
 		g_unk0x100f0f20 = FALSE;
@@ -527,10 +527,10 @@ undefined4 Act2Actor::FUN_10019700(MxFloat p_param)
 		m_unk0x1e = 1;
 
 		if (m_unk0x1d == 8) {
-			((LegoAct2*) CurrentWorld())->FUN_10051f20();
+			((LegoAct2*) CurrentWorld())->BadEnding();
 		}
 
-		return 1;
+		return TRUE;
 	}
 
 	if (!g_unk0x100f0f28 && m_unk0x30 < p_param) {
@@ -553,7 +553,7 @@ undefined4 Act2Actor::FUN_10019700(MxFloat p_param)
 		m_unk0x30 = m_unk0x2c - 1300.0f;
 		g_unk0x100f0f24 = FALSE;
 		g_unk0x100f0f28 = FALSE;
-		return 0;
+		return FALSE;
 	}
 
 	m_lastTime = p_param;
@@ -585,7 +585,7 @@ undefined4 Act2Actor::FUN_10019700(MxFloat p_param)
 		LegoROI::FUN_100a8e80(root->GetChild(i), matrix, time, m_shootAnim->GetROIMap());
 	}
 
-	return 0;
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x100199f0

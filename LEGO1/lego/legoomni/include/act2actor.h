@@ -10,11 +10,11 @@
 // SIZE 0x1a8
 class Act2Actor : public LegoAnimActor {
 public:
-	struct UnknownListStructure {
+	struct Location {
 		MxFloat m_position[3];  // 0x00
 		MxFloat m_direction[3]; // 0x0c
 		const char* m_boundary; // 0x18
-		undefined m_unk0x1c;    // 0x1c
+		MxBool m_unk0x1c;       // 0x1c
 	};
 
 	Act2Actor();
@@ -31,9 +31,9 @@ public:
 	void FUN_10019250(MxFloat p_speed, MxFloat p_param2);
 	void FUN_10019520();
 	void FUN_10019560();
-	undefined4 FUN_10019700(MxFloat p_param);
+	MxU32 FUN_10019700(MxFloat p_param);
 	void FUN_100199f0(MxS8 p_param);
-	void FUN_100192a0(undefined4 p_param);
+	void FUN_100192a0(undefined4 p_location);
 	LegoEntity* FUN_10019b90(undefined* p_param);
 
 	// SYNTHETIC: LEGO1 0x1001a0a0

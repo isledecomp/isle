@@ -928,12 +928,24 @@ void LegoAct2::SpawnBricks()
 	m_nextBrick++;
 }
 
-// STUB: LEGO1 0x10051f20
-// STUB: BETA10 0x10013f48
-undefined4 LegoAct2::FUN_10051f20()
+// FUNCTION: LEGO1 0x10051f20
+// FUNCTION: BETA10 0x10013f48
+MxResult LegoAct2::BadEnding()
 {
-	// TODO
-	return 0;
+	for (MxS32 i = 0; i < (MxS32) sizeOfArray(m_bricks); i++) {
+		m_bricks[i].Remove();
+	}
+
+	LegoPathActor* actor = m_unk0x1138;
+	actor->SetState(LegoPathActor::c_bit3);
+
+	m_gameState->SetUnknown0x08(104);
+	m_destLocation = LegoGameState::e_infomain;
+	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+
+	MxTrace("Bad End of Act2\n");
+	m_unk0x10c4 = 14;
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10051fa0
