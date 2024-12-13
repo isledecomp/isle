@@ -214,7 +214,7 @@ void LegoCarRaceActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown
 
 // FUNCTION: LEGO1 0x10080b70
 // FUNCTION: BETA10 0x100cdbae
-void LegoCarRaceActor::UpdateState(float p_time)
+void LegoCarRaceActor::Animate(float p_time)
 {
 	// m_unk0x0c is not an MxBool, there are places where it is set to 2 or higher
 	if (m_unk0x0c == 0) {
@@ -228,7 +228,7 @@ void LegoCarRaceActor::UpdateState(float p_time)
 	}
 
 	if (m_unk0x0c == 1) {
-		LegoAnimActor::UpdateState(p_time);
+		LegoAnimActor::Animate(p_time);
 	}
 }
 

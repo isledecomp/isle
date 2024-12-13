@@ -367,7 +367,7 @@ void LegoPathController::FUN_10046970()
 
 		if (m_actors.find(actor) != m_actors.end()) {
 			if (!((MxU8) actor->GetActorState() & LegoPathActor::c_disabled)) {
-				actor->UpdateState(time);
+				actor->Animate(time);
 			}
 		}
 	}

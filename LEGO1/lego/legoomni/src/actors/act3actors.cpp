@@ -156,7 +156,7 @@ void Act3Cop::ParseAction(char* p_extra)
 }
 
 // STUB: LEGO1 0x100401f0
-void Act3Cop::UpdateState(float p_time)
+void Act3Cop::Animate(float p_time)
 {
 	// TODO
 }
@@ -229,7 +229,7 @@ void Act3Brickster::ParseAction(char* p_extra)
 }
 
 // STUB: LEGO1 0x10041050
-void Act3Brickster::UpdateState(float p_time)
+void Act3Brickster::Animate(float p_time)
 {
 	// TODO
 }
@@ -317,7 +317,7 @@ MxResult Act3Shark::FUN_10042ce0(Act3Ammo* p_ammo)
 }
 
 // STUB: LEGO1 0x10042d40
-void Act3Shark::UpdateState(float p_time)
+void Act3Shark::Animate(float p_time)
 {
 	// TODO
 }

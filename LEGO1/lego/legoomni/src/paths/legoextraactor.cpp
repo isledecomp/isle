@@ -328,13 +328,13 @@ void LegoExtraActor::Restart()
 }
 
 // FUNCTION: LEGO1 0x1002b440
-void LegoExtraActor::UpdateState(float p_time)
+void LegoExtraActor::Animate(float p_time)
 {
 	LegoAnimActorStruct* laas = NULL;
 
 	switch (m_whichAnim) {
 	case 0:
-		LegoAnimActor::UpdateState(p_time);
+		LegoAnimActor::Animate(p_time);
 		break;
 	case 1:
 		if (m_scheduledTime < p_time) {

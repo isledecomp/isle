@@ -377,14 +377,14 @@ MxU32 LegoRaceCar::HandleSkeletonKicks(float p_param1)
 
 // FUNCTION: LEGO1 0x100131f0
 // FUNCTION: BETA10 0x100cb88a
-void LegoRaceCar::UpdateState(float p_time)
+void LegoRaceCar::Animate(float p_time)
 {
 	if (m_userNavFlag && (m_userState == LEGORACECAR_KICK1 || m_userState == LEGORACECAR_KICK2)) {
 		FUN_10012ff0(p_time);
 		return;
 	}
 
-	LegoCarRaceActor::UpdateState(p_time);
+	LegoCarRaceActor::Animate(p_time);
 
 	if (m_userNavFlag && m_userState == LEGORACECAR_UNKNOWN_1) {
 		if (HandleSkeletonKicks(p_time)) {
@@ -587,9 +587,9 @@ void LegoJetski::FUN_100136f0(float p_worldSpeed)
 
 // FUNCTION: LEGO1 0x10013740
 // FUNCTION: BETA10 0x100cc0ae
-void LegoJetski::UpdateState(float p_time)
+void LegoJetski::Animate(float p_time)
 {
-	LegoJetskiRaceActor::UpdateState(p_time);
+	LegoJetskiRaceActor::Animate(p_time);
 
 	if (LegoCarRaceActor::m_unk0x0c == 1) {
 		FUN_1005d4b0();

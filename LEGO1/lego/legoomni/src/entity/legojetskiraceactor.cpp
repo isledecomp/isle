@@ -119,7 +119,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 }
 
 // FUNCTION: LEGO1 0x10081550
-void LegoJetskiRaceActor::UpdateState(float p_time)
+void LegoJetskiRaceActor::Animate(float p_time)
 {
 	if (m_unk0x0c == 0) {
 		const LegoChar* raceState = VariableTable()->GetVariable(g_raceState);
@@ -129,12 +129,12 @@ void LegoJetskiRaceActor::UpdateState(float p_time)
 			m_unk0x1c = p_time;
 		}
 		else if (!m_userNavFlag) {
-			LegoAnimActor::UpdateState(m_lastTime + 1.0f);
+			LegoAnimActor::Animate(m_lastTime + 1.0f);
 		}
 	}
 
 	if (m_unk0x0c == 1) {
-		LegoAnimActor::UpdateState(p_time);
+		LegoAnimActor::Animate(p_time);
 	}
 }
 

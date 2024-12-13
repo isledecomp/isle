@@ -61,7 +61,7 @@ public:
 		float p_f2,
 		Vector3& p_v3
 	);                                             // vtable+0x6c
-	virtual void UpdateState(float p_time);        // vtable+0x70
+	virtual void Animate(float p_time);            // vtable+0x70
 	virtual void VTable0x74(Matrix4& p_transform); // vtable+0x74
 
 	// FUNCTION: LEGO1 0x10002d20

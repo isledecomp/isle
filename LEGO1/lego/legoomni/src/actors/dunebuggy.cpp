@@ -48,9 +48,9 @@ MxResult DuneBuggy::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10067ec0
-void DuneBuggy::UpdateState(float p_time)
+void DuneBuggy::Animate(float p_time)
 {
-	IslePathActor::UpdateState(p_time);
+	IslePathActor::Animate(p_time);
 
 	char buf[200];
 	float speed = abs(m_worldSpeed);

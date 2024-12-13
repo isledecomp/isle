@@ -71,7 +71,7 @@ void LegoAnimActor::VTable0x74(Matrix4& p_transform)
 
 // FUNCTION: LEGO1 0x1001c290
 // FUNCTION: BETA10 0x1003e144
-void LegoAnimActor::UpdateState(float p_time)
+void LegoAnimActor::Animate(float p_time)
 {
 	assert(m_roi);
 
@@ -90,7 +90,7 @@ void LegoAnimActor::UpdateState(float p_time)
 		m_lastTime = m_actorTime = p_time;
 	}
 	else {
-		LegoPathActor::UpdateState(p_time);
+		LegoPathActor::Animate(p_time);
 	}
 }
 

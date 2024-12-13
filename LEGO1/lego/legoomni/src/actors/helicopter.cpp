@@ -382,12 +382,12 @@ void Helicopter::VTable0x74(Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x10003ee0
-void Helicopter::UpdateState(float p_time)
+void Helicopter::Animate(float p_time)
 {
 	MxU32 state = m_state->GetUnkown8();
 	switch (state) {
 	default:
-		LegoPathActor::UpdateState(p_time);
+		LegoPathActor::Animate(p_time);
 		return;
 	case 4:
 	case 5:

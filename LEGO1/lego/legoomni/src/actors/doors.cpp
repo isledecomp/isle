@@ -65,7 +65,7 @@ MxFloat Doors::VTable0xcc(float p_time)
 
 // FUNCTION: LEGO1 0x10066250
 // FUNCTION: BETA10 0x10026a45
-void Doors::UpdateState(float p_time)
+void Doors::Animate(float p_time)
 {
 	assert(m_ltDoor && m_rtDoor);
 
