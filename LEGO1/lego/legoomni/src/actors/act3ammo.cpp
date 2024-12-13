@@ -24,7 +24,7 @@ Mx3DPointFloat Act3Ammo::g_unk0x10104f08 = Mx3DPointFloat(0.0, 5.0, 0.0);
 Act3Ammo::Act3Ammo()
 {
 	m_ammoFlag = 0;
-	m_a3 = NULL;
+	m_world = NULL;
 }
 
 // FUNCTION: LEGO1 0x100538a0
@@ -102,7 +102,7 @@ MxResult Act3Ammo::Create(Act3* p_a3, MxU32 p_isPizza, MxS32 p_index)
 		assert(m_roi);
 	}
 
-	m_a3 = p_a3;
+	m_world = p_a3;
 	SetValid(TRUE);
 	return SUCCESS;
 }
@@ -335,12 +335,12 @@ void Act3Ammo::Animate(float p_time)
 	if (localb8) {
 		if (IsBit4()) {
 			if (IsPizza()) {
-				m_a3->RemovePizza(*this);
-				m_a3->FUN_10072ad0(2);
+				m_world->RemovePizza(*this);
+				m_world->FUN_10072ad0(2);
 			}
 			else {
-				m_a3->RemoveDonut(*this);
-				m_a3->FUN_10072ad0(4);
+				m_world->RemoveDonut(*this);
+				m_world->FUN_10072ad0(4);
 			}
 		}
 		else {
@@ -377,17 +377,17 @@ void Act3Ammo::Animate(float p_time)
 								assert(0);
 							}
 
-							assert(m_a3);
+							assert(m_world);
 
-							if (m_a3->m_pizzas[count].IsValid() && !m_a3->m_pizzas[count].IsBit5()) {
-								m_a3->EatPizza(count);
-								m_a3->m_brickster->FUN_100417c0();
+							if (m_world->m_pizzas[count].IsValid() && !m_world->m_pizzas[count].IsBit5()) {
+								m_world->EatPizza(count);
+								m_world->m_brickster->FUN_100417c0();
 							}
 
 							if (IsDonut()) {
 								assert(SoundManager()->GetCacheSoundManager());
 								SoundManager()->GetCacheSoundManager()->Play("dnhitpz", NULL, FALSE);
-								m_a3->RemoveDonut(*this);
+								m_world->RemoveDonut(*this);
 								local14 = TRUE;
 								break;
 							}
@@ -409,14 +409,14 @@ void Act3Ammo::Animate(float p_time)
 								assert(0);
 							}
 
-							assert(m_a3);
+							assert(m_world);
 
-							m_a3->EatDonut(count);
+							m_world->EatDonut(count);
 
 							if (IsPizza()) {
 								assert(SoundManager()->GetCacheSoundManager());
 								SoundManager()->GetCacheSoundManager()->Play("pzhitdn", NULL, FALSE);
-								m_a3->RemovePizza(*this);
+								m_world->RemovePizza(*this);
 								local14 = TRUE;
 								break;
 							}
@@ -427,10 +427,10 @@ void Act3Ammo::Animate(float p_time)
 
 			if (!local14) {
 				if (IsPizza()) {
-					m_a3->FUN_10073360(*this, local68);
+					m_world->FUN_10073360(*this, local68);
 				}
 				else {
-					m_a3->FUN_10073390(*this, local68);
+					m_world->FUN_10073390(*this, local68);
 				}
 
 				m_worldSpeed = -1.0f;

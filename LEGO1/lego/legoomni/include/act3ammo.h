@@ -96,7 +96,7 @@ private:
 
 	MxU16 m_ammoFlag;       // 0x154
 	MxFloat m_unk0x158;     // 0x158
-	Act3* m_a3;             // 0x15c
+	Act3* m_world;          // 0x15c
 	Mx3DPointFloat m_eq[3]; // 0x160
 	MxFloat m_unk0x19c;     // 0x19c
 };
