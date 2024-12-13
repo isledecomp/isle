@@ -71,7 +71,7 @@ void LegoAnimActor::VTable0x74(Matrix4& p_transform)
 
 // FUNCTION: LEGO1 0x1001c290
 // FUNCTION: BETA10 0x1003e144
-void LegoAnimActor::UpdateState(float p_time)
+void LegoAnimActor::Animate(float p_time)
 {
 	assert(m_roi);
 
@@ -79,7 +79,7 @@ void LegoAnimActor::UpdateState(float p_time)
 		m_lastTime = p_time - 1.0f;
 	}
 
-	if (m_actorFlags == 0 && !m_userNavFlag && m_worldSpeed <= 0) {
+	if (m_actorState == c_initial && !m_userNavFlag && m_worldSpeed <= 0) {
 		if (m_curAnim >= 0) {
 			MxMatrix matrix(m_unk0xec);
 			float f;
@@ -90,7 +90,7 @@ void LegoAnimActor::UpdateState(float p_time)
 		m_lastTime = m_actorTime = p_time;
 	}
 	else {
-		LegoPathActor::UpdateState(p_time);
+		LegoPathActor::Animate(p_time);
 	}
 }
 

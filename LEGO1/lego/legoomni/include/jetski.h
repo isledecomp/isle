@@ -26,7 +26,7 @@ public:
 	}
 
 	MxResult Create(MxDSAction& p_dsAction) override;                    // vtable+0x18
-	void UpdateState(float p_time) override;                             // vtable+0x70
+	void Animate(float p_time) override;                                 // vtable+0x70
 	MxLong HandleClick() override;                                       // vtable+0xcc
 	MxLong HandleControl(LegoControlManagerNotificationParam&) override; // vtable+0xd4
 	void Exit() override;                                                // vtable+0xe4

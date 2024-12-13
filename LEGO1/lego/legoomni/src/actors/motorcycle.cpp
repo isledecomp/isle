@@ -44,9 +44,9 @@ MxResult Motocycle::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10035ad0
-void Motocycle::UpdateState(float p_time)
+void Motocycle::Animate(float p_time)
 {
-	IslePathActor::UpdateState(p_time);
+	IslePathActor::Animate(p_time);
 
 	if (UserActor() == this) {
 		char buf[200];

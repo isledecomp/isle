@@ -46,7 +46,7 @@ LegoPathActor::LegoPathActor()
 	m_lastTime = 0;
 	m_unk0x7c = 0;
 	m_userNavFlag = FALSE;
-	m_actorFlags = 0;
+	m_actorState = c_initial;
 	m_grec = NULL;
 	m_pathController = NULL;
 	m_collideBox = FALSE;
@@ -235,7 +235,7 @@ MxResult LegoPathActor::VTable0x84(
 // FUNCTION: BETA10 0x100b0520
 MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 {
-	if (m_userNavFlag && m_actorFlags == 0) {
+	if (m_userNavFlag && m_actorState == c_initial) {
 		m_lastTime = p_time;
 
 		Mx3DPointFloat p1, p2, p3, p4, p5;
@@ -381,13 +381,13 @@ void LegoPathActor::VTable0x74(Matrix4& p_transform)
 
 // FUNCTION: LEGO1 0x1002e790
 // FUNCTION: BETA10 0x100af208
-void LegoPathActor::UpdateState(float p_time)
+void LegoPathActor::Animate(float p_time)
 {
 	MxMatrix transform;
 	MxU32 b = FALSE;
 
 	while (m_lastTime < p_time) {
-		if (m_actorFlags != 0 && !VTable0x90(p_time, transform)) {
+		if (m_actorState != c_initial && !VTable0x90(p_time, transform)) {
 			return;
 		}
 
@@ -458,7 +458,7 @@ MxU32 LegoPathActor::VTable0x6c(
 		if (plpas.find(*itpa) != plpas.end()) {
 			LegoPathActor* actor = *itpa;
 
-			if (this != actor && !(actor->GetActorFlags() & LegoPathActor::c_noCollide)) {
+			if (this != actor && !(actor->GetActorState() & LegoPathActor::c_noCollide)) {
 				LegoROI* roi = actor->GetROI();
 
 				if (roi != NULL && (roi->GetVisibility() || actor->GetCameraFlag())) {

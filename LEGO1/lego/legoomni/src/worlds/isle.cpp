@@ -586,7 +586,7 @@ void Isle::Enable(MxBool p_enable)
 				FALSE,
 				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 			);
-			actor->SetActorFlags(0);
+			actor->SetActorState(LegoPathActor::c_initial);
 		}
 		else {
 			FUN_10032620();

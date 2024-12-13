@@ -100,7 +100,7 @@ void Act2Brick::FUN_1007a670(MxMatrix& p_param1, MxMatrix& p_param2, LegoPathBou
 	CurrentWorld()->PlaceActor(this);
 	p_boundary->AddActor(this);
 
-	SetActorFlags(LegoPathActor::c_disable);
+	SetActorState(c_disabled);
 	m_roi->FUN_100a58f0(p_param1);
 	m_roi->VTable0x14();
 	m_roi->SetVisibility(TRUE);

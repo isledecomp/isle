@@ -25,7 +25,7 @@ public:
 	}
 
 	void ParseAction(char* p_extra) override;                          // vtable+0x20
-	void UpdateState(float p_time) override;                           // vtable+0x70
+	void Animate(float p_time) override;                               // vtable+0x70
 	MxResult HitActor(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 	virtual MxFloat VTable0xcc(float p_time);                          // vtable+0xcc
 

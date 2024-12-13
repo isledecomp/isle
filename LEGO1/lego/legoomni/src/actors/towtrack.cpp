@@ -74,9 +74,9 @@ MxResult TowTrack::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x1004cb10
-void TowTrack::UpdateState(float p_time)
+void TowTrack::Animate(float p_time)
 {
-	IslePathActor::UpdateState(p_time);
+	IslePathActor::Animate(p_time);
 
 	if (UserActor() == this) {
 		char buf[200];
