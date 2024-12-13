@@ -30,6 +30,9 @@ DECOMP_SIZE_ASSERT(Act3State, 0x0c)
 DECOMP_SIZE_ASSERT(Act3ListElement, 0x0c)
 DECOMP_SIZE_ASSERT(Act3List, 0x10)
 
+// GLOBAL: LEGO1 0x100f7814
+MxU8 g_unk0x100f7814 = 0;
+
 // GLOBAL: LEGO1 0x100d95e8
 Act3Script::Script g_unk0x100d95e8[] =
 	{Act3Script::c_tlp053in_RunAnim, Act3Script::c_tlp064la_RunAnim, Act3Script::c_tlp068in_RunAnim};
@@ -333,6 +336,13 @@ MxResult Act3::ShootDonut(LegoPathController* p_controller, Vector3& p_location,
 	return FAILURE;
 }
 
+// STUB: LEGO1 0x10072ad0
+// STUB: BETA10 0x10015eec
+void Act3::FUN_10072ad0(undefined4 p_param1)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10072c30
 // FUNCTION: BETA10 0x100160fb
 MxResult Act3::Create(MxDSAction& p_dsAction)
@@ -560,6 +570,34 @@ MxResult Act3::Tickle()
 		}
 	}
 
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x10073360
+// FUNCTION: BETA10 0x100169d5
+MxResult Act3::FUN_10073360(Act3Ammo& p_ammo, const Vector3& p_param2)
+{
+	assert(m_brickster);
+	m_brickster->FUN_100417a0(p_ammo, p_param2);
+	FUN_10072ad0(1);
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x10073390
+// FUNCTION: BETA10 0x10016a40
+MxResult Act3::FUN_10073390(Act3Ammo& p_ammo, const Vector3& p_param2)
+{
+	assert(m_cop1 && m_cop2);
+
+	if (!(g_unk0x100f7814 & 1)) {
+		m_cop1->FUN_10040350(p_ammo, p_param2);
+	}
+	else {
+		m_cop2->FUN_10040350(p_ammo, p_param2);
+	}
+
+	FUN_10072ad0(3);
+	g_unk0x100f7814++;
 	return SUCCESS;
 }
 

@@ -47,6 +47,9 @@ public:
 	// FUNCTION: BETA10 0x1001fc80
 	MxU32 IsPizza() { return m_ammoFlag & c_pizza; }
 
+	// FUNCTION: BETA10 0x10021d60
+	MxU32 IsDonut() { return m_ammoFlag & c_donut; }
+
 	// FUNCTION: BETA10 0x1001fcb0
 	void SetBit4(MxBool p_bit4)
 	{
@@ -57,6 +60,9 @@ public:
 			m_ammoFlag &= ~c_bit4;
 		}
 	}
+
+	// FUNCTION: BETA10 0x10021d90
+	MxU32 IsBit4() { return m_ammoFlag & c_bit4; }
 
 	void SetBit5(MxBool p_bit5)
 	{
@@ -75,7 +81,7 @@ public:
 	void SetUnknown0x158(MxFloat p_unk0x158) { m_unk0x158 = p_unk0x158; }
 
 	MxResult Remove();
-	MxResult Create(Act3* p_a3, MxU32 p_isPizza, MxS32 p_index);
+	MxResult Create(Act3* p_world, MxU32 p_isPizza, MxS32 p_index);
 	MxResult FUN_10053b40(Vector3& p_srcLoc, Vector3& p_srcDir, Vector3& p_srcUp);
 	MxResult FUN_10053cb0(LegoPathController* p_p, LegoPathBoundary* p_boundary, MxFloat p_unk0x19c);
 	MxResult FUN_10053d30(LegoPathController* p_p, MxFloat p_unk0x19c);
@@ -84,9 +90,13 @@ public:
 	// Act3Ammo::`scalar deleting destructor'
 
 private:
+	MxResult FUN_10053db0(float p_param1, const Matrix4& p_param2);
+
+	static Mx3DPointFloat g_unk0x10104f08;
+
 	MxU16 m_ammoFlag;       // 0x154
 	MxFloat m_unk0x158;     // 0x158
-	Act3* m_a3;             // 0x15c
+	Act3* m_world;          // 0x15c
 	Mx3DPointFloat m_eq[3]; // 0x160
 	MxFloat m_unk0x19c;     // 0x19c
 };

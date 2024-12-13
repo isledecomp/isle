@@ -120,13 +120,13 @@ MxResult Act3Cop::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 	LegoROI* roi = p_actor->GetROI();
 
 	if (p_bool && !strncmp(roi->GetName(), "dammo", 5)) {
-		MxS32 count = -1;
-		if (sscanf(roi->GetName(), "dammo%d", &count) != 1) {
+		MxS32 index = -1;
+		if (sscanf(roi->GetName(), "dammo%d", &index) != 1) {
 			assert(0);
 		}
 
 		assert(m_world);
-		((Act3*) m_world)->EatDonut(count);
+		((Act3*) m_world)->EatDonut(index);
 		m_unk0x20 = m_lastTime + 2000;
 		SetWorldSpeed(6.0);
 
@@ -161,11 +161,19 @@ void Act3Cop::Animate(float p_time)
 	// TODO
 }
 
+// FUNCTION: LEGO1 0x10040350
+// FUNCTION: BETA10 0x10018c4a
+MxResult Act3Cop::FUN_10040350(Act3Ammo& p_ammo, const Vector3&)
+{
+	return FUN_10040360();
+}
+
 // STUB: LEGO1 0x10040360
 // STUB: BETA10 0x10018c6a
-void Act3Cop::FUN_10040360()
+MxResult Act3Cop::FUN_10040360()
 {
 	// TODO
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10040d20
@@ -248,15 +256,15 @@ MxResult Act3Brickster::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 
 	if (a3->m_cop1->GetROI() != r && a3->m_cop2->GetROI() != r) {
 		if (!strncmp(r->GetName(), "pammo", 5)) {
-			MxS32 count = -1;
-			if (sscanf(r->GetName(), "pammo%d", &count) != 1) {
+			MxS32 index = -1;
+			if (sscanf(r->GetName(), "pammo%d", &index) != 1) {
 				assert(0);
 			}
 
 			assert(m_world);
 
-			if (a3->m_pizzas[count].IsValid() && !a3->m_pizzas[count].IsBit5()) {
-				a3->EatPizza(count);
+			if (a3->m_pizzas[index].IsValid() && !a3->m_pizzas[index].IsBit5()) {
+				a3->EatPizza(index);
 			}
 
 			m_unk0x38 = 2;
@@ -265,6 +273,17 @@ MxResult Act3Brickster::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 		else {
 			return Act3Actor::HitActor(p_actor, p_bool);
 		}
+	}
+
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100417a0
+// FUNCTION: BETA10 0x1001a3cf
+MxResult Act3Brickster::FUN_100417a0(Act3Ammo& p_ammo, const Vector3&)
+{
+	if (m_unk0x58 < 8) {
+		return FUN_100417c0();
 	}
 
 	return SUCCESS;
