@@ -46,8 +46,10 @@ public:
 	MxBool SwitchMood(LegoEntity* p_entity);
 	MxU32 GetAnimationId(LegoEntity* p_entity);
 	MxU32 GetSoundId(LegoEntity* p_entity, MxBool p_state);
+	LegoPlantInfo* GetInfoArray(MxS32& p_length);
 	MxBool FUN_10026c50(LegoEntity* p_entity);
 	void ScheduleAnimation(LegoEntity* p_entity, MxLong p_length);
+	MxResult FUN_10026410();
 	void FUN_10027120();
 	void FUN_10027200();
 

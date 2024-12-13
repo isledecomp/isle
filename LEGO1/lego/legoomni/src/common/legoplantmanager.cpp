@@ -115,6 +115,27 @@ void LegoPlantManager::Reset(MxS32 p_worldId)
 	m_unk0x0c = 0;
 }
 
+// STUB: LEGO1 0x10026410
+// STUB: BETA10 0x100c50e9
+MxResult LegoPlantManager::FUN_10026410()
+{
+	// might be similar to LegoBuildingManager::FUN_10030630()
+	// TODO
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x10026570
+// FUNCTION: BETA10 0x100c55e0
+LegoPlantInfo* LegoPlantManager::GetInfoArray(MxS32& p_length)
+{
+	if (!m_unk0x0c) {
+		FUN_10026410();
+	}
+
+	p_length = sizeOfArray(g_plantInfo);
+	return g_plantInfo;
+}
+
 // FUNCTION: LEGO1 0x10026590
 // FUNCTION: BETA10 0x100c561e
 LegoEntity* LegoPlantManager::CreatePlant(MxS32 p_index, LegoWorld* p_world, MxS32 p_worldId)
