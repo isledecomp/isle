@@ -25,7 +25,7 @@ public:
 	enum {
 		c_bit2 = 0x02,
 		c_disable = 0x04,
-		c_bit9 = 0x100
+		c_noCollide = 0x100
 	};
 
 	LegoPathActor();
@@ -54,7 +54,7 @@ public:
 		float p_f2,
 		Vector3& p_v3
 	);                                             // vtable+0x6c
-	virtual void VTable0x70(float p_time);         // vtable+0x70
+	virtual void UpdateState(float p_time);        // vtable+0x70
 	virtual void VTable0x74(Matrix4& p_transform); // vtable+0x74
 
 	// FUNCTION: LEGO1 0x10002d20
@@ -133,7 +133,7 @@ public:
 	LegoPathBoundary* GetBoundary() { return m_boundary; }
 
 	// FUNCTION: BETA10 0x1001c860
-	MxU32 GetState() { return m_state; }
+	MxU32 GetActorFlags() { return m_actorFlags; }
 
 	LegoPathController* GetController() { return m_pathController; }
 	MxBool GetCollideBox() { return m_collideBox; }
@@ -143,7 +143,7 @@ public:
 	void SetBoundary(LegoPathBoundary* p_boundary) { m_boundary = p_boundary; }
 
 	// FUNCTION: BETA10 0x10013430
-	void SetState(MxU32 p_state) { m_state = p_state; }
+	void SetActorFlags(MxU32 p_actorFlags) { m_actorFlags = p_actorFlags; }
 
 	void SetController(LegoPathController* p_pathController) { m_pathController = p_pathController; }
 	void SetLastTime(MxFloat p_lastTime) { m_lastTime = p_lastTime; }
@@ -173,7 +173,7 @@ protected:
 	MxFloat m_lastTime;                   // 0x84
 	LegoPathBoundary* m_boundary;         // 0x88
 	LegoUnknown m_unk0x8c;                // 0x8c
-	MxU32 m_state;                        // 0xdc
+	MxU32 m_actorFlags;                   // 0xdc
 	LegoUnknown100db7f4* m_destEdge;      // 0xe0
 	MxFloat m_unk0xe4;                    // 0xe4
 	MxBool m_collideBox;                  // 0xe8

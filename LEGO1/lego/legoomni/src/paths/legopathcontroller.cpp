@@ -366,8 +366,8 @@ void LegoPathController::FUN_10046970()
 		LegoPathActor* actor = *itpa;
 
 		if (m_actors.find(actor) != m_actors.end()) {
-			if (!((MxU8) actor->GetState() & LegoPathActor::c_disable)) {
-				actor->VTable0x70(time);
+			if (!((MxU8) actor->GetActorFlags() & LegoPathActor::c_disable)) {
+				actor->UpdateState(time);
 			}
 		}
 	}

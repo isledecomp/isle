@@ -177,7 +177,7 @@ MxResult LegoAct2::Tickle()
 		m_unk0x10c4 = 1;
 		break;
 	case 1:
-		((LegoPathActor*) m_pepper->GetEntity())->SetState(LegoPathActor::c_disable);
+		((LegoPathActor*) m_pepper->GetEntity())->SetActorFlags(LegoPathActor::c_disable);
 
 		switch (rand() % 3) {
 		case 0:
@@ -336,7 +336,7 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 
 				m_unk0x10c4 = 14;
 				m_unk0x10d0 = 0;
-				((LegoPathActor*) m_pepper->GetEntity())->SetState(LegoPathActor::c_disable);
+				((LegoPathActor*) m_pepper->GetEntity())->SetActorFlags(LegoPathActor::c_disable);
 			}
 			break;
 		case c_notificationTransitioned:
@@ -417,7 +417,7 @@ MxLong LegoAct2::HandleEndAction(MxEndActionNotificationParam& p_param)
 			m_unk0x10d0 = 0;
 
 			FUN_10052560(Act2mainScript::c_tra045la_RunAnim, TRUE, TRUE, NULL, NULL, NULL);
-			((LegoPathActor*) m_pepper->GetEntity())->SetState(LegoPathActor::c_disable);
+			((LegoPathActor*) m_pepper->GetEntity())->SetActorFlags(LegoPathActor::c_disable);
 			AnimationManager()->EnableCamAnims(TRUE);
 			AnimationManager()->FUN_1005f6d0(TRUE);
 			AnimationManager()->FUN_100604f0(g_unk0x100f4428, sizeOfArray(g_unk0x100f4428));
@@ -450,7 +450,7 @@ MxLong LegoAct2::HandleEndAction(MxEndActionNotificationParam& p_param)
 			m_unk0x10c4 = 13;
 			SpawnBricks();
 			PlayMusic(JukeboxScript::c_BrickHunt);
-			((LegoPathActor*) m_pepper->GetEntity())->SetState(0);
+			((LegoPathActor*) m_pepper->GetEntity())->SetActorFlags(0);
 			break;
 		}
 		case 14:
@@ -602,7 +602,7 @@ MxLong LegoAct2::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 {
 	if (m_unk0x10c4 == 5 && p_param.GetData() == 0x32) {
 		LegoPathActor* actor = (LegoPathActor*) m_pepper->GetEntity();
-		actor->SetState(LegoPathActor::c_disable);
+		actor->SetActorFlags(LegoPathActor::c_disable);
 		actor->SetWorldSpeed(0.0f);
 		FUN_10051900();
 
@@ -630,7 +630,7 @@ MxLong LegoAct2::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 		FUN_10051fa0(p_param.GetData());
 	}
 	else if (m_unk0x10c4 == 10 && p_param.GetData() == 0x165) {
-		((LegoPathActor*) m_pepper->GetEntity())->SetState(LegoPathActor::c_disable);
+		((LegoPathActor*) m_pepper->GetEntity())->SetActorFlags(LegoPathActor::c_disable);
 
 		if (FUN_10052560(Act2mainScript::c_VOhide_PlayWav, FALSE, TRUE, NULL, NULL, NULL) == SUCCESS) {
 			m_unk0x1140 = Act2mainScript::c_VOhide_PlayWav;
@@ -746,7 +746,7 @@ void LegoAct2::FUN_10051960()
 		roi->SetVisibility(FALSE);
 	}
 
-	((LegoPathActor*) m_pepper->GetEntity())->SetState(0);
+	((LegoPathActor*) m_pepper->GetEntity())->SetActorFlags(0);
 }
 
 // FUNCTION: LEGO1 0x100519c0
@@ -937,7 +937,7 @@ MxResult LegoAct2::BadEnding()
 	}
 
 	LegoPathActor* actor = m_unk0x1138;
-	actor->SetState(LegoPathActor::c_disable);
+	actor->SetActorFlags(LegoPathActor::c_disable);
 
 	m_gameState->SetUnknown0x08(104);
 	m_destLocation = LegoGameState::e_infomain;

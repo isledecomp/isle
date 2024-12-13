@@ -37,7 +37,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 	Vector3* v1 = NULL;
 	Vector3* v2 = NULL;
 
-	if (m_state == 1) {
+	if (m_actorFlags == 1) {
 		if (m_destEdge == LegoPathController::GetControlEdgeA(13)) {
 			m_boundary = (LegoPathBoundary*) m_destEdge->OtherFace(LegoPathController::GetControlBoundaryA(13));
 		}
@@ -45,7 +45,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 			m_boundary = (LegoPathBoundary*) m_destEdge->OtherFace(LegoPathController::GetControlBoundaryA(15));
 		}
 
-		m_state = 0;
+		m_actorFlags = 0;
 		m_unk0x7c = 0;
 
 		if (m_userNavFlag) {
@@ -58,7 +58,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 	}
 	else {
 		if (p_edge == LegoPathController::GetControlEdgeA(12)) {
-			m_state = 1;
+			m_actorFlags = 1;
 
 			if (m_worldSpeed < g_unk0x100da044) {
 				m_worldSpeed = g_unk0x100da044;
@@ -68,7 +68,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 			m_boundary = LegoPathController::GetControlBoundaryA(13);
 		}
 		else if (p_edge == LegoPathController::GetControlEdgeA(14)) {
-			m_state = 1;
+			m_actorFlags = 1;
 
 			if (m_worldSpeed < g_unk0x100da044) {
 				m_worldSpeed = g_unk0x100da044;
@@ -78,7 +78,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 			m_boundary = LegoPathController::GetControlBoundaryA(15);
 		}
 
-		if (m_state == 1) {
+		if (m_actorFlags == 1) {
 			if (m_userNavFlag) {
 				m_unk0xe4 = 0.5f;
 			}
@@ -119,7 +119,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 }
 
 // FUNCTION: LEGO1 0x10081550
-void LegoJetskiRaceActor::VTable0x70(float p_time)
+void LegoJetskiRaceActor::UpdateState(float p_time)
 {
 	if (m_unk0x0c == 0) {
 		const LegoChar* raceState = VariableTable()->GetVariable(g_raceState);
@@ -129,12 +129,12 @@ void LegoJetskiRaceActor::VTable0x70(float p_time)
 			m_unk0x1c = p_time;
 		}
 		else if (!m_userNavFlag) {
-			LegoAnimActor::VTable0x70(m_lastTime + 1.0f);
+			LegoAnimActor::UpdateState(m_lastTime + 1.0f);
 		}
 	}
 
 	if (m_unk0x0c == 1) {
-		LegoAnimActor::VTable0x70(p_time);
+		LegoAnimActor::UpdateState(p_time);
 	}
 }
 

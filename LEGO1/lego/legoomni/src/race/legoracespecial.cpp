@@ -113,7 +113,7 @@ MxS32 LegoCarRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 	Mx3DPointFloat destEdgeUnknownVector;
 	Mx3DPointFloat crossProduct;
 
-	if (m_state == 1) {
+	if (m_actorFlags == 1) {
 		m_boundary = NULL;
 
 		// Not sure where the upper bound of 11 comes from, the underlying array has a size of 16
@@ -126,7 +126,7 @@ MxS32 LegoCarRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 
 		assert(m_boundary);
 
-		m_state = 0;
+		m_actorFlags = 0;
 		m_unk0x7c = 0;
 
 		if (m_userNavFlag) {
@@ -140,7 +140,7 @@ MxS32 LegoCarRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 	else {
 		for (MxS32 i = 0; i < 11; i += 2) {
 			if (LegoPathController::GetControlEdgeA(i) == p_edge) {
-				m_state = 1;
+				m_actorFlags = 1;
 
 				if (m_worldSpeed < g_unk0x100f7aec) {
 					m_worldSpeed = g_unk0x100f7aec;
@@ -152,7 +152,7 @@ MxS32 LegoCarRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 			}
 		}
 
-		if (m_state == 1) {
+		if (m_actorFlags == 1) {
 			if (m_userNavFlag) {
 				m_unk0xe4 = 0.5f;
 			}
@@ -214,7 +214,7 @@ void LegoCarRaceActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown
 
 // FUNCTION: LEGO1 0x10080b70
 // FUNCTION: BETA10 0x100cdbae
-void LegoCarRaceActor::VTable0x70(float p_time)
+void LegoCarRaceActor::UpdateState(float p_time)
 {
 	// m_unk0x0c is not an MxBool, there are places where it is set to 2 or higher
 	if (m_unk0x0c == 0) {
@@ -228,7 +228,7 @@ void LegoCarRaceActor::VTable0x70(float p_time)
 	}
 
 	if (m_unk0x0c == 1) {
-		LegoAnimActor::VTable0x70(p_time);
+		LegoAnimActor::UpdateState(p_time);
 	}
 }
 

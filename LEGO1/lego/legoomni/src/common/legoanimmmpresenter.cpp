@@ -460,7 +460,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 			}
 		}
 
-		actor->SetState(0);
+		actor->SetActorFlags(0);
 	}
 
 	return TRUE;

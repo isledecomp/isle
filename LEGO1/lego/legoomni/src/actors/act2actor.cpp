@@ -155,7 +155,7 @@ MxResult Act2Actor::VTable0x9c()
 
 // FUNCTION: LEGO1 0x10018c30
 // FUNCTION: BETA10 0x1000cb52
-void Act2Actor::VTable0x70(float p_time)
+void Act2Actor::UpdateState(float p_time)
 {
 	int dummy1; // for BETA10, not sure what it is being used for
 
@@ -168,7 +168,7 @@ void Act2Actor::VTable0x70(float p_time)
 	g_unk0x100f0f1c = p_time;
 #endif
 
-	LegoAnimActor::VTable0x70(p_time);
+	LegoAnimActor::UpdateState(p_time);
 
 	if (m_unk0x44 != 0.0f && m_unk0x44 < p_time) {
 		SetWorldSpeed(m_unk0x28);

@@ -377,14 +377,14 @@ MxU32 LegoRaceCar::HandleSkeletonKicks(float p_param1)
 
 // FUNCTION: LEGO1 0x100131f0
 // FUNCTION: BETA10 0x100cb88a
-void LegoRaceCar::VTable0x70(float p_time)
+void LegoRaceCar::UpdateState(float p_time)
 {
 	if (m_userNavFlag && (m_userState == LEGORACECAR_KICK1 || m_userState == LEGORACECAR_KICK2)) {
 		FUN_10012ff0(p_time);
 		return;
 	}
 
-	LegoCarRaceActor::VTable0x70(p_time);
+	LegoCarRaceActor::UpdateState(p_time);
 
 	if (m_userNavFlag && m_userState == LEGORACECAR_UNKNOWN_1) {
 		if (HandleSkeletonKicks(p_time)) {
@@ -438,7 +438,7 @@ MxResult LegoRaceCar::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
 	// Note: Code duplication with LegoRaceActor::HitActor
 	if (!p_actor->GetUserNavFlag()) {
-		if (p_actor->GetState()) {
+		if (p_actor->GetActorFlags()) {
 			return FAILURE;
 		}
 
@@ -451,7 +451,7 @@ MxResult LegoRaceCar::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			Vector3(matr[3]) += g_unk0x10102af0;
 			roi->FUN_100a58f0(matr);
 
-			p_actor->SetState(2);
+			p_actor->SetActorFlags(2);
 		}
 
 		if (m_userNavFlag) {
@@ -587,9 +587,9 @@ void LegoJetski::FUN_100136f0(float p_worldSpeed)
 
 // FUNCTION: LEGO1 0x10013740
 // FUNCTION: BETA10 0x100cc0ae
-void LegoJetski::VTable0x70(float p_time)
+void LegoJetski::UpdateState(float p_time)
 {
-	LegoJetskiRaceActor::VTable0x70(p_time);
+	LegoJetskiRaceActor::UpdateState(p_time);
 
 	if (LegoCarRaceActor::m_unk0x0c == 1) {
 		FUN_1005d4b0();

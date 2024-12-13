@@ -65,7 +65,7 @@ MxFloat Doors::VTable0xcc(float p_time)
 
 // FUNCTION: LEGO1 0x10066250
 // FUNCTION: BETA10 0x10026a45
-void Doors::VTable0x70(float p_time)
+void Doors::UpdateState(float p_time)
 {
 	assert(m_ltDoor && m_rtDoor);
 
@@ -75,7 +75,7 @@ void Doors::VTable0x70(float p_time)
 	switch (m_unk0x154) {
 	case 0:
 		m_unk0x154 = 1;
-		m_state = 0;
+		m_actorFlags = 0;
 		break;
 	case 1:
 		break;
@@ -108,7 +108,7 @@ void Doors::VTable0x70(float p_time)
 			m_ltDoor->VTable0x14();
 			m_rtDoor->VTable0x14();
 			m_unk0x154 = 1;
-			m_state = 0;
+			m_actorFlags = 0;
 			m_unk0x1f4 = 0;
 		}
 	}

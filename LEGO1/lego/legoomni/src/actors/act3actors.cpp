@@ -34,13 +34,13 @@ Act3Actor::Act3Actor()
 MxU32 Act3Actor::VTable0x90(float p_time, Matrix4& p_transform)
 {
 	// Note: Code duplication with LegoExtraActor::VTable0x90
-	switch (m_state & 0xff) {
+	switch (m_actorFlags & 0xff) {
 	case 0:
 	case 1:
 		return TRUE;
 	case 2:
 		m_unk0x1c = p_time + 2000.0f;
-		m_state = 3;
+		m_actorFlags = 3;
 		m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
 		m_lastTime = p_time;
 		return FALSE;
@@ -65,7 +65,7 @@ MxU32 Act3Actor::VTable0x90(float p_time, Matrix4& p_transform)
 			return FALSE;
 		}
 		else {
-			m_state = 0;
+			m_actorFlags = 0;
 			m_unk0x1c = 0;
 
 			positionRef -= g_unk0x10104ef0;
@@ -82,7 +82,7 @@ MxU32 Act3Actor::VTable0x90(float p_time, Matrix4& p_transform)
 MxResult Act3Actor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
 	if (!p_actor->GetUserNavFlag() && p_bool) {
-		if (p_actor->GetState()) {
+		if (p_actor->GetActorFlags()) {
 			return FAILURE;
 		}
 
@@ -96,7 +96,7 @@ MxResult Act3Actor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 		roi->FUN_100a58f0(local2world);
 		roi->VTable0x14();
 
-		p_actor->SetState(c_bit2 | c_bit9);
+		p_actor->SetActorFlags(c_bit2 | c_noCollide);
 	}
 
 	return SUCCESS;
@@ -108,7 +108,7 @@ Act3Cop::Act3Cop()
 {
 	m_unk0x20 = -1.0f;
 	m_world = NULL;
-	SetState(c_disable);
+	SetActorFlags(c_disable);
 }
 
 // FUNCTION: LEGO1 0x1003ff70
@@ -154,7 +154,7 @@ void Act3Cop::ParseAction(char* p_extra)
 }
 
 // STUB: LEGO1 0x100401f0
-void Act3Cop::VTable0x70(float p_time)
+void Act3Cop::UpdateState(float p_time)
 {
 	// TODO
 }
@@ -194,7 +194,7 @@ Act3Brickster::Act3Brickster()
 	m_unk0x24 = 0.0f;
 	m_unk0x54 = 0;
 
-	SetState(c_disable);
+	SetActorFlags(c_disable);
 	m_unk0x58 = 0;
 
 	m_unk0x3c.Clear();
@@ -227,7 +227,7 @@ void Act3Brickster::ParseAction(char* p_extra)
 }
 
 // STUB: LEGO1 0x10041050
-void Act3Brickster::VTable0x70(float p_time)
+void Act3Brickster::UpdateState(float p_time)
 {
 	// TODO
 }
@@ -315,7 +315,7 @@ MxResult Act3Shark::FUN_10042ce0(Act3Ammo* p_ammo)
 }
 
 // STUB: LEGO1 0x10042d40
-void Act3Shark::VTable0x70(float p_time)
+void Act3Shark::UpdateState(float p_time)
 {
 	// TODO
 }

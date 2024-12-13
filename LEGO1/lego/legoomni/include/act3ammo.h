@@ -22,7 +22,7 @@ public:
 	~Act3Ammo() override;
 
 	void Destroy(MxBool p_fromDestructor) override; // vtable+0x1c
-	void VTable0x70(float p_time) override;         // vtable+0x70
+	void UpdateState(float p_time) override;        // vtable+0x70
 
 	// FUNCTION: BETA10 0x10017750
 	MxU32 IsValid() { return m_ammoFlag & c_valid; }

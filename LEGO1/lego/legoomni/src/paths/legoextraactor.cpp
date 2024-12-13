@@ -50,13 +50,13 @@ LegoExtraActor::~LegoExtraActor()
 // FUNCTION: LEGO1 0x1002a720
 MxU32 LegoExtraActor::VTable0x90(float p_time, Matrix4& p_transform)
 {
-	switch (m_state & 0xff) {
+	switch (m_actorFlags & 0xff) {
 	case 0:
 	case 1:
 		return TRUE;
 	case 2:
 		m_scheduledTime = p_time + 2000.0f;
-		m_state = 3;
+		m_actorFlags = 3;
 		m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
 		m_lastTime = p_time;
 		return FALSE;
@@ -95,7 +95,7 @@ MxU32 LegoExtraActor::VTable0x90(float p_time, Matrix4& p_transform)
 			return FALSE;
 		}
 		else {
-			m_state = 0;
+			m_actorFlags = 0;
 			m_scheduledTime = 0.0f;
 			positionRef -= g_unk0x10104c18;
 			m_roi->FUN_100a58f0(p_transform);
@@ -192,7 +192,7 @@ inline void LegoExtraActor::FUN_1002ad8a()
 // FUNCTION: LEGO1 0x1002aba0
 MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
-	if (p_actor->GetState() != 0 || m_state != 0) {
+	if (p_actor->GetActorFlags() != 0 || m_actorFlags != 0) {
 		return FAILURE;
 	}
 
@@ -237,7 +237,7 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 				VTable0xc4();
 				SetWorldSpeed(0);
 				m_whichAnim = 1;
-				m_state = 0x101;
+				m_actorFlags = 0x101;
 			}
 		}
 
@@ -245,7 +245,7 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			LegoROI* roi = m_roi;
 			SoundManager()->GetCacheSoundManager()->Play("crash5", m_roi->GetName(), FALSE);
 			VTable0xc4();
-			m_state = 0x102;
+			m_actorFlags = 0x102;
 			Mx3DPointFloat dir = p_actor->GetWorldDirection();
 			MxMatrix matrix3 = MxMatrix(roi->GetLocal2World());
 			Vector3 positionRef(matrix3[3]);
@@ -328,18 +328,18 @@ void LegoExtraActor::Restart()
 }
 
 // FUNCTION: LEGO1 0x1002b440
-void LegoExtraActor::VTable0x70(float p_time)
+void LegoExtraActor::UpdateState(float p_time)
 {
 	LegoAnimActorStruct* laas = NULL;
 
 	switch (m_whichAnim) {
 	case 0:
-		LegoAnimActor::VTable0x70(p_time);
+		LegoAnimActor::UpdateState(p_time);
 		break;
 	case 1:
 		if (m_scheduledTime < p_time) {
 			m_whichAnim = 2;
-			m_state = 0x101;
+			m_actorFlags = 0x101;
 			m_scheduledTime = m_assAnim->GetDuration() + p_time;
 			break;
 		}
@@ -350,7 +350,7 @@ void LegoExtraActor::VTable0x70(float p_time)
 	case 2:
 		if (m_scheduledTime < p_time) {
 			m_whichAnim = 0;
-			m_state = 0;
+			m_actorFlags = 0;
 			SetWorldSpeed(m_prevWorldSpeed);
 			m_roi->FUN_100a58f0(m_unk0x18);
 			m_lastTime = p_time;
@@ -452,7 +452,7 @@ MxU32 LegoExtraActor::VTable0x6c(
 		if (plpas.find(*itpa) != plpas.end()) {
 			LegoPathActor* actor = *itpa;
 
-			if (this != actor && !(actor->GetState() & LegoPathActor::c_bit9)) {
+			if (this != actor && !(actor->GetActorFlags() & LegoPathActor::c_noCollide)) {
 				LegoROI* roi = actor->GetROI();
 
 				if ((roi != NULL && roi->GetVisibility()) || actor->GetCameraFlag()) {

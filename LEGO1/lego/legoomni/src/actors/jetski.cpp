@@ -49,9 +49,9 @@ MxResult Jetski::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x1007e680
-void Jetski::VTable0x70(float p_time)
+void Jetski::UpdateState(float p_time)
 {
-	IslePathActor::VTable0x70(p_time);
+	IslePathActor::UpdateState(p_time);
 
 	char buf[200];
 	float speed = abs(m_worldSpeed);

@@ -202,7 +202,7 @@ void Pizza::FUN_100382b0()
 
 		m_act1state->m_unk0x018 = 0;
 		m_state->m_unk0x0c = 0;
-		UserActor()->SetState(0);
+		UserActor()->SetActorFlags(0);
 		g_isleFlags |= Isle::c_playMusic;
 		AnimationManager()->EnableCamAnims(TRUE);
 		AnimationManager()->FUN_1005f6d0(TRUE);
@@ -472,7 +472,7 @@ MxLong Pizza::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 			m_state->m_unk0x0c = 4;
 			m_state->SetUnknown0xb0(IsleScript::c_noneIsle);
-			UserActor()->SetState(0);
+			UserActor()->SetActorFlags(0);
 			m_skateBoard->SetUnknown0x160(TRUE);
 			m_world->PlaceActor(m_skateBoard, "int37", 2, 0.5, 3, 0.5);
 

@@ -426,7 +426,7 @@ MxLong Act3::Notify(MxParam& p_param)
 					VideoManager()->Get3DManager()->SetFrustrum(45.0f, 0.1f, 125.0f);
 
 					m_brickster->SetWorldSpeed(5.0f);
-					m_brickster->SetState(0);
+					m_brickster->SetActorFlags(0);
 					assert(BackgroundAudioManager());
 
 					action.SetAtomId(*g_jukeboxScript);
@@ -435,11 +435,11 @@ MxLong Act3::Notify(MxParam& p_param)
 					BackgroundAudioManager()->PlayMusic(action, 5, MxPresenter::e_repeating);
 					m_brickster->FUN_100417c0();
 
-					m_cop1->SetState(0);
+					m_cop1->SetActorFlags(0);
 					m_cop1->SetWorldSpeed(2.0f);
 					m_cop1->VTable0xa8();
 
-					m_cop2->SetState(0);
+					m_cop2->SetActorFlags(0);
 					m_cop2->SetWorldSpeed(2.0f);
 					m_cop2->VTable0xa8();
 
@@ -592,9 +592,9 @@ void Act3::GoodEnding(const Matrix4& p_destination)
 {
 	assert(m_cop1 && m_cop2 && m_brickster && m_state);
 
-	m_cop1->SetState(LegoPathActor::c_disable);
-	m_cop2->SetState(LegoPathActor::c_disable);
-	m_brickster->SetState(LegoPathActor::c_disable);
+	m_cop1->SetActorFlags(LegoPathActor::c_disable);
+	m_cop2->SetActorFlags(LegoPathActor::c_disable);
+	m_brickster->SetActorFlags(LegoPathActor::c_disable);
 
 	m_unk0x4220.Clear();
 	m_copter->FUN_10004640(p_destination);

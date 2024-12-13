@@ -586,7 +586,7 @@ void Isle::Enable(MxBool p_enable)
 				FALSE,
 				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 			);
-			actor->SetState(0);
+			actor->SetActorFlags(0);
 		}
 		else {
 			FUN_10032620();
