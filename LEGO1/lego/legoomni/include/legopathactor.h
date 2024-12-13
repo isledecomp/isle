@@ -22,9 +22,16 @@ extern const char* g_strHIT_WALL_SOUND;
 // SIZE 0x154
 class LegoPathActor : public LegoActor {
 public:
-	enum {
-		c_bit2 = 0x02,
-		c_disable = 0x04,
+	enum ActorState {
+		// States
+		c_initial = 0,
+		c_one = 1,
+		c_two = 2,
+		c_three = 3,
+		c_disabled = 4,
+		c_maxState = 255,
+
+		// Flags
 		c_noCollide = 0x100
 	};
 
@@ -133,7 +140,7 @@ public:
 	LegoPathBoundary* GetBoundary() { return m_boundary; }
 
 	// FUNCTION: BETA10 0x1001c860
-	MxU32 GetActorFlags() { return m_actorFlags; }
+	MxU32 GetActorState() { return m_actorState; }
 
 	LegoPathController* GetController() { return m_pathController; }
 	MxBool GetCollideBox() { return m_collideBox; }
@@ -143,7 +150,7 @@ public:
 	void SetBoundary(LegoPathBoundary* p_boundary) { m_boundary = p_boundary; }
 
 	// FUNCTION: BETA10 0x10013430
-	void SetActorFlags(MxU32 p_actorFlags) { m_actorFlags = p_actorFlags; }
+	void SetActorState(MxU32 p_actorState) { m_actorState = p_actorState; }
 
 	void SetController(LegoPathController* p_pathController) { m_pathController = p_pathController; }
 	void SetLastTime(MxFloat p_lastTime) { m_lastTime = p_lastTime; }
@@ -173,7 +180,7 @@ protected:
 	MxFloat m_lastTime;                   // 0x84
 	LegoPathBoundary* m_boundary;         // 0x88
 	LegoUnknown m_unk0x8c;                // 0x8c
-	MxU32 m_actorFlags;                   // 0xdc
+	MxU32 m_actorState;                   // 0xdc
 	LegoUnknown100db7f4* m_destEdge;      // 0xe0
 	MxFloat m_unk0xe4;                    // 0xe4
 	MxBool m_collideBox;                  // 0xe8

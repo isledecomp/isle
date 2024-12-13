@@ -37,7 +37,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 	Vector3* v1 = NULL;
 	Vector3* v2 = NULL;
 
-	if (m_actorFlags == 1) {
+	if (m_actorState == c_one) {
 		if (m_destEdge == LegoPathController::GetControlEdgeA(13)) {
 			m_boundary = (LegoPathBoundary*) m_destEdge->OtherFace(LegoPathController::GetControlBoundaryA(13));
 		}
@@ -45,7 +45,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 			m_boundary = (LegoPathBoundary*) m_destEdge->OtherFace(LegoPathController::GetControlBoundaryA(15));
 		}
 
-		m_actorFlags = 0;
+		m_actorState = c_initial;
 		m_unk0x7c = 0;
 
 		if (m_userNavFlag) {
@@ -58,7 +58,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 	}
 	else {
 		if (p_edge == LegoPathController::GetControlEdgeA(12)) {
-			m_actorFlags = 1;
+			m_actorState = c_one;
 
 			if (m_worldSpeed < g_unk0x100da044) {
 				m_worldSpeed = g_unk0x100da044;
@@ -68,7 +68,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 			m_boundary = LegoPathController::GetControlBoundaryA(13);
 		}
 		else if (p_edge == LegoPathController::GetControlEdgeA(14)) {
-			m_actorFlags = 1;
+			m_actorState = c_one;
 
 			if (m_worldSpeed < g_unk0x100da044) {
 				m_worldSpeed = g_unk0x100da044;
@@ -78,7 +78,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 			m_boundary = LegoPathController::GetControlBoundaryA(15);
 		}
 
-		if (m_actorFlags == 1) {
+		if (m_actorState == c_one) {
 			if (m_userNavFlag) {
 				m_unk0xe4 = 0.5f;
 			}

@@ -134,7 +134,7 @@ public:
 	void Reset()
 	{
 		m_roi->SetVisibility(TRUE);
-		SetActorFlags(0);
+		SetActorState(c_initial);
 	}
 
 	void SetWorld(LegoWorld* p_world) { m_world = p_world; }

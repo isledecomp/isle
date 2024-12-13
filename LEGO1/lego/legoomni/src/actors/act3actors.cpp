@@ -31,20 +31,21 @@ Act3Actor::Act3Actor()
 }
 
 // FUNCTION: LEGO1 0x1003fb70
+// FUNCTION: BETA10 0x100180ab
 MxU32 Act3Actor::VTable0x90(float p_time, Matrix4& p_transform)
 {
 	// Note: Code duplication with LegoExtraActor::VTable0x90
-	switch (m_actorFlags & 0xff) {
-	case 0:
-	case 1:
+	switch (m_actorState & c_maxState) {
+	case c_initial:
+	case c_one:
 		return TRUE;
-	case 2:
+	case c_two:
 		m_unk0x1c = p_time + 2000.0f;
-		m_actorFlags = 3;
+		m_actorState = c_three;
 		m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
 		m_lastTime = p_time;
 		return FALSE;
-	case 3:
+	case c_three:
 		assert(!m_userNavFlag);
 		Vector3 positionRef(p_transform[3]);
 
@@ -65,7 +66,7 @@ MxU32 Act3Actor::VTable0x90(float p_time, Matrix4& p_transform)
 			return FALSE;
 		}
 		else {
-			m_actorFlags = 0;
+			m_actorState = c_initial;
 			m_unk0x1c = 0;
 
 			positionRef -= g_unk0x10104ef0;
@@ -79,10 +80,11 @@ MxU32 Act3Actor::VTable0x90(float p_time, Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x1003fd90
+// FUNCTION: BETA10 0x10018328
 MxResult Act3Actor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
 	if (!p_actor->GetUserNavFlag() && p_bool) {
-		if (p_actor->GetActorFlags()) {
+		if (p_actor->GetActorState() != c_initial) {
 			return FAILURE;
 		}
 
@@ -96,7 +98,7 @@ MxResult Act3Actor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 		roi->FUN_100a58f0(local2world);
 		roi->VTable0x14();
 
-		p_actor->SetActorFlags(c_bit2 | c_noCollide);
+		p_actor->SetActorState(c_two | c_noCollide);
 	}
 
 	return SUCCESS;
@@ -108,7 +110,7 @@ Act3Cop::Act3Cop()
 {
 	m_unk0x20 = -1.0f;
 	m_world = NULL;
-	SetActorFlags(c_disable);
+	SetActorState(c_disabled);
 }
 
 // FUNCTION: LEGO1 0x1003ff70
@@ -194,7 +196,7 @@ Act3Brickster::Act3Brickster()
 	m_unk0x24 = 0.0f;
 	m_unk0x54 = 0;
 
-	SetActorFlags(c_disable);
+	SetActorState(c_disabled);
 	m_unk0x58 = 0;
 
 	m_unk0x3c.Clear();

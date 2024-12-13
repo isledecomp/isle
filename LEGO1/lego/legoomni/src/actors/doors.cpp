@@ -75,7 +75,7 @@ void Doors::UpdateState(float p_time)
 	switch (m_unk0x154) {
 	case 0:
 		m_unk0x154 = 1;
-		m_actorFlags = 0;
+		m_actorState = c_initial;
 		break;
 	case 1:
 		break;
@@ -108,7 +108,7 @@ void Doors::UpdateState(float p_time)
 			m_ltDoor->VTable0x14();
 			m_rtDoor->VTable0x14();
 			m_unk0x154 = 1;
-			m_actorFlags = 0;
+			m_actorState = c_initial;
 			m_unk0x1f4 = 0;
 		}
 	}

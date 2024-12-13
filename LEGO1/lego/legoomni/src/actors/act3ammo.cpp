@@ -159,7 +159,7 @@ MxResult Act3Ammo::FUN_10053cb0(LegoPathController* p_p, LegoPathBoundary* p_bou
 	m_unk0x19c = p_unk0x19c;
 	m_unk0x7c = 0.0f;
 	m_lastTime = -1.0f;
-	m_actorFlags = 1;
+	m_actorState = c_one;
 	return SUCCESS;
 }
 
@@ -186,13 +186,13 @@ MxResult Act3Ammo::FUN_10053d30(LegoPathController* p_p, MxFloat p_unk0x19c)
 	m_unk0x19c = p_unk0x19c;
 	m_unk0x7c = 0.0f;
 	m_lastTime = -1.0f;
-	m_actorFlags = 1;
+	m_actorState = c_one;
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10054050
-// STUB: BETA10 0x1001e362
+// FUNCTION: LEGO1 0x10054050
+// FUNCTION: BETA10 0x1001e362
 void Act3Ammo::UpdateState(float p_time)
 {
-	// TODO
+	assert(IsValid());
 }

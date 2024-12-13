@@ -79,7 +79,7 @@ void LegoAnimActor::UpdateState(float p_time)
 		m_lastTime = p_time - 1.0f;
 	}
 
-	if (m_actorFlags == 0 && !m_userNavFlag && m_worldSpeed <= 0) {
+	if (m_actorState == c_initial && !m_userNavFlag && m_worldSpeed <= 0) {
 		if (m_curAnim >= 0) {
 			MxMatrix matrix(m_unk0xec);
 			float f;

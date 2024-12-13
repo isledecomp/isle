@@ -438,7 +438,7 @@ MxResult LegoRaceCar::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
 	// Note: Code duplication with LegoRaceActor::HitActor
 	if (!p_actor->GetUserNavFlag()) {
-		if (p_actor->GetActorFlags()) {
+		if (p_actor->GetActorState() != c_initial) {
 			return FAILURE;
 		}
 
@@ -451,7 +451,7 @@ MxResult LegoRaceCar::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			Vector3(matr[3]) += g_unk0x10102af0;
 			roi->FUN_100a58f0(matr);
 
-			p_actor->SetActorFlags(2);
+			p_actor->SetActorState(c_two);
 		}
 
 		if (m_userNavFlag) {
