@@ -108,7 +108,7 @@ Act3Cop::Act3Cop()
 {
 	m_unk0x20 = -1.0f;
 	m_world = NULL;
-	SetState(c_bit3);
+	SetState(c_disable);
 }
 
 // FUNCTION: LEGO1 0x1003ff70
@@ -194,7 +194,7 @@ Act3Brickster::Act3Brickster()
 	m_unk0x24 = 0.0f;
 	m_unk0x54 = 0;
 
-	SetState(c_bit3);
+	SetState(c_disable);
 	m_unk0x58 = 0;
 
 	m_unk0x3c.Clear();

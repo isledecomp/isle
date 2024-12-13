@@ -23,6 +23,8 @@
 #include "mxtransitionmanager.h"
 #include "scripts.h"
 
+#include <vec.h>
+
 DECOMP_SIZE_ASSERT(Act3, 0x4274)
 DECOMP_SIZE_ASSERT(Act3State, 0x0c)
 DECOMP_SIZE_ASSERT(Act3ListElement, 0x0c)
@@ -584,18 +586,85 @@ void Act3::FUN_10073430()
 	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 }
 
-// STUB: LEGO1 0x10073460
-// STUB: BETA10 0x10016bc6
-void Act3::GoodEnding(const Matrix4& p_matrix)
+// FUNCTION: LEGO1 0x10073460
+// FUNCTION: BETA10 0x10016bc6
+void Act3::GoodEnding(const Matrix4& p_destination)
 {
-	// TODO
+	assert(m_cop1 && m_cop2 && m_brickster && m_state);
+
+	m_cop1->SetState(LegoPathActor::c_disable);
+	m_cop2->SetState(LegoPathActor::c_disable);
+	m_brickster->SetState(LegoPathActor::c_disable);
+
+	m_unk0x4220.Clear();
+	m_copter->FUN_10004640(p_destination);
+
 	DebugPrintf("In Good Ending...");
+	DebugCopter(
+		m_copter->GetROI()->GetLocal2World(),
+		p_destination,
+		m_copter->m_unk0x160,
+		m_copter->m_unk0x1a8,
+		m_copter->m_unk0x1f4
+	);
 }
 
 // FUNCTION: LEGO1 0x10073500
 void Act3::DebugPrintf(const char* p_format, ...)
 {
 	// empty
+}
+
+// FUNCTION: LEGO1 0x10073510
+void Act3::DebugCopter(
+	const Matrix4& p_copter,
+	const Matrix4& p_destination,
+	const Matrix4& p_startPosition,
+	const Matrix4& p_endPosition,
+	const UnknownMx4DPointFloat& p_unk0x1f4
+)
+{
+	DebugPrintf("Copter matrix...\n\n");
+
+	// STRING: LEGO1 0x100f78e0
+	DebugPrintf("\t%g, %g, %g, %g", EXPAND4(p_copter[0]));
+	DebugPrintf("\t%g, %g, %g, %g", EXPAND4(p_copter[1]));
+	DebugPrintf("\t%g, %g, %g, %g", EXPAND4(p_copter[2]));
+	// STRING: LEGO1 0x100f78cc
+	DebugPrintf("\t%g, %g, %g, %g\n\n", EXPAND4(p_copter[3]));
+
+	DebugPrintf("Destination matrix...");
+	DebugPrintf("\t%g, %g, %g, %g", EXPAND4(p_destination[0]));
+	DebugPrintf("\t%g, %g, %g, %g", EXPAND4(p_destination[1]));
+	DebugPrintf("\t%g, %g, %g, %g", EXPAND4(p_destination[2]));
+	DebugPrintf("\t%g, %g, %g, %g\n\n", EXPAND4(p_destination[3]));
+
+	DebugPrintf("Start position...");
+	DebugPrintf("\t%g, %g, %g, %g", EXPAND4(p_startPosition[0]));
+	DebugPrintf("\t%g, %g, %g, %g", EXPAND4(p_startPosition[1]));
+	DebugPrintf("\t%g, %g, %g, %g", EXPAND4(p_startPosition[2]));
+	DebugPrintf("\t%g, %g, %g, %g\n\n", EXPAND4(p_startPosition[3]));
+
+	DebugPrintf("End position...");
+	DebugPrintf("\t%g, %g, %g, %g", EXPAND4(p_endPosition[0]));
+	DebugPrintf("\t%g, %g, %g, %g", EXPAND4(p_endPosition[1]));
+	DebugPrintf("\t%g, %g, %g, %g", EXPAND4(p_endPosition[2]));
+	DebugPrintf("\t%g, %g, %g, %g\n\n", EXPAND4(p_endPosition[3]));
+
+	Mx4DPointFloat unk0x00, unk0x18;
+
+	if (p_unk0x1f4.GetUnknown0x30() != 0) {
+		// TODO: Match
+		unk0x00 = p_unk0x1f4.GetUnknown0x00();
+		unk0x18 = p_unk0x1f4.GetUnknown0x18();
+
+		DebugPrintf("Source quaternion...");
+		// STRING: LEGO1 0x100f7864
+		DebugPrintf("\t%g, %g, %g, %g\n", EXPAND4(unk0x00));
+
+		DebugPrintf("Destination quaternion...");
+		DebugPrintf("\t%g, %g, %g, %g\n", EXPAND4(unk0x18));
+	}
 }
 
 // FUNCTION: LEGO1 0x10073a90

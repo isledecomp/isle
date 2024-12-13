@@ -131,6 +131,10 @@ public:
 		m_unk0x30 |= c_bit2;
 	}
 
+	const Vector4& GetUnknown0x00() const { return m_unk0x00; }
+	const Vector4& GetUnknown0x18() const { return m_unk0x18; }
+	undefined4 GetUnknown0x30() const { return m_unk0x30; }
+
 	inline int Unknown6(Matrix4& p_matrix, float p_f);
 	inline void Unknown7();
 

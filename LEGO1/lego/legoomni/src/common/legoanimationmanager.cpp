@@ -1028,7 +1028,7 @@ MxResult LegoAnimationManager::FUN_100605e0(
 				LegoPathActor* actor = UserActor();
 
 				if (actor != NULL) {
-					actor->SetState(LegoPathActor::c_bit3);
+					actor->SetState(LegoPathActor::c_disable);
 					actor->SetWorldSpeed(0.0f);
 				}
 			}
@@ -2786,7 +2786,7 @@ void LegoAnimationManager::FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x
 
 		LegoPathActor* actor = UserActor();
 		if (actor != NULL) {
-			actor->SetState(LegoPathActor::c_bit3);
+			actor->SetState(LegoPathActor::c_disable);
 			actor->SetWorldSpeed(0.0f);
 		}
 
