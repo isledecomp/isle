@@ -858,6 +858,7 @@ MxResult LegoBuildingManager::FUN_10030630()
 }
 
 // FUNCTION: LEGO1 0x10030790
+// FUNCTION: BETA10 0x10064db9
 LegoBuildingInfo* LegoBuildingManager::GetInfoArray(MxS32& p_length)
 {
 	if (!m_unk0x09) {
