@@ -161,11 +161,19 @@ void Act3Cop::Animate(float p_time)
 	// TODO
 }
 
+// FUNCTION: LEGO1 0x10040350
+// FUNCTION: BETA10 0x10018c4a
+MxResult Act3Cop::FUN_10040350(Act3Ammo& p_ammo, const Vector3&)
+{
+	return FUN_10040360();
+}
+
 // STUB: LEGO1 0x10040360
 // STUB: BETA10 0x10018c6a
-void Act3Cop::FUN_10040360()
+MxResult Act3Cop::FUN_10040360()
 {
 	// TODO
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10040d20
@@ -265,6 +273,17 @@ MxResult Act3Brickster::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 		else {
 			return Act3Actor::HitActor(p_actor, p_bool);
 		}
+	}
+
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100417a0
+// FUNCTION: BETA10 0x1001a3cf
+MxResult Act3Brickster::FUN_100417a0(Act3Ammo& p_ammo, const Vector3&)
+{
+	if (m_unk0x58 < 8) {
+		return FUN_100417c0();
 	}
 
 	return SUCCESS;

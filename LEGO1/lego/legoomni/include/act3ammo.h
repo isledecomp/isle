@@ -47,6 +47,9 @@ public:
 	// FUNCTION: BETA10 0x1001fc80
 	MxU32 IsPizza() { return m_ammoFlag & c_pizza; }
 
+	// FUNCTION: BETA10 0x10021d60
+	MxU32 IsDonut() { return m_ammoFlag & c_donut; }
+
 	// FUNCTION: BETA10 0x1001fcb0
 	void SetBit4(MxBool p_bit4)
 	{
@@ -57,6 +60,9 @@ public:
 			m_ammoFlag &= ~c_bit4;
 		}
 	}
+
+	// FUNCTION: BETA10 0x10021d90
+	MxU32 IsBit4() { return m_ammoFlag & c_bit4; }
 
 	void SetBit5(MxBool p_bit5)
 	{
@@ -84,6 +90,10 @@ public:
 	// Act3Ammo::`scalar deleting destructor'
 
 private:
+	MxResult FUN_10053db0(float p_param1, const Matrix4& p_param2);
+
+	static Mx3DPointFloat g_unk0x10104f08;
+
 	MxU16 m_ammoFlag;       // 0x154
 	MxFloat m_unk0x158;     // 0x158
 	Act3* m_a3;             // 0x15c

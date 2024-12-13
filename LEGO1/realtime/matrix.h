@@ -130,6 +130,7 @@ public:
 	inline virtual int FromQuaternion(const Vector4& p_vec); // vtable+0x44
 
 	// FUNCTION: LEGO1 0x100a0ff0
+	// FUNCTION: BETA10 0x1001fe60
 	void Scale(const float& p_x, const float& p_y, const float& p_z)
 	{
 		for (int i = 0; i < 4; i++) {
