@@ -279,7 +279,7 @@ void Act3Ammo::Animate(float p_time)
 	local104.SetIdentity();
 
 	MxResult r = FUN_10053db0((m_unk0x7c / m_BADuration) * m_unk0x19c, local104);
-	assert(r == SUCCESS);
+	assert(r == 0); // SUCCESS
 
 	local60.SetIdentity();
 
@@ -389,6 +389,7 @@ void Act3Ammo::Animate(float p_time)
 								SoundManager()->GetCacheSoundManager()->Play("dnhitpz", NULL, FALSE);
 								m_a3->RemoveDonut(*this);
 								local14 = TRUE;
+								break;
 							}
 						}
 					}
@@ -417,6 +418,7 @@ void Act3Ammo::Animate(float p_time)
 								SoundManager()->GetCacheSoundManager()->Play("pzhitdn", NULL, FALSE);
 								m_a3->RemovePizza(*this);
 								local14 = TRUE;
+								break;
 							}
 						}
 					}
