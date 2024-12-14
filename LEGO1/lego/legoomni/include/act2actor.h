@@ -34,7 +34,7 @@ public:
 	MxU32 FUN_10019700(MxFloat p_param);
 	void FUN_100199f0(MxS8 p_param);
 	void FUN_100192a0(undefined4 p_location);
-	LegoEntity* FUN_10019b90(undefined* p_param);
+	LegoEntity* FUN_10019b90(MxBool* p_param);
 
 	// SYNTHETIC: LEGO1 0x1001a0a0
 	// Act2Actor::`scalar deleting destructor'

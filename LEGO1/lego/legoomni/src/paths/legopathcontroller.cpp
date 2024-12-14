@@ -1015,9 +1015,9 @@ MxS32 LegoPathController::FUN_1004a240(
 	return 0;
 }
 
-// STUB: LEGO1 0x1004a380
-// STUB: BETA10 0x100b957f
-undefined4 LegoPathController::FUN_1004a380(
+// FUNCTION: LEGO1 0x1004a380
+// FUNCTION: BETA10 0x100b957f
+MxResult LegoPathController::FUN_1004a380(
 	Vector3& p_param1,
 	Vector3& p_param2,
 	Mx3DPointFloat* p_param3,
@@ -1025,6 +1025,87 @@ undefined4 LegoPathController::FUN_1004a380(
 	MxFloat& p_param5
 )
 {
-	// TODO
-	return 0;
+	MxFloat param5 = p_param5;
+	Mx3DPointFloat local24;
+	MxU32 local8 = TRUE;
+
+	for (MxS32 i = 0; i < m_numL; i++) {
+		if (m_boundaries[i].m_flags & LegoPathBoundary::c_bit3) {
+			continue;
+		}
+
+		LegoPathBoundary* b = &m_boundaries[i];
+		Mx4DPointFloat* unk0x14 = b->GetUnknown0x14();
+		float local28 = p_param3[0].Dot(&p_param3[0], unk0x14);
+
+		if (local28 < 0.001 && local28 > -0.001) {
+			continue;
+		}
+
+		float local2c = p_param3[1].Dot(&p_param3[1], unk0x14);
+		float local34 = p_param3[2].Dot(&p_param3[2], unk0x14) + unk0x14->index_operator(3);
+		float local3c = local2c * local2c - local34 * local28 * 4.0f;
+
+		if (local3c < -0.001) {
+			continue;
+		}
+
+		if (local3c < 0.0f) {
+			local3c = 0.0f;
+		}
+		else {
+			local3c = sqrt(local3c);
+		}
+
+		float local38 = (local3c - local2c) / (local28 * 2.0f);
+		float local44 = (-local3c - local2c) / (local28 * 2.0f);
+
+		if (!IsBetween(local38, 0.0f, param5)) {
+			if (IsBetween(local44, 0.0f, param5)) {
+				local38 = local44;
+			}
+			else {
+				continue;
+			}
+		}
+
+		if (local8 || FUN_100c17a0(local38, p_param5, 0.0f, param5)) {
+			Mx3DPointFloat local58(p_param3[0]);
+
+			local58 *= local38 * local38;
+			local24 = p_param3[1];
+			local24 *= local38;
+			local24 += p_param3[2];
+			local24 += local58;
+
+			assert(b->GetNumEdges() > 1);
+
+			MxS32 j;
+			for (j = b->GetNumEdges() - 1; j >= 0; j--) {
+				Mx4DPointFloat* local60 = b->GetEdgeNormal(j);
+
+				if (local24.Dot(local60, &local24) + local60->index_operator(3) < -0.001) {
+					break;
+				}
+			}
+
+			if (j < 0) {
+				Mx3DPointFloat local74(p_param1);
+				local74 -= local24;
+
+				if (local74.Dot(&local74, unk0x14) >= 0.0f) {
+					p_param5 = local38;
+					p_boundary = b;
+					local8 = FALSE;
+				}
+			}
+		}
+	}
+
+	if (local8) {
+		p_param5 = param5;
+		return FAILURE;
+	}
+
+	return SUCCESS;
 }

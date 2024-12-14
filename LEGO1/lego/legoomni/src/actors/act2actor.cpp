@@ -701,7 +701,7 @@ void Act2Actor::FUN_100199f0(MxS8 p_param)
 
 // FUNCTION: LEGO1 0x10019b90
 // FUNCTION: BETA10 0x1000e374
-LegoEntity* Act2Actor::FUN_10019b90(undefined* p_param)
+LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 {
 	MxS32 i;
 	LegoBuildingInfo* buildingInfo = BuildingManager()->GetInfoArray(i);
@@ -712,11 +712,11 @@ LegoEntity* Act2Actor::FUN_10019b90(undefined* p_param)
 	case 0:
 		if (buildingInfo[12].m_unk0x11) {
 			result = buildingInfo[12].m_entity;
-			*p_param = 1;
+			*p_param = TRUE;
 		}
 		else if (buildingInfo[14].m_unk0x11) {
 			result = buildingInfo[14].m_entity;
-			*p_param = 1;
+			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f0f30[i] != -1; i++) {
@@ -730,7 +730,7 @@ LegoEntity* Act2Actor::FUN_10019b90(undefined* p_param)
 	case 1:
 		if (buildingInfo[13].m_unk0x11) {
 			result = buildingInfo[13].m_entity;
-			*p_param = 1;
+			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f0f50[i] != -1; i++) {
@@ -744,11 +744,11 @@ LegoEntity* Act2Actor::FUN_10019b90(undefined* p_param)
 	case 2:
 		if (buildingInfo[9].m_unk0x11) {
 			result = buildingInfo[9].m_entity;
-			*p_param = 1;
+			*p_param = TRUE;
 		}
 		else if (buildingInfo[11].m_unk0x11) {
 			result = buildingInfo[11].m_entity;
-			*p_param = 1;
+			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f0f90[i] != -1; i++) {
@@ -762,15 +762,15 @@ LegoEntity* Act2Actor::FUN_10019b90(undefined* p_param)
 	case 3:
 		if (buildingInfo[7].m_unk0x11) {
 			result = buildingInfo[7].m_entity;
-			*p_param = 1;
+			*p_param = TRUE;
 		}
 		else if (buildingInfo[8].m_unk0x11) {
 			result = buildingInfo[8].m_entity;
-			*p_param = 1;
+			*p_param = TRUE;
 		}
 		else if (buildingInfo[3].m_unk0x11) {
 			result = buildingInfo[3].m_entity;
-			*p_param = 1;
+			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f0fa8[i] != -1; i++) {
@@ -784,11 +784,11 @@ LegoEntity* Act2Actor::FUN_10019b90(undefined* p_param)
 	case 4:
 		if (buildingInfo[5].m_unk0x11) {
 			result = buildingInfo[5].m_entity;
-			*p_param = 1;
+			*p_param = TRUE;
 		}
 		else if (buildingInfo[10].m_unk0x11) {
 			result = buildingInfo[10].m_entity;
-			*p_param = 1;
+			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f0fb8[i] != -1; i++) {
@@ -802,7 +802,7 @@ LegoEntity* Act2Actor::FUN_10019b90(undefined* p_param)
 	case 5:
 		if (buildingInfo[4].m_unk0x11) {
 			result = buildingInfo[4].m_entity;
-			*p_param = 1;
+			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f0fe8[i] != -1; i++) {
@@ -816,7 +816,7 @@ LegoEntity* Act2Actor::FUN_10019b90(undefined* p_param)
 	case 6:
 		if (buildingInfo[2].m_unk0x11) {
 			result = buildingInfo[2].m_entity;
-			*p_param = 1;
+			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f1000[i] != -1; i++) {
@@ -830,7 +830,7 @@ LegoEntity* Act2Actor::FUN_10019b90(undefined* p_param)
 	case 7:
 		if (buildingInfo[6].m_unk0x11) {
 			result = buildingInfo[6].m_entity;
-			*p_param = 1;
+			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f1018[i] != -1; i++) {
@@ -853,15 +853,15 @@ LegoEntity* Act2Actor::FUN_10019b90(undefined* p_param)
 			return result;
 		}
 
-		if (buildingInfo[0xf].m_unk0x11) {
-			result = buildingInfo[0xf].m_entity;
-			*p_param = 1;
+		if (buildingInfo[15].m_unk0x11) {
+			result = buildingInfo[15].m_entity;
+			*p_param = TRUE;
 		}
 		break;
 	}
 
 	if (!result && !g_brickstrLocations[m_unk0x1d].m_unk0x1c) {
-		g_brickstrLocations[m_unk0x1d].m_unk0x1c = 1;
+		g_brickstrLocations[m_unk0x1d].m_unk0x1c = TRUE;
 		m_unk0x48++;
 	}
 
