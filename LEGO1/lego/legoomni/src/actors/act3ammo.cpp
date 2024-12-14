@@ -196,11 +196,51 @@ MxResult Act3Ammo::FUN_10053d30(LegoPathController* p_p, MxFloat p_unk0x19c)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10053db0
-// STUB: BETA10 0x1001e0f0
+// FUNCTION: LEGO1 0x10053db0
+// FUNCTION: BETA10 0x1001e0f0
 MxResult Act3Ammo::FUN_10053db0(float p_param1, const Matrix4& p_param2)
 {
-	// TODO
+	float local34 = p_param1 * p_param1;
+
+	Vector3 local14(p_param2[0]);
+	Vector3 local3c(p_param2[1]);
+	Vector3 localc(p_param2[2]);
+	Vector3 local30(p_param2[3]);
+	Mx3DPointFloat local28;
+
+	local28 = m_eq[1];
+	local28 *= p_param1;
+	local30 = m_eq[0];
+	local30 *= local34;
+	local30 += local28;
+	local30 += m_eq[2];
+	localc = m_eq[0];
+	localc *= 2.0f;
+	localc *= p_param1;
+	localc += m_eq[1];
+	localc *= -1.0f;
+
+	if (localc.Unitize() != 0) {
+		assert(0);
+		return FAILURE;
+	}
+
+	local14[1] = local14[2] = 0.0f;
+	local14[0] = 1.0f;
+	local3c.EqualsCross(&localc, &local14);
+
+	if (local3c.Unitize() != 0) {
+		local14[0] = local14[1] = 0.0f;
+		local14[2] = 1.0f;
+		local3c.EqualsCross(&localc, &local14);
+
+		if (local3c.Unitize() != 0) {
+			assert(0);
+			return FAILURE;
+		}
+	}
+
+	local14.EqualsCross(&local3c, &localc);
 	return SUCCESS;
 }
 
