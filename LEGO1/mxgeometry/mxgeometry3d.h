@@ -76,8 +76,8 @@ public:
 	// FUNCTION: BETA10 0x1004af10
 	float& operator[](int idx) { return m_data[idx]; }
 
-	const float& operator[](int idx) const { return m_data[idx]; }
-
+	// According to the PDB, BETA10 will not link this one if it is never used
+	// const float& operator[](int idx) const { return m_data[idx]; }
 
 	// only used by a couple of BETA10 functions for some unknown reason
 	// FUNCTION: BETA10 0x1001c950
