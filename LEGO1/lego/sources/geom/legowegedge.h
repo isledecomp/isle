@@ -43,6 +43,7 @@ public:
 	// FUNCTION: BETA10 0x100270c0
 	LegoU32 GetFlag0x10() { return m_flags & c_bit5 ? FALSE : TRUE; }
 
+	// TODO: Other BETA10 reference at 0x1001c9e0, not sure what is going on
 	// FUNCTION: BETA10 0x1001ff80
 	Mx4DPointFloat* GetUnknown0x14() { return &m_unk0x14; }
 

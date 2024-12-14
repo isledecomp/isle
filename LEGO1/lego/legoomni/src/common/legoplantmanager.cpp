@@ -8,6 +8,7 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "misc/legostorage.h"
+#include "mxdebug.h"
 #include "mxmisc.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
@@ -54,6 +55,7 @@ MxU32 g_plantAnimationId[4] = {30, 33, 36, 39};
 char* LegoPlantManager::g_customizeAnimFile = NULL;
 
 // GLOBAL: LEGO1 0x10103180
+// GLOBAL: BETA10 0x1020f4c0
 LegoPlantInfo g_plantInfo[81];
 
 // FUNCTION: LEGO1 0x10026220
@@ -115,12 +117,77 @@ void LegoPlantManager::Reset(MxS32 p_worldId)
 	m_unk0x0c = 0;
 }
 
-// STUB: LEGO1 0x10026410
-// STUB: BETA10 0x100c50e9
+// FUNCTION: LEGO1 0x10026410
+// FUNCTION: BETA10 0x100c50e9
 MxResult LegoPlantManager::FUN_10026410()
 {
-	// might be similar to LegoBuildingManager::FUN_10030630()
-	// TODO
+	// similar to LegoBuildingManager::FUN_10030630()
+
+	LegoWorld* world = CurrentWorld();
+
+	if (world == NULL) {
+		return FAILURE;
+	}
+
+	for (MxS32 i = 0; i < sizeOfArray(g_plantInfo); i++) {
+		if (g_plantInfo[i].m_entity != NULL && g_plantInfo[i].m_name != NULL) {
+			g_plantInfo[i].m_boundary = world->FindPathBoundary(g_plantInfo[i].m_name);
+
+			if (g_plantInfo[i].m_boundary != NULL) {
+				Mx3DPointFloat position(g_plantInfo[i].m_x, g_plantInfo[i].m_y, g_plantInfo[i].m_z);
+				LegoPathBoundary* boundary = g_plantInfo[i].m_boundary;
+
+				for (MxS32 j = 0; j < boundary->GetNumEdges(); j++) {
+					Mx4DPointFloat* normal = boundary->GetEdgeNormal(j);
+
+					if (position.Dot(normal, &position) + (*normal).index_operator(3) < -0.001) {
+						MxTrace(
+							"Plant %d shot location (%g, %g, %g) is not in boundary %s.\n",
+							i,
+							position[0],
+							position[1],
+							position[2],
+							boundary->GetName()
+						);
+						g_plantInfo[i].m_boundary = NULL;
+						break;
+					}
+				}
+
+				if (g_plantInfo[i].m_boundary != NULL) {
+					Mx4DPointFloat& unk0x14 = *g_plantInfo[i].m_boundary->GetUnknown0x14();
+
+					if (position.Dot(&position, &unk0x14) + unk0x14.index_operator(3) > 0.001 ||
+						position.Dot(&position, &unk0x14) + unk0x14.index_operator(3) < -0.001) {
+
+						g_plantInfo[i].m_y =
+							-((position[0] * unk0x14.index_operator(0) + unk0x14.index_operator(3) +
+							   position[2] * unk0x14.index_operator(2)) /
+							  unk0x14.index_operator(1));
+
+						MxTrace(
+							"Plant %d shot location (%g, %g, %g) is not on plane of boundary %s...adjusting to (%g, "
+							"%g, "
+							"%g)\n",
+							i,
+							position[0],
+							position[1],
+							position[2],
+							g_plantInfo[i].m_boundary->GetName(),
+							position[0],
+							g_plantInfo[i].m_y,
+							position[2]
+						);
+					}
+				}
+			}
+			else {
+				MxTrace("Plant %d is in boundary %s that does not exist.\n", i, g_plantInfo[i].m_name);
+			}
+		}
+	}
+
+	m_unk0x0c = TRUE;
 	return SUCCESS;
 }
 
