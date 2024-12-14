@@ -30,6 +30,77 @@ DECOMP_SIZE_ASSERT(Act3State, 0x0c)
 DECOMP_SIZE_ASSERT(Act3ListElement, 0x0c)
 DECOMP_SIZE_ASSERT(Act3List, 0x10)
 
+// GLOBAL: LEGO1 0x100d94f8
+Act3Script::Script g_unk0x100d94f8[] = {
+	Act3Script::c_sns02xni_PlayWav,
+	Act3Script::c_sns03xni_PlayWav,
+	Act3Script::c_sns04xni_PlayWav,
+	Act3Script::c_sns05xni_PlayWav,
+	Act3Script::c_sns06xni_PlayWav,
+	Act3Script::c_sns07xni_PlayWav,
+	Act3Script::c_sns08xni_PlayWav,
+	Act3Script::c_sns09xni_PlayWav,
+	Act3Script::c_sns10xni_PlayWav,
+	Act3Script::c_sns11xni_PlayWav,
+	Act3Script::c_sns12xla_PlayWav,
+	Act3Script::c_sns13xla_PlayWav,
+	Act3Script::c_sns14xla_PlayWav,
+	Act3Script::c_sns15xla_PlayWav,
+	Act3Script::c_sns16xla_PlayWav,
+	Act3Script::c_sns17xla_PlayWav
+};
+
+// GLOBAL: LEGO1 0x100d9538
+Act3Script::Script g_unk0x100d9538[] = {
+	Act3Script::c_sns19xni_PlayWav,
+	Act3Script::c_sns20xni_PlayWav,
+	Act3Script::c_sns22xni_PlayWav,
+	Act3Script::c_sns23xni_PlayWav,
+	Act3Script::c_sns35xla_PlayWav,
+	(Act3Script::Script) 0
+};
+
+// GLOBAL: LEGO1 0x100d9550
+Act3Script::Script g_unk0x100d9550[] = {
+	Act3Script::c_sns25xni_PlayWav,
+	Act3Script::c_sns26xni_PlayWav,
+	Act3Script::c_sns27xni_PlayWav,
+	Act3Script::c_sns28xni_PlayWav,
+	Act3Script::c_sns29xni_PlayWav,
+	Act3Script::c_sns37xla_PlayWav,
+	Act3Script::c_sns38xla_PlayWav,
+	Act3Script::c_sns39xla_PlayWav
+};
+
+// GLOBAL: LEGO1 0x100d9570
+Act3Script::Script g_unk0x100d9570[] = {
+	Act3Script::c_sns30xni_PlayWav,
+	Act3Script::c_sns31xni_PlayWav,
+	Act3Script::c_sns32xni_PlayWav,
+	Act3Script::c_sns40xla_PlayWav,
+	Act3Script::c_sns41xla_PlayWav,
+	Act3Script::c_sns42xla_PlayWav
+};
+
+// GLOBAL: LEGO1 0x100d9588
+Act3Script::Script g_unk0x100d9588[] = {
+	Act3Script::c_sns43xma_PlayWav, Act3Script::c_sns46xin_PlayWav, Act3Script::c_sns60xna_PlayWav,
+	Act3Script::c_sns52xro_PlayWav, Act3Script::c_sns58xna_PlayWav, Act3Script::c_sns68xbu_PlayWav,
+	Act3Script::c_sns59xna_PlayWav, Act3Script::c_sns51xin_PlayWav, Act3Script::c_sns61xva_PlayWav,
+	Act3Script::c_sns44xma_PlayWav, Act3Script::c_sns47xin_PlayWav, Act3Script::c_sns53xro_PlayWav,
+	Act3Script::c_sns45xma_PlayWav, Act3Script::c_sns69xsn_PlayWav, Act3Script::c_sns48xin_PlayWav,
+	Act3Script::c_sns66xsl_PlayWav, Act3Script::c_sns49xin_PlayWav, Act3Script::c_sns62xmg_PlayWav,
+	Act3Script::c_sns54xro_PlayWav, Act3Script::c_sns50xin_PlayWav
+};
+
+// GLOBAL: LEGO1 0x100d95d8
+Act3Script::Script g_unk0x100d95d8[] = {
+	Act3Script::c_tns080br_PlayWav,
+	Act3Script::c_tnsx07br_PlayWav,
+	Act3Script::c_snsxx2br_PlayWav,
+	Act3Script::c_snsy23br_PlayWav
+};
+
 // GLOBAL: LEGO1 0x100f7814
 MxU8 g_unk0x100f7814 = 0;
 
@@ -336,11 +407,74 @@ MxResult Act3::ShootDonut(LegoPathController* p_controller, Vector3& p_location,
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x10072ad0
-// STUB: BETA10 0x10015eec
+// FUNCTION: LEGO1 0x10072ad0
+// FUNCTION: BETA10 0x10015eec
 void Act3::FUN_10072ad0(undefined4 p_param1)
 {
-	// TODO
+	float time = Timer()->GetTime();
+
+	switch (p_param1) {
+	case 1: {
+		if (m_unk0x4218 >= sizeOfArray(g_unk0x100d94f8)) {
+			m_unk0x4218 = 0;
+		}
+
+		Act3Script::Script objectId = g_unk0x100d94f8[m_unk0x4218];
+		m_unk0x4218++;
+		m_unk0x4220.Insert(objectId, 3);
+		break;
+	}
+	case 2: {
+		if (m_unk0x4219 >= sizeOfArray(g_unk0x100d9538) - 1) {
+			m_unk0x4219 = 0;
+		}
+
+		Act3Script::Script objectId = g_unk0x100d9538[m_unk0x4219];
+		m_unk0x4219++;
+		m_unk0x4220.Insert(objectId, 3);
+		break;
+	}
+	case 3: {
+		if (m_unk0x421a >= sizeOfArray(g_unk0x100d9550)) {
+			m_unk0x421a = 0;
+		}
+
+		Act3Script::Script objectId = g_unk0x100d9550[m_unk0x421a];
+		m_unk0x421a++;
+		m_unk0x4220.Insert(objectId, 3);
+		break;
+	}
+	case 4: {
+		if (m_unk0x421b >= sizeOfArray(g_unk0x100d9570)) {
+			m_unk0x421b = 0;
+		}
+
+		Act3Script::Script objectId = g_unk0x100d9570[m_unk0x421b];
+		m_unk0x421b++;
+		m_unk0x4220.Insert(objectId, 3);
+		break;
+	}
+	case 5: {
+		if (m_unk0x421c >= sizeOfArray(g_unk0x100d9588)) {
+			m_unk0x421c = 0;
+		}
+
+		Act3Script::Script objectId = g_unk0x100d9588[m_unk0x421c];
+		m_unk0x421c++;
+		m_unk0x4220.Insert(objectId, 3);
+		break;
+	}
+	case 6: {
+		if (m_unk0x421d >= sizeOfArray(g_unk0x100d95d8)) {
+			m_unk0x421d = 0;
+		}
+
+		Act3Script::Script objectId = g_unk0x100d95d8[m_unk0x421d];
+		m_unk0x421d++;
+		m_unk0x4220.Insert(objectId, 1);
+		break;
+	}
+	}
 }
 
 // FUNCTION: LEGO1 0x10072c30
