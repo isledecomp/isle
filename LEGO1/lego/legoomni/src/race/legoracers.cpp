@@ -143,11 +143,29 @@ MxS32 g_unk0x100f0b88 = 0;
 // GLOBAL: BETA10 0x101f5f98
 MxBool g_unk0x100f0b8c = TRUE;
 
+// GLOBAL: LEGO1 0x100f0b90
+const char* g_hitSnapSounds[] = {
+	"Svo001Sn",
+	"Svo002Sn",
+	"Svo004Sn",
+	"Svo005Sn",
+};
+
+// GLOBAL: LEGO1 0x100f0ba0
+const char* g_hitValerieSounds[] = {
+	"Svo001Va",
+	"Svo003Va",
+	"Svo004Va",
+};
+
 // GLOBAL: LEGO1 0x100f0bac
-undefined4 g_unk0x100f0bac = 0;
+undefined4 g_hitSnapSoundsIndex = 0;
 
 // GLOBAL: LEGO1 0x100f0bb0
-undefined4 g_unk0x100f0bb0 = 0;
+undefined4 g_hitValerieSoundsIndex = 0;
+
+// GLOBAL: LEGO1 0x100f0bb4
+MxLong g_unk0x100f0bb4 = 0;
 
 // Initialized at LEGO1 0x10012db0
 // GLOBAL: LEGO1 0x10102af0
@@ -550,11 +568,11 @@ MxResult LegoRaceCar::VTable0x9c()
 // FUNCTION: LEGO1 0x10013670
 void LegoRaceCar::FUN_10013670()
 {
-	g_unk0x100f0bac = (rand() & 0xc) >> 2;
+	g_hitSnapSoundsIndex = (rand() & 0xc) >> 2;
 
 	// Inlining the `rand()` causes this function to mismatch
 	MxU32 uVar1 = rand();
-	g_unk0x100f0bb0 = uVar1 % 0xc >> 2;
+	g_hitValerieSoundsIndex = uVar1 % 0xc >> 2;
 }
 
 // FUNCTION: LEGO1 0x100136a0
@@ -648,10 +666,63 @@ MxLong LegoJetski::Notify(MxParam& p_param)
 	return LegoRaceMap::Notify(p_param);
 }
 
-// STUB: LEGO1 0x10013c40
+// FUNCTION: LEGO1 0x10013c40
 MxResult LegoJetski::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 {
-	// very similar to LegoRaceCar::HitActor
+	// Note: very similar to LegoRaceCar::HitActor
+
+	if (!p_actor->GetUserNavFlag()) {
+		if (p_actor->GetActorState() != c_initial) {
+			return FAILURE;
+		}
+
+		if (p_bool) {
+			LegoROI* roi = p_actor->GetROI();
+			MxMatrix matr;
+			matr = roi->GetLocal2World();
+
+			Vector3(matr[3]) += g_unk0x10102af0;
+			roi->FUN_100a58f0(matr);
+
+			p_actor->SetActorState(c_two);
+		}
+
+		if (m_userNavFlag) {
+			MxBool actorIsSnap = strcmpi(p_actor->GetROI()->GetName(), "snap") == 0;
+			MxBool actorIsValerie = strcmpi(p_actor->GetROI()->GetName(), "valerie") == 0;
+			MxLong time = Timer()->GetTime();
+
+			const char* soundKey = NULL;
+			MxLong timeElapsed = time - g_unk0x100f0bb4;
+
+			if (timeElapsed > 3000) {
+				if (actorIsSnap) {
+					soundKey = g_hitSnapSounds[g_hitSnapSoundsIndex++];
+					if (g_hitSnapSoundsIndex >= sizeOfArray(g_hitSnapSounds)) {
+						g_hitSnapSoundsIndex = 0;
+					}
+				}
+				else if (actorIsValerie) {
+					soundKey = g_hitValerieSounds[g_hitValerieSoundsIndex++];
+					if (g_hitValerieSoundsIndex >= sizeOfArray(g_hitValerieSounds)) {
+						g_hitValerieSoundsIndex = 0;
+					}
+				}
+
+				if (soundKey) {
+					SoundManager()->GetCacheSoundManager()->Play(soundKey, NULL, FALSE);
+					g_timeLastSoundPlayed = g_unk0x100f3308 = time;
+				}
+			}
+
+			if (p_bool && m_worldSpeed != 0) {
+				return SUCCESS;
+			}
+
+			return FAILURE;
+		}
+	}
+
 	return SUCCESS;
 }
 
