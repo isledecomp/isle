@@ -412,6 +412,7 @@ MxResult Act3::ShootDonut(LegoPathController* p_controller, Vector3& p_location,
 void Act3::FUN_10072ad0(undefined4 p_param1)
 {
 	float time = Timer()->GetTime();
+	Act3Script::Script objectId;
 
 	switch (p_param1) {
 	case 1: {
@@ -419,7 +420,7 @@ void Act3::FUN_10072ad0(undefined4 p_param1)
 			m_unk0x4218 = 0;
 		}
 
-		m_unk0x4220.Insert(g_unk0x100d94f8[m_unk0x4218++], 3);
+		objectId = g_unk0x100d94f8[m_unk0x4218++];
 		break;
 	}
 	case 2: {
@@ -427,7 +428,7 @@ void Act3::FUN_10072ad0(undefined4 p_param1)
 			m_unk0x4219 = 0;
 		}
 
-		m_unk0x4220.Insert(g_unk0x100d9538[m_unk0x4219++], 3);
+		objectId = g_unk0x100d9538[m_unk0x4219++];
 		break;
 	}
 	case 3: {
@@ -435,7 +436,7 @@ void Act3::FUN_10072ad0(undefined4 p_param1)
 			m_unk0x421a = 0;
 		}
 
-		m_unk0x4220.Insert(g_unk0x100d9550[m_unk0x421a++], 3);
+		objectId = g_unk0x100d9550[m_unk0x421a++];
 		break;
 	}
 	case 4: {
@@ -443,7 +444,7 @@ void Act3::FUN_10072ad0(undefined4 p_param1)
 			m_unk0x421b = 0;
 		}
 
-		m_unk0x4220.Insert(g_unk0x100d9570[m_unk0x421b++], 3);
+		objectId = g_unk0x100d9570[m_unk0x421b++];
 		break;
 	}
 	case 5: {
@@ -451,7 +452,7 @@ void Act3::FUN_10072ad0(undefined4 p_param1)
 			m_unk0x421c = 0;
 		}
 
-		m_unk0x4220.Insert(g_unk0x100d9588[m_unk0x421c++], 3);
+		objectId = g_unk0x100d9588[m_unk0x421c++];
 		break;
 	}
 	case 6: {
@@ -460,9 +461,13 @@ void Act3::FUN_10072ad0(undefined4 p_param1)
 		}
 
 		m_unk0x4220.Insert(g_unk0x100d95d8[m_unk0x421d++], 1);
-		break;
+		return;
 	}
+	default:
+		return;
 	}
+
+	m_unk0x4220.Insert(objectId, 3);
 }
 
 // FUNCTION: LEGO1 0x10072c30
