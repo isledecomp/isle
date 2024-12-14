@@ -24,9 +24,10 @@ DECOMP_SIZE_ASSERT(SkeletonKickPhase, 0x10)
 DECOMP_SIZE_ASSERT(LegoRaceCar, 0x200)
 DECOMP_SIZE_ASSERT(LegoJetski, 0x1dc)
 
+// name verified by BETA10 0x100cbee6
 // GLOBAL: LEGO1 0x100f0a20
 // GLOBAL: BETA10 0x101f5e34
-EdgeReference LegoRaceCar::g_skBMap[] = {
+EdgeReference g_skBMap[] = {
 	{// STRING: LEGO1 0x100f0a10
 	 "EDG03_772",
 	 NULL
@@ -55,31 +56,31 @@ EdgeReference LegoRaceCar::g_skBMap[] = {
 
 // GLOBAL: LEGO1 0x100f0a50
 // GLOBAL: BETA10 0x101f5e60
-const SkeletonKickPhase LegoRaceCar::g_skeletonKickPhases[] = {
-	{&LegoRaceCar::g_skBMap[0], 0.1, 0.2, LEGORACECAR_KICK2},
-	{&LegoRaceCar::g_skBMap[1], 0.2, 0.3, LEGORACECAR_KICK2},
-	{&LegoRaceCar::g_skBMap[2], 0.3, 0.4, LEGORACECAR_KICK2},
-	{&LegoRaceCar::g_skBMap[2], 0.6, 0.7, LEGORACECAR_KICK1},
-	{&LegoRaceCar::g_skBMap[1], 0.7, 0.8, LEGORACECAR_KICK1},
-	{&LegoRaceCar::g_skBMap[0], 0.8, 0.9, LEGORACECAR_KICK1},
-	{&LegoRaceCar::g_skBMap[3], 0.1, 0.2, LEGORACECAR_KICK1},
-	{&LegoRaceCar::g_skBMap[4], 0.2, 0.3, LEGORACECAR_KICK1},
-	{&LegoRaceCar::g_skBMap[5], 0.3, 0.4, LEGORACECAR_KICK1},
-	{&LegoRaceCar::g_skBMap[5], 0.6, 0.7, LEGORACECAR_KICK2},
-	{&LegoRaceCar::g_skBMap[4], 0.7, 0.8, LEGORACECAR_KICK2},
-	{&LegoRaceCar::g_skBMap[3], 0.8, 0.9, LEGORACECAR_KICK2},
+const SkeletonKickPhase g_skeletonKickPhases[] = {
+	{&g_skBMap[0], 0.1, 0.2, LEGORACECAR_KICK2},
+	{&g_skBMap[1], 0.2, 0.3, LEGORACECAR_KICK2},
+	{&g_skBMap[2], 0.3, 0.4, LEGORACECAR_KICK2},
+	{&g_skBMap[2], 0.6, 0.7, LEGORACECAR_KICK1},
+	{&g_skBMap[1], 0.7, 0.8, LEGORACECAR_KICK1},
+	{&g_skBMap[0], 0.8, 0.9, LEGORACECAR_KICK1},
+	{&g_skBMap[3], 0.1, 0.2, LEGORACECAR_KICK1},
+	{&g_skBMap[4], 0.2, 0.3, LEGORACECAR_KICK1},
+	{&g_skBMap[5], 0.3, 0.4, LEGORACECAR_KICK1},
+	{&g_skBMap[5], 0.6, 0.7, LEGORACECAR_KICK2},
+	{&g_skBMap[4], 0.7, 0.8, LEGORACECAR_KICK2},
+	{&g_skBMap[3], 0.8, 0.9, LEGORACECAR_KICK2},
 };
 
 // the STRING is already declared at LEGO1 0x101020b8
 // GLOBAL: LEGO1 0x100f0b10
-const char* LegoRaceCar::g_strSpeed = "SPEED";
+const char* g_strSpeed = "SPEED";
 
 // GLOBAL: LEGO1 0x100f0b14
-const char* LegoRaceCar::g_strJetSpeed = "jetSPEED";
+const char* g_strJetSpeed = "jetSPEED";
 
 // GLOBAL: LEGO1 0x100f0b18
 // GLOBAL: BETA10 0x101f5f28
-const char* LegoRaceCar::g_srtsl18to29[] = {
+const char* g_srtsl18to29[] = {
 	"srt018sl",
 	"srt019sl",
 	"srt020sl",
@@ -96,62 +97,62 @@ const char* LegoRaceCar::g_srtsl18to29[] = {
 
 // GLOBAL: LEGO1 0x100f0b48
 // GLOBAL: BETA10 0x101f5f58
-const char* LegoRaceCar::g_srtsl6to10[] = {"srt006sl", "srt007sl", "srt008sl", "srt009sl", "srt010sl"};
+const char* g_srtsl6to10[] = {"srt006sl", "srt007sl", "srt008sl", "srt009sl", "srt010sl"};
 
 // GLOBAL: LEGO1 0x100f0b5c
 // GLOBAL: BETA10 0x101f5f6c
-const char* LegoRaceCar::g_emptySoundKeyList[] = {NULL};
+const char* g_emptySoundKeyList[] = {NULL};
 
 // GLOBAL: LEGO1 0x100f0b60
 // GLOBAL: BETA10 0x101f5f70
-const char* LegoRaceCar::g_srtrh[] = {"srt004rh", "srt005rh", "srt006rh"};
+const char* g_srtrh[] = {"srt004rh", "srt005rh", "srt006rh"};
 
 // GLOBAL: LEGO1 0x100f0b6c
 // STRING: LEGO1 0x100f08c4
-const char* LegoRaceCar::g_srt001ra = "srt001ra";
+const char* g_srt001ra = "srt001ra";
 
 // GLOBAL: LEGO1 0x100f0b70
 // STRING: LEGO1 0x100f08bc
-const char* LegoRaceCar::g_soundSkel3 = "skel3";
+const char* g_soundSkel3 = "skel3";
 
 // GLOBAL: LEGO1 0x100f0b74
 // GLOBAL: BETA10 0x101f5f80
-MxU32 LegoRaceCar::g_srtsl18to29Index = 0;
+MxU32 g_srtsl18to29Index = 0;
 
 // GLOBAL: LEGO1 0x100f0b78
 // GLOBAL: BETA10 0x101f5f84
-MxU32 LegoRaceCar::g_srtsl6to10Index = 0;
+MxU32 g_srtsl6to10Index = 0;
 
 // GLOBAL: LEGO1 0x100f0b7c
 // GLOBAL: BETA10 0x101f5f88
-MxU32 LegoRaceCar::g_emptySoundKeyListIndex = 0;
+MxU32 g_emptySoundKeyListIndex = 0;
 
 // GLOBAL: LEGO1 0x100f0b80
 // GLOBAL: BETA10 0x101f5f8c
-MxU32 LegoRaceCar::g_srtrhIndex = 0;
+MxU32 g_srtrhIndex = 0;
 
 // GLOBAL: LEGO1 0x100f0b84
 // GLOBAL: BETA10 0x101f5f90
-MxLong LegoRaceCar::g_timeLastSoundPlayed = 0;
+MxLong g_timeLastSoundPlayed = 0;
 
 // GLOBAL: LEGO1 0x100f0b88
 // GLOBAL: BETA10 0x101f5f94
-MxS32 LegoRaceCar::g_unk0x100f0b88 = 0;
+MxS32 g_unk0x100f0b88 = 0;
 
 // GLOBAL: LEGO1 0x100f0b8c
 // GLOBAL: BETA10 0x101f5f98
-MxBool LegoRaceCar::g_unk0x100f0b8c = TRUE;
+MxBool g_unk0x100f0b8c = TRUE;
 
 // GLOBAL: LEGO1 0x100f0bac
-undefined4 LegoRaceCar::g_unk0x100f0bac = 0;
+undefined4 g_unk0x100f0bac = 0;
 
 // GLOBAL: LEGO1 0x100f0bb0
-undefined4 LegoRaceCar::g_unk0x100f0bb0 = 0;
+undefined4 g_unk0x100f0bb0 = 0;
 
 // Initialized at LEGO1 0x10012db0
 // GLOBAL: LEGO1 0x10102af0
 // GLOBAL: BETA10 0x102114c0
-Mx3DPointFloat LegoRaceCar::g_unk0x10102af0 = Mx3DPointFloat(0.0f, 2.0f, 0.0f);
+Mx3DPointFloat g_unk0x10102af0 = Mx3DPointFloat(0.0f, 2.0f, 0.0f);
 
 // FUNCTION: LEGO1 0x10012950
 LegoRaceCar::LegoRaceCar()
@@ -605,7 +606,7 @@ void LegoJetski::Animate(float p_time)
 
 		sprintf(buffer, "%g", speedRatio);
 
-		VariableTable()->SetVariable(LegoRaceCar::g_strJetSpeed, buffer);
+		VariableTable()->SetVariable(g_strJetSpeed, buffer);
 
 		if (m_sound) {
 			m_frequencyFactor = speedRatio * 1.2 + 0.7;

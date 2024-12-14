@@ -98,33 +98,6 @@ private:
 
 	// Name verified by BETA10 0x100cb537
 	LegoPathBoundary* m_kick2B; // 0x7c
-
-	// name verified by BETA10 0x100cbee6
-	static EdgeReference g_skBMap[];
-
-public:
-	// TODO: These are shared with LegoJetski, and we should move them outside of this class
-	// and into the scope of legoracers.cpp
-
-	static const SkeletonKickPhase g_skeletonKickPhases[];
-	static const char* g_strSpeed;
-	static const char* g_strJetSpeed;
-	static const char* g_srtsl18to29[];
-	static const char* g_srtsl6to10[];
-	static const char* g_emptySoundKeyList[];
-	static const char* g_srtrh[];
-	static const char* g_srt001ra;
-	static const char* g_soundSkel3;
-	static MxU32 g_srtsl18to29Index;
-	static MxU32 g_srtsl6to10Index;
-	static MxU32 g_emptySoundKeyListIndex;
-	static MxU32 g_srtrhIndex;
-	static Mx3DPointFloat g_unk0x10102af0;
-	static MxLong g_timeLastSoundPlayed;
-	static MxS32 g_unk0x100f0b88;
-	static MxBool g_unk0x100f0b8c;
-	static undefined4 g_unk0x100f0bac;
-	static undefined4 g_unk0x100f0bb0;
 };
 
 // VTABLE: LEGO1 0x100d5a08 LegoCarRaceActor
