@@ -78,6 +78,11 @@ public:
 
 	const float& operator[](int idx) const { return m_data[idx]; }
 
+
+	// only used by a couple of BETA10 functions for some unknown reason
+	// FUNCTION: BETA10 0x1001c950
+	float& index_operator(int idx) { return m_data[idx]; }
+
 	// SYNTHETIC: LEGO1 0x10064b20
 	// SYNTHETIC: BETA10 0x10070420
 	// ??4Mx4DPointFloat@@QAEAAV0@ABV0@@Z
