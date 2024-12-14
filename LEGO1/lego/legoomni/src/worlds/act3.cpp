@@ -419,9 +419,7 @@ void Act3::FUN_10072ad0(undefined4 p_param1)
 			m_unk0x4218 = 0;
 		}
 
-		Act3Script::Script objectId = g_unk0x100d94f8[m_unk0x4218];
-		m_unk0x4218++;
-		m_unk0x4220.Insert(objectId, 3);
+		m_unk0x4220.Insert(g_unk0x100d94f8[m_unk0x4218++], 3);
 		break;
 	}
 	case 2: {
@@ -429,9 +427,7 @@ void Act3::FUN_10072ad0(undefined4 p_param1)
 			m_unk0x4219 = 0;
 		}
 
-		Act3Script::Script objectId = g_unk0x100d9538[m_unk0x4219];
-		m_unk0x4219++;
-		m_unk0x4220.Insert(objectId, 3);
+		m_unk0x4220.Insert(g_unk0x100d9538[m_unk0x4219++], 3);
 		break;
 	}
 	case 3: {
@@ -439,9 +435,7 @@ void Act3::FUN_10072ad0(undefined4 p_param1)
 			m_unk0x421a = 0;
 		}
 
-		Act3Script::Script objectId = g_unk0x100d9550[m_unk0x421a];
-		m_unk0x421a++;
-		m_unk0x4220.Insert(objectId, 3);
+		m_unk0x4220.Insert(g_unk0x100d9550[m_unk0x421a++], 3);
 		break;
 	}
 	case 4: {
@@ -449,9 +443,7 @@ void Act3::FUN_10072ad0(undefined4 p_param1)
 			m_unk0x421b = 0;
 		}
 
-		Act3Script::Script objectId = g_unk0x100d9570[m_unk0x421b];
-		m_unk0x421b++;
-		m_unk0x4220.Insert(objectId, 3);
+		m_unk0x4220.Insert(g_unk0x100d9570[m_unk0x421b++], 3);
 		break;
 	}
 	case 5: {
@@ -459,9 +451,7 @@ void Act3::FUN_10072ad0(undefined4 p_param1)
 			m_unk0x421c = 0;
 		}
 
-		Act3Script::Script objectId = g_unk0x100d9588[m_unk0x421c];
-		m_unk0x421c++;
-		m_unk0x4220.Insert(objectId, 3);
+		m_unk0x4220.Insert(g_unk0x100d9588[m_unk0x421c++], 3);
 		break;
 	}
 	case 6: {
