@@ -469,9 +469,7 @@ void Act3::FUN_10072ad0(undefined4 p_param1)
 			m_unk0x421d = 0;
 		}
 
-		Act3Script::Script objectId = g_unk0x100d95d8[m_unk0x421d];
-		m_unk0x421d++;
-		m_unk0x4220.Insert(objectId, 1);
+		m_unk0x4220.Insert(g_unk0x100d95d8[m_unk0x421d++], 1);
 		break;
 	}
 	}
