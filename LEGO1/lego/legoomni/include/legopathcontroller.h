@@ -130,7 +130,7 @@ public:
 		LegoUnknown100db7f4*& p_edge,
 		LegoPathBoundary*& p_boundary
 	);
-	undefined4 FUN_1004a380(
+	MxResult FUN_1004a380(
 		Vector3& p_param1,
 		Vector3& p_param2,
 		Mx3DPointFloat* p_param3,
@@ -159,6 +159,31 @@ private:
 	MxResult ReadBoundaries(LegoStorage* p_storage);
 	static MxResult ReadVector(LegoStorage* p_storage, Mx3DPointFloat& p_vec);
 	static MxResult ReadVector(LegoStorage* p_storage, Mx4DPointFloat& p_vec);
+
+	// FUNCTION: BETA10 0x100c16f0
+	static MxU32 IsBetween(MxFloat p_v, MxFloat p_a, MxFloat p_b)
+	{
+		if (p_a <= p_b) {
+			return p_v >= p_a && p_v <= p_b;
+		}
+		else {
+			return p_v <= p_a && p_v >= p_b;
+		}
+	}
+
+	// FUNCTION: BETA10 0x100c17a0
+	static MxU32 FUN_100c17a0(MxFloat p_v1, MxFloat p_v2, MxFloat p_a, MxFloat p_b)
+	{
+		assert(IsBetween(p_v1, p_a, p_b));
+		assert(IsBetween(p_v2, p_a, p_b));
+
+		if (p_a <= p_b) {
+			return p_v1 < p_v2;
+		}
+		else {
+			return p_v1 > p_v2;
+		}
+	}
 
 	LegoPathBoundary* m_boundaries; // 0x08
 	LegoPathCtrlEdge* m_edges;      // 0x0c
