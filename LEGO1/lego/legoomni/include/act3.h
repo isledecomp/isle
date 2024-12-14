@@ -158,12 +158,12 @@ protected:
 	Helicopter* m_copter;               // 0x420c
 	Act3Shark* m_shark;                 // 0x4210
 	MxFloat m_time;                     // 0x4214
-	undefined m_unk0x4218;              // 0x4218
-	undefined m_unk0x4219;              // 0x4219
-	undefined m_unk0x421a;              // 0x421a
-	undefined m_unk0x421b;              // 0x421b
-	undefined m_unk0x421c;              // 0x421c
-	undefined m_unk0x421d;              // 0x421d
+	MxU8 m_unk0x4218;                   // 0x4218
+	MxU8 m_unk0x4219;                   // 0x4219
+	MxU8 m_unk0x421a;                   // 0x421a
+	MxU8 m_unk0x421b;                   // 0x421b
+	MxU8 m_unk0x421c;                   // 0x421c
+	MxU8 m_unk0x421d;                   // 0x421d
 	undefined m_unk0x421e;              // 0x421e
 	Act3List m_unk0x4220;               // 0x4220
 	MxPresenter* m_helicopterDots[15];  // 0x4230
