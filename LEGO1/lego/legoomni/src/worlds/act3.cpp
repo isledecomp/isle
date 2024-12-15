@@ -728,6 +728,18 @@ MxResult Act3::FUN_10073390(Act3Ammo& p_ammo, const Vector3& p_param2)
 	return SUCCESS;
 }
 
+// FUNCTION: LEGO1 0x100733d0
+// FUNCTION: BETA10 0x10016b5d
+void Act3::AddCop(Act3Cop* p_cop)
+{
+	if (m_cop1) {
+		m_cop2 = p_cop;
+	}
+	else {
+		m_cop1 = p_cop;
+	}
+}
+
 // FUNCTION: LEGO1 0x100733f0
 // FUNCTION: BETA10 0x10016ba2
 void Act3::SetBrickster(Act3Brickster* p_brickster)
