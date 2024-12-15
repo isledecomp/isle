@@ -9,6 +9,7 @@
 #include "legopathedgecontainer.h"
 #include "legosoundmanager.h"
 #include "misc.h"
+#include "mxdebug.h"
 #include "mxmisc.h"
 #include "mxtimer.h"
 #include "mxutilities.h"
@@ -211,11 +212,67 @@ MxResult Act3Cop::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10040060
-// STUB: BETA10 0x100186fa
+// FUNCTION: LEGO1 0x10040060
+// FUNCTION: BETA10 0x100186fa
 void Act3Cop::ParseAction(char* p_extra)
 {
-	// TODO
+	m_world = CurrentWorld();
+	LegoAnimActor::ParseAction(p_extra);
+	((Act3*) m_world)->AddCop(this);
+	Act3* world = (Act3*) m_world;
+	MxS32 i;
+
+	// The typecast is necessary for correct signedness
+	for (i = 0; i < (MxS32) sizeOfArray(g_copDest); i++) {
+		assert(g_copDest[i].m_bName);
+		g_copDest[i].m_boundary = world->FindPathBoundary(g_copDest[i].m_bName);
+		assert(g_copDest[i].m_boundary);
+
+		if (g_copDest[i].m_boundary) {
+			Mx3DPointFloat point(g_copDest[i].m_unk0x08[0], g_copDest[i].m_unk0x08[1], g_copDest[i].m_unk0x08[2]);
+			LegoPathBoundary* boundary = g_copDest[i].m_boundary;
+
+			for (MxS32 j = 0; j < boundary->GetNumEdges(); j++) {
+				Mx4DPointFloat* edgeNormal = boundary->GetEdgeNormal(j);
+				if (point.Dot(edgeNormal, &point) + edgeNormal->index_operator(3) < -0.001) {
+
+					MxTrace("Bad Act3 cop destination %d\n", i);
+					break;
+				}
+			}
+
+			Mx4DPointFloat* boundary0x14 = boundary->GetUnknown0x14();
+
+			if (point.Dot(&point, boundary0x14) + boundary0x14->index_operator(3) <= 0.001 &&
+				point.Dot(&point, boundary0x14) + boundary0x14->index_operator(3) >= -0.001) {
+				continue;
+			}
+
+			g_copDest[i].m_unk0x08[1] = -(boundary0x14->index_operator(3) + boundary0x14->index_operator(0) * point[0] +
+										  boundary0x14->index_operator(2) * point[2]) /
+										boundary0x14->index_operator(1);
+
+			MxTrace(
+				"Act3 cop destination %d (%g, %g, %g) is not on plane of boundary %s...adjusting to (%g, %g, %g)\n",
+				i,
+				point[0],
+				point[1],
+				point[2],
+				boundary->GetName(),
+				point[0],
+				g_copDest[i].m_unk0x08[1],
+				point[2]
+			);
+		}
+	}
+
+	for (i = 0; i < m_animMaps.size(); i++) {
+		if (m_animMaps[i]->GetUnknown0x00() == -1.0f) {
+			m_eatAnim = m_animMaps[i];
+		}
+	}
+
+	assert(m_eatAnim);
 }
 
 // STUB: LEGO1 0x100401f0
