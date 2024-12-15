@@ -300,6 +300,7 @@ void Act3Brickster::ParseAction(char* p_extra)
 }
 
 // STUB: LEGO1 0x10041050
+// STUB: BETA10 0x100197d7
 void Act3Brickster::Animate(float p_time)
 {
 	// TODO
