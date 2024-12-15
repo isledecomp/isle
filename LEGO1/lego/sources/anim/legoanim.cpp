@@ -136,6 +136,14 @@ done:
 	return result;
 }
 
+// STUB: LEGO1 0x1009f120
+// STUB: BETA10 0x101814be
+LegoResult LegoAnimScene::Write(LegoStorage* p_storage)
+{
+	// TODO
+	return FAILURE;
+}
+
 // FUNCTION: LEGO1 0x1009f490
 // FUNCTION: BETA10 0x10181a83
 LegoResult LegoAnimScene::FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix)
@@ -400,6 +408,7 @@ LegoAnimNodeData::~LegoAnimNodeData()
 }
 
 // FUNCTION: LEGO1 0x1009fe60
+// FUNCTION: BETA10 0x1017e949
 LegoResult LegoAnimNodeData::Read(LegoStorage* p_storage)
 {
 	LegoResult result;
@@ -491,6 +500,7 @@ LegoResult LegoAnimNodeData::Read(LegoStorage* p_storage)
 }
 
 // STUB: LEGO1 0x100a01e0
+// STUB: BETA10 0x1017ef0f
 LegoResult LegoAnimNodeData::Write(LegoStorage* p_storage)
 {
 	// TODO
@@ -798,7 +808,7 @@ inline LegoAnimKey& LegoAnimNodeData::GetKey(LegoU32 p_i, LegoAnimKey* p_keys, L
 LegoAnim::LegoAnim()
 {
 	m_duration = 0;
-	m_actors = NULL;
+	m_modelList = NULL;
 	m_numActors = 0;
 	m_camAnim = NULL;
 }
@@ -806,12 +816,12 @@ LegoAnim::LegoAnim()
 // FUNCTION: LEGO1 0x100a0bc0
 LegoAnim::~LegoAnim()
 {
-	if (m_actors != NULL) {
+	if (m_modelList != NULL) {
 		for (LegoU32 i = 0; i < m_numActors; i++) {
-			delete[] m_actors[i].m_name;
+			delete[] m_modelList[i].m_name;
 		}
 
-		delete[] m_actors;
+		delete[] m_modelList;
 	}
 
 	if (m_camAnim != NULL) {
@@ -829,7 +839,7 @@ LegoResult LegoAnim::Read(LegoStorage* p_storage, LegoS32 p_parseScene)
 		goto done;
 	}
 
-	m_actors = new LegoAnimActorEntry[length];
+	m_modelList = new LegoAnimActorEntry[length];
 	m_numActors = 0;
 
 	for (i = 0; i < length; i++) {
@@ -839,15 +849,15 @@ LegoResult LegoAnim::Read(LegoStorage* p_storage, LegoS32 p_parseScene)
 		}
 
 		if (length) {
-			m_actors[i].m_name = new LegoChar[length + 1];
+			m_modelList[i].m_name = new LegoChar[length + 1];
 
-			if (p_storage->Read(m_actors[i].m_name, length) != SUCCESS) {
+			if (p_storage->Read(m_modelList[i].m_name, length) != SUCCESS) {
 				goto done;
 			}
 
-			m_actors[i].m_name[length] = '\0';
+			m_modelList[i].m_name[length] = '\0';
 
-			if (p_storage->Read(&m_actors[i].m_unk0x04, sizeof(m_actors[i].m_unk0x04)) != SUCCESS) {
+			if (p_storage->Read(&m_modelList[i].m_unk0x04, sizeof(m_modelList[i].m_unk0x04)) != SUCCESS) {
 				goto done;
 			}
 		}
@@ -872,41 +882,81 @@ LegoResult LegoAnim::Read(LegoStorage* p_storage, LegoS32 p_parseScene)
 	result = LegoTree::Read(p_storage);
 
 done:
-	if (result != SUCCESS && m_actors != NULL) {
+	if (result != SUCCESS && m_modelList != NULL) {
 		for (i = 0; i < m_numActors; i++) {
-			delete[] m_actors[i].m_name;
+			delete[] m_modelList[i].m_name;
 		}
 
 		m_numActors = 0;
-		delete[] m_actors;
-		m_actors = NULL;
+		delete[] m_modelList;
+		m_modelList = NULL;
 	}
 
 	return result;
 }
 
-// STUB: LEGO1 0x100a0e30
+// FUNCTION: LEGO1 0x100a0e30
+// FUNCTION: BETA10 0x1017fe3a
 LegoResult LegoAnim::Write(LegoStorage* p_storage)
 {
-	// TODO
-	return SUCCESS;
+	LegoResult result = FAILURE;
+	LegoU32 i;
+
+	if (p_storage->Write(&m_numActors, sizeof(m_numActors)) != SUCCESS) {
+		goto done;
+	}
+
+	for (i = 0; i < m_numActors; i++) {
+		LegoU32 length = strlen(m_modelList[i].m_name);
+
+		if (p_storage->Write(&length, sizeof(length)) != SUCCESS) {
+			goto done;
+		}
+
+		if (length != 0) {
+			if (p_storage->Write(m_modelList[i].m_name, length) != SUCCESS) {
+				goto done;
+			}
+
+			if (p_storage->Write(&m_modelList[i].m_unk0x04, sizeof(m_modelList[i].m_unk0x04)) != SUCCESS) {
+				goto done;
+			}
+		}
+	}
+
+	if (p_storage->Write(&m_duration, sizeof(m_duration)) != SUCCESS) {
+		goto done;
+	}
+
+	if (m_camAnim != NULL) {
+		if (m_camAnim->Write(p_storage) != SUCCESS) {
+			goto done;
+		}
+	}
+
+	result = LegoTree::Write(p_storage);
+
+done:
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100a0f20
+// FUNCTION: BETA10 0x101801fd
 const LegoChar* LegoAnim::GetActorName(LegoU32 p_index)
 {
 	if (p_index < m_numActors) {
-		return m_actors[p_index].m_name;
+		return m_modelList[p_index].m_name;
 	}
 
 	return NULL;
 }
 
 // FUNCTION: LEGO1 0x100a0f40
+// FUNCTION: BETA10 0x1018023c
 undefined4 LegoAnim::GetActorUnknown0x04(LegoU32 p_index)
 {
 	if (p_index < m_numActors) {
-		return m_actors[p_index].m_unk0x04;
+		return m_modelList[p_index].m_unk0x04;
 	}
 
 	return NULL;

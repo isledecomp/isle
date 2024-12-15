@@ -291,6 +291,7 @@ public:
 	LegoAnimScene();
 	~LegoAnimScene();
 	LegoResult Read(LegoStorage* p_storage);
+	LegoResult Write(LegoStorage* p_storage);
 	LegoResult FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix);
 
 	LegoU32 GetUnknown0x18() { return m_unk0x18; }
@@ -337,10 +338,10 @@ public:
 	// LegoAnim::`scalar deleting destructor'
 
 protected:
-	LegoTime m_duration;          // 0x08
-	LegoAnimActorEntry* m_actors; // 0x0c
-	LegoU32 m_numActors;          // 0x10
-	LegoAnimScene* m_camAnim;     // 0x14
+	LegoTime m_duration;             // 0x08
+	LegoAnimActorEntry* m_modelList; // 0x0c
+	LegoU32 m_numActors;             // 0x10
+	LegoAnimScene* m_camAnim;        // 0x14
 
 	// FUNCTION: LEGO1 0x100a1040
 	LegoTreeNodeData* CreateData() override { return new LegoAnimNodeData(); } // vtable+0x0c
