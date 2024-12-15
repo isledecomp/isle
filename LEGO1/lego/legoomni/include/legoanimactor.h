@@ -13,6 +13,7 @@ struct LegoAnimActorStruct {
 
 	float GetDuration();
 
+	// FUNCTION: BETA10 0x1000fb10
 	float GetUnknown0x00() { return m_unk0x00; }
 
 	// FUNCTION: BETA10 0x10012210

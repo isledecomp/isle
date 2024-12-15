@@ -78,7 +78,11 @@ public:
 private:
 	MxFloat m_unk0x20;       // 0x20
 	LegoWorld* m_world;      // 0x24
-	undefined4 m_unk0x28[2]; // 0x28
+
+	// name verified by BETA10 0x10018aa1
+	LegoAnimActorStruct* m_eatAnim; // 0x28
+
+	undefined4 m_unk0x2c; // 0x2c
 };
 
 // VTABLE: LEGO1 0x100d7838 LegoPathActor
