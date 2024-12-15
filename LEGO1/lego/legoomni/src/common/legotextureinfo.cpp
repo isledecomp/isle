@@ -153,7 +153,7 @@ done:
 	return NULL;
 }
 
-// STUB: LEGO1 0x10065f60
+// FUNCTION: LEGO1 0x10065f60
 BOOL LegoTextureInfo::SetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo* p_textureInfo)
 {
 	TglImpl::MeshImpl::MeshData* data = ((TglImpl::MeshImpl*) pMesh)->ImplementationData();
