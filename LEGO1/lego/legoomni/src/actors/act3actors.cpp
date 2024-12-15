@@ -288,7 +288,7 @@ void Act3Cop::Animate(float p_time)
 	Act3Brickster* brickster = ((Act3*) m_world)->m_brickster;
 
 	if (brickster != NULL && brickster->GetROI() != NULL && m_roi != NULL) {
-		Mx3DPointFloat local34 = brickster->GetROI()->GetLocal2World()[3];
+		Mx3DPointFloat local34(brickster->GetROI()->GetLocal2World()[3]);
 		local34 -= m_roi->GetLocal2World()[3];
 
 		float distance = local34.LenSquared();
