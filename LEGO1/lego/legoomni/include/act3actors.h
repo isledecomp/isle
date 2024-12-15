@@ -156,7 +156,7 @@ public:
 
 private:
 	list<Act3Ammo*> m_unk0x1c;      // 0x1c
-	undefined4 m_unk0x28;           // 0x28
+	Act3Ammo* m_unk0x28;            // 0x28
 	MxFloat m_unk0x2c;              // 0x2c
 	LegoWorld* m_world;             // 0x30
 	LegoAnimActorStruct* m_unk0x34; // 0x34
@@ -172,6 +172,9 @@ private:
 
 // TEMPLATE: LEGO1 0x10042c90
 // List<Act3Ammo *>::~List<Act3Ammo *>
+
+// TEMPLATE: LEGO1 0x10042ee0
+// list<Act3Ammo *,allocator<Act3Ammo *> >::erase
 
 // GLOBAL: LEGO1 0x100d7660
 // Act3Actor::`vbtable'
