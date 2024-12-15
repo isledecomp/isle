@@ -235,7 +235,6 @@ void Act3Cop::ParseAction(char* p_extra)
 			for (MxS32 j = 0; j < boundary->GetNumEdges(); j++) {
 				Mx4DPointFloat* edgeNormal = boundary->GetEdgeNormal(j);
 				if (point.Dot(edgeNormal, &point) + edgeNormal->index_operator(3) < -0.001) {
-
 					MxTrace("Bad Act3 cop destination %d\n", i);
 					break;
 				}
@@ -275,10 +274,40 @@ void Act3Cop::ParseAction(char* p_extra)
 	assert(m_eatAnim);
 }
 
-// STUB: LEGO1 0x100401f0
+// FUNCTION: LEGO1 0x100401f0
+// FUNCTION: BETA10 0x10018abf
 void Act3Cop::Animate(float p_time)
 {
-	// TODO
+	Act3Actor::Animate(p_time);
+
+	if (m_unk0x20 > 0.0f && m_unk0x20 < m_lastTime) {
+		SetWorldSpeed(2.0f);
+		m_unk0x20 = -1.0f;
+	}
+
+	Act3Brickster* brickster = ((Act3*) m_world)->m_brickster;
+
+	if (brickster != NULL && brickster->GetROI() != NULL && m_roi != NULL) {
+		Mx3DPointFloat local34(brickster->GetROI()->GetLocal2World()[3]);
+		local34 -= m_roi->GetLocal2World()[3];
+
+		float distance = local34.LenSquared();
+
+		if (distance < 4.0f) {
+			((Act3*) m_world)->GoodEnding(brickster->GetROI()->GetLocal2World());
+			return;
+		}
+
+		if (distance < 25.0f) {
+			brickster->SetActorState(c_disabled);
+			FUN_10040360();
+			return;
+		}
+	}
+
+	if (m_grec == NULL) {
+		FUN_10040360();
+	}
 }
 
 // FUNCTION: LEGO1 0x10040350
