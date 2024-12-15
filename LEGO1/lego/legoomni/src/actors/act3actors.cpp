@@ -2,6 +2,7 @@
 
 #include "act3.h"
 #include "act3ammo.h"
+#include "anim/legoanim.h"
 #include "define.h"
 #include "legocachesoundmanager.h"
 #include "legolocomotionanimpresenter.h"
@@ -386,7 +387,7 @@ MxResult Act3Brickster::VTable0x9c()
 Act3Shark::Act3Shark()
 {
 	m_unk0x2c = 0.0f;
-	m_unk0x28 = 0;
+	m_unk0x28 = NULL;
 }
 
 // FUNCTION: LEGO1 0x10042ce0
@@ -397,10 +398,56 @@ MxResult Act3Shark::FUN_10042ce0(Act3Ammo* p_ammo)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10042d40
+// FUNCTION: LEGO1 0x10042d40
 void Act3Shark::Animate(float p_time)
 {
-	// TODO
+	LegoROI** roiMap = m_unk0x34->GetROIMap();
+
+	if (m_unk0x28 == NULL) {
+		if (m_unk0x1c.size() > 0) {
+			m_unk0x28 = m_unk0x1c.front();
+			m_unk0x1c.pop_front();
+			m_unk0x2c = p_time;
+			roiMap[1] = m_unk0x28->GetROI();
+			m_unk0x3c = roiMap[1]->GetLocal2World()[3];
+			roiMap[1]->SetVisibility(TRUE);
+			roiMap[2]->SetVisibility(TRUE);
+		}
+
+		if (m_unk0x28 == NULL) {
+			return;
+		}
+	}
+
+	float time = m_unk0x2c + m_unk0x34->GetDuration();
+
+	if (time > p_time) {
+		float duration = p_time - m_unk0x2c;
+
+		if (duration < 0) {
+			duration = 0;
+		}
+
+		if (m_unk0x34->GetDuration() < duration) {
+			duration = m_unk0x34->GetDuration();
+		}
+
+		MxMatrix mat;
+		mat.SetIdentity();
+
+		Vector3 vec(mat[3]);
+		vec = m_unk0x3c;
+
+		LegoTreeNode* node = m_unk0x34->GetAnimTreePtr()->GetRoot();
+		LegoROI::FUN_100a8e80(node, mat, duration, m_unk0x34->GetROIMap());
+	}
+	else {
+		roiMap[1] = m_unk0x38;
+		((Act3*) m_world)->RemovePizza(*m_unk0x28);
+		m_unk0x28 = NULL;
+		roiMap[1]->SetVisibility(FALSE);
+		roiMap[2]->SetVisibility(FALSE);
+	}
 }
 
 // FUNCTION: LEGO1 0x10042f30
@@ -408,7 +455,7 @@ void Act3Shark::ParseAction(char* p_extra)
 {
 	LegoPathActor::ParseAction(p_extra);
 
-	m_world = (LegoWorld*) CurrentWorld();
+	m_world = CurrentWorld();
 
 	char value[256];
 	if (KeyValueStringParse(value, g_strANIMATION, p_extra)) {
