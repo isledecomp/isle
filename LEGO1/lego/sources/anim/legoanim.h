@@ -18,6 +18,7 @@ public:
 
 	LegoAnimKey();
 	LegoResult Read(LegoStorage* p_storage);
+	LegoResult Write(LegoStorage* p_storage);
 	LegoFloat GetTime() { return m_time; }
 
 	// The different types (LegoFloat vs. MxS32) are correct according to BETA10
@@ -49,6 +50,7 @@ class LegoTranslationKey : public LegoAnimKey {
 public:
 	LegoTranslationKey();
 	LegoResult Read(LegoStorage* p_storage);
+	LegoResult Write(LegoStorage* p_storage);
 	LegoFloat GetX() { return m_x; }
 	void SetX(LegoFloat p_x) { m_x = p_x; }
 	LegoFloat GetY() { return m_y; }
@@ -67,6 +69,7 @@ class LegoRotationKey : public LegoAnimKey {
 public:
 	LegoRotationKey();
 	LegoResult Read(LegoStorage* p_storage);
+	LegoResult Write(LegoStorage* p_storage);
 
 	// FUNCTION: BETA10 0x10073a00
 	LegoFloat GetAngle() { return m_angle; }
@@ -104,6 +107,7 @@ class LegoScaleKey : public LegoAnimKey {
 public:
 	LegoScaleKey();
 	LegoResult Read(LegoStorage* p_storage);
+	LegoResult Write(LegoStorage* p_storage);
 	LegoFloat GetX() { return m_x; }
 	void SetX(LegoFloat p_x) { m_x = p_x; }
 	LegoFloat GetY() { return m_y; }
@@ -122,6 +126,7 @@ class LegoMorphKey : public LegoAnimKey {
 public:
 	LegoMorphKey();
 	LegoResult Read(LegoStorage* p_storage);
+	LegoResult Write(LegoStorage* p_storage);
 	LegoBool GetUnknown0x08() { return m_unk0x08; }
 
 	// FUNCTION: BETA10 0x100738d0
@@ -136,6 +141,7 @@ class LegoUnknownKey : public LegoAnimKey {
 public:
 	LegoUnknownKey();
 	LegoResult Read(LegoStorage* p_storage);
+	LegoResult Write(LegoStorage* p_storage);
 
 	LegoFloat GetZ() { return m_z; }
 
@@ -291,6 +297,7 @@ public:
 	LegoAnimScene();
 	~LegoAnimScene();
 	LegoResult Read(LegoStorage* p_storage);
+	LegoResult Write(LegoStorage* p_storage);
 	LegoResult FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix);
 
 	LegoU32 GetUnknown0x18() { return m_unk0x18; }
@@ -337,10 +344,10 @@ public:
 	// LegoAnim::`scalar deleting destructor'
 
 protected:
-	LegoTime m_duration;          // 0x08
-	LegoAnimActorEntry* m_actors; // 0x0c
-	LegoU32 m_numActors;          // 0x10
-	LegoAnimScene* m_camAnim;     // 0x14
+	LegoTime m_duration;             // 0x08
+	LegoAnimActorEntry* m_modelList; // 0x0c
+	LegoU32 m_numActors;             // 0x10
+	LegoAnimScene* m_camAnim;        // 0x14
 
 	// FUNCTION: LEGO1 0x100a1040
 	LegoTreeNodeData* CreateData() override { return new LegoAnimNodeData(); } // vtable+0x0c
