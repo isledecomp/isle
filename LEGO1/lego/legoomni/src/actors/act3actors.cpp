@@ -272,7 +272,6 @@ void Act3Cop::ParseAction(char* p_extra)
 	}
 
 	assert(m_eatAnim);
-	return;
 }
 
 // STUB: LEGO1 0x100401f0
