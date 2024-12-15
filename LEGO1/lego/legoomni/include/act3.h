@@ -126,6 +126,7 @@ public:
 	MxResult FUN_10073360(Act3Ammo& p_ammo, const Vector3& p_param2);
 	MxResult FUN_10073390(Act3Ammo& p_ammo, const Vector3& p_param2);
 	void SetBrickster(Act3Brickster* p_brickster);
+	void AddCop(Act3Cop *p_cop);
 	void FUN_10073400();
 	void FUN_10073430();
 	void GoodEnding(const Matrix4& p_destination);

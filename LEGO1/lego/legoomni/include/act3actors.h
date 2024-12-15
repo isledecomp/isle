@@ -14,6 +14,17 @@ class LegoWorld;
 // SIZE 0x178
 class Act3Actor : public LegoAnimActor {
 public:
+	struct Act3CopDest {
+		// name verified by BETA10 0x10018776
+		const char* m_bName; // 0x00
+
+		// name verified by BETA10 0x100187cb
+		LegoPathBoundary* m_boundary; // 0x04
+
+		MxFloat m_unk0x08[3]; // 0x08
+		MxFloat m_unk0x14[3]; // 0x14
+	};
+
 	Act3Actor();
 
 	// FUNCTION: LEGO1 0x100431b0

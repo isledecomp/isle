@@ -17,8 +17,70 @@
 
 DECOMP_SIZE_ASSERT(Act3Actor, 0x178)
 DECOMP_SIZE_ASSERT(Act3Cop, 0x188)
+DECOMP_SIZE_ASSERT(Act3Cop::Act3CopDest, 0x20)
 DECOMP_SIZE_ASSERT(Act3Brickster, 0x1b4)
 DECOMP_SIZE_ASSERT(Act3Shark, 0x1a8)
+
+// name verified by BETA10 0x10018776
+// GLOBAL: LEGO1 0x100f4120
+// GLOBAL: BETA10 0x101dcdc8
+Act3Actor::Act3CopDest g_copDest[5] = {
+	{"INT38", NULL, {3.69, -1.31251, -59.231}, {-0.99601698, 0.0, -0.089166}},
+	{
+		"EDG02_08",
+		NULL,
+		{
+			-96.459999,
+			4.0,
+			11.22,
+		},
+		{
+			-0.9725,
+			0.0,
+			-0.23,
+		},
+	},
+	{
+		"INT18",
+		NULL,
+		{
+			28.076799,
+			2.0,
+			32.11,
+		},
+		{
+			-0.19769999,
+			0.0,
+			0.98,
+		},
+	},
+	{
+		"INT48",
+		NULL,
+		{
+			84.736,
+			9.0,
+			-1.965,
+		},
+		{
+			0.241,
+			0.0,
+			-0.97,
+		},
+	},
+	{"INT42",
+	 NULL,
+	 {
+		 63.76178,
+		 0.999993,
+		 -77.739998,
+	 },
+	 {
+		 0.47999999,
+		 0.0,
+		 -0.87699997,
+	 }}
+};
 
 // Initialized at LEGO1 0x1003fa20
 // GLOBAL: LEGO1 0x10104ef0
