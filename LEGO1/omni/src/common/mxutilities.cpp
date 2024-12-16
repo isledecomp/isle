@@ -12,7 +12,7 @@
 #include <assert.h>
 
 // GLOBAL: LEGO1 0x101020e8
-void (*g_omniUserMessage)(const char*, int) = NULL;
+void (*g_omniUserMessage)(const char*, MxS32) = NULL;
 
 // FUNCTION: LEGO1 0x100b6e10
 MxBool GetRectIntersection(
@@ -166,7 +166,7 @@ MxDSObject* CreateStreamObject(MxDSFile* p_file, MxS16 p_ofs)
 	MxU8* buf;
 	_MMCKINFO tmpChunk;
 
-	if (p_file->Seek(((MxLong*) p_file->GetBuffer())[p_ofs], 0)) {
+	if (p_file->Seek(((MxLong*) p_file->GetBuffer())[p_ofs], SEEK_SET)) {
 		return NULL;
 	}
 

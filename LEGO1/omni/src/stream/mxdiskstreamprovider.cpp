@@ -245,7 +245,7 @@ void MxDiskStreamProvider::PerformWork()
 	buffer = streamingAction->GetUnknowna0();
 
 	if (m_pFile->GetPosition() == streamingAction->GetBufferOffset() ||
-		m_pFile->Seek(streamingAction->GetBufferOffset(), 0) == 0) {
+		m_pFile->Seek(streamingAction->GetBufferOffset(), SEEK_SET) == 0) {
 		buffer->SetUnknown14(m_pFile->GetPosition());
 
 		if (m_pFile->ReadToBuffer(buffer) == SUCCESS) {
