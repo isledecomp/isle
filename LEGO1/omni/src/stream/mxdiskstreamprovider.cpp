@@ -92,11 +92,11 @@ MxResult MxDiskStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 
 	m_pFile = new MxDSFile(path.GetData(), 0);
 	if (m_pFile != NULL) {
-		if (m_pFile->Open(0) != 0) {
+		if (m_pFile->Open(OF_READ) != 0) {
 			path = MxString(MxOmni::GetCD()) + p_resource->GetAtom().GetInternal() + ".si";
 			m_pFile->SetFileName(path.GetData());
 
-			if (m_pFile->Open(0) != 0) {
+			if (m_pFile->Open(OF_READ) != 0) {
 				goto done;
 			}
 		}
@@ -245,7 +245,7 @@ void MxDiskStreamProvider::PerformWork()
 	buffer = streamingAction->GetUnknowna0();
 
 	if (m_pFile->GetPosition() == streamingAction->GetBufferOffset() ||
-		m_pFile->Seek(streamingAction->GetBufferOffset(), 0) == 0) {
+		m_pFile->Seek(streamingAction->GetBufferOffset(), SEEK_SET) == 0) {
 		buffer->SetUnknown14(m_pFile->GetPosition());
 
 		if (m_pFile->ReadToBuffer(buffer) == SUCCESS) {

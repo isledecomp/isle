@@ -319,7 +319,7 @@ MxResult LegoWorldPresenter::FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile)
 	MxResult result;
 	MxU8* buff = new MxU8[p_part.m_partDataLength];
 
-	fseek(p_wdbFile, p_part.m_partDataOffset, 0);
+	fseek(p_wdbFile, p_part.m_partDataOffset, SEEK_SET);
 	if (fread(buff, p_part.m_partDataLength, 1, p_wdbFile) != 1) {
 		return FAILURE;
 	}
@@ -344,7 +344,7 @@ MxResult LegoWorldPresenter::FUN_100674b0(ModelDbModel& p_model, FILE* p_wdbFile
 {
 	MxU8* buff = new MxU8[p_model.m_unk0x04];
 
-	fseek(p_wdbFile, p_model.m_unk0x08, 0);
+	fseek(p_wdbFile, p_model.m_unk0x08, SEEK_SET);
 	if (fread(buff, p_model.m_unk0x04, 1, p_wdbFile) != 1) {
 		return FAILURE;
 	}

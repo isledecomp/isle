@@ -41,7 +41,7 @@ MxResult MxDSFile::Open(MxULong p_uStyle)
 		Close();
 	}
 	else {
-		Seek(0, 0);
+		Seek(0, SEEK_SET);
 	}
 
 	return result;

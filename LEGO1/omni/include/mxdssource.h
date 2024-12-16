@@ -31,7 +31,7 @@ public:
 	virtual MxLong Close() = 0;                          // vtable+0x18
 	virtual MxResult ReadToBuffer(MxDSBuffer* p_buffer); // vtable+0x1c
 	virtual MxResult Read(unsigned char*, MxULong) = 0;  // vtable+0x20
-	virtual MxLong Seek(MxLong, int) = 0;                // vtable+0x24
+	virtual MxLong Seek(MxLong, MxS32) = 0;              // vtable+0x24
 	virtual MxULong GetBufferSize() = 0;                 // vtable+0x28
 	virtual MxULong GetStreamBuffersNum() = 0;           // vtable+0x2c
 	virtual MxLong GetLengthInDWords();                  // vtable+0x30

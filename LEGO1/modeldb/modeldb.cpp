@@ -52,8 +52,11 @@ MxResult ModelDbModel::Read(FILE* p_file)
 	if (fread(&m_up, sizeof(*m_up), 3, p_file) != 3) {
 		return FAILURE;
 	}
+	if (fread(&m_unk0x34, sizeof(m_unk0x34), 1, p_file) != 1) {
+		return FAILURE;
+	}
 
-	return fread(&m_unk0x34, sizeof(m_unk0x34), 1, p_file) == 1 ? SUCCESS : FAILURE;
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10027850
@@ -76,8 +79,11 @@ MxResult ModelDbPart::Read(FILE* p_file)
 	if (fread(&m_partDataLength, sizeof(m_partDataLength), 1, p_file) != 1) {
 		return FAILURE;
 	}
+	if (fread(&m_partDataOffset, sizeof(m_partDataOffset), 1, p_file) != 1) {
+		return FAILURE;
+	}
 
-	return fread(&m_partDataOffset, sizeof(m_partDataOffset), 1, p_file) == 1 ? SUCCESS : FAILURE;
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10027910
