@@ -151,11 +151,8 @@ public:
 	virtual void SetVector(float* p_other) { EqualsImpl(p_other); } // vtable+0x70
 
 	// FUNCTION: LEGO1 0x10002260
+	// FUNCTION: BETA10 0x100110c0
 	virtual void SetVector(const Vector2* p_other) { EqualsImpl(p_other->m_data); } // vtable+0x6c
-
-	// SYNTHETIC: LEGO1 0x10010be0
-	// SYNTHETIC: BETA10 0x100121e0
-	// Vector3::operator=
 
 	// SYNTHETIC: BETA10 0x1004af40
 	// Vector4::operator=
@@ -306,6 +303,14 @@ public:
 	{
 		return m_data[0] * m_data[0] + m_data[1] * m_data[1] + m_data[2] * m_data[2];
 	} // vtable+0x40
+
+	// FUNCTION: LEGO1 0x10010be0
+	// FUNCTION: BETA10 0x100121e0
+	Vector3& operator=(const Vector3& p_other)
+	{
+		Vector3::SetVector(&p_other);
+		return *this;
+	}
 
 	friend class Mx3DPointFloat;
 };

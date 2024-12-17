@@ -19,6 +19,12 @@ struct LegoEdge {
 
 	LegoResult FUN_1002ddc0(LegoWEEdge& p_face, Vector3& p_point);
 
+	// FUNCTION: BETA10 0x1001cb80
+	Vector3* GetPointA() { return m_pointA; }
+
+	// FUNCTION: BETA10 0x1001cbb0
+	Vector3* GetPointB() { return m_pointB; }
+
 	// SYNTHETIC: LEGO1 0x1009a4a0
 	// LegoEdge::`scalar deleting destructor'
 
