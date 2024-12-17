@@ -529,7 +529,7 @@ void MxDisplaySurface::VTable0x30(
 		MxU8* surface = (MxU8*) ddsd.lpSurface + p_right + (p_bottom * ddsd.lPitch);
 		if (p_und) {
 			MxS32 size = p_bitmap->GetBmiHeader()->biSizeImage;
-			FUN_100bb500(&data, &surface, size, p_width, p_height, ddsd.lPitch, 8);
+			DrawTransparentRLE(data, surface, size, p_width, p_height, ddsd.lPitch, 8);
 		}
 		else {
 			MxLong stride = -p_width + GetAdjustedStride(p_bitmap);
@@ -555,7 +555,7 @@ void MxDisplaySurface::VTable0x30(
 		MxU8* surface = (MxU8*) ddsd.lpSurface + (2 * p_right) + (p_bottom * ddsd.lPitch);
 		if (p_und) {
 			MxS32 size = p_bitmap->GetBmiHeader()->biSizeImage;
-			FUN_100bb500(&data, &surface, size, p_width, p_height, ddsd.lPitch, 16);
+			DrawTransparentRLE(data, surface, size, p_width, p_height, ddsd.lPitch, 16);
 		}
 		else {
 			MxLong stride = -p_width + GetAdjustedStride(p_bitmap);
@@ -584,19 +584,159 @@ void MxDisplaySurface::VTable0x30(
 	m_ddSurface2->Unlock(ddsd.lpSurface);
 }
 
-// STUB: LEGO1 0x100bb500
-// STUB: BETA10 0x10140cd6
-void MxDisplaySurface::FUN_100bb500(
-	MxU8** p_bitmapData,
-	MxU8** p_surfaceData,
+// FUNCTION: LEGO1 0x100bb500
+// FUNCTION: BETA10 0x10140cd6
+void MxDisplaySurface::DrawTransparentRLE(
+	MxU8*& p_bitmapData,
+	MxU8*& p_surfaceData,
 	MxU32 p_bitmapSize,
 	MxS32 p_width,
 	MxS32 p_height,
 	MxLong p_pitch,
-	MxU32 p_bpp
+	MxU8 p_bpp
 )
 {
-	// TODO
+	/* Assumes partial RLE for the bitmap: only the skipped pixels are compressed.
+	The drawn pixels are uncompressed. The procedure is:
+	1. Read 3 bytes from p_bitmapData. Skip this many pixels on the surface.
+	2. Read 3 bytes from p_bitmapData. Draw this many pixels on the surface.
+	3. Repeat until the end of p_bitmapData is reached. */
+
+	MxU8* end = p_bitmapData + p_bitmapSize;
+	MxU8* surfCopy = p_surfaceData; // unused?
+
+	// The total number of pixels drawn or skipped
+	MxU32 count = 0;
+
+	// Used in both 8 and 16 bit branches
+	MxU32 skipCount;
+	MxU32 drawCount;
+	MxU32 t;
+
+	if (p_bpp == 16) {
+		// DECOMP: why goto?
+		goto sixteen_bit;
+	}
+
+	while (p_bitmapData < end) {
+		skipCount = *p_bitmapData++;
+		t = *p_bitmapData++;
+		skipCount += t << 8;
+		t = *p_bitmapData++;
+		skipCount += t << 16;
+
+		MxS32 rowRemainder = p_width - count % p_width;
+		count += skipCount;
+
+		if (skipCount >= rowRemainder) {
+			p_surfaceData += rowRemainder; // skip the rest of this row
+			skipCount -= rowRemainder;
+			p_surfaceData += p_pitch - p_width;               // seek to start of next row
+			p_surfaceData += p_pitch * (skipCount / p_width); // skip entire rows if any
+		}
+
+		// skip any pixels at the start of this row
+		p_surfaceData += skipCount % p_width;
+		if (p_bitmapData >= end) {
+			break;
+		}
+
+		drawCount = *p_bitmapData++;
+		t = *p_bitmapData++;
+		drawCount += t << 8;
+		t = *p_bitmapData++;
+		drawCount += t << 16;
+
+		rowRemainder = p_width - count % p_width;
+		count += drawCount;
+
+		if (drawCount >= rowRemainder) {
+			memcpy(p_surfaceData, p_bitmapData, rowRemainder);
+			p_surfaceData += rowRemainder;
+			p_bitmapData += rowRemainder;
+
+			drawCount -= rowRemainder;
+
+			// seek to start of bitmap on this screen row
+			p_surfaceData += p_pitch - p_width;
+			MxS32 rows = drawCount / p_width;
+
+			for (MxU32 i = 0; i < rows; i++) {
+				memcpy(p_surfaceData, p_bitmapData, p_width);
+				p_bitmapData += p_width;
+				p_surfaceData += p_pitch;
+			}
+		}
+
+		MxS32 tail = drawCount % p_width;
+		memcpy(p_surfaceData, p_bitmapData, tail);
+		p_surfaceData += tail;
+		p_bitmapData += tail;
+	}
+	return;
+
+sixteen_bit:
+	while (p_bitmapData < end) {
+		skipCount = *p_bitmapData++;
+		t = *p_bitmapData++;
+		skipCount += t << 8;
+		t = *p_bitmapData++;
+		skipCount += t << 16;
+
+		MxS32 rowRemainder = p_width - count % p_width;
+		count += skipCount;
+
+		if (skipCount >= rowRemainder) {
+			p_surfaceData += 2 * rowRemainder;
+			skipCount -= rowRemainder;
+			p_surfaceData += p_pitch - 2 * p_width;
+			p_surfaceData += p_pitch * (skipCount / p_width);
+		}
+
+		p_surfaceData += 2 * (skipCount % p_width);
+		if (p_bitmapData >= end) {
+			break;
+		}
+
+		drawCount = *p_bitmapData++;
+		t = *p_bitmapData++;
+		drawCount += t << 8;
+		t = *p_bitmapData++;
+		drawCount += t << 16;
+
+		rowRemainder = p_width - count % p_width;
+		count += drawCount;
+
+		if (drawCount >= rowRemainder) {
+			// memcpy
+			for (MxU32 j = 0; j < rowRemainder; j++) {
+				*((MxU16*) p_surfaceData) = m_16bitPal[*p_bitmapData++];
+				p_surfaceData += 2;
+			}
+
+			drawCount -= rowRemainder;
+
+			p_surfaceData += p_pitch - 2 * p_width;
+			MxS32 rows = drawCount / p_width;
+
+			for (MxU32 i = 0; i < rows; i++) {
+				// memcpy
+				for (MxS32 j = 0; j < p_width; j++) {
+					*((MxU16*) p_surfaceData) = m_16bitPal[*p_bitmapData++];
+					p_surfaceData += 2;
+				}
+
+				p_surfaceData += p_pitch - 2 * p_width;
+			}
+		}
+
+		MxS32 tail = drawCount % p_width;
+		// memcpy
+		for (MxS32 j = 0; j < tail; j++) {
+			*((MxU16*) p_surfaceData) = m_16bitPal[*p_bitmapData++];
+			p_surfaceData += 2;
+		}
+	}
 }
 
 // STUB: LEGO1 0x100bb850
