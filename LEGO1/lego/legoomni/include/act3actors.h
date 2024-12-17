@@ -6,6 +6,8 @@
 // File name verified by multiple assertions, e.g. BETA10 0x10018391
 
 class Act3Ammo;
+struct LegoBuildingInfo;
+struct LegoPlantInfo;
 class LegoWorld;
 
 // VTABLE: LEGO1 0x100d7668 LegoPathActor
@@ -118,17 +120,19 @@ public:
 	// Act3Brickster::`scalar deleting destructor'
 
 private:
+	MxS32 FUN_10042300();
+
 	MxFloat m_unk0x20;                // 0x20
 	MxFloat m_unk0x24;                // 0x24
 	LegoWorld* m_world;               // 0x28
-	undefined4 m_unk0x2c;             // 0x2c
-	undefined4 m_unk0x30;             // 0x30
+	LegoPlantInfo* m_pInfo;           // 0x2c
+	LegoBuildingInfo* m_bInfo;        // 0x30
 	LegoAnimActorStruct* m_shootAnim; // 0x34
 	undefined4 m_unk0x38;             // 0x38
 	Mx3DPointFloat m_unk0x3c;         // 0x3c
 	MxFloat m_unk0x50;                // 0x50
-	undefined4 m_unk0x54;             // 0x54
-	undefined m_unk0x58;              // 0x58
+	MxFloat m_unk0x54;                // 0x54
+	MxU8 m_unk0x58;                   // 0x58
 };
 
 // VTABLE: LEGO1 0x100d7920 LegoPathActor
