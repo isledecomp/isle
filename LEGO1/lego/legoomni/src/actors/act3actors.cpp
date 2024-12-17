@@ -617,6 +617,9 @@ MxResult Act3Brickster::FUN_100417c0()
 // FUNCTION: BETA10 0x1001b017
 MxS32 Act3Brickster::FUN_10042300()
 {
+	// TODO: Has poor inlining, possibly can be fixed by changing the assignment operator in vector.h
+	// See extended comment in vector.h for operator=
+
 	Act3* a3 = (Act3*) m_world;
 
 	assert(a3 && a3->m_cop1 && a3->m_cop2);
