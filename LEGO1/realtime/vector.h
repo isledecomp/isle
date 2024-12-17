@@ -151,6 +151,7 @@ public:
 	virtual void SetVector(float* p_other) { EqualsImpl(p_other); } // vtable+0x70
 
 	// FUNCTION: LEGO1 0x10002260
+	// FUNCTION: BETA10 0x100110c0
 	virtual void SetVector(const Vector2* p_other) { EqualsImpl(p_other->m_data); } // vtable+0x6c
 
 	// Note: it's unclear whether Vector3::operator= has been defined explicitly
