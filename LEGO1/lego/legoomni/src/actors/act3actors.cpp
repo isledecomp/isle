@@ -475,12 +475,11 @@ void Act3Brickster::Animate(float p_time)
 			assert(SoundManager()->GetCacheSoundManager());
 			SoundManager()->GetCacheSoundManager()->Play("thpt", NULL, FALSE);
 
-			// TODO
-			do {
-				if (m_bInfo->m_unk0x11 <= 0 && m_bInfo->m_unk0x11 != -1) {
+			while (m_bInfo->m_unk0x11 > 0 || m_bInfo->m_unk0x11 == -1) {
+				if (!BuildingManager()->FUN_10030110(m_bInfo)) {
 					break;
 				}
-			} while (BuildingManager()->FUN_10030110(m_bInfo));
+			}
 
 			FUN_100417c0();
 		}
