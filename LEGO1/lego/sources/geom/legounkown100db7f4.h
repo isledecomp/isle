@@ -93,6 +93,8 @@ public:
 	// FUNCTION: BETA10 0x1001cc60
 	LegoU32 GetMask0x03() { return m_flags & (c_bit1 | c_bit2); }
 
+	inline LegoU32 FUN_10048c40(const Vector3& p_position);
+
 	// SYNTHETIC: LEGO1 0x1009a6c0
 	// LegoUnknown100db7f4::`scalar deleting destructor'
 
@@ -100,5 +102,67 @@ public:
 	Mx3DPointFloat m_unk0x28; // 0x28
 	float m_unk0x3c;          // 0x3c
 };
+
+// FUNCTION: LEGO1 0x10048c40
+// FUNCTION: BETA10 0x1001cc90
+inline LegoU32 LegoUnknown100db7f4::FUN_10048c40(const Vector3& p_position)
+{
+	LegoFloat localc, local10;
+	LegoU32 result = FALSE;
+
+	if (m_unk0x28[0] > 0.001 || m_unk0x28[0] < -0.001) {
+		localc = (p_position[0] - (*m_pointA)[0]) / m_unk0x28[0];
+
+		if (localc < 0 || localc > 1) {
+			return FALSE;
+		}
+
+		result = TRUE;
+	}
+	else {
+		if (p_position[0] > (*m_pointA)[0] + 0.001 || p_position[0] < (*m_pointA)[0] - 0.001) {
+			return FALSE;
+		}
+	}
+
+	if (m_unk0x28[1] > 0.001 || m_unk0x28[1] < -0.001) {
+		local10 = (p_position[1] - (*m_pointA)[1]) / m_unk0x28[1];
+
+		if (result) {
+			if (localc > local10 + 0.001 || localc < local10 - 0.001) {
+				return FALSE;
+			}
+		}
+		else {
+			result = TRUE;
+			localc = local10;
+		}
+	}
+	else {
+		if (p_position[1] > (*m_pointA)[1] + 0.001 || p_position[1] < (*m_pointA)[1] - 0.001) {
+			return FALSE;
+		}
+	}
+
+	if (m_unk0x28[2] > 0.001 || m_unk0x28[2] < -0.001) {
+		local10 = (p_position[2] - (*m_pointA)[2]) / m_unk0x28[2];
+
+		if (result) {
+			if (localc > local10 + 0.001 || localc < local10 - 0.001) {
+				return FALSE;
+			}
+		}
+		else {
+			return TRUE;
+		}
+	}
+	else {
+		if (p_position[2] > (*m_pointA)[2] + 0.001 || p_position[2] < (*m_pointA)[2] - 0.001) {
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
 
 #endif // __LEGOUNKNOWN100DB7F4_H

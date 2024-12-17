@@ -33,6 +33,9 @@ public:
 	// FUNCTION: LEGO1 0x10003c10
 	virtual void operator=(const Vector3& p_impl) { EqualsImpl(p_impl.m_data); } // vtable+0x88
 
+	// FUNCTION: BETA10 0x10015240
+	// ??4Mx3DPointFloat@@QAEAAV0@ABV0@@Z
+
 	// FUNCTION: BETA10 0x10013460
 	float& operator[](int idx) { return m_data[idx]; }
 

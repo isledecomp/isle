@@ -613,11 +613,105 @@ MxResult Act3Brickster::FUN_100417c0()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10042300
-// STUB: BETA10 0x1001b017
+// FUNCTION: LEGO1 0x10042300
+// FUNCTION: BETA10 0x1001b017
 MxS32 Act3Brickster::FUN_10042300()
 {
-	// TODO
+	// TODO: Has poor inlining, can be fixed by changing the assignment operator in vector.h
+	// See extended comment in vector.h for operator=
+
+	Act3* a3 = (Act3*) m_world;
+
+	assert(a3 && a3->m_cop1 && a3->m_cop2);
+	assert(a3->m_cop1->GetROI() && a3->m_cop2->GetROI() && GetROI());
+
+	Mx3DPointFloat local64[2];
+	Mx3DPointFloat local38;
+	Mx3DPointFloat local18;
+
+	MxS32 local1c = 0;
+	float local24[2];
+
+	local64[0] = a3->m_cop1->GetROI()->GetLocal2World()[3];
+	local64[1] = a3->m_cop2->GetROI()->GetLocal2World()[3];
+	local38 = GetROI()->GetLocal2World()[3];
+
+	local18 = local64[0];
+	local18 -= local38;
+	local24[0] = local18.LenSquared();
+
+	local18 = local64[1];
+	local18 -= local38;
+	local24[1] = local18.LenSquared();
+
+	if (local24[1] < local24[0]) {
+		local1c = 1;
+	}
+
+	if (local24[local1c] < 225.0f) {
+		m_unk0x38 = 8;
+
+		if (m_grec != NULL) {
+			delete m_grec;
+			m_grec = NULL;
+		}
+
+		if (m_pInfo != NULL) {
+			m_pInfo = NULL;
+		}
+
+		assert(m_boundary && m_destEdge && m_roi);
+
+		LegoPathBoundary* boundaries[2];
+		LegoUnknown100db7f4* maxE = NULL;
+		boundaries[0] = m_boundary;
+
+		if (m_destEdge->FUN_10048c40(local38)) {
+			boundaries[1] = (LegoPathBoundary*) m_destEdge->OtherFace(m_boundary);
+		}
+		else {
+			boundaries[1] = NULL;
+		}
+
+		float local78, local98;
+		for (MxS32 i = 0; i < (MxS32) sizeOfArray(boundaries); i++) {
+			if (boundaries[i] != NULL) {
+				for (MxS32 j = 0; j < boundaries[i]->GetNumEdges(); j++) {
+					LegoUnknown100db7f4* e = boundaries[i]->GetEdges()[j];
+
+					if (e->GetMask0x03()) {
+						Mx3DPointFloat local94(*e->GetPointA());
+						local94 += *e->GetPointB();
+						local94 /= 2.0f;
+
+						local18 = local94;
+						local18 -= local64[local1c];
+						local98 = local18.LenSquared();
+
+						local94 -= local38;
+						local18 = local64[local1c];
+						local18 -= local38;
+
+						if (maxE == NULL || (local18.Dot(&local94, &local18) < 0.0f && local78 < local98)) {
+							maxE = e;
+							m_boundary = boundaries[i];
+							local78 = local98;
+						}
+					}
+				}
+			}
+		}
+
+		assert(maxE);
+		m_destEdge = maxE;
+
+		if (m_boundary != boundaries[0]) {
+			m_unk0xe4 = 1.0 - m_unk0xe4;
+		}
+
+		VTable0x9c();
+	}
+
 	return -1;
 }
 
