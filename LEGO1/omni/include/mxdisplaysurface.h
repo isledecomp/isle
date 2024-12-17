@@ -99,14 +99,14 @@ public:
 	LPDIRECTDRAWSURFACE GetDirectDrawSurface2() { return m_ddSurface2; }
 	MxVideoParam& GetVideoParam() { return m_videoParam; }
 
-	void FUN_100bb500(
-		MxU8** p_bitmapData,
-		MxU8** p_surfaceData,
+	void DrawTransparentRLE(
+		MxU8*& p_bitmapData,
+		MxU8*& p_surfaceData,
 		MxU32 p_bitmapSize,
 		MxS32 p_width,
 		MxS32 p_height,
 		MxLong p_pitch,
-		MxU32 p_bpp
+		MxU8 p_bpp
 	);
 
 private:
