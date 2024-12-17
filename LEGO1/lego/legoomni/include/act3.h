@@ -130,6 +130,7 @@ public:
 	void FUN_10073400();
 	void FUN_10073430();
 	void GoodEnding(const Matrix4& p_destination);
+	void FUN_10073a60();
 
 	// BETA indicates that the following classes access certain members directly.
 	friend class Act3Ammo;

@@ -844,6 +844,13 @@ void Act3::DebugCopter(
 	}
 }
 
+// FUNCTION: LEGO1 0x10073a60
+void Act3::FUN_10073a60()
+{
+	m_unk0x421e--;
+	m_helicopterDots[m_unk0x421e]->Enable(FALSE);
+}
+
 // FUNCTION: LEGO1 0x10073a90
 void Act3::Enable(MxBool p_enable)
 {

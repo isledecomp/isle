@@ -4,9 +4,12 @@
 #include "act3ammo.h"
 #include "anim/legoanim.h"
 #include "define.h"
+#include "legobuildingmanager.h"
 #include "legocachesoundmanager.h"
 #include "legolocomotionanimpresenter.h"
 #include "legopathedgecontainer.h"
+#include "legoplantmanager.h"
+#include "legoplants.h"
 #include "legosoundmanager.h"
 #include "misc.h"
 #include "mxdebug.h"
@@ -345,13 +348,13 @@ MxResult Act3Cop::VTable0x9c()
 Act3Brickster::Act3Brickster()
 {
 	m_world = NULL;
-	m_unk0x2c = 0;
-	m_unk0x30 = 0;
+	m_pInfo = NULL;
+	m_bInfo = NULL;
 	m_shootAnim = NULL;
 	m_unk0x38 = 0;
 	m_unk0x20 = 0.0f;
 	m_unk0x24 = 0.0f;
-	m_unk0x54 = 0;
+	m_unk0x54 = 0.0f;
 
 	SetActorState(c_disabled);
 	m_unk0x58 = 0;
@@ -385,11 +388,175 @@ void Act3Brickster::ParseAction(char* p_extra)
 	assert(m_shootAnim);
 }
 
-// STUB: LEGO1 0x10041050
-// STUB: BETA10 0x100197d7
+// FUNCTION: LEGO1 0x10041050
+// FUNCTION: BETA10 0x100197d7
 void Act3Brickster::Animate(float p_time)
 {
-	// TODO
+	if (m_lastTime <= m_unk0x20 && m_unk0x20 <= p_time) {
+		SetWorldSpeed(5.0f);
+	}
+
+	if (m_unk0x38 != 3 && m_unk0x38 != 4) {
+		Act3Actor::Animate(p_time);
+	}
+
+	if (m_unk0x54 < p_time) {
+		((Act3*) m_world)->FUN_10072ad0(5);
+		m_unk0x54 = p_time + 15000.0f;
+	}
+
+	switch (m_unk0x38) {
+	case 1:
+		FUN_100417c0();
+		break;
+	case 2:
+		m_unk0x58++;
+		m_unk0x20 = p_time + 2000.0f;
+		SetWorldSpeed(3.0f);
+
+		assert(SoundManager()->GetCacheSoundManager());
+
+		if (m_unk0x58 >= 8) {
+			((Act3*) m_world)->FUN_10072ad0(6);
+		}
+		else {
+			SoundManager()->GetCacheSoundManager()->Play("eatpz", NULL, FALSE);
+		}
+
+		FUN_100417c0();
+		break;
+	case 3:
+		assert(m_shootAnim && m_pInfo);
+
+		if (m_unk0x50 < p_time) {
+			while (m_pInfo->m_unk0x16) {
+				PlantManager()->FUN_10026c50(m_pInfo->m_entity);
+			}
+
+			assert(SoundManager()->GetCacheSoundManager());
+			SoundManager()->GetCacheSoundManager()->Play("thpt", NULL, FALSE);
+			m_unk0x58 = 0;
+			FUN_100417c0();
+		}
+		else {
+			MxMatrix local70;
+			local70 = m_unk0xec;
+
+			Vector3 local14(local70[0]);
+			Vector3 local28(local70[1]);
+			Vector3 localc(local70[2]);
+			Vector3 local20(local70[3]);
+
+			localc = local20;
+			localc -= m_pInfo->m_position;
+			localc.Unitize();
+			local14.EqualsCross(&local28, &localc);
+			local14.Unitize();
+			local28.EqualsCross(&localc, &local14);
+
+			assert(!m_cameraFlag);
+
+			LegoTreeNode* root = m_shootAnim->GetAnimTreePtr()->GetRoot();
+			float time = p_time - (m_unk0x50 - m_shootAnim->GetDuration());
+
+			for (MxS32 i = 0; i < root->GetNumChildren(); i++) {
+				LegoROI::FUN_100a8e80(root->GetChild(i), local70, time, m_shootAnim->GetROIMap());
+			}
+		}
+
+		m_lastTime = p_time;
+		break;
+	case 4:
+		assert(m_shootAnim && m_bInfo);
+
+		if (m_unk0x50 < p_time) {
+			((Act3*) m_world)->FUN_10073a60();
+			m_unk0x58 = 0;
+			assert(SoundManager()->GetCacheSoundManager());
+			SoundManager()->GetCacheSoundManager()->Play("thpt", NULL, FALSE);
+
+			// TODO
+			do {
+				if (m_bInfo->m_unk0x11 <= 0 && m_bInfo->m_unk0x11 != -1) {
+					break;
+				}
+			} while (BuildingManager()->FUN_10030110(m_bInfo));
+
+			FUN_100417c0();
+		}
+		else {
+			MxMatrix locale4;
+			locale4 = m_unk0xec;
+
+			Vector3 local88(locale4[0]);
+			Vector3 local9c(locale4[1]);
+			Vector3 local80(locale4[2]);
+			Vector3 local94(locale4[3]);
+
+			local80 = local94;
+			assert(m_bInfo->m_entity && m_bInfo->m_entity->GetROI());
+
+			local80 -= m_unk0x3c;
+			local80.Unitize();
+			local88.EqualsCross(&local9c, &local80);
+			local88.Unitize();
+			local9c.EqualsCross(&local80, &local88);
+
+			assert(!m_cameraFlag);
+
+			LegoTreeNode* root = m_shootAnim->GetAnimTreePtr()->GetRoot();
+			float time = p_time - (m_unk0x50 - m_shootAnim->GetDuration());
+
+			for (MxS32 i = 0; i < root->GetNumChildren(); i++) {
+				LegoROI::FUN_100a8e80(root->GetChild(i), locale4, time, m_shootAnim->GetROIMap());
+			}
+		}
+
+		m_lastTime = p_time;
+		break;
+	case 5:
+		if (m_grec == NULL) {
+			assert(m_shootAnim && m_pInfo);
+			m_unk0x38 = 3;
+			m_unk0x50 = p_time + m_shootAnim->GetDuration();
+			assert(SoundManager()->GetCacheSoundManager());
+			SoundManager()->GetCacheSoundManager()->Play("xarrow", NULL, FALSE);
+		}
+		else {
+			FUN_10042300();
+		}
+		break;
+	case 6:
+		if (m_grec == NULL) {
+			assert(m_shootAnim && m_bInfo);
+			m_unk0x38 = 4;
+			m_unk0x50 = p_time + m_shootAnim->GetDuration();
+			assert(SoundManager()->GetCacheSoundManager());
+			SoundManager()->GetCacheSoundManager()->Play("xarrow", NULL, FALSE);
+			BuildingManager()->ScheduleAnimation(m_bInfo->m_entity, 0, FALSE, TRUE);
+			m_unk0x3c = m_bInfo->m_entity->GetROI()->GetLocal2World()[3];
+		}
+		else {
+			FUN_10042300();
+		}
+		break;
+	case 7:
+	default:
+		FUN_10042300();
+		break;
+	case 8:
+		m_unk0x24 = p_time + 10000.0f;
+		m_unk0x38 = 9;
+		break;
+	case 9:
+		if (m_unk0x24 < p_time) {
+			FUN_100417c0();
+		}
+		else if (m_unk0x24 - 9000.0f < p_time) {
+			FUN_10042300();
+		}
+		break;
+	}
 }
 
 // FUNCTION: LEGO1 0x100416b0
@@ -445,6 +612,14 @@ MxResult Act3Brickster::FUN_100417c0()
 {
 	// TODO
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x10042300
+// STUB: BETA10 0x1001b017
+MxS32 Act3Brickster::FUN_10042300()
+{
+	// TODO
+	return -1;
 }
 
 // FUNCTION: LEGO1 0x10042990
