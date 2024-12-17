@@ -151,8 +151,27 @@ public:
 	virtual void SetVector(float* p_other) { EqualsImpl(p_other); } // vtable+0x70
 
 	// FUNCTION: LEGO1 0x10002260
-	// FUNCTION: BETA10 0x100110c0
 	virtual void SetVector(const Vector2* p_other) { EqualsImpl(p_other->m_data); } // vtable+0x6c
+
+	// Note: it's unclear whether Vector3::operator= has been defined explicitly
+	// with the same function body as Vector2& operator=. The BETA indicates that;
+	// however, it makes LEGO1 0x10010be0 disappear and worsens matches in
+	// at least these functions:
+	// LEGO1 0x100109b0
+	// LEGO1 0x10023130
+	// LEGO1 0x1002de10
+	// LEGO1 0x10050a80
+	// LEGO1 0x10053980
+	// LEGO1 0x100648f0
+	// LEGO1 0x10064b50
+	// LEGO1 0x10084030
+	// LEGO1 0x100a9410
+	// However, defining it as in the BETA improves at least these functions:
+	// LEGO1 0x10042300
+
+	// SYNTHETIC: LEGO1 0x10010be0
+	// SYNTHETIC: BETA10 0x100121e0
+	// Vector3::operator=
 
 	// SYNTHETIC: BETA10 0x1004af40
 	// Vector4::operator=
@@ -303,14 +322,6 @@ public:
 	{
 		return m_data[0] * m_data[0] + m_data[1] * m_data[1] + m_data[2] * m_data[2];
 	} // vtable+0x40
-
-	// FUNCTION: LEGO1 0x10010be0
-	// FUNCTION: BETA10 0x100121e0
-	Vector3& operator=(const Vector3& p_other)
-	{
-		Vector3::SetVector(&p_other);
-		return *this;
-	}
 
 	friend class Mx3DPointFloat;
 };
