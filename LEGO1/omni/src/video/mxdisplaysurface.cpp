@@ -603,14 +603,14 @@ void MxDisplaySurface::DrawTransparentRLE(
 	3. Repeat until the end of p_bitmapData is reached. */
 
 	MxU8* end = p_bitmapData + p_bitmapSize;
-	MxU8* surf_copy = p_surfaceData; // unused?
+	MxU8* surfCopy = p_surfaceData; // unused?
 
 	// The total number of pixels drawn or skipped
 	MxU32 count = 0;
 
 	// Used in both 8 and 16 bit branches
-	MxU32 n_skip;
-	MxU32 n_draw;
+	MxU32 skipCount;
+	MxU32 drawCount;
 	MxU32 t;
 
 	if (p_bpp == 16) {
@@ -619,47 +619,47 @@ void MxDisplaySurface::DrawTransparentRLE(
 	}
 
 	while (p_bitmapData < end) {
-		n_skip = *p_bitmapData++;
+		skipCount = *p_bitmapData++;
 		t = *p_bitmapData++;
-		n_skip += t << 8;
+		skipCount += t << 8;
 		t = *p_bitmapData++;
-		n_skip += t << 16;
+		skipCount += t << 16;
 
-		MxS32 row_remainder = p_width - count % p_width;
-		count += n_skip;
+		MxS32 rowRemainder = p_width - count % p_width;
+		count += skipCount;
 
-		if (n_skip >= row_remainder) {
-			p_surfaceData += row_remainder; // skip the rest of this row
-			n_skip -= row_remainder;
-			p_surfaceData += p_pitch - p_width;            // seek to start of next row
-			p_surfaceData += p_pitch * (n_skip / p_width); // skip entire rows if any
+		if (skipCount >= rowRemainder) {
+			p_surfaceData += rowRemainder; // skip the rest of this row
+			skipCount -= rowRemainder;
+			p_surfaceData += p_pitch - p_width;               // seek to start of next row
+			p_surfaceData += p_pitch * (skipCount / p_width); // skip entire rows if any
 		}
 
 		// skip any pixels at the start of this row
-		p_surfaceData += n_skip % p_width;
+		p_surfaceData += skipCount % p_width;
 		if (p_bitmapData >= end) {
 			break;
 		}
 
-		n_draw = *p_bitmapData++;
+		drawCount = *p_bitmapData++;
 		t = *p_bitmapData++;
-		n_draw += t << 8;
+		drawCount += t << 8;
 		t = *p_bitmapData++;
-		n_draw += t << 16;
+		drawCount += t << 16;
 
-		row_remainder = p_width - count % p_width;
-		count += n_draw;
+		rowRemainder = p_width - count % p_width;
+		count += drawCount;
 
-		if (n_draw >= row_remainder) {
-			memcpy(p_surfaceData, p_bitmapData, row_remainder);
-			p_surfaceData += row_remainder;
-			p_bitmapData += row_remainder;
+		if (drawCount >= rowRemainder) {
+			memcpy(p_surfaceData, p_bitmapData, rowRemainder);
+			p_surfaceData += rowRemainder;
+			p_bitmapData += rowRemainder;
 
-			n_draw -= row_remainder;
+			drawCount -= rowRemainder;
 
 			// seek to start of bitmap on this screen row
 			p_surfaceData += p_pitch - p_width;
-			MxS32 rows = n_draw / p_width;
+			MxS32 rows = drawCount / p_width;
 
 			for (MxU32 i = 0; i < rows; i++) {
 				memcpy(p_surfaceData, p_bitmapData, p_width);
@@ -668,7 +668,7 @@ void MxDisplaySurface::DrawTransparentRLE(
 			}
 		}
 
-		MxS32 tail = n_draw % p_width;
+		MxS32 tail = drawCount % p_width;
 		memcpy(p_surfaceData, p_bitmapData, tail);
 		p_surfaceData += tail;
 		p_bitmapData += tail;
@@ -677,47 +677,47 @@ void MxDisplaySurface::DrawTransparentRLE(
 
 sixteen_bit:
 	while (p_bitmapData < end) {
-		n_skip = *p_bitmapData++;
+		skipCount = *p_bitmapData++;
 		t = *p_bitmapData++;
-		n_skip += t << 8;
+		skipCount += t << 8;
 		t = *p_bitmapData++;
-		n_skip += t << 16;
+		skipCount += t << 16;
 
-		MxS32 row_remainder = p_width - count % p_width;
-		count += n_skip;
+		MxS32 rowRemainder = p_width - count % p_width;
+		count += skipCount;
 
-		if (n_skip >= row_remainder) {
-			p_surfaceData += 2 * row_remainder;
-			n_skip -= row_remainder;
+		if (skipCount >= rowRemainder) {
+			p_surfaceData += 2 * rowRemainder;
+			skipCount -= rowRemainder;
 			p_surfaceData += p_pitch - 2 * p_width;
-			p_surfaceData += p_pitch * (n_skip / p_width);
+			p_surfaceData += p_pitch * (skipCount / p_width);
 		}
 
-		p_surfaceData += 2 * (n_skip % p_width);
+		p_surfaceData += 2 * (skipCount % p_width);
 		if (p_bitmapData >= end) {
 			break;
 		}
 
-		n_draw = *p_bitmapData++;
+		drawCount = *p_bitmapData++;
 		t = *p_bitmapData++;
-		n_draw += t << 8;
+		drawCount += t << 8;
 		t = *p_bitmapData++;
-		n_draw += t << 16;
+		drawCount += t << 16;
 
-		row_remainder = p_width - count % p_width;
-		count += n_draw;
+		rowRemainder = p_width - count % p_width;
+		count += drawCount;
 
-		if (n_draw >= row_remainder) {
+		if (drawCount >= rowRemainder) {
 			// memcpy
-			for (MxU32 j = 0; j < row_remainder; j++) {
+			for (MxU32 j = 0; j < rowRemainder; j++) {
 				*((MxU16*) p_surfaceData) = m_16bitPal[*p_bitmapData++];
 				p_surfaceData += 2;
 			}
 
-			n_draw -= row_remainder;
+			drawCount -= rowRemainder;
 
 			p_surfaceData += p_pitch - 2 * p_width;
-			MxS32 rows = n_draw / p_width;
+			MxS32 rows = drawCount / p_width;
 
 			for (MxU32 i = 0; i < rows; i++) {
 				// memcpy
@@ -730,7 +730,7 @@ sixteen_bit:
 			}
 		}
 
-		MxS32 tail = n_draw % p_width;
+		MxS32 tail = drawCount % p_width;
 		// memcpy
 		for (MxS32 j = 0; j < tail; j++) {
 			*((MxU16*) p_surfaceData) = m_16bitPal[*p_bitmapData++];
