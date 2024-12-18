@@ -336,7 +336,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 	}
 
 	MxU32 version, status;
-	MxS16 count, area, act;
+	MxS16 count, actArea;
 	const char* lightPosition;
 
 	Read(&fileStorage, &version);
@@ -348,8 +348,8 @@ MxResult LegoGameState::Load(MxULong p_slot)
 
 	Read(&fileStorage, &m_unk0x24);
 
-	Read(&fileStorage, &act);
-	SetCurrentAct((Act) act);
+	Read(&fileStorage, &actArea);
+	SetCurrentAct((Act) actArea);
 
 	Read(&fileStorage, &m_actorId);
 	if (m_actorId) {
@@ -406,13 +406,13 @@ MxResult LegoGameState::Load(MxULong p_slot)
 		}
 	}
 
-	Read(&fileStorage, &area);
+	Read(&fileStorage, &actArea);
 
 	if (m_currentAct == 0) {
 		m_unk0x42c = e_undefined;
 	}
 	else {
-		m_unk0x42c = (Area) area;
+		m_unk0x42c = (Area) actArea;
 	}
 
 	result = SUCCESS;
