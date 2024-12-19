@@ -5,8 +5,8 @@
 #include "legophonemelist.h"
 #include "mxvideomanager.h"
 
-#include <ddraw.h>
 #include <d3drm.h>
+#include <ddraw.h>
 
 class Lego3DManager;
 class LegoROI;
@@ -108,12 +108,12 @@ private:
 	undefined m_pad0x556[0x2];                   // 0x556
 	D3DVALUE m_back_0x558;                       // 0x558
 	D3DVALUE m_front_0x55c;                      // 0x55c
-    float m_camera_width_0x560;                  // 0x560
-    float m_camera_height_0x564;                 // 0x564
+	float m_camera_width_0x560;                  // 0x560
+	float m_camera_height_0x564;                 // 0x564
 	D3DVALUE m_fov_0x568;                        // 0x55c
-	IDirect3DRMFrame *m_camera_0x56c;            // 0x56c
+	IDirect3DRMFrame* m_camera_0x56c;            // 0x56c
 	D3DRMPROJECTIONTYPE m_projection_0x570;      // 0x570
-	ViewportAppData *m_appdata_0x574;            // 0x574
+	ViewportAppData* m_appdata_0x574;            // 0x574
 	D3DRMRENDERQUALITY m_quality_0x578;          // 0x578
 	DWORD m_shades_0x57c;                        // 0x57c
 	D3DRMTEXTUREQUALITY m_texture_quality_0x580; // 0x580
