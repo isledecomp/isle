@@ -31,5 +31,6 @@ targets:
         - LegoWorld
       ignore-functions:
         # strcpy, strlen, ... (arguments are imported incorrectly)
+        - 0x100f8ad0
         - 0x100fa200
         - 0x100f9780

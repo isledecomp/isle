@@ -115,6 +115,7 @@ public:
 		m_unk0x30 |= c_bit1;
 	}
 
+	// FUNCTION: LEGO1 0x10004620
 	// FUNCTION: BETA10 0x1004aa30
 	void Unknown3(Matrix4& p_m)
 	{
@@ -141,7 +142,7 @@ public:
 	undefined4 GetUnknown0x30() const { return m_unk0x30; }
 
 	inline int Unknown6(Matrix4& p_matrix, float p_f);
-	inline void Unknown7();
+	inline long Unknown7();
 
 private:
 	inline int FUN_100040a0(Vector4& p_v, float p_f);
@@ -165,22 +166,27 @@ int UnknownMx4DPointFloat::Unknown6(Matrix4& p_matrix, float p_f)
 	}
 }
 
-inline void UnknownMx4DPointFloat::Unknown7()
+// FUNCTION: LEGO1 0x10004520
+inline long UnknownMx4DPointFloat::Unknown7()
 {
-	if (m_unk0x30) {
-		Mx4DPointFloat v1;
-		Mx4DPointFloat v2;
-
-		v1 = m_unk0x00;
-		v1 += m_unk0x18;
-
-		v2 = m_unk0x00;
-		v2 -= m_unk0x18;
-
-		if (v1.Dot(&v1, &v1) < v2.Dot(&v2, &v2)) {
-			m_unk0x18 *= -1.0f;
-		}
+	if (!m_unk0x30) {
+		return -1;
 	}
+
+	Mx4DPointFloat v1;
+	Mx4DPointFloat v2;
+
+	v1 = m_unk0x00;
+	v1 += m_unk0x18;
+
+	v2 = m_unk0x00;
+	v2 -= m_unk0x18;
+
+	if (v1.Dot(&v1, &v1) < v2.Dot(&v2, &v2)) {
+		m_unk0x18 *= -1.0f;
+	}
+
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x100040a0
