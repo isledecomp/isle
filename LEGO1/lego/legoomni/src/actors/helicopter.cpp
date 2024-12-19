@@ -14,6 +14,8 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "mxdebug.h"
+#include "mxmisc.h"
+#include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "scripts.h"
 
@@ -425,10 +427,54 @@ void Helicopter::Animate(float p_time)
 	}
 }
 
-// STUB: LEGO1 0x100042a0
+// FUNCTION: LEGO1 0x100042a0
 void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 {
-	// TODO
+	MxMatrix matrix1;
+	MxMatrix matrix2;
+
+	// TODO: validate column order
+	Vector3 col0(m_unk0x1a8[0]);
+	Vector3 col1(m_unk0x1a8[1]);
+	Vector3 col2(m_unk0x1a8[2]);
+	Vector3 col3(m_unk0x1a8[3]);
+
+	m_world->GetCamera()->FUN_100123b0(matrix1);
+	m_unk0x1a8.SetIdentity();
+	matrix2 = p_matrix;
+
+	// The columns are most likely mixed up in the code below.
+	// Much of this is guesswork
+	matrix2[3][1] += 20.0f;
+	col3 = matrix2[3];
+	col3 -= col2;
+	col3.Unitize();
+
+	col2[0] = 0.0f;
+	col2[1] = -1.0f;
+	col2[2] = 0.0f;
+
+	col0.EqualsCross(&col3, &col2);
+	col0.Unitize();
+
+	col1.EqualsCross(&col2, &col3);
+
+	col2 = col0;
+
+	m_unk0x160 = matrix1;
+
+	col0[0] = 0.0f;
+	col0[1] = 0.0f;
+	col0[2] = 0.0f;
+	col1[0] = 0.0f;
+	col1[1] = 0.0f;
+	col1[2] = 0.0f;
+
+	m_unk0x1f0 = Timer()->GetTime();
+
+	m_unk0x1f4.Unknown2(matrix1);
+	m_unk0x1f4.Unknown3(matrix2); // quite sure, but isn't inlined - why?
+	m_unk0x1f4.Unknown7();        // sure about this one
 }
 
 // FUNCTION: LEGO1 0x10004640
