@@ -19,6 +19,8 @@
 #include "mxtransitionmanager.h"
 #include "scripts.h"
 
+#include <vec.h>
+
 DECOMP_SIZE_ASSERT(Helicopter, 0x230)
 DECOMP_SIZE_ASSERT(HelicopterState, 0x0c)
 DECOMP_SIZE_ASSERT(Mx3DPointFloat, 0x14)
@@ -430,50 +432,44 @@ void Helicopter::Animate(float p_time)
 // FUNCTION: LEGO1 0x100042a0
 void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 {
-	MxMatrix matrix1;
-	MxMatrix matrix2;
+	MxMatrix local48;
+	MxMatrix local90;
 
-	// TODO: validate column order
-	Vector3 col0(m_unk0x1a8[0]);
-	Vector3 col1(m_unk0x1a8[1]);
-	Vector3 col2(m_unk0x1a8[2]);
-	Vector3 col3(m_unk0x1a8[3]);
+	Vector3 vec1(local48[3]);    // local98  // esp+0x30
+	Vector3 vec2(local90[3]);    // localac  // esp+0x1c
+	Vector3 vec3(m_unk0x1a8[0]); // locala8  // esp+0x20
+	Vector3 vec4(m_unk0x1a8[1]); // localb8  // esp+0x10
+	Vector3 vec5(m_unk0x1a8[2]); // EDI
+	Vector3 vec6(m_unk0x1a8[3]); // locala0  // esp+0x28
 
-	m_world->GetCamera()->FUN_100123b0(matrix1);
+	m_world->GetCamera()->FUN_100123b0(local48);
 	m_unk0x1a8.SetIdentity();
-	matrix2 = p_matrix;
+	local90 = p_matrix;
 
-	// The columns are most likely mixed up in the code below.
-	// Much of this is guesswork
-	matrix2[3][1] += 20.0f;
-	col3 = matrix2[3];
-	col3 -= col2;
-	col3.Unitize();
+	vec2[1] += 20.0f;
+	vec4 = vec2;
+	vec4 -= vec1;
+	vec4.Unitize();
 
-	col2[0] = 0.0f;
-	col2[1] = -1.0f;
-	col2[2] = 0.0f;
+	vec5[0] = 0.0f;
+	vec5[1] = -1.0f;
+	vec5[2] = 0.0f;
 
-	col0.EqualsCross(&col3, &col2);
-	col0.Unitize();
+	vec3.EqualsCross(&vec4, &vec5);
+	vec3.Unitize();
+	vec4.EqualsCross(&vec5, &vec3);
+	vec6 = vec2;
 
-	col1.EqualsCross(&col2, &col3);
+	local90 = m_unk0x1a8;
+	m_unk0x160 = local48;
 
-	col2 = col0;
-
-	m_unk0x160 = matrix1;
-
-	col0[0] = 0.0f;
-	col0[1] = 0.0f;
-	col0[2] = 0.0f;
-	col1[0] = 0.0f;
-	col1[1] = 0.0f;
-	col1[2] = 0.0f;
+	ZEROVEC3(vec1);
+	ZEROVEC3(vec2);
 
 	m_unk0x1f0 = Timer()->GetTime();
 
-	m_unk0x1f4.Unknown2(matrix1);
-	m_unk0x1f4.Unknown3(matrix2); // quite sure, but isn't inlined - why?
+	m_unk0x1f4.Unknown2(local48);
+	m_unk0x1f4.Unknown3(local90); // quite sure, but isn't inlined - why?
 	m_unk0x1f4.Unknown7();        // sure about this one
 }
 
