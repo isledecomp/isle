@@ -82,7 +82,6 @@ private:
 	MxBool m_unk0xe5;                     // 0xe5
 	MxBool m_unk0xe6;                     // 0xe6
 	PALETTEENTRY m_paletteEntries[256];   // 0xe7
-	undefined m_padding0x4e7;             // 0x4e7
 	LegoPhonemeList* m_phonemeRefList;    // 0x4e8
 	MxBool m_isFullscreenMovie;           // 0x4ec
 	MxPalette* m_palette;                 // 0x4f0
@@ -105,7 +104,6 @@ private:
 	MxFloat m_unk0x550;                   // 0x550
 	MxBool m_unk0x554;                    // 0x554
 	MxBool m_paused;                      // 0x555
-	undefined m_pad0x556[0x2];            // 0x556
 	D3DVALUE m_back;                      // 0x558
 	D3DVALUE m_front;                     // 0x55c
 	float m_cameraWidth;                  // 0x560
