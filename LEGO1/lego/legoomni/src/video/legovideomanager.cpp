@@ -561,7 +561,7 @@ void LegoVideoManager::FUN_1007c520()
 	InputManager()->SetUnknown335(TRUE);
 }
 
-extern void ViewportDestroyCallback(IDirect3DRMObject* pObject, void* pArg);
+extern void ViewportDestroyCallback(IDirect3DRMObject*, void*);
 
 // FUNCTION: LEGO1 0x1007c560
 int LegoVideoManager::EnableRMDevice()
