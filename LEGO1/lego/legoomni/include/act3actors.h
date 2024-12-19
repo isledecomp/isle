@@ -132,7 +132,7 @@ private:
 	Mx3DPointFloat m_unk0x3c;         // 0x3c
 	MxFloat m_unk0x50;                // 0x50
 	MxFloat m_unk0x54;                // 0x54
-	MxU8 m_eatenPizzas;               // 0x58
+	MxU8 m_unk0x58;                   // 0x58
 };
 
 // VTABLE: LEGO1 0x100d7920 LegoPathActor

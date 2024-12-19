@@ -357,7 +357,7 @@ Act3Brickster::Act3Brickster()
 	m_unk0x54 = 0.0f;
 
 	SetActorState(c_disabled);
-	m_eatenPizzas = 0;
+	m_unk0x58 = 0;
 
 	m_unk0x3c.Clear();
 }
@@ -410,13 +410,13 @@ void Act3Brickster::Animate(float p_time)
 		FUN_100417c0();
 		break;
 	case 2:
-		m_eatenPizzas++;
+		m_unk0x58++;
 		m_unk0x20 = p_time + 2000.0f;
 		SetWorldSpeed(3.0f);
 
 		assert(SoundManager()->GetCacheSoundManager());
 
-		if (m_eatenPizzas >= 8) {
+		if (m_unk0x58 >= 8) {
 			((Act3*) m_world)->FUN_10072ad0(6);
 		}
 		else {
@@ -435,7 +435,7 @@ void Act3Brickster::Animate(float p_time)
 
 			assert(SoundManager()->GetCacheSoundManager());
 			SoundManager()->GetCacheSoundManager()->Play("thpt", NULL, FALSE);
-			m_eatenPizzas = 0;
+			m_unk0x58 = 0;
 			FUN_100417c0();
 		}
 		else {
@@ -471,7 +471,7 @@ void Act3Brickster::Animate(float p_time)
 
 		if (m_unk0x50 < p_time) {
 			((Act3*) m_world)->FUN_10073a60();
-			m_eatenPizzas = 0;
+			m_unk0x58 = 0;
 			assert(SoundManager()->GetCacheSoundManager());
 			SoundManager()->GetCacheSoundManager()->Play("thpt", NULL, FALSE);
 
@@ -598,7 +598,7 @@ MxResult Act3Brickster::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 // FUNCTION: BETA10 0x1001a3cf
 MxResult Act3Brickster::FUN_100417a0(Act3Ammo& p_ammo, const Vector3&)
 {
-	if (m_eatenPizzas < 8) {
+	if (m_unk0x58 < 8) {
 		return FUN_100417c0();
 	}
 
@@ -619,7 +619,7 @@ MxResult Act3Brickster::FUN_100417c0()
 	Vector3 local28(local70[3]);
 	Vector3 local20(local70[2]);
 
-	if (m_eatenPizzas < 8 && m_unk0x24 + 5000.0f < m_lastTime) {
+	if (m_unk0x58 < 8 && m_unk0x24 + 5000.0f < m_lastTime) {
 		float local18;
 
 		for (MxS32 i = 0; i < MAX_PIZZAS; i++) {
