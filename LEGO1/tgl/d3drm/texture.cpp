@@ -89,10 +89,12 @@ void TglD3DRMIMAGE::Destroy()
 inline static int IsPowerOfTwo(int v)
 {
 	int m = 0;
+
 	while (v > 2 && m == 0) {
 		m = v % 2;
 		v /= 2;
 	}
+
 	return v == 2 && m == 0;
 }
 
@@ -102,14 +104,17 @@ Result TglD3DRMIMAGE::CreateBuffer(int width, int height, int depth, void* pBuff
 	if (!(IsPowerOfTwo(width) && IsPowerOfTwo(height) && width % 4 == 0)) {
 		return Error;
 	}
+
 	m_image.width = width;
 	m_image.height = height;
 	m_image.depth = depth;
 	m_image.bytes_per_line = width;
+
 	if (!m_texelsAllocatedByClient) {
 		delete[] m_image.buffer1;
 		m_image.buffer1 = NULL;
 	}
+
 	if (useBuffer) {
 		m_texelsAllocatedByClient = 1;
 		m_image.buffer1 = (char*) pBuffer;
@@ -119,6 +124,7 @@ Result TglD3DRMIMAGE::CreateBuffer(int width, int height, int depth, void* pBuff
 		memcpy(m_image.buffer1, pBuffer, width * height);
 		m_texelsAllocatedByClient = 0;
 	}
+
 	return Success;
 }
 
