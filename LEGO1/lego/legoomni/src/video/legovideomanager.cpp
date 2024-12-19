@@ -561,11 +561,49 @@ void LegoVideoManager::FUN_1007c520()
 	InputManager()->SetUnknown335(TRUE);
 }
 
-// STUB: LEGO1 0x1007c560
+extern void ViewportDestroyCallback(IDirect3DRMObject* pObject, void* pArg);
+
+// FUNCTION: LEGO1 0x1007c560
 int LegoVideoManager::EnableRMDevice()
 {
-	// TODO
-	return 0;
+    IDirect3DRMViewport *viewport;
+    if (!m_paused) {
+        return -1;
+    }
+    int result = -1;
+    TglImpl::DeviceImpl *device_impl = (TglImpl::DeviceImpl*)m_3dManager->GetLego3DView()->GetDevice();
+    IDirect3DRM2 *d3drm2 = ((TglImpl::RendererImpl*)m_renderer)->ImplementationData();
+    IDirect3D2 *d3d2 = m_direct3d->Direct3D();
+    IDirect3DDevice2 *d3d_dev2 = m_direct3d->Direct3DDevice();
+    m_direct3d->RestoreSurfaces();
+    IDirect3DRMDevice2 *d3drm_dev2 = NULL;
+    HRESULT res = d3drm2->CreateDeviceFromD3D(d3d2, d3d_dev2, &d3drm_dev2);
+    if (res == D3DRM_OK) {
+        viewport = NULL;
+        device_impl->SetImplementationData(d3drm_dev2);
+        res = d3drm2->CreateViewport(d3drm_dev2, m_camera_0x56c, 0, 0, m_camera_width_0x560, m_camera_height_0x564, &viewport);
+        if (res == D3DRM_OK) {
+            viewport->SetBack(m_back_0x558);
+            viewport->SetFront(m_front_0x55c);
+            viewport->SetField(m_fov_0x568);
+            viewport->SetCamera(m_camera_0x56c);
+            viewport->SetProjection(m_projection_0x570);
+            viewport->SetAppData((DWORD)m_appdata_0x574);
+            d3drm_dev2->SetQuality(m_quality_0x578);
+            d3drm_dev2->SetShades(m_shades_0x57c);
+            d3drm_dev2->SetTextureQuality(m_texture_quality_0x580);
+            d3drm_dev2->SetRenderMode(m_rendermode_0x584);
+            d3drm_dev2->SetDither(m_dither_0x588);
+            d3drm_dev2->SetBufferCount(m_buffer_count_0x58c);
+            m_camera_0x56c->Release();
+            if (viewport->AddDestroyCallback(ViewportDestroyCallback, m_appdata_0x574) == D3DRM_OK) {
+                ((TglImpl::ViewImpl*)m_3dManager->GetLego3DView()->GetView())->SetImplementationData(viewport);
+                m_paused = 0;
+                result = 0;
+            }
+        }
+    }
+    return result;
 }
 
 // STUB: LEGO1 0x1007c740

@@ -149,6 +149,7 @@ public:
 	void InitFromWindowsDevice(Device*) override;
 
 	IDirect3DRMDevice2* ImplementationData() const { return m_data; }
+	void SetImplementationData(IDirect3DRMDevice2* device) { m_data = device; }
 
 	friend class RendererImpl;
 
@@ -199,6 +200,7 @@ public:
 	) override;
 
 	IDirect3DRMViewport* ImplementationData() const { return m_data; }
+	void SetImplementationData(IDirect3DRMViewport* viewport) { m_data = viewport; }
 
 	static Result ViewportCreateAppData(IDirect3DRM2*, IDirect3DRMViewport*, IDirect3DRMFrame2*);
 
