@@ -15,7 +15,7 @@ public:
 		c_donut = 0x02,
 		c_valid = 0x04,
 		c_bit4 = 0x08,
-		c_bit5 = 0x10
+		c_sharkFood = 0x10
 	};
 
 	Act3Ammo();
@@ -64,17 +64,17 @@ public:
 	// FUNCTION: BETA10 0x10021d90
 	MxU32 IsBit4() { return m_ammoFlag & c_bit4; }
 
-	void SetBit5(MxBool p_bit5)
+	void SetSharkFood(MxBool p_sharkFood)
 	{
-		if (p_bit5) {
-			m_ammoFlag |= c_bit5;
+		if (p_sharkFood) {
+			m_ammoFlag |= c_sharkFood;
 		}
 		else {
-			m_ammoFlag &= ~c_bit5;
+			m_ammoFlag &= ~c_sharkFood;
 		}
 	}
 
-	MxU32 IsBit5() { return m_ammoFlag & c_bit5; }
+	MxU32 IsSharkFood() { return m_ammoFlag & c_sharkFood; }
 
 	MxFloat GetUnknown0x158() { return m_unk0x158; }
 

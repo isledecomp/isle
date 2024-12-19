@@ -579,7 +579,7 @@ MxResult Act3Brickster::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 
 			assert(m_world);
 
-			if (a3->m_pizzas[index].IsValid() && !a3->m_pizzas[index].IsBit5()) {
+			if (a3->m_pizzas[index].IsValid() && !a3->m_pizzas[index].IsSharkFood()) {
 				a3->EatPizza(index);
 			}
 
@@ -605,11 +605,227 @@ MxResult Act3Brickster::FUN_100417a0(Act3Ammo& p_ammo, const Vector3&)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100417c0
-// STUB: BETA10 0x1001a407
+// FUNCTION: LEGO1 0x100417c0
+// FUNCTION: BETA10 0x1001a407
 MxResult Act3Brickster::FUN_100417c0()
 {
-	// TODO
+	m_pInfo = NULL;
+	m_bInfo = NULL;
+	m_unk0x38 = 0;
+	LegoPathEdgeContainer* grec = NULL;
+	Act3* a3 = (Act3*) m_world;
+
+	MxMatrix local70(m_unk0xec);
+	Vector3 local28(local70[3]);
+	Vector3 local20(local70[2]);
+
+	if (m_unk0x58 < 8 && m_unk0x24 + 5000.0f < m_lastTime) {
+		float local18;
+
+		for (MxS32 i = 0; i < MAX_PIZZAS; i++) {
+			Act3Ammo* pizza = &a3->m_pizzas[i];
+			assert(pizza);
+
+			if (pizza->IsValid() && !pizza->IsSharkFood() && pizza->GetActorState() == c_initial) {
+				LegoROI* proi = pizza->GetROI();
+				assert(proi);
+
+				MxMatrix locald0 = proi->GetLocal2World();
+				Vector3 local88(locald0[3]);
+				Mx3DPointFloat localec(local88);
+				localec -= local28;
+
+				if (localec.LenSquared() > 1600.0f) {
+					((Act3*) m_world)->m_shark->EatPizza(pizza);
+				}
+				else {
+					LegoPathEdgeContainer* r2 = new LegoPathEdgeContainer();
+					assert(r2);
+
+					MxFloat locald8;
+					LegoPathEdgeContainer *local16c, *local168, *local174, *local170; // unused
+
+					if (m_pathController->FUN_10048310(
+							r2,
+							local28,
+							local20,
+							m_boundary,
+							local88,
+							localec,
+							pizza->GetBoundary(),
+							LegoUnknown100db7f4::c_bit1,
+							&locald8
+						) == SUCCESS &&
+						(grec == NULL || locald8 < local18)) {
+						if (grec != NULL) {
+							local168 = local16c = grec;
+							delete grec;
+						}
+
+						grec = r2;
+						local18 = locald8;
+					}
+
+					if (grec != r2) {
+						local170 = local174 = r2;
+						delete r2;
+					}
+				}
+			}
+		}
+	}
+
+	if (grec == NULL) {
+		MxS32 length = 0;
+		LegoPlantInfo* pInfo = PlantManager()->GetInfoArray(length);
+		Mx3DPointFloat local108;
+		Mx3DPointFloat local138;
+		MxS32 local120 = -1;
+		MxU32 local110 = FALSE;
+		LegoPathBoundary* localf4 = NULL;
+		LegoBuildingInfo* bInfo = BuildingManager()->GetInfoArray(length);
+		float local124;
+
+		for (MxS32 i = 0; i < length; i++) {
+			if (bInfo[i].m_unk0x11 < 0 && bInfo[i].m_boundary != NULL && bInfo[i].m_entity != NULL && i != 0 &&
+				(local120 == -1 || i != 15)) {
+				Mx3DPointFloat local188(bInfo[i].m_x, bInfo[i].m_y, bInfo[i].m_z);
+
+				local138 = local188;
+				local138 -= local28;
+				float length = local138.LenSquared();
+
+				if (local120 < 0 || length < local124) {
+					local110 = TRUE;
+					local120 = i;
+					local124 = length;
+				}
+			}
+		}
+
+		if (local120 != -1) {
+			if (local110) {
+				m_bInfo = &bInfo[local120];
+				localf4 = m_bInfo->m_boundary;
+				Mx3DPointFloat local19c(m_bInfo->m_x, m_bInfo->m_y, m_bInfo->m_z);
+				local108 = local19c;
+			}
+			else {
+				m_pInfo = &pInfo[local120];
+				localf4 = m_pInfo->m_boundary;
+				Mx3DPointFloat local1b0(m_pInfo->m_x, m_pInfo->m_y, m_pInfo->m_z);
+				local108 = local1b0;
+			}
+		}
+
+		if (localf4 != NULL) {
+			assert(m_pInfo || m_bInfo);
+
+			grec = new LegoPathEdgeContainer();
+			local138 = local108;
+			local138 -= local28;
+			local138.Unitize();
+
+			MxFloat local13c;
+			LegoPathEdgeContainer *local1c0, *local1bc; // unused
+
+			if (m_pathController->FUN_10048310(
+					grec,
+					local28,
+					local20,
+					m_boundary,
+					local108,
+					local138,
+					localf4,
+					LegoUnknown100db7f4::c_bit1,
+					&local13c
+				) != SUCCESS) {
+				local1bc = local1c0 = grec;
+
+				if (grec != NULL) {
+					delete grec;
+				}
+
+				grec = NULL;
+				assert(0);
+			}
+		}
+		else {
+			((Act3*) m_world)->BadEnding(m_roi->GetLocal2World());
+			return SUCCESS;
+		}
+	}
+
+	if (grec != NULL) {
+		Mx3DPointFloat local150;
+
+		LegoPathEdgeContainer *local1c4, *local1c8; // unused
+		if (m_grec != NULL) {
+			local1c4 = local1c8 = m_grec;
+			delete m_grec;
+		}
+
+		m_grec = grec;
+		Mx3DPointFloat vecUnk;
+
+		if (m_grec->size() == 0) {
+			vecUnk = m_grec->m_position;
+			m_boundary = m_grec->m_boundary;
+
+			m_grec->m_direction = m_unk0xec[3];
+			m_grec->m_direction -= vecUnk;
+
+			local150 = m_grec->m_direction;
+		}
+		else {
+			LegoEdge* edge = m_grec->back().m_edge;
+
+			Vector3* v1 = edge->CWVertex(*m_grec->m_boundary);
+			Vector3* v2 = edge->CCWVertex(*m_grec->m_boundary);
+			assert(v1 && v2);
+
+			local150 = *v2;
+			local150 -= *v1;
+			local150 *= m_unk0xe4;
+			local150 += *v1;
+			local150 *= -1.0f;
+			local150 += m_grec->m_position;
+			local150.Unitize();
+			m_grec->m_direction = local150;
+
+			edge = m_grec->front().m_edge;
+			LegoPathBoundary* boundary = m_grec->front().m_boundary;
+
+			v1 = edge->CWVertex(*boundary);
+			v2 = edge->CCWVertex(*boundary);
+
+			vecUnk = *v2;
+			vecUnk -= *v1;
+			vecUnk *= m_unk0xe4;
+			vecUnk += *v1;
+		}
+
+		Vector3 v1(m_unk0xec[0]);
+		Vector3 v2(m_unk0xec[1]);
+		Vector3 v3(m_unk0xec[2]);
+
+		v3 = m_unk0xec[3];
+		v3 -= vecUnk;
+		v3.Unitize();
+		v1.EqualsCross(&v2, &v3);
+		v1.Unitize();
+		v2.EqualsCross(&v3, &v1);
+
+		VTable0x9c();
+
+		if (m_pInfo != NULL) {
+			m_unk0x38 = 5;
+		}
+		else if (m_bInfo != NULL) {
+			m_unk0x38 = 6;
+		}
+	}
+
 	return SUCCESS;
 }
 
@@ -742,14 +958,14 @@ MxResult Act3Brickster::VTable0x9c()
 Act3Shark::Act3Shark()
 {
 	m_unk0x2c = 0.0f;
-	m_unk0x28 = NULL;
+	m_nextPizza = NULL;
 }
 
 // FUNCTION: LEGO1 0x10042ce0
-MxResult Act3Shark::FUN_10042ce0(Act3Ammo* p_ammo)
+MxResult Act3Shark::EatPizza(Act3Ammo* p_ammo)
 {
-	p_ammo->SetBit5(TRUE);
-	m_unk0x1c.push_back(p_ammo);
+	p_ammo->SetSharkFood(TRUE);
+	m_eatPizzas.push_back(p_ammo);
 	return SUCCESS;
 }
 
@@ -758,18 +974,18 @@ void Act3Shark::Animate(float p_time)
 {
 	LegoROI** roiMap = m_unk0x34->GetROIMap();
 
-	if (m_unk0x28 == NULL) {
-		if (m_unk0x1c.size() > 0) {
-			m_unk0x28 = m_unk0x1c.front();
-			m_unk0x1c.pop_front();
+	if (m_nextPizza == NULL) {
+		if (m_eatPizzas.size() > 0) {
+			m_nextPizza = m_eatPizzas.front();
+			m_eatPizzas.pop_front();
 			m_unk0x2c = p_time;
-			roiMap[1] = m_unk0x28->GetROI();
+			roiMap[1] = m_nextPizza->GetROI();
 			m_unk0x3c = roiMap[1]->GetLocal2World()[3];
 			roiMap[1]->SetVisibility(TRUE);
 			roiMap[2]->SetVisibility(TRUE);
 		}
 
-		if (m_unk0x28 == NULL) {
+		if (m_nextPizza == NULL) {
 			return;
 		}
 	}
@@ -798,8 +1014,8 @@ void Act3Shark::Animate(float p_time)
 	}
 	else {
 		roiMap[1] = m_unk0x38;
-		((Act3*) m_world)->RemovePizza(*m_unk0x28);
-		m_unk0x28 = NULL;
+		((Act3*) m_world)->RemovePizza(*m_nextPizza);
+		m_nextPizza = NULL;
 		roiMap[1]->SetVisibility(FALSE);
 		roiMap[2]->SetVisibility(FALSE);
 	}
