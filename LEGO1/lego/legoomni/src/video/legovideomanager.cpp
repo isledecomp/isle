@@ -606,11 +606,53 @@ int LegoVideoManager::EnableRMDevice()
     return result;
 }
 
-// STUB: LEGO1 0x1007c740
+// FUNCTION: LEGO1 0x1007c740
 int LegoVideoManager::DisableRMDevice()
 {
-	// TODO
-	return 0;
+    if (m_paused) {
+        return -1;
+    }
+	IDirect3DRMDevice2* d3drm_dev2 =
+		((TglImpl::DeviceImpl*) m_3dManager->GetLego3DView()->GetDevice())->ImplementationData();
+    if (d3drm_dev2 != NULL) {
+        IDirect3DRMViewportArray *viewport_array = NULL;
+        if (d3drm_dev2->GetViewports(&viewport_array) == D3DRM_OK && viewport_array != NULL) {
+            if (viewport_array->GetSize() == 1) {
+                IDirect3DRMViewport *viewport = NULL;
+                if (viewport_array->GetElement(0, &viewport) == D3DRM_OK) {
+                    m_back_0x558 = viewport->GetBack();
+                    m_front_0x55c = viewport->GetFront();
+                    m_camera_width_0x560 = viewport->GetWidth();
+                    m_camera_height_0x564 = viewport->GetHeight();
+                    m_fov_0x568 = viewport->GetField();
+                    viewport->GetCamera(&m_camera_0x56c);
+                    m_projection_0x570 = viewport->GetProjection();
+                    m_appdata_0x574 = (ViewportAppData *) viewport->GetAppData();
+                    viewport_array->Release();
+                    viewport->Release();
+                    viewport->DeleteDestroyCallback(ViewportDestroyCallback, this->m_appdata_0x574);
+                    viewport->Release();
+                    m_paused = 1;
+                    m_direct3d->Direct3D()->AddRef();
+                    m_direct3d->Direct3DDevice()->AddRef();
+                } else {
+                    viewport_array->Release();
+                }
+            }
+        }
+        m_quality_0x578 = d3drm_dev2->GetQuality();
+        m_shades_0x57c = d3drm_dev2->GetShades();
+        m_texture_quality_0x580 = d3drm_dev2->GetTextureQuality();
+        m_rendermode_0x584 = d3drm_dev2->GetRenderMode();
+        m_dither_0x588 = d3drm_dev2->GetDither();
+        m_buffer_count_0x58c = d3drm_dev2->GetBufferCount();
+        d3drm_dev2->Release();
+    }
+    if (m_paused) {
+        return 0;
+    } else {
+        return -1;
+    }
 }
 
 // FUNCTION: LEGO1 0x1007c930

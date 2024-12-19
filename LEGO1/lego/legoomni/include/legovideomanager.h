@@ -117,7 +117,7 @@ private:
 	D3DRMRENDERQUALITY m_quality_0x578;          // 0x578
 	DWORD m_shades_0x57c;                        // 0x57c
 	D3DRMTEXTUREQUALITY m_texture_quality_0x580; // 0x580
-	D3DRMTEXTUREQUALITY m_rendermode_0x584;      // 0x584
+	DWORD m_rendermode_0x584;                    // 0x584
 	BOOL m_dither_0x588;                         // 0x588
 	DWORD m_buffer_count_0x58c;                  // 0x58c
 };
