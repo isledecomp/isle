@@ -439,3 +439,12 @@ void Helicopter::FUN_10004640(const Matrix4& p_matrix)
 		FUN_100042a0(p_matrix);
 	}
 }
+
+// FUNCTION: LEGO1 0x10004670
+void Helicopter::FUN_10004670(const Matrix4& p_matrix)
+{
+	if (m_state->m_unk0x08 != 4 && m_state->m_unk0x08 != 5) {
+		m_state->m_unk0x08 = 5;
+		FUN_100042a0(p_matrix);
+	}
+}

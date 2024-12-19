@@ -77,6 +77,7 @@ public:
 
 	void CreateState();
 	void FUN_10004640(const Matrix4& p_matrix);
+	void FUN_10004670(const Matrix4& p_matrix);
 
 	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'
