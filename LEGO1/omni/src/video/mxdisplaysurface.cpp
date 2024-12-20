@@ -1092,3 +1092,39 @@ MxBool MxDisplaySurface::VTable0x2c(
 {
 	return 0;
 }
+
+// FUNCTION: LEGO1 0x100bc8b0
+LPDIRECTDRAWSURFACE MxDisplaySurface::FUN_100bc8b0(MxS32 width, MxS32 height)
+{
+	LPDIRECTDRAWSURFACE surface = NULL;
+
+	LPDIRECTDRAW ddraw = MVideoManager()->GetDirectDraw();
+	MxVideoParam& unused = MVideoManager()->GetVideoParam();
+
+	DDSURFACEDESC surfaceDesc;
+	memset(&surfaceDesc, 0, sizeof(surfaceDesc));
+	surfaceDesc.dwSize = sizeof(surfaceDesc);
+
+	if (ddraw->GetDisplayMode(&surfaceDesc) != DD_OK) {
+		return NULL;
+	}
+
+	if (surfaceDesc.ddpfPixelFormat.dwRGBBitCount != 16) {
+		return NULL;
+	}
+
+	surfaceDesc.dwWidth = width;
+	surfaceDesc.dwHeight = height;
+	surfaceDesc.dwFlags = DDSD_PIXELFORMAT | DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
+	surfaceDesc.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
+
+	if (ddraw->CreateSurface(&surfaceDesc, &surface, NULL) != DD_OK) {
+		surfaceDesc.ddsCaps.dwCaps &= ~DDSCAPS_VIDEOMEMORY;
+		surfaceDesc.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
+		if (ddraw->CreateSurface(&surfaceDesc, &surface, NULL) != DD_OK) {
+			return NULL;
+		}
+	}
+
+	return surface;
+}
