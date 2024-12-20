@@ -384,6 +384,7 @@ done:
 	m_pIntoBuffer2 = result;
 	return result;
 }
+
 // FUNCTION: LEGO1 0x100c6ec0
 MxU8 MxDSBuffer::ReleaseRef(MxDSChunk*)
 {
