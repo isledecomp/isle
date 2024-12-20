@@ -109,20 +109,22 @@ Result GroupImpl::Remove(const Group* pGroup)
 // FUNCTION: LEGO1 0x100a34b0
 Result GroupImpl::RemoveAll()
 {
-    IDirect3DRMVisualArray *visuals;
-    int i;
-    IDirect3DRMFrame2 *frame = m_data;
-    Result result = (Result)SUCCEEDED(frame->GetVisuals(&visuals));
-    if (result) {
-        for (i = 0; i < (int)visuals->GetSize(); ) {
-            IDirect3DRMVisual *visual;
-            result = (Result)SUCCEEDED(visuals->GetElement(i, &visual));
-            frame->DeleteVisual(visual);
-            i += 1;
-            visual->Release();
-        }
-        visuals->Release();
-    }
+	IDirect3DRMVisualArray* visuals;
+	IDirect3DRMFrame2* frame = m_data;
+	Result result = (Result) SUCCEEDED(frame->GetVisuals(&visuals));
+
+	if (result == Success) {
+		for (int i = 0; i < (int) visuals->GetSize(); i++) {
+			IDirect3DRMVisual* visual;
+
+			result = (Result) SUCCEEDED(visuals->GetElement(i, &visual));
+			frame->DeleteVisual(visual);
+			visual->Release();
+		}
+
+		visuals->Release();
+	}
+
 	return result;
 }
 
