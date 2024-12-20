@@ -878,9 +878,9 @@ inline void LegoAnimNodeData::GetTranslation(
 				c[3] = p_rotationKeys[i + 1].GetAngle();
 			}
 
-			b.Unknown4(a);
-			b.Unknown5(c);
-			b.Unknown6(
+			b.BETA_10180b80(a);
+			b.BETA_10180bc0(c);
+			b.BETA_1004aaa0(
 				p_matrix,
 				(p_time - p_rotationKeys[i].GetTime()) / (p_rotationKeys[i + 1].GetTime() - p_rotationKeys[i].GetTime())
 			);

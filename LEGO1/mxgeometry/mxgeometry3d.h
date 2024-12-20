@@ -105,14 +105,14 @@ public:
 	UnknownMx4DPointFloat() : m_unk0x30(0) {}
 
 	// FUNCTION: BETA10 0x1004a9b0
-	void Unknown1(Matrix4& p_m1, Matrix4& p_m2)
+	void BETA_1004a9b0(Matrix4& p_m1, Matrix4& p_m2)
 	{
-		Unknown2(p_m1);
-		Unknown3(p_m2);
+		BETA_1004a9f0(p_m1);
+		FUN_10004620(p_m2);
 	}
 
 	// FUNCTION: BETA10 0x1004a9f0
-	void Unknown2(Matrix4& p_m)
+	void BETA_1004a9f0(Matrix4& p_m)
 	{
 		p_m.ToQuaternion(m_unk0x00);
 		m_unk0x30 |= c_bit1;
@@ -120,21 +120,21 @@ public:
 
 	// FUNCTION: LEGO1 0x10004620
 	// FUNCTION: BETA10 0x1004aa30
-	void Unknown3(Matrix4& p_m)
+	void FUN_10004620(Matrix4& p_m)
 	{
 		p_m.ToQuaternion(m_unk0x18);
 		m_unk0x30 |= c_bit2;
 	}
 
 	// FUNCTION: BETA10 0x10180b80
-	void Unknown4(Vector4& p_v)
+	void BETA_10180b80(Vector4& p_v)
 	{
 		m_unk0x00 = p_v;
 		m_unk0x30 |= c_bit1;
 	}
 
 	// FUNCTION: BETA10 0x10180bc0
-	void Unknown5(Vector4& p_v)
+	void BETA_10180bc0(Vector4& p_v)
 	{
 		m_unk0x18 = p_v;
 		m_unk0x30 |= c_bit2;
@@ -144,8 +144,8 @@ public:
 	const Vector4& GetUnknown0x18() const { return m_unk0x18; }
 	undefined4 GetUnknown0x30() const { return m_unk0x30; }
 
-	inline int Unknown6(Matrix4& p_matrix, float p_f);
-	inline long Unknown7();
+	inline int BETA_1004aaa0(Matrix4& p_matrix, float p_f);
+	inline long FUN_10004520();
 
 private:
 	inline int FUN_100040a0(Vector4& p_v, float p_f);
@@ -156,7 +156,7 @@ private:
 };
 
 // FUNCTION: BETA10 0x1004aaa0
-int UnknownMx4DPointFloat::Unknown6(Matrix4& p_matrix, float p_f)
+int UnknownMx4DPointFloat::BETA_1004aaa0(Matrix4& p_matrix, float p_f)
 {
 	float data[4];
 	Vector4 v(data);
@@ -170,7 +170,7 @@ int UnknownMx4DPointFloat::Unknown6(Matrix4& p_matrix, float p_f)
 }
 
 // FUNCTION: LEGO1 0x10004520
-inline long UnknownMx4DPointFloat::Unknown7()
+inline long UnknownMx4DPointFloat::FUN_10004520()
 {
 	if (!m_unk0x30) {
 		return -1;

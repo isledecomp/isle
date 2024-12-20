@@ -407,7 +407,7 @@ void Helicopter::Animate(float p_time)
 			Vector3 v2(m_unk0x1a8[3]);
 			float* loc = m_unk0x1a8[3];
 			mat.SetIdentity();
-			m_unk0x1f4.Unknown6(mat, f2);
+			m_unk0x1f4.BETA_1004aaa0(mat, f2);
 			v2.SetVector(loc);
 			v2 -= v;
 			v2 *= f2;
@@ -465,9 +465,9 @@ void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 
 	m_unk0x1f0 = Timer()->GetTime();
 
-	m_unk0x1f4.Unknown2(local48);
-	m_unk0x1f4.Unknown3(local90); // quite sure, but isn't inlined - why?
-	m_unk0x1f4.Unknown7();        // sure about this one
+	m_unk0x1f4.BETA_1004a9f0(local48);
+	m_unk0x1f4.FUN_10004620(local90); // quite sure, but isn't inlined - why?
+	m_unk0x1f4.FUN_10004520();        // sure about this one
 }
 
 // FUNCTION: LEGO1 0x10004640
