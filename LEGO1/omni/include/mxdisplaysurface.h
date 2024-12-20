@@ -109,7 +109,7 @@ public:
 		MxU8 p_bpp
 	);
 
-	IDirectDrawSurface* FUN_100bc8b0(void);
+	IDirectDrawSurface* FUN_100bc8b0(int width, int height);
 
 private:
 	MxU8 CountTotalBitsSetTo1(MxU32 p_param);

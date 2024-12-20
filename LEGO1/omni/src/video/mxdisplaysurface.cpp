@@ -1093,8 +1093,31 @@ MxBool MxDisplaySurface::VTable0x2c(
 	return 0;
 }
 
-// STUB: LEGO1 0x100bc8b0
-IDirectDrawSurface* MxDisplaySurface::FUN_100bc8b0(void)
+// FUNCTION: LEGO1 0x100bc8b0
+IDirectDrawSurface* MxDisplaySurface::FUN_100bc8b0(int width, int height)
 {
-	return NULL;
+	MxVideoManager *video_manager = MVideoManager();
+	IDirectDraw *ddraw = video_manager->GetDirectDraw();
+	MVideoManager();
+	DDSURFACEDESC surfaceDesc;
+	memset(&surfaceDesc, 0, sizeof(surfaceDesc));
+	surfaceDesc.dwSize = sizeof(surfaceDesc);
+	if (ddraw->GetDisplayMode(&surfaceDesc) != DD_OK) {
+		return NULL;
+	}
+	if (surfaceDesc.ddpfPixelFormat.dwRGBBitCount != 16) {
+		return NULL;
+	}
+	surfaceDesc.dwWidth = width;
+	surfaceDesc.dwHeight = height;
+	surfaceDesc.dwFlags = DDSD_PIXELFORMAT | DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
+	surfaceDesc.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
+	IDirectDrawSurface *surface = NULL;
+	if (ddraw->CreateSurface(&surfaceDesc, &surface, NULL) != DD_OK) {
+		surfaceDesc.ddsCaps.dwCaps = (surfaceDesc.ddsCaps.dwCaps & ~DDSCAPS_VIDEOMEMORY) | DDSCAPS_SYSTEMMEMORY;
+		if (ddraw->CreateSurface(&surfaceDesc, &surface, NULL) != DD_OK) {
+			return NULL;
+		}
+	}
+	return surface;
 }
