@@ -145,7 +145,7 @@ public:
 
 	// vtable+0x20
 	Result Update() override;
-	void InitFromD3DDevice(Device*) override;
+	void HandleActivate(WORD) override;
 	void InitFromWindowsDevice(Device*) override;
 
 	IDirect3DRMDevice2* ImplementationData() const { return m_data; }

@@ -171,7 +171,7 @@ public:
 
 	// vtable+0x20
 	virtual Result Update() = 0;
-	virtual void InitFromD3DDevice(Device*) = 0;
+	virtual void HandleActivate(WORD) = 0;
 	virtual void InitFromWindowsDevice(Device*) = 0;
 
 	// SYNTHETIC: LEGO1 0x100a2350
