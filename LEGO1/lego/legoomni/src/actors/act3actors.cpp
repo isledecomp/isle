@@ -320,11 +320,188 @@ MxResult Act3Cop::FUN_10040350(Act3Ammo& p_ammo, const Vector3&)
 	return FUN_10040360();
 }
 
-// STUB: LEGO1 0x10040360
-// STUB: BETA10 0x10018c6a
+// FUNCTION: LEGO1 0x10040360
+// FUNCTION: BETA10 0x10018c6a
 MxResult Act3Cop::FUN_10040360()
 {
-	// TODO
+	LegoPathEdgeContainer* grec = NULL;
+	Act3* a3 = (Act3*) m_world;
+
+	MxMatrix local74(m_unk0xec);
+	Vector3 local2c(local74[3]);
+	Vector3 local20(local74[2]);
+
+	Mx3DPointFloat local7c;
+	local7c = a3->m_brickster->GetROI()->GetLocal2World()[3];
+	local7c -= local2c;
+
+	if (local7c.LenSquared() < 144.0f) {
+		local7c = a3->m_brickster->GetROI()->GetLocal2World()[3];
+		Mx3DPointFloat local5c(a3->m_brickster->GetROI()->GetLocal2World()[2]);
+		LegoPathBoundary* boundary = a3->m_brickster->GetBoundary();
+
+		grec = new LegoPathEdgeContainer();
+		assert(grec);
+
+		MxFloat local34;
+		if (m_pathController->FUN_10048310(
+				grec,
+				local2c,
+				local20,
+				m_boundary,
+				local7c,
+				local5c,
+				boundary,
+				LegoUnknown100db7f4::c_bit1,
+				&local34
+			) != SUCCESS) {
+			delete grec;
+			grec = NULL;
+		}
+	}
+
+	if (grec == NULL) {
+		float local18;
+
+		for (MxS32 i = 0; i < MAX_DONUTS; i++) {
+			Act3Ammo* donut = &a3->m_donuts[i];
+			assert(donut);
+
+			if (donut->IsValid() && donut->GetActorState() == c_initial) {
+				LegoROI* proi = donut->GetROI();
+				assert(proi);
+
+				MxMatrix locald0 = proi->GetLocal2World();
+				Vector3 local88(locald0[3]);
+				Mx3DPointFloat localec(local88);
+				localec -= local88;
+
+				LegoPathEdgeContainer* r2 = new LegoPathEdgeContainer();
+				assert(r2);
+
+				MxFloat locald8;
+				LegoPathEdgeContainer *local138, *local134, *local140, *local13c; // unused
+
+				if (m_pathController->FUN_10048310(
+						r2,
+						local2c,
+						local20,
+						m_boundary,
+						local88,
+						localec,
+						donut->GetBoundary(),
+						LegoUnknown100db7f4::c_bit1,
+						&locald8
+					) == SUCCESS &&
+					(grec == NULL || locald8 < local18)) {
+					if (grec != NULL) {
+						local134 = local138 = grec;
+						delete grec;
+					}
+
+					grec = r2;
+					local18 = locald8;
+				}
+
+				if (grec != r2) {
+					local13c = local140 = r2;
+					delete r2;
+				}
+			}
+		}
+
+		if (grec == NULL) {
+			MxS32 random = rand() % (MxS32) sizeOfArray(g_copDest);
+			Vector3 localf8(g_copDest[random].m_unk0x08);
+			Vector3 local108(g_copDest[random].m_unk0x14);
+
+			grec = new LegoPathEdgeContainer();
+			LegoPathBoundary* boundary = g_copDest[random].m_boundary;
+
+			if (boundary != NULL) {
+				MxFloat local100;
+				LegoPathEdgeContainer *local150, *local14c; // unused
+
+				if (m_pathController->FUN_10048310(
+						grec,
+						local2c,
+						local20,
+						m_boundary,
+						localf8,
+						local108,
+						boundary,
+						LegoUnknown100db7f4::c_bit1,
+						&local100
+					) != SUCCESS) {
+					local14c = local150 = grec;
+					delete grec;
+					grec = NULL;
+				}
+			}
+		}
+	}
+
+	if (grec != NULL) {
+		LegoPathEdgeContainer *local158, *local154; // unused
+		if (m_grec != NULL) {
+			local154 = local158 = m_grec;
+			delete m_grec;
+		}
+
+		m_grec = grec;
+		Mx3DPointFloat vecUnk;
+
+		if (m_grec->size() == 0) {
+			vecUnk = m_grec->m_position;
+			m_boundary = m_grec->m_boundary;
+
+			m_grec->m_direction = m_unk0xec[3];
+			m_grec->m_direction -= vecUnk;
+		}
+		else {
+			Mx3DPointFloat local128;
+			LegoEdge* edge = m_grec->back().m_edge;
+
+			Vector3* v1 = edge->CWVertex(*m_grec->m_boundary);
+			Vector3* v2 = edge->CCWVertex(*m_grec->m_boundary);
+			assert(v1 && v2);
+
+			local128 = *v2;
+			local128 -= *v1;
+			local128 *= m_unk0xe4;
+			local128 += *v1;
+			local128 *= -1.0f;
+			local128 += m_grec->m_position;
+			local128.Unitize();
+			m_grec->m_direction = local128;
+
+			edge = m_grec->front().m_edge;
+			LegoPathBoundary* boundary = m_grec->front().m_boundary;
+
+			v1 = edge->CWVertex(*boundary);
+			v2 = edge->CCWVertex(*boundary);
+
+			vecUnk = *v2;
+			vecUnk -= *v1;
+			vecUnk *= m_unk0xe4;
+			vecUnk += *v1;
+		}
+
+		Vector3 v1(m_unk0xec[0]);
+		Vector3 v2(m_unk0xec[1]);
+		Vector3 v3(m_unk0xec[2]);
+		Vector3 v4(m_unk0xec[3]);
+
+		v3 = v4;
+		v3 -= vecUnk;
+		v3.Unitize();
+		v1.EqualsCross(&v2, &v3);
+		v1.Unitize();
+		v2.EqualsCross(&v3, &v1);
+
+		VTable0x9c();
+	}
+
 	return SUCCESS;
 }
 
@@ -808,8 +985,9 @@ MxResult Act3Brickster::FUN_100417c0()
 		Vector3 v1(m_unk0xec[0]);
 		Vector3 v2(m_unk0xec[1]);
 		Vector3 v3(m_unk0xec[2]);
+		Vector3 v4(m_unk0xec[3]);
 
-		v3 = m_unk0xec[3];
+		v3 = v4;
 		v3 -= vecUnk;
 		v3.Unitize();
 		v1.EqualsCross(&v2, &v3);
