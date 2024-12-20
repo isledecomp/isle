@@ -338,48 +338,52 @@ MxCore* MxDSBuffer::ReadChunk(MxDSBuffer* p_buffer, MxU32* p_chunkData, MxU16 p_
 }
 
 // FUNCTION: LEGO1 0x100c6df0
+// FUNCTION: BETA10 0x10157e0a
 MxU8* MxDSBuffer::SkipToData()
 {
 	MxU8* result = NULL;
 
 	if (m_pIntoBuffer != NULL) {
-		do {
-			MxU32* ptr = (MxU32*) m_pIntoBuffer;
-			switch (*ptr) {
-			case FOURCC('L', 'I', 'S', 'T'):
-			case FOURCC('R', 'I', 'F', 'F'):
-				m_pIntoBuffer = (MxU8*) (ptr + 3);
-				break;
+		while (TRUE) {
+			switch (*(MxU32*) m_pIntoBuffer) {
 			case FOURCC('M', 'x', 'O', 'b'):
 			case FOURCC('M', 'x', 'C', 'h'):
 				result = m_pIntoBuffer;
-				m_pIntoBuffer = (MxU8*) ((ptr[1] & 1) + ptr[1] + (MxU32) ptr);
-				m_pIntoBuffer = (MxU8*) ((MxU32*) m_pIntoBuffer + 2);
-				if (m_pBuffer + (m_writeOffset - 8) < m_pIntoBuffer) {
-					m_pIntoBuffer2 = result;
+				m_pIntoBuffer += (*(MxU32*) (m_pIntoBuffer + 4) & 1) + *(MxU32*) (m_pIntoBuffer + 4);
+				m_pIntoBuffer += 8;
+
+				if (m_pBuffer + m_writeOffset - 8 < m_pIntoBuffer) {
 					m_pIntoBuffer = NULL;
-					return result;
 				}
+
 				goto done;
 			case FOURCC('M', 'x', 'D', 'a'):
 			case FOURCC('M', 'x', 'S', 't'):
-				m_pIntoBuffer = (MxU8*) (ptr + 2);
+				m_pIntoBuffer += 8;
 				break;
 			case FOURCC('M', 'x', 'H', 'd'):
-				m_pIntoBuffer = (MxU8*) ((MxU32) ptr + ptr[1] + 8);
+				m_pIntoBuffer += *(MxU32*) (m_pIntoBuffer + 4) + 8;
+				break;
+			case FOURCC('L', 'I', 'S', 'T'):
+			case FOURCC('R', 'I', 'F', 'F'):
+				m_pIntoBuffer += 12;
 				break;
 			default:
 				m_pIntoBuffer = NULL;
-				m_pIntoBuffer2 = NULL;
-				return NULL;
+				result = NULL;
+				goto done;
 			}
-		} while (m_pIntoBuffer <= m_pBuffer + (m_writeOffset - 8));
+
+			if (m_pIntoBuffer > m_pBuffer + m_writeOffset - 8) {
+				m_pIntoBuffer = NULL;
+				goto done;
+			}
+		}
 	}
 done:
 	m_pIntoBuffer2 = result;
 	return result;
 }
-
 // FUNCTION: LEGO1 0x100c6ec0
 MxU8 MxDSBuffer::ReleaseRef(MxDSChunk*)
 {
