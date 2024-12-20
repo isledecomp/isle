@@ -639,7 +639,7 @@ MxLong Act3::Notify(MxParam& p_param)
 		case c_notificationEndAnim:
 			if (m_state->m_unk0x08 == 1) {
 				assert(m_copter && m_brickster && m_cop1 && m_cop2);
-				m_unk0x4220.FUN_100720d0(NULL);
+				m_unk0x4220.FUN_100720d0(0);
 				m_state->m_unk0x08 = 0;
 				FUN_10015820(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 				m_copter->HandleClick();

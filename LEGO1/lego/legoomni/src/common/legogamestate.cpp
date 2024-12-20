@@ -408,7 +408,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 
 	Read(&fileStorage, &actArea);
 
-	if (m_currentAct == 0) {
+	if (m_currentAct == e_act1) {
 		m_unk0x42c = e_undefined;
 	}
 	else {
