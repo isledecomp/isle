@@ -60,16 +60,12 @@ void DeviceImpl::HandleActivate(WORD wParam)
 	}
 }
 
-// Really don't know what's going on here. Seems it will call down to Init
-// but the decomp suggests it otherwise looks the same as InitFromD3D but Init
-// takes widly different parameters.
 // FUNCTION: LEGO1 0x100a2d20
-void DeviceImpl::InitFromWindowsDevice(Device*)
+void DeviceImpl::HandlePaint(HDC p_dc)
 {
-	// Device argument is intentionally unused.
 	IDirect3DRMWinDevice* winDevice;
 	if (SUCCEEDED(m_data->QueryInterface(IID_IDirect3DRMWinDevice, (LPVOID*) &winDevice))) {
-		// m_data->Init(??);
+		winDevice->HandlePaint(p_dc);
 		winDevice->Release();
 	}
 }
@@ -79,3 +75,6 @@ Result DeviceImpl::Update()
 {
 	return ResultVal(m_data->Update());
 }
+
+// GLOBAL: LEGO1 0x100dd1d0
+// IID_IDirect3DRMWinDevice
