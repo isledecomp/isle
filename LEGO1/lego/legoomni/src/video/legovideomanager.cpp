@@ -396,6 +396,7 @@ inline void LegoVideoManager::DrawCursor()
 void LegoVideoManager::DrawFPS()
 {
 	char zeros[8] = "0000.00";
+
 	if (m_unk0x528 == NULL) {
 		m_arialFont = CreateFontA(
 			12,
@@ -413,24 +414,29 @@ void LegoVideoManager::DrawFPS()
 			FF_DONTCARE | VARIABLE_PITCH,
 			"Arial"
 		);
+
 		HDC dc = GetDC(NULL);
 		SelectObject(dc, m_arialFont);
 		GetTextExtentPointA(dc, zeros, strlen(zeros), &m_fpsSize);
 		ReleaseDC(NULL, dc);
+
 		m_unk0x528 = m_displaySurface->FUN_100bc8b0(m_fpsSize.cx, m_fpsSize.cy);
-		SetRect(&this->m_fpsRect, 0, 0, m_fpsSize.cx, m_fpsSize.cy);
+		SetRect(&m_fpsRect, 0, 0, m_fpsSize.cx, m_fpsSize.cy);
+
 		if (m_unk0x528 == NULL) {
 			DeleteObject(m_arialFont);
 			m_arialFont = NULL;
 			return;
 		}
-		DDCOLORKEY color_key;
-		color_key.dwColorSpaceHighValue = 0;
-		color_key.dwColorSpaceLowValue = 0;
-		m_unk0x528->SetColorKey(DDCKEY_SRCBLT, &color_key);
+
+		DDCOLORKEY colorKey;
+		memset(&colorKey, 0, sizeof(colorKey));
+		m_unk0x528->SetColorKey(DDCKEY_SRCBLT, &colorKey);
+
 		DDSURFACEDESC surfaceDesc;
 		memset(&surfaceDesc, 0, sizeof(surfaceDesc));
 		surfaceDesc.dwSize = sizeof(surfaceDesc);
+
 		if (m_unk0x528->Lock(NULL, &surfaceDesc, DDLOCK_WAIT, NULL) != DD_OK) {
 			m_unk0x528->Release();
 			DeleteObject(m_arialFont);
@@ -440,36 +446,40 @@ void LegoVideoManager::DrawFPS()
 		else {
 			DWORD i;
 			char* ptr = (char*) surfaceDesc.lpSurface;
+
 			for (i = 0; i < surfaceDesc.dwHeight; i++) {
 				memset(ptr, 0, surfaceDesc.dwWidth * surfaceDesc.ddpfPixelFormat.dwRGBBitCount / 8);
 				ptr += surfaceDesc.lPitch;
 			}
+
 			m_unk0x528->Unlock(surfaceDesc.lpSurface);
 			m_unk0x54c = Timer()->GetTime();
 			m_unk0x550 = 1.f;
 		}
 	}
 	else {
-		MxTimer* timer = Timer();
-		if (timer->GetTime() <= m_unk0x54c + 5000.f) {
-			m_unk0x550 += 1.f;
-		}
-		else {
+		if (Timer()->GetTime() > m_unk0x54c + 5000.f) {
 			char buffer[32];
-			int nb = sprintf(buffer, "%.02f", m_unk0x550 / (Timer()->GetTime() - m_unk0x54c) / 1000.f);
+			MxFloat time = (Timer()->GetTime() - m_unk0x54c) / 1000.0f;
+			MxS32 nb = sprintf(buffer, "%.02f", m_unk0x550 / time);
 			m_unk0x54c = Timer()->GetTime();
+
 			DDSURFACEDESC surfaceDesc;
 			memset(&surfaceDesc, 0, sizeof(surfaceDesc));
 			surfaceDesc.dwSize = sizeof(surfaceDesc);
+
 			if (m_unk0x528->Lock(NULL, &surfaceDesc, DDLOCK_WAIT, NULL) == DD_OK) {
 				DWORD i;
 				char* ptr = (char*) surfaceDesc.lpSurface;
+
 				for (i = 0; i < surfaceDesc.dwHeight; i++) {
 					memset(ptr, 0, surfaceDesc.dwWidth * surfaceDesc.ddpfPixelFormat.dwRGBBitCount / 8);
 					ptr += surfaceDesc.lPitch;
 				}
+
 				m_unk0x528->Unlock(surfaceDesc.lpSurface);
 			}
+
 			HDC dc;
 			if (m_unk0x528->GetDC(&dc) != DD_OK) {
 				m_unk0x528->Release();
@@ -478,17 +488,23 @@ void LegoVideoManager::DrawFPS()
 				m_arialFont = NULL;
 				return;
 			}
+
 			SelectObject(dc, m_arialFont);
-			SetTextColor(dc, RGB(0xff, 0xff, 0x00));
-			SetBkColor(dc, RGB(0x00, 0x00, 0x00));
+			SetTextColor(dc, RGB(255, 255, 0));
+			SetBkColor(dc, RGB(0, 0, 0));
 			SetBkMode(dc, OPAQUE);
 			GetTextExtentPoint32A(dc, buffer, nb, &m_fpsSize);
+
 			RECT rect;
 			SetRect(&rect, 0, 0, m_fpsSize.cx, m_fpsSize.cy);
 			ExtTextOutA(dc, 0, 0, ETO_OPAQUE, &rect, buffer, nb, NULL);
 			m_unk0x528->ReleaseDC(dc);
 			m_unk0x550 = 1.f;
 		}
+		else {
+			m_unk0x550 += 1.f;
+		}
+
 		if (m_unk0x528 != NULL) {
 			m_displaySurface->GetDirectDrawSurface2()
 				->BltFast(20, 20, m_unk0x528, &m_fpsRect, DDBLTFAST_WAIT | DDBLTFAST_SRCCOLORKEY);
@@ -632,7 +648,7 @@ void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 // FUNCTION: LEGO1 0x1007c4c0
 void LegoVideoManager::OverrideSkyColor(MxBool p_shouldOverride)
 {
-	this->m_videoParam.GetPalette()->SetOverrideSkyColor(p_shouldOverride);
+	m_videoParam.GetPalette()->SetOverrideSkyColor(p_shouldOverride);
 }
 
 // FUNCTION: LEGO1 0x1007c4d0
