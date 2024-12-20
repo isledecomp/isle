@@ -466,8 +466,8 @@ void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 	m_unk0x1f0 = Timer()->GetTime();
 
 	m_unk0x1f4.BETA_1004a9f0(local48);
-	m_unk0x1f4.FUN_10004620(local90); // quite sure, but isn't inlined - why?
-	m_unk0x1f4.FUN_10004520();        // sure about this one
+	m_unk0x1f4.FUN_10004620(local90);
+	m_unk0x1f4.FUN_10004520();
 }
 
 // FUNCTION: LEGO1 0x10004640
