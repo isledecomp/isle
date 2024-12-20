@@ -106,10 +106,26 @@ Result GroupImpl::Remove(const Group* pGroup)
 	return ResultVal(m_data->DeleteVisual(pGroupImpl->m_data));
 }
 
-// STUB: LEGO1 0x100a34b0
+// FUNCTION: LEGO1 0x100a34b0
 Result GroupImpl::RemoveAll()
 {
-	return Error;
+	IDirect3DRMVisualArray* visuals;
+	IDirect3DRMFrame2* frame = m_data;
+	Result result = (Result) SUCCEEDED(frame->GetVisuals(&visuals));
+
+	if (result == Success) {
+		for (int i = 0; i < (int) visuals->GetSize(); i++) {
+			IDirect3DRMVisual* visual;
+
+			result = (Result) SUCCEEDED(visuals->GetElement(i, &visual));
+			frame->DeleteVisual(visual);
+			visual->Release();
+		}
+
+		visuals->Release();
+	}
+
+	return result;
 }
 
 // STUB: LEGO1 0x100a3540
