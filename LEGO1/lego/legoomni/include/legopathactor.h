@@ -137,6 +137,7 @@ public:
 	// FUNCTION: LEGO1 0x10002de0
 	virtual void VTable0xc8(MxU8 p_unk0x148) { m_unk0x148 = p_unk0x148; } // vtable+0xc8
 
+	// FUNCTION: BETA10 0x1001ca40
 	LegoPathBoundary* GetBoundary() { return m_boundary; }
 
 	// FUNCTION: BETA10 0x1001c860

@@ -80,6 +80,8 @@ inline Result ViewRestoreFrameAfterRender(
 	return result;
 }
 
+// FIXME: from LEGO1/tgl/d3drm/view.cpp
+
 // FUNCTION: LEGO1 0x100a1240
 void ViewportDestroyCallback(IDirect3DRMObject* pObject, void* pArg)
 {
