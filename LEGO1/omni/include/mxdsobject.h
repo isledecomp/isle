@@ -5,6 +5,7 @@
 #include "mxatom.h"
 #include "mxcore.h"
 
+class MxDSFile;
 class MxPresenter;
 
 // VTABLE: LEGO1 0x100dc868
@@ -104,5 +105,6 @@ protected:
 };
 
 MxDSObject* DeserializeDSObjectDispatch(MxU8*&, MxS16);
+MxDSObject* CreateStreamObject(MxDSFile*, MxS16);
 
 #endif // MXDSOBJECT_H

@@ -251,7 +251,6 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/stream/mxdsbuffer.cpp
     LEGO1/omni/src/stream/mxdschunk.cpp
     LEGO1/omni/src/stream/mxdsfile.cpp
-    LEGO1/omni/src/stream/mxdssource.cpp
     LEGO1/omni/src/stream/mxdssubscriber.cpp
     LEGO1/omni/src/stream/mxio.cpp
     LEGO1/omni/src/stream/mxramstreamcontroller.cpp
