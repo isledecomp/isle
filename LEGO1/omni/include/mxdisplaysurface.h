@@ -109,6 +109,8 @@ public:
 		MxU8 p_bpp
 	);
 
+	IDirectDrawSurface* FUN_100bc8b0(void);
+
 private:
 	MxU8 CountTotalBitsSetTo1(MxU32 p_param);
 	MxU8 CountContiguousBitsSetTo1(MxU32 p_param);

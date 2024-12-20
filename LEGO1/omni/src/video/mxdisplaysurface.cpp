@@ -1092,3 +1092,9 @@ MxBool MxDisplaySurface::VTable0x2c(
 {
 	return 0;
 }
+
+// STUB: LEGO1 0x100bc8b0
+IDirectDrawSurface* MxDisplaySurface::FUN_100bc8b0(void)
+{
+	return NULL;
+}
