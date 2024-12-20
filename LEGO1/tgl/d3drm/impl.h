@@ -145,8 +145,8 @@ public:
 
 	// vtable+0x20
 	Result Update() override;
-	void InitFromD3DDevice(Device*) override;
-	void InitFromWindowsDevice(Device*) override;
+	void HandleActivate(WORD) override;
+	void HandlePaint(HDC) override;
 
 	IDirect3DRMDevice2* ImplementationData() const { return m_data; }
 	void SetImplementationData(IDirect3DRMDevice2* device) { m_data = device; }
@@ -335,7 +335,7 @@ public:
 	Result RemoveAll() override;
 
 	// vtable+0x30
-	Result Unknown() override;
+	Result Bounds(D3DVECTOR* p_min, D3DVECTOR* p_max) override;
 
 	IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
@@ -544,5 +544,8 @@ inline D3DRMMATRIX4D* Translate(FloatMatrix4& tglMatrix4x4, D3DRMMATRIX4D& rD3DR
 
 // SYNTHETIC: LEGO1 0x100a3d80
 // TglImpl::MeshImpl::`scalar deleting destructor'
+
+// GLOBAL: LEGO1 0x100dd1e0
+// IID_IDirect3DRMMeshBuilder
 
 } /* namespace TglImpl */

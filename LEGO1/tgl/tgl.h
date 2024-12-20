@@ -171,8 +171,8 @@ public:
 
 	// vtable+0x20
 	virtual Result Update() = 0;
-	virtual void InitFromD3DDevice(Device*) = 0;
-	virtual void InitFromWindowsDevice(Device*) = 0;
+	virtual void HandleActivate(WORD) = 0;
+	virtual void HandlePaint(HDC) = 0;
 
 	// SYNTHETIC: LEGO1 0x100a2350
 	// Tgl::Device::~Device
@@ -305,7 +305,7 @@ public:
 
 	// This is TransformLocalToWorld in the leak, however it seems
 	// to have been replaced by something else in the shipped code.
-	virtual Result Unknown() = 0;
+	virtual Result Bounds(D3DVECTOR*, D3DVECTOR*) = 0;
 
 	// SYNTHETIC: LEGO1 0x100a2510
 	// Tgl::Group::~Group
