@@ -48,6 +48,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d40f8
+// VTABLE: BETA10 0x101b9880
 // SIZE 0x230
 class Helicopter : public IslePathActor {
 public:
@@ -55,6 +56,7 @@ public:
 	~Helicopter() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10003070
+	// FUNCTION: BETA10 0x1002b300
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0130
@@ -62,6 +64,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10003080
+	// FUNCTION: BETA10 0x1002b330
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Helicopter::ClassName()) || IslePathActor::IsA(p_name);

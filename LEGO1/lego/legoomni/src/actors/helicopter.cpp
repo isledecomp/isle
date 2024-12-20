@@ -14,6 +14,8 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "mxdebug.h"
+#include "mxmisc.h"
+#include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "scripts.h"
 
@@ -405,7 +407,7 @@ void Helicopter::Animate(float p_time)
 			Vector3 v2(m_unk0x1a8[3]);
 			float* loc = m_unk0x1a8[3];
 			mat.SetIdentity();
-			m_unk0x1f4.Unknown6(mat, f2);
+			m_unk0x1f4.BETA_1004aaa0(mat, f2);
 			v2.SetVector(loc);
 			v2 -= v;
 			v2 *= f2;
@@ -425,10 +427,47 @@ void Helicopter::Animate(float p_time)
 	}
 }
 
-// STUB: LEGO1 0x100042a0
+// FUNCTION: LEGO1 0x100042a0
 void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 {
-	// TODO
+	MxMatrix local48;
+	MxMatrix local90;
+
+	Vector3 vec1(local48[3]);    // local98  // esp+0x30
+	Vector3 vec2(local90[3]);    // localac  // esp+0x1c
+	Vector3 vec3(m_unk0x1a8[0]); // locala8  // esp+0x20
+	Vector3 vec4(m_unk0x1a8[1]); // localb8  // esp+0x10
+	Vector3 vec5(m_unk0x1a8[2]); // EDI
+	Vector3 vec6(m_unk0x1a8[3]); // locala0  // esp+0x28
+
+	m_world->GetCamera()->FUN_100123b0(local48);
+	m_unk0x1a8.SetIdentity();
+	local90 = p_matrix;
+
+	vec2[1] += 20.0f;
+	vec4 = vec2;
+	vec4 -= vec1;
+	vec4.Unitize();
+
+	vec5[0] = vec5[2] = 0.0f;
+	vec5[1] = -1.0f;
+
+	vec3.EqualsCross(&vec4, &vec5);
+	vec3.Unitize();
+	vec4.EqualsCross(&vec5, &vec3);
+	vec6 = vec2;
+
+	local90 = m_unk0x1a8;
+	m_unk0x160 = local48;
+
+	vec1.Clear();
+	vec2.Clear();
+
+	m_unk0x1f0 = Timer()->GetTime();
+
+	m_unk0x1f4.BETA_1004a9f0(local48);
+	m_unk0x1f4.FUN_10004620(local90);
+	m_unk0x1f4.FUN_10004520();
 }
 
 // FUNCTION: LEGO1 0x10004640

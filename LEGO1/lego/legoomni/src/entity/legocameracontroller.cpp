@@ -140,6 +140,20 @@ void LegoCameraController::FUN_10012320(float p_angle)
 	m_matrix1.RotateY(p_angle);
 }
 
+// FUNCTION: LEGO1 0x100123b0
+MxResult LegoCameraController::FUN_100123b0(Matrix4& p_matrix)
+{
+	if (m_lego3DView) {
+		ViewROI* pov = m_lego3DView->GetPointOfView();
+		if (pov) {
+			p_matrix = pov->GetLocal2World();
+			return SUCCESS;
+		}
+	}
+
+	return FAILURE;
+}
+
 // FUNCTION: LEGO1 0x100123e0
 // FUNCTION: BETA10 0x10068cb2
 void LegoCameraController::FUN_100123e0(const Matrix4& p_transform, MxU32 p_und)
