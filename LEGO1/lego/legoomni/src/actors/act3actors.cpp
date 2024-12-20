@@ -328,8 +328,8 @@ MxResult Act3Cop::FUN_10040360()
 	Act3* a3 = (Act3*) m_world;
 
 	MxMatrix local74(m_unk0xec);
-	Vector3 local2c(local74[3]); // local64 in RETAIL
-	Vector3 local20(local74[2]); // local84 in RETAIL
+	Vector3 local2c(local74[3]);
+	Vector3 local20(local74[2]);
 
 	Mx3DPointFloat local7c;
 	local7c = a3->m_brickster->GetROI()->GetLocal2World()[3];
