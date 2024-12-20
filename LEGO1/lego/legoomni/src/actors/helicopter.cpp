@@ -19,8 +19,6 @@
 #include "mxtransitionmanager.h"
 #include "scripts.h"
 
-#include <vec.h>
-
 DECOMP_SIZE_ASSERT(Helicopter, 0x230)
 DECOMP_SIZE_ASSERT(HelicopterState, 0x0c)
 DECOMP_SIZE_ASSERT(Mx3DPointFloat, 0x14)
@@ -451,9 +449,8 @@ void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 	vec4 -= vec1;
 	vec4.Unitize();
 
-	vec5[0] = 0.0f;
+	vec5[0] = vec5[2] = 0.0f;
 	vec5[1] = -1.0f;
-	vec5[2] = 0.0f;
 
 	vec3.EqualsCross(&vec4, &vec5);
 	vec3.Unitize();
@@ -463,8 +460,8 @@ void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 	local90 = m_unk0x1a8;
 	m_unk0x160 = local48;
 
-	ZEROVEC3(vec1);
-	ZEROVEC3(vec2);
+	vec1.Clear();
+	vec2.Clear();
 
 	m_unk0x1f0 = Timer()->GetTime();
 
