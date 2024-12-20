@@ -337,7 +337,7 @@ MxResult Act3Cop::FUN_10040360()
 
 	if (local7c.LenSquared() < 144.0f) {
 		local7c = a3->m_brickster->GetROI()->GetLocal2World()[3];
-		Mx3DPointFloat local5c = a3->m_brickster->GetROI()->GetLocal2World()[2];
+		Mx3DPointFloat local5c(a3->m_brickster->GetROI()->GetLocal2World()[2]);
 		LegoPathBoundary* boundary = a3->m_brickster->GetBoundary();
 
 		grec = new LegoPathEdgeContainer();
