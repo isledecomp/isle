@@ -844,6 +844,29 @@ void Act3::DebugCopter(
 	}
 }
 
+// FUNCTION: LEGO1 0x100739c0
+// FUNCTION: BETA10 0x10016cc4
+void Act3::BadEnding(const Matrix4& p_destination)
+{
+	assert(m_cop1 && m_cop2 && m_brickster && m_state);
+
+	m_cop1->SetActorState(LegoPathActor::c_disabled);
+	m_cop2->SetActorState(LegoPathActor::c_disabled);
+	m_brickster->SetActorState(LegoPathActor::c_disabled);
+
+	m_unk0x4220.Clear();
+	m_copter->FUN_10004670(p_destination);
+
+	DebugPrintf("In Bad Ending...");
+	DebugCopter(
+		m_copter->GetROI()->GetLocal2World(),
+		p_destination,
+		m_copter->m_unk0x160,
+		m_copter->m_unk0x1a8,
+		m_copter->m_unk0x1f4
+	);
+}
+
 // FUNCTION: LEGO1 0x10073a60
 void Act3::FUN_10073a60()
 {

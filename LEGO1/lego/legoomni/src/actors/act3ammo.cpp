@@ -419,7 +419,7 @@ void Act3Ammo::Animate(float p_time)
 
 							assert(m_world);
 
-							if (m_world->m_pizzas[index].IsValid() && !m_world->m_pizzas[index].IsBit5()) {
+							if (m_world->m_pizzas[index].IsValid() && !m_world->m_pizzas[index].IsSharkFood()) {
 								m_world->EatPizza(index);
 								m_world->m_brickster->FUN_100417c0();
 							}
