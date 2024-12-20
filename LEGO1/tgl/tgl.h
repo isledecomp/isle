@@ -305,7 +305,7 @@ public:
 
 	// This is TransformLocalToWorld in the leak, however it seems
 	// to have been replaced by something else in the shipped code.
-	virtual Result Bounds(D3DVECTOR *, D3DVECTOR *) = 0;
+	virtual Result Bounds(D3DVECTOR*, D3DVECTOR*) = 0;
 
 	// SYNTHETIC: LEGO1 0x100a2510
 	// Tgl::Group::~Group

@@ -335,7 +335,7 @@ public:
 	Result RemoveAll() override;
 
 	// vtable+0x30
-	Result Bounds(D3DVECTOR *p_min, D3DVECTOR *p_max) override;
+	Result Bounds(D3DVECTOR* p_min, D3DVECTOR* p_max) override;
 
 	IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
