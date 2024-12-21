@@ -718,10 +718,10 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 			LegoROI* roi = CharacterManager()->GetActorROI(CharacterManager()->GetActorName(g_unk0x100f66cc), TRUE);
 			if (roi != NULL) {
 				MxMatrix mat;
-				ViewROI* roi = LegoOmni::GetInstance()->GetVideoManager()->GetViewROI();
-				const float* position = roi->GetWorldPosition();
-				const float* direction = roi->GetWorldDirection();
-				const float* up = roi->GetWorldUp();
+				ViewROI* viewRoi = LegoOmni::GetInstance()->GetVideoManager()->GetViewROI();
+				const float* position = viewRoi->GetWorldPosition();
+				const float* direction = viewRoi->GetWorldDirection();
+				const float* up = viewRoi->GetWorldUp();
 				CalcLocalTransform(position, direction, up, mat);
 				mat.TranslateBy(direction[0] * 2.0f, direction[1] - 1.0, direction[2] * 2.0f);
 				roi->UpdateTransformationRelativeToParent(mat);
