@@ -345,6 +345,13 @@ void LegoPlantManager::FUN_10026860(MxS32 p_index)
 	}
 }
 
+// FUNCTION: LEGO1 0x100268d0
+// FUNCTION: BETA10 0x100c5c7a
+MxS32 LegoPlantManager::GetNumPlants()
+{
+	return sizeOfArray(g_plantInfo);
+}
+
 // FUNCTION: LEGO1 0x100268e0
 // FUNCTION: BETA10 0x100c5c95
 LegoPlantInfo* LegoPlantManager::GetInfo(LegoEntity* p_entity)
@@ -362,13 +369,6 @@ LegoPlantInfo* LegoPlantManager::GetInfo(LegoEntity* p_entity)
 	}
 
 	return NULL;
-}
-
-// FUNCTION: LEGO1 0x100268d0
-// FUNCTION: BETA10 0x100c5c7a
-MxS32 LegoPlantManager::GetNumPlants()
-{
-	return sizeOfArray(g_plantInfo);
 }
 
 // FUNCTION: LEGO1 0x10026920
