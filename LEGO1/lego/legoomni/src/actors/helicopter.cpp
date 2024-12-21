@@ -387,24 +387,21 @@ void Helicopter::VTable0x74(Matrix4& p_transform)
 void Helicopter::Animate(float p_time)
 {
 	MxU32 state = m_state->GetUnkown8();
-	switch (state) {
-	default:
-		LegoPathActor::Animate(p_time);
-		return;
-	case 4:
-	case 5:
+
+	if (state == 4 || state == 5) {
 		float f = m_unk0x1f0 - p_time + 3000;
 		if (f >= 0) {
-			float f2 = f / 3000 + 1;
+			float f2 = f / -3000.0f + 1;
 			if (f2 < 0) {
 				f2 = 0;
 			}
 			if (1.0f < f2) {
 				f2 = 1.0f;
 			}
-			Vector3 v(m_unk0x160[3]);
 			MxMatrix mat;
+			Vector3 v(m_unk0x160[3]);
 			Vector3 v2(m_unk0x1a8[3]);
+
 			float* loc = m_unk0x1a8[3];
 			mat.SetIdentity();
 			m_unk0x1f4.BETA_1004aaa0(mat, f2);
@@ -424,6 +421,8 @@ void Helicopter::Animate(float p_time)
 
 			LegoPathActor::m_actorState = c_disabled;
 		}
+	} else {
+		LegoPathActor::Animate(p_time);
 	}
 }
 
