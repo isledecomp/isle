@@ -607,8 +607,8 @@ MxResult LegoNavController::ProcessKeyboardInput()
 		bool2 = TRUE;
 	}
 
-	MxFloat val = keyFlags & 0x10 ? 1.0f : 4.0f;
-	MxFloat val2 = keyFlags & 0x10 ? 1.0f : 2.0f;
+	MxFloat val = keyFlags & LegoInputManager::c_bit5 ? 1.0f : 4.0f;
+	MxFloat val2 = keyFlags & LegoInputManager::c_bit5 ? 1.0f : 2.0f;
 
 	if (!bool1) {
 		m_targetRotationalVel = CalculateNewTargetVel(hMax, m_hMax / 2, m_maxRotationalVel);
