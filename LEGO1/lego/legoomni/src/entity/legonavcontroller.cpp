@@ -82,16 +82,16 @@ MxBool LegoNavController::g_defuseRotationalVel = FALSE;
 MxU32 g_changeLight = FALSE;
 
 // GLOBAL: LEGO1 0x100f66a4
-MxU32 g_locationCalcStep = 0;
+MxS32 g_locationCalcStep = 0;
 
 // GLOBAL: LEGO1 0x100f66a8
-MxU32 g_nextLocation = 0;
+MxS32 g_nextLocation = 0;
 
 // GLOBAL: LEGO1 0x100f66ac
 MxBool g_resetPlants = FALSE;
 
 // GLOBAL: LEGO1 0x100f66b0
-MxU32 g_animationCalcStep = 0;
+MxS32 g_animationCalcStep = 0;
 
 // GLOBAL: LEGO1 0x100f66b4
 MxS32 g_nextAnimation = 0;
