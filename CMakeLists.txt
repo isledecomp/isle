@@ -561,6 +561,8 @@ if (MSVC_FOR_DECOMP)
     set_property(TARGET isle ${lego1_targets} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   endif()
 
+  target_link_options(lego1 PRIVATE "/OPT:REF")
+
   # Equivalent to target_compile_options(... PRIVATE "/MT$<$<CONFIG:Debug>:d>")
   set_property(TARGET lego1 ${lego1_targets} ${beta10_targets} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 

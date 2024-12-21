@@ -582,7 +582,8 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_enter, MxU8
 			}
 
 			if (state != NULL && state->m_unk0x4d && !state->m_unk0x4e) {
-				if (AnimationManager()->FUN_10060dc0(anim, NULL, TRUE, FALSE, NULL, FALSE, TRUE, TRUE, TRUE) ==
+				if (AnimationManager()
+						->FUN_10060dc0(anim, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, TRUE, TRUE, TRUE) ==
 					SUCCESS) {
 					state->m_unk0x4e = TRUE;
 					camAnim = FALSE;

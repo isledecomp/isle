@@ -221,6 +221,24 @@ done:
 	return result;
 }
 
+// FUNCTION: LEGO1 0x100834d0
+// FUNCTION: BETA10 0x100742eb
+const char* LegoCharacterManager::GetActorName(MxS32 p_index)
+{
+	if (p_index < sizeOfArray(g_actorInfo)) {
+		return g_actorInfo[p_index].m_name;
+	}
+
+	return NULL;
+}
+
+// FUNCTION: LEGO1 0x100834f0
+// FUNCTION: BETA10 0x1007432a
+MxU32 LegoCharacterManager::GetNumActors()
+{
+	return sizeOfArray(g_actorInfo);
+}
+
 // FUNCTION: LEGO1 0x10083500
 // FUNCTION: BETA10 0x10074345
 LegoROI* LegoCharacterManager::GetActorROI(const char* p_name, MxBool p_createEntity)

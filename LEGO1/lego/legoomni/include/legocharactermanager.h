@@ -53,6 +53,8 @@ public:
 
 	MxResult Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);
+	const char* GetActorName(MxS32 p_index);
+	MxU32 GetNumActors();
 	LegoROI* GetActorROI(const char* p_name, MxBool p_createEntity);
 
 	void Init();

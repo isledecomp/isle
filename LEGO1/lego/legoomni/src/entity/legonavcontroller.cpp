@@ -1,25 +1,30 @@
 #include "legonavcontroller.h"
 
 #include "3dmanager/lego3dmanager.h"
+#include "act3.h"
 #include "infocenter.h"
 #include "legoanimationmanager.h"
 #include "legocameracontroller.h"
+#include "legocharactermanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legolocations.h"
 #include "legomain.h"
+#include "legoplantmanager.h"
 #include "legosoundmanager.h"
 #include "legoutils.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxdebug.h"
 #include "mxmisc.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "mxutilities.h"
 #include "realtime/realtime.h"
 #include "realtime/realtimeview.h"
+#include "viewmanager/viewmanager.h"
 
 #include <vec.h>
 
@@ -74,19 +79,28 @@ float LegoNavController::g_defrotSensitivity = 0.4f;
 MxBool LegoNavController::g_defuseRotationalVel = FALSE;
 
 // GLOBAL: LEGO1 0x100f66a0
-MxBool g_unk0x100f66a0 = FALSE;
+MxU32 g_changeLight = FALSE;
 
 // GLOBAL: LEGO1 0x100f66a4
-MxBool g_unk0x100f66a4 = FALSE;
+MxU32 g_locationCalcStep = 0;
+
+// GLOBAL: LEGO1 0x100f66a8
+MxU32 g_nextLocation = 0;
+
+// GLOBAL: LEGO1 0x100f66ac
+MxBool g_resetPlants = FALSE;
 
 // GLOBAL: LEGO1 0x100f66b0
-undefined4 g_unk0x100f66b0 = 0;
+MxU32 g_animationCalcStep = 0;
 
 // GLOBAL: LEGO1 0x100f66b4
-undefined4 g_unk0x100f66b4 = 0;
+MxS32 g_nextAnimation = 0;
+
+// GLOBAL: LEGO1 0x100f66b8
+MxU32 g_switchAct = FALSE;
 
 // GLOBAL: LEGO1 0x100f66bc
-undefined4 g_unk0x100f66bc = 2;
+LegoAnimationManager::PlayMode g_unk0x100f66bc = LegoAnimationManager::e_unk2;
 
 // GLOBAL: LEGO1 0x100f66c0
 char g_debugPassword[] = "OGEL";
@@ -94,11 +108,14 @@ char g_debugPassword[] = "OGEL";
 // GLOBAL: LEGO1 0x100f66c8
 char* g_currentInput = g_debugPassword;
 
+// GLOBAL: LEGO1 0x100f66cc
+MxS32 g_unk0x100f66cc = -1;
+
 // GLOBAL: LEGO1 0x100f66d0
-MxBool g_musicEnabled = TRUE;
+MxBool g_enableMusic = TRUE;
 
 // GLOBAL: LEGO1 0x100f66d4
-undefined4 g_unk0x100f66d4 = 1;
+MxU32 g_fpsEnabled = TRUE;
 
 // FUNCTION: LEGO1 0x10054ac0
 LegoNavController::LegoNavController()
@@ -608,14 +625,16 @@ MxResult LegoNavController::ProcessKeyboardInput()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10055a60
+// FUNCTION: LEGO1 0x10055a60
+// FUNCTION: BETA10 0x1009c712
 MxLong LegoNavController::Notify(MxParam& p_param)
 {
 	if (((MxNotificationParam&) p_param).GetNotification() == c_notificationKeyPress) {
 		m_unk0x5d = TRUE;
+		MxU8 key = ((LegoEventNotificationParam&) p_param).GetKey();
 
-		switch (((LegoEventNotificationParam&) p_param).GetKey()) {
-		case VK_PAUSE:
+		switch (key) {
+		case VK_PAUSE: // Pause game
 			if (Lego()->IsPaused()) {
 				Lego()->Resume();
 			}
@@ -623,32 +642,95 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 				Lego()->Pause();
 			}
 			break;
-		case VK_ESCAPE: {
+		case VK_ESCAPE: { // Return to infocenter
 			LegoWorld* currentWorld = CurrentWorld();
+			if (currentWorld != NULL) {
+				InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
+				assert(state);
 
-			if (currentWorld) {
-				InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
-				if (infocenterState && infocenterState->GetUnknown0x74() != 8 && currentWorld->Escape()) {
+				if (state != NULL && state->m_unk0x74 != 8 && currentWorld->Escape()) {
 					BackgroundAudioManager()->Stop();
 					TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
-					infocenterState->SetUnknown0x74(8);
+					state->m_unk0x74 = 8;
 				}
 			}
 			break;
 		}
-		case VK_SPACE:
+		case VK_SPACE: // Interrupt/end animations or free navigation
 			AnimationManager()->FUN_10061010(TRUE);
 			break;
-		case 'Z':
-			// TODO
+		case 'Z': { // Make nearby plants "dance"
+			LegoOmni* omni = Lego();
+
+			if (omni->GetCurrentWorld() != NULL && omni->GetCurrentWorld()->GetWorldId() == LegoOmni::e_act1) {
+				LegoVideoManager* videoMgr = LegoOmni::GetInstance()->GetVideoManager();
+				ViewROI* roi = videoMgr->GetViewROI();
+				ViewManager* view = videoMgr->Get3DManager()->GetLego3DView()->GetViewManager();
+				LegoPlantManager* plantMgr = LegoOmni::GetInstance()->GetPlantManager();
+				Mx3DPointFloat viewPosition(roi->GetWorldPosition());
+				MxS32 numPlants = plantMgr->GetNumPlants();
+
+				for (MxS32 i = 0; i < numPlants; i++) {
+					LegoEntity* entity = plantMgr->CreatePlant(i, NULL, LegoOmni::e_act1);
+
+					if (entity != NULL && !entity->GetUnknown0x10IsSet(LegoEntity::c_altBit1)) {
+						LegoROI* roi = entity->GetROI();
+
+						if (roi != NULL && roi->GetVisibility()) {
+							const BoundingBox& box = roi->GetWorldBoundingBox();
+
+							if (view->IsBoundingBoxInFrustum(box)) {
+								Mx3DPointFloat roiPosition(roi->GetWorldPosition());
+								roiPosition -= viewPosition;
+
+								if (roiPosition.LenSquared() < 2000.0 || roi->GetUnknown0xe0() > 0) {
+									entity->ClickAnimation();
+								}
+							}
+						}
+					}
+				}
+			}
 			break;
+		}
 		case 'k':
-		case 'm':
-			// TODO
+		case 'm': { // Keys need to be uppercased to trigger this code, but seems dysfunctional
+			if (g_unk0x100f66cc == -1) {
+				g_unk0x100f66cc = 0;
+			}
+			else {
+				CharacterManager()->ReleaseActor(CharacterManager()->GetActorName(g_unk0x100f66cc));
+
+				if (key == 'k') {
+					g_unk0x100f66cc++;
+					if (g_unk0x100f66cc >= CharacterManager()->GetNumActors()) {
+						g_unk0x100f66cc = 0;
+					}
+				}
+				else {
+					g_unk0x100f66cc--;
+					if (g_unk0x100f66cc < 0) {
+						g_unk0x100f66cc = CharacterManager()->GetNumActors() - 1;
+					}
+				}
+			}
+
+			LegoROI* roi = CharacterManager()->GetActorROI(CharacterManager()->GetActorName(g_unk0x100f66cc), TRUE);
+			if (roi != NULL) {
+				MxMatrix mat;
+				ViewROI* roi = LegoOmni::GetInstance()->GetVideoManager()->GetViewROI();
+				const float* position = roi->GetWorldPosition();
+				const float* direction = roi->GetWorldDirection();
+				const float* up = roi->GetWorldUp();
+				CalcLocalTransform(position, direction, up, mat);
+				mat.TranslateBy(direction[0] * 2.0f, direction[1] - 1.0, direction[2] * 2.0f);
+				roi->UpdateTransformationRelativeToParent(mat);
+			}
 			break;
-		case '{': {
-			InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
-			if (infocenterState && infocenterState->HasRegistered()) {
+		}
+		case '{': { // Saves the game. Can't actually be triggered
+			InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
+			if (state && state->HasRegistered()) {
 				GameState()->Save(0);
 			}
 			break;
@@ -659,14 +741,14 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 				// password "protected" debug shortcuts
 				switch (((LegoEventNotificationParam&) p_param).GetKey()) {
 				case VK_TAB:
-					VideoManager()->ToggleFPS(g_unk0x100f66d4);
-					if (g_unk0x100f66d4 == 0) {
-						g_unk0x100f66d4 = 1;
+					VideoManager()->ToggleFPS(g_fpsEnabled);
+					if (g_fpsEnabled) {
+						g_fpsEnabled = FALSE;
 						m_unk0x5d = FALSE;
-						break;
 					}
 					else {
-						g_unk0x100f66d4 = 0;
+						g_fpsEnabled = TRUE;
+						m_unk0x5d = FALSE;
 					}
 					break;
 				case '0':
@@ -679,17 +761,130 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 				case '7':
 				case '8':
 				case '9':
-					// TODO
+					if (g_changeLight && key <= '1') {
+						LegoROI* roi = VideoManager()->GetViewROI();
+						Tgl::FloatMatrix4 matrix;
+						Matrix4 in(matrix);
+						roi->GetLocalTransform(in);
+						VideoManager()->Get3DManager()->GetLego3DView()->SetLightTransform(key - '0', matrix);
+						g_changeLight = FALSE;
+					}
+					else if (g_locationCalcStep) {
+						if (g_locationCalcStep == 1) {
+							// Calculate base offset into g_locations
+							g_nextLocation = (key - '0') * 5;
+							g_locationCalcStep = 2;
+						}
+						else {
+							// Add to base g_locations offset
+							g_nextLocation += key - '0';
+							g_locationCalcStep = 0;
+							UpdateLocation(g_nextLocation);
+						}
+					}
+					else if (g_animationCalcStep) {
+						if (g_animationCalcStep == 1) {
+							// Calculate base offset into possible animation object IDs (up to 999)
+							g_nextAnimation = (key - '0') * 100;
+							g_animationCalcStep = 2;
+						}
+						else if (g_animationCalcStep == 2) {
+							// Add to animation object ID offset
+							g_nextAnimation += (key - '0') * 10;
+							g_animationCalcStep = 3;
+						}
+						else {
+							// Add to animation object ID offset
+							g_nextAnimation += key - '0';
+							g_animationCalcStep = 0;
+							AnimationManager()->FUN_10060dc0(
+								g_nextAnimation,
+								NULL,
+								TRUE,
+								g_unk0x100f66bc,
+								NULL,
+								TRUE,
+								TRUE,
+								TRUE,
+								TRUE
+							);
+
+							g_unk0x100f66bc = LegoAnimationManager::e_unk2;
+						}
+					}
+
+					if (g_switchAct && key >= '1' && key <= '5') {
+						switch (GameState()->GetCurrentAct()) {
+						case LegoGameState::e_act1:
+							GameState()->m_currentArea = LegoGameState::e_isle;
+							break;
+						case LegoGameState::e_act2:
+							GameState()->m_currentArea = LegoGameState::e_act2main;
+							break;
+						case LegoGameState::e_act3:
+							GameState()->m_currentArea = LegoGameState::e_act3script;
+							break;
+						}
+
+						switch (key) {
+						case '1':
+							GameState()->SetCurrentAct(LegoGameState::e_act1);
+							GameState()->SwitchArea(LegoGameState::e_isle);
+							break;
+						case '2':
+							GameState()->SwitchArea(LegoGameState::e_act2main);
+							break;
+						case '3':
+							GameState()->SwitchArea(LegoGameState::e_act3script);
+							break;
+						case '4': {
+							Act3State* act3State = (Act3State*) GameState()->GetState("Act3State");
+							if (act3State == NULL) {
+								act3State = new Act3State();
+								assert(act3State);
+								GameState()->RegisterState(act3State);
+							}
+
+							GameState()->SetCurrentAct(LegoGameState::e_act3);
+							act3State->m_unk0x08 = 2;
+							GameState()->m_currentArea = LegoGameState::e_act3script;
+							GameState()->SwitchArea(LegoGameState::e_infomain);
+							break;
+						}
+						case '5': {
+							Act3State* act3State = (Act3State*) GameState()->GetState("Act3State");
+							if (act3State == NULL) {
+								act3State = new Act3State();
+								assert(act3State);
+								GameState()->RegisterState(act3State);
+							}
+
+							GameState()->SetCurrentAct(LegoGameState::e_act3);
+							act3State->m_unk0x08 = 3;
+							GameState()->m_currentArea = LegoGameState::e_act3script;
+							GameState()->SwitchArea(LegoGameState::e_infomain);
+							break;
+						}
+						}
+
+						g_switchAct = FALSE;
+					}
+					else {
+						MxDSAction action;
+						action.SetObjectId(key - '0');
+						action.SetAtomId(MxAtomId("q:\\lego\\media\\model\\common\\common", e_lowerCase2));
+						LegoOmni::GetInstance()->Start(&action);
+					}
 					break;
 				case 'A':
-					if (g_unk0x100f66b0 == 1) {
-						Lego()->SetUnknown13c(TRUE);
-						AnimationManager()->FUN_10060570(1);
-						g_unk0x100f66b0 = 0;
+					if (g_animationCalcStep == 1) {
+						Lego()->m_unk0x13c = TRUE;
+						AnimationManager()->FUN_10060570(TRUE);
+						g_animationCalcStep = 0;
 					}
 					else {
 						LegoWorld* world = CurrentWorld();
-						if (world) {
+						if (world != NULL) {
 							MxDSAction action;
 							action.SetObjectId(1);
 							action.SetAtomId(world->GetAtomId());
@@ -698,7 +893,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					}
 					break;
 				case 'C':
-					g_unk0x100f66a4 = TRUE;
+					g_locationCalcStep = 1;
 					break;
 				case 'D':
 					m_unk0x60 = -1.0;
@@ -707,56 +902,121 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					RealtimeView::SetUserMaxLOD(0.0);
 					break;
 				case 'G':
-					g_unk0x100f66b4 = 1;
+					g_switchAct = TRUE;
 					break;
 				case 'H':
 					RealtimeView::SetUserMaxLOD(5.0);
 					break;
-				case 'I':
-					// TODO
+				case 'I': {
+					LegoROI* roi = VideoManager()->GetViewROI();
+					MxMatrix mat;
+					mat.SetIdentity();
+					mat.RotateX(0.2618f);
+					roi->WrappedVTable0x24(mat);
 					break;
-				case 'J':
-					// TODO
+				}
+				case 'J': {
+					LegoROI* roi = VideoManager()->GetViewROI();
+					MxMatrix mat;
+					mat.SetIdentity();
+					mat.RotateZ(0.2618f);
+					roi->WrappedVTable0x24(mat);
 					break;
-				case 'K':
-					// TODO
+				}
+				case 'K': {
+					MxMatrix mat;
+					LegoROI* roi = LegoOmni::GetInstance()->GetVideoManager()->GetViewROI();
+					mat.SetIdentity();
+					mat.RotateZ(-0.2618f);
+					roi->WrappedVTable0x24(mat);
 					break;
+				}
 				case 'L':
-					g_unk0x100f66a0 = TRUE;
+					g_changeLight = TRUE;
 					break;
-				case 'M':
-					// TODO
+				case 'M': {
+					LegoROI* roi = LegoOmni::GetInstance()->GetVideoManager()->GetViewROI();
+					MxMatrix mat;
+					mat.SetIdentity();
+					mat.RotateX(-0.2618f);
+					roi->WrappedVTable0x24(mat);
 					break;
+				}
 				case 'N':
 					if (VideoManager()) {
 						VideoManager()->SetRender3D(!VideoManager()->GetRender3D());
 					}
 					break;
 				case 'P':
-					// TODO
+					if (!g_resetPlants) {
+						PlantManager()->LoadWorldInfo(LegoOmni::e_act1);
+						g_resetPlants = TRUE;
+					}
+					else {
+						PlantManager()->Reset(LegoOmni::e_act1);
+						g_resetPlants = FALSE;
+					}
 					break;
 				case 'S':
-					BackgroundAudioManager()->Enable(!g_musicEnabled);
+					g_enableMusic = g_enableMusic == FALSE;
+					BackgroundAudioManager()->Enable(g_enableMusic);
 					break;
 				case 'U':
 					m_unk0x60 = 1.0;
 					break;
 				case 'V':
-					// TODO
-				case 'W':
-					// TODO
+					if (g_nextAnimation > 0 && g_animationCalcStep == 0) {
+						AnimationManager()->FUN_10061010(FALSE);
+					}
+
+					if (g_animationCalcStep != 0) {
+						g_unk0x100f66bc = LegoAnimationManager::e_unk2;
+					}
+
+					g_nextAnimation = 0;
+					g_animationCalcStep = 1;
 					break;
+				case 'W': {
+					MxMatrix mat;
+					LegoROI* roi = LegoOmni::GetInstance()->GetVideoManager()->GetViewROI();
+					const float* position = roi->GetWorldPosition();
+					const float* direction = roi->GetWorldDirection();
+					const float* up = roi->GetWorldUp();
+
+					MxTrace(
+						"pos: %f, %f, %f\ndir: %f, %f, %f\nup: %f, %f, %f\n",
+						EXPAND3(position),
+						EXPAND3(direction),
+						EXPAND3(up)
+					);
+					break;
+				}
 				case 'X':
 					RealtimeView::SetUserMaxLOD(3.6);
 					break;
-				case 'j':
-					// TODO
+				case 'j': {
+					MxU8 newActor = GameState()->GetActorId() + 1;
+
+					if (newActor > LegoActor::c_laura) {
+						newActor = LegoActor::c_pepper;
+					}
+
+					GameState()->SetActorId(newActor);
 					break;
+				}
 				case 'o':
-					GameState()->SetActorId(6);
+					GameState()->SetActorId(LegoActor::c_brickster);
+					break;
+				case 'z':
+					if (GameState()->m_isDirty) {
+						GameState()->m_isDirty = FALSE;
+					}
+					else {
+						GameState()->m_isDirty = TRUE;
+					}
 					break;
 				case 0xbd:
-					g_unk0x100f66bc = 1;
+					g_unk0x100f66bc = LegoAnimationManager::e_unk1;
 					break;
 				default:
 					m_unk0x5d = FALSE;
@@ -766,14 +1026,11 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 			else {
 				if (*g_currentInput == ((LegoEventNotificationParam&) p_param).GetKey()) {
 					g_currentInput++;
-					break;
 				}
 				else {
 					g_currentInput = g_debugPassword;
-					break;
 				}
 			}
-			break;
 		}
 	}
 

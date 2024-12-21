@@ -586,7 +586,8 @@ void Pizza::PlayAction(MxU32 p_objectId, MxBool p_param7)
 		InvokeAction(Extra::e_stop, *g_isleScript, m_unk0x8c, NULL);
 	}
 
-	AnimationManager()->FUN_10060dc0(p_objectId, NULL, TRUE, FALSE, NULL, FALSE, p_param7, TRUE, TRUE);
+	AnimationManager()
+		->FUN_10060dc0(p_objectId, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, p_param7, TRUE, TRUE);
 }
 
 // FUNCTION: LEGO1 0x10039030

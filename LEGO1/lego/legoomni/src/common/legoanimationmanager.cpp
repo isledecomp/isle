@@ -1138,7 +1138,7 @@ MxResult LegoAnimationManager::FUN_10060dc0(
 	MxU32 p_objectId,
 	MxMatrix* p_matrix,
 	MxBool p_param3,
-	MxBool p_param4,
+	MxU8 p_param4,
 	LegoROI* p_roi,
 	MxBool p_param6,
 	MxBool p_param7,
@@ -1159,10 +1159,10 @@ MxResult LegoAnimationManager::FUN_10060dc0(
 			MxBool unk0x0a;
 
 			switch (p_param4) {
-			case FALSE:
+			case e_unk0:
 				unk0x0a = m_anims[i].m_unk0x0a;
 				break;
-			case TRUE:
+			case e_unk1:
 				unk0x0a = TRUE;
 				break;
 			default:

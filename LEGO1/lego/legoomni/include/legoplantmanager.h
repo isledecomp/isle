@@ -40,6 +40,7 @@ public:
 	void Reset(LegoOmni::World p_worldId);
 	MxResult Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);
+	MxS32 GetNumPlants();
 	MxBool SwitchColor(LegoEntity* p_entity);
 	MxBool SwitchVariant(LegoEntity* p_entity);
 	MxBool SwitchSound(LegoEntity* p_entity);
@@ -48,6 +49,7 @@ public:
 	MxU32 GetAnimationId(LegoEntity* p_entity);
 	MxU32 GetSoundId(LegoEntity* p_entity, MxBool p_state);
 	LegoPlantInfo* GetInfoArray(MxS32& p_length);
+	LegoEntity* CreatePlant(MxS32 p_index, LegoWorld* p_world, LegoOmni::World p_worldId);
 	MxBool FUN_10026c50(LegoEntity* p_entity);
 	void ScheduleAnimation(LegoEntity* p_entity, MxLong p_length);
 	MxResult FUN_10026410();
@@ -61,7 +63,6 @@ public:
 	// LegoPlantManager::`scalar deleting destructor'
 
 private:
-	LegoEntity* CreatePlant(MxS32 p_index, LegoWorld* p_world, LegoOmni::World p_worldId);
 	void RemovePlant(MxS32 p_index, LegoOmni::World p_worldId);
 	void FUN_10026860(MxS32 p_index);
 	LegoPlantInfo* GetInfo(LegoEntity* p_entity);

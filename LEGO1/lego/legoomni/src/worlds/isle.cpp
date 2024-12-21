@@ -757,7 +757,8 @@ void Isle::Enable(MxBool p_enable)
 					break;
 				}
 
-				AnimationManager()->FUN_10060dc0(script, NULL, TRUE, TRUE, NULL, FALSE, FALSE, TRUE, FALSE);
+				AnimationManager()
+					->FUN_10060dc0(script, NULL, TRUE, LegoAnimationManager::e_unk1, NULL, FALSE, FALSE, TRUE, FALSE);
 			}
 
 			m_act1state->m_unk0x018 = 0;
@@ -790,7 +791,8 @@ void Isle::Enable(MxBool p_enable)
 					break;
 				}
 
-				AnimationManager()->FUN_10060dc0(script, NULL, TRUE, TRUE, NULL, FALSE, FALSE, TRUE, FALSE);
+				AnimationManager()
+					->FUN_10060dc0(script, NULL, TRUE, LegoAnimationManager::e_unk1, NULL, FALSE, FALSE, TRUE, FALSE);
 			}
 
 			m_act1state->m_unk0x018 = 0;
