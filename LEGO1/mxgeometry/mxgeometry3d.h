@@ -156,7 +156,7 @@ private:
 };
 
 // FUNCTION: BETA10 0x1004aaa0
-int UnknownMx4DPointFloat::BETA_1004aaa0(Matrix4& p_matrix, float p_f)
+inline int UnknownMx4DPointFloat::BETA_1004aaa0(Matrix4& p_matrix, float p_f)
 {
 	float data[4];
 	Vector4 v(data);
@@ -196,17 +196,17 @@ inline long UnknownMx4DPointFloat::FUN_10004520()
 // FUNCTION: BETA10 0x1004ab10
 inline int UnknownMx4DPointFloat::FUN_100040a0(Vector4& p_v, float p_f)
 {
-	if (m_unk0x30 == 1) {
+	if (m_unk0x30 == c_bit1) {
 		p_v = m_unk0x00;
 		p_v[3] = (1.0 - p_f) * acos((double) p_v[3]) * 2.0;
 		return p_v.NormalizeQuaternion();
 	}
-	else if (m_unk0x30 == 2) {
+	else if (m_unk0x30 == c_bit2) {
 		p_v = m_unk0x18;
 		p_v[3] = p_f * acos((double) p_v[3]) * 2.0;
 		return p_v.NormalizeQuaternion();
 	}
-	else if (m_unk0x30 == 3) {
+	else if (m_unk0x30 == (c_bit1 | c_bit2)) {
 		int i;
 		double d1 = p_v.Dot(&m_unk0x00, &m_unk0x18);
 		double a;

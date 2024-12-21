@@ -386,36 +386,34 @@ void Helicopter::VTable0x74(Matrix4& p_transform)
 // FUNCTION: LEGO1 0x10003ee0
 void Helicopter::Animate(float p_time)
 {
-	MxU32 state = m_state->GetUnkown8();
-	switch (state) {
-	default:
-		LegoPathActor::Animate(p_time);
-		return;
-	case 4:
-	case 5:
-		float f = m_unk0x1f0 - p_time + 3000;
+	if (m_state->m_unk0x08 == 4 || m_state->m_unk0x08 == 5) {
+		float f = m_unk0x1f0 - p_time + 3000.0f;
 		if (f >= 0) {
-			float f2 = f / 3000 + 1;
+			float f2 = f / -3000.0f + 1;
 			if (f2 < 0) {
 				f2 = 0;
 			}
-			if (1.0f < f2) {
+			if (f2 > 1.0f) {
 				f2 = 1.0f;
 			}
-			Vector3 v(m_unk0x160[3]);
+
 			MxMatrix mat;
-			Vector3 v2(m_unk0x1a8[3]);
-			float* loc = m_unk0x1a8[3];
+			Vector3 v1(m_unk0x160[3]);
+			Vector3 v2(mat[3]);
+			Vector3 v3(m_unk0x1a8[3]);
+
 			mat.SetIdentity();
 			m_unk0x1f4.BETA_1004aaa0(mat, f2);
-			v2.SetVector(loc);
-			v2 -= v;
+
+			v2 = v3;
+			v2 -= v1;
 			v2 *= f2;
-			v2 += v;
+			v2 += v1;
+
 			m_world->GetCamera()->FUN_100123e0(mat, 0);
 		}
 		else {
-			if (state == 4) {
+			if (m_state->m_unk0x08 == 4) {
 				((Act3*) m_world)->FUN_10073400();
 			}
 			else {
@@ -424,6 +422,9 @@ void Helicopter::Animate(float p_time)
 
 			LegoPathActor::m_actorState = c_disabled;
 		}
+	}
+	else {
+		LegoPathActor::Animate(p_time);
 	}
 }
 
