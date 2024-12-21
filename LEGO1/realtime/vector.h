@@ -183,6 +183,12 @@ public:
 		return *this;
 	}
 
+	Vector2& operator=(float* p_other)
+	{
+		Vector2::EqualsImpl(p_other);
+		return *this;
+	}
+
 	// FUNCTION: BETA10 0x1001d140
 	float& operator[](int idx) { return m_data[idx]; }
 

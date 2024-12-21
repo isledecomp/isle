@@ -386,9 +386,7 @@ void Helicopter::VTable0x74(Matrix4& p_transform)
 // FUNCTION: LEGO1 0x10003ee0
 void Helicopter::Animate(float p_time)
 {
-	MxU32 state = m_state->GetUnkown8();
-
-	if (state == 4 || state == 5) {
+	if (m_state->m_unk0x08 == 4 || m_state->m_unk0x08 == 5) {
 		float f = m_unk0x1f0 - p_time + 3000;
 		if (f >= 0) {
 			float f2 = f / -3000.0f + 1;
@@ -398,21 +396,23 @@ void Helicopter::Animate(float p_time)
 			if (1.0f < f2) {
 				f2 = 1.0f;
 			}
+
 			MxMatrix mat;
 			Vector3 v(m_unk0x160[3]);
-			Vector3 v2(m_unk0x1a8[3]);
+			Vector3 v2(mat[3]); // likely correct according to stackcmp
 
-			float* loc = m_unk0x1a8[3];
+			// float* loc = m_unk0x1a8[0]; // this looks more correct, but it mixes up the registers. Re-enable later
 			mat.SetIdentity();
 			m_unk0x1f4.BETA_1004aaa0(mat, f2);
-			v2.SetVector(loc);
+			// v2 = loc;
+			v2 = m_unk0x1a8[0];
 			v2 -= v;
 			v2 *= f2;
 			v2 += v;
 			m_world->GetCamera()->FUN_100123e0(mat, 0);
 		}
 		else {
-			if (state == 4) {
+			if (m_state->m_unk0x08 == 4) {
 				((Act3*) m_world)->FUN_10073400();
 			}
 			else {
@@ -421,7 +421,8 @@ void Helicopter::Animate(float p_time)
 
 			LegoPathActor::m_actorState = c_disabled;
 		}
-	} else {
+	}
+	else {
 		LegoPathActor::Animate(p_time);
 	}
 }
