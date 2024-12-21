@@ -266,32 +266,31 @@ done:
 // FUNCTION: LEGO1 0x1005a5f0
 MxResult LegoOmni::RegisterWorlds()
 {
-	m_worlds = new WorldContainer[19];
+	m_worlds = new WorldContainer[e_numWorlds];
 
 	if (!m_worlds) {
 		return FAILURE;
 	}
 
 	m_worlds[0] = WorldContainer();
-	m_worlds[1] = WorldContainer(0, "ACT1", g_isleScript);
-	m_worlds[2] = WorldContainer(1, "IMAIN", g_infomainScript);
-	m_worlds[3] = WorldContainer(2, "ICUBE", g_infoscorScript);
-	m_worlds[4] = WorldContainer(3, "IREG", g_regbookScript);
-	m_worlds[5] = WorldContainer(4, "IELEV", g_elevbottScript);
-	m_worlds[6] = WorldContainer(5, "IISLE", g_infodoorScript);
-	m_worlds[7] = WorldContainer(6, "HOSP", g_hospitalScript);
-	m_worlds[8] = WorldContainer(7, "POLICE", g_policeScript);
-	m_worlds[9] = WorldContainer(8, "GMAIN", g_garageScript);
-	m_worlds[10] = WorldContainer(9, "BLDH", g_copterScript);
-	m_worlds[11] = WorldContainer(10, "BLDD", g_dunecarScript);
-	m_worlds[12] = WorldContainer(11, "BLDJ", g_jetskiScript);
-	m_worlds[13] = WorldContainer(12, "BLDR", g_racecarScript);
-	m_worlds[14] = WorldContainer(13, "RACC", g_carraceScript);
-	m_worlds[15] = WorldContainer(14, "RACJ", g_jetraceScript);
-	m_worlds[16] = WorldContainer(15, "ACT2", g_act2mainScript);
-	m_worlds[17] = WorldContainer(16, "ACT3", g_act3Script);
-	m_worlds[18] = WorldContainer(17, "TEST", g_testScript);
-
+	m_worlds[1] = WorldContainer(e_act1, "ACT1", g_isleScript);
+	m_worlds[2] = WorldContainer(e_imain, "IMAIN", g_infomainScript);
+	m_worlds[3] = WorldContainer(e_icube, "ICUBE", g_infoscorScript);
+	m_worlds[4] = WorldContainer(e_ireg, "IREG", g_regbookScript);
+	m_worlds[5] = WorldContainer(e_ielev, "IELEV", g_elevbottScript);
+	m_worlds[6] = WorldContainer(e_iisle, "IISLE", g_infodoorScript);
+	m_worlds[7] = WorldContainer(e_hosp, "HOSP", g_hospitalScript);
+	m_worlds[8] = WorldContainer(e_police, "POLICE", g_policeScript);
+	m_worlds[9] = WorldContainer(e_gmain, "GMAIN", g_garageScript);
+	m_worlds[10] = WorldContainer(e_bldh, "BLDH", g_copterScript);
+	m_worlds[11] = WorldContainer(e_bldd, "BLDD", g_dunecarScript);
+	m_worlds[12] = WorldContainer(e_bldj, "BLDJ", g_jetskiScript);
+	m_worlds[13] = WorldContainer(e_bldr, "BLDR", g_racecarScript);
+	m_worlds[14] = WorldContainer(e_racc, "RACC", g_carraceScript);
+	m_worlds[15] = WorldContainer(e_racj, "RACJ", g_jetraceScript);
+	m_worlds[16] = WorldContainer(e_act2, "ACT2", g_act2mainScript);
+	m_worlds[17] = WorldContainer(e_act3, "ACT3", g_act3Script);
+	m_worlds[18] = WorldContainer(e_test, "TEST", g_testScript);
 	return SUCCESS;
 }
 
@@ -476,10 +475,10 @@ MxS32 LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 }
 
 // FUNCTION: LEGO1 0x1005b430
-const char* LegoOmni::GetWorldName(MxU32 p_id)
+const char* LegoOmni::GetWorldName(LegoOmni::World p_worldId)
 {
-	for (MxS32 i = 0; i < 19; i++) {
-		if (m_worlds[i].m_id == p_id) {
+	for (MxS32 i = 0; i < e_numWorlds; i++) {
+		if (m_worlds[i].m_id == p_worldId) {
 			return m_worlds[i].m_key;
 		}
 	}
@@ -489,10 +488,10 @@ const char* LegoOmni::GetWorldName(MxU32 p_id)
 
 // FUNCTION: LEGO1 0x1005b460
 // FUNCTION: BETA10 0x1008edd8
-MxAtomId* LegoOmni::GetWorldAtom(MxU32 p_id)
+MxAtomId* LegoOmni::GetWorldAtom(LegoOmni::World p_worldId)
 {
-	for (MxS32 i = 0; i < 19; i++) {
-		if (m_worlds[i].m_id == p_id) {
+	for (MxS32 i = 0; i < e_numWorlds; i++) {
+		if (m_worlds[i].m_id == p_worldId) {
 			return m_worlds[i].m_atomId;
 		}
 	}
@@ -503,15 +502,15 @@ MxAtomId* LegoOmni::GetWorldAtom(MxU32 p_id)
 }
 
 // FUNCTION: LEGO1 0x1005b490
-MxS32 LegoOmni::GetWorldId(const char* p_key)
+LegoOmni::World LegoOmni::GetWorldId(const char* p_key)
 {
-	for (MxS32 i = 0; i < 19; i++) {
+	for (MxS32 i = 0; i < e_numWorlds; i++) {
 		if ((MxS32) &m_worlds[i] != -4 && !strcmpi(m_worlds[i].GetKey(), p_key)) {
 			return m_worlds[i].GetId();
 		}
 	}
 
-	return -1;
+	return e_undefined;
 }
 
 // FUNCTION: LEGO1 0x1005b4f0

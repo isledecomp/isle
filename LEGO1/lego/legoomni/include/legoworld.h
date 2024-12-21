@@ -2,6 +2,7 @@
 #define LEGOWORLD_H
 
 #include "legoentity.h"
+#include "legomain.h"
 #include "legopathcontrollerlist.h"
 #include "mxpresenterlist.h"
 #include "roi/legoroi.h"
@@ -104,12 +105,12 @@ public:
 	LegoCameraController* GetCamera() { return m_cameraController; }
 
 	LegoEntityList* GetEntityList() { return m_entityList; }
-	MxS32 GetWorldId() { return m_worldId; }
+	LegoOmni::World GetWorldId() { return m_worldId; }
 	MxBool GetUnknown0xd0Empty() { return m_set0xd0.empty(); }
 	list<LegoROI*>& GetROIList() { return m_roiList; }
 	LegoHideAnimPresenter* GetHideAnimPresenter() { return m_hideAnim; }
 
-	void SetWorldId(MxS32 p_worldId) { m_worldId = p_worldId; }
+	void SetWorldId(LegoOmni::World p_worldId) { m_worldId = p_worldId; }
 
 	// SYNTHETIC: LEGO1 0x1001dee0
 	// LegoWorld::`scalar deleting destructor'
@@ -125,7 +126,7 @@ protected:
 	MxPresenterList m_controlPresenters;      // 0xb8
 	MxCoreSet m_set0xd0;                      // 0xd0
 	list<LegoROI*> m_roiList;                 // 0xe0
-	MxS32 m_worldId;                          // 0xec
+	LegoOmni::World m_worldId;                // 0xec
 
 	// name verified by BETA10 0x100c7f59
 	LegoHideAnimPresenter* m_hideAnim; // 0xf0

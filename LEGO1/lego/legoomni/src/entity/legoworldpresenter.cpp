@@ -54,7 +54,7 @@ LegoWorldPresenter::~LegoWorldPresenter()
 {
 	MxBool result = FALSE;
 	if (m_entity) {
-		MxS32 worldId = ((LegoWorld*) m_entity)->GetWorldId();
+		LegoOmni::World worldId = ((LegoWorld*) m_entity)->GetWorldId();
 		PlantManager()->LoadWorldInfo(worldId);
 		AnimationManager()->LoadWorldInfo(worldId);
 		BuildingManager()->LoadWorldInfo();
