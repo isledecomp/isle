@@ -12,6 +12,7 @@
 #define DS_CHUNK_BIT16 0x8000
 
 // VTABLE: LEGO1 0x100dc7f8
+// VTABLE: BETA10 0x101c23d0
 // SIZE 0x1c
 class MxDSChunk : public MxCore {
 public:
@@ -19,6 +20,7 @@ public:
 	~MxDSChunk() override;
 
 	// FUNCTION: LEGO1 0x100be0c0
+	// FUNCTION: BETA10 0x10134580
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10101e6c
@@ -26,6 +28,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100be0d0
+	// FUNCTION: BETA10 0x10134520
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSChunk::ClassName()) || MxCore::IsA(p_name);
@@ -39,14 +42,26 @@ public:
 
 	void SetChunkFlags(MxU16 p_flags) { m_flags = p_flags; }
 	void SetObjectId(undefined4 p_objectid) { m_objectId = p_objectid; }
+
+	// FUNCTION: BETA10 0x101343f0
 	void SetTime(MxLong p_time) { m_time = p_time; }
+
 	void SetLength(MxU32 p_length) { m_length = p_length; }
 	void SetData(MxU8* p_data) { m_data = p_data; }
 
+	// FUNCTION: BETA10 0x1005ab90
 	MxU16 GetChunkFlags() { return m_flags; }
+
+	// FUNCTION: BETA10 0x10159110
 	undefined4 GetObjectId() { return m_objectId; }
+
+	// FUNCTION: BETA10 0x1005ab30
 	MxLong GetTime() { return m_time; }
+
+	// FUNCTION: BETA10 0x1008d000
 	MxU32 GetLength() { return m_length; }
+
+	// FUNCTION: BETA10 0x10056d60
 	MxU8* GetData() { return m_data; }
 
 	void Release()
@@ -57,6 +72,7 @@ public:
 	}
 
 	// SYNTHETIC: LEGO1 0x100be150
+	// SYNTHETIC: BETA10 0x101474c0
 	// MxDSChunk::`scalar deleting destructor'
 
 protected:
