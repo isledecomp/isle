@@ -129,7 +129,8 @@ void CarRace::ReadyWorld()
 
 	m_unk0x144 = g_unk0x100d5d10[rand() & 7];
 
-	AnimationManager()->FUN_10060dc0(m_unk0x144, NULL, TRUE, FALSE, NULL, FALSE, TRUE, FALSE, TRUE);
+	AnimationManager()
+		->FUN_10060dc0(m_unk0x144, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, TRUE, FALSE, TRUE);
 
 	m_unk0x128 = (MxStillPresenter*) Find("MxPresenter", "CarLocator2");
 	m_unk0x128->SetPosition(m_unk0x130.GetLeft(), m_unk0x130.GetTop());
@@ -162,7 +163,8 @@ MxLong CarRace::HandleEndAction(MxEndActionNotificationParam& p_param)
 			result = 1;
 		}
 		else if (m_unk0x148 == objectId) {
-			AnimationManager()->FUN_10060dc0(m_unk0x14c, NULL, TRUE, FALSE, NULL, FALSE, TRUE, FALSE, TRUE);
+			AnimationManager()
+				->FUN_10060dc0(m_unk0x14c, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, TRUE, FALSE, TRUE);
 		}
 		else if (m_unk0x14c == objectId) {
 			NotificationManager()->Send(this, MxNotificationParam());
@@ -253,7 +255,17 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 						raceState->m_score = position;
 					}
 
-					AnimationManager()->FUN_10060dc0(m_unk0x148, NULL, TRUE, FALSE, NULL, FALSE, TRUE, FALSE, TRUE);
+					AnimationManager()->FUN_10060dc0(
+						m_unk0x148,
+						NULL,
+						TRUE,
+						LegoAnimationManager::e_unk0,
+						NULL,
+						FALSE,
+						TRUE,
+						FALSE,
+						TRUE
+					);
 				}
 
 				result = 1;

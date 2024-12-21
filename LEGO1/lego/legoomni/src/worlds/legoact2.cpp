@@ -1167,12 +1167,30 @@ MxResult LegoAct2::FUN_10052560(
 			MxResult result;
 
 			if (p_objectId == Act2mainScript::c_tja009ni_RunAnim) {
-				result =
-					AnimationManager()->FUN_10060dc0(p_objectId, pmatrix, TRUE, FALSE, NULL, TRUE, TRUE, TRUE, TRUE);
+				result = AnimationManager()->FUN_10060dc0(
+					p_objectId,
+					pmatrix,
+					TRUE,
+					LegoAnimationManager::e_unk0,
+					NULL,
+					TRUE,
+					TRUE,
+					TRUE,
+					TRUE
+				);
 			}
 			else {
-				result =
-					AnimationManager()->FUN_10060dc0(p_objectId, pmatrix, TRUE, FALSE, NULL, TRUE, TRUE, TRUE, FALSE);
+				result = AnimationManager()->FUN_10060dc0(
+					p_objectId,
+					pmatrix,
+					TRUE,
+					LegoAnimationManager::e_unk0,
+					NULL,
+					TRUE,
+					TRUE,
+					TRUE,
+					FALSE
+				);
 			}
 
 			if (result == SUCCESS) {

@@ -157,8 +157,17 @@ void SkateBoard::ActivateSceneActions()
 			MxMatrix mat(UserActor()->GetROI()->GetLocal2World());
 			mat.TranslateBy(mat[2][0] * 2.5, mat[2][1] + 0.2, mat[2][2] * 2.5);
 
-			AnimationManager()
-				->FUN_10060dc0(IsleScript::c_sns008in_RunAnim, &mat, TRUE, FALSE, NULL, FALSE, TRUE, TRUE, TRUE);
+			AnimationManager()->FUN_10060dc0(
+				IsleScript::c_sns008in_RunAnim,
+				&mat,
+				TRUE,
+				LegoAnimationManager::e_unk0,
+				NULL,
+				FALSE,
+				TRUE,
+				TRUE,
+				TRUE
+			);
 		}
 	}
 }

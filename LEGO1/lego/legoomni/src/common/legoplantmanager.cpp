@@ -98,6 +98,7 @@ void LegoPlantManager::LoadWorldInfo(LegoOmni::World p_worldId)
 }
 
 // FUNCTION: LEGO1 0x100263a0
+// FUNCTION: BETA10 0x100c5093
 void LegoPlantManager::Reset(LegoOmni::World p_worldId)
 {
 	MxU32 i;
@@ -361,6 +362,13 @@ LegoPlantInfo* LegoPlantManager::GetInfo(LegoEntity* p_entity)
 	}
 
 	return NULL;
+}
+
+// FUNCTION: LEGO1 0x100268d0
+// FUNCTION: BETA10 0x100c5c7a
+MxS32 LegoPlantManager::GetNumPlants()
+{
+	return sizeOfArray(g_plantInfo);
 }
 
 // FUNCTION: LEGO1 0x10026920

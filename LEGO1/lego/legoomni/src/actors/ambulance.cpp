@@ -595,7 +595,8 @@ void Ambulance::FUN_10037250()
 // FUNCTION: BETA10 0x100241a0
 void Ambulance::PlayAnimation(IsleScript::Script p_objectId)
 {
-	AnimationManager()->FUN_10060dc0(p_objectId, NULL, TRUE, FALSE, NULL, FALSE, FALSE, FALSE, TRUE);
+	AnimationManager()
+		->FUN_10060dc0(p_objectId, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, FALSE, FALSE, TRUE);
 	m_lastAnimation = p_objectId;
 }
 
@@ -603,7 +604,8 @@ void Ambulance::PlayAnimation(IsleScript::Script p_objectId)
 // FUNCTION: BETA10 0x10024440
 void Ambulance::PlayFinalAnimation(IsleScript::Script p_objectId)
 {
-	AnimationManager()->FUN_10060dc0(p_objectId, NULL, TRUE, TRUE, NULL, FALSE, FALSE, TRUE, TRUE);
+	AnimationManager()
+		->FUN_10060dc0(p_objectId, NULL, TRUE, LegoAnimationManager::e_unk1, NULL, FALSE, FALSE, TRUE, TRUE);
 	m_lastAnimation = p_objectId;
 }
 

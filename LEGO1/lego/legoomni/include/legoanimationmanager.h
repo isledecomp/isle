@@ -128,6 +128,12 @@ public:
 		MxBool m_unk0x14;    // 0x14
 	};
 
+	enum PlayMode {
+		e_unk0 = 0,
+		e_unk1,
+		e_unk2
+	};
+
 	LegoAnimationManager();
 	~LegoAnimationManager() override;
 
@@ -166,7 +172,7 @@ public:
 		MxU32 p_objectId,
 		MxMatrix* p_matrix,
 		MxBool p_param3,
-		MxBool p_param4,
+		MxU8 p_param4,
 		LegoROI* p_roi,
 		MxBool p_param6,
 		MxBool p_param7,
