@@ -156,7 +156,7 @@ private:
 };
 
 // FUNCTION: BETA10 0x1004aaa0
-int UnknownMx4DPointFloat::BETA_1004aaa0(Matrix4& p_matrix, float p_f)
+inline int UnknownMx4DPointFloat::BETA_1004aaa0(Matrix4& p_matrix, float p_f)
 {
 	float data[4];
 	Vector4 v(data);
@@ -170,7 +170,7 @@ int UnknownMx4DPointFloat::BETA_1004aaa0(Matrix4& p_matrix, float p_f)
 }
 
 // FUNCTION: LEGO1 0x10004520
-long UnknownMx4DPointFloat::FUN_10004520()
+inline long UnknownMx4DPointFloat::FUN_10004520()
 {
 	if (!m_unk0x30) {
 		return -1;
