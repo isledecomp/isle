@@ -44,6 +44,9 @@ public:
 	void SetUnknowna4(MxDSBuffer* p_unk0xa4) { m_unk0xa4 = p_unk0xa4; }
 	void SetBufferOffset(MxU32 p_bufferOffset) { m_bufferOffset = p_bufferOffset; }
 
+	// FUNCTION: BETA10 0x10156650
+	void ClearUnknowna0() { m_unk0xa0 = NULL; }
+
 	// SYNTHETIC: LEGO1 0x100cd0b0
 	// MxDSStreamingAction::`scalar deleting destructor'
 
