@@ -744,12 +744,12 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					VideoManager()->ToggleFPS(g_fpsEnabled);
 					if (g_fpsEnabled) {
 						g_fpsEnabled = FALSE;
-						m_unk0x5d = FALSE;
 					}
 					else {
 						g_fpsEnabled = TRUE;
-						m_unk0x5d = FALSE;
 					}
+				default:
+					m_unk0x5d = FALSE;
 					break;
 				case '0':
 				case '1':
@@ -772,7 +772,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					else if (g_locationCalcStep) {
 						if (g_locationCalcStep == 1) {
 							// Calculate base offset into g_locations
-							g_nextLocation = (key - '0') * 5;
+							g_nextLocation = (key - '0') * 10;
 							g_locationCalcStep = 2;
 						}
 						else {
@@ -1017,9 +1017,6 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					break;
 				case 0xbd:
 					g_unk0x100f66bc = LegoAnimationManager::e_unk1;
-					break;
-				default:
-					m_unk0x5d = FALSE;
 					break;
 				}
 			}
