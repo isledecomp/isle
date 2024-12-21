@@ -12,7 +12,6 @@
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legolocomotionanimpresenter.h"
-#include "legomain.h"
 #include "legonavcontroller.h"
 #include "legoplantmanager.h"
 #include "legosoundmanager.h"
@@ -102,8 +101,7 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 	}
 
 	SetIsWorldActive(TRUE);
-	m_worldId = -1;
-
+	m_worldId = LegoOmni::e_undefined;
 	return SUCCESS;
 }
 
@@ -180,7 +178,7 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 		}
 	}
 
-	if (m_worldId != -1 && m_set0xd0.empty()) {
+	if (m_worldId != LegoOmni::e_undefined && m_set0xd0.empty()) {
 		PlantManager()->Reset(m_worldId);
 		BuildingManager()->Reset();
 	}
@@ -701,7 +699,7 @@ void LegoWorld::Enable(MxBool p_enable)
 				Lego()->SetNavController(m_cameraController->GetNavController());
 			}
 
-			if (m_worldId != -1) {
+			if (m_worldId != LegoOmni::e_undefined) {
 				PlantManager()->LoadWorldInfo(m_worldId);
 				AnimationManager()->LoadWorldInfo(m_worldId);
 				BuildingManager()->LoadWorldInfo();
@@ -724,7 +722,7 @@ void LegoWorld::Enable(MxBool p_enable)
 		AnimationManager()->Reset(FALSE);
 		m_set0xd0.insert(this);
 
-		if (m_worldId != -1) {
+		if (m_worldId != LegoOmni::e_undefined) {
 			PlantManager()->Reset(m_worldId);
 			BuildingManager()->Reset();
 		}

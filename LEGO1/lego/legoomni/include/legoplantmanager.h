@@ -2,6 +2,7 @@
 #define LEGOPLANTMANAGER_H
 
 #include "decomp.h"
+#include "legomain.h"
 #include "mxcore.h"
 
 class LegoEntity;
@@ -35,8 +36,8 @@ public:
 	}
 
 	void Init();
-	void LoadWorldInfo(MxS32 p_worldId);
-	void Reset(MxS32 p_worldId);
+	void LoadWorldInfo(LegoOmni::World p_worldId);
+	void Reset(LegoOmni::World p_worldId);
 	MxResult Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);
 	MxBool SwitchColor(LegoEntity* p_entity);
@@ -60,8 +61,8 @@ public:
 	// LegoPlantManager::`scalar deleting destructor'
 
 private:
-	LegoEntity* CreatePlant(MxS32 p_index, LegoWorld* p_world, MxS32 p_worldId);
-	void RemovePlant(MxS32 p_index, MxS32 p_worldId);
+	LegoEntity* CreatePlant(MxS32 p_index, LegoWorld* p_world, LegoOmni::World p_worldId);
+	void RemovePlant(MxS32 p_index, LegoOmni::World p_worldId);
 	void FUN_10026860(MxS32 p_index);
 	LegoPlantInfo* GetInfo(LegoEntity* p_entity);
 	MxBool FUN_10026c80(MxS32 p_index);
@@ -71,11 +72,11 @@ private:
 	static MxS32 g_maxMove[4];
 	static MxU32 g_maxSound;
 
-	MxS32 m_worldId;         // 0x08
-	undefined m_unk0x0c;     // 0x0c
-	AnimEntry* m_entries[5]; // 0x10
-	MxS8 m_numEntries;       // 0x24
-	LegoWorld* m_world;      // 0x28
+	LegoOmni::World m_worldId; // 0x08
+	undefined m_unk0x0c;       // 0x0c
+	AnimEntry* m_entries[5];   // 0x10
+	MxS8 m_numEntries;         // 0x24
+	LegoWorld* m_world;        // 0x28
 };
 
 #endif // LEGOPLANTMANAGER_H
