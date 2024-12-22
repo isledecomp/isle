@@ -340,7 +340,7 @@ MxLong MxOmni::HandleEndAction(MxParam& p_param)
 	MxStreamController* controller = Streamer()->GetOpenStream(action->GetAtomId().GetInternal());
 
 	if (controller != NULL) {
-		action = controller->GetUnk0x54().Find(action);
+		action = (MxDSAction*) controller->GetUnk0x54().Find(action);
 		if (action) {
 			if (ActionSourceEquals(action, "LegoLoopingAnimPresenter") == FALSE) {
 				delete controller->GetUnk0x54().FindAndErase(action);

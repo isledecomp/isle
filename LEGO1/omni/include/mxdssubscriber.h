@@ -4,8 +4,17 @@
 #include "decomp.h"
 #include "mxcore.h"
 #include "mxstreamchunklist.h"
+#include "mxutilitylist.h"
 
+class MxDSObject;
+class MxDSSubscriber;
 class MxStreamController;
+
+// SIZE 0x0c
+class MxDSSubscriberList : public MxUtilityList<MxDSSubscriber*> {
+public:
+	MxDSSubscriber* Find(MxDSObject* p_object);
+};
 
 // VTABLE: LEGO1 0x100dc698
 // VTABLE: BETA10 0x101c1d38
@@ -57,5 +66,8 @@ private:
 
 // TEMPLATE: LEGO1 0x100b7d00
 // MxStreamChunkList::~MxStreamChunkList
+
+// TEMPLATE: BETA10 0x10150a70
+// MxUtilityList<MxDSSubscriber *>::PopFront
 
 #endif // MXDSSUBSCRIBER_H

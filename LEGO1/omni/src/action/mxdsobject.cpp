@@ -17,7 +17,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-DECOMP_SIZE_ASSERT(MxDSObject, 0x2c);
+DECOMP_SIZE_ASSERT(MxDSObject, 0x2c)
+DECOMP_SIZE_ASSERT(MxDSObjectList, 0x0c)
 
 // FUNCTION: LEGO1 0x100bf6a0
 // FUNCTION: BETA10 0x101478c0
@@ -170,6 +171,38 @@ void MxDSObject::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
 	p_source += sizeof(m_objectId);
 
 	m_unk0x24 = p_unk0x24;
+}
+
+// FUNCTION: LEGO1 0x100bfa80
+// FUNCTION: BETA10 0x10147e02
+MxDSObject* MxDSObjectList::FindInternal(MxDSObject* p_action, MxBool p_delete)
+{
+	// DECOMP ALPHA 0x1008b99d ?
+
+	MxDSObject* found = NULL;
+
+#ifdef COMPAT_MODE
+	iterator it;
+	for (it = begin(); it != end(); it++) {
+#else
+	for (iterator it = begin(); it != end(); it++) {
+#endif
+		if (p_action->GetObjectId() == -1 || p_action->GetObjectId() == (*it)->GetObjectId()) {
+			if (p_action->GetUnknown24() == -2 || p_action->GetUnknown24() == -3 ||
+				p_action->GetUnknown24() == (*it)->GetUnknown24()) {
+				found = *it;
+				if (p_action->GetUnknown24() != -3) {
+					break;
+				}
+			}
+		}
+	}
+
+	if (p_delete && found != NULL) {
+		erase(it);
+	}
+
+	return found;
 }
 
 // FUNCTION: LEGO1 0x100bfb30

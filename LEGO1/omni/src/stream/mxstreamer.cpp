@@ -2,6 +2,7 @@
 
 #include "mxdebug.h"
 #include "mxdiskstreamcontroller.h"
+#include "mxdsaction.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxramstreamcontroller.h"

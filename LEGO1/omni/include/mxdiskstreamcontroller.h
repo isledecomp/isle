@@ -53,15 +53,15 @@ public:
 	void FUN_100c8670(MxDSStreamingAction* p_streamingAction);
 
 private:
-	MxStreamListMxDSAction m_list0x64; // 0x64
-	MxBool m_unk0x70;                  // 0x70
-	list<MxDSBuffer*> m_list0x74;      // 0x74
-	MxStreamListMxDSAction m_list0x80; // 0x80
-	undefined2 m_unk0x8c;              // 0x8c
-	MxStreamListMxDSAction m_list0x90; // 0x90
-	MxCriticalSection m_critical9c;    // 0x9c
-	MxStreamListMxDSAction m_list0xb8; // 0xb8
-	MxBool m_unk0xc4;                  // 0xc4
+	MxDSObjectList m_list0x64;      // 0x64
+	MxBool m_unk0x70;               // 0x70
+	list<MxDSBuffer*> m_list0x74;   // 0x74
+	MxDSObjectList m_list0x80;      // 0x80
+	undefined2 m_unk0x8c;           // 0x8c
+	MxDSObjectList m_list0x90;      // 0x90
+	MxCriticalSection m_critical9c; // 0x9c
+	MxDSObjectList m_list0xb8;      // 0xb8
+	MxBool m_unk0xc4;               // 0xc4
 
 	void FUN_100c7970();
 	void FUN_100c7ce0(MxDSBuffer* p_buffer);
