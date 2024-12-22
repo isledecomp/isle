@@ -16,7 +16,7 @@ LegoWEGEdge::LegoWEGEdge()
 	m_unk0x14.Clear();
 	m_edgeNormals = NULL;
 	m_flags = 0;
-	m_numPathTrigger = 0;
+	m_numTriggers = 0;
 	m_pathTrigger = NULL;
 	m_unk0x50 = NULL;
 }
@@ -151,7 +151,7 @@ LegoS32 LegoWEGEdge::VTable0x04()
 		}
 	}
 
-	if (m_numPathTrigger > 0) {
+	if (m_numTriggers > 0) {
 		Vector3* vTrig1 = m_edges[0]->CCWVertex(*this);
 		Vector3* vTrig2 = m_edges[1]->CCWVertex(*this);
 		assert(vTrig1 && vTrig2);
@@ -198,7 +198,7 @@ LegoS32 LegoWEGEdge::VTable0x04()
 			local98 += 0.001;
 			local9c -= 0.001;
 
-			for (LegoS32 j = 0; j < m_numPathTrigger; j++) {
+			for (LegoS32 j = 0; j < m_numTriggers; j++) {
 				if (m_pathTrigger[j].m_unk0x08 < local98) {
 					m_pathTrigger[j].m_unk0x08 = local98;
 				}
