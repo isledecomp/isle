@@ -258,7 +258,6 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/stream/mxstreamchunk.cpp
     LEGO1/omni/src/stream/mxstreamcontroller.cpp
     LEGO1/omni/src/stream/mxstreamer.cpp
-    LEGO1/omni/src/stream/mxstreamprovider.cpp
     LEGO1/omni/src/system/mxautolock.cpp
     LEGO1/omni/src/system/mxcriticalsection.cpp
     LEGO1/omni/src/system/mxscheduler.cpp
