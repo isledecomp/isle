@@ -14,7 +14,7 @@ public:
 	LegoWEEdge();
 	virtual ~LegoWEEdge(); // vtable+0x00
 
-	virtual LegoResult VTable0x04(); // vtable+0x04
+	virtual LegoS32 VTable0x04(); // vtable+0x04
 
 	// FUNCTION: BETA10 0x1001c980
 	LegoU8 GetNumEdges() { return m_numEdges; }
