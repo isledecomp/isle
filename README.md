@@ -8,16 +8,16 @@ This is a **work-in-progress** decompilation of LEGO Island (Version 1.1, Englis
 
 <img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="50%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="50%">
 
-Currently, `ISLE.EXE` is completely decompiled and behaves identically to the original. A handful of stubborn instructions are not yet matching; however, we anticipate they will as more of the overall codebase is implemented.
+Currently, `ISLE.EXE` is completely decompiled and is functionally identical to the original, while `LEGO1.DLL` is complete in terms of gameplay features. However, work is still ongoing to improve the accuracy, naming, documentation, and structure of the source code. While there may still be unresolved bugs that are not present in retail, the game should be fully playable with the binaries derived from this source code.
 
-`LEGO1.DLL` is still lacking some gameplay features but is generally workable. If you would like to use this, make sure to do so without interacting with save files created by the retail version, as there might still be some incompatibilities.
+Due to various complexities with regard to the compiler, these binaries are not a byte-for-byte match of the original executables. We remain hopeful that this can be resolved at some point.
 
 ## Building
 
 This project uses the [CMake](https://cmake.org/) build system, which allows for a high degree of versatility regarding compilers and development environments. For the most accurate results, it is recommended to use Microsoft Visual C++ 4.20 (the same compiler used to build the original game). Since we're trying to match the output of this code to the original executables as closely as possible, all contributions will be graded with the output of this compiler.
 
 
-These instructions will outline how to compile this repository into accurate instruction-matching binaries with Visual C++ 4.2. If you wish, you can try using other compilers, but this is at your own risk and won't be covered in this guide.
+These instructions will outline how to compile this repository using Visual C++ 4.2 into highly-accurate binaries where the majority of functions are instruction-matching with retail. If you wish, you can try using other compilers, but this is at your own risk and won't be covered in this guide.
 
 #### Prerequisites
 
