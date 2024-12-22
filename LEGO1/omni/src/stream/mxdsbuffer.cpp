@@ -13,12 +13,13 @@
 DECOMP_SIZE_ASSERT(MxDSBuffer, 0x34);
 
 // FUNCTION: LEGO1 0x100c6470
+// FUNCTION: BETA10 0x10156f00
 MxDSBuffer::MxDSBuffer()
 {
-	m_referenceCount = 0;
 	m_pBuffer = NULL;
 	m_pIntoBuffer = NULL;
 	m_pIntoBuffer2 = NULL;
+	m_referenceCount = 0;
 	m_unk0x14 = 0;
 	m_unk0x18 = 0;
 	m_unk0x1c = 0;
@@ -29,6 +30,7 @@ MxDSBuffer::MxDSBuffer()
 }
 
 // FUNCTION: LEGO1 0x100c6530
+// FUNCTION: BETA10 0x10156ff7
 MxDSBuffer::~MxDSBuffer()
 {
 	assert(m_referenceCount == 0);
@@ -54,6 +56,7 @@ MxDSBuffer::~MxDSBuffer()
 }
 
 // FUNCTION: LEGO1 0x100c6640
+// FUNCTION: BETA10 0x10157146
 MxResult MxDSBuffer::AllocateBuffer(MxU32 p_bufferSize, Type p_mode)
 {
 	MxResult result = FAILURE;
@@ -233,6 +236,7 @@ MxResult MxDSBuffer::StartPresenterFromAction(
 }
 
 // FUNCTION: LEGO1 0x100c6a50
+// FUNCTION: BETA10 0x10157795
 MxResult MxDSBuffer::ParseChunk(
 	MxStreamController* p_controller,
 	MxU32* p_data,
@@ -254,26 +258,19 @@ MxResult MxDSBuffer::ParseChunk(
 		MxU32 length = p_header->GetLength() + MxDSChunk::GetHeaderSize() + 8;
 		MxDSBuffer* buffer = new MxDSBuffer();
 
-		if (buffer && buffer->AllocateBuffer(length, e_allocate) == SUCCESS &&
-			buffer->CalcBytesRemaining((MxU8*) p_data) == SUCCESS) {
-			*p_streamingAction = new MxDSStreamingAction((MxDSStreamingAction&) *p_action);
-
-			if (*p_streamingAction) {
-				MxU16* flags = MxStreamChunk::IntoFlags(buffer->GetBuffer());
-				*flags = p_header->GetChunkFlags() & ~DS_CHUNK_SPLIT;
-
-				delete p_header;
-				(*p_streamingAction)->SetUnknowna0(buffer);
-				goto done;
-			}
-		}
-
-		if (buffer) {
+		if (!buffer || buffer->AllocateBuffer(length, e_allocate) != SUCCESS ||
+			buffer->CalcBytesRemaining((MxU8*) p_data) != SUCCESS ||
+			(*p_streamingAction = new MxDSStreamingAction((MxDSStreamingAction&) *p_action)) == NULL) {
 			delete buffer;
+			delete p_header;
+			return FAILURE;
 		}
+
+		MxU16* flags = MxStreamChunk::IntoFlags(buffer->GetBuffer());
+		*flags = p_header->GetChunkFlags() & ~DS_CHUNK_SPLIT;
 
 		delete p_header;
-		return FAILURE;
+		(*p_streamingAction)->SetUnknowna0(buffer);
 	}
 	else {
 		if (p_header->GetChunkFlags() & DS_CHUNK_END_OF_STREAM) {
@@ -317,7 +314,6 @@ MxResult MxDSBuffer::ParseChunk(
 		}
 	}
 
-done:
 	return result;
 }
 

@@ -11,6 +11,7 @@ class MxStreamChunk;
 class MxDSChunk;
 
 // VTABLE: LEGO1 0x100dcca0
+// VTABLE: BETA10 0x101c2898
 // SIZE 0x34
 class MxDSBuffer : public MxCore {
 public:
@@ -25,6 +26,7 @@ public:
 	~MxDSBuffer() override;
 
 	// FUNCTION: LEGO1 0x100c6500
+	// FUNCTION: BETA10 0x10158510
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101025b8
@@ -87,6 +89,7 @@ public:
 	void SetUnk30(MxDSStreamingAction* p_unk0x30) { m_unk0x30 = p_unk0x30; }
 
 	// SYNTHETIC: LEGO1 0x100c6510
+	// SYNTHETIC: BETA10 0x10158530
 	// MxDSBuffer::`scalar deleting destructor'
 
 private:

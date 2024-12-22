@@ -83,6 +83,7 @@ public:
 	// FUNCTION: BETA10 0x1012be80
 	MxS32 GetLoopCount() { return m_loopCount; }
 
+	// FUNCTION: BETA10 0x100f27f0
 	void SetLoopCount(MxS32 p_loopCount) { m_loopCount = p_loopCount; }
 
 	// FUNCTION: BETA10 0x1003db50
