@@ -6,7 +6,7 @@
 class LegoROI;
 
 // VTABLE: LEGO1 0x100d4788
-// VTABLE: BETA10 0x100d4788
+// VTABLE: BETA10 0x101bcfb8
 // SIZE 0x1f8
 class Doors : public LegoPathActor {
 public:
