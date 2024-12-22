@@ -20,7 +20,7 @@ LegoWEEdge::~LegoWEEdge()
 }
 
 // FUNCTION: LEGO1 0x1009a5b0
-LegoResult LegoWEEdge::VTable0x04()
+LegoS32 LegoWEEdge::VTable0x04()
 {
 	for (LegoS32 i = 0; i < m_numEdges; i++) {
 		LegoUnknown100db7f4* e1 = m_edges[i];
@@ -52,5 +52,5 @@ LegoResult LegoWEEdge::VTable0x04()
 		}
 	}
 
-	return SUCCESS;
+	return 0;
 }

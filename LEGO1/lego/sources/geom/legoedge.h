@@ -19,6 +19,12 @@ struct LegoEdge {
 
 	LegoResult FUN_1002ddc0(LegoWEEdge& p_face, Vector3& p_point);
 
+	// FUNCTION: BETA10 0x10184170
+	LegoWEEdge* GetFaceA() { return m_faceA; }
+
+	// FUNCTION: BETA10 0x10184190
+	LegoWEEdge* GetFaceB() { return m_faceB; }
+
 	// FUNCTION: BETA10 0x1001cb80
 	Vector3* GetPointA() { return m_pointA; }
 

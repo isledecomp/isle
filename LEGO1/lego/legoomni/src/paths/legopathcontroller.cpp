@@ -673,15 +673,15 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 			return FAILURE;
 		}
 
-		if (p_storage->Read(&boundary.m_unk0x48, sizeof(boundary.m_unk0x48)) != SUCCESS) {
+		if (p_storage->Read(&boundary.m_numTriggers, sizeof(boundary.m_numTriggers)) != SUCCESS) {
 			return FAILURE;
 		}
 
-		if (boundary.m_unk0x48 > 0) {
+		if (boundary.m_numTriggers > 0) {
 			boundary.m_unk0x50 = new Mx3DPointFloat;
-			boundary.m_pathTrigger = new LegoWEGEdge::PathWithTrigger[boundary.m_unk0x48];
+			boundary.m_pathTrigger = new LegoWEGEdge::PathWithTrigger[boundary.m_numTriggers];
 
-			for (j = 0; j < boundary.m_unk0x48; j++) {
+			for (j = 0; j < boundary.m_numTriggers; j++) {
 				if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 					return FAILURE;
 				}

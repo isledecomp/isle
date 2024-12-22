@@ -48,7 +48,7 @@ void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPa
 {
 	Vector3* ccwV = NULL;
 
-	if (m_unk0x48 > 0 && m_unk0x50 != NULL) {
+	if (m_numTriggers > 0 && m_unk0x50 != NULL) {
 		ccwV = m_edges[0]->CCWVertex(*this);
 		Mx3DPointFloat v;
 
@@ -61,7 +61,7 @@ void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPa
 		float dot2 = v.Dot(&v, m_unk0x50);
 
 		if (dot2 > dot1) {
-			for (MxS32 i = 0; i < m_unk0x48; i++) {
+			for (MxS32 i = 0; i < m_numTriggers; i++) {
 				LegoPathStruct* s = m_pathTrigger[i].m_pathStruct;
 
 				if (m_pathTrigger[i].m_unk0x08 >= dot1 && m_pathTrigger[i].m_unk0x08 < dot2) {
@@ -70,7 +70,7 @@ void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPa
 			}
 		}
 		else if (dot2 < dot1) {
-			for (MxS32 i = 0; i < m_unk0x48; i++) {
+			for (MxS32 i = 0; i < m_numTriggers; i++) {
 				LegoPathStruct* s = m_pathTrigger[i].m_pathStruct;
 
 				if (m_pathTrigger[i].m_unk0x08 >= dot2 && m_pathTrigger[i].m_unk0x08 < dot1) {

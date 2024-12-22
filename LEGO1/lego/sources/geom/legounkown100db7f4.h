@@ -93,6 +93,9 @@ public:
 	// FUNCTION: BETA10 0x1001cc60
 	LegoU32 GetMask0x03() { return m_flags & (c_bit1 | c_bit2); }
 
+	// FUNCTION: BETA10 0x101841b0
+	void SetFlags(LegoU16 p_flags) { m_flags = p_flags; }
+
 	inline LegoU32 FUN_10048c40(const Vector3& p_position);
 
 	// SYNTHETIC: LEGO1 0x1009a6c0
