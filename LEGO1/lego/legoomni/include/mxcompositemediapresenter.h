@@ -4,6 +4,7 @@
 #include "mxcompositepresenter.h"
 
 // VTABLE: LEGO1 0x100d96b0
+// VTABLE: BETA10 0x101bf540
 // SIZE 0x50
 class MxCompositeMediaPresenter : public MxCompositePresenter {
 public:
@@ -13,6 +14,7 @@ public:
 	MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10073f10
+	// FUNCTION: BETA10 0x100ea920
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f02d4

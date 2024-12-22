@@ -4,6 +4,7 @@
 #include "mxstreamprovider.h"
 
 // VTABLE: LEGO1 0x100dd0d0
+// VTABLE: BETA10 0x101c2ca8
 // SIZE 0x24
 class MxRAMStreamProvider : public MxStreamProvider {
 public:
@@ -11,6 +12,7 @@ public:
 	~MxRAMStreamProvider() override;
 
 	// FUNCTION: LEGO1 0x100d0970
+	// FUNCTION: BETA10 0x10164bf0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102864

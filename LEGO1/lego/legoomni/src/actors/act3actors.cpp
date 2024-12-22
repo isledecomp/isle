@@ -92,6 +92,7 @@ Act3Actor::Act3CopDest g_copDest[5] = {
 Mx3DPointFloat Act3Actor::g_unk0x10104ef0 = Mx3DPointFloat(0.0, 5.0, 0.0);
 
 // FUNCTION: LEGO1 0x1003fa50
+// FUNCTION: BETA10 0x10017fb8
 Act3Actor::Act3Actor()
 {
 	m_unk0x1c = 0;

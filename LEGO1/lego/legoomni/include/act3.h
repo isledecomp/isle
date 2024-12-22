@@ -47,12 +47,14 @@ private:
 };
 
 // VTABLE: LEGO1 0x100d4fc8
+// VTABLE: BETA10 0x101b89b8
 // SIZE 0x0c
 class Act3State : public LegoState {
 public:
 	Act3State() { m_unk0x08 = 0; }
 
 	// FUNCTION: LEGO1 0x1000e300
+	// FUNCTION: BETA10 0x10017e10
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03f0
@@ -79,6 +81,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d9628
+// VTABLE: BETA10 0x101b8940
 // SIZE 0x4274
 class Act3 : public LegoWorld {
 public:
@@ -89,6 +92,7 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10072510
+	// FUNCTION: BETA10 0x10017550
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f013c

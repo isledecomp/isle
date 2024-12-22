@@ -5,6 +5,7 @@
 #include "mxdsbuffer.h"
 
 // VTABLE: LEGO1 0x100dc8c8
+// VTABLE: BETA10 0x101c2450
 // SIZE 0x14
 class MxDSSource : public MxCore {
 public:
@@ -14,6 +15,7 @@ public:
 	~MxDSSource() override { delete[] m_pBuffer; }
 
 	// FUNCTION: LEGO1 0x100c0010
+	// FUNCTION: BETA10 0x10148cc0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102588

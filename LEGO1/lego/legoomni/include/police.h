@@ -12,6 +12,7 @@ class LegoEventNotificationParam;
 class MxDSAction;
 
 // VTABLE: LEGO1 0x100d8af0
+// VTABLE: BETA10 0x101bf838
 // SIZE 0x10
 class PoliceState : public LegoState {
 public:
@@ -19,6 +20,7 @@ public:
 	~PoliceState() override {}
 
 	// FUNCTION: LEGO1 0x1005e860
+	// FUNCTION: BETA10 0x100f0d40
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0444
@@ -48,6 +50,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d8a80
+// VTABLE: BETA10 0x101bf7c0
 // SIZE 0x110
 class Police : public LegoWorld {
 public:
@@ -57,6 +60,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x1005e1e0
+	// FUNCTION: BETA10 0x100f0c50
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0450

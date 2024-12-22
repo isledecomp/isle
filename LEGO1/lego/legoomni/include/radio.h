@@ -9,12 +9,14 @@ class MxAtomId;
 class MxEndActionNotificationParam;
 
 // VTABLE: LEGO1 0x100d6d28
+// VTABLE: BETA10 0x101bfb08
 // SIZE 0x30
 class RadioState : public LegoState {
 public:
 	RadioState();
 
 	// FUNCTION: LEGO1 0x1002cf60
+	// FUNCTION: BETA10 0x100f2850
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f04f8
@@ -47,6 +49,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d6d10
+// VTABLE: BETA10 0x101bfaf0
 // SIZE 0x10
 class Radio : public MxCore {
 public:
@@ -56,6 +59,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x1002c8e0
+	// FUNCTION: BETA10 0x100f2670
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f328c

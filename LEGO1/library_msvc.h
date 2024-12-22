@@ -744,4 +744,28 @@
 // LIBRARY: BETA10 0x100f9610
 // rand
 
+// LIBRARY: BETA10 0x100f9b90
+// _purecall
+
+// LIBRARY: BETA10 0x100fca70
+// _amsg_exit
+
+// LIBRARY: BETA10 0x1010ab30
+// _FF_MSGBANNER
+
+// LIBRARY: BETA10 0x1010ab90
+// _NMSG_WRITE
+
+// LIBRARY: BETA10 0x100fbdb0
+// _exit
+
+// LIBRARY: BETA10 0x10100bf0
+// _CrtDbgReport
+
+// GLOBAL: BETA10 0x101faf74
+// __error_mode
+
+// GLOBAL: BETA10 0x101faf78
+// __app_type
+
 #endif

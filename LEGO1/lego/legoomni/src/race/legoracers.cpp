@@ -633,12 +633,14 @@ void LegoJetski::Animate(float p_time)
 }
 
 // FUNCTION: LEGO1 0x10013820
+// FUNCTION: BETA10 0x100cc335
 LegoJetski::LegoJetski()
 {
 	NotificationManager()->Register(this);
 }
 
 // FUNCTION: LEGO1 0x10013aa0
+// FUNCTION: BETA10 0x100cc58e
 LegoJetski::~LegoJetski()
 {
 	NotificationManager()->Unregister(this);

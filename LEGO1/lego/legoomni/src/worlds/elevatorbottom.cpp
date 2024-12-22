@@ -65,6 +65,7 @@ MxLong ElevatorBottom::Notify(MxParam& p_param)
 			ret = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;
 		case c_notificationTransitioned:
+			assert(m_destLocation != LegoGameState::e_undefined);
 			GameState()->SwitchArea(m_destLocation);
 			break;
 		}

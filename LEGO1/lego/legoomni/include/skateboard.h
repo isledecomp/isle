@@ -7,6 +7,7 @@
 class Act1State;
 
 // VTABLE: LEGO1 0x100d55f0
+// VTABLE: BETA10 0x101bfc70
 // SIZE 0x168
 class SkateBoard : public IslePathActor {
 public:
@@ -14,6 +15,7 @@ public:
 	~SkateBoard() override;
 
 	// FUNCTION: LEGO1 0x1000fdd0
+	// FUNCTION: BETA10 0x100f55d0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f041c

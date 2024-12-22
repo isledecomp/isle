@@ -4,6 +4,7 @@
 #include "mxdsmediaaction.h"
 
 // VTABLE: LEGO1 0x100dcdd0
+// VTABLE: BETA10 0x101c2b68
 // SIZE 0xc0
 class MxDSSound : public MxDSMediaAction {
 public:
@@ -14,6 +15,7 @@ public:
 	MxDSSound& operator=(MxDSSound& p_dsSound);
 
 	// FUNCTION: LEGO1 0x100c9330
+	// FUNCTION: BETA10 0x1015d950
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101025e4

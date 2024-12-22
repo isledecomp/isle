@@ -153,6 +153,7 @@ void LegoOmni::Destroy()
 }
 
 // FUNCTION: LEGO1 0x10058e70
+// FUNCTION: BETA10 0x1008d6bf
 MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 {
 	MxResult result = FAILURE;

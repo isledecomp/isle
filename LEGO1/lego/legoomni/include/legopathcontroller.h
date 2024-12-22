@@ -34,6 +34,7 @@ struct LegoPathCtrlEdgeCompare {
 typedef set<LegoPathCtrlEdge*, LegoPathCtrlEdgeCompare> LegoPathCtrlEdgeSet;
 
 // VTABLE: LEGO1 0x100d7d60
+// VTABLE: BETA10 0x101bde20
 // SIZE 0x40
 class LegoPathController : public MxCore {
 public:
@@ -69,6 +70,7 @@ public:
 	MxResult Tickle() override; // vtable+08
 
 	// FUNCTION: LEGO1 0x10045110
+	// FUNCTION: BETA10 0x100ba560
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f11b8

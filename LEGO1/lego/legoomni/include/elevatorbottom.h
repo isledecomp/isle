@@ -8,6 +8,7 @@
 class LegoControlManagerNotificationParam;
 
 // VTABLE: LEGO1 0x100d5f20
+// VTABLE: BETA10 0x101b96f0
 // SIZE 0xfc
 class ElevatorBottom : public LegoWorld {
 public:
@@ -17,6 +18,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10017f20
+	// FUNCTION: BETA10 0x10028130
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f04ac

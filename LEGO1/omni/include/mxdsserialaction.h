@@ -5,6 +5,7 @@
 #include "mxdsmultiaction.h"
 
 // VTABLE: LEGO1 0x100dcf38
+// VTABLE: BETA10 0x101c2940
 // SIZE 0xa8
 class MxDSSerialAction : public MxDSMultiAction {
 public:
@@ -15,6 +16,7 @@ public:
 	MxDSSerialAction& operator=(MxDSSerialAction& p_dsSerialAction);
 
 	// FUNCTION: LEGO1 0x100caad0
+	// FUNCTION: BETA10 0x1015b2b0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f75dc

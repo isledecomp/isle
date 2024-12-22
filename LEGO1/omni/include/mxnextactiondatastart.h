@@ -4,6 +4,7 @@
 #include "mxcore.h"
 
 // VTABLE: LEGO1 0x100dc9a0
+// VTABLE: BETA10 0x101c26a8
 // SIZE 0x14
 class MxNextActionDataStart : public MxCore {
 public:
@@ -16,6 +17,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100c1900
+	// FUNCTION: BETA10 0x1014f660
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101025a0

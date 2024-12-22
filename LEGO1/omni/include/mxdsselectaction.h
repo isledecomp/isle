@@ -6,6 +6,7 @@
 #include "mxstringlist.h"
 
 // VTABLE: LEGO1 0x100dcfc8
+// VTABLE: BETA10 0x101c29d0
 // SIZE 0xb0
 class MxDSSelectAction : public MxDSParallelAction {
 public:
@@ -16,6 +17,7 @@ public:
 	MxDSSelectAction& operator=(MxDSSelectAction& p_dsSelectAction);
 
 	// FUNCTION: LEGO1 0x100cb6f0
+	// FUNCTION: BETA10 0x1015b460
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x1010261c

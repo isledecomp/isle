@@ -12,6 +12,7 @@ class MxEndActionNotificationParam;
 class MxStillPresenter;
 
 // VTABLE: LEGO1 0x100d97a0
+// VTABLE: BETA10 0x101b9ad8
 // SIZE 0x18
 class HospitalState : public LegoState {
 public:
@@ -24,6 +25,7 @@ public:
 	~HospitalState() override {}
 
 	// FUNCTION: LEGO1 0x10076400
+	// FUNCTION: BETA10 0x1002e3c0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0480
@@ -53,6 +55,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d9730
+// VTABLE: BETA10 0x101b9a60
 // SIZE 0x12c
 class Hospital : public LegoWorld {
 public:
@@ -63,6 +66,7 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x100746b0
+	// FUNCTION: BETA10 0x1002e1a0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0490

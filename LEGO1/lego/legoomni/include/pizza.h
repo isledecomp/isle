@@ -11,6 +11,7 @@ class PizzeriaState;
 class SkateBoard;
 
 // VTABLE: LEGO1 0x100d7408
+// VTABLE: BETA10 0x101bf750
 // SIZE 0xb4
 class PizzaMissionState : public LegoState {
 public:
@@ -126,6 +127,7 @@ public:
 	PizzaMissionState();
 
 	// FUNCTION: LEGO1 0x10039290
+	// FUNCTION: BETA10 0x100efa20
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f00d4
@@ -173,6 +175,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d7380
+// VTABLE: BETA10 0x101bf6b0
 // SIZE 0x9c
 class Pizza : public IsleActor {
 public:
@@ -182,6 +185,7 @@ public:
 	MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10037f90
+	// FUNCTION: BETA10 0x100ef300
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f038c

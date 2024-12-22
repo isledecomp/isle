@@ -12,6 +12,7 @@
 class MxDSStreamingAction;
 
 // VTABLE: LEGO1 0x100dccb8
+// VTABLE: BETA10 0x101c2818
 // SIZE 0xc8
 class MxDiskStreamController : public MxStreamController {
 public:
@@ -21,6 +22,7 @@ public:
 	MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x100c7360
+	// FUNCTION: BETA10 0x10155c00
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102144

@@ -7,6 +7,7 @@
 #include "mxpoint32.h"
 
 // VTABLE: LEGO1 0x100d57b0
+// VTABLE: BETA10 0x101bb748
 // SIZE 0xc8
 class LegoCameraController : public LegoPointOfViewController {
 public:
@@ -16,6 +17,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+04
 
 	// FUNCTION: LEGO1 0x10011ec0
+	// FUNCTION: BETA10 0x1006a950
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0850

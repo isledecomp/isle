@@ -9,6 +9,7 @@
 class LegoControlManagerNotificationParam;
 
 // VTABLE: LEGO1 0x100d4a90
+// VTABLE: BETA10 0x101ba6e8
 // SIZE 0x10
 class JukeBoxState : public LegoState {
 public:
@@ -24,6 +25,7 @@ public:
 	JukeBoxState() : m_music(e_pasquell), m_active(FALSE) {}
 
 	// FUNCTION: LEGO1 0x1000f310
+	// FUNCTION: BETA10 0x100389c0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f02bc
@@ -47,6 +49,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d8958
+// VTABLE: BETA10 0x101ba670
 // SIZE 0x104
 class JukeBox : public LegoWorld {
 public:
@@ -57,6 +60,7 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1005d6f0
+	// FUNCTION: BETA10 0x100388d0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f02cc

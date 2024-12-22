@@ -8,6 +8,7 @@
 class MxStreamController;
 
 // VTABLE: LEGO1 0x100dc698
+// VTABLE: BETA10 0x101c1d38
 // SIZE 0x4c
 class MxDSSubscriber : public MxCore {
 public:
@@ -15,6 +16,7 @@ public:
 	~MxDSSubscriber() override;
 
 	// FUNCTION: LEGO1 0x100b7d50
+	// FUNCTION: BETA10 0x10135180
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101020f8

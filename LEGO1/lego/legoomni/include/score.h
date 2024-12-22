@@ -9,12 +9,14 @@ class LegoControlManagerNotificationParam;
 class MxEndActionNotificationParam;
 
 // VTABLE: LEGO1 0x100d53f8
+// VTABLE: BETA10 0x101bcf78
 // SIZE 0x0c
 class ScoreState : public LegoState {
 public:
 	ScoreState() : m_playCubeTutorial(TRUE) {}
 
 	// FUNCTION: LEGO1 0x1000de40
+	// FUNCTION: BETA10 0x100a7a70
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0084
@@ -49,6 +51,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d4018
+// VTABLE: BETA10 0x101bfbd8
 // SIZE 0x104
 class Score : public LegoWorld {
 public:
@@ -57,6 +60,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100010c0
+	// FUNCTION: BETA10 0x100f4f20
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0050

@@ -6,6 +6,8 @@
 
 // VTABLE: LEGO1 0x100d6790 LegoPathActor
 // VTABLE: LEGO1 0x100d6860 LegoAnimActor
+// VTABLE: BETA10 0x101b9430 LegoPathActor
+// VTABLE: BETA10 0x101b9520 LegoAnimActor
 // SIZE 0x174
 class BumpBouy : public LegoAnimActor {
 public:
@@ -14,6 +16,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100274f0
+	// FUNCTION: BETA10 0x10026790
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0394

@@ -7,12 +7,14 @@
 class LegoControlManagerNotificationParam;
 
 // VTABLE: LEGO1 0x100d9ec8
+// VTABLE: BETA10 0x101ba540
 // SIZE 0x164
 class Jetski : public IslePathActor {
 public:
 	Jetski();
 
 	// FUNCTION: LEGO1 0x1007e430
+	// FUNCTION: BETA10 0x10037910
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03d8

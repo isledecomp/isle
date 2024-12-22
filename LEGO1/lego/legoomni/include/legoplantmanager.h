@@ -31,6 +31,8 @@ public:
 	// FUNCTION: LEGO1 0x10026290
 	const char* ClassName() const override // vtable+0x0c
 	{
+		// While this class exists in BETA10, it didn't have a ClassName().
+		// I suppose it did not inherit from MxCore back then and likely did not have a VTABLE.
 		// STRING: LEGO1 0x100f318c
 		return "LegoPlantManager";
 	}
@@ -57,6 +59,8 @@ public:
 	void FUN_10027200();
 
 	static void SetCustomizeAnimFile(const char* p_value);
+
+	// FUNCTION: BETA10 0x1007ffa0
 	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }
 
 	// SYNTHETIC: LEGO1 0x100262a0

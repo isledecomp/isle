@@ -25,6 +25,7 @@ public:
 	MxObjectFactory();
 
 	// FUNCTION: LEGO1 0x10008f70
+	// FUNCTION: BETA10 0x100a5d20
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0730

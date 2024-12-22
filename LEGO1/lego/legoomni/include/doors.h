@@ -6,12 +6,14 @@
 class LegoROI;
 
 // VTABLE: LEGO1 0x100d4788
+// VTABLE: BETA10 0x101bcfb8
 // SIZE 0x1f8
 class Doors : public LegoPathActor {
 public:
 	Doors() : m_unk0x154(0), m_ltDoor(NULL), m_rtDoor(NULL), m_unk0x1f4(0) {}
 
 	// FUNCTION: LEGO1 0x1000e430
+	// FUNCTION: BETA10 0x100a7f20
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03e8

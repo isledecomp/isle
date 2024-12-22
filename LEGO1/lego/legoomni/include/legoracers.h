@@ -105,6 +105,11 @@ private:
 // VTABLE: LEGO1 0x100d5a30 LegoAnimActor
 // VTABLE: LEGO1 0x100d5a40 LegoPathActor
 // VTABLE: LEGO1 0x100d5b10 LegoRaceMap
+// VTABLE: BETA10 0x101be8a0 LegoCarRaceActor
+// VTABLE: BETA10 0x101be8c8 LegoRaceActor
+// VTABLE: BETA10 0x101be8d0 LegoAnimActor
+// VTABLE: BETA10 0x101be8e8 LegoPathActor
+// VTABLE: BETA10 0x101be9d8 LegoRaceMap
 // SIZE 0x1dc
 class LegoJetski : public LegoJetskiRaceActor, public LegoRaceMap {
 public:
@@ -114,6 +119,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10013e90
+	// FUNCTION: BETA10 0x100cd1f0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f053c

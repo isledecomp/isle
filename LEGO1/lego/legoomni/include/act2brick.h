@@ -4,6 +4,7 @@
 #include "legopathactor.h"
 
 // VTABLE: LEGO1 0x100d9b60
+// VTABLE: BETA10 0x101b85b8
 // SIZE 0x194
 class Act2Brick : public LegoPathActor {
 public:
@@ -14,6 +15,7 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1007a360
+	// FUNCTION: BETA10 0x10013290
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0438

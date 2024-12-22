@@ -58,6 +58,7 @@ public:
 	// FUNCTION: LEGO1 0x1002f930
 	const char* ClassName() const override // vtable+0x0c
 	{
+		// not in BETA10
 		// STRING: LEGO1 0x100f37d0
 		return "LegoBuildingManager";
 	}

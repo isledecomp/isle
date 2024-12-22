@@ -6,7 +6,9 @@
 // VTABLE: LEGO1 0x100d6c00 LegoAnimActor
 // VTABLE: LEGO1 0x100d6c10 LegoPathActor
 // VTABLE: LEGO1 0x100d6cdc LegoExtraActor
+// VTABLE: BETA10 0x101bc2a0 LegoAnimActor
 // VTABLE: BETA10 0x101bc2b8 LegoPathActor
+// VTABLE: BETA10 0x101bc3a8 LegoExtraActor
 // SIZE 0x1dc
 class LegoExtraActor : public virtual LegoAnimActor {
 public:
@@ -21,6 +23,7 @@ public:
 	~LegoExtraActor() override;
 
 	// FUNCTION: LEGO1 0x1002b7b0
+	// FUNCTION: BETA10 0x100831a0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f3204

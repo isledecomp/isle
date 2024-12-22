@@ -10,6 +10,7 @@
 class MxStillPresenter;
 
 // VTABLE: LEGO1 0x100d46e0
+// VTABLE: BETA10 0x101b9818
 // SIZE 0x24
 class GasStationState : public LegoState {
 public:
@@ -21,6 +22,7 @@ public:
 	GasStationState();
 
 	// FUNCTION: LEGO1 0x100061d0
+	// FUNCTION: BETA10 0x10029f50
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0174
@@ -54,6 +56,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d4650
+// VTABLE: BETA10 0x101b97a0
 // SIZE 0x128
 class GasStation : public LegoWorld {
 public:
@@ -64,6 +67,7 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10004780
+	// FUNCTION: BETA10 0x10029d40
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0168

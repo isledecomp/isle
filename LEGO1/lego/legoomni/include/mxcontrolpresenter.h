@@ -8,6 +8,7 @@ class LegoControlManagerNotificationParam;
 class MxVideoPresenter;
 
 // VTABLE: LEGO1 0x100d7b88
+// VTABLE: BETA10 0x101bf5d0
 // SIZE 0x5c
 class MxControlPresenter : public MxCompositePresenter {
 public:
@@ -15,6 +16,7 @@ public:
 	~MxControlPresenter() override;
 
 	// FUNCTION: LEGO1 0x10044000
+	// FUNCTION: BETA10 0x100ebf80
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0514

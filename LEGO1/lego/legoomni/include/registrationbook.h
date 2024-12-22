@@ -11,6 +11,7 @@ class LegoControlManagerNotificationParam;
 class LegoPathStructNotificationParam;
 
 // VTABLE: LEGO1 0x100d9928
+// VTABLE: BETA10 0x101bfb48
 // SIZE 0x2d0
 class RegistrationBook : public LegoWorld {
 public:
@@ -21,6 +22,7 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10076e10
+	// FUNCTION: BETA10 0x100f4000
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f04c8
