@@ -216,10 +216,67 @@ LegoS32 LegoWEGEdge::VTable0x04()
 	return result;
 }
 
-// STUB: LEGO1 0x1009aea0
-// STUB: BETA10 0x10183e2a
+// FUNCTION: LEGO1 0x1009aea0
+// FUNCTION: BETA10 0x10183e2a
 LegoS32 LegoWEGEdge::FUN_1009aea0()
 {
-	// TODO
-	return -1;
+	LegoU32 localc = FALSE;
+	Mx3DPointFloat local24;
+
+	if (m_numEdges < 3) {
+		return -1;
+	}
+
+	Vector3** local8 = new Vector3*[m_numEdges];
+	LegoS32 i;
+
+	for (i = 0; i < m_numEdges; i++) {
+		local8[i] = m_edges[i]->CWVertex(*this);
+	}
+
+	for (i = 2; i < m_numEdges; i++) {
+		Mx3DPointFloat local3c;
+		Mx3DPointFloat local50;
+		float local28 = 0.0f;
+
+		local3c = *local8[i];
+		local3c -= *local8[i - 1];
+		local50 = *local8[i - 2];
+		local50 -= *local8[i - 1];
+
+		local24.EqualsCross(&local50, &local3c);
+		local28 = local24.LenSquared();
+
+		if (local28 < 0.00001f) {
+			continue;
+		}
+
+		float local58 = sqrt((double) local28);
+		local24 /= local58;
+
+		if (localc) {
+			float local54 = local24.Dot(&m_unk0x14, &local24);
+			if (local54 < 0.98) {
+				delete[] local8;
+				return -2;
+			}
+		}
+		else {
+			m_unk0x14[0] = local24[0];
+			m_unk0x14[1] = local24[1];
+			m_unk0x14[2] = local24[2];
+			m_unk0x14[3] = -local8[i]->Dot(local8[i], &local24);
+			localc = TRUE;
+		}
+	}
+
+	if (local8 != NULL) {
+		delete[] local8;
+	}
+
+	if (!localc) {
+		return -1;
+	}
+
+	return 0;
 }
