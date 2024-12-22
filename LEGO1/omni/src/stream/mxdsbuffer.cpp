@@ -258,7 +258,8 @@ MxResult MxDSBuffer::ParseChunk(
 		MxU32 length = p_header->GetLength() + MxDSChunk::GetHeaderSize() + 8;
 		MxDSBuffer* buffer = new MxDSBuffer();
 
-		if (!buffer || buffer->AllocateBuffer(length, e_allocate) || buffer->CalcBytesRemaining((MxU8*) p_data) ||
+		if (!buffer || buffer->AllocateBuffer(length, e_allocate) != SUCCESS ||
+			buffer->CalcBytesRemaining((MxU8*) p_data) != SUCCESS ||
 			(*p_streamingAction = new MxDSStreamingAction((MxDSStreamingAction&) *p_action)) == NULL) {
 			delete buffer;
 			delete p_header;
