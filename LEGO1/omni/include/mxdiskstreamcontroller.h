@@ -74,10 +74,10 @@ private:
 };
 
 // TEMPLATE: LEGO1 0x100c14d0
-// list<MxDSAction *,allocator<MxDSAction *> >::erase
+// list<MxDSObject *,allocator<MxDSObject *> >::erase
 
 // TEMPLATE: LEGO1 0x100c7330
-// list<MxDSAction *,allocator<MxDSAction *> >::_Buynode
+// list<MxDSObject *,allocator<MxDSObject *> >::_Buynode
 
 // TEMPLATE: LEGO1 0x100c7420
 // list<MxDSBuffer *,allocator<MxDSBuffer *> >::~list<MxDSBuffer *,allocator<MxDSBuffer *> >
