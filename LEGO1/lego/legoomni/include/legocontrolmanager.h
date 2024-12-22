@@ -40,6 +40,7 @@ public:
 // LegoControlManagerNotificationParam::~LegoControlManagerNotificationParam
 
 // VTABLE: LEGO1 0x100d6a80
+// VTABLE: BETA10 0x101bc610
 class LegoControlManager : public MxCore {
 public:
 	LegoControlManager();

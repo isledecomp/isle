@@ -5,12 +5,14 @@
 #include "islepathactor.h"
 
 // VTABLE: LEGO1 0x100d9808
+// VTABLE: BETA10 0x101b91e8
 // SIZE 0x164
 class Bike : public IslePathActor {
 public:
 	Bike();
 
 	// FUNCTION: LEGO1 0x100766f0
+	// FUNCTION: BETA10 0x10024bd0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03d0

@@ -13,6 +13,7 @@ class LegoWorld;
 // VTABLE: LEGO1 0x100d7668 LegoPathActor
 // VTABLE: LEGO1 0x100d7738 LegoAnimActor
 // VTABLE: BETA10 0x101b8a98 LegoPathActor
+// VTABLE: BETA10 0x101b8b88 LegoAnimActor
 // SIZE 0x178
 class Act3Actor : public LegoAnimActor {
 public:
@@ -30,6 +31,7 @@ public:
 	Act3Actor();
 
 	// FUNCTION: LEGO1 0x100431b0
+	// FUNCTION: BETA10 0x1001d320
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03ac
@@ -145,6 +147,7 @@ public:
 	// FUNCTION: LEGO1 0x100430d0
 	const char* ClassName() const override // vtable+0x0c
 	{
+		// Does not exist in BETA10
 		// STRING: LEGO1 0x100f03a0
 		return "Act3Shark";
 	}

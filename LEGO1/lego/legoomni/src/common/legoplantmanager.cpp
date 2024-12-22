@@ -52,6 +52,7 @@ MxS32 LegoPlantManager::g_maxMove[4] = {3, 3, 3, 3};
 MxU32 g_plantAnimationId[4] = {30, 33, 36, 39};
 
 // GLOBAL: LEGO1 0x100f3188
+// GLOBAL: BETA10 0x101f4e70
 char* LegoPlantManager::g_customizeAnimFile = NULL;
 
 // GLOBAL: LEGO1 0x10103180
@@ -65,6 +66,7 @@ LegoPlantManager::LegoPlantManager()
 }
 
 // FUNCTION: LEGO1 0x100262c0
+// FUNCTION: BETA10 0x100c5002
 LegoPlantManager::~LegoPlantManager()
 {
 	delete[] g_customizeAnimFile;
@@ -74,6 +76,8 @@ LegoPlantManager::~LegoPlantManager()
 // FUNCTION: BETA10 0x100c4f90
 void LegoPlantManager::Init()
 {
+	// In BETA10 this appears to be LegoPlantManager::LegoPlantManager()
+
 	for (MxS32 i = 0; i < sizeOfArray(g_plantInfo); i++) {
 		g_plantInfo[i] = g_plantInfoInit[i];
 	}

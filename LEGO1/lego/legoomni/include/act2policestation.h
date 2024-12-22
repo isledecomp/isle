@@ -4,12 +4,14 @@
 #include "legoentity.h"
 
 // VTABLE: LEGO1 0x100d53a8
+// VTABLE: BETA10 0x101bd570
 // SIZE 0x68
 class Act2PoliceStation : public LegoEntity {
 public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x1000e200
+	// FUNCTION: BETA10 0x100a8e00
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03fc

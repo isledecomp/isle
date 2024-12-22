@@ -28,6 +28,7 @@ MxS32 g_unk0x100f31dc = 0;
 Mx3DPointFloat g_unk0x10104c18 = Mx3DPointFloat(0.0f, 2.5f, 0.0f);
 
 // FUNCTION: LEGO1 0x1002a500
+// FUNCTION: BETA10 0x10080908
 LegoExtraActor::LegoExtraActor()
 {
 	m_unk0x70 = 0.0f;

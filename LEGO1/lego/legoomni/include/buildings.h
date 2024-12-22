@@ -6,9 +6,11 @@
 class LegoEventNotificationParam;
 
 // VTABLE: LEGO1 0x100d48a8
+// VTABLE: BETA10 0x101bd818
 // SIZE 0x68
 class RaceStandsEntity : public BuildingEntity {
 	// FUNCTION: LEGO1 0x1000efa0
+	// FUNCTION: BETA10 0x100a9820
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// at LEGO1 0x100f0300, needs no annotation
@@ -28,10 +30,12 @@ class RaceStandsEntity : public BuildingEntity {
 };
 
 // VTABLE: LEGO1 0x100d4a18
+// VTABLE: BETA10 0x101bd7b0
 // SIZE 0x68
 class BeachHouseEntity : public BuildingEntity {
 public:
 	// FUNCTION: LEGO1 0x1000ee80
+	// FUNCTION: BETA10 0x100a96f0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0314
@@ -51,10 +55,12 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d4ab0
+// VTABLE: BETA10 0x101bd748
 // SIZE 0x68
 class PoliceEntity : public BuildingEntity {
 public:
 	// FUNCTION: LEGO1 0x1000ed60
+	// FUNCTION: BETA10 0x100a95c0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0328
@@ -74,10 +80,12 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d4b90
+// VTABLE: BETA10 0x101bd610
 // SIZE 0x68
 class InfoCenterEntity : public BuildingEntity {
 public:
 	// FUNCTION: LEGO1 0x1000ea00
+	// FUNCTION: BETA10 0x100a9230
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f035c
@@ -97,10 +105,12 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d5068
+// VTABLE: BETA10 0x101bd678
 // SIZE 0x68
 class HospitalEntity : public BuildingEntity {
 public:
 	// FUNCTION: LEGO1 0x1000ec40
+	// FUNCTION: BETA10 0x100a9360
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0338
@@ -120,9 +130,11 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d50c0
+// VTABLE: BETA10 0x101bd880
 // SIZE 0x68
 class CaveEntity : public BuildingEntity {
 	// FUNCTION: LEGO1 0x1000f1e0
+	// FUNCTION: BETA10 0x100a9950
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// at LEGO1 0x100f0300, needs no annotation
@@ -142,9 +154,11 @@ class CaveEntity : public BuildingEntity {
 };
 
 // VTABLE: LEGO1 0x100d5200
+// VTABLE: BETA10 0x101bd8e8
 // SIZE 0x68
 class JailEntity : public BuildingEntity {
 	// FUNCTION: LEGO1 0x1000f0c0
+	// FUNCTION: BETA10 0x100a9a80
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// at LEGO1 0x100f0300, needs no annotation
@@ -164,10 +178,12 @@ class JailEntity : public BuildingEntity {
 };
 
 // VTABLE: LEGO1 0x100d5258
+// VTABLE: BETA10 0x101bd6e0
 // SIZE 0x68
 class GasStationEntity : public BuildingEntity {
 public:
 	// FUNCTION: LEGO1 0x1000eb20
+	// FUNCTION: BETA10 0x100a9490
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0348
