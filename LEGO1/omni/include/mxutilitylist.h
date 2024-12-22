@@ -1,7 +1,7 @@
 #ifndef MXUTILITYLIST_H
 #define MXUTILITYLIST_H
 
-#include "mxstl/mxstl.h"
+#include "mxstl/stlcompat.h"
 
 // Probably should be defined somewhere else
 
