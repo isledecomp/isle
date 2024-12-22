@@ -29,9 +29,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100d07c0
-	virtual MxResult SetResourceToGet(MxStreamController* p_resource)
+	virtual MxResult SetResourceToGet(MxStreamController* p_pLookup)
 	{
-		m_pLookup = p_resource;
+		m_pLookup = p_pLookup;
 		return SUCCESS;
 	} // vtable+0x14
 
