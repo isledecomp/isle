@@ -43,12 +43,20 @@ public:
 		return !strcmp(p_name, MxStreamController::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	virtual MxResult Open(const char* p_filename);                        // vtable+0x14
-	virtual MxResult VTable0x18(undefined4, undefined4);                  // vtable+0x18
-	virtual MxResult VTable0x1c(undefined4, undefined4);                  // vtable+0x1c
-	virtual MxResult VTable0x20(MxDSAction* p_action);                    // vtable+0x20
-	virtual MxResult VTable0x24(MxDSAction* p_action);                    // vtable+0x24
-	virtual MxDSStreamingAction* VTable0x28();                            // vtable+0x28
+	virtual MxResult Open(const char* p_filename); // vtable+0x14
+
+	// FUNCTION: LEGO1 0x100b9400
+	virtual MxResult VTable0x18(undefined4, undefined4) { return FAILURE; } // vtable+0x18
+
+	// FUNCTION: LEGO1 0x100b9410
+	virtual MxResult VTable0x1c(undefined4, undefined4) { return FAILURE; } // vtable+0x1c
+
+	virtual MxResult VTable0x20(MxDSAction* p_action); // vtable+0x20
+	virtual MxResult VTable0x24(MxDSAction* p_action); // vtable+0x24
+
+	// FUNCTION: LEGO1 0x100b9420
+	virtual MxDSStreamingAction* VTable0x28() { return NULL; } // vtable+0x28
+
 	virtual MxResult VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval); // vtable+0x2c
 	virtual MxResult VTable0x30(MxDSAction* p_action);                    // vtable+0x30
 

@@ -16,24 +16,6 @@ DECOMP_SIZE_ASSERT(MxStreamController, 0x64)
 DECOMP_SIZE_ASSERT(MxNextActionDataStart, 0x14)
 DECOMP_SIZE_ASSERT(MxNextActionDataStartList, 0x0c)
 
-// FUNCTION: LEGO1 0x100b9400
-MxResult MxStreamController::VTable0x18(undefined4, undefined4)
-{
-	return FAILURE;
-}
-
-// FUNCTION: LEGO1 0x100b9410
-MxResult MxStreamController::VTable0x1c(undefined4, undefined4)
-{
-	return FAILURE;
-}
-
-// FUNCTION: LEGO1 0x100b9420
-MxDSStreamingAction* MxStreamController::VTable0x28()
-{
-	return NULL;
-}
-
 // FUNCTION: LEGO1 0x100c0b90
 MxStreamController::MxStreamController()
 {
