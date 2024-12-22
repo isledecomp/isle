@@ -70,7 +70,7 @@ public:
 	MxResult Tickle() override; // vtable+08
 
 	// FUNCTION: LEGO1 0x10045110
-    // FUNCTION: BETA10 0x100ba560
+	// FUNCTION: BETA10 0x100ba560
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f11b8

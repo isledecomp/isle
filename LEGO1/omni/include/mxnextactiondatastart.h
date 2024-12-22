@@ -17,7 +17,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100c1900
-    // FUNCTION: BETA10 0x1014f660
+	// FUNCTION: BETA10 0x1014f660
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101025a0

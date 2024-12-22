@@ -12,7 +12,7 @@ public:
 	DuneBuggy();
 
 	// FUNCTION: LEGO1 0x10067c30
-    // FUNCTION: BETA10 0x100278a0
+	// FUNCTION: BETA10 0x100278a0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0410

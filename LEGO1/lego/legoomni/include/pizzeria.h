@@ -16,7 +16,7 @@ public:
 	PizzeriaState();
 
 	// FUNCTION: LEGO1 0x10017c20
-    // FUNCTION: BETA10 0x100f0020
+	// FUNCTION: BETA10 0x100f0020
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0370
@@ -55,7 +55,7 @@ public:
 	Pizzeria() : m_pizzeriaState(NULL) {}
 
 	// FUNCTION: LEGO1 0x1000e780
-    // FUNCTION: BETA10 0x100a81f0
+	// FUNCTION: BETA10 0x100a81f0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0380

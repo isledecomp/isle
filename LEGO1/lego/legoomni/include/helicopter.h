@@ -15,7 +15,7 @@ public:
 	HelicopterState() : m_unk0x08(0) {}
 
 	// FUNCTION: LEGO1 0x1000e0d0
-    // FUNCTION: BETA10 0x100a7cc0
+	// FUNCTION: BETA10 0x100a7cc0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0144

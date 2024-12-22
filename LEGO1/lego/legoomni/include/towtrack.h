@@ -15,7 +15,7 @@ public:
 	TowTrackMissionState();
 
 	// FUNCTION: LEGO1 0x1004dfa0
-    // FUNCTION: BETA10 0x100f8920
+	// FUNCTION: BETA10 0x100f8920
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f00bc
@@ -112,7 +112,7 @@ public:
 	~TowTrack() override;
 
 	// FUNCTION: LEGO1 0x1004c7c0
-    // FUNCTION: BETA10 0x100f8440
+	// FUNCTION: BETA10 0x100f8440
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03b8

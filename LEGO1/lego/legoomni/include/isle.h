@@ -37,7 +37,7 @@ public:
 	Act1State();
 
 	// FUNCTION: LEGO1 0x100338a0
-    // FUNCTION: BETA10 0x10036040
+	// FUNCTION: BETA10 0x10036040
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0154

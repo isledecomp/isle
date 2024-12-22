@@ -15,7 +15,7 @@ public:
 	MxDSAnim& operator=(MxDSAnim& p_dsAnim);
 
 	// FUNCTION: LEGO1 0x100c9060
-    // FUNCTION: BETA10 0x1015d890
+	// FUNCTION: BETA10 0x1015d890
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101025d8

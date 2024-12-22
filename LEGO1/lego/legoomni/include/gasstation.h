@@ -22,7 +22,7 @@ public:
 	GasStationState();
 
 	// FUNCTION: LEGO1 0x100061d0
-    // FUNCTION: BETA10 0x10029f50
+	// FUNCTION: BETA10 0x10029f50
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0174
@@ -67,7 +67,7 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10004780
-    // FUNCTION: BETA10 0x10029d40
+	// FUNCTION: BETA10 0x10029d40
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0168

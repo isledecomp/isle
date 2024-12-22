@@ -15,7 +15,7 @@ public:
 	MxDSParallelAction& operator=(MxDSParallelAction& p_dsParallelAction);
 
 	// FUNCTION: LEGO1 0x100caf00
-    // FUNCTION: BETA10 0x1015b3a0
+	// FUNCTION: BETA10 0x1015b3a0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102608

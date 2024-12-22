@@ -16,7 +16,7 @@ public:
 	MxDSMultiAction& operator=(MxDSMultiAction& p_dsMultiAction);
 
 	// FUNCTION: LEGO1 0x100c9f50
-    // FUNCTION: BETA10 0x1015b190
+	// FUNCTION: BETA10 0x1015b190
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10101dbc

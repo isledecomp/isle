@@ -23,7 +23,7 @@ public:
 	~LegoAct2State() override {}
 
 	// FUNCTION: LEGO1 0x1000df80
-    // FUNCTION: BETA10 0x1003c7e0
+	// FUNCTION: BETA10 0x1003c7e0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0428

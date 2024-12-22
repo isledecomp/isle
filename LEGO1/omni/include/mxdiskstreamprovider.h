@@ -31,7 +31,7 @@ public:
 	~MxDiskStreamProvider() override;
 
 	// FUNCTION: LEGO1 0x100d1160
-    // FUNCTION: BETA10 0x10164090
+	// FUNCTION: BETA10 0x10164090
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x1010287c

@@ -20,7 +20,7 @@ public:
 	~PoliceState() override {}
 
 	// FUNCTION: LEGO1 0x1005e860
-    // FUNCTION: BETA10 0x100f0d40
+	// FUNCTION: BETA10 0x100f0d40
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0444
@@ -60,7 +60,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x1005e1e0
-    // FUNCTION: BETA10 0x100f0c50
+	// FUNCTION: BETA10 0x100f0c50
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0450

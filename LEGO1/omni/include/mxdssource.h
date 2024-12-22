@@ -15,7 +15,7 @@ public:
 	~MxDSSource() override { delete[] m_pBuffer; }
 
 	// FUNCTION: LEGO1 0x100c0010
-    // FUNCTION: BETA10 0x10148cc0
+	// FUNCTION: BETA10 0x10148cc0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102588

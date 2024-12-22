@@ -91,7 +91,7 @@ public:
 	~LegoCarBuild() override;
 
 	// FUNCTION: LEGO1 0x10022940
-    // FUNCTION: BETA10 0x10070090
+	// FUNCTION: BETA10 0x10070090
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0504

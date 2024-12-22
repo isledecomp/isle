@@ -57,7 +57,7 @@ public:
 	~AnimState() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10065070
-    // FUNCTION: BETA10 0x1004afe0
+	// FUNCTION: BETA10 0x1004afe0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0460
@@ -144,7 +144,7 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1005ec80
-    // FUNCTION: BETA10 0x100483d0
+	// FUNCTION: BETA10 0x100483d0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f7508

@@ -25,7 +25,7 @@ public:
 	JukeBoxState() : m_music(e_pasquell), m_active(FALSE) {}
 
 	// FUNCTION: LEGO1 0x1000f310
-    // FUNCTION: BETA10 0x100389c0
+	// FUNCTION: BETA10 0x100389c0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f02bc
@@ -60,7 +60,7 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1005d6f0
-    // FUNCTION: BETA10 0x100388d0
+	// FUNCTION: BETA10 0x100388d0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f02cc

@@ -104,7 +104,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10058aa0
-    // FUNCTION: BETA10 0x1008f830
+	// FUNCTION: BETA10 0x1008f830
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f671c

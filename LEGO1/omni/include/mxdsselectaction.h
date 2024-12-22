@@ -17,7 +17,7 @@ public:
 	MxDSSelectAction& operator=(MxDSSelectAction& p_dsSelectAction);
 
 	// FUNCTION: LEGO1 0x100cb6f0
-    // FUNCTION: BETA10 0x1015b460
+	// FUNCTION: BETA10 0x1015b460
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x1010261c

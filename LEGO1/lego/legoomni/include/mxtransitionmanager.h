@@ -21,7 +21,7 @@ public:
 	MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1004b950
-    // FUNCTION: BETA10 0x100ed8e0
+	// FUNCTION: BETA10 0x100ed8e0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		return "MxTransitionManager";

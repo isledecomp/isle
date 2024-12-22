@@ -15,7 +15,7 @@ public:
 	MxDSSound& operator=(MxDSSound& p_dsSound);
 
 	// FUNCTION: LEGO1 0x100c9330
-    // FUNCTION: BETA10 0x1015d950
+	// FUNCTION: BETA10 0x1015d950
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101025e4

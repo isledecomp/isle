@@ -15,7 +15,7 @@ public:
 	MxDSStill& operator=(MxDSStill& p_dsStill);
 
 	// FUNCTION: LEGO1 0x100c9930
-    // FUNCTION: BETA10 0x1015dad0
+	// FUNCTION: BETA10 0x1015dad0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101025fc

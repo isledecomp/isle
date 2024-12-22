@@ -16,7 +16,7 @@ public:
 	MxDSSerialAction& operator=(MxDSSerialAction& p_dsSerialAction);
 
 	// FUNCTION: LEGO1 0x100caad0
-    // FUNCTION: BETA10 0x1015b2b0
+	// FUNCTION: BETA10 0x1015b2b0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f75dc

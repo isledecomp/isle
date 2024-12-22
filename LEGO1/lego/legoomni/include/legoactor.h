@@ -25,7 +25,7 @@ public:
 	~LegoActor() override;
 
 	// FUNCTION: LEGO1 0x1002d210
-    // FUNCTION: BETA10 0x10012760
+	// FUNCTION: BETA10 0x10012760
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0124

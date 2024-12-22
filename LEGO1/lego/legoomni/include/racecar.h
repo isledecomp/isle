@@ -13,7 +13,7 @@ public:
 	~RaceCar() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10028270
-    // FUNCTION: BETA10 0x100f1150
+	// FUNCTION: BETA10 0x100f1150
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03e0

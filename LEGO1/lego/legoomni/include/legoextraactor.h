@@ -23,7 +23,7 @@ public:
 	~LegoExtraActor() override;
 
 	// FUNCTION: LEGO1 0x1002b7b0
-    // FUNCTION: BETA10 0x100831a0
+	// FUNCTION: BETA10 0x100831a0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f3204

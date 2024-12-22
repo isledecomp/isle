@@ -14,7 +14,7 @@ public:
 	MxRAMStreamController() {}
 
 	// FUNCTION: LEGO1 0x100b9430
-    // FUNCTION: BETA10 0x10146c10
+	// FUNCTION: BETA10 0x10146c10
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102118

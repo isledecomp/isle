@@ -12,7 +12,7 @@ public:
 	Motocycle();
 
 	// FUNCTION: LEGO1 0x10035840
-    // FUNCTION: BETA10 0x100e83c0
+	// FUNCTION: BETA10 0x100e83c0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f38e8

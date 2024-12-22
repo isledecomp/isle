@@ -15,7 +15,7 @@ public:
 	~SkateBoard() override;
 
 	// FUNCTION: LEGO1 0x1000fdd0
-    // FUNCTION: BETA10 0x100f55d0
+	// FUNCTION: BETA10 0x100f55d0
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f041c

@@ -16,7 +16,7 @@ public:
 	ScoreState() : m_playCubeTutorial(TRUE) {}
 
 	// FUNCTION: LEGO1 0x1000de40
-    // FUNCTION: BETA10 0x100a7a70
+	// FUNCTION: BETA10 0x100a7a70
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0084
@@ -60,7 +60,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100010c0
-    // FUNCTION: BETA10 0x100f4f20
+	// FUNCTION: BETA10 0x100f4f20
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0050
