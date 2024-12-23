@@ -398,7 +398,7 @@ void MxDisplaySurface::VTable0x28(
 			MxU16* p16bitPal = m_16bitPal;
 
 			MxS32 i;
-			if (stride || length) {
+			if (!stride && !length) {
 				while (height--) {
 					MxU8* surfaceBefore = surface;
 
@@ -1131,8 +1131,7 @@ void MxDisplaySurface::VTable0x24(
 			MxU16* p16bitPal = m_16bitPal;
 
 			MxS32 i;
-			// DECOMP: branches swapped from VTable0x28
-			if (stride || length) {
+			if (!stride && !length) {
 				while (height--) {
 					MxU8* surfaceBefore = surface;
 
@@ -1146,10 +1145,7 @@ void MxDisplaySurface::VTable0x24(
 						surface += 2;
 					}
 
-					data += stride;
-					surface += length;
-
-					memcpy(surface, surfaceBefore, p_width * 4);
+					memcpy(surface, surfaceBefore, copyWidth);
 					surface += p_desc->lPitch;
 				}
 			}
@@ -1167,7 +1163,10 @@ void MxDisplaySurface::VTable0x24(
 						surface += 2;
 					}
 
-					memcpy(surface, surfaceBefore, copyWidth);
+					data += stride;
+					surface += length;
+
+					memcpy(surface, surfaceBefore, p_width * 4);
 					surface += p_desc->lPitch;
 				}
 			}
