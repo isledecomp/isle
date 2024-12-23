@@ -27,14 +27,14 @@ public:
 	virtual void Destroy();                              // vtable+0x1c
 	virtual void SetPalette(MxPalette* p_palette);       // vtable+0x20
 	virtual void VTable0x24(
-		LPDDSURFACEDESC,
-		MxBitmap*,
-		undefined4,
-		undefined4,
-		undefined4,
-		undefined4,
-		undefined4,
-		undefined4
+		LPDDSURFACEDESC p_desc,
+		MxBitmap* p_bitmap,
+		MxS32 p_left,
+		MxS32 p_top,
+		MxS32 p_right,
+		MxS32 p_bottom,
+		MxS32 p_width,
+		MxS32 p_height
 	); // vtable+0x24
 	virtual void VTable0x28(
 		MxBitmap* p_bitmap,
@@ -45,16 +45,16 @@ public:
 		MxS32 p_width,
 		MxS32 p_height
 	); // vtable+0x28
-	virtual MxBool VTable0x2c(
-		LPDDSURFACEDESC,
-		MxBitmap*,
-		undefined4,
-		undefined4,
-		undefined4,
-		undefined4,
-		undefined4,
-		undefined4,
-		MxBool
+	virtual void VTable0x2c(
+		LPDDSURFACEDESC p_desc,
+		MxBitmap* p_bitmap,
+		MxS32 p_left,
+		MxS32 p_top,
+		MxS32 p_right,
+		MxS32 p_bottom,
+		MxS32 p_width,
+		MxS32 p_height,
+		MxBool p_RLE
 	); // vtable+0x2c
 	virtual void VTable0x30(
 		MxBitmap* p_bitmap,
@@ -64,7 +64,7 @@ public:
 		MxS32 p_bottom,
 		MxS32 p_width,
 		MxS32 p_height,
-		MxBool p_und
+		MxBool p_RLE
 	); // vtable+0x30
 	virtual undefined4 VTable0x34(
 		undefined4,
