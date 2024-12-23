@@ -66,13 +66,13 @@ public:
 		MxS32 p_height,
 		MxBool p_RLE
 	); // vtable+0x30
-	virtual undefined4 VTable0x34(
-		undefined4,
-		undefined4,
-		undefined4,
-		undefined4,
-		undefined4,
-		undefined4
+	virtual void VTable0x34(
+		MxU8* p_pixels,
+		MxS32 p_bpp,
+		MxS32 p_width,
+		MxS32 p_height,
+		MxS32 p_x,
+		MxS32 p_y
 	); // vtable+0x34
 	virtual void Display(
 		MxS32 p_left,
