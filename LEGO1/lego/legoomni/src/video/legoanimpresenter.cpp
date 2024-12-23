@@ -404,13 +404,13 @@ LegoROI* LegoAnimPresenter::FUN_100699e0(const LegoChar* p_und)
 // FUNCTION: LEGO1 0x10069b10
 void LegoAnimPresenter::FUN_10069b10()
 {
-	LegoAnimStructMap map;
+	LegoAnimStructMap anims;
 
 	if (m_unk0x8c != NULL) {
 		memset(m_unk0x8c, 0, m_unk0x94 * sizeof(*m_unk0x8c));
 	}
 
-	FUN_1006a3c0(map, m_anim->GetRoot(), NULL);
+	FUN_1006a3c0(anims, m_anim->GetRoot(), NULL);
 
 	if (m_roiMap != NULL) {
 		delete[] m_roiMap;
@@ -418,10 +418,10 @@ void LegoAnimPresenter::FUN_10069b10()
 	}
 
 	m_roiMapSize = 0;
-	m_roiMap = new LegoROI*[map.size() + 1];
-	memset(m_roiMap, 0, (map.size() + 1) * sizeof(*m_roiMap));
+	m_roiMap = new LegoROI*[anims.size() + 1];
+	memset(m_roiMap, 0, (anims.size() + 1) * sizeof(*m_roiMap));
 
-	for (LegoAnimStructMap::iterator it = map.begin(); it != map.end();) {
+	for (LegoAnimStructMap::iterator it = anims.begin(); it != anims.end();) {
 		MxU32 index = (*it).second.m_index;
 		m_roiMap[index] = (*it).second.m_roi;
 

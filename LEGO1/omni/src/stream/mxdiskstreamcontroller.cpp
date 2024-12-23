@@ -35,9 +35,9 @@ MxDiskStreamController::~MxDiskStreamController()
 #endif
 	}
 
-	MxDSAction* action;
-	while (m_unk0x3c.PopFront(action)) {
-		delete action;
+	MxDSObject* object;
+	while (m_unk0x3c.PopFront(object)) {
+		delete object;
 	}
 
 	if (m_provider) {
@@ -47,12 +47,12 @@ MxDiskStreamController::~MxDiskStreamController()
 
 	FUN_100c8720();
 
-	while (m_list0x80.PopFront(action)) {
-		FUN_100c7cb0((MxDSStreamingAction*) action);
+	while (m_list0x80.PopFront(object)) {
+		FUN_100c7cb0((MxDSStreamingAction*) object);
 	}
 
-	while (m_list0x64.PopFront(action)) {
-		FUN_100c7cb0((MxDSStreamingAction*) action);
+	while (m_list0x64.PopFront(object)) {
+		FUN_100c7cb0((MxDSStreamingAction*) object);
 	}
 
 	while (!m_list0x74.empty()) {
@@ -162,7 +162,7 @@ void MxDiskStreamController::FUN_100c7980()
 MxDSStreamingAction* MxDiskStreamController::VTable0x28()
 {
 	AUTOLOCK(m_criticalSection);
-	MxDSAction* oldAction;
+	MxDSObject* oldAction;
 	MxDSStreamingAction* result = NULL;
 	MxU32 filesize = m_provider->GetFileSize();
 
@@ -252,10 +252,9 @@ MxDSStreamingAction* MxDiskStreamController::FUN_100c7db0()
 {
 	AUTOLOCK(m_criticalSection);
 
-	for (MxStreamListMxNextActionDataStart::iterator it = m_nextActionList.begin(); it != m_nextActionList.end();
-		 it++) {
+	for (MxNextActionDataStartList::iterator it = m_nextActionList.begin(); it != m_nextActionList.end(); it++) {
 		MxNextActionDataStart* data = *it;
-		for (MxStreamListMxDSAction::iterator it2 = m_list0x64.begin(); it2 != m_list0x64.end(); it2++) {
+		for (MxDSObjectList::iterator it2 = m_list0x64.begin(); it2 != m_list0x64.end(); it2++) {
 			MxDSStreamingAction* streamingAction = (MxDSStreamingAction*) *it2;
 			if (streamingAction->GetObjectId() == data->GetObjectId() &&
 				streamingAction->GetUnknown24() == data->GetUnknown24() &&
@@ -320,7 +319,7 @@ void MxDiskStreamController::FUN_100c8120(MxDSAction* p_action)
 	}
 
 	while (TRUE) {
-		MxDSAction* found = m_unk0x54.FindAndErase(p_action);
+		MxDSObject* found = m_unk0x54.FindAndErase(p_action);
 		if (!found) {
 			break;
 		}

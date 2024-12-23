@@ -2,7 +2,8 @@
 
 #include "mxstreamcontroller.h"
 
-DECOMP_SIZE_ASSERT(MxDSSubscriber, 0x4c);
+DECOMP_SIZE_ASSERT(MxDSSubscriber, 0x4c)
+DECOMP_SIZE_ASSERT(MxDSSubscriberList, 0x0c)
 
 // FUNCTION: LEGO1 0x100b7bb0
 MxDSSubscriber::MxDSSubscriber()
@@ -134,4 +135,19 @@ void MxDSSubscriber::FreeDataChunk(MxStreamChunk* p_chunk)
 			delete p_chunk;
 		}
 	}
+}
+
+// FUNCTION: LEGO1 0x100b8450
+// FUNCTION: BETA10 0x10134c1d
+MxDSSubscriber* MxDSSubscriberList::Find(MxDSObject* p_object)
+{
+	for (iterator it = begin(); it != end(); it++) {
+		if (p_object->GetObjectId() == -1 || p_object->GetObjectId() == (*it)->GetObjectId()) {
+			if (p_object->GetUnknown24() == -2 || p_object->GetUnknown24() == (*it)->GetUnknown48()) {
+				return *it;
+			}
+		}
+	}
+
+	return NULL;
 }

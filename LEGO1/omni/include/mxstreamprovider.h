@@ -28,12 +28,21 @@ public:
 		return !strcmp(p_name, MxStreamProvider::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	virtual MxResult SetResourceToGet(MxStreamController* p_resource); // vtable+0x14
-	virtual MxU32 GetFileSize() = 0;                                   // vtable+0x18
-	virtual MxS32 GetStreamBuffersNum() = 0;                           // vtable+0x1c
-	virtual void VTable0x20(MxDSAction* p_action);                     // vtable+0x20
-	virtual MxU32 GetLengthInDWords() = 0;                             // vtable+0x24
-	virtual MxU32* GetBufferForDWords() = 0;                           // vtable+0x28
+	// FUNCTION: LEGO1 0x100d07c0
+	virtual MxResult SetResourceToGet(MxStreamController* p_pLookup)
+	{
+		m_pLookup = p_pLookup;
+		return SUCCESS;
+	} // vtable+0x14
+
+	virtual MxU32 GetFileSize() = 0;         // vtable+0x18
+	virtual MxS32 GetStreamBuffersNum() = 0; // vtable+0x1c
+
+	// FUNCTION: LEGO1 0x100d07d0
+	virtual void VTable0x20(MxDSAction* p_action) {} // vtable+0x20
+
+	virtual MxU32 GetLengthInDWords() = 0;   // vtable+0x24
+	virtual MxU32* GetBufferForDWords() = 0; // vtable+0x28
 
 protected:
 	MxStreamController* m_pLookup; // 0x08

@@ -340,7 +340,7 @@ MxLong MxOmni::HandleEndAction(MxParam& p_param)
 	MxStreamController* controller = Streamer()->GetOpenStream(action->GetAtomId().GetInternal());
 
 	if (controller != NULL) {
-		action = controller->GetUnk0x54().Find(action);
+		action = (MxDSAction*) controller->GetUnk0x54().Find(action);
 		if (action) {
 			if (ActionSourceEquals(action, "LegoLoopingAnimPresenter") == FALSE) {
 				delete controller->GetUnk0x54().FindAndErase(action);
@@ -399,9 +399,9 @@ void MxOmni::SetSound3D(MxBool p_use3dSound)
 MxBool MxOmni::DoesEntityExist(MxDSAction& p_dsAction)
 {
 	if (m_streamer->FUN_100b9b30(p_dsAction)) {
-		MxNotificationPtrList* queue = m_notificationManager->GetQueue();
+		MxNotificationPtrList* notifications = m_notificationManager->GetQueue();
 
-		if (!queue || queue->size() == 0) {
+		if (!notifications || notifications->size() == 0) {
 			return TRUE;
 		}
 	}

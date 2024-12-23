@@ -143,18 +143,18 @@ void LegoHideAnimPresenter::FUN_1006db60(LegoTreeNode* p_node, LegoTime p_time)
 // FUNCTION: BETA10 0x100532fd
 void LegoHideAnimPresenter::FUN_1006dc10()
 {
-	LegoHideAnimStructMap map;
+	LegoHideAnimStructMap anims;
 
-	FUN_1006e3f0(map, m_anim->GetRoot());
+	FUN_1006e3f0(anims, m_anim->GetRoot());
 
 	if (m_boundaryMap != NULL) {
 		delete[] m_boundaryMap;
 	}
 
-	m_boundaryMap = new LegoPathBoundary*[map.size() + 1];
+	m_boundaryMap = new LegoPathBoundary*[anims.size() + 1];
 	m_boundaryMap[0] = NULL;
 
-	for (LegoHideAnimStructMap::iterator it = map.begin(); !(it == map.end()); it++) {
+	for (LegoHideAnimStructMap::iterator it = anims.begin(); !(it == anims.end()); it++) {
 		m_boundaryMap[(*it).second.m_index] = (*it).second.m_boundary;
 		delete[] const_cast<char*>((*it).first);
 	}

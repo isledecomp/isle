@@ -4,9 +4,24 @@
 #include "decomp.h"
 #include "mxatom.h"
 #include "mxcore.h"
+#include "mxutilitylist.h"
 
 class MxDSFile;
+class MxDSObject;
 class MxPresenter;
+
+// SIZE 0x0c
+class MxDSObjectList : public MxUtilityList<MxDSObject*> {
+public:
+	// FUNCTION: BETA10 0x10150e30
+	MxDSObject* FindAndErase(MxDSObject* p_action) { return FindInternal(p_action, TRUE); }
+
+	// FUNCTION: BETA10 0x10150fc0
+	MxDSObject* Find(MxDSObject* p_action) { return FindInternal(p_action, FALSE); }
+
+private:
+	MxDSObject* FindInternal(MxDSObject* p_action, MxBool p_delete);
+};
 
 // VTABLE: LEGO1 0x100dc868
 // VTABLE: BETA10 0x101c23f0
@@ -106,5 +121,8 @@ protected:
 
 MxDSObject* DeserializeDSObjectDispatch(MxU8*&, MxS16);
 MxDSObject* CreateStreamObject(MxDSFile*, MxS16);
+
+// TEMPLATE: BETA10 0x10150950
+// MxUtilityList<MxDSObject *>::PopFront
 
 #endif // MXDSOBJECT_H

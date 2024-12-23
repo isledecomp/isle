@@ -5,7 +5,6 @@
 #include "decomp.h"
 #include "mxcriticalsection.h"
 #include "mxdsaction.h"
-#include "mxstreamlist.h"
 #include "mxstreamprovider.h"
 #include "mxthread.h"
 
@@ -63,7 +62,7 @@ private:
 	MxBool m_remainingWork;              // 0x34
 	MxBool m_unk0x35;                    // 0x35
 	MxCriticalSection m_criticalSection; // 0x38
-	MxStreamListMxDSAction m_list;       // 0x54
+	MxDSObjectList m_list;               // 0x54
 };
 
 // SYNTHETIC: LEGO1 0x100d10a0

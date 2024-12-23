@@ -43,7 +43,7 @@ MxResult MxRAMStreamController::VTable0x20(MxDSAction* p_action)
 
 	if (p_action->GetUnknown24() == -1) {
 		p_action->SetUnknown24(-3);
-		MxDSAction* action = m_unk0x54.Find(p_action);
+		MxDSObject* action = m_unk0x54.Find(p_action);
 		if (action != NULL) {
 			unk0x24 = action->GetUnknown24() + 1;
 		}
