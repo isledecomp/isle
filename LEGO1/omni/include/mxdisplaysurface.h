@@ -45,7 +45,7 @@ public:
 		MxS32 p_width,
 		MxS32 p_height
 	); // vtable+0x28
-	virtual MxBool VTable0x2c(
+	virtual void VTable0x2c(
 		LPDDSURFACEDESC p_ddSurface,
 		MxBitmap* p_bitmap,
 		MxS32 p_left,
