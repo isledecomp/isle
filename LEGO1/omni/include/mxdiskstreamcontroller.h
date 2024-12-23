@@ -92,6 +92,9 @@ private:
 // List<MxDSBuffer *>::~List<MxDSBuffer *>
 
 // TEMPLATE: LEGO1 0x100c7ef0
-// list<MxNextActionDataStart *>::insert
+// list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >::insert
+
+// TEMPLATE: BETA10 0x10150e60
+// MxUtilityList<MxNextActionDataStart *>::PushBack
 
 #endif // MXDISKSTREAMCONTROLLER_H

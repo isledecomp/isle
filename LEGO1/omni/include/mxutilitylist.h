@@ -18,6 +18,9 @@ public:
 		this->pop_front();
 		return TRUE;
 	}
+
+	// Note: does not take a reference
+	void PushBack(T p_obj) { this->push_back(p_obj); }
 };
 
 #endif // MXUTILITYLIST_H

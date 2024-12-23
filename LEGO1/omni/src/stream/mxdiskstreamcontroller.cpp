@@ -248,27 +248,31 @@ MxResult MxDiskStreamController::FUN_100c7d10()
 }
 
 // FUNCTION: LEGO1 0x100c7db0
+// FUNCTION: BETA10 0x101551d0
 MxDSStreamingAction* MxDiskStreamController::FUN_100c7db0()
 {
 	AUTOLOCK(m_criticalSection);
 
 	for (MxNextActionDataStartList::iterator it = m_nextActionList.begin(); it != m_nextActionList.end(); it++) {
 		MxNextActionDataStart* data = *it;
+
 		for (MxDSObjectList::iterator it2 = m_list0x64.begin(); it2 != m_list0x64.end(); it2++) {
 			MxDSStreamingAction* streamingAction = (MxDSStreamingAction*) *it2;
+
 			if (streamingAction->GetObjectId() == data->GetObjectId() &&
 				streamingAction->GetUnknown24() == data->GetUnknown24() &&
 				streamingAction->GetBufferOffset() == data->GetData()) {
 				m_nextActionList.erase(it);
 
 				data->SetData(m_provider->GetFileSize() + data->GetData());
-				m_nextActionList.push_back(data);
+				m_nextActionList.PushBack(data);
 
 				m_list0x64.erase(it2);
 				return streamingAction;
 			}
 		}
 	}
+
 	return NULL;
 }
 
