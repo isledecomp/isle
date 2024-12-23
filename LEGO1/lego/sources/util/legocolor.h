@@ -1,7 +1,7 @@
 #ifndef __LEGOCOLOR_H
 #define __LEGOCOLOR_H
 
-#include "legotypes.h"
+#include "misc/legotypes.h"
 
 class LegoStorage;
 

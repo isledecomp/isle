@@ -1,11 +1,11 @@
 
 #include "legolod.h"
 
-#include "geom/legomesh.h"
 #include "legoroi.h"
 #include "misc/legocontainer.h"
 #include "misc/legostorage.h"
 #include "tgl/d3drm/impl.h"
+#include "util/legomesh.h"
 
 DECOMP_SIZE_ASSERT(LODObject, 0x04)
 DECOMP_SIZE_ASSERT(ViewLOD, 0x0c)

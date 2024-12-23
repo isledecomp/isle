@@ -2,7 +2,7 @@
 #define __LEGOMESH_H
 
 #include "decomp.h"
-#include "misc/legocolor.h"
+#include "legocolor.h"
 #include "misc/legotypes.h"
 
 class LegoStorage;
