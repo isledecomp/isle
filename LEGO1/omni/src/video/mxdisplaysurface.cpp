@@ -491,7 +491,7 @@ void MxDisplaySurface::VTable0x30(
 	MxS32 p_bottom,
 	MxS32 p_width,
 	MxS32 p_height,
-	MxBool p_und
+	MxBool p_RLE
 )
 {
 	if (!GetRectIntersection(
@@ -527,7 +527,7 @@ void MxDisplaySurface::VTable0x30(
 	switch (m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount) {
 	case 8: {
 		MxU8* surface = (MxU8*) ddsd.lpSurface + p_right + (p_bottom * ddsd.lPitch);
-		if (p_und) {
+		if (p_RLE) {
 			MxS32 size = p_bitmap->GetBmiHeader()->biSizeImage;
 			DrawTransparentRLE(data, surface, size, p_width, p_height, ddsd.lPitch, 8);
 		}
@@ -553,7 +553,7 @@ void MxDisplaySurface::VTable0x30(
 	}
 	case 16: {
 		MxU8* surface = (MxU8*) ddsd.lpSurface + (2 * p_right) + (p_bottom * ddsd.lPitch);
-		if (p_und) {
+		if (p_RLE) {
 			MxS32 size = p_bitmap->GetBmiHeader()->biSizeImage;
 			DrawTransparentRLE(data, surface, size, p_width, p_height, ddsd.lPitch, 16);
 		}

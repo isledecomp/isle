@@ -64,7 +64,7 @@ public:
 		MxS32 p_bottom,
 		MxS32 p_width,
 		MxS32 p_height,
-		MxBool p_und
+		MxBool p_RLE
 	); // vtable+0x30
 	virtual undefined4 VTable0x34(
 		undefined4,
