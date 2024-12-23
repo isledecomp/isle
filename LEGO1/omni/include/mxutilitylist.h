@@ -20,7 +20,7 @@ public:
 	}
 
 	// Note: does not take a reference
-	void PushBack(T p_obj) { push_back(p_obj); }
+	void PushBack(T p_obj) { this->push_back(p_obj); }
 };
 
 #endif // MXUTILITYLIST_H
