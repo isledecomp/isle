@@ -1,6 +1,7 @@
 #include "mxdisplaysurface.h"
 
 #include "mxbitmap.h"
+#include "mxdebug.h"
 #include "mxmisc.h"
 #include "mxomni.h"
 #include "mxpalette.h"
@@ -739,10 +740,75 @@ sixteen_bit:
 	}
 }
 
-// STUB: LEGO1 0x100bb850
-undefined4 MxDisplaySurface::VTable0x34(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
+// FUNCTION: LEGO1 0x100bb850
+// FUNCTION: BETA10 0x10141191
+void MxDisplaySurface::VTable0x34(MxU8* p_pixels, MxS32 p_bpp, MxS32 p_width, MxS32 p_height, MxS32 p_x, MxS32 p_y)
 {
-	return 0;
+	DDSURFACEDESC surfaceDesc;
+	memset(&surfaceDesc, 0, sizeof(surfaceDesc));
+	surfaceDesc.dwSize = sizeof(surfaceDesc);
+
+	HRESULT result = m_ddSurface2->Lock(NULL, &surfaceDesc, DDLOCK_WAIT, NULL);
+
+	if (result == DDERR_SURFACELOST) {
+		m_ddSurface2->Restore();
+		result = m_ddSurface2->Lock(NULL, &surfaceDesc, DDLOCK_WAIT, NULL);
+	}
+
+	if (result == DD_OK) {
+		MxU8* pixels = p_pixels;
+
+		switch (m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount) {
+		case 8: {
+			if (p_bpp == 16) {
+				MxTrace("16 bit source to 8 bit display NOT_IMPLEMENTED");
+				assert(0);
+				return;
+			}
+
+			MxU8* dst = (MxU8*) surfaceDesc.lpSurface + p_y * surfaceDesc.lPitch + p_x;
+			MxLong stride = p_width;
+			MxLong length = surfaceDesc.lPitch;
+
+			while (p_height--) {
+				memcpy(dst, pixels, p_width);
+				pixels += stride;
+				dst += length;
+			}
+			break;
+		}
+		case 16: {
+			if (p_bpp == 16) {
+				MxU8* dst = (MxU8*) surfaceDesc.lpSurface + p_y * surfaceDesc.lPitch + p_x;
+				MxLong stride = p_width * 2;
+				MxLong length = surfaceDesc.lPitch;
+
+				while (p_height--) {
+					memcpy(dst, pixels, 2 * p_width);
+					pixels += stride;
+					dst += length;
+				}
+			}
+			else if (p_bpp == 8) {
+				MxU8* dst = (MxU8*) surfaceDesc.lpSurface + p_y * surfaceDesc.lPitch + 2 * p_x;
+				MxLong stride = p_width * 2;
+				MxLong length = -2 * p_width + surfaceDesc.lPitch;
+
+				for (MxS32 i = 0; i < p_height; i++) {
+					for (MxS32 j = 0; j < p_width; j++) {
+						*(MxU16*) dst = m_16bitPal[*pixels++];
+						dst += 2;
+					}
+
+					pixels += stride;
+					dst += length;
+				}
+			}
+		}
+		}
+
+		m_ddSurface2->Unlock(surfaceDesc.lpSurface);
+	}
 }
 
 // FUNCTION: LEGO1 0x100bba50
