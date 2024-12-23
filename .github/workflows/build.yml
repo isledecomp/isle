@@ -139,7 +139,7 @@ jobs:
       run: |
         reccmp-reccmp -S CONFIGPROGRESS.SVG --svg-icon assets/config.png --target CONFIG | tee CONFIGPROGRESS.TXT
         reccmp-reccmp -S ISLEPROGRESS.SVG --svg-icon assets/isle.png --target ISLE | tee ISLEPROGRESS.TXT
-        reccmp-reccmp -S LEGO1PROGRESS.SVG -T 4358 --svg-icon assets/lego1.png --target LEGO1 | tee LEGO1PROGRESS.TXT
+        reccmp-reccmp -S LEGO1PROGRESS.SVG --svg-icon assets/lego1.png --target LEGO1 | tee LEGO1PROGRESS.TXT
 
     - name: Compare Accuracy With Current Master
       shell: bash
