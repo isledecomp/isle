@@ -153,12 +153,8 @@ function(add_lego_libraries NAME)
   target_link_libraries(roi${ARG_SUFFIX} PRIVATE viewmanager${ARG_SUFFIX} Vec::Vec)
 
   add_library(geom${ARG_SUFFIX} STATIC
-    LEGO1/lego/sources/geom/legobox.cpp
     LEGO1/lego/sources/geom/legoedge.cpp
-    LEGO1/lego/sources/geom/legomesh.cpp
-    LEGO1/lego/sources/geom/legosphere.cpp
     LEGO1/lego/sources/geom/legounkown100db7f4.cpp
-    LEGO1/lego/sources/geom/legovertex.cpp
     LEGO1/lego/sources/geom/legoweedge.cpp
     LEGO1/lego/sources/geom/legowegedge.cpp
   )
@@ -166,6 +162,18 @@ function(add_lego_libraries NAME)
   set_property(TARGET geom${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "geom$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
   target_include_directories(geom${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
   target_link_libraries(geom${ARG_SUFFIX} PRIVATE)
+
+  add_library(shape${ARG_SUFFIX} STATIC
+    LEGO1/lego/sources/shape/legocolor.cpp
+    LEGO1/lego/sources/shape/legobox.cpp
+    LEGO1/lego/sources/shape/legomesh.cpp
+    LEGO1/lego/sources/shape/legosphere.cpp
+    LEGO1/lego/sources/shape/legovertex.cpp
+  )
+  list(APPEND list_targets shape${ARG_SUFFIX})
+  set_property(TARGET shape${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "shape$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
+  target_include_directories(shape${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
+  target_link_libraries(shape${ARG_SUFFIX} PRIVATE)
 
   add_library(anim${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/anim/legoanim.cpp
@@ -175,7 +183,6 @@ function(add_lego_libraries NAME)
   target_include_directories(anim${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
 
   add_library(misc${ARG_SUFFIX} STATIC
-    LEGO1/lego/sources/misc/legocolor.cpp
     LEGO1/lego/sources/misc/legocontainer.cpp
     LEGO1/lego/sources/misc/legoimage.cpp
     LEGO1/lego/sources/misc/legostorage.cpp
@@ -422,7 +429,22 @@ function(add_lego_libraries NAME)
   target_include_directories(${NAME} PUBLIC "${PROJECT_SOURCE_DIR}/LEGO1/lego/legoomni/include/actions")
 
   # Link libraries
-  target_link_libraries(${NAME} PRIVATE tglrl${ARG_SUFFIX} viewmanager${ARG_SUFFIX} realtime${ARG_SUFFIX} mxdirectx${ARG_SUFFIX} roi${ARG_SUFFIX} geom${ARG_SUFFIX} anim${ARG_SUFFIX} Vec::Vec dinput dxguid misc${ARG_SUFFIX} 3dmanager${ARG_SUFFIX} omni${ARG_SUFFIX})
+  target_link_libraries(${NAME} PRIVATE
+    tglrl${ARG_SUFFIX}
+    viewmanager${ARG_SUFFIX}
+    realtime${ARG_SUFFIX}
+    mxdirectx${ARG_SUFFIX}
+    roi${ARG_SUFFIX}
+    geom${ARG_SUFFIX}
+    anim${ARG_SUFFIX}
+    Vec::Vec
+    dinput
+    dxguid
+    misc${ARG_SUFFIX}
+    3dmanager${ARG_SUFFIX}
+    omni${ARG_SUFFIX}
+    shape${ARG_SUFFIX}
+  )
 
   foreach(tgt IN LISTS list_targets)
     target_link_libraries(${tgt} PRIVATE ${ARG_LINK_LIBRARIES})

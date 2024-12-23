@@ -1,12 +1,12 @@
 #include "legoroi.h"
 
 #include "anim/legoanim.h"
-#include "geom/legobox.h"
-#include "geom/legosphere.h"
 #include "legolod.h"
 #include "misc/legocontainer.h"
 #include "misc/legostorage.h"
 #include "realtime/realtime.h"
+#include "shape/legobox.h"
+#include "shape/legosphere.h"
 
 #include <string.h>
 #include <vec.h>

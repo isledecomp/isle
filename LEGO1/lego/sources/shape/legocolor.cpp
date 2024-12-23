@@ -1,7 +1,7 @@
 #include "legocolor.h"
 
 #include "decomp.h"
-#include "legostorage.h"
+#include "misc/legostorage.h"
 
 DECOMP_SIZE_ASSERT(LegoColor, 0x03)
 
