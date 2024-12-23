@@ -163,17 +163,17 @@ function(add_lego_libraries NAME)
   target_include_directories(geom${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
   target_link_libraries(geom${ARG_SUFFIX} PRIVATE)
 
-  add_library(util${ARG_SUFFIX} STATIC
-    LEGO1/lego/sources/util/legocolor.cpp
-    LEGO1/lego/sources/util/legobox.cpp
-    LEGO1/lego/sources/util/legomesh.cpp
-    LEGO1/lego/sources/util/legosphere.cpp
-    LEGO1/lego/sources/util/legovertex.cpp
+  add_library(shape${ARG_SUFFIX} STATIC
+    LEGO1/lego/sources/shape/legocolor.cpp
+    LEGO1/lego/sources/shape/legobox.cpp
+    LEGO1/lego/sources/shape/legomesh.cpp
+    LEGO1/lego/sources/shape/legosphere.cpp
+    LEGO1/lego/sources/shape/legovertex.cpp
   )
-  list(APPEND list_targets util${ARG_SUFFIX})
-  set_property(TARGET util${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "util$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
-  target_include_directories(util${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
-  target_link_libraries(util${ARG_SUFFIX} PRIVATE)
+  list(APPEND list_targets shape${ARG_SUFFIX})
+  set_property(TARGET shape${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "shape$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
+  target_include_directories(shape${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
+  target_link_libraries(shape${ARG_SUFFIX} PRIVATE)
 
   add_library(anim${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/anim/legoanim.cpp
@@ -443,7 +443,7 @@ function(add_lego_libraries NAME)
     misc${ARG_SUFFIX}
     3dmanager${ARG_SUFFIX}
     omni${ARG_SUFFIX}
-    util${ARG_SUFFIX}
+    shape${ARG_SUFFIX}
   )
 
   foreach(tgt IN LISTS list_targets)

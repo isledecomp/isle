@@ -5,8 +5,8 @@
 #include "misc/legocontainer.h"
 #include "misc/legostorage.h"
 #include "realtime/realtime.h"
-#include "util/legobox.h"
-#include "util/legosphere.h"
+#include "shape/legobox.h"
+#include "shape/legosphere.h"
 
 #include <string.h>
 #include <vec.h>
