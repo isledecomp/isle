@@ -94,15 +94,15 @@ function(add_lego_libraries NAME)
   set(SUFFIX "${ARG_SUFFIX}")
 
   add_library(tglrl${ARG_SUFFIX} STATIC
-    LEGO1/tgl/d3drm/camera.cpp
-    LEGO1/tgl/d3drm/device.cpp
-    LEGO1/tgl/d3drm/group.cpp
-    LEGO1/tgl/d3drm/light.cpp
-    LEGO1/tgl/d3drm/mesh.cpp
-    LEGO1/tgl/d3drm/meshbuilder.cpp
     LEGO1/tgl/d3drm/renderer.cpp
     LEGO1/tgl/d3drm/texture.cpp
     LEGO1/tgl/d3drm/view.cpp
+    LEGO1/tgl/d3drm/device.cpp
+    LEGO1/tgl/d3drm/group.cpp
+    LEGO1/tgl/d3drm/camera.cpp
+    LEGO1/tgl/d3drm/light.cpp
+    LEGO1/tgl/d3drm/meshbuilder.cpp
+    LEGO1/tgl/d3drm/mesh.cpp
   )
   list(APPEND list_targets tglrl${ARG_SUFFIX})
   set_property(TARGET tglrl${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "tglrl40$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
@@ -110,11 +110,9 @@ function(add_lego_libraries NAME)
   target_link_libraries(tglrl${ARG_SUFFIX} PRIVATE d3drm)
 
   add_library(realtime${ARG_SUFFIX} STATIC
-    LEGO1/realtime/matrix.cpp
     LEGO1/realtime/orientableroi.cpp
     LEGO1/realtime/realtime.cpp
     LEGO1/realtime/realtimeview.cpp
-    LEGO1/realtime/vector.cpp
   )
   list(APPEND list_targets realtime${ARG_SUFFIX})
   set_property(TARGET realtime${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "realtime$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
@@ -123,8 +121,8 @@ function(add_lego_libraries NAME)
 
   add_library(viewmanager${ARG_SUFFIX} STATIC
     LEGO1/viewmanager/viewlod.cpp
-    LEGO1/viewmanager/viewlodlist.cpp
     LEGO1/viewmanager/viewmanager.cpp
+    LEGO1/viewmanager/viewlodlist.cpp
     LEGO1/viewmanager/viewroi.cpp
   )
   list(APPEND list_targets viewmanager${ARG_SUFFIX})
@@ -134,9 +132,9 @@ function(add_lego_libraries NAME)
 
   add_library(mxdirectx${ARG_SUFFIX} STATIC
     LEGO1/mxdirectx/mxdirect3d.cpp
-    LEGO1/mxdirectx/mxdirectdraw.cpp
     LEGO1/mxdirectx/mxdirectxinfo.cpp
     LEGO1/mxdirectx/legodxinfo.cpp
+    LEGO1/mxdirectx/mxdirectdraw.cpp
   )
   list(APPEND list_targets mxdirectx${ARG_SUFFIX})
   set_property(TARGET mxdirectx${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "MxDirectX$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
@@ -144,8 +142,8 @@ function(add_lego_libraries NAME)
   target_link_libraries(mxdirectx${ARG_SUFFIX} PRIVATE ddraw)
 
   add_library(roi${ARG_SUFFIX} STATIC
-    LEGO1/lego/sources/roi/legolod.cpp
     LEGO1/lego/sources/roi/legoroi.cpp
+    LEGO1/lego/sources/roi/legolod.cpp
   )
   list(APPEND list_targets roi${ARG_SUFFIX})
   set_property(TARGET roi${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "roi$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
@@ -154,8 +152,8 @@ function(add_lego_libraries NAME)
 
   add_library(geom${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/geom/legoedge.cpp
-    LEGO1/lego/sources/geom/legounkown100db7f4.cpp
     LEGO1/lego/sources/geom/legoweedge.cpp
+    LEGO1/lego/sources/geom/legounkown100db7f4.cpp
     LEGO1/lego/sources/geom/legowegedge.cpp
   )
   list(APPEND list_targets geom${ARG_SUFFIX})
@@ -164,11 +162,11 @@ function(add_lego_libraries NAME)
   target_link_libraries(geom${ARG_SUFFIX} PRIVATE)
 
   add_library(shape${ARG_SUFFIX} STATIC
-    LEGO1/lego/sources/shape/legocolor.cpp
     LEGO1/lego/sources/shape/legobox.cpp
-    LEGO1/lego/sources/shape/legomesh.cpp
     LEGO1/lego/sources/shape/legosphere.cpp
     LEGO1/lego/sources/shape/legovertex.cpp
+    LEGO1/lego/sources/shape/legomesh.cpp
+    LEGO1/lego/sources/shape/legocolor.cpp
   )
   list(APPEND list_targets shape${ARG_SUFFIX})
   set_property(TARGET shape${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "shape$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
@@ -183,10 +181,10 @@ function(add_lego_libraries NAME)
   target_include_directories(anim${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
 
   add_library(misc${ARG_SUFFIX} STATIC
-    LEGO1/lego/sources/misc/legocontainer.cpp
-    LEGO1/lego/sources/misc/legoimage.cpp
-    LEGO1/lego/sources/misc/legostorage.cpp
     LEGO1/lego/sources/misc/legotexture.cpp
+    LEGO1/lego/sources/misc/legostorage.cpp
+    LEGO1/lego/sources/misc/legoimage.cpp
+    LEGO1/lego/sources/misc/legocontainer.cpp
     LEGO1/lego/sources/misc/legotree.cpp
     LEGO1/lego/sources/misc/legounknown.cpp
   )
@@ -196,8 +194,8 @@ function(add_lego_libraries NAME)
   target_link_libraries(misc${ARG_SUFFIX} PRIVATE)
 
   add_library(3dmanager${ARG_SUFFIX} STATIC
-    LEGO1/lego/sources/3dmanager/lego3dmanager.cpp
     LEGO1/lego/sources/3dmanager/lego3dview.cpp
+    LEGO1/lego/sources/3dmanager/lego3dmanager.cpp
     LEGO1/lego/sources/3dmanager/legoview1.cpp
     LEGO1/lego/sources/3dmanager/tglsurface.cpp
   )
@@ -399,6 +397,7 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
     LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp
     LEGO1/main.cpp
+    # We need to get rid of / refactor the below units into existing/other ones
     LEGO1/lego/legoomni/src/entity/legolocations.cpp
     LEGO1/lego/legoomni/src/notify/legoeventnotificationparam.cpp
     LEGO1/lego/legoomni/src/common/legoactors.cpp
