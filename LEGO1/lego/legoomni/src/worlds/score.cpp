@@ -32,12 +32,6 @@ Score::Score()
 	NotificationManager()->Register(this);
 }
 
-// FUNCTION: LEGO1 0x100010b0
-MxBool Score::VTable0x5c()
-{
-	return TRUE;
-}
-
 // FUNCTION: LEGO1 0x10001200
 Score::~Score()
 {
