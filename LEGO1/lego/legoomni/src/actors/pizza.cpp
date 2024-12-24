@@ -214,7 +214,7 @@ void Pizza::FUN_100382b0()
 		TickleManager()->UnregisterClient(this);
 		m_unk0x90 = INT_MIN;
 		m_skateBoard->EnableScenePresentation(FALSE);
-		m_skateBoard->SetUnknown0x160(FALSE);
+		m_skateBoard->SetPizzaVisible(FALSE);
 		MxTrace("Pizza mission: idle\n");
 	}
 }
@@ -379,7 +379,7 @@ MxResult Pizza::Tickle()
 	if (m_unk0x90 != INT_MIN && m_unk0x94 + m_unk0x90 <= time) {
 		m_unk0x90 = INT_MIN;
 		m_skateBoard->EnableScenePresentation(FALSE);
-		m_skateBoard->SetUnknown0x160(FALSE);
+		m_skateBoard->SetPizzaVisible(FALSE);
 		TickleManager()->UnregisterClient(this);
 	}
 
@@ -425,7 +425,7 @@ MxResult Pizza::Tickle()
 			assert(m_mission);
 
 			if (Timer()->GetTime() > m_mission->m_startTime + 5000) {
-				m_skateBoard->SetUnknown0x160(FALSE);
+				m_skateBoard->SetPizzaVisible(FALSE);
 				m_skateBoard->EnableScenePresentation(FALSE);
 				TickleManager()->UnregisterClient(this);
 				m_mission->UpdateScore(LegoState::e_grey);
@@ -473,7 +473,7 @@ MxLong Pizza::HandleEndAction(MxEndActionNotificationParam& p_param)
 			m_state->m_unk0x0c = 4;
 			m_state->SetUnknown0xb0(IsleScript::c_noneIsle);
 			UserActor()->SetActorState(LegoPathActor::c_initial);
-			m_skateBoard->SetUnknown0x160(TRUE);
+			m_skateBoard->SetPizzaVisible(TRUE);
 			m_world->PlaceActor(m_skateBoard, "int37", 2, 0.5, 3, 0.5);
 
 #ifdef COMPAT_MODE
