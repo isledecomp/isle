@@ -21,6 +21,7 @@ public:
 
 	// Note: does not take a reference
 	void PushBack(T p_obj) { this->push_back(p_obj); }
+	void Remove(T p_obj) { this->remove(p_obj); }
 };
 
 #endif // MXUTILITYLIST_H

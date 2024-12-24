@@ -72,20 +72,22 @@ MxResult MxStreamController::Open(const char* p_filename)
 	AUTOLOCK(m_criticalSection);
 
 	MakeSourceName(sourceName, p_filename);
-	this->m_atom = MxAtomId(sourceName, e_lowerCase2);
+	m_atom = MxAtomId(sourceName, e_lowerCase2);
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100c15d0
+// FUNCTION: BETA10 0x1014e730
 void MxStreamController::AddSubscriber(MxDSSubscriber* p_subscriber)
 {
-	m_subscriberList.push_back(p_subscriber);
+	m_subscriberList.PushBack(p_subscriber);
 }
 
 // FUNCTION: LEGO1 0x100c1620
+// FUNCTION: BETA10 0x1014e7b4
 void MxStreamController::RemoveSubscriber(MxDSSubscriber* p_subscriber)
 {
-	m_subscriberList.remove(p_subscriber);
+	m_subscriberList.Remove(p_subscriber);
 }
 
 // FUNCTION: LEGO1 0x100c1690
@@ -114,11 +116,13 @@ MxResult MxStreamController::VTable0x20(MxDSAction* p_action)
 }
 
 // FUNCTION: LEGO1 0x100c1740
+// FUNCTION: BETA10 0x1014e922
 MxResult MxStreamController::VTable0x24(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
 	VTable0x30(p_action);
 	m_action0x60 = (MxDSAction*) m_unk0x54.FindAndErase(p_action);
+
 	if (m_action0x60 == NULL) {
 		return FAILURE;
 	}
@@ -130,6 +134,7 @@ MxResult MxStreamController::VTable0x24(MxDSAction* p_action)
 }
 
 // FUNCTION: LEGO1 0x100c1800
+// FUNCTION: BETA10 0x1014ea36
 MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
 {
 	MxNextActionDataStart* dataActionStart =
@@ -138,11 +143,12 @@ MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
 		return FAILURE;
 	}
 
-	m_nextActionList.push_back(dataActionStart);
+	m_nextActionList.PushBack(dataActionStart);
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100c1a00
+// FUNCTION: BETA10 0x1014eb04
 MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 {
 	if (p_action->GetUnknown24() == -1) {
@@ -198,36 +204,43 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 	MxLong time = Timer()->GetTime();
 	streamingAction->SetUnknown90(time);
 
-	m_unk0x3c.push_back(streamingAction);
+	m_unk0x3c.PushBack(streamingAction);
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100c1c10
+// FUNCTION: BETA10 0x1014ed8c
 MxResult MxStreamController::VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
 {
 	AUTOLOCK(m_criticalSection);
+
 	if (FUN_100c1a00(p_action, p_bufferval) != SUCCESS) {
 		return FAILURE;
 	}
+
 	return FUN_100c1800(p_action, (p_bufferval / m_provider->GetFileSize()) * m_provider->GetFileSize());
 }
 
 // FUNCTION: LEGO1 0x100c1ce0
+// FUNCTION: BETA10 0x1014eeb5
 MxResult MxStreamController::VTable0x30(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
 	MxResult result = FAILURE;
 	MxDSObject* action = m_unk0x3c.FindAndErase(p_action);
+
 	if (action != NULL) {
 		MxNextActionDataStart* data = m_nextActionList.FindAndErase(action->GetObjectId(), action->GetUnknown24());
 		delete action;
 		delete data;
 		result = SUCCESS;
 	}
+
 	return result;
 }
 
 // FUNCTION: LEGO1 0x100c1da0
+// FUNCTION: BETA10 0x1014efdc
 MxResult MxStreamController::InsertActionToList54(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
@@ -237,16 +250,18 @@ MxResult MxStreamController::InsertActionToList54(MxDSAction* p_action)
 		return FAILURE;
 	}
 	else {
-		m_unk0x54.push_back(action);
+		m_unk0x54.PushBack(action);
 		return SUCCESS;
 	}
 }
 
 // FUNCTION: LEGO1 0x100c1e70
+// FUNCTION: BETA10 0x1014f0a1
 MxPresenter* MxStreamController::FUN_100c1e70(MxDSAction& p_action)
 {
 	AUTOLOCK(m_criticalSection);
 	MxPresenter* result = NULL;
+
 	if (p_action.GetObjectId() != -1) {
 		MxDSObject* action = m_unk0x3c.Find(&p_action);
 		if (action != NULL) {
@@ -258,6 +273,7 @@ MxPresenter* MxStreamController::FUN_100c1e70(MxDSAction& p_action)
 }
 
 // FUNCTION: LEGO1 0x100c1f00
+// FUNCTION: BETA10 0x1014f162
 MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
@@ -292,6 +308,7 @@ MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 }
 
 // FUNCTION: LEGO1 0x100c20b0
+// FUNCTION: BETA10 0x1014f37d
 MxNextActionDataStart* MxStreamController::FindNextActionDataStartFromStreamingAction(MxDSStreamingAction* p_action)
 {
 	return m_nextActionList.Find(p_action->GetObjectId(), p_action->GetUnknown24());

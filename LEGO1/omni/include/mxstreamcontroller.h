@@ -138,4 +138,10 @@ protected:
 // TEMPLATE: LEGO1 0x100c1bc0
 // list<MxDSObject *,allocator<MxDSObject *> >::insert
 
+// TEMPLATE: BETA10 0x10150b90
+// MxUtilityList<MxDSSubscriber *>::PushBack
+
+// TEMPLATE: BETA10 0x10150cf0
+// MxUtilityList<MxDSSubscriber *>::Remove
+
 #endif // MXSTREAMCONTROLLER_H
