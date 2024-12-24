@@ -291,7 +291,7 @@ void Score::Paint()
 
 // FUNCTION: LEGO1 0x10001d20
 // FUNCTION: BETA10 0x100f4a52
-void Score::FillArea(MxU32 i_activity, MxU32 i_actor, MxS16 score)
+void Score::FillArea(MxS32 i_activity, MxS32 i_actor, MxS16 score)
 {
 	MxS32 local3c[] = {0x2b00, 0x5700, 0x8000, 0xab00, 0xd600};
 	MxS32 local14[] = {0x2a, 0x27, 0x29, 0x29, 0x2a};
