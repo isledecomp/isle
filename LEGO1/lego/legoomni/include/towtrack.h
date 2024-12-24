@@ -30,22 +30,28 @@ public:
 
 	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
+	// FUNCTION: BETA10 0x10088890
 	MxS16 GetHighScore(MxU8 p_actorId)
 	{
 		switch (p_actorId) {
 		case LegoActor::c_pepper:
 			return m_peHighScore;
+			break;
 		case LegoActor::c_mama:
 			return m_maHighScore;
+			break;
 		case LegoActor::c_papa:
 			return m_paHighScore;
+			break;
 		case LegoActor::c_nick:
 			return m_niHighScore;
+			break;
 		case LegoActor::c_laura:
 			return m_laHighScore;
-		default:
-			return 0;
+			break;
 		}
+
+		return 0;
 	}
 
 	// FUNCTION: BETA10 0x100f8530
