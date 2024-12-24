@@ -42,28 +42,25 @@ public:
 		m_data[1] -= p_value[1];
 	} // vtable+0x08
 
-	// Those are also overloads in all likelihood,
-	// but we need a type to do that.
-
-	// FUNCTION: LEGO1 0x10002000
-	virtual void MulScalarImpl(float* p_value)
-	{
-		m_data[0] *= *p_value;
-		m_data[1] *= *p_value;
-	} // vtable+0x0c
-
 	// FUNCTION: LEGO1 0x10001fe0
-	virtual void MulVectorImpl(float* p_value)
+	virtual void MulImpl(float* p_value)
 	{
 		m_data[0] *= p_value[0];
 		m_data[1] *= p_value[1];
 	} // vtable+0x10
 
-	// FUNCTION: LEGO1 0x10002020
-	virtual void DivScalarImpl(float* p_value)
+	// FUNCTION: LEGO1 0x10002000
+	virtual void MulImpl(const float& p_value)
 	{
-		m_data[0] /= *p_value;
-		m_data[1] /= *p_value;
+		m_data[0] *= p_value;
+		m_data[1] *= p_value;
+	} // vtable+0x0c
+
+	// FUNCTION: LEGO1 0x10002020
+	virtual void DivImpl(const float& p_value)
+	{
+		m_data[0] /= p_value;
+		m_data[1] /= p_value;
 	} // vtable+0x14
 
 	// FUNCTION: LEGO1 0x10002040
@@ -110,7 +107,7 @@ public:
 		if (sq > 0.0f) {
 			float root = sqrt(sq);
 			if (root > 0.0f) {
-				DivScalarImpl(&root);
+				DivImpl(root);
 				return 0;
 			}
 		}
@@ -135,16 +132,16 @@ private:
 	virtual void Sub(const Vector2& p_other) { SubImpl((float*) p_other.m_data); } // vtable+0x54
 
 	// FUNCTION: LEGO1 0x10002210
-	virtual void Mul(float* p_other) { MulVectorImpl(p_other); } // vtable+0x64
+	virtual void Mul(float* p_other) { MulImpl(p_other); } // vtable+0x64
 
 	// FUNCTION: LEGO1 0x10002220
-	virtual void Mul(Vector2* p_other) { MulVectorImpl(p_other->m_data); } // vtable+0x60
+	virtual void Mul(Vector2* p_other) { MulImpl(p_other->m_data); } // vtable+0x60
 
 	// FUNCTION: LEGO1 0x10002230
-	virtual void Mul(const float& p_value) { MulScalarImpl((float*) &p_value); } // vtable+0x5c
+	virtual void Mul(const float& p_value) { MulImpl(p_value); } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x10002240
-	virtual void Div(const float& p_value) { DivScalarImpl((float*) &p_value); } // vtable+0x68
+	virtual void Div(const float& p_value) { DivImpl(p_value); } // vtable+0x68
 
 public:
 	// FUNCTION: LEGO1 0x10002250
@@ -279,28 +276,28 @@ public:
 		m_data[2] -= p_value[2];
 	} // vtable+0x08
 
-	// FUNCTION: LEGO1 0x10003b20
-	void MulScalarImpl(float* p_value) override
-	{
-		m_data[0] *= *p_value;
-		m_data[1] *= *p_value;
-		m_data[2] *= *p_value;
-	} // vtable+0x0c
-
 	// FUNCTION: LEGO1 0x10003af0
-	void MulVectorImpl(float* p_value) override
+	void MulImpl(float* p_value) override
 	{
 		m_data[0] *= p_value[0];
 		m_data[1] *= p_value[1];
 		m_data[2] *= p_value[2];
 	} // vtable+0x10
 
-	// FUNCTION: LEGO1 0x10003b50
-	void DivScalarImpl(float* p_value) override
+	// FUNCTION: LEGO1 0x10003b20
+	void MulImpl(const float& p_value) override
 	{
-		m_data[0] /= *p_value;
-		m_data[1] /= *p_value;
-		m_data[2] /= *p_value;
+		m_data[0] *= p_value;
+		m_data[1] *= p_value;
+		m_data[2] *= p_value;
+	} // vtable+0x0c
+
+	// FUNCTION: LEGO1 0x10003b50
+	void DivImpl(const float& p_value) override
+	{
+		m_data[0] /= p_value;
+		m_data[1] /= p_value;
+		m_data[2] /= p_value;
 	} // vtable+0x14
 
 	// FUNCTION: LEGO1 0x10003b80
@@ -392,17 +389,8 @@ public:
 		m_data[3] -= p_value[3];
 	} // vtable+0x08
 
-	// FUNCTION: LEGO1 0x10002970
-	void MulScalarImpl(float* p_value) override
-	{
-		m_data[0] *= *p_value;
-		m_data[1] *= *p_value;
-		m_data[2] *= *p_value;
-		m_data[3] *= *p_value;
-	} // vtable+0x0c
-
 	// FUNCTION: LEGO1 0x10002930
-	void MulVectorImpl(float* p_value) override
+	void MulImpl(float* p_value) override
 	{
 		m_data[0] *= p_value[0];
 		m_data[1] *= p_value[1];
@@ -410,13 +398,22 @@ public:
 		m_data[3] *= p_value[3];
 	} // vtable+0x10
 
-	// FUNCTION: LEGO1 0x100029b0
-	void DivScalarImpl(float* p_value) override
+	// FUNCTION: LEGO1 0x10002970
+	void MulImpl(const float& p_value) override
 	{
-		m_data[0] /= *p_value;
-		m_data[1] /= *p_value;
-		m_data[2] /= *p_value;
-		m_data[3] /= *p_value;
+		m_data[0] *= p_value;
+		m_data[1] *= p_value;
+		m_data[2] *= p_value;
+		m_data[3] *= p_value;
+	} // vtable+0x0c
+
+	// FUNCTION: LEGO1 0x100029b0
+	void DivImpl(const float& p_value) override
+	{
+		m_data[0] /= p_value;
+		m_data[1] /= p_value;
+		m_data[2] /= p_value;
+		m_data[3] /= p_value;
 	} // vtable+0x14
 
 	// FUNCTION: LEGO1 0x100029f0
@@ -464,9 +461,10 @@ inline int Vector4::NormalizeQuaternion()
 		float theta = v[3] * 0.5f;
 		v[3] = cos(theta);
 		magnitude = sin(theta) / sqrt(magnitude);
-		Vector3::MulScalarImpl(&magnitude);
+		Vector3::MulImpl(magnitude);
 		return 0;
 	}
+
 	return -1;
 }
 
