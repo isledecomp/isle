@@ -327,7 +327,7 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 				local90 *= 1.25f;
 				locala4 += local90;
 				locala4[1] += 0.25;
-				local30.EqualsCross(&localac, &local28);
+				local30.EqualsCross(localac, local28);
 				local30.Unitize();
 
 				Mx3DPointFloat locald4(local2world[2]);
@@ -1155,7 +1155,7 @@ MxResult LegoAct2::FUN_10052560(
 			Vector3 secondColumn(matrix[1]);
 			Vector3 thirdColumn(matrix[2]);
 
-			firstColumn.EqualsCross(&secondColumn, &thirdColumn);
+			firstColumn.EqualsCross(secondColumn, thirdColumn);
 			firstColumn.Unitize();
 
 			MxMatrix* pmatrix = NULL;

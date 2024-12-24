@@ -1596,7 +1596,7 @@ MxU16 LegoAnimationManager::FUN_10062110(
 		if (GetViewManager()->IsBoundingBoxInFrustum(p_roi->GetWorldBoundingBox())) {
 			Mx3DPointFloat direction(p_roi->GetWorldDirection());
 
-			if (direction.Dot(&direction, &p_direction) > 0.707) {
+			if (direction.Dot(direction, p_direction) > 0.707) {
 				Mx3DPointFloat position(p_roi->GetWorldPosition());
 
 				position -= p_position;
@@ -2525,7 +2525,7 @@ MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, Mx
 	for (i = 0; i < numEdges; i++) {
 		e = (LegoUnknown100db7f4*) boundary->GetEdges()[i];
 		e->FUN_1002ddc0(*boundary, vec);
-		float dot = vec.Dot(&direction, &vec);
+		float dot = vec.Dot(direction, vec);
 
 		if (dot > local4c) {
 			local50 = e;

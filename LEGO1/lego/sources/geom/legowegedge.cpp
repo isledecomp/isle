@@ -139,10 +139,10 @@ LegoS32 LegoWEGEdge::VTable0x04()
 		Mx3DPointFloat local58;
 		Vector3 local64(&m_edgeNormals[i][0]);
 		edge->FUN_1002ddc0(*this, local58);
-		local64.EqualsCross(&local58, &m_unk0x14);
+		local64.EqualsCross(local58, m_unk0x14);
 
-		m_edgeNormals[i][3] = -local64.Dot(m_edges[i]->m_pointA, &local64);
-		if (m_edgeNormals[i][3] + m_unk0x30.Dot(&m_unk0x30, &local64) < 0.0f) {
+		m_edgeNormals[i][3] = -local64.Dot(*m_edges[i]->m_pointA, local64);
+		if (m_edgeNormals[i][3] + m_unk0x30.Dot(m_unk0x30, local64) < 0.0f) {
 			m_edgeNormals[i] *= -1.0f;
 		}
 
@@ -178,12 +178,12 @@ LegoS32 LegoWEGEdge::VTable0x04()
 			localb8 -= *vTrig1;
 			local80 -= *vTrig1;
 
-			float locala4 = localb8.Dot(m_unk0x50, &localb8);
+			float locala4 = localb8.Dot(*m_unk0x50, localb8);
 			if (local98 < locala4) {
 				local98 = locala4;
 			}
 
-			locala4 = local80.Dot(m_unk0x50, &local80);
+			locala4 = local80.Dot(*m_unk0x50, local80);
 			if (locala4 < local9c) {
 				local9c = locala4;
 			}
@@ -244,7 +244,7 @@ LegoS32 LegoWEGEdge::FUN_1009aea0()
 		local50 = *local8[i - 2];
 		local50 -= *local8[i - 1];
 
-		local24.EqualsCross(&local50, &local3c);
+		local24.EqualsCross(local50, local3c);
 		local28 = local24.LenSquared();
 
 		if (local28 < 0.00001f) {
@@ -255,7 +255,7 @@ LegoS32 LegoWEGEdge::FUN_1009aea0()
 		local24 /= local58;
 
 		if (localc) {
-			float local54 = local24.Dot(&m_unk0x14, &local24);
+			float local54 = local24.Dot(m_unk0x14, local24);
 			if (local54 < 0.98) {
 				delete[] local8;
 				return -2;
@@ -265,7 +265,7 @@ LegoS32 LegoWEGEdge::FUN_1009aea0()
 			m_unk0x14[0] = local24[0];
 			m_unk0x14[1] = local24[1];
 			m_unk0x14[2] = local24[2];
-			m_unk0x14[3] = -local8[i]->Dot(local8[i], &local24);
+			m_unk0x14[3] = -local8[i]->Dot(*local8[i], local24);
 			localc = TRUE;
 		}
 	}

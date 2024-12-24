@@ -138,7 +138,7 @@ MxResult LegoExtraActor::FUN_1002aae0()
 	Vector3 positionRef(m_unk0xec[3]);
 
 	dirRef *= -1.0f;
-	rightRef.EqualsCross(&upRef, &dirRef);
+	rightRef.EqualsCross(upRef, dirRef);
 
 	if (m_boundary == m_destEdge->m_faceA) {
 		m_boundary = (LegoPathBoundary*) m_destEdge->m_faceB;
@@ -222,7 +222,7 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			for (MxS32 i = 0; i < m_boundary->GetNumEdges(); i++) {
 				Mx4DPointFloat* normal = m_boundary->GetEdgeNormal(i);
 
-				if (positionRef.Dot(normal, &positionRef) + (*normal)[3] < -0.001) {
+				if (positionRef.Dot(*normal, positionRef) + (*normal)[3] < -0.001) {
 					b = TRUE;
 					break;
 				}
@@ -257,13 +257,13 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			float dotX, dotZ;
 			{
 				Mx3DPointFloat tmp(1.0f, 0, 0);
-				dotX = dir.Dot(&dir, &tmp);
+				dotX = dir.Dot(dir, tmp);
 				Mx3DPointFloat tmp2(0, 0, 1.0f);
-				dotZ = dir.Dot(&dir, &tmp2);
+				dotZ = dir.Dot(dir, tmp2);
 			}
 #else
-			float dotX = dir.Dot(&dir, &Mx3DPointFloat(1.0f, 0, 0));
-			float dotZ = dir.Dot(&dir, &Mx3DPointFloat(0, 0, 1.0f));
+			float dotX = dir.Dot(dir, Mx3DPointFloat(1.0f, 0, 0));
+			float dotZ = dir.Dot(dir, Mx3DPointFloat(0, 0, 1.0f));
 #endif
 
 			if (abs(dotZ) < abs(dotX)) {
@@ -463,9 +463,9 @@ MxU32 LegoExtraActor::VTable0x6c(
 						Mx3DPointFloat local54(p_v1);
 
 						local54 -= local60;
-						float local1c = p_v2.Dot(&p_v2, &p_v2);
-						float local24 = p_v2.Dot(&p_v2, &local54) * 2.0f;
-						float local20 = local54.Dot(&local54, &local54);
+						float local1c = p_v2.Dot(p_v2, p_v2);
+						float local24 = p_v2.Dot(p_v2, local54) * 2.0f;
+						float local20 = local54.Dot(local54, local54);
 
 						if (m_unk0x15 != 0 && local20 < 10.0f) {
 							return 0;

@@ -311,7 +311,7 @@ void Act2Actor::Animate(float p_time)
 				local30 -= local60;
 				local30.Unitize();
 
-				MxFloat dotproduct = local18.Dot(&local30, &local18);
+				MxFloat dotproduct = local18.Dot(local30, local18);
 
 				if (dotproduct >= 0.0) {
 					const MxFloat* pepperWorldPosition = roiPepper->GetWorldPosition();
@@ -613,9 +613,9 @@ MxU32 Act2Actor::FUN_10019700(MxFloat p_param)
 	col2 = col3;
 	col2 -= m_unk0x4c->GetROI()->GetWorldPosition();
 	col2.Unitize();
-	col0.EqualsCross(&col1, &col2);
+	col0.EqualsCross(col1, col2);
 	col0.Unitize();
-	col1.EqualsCross(&col2, &col0);
+	col1.EqualsCross(col2, col0);
 
 	assert(!m_cameraFlag);
 

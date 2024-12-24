@@ -133,7 +133,7 @@ void IslePathActor::Exit()
 			for (j = 0; j < m_boundary->GetNumEdges(); j++) {
 				Mx4DPointFloat& normal = *m_boundary->GetEdgeNormal(j);
 
-				if (local20.Dot(&normal, &local20) + normal[3] < -0.001) {
+				if (local20.Dot(normal, local20) + normal[3] < -0.001) {
 					break;
 				}
 			}
@@ -645,7 +645,7 @@ void IslePathActor::FUN_1001b660()
 	Vector3 up(transform[2]);
 
 	up *= -1.0f;
-	position.EqualsCross(&direction, &up);
+	position.EqualsCross(direction, up);
 	m_roi->FUN_100a58f0(transform);
 	m_roi->VTable0x14();
 }
