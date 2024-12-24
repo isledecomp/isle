@@ -4,16 +4,16 @@ on: [push, pull_request]
 
 jobs:
   ncc:
-    name: 'C++'
+    name: C++
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
 
     - name: Install LLVM and Clang
-      uses: KyleMayes/install-llvm-action@v1
+      uses: KyleMayes/install-llvm-action@v2
       with:
-        version: "16"
+        version: '16'
 
     - uses: actions/setup-python@v5
       with:

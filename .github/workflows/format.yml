@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   clang-format:
-    name: 'C++'
+    name: C++
     runs-on: ubuntu-latest
 
     steps:

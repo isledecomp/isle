@@ -10,7 +10,7 @@ jobs:
 
     - name: Restore cached original binaries
       id: cache-original-binaries
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v4
       with:
         enableCrossOsArchive: true
         path: legobin
@@ -25,7 +25,7 @@ jobs:
 
     - name: Cache original binaries
       if: ${{ !steps.cache-original-binaries.outputs.cache-hit }}
-      uses: actions/cache/save@v3
+      uses: actions/cache/save@v4
       with:
         enableCrossOsArchive: true
         path: legobin

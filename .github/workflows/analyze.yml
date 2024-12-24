@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   decomplint-isle:
-    name: '${{ matrix.who }} annotations'
+    name: ${{ matrix.who }} annotations
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
