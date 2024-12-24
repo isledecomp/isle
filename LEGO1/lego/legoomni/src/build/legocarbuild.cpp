@@ -945,7 +945,7 @@ MxS32 LegoCarBuild::FUN_10024850(MxLong p_x, MxLong p_y)
 	return result;
 }
 
-#ifdef NDEBUG
+#ifndef BETA10
 
 // FUNCTION: LEGO1 0x10024890
 undefined4 LegoCarBuild::FUN_10024890(MxParam* p_param)
@@ -1494,8 +1494,7 @@ void LegoCarBuild::FUN_10025720(undefined4 p_param)
 	m_unk0x10a = 0;
 	MxS32 uVar6;
 
-#ifdef NDEBUG
-
+#ifndef BETA10
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act2) {
 		// This is most likely related to the helicopter rebuild in Act 2
 		switch (p_param) {
@@ -1597,7 +1596,7 @@ void LegoCarBuild::FUN_10025720(undefined4 p_param)
 			assert(m_numAnimsRun >= 0);
 			return;
 		}
-#ifdef NDEBUG
+#ifndef BETA10
 	}
 #endif
 

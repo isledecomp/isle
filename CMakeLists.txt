@@ -483,6 +483,7 @@ if(ISLE_BUILD_BETA10)
     OUT_TARGETS beta10_targets
   )
   reccmp_add_target(beta10 ID BETA10)
+  target_compile_definitions(beta10 PRIVATE BETA10)
 endif()
 
 if (ISLE_BUILD_APP)
