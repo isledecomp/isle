@@ -208,6 +208,7 @@ function(add_lego_libraries NAME)
 
   add_library(omni${ARG_SUFFIX} STATIC
     LEGO1/omni/src/notify/mxnotificationmanager.cpp
+    LEGO1/omni/src/common/mxdebug.cpp
     LEGO1/omni/src/common/mxmisc.cpp
     LEGO1/omni/src/common/mxatom.cpp
     LEGO1/omni/src/action/mxdsaction.cpp
