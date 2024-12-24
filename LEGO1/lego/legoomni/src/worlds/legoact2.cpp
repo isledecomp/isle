@@ -49,7 +49,7 @@ MxS32 g_unk0x100f43f0[] = {
 };
 
 // GLOBAL: LEGO1 0x100f4410
-LegoChar* g_unk0x100f4410[] = {"bd", "pg", "rd", "sy", "ro", "cl"};
+const LegoChar* g_unk0x100f4410[] = {"bd", "pg", "rd", "sy", "ro", "cl"};
 
 // GLOBAL: LEGO1 0x100f4428
 MxS32 g_unk0x100f4428[] = {
@@ -68,7 +68,7 @@ MxS32 g_unk0x100f4428[] = {
 };
 
 // GLOBAL: LEGO1 0x100f4458
-LegoChar* g_unk0x100f4458[] = {"papa", "nick", "laura", "cl", "pg", "rd", "sy"};
+const LegoChar* g_unk0x100f4458[] = {"papa", "nick", "laura", "cl", "pg", "rd", "sy"};
 
 // FUNCTION: LEGO1 0x1004fce0
 // FUNCTION: BETA10 0x1003a5a0

@@ -41,7 +41,7 @@ public:
 	void Mute(MxBool p_muted);
 
 private:
-	static LegoChar* g_lodNames[];
+	static const LegoChar* g_lodNames[];
 	static MxLong g_lastHitActorTime;
 
 	LegoCacheSound* m_whistleSound; // 0x154

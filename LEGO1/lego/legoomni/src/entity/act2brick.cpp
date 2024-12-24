@@ -19,7 +19,7 @@
 DECOMP_SIZE_ASSERT(Act2Brick, 0x194)
 
 // GLOBAL: LEGO1 0x100f7a38
-LegoChar* Act2Brick::g_lodNames[] =
+const LegoChar* Act2Brick::g_lodNames[] =
 	{"xchbase1", "xchblad1", "xchseat1", "xchtail1", "xhback1", "xhljet1", "xhmidl1", "xhmotr1", "xhsidl1", "xhsidr1"};
 
 // GLOBAL: LEGO1 0x100f7a60
