@@ -57,7 +57,6 @@ public:
 		}
 	}
 
-	// FUNCTION: BETA10 0x1007bc00
 	T* Get(const char* p_name)
 	{
 		T* value = NULL;
@@ -196,5 +195,8 @@ protected:
 // GLOBAL: LEGO1 0x100f0100
 // _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Nil
 // clang-format on
+
+// TEMPLATE: BETA10 0x1007bc00
+// LegoContainer<LegoTextureInfo>::Get
 
 #endif // LEGOCONTAINER_H

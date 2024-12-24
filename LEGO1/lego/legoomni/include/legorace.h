@@ -34,6 +34,8 @@ public:
 		}
 
 		MxS16 GetUnknown0x02() { return m_unk0x02; }
+
+		// FUNCTION: BETA10 0x10088970
 		MxS16 GetHighScore() { return m_score; }
 
 		// FUNCTION: BETA10 0x100c96f0

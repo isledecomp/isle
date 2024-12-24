@@ -165,6 +165,7 @@ MxResult RaceState::Serialize(LegoFile* p_file)
 }
 
 // FUNCTION: LEGO1 0x10016280
+// FUNCTION: BETA10 0x100c7dfd
 RaceState::Entry* RaceState::GetState(MxU8 p_id)
 {
 	for (MxS16 i = 0;; i++) {
