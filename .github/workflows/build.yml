@@ -8,7 +8,7 @@ jobs:
     uses: ./.github/workflows/legobin.yml
 
   build-current-toolchain:
-    name: 'Current ${{ matrix.toolchain.name }}'
+    name: Current ${{ matrix.toolchain.name }}
     runs-on: windows-latest
     defaults:
       run:
@@ -35,7 +35,7 @@ jobs:
 
       - name: Setup cmake
         if: matrix.toolchain.setup-cmake
-        uses: jwlawson/actions-setup-cmake@v1.13
+        uses: jwlawson/actions-setup-cmake@v2
 
       - name: Setup ninja
         if: matrix.toolchain.setup-ninja
@@ -68,11 +68,11 @@ jobs:
 
     - uses: actions/checkout@v4
       with:
-        repository: 'itsmattkc/msvc420'
+        repository: itsmattkc/msvc420
         path: msvc420
 
     - name: Setup cmake
-      uses: jwlawson/actions-setup-cmake@v1.13
+      uses: jwlawson/actions-setup-cmake@v2
       with:
         # Use minimum supported version
         cmake-version: '3.15.x'
@@ -89,7 +89,7 @@ jobs:
         cmake --build build
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       with:
         name: Win32
         path: |
@@ -101,24 +101,24 @@ jobs:
           build/LEGO1.PDB
 
   compare:
-    name: 'Compare with master'
+    name: Compare with master
     needs: [build, fetch-deps]
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
 
     - uses: actions/setup-python@v5
       with:
         python-version: '3.12'
 
-    - uses: actions/download-artifact@master
+    - uses: actions/download-artifact@main
       with:
        name: Win32
        path: build
 
     - name: Restore cached original binaries
       id: cache-original-binaries
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v4
       with:
         enableCrossOsArchive: true
         path: legobin
@@ -173,7 +173,7 @@ jobs:
        reccmp-datacmp --target LEGO1
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       with:
         name: Accuracy Report
         path: |
@@ -182,21 +182,21 @@ jobs:
           LEGO1PROGRESS.*
 
   upload:
-    name: 'Upload artifacts'
+    name: Upload artifacts
     needs: [build, compare]
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
     steps:
     - uses: actions/checkout@v4
       with:
-        repository: 'probonopd/uploadtool'
+        repository: probonopd/uploadtool
 
-    - uses: actions/download-artifact@master
+    - uses: actions/download-artifact@main
       with:
        name: Win32
        path: build
 
-    - uses: actions/download-artifact@master
+    - uses: actions/download-artifact@main
       with:
         name: Accuracy Report
 
