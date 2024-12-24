@@ -34,7 +34,7 @@ public:
 	MxLong HandleControl(LegoControlManagerNotificationParam& p_param) override; // vtable+0xd4
 	void Exit() override;                                                        // vtable+0xe4
 
-	void SetUnknown0x160(MxBool p_unk0x160) { m_unk0x160 = p_unk0x160; }
+	void SetPizzaVisible(MxBool p_pizzaVisible) { m_pizzaVisible = p_pizzaVisible; }
 
 	void ActivateSceneActions();
 	void EnableScenePresentation(MxBool p_enable);
@@ -43,7 +43,7 @@ public:
 	// SkateBoard::`scalar deleting destructor'
 
 private:
-	MxBool m_unk0x160;      // 0x160
+	MxBool m_pizzaVisible;  // 0x160
 	Act1State* m_act1state; // 0x164
 };
 

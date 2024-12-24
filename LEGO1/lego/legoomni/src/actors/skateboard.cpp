@@ -20,7 +20,7 @@ DECOMP_SIZE_ASSERT(SkateBoard, 0x168)
 // FUNCTION: LEGO1 0x1000fd40
 SkateBoard::SkateBoard()
 {
-	m_unk0x160 = FALSE;
+	m_pizzaVisible = FALSE;
 	m_maxLinearVel = 15.0;
 	m_unk0x150 = 3.5;
 	m_unk0x148 = 1;
@@ -60,7 +60,7 @@ void SkateBoard::Exit()
 		Pizza* pizza = (Pizza*) CurrentWorld()->Find(*g_isleScript, IsleScript::c_Pizza_Actor);
 		pizza->StopActions();
 		pizza->FUN_100382b0();
-		m_unk0x160 = FALSE;
+		m_pizzaVisible = FALSE;
 	}
 
 	IslePathActor::Exit();
@@ -97,7 +97,7 @@ MxLong SkateBoard::HandleClick()
 		ControlManager()->Register(this);
 	}
 
-	EnableScenePresentation(m_unk0x160);
+	EnableScenePresentation(m_pizzaVisible);
 
 	Vector3 position = m_roi->GetWorldPosition();
 	AnimationManager()->FUN_10064670(&position);
@@ -132,7 +132,7 @@ void SkateBoard::EnableScenePresentation(MxBool p_enable)
 	if (presenter) {
 		presenter->Enable(p_enable);
 	}
-	else if (m_unk0x160) {
+	else if (m_pizzaVisible) {
 		NotificationManager()->Send(this, MxNotificationParam(c_notificationType0, NULL));
 	}
 }
@@ -141,7 +141,7 @@ void SkateBoard::EnableScenePresentation(MxBool p_enable)
 // FUNCTION: BETA10 0x100f5472
 MxLong SkateBoard::HandleNotification0()
 {
-	EnableScenePresentation(m_unk0x160);
+	EnableScenePresentation(m_pizzaVisible);
 	return 1;
 }
 

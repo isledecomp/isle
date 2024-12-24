@@ -1226,7 +1226,7 @@ MxBool Isle::Escape()
 	if (UserActor()) {
 		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
 			((IslePathActor*) UserActor())->Exit();
-			m_skateboard->SetUnknown0x160(FALSE);
+			m_skateboard->SetPizzaVisible(FALSE);
 		}
 	}
 
@@ -1272,7 +1272,7 @@ void Isle::FUN_10033350()
 	if (UserActor()) {
 		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
 			((IslePathActor*) UserActor())->Exit();
-			m_skateboard->SetUnknown0x160(FALSE);
+			m_skateboard->SetPizzaVisible(FALSE);
 		}
 	}
 
