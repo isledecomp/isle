@@ -881,7 +881,7 @@ void LegoAnimationManager::DeleteAnimations()
 
 // FUNCTION: LEGO1 0x10060480
 // FUNCTION: BETA10 0x100412a9
-void LegoAnimationManager::FUN_10060480(LegoChar* p_characterNames[], MxU32 p_numCharacterNames)
+void LegoAnimationManager::FUN_10060480(const LegoChar* p_characterNames[], MxU32 p_numCharacterNames)
 {
 	for (MxS32 i = 0; i < p_numCharacterNames; i++) {
 		for (MxS32 j = 0; j < sizeOfArray(g_characters); j++) {

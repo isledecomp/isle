@@ -59,11 +59,11 @@ MxS32 CarRace::g_unk0x100d5d60[] =
 
 // GLOBAL: LEGO1 0x100f0c70
 // STRING: LEGO1 0x100f0c48
-LegoChar* g_strCRCFRNTY6 = "C_RCFRNTY6";
+const LegoChar* g_strCRCFRNTY6 = "C_RCFRNTY6";
 
 // GLOBAL: LEGO1 0x100f0c74
 // STRING: LEGO1 0x100f0c3c
-LegoChar* g_strCRCEDGEY0 = "C_RCEDGEY0";
+const LegoChar* g_strCRCEDGEY0 = "C_RCEDGEY0";
 
 // GLOBAL: LEGO1 0x100f0c7c
 MxS32 g_unk0x100f0c7c = 2;
