@@ -299,6 +299,10 @@ void Score::FillArea(MxU32 i_activity, MxU32 i_actor, MxS16 score)
 	MxS32 local28[] = {0x25, 0x29, 0x27, 0x28, 0x28};
 	MxS32 colors[] = {0x11, 0x0f, 0x08, 0x05};
 
+	assert(i_activity >= 0 && i_activity < 5);
+	assert(i_actor >= 0 && i_actor < 5);
+	assert(score >= 0 && score < 4);
+
 	MxU8* ptr = m_surface + local3c[i_actor] + local50[i_activity];
 	MxS32 color = colors[score];
 	MxS32 size = local28[i_activity];
