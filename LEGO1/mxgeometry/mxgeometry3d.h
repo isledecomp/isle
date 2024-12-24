@@ -185,7 +185,7 @@ inline long UnknownMx4DPointFloat::FUN_10004520()
 	v2 = m_unk0x00;
 	v2 -= m_unk0x18;
 
-	if (v1.Dot(&v1, &v1) < v2.Dot(&v2, &v2)) {
+	if (v1.Dot(v1, v1) < v2.Dot(v2, v2)) {
 		m_unk0x18 *= -1.0f;
 	}
 
@@ -208,7 +208,7 @@ inline int UnknownMx4DPointFloat::FUN_100040a0(Vector4& p_v, float p_f)
 	}
 	else if (m_unk0x30 == (c_bit1 | c_bit2)) {
 		int i;
-		double d1 = p_v.Dot(&m_unk0x00, &m_unk0x18);
+		double d1 = p_v.Dot(m_unk0x00, m_unk0x18);
 		double a;
 		double b;
 

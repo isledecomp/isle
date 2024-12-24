@@ -68,11 +68,11 @@ LegoResult LegoUnknown::FUN_1009a1e0(float p_f1, Matrix4& p_mat, Vector3& p_v, L
 		return FAILURE;
 	}
 
-	v2.EqualsCross(&p_v, &v4);
+	v2.EqualsCross(p_v, v4);
 	if (v2.Unitize() != 0) {
 		return FAILURE;
 	}
 
-	v3.EqualsCross(&v4, &v2);
+	v3.EqualsCross(v4, v2);
 	return SUCCESS;
 }

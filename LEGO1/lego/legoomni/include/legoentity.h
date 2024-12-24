@@ -86,6 +86,8 @@ public:
 	MxBool GetUnknown0x10IsSet(MxU8 p_flag) { return m_unk0x10 & p_flag; }
 	MxBool GetFlagsIsSet(MxU8 p_flag) { return m_flags & p_flag; }
 	MxU8 GetFlags() { return m_flags; }
+
+	// FUNCTION: BETA10 0x10049db0
 	MxFloat GetWorldSpeed() { return m_worldSpeed; }
 
 	// FUNCTION: BETA10 0x1000f2f0

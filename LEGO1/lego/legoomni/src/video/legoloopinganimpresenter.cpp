@@ -68,9 +68,9 @@ void LegoLoopingAnimPresenter::PutFrame()
 
 				up -= m_currentWorld->GetCamera()->GetWorldLocation();
 				dir /= dirsqr;
-				pos.EqualsCross(&dir, &up);
+				pos.EqualsCross(dir, up);
 				pos.Unitize();
-				up.EqualsCross(&pos, &dir);
+				up.EqualsCross(pos, dir);
 				pos *= possqr;
 				dir *= dirsqr;
 				up *= upsqr;

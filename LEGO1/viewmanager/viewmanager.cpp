@@ -435,10 +435,10 @@ void ViewManager::UpdateViewTransformations()
 		y = a;
 		y -= b;
 
-		normal.EqualsCross(&x, &y);
+		normal.EqualsCross(x, y);
 		normal.Unitize();
 
-		frustum_planes[i][3] = -normal.Dot(&normal, &a);
+		frustum_planes[i][3] = -normal.Dot(normal, a);
 	}
 
 	flags |= c_bit4;

@@ -231,10 +231,10 @@ LegoResult LegoAnimScene::FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix)
 	local54 -= localb8;
 
 	if (local54.Unitize() == 0) {
-		local5c.EqualsCross(&local68, &local54);
+		local5c.EqualsCross(local68, local54);
 
 		if (local5c.Unitize() == 0) {
-			local68.EqualsCross(&local54, &local5c);
+			local68.EqualsCross(local54, local5c);
 
 			localcc = p_matrix[3];
 			localcc += localb0[3];

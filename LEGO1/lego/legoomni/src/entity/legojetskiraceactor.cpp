@@ -90,7 +90,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 			LERP3(a, *v1, *v2, m_unk0xe4);
 
 			m_destEdge->FUN_1002ddc0(*m_boundary, bbb);
-			c.EqualsCross(&bbb, m_boundary->GetUnknown0x14());
+			c.EqualsCross(bbb, *m_boundary->GetUnknown0x14());
 			c.Unitize();
 
 			Mx3DPointFloat worldDirection(m_roi->GetWorldDirection());
