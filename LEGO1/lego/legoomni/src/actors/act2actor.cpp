@@ -444,6 +444,8 @@ MxS32 Act2Actor::VTable0xa0()
 {
 	undefined4 newLocation;
 
+	assert(!m_grec);
+
 	CurrentWorld();
 	MxU16 randomVal = rand() / (RAND_MAX / 2) + 1;
 
