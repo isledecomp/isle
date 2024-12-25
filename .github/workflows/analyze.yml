@@ -1,9 +1,6 @@
 name: Analyze
 
-on:
-  push:
-  pull_request:
-  workflow_dispatch:
+on: [push, pull_request]
 
 jobs:
   decomplint-isle:
@@ -18,18 +15,16 @@ jobs:
           - LEGO1
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
 
-      - name: Setup Python modules
-        run: |
-          pip install -r tools/requirements.txt
+    - name: Install python libraries
+      run: |
+        pip install -r tools/requirements.txt
 
-      - name: Run decomplint.py
-        run: |
-          reccmp-decomplint ${{ matrix.who }} --module ${{ matrix.who }} --warnfail
+    - name: Run decomplint.py
+      run: |
+        reccmp-decomplint ${{ matrix.who }} --module ${{ matrix.who }} --warnfail

@@ -1,9 +1,6 @@
 name: Build
 
-on:
-  push:
-  pull_request:
-  workflow_dispatch:
+on: [push, pull_request]
 
 jobs:
   fetch-deps:
@@ -20,15 +17,12 @@ jobs:
       fail-fast: false
       matrix:
         toolchain:
-          - { name: 'MSVC',           shell: 'sh',        setup-cmake: true, setup-ninja: true, setup-msvc: true }
-          - { name: 'msys2 mingw32',  shell: 'msys2 {0}', msystem: mingw32, msys-env: mingw-w64-i686, clang-tidy: true, werror: true }
-          - { name: 'msys2 clang32',  shell: 'msys2 {0}', msystem: clang32, msys-env: mingw-w64-clang-i686, clang-tidy: true, werror: true, no-dx5-libs: true }
+        - { name: 'MSVC',           shell: 'sh',        setup-cmake: true, setup-ninja: true, setup-msvc: true }
+        - { name: 'msys2 mingw32',  shell: 'msys2 {0}', msystem: mingw32, msys-env: mingw-w64-i686,        clang-tidy: true, werror: true }
+        - { name: 'msys2 clang32',  shell: 'msys2 {0}', msystem: clang32, msys-env: mingw-w64-clang-i686,  clang-tidy: true, werror: true, no-dx5-libs: true }
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup MSYS2
+      - name: Set up MSYS2
         if: ${{ !!matrix.toolchain.msystem }}
         uses: msys2/setup-msys2@v2
         with:
@@ -39,19 +33,21 @@ jobs:
             ${{ matrix.toolchain.msys-env }}-ninja
             ${{ matrix.toolchain.msys-env }}-clang-tools-extra
 
-      - name: Setup CMake
+      - name: Setup cmake
         if: matrix.toolchain.setup-cmake
         uses: jwlawson/actions-setup-cmake@v2
 
       - name: Setup ninja
         if: matrix.toolchain.setup-ninja
-        uses: larziwau/gha-setup-ninja@master
+        uses: ashutoshvarma/setup-ninja@master
 
       - name: Setup vcvars
         if: matrix.toolchain.setup-msvc
         uses: ilammy/msvc-dev-cmd@v1
         with:
-          arch: amd64_x86
+          arch: amd64_x86  # Use the 64-bit x64-native cross tools to build 32-bit x86 code
+
+      - uses: actions/checkout@v4
 
       - name: Build
         run: |
@@ -64,129 +60,126 @@ jobs:
           cmake --build build -- -k0
 
   build:
-    name: MSVC 4.20
+    name: 'MSVC 4.20'
     runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Checkout MSVC repository
-        uses: actions/checkout@v4
-        with:
-          repository: itsmattkc/MSVC420
-          path: msvc420
+    - uses: actions/checkout@v4
+      with:
+        repository: itsmattkc/msvc420
+        path: msvc420
 
-      - name: Setup CMake
-        uses: jwlawson/actions-setup-cmake@v2
-        with:
-          cmake-version: '3.31.x'
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v2
+      with:
+        # Use minimum supported version
+        cmake-version: '3.15.x'
 
-      - name: Patch MSVC
-        run: |
-          tools/patch_c2.py msvc420/bin/C2.EXE
+    - name: Patch MSVC 4.2
+      run: |
+        tools/patch_c2.py msvc420/bin/C2.EXE
 
-      - name: Build
-        shell: cmd
-        run: |
-          call .\msvc420\bin\VCVARS32.BAT x86
-          cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
-          cmake --build build
+    - name: Build
+      shell: cmd
+      run: |
+        call .\msvc420\bin\VCVARS32.BAT x86
+        cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
+        cmake --build build
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Win32
-          path: |
-            build/CONFIG.EXE
-            build/CONFIG.PDB
-            build/ISLE.EXE
-            build/ISLE.PDB
-            build/LEGO1.DLL
-            build/LEGO1.PDB
+    - name: Upload Artifact
+      uses: actions/upload-artifact@main
+      with:
+        name: Win32
+        path: |
+          build/CONFIG.EXE
+          build/CONFIG.PDB
+          build/ISLE.EXE
+          build/ISLE.PDB
+          build/LEGO1.DLL
+          build/LEGO1.PDB
 
   compare:
     name: Compare with master
     needs: [build, fetch-deps]
     runs-on: windows-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - uses: actions/checkout@main
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
 
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: Win32
-          path: build
+    - uses: actions/download-artifact@main
+      with:
+       name: Win32
+       path: build
 
-      - name: Restore cached original binaries
-        id: cache-original-binaries
-        uses: actions/cache/restore@v4
-        with:
-          enableCrossOsArchive: true
-          path: legobin
-          key: legobin
+    - name: Restore cached original binaries
+      id: cache-original-binaries
+      uses: actions/cache/restore@v4
+      with:
+        enableCrossOsArchive: true
+        path: legobin
+        key: legobin
 
-      - name: Setup Python modules
-        shell: bash
-        run: |
-          pip install -r tools/requirements.txt
+    - name: Install python packages
+      shell: bash
+      run: |
+        pip install -r tools/requirements.txt
 
-      - name: Detect binaries
-        run: |
-          reccmp-project detect --what original --search-path legobin
-          reccmp-project detect --what recompiled --search-path build
+    - name: Detect binaries
+      run: |
+        reccmp-project detect --what original   --search-path legobin
+        reccmp-project detect --what recompiled --search-path build
 
-      - name: Summarize accuracy
-        shell: bash
-        run: |
-          reccmp-reccmp -S CONFIGPROGRESS.SVG --svg-icon assets/config.png --target CONFIG | tee CONFIGPROGRESS.TXT
-          reccmp-reccmp -S ISLEPROGRESS.SVG --svg-icon assets/isle.png --target ISLE | tee ISLEPROGRESS.TXT
-          reccmp-reccmp -S LEGO1PROGRESS.SVG --svg-icon assets/lego1.png --target LEGO1 | tee LEGO1PROGRESS.TXT
+    - name: Summarize Accuracy
+      shell: bash
+      run: |
+        reccmp-reccmp -S CONFIGPROGRESS.SVG --svg-icon assets/config.png --target CONFIG | tee CONFIGPROGRESS.TXT
+        reccmp-reccmp -S ISLEPROGRESS.SVG --svg-icon assets/isle.png --target ISLE | tee ISLEPROGRESS.TXT
+        reccmp-reccmp -S LEGO1PROGRESS.SVG --svg-icon assets/lego1.png --target LEGO1 | tee LEGO1PROGRESS.TXT
 
-      - name: Compare accuracy with current master
-        shell: bash
-        run: |
-          curl -fLSs -o CONFIGPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/CONFIGPROGRESS.TXT || echo "" >CONFIGPROGRESS-OLD.TXT
-          curl -fLSs -o ISLEPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/ISLEPROGRESS.TXT || echo "" >ISLEPROGRESS-OLD.TXT
-          curl -fLSs -o LEGO1PROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/LEGO1PROGRESS.TXT || echo "" >LEGO1PROGRESS-OLD.TXT
+    - name: Compare Accuracy With Current Master
+      shell: bash
+      run: |
+        # Compare with current master
+        curl -fLSs -o CONFIGPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/CONFIGPROGRESS.TXT || echo "" >CONFIGPROGRESS-OLD.TXT
+        curl -fLSs -o ISLEPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/ISLEPROGRESS.TXT || echo "" >ISLEPROGRESS-OLD.TXT
+        curl -fLSs -o LEGO1PROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/LEGO1PROGRESS.TXT || echo "" >LEGO1PROGRESS-OLD.TXT
 
-          diff -u0 CONFIGPROGRESS-OLD.TXT CONFIGPROGRESS.TXT || true
-          diff -u0 ISLEPROGRESS-OLD.TXT ISLEPROGRESS.TXT || true
-          diff -u0 LEGO1PROGRESS-OLD.TXT LEGO1PROGRESS.TXT || true
+        diff -u0 CONFIGPROGRESS-OLD.TXT CONFIGPROGRESS.TXT || true
+        diff -u0 ISLEPROGRESS-OLD.TXT ISLEPROGRESS.TXT || true
+        diff -u0 LEGO1PROGRESS-OLD.TXT LEGO1PROGRESS.TXT || true
 
-      - name: Test exports
-        shell: bash
-        run: |
-          reccmp-verexp --target LEGO1
+    - name: Test Exports
+      shell: bash
+      run: |
+        reccmp-verexp --target LEGO1
 
-      - name: Check vtables
-        shell: bash
-        run: |
-          reccmp-vtable --target CONFIG
-          reccmp-vtable --target ISLE
-          reccmp-vtable --target LEGO1
+    - name: Check Vtables
+      shell: bash
+      run: |
+        reccmp-vtable --target CONFIG
+        reccmp-vtable --target ISLE
+        reccmp-vtable --target LEGO1
 
-      - name: Check variables
-        shell: bash
-        run: |
-          reccmp-datacmp --target CONFIG
-          reccmp-datacmp --target ISLE
-          reccmp-datacmp --target LEGO1
+    - name: Check Variables
+      shell: bash
+      run: |
+       reccmp-datacmp --target CONFIG
+       reccmp-datacmp --target ISLE
+       reccmp-datacmp --target LEGO1
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Accuracy Report
-          path: |
-            CONFIGPROGRESS.*
-            ISLEPROGRESS.*
-            LEGO1PROGRESS.*
+    - name: Upload Artifact
+      uses: actions/upload-artifact@main
+      with:
+        name: Accuracy Report
+        path: |
+          CONFIGPROGRESS.*
+          ISLEPROGRESS.*
+          LEGO1PROGRESS.*
 
   upload:
     name: Upload artifacts
@@ -194,35 +187,32 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
     steps:
-      - name: Checkout uploadtool repository
-        uses: actions/checkout@v4
-        with:
-          repository: probonopd/uploadtool
+    - uses: actions/checkout@v4
+      with:
+        repository: probonopd/uploadtool
 
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: Win32
-          path: build
+    - uses: actions/download-artifact@main
+      with:
+       name: Win32
+       path: build
 
-      - name: Download accuracy report artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: Accuracy Report
+    - uses: actions/download-artifact@main
+      with:
+        name: Accuracy Report
 
-      - name: Upload continuous release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          UPLOAD_KEY: ${{ secrets.UPLOAD_KEY }}
-        run: |
-          ./upload.sh \
-            build/CONFIG.EXE \
-            build/ISLE.EXE \
-            build/LEGO1.DLL \
-            CONFIGPROGRESS.* \
-            ISLEPROGRESS.* \
-            LEGO1PROGRESS.*
+    - name: Upload Continuous Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        UPLOAD_KEY: ${{ secrets.UPLOAD_KEY }}
+      run: |
+        ./upload.sh \
+          build/CONFIG.EXE \
+          build/ISLE.EXE \
+          build/LEGO1.DLL \
+          CONFIGPROGRESS.* \
+          ISLEPROGRESS.* \
+          LEGO1PROGRESS.*
 
-          curl -X POST -F key=$UPLOAD_KEY -F 'file=@CONFIGPROGRESS.SVG' https://legoisland.org/progress/
-          curl -X POST -F key=$UPLOAD_KEY -F 'file=@ISLEPROGRESS.SVG' https://legoisland.org/progress/
-          curl -X POST -F key=$UPLOAD_KEY -F 'file=@LEGO1PROGRESS.SVG' https://legoisland.org/progress/
+        curl -X POST -F key=$UPLOAD_KEY -F 'file=@CONFIGPROGRESS.SVG' https://legoisland.org/progress/
+        curl -X POST -F key=$UPLOAD_KEY -F 'file=@ISLEPROGRESS.SVG' https://legoisland.org/progress/
+        curl -X POST -F key=$UPLOAD_KEY -F 'file=@LEGO1PROGRESS.SVG' https://legoisland.org/progress/

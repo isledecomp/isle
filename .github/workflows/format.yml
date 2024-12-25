@@ -1,9 +1,6 @@
 name: Format
 
-on:
-  push:
-  pull_request:
-  workflow_dispatch:
+on: [push, pull_request]
 
 jobs:
   clang-format:
@@ -11,13 +8,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Run clang-format
-        run: |
-          find CONFIG LEGO1 ISLE -iname '*.h' -o -iname '*.cpp' | xargs \
-            pipx run "clang-format>=17,<18" \
-              --style=file \
-              -i
-          git diff --exit-code
+    - name: Run clang-format
+      run: |
+        find CONFIG LEGO1 ISLE -iname '*.h' -o -iname '*.cpp' | xargs \
+        pipx run "clang-format>=17,<18" \
+          --style=file \
+          -i
+        git diff --exit-code
