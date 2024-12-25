@@ -542,8 +542,8 @@ MxResult LegoNavController::ProcessJoystickInput(MxBool& p_und)
 			if (povPosition >= 0) {
 				LegoWorld* world = CurrentWorld();
 
-				if (world && world->GetCamera()) {
-					world->GetCamera()->FUN_10012320(DTOR(povPosition));
+				if (world && world->GetCameraController()) {
+					world->GetCameraController()->FUN_10012320(DTOR(povPosition));
 					p_und = TRUE;
 				}
 			}
