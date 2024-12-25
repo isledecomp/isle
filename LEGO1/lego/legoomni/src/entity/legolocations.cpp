@@ -1043,7 +1043,7 @@ LegoLocation g_locations[] = {
 	{69,
 	 "overhead",
 	 0.0f,
-	 1.5f,
+	 135.0f,
 	 0.0f,
 	 0.0f,
 	 -1.0f,
