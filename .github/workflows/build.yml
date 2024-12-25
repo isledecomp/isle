@@ -64,7 +64,7 @@ jobs:
           cmake --build build -- -k0
 
   build:
-    name: 'MSVC 4.20'
+    name: MSVC 4.20
     runs-on: windows-latest
 
     steps:
@@ -116,7 +116,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
 
       - name: Download artifact
         uses: actions/download-artifact@v4
