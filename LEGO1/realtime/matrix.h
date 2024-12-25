@@ -179,7 +179,7 @@ public:
 		}
 	}
 
-	inline int Unknown(Matrix4& p_mat);
+	inline int BETA_1005a590(Matrix4& p_mat);
 
 	// FUNCTION: LEGO1 0x1006b500
 	void Swap(int p_d1, int p_d2)
@@ -202,9 +202,11 @@ protected:
 // FUNCTION: BETA10 0x100101c0
 inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 {
-	float trace = m_data[0][0] + m_data[1][1] + m_data[2][2];
-	if (trace > 0) {
-		trace = sqrt(trace + 1.0);
+	float trace;
+	float localc = m_data[0][0] + m_data[1][1] + m_data[2][2];
+
+	if (localc > 0) {
+		trace = sqrt(localc + 1.0);
 		p_outQuat[3] = trace * 0.5f;
 		trace = 0.5f / trace;
 		p_outQuat[0] = (m_data[2][1] - m_data[1][2]) * trace;
@@ -212,7 +214,6 @@ inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 		p_outQuat[2] = (m_data[1][0] - m_data[0][1]) * trace;
 	}
 	else {
-
 		// GLOBAL: LEGO1 0x100d4090
 		static int rotateIndex[] = {1, 2, 0};
 
@@ -228,13 +229,13 @@ inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 		int next = rotateIndex[largest];
 		int nextNext = rotateIndex[next];
 
-		float trace = sqrt(*Element(largest, largest) - (*Element(nextNext, nextNext) + *Element(next, next)) + 1.0);
+		trace = sqrt(*Element(largest, largest) - (*Element(nextNext, nextNext) + *Element(next, next)) + 1.0);
 
 		p_outQuat[largest] = trace * 0.5f;
 		trace = 0.5f / trace;
 
 		p_outQuat[3] = (*Element(nextNext, next) - *Element(next, nextNext)) * trace;
-		p_outQuat[next] = (*Element(largest, next) + *Element(next, largest)) * trace;
+		p_outQuat[next] = (*Element(largest, next) - *Element(next, largest)) * trace;
 		p_outQuat[nextNext] = (*Element(largest, nextNext) + *Element(nextNext, largest)) * trace;
 	}
 }
@@ -292,7 +293,7 @@ inline int Matrix4::FromQuaternion(const Vector4& p_vec)
 }
 
 // FUNCTION: BETA10 0x1005a590
-inline int Matrix4::Unknown(Matrix4& p_mat)
+inline int Matrix4::BETA_1005a590(Matrix4& p_mat)
 {
 	float local5c[4][4];
 	Matrix4 localc(local5c);
