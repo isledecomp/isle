@@ -235,7 +235,7 @@ inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 		trace = 0.5f / trace;
 
 		p_outQuat[3] = (*Element(nextNext, next) - *Element(next, nextNext)) * trace;
-		p_outQuat[next] = (*Element(largest, next) - *Element(next, largest)) * trace;
+		p_outQuat[next] = (*Element(largest, next) + *Element(next, largest)) * trace;
 		p_outQuat[nextNext] = (*Element(largest, nextNext) + *Element(nextNext, largest)) * trace;
 	}
 }
