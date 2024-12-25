@@ -197,13 +197,13 @@ inline int UnknownMx4DPointFloat::FUN_100040a0(Vector4& p_v, float p_f)
 {
 	if (m_unk0x30 == c_bit1) {
 		p_v = m_unk0x00;
-		p_v[3] = (1.0 - p_f) * acos((double) p_v[3]) * 2.0;
+		p_v[3] = (float) ((1.0 - p_f) * acos((double) p_v[3]) * 2.0);
 		return p_v.NormalizeQuaternion();
 	}
 
 	if (m_unk0x30 == c_bit2) {
 		p_v = m_unk0x18;
-		p_v[3] = p_f * acos((double) p_v[3]) * 2.0;
+		p_v[3] = (float) (p_f * acos((double) p_v[3]) * 2.0);
 		return p_v.NormalizeQuaternion();
 	}
 
@@ -226,7 +226,7 @@ inline int UnknownMx4DPointFloat::FUN_100040a0(Vector4& p_v, float p_f)
 			}
 
 			for (i = 0; i < 4; i++) {
-				p_v[i] = m_unk0x00[i] * a + m_unk0x18[i] * b;
+				p_v[i] = (float) (m_unk0x00[i] * a + m_unk0x18[i] * b);
 			}
 		}
 		else {
@@ -238,7 +238,7 @@ inline int UnknownMx4DPointFloat::FUN_100040a0(Vector4& p_v, float p_f)
 			b = sin(p_f * 1.570796326794895);
 
 			for (i = 0; i < 3; i++) {
-				p_v[i] = m_unk0x00[i] * a + p_v[i] * b;
+				p_v[i] = (float) (m_unk0x00[i] * a + p_v[i] * b);
 			}
 		}
 
