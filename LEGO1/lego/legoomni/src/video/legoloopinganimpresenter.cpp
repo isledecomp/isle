@@ -50,7 +50,7 @@ void LegoLoopingAnimPresenter::PutFrame()
 
 	FUN_1006b9a0(m_anim, time, m_unk0x78);
 
-	if (m_unk0x8c != NULL && m_currentWorld != NULL && m_currentWorld->GetCamera() != NULL) {
+	if (m_unk0x8c != NULL && m_currentWorld != NULL && m_currentWorld->GetCameraController() != NULL) {
 		for (MxS32 i = 0; i < m_unk0x94; i++) {
 			if (m_unk0x8c[i] != NULL) {
 				MxMatrix mat(m_unk0x8c[i]->GetLocal2World());
@@ -66,7 +66,7 @@ void LegoLoopingAnimPresenter::PutFrame()
 
 				up = und;
 
-				up -= m_currentWorld->GetCamera()->GetWorldLocation();
+				up -= m_currentWorld->GetCameraController()->GetWorldLocation();
 				dir /= dirsqr;
 				pos.EqualsCross(dir, up);
 				pos.Unitize();

@@ -102,7 +102,7 @@ public:
 	MxCore* Find(const MxAtomId& p_atom, MxS32 p_entityId);
 
 	// FUNCTION: BETA10 0x1002b4f0
-	LegoCameraController* GetCamera() { return m_cameraController; }
+	LegoCameraController* GetCameraController() { return m_cameraController; }
 
 	LegoEntityList* GetEntityList() { return m_entityList; }
 	LegoOmni::World GetWorldId() { return m_worldId; }

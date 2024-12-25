@@ -38,13 +38,8 @@ public:
 		return TRUE;
 	} // vtable+0x18
 
-	void SetUnknown8(MxU32 p_unk0x08) { m_unk0x08 = p_unk0x08; }
-	MxU32 GetUnkown8() { return m_unk0x08; }
-
 	// SYNTHETIC: LEGO1 0x1000e190
 	// HelicopterState::`scalar deleting destructor'
-
-	// TODO: Most likely getters/setters are not used according to BETA.
 
 	MxU32 m_unk0x08; // 0x08
 };
