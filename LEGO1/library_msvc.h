@@ -675,6 +675,9 @@
 // LIBRARY: BETA10 0x100f9a50
 // _sin
 
+// LIBRARY: BETA10 0x100f9a5a
+// _cos
+
 // LIBRARY: BETA10 0x100f95d0
 // _sqrt
 
