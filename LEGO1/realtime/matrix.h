@@ -204,7 +204,7 @@ inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 {
 	float trace = m_data[0][0] + m_data[1][1] + m_data[2][2];
 	if (trace > 0) {
-		trace = sqrt(trace + 1.0);
+		trace = (float) sqrt(trace + 1.0);
 		p_outQuat[3] = trace * 0.5f;
 		trace = 0.5f / trace;
 		p_outQuat[0] = (m_data[2][1] - m_data[1][2]) * trace;
@@ -228,7 +228,8 @@ inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 		int next = rotateIndex[largest];
 		int nextNext = rotateIndex[next];
 
-		float trace = sqrt(*Element(largest, largest) - (*Element(nextNext, nextNext) + *Element(next, next)) + 1.0);
+		float trace =
+			(float) (sqrt(*Element(largest, largest) - (*Element(nextNext, nextNext) + *Element(next, next)) + 1.0));
 
 		p_outQuat[largest] = trace * 0.5f;
 		trace = 0.5f / trace;
@@ -276,14 +277,14 @@ inline int Matrix4::FromQuaternion(const Vector4& p_vec)
 		m_data[1][2] = v24 - v13;
 		m_data[2][2] = 1.0f - (v18 + v17);
 
-		m_data[3][0] = 0;
-		m_data[3][1] = 0;
-		m_data[3][2] = 0;
+		m_data[3][0] = 0.0f;
+		m_data[3][1] = 0.0f;
+		m_data[3][2] = 0.0f;
 		m_data[3][3] = 1.0f;
 
-		m_data[0][3] = 0;
-		m_data[1][3] = 0;
-		m_data[2][3] = 0;
+		m_data[0][3] = 0.0f;
+		m_data[1][3] = 0.0f;
+		m_data[2][3] = 0.0f;
 		return 0;
 	}
 

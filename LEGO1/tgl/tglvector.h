@@ -10,15 +10,15 @@ namespace Tgl
 
 namespace Constant
 {
-const float Pi = 3.14159265358979323846;
+const double Pi = 3.14159265358979323846;
 };
 
-inline float DegreesToRadians(float degrees)
+inline double DegreesToRadians(double degrees)
 {
 	return Constant::Pi * (degrees / 180.0);
 }
 
-inline float RadiansToDegrees(float radians)
+inline double RadiansToDegrees(double radians)
 {
 	return (radians / Constant::Pi) * 180.0;
 }
