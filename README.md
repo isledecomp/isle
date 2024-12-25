@@ -8,8 +8,7 @@ This is a functionally complete decompilation of **LEGO Island** (Version 1.1, E
 
 ## Status
 
-![ISLE Progress](https://legoisland.org/progress/ISLEPROGRESS.SVG)
-![LEGO1 Progress](https://legoisland.org/progress/LEGO1PROGRESS.SVG)
+<img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="50%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="50%">
 
 Both `ISLE.EXE` and `LEGO1.DLL` are fully decompiled and are functionally identical to the original executables, as far as we know. However, there is ongoing work to improve the accuracy, naming, documentation, and structure of the source code. The game should be fully playable with the binaries derived from this source code, though some unresolved bugs may still exist.
 
