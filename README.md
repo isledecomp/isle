@@ -38,7 +38,7 @@ cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo
 ```
   - **Visual C++ 4.2 has issues with paths containing spaces**. If you get configure or build errors, make sure neither CMake, the repository, nor Visual C++ 4.2 is in a path that contains spaces.
   - Replace `<path-to-source>` with the source repository. This can be `..` if your build folder is inside the source repository.
-  - `RelWithDebInfo` is recommended because it will produce debug symbols useful for further decompilation work. However, you can change this to `Release` if you don't need them. `Debug` builds are not recommended because they are unlikely to be compatible with the retail `LEGO1.DLL`, which is currently the only way to use this decompilation for gameplay.
+  - `RelWithDebInfo` is recommended because it will produce debug symbols useful for further decompilation work. However, you can change this to `Release` if you don't need them. While `Debug` builds can be compiled and used, they are not recommended as the primary goal is to match the code to the original binary. This is because the retail binaries were compiled as `Release` builds.
   - `NMake Makefiles` is most recommended because it will be immediately compatible with Visual C++ 4.2. For faster builds, you can use `Ninja` (if you have it installed), however due to limitations in Visual C++ 4.2, you can only build `Release` builds this way (debug symbols cannot be generated with `Ninja`).
 1. Build the project by running `nmake` or `cmake --build <build-folder>`
 1. When this is done, there should be a recompiled `ISLE.EXE` and `LEGO1.DLL` in the build folder.
