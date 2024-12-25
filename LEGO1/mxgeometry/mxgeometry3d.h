@@ -164,9 +164,8 @@ inline int UnknownMx4DPointFloat::BETA_1004aaa0(Matrix4& p_matrix, float p_f)
 	if (FUN_100040a0(v, p_f) == 0) {
 		return p_matrix.FromQuaternion(v);
 	}
-	else {
-		return -1;
-	}
+
+	return -1;
 }
 
 // FUNCTION: LEGO1 0x10004520
@@ -201,12 +200,14 @@ inline int UnknownMx4DPointFloat::FUN_100040a0(Vector4& p_v, float p_f)
 		p_v[3] = (1.0 - p_f) * acos((double) p_v[3]) * 2.0;
 		return p_v.NormalizeQuaternion();
 	}
-	else if (m_unk0x30 == c_bit2) {
+
+	if (m_unk0x30 == c_bit2) {
 		p_v = m_unk0x18;
 		p_v[3] = p_f * acos((double) p_v[3]) * 2.0;
 		return p_v.NormalizeQuaternion();
 	}
-	else if (m_unk0x30 == (c_bit1 | c_bit2)) {
+
+	if (m_unk0x30 == (c_bit1 | c_bit2)) {
 		int i;
 		double d1 = p_v.Dot(m_unk0x00, m_unk0x18);
 		double a;
@@ -243,9 +244,8 @@ inline int UnknownMx4DPointFloat::FUN_100040a0(Vector4& p_v, float p_f)
 
 		return 0;
 	}
-	else {
-		return -1;
-	}
+
+	return -1;
 }
 
 #endif // MXGEOMETRY3D_H

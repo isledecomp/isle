@@ -286,8 +286,9 @@ inline int Matrix4::FromQuaternion(const Vector4& p_vec)
 		m_data[2][3] = 0;
 		return 0;
 	}
-
-	return -1;
+	else {
+		return -1;
+	}
 }
 
 // FUNCTION: BETA10 0x1005a590

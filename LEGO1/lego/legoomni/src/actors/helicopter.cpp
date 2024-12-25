@@ -30,6 +30,7 @@ DECOMP_SIZE_ASSERT(Matrix4, 0x08)
 DECOMP_SIZE_ASSERT(MxMatrix, 0x48)
 
 // FUNCTION: LEGO1 0x10001e60
+// FUNCTION: BETA10 0x1002a0d0
 Helicopter::Helicopter()
 {
 	m_maxLinearVel = 60;
@@ -43,6 +44,7 @@ Helicopter::~Helicopter()
 }
 
 // FUNCTION: LEGO1 0x100032c0
+// FUNCTION: BETA10 0x1002a16d
 MxResult Helicopter::Create(MxDSAction& p_dsAction)
 {
 	MxResult result = IslePathActor::Create(p_dsAction);
@@ -51,6 +53,8 @@ MxResult Helicopter::Create(MxDSAction& p_dsAction)
 	if (m_world->IsA("Act3")) {
 		((Act3*) m_world)->SetHelicopter(this);
 	}
+
+	assert(m_world);
 
 	if (m_world != NULL) {
 		m_world->Add(this);
@@ -61,6 +65,7 @@ MxResult Helicopter::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10003320
+// FUNCTION: BETA10 0x1002a240
 void Helicopter::CreateState()
 {
 	m_state = (HelicopterState*) GameState()->GetState("HelicopterState");
@@ -70,8 +75,11 @@ void Helicopter::CreateState()
 }
 
 // FUNCTION: LEGO1 0x10003360
+// FUNCTION: BETA10 0x1002a29a
 void Helicopter::Exit()
 {
+	assert(UserActor() == this);
+
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 		SpawnPlayer(
 			LegoGameState::e_unk40,
@@ -110,6 +118,7 @@ void Helicopter::Exit()
 }
 
 // FUNCTION: LEGO1 0x10003480
+// FUNCTION: BETA10 0x1002a3db
 MxLong Helicopter::HandleClick()
 {
 	if (!FUN_1003ef60()) {
@@ -118,6 +127,7 @@ MxLong Helicopter::HandleClick()
 
 	if (!m_world) {
 		m_world = CurrentWorld();
+		assert(m_world);
 	}
 
 	AnimationManager()->FUN_1005f6d0(FALSE);
@@ -163,6 +173,8 @@ MxLong Helicopter::HandleClick()
 MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	MxLong result = 0;
+
+	assert(m_world);
 	MxAtomId script;
 
 	switch (GameState()->GetCurrentAct()) {
@@ -199,9 +211,10 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 				break;
 			}
 
-			Act1State* state = (Act1State*) GameState()->GetState("Act1State");
+			Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+			assert(act1State);
 			if (m_state->m_unk0x08 == 0) {
-				state->m_unk0x018 = 4;
+				act1State->m_unk0x018 = 4;
 				m_state->m_unk0x08 = 1;
 				m_world->RemoveActor(this);
 				InvokeAction(Extra::ActionType::e_start, script, IsleScript::c_HelicopterTakeOff_Anim, NULL);
@@ -303,9 +316,9 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 	switch (m_state->m_unk0x08) {
 	case 1: {
 		if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
-			Act1State* act1state = (Act1State*) GameState()->GetState("Act1State");
-			assert(act1state);
-			act1state->m_unk0x018 = 4;
+			Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+			assert(act1State);
+			act1State->m_unk0x018 = 4;
 			SpawnPlayer(
 				LegoGameState::e_unk42,
 				TRUE,
@@ -344,9 +357,9 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 		m_world->GetCameraController()->SetWorldTransform(at, dir, up);
 
 		if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
-			Act1State* act1state = (Act1State*) GameState()->GetState("Act1State");
-			assert(act1state);
-			act1state->m_unk0x018 = 0;
+			Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+			assert(act1State);
+			act1State->m_unk0x018 = 0;
 			SpawnPlayer(
 				LegoGameState::e_unk41,
 				TRUE,
@@ -423,7 +436,7 @@ void Helicopter::Animate(float p_time)
 				((Act3*) m_world)->FUN_10073430();
 			}
 
-			LegoPathActor::m_actorState = c_disabled;
+			SetActorState(c_disabled);
 		}
 	}
 	else {
