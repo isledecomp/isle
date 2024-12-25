@@ -4,8 +4,6 @@
 
 This is a functionally complete decompilation of **LEGO Island** (Version 1.1, English). The aim is to match the recompiled instructions closely to the original machine code. The goal is to provide a workable codebase that can be modified, improved, and ported to other platforms in the future.
 
----
-
 ## Status
 
 <img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="50%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="50%">
@@ -13,8 +11,6 @@ This is a functionally complete decompilation of **LEGO Island** (Version 1.1, E
 Both `ISLE.EXE` and `LEGO1.DLL` are fully decompiled and are functionally identical to the original executables, as far as we know. However, there is ongoing work to improve the accuracy, naming, documentation, and structure of the source code. The game should be fully playable with the binaries derived from this source code, though some unresolved bugs may still exist.
 
 Due to complications with the compiler, the binaries are not a byte-for-byte match of the original executables, but we are hopeful that this will be resolved in the future.
-
----
 
 ## Building
 
@@ -52,8 +48,6 @@ You will need the following software installed:
 
 If you have a CMake-compatible IDE, using it should be straightforward as long as you can execute `VCVARS32.BAT` and set the generator to `NMake Makefiles`.
 
----
-
 ## Usage
 
 To use the compiled executables:
@@ -61,13 +55,9 @@ To use the compiled executables:
 1. Place the compiled `ISLE.EXE` and `LEGO1.DLL` into LEGO Island's installation folder (typically found at `C:\Program Files\LEGO Island` or `C:\Program Files (x86)\LEGO Island`).
 2. Alternatively, LEGO Island can run from any directory, provided both `ISLE.EXE` and `LEGO1.DLL` are in the same directory, and the registry keys (usually located at `HKEY_LOCAL_MACHINE\Software\Mindscape\LEGO Island` or `HKEY_LOCAL_MACHINE\Software\Wow6432Node\Mindscape\LEGO Island`) point to the correct asset file location.
 
----
-
 ## Contributing
 
 If you're interested in contributing to this project, please refer to the [CONTRIBUTING](/CONTRIBUTING.md) page.
-
----
 
 ## Additional Information
 
