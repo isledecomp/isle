@@ -340,8 +340,8 @@ void LegoRaceCar::FUN_10012ff0(float p_param)
 			// Possible bug in the original code: The first argument is not initialized
 			a->GetAnimTreePtr()->GetCamAnim()->FUN_1009f490(deltaTime, transformationMatrix);
 
-			if (r->GetCamera()) {
-				r->GetCamera()->FUN_100123e0(transformationMatrix, 0);
+			if (r->GetCameraController()) {
+				r->GetCameraController()->FUN_100123e0(transformationMatrix, 0);
 			}
 
 			m_roi->FUN_100a58f0(transformationMatrix);

@@ -381,7 +381,7 @@ void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender
 // FUNCTION: LEGO1 0x1003eab0
 void SetCameraControllerFromIsle()
 {
-	InputManager()->SetCamera(FindWorld(*g_isleScript, IsleScript::c__Isle)->GetCamera());
+	InputManager()->SetCamera(FindWorld(*g_isleScript, IsleScript::c__Isle)->GetCameraController());
 }
 
 // FUNCTION: LEGO1 0x1003eae0
