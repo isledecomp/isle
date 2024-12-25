@@ -716,7 +716,7 @@ MxResult LegoAnimPresenter::FUN_1006b140(LegoROI* p_roi)
 
 	for (i = 1; i <= m_roiMapSize; i++) {
 		if (m_roiMap[i] == p_roi) {
-			if (local5c[i].Unknown(local58) != SUCCESS) {
+			if (local5c[i].BETA_1005a590(local58) != SUCCESS) {
 				goto done;
 			}
 
