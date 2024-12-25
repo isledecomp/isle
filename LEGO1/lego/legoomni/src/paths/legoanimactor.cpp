@@ -183,6 +183,7 @@ void LegoAnimActor::ClearMaps()
 }
 
 // FUNCTION: LEGO1 0x1001c870
+// FUNCTION: BETA10 0x1003e7e4
 void LegoAnimActor::SetWorldSpeed(MxFloat p_worldSpeed)
 {
 	if (p_worldSpeed < 0) {
