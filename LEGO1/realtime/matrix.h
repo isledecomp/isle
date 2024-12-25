@@ -243,38 +243,38 @@ inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 // FUNCTION: BETA10 0x10010550
 inline int Matrix4::FromQuaternion(const Vector4& p_vec)
 {
-	float len = p_vec.LenSquared();
+	float local14 = p_vec.LenSquared();
 
-	if (len > 0.0f) {
-		float v7 = 2.0f / len;
+	if (local14 > 0.0f) {
+		local14 = 2.0f / local14;
 
-		float v9 = p_vec[0] * v7;
-		float v11 = p_vec[1] * v7;
-		float v12 = p_vec[2] * v7;
+		float local24 = p_vec[0] * local14;
+		float local34 = p_vec[1] * local14;
+		float local10 = p_vec[2] * local14;
 
-		float v13 = p_vec[3] * v9;
-		float v14 = p_vec[3] * v11;
-		float v16 = p_vec[3] * v12;
+		float local28 = p_vec[3] * local24;
+		float local2c = p_vec[3] * local34;
+		float local30 = p_vec[3] * local10;
 
-		float v17 = p_vec[0] * v9;
-		float v22 = p_vec[0] * v11;
-		float v23 = p_vec[0] * v12;
+		float local38 = p_vec[0] * local24;
+		float local8 = p_vec[0] * local34;
+		float localc = p_vec[0] * local10;
 
-		float v18 = p_vec[1] * v11;
-		float v24 = p_vec[1] * v12;
-		float v19 = p_vec[2] * v12;
+		float local18 = p_vec[1] * local34;
+		float local1c = p_vec[1] * local10;
+		float local20 = p_vec[2] * local10;
 
-		m_data[0][0] = 1.0f - (v18 + v19);
-		m_data[1][0] = v22 + v16;
-		m_data[2][0] = v23 - v14;
+		m_data[0][0] = 1.0f - (local18 + local20);
+		m_data[1][0] = local8 + local30;
+		m_data[2][0] = localc - local2c;
 
-		m_data[0][1] = v22 - v16;
-		m_data[1][1] = 1.0f - (v17 + v19);
-		m_data[2][1] = v24 + v13;
+		m_data[0][1] = local8 - local30;
+		m_data[1][1] = 1.0f - (local38 + local20);
+		m_data[2][1] = local1c + local28;
 
-		m_data[0][2] = v14 + v23;
-		m_data[1][2] = v24 - v13;
-		m_data[2][2] = 1.0f - (v18 + v17);
+		m_data[0][2] = local2c + localc;
+		m_data[1][2] = local1c - local28;
+		m_data[2][2] = 1.0f - (local18 + local38);
 
 		m_data[3][0] = 0;
 		m_data[3][1] = 0;
