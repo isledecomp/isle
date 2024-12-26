@@ -89,14 +89,6 @@ public:
 	void SetBottom(MxS32 p_bottom) { bottom = p_bottom; }
 
 private:
-	void CopyFrom(MxS32 p_left, MxS32 p_top, MxS32 p_right, MxS32 p_bottom)
-	{
-		this->left = p_left;
-		this->top = p_top;
-		this->right = p_right;
-		this->bottom = p_bottom;
-	}
-
 	void CopyFrom(const MxRect32& p_rect)
 	{
 		this->left = p_rect.left;
