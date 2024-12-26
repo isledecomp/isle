@@ -5,6 +5,11 @@
 #include "mxpoint32.h"
 #include "mxsize32.h"
 
+// TODO: We recently added the MFC base class.
+// We have to check all usage sites of MxRect32 and verify with the help of the BETA
+// whether MxRect32 or CRect has been used.
+// Functions like CopyFrom or the other utility functions may take different types.
+
 // SIZE 0x10
 class MxRect32 : public CRect {
 public:
@@ -37,24 +42,24 @@ public:
 
 	void SetPoint(const MxPoint32& p_point)
 	{
-		this->left = p_point.GetX();
-		this->top = p_point.GetY();
+		left = p_point.GetX();
+		top = p_point.GetY();
 	}
 
 	void AddPoint(const MxPoint32& p_point)
 	{
-		this->left += p_point.GetX();
-		this->top += p_point.GetY();
-		this->right += p_point.GetX();
-		this->bottom += p_point.GetY();
+		left += p_point.GetX();
+		top += p_point.GetY();
+		right += p_point.GetX();
+		bottom += p_point.GetY();
 	}
 
 	void SubtractPoint(const MxPoint32& p_point)
 	{
-		this->left -= p_point.GetX();
-		this->top -= p_point.GetY();
-		this->right -= p_point.GetX();
-		this->bottom -= p_point.GetY();
+		left -= p_point.GetX();
+		top -= p_point.GetY();
+		right -= p_point.GetX();
+		bottom -= p_point.GetY();
 	}
 
 	void UpdateBounds(const MxRect32& p_rect)
@@ -75,8 +80,8 @@ public:
 	MxS32 GetWidth() const { return (right - left) + 1; }
 	MxS32 GetHeight() const { return (bottom - top) + 1; }
 
-	MxPoint32 GetPoint() const { return MxPoint32(this->left, this->top); }
-	MxSize32 GetSize() const { return MxSize32(this->right, this->bottom); }
+	MxPoint32 GetPoint() const { return MxPoint32(left, top); }
+	MxSize32 GetSize() const { return MxSize32(right, bottom); }
 
 	MxS32 GetLeft() const { return left; }
 	MxS32 GetTop() const { return top; }
@@ -91,20 +96,20 @@ public:
 private:
 	void CopyFrom(const MxRect32& p_rect)
 	{
-		this->left = p_rect.left;
-		this->top = p_rect.top;
-		this->right = p_rect.right;
-		this->bottom = p_rect.bottom;
+		left = p_rect.left;
+		top = p_rect.top;
+		right = p_rect.right;
+		bottom = p_rect.bottom;
 	}
 
 	// The address might also be the constructor that calls CopyFrom
 	// FUNCTION: LEGO1 0x100b6fc0
 	MxRect32* CopyFrom(const MxPoint32& p_point, const MxSize32& p_size)
 	{
-		this->left = p_point.GetX();
-		this->top = p_point.GetY();
-		this->right = p_size.GetWidth() + p_point.GetX() - 1;
-		this->bottom = p_size.GetHeight() + p_point.GetY() - 1;
+		left = p_point.GetX();
+		top = p_point.GetY();
+		right = p_size.GetWidth() + p_point.GetX() - 1;
+		bottom = p_size.GetHeight() + p_point.GetY() - 1;
 		return this;
 	}
 

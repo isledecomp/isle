@@ -4,6 +4,10 @@
 #include "mfc.h"
 #include "mxtypes.h"
 
+// TODO: We recently added the MFC base class.
+// We have to check all usage sites of MxPoint32 and verify with the help of the BETA
+// whether MxPoint32 or CRect has been used.
+
 class MxPoint32 : public CPoint {
 public:
 	MxPoint32() {}

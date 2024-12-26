@@ -4,6 +4,10 @@
 #include "mfc.h"
 #include "mxtypes.h"
 
+// TODO: We recently added the MFC base class.
+// We have to check all usage sites of MxSize32 and verify with the help of the BETA
+// whether MxSize32 or CRect has been used.
+
 class MxSize32 : public CSize {
 public:
 	MxSize32() {}
