@@ -6,7 +6,7 @@
 
 // TODO: We recently added the MFC base class.
 // We have to check all usage sites of MxPoint32 and verify with the help of the BETA
-// whether MxPoint32 or CRect has been used.
+// whether MxPoint32 or CPoint has been used.
 
 class MxPoint32 : public CPoint {
 public:
