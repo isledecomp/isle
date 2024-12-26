@@ -12,7 +12,18 @@ public:
 		m_name = p_name;
 		m_list = p_list;
 	}
-	~LegoNamedPart() { delete m_list; }
+	~LegoNamedPart()
+	{
+		LegoLODListCursor cursor(m_list);
+		LegoLOD* lod;
+
+		while (cursor.First(lod)) {
+			cursor.Detach();
+			delete lod;
+		}
+
+		delete m_list;
+	}
 
 	const MxString* GetName() const { return &m_name; }
 	LegoLODList* GetList() { return m_list; }
