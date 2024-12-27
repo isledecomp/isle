@@ -2493,7 +2493,7 @@ MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoUnkn
 	boundingBox.Max() = p1;
 	boundingBox.Max() += vec;
 
-	if (GetViewManager()->IsBoundingBoxInFrustum(boundingBox) == 0) {
+	if (GetViewManager()->IsBoundingBoxInFrustum(boundingBox) == FALSE) {
 		return TRUE;
 	}
 
