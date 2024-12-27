@@ -121,35 +121,33 @@ public:
 		return -1;
 	} // vtable+0x44
 
-private:
 	// FUNCTION: LEGO1 0x100021c0
-	virtual void Add(float p_value) { AddImpl(p_value); } // vtable+0x50
+	virtual void operator+=(float p_value) { AddImpl(p_value); } // vtable+0x50
 
 	// FUNCTION: LEGO1 0x100021d0
-	virtual void Add(const float* p_other) { AddImpl(p_other); } // vtable+0x4c
+	virtual void operator+=(const float* p_other) { AddImpl(p_other); } // vtable+0x4c
 
 	// FUNCTION: LEGO1 0x100021e0
-	virtual void Add(const Vector2& p_other) { AddImpl(p_other.m_data); } // vtable+0x48
+	virtual void operator+=(const Vector2& p_other) { AddImpl(p_other.m_data); } // vtable+0x48
 
 	// FUNCTION: LEGO1 0x100021f0
-	virtual void Sub(const float* p_other) { SubImpl(p_other); } // vtable+0x58
+	virtual void operator-=(const float* p_other) { SubImpl(p_other); } // vtable+0x58
 
 	// FUNCTION: LEGO1 0x10002200
-	virtual void Sub(const Vector2& p_other) { SubImpl(p_other.m_data); } // vtable+0x54
+	virtual void operator-=(const Vector2& p_other) { SubImpl(p_other.m_data); } // vtable+0x54
 
 	// FUNCTION: LEGO1 0x10002210
-	virtual void Mul(const float* p_other) { MulImpl(p_other); } // vtable+0x64
+	virtual void operator*=(const float* p_other) { MulImpl(p_other); } // vtable+0x64
 
 	// FUNCTION: LEGO1 0x10002220
-	virtual void Mul(const Vector2& p_other) { MulImpl(p_other.m_data); } // vtable+0x60
+	virtual void operator*=(const Vector2& p_other) { MulImpl(p_other.m_data); } // vtable+0x60
 
 	// FUNCTION: LEGO1 0x10002230
-	virtual void Mul(const float& p_value) { MulImpl(p_value); } // vtable+0x5c
+	virtual void operator*=(const float& p_value) { MulImpl(p_value); } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x10002240
-	virtual void Div(const float& p_value) { DivImpl(p_value); } // vtable+0x68
+	virtual void operator/=(const float& p_value) { DivImpl(p_value); } // vtable+0x68
 
-public:
 	// FUNCTION: LEGO1 0x10002250
 	virtual void SetVector(const float* p_other) { EqualsImpl(p_other); } // vtable+0x70
 
@@ -191,19 +189,6 @@ public:
 
 	// FUNCTION: BETA10 0x1001d170
 	const float& operator[](int idx) const { return m_data[idx]; }
-
-	void operator+=(float p_value) { Add(p_value); }
-	void operator+=(const float* p_other) { Add(p_other); }
-	void operator+=(const Vector2& p_other) { Add(p_other); }
-
-	void operator-=(const float* p_other) { Sub(p_other); }
-	void operator-=(const Vector2& p_other) { Sub(p_other); }
-
-	void operator*=(const float* p_other) { Mul(p_other); }
-	void operator*=(const Vector2& p_other) { Mul(p_other); }
-	void operator*=(const float& p_value) { Mul(p_value); }
-
-	void operator/=(const float& p_value) { Div(p_value); }
 
 protected:
 	float* m_data; // 0x04
