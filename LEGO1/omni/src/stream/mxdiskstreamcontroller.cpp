@@ -8,6 +8,8 @@
 #include "mxomni.h"
 #include "mxticklemanager.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(MxDiskStreamController, 0xc8);
 
 // FUNCTION: LEGO1 0x100c7120
@@ -17,6 +19,7 @@ MxDiskStreamController::MxDiskStreamController()
 }
 
 // FUNCTION: LEGO1 0x100c7530
+// FUNCTION: BETA10 0x10153a2d
 MxDiskStreamController::~MxDiskStreamController()
 {
 	AUTOLOCK(m_criticalSection);
@@ -34,6 +37,8 @@ MxDiskStreamController::~MxDiskStreamController()
 		m_provider->VTable0x20(&MxDSAction());
 #endif
 	}
+
+	assert(m_subscribers.size() == 0);
 
 	MxDSObject* object;
 	while (m_unk0x3c.PopFront(object)) {
@@ -65,28 +70,32 @@ MxDiskStreamController::~MxDiskStreamController()
 }
 
 // FUNCTION: LEGO1 0x100c7790
+// FUNCTION: BETA10 0x10153ea8
 MxResult MxDiskStreamController::Open(const char* p_filename)
 {
 	AUTOLOCK(m_criticalSection);
 	MxResult result = MxStreamController::Open(p_filename);
 
-	if (result == SUCCESS) {
-		m_provider = new MxDiskStreamProvider();
-		if (m_provider == NULL) {
-			result = FAILURE;
-		}
-		else {
-			result = m_provider->SetResourceToGet(this);
-			if (result != SUCCESS) {
-				delete m_provider;
-				m_provider = NULL;
-			}
-			else {
-				TickleManager()->RegisterClient(this, 10);
-			}
-		}
+	if (result != SUCCESS) {
+		goto done;
 	}
 
+	m_provider = new MxDiskStreamProvider();
+	if (m_provider == NULL) {
+		result = FAILURE;
+		goto done;
+	}
+
+	result = m_provider->SetResourceToGet(this);
+	if (result != SUCCESS) {
+		delete m_provider;
+		m_provider = NULL;
+		goto done;
+	}
+
+	TickleManager()->RegisterClient(this, 10);
+
+done:
 	return result;
 }
 
@@ -97,6 +106,7 @@ MxResult MxDiskStreamController::VTable0x18(undefined4, undefined4)
 }
 
 // FUNCTION: LEGO1 0x100c7890
+// FUNCTION: BETA10 0x101543bb
 MxResult MxDiskStreamController::FUN_100c7890(MxDSStreamingAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
@@ -104,7 +114,7 @@ MxResult MxDiskStreamController::FUN_100c7890(MxDSStreamingAction* p_action)
 		return FAILURE;
 	}
 
-	m_list0x80.push_back(p_action);
+	m_list0x80.PushBack(p_action);
 	FUN_100c7970();
 	return SUCCESS;
 }
@@ -122,6 +132,7 @@ void MxDiskStreamController::FUN_100c7970()
 }
 
 // FUNCTION: LEGO1 0x100c7980
+// FUNCTION: BETA10 0x10154848
 void MxDiskStreamController::FUN_100c7980()
 {
 	MxDSBuffer* buffer;
@@ -159,24 +170,33 @@ void MxDiskStreamController::FUN_100c7980()
 }
 
 // FUNCTION: LEGO1 0x100c7ac0
+// FUNCTION: BETA10 0x10154abb
 MxDSStreamingAction* MxDiskStreamController::VTable0x28()
 {
 	AUTOLOCK(m_criticalSection);
 	MxDSObject* oldAction;
-	MxDSStreamingAction* result = NULL;
+
+	assert(m_provider);
+	MxDSStreamingAction* request = NULL;
 	MxU32 filesize = m_provider->GetFileSize();
 
-	if (m_unk0x3c.PopFront(oldAction)) {
-		result = new MxDSStreamingAction((MxDSStreamingAction&) *oldAction);
-		if (result) {
-			MxU32 offset = result->GetBufferOffset() + filesize;
-			((MxDSStreamingAction*) oldAction)->SetUnknown94(offset);
-			((MxDSStreamingAction*) oldAction)->SetBufferOffset(offset);
-			m_unk0x3c.push_back(oldAction);
-		}
+	if (!m_unk0x3c.PopFront(oldAction)) {
+		goto done;
 	}
 
-	return result;
+	request = new MxDSStreamingAction((MxDSStreamingAction&) *oldAction);
+	assert(request);
+
+	if (!request) {
+		goto done;
+	}
+
+	((MxDSStreamingAction*) oldAction)->SetUnknown94(request->GetBufferOffset() + filesize);
+	((MxDSStreamingAction*) oldAction)->SetBufferOffset(((MxDSStreamingAction*) oldAction)->GetUnknown94());
+	m_unk0x3c.PushBack(oldAction);
+
+done:
+	return request;
 }
 
 // FUNCTION: LEGO1 0x100c7c00

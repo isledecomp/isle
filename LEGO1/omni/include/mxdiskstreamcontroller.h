@@ -97,4 +97,7 @@ private:
 // TEMPLATE: BETA10 0x10150e60
 // MxUtilityList<MxNextActionDataStart *>::PushBack
 
+// TEMPLATE: BETA10 0x10150ff0
+// MxUtilityList<MxDSObject *>::PushBack
+
 #endif // MXDISKSTREAMCONTROLLER_H
