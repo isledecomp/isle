@@ -2478,6 +2478,8 @@ MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoUnkn
 	Vector3* v1 = p_edge->CWVertex(*p_boundary);
 	Vector3* v2 = p_edge->CCWVertex(*p_boundary);
 
+	assert(v1 && v2);
+
 	p1 = *v2;
 	p1 -= *v1;
 	p1 *= p_destScale;
@@ -2490,7 +2492,12 @@ MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoUnkn
 	boundingBox.Min() -= vec;
 	boundingBox.Max() = p1;
 	boundingBox.Max() += vec;
-	return GetViewManager()->IsBoundingBoxInFrustum(boundingBox) == FALSE;
+
+	if (GetViewManager()->IsBoundingBoxInFrustum(boundingBox) == 0) {
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x10064120

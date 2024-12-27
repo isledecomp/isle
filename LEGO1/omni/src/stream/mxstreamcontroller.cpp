@@ -32,7 +32,7 @@ MxStreamController::~MxStreamController()
 	AUTOLOCK(m_criticalSection);
 
 	MxDSSubscriber* subscriber;
-	while (m_subscriberList.PopFront(subscriber)) {
+	while (m_subscribers.PopFront(subscriber)) {
 		delete subscriber;
 	}
 
@@ -80,14 +80,14 @@ MxResult MxStreamController::Open(const char* p_filename)
 // FUNCTION: BETA10 0x1014e730
 void MxStreamController::AddSubscriber(MxDSSubscriber* p_subscriber)
 {
-	m_subscriberList.PushBack(p_subscriber);
+	m_subscribers.PushBack(p_subscriber);
 }
 
 // FUNCTION: LEGO1 0x100c1620
 // FUNCTION: BETA10 0x1014e7b4
 void MxStreamController::RemoveSubscriber(MxDSSubscriber* p_subscriber)
 {
-	m_subscriberList.Remove(p_subscriber);
+	m_subscribers.Remove(p_subscriber);
 }
 
 // FUNCTION: LEGO1 0x100c1690
@@ -173,7 +173,7 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 			}
 
 			if (newUnknown24 == -1) {
-				for (MxDSSubscriberList::iterator it = m_subscriberList.begin(); it != m_subscriberList.end(); it++) {
+				for (MxDSSubscriberList::iterator it = m_subscribers.begin(); it != m_subscribers.end(); it++) {
 					MxDSSubscriber* subscriber = *it;
 
 					if (subscriber->GetObjectId() == p_action->GetObjectId()) {
@@ -288,7 +288,7 @@ MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 	chunk->SetChunkFlags(DS_CHUNK_BIT3);
 	chunk->SetObjectId(objectId);
 
-	if (chunk->SendChunk(m_subscriberList, FALSE, p_action->GetUnknown24()) != SUCCESS) {
+	if (chunk->SendChunk(m_subscribers, FALSE, p_action->GetUnknown24()) != SUCCESS) {
 		delete chunk;
 	}
 
@@ -318,7 +318,7 @@ MxNextActionDataStart* MxStreamController::FindNextActionDataStartFromStreamingA
 // FUNCTION: BETA10 0x1014f3b5
 MxBool MxStreamController::IsStoped(MxDSObject* p_obj)
 {
-	MxDSSubscriber* subscriber = m_subscriberList.Find(p_obj);
+	MxDSSubscriber* subscriber = m_subscribers.Find(p_obj);
 
 	if (subscriber) {
 		MxTrace(
