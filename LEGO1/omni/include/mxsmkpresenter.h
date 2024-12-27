@@ -2,7 +2,7 @@
 #define MXSMKPRESENTER_H
 
 #include "decomp.h"
-#include "mxsmack.h"
+#include "mxsmk.h"
 #include "mxvideopresenter.h"
 
 // VTABLE: LEGO1 0x100dc348
@@ -48,7 +48,7 @@ private:
 	void Destroy(MxBool p_fromDestructor);
 
 protected:
-	MxSmack m_mxSmack;    // 0x64
+	MxSmk m_mxSmk;    // 0x64
 	MxU32 m_currentFrame; // 0x71c
 };
 

@@ -24,7 +24,7 @@ MxSmkPresenter::~MxSmkPresenter()
 void MxSmkPresenter::Init()
 {
 	m_currentFrame = 0;
-	memset(&m_mxSmack, 0, sizeof(m_mxSmack));
+	memset(&m_mxSmk, 0, sizeof(m_mxSmk));
 	SetBit1(FALSE);
 	SetBit2(FALSE);
 }
@@ -34,7 +34,7 @@ void MxSmkPresenter::Destroy(MxBool p_fromDestructor)
 {
 	m_criticalSection.Enter();
 
-	MxSmack::Destroy(&m_mxSmack);
+	MxSmk::Destroy(&m_mxSmk);
 	Init();
 
 	m_criticalSection.Leave();
@@ -47,7 +47,7 @@ void MxSmkPresenter::Destroy(MxBool p_fromDestructor)
 // FUNCTION: LEGO1 0x100b3940
 void MxSmkPresenter::LoadHeader(MxStreamChunk* p_chunk)
 {
-	MxSmack::LoadHeader(p_chunk->GetData(), &m_mxSmack);
+	MxSmk::LoadHeader(p_chunk->GetData(), &m_mxSmk);
 }
 
 // FUNCTION: LEGO1 0x100b3960
@@ -58,7 +58,7 @@ void MxSmkPresenter::CreateBitmap()
 	}
 
 	m_frameBitmap = new MxBitmap;
-	m_frameBitmap->SetSize(m_mxSmack.m_smackTag.Width, m_mxSmack.m_smackTag.Height, NULL, FALSE);
+	m_frameBitmap->SetSize(m_mxSmk.m_smackTag.Width, m_mxSmk.m_smackTag.Height, NULL, FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b3a00
@@ -68,12 +68,12 @@ void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 	MxU8* bitmapData = m_frameBitmap->GetImage();
 	MxU8* chunkData = p_chunk->GetData();
 
-	MxBool paletteChanged = m_mxSmack.m_frameTypes[m_currentFrame] & 1;
+	MxBool paletteChanged = m_mxSmk.m_frameTypes[m_currentFrame] & 1;
 	m_currentFrame++;
 	VTable0x88();
 
 	MxRectList rects(TRUE);
-	MxSmack::LoadFrame(bitmapInfo, bitmapData, &m_mxSmack, chunkData, paletteChanged, &rects);
+	MxSmk::LoadFrame(bitmapInfo, bitmapData, &m_mxSmk, chunkData, paletteChanged, &rects);
 
 	if (((MxDSMediaAction*) m_action)->GetPaletteManagement() && paletteChanged) {
 		RealizePalette();
@@ -93,17 +93,17 @@ void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x100b4260
 void MxSmkPresenter::VTable0x88()
 {
-	if ((m_mxSmack.m_smackTag.SmackerType & 1) != 0) {
-		MxU32 und = (m_currentFrame % m_mxSmack.m_smackTag.Frames);
+	if ((m_mxSmk.m_smackTag.SmackerType & 1) != 0) {
+		MxU32 und = (m_currentFrame % m_mxSmk.m_smackTag.Frames);
 		if (1 < m_currentFrame && und == 1) {
 			m_currentFrame = 1;
 		}
 	}
 	else {
-		if (m_mxSmack.m_smackTag.Frames == m_currentFrame) {
+		if (m_mxSmk.m_smackTag.Frames == m_currentFrame) {
 			m_currentFrame = 0;
 			// TODO: struct incorrect, Palette at wrong offset?
-			memset(&m_mxSmack.m_smackTag.Palette[4], 0, sizeof(m_mxSmack.m_smackTag.Palette));
+			memset(&m_mxSmk.m_smackTag.Palette[4], 0, sizeof(m_mxSmk.m_smackTag.Palette));
 		}
 	}
 }

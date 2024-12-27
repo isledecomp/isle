@@ -1,5 +1,5 @@
-#ifndef MXSMACK_H
-#define MXSMACK_H
+#ifndef MXSMK_H
+#define MXSMK_H
 
 #include "decomp.h"
 #include "mxrectlist.h"
@@ -28,7 +28,7 @@ extern "C"
 }
 
 // SIZE 0x6b8
-struct MxSmack {
+struct MxSmk {
 	SmackTag m_smackTag;       // 0x00
 	undefined m_unk0x390[784]; // 0x390
 	MxU32* m_frameSizes;       // 0x6a0
@@ -38,12 +38,12 @@ struct MxSmack {
 	MxU32 m_maxFrameSize;      // 0x6b0
 	MxU8* m_unk0x6b4;          // 0x6b4
 
-	static MxResult LoadHeader(MxU8* p_data, MxSmack* p_mxSmack);
-	static void Destroy(MxSmack* p_mxSmack);
+	static MxResult LoadHeader(MxU8* p_data, MxSmk* p_mxSmk);
+	static void Destroy(MxSmk* p_mxSmk);
 	static MxResult LoadFrame(
 		MxBITMAPINFO* p_bitmapInfo,
 		MxU8* p_bitmapData,
-		MxSmack* p_mxSmack,
+		MxSmk* p_mxSmk,
 		MxU8* p_chunkData,
 		MxBool p_paletteChanged,
 		MxRectList* p_list
@@ -51,4 +51,4 @@ struct MxSmack {
 	static MxBool GetRect(MxU8* p_unk0x6b4, MxU16* p_und, u32* p_smackRect, MxRect32* p_rect);
 };
 
-#endif // MXSMACK_H
+#endif // MXSMK_H
