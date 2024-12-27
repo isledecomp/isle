@@ -48,7 +48,7 @@ private:
 	void Destroy(MxBool p_fromDestructor);
 
 protected:
-	MxSmk m_mxSmk;    // 0x64
+	MxSmk m_mxSmk;        // 0x64
 	MxU32 m_currentFrame; // 0x71c
 };
 
