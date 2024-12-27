@@ -132,12 +132,12 @@ Infocenter::Infocenter()
 	m_selectedCharacter = e_noCharacter;
 	m_unk0x11c = NULL;
 	m_infocenterState = NULL;
-	m_frameHotBitmap = NULL;
+	m_frame = NULL;
 	m_destLocation = LegoGameState::e_undefined;
 	m_currentInfomainScript = InfomainScript::c_noneInfomain;
 	m_currentCutscene = e_noIntro;
 
-	memset(&m_mapAreas, 0, sizeof(m_mapAreas));
+	memset(&m_glowInfo, 0, sizeof(m_glowInfo));
 
 	m_unk0x1c8 = -1;
 	SetAppCursor(e_cursorBusy);
@@ -612,6 +612,7 @@ void Infocenter::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x1006f9a0
+// FUNCTION: BETA10 0x1002ef2f
 void Infocenter::InitializeBitmaps()
 {
 	m_radio.Initialize(TRUE);
@@ -632,56 +633,64 @@ void Infocenter::InitializeBitmaps()
 	((MxPresenter*) Find(m_atomId, InfomainScript::c_Laura_Ctl))->Enable(TRUE);
 	((MxPresenter*) Find(m_atomId, InfomainScript::c_Radio_Ctl))->Enable(TRUE);
 
-	m_mapAreas[0].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Info_A_Bitmap");
-	m_mapAreas[0].m_area.SetLeft(391);
-	m_mapAreas[0].m_area.SetTop(182);
-	m_mapAreas[0].m_area.SetRight(427);
-	m_mapAreas[0].m_area.SetBottom(230);
-	m_mapAreas[0].m_unk0x04 = 3;
+	m_glowInfo[0].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Info_A_Bitmap");
+	assert(m_glowInfo[0].m_destCtl);
+	m_glowInfo[0].m_area.SetLeft(391);
+	m_glowInfo[0].m_area.SetTop(182);
+	m_glowInfo[0].m_area.SetRight(427);
+	m_glowInfo[0].m_area.SetBottom(230);
+	m_glowInfo[0].m_unk0x04 = 3;
 
-	m_mapAreas[1].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Boat_A_Bitmap");
-	m_mapAreas[1].m_area.SetLeft(304);
-	m_mapAreas[1].m_area.SetTop(225);
-	m_mapAreas[1].m_area.SetRight(350);
-	m_mapAreas[1].m_area.SetBottom(268);
-	m_mapAreas[1].m_unk0x04 = 10;
+	m_glowInfo[1].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Boat_A_Bitmap");
+	assert(m_glowInfo[1].m_destCtl);
+	m_glowInfo[1].m_area.SetLeft(304);
+	m_glowInfo[1].m_area.SetTop(225);
+	m_glowInfo[1].m_area.SetRight(350);
+	m_glowInfo[1].m_area.SetBottom(268);
+	m_glowInfo[1].m_unk0x04 = 10;
 
-	m_mapAreas[2].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Race_A_Bitmap");
-	m_mapAreas[2].m_area.SetLeft(301);
-	m_mapAreas[2].m_area.SetTop(133);
-	m_mapAreas[2].m_area.SetRight(347);
-	m_mapAreas[2].m_area.SetBottom(181);
-	m_mapAreas[2].m_unk0x04 = 11;
+	m_glowInfo[2].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Race_A_Bitmap");
+	assert(m_glowInfo[1].m_destCtl); // DECOMP: intentional typo
+	m_glowInfo[2].m_area.SetLeft(301);
+	m_glowInfo[2].m_area.SetTop(133);
+	m_glowInfo[2].m_area.SetRight(347);
+	m_glowInfo[2].m_area.SetBottom(181);
+	m_glowInfo[2].m_unk0x04 = 11;
 
-	m_mapAreas[3].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Pizza_A_Bitmap");
-	m_mapAreas[3].m_area.SetLeft(289);
-	m_mapAreas[3].m_area.SetTop(182);
-	m_mapAreas[3].m_area.SetRight(335);
-	m_mapAreas[3].m_area.SetBottom(225);
-	m_mapAreas[3].m_unk0x04 = 12;
+	m_glowInfo[3].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Pizza_A_Bitmap");
+	assert(m_glowInfo[3].m_destCtl);
+	m_glowInfo[3].m_area.SetLeft(289);
+	m_glowInfo[3].m_area.SetTop(182);
+	m_glowInfo[3].m_area.SetRight(335);
+	m_glowInfo[3].m_area.SetBottom(225);
+	m_glowInfo[3].m_unk0x04 = 12;
 
-	m_mapAreas[4].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Gas_A_Bitmap");
-	m_mapAreas[4].m_area.SetLeft(350);
-	m_mapAreas[4].m_area.SetTop(161);
-	m_mapAreas[4].m_area.SetRight(391);
-	m_mapAreas[4].m_area.SetBottom(209);
-	m_mapAreas[4].m_unk0x04 = 13;
+	m_glowInfo[4].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Gas_A_Bitmap");
+	assert(m_glowInfo[4].m_destCtl);
+	m_glowInfo[4].m_area.SetLeft(350);
+	m_glowInfo[4].m_area.SetTop(161);
+	m_glowInfo[4].m_area.SetRight(391);
+	m_glowInfo[4].m_area.SetBottom(209);
+	m_glowInfo[4].m_unk0x04 = 13;
 
-	m_mapAreas[5].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Med_A_Bitmap");
-	m_mapAreas[5].m_area.SetLeft(392);
-	m_mapAreas[5].m_area.SetTop(130);
-	m_mapAreas[5].m_area.SetRight(438);
-	m_mapAreas[5].m_area.SetBottom(176);
-	m_mapAreas[5].m_unk0x04 = 14;
+	m_glowInfo[5].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Med_A_Bitmap");
+	assert(m_glowInfo[5].m_destCtl);
+	m_glowInfo[5].m_area.SetLeft(392);
+	m_glowInfo[5].m_area.SetTop(130);
+	m_glowInfo[5].m_area.SetRight(438);
+	m_glowInfo[5].m_area.SetBottom(176);
+	m_glowInfo[5].m_unk0x04 = 14;
 
-	m_mapAreas[6].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Cop_A_Bitmap");
-	m_mapAreas[6].m_area.SetLeft(396);
-	m_mapAreas[6].m_area.SetTop(229);
-	m_mapAreas[6].m_area.SetRight(442);
-	m_mapAreas[6].m_area.SetBottom(272);
-	m_mapAreas[6].m_unk0x04 = 15;
+	m_glowInfo[6].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Cop_A_Bitmap");
+	assert(m_glowInfo[6].m_destCtl);
+	m_glowInfo[6].m_area.SetLeft(396);
+	m_glowInfo[6].m_area.SetTop(229);
+	m_glowInfo[6].m_area.SetRight(442);
+	m_glowInfo[6].m_area.SetBottom(272);
+	m_glowInfo[6].m_unk0x04 = 15;
 
-	m_frameHotBitmap = (MxStillPresenter*) Find("MxStillPresenter", "FrameHot_Bitmap");
+	m_frame = (MxStillPresenter*) Find("MxStillPresenter", "FrameHot_Bitmap");
+	assert(m_frame);
 
 	UpdateFrameHot(TRUE);
 }
@@ -831,7 +840,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 			if (m_unk0x1c8 != -1) {
 				m_infoManDialogueTimer = 0;
 
-				switch (m_mapAreas[m_unk0x1c8].m_unk0x04) {
+				switch (m_glowInfo[m_unk0x1c8].m_unk0x04) {
 				case 3:
 					GameState()->SetActor(m_selectedCharacter);
 
@@ -1304,11 +1313,11 @@ MxBool Infocenter::VTable0x5c()
 void Infocenter::FUN_10070d10(MxS32 p_x, MxS32 p_y)
 {
 	MxS16 i;
-	for (i = 0; i < (MxS32) (sizeof(m_mapAreas) / sizeof(m_mapAreas[0])); i++) {
-		MxS32 right = m_mapAreas[i].m_area.GetRight();
-		MxS32 bottom = m_mapAreas[i].m_area.GetBottom();
-		MxS32 left = m_mapAreas[i].m_area.GetLeft();
-		MxS32 top = m_mapAreas[i].m_area.GetTop();
+	for (i = 0; i < (MxS32) (sizeof(m_glowInfo) / sizeof(m_glowInfo[0])); i++) {
+		MxS32 right = m_glowInfo[i].m_area.GetRight();
+		MxS32 bottom = m_glowInfo[i].m_area.GetBottom();
+		MxS32 left = m_glowInfo[i].m_area.GetLeft();
+		MxS32 top = m_glowInfo[i].m_area.GetTop();
 
 		if (left <= p_x && p_x <= right && top <= p_y && p_y <= bottom) {
 			break;
@@ -1321,12 +1330,12 @@ void Infocenter::FUN_10070d10(MxS32 p_x, MxS32 p_y)
 
 	if (i != m_unk0x1c8) {
 		if (m_unk0x1c8 != -1) {
-			m_mapAreas[m_unk0x1c8].m_presenter->Enable(FALSE);
+			m_glowInfo[m_unk0x1c8].m_destCtl->Enable(FALSE);
 		}
 
 		m_unk0x1c8 = i;
 		if (i != -1) {
-			m_mapAreas[i].m_presenter->Enable(TRUE);
+			m_glowInfo[i].m_destCtl->Enable(TRUE);
 		}
 	}
 }
@@ -1362,18 +1371,18 @@ void Infocenter::UpdateFrameHot(MxBool p_display)
 			return;
 		}
 
-		MxS32 originalDisplayZ = m_frameHotBitmap->GetDisplayZ();
+		MxS32 originalDisplayZ = m_frame->GetDisplayZ();
 
-		m_frameHotBitmap->SetDisplayZ(1000);
+		m_frame->SetDisplayZ(1000);
 		VideoManager()->SortPresenterList();
 
-		m_frameHotBitmap->Enable(TRUE);
-		m_frameHotBitmap->SetPosition(x, y);
-		m_frameHotBitmap->SetDisplayZ(originalDisplayZ);
+		m_frame->Enable(TRUE);
+		m_frame->SetPosition(x, y);
+		m_frame->SetDisplayZ(originalDisplayZ);
 	}
 	else {
-		if (m_frameHotBitmap) {
-			m_frameHotBitmap->Enable(FALSE);
+		if (m_frame) {
+			m_frame->Enable(FALSE);
 		}
 	}
 }
