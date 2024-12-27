@@ -2342,11 +2342,11 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 {
 	const char** cycles = g_cycles[g_characters[p_characterId].m_unk0x16];
 	const char* vehicleWC;
+	LegoLocomotionAnimPresenter* presenter;
 
 	if (g_characters[p_characterId].m_vehicleId >= 0 && g_vehicles[g_characters[p_characterId].m_vehicleId].m_unk0x04 &&
 		(vehicleWC = cycles[10]) != NULL) {
-		LegoLocomotionAnimPresenter* presenter =
-			(LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
+		presenter = (LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
 
 		if (presenter != NULL) {
 			presenter->FUN_1006d680(p_actor, 1.7f);
@@ -2359,8 +2359,7 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 	else {
 		vehicleWC = cycles[p_mood];
 		if (vehicleWC != NULL) {
-			LegoLocomotionAnimPresenter* presenter =
-				(LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
+			presenter = (LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
 
 			if (presenter != NULL) {
 				presenter->FUN_1006d680(p_actor, 0.7f);
@@ -2373,8 +2372,7 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 
 		vehicleWC = cycles[p_mood + 4];
 		if (vehicleWC != NULL) {
-			LegoLocomotionAnimPresenter* presenter =
-				(LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
+			presenter = (LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
 
 			if (presenter != NULL) {
 				presenter->FUN_1006d680(p_actor, 4.0f);
@@ -2387,8 +2385,7 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 
 		vehicleWC = cycles[p_mood + 7];
 		if (vehicleWC != NULL) {
-			LegoLocomotionAnimPresenter* presenter =
-				(LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
+			presenter = (LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
 
 			if (presenter != NULL) {
 				presenter->FUN_1006d680(p_actor, 0.0f);
