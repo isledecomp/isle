@@ -90,7 +90,7 @@ public:
 	// DECOMP: This could be a free function. It is static here because it has no
 	// reference to "this". In the beta it is called in two places:
 	// 1. GetBmiHeightAbs
-	// 2. MxSmack::LoadFrame
+	// 2. MxSmk::LoadFrame
 	// FUNCTION: BETA10 0x1002c690
 	static MxLong HeightAbs(MxLong p_value) { return p_value > 0 ? p_value : -p_value; }
 

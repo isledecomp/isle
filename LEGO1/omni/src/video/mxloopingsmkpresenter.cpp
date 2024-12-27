@@ -41,10 +41,10 @@ void MxLoopingSmkPresenter::Destroy(MxBool p_fromDestructor)
 // FUNCTION: LEGO1 0x100b4a00
 void MxLoopingSmkPresenter::VTable0x88()
 {
-	if (m_mxSmack.m_smackTag.Frames == m_currentFrame) {
+	if (m_mxSmk.m_smackTag.Frames == m_currentFrame) {
 		m_currentFrame = 0;
 		// TODO: struct incorrect, Palette at wrong offset?
-		memset(&m_mxSmack.m_smackTag.Palette[4], 0, sizeof(m_mxSmack.m_smackTag.Palette));
+		memset(&m_mxSmk.m_smackTag.Palette[4], 0, sizeof(m_mxSmk.m_smackTag.Palette));
 	}
 }
 
