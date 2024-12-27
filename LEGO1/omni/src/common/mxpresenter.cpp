@@ -41,17 +41,15 @@ void MxPresenter::Init()
 }
 
 // FUNCTION: LEGO1 0x100b4d80
+// FUNCTION: BETA10 0x1012e120
 MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
 
-	this->m_action = p_action;
+	m_action = p_action;
+	m_location = MxPoint32(m_action->GetLocation()[0], m_action->GetLocation()[1]);
+	m_displayZ = m_action->GetLocation()[2];
 
-	const Mx3DPointFloat& location = this->m_action->GetLocation();
-	MxS32 previousTickleState = this->m_currentTickleState;
-
-	this->m_location = MxPoint32(this->m_action->GetLocation()[0], this->m_action->GetLocation()[1]);
-	this->m_displayZ = this->m_action->GetLocation()[2];
 	ProgressTickleState(e_ready);
 
 	return SUCCESS;
@@ -60,22 +58,22 @@ MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 // FUNCTION: LEGO1 0x100b4e40
 void MxPresenter::EndAction()
 {
-	if (this->m_action == NULL) {
+	if (m_action == NULL) {
 		return;
 	}
 
 	AUTOLOCK(m_criticalSection);
 
-	if (!this->m_compositePresenter) {
+	if (!m_compositePresenter) {
 		MxOmni::GetInstance()->NotifyCurrentEntity(
-			MxEndActionNotificationParam(c_notificationEndAction, NULL, this->m_action, TRUE)
+			MxEndActionNotificationParam(c_notificationEndAction, NULL, m_action, TRUE)
 		);
 	}
 
-	this->m_action = NULL;
+	m_action = NULL;
 	MxS32 previousTickleState = 1 << m_currentTickleState;
-	this->m_previousTickleStates |= previousTickleState;
-	this->m_currentTickleState = e_idle;
+	m_previousTickleStates |= previousTickleState;
+	m_currentTickleState = e_idle;
 }
 
 // FUNCTION: LEGO1 0x100b4fc0
@@ -129,39 +127,39 @@ MxResult MxPresenter::Tickle()
 {
 	AUTOLOCK(m_criticalSection);
 
-	switch (this->m_currentTickleState) {
+	switch (m_currentTickleState) {
 	case e_ready:
-		this->ReadyTickle();
+		ReadyTickle();
 
 		if (m_currentTickleState != e_starting) {
 			break;
 		}
 	case e_starting:
-		this->StartingTickle();
+		StartingTickle();
 
 		if (m_currentTickleState != e_streaming) {
 			break;
 		}
 	case e_streaming:
-		this->StreamingTickle();
+		StreamingTickle();
 
 		if (m_currentTickleState != e_repeating) {
 			break;
 		}
 	case e_repeating:
-		this->RepeatingTickle();
+		RepeatingTickle();
 
 		if (m_currentTickleState != e_freezing) {
 			break;
 		}
 	case e_freezing:
-		this->FreezingTickle();
+		FreezingTickle();
 
 		if (m_currentTickleState != e_done) {
 			break;
 		}
 	case e_done:
-		this->DoneTickle();
+		DoneTickle();
 	default:
 		break;
 	}
@@ -172,14 +170,14 @@ MxResult MxPresenter::Tickle()
 // FUNCTION: LEGO1 0x100b52d0
 void MxPresenter::Enable(MxBool p_enable)
 {
-	if (this->m_action && this->IsEnabled() != p_enable) {
-		MxU32 flags = this->m_action->GetFlags();
+	if (m_action && IsEnabled() != p_enable) {
+		MxU32 flags = m_action->GetFlags();
 
 		if (p_enable) {
-			this->m_action->SetFlags(flags | MxDSAction::c_enabled);
+			m_action->SetFlags(flags | MxDSAction::c_enabled);
 		}
 		else {
-			this->m_action->SetFlags(flags & ~MxDSAction::c_enabled);
+			m_action->SetFlags(flags & ~MxDSAction::c_enabled);
 		}
 	}
 }
@@ -266,5 +264,5 @@ MxEntity* MxPresenter::CreateEntity(const char* p_defaultName)
 // FUNCTION: BETA10 0x1012ebaf
 MxBool MxPresenter::IsEnabled()
 {
-	return this->m_action && this->m_action->GetFlags() & MxDSAction::c_enabled;
+	return m_action && m_action->GetFlags() & MxDSAction::c_enabled;
 }
