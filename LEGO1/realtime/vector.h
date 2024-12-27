@@ -148,7 +148,6 @@ public:
 	// FUNCTION: LEGO1 0x10002240
 	virtual void operator/=(const float& p_value) { DivImpl(p_value); } // vtable+0x68
 
-public:
 	// FUNCTION: LEGO1 0x10002250
 	virtual void SetVector(const float* p_other) { EqualsImpl(p_other); } // vtable+0x70
 
