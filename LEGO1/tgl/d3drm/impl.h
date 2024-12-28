@@ -411,7 +411,7 @@ public:
 
 	Result CreateBuffer(int width, int height, int depth, void* pBuffer, int useBuffer);
 	void Destroy();
-	void FillRowsOfTexture(int y, int height, char* content);
+	Result FillRowsOfTexture(int y, int height, char* content);
 	Result InitializePalette(int paletteSize, PaletteEntry* pEntries);
 
 	D3DRMIMAGE m_image;
