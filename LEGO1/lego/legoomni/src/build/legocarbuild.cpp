@@ -1203,7 +1203,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 			assert(destWorld);
 			m_buildState->m_animationState = LegoVehicleBuildState::e_exiting;
 
-			if (m_unk0x258->AllPartsPlaced()) {
+			if (!m_unk0x258->AllPartsPlaced()) {
 				FUN_100243a0();
 			}
 			else {
@@ -1211,8 +1211,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 			}
 		}
 		else {
-			MxNotificationParam param;
-			NotificationManager()->Send(this, param);
+			NotificationManager()->Send(this, MxNotificationParam());
 		}
 		break;
 	case 2:
@@ -1239,9 +1238,8 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 			FUN_10024ef0();
 		}
 		else {
-			MxNotificationParam p;
 			// In BETA10, NotificationManager->Send() also takes __FILE__ and __LINE__ arguments
-			NotificationManager()->Send(this, p);
+			NotificationManager()->Send(this, MxNotificationParam());
 		}
 		break;
 	}
