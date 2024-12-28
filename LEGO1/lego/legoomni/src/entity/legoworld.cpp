@@ -783,7 +783,7 @@ MxResult LegoWorld::Tickle()
 			ReadyWorld();
 			return TRUE;
 		case e_two:
-			if (PresentersPending()) {
+			if (PresentersPending() == TRUE) {
 				break;
 			}
 		default:
