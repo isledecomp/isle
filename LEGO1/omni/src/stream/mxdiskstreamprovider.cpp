@@ -201,7 +201,7 @@ MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 
 	{
 		AUTOLOCK(m_criticalSection);
-		m_list.push_back(p_action);
+		m_list.PushBack(p_action);
 	}
 
 	m_unk0x35 = TRUE;
