@@ -582,29 +582,33 @@ MxResult LegoNavController::ProcessKeyboardInput()
 	m_unk0x6c = TRUE;
 
 	MxS32 hMax;
-	if ((keyFlags & LegoInputManager::c_leftOrRight) == LegoInputManager::c_left) {
+	switch (keyFlags & LegoInputManager::c_leftOrRight) {
+	case LegoInputManager::c_left:
 		hMax = 0;
-	}
-	else if ((keyFlags & LegoInputManager::c_leftOrRight) == LegoInputManager::c_right) {
+		break;
+	case LegoInputManager::c_right:
 		hMax = m_hMax;
-	}
-	else {
+		break;
+	default:
 		m_targetRotationalVel = 0.0;
 		m_rotationalAccel = m_maxRotationalDeccel;
 		bool1 = TRUE;
+		break;
 	}
 
 	MxS32 vMax;
-	if ((keyFlags & LegoInputManager::c_upOrDown) == LegoInputManager::c_up) {
+	switch (keyFlags & LegoInputManager::c_upOrDown) {
+	case LegoInputManager::c_up:
 		vMax = 0;
-	}
-	else if ((keyFlags & LegoInputManager::c_upOrDown) == LegoInputManager::c_down) {
+		break;
+	case LegoInputManager::c_down:
 		vMax = m_vMax;
-	}
-	else {
+		break;
+	default:
 		m_targetLinearVel = 0.0;
 		m_linearAccel = m_maxLinearDeccel;
 		bool2 = TRUE;
+		break;
 	}
 
 	MxFloat val = keyFlags & LegoInputManager::c_bit5 ? 1.0f : 4.0f;
