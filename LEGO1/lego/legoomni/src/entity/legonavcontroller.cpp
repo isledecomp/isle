@@ -30,6 +30,11 @@
 
 DECOMP_SIZE_ASSERT(LegoNavController, 0x70)
 
+// MSVC 4.20 didn't define a macro for this key
+#ifndef VK_OEM_MINUS
+#define VK_OEM_MINUS 0xBD
+#endif
+
 //////////////////////////////////////////////////////////////////////
 
 #ifndef M_PI
@@ -109,7 +114,7 @@ char g_debugPassword[] = "OGEL";
 char* g_currentInput = g_debugPassword;
 
 // GLOBAL: LEGO1 0x100f66cc
-MxS32 g_unk0x100f66cc = -1;
+MxS32 g_nextCharacter = -1;
 
 // GLOBAL: LEGO1 0x100f66d0
 MxBool g_enableMusic = TRUE;
@@ -697,29 +702,29 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 			}
 			break;
 		}
-		case 'k':
-		case 'm': { // Keys need to be uppercased to trigger this code, but seems dysfunctional
-			if (g_unk0x100f66cc == -1) {
-				g_unk0x100f66cc = 0;
+		case VK_ADD:
+		case VK_SUBTRACT: { // Cycles through characters and puts them in front of you
+			if (g_nextCharacter == -1) {
+				g_nextCharacter = 0;
 			}
 			else {
-				CharacterManager()->ReleaseActor(CharacterManager()->GetActorName(g_unk0x100f66cc));
+				CharacterManager()->ReleaseActor(CharacterManager()->GetActorName(g_nextCharacter));
 
-				if (key == 'k') {
-					g_unk0x100f66cc++;
-					if (g_unk0x100f66cc >= CharacterManager()->GetNumActors()) {
-						g_unk0x100f66cc = 0;
+				if (key == VK_ADD) {
+					g_nextCharacter++;
+					if (g_nextCharacter >= CharacterManager()->GetNumActors()) {
+						g_nextCharacter = 0;
 					}
 				}
 				else {
-					g_unk0x100f66cc--;
-					if (g_unk0x100f66cc < 0) {
-						g_unk0x100f66cc = CharacterManager()->GetNumActors() - 1;
+					g_nextCharacter--;
+					if (g_nextCharacter < 0) {
+						g_nextCharacter = CharacterManager()->GetNumActors() - 1;
 					}
 				}
 			}
 
-			LegoROI* roi = CharacterManager()->GetActorROI(CharacterManager()->GetActorName(g_unk0x100f66cc), TRUE);
+			LegoROI* roi = CharacterManager()->GetActorROI(CharacterManager()->GetActorName(g_nextCharacter), TRUE);
 			if (roi != NULL) {
 				MxMatrix mat;
 				ViewROI* viewRoi = LegoOmni::GetInstance()->GetVideoManager()->GetViewROI();
@@ -732,7 +737,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 			}
 			break;
 		}
-		case '{': { // Saves the game. Can't actually be triggered
+		case VK_F12: { // Saves the game
 			InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
 			if (state && state->HasRegistered()) {
 				GameState()->Save(0);
@@ -998,7 +1003,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 				case 'X':
 					RealtimeView::SetUserMaxLOD(3.6);
 					break;
-				case 'j': {
+				case VK_MULTIPLY: {
 					MxU8 newActor = GameState()->GetActorId() + 1;
 
 					if (newActor > LegoActor::c_laura) {
@@ -1008,10 +1013,10 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					GameState()->SetActorId(newActor);
 					break;
 				}
-				case 'o':
+				case VK_DIVIDE:
 					GameState()->SetActorId(LegoActor::c_brickster);
 					break;
-				case 'z':
+				case VK_F11:
 					if (GameState()->m_isDirty) {
 						GameState()->m_isDirty = FALSE;
 					}
@@ -1019,7 +1024,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 						GameState()->m_isDirty = TRUE;
 					}
 					break;
-				case 0xbd:
+				case VK_OEM_MINUS:
 					g_unk0x100f66bc = LegoAnimationManager::e_unk1;
 					break;
 				}
