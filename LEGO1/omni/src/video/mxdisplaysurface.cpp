@@ -978,7 +978,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 				if (p_transparent) {
 					for (MxS32 y = 0; y < heightAbs; y++) {
 						for (MxS32 x = 0; x < widthNormal; x++) {
-							if (*bitmapSrcPtr == NULL) {
+							if (*bitmapSrcPtr == 0) {
 								*surfaceData = RGB555_CREATE(0x1f, 0, 0x1f);
 							}
 							else {
