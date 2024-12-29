@@ -114,7 +114,7 @@ char g_debugPassword[] = "OGEL";
 char* g_currentInput = g_debugPassword;
 
 // GLOBAL: LEGO1 0x100f66cc
-MxS32 g_unk0x100f66cc = -1;
+MxS32 g_nextCharacter = -1;
 
 // GLOBAL: LEGO1 0x100f66d0
 MxBool g_enableMusic = TRUE;
@@ -704,27 +704,27 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 		}
 		case VK_ADD:
 		case VK_SUBTRACT: { // Cycles through characters and puts them in front of you
-			if (g_unk0x100f66cc == -1) {
-				g_unk0x100f66cc = 0;
+			if (g_nextCharacter == -1) {
+				g_nextCharacter = 0;
 			}
 			else {
-				CharacterManager()->ReleaseActor(CharacterManager()->GetActorName(g_unk0x100f66cc));
+				CharacterManager()->ReleaseActor(CharacterManager()->GetActorName(g_nextCharacter));
 
 				if (key == VK_ADD) {
-					g_unk0x100f66cc++;
-					if (g_unk0x100f66cc >= CharacterManager()->GetNumActors()) {
-						g_unk0x100f66cc = 0;
+					g_nextCharacter++;
+					if (g_nextCharacter >= CharacterManager()->GetNumActors()) {
+						g_nextCharacter = 0;
 					}
 				}
 				else {
-					g_unk0x100f66cc--;
-					if (g_unk0x100f66cc < 0) {
-						g_unk0x100f66cc = CharacterManager()->GetNumActors() - 1;
+					g_nextCharacter--;
+					if (g_nextCharacter < 0) {
+						g_nextCharacter = CharacterManager()->GetNumActors() - 1;
 					}
 				}
 			}
 
-			LegoROI* roi = CharacterManager()->GetActorROI(CharacterManager()->GetActorName(g_unk0x100f66cc), TRUE);
+			LegoROI* roi = CharacterManager()->GetActorROI(CharacterManager()->GetActorName(g_nextCharacter), TRUE);
 			if (roi != NULL) {
 				MxMatrix mat;
 				ViewROI* viewRoi = LegoOmni::GetInstance()->GetVideoManager()->GetViewROI();
