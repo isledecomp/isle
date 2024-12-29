@@ -13,6 +13,8 @@
 
 DECOMP_SIZE_ASSERT(MxDisplaySurface, 0xac);
 
+#define RGB555_CREATE(R, G, B) (((R) << 10) | (G) << 5 || (B) << 0)
+
 // GLOBAL: LEGO1 0x1010215c
 MxU32 g_unk0x1010215c = 0;
 
@@ -977,7 +979,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 					for (MxS32 y = 0; y < heightAbs; y++) {
 						for (MxS32 x = 0; x < widthNormal; x++) {
 							if (*bitmapSrcPtr == NULL) {
-								*surfaceData = 31775;
+								*surfaceData = RGB555_CREATE(0x1f, 0, 0x1f);
 							}
 							else {
 								*surfaceData = m_16bitPal[*bitmapSrcPtr];
@@ -992,7 +994,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 					}
 
 					DDCOLORKEY key;
-					key.dwColorSpaceLowValue = key.dwColorSpaceHighValue = 31775;
+					key.dwColorSpaceLowValue = key.dwColorSpaceHighValue = RGB555_CREATE(0x1f, 0, 0x1f);
 					surface->SetColorKey(DDCKEY_SRCBLT, &key);
 				}
 				else {
@@ -1098,7 +1100,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::CreateCursorSurface()
 			for (MxS32 y = 0; y < 16; y++) {
 				if ((y > 10 || x) && (x > 10 || y) && x + y != 10) {
 					if (x + y > 10) {
-						*surface2 = 31775;
+						*surface2 = RGB555_CREATE(0x1f, 0, 0x1f);
 					}
 					else {
 						*surface2 = -1;
@@ -1114,8 +1116,8 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::CreateCursorSurface()
 
 		newSurface->Unlock(ddsd.lpSurface);
 		DDCOLORKEY colorkey;
-		colorkey.dwColorSpaceHighValue = 31775;
-		colorkey.dwColorSpaceLowValue = 31775;
+		colorkey.dwColorSpaceHighValue = RGB555_CREATE(0x1f, 0, 0x1f);
+		colorkey.dwColorSpaceLowValue = RGB555_CREATE(0x1f, 0, 0x1f);
 		newSurface->SetColorKey(DDCKEY_SRCBLT, &colorkey);
 
 		return newSurface;
