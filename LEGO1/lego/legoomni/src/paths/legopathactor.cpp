@@ -316,7 +316,7 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, MxMatrix& p_transform)
 			up = *m_boundary->GetUnknown0x14();
 			right.EqualsCross(up, dir);
 
-			int res = right.Unitize();
+			MxS32 res = right.Unitize();
 			assert(res == 0);
 
 			dir.EqualsCross(right, up);
