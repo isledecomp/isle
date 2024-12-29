@@ -1163,7 +1163,7 @@ undefined4 LegoAnim::GetActorUnknown0x04(LegoU32 p_index)
 		return m_modelList[p_index].m_unk0x04;
 	}
 
-	return NULL;
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x100a0f60
