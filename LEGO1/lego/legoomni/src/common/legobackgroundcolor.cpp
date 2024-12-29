@@ -121,9 +121,9 @@ void LegoBackgroundColor::SetLightColor(float p_r, float p_g, float p_b)
 {
 	if (!VideoManager()->GetVideoParam().Flags().GetF2bit0()) {
 		// TODO: Computed constants based on what?
-		p_r *= 4.3478260869565215;
-		p_g *= 1.5873015873015872;
-		p_b *= 1.1764705882352942;
+		p_r *= 1.f / 0.23f;
+		p_g *= 1.f / 0.63f;
+		p_b *= 1.f / 0.85f;
 
 		if (p_r > 1.0) {
 			p_r = 1.0;
