@@ -710,7 +710,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 			else {
 				CharacterManager()->ReleaseActor(CharacterManager()->GetActorName(g_unk0x100f66cc));
 
-				if (key == 'k') {
+				if (key == VK_ADD) {
 					g_unk0x100f66cc++;
 					if (g_unk0x100f66cc >= CharacterManager()->GetNumActors()) {
 						g_unk0x100f66cc = 0;
