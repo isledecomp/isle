@@ -30,6 +30,11 @@
 
 DECOMP_SIZE_ASSERT(LegoNavController, 0x70)
 
+// MSVC 4.20 didn't define a macro for this key
+#ifndef VK_OEM_MINUS
+#define VK_OEM_MINUS 0xBD
+#endif
+
 //////////////////////////////////////////////////////////////////////
 
 #ifndef M_PI
@@ -1019,7 +1024,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 						GameState()->m_isDirty = TRUE;
 					}
 					break;
-				case 0xbd:
+				case VK_OEM_MINUS:
 					g_unk0x100f66bc = LegoAnimationManager::e_unk1;
 					break;
 				}
