@@ -1,5 +1,7 @@
 #include "legounknown.h"
 
+#include "mxgeometry/mxmatrix.h"
+
 DECOMP_SIZE_ASSERT(LegoUnknown, 0x50)
 
 // FUNCTION: LEGO1 0x1009a0f0
@@ -29,7 +31,7 @@ void LegoUnknown::FUN_1009a140(const Vector3& p_point1, Vector3& p_point2, Vecto
 
 // FUNCTION: LEGO1 0x1009a1e0
 // FUNCTION: BETA10 0x10182d61
-LegoResult LegoUnknown::FUN_1009a1e0(float p_f1, Matrix4& p_mat, Vector3& p_v, LegoU32 p_und)
+LegoResult LegoUnknown::FUN_1009a1e0(float p_f1, MxMatrix& p_mat, Vector3& p_v, LegoU32 p_und)
 {
 	Vector3 v1(p_mat[3]);
 	Vector3 v2(p_mat[0]);
