@@ -16,6 +16,7 @@
 #include "roi/legolod.h"
 #include "viewmanager/viewmanager.h"
 
+#include <assert.h>
 #include <vec.h>
 
 DECOMP_SIZE_ASSERT(LegoCharacter, 0x08)
@@ -52,10 +53,11 @@ MxU32 g_unk0x100fc4f0 = 0;
 LegoActorInfo g_actorInfo[66];
 
 // FUNCTION: LEGO1 0x10082a20
+// FUNCTION: BETA10 0x10073c60
 LegoCharacterManager::LegoCharacterManager()
 {
 	m_characters = new LegoCharacterMap();
-	Init();
+	Init(); // DECOMP: inlined here in BETA10
 
 	m_customizeAnimFile = new CustomizeAnimFileVariable("CUSTOMIZE_ANIM_FILE");
 	VariableTable()->SetVariable(m_customizeAnimFile);
@@ -228,8 +230,9 @@ const char* LegoCharacterManager::GetActorName(MxS32 p_index)
 	if (p_index < sizeOfArray(g_actorInfo)) {
 		return g_actorInfo[p_index].m_name;
 	}
-
-	return NULL;
+	else {
+		return NULL;
+	}
 }
 
 // FUNCTION: LEGO1 0x100834f0
@@ -244,9 +247,9 @@ MxU32 LegoCharacterManager::GetNumActors()
 LegoROI* LegoCharacterManager::GetActorROI(const char* p_name, MxBool p_createEntity)
 {
 	LegoCharacter* character = NULL;
-	LegoCharacterMap::iterator it = m_characters->find(const_cast<char*>(p_name));
+	LegoCharacterMap::const_iterator it = m_characters->find(const_cast<char*>(p_name));
 
-	if (it != m_characters->end()) {
+	if (!(it == m_characters->end())) {
 		character = (*it).second;
 		character->AddRef();
 	}
@@ -254,13 +257,9 @@ LegoROI* LegoCharacterManager::GetActorROI(const char* p_name, MxBool p_createEn
 	if (character == NULL) {
 		LegoROI* roi = CreateActorROI(p_name);
 
-		if (roi == NULL) {
-			goto done;
-		}
-
-		roi->SetVisibility(FALSE);
-
 		if (roi != NULL) {
+			roi->SetVisibility(FALSE);
+
 			character = new LegoCharacter(roi);
 			char* name = new char[strlen(p_name) + 1];
 
@@ -276,7 +275,6 @@ LegoROI* LegoCharacterManager::GetActorROI(const char* p_name, MxBool p_createEn
 		VideoManager()->Get3DManager()->Add(*character->m_roi);
 	}
 
-done:
 	if (character != NULL) {
 		if (p_createEntity && character->m_roi->GetEntity() == NULL) {
 			LegoExtraActor* actor = new LegoExtraActor();
@@ -289,15 +287,15 @@ done:
 
 		return character->m_roi;
 	}
-
-	return NULL;
+	else {
+		return NULL;
+	}
 }
 
 // FUNCTION: LEGO1 0x10083b20
 // FUNCTION: BETA10 0x10074608
 MxBool LegoCharacterManager::Exists(const char* p_name)
 {
-	LegoCharacter* character = NULL;
 	LegoCharacterMap::iterator it = m_characters->find(const_cast<char*>(p_name));
 
 	if (it != m_characters->end()) {
@@ -454,6 +452,7 @@ void LegoCharacterManager::RemoveROI(LegoROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x10084030
+// FUNCTION: BETA10 0x10074e4f
 LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 {
 	MxBool success = FALSE;
@@ -601,7 +600,7 @@ done:
 
 // FUNCTION: LEGO1 0x100849a0
 // FUNCTION: BETA10 0x10075b51
-MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_textureInfo)
+MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_texture)
 {
 	LegoResult result = SUCCESS;
 	LegoROI* head = FindChildROI(p_roi, g_actorLODs[c_headLOD].m_name);
@@ -610,24 +609,30 @@ MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_tex
 		char lodName[256];
 
 		ViewLODList* lodList = GetViewLODListManager()->Lookup(g_actorLODs[c_headLOD].m_parentName);
+		assert(lodList);
+
 		MxS32 lodSize = lodList->Size();
 		sprintf(lodName, "%s%s%d", p_roi->GetName(), "head", g_unk0x100fc4e8++);
 		ViewLODList* dupLodList = GetViewLODListManager()->Create(lodName, lodSize);
+		assert(dupLodList);
 
 		Tgl::Renderer* renderer = VideoManager()->GetRenderer();
 
-		if (p_textureInfo == NULL) {
+		if (p_texture == NULL) {
 			LegoActorInfo* info = GetActorInfo(p_roi->GetName());
+			assert(info);
+
 			LegoActorInfo::Part& part = info->m_parts[c_headPart];
-			p_textureInfo = TextureContainer()->Get(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]]);
+			p_texture = TextureContainer()->Get(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]]);
+			assert(p_texture);
 		}
 
 		for (MxS32 i = 0; i < lodSize; i++) {
 			LegoLOD* lod = (LegoLOD*) (*lodList)[i];
 			LegoLOD* clone = lod->Clone(renderer);
 
-			if (p_textureInfo != NULL) {
-				clone->FUN_100aad70(p_textureInfo);
+			if (p_texture != NULL) {
+				clone->FUN_100aad70(p_texture);
 			}
 
 			dupLodList->PushBack(clone);
@@ -672,6 +677,7 @@ LegoExtraActor* LegoCharacterManager::GetExtraActor(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x10084c60
+// FUNCTION: BETA10 0x10075ede
 LegoActorInfo* LegoCharacterManager::GetActorInfo(const char* p_name)
 {
 	MxU32 i;
@@ -685,11 +691,13 @@ LegoActorInfo* LegoCharacterManager::GetActorInfo(const char* p_name)
 	if (i < sizeOfArray(g_actorInfo)) {
 		return &g_actorInfo[i];
 	}
-
-	return NULL;
+	else {
+		return NULL;
+	}
 }
 
 // FUNCTION: LEGO1 0x10084cb0
+// FUNCTION: BETA10 0x10075f66
 LegoActorInfo* LegoCharacterManager::GetActorInfo(LegoROI* p_roi)
 {
 	MxU32 i;
@@ -703,21 +711,24 @@ LegoActorInfo* LegoCharacterManager::GetActorInfo(LegoROI* p_roi)
 	if (i < sizeOfArray(g_actorInfo)) {
 		return &g_actorInfo[i];
 	}
-
-	return NULL;
+	else {
+		return NULL;
+	}
 }
 
 // FUNCTION: LEGO1 0x10084cf0
 // FUNCTION: BETA10 0x10075fe2
 LegoROI* LegoCharacterManager::FindChildROI(LegoROI* p_roi, const char* p_name)
 {
+#ifdef COMPAT_MODE
+	CompoundObject::const_iterator it;
+#else
+	CompoundObject::iterator it;
+#endif
+
 	const CompoundObject* comp = p_roi->GetComp();
 
-#ifdef COMPAT_MODE
-	for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
-#else
-	for (CompoundObject::iterator it = comp->begin(); !(it == comp->end()); it++) {
-#endif
+	for (it = comp->begin(); it != comp->end(); it++) {
 		LegoROI* roi = (LegoROI*) *it;
 
 		if (!strcmpi(p_name, roi->GetName())) {
@@ -911,11 +922,13 @@ MxU32 LegoCharacterManager::GetAnimationId(LegoROI* p_roi)
 	if (info != NULL) {
 		return info->m_move + g_characterAnimationId;
 	}
-
-	return 0;
+	else {
+		return 0;
+	}
 }
 
 // FUNCTION: LEGO1 0x10085140
+// FUNCTION: BETA10 0x10076855
 MxU32 LegoCharacterManager::GetSoundId(LegoROI* p_roi, MxBool p_und)
 {
 	LegoActorInfo* info = GetActorInfo(p_roi);
@@ -927,8 +940,9 @@ MxU32 LegoCharacterManager::GetSoundId(LegoROI* p_roi, MxBool p_und)
 	if (info != NULL) {
 		return info->m_sound + g_unk0x100fc4d8;
 	}
-
-	return 0;
+	else {
+		return 0;
+	}
 }
 
 // FUNCTION: LEGO1 0x10085180
@@ -940,8 +954,9 @@ MxU8 LegoCharacterManager::GetMood(LegoROI* p_roi)
 	if (info != NULL) {
 		return info->m_mood;
 	}
-
-	return 0;
+	else {
+		return 0;
+	}
 }
 
 // FUNCTION: LEGO1 0x100851a0
