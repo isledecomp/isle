@@ -1,5 +1,6 @@
 #include "legoanim.h"
 
+#include "mxgeometry/mxgeometry4d.h"
 #include "mxgeometry/mxmatrix.h"
 
 #include <limits.h>

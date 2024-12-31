@@ -8,6 +8,7 @@
 #include "legotraninfolist.h"
 #include "mxcore.h"
 #include "mxgeometry/mxgeometry3d.h"
+#include "mxgeometry/mxgeometry4d.h"
 
 class LegoAnimPresenter;
 class LegoEntity;

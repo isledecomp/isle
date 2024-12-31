@@ -86,10 +86,27 @@ public:
 
 	IslePathActor();
 
+	// FUNCTION: LEGO1 0x10002df0
+	virtual MxLong HandleNotification0() { return 0; } // vtable+0xd0
+
+	// FUNCTION: LEGO1 0x10002e00
+	virtual MxLong HandlePathStruct(LegoPathStructNotificationParam&) { return 0; } // vtable+0xdc
+
 	// FUNCTION: LEGO1 0x10002e10
 	~IslePathActor() override { IslePathActor::Destroy(TRUE); }
 
-	MxLong Notify(MxParam& p_param) override; // vtable+0x04
+	// FUNCTION: LEGO1 0x10002e70
+	virtual MxLong HandleClick() { return 0; } // vtable+0xcc
+
+	// FUNCTION: LEGO1 0x10002e80
+	virtual MxLong HandleControl(LegoControlManagerNotificationParam&) { return 0; } // vtable+0xd4
+
+	// FUNCTION: LEGO1 0x10002e90
+	virtual MxLong HandleEndAnim(LegoEndAnimNotificationParam&) { return 0; } // vtable+0xd8
+
+	MxLong Notify(MxParam& p_param) override;         // vtable+0x04
+	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
 
 	// FUNCTION: LEGO1 0x10002ea0
 	// FUNCTION: BETA10 0x10023fa0
@@ -104,24 +121,6 @@ public:
 	{
 		return !strcmp(p_name, IslePathActor::ClassName()) || LegoPathActor::IsA(p_name);
 	}
-
-	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
-
-	// FUNCTION: LEGO1 0x10002e70
-	virtual MxLong HandleClick() { return 0; } // vtable+0xcc
-
-	// FUNCTION: LEGO1 0x10002df0
-	virtual MxLong HandleNotification0() { return 0; } // vtable+0xd0
-
-	// FUNCTION: LEGO1 0x10002e80
-	virtual MxLong HandleControl(LegoControlManagerNotificationParam&) { return 0; } // vtable+0xd4
-
-	// FUNCTION: LEGO1 0x10002e90
-	virtual MxLong HandleEndAnim(LegoEndAnimNotificationParam&) { return 0; } // vtable+0xd8
-
-	// FUNCTION: LEGO1 0x10002e00
-	virtual MxLong HandlePathStruct(LegoPathStructNotificationParam&) { return 0; } // vtable+0xdc
 
 	virtual void Enter();                                                                        // vtable+0xe0
 	virtual void Exit();                                                                         // vtable+0xe4
