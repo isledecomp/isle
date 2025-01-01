@@ -6,9 +6,6 @@
 #include <math.h>
 #include <memory.h>
 
-// Note: Many functions most likely take const references/pointers instead of non-const.
-// The class needs to undergo a very careful refactoring to fix that (no matches should break).
-
 // VTABLE: LEGO1 0x100d4288
 // VTABLE: BETA10 0x101b8440
 // SIZE 0x08

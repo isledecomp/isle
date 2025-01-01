@@ -3,6 +3,7 @@
 
 #include "islepathactor.h"
 #include "legostate.h"
+#include "mxgeometry/mxgeometry4d.h"
 #include "realtime/matrix.h"
 
 class Act3;
@@ -44,16 +45,17 @@ public:
 	MxU32 m_unk0x08; // 0x08
 };
 
-#include "mxgeometry/mxgeometry4d.h"
-
 // VTABLE: LEGO1 0x100d40f8
 // VTABLE: BETA10 0x101b9880
 // SIZE 0x230
 class Helicopter : public IslePathActor {
 public:
+	Helicopter();
+	~Helicopter() override; // vtable+0x00
+
 	// FUNCTION: LEGO1 0x10003070
 	// FUNCTION: BETA10 0x1002b300
-	virtual const char* ClassName() const override // vtable+0x0c
+	const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0130
 		return "Helicopter";
@@ -61,13 +63,10 @@ public:
 
 	// FUNCTION: LEGO1 0x10003080
 	// FUNCTION: BETA10 0x1002b330
-	virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Helicopter::ClassName()) || IslePathActor::IsA(p_name);
 	}
-
-	Helicopter();
-	~Helicopter() override; // vtable+0x00
 
 	MxResult Create(MxDSAction& p_dsAction) override;                            // vtable+0x18
 	void Animate(float p_time) override;                                         // vtable+0x70
