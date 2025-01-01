@@ -482,8 +482,7 @@ void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 
 	m_unk0x1f0 = Timer()->GetTime();
 
-	m_unk0x1f4.BETA_1004a9f0(local48);
-	m_unk0x1f4.FUN_10004620(local90);
+	m_unk0x1f4.BETA_1004a9b0(local48, local90);
 	m_unk0x1f4.FUN_10004520();
 }
 
