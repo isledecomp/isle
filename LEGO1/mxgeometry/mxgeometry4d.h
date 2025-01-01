@@ -55,6 +55,29 @@ public:
 
 	UnknownMx4DPointFloat() : m_unk0x30(0) {}
 
+	// FUNCTION: LEGO1 0x10004520
+	inline long FUN_10004520()
+	{
+		if (!m_unk0x30) {
+			return -1;
+		}
+
+		Mx4DPointFloat v1;
+		Mx4DPointFloat v2;
+
+		v1 = m_unk0x00;
+		v1 += m_unk0x18;
+
+		v2 = m_unk0x00;
+		v2 -= m_unk0x18;
+
+		if (v1.Dot(v1, v1) < v2.Dot(v2, v2)) {
+			m_unk0x18 *= -1.0f;
+		}
+
+		return 0;
+	}
+
 	// FUNCTION: BETA10 0x1004a9b0
 	void BETA_1004a9b0(Matrix4& p_m1, Matrix4& p_m2)
 	{
@@ -106,29 +129,6 @@ public:
 		}
 
 		return -1;
-	}
-
-	// FUNCTION: LEGO1 0x10004520
-	inline long FUN_10004520()
-	{
-		if (!m_unk0x30) {
-			return -1;
-		}
-
-		Mx4DPointFloat v1;
-		Mx4DPointFloat v2;
-
-		v1 = m_unk0x00;
-		v1 += m_unk0x18;
-
-		v2 = m_unk0x00;
-		v2 -= m_unk0x18;
-
-		if (v1.Dot(v1, v1) < v2.Dot(v2, v2)) {
-			m_unk0x18 *= -1.0f;
-		}
-
-		return 0;
 	}
 
 private:
