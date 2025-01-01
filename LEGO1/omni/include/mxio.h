@@ -29,6 +29,7 @@ public:
 	MxU16 Advance(MxU16);
 	MxU16 Descend(MMCKINFO*, const MMCKINFO*, MxU16);
 	MxU16 Ascend(MMCKINFO*, MxU16);
+	MxU16 CreateChunk(MMCKINFO* p_chunkInfo, MxU16 p_create);
 
 	// NOTE: In MXIOINFO, the `hmmio` member of MMIOINFO is used like
 	// an HFILE (int) instead of an HMMIO (WORD).
