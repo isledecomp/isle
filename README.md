@@ -46,6 +46,25 @@ cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
 If you have a CMake-compatible IDE, it should be pretty straightforward to use this repository, as long as you can use `VCVARS32.BAT` and set the generator to `NMake Makefiles`.
 
+### Docker
+
+Alternatively, we support Docker as a method of compilation. This is ideal for users on Linux and macOS who do not wish to manually configure a Wine environment for compiling this project.
+
+Compilation should be as simple as configuring and running the following command:
+
+```
+docker run -d \
+	-e CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo" \
+	-v <path-to-source>:/isle:rw \
+	-v <build-folder>:/build:rw \
+	ghcr.io/isledecomp/isle:latest
+```
+
+`<path-to-source>` should be replaced with the path to the source code directory (ie: the root of this repository).
+`<build-folder>` should be replaced with the path to the build folder you'd like CMake to use during compilation.
+
+You can pass as many CMake flags as you'd like in the `CMAKE_FLAGS` environment variable, but the default configuration provided in the command is already ideal for building highly-accurate binaries.
+
 ## Usage
 
 The simplest way to use the recompiled binaries is to swap the original executables (`ISLE.EXE`, `LEGO1.DLL`, and `CONFIG.EXE`) in LEGO Island's installation directory for the ones that you've built from this source code. By default, LEGO Island is installed to `C:\Program Files\LEGO Island` on 32-bit operating systems and `C:\Program Files (x86)\LEGO Island` on 64-bit operating systems.
