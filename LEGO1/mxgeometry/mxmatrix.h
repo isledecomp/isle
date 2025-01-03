@@ -2,7 +2,7 @@
 #define MXMATRIX_H
 
 #include "realtime/matrix.h"
-#include "realtime/matrix4d.h"
+#include "realtime/matrix4d.inl.h"
 
 // VTABLE: LEGO1 0x100d4300
 // VTABLE: BETA10 0x101b82e0
@@ -37,6 +37,6 @@ private:
 };
 
 // Must be included here for correct ordering in binary
-#include "realtime/vector4d.h"
+#include "realtime/vector4d.inl.h"
 
 #endif // MXMATRIX_H

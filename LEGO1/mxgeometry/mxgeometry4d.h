@@ -3,8 +3,8 @@
 
 #include "decomp.h"
 #include "realtime/matrix.h"
-#include "realtime/matrix4d.h"
-#include "realtime/vector4d.h"
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vector4d.inl.h"
 
 // VTABLE: LEGO1 0x100d41e8
 // VTABLE: BETA10 0x101bab78

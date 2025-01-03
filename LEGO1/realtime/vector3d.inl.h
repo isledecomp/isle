@@ -2,7 +2,7 @@
 #define VECTOR3D_H
 
 #include "vector.h"
-#include "vector2d.h"
+#include "vector2d.inl.h"
 
 // FUNCTION: LEGO1 0x10002270
 // FUNCTION: BETA10 0x10011350
