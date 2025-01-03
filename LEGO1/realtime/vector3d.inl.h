@@ -1,7 +1,6 @@
 #ifndef VECTOR3D_H
 #define VECTOR3D_H
 
-#include "vector.h"
 #include "vector2d.inl.h"
 
 // FUNCTION: LEGO1 0x10002270

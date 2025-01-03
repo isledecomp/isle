@@ -2,8 +2,6 @@
 #define MXGEOMETRY4D_H
 
 #include "decomp.h"
-#include "realtime/matrix.h"
-#include "realtime/matrix4d.inl.h"
 #include "realtime/vector4d.inl.h"
 
 // VTABLE: LEGO1 0x100d41e8

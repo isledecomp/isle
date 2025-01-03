@@ -1,7 +1,6 @@
 #ifndef MXMATRIX_H
 #define MXMATRIX_H
 
-#include "realtime/matrix.h"
 #include "realtime/matrix4d.inl.h"
 
 // VTABLE: LEGO1 0x100d4300
@@ -36,7 +35,9 @@ private:
 	float m_elements[4][4]; // 0x08
 };
 
-// Must be included here for correct ordering in binary
+// Must be included here (not before MxMatrix) for correct ordering in binary.
+// FromQuaternion and ToQuaternion in Matrix4 depend on Vector4.
+// There's a chance they included mxgeometry4d.h after including this somewhere.
 #include "realtime/vector4d.inl.h"
 
 #endif // MXMATRIX_H

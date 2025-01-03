@@ -2,8 +2,6 @@
 #define MXGEOMETRY3D_H
 
 #include "decomp.h"
-#include "realtime/vector.h"
-#include "realtime/vector2d.inl.h"
 #include "realtime/vector3d.inl.h"
 
 // VTABLE: LEGO1 0x100d4488
