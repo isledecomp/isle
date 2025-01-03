@@ -200,7 +200,7 @@ void Act2Actor::Animate(float p_time)
 {
 	int dummy1; // for BETA10, not sure what it is being used for
 
-#ifdef NDEBUG
+#ifndef BETA10
 	MxFloat local48float = 0.0f;
 	if (g_unk0x100f0f1c != 0.0f) {
 		local48float = p_time - g_unk0x100f0f1c;
@@ -221,14 +221,14 @@ void Act2Actor::Animate(float p_time)
 			m_unk0x20 = 0;
 		}
 		else {
-#ifdef NDEBUG
+#ifndef BETA10
 			m_unk0x20 += local48float;
 #endif
 			MxMatrix matrix = m_roi->GetLocal2World();
 			matrix[3][1] += 3.0f;
 			m_roi->UpdateTransformationRelativeToParent(matrix);
 
-#ifdef NDEBUG
+#ifndef BETA10
 			LegoROI* brickstrROI = FindROI("brickstr");
 			MxMatrix brickstrMatrix = brickstrROI->GetLocal2World();
 			brickstrMatrix[3][1] += 3.0f;
@@ -272,7 +272,7 @@ void Act2Actor::Animate(float p_time)
 			CurrentWorld()->RemoveActor(this);
 			return;
 		}
-#ifdef NDEBUG
+#ifndef BETA10
 		else if (m_unk0x1e == 4) {
 			if (m_worldSpeed == 0.0f) {
 				return;
@@ -340,7 +340,7 @@ void Act2Actor::Animate(float p_time)
 									FUN_100199f0(0);
 								}
 								else
-#ifdef NDEBUG
+#ifndef BETA10
 									if (p_time - m_unk0x24 > 3000.0f) {
 #endif
 									SetWorldSpeed(m_unk0x28 - 1);
@@ -350,7 +350,7 @@ void Act2Actor::Animate(float p_time)
 									if (((LegoAct2*) CurrentWorld())->FUN_100516b0() == SUCCESS) {
 										FUN_100199f0(1);
 									}
-#ifdef NDEBUG
+#ifndef BETA10
 								}
 #endif
 							}

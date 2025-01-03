@@ -100,7 +100,7 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 			}
 
 			if (VTable0x80(m_roi->GetWorldPosition(), worldDirection, a, c)) {
-#ifdef NDEBUG
+#ifndef BETA10
 				m_unk0x7c = 0;
 				return 0;
 #else
