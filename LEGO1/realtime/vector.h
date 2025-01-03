@@ -6,6 +6,9 @@
 #include <math.h>
 #include <memory.h>
 
+// Note: virtual function overloads appear in the virtual table
+// in reverse order of appearance.
+
 // VTABLE: LEGO1 0x100d4288
 // VTABLE: BETA10 0x101b8440
 // SIZE 0x08
@@ -15,142 +18,38 @@ public:
 	// FUNCTION: BETA10 0x100116a0
 	Vector2(float* p_data) { SetData(p_data); }
 
-	// Note: virtual function overloads appear in the virtual table
-	// in reverse order of appearance.
+protected:
+	inline virtual void AddImpl(const float* p_value);                      // vtable+0x04
+	inline virtual void AddImpl(float p_value);                             // vtable+0x00
+	inline virtual void SubImpl(const float* p_value);                      // vtable+0x08
+	inline virtual void MulImpl(const float* p_value);                      // vtable+0x10
+	inline virtual void MulImpl(const float& p_value);                      // vtable+0x0c
+	inline virtual void DivImpl(const float& p_value);                      // vtable+0x14
+	inline virtual float DotImpl(const float* p_a, const float* p_b) const; // vtable+0x18
+	inline virtual void SetData(float* p_data);                             // vtable+0x1c
+	inline virtual void EqualsImpl(const float* p_data);                    // vtable+0x20
 
-	// FUNCTION: LEGO1 0x10001f80
-	virtual void AddImpl(const float* p_value)
-	{
-		m_data[0] += p_value[0];
-		m_data[1] += p_value[1];
-	} // vtable+0x04
-
-	// FUNCTION: LEGO1 0x10001fa0
-	virtual void AddImpl(float p_value)
-	{
-		m_data[0] += p_value;
-		m_data[1] += p_value;
-	} // vtable+0x00
-
-	// FUNCTION: LEGO1 0x10001fc0
-	virtual void SubImpl(const float* p_value)
-	{
-		m_data[0] -= p_value[0];
-		m_data[1] -= p_value[1];
-	} // vtable+0x08
-
-	// FUNCTION: LEGO1 0x10001fe0
-	virtual void MulImpl(const float* p_value)
-	{
-		m_data[0] *= p_value[0];
-		m_data[1] *= p_value[1];
-	} // vtable+0x10
-
-	// FUNCTION: LEGO1 0x10002000
-	virtual void MulImpl(const float& p_value)
-	{
-		m_data[0] *= p_value;
-		m_data[1] *= p_value;
-	} // vtable+0x0c
-
-	// FUNCTION: LEGO1 0x10002020
-	virtual void DivImpl(const float& p_value)
-	{
-		m_data[0] /= p_value;
-		m_data[1] /= p_value;
-	} // vtable+0x14
-
-	// FUNCTION: LEGO1 0x10002040
-	virtual float DotImpl(const float* p_a, const float* p_b) const
-	{
-		return p_b[0] * p_a[0] + p_b[1] * p_a[1];
-	} // vtable+0x18
-
-	// FUNCTION: LEGO1 0x10002060
-	// FUNCTION: BETA10 0x10010c90
-	virtual void SetData(float* p_data) { m_data = p_data; } // vtable+0x1c
-
-	// FUNCTION: LEGO1 0x10002070
-	virtual void EqualsImpl(const float* p_data) { memcpy(m_data, p_data, sizeof(float) * 2); } // vtable+0x20
-
-	// FUNCTION: LEGO1 0x10002090
-	virtual float* GetData() { return m_data; } // vtable+0x28
-
-	// FUNCTION: LEGO1 0x100020a0
-	virtual const float* GetData() const { return m_data; } // vtable+0x24
-
-	// FUNCTION: LEGO1 0x100020b0
-	virtual void Clear() { memset(m_data, 0, sizeof(float) * 2); } // vtable+0x2c
-
-	// FUNCTION: LEGO1 0x100020d0
-	virtual float Dot(const float* p_a, const float* p_b) const { return DotImpl(p_a, p_b); } // vtable+0x3c
-
-	// FUNCTION: LEGO1 0x100020f0
-	// FUNCTION: BETA10 0x100108c0
-	virtual float Dot(const Vector2& p_a, const Vector2& p_b) const
-	{
-		return DotImpl(p_a.m_data, p_b.m_data);
-	} // vtable+0x38
-
-	// FUNCTION: LEGO1 0x10002110
-	virtual float Dot(const float* p_a, const Vector2& p_b) const { return DotImpl(p_a, p_b.m_data); } // vtable+0x34
-
-	// FUNCTION: LEGO1 0x10002130
-	virtual float Dot(const Vector2& p_a, const float* p_b) const { return DotImpl(p_a.m_data, p_b); } // vtable+0x30
-
-	// FUNCTION: LEGO1 0x10002150
-	virtual float LenSquared() const { return m_data[0] * m_data[0] + m_data[1] * m_data[1]; } // vtable+0x40
-
-	// FUNCTION: LEGO1 0x10002160
-	// FUNCTION: BETA10 0x10010900
-	virtual int Unitize()
-	{
-		float sq = LenSquared();
-
-		if (sq > 0.0f) {
-			float root = sqrt(sq);
-			if (root > 0.0f) {
-				DivImpl(root);
-				return 0;
-			}
-		}
-
-		return -1;
-	} // vtable+0x44
-
-	// FUNCTION: LEGO1 0x100021c0
-	virtual void operator+=(float p_value) { AddImpl(p_value); } // vtable+0x50
-
-	// FUNCTION: LEGO1 0x100021d0
-	virtual void operator+=(const float* p_other) { AddImpl(p_other); } // vtable+0x4c
-
-	// FUNCTION: LEGO1 0x100021e0
-	virtual void operator+=(const Vector2& p_other) { AddImpl(p_other.m_data); } // vtable+0x48
-
-	// FUNCTION: LEGO1 0x100021f0
-	virtual void operator-=(const float* p_other) { SubImpl(p_other); } // vtable+0x58
-
-	// FUNCTION: LEGO1 0x10002200
-	virtual void operator-=(const Vector2& p_other) { SubImpl(p_other.m_data); } // vtable+0x54
-
-	// FUNCTION: LEGO1 0x10002210
-	virtual void operator*=(const float* p_other) { MulImpl(p_other); } // vtable+0x64
-
-	// FUNCTION: LEGO1 0x10002220
-	virtual void operator*=(const Vector2& p_other) { MulImpl(p_other.m_data); } // vtable+0x60
-
-	// FUNCTION: LEGO1 0x10002230
-	virtual void operator*=(const float& p_value) { MulImpl(p_value); } // vtable+0x5c
-
-	// FUNCTION: LEGO1 0x10002240
-	virtual void operator/=(const float& p_value) { DivImpl(p_value); } // vtable+0x68
-
-	// FUNCTION: LEGO1 0x10002250
-	virtual void SetVector(const float* p_other) { EqualsImpl(p_other); } // vtable+0x70
-
-	// FUNCTION: LEGO1 0x10002260
-	// FUNCTION: BETA10 0x100110c0
-	virtual void SetVector(const Vector2& p_other) { EqualsImpl(p_other.m_data); } // vtable+0x6c
+public:
+	inline virtual float* GetData();                                        // vtable+0x28
+	inline virtual const float* GetData() const;                            // vtable+0x24
+	inline virtual void Clear();                                            // vtable+0x2c
+	inline virtual float Dot(const float* p_a, const float* p_b) const;     // vtable+0x3c
+	inline virtual float Dot(const Vector2& p_a, const Vector2& p_b) const; // vtable+0x38
+	inline virtual float Dot(const float* p_a, const Vector2& p_b) const;   // vtable+0x34
+	inline virtual float Dot(const Vector2& p_a, const float* p_b) const;   // vtable+0x30
+	inline virtual float LenSquared() const;                                // vtable+0x40
+	inline virtual int Unitize();                                           // vtable+0x44
+	inline virtual void operator+=(float p_value);                          // vtable+0x50
+	inline virtual void operator+=(const float* p_other);                   // vtable+0x4c
+	inline virtual void operator+=(const Vector2& p_other);                 // vtable+0x48
+	inline virtual void operator-=(const float* p_other);                   // vtable+0x58
+	inline virtual void operator-=(const Vector2& p_other);                 // vtable+0x54
+	inline virtual void operator*=(const float* p_other);                   // vtable+0x64
+	inline virtual void operator*=(const Vector2& p_other);                 // vtable+0x60
+	inline virtual void operator*=(const float& p_value);                   // vtable+0x5c
+	inline virtual void operator/=(const float& p_value);                   // vtable+0x68
+	inline virtual void SetVector(const float* p_other);                    // vtable+0x70
+	inline virtual void SetVector(const Vector2& p_other);                  // vtable+0x6c
 
 	// Note: it's unclear whether Vector3::operator= has been defined explicitly
 	// with the same function body as Vector2& operator=. The BETA indicates that;
@@ -208,111 +107,76 @@ public:
 	// FUNCTION: BETA10 0x100109a0
 	Vector3(const float* p_data) : Vector2((float*) p_data) {}
 
+protected:
+	inline void AddImpl(const float* p_value) override;                      // vtable+0x04
+	inline void AddImpl(float p_value) override;                             // vtable+0x00
+	inline void SubImpl(const float* p_value) override;                      // vtable+0x08
+	inline void MulImpl(const float* p_value) override;                      // vtable+0x10
+	inline void MulImpl(const float& p_value) override;                      // vtable+0x0c
+	inline void DivImpl(const float& p_value) override;                      // vtable+0x14
+	inline float DotImpl(const float* p_a, const float* p_b) const override; // vtable+0x18
+	inline void EqualsImpl(const float* p_data) override;                    // vtable+0x20
+	inline virtual void EqualsCrossImpl(const float* p_a, const float* p_b); // vtable+0x74
+
+public:
+	inline void Clear() override;                                            // vtable+0x2c
+	inline float LenSquared() const override;                                // vtable+0x40
+	inline virtual void EqualsCross(const Vector3& p_a, const Vector3& p_b); // vtable+0x80
+	inline virtual void EqualsCross(const Vector3& p_a, const float* p_b);   // vtable+0x7c
+	inline virtual void EqualsCross(const float* p_a, const Vector3& p_b);   // vtable+0x78
+	inline virtual void Fill(const float& p_value);                          // vtable+0x84
+
+	friend class Mx3DPointFloat;
+};
+
+#include "vector2d.inl"
+#include "vector3d.inl"
+
+// VTABLE: LEGO1 0x100d45a0
+// VTABLE: BETA10 0x101bac38
+// SIZE 0x08
+class Vector4 : public Vector3 {
+public:
+	// FUNCTION: BETA10 0x10048780
+	inline Vector4(float* p_data) : Vector3(p_data) {}
+
+	// Some code initializes a Vector4 from a `const float*` source.
+	// Example: `LegoCarBuild::VTable0x6c`
+	// Vector4 however is a class that can mutate its underlying source, making
+	// initialization with a const source fundamentally incompatible.
+	// BETA10 appears to have two separate constructors for Vector4 as well,
+	// supporting the theory that this decompilation is correct.
+
+	// FUNCTION: BETA10 0x100701b0
+	inline Vector4(const float* p_data) : Vector3((float*) p_data) {}
+
 	// Note: virtual function overloads appear in the virtual table
 	// in reverse order of appearance.
 
-	// FUNCTION: LEGO1 0x10002270
-	// FUNCTION: BETA10 0x10011350
-	virtual void EqualsCrossImpl(const float* p_a, const float* p_b)
-	{
-		m_data[0] = p_a[1] * p_b[2] - p_a[2] * p_b[1];
-		m_data[1] = p_a[2] * p_b[0] - p_a[0] * p_b[2];
-		m_data[2] = p_a[0] * p_b[1] - p_a[1] * p_b[0];
-	} // vtable+0x74
+	inline void AddImpl(const float* p_value) override;                      // vtable+0x04
+	inline void AddImpl(float p_value) override;                             // vtable+0x00
+	inline void SubImpl(const float* p_value) override;                      // vtable+0x08
+	inline void MulImpl(const float* p_value) override;                      // vtable+0x10
+	inline void MulImpl(const float& p_value) override;                      // vtable+0x0c
+	inline void DivImpl(const float& p_value) override;                      // vtable+0x14
+	inline float DotImpl(const float* p_a, const float* p_b) const override; // vtable+0x18
+	inline void EqualsImpl(const float* p_data) override;                    // vtable+0x20
 
-	// FUNCTION: LEGO1 0x100022c0
-	// FUNCTION: BETA10 0x10011430
-	virtual void EqualsCross(const Vector3& p_a, const Vector3& p_b)
-	{
-		EqualsCrossImpl(p_a.m_data, p_b.m_data);
-	} // vtable+0x80
+	inline void Clear() override;                    // vtable+0x2c
+	inline float LenSquared() const override;        // vtable+0x40
+	inline void Fill(const float& p_value) override; // vtable+0x84
 
-	// FUNCTION: LEGO1 0x100022e0
-	virtual void EqualsCross(const Vector3& p_a, const float* p_b) { EqualsCrossImpl(p_a.m_data, p_b); } // vtable+0x7c
+	inline virtual void SetMatrixProduct(const float* p_vec, const float* p_mat);     // vtable+0x8c
+	inline virtual void SetMatrixProduct(const Vector4& p_a, const float* p_b);       // vtable+0x88
+	inline virtual int NormalizeQuaternion();                                         // vtable+0x90
+	inline virtual int EqualsHamiltonProduct(const Vector4& p_a, const Vector4& p_b); // vtable+0x94
 
-	// FUNCTION: LEGO1 0x10002300
-	virtual void EqualsCross(const float* p_a, const Vector3& p_b) { EqualsCrossImpl(p_a, p_b.m_data); } // vtable+0x78
+	float& operator[](int idx) { return m_data[idx]; }
 
-	// Vector2 overrides
+	// FUNCTION: BETA10 0x10010890
+	const float& operator[](int idx) const { return m_data[idx]; }
 
-	// FUNCTION: LEGO1 0x10003a60
-	void AddImpl(const float* p_value) override
-	{
-		m_data[0] += p_value[0];
-		m_data[1] += p_value[1];
-		m_data[2] += p_value[2];
-	} // vtable+0x04
-
-	// FUNCTION: LEGO1 0x10003a90
-	void AddImpl(float p_value) override
-	{
-		m_data[0] += p_value;
-		m_data[1] += p_value;
-		m_data[2] += p_value;
-	} // vtable+0x00
-
-	// FUNCTION: LEGO1 0x10003ac0
-	void SubImpl(const float* p_value) override
-	{
-		m_data[0] -= p_value[0];
-		m_data[1] -= p_value[1];
-		m_data[2] -= p_value[2];
-	} // vtable+0x08
-
-	// FUNCTION: LEGO1 0x10003af0
-	void MulImpl(const float* p_value) override
-	{
-		m_data[0] *= p_value[0];
-		m_data[1] *= p_value[1];
-		m_data[2] *= p_value[2];
-	} // vtable+0x10
-
-	// FUNCTION: LEGO1 0x10003b20
-	void MulImpl(const float& p_value) override
-	{
-		m_data[0] *= p_value;
-		m_data[1] *= p_value;
-		m_data[2] *= p_value;
-	} // vtable+0x0c
-
-	// FUNCTION: LEGO1 0x10003b50
-	void DivImpl(const float& p_value) override
-	{
-		m_data[0] /= p_value;
-		m_data[1] /= p_value;
-		m_data[2] /= p_value;
-	} // vtable+0x14
-
-	// FUNCTION: LEGO1 0x10003b80
-	float DotImpl(const float* p_a, const float* p_b) const override
-	{
-		return p_a[0] * p_b[0] + p_a[2] * p_b[2] + p_a[1] * p_b[1];
-	} // vtable+0x18
-
-	// FUNCTION: LEGO1 0x10003ba0
-	// FUNCTION: BETA10 0x100113f0
-	void EqualsImpl(const float* p_data) override { memcpy(m_data, p_data, sizeof(float) * 3); } // vtable+0x20
-
-	// FUNCTION: LEGO1 0x10003bc0
-	// FUNCTION: BETA10 0x100114f0
-	void Clear() override { memset(m_data, 0, sizeof(float) * 3); } // vtable+0x2c
-
-	// FUNCTION: LEGO1 0x10003bd0
-	// FUNCTION: BETA10 0x10011530
-	float LenSquared() const override
-	{
-		return m_data[0] * m_data[0] + m_data[1] * m_data[1] + m_data[2] * m_data[2];
-	} // vtable+0x40
-
-	// FUNCTION: LEGO1 0x10003bf0
-	virtual void Fill(const float& p_value)
-	{
-		m_data[0] = p_value;
-		m_data[1] = p_value;
-		m_data[2] = p_value;
-	} // vtable+0x84
-
-	friend class Mx3DPointFloat;
+	friend class Mx4DPointFloat;
 };
 
 struct UnknownMatrixType {
@@ -631,135 +495,107 @@ private:
 	float m_elements[4][4]; // 0x08
 };
 
-// VTABLE: LEGO1 0x100d45a0
-// VTABLE: BETA10 0x101bac38
-// SIZE 0x08
-class Vector4 : public Vector3 {
-public:
-	// FUNCTION: BETA10 0x10048780
-	Vector4(float* p_data) : Vector3(p_data) {}
+// FUNCTION: LEGO1 0x10002870
+void Vector4::AddImpl(const float* p_value)
+{
+	m_data[0] += p_value[0];
+	m_data[1] += p_value[1];
+	m_data[2] += p_value[2];
+	m_data[3] += p_value[3];
+}
 
-	// Some code initializes a Vector4 from a `const float*` source.
-	// Example: `LegoCarBuild::VTable0x6c`
-	// Vector4 however is a class that can mutate its underlying source, making
-	// initialization with a const source fundamentally incompatible.
-	// BETA10 appears to have two separate constructors for Vector4 as well,
-	// supporting the theory that this decompilation is correct.
+// FUNCTION: LEGO1 0x100028b0
+void Vector4::AddImpl(float p_value)
+{
+	m_data[0] += p_value;
+	m_data[1] += p_value;
+	m_data[2] += p_value;
+	m_data[3] += p_value;
+}
 
-	// FUNCTION: BETA10 0x100701b0
-	Vector4(const float* p_data) : Vector3((float*) p_data) {}
+// FUNCTION: LEGO1 0x100028f0
+void Vector4::SubImpl(const float* p_value)
+{
+	m_data[0] -= p_value[0];
+	m_data[1] -= p_value[1];
+	m_data[2] -= p_value[2];
+	m_data[3] -= p_value[3];
+}
 
-	// Note: virtual function overloads appear in the virtual table
-	// in reverse order of appearance.
+// FUNCTION: LEGO1 0x10002930
+void Vector4::MulImpl(const float* p_value)
+{
+	m_data[0] *= p_value[0];
+	m_data[1] *= p_value[1];
+	m_data[2] *= p_value[2];
+	m_data[3] *= p_value[3];
+}
 
-	// Vector3 overrides
+// FUNCTION: LEGO1 0x10002970
+void Vector4::MulImpl(const float& p_value)
+{
+	m_data[0] *= p_value;
+	m_data[1] *= p_value;
+	m_data[2] *= p_value;
+	m_data[3] *= p_value;
+}
 
-	// FUNCTION: LEGO1 0x10002870
-	void AddImpl(const float* p_value) override
-	{
-		m_data[0] += p_value[0];
-		m_data[1] += p_value[1];
-		m_data[2] += p_value[2];
-		m_data[3] += p_value[3];
-	} // vtable+0x04
+// FUNCTION: LEGO1 0x100029b0
+void Vector4::DivImpl(const float& p_value)
+{
+	m_data[0] /= p_value;
+	m_data[1] /= p_value;
+	m_data[2] /= p_value;
+	m_data[3] /= p_value;
+}
 
-	// FUNCTION: LEGO1 0x100028b0
-	void AddImpl(float p_value) override
-	{
-		m_data[0] += p_value;
-		m_data[1] += p_value;
-		m_data[2] += p_value;
-		m_data[3] += p_value;
-	} // vtable+0x00
+// FUNCTION: LEGO1 0x100029f0
+float Vector4::DotImpl(const float* p_a, const float* p_b) const
+{
+	return p_a[0] * p_b[0] + p_a[2] * p_b[2] + (p_a[1] * p_b[1] + p_a[3] * p_b[3]);
+}
 
-	// FUNCTION: LEGO1 0x100028f0
-	void SubImpl(const float* p_value) override
-	{
-		m_data[0] -= p_value[0];
-		m_data[1] -= p_value[1];
-		m_data[2] -= p_value[2];
-		m_data[3] -= p_value[3];
-	} // vtable+0x08
+// FUNCTION: LEGO1 0x10002a20
+void Vector4::EqualsImpl(const float* p_data)
+{
+	memcpy(m_data, p_data, sizeof(float) * 4);
+}
 
-	// FUNCTION: LEGO1 0x10002930
-	void MulImpl(const float* p_value) override
-	{
-		m_data[0] *= p_value[0];
-		m_data[1] *= p_value[1];
-		m_data[2] *= p_value[2];
-		m_data[3] *= p_value[3];
-	} // vtable+0x10
+// FUNCTION: LEGO1 0x10002a40
+void Vector4::SetMatrixProduct(const float* p_vec, const float* p_mat)
+{
+	m_data[0] = p_vec[0] * p_mat[0] + p_vec[1] * p_mat[4] + p_vec[2] * p_mat[8] + p_vec[3] * p_mat[12];
+	m_data[1] = p_vec[0] * p_mat[1] + p_vec[1] * p_mat[5] + p_vec[2] * p_mat[9] + p_vec[4] * p_mat[13];
+	m_data[2] = p_vec[0] * p_mat[2] + p_vec[1] * p_mat[6] + p_vec[2] * p_mat[10] + p_vec[4] * p_mat[14];
+	m_data[3] = p_vec[0] * p_mat[3] + p_vec[1] * p_mat[7] + p_vec[2] * p_mat[11] + p_vec[4] * p_mat[15];
+}
 
-	// FUNCTION: LEGO1 0x10002970
-	void MulImpl(const float& p_value) override
-	{
-		m_data[0] *= p_value;
-		m_data[1] *= p_value;
-		m_data[2] *= p_value;
-		m_data[3] *= p_value;
-	} // vtable+0x0c
+// FUNCTION: LEGO1 0x10002ae0
+void Vector4::SetMatrixProduct(const Vector4& p_a, const float* p_b)
+{
+	SetMatrixProduct(p_a.m_data, p_b);
+}
 
-	// FUNCTION: LEGO1 0x100029b0
-	void DivImpl(const float& p_value) override
-	{
-		m_data[0] /= p_value;
-		m_data[1] /= p_value;
-		m_data[2] /= p_value;
-		m_data[3] /= p_value;
-	} // vtable+0x14
+// FUNCTION: LEGO1 0x10002b00
+void Vector4::Clear()
+{
+	memset(m_data, 0, sizeof(float) * 4);
+}
 
-	// FUNCTION: LEGO1 0x100029f0
-	float DotImpl(const float* p_a, const float* p_b) const override
-	{
-		return p_a[0] * p_b[0] + p_a[2] * p_b[2] + (p_a[1] * p_b[1] + p_a[3] * p_b[3]);
-	} // vtable+0x18
+// FUNCTION: LEGO1 0x10002b20
+float Vector4::LenSquared() const
+{
+	return m_data[1] * m_data[1] + m_data[0] * m_data[0] + m_data[2] * m_data[2] + m_data[3] * m_data[3];
+}
 
-	// FUNCTION: LEGO1 0x10002a20
-	void EqualsImpl(const float* p_data) override { memcpy(m_data, p_data, sizeof(float) * 4); } // vtable+0x20
-
-	// FUNCTION: LEGO1 0x10002a40
-	virtual void SetMatrixProduct(const float* p_vec, const float* p_mat)
-	{
-		m_data[0] = p_vec[0] * p_mat[0] + p_vec[1] * p_mat[4] + p_vec[2] * p_mat[8] + p_vec[3] * p_mat[12];
-		m_data[1] = p_vec[0] * p_mat[1] + p_vec[1] * p_mat[5] + p_vec[2] * p_mat[9] + p_vec[4] * p_mat[13];
-		m_data[2] = p_vec[0] * p_mat[2] + p_vec[1] * p_mat[6] + p_vec[2] * p_mat[10] + p_vec[4] * p_mat[14];
-		m_data[3] = p_vec[0] * p_mat[3] + p_vec[1] * p_mat[7] + p_vec[2] * p_mat[11] + p_vec[4] * p_mat[15];
-	} // vtable+0x8c
-
-	// FUNCTION: LEGO1 0x10002ae0
-	virtual void SetMatrixProduct(const Vector4& p_a, const float* p_b)
-	{
-		SetMatrixProduct(p_a.m_data, p_b);
-	} // vtable+0x88
-
-	inline virtual int NormalizeQuaternion();                                         // vtable+0x90
-	inline virtual int EqualsHamiltonProduct(const Vector4& p_a, const Vector4& p_b); // vtable+0x94
-
-	// FUNCTION: LEGO1 0x10002b00
-	void Clear() override { memset(m_data, 0, sizeof(float) * 4); } // vtable+0x2c
-
-	// FUNCTION: LEGO1 0x10002b20
-	float LenSquared() const override
-	{
-		return m_data[1] * m_data[1] + m_data[0] * m_data[0] + m_data[2] * m_data[2] + m_data[3] * m_data[3];
-	} // vtable+0x40
-
-	// FUNCTION: LEGO1 0x10002b40
-	void Fill(const float& p_value) override
-	{
-		m_data[0] = p_value;
-		m_data[1] = p_value;
-		m_data[2] = p_value;
-		m_data[3] = p_value;
-	} // vtable+0x84
-
-	float& operator[](int idx) { return m_data[idx]; }
-
-	// FUNCTION: BETA10 0x10010890
-	const float& operator[](int idx) const { return m_data[idx]; }
-
-	friend class Mx4DPointFloat;
-};
+// FUNCTION: LEGO1 0x10002b40
+void Vector4::Fill(const float& p_value)
+{
+	m_data[0] = p_value;
+	m_data[1] = p_value;
+	m_data[2] = p_value;
+	m_data[3] = p_value;
+}
 
 // FUNCTION: BETA10 0x1005a590
 inline int Matrix4::BETA_1005a590(Matrix4& p_mat)
