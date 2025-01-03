@@ -14,6 +14,9 @@ struct UnknownMatrixType {
 // VTABLE: BETA10 0x101b8340
 // SIZE 0x08
 class Matrix4 {
+protected:
+	float (*m_data)[4];
+
 public:
 	// FUNCTION: LEGO1 0x10004500
 	// FUNCTION: BETA10 0x1000fc70
@@ -47,9 +50,6 @@ public:
 
 	float* operator[](int idx) { return m_data[idx]; }
 	const float* operator[](int idx) const { return m_data[idx]; }
-
-protected:
-	float (*m_data)[4];
 };
 
 #endif // MATRIX_H

@@ -21,6 +21,8 @@ protected:
 	inline virtual void SetData(float* p_data);                             // vtable+0x1c
 	inline virtual void EqualsImpl(const float* p_data);                    // vtable+0x20
 
+	float* m_data; // 0x04
+
 public:
 	// FUNCTION: LEGO1 0x1000c0f0
 	// FUNCTION: BETA10 0x100116a0
@@ -81,9 +83,6 @@ public:
 
 	// FUNCTION: BETA10 0x1001d170
 	const float& operator[](int idx) const { return m_data[idx]; }
-
-protected:
-	float* m_data; // 0x04
 };
 
 // VTABLE: LEGO1 0x100d4518
