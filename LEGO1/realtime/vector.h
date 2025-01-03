@@ -28,6 +28,9 @@ public:
 	// FUNCTION: BETA10 0x100116a0
 	Vector2(float* p_data) { SetData(p_data); }
 
+	// FUNCTION: BETA10 0x100109e0
+	Vector2(const float* p_data) { m_data = (float*) p_data; }
+
 	inline virtual float* GetData();                                        // vtable+0x28
 	inline virtual const float* GetData() const;                            // vtable+0x24
 	inline virtual void Clear();                                            // vtable+0x2c
@@ -89,7 +92,7 @@ public:
 	// initialization with a const source fundamentally incompatible.
 
 	// FUNCTION: BETA10 0x100109a0
-	Vector3(const float* p_data) : Vector2((float*) p_data) {}
+	Vector3(const float* p_data) : Vector2(p_data) {}
 
 	inline void Clear() override;                                            // vtable+0x2c
 	inline float LenSquared() const override;                                // vtable+0x40
@@ -127,7 +130,7 @@ public:
 	// supporting the theory that this decompilation is correct.
 
 	// FUNCTION: BETA10 0x100701b0
-	Vector4(const float* p_data) : Vector3((float*) p_data) {}
+	Vector4(const float* p_data) : Vector3(p_data) {}
 
 	inline void Clear() override;                                                     // vtable+0x2c
 	inline float LenSquared() const override;                                         // vtable+0x40
