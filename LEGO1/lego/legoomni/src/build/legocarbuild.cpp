@@ -358,7 +358,7 @@ void LegoCarBuild::VTable0x70()
 
 	m_unk0x2a0 = sqrt((MxDouble) DISTSQRD2(m_unk0x290, m_unk0x298));
 
-	m_unk0x25c.Set(m_unk0x178, m_unk0x208);
+	m_unk0x25c.SetStartEnd(m_unk0x178, m_unk0x208);
 }
 
 // FUNCTION: LEGO1 0x10023130

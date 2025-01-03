@@ -482,7 +482,7 @@ void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 
 	m_unk0x1f0 = Timer()->GetTime();
 
-	m_unk0x1f4.Set(local48, local90);
+	m_unk0x1f4.SetStartEnd(local48, local90);
 	m_unk0x1f4.NormalizeDirection();
 }
 
