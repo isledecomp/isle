@@ -3,9 +3,6 @@
 
 #include "compat.h"
 
-#include <math.h>
-#include <memory.h>
-
 // Note: virtual function overloads appear in the virtual table
 // in reverse order of appearance.
 
@@ -13,11 +10,6 @@
 // VTABLE: BETA10 0x101b8440
 // SIZE 0x08
 class Vector2 {
-public:
-	// FUNCTION: LEGO1 0x1000c0f0
-	// FUNCTION: BETA10 0x100116a0
-	Vector2(float* p_data) { SetData(p_data); }
-
 protected:
 	inline virtual void AddImpl(const float* p_value);                      // vtable+0x04
 	inline virtual void AddImpl(float p_value);                             // vtable+0x00
@@ -30,6 +22,10 @@ protected:
 	inline virtual void EqualsImpl(const float* p_data);                    // vtable+0x20
 
 public:
+	// FUNCTION: LEGO1 0x1000c0f0
+	// FUNCTION: BETA10 0x100116a0
+	Vector2(float* p_data) { SetData(p_data); }
+
 	inline virtual float* GetData();                                        // vtable+0x28
 	inline virtual const float* GetData() const;                            // vtable+0x24
 	inline virtual void Clear();                                            // vtable+0x2c
@@ -94,6 +90,17 @@ protected:
 // VTABLE: BETA10 0x101b8398
 // SIZE 0x08
 class Vector3 : public Vector2 {
+protected:
+	inline void AddImpl(const float* p_value) override;                      // vtable+0x04
+	inline void AddImpl(float p_value) override;                             // vtable+0x00
+	inline void SubImpl(const float* p_value) override;                      // vtable+0x08
+	inline void MulImpl(const float* p_value) override;                      // vtable+0x10
+	inline void MulImpl(const float& p_value) override;                      // vtable+0x0c
+	inline void DivImpl(const float& p_value) override;                      // vtable+0x14
+	inline float DotImpl(const float* p_a, const float* p_b) const override; // vtable+0x18
+	inline void EqualsImpl(const float* p_data) override;                    // vtable+0x20
+	inline virtual void EqualsCrossImpl(const float* p_a, const float* p_b); // vtable+0x74
+
 public:
 	// FUNCTION: LEGO1 0x1001d150
 	// FUNCTION: BETA10 0x10011660
@@ -107,18 +114,6 @@ public:
 	// FUNCTION: BETA10 0x100109a0
 	Vector3(const float* p_data) : Vector2((float*) p_data) {}
 
-protected:
-	inline void AddImpl(const float* p_value) override;                      // vtable+0x04
-	inline void AddImpl(float p_value) override;                             // vtable+0x00
-	inline void SubImpl(const float* p_value) override;                      // vtable+0x08
-	inline void MulImpl(const float* p_value) override;                      // vtable+0x10
-	inline void MulImpl(const float& p_value) override;                      // vtable+0x0c
-	inline void DivImpl(const float& p_value) override;                      // vtable+0x14
-	inline float DotImpl(const float* p_a, const float* p_b) const override; // vtable+0x18
-	inline void EqualsImpl(const float* p_data) override;                    // vtable+0x20
-	inline virtual void EqualsCrossImpl(const float* p_a, const float* p_b); // vtable+0x74
-
-public:
 	inline void Clear() override;                                            // vtable+0x2c
 	inline float LenSquared() const override;                                // vtable+0x40
 	inline virtual void EqualsCross(const Vector3& p_a, const Vector3& p_b); // vtable+0x80
@@ -133,6 +128,16 @@ public:
 // VTABLE: BETA10 0x101bac38
 // SIZE 0x08
 class Vector4 : public Vector3 {
+protected:
+	inline void AddImpl(const float* p_value) override;                      // vtable+0x04
+	inline void AddImpl(float p_value) override;                             // vtable+0x00
+	inline void SubImpl(const float* p_value) override;                      // vtable+0x08
+	inline void MulImpl(const float* p_value) override;                      // vtable+0x10
+	inline void MulImpl(const float& p_value) override;                      // vtable+0x0c
+	inline void DivImpl(const float& p_value) override;                      // vtable+0x14
+	inline float DotImpl(const float* p_a, const float* p_b) const override; // vtable+0x18
+	inline void EqualsImpl(const float* p_data) override;                    // vtable+0x20
+
 public:
 	// FUNCTION: BETA10 0x10048780
 	inline Vector4(float* p_data) : Vector3(p_data) {}
@@ -147,17 +152,6 @@ public:
 	// FUNCTION: BETA10 0x100701b0
 	inline Vector4(const float* p_data) : Vector3((float*) p_data) {}
 
-protected:
-	inline void AddImpl(const float* p_value) override;                      // vtable+0x04
-	inline void AddImpl(float p_value) override;                             // vtable+0x00
-	inline void SubImpl(const float* p_value) override;                      // vtable+0x08
-	inline void MulImpl(const float* p_value) override;                      // vtable+0x10
-	inline void MulImpl(const float& p_value) override;                      // vtable+0x0c
-	inline void DivImpl(const float& p_value) override;                      // vtable+0x14
-	inline float DotImpl(const float* p_a, const float* p_b) const override; // vtable+0x18
-	inline void EqualsImpl(const float* p_data) override;                    // vtable+0x20
-
-public:
 	inline void Clear() override;                                                     // vtable+0x2c
 	inline float LenSquared() const override;                                         // vtable+0x40
 	inline void Fill(const float& p_value) override;                                  // vtable+0x84

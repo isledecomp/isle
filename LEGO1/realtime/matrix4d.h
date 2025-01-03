@@ -3,6 +3,9 @@
 
 #include "matrix.h"
 
+#include <math.h>
+#include <memory.h>
+
 // FUNCTION: LEGO1 0x10002320
 // FUNCTION: BETA10 0x1000fcb0
 void Matrix4::Equals(float (*p_data)[4])
