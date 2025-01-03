@@ -189,14 +189,14 @@ void Vector2::operator/=(const float& p_value)
 }
 
 // FUNCTION: LEGO1 0x10002250
-void Vector2::SetVector(const float* p_other)
+void Vector2::operator=(const float* p_other)
 {
 	EqualsImpl(p_other);
 }
 
 // FUNCTION: LEGO1 0x10002260
 // FUNCTION: BETA10 0x100110c0
-void Vector2::SetVector(const Vector2& p_other)
+void Vector2::operator=(const Vector2& p_other)
 {
 	EqualsImpl(p_other.m_data);
 }

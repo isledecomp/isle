@@ -46,24 +46,8 @@ public:
 	inline virtual void operator*=(const Vector2& p_other);                 // vtable+0x60
 	inline virtual void operator*=(const float& p_value);                   // vtable+0x5c
 	inline virtual void operator/=(const float& p_value);                   // vtable+0x68
-	inline virtual void SetVector(const float* p_other);                    // vtable+0x70
-	inline virtual void SetVector(const Vector2& p_other);                  // vtable+0x6c
-
-	// Note: it's unclear whether Vector3::operator= has been defined explicitly
-	// with the same function body as Vector2& operator=. The BETA indicates that;
-	// however, it makes LEGO1 0x10010be0 disappear and worsens matches in
-	// at least these functions:
-	// LEGO1 0x100109b0
-	// LEGO1 0x10023130
-	// LEGO1 0x1002de10
-	// LEGO1 0x10050a80
-	// LEGO1 0x10053980
-	// LEGO1 0x100648f0
-	// LEGO1 0x10064b50
-	// LEGO1 0x10084030
-	// LEGO1 0x100a9410
-	// However, defining it as in the BETA improves at least these functions:
-	// LEGO1 0x10042300
+	inline virtual void operator=(const float* p_other);                    // vtable+0x70
+	inline virtual void operator=(const Vector2& p_other);                  // vtable+0x6c
 
 	// SYNTHETIC: LEGO1 0x10010be0
 	// SYNTHETIC: BETA10 0x100121e0
@@ -71,12 +55,6 @@ public:
 
 	// SYNTHETIC: BETA10 0x1004af40
 	// Vector4::operator=
-
-	Vector2& operator=(const Vector2& p_other)
-	{
-		Vector2::SetVector(p_other);
-		return *this;
-	}
 
 	// FUNCTION: BETA10 0x1001d140
 	float& operator[](int idx) { return m_data[idx]; }
