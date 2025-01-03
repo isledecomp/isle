@@ -3,7 +3,6 @@
 
 #include "legoactor.h"
 #include "misc/legounknown.h"
-#include "mxgeometry/mxmatrix.h"
 #include "mxtypes.h"
 
 struct LegoEdge;

@@ -1,6 +1,7 @@
 #include "legoanim.h"
 
 #include "mxgeometry/mxmatrix.h"
+#include "mxgeometry/mxquaternion.h"
 
 #include <limits.h>
 
@@ -851,7 +852,7 @@ inline void LegoAnimNodeData::GetTranslation(
 		break;
 	case 2:
 		Mx4DPointFloat a;
-		UnknownMx4DPointFloat b;
+		MxQuaternionTransformer b;
 
 		if (p_rotationKeys[i].TestBit1() || p_rotationKeys[i + 1].TestBit1()) {
 			a[0] = p_rotationKeys[i].GetX();
@@ -878,9 +879,9 @@ inline void LegoAnimNodeData::GetTranslation(
 				c[3] = p_rotationKeys[i + 1].GetAngle();
 			}
 
-			b.BETA_10180b80(a);
-			b.BETA_10180bc0(c);
-			b.BETA_1004aaa0(
+			b.SetStart(a);
+			b.SetEnd(c);
+			b.InterpolateToMatrix(
 				p_matrix,
 				(p_time - p_rotationKeys[i].GetTime()) / (p_rotationKeys[i + 1].GetTime() - p_rotationKeys[i].GetTime())
 			);

@@ -10,6 +10,7 @@ class Act3Brickster;
 class Act3Cop;
 class Act3Shark;
 class Helicopter;
+class MxQuaternionTransformer;
 
 // Macros confirmed by BETA10
 #define MAX_PIZZAS 20
@@ -152,7 +153,7 @@ protected:
 		const Matrix4& p_destination,
 		const Matrix4& p_startPosition,
 		const Matrix4& p_endPosition,
-		const UnknownMx4DPointFloat& p_unk0x1f4
+		const MxQuaternionTransformer& p_unk0x1f4
 	);
 
 	Act3State* m_state;                 // 0xf8

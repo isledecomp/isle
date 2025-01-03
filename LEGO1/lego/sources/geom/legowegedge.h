@@ -4,6 +4,7 @@
 #include "decomp.h"
 #include "legoweedge.h"
 #include "mxgeometry/mxgeometry3d.h"
+#include "mxgeometry/mxgeometry4d.h"
 
 class LegoPathStruct;
 

@@ -4,6 +4,7 @@
 #include "legogamestate.h"
 #include "legostate.h"
 #include "legoworld.h"
+#include "mxgeometry/mxquaternion.h"
 
 class LegoCarBuildAnimPresenter;
 class LegoControlManagerNotificationParam;
@@ -189,7 +190,7 @@ private:
 	MxS32 m_unk0x250[2]; // 0x250
 
 	LegoCarBuildAnimPresenter* m_unk0x258; // 0x258
-	UnknownMx4DPointFloat m_unk0x25c;      // 0x25c
+	MxQuaternionTransformer m_unk0x25c;    // 0x25c
 
 	// These two are likely locations in pixel space
 	MxS32 m_unk0x290[2]; // 0x290

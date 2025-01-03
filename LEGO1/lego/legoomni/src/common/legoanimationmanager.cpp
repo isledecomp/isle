@@ -2797,8 +2797,8 @@ void LegoAnimationManager::FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x
 		LegoLocation* location = NavController()->GetLocation(p_tranInfo->m_location);
 		if (location != NULL) {
 			CalcLocalTransform(location->m_position, location->m_direction, location->m_up, m_unk0x484);
-			m_unk0x4cc.BETA_1004a9b0(m_unk0x43c, m_unk0x484);
-			m_unk0x4cc.FUN_10004520();
+			m_unk0x4cc.SetStartEnd(m_unk0x43c, m_unk0x484);
+			m_unk0x4cc.NormalizeDirection();
 		}
 		else {
 			p_tranInfo->m_flags &= ~LegoTranInfo::c_bit1;
@@ -2832,7 +2832,7 @@ void LegoAnimationManager::FUN_10064b50(MxLong p_time)
 			sub[1] = (m_unk0x484[3][1] - m_unk0x43c[3][1]) * und;
 			sub[2] = (m_unk0x484[3][2] - m_unk0x43c[3][2]) * und;
 
-			m_unk0x4cc.BETA_1004aaa0(mat, (float) (p_time - m_unk0x434) / 1000.0f);
+			m_unk0x4cc.InterpolateToMatrix(mat, (float) (p_time - m_unk0x434) / 1000.0f);
 
 			VPV3(mat[3], m_unk0x43c[3], sub);
 			mat[3][3] = 1.0f;
