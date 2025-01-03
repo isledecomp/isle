@@ -1,4 +1,7 @@
 
+#ifndef VECTOR2D_H
+#define VECTOR2D_H
+
 #include "vector.h"
 
 // FUNCTION: LEGO1 0x10001f80
@@ -194,3 +197,5 @@ void Vector2::SetVector(const Vector2& p_other)
 {
 	EqualsImpl(p_other.m_data);
 }
+
+#endif // VECTOR2D_H

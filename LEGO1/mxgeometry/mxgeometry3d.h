@@ -2,8 +2,9 @@
 #define MXGEOMETRY3D_H
 
 #include "decomp.h"
-#include "realtime/matrix.h"
 #include "realtime/vector.h"
+#include "realtime/vector2d.h"
+#include "realtime/vector3d.h"
 
 // VTABLE: LEGO1 0x100d4488
 // VTABLE: BETA10 0x101b84d0

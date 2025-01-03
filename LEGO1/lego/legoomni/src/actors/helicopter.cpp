@@ -419,7 +419,7 @@ void Helicopter::Animate(float p_time)
 			Vector3 v3(m_unk0x1a8[3]);
 
 			mat.SetIdentity();
-			m_unk0x1f4.BETA_1004aaa0(mat, f2);
+			m_unk0x1f4.InterpolateToMatrix(mat, f2);
 
 			v2 = v3;
 			v2 -= v1;
@@ -482,8 +482,8 @@ void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 
 	m_unk0x1f0 = Timer()->GetTime();
 
-	m_unk0x1f4.BETA_1004a9b0(local48, local90);
-	m_unk0x1f4.FUN_10004520();
+	m_unk0x1f4.Set(local48, local90);
+	m_unk0x1f4.NormalizeDirection();
 }
 
 // FUNCTION: LEGO1 0x10004640

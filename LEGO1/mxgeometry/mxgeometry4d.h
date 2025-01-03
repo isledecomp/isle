@@ -2,7 +2,9 @@
 #define MXGEOMETRY4D_H
 
 #include "decomp.h"
-#include "realtime/vector.h"
+#include "realtime/matrix.h"
+#include "realtime/matrix4d.h"
+#include "realtime/vector4d.h"
 
 // VTABLE: LEGO1 0x100d41e8
 // VTABLE: BETA10 0x101bab78
@@ -43,155 +45,6 @@ public:
 
 private:
 	float m_elements[4]; // 0x08
-};
-
-// SIZE 0x34
-class UnknownMx4DPointFloat {
-public:
-	enum {
-		c_bit1 = 0x01,
-		c_bit2 = 0x02
-	};
-
-	UnknownMx4DPointFloat() : m_unk0x30(0) {}
-
-	// FUNCTION: LEGO1 0x10004520
-	inline long FUN_10004520()
-	{
-		if (!m_unk0x30) {
-			return -1;
-		}
-
-		Mx4DPointFloat v1;
-		Mx4DPointFloat v2;
-
-		v1 = m_unk0x00;
-		v1 += m_unk0x18;
-
-		v2 = m_unk0x00;
-		v2 -= m_unk0x18;
-
-		if (v1.Dot(v1, v1) < v2.Dot(v2, v2)) {
-			m_unk0x18 *= -1.0f;
-		}
-
-		return 0;
-	}
-
-	// FUNCTION: BETA10 0x1004a9b0
-	void BETA_1004a9b0(Matrix4& p_m1, Matrix4& p_m2)
-	{
-		BETA_1004a9f0(p_m1);
-		FUN_10004620(p_m2);
-	}
-
-	// FUNCTION: BETA10 0x1004a9f0
-	void BETA_1004a9f0(Matrix4& p_m)
-	{
-		p_m.ToQuaternion(m_unk0x00);
-		m_unk0x30 |= c_bit1;
-	}
-
-	// FUNCTION: LEGO1 0x10004620
-	// FUNCTION: BETA10 0x1004aa30
-	void FUN_10004620(Matrix4& p_m)
-	{
-		p_m.ToQuaternion(m_unk0x18);
-		m_unk0x30 |= c_bit2;
-	}
-
-	// FUNCTION: BETA10 0x10180b80
-	void BETA_10180b80(Vector4& p_v)
-	{
-		m_unk0x00 = p_v;
-		m_unk0x30 |= c_bit1;
-	}
-
-	// FUNCTION: BETA10 0x10180bc0
-	void BETA_10180bc0(Vector4& p_v)
-	{
-		m_unk0x18 = p_v;
-		m_unk0x30 |= c_bit2;
-	}
-
-	const Vector4& GetUnknown0x00() const { return m_unk0x00; }
-	const Vector4& GetUnknown0x18() const { return m_unk0x18; }
-	undefined4 GetUnknown0x30() const { return m_unk0x30; }
-
-	// FUNCTION: BETA10 0x1004aaa0
-	inline int BETA_1004aaa0(Matrix4& p_matrix, float p_f)
-	{
-		float data[4];
-		Vector4 v(data);
-
-		if (FUN_100040a0(v, p_f) == 0) {
-			return p_matrix.FromQuaternion(v);
-		}
-
-		return -1;
-	}
-
-private:
-	// FUNCTION: LEGO1 0x100040a0
-	// FUNCTION: BETA10 0x1004ab10
-	inline int FUN_100040a0(Vector4& p_v, float p_f)
-	{
-		if (m_unk0x30 == c_bit1) {
-			p_v = m_unk0x00;
-			p_v[3] = (float) ((1.0 - p_f) * acos((double) p_v[3]) * 2.0);
-			return p_v.NormalizeQuaternion();
-		}
-
-		if (m_unk0x30 == c_bit2) {
-			p_v = m_unk0x18;
-			p_v[3] = (float) (p_f * acos((double) p_v[3]) * 2.0);
-			return p_v.NormalizeQuaternion();
-		}
-
-		if (m_unk0x30 == (c_bit1 | c_bit2)) {
-			int i;
-			double d1 = p_v.Dot(m_unk0x00, m_unk0x18);
-			double a;
-			double b;
-
-			if (d1 + 1.0 > 0.00001) {
-				if (1.0 - d1 > 0.00001) {
-					double d2 = acos(d1);
-					double denominator = sin(d2);
-					a = sin((1.0 - p_f) * d2) / denominator;
-					b = sin(p_f * d2) / denominator;
-				}
-				else {
-					a = 1.0 - p_f;
-					b = p_f;
-				}
-
-				for (i = 0; i < 4; i++) {
-					p_v[i] = (float) (m_unk0x00[i] * a + m_unk0x18[i] * b);
-				}
-			}
-			else {
-				p_v[0] = -m_unk0x00[1];
-				p_v[1] = m_unk0x00[0];
-				p_v[2] = -m_unk0x00[3];
-				p_v[3] = m_unk0x00[2];
-				a = sin((1.0 - p_f) * 1.570796326794895);
-				b = sin(p_f * 1.570796326794895);
-
-				for (i = 0; i < 3; i++) {
-					p_v[i] = (float) (m_unk0x00[i] * a + p_v[i] * b);
-				}
-			}
-
-			return 0;
-		}
-
-		return -1;
-	}
-
-	Mx4DPointFloat m_unk0x00; // 0x00
-	Mx4DPointFloat m_unk0x18; // 0x18
-	undefined4 m_unk0x30;     // 0x30
 };
 
 #endif // MXGEOMETRY4D_H

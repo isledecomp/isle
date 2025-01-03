@@ -1,4 +1,8 @@
+#ifndef VECTOR3D_H
+#define VECTOR3D_H
+
 #include "vector.h"
+#include "vector2d.h"
 
 // FUNCTION: LEGO1 0x10002270
 // FUNCTION: BETA10 0x10011350
@@ -110,3 +114,5 @@ void Vector3::Fill(const float& p_value)
 	m_data[1] = p_value;
 	m_data[2] = p_value;
 }
+
+#endif // VECTOR3D_H
