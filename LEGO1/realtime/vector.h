@@ -117,7 +117,7 @@ protected:
 
 public:
 	// FUNCTION: BETA10 0x10048780
-	inline Vector4(float* p_data) : Vector3(p_data) {}
+	Vector4(float* p_data) : Vector3(p_data) {}
 
 	// Some code initializes a Vector4 from a `const float*` source.
 	// Example: `LegoCarBuild::VTable0x6c`
@@ -127,7 +127,7 @@ public:
 	// supporting the theory that this decompilation is correct.
 
 	// FUNCTION: BETA10 0x100701b0
-	inline Vector4(const float* p_data) : Vector3((float*) p_data) {}
+	Vector4(const float* p_data) : Vector3((float*) p_data) {}
 
 	inline void Clear() override;                                                     // vtable+0x2c
 	inline float LenSquared() const override;                                         // vtable+0x40
