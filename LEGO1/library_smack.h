@@ -12,6 +12,13 @@
 // LIBRARY: BETA10 0x1015fe83
 // _SmackDoFrameToBuffer
 
+// LIBRARY: LEGO1 0x100cea58
+// LIBRARY: BETA10 0x10160e58
+// _SmackDoFrameToVESA
+
+// LIBRARY: LEGO1 0x100cfd90
+// _SmackDoPCM
+
 // LIBRARY: LEGO1 0x100d052c
 // LIBRARY: BETA10 0x1016292c
 // _SmackGetSizeDeltas
@@ -19,5 +26,8 @@
 // LIBRARY: LEGO1 0x100d0543
 // LIBRARY: BETA10 0x10162943
 // _SmackGetRect
+
+// LIBRARY: LEGO1 0x100d0654
+// _SmackRemapTables
 
 #endif
