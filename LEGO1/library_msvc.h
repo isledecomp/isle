@@ -639,6 +639,15 @@
 // GLOBAL: LEGO1 0x101028da
 // __OP_POWjmptab
 
+// GLOBAL: LEGO1 0x1010292a
+// __OP_LOG10jmptab
+
+// GLOBAL: LEGO1 0x1010294a
+// __OP_LOGjmptab
+
+// GLOBAL: LEGO1 0x1010296a
+// __OP_EXPjmptab
+
 // GLOBAL: LEGO1 0x101095f8
 // __crtheap
 
