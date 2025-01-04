@@ -3,7 +3,7 @@
 
 #include "islepathactor.h"
 #include "legostate.h"
-#include "realtime/matrix.h"
+#include "mxgeometry/mxquaternion.h"
 
 class Act3;
 
@@ -88,12 +88,12 @@ public:
 protected:
 	void FUN_100042a0(const Matrix4& p_matrix);
 
-	MxMatrix m_unk0x160;              // 0x160
-	MxMatrix m_unk0x1a8;              // 0x1a8
-	float m_unk0x1f0;                 // 0x1f0
-	UnknownMx4DPointFloat m_unk0x1f4; // 0x1f4
-	HelicopterState* m_state;         // 0x228
-	MxAtomId m_script;                // 0x22c
+	MxMatrix m_unk0x160;                // 0x160
+	MxMatrix m_unk0x1a8;                // 0x1a8
+	float m_unk0x1f0;                   // 0x1f0
+	MxQuaternionTransformer m_unk0x1f4; // 0x1f4
+	HelicopterState* m_state;           // 0x228
+	MxAtomId m_script;                  // 0x22c
 };
 
 #endif // HELICOPTER_H

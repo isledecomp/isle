@@ -4,6 +4,7 @@
 #include "legolod.h"
 #include "misc/legocontainer.h"
 #include "misc/legostorage.h"
+#include "mxgeometry/mxgeometry4d.h"
 #include "realtime/realtime.h"
 #include "shape/legobox.h"
 #include "shape/legosphere.h"

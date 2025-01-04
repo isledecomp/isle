@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "legoentity.h"
+#include "mxgeometry/mxmatrix.h"
 
 class LegoCacheSound;
 
