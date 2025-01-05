@@ -164,8 +164,6 @@ void GasStation::ReadyWorld()
 		if (m_state->m_pepperAction < 5) {
 			m_state->m_pepperAction++;
 		}
-
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
 	case LegoActor::c_mama:
 		switch (m_state->m_mamaAction) {
@@ -190,34 +188,6 @@ void GasStation::ReadyWorld()
 		if (m_state->m_mamaAction < 5) {
 			m_state->m_mamaAction++;
 		}
-
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
-		break;
-	case LegoActor::c_papa:
-		switch (m_state->m_papaAction) {
-		case 0:
-			m_state->m_unk0x14 = 5;
-			PlayAction(GarageScript::c_wgs012nu_RunAnim);
-			m_unk0x106 = 1;
-			break;
-		case 1:
-			m_state->m_unk0x14 = 5;
-			PlayAction(GarageScript::c_wgs014nu_RunAnim);
-			m_unk0x106 = 1;
-			break;
-		default:
-			m_state->m_unk0x14 = 6;
-			PlayAction(GarageScript::c_wgs017nu_RunAnim);
-			m_unk0x106 = 1;
-			m_unk0x104 = 1;
-			break;
-		}
-
-		if (m_state->m_papaAction < 5) {
-			m_state->m_papaAction++;
-		}
-
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
 	case LegoActor::c_nick:
 		switch (m_state->m_nickAction) {
@@ -242,8 +212,30 @@ void GasStation::ReadyWorld()
 		if (m_state->m_nickAction < 5) {
 			m_state->m_nickAction++;
 		}
+		break;
+	case LegoActor::c_papa:
+		switch (m_state->m_papaAction) {
+		case 0:
+			m_state->m_unk0x14 = 5;
+			PlayAction(GarageScript::c_wgs012nu_RunAnim);
+			m_unk0x106 = 1;
+			break;
+		case 1:
+			m_state->m_unk0x14 = 5;
+			PlayAction(GarageScript::c_wgs014nu_RunAnim);
+			m_unk0x106 = 1;
+			break;
+		default:
+			m_state->m_unk0x14 = 6;
+			PlayAction(GarageScript::c_wgs017nu_RunAnim);
+			m_unk0x106 = 1;
+			m_unk0x104 = 1;
+			break;
+		}
 
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+		if (m_state->m_papaAction < 5) {
+			m_state->m_papaAction++;
+		}
 		break;
 	case LegoActor::c_laura:
 		switch (m_state->m_lauraAction) {
@@ -268,13 +260,12 @@ void GasStation::ReadyWorld()
 		if (m_state->m_lauraAction < 5) {
 			m_state->m_lauraAction++;
 		}
-
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
 	default:
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
 	}
+
+	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
 // FUNCTION: LEGO1 0x10005590
