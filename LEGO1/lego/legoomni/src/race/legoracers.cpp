@@ -167,11 +167,6 @@ undefined4 g_hitValerieSoundsIndex = 0;
 // GLOBAL: LEGO1 0x100f0bb4
 MxLong g_unk0x100f0bb4 = 0;
 
-// Initialized at LEGO1 0x10012db0
-// GLOBAL: LEGO1 0x10102af0
-// GLOBAL: BETA10 0x102114c0
-Mx3DPointFloat g_unk0x10102af0 = Mx3DPointFloat(0.0f, 2.0f, 0.0f);
-
 // FUNCTION: LEGO1 0x10012950
 LegoRaceCar::LegoRaceCar()
 {
@@ -196,6 +191,11 @@ MxLong LegoRaceCar::Notify(MxParam& p_param)
 {
 	return LegoRaceMap::Notify(p_param);
 }
+
+// Initialized at LEGO1 0x10012db0
+// GLOBAL: LEGO1 0x10102af0
+// GLOBAL: BETA10 0x102114c0
+Mx3DPointFloat g_unk0x10102af0 = Mx3DPointFloat(0.0f, 2.0f, 0.0f);
 
 // FUNCTION: LEGO1 0x10012de0
 void LegoRaceCar::FUN_10012de0()
@@ -726,50 +726,4 @@ MxResult LegoJetski::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 	}
 
 	return SUCCESS;
-}
-
-// FUNCTION: LEGO1 0x10014150
-MxU32 LegoJetski::VTable0x6c(
-	LegoPathBoundary* p_boundary,
-	Vector3& p_v1,
-	Vector3& p_v2,
-	float p_f1,
-	float p_f2,
-	Vector3& p_v3
-)
-{
-	return LegoJetskiRaceActor::VTable0x6c(p_boundary, p_v1, p_v2, p_f1, p_f2, p_v3);
-}
-
-// FUNCTION: LEGO1 0x100141d0
-void LegoJetski::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
-{
-	LegoJetskiRaceActor::SwitchBoundary(p_boundary, p_edge, p_unk0xe4);
-}
-
-// FUNCTION: LEGO1 0x10014210
-MxResult LegoJetski::VTable0x9c()
-{
-	return LegoJetskiRaceActor::VTable0x9c();
-}
-
-// FUNCTION: LEGO1 0x10014500
-// FUNCTION: BETA10 0x100cd5e0
-MxU32 LegoRaceCar::VTable0x6c(
-	LegoPathBoundary* p_boundary,
-	Vector3& p_v1,
-	Vector3& p_v2,
-	float p_f1,
-	float p_f2,
-	Vector3& p_v3
-)
-{
-	return LegoCarRaceActor::VTable0x6c(p_boundary, p_v1, p_v2, p_f1, p_f2, p_v3);
-}
-
-// FUNCTION: LEGO1 0x10014560
-// FUNCTION: BETA10 0x100cd660
-void LegoRaceCar::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
-{
-	LegoCarRaceActor::SwitchBoundary(p_boundary, p_edge, p_unk0xe4);
 }

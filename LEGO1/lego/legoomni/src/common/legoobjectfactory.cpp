@@ -1,5 +1,36 @@
 #include "legoobjectfactory.h"
 
+// Headers need to be included in a certain order to match the original binary.
+// Some of the following headers were probably not directly included,
+// but were included from one of the higher level classes. We should attempt
+// to reverse engineer the inclusion "graph" at some point. Until then, to maintain
+// correct order in the binary, we include them in the order we want here.
+// clang-format off
+#include "mxpresenter.h"
+#include "legoentity.h"
+#include "legopathactor.h"
+// The below header inclusions should be sound.
+#include "legoloopinganimpresenter.h"
+#include "mxcompositemediapresenter.h"
+#include "legoactorpresenter.h"
+#include "legomodelpresenter.h"
+#include "legotexturepresenter.h"
+#include "legopartpresenter.h"
+#include "legoactioncontrolpresenter.h"
+#include "lego3dwavepresenter.h"
+#include "jetskirace.h"
+#include "carrace.h"
+#include "score.h"
+#include "legoact2.h"
+#include "helicopter.h"
+#include "act2policestation.h"
+#include "act3.h"
+#include "doors.h"
+#include "pizzeria.h"
+#include "buildings.h"
+#include "jukebox.h"
+// clang-format on
+
 #include "act2actor.h"
 #include "act2brick.h"
 #include "act2genactor.h"

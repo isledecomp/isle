@@ -14,22 +14,7 @@ class MxNotificationParam;
 // SIZE 0x7c
 class IsleActor : public LegoActor {
 public:
-	MxLong Notify(MxParam& p_param) override; // vtable+0x04
-
-	// FUNCTION: LEGO1 0x1000e660
-	// FUNCTION: BETA10 0x100a8300
-	const char* ClassName() const override // vtable+0x0c
-	{
-		// STRING: LEGO1 0x100f07dc
-		return "IsleActor";
-	}
-
-	// FUNCTION: LEGO1 0x1000e670
-	MxBool IsA(const char* p_name) const override // vtable+0x10
-	{
-		return !strcmp(p_name, IsleActor::ClassName()) || LegoActor::IsA(p_name);
-	}
-
+	MxLong Notify(MxParam& p_param) override;         // vtable+0x04
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 
 	// FUNCTION: LEGO1 0x1000e5f0
@@ -52,6 +37,20 @@ public:
 
 	// FUNCTION: LEGO1 0x1000e650
 	virtual MxLong HandlePathStruct(LegoPathStructNotificationParam&) { return 0; } // vtable+0x80
+
+	// FUNCTION: LEGO1 0x1000e660
+	// FUNCTION: BETA10 0x100a8300
+	const char* ClassName() const override // vtable+0x0c
+	{
+		// STRING: LEGO1 0x100f07dc
+		return "IsleActor";
+	}
+
+	// FUNCTION: LEGO1 0x1000e670
+	MxBool IsA(const char* p_name) const override // vtable+0x10
+	{
+		return !strcmp(p_name, IsleActor::ClassName()) || LegoActor::IsA(p_name);
+	}
 
 protected:
 	LegoWorld* m_world; // 0x78

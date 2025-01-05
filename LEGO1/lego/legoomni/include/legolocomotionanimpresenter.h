@@ -4,6 +4,8 @@
 #include "legoloopinganimpresenter.h"
 #include "legoroimaplist.h"
 
+class LegoAnimActor;
+
 // VTABLE: LEGO1 0x100d9170
 // SIZE 0xd8
 class LegoLocomotionAnimPresenter : public LegoLoopingAnimPresenter {

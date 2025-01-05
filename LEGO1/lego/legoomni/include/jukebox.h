@@ -24,6 +24,9 @@ public:
 
 	JukeBoxState() : m_music(e_pasquell), m_active(FALSE) {}
 
+	// FUNCTION: LEGO1 0x1000f300
+	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
+
 	// FUNCTION: LEGO1 0x1000f310
 	// FUNCTION: BETA10 0x100389c0
 	const char* ClassName() const override // vtable+0x0c
@@ -37,9 +40,6 @@ public:
 	{
 		return !strcmp(p_name, JukeBoxState::ClassName()) || LegoState::IsA(p_name);
 	}
-
-	// FUNCTION: LEGO1 0x1000f300
-	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
 
 	// SYNTHETIC: LEGO1 0x1000f3d0
 	// JukeBoxState::`scalar deleting destructor'

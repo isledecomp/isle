@@ -292,15 +292,15 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/actors/helicopter.cpp
     LEGO1/lego/legoomni/src/worlds/gasstation.cpp
     LEGO1/lego/legoomni/src/audio/legocachsound.cpp
-    LEGO1/lego/legoomni/src/actors/act2actor.cpp
     LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp
-    LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
-    LEGO1/lego/legoomni/src/actors/buildingentity.cpp
     LEGO1/lego/legoomni/src/actors/skateboard.cpp
     LEGO1/lego/legoomni/src/entity/legoentity.cpp
     LEGO1/lego/legoomni/src/audio/lego3dsound.cpp
     LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
     LEGO1/lego/legoomni/src/race/legoracers.cpp
+    LEGO1/lego/legoomni/src/actors/act2actor.cpp
+    LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
+    LEGO1/lego/legoomni/src/actors/buildingentity.cpp
     LEGO1/lego/legoomni/src/race/legoraceactor.cpp
     LEGO1/lego/legoomni/src/common/legostate.cpp
     LEGO1/lego/legoomni/src/actors/buildings.cpp

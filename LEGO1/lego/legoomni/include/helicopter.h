@@ -14,6 +14,16 @@ class HelicopterState : public LegoState {
 public:
 	HelicopterState() : m_unk0x08(0) {}
 
+	// FUNCTION: LEGO1 0x1000e0b0
+	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
+
+	// FUNCTION: LEGO1 0x1000e0c0
+	MxBool Reset() override
+	{
+		m_unk0x08 = 0;
+		return TRUE;
+	} // vtable+0x18
+
 	// FUNCTION: LEGO1 0x1000e0d0
 	// FUNCTION: BETA10 0x100a7cc0
 	const char* ClassName() const override // vtable+0x0c
@@ -27,16 +37,6 @@ public:
 	{
 		return !strcmp(p_name, HelicopterState::ClassName()) || LegoState::IsA(p_name);
 	}
-
-	// FUNCTION: LEGO1 0x1000e0b0
-	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
-
-	// FUNCTION: LEGO1 0x1000e0c0
-	MxBool Reset() override
-	{
-		m_unk0x08 = 0;
-		return TRUE;
-	} // vtable+0x18
 
 	// SYNTHETIC: LEGO1 0x1000e190
 	// HelicopterState::`scalar deleting destructor'

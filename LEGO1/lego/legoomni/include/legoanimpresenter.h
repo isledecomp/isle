@@ -7,7 +7,6 @@
 
 class LegoAnim;
 class LegoWorld;
-class LegoAnimActor;
 class LegoPathBoundary;
 class MxMatrix;
 class Vector3;

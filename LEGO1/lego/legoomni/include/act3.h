@@ -54,6 +54,9 @@ class Act3State : public LegoState {
 public:
 	Act3State() { m_unk0x08 = 0; }
 
+	// FUNCTION: LEGO1 0x1000e2f0
+	MxBool IsSerializable() override { return FALSE; }
+
 	// FUNCTION: LEGO1 0x1000e300
 	// FUNCTION: BETA10 0x10017e10
 	const char* ClassName() const override // vtable+0x0c
@@ -67,9 +70,6 @@ public:
 	{
 		return !strcmp(p_name, Act3State::ClassName()) || LegoState::IsA(p_name);
 	}
-
-	// FUNCTION: LEGO1 0x1000e2f0
-	MxBool IsSerializable() override { return FALSE; }
 
 	// SYNTHETIC: LEGO1 0x1000e3c0
 	// Act3State::`scalar deleting destructor'
