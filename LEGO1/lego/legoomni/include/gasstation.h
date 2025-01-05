@@ -14,11 +14,6 @@ class MxStillPresenter;
 // SIZE 0x24
 class GasStationState : public LegoState {
 public:
-	// SIZE 0x04
-	struct Unknown0x14 {
-		undefined4 m_unk0x00; // 0x00
-	};
-
 	GasStationState();
 
 	// FUNCTION: LEGO1 0x100061d0
@@ -47,7 +42,7 @@ public:
 	// TODO: Most likely getters/setters are not used according to BETA.
 
 	GarageScript::Script m_actions[3]; // 0x08
-	Unknown0x14 m_unk0x14;             // 0x14
+	undefined4 m_unk0x14;              // 0x14
 	MxS16 m_pepperAction;              // 0x18
 	MxS16 m_mamaAction;                // 0x1a
 	MxS16 m_papaAction;                // 0x1c
@@ -66,6 +61,9 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 	MxResult Tickle() override;               // vtable+0x08
 
+	// FUNCTION: LEGO1 0x10004770
+	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
+
 	// FUNCTION: LEGO1 0x10004780
 	// FUNCTION: BETA10 0x10029d40
 	const char* ClassName() const override // vtable+0x0c
@@ -82,7 +80,6 @@ public:
 
 	MxResult Create(MxDSAction& p_dsAction) override;                           // vtable+0x18
 	void ReadyWorld() override;                                                 // vtable+0x50
-	MxBool VTable0x5c() override;                                               // vtable+0x5c
 	MxBool Escape() override;                                                   // vtable+0x64
 	void Enable(MxBool p_enable) override;                                      // vtable+0x68
 	virtual MxLong HandleControl(LegoControlManagerNotificationParam& p_param); // vtable+0x6c
