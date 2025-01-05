@@ -133,8 +133,7 @@ public:
 
 	// FUNCTION: LEGO1 0x10014560
 	// FUNCTION: BETA10 0x100cd660
-	void LegoRaceCar::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
-		override
+	void SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4) override
 	{
 		LegoCarRaceActor::SwitchBoundary(p_boundary, p_edge, p_unk0xe4);
 	} // vtable+0x98
