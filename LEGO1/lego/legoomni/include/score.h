@@ -15,6 +15,16 @@ class ScoreState : public LegoState {
 public:
 	ScoreState() : m_playCubeTutorial(TRUE) {}
 
+	// FUNCTION: LEGO1 0x1000de20
+	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
+
+	// FUNCTION: LEGO1 0x1000de30
+	MxBool Reset() override
+	{
+		m_playCubeTutorial = TRUE;
+		return TRUE;
+	} // vtable+0x18
+
 	// FUNCTION: LEGO1 0x1000de40
 	// FUNCTION: BETA10 0x100a7a70
 	const char* ClassName() const override // vtable+0x0c
@@ -28,16 +38,6 @@ public:
 	{
 		return !strcmp(p_name, ScoreState::ClassName()) || LegoState::IsA(p_name);
 	}
-
-	// FUNCTION: LEGO1 0x1000de20
-	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
-
-	// FUNCTION: LEGO1 0x1000de30
-	MxBool Reset() override
-	{
-		m_playCubeTutorial = TRUE;
-		return TRUE;
-	} // vtable+0x18
 
 	MxBool GetTutorialFlag() { return m_playCubeTutorial; }
 	void SetTutorialFlag(MxBool p_playCubeTutorial) { m_playCubeTutorial = p_playCubeTutorial; }

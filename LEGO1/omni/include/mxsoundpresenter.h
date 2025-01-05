@@ -10,6 +10,9 @@ public:
 	// FUNCTION: LEGO1 0x1000d430
 	~MxSoundPresenter() override { Destroy(TRUE); }
 
+	// FUNCTION: LEGO1 0x1000d490
+	void Destroy() override { Destroy(FALSE); } // vtable+0x38
+
 	// FUNCTION: BETA10 0x1008ca70
 	static const char* HandlerClassName()
 	{
@@ -31,9 +34,6 @@ public:
 	}
 
 	MxResult AddToManager() override; // vtable+0x34
-
-	// FUNCTION: LEGO1 0x1000d490
-	void Destroy() override { Destroy(FALSE); } // vtable+0x38
 
 	// SYNTHETIC: LEGO1 0x1000d5c0
 	// MxSoundPresenter::`scalar deleting destructor'

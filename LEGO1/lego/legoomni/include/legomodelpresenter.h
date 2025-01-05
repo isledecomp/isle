@@ -18,6 +18,9 @@ public:
 	// FUNCTION: LEGO1 0x10067a10
 	~LegoModelPresenter() override { Destroy(TRUE); }
 
+	// FUNCTION: LEGO1 0x1000cca0
+	void Destroy() override { Destroy(FALSE); } // vtable+0x38
+
 	static void configureLegoModelPresenter(MxS32 p_modelPresenterConfig);
 
 	// FUNCTION: BETA10 0x100a7180
@@ -42,7 +45,6 @@ public:
 
 	void ReadyTickle() override; // vtable+0x18
 	void ParseExtra() override;  // vtable+0x30
-	void Destroy() override;     // vtable+0x38
 
 	MxResult FUN_1007ff70(MxDSChunk& p_chunk, LegoEntity* p_entity, MxBool p_roiVisible, LegoWorld* p_world);
 

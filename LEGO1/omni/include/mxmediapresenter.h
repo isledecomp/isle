@@ -16,6 +16,9 @@ public:
 	// FUNCTION: LEGO1 0x1000c550
 	~MxMediaPresenter() override { Destroy(TRUE); }
 
+	// FUNCTION: LEGO1 0x1000c5b0
+	void Destroy() override { Destroy(FALSE); } // vtable+0x38
+
 	MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: BETA10 0x10054f50
@@ -41,9 +44,6 @@ public:
 	void StreamingTickle() override; // vtable+0x20
 	void RepeatingTickle() override; // vtable+0x24
 	void DoneTickle() override;      // vtable+0x2c
-
-	// FUNCTION: LEGO1 0x1000c5b0
-	void Destroy() override { Destroy(FALSE); } // vtable+0x38
 
 	MxResult StartAction(MxStreamController*, MxDSAction*) override; // vtable+0x3c
 	void EndAction() override;                                       // vtable+0x40

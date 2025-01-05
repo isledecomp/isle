@@ -24,12 +24,6 @@ DECOMP_SIZE_ASSERT(LegoModelPresenter, 0x6c)
 // GLOBAL: LEGO1 0x100f7ae0
 MxS32 g_modelPresenterConfig = 1;
 
-// FUNCTION: LEGO1 0x1000cca0
-void LegoModelPresenter::Destroy()
-{
-	Destroy(FALSE);
-}
-
 // FUNCTION: LEGO1 0x1007f660
 void LegoModelPresenter::configureLegoModelPresenter(MxS32 p_modelPresenterConfig)
 {

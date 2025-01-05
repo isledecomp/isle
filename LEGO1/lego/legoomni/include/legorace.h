@@ -112,6 +112,19 @@ public:
 		return "LegoRace";
 	}
 
+	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+
+	virtual MxLong HandleClick(LegoEventNotificationParam&) = 0; // vtable+0x6c
+
+	// FUNCTION: LEGO1 0x10015b70
+	virtual MxLong HandlePathStruct(LegoPathStructNotificationParam&) { return 0; } // vtable+0x70
+
+	// FUNCTION: LEGO1 0x10015b80
+	virtual MxLong HandleEndAction(MxEndActionNotificationParam&) { return 0; } // vtable+0x74
+
+	// FUNCTION: LEGO1 0x10015b90
+	MxBool Escape() override { return FALSE; } // vtable+0x64
+
 	// FUNCTION: LEGO1 0x10015ba0
 	// FUNCTION: BETA10 0x100a8940
 	const char* ClassName() const override // vtable+0x0c
@@ -126,17 +139,6 @@ public:
 		return !strcmp(p_name, LegoRace::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-
-	// FUNCTION: LEGO1 0x1000dae0
-	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
-
-	MxBool Escape() override;                                          // vtable+0x64
-	void Enable(MxBool p_enable) override;                             // vtable+0x68
-	virtual MxLong HandleClick(LegoEventNotificationParam&) = 0;       // vtable+0x6c
-	virtual MxLong HandlePathStruct(LegoPathStructNotificationParam&); // vtable+0x70
-	virtual MxLong HandleEndAction(MxEndActionNotificationParam&);     // vtable+0x74
-
 	// FUNCTION: LEGO1 0x1000dab0
 	virtual MxLong HandleType0Notification(MxNotificationParam&) { return 0; } // vtable+0x78
 
@@ -146,6 +148,11 @@ public:
 	{
 		m_maps[p_index] = p_map;
 	}
+
+	// FUNCTION: LEGO1 0x1000dae0
+	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
+
+	void Enable(MxBool p_enable) override; // vtable+0x68
 
 	// SYNTHETIC: LEGO1 0x10015cc0
 	// LegoRace::`scalar deleting destructor'

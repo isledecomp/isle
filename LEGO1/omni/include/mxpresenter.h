@@ -28,30 +28,7 @@ public:
 
 	MxPresenter() { Init(); }
 
-	// FUNCTION: LEGO1 0x1000bf00
-	~MxPresenter() override {} // vtable+0x00
-
 	MxResult Tickle() override; // vtable+0x08
-
-	// FUNCTION: BETA10 0x1004d9e0
-	static const char* HandlerClassName()
-	{
-		// STRING: LEGO1 0x100f0740
-		return "MxPresenter";
-	}
-
-	// FUNCTION: LEGO1 0x1000bfe0
-	// FUNCTION: BETA10 0x1004d9b0
-	const char* ClassName() const override // vtable+0x0c
-	{
-		return HandlerClassName();
-	}
-
-	// FUNCTION: LEGO1 0x1000bff0
-	MxBool IsA(const char* p_name) const override // vtable+0x10
-	{
-		return !strcmp(p_name, MxPresenter::ClassName()) || MxCore::IsA(p_name);
-	}
 
 	// FUNCTION: LEGO1 0x1000be30
 	virtual void VTable0x14() {} // vtable+0x14
@@ -88,6 +65,9 @@ protected:
 	}
 
 public:
+	// FUNCTION: LEGO1 0x1000bf00
+	~MxPresenter() override {} // vtable+0x00
+
 	// FUNCTION: LEGO1 0x1000bf70
 	virtual MxResult AddToManager() { return SUCCESS; } // vtable+0x34
 
@@ -114,6 +94,26 @@ public:
 	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y) { return FALSE; } // vtable+0x50
 
 	virtual void Enable(MxBool p_enable); // vtable+0x54
+
+	// FUNCTION: BETA10 0x1004d9e0
+	static const char* HandlerClassName()
+	{
+		// STRING: LEGO1 0x100f0740
+		return "MxPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1000bfe0
+	// FUNCTION: BETA10 0x1004d9b0
+	const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
+	}
+
+	// FUNCTION: LEGO1 0x1000bff0
+	MxBool IsA(const char* p_name) const override // vtable+0x10
+	{
+		return !strcmp(p_name, MxPresenter::ClassName()) || MxCore::IsA(p_name);
+	}
 
 	MxEntity* CreateEntity(const char* p_defaultName);
 	void SendToCompositePresenter(MxOmni* p_omni);
