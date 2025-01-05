@@ -869,13 +869,3 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 
 	return result;
 }
-
-// FUNCTION: LEGO1 0x1001a180
-MxS32 Act2Actor::VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3)
-{
-	if (m_unk0x1f) {
-		return 0;
-	}
-
-	return LegoAnimActor::VTable0x68(p_v1, p_v2, p_v3);
-}

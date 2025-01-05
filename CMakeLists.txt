@@ -309,8 +309,8 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/actors/pizzeria.cpp
     LEGO1/lego/legoomni/src/worlds/elevatorbottom.cpp
     LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
-    LEGO1/lego/legoomni/src/actors/act2actor.cpp
     LEGO1/lego/legoomni/src/actors/act2genactor.cpp
+    LEGO1/lego/legoomni/src/actors/act2actor.cpp
     LEGO1/lego/legoomni/src/actors/islepathactor.cpp
     LEGO1/lego/legoomni/src/paths/legopathstruct.cpp
     LEGO1/lego/legoomni/src/paths/legoanimactor.cpp
