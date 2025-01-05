@@ -298,10 +298,10 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/audio/lego3dsound.cpp
     LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
     LEGO1/lego/legoomni/src/race/legoracers.cpp
+    LEGO1/lego/legoomni/src/race/legoraceactor.cpp
     LEGO1/lego/legoomni/src/actors/act2actor.cpp
     LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
     LEGO1/lego/legoomni/src/actors/buildingentity.cpp
-    LEGO1/lego/legoomni/src/race/legoraceactor.cpp
     LEGO1/lego/legoomni/src/common/legostate.cpp
     LEGO1/lego/legoomni/src/actors/buildings.cpp
     LEGO1/lego/legoomni/src/common/misc.cpp
