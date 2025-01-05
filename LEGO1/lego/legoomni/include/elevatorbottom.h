@@ -17,6 +17,9 @@ public:
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
+	// FUNCTION: LEGO1 0x10017f10
+	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
+
 	// FUNCTION: LEGO1 0x10017f20
 	// FUNCTION: BETA10 0x10028130
 	const char* ClassName() const override // vtable+0x0c
@@ -33,12 +36,8 @@ public:
 
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void ReadyWorld() override;                       // vtable+0x50
-
-	// FUNCTION: LEGO1 0x10017f10
-	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
-
-	MxBool Escape() override;              // vtable+0x64
-	void Enable(MxBool p_enable) override; // vtable+0x68
+	MxBool Escape() override;                         // vtable+0x64
+	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	// SYNTHETIC: LEGO1 0x10018040
 	// ElevatorBottom::`scalar deleting destructor'
