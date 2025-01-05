@@ -84,22 +84,6 @@ public:
 	// FUNCTION: LEGO1 0x10005f40
 	~LegoState() override {}
 
-	// FUNCTION: LEGO1 0x100060d0
-	// FUNCTION: BETA10 0x10017d20
-	const char* ClassName() const override // vtable+0x0c
-	{
-		// STRING: LEGO1 0x100f01b8
-		// STRING: BETA10 0x101dcdac
-		return "LegoState";
-	}
-
-	// FUNCTION: LEGO1 0x100060e0
-	// FUNCTION: BETA10 0x100a9000
-	MxBool IsA(const char* p_name) const override // vtable+0x10
-	{
-		return !strcmp(p_name, LegoState::ClassName()) || MxCore::IsA(p_name);
-	}
-
 	// FUNCTION: LEGO1 0x10005f90
 	virtual MxBool IsSerializable() { return TRUE; } // vtable+0x14
 
@@ -115,6 +99,22 @@ public:
 		}
 		return SUCCESS;
 	} // vtable+0x1c
+
+	// FUNCTION: LEGO1 0x100060d0
+	// FUNCTION: BETA10 0x10017d20
+	const char* ClassName() const override // vtable+0x0c
+	{
+		// STRING: LEGO1 0x100f01b8
+		// STRING: BETA10 0x101dcdac
+		return "LegoState";
+	}
+
+	// FUNCTION: LEGO1 0x100060e0
+	// FUNCTION: BETA10 0x100a9000
+	MxBool IsA(const char* p_name) const override // vtable+0x10
+	{
+		return !strcmp(p_name, LegoState::ClassName()) || MxCore::IsA(p_name);
+	}
 
 	// SYNTHETIC: LEGO1 0x10006160
 	// LegoState::`scalar deleting destructor'
