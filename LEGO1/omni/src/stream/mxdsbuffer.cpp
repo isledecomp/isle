@@ -491,6 +491,7 @@ MxU8* MxDSBuffer::FUN_100c6fa0(MxU8* p_data)
 }
 
 // FUNCTION: LEGO1 0x100c7090
+// FUNCTION: BETA10 0x1015842d
 MxResult MxDSBuffer::FUN_100c7090(MxDSBuffer* p_buf)
 {
 	MxResult result = FAILURE;

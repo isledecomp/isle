@@ -10,6 +10,7 @@ class Act3Brickster;
 class Act3Cop;
 class Act3Shark;
 class Helicopter;
+class MxQuaternionTransformer;
 
 // Macros confirmed by BETA10
 #define MAX_PIZZAS 20
@@ -53,6 +54,9 @@ class Act3State : public LegoState {
 public:
 	Act3State() { m_unk0x08 = 0; }
 
+	// FUNCTION: LEGO1 0x1000e2f0
+	MxBool IsSerializable() override { return FALSE; }
+
 	// FUNCTION: LEGO1 0x1000e300
 	// FUNCTION: BETA10 0x10017e10
 	const char* ClassName() const override // vtable+0x0c
@@ -66,9 +70,6 @@ public:
 	{
 		return !strcmp(p_name, Act3State::ClassName()) || LegoState::IsA(p_name);
 	}
-
-	// FUNCTION: LEGO1 0x1000e2f0
-	MxBool IsSerializable() override { return FALSE; }
 
 	// SYNTHETIC: LEGO1 0x1000e3c0
 	// Act3State::`scalar deleting destructor'
@@ -152,7 +153,7 @@ protected:
 		const Matrix4& p_destination,
 		const Matrix4& p_startPosition,
 		const Matrix4& p_endPosition,
-		const UnknownMx4DPointFloat& p_unk0x1f4
+		const MxQuaternionTransformer& p_unk0x1f4
 	);
 
 	Act3State* m_state;                 // 0xf8

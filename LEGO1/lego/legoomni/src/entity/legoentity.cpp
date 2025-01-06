@@ -42,21 +42,21 @@ void LegoEntity::ResetWorldTransform(MxBool p_cameraFlag)
 {
 	LegoWorld* world = CurrentWorld();
 
-	if (world != NULL && world->GetCamera() != NULL) {
+	if (world != NULL && world->GetCameraController() != NULL) {
 		m_cameraFlag = p_cameraFlag;
 
 		if (m_cameraFlag) {
-			world->GetCamera()->SetEntity(this);
-			world->GetCamera()->SetWorldTransform(
+			world->GetCameraController()->SetEntity(this);
+			world->GetCameraController()->SetWorldTransform(
 				Mx3DPointFloat(0.0F, 1.25F, 0.0F),
 				Mx3DPointFloat(0.0F, 0.0F, 1.0F),
 				Mx3DPointFloat(0.0F, 1.0F, 0.0F)
 			);
 		}
 		else {
-			if (world->GetCamera()->GetEntity() == this) {
-				world->GetCamera()->SetEntity(NULL);
-				world->GetCamera()->SetWorldTransform(
+			if (world->GetCameraController()->GetEntity() == this) {
+				world->GetCameraController()->SetEntity(NULL);
+				world->GetCameraController()->SetWorldTransform(
 					Mx3DPointFloat(0.0F, 0.0F, 0.0F),
 					Mx3DPointFloat(0.0F, 0.0F, 1.0F),
 					Mx3DPointFloat(0.0F, 1.0F, 0.0F)
@@ -72,10 +72,10 @@ void LegoEntity::SetWorldTransform(const Vector3& p_location, const Vector3& p_d
 {
 	LegoWorld* world = CurrentWorld();
 
-	if (world != NULL && world->GetCamera() != NULL) {
+	if (world != NULL && world->GetCameraController() != NULL) {
 		m_cameraFlag = TRUE;
-		world->GetCamera()->SetEntity(this);
-		world->GetCamera()->SetWorldTransform(p_location, p_direction, p_up);
+		world->GetCameraController()->SetEntity(this);
+		world->GetCameraController()->SetWorldTransform(p_location, p_direction, p_up);
 	}
 }
 
@@ -193,8 +193,8 @@ void LegoEntity::FUN_10010c30()
 {
 	LegoWorld* world = CurrentWorld();
 
-	if (m_cameraFlag && world && world->GetCamera() && m_roi) {
-		world->GetCamera()->FUN_100123e0(m_roi->GetLocal2World(), 1);
+	if (m_cameraFlag && world && world->GetCameraController() && m_roi) {
+		world->GetCameraController()->FUN_100123e0(m_roi->GetLocal2World(), 1);
 	}
 }
 

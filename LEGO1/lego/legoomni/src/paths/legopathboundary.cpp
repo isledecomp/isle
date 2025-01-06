@@ -54,11 +54,11 @@ void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPa
 
 		v = p_point1;
 		v -= *ccwV;
-		float dot1 = v.Dot(&v, m_unk0x50);
+		float dot1 = v.Dot(v, *m_unk0x50);
 
 		v = p_point2;
 		v -= *ccwV;
-		float dot2 = v.Dot(&v, m_unk0x50);
+		float dot2 = v.Dot(v, *m_unk0x50);
 
 		if (dot2 > dot1) {
 			for (MxS32 i = 0; i < m_numTriggers; i++) {
@@ -197,7 +197,7 @@ MxU32 LegoPathBoundary::Intersect(
 	for (MxS32 i = 0; i < m_numEdges; i++) {
 		LegoUnknown100db7f4* edge = (LegoUnknown100db7f4*) m_edges[i];
 
-		if (p_point2.Dot(&m_edgeNormals[i], &p_point2) + m_edgeNormals[i][3] <= -1e-07) {
+		if (p_point2.Dot(m_edgeNormals[i], p_point2) + m_edgeNormals[i][3] <= -1e-07) {
 			if (local10 == 0) {
 				local10 = 1;
 				vec = p_point2;
@@ -212,9 +212,9 @@ MxU32 LegoPathBoundary::Intersect(
 				vec /= len;
 			}
 
-			float dot = vec.Dot(&vec, &m_edgeNormals[i]);
+			float dot = vec.Dot(vec, m_edgeNormals[i]);
 			if (dot != 0.0f) {
-				float local34 = (-m_edgeNormals[i][3] - p_point1.Dot(&p_point1, &m_edgeNormals[i])) / dot;
+				float local34 = (-m_edgeNormals[i][3] - p_point1.Dot(p_point1, m_edgeNormals[i])) / dot;
 
 				if (local34 >= -0.001 && local34 <= len && (e == NULL || local34 < localc)) {
 					e = edge;
@@ -242,7 +242,7 @@ MxU32 LegoPathBoundary::Intersect(
 
 		e->FUN_1002ddc0(*this, local70);
 
-		float local58 = local50.Dot(&local50, &local70);
+		float local58 = local50.Dot(local50, local70);
 		LegoUnknown100db7f4* local54 = NULL;
 
 		if (local58 < 0.0f) {
@@ -252,7 +252,7 @@ MxU32 LegoPathBoundary::Intersect(
 				 local88 = (LegoUnknown100db7f4*) local88->GetClockwiseEdge(*this)) {
 				local88->FUN_1002ddc0(*this, local84);
 
-				if (local84.Dot(&local84, &local70) <= 0.9) {
+				if (local84.Dot(local84, local70) <= 0.9) {
 					break;
 				}
 
@@ -260,7 +260,7 @@ MxU32 LegoPathBoundary::Intersect(
 				Mx3DPointFloat locala4(p_point3);
 				locala4 -= *local90;
 
-				float local8c = locala4.Dot(&locala4, &local84);
+				float local8c = locala4.Dot(locala4, local84);
 
 				if (local8c > local58 && local8c < local88->m_unk0x3c) {
 					local54 = local88;
@@ -279,7 +279,7 @@ MxU32 LegoPathBoundary::Intersect(
 					 locala8 = (LegoUnknown100db7f4*) locala8->GetCounterclockwiseEdge(*this)) {
 					locala8->FUN_1002ddc0(*this, localbc);
 
-					if (localbc.Dot(&localbc, &local70) <= 0.9) {
+					if (localbc.Dot(localbc, local70) <= 0.9) {
 						break;
 					}
 
@@ -287,7 +287,7 @@ MxU32 LegoPathBoundary::Intersect(
 					Mx3DPointFloat locald8(p_point3);
 					locald8 -= *localc4;
 
-					float localc0 = locald8.Dot(&locald8, &localbc);
+					float localc0 = locald8.Dot(locald8, localbc);
 
 					if (localc0 < local58 && localc0 >= 0.0f) {
 						local54 = locala8;

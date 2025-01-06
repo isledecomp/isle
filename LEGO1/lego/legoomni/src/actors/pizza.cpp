@@ -624,6 +624,7 @@ MxResult PizzaMissionState::Serialize(LegoFile* p_file)
 }
 
 // FUNCTION: LEGO1 0x10039510
+// FUNCTION: BETA10 0x100eed45
 PizzaMissionState::Mission* PizzaMissionState::GetMission(MxU8 p_actorId)
 {
 	for (MxS16 i = 0; i < 5; i++) {

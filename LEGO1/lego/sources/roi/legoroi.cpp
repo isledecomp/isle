@@ -4,6 +4,7 @@
 #include "legolod.h"
 #include "misc/legocontainer.h"
 #include "misc/legostorage.h"
+#include "mxgeometry/mxgeometry4d.h"
 #include "realtime/realtime.h"
 #include "shape/legobox.h"
 #include "shape/legosphere.h"
@@ -626,13 +627,13 @@ LegoU32 LegoROI::FUN_100a9410(
 		local38 *= 0.5f;
 
 		local70 = localc0;
-		localc0.SetMatrixProduct(&local70, (float*) m_local2world.GetData());
+		localc0.SetMatrixProduct(local70, (float*) m_local2world.GetData());
 
 		local70 = local9c;
-		local9c.SetMatrixProduct(&local70, (float*) m_local2world.GetData());
+		local9c.SetMatrixProduct(local70, (float*) m_local2world.GetData());
 
 		local70 = local168;
-		local168.SetMatrixProduct(&local70, (float*) m_local2world.GetData());
+		local168.SetMatrixProduct(local70, (float*) m_local2world.GetData());
 
 		p_v3 = m_local2world[3];
 
@@ -641,22 +642,22 @@ LegoU32 LegoROI::FUN_100a9410(
 			local150[i] = m_local2world[i % 3];
 
 			if (i > 2) {
-				local150[i][3] = -local58.Dot(&local58, &local150[i]);
+				local150[i][3] = -local58.Dot(local58, local150[i]);
 			}
 			else {
-				local150[i][3] = -locala8.Dot(&locala8, &local150[i]);
+				local150[i][3] = -locala8.Dot(locala8, local150[i]);
 			}
 
-			if (local150[i][3] + local38.Dot(&local38, &local150[i]) < 0.0f) {
+			if (local150[i][3] + local38.Dot(local38, local150[i]) < 0.0f) {
 				local150[i] *= -1.0f;
 			}
 		}
 
 		for (i = 0; i < 6; i++) {
-			float local50 = p_v2.Dot(&p_v2, &local150[i]);
+			float local50 = p_v2.Dot(p_v2, local150[i]);
 
 			if (local50 >= 0.01 || local50 < -0.01) {
-				local50 = -((local150[i][3] + local4c.Dot(&local4c, &local150[i])) / local50);
+				local50 = -((local150[i][3] + local4c.Dot(local4c, local150[i])) / local50);
 
 				if (local50 >= 0.0f && local50 <= p_f1) {
 					Mx3DPointFloat local17c(p_v2);
@@ -666,7 +667,7 @@ LegoU32 LegoROI::FUN_100a9410(
 					LegoS32 j;
 					for (j = 0; j < 6; j++) {
 						if (i != j && i - j != 3 && j - i != 3) {
-							if (local150[j][3] + local17c.Dot(&local17c, &local150[j]) < 0.0f) {
+							if (local150[j][3] + local17c.Dot(local17c, local150[j]) < 0.0f) {
 								break;
 							}
 						}
@@ -684,9 +685,9 @@ LegoU32 LegoROI::FUN_100a9410(
 		v1 -= GetWorldBoundingSphere().Center();
 
 		float local10 = GetWorldBoundingSphere().Radius();
-		float local8 = p_v2.Dot(&p_v2, &p_v2);
-		float localc = p_v2.Dot(&p_v2, &v1) * 2.0f;
-		float local14 = v1.Dot(&v1, &v1) - (local10 * local10);
+		float local8 = p_v2.Dot(p_v2, p_v2);
+		float localc = p_v2.Dot(p_v2, v1) * 2.0f;
+		float local14 = v1.Dot(v1, v1) - (local10 * local10);
 
 		if (local8 >= 0.001 || local8 <= -0.001) {
 			float local1c = -1.0f;

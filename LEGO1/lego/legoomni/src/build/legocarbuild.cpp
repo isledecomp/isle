@@ -358,7 +358,7 @@ void LegoCarBuild::VTable0x70()
 
 	m_unk0x2a0 = sqrt((MxDouble) DISTSQRD2(m_unk0x290, m_unk0x298));
 
-	m_unk0x25c.BETA_1004a9b0(m_unk0x178, m_unk0x208);
+	m_unk0x25c.SetStartEnd(m_unk0x178, m_unk0x208);
 }
 
 // FUNCTION: LEGO1 0x10023130
@@ -406,7 +406,7 @@ void LegoCarBuild::FUN_10023130(MxLong p_x, MxLong p_y)
 
 			MxFloat local1c = sqrt((double) (NORMSQRD2(local20))) / m_unk0x2a0;
 
-			m_unk0x25c.BETA_1004aaa0(local78, local1c);
+			m_unk0x25c.InterpolateToMatrix(local78, local1c);
 
 			local78[3][0] = m_unk0x178[3][0] + local18[0];
 			local78[3][1] = m_unk0x178[3][1] + local18[1];
@@ -1203,7 +1203,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 			assert(destWorld);
 			m_buildState->m_animationState = LegoVehicleBuildState::e_exiting;
 
-			if (m_unk0x258->AllPartsPlaced()) {
+			if (!m_unk0x258->AllPartsPlaced()) {
 				FUN_100243a0();
 			}
 			else {
@@ -1211,8 +1211,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 			}
 		}
 		else {
-			MxNotificationParam param;
-			NotificationManager()->Send(this, param);
+			NotificationManager()->Send(this, MxNotificationParam());
 		}
 		break;
 	case 2:
@@ -1239,9 +1238,8 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 			FUN_10024ef0();
 		}
 		else {
-			MxNotificationParam p;
 			// In BETA10, NotificationManager->Send() also takes __FILE__ and __LINE__ arguments
-			NotificationManager()->Send(this, p);
+			NotificationManager()->Send(this, MxNotificationParam());
 		}
 		break;
 	}

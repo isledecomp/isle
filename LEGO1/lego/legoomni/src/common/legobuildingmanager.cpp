@@ -809,7 +809,7 @@ MxResult LegoBuildingManager::FUN_10030630()
 				for (MxS32 j = 0; j < boundary->GetNumEdges(); j++) {
 					Mx4DPointFloat* normal = boundary->GetEdgeNormal(j);
 
-					if (position.Dot(normal, &position) + (*normal).index_operator(3) < -0.001) {
+					if (position.Dot(*normal, position) + (*normal).index_operator(3) < -0.001) {
 						MxTrace(
 							"Building %d shot location (%g, %g, %g) is not in boundary %s.\n",
 							i,
@@ -826,8 +826,8 @@ MxResult LegoBuildingManager::FUN_10030630()
 				if (g_buildingInfo[i].m_boundary != NULL) {
 					Mx4DPointFloat& unk0x14 = *g_buildingInfo[i].m_boundary->GetUnknown0x14();
 
-					if (position.Dot(&position, &unk0x14) + unk0x14.index_operator(3) > 0.001 ||
-						position.Dot(&position, &unk0x14) + unk0x14.index_operator(3) < -0.001) {
+					if (position.Dot(position, unk0x14) + unk0x14.index_operator(3) > 0.001 ||
+						position.Dot(position, unk0x14) + unk0x14.index_operator(3) < -0.001) {
 
 						g_buildingInfo[i].m_y =
 							-((position[0] * unk0x14.index_operator(0) + unk0x14.index_operator(3) +

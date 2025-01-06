@@ -81,7 +81,7 @@ TglD3DRMIMAGE::TglD3DRMIMAGE(
 void TglD3DRMIMAGE::Destroy()
 {
 	if (m_texelsAllocatedByClient == 0) {
-		delete m_image.buffer1;
+		delete[] ((char*) m_image.buffer1);
 	}
 	delete m_image.palette;
 }
@@ -111,7 +111,7 @@ Result TglD3DRMIMAGE::CreateBuffer(int width, int height, int depth, void* pBuff
 	m_image.bytes_per_line = width;
 
 	if (!m_texelsAllocatedByClient) {
-		delete[] m_image.buffer1;
+		delete[] ((char*) m_image.buffer1);
 		m_image.buffer1 = NULL;
 	}
 
@@ -129,10 +129,11 @@ Result TglD3DRMIMAGE::CreateBuffer(int width, int height, int depth, void* pBuff
 }
 
 // FUNCTION: LEGO1 0x100a1510
-void TglD3DRMIMAGE::FillRowsOfTexture(int y, int height, char* pContent)
+Result TglD3DRMIMAGE::FillRowsOfTexture(int y, int height, char* pContent)
 {
 	// The purpose is clearly this but I can't get the assembly to line up.
 	memcpy((char*) m_image.buffer1 + (y * m_image.bytes_per_line), pContent, height * m_image.bytes_per_line);
+	return Success;
 }
 
 // FUNCTION: LEGO1 0x100a1550

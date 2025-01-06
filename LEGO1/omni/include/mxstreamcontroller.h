@@ -74,14 +74,14 @@ public:
 	MxStreamProvider* GetProvider() { return m_provider; }
 	MxDSObjectList& GetUnk0x3c() { return m_unk0x3c; }
 	MxDSObjectList& GetUnk0x54() { return m_unk0x54; }
-	MxDSSubscriberList& GetSubscriberList() { return m_subscriberList; }
+	MxDSSubscriberList& GetSubscriberList() { return m_subscribers; }
 
 protected:
 	MxCriticalSection m_criticalSection;        // 0x08
 	MxAtomId m_atom;                            // 0x24
 	MxStreamProvider* m_provider;               // 0x28
 	undefined4* m_unk0x2c;                      // 0x2c
-	MxDSSubscriberList m_subscriberList;        // 0x30
+	MxDSSubscriberList m_subscribers;           // 0x30
 	MxDSObjectList m_unk0x3c;                   // 0x3c
 	MxNextActionDataStartList m_nextActionList; // 0x48
 	MxDSObjectList m_unk0x54;                   // 0x54
@@ -137,5 +137,11 @@ protected:
 
 // TEMPLATE: LEGO1 0x100c1bc0
 // list<MxDSObject *,allocator<MxDSObject *> >::insert
+
+// TEMPLATE: BETA10 0x10150b90
+// MxUtilityList<MxDSSubscriber *>::PushBack
+
+// TEMPLATE: BETA10 0x10150cf0
+// MxUtilityList<MxDSSubscriber *>::Remove
 
 #endif // MXSTREAMCONTROLLER_H

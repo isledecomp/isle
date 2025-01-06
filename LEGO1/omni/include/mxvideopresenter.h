@@ -14,43 +14,6 @@ class MxVideoPresenter : public MxMediaPresenter {
 public:
 	MxVideoPresenter() { Init(); }
 
-	// FUNCTION: LEGO1 0x1000c740
-	~MxVideoPresenter() override { Destroy(TRUE); } // vtable+0x00
-
-	// FUNCTION: BETA10 0x100551b0
-	static const char* HandlerClassName()
-	{
-		// STRING: LEGO1 0x100f0760
-		return "MxVideoPresenter";
-	}
-
-	// FUNCTION: LEGO1 0x1000c820
-	// FUNCTION: BETA10 0x10055180
-	const char* ClassName() const override // vtable+0x0c
-	{
-		return HandlerClassName();
-	}
-
-	// FUNCTION: LEGO1 0x1000c830
-	MxBool IsA(const char* p_name) const override // vtable+0x10
-	{
-		return !strcmp(p_name, MxVideoPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
-	}
-
-	void ReadyTickle() override;      // vtable+0x18
-	void StartingTickle() override;   // vtable+0x1c
-	void StreamingTickle() override;  // vtable+0x20
-	void RepeatingTickle() override;  // vtable+0x24
-	void FreezingTickle() override;   // vtable+0x28
-	MxResult AddToManager() override; // vtable+0x34
-
-	// FUNCTION: LEGO1 0x1000c7a0
-	void Destroy() override { Destroy(FALSE); } // vtable+0x38
-
-	void EndAction() override;                   // vtable+0x40
-	MxResult PutData() override;                 // vtable+0x4c
-	MxBool IsHit(MxS32 p_x, MxS32 p_y) override; // vtable+0x50
-
 	// FUNCTION: LEGO1 0x1000c700
 	// FUNCTION: BETA10 0x10054a80
 	virtual void LoadHeader(MxStreamChunk* p_chunk) {} // vtable+0x5c
@@ -72,6 +35,12 @@ public:
 
 	virtual undefined VTable0x74(); // vtable+0x74
 
+	// FUNCTION: LEGO1 0x1000c740
+	~MxVideoPresenter() override { Destroy(TRUE); } // vtable+0x00
+
+	// FUNCTION: LEGO1 0x1000c7a0
+	void Destroy() override { Destroy(FALSE); } // vtable+0x38
+
 	// FUNCTION: LEGO1 0x1000c7b0
 	virtual LPDIRECTDRAWSURFACE VTable0x78() { return m_unk0x58; } // vtable+0x78
 
@@ -83,6 +52,36 @@ public:
 
 	// FUNCTION: LEGO1 0x1000c800
 	virtual MxS32 GetHeight() { return m_alpha ? m_alpha->m_height : m_frameBitmap->GetBmiHeightAbs(); } // vtable+0x84
+
+	// FUNCTION: BETA10 0x100551b0
+	static const char* HandlerClassName()
+	{
+		// STRING: LEGO1 0x100f0760
+		return "MxVideoPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1000c820
+	// FUNCTION: BETA10 0x10055180
+	const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
+	}
+
+	// FUNCTION: LEGO1 0x1000c830
+	MxBool IsA(const char* p_name) const override // vtable+0x10
+	{
+		return !strcmp(p_name, MxVideoPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
+	}
+
+	void ReadyTickle() override;                 // vtable+0x18
+	void StartingTickle() override;              // vtable+0x1c
+	void StreamingTickle() override;             // vtable+0x20
+	void RepeatingTickle() override;             // vtable+0x24
+	void FreezingTickle() override;              // vtable+0x28
+	MxResult AddToManager() override;            // vtable+0x34
+	void EndAction() override;                   // vtable+0x40
+	MxResult PutData() override;                 // vtable+0x4c
+	MxBool IsHit(MxS32 p_x, MxS32 p_y) override; // vtable+0x50
 
 	// VTABLE: LEGO1 0x100dc2bc
 	// SIZE 0x0c

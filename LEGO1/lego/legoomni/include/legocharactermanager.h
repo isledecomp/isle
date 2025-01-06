@@ -67,7 +67,7 @@ public:
 	void ReleaseActor(const char* p_name);
 	void ReleaseActor(LegoROI* p_roi);
 	void ReleaseAutoROI(LegoROI* p_roi);
-	MxBool FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_textureInfo);
+	MxBool FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_texture);
 	LegoExtraActor* GetExtraActor(const char* p_name);
 	LegoActorInfo* GetActorInfo(const char* p_name);
 	LegoActorInfo* GetActorInfo(LegoROI* p_roi);

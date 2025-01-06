@@ -22,6 +22,9 @@ public:
 	}
 	~LegoAct2State() override {}
 
+	// FUNCTION: LEGO1 0x1000df70
+	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
+
 	// FUNCTION: LEGO1 0x1000df80
 	// FUNCTION: BETA10 0x1003c7e0
 	const char* ClassName() const override // vtable+0x0c
@@ -35,9 +38,6 @@ public:
 	{
 		return !strcmp(p_name, LegoAct2State::ClassName()) || LegoState::IsA(p_name);
 	}
-
-	// FUNCTION: LEGO1 0x1000df70
-	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
 
 	// SYNTHETIC: LEGO1 0x1000e040
 	// LegoAct2State::`scalar deleting destructor'

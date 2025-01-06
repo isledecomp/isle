@@ -3,7 +3,7 @@
 
 #include "islepathactor.h"
 #include "legostate.h"
-#include "realtime/matrix.h"
+#include "mxgeometry/mxquaternion.h"
 
 class Act3;
 
@@ -13,6 +13,16 @@ class Act3;
 class HelicopterState : public LegoState {
 public:
 	HelicopterState() : m_unk0x08(0) {}
+
+	// FUNCTION: LEGO1 0x1000e0b0
+	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
+
+	// FUNCTION: LEGO1 0x1000e0c0
+	MxBool Reset() override
+	{
+		m_unk0x08 = 0;
+		return TRUE;
+	} // vtable+0x18
 
 	// FUNCTION: LEGO1 0x1000e0d0
 	// FUNCTION: BETA10 0x100a7cc0
@@ -28,23 +38,8 @@ public:
 		return !strcmp(p_name, HelicopterState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	// FUNCTION: LEGO1 0x1000e0b0
-	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
-
-	// FUNCTION: LEGO1 0x1000e0c0
-	MxBool Reset() override
-	{
-		m_unk0x08 = 0;
-		return TRUE;
-	} // vtable+0x18
-
-	void SetUnknown8(MxU32 p_unk0x08) { m_unk0x08 = p_unk0x08; }
-	MxU32 GetUnkown8() { return m_unk0x08; }
-
 	// SYNTHETIC: LEGO1 0x1000e190
 	// HelicopterState::`scalar deleting destructor'
-
-	// TODO: Most likely getters/setters are not used according to BETA.
 
 	MxU32 m_unk0x08; // 0x08
 };
@@ -93,12 +88,12 @@ public:
 protected:
 	void FUN_100042a0(const Matrix4& p_matrix);
 
-	MxMatrix m_unk0x160;              // 0x160
-	MxMatrix m_unk0x1a8;              // 0x1a8
-	float m_unk0x1f0;                 // 0x1f0
-	UnknownMx4DPointFloat m_unk0x1f4; // 0x1f4
-	HelicopterState* m_state;         // 0x228
-	MxAtomId m_script;                // 0x22c
+	MxMatrix m_unk0x160;                // 0x160
+	MxMatrix m_unk0x1a8;                // 0x1a8
+	float m_unk0x1f0;                   // 0x1f0
+	MxQuaternionTransformer m_unk0x1f4; // 0x1f4
+	HelicopterState* m_state;           // 0x228
+	MxAtomId m_script;                  // 0x22c
 };
 
 #endif // HELICOPTER_H

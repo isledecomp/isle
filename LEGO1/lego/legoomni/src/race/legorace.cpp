@@ -35,24 +35,6 @@ LegoRace::LegoRace()
 	NotificationManager()->Register(this);
 }
 
-// FUNCTION: LEGO1 0x10015b70
-MxLong LegoRace::HandlePathStruct(LegoPathStructNotificationParam&)
-{
-	return 0;
-}
-
-// FUNCTION: LEGO1 0x10015b80
-MxLong LegoRace::HandleEndAction(MxEndActionNotificationParam&)
-{
-	return 0;
-}
-
-// FUNCTION: LEGO1 0x10015b90
-MxBool LegoRace::Escape()
-{
-	return FALSE;
-}
-
 // FUNCTION: LEGO1 0x10015ce0
 // FUNCTION: BETA10 0x100c7a71
 MxResult LegoRace::Create(MxDSAction& p_dsAction)
@@ -165,6 +147,7 @@ MxResult RaceState::Serialize(LegoFile* p_file)
 }
 
 // FUNCTION: LEGO1 0x10016280
+// FUNCTION: BETA10 0x100c7dfd
 RaceState::Entry* RaceState::GetState(MxU8 p_id)
 {
 	for (MxS16 i = 0;; i++) {

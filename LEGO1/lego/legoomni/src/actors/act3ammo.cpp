@@ -227,12 +227,12 @@ MxResult Act3Ammo::FUN_10053db0(float p_param1, const Matrix4& p_param2)
 
 	local14[1] = local14[2] = 0.0f;
 	local14[0] = 1.0f;
-	local3c.EqualsCross(&localc, &local14);
+	local3c.EqualsCross(localc, local14);
 
 	if (local3c.Unitize() != 0) {
 		local14[0] = local14[1] = 0.0f;
 		local14[2] = 1.0f;
-		local3c.EqualsCross(&localc, &local14);
+		local3c.EqualsCross(localc, local14);
 
 		if (local3c.Unitize() != 0) {
 			assert(0);
@@ -240,7 +240,7 @@ MxResult Act3Ammo::FUN_10053db0(float p_param1, const Matrix4& p_param2)
 		}
 	}
 
-	local14.EqualsCross(&local3c, &localc);
+	local14.EqualsCross(local3c, localc);
 	return SUCCESS;
 }
 
@@ -340,17 +340,17 @@ void Act3Ammo::Animate(float p_time)
 				local184 = *m_boundary->GetUnknown0x14();
 				local17c[0] = 1.0f;
 				local17c[1] = local17c[2] = 0.0f;
-				local174.EqualsCross(&local17c, &local184);
+				local174.EqualsCross(local17c, local184);
 				local174.Unitize();
-				local17c.EqualsCross(&local184, &local174);
+				local17c.EqualsCross(local184, local174);
 			}
 			else {
 				local17c = *m_boundary->GetUnknown0x14();
 				local184[0] = 1.0f;
 				local184[1] = local184[2] = 0.0f;
-				local174.EqualsCross(&local17c, &local184);
+				local174.EqualsCross(local17c, local184);
 				local174.Unitize();
-				local184.EqualsCross(&local174, &local17c);
+				local184.EqualsCross(local174, local17c);
 			}
 		}
 

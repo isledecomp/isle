@@ -69,9 +69,9 @@ struct InfocenterMapEntry {
 	// FUNCTION: LEGO1 0x1006ec80
 	InfocenterMapEntry() {}
 
-	MxStillPresenter* m_presenter; // 0x00
-	undefined4 m_unk0x04;          // 0x04
-	MxRect32 m_area;               // 0x08
+	MxStillPresenter* m_destCtl; // 0x00
+	undefined4 m_unk0x04;        // 0x04
+	MxRect32 m_area;             // 0x08
 };
 
 // VTABLE: LEGO1 0x100d9338
@@ -161,9 +161,9 @@ private:
 	Cutscene m_currentCutscene;                     // 0x108
 	Radio m_radio;                                  // 0x10c
 	MxStillPresenter* m_unk0x11c;                   // 0x11c
-	InfocenterMapEntry m_mapAreas[7];               // 0x120
+	InfocenterMapEntry m_glowInfo[7];               // 0x120
 	MxS16 m_unk0x1c8;                               // 0x1c8
-	MxStillPresenter* m_frameHotBitmap;             // 0x1cc
+	MxStillPresenter* m_frame;                      // 0x1cc
 	MxS16 m_infoManDialogueTimer;                   // 0x1d0
 	MxS16 m_bookAnimationTimer;                     // 0x1d2
 	MxU16 m_unk0x1d4;                               // 0x1d4

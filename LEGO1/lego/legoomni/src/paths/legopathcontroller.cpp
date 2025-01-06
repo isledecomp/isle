@@ -256,7 +256,7 @@ MxResult LegoPathController::PlaceActor(
 			for (j = 0; j < b.GetNumEdges(); j++) {
 				Mx4DPointFloat normal(*b.GetEdgeNormal(j));
 
-				if (p_position.Dot(&p_position, &normal) + normal[3] < 0.0f) {
+				if (p_position.Dot(p_position, normal) + normal[3] < 0.0f) {
 					break;
 				}
 			}
@@ -282,7 +282,7 @@ MxResult LegoPathController::PlaceActor(
 			Mx3DPointFloat vec;
 
 			if (((LegoUnknown100db7f4*) edge->GetClockwiseEdge(*boundary))->FUN_1002ddc0(*boundary, vec) == SUCCESS &&
-				vec.Dot(&vec, &p_direction) < 0.0f) {
+				vec.Dot(vec, p_direction) < 0.0f) {
 				edge =
 					(LegoUnknown100db7f4*) edge->GetCounterclockwiseEdge(*boundary)->GetCounterclockwiseEdge(*boundary);
 			}
@@ -949,7 +949,7 @@ MxS32 LegoPathController::FUN_1004a240(
 	p_v1 *= p_f1;
 	p_v1 += *p_edge->CWVertex(*p_boundary);
 	p_edge->FUN_1002ddc0(*p_boundary, vec);
-	p_v2.EqualsCross(p_boundary->GetUnknown0x14(), &vec);
+	p_v2.EqualsCross(*p_boundary->GetUnknown0x14(), vec);
 	return 0;
 }
 
@@ -974,14 +974,14 @@ MxResult LegoPathController::FUN_1004a380(
 
 		LegoPathBoundary* b = &m_boundaries[i];
 		Mx4DPointFloat* unk0x14 = b->GetUnknown0x14();
-		float local28 = p_param3[0].Dot(&p_param3[0], unk0x14);
+		float local28 = p_param3[0].Dot(p_param3[0], *unk0x14);
 
 		if (local28 < 0.001 && local28 > -0.001) {
 			continue;
 		}
 
-		float local2c = p_param3[1].Dot(&p_param3[1], unk0x14);
-		float local34 = p_param3[2].Dot(&p_param3[2], unk0x14) + unk0x14->index_operator(3);
+		float local2c = p_param3[1].Dot(p_param3[1], *unk0x14);
+		float local34 = p_param3[2].Dot(p_param3[2], *unk0x14) + unk0x14->index_operator(3);
 		float local3c = local2c * local2c - local34 * local28 * 4.0f;
 
 		if (local3c < -0.001) {
@@ -1022,7 +1022,7 @@ MxResult LegoPathController::FUN_1004a380(
 			for (j = b->GetNumEdges() - 1; j >= 0; j--) {
 				Mx4DPointFloat* local60 = b->GetEdgeNormal(j);
 
-				if (local24.Dot(local60, &local24) + local60->index_operator(3) < -0.001) {
+				if (local24.Dot(*local60, local24) + local60->index_operator(3) < -0.001) {
 					break;
 				}
 			}
@@ -1031,7 +1031,7 @@ MxResult LegoPathController::FUN_1004a380(
 				Mx3DPointFloat local74(p_param1);
 				local74 -= local24;
 
-				if (local74.Dot(&local74, unk0x14) >= 0.0f) {
+				if (local74.Dot(local74, *unk0x14) >= 0.0f) {
 					p_param5 = local38;
 					p_boundary = b;
 					local8 = FALSE;

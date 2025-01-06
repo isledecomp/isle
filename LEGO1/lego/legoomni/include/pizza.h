@@ -148,6 +148,7 @@ public:
 	// FUNCTION: BETA10 0x100ef850
 	MxU32 GetUnknown0xb0() { return m_unk0xb0; }
 
+	// FUNCTION: BETA10 0x10088850
 	MxS16 GetHighScore(MxU8 p_actorId) { return GetMission(p_actorId)->m_hiScore; }
 
 	// SYNTHETIC: LEGO1 0x10039350

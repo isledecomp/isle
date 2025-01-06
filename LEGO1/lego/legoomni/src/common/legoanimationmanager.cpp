@@ -1596,7 +1596,7 @@ MxU16 LegoAnimationManager::FUN_10062110(
 		if (GetViewManager()->IsBoundingBoxInFrustum(p_roi->GetWorldBoundingBox())) {
 			Mx3DPointFloat direction(p_roi->GetWorldDirection());
 
-			if (direction.Dot(&direction, &p_direction) > 0.707) {
+			if (direction.Dot(direction, p_direction) > 0.707) {
 				Mx3DPointFloat position(p_roi->GetWorldPosition());
 
 				position -= p_position;
@@ -2342,11 +2342,11 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 {
 	const char** cycles = g_cycles[g_characters[p_characterId].m_unk0x16];
 	const char* vehicleWC;
+	LegoLocomotionAnimPresenter* presenter;
 
 	if (g_characters[p_characterId].m_vehicleId >= 0 && g_vehicles[g_characters[p_characterId].m_vehicleId].m_unk0x04 &&
 		(vehicleWC = cycles[10]) != NULL) {
-		LegoLocomotionAnimPresenter* presenter =
-			(LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
+		presenter = (LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
 
 		if (presenter != NULL) {
 			presenter->FUN_1006d680(p_actor, 1.7f);
@@ -2359,8 +2359,7 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 	else {
 		vehicleWC = cycles[p_mood];
 		if (vehicleWC != NULL) {
-			LegoLocomotionAnimPresenter* presenter =
-				(LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
+			presenter = (LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
 
 			if (presenter != NULL) {
 				presenter->FUN_1006d680(p_actor, 0.7f);
@@ -2373,8 +2372,7 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 
 		vehicleWC = cycles[p_mood + 4];
 		if (vehicleWC != NULL) {
-			LegoLocomotionAnimPresenter* presenter =
-				(LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
+			presenter = (LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
 
 			if (presenter != NULL) {
 				presenter->FUN_1006d680(p_actor, 4.0f);
@@ -2387,8 +2385,7 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 
 		vehicleWC = cycles[p_mood + 7];
 		if (vehicleWC != NULL) {
-			LegoLocomotionAnimPresenter* presenter =
-				(LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
+			presenter = (LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
 
 			if (presenter != NULL) {
 				presenter->FUN_1006d680(p_actor, 0.0f);
@@ -2481,6 +2478,8 @@ MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoUnkn
 	Vector3* v1 = p_edge->CWVertex(*p_boundary);
 	Vector3* v2 = p_edge->CCWVertex(*p_boundary);
 
+	assert(v1 && v2);
+
 	p1 = *v2;
 	p1 -= *v1;
 	p1 *= p_destScale;
@@ -2493,7 +2492,12 @@ MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoUnkn
 	boundingBox.Min() -= vec;
 	boundingBox.Max() = p1;
 	boundingBox.Max() += vec;
-	return GetViewManager()->IsBoundingBoxInFrustum(boundingBox) == FALSE;
+
+	if (GetViewManager()->IsBoundingBoxInFrustum(boundingBox) == FALSE) {
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x10064120
@@ -2525,7 +2529,7 @@ MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, Mx
 	for (i = 0; i < numEdges; i++) {
 		e = (LegoUnknown100db7f4*) boundary->GetEdges()[i];
 		e->FUN_1002ddc0(*boundary, vec);
-		float dot = vec.Dot(&direction, &vec);
+		float dot = vec.Dot(direction, vec);
 
 		if (dot > local4c) {
 			local50 = e;
@@ -2793,8 +2797,8 @@ void LegoAnimationManager::FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x
 		LegoLocation* location = NavController()->GetLocation(p_tranInfo->m_location);
 		if (location != NULL) {
 			CalcLocalTransform(location->m_position, location->m_direction, location->m_up, m_unk0x484);
-			m_unk0x4cc.BETA_1004a9b0(m_unk0x43c, m_unk0x484);
-			m_unk0x4cc.FUN_10004520();
+			m_unk0x4cc.SetStartEnd(m_unk0x43c, m_unk0x484);
+			m_unk0x4cc.NormalizeDirection();
 		}
 		else {
 			p_tranInfo->m_flags &= ~LegoTranInfo::c_bit1;
@@ -2828,7 +2832,7 @@ void LegoAnimationManager::FUN_10064b50(MxLong p_time)
 			sub[1] = (m_unk0x484[3][1] - m_unk0x43c[3][1]) * und;
 			sub[2] = (m_unk0x484[3][2] - m_unk0x43c[3][2]) * und;
 
-			m_unk0x4cc.BETA_1004aaa0(mat, (float) (p_time - m_unk0x434) / 1000.0f);
+			m_unk0x4cc.InterpolateToMatrix(mat, (float) (p_time - m_unk0x434) / 1000.0f);
 
 			VPV3(mat[3], m_unk0x43c[3], sub);
 			mat[3][3] = 1.0f;

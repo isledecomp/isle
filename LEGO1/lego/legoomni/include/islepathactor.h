@@ -86,6 +86,26 @@ public:
 
 	IslePathActor();
 
+	// FUNCTION: LEGO1 0x10002e70
+	virtual MxLong HandleClick() { return 0; } // vtable+0xcc
+
+	// FUNCTION: LEGO1 0x10002df0
+	virtual MxLong HandleNotification0() { return 0; } // vtable+0xd0
+
+	// FUNCTION: LEGO1 0x10002e80
+	virtual MxLong HandleControl(LegoControlManagerNotificationParam&) { return 0; } // vtable+0xd4
+
+	// FUNCTION: LEGO1 0x10002e90
+	virtual MxLong HandleEndAnim(LegoEndAnimNotificationParam&) { return 0; } // vtable+0xd8
+
+	// FUNCTION: LEGO1 0x10002e00
+	virtual MxLong HandlePathStruct(LegoPathStructNotificationParam&) { return 0; } // vtable+0xdc
+
+	virtual void Enter();                                                                        // vtable+0xe0
+	virtual void Exit();                                                                         // vtable+0xe4
+	virtual void SpawnPlayer(LegoGameState::Area p_area, MxBool p_enter, MxU8 p_flags);          // vtable+0xe8
+	virtual void VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundary, MxBool p_reset); // vtable+0xec
+
 	// FUNCTION: LEGO1 0x10002e10
 	~IslePathActor() override { IslePathActor::Destroy(TRUE); }
 
@@ -108,29 +128,6 @@ public:
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
 
-	// FUNCTION: LEGO1 0x10002e70
-	virtual MxLong HandleClick() { return 0; } // vtable+0xcc
-
-	// FUNCTION: LEGO1 0x10002df0
-	virtual MxLong HandleNotification0() { return 0; } // vtable+0xd0
-
-	// FUNCTION: LEGO1 0x10002e80
-	virtual MxLong HandleControl(LegoControlManagerNotificationParam&) { return 0; } // vtable+0xd4
-
-	// FUNCTION: LEGO1 0x10002e90
-	virtual MxLong HandleEndAnim(LegoEndAnimNotificationParam&) { return 0; } // vtable+0xd8
-
-	// FUNCTION: LEGO1 0x10002e00
-	virtual MxLong HandlePathStruct(LegoPathStructNotificationParam&) { return 0; } // vtable+0xdc
-
-	virtual void Enter();                                                                        // vtable+0xe0
-	virtual void Exit();                                                                         // vtable+0xe4
-	virtual void SpawnPlayer(LegoGameState::Area p_area, MxBool p_enter, MxU8 p_flags);          // vtable+0xe8
-	virtual void VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundary, MxBool p_reset); // vtable+0xec
-
-	// SYNTHETIC: LEGO1 0x10002ff0
-	// IslePathActor::`scalar deleting destructor'
-
 	void FUN_1001b660();
 
 	void Reset()
@@ -142,6 +139,9 @@ public:
 	void SetWorld(LegoWorld* p_world) { m_world = p_world; }
 
 	static void RegisterSpawnLocations();
+
+	// SYNTHETIC: LEGO1 0x10002ff0
+	// IslePathActor::`scalar deleting destructor'
 
 protected:
 	LegoWorld* m_world;             // 0x154

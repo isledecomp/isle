@@ -138,7 +138,7 @@ public:
 		const char* data = p_str.GetData();
 		LegoU32 fullLength = strlen(data);
 
-		LegoU16 limitedLength = fullLength;
+		LegoU16 limitedLength = (LegoU16) fullLength;
 		Write(&limitedLength, sizeof(limitedLength));
 		Write((char*) data, (LegoS16) fullLength);
 

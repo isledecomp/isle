@@ -634,7 +634,7 @@ void LegoAnimPresenter::PutFrame()
 
 		FUN_1006b9a0(m_anim, time, m_unk0x78);
 
-		if (m_unk0x8c != NULL && m_currentWorld != NULL && m_currentWorld->GetCamera() != NULL) {
+		if (m_unk0x8c != NULL && m_currentWorld != NULL && m_currentWorld->GetCameraController() != NULL) {
 			for (MxS32 i = 0; i < m_unk0x94; i++) {
 				if (m_unk0x8c[i] != NULL) {
 					MxMatrix mat(m_unk0x8c[i]->GetLocal2World());
@@ -650,11 +650,11 @@ void LegoAnimPresenter::PutFrame()
 
 					up = und;
 
-					up -= m_currentWorld->GetCamera()->GetWorldLocation();
+					up -= m_currentWorld->GetCameraController()->GetWorldLocation();
 					dir /= dirsqr;
-					pos.EqualsCross(&dir, &up);
+					pos.EqualsCross(dir, up);
 					pos.Unitize();
-					up.EqualsCross(&pos, &dir);
+					up.EqualsCross(pos, dir);
 					pos *= possqr;
 					dir *= dirsqr;
 					up *= upsqr;
@@ -716,7 +716,7 @@ MxResult LegoAnimPresenter::FUN_1006b140(LegoROI* p_roi)
 
 	for (i = 1; i <= m_roiMapSize; i++) {
 		if (m_roiMap[i] == p_roi) {
-			if (local5c[i].Unknown(local58) != SUCCESS) {
+			if (local5c[i].BETA_1005a590(local58) != SUCCESS) {
 				goto done;
 			}
 
@@ -930,8 +930,8 @@ void LegoAnimPresenter::FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p
 		MxMatrix transform(mat);
 		p_anim->GetCamAnim()->FUN_1009f490(p_time, transform);
 
-		if (m_currentWorld != NULL && m_currentWorld->GetCamera() != NULL) {
-			m_currentWorld->GetCamera()->FUN_100123e0(transform, 0);
+		if (m_currentWorld != NULL && m_currentWorld->GetCameraController() != NULL) {
+			m_currentWorld->GetCameraController()->FUN_100123e0(transform, 0);
 		}
 	}
 

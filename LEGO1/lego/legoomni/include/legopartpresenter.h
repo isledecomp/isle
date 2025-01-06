@@ -13,6 +13,9 @@ public:
 	// FUNCTION: LEGO1 0x10067300
 	~LegoPartPresenter() override { Destroy(TRUE); }
 
+	// FUNCTION: LEGO1 0x1000cf60
+	void Destroy() override { Destroy(FALSE); } // vtable+0x38
+
 	// FUNCTION: BETA10 0x100a75d0
 	static const char* HandlerClassName()
 	{
@@ -35,7 +38,6 @@ public:
 
 	void ReadyTickle() override;      // vtable+0x18
 	MxResult AddToManager() override; // vtable+0x34
-	void Destroy() override;          // vtable+0x38
 
 	static void configureLegoPartPresenter(MxS32, MxS32);
 

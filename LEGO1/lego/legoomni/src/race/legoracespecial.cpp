@@ -166,7 +166,7 @@ MxS32 LegoCarRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 
 			m_destEdge->FUN_1002ddc0(*m_boundary, destEdgeUnknownVector);
 
-			crossProduct.EqualsCross(m_boundary->GetUnknown0x14(), &destEdgeUnknownVector);
+			crossProduct.EqualsCross(*m_boundary->GetUnknown0x14(), destEdgeUnknownVector);
 			crossProduct.Unitize();
 
 			Mx3DPointFloat worldDirection(Vector3(m_roi->GetWorldDirection()));
@@ -260,8 +260,8 @@ MxResult LegoCarRaceActor::VTable0x9c()
 		d->FUN_1002ddc0(*b, point2);
 		m_destEdge->FUN_1002ddc0(*m_boundary, point3);
 
-		point4.EqualsCross(&point2, m_boundary->GetUnknown0x14());
-		point5.EqualsCross(m_boundary->GetUnknown0x14(), &point3);
+		point4.EqualsCross(point2, *m_boundary->GetUnknown0x14());
+		point5.EqualsCross(*m_boundary->GetUnknown0x14(), point3);
 
 		point4.Unitize();
 		point5.Unitize();

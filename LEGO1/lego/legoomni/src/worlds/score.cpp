@@ -32,12 +32,6 @@ Score::Score()
 	NotificationManager()->Register(this);
 }
 
-// FUNCTION: LEGO1 0x100010b0
-MxBool Score::VTable0x5c()
-{
-	return TRUE;
-}
-
 // FUNCTION: LEGO1 0x10001200
 Score::~Score()
 {
@@ -260,7 +254,8 @@ void Score::Paint()
 		memset(&desc, 0, sizeof(desc));
 		desc.dwSize = sizeof(desc);
 
-		if (cube->m_surface->Lock(NULL, &desc, 0, NULL) == DD_OK) {
+		HRESULT result = cube->m_surface->Lock(NULL, &desc, DDLOCK_SURFACEMEMORYPTR, NULL);
+		if (result == DD_OK) {
 			if (desc.lPitch != desc.dwWidth) {
 				cube->m_surface->Unlock(desc.lpSurface);
 				return;
@@ -296,13 +291,17 @@ void Score::Paint()
 
 // FUNCTION: LEGO1 0x10001d20
 // FUNCTION: BETA10 0x100f4a52
-void Score::FillArea(MxU32 i_activity, MxU32 i_actor, MxS16 score)
+void Score::FillArea(MxS32 i_activity, MxS32 i_actor, MxS16 score)
 {
 	MxS32 local3c[] = {0x2b00, 0x5700, 0x8000, 0xab00, 0xd600};
 	MxS32 local14[] = {0x2a, 0x27, 0x29, 0x29, 0x2a};
 	MxS32 local50[] = {0x2f, 0x56, 0x81, 0xaa, 0xd4};
 	MxS32 local28[] = {0x25, 0x29, 0x27, 0x28, 0x28};
 	MxS32 colors[] = {0x11, 0x0f, 0x08, 0x05};
+
+	assert(i_activity >= 0 && i_activity < 5);
+	assert(i_actor >= 0 && i_actor < 5);
+	assert(score >= 0 && score < 4);
 
 	MxU8* ptr = m_surface + local3c[i_actor] + local50[i_activity];
 	MxS32 color = colors[score];

@@ -38,7 +38,7 @@ MXIOINFO::~MXIOINFO()
 MxU16 MXIOINFO::Open(const char* p_filename, MxULong p_flags)
 {
 	OFSTRUCT unused;
-	MxU16 result = 0;
+	MxU16 result = MMSYSERR_NOERROR;
 
 	m_info.lDiskOffset = m_info.lBufOffset = 0;
 
@@ -84,7 +84,7 @@ MxU16 MXIOINFO::Open(const char* p_filename, MxULong p_flags)
 // FUNCTION: BETA10 0x1015e30b
 MxU16 MXIOINFO::Close(MxLong p_unused)
 {
-	MxU16 result = 0;
+	MxU16 result = MMSYSERR_NOERROR;
 
 	if (RAW_M_FILE) {
 		result = Flush(0);
@@ -317,7 +317,7 @@ MxLong MXIOINFO::Seek(MxLong p_offset, MxLong p_origin)
 // FUNCTION: BETA10 0x1015e9ad
 MxU16 MXIOINFO::SetBuffer(char* p_buf, MxLong p_len, MxLong p_unused)
 {
-	MxU16 result = 0;
+	MxU16 result = MMSYSERR_NOERROR;
 	result = Flush(0);
 
 	if (m_info.dwFlags & MMIO_ALLOCBUF) {
@@ -337,7 +337,7 @@ MxU16 MXIOINFO::SetBuffer(char* p_buf, MxLong p_len, MxLong p_unused)
 // FUNCTION: BETA10 0x1015ea3e
 MxU16 MXIOINFO::Flush(MxU16 p_unused)
 {
-	MxU16 result = 0;
+	MxU16 result = MMSYSERR_NOERROR;
 	MxLong bytesWritten;
 
 	// if buffer is dirty
@@ -389,7 +389,7 @@ MxU16 MXIOINFO::Flush(MxU16 p_unused)
 // FUNCTION: BETA10 0x1015eb8f
 MxU16 MXIOINFO::Advance(MxU16 p_option)
 {
-	MxU16 result = 0;
+	MxU16 result = MMSYSERR_NOERROR;
 	MxULong rwmode = m_info.dwFlags & MMIO_RWMODE;
 
 	if (m_info.pchBuffer) {
@@ -463,7 +463,7 @@ MxU16 MXIOINFO::Advance(MxU16 p_option)
 // FUNCTION: BETA10 0x1015edef
 MxU16 MXIOINFO::Descend(MMCKINFO* p_chunkInfo, const MMCKINFO* p_parentInfo, MxU16 p_descend)
 {
-	MxU16 result = 0;
+	MxU16 result = MMSYSERR_NOERROR;
 	MxULong ofs;
 	BOOL readOk;
 
@@ -554,7 +554,7 @@ MxU16 MXIOINFO::Ascend(MMCKINFO* p_chunkInfo, MxU16 p_ascend)
 {
 	MxLong ofs;
 	MxULong size;
-	MxU16 result = 0;
+	MxU16 result = MMSYSERR_NOERROR;
 
 	if (p_chunkInfo == NULL) {
 		return MMIOERR_BASE;
@@ -605,10 +605,50 @@ MxU16 MXIOINFO::Ascend(MMCKINFO* p_chunkInfo, MxU16 p_ascend)
 	}
 
 	// Seek past the end of the chunk (plus optional pad byte if size is odd)
-	if (result == 0 &&
+	if (result == MMSYSERR_NOERROR &&
 		Seek((p_chunkInfo->cksize & 1) + p_chunkInfo->cksize + p_chunkInfo->dwDataOffset, SEEK_SET) == -1) {
 		result = MMIOERR_CANNOTSEEK;
 	}
 
+	return result;
+}
+
+// FUNCTION: BETA10 0x1015f28b
+MxU16 MXIOINFO::CreateChunk(MMCKINFO* p_chunkInfo, MxU16 p_create)
+{
+	MxU16 result = MMSYSERR_NOERROR;
+
+	if (p_chunkInfo == NULL) {
+		return MMIOERR_BASE;
+	}
+
+	if (p_create == MMIO_CREATERIFF) {
+		p_chunkInfo->ckid = FOURCC_RIFF;
+	}
+	if (p_create == MMIO_CREATELIST) {
+		p_chunkInfo->ckid = FOURCC_LIST;
+	}
+
+	p_chunkInfo->dwDataOffset = Seek(0, SEEK_CUR);
+	if (p_chunkInfo->dwDataOffset == -1) {
+		result = MMIOERR_CANNOTSEEK;
+	}
+	else {
+		p_chunkInfo->dwDataOffset += 8;
+	}
+
+	MxU32 size;
+	if (p_chunkInfo->ckid == FOURCC_RIFF || p_chunkInfo->ckid == FOURCC_LIST) {
+		size = 12;
+	}
+	else {
+		size = 8;
+	}
+
+	if (Write(p_chunkInfo, size) != size) {
+		result = MMIOERR_CANNOTWRITE;
+	}
+
+	p_chunkInfo->dwFlags = MMIO_DIRTY;
 	return result;
 }

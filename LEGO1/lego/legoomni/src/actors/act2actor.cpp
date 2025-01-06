@@ -311,7 +311,7 @@ void Act2Actor::Animate(float p_time)
 				local30 -= local60;
 				local30.Unitize();
 
-				MxFloat dotproduct = local18.Dot(&local30, &local18);
+				MxFloat dotproduct = local18.Dot(local30, local18);
 
 				if (dotproduct >= 0.0) {
 					const MxFloat* pepperWorldPosition = roiPepper->GetWorldPosition();
@@ -443,6 +443,8 @@ void Act2Actor::FUN_10019560()
 MxS32 Act2Actor::VTable0xa0()
 {
 	undefined4 newLocation;
+
+	assert(!m_grec);
 
 	CurrentWorld();
 	MxU16 randomVal = rand() / (RAND_MAX / 2) + 1;
@@ -613,9 +615,9 @@ MxU32 Act2Actor::FUN_10019700(MxFloat p_param)
 	col2 = col3;
 	col2 -= m_unk0x4c->GetROI()->GetWorldPosition();
 	col2.Unitize();
-	col0.EqualsCross(&col1, &col2);
+	col0.EqualsCross(col1, col2);
 	col0.Unitize();
-	col1.EqualsCross(&col2, &col0);
+	col1.EqualsCross(col2, col0);
 
 	assert(!m_cameraFlag);
 
@@ -866,14 +868,4 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 	}
 
 	return result;
-}
-
-// FUNCTION: LEGO1 0x1001a180
-MxS32 Act2Actor::VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3)
-{
-	if (m_unk0x1f) {
-		return 0;
-	}
-
-	return LegoAnimActor::VTable0x68(p_v1, p_v2, p_v3);
 }

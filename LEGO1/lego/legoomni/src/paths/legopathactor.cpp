@@ -16,6 +16,7 @@
 #include "mxutilities.h"
 #include "mxvariabletable.h"
 
+#include <mxdebug.h>
 #include <vec.h>
 
 DECOMP_SIZE_ASSERT(LegoPathActor, 0x154)
@@ -142,11 +143,11 @@ MxResult LegoPathActor::VTable0x88(
 		dir *= -1.0f;
 	}
 
-	right.EqualsCross(&up, &dir);
+	right.EqualsCross(up, dir);
 	m_roi->UpdateTransformationRelativeToParent(matrix);
 
 	if (!m_cameraFlag || !m_userNavFlag) {
-		p5.EqualsCross(p_boundary->GetUnknown0x14(), &p3);
+		p5.EqualsCross(*p_boundary->GetUnknown0x14(), p3);
 		p5.Unitize();
 
 		if (VTable0x80(p1, p4, p2, p5) == SUCCESS) {
@@ -208,11 +209,11 @@ MxResult LegoPathActor::VTable0x84(
 		dir *= -1.0f;
 	}
 
-	right.EqualsCross(&up, &dir);
+	right.EqualsCross(up, dir);
 	m_roi->UpdateTransformationRelativeToParent(matrix);
 
 	if (!m_cameraFlag || !m_userNavFlag) {
-		p5.EqualsCross(p_boundary->GetUnknown0x14(), &p3);
+		p5.EqualsCross(*p_boundary->GetUnknown0x14(), p3);
 		p5.Unitize();
 
 		if (VTable0x80(p_p1, p_p4, p2, p5) == SUCCESS) {
@@ -233,7 +234,7 @@ MxResult LegoPathActor::VTable0x84(
 
 // FUNCTION: LEGO1 0x1002e100
 // FUNCTION: BETA10 0x100b0520
-MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
+MxS32 LegoPathActor::VTable0x8c(float p_time, MxMatrix& p_transform)
 {
 	if (m_userNavFlag && m_actorState == c_initial) {
 		m_lastTime = p_time;
@@ -243,22 +244,27 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 		p4 = Vector3(m_roi->GetWorldPosition());
 
 		LegoNavController* nav = NavController();
+		assert(nav);
+
 		m_worldSpeed = nav->GetLinearVel();
 
 		if (nav->CalculateNewPosDir(p4, p5, p2, p1, m_boundary->GetUnknown0x14())) {
 			Mx3DPointFloat p6;
 			p6 = p2;
+			MxS32 result = 0;
 
 			m_unk0xe9 = m_boundary->Intersect(m_roi->GetWorldBoundingSphere().Radius(), p4, p2, p3, m_destEdge);
 			if (m_unk0xe9 == -1) {
+				MxTrace("Intersect returned -1\n");
 				return -1;
 			}
-
-			if (m_unk0xe9 != 0) {
-				p2 = p3;
+			else {
+				if (m_unk0xe9 != 0) {
+					p2 = p3;
+				}
 			}
 
-			MxS32 result = VTable0x68(p4, p2, p3);
+			result = VTable0x68(p4, p2, p3);
 
 			if (result > 0) {
 				p2 = p4;
@@ -308,11 +314,17 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 
 			dir = p1;
 			up = *m_boundary->GetUnknown0x14();
-			right.EqualsCross(&up, &dir);
-			right.Unitize();
-			dir.EqualsCross(&right, &up);
+			right.EqualsCross(up, dir);
+
+			MxS32 res = right.Unitize();
+			assert(res == 0);
+
+			dir.EqualsCross(right, up);
 			pos = p2;
 			return result;
+		}
+		else {
+			return -1;
 		}
 	}
 	else if (p_time >= 0 && m_worldSpeed > 0) {
@@ -332,12 +344,15 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 		m_lastTime = f;
 		p_transform.SetIdentity();
 
+		LegoResult r;
 		if (m_userNavFlag) {
-			m_unk0x8c.FUN_1009a1e0(m_unk0x7c / m_BADuration, p_transform, *m_boundary->GetUnknown0x14(), 0);
+			r = m_unk0x8c.FUN_1009a1e0(m_unk0x7c / m_BADuration, p_transform, *m_boundary->GetUnknown0x14(), 0);
 		}
 		else {
-			m_unk0x8c.FUN_1009a1e0(m_unk0x7c / m_BADuration, p_transform, *m_boundary->GetUnknown0x14(), 1);
+			r = m_unk0x8c.FUN_1009a1e0(m_unk0x7c / m_BADuration, p_transform, *m_boundary->GetUnknown0x14(), 1);
 		}
+
+		assert(r == 0); // SUCCESS
 
 		Vector3 pos1(p_transform[3]);
 		Vector3 pos2(m_unk0xec[3]);
@@ -350,16 +365,17 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 		else {
 			m_boundary->FUN_100575b0(pos2, pos1, this);
 			pos2 = pos1;
+		}
 
-			if (m_unk0xe9 != 0) {
-				VTable0x9c();
-			}
-
-			return 0;
+		if (m_unk0xe9 != 0) {
+			VTable0x9c();
 		}
 	}
+	else {
+		return -1;
+	}
 
-	return -1;
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x1002e740
@@ -414,7 +430,7 @@ void LegoPathActor::Animate(float p_time)
 			LegoWorld* world = CurrentWorld();
 
 			if (world) {
-				world->GetCamera()->FUN_10012290(DTOR(m_unk0x14c));
+				world->GetCameraController()->FUN_10012290(DTOR(m_unk0x14c));
 			}
 		}
 	}
@@ -636,7 +652,7 @@ MxResult LegoPathActor::VTable0x9c()
 		LERP3(local34, v1, v2, m_unk0xe4);
 
 		m_destEdge->FUN_1002ddc0(*m_boundary, local78);
-		local48.EqualsCross(m_boundary->GetUnknown0x14(), &local78);
+		local48.EqualsCross(*m_boundary->GetUnknown0x14(), local78);
 		local48.Unitize();
 	}
 
@@ -646,10 +662,10 @@ MxResult LegoPathActor::VTable0x9c()
 
 	upRef = *m_boundary->GetUnknown0x14();
 
-	rightRef.EqualsCross(&upRef, &dirRef);
+	rightRef.EqualsCross(upRef, dirRef);
 	rightRef.Unitize();
 
-	dirRef.EqualsCross(&rightRef, &upRef);
+	dirRef.EqualsCross(rightRef, upRef);
 	dirRef.Unitize();
 
 	Mx3DPointFloat localc0(m_unk0xec[3]);

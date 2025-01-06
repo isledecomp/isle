@@ -1,15 +1,15 @@
-#include "mxsmack.h"
+#include "mxsmk.h"
 
 #include "mxbitmap.h"
 
 #include <string.h>
 
 DECOMP_SIZE_ASSERT(SmackTag, 0x390);
-DECOMP_SIZE_ASSERT(MxSmack, 0x6b8);
+DECOMP_SIZE_ASSERT(MxSmk, 0x6b8);
 
 // FUNCTION: LEGO1 0x100c5a90
 // FUNCTION: BETA10 0x10151e70
-MxResult MxSmack::LoadHeader(MxU8* p_data, MxSmack* p_mxSmack)
+MxResult MxSmk::LoadHeader(MxU8* p_data, MxSmk* p_mxSmk)
 {
 // Macros for readability
 // If bit0 of SmackerType is set, there is an extra frame ("ring frame")
@@ -29,15 +29,15 @@ MxResult MxSmack::LoadHeader(MxU8* p_data, MxSmack* p_mxSmack)
 	MxU32 size;
 	MxS32 width;
 
-	if (!p_data || !p_mxSmack) {
+	if (!p_data || !p_mxSmk) {
 		return FAILURE;
 	}
 
-	SmackTag* smackTag = &p_mxSmack->m_smackTag;
-	p_mxSmack->m_frameTypes = NULL;
-	p_mxSmack->m_frameSizes = NULL;
-	p_mxSmack->m_huffmanTrees = NULL;
-	p_mxSmack->m_huffmanTables = NULL;
+	SmackTag* smackTag = &p_mxSmk->m_smackTag;
+	p_mxSmk->m_frameTypes = NULL;
+	p_mxSmk->m_frameSizes = NULL;
+	p_mxSmk->m_huffmanTrees = NULL;
+	p_mxSmk->m_huffmanTables = NULL;
 
 	memcpy(smackTag, p_data, SmackHeaderSize(smackTag));
 	p_data += SmackHeaderSize(smackTag);
@@ -52,11 +52,11 @@ MxResult MxSmack::LoadHeader(MxU8* p_data, MxSmack* p_mxSmack)
 	memcpy(frameSizes, p_data, FRAME_COUNT(smackTag) * sizeof(MxU32));
 
 	p_data += FRAME_COUNT(smackTag) * sizeof(MxU32);
-	p_mxSmack->m_maxFrameSize = 0;
+	p_mxSmk->m_maxFrameSize = 0;
 
 	for (i = 0; i < FRAME_COUNT(smackTag); i++) {
-		if (p_mxSmack->m_maxFrameSize < frameSizes[i]) {
-			p_mxSmack->m_maxFrameSize = frameSizes[i];
+		if (p_mxSmk->m_maxFrameSize < frameSizes[i]) {
+			p_mxSmk->m_maxFrameSize = frameSizes[i];
 		}
 	}
 
@@ -82,17 +82,17 @@ MxResult MxSmack::LoadHeader(MxU8* p_data, MxSmack* p_mxSmack)
 	p_data += smackTag->tablesize;
 
 	sizetables = SmackGetSizeTables();
-	p_mxSmack->m_huffmanTables =
+	p_mxSmk->m_huffmanTables =
 		new MxU8[smackTag->codesize + smackTag->detailsize + smackTag->typesize + smackTag->absize + sizetables];
 
-	if (!p_mxSmack->m_huffmanTables) {
+	if (!p_mxSmk->m_huffmanTables) {
 		result = FAILURE;
 		goto done;
 	}
 
 	SmackDoTables(
 		huffmanTrees,
-		p_mxSmack->m_huffmanTables,
+		p_mxSmk->m_huffmanTables,
 		smackTag->codesize,
 		smackTag->absize,
 		smackTag->detailsize,
@@ -100,11 +100,11 @@ MxResult MxSmack::LoadHeader(MxU8* p_data, MxSmack* p_mxSmack)
 	);
 
 	size = SmackGetSizeDeltas(smackTag->Width, smackTag->Height) + 32;
-	p_mxSmack->m_unk0x6b4 = new MxU8[size];
-	memset(p_mxSmack->m_unk0x6b4, 0, size);
+	p_mxSmk->m_unk0x6b4 = new MxU8[size];
+	memset(p_mxSmk->m_unk0x6b4, 0, size);
 
-	width = p_mxSmack->m_smackTag.Width;
-	data = (MxU32*) p_mxSmack->m_unk0x6b4;
+	width = p_mxSmk->m_smackTag.Width;
+	data = (MxU32*) p_mxSmk->m_unk0x6b4;
 
 	*data = 1;
 	data++;
@@ -128,9 +128,9 @@ MxResult MxSmack::LoadHeader(MxU8* p_data, MxSmack* p_mxSmack)
 	*data = smackTag->Height;
 
 done:
-	p_mxSmack->m_frameTypes = frameTypes;
-	p_mxSmack->m_frameSizes = frameSizes;
-	p_mxSmack->m_huffmanTrees = huffmanTrees;
+	p_mxSmk->m_frameTypes = frameTypes;
+	p_mxSmk->m_frameSizes = frameSizes;
+	p_mxSmk->m_huffmanTrees = huffmanTrees;
 	return result;
 
 #undef FRAME_COUNT
@@ -138,38 +138,38 @@ done:
 
 // FUNCTION: LEGO1 0x100c5d40
 // FUNCTION: BETA10 0x10152298
-void MxSmack::Destroy(MxSmack* p_mxSmack)
+void MxSmk::Destroy(MxSmk* p_mxSmk)
 {
-	if (p_mxSmack->m_frameSizes) {
-		delete[] p_mxSmack->m_frameSizes;
+	if (p_mxSmk->m_frameSizes) {
+		delete[] p_mxSmk->m_frameSizes;
 	}
-	if (p_mxSmack->m_frameTypes) {
-		delete[] p_mxSmack->m_frameTypes;
+	if (p_mxSmk->m_frameTypes) {
+		delete[] p_mxSmk->m_frameTypes;
 	}
-	if (p_mxSmack->m_huffmanTrees) {
-		delete[] p_mxSmack->m_huffmanTrees;
+	if (p_mxSmk->m_huffmanTrees) {
+		delete[] p_mxSmk->m_huffmanTrees;
 	}
-	if (p_mxSmack->m_huffmanTables) {
-		delete[] p_mxSmack->m_huffmanTables;
+	if (p_mxSmk->m_huffmanTables) {
+		delete[] p_mxSmk->m_huffmanTables;
 	}
-	if (p_mxSmack->m_unk0x6b4) {
-		delete[] p_mxSmack->m_unk0x6b4;
+	if (p_mxSmk->m_unk0x6b4) {
+		delete[] p_mxSmk->m_unk0x6b4;
 	}
 }
 
 // FUNCTION: LEGO1 0x100c5db0
 // FUNCTION: BETA10 0x10152391
-MxResult MxSmack::LoadFrame(
+MxResult MxSmk::LoadFrame(
 	MxBITMAPINFO* p_bitmapInfo,
 	MxU8* p_bitmapData,
-	MxSmack* p_mxSmack,
+	MxSmk* p_mxSmk,
 	MxU8* p_chunkData,
 	MxBool p_paletteChanged,
 	MxRectList* p_list
 )
 {
 	p_bitmapInfo->m_bmiHeader.biHeight = -MxBitmap::HeightAbs(p_bitmapInfo->m_bmiHeader.biHeight);
-	*(MxU8**) (p_mxSmack->m_unk0x6b4 + 4) = p_bitmapData;
+	*(MxU8**) (p_mxSmk->m_unk0x6b4 + 4) = p_bitmapData;
 
 	// Reference: https://wiki.multimedia.cx/index.php/Smacker#Palette_Chunk
 	if (p_paletteChanged) {
@@ -179,7 +179,7 @@ MxResult MxSmack::LoadFrame(
 		MxU8* intoPalette = palette;
 		MxU16 paletteIndex = 0;
 		// TODO: struct incorrect, Palette at wrong offset?
-		MxU8* currentPalette = &p_mxSmack->m_smackTag.Palette[4];
+		MxU8* currentPalette = &p_mxSmk->m_smackTag.Palette[4];
 
 		do {
 			if (*intoChunk & 0x80) {
@@ -217,13 +217,13 @@ MxResult MxSmack::LoadFrame(
 		p_chunkData += *p_chunkData * 4;
 	}
 
-	SmackDoFrameToBuffer(p_chunkData, p_mxSmack->m_huffmanTables, p_mxSmack->m_unk0x6b4);
+	SmackDoFrameToBuffer(p_chunkData, p_mxSmk->m_huffmanTables, p_mxSmk->m_unk0x6b4);
 
 	MxU16 und = 1;
 	u32 smackRect[4];
 	MxRect32 rect;
 
-	while (GetRect(p_mxSmack->m_unk0x6b4, &und, smackRect, &rect)) {
+	while (GetRect(p_mxSmk->m_unk0x6b4, &und, smackRect, &rect)) {
 		MxRect32* newRect = new MxRect32(rect);
 		p_list->Append(newRect);
 	}
@@ -233,7 +233,7 @@ MxResult MxSmack::LoadFrame(
 
 // FUNCTION: LEGO1 0x100c6050
 // FUNCTION: BETA10 0x10152739
-MxBool MxSmack::GetRect(MxU8* p_unk0x6b4, MxU16* p_und, u32* p_smackRect, MxRect32* p_rect)
+MxBool MxSmk::GetRect(MxU8* p_unk0x6b4, MxU16* p_und, u32* p_smackRect, MxRect32* p_rect)
 {
 	u32 left, bottom, top, right;
 

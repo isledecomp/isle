@@ -381,7 +381,7 @@ void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender
 // FUNCTION: LEGO1 0x1003eab0
 void SetCameraControllerFromIsle()
 {
-	InputManager()->SetCamera(FindWorld(*g_isleScript, IsleScript::c__Isle)->GetCamera());
+	InputManager()->SetCamera(FindWorld(*g_isleScript, IsleScript::c__Isle)->GetCameraController());
 }
 
 // FUNCTION: LEGO1 0x1003eae0
@@ -709,7 +709,7 @@ void WriteDefaultTexture(LegoFile* p_file, const char* p_name)
 				}
 				else {
 					MxU8* surface = (MxU8*) desc.lpSurface;
-					LegoU8* bits = image->GetBits();
+					const LegoU8* bits = image->GetBits();
 
 					for (MxS32 i = 0; i < desc.dwHeight; i++) {
 						memcpy(surface, bits, desc.dwWidth);

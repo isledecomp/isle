@@ -20,12 +20,6 @@ MxS32 g_partPresenterConfig1 = 1;
 // GLOBAL: LEGO1 0x100f7aa4
 MxS32 g_partPresenterConfig2 = 100;
 
-// FUNCTION: LEGO1 0x1000cf60
-void LegoPartPresenter::Destroy()
-{
-	Destroy(FALSE);
-}
-
 // FUNCTION: LEGO1 0x1007c990
 void LegoPartPresenter::configureLegoPartPresenter(MxS32 p_partPresenterConfig1, MxS32 p_partPresenterConfig2)
 {

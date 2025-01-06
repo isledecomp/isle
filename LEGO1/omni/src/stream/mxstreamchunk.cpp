@@ -96,6 +96,7 @@ MxU32* MxStreamChunk::IntoObjectId(MxU8* p_buffer)
 }
 
 // FUNCTION: LEGO1 0x100c31a0
+// FUNCTION: BETA10 0x10151626
 MxLong* MxStreamChunk::IntoTime(MxU8* p_buffer)
 {
 	return (MxLong*) (p_buffer + 0x0e);

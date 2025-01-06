@@ -1,6 +1,7 @@
 #include "legoanim.h"
 
 #include "mxgeometry/mxmatrix.h"
+#include "mxgeometry/mxquaternion.h"
 
 #include <limits.h>
 
@@ -231,10 +232,10 @@ LegoResult LegoAnimScene::FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix)
 	local54 -= localb8;
 
 	if (local54.Unitize() == 0) {
-		local5c.EqualsCross(&local68, &local54);
+		local5c.EqualsCross(local68, local54);
 
 		if (local5c.Unitize() == 0) {
-			local68.EqualsCross(&local54, &local5c);
+			local68.EqualsCross(local54, local5c);
 
 			localcc = p_matrix[3];
 			localcc += localb0[3];
@@ -851,7 +852,7 @@ inline void LegoAnimNodeData::GetTranslation(
 		break;
 	case 2:
 		Mx4DPointFloat a;
-		UnknownMx4DPointFloat b;
+		MxQuaternionTransformer b;
 
 		if (p_rotationKeys[i].TestBit1() || p_rotationKeys[i + 1].TestBit1()) {
 			a[0] = p_rotationKeys[i].GetX();
@@ -878,9 +879,9 @@ inline void LegoAnimNodeData::GetTranslation(
 				c[3] = p_rotationKeys[i + 1].GetAngle();
 			}
 
-			b.BETA_10180b80(a);
-			b.BETA_10180bc0(c);
-			b.BETA_1004aaa0(
+			b.SetStart(a);
+			b.SetEnd(c);
+			b.InterpolateToMatrix(
 				p_matrix,
 				(p_time - p_rotationKeys[i].GetTime()) / (p_rotationKeys[i + 1].GetTime() - p_rotationKeys[i].GetTime())
 			);
@@ -1163,7 +1164,7 @@ undefined4 LegoAnim::GetActorUnknown0x04(LegoU32 p_index)
 		return m_modelList[p_index].m_unk0x04;
 	}
 
-	return NULL;
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x100a0f60

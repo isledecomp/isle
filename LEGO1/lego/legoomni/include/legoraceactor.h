@@ -34,9 +34,7 @@ public:
 	MxU32 VTable0x90(float p_time, Matrix4& p_matrix) override;             // vtable+0x90
 	MxResult HitActor(LegoPathActor* p_actor, MxBool p_bool) override;      // vtable+0x94
 
-	// FUNCTION: LEGO1 0x10014aa0
-	// FUNCTION: BETA10 0x100ca038
-	virtual MxResult FUN_10014aa0() { return SUCCESS; }
+	virtual MxResult FUN_10014aa0();
 
 	// SYNTHETIC: LEGO1 0x10012c10
 	// LegoRaceActor::`vbase destructor'

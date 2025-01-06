@@ -15,6 +15,15 @@ public:
 	// FUNCTION: LEGO1 0x1000d640
 	~MxWavePresenter() override { Destroy(TRUE); } // vtable+0x00
 
+	// FUNCTION: LEGO1 0x1000d6a0
+	void Destroy() override { Destroy(FALSE); } // vtable+0x38
+
+	virtual void Pause();  // vtable+0x64
+	virtual void Resume(); // vtable+0x68
+
+	// FUNCTION: LEGO1 0x1000d6b0
+	virtual MxBool IsPaused() { return m_paused; } // vtable+0x6c
+
 	// FUNCTION: BETA10 0x1008cd00
 	static const char* HandlerClassName()
 	{
@@ -35,26 +44,17 @@ public:
 		return !strcmp(p_name, MxWavePresenter::ClassName()) || MxSoundPresenter::IsA(p_name);
 	}
 
-	void ReadyTickle() override;      // vtable+0x18
-	void StartingTickle() override;   // vtable+0x1c
-	void StreamingTickle() override;  // vtable+0x20
-	void DoneTickle() override;       // vtable+0x2c
-	void ParseExtra() override;       // vtable+0x30
-	MxResult AddToManager() override; // vtable+0x34
-
-	// FUNCTION: LEGO1 0x1000d6a0
-	void Destroy() override { Destroy(FALSE); } // vtable+0x38
-
+	void ReadyTickle() override;                     // vtable+0x18
+	void StartingTickle() override;                  // vtable+0x1c
+	void StreamingTickle() override;                 // vtable+0x20
+	void DoneTickle() override;                      // vtable+0x2c
+	void ParseExtra() override;                      // vtable+0x30
+	MxResult AddToManager() override;                // vtable+0x34
 	void EndAction() override;                       // vtable+0x40
 	MxResult PutData() override;                     // vtable+0x4c
 	void Enable(MxBool p_enable) override;           // vtable+0x54
 	void LoopChunk(MxStreamChunk* p_chunk) override; // vtable+0x58
 	void SetVolume(MxS32 p_volume) override;         // vtable+0x60
-	virtual void Pause();                            // vtable+0x64
-	virtual void Resume();                           // vtable+0x68
-
-	// FUNCTION: LEGO1 0x1000d6b0
-	virtual MxBool IsPaused() { return m_paused; } // vtable+0x6c
 
 	// SIZE 0x18
 	struct WaveFormat {
