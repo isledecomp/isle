@@ -271,7 +271,7 @@ MxResult LegoCarRaceActor::VTable0x9c()
 
 		MxResult res = VTable0x80(m_roi->GetWorldPosition(), point4, point1, point5);
 
-#ifndef NDEBUG // BETA10 only
+#ifdef BETA10
 		if (res) {
 			assert(0);
 			return -1;
