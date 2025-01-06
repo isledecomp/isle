@@ -68,7 +68,7 @@ public:
 	// FUNCTION: BETA10 0x10148c60
 	MxU8* GetBuffer() { return m_pBuffer; }
 
-	MxU8** GetBufferRef() { return &m_pBuffer; }
+	// FUNCTION: BETA10 0x10164240
 	undefined4 GetUnknown14() { return m_unk0x14; }
 
 	// FUNCTION: BETA10 0x10156420
@@ -85,7 +85,10 @@ public:
 
 	void SetUnknown14(undefined4 p_unk0x14) { m_unk0x14 = p_unk0x14; }
 	void SetUnknown1c(undefined4 p_unk0x1c) { m_unk0x1c = p_unk0x1c; }
+
+	// FUNCTION: BETA10 0x10164260
 	void SetMode(Type p_mode) { m_mode = p_mode; }
+
 	void SetUnk30(MxDSStreamingAction* p_unk0x30) { m_unk0x30 = p_unk0x30; }
 
 	// SYNTHETIC: LEGO1 0x100c6510
