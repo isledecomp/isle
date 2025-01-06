@@ -102,62 +102,63 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100d0d80
+// FUNCTION: BETA10 0x1016492f
 MxU32 ReadData(MxU8* p_buffer, MxU32 p_size)
 {
 	MxU32 id;
 	MxU8* data = p_buffer;
-	MxU8* end = p_buffer + p_size;
 	MxU8* data2;
 
-	if (p_buffer < end) {
-		do {
-			if (*MxDSChunk::IntoType(data) == FOURCC('M', 'x', 'O', 'b')) {
-				data2 = data;
-				data += 8;
+#define IntoType(p) ((MxU32*) (p))
 
-				MxDSObject* obj = DeserializeDSObjectDispatch(data, -1);
-				id = obj->GetObjectId();
-				delete obj;
+	while (data < p_buffer + p_size) {
+		if (*IntoType(data) == FOURCC('M', 'x', 'O', 'b')) {
+			data2 = data;
+			data = data2 + 8;
 
-				data = MxDSChunk::End(data2);
-				while (data < end) {
-					if (*MxDSChunk::IntoType(data) == FOURCC('M', 'x', 'C', 'h')) {
-						MxU8* data3 = data;
-						MxU32* psize = MxDSChunk::IntoLength(data);
-						data += MxDSChunk::Size(*psize);
+			MxDSObject* obj = DeserializeDSObjectDispatch(data, -1);
+			id = obj->GetObjectId();
+			delete obj;
 
-						if ((*MxDSChunk::IntoType(data2) == FOURCC('M', 'x', 'C', 'h')) &&
-							(*MxStreamChunk::IntoFlags(data2) & DS_CHUNK_SPLIT)) {
-							if (*MxStreamChunk::IntoObjectId(data2) == *MxStreamChunk::IntoObjectId(data3) &&
-								(*MxStreamChunk::IntoFlags(data3) & DS_CHUNK_SPLIT) &&
-								*MxStreamChunk::IntoTime(data2) == *MxStreamChunk::IntoTime(data3)) {
-								MxDSBuffer::Append(data2, data3);
-								continue;
-							}
-							else {
-								*MxStreamChunk::IntoFlags(data2) &= ~DS_CHUNK_SPLIT;
-							}
+			data = MxDSChunk::End(data2);
+			while (data < p_buffer + p_size) {
+				if (*IntoType(data) == FOURCC('M', 'x', 'C', 'h')) {
+					MxU8* data3 = data;
+					data = MxDSChunk::End(data3);
+
+					if ((*IntoType(data2) == FOURCC('M', 'x', 'C', 'h')) &&
+						(*MxStreamChunk::IntoFlags(data2) & DS_CHUNK_SPLIT)) {
+						if (*MxStreamChunk::IntoObjectId(data2) == *MxStreamChunk::IntoObjectId(data3) &&
+							(*MxStreamChunk::IntoFlags(data3) & DS_CHUNK_SPLIT) &&
+							*MxStreamChunk::IntoTime(data2) == *MxStreamChunk::IntoTime(data3)) {
+							MxDSBuffer::Append(data2, data3);
+							continue;
 						}
-
-						data2 += MxDSChunk::Size(*MxDSChunk::IntoLength(data2));
-						memcpy(data2, data3, MxDSChunk::Size(*psize));
-
-						if (*MxStreamChunk::IntoObjectId(data2) == id &&
-							(*MxStreamChunk::IntoFlags(data2) & DS_CHUNK_END_OF_STREAM)) {
-							break;
+						else {
+							*MxStreamChunk::IntoFlags(data2) &= ~DS_CHUNK_SPLIT;
 						}
 					}
-					else {
-						data++;
+
+					data2 = MxDSChunk::End(data2);
+					memcpy(data2, data3, MxDSChunk::Size(data3));
+
+					if (*MxStreamChunk::IntoObjectId(data2) == id &&
+						(*MxStreamChunk::IntoFlags(data2) & DS_CHUNK_END_OF_STREAM)) {
+						break;
 					}
 				}
+				else {
+					data++;
+				}
 			}
-			else {
-				data++;
-			}
-		} while (data < end);
+		}
+		else {
+			data++;
+		}
 	}
 
 	*MxStreamChunk::IntoFlags(data2) &= ~DS_CHUNK_SPLIT;
-	return MxDSChunk::End(data2) - p_buffer;
+	return MxDSChunk::Size(data2) + (MxU32) (data2 - p_buffer);
+
+#undef IntoType
 }
