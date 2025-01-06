@@ -6,6 +6,7 @@
 class MxDSBuffer;
 
 // VTABLE: LEGO1 0x100dd088
+// VTABLE: BETA10 0x101c2850
 // SIZE 0xb4
 class MxDSStreamingAction : public MxDSAction {
 public:
@@ -14,20 +15,10 @@ public:
 	~MxDSStreamingAction() override;
 
 	MxDSStreamingAction* CopyFrom(MxDSStreamingAction& p_dsStreamingAction);
-	MxDSStreamingAction& operator=(MxDSAction& p_dsAction)
-	{
-		MxDSAction::operator=(p_dsAction);
-		return *this;
-	}
-	MxDSStreamingAction& operator=(MxDSStreamingAction& p_dsStreamingAction)
-	{
-		MxDSAction::operator=(p_dsStreamingAction);
-		return *this;
-	}
 
-	MxBool HasId(MxU32 p_objectId) override; // vtable+34;
+	MxBool HasId(MxU32 p_objectId) override; // vtable+0x34;
 
-	MxResult Init();
+	void Init();
 	void SetInternalAction(MxDSAction* p_dsAction);
 	void FUN_100cd2d0();
 
@@ -70,6 +61,7 @@ public:
 	void ClearUnknowna0() { m_unk0xa0 = NULL; }
 
 	// SYNTHETIC: LEGO1 0x100cd0b0
+	// SYNTHETIC: BETA10 0x101565f0
 	// MxDSStreamingAction::`scalar deleting destructor'
 
 private:
