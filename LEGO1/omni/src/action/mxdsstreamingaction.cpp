@@ -10,7 +10,7 @@ MxDSStreamingAction::MxDSStreamingAction(MxDSAction& p_dsAction, MxU32 p_offset)
 {
 	Init();
 
-	*(MxDSAction*) this = p_dsAction;
+	MxDSAction::operator=(p_dsAction);
 	m_unk0x94 = p_offset;
 	m_bufferOffset = p_offset;
 }
@@ -63,7 +63,7 @@ void MxDSStreamingAction::Init()
 // FUNCTION: BETA10 0x1015f5b9
 MxDSStreamingAction* MxDSStreamingAction::CopyFrom(MxDSStreamingAction& p_dsStreamingAction)
 {
-	*(MxDSAction*) this = p_dsStreamingAction;
+	MxDSAction::operator=(p_dsStreamingAction);
 	m_unk0x94 = p_dsStreamingAction.m_unk0x94;
 	m_bufferOffset = p_dsStreamingAction.m_bufferOffset;
 	m_unk0x9c = p_dsStreamingAction.m_unk0x9c;
