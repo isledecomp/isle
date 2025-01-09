@@ -52,4 +52,8 @@ public:
 	const float* operator[](int idx) const { return m_data[idx]; }
 };
 
+#ifdef COMPAT_MODE
+#include "matrix4d.inl.h"
+#endif
+
 #endif // MATRIX_H
