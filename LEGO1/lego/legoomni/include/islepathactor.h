@@ -28,6 +28,7 @@ public:
 
 	// SIZE 0x38
 	struct SpawnLocation {
+		// FUNCTION: LEGO1 0x1001a6f0
 		SpawnLocation() {}
 
 		// FUNCTION: LEGO1 0x1001b1b0
