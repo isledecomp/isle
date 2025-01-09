@@ -517,11 +517,12 @@ MxResult LegoRaceCar::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 				}
 			}
 
-			if (p_bool && m_worldSpeed != 0) {
-				return SUCCESS;
+			if (p_bool) {
+				return m_worldSpeed != 0 ? SUCCESS : FAILURE;
 			}
-
-			return FAILURE;
+			else {
+				return FAILURE;
+			}
 		}
 	}
 
@@ -717,11 +718,12 @@ MxResult LegoJetski::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 				}
 			}
 
-			if (p_bool && m_worldSpeed != 0) {
-				return SUCCESS;
+			if (p_bool) {
+				return m_worldSpeed != 0 ? SUCCESS : FAILURE;
 			}
-
-			return FAILURE;
+			else {
+				return FAILURE;
+			}
 		}
 	}
 
