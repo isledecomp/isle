@@ -3,6 +3,9 @@
 
 #include "vector.h"
 
+#include <math.h>
+#include <memory.h>
+
 // FUNCTION: LEGO1 0x10002870
 void Vector4::AddImpl(const float* p_value)
 {

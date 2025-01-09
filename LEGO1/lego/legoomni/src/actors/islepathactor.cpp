@@ -19,9 +19,6 @@
 DECOMP_SIZE_ASSERT(IslePathActor, 0x160)
 DECOMP_SIZE_ASSERT(IslePathActor::SpawnLocation, 0x38)
 
-// GLOBAL: LEGO1 0x10102b28
-IslePathActor::SpawnLocation g_spawnLocations[IslePathActor::c_LOCATIONS_NUM];
-
 // FUNCTION: LEGO1 0x1001a200
 IslePathActor::IslePathActor()
 {
@@ -156,6 +153,9 @@ void IslePathActor::Exit()
 	FUN_10010c30();
 	FUN_1003eda0();
 }
+
+// GLOBAL: LEGO1 0x10102b28
+IslePathActor::SpawnLocation g_spawnLocations[IslePathActor::c_LOCATIONS_NUM];
 
 // FUNCTION: LEGO1 0x1001a700
 void IslePathActor::RegisterSpawnLocations()
