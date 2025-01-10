@@ -1,15 +1,18 @@
 #ifndef LEGOWORLD_H
 #define LEGOWORLD_H
 
+// clang-format off
+#include "mxpresenterlist.h"
+#include "legoentitylist.h"
+#include "legocachesoundlist.h"
+// clang-format on
+
 #include "legoentity.h"
 #include "legomain.h"
 #include "legopathcontrollerlist.h"
-#include "mxpresenterlist.h"
 #include "roi/legoroi.h"
 
-class LegoCacheSoundList;
 class LegoCameraController;
-class LegoEntityList;
 class LegoPathBoundary;
 class LegoHideAnimPresenter;
 
@@ -44,8 +47,26 @@ public:
 	LegoWorld();
 	~LegoWorld() override; // vtable+0x00
 
-	MxLong Notify(MxParam& p_param) override; // vtable+0x04
-	MxResult Tickle() override;               // vtable+0x08
+	MxLong Notify(MxParam& p_param) override;         // vtable+0x04
+	MxResult Tickle() override;                       // vtable+0x08
+	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
+	virtual void ReadyWorld();                        // vtable+0x50
+	virtual LegoCameraController* VTable0x54();       // vtable+0x54
+	virtual void Add(MxCore* p_object);               // vtable+0x58
+
+	// The BETA10 match could also be LegoWorld::Escape(), only the child classes might be able to tell
+	// FUNCTION: LEGO1 0x1001d670
+	// FUNCTION: BETA10 0x10017530
+	virtual MxBool VTable0x5c() { return FALSE; } // vtable+0x5c
+
+	// FUNCTION: LEGO1 0x100010a0
+	virtual void VTable0x60() {} // vtable+0x60
+
+	// FUNCTION: LEGO1 0x1001d680
+	virtual MxBool Escape() { return FALSE; } // vtable+0x64
+
+	virtual void Enable(MxBool p_enable); // vtable+0x68
 
 	// FUNCTION: LEGO1 0x1001d690
 	// FUNCTION: BETA10 0x10017660
@@ -61,19 +82,6 @@ public:
 	{
 		return !strcmp(p_name, LegoWorld::ClassName()) || LegoEntity::IsA(p_name);
 	}
-
-	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
-	virtual void ReadyWorld();                        // vtable+0x50
-	virtual LegoCameraController* VTable0x54();       // vtable+0x54
-	virtual void Add(MxCore* p_object);               // vtable+0x58
-	virtual MxBool VTable0x5c();                      // vtable+0x5c
-
-	// FUNCTION: LEGO1 0x100010a0
-	virtual void VTable0x60() {} // vtable+0x60
-
-	virtual MxBool Escape();              // vtable+0x64
-	virtual void Enable(MxBool p_enable); // vtable+0x68
 
 	MxBool PresentersPending();
 	void Remove(MxCore* p_object);

@@ -12,12 +12,13 @@ public:
 		SetDestroy(Destroy);
 	}
 
+	virtual MxS8 Compare(T, T) { return 0; } // vtable+0x14
+
+	~MxCollection() override {}
+
 	static void Destroy(T) {}
 
 	void SetDestroy(void (*p_customDestructor)(T)) { this->m_customDestructor = p_customDestructor; }
-
-	~MxCollection() override {}
-	virtual MxS8 Compare(T, T) { return 0; }
 
 protected:
 	MxU32 m_count;                 // 0x08

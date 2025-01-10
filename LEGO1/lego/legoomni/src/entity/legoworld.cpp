@@ -4,11 +4,9 @@
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
 #include "legobuildingmanager.h"
-#include "legocachesoundlist.h"
 #include "legocachesoundmanager.h"
 #include "legocameracontroller.h"
 #include "legocontrolmanager.h"
-#include "legoentitylist.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legolocomotionanimpresenter.h"
@@ -45,20 +43,6 @@ LegoWorld::LegoWorld() : m_list0x68(TRUE)
 	m_worldStarted = FALSE;
 
 	NotificationManager()->Register(this);
-}
-
-// FUNCTION: LEGO1 0x1001d670
-// FUNCTION: BETA10 0x10017530
-MxBool LegoWorld::VTable0x5c()
-{
-	// The BETA10 match could also be LegoWorld::Escape(), only the child classes might be able to tell
-	return FALSE;
-}
-
-// FUNCTION: LEGO1 0x1001d680
-MxBool LegoWorld::Escape()
-{
-	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x1001dfa0

@@ -46,8 +46,7 @@ template <class T>
 class MxList : protected MxCollection<T> {
 public:
 	MxList() { m_first = m_last = NULL; }
-
-	~MxList() override;
+	~MxList() override { DeleteAll(); }
 
 	void Append(T p_obj) { InsertEntry(p_obj, this->m_last, NULL); }
 	void Prepend(T p_obj) { InsertEntry(p_obj, NULL, this->m_first); }
@@ -126,12 +125,6 @@ class MxPtrListCursor : public MxListCursor<T*> {
 public:
 	MxPtrListCursor(MxPtrList<T>* p_list) : MxListCursor<T*>(p_list) {}
 };
-
-template <class T>
-MxList<T>::~MxList()
-{
-	DeleteAll();
-}
 
 // Delete entries and values
 template <class T>
