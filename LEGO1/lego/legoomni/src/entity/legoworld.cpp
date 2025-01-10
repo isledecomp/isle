@@ -1,14 +1,9 @@
 #include "legoworld.h"
 
-// clang-format off
-#include "legoentitylist.h"
-// clang-format on
-
 #include "anim/legoanim.h"
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
 #include "legobuildingmanager.h"
-#include "legocachesoundlist.h"
 #include "legocachesoundmanager.h"
 #include "legocameracontroller.h"
 #include "legocontrolmanager.h"

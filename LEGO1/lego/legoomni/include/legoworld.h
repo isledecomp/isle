@@ -3,6 +3,8 @@
 
 // clang-format off
 #include "mxpresenterlist.h"
+#include "legoentitylist.h"
+#include "legocachesoundlist.h"
 // clang-format on
 
 #include "legoentity.h"
@@ -10,9 +12,7 @@
 #include "legopathcontrollerlist.h"
 #include "roi/legoroi.h"
 
-class LegoCacheSoundList;
 class LegoCameraController;
-class LegoEntityList;
 class LegoPathBoundary;
 class LegoHideAnimPresenter;
 
