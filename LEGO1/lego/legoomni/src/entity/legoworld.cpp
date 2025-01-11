@@ -402,68 +402,88 @@ MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_boundaries, MxS32& p_nu
 // FUNCTION: BETA10 0x100da90b
 void LegoWorld::Add(MxCore* p_object)
 {
-	if (p_object && !p_object->IsA("LegoWorld") && !p_object->IsA("LegoWorldPresenter")) {
-		if (p_object->IsA("LegoAnimPresenter")) {
-			LegoAnimPresenter* animPresenter = (LegoAnimPresenter*) p_object;
+	if (p_object == NULL || p_object->IsA("LegoWorld") || p_object->IsA("LegoWorldPresenter")) {
+		return;
+	}
 
-			if (!strcmpi(animPresenter->GetAction()->GetObjectName(), "ConfigAnimation")) {
-				FUN_1003e050(animPresenter);
-				animPresenter->GetAction()->SetDuration(animPresenter->GetAnimation()->GetDuration());
-			}
+#ifndef BETA10
+	if (p_object->IsA("LegoAnimPresenter")) {
+		if (!strcmpi(((LegoAnimPresenter*) p_object)->GetAction()->GetObjectName(), "ConfigAnimation")) {
+			FUN_1003e050((LegoAnimPresenter*) p_object);
+			((LegoAnimPresenter*) p_object)
+				->GetAction()
+				->SetDuration(((LegoAnimPresenter*) p_object)->GetAnimation()->GetDuration());
+		}
+	}
+#endif
+
+	if (p_object->IsA("MxControlPresenter")) {
+		MxPresenterListCursor cursor(&m_controlPresenters);
+
+		if (cursor.Find((MxPresenter*) p_object)) {
+			assert(0);
+			return;
 		}
 
-		if (p_object->IsA("MxControlPresenter")) {
-			MxPresenterListCursor cursor(&m_controlPresenters);
+		m_controlPresenters.Append((MxPresenter*) p_object);
+	}
+	else if (p_object->IsA("MxEntity")) {
+		LegoEntityListCursor cursor(m_entityList);
 
-			if (cursor.Find((MxPresenter*) p_object)) {
-				return;
-			}
-
-			m_controlPresenters.Append((MxPresenter*) p_object);
+		if (cursor.Find((LegoEntity*) p_object)) {
+			assert(0);
+			return;
 		}
-		else if (p_object->IsA("MxEntity")) {
-			LegoEntityListCursor cursor(m_entityList);
 
-			if (cursor.Find((LegoEntity*) p_object)) {
-				return;
-			}
+		m_entityList->Append((LegoEntity*) p_object);
+	}
+	else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
+		MxPresenterListCursor cursor(&m_animPresenters);
 
-			m_entityList->Append((LegoEntity*) p_object);
+		if (cursor.Find((MxPresenter*) p_object)) {
+			assert(0);
+			return;
 		}
-		else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
-			MxPresenterListCursor cursor(&m_animPresenters);
 
-			if (cursor.Find((MxPresenter*) p_object)) {
-				return;
-			}
+		((MxPresenter*) p_object)->SendToCompositePresenter(Lego());
+		m_animPresenters.Append(((MxPresenter*) p_object));
 
-			((MxPresenter*) p_object)->SendToCompositePresenter(Lego());
-			m_animPresenters.Append(((MxPresenter*) p_object));
-
-			if (p_object->IsA("LegoHideAnimPresenter")) {
-				m_hideAnim = (LegoHideAnimPresenter*) p_object;
-			}
+		if (p_object->IsA("LegoHideAnimPresenter")) {
+			m_hideAnim = (LegoHideAnimPresenter*) p_object;
 		}
-		else if (p_object->IsA("LegoCacheSound")) {
-			LegoCacheSoundListCursor cursor(m_cacheSoundList);
+	}
+#ifndef BETA10
+	else if (p_object->IsA("LegoCacheSound")) {
+		LegoCacheSoundListCursor cursor(m_cacheSoundList);
 
-			if (cursor.Find((LegoCacheSound*) p_object)) {
-				return;
+		if (cursor.Find((LegoCacheSound*) p_object)) {
+			assert(0); // ?
+			return;
+		}
+
+		m_cacheSoundList->Append((LegoCacheSound*) p_object);
+	}
+#endif
+	else {
+		MxCoreSet::iterator it = m_set0xa8.find(p_object);
+		if (it == m_set0xa8.end()) {
+#ifdef BETA10
+			if (p_object->IsA("MxPresenter")) {
+				assert(static_cast<MxPresenter*>(p_object)->GetAction());
 			}
+#endif
 
-			m_cacheSoundList->Append((LegoCacheSound*) p_object);
+			m_set0xa8.insert(p_object);
 		}
 		else {
-			if (m_set0xa8.find(p_object) == m_set0xa8.end()) {
-				m_set0xa8.insert(p_object);
-			}
+			assert(0);
 		}
+	}
 
-		if (!m_set0xd0.empty() && p_object->IsA("MxPresenter")) {
-			if (((MxPresenter*) p_object)->IsEnabled()) {
-				((MxPresenter*) p_object)->Enable(FALSE);
-				m_set0xd0.insert(p_object);
-			}
+	if (m_set0xd0.size() != 0 && p_object->IsA("MxPresenter")) {
+		if (((MxPresenter*) p_object)->IsEnabled()) {
+			((MxPresenter*) p_object)->Enable(FALSE);
+			m_set0xd0.insert(p_object);
 		}
 	}
 }
@@ -472,60 +492,64 @@ void LegoWorld::Add(MxCore* p_object)
 // FUNCTION: BETA10 0x100dad2a
 void LegoWorld::Remove(MxCore* p_object)
 {
-	if (p_object) {
-		MxCoreSet::iterator it;
+	MxCoreSet::iterator it;
 
-		if (p_object->IsA("MxControlPresenter")) {
-			MxPresenterListCursor cursor(&m_controlPresenters);
+	if (p_object == NULL) {
+		return;
+	}
 
-			if (cursor.Find((MxControlPresenter*) p_object)) {
-				cursor.Detach();
-				((MxControlPresenter*) p_object)->GetAction()->SetOrigin(Lego());
-				((MxControlPresenter*) p_object)->VTable0x68(TRUE);
-			}
+	if (p_object->IsA("MxControlPresenter")) {
+		MxPresenterListCursor cursor(&m_controlPresenters);
+
+		if (cursor.Find((MxControlPresenter*) p_object)) {
+			cursor.Detach();
+			((MxControlPresenter*) p_object)->GetAction()->SetOrigin(Lego());
+			((MxControlPresenter*) p_object)->VTable0x68(TRUE);
 		}
-		else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
-			MxPresenterListCursor cursor(&m_animPresenters);
+	}
+	else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
+		MxPresenterListCursor cursor(&m_animPresenters);
 
-			if (cursor.Find((MxPresenter*) p_object)) {
-				cursor.Detach();
-			}
-
-			if (p_object->IsA("LegoHideAnimPresenter")) {
-				m_hideAnim = NULL;
-			}
+		if (cursor.Find((MxPresenter*) p_object)) {
+			cursor.Detach();
 		}
-		else if (p_object->IsA("MxEntity")) {
-			if (p_object->IsA("LegoPathActor")) {
-				RemoveActor((LegoPathActor*) p_object);
-			}
 
-			if (m_entityList) {
-				LegoEntityListCursor cursor(m_entityList);
-
-				if (cursor.Find((LegoEntity*) p_object)) {
-					cursor.Detach();
-				}
-			}
+		if (p_object->IsA("LegoHideAnimPresenter")) {
+			m_hideAnim = NULL;
 		}
-		else if (p_object->IsA("LegoCacheSound")) {
-			LegoCacheSoundListCursor cursor(m_cacheSoundList);
+	}
+	else if (p_object->IsA("MxEntity")) {
+		if (p_object->IsA("LegoPathActor")) {
+			RemoveActor((LegoPathActor*) p_object);
+		}
 
-			if (cursor.Find((LegoCacheSound*) p_object)) {
+		if (m_entityList) {
+			LegoEntityListCursor cursor(m_entityList);
+
+			if (cursor.Find((LegoEntity*) p_object)) {
 				cursor.Detach();
 			}
 		}
-		else {
-			it = m_set0xa8.find(p_object);
-			if (it != m_set0xa8.end()) {
-				m_set0xa8.erase(it);
-			}
-		}
+	}
+#ifndef BETA10
+	else if (p_object->IsA("LegoCacheSound")) {
+		LegoCacheSoundListCursor cursor(m_cacheSoundList);
 
-		it = m_set0xd0.find(p_object);
-		if (it != m_set0xd0.end()) {
-			m_set0xd0.erase(it);
+		if (cursor.Find((LegoCacheSound*) p_object)) {
+			cursor.Detach();
 		}
+	}
+#endif
+	else {
+		it = m_set0xa8.find(p_object);
+		if (it != m_set0xa8.end()) {
+			m_set0xa8.erase(it);
+		}
+	}
+
+	it = m_set0xd0.find(p_object);
+	if (it != m_set0xd0.end()) {
+		m_set0xd0.erase(it);
 	}
 }
 
@@ -643,57 +667,66 @@ MxCore* LegoWorld::Find(const MxAtomId& p_atom, MxS32 p_entityId)
 // FUNCTION: BETA10 0x100db758
 void LegoWorld::Enable(MxBool p_enable)
 {
-	if (p_enable && !m_set0xd0.empty()) {
-		if (CurrentWorld() != this) {
-			if (CurrentWorld()) {
-				AnimationManager()->FUN_10061010(FALSE);
-				CurrentWorld()->Enable(FALSE);
+	MxCoreSet::iterator it;
 
-				LegoEntityListCursor cursor(m_entityList);
-				LegoEntity* entity;
-
-				while (cursor.Next(entity)) {
-					if (entity->GetROI()) {
-						entity->GetROI()->SetEntity(entity);
-						GetViewManager()->Add(entity->GetROI());
-					}
-				}
-			}
-
-			while (!m_set0xd0.empty()) {
-				MxCoreSet::iterator it = m_set0xd0.begin();
-
-				if ((*it)->IsA("MxPresenter")) {
-					((MxPresenter*) *it)->Enable(TRUE);
-				}
-				else if ((*it)->IsA("LegoPathController")) {
-					((LegoPathController*) *it)->Enable(TRUE);
-				}
-
-				m_set0xd0.erase(it);
-			}
-
-			SetCurrentWorld(this);
-			ControlManager()->FUN_10028df0(&m_controlPresenters);
-			InputManager()->SetCamera(m_cameraController);
-
-			if (m_cameraController) {
-				InputManager()->Register(m_cameraController->GetNavController());
-				Lego()->SetNavController(m_cameraController->GetNavController());
-			}
-
-			if (m_worldId != LegoOmni::e_undefined) {
-				PlantManager()->LoadWorldInfo(m_worldId);
-				AnimationManager()->LoadWorldInfo(m_worldId);
-				BuildingManager()->LoadWorldInfo();
-				AnimationManager()->Resume();
-			}
-
-			GameState()->ResetROI();
-			SetIsWorldActive(TRUE);
+	if (p_enable && m_set0xd0.size() != 0) {
+		if (CurrentWorld() == this) {
+			return;
 		}
+		if (CurrentWorld()) {
+			AnimationManager()->FUN_10061010(FALSE);
+			CurrentWorld()->Enable(FALSE);
+
+			LegoEntityListCursor cursor(m_entityList);
+			LegoEntity* entity;
+
+			while (cursor.Next(entity)) {
+				assert(entity->GetROI());
+
+				if (entity->GetROI()) {
+#ifndef BETA10
+					entity->GetROI()->SetEntity(entity);
+#endif
+					GetViewManager()->Add(entity->GetROI());
+				}
+			}
+		}
+
+		while (m_set0xd0.size() != 0) {
+			it = m_set0xd0.begin();
+
+			if ((*it)->IsA("MxPresenter")) {
+				((MxPresenter*) *it)->Enable(TRUE);
+			}
+			else if ((*it)->IsA("LegoPathController")) {
+				((LegoPathController*) *it)->Enable(TRUE);
+			}
+
+			m_set0xd0.erase(it);
+		}
+
+		SetCurrentWorld(this);
+		ControlManager()->FUN_10028df0(&m_controlPresenters);
+		InputManager()->SetCamera(m_cameraController);
+
+		if (m_cameraController) {
+			InputManager()->Register(m_cameraController->GetNavController());
+			Lego()->SetNavController(m_cameraController->GetNavController());
+		}
+
+		if (m_worldId != LegoOmni::e_undefined) {
+			PlantManager()->LoadWorldInfo(m_worldId);
+			AnimationManager()->LoadWorldInfo(m_worldId);
+			BuildingManager()->LoadWorldInfo();
+			AnimationManager()->Resume();
+		}
+
+		GameState()->ResetROI();
+#ifndef BETA10
+		SetIsWorldActive(TRUE);
+#endif
 	}
-	else if (!p_enable && m_set0xd0.empty()) {
+	else if (!p_enable && m_set0xd0.size() != 0) {
 		MxPresenter* presenter;
 		LegoPathController* controller;
 		LegoPathActor* actor = UserActor();
@@ -707,7 +740,9 @@ void LegoWorld::Enable(MxBool p_enable)
 
 		if (m_worldId != LegoOmni::e_undefined) {
 			PlantManager()->Reset(m_worldId);
+#ifndef BETA10
 			BuildingManager()->Reset();
+#endif
 		}
 
 		MxPresenterListCursor controlPresenterCursor(&m_controlPresenters);
