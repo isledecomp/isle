@@ -101,6 +101,7 @@ public:
 		Vector3& p_direction
 	);
 	void RemoveActor(LegoPathActor* p_actor);
+	MxBool ActorExists(LegoPathActor* p_actor);
 	void FUN_1001fda0(LegoAnimPresenter* p_presenter);
 	void FUN_1001fe90(LegoAnimPresenter* p_presenter);
 	LegoPathBoundary* FindPathBoundary(const char* p_name);

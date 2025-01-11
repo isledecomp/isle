@@ -334,6 +334,21 @@ void LegoWorld::RemoveActor(LegoPathActor* p_actor)
 	}
 }
 
+// FUNCTION: BETA10 0x100da560
+MxBool LegoWorld::ActorExists(LegoPathActor* p_actor)
+{
+	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathController* controller;
+
+	while (cursor.Next(controller)) {
+		if (controller->ActorExists(p_actor) == TRUE) {
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
 // FUNCTION: LEGO1 0x1001fda0
 // FUNCTION: BETA10 0x100da621
 void LegoWorld::FUN_1001fda0(LegoAnimPresenter* p_presenter)
