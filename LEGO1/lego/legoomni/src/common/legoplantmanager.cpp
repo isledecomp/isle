@@ -618,7 +618,11 @@ void LegoPlantManager::ScheduleAnimation(LegoEntity* p_entity, MxLong p_length)
 
 	entry->m_entity = p_entity;
 	entry->m_roi = p_entity->GetROI();
-	entry->m_time = Timer()->GetTime() + p_length + 1000;
+
+	MxLong time = Timer()->GetTime();
+	time += p_length;
+	entry->m_time = time + 1000;
+
 	FUN_100271b0(p_entity, -1);
 }
 

@@ -321,11 +321,9 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/paths/legoanimactor.cpp
     LEGO1/lego/legoomni/src/entity/legoworld.cpp
     LEGO1/lego/legoomni/src/build/legocarbuild.cpp
-    LEGO1/lego/legoomni/src/actors/ambulance.cpp
     LEGO1/lego/legoomni/src/common/legoplantmanager.cpp
     LEGO1/lego/legoomni/src/actors/bumpbouy.cpp
     LEGO1/modeldb/modeldb.cpp
-    LEGO1/lego/legoomni/src/actors/pizza.cpp
     LEGO1/lego/legoomni/src/actors/racecar.cpp
     LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp
     LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp
@@ -336,6 +334,8 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/paths/legopathactor.cpp
     LEGO1/lego/legoomni/src/common/legobuildingmanager.cpp
     LEGO1/lego/legoomni/src/worlds/isle.cpp
+    LEGO1/lego/legoomni/src/actors/ambulance.cpp
+    LEGO1/lego/legoomni/src/actors/pizza.cpp
     LEGO1/lego/legoomni/src/actors/motorcycle.cpp
     LEGO1/lego/legoomni/src/actors/act3ammo.cpp
     LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp
