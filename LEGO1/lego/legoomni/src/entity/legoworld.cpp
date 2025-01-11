@@ -726,11 +726,7 @@ void LegoWorld::Enable(MxBool p_enable)
 		SetIsWorldActive(TRUE);
 #endif
 	}
-#ifndef BETA10
 	else if (!p_enable && m_set0xd0.size() == 0) {
-#else
-	else if (!p_enable && m_set0xd0.size() != 0) {
-#endif
 		MxPresenter* presenter;
 		LegoPathController* controller;
 		LegoPathActor* actor = UserActor();
