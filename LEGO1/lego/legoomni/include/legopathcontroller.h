@@ -138,6 +138,9 @@ public:
 		MxFloat& p_param5
 	);
 
+	// FUNCTION: BETA10 0x100e0160
+	MxBool ActorExists(LegoPathActor* p_actor) { return m_actors.find(p_actor) == m_actors.end() ? FALSE : TRUE; }
+
 	static MxResult Init();
 	static MxResult Reset();
 
