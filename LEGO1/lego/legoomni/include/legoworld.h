@@ -184,7 +184,8 @@ protected:
 // TEMPLATE: LEGO1 0x10020b20
 // _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::iterator::_Dec
 
-// XTEMPLATE LEGO1 0x10020b70
+// TEMPLATE: LEGO1 0x10020b70
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::lower_bound
 
 // TEMPLATE: LEGO1 0x10020bb0
 // _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Buynode
