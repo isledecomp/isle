@@ -14,8 +14,6 @@ ENV/
 VENV/
 env.bak/
 venv.bak/
-/build/
-/build_debug/
 /legobin/
 *.swp
 LEGO1PROGRESS.*
@@ -25,5 +23,23 @@ tools/ghidra_scripts/import.log
 
 # By convention we put the retail binaries into ./legobin.
 # These entries are kept for now since that convention has not always been around.
-ISLE.EXE
-LEGO1.DLL
+build/*.EXE
+build/B_TMA.DLL
+build/X10_TMA.DLL
+build/*.pdb
+build/*.lib
+build/*.exp
+setupPaths.bat
+build/CMakeFiles/
+build/SAV/
+
+build/CMakeCache.txt
+build/Makefile
+build/cmake_install.cmake
+build/tma_sources.txt
+
+dgVoodooSetup.exe
+build/Lego/
+!build/Lego/Scripts
+build/Lego/Scripts/*
+!build/Lego/Scripts/NOCD.SI

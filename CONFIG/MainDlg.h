@@ -35,6 +35,7 @@ protected:
 	void OnCancel();
 	void OnDestroy();
 	void OnButtonCancel();
+	void OnApply();
 	void OnCheckbox3DSound();
 	void OnCheckbox3DVideoMemory();
 	void OnRadiobuttonPalette16bit();
@@ -48,6 +49,7 @@ protected:
 	void OnButtonAdvanced();
 	void OnCheckboxDrawCursor();
 	void OnCheckboxMusic();
+	void OnCheckboxFullscreen();
 
 	DECLARE_MESSAGE_MAP()
 };

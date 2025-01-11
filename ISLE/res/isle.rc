@@ -1,13 +1,21 @@
 #include "resource.h"
 
+//Why in the fuck does this resource code not accept animated cursor icons (.ani)?
+//What the fuck??
+
+//3 days later - Hello Dipshit, the syntax for animated cursors is ANICURSOR, not CURSOR
+//hope you found this helpful :3
+
 ISLE_ARROW 	CURSOR 	"arrow.cur"
-ISLE_NO 		CURSOR 	"no.cur"
+//ISLE_NO 		CURSOR 	"no.cur"
+ISLE_NO 		CURSOR 	"exclaim.cur"
 ISLE_BUSY 	CURSOR 	"busy.cur"
-APP_ICON 		ICON 		"isle.ico"
+//ISLE_BUSY 	ANICURSOR 	"busy.ani"
+APP_ICON 		ICON 		"TMA.ico"
 
 1 VERSIONINFO
-FILEVERSION 1,1,0,0
-PRODUCTVERSION 1,1,0,0
+FILEVERSION 0,0,0,1
+PRODUCTVERSION 0,0,0,1
 FILEOS 0x40004
 FILETYPE 0x1
 {
@@ -16,14 +24,14 @@ BLOCK "StringFileInfo"
 	BLOCK "040904b0"
 	{
 		VALUE "Comments", "DG JB AG RC EE"
-		VALUE "CompanyName", "Mindscape"
-		VALUE "FileDescription", "isle"
-		VALUE "FileVersion", "1, 1, 0, 0"
-		VALUE "InternalName", "isle"
-		VALUE "LegalCopyright", "Copyright \xA9 1997"
-		VALUE "OriginalFilename", "isle.exe"
-		VALUE "ProductName", "Adventures on LEGO Island"
-		VALUE "ProductVersion", "1, 1, 0, 0"
+		VALUE "CompanyName", "FUNNIMAN.EXE"
+		VALUE "FileDescription", "b_TMAOmni Library Launcher"
+		VALUE "FileVersion", "0, 0, 0, 1"
+		VALUE "InternalName", "b_TMAOmni Library Launcher"
+		VALUE "LegalCopyright", "Copyright \xA9 2025"
+		VALUE "OriginalFilename", "ISLE_LAUNCHER.EXE"
+		VALUE "ProductName", "LEGO Island: The Modder's Arrival"
+		VALUE "ProductVersion", "0, 0, 0, 1"
 		VALUE "SpecialBuild", "Very"
 	}
 }

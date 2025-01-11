@@ -1,0 +1,39 @@
+#include "resource.h"
+
+LEGO1_LEAF4 CURSOR "leaf_4.cur"
+LEGO1_LEAF7 CURSOR "leaf_7.cur"
+LEGO1_LEAF1 CURSOR "leaf_1.cur"
+LEGO1_LEAF2 CURSOR "leaf_2.cur"
+LEGO1_LEAF6 CURSOR "leaf_6.cur"
+LEGO1_LEAF0 CURSOR "leaf_0.cur"
+LEGO1_LEAF5 CURSOR "leaf_5.cur"
+LEGO1_LEAF3 CURSOR "leaf_3.cur"
+LEGO1_ARROW CURSOR "arrow.cur"
+LEGO1_BUSY  CURSOR "busy.cur"
+
+1 VERSIONINFO
+FILEVERSION 0,0,0,1
+PRODUCTVERSION 0,0,0,1
+FILEOS 0x40004
+FILETYPE 0x2
+{
+BLOCK "StringFileInfo"
+{
+	BLOCK "040904b0"
+	{
+		VALUE "CompanyName", "FUNNIMAN.EXE"
+		VALUE "FileDescription", "x10_TMAOmni Library"
+		VALUE "FileVersion", "0, 0, 0, 1"
+		VALUE "InternalName", "x10_TMAOmni Library"
+		VALUE "LegalCopyright", "Copyright \xA9 2025"
+		VALUE "OriginalFilename", "X10_TMA.DLL"
+		VALUE "ProductName", "LEGO Island: The Modder's Arrival"
+		VALUE "ProductVersion", "0, 0, 0, 1"
+	}
+}
+
+BLOCK "VarFileInfo"
+{
+	VALUE "Translation", 0x0409, 0x04B0
+}
+}

@@ -29,12 +29,17 @@ CConfigApp::CConfigApp()
 BOOL CConfigApp::InitInstance()
 {
 	if (!IsLegoNotRunning()) {
+		AfxMessageBox(
+			"\"LEGO Island: The Modder's Arrival\" configuration requests that you exit \"LEGO Island: The Modder's Arrival\" "
+			"before continuing. This ensures that no unwanted behavior occurs by preventing you from changing configurations "
+			"while the game is running."
+		);
 		return FALSE;
 	}
 	if (!DetectDirectX5()) {
 		AfxMessageBox(
-			"\"LEGO\xae Island\" is not detecting DirectX 5 or later.  Please quit all other applications and try "
-			"again."
+			"\"LEGO Island: The Modder's Arrival\" configuration failed to detect an installation of DirectX 5. Please ensure any possibly"
+			"interfering applications have been terminated before re-launching \"LEGO Island: The Modder's Arrival\"."
 		);
 		return FALSE;
 	}
@@ -45,7 +50,7 @@ BOOL CConfigApp::InitInstance()
 #endif
 	CConfigCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
-	if (_stricmp(afxCurrentAppName, "config") == 0) {
+	if (_stricmp(afxCurrentAppName, "configure") == 0) {
 		m_run_config_dialog = TRUE;
 	}
 	m_device_enumerator = new LegoDeviceEnumerate;
@@ -90,7 +95,7 @@ BOOL CConfigApp::InitInstance()
 		m_device = NULL;
 		char password[256];
 		ReadReg("password", password, sizeof(password));
-		const char* exe = _stricmp("ogel", password) == 0 ? "isled.exe" : "isle.exe";
+		const char* exe = _stricmp("ogel", password) == 0 ? "isled.exe" : "isle_tma.exe";
 		char diskpath[1024];
 		if (ReadReg("diskpath", diskpath, sizeof(diskpath))) {
 			_chdir(diskpath);
@@ -106,8 +111,17 @@ BOOL CConfigApp::InitInstance()
 // FUNCTION: CONFIG 0x00403100
 BOOL CConfigApp::IsLegoNotRunning()
 {
+	//hwnd is legacy, hwnd2 is the handle used by TMA
 	HWND hWnd = FindWindowA("Lego Island MainNoM App", "LEGO\xae");
-	if (_stricmp(afxCurrentAppName, "config") == 0 || !hWnd) {
+	HWND hWnd2 = FindWindowA("TMAOMNI PrimaryRuntimeWrapper", "LEGO Island: The Modder's Arrival");
+	// This only part of this code that works is checking whether the app filename is configure or not.
+	// Why does it even check for this.
+	// And the only part that should work doesn't. Why? Has it ever?
+	
+	// Hello me from 30 minutes ago - this was really fucking simple to fix. Are you stupid?
+	
+	//if (_stricmp(afxCurrentAppName, "configure") == 0 && hWnd && hWnd2) {
+	if (!hWnd && !hWnd2) {
 		return TRUE;
 	}
 	if (SetForegroundWindow(hWnd)) {
@@ -124,7 +138,7 @@ BOOL CConfigApp::WriteReg(const char* p_key, const char* p_value) const
 
 	if (RegCreateKeyExA(
 			HKEY_LOCAL_MACHINE,
-			"SOFTWARE\\Mindscape\\LEGO Island",
+			"SOFTWARE\\ActionSoft\\LEGO Island TMA",
 			0,
 			"string",
 			0,
@@ -153,7 +167,7 @@ BOOL CConfigApp::ReadReg(LPCSTR p_key, LPCSTR p_value, DWORD p_size) const
 
 	BOOL out = FALSE;
 	DWORD size = p_size;
-	if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Mindscape\\LEGO Island", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+	if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\ActionSoft\\LEGO Island TMA", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
 		if (RegQueryValueExA(hKey, p_key, NULL, &valueType, (LPBYTE) p_value, &size) == ERROR_SUCCESS) {
 			if (RegCloseKey(hKey) == ERROR_SUCCESS) {
 				out = TRUE;

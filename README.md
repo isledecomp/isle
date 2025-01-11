@@ -1,16 +1,6 @@
-# LEGO Island Decompilation
+# LEGO Island: The Modder's Arrival
 
-[Development Vlog](https://www.youtube.com/playlist?list=PLbpl-gZkNl2COf_bB6cfgTapD5WduAfPz) | [Contributing](/CONTRIBUTING.md) | [Matrix](https://matrix.to/#/#isledecomp:matrix.org) | [Forums](https://forum.mattkc.com/viewforum.php?f=1) | [Patreon](https://www.patreon.com/mattkc)
-  
-This is a functionally complete decompilation of LEGO Island (Version 1.1, English). It aims to be as accurate as possible, matching the recompiled instructions to the original machine code as much as possible. The goal is to provide a workable codebase that can be modified, improved, and ported to other platforms later on.
-
-## Status
-
-<img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="50%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="50%">
-
-Both `ISLE.EXE` and `LEGO1.DLL` are completely decompiled and, to the best of our knowledge, are functionally identical to the originals. However, work is still ongoing to improve the accuracy, naming, documentation, and structure of the source code. While there may still be unresolved bugs that are not present in retail, the game should be fully playable with the binaries derived from this source code.
-
-Due to various complexities with regard to the compiler, these binaries are not a byte-for-byte match of the original executables. We remain hopeful that this can be resolved at some point.
+## [Original LEGO Island decomp](https://github.com/isledecomp/isle)
 
 ## Building
 
@@ -30,18 +20,14 @@ You will need the following software installed:
 
 1. Open a Command Prompt (`cmd`).
 1. From Visual C++ 4.2, run `BIN/VCVARS32.BAT x86` to populate the path and other environment variables for compiling with MSVC.
-1. Make a folder for compiled objects to go, such as a `build` folder inside the source repository (the folder you cloned/downloaded to).
-1. In your Command Prompt, `cd` to the build folder.
-1. Configure the project with CMake by running:
-```
-cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo
-```
+1. Run "reconfigureCMake.bat" to configure CMake for building
+
   - **Visual C++ 4.2 has issues with paths containing spaces**. If you get configure or build errors, make sure neither CMake, the repository, nor Visual C++ 4.2 is in a path that contains spaces.
   - Replace `<path-to-source>` with the source repository. This can be `..` if your build folder is inside the source repository.
   - `RelWithDebInfo` is recommended because it will produce debug symbols useful for further decompilation work. However, you can change this to `Release` if you don't need them. While `Debug` builds can be compiled and used, they are not recommended as the primary goal is to match the code to the original binary. This is because the retail binaries were compiled as `Release` builds.
   - `NMake Makefiles` is most recommended because it will be immediately compatible with Visual C++ 4.2. For faster builds, you can use `Ninja` (if you have it installed), however due to limitations in Visual C++ 4.2, you can only build `Release` builds this way (debug symbols cannot be generated with `Ninja`).
-1. Build the project by running `nmake` or `cmake --build <build-folder>`
-1. When this is done, there should be a recompiled `ISLE.EXE` and `LEGO1.DLL` in the build folder.
+1. Build the project by running `nmake` or `cmake --build <build-folder>` or by running "compile.bat"
+1. When this is done, there should be a compiled `TMA_LAUNCHER.EXE` and `B_TMA.DLL` in the build folder.
 1. Note that `nmake` must be run twice under certain conditions, so it is advisable to always (re-)compile using `nmake && nmake`.
 
 If you have a CMake-compatible IDE, it should be pretty straightforward to use this repository, as long as you can use `VCVARS32.BAT` and set the generator to `NMake Makefiles`.
@@ -67,24 +53,19 @@ You can pass as many CMake flags as you'd like in the `CMAKE_FLAGS` environment 
 
 ## Usage
 
-The simplest way to use the recompiled binaries is to swap the original executables (`ISLE.EXE`, `LEGO1.DLL`, and `CONFIG.EXE`) in LEGO Island's installation directory for the ones that you've built from this source code. By default, LEGO Island is installed to `C:\Program Files\LEGO Island` on 32-bit operating systems and `C:\Program Files (x86)\LEGO Island` on 64-bit operating systems.
+In order to run TMA, you must first configure the `diskpath` environment variable (`usage of cdpath has been disabled entirely`). This is necessary since, currently, nothing creates this environment variable, or populates it.
 
-For advanced users, you can get LEGO Island to run from anywhere as long as `ISLE.EXE` and `LEGO1.DLL` are in the same directory and the `cdpath` and `diskpath` registry keys (usually found in `HKEY_LOCAL_MACHINE\Software\Mindscape\LEGO Island` on 32-bit operating systems and `HKEY_LOCAL_MACHINE\Software\Wow6432Node\Mindscape\LEGO Island` on 64-bit operating systems) point to the correct location for the asset files (the directory that contains the `LEGO` folder).
+The registry keys can be created in (usually found in `HKEY_LOCAL_MACHINE\Software\ActionSoft\LEGO Island TMA` on 32-bit operating systems and `HKEY_LOCAL_MACHINE\Software\Wow6432Node\ActionSoft\LEGO Island TMA` on 64-bit operating systems), and should point to the location where the `TMA_LAUNCHER.EXE`, `B_TMA.DLL`, and LEGO files/folders are stored (by default, this is the build folder). As long as you
 
-If you see an error about `d3drm.dll`, you will need to acquire a copy and place it in the same directory as the game executables, as it has not shipped with Windows since Windows XP. We have published a [known good copy here](https://legoisland.org/download/d3drm.zip) that works with LEGO Island.
+The build folder contains a copy of `d3drm.dll`, `D3D8.dll`, `D3DImm.dll`, `DDraw.dll`, and `dgVoodoo.conf` files, DO NOT REMOVE ANY OF THEM.
 
-## Contributing
+NOTE: Due to Github size limitations, and the fact this is a repo just for me to keep mirrored across devices, this repo does not include anything within the Lego folder. For the time being, access to the Lego folder cannot be requested, but may be able to in the future.
 
-If you're interested in helping or contributing to this project, check out the [CONTRIBUTING](/CONTRIBUTING.md) page.
+### What does what?
 
-## Additional Information
+`TMA_LAUNCHER.EXE` - The wrapper for `B_TMA.DLL`, launches the game - the equivalant to `ISLE.EXE`
 
-### Which version of LEGO Island do I have?
+`B_TMA.DLL` - The primary dll, containing all game logic - the equivalant to `LEGO1.DLL`
 
-Right click on `LEGO1.DLL`, select `Properties`, and switch to the `Details` tab. Under `Version` you should either see `1.0.0.0` (1.0) or `1.1.0.0` (1.1). Additionally, you can look at the game disc files; 1.0's files will all say August 8, 1997, and 1.1's files will all say September 8, 1997. Version 1.1 is by far the most common, especially if you're not using the English or Japanese versions, so that's most likely the version you have.
-
-Please note that some localized versions of LEGO Island were recompiled with small changes despite maintaining a version number parallel with other versions; this decompilation specifically targets the English release of version 1.1 of LEGO Island. You can verify you have the correct version using the checksums below:
-
-* ISLE.EXE `md5: f6da12249e03eed1c74810cd23beb9f5`
-* LEGO1.DLL `md5: 4e2f6d969ea2ef8655ba3fc221a0c8fe`
-* CONFIG.EXE `md5: 92d958a64a273662c591c88b09100f4a`
+`CONFIGURE.EXE` - Primary configuration application, contains some options - the equivalant to `CONFIG.EXE`
+                For more advanced configurations, you will need to acquire `dgVoodooSetup.exe`, and place it in the same folder as `dgVoodoo.conf`

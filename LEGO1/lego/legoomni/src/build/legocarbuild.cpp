@@ -130,6 +130,16 @@ LegoCarBuild::LegoCarBuild()
 	NotificationManager()->Register(this);
 }
 
+<<<<<<< Updated upstream
+// FUNCTION: LEGO1 0x10022930
+// FUNCTION: BETA10 0x10070070
+MxBool LegoCarBuild::VTable0x5c()
+{
+	return TRUE;
+}
+
+=======
+>>>>>>> Stashed changes
 // FUNCTION: LEGO1 0x10022a80
 // FUNCTION: BETA10 0x1006aea3
 LegoCarBuild::~LegoCarBuild()

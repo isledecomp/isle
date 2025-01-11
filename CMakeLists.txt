@@ -58,6 +58,7 @@ endfunction()
 message(STATUS "MSVC for decompilation: ${MSVC_FOR_DECOMP}")
 
 option(ISLE_WERROR "Treat warnings as errors" OFF)
+<<<<<<< Updated upstream
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
 cmake_dependent_option(ISLE_BUILD_CONFIG "Build CONFIG.EXE application" ON "NOT MINGW" OFF)
 option(ISLE_USE_SMARTHEAP "Build LEGO1.DLL with SmartHeap" ${MSVC_FOR_DECOMP})
@@ -66,6 +67,16 @@ option(ISLE_DECOMP_ASSERT "Assert struct size" ${MSVC_FOR_DECOMP})
 cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libraries" ON ISLE_USE_DX5 OFF)
 option(ISLE_BUILD_LEGO1 "Build LEGO1.DLL library" ON)
 option(ISLE_BUILD_BETA10 "Build BETA10.DLL library" OFF)
+=======
+option(ISLE_BUILD_APP "Build TMA_LAUNCHER.EXE application" ON)
+cmake_dependent_option(ISLE_BUILD_CONFIG "Build CONFIGURE.EXE application" ON "NOT MINGW" OFF)
+option(ISLE_USE_SMARTHEAP "Build B_TMA.DLL with SmartHeap" ${MSVC_FOR_DECOMP})
+option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
+option(ISLE_DECOMP_ASSERT "Assert struct size" ${MSVC_FOR_DECOMP})
+cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libraries" ON ISLE_USE_DX5 OFF)
+option(ISLE_BUILD_LEGO1 "Build B_TMA.DLL library" ON)
+option(ISLE_BUILD_BETA10 "Build X10_TMA.DLL library" OFF)
+>>>>>>> Stashed changes
 
 if(NOT (ISLE_BUILD_LEGO1 OR ISLE_BUILD_BETA10))
   message(FATAL_ERROR "ISLE_BUILD_LEGO1 AND ISLE_BUILD_BETA10 cannot be both disabled")
@@ -321,9 +332,17 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/paths/legoanimactor.cpp
     LEGO1/lego/legoomni/src/entity/legoworld.cpp
     LEGO1/lego/legoomni/src/build/legocarbuild.cpp
+<<<<<<< Updated upstream
+    LEGO1/lego/legoomni/src/actors/ambulance.cpp
     LEGO1/lego/legoomni/src/common/legoplantmanager.cpp
     LEGO1/lego/legoomni/src/actors/bumpbouy.cpp
     LEGO1/modeldb/modeldb.cpp
+    LEGO1/lego/legoomni/src/actors/pizza.cpp
+=======
+    LEGO1/lego/legoomni/src/common/legoplantmanager.cpp
+    LEGO1/lego/legoomni/src/actors/bumpbouy.cpp
+    LEGO1/modeldb/modeldb.cpp
+>>>>>>> Stashed changes
     LEGO1/lego/legoomni/src/actors/racecar.cpp
     LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp
     LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp
@@ -334,8 +353,11 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/paths/legopathactor.cpp
     LEGO1/lego/legoomni/src/common/legobuildingmanager.cpp
     LEGO1/lego/legoomni/src/worlds/isle.cpp
+<<<<<<< Updated upstream
+=======
     LEGO1/lego/legoomni/src/actors/ambulance.cpp
     LEGO1/lego/legoomni/src/actors/pizza.cpp
+>>>>>>> Stashed changes
     LEGO1/lego/legoomni/src/actors/motorcycle.cpp
     LEGO1/lego/legoomni/src/actors/act3ammo.cpp
     LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp
@@ -468,7 +490,11 @@ endif()
 if(ISLE_BUILD_LEGO1)
   add_lego_libraries(lego1
     LINK_LIBRARIES ${lego1_link_libraries}
+<<<<<<< Updated upstream
     DLL_OUTPUT_NAME "LEGO1"
+=======
+    DLL_OUTPUT_NAME "B_TMA"
+>>>>>>> Stashed changes
     DLL_PREFIX ""
     DLL_SUFFIX ".DLL"
     OUT_TARGETS lego1_targets
@@ -479,7 +505,11 @@ endif()
 if(ISLE_BUILD_BETA10)
   add_lego_libraries(beta10
     SUFFIX "-beta10"
+<<<<<<< Updated upstream
     DLL_OUTPUT_NAME "BETA10"
+=======
+    DLL_OUTPUT_NAME "X10_TMA"
+>>>>>>> Stashed changes
     DLL_PREFIX ""
     DLL_SUFFIX ".DLL"
     OUT_TARGETS beta10_targets
@@ -513,7 +543,11 @@ if (ISLE_BUILD_APP)
   endif()
 
   # Make sure filenames are ALL CAPS
+<<<<<<< Updated upstream
   set_property(TARGET isle PROPERTY OUTPUT_NAME ISLE)
+=======
+  set_property(TARGET isle PROPERTY OUTPUT_NAME TMA_LAUNCHER)
+>>>>>>> Stashed changes
   set_property(TARGET isle PROPERTY SUFFIX ".EXE")
 endif()
 
@@ -537,7 +571,11 @@ if (ISLE_BUILD_CONFIG)
   endif()
   target_compile_definitions(config PRIVATE DIRECT3D_VERSION=0x500)
   target_link_libraries(config PRIVATE ddraw dxguid)
+<<<<<<< Updated upstream
   set_property(TARGET config PROPERTY OUTPUT_NAME "CONFIG")
+=======
+  set_property(TARGET config PROPERTY OUTPUT_NAME "CONFIGURE")
+>>>>>>> Stashed changes
   set_property(TARGET config PROPERTY SUFFIX ".EXE")
   set_property(TARGET config PROPERTY MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug>DLL)
 endif()

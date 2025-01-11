@@ -2,7 +2,10 @@
 #define LEGOEXTRAACTOR_H
 
 #include "legoanimactor.h"
+<<<<<<< Updated upstream
+=======
 #include "legopathboundary.h"
+>>>>>>> Stashed changes
 
 // VTABLE: LEGO1 0x100d6c00 LegoAnimActor
 // VTABLE: LEGO1 0x100d6c10 LegoPathActor
@@ -37,9 +40,15 @@ public:
 		return !strcmp(p_name, LegoExtraActor::ClassName()) || LegoAnimActor::IsA(p_name);
 	}
 
+<<<<<<< Updated upstream
+	void SetWorldSpeed(MxFloat p_worldSpeed) override;       // vtable+0x30
+	MxS32 VTable0x68(Vector3&, Vector3&, Vector3&) override; // vtable+0x68
+	MxU32 VTable0x6c(
+=======
 	void SetWorldSpeed(MxFloat p_worldSpeed) override;                                  // vtable+0x30
 	MxS32 VTable0x68(Vector3& p_point1, Vector3& p_point2, Vector3& p_point3) override; // vtable+0x68
 	inline MxU32 VTable0x6c(
+>>>>>>> Stashed changes
 		LegoPathBoundary* p_boundary,
 		Vector3& p_v1,
 		Vector3& p_v2,
@@ -78,6 +87,8 @@ private:
 	LegoAnimActorStruct* m_disAnim; // 0x64
 };
 
+<<<<<<< Updated upstream
+=======
 // FUNCTION: LEGO1 0x1002b980
 inline MxU32 LegoExtraActor::VTable0x6c(
 	LegoPathBoundary* p_boundary,
@@ -180,6 +191,7 @@ inline MxU32 LegoExtraActor::VTable0x6c(
 	return 0;
 }
 
+>>>>>>> Stashed changes
 // GLOBAL: LEGO1 0x100d6be8
 // LegoExtraActor::`vbtable'{for `LegoAnimActor'}
 

@@ -1,3 +1,17 @@
+//------------------------------------------------------------------------------------------------------------------
+//
+// BE WARNED!!!
+//
+// YOU ARE STEPPING INTO THE TERRITORY OF DECOMPILED CODE VERSES A DUMBASS
+//
+// THERE WILL BE A LOT OF SHIT THAT IS STUPID - AND A LOT OF SHIT THAT CAN BE FIXED BUT I DONT KNOW HOW
+//
+// YOU HAVE BEEN WARNED
+//
+//------------------------------------------------------------------------------------------------------------------
+
+// ident - this file is post complete decomp, but has been modified to include the checks and updates from pre-complete decomp
+
 #include "isleapp.h"
 
 #include "3dmanager/lego3dmanager.h"
@@ -27,6 +41,9 @@
 #include "res/resource.h"
 #include "roi/legoroi.h"
 #include "viewmanager/viewmanager.h"
+
+// i shit you not, this was a thing that could've happened
+//#include "discord-rpc/discord.h"
 
 #include <dsound.h>
 
@@ -66,10 +83,12 @@ int g_targetDepth = 16;
 BOOL g_reqEnableRMDevice = FALSE;
 
 // STRING: ISLE 0x4101c4
-#define WNDCLASS_NAME "Lego Island MainNoM App"
+//#define WNDCLASS_NAME "Lego Island MainNoM App"
+#define WNDCLASS_NAME "TMAOMNI PrimaryRuntimeWrapper"
 
 // STRING: ISLE 0x4101dc
-#define WINDOW_TITLE "LEGO\xAE"
+//#define WINDOW_TITLE "LEGO\xAE"
+#define WINDOW_TITLE "LEGO Island: The Modder's Arrival"
 
 // Might be static functions of IsleApp
 BOOL FindExistingInstance();
@@ -172,14 +191,28 @@ void IsleApp::Close()
 			TickleManager()->Tickle();
 		}
 	}
+	//Discord_Shutdown();
 }
+
+/*BOOL IsleApp::GetWorkingDir()
+{
+	string s1 = GetCommandLine();
+	s1 = s1.substr(0, s1.find_last_of("\\/"));
+	//p_assign = s1.c_str();
+	const char* ret = s1.c_str();
+	if (!WriteReg("temp", ret))
+		return FALSE;
+	
+	return TRUE;
+	//return ret;
+}*/
 
 // FUNCTION: ISLE 0x4013b0
 BOOL IsleApp::SetupLegoOmni()
 {
 	BOOL result = FALSE;
 	char mediaPath[256];
-	GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, sizeof(mediaPath));
+	GetProfileStringA("LEGO Island TMA", "MediaPath", "", mediaPath, sizeof(mediaPath));
 
 #ifdef COMPAT_MODE
 	BOOL failure;
@@ -231,6 +264,31 @@ void IsleApp::SetupVideoFlags(
 	}
 }
 
+//TODO: FIXME
+/*void InitDiscord()
+{
+	DiscordEventHandlers handlers;
+	memset(&handlers, 0, sizeof(handlers));
+	handlers.ready = handleDiscordReady;
+    handlers.errored = handleDiscordError;
+	
+	Discord_Initialize("1249977928561721357", &handlers, 1, NULL, NULL);
+}
+
+void UpdatePresence()
+{
+    char buffer[256];
+    DiscordRichPresence discordPresence;
+    memset(&discordPresence, 0, sizeof(discordPresence));
+    discordPresence.state = "Lego Island:";
+    //sprintf(buffer, "Ranked | Mode: %d", GameEngine.GetMode());
+    discordPresence.details = "The Modder's Arrival";
+    discordPresence.endTimestamp = time(0) + 5 * 60;
+    //discordPresence.largeImageKey = "img";
+    discordPresence.instance = 1;
+    Discord_UpdatePresence(&discordPresence);
+}*/
+
 // FUNCTION: ISLE 0x401610
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
@@ -253,9 +311,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	if (!soundReady) {
 		MessageBoxA(
 			NULL,
-			"\"LEGO\xAE Island\" is not detecting a DirectSound compatible sound card.  Please quit all other "
-			"applications and try again.",
-			"Lego Island Error",
+			"\"LEGO Island: The Modder's Arrival\" failed to detect a DirectSound compatible sound card/driver. Please ensure any "
+			"possibly interfering applications have been terminated before re-launching \"LEGO Island: The Modder's Arrival\".",
+			"Sound Card Failure!",
 			MB_OK
 		);
 		return 0;
@@ -264,12 +322,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Create global app instance
 	g_isle = new IsleApp();
 
+	// Crash if config open. You wana break the game? Too Bad!!
+	HWND hWnd = FindWindowA(NULL, "Configuration for LEGO Island: The Modder's Arrival");
+	if (hWnd) {
+		MessageBoxA(
+			NULL,
+			"\"LEGO Island: The Modder's Arrival\" requests that you exit \"LEGO Island: The Modder's Arrival\" configuration dialogue "
+			"before continuing. This ensures that no unwanted behavior occurs by preventing you from changing configurations "
+			"while the game is running.",
+			"Please close Config!",
+			MB_OK
+		);
+		return 0;
+	}
+
 	// Create window
+	// Flip Surfaces don't work in Windowed mode, crash.
 	if (g_isle->SetupWindow(hInstance, lpCmdLine) != SUCCESS) {
 		MessageBoxA(
 			NULL,
-			"\"LEGO\xAE Island\" failed to start.  Please quit all other applications and try again.",
-			"LEGO\xAE Island Error",
+			"\"LEGO Island: The Modder's Arrival\" encountered an error while attempting to create the application window. Please ensure any possibly "
+			"interfering applications have been terminated before re-launching \"LEGO Island: The Modder's Arrival\".",
+			"Failed to Create Window!",
 			MB_OK
 		);
 		return 0;
@@ -570,6 +644,7 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 	wndclass.hIcon = LoadIconA(hInstance, MAKEINTRESOURCEA(APP_ICON));
 	wndclass.hCursor = m_cursorArrow = m_cursorCurrent = LoadCursorA(hInstance, MAKEINTRESOURCEA(ISLE_ARROW));
 	m_cursorBusy = LoadCursorA(hInstance, MAKEINTRESOURCEA(ISLE_BUSY));
+	//m_cursorBusy = CreateAniCursor(ISLE_BUSY);
 	m_cursorNo = LoadCursorA(hInstance, MAKEINTRESOURCEA(ISLE_NO));
 	wndclass.hInstance = hInstance;
 	wndclass.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
@@ -682,6 +757,34 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 	return SUCCESS;
 }
 
+BOOL IsleApp::WriteReg(const char* p_key, const char* p_value) const
+{
+	HKEY hKey;
+	DWORD pos;
+
+	if (RegCreateKeyExA(
+			HKEY_LOCAL_MACHINE,
+			"SOFTWARE\\ActionSoft\\LEGO Island TMA",
+			0,
+			"string",
+			0,
+			KEY_READ | KEY_WRITE,
+			NULL,
+			&hKey,
+			&pos
+		) == ERROR_SUCCESS) {
+		if (RegSetValueExA(hKey, p_key, 0, REG_SZ, (LPBYTE) p_value, strlen(p_value)) == ERROR_SUCCESS) {
+			if (RegCloseKey(hKey) == ERROR_SUCCESS) {
+				return TRUE;
+			}
+		}
+		else {
+			RegCloseKey(hKey);
+		}
+	}
+	return FALSE;
+}
+
 // FUNCTION: ISLE 0x402740
 BOOL IsleApp::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 {
@@ -690,7 +793,7 @@ BOOL IsleApp::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 
 	BOOL out = FALSE;
 	DWORD size = outSize;
-	if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Mindscape\\LEGO Island", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+	if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\ActionSoft\\LEGO Island TMA", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
 		if (RegQueryValueExA(hKey, name, NULL, &valueType, (LPBYTE) outValue, &size) == ERROR_SUCCESS) {
 			if (RegCloseKey(hKey) == ERROR_SUCCESS) {
 				out = TRUE;
@@ -741,21 +844,86 @@ void IsleApp::LoadConfig()
 {
 	char buffer[1024];
 
+	//big nasty fuckin' hack comin' up
+	//a hack which doesn't even work, FUCK
+	/*GetWorkingDir();
+	
+	if (!ReadReg("temp", buffer, sizeof(buffer))) {
+		MessageBoxA(
+			NULL,
+			"\"LEGO Island: The Modder's Arrival\" encountered an error while attempting to aquire the current directory from temporary registry key. "
+			"Please restart the computer and/or contact support to resolve the issue.",
+			"Failed to Aquire Key: \"temp\"",
+			MB_OK
+		);
+	}
+	
+	strcpy(m_curDirBase, buffer);
+	strcpy(m_curDir1, m_curDirBase);
+	strcat(m_curDir1, "\"");
+	
+	if (!WriteReg("diskpath", m_curDirBase))
+	{
+		MessageBoxA(
+			NULL,
+			"\"LEGO Island: The Modder's Arrival\" encountered an error while attempting to assign the diskpath registry key. "
+			"Please restart the computer and/or contact support to resolve the issue.",
+			"Failed to Assign Key: \"diskpath\"",
+			MB_OK
+		);
+	}*/
+	
+	//We're not streaming off CD in this mod, return disk path for cd path
+	//if (!WriteReg("cdpath", GetWorkingDir()))
+	//{
+	//	MessageBoxA(
+	//		NULL,
+	//		"\"LEGO Island: The Modder's Arrival\" encountered an error while attempting to assign the cdpath registry key. "
+	//		"Please restart the computer and/or contact support to resolve the issue.",
+	//		"Failed to Assign Key: \"cdpath\"",
+	//		MB_OK
+	//	);
+	//}
+
 	if (!ReadReg("diskpath", buffer, sizeof(buffer))) {
-		strcpy(buffer, MxOmni::GetHD());
+		//strcpy(buffer, MxOmni::GetHD());
+		MessageBoxA(
+			NULL,
+			"\"LEGO Island: The Modder's Arrival\" encountered an error while attempting to aquire the \"diskpath\" registry key. "
+			"Please ensure you followed the instructions in the README text document properly and relaunch the game.",
+			"Failed to Aquire Key: \"diskpath\"",
+			MB_OK
+		);
+		Close();
+		MxOmni::DestroyInstance();
 	}
 
 	m_hdPath = new char[strlen(buffer) + 1];
 	strcpy(m_hdPath, buffer);
 	MxOmni::SetHD(m_hdPath);
+	MxOmni::SetCD(m_hdPath);
 
-	if (!ReadReg("cdpath", buffer, sizeof(buffer))) {
-		strcpy(buffer, MxOmni::GetCD());
-	}
+	//if (!ReadReg("cdpath", buffer, sizeof(buffer))) {
+	//	strcpy(buffer, GetWorkingDir());
+	//}
+	
+	//if (!ReadReg("savepath", buffer, sizeof(buffer))) {
+	//	if (!WriteReg("savepath", MxOmni::GetHD() + "\\SAV"))
+	//	{
+	//		MessageBoxA(
+	//			NULL,
+	//			"\"LEGO Island: The Modder's Arrival\" encountered an error while attempting to assign the savepath registry key. "
+	//			"Please restart the computer and/or contact support to resolve the issue.",
+	//			"Failed to Assign Key: \"savepath\"",
+	//			MB_OK
+	//		);
+	//		return 0;
+	//	}
+	//}
 
-	m_cdPath = new char[strlen(buffer) + 1];
-	strcpy(m_cdPath, buffer);
-	MxOmni::SetCD(m_cdPath);
+	//m_cdPath = new char[strlen(buffer) + 1];
+	//strcpy(m_cdPath, buffer);
+	//MxOmni::SetCD(m_cdPath);
 
 	ReadRegBool("Flip Surfaces", &m_flipSurfaces);
 	ReadRegBool("Full Screen", &m_fullScreen);
@@ -799,6 +967,23 @@ void IsleApp::LoadConfig()
 	if (ReadReg("savepath", buffer, sizeof(buffer))) {
 		m_savePath = new char[strlen(buffer) + 1];
 		strcpy(m_savePath, buffer);
+	} else {
+		m_savePath = new char[strlen(buffer) + 1];
+		//strcpy(m_savePath, m_curDirBase);
+		strcpy(m_savePath, m_hdPath);
+		strcat(m_savePath, "\\SAV");
+		if (!WriteReg("savepath", m_savePath))
+		{
+			MessageBoxA(
+				NULL,
+				"\"LEGO Island: The Modder's Arrival\" encountered an error while attempting to assign the savepath registry key. "
+				"Please restart the computer and/or contact support to resolve the issue.",
+				"Failed to Assign Key: \"savepath\"",
+				MB_OK
+			);
+			Close();
+			MxOmni::DestroyInstance();
+		}
 	}
 }
 
@@ -853,6 +1038,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 		MxDSAction ds;
 
 		if (!stream) {
+			// since we have disabled cd drive functionality, this should only trigger if lego\scripts\isle\isle.si is missing
 			stream = Streamer()->Open("\\lego\\scripts\\nocd", MxStreamer::e_diskStream);
 			if (!stream) {
 				return;

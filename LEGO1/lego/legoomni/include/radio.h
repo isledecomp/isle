@@ -15,9 +15,12 @@ class RadioState : public LegoState {
 public:
 	RadioState();
 
+<<<<<<< Updated upstream
+=======
 	// FUNCTION: LEGO1 0x1002cf50
 	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
 
+>>>>>>> Stashed changes
 	// FUNCTION: LEGO1 0x1002cf60
 	// FUNCTION: BETA10 0x100f2850
 	const char* ClassName() const override // vtable+0x0c
@@ -32,6 +35,11 @@ public:
 		return !strcmp(p_name, RadioState::ClassName()) || LegoState::IsA(p_name);
 	}
 
+<<<<<<< Updated upstream
+	MxBool IsSerializable() override; // vtable+0x14
+
+=======
+>>>>>>> Stashed changes
 	// SYNTHETIC: LEGO1 0x1002d020
 	// RadioState::`scalar deleting destructor'
 

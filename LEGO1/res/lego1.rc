@@ -12,8 +12,8 @@ LEGO1_ARROW CURSOR "arrow.cur"
 LEGO1_BUSY  CURSOR "busy.cur"
 
 1 VERSIONINFO
-FILEVERSION 1,1,0,0
-PRODUCTVERSION 1,1,0,0
+FILEVERSION 0,0,0,1
+PRODUCTVERSION 0,0,0,1
 FILEOS 0x40004
 FILETYPE 0x2
 {
@@ -21,14 +21,14 @@ BLOCK "StringFileInfo"
 {
 	BLOCK "040904b0"
 	{
-		VALUE "CompanyName", "Mindscape, Inc."
-		VALUE "FileDescription", "LegoOmni Library"
-		VALUE "FileVersion", "1, 1, 0, 0"
-		VALUE "InternalName", "LegoOmni Library"
-		VALUE "LegalCopyright", "Copyright \xA9 1997"
-		VALUE "OriginalFilename", "LegoOmni Library"
-		VALUE "ProductName", "LegoOmni Library"
-		VALUE "ProductVersion", "1, 1, 0, 0"
+		VALUE "CompanyName", "FUNNIMAN.EXE"
+		VALUE "FileDescription", "b_TMAOmni Library"
+		VALUE "FileVersion", "0, 0, 0, 1"
+		VALUE "InternalName", "b_TMAOmni Library"
+		VALUE "LegalCopyright", "Copyright \xA9 2025"
+		VALUE "OriginalFilename", "B_TMA.DLL"
+		VALUE "ProductName", "LEGO Island: The Modder's Arrival"
+		VALUE "ProductVersion", "0, 0, 0, 1"
 	}
 }
 

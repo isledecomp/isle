@@ -28,6 +28,7 @@ public:
 	);
 	MxResult SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine);
 
+	BOOL WriteReg(const char* p_key, const char* p_value) const;
 	BOOL ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize);
 	BOOL ReadRegBool(LPCSTR name, BOOL* out);
 	BOOL ReadRegInt(LPCSTR name, int* out);

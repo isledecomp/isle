@@ -228,6 +228,15 @@ RadioState::RadioState()
 	m_active = FALSE;
 }
 
+<<<<<<< Updated upstream
+// FUNCTION: LEGO1 0x1002cf50
+MxBool RadioState::IsSerializable()
+{
+	return FALSE;
+}
+
+=======
+>>>>>>> Stashed changes
 // FUNCTION: LEGO1 0x1002d090
 MxU32 RadioState::FUN_1002d090()
 {

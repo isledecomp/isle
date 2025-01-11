@@ -32,6 +32,7 @@ ON_COMMAND(IDC_RAD_PALETTE_256, OnRadiobuttonPalette256)
 ON_COMMAND(IDC_CHK_3D_VIDEO_MEMORY, OnCheckbox3DVideoMemory)
 ON_WM_DESTROY() // FIXME: CONFIG.EXE calls Default
 ON_COMMAND(IDABORT, OnButtonCancel)
+ON_COMMAND(IDAPPLY, OnApply)
 ON_COMMAND(IDC_CHK_3DSOUND, OnCheckbox3DSound)
 ON_COMMAND(IDC_RAD_MODEL_QUALITY_LOW, OnRadiobuttonModelLowQuality)
 ON_COMMAND(IDC_RAD_MODEL_QUALITY_HIGH, OnRadiobuttonModelHighQuality)
@@ -41,6 +42,7 @@ ON_COMMAND(IDC_CHK_JOYSTICK, OnCheckboxJoystick)
 ON_COMMAND(IDC_BTN_ADVANCED, OnButtonAdvanced)
 ON_COMMAND(IDC_CHK_DRAW_CURSOR, OnCheckboxDrawCursor)
 ON_COMMAND(IDC_CHK_MUSIC, OnCheckboxMusic)
+ON_COMMAND(IDC_CHK_FULLSCREEN, OnCheckboxFullscreen)
 END_MESSAGE_MAP()
 
 // FUNCTION: CONFIG 0x00403e80
@@ -168,6 +170,14 @@ void CMainDialog::OnButtonCancel()
 	OnCancel();
 }
 
+void CMainDialog::OnApply()
+{
+	if (m_modified) {
+		currentConfigApp->WriteRegisterSettings();
+	}
+}
+
+
 // FUNCTION: CONFIG 0x00404360
 void CMainDialog::UpdateInterface()
 {
@@ -218,6 +228,7 @@ void CMainDialog::UpdateInterface()
 	);
 	CheckDlgButton(IDC_CHK_JOYSTICK, currentConfigApp->m_use_joystick);
 	CheckDlgButton(IDC_CHK_MUSIC, currentConfigApp->m_music);
+	CheckDlgButton(IDC_CHK_FULLSCREEN, currentConfigApp->m_full_screen);
 }
 
 // FUNCTION: CONFIG 0x004045e0
@@ -341,6 +352,13 @@ void CMainDialog::OnCheckboxDrawCursor()
 void CMainDialog::OnCheckboxMusic()
 {
 	currentConfigApp->m_music = IsDlgButtonChecked(IDC_CHK_MUSIC);
+	m_modified = TRUE;
+	UpdateInterface();
+}
+
+void CMainDialog::OnCheckboxFullscreen()
+{
+	currentConfigApp->m_full_screen = IsDlgButtonChecked(IDC_CHK_FULLSCREEN);
 	m_modified = TRUE;
 	UpdateInterface();
 }

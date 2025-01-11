@@ -91,10 +91,13 @@ public:
 	LegoCarBuild();
 	~LegoCarBuild() override;
 
+<<<<<<< Updated upstream
+=======
 	// FUNCTION: LEGO1 0x10022930
 	// FUNCTION: BETA10 0x10070070
 	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
 
+>>>>>>> Stashed changes
 	// FUNCTION: LEGO1 0x10022940
 	// FUNCTION: BETA10 0x10070090
 	const char* ClassName() const override // vtable+0x0c
@@ -114,6 +117,10 @@ public:
 
 	MxResult Create(MxDSAction& p_dsAction) override;                  // vtable+0x18
 	void ReadyWorld() override;                                        // vtable+0x50
+<<<<<<< Updated upstream
+	MxBool VTable0x5c() override;                                      // vtable+0x5c
+=======
+>>>>>>> Stashed changes
 	MxBool Escape() override;                                          // vtable+0x64
 	void Enable(MxBool p_enable) override;                             // vtable+0x68
 	virtual void VTable0x6c();                                         // vtable+0x6c
