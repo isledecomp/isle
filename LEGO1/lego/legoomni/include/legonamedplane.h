@@ -32,15 +32,15 @@ public:
 	{
 		if (p_file->IsWriteMode()) {
 			p_file->Write(MxString(m_name));
-			p_file->WriteVector3(m_position);
-			p_file->WriteVector3(m_direction);
-			p_file->WriteVector3(m_up);
+			p_file->Write(m_position);
+			p_file->Write(m_direction);
+			p_file->Write(m_up);
 		}
 		else if (p_file->IsReadMode()) {
-			p_file->ReadString(m_name);
-			p_file->ReadVector3(m_position);
-			p_file->ReadVector3(m_direction);
-			p_file->ReadVector3(m_up);
+			p_file->Read(m_name);
+			p_file->Read(m_position);
+			p_file->Read(m_direction);
+			p_file->Read(m_up);
 		}
 
 		return SUCCESS;

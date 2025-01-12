@@ -1408,8 +1408,8 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 			}
 		}
 
-		m_cptClickDialogue.WriteToFile(p_file);
-		Write(p_file, m_unk0x022);
+		p_file->Write(m_cptClickDialogue.m_nextIndex);
+		p_file->Write(m_unk0x022);
 	}
 	else if (p_file->IsReadMode()) {
 		if (m_helicopterPlane.IsPresent()) {
@@ -1465,8 +1465,8 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 			}
 		}
 
-		m_cptClickDialogue.ReadFromFile(p_file);
-		Read(p_file, &m_unk0x022);
+		p_file->Read(m_cptClickDialogue.m_nextIndex);
+		p_file->Read(m_unk0x022);
 	}
 
 	// TODO

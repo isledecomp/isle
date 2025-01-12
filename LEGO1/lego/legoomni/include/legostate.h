@@ -62,18 +62,6 @@ public:
 
 		void SetNextIndex(MxS16 p_nextIndex) { m_nextIndex = p_nextIndex; }
 
-		MxResult ReadFromFile(LegoFile* p_file)
-		{
-			Read(p_file, &m_nextIndex);
-			return SUCCESS;
-		}
-
-		MxResult WriteToFile(LegoFile* p_file)
-		{
-			Write(p_file, m_nextIndex);
-			return SUCCESS;
-		}
-
 		// private:
 		MxU32* m_objectIds; // 0x00
 		MxS16 m_length;     // 0x04

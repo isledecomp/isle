@@ -668,7 +668,7 @@ LegoNamedTexture* ReadNamedTexture(LegoFile* p_file)
 	LegoNamedTexture* namedTexture = NULL;
 	MxString string;
 
-	p_file->ReadString(string);
+	p_file->Read(string);
 
 	texture = new LegoTexture();
 	if (texture != NULL) {
