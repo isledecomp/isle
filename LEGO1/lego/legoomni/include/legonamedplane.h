@@ -31,7 +31,7 @@ public:
 	MxResult Serialize(LegoFile* p_file)
 	{
 		if (p_file->IsWriteMode()) {
-			p_file->WriteString(m_name);
+			p_file->Write(MxString(m_name));
 			p_file->WriteVector3(m_position);
 			p_file->WriteVector3(m_direction);
 			p_file->WriteVector3(m_up);

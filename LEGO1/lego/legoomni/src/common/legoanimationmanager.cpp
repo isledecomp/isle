@@ -2943,7 +2943,7 @@ MxResult AnimState::Serialize(LegoFile* p_file)
 	// LegoState::Serialize(p_file);
 	// Option 2:
 	if (p_file->IsWriteMode()) {
-		p_file->WriteString(ClassName());
+		p_file->Write(MxString(ClassName()));
 	}
 
 	if (p_file->IsReadMode()) {

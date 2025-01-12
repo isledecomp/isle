@@ -74,7 +74,7 @@ public:
 			return SUCCESS;
 		}
 
-	private:
+		// private:
 		MxU32* m_objectIds; // 0x00
 		MxS16 m_length;     // 0x04
 		MxS16 m_mode;       // 0x06
@@ -95,7 +95,7 @@ public:
 	virtual MxResult Serialize(LegoFile* p_file)
 	{
 		if (p_file->IsWriteMode()) {
-			p_file->WriteString(ClassName());
+			p_file->Write(MxString(ClassName()));
 		}
 		return SUCCESS;
 	} // vtable+0x1c

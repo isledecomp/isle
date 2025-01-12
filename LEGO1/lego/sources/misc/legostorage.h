@@ -132,16 +132,34 @@ public:
 		return this;
 	}
 
-	// FUNCTION: LEGO1 0x10006030
-	LegoStorage* WriteString(MxString p_str)
+	// FUNCTION: BETA10 0x10024680
+	LegoStorage* Read(LegoS16& p_data)
 	{
-		const char* data = p_str.GetData();
-		LegoU32 fullLength = strlen(data);
+		Read(&p_data, sizeof(p_data));
+		return this;
+	}
 
-		LegoU16 limitedLength = (LegoU16) fullLength;
-		Write(&limitedLength, sizeof(limitedLength));
-		Write((char*) data, (LegoS16) fullLength);
+	// FUNCTION: LEGO1 0x10006030
+	// FUNCTION: BETA10 0x10017bb0
+	LegoStorage* Write(MxString p_data)
+	{
+		Write(p_data.GetData());
+		return this;
+	}
 
+	// FUNCTION: BETA10 0x10017c80
+	LegoStorage* Write(const char* p_data)
+	{
+		LegoS16 length = strlen(p_data);
+		Write(length);
+		Write(p_data, length);
+		return this;
+	}
+
+	// FUNCTION: BETA10 0x10017ce0
+	LegoStorage* Write(LegoS16 p_data)
+	{
+		Write(&p_data, sizeof(p_data));
 		return this;
 	}
 

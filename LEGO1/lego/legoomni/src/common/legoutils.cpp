@@ -743,7 +743,7 @@ void WriteDefaultTexture(LegoFile* p_file, const char* p_name)
 					LegoTexture texture;
 					texture.SetImage(image);
 
-					p_file->WriteString(name);
+					p_file->Write(MxString(name));
 					texture.Write(p_file);
 				}
 				else {
@@ -760,7 +760,7 @@ void WriteDefaultTexture(LegoFile* p_file, const char* p_name)
 // FUNCTION: LEGO1 0x1003f8a0
 void WriteNamedTexture(LegoFile* p_file, LegoNamedTexture* p_namedTexture)
 {
-	p_file->WriteString(*p_namedTexture->GetName());
+	p_file->Write(MxString(*p_namedTexture->GetName()));
 	p_namedTexture->GetTexture()->Write(p_file);
 }
 
