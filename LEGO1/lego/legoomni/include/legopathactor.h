@@ -198,6 +198,9 @@ protected:
 	MxFloat m_unk0x150;                   // 0x150
 };
 
+// FUNCTION: LEGO1 0x1002edd0
+// LegoPathActor::FUN_1002edd0
+
 // TEMPLATE: LEGO1 0x10018b70
 // List<LegoBoundaryEdge>::~List<LegoBoundaryEdge>
 

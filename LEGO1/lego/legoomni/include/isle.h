@@ -118,6 +118,9 @@ public:
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
+	// FUNCTION: LEGO1 0x10030900
+	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
+
 	// FUNCTION: LEGO1 0x10030910
 	// FUNCTION: BETA10 0x10035d70
 	const char* ClassName() const override // vtable+0x0c
@@ -135,16 +138,10 @@ public:
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void ReadyWorld() override;                       // vtable+0x50
 	void Add(MxCore* p_object) override;              // vtable+0x58
-
-	// FUNCTION: LEGO1 0x10030900
-	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
-
-	// FUNCTION: LEGO1 0x10033170
-	void VTable0x60() override {} // vtable+60
-
-	MxBool Escape() override;                        // vtable+0x64
-	void Enable(MxBool p_enable) override;           // vtable+0x68
-	virtual void VTable0x6c(LegoPathActor* p_actor); // vtable+0x6c
+	void VTable0x60() override;                       // vtable+0x60
+	MxBool Escape() override;                         // vtable+0x64
+	void Enable(MxBool p_enable) override;            // vtable+0x68
+	virtual void VTable0x6c(LegoPathActor* p_actor);  // vtable+0x6c
 
 	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
 	MxBool HasHelicopter() { return m_helicopter != NULL; }
