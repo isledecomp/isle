@@ -111,7 +111,7 @@ public:
 		Username(Username& p_other) { Set(p_other); }
 		void Set(Username& p_other) { memcpy(m_letters, p_other.m_letters, sizeof(m_letters)); }
 
-		MxResult Serialize(LegoStorage* p_storage);
+		MxResult Serialize(LegoFile* p_file);
 		Username& operator=(const Username& p_other);
 
 		MxS16 m_letters[7]; // 0x00

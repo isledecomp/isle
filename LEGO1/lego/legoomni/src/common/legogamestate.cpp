@@ -1153,16 +1153,16 @@ LegoGameState::Username::Username()
 
 // FUNCTION: LEGO1 0x1003c690
 // FUNCTION: BETA10 0x10086c57
-MxResult LegoGameState::Username::Serialize(LegoStorage* p_storage)
+MxResult LegoGameState::Username::Serialize(LegoFile* p_file)
 {
-	if (p_storage->IsReadMode()) {
+	if (p_file->IsReadMode()) {
 		for (MxS16 i = 0; i < (MxS16) sizeOfArray(m_letters); i++) {
-			Read(p_storage, &m_letters[i]);
+			p_file->Read(m_letters[i]);
 		}
 	}
-	else if (p_storage->IsWriteMode()) {
+	else if (p_file->IsWriteMode()) {
 		for (MxS16 i = 0; i < (MxS16) sizeOfArray(m_letters); i++) {
-			Write(p_storage, m_letters[i]);
+			p_file->Write(m_letters[i]);
 		}
 	}
 
