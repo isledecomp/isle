@@ -491,29 +491,6 @@ MxU32 LegoPathActor::VTable0x6c(
 	return 0;
 }
 
-// FUNCTION: LEGO1 0x1002ebe0
-// FUNCTION: BETA10 0x100af35e
-MxS32 LegoPathActor::VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3)
-{
-	Mx3DPointFloat v2(p_v2);
-	v2 -= p_v1;
-
-	float len = v2.LenSquared();
-
-	if (len <= 0.001) {
-		return 0;
-	}
-
-	len = sqrt(len);
-	v2 /= len;
-
-	float radius = m_roi->GetWorldBoundingSphere().Radius();
-	list<LegoPathBoundary*> boundaries;
-
-	return FUN_1002edd0(boundaries, m_boundary, p_v1, v2, len, radius, p_v3, 0);
-}
-
-// FUNCTION: LEGO1 0x1002edd0
 inline MxU32 LegoPathActor::FUN_1002edd0(
 	list<LegoPathBoundary*>& p_boundaries,
 	LegoPathBoundary* p_boundary,
@@ -527,42 +504,69 @@ inline MxU32 LegoPathActor::FUN_1002edd0(
 {
 	MxU32 result = VTable0x6c(p_boundary, p_v1, p_v2, p_f1, p_f2, p_v3);
 
-	if (result == 0) {
-		p_boundaries.push_back(p_boundary);
+	if (result != 0) {
+		return result;
+	}
 
-		if (p_und >= 2) {
-			return 0;
-		}
+	p_boundaries.push_back(p_boundary);
 
-		LegoS32 numEdges = p_boundary->GetNumEdges();
-		for (MxS32 i = 0; i < numEdges; i++) {
-			LegoUnknown100db7f4* edge = ((LegoUnknown100db7f4*) p_boundary->GetEdges()[i]);
-			LegoPathBoundary* boundary = (LegoPathBoundary*) edge->OtherFace(p_boundary);
+	if (p_und >= 2) {
+		return 0;
+	}
 
-			if (boundary != NULL) {
-				list<LegoPathBoundary*>::iterator it;
+	LegoS32 numEdges = p_boundary->GetNumEdges();
+	for (MxS32 i = 0; i < numEdges; i++) {
+		LegoUnknown100db7f4* edge = p_boundary->GetEdges()[i];
+		LegoPathBoundary* boundary = (LegoPathBoundary*) edge->OtherFace(p_boundary);
 
-				for (it = p_boundaries.begin(); it != p_boundaries.end(); it++) {
-					if ((*it) == boundary) {
-						break;
-					}
+		if (boundary != NULL) {
+			list<LegoPathBoundary*>::const_iterator it;
+
+			for (it = p_boundaries.begin(); !(it == p_boundaries.end()); it++) {
+				if ((*it) == boundary) {
+					break;
 				}
+			}
 
-				if (it == p_boundaries.end()) {
-					result = FUN_1002edd0(p_boundaries, boundary, p_v1, p_v2, p_f1, p_f2, p_v3, p_und + 1);
+			if (it == p_boundaries.end()) {
+				result = FUN_1002edd0(p_boundaries, boundary, p_v1, p_v2, p_f1, p_f2, p_v3, p_und + 1);
 
-					if (result != 0) {
-						return result;
-					}
+				if (result != 0) {
+					return result;
 				}
 			}
 		}
-
-		result = 0;
 	}
 
-	return result;
+	return 0;
 }
+
+// FUNCTION: LEGO1 0x1002ebe0
+// FUNCTION: BETA10 0x100af35e
+MxS32 LegoPathActor::VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3)
+{
+	assert(m_boundary && m_roi);
+
+	Mx3DPointFloat v2(p_v2);
+	v2 -= p_v1;
+
+	float len = v2.LenSquared();
+
+	if (len <= 0.001) {
+		return 0;
+	}
+
+	len = sqrt((double) len);
+	v2 /= len;
+
+	float radius = m_roi->GetWorldBoundingSphere().Radius();
+	list<LegoPathBoundary*> boundaries;
+
+	return FUN_1002edd0(boundaries, m_boundary, p_v1, v2, len, radius, p_v3, 0);
+}
+
+// FUNCTION: LEGO1 0x1002edd0
+// LegoPathActor::FUN_1002edd0
 
 // FUNCTION: LEGO1 0x1002f020
 // FUNCTION: BETA10 0x100af54a
