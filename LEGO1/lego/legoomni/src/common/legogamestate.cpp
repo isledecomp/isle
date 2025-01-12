@@ -1328,21 +1328,21 @@ LegoGameState::ScoreItem* LegoGameState::History::FUN_1003cc90(
 MxResult LegoGameState::History::Serialize(LegoFile* p_file)
 {
 	if (p_file->IsReadMode()) {
-		Read(p_file, &m_unk0x372);
-		Read(p_file, &m_count);
+		p_file->Read(m_unk0x372);
+		p_file->Read(m_count);
 
 		for (MxS16 i = 0; i < m_count; i++) {
 			MxS16 j;
-			Read(p_file, &j);
+			p_file->Read(j);
 			m_scores[i].Serialize(p_file);
 		}
 	}
 	else if (p_file->IsWriteMode()) {
-		Write(p_file, m_unk0x372);
-		Write(p_file, m_count);
+		p_file->Write(m_unk0x372);
+		p_file->Write(m_count);
 
 		for (MxS16 i = 0; i < m_count; i++) {
-			Write(p_file, i);
+			p_file->Write(i);
 			m_scores[i].Serialize(p_file);
 		}
 	}

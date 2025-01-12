@@ -141,7 +141,7 @@ public:
 
 		MxS16 m_count;          // 0x00
 		ScoreItem m_scores[20]; // 0x02
-		undefined2 m_unk0x372;  // 0x372
+		MxS16 m_unk0x372;       // 0x372
 	};
 
 	LegoGameState();
