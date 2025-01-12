@@ -2937,67 +2937,75 @@ void AnimState::InitFromAnims(MxU32 p_animsLength, AnimInfo* p_anims, MxU32 p_ex
 // FUNCTION: BETA10 0x10046621
 MxResult AnimState::Serialize(LegoFile* p_file)
 {
-	// These two are equivalent up to the order of some deallocation.
-	// Choose as needed to get 100 %.
-	// Option 1:
-	// LegoState::Serialize(p_file);
-	// Option 2:
-	if (p_file->IsWriteMode()) {
-		p_file->Write(MxString(ClassName()));
-	}
+	MxResult result = LegoState::Serialize(p_file);
 
-	if (p_file->IsReadMode()) {
-		Read(p_file, &m_extraCharacterId);
+	if (result == SUCCESS) {
+		if (p_file->IsReadMode()) {
+			MxS32 i;
 
-		if (m_unk0x10) {
-			delete[] m_unk0x10;
-		}
+			p_file->Read(m_extraCharacterId);
 
-		Read(p_file, &m_unk0x0c);
-		if (m_unk0x0c != 0) {
+			if (m_unk0x10) {
+				delete[] m_unk0x10;
+			}
+
+			p_file->Read(m_unk0x0c);
+
+#ifndef BETA10
+			if (m_unk0x0c != 0) {
+				m_unk0x10 = new MxU16[m_unk0x0c];
+			}
+			else {
+				m_unk0x10 = NULL;
+			}
+#else
 			m_unk0x10 = new MxU16[m_unk0x0c];
-		}
-		else {
-			m_unk0x10 = NULL;
-		}
+#endif
 
-		for (MxS32 i = 0; i < m_unk0x0c; i++) {
-			Read(p_file, &m_unk0x10[i]);
-		}
+			for (i = 0; i < m_unk0x0c; i++) {
+				p_file->Read(m_unk0x10[i]);
+			}
 
-		// Note that here we read first and then free memory in contrast to above
-		Read(p_file, &m_locationsFlagsLength);
+			// Note that here we read first and then free memory in contrast to above
+			p_file->Read(m_locationsFlagsLength);
 
-		if (m_locationsFlags) {
-			delete[] m_locationsFlags;
-		}
+#ifndef BETA10
+			if (m_locationsFlags) {
+				delete[] m_locationsFlags;
+			}
 
-		if (m_locationsFlagsLength != 0) {
+			if (m_locationsFlagsLength != 0) {
+				m_locationsFlags = new MxBool[m_locationsFlagsLength];
+			}
+			else {
+				m_locationsFlags = NULL;
+			}
+#else
 			m_locationsFlags = new MxBool[m_locationsFlagsLength];
-		}
-		else {
-			m_locationsFlags = NULL;
-		}
+#endif
 
-		for (MxS32 j = 0; j < m_locationsFlagsLength; j++) {
-			Read(p_file, &m_locationsFlags[j]);
+			for (i = 0; i < m_locationsFlagsLength; i++) {
+				p_file->Read(m_locationsFlags[i]);
+			}
+		}
+		else if (p_file->IsWriteMode()) {
+			MxS32 i;
+
+			p_file->Write(m_extraCharacterId);
+			p_file->Write(m_unk0x0c);
+
+			for (i = 0; i < m_unk0x0c; i++) {
+				p_file->Write(m_unk0x10[i]);
+			}
+
+			p_file->Write(m_locationsFlagsLength);
+			for (i = 0; i < m_locationsFlagsLength; i++) {
+				p_file->Write(m_locationsFlags[i]);
+			}
 		}
 	}
-	else if (p_file->IsWriteMode()) {
-		Write(p_file, m_extraCharacterId);
 
-		Write(p_file, m_unk0x0c);
-		for (MxS32 i = 0; i < m_unk0x0c; i++) {
-			Write(p_file, m_unk0x10[i]);
-		}
-
-		Write(p_file, m_locationsFlagsLength);
-		for (MxS32 j = 0; j < m_locationsFlagsLength; j++) {
-			Write(p_file, m_locationsFlags[j]);
-		}
-	}
-
-	return SUCCESS;
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100654f0

@@ -513,18 +513,18 @@ MxResult GasStationState::Serialize(LegoFile* p_file)
 	LegoState::Serialize(p_file);
 
 	if (p_file->IsWriteMode()) {
-		Write(p_file, m_pepperAction);
-		Write(p_file, m_mamaAction);
-		Write(p_file, m_papaAction);
-		Write(p_file, m_nickAction);
-		Write(p_file, m_lauraAction);
+		p_file->Write(m_pepperAction);
+		p_file->Write(m_mamaAction);
+		p_file->Write(m_papaAction);
+		p_file->Write(m_nickAction);
+		p_file->Write(m_lauraAction);
 	}
 	else if (p_file->IsReadMode()) {
-		Read(p_file, &m_pepperAction);
-		Read(p_file, &m_mamaAction);
-		Read(p_file, &m_papaAction);
-		Read(p_file, &m_nickAction);
-		Read(p_file, &m_lauraAction);
+		p_file->Read(m_pepperAction);
+		p_file->Read(m_mamaAction);
+		p_file->Read(m_papaAction);
+		p_file->Read(m_nickAction);
+		p_file->Read(m_lauraAction);
 	}
 
 	return SUCCESS;
