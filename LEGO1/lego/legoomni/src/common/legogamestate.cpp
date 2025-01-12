@@ -1182,28 +1182,28 @@ LegoGameState::Username& LegoGameState::Username::operator=(const Username& p_ot
 MxResult LegoGameState::ScoreItem::Serialize(LegoFile* p_file)
 {
 	if (p_file->IsReadMode()) {
-		Read(p_file, &m_totalScore);
+		p_file->Read(m_totalScore);
 
 		for (MxS32 i = 0; i < 5; i++) {
 			for (MxS32 j = 0; j < 5; j++) {
-				Read(p_file, &m_scores[i][j]);
+				p_file->Read(m_scores[i][j]);
 			}
 		}
 
 		m_name.Serialize(p_file);
-		Read(p_file, &m_unk0x2a);
+		p_file->Read(m_unk0x2a);
 	}
 	else if (p_file->IsWriteMode()) {
-		Write(p_file, m_totalScore);
+		p_file->Write(m_totalScore);
 
 		for (MxS32 i = 0; i < 5; i++) {
 			for (MxS32 j = 0; j < 5; j++) {
-				Write(p_file, m_scores[i][j]);
+				p_file->Write(m_scores[i][j]);
 			}
 		}
 
 		m_name.Serialize(p_file);
-		Write(p_file, m_unk0x2a);
+		p_file->Write(m_unk0x2a);
 	}
 
 	return SUCCESS;

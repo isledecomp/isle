@@ -121,10 +121,10 @@ public:
 	struct ScoreItem {
 		MxResult Serialize(LegoFile* p_file);
 
-		MxS16 m_totalScore;   // 0x00
-		MxU8 m_scores[5][5];  // 0x02
-		Username m_name;      // 0x1c
-		undefined2 m_unk0x2a; // 0x2a
+		MxS16 m_totalScore;  // 0x00
+		MxU8 m_scores[5][5]; // 0x02
+		Username m_name;     // 0x1c
+		MxS16 m_unk0x2a;     // 0x2a
 	};
 
 	// SIZE 0x372
