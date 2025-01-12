@@ -15,6 +15,7 @@ class MxSoundPresenter;
 class MxActionNotificationParam;
 
 // VTABLE: LEGO1 0x100d66e0
+// VTABLE: BETA10 0x101bb910
 // SIZE 0x50
 class LegoVehicleBuildState : public LegoState {
 public:
@@ -32,13 +33,13 @@ public:
 	// FUNCTION: LEGO1 0x10025ff0
 	const char* ClassName() const override // vtable+0x0c
 	{
-		return this->m_className.GetData();
+		return m_className.GetData();
 	}
 
 	// FUNCTION: LEGO1 0x10026000
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(p_name, this->m_className.GetData()) || LegoState::IsA(p_name);
+		return !strcmp(p_name, m_className.GetData()) || LegoState::IsA(p_name);
 	}
 
 	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
@@ -56,7 +57,7 @@ public:
 	MxString m_className; // 0x38
 
 	AnimationState m_animationState; // 0x48
-	undefined m_unk0x4c;             // 0x4c
+	MxU8 m_unk0x4c;                  // 0x4c
 	MxBool m_unk0x4d;                // 0x4d
 	MxBool m_unk0x4e;                // 0x4e
 	MxU8 m_placedPartCount;          // 0x4f
