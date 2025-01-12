@@ -565,9 +565,6 @@ MxS32 LegoPathActor::VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3)
 	return FUN_1002edd0(boundaries, m_boundary, p_v1, v2, len, radius, p_v3, 0);
 }
 
-// FUNCTION: LEGO1 0x1002edd0
-// LegoPathActor::FUN_1002edd0
-
 // FUNCTION: LEGO1 0x1002f020
 // FUNCTION: BETA10 0x100af54a
 void LegoPathActor::ParseAction(char* p_extra)
