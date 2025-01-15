@@ -18,8 +18,7 @@ public:
 	};
 
 	// SIZE 0x0c
-	class Playlist {
-	public:
+	struct Playlist {
 		enum Mode {
 			e_loop,
 			e_once,
@@ -60,9 +59,6 @@ public:
 		MxU32 Next();
 		MxBool Contains(MxU32 p_objectId);
 
-		void SetNextIndex(MxS16 p_nextIndex) { m_nextIndex = p_nextIndex; }
-
-		// private:
 		MxU32* m_objectIds; // 0x00
 		MxS16 m_length;     // 0x04
 		MxS16 m_mode;       // 0x06

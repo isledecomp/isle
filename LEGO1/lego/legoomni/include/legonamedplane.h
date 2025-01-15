@@ -24,6 +24,7 @@ public:
 	void SetDirection(const Mx3DPointFloat& p_direction) { m_direction = p_direction; }
 	void SetUp(const Mx3DPointFloat& p_up) { m_up = p_up; }
 
+	// TODO: Unclear whether this was defined
 	MxBool IsPresent() { return strcmp(m_name.GetData(), "") != 0; }
 	void Reset() { m_name = ""; }
 
@@ -46,7 +47,7 @@ public:
 		return SUCCESS;
 	}
 
-private:
+	// private:
 	MxString m_name;            // 0x00
 	Mx3DPointFloat m_position;  // 0x10
 	Mx3DPointFloat m_direction; // 0x24
