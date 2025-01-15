@@ -214,7 +214,7 @@ private:
 	// TODO: Most likely getters/setters are not used according to BETA for the following members:
 
 public:
-	MxU16 m_unk0x24;                      // 0x24
+	MxS16 m_unk0x24;                      // 0x24
 	MxS16 m_playerCount;                  // 0x26
 	Username m_players[9];                // 0x28
 	History m_history;                    // 0xa6

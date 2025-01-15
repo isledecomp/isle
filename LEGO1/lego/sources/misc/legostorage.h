@@ -40,18 +40,6 @@ protected:
 	LegoU8 m_mode; // 0x04
 };
 
-template <class T>
-inline void Read(LegoStorage* p_storage, T* p_variable, LegoU32 p_size = sizeof(T))
-{
-	p_storage->Read(p_variable, p_size);
-}
-
-template <class T>
-inline void Write(LegoStorage* p_storage, T p_variable)
-{
-	p_storage->Write(&p_variable, sizeof(p_variable));
-}
-
 // VTABLE: LEGO1 0x100db710
 // SIZE 0x10
 class LegoMemory : public LegoStorage {

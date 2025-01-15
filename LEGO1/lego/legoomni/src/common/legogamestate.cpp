@@ -171,6 +171,7 @@ LegoGameState::~LegoGameState()
 }
 
 // FUNCTION: LEGO1 0x10039780
+// FUNCTION: BETA10 0x10083d43
 void LegoGameState::SetActor(MxU8 p_actorId)
 {
 	if (p_actorId) {
@@ -238,7 +239,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	}
 
 	MxResult result = FAILURE;
-	LegoFile fileStorage;
+	LegoFile storage;
 	MxVariableTable* variableTable = VariableTable();
 	MxS16 count = 0;
 	MxU32 i;
@@ -248,32 +249,32 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	MxString savePath;
 	GetFileSavePath(&savePath, p_slot);
 
-	if (fileStorage.Open(savePath.GetData(), LegoFile::c_write) == FAILURE) {
+	if (storage.Open(savePath.GetData(), LegoFile::c_write) == FAILURE) {
 		goto done;
 	}
 
-	Write(&fileStorage, 0x1000c);
-	Write(&fileStorage, m_unk0x24);
-	Write(&fileStorage, (MxU16) m_currentAct);
-	Write(&fileStorage, m_actorId);
+	storage.Write(0x1000c);
+	storage.Write(m_unk0x24);
+	storage.Write((MxU16) m_currentAct);
+	storage.Write(m_actorId);
 
 	for (i = 0; i < sizeOfArray(g_colorSaveData); i++) {
-		if (WriteVariable(&fileStorage, variableTable, g_colorSaveData[i].m_targetName) == FAILURE) {
+		if (WriteVariable(&storage, variableTable, g_colorSaveData[i].m_targetName) == FAILURE) {
 			goto done;
 		}
 	}
 
-	if (WriteVariable(&fileStorage, variableTable, "backgroundcolor") == FAILURE) {
+	if (WriteVariable(&storage, variableTable, "backgroundcolor") == FAILURE) {
 		goto done;
 	}
-	if (WriteVariable(&fileStorage, variableTable, "lightposition") == FAILURE) {
+	if (WriteVariable(&storage, variableTable, "lightposition") == FAILURE) {
 		goto done;
 	}
 
-	WriteEndOfVariables(&fileStorage);
-	CharacterManager()->Write(&fileStorage);
-	PlantManager()->Write(&fileStorage);
-	result = BuildingManager()->Write(&fileStorage);
+	WriteEndOfVariables(&storage);
+	CharacterManager()->Write(&storage);
+	PlantManager()->Write(&storage);
+	result = BuildingManager()->Write(&storage);
 
 	for (j = 0; j < m_stateCount; j++) {
 		if (m_stateArray[j]->IsSerializable()) {
@@ -281,16 +282,16 @@ MxResult LegoGameState::Save(MxULong p_slot)
 		}
 	}
 
-	Write(&fileStorage, count);
+	storage.Write(count);
 
 	for (j = 0; j < m_stateCount; j++) {
 		if (m_stateArray[j]->IsSerializable()) {
-			m_stateArray[j]->Serialize(&fileStorage);
+			m_stateArray[j]->Serialize(&storage);
 		}
 	}
 
 	area = m_unk0x42c;
-	Write(&fileStorage, (MxU16) area);
+	storage.Write((MxU16) area);
 	SerializeScoreHistory(2);
 	m_isDirty = FALSE;
 
@@ -322,42 +323,43 @@ MxResult LegoGameState::DeleteState()
 }
 
 // FUNCTION: LEGO1 0x10039c60
+// FUNCTION: BETA10 0x10084329
 MxResult LegoGameState::Load(MxULong p_slot)
 {
 	MxResult result = FAILURE;
-	LegoFile fileStorage;
+	LegoFile storage;
 	MxVariableTable* variableTable = VariableTable();
 
 	MxString savePath;
 	GetFileSavePath(&savePath, p_slot);
 
-	if (fileStorage.Open(savePath.GetData(), LegoFile::c_read) == FAILURE) {
+	if (storage.Open(savePath.GetData(), LegoFile::c_read) == FAILURE) {
 		goto done;
 	}
 
-	MxU32 version, status;
+	MxS32 version;
+	MxU32 status;
 	MxS16 count, actArea;
 	const char* lightPosition;
 
-	Read(&fileStorage, &version);
+	storage.Read(version);
 
 	if (version != 0x1000c) {
 		OmniError("Saved game version mismatch", 0);
 		goto done;
 	}
 
-	Read(&fileStorage, &m_unk0x24);
+	storage.Read(m_unk0x24);
+	storage.Read(actArea);
 
-	Read(&fileStorage, &actArea);
 	SetCurrentAct((Act) actArea);
-
-	Read(&fileStorage, &m_actorId);
+	storage.Read(m_actorId);
 	if (m_actorId) {
 		SetActor(m_actorId);
 	}
 
 	do {
-		status = ReadVariable(&fileStorage, variableTable);
+		status = ReadVariable(&storage, variableTable);
 		if (status == 1) {
 			goto done;
 		}
@@ -370,13 +372,13 @@ MxResult LegoGameState::Load(MxULong p_slot)
 		SetLightPosition(atoi(lightPosition));
 	}
 
-	if (CharacterManager()->Read(&fileStorage) == FAILURE) {
+	if (CharacterManager()->Read(&storage) == FAILURE) {
 		goto done;
 	}
-	if (PlantManager()->Read(&fileStorage) == FAILURE) {
+	if (PlantManager()->Read(&storage) == FAILURE) {
 		goto done;
 	}
-	if (BuildingManager()->Read(&fileStorage) == FAILURE) {
+	if (BuildingManager()->Read(&storage) == FAILURE) {
 		goto done;
 	}
 	if (DeleteState() != SUCCESS) {
@@ -384,13 +386,13 @@ MxResult LegoGameState::Load(MxULong p_slot)
 	}
 
 	char stateName[80];
-	Read(&fileStorage, &count);
+	storage.Read(count);
 
 	if (count) {
 		for (MxS16 i = 0; i < count; i++) {
 			MxS16 stateNameLength;
-			Read(&fileStorage, &stateNameLength);
-			Read(&fileStorage, stateName, (MxULong) stateNameLength);
+			storage.Read(stateNameLength);
+			storage.Read(stateName, (MxULong) stateNameLength);
 			stateName[stateNameLength] = 0;
 
 			LegoState* state = GetState(stateName);
@@ -402,11 +404,11 @@ MxResult LegoGameState::Load(MxULong p_slot)
 				}
 			}
 
-			state->Serialize(&fileStorage);
+			state->Serialize(&storage);
 		}
 	}
 
-	Read(&fileStorage, &actArea);
+	storage.Read(actArea);
 
 	if (m_currentAct == e_act1) {
 		m_unk0x42c = e_undefined;
@@ -537,10 +539,10 @@ void LegoGameState::SerializePlayersInfo(MxS16 p_flags)
 
 	if (fileStorage.Open(playersGSI.GetData(), p_flags) == SUCCESS) {
 		if (fileStorage.IsReadMode()) {
-			Read(&fileStorage, &m_playerCount);
+			fileStorage.Read(m_playerCount);
 		}
 		else if (fileStorage.IsWriteMode()) {
-			Write(&fileStorage, m_playerCount);
+			fileStorage.Write(m_playerCount);
 		}
 
 		for (MxS16 i = 0; i < m_playerCount; i++) {
