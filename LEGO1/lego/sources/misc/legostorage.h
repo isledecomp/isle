@@ -155,6 +155,15 @@ public:
 		return this;
 	}
 
+	LegoStorage* Read(char* p_data)
+	{
+		LegoS16 length;
+		Read(length);
+		Read(p_data, length);
+		p_data[length] = '\0';
+		return this;
+	}
+
 	// FUNCTION: LEGO1 0x10034470
 	LegoStorage* Read(MxString& p_data)
 	{

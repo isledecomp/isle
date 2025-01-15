@@ -390,10 +390,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 
 	if (count) {
 		for (MxS16 i = 0; i < count; i++) {
-			MxS16 stateNameLength;
-			storage.Read(stateNameLength);
-			storage.Read(stateName, (MxULong) stateNameLength);
-			stateName[stateNameLength] = 0;
+			storage.Read(stateName);
 
 			LegoState* state = GetState(stateName);
 			if (!state) {
