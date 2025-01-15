@@ -136,6 +136,14 @@ public:
 		return this;
 	}
 
+	// TODO: Type might be different (LegoS32). MxS32 is incompatible with LegoS32.
+	// FUNCTION: BETA10 0x10088540
+	LegoStorage* Write(MxS32 p_data)
+	{
+		Write(&p_data, sizeof(p_data));
+		return this;
+	}
+
 	// TODO: Type might be different (LegoU32). MxU32 is incompatible with LegoU32.
 	// FUNCTION: BETA10 0x1004b150
 	LegoStorage* Write(MxU32 p_data)
@@ -190,6 +198,14 @@ public:
 
 	// FUNCTION: BETA10 0x1004b1d0
 	LegoStorage* Read(LegoU16& p_data)
+	{
+		Read(&p_data, sizeof(p_data));
+		return this;
+	}
+
+	// TODO: Type might be different (LegoS32). MxS32 is incompatible with LegoS32.
+	// FUNCTION: BETA10 0x10088580
+	LegoStorage* Read(MxS32& p_data)
 	{
 		Read(&p_data, sizeof(p_data));
 		return this;
