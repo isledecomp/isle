@@ -209,6 +209,7 @@ void Radio::CreateState()
 }
 
 // FUNCTION: LEGO1 0x1002ce10
+// FUNCTION: BETA10 0x100f20f6
 RadioState::RadioState()
 {
 	srand(Timer()->GetTime());
@@ -217,13 +218,13 @@ RadioState::RadioState()
 	m_unk0x2c = random % 3;
 
 	m_unk0x08[0] = Playlist((MxU32*) g_unk0x100f3218, sizeOfArray(g_unk0x100f3218), Playlist::e_loop);
-	m_unk0x08[0].SetNextIndex(rand() % sizeOfArray(g_unk0x100f3218));
+	m_unk0x08[0].m_nextIndex = (rand() % sizeOfArray(g_unk0x100f3218));
 
 	m_unk0x08[1] = Playlist((MxU32*) g_unk0x100f3230, sizeOfArray(g_unk0x100f3230), Playlist::e_loop);
-	m_unk0x08[1].SetNextIndex(rand() % sizeOfArray(g_unk0x100f3230));
+	m_unk0x08[1].m_nextIndex = (rand() % sizeOfArray(g_unk0x100f3230));
 
 	m_unk0x08[2] = Playlist((MxU32*) g_unk0x100f3268, sizeOfArray(g_unk0x100f3268), Playlist::e_loop);
-	m_unk0x08[2].SetNextIndex(rand() % sizeOfArray(g_unk0x100f3268));
+	m_unk0x08[2].m_nextIndex = (rand() % sizeOfArray(g_unk0x100f3268));
 
 	m_active = FALSE;
 }

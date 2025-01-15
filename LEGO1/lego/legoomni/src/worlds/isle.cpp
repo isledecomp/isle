@@ -1337,82 +1337,83 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 	m_racecarPlane.Serialize(p_file);
 
 	if (p_file->IsWriteMode()) {
-		if (m_helicopterPlane.IsPresent()) {
-			if (m_helicopterWindshield) {
-				WriteNamedTexture(p_file, m_helicopterWindshield);
-			}
-			else {
+		// TODO: Seems to match better when using strcmp directly instead of IsPresent
+		if (strcmp(m_helicopterPlane.m_name.GetData(), "")) {
+			if (!m_helicopterWindshield) {
 				WriteDefaultTexture(p_file, "chwind.gif");
 			}
-
-			if (m_helicopterJetLeft) {
-				WriteNamedTexture(p_file, m_helicopterJetLeft);
-			}
 			else {
+				WriteNamedTexture(p_file, m_helicopterWindshield);
+			}
+
+			if (!m_helicopterJetLeft) {
 				WriteDefaultTexture(p_file, "chjetl.gif");
 			}
-
-			if (m_helicopterJetRight) {
-				WriteNamedTexture(p_file, m_helicopterJetRight);
-			}
 			else {
+				WriteNamedTexture(p_file, m_helicopterJetLeft);
+			}
+
+			if (!m_helicopterJetRight) {
 				WriteDefaultTexture(p_file, "chjetr.gif");
 			}
+			else {
+				WriteNamedTexture(p_file, m_helicopterJetRight);
+			}
 		}
 
-		if (m_jetskiPlane.IsPresent()) {
-			if (m_jetskiFront) {
-				WriteNamedTexture(p_file, m_jetskiFront);
-			}
-			else {
+		if (strcmp(m_jetskiPlane.m_name.GetData(), "")) {
+			if (!m_jetskiFront) {
 				WriteDefaultTexture(p_file, "jsfrnt.gif");
 			}
-
-			if (m_jetskiWindshield) {
-				WriteNamedTexture(p_file, m_jetskiWindshield);
-			}
 			else {
+				WriteNamedTexture(p_file, m_jetskiFront);
+			}
+
+			if (!m_jetskiWindshield) {
 				WriteDefaultTexture(p_file, "jswnsh.gif");
 			}
+			else {
+				WriteNamedTexture(p_file, m_jetskiWindshield);
+			}
 		}
 
-		if (m_dunebuggyPlane.IsPresent()) {
-			if (m_dunebuggyFront) {
-				WriteNamedTexture(p_file, m_dunebuggyFront);
-			}
-			else {
+		if (strcmp(m_dunebuggyPlane.m_name.GetData(), "")) {
+			if (!m_dunebuggyFront) {
 				WriteDefaultTexture(p_file, "dbfrfn.gif");
 			}
+			else {
+				WriteNamedTexture(p_file, m_dunebuggyFront);
+			}
 		}
 
-		if (m_racecarPlane.IsPresent()) {
-			if (m_racecarFront) {
-				WriteNamedTexture(p_file, m_racecarFront);
-			}
-			else {
+		if (strcmp(m_racecarPlane.m_name.GetData(), "")) {
+			if (!m_racecarFront) {
 				WriteDefaultTexture(p_file, "rcfrnt.gif");
 			}
-
-			if (m_racecarBack) {
-				WriteNamedTexture(p_file, m_racecarBack);
-			}
 			else {
+				WriteNamedTexture(p_file, m_racecarFront);
+			}
+
+			if (!m_racecarBack) {
 				WriteDefaultTexture(p_file, "rcback.gif");
 			}
+			else {
+				WriteNamedTexture(p_file, m_racecarBack);
+			}
 
-			if (m_racecarTail) {
-				WriteNamedTexture(p_file, m_racecarTail);
+			if (!m_racecarTail) {
+				WriteDefaultTexture(p_file, "rctail.gif");
 			}
 			else {
-				WriteDefaultTexture(p_file, "rctail.gif");
+				WriteNamedTexture(p_file, m_racecarTail);
 			}
 		}
 
-		m_cptClickDialogue.WriteToFile(p_file);
-		Write(p_file, m_unk0x022);
+		p_file->Write(m_cptClickDialogue.m_nextIndex);
+		p_file->Write(m_unk0x022);
 	}
 	else if (p_file->IsReadMode()) {
-		if (m_helicopterPlane.IsPresent()) {
+		if (strcmp(m_helicopterPlane.m_name.GetData(), "")) {
 			m_helicopterWindshield = ReadNamedTexture(p_file);
 			if (m_helicopterWindshield == NULL) {
 				return FAILURE;
@@ -1429,7 +1430,7 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 			}
 		}
 
-		if (m_jetskiPlane.IsPresent()) {
+		if (strcmp(m_jetskiPlane.m_name.GetData(), "")) {
 			m_jetskiFront = ReadNamedTexture(p_file);
 			if (m_jetskiFront == NULL) {
 				return FAILURE;
@@ -1441,14 +1442,14 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 			}
 		}
 
-		if (m_dunebuggyPlane.IsPresent()) {
+		if (strcmp(m_dunebuggyPlane.m_name.GetData(), "")) {
 			m_dunebuggyFront = ReadNamedTexture(p_file);
 			if (m_dunebuggyFront == NULL) {
 				return FAILURE;
 			}
 		}
 
-		if (m_racecarPlane.IsPresent()) {
+		if (strcmp(m_racecarPlane.m_name.GetData(), "")) {
 			m_racecarFront = ReadNamedTexture(p_file);
 			if (m_racecarFront == NULL) {
 				return FAILURE;
@@ -1465,11 +1466,10 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 			}
 		}
 
-		m_cptClickDialogue.ReadFromFile(p_file);
-		Read(p_file, &m_unk0x022);
+		p_file->Read(m_cptClickDialogue.m_nextIndex);
+		p_file->Read(m_unk0x022);
 	}
 
-	// TODO
 	return SUCCESS;
 }
 

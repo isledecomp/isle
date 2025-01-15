@@ -124,12 +124,12 @@ MxResult PizzeriaState::Serialize(LegoFile* p_file)
 
 	if (p_file->IsReadMode()) {
 		for (MxS16 i = 0; i < 5; i++) {
-			m_unk0x08[i].ReadFromFile(p_file);
+			p_file->Read(m_unk0x08[i].m_nextIndex);
 		}
 	}
 	else {
 		for (MxS16 i = 0; i < 5; i++) {
-			m_unk0x08[i].WriteToFile(p_file);
+			p_file->Write(m_unk0x08[i].m_nextIndex);
 		}
 	}
 

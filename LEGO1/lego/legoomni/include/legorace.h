@@ -42,14 +42,17 @@ public:
 		MxResult Serialize(LegoFile* p_file)
 		{
 			if (p_file->IsReadMode()) {
-				Read(p_file, &m_id);
-				Read(p_file, &m_unk0x02);
-				Read(p_file, &m_score);
+				p_file->Read(m_id);
+				p_file->Read(m_unk0x02);
+				p_file->Read(m_score);
 			}
 			else if (p_file->IsWriteMode()) {
-				Write(p_file, m_id);
-				Write(p_file, m_unk0x02);
-				Write(p_file, m_score);
+				p_file->Write(m_id);
+				p_file->Write(m_unk0x02);
+				p_file->Write(m_score);
+			}
+			else {
+				return FAILURE;
 			}
 
 			return SUCCESS;

@@ -111,7 +111,7 @@ public:
 		Username(Username& p_other) { Set(p_other); }
 		void Set(Username& p_other) { memcpy(m_letters, p_other.m_letters, sizeof(m_letters)); }
 
-		MxResult Serialize(LegoStorage* p_storage);
+		MxResult Serialize(LegoFile* p_file);
 		Username& operator=(const Username& p_other);
 
 		MxS16 m_letters[7]; // 0x00
@@ -121,10 +121,10 @@ public:
 	struct ScoreItem {
 		MxResult Serialize(LegoFile* p_file);
 
-		MxS16 m_totalScore;   // 0x00
-		MxU8 m_scores[5][5];  // 0x02
-		Username m_name;      // 0x1c
-		undefined2 m_unk0x2a; // 0x2a
+		MxS16 m_totalScore;  // 0x00
+		MxU8 m_scores[5][5]; // 0x02
+		Username m_name;     // 0x1c
+		MxS16 m_unk0x2a;     // 0x2a
 	};
 
 	// SIZE 0x372
@@ -141,7 +141,7 @@ public:
 
 		MxS16 m_count;          // 0x00
 		ScoreItem m_scores[20]; // 0x02
-		undefined2 m_unk0x372;  // 0x372
+		MxS16 m_unk0x372;       // 0x372
 	};
 
 	LegoGameState();
@@ -214,7 +214,7 @@ private:
 	// TODO: Most likely getters/setters are not used according to BETA for the following members:
 
 public:
-	MxU16 m_unk0x24;                      // 0x24
+	MxS16 m_unk0x24;                      // 0x24
 	MxS16 m_playerCount;                  // 0x26
 	Username m_players[9];                // 0x28
 	History m_history;                    // 0xa6

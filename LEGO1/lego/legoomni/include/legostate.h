@@ -18,8 +18,7 @@ public:
 	};
 
 	// SIZE 0x0c
-	class Playlist {
-	public:
+	struct Playlist {
 		enum Mode {
 			e_loop,
 			e_once,
@@ -60,21 +59,6 @@ public:
 		MxU32 Next();
 		MxBool Contains(MxU32 p_objectId);
 
-		void SetNextIndex(MxS16 p_nextIndex) { m_nextIndex = p_nextIndex; }
-
-		MxResult ReadFromFile(LegoFile* p_file)
-		{
-			Read(p_file, &m_nextIndex);
-			return SUCCESS;
-		}
-
-		MxResult WriteToFile(LegoFile* p_file)
-		{
-			Write(p_file, m_nextIndex);
-			return SUCCESS;
-		}
-
-	private:
 		MxU32* m_objectIds; // 0x00
 		MxS16 m_length;     // 0x04
 		MxS16 m_mode;       // 0x06
@@ -95,7 +79,7 @@ public:
 	virtual MxResult Serialize(LegoFile* p_file)
 	{
 		if (p_file->IsWriteMode()) {
-			p_file->WriteString(ClassName());
+			p_file->Write(MxString(ClassName()));
 		}
 		return SUCCESS;
 	} // vtable+0x1c

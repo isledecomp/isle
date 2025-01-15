@@ -646,33 +646,34 @@ AmbulanceMissionState::AmbulanceMissionState()
 }
 
 // FUNCTION: LEGO1 0x10037440
+// FUNCTION: BETA10 0x10024480
 MxResult AmbulanceMissionState::Serialize(LegoFile* p_file)
 {
 	LegoState::Serialize(p_file);
 
 	if (p_file->IsReadMode()) {
-		Read(p_file, &m_peScore);
-		Read(p_file, &m_maScore);
-		Read(p_file, &m_paScore);
-		Read(p_file, &m_niScore);
-		Read(p_file, &m_laScore);
-		Read(p_file, &m_peHighScore);
-		Read(p_file, &m_maHighScore);
-		Read(p_file, &m_paHighScore);
-		Read(p_file, &m_niHighScore);
-		Read(p_file, &m_laHighScore);
+		p_file->Read(m_peScore);
+		p_file->Read(m_maScore);
+		p_file->Read(m_paScore);
+		p_file->Read(m_niScore);
+		p_file->Read(m_laScore);
+		p_file->Read(m_peHighScore);
+		p_file->Read(m_maHighScore);
+		p_file->Read(m_paHighScore);
+		p_file->Read(m_niHighScore);
+		p_file->Read(m_laHighScore);
 	}
 	else if (p_file->IsWriteMode()) {
-		Write(p_file, m_peScore);
-		Write(p_file, m_maScore);
-		Write(p_file, m_paScore);
-		Write(p_file, m_niScore);
-		Write(p_file, m_laScore);
-		Write(p_file, m_peHighScore);
-		Write(p_file, m_maHighScore);
-		Write(p_file, m_paHighScore);
-		Write(p_file, m_niHighScore);
-		Write(p_file, m_laHighScore);
+		p_file->Write(m_peScore);
+		p_file->Write(m_maScore);
+		p_file->Write(m_paScore);
+		p_file->Write(m_niScore);
+		p_file->Write(m_laScore);
+		p_file->Write(m_peHighScore);
+		p_file->Write(m_maHighScore);
+		p_file->Write(m_paHighScore);
+		p_file->Write(m_niHighScore);
+		p_file->Write(m_laHighScore);
 	}
 
 	return SUCCESS;
