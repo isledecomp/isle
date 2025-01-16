@@ -1705,24 +1705,24 @@ LegoVehicleBuildState::LegoVehicleBuildState(const char* p_classType)
 
 // FUNCTION: LEGO1 0x10026120
 // FUNCTION: BETA10 0x1006eef0
-MxResult LegoVehicleBuildState::Serialize(LegoFile* p_file)
+MxResult LegoVehicleBuildState::Serialize(LegoStorage* p_storage)
 {
-	LegoState::Serialize(p_file);
+	LegoState::Serialize(p_storage);
 
-	if (p_file->IsReadMode()) {
-		p_file->Read(m_unk0x4c);
-		p_file->Read(m_unk0x4d);
-		p_file->Read(m_unk0x4e);
+	if (p_storage->IsReadMode()) {
+		p_storage->ReadU8(m_unk0x4c);
+		p_storage->ReadU8(m_unk0x4d);
+		p_storage->ReadU8(m_unk0x4e);
 #ifndef BETA10
-		p_file->Read(m_placedPartCount);
+		p_storage->ReadU8(m_placedPartCount);
 #endif
 	}
 	else {
-		p_file->Write(m_unk0x4c);
-		p_file->Write(m_unk0x4d);
-		p_file->Write(m_unk0x4e);
+		p_storage->WriteU8(m_unk0x4c);
+		p_storage->WriteU8(m_unk0x4d);
+		p_storage->WriteU8(m_unk0x4e);
 #ifndef BETA10
-		p_file->Write(m_placedPartCount);
+		p_storage->WriteU8(m_placedPartCount);
 #endif
 	}
 

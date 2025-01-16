@@ -28,7 +28,7 @@ public:
 		return !strcmp(p_name, TowTrackMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
+	MxResult Serialize(LegoStorage* p_storage) override; // vtable+0x1c
 
 	// FUNCTION: BETA10 0x10088890
 	MxS16 GetHighScore(MxU8 p_actorId)

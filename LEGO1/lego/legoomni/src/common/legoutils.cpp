@@ -662,17 +662,17 @@ void SetLightPosition(MxS32 p_index)
 }
 
 // FUNCTION: LEGO1 0x1003f3b0
-LegoNamedTexture* ReadNamedTexture(LegoFile* p_file)
+LegoNamedTexture* ReadNamedTexture(LegoStorage* p_storage)
 {
 	LegoTexture* texture = NULL;
 	LegoNamedTexture* namedTexture = NULL;
 	MxString string;
 
-	p_file->Read(string);
+	p_storage->ReadMxString(string);
 
 	texture = new LegoTexture();
 	if (texture != NULL) {
-		if (texture->Read(p_file, 0) != SUCCESS) {
+		if (texture->Read(p_storage, 0) != SUCCESS) {
 			delete texture;
 			return namedTexture;
 		}
@@ -687,7 +687,7 @@ LegoNamedTexture* ReadNamedTexture(LegoFile* p_file)
 }
 
 // FUNCTION: LEGO1 0x1003f540
-void WriteDefaultTexture(LegoFile* p_file, const char* p_name)
+void WriteDefaultTexture(LegoStorage* p_storage, const char* p_name)
 {
 	MxString name(p_name);
 	LegoTextureInfo* textureInfo = TextureContainer()->Get(p_name);
@@ -743,8 +743,8 @@ void WriteDefaultTexture(LegoFile* p_file, const char* p_name)
 					LegoTexture texture;
 					texture.SetImage(image);
 
-					p_file->Write(MxString(name));
-					texture.Write(p_file);
+					p_storage->WriteMxString(name);
+					texture.Write(p_storage);
 				}
 				else {
 					delete image;
@@ -758,10 +758,10 @@ void WriteDefaultTexture(LegoFile* p_file, const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x1003f8a0
-void WriteNamedTexture(LegoFile* p_file, LegoNamedTexture* p_namedTexture)
+void WriteNamedTexture(LegoStorage* p_storage, LegoNamedTexture* p_namedTexture)
 {
-	p_file->Write(MxString(*p_namedTexture->GetName()));
-	p_namedTexture->GetTexture()->Write(p_file);
+	p_storage->WriteMxString(*p_namedTexture->GetName());
+	p_namedTexture->GetTexture()->Write(p_storage);
 }
 
 // FUNCTION: LEGO1 0x1003f930

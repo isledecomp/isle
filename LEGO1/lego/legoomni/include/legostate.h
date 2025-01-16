@@ -76,10 +76,10 @@ public:
 
 	// FUNCTION: LEGO1 0x10005fb0
 	// FUNCTION: BETA10 0x10017af0
-	virtual MxResult Serialize(LegoFile* p_file)
+	virtual MxResult Serialize(LegoStorage* p_storage)
 	{
-		if (p_file->IsWriteMode()) {
-			p_file->Write(MxString(ClassName()));
+		if (p_storage->IsWriteMode()) {
+			p_storage->WriteMxString(ClassName());
 		}
 		return SUCCESS;
 	} // vtable+0x1c

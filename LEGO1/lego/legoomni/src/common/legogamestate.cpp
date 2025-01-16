@@ -253,10 +253,10 @@ MxResult LegoGameState::Save(MxULong p_slot)
 		goto done;
 	}
 
-	storage.Write(0x1000c);
-	storage.Write(m_unk0x24);
-	storage.Write((MxU16) m_currentAct);
-	storage.Write(m_actorId);
+	storage.WriteS32(0x1000c);
+	storage.WriteS16(m_unk0x24);
+	storage.WriteU16(m_currentAct);
+	storage.WriteU8(m_actorId);
 
 	for (i = 0; i < sizeOfArray(g_colorSaveData); i++) {
 		if (WriteVariable(&storage, variableTable, g_colorSaveData[i].m_targetName) == FAILURE) {
@@ -282,7 +282,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 		}
 	}
 
-	storage.Write(count);
+	storage.WriteS16(count);
 
 	for (j = 0; j < m_stateCount; j++) {
 		if (m_stateArray[j]->IsSerializable()) {
@@ -291,7 +291,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	}
 
 	area = m_unk0x42c;
-	storage.Write((MxU16) area);
+	storage.WriteU16(area);
 	SerializeScoreHistory(2);
 	m_isDirty = FALSE;
 
@@ -342,18 +342,18 @@ MxResult LegoGameState::Load(MxULong p_slot)
 	MxS16 count, actArea;
 	const char* lightPosition;
 
-	storage.Read(version);
+	storage.ReadS32(version);
 
 	if (version != 0x1000c) {
 		OmniError("Saved game version mismatch", 0);
 		goto done;
 	}
 
-	storage.Read(m_unk0x24);
-	storage.Read(actArea);
+	storage.ReadS16(m_unk0x24);
+	storage.ReadS16(actArea);
 
 	SetCurrentAct((Act) actArea);
-	storage.Read(m_actorId);
+	storage.ReadU8(m_actorId);
 	if (m_actorId) {
 		SetActor(m_actorId);
 	}
@@ -386,11 +386,11 @@ MxResult LegoGameState::Load(MxULong p_slot)
 	}
 
 	char stateName[80];
-	storage.Read(count);
+	storage.ReadS16(count);
 
 	if (count) {
 		for (MxS16 i = 0; i < count; i++) {
-			storage.Read(stateName);
+			storage.ReadString(stateName);
 
 			LegoState* state = GetState(stateName);
 			if (!state) {
@@ -405,7 +405,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 		}
 	}
 
-	storage.Read(actArea);
+	storage.ReadS16(actArea);
 
 	if (m_currentAct == e_act1) {
 		m_unk0x42c = e_undefined;
@@ -528,22 +528,22 @@ void LegoGameState::GetFileSavePath(MxString* p_outPath, MxU8 p_slotn)
 // FUNCTION: LEGO1 0x1003a2e0
 void LegoGameState::SerializePlayersInfo(MxS16 p_flags)
 {
-	LegoFile fileStorage;
+	LegoFile storage;
 	MxString playersGSI = MxString(m_savePath);
 
 	playersGSI += "\\";
 	playersGSI += g_playersGSI;
 
-	if (fileStorage.Open(playersGSI.GetData(), p_flags) == SUCCESS) {
-		if (fileStorage.IsReadMode()) {
-			fileStorage.Read(m_playerCount);
+	if (storage.Open(playersGSI.GetData(), p_flags) == SUCCESS) {
+		if (storage.IsReadMode()) {
+			storage.ReadS16(m_playerCount);
 		}
-		else if (fileStorage.IsWriteMode()) {
-			fileStorage.Write(m_playerCount);
+		else if (storage.IsWriteMode()) {
+			storage.WriteS16(m_playerCount);
 		}
 
 		for (MxS16 i = 0; i < m_playerCount; i++) {
-			m_players[i].Serialize(&fileStorage);
+			m_players[i].Serialize(&storage);
 		}
 	}
 }
@@ -1152,16 +1152,16 @@ LegoGameState::Username::Username()
 
 // FUNCTION: LEGO1 0x1003c690
 // FUNCTION: BETA10 0x10086c57
-MxResult LegoGameState::Username::Serialize(LegoFile* p_file)
+MxResult LegoGameState::Username::Serialize(LegoStorage* p_storage)
 {
-	if (p_file->IsReadMode()) {
+	if (p_storage->IsReadMode()) {
 		for (MxS16 i = 0; i < (MxS16) sizeOfArray(m_letters); i++) {
-			p_file->Read(m_letters[i]);
+			p_storage->ReadS16(m_letters[i]);
 		}
 	}
-	else if (p_file->IsWriteMode()) {
+	else if (p_storage->IsWriteMode()) {
 		for (MxS16 i = 0; i < (MxS16) sizeOfArray(m_letters); i++) {
-			p_file->Write(m_letters[i]);
+			p_storage->WriteS16(m_letters[i]);
 		}
 	}
 
@@ -1178,31 +1178,31 @@ LegoGameState::Username& LegoGameState::Username::operator=(const Username& p_ot
 
 // FUNCTION: LEGO1 0x1003c740
 // FUNCTION: BETA10 0x10086d39
-MxResult LegoGameState::ScoreItem::Serialize(LegoFile* p_file)
+MxResult LegoGameState::ScoreItem::Serialize(LegoStorage* p_storage)
 {
-	if (p_file->IsReadMode()) {
-		p_file->Read(m_totalScore);
+	if (p_storage->IsReadMode()) {
+		p_storage->ReadS16(m_totalScore);
 
 		for (MxS32 i = 0; i < 5; i++) {
 			for (MxS32 j = 0; j < 5; j++) {
-				p_file->Read(m_scores[i][j]);
+				p_storage->ReadU8(m_scores[i][j]);
 			}
 		}
 
-		m_name.Serialize(p_file);
-		p_file->Read(m_unk0x2a);
+		m_name.Serialize(p_storage);
+		p_storage->ReadS16(m_unk0x2a);
 	}
-	else if (p_file->IsWriteMode()) {
-		p_file->Write(m_totalScore);
+	else if (p_storage->IsWriteMode()) {
+		p_storage->WriteS16(m_totalScore);
 
 		for (MxS32 i = 0; i < 5; i++) {
 			for (MxS32 j = 0; j < 5; j++) {
-				p_file->Write(m_scores[i][j]);
+				p_storage->WriteU8(m_scores[i][j]);
 			}
 		}
 
-		m_name.Serialize(p_file);
-		p_file->Write(m_unk0x2a);
+		m_name.Serialize(p_storage);
+		p_storage->WriteS16(m_unk0x2a);
 	}
 
 	return SUCCESS;
@@ -1324,25 +1324,25 @@ LegoGameState::ScoreItem* LegoGameState::History::FUN_1003cc90(
 
 // FUNCTION: LEGO1 0x1003ccf0
 // FUNCTION: BETA10 0x100873e7
-MxResult LegoGameState::History::Serialize(LegoFile* p_file)
+MxResult LegoGameState::History::Serialize(LegoStorage* p_storage)
 {
-	if (p_file->IsReadMode()) {
-		p_file->Read(m_unk0x372);
-		p_file->Read(m_count);
+	if (p_storage->IsReadMode()) {
+		p_storage->ReadS16(m_unk0x372);
+		p_storage->ReadS16(m_count);
 
 		for (MxS16 i = 0; i < m_count; i++) {
 			MxS16 j;
-			p_file->Read(j);
-			m_scores[i].Serialize(p_file);
+			p_storage->ReadS16(j);
+			m_scores[i].Serialize(p_storage);
 		}
 	}
-	else if (p_file->IsWriteMode()) {
-		p_file->Write(m_unk0x372);
-		p_file->Write(m_count);
+	else if (p_storage->IsWriteMode()) {
+		p_storage->WriteS16(m_unk0x372);
+		p_storage->WriteS16(m_count);
 
 		for (MxS16 i = 0; i < m_count; i++) {
-			p_file->Write(i);
-			m_scores[i].Serialize(p_file);
+			p_storage->WriteS16(i);
+			m_scores[i].Serialize(p_storage);
 		}
 	}
 
@@ -1352,7 +1352,7 @@ MxResult LegoGameState::History::Serialize(LegoFile* p_file)
 // FUNCTION: LEGO1 0x1003cdd0
 void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
 {
-	LegoFile stream;
+	LegoFile storage;
 	MxString savePath(m_savePath);
 	savePath += "\\";
 	savePath += g_historyGSI;
@@ -1361,8 +1361,8 @@ void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
 		m_history.WriteScoreHistory();
 	}
 
-	if (stream.Open(savePath.GetData(), p_flags) == SUCCESS) {
-		m_history.Serialize(&stream);
+	if (storage.Open(savePath.GetData(), p_flags) == SUCCESS) {
+		m_history.Serialize(&storage);
 	}
 }
 

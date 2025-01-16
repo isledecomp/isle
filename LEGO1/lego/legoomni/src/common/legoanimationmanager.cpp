@@ -621,7 +621,7 @@ MxResult LegoAnimationManager::LoadWorldInfo(LegoOmni::World p_worldId)
 
 		DeleteAnimations();
 
-		LegoFile file;
+		LegoFile storage;
 
 		if (p_worldId == LegoOmni::e_undefined) {
 			result = SUCCESS;
@@ -653,12 +653,12 @@ MxResult LegoAnimationManager::LoadWorldInfo(LegoOmni::World p_worldId)
 			}
 		}
 
-		if (file.Open(path, LegoFile::c_read) == FAILURE) {
+		if (storage.Open(path, LegoFile::c_read) == FAILURE) {
 			goto done;
 		}
 
 		MxU32 version;
-		if (file.Read(&version, sizeof(version)) == FAILURE) {
+		if (storage.Read(&version, sizeof(version)) == FAILURE) {
 			goto done;
 		}
 
@@ -667,7 +667,7 @@ MxResult LegoAnimationManager::LoadWorldInfo(LegoOmni::World p_worldId)
 			goto done;
 		}
 
-		if (file.Read(&m_animCount, sizeof(m_animCount)) == FAILURE) {
+		if (storage.Read(&m_animCount, sizeof(m_animCount)) == FAILURE) {
 			goto done;
 		}
 
@@ -675,7 +675,7 @@ MxResult LegoAnimationManager::LoadWorldInfo(LegoOmni::World p_worldId)
 		memset(m_anims, 0, m_animCount * sizeof(*m_anims));
 
 		for (j = 0; j < m_animCount; j++) {
-			if (ReadAnimInfo(&file, &m_anims[j]) == FAILURE) {
+			if (ReadAnimInfo(&storage, &m_anims[j]) == FAILURE) {
 				goto done;
 			}
 
@@ -754,49 +754,49 @@ MxBool LegoAnimationManager::FindVehicle(const char* p_name, MxU32& p_index)
 }
 
 // FUNCTION: LEGO1 0x10060180
-MxResult LegoAnimationManager::ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info)
+MxResult LegoAnimationManager::ReadAnimInfo(LegoStorage* p_storage, AnimInfo* p_info)
 {
 	MxResult result = FAILURE;
 	MxU8 length;
 	MxS32 i, j;
 
-	if (p_file->Read(&length, sizeof(length)) == FAILURE) {
+	if (p_storage->Read(&length, sizeof(length)) == FAILURE) {
 		goto done;
 	}
 
 	p_info->m_name = new char[length + 1];
-	if (p_file->Read(p_info->m_name, length) == FAILURE) {
+	if (p_storage->Read(p_info->m_name, length) == FAILURE) {
 		goto done;
 	}
 
 	p_info->m_name[length] = 0;
-	if (p_file->Read(&p_info->m_objectId, sizeof(p_info->m_objectId)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_objectId, sizeof(p_info->m_objectId)) == FAILURE) {
 		goto done;
 	}
 
-	if (p_file->Read(&p_info->m_location, sizeof(p_info->m_location)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_location, sizeof(p_info->m_location)) == FAILURE) {
 		goto done;
 	}
-	if (p_file->Read(&p_info->m_unk0x0a, sizeof(p_info->m_unk0x0a)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_unk0x0a, sizeof(p_info->m_unk0x0a)) == FAILURE) {
 		goto done;
 	}
-	if (p_file->Read(&p_info->m_unk0x0b, sizeof(p_info->m_unk0x0b)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_unk0x0b, sizeof(p_info->m_unk0x0b)) == FAILURE) {
 		goto done;
 	}
-	if (p_file->Read(&p_info->m_unk0x0c, sizeof(p_info->m_unk0x0c)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_unk0x0c, sizeof(p_info->m_unk0x0c)) == FAILURE) {
 		goto done;
 	}
-	if (p_file->Read(&p_info->m_unk0x0d, sizeof(p_info->m_unk0x0d)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_unk0x0d, sizeof(p_info->m_unk0x0d)) == FAILURE) {
 		goto done;
 	}
 
 	for (i = 0; i < (MxS32) sizeOfArray(p_info->m_unk0x10); i++) {
-		if (p_file->Read(&p_info->m_unk0x10[i], sizeof(*p_info->m_unk0x10)) != SUCCESS) {
+		if (p_storage->Read(&p_info->m_unk0x10[i], sizeof(*p_info->m_unk0x10)) != SUCCESS) {
 			goto done;
 		}
 	}
 
-	if (p_file->Read(&p_info->m_modelCount, sizeof(p_info->m_modelCount)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_modelCount, sizeof(p_info->m_modelCount)) == FAILURE) {
 		goto done;
 	}
 
@@ -804,7 +804,7 @@ MxResult LegoAnimationManager::ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info)
 	memset(p_info->m_models, 0, p_info->m_modelCount * sizeof(*p_info->m_models));
 
 	for (j = 0; j < p_info->m_modelCount; j++) {
-		if (ReadModelInfo(p_file, &p_info->m_models[j]) == FAILURE) {
+		if (ReadModelInfo(p_storage, &p_info->m_models[j]) == FAILURE) {
 			goto done;
 		}
 	}
@@ -816,35 +816,35 @@ done:
 }
 
 // FUNCTION: LEGO1 0x10060310
-MxResult LegoAnimationManager::ReadModelInfo(LegoFile* p_file, ModelInfo* p_info)
+MxResult LegoAnimationManager::ReadModelInfo(LegoStorage* p_storage, ModelInfo* p_info)
 {
 	MxResult result = FAILURE;
 	MxU8 length;
 
-	if (p_file->Read(&length, 1) == FAILURE) {
+	if (p_storage->Read(&length, 1) == FAILURE) {
 		goto done;
 	}
 
 	p_info->m_name = new char[length + 1];
-	if (p_file->Read(p_info->m_name, length) == FAILURE) {
+	if (p_storage->Read(p_info->m_name, length) == FAILURE) {
 		goto done;
 	}
 
 	p_info->m_name[length] = 0;
-	if (p_file->Read(&p_info->m_unk0x04, sizeof(p_info->m_unk0x04)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_unk0x04, sizeof(p_info->m_unk0x04)) == FAILURE) {
 		goto done;
 	}
 
-	if (p_file->Read(p_info->m_location, sizeof(p_info->m_location)) != SUCCESS) {
+	if (p_storage->Read(p_info->m_location, sizeof(p_info->m_location)) != SUCCESS) {
 		goto done;
 	}
-	if (p_file->Read(p_info->m_direction, sizeof(p_info->m_direction)) != SUCCESS) {
+	if (p_storage->Read(p_info->m_direction, sizeof(p_info->m_direction)) != SUCCESS) {
 		goto done;
 	}
-	if (p_file->Read(p_info->m_up, sizeof(p_info->m_up)) != SUCCESS) {
+	if (p_storage->Read(p_info->m_up, sizeof(p_info->m_up)) != SUCCESS) {
 		goto done;
 	}
-	if (p_file->Read(&p_info->m_unk0x2c, sizeof(p_info->m_unk0x2c)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_unk0x2c, sizeof(p_info->m_unk0x2c)) == FAILURE) {
 		goto done;
 	}
 
@@ -2935,21 +2935,21 @@ void AnimState::InitFromAnims(MxU32 p_animsLength, AnimInfo* p_anims, MxU32 p_ex
 
 // FUNCTION: LEGO1 0x100652d0
 // FUNCTION: BETA10 0x10046621
-MxResult AnimState::Serialize(LegoFile* p_file)
+MxResult AnimState::Serialize(LegoStorage* p_storage)
 {
-	MxResult result = LegoState::Serialize(p_file);
+	MxResult result = LegoState::Serialize(p_storage);
 
 	if (result == SUCCESS) {
-		if (p_file->IsReadMode()) {
+		if (p_storage->IsReadMode()) {
 			MxS32 i;
 
-			p_file->Read(m_extraCharacterId);
+			p_storage->ReadU32(m_extraCharacterId);
 
 			if (m_unk0x10) {
 				delete[] m_unk0x10;
 			}
 
-			p_file->Read(m_unk0x0c);
+			p_storage->ReadU32(m_unk0x0c);
 
 #ifndef BETA10
 			if (m_unk0x0c != 0) {
@@ -2963,11 +2963,11 @@ MxResult AnimState::Serialize(LegoFile* p_file)
 #endif
 
 			for (i = 0; i < m_unk0x0c; i++) {
-				p_file->Read(m_unk0x10[i]);
+				p_storage->ReadU16(m_unk0x10[i]);
 			}
 
 			// Note that here we read first and then free memory in contrast to above
-			p_file->Read(m_locationsFlagsLength);
+			p_storage->ReadU32(m_locationsFlagsLength);
 
 #ifndef BETA10
 			if (m_locationsFlags) {
@@ -2985,22 +2985,22 @@ MxResult AnimState::Serialize(LegoFile* p_file)
 #endif
 
 			for (i = 0; i < m_locationsFlagsLength; i++) {
-				p_file->Read(m_locationsFlags[i]);
+				p_storage->ReadU8(m_locationsFlags[i]);
 			}
 		}
-		else if (p_file->IsWriteMode()) {
+		else if (p_storage->IsWriteMode()) {
 			MxS32 i;
 
-			p_file->Write(m_extraCharacterId);
-			p_file->Write(m_unk0x0c);
+			p_storage->WriteU32(m_extraCharacterId);
+			p_storage->WriteU32(m_unk0x0c);
 
 			for (i = 0; i < m_unk0x0c; i++) {
-				p_file->Write(m_unk0x10[i]);
+				p_storage->WriteU16(m_unk0x10[i]);
 			}
 
-			p_file->Write(m_locationsFlagsLength);
+			p_storage->WriteU32(m_locationsFlagsLength);
 			for (i = 0; i < m_locationsFlagsLength; i++) {
-				p_file->Write(m_locationsFlags[i]);
+				p_storage->WriteU8(m_locationsFlags[i]);
 			}
 		}
 	}

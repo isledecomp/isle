@@ -610,33 +610,33 @@ TowTrackMissionState::TowTrackMissionState()
 
 // FUNCTION: LEGO1 0x1004dde0
 // FUNCTION: BETA10 0x100f8720
-MxResult TowTrackMissionState::Serialize(LegoFile* p_file)
+MxResult TowTrackMissionState::Serialize(LegoStorage* p_storage)
 {
-	LegoState::Serialize(p_file);
+	LegoState::Serialize(p_storage);
 
-	if (p_file->IsReadMode()) {
-		p_file->Read(m_peScore);
-		p_file->Read(m_maScore);
-		p_file->Read(m_paScore);
-		p_file->Read(m_niScore);
-		p_file->Read(m_laScore);
-		p_file->Read(m_peHighScore);
-		p_file->Read(m_maHighScore);
-		p_file->Read(m_paHighScore);
-		p_file->Read(m_niHighScore);
-		p_file->Read(m_laHighScore);
+	if (p_storage->IsReadMode()) {
+		p_storage->ReadS16(m_peScore);
+		p_storage->ReadS16(m_maScore);
+		p_storage->ReadS16(m_paScore);
+		p_storage->ReadS16(m_niScore);
+		p_storage->ReadS16(m_laScore);
+		p_storage->ReadS16(m_peHighScore);
+		p_storage->ReadS16(m_maHighScore);
+		p_storage->ReadS16(m_paHighScore);
+		p_storage->ReadS16(m_niHighScore);
+		p_storage->ReadS16(m_laHighScore);
 	}
-	else if (p_file->IsWriteMode()) {
-		p_file->Write(m_peScore);
-		p_file->Write(m_maScore);
-		p_file->Write(m_paScore);
-		p_file->Write(m_niScore);
-		p_file->Write(m_laScore);
-		p_file->Write(m_peHighScore);
-		p_file->Write(m_maHighScore);
-		p_file->Write(m_paHighScore);
-		p_file->Write(m_niHighScore);
-		p_file->Write(m_laHighScore);
+	else if (p_storage->IsWriteMode()) {
+		p_storage->WriteS16(m_peScore);
+		p_storage->WriteS16(m_maScore);
+		p_storage->WriteS16(m_paScore);
+		p_storage->WriteS16(m_niScore);
+		p_storage->WriteS16(m_laScore);
+		p_storage->WriteS16(m_peHighScore);
+		p_storage->WriteS16(m_maHighScore);
+		p_storage->WriteS16(m_paHighScore);
+		p_storage->WriteS16(m_niHighScore);
+		p_storage->WriteS16(m_laHighScore);
 	}
 
 	return SUCCESS;

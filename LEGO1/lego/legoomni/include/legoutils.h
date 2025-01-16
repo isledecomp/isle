@@ -31,11 +31,11 @@ enum Cursor {
 class BoundingSphere;
 class MxAtomId;
 class LegoEntity;
-class LegoFile;
 class LegoAnimPresenter;
 class LegoNamedTexture;
 class LegoPathActor;
 class LegoROI;
+class LegoStorage;
 class LegoTreeNode;
 
 extern MxAtomId* g_isleScript;
@@ -63,9 +63,9 @@ MxBool FUN_1003ef60();
 MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_worldAtom, MxS32 p_worldEntityId);
 MxS32 UpdateLightPosition(MxS32 p_increase);
 void SetLightPosition(MxS32 p_index);
-LegoNamedTexture* ReadNamedTexture(LegoFile* p_file);
-void WriteDefaultTexture(LegoFile* p_file, const char* p_name);
-void WriteNamedTexture(LegoFile* p_file, LegoNamedTexture* p_namedTexture);
+LegoNamedTexture* ReadNamedTexture(LegoStorage* p_storage);
+void WriteDefaultTexture(LegoStorage* p_storage, const char* p_name);
+void WriteNamedTexture(LegoStorage* p_storage, LegoNamedTexture* p_namedTexture);
 void FUN_1003f930(LegoNamedTexture* p_namedTexture);
 
 // FUNCTION: BETA10 0x100260a0
