@@ -87,13 +87,13 @@ public:
 	void SetLoopCount(MxS32 p_loopCount) { m_loopCount = p_loopCount; }
 
 	// FUNCTION: BETA10 0x1003db50
-	Vector3& GetLocation() { return m_location; }
+	const Vector3& GetLocation() { return m_location; }
 
 	// FUNCTION: BETA10 0x1003db80
-	Vector3& GetDirection() { return m_direction; }
+	const Vector3& GetDirection() { return m_direction; }
 
 	// FUNCTION: BETA10 0x1003dbb0
-	Vector3& GetUp() { return m_up; }
+	const Vector3& GetUp() { return m_up; }
 
 	// FUNCTION: BETA10 0x100153b0
 	void SetLocation(const Vector3& p_location) { m_location = p_location; }

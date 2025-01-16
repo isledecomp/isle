@@ -471,6 +471,7 @@ void ViewManager::SetPOVSource(const OrientableROI* point_of_view)
 }
 
 // FUNCTION: LEGO1 0x100a6dc0
+// FUNCTION: BETA10 0x101739b8
 float ViewManager::ProjectedSize(const BoundingSphere& p_bounding_sphere)
 {
 	// The algorithm projects the radius of bounding sphere onto the perpendicular
