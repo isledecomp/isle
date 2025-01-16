@@ -1337,7 +1337,6 @@ MxResult Act1State::Serialize(LegoStorage* p_storage)
 	m_racecarPlane.Serialize(p_storage);
 
 	if (p_storage->IsWriteMode()) {
-		// TODO: Seems to match better when using strcmp directly instead of IsPresent
 		if (strcmp(m_helicopterPlane.m_name.GetData(), "")) {
 			if (!m_helicopterWindshield) {
 				WriteDefaultTexture(p_storage, "chwind.gif");
@@ -1414,54 +1413,45 @@ MxResult Act1State::Serialize(LegoStorage* p_storage)
 	}
 	else if (p_storage->IsReadMode()) {
 		if (strcmp(m_helicopterPlane.m_name.GetData(), "")) {
-			m_helicopterWindshield = ReadNamedTexture(p_storage);
-			if (m_helicopterWindshield == NULL) {
+			if ((m_helicopterWindshield = ReadNamedTexture(p_storage)) == NULL) {
 				return FAILURE;
 			}
 
-			m_helicopterJetLeft = ReadNamedTexture(p_storage);
-			if (m_helicopterJetLeft == NULL) {
+			if ((m_helicopterJetLeft = ReadNamedTexture(p_storage)) == NULL) {
 				return FAILURE;
 			}
 
-			m_helicopterJetRight = ReadNamedTexture(p_storage);
-			if (m_helicopterJetRight == NULL) {
+			if ((m_helicopterJetRight = ReadNamedTexture(p_storage)) == NULL) {
 				return FAILURE;
 			}
 		}
 
 		if (strcmp(m_jetskiPlane.m_name.GetData(), "")) {
-			m_jetskiFront = ReadNamedTexture(p_storage);
-			if (m_jetskiFront == NULL) {
+			if ((m_jetskiFront = ReadNamedTexture(p_storage)) == NULL) {
 				return FAILURE;
 			}
 
-			m_jetskiWindshield = ReadNamedTexture(p_storage);
-			if (m_jetskiWindshield == NULL) {
+			if ((m_jetskiWindshield = ReadNamedTexture(p_storage)) == NULL) {
 				return FAILURE;
 			}
 		}
 
 		if (strcmp(m_dunebuggyPlane.m_name.GetData(), "")) {
-			m_dunebuggyFront = ReadNamedTexture(p_storage);
-			if (m_dunebuggyFront == NULL) {
+			if ((m_dunebuggyFront = ReadNamedTexture(p_storage)) == NULL) {
 				return FAILURE;
 			}
 		}
 
 		if (strcmp(m_racecarPlane.m_name.GetData(), "")) {
-			m_racecarFront = ReadNamedTexture(p_storage);
-			if (m_racecarFront == NULL) {
+			if ((m_racecarFront = ReadNamedTexture(p_storage)) == NULL) {
 				return FAILURE;
 			}
 
-			m_racecarBack = ReadNamedTexture(p_storage);
-			if (m_racecarBack == NULL) {
+			if ((m_racecarBack = ReadNamedTexture(p_storage)) == NULL) {
 				return FAILURE;
 			}
 
-			m_racecarTail = ReadNamedTexture(p_storage);
-			if (m_racecarTail == NULL) {
+			if ((m_racecarTail = ReadNamedTexture(p_storage)) == NULL) {
 				return FAILURE;
 			}
 		}
