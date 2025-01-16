@@ -508,23 +508,23 @@ GasStationState::GasStationState()
 
 // FUNCTION: LEGO1 0x10006300
 // FUNCTION: BETA10 0x10029754
-MxResult GasStationState::Serialize(LegoFile* p_file)
+MxResult GasStationState::Serialize(LegoStorage* p_storage)
 {
-	LegoState::Serialize(p_file);
+	LegoState::Serialize(p_storage);
 
-	if (p_file->IsWriteMode()) {
-		p_file->Write(m_pepperAction);
-		p_file->Write(m_mamaAction);
-		p_file->Write(m_papaAction);
-		p_file->Write(m_nickAction);
-		p_file->Write(m_lauraAction);
+	if (p_storage->IsWriteMode()) {
+		p_storage->WriteS16(m_pepperAction);
+		p_storage->WriteS16(m_mamaAction);
+		p_storage->WriteS16(m_papaAction);
+		p_storage->WriteS16(m_nickAction);
+		p_storage->WriteS16(m_lauraAction);
 	}
-	else if (p_file->IsReadMode()) {
-		p_file->Read(m_pepperAction);
-		p_file->Read(m_mamaAction);
-		p_file->Read(m_papaAction);
-		p_file->Read(m_nickAction);
-		p_file->Read(m_lauraAction);
+	else if (p_storage->IsReadMode()) {
+		p_storage->ReadS16(m_pepperAction);
+		p_storage->ReadS16(m_mamaAction);
+		p_storage->ReadS16(m_papaAction);
+		p_storage->ReadS16(m_nickAction);
+		p_storage->ReadS16(m_lauraAction);
 	}
 
 	return SUCCESS;

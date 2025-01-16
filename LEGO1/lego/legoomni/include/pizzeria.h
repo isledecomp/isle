@@ -29,7 +29,7 @@ public:
 		return !strcmp(p_name, PizzeriaState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
+	MxResult Serialize(LegoStorage* p_storage) override; // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x10017ce0
 	// PizzeriaState::`scalar deleting destructor'

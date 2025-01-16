@@ -82,7 +82,7 @@ public:
 
 	MxResult Remove();
 	MxResult Create(Act3* p_world, MxU32 p_isPizza, MxS32 p_index);
-	MxResult FUN_10053b40(Vector3& p_srcLoc, Vector3& p_srcDir, Vector3& p_srcUp);
+	MxResult FUN_10053b40(const Vector3& p_srcLoc, const Vector3& p_srcDir, const Vector3& p_srcUp);
 	MxResult FUN_10053cb0(LegoPathController* p_p, LegoPathBoundary* p_boundary, MxFloat p_unk0x19c);
 	MxResult FUN_10053d30(LegoPathController* p_p, MxFloat p_unk0x19c);
 

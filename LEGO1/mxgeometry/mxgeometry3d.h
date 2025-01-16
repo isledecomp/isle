@@ -38,12 +38,8 @@ public:
 	// FUNCTION: BETA10 0x10013460
 	float& operator[](int idx) { return m_data[idx]; }
 
-	// According to the PDB, BETA10 will not link this one if it is never used
-	// const float& operator[](int idx) const { return m_data[idx]; }
-
-	// only used by LegoUnknown100db7f4::FUN_1002ddc0() for some unknown reason
 	// FUNCTION: BETA10 0x100373c0
-	float& index_operator(int idx) { return m_data[idx]; }
+	const float& operator[](int idx) const { return m_data[idx]; }
 
 	// SYNTHETIC: LEGO1 0x10010c00
 	// ??4Mx3DPointFloat@@QAEAAV0@ABV0@@Z

@@ -29,19 +29,19 @@ public:
 	void Reset() { m_name = ""; }
 
 	// FUNCTION: LEGO1 0x100344d0
-	MxResult Serialize(LegoFile* p_file)
+	MxResult Serialize(LegoStorage* p_storage)
 	{
-		if (p_file->IsWriteMode()) {
-			p_file->Write(MxString(m_name));
-			p_file->Write(m_position);
-			p_file->Write(m_direction);
-			p_file->Write(m_up);
+		if (p_storage->IsWriteMode()) {
+			p_storage->WriteMxString(m_name);
+			p_storage->WriteVector(m_position);
+			p_storage->WriteVector(m_direction);
+			p_storage->WriteVector(m_up);
 		}
-		else if (p_file->IsReadMode()) {
-			p_file->Read(m_name);
-			p_file->Read(m_position);
-			p_file->Read(m_direction);
-			p_file->Read(m_up);
+		else if (p_storage->IsReadMode()) {
+			p_storage->ReadMxString(m_name);
+			p_storage->ReadVector(m_position);
+			p_storage->ReadVector(m_direction);
+			p_storage->ReadVector(m_up);
 		}
 
 		return SUCCESS;

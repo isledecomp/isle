@@ -18,7 +18,13 @@ LegoUnknown::~LegoUnknown()
 }
 
 // FUNCTION: LEGO1 0x1009a140
-void LegoUnknown::FUN_1009a140(const Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, Vector3& p_point4)
+// FUNCTION: BETA10 0x10182c2f
+void LegoUnknown::FUN_1009a140(
+	const Vector3& p_point1,
+	const Vector3& p_point2,
+	const Vector3& p_point3,
+	const Vector3& p_point4
+)
 {
 	m_unk0x00[0] = p_point1;
 	m_unk0x00[1] = p_point2;

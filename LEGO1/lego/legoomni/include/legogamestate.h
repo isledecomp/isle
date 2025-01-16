@@ -111,7 +111,7 @@ public:
 		Username(Username& p_other) { Set(p_other); }
 		void Set(Username& p_other) { memcpy(m_letters, p_other.m_letters, sizeof(m_letters)); }
 
-		MxResult Serialize(LegoFile* p_file);
+		MxResult Serialize(LegoStorage* p_storage);
 		Username& operator=(const Username& p_other);
 
 		MxS16 m_letters[7]; // 0x00
@@ -119,7 +119,7 @@ public:
 
 	// SIZE 0x2c
 	struct ScoreItem {
-		MxResult Serialize(LegoFile* p_file);
+		MxResult Serialize(LegoStorage* p_storage);
 
 		MxS16 m_totalScore;  // 0x00
 		MxU8 m_scores[5][5]; // 0x02
@@ -131,7 +131,7 @@ public:
 	struct History {
 		History();
 		void WriteScoreHistory();
-		MxResult Serialize(LegoFile* p_file);
+		MxResult Serialize(LegoStorage* p_storage);
 		ScoreItem* FUN_1003cc90(Username* p_player, MxU16 p_unk0x24, MxS32& p_unk0x2c);
 
 		// FUNCTION: BETA10 0x1002c2b0

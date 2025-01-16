@@ -316,6 +316,7 @@ float LegoNavController::CalculateNewVel(float p_targetVel, float p_currentVel, 
 }
 
 // FUNCTION: LEGO1 0x10055080
+// FUNCTION: BETA10 0x1009b26b
 MxBool LegoNavController::CalculateNewPosDir(
 	const Vector3& p_curPos,
 	const Vector3& p_curDir,

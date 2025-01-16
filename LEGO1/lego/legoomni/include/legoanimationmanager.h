@@ -70,8 +70,8 @@ public:
 		return !strcmp(p_name, AnimState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxBool Reset() override;                       // vtable+0x18
-	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
+	MxBool Reset() override;                             // vtable+0x18
+	MxResult Serialize(LegoStorage* p_storage) override; // vtable+0x1c
 
 	void CopyToAnims(MxU32, AnimInfo* p_anims, MxU32& p_outExtraCharacterId);
 	void InitFromAnims(MxU32 p_animsLength, AnimInfo* p_anims, MxU32 p_extraCharacterId);
@@ -164,8 +164,8 @@ public:
 	void EnableCamAnims(MxBool p_enableCamAnims);
 	MxResult LoadWorldInfo(LegoOmni::World p_worldId);
 	MxBool FindVehicle(const char* p_name, MxU32& p_index);
-	MxResult ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info);
-	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
+	MxResult ReadAnimInfo(LegoStorage* p_storage, AnimInfo* p_info);
+	MxResult ReadModelInfo(LegoStorage* p_storage, ModelInfo* p_info);
 	void FUN_10060480(const LegoChar* p_characterNames[], MxU32 p_numCharacterNames);
 	void FUN_100604d0(MxBool p_unk0x08);
 	void FUN_100604f0(MxS32 p_objectIds[], MxU32 p_numObjectIds);

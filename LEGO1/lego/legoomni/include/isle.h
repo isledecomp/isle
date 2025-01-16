@@ -50,8 +50,8 @@ public:
 		return !strcmp(p_name, Act1State::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxBool Reset() override;                       // vtable+0x18
-	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
+	MxBool Reset() override;                             // vtable+0x18
+	MxResult Serialize(LegoStorage* p_storage) override; // vtable+0x1c
 
 	void PlayCptClickDialogue();
 	void StopCptClickDialogue();

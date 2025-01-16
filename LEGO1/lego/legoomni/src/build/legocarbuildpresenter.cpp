@@ -260,9 +260,9 @@ void LegoCarBuildAnimPresenter::StreamingTickle()
 
 	Mx3DPointFloat dirVec;
 
-	Vector3 cameraPosition(camera->GetWorldPosition());
-	Vector3 upVec(camera->GetWorldUp());
-	Vector3 targetPosition(targetROI->GetWorldPosition());
+	const Vector3 cameraPosition(camera->GetWorldPosition());
+	const Vector3 upVec(camera->GetWorldUp());
+	const Vector3 targetPosition(targetROI->GetWorldPosition());
 
 	MxMatrix localTransform;
 

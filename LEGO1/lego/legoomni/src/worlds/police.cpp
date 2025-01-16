@@ -209,15 +209,15 @@ PoliceState::PoliceState()
 
 // FUNCTION: LEGO1 0x1005e990
 // FUNCTION: BETA10 0x100f08b0
-MxResult PoliceState::Serialize(LegoFile* p_file)
+MxResult PoliceState::Serialize(LegoStorage* p_storage)
 {
-	LegoState::Serialize(p_file);
+	LegoState::Serialize(p_storage);
 
-	if (p_file->IsReadMode()) {
-		p_file->Read((MxS32&) m_policeScript);
+	if (p_storage->IsReadMode()) {
+		p_storage->ReadS32((MxS32&) m_policeScript);
 	}
 	else {
-		p_file->Write((MxS32) m_policeScript);
+		p_storage->WriteS32(m_policeScript);
 	}
 
 	return SUCCESS;

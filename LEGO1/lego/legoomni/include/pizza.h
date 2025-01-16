@@ -122,7 +122,7 @@ public:
 		return !strcmp(p_name, PizzaMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
+	MxResult Serialize(LegoStorage* p_storage) override; // vtable+0x1c
 
 	// FUNCTION: BETA10 0x100ef470
 	void SetUnknown0xb0(MxU32 p_unk0xb0) { m_unk0xb0 = p_unk0xb0; }

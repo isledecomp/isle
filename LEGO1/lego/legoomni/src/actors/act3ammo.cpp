@@ -109,7 +109,7 @@ MxResult Act3Ammo::Create(Act3* p_world, MxU32 p_isPizza, MxS32 p_index)
 
 // FUNCTION: LEGO1 0x10053b40
 // FUNCTION: BETA10 0x1001db2a
-MxResult Act3Ammo::FUN_10053b40(Vector3& p_srcLoc, Vector3& p_srcDir, Vector3& p_srcUp)
+MxResult Act3Ammo::FUN_10053b40(const Vector3& p_srcLoc, const Vector3& p_srcDir, const Vector3& p_srcUp)
 {
 	assert(p_srcDir[1] != 0);
 
