@@ -71,6 +71,7 @@ void MxControlPresenter::EndAction()
 }
 
 // FUNCTION: LEGO1 0x10044270
+// FUNCTION: BETA10 0x100eae68
 MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* p_presenter)
 {
 	if (m_unk0x4c == 3) {
