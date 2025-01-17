@@ -31,10 +31,8 @@
 #include "jukebox_actions.h"
 #include "jukeboxw_actions.h"
 #include "legoanimationmanager.h"
-#include "legobackgroundcolor.h"
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
-#include "legofullscreenmovie.h"
 #include "legomain.h"
 #include "legonavcontroller.h"
 #include "legoplantmanager.h"
@@ -69,6 +67,8 @@ DECOMP_SIZE_ASSERT(LegoGameState::ScoreItem, 0x2c)
 DECOMP_SIZE_ASSERT(LegoGameState::History, 0x374)
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 DECOMP_SIZE_ASSERT(ColorStringStruct, 0x08)
+DECOMP_SIZE_ASSERT(LegoBackgroundColor, 0x30)
+DECOMP_SIZE_ASSERT(LegoFullScreenMovie, 0x24)
 
 // GLOBAL: LEGO1 0x100f3e40
 // STRING: LEGO1 0x100f3e3c
@@ -118,6 +118,26 @@ ColorStringStruct g_colorSaveData[43] = {
 // NOTE: This offset = the end of the variables table, the last entry
 // in that table is a special entry, the string "END_OF_VARIABLES"
 extern const char* g_endOfVariables;
+
+// GLOBAL: LEGO1 0x100f3fb0
+// STRING: LEGO1 0x100f3a18
+const char* g_delimiter = " \t";
+
+// GLOBAL: LEGO1 0x100f3fb4
+// STRING: LEGO1 0x100f3bf0
+const char* g_set = "set";
+
+// GLOBAL: LEGO1 0x100f3fb8
+// STRING: LEGO1 0x100f0cdc
+const char* g_reset = "reset";
+
+// GLOBAL: LEGO1 0x100f3fbc
+// STRING: LEGO1 0x100f3be8
+const char* g_strEnable = "enable";
+
+// GLOBAL: LEGO1 0x100f3fc0
+// STRING: LEGO1 0x100f3bf4
+const char* g_strDisable = "disable";
 
 // FUNCTION: LEGO1 0x10039550
 LegoGameState::LegoGameState()
@@ -1144,6 +1164,162 @@ void LegoGameState::Init()
 	m_unk0x42c = e_undefined;
 }
 
+// FUNCTION: LEGO1 0x1003bfb0
+LegoBackgroundColor::LegoBackgroundColor(const char* p_key, const char* p_value)
+{
+	m_key = p_key;
+	m_key.ToUpperCase();
+	SetValue(p_value);
+}
+
+// FUNCTION: LEGO1 0x1003c070
+void LegoBackgroundColor::SetValue(const char* p_colorString)
+{
+	m_value = p_colorString;
+	m_value.ToLowerCase();
+
+	LegoVideoManager* videomanager = VideoManager();
+	if (!videomanager || !p_colorString) {
+		return;
+	}
+
+	float convertedR, convertedG, convertedB;
+	char* colorStringCopy = strcpy(new char[strlen(p_colorString) + 1], p_colorString);
+	char* colorStringSplit = strtok(colorStringCopy, g_delimiter);
+
+	if (!strcmp(colorStringSplit, g_set)) {
+		colorStringSplit = strtok(0, g_delimiter);
+		if (colorStringSplit) {
+			m_h = (float) (atoi(colorStringSplit) * 0.01);
+		}
+		colorStringSplit = strtok(0, g_delimiter);
+		if (colorStringSplit) {
+			m_s = (float) (atoi(colorStringSplit) * 0.01);
+		}
+		colorStringSplit = strtok(0, g_delimiter);
+		if (colorStringSplit) {
+			m_v = (float) (atoi(colorStringSplit) * 0.01);
+		}
+
+		ConvertHSVToRGB(m_h, m_s, m_v, &convertedR, &convertedG, &convertedB);
+		videomanager->SetSkyColor(convertedR, convertedG, convertedB);
+	}
+	else if (!strcmp(colorStringSplit, g_reset)) {
+		ConvertHSVToRGB(m_h, m_s, m_v, &convertedR, &convertedG, &convertedB);
+		videomanager->SetSkyColor(convertedR, convertedG, convertedB);
+	}
+
+	delete[] colorStringCopy;
+}
+
+// FUNCTION: LEGO1 0x1003c230
+void LegoBackgroundColor::ToggleDayNight(MxBool p_sun)
+{
+	char buffer[30];
+
+	if (p_sun) {
+		m_s += 0.1;
+		if (m_s > 0.9) {
+			m_s = 1.0;
+		}
+	}
+	else {
+		m_s -= 0.1;
+		if (m_s < 0.1) {
+			m_s = 0.1;
+		}
+	}
+
+	sprintf(buffer, "set %d %d %d", (MxU32) (m_h * 100.0f), (MxU32) (m_s * 100.0f), (MxU32) (m_v * 100.0f));
+	m_value = buffer;
+
+	float convertedR, convertedG, convertedB;
+	ConvertHSVToRGB(m_h, m_s, m_v, &convertedR, &convertedG, &convertedB);
+	VideoManager()->SetSkyColor(convertedR, convertedG, convertedB);
+	SetLightColor(convertedR, convertedG, convertedB);
+}
+
+// FUNCTION: LEGO1 0x1003c330
+void LegoBackgroundColor::ToggleSkyColor()
+{
+	char buffer[30];
+
+	m_h += 0.05;
+	if (m_h > 1.0) {
+		m_h -= 1.0;
+	}
+
+	sprintf(buffer, "set %d %d %d", (MxU32) (m_h * 100.0f), (MxU32) (m_s * 100.0f), (MxU32) (m_v * 100.0f));
+	m_value = buffer;
+
+	float convertedR, convertedG, convertedB;
+	ConvertHSVToRGB(m_h, m_s, m_v, &convertedR, &convertedG, &convertedB);
+	VideoManager()->SetSkyColor(convertedR, convertedG, convertedB);
+	SetLightColor(convertedR, convertedG, convertedB);
+}
+
+// FUNCTION: LEGO1 0x1003c400
+void LegoBackgroundColor::SetLightColor(float p_r, float p_g, float p_b)
+{
+	if (!VideoManager()->GetVideoParam().Flags().GetF2bit0()) {
+		// TODO: Computed constants based on what?
+		p_r *= 1. / 0.23;
+		p_g *= 1. / 0.63;
+		p_b *= 1. / 0.85;
+
+		if (p_r > 1.0) {
+			p_r = 1.0;
+		}
+
+		if (p_g > 1.0) {
+			p_g = 1.0;
+		}
+
+		if (p_b > 1.0) {
+			p_b = 1.0;
+		}
+
+		VideoManager()->Get3DManager()->GetLego3DView()->SetLightColor(FALSE, p_r, p_g, p_b);
+		VideoManager()->Get3DManager()->GetLego3DView()->SetLightColor(TRUE, p_r, p_g, p_b);
+	}
+}
+
+// FUNCTION: LEGO1 0x1003c4b0
+void LegoBackgroundColor::SetLightColor()
+{
+	float convertedR, convertedG, convertedB;
+	ConvertHSVToRGB(m_h, m_s, m_v, &convertedR, &convertedG, &convertedB);
+	SetLightColor(convertedR, convertedG, convertedB);
+}
+
+// FUNCTION: LEGO1 0x1003c500
+LegoFullScreenMovie::LegoFullScreenMovie(const char* p_key, const char* p_value)
+{
+	m_key = p_key;
+	m_key.ToUpperCase();
+	SetValue(p_value);
+}
+
+// FUNCTION: LEGO1 0x1003c5c0
+void LegoFullScreenMovie::SetValue(const char* p_option)
+{
+	m_value = p_option;
+	m_value.ToLowerCase();
+
+	LegoVideoManager* videomanager = VideoManager();
+	if (videomanager) {
+		if (!strcmp(m_value.GetData(), g_strEnable)) {
+			videomanager->EnableFullScreenMovie(TRUE);
+			return;
+		}
+
+		if (!strcmp(m_value.GetData(), g_strDisable)) {
+			videomanager->EnableFullScreenMovie(FALSE);
+			return;
+		}
+	}
+}
+
 // FUNCTION: LEGO1 0x1003c670
 LegoGameState::Username::Username()
 {
@@ -1275,7 +1451,7 @@ void LegoGameState::History::WriteScoreHistory()
 
 		MxU8 tmpScores[5][5];
 		Username tmpPlayer;
-		undefined2 tmpUnk0x2a;
+		MxS16 tmpUnk0x2a;
 
 		// TODO: Match bubble sort loops
 		for (MxS32 i = m_count - 1; i > 0; i--) {
@@ -1302,7 +1478,7 @@ void LegoGameState::History::WriteScoreHistory()
 // FUNCTION: BETA10 0x1008732a
 LegoGameState::ScoreItem* LegoGameState::History::FUN_1003cc90(
 	LegoGameState::Username* p_player,
-	MxU16 p_unk0x24,
+	MxS16 p_unk0x24,
 	MxS32& p_unk0x2c
 )
 {
