@@ -13,6 +13,10 @@ struct LegoNamedPlane {
 	// FUNCTION: LEGO1 0x10033a70
 	// LegoNamedPlane::~LegoNamedPlane
 
+	// Unclear whether getters/setters were used.
+	// Act1State::Serialize seems to access `m_name` directly (only matches like that)
+	// Act1State::PlaceActors though seems to require extensive use of getters to improve
+
 	const char* GetName() const { return m_name.GetData(); }
 	const Mx3DPointFloat& GetPosition() { return m_position; }
 	const Mx3DPointFloat& GetDirection() { return m_direction; }
@@ -22,9 +26,6 @@ struct LegoNamedPlane {
 	void SetPosition(const Mx3DPointFloat& p_position) { m_position = p_position; }
 	void SetDirection(const Mx3DPointFloat& p_direction) { m_direction = p_direction; }
 	void SetUp(const Mx3DPointFloat& p_up) { m_up = p_up; }
-
-	// TODO: Unclear whether this was defined
-	MxBool IsPresent() { return strcmp(m_name.GetData(), "") != 0; }
 
 	// FUNCTION: LEGO1 0x100344d0
 	MxResult Serialize(LegoStorage* p_storage)
