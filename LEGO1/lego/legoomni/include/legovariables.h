@@ -54,13 +54,4 @@ public:
 	void SetValue(const char* p_value) override; // vtable+0x04
 };
 
-// VTABLE: LEGO1 0x100da878
-// SIZE 0x24
-class CustomizeAnimFileVariable : public MxVariable {
-public:
-	CustomizeAnimFileVariable(const char* p_key);
-
-	void SetValue(const char* p_value) override; // vtable+0x04
-};
-
 #endif // LEGOVARIABLES_H

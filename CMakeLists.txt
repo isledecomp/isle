@@ -337,6 +337,7 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/actors/motorcycle.cpp
     LEGO1/lego/legoomni/src/actors/ambulance.cpp
     LEGO1/lego/legoomni/src/worlds/infocenterdoor.cpp
+    LEGO1/lego/legoomni/src/common/legovariables.cpp
     LEGO1/lego/legoomni/src/actors/pizza.cpp
     LEGO1/lego/legoomni/src/actors/act3ammo.cpp
     LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp
@@ -360,7 +361,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/video/legophonemepresenter.cpp
     LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp
     LEGO1/lego/legoomni/src/worlds/legoact2.cpp
-    LEGO1/lego/legoomni/src/common/legovariables.cpp
     LEGO1/lego/legoomni/src/main/scripts.cpp
     LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
     LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp

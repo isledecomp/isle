@@ -131,12 +131,6 @@ public:
 
 	void FUN_1001b660();
 
-	void Reset()
-	{
-		m_roi->SetVisibility(TRUE);
-		SetActorState(c_initial);
-	}
-
 	void SetWorld(LegoWorld* p_world) { m_world = p_world; }
 
 	static void RegisterSpawnLocations();

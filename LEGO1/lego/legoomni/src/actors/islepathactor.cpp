@@ -100,7 +100,8 @@ void IslePathActor::Enter()
 // FUNCTION: BETA10 0x1003669f
 void IslePathActor::Exit()
 {
-	Reset();
+	SetActorState(c_initial);
+	m_roi->SetVisibility(TRUE);
 
 	GetViewManager()->Remove(m_roi);
 	GetViewManager()->Add(m_roi);
