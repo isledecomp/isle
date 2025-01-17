@@ -33,14 +33,6 @@ public:
 	// FUNCTION: LEGO1 0x10045af0
 	virtual LegoBool IsReadMode() { return m_mode == c_read; } // vtable+0x18
 
-	// FUNCTION: LEGO1 0x10006030
-	// FUNCTION: BETA10 0x10017bb0
-	LegoStorage* WriteMxString(MxString p_data)
-	{
-		WriteString(p_data.GetData());
-		return this;
-	}
-
 	// FUNCTION: BETA10 0x10017c80
 	LegoStorage* WriteString(const char* p_data)
 	{
@@ -102,18 +94,11 @@ public:
 		return this;
 	}
 
-	// FUNCTION: LEGO1 0x10034470
-	LegoStorage* ReadMxString(MxString& p_data)
+	// FUNCTION: LEGO1 0x10006030
+	// FUNCTION: BETA10 0x10017bb0
+	LegoStorage* WriteMxString(MxString p_data)
 	{
-		LegoS16 length;
-		ReadS16(length);
-
-		char* text = new char[length + 1];
-		Read(text, length);
-
-		text[length] = '\0';
-		p_data = text;
-		delete[] text;
+		WriteString(p_data.GetData());
 		return this;
 	}
 
@@ -175,6 +160,21 @@ public:
 		ReadFloat(p_data[0]);
 		ReadFloat(p_data[1]);
 		ReadFloat(p_data[2]);
+		return this;
+	}
+
+	// FUNCTION: LEGO1 0x10034470
+	LegoStorage* ReadMxString(MxString& p_data)
+	{
+		LegoS16 length;
+		ReadS16(length);
+
+		char* text = new char[length + 1];
+		Read(text, length);
+
+		text[length] = '\0';
+		p_data = text;
+		delete[] text;
 		return this;
 	}
 

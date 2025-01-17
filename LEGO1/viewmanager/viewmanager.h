@@ -42,6 +42,7 @@ public:
 	// FUNCTION: BETA10 0x100576b0
 	const CompoundObject& GetROIs() { return rois; }
 
+	// FUNCTION: BETA10 0x100e1260
 	void Add(ViewROI* p_roi) { rois.push_back(p_roi); }
 
 	// SYNTHETIC: LEGO1 0x100a6000

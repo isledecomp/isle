@@ -6,7 +6,7 @@
 #include "mxtypes.h"
 
 struct LegoEdge;
-class LegoNamedPlane;
+struct LegoNamedPlane;
 class LegoPathBoundary;
 class LegoPathController;
 struct LegoPathEdgeContainer;

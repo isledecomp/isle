@@ -1487,12 +1487,12 @@ void Act1State::StopCptClickDialogue()
 // FUNCTION: LEGO1 0x100346d0
 MxBool Act1State::Reset()
 {
-	m_motocyclePlane.Reset();
-	m_bikePlane.Reset();
-	m_skateboardPlane.Reset();
+	m_motocyclePlane.m_name = "";
+	m_bikePlane.m_name = "";
+	m_skateboardPlane.m_name = "";
 	m_unk0x022 = FALSE;
 
-	m_helicopterPlane.Reset();
+	m_helicopterPlane.m_name = "";
 	if (m_helicopterWindshield) {
 		delete m_helicopterWindshield;
 		m_helicopterWindshield = NULL;
@@ -1513,7 +1513,7 @@ MxBool Act1State::Reset()
 		m_helicopter = NULL;
 	}
 
-	m_jetskiPlane.Reset();
+	m_jetskiPlane.m_name = "";
 	if (m_jetskiFront) {
 		delete m_jetskiFront;
 		m_jetskiFront = NULL;
@@ -1529,7 +1529,7 @@ MxBool Act1State::Reset()
 		m_jetski = NULL;
 	}
 
-	m_dunebuggyPlane.Reset();
+	m_dunebuggyPlane.m_name = "";
 	if (m_dunebuggyFront) {
 		delete m_dunebuggyFront;
 		m_dunebuggyFront = NULL;
@@ -1540,7 +1540,7 @@ MxBool Act1State::Reset()
 		m_dunebuggy = NULL;
 	}
 
-	m_racecarPlane.Reset();
+	m_racecarPlane.m_name = "";
 	if (m_racecarFront) {
 		delete m_racecarFront;
 		m_racecarFront = NULL;
