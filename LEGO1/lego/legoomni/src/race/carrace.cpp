@@ -5,7 +5,6 @@
 #include "isle.h"
 #include "jukebox_actions.h"
 #include "legoanimationmanager.h"
-#include "legobackgroundcolor.h"
 #include "legocontrolmanager.h"
 #include "legohideanimpresenter.h"
 #include "legomain.h"

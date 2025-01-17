@@ -1,11 +1,8 @@
 #include "legovariables.h"
 
 #include "3dmanager/lego3dmanager.h"
-#include "legobuildingmanager.h"
-#include "legocharactermanager.h"
 #include "legogamestate.h"
 #include "legonavcontroller.h"
-#include "legoplantmanager.h"
 #include "legovideomanager.h"
 #include "misc.h"
 #include "roi/legoroi.h"
@@ -14,7 +11,6 @@ DECOMP_SIZE_ASSERT(VisibilityVariable, 0x24)
 DECOMP_SIZE_ASSERT(CameraLocationVariable, 0x24)
 DECOMP_SIZE_ASSERT(CursorVariable, 0x24)
 DECOMP_SIZE_ASSERT(WhoAmIVariable, 0x24)
-DECOMP_SIZE_ASSERT(CustomizeAnimFileVariable, 0x24)
 
 // GLOBAL: LEGO1 0x100f7ab0
 // STRING: LEGO1 0x100f09c0
@@ -174,23 +170,5 @@ void WhoAmIVariable::SetValue(const char* p_value)
 	}
 	else if (!strcmpi(p_value, g_laura)) {
 		GameState()->SetActorId(5);
-	}
-}
-
-// FUNCTION: LEGO1 0x10085aa0
-CustomizeAnimFileVariable::CustomizeAnimFileVariable(const char* p_key)
-{
-	m_key = p_key;
-	m_key.ToUpperCase();
-}
-
-// FUNCTION: LEGO1 0x10085b50
-void CustomizeAnimFileVariable::SetValue(const char* p_value)
-{
-	// STRING: LEGO1 0x100fc4f4
-	if (strcmp(m_key.GetData(), "CUSTOMIZE_ANIM_FILE") == 0) {
-		CharacterManager()->SetCustomizeAnimFile(p_value);
-		PlantManager()->SetCustomizeAnimFile(p_value);
-		BuildingManager()->SetCustomizeAnimFile(p_value);
 	}
 }

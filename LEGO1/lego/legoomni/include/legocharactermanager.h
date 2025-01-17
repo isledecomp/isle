@@ -4,9 +4,9 @@
 #include "decomp.h"
 #include "mxstl/stlcompat.h"
 #include "mxtypes.h"
+#include "mxvariable.h"
 #include "roi/legoroi.h"
 
-class CustomizeAnimFileVariable;
 class LegoActor;
 class LegoExtraActor;
 class LegoStorage;
@@ -44,6 +44,15 @@ struct LegoCharacter {
 struct LegoActorInfo;
 
 typedef map<char*, LegoCharacter*, LegoCharacterComparator> LegoCharacterMap;
+
+// VTABLE: LEGO1 0x100da878
+// SIZE 0x24
+class CustomizeAnimFileVariable : public MxVariable {
+public:
+	CustomizeAnimFileVariable(const char* p_key);
+
+	void SetValue(const char* p_value) override; // vtable+0x04
+};
 
 // SIZE 0x08
 class LegoCharacterManager {

@@ -46,11 +46,6 @@ Ambulance::Ambulance()
 	m_fuel = 1.0;
 }
 
-// FUNCTION: LEGO1 0x10035f90
-void Ambulance::Destroy(MxBool p_fromDestructor)
-{
-}
-
 // FUNCTION: LEGO1 0x10036150
 // FUNCTION: BETA10 0x100228fe
 Ambulance::~Ambulance()
@@ -643,38 +638,4 @@ AmbulanceMissionState::AmbulanceMissionState()
 	m_paHighScore = 0;
 	m_niHighScore = 0;
 	m_laHighScore = 0;
-}
-
-// FUNCTION: LEGO1 0x10037440
-// FUNCTION: BETA10 0x10024480
-MxResult AmbulanceMissionState::Serialize(LegoStorage* p_storage)
-{
-	LegoState::Serialize(p_storage);
-
-	if (p_storage->IsReadMode()) {
-		p_storage->ReadS16(m_peScore);
-		p_storage->ReadS16(m_maScore);
-		p_storage->ReadS16(m_paScore);
-		p_storage->ReadS16(m_niScore);
-		p_storage->ReadS16(m_laScore);
-		p_storage->ReadS16(m_peHighScore);
-		p_storage->ReadS16(m_maHighScore);
-		p_storage->ReadS16(m_paHighScore);
-		p_storage->ReadS16(m_niHighScore);
-		p_storage->ReadS16(m_laHighScore);
-	}
-	else if (p_storage->IsWriteMode()) {
-		p_storage->WriteS16(m_peScore);
-		p_storage->WriteS16(m_maScore);
-		p_storage->WriteS16(m_paScore);
-		p_storage->WriteS16(m_niScore);
-		p_storage->WriteS16(m_laScore);
-		p_storage->WriteS16(m_peHighScore);
-		p_storage->WriteS16(m_maHighScore);
-		p_storage->WriteS16(m_paHighScore);
-		p_storage->WriteS16(m_niHighScore);
-		p_storage->WriteS16(m_laHighScore);
-	}
-
-	return SUCCESS;
 }

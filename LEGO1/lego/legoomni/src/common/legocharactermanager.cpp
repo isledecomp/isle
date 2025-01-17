@@ -3,9 +3,10 @@
 #include "3dmanager/lego3dmanager.h"
 #include "legoactors.h"
 #include "legoanimactor.h"
+#include "legobuildingmanager.h"
 #include "legoextraactor.h"
 #include "legogamestate.h"
-#include "legovariables.h"
+#include "legoplantmanager.h"
 #include "legovideomanager.h"
 #include "misc.h"
 #include "misc/legocontainer.h"
@@ -21,6 +22,7 @@
 
 DECOMP_SIZE_ASSERT(LegoCharacter, 0x08)
 DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)
+DECOMP_SIZE_ASSERT(CustomizeAnimFileVariable, 0x24)
 
 // GLOBAL: LEGO1 0x100fc4d0
 MxU32 LegoCharacterManager::g_maxMove = 4;
@@ -1085,4 +1087,22 @@ MxResult LegoCharacterManager::FUN_10085870(LegoROI* p_roi)
 LegoROI* LegoCharacterManager::FUN_10085a80(const char* p_name, const char* p_lodName, MxBool p_createEntity)
 {
 	return CreateAutoROI(p_name, p_lodName, p_createEntity);
+}
+
+// FUNCTION: LEGO1 0x10085aa0
+CustomizeAnimFileVariable::CustomizeAnimFileVariable(const char* p_key)
+{
+	m_key = p_key;
+	m_key.ToUpperCase();
+}
+
+// FUNCTION: LEGO1 0x10085b50
+void CustomizeAnimFileVariable::SetValue(const char* p_value)
+{
+	// STRING: LEGO1 0x100fc4f4
+	if (strcmp(m_key.GetData(), "CUSTOMIZE_ANIM_FILE") == 0) {
+		CharacterManager()->SetCustomizeAnimFile(p_value);
+		PlantManager()->SetCustomizeAnimFile(p_value);
+		BuildingManager()->SetCustomizeAnimFile(p_value);
+	}
 }

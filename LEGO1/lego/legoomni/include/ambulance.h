@@ -13,6 +13,40 @@ class AmbulanceMissionState : public LegoState {
 public:
 	AmbulanceMissionState();
 
+	// FUNCTION: LEGO1 0x10037440
+	// FUNCTION: BETA10 0x10024480
+	MxResult Serialize(LegoStorage* p_storage) override
+	{
+		LegoState::Serialize(p_storage);
+
+		if (p_storage->IsReadMode()) {
+			p_storage->ReadS16(m_peScore);
+			p_storage->ReadS16(m_maScore);
+			p_storage->ReadS16(m_paScore);
+			p_storage->ReadS16(m_niScore);
+			p_storage->ReadS16(m_laScore);
+			p_storage->ReadS16(m_peHighScore);
+			p_storage->ReadS16(m_maHighScore);
+			p_storage->ReadS16(m_paHighScore);
+			p_storage->ReadS16(m_niHighScore);
+			p_storage->ReadS16(m_laHighScore);
+		}
+		else if (p_storage->IsWriteMode()) {
+			p_storage->WriteS16(m_peScore);
+			p_storage->WriteS16(m_maScore);
+			p_storage->WriteS16(m_paScore);
+			p_storage->WriteS16(m_niScore);
+			p_storage->WriteS16(m_laScore);
+			p_storage->WriteS16(m_peHighScore);
+			p_storage->WriteS16(m_maHighScore);
+			p_storage->WriteS16(m_paHighScore);
+			p_storage->WriteS16(m_niHighScore);
+			p_storage->WriteS16(m_laHighScore);
+		}
+
+		return SUCCESS;
+	} // vtable+0x1c
+
 	// FUNCTION: LEGO1 0x10037600
 	// FUNCTION: BETA10 0x100246c0
 	const char* ClassName() const override // vtable+0x0c
@@ -26,8 +60,6 @@ public:
 	{
 		return !strcmp(p_name, AmbulanceMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
-
-	MxResult Serialize(LegoStorage* p_storage) override; // vtable+0x1c
 
 	// FUNCTION: BETA10 0x10088770
 	MxS16 GetHighScore(MxU8 p_actorId)
@@ -118,6 +150,9 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 	MxResult Tickle() override;               // vtable+0x08
 
+	// FUNCTION: LEGO1 0x10035f90
+	void Destroy(MxBool p_fromDestructor) override {} // vtable+0x1c
+
 	// FUNCTION: LEGO1 0x10035fa0
 	// FUNCTION: BETA10 0x100240b0
 	const char* ClassName() const override // vtable+0x0c
@@ -133,7 +168,6 @@ public:
 	}
 
 	MxResult Create(MxDSAction& p_dsAction) override;                              // vtable+0x18
-	void Destroy(MxBool p_fromDestructor) override;                                // vtable+0x1c
 	void Animate(float p_time) override;                                           // vtable+0x70
 	MxLong HandleClick() override;                                                 // vtable+0xcc
 	MxLong HandleControl(LegoControlManagerNotificationParam& p_param) override;   // vtable+0xd4
