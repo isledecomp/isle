@@ -340,10 +340,10 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/legovariables.cpp
     LEGO1/lego/legoomni/src/actors/pizza.cpp
     LEGO1/lego/legoomni/src/common/legogamestate.cpp
-    LEGO1/lego/legoomni/src/actors/act3ammo.cpp
     LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp
     LEGO1/lego/legoomni/src/common/legoutils.cpp
     LEGO1/lego/legoomni/src/actors/act3actors.cpp
+    LEGO1/lego/legoomni/src/actors/act3ammo.cpp
     LEGO1/lego/legoomni/src/control/legometerpresenter.cpp
     LEGO1/lego/legoomni/src/common/legoactioncontrolpresenter.cpp
     LEGO1/lego/legoomni/src/common/mxcontrolpresenter.cpp
