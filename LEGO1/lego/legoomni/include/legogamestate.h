@@ -26,6 +26,7 @@ struct ColorStringStruct {
 // SIZE 0x30
 class LegoBackgroundColor : public MxVariable {
 public:
+	LegoBackgroundColor();
 	LegoBackgroundColor(const char* p_key, const char* p_value);
 
 	void SetValue(const char* p_colorString) override; // vtable+0x04

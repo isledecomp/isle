@@ -1084,6 +1084,7 @@ LegoState* LegoGameState::CreateState(const char* p_stateName)
 }
 
 // FUNCTION: LEGO1 0x1003bc30
+// FUNCTION: BETA10 0x1008636e
 void LegoGameState::RegisterState(LegoState* p_state)
 {
 	MxS32 targetIndex;
@@ -1164,7 +1165,16 @@ void LegoGameState::Init()
 	m_unk0x42c = e_undefined;
 }
 
+// FUNCTION: BETA10 0x10086510
+LegoBackgroundColor::LegoBackgroundColor()
+{
+	m_h = 0.0f;
+	m_s = 0.0f;
+	m_v = 0.0f;
+}
+
 // FUNCTION: LEGO1 0x1003bfb0
+// FUNCTION: BETA10 0x1008659d
 LegoBackgroundColor::LegoBackgroundColor(const char* p_key, const char* p_value)
 {
 	m_key = p_key;
@@ -1173,6 +1183,7 @@ LegoBackgroundColor::LegoBackgroundColor(const char* p_key, const char* p_value)
 }
 
 // FUNCTION: LEGO1 0x1003c070
+// FUNCTION: BETA10 0x10086634
 void LegoBackgroundColor::SetValue(const char* p_colorString)
 {
 	m_value = p_colorString;
@@ -1213,6 +1224,7 @@ void LegoBackgroundColor::SetValue(const char* p_colorString)
 }
 
 // FUNCTION: LEGO1 0x1003c230
+// FUNCTION: BETA10 0x100867f9
 void LegoBackgroundColor::ToggleDayNight(MxBool p_sun)
 {
 	char buffer[30];
@@ -1240,6 +1252,7 @@ void LegoBackgroundColor::ToggleDayNight(MxBool p_sun)
 }
 
 // FUNCTION: LEGO1 0x1003c330
+// FUNCTION: BETA10 0x100868de
 void LegoBackgroundColor::ToggleSkyColor()
 {
 	char buffer[30];
@@ -1259,6 +1272,7 @@ void LegoBackgroundColor::ToggleSkyColor()
 }
 
 // FUNCTION: LEGO1 0x1003c400
+// FUNCTION: BETA10 0x10086984
 void LegoBackgroundColor::SetLightColor(float p_r, float p_g, float p_b)
 {
 	if (!VideoManager()->GetVideoParam().Flags().GetF2bit0()) {
@@ -1293,6 +1307,7 @@ void LegoBackgroundColor::SetLightColor()
 }
 
 // FUNCTION: LEGO1 0x1003c500
+// FUNCTION: BETA10 0x10086af6
 LegoFullScreenMovie::LegoFullScreenMovie(const char* p_key, const char* p_value)
 {
 	m_key = p_key;
@@ -1301,6 +1316,7 @@ LegoFullScreenMovie::LegoFullScreenMovie(const char* p_key, const char* p_value)
 }
 
 // FUNCTION: LEGO1 0x1003c5c0
+// FUNCTION: BETA10 0x10086b8d
 void LegoFullScreenMovie::SetValue(const char* p_option)
 {
 	m_value = p_option;
@@ -1310,12 +1326,9 @@ void LegoFullScreenMovie::SetValue(const char* p_option)
 	if (videomanager) {
 		if (!strcmp(m_value.GetData(), g_strEnable)) {
 			videomanager->EnableFullScreenMovie(TRUE);
-			return;
 		}
-
-		if (!strcmp(m_value.GetData(), g_strDisable)) {
+		else if (!strcmp(m_value.GetData(), g_strDisable)) {
 			videomanager->EnableFullScreenMovie(FALSE);
-			return;
 		}
 	}
 }
