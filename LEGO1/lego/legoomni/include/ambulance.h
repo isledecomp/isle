@@ -47,6 +47,20 @@ public:
 		return SUCCESS;
 	} // vtable+0x1c
 
+	// FUNCTION: LEGO1 0x10037600
+	// FUNCTION: BETA10 0x100246c0
+	const char* ClassName() const override // vtable+0x0c
+	{
+		// STRING: LEGO1 0x100f00e8
+		return "AmbulanceMissionState";
+	}
+
+	// FUNCTION: LEGO1 0x10037610
+	MxBool IsA(const char* p_name) const override // vtable+0x10
+	{
+		return !strcmp(p_name, AmbulanceMissionState::ClassName()) || LegoState::IsA(p_name);
+	}
+
 	// FUNCTION: BETA10 0x10088770
 	MxS16 GetHighScore(MxU8 p_actorId)
 	{
@@ -123,20 +137,6 @@ public:
 	MxS16 m_paHighScore;  // 0x1e
 	MxS16 m_niHighScore;  // 0x20
 	MxS16 m_laHighScore;  // 0x22
-
-	// FUNCTION: LEGO1 0x10037600
-	// FUNCTION: BETA10 0x100246c0
-	const char* ClassName() const override // vtable+0x0c
-	{
-		// STRING: LEGO1 0x100f00e8
-		return "AmbulanceMissionState";
-	}
-
-	// FUNCTION: LEGO1 0x10037610
-	MxBool IsA(const char* p_name) const override // vtable+0x10
-	{
-		return !strcmp(p_name, AmbulanceMissionState::ClassName()) || LegoState::IsA(p_name);
-	}
 };
 
 // VTABLE: LEGO1 0x100d71a8
