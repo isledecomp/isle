@@ -10,6 +10,44 @@ struct LegoBuildingInfo;
 struct LegoPlantInfo;
 class LegoWorld;
 
+// VTABLE: LEGO1 0x100d7920 LegoPathActor
+// VTABLE: LEGO1 0x100d79f0 LegoAnimActor
+// SIZE 0x1a8
+class Act3Shark : public LegoAnimActor {
+public:
+	Act3Shark();
+
+	void ParseAction(char*) override;    // vtable+0x20
+	void Animate(float p_time) override; // vtable+0x70
+
+	// LegoAnimActor vtable
+	virtual MxResult EatPizza(Act3Ammo* p_ammo); // vtable+0x10
+
+	// FUNCTION: LEGO1 0x100430d0
+	const char* ClassName() const override // vtable+0x0c
+	{
+		// Does not exist in BETA10
+		// STRING: LEGO1 0x100f03a0
+		return "Act3Shark";
+	}
+
+	MxFloat GetUnknown0x2c() { return m_unk0x2c; }
+
+	void SetUnknown0x2c(MxFloat p_unk0x2c) { m_unk0x2c = p_unk0x2c; }
+
+	// SYNTHETIC: LEGO1 0x10043030
+	// Act3Shark::`scalar deleting destructor'
+
+private:
+	list<Act3Ammo*> m_eatPizzas;    // 0x1c
+	Act3Ammo* m_nextPizza;          // 0x28
+	MxFloat m_unk0x2c;              // 0x2c
+	LegoWorld* m_world;             // 0x30
+	LegoAnimActorStruct* m_unk0x34; // 0x34
+	LegoROI* m_unk0x38;             // 0x38
+	Mx3DPointFloat m_unk0x3c;       // 0x3c
+};
+
 // VTABLE: LEGO1 0x100d7668 LegoPathActor
 // VTABLE: LEGO1 0x100d7738 LegoAnimActor
 // VTABLE: BETA10 0x101b8a98 LegoPathActor
@@ -17,18 +55,10 @@ class LegoWorld;
 // SIZE 0x178
 class Act3Actor : public LegoAnimActor {
 public:
-	struct Act3CopDest {
-		// name verified by BETA10 0x10018776
-		const char* m_bName; // 0x00
-
-		// name verified by BETA10 0x100187cb
-		LegoPathBoundary* m_boundary; // 0x04
-
-		MxFloat m_unk0x08[3]; // 0x08
-		MxFloat m_unk0x14[3]; // 0x14
-	};
-
 	Act3Actor();
+
+	MxU32 VTable0x90(float p_time, Matrix4& p_transform) override;     // vtable+0x90
+	MxResult HitActor(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 
 	// FUNCTION: LEGO1 0x100431b0
 	// FUNCTION: BETA10 0x1001d320
@@ -37,9 +67,6 @@ public:
 		// STRING: LEGO1 0x100f03ac
 		return "Act3Actor";
 	}
-
-	MxU32 VTable0x90(float p_time, Matrix4& p_transform) override;     // vtable+0x90
-	MxResult HitActor(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 
 	MxFloat GetUnknown0x1c() { return m_unk0x1c; }
 
@@ -62,6 +89,17 @@ private:
 // SIZE 0x188
 class Act3Cop : public Act3Actor {
 public:
+	struct Act3CopDest {
+		// name verified by BETA10 0x10018776
+		const char* m_bName; // 0x00
+
+		// name verified by BETA10 0x100187cb
+		LegoPathBoundary* m_boundary; // 0x04
+
+		MxFloat m_unk0x08[3]; // 0x08
+		MxFloat m_unk0x14[3]; // 0x14
+	};
+
 	Act3Cop();
 
 	void ParseAction(char* p_extra) override;           // vtable+0x20
@@ -135,44 +173,6 @@ private:
 	MxFloat m_unk0x50;                // 0x50
 	MxFloat m_unk0x54;                // 0x54
 	MxU8 m_unk0x58;                   // 0x58
-};
-
-// VTABLE: LEGO1 0x100d7920 LegoPathActor
-// VTABLE: LEGO1 0x100d79f0 LegoAnimActor
-// SIZE 0x1a8
-class Act3Shark : public LegoAnimActor {
-public:
-	Act3Shark();
-
-	// FUNCTION: LEGO1 0x100430d0
-	const char* ClassName() const override // vtable+0x0c
-	{
-		// Does not exist in BETA10
-		// STRING: LEGO1 0x100f03a0
-		return "Act3Shark";
-	}
-
-	void ParseAction(char*) override;    // vtable+0x20
-	void Animate(float p_time) override; // vtable+0x70
-
-	// LegoAnimActor vtable
-	virtual MxResult EatPizza(Act3Ammo* p_ammo); // vtable+0x10
-
-	MxFloat GetUnknown0x2c() { return m_unk0x2c; }
-
-	void SetUnknown0x2c(MxFloat p_unk0x2c) { m_unk0x2c = p_unk0x2c; }
-
-	// SYNTHETIC: LEGO1 0x10043030
-	// Act3Shark::`scalar deleting destructor'
-
-private:
-	list<Act3Ammo*> m_eatPizzas;    // 0x1c
-	Act3Ammo* m_nextPizza;          // 0x28
-	MxFloat m_unk0x2c;              // 0x2c
-	LegoWorld* m_world;             // 0x30
-	LegoAnimActorStruct* m_unk0x34; // 0x34
-	LegoROI* m_unk0x38;             // 0x38
-	Mx3DPointFloat m_unk0x3c;       // 0x3c
 };
 
 // FUNCTION: LEGO1 0x1003ff10
