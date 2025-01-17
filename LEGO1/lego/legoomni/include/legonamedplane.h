@@ -6,8 +6,7 @@
 #include "mxstring.h"
 
 // SIZE 0x4c
-class LegoNamedPlane {
-public:
+struct LegoNamedPlane {
 	// FUNCTION: LEGO1 0x10033800
 	LegoNamedPlane() {}
 
@@ -26,7 +25,6 @@ public:
 
 	// TODO: Unclear whether this was defined
 	MxBool IsPresent() { return strcmp(m_name.GetData(), "") != 0; }
-	void Reset() { m_name = ""; }
 
 	// FUNCTION: LEGO1 0x100344d0
 	MxResult Serialize(LegoStorage* p_storage)
@@ -47,7 +45,6 @@ public:
 		return SUCCESS;
 	}
 
-	// private:
 	MxString m_name;            // 0x00
 	Mx3DPointFloat m_position;  // 0x10
 	Mx3DPointFloat m_direction; // 0x24
