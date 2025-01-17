@@ -14,30 +14,12 @@ DECOMP_SIZE_ASSERT(MxControlPresenter, 0x5c)
 // FUNCTION: LEGO1 0x10043f50
 MxControlPresenter::MxControlPresenter()
 {
-	this->m_unk0x4c = 0;
-	this->m_unk0x4e = -1;
-	this->m_unk0x50 = FALSE;
-	this->m_unk0x52 = 0;
-	this->m_unk0x58 = 0;
-	this->m_unk0x54 = 0;
-}
-
-// FUNCTION: LEGO1 0x10043fd0
-void MxControlPresenter::RepeatingTickle()
-{
-	// empty
-}
-
-// FUNCTION: LEGO1 0x10043fe0
-MxBool MxControlPresenter::VTable0x64(undefined4 p_undefined)
-{
-	return m_unk0x50;
-}
-
-// FUNCTION: LEGO1 0x10043ff0
-void MxControlPresenter::VTable0x68(MxBool p_unk0x50)
-{
-	m_unk0x50 = p_unk0x50;
+	m_unk0x4c = 0;
+	m_unk0x4e = -1;
+	m_unk0x50 = FALSE;
+	m_unk0x52 = 0;
+	m_unk0x58 = 0;
+	m_unk0x54 = 0;
 }
 
 // FUNCTION: LEGO1 0x10044110
