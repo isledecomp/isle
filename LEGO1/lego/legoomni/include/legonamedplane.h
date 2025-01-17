@@ -27,6 +27,10 @@ struct LegoNamedPlane {
 	void SetDirection(const Mx3DPointFloat& p_direction) { m_direction = p_direction; }
 	void SetUp(const Mx3DPointFloat& p_up) { m_up = p_up; }
 
+	// TODO: Unclear whether this was defined
+	MxBool IsPresent() { return strcmp(m_name.GetData(), "") != 0; }
+	void Reset() { m_name = ""; }
+
 	// FUNCTION: LEGO1 0x100344d0
 	MxResult Serialize(LegoStorage* p_storage)
 	{

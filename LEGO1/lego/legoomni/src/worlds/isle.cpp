@@ -1615,21 +1615,21 @@ void Act1State::PlaceActors()
 {
 	Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 
-	if (strcmp(m_motocyclePlane.m_name.GetData(), "")) {
+	if (m_motocyclePlane.IsPresent()) {
 		isle->m_motocycle->PlaceActor(m_motocyclePlane);
 	}
 	else {
 		isle->PlaceActor(isle->m_motocycle, "INT43", 4, 0.5f, 1, 0.5f);
 	}
 
-	if (strcmp(m_bikePlane.m_name.GetData(), "")) {
+	if (m_bikePlane.IsPresent()) {
 		isle->m_bike->PlaceActor(m_bikePlane);
 	}
 	else {
 		isle->PlaceActor(isle->m_bike, "INT44", 2, 0.5f, 0, 0.5f);
 	}
 
-	if (strcmp(m_skateboardPlane.m_name.GetData(), "")) {
+	if (m_skateboardPlane.IsPresent()) {
 		isle->m_skateboard->PlaceActor(m_skateboardPlane);
 	}
 	else {
@@ -1637,7 +1637,7 @@ void Act1State::PlaceActors()
 	}
 
 	if (m_helicopter != NULL) {
-		if (!strcmp(m_helicopterPlane.m_name.GetData(), "")) {
+		if (!m_helicopterPlane.IsPresent()) {
 			m_helicopter->SpawnPlayer(LegoGameState::e_unk40, FALSE, 0);
 		}
 		else {
@@ -1654,7 +1654,7 @@ void Act1State::PlaceActors()
 
 		GetViewManager()->Add(m_helicopter->GetROI());
 		m_helicopter->GetROI()->SetVisibility(TRUE);
-		m_helicopterPlane.m_name = "";
+		m_helicopterPlane.Reset();
 		m_helicopter = NULL;
 
 		if (m_helicopterWindshield != NULL) {
@@ -1677,7 +1677,7 @@ void Act1State::PlaceActors()
 	}
 
 	if (m_jetski != NULL) {
-		if (!strcmp(m_jetskiPlane.m_name.GetData(), "")) {
+		if (!m_jetskiPlane.IsPresent()) {
 			m_jetski->SpawnPlayer(LegoGameState::e_unk45, FALSE, 0);
 		}
 		else {
@@ -1690,7 +1690,7 @@ void Act1State::PlaceActors()
 
 		GetViewManager()->Add(m_jetski->GetROI());
 		m_jetski->GetROI()->SetVisibility(TRUE);
-		m_jetskiPlane.m_name = "";
+		m_jetskiPlane.Reset();
 		m_jetski = NULL;
 
 		if (m_jetskiFront != NULL) {
@@ -1707,7 +1707,7 @@ void Act1State::PlaceActors()
 	}
 
 	if (m_dunebuggy != NULL) {
-		if (!strcmp(m_dunebuggyPlane.m_name.GetData(), "")) {
+		if (!m_dunebuggyPlane.IsPresent()) {
 			m_dunebuggy->SpawnPlayer(LegoGameState::e_unk43, FALSE, 0);
 		}
 		else {
@@ -1724,7 +1724,7 @@ void Act1State::PlaceActors()
 
 		GetViewManager()->Add(m_dunebuggy->GetROI());
 		m_dunebuggy->GetROI()->SetVisibility(TRUE);
-		m_dunebuggyPlane.m_name = "";
+		m_dunebuggyPlane.Reset();
 		m_dunebuggy = NULL;
 
 		if (m_dunebuggyFront != NULL) {
@@ -1735,7 +1735,7 @@ void Act1State::PlaceActors()
 	}
 
 	if (m_racecar != NULL) {
-		if (!strcmp(m_racecarPlane.m_name.GetData(), "")) {
+		if (!m_racecarPlane.IsPresent()) {
 			m_racecar->SpawnPlayer(LegoGameState::e_unk44, FALSE, 0);
 		}
 		else {
@@ -1752,7 +1752,7 @@ void Act1State::PlaceActors()
 
 		GetViewManager()->Add(m_racecar->GetROI());
 		m_racecar->GetROI()->SetVisibility(TRUE);
-		m_racecarPlane.m_name = "";
+		m_racecarPlane.Reset();
 		m_racecar = NULL;
 
 		if (m_racecarFront != NULL) {

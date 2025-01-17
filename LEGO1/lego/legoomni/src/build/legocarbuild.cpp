@@ -1165,7 +1165,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 				}
 
 				gameState->m_helicopter = (Helicopter*) entity;
-				gameState->m_helicopterPlane.m_name = "";
+				gameState->m_helicopterPlane.Reset();
 				break;
 			case LegoGameState::e_dunecarbuild:
 				if (gameState->m_dunebuggy) {
@@ -1173,7 +1173,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 				}
 
 				gameState->m_dunebuggy = (DuneBuggy*) entity;
-				gameState->m_dunebuggyPlane.m_name = "";
+				gameState->m_dunebuggyPlane.Reset();
 				break;
 			case LegoGameState::e_jetskibuild:
 				if (gameState->m_jetski) {
@@ -1181,7 +1181,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 				}
 
 				gameState->m_jetski = (Jetski*) entity;
-				gameState->m_jetskiPlane.m_name = "";
+				gameState->m_jetskiPlane.Reset();
 				break;
 			case LegoGameState::e_racecarbuild:
 				if (gameState->m_racecar) {
@@ -1189,7 +1189,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 				}
 
 				gameState->m_racecar = (RaceCar*) entity;
-				gameState->m_racecarPlane.m_name = "";
+				gameState->m_racecarPlane.Reset();
 				break;
 			}
 
