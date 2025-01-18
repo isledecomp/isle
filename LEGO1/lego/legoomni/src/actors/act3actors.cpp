@@ -29,7 +29,7 @@ DECOMP_SIZE_ASSERT(Act3Shark, 0x1a8)
 // name verified by BETA10 0x10018776
 // GLOBAL: LEGO1 0x100f4120
 // GLOBAL: BETA10 0x101dcdc8
-Act3Actor::Act3CopDest g_copDest[5] = {
+Act3Cop::Act3CopDest g_copDest[5] = {
 	{"INT38", NULL, {3.69, -1.31251, -59.231}, {-0.99601698, 0.0, -0.089166}},
 	{
 		"EDG02_08",
@@ -1012,9 +1012,6 @@ MxResult Act3Brickster::FUN_100417c0()
 // FUNCTION: BETA10 0x1001b017
 MxS32 Act3Brickster::FUN_10042300()
 {
-	// TODO: Has poor inlining, can be fixed by changing the assignment operator in vector.h
-	// See extended comment in vector.h for operator=
-
 	Act3* a3 = (Act3*) m_world;
 
 	assert(a3 && a3->m_cop1 && a3->m_cop2);

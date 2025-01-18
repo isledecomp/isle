@@ -1,12 +1,31 @@
 #ifndef __LEGOWEGEDGE_H
 #define __LEGOWEGEDGE_H
 
+class LegoPathStruct;
+
 #include "decomp.h"
 #include "legoweedge.h"
+
+// This struct might have been defined elsewhere (legopathstruct.h?).
+// Must be defined before the inclusion of Mx4DPointFloat for correct order
+// SIZE 0x0c
+struct PathWithTrigger {
+	// FUNCTION: LEGO1 0x10048280
+	// FUNCTION: BETA10 0x100bd450
+	PathWithTrigger()
+	{
+		m_pathStruct = NULL;
+		m_data = 0;
+		m_unk0x08 = 0.0f;
+	}
+
+	LegoPathStruct* m_pathStruct; // 0x00
+	unsigned int m_data;          // 0x04
+	float m_unk0x08;              // 0x08
+};
+
 #include "mxgeometry/mxgeometry3d.h"
 #include "mxgeometry/mxgeometry4d.h"
-
-class LegoPathStruct;
 
 // might be a struct with public members
 // VTABLE: LEGO1 0x100db7f8
@@ -18,22 +37,6 @@ public:
 		c_bit2 = 0x02,
 		c_bit3 = 0x04,
 		c_bit5 = 0x10
-	};
-
-	// SIZE 0x0c
-	struct PathWithTrigger {
-		// FUNCTION: LEGO1 0x10048280
-		// FUNCTION: BETA10 0x100bd450
-		PathWithTrigger()
-		{
-			m_pathStruct = NULL;
-			m_data = 0;
-			m_unk0x08 = 0.0f;
-		}
-
-		LegoPathStruct* m_pathStruct; // 0x00
-		unsigned int m_data;          // 0x04
-		float m_unk0x08;              // 0x08
 	};
 
 	LegoWEGEdge();

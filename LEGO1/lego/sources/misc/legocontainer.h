@@ -27,6 +27,8 @@ class LegoContainerInfo : public map<const char*, T*, LegoContainerInfoComparato
 template <class T>
 class LegoContainer {
 public:
+	LegoContainer() { m_ownership = TRUE; }
+
 	virtual ~LegoContainer()
 	{
 #ifdef COMPAT_MODE
@@ -115,7 +117,6 @@ typedef list<LegoCachedTexture> LegoCachedTextureList;
 // SIZE 0x24
 class LegoTextureContainer : public LegoContainer<LegoTextureInfo> {
 public:
-	LegoTextureContainer() { m_ownership = TRUE; }
 	~LegoTextureContainer() override;
 
 	LegoTextureInfo* GetCached(LegoTextureInfo* p_textureInfo);

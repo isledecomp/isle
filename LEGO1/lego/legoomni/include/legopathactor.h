@@ -37,20 +37,6 @@ public:
 	LegoPathActor();
 	~LegoPathActor() override;
 
-	// FUNCTION: LEGO1 0x1000c430
-	// FUNCTION: BETA10 0x10012790
-	const char* ClassName() const override // vtable+0x0c
-	{
-		// STRING: LEGO1 0x100f0114
-		return "LegoPathActor";
-	}
-
-	// FUNCTION: LEGO1 0x1000c440
-	MxBool IsA(const char* p_name) const override // vtable+0x10
-	{
-		return !strcmp(p_name, LegoPathActor::ClassName()) || LegoActor::IsA(p_name);
-	}
-
 	void ParseAction(char* p_extra) override;                              // vtable+0x20
 	virtual MxS32 VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3); // vtable+0x68
 	virtual MxU32 VTable0x6c(
@@ -136,6 +122,20 @@ public:
 
 	// FUNCTION: LEGO1 0x10002de0
 	virtual void VTable0xc8(MxU8 p_unk0x148) { m_unk0x148 = p_unk0x148; } // vtable+0xc8
+
+	// FUNCTION: LEGO1 0x1000c430
+	// FUNCTION: BETA10 0x10012790
+	const char* ClassName() const override // vtable+0x0c
+	{
+		// STRING: LEGO1 0x100f0114
+		return "LegoPathActor";
+	}
+
+	// FUNCTION: LEGO1 0x1000c440
+	MxBool IsA(const char* p_name) const override // vtable+0x10
+	{
+		return !strcmp(p_name, LegoPathActor::ClassName()) || LegoActor::IsA(p_name);
+	}
 
 	// FUNCTION: BETA10 0x1001ca40
 	LegoPathBoundary* GetBoundary() { return m_boundary; }

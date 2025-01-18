@@ -13,6 +13,9 @@ public:
 	// FUNCTION: LEGO1 0x10043550
 	~MxStillPresenter() override { Destroy(TRUE); } // vtable+0x00
 
+	// FUNCTION: LEGO1 0x100435b0
+	void Destroy() override { Destroy(FALSE); } // vtable+0x38
+
 	// FUNCTION: BETA10 0x100980c0
 	static const char* HandlerClassName()
 	{
@@ -33,14 +36,10 @@ public:
 		return !strcmp(p_name, MxStillPresenter::ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
 
-	void StartingTickle() override;  // vtable+0x1c
-	void StreamingTickle() override; // vtable+0x20
-	void RepeatingTickle() override; // vtable+0x24
-	void ParseExtra() override;      // vtable+0x30
-
-	// FUNCTION: LEGO1 0x100435b0
-	void Destroy() override { Destroy(FALSE); } // vtable+0x38
-
+	void StartingTickle() override;                   // vtable+0x1c
+	void StreamingTickle() override;                  // vtable+0x20
+	void RepeatingTickle() override;                  // vtable+0x24
+	void ParseExtra() override;                       // vtable+0x30
 	void Enable(MxBool p_enable) override;            // vtable+0x54
 	void LoadHeader(MxStreamChunk* p_chunk) override; // vtable+0x5c
 	void CreateBitmap() override;                     // vtable+0x60

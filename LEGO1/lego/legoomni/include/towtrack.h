@@ -14,6 +14,40 @@ class TowTrackMissionState : public LegoState {
 public:
 	TowTrackMissionState();
 
+	// FUNCTION: LEGO1 0x1004dde0
+	// FUNCTION: BETA10 0x100f8720
+	MxResult Serialize(LegoStorage* p_storage) override
+	{
+		LegoState::Serialize(p_storage);
+
+		if (p_storage->IsReadMode()) {
+			p_storage->ReadS16(m_peScore);
+			p_storage->ReadS16(m_maScore);
+			p_storage->ReadS16(m_paScore);
+			p_storage->ReadS16(m_niScore);
+			p_storage->ReadS16(m_laScore);
+			p_storage->ReadS16(m_peHighScore);
+			p_storage->ReadS16(m_maHighScore);
+			p_storage->ReadS16(m_paHighScore);
+			p_storage->ReadS16(m_niHighScore);
+			p_storage->ReadS16(m_laHighScore);
+		}
+		else if (p_storage->IsWriteMode()) {
+			p_storage->WriteS16(m_peScore);
+			p_storage->WriteS16(m_maScore);
+			p_storage->WriteS16(m_paScore);
+			p_storage->WriteS16(m_niScore);
+			p_storage->WriteS16(m_laScore);
+			p_storage->WriteS16(m_peHighScore);
+			p_storage->WriteS16(m_maHighScore);
+			p_storage->WriteS16(m_paHighScore);
+			p_storage->WriteS16(m_niHighScore);
+			p_storage->WriteS16(m_laHighScore);
+		}
+
+		return SUCCESS;
+	} // vtable+0x1c
+
 	// FUNCTION: LEGO1 0x1004dfa0
 	// FUNCTION: BETA10 0x100f8920
 	const char* ClassName() const override // vtable+0x0c
@@ -27,8 +61,6 @@ public:
 	{
 		return !strcmp(p_name, TowTrackMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
-
-	MxResult Serialize(LegoStorage* p_storage) override; // vtable+0x1c
 
 	// FUNCTION: BETA10 0x10088890
 	MxS16 GetHighScore(MxU8 p_actorId)

@@ -1,7 +1,6 @@
 #include "legopathcontroller.h"
 
 #include "legopathedgecontainer.h"
-#include "legopathstruct.h"
 #include "misc/legostorage.h"
 #include "mxmisc.h"
 #include "mxticklemanager.h"
@@ -214,12 +213,21 @@ MxResult LegoPathController::PlaceActor(
 	}
 
 	LegoPathBoundary* pBoundary = GetPathBoundary(p_name);
+
+	assert(pBoundary);
+	assert(p_src < pBoundary->GetNumEdges() && p_dest < pBoundary->GetNumEdges());
+
 	LegoEdge* pSrcE = pBoundary->GetEdges()[p_src];
 	LegoEdge* pDestE = pBoundary->GetEdges()[p_dest];
-	float time = Timer()->GetTime();
 
-	if (p_actor->VTable0x88(pBoundary, time, *pSrcE, p_srcScale, (LegoUnknown100db7f4&) *pDestE, p_destScale) !=
-		SUCCESS) {
+	assert(pSrcE && pDestE);
+
+	float time = Timer()->GetTime();
+	MxResult result =
+		p_actor->VTable0x88(pBoundary, time, *pSrcE, p_srcScale, (LegoUnknown100db7f4&) *pDestE, p_destScale);
+
+	if (result != SUCCESS) {
+		assert(0);
 		return FAILURE;
 	}
 
@@ -679,7 +687,7 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 
 		if (boundary.m_numTriggers > 0) {
 			boundary.m_unk0x50 = new Mx3DPointFloat;
-			boundary.m_pathTrigger = new LegoWEGEdge::PathWithTrigger[boundary.m_numTriggers];
+			boundary.m_pathTrigger = new PathWithTrigger[boundary.m_numTriggers];
 
 			for (j = 0; j < boundary.m_numTriggers; j++) {
 				if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {

@@ -49,6 +49,8 @@ public:
 	inline void Swap(int p_d1, int p_d2);
 
 	float* operator[](int idx) { return m_data[idx]; }
+
+	// FUNCTION: BETA10 0x10017780
 	const float* operator[](int idx) const { return m_data[idx]; }
 };
 
