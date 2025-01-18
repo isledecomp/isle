@@ -21,7 +21,6 @@
 #include "mxautolock.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxdisplaysurface.h"
-#include "mxdsfile.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxomnicreateflags.h"
