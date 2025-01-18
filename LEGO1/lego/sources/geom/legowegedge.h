@@ -3,6 +3,9 @@
 
 class LegoPathStruct;
 
+#include "decomp.h"
+#include "legoweedge.h"
+
 // This struct might have been defined elsewhere (legopathstruct.h?).
 // Must be defined before the inclusion of Mx4DPointFloat for correct order
 // SIZE 0x0c
@@ -21,8 +24,6 @@ struct PathWithTrigger {
 	float m_unk0x08;              // 0x08
 };
 
-#include "decomp.h"
-#include "legoweedge.h"
 #include "mxgeometry/mxgeometry3d.h"
 #include "mxgeometry/mxgeometry4d.h"
 
