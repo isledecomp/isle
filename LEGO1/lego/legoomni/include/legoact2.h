@@ -65,10 +65,13 @@ public:
 	MxResult Tickle() override;                       // vtable+0x08
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void ReadyWorld() override;                       // vtable+0x50
-	MxBool VTable0x5c() override;                     // vtable+0x5c
-	void VTable0x60() override;                       // vtable+0x60
-	MxBool Escape() override;                         // vtable+0x64
-	void Enable(MxBool p_enable) override;            // vtable+0x68
+
+	// FUNCTION: LEGO1 0x1004fe10
+	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
+
+	void VTable0x60() override;            // vtable+0x60
+	MxBool Escape() override;              // vtable+0x64
+	void Enable(MxBool p_enable) override; // vtable+0x68
 
 	void SetUnknown0x1138(Act2Actor* p_unk0x1138) { m_unk0x1138 = p_unk0x1138; }
 	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }

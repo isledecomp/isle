@@ -353,13 +353,13 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/legoanimmmpresenter.cpp
     LEGO1/lego/legoomni/src/common/mxtransitionmanager.cpp
     LEGO1/lego/legoomni/src/actors/towtrack.cpp
-
-    LEGO1/lego/legoomni/src/actors/act3ammo.cpp
-    LEGO1/lego/legoomni/src/entity/legojetskiraceactor.cpp
     LEGO1/lego/legoomni/src/entity/act2policestation.cpp
     LEGO1/lego/legoomni/src/video/legophonemepresenter.cpp
     LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp
     LEGO1/lego/legoomni/src/worlds/legoact2.cpp
+
+    LEGO1/lego/legoomni/src/actors/act3ammo.cpp
+    LEGO1/lego/legoomni/src/entity/legojetskiraceactor.cpp
     LEGO1/lego/legoomni/src/main/scripts.cpp
     LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
     LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp

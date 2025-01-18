@@ -92,12 +92,6 @@ LegoAct2::LegoAct2()
 	NotificationManager()->Register(this);
 }
 
-// FUNCTION: LEGO1 0x1004fe10
-MxBool LegoAct2::VTable0x5c()
-{
-	return TRUE;
-}
-
 // FUNCTION: LEGO1 0x1004fe40
 // FUNCTION: BETA10 0x1003a6f0
 LegoAct2::~LegoAct2()

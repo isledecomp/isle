@@ -40,15 +40,15 @@ public:
 	MxBitmap();
 	~MxBitmap() override; // vtable+00
 
-	virtual MxResult ImportBitmap(MxBitmap* p_bitmap);                                     // vtable+14
-	virtual MxResult ImportBitmapInfo(MxBITMAPINFO* p_info);                               // vtable+18
-	virtual MxResult SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, MxBool); // vtable+1c
-	virtual MxResult LoadFile(HANDLE p_handle);                                            // vtable+20
-	virtual MxLong Read(const char* p_filename);                                           // vtable+24
+	virtual MxResult ImportBitmap(MxBitmap* p_bitmap);                                     // vtable+0x14
+	virtual MxResult ImportBitmapInfo(MxBITMAPINFO* p_info);                               // vtable+0x18
+	virtual MxResult SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, MxBool); // vtable+0x1c
+	virtual MxResult LoadFile(HANDLE p_handle);                                            // vtable+0x20
+	virtual MxLong Read(const char* p_filename);                                           // vtable+0x24
 
 	// FUNCTION: LEGO1 0x1004e0d0
 	// FUNCTION: BETA10 0x10060fc0
-	virtual int VTable0x28(int) { return -1; } // vtable+28
+	virtual MxS32 VTable0x28(MxS32) { return -1; } // vtable+28
 
 	virtual void BitBlt(
 		MxBitmap* p_src,
