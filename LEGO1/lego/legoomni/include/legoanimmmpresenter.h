@@ -1,6 +1,10 @@
 #ifndef LEGOANIMMMPRESENTER_H
 #define LEGOANIMMMPRESENTER_H
 
+// MxDSActionListCursor needs to be included before std::list
+// clang-format off
+#include "mxdsmultiaction.h"
+// clang-format on
 #include "mxcompositepresenter.h"
 
 class LegoAnimPresenter;

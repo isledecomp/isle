@@ -607,37 +607,3 @@ TowTrackMissionState::TowTrackMissionState()
 	m_niHighScore = 0;
 	m_laHighScore = 0;
 }
-
-// FUNCTION: LEGO1 0x1004dde0
-// FUNCTION: BETA10 0x100f8720
-MxResult TowTrackMissionState::Serialize(LegoStorage* p_storage)
-{
-	LegoState::Serialize(p_storage);
-
-	if (p_storage->IsReadMode()) {
-		p_storage->ReadS16(m_peScore);
-		p_storage->ReadS16(m_maScore);
-		p_storage->ReadS16(m_paScore);
-		p_storage->ReadS16(m_niScore);
-		p_storage->ReadS16(m_laScore);
-		p_storage->ReadS16(m_peHighScore);
-		p_storage->ReadS16(m_maHighScore);
-		p_storage->ReadS16(m_paHighScore);
-		p_storage->ReadS16(m_niHighScore);
-		p_storage->ReadS16(m_laHighScore);
-	}
-	else if (p_storage->IsWriteMode()) {
-		p_storage->WriteS16(m_peScore);
-		p_storage->WriteS16(m_maScore);
-		p_storage->WriteS16(m_paScore);
-		p_storage->WriteS16(m_niScore);
-		p_storage->WriteS16(m_laScore);
-		p_storage->WriteS16(m_peHighScore);
-		p_storage->WriteS16(m_maHighScore);
-		p_storage->WriteS16(m_paHighScore);
-		p_storage->WriteS16(m_niHighScore);
-		p_storage->WriteS16(m_laHighScore);
-	}
-
-	return SUCCESS;
-}
