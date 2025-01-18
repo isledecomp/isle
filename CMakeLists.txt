@@ -363,7 +363,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp
     LEGO1/lego/legoomni/src/paths/legopathboundary.cpp
     LEGO1/lego/legoomni/src/main/legomain.cpp
-
     LEGO1/lego/legoomni/src/entity/legojetskiraceactor.cpp
     LEGO1/lego/legoomni/src/input/legoinputmanager.cpp
     LEGO1/lego/legoomni/src/race/legoracemap.cpp
