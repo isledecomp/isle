@@ -48,7 +48,7 @@ public:
 
 	// FUNCTION: LEGO1 0x1004e0d0
 	// FUNCTION: BETA10 0x10060fc0
-	virtual MxS32 VTable0x28(MxS32) { return -1; } // vtable+28
+	virtual MxS32 VTable0x28(MxS32) { return -1; } // vtable+0x28
 
 	virtual void BitBlt(
 		MxBitmap* p_src,
@@ -58,7 +58,7 @@ public:
 		MxS32 p_bottom,
 		MxS32 p_width,
 		MxS32 p_height
-	); // vtable+2c
+	); // vtable+0x2c
 	virtual void BitBltTransparent(
 		MxBitmap* p_src,
 		MxS32 p_left,
@@ -67,10 +67,10 @@ public:
 		MxS32 p_bottom,
 		MxS32 p_width,
 		MxS32 p_height
-	);                                                // vtable+30
-	virtual MxPalette* CreatePalette();               // vtable+34
-	virtual void ImportPalette(MxPalette* p_palette); // vtable+38
-	virtual MxResult SetBitDepth(MxBool);             // vtable+3c
+	);                                                // vtable+0x30
+	virtual MxPalette* CreatePalette();               // vtable+0x34
+	virtual void ImportPalette(MxPalette* p_palette); // vtable+0x38
+	virtual MxResult SetBitDepth(MxBool);             // vtable+0x3c
 	virtual MxResult StretchBits(
 		HDC p_hdc,
 		MxS32 p_xSrc,
@@ -79,7 +79,7 @@ public:
 		MxS32 p_yDest,
 		MxS32 p_destWidth,
 		MxS32 p_destHeight
-	); // vtable+40
+	); // vtable+0x40
 
 	// Bit mask trick to round up to the nearest multiple of four.
 	// Pixel data may be stored with padding.
