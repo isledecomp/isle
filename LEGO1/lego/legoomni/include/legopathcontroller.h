@@ -5,11 +5,10 @@
 #include "geom/legounkown100db7f4.h"
 #include "legopathactor.h"
 #include "legopathboundary.h"
-#include "mxcore.h"
+#include "legopathstruct.h"
 #include "mxstl/stlcompat.h"
 
 class LegoAnimPresenter;
-class LegoPathStruct;
 class LegoWorld;
 class MxAtomId;
 class Vector3;
