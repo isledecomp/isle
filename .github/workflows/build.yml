@@ -152,10 +152,9 @@ jobs:
         curl -fLSs -o LEGO1PROGRESS-old.json $RELEASE_URL/LEGO1PROGRESS.json || echo "" >LEGO1PROGRESS-old.json
         
         # Compare with current master
-        # Disabled until second PR - nothing to compare against at the moment
-        # reccmp-reccmp --target CONFIG --diff CONFIGPROGRESS-old.json || echo "Current master not found"
-        # reccmp-reccmp --target ISLE --diff ISLEPROGRESS-old.json || echo "Current master not found"
-        # reccmp-reccmp --target LEGO1 --diff LEGO1PROGRESS-old.json || echo "Current master not found"
+        reccmp-reccmp --target CONFIG --diff CONFIGPROGRESS-old.json || echo "Current master not found"
+        reccmp-reccmp --target ISLE --diff ISLEPROGRESS-old.json || echo "Current master not found"
+        reccmp-reccmp --target LEGO1 --diff LEGO1PROGRESS-old.json || echo "Current master not found"
 
     - name: Test Exports
       shell: bash
