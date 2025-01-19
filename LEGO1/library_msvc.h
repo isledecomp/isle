@@ -697,7 +697,7 @@
 // strcpy
 
 // LIBRARY: BETA10 0x100f8a88
-// operator new
+// ??2@YAPAXI@Z
 
 // LIBRARY: BETA10 0x100f9420
 // memcpy

@@ -125,7 +125,7 @@ private:
 // _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Rrotate
 
 // TEMPLATE: LEGO1 0x1004a7a0
-// ?_Construct@@YAXPAPAVMxCore@@ABQAV1@@Z
+// ?_Construct@@YAXPAPAVLegoPathActor@@ABQAV1@@Z
 
 // TEMPLATE: LEGO1 0x10056c20
 // _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresenter *,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::_Kfn,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::~_Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoA
