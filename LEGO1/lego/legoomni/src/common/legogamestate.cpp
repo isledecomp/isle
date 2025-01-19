@@ -87,6 +87,8 @@ const char* g_historyGSI = "History.gsi";
 // TODO: make g_endOfVariables reference the actual end of the variable array.
 // GLOBAL: LEGO1 0x100f3e50
 // STRING: LEGO1 0x100f3e00
+// GLOBAL: BETA10 0x101ed5dc
+// STRING: BETA10 0x101ed768
 const char* g_endOfVariables = "END_OF_VARIABLES";
 
 // GLOBAL: LEGO1 0x100f3e58
@@ -462,6 +464,7 @@ void LegoGameState::SetSavePath(char* p_savePath)
 }
 
 // FUNCTION: LEGO1 0x10039f70
+// FUNCTION: BETA10 0x1008483b
 MxResult LegoGameState::WriteVariable(LegoStorage* p_storage, MxVariableTable* p_from, const char* p_variableName)
 {
 	MxResult result = FAILURE;
@@ -469,20 +472,28 @@ MxResult LegoGameState::WriteVariable(LegoStorage* p_storage, MxVariableTable* p
 
 	if (variableValue) {
 		MxU8 length = strlen(p_variableName);
-		if (p_storage->Write(&length, sizeof(length)) == SUCCESS) {
-			if (p_storage->Write(p_variableName, length) == SUCCESS) {
-				length = strlen(variableValue);
-				if (p_storage->Write(&length, sizeof(length)) == SUCCESS) {
-					result = p_storage->Write(variableValue, length);
-				}
-			}
+		if (p_storage->Write(&length, sizeof(length)) != SUCCESS) {
+			goto done;
 		}
+
+		if (p_storage->Write(p_variableName, length) != SUCCESS) {
+			goto done;
+		}
+
+		length = strlen(variableValue);
+		if (p_storage->Write(&length, sizeof(length)) != SUCCESS) {
+			goto done;
+		}
+
+		result = p_storage->Write(variableValue, length);
 	}
 
+done:
 	return result;
 }
 
 // FUNCTION: LEGO1 0x1003a020
+// FUNCTION: BETA10 0x10084928
 MxResult LegoGameState::WriteEndOfVariables(LegoStorage* p_storage)
 {
 	MxU8 len = strlen(g_endOfVariables);
@@ -495,32 +506,46 @@ MxResult LegoGameState::WriteEndOfVariables(LegoStorage* p_storage)
 }
 
 // FUNCTION: LEGO1 0x1003a080
+// FUNCTION: BETA10 0x1008498b
 MxS32 LegoGameState::ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to)
 {
 	MxS32 result = 1;
-	MxU8 length;
+	MxU8 len;
 
-	if (p_storage->Read(&length, sizeof(length)) == SUCCESS) {
-		char nameBuffer[256];
-		if (p_storage->Read(nameBuffer, length) == SUCCESS) {
-			nameBuffer[length] = '\0';
-			if (strcmp(nameBuffer, g_endOfVariables) == 0) {
-				// 2 -> "This was the last entry, done reading."
-				result = 2;
-			}
-			else {
-				if (p_storage->Read(&length, sizeof(length)) == SUCCESS) {
-					char valueBuffer[256];
-					if (p_storage->Read(valueBuffer, length) == SUCCESS) {
-						valueBuffer[length] = '\0';
-						p_to->SetVariable(nameBuffer, valueBuffer);
-						result = SUCCESS;
-					}
-				}
-			}
-		}
+	if (p_storage->Read(&len, sizeof(len)) != SUCCESS) {
+		goto done;
 	}
 
+	char varName[256];
+	assert(len < sizeof(varName));
+
+	if (p_storage->Read(varName, len) != SUCCESS) {
+		goto done;
+	}
+
+	varName[len] = '\0';
+	if (strcmp(varName, g_endOfVariables) == 0) {
+		// 2 -> "This was the last entry, done reading."
+		result = 2;
+		goto done;
+	}
+
+	if (p_storage->Read(&len, sizeof(len)) != SUCCESS) {
+		goto done;
+	}
+
+	char value[256];
+	assert(len < sizeof(value));
+
+	if (p_storage->Read(value, len) != SUCCESS) {
+		goto done;
+	}
+
+	value[len] = '\0';
+	p_to->SetVariable(varName, value);
+	result = SUCCESS;
+
+done:
 	return result;
 }
 
