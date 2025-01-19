@@ -252,6 +252,7 @@ void LegoGameState::ResetROI()
 }
 
 // FUNCTION: LEGO1 0x10039980
+// FUNCTION: BETA10 0x100840e4
 MxResult LegoGameState::Save(MxULong p_slot)
 {
 	InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
@@ -550,7 +551,8 @@ done:
 }
 
 // FUNCTION: LEGO1 0x1003a170
-void LegoGameState::GetFileSavePath(MxString* p_outPath, MxU8 p_slotn)
+// FUNCTION: BETA10 0x10084b45
+void LegoGameState::GetFileSavePath(MxString* p_outPath, MxS16 p_slotn)
 {
 	char baseForSlot[2] = "0";
 	char path[1024] = "";

@@ -193,7 +193,7 @@ public:
 	LegoState* GetState(const char* p_stateName);
 	LegoState* CreateState(const char* p_stateName);
 
-	void GetFileSavePath(MxString* p_outPath, MxU8 p_slotn);
+	void GetFileSavePath(MxString* p_outPath, MxS16 p_slotn);
 	void StopArea(Area p_area);
 	void SwitchArea(Area p_area);
 	void Init();
