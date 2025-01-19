@@ -144,17 +144,18 @@ jobs:
     - name: Compare Accuracy With Current Master
       shell: bash
       env:
-#        RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
-        RELEASE_URL: https://github.com/jonschz/isle/releases/download/continuous
+        RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
       run: |
-        # Compare with current master
+        # Download the current master state
         curl -fLSs -o CONFIGPROGRESS-old.json $RELEASE_URL/CONFIGPROGRESS.json || echo "" >CONFIGPROGRESS-old.json
         curl -fLSs -o ISLEPROGRESS-old.json $RELEASE_URL/ISLEPROGRESS.json || echo "" >ISLEPROGRESS-old.json
         curl -fLSs -o LEGO1PROGRESS-old.json $RELEASE_URL/LEGO1PROGRESS.json || echo "" >LEGO1PROGRESS-old.json
-        # intentional typo to validate error handling        
-        reccmp-reccmp --target CONFIG --diff CONFIGPROGRESS-oldTYPO.json || echo "Current master not found"
-        reccmp-reccmp --target ISLE --diff ISLEPROGRESS-old.json || echo "Current master not found"
-        reccmp-reccmp --target LEGO1 --diff LEGO1PROGRESS-old.json || echo "Current master not found"
+        
+        # Compare with current master
+        # Disabled until second PR - nothing to compare against at the moment
+        # reccmp-reccmp --target CONFIG --diff CONFIGPROGRESS-old.json || echo "Current master not found"
+        # reccmp-reccmp --target ISLE --diff ISLEPROGRESS-old.json || echo "Current master not found"
+        # reccmp-reccmp --target LEGO1 --diff LEGO1PROGRESS-old.json || echo "Current master not found"
 
     - name: Test Exports
       shell: bash
@@ -188,7 +189,6 @@ jobs:
     name: Upload artifacts
     needs: [build, compare]
     runs-on: ubuntu-latest
-#     FIXME: CHANGED TEMPORARILY FOR TESTING PURPOSES, CHANGE BACK
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
     steps:
     - uses: actions/checkout@v4
@@ -207,7 +207,7 @@ jobs:
     - name: Upload Continuous Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        UPLOAD_KEY: ${{ secrets.UPLOAD_KEY }}
+        UPLOAD_KEY: ${{ secrets.UPLOAD_KEY }}
       run: |
         ./upload.sh \
           build/CONFIG.EXE \
