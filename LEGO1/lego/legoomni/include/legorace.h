@@ -66,7 +66,7 @@ public:
 
 	RaceState();
 
-	// FUNCTION: LEGO1 0x10016010
+	// // FUNCTION: LEGO1 0x10016010
 	// FUNCTION: BETA10 0x100a9040
 	const char* ClassName() const override // vtable+0x0c
 	{

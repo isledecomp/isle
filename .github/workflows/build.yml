@@ -149,10 +149,9 @@ jobs:
         curl -fLSs -o ISLEPROGRESS-old.json https://github.com/isledecomp/isle/releases/download/continuous/ISLEPROGRESS.json || echo "" >ISLEPROGRESS-old.json
         curl -fLSs -o LEGO1PROGRESS-old.json https://github.com/isledecomp/isle/releases/download/continuous/LEGO1PROGRESS.json || echo "" >LEGO1PROGRESS-old.json
 
-# Disabled until one build has been created - will fail otherwise        
-#        reccmp-reccmp --target CONFIG --diff CONFIGPROGRESS-old.json
-#        reccmp-reccmp --target ISLE --diff ISLEPROGRESS-old.json
-#        reccmp-reccmp --target LEGO1 --diff LEGO1PROGRESS-old.json
+        reccmp-reccmp --target CONFIG --diff CONFIGPROGRESS-old.json
+        reccmp-reccmp --target ISLE --diff ISLEPROGRESS-old.json
+        reccmp-reccmp --target LEGO1 --diff LEGO1PROGRESS-old.json
 
     - name: Test Exports
       shell: bash
@@ -187,7 +186,7 @@ jobs:
     needs: [build, compare]
     runs-on: ubuntu-latest
 #     FIXME: CHANGED TEMPORARILY FOR TESTING PURPOSES, CHANGE BACK
-#     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
     steps:
     - uses: actions/checkout@v4
       with:
@@ -215,6 +214,6 @@ jobs:
           ISLEPROGRESS.* \
           LEGO1PROGRESS.*
 
-#        curl -X POST -F key=$UPLOAD_KEY -F 'file=@CONFIGPROGRESS.SVG' https://legoisland.org/progress/
-#        curl -X POST -F key=$UPLOAD_KEY -F 'file=@ISLEPROGRESS.SVG' https://legoisland.org/progress/
-#        curl -X POST -F key=$UPLOAD_KEY -F 'file=@LEGO1PROGRESS.SVG' https://legoisland.org/progress/
+        curl -X POST -F key=$UPLOAD_KEY -F 'file=@CONFIGPROGRESS.SVG' https://legoisland.org/progress/
+        curl -X POST -F key=$UPLOAD_KEY -F 'file=@ISLEPROGRESS.SVG' https://legoisland.org/progress/
+        curl -X POST -F key=$UPLOAD_KEY -F 'file=@LEGO1PROGRESS.SVG' https://legoisland.org/progress/
