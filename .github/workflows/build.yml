@@ -137,21 +137,25 @@ jobs:
     - name: Summarize Accuracy
       shell: bash
       run: |
-        reccmp-reccmp -S CONFIGPROGRESS.SVG --svg-icon assets/config.png --target CONFIG | tee CONFIGPROGRESS.TXT
-        reccmp-reccmp -S ISLEPROGRESS.SVG --svg-icon assets/isle.png --target ISLE | tee ISLEPROGRESS.TXT
-        reccmp-reccmp -S LEGO1PROGRESS.SVG --svg-icon assets/lego1.png --target LEGO1 | tee LEGO1PROGRESS.TXT
+        reccmp-reccmp -S CONFIGPROGRESS.SVG --svg-icon assets/config.png --target CONFIG --json CONFIGPROGRESS.json
+        reccmp-reccmp -S ISLEPROGRESS.SVG --svg-icon assets/isle.png --target ISLE --json ISLEPROGRESS.json
+        reccmp-reccmp -S LEGO1PROGRESS.SVG --svg-icon assets/lego1.png --target LEGO1 --json LEGO1PROGRESS.json
 
     - name: Compare Accuracy With Current Master
       shell: bash
+      env:
+        RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
       run: |
+        # Download the current master state
+        curl -fLSs -o CONFIGPROGRESS-old.json $RELEASE_URL/CONFIGPROGRESS.json || echo "" >CONFIGPROGRESS-old.json
+        curl -fLSs -o ISLEPROGRESS-old.json $RELEASE_URL/ISLEPROGRESS.json || echo "" >ISLEPROGRESS-old.json
+        curl -fLSs -o LEGO1PROGRESS-old.json $RELEASE_URL/LEGO1PROGRESS.json || echo "" >LEGO1PROGRESS-old.json
+        
         # Compare with current master
-        curl -fLSs -o CONFIGPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/CONFIGPROGRESS.TXT || echo "" >CONFIGPROGRESS-OLD.TXT
-        curl -fLSs -o ISLEPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/ISLEPROGRESS.TXT || echo "" >ISLEPROGRESS-OLD.TXT
-        curl -fLSs -o LEGO1PROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/LEGO1PROGRESS.TXT || echo "" >LEGO1PROGRESS-OLD.TXT
-
-        diff -u0 CONFIGPROGRESS-OLD.TXT CONFIGPROGRESS.TXT || true
-        diff -u0 ISLEPROGRESS-OLD.TXT ISLEPROGRESS.TXT || true
-        diff -u0 LEGO1PROGRESS-OLD.TXT LEGO1PROGRESS.TXT || true
+        # Disabled until second PR - nothing to compare against at the moment
+        # reccmp-reccmp --target CONFIG --diff CONFIGPROGRESS-old.json || echo "Current master not found"
+        # reccmp-reccmp --target ISLE --diff ISLEPROGRESS-old.json || echo "Current master not found"
+        # reccmp-reccmp --target LEGO1 --diff LEGO1PROGRESS-old.json || echo "Current master not found"
 
     - name: Test Exports
       shell: bash
