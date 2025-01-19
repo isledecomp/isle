@@ -135,7 +135,6 @@ public:
 	// SIZE 0x0e
 	struct Username {
 		Username();
-		Username(Username& p_other) { Set(p_other); }
 		void Set(Username& p_other) { memcpy(m_letters, p_other.m_letters, sizeof(m_letters)); }
 
 		MxResult Serialize(LegoStorage* p_storage);

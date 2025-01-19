@@ -624,6 +624,7 @@ MxResult LegoGameState::AddPlayer(Username& p_player)
 }
 
 // FUNCTION: LEGO1 0x1003a540
+// FUNCTION: BETA10 0x10084fc4
 void LegoGameState::SwitchPlayer(MxS16 p_playerId)
 {
 	if (p_playerId > 0) {
