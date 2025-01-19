@@ -137,21 +137,22 @@ jobs:
     - name: Summarize Accuracy
       shell: bash
       run: |
-        reccmp-reccmp -S CONFIGPROGRESS.SVG --svg-icon assets/config.png --target CONFIG | tee CONFIGPROGRESS.TXT
-        reccmp-reccmp -S ISLEPROGRESS.SVG --svg-icon assets/isle.png --target ISLE | tee ISLEPROGRESS.TXT
-        reccmp-reccmp -S LEGO1PROGRESS.SVG --svg-icon assets/lego1.png --target LEGO1 | tee LEGO1PROGRESS.TXT
+        reccmp-reccmp -S CONFIGPROGRESS.SVG --svg-icon assets/config.png --target CONFIG --json CONFIGPROGRESS.json
+        reccmp-reccmp -S ISLEPROGRESS.SVG --svg-icon assets/isle.png --target ISLE --json ISLEPROGRESS.json
+        reccmp-reccmp -S LEGO1PROGRESS.SVG --svg-icon assets/lego1.png --target LEGO1 --json LEGO1PROGRESS.json
 
     - name: Compare Accuracy With Current Master
       shell: bash
       run: |
         # Compare with current master
-        curl -fLSs -o CONFIGPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/CONFIGPROGRESS.TXT || echo "" >CONFIGPROGRESS-OLD.TXT
-        curl -fLSs -o ISLEPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/ISLEPROGRESS.TXT || echo "" >ISLEPROGRESS-OLD.TXT
-        curl -fLSs -o LEGO1PROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/LEGO1PROGRESS.TXT || echo "" >LEGO1PROGRESS-OLD.TXT
+        curl -fLSs -o CONFIGPROGRESS-old.json https://github.com/isledecomp/isle/releases/download/continuous/CONFIGPROGRESS.json || echo "" >CONFIGPROGRESS-old.json
+        curl -fLSs -o ISLEPROGRESS-old.json https://github.com/isledecomp/isle/releases/download/continuous/ISLEPROGRESS.json || echo "" >ISLEPROGRESS-old.json
+        curl -fLSs -o LEGO1PROGRESS-old.json https://github.com/isledecomp/isle/releases/download/continuous/LEGO1PROGRESS.json || echo "" >LEGO1PROGRESS-old.json
 
-        diff -u0 CONFIGPROGRESS-OLD.TXT CONFIGPROGRESS.TXT || true
-        diff -u0 ISLEPROGRESS-OLD.TXT ISLEPROGRESS.TXT || true
-        diff -u0 LEGO1PROGRESS-OLD.TXT LEGO1PROGRESS.TXT || true
+# Disabled until one build has been created - will fail otherwise        
+#        reccmp-reccmp --target CONFIG --diff CONFIGPROGRESS-old.json
+#        reccmp-reccmp --target ISLE --diff ISLEPROGRESS-old.json
+#        reccmp-reccmp --target LEGO1 --diff LEGO1PROGRESS-old.json
 
     - name: Test Exports
       shell: bash
@@ -185,7 +186,8 @@ jobs:
     name: Upload artifacts
     needs: [build, compare]
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
+#     FIXME: CHANGED TEMPORARILY FOR TESTING PURPOSES, CHANGE BACK
+#     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
     steps:
     - uses: actions/checkout@v4
       with:
@@ -203,7 +205,7 @@ jobs:
     - name: Upload Continuous Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        UPLOAD_KEY: ${{ secrets.UPLOAD_KEY }}
+#        UPLOAD_KEY: ${{ secrets.UPLOAD_KEY }}
       run: |
         ./upload.sh \
           build/CONFIG.EXE \
@@ -213,6 +215,6 @@ jobs:
           ISLEPROGRESS.* \
           LEGO1PROGRESS.*
 
-        curl -X POST -F key=$UPLOAD_KEY -F 'file=@CONFIGPROGRESS.SVG' https://legoisland.org/progress/
-        curl -X POST -F key=$UPLOAD_KEY -F 'file=@ISLEPROGRESS.SVG' https://legoisland.org/progress/
-        curl -X POST -F key=$UPLOAD_KEY -F 'file=@LEGO1PROGRESS.SVG' https://legoisland.org/progress/
+#        curl -X POST -F key=$UPLOAD_KEY -F 'file=@CONFIGPROGRESS.SVG' https://legoisland.org/progress/
+#        curl -X POST -F key=$UPLOAD_KEY -F 'file=@ISLEPROGRESS.SVG' https://legoisland.org/progress/
+#        curl -X POST -F key=$UPLOAD_KEY -F 'file=@LEGO1PROGRESS.SVG' https://legoisland.org/progress/
