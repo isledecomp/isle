@@ -363,14 +363,12 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp
     LEGO1/lego/legoomni/src/paths/legopathboundary.cpp
     LEGO1/lego/legoomni/src/main/legomain.cpp
-    LEGO1/lego/legoomni/src/entity/legojetskiraceactor.cpp
     LEGO1/lego/legoomni/src/input/legoinputmanager.cpp
     LEGO1/lego/legoomni/src/race/legoracemap.cpp
     LEGO1/lego/legoomni/src/worlds/jukebox.cpp
     LEGO1/lego/legoomni/src/video/legoflctexturepresenter.cpp
     LEGO1/lego/legoomni/src/worlds/police.cpp
     LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp
-    LEGO1/lego/legoomni/src/build/legocarbuildpresenter.cpp
     LEGO1/lego/legoomni/src/entity/legopovcontroller.cpp
     LEGO1/lego/legoomni/src/common/legotextureinfo.cpp
     LEGO1/lego/legoomni/src/actors/doors.cpp
@@ -381,6 +379,9 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/video/legolocomotionanimpresenter.cpp
     LEGO1/lego/legoomni/src/video/legohideanimpresenter.cpp
     LEGO1/lego/legoomni/src/worlds/infocenter.cpp
+
+    LEGO1/lego/legoomni/src/entity/legojetskiraceactor.cpp
+    LEGO1/lego/legoomni/src/build/legocarbuildpresenter.cpp
     LEGO1/lego/legoomni/src/race/raceskel.cpp
     LEGO1/lego/legoomni/src/worlds/act3.cpp
     LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp

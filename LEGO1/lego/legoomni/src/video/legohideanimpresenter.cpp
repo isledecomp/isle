@@ -14,16 +14,6 @@ LegoHideAnimPresenter::LegoHideAnimPresenter()
 	Init();
 }
 
-// FUNCTION: LEGO1 0x1006d860
-void LegoHideAnimPresenter::VTable0x8c()
-{
-}
-
-// FUNCTION: LEGO1 0x1006d870
-void LegoHideAnimPresenter::VTable0x90()
-{
-}
-
 // FUNCTION: LEGO1 0x1006d9f0
 LegoHideAnimPresenter::~LegoHideAnimPresenter()
 {

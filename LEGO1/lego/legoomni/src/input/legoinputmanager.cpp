@@ -52,13 +52,6 @@ LegoInputManager::LegoInputManager()
 	m_autoDragTime = 1000;
 }
 
-// FUNCTION: LEGO1 0x1005b8b0
-MxResult LegoInputManager::Tickle()
-{
-	ProcessEvents();
-	return SUCCESS;
-}
-
 // FUNCTION: LEGO1 0x1005b8f0
 LegoInputManager::~LegoInputManager()
 {

@@ -26,12 +26,6 @@ JukeBox::JukeBox()
 	NotificationManager()->Register(this);
 }
 
-// FUNCTION: LEGO1 0x1005d6e0
-MxBool JukeBox::VTable0x5c()
-{
-	return TRUE;
-}
-
 // FUNCTION: LEGO1 0x1005d830
 JukeBox::~JukeBox()
 {

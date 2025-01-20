@@ -26,12 +26,6 @@ Police::Police()
 	NotificationManager()->Register(this);
 }
 
-// FUNCTION: LEGO1 0x1005e1d0
-MxBool Police::VTable0x5c()
-{
-	return TRUE;
-}
-
 // FUNCTION: LEGO1 0x1005e320
 Police::~Police()
 {
