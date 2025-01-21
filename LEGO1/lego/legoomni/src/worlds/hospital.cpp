@@ -50,12 +50,6 @@ Hospital::Hospital()
 	NotificationManager()->Register(this);
 }
 
-// FUNCTION: LEGO1 0x100746a0
-MxBool Hospital::VTable0x5c()
-{
-	return TRUE;
-}
-
 // FUNCTION: LEGO1 0x100747f0
 Hospital::~Hospital()
 {

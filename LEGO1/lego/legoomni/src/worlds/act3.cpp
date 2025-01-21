@@ -241,12 +241,6 @@ Act3::Act3()
 	NotificationManager()->Register(this);
 }
 
-// FUNCTION: LEGO1 0x10072500
-MxBool Act3::VTable0x5c()
-{
-	return TRUE;
-}
-
 // FUNCTION: LEGO1 0x100726a0
 // FUNCTION: BETA10 0x100155da
 Act3::~Act3()

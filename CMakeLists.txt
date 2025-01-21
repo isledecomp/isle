@@ -380,13 +380,13 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/video/legohideanimpresenter.cpp
     LEGO1/lego/legoomni/src/worlds/infocenter.cpp
     LEGO1/lego/legoomni/src/race/raceskel.cpp
+    LEGO1/lego/legoomni/src/worlds/act3.cpp
+    LEGO1/lego/legoomni/src/common/mxcompositemediapresenter.cpp
+    LEGO1/lego/legoomni/src/worlds/hospital.cpp
 
     LEGO1/lego/legoomni/src/entity/legojetskiraceactor.cpp
     LEGO1/lego/legoomni/src/build/legocarbuildpresenter.cpp
-    LEGO1/lego/legoomni/src/worlds/act3.cpp
     LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp
-    LEGO1/lego/legoomni/src/common/mxcompositemediapresenter.cpp
-    LEGO1/lego/legoomni/src/worlds/hospital.cpp
     LEGO1/lego/legoomni/src/actors/bike.cpp
     LEGO1/lego/legoomni/src/entity/legoactorpresenter.cpp
     LEGO1/lego/legoomni/src/worlds/registrationbook.cpp
