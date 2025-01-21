@@ -16,11 +16,6 @@ class MxStillPresenter;
 // SIZE 0x18
 class HospitalState : public LegoState {
 public:
-	// SIZE 0x04
-	struct Unknown0x08 {
-		undefined4 m_unk0x00; // 0x00
-	};
-
 	HospitalState();
 	~HospitalState() override {}
 
@@ -45,13 +40,13 @@ public:
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
-	Unknown0x08 m_unk0x08; // 0x08
-	MxS16 m_unk0x0c;       // 0x0c
-	MxS16 m_unk0x0e;       // 0x0e
-	MxS16 m_unk0x10;       // 0x10
-	MxS16 m_unk0x12;       // 0x12
-	MxS16 m_unk0x14;       // 0x14
-	MxS16 m_unk0x16;       // 0x16
+	undefined4 m_unk0x08; // 0x08
+	MxS16 m_unk0x0c;      // 0x0c
+	MxS16 m_unk0x0e;      // 0x0e
+	MxS16 m_unk0x10;      // 0x10
+	MxS16 m_unk0x12;      // 0x12
+	MxS16 m_unk0x14;      // 0x14
+	MxS16 m_unk0x16;      // 0x16
 };
 
 // VTABLE: LEGO1 0x100d9730
@@ -64,6 +59,9 @@ public:
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 	MxResult Tickle() override;               // vtable+0x08
+
+	// FUNCTION: LEGO1 0x100746a0
+	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x100746b0
 	// FUNCTION: BETA10 0x1002e1a0
@@ -81,7 +79,6 @@ public:
 
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void ReadyWorld() override;                       // vtable+0x50
-	MxBool VTable0x5c() override;                     // vtable+0x5c
 	MxBool Escape() override;                         // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 

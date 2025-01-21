@@ -149,6 +149,11 @@ Infocenter::Infocenter()
 	m_unk0x1d6 = 0;
 }
 
+// FUNCTION: LEGO1 0x1006ec80
+InfocenterMapEntry::InfocenterMapEntry()
+{
+}
+
 // FUNCTION: LEGO1 0x1006ec90
 Infocenter::~Infocenter()
 {

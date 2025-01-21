@@ -39,12 +39,6 @@ LegoCarBuildAnimPresenter::LegoCarBuildAnimPresenter()
 	m_mainSourceId = NULL;
 }
 
-// FUNCTION: LEGO1 0x10078500
-void LegoCarBuildAnimPresenter::RepeatingTickle()
-{
-	// empty
-}
-
 // FUNCTION: LEGO1 0x10078680
 // FUNCTION: BETA10 0x1007091e
 LegoCarBuildAnimPresenter::~LegoCarBuildAnimPresenter()
@@ -292,6 +286,14 @@ void LegoCarBuildAnimPresenter::EndAction()
 		MxVideoPresenter::EndAction();
 		m_unk0xbc = 0;
 	}
+}
+
+// STUB: LEGO1 0x10078e30
+// STUB: BETA10 0x10071387
+MxResult LegoCarBuildAnimPresenter::Serialize(LegoStorage* p_storage)
+{
+	// TODO
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10079050

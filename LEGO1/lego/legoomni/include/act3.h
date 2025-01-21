@@ -92,6 +92,9 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 	MxResult Tickle() override;               // vtable+0x08
 
+	// FUNCTION: LEGO1 0x10072500
+	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
+
 	// FUNCTION: LEGO1 0x10072510
 	// FUNCTION: BETA10 0x10017550
 	const char* ClassName() const override // vtable+0x0c
@@ -109,7 +112,6 @@ public:
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
 	void ReadyWorld() override;                       // vtable+0x50
-	MxBool VTable0x5c() override;                     // vtable+0x5c
 	void VTable0x60() override;                       // vtable+0x60
 	MxBool Escape() override;                         // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68

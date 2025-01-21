@@ -25,6 +25,12 @@ public:
 	LegoHideAnimPresenter();
 	~LegoHideAnimPresenter() override;
 
+	// FUNCTION: LEGO1 0x1006d860
+	void VTable0x8c() override {} // vtable+0x8c
+
+	// FUNCTION: LEGO1 0x1006d870
+	void VTable0x90() override {} // vtable+0x90
+
 	// FUNCTION: BETA10 0x1005d4a0
 	static const char* HandlerClassName()
 	{
@@ -51,8 +57,6 @@ public:
 	void Destroy() override;          // vtable+0x38
 	void EndAction() override;        // vtable+0x40
 	void PutFrame() override;         // vtable+0x6c
-	void VTable0x8c() override;       // vtable+0x8c
-	void VTable0x90() override;       // vtable+0x90
 
 	void FUN_1006db40(LegoTime p_time);
 

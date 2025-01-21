@@ -17,6 +17,8 @@ public:
 
 	MxResult FUN_1001c360(float p_und, Matrix4& p_transform) override;
 
+	virtual void FUN_10071c80(Vector3& p_vec);
+
 	void GetCurrentAnimData(float* p_outCurAnimPosition, float* p_outCurAnimDuration);
 
 	// SYNTHETIC: LEGO1 0x10071cf0

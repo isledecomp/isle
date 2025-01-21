@@ -87,7 +87,12 @@ public:
 	void Register(MxCore*);
 	void UnRegister(MxCore*);
 
-	MxResult Tickle() override; // vtable+0x08
+	// FUNCTION: LEGO1 0x1005b8b0
+	MxResult Tickle() override
+	{
+		ProcessEvents();
+		return SUCCESS;
+	} // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1005b8c0
 	MxResult PutData() override { return SUCCESS; } // vtable+0x4c
