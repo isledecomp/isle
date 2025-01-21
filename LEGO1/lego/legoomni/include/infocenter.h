@@ -20,6 +20,9 @@ public:
 	InfocenterState();
 	~InfocenterState() override;
 
+	// FUNCTION: LEGO1 0x10071830
+	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
+
 	// FUNCTION: LEGO1 0x10071840
 	// FUNCTION: BETA10 0x10031ee0
 	const char* ClassName() const override // vtable+0x0c
@@ -33,9 +36,6 @@ public:
 	{
 		return !strcmp(p_name, InfocenterState::ClassName()) || LegoState::IsA(p_name);
 	}
-
-	// FUNCTION: LEGO1 0x10071830
-	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
 
 	MxS16 GetMaxNameLength() { return sizeOfArray(m_letters); }
 	MxStillPresenter* GetNameLetter(MxS32 p_index) { return m_letters[p_index]; }
@@ -66,8 +66,7 @@ public:
 
 // SIZE 0x18
 struct InfocenterMapEntry {
-	// FUNCTION: LEGO1 0x1006ec80
-	InfocenterMapEntry() {}
+	InfocenterMapEntry();
 
 	MxStillPresenter* m_destCtl; // 0x00
 	undefined4 m_unk0x04;        // 0x04

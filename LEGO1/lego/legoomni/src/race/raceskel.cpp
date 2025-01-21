@@ -50,6 +50,14 @@ void RaceSkel::ParseAction(char* p_extra)
 	m_roi->SetBoundingSphere(sphere);
 }
 
+// FUNCTION: LEGO1 0x10071c80
+void RaceSkel::FUN_10071c80(Vector3& p_vec)
+{
+	p_vec[0] = -630.0f;
+	p_vec[1] = -4.688f;
+	p_vec[2] = 323.0f;
+}
+
 // FUNCTION: LEGO1 0x10071cb0
 // FUNCTION: BETA10 0x100f158b
 void RaceSkel::GetCurrentAnimData(float* p_outCurAnimPosition, float* p_outCurAnimDuration)
