@@ -51,6 +51,7 @@ void RaceSkel::ParseAction(char* p_extra)
 }
 
 // FUNCTION: LEGO1 0x10071c80
+// FUNCTION: BETA10 0x100f1531
 void RaceSkel::FUN_10071c80(Vector3& p_vec)
 {
 	p_vec[0] = -630.0f;
