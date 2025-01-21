@@ -288,11 +288,29 @@ void LegoCarBuildAnimPresenter::EndAction()
 	}
 }
 
-// STUB: LEGO1 0x10078e30
-// STUB: BETA10 0x10071387
+// FUNCTION: LEGO1 0x10078e30
+// FUNCTION: BETA10 0x10071387
 MxResult LegoCarBuildAnimPresenter::Serialize(LegoStorage* p_storage)
 {
-	// TODO
+	if (p_storage->IsReadMode()) {
+		p_storage->ReadS16(m_placedPartCount);
+		p_storage->ReadFloat(m_unk0x130);
+		for (MxS16 i = 0; i < m_numberOfParts; i++) {
+			p_storage->ReadString(m_parts[i].m_name);
+			p_storage->ReadString(m_parts[i].m_wiredName);
+			p_storage->ReadS16(m_parts[i].m_objectId);
+		}
+	}
+	else if (p_storage->IsWriteMode()) {
+		p_storage->WriteS16(m_placedPartCount);
+		p_storage->WriteFloat(m_unk0x130);
+		for (MxS16 i = 0; i < m_numberOfParts; i++) {
+			p_storage->WriteString(m_parts[i].m_name);
+			p_storage->WriteString(m_parts[i].m_wiredName);
+			p_storage->WriteS16(m_parts[i].m_objectId);
+		}
+	}
+
 	return SUCCESS;
 }
 

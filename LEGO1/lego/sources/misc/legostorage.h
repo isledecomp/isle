@@ -79,6 +79,7 @@ public:
 		return this;
 	}
 
+	// FUNCTION: BETA10 0x10073610
 	LegoStorage* WriteFloat(LegoFloat p_data)
 	{
 		Write(&p_data, sizeof(p_data));
@@ -102,6 +103,7 @@ public:
 		return this;
 	}
 
+	// FUNCTION: BETA10 0x10073690
 	LegoStorage* ReadString(char* p_data)
 	{
 		LegoS16 length;
@@ -148,6 +150,7 @@ public:
 		return this;
 	}
 
+	// FUNCTION: BETA10 0x10073650
 	LegoStorage* ReadFloat(LegoFloat& p_data)
 	{
 		Read(&p_data, sizeof(p_data));
