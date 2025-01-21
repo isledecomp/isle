@@ -14,6 +14,7 @@ public:
 	~RaceSkel() override;
 
 	void ParseAction(char* p_extra) override; // vtable+0x20
+
 	MxResult FUN_1001c360(float p_und, Matrix4& p_transform) override;
 
 	virtual void FUN_10071c80(Vector3& p_vec);
