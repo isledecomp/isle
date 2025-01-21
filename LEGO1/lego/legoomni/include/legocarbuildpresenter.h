@@ -44,6 +44,9 @@ public:
 		return "LegoCarBuildAnimPresenter";
 	}
 
+	// FUNCTION: LEGO1 0x10078500
+	void RepeatingTickle() override {} // vtable+0x24
+
 	// FUNCTION: LEGO1 0x10078510
 	// FUNCTION: BETA10 0x10073260
 	const char* ClassName() const override // vtable+0x0c
@@ -59,9 +62,10 @@ public:
 
 	void ReadyTickle() override;     // vtable+0x18
 	void StreamingTickle() override; // vtable+0x20
-	void RepeatingTickle() override; // vtable+0x24
 	void EndAction() override;       // vtable+0x40
 	void PutFrame() override;        // vtable+0x6c
+
+	virtual MxResult Serialize(LegoStorage* p_storage);
 
 	void FUN_10079050(MxS16 p_index);
 	void SwapNodesByName(LegoChar* p_param1, LegoChar* p_param2);

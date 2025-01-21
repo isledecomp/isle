@@ -16,11 +16,6 @@ class MxStillPresenter;
 // SIZE 0x18
 class HospitalState : public LegoState {
 public:
-	// SIZE 0x04
-	struct Unknown0x08 {
-		undefined4 m_unk0x00; // 0x00
-	};
-
 	HospitalState();
 	~HospitalState() override {}
 
@@ -45,13 +40,13 @@ public:
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
-	Unknown0x08 m_unk0x08; // 0x08
-	MxS16 m_unk0x0c;       // 0x0c
-	MxS16 m_unk0x0e;       // 0x0e
-	MxS16 m_unk0x10;       // 0x10
-	MxS16 m_unk0x12;       // 0x12
-	MxS16 m_unk0x14;       // 0x14
-	MxS16 m_unk0x16;       // 0x16
+	undefined4 m_unk0x08; // 0x08
+	MxS16 m_unk0x0c;      // 0x0c
+	MxS16 m_unk0x0e;      // 0x0e
+	MxS16 m_unk0x10;      // 0x10
+	MxS16 m_unk0x12;      // 0x12
+	MxS16 m_unk0x14;      // 0x14
+	MxS16 m_unk0x16;      // 0x16
 };
 
 // VTABLE: LEGO1 0x100d9730
