@@ -2,7 +2,6 @@
 #define LEGOEXTRAACTOR_H
 
 #include "legoanimactor.h"
-#include "legopathboundary.h"
 
 // VTABLE: LEGO1 0x100d6c00 LegoAnimActor
 // VTABLE: LEGO1 0x100d6c10 LegoPathActor
