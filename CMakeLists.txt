@@ -387,15 +387,16 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/entity/legoactorpresenter.cpp
     LEGO1/lego/legoomni/src/worlds/registrationbook.cpp
     LEGO1/lego/legoomni/src/build/legocarbuildpresenter.cpp
-    LEGO1/lego/legoomni/src/entity/legojetskiraceactor.cpp
-    LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp
     LEGO1/lego/legoomni/src/video/legopalettepresenter.cpp
     LEGO1/lego/legoomni/src/entity/act2brick.cpp
     LEGO1/lego/legoomni/src/video/legovideomanager.cpp
     LEGO1/lego/legoomni/src/video/legopartpresenter.cpp
     LEGO1/lego/legoomni/src/actors/jetski.cpp
     LEGO1/lego/legoomni/src/audio/mxbackgroundaudiomanager.cpp
+    LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp
     LEGO1/lego/legoomni/src/race/legoracespecial.cpp
+
+
     LEGO1/lego/legoomni/src/worlds/historybook.cpp
     LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
     LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp

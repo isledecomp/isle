@@ -72,7 +72,6 @@
 #include "legoentitypresenter.h"
 #include "legoflctexturepresenter.h"
 #include "legohideanimpresenter.h"
-#include "legojetskiraceactor.h"
 #include "legoloadcachesoundpresenter.h"
 #include "legolocomotionanimpresenter.h"
 #include "legoloopinganimpresenter.h"
