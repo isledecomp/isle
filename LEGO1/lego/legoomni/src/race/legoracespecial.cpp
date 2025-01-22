@@ -415,7 +415,7 @@ void LegoJetskiRaceActor::Animate(float p_time)
 
 // FUNCTION: LEGO1 0x10081840
 // FUNCTION: BETA10 0x100cf680
-MxU32 LegoCarRaceActor::VTable0x6c(
+inline MxU32 LegoCarRaceActor::VTable0x6c(
 	LegoPathBoundary* p_boundary,
 	Vector3& p_v1,
 	Vector3& p_v2,
@@ -514,7 +514,7 @@ MxU32 LegoCarRaceActor::VTable0x6c(
 }
 
 // FUNCTION: LEGO1 0x10081fd0
-MxU32 LegoJetskiRaceActor::VTable0x6c(
+inline MxU32 LegoJetskiRaceActor::VTable0x6c(
 	LegoPathBoundary* p_boundary,
 	Vector3& p_v1,
 	Vector3& p_v2,

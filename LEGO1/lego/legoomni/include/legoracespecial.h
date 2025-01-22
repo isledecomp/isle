@@ -35,7 +35,7 @@ public:
 		return !strcmp(p_name, LegoCarRaceActor::ClassName()) || LegoRaceActor::IsA(p_name);
 	}
 
-	MxU32 VTable0x6c(
+	inline MxU32 VTable0x6c(
 		LegoPathBoundary* p_boundary,
 		Vector3& p_v1,
 		Vector3& p_v2,
@@ -127,7 +127,7 @@ public:
 		return !strcmp(p_name, LegoJetskiRaceActor::ClassName()) || LegoCarRaceActor::IsA(p_name);
 	}
 
-	MxU32 VTable0x6c(
+	inline MxU32 VTable0x6c(
 		LegoPathBoundary* p_boundary,
 		Vector3& p_v1,
 		Vector3& p_v2,
