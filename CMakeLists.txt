@@ -401,10 +401,9 @@ function(add_lego_libraries NAME)
     # We need to get rid of / refactor the below units into existing/other ones
     LEGO1/main.cpp
     LEGO1/lego/legoomni/src/entity/legolocations.cpp
-    LEGO1/lego/legoomni/src/notify/legoeventnotificationparam.cpp
     LEGO1/lego/legoomni/src/common/legoactors.cpp
-    LEGO1/define.cpp
     LEGO1/lego/legoomni/src/common/legoplants.cpp
+    LEGO1/define.cpp
   )
   list(APPEND list_targets ${NAME})
 

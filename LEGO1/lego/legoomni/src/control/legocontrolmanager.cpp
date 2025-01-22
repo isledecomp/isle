@@ -11,6 +11,7 @@
 
 DECOMP_SIZE_ASSERT(LegoControlManager, 0x60)
 DECOMP_SIZE_ASSERT(LegoControlManagerNotificationParam, 0x2c)
+DECOMP_SIZE_ASSERT(LegoEventNotificationParam, 0x20)
 
 // FUNCTION: LEGO1 0x10028520
 LegoControlManager::LegoControlManager()
