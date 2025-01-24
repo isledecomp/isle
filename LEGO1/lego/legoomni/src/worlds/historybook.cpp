@@ -142,9 +142,10 @@ void HistoryBook::ReadyWorld()
 		}
 
 		MxS32 scoreboxX = 1;
-		MxS32 scoreboxRow = 5;
 
 		for (MxS32 scoreState = 0; scoreState < 5; scoreState++) {
+			MxS32 scoreboxY = 1;
+
 			for (MxS32 scoreBoxColumn = 0, scoreboxY = 1; scoreBoxColumn < 5; scoreBoxColumn++, scoreboxY += 5) {
 				// SetColor(*scorebox, score->m_scores[scoreState][scoreBoxColumn], scoreColors, scoreboxX, scoreboxY);
 				// inline void SetColor(MxStillPresenter* p_presenter, MxU8 p_color, MxU8* p_colors, MxS32 p_x, MxS32 p_y)
@@ -159,11 +160,13 @@ void HistoryBook::ReadyWorld()
 							memset(NULL, scoreColors[color - 1], 4);
 						}
 						else {
-							memset(m_scores[i]->GetBitmap()->GetStart(scoreboxX, scoreboxY + lax), scoreColors[color - 1], 4);
+							memset(m_scores[i]->GetBitmap()->GetStart(scoreboxX, lax + scoreboxY), scoreColors[color - 1], 4);
 						}
 #endif
 					}
 				}
+
+				scoreboxY += 5;
 			}
 
 			scoreState++;
@@ -192,7 +195,7 @@ void HistoryBook::ReadyWorld()
 			scoreX += 0x17;
 		}
 
-		scoreY += 0x1b;
+		scoreY += 0x1b; // TODO: wrong place in BETA10, skipped at loop start
 	}
 
 #ifndef BETA10
