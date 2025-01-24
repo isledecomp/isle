@@ -107,9 +107,10 @@ inline void SetColor(MxStillPresenter* p_presenter, MxU8 p_color, MxU8* p_colors
 // FUNCTION: BETA10 0x1002b9b9
 void HistoryBook::ReadyWorld()
 {
+	undefined4 dummy;
+
 	LegoWorld::ReadyWorld();
-	// TODO: No GetHistory() in between for BETA10 - check order / alignment for WriteScoreHistory
-	GameState()->GetHistory()->WriteScoreHistory();
+	GameState()->m_history.WriteScoreHistory();
 
 	char bitmap[] = "A_Bitmap";
 	MxS16 i = 0;
@@ -125,8 +126,8 @@ void HistoryBook::ReadyWorld()
 		{0x76, 0x4c, 0x38}; // yellow - #FFB900, blue - #00548C, red - #CB1220, background - #CECECE, border - #74818B
 	MxS32 scoreY = 0x79;
 
-	for (i = 0; i < GameState()->GetHistory()->GetCount(); i++) {
-		LegoGameState::ScoreItem* score = GameState()->GetHistory()->GetScore(i);
+	for (i = 0; i < GameState()->m_history.GetCount(); i++) {
+		LegoGameState::ScoreItem* score = GameState()->m_history.GetScore(i);
 
 		MxStillPresenter** scorebox = &m_scores[i];
 		*scorebox = scoreboxMaster->Clone();

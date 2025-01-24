@@ -208,7 +208,6 @@ public:
 	Act GetLoadedAct() { return m_loadedAct; }
 	Area GetPreviousArea() { return m_previousArea; }
 	Area GetUnknown0x42c() { return m_unk0x42c; }
-	History* GetHistory() { return &m_history; }
 
 	void SetDirty(MxBool p_isDirty) { m_isDirty = p_isDirty; }
 	void SetPreviousArea(Area p_previousArea) { m_previousArea = p_previousArea; }
