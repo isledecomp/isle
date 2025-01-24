@@ -163,7 +163,9 @@ public:
 		// FUNCTION: BETA10 0x1002c2b0
 		MxS16 GetCount() { return m_count; }
 
-		ScoreItem* GetScore(MxS16 p_index) { return p_index >= m_count ? NULL : &m_scores[p_index]; }
+		// TODO: Not yet correct
+		// FUNCTION: BETA10 0x1002c54
+		ScoreItem* GetScore(MxS32 p_index) { return p_index >= m_count ? NULL : &m_scores[p_index]; }
 
 		MxS16 m_count;          // 0x00
 		ScoreItem m_scores[20]; // 0x02

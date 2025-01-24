@@ -16,7 +16,7 @@ DECOMP_SIZE_ASSERT(HistoryBook, 0x3e4)
 HistoryBook::HistoryBook()
 {
 	memset(m_alphabet, 0, sizeof(m_alphabet));
-	memset(m_names, 0, sizeof(m_names));
+	memset(m_name, 0, sizeof(m_name));
 	memset(m_scores, 0, sizeof(m_scores));
 	NotificationManager()->Register(this);
 }
@@ -32,11 +32,11 @@ HistoryBook::~HistoryBook()
 			m_scores[scoreIndex] = NULL;
 		}
 
-		for (MxS16 letterIndex = 0; letterIndex < (MxS16) sizeOfArray(m_names[0]); letterIndex++) {
-			if (m_names[scoreIndex][letterIndex]) {
-				delete m_names[scoreIndex][letterIndex]->GetAction();
-				delete m_names[scoreIndex][letterIndex];
-				m_names[scoreIndex][letterIndex] = NULL;
+		for (MxS16 letterIndex = 0; letterIndex < (MxS16) sizeOfArray(m_name[0]); letterIndex++) {
+			if (m_name[scoreIndex][letterIndex]) {
+				delete m_name[scoreIndex][letterIndex]->GetAction();
+				delete m_name[scoreIndex][letterIndex];
+				m_name[scoreIndex][letterIndex] = NULL;
 			}
 		}
 	}
@@ -104,14 +104,19 @@ inline void SetColor(MxStillPresenter* p_presenter, MxU8 p_color, MxU8* p_colors
 }
 
 // FUNCTION: LEGO1 0x100826f0
+// FUNCTION: BETA10 0x1002b9b9
 void HistoryBook::ReadyWorld()
 {
 	LegoWorld::ReadyWorld();
+	// TODO: No GetHistory() in between for BETA10 - check order / alignment for WriteScoreHistory
 	GameState()->GetHistory()->WriteScoreHistory();
 
 	char bitmap[] = "A_Bitmap";
-	for (MxS16 i = 0; i < 26; i++) {
+	MxS16 i = 0;
+
+	for (; i < 26; i++) {
 		m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", bitmap);
+		assert(m_alphabet[i]);
 		bitmap[0]++;
 	}
 
@@ -120,15 +125,15 @@ void HistoryBook::ReadyWorld()
 		{0x76, 0x4c, 0x38}; // yellow - #FFB900, blue - #00548C, red - #CB1220, background - #CECECE, border - #74818B
 	MxS32 scoreY = 0x79;
 
-	for (MxS16 scoreIndex = 0; scoreIndex < GameState()->GetHistory()->m_count; scoreIndex++) {
-		LegoGameState::ScoreItem* score = GameState()->GetHistory()->GetScore(scoreIndex);
+	for (i = 0; i < GameState()->GetHistory()->GetCount(); i++) {
+		LegoGameState::ScoreItem* score = GameState()->GetHistory()->GetScore(i);
 
-		MxStillPresenter** scorebox = &m_scores[scoreIndex];
+		MxStillPresenter** scorebox = &m_scores[i];
 		*scorebox = scoreboxMaster->Clone();
 
 		MxS32 scoreX = 0x90;
-		if (scoreIndex >= 10) {
-			if (scoreIndex == 10) {
+		if (i >= 10) {
+			if (i == 10) {
 				scoreY = 0x79;
 			}
 
@@ -141,7 +146,19 @@ void HistoryBook::ReadyWorld()
 
 		for (; scoreboxRow > 0; scoreboxRow--) {
 			for (MxS32 scoreBoxColumn = 0, scoreboxY = 1; scoreBoxColumn < 5; scoreBoxColumn++, scoreboxY += 5) {
-				SetColor(*scorebox, score->m_scores[scoreState][scoreBoxColumn], scoreColors, scoreboxX, scoreboxY);
+				// SetColor(*scorebox, score->m_scores[scoreState][scoreBoxColumn], scoreColors, scoreboxX, scoreboxY);
+				// inline void SetColor(MxStillPresenter* p_presenter, MxU8 p_color, MxU8* p_colors, MxS32 p_x, MxS32 p_y)
+				MxU8 color = score->m_scores[scoreState][scoreBoxColumn];
+				if (color) {
+					for (MxS32 lax = 0; lax < 4; lax++) {
+						if ((*scorebox)->GetAlphaMask() != NULL) {
+							memset(NULL, scoreColors[color - 1], 4);
+						}
+						else {
+							memset((*scorebox)->GetBitmap()->GetStart(scoreboxX, scoreboxY + lax), scoreColors[color - 1], 4);
+						}
+					}
+				}
 			}
 
 			scoreState++;
@@ -152,18 +169,20 @@ void HistoryBook::ReadyWorld()
 		(*scorebox)->SetTickleState(MxPresenter::e_repeating);
 		(*scorebox)->SetPosition(scoreX + 0xa1, scoreY);
 
-		for (MxS16 letterIndex = 0; letterIndex < (MxS16) sizeOfArray(m_names[0]);) {
+		for (MxS16 letterIndex = 0; letterIndex < (MxS16) sizeOfArray(m_name[0]);) {
 			MxS16 letter = score->m_name.m_letters[letterIndex];
 
 			if (letter == -1) {
 				break;
 			}
 
-			MxS16 nameIndex = letterIndex++;
-			m_names[scoreIndex][nameIndex] = m_alphabet[letter]->Clone();
-			m_names[scoreIndex][nameIndex]->Enable(TRUE);
-			m_names[scoreIndex][nameIndex]->SetTickleState(MxPresenter::e_repeating);
-			m_names[scoreIndex][nameIndex]->SetPosition(scoreX, scoreY);
+			MxS16 j = letterIndex++;
+
+			assert(m_name[i][j]);
+			m_name[i][j] = m_alphabet[letter]->Clone();
+			m_name[i][j]->Enable(TRUE);
+			m_name[i][j]->SetTickleState(MxPresenter::e_repeating);
+			m_name[i][j]->SetPosition(scoreX, scoreY);
 			scoreX += 0x17;
 		}
 
