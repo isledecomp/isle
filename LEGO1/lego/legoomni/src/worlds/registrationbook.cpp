@@ -392,17 +392,20 @@ void RegistrationBook::ReadyWorld()
 {
 	LegoGameState* gameState = GameState();
 	gameState->m_history.WriteScoreHistory();
-	MxS16 i;
 
 	PlayMusic(JukeboxScript::c_InformationCenter_Music);
 
 	char letterBuffer[] = "A_Bitmap";
-	for (i = 0; i < 26; i++) {
-		m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", letterBuffer);
+	MxS16 i;
 
-		// We need to loop through the entire alphabet,
-		// so increment the first char of the bitmap name
-		letterBuffer[0]++;
+	for (i = 0; i < 26; i++) {
+		if (i < 26) {
+			m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", letterBuffer);
+
+			// We need to loop through the entire alphabet,
+			// so increment the first char of the bitmap name
+			letterBuffer[0]++;
+		}
 	}
 
 	// Now we have to do the checkmarks
@@ -437,7 +440,7 @@ void RegistrationBook::ReadyWorld()
 		}
 	}
 
-	if (m_infocenterState->HasRegistered()) {
+	if (m_infocenterState->m_letters[0] != NULL) {
 		PlayAction(RegbookScript::c_iic008in_PlayWav);
 
 		LegoROI* infoman = FindROI(g_infoman);
