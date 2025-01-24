@@ -163,7 +163,9 @@ public:
 		// FUNCTION: BETA10 0x1002c2b0
 		MxS16 GetCount() { return m_count; }
 
-		ScoreItem* GetScore(MxS16 p_index) { return p_index >= m_count ? NULL : &m_scores[p_index]; }
+		// TODO: Not yet correct
+		// FUNCTION: BETA10 0x1002c540
+		ScoreItem* GetScore(MxS32 p_index) { return p_index >= m_count ? NULL : &m_scores[p_index]; }
 
 		MxS16 m_count;          // 0x00
 		ScoreItem m_scores[20]; // 0x02
@@ -206,7 +208,6 @@ public:
 	Act GetLoadedAct() { return m_loadedAct; }
 	Area GetPreviousArea() { return m_previousArea; }
 	Area GetUnknown0x42c() { return m_unk0x42c; }
-	History* GetHistory() { return &m_history; }
 
 	void SetDirty(MxBool p_isDirty) { m_isDirty = p_isDirty; }
 	void SetPreviousArea(Area p_previousArea) { m_previousArea = p_previousArea; }

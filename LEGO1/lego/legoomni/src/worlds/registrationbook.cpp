@@ -391,7 +391,7 @@ void RegistrationBook::FUN_100778c0()
 void RegistrationBook::ReadyWorld()
 {
 	LegoGameState* gameState = GameState();
-	gameState->GetHistory()->WriteScoreHistory();
+	gameState->m_history.WriteScoreHistory();
 	MxS16 i;
 
 	PlayMusic(JukeboxScript::c_InformationCenter_Music);

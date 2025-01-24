@@ -24,6 +24,7 @@ targets:
         # these classes have been changed by hand to account for changes between LEGO1 and BETA10
         - Act2Actor
         - Act2Brick
+        - HistoryBook
         - LegoAct2
         - LegoCarBuild
         - LegoCarBuildAnimPresenter
@@ -34,3 +35,5 @@ targets:
         - 0x100f8ad0
         - 0x100fa200
         - 0x100f9780
+        # memset etc.
+        - 0x100f9570

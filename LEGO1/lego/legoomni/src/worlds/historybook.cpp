@@ -16,7 +16,7 @@ DECOMP_SIZE_ASSERT(HistoryBook, 0x3e4)
 HistoryBook::HistoryBook()
 {
 	memset(m_alphabet, 0, sizeof(m_alphabet));
-	memset(m_names, 0, sizeof(m_names));
+	memset(m_name, 0, sizeof(m_name));
 	memset(m_scores, 0, sizeof(m_scores));
 	NotificationManager()->Register(this);
 }
@@ -32,11 +32,11 @@ HistoryBook::~HistoryBook()
 			m_scores[scoreIndex] = NULL;
 		}
 
-		for (MxS16 letterIndex = 0; letterIndex < (MxS16) sizeOfArray(m_names[0]); letterIndex++) {
-			if (m_names[scoreIndex][letterIndex]) {
-				delete m_names[scoreIndex][letterIndex]->GetAction();
-				delete m_names[scoreIndex][letterIndex];
-				m_names[scoreIndex][letterIndex] = NULL;
+		for (MxS16 letterIndex = 0; letterIndex < (MxS16) sizeOfArray(m_name[0]); letterIndex++) {
+			if (m_name[scoreIndex][letterIndex]) {
+				delete m_name[scoreIndex][letterIndex]->GetAction();
+				delete m_name[scoreIndex][letterIndex];
+				m_name[scoreIndex][letterIndex] = NULL;
 			}
 		}
 	}
@@ -89,88 +89,94 @@ MxLong HistoryBook::Notify(MxParam& p_param)
 	return 0;
 }
 
-inline void SetColor(MxStillPresenter* p_presenter, MxU8 p_color, MxU8* p_colors, MxS32 p_x, MxS32 p_y)
-{
-	if (p_color) {
-		for (MxS32 lax = 0; lax < 4; lax++) {
-			if (p_presenter->GetAlphaMask() != NULL) {
-				memset(NULL, p_colors[p_color - 1], 4);
-			}
-			else {
-				memset(p_presenter->GetBitmap()->GetStart(p_x, p_y + lax), p_colors[p_color - 1], 4);
-			}
-		}
-	}
-}
-
 // FUNCTION: LEGO1 0x100826f0
+// FUNCTION: BETA10 0x1002b9b9
 void HistoryBook::ReadyWorld()
 {
+	undefined2 dummy1 = 0x90, dummy2 = 0x79, dummy3 = 0xc8, dummy4 = 0x17, dummy5 = 0x1b;
+#ifndef BETA10
 	LegoWorld::ReadyWorld();
-	GameState()->GetHistory()->WriteScoreHistory();
+#endif
+	GameState()->m_history.WriteScoreHistory();
 
 	char bitmap[] = "A_Bitmap";
-	for (MxS16 i = 0; i < 26; i++) {
-		m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", bitmap);
-		bitmap[0]++;
+	MxS16 i;
+
+	for (i = 0; i < 26; i++) {
+		if (i < 26) {
+			m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", bitmap);
+			assert(m_alphabet[i]);
+			bitmap[0]++;
+		}
 	}
 
 	MxStillPresenter* scoreboxMaster = (MxStillPresenter*) Find("MxStillPresenter", "ScoreBox");
 	MxU8 scoreColors[3] =
 		{0x76, 0x4c, 0x38}; // yellow - #FFB900, blue - #00548C, red - #CB1220, background - #CECECE, border - #74818B
-	MxS32 scoreY = 0x79;
 
-	for (MxS16 scoreIndex = 0; scoreIndex < GameState()->GetHistory()->m_count; scoreIndex++) {
-		LegoGameState::ScoreItem* score = GameState()->GetHistory()->GetScore(scoreIndex);
+	MxS32 scoreY;
 
-		MxStillPresenter** scorebox = &m_scores[scoreIndex];
-		*scorebox = scoreboxMaster->Clone();
+	for (i = 0, scoreY = 0x79; i < GameState()->m_history.GetCount(); i++, scoreY += 0x1b) {
+		LegoGameState::ScoreItem* score = GameState()->m_history.GetScore(i);
+
+		m_scores[i] = scoreboxMaster->Clone();
 
 		MxS32 scoreX = 0x90;
-		if (scoreIndex >= 10) {
-			if (scoreIndex == 10) {
+		if (i >= 10) {
+			if (i == 10) {
 				scoreY = 0x79;
 			}
 
 			scoreX = 0x158;
 		}
 
-		MxS32 scoreboxX = 1;
-		MxS32 scoreboxRow = 5;
-		MxS32 scoreState = 0;
-
-		for (; scoreboxRow > 0; scoreboxRow--) {
+		for (MxS32 scoreState = 0, scoreboxX = 1; scoreState < 5; scoreState++, scoreboxX += 5) {
 			for (MxS32 scoreBoxColumn = 0, scoreboxY = 1; scoreBoxColumn < 5; scoreBoxColumn++, scoreboxY += 5) {
-				SetColor(*scorebox, score->m_scores[scoreState][scoreBoxColumn], scoreColors, scoreboxX, scoreboxY);
-			}
+				MxU8 color = score->m_scores[scoreState][scoreBoxColumn];
 
-			scoreState++;
-			scoreboxX += 5;
+				if (color > 0) {
+					for (MxS32 lax = 0; lax < 4; lax++) {
+#ifdef BETA10
+						memset(m_scores[i]->GetBitmapStart(scoreboxX, scoreboxY + lax), scoreColors[color - 1], 4);
+#else
+						if (m_scores[i]->GetAlphaMask() != NULL) {
+							memset(NULL, scoreColors[color - 1], 4);
+						}
+						else {
+							memset(
+								m_scores[i]->GetBitmap()->GetStart(scoreboxX, lax + scoreboxY),
+								scoreColors[color - 1],
+								4
+							);
+						}
+#endif
+					}
+				}
+			}
 		}
 
-		(*scorebox)->Enable(TRUE);
-		(*scorebox)->SetTickleState(MxPresenter::e_repeating);
-		(*scorebox)->SetPosition(scoreX + 0xa1, scoreY);
+		m_scores[i]->Enable(TRUE);
+		m_scores[i]->SetTickleState(MxPresenter::e_repeating);
+		m_scores[i]->SetPosition(scoreX + 0xa1, scoreY);
 
-		for (MxS16 letterIndex = 0; letterIndex < (MxS16) sizeOfArray(m_names[0]);) {
-			MxS16 letter = score->m_name.m_letters[letterIndex];
+#ifdef BETA10
+		for (MxS16 j = 0; score->m_name.m_letters[j] != -1; j++, scoreX += 0x17)
+#else
+		for (MxS16 j = 0; j < (MxS16) sizeOfArray(m_name[0]) && score->m_name.m_letters[j] != -1; j++, scoreX += 0x17)
+#endif
+		{
+			m_name[i][j] = m_alphabet[score->m_name.m_letters[j]]->Clone();
 
-			if (letter == -1) {
-				break;
-			}
-
-			MxS16 nameIndex = letterIndex++;
-			m_names[scoreIndex][nameIndex] = m_alphabet[letter]->Clone();
-			m_names[scoreIndex][nameIndex]->Enable(TRUE);
-			m_names[scoreIndex][nameIndex]->SetTickleState(MxPresenter::e_repeating);
-			m_names[scoreIndex][nameIndex]->SetPosition(scoreX, scoreY);
-			scoreX += 0x17;
+			assert(m_name[i][j]);
+			m_name[i][j]->Enable(TRUE);
+			m_name[i][j]->SetTickleState(MxPresenter::e_repeating);
+			m_name[i][j]->SetPosition(scoreX, scoreY);
 		}
-
-		scoreY += 0x1b;
 	}
 
+#ifndef BETA10
 	PlayMusic(JukeboxScript::c_InformationCenter_Music);
+#endif
 }
 
 // FUNCTION: LEGO1 0x10082a10

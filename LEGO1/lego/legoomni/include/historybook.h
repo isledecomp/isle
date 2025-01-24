@@ -41,8 +41,11 @@ public:
 private:
 	LegoGameState::Area m_destLocation; // 0xf8
 	MxStillPresenter* m_alphabet[26];   // 0xfc
-	MxStillPresenter* m_names[20][7];   // 0x164
-	MxStillPresenter* m_scores[20];     // 0x394
+
+	// variable name verified by BETA10 0x1002bd27
+	MxStillPresenter* m_name[20][7]; // 0x164
+
+	MxStillPresenter* m_scores[20]; // 0x394
 };
 
 #endif // HISTORYBOOK_H

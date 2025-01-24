@@ -702,6 +702,9 @@
 // LIBRARY: BETA10 0x100f9420
 // memcpy
 
+// LIBRARY: BETA10 0x100faa00
+// memcmp
+
 // LIBRARY: BETA10 0x100fb080
 // _stricmp
 
