@@ -129,11 +129,10 @@ void HistoryBook::ReadyWorld()
 		}
 
 		for (MxS32 scoreState = 0, scoreboxX = 1; scoreState < 5; scoreState++, scoreboxX += 5) {
-
 			for (MxS32 scoreBoxColumn = 0, scoreboxY = 1; scoreBoxColumn < 5; scoreBoxColumn++, scoreboxY += 5) {
 				MxU8 color = score->m_scores[scoreState][scoreBoxColumn];
 
-				if (color) {
+				if (color > 0) {
 					for (MxS32 lax = 0; lax < 4; lax++) {
 #ifdef BETA10
 						memset(m_scores[i]->GetBitmapStart(scoreboxX, scoreboxY + lax), scoreColors[color - 1], 4);
@@ -142,7 +141,11 @@ void HistoryBook::ReadyWorld()
 							memset(NULL, scoreColors[color - 1], 4);
 						}
 						else {
-							memset(m_scores[i]->GetBitmap()->GetStart(scoreboxX, lax + scoreboxY), scoreColors[color - 1], 4);
+							memset(
+								m_scores[i]->GetBitmap()->GetStart(scoreboxX, lax + scoreboxY),
+								scoreColors[color - 1],
+								4
+							);
 						}
 #endif
 					}
@@ -153,11 +156,13 @@ void HistoryBook::ReadyWorld()
 		m_scores[i]->Enable(TRUE);
 		m_scores[i]->SetTickleState(MxPresenter::e_repeating);
 		m_scores[i]->SetPosition(scoreX + 0xa1, scoreY);
+
 #ifdef BETA10
-		for (MxS16 j = 0; score->m_name.m_letters[j] != -1; j++, scoreX += 0x17) {
+		for (MxS16 j = 0; score->m_name.m_letters[j] != -1; j++, scoreX += 0x17)
 #else
-		for (MxS16 j = 0; j < (MxS16) sizeOfArray(m_name[0]) && score->m_name.m_letters[j] != -1; j++, scoreX += 0x17) {
+		for (MxS16 j = 0; j < (MxS16) sizeOfArray(m_name[0]) && score->m_name.m_letters[j] != -1; j++, scoreX += 0x17)
 #endif
+		{
 			m_name[i][j] = m_alphabet[score->m_name.m_letters[j]]->Clone();
 
 			assert(m_name[i][j]);
