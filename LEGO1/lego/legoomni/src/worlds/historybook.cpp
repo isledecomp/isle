@@ -103,9 +103,11 @@ void HistoryBook::ReadyWorld()
 	MxS16 i;
 
 	for (i = 0; i < 26; i++) {
-		m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", bitmap);
-		assert(m_alphabet[i]);
-		bitmap[0]++;
+		if (i < 26) {
+			m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", bitmap);
+			assert(m_alphabet[i]);
+			bitmap[0]++;
+		}
 	}
 
 	MxStillPresenter* scoreboxMaster = (MxStillPresenter*) Find("MxStillPresenter", "ScoreBox");
