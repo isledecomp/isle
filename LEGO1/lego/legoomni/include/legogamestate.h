@@ -164,7 +164,7 @@ public:
 		MxS16 GetCount() { return m_count; }
 
 		// TODO: Not yet correct
-		// FUNCTION: BETA10 0x1002c54
+		// FUNCTION: BETA10 0x1002c540
 		ScoreItem* GetScore(MxS32 p_index) { return p_index >= m_count ? NULL : &m_scores[p_index]; }
 
 		MxS16 m_count;          // 0x00

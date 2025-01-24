@@ -93,9 +93,10 @@ MxLong HistoryBook::Notify(MxParam& p_param)
 // FUNCTION: BETA10 0x1002b9b9
 void HistoryBook::ReadyWorld()
 {
-	undefined2 dummy1 = 0x90, dummy2 = 0x79, dummy3 = 0xc8;//, dummy4 = 0x17, dummy5 = 0x1b;
-
+	undefined2 dummy1 = 0x90, dummy2 = 0x79, dummy3 = 0xc8, dummy4 = 0x17, dummy5 = 0x1b;
+#ifndef BETA10
 	LegoWorld::ReadyWorld();
+#endif
 	GameState()->m_history.WriteScoreHistory();
 
 	char bitmap[] = "A_Bitmap";
@@ -152,17 +153,12 @@ void HistoryBook::ReadyWorld()
 		m_scores[i]->Enable(TRUE);
 		m_scores[i]->SetTickleState(MxPresenter::e_repeating);
 		m_scores[i]->SetPosition(scoreX + 0xa1, scoreY);
-
-		for (MxS16 letterIndex = 0; letterIndex < (MxS16) sizeOfArray(m_name[0]); letterIndex++, scoreX += 0x17) {
-			MxS16 letter = score->m_name.m_letters[letterIndex];
-
-			if (letter == -1) {
-				break;
-			}
-
-			MxS16 j = letterIndex++;
-
-			m_name[i][j] = m_alphabet[letter]->Clone();
+#ifdef BETA10
+		for (MxS16 j = 0; score->m_name.m_letters[j] != -1; j++, scoreX += 0x17) {
+#else
+		for (MxS16 j = 0; j < (MxS16) sizeOfArray(m_name[0]) && score->m_name.m_letters[j] != -1; j++, scoreX += 0x17) {
+#endif
+			m_name[i][j] = m_alphabet[score->m_name.m_letters[j]]->Clone();
 
 			assert(m_name[i][j]);
 			m_name[i][j]->Enable(TRUE);
