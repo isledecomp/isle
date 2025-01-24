@@ -107,7 +107,7 @@ inline void SetColor(MxStillPresenter* p_presenter, MxU8 p_color, MxU8* p_colors
 // FUNCTION: BETA10 0x1002b9b9
 void HistoryBook::ReadyWorld()
 {
-	undefined4 dummy;
+	undefined4 dummy1;
 
 	LegoWorld::ReadyWorld();
 	GameState()->m_history.WriteScoreHistory();
@@ -143,21 +143,25 @@ void HistoryBook::ReadyWorld()
 
 		MxS32 scoreboxX = 1;
 		MxS32 scoreboxRow = 5;
-		MxS32 scoreState = 0;
 
-		for (; scoreboxRow > 0; scoreboxRow--) {
+		for (MxS32 scoreState = 0; scoreState < 5; scoreState++) {
 			for (MxS32 scoreBoxColumn = 0, scoreboxY = 1; scoreBoxColumn < 5; scoreBoxColumn++, scoreboxY += 5) {
 				// SetColor(*scorebox, score->m_scores[scoreState][scoreBoxColumn], scoreColors, scoreboxX, scoreboxY);
 				// inline void SetColor(MxStillPresenter* p_presenter, MxU8 p_color, MxU8* p_colors, MxS32 p_x, MxS32 p_y)
 				MxU8 color = score->m_scores[scoreState][scoreBoxColumn];
+				// this->m_scores
 				if (color) {
 					for (MxS32 lax = 0; lax < 4; lax++) {
+#ifdef BETA10
+						memset(m_scores[i]->GetBitmapStart(scoreboxX, scoreboxY + lax), scoreColors[color - 1], 4);
+#else
 						if ((*scorebox)->GetAlphaMask() != NULL) {
 							memset(NULL, scoreColors[color - 1], 4);
 						}
 						else {
-							memset((*scorebox)->GetBitmap()->GetStart(scoreboxX, scoreboxY + lax), scoreColors[color - 1], 4);
+							memset(m_scores[i]->GetBitmap()->GetStart(scoreboxX, scoreboxY + lax), scoreColors[color - 1], 4);
 						}
+#endif
 					}
 				}
 			}
@@ -179,8 +183,9 @@ void HistoryBook::ReadyWorld()
 
 			MxS16 j = letterIndex++;
 
-			assert(m_name[i][j]);
 			m_name[i][j] = m_alphabet[letter]->Clone();
+
+			assert(m_name[i][j]);
 			m_name[i][j]->Enable(TRUE);
 			m_name[i][j]->SetTickleState(MxPresenter::e_repeating);
 			m_name[i][j]->SetPosition(scoreX, scoreY);
@@ -190,7 +195,9 @@ void HistoryBook::ReadyWorld()
 		scoreY += 0x1b;
 	}
 
+#ifndef BETA10
 	PlayMusic(JukeboxScript::c_InformationCenter_Music);
+#endif
 }
 
 // FUNCTION: LEGO1 0x10082a10

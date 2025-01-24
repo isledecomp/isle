@@ -104,6 +104,9 @@ public:
 	MxBitmap* GetBitmap() { return m_frameBitmap; }
 	AlphaMask* GetAlphaMask() { return m_alpha; }
 
+	// FUNCTION: BETA10 0x1002c2e0
+	MxU8* GetBitmapStart(MxS32 p_left, MxS32 p_top) { return m_frameBitmap->GetStart(p_left, p_top); }
+
 	void SetBit0(BOOL p_e) { m_flags.m_bit0 = p_e; }
 	void SetBit1(BOOL p_e) { m_flags.m_bit1 = p_e; }
 	void SetBit2(BOOL p_e) { m_flags.m_bit2 = p_e; }
