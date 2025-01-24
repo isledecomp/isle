@@ -93,7 +93,7 @@ MxLong HistoryBook::Notify(MxParam& p_param)
 // FUNCTION: BETA10 0x1002b9b9
 void HistoryBook::ReadyWorld()
 {
-	undefined4 dummy1, dummy2, dummy3;
+	undefined2 dummy1 = 0x90, dummy2 = 0x79, dummy3 = 0xc8;//, dummy4 = 0x17, dummy5 = 0x1b;
 
 	LegoWorld::ReadyWorld();
 	GameState()->m_history.WriteScoreHistory();
@@ -147,16 +147,13 @@ void HistoryBook::ReadyWorld()
 					}
 				}
 			}
-
-			scoreState++;
-			scoreboxX += 5;
 		}
 
 		m_scores[i]->Enable(TRUE);
 		m_scores[i]->SetTickleState(MxPresenter::e_repeating);
 		m_scores[i]->SetPosition(scoreX + 0xa1, scoreY);
 
-		for (MxS16 letterIndex = 0; letterIndex < (MxS16) sizeOfArray(m_name[0]);) {
+		for (MxS16 letterIndex = 0; letterIndex < (MxS16) sizeOfArray(m_name[0]); letterIndex++, scoreX += 0x17) {
 			MxS16 letter = score->m_name.m_letters[letterIndex];
 
 			if (letter == -1) {
@@ -171,7 +168,6 @@ void HistoryBook::ReadyWorld()
 			m_name[i][j]->Enable(TRUE);
 			m_name[i][j]->SetTickleState(MxPresenter::e_repeating);
 			m_name[i][j]->SetPosition(scoreX, scoreY);
-			scoreX += 0x17;
 		}
 	}
 
