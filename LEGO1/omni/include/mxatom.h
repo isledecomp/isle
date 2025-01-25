@@ -147,9 +147,10 @@ private:
 // _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::erase
 // clang-format on
 
+// clang-format off
 // TEMPLATE: BETA10 0x10131460
-// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *>
-// >::size
+// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::size
+// clang-format on
 
 // clang-format off
 // TEMPLATE: LEGO1 0x100afc40
@@ -175,9 +176,10 @@ private:
 // _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::_Nil
 // clang-format on
 
+// clang-format off
 // TEMPLATE: BETA10 0x10132170
-// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *>
-// >::begin
+// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::begin
+// clang-format on
 
 // TEMPLATE: BETA10 0x101321d0
 // set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::size
