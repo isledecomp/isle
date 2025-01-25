@@ -172,10 +172,12 @@ private:
 
 // TEMPLATE: BETA10 0x1017ab10
 // map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::erase
+// No symbol generated for this?
 // Two iterators
 
 // TEMPLATE: BETA10 0x1017a040
-// map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::erase
+// ?erase@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAE?AViterator@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocato
+// aka map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::erase
 // One iterator
 
 // TEMPLATE: BETA10 0x10178f80
