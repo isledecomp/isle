@@ -32,6 +32,7 @@
 DECOMP_SIZE_ASSERT(RegistrationBook, 0x2d0)
 
 // GLOBAL: LEGO1 0x100d9924
+// GLOBAL: BETA10 0x101bfb3c
 const char* g_infoman = "infoman";
 
 // GLOBAL: LEGO1 0x100f7964
@@ -396,8 +397,10 @@ void RegistrationBook::ReadyWorld()
 	// This even happens for commenting out `assert()` calls, which shouldn't affect release builds at all.
 	// See https://github.com/isledecomp/isle/pull/1375 for a version that had 100 %.
 
+#ifndef BETA10
 	LegoGameState* gameState = GameState();
 	gameState->m_history.WriteScoreHistory();
+#endif
 
 	PlayMusic(JukeboxScript::c_InformationCenter_Music);
 
