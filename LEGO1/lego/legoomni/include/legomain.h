@@ -168,7 +168,9 @@ public:
 	// FUNCTION: BETA10 0x100e52b0
 	LegoGameState* GetGameState() { return m_gameState; }
 
+	// FUNCTION: BETA10 0x100e5280
 	MxBackgroundAudioManager* GetBackgroundAudioManager() { return m_bkgAudioManager; }
+
 	MxTransitionManager* GetTransitionManager() { return m_transitionManager; }
 	MxDSAction& GetCurrentAction() { return m_action; }
 	LegoCharacterManager* GetCharacterManager() { return m_characterManager; }

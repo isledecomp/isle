@@ -103,6 +103,8 @@ void HistoryBook::ReadyWorld()
 	MxS16 i;
 
 	for (i = 0; i < 26; i++) {
+		// TODO: This might be an inline function.
+		// See also `RegistrationBook::ReadyWorld()`.
 		if (i < 26) {
 			m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", bitmap);
 			assert(m_alphabet[i]);

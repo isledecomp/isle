@@ -388,6 +388,7 @@ void RegistrationBook::FUN_100778c0()
 }
 
 // FUNCTION: LEGO1 0x10077cc0
+// FUNCTION: BETA10 0x100f3671
 void RegistrationBook::ReadyWorld()
 {
 	LegoGameState* gameState = GameState();
@@ -399,9 +400,11 @@ void RegistrationBook::ReadyWorld()
 	MxS16 i;
 
 	for (i = 0; i < 26; i++) {
+		// TODO: This might be an inline function.
+		// See also `HistoryBook::ReadyWorld()`.
 		if (i < 26) {
 			m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", letterBuffer);
-
+			assert(m_alphabet[i]);
 			// We need to loop through the entire alphabet,
 			// so increment the first char of the bitmap name
 			letterBuffer[0]++;
@@ -412,7 +415,7 @@ void RegistrationBook::ReadyWorld()
 	char checkmarkBuffer[] = "Check0_Ctl";
 	for (i = 0; i < 10; i++) {
 		m_checkmark[i] = (MxControlPresenter*) Find("MxControlPresenter", checkmarkBuffer);
-
+		assert(m_checkmark[i]);
 		// Just like in the prior letter loop,
 		// we need to increment the fifth char
 		// to get the next checkmark bitmap
@@ -431,6 +434,7 @@ void RegistrationBook::ReadyWorld()
 				// Start building the player names using a two-dimensional array
 				m_name[i][j] = m_alphabet[players[i - 1].m_letters[j]]->Clone();
 
+				assert(m_name[i][j]);
 				// Enable the presenter to actually show the letter in the grid
 				m_name[i][j]->Enable(TRUE);
 
