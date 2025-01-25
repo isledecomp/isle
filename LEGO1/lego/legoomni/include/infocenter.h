@@ -50,6 +50,9 @@ public:
 
 	void SetUnknown0x74(MxU32 p_unk0x74) { m_unk0x74 = p_unk0x74; }
 
+	// FUNCTION: BETA10 0x10031bd0
+	MxBool FirstLetterIsNotNull() { return m_letters[0] != NULL; }
+
 	// SYNTHETIC: LEGO1 0x10071900
 	// InfocenterState::`scalar deleting destructor'
 

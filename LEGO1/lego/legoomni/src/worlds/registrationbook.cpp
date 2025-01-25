@@ -268,6 +268,7 @@ MxLong RegistrationBook::HandleControl(LegoControlManagerNotificationParam& p_pa
 }
 
 // FUNCTION: LEGO1 0x100775c0
+// STUB: BETA10 0x100f32b2
 void RegistrationBook::FUN_100775c0(MxS16 p_playerIndex)
 {
 	if (m_infocenterState->HasRegistered()) {
@@ -391,6 +392,10 @@ void RegistrationBook::FUN_100778c0()
 // FUNCTION: BETA10 0x100f3671
 void RegistrationBook::ReadyWorld()
 {
+	// This function is very fragile and appears to oscillate between two versions on small changes.
+	// This even happens for commenting out `assert()` calls, which shouldn't affect release builds at all.
+	// See https://github.com/isledecomp/isle/pull/1375 for a version that had 100 %.
+
 	LegoGameState* gameState = GameState();
 	gameState->m_history.WriteScoreHistory();
 
@@ -405,6 +410,7 @@ void RegistrationBook::ReadyWorld()
 		if (i < 26) {
 			m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", letterBuffer);
 			assert(m_alphabet[i]);
+
 			// We need to loop through the entire alphabet,
 			// so increment the first char of the bitmap name
 			letterBuffer[0]++;
@@ -416,6 +422,7 @@ void RegistrationBook::ReadyWorld()
 	for (i = 0; i < 10; i++) {
 		m_checkmark[i] = (MxControlPresenter*) Find("MxControlPresenter", checkmarkBuffer);
 		assert(m_checkmark[i]);
+
 		// Just like in the prior letter loop,
 		// we need to increment the fifth char
 		// to get the next checkmark bitmap
@@ -444,7 +451,15 @@ void RegistrationBook::ReadyWorld()
 		}
 	}
 
-	if (m_infocenterState->m_letters[0] != NULL) {
+#ifdef BETA10
+	InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
+	assert(infocenterState);
+
+	if (infocenterState->FirstLetterIsNotNull())
+#else
+	if (m_infocenterState->FirstLetterIsNotNull())
+#endif
+	{
 		PlayAction(RegbookScript::c_iic008in_PlayWav);
 
 		LegoROI* infoman = FindROI(g_infoman);
@@ -457,6 +472,7 @@ void RegistrationBook::ReadyWorld()
 	}
 }
 
+// FUNCTION: BETA10 0x100f3424
 inline void RegistrationBook::PlayAction(MxU32 p_objectId)
 {
 	MxDSAction action;
