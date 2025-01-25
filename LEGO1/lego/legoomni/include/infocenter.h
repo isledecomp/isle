@@ -40,7 +40,10 @@ public:
 	MxS16 GetMaxNameLength() { return sizeOfArray(m_letters); }
 	MxStillPresenter* GetNameLetter(MxS32 p_index) { return m_letters[p_index]; }
 	void SetNameLetter(MxS32 p_index, MxStillPresenter* p_letter) { m_letters[p_index] = p_letter; }
+
+	// FUNCTION: BETA10 0x10031bd0
 	MxBool HasRegistered() { return m_letters[0] != NULL; }
+
 	Playlist& GetExitDialogueAct1() { return m_exitDialogueAct1; }
 	Playlist& GetExitDialogueAct23() { return m_exitDialogueAct23; }
 	Playlist& GetReturnDialogue(LegoGameState::Act p_act) { return m_returnDialogue[p_act]; }
@@ -49,9 +52,6 @@ public:
 	MxU32 GetUnknown0x74() { return m_unk0x74; }
 
 	void SetUnknown0x74(MxU32 p_unk0x74) { m_unk0x74 = p_unk0x74; }
-
-	// FUNCTION: BETA10 0x10031bd0
-	MxBool FirstLetterIsNotNull() { return m_letters[0] != NULL; }
 
 	// SYNTHETIC: LEGO1 0x10071900
 	// InfocenterState::`scalar deleting destructor'

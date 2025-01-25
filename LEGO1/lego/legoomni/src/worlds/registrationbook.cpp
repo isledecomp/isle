@@ -454,13 +454,16 @@ void RegistrationBook::ReadyWorld()
 		}
 	}
 
+	// TODO: Remove this one if the function mismatches again
+	(void)0;
+
 #ifdef BETA10
 	InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
 	assert(infocenterState);
 
-	if (infocenterState->FirstLetterIsNotNull())
+	if (infocenterState->HasRegistered())
 #else
-	if (m_infocenterState->FirstLetterIsNotNull())
+	if (m_infocenterState->HasRegistered())
 #endif
 	{
 		PlayAction(RegbookScript::c_iic008in_PlayWav);
