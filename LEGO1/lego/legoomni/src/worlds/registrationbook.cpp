@@ -32,6 +32,7 @@
 DECOMP_SIZE_ASSERT(RegistrationBook, 0x2d0)
 
 // GLOBAL: LEGO1 0x100d9924
+// GLOBAL: BETA10 0x101bfb3c
 const char* g_infoman = "infoman";
 
 // GLOBAL: LEGO1 0x100f7964
@@ -268,6 +269,7 @@ MxLong RegistrationBook::HandleControl(LegoControlManagerNotificationParam& p_pa
 }
 
 // FUNCTION: LEGO1 0x100775c0
+// STUB: BETA10 0x100f32b2
 void RegistrationBook::FUN_100775c0(MxS16 p_playerIndex)
 {
 	if (m_infocenterState->HasRegistered()) {
@@ -388,10 +390,17 @@ void RegistrationBook::FUN_100778c0()
 }
 
 // FUNCTION: LEGO1 0x10077cc0
+// FUNCTION: BETA10 0x100f3671
 void RegistrationBook::ReadyWorld()
 {
+	// This function is very fragile and appears to oscillate between two versions on small changes.
+	// This even happens for commenting out `assert()` calls, which shouldn't affect release builds at all.
+	// See https://github.com/isledecomp/isle/pull/1375 for a version that had 100 %.
+
+#ifndef BETA10
 	LegoGameState* gameState = GameState();
 	gameState->m_history.WriteScoreHistory();
+#endif
 
 	PlayMusic(JukeboxScript::c_InformationCenter_Music);
 
@@ -399,8 +408,11 @@ void RegistrationBook::ReadyWorld()
 	MxS16 i;
 
 	for (i = 0; i < 26; i++) {
+		// TODO: This might be an inline function.
+		// See also `HistoryBook::ReadyWorld()`.
 		if (i < 26) {
 			m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", letterBuffer);
+			assert(m_alphabet[i]);
 
 			// We need to loop through the entire alphabet,
 			// so increment the first char of the bitmap name
@@ -412,6 +424,7 @@ void RegistrationBook::ReadyWorld()
 	char checkmarkBuffer[] = "Check0_Ctl";
 	for (i = 0; i < 10; i++) {
 		m_checkmark[i] = (MxControlPresenter*) Find("MxControlPresenter", checkmarkBuffer);
+		assert(m_checkmark[i]);
 
 		// Just like in the prior letter loop,
 		// we need to increment the fifth char
@@ -431,6 +444,7 @@ void RegistrationBook::ReadyWorld()
 				// Start building the player names using a two-dimensional array
 				m_name[i][j] = m_alphabet[players[i - 1].m_letters[j]]->Clone();
 
+				assert(m_name[i][j]);
 				// Enable the presenter to actually show the letter in the grid
 				m_name[i][j]->Enable(TRUE);
 
@@ -440,7 +454,15 @@ void RegistrationBook::ReadyWorld()
 		}
 	}
 
-	if (m_infocenterState->m_letters[0] != NULL) {
+#ifdef BETA10
+	InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
+	assert(infocenterState);
+
+	if (infocenterState->HasRegistered())
+#else
+	if (m_infocenterState->HasRegistered())
+#endif
+	{
 		PlayAction(RegbookScript::c_iic008in_PlayWav);
 
 		LegoROI* infoman = FindROI(g_infoman);
@@ -453,6 +475,7 @@ void RegistrationBook::ReadyWorld()
 	}
 }
 
+// FUNCTION: BETA10 0x100f3424
 inline void RegistrationBook::PlayAction(MxU32 p_objectId)
 {
 	MxDSAction action;

@@ -40,7 +40,10 @@ public:
 	MxS16 GetMaxNameLength() { return sizeOfArray(m_letters); }
 	MxStillPresenter* GetNameLetter(MxS32 p_index) { return m_letters[p_index]; }
 	void SetNameLetter(MxS32 p_index, MxStillPresenter* p_letter) { m_letters[p_index] = p_letter; }
+
+	// FUNCTION: BETA10 0x10031bd0
 	MxBool HasRegistered() { return m_letters[0] != NULL; }
+
 	Playlist& GetExitDialogueAct1() { return m_exitDialogueAct1; }
 	Playlist& GetExitDialogueAct23() { return m_exitDialogueAct23; }
 	Playlist& GetReturnDialogue(LegoGameState::Act p_act) { return m_returnDialogue[p_act]; }

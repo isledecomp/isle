@@ -212,8 +212,11 @@ MxTransitionManager* TransitionManager()
 }
 
 // FUNCTION: LEGO1 0x10015910
+// FUNCTION: BETA10 0x100e4f4c
 void PlayMusic(JukeboxScript::Script p_objectId)
 {
+	assert(LegoOmni::GetInstance());
+
 	MxDSAction action;
 	action.SetAtomId(*g_jukeboxScript);
 	action.SetObjectId(p_objectId);

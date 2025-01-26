@@ -40,7 +40,7 @@ public:
 	MxBool Escape() override;                         // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
-	inline void PlayAction(MxU32 p_objectId);
+	inline static void PlayAction(MxU32 p_objectId);
 
 	// SYNTHETIC: LEGO1 0x10076f30
 	// RegistrationBook::`scalar deleting destructor'
