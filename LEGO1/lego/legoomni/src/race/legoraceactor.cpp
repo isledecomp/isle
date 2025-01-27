@@ -13,6 +13,7 @@ DECOMP_SIZE_ASSERT(LegoRaceActor, 0x180)
 
 // Initialized at LEGO1 0x100145a0
 // GLOBAL: LEGO1 0x10102b08
+// GLOBAL: BETA10 0x102114a8
 Mx3DPointFloat LegoRaceActor::g_unk0x10102b08 = Mx3DPointFloat(0.0, 2.0, 0.0);
 
 // FUNCTION: LEGO1 0x100145d0
@@ -101,9 +102,9 @@ MxResult LegoRaceActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 		}
 
 		if (p_bool) {
+			MxMatrix matr;
 			LegoROI* roi = p_actor->GetROI(); // name verified by BETA10 0x100c9fcf
 			assert(roi);
-			MxMatrix matr;
 			matr = roi->GetLocal2World();
 
 			Vector3(matr[3]) += g_unk0x10102b08;

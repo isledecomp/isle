@@ -100,7 +100,7 @@ MxResult CarRace::Create(MxDSAction& p_dsAction)
 	m_unk0x148 = -1;
 	m_unk0x14c = -1;
 
-	LegoRaceCar::FUN_10012e00();
+	LegoRaceCar::InitSoundIndices();
 
 	MxS32 streamId =
 		DuneBuggy::GetColorOffset(g_strCRCEDGEY0) + (DuneBuggy::GetColorOffset(g_strCRCFRNTY6) * 5 + 15) * 2;

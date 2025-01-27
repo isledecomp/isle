@@ -63,7 +63,7 @@ MxResult JetskiRace::Create(MxDSAction& p_dsAction)
 	m_unk0x130.SetTop(317);
 	m_unk0x130.SetRight(543);
 	m_unk0x130.SetBottom(333);
-	LegoRaceCar::FUN_10013670();
+	LegoJetski::InitSoundIndices();
 	InvokeAction(
 		Extra::e_start,
 		m_atomId,
