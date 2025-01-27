@@ -26,7 +26,7 @@ DECOMP_SIZE_ASSERT(LegoJetski, 0x1dc)
 
 // name verified by BETA10 0x100cbee6
 // GLOBAL: LEGO1 0x100f0a20
-// GLOBAL: BETA10 0x101f5e34
+// GLOBAL: BETA10 0x101f5e30
 EdgeReference g_skBMap[] = {
 	{// STRING: LEGO1 0x100f0a10
 	 "EDG03_772",
@@ -80,7 +80,7 @@ const char* g_strJetSpeed = "jetSPEED";
 
 // GLOBAL: LEGO1 0x100f0b18
 // GLOBAL: BETA10 0x101f5f28
-const char* g_srtsl18to29[] = {
+const char* g_playerHitStudsSounds[] = {
 	"srt018sl",
 	"srt019sl",
 	"srt020sl",
@@ -97,19 +97,19 @@ const char* g_srtsl18to29[] = {
 
 // GLOBAL: LEGO1 0x100f0b48
 // GLOBAL: BETA10 0x101f5f58
-const char* g_srtsl6to10[] = {"srt006sl", "srt007sl", "srt008sl", "srt009sl", "srt010sl"};
+const char* g_studsHitPlayerSounds[] = {"srt006sl", "srt007sl", "srt008sl", "srt009sl", "srt010sl"};
 
 // GLOBAL: LEGO1 0x100f0b5c
 // GLOBAL: BETA10 0x101f5f6c
-const char* g_emptySoundKeyList[] = {NULL};
+const char* g_playerHitRhodaSounds[] = {NULL};
 
 // GLOBAL: LEGO1 0x100f0b60
 // GLOBAL: BETA10 0x101f5f70
-const char* g_srtrh[] = {"srt004rh", "srt005rh", "srt006rh"};
+const char* g_rhodaHitPlayerSounds[] = {"srt004rh", "srt005rh", "srt006rh"};
 
 // GLOBAL: LEGO1 0x100f0b6c
 // STRING: LEGO1 0x100f08c4
-const char* g_srt001ra = "srt001ra";
+const char* g_youCantStopSound = "srt001ra";
 
 // GLOBAL: LEGO1 0x100f0b70
 // STRING: LEGO1 0x100f08bc
@@ -117,31 +117,31 @@ const char* g_soundSkel3 = "skel3";
 
 // GLOBAL: LEGO1 0x100f0b74
 // GLOBAL: BETA10 0x101f5f80
-MxU32 g_srtsl18to29Index = 0;
+MxU32 g_playerHitStudsSoundsIndex = 0;
 
 // GLOBAL: LEGO1 0x100f0b78
 // GLOBAL: BETA10 0x101f5f84
-MxU32 g_srtsl6to10Index = 0;
+MxU32 g_studsHitPlayerSoundsIndex = 0;
 
 // GLOBAL: LEGO1 0x100f0b7c
 // GLOBAL: BETA10 0x101f5f88
-MxU32 g_emptySoundKeyListIndex = 0;
+MxU32 g_playerHitRhodaSoundsIndex = 0;
 
 // GLOBAL: LEGO1 0x100f0b80
 // GLOBAL: BETA10 0x101f5f8c
-MxU32 g_srtrhIndex = 0;
+MxU32 g_rhodaHitPlayerSoundsIndex = 0;
 
 // GLOBAL: LEGO1 0x100f0b84
 // GLOBAL: BETA10 0x101f5f90
-MxLong g_timeLastSoundPlayed = 0;
+MxLong g_timeLastRaceCarSoundPlayed = 0;
 
 // GLOBAL: LEGO1 0x100f0b88
 // GLOBAL: BETA10 0x101f5f94
-MxS32 g_unk0x100f0b88 = 0;
+MxS32 g_timePlayerLastMoved = 0;
 
 // GLOBAL: LEGO1 0x100f0b8c
 // GLOBAL: BETA10 0x101f5f98
-MxBool g_unk0x100f0b8c = TRUE;
+MxBool g_playedYouCantStopSound = TRUE;
 
 // GLOBAL: LEGO1 0x100f0b90
 const char* g_hitSnapSounds[] = {
@@ -165,9 +165,10 @@ undefined4 g_hitSnapSoundsIndex = 0;
 undefined4 g_hitValerieSoundsIndex = 0;
 
 // GLOBAL: LEGO1 0x100f0bb4
-MxLong g_unk0x100f0bb4 = 0;
+MxLong g_timeLastJetskiSoundPlayed = 0;
 
 // FUNCTION: LEGO1 0x10012950
+// FUNCTION: BETA10 0x100cad10
 LegoRaceCar::LegoRaceCar()
 {
 	m_userState = 0;
@@ -181,12 +182,14 @@ LegoRaceCar::LegoRaceCar()
 }
 
 // FUNCTION: LEGO1 0x10012c80
+// FUNCTION: BETA10 0x100caf67
 LegoRaceCar::~LegoRaceCar()
 {
 	NotificationManager()->Unregister(this);
 }
 
 // FUNCTION: LEGO1 0x10012d90
+// FUNCTION: BETA10 0x100cb0bd
 MxLong LegoRaceCar::Notify(MxParam& p_param)
 {
 	return LegoRaceMap::Notify(p_param);
@@ -200,21 +203,22 @@ Mx3DPointFloat g_unk0x10102af0 = Mx3DPointFloat(0.0f, 2.0f, 0.0f);
 // FUNCTION: LEGO1 0x10012de0
 void LegoRaceCar::FUN_10012de0()
 {
-	g_unk0x100f0b8c = TRUE;
-	g_timeLastSoundPlayed = 0;
-	g_unk0x100f0b88 = 0;
+	// Init to TRUE so we don't play "you can't stop in the middle of the race!" before the player ever moves
+	g_playedYouCantStopSound = TRUE;
+	g_timeLastRaceCarSoundPlayed = 0;
+	g_timePlayerLastMoved = 0;
 }
 
 // FUNCTION: LEGO1 0x10012e00
 // FUNCTION: BETA10 0x100cb129
-void LegoRaceCar::FUN_10012e00()
+void LegoRaceCar::InitSoundIndices()
 {
 	// Note the (likely unintentional) order of operations: `%` is executed before `/`,
 	// so the division is performed at runtime.
-	g_srtsl18to29Index = rand() % sizeof(g_srtsl18to29) / sizeof(g_srtsl18to29[0]);
-	g_srtsl6to10Index = rand() % sizeof(g_srtsl6to10) / sizeof(g_srtsl6to10[0]);
-	g_emptySoundKeyListIndex = rand() % sizeof(g_emptySoundKeyList) / sizeof(g_emptySoundKeyList[0]);
-	g_srtrhIndex = rand() % sizeof(g_srtrh) / sizeof(g_srtrh[0]);
+	g_playerHitStudsSoundsIndex = rand() % sizeof(g_playerHitStudsSounds) / sizeof(g_playerHitStudsSounds[0]);
+	g_studsHitPlayerSoundsIndex = rand() % sizeof(g_studsHitPlayerSounds) / sizeof(g_studsHitPlayerSounds[0]);
+	g_playerHitRhodaSoundsIndex = rand() % sizeof(g_playerHitRhodaSounds) / sizeof(g_playerHitRhodaSounds[0]);
+	g_rhodaHitPlayerSoundsIndex = rand() % sizeof(g_rhodaHitPlayerSounds) / sizeof(g_rhodaHitPlayerSounds[0]);
 }
 
 // FUNCTION: LEGO1 0x10012e60
@@ -264,27 +268,22 @@ void LegoRaceCar::ParseAction(char* p_extra)
 		MxS32 i;
 
 		for (i = 0; i < m_animMaps.size(); i++) {
-			// It appears that the implementation in BETA10 does not use this variable
-			LegoAnimActorStruct* animMap = m_animMaps[i];
-
-			if (animMap->m_unk0x00 == -1.0f) {
-				m_skelKick1Anim = animMap;
+			if (m_animMaps[i]->GetUnknown0x00() == -1.0f) {
+				m_skelKick1Anim = m_animMaps[i];
 			}
-			else if (animMap->m_unk0x00 == -2.0f) {
-				m_skelKick2Anim = animMap;
+			else if (m_animMaps[i]->GetUnknown0x00() == -2.0f) {
+				m_skelKick2Anim = m_animMaps[i];
 			}
 		}
 
 		assert(m_skelKick1Anim && m_skelKick2Anim);
 
 		// STRING: LEGO1 0x100f0bc4
-		const char* edge0344 = "EDG03_44";
-		m_kick1B = currentWorld->FindPathBoundary(edge0344);
+		m_kick1B = currentWorld->FindPathBoundary("EDG03_44");
 		assert(m_kick1B);
 
 		// STRING: LEGO1 0x100f0bb8
-		const char* edge0354 = "EDG03_54";
-		m_kick2B = currentWorld->FindPathBoundary(edge0354);
+		m_kick2B = currentWorld->FindPathBoundary("EDG03_54");
 		assert(m_kick2B);
 
 		for (i = 0; i < sizeOfArray(g_skBMap); i++) {
@@ -439,14 +438,16 @@ void LegoRaceCar::Animate(float p_time)
 			}
 		}
 
+		// If the player is moving forwards or backwards
 		if (absoluteSpeed != 0.0f) {
-			g_unk0x100f0b88 = p_time;
-			g_unk0x100f0b8c = FALSE;
+			g_timePlayerLastMoved = p_time;
+			g_playedYouCantStopSound = FALSE;
 		}
 
-		if (p_time - g_unk0x100f0b88 > 5000.0f && !g_unk0x100f0b8c) {
-			SoundManager()->GetCacheSoundManager()->Play(g_srt001ra, NULL, 0);
-			g_unk0x100f0b8c = TRUE;
+		// If the player hasn't moved in 5 seconds, play the "you can't stop in the middle of the race!" sound once
+		if (p_time - g_timePlayerLastMoved > 5000.0f && !g_playedYouCantStopSound) {
+			SoundManager()->GetCacheSoundManager()->Play(g_youCantStopSound, NULL, 0);
+			g_playedYouCantStopSound = TRUE;
 		}
 	}
 }
@@ -462,9 +463,9 @@ MxResult LegoRaceCar::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 		}
 
 		if (p_bool) {
+			MxMatrix matr;
 			LegoROI* roi = p_actor->GetROI(); // name verified by BETA10 0x100cbbf5
 			assert(roi);
-			MxMatrix matr;
 			matr = roi->GetLocal2World();
 
 			Vector3(matr[3]) += g_unk0x10102af0;
@@ -479,41 +480,40 @@ MxResult LegoRaceCar::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			MxLong time = Timer()->GetTime();
 
 			const char* soundKey = NULL;
-			MxLong timeElapsed = time - g_timeLastSoundPlayed;
 
-			if (timeElapsed > 3000) {
+			if (time - g_timeLastRaceCarSoundPlayed > 3000) {
 				if (p_bool) {
 					if (actorIsStuds) {
-						soundKey = g_srtsl18to29[g_srtsl18to29Index++];
-						if (g_srtsl18to29Index >= sizeOfArray(g_srtsl18to29)) {
-							g_srtsl18to29Index = 0;
+						soundKey = g_playerHitStudsSounds[g_playerHitStudsSoundsIndex++];
+						if (g_playerHitStudsSoundsIndex >= sizeOfArray(g_playerHitStudsSounds)) {
+							g_playerHitStudsSoundsIndex = 0;
 						}
 					}
 					else if (actorIsRhoda) {
-						soundKey = g_emptySoundKeyList[g_emptySoundKeyListIndex++];
-						if (g_emptySoundKeyListIndex >= sizeOfArray(g_emptySoundKeyList)) {
-							g_emptySoundKeyListIndex = 0;
+						soundKey = g_playerHitRhodaSounds[g_playerHitRhodaSoundsIndex++];
+						if (g_playerHitRhodaSoundsIndex >= sizeOfArray(g_playerHitRhodaSounds)) {
+							g_playerHitRhodaSoundsIndex = 0;
 						}
 					}
 				}
 				else {
 					if (actorIsStuds) {
-						soundKey = g_srtsl6to10[g_srtsl6to10Index++];
-						if (g_srtsl6to10Index >= sizeOfArray(g_srtsl6to10)) {
-							g_srtsl6to10Index = 0;
+						soundKey = g_studsHitPlayerSounds[g_studsHitPlayerSoundsIndex++];
+						if (g_studsHitPlayerSoundsIndex >= sizeOfArray(g_studsHitPlayerSounds)) {
+							g_studsHitPlayerSoundsIndex = 0;
 						}
 					}
 					else if (actorIsRhoda) {
-						soundKey = g_srtrh[g_srtrhIndex++];
-						if (g_srtrhIndex >= sizeOfArray(g_srtrh)) {
-							g_srtrhIndex = 0;
+						soundKey = g_rhodaHitPlayerSounds[g_rhodaHitPlayerSoundsIndex++];
+						if (g_rhodaHitPlayerSoundsIndex >= sizeOfArray(g_rhodaHitPlayerSounds)) {
+							g_rhodaHitPlayerSoundsIndex = 0;
 						}
 					}
 				}
 
 				if (soundKey) {
 					SoundManager()->GetCacheSoundManager()->Play(soundKey, NULL, FALSE);
-					g_timeLastSoundPlayed = g_unk0x100f3308 = time;
+					g_timeLastRaceCarSoundPlayed = g_unk0x100f3308 = time;
 				}
 			}
 
@@ -567,13 +567,11 @@ MxResult LegoRaceCar::VTable0x9c()
 }
 
 // FUNCTION: LEGO1 0x10013670
-void LegoRaceCar::FUN_10013670()
+void LegoJetski::InitSoundIndices()
 {
-	g_hitSnapSoundsIndex = (rand() & 0xc) >> 2;
-
-	// Inlining the `rand()` causes this function to mismatch
-	MxU32 uVar1 = rand();
-	g_hitValerieSoundsIndex = uVar1 % 0xc >> 2;
+	// See note in LegoRaceCar::InitSoundIndices
+	g_hitSnapSoundsIndex = rand() % sizeof(g_hitSnapSounds) / sizeof(g_hitSnapSounds[0]);
+	g_hitValerieSoundsIndex = rand() % sizeof(g_hitValerieSounds) / sizeof(g_hitValerieSounds[0]);
 }
 
 // FUNCTION: LEGO1 0x100136a0
@@ -680,8 +678,8 @@ MxResult LegoJetski::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 		}
 
 		if (p_bool) {
-			LegoROI* roi = p_actor->GetROI();
 			MxMatrix matr;
+			LegoROI* roi = p_actor->GetROI();
 			matr = roi->GetLocal2World();
 
 			Vector3(matr[3]) += g_unk0x10102af0;
@@ -696,9 +694,8 @@ MxResult LegoJetski::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			MxLong time = Timer()->GetTime();
 
 			const char* soundKey = NULL;
-			MxLong timeElapsed = time - g_unk0x100f0bb4;
 
-			if (timeElapsed > 3000) {
+			if (time - g_timeLastJetskiSoundPlayed > 3000) {
 				if (actorIsSnap) {
 					soundKey = g_hitSnapSounds[g_hitSnapSoundsIndex++];
 					if (g_hitSnapSoundsIndex >= sizeOfArray(g_hitSnapSounds)) {
@@ -714,7 +711,7 @@ MxResult LegoJetski::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 
 				if (soundKey) {
 					SoundManager()->GetCacheSoundManager()->Play(soundKey, NULL, FALSE);
-					g_timeLastSoundPlayed = g_unk0x100f3308 = time;
+					g_timeLastJetskiSoundPlayed = g_unk0x100f3308 = time;
 				}
 			}
 
