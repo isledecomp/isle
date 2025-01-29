@@ -4,31 +4,36 @@
 #include "misc.h"
 #include "mxomni.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoCacheSound, 0x88)
 
 // FUNCTION: LEGO1 0x100064d0
+// FUNCTION: BETA10 0x10066340
 LegoCacheSound::LegoCacheSound()
 {
 	Init();
 }
 
 // FUNCTION: LEGO1 0x10006630
+// FUNCTION: BETA10 0x100663f3
 LegoCacheSound::~LegoCacheSound()
 {
 	Destroy();
 }
 
 // FUNCTION: LEGO1 0x100066d0
+// FUNCTION: BETA10 0x10066498
 void LegoCacheSound::Init()
 {
 	m_dsBuffer = NULL;
 	m_data = NULL;
 	m_unk0x58 = FALSE;
 	memset(&m_wfx, 0, sizeof(m_wfx));
-	m_unk0x6a = FALSE;
-	m_unk0x70 = FALSE;
 	m_looping = TRUE;
+	m_unk0x6a = FALSE;
 	m_volume = 79;
+	m_unk0x70 = FALSE;
 	m_muted = FALSE;
 }
 
@@ -42,6 +47,8 @@ MxResult LegoCacheSound::Create(
 	MxU32 p_dataSize
 )
 {
+	assert(p_pwfx);
+
 	WAVEFORMATEX wfx;
 	wfx.wFormatTag = p_pwfx->wf.wFormatTag;
 	wfx.nChannels = p_pwfx->wf.nChannels;
@@ -86,7 +93,7 @@ MxResult LegoCacheSound::Create(
 		CopyData(p_data, p_dataSize);
 	}
 
-	m_unk0x48 = FUN_10006d80(p_mediaSrcPath);
+	m_unk0x48 = GetBaseFilename(p_mediaSrcPath);
 	m_wfx = *p_pwfx;
 	return SUCCESS;
 }
@@ -95,6 +102,9 @@ MxResult LegoCacheSound::Create(
 // FUNCTION: BETA10 0x100667a0
 void LegoCacheSound::CopyData(MxU8* p_data, MxU32 p_dataSize)
 {
+	assert(p_data);
+	assert(p_dataSize);
+
 	delete[] m_data;
 	m_dataSize = p_dataSize;
 	m_data = new MxU8[m_dataSize];
@@ -102,6 +112,7 @@ void LegoCacheSound::CopyData(MxU8* p_data, MxU32 p_dataSize)
 }
 
 // FUNCTION: LEGO1 0x10006920
+// FUNCTION: BETA10 0x1006685b
 void LegoCacheSound::Destroy()
 {
 	if (m_dsBuffer) {
@@ -119,19 +130,24 @@ void LegoCacheSound::Destroy()
 LegoCacheSound* LegoCacheSound::Clone()
 {
 	LegoCacheSound* pnew = new LegoCacheSound();
+	assert(pnew);
 
-	if (pnew->Create(&m_wfx, m_unk0x48, m_volume, m_data, m_dataSize) == SUCCESS) {
+	MxResult result = pnew->Create(&m_wfx, m_unk0x48, m_volume, m_data, m_dataSize);
+	if (result == SUCCESS) {
 		return pnew;
 	}
-
-	delete pnew;
-	return NULL;
+	else {
+		delete pnew;
+		return NULL;
+	}
 }
 
 // FUNCTION: LEGO1 0x10006a30
 // FUNCTION: BETA10 0x10066a23
 MxResult LegoCacheSound::Play(const char* p_name, MxBool p_looping)
 {
+	assert(m_dsBuffer);
+
 	if (m_data == NULL || m_dataSize == 0) {
 		return FAILURE;
 	}
@@ -162,10 +178,19 @@ MxResult LegoCacheSound::Play(const char* p_name, MxBool p_looping)
 				memcpy(pvAudioPtr2, m_data + dwAudioBytes1, dwAudioBytes2);
 			}
 
-			m_dsBuffer->Unlock(pvAudioPtr1, dwAudioBytes1, pvAudioPtr2, dwAudioBytes2);
+			DWORD sts = m_dsBuffer->Unlock(pvAudioPtr1, dwAudioBytes1, pvAudioPtr2, dwAudioBytes2);
+			assert(!sts);
 			m_dsBuffer->SetCurrentPosition(0);
-			m_dsBuffer->Play(0, 0, p_looping);
+			if (m_dsBuffer->Play(0, 0, p_looping)) {
+				assert(0);
+			}
 		}
+		else {
+			assert(0);
+		}
+	}
+	else {
+		assert(0);
 	}
 
 	if (p_looping == FALSE) {
@@ -181,6 +206,7 @@ MxResult LegoCacheSound::Play(const char* p_name, MxBool p_looping)
 }
 
 // FUNCTION: LEGO1 0x10006b80
+// FUNCTION: BETA10 0x10066ca3
 void LegoCacheSound::Stop()
 {
 	DWORD dwStatus;
@@ -200,6 +226,7 @@ void LegoCacheSound::Stop()
 }
 
 // FUNCTION: LEGO1 0x10006be0
+// FUNCTION: BETA10 0x10066d23
 void LegoCacheSound::FUN_10006be0()
 {
 	if (!m_looping) {
@@ -226,14 +253,16 @@ void LegoCacheSound::FUN_10006be0()
 		}
 	}
 
-	if (m_unk0x74.GetLength() != 0 && !m_muted) {
-		if (!m_sound.UpdatePosition(m_dsBuffer)) {
-			if (m_unk0x6a) {
-				return;
-			}
+	if (m_unk0x74.GetLength() == 0) {
+		return;
+	}
 
-			m_dsBuffer->Stop();
-			m_unk0x6a = TRUE;
+	if (!m_muted) {
+		if (!m_sound.UpdatePosition(m_dsBuffer)) {
+			if (!m_unk0x6a) {
+				m_dsBuffer->Stop();
+				m_unk0x6a = TRUE;
+			}
 		}
 		else if (m_unk0x6a) {
 			m_dsBuffer->Play(0, 0, m_looping);
@@ -243,12 +272,14 @@ void LegoCacheSound::FUN_10006be0()
 }
 
 // FUNCTION: LEGO1 0x10006cb0
+// FUNCTION: BETA10 0x10066e85
 void LegoCacheSound::SetDistance(MxS32 p_min, MxS32 p_max)
 {
 	m_sound.SetDistance(p_min, p_max);
 }
 
 // FUNCTION: LEGO1 0x10006cd0
+// FUNCTION: BETA10 0x10066eb0
 void LegoCacheSound::FUN_10006cd0(undefined4, undefined4)
 {
 }
@@ -288,33 +319,33 @@ void LegoCacheSound::MuteStop(MxBool p_muted)
 
 // FUNCTION: LEGO1 0x10006d80
 // FUNCTION: BETA10 0x100670e7
-MxString LegoCacheSound::FUN_10006d80(const MxString& p_str)
+MxString LegoCacheSound::GetBaseFilename(MxString& p_path)
 {
-	// TODO: Clean up code
-	char* str = p_str.GetData();
-	MxU32 length = strlen(str);
+	// Get the base filename from the given path
+	// e.g. "Z:\Lego\Audio\test.wav" --> "test"
+	char* str = p_path.GetData();
 
-	char* local28 = str + length;
-	char* local14 = local28;
-	char* pVar1 = local28;
+	// Start at the end of the string and work backwards.
+	char* p = str + strlen(str);
+	char* end = p;
 
-	do {
-		local14 = pVar1;
-		pVar1 = local14 + -1;
+	while (str != p--) {
+		// If the file has an extension, we want to exclude it from the output.
+		// Set this as our new end position.
+		if (*p == '.') {
+			end = p;
+		}
 
-		if (str == local14) {
+		// Stop if we hit a directory or drive letter.
+		if (*p == '\\') {
 			break;
 		}
+	}
 
-		if (*pVar1 == '.') {
-			local28 = pVar1;
-		}
-	} while (*pVar1 != '\\');
-
-	local14 = pVar1;
-
-	MxString local24;
-	local14++;
-	*local28 = '\0';
-	return local24 = local14;
+	MxString output;
+	// Increment by one to shift p to the start of the filename.
+	char* x = ++p;
+	// If end points to the dot in filename, change it to a null terminator.
+	x[end - p] = '\0';
+	return output = x;
 }
