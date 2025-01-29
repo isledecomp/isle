@@ -7,6 +7,7 @@
 #include "mxstring.h"
 
 // VTABLE: LEGO1 0x100d4718
+// VTABLE: BETA10 0x101bb6f0
 // SIZE 0x88
 class LegoCacheSound : public MxCore {
 public:
@@ -49,12 +50,13 @@ public:
 	void MuteStop(MxBool p_mute);
 
 	// SYNTHETIC: LEGO1 0x10006610
+	// SYNTHETIC: BETA10 0x100675b0
 	// LegoCacheSound::`scalar deleting destructor'
 
 private:
 	void Init();
 	void CopyData(MxU8* p_data, MxU32 p_dataSize);
-	MxString FUN_10006d80(const MxString& p_str);
+	MxString GetBaseFilename(MxString& p_path);
 
 	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x08
 	undefined m_unk0x0c[4];         // 0x0c
