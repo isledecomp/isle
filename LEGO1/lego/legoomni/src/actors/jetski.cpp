@@ -93,10 +93,10 @@ MxLong Jetski::HandleClick()
 		((IslePathActor*) UserActor())->Exit();
 	}
 
-	MxS32 local_8 = DuneBuggy::GetColorOffset(g_varJSWNSHY5);
-	m_unk0x160 = 10 * (local_8 + 3);
-	MxS32 local_1c = DuneBuggy::GetColorOffset(g_varJSFRNTY5);
-	m_unk0x160 += local_1c;
+	MxS32 local8 = DuneBuggy::GetColorOffset(g_varJSWNSHY5);
+	m_unk0x160 = 10 * (local8 + 3);
+	MxS32 local1c = DuneBuggy::GetColorOffset(g_varJSFRNTY5);
+	m_unk0x160 += local1c;
 
 	InvokeAction(Extra::ActionType::e_start, *g_isleScript, m_unk0x160, NULL);
 	InvokeAction(Extra::ActionType::e_start, *g_isleScript, IsleScript::c_JetskiDashboard, NULL);
