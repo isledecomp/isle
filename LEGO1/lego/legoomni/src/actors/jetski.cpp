@@ -18,12 +18,15 @@
 
 DECOMP_SIZE_ASSERT(Jetski, 0x164)
 
+// These two have been changed between BETA10 and LEGO1
 // GLOBAL: LEGO1 0x100f7ab8
 // STRING: LEGO1 0x100f3ce0
+// GLOBAL: BETA10 0x101e0be4
 const char* g_varJSFRNTY5 = "c_jsfrnty5";
 
 // GLOBAL: LEGO1 0x100f7abc
 // STRING: LEGO1 0x100f3ca4
+// GLOBAL: BETA10 0x101e0be0
 const char* g_varJSWNSHY5 = "c_jswnshy5";
 
 // FUNCTION: LEGO1 0x1007e3b0
@@ -90,9 +93,10 @@ MxLong Jetski::HandleClick()
 		((IslePathActor*) UserActor())->Exit();
 	}
 
-	// TODO: Match
-	m_unk0x160 = ((DuneBuggy::GetColorOffset(g_varJSWNSHY5) * 5 + 15) * 2);
-	m_unk0x160 += DuneBuggy::GetColorOffset(g_varJSFRNTY5);
+	MxS32 local_8 = DuneBuggy::GetColorOffset(g_varJSWNSHY5);
+	m_unk0x160 = 10 * (local_8 + 3);
+	MxS32 local_1c = DuneBuggy::GetColorOffset(g_varJSFRNTY5);
+	m_unk0x160 += local_1c;
 
 	InvokeAction(Extra::ActionType::e_start, *g_isleScript, m_unk0x160, NULL);
 	InvokeAction(Extra::ActionType::e_start, *g_isleScript, IsleScript::c_JetskiDashboard, NULL);
