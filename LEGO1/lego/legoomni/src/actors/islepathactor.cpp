@@ -71,6 +71,7 @@ MxLong IslePathActor::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1001a350
+// FUNCTION: BETA10 0x100365ad
 void IslePathActor::Enter()
 {
 	m_roi->SetVisibility(FALSE);

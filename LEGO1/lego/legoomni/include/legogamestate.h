@@ -199,6 +199,7 @@ public:
 	void SwitchArea(Area p_area);
 	void Init();
 
+	// FUNCTION: BETA10 0x10083ff5
 	MxU8 GetActorId() { return m_actorId; }
 
 	// FUNCTION: BETA10 0x1004a2d0
