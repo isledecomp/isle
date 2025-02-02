@@ -18,12 +18,15 @@
 
 DECOMP_SIZE_ASSERT(Jetski, 0x164)
 
+// These two have been changed between BETA10 and LEGO1
 // GLOBAL: LEGO1 0x100f7ab8
 // STRING: LEGO1 0x100f3ce0
+// GLOBAL: BETA10 0x101e0be4
 const char* g_varJSFRNTY5 = "c_jsfrnty5";
 
 // GLOBAL: LEGO1 0x100f7abc
 // STRING: LEGO1 0x100f3ca4
+// GLOBAL: BETA10 0x101e0be0
 const char* g_varJSWNSHY5 = "c_jswnshy5";
 
 // FUNCTION: LEGO1 0x1007e3b0
@@ -77,6 +80,7 @@ void Jetski::Exit()
 // FUNCTION: BETA10 0x10037621
 MxLong Jetski::HandleClick()
 {
+#ifndef BETA10
 	if (!FUN_1003ef60()) {
 		return 1;
 	}
@@ -89,26 +93,41 @@ MxLong Jetski::HandleClick()
 	if (GameState()->GetActorId() != UserActor()->GetActorId()) {
 		((IslePathActor*) UserActor())->Exit();
 	}
+#endif
 
-	// TODO: Match
-	m_unk0x160 = ((DuneBuggy::GetColorOffset(g_varJSWNSHY5) * 5 + 15) * 2);
-	m_unk0x160 += DuneBuggy::GetColorOffset(g_varJSFRNTY5);
+	// Selects the windshield from `IsleScript::c_JetskiDashboard11_Bitmap` (=41)
+	// to `IsleScript::c_JetskiDashboard66_Bitmap` based on the user's color selection
+	MxS32 colorOffset = DuneBuggy::GetColorOffset(g_varJSWNSHY5);
+	m_jetskiDashboardStreamId = 10 * (colorOffset + 3);
+	colorOffset = DuneBuggy::GetColorOffset(g_varJSFRNTY5);
+	m_jetskiDashboardStreamId += colorOffset;
 
-	InvokeAction(Extra::ActionType::e_start, *g_isleScript, m_unk0x160, NULL);
+	InvokeAction(Extra::ActionType::e_start, *g_isleScript, m_jetskiDashboardStreamId, NULL);
 	InvokeAction(Extra::ActionType::e_start, *g_isleScript, IsleScript::c_JetskiDashboard, NULL);
+
+#ifdef BETA10
+	if (UserActor()->GetActorId() != GameState()->GetActorId()) {
+		((IslePathActor*) UserActor())->Exit();
+	}
+	Enter();
+	ControlManager()->Register(this);
+	PlayCamAnim(this, FALSE, 0x44, TRUE);
+#else
 	GetCurrentAction().SetObjectId(-1);
 
 	AnimationManager()->FUN_1005f6d0(FALSE);
 	AnimationManager()->FUN_10064670(NULL);
 	Enter();
 	ControlManager()->Register(this);
+#endif
+
 	return 1;
 }
 
 // FUNCTION: LEGO1 0x1007e880
 void Jetski::RemoveFromWorld()
 {
-	RemoveFromCurrentWorld(*g_isleScript, m_unk0x160);
+	RemoveFromCurrentWorld(*g_isleScript, m_jetskiDashboardStreamId);
 	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_JetskiArms_Ctl);
 	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_JetskiInfo_Ctl);
 	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_JetskiSpeedMeter);

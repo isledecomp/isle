@@ -58,6 +58,7 @@ public:
 	virtual MxFloat VTable0x5c() { return m_unk0x70; } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x10002d00
+	// FUNCTION: BETA10 0x1000f4a0
 	virtual MxU8 GetActorId() { return m_actorId; } // vtable+0x60
 
 	// FUNCTION: LEGO1 0x10002d10
