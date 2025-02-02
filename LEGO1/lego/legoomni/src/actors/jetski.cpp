@@ -107,7 +107,7 @@ MxLong Jetski::HandleClick()
 
 #ifdef BETA10
 	if (UserActor()->GetActorId() != GameState()->GetActorId()) {
-		((IslePathActor*)UserActor())->Exit();
+		((IslePathActor*) UserActor())->Exit();
 	}
 	Enter();
 	ControlManager()->Register(this);
