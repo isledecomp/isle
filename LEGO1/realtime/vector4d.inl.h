@@ -10,9 +10,7 @@
 // FUNCTION: BETA10 0x10048500
 void Vector4::AddImpl(const float* p_value)
 {
-	m_data[0] += p_value[0];
-	m_data[1] += p_value[1];
-	m_data[2] += p_value[2];
+	Vector3::AddImpl(p_value);
 	m_data[3] += p_value[3];
 }
 
@@ -30,9 +28,7 @@ void Vector4::AddImpl(float p_value)
 // FUNCTION: BETA10 0x100485e0
 void Vector4::SubImpl(const float* p_value)
 {
-	m_data[0] -= p_value[0];
-	m_data[1] -= p_value[1];
-	m_data[2] -= p_value[2];
+	Vector3::SubImpl(p_value);
 	m_data[3] -= p_value[3];
 }
 
@@ -40,9 +36,7 @@ void Vector4::SubImpl(const float* p_value)
 // FUNCTION: BETA10 0x10048630
 void Vector4::MulImpl(const float* p_value)
 {
-	m_data[0] *= p_value[0];
-	m_data[1] *= p_value[1];
-	m_data[2] *= p_value[2];
+	Vector3::MulImpl(p_value);
 	m_data[3] *= p_value[3];
 }
 
@@ -50,9 +44,7 @@ void Vector4::MulImpl(const float* p_value)
 // FUNCTION: BETA10 0x10048680
 void Vector4::MulImpl(const float& p_value)
 {
-	m_data[0] *= p_value;
-	m_data[1] *= p_value;
-	m_data[2] *= p_value;
+	Vector3::MulImpl(p_value);
 	m_data[3] *= p_value;
 }
 
@@ -60,9 +52,7 @@ void Vector4::MulImpl(const float& p_value)
 // FUNCTION: BETA10 0x100486d0
 void Vector4::DivImpl(const float& p_value)
 {
-	m_data[0] /= p_value;
-	m_data[1] /= p_value;
-	m_data[2] /= p_value;
+	Vector3::DivImpl(p_value);
 	m_data[3] /= p_value;
 }
 

@@ -138,9 +138,9 @@ int Vector2::Unitize()
 	float sq = LenSquared();
 
 	if (sq > 0.0f) {
-		float root = sqrt(sq);
-		if (root > 0.0f) {
-			DivImpl(root);
+		sq = sqrt(sq);
+		if (sq > 0.0f) {
+			DivImpl(sq);
 			return 0;
 		}
 	}
