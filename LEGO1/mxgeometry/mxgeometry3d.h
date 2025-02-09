@@ -30,10 +30,8 @@ public:
 	Mx3DPointFloat(const Vector3& p_other) : Vector3(m_elements) { EqualsImpl(p_other.m_data); }
 
 	// FUNCTION: LEGO1 0x10003c10
+	// FUNCTION: BETA10 0x100116e0
 	virtual void operator=(const Vector3& p_impl) { EqualsImpl(p_impl.m_data); } // vtable+0x88
-
-	// FUNCTION: BETA10 0x10015240
-	// ??4Mx3DPointFloat@@QAEAAV0@ABV0@@Z
 
 	// FUNCTION: BETA10 0x10013460
 	float& operator[](int idx) { return m_data[idx]; }
@@ -42,6 +40,7 @@ public:
 	const float& operator[](int idx) const { return m_data[idx]; }
 
 	// SYNTHETIC: LEGO1 0x10010c00
+	// SYNTHETIC: BETA10 0x10015240
 	// ??4Mx3DPointFloat@@QAEAAV0@ABV0@@Z
 
 private:
