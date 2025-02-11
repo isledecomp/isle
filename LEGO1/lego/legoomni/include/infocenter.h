@@ -5,6 +5,7 @@
 #include "legogamestate.h"
 #include "legostate.h"
 #include "legoworld.h"
+#include "misc.h"
 #include "mxrect32.h"
 #include "radio.h"
 
@@ -44,6 +45,13 @@ public:
 	// FUNCTION: BETA10 0x10031bd0
 	MxBool HasRegistered() { return m_letters[0] != NULL; }
 
+	// FUNCTION: BETA10 0x10031c10
+	InfomainScript::Script GetNextLeaveDialogue()
+	{
+		return (InfomainScript::Script) m_leaveDialogue[GameState()->GetCurrentAct()].Next();
+	}
+
+	// TODO: These probably don't exist according to BETA
 	Playlist& GetExitDialogueAct1() { return m_exitDialogueAct1; }
 	Playlist& GetExitDialogueAct23() { return m_exitDialogueAct23; }
 	Playlist& GetReturnDialogue(LegoGameState::Act p_act) { return m_returnDialogue[p_act]; }

@@ -205,7 +205,9 @@ public:
 	// FUNCTION: BETA10 0x1004a2d0
 	const char* GetActorName() { return g_actorNames[GetActorId()]; }
 
+	// FUNCTION: BETA10 0x1002b4c0
 	Act GetCurrentAct() { return m_currentAct; }
+
 	Act GetLoadedAct() { return m_loadedAct; }
 	Area GetPreviousArea() { return m_previousArea; }
 	Area GetUnknown0x42c() { return m_unk0x42c; }

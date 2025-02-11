@@ -17,7 +17,6 @@
 #include "legoplantmanager.h"
 #include "legoutils.h"
 #include "legovideomanager.h"
-#include "misc.h"
 #include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxcontrolpresenter.h"
@@ -725,15 +724,16 @@ MxU8 Infocenter::HandleMouseMove(MxS32 p_x, MxS32 p_y)
 }
 
 // FUNCTION: LEGO1 0x1006fda0
+// FUNCTION: BETA10 0x1002f907
 MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 {
 	MxLong result = 0;
 
 	if (p_key == VK_SPACE && m_worldStarted) {
-		switch (m_infocenterState->GetUnknown0x74()) {
+		switch (m_infocenterState->m_unk0x74) {
 		case 0:
 			StopCutscene();
-			m_infocenterState->SetUnknown0x74(1);
+			m_infocenterState->m_unk0x74 = 1;
 
 			if (!m_infocenterState->HasRegistered()) {
 				m_bookAnimationTimer = 1;
@@ -747,13 +747,13 @@ MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 			InfomainScript::Script script = m_currentInfomainScript;
 			StopCurrentAction();
 
-			switch (m_infocenterState->GetUnknown0x74()) {
+			switch (m_infocenterState->m_unk0x74) {
 			case 5:
 			case 12:
 				m_currentInfomainScript = script;
 				return 1;
 			default:
-				m_infocenterState->SetUnknown0x74(2);
+				m_infocenterState->m_unk0x74 = 2;
 				return 1;
 			case 8:
 			case 11:
@@ -772,6 +772,7 @@ MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 }
 
 // FUNCTION: LEGO1 0x1006feb0
+// FUNCTION: BETA10 0x1002fa12
 MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 {
 	if (m_unk0x11c) {
@@ -870,37 +871,37 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				case 10:
 					if (m_selectedCharacter) {
 						m_destLocation = LegoGameState::e_jetraceExterior;
-						m_infocenterState->SetUnknown0x74(5);
+						m_infocenterState->m_unk0x74 = 5;
 					}
 					break;
 				case 11:
 					if (m_selectedCharacter) {
 						m_destLocation = LegoGameState::e_carraceExterior;
-						m_infocenterState->SetUnknown0x74(5);
+						m_infocenterState->m_unk0x74 = 5;
 					}
 					break;
 				case 12:
 					if (m_selectedCharacter) {
 						m_destLocation = LegoGameState::e_pizzeriaExterior;
-						m_infocenterState->SetUnknown0x74(5);
+						m_infocenterState->m_unk0x74 = 5;
 					}
 					break;
 				case 13:
 					if (m_selectedCharacter) {
 						m_destLocation = LegoGameState::e_garageExterior;
-						m_infocenterState->SetUnknown0x74(5);
+						m_infocenterState->m_unk0x74 = 5;
 					}
 					break;
 				case 14:
 					if (m_selectedCharacter) {
 						m_destLocation = LegoGameState::e_hospitalExterior;
-						m_infocenterState->SetUnknown0x74(5);
+						m_infocenterState->m_unk0x74 = 5;
 					}
 					break;
 				case 15:
 					if (m_selectedCharacter) {
 						m_destLocation = LegoGameState::e_policeExterior;
-						m_infocenterState->SetUnknown0x74(5);
+						m_infocenterState->m_unk0x74 = 5;
 					}
 					break;
 				}
@@ -910,14 +911,14 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 		m_unk0x11c->Enable(FALSE);
 		m_unk0x11c = NULL;
 
-		if (m_infocenterState->GetUnknown0x74() == 5) {
+		if (m_infocenterState->m_unk0x74 == 5) {
 			InfomainScript::Script dialogueToPlay;
 
 			if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 				if (!m_infocenterState->HasRegistered()) {
-					m_infocenterState->SetUnknown0x74(2);
-					m_destLocation = LegoGameState::e_undefined;
 					dialogueToPlay = InfomainScript::c_iic007in_PlayWav;
+					m_infocenterState->m_unk0x74 = 2;
+					m_destLocation = LegoGameState::e_undefined;
 				}
 				else {
 					switch (m_selectedCharacter) {
@@ -942,9 +943,8 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 						GameState()->SetActorId(m_selectedCharacter);
 						break;
 					default:
-						dialogueToPlay =
-							(InfomainScript::Script) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct())
-								.Next();
+						assert(0);
+						dialogueToPlay = m_infocenterState->GetNextLeaveDialogue();
 						break;
 					}
 
@@ -953,8 +953,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 			}
 			else {
-				dialogueToPlay =
-					(InfomainScript::Script) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct()).Next();
+				dialogueToPlay = m_infocenterState->GetNextLeaveDialogue();
 			}
 
 			PlayAction(dialogueToPlay);
