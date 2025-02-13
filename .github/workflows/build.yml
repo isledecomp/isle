@@ -59,6 +59,67 @@ jobs:
             -Werror=dev
           cmake --build build -- -k0
 
+  build-with-entropy:
+    name: 'MSVC 4.20 with additional entropy'
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        instance: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/checkout@v4
+      with:
+        repository: itsmattkc/msvc420
+        path: msvc420
+
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v2
+      with:
+        # Use minimum supported version
+        cmake-version: '3.15.x'
+
+    - name: Patch MSVC 4.2
+      run: |
+        tools/patch_c2.py msvc420/bin/C2.EXE
+
+    - name: Generate Entropy
+      shell: bash
+      run: |
+        tools/entropy.sh
+
+    - name: Build
+      shell: cmd
+      run: |
+        call .\msvc420\bin\VCVARS32.BAT x86
+        cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -ISLE_INCLUDE_ENTROPY=ON -G "NMake Makefiles"
+        cmake --build build
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@main
+      with:
+        name: Win32-Entropy-${{ matrix.instance }}
+        path: |
+          build/CONFIG.EXE
+          build/CONFIG.PDB
+          build/ISLE.EXE
+          build/ISLE.PDB
+          build/LEGO1.DLL
+          build/LEGO1.PDB
+
+  merge-entropy-artifacts:
+    name: 'Merge entropy artifacts'
+    runs-on: ubuntu-latest
+    needs: build-with-entropy
+    steps:
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: Win32-Entropy
+          pattern: Win32-Entropy-*
+          separate-directories: true
+          
   build:
     name: 'MSVC 4.20'
     runs-on: windows-latest
@@ -102,7 +163,7 @@ jobs:
 
   compare:
     name: Compare with master
-    needs: [build, fetch-deps]
+    needs: [build, merge-entropy-artifacts, fetch-deps]
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@main
@@ -115,6 +176,11 @@ jobs:
       with:
        name: Win32
        path: build
+
+    - uses: actions/download-artifact@main
+      with:
+       name: Win32-Entropy
+       path: build-entropy
 
     - name: Restore cached original binaries
       id: cache-original-binaries
