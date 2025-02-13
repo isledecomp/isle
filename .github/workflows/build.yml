@@ -93,7 +93,7 @@ jobs:
       shell: cmd
       run: |
         call .\msvc420\bin\VCVARS32.BAT x86
-        cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -ISLE_INCLUDE_ENTROPY=ON -G "NMake Makefiles"
+        cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DISLE_INCLUDE_ENTROPY=ON -G "NMake Makefiles"
         cmake --build build
 
     - name: Upload Artifact
