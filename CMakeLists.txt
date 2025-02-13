@@ -588,7 +588,7 @@ if (MSVC_FOR_DECOMP)
 
   if (ISLE_INCLUDE_ENTROPY)
     foreach(tgt IN LISTS lego1_targets beta10_targets)
-      target_compile_options(${tgt} PRIVATE /FI${PROJECT_SOURCE_DIR}/tools/entropy.h)
+      target_compile_options(${tgt} PRIVATE /FI${PROJECT_SOURCE_DIR}/entropy.h)
     endforeach()
   endif()
 
