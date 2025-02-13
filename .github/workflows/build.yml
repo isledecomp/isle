@@ -60,11 +60,11 @@ jobs:
           cmake --build build -- -k0
 
   build-with-entropy:
-    name: 'MSVC 4.20 with additional entropy'
+    name: 'MSVC 4.20 with entropy'
     runs-on: windows-latest
     strategy:
       matrix:
-        instance: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        instance: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
     steps:
     - uses: actions/checkout@v4
