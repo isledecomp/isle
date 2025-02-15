@@ -129,7 +129,7 @@ InfomainScript::Script g_bricksterDialogue[2] = {
 Infocenter::Infocenter()
 {
 	m_selectedCharacter = e_noCharacter;
-	m_unk0x11c = NULL;
+	m_dragPresenter = NULL;
 	m_infocenterState = NULL;
 	m_frame = NULL;
 	m_destLocation = LegoGameState::e_undefined;
@@ -703,18 +703,18 @@ void Infocenter::InitializeBitmaps()
 // FUNCTION: BETA10 0x1002f808
 MxU8 Infocenter::HandleMouseMove(MxS32 p_x, MxS32 p_y)
 {
-	if (m_unk0x11c) {
-		if (!m_unk0x11c->IsEnabled()) {
-			MxS32 oldDisplayZ = m_unk0x11c->GetDisplayZ();
+	if (m_dragPresenter) {
+		if (!m_dragPresenter->IsEnabled()) {
+			MxS32 oldDisplayZ = m_dragPresenter->GetDisplayZ();
 
-			m_unk0x11c->SetDisplayZ(1000);
+			m_dragPresenter->SetDisplayZ(1000);
 			VideoManager()->SortPresenterList();
-			m_unk0x11c->Enable(TRUE);
-			m_unk0x11c->SetPosition(p_x, p_y);
-			m_unk0x11c->SetDisplayZ(oldDisplayZ);
+			m_dragPresenter->Enable(TRUE);
+			m_dragPresenter->SetPosition(p_x, p_y);
+			m_dragPresenter->SetDisplayZ(oldDisplayZ);
 		}
 		else {
-			m_unk0x11c->SetPosition(p_x, p_y);
+			m_dragPresenter->SetPosition(p_x, p_y);
 		}
 
 		FUN_10070d10(p_x, p_y);
@@ -776,10 +776,10 @@ MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 // FUNCTION: BETA10 0x1002fa12
 MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 {
-	if (m_unk0x11c) {
+	if (m_dragPresenter) {
 		MxControlPresenter* control = InputManager()->GetControlManager()->FUN_100294e0(p_x - 1, p_y - 1);
 
-		switch (m_unk0x11c->GetAction()->GetObjectId()) {
+		switch (m_dragPresenter->GetAction()->GetObjectId()) {
 		case InfomainScript::c_PepperHot_Bitmap:
 			m_selectedCharacter = e_pepper;
 			break;
@@ -909,8 +909,8 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 			}
 		}
 
-		m_unk0x11c->Enable(FALSE);
-		m_unk0x11c = NULL;
+		m_dragPresenter->Enable(FALSE);
+		m_dragPresenter = NULL;
 
 		if (m_infocenterState->m_unk0x74 == 5) {
 			InfomainScript::Script dialogueToPlay;
@@ -1147,7 +1147,8 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 		}
 
 		if (characterBitmap != InfomainScript::c_noneInfomain) {
-			m_unk0x11c = (MxStillPresenter*) Find(m_atomId, characterBitmap);
+			m_dragPresenter = (MxStillPresenter*) Find(m_atomId, characterBitmap);
+			assert(m_dragPresenter);
 		}
 	}
 
@@ -1160,7 +1161,6 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 {
 	// This function has changed significantly since BETA10
 
-	// MxLong result
 	MxCore* sender = p_param.GetSender();
 
 	if (sender == NULL) {

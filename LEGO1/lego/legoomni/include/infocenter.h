@@ -170,7 +170,7 @@ private:
 	LegoGameState::Area m_destLocation;             // 0x104
 	Cutscene m_currentCutscene;                     // 0x108
 	Radio m_radio;                                  // 0x10c
-	MxStillPresenter* m_unk0x11c;                   // 0x11c
+	MxStillPresenter* m_dragPresenter;              // 0x11c
 	InfocenterMapEntry m_glowInfo[7];               // 0x120
 	MxS16 m_unk0x1c8;                               // 0x1c8
 	MxStillPresenter* m_frame;                      // 0x1cc
