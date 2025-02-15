@@ -19,6 +19,7 @@
 DECOMP_SIZE_ASSERT(Act2Brick, 0x194)
 
 // GLOBAL: LEGO1 0x100f7a38
+// GLOBAL: BETA10 0x101dc480
 const LegoChar* Act2Brick::g_lodNames[] =
 	{"xchbase1", "xchblad1", "xchseat1", "xchtail1", "xhback1", "xhljet1", "xhmidl1", "xhmotr1", "xhsidl1", "xhsidr1"};
 
@@ -51,8 +52,12 @@ MxResult Act2Brick::Create(MxS32 p_index)
 	sprintf(name, "chbrick%d", p_index);
 
 	m_roi = CharacterManager()->CreateAutoROI(name, g_lodNames[p_index], FALSE);
+	assert(m_roi);
 
-	BoundingSphere sphere = m_roi->GetBoundingSphere();
+#ifndef BETA10
+	BoundingSphere sphere;
+
+	sphere.Center() = m_roi->GetBoundingSphere().Center();
 	sphere.Center()[1] -= 0.3;
 
 	if (p_index < 6) {
@@ -63,6 +68,8 @@ MxResult Act2Brick::Create(MxS32 p_index)
 	}
 
 	m_roi->SetBoundingSphere(sphere);
+#endif
+
 	m_roi->SetEntity(this);
 	CurrentWorld()->Add(this);
 	m_unk0x164 = 1;

@@ -73,7 +73,9 @@ public:
 
 	BoundingSphere& GetBoundingSphere() { return m_sphere; }
 
+	// FUNCTION: BETA10 0x10013400
 	void SetEntity(LegoEntity* p_entity) { m_entity = p_entity; }
+
 	void SetComp(CompoundObject* p_comp) { comp = p_comp; }
 	void SetBoundingSphere(const BoundingSphere& p_sphere) { m_sphere = m_world_bounding_sphere = p_sphere; }
 	void SetUnknown0x80(const BoundingBox& p_unk0x80) { m_unk0x80 = p_unk0x80; }
