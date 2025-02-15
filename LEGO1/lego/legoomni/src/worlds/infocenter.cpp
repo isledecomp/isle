@@ -700,6 +700,7 @@ void Infocenter::InitializeBitmaps()
 }
 
 // FUNCTION: LEGO1 0x1006fd00
+// FUNCTION: BETA10 0x1002f808
 MxU8 Infocenter::HandleMouseMove(MxS32 p_x, MxS32 p_y)
 {
 	if (m_unk0x11c) {
@@ -967,9 +968,10 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 }
 
 // FUNCTION: LEGO1 0x10070370
+// FUNCTION: BETA10 0x1002ffd4
 MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
-	if (p_param.GetUnknown0x28() == 1) {
+	if (p_param.m_unk0x28 == 1) {
 		m_infoManDialogueTimer = 0;
 
 		InfomainScript::Script actionToPlay = InfomainScript::c_noneInfomain;
@@ -978,7 +980,7 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 
 		LegoGameState* state = GameState();
 
-		switch (p_param.GetClickedObjectId()) {
+		switch (p_param.m_clickedObjectId) {
 		case InfomainScript::c_LeftArrow_Ctl:
 			m_infocenterState->SetUnknown0x74(14);
 			StopCurrentAction();
@@ -1143,8 +1145,11 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10070870
+// FUNCTION: BETA10 0x1003039e
 MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 {
+	// This function has changed significantly since BETA10
+
 	// MxLong result
 	MxCore* sender = p_param.GetSender();
 
@@ -1314,6 +1319,7 @@ MxBool Infocenter::VTable0x5c()
 }
 
 // FUNCTION: LEGO1 0x10070d10
+// FUNCTION: BETA10 0x100307d4
 void Infocenter::FUN_10070d10(MxS32 p_x, MxS32 p_y)
 {
 	MxS16 i;

@@ -123,6 +123,8 @@ public:
 	MxPoint32 GetLocation() const { return this->m_location; }
 	MxS32 GetX() const { return this->m_location.GetX(); }
 	MxS32 GetY() const { return this->m_location.GetY(); }
+
+	// FUNCTION: BETA10 0x10031b70
 	MxS32 GetDisplayZ() const { return this->m_displayZ; }
 
 	// FUNCTION: BETA10 0x10028430
@@ -135,6 +137,7 @@ public:
 		m_compositePresenter = p_compositePresenter;
 	}
 
+	// FUNCTION: BETA10 0x10031b40
 	void SetDisplayZ(MxS32 p_displayZ) { m_displayZ = p_displayZ; }
 
 	// SYNTHETIC: LEGO1 0x1000c070
