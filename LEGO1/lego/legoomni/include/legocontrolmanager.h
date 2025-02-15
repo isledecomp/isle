@@ -20,9 +20,7 @@ public:
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
-	MxS32 GetClickedObjectId() const { return m_clickedObjectId; }
 	const char* GetClickedAtom() const { return m_clickedAtom; }
-	MxS16 GetUnknown0x28() const { return m_unk0x28; }
 
 	void SetClickedObjectId(MxS32 p_clickedObjectId) { m_clickedObjectId = p_clickedObjectId; }
 	void SetClickedAtom(const char* p_clickedAtom) { m_clickedAtom = p_clickedAtom; }

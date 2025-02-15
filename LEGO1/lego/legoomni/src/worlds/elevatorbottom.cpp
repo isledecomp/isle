@@ -87,8 +87,8 @@ MxLong ElevatorBottom::HandleControl(LegoControlManagerNotificationParam& p_para
 {
 	MxLong result = 0;
 
-	if (p_param.GetUnknown0x28() == 1) {
-		switch (p_param.GetClickedObjectId()) {
+	if (p_param.m_unk0x28 == 1) {
+		switch (p_param.m_clickedObjectId) {
 		case ElevbottScript::c_LeftArrow_Ctl:
 			m_destLocation = LegoGameState::e_infodoor;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
