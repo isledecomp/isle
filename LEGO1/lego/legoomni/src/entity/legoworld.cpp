@@ -630,6 +630,7 @@ MxCore* LegoWorld::Find(const char* p_class, const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x10021790
+// FUNCTION: BETA10 0x100db3de
 MxCore* LegoWorld::Find(const MxAtomId& p_atom, MxS32 p_entityId)
 {
 	LegoEntityListCursor entityCursor(m_entityList);
