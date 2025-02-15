@@ -57,9 +57,6 @@ public:
 	Playlist& GetReturnDialogue(LegoGameState::Act p_act) { return m_returnDialogue[p_act]; }
 	Playlist& GetLeaveDialogue(LegoGameState::Act p_act) { return m_leaveDialogue[p_act]; }
 	Playlist& GetBricksterDialogue() { return m_bricksterDialogue; }
-	MxU32 GetUnknown0x74() { return m_unk0x74; }
-
-	void SetUnknown0x74(MxU32 p_unk0x74) { m_unk0x74 = p_unk0x74; }
 
 	// SYNTHETIC: LEGO1 0x10071900
 	// InfocenterState::`scalar deleting destructor'
