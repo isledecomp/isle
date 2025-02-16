@@ -1117,7 +1117,7 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 			actionToPlay = GameState()->GetCurrentAct() != LegoGameState::e_act1 ? InfomainScript::c_GoTo_RegBook_Red
 																				 : InfomainScript::c_GoTo_RegBook;
 			m_radio.Stop();
-			GameState()->SetUnknown0x42c(GameState()->GetPreviousArea());
+			GameState()->m_unk0x42c = GameState()->GetPreviousArea();
 			InputManager()->DisableInputProcessing();
 			break;
 		case InfomainScript::c_Mama_Ctl:
@@ -1426,7 +1426,7 @@ void Infocenter::Reset()
 	CharacterManager()->ReleaseAllActors();
 	GameState()->SetCurrentAct(LegoGameState::e_act1);
 	GameState()->SetPreviousArea(LegoGameState::e_undefined);
-	GameState()->SetUnknown0x42c(LegoGameState::e_undefined);
+	GameState()->m_unk0x42c = LegoGameState::e_undefined;
 
 	InitializeBitmaps();
 	m_selectedCharacter = e_pepper;
