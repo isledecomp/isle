@@ -1058,8 +1058,7 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 						m_infocenterState->m_unk0x74 = 5;
 						m_destLocation = state->GetPreviousArea();
 						actionToPlay =
-							(InfomainScript::Script) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct())
-								.Next();
+							(InfomainScript::Script) m_infocenterState->GetNextLeaveDialogue();
 						m_radio.Stop();
 						InputManager()->DisableInputProcessing();
 						InputManager()->SetUnknown336(TRUE);
@@ -1082,8 +1081,7 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 								m_infocenterState->m_unk0x74 = 5;
 								m_destLocation = state->m_previousArea;
 								actionToPlay = (InfomainScript::Script) m_infocenterState
-												   ->GetLeaveDialogue(GameState()->GetCurrentAct())
-												   .Next();
+												   ->GetNextLeaveDialogue();
 								m_radio.Stop();
 								InputManager()->DisableInputProcessing();
 								InputManager()->SetUnknown336(TRUE);
@@ -1097,7 +1095,7 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 				m_infocenterState->m_unk0x74 = 5;
 				m_destLocation = LegoGameState::e_act2main;
 				actionToPlay =
-					(InfomainScript::Script) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct()).Next();
+					(InfomainScript::Script) m_infocenterState->GetNextLeaveDialogue();
 				InputManager()->DisableInputProcessing();
 				InputManager()->SetUnknown336(TRUE);
 				break;
@@ -1105,7 +1103,7 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 				m_infocenterState->m_unk0x74 = 5;
 				m_destLocation = LegoGameState::e_act3script;
 				actionToPlay =
-					(InfomainScript::Script) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct()).Next();
+					(InfomainScript::Script) m_infocenterState->GetNextLeaveDialogue();
 				InputManager()->DisableInputProcessing();
 				InputManager()->SetUnknown336(TRUE);
 				break;
