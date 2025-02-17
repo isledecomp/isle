@@ -1057,8 +1057,7 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 					case LegoGameState::e_infoscor:
 						m_infocenterState->m_unk0x74 = 5;
 						m_destLocation = state->GetPreviousArea();
-						actionToPlay =
-							(InfomainScript::Script) m_infocenterState->GetNextLeaveDialogue();
+						actionToPlay = (InfomainScript::Script) m_infocenterState->GetNextLeaveDialogue();
 						m_radio.Stop();
 						InputManager()->DisableInputProcessing();
 						InputManager()->SetUnknown336(TRUE);
@@ -1080,8 +1079,7 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 							else {
 								m_infocenterState->m_unk0x74 = 5;
 								m_destLocation = state->m_previousArea;
-								actionToPlay = (InfomainScript::Script) m_infocenterState
-												   ->GetNextLeaveDialogue();
+								actionToPlay = (InfomainScript::Script) m_infocenterState->GetNextLeaveDialogue();
 								m_radio.Stop();
 								InputManager()->DisableInputProcessing();
 								InputManager()->SetUnknown336(TRUE);
@@ -1094,16 +1092,14 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 			case LegoGameState::e_act2:
 				m_infocenterState->m_unk0x74 = 5;
 				m_destLocation = LegoGameState::e_act2main;
-				actionToPlay =
-					(InfomainScript::Script) m_infocenterState->GetNextLeaveDialogue();
+				actionToPlay = (InfomainScript::Script) m_infocenterState->GetNextLeaveDialogue();
 				InputManager()->DisableInputProcessing();
 				InputManager()->SetUnknown336(TRUE);
 				break;
 			case LegoGameState::e_act3:
 				m_infocenterState->m_unk0x74 = 5;
 				m_destLocation = LegoGameState::e_act3script;
-				actionToPlay =
-					(InfomainScript::Script) m_infocenterState->GetNextLeaveDialogue();
+				actionToPlay = (InfomainScript::Script) m_infocenterState->GetNextLeaveDialogue();
 				InputManager()->DisableInputProcessing();
 				InputManager()->SetUnknown336(TRUE);
 				break;
