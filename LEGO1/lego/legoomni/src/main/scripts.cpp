@@ -38,6 +38,7 @@ MxAtomId* g_elevbottScript = NULL;
 MxAtomId* g_infodoorScript = NULL;
 
 // GLOBAL: LEGO1 0x100f4548
+// GLOBAL: BETA10 0x102114dc
 MxAtomId* g_infomainScript = NULL;
 
 // GLOBAL: LEGO1 0x100f454c

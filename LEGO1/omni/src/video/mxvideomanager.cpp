@@ -96,6 +96,7 @@ void MxVideoManager::UpdateRegion()
 }
 
 // FUNCTION: LEGO1 0x100be440
+// FUNCTION: BETA10 0x1012ce5e
 void MxVideoManager::SortPresenterList()
 {
 	if (this->m_presenters->GetCount() <= 1) {

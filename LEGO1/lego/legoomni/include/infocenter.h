@@ -55,11 +55,7 @@ public:
 	Playlist& GetExitDialogueAct1() { return m_exitDialogueAct1; }
 	Playlist& GetExitDialogueAct23() { return m_exitDialogueAct23; }
 	Playlist& GetReturnDialogue(LegoGameState::Act p_act) { return m_returnDialogue[p_act]; }
-	Playlist& GetLeaveDialogue(LegoGameState::Act p_act) { return m_leaveDialogue[p_act]; }
 	Playlist& GetBricksterDialogue() { return m_bricksterDialogue; }
-	MxU32 GetUnknown0x74() { return m_unk0x74; }
-
-	void SetUnknown0x74(MxU32 p_unk0x74) { m_unk0x74 = p_unk0x74; }
 
 	// SYNTHETIC: LEGO1 0x10071900
 	// InfocenterState::`scalar deleting destructor'
@@ -170,7 +166,7 @@ private:
 	LegoGameState::Area m_destLocation;             // 0x104
 	Cutscene m_currentCutscene;                     // 0x108
 	Radio m_radio;                                  // 0x10c
-	MxStillPresenter* m_unk0x11c;                   // 0x11c
+	MxStillPresenter* m_dragPresenter;              // 0x11c
 	InfocenterMapEntry m_glowInfo[7];               // 0x120
 	MxS16 m_unk0x1c8;                               // 0x1c8
 	MxStillPresenter* m_frame;                      // 0x1cc

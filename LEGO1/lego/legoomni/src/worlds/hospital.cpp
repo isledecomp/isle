@@ -553,8 +553,8 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 // FUNCTION: LEGO1 0x10075f90
 MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
-	if (p_param.GetUnknown0x28() == 1) {
-		switch (p_param.GetClickedObjectId()) {
+	if (p_param.m_unk0x28 == 1) {
+		switch (p_param.m_clickedObjectId) {
 		case HospitalScript::c_Info_Ctl:
 			BackgroundAudioManager()->RaiseVolume();
 			DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
