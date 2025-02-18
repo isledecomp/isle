@@ -87,7 +87,10 @@ jobs:
     - name: Generate Entropy
       shell: bash
       run: |
-        tools/entropy.sh
+        # Get the first 8 characters of the SHA (enough for a decent seed)
+        SHA_PREFIX=$(echo "${{ github.sha }}" | cut -c 1-8)
+
+        tools/entropy.sh $((16#$SHA_PREFIX + ${{ matrix.instance }}))
 
     - name: Build
       shell: cmd
