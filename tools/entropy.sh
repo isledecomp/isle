@@ -64,4 +64,4 @@ for ((i=0; i<NUM_CLASSES; i++)); do
     echo >> "$OUTPUT_FILE"
 done
 
-echo "Generated $NUM_CLASSES classes in $OUTPUT_FILE"
+echo "Generated $NUM_CLASSES classes in $OUTPUT_FILE using seed $SEED"
