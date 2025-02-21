@@ -456,7 +456,7 @@ void Infocenter::ReadyWorld()
 		case 3:
 			PlayCutscene(e_legoMovie, TRUE);
 			m_infocenterState->m_unk0x74 = 0;
-			break;
+			return;
 		case 4:
 			m_infocenterState->m_unk0x74 = 2;
 			if (!m_infocenterState->HasRegistered()) {
@@ -466,7 +466,7 @@ void Infocenter::ReadyWorld()
 			PlayAction(InfomainScript::c_iicx18in_RunAnim);
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
-			break;
+			return;
 		case 5:
 		default: {
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
@@ -484,15 +484,15 @@ void Infocenter::ReadyWorld()
 				m_bookAnimationTimer = 1;
 			}
 
-			m_infocenterState->m_unk0x74 = 11;
-			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+			// m_infocenterState->m_unk0x74 = 11;
+			// FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			break;
 		}
 		case 8:
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			PlayAction(InfomainScript::c_iic043in_RunAnim);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
-			break;
+			return;
 		case 0xf:
 			m_infocenterState->m_unk0x74 = 2;
 			if (!m_infocenterState->HasRegistered()) {
@@ -502,9 +502,9 @@ void Infocenter::ReadyWorld()
 			PlayAction(InfomainScript::c_iicx17in_RunAnim);
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
-			break;
+			return;
 		}
-		return;
+		break;
 	case LegoGameState::e_act2: {
 		if (m_infocenterState->m_unk0x74 == 8) {
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
@@ -562,20 +562,18 @@ void Infocenter::ReadyWorld()
 		Act3State* state = (Act3State*) GameState()->GetState("Act3State");
 		GameState()->FindLoadedAct();
 
-		if (state) {
-			if (state->GetUnknown0x08() == 3) {
-				bg->Enable(TRUE);
-				PlayCutscene(e_badEndMovie, TRUE);
-				m_infocenterState->m_unk0x74 = 0;
-				return;
-			}
+		if (state && state->GetUnknown0x08() == 3) {
+			bg->Enable(TRUE);
+			PlayCutscene(e_badEndMovie, TRUE);
+			m_infocenterState->m_unk0x74 = 0;
+			return;
+		}
 
-			if (state && state->GetUnknown0x08() == 2) {
-				bg->Enable(TRUE);
-				PlayCutscene(e_goodEndMovie, TRUE);
-				m_infocenterState->m_unk0x74 = 0;
-				return;
-			}
+		if (state && state->GetUnknown0x08() == 2) {
+			bg->Enable(TRUE);
+			PlayCutscene(e_goodEndMovie, TRUE);
+			m_infocenterState->m_unk0x74 = 0;
+			return;
 		}
 
 		if (m_infocenterState->m_unk0x74 == 4) {
