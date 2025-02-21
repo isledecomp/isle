@@ -793,7 +793,7 @@ void Act3::DebugCopter(
 	const Matrix4& p_destination,
 	const Matrix4& p_startPosition,
 	const Matrix4& p_endPosition,
-	const MxQuaternionTransformer& p_unk0x1f4
+	const MxQuaternionTransformer& p_quatTransform
 )
 {
 	DebugPrintf("Copter matrix...\n\n");
@@ -825,8 +825,8 @@ void Act3::DebugCopter(
 
 	Mx4DPointFloat startQuat, endQuat;
 
-	if (p_unk0x1f4.GetFlags() != 0) {
-		p_unk0x1f4.GetQuat(startQuat, endQuat);
+	if (p_quatTransform.GetFlags() != 0) {
+		p_quatTransform.GetQuat(startQuat, endQuat);
 
 		DebugPrintf("Source quaternion...");
 		// STRING: LEGO1 0x100f7864
