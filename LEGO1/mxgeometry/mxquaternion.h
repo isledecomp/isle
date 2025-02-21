@@ -21,8 +21,12 @@ public:
 	inline void SetEnd(Vector4& p_v);
 	inline int InterpolateToMatrix(Matrix4& p_matrix, float p_f);
 
-	const Vector4& GetStartQuat() const { return m_startQuat; }
-	const Vector4& GetEndQuat() const { return m_endQuat; }
+	void GetQuat(Vector4& p_startQuat, Vector4& p_endQuat) const
+	{
+		p_startQuat = m_startQuat;
+		p_endQuat = m_endQuat;
+	}
+
 	undefined4 GetFlags() const { return m_flags; }
 
 private:

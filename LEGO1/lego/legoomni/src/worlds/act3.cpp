@@ -793,7 +793,7 @@ void Act3::DebugCopter(
 	const Matrix4& p_destination,
 	const Matrix4& p_startPosition,
 	const Matrix4& p_endPosition,
-	const MxQuaternionTransformer& p_unk0x1f4
+	const MxQuaternionTransformer& p_quatTransform
 )
 {
 	DebugPrintf("Copter matrix...\n\n");
@@ -823,19 +823,17 @@ void Act3::DebugCopter(
 	DebugPrintf("\t%g, %g, %g, %g", EXPAND4(p_endPosition[2]));
 	DebugPrintf("\t%g, %g, %g, %g\n\n", EXPAND4(p_endPosition[3]));
 
-	Mx4DPointFloat unk0x00, unk0x18;
+	Mx4DPointFloat startQuat, endQuat;
 
-	if (p_unk0x1f4.GetFlags() != 0) {
-		// TODO: Match
-		unk0x00 = p_unk0x1f4.GetStartQuat();
-		unk0x18 = p_unk0x1f4.GetEndQuat();
+	if (p_quatTransform.GetFlags() != 0) {
+		p_quatTransform.GetQuat(startQuat, endQuat);
 
 		DebugPrintf("Source quaternion...");
 		// STRING: LEGO1 0x100f7864
-		DebugPrintf("\t%g, %g, %g, %g\n", EXPAND4(unk0x00));
+		DebugPrintf("\t%g, %g, %g, %g\n", EXPAND4(startQuat));
 
 		DebugPrintf("Destination quaternion...");
-		DebugPrintf("\t%g, %g, %g, %g\n", EXPAND4(unk0x18));
+		DebugPrintf("\t%g, %g, %g, %g\n", EXPAND4(endQuat));
 	}
 }
 
