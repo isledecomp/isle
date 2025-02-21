@@ -51,6 +51,7 @@ public:
 		return (InfomainScript::Script) m_leaveDialogue[GameState()->GetCurrentAct()].Next();
 	}
 
+	// FUNCTION: BETA10 0x10031ac0
 	InfomainScript::Script GetNextReturnDialogue()
 	{
 		return (InfomainScript::Script) m_returnDialogue[GameState()->GetCurrentAct()].Next();
