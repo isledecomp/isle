@@ -484,8 +484,6 @@ void Infocenter::ReadyWorld()
 				m_bookAnimationTimer = 1;
 			}
 
-			// m_infocenterState->m_unk0x74 = 11;
-			// FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			break;
 		}
 		case 8:
