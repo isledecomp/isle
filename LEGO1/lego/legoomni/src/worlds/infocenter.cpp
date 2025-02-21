@@ -471,8 +471,7 @@ void Infocenter::ReadyWorld()
 		default: {
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 
-			InfomainScript::Script script =
-				(InfomainScript::Script) m_infocenterState->GetReturnDialogue(GameState()->GetCurrentAct()).Next();
+			InfomainScript::Script script = m_infocenterState->GetNextReturnDialogue();
 			PlayAction(script);
 
 			if (script == InfomainScript::c_iicx26in_RunAnim) {
@@ -537,8 +536,7 @@ void Infocenter::ReadyWorld()
 			m_infocenterState->m_unk0x74 = 5;
 			m_destLocation = LegoGameState::e_act2main;
 
-			InfomainScript::Script script =
-				(InfomainScript::Script) m_infocenterState->GetReturnDialogue(GameState()->GetCurrentAct()).Next();
+			InfomainScript::Script script = m_infocenterState->GetNextReturnDialogue();
 			PlayAction(script);
 
 			InputManager()->DisableInputProcessing();
@@ -547,8 +545,7 @@ void Infocenter::ReadyWorld()
 		}
 
 		PlayMusic(JukeboxScript::c_InformationCenter_Music);
-		InfomainScript::Script script =
-			(InfomainScript::Script) m_infocenterState->GetReturnDialogue(GameState()->GetCurrentAct()).Next();
+		InfomainScript::Script script = m_infocenterState->GetNextReturnDialogue();
 		PlayAction(script);
 		bgRed->Enable(TRUE);
 		break;
@@ -593,8 +590,7 @@ void Infocenter::ReadyWorld()
 			m_infocenterState->m_unk0x74 = 5;
 			m_destLocation = LegoGameState::e_act3script;
 
-			InfomainScript::Script script =
-				(InfomainScript::Script) m_infocenterState->GetReturnDialogue(GameState()->GetCurrentAct()).Next();
+			InfomainScript::Script script = m_infocenterState->GetNextReturnDialogue();
 			PlayAction(script);
 
 			InputManager()->DisableInputProcessing();
@@ -603,8 +599,7 @@ void Infocenter::ReadyWorld()
 		}
 
 		PlayMusic(JukeboxScript::c_InformationCenter_Music);
-		InfomainScript::Script script =
-			(InfomainScript::Script) m_infocenterState->GetReturnDialogue(GameState()->GetCurrentAct()).Next();
+		InfomainScript::Script script = m_infocenterState->GetNextReturnDialogue();
 		PlayAction(script);
 		bgRed->Enable(TRUE);
 		break;
@@ -1228,6 +1223,7 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10070aa0
+// FUNCTION: BETA10 0x10030508
 void Infocenter::Enable(MxBool p_enable)
 {
 	LegoWorld::Enable(p_enable);
