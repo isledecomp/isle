@@ -51,10 +51,15 @@ public:
 		return (InfomainScript::Script) m_leaveDialogue[GameState()->GetCurrentAct()].Next();
 	}
 
+	// FUNCTION: BETA10 0x10031ac0
+	InfomainScript::Script GetNextReturnDialogue()
+	{
+		return (InfomainScript::Script) m_returnDialogue[GameState()->GetCurrentAct()].Next();
+	}
+
 	// TODO: These probably don't exist according to BETA
 	Playlist& GetExitDialogueAct1() { return m_exitDialogueAct1; }
 	Playlist& GetExitDialogueAct23() { return m_exitDialogueAct23; }
-	Playlist& GetReturnDialogue(LegoGameState::Act p_act) { return m_returnDialogue[p_act]; }
 	Playlist& GetBricksterDialogue() { return m_bricksterDialogue; }
 
 	// SYNTHETIC: LEGO1 0x10071900
