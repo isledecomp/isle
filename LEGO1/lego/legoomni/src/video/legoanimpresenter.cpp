@@ -704,7 +704,9 @@ MxResult LegoAnimPresenter::FUN_1006b140(LegoROI* p_roi)
 		return FAILURE;
 	}
 
-	MxMatrix* mn = new MxMatrix();
+	Matrix4* mn = new MxMatrix();
+	assert(mn);
+
 	MxMatrix local58;
 	const Matrix4& local2world = p_roi->GetLocal2World();
 	MxMatrix* local5c;
@@ -725,7 +727,7 @@ MxResult LegoAnimPresenter::FUN_1006b140(LegoROI* p_roi)
 	}
 
 	{
-		((Matrix4*) mn)->Product(local58, local2world);
+		mn->Product(local58, local2world);
 		SetUnknown0xa0(mn);
 		delete[] local5c;
 		SetUnknown0x0cTo1();
@@ -734,7 +736,7 @@ MxResult LegoAnimPresenter::FUN_1006b140(LegoROI* p_roi)
 		MxMatrix localf8;
 
 		localf8.Product(local140, *m_unk0xa0);
-		((Matrix4&) *m_unk0x78) = localf8;
+		*m_unk0x78 = localf8;
 		return SUCCESS;
 	}
 

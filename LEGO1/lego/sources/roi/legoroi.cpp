@@ -736,6 +736,7 @@ TimeROI::TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_t
 }
 
 // FUNCTION: LEGO1 0x100a9b40
+// FUNCTION: BETA10 0x1018bbf0
 void TimeROI::FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time)
 {
 	LegoTime time = p_time - m_time;
@@ -747,7 +748,7 @@ void TimeROI::FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time)
 		Vector3 vec(m_local2world[3]);
 
 		targetPosition -= vec;
-		targetPosition /= time * 0.001;
+		targetPosition /= time / 1000.0;
 
 		FUN_100a5a30(targetPosition);
 	}

@@ -68,6 +68,7 @@ void OrientableROI::WrappedVTable0x24(const Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x100a50a0
+// FUNCTION: BETA10 0x1016601f
 void OrientableROI::GetLocalTransform(Matrix4& p_transform)
 {
 	MxMatrix mat;

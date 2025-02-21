@@ -48,6 +48,7 @@ public:
 	inline int BETA_1005a590(Matrix4& p_mat);
 	inline void Swap(int p_d1, int p_d2);
 
+	// FUNCTION: BETA10 0x1001c670
 	float* operator[](int idx) { return m_data[idx]; }
 
 	// FUNCTION: BETA10 0x10017780

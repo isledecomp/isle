@@ -90,7 +90,7 @@ public:
 	void SetUnknown0xbc(undefined2 p_unk0xbc) { m_unk0xbc = p_unk0xbc; }
 
 	// FUNCTION: BETA10 0x100703b0
-	MxMatrix& GetUnknown0xe0() { return m_unk0xe0; }
+	Matrix4& GetUnknown0xe0() { return m_unk0xe0; }
 
 	MxBool StringEndsOnW(LegoChar* p_param);
 	MxBool StringEndsOnYOrN(const LegoChar* p_string);
