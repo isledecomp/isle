@@ -396,7 +396,7 @@ void MxRegionCursor::PrevSpan(MxRect32& p_rect)
 MxSpan::MxSpan(MxS32 p_min, MxS32 p_max)
 {
 	m_min = p_min;
-	m_max = m_max;
+	m_max = p_max;
 	m_segList = new MxSegmentList;
 }
 
