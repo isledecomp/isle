@@ -77,8 +77,8 @@ public:
 		float p_srcScale,
 		LegoUnknown100db7f4& p_destEdge,
 		float p_destScale
-	);                                                             // vtable+0x88
-	virtual MxS32 VTable0x8c(float p_time, MxMatrix& p_transform); // vtable+0x8c
+	);                                                            // vtable+0x88
+	virtual MxS32 VTable0x8c(float p_time, Matrix4& p_transform); // vtable+0x8c
 
 	// FUNCTION: LEGO1 0x10002d40
 	virtual MxU32 VTable0x90(float, Matrix4&) { return FALSE; } // vtable+0x90

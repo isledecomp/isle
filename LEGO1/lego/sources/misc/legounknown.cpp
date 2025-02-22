@@ -37,7 +37,7 @@ void LegoUnknown::FUN_1009a140(
 
 // FUNCTION: LEGO1 0x1009a1e0
 // FUNCTION: BETA10 0x10182d61
-LegoResult LegoUnknown::FUN_1009a1e0(float p_f1, MxMatrix& p_mat, Vector3& p_v, LegoU32 p_und)
+LegoResult LegoUnknown::FUN_1009a1e0(float p_f1, Matrix4& p_mat, Vector3& p_v, LegoU32 p_und)
 {
 	Vector3 v1(p_mat[3]);
 	Vector3 v2(p_mat[0]);

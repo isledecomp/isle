@@ -234,7 +234,7 @@ MxResult LegoPathActor::VTable0x84(
 
 // FUNCTION: LEGO1 0x1002e100
 // FUNCTION: BETA10 0x100b0520
-MxS32 LegoPathActor::VTable0x8c(float p_time, MxMatrix& p_transform)
+MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 {
 	if (m_userNavFlag && m_actorState == c_initial) {
 		m_lastTime = p_time;
