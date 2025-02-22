@@ -264,7 +264,6 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/audio/mxloopingmidipresenter.cpp
     LEGO1/omni/src/event/mxeventpresenter.cpp
     LEGO1/omni/src/stream/mxstreamchunk.cpp
-    LEGO1/omni/src/video/mxregioncursor.cpp
     LEGO1/omni/src/video/mxregion.cpp
     LEGO1/omni/src/video/mxsmk.cpp
     LEGO1/omni/src/stream/mxramstreamcontroller.cpp

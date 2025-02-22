@@ -250,7 +250,7 @@ void LegoPartPresenter::Store()
 		ViewLODList* lodList = GetViewLODListManager()->Lookup(part->GetName()->GetData());
 
 		if (lodList == NULL) {
-			lodList = GetViewLODListManager()->Create(part->GetName()->GetData(), part->GetList()->GetCount());
+			lodList = GetViewLODListManager()->Create(part->GetName()->GetData(), part->GetList()->GetNumElements());
 
 			LegoLODListCursor lodCursor(part->GetList());
 			LegoLOD* lod;

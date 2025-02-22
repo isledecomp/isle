@@ -192,7 +192,7 @@ MxBool MxControlPresenter::FUN_10044480(LegoControlManagerNotificationParam* p_p
 void MxControlPresenter::VTable0x6c(MxS16 p_unk0x4e)
 {
 	if (p_unk0x4e == -1) {
-		if ((MxS16) ((MxDSMultiAction*) m_action)->GetActionList()->GetCount() - m_unk0x4e == 1) {
+		if ((MxS16) ((MxDSMultiAction*) m_action)->GetActionList()->GetNumElements() - m_unk0x4e == 1) {
 			m_unk0x4e = 0;
 		}
 		else {

@@ -58,7 +58,7 @@ void LegoControlManager::Unregister(MxCore* p_listener)
 // FUNCTION: LEGO1 0x10029210
 MxBool LegoControlManager::FUN_10029210(LegoEventNotificationParam& p_param, MxPresenter* p_presenter)
 {
-	if (m_presenterList != NULL && m_presenterList->GetCount() != 0) {
+	if (m_presenterList != NULL && m_presenterList->GetNumElements() != 0) {
 		m_unk0x14 = p_presenter;
 
 		if (p_param.GetNotification() == c_notificationButtonUp ||

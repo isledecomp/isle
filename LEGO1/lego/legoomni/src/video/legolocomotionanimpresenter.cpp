@@ -114,7 +114,7 @@ void LegoLocomotionAnimPresenter::StartingTickle()
 		m_subscriber->FreeDataChunk(chunk);
 	}
 
-	if (m_roiMapList->GetCount() != 0) {
+	if (m_roiMapList->GetNumElements() != 0) {
 		ProgressTickleState(e_streaming);
 	}
 }
