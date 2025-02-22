@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Set up MSYS2
         if: ${{ !!matrix.toolchain.msystem }}
-        uses: msys2/setup-msys2@v2
+        uses: msys2/setup-msys2@e3fe20f54b5e9aed4fb39dba199206fad1d362b1
         with:
           msystem: ${{ matrix.toolchain.msystem }}
           install: >-
