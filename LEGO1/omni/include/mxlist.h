@@ -52,7 +52,7 @@ public:
 	void Prepend(T p_obj) { InsertEntry(p_obj, NULL, this->m_first); }
 	void DeleteAll();
 	void Empty();
-	MxU32 GetCount() { return this->m_count; }
+	MxU32 GetNumElements() { return this->m_count; }
 
 	friend class MxListCursor<T>;
 	using MxCollection<T>::SetDestroy;
