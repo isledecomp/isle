@@ -485,6 +485,7 @@ MxBool MxSpan::IntersectsH(MxRect32& p_rect)
 		if (p_rect.GetRight() <= segment->GetMin()) {
 			return FALSE;
 		}
+
 		if (segment->GetMax() > p_rect.GetLeft()) {
 			return TRUE;
 		}
