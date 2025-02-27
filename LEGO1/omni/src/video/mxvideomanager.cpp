@@ -32,12 +32,12 @@ MxVideoManager::~MxVideoManager()
 // FUNCTION: LEGO1 0x100be320
 MxResult MxVideoManager::Init()
 {
-	this->m_pDirectDraw = NULL;
-	this->m_pDirect3D = NULL;
-	this->m_displaySurface = NULL;
-	this->m_region = NULL;
-	this->m_videoParam.SetPalette(NULL);
-	this->m_unk0x60 = FALSE;
+	m_pDirectDraw = NULL;
+	m_pDirect3D = NULL;
+	m_displaySurface = NULL;
+	m_region = NULL;
+	m_videoParam.SetPalette(NULL);
+	m_unk0x60 = FALSE;
 	return SUCCESS;
 }
 
@@ -86,8 +86,8 @@ void MxVideoManager::Destroy(MxBool p_fromDestructor)
 // FUNCTION: LEGO1 0x100be3e0
 void MxVideoManager::UpdateRegion()
 {
-	if (m_region->VTable0x20() == FALSE) {
-		MxRect32 rect(m_region->GetRect());
+	if (m_region->IsEmpty() == FALSE) {
+		MxRect32 rect(m_region->GetBoundingRect());
 		rect.Intersect(m_videoParam.GetRect());
 
 		m_displaySurface
@@ -99,13 +99,13 @@ void MxVideoManager::UpdateRegion()
 // FUNCTION: BETA10 0x1012ce5e
 void MxVideoManager::SortPresenterList()
 {
-	if (this->m_presenters->GetCount() <= 1) {
+	if (m_presenters->GetNumElements() <= 1) {
 		return;
 	}
 
-	MxPresenterListCursor a(this->m_presenters);
-	MxPresenterListCursor b(this->m_presenters);
-	MxU32 count = this->m_presenters->GetCount() - 1;
+	MxPresenterListCursor a(m_presenters);
+	MxPresenterListCursor b(m_presenters);
+	MxU32 count = m_presenters->GetNumElements() - 1;
 	MxBool finished;
 
 	if (count != 0) {
@@ -302,7 +302,7 @@ void MxVideoManager::InvalidateRect(MxRect32& p_rect)
 	m_criticalSection.Enter();
 
 	if (m_region) {
-		m_region->VTable0x18(p_rect);
+		m_region->AddRect(p_rect);
 	}
 
 	m_criticalSection.Leave();
@@ -316,7 +316,7 @@ MxResult MxVideoManager::Tickle()
 	SortPresenterList();
 
 	MxPresenter* presenter;
-	MxPresenterListCursor cursor(this->m_presenters);
+	MxPresenterListCursor cursor(m_presenters);
 
 	while (cursor.Next(presenter)) {
 		presenter->Tickle();
@@ -339,14 +339,14 @@ MxResult MxVideoManager::RealizePalette(MxPalette* p_palette)
 {
 	PALETTEENTRY paletteEntries[256];
 
-	this->m_criticalSection.Enter();
+	m_criticalSection.Enter();
 
-	if (p_palette && this->m_videoParam.GetPalette()) {
+	if (p_palette && m_videoParam.GetPalette()) {
 		p_palette->GetEntries(paletteEntries);
-		this->m_videoParam.GetPalette()->SetEntries(paletteEntries);
-		this->m_displaySurface->SetPalette(this->m_videoParam.GetPalette());
+		m_videoParam.GetPalette()->SetEntries(paletteEntries);
+		m_displaySurface->SetPalette(m_videoParam.GetPalette());
 	}
 
-	this->m_criticalSection.Leave();
+	m_criticalSection.Leave();
 	return SUCCESS;
 }
