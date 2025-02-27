@@ -5,7 +5,7 @@
 #include "mxdsmediaaction.h"
 #include "mxdssubscriber.h"
 #include "mxmisc.h"
-#include "mxregioncursor.h"
+#include "mxregion.h"
 #include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
@@ -342,7 +342,7 @@ void MxVideoPresenter::PutFrame()
 		MxRegionCursor cursor(region);
 		MxRect32* regionRect;
 
-		while ((regionRect = cursor.VTable0x24(rect))) {
+		while ((regionRect = cursor.Next(rect))) {
 			if (regionRect->GetWidth() >= 1 && regionRect->GetHeight() >= 1) {
 				RECT src, dest;
 
