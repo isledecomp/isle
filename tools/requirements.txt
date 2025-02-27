@@ -1,3 +1,3 @@
-reccmp @ git+https://github.com/isledecomp/reccmp
+reccmp @ git+https://github.com/disinvite/reccmp@pr-denoise
 clang==16.*
 pyyaml
