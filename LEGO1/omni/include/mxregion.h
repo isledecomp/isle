@@ -13,13 +13,19 @@ protected:
 	MxS32 m_max; // 0x04
 
 public:
+	// FUNCTION: BETA10 0x1014c360
 	MxSegment(MxS32 p_min, MxS32 p_max)
 	{
 		m_min = p_min;
 		m_max = p_max;
 	}
+
+	// FUNCTION: BETA10 0x1014b910
 	MxS32 GetMin() { return m_min; }
+
+	// FUNCTION: BETA10 0x1014b930
 	MxS32 GetMax() { return m_max; }
+
 	MxSegment* Clone() { return new MxSegment(m_min, m_max); }
 	MxBool Combine(MxSegment& p_seg);
 	MxBool Adjacent(MxSegment& p_seg) { return m_max == p_seg.m_min || m_min == p_seg.m_max; }
@@ -79,10 +85,18 @@ protected:
 public:
 	MxSpan(MxS32 p_min, MxS32 p_max);
 	MxSpan(MxRect32& p_rect);
+
+	// FUNCTION: BETA10 0x1014b0f0
 	~MxSpan() { delete m_segList; }
+
+	// FUNCTION: BETA10 0x1014b3b0
 	MxS32 GetMin() { return m_min; }
+
 	void SetMin(MxS32 p_min) { m_min = p_min; }
+
+	// FUNCTION: BETA10 0x1014b3f0
 	MxS32 GetMax() { return m_max; }
+
 	void SetMax(MxS32 p_max) { m_max = p_max; }
 	MxSpan* Clone();
 	void Compact();
@@ -98,6 +112,9 @@ public:
 	}
 	MxBool operator!=(MxSpan& p_span) { return !operator==(p_span); }
 	friend class MxRegionCursor;
+
+	// SYNTHETIC: BETA10 0x1014b0b0
+	// MxSpan::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dcb10
@@ -162,12 +179,14 @@ public:
 	virtual MxBool Intersects(MxRect32& p_rect); // vtable+0x1c
 
 	// FUNCTION: LEGO1 0x100c3660
+	// FUNCTION: BETA10 0x1014b1d0
 	virtual MxBool IsEmpty() { return m_spanList->GetNumElements() == 0; } // vtable+0x20
 
 	void Compact();
 	friend class MxRegionCursor;
 
 	// SYNTHETIC: LEGO1 0x100c3670
+	// SYNTHETIC: BETA10 0x1014b230
 	// MxRegion::`scalar deleting destructor'
 };
 
@@ -530,5 +549,11 @@ public:
 
 // TEMPLATE: BETA10 0x1014d200
 // MxList<MxSpan *>::DeleteEntry
+
+// TEMPLATE: BETA10 0x1014b210
+// MxList<MxSpan *>::GetNumElements
+
+// TEMPLATE: BETA10 0x1014c910
+// ?Next@?$MxListCursor@PAVMxSegment@@@@QAEEXZ
 
 #endif // __MXREGION_H

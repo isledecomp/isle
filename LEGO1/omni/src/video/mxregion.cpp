@@ -16,11 +16,10 @@ MxRegion::MxRegion()
 }
 
 // FUNCTION: LEGO1 0x100c3690
+// FUNCTION: BETA10 0x10148fe8
 MxRegion::~MxRegion()
 {
-	if (m_spanList) {
-		delete m_spanList;
-	}
+	delete m_spanList;
 }
 
 // FUNCTION: LEGO1 0x100c3700
@@ -85,6 +84,7 @@ void MxRegion::AddRect(MxRect32& p_rect)
 }
 
 // FUNCTION: LEGO1 0x100c3e20
+// FUNCTION: BETA10 0x10149535
 MxBool MxRegion::Intersects(MxRect32& p_rect)
 {
 	if (!m_boundingRect.IntersectsWith(p_rect)) {
@@ -424,11 +424,7 @@ void MxSpan::AddSegment(MxS32 p_min, MxS32 p_max)
 		;
 	}
 
-	if (!a.HasMatch()) {
-		MxSegment* copy = new MxSegment(p_min, p_max);
-		m_segList->Append(copy);
-	}
-	else {
+	if (a.HasMatch()) {
 		if (p_min > segment->GetMin()) {
 			p_min = segment->GetMin();
 		}
@@ -458,6 +454,10 @@ void MxSpan::AddSegment(MxS32 p_min, MxS32 p_max)
 			m_segList->Append(copy);
 		}
 	}
+	else {
+		MxSegment* copy = new MxSegment(p_min, p_max);
+		m_segList->Append(copy);
+	}
 }
 
 // FUNCTION: LEGO1 0x100c55d0
@@ -476,6 +476,7 @@ MxSpan* MxSpan::Clone()
 }
 
 // FUNCTION: LEGO1 0x100c57b0
+// FUNCTION: BETA10 0x1014aa46
 MxBool MxSpan::IntersectsH(MxRect32& p_rect)
 {
 	MxSegmentListCursor cursor(m_segList);
