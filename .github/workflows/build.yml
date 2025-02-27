@@ -106,7 +106,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        instance: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        instance: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
     steps:
     - uses: actions/checkout@v4
@@ -229,7 +229,7 @@ jobs:
       run: |
         reccmp-project detect --what original   --search-path legobin
         reccmp-project detect --what recompiled --search-path build
-        
+
     - name: Denoise Accuracy
       shell: bash
       run: |
