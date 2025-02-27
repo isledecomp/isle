@@ -319,6 +319,7 @@ void MxBackgroundAudioManager::LowerVolume()
 }
 
 // FUNCTION: LEGO1 0x1007f5b0
+// FUNCTION: BETA10 0x100e9543
 void MxBackgroundAudioManager::RaiseVolume()
 {
 	if (m_unk0x148 != 0) {

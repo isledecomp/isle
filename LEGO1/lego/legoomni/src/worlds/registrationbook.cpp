@@ -226,18 +226,18 @@ MxLong RegistrationBook::HandleKeyPress(MxU8 p_key)
 // FUNCTION: LEGO1 0x100774a0
 MxLong RegistrationBook::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
-	MxS16 unk0x28 = p_param.GetUnknown0x28();
+	MxS16 unk0x28 = p_param.m_unk0x28;
 
 	if (unk0x28 >= 1 && unk0x28 <= 28) {
-		if (p_param.GetClickedObjectId() == RegbookScript::c_Alphabet_Ctl) {
+		if (p_param.m_clickedObjectId == RegbookScript::c_Alphabet_Ctl) {
 			if (unk0x28 == 28) {
 				DeleteObjects(&m_atomId, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 
 				if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
-					m_infocenterState->SetUnknown0x74(15);
+					m_infocenterState->m_unk0x74 = 15;
 				}
 				else {
-					m_infocenterState->SetUnknown0x74(2);
+					m_infocenterState->m_unk0x74 = 2;
 				}
 
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
@@ -256,7 +256,7 @@ MxLong RegistrationBook::HandleControl(LegoControlManagerNotificationParam& p_pa
 
 			MxS16 i;
 			for (i = 0; i < 10; i++) {
-				if (m_checkmark[i]->GetAction()->GetObjectId() == p_param.GetClickedObjectId()) {
+				if (m_checkmark[i]->GetAction()->GetObjectId() == p_param.m_clickedObjectId) {
 					break;
 				}
 			}
@@ -318,7 +318,7 @@ void RegistrationBook::FUN_100775c0(MxS16 p_playerIndex)
 		break;
 	}
 
-	m_infocenterState->SetUnknown0x74(4);
+	m_infocenterState->m_unk0x74 = 4;
 	if (m_unk0x2b8 == 0 && !m_unk0x2c1) {
 		DeleteObjects(&m_atomId, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);

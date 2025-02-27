@@ -96,10 +96,10 @@ MxLong InfocenterDoor::HandleControl(LegoControlManagerNotificationParam& p_para
 {
 	MxLong result = 0;
 
-	if (p_param.GetUnknown0x28() == 1) {
+	if (p_param.m_unk0x28 == 1) {
 		DeleteObjects(&m_atomId, InfodoorScript::c_iic037in_PlayWav, 510);
 
-		switch (p_param.GetClickedObjectId()) {
+		switch (p_param.m_clickedObjectId) {
 		case InfodoorScript::c_LeftArrow_Ctl:
 			m_destLocation = LegoGameState::e_infoscor;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);

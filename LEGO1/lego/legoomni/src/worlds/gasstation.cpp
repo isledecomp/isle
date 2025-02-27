@@ -387,10 +387,10 @@ MxLong GasStation::HandleButtonDown(LegoControlManagerNotificationParam& p_param
 // FUNCTION: BETA10 0x10029445
 MxLong GasStation::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
-	if (p_param.GetUnknown0x28() == 1) {
+	if (p_param.m_unk0x28 == 1) {
 		MxDSAction action;
 
-		switch (p_param.GetClickedObjectId()) {
+		switch (p_param.m_clickedObjectId) {
 		case GarageScript::c_LeftArrow_Ctl:
 		case GarageScript::c_RightArrow_Ctl:
 			m_state->m_unk0x14 = 0;

@@ -155,7 +155,7 @@ protected:
 		const Matrix4& p_destination,
 		const Matrix4& p_startPosition,
 		const Matrix4& p_endPosition,
-		const MxQuaternionTransformer& p_unk0x1f4
+		const MxQuaternionTransformer& p_quatTransform
 	);
 
 	Act3State* m_state;                 // 0xf8

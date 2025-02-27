@@ -185,7 +185,7 @@ MxBool LegoControlManager::FUN_10029630()
 
 	while (cursor.Next(presenter)) {
 		if (((MxControlPresenter*) presenter)->FUN_10044480(&m_event, m_unk0x14)) {
-			g_unk0x100f31b0 = m_event.GetClickedObjectId();
+			g_unk0x100f31b0 = m_event.m_clickedObjectId;
 			g_unk0x100f31b4 = m_event.GetClickedAtom();
 			FUN_100292e0();
 			m_unk0x08 = 1;

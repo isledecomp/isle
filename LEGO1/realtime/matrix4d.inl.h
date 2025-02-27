@@ -292,8 +292,8 @@ int Matrix4::BETA_1005a590(Matrix4& p_mat)
 {
 	float local5c[4][4];
 	Matrix4 localc(local5c);
+	localc = *this;
 
-	((Matrix4&) localc) = *this;
 	p_mat.SetIdentity();
 
 	for (int i = 0; i < 4; i++) {

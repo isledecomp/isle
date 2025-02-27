@@ -101,8 +101,8 @@ void Police::ReadyWorld()
 // FUNCTION: LEGO1 0x1005e550
 MxLong Police::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
-	if (p_param.GetUnknown0x28() == 1) {
-		switch (p_param.GetClickedObjectId()) {
+	if (p_param.m_unk0x28 == 1) {
+		switch (p_param.m_clickedObjectId) {
 		case PoliceScript::c_LeftArrow_Ctl:
 		case PoliceScript::c_RightArrow_Ctl:
 			if (m_policeState->GetUnknown0x0c() == 1) {

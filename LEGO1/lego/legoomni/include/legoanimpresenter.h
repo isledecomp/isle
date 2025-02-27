@@ -93,7 +93,7 @@ public:
 
 	void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
 	void SetUnknown0x0cTo1() { m_unk0x9c = 1; }
-	void SetUnknown0xa0(MxMatrix* p_unk0xa0) { m_unk0xa0 = p_unk0xa0; }
+	void SetUnknown0xa0(Matrix4* p_unk0xa0) { m_unk0xa0 = p_unk0xa0; }
 
 	LegoAnim* GetAnimation() { return m_anim; }
 
@@ -123,7 +123,7 @@ protected:
 	MxU32 m_roiMapSize;           // 0x6c
 	LegoROIList* m_unk0x70;       // 0x70
 	LegoROIList* m_unk0x74;       // 0x74
-	MxMatrix* m_unk0x78;          // 0x78
+	Matrix4* m_unk0x78;           // 0x78
 	MxU32 m_flags;                // 0x7c
 	LegoWorld* m_currentWorld;    // 0x80
 	MxAtomId m_worldAtom;         // 0x84
@@ -136,7 +136,7 @@ protected:
 	undefined m_unk0x97;          // 0x97
 	LegoAnimSubstMap* m_substMap; // 0x98
 	MxS16 m_unk0x9c;              // 0x9c
-	MxMatrix* m_unk0xa0;          // 0xa0
+	Matrix4* m_unk0xa0;           // 0xa0
 
 public:
 	float m_unk0xa4;          // 0xa4

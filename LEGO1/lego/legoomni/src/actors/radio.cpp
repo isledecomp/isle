@@ -144,7 +144,7 @@ void Radio::Stop()
 MxLong Radio::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	MxDSAction action; // Unused
-	MxS32 objectId = p_param.GetClickedObjectId();
+	MxS32 objectId = p_param.m_clickedObjectId;
 
 	if (objectId == IsleScript::c_Radio_Ctl) {
 		if (m_state->IsActive()) {
