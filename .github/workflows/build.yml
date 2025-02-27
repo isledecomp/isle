@@ -161,7 +161,7 @@ jobs:
     - name: Detect binaries
       run: |
         reccmp-project detect --what original   --search-path legobin
-        reccmp-project detect --what recompiled --search-path build  
+        reccmp-project detect --what recompiled --search-path build
 
     - name: Summarize Accuracy
       shell: bash
@@ -204,8 +204,13 @@ jobs:
 
     - uses: actions/download-artifact@main
       with:
-       name: Win32-Entropy
-       path: build-entropy
+        name: Win32
+        path: build
+
+    - uses: actions/download-artifact@main
+      with:
+        name: Win32-Entropy
+        path: build-entropy
 
     - name: Restore cached original binaries
       id: cache-original-binaries
@@ -220,6 +225,11 @@ jobs:
       run: |
         pip install -r tools/requirements.txt
 
+    - name: Detect binaries
+      run: |
+        reccmp-project detect --what original   --search-path legobin
+        reccmp-project detect --what recompiled --search-path build
+        
     - name: Denoise Accuracy
       shell: bash
       run: |
