@@ -1,5 +1,7 @@
 #include "mxdirect3d.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(MxDirect3D, 0x894)
 
 #if !defined(MXDIRECTX_FOR_CONFIG)
@@ -234,81 +236,72 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_dri
 		m_pCurrentDeviceModesList = NULL;
 	}
 
-	MxAssignedDevice* assignedDevice = new MxAssignedDevice;
+	MxAssignedDevice* d = new MxAssignedDevice;
+	assert(d);
 	int i = 0;
 
-	for (list<MxDriver>::iterator it = p_deviceEnumerate.m_list.begin(); it != p_deviceEnumerate.m_list.end(); it++) {
+	for (list<MxDriver>::iterator it = p_deviceEnumerate.m_list.begin(); it != p_deviceEnumerate.m_list.end();
+		 it++, i++) {
 		MxDriver& driver = *it;
 
 		if (&driver == p_driver) {
-			assignedDevice->m_deviceInfo = new DeviceModesInfo;
+			d->m_deviceInfo = new DeviceModesInfo;
 
 			if (driver.m_guid) {
-				assignedDevice->m_deviceInfo->m_guid = new GUID;
-				memcpy(assignedDevice->m_deviceInfo->m_guid, driver.m_guid, sizeof(GUID));
+				d->m_deviceInfo->m_guid = new GUID;
+				*d->m_deviceInfo->m_guid = *driver.m_guid;
 			}
 
-			assignedDevice->m_deviceInfo->m_count = driver.m_displayModes.size();
+			d->m_deviceInfo->m_count = driver.m_displayModes.size();
 
-			if (assignedDevice->m_deviceInfo->m_count > 0) {
-				assignedDevice->m_deviceInfo->m_modeArray =
-					new DeviceModesInfo::Mode[assignedDevice->m_deviceInfo->m_count];
-
+			if (d->m_deviceInfo->m_count > 0) {
 				int j = 0;
+				d->m_deviceInfo->m_modeArray = new DeviceModesInfo::Mode[d->m_deviceInfo->m_count];
+
 				for (list<MxDisplayMode>::iterator it2 = driver.m_displayModes.begin();
 					 it2 != driver.m_displayModes.end();
-					 it2++) {
-					assignedDevice->m_deviceInfo->m_modeArray[j].width = (*it2).m_width;
-					assignedDevice->m_deviceInfo->m_modeArray[j].height = (*it2).m_height;
-					assignedDevice->m_deviceInfo->m_modeArray[j].bitsPerPixel = (*it2).m_bitsPerPixel;
-					j++;
+					 it2++, j++) {
+					d->m_deviceInfo->m_modeArray[j].width = (*it2).m_width;
+					d->m_deviceInfo->m_modeArray[j].height = (*it2).m_height;
+					d->m_deviceInfo->m_modeArray[j].bitsPerPixel = (*it2).m_bitsPerPixel;
 				}
 			}
 
-			memcpy(
-				&assignedDevice->m_deviceInfo->m_ddcaps,
-				&driver.m_ddCaps,
-				sizeof(assignedDevice->m_deviceInfo->m_ddcaps)
-			);
+			d->m_deviceInfo->m_ddcaps = driver.m_ddCaps;
 
 			if (i == 0) {
-				assignedDevice->m_flags |= MxAssignedDevice::c_primaryDevice;
+				d->m_flags |= MxAssignedDevice::c_primaryDevice;
 			}
 
 			for (list<Direct3DDeviceInfo>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end();
 				 it2++) {
 				Direct3DDeviceInfo& device = *it2;
-				if (&device != p_device) {
-					continue;
-				}
+				if (&device == p_device) {
+					memcpy(&d->m_guid, device.m_guid, sizeof(d->m_guid));
 
-				memcpy(&assignedDevice->m_guid, device.m_guid, sizeof(assignedDevice->m_guid));
+					if (device.m_HWDesc.dcmColorModel) {
+						d->m_flags |= MxAssignedDevice::c_hardwareMode;
+						d->m_desc = device.m_HWDesc;
+					}
+					else {
+						d->m_desc = device.m_HELDesc;
+					}
 
-				D3DDEVICEDESC* desc;
-				if (device.m_HWDesc.dcmColorModel) {
-					assignedDevice->m_flags |= MxAssignedDevice::c_hardwareMode;
-					desc = &device.m_HWDesc;
+					m_assignedDevice = d;
+					m_pCurrentDeviceModesList = d->m_deviceInfo;
+					break;
 				}
-				else {
-					desc = &device.m_HELDesc;
-				}
-
-				memcpy(&assignedDevice->m_desc, desc, sizeof(assignedDevice->m_desc));
-				m_assignedDevice = assignedDevice;
-				m_pCurrentDeviceModesList = assignedDevice->m_deviceInfo;
-				break;
 			}
 		}
-
-		i++;
 	}
 
 	if (!m_assignedDevice) {
-		delete assignedDevice;
+		delete d;
 		return FALSE;
 	}
-
-	return TRUE;
+	else {
+		return TRUE;
+	}
 }
 
 #endif
