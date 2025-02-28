@@ -302,7 +302,7 @@ MxLong Ambulance::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 					InvokeAction(Extra::e_stop, *g_isleScript, m_lastAction, NULL);
 				}
 
-				PlayAction(IsleScript::c_Avo915In_PlayWav);
+				PlayAction(IsleScript::c_Avo916In_PlayWav);
 				return 0;
 			}
 		}
