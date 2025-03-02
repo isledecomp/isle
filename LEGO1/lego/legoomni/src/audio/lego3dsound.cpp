@@ -296,6 +296,7 @@ void Lego3DSound::Reset()
 }
 
 // FUNCTION: LEGO1 0x10011cf0
+// FUNCTION: BETA10 0x10039fe0
 MxS32 Lego3DSound::SetDistance(MxS32 p_min, MxS32 p_max)
 {
 	if (MxOmni::IsSound3D()) {

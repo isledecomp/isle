@@ -105,6 +105,9 @@ protected:
 // TEMPLATE: LEGO1 0x1001c7e0
 // vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *> >::_Destroy
 
+// TEMPLATE: BETA10 0x1000fbc0
+// vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *> >::begin
+
 // TEMPLATE: LEGO1 0x1001c9e0
 // uninitialized_fill_n
 

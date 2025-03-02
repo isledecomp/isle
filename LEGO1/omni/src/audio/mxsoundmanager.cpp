@@ -67,6 +67,7 @@ void MxSoundManager::Destroy(MxBool p_fromDestructor)
 }
 
 // FUNCTION: LEGO1 0x100ae8b0
+// FUNCTION: BETA10 0x10132e94
 MxResult MxSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
 	MxResult status = FAILURE;

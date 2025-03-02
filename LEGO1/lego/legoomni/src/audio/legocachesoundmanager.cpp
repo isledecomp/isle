@@ -61,8 +61,11 @@ MxResult LegoCacheSoundManager::Tickle()
 }
 
 // FUNCTION: LEGO1 0x1003d170
+// FUNCTION: BETA10 0x1006539d
 LegoCacheSound* LegoCacheSoundManager::FindSoundByKey(const char* p_key)
 {
+	// This function has changed completely since BETA10, but its calls suggest the match is correct
+
 	char* key = new char[strlen(p_key) + 1];
 	strcpy(key, p_key);
 

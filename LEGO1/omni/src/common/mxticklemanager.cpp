@@ -5,6 +5,8 @@
 #include "mxtimer.h"
 #include "mxtypes.h"
 
+#include <assert.h>
+
 #define TICKLE_MANAGER_FLAG_DESTROY 0x01
 
 DECOMP_SIZE_ASSERT(MxTickleClient, 0x10);
@@ -30,6 +32,7 @@ MxTickleManager::~MxTickleManager()
 }
 
 // FUNCTION: LEGO1 0x100bdde0
+// FUNCTION: BETA10 0x1013eb1f
 MxResult MxTickleManager::Tickle()
 {
 	MxTime time = Timer()->GetTime();
@@ -60,6 +63,7 @@ MxResult MxTickleManager::Tickle()
 }
 
 // FUNCTION: LEGO1 0x100bde80
+// FUNCTION: BETA10 0x1013ec5f
 void MxTickleManager::RegisterClient(MxCore* p_client, MxTime p_interval)
 {
 	MxTime interval = GetClientTickleInterval(p_client);
@@ -72,6 +76,7 @@ void MxTickleManager::RegisterClient(MxCore* p_client, MxTime p_interval)
 }
 
 // FUNCTION: LEGO1 0x100bdf60
+// FUNCTION: BETA10 0x1013edd0
 void MxTickleManager::UnregisterClient(MxCore* p_client)
 {
 	MxTickleClientPtrList::iterator it = m_clients.begin();
@@ -87,6 +92,7 @@ void MxTickleManager::UnregisterClient(MxCore* p_client)
 }
 
 // FUNCTION: LEGO1 0x100bdfa0
+// FUNCTION: BETA10 0x1013ee6d
 void MxTickleManager::SetClientTickleInterval(MxCore* p_client, MxTime p_interval)
 {
 	for (MxTickleClientPtrList::iterator it = m_clients.begin(); it != m_clients.end(); it++) {
@@ -99,6 +105,7 @@ void MxTickleManager::SetClientTickleInterval(MxCore* p_client, MxTime p_interva
 }
 
 // FUNCTION: LEGO1 0x100be000
+// FUNCTION: BETA10 0x1013ef2d
 MxTime MxTickleManager::GetClientTickleInterval(MxCore* p_client)
 {
 	MxTickleClientPtrList::iterator it = m_clients.begin();
