@@ -774,6 +774,9 @@
 // LIBRARY: BETA10 0x100fbdb0
 // _exit
 
+// GLOBAL: BETA10 0x101faf70
+// _aexit_rtn
+
 // LIBRARY: BETA10 0x10100bf0
 // _CrtDbgReport
 
