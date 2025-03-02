@@ -6,6 +6,7 @@
 class LegoCacheSoundManager;
 
 // VTABLE: LEGO1 0x100d6b10
+// VTABLE: BETA10 0x101bec30
 // SIZE 0x44
 class LegoSoundManager : public MxSoundManager {
 public:
@@ -17,6 +18,7 @@ public:
 	MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread) override; // vtable+0x30
 
 	// SYNTHETIC: LEGO1 0x10029920
+	// SYNTHETIC: BETA10 0x100d0660
 	// LegoSoundManager::`scalar deleting destructor'
 
 	void UpdateListener(const float* p_position, const float* p_direction, const float* p_up, const float* p_velocity);

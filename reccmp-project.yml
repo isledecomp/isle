@@ -35,5 +35,6 @@ targets:
         - 0x100f8ad0
         - 0x100fa200
         - 0x100f9780
+        - 0x100fb080
         # memset etc.
         - 0x100f9570

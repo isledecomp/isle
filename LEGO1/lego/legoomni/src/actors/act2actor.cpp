@@ -153,8 +153,15 @@ void Act2Actor::FUN_10018980()
 	assert(m_shootAnim);
 
 	m_unk0x38 = SoundManager()->GetCacheSoundManager()->FindSoundByKey("xarrow");
+#ifdef BETA10
+	// actually 0x2c and 0x30
+	m_unk0x38 = SoundManager()->GetCacheSoundManager()->FindSoundByKey("bcrash");
+	m_unk0x38->SetDistance(35, 60);
+	m_unk0x38->SetDistance(35, 60);
+#else
 	m_unk0x38->SetDistance(45, 55);
 	m_roi->SetVisibility(TRUE);
+#endif
 }
 
 // FUNCTION: LEGO1 0x100189f0
