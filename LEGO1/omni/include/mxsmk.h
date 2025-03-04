@@ -2,7 +2,7 @@
 #define MXSMK_H
 
 #include "decomp.h"
-#include "mxrectlist.h"
+#include "mxgeometry.h"
 #include "mxtypes.h"
 
 #include <smack.h>
@@ -46,7 +46,7 @@ struct MxSmk {
 		MxSmk* p_mxSmk,
 		MxU8* p_chunkData,
 		MxBool p_paletteChanged,
-		MxRectList* p_list
+		MxRect32List* p_list
 	);
 	static MxBool GetRect(MxU8* p_unk0x6b4, MxU16* p_und, u32* p_smackRect, MxRect32* p_rect);
 };

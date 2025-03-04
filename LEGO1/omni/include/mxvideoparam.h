@@ -2,7 +2,7 @@
 #define MXVIDEOPARAM_H
 
 #include "compat.h"
-#include "mxrect32.h"
+#include "mxgeometry.h"
 #include "mxtypes.h"
 #include "mxvideoparamflags.h"
 

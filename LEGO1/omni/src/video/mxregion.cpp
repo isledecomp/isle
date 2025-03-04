@@ -39,7 +39,7 @@ void MxRegion::AddRect(MxRect32& p_rect)
 	MxSpanListCursor cursor(m_spanList);
 	MxSpan* span;
 
-	while (rect.IsValid() && cursor.Next(span)) {
+	while (!rect.Empty() && cursor.Next(span)) {
 		if (span->GetMin() >= rect.GetBottom()) {
 			MxSpan* newSpan = new MxSpan(rect);
 			cursor.Prepend(newSpan);
@@ -75,19 +75,19 @@ void MxRegion::AddRect(MxRect32& p_rect)
 		}
 	}
 
-	if (rect.IsValid()) {
+	if (!rect.Empty()) {
 		MxSpan* newSpan = new MxSpan(rect);
 		m_spanList->Append(newSpan);
 	}
 
-	m_boundingRect.UpdateBounds(p_rect);
+	m_boundingRect |= p_rect;
 }
 
 // FUNCTION: LEGO1 0x100c3e20
 // FUNCTION: BETA10 0x10149535
 MxBool MxRegion::Intersects(MxRect32& p_rect)
 {
-	if (!m_boundingRect.IntersectsWith(p_rect)) {
+	if (!m_boundingRect.Intersects(p_rect)) {
 		return FALSE;
 	}
 
@@ -253,7 +253,7 @@ MxRect32* MxRegionCursor::Next(MxRect32& p_rect)
 
 		if (span->IntersectsV(p_rect) && segment->IntersectsH(p_rect)) {
 			SetRect(segment->GetMin(), span->GetMin(), segment->GetMax(), span->GetMax());
-			m_rect->Intersect(p_rect);
+			*m_rect &= p_rect;
 		}
 		else {
 			NextSpan(p_rect);
@@ -278,7 +278,7 @@ MxRect32* MxRegionCursor::Prev(MxRect32& p_rect)
 
 		if (span->IntersectsV(p_rect) && segment->IntersectsH(p_rect)) {
 			SetRect(segment->GetMin(), span->GetMin(), segment->GetMax(), span->GetMax());
-			m_rect->Intersect(p_rect);
+			*m_rect &= p_rect;
 		}
 		else {
 			PrevSpan(p_rect);
@@ -351,7 +351,7 @@ void MxRegionCursor::NextSpan(MxRect32& p_rect)
 
 				if (p_rect.GetLeft() < segment->GetMax()) {
 					SetRect(segment->GetMin(), span->GetMin(), segment->GetMax(), span->GetMax());
-					m_rect->Intersect(p_rect);
+					*m_rect &= p_rect;
 					return;
 				}
 			}
@@ -382,7 +382,7 @@ void MxRegionCursor::PrevSpan(MxRect32& p_rect)
 
 				if (segment->GetMin() < p_rect.GetRight()) {
 					SetRect(segment->GetMin(), span->GetMin(), segment->GetMax(), span->GetMax());
-					m_rect->Intersect(p_rect);
+					*m_rect &= p_rect;
 					return;
 				}
 			}
