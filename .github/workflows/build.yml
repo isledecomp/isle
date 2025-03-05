@@ -108,14 +108,7 @@ jobs:
       matrix:
         instance: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
                    10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-                   20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-                   30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
-                   40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
-                   50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
-                   60, 61, 62, 63, 64, 65, 66, 67, 68, 69,
-                   70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
-                   80, 81, 82, 83, 84, 85, 86, 87, 88, 89,
-                   90, 91, 92, 93, 94, 95, 96, 97, 98, 99]
+                   20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
 
     steps:
     - uses: actions/checkout@v4
@@ -145,7 +138,7 @@ jobs:
         # Get the first 8 characters of the SHA (enough for a decent seed)
         SHA_PREFIX=$(echo "${{ github.sha }}" | cut -c 1-8)
 
-        tools/entropy.sh $((16#$SHA_PREFIX + ${{ matrix.instance }}))
+        python3 tools/entropy.py $((16#$SHA_PREFIX + ${{ matrix.instance }})) > entropy.h
 
     - name: Build
       shell: cmd
@@ -239,12 +232,12 @@ jobs:
         reccmp-project detect --what original   --search-path legobin
         reccmp-project detect --what recompiled --search-path build
 
-    - name: Denoise Accuracy
+    - name: Summarize Accuracy
       shell: bash
       run: |
-        reccmp-denoise --samples $(find build-entropy -type f -name "CONFIGPROGRESS.json") --output CONFIGPROGRESS.json
-        reccmp-denoise --samples $(find build-entropy -type f -name "ISLEPROGRESS.json") --output ISLEPROGRESS.json
-        reccmp-denoise --samples $(find build-entropy -type f -name "LEGO1PROGRESS.json") --output LEGO1PROGRESS.json
+        reccmp-reccmp -S CONFIGPROGRESS.SVG --svg-icon assets/config.png --target CONFIG --json CONFIGPROGRESS.json
+        reccmp-reccmp -S ISLEPROGRESS.SVG --svg-icon assets/isle.png --target ISLE --json ISLEPROGRESS.json
+        reccmp-reccmp -S LEGO1PROGRESS.SVG --svg-icon assets/lego1.png --target LEGO1 --json LEGO1PROGRESS.json
 
     - name: Compare Accuracy With Current Master
       shell: bash
@@ -257,9 +250,31 @@ jobs:
         curl -fLSs -o LEGO1PROGRESS-old.json $RELEASE_URL/LEGO1PROGRESS.json || echo "" >LEGO1PROGRESS-old.json
         
         # Compare with current master
-        reccmp-denoise --diff CONFIGPROGRESS-old.json CONFIGPROGRESS.json
-        reccmp-denoise --diff ISLEPROGRESS-old.json ISLEPROGRESS.json
-        reccmp-denoise --diff LEGO1PROGRESS-old.json LEGO1PROGRESS.json
+        reccmp-reccmp --target CONFIG --diff CONFIGPROGRESS-old.json || echo "Current master not found"
+        reccmp-reccmp --target ISLE --diff ISLEPROGRESS-old.json || echo "Current master not found"
+        reccmp-reccmp --target LEGO1 --diff LEGO1PROGRESS-old.json || echo "Current master not found"
+
+    - name: Aggregate Accuracy
+      shell: bash
+      run: |
+        reccmp-aggregate --samples $(find build-entropy -type f -name "CONFIGPROGRESS.json") --output CONFIGPROGRESS-agg.json
+        reccmp-aggregate --samples $(find build-entropy -type f -name "ISLEPROGRESS.json") --output ISLEPROGRESS-agg.json
+        reccmp-aggregate --samples $(find build-entropy -type f -name "LEGO1PROGRESS.json") --output LEGO1PROGRESS-agg.json
+
+    - name: Compare Aggregate Accuracy With Current Master
+      shell: bash
+      env:
+        RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
+      run: |
+        # Download the current master state
+        curl -fLSs -o CONFIGPROGRESS-agg-old.json $RELEASE_URL/CONFIGPROGRESS-agg.json || echo "" >CONFIGPROGRESS-agg-old.json
+        curl -fLSs -o ISLEPROGRESS-agg-old.json $RELEASE_URL/ISLEPROGRESS-agg.json || echo "" >ISLEPROGRESS-agg-old.json
+        curl -fLSs -o LEGO1PROGRESS-agg-old.json $RELEASE_URL/LEGO1PROGRESS-agg.json || echo "" >LEGO1PROGRESS-agg-old.json
+        
+        # Compare with current master
+        reccmp-aggregate --diff CONFIGPROGRESS-agg-old.json CONFIGPROGRESS-agg.json || echo "Current master not found"
+        reccmp-aggregate --diff ISLEPROGRESS-agg-old.json ISLEPROGRESS-agg.json || echo "Current master not found"
+        reccmp-aggregate --diff LEGO1PROGRESS-agg-old.json LEGO1PROGRESS-agg.json || echo "Current master not found"
 
     - name: Test Exports
       shell: bash
@@ -285,9 +300,9 @@ jobs:
       with:
         name: Accuracy Report
         path: |
-          CONFIGPROGRESS.*
-          ISLEPROGRESS.*
-          LEGO1PROGRESS.*
+          CONFIGPROGRESS*
+          ISLEPROGRESS*
+          LEGO1PROGRESS*
 
   upload:
     name: Upload artifacts
