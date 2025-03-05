@@ -137,8 +137,10 @@ jobs:
       run: |
         # Get the first 8 characters of the SHA (enough for a decent seed)
         SHA_PREFIX=$(echo "${{ github.sha }}" | cut -c 1-8)
+        ENTROPY_SEED=$((16#$SHA_PREFIX + ${{ matrix.instance }}))
 
-        python3 tools/entropy.py $((16#$SHA_PREFIX + ${{ matrix.instance }})) > entropy.h
+        echo "Seed: $ENTROPY_SEED"
+        python3 tools/entropy.py $ENTROPY_SEED > entropy.h
 
     - name: Build
       shell: cmd
