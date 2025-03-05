@@ -774,6 +774,9 @@
 // LIBRARY: BETA10 0x100fbdb0
 // _exit
 
+// GLOBAL: BETA10 0x101faf70
+// _aexit_rtn
+
 // LIBRARY: BETA10 0x10100bf0
 // _CrtDbgReport
 
@@ -782,5 +785,12 @@
 
 // GLOBAL: BETA10 0x101faf78
 // __app_type
+
+// GLOBAL: LEGO1 0x100db6e0
+// GUID_SysKeyboard
+
+// Cannot be handled right now due to anonymous pointer in struct
+// // GLOBAL: LEGO1 0x10098f80
+// c_dfDIKeyboard
 
 #endif

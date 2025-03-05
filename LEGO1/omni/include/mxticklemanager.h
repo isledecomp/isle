@@ -34,10 +34,13 @@ private:
 typedef list<MxTickleClient*> MxTickleClientPtrList;
 
 // VTABLE: LEGO1 0x100d86d8
+// VTABLE: BETA10 0x101bc9d0
 // SIZE 0x14
 class MxTickleManager : public MxCore {
 public:
+	// FUNCTION: BETA10 0x100937c0
 	MxTickleManager() {}
+
 	~MxTickleManager() override;
 
 	MxResult Tickle() override;                                                // vtable+0x08
@@ -47,6 +50,7 @@ public:
 	virtual MxTime GetClientTickleInterval(MxCore* p_client);                  // vtable+0x20
 
 	// SYNTHETIC: LEGO1 0x1005a510
+	// SYNTHETIC: BETA10 0x100962f0
 	// MxTickleManager::`scalar deleting destructor'
 
 private:
@@ -58,7 +62,11 @@ private:
 // TEMPLATE: LEGO1 0x1005a4a0
 // list<MxTickleClient *,allocator<MxTickleClient *> >::~list<MxTickleClient *,allocator<MxTickleClient *> >
 
+// TEMPLATE: BETA10 0x10093870
+// List<MxTickleClient *>::List<MxTickleClient *>
+
 // TEMPLATE: LEGO1 0x1005a530
+// TEMPLATE: BETA10 0x10096340
 // List<MxTickleClient *>::~List<MxTickleClient *>
 
 #endif // MXTICKLEMANAGER_H
