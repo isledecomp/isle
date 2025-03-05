@@ -139,7 +139,7 @@ jobs:
         SHA_PREFIX=$(echo "${{ github.sha }}" | cut -c 1-8)
         ENTROPY_SEED=$((16#$SHA_PREFIX + ${{ matrix.instance }}))
 
-        echo "Seed: $ENTROPY_SEED"
+        echo "Using seed: $ENTROPY_SEED"
         python3 tools/entropy.py $ENTROPY_SEED > entropy.h
 
     - name: Build
