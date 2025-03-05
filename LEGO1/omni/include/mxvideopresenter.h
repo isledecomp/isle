@@ -3,8 +3,8 @@
 
 #include "decomp.h"
 #include "mxbitmap.h"
+#include "mxgeometry.h"
 #include "mxmediapresenter.h"
-#include "mxrect32.h"
 
 #include <ddraw.h>
 

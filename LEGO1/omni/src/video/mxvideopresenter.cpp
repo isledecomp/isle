@@ -301,7 +301,7 @@ void MxVideoPresenter::PutFrame()
 	MxDisplaySurface* displaySurface = MVideoManager()->GetDisplaySurface();
 	MxRegion* region = MVideoManager()->GetRegion();
 	MxRect32 rect(MxPoint32(0, 0), MxSize32(GetWidth(), GetHeight()));
-	rect.AddPoint(GetLocation());
+	rect += GetLocation();
 	LPDIRECTDRAWSURFACE ddSurface = displaySurface->GetDirectDrawSurface2();
 
 	if (m_action->GetFlags() & MxDSAction::c_bit5) {

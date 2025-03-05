@@ -3,8 +3,8 @@
 
 #include "decomp.h"
 #include "mxcore.h"
+#include "mxgeometry.h"
 #include "mxlist.h"
-#include "mxrect32.h" // should be mxgeometry.h
 
 // SIZE 0x08
 class MxSegment {
