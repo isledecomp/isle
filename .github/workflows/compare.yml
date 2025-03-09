@@ -51,7 +51,7 @@ jobs:
       shell: bash
       run: |
         # Calculate instance number based on matrix inputs
-        INSTANCE = $((${{ matrix.high }} << 4 | ${{ matrix.low }}))
+        INSTANCE=$((${{ matrix.high }} << 4 | ${{ matrix.low }}))
 
         # Get the first 8 characters of the SHA (enough for a decent seed)
         SHA_PREFIX=$(echo "${{ github.sha }}" | cut -c 1-8)
