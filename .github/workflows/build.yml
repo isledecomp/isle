@@ -154,7 +154,7 @@ jobs:
        reccmp-datacmp --target LEGO1
 
   upload:
-    name: Upload build artifacts
+    name: Upload artifacts
     needs: [verify]
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}

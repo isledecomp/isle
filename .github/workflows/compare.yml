@@ -165,7 +165,7 @@ jobs:
           LEGO1PROGRESS*
 
   upload:
-    name: Upload accuracy report
+    name: Upload artifacts
     needs: [compare]
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
