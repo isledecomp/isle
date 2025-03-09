@@ -212,7 +212,7 @@ jobs:
           build/CONFIG.EXE \
           build/ISLE.EXE \
           build/LEGO1.DLL \
-          CONFIGPROGRE* \
+          CONFIGPROGRESS* \
           ISLEPROGRESS* \
           LEGO1PROGRESS*
 
