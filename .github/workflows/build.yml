@@ -134,6 +134,28 @@ jobs:
         reccmp-project detect --what original   --search-path legobin
         reccmp-project detect --what recompiled --search-path build
 
+    - name: Summarize Accuracy
+      shell: bash
+      run: |
+        reccmp-reccmp -S CONFIGPROGRESS.SVG --svg-icon assets/config.png --target CONFIG --json CONFIGPROGRESS.json
+        reccmp-reccmp -S ISLEPROGRESS.SVG --svg-icon assets/isle.png --target ISLE --json ISLEPROGRESS.json
+        reccmp-reccmp -S LEGO1PROGRESS.SVG --svg-icon assets/lego1.png --target LEGO1 --json LEGO1PROGRESS.json
+
+    - name: Compare Accuracy With Current Master
+      shell: bash
+      env:
+        RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
+      run: |
+        # Download the current master state
+        curl -fLSs -o CONFIGPROGRESS-old.json $RELEASE_URL/CONFIGPROGRESS.json || echo "" >CONFIGPROGRESS-old.json
+        curl -fLSs -o ISLEPROGRESS-old.json $RELEASE_URL/ISLEPROGRESS.json || echo "" >ISLEPROGRESS-old.json
+        curl -fLSs -o LEGO1PROGRESS-old.json $RELEASE_URL/LEGO1PROGRESS.json || echo "" >LEGO1PROGRESS-old.json
+        
+        # Compare with current master
+        reccmp-reccmp --target CONFIG --diff CONFIGPROGRESS-old.json || echo "Current master not found"
+        reccmp-reccmp --target ISLE --diff ISLEPROGRESS-old.json || echo "Current master not found"
+        reccmp-reccmp --target LEGO1 --diff LEGO1PROGRESS-old.json || echo "Current master not found"
+
     - name: Test Exports
       shell: bash
       run: |
@@ -149,9 +171,18 @@ jobs:
     - name: Check Variables
       shell: bash
       run: |
-       reccmp-datacmp --target CONFIG
-       reccmp-datacmp --target ISLE
-       reccmp-datacmp --target LEGO1
+        reccmp-datacmp --target CONFIG
+        reccmp-datacmp --target ISLE
+        reccmp-datacmp --target LEGO1
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@main
+      with:
+        name: Accuracy Report
+        path: |
+          CONFIGPROGRESS.*
+          ISLEPROGRESS.*
+          LEGO1PROGRESS.*
 
   upload:
     name: Upload artifacts
@@ -168,6 +199,10 @@ jobs:
        name: Win32
        path: build
 
+    - uses: actions/download-artifact@main
+      with:
+        name: Accuracy Report
+
     - name: Upload Continuous Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -176,4 +211,11 @@ jobs:
         ./upload.sh \
           build/CONFIG.EXE \
           build/ISLE.EXE \
-          build/LEGO1.DLL
+          build/LEGO1.DLL \
+          CONFIGPROGRESS.* \
+          ISLEPROGRESS.* \
+          LEGO1PROGRESS.*
+
+        curl -X POST -F key=$UPLOAD_KEY -F 'file=@CONFIGPROGRESS.SVG' https://legoisland.org/progress/
+        curl -X POST -F key=$UPLOAD_KEY -F 'file=@ISLEPROGRESS.SVG' https://legoisland.org/progress/
+        curl -X POST -F key=$UPLOAD_KEY -F 'file=@LEGO1PROGRESS.SVG' https://legoisland.org/progress/
