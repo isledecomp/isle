@@ -176,4 +176,4 @@ jobs:
         ./upload.sh \
           build/CONFIG.EXE \
           build/ISLE.EXE \
-          build/LEGO1.DLL \
+          build/LEGO1.DLL
