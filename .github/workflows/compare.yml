@@ -1,0 +1,190 @@
+name: Compare
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fetch-deps:
+    name: Download original binaries
+    uses: ./.github/workflows/legobin.yml
+
+  build:
+    name: 'MSVC 4.20'
+    needs: [fetch-deps]
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        low: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        high: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - uses: actions/checkout@v4
+      with:
+        repository: itsmattkc/msvc420
+        path: msvc420
+
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v2
+      with:
+        # Use minimum supported version
+        cmake-version: '3.15.x'
+
+    - name: Patch MSVC 4.2
+      run: |
+        tools/patch_c2.py msvc420/bin/C2.EXE
+
+    - name: Generate Entropy
+      shell: bash
+      run: |
+        # Calculate instance number based on matrix inputs
+        INSTANCE = $((${{ matrix.high }} << 4 | ${{ matrix.low }}))
+
+        # Get the first 8 characters of the SHA (enough for a decent seed)
+        SHA_PREFIX=$(echo "${{ github.sha }}" | cut -c 1-8)
+        ENTROPY_SEED=$((16#$SHA_PREFIX + $INSTANCE))
+
+        echo "Using seed: $ENTROPY_SEED (instance $INSTANCE)"
+        python3 tools/entropy.py $ENTROPY_SEED > entropy.h
+
+    - name: Build
+      shell: cmd
+      run: |
+        call .\msvc420\bin\VCVARS32.BAT x86
+        cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DISLE_INCLUDE_ENTROPY=ON -G "NMake Makefiles"
+        cmake --build build
+
+    - name: Restore cached original binaries
+      id: cache-original-binaries
+      uses: actions/cache/restore@v4
+      with:
+        enableCrossOsArchive: true
+        path: legobin
+        key: legobin
+        
+    - name: Install python packages
+      shell: bash
+      run: |
+        pip install -r tools/requirements.txt
+  
+    - name: Detect binaries
+      run: |
+        reccmp-project detect --what original   --search-path legobin
+        reccmp-project detect --what recompiled --search-path build
+
+    - name: Summarize Accuracy
+      shell: bash
+      run: |
+        reccmp-reccmp --target CONFIG --json CONFIGPROGRESS.json
+        reccmp-reccmp --target ISLE --json ISLEPROGRESS.json
+        reccmp-reccmp --target LEGO1 --json LEGO1PROGRESS.json
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@main
+      with:
+        name: Win32-Entropy-${{ matrix.high }}-${{ matrix.low }}
+        path: |
+          CONFIGPROGRESS.json
+          ISLEPROGRESS.json
+          LEGO1PROGRESS.json
+
+  merge-artifacts:
+    name: 'Merge entropy artifacts'
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: Win32-Entropy
+          pattern: Win32-Entropy-*
+          separate-directories: true
+          
+  compare:
+    name: Compare with master
+    needs: [build, merge-artifacts]
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@main
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - uses: actions/download-artifact@main
+      with:
+        name: Win32-Entropy
+        path: build-entropy
+
+    - name: Install python packages
+      shell: bash
+      run: |
+        pip install -r tools/requirements.txt
+
+    - name: Aggregate Accuracy
+      shell: bash
+      run: |
+        reccmp-aggregate --samples $(find build-entropy -type f -name "CONFIGPROGRESS.json") --output CONFIGPROGRESS-agg.json --html CONFIGPROGRESS-agg.html
+        reccmp-aggregate --samples $(find build-entropy -type f -name "ISLEPROGRESS.json") --output ISLEPROGRESS-agg.json --html ISLEPROGRESS-agg.html
+        reccmp-aggregate --samples $(find build-entropy -type f -name "LEGO1PROGRESS.json") --output LEGO1PROGRESS-agg.json --html LEGO1PROGRESS-agg.html
+
+    - name: Compare Aggregate Accuracy With Current Master
+      shell: bash
+      env:
+        RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
+      run: |
+        # Download the current master state
+        curl -fLSs -o CONFIGPROGRESS-agg-old.json $RELEASE_URL/CONFIGPROGRESS-agg.json || echo "" >CONFIGPROGRESS-agg-old.json
+        curl -fLSs -o ISLEPROGRESS-agg-old.json $RELEASE_URL/ISLEPROGRESS-agg.json || echo "" >ISLEPROGRESS-agg-old.json
+        curl -fLSs -o LEGO1PROGRESS-agg-old.json $RELEASE_URL/LEGO1PROGRESS-agg.json || echo "" >LEGO1PROGRESS-agg-old.json
+        
+        # Compare with current master
+        reccmp-aggregate --diff CONFIGPROGRESS-agg-old.json CONFIGPROGRESS-agg.json || echo "Current master not found"
+        reccmp-aggregate --diff ISLEPROGRESS-agg-old.json ISLEPROGRESS-agg.json || echo "Current master not found"
+        reccmp-aggregate --diff LEGO1PROGRESS-agg-old.json LEGO1PROGRESS-agg.json || echo "Current master not found"
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@main
+      with:
+        name: Accuracy Report
+        path: |
+          CONFIGPROGRESS*
+          ISLEPROGRESS*
+          LEGO1PROGRESS*
+
+  upload:
+    name: Upload accuracy report
+    needs: [compare]
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: probonopd/uploadtool
+
+    - uses: actions/download-artifact@main
+      with:
+        name: Accuracy Report
+
+    - name: Upload Continuous Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        UPLOAD_KEY: ${{ secrets.UPLOAD_KEY }}
+      run: |
+        export UPLOADTOOL_SUFFIX=accuracy
+        ./upload.sh \
+          CONFIGPROGRESS* \
+          ISLEPROGRESS* \
+          LEGO1PROGRESS*
