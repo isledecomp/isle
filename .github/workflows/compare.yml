@@ -143,7 +143,7 @@ jobs:
     - name: Compare Aggregate Accuracy With Current Master
       shell: bash
       env:
-        RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
+        RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous-accuracy
       run: |
         # Download the current master state
         curl -fLSs -o CONFIGPROGRESS-agg-old.json $RELEASE_URL/CONFIGPROGRESS-agg.json || echo "" >CONFIGPROGRESS-agg-old.json
