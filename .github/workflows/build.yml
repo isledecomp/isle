@@ -263,9 +263,9 @@ jobs:
     - name: Aggregate Accuracy
       shell: bash
       run: |
-        reccmp-aggregate --samples $(find build-entropy -type f -name "CONFIGPROGRESS.json") --output CONFIGPROGRESS-agg.json
-        reccmp-aggregate --samples $(find build-entropy -type f -name "ISLEPROGRESS.json") --output ISLEPROGRESS-agg.json
-        reccmp-aggregate --samples $(find build-entropy -type f -name "LEGO1PROGRESS.json") --output LEGO1PROGRESS-agg.json
+        reccmp-aggregate --samples $(find build-entropy -type f -name "CONFIGPROGRESS.json") --output CONFIGPROGRESS-agg.json --html CONFIGPROGRESS-agg.html
+        reccmp-aggregate --samples $(find build-entropy -type f -name "ISLEPROGRESS.json") --output ISLEPROGRESS-agg.json --html ISLEPROGRESS-agg.html
+        reccmp-aggregate --samples $(find build-entropy -type f -name "LEGO1PROGRESS.json") --output LEGO1PROGRESS-agg.json --html LEGO1PROGRESS-agg.html
 
     - name: Compare Aggregate Accuracy With Current Master
       shell: bash
