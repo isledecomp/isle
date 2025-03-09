@@ -94,8 +94,11 @@ jobs:
         name: Win32
         path: |
           build/CONFIG.EXE
+          build/CONFIG.PDB
           build/ISLE.EXE
+          build/ISLE.PDB
           build/LEGO1.DLL
+          build/LEGO1.PDB
 
   verify:
     name: Verify decomp
