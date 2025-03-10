@@ -78,4 +78,10 @@ MxBool ContainsPresenter(MxCompositePresenterList& p_presenterList, MxPresenter*
 void FUN_100b7220(MxDSAction* p_action, MxU32 p_newFlags, MxBool p_setFlags);
 MxBool KeyValueStringParse(char*, const char*, const char*);
 
+// TEMPLATE: BETA10 0x1012dfd0
+// ?Max@@YAHHH@Z
+
+// TEMPLATE: BETA10 0x1012dff0
+// ?Min@@YAHHH@Z
+
 #endif // MXUTILITIES_H

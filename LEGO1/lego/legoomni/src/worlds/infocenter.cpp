@@ -630,58 +630,37 @@ void Infocenter::InitializeBitmaps()
 
 	m_glowInfo[0].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Info_A_Bitmap");
 	assert(m_glowInfo[0].m_destCtl);
-	m_glowInfo[0].m_area.SetLeft(391);
-	m_glowInfo[0].m_area.SetTop(182);
-	m_glowInfo[0].m_area.SetRight(427);
-	m_glowInfo[0].m_area.SetBottom(230);
+	m_glowInfo[0].m_area = MxRect<MxS32>(391, 182, 427, 230);
 	m_glowInfo[0].m_unk0x04 = 3;
 
 	m_glowInfo[1].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Boat_A_Bitmap");
 	assert(m_glowInfo[1].m_destCtl);
-	m_glowInfo[1].m_area.SetLeft(304);
-	m_glowInfo[1].m_area.SetTop(225);
-	m_glowInfo[1].m_area.SetRight(350);
-	m_glowInfo[1].m_area.SetBottom(268);
+	m_glowInfo[1].m_area = MxRect<MxS32>(304, 225, 350, 268);
 	m_glowInfo[1].m_unk0x04 = 10;
 
 	m_glowInfo[2].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Race_A_Bitmap");
 	assert(m_glowInfo[1].m_destCtl); // DECOMP: intentional typo
-	m_glowInfo[2].m_area.SetLeft(301);
-	m_glowInfo[2].m_area.SetTop(133);
-	m_glowInfo[2].m_area.SetRight(347);
-	m_glowInfo[2].m_area.SetBottom(181);
+	m_glowInfo[2].m_area = MxRect<MxS32>(301, 133, 347, 181);
 	m_glowInfo[2].m_unk0x04 = 11;
 
 	m_glowInfo[3].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Pizza_A_Bitmap");
 	assert(m_glowInfo[3].m_destCtl);
-	m_glowInfo[3].m_area.SetLeft(289);
-	m_glowInfo[3].m_area.SetTop(182);
-	m_glowInfo[3].m_area.SetRight(335);
-	m_glowInfo[3].m_area.SetBottom(225);
+	m_glowInfo[3].m_area = MxRect<MxS32>(289, 182, 335, 225);
 	m_glowInfo[3].m_unk0x04 = 12;
 
 	m_glowInfo[4].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Gas_A_Bitmap");
 	assert(m_glowInfo[4].m_destCtl);
-	m_glowInfo[4].m_area.SetLeft(350);
-	m_glowInfo[4].m_area.SetTop(161);
-	m_glowInfo[4].m_area.SetRight(391);
-	m_glowInfo[4].m_area.SetBottom(209);
+	m_glowInfo[4].m_area = MxRect<MxS32>(350, 161, 391, 209);
 	m_glowInfo[4].m_unk0x04 = 13;
 
 	m_glowInfo[5].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Med_A_Bitmap");
 	assert(m_glowInfo[5].m_destCtl);
-	m_glowInfo[5].m_area.SetLeft(392);
-	m_glowInfo[5].m_area.SetTop(130);
-	m_glowInfo[5].m_area.SetRight(438);
-	m_glowInfo[5].m_area.SetBottom(176);
+	m_glowInfo[5].m_area = MxRect<MxS32>(392, 130, 438, 176);
 	m_glowInfo[5].m_unk0x04 = 14;
 
 	m_glowInfo[6].m_destCtl = (MxStillPresenter*) Find("MxStillPresenter", "Cop_A_Bitmap");
 	assert(m_glowInfo[6].m_destCtl);
-	m_glowInfo[6].m_area.SetLeft(396);
-	m_glowInfo[6].m_area.SetTop(229);
-	m_glowInfo[6].m_area.SetRight(442);
-	m_glowInfo[6].m_area.SetBottom(272);
+	m_glowInfo[6].m_area = MxRect<MxS32>(396, 229, 442, 272);
 	m_glowInfo[6].m_unk0x04 = 15;
 
 	m_frame = (MxStillPresenter*) Find("MxStillPresenter", "FrameHot_Bitmap");

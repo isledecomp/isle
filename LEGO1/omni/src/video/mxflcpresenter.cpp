@@ -70,7 +70,7 @@ void MxFlcPresenter::LoadFrame(MxStreamChunk* p_chunk)
 
 	for (MxS32 i = 0; i < rectCount; i++) {
 		MxRect32 rect(rects[i]);
-		rect.AddPoint(m_location);
+		rect += m_location;
 		MVideoManager()->InvalidateRect(rect);
 	}
 }

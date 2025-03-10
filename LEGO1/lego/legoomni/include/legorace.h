@@ -7,7 +7,7 @@
 #include "legoracemap.h"
 #include "legostate.h"
 #include "legoworld.h"
-#include "mxrect32.h"
+#include "mxgeometry.h"
 #include "mxtypes.h"
 
 class Act1State;
