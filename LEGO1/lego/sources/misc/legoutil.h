@@ -1,7 +1,7 @@
 #ifndef __LEGOUTIL_H
 #define __LEGOUTIL_H
 
-// TODO: exclude from modern compilers due to clash with mxutilities.h
+// Exclude from modern compilers due to clash with mxutilities.h
 #ifndef COMPAT_MODE
 
 template <class T>
