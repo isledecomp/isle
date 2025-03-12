@@ -148,20 +148,21 @@ void MxStillPresenter::RepeatingTickle()
 }
 
 // FUNCTION: LEGO1 0x100ba040
+// FUNCTION: BETA10 0x10142724
 void MxStillPresenter::SetPosition(MxS32 p_x, MxS32 p_y)
 {
-	MxS32 x = m_location.GetX();
-	MxS32 y = m_location.GetY();
+	MxPoint32 oldLocation(m_location);
 	m_location.SetX(p_x);
 	m_location.SetY(p_y);
 
 	if (IsEnabled()) {
-		// Most likely needs to work with MxSize32 and MxPoint32
-		MxS32 height = GetHeight() - 1;
-		MxS32 width = GetWidth() - 1;
+		MxRect32 area(0, 0, GetWidth() - 1, GetHeight() - 1);
 
-		MxRect32 rectA(x, y, width + x, height + y);
-		MxRect32 rectB(m_location.GetX(), m_location.GetY(), width + m_location.GetX(), height + m_location.GetY());
+		MxRect32 rectA(area);
+		rectA += oldLocation;
+
+		MxRect32 rectB(area);
+		rectB += m_location;
 
 		MVideoManager()->InvalidateRect(rectA);
 		MVideoManager()->UpdateView(rectA.GetLeft(), rectA.GetTop(), rectA.GetWidth(), rectA.GetHeight());

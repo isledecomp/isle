@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxcore.h"
 #include "mxcriticalsection.h"
-#include "mxpoint32.h"
+#include "mxgeometry.h"
 
 class MxCompositePresenter;
 class MxDSAction;

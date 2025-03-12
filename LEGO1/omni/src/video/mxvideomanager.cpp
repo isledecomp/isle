@@ -84,11 +84,12 @@ void MxVideoManager::Destroy(MxBool p_fromDestructor)
 }
 
 // FUNCTION: LEGO1 0x100be3e0
+// FUNCTION: BETA10 0x1012cdaa
 void MxVideoManager::UpdateRegion()
 {
 	if (m_region->IsEmpty() == FALSE) {
 		MxRect32 rect(m_region->GetBoundingRect());
-		rect.Intersect(m_videoParam.GetRect());
+		rect &= m_videoParam.GetRect();
 
 		m_displaySurface
 			->Display(rect.GetLeft(), rect.GetTop(), rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());

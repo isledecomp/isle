@@ -1,6 +1,9 @@
 #ifndef __LEGOUTIL_H
 #define __LEGOUTIL_H
 
+// Exclude from modern compilers due to clash with mxutilities.h
+#ifndef COMPAT_MODE
+
 template <class T>
 inline T Min(T p_t1, T p_t2)
 {
@@ -30,6 +33,8 @@ inline T Abs(T p_t)
 {
 	return p_t < 0 ? -p_t : p_t;
 }
+
+#endif
 
 template <class T>
 inline void Swap(T& p_t1, T& p_t2)
