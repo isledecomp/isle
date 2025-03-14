@@ -141,12 +141,13 @@ void Radio::Stop()
 }
 
 // FUNCTION: LEGO1 0x1002cbc0
+// FUNCTION: BETA10 0x100f1ce1
 MxLong Radio::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	MxDSAction action; // Unused
-	MxS32 objectId = p_param.m_clickedObjectId;
 
-	if (objectId == IsleScript::c_Radio_Ctl) {
+	switch (p_param.m_clickedObjectId) {
+	case IsleScript::c_Radio_Ctl:
 		if (m_state->IsActive()) {
 			Stop();
 		}
