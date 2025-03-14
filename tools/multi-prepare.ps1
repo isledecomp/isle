@@ -4,8 +4,9 @@ if ($args.count -lt 2) {
 }
 
 function Get-BaseSeed {
-    # Which job number this is (so each seed is unique)
-    $matrix = [int]$args[0]
+    Param (
+        [int]$Matrix
+    )
 
     # GITHUB_SHA is the commit hash. This means the entropy files will be consistent
     # unless you push a new commit.
@@ -15,11 +16,12 @@ function Get-BaseSeed {
     $base_seed = ($sha -band 0xffff0000)
 
     # Add the matrix number * 256. We can run 256 unique builds on this job.
-    return $base_seed + ($matrix -shl 8)
+    return $base_seed + ($Matrix -shl 8)
 }
 
+$MatrixNo = [int]$args[0]
 $BuildCount = [int]$args[1]
-$base_seed = Get-BaseSeed
+$base_seed = $(Get-BaseSeed -Matrix $MatrixNo)
 
 $build_ids = 0..($BuildCount - 1)
 
@@ -33,6 +35,7 @@ foreach($i in $build_ids) {
     # Create the entropy file
     $entropy_file = "entropy$i.h"
     $seed = $base_seed + $i
+
     Write-Output "Using seed: $seed (instance $i)"
     python3 tools/entropy.py $seed > $entropy_file
 
