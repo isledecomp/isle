@@ -205,13 +205,8 @@ MxLong Isle::HandleEndAction(MxEndActionNotificationParam& p_param)
 		result = m_radio.Notify(p_param);
 
 		if (result == 0) {
-			MxDSAction* action = p_param.GetAction();
-
-			// TODO: Should be signed, but worsens match
-			MxU32 script;
-
-			if (action->GetAtomId() == *g_jukeboxScript) {
-				script = action->GetObjectId();
+			if (p_param.GetAction()->GetAtomId() == *g_jukeboxScript) {
+				MxS32 script = p_param.GetAction()->GetObjectId();
 
 				if (script >= JukeboxScript::c_JBMusic1 && script <= JukeboxScript::c_JBMusic6) {
 					m_jukebox->StopAction((JukeboxScript::Script) script);
@@ -219,14 +214,14 @@ MxLong Isle::HandleEndAction(MxEndActionNotificationParam& p_param)
 				}
 			}
 			else if (m_act1state->m_planeActive) {
-				script = action->GetObjectId();
+				MxS32 script = p_param.GetAction()->GetObjectId();
 
 				if (script >= IsleScript::c_nic002pr_RunAnim && script <= IsleScript::c_nic004pr_RunAnim) {
 					m_act1state->m_planeActive = FALSE;
 				}
 			}
 			else {
-				script = action->GetObjectId();
+				MxS32 script = p_param.GetAction()->GetObjectId();
 
 				if (script == IsleScript::c_Avo917In_PlayWav ||
 					(script >= IsleScript::c_Avo900Ps_PlayWav && script <= IsleScript::c_Avo907Ps_PlayWav)) {
