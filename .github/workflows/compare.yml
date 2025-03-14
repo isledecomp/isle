@@ -10,7 +10,8 @@ on:
         description: 'How many builds to run in parallel on each job.'
         default: 4
         required: true
-        type: number
+        type: choice
+        options: [1, 2, 4, 8, 16, 32, 64]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
