@@ -2,6 +2,8 @@
 
 #include "decomp.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(MxDirectDraw, 0x880)
 
 #define RELEASE(x)                                                                                                     \
@@ -15,9 +17,11 @@ DECOMP_SIZE_ASSERT(MxDirectDraw, 0x880)
 #endif
 
 // GLOBAL: LEGO1 0x10100c68
+// GLOBAL: BETA10 0x101ff1c4
 BOOL g_isPaletteIndexed8 = 0;
 
 // FUNCTION: LEGO1 0x1009d490
+// FUNCTION: BETA10 0x1012036a
 MxDirectDraw::MxDirectDraw()
 {
 	m_pFrontBuffer = NULL;
@@ -26,6 +30,7 @@ MxDirectDraw::MxDirectDraw()
 	m_pClipper = NULL;
 	m_pPalette = NULL;
 	m_pDirectDraw = NULL;
+	m_bIsOnPrimaryDevice = TRUE;
 	m_pText1Surface = NULL;
 	m_pText2Surface = NULL;
 	m_hWndMain = NULL;
@@ -39,32 +44,31 @@ MxDirectDraw::MxDirectDraw()
 	m_pFatalErrorHandler = NULL;
 	m_pErrorHandlerArg = NULL;
 	m_pFatalErrorHandlerArg = NULL;
-	m_pCurrentDeviceModesList = NULL;
-	m_bIsOnPrimaryDevice = TRUE;
+	m_currentDevInfo = NULL;
 	m_hFont = NULL;
 }
 
 // FUNCTION: LEGO1 0x1009d530
+// FUNCTION: BETA10 0x1012048f
 MxDirectDraw::~MxDirectDraw()
 {
 	Destroy();
 
-	if (m_pCurrentDeviceModesList != NULL) {
-		delete m_pCurrentDeviceModesList;
-		m_pCurrentDeviceModesList = NULL;
+	if (m_currentDevInfo != NULL) {
+		delete m_currentDevInfo;
+		m_currentDevInfo = NULL;
 	}
 }
 
 // FUNCTION: LEGO1 0x1009d570
+// FUNCTION: BETA10 0x101204fe
 int MxDirectDraw::GetPrimaryBitDepth()
 {
-	DWORD dwRGBBitCount;
+	DWORD dwRGBBitCount = 8;
 	LPDIRECTDRAW pDDraw;
 	DDSURFACEDESC ddsd;
 
-	HRESULT result = DirectDrawCreate(NULL, &pDDraw, NULL);
-	dwRGBBitCount = 8;
-	if (!result) {
+	if (!DirectDrawCreate(NULL, &pDDraw, NULL)) {
 		memset(&ddsd, 0, sizeof(ddsd));
 		ddsd.dwSize = sizeof(ddsd);
 
@@ -78,6 +82,7 @@ int MxDirectDraw::GetPrimaryBitDepth()
 }
 
 // FUNCTION: LEGO1 0x1009d5e0
+// FUNCTION: BETA10 0x1012058c
 BOOL MxDirectDraw::Create(
 	HWND hWnd,
 	BOOL fullscreen,
@@ -90,17 +95,19 @@ BOOL MxDirectDraw::Create(
 	int paletteEntryCount
 )
 {
+	assert(m_currentDevInfo);
+
 	m_hWndMain = hWnd;
 
 	CacheOriginalPaletteEntries();
 
-	if (!RecreateDirectDraw(&m_pCurrentDeviceModesList->m_guid)) {
+	if (!RecreateDirectDraw(&m_currentDevInfo->m_guid)) {
 		return FALSE;
 	}
 
 	m_bFlipSurfaces = surface_fullscreen;
 	m_bOnlySystemMemory = onlySystemMemory;
-	m_bIsOnPrimaryDevice = !m_pCurrentDeviceModesList->m_guid;
+	m_bIsOnPrimaryDevice = m_currentDevInfo->m_guid ? FALSE : TRUE;
 
 	if (!m_bIsOnPrimaryDevice) {
 		fullscreen = TRUE;
@@ -122,6 +129,7 @@ BOOL MxDirectDraw::Create(
 }
 
 // FUNCTION: LEGO1 0x1009d690
+// FUNCTION: BETA10 0x101206ca
 BOOL MxDirectDraw::RecreateDirectDraw(GUID** ppGUID)
 {
 	RELEASE(m_pDirectDraw);
@@ -129,6 +137,7 @@ BOOL MxDirectDraw::RecreateDirectDraw(GUID** ppGUID)
 }
 
 // FUNCTION: LEGO1 0x1009d6c0
+// FUNCTION: BETA10 0x10120733
 BOOL MxDirectDraw::CacheOriginalPaletteEntries()
 {
 	HDC hdc;
@@ -142,11 +151,9 @@ BOOL MxDirectDraw::CacheOriginalPaletteEntries()
 }
 
 // FUNCTION: LEGO1 0x1009d700
+// FUNCTION: BETA10 0x1012078c
 BOOL MxDirectDraw::SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int paletteEntryCount, BOOL fullscreen)
 {
-	int reservedLowEntryCount = 10;
-	int reservedHighEntryCount = 10;
-	int arraySize = sizeOfArray(m_paletteEntries);
 	HDC hdc;
 	int i;
 
@@ -156,24 +163,26 @@ BOOL MxDirectDraw::SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int pa
 		ReleaseDC(NULL, hdc);
 	}
 
-	for (i = 0; i < reservedLowEntryCount; i++) {
+	for (i = 0; i < 10; i++) {
 		m_paletteEntries[i].peFlags = 0x80;
 	}
 
-	for (i = reservedLowEntryCount; i < 142; i++) {
+	for (; i < 142; i++) {
 		m_paletteEntries[i].peFlags = 0x44;
 	}
 
-	for (i = 142; i < arraySize - reservedHighEntryCount; i++) {
+	for (; i < 246; i++) {
 		m_paletteEntries[i].peFlags = 0x84;
 	}
 
-	for (i = 256 - reservedHighEntryCount; i < 256; i++) {
+	for (; i < 256; i++) {
 		m_paletteEntries[i].peFlags = 0x80;
 	}
 
 	if (paletteEntryCount != 0) {
-		for (i = reservedLowEntryCount; (i < paletteEntryCount) && (i < 256 - reservedHighEntryCount); i++) {
+		assert(paletteEntryCount <= (sizeof(m_paletteEntries) / sizeof(m_paletteEntries[0])));
+
+		for (i = 10; (i < paletteEntryCount) && (i < 246); i++) {
 			m_paletteEntries[i].peRed = pPaletteEntries[i].peRed;
 			m_paletteEntries[i].peGreen = pPaletteEntries[i].peGreen;
 			m_paletteEntries[i].peBlue = pPaletteEntries[i].peBlue;
@@ -194,6 +203,7 @@ BOOL MxDirectDraw::SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int pa
 }
 
 // FUNCTION: LEGO1 0x1009d800
+// FUNCTION: BETA10 0x10120971
 void MxDirectDraw::Destroy()
 {
 	DestroyButNotDirectDraw();
@@ -204,13 +214,14 @@ void MxDirectDraw::Destroy()
 
 	m_bIsOnPrimaryDevice = TRUE;
 
-	if (m_pCurrentDeviceModesList != NULL) {
-		delete m_pCurrentDeviceModesList;
-		m_pCurrentDeviceModesList = NULL;
+	if (m_currentDevInfo != NULL) {
+		delete m_currentDevInfo;
+		m_currentDevInfo = NULL;
 	}
 }
 
 // FUNCTION: LEGO1 0x1009d860
+// FUNCTION: BETA10 0x10120a18
 void MxDirectDraw::DestroyButNotDirectDraw()
 {
 	RestoreOriginalPaletteEntries();
@@ -232,6 +243,7 @@ void MxDirectDraw::DestroyButNotDirectDraw()
 }
 
 // FUNCTION: LEGO1 0x1009d920
+// FUNCTION: BETA10 0x10120b9e
 void MxDirectDraw::FUN_1009d920()
 {
 	RestoreOriginalPaletteEntries();
@@ -244,8 +256,11 @@ void MxDirectDraw::FUN_1009d920()
 }
 
 // FUNCTION: LEGO1 0x1009d960
+// FUNCTION: BETA10 0x10120d61
 BOOL MxDirectDraw::DDInit(BOOL fullscreen)
 {
+	assert(m_pDirectDraw);
+
 	HRESULT result;
 
 	if (fullscreen) {
@@ -268,12 +283,15 @@ BOOL MxDirectDraw::DDInit(BOOL fullscreen)
 }
 
 // FUNCTION: LEGO1 0x1009d9d0
+// FUNCTION: BETA10 0x10120e45
 BOOL MxDirectDraw::IsSupportedMode(int width, int height, int bpp)
 {
 	DeviceModesInfo::Mode mode = {width, height, bpp};
 
-	for (int i = 0; i < m_pCurrentDeviceModesList->m_count; i++) {
-		if (m_pCurrentDeviceModesList->m_modeArray[i] == mode) {
+	assert(m_currentDevInfo);
+
+	for (int i = 0; i < m_currentDevInfo->m_count; i++) {
+		if (m_currentDevInfo->m_modeArray[i] == mode) {
 			return TRUE;
 		}
 	}
@@ -282,6 +300,7 @@ BOOL MxDirectDraw::IsSupportedMode(int width, int height, int bpp)
 }
 
 // FUNCTION: LEGO1 0x1009da20
+// FUNCTION: BETA10 0x10120efb
 void EnableResizing(HWND p_hwnd, BOOL p_flag)
 {
 	static DWORD g_dwStyle;
@@ -298,17 +317,17 @@ void EnableResizing(HWND p_hwnd, BOOL p_flag)
 }
 
 // FUNCTION: LEGO1 0x1009da80
+// FUNCTION: BETA10 0x10120f68
 BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
 {
 	HRESULT result;
 
 	if (m_bFullScreen) {
-		LPDIRECTDRAW lpDD;
-
 		EnableResizing(m_hWndMain, FALSE);
 
+#ifndef BETA10
 		if (!m_bIsOnPrimaryDevice) {
-			lpDD = NULL;
+			LPDIRECTDRAW lpDD = NULL;
 			result = DirectDrawCreate(0, &lpDD, 0);
 			if (result == DD_OK) {
 				result = lpDD->SetCooperativeLevel(m_hWndMain, DDSCL_FULLSCREEN | DDSCL_EXCLUSIVE | DDSCL_ALLOWREBOOT);
@@ -317,11 +336,12 @@ BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
 				}
 			}
 		}
+#endif
 
 		if (!IsSupportedMode(width, height, bpp)) {
-			width = m_pCurrentDeviceModesList->m_modeArray[0].width;
-			height = m_pCurrentDeviceModesList->m_modeArray[0].height;
-			bpp = m_pCurrentDeviceModesList->m_modeArray[0].bitsPerPixel;
+			width = m_currentDevInfo->m_modeArray[0].width;
+			height = m_currentDevInfo->m_modeArray[0].height;
+			bpp = m_currentDevInfo->m_modeArray[0].bitsPerPixel;
 		}
 
 		m_bIgnoreWMSIZE = TRUE;
@@ -412,20 +432,29 @@ BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
 	}
 
 	// create debug text only in windowed mode?
-	return m_bFullScreen || CreateTextSurfaces();
+	if (!m_bFullScreen) {
+		if (!CreateTextSurfaces()) {
+			return FALSE;
+		}
+	}
+
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x1009dd80
+// FUNCTION: BETA10 0x1012137f
 HRESULT MxDirectDraw::CreateDDSurface(
 	LPDDSURFACEDESC p_lpDDSurfDesc,
 	LPDIRECTDRAWSURFACE FAR* p_lpDDSurface,
 	IUnknown FAR* p_pUnkOuter
 )
 {
-	return m_pDirectDraw->CreateSurface(p_lpDDSurfDesc, p_lpDDSurface, p_pUnkOuter);
+	HRESULT res = m_pDirectDraw->CreateSurface(p_lpDDSurfDesc, p_lpDDSurface, p_pUnkOuter);
+	return res;
 }
 
 // FUNCTION: LEGO1 0x1009dda0
+// FUNCTION: BETA10 0x101213bb
 BOOL MxDirectDraw::GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSURFACE lpDDSurf)
 {
 	HRESULT result;
@@ -441,6 +470,7 @@ BOOL MxDirectDraw::GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSU
 }
 
 // FUNCTION: LEGO1 0x1009ddf0
+// FUNCTION: BETA10 0x10121430
 BOOL MxDirectDraw::DDCreateSurfaces()
 {
 	HRESULT result;
@@ -518,13 +548,14 @@ BOOL MxDirectDraw::DDCreateSurfaces()
 }
 
 // FUNCTION: LEGO1 0x1009e020
+// FUNCTION: BETA10 0x10121700
 void MxDirectDraw::FUN_1009e020()
 {
 	HRESULT result;
 	byte* line;
 	DDSURFACEDESC ddsd;
-	int j;
 	int count = m_bFlipSurfaces ? 2 : 1;
+	int value = 0;
 
 	for (int i = 0; i < count; i++) {
 		memset(&ddsd, 0, sizeof(ddsd));
@@ -543,8 +574,8 @@ void MxDirectDraw::FUN_1009e020()
 
 		// clear backBuffer
 		line = (byte*) ddsd.lpSurface;
-		for (j = ddsd.dwHeight; j--;) {
-			memset(line, 0, ddsd.dwWidth);
+		for (int j = ddsd.dwHeight; j--;) {
+			memset(line, value, ddsd.dwWidth);
 			line += ddsd.lPitch;
 		}
 
@@ -557,6 +588,7 @@ void MxDirectDraw::FUN_1009e020()
 }
 
 // FUNCTION: LEGO1 0x1009e110
+// FUNCTION: BETA10 0x101219de
 BOOL MxDirectDraw::TextToTextSurface(const char* text, IDirectDrawSurface* pSurface, SIZE& textSizeOnSurface)
 {
 	HRESULT result;
@@ -589,18 +621,21 @@ BOOL MxDirectDraw::TextToTextSurface(const char* text, IDirectDrawSurface* pSurf
 }
 
 // FUNCTION: LEGO1 0x1009e210
+// FUNCTION: BETA10 0x10121aea
 BOOL MxDirectDraw::TextToTextSurface1(const char* text)
 {
 	return TextToTextSurface(text, m_pText1Surface, m_text1SizeOnSurface);
 }
 
 // FUNCTION: LEGO1 0x1009e230
+// FUNCTION: BETA10 0x10121b1e
 BOOL MxDirectDraw::TextToTextSurface2(const char* text)
 {
 	return TextToTextSurface(text, m_pText2Surface, m_text2SizeOnSurface);
 }
 
 // FUNCTION: LEGO1 0x1009e250
+// FUNCTION: BETA10 0x10121b52
 BOOL MxDirectDraw::CreateTextSurfaces()
 {
 	HRESULT result;
@@ -680,6 +715,7 @@ BOOL MxDirectDraw::CreateTextSurfaces()
 }
 
 // FUNCTION: LEGO1 0x1009e4d0
+// FUNCTION: BETA10 0x10121e87
 BOOL MxDirectDraw::RestoreSurfaces()
 {
 	HRESULT result;
@@ -738,6 +774,7 @@ BOOL MxDirectDraw::RestoreSurfaces()
 }
 
 // FUNCTION: LEGO1 0x1009e5e0
+// FUNCTION: BETA10 0x10122087
 BOOL MxDirectDraw::CreateZBuffer(DWORD memorytype, DWORD depth)
 {
 	HRESULT result;                // eax
@@ -769,6 +806,7 @@ BOOL MxDirectDraw::CreateZBuffer(DWORD memorytype, DWORD depth)
 }
 
 // FUNCTION: LEGO1 0x1009e6a0
+// FUNCTION: BETA10 0x10122166
 int MxDirectDraw::Pause(BOOL p_pause)
 {
 	if (p_pause) {
@@ -811,6 +849,7 @@ int MxDirectDraw::Pause(BOOL p_pause)
 }
 
 // FUNCTION: LEGO1 0x1009e750
+// FUNCTION: BETA10 0x101223c9
 BOOL MxDirectDraw::RestorePaletteEntries()
 {
 
@@ -831,6 +870,7 @@ BOOL MxDirectDraw::RestorePaletteEntries()
 }
 
 // FUNCTION: LEGO1 0x1009e7a0
+// FUNCTION: BETA10 0x10122458
 BOOL MxDirectDraw::RestoreOriginalPaletteEntries()
 {
 	if (m_bPrimaryPalettized) {
@@ -854,6 +894,7 @@ BOOL MxDirectDraw::RestoreOriginalPaletteEntries()
 }
 
 // FUNCTION: LEGO1 0x1009e7f0
+// FUNCTION: BETA10 0x101224d9
 int MxDirectDraw::FlipToGDISurface()
 {
 
@@ -871,22 +912,27 @@ int MxDirectDraw::FlipToGDISurface()
 }
 
 // FUNCTION: LEGO1 0x1009e830
+// FUNCTION: BETA10 0x101225b9
 void MxDirectDraw::Error(const char* p_message, int p_error)
 {
-	// at LEGO1 0x10100c70, needs no annotation
+	// ~GLOBAL: LEGO1 0x10100c70
+	// ~GLOBAL: BETA10 0x101ff1cc
 	static BOOL g_isInsideError = FALSE;
 
-	if (!g_isInsideError) {
-		g_isInsideError = TRUE;
-		Destroy();
-		if (m_pErrorHandler) {
-			m_pErrorHandler(p_message, p_error, m_pErrorHandlerArg);
-		}
-		g_isInsideError = FALSE;
+	if (g_isInsideError) {
+		return;
 	}
+
+	g_isInsideError = TRUE;
+	Destroy();
+	if (m_pErrorHandler) {
+		m_pErrorHandler(p_message, p_error, m_pErrorHandlerArg);
+	}
+	g_isInsideError = FALSE;
 }
 
 // FUNCTION: LEGO1 0x1009e880
+// FUNCTION: BETA10 0x10122630
 const char* MxDirectDraw::ErrorToString(HRESULT p_error)
 {
 	switch (p_error) {
