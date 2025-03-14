@@ -5,6 +5,12 @@ on:
     branches:
       - master
   workflow_dispatch:
+    inputs:
+      builds_per_job:
+        description: 'How many builds to run in parallel on each job.'
+        default: 4
+        required: true
+        type: number
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -15,14 +21,40 @@ jobs:
     name: Download original binaries
     uses: ./.github/workflows/legobin.yml
 
+  reccmp:
+    name: Setup python environment
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    # The typical cache key would include a hash on requirements.txt.
+    # We currently run reccmp from latest so we would have to manually purge it.
+    # The goal is simply to restore the cache across entropy build jobs.
+    - name: Cache venv
+      uses: actions/cache@v4
+      with:
+        key: venv-entropy-${{ github.run_id }}
+        path: .venv
+
+    - name: Install python packages
+      run: |
+        python -m venv .venv
+        .venv\Scripts\Activate
+        pip install -r tools/requirements.txt
+
   build:
     name: 'MSVC 4.20'
-    needs: [fetch-deps]
+    needs: [fetch-deps, reccmp]
     runs-on: windows-latest
     strategy:
       matrix:
-        high: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-        low: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        job: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        builds:
+          - ${{ inputs.builds_per_job && inputs.builds_per_job || 4 }}
 
     steps:
     - uses: actions/checkout@v4
@@ -46,26 +78,6 @@ jobs:
       run: |
         tools/patch_c2.py msvc420/bin/C2.EXE
 
-    - name: Generate Entropy
-      shell: bash
-      run: |
-        # Calculate instance number based on matrix inputs
-        INSTANCE=$((${{ matrix.high }} << 4 | ${{ matrix.low }}))
-
-        # Get the first 8 characters of the SHA (enough for a decent seed)
-        SHA_PREFIX=$(echo "${{ github.sha }}" | cut -c 1-8)
-        ENTROPY_SEED=$((16#$SHA_PREFIX + $INSTANCE))
-
-        echo "Using seed: $ENTROPY_SEED (instance $INSTANCE)"
-        python3 tools/entropy.py $ENTROPY_SEED > entropy.h
-
-    - name: Build
-      shell: cmd
-      run: |
-        call .\msvc420\bin\VCVARS32.BAT x86
-        cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DISLE_INCLUDE_ENTROPY=ON -G "NMake Makefiles"
-        cmake --build build
-
     - name: Restore cached original binaries
       id: cache-original-binaries
       uses: actions/cache/restore@v4
@@ -73,32 +85,47 @@ jobs:
         enableCrossOsArchive: true
         path: legobin
         key: legobin
-        
-    - name: Install python packages
-      shell: bash
-      run: |
-        pip install -r tools/requirements.txt
-  
-    - name: Detect binaries
-      run: |
-        reccmp-project detect --what original   --search-path legobin
-        reccmp-project detect --what recompiled --search-path build
 
-    - name: Summarize Accuracy
-      shell: bash
+    - name: Install python packages
       run: |
-        reccmp-reccmp --target CONFIG --json CONFIGPROGRESS.json
-        reccmp-reccmp --target ISLE --json ISLEPROGRESS.json
-        reccmp-reccmp --target LEGO1 --json LEGO1PROGRESS.json
+        python -m venv .venv
+        .venv\Scripts\Activate
+        echo ($env:VIRTUAL_ENV + "\Scripts") >> $env:GITHUB_PATH
+        echo ("VIRTUAL_ENV=" + $env:VIRTUAL_ENV) >> $env:GITHUB_ENV
+
+    - name: Restore cached virtualenv
+      uses: actions/cache@v4
+      with:
+        key: venv-entropy-${{ github.run_id }}
+        path: .venv
+  
+    - name: Prepare builds
+      shell: pwsh
+      run: |
+        cmd /c "call `".\msvc420\bin\VCVARS32.BAT`" x86 && set > %temp%\vcvars32.txt"
+        Get-Content "$env:temp\vcvars32.txt" | Foreach-Object { if ($_ -match "^(.*?)=(.*)$") { Set-Content "env:\$($matches[1])" $matches[2] } }
+        .\tools\multi-prepare.ps1 ${{ matrix.job }} ${{ matrix.builds }}
+
+    - name: Run builds
+      shell: pwsh
+      run: |
+        cmd /c "call `".\msvc420\bin\VCVARS32.BAT`" x86 && set > %temp%\vcvars32.txt"
+        Get-Content "$env:temp\vcvars32.txt" | Foreach-Object { if ($_ -match "^(.*?)=(.*)$") { Set-Content "env:\$($matches[1])" $matches[2] } }
+        .\tools\multi-build.ps1 ${{ matrix.builds }}
+
+    - name: Analyze builds
+      shell: pwsh
+      run: |
+        .\tools\multi-analyze.ps1 ${{ matrix.builds }}
 
     - name: Upload Artifact
       uses: actions/upload-artifact@main
       with:
-        name: Win32-Entropy-${{ matrix.high }}-${{ matrix.low }}
+        name: Win32-Entropy-${{ matrix.job }}
         path: |
-          CONFIGPROGRESS.json
-          ISLEPROGRESS.json
-          LEGO1PROGRESS.json
+          CONFIGPROGRESS*
+          ISLEPROGRESS*
+          LEGO1PROGRESS*
 
   merge-artifacts:
     name: 'Merge entropy artifacts'
@@ -129,16 +156,24 @@ jobs:
         path: build-entropy
 
     - name: Install python packages
-      shell: bash
       run: |
-        pip install -r tools/requirements.txt
+        python -m venv .venv
+        .venv\Scripts\Activate
+        echo ($env:VIRTUAL_ENV + "\Scripts") >> $env:GITHUB_PATH
+        echo ("VIRTUAL_ENV=" + $env:VIRTUAL_ENV) >> $env:GITHUB_ENV
+
+    - name: Restore cached virtualenv
+      uses: actions/cache@v4
+      with:
+        key: venv-entropy-${{ github.run_id }}
+        path: .venv
 
     - name: Aggregate Accuracy
       shell: bash
       run: |
-        reccmp-aggregate --samples $(find build-entropy -type f -name "CONFIGPROGRESS.json") --output CONFIGPROGRESS-agg.json --html CONFIGPROGRESS-agg.html
-        reccmp-aggregate --samples $(find build-entropy -type f -name "ISLEPROGRESS.json") --output ISLEPROGRESS-agg.json --html ISLEPROGRESS-agg.html
-        reccmp-aggregate --samples $(find build-entropy -type f -name "LEGO1PROGRESS.json") --output LEGO1PROGRESS-agg.json --html LEGO1PROGRESS-agg.html
+        reccmp-aggregate --samples $(find build-entropy -type f -name "CONFIGPROGRESS*.json") --output CONFIGPROGRESS-agg.json --html CONFIGPROGRESS-agg.html
+        reccmp-aggregate --samples $(find build-entropy -type f -name "ISLEPROGRESS*.json") --output ISLEPROGRESS-agg.json --html ISLEPROGRESS-agg.html
+        reccmp-aggregate --samples $(find build-entropy -type f -name "LEGO1PROGRESS*.json") --output LEGO1PROGRESS-agg.json --html LEGO1PROGRESS-agg.html
 
     - name: Compare Aggregate Accuracy With Current Master
       shell: bash
