@@ -543,11 +543,12 @@ void Isle::Enable(MxBool p_enable)
 		m_act1state->PlaceActors();
 
 		if (UserActor() != NULL && UserActor()->GetActorId() != LegoActor::c_none) {
-			// TODO: Match, most likely an inline function
-			MxS32 targetEntityId = (UserActor()->GetActorId() == 1) + 250;
+			IsleScript::Script noPizzaSign = UserActor()->GetActorId() == LegoActor::c_pepper
+												 ? IsleScript::c_NoPizaz_Texture
+												 : IsleScript::c_NoPizza_Texture;
 
-			if (targetEntityId != -1) {
-				InvokeAction(Extra::e_start, *g_isleScript, targetEntityId, NULL);
+			if (noPizzaSign != IsleScript::c_noneIsle) {
+				InvokeAction(Extra::e_start, *g_isleScript, noPizzaSign, NULL);
 			}
 		}
 
