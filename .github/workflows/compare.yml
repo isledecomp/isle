@@ -16,12 +16,34 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  # Default to 16 builds per job for push event.
+  BUILDS: ${{ inputs.builds_per_job && inputs.builds_per_job || 16 }}
+
 jobs:
+  param-check:
+    name: Verify builds parameter
+    runs-on: ubuntu-latest
+    outputs:
+      builds: ${{ steps.verify.outputs.builds }}
+    steps:
+      - id: verify
+        run: |
+          if (( ${{ env.BUILDS }} < 0 || ${{ env.BUILDS }} > 64 )); then
+            echo "Invalid number of builds!"
+            exit 1
+          else
+            echo "Builds per job '${{ env.BUILDS }}' OK."
+            echo "builds=${{ env.BUILDS }}" >> $GITHUB_OUTPUT
+          fi
+
   fetch-deps:
+    needs: param-check
     name: Download original binaries
     uses: ./.github/workflows/legobin.yml
 
   reccmp:
+    needs: param-check
     name: Setup python environment
     runs-on: windows-latest
     steps:
@@ -48,13 +70,13 @@ jobs:
 
   build:
     name: 'MSVC 4.20'
-    needs: [fetch-deps, reccmp]
+    needs: [param-check, fetch-deps, reccmp]
     runs-on: windows-latest
     strategy:
       matrix:
         job: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
         builds:
-          - ${{ inputs.builds_per_job && inputs.builds_per_job || 4 }}
+          - ${{ needs.param-check.output.builds }}
 
     steps:
     - uses: actions/checkout@v4
