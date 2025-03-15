@@ -296,9 +296,14 @@ void MxControlPresenter::Enable(MxBool p_enable)
 // FUNCTION: LEGO1 0x100448a0
 MxBool MxControlPresenter::HasTickleStatePassed(TickleState p_tickleState)
 {
-	MxCompositePresenterList::iterator it = m_list.begin();
-	for (MxS16 i = m_unk0x4e; i > 0; i--, it++) {
-	}
+	MxCompositePresenterList::const_iterator it = m_list.begin();
+
+#ifdef COMPAT_MODE
+	advance(it, m_unk0x4e);
+#else
+	// Uses forward iterator logic instead of bidrectional for some reason.
+	_Advance(it, m_unk0x4e, forward_iterator_tag());
+#endif
 
 	return (*it)->HasTickleStatePassed(p_tickleState);
 }
