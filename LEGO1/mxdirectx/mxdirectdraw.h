@@ -7,6 +7,7 @@
 #include <windows.h>
 
 // VTABLE: LEGO1 0x100db818
+// VTABLE: BETA10 0x101c1b10
 // SIZE 0x880
 class MxDirectDraw {
 public:
@@ -32,10 +33,20 @@ public:
 	virtual void DestroyButNotDirectDraw(); // vtable+0x0c
 
 	IDirectDraw* DirectDraw() { return m_pDirectDraw; }
+
+	// FUNCTION: BETA10 0x100d8ab0
 	IDirectDrawSurface* FrontBuffer() { return m_pFrontBuffer; }
+
+	// FUNCTION: BETA10 0x100d8ae0
 	IDirectDrawSurface* BackBuffer() { return m_pBackBuffer; }
+
+	// FUNCTION: BETA10 0x100d8b10
 	IDirectDrawClipper* Clipper() { return m_pClipper; }
 
+	// FUNCTION: BETA10 0x1011c190
+	DeviceModesInfo::Mode* CurrentMode() { return &m_currentMode; }
+
+	// FUNCTION: BETA10 0x1011c170
 	BOOL IsFullScreen() { return m_bFullScreen; }
 
 	BOOL IsSupportedMode(int width, int height, int bpp);
@@ -72,6 +83,7 @@ protected:
 	void FUN_1009d920();
 
 	// SYNTHETIC: LEGO1 0x1009d510
+	// SYNTHETIC: BETA10 0x10122f80
 	// MxDirectDraw::`scalar deleting destructor'
 
 protected:
@@ -102,7 +114,7 @@ protected:
 	void* m_pErrorHandlerArg;                   // 0x864
 	void* m_pFatalErrorHandlerArg;              // 0x868
 	int m_pauseCount;                           // 0x86c
-	DeviceModesInfo* m_pCurrentDeviceModesList; // 0x870
+	DeviceModesInfo* m_currentDevInfo;          // 0x870
 	DeviceModesInfo::Mode m_currentMode;        // 0x874
 };
 

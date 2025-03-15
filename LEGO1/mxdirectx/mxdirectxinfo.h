@@ -10,6 +10,7 @@
 struct DeviceModesInfo {
 	// SIZE 0x0c
 	struct Mode {
+		// FUNCTION: BETA10 0x10122fc0
 		int operator==(const Mode& p_mode) const
 		{
 			return ((width == p_mode.width) && (height == p_mode.height) && (bitsPerPixel == p_mode.bitsPerPixel));
