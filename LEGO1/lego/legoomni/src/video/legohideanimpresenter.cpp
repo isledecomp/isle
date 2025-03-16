@@ -118,8 +118,7 @@ void LegoHideAnimPresenter::FUN_1006db60(LegoTreeNode* p_node, LegoTime p_time)
 
 		if (boundary != NULL) {
 			newB = data->FUN_100a0990(p_time);
-			boundary->GetFlag0x10();
-			// TODO: Match
+			previousB = boundary->GetFlag0x10();
 			boundary->SetFlag0x10(newB);
 		}
 	}
