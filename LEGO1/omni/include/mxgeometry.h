@@ -369,7 +369,6 @@ public:
 	MxRect32(MxS32 p_l, MxS32 p_t, MxS32 p_r, MxS32 p_b) : MxRect<MxS32>(p_l, p_t, p_r, p_b) {}
 
 #ifndef COMPAT_MODE
-	// FUNCTION: LEGO1 0x100b6fc0
 	// FUNCTION: BETA10 0x10137060
 	MxRect32(MxPoint32& p_p, MxSize32& p_s) : MxRect<MxS32>(p_p, p_s) {}
 #else
@@ -406,6 +405,7 @@ public:
 // TEMPLATE: BETA10 0x10031800
 // ??0?$MxRect@H@@QAE@XZ
 
+// TEMPLATE: LEGO1 0x100b6fc0
 // TEMPLATE: BETA10 0x10031860
 // ??0?$MxRect@H@@QAE@ABV?$MxPoint@H@@ABV?$MxSize@H@@@Z
 
