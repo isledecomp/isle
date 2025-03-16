@@ -87,7 +87,7 @@ void MxStreamController::AddSubscriber(MxDSSubscriber* p_subscriber)
 // FUNCTION: BETA10 0x1014e7b4
 void MxStreamController::RemoveSubscriber(MxDSSubscriber* p_subscriber)
 {
-	m_subscribers.Remove(p_subscriber);
+	m_subscribers.remove(p_subscriber);
 }
 
 // FUNCTION: LEGO1 0x100c1690
