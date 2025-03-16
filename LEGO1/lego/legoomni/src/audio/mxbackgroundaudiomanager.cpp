@@ -163,6 +163,7 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 }
 
 // FUNCTION: LEGO1 0x1007f0e0
+// FUNCTION: BETA10 0x100e8d8d
 void MxBackgroundAudioManager::FadeInOrFadeOut()
 {
 	MxS32 volume, compare;
@@ -178,12 +179,10 @@ void MxBackgroundAudioManager::FadeInOrFadeOut()
 		}
 
 		if (volume < compare) {
-			volume = Min(volume + m_speed, compare);
-			m_unk0xa0->SetVolume(volume);
+			m_unk0xa0->SetVolume(volume + m_speed < compare ? volume + m_speed : compare);
 		}
 		else if (compare < volume) {
-			volume = Max(volume - m_speed, compare);
-			m_unk0xa0->SetVolume(volume);
+			m_unk0xa0->SetVolume(volume - m_speed > compare ? volume - m_speed : compare);
 		}
 		else {
 			m_unk0xa0->SetVolume(volume);
