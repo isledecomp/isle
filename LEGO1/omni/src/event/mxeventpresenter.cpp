@@ -8,6 +8,8 @@
 #include "mxmisc.h"
 #include "mxvariabletable.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(MxEventPresenter, 0x54);
 
 // FUNCTION: LEGO1 0x100c2b70
@@ -90,6 +92,7 @@ void MxEventPresenter::StartingTickle()
 }
 
 // FUNCTION: LEGO1 0x100c2ef0
+// FUNCTION: BETA10 0x10152d26
 MxResult MxEventPresenter::PutData()
 {
 	AUTOLOCK(m_criticalSection);
@@ -102,10 +105,15 @@ MxResult MxEventPresenter::PutData()
 					const char* data = (const char*) m_currentChunk->GetData();
 					MxVariableTable* variableTable = VariableTable();
 
-					const char* key = data;
-					const char* value = &data[strlen(data) + 1];
-					strlen(value);
-					variableTable->SetVariable(key, value);
+					const char* name = data;
+					assert(name);
+					data += strlen(data) + 1;
+
+					const char* value = data;
+					assert(value);
+					data += strlen(data) + 1;
+
+					variableTable->SetVariable(name, value);
 				}
 
 				if (m_currentTickleState == e_streaming) {
