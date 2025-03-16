@@ -189,6 +189,7 @@ public:
 	// FUNCTION: BETA10 0x1005abc0
 	LegoU16 GetUnknown0x20() { return m_unk0x20; }
 
+	// FUNCTION: BETA10 0x1005d5c0
 	LegoU16 GetUnknown0x22() { return m_unk0x22; }
 
 	// FUNCTION: BETA10 0x10073b80
@@ -222,6 +223,8 @@ public:
 	{
 		return CreateLocalTransform((LegoFloat) p_time, p_matrix);
 	}
+
+	// FUNCTION: BETA10 0x1005d580
 	LegoBool FUN_100a0990(LegoTime p_time) { return FUN_100a0990((LegoFloat) p_time); }
 
 	inline static void GetTranslation(

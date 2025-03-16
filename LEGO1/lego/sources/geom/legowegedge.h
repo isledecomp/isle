@@ -45,7 +45,15 @@ public:
 	LegoS32 VTable0x04() override; // vtable+0x04
 
 	// FUNCTION: BETA10 0x100270c0
-	LegoU32 GetFlag0x10() { return m_flags & c_bit5 ? FALSE : TRUE; }
+	LegoU32 GetFlag0x10()
+	{
+		if (m_flags & c_bit5) {
+			return FALSE;
+		}
+		else {
+			return TRUE;
+		}
+	}
 
 	// TODO: Other BETA10 reference at 0x1001c9e0, not sure what is going on
 	// FUNCTION: BETA10 0x1001ff80
@@ -57,6 +65,7 @@ public:
 	// FUNCTION: BETA10 0x1001c9b0
 	const LegoChar* GetName() { return m_name; }
 
+	// FUNCTION: BETA10 0x1005d5f0
 	void SetFlag0x10(LegoU32 p_disable)
 	{
 		if (p_disable) {
