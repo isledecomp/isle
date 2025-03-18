@@ -427,6 +427,7 @@ function(add_lego_libraries NAME)
 
   # Link libraries
   target_link_libraries(${NAME} PRIVATE
+    ${ARG_LINK_LIBRARIES}
     dinput
     misc${ARG_SUFFIX}
     geom${ARG_SUFFIX}
@@ -459,7 +460,7 @@ endfunction()
 
 set(lego1_link_libraries )
 if (ISLE_USE_SMARTHEAP)
-  list(APPEND lego1_link_libraries SmartHeap::SmartHeap)
+  list(APPEND lego1_link_libraries SmartHeap::SmartHeap libcmt)
 endif()
 
 if(ISLE_BUILD_LEGO1)
