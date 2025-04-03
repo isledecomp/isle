@@ -5,7 +5,6 @@
 #include "mxcompositepresenter.h"
 
 class LegoControlManagerNotificationParam;
-class MxVideoPresenter;
 
 // VTABLE: LEGO1 0x100d7b88
 // VTABLE: BETA10 0x101bf5d0
@@ -48,18 +47,18 @@ public:
 	virtual void VTable0x6c(MxS16 p_unk0x4e);                        // vtable+0x6c
 
 	MxBool FUN_10044480(LegoControlManagerNotificationParam* p_param, MxPresenter* p_presenter);
-	MxBool FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* p_presenter);
+	MxBool FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_presenter);
 
 	MxS16 GetUnknown0x4e() { return m_unk0x4e; }
 
 private:
-	undefined2 m_unk0x4c; // 0x4c
-	MxS16 m_unk0x4e;      // 0x4e
-	MxBool m_unk0x50;     // 0x50
-	undefined2 m_unk0x52; // 0x52
-	undefined2 m_unk0x54; // 0x54
-	undefined2 m_unk0x56; // 0x56
-	MxS16* m_unk0x58;     // 0x58
+	MxS16 m_unk0x4c;  // 0x4c
+	MxS16 m_unk0x4e;  // 0x4e
+	MxBool m_unk0x50; // 0x50
+	MxS16 m_unk0x52;  // 0x52
+	MxS16 m_unk0x54;  // 0x54
+	MxS16 m_unk0x56;  // 0x56
+	MxS16* m_states;  // 0x58
 };
 
 // SYNTHETIC: LEGO1 0x100440f0

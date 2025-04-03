@@ -144,12 +144,13 @@ void LegoControlManager::FUN_100293c0(MxU32 p_objectId, const char* p_atom, MxS1
 }
 
 // FUNCTION: LEGO1 0x100294e0
+// FUNCTION: BETA10 0x1007c92f
 MxControlPresenter* LegoControlManager::FUN_100294e0(MxS32 p_x, MxS32 p_y)
 {
 	if (m_presenterList) {
 		MxPresenterListCursor cursor(m_presenterList);
 		MxPresenter* control;
-		MxVideoPresenter* presenter = (MxVideoPresenter*) VideoManager()->GetPresenterAt(p_x, p_y);
+		MxPresenter* presenter = VideoManager()->GetPresenterAt(p_x, p_y);
 
 		if (presenter) {
 			while (cursor.Next(control)) {
