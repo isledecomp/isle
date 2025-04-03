@@ -84,7 +84,7 @@ MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_pre
 		assert(map && map->IsA("MxStillPresenter"));
 
 		if (presenter == map || map->GetDisplayZ() < presenter->GetDisplayZ()) {
-			if (presenter->VTable0x7c()) {
+			if (map->VTable0x7c()) {
 				MxRect32 rect(0, 0, map->GetWidth() - 1, map->GetHeight() - 1);
 				rect += map->GetLocation();
 
