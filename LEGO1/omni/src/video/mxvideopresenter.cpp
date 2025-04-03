@@ -15,16 +15,11 @@ DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0x0c);
 MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 {
 	m_width = p_bitmap.GetBmiWidth();
-	// DECOMP: ECX becomes word-sized if these are not two separate actions.
-	MxLong height = p_bitmap.GetBmiHeightAbs();
-	m_height = height;
+	m_height = p_bitmap.GetBmiHeightAbs();
 
 	MxS32 size = ((m_width * m_height) / 8) + 1;
 	m_bitmask = new MxU8[size];
 	memset(m_bitmask, 0, size);
-
-	MxU32 rowsBeforeTop;
-	MxU8* bitmapSrcPtr;
 
 	// The goal here is to enable us to walk through the bitmap's rows
 	// in order, regardless of the orientation. We want to end up at the
@@ -34,37 +29,13 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 	// Reminder: Negative biHeight means this is a top-down DIB.
 	// Otherwise it is bottom-up.
 
-	switch (p_bitmap.GetBmiHeader()->biCompression) {
-	case BI_RGB: {
-		if (p_bitmap.GetBmiHeight() < 0) {
-			rowsBeforeTop = 0;
-		}
-		else {
-			rowsBeforeTop = p_bitmap.GetBmiHeightAbs() - 1;
-		}
-		bitmapSrcPtr = p_bitmap.GetImage() + (p_bitmap.GetBmiStride() * rowsBeforeTop);
-		break;
-	}
-	case BI_RGB_TOPDOWN:
-		bitmapSrcPtr = p_bitmap.GetImage();
-		break;
-	default: {
-		if (p_bitmap.GetBmiHeight() < 0) {
-			rowsBeforeTop = 0;
-		}
-		else {
-			rowsBeforeTop = p_bitmap.GetBmiHeightAbs() - 1;
-		}
-		bitmapSrcPtr = p_bitmap.GetImage() + (p_bitmap.GetBmiStride() * rowsBeforeTop);
-	}
-	}
+	MxU8* bitmapSrcPtr = p_bitmap.GetStart(0, 0);
 
 	// How many bytes are there for each row of the bitmap?
 	// (i.e. the image stride)
 	// If this is a bottom-up DIB, we will walk it in reverse.
-	// TODO: Same rounding trick as in MxBitmap
-	MxS32 rowSeek = ((m_width + 3) & -4);
-	if (p_bitmap.GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap.GetBmiHeight() > 0) {
+	MxS32 rowSeek = p_bitmap.AlignToFourByte(m_width);
+	if (p_bitmap.GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap.GetBmiHeight() >= 0) {
 		rowSeek = -rowSeek;
 	}
 
@@ -76,9 +47,7 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 		MxU8* tPtr = bitmapSrcPtr;
 		for (MxS32 i = 0; i < m_width; i++) {
 			if (*tPtr) {
-				// TODO: Second CDQ instruction for abs() should not be there.
-				MxU32 shift = abs(offset) & 7;
-				m_bitmask[offset / 8] |= (1 << abs((MxS32) shift));
+				m_bitmask[offset / 8] |= (1 << (offset % 8));
 			}
 			tPtr++;
 			offset++;
@@ -116,7 +85,7 @@ MxS32 MxVideoPresenter::AlphaMask::IsHit(MxU32 p_x, MxU32 p_y)
 	}
 
 	MxS32 pos = p_y * m_width + p_x;
-	return m_bitmask[pos / 8] & (1 << abs(abs(pos) & 7)) ? 1 : 0;
+	return m_bitmask[pos / 8] & (1 << (pos % 8)) ? 1 : 0;
 }
 
 // FUNCTION: LEGO1 0x100b2760
