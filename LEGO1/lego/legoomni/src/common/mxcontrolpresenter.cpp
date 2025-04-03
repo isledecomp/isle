@@ -4,10 +4,12 @@
 #include "legocontrolmanager.h"
 #include "mxdsmultiaction.h"
 #include "mxmisc.h"
+#include "mxstillpresenter.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxutilities.h"
-#include "mxvideopresenter.h"
+
+#include <assert.h>
 
 DECOMP_SIZE_ASSERT(MxControlPresenter, 0x5c)
 
@@ -18,15 +20,15 @@ MxControlPresenter::MxControlPresenter()
 	m_unk0x4e = -1;
 	m_unk0x50 = FALSE;
 	m_unk0x52 = 0;
-	m_unk0x58 = 0;
+	m_states = NULL;
 	m_unk0x54 = 0;
 }
 
 // FUNCTION: LEGO1 0x10044110
 MxControlPresenter::~MxControlPresenter()
 {
-	if (m_unk0x58) {
-		delete m_unk0x58;
+	if (m_states) {
+		delete m_states;
 	}
 }
 
@@ -72,44 +74,39 @@ void MxControlPresenter::EndAction()
 
 // FUNCTION: LEGO1 0x10044270
 // FUNCTION: BETA10 0x100eae68
-MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* p_presenter)
+MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_presenter)
 {
+	assert(p_presenter);
+	MxStillPresenter* presenter = (MxStillPresenter*) p_presenter;
+
 	if (m_unk0x4c == 3) {
-		MxVideoPresenter* frontPresenter = (MxVideoPresenter*) m_list.front();
+		MxStillPresenter* map = (MxStillPresenter*) m_list.front();
+		assert(map && map->IsA("MxStillPresenter"));
 
-		if (p_presenter == frontPresenter || frontPresenter->GetDisplayZ() < p_presenter->GetDisplayZ()) {
-			if (p_presenter->VTable0x7c()) {
-				MxS32 height = frontPresenter->GetHeight();
-				MxS32 width = frontPresenter->GetWidth();
+		if (presenter == map || map->GetDisplayZ() < presenter->GetDisplayZ()) {
+			if (presenter->VTable0x7c()) {
+				MxRect32 rect(0, 0, map->GetWidth() - 1, map->GetHeight() - 1);
+				rect += map->GetLocation();
 
-				if (frontPresenter->GetLocation().GetX() <= p_x &&
-					p_x < width - 1 + frontPresenter->GetLocation().GetX() &&
-					frontPresenter->GetLocation().GetY() <= p_y &&
-					p_y < height - 1 + frontPresenter->GetLocation().GetY()) {
-					MxU8* start;
-
-					if (frontPresenter->GetAlphaMask() == NULL) {
-						start = frontPresenter->GetBitmap()->GetStart(
-							p_x - frontPresenter->GetLocation().GetX(),
-							p_y - frontPresenter->GetLocation().GetY()
-						);
-					}
-					else {
-						start = NULL;
-					}
+				if (rect.GetLeft() <= p_x && p_x < rect.GetRight() && rect.GetTop() <= p_y && p_y < rect.GetBottom()) {
+					// DECOMP: Beta uses GetBitmapStart() here, but that causes more diffs for retail.
+					MxU8* start = map->GetAlphaMask()
+									  ? NULL
+									  : map->GetBitmap()->GetStart(p_x - rect.GetLeft(), p_y - rect.GetTop());
 
 					m_unk0x56 = 0;
-					if (m_unk0x58 == NULL) {
-						if (*start != 0) {
-							m_unk0x56 = 1;
-						}
-					}
-					else {
-						for (MxS16 i = 1; i <= *m_unk0x58; i++) {
-							if (m_unk0x58[i] == *start) {
+					if (m_states) {
+						for (MxS16 i = 1; i <= *m_states; i++) {
+							// TODO: Can we match without the cast here?
+							if (m_states[i] == (MxS16) *start) {
 								m_unk0x56 = i;
 								break;
 							}
+						}
+					}
+					else {
+						if (*start != 0) {
+							m_unk0x56 = 1;
 						}
 					}
 
@@ -121,29 +118,18 @@ MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* 
 		}
 	}
 	else {
-		if (ContainsPresenter(m_list, p_presenter)) {
+		if (ContainsPresenter(m_list, presenter)) {
 			if (m_unk0x4c == 2) {
-				MxS32 width = p_presenter->GetWidth();
-				MxS32 height = p_presenter->GetHeight();
+				MxS32 width = presenter->GetWidth();
+				MxS32 height = presenter->GetHeight();
 
 				if (m_unk0x52 == 2 && m_unk0x54 == 2) {
-					MxS16 val;
-					if (p_x < p_presenter->GetLocation().GetX() + width / 2) {
-						val = 3;
-						if (p_y < p_presenter->GetLocation().GetY() + height / 2) {
-							val = 1;
-						}
-						m_unk0x56 = val;
-						return TRUE;
+					if (p_x < presenter->GetX() + width / 2) {
+						m_unk0x56 = (p_y >= presenter->GetY() + height / 2) ? 3 : 1;
 					}
-
-					val = 4;
-					if (p_y < p_presenter->GetLocation().GetY() + height / 2) {
-						val = 2;
+					else {
+						m_unk0x56 = (p_y >= presenter->GetY() + height / 2) ? 4 : 2;
 					}
-
-					m_unk0x56 = val;
-					return TRUE;
 				}
 			}
 			else {
@@ -173,7 +159,7 @@ MxBool MxControlPresenter::FUN_10044480(LegoControlManagerNotificationParam* p_p
 			}
 			break;
 		case c_notificationButtonDown:
-			if (FUN_10044270(p_param->GetX(), p_param->GetY(), (MxVideoPresenter*) p_presenter)) {
+			if (FUN_10044270(p_param->GetX(), p_param->GetY(), p_presenter)) {
 				p_param->SetClickedObjectId(m_action->GetObjectId());
 				p_param->SetClickedAtom(m_action->GetAtomId().GetInternal());
 				VTable0x6c(m_unk0x56);
@@ -221,6 +207,7 @@ void MxControlPresenter::ReadyTickle()
 }
 
 // FUNCTION: LEGO1 0x10044640
+// FUNCTION: BETA10 0x100eb5e3
 void MxControlPresenter::ParseExtra()
 {
 	MxU16 extraLength;
@@ -234,27 +221,35 @@ void MxControlPresenter::ParseExtra()
 
 		char output[256];
 		if (KeyValueStringParse(output, g_strSTYLE, extraCopy)) {
-			char* str = strtok(output, g_parseExtraTokens);
+			char* token = strtok(output, g_parseExtraTokens);
 
-			if (!strcmpi(str, g_strTOGGLE)) {
+			if (!strcmpi(token, g_strTOGGLE)) {
 				m_unk0x4c = 1;
 			}
-			else if (!strcmpi(str, g_strGRID)) {
+			else if (!strcmpi(token, g_strGRID)) {
 				m_unk0x4c = 2;
-				m_unk0x52 = atoi(strtok(NULL, g_parseExtraTokens));
-				m_unk0x54 = atoi(strtok(NULL, g_parseExtraTokens));
+				token = strtok(NULL, g_parseExtraTokens);
+				assert(token);
+				m_unk0x52 = atoi(token);
+
+				token = strtok(NULL, g_parseExtraTokens);
+				assert(token);
+				m_unk0x54 = atoi(token);
 			}
-			else if (!strcmpi(str, g_strMAP)) {
+			else if (!strcmpi(token, g_strMAP)) {
 				m_unk0x4c = 3;
-				str = strtok(NULL, g_parseExtraTokens);
+				token = strtok(NULL, g_parseExtraTokens);
 
-				if (str) {
-					MxS16 count = atoi(str);
-					m_unk0x58 = new MxS16[count + 1];
-					*m_unk0x58 = count;
+				if (token) {
+					MxS16 numStates = atoi(token);
+					m_states = new MxS16[numStates + 1];
+					assert(numStates);
+					*m_states = numStates;
 
-					for (MxS16 i = 1; i <= count; i++) {
-						m_unk0x58[i] = atoi(strtok(NULL, g_parseExtraTokens));
+					for (MxS16 i = 1; i <= numStates; i++) {
+						token = strtok(NULL, g_parseExtraTokens);
+						assert(token);
+						m_states[i] = atoi(token);
 					}
 				}
 			}
