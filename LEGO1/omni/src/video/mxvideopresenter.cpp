@@ -174,47 +174,14 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 		return m_alpha->IsHit(p_x - m_location.GetX(), p_y - m_location.GetY());
 	}
 
-	MxLong heightAbs = m_frameBitmap->GetBmiHeightAbs();
+	MxRect32 rect(0, 0, m_frameBitmap->GetBmiWidth(), m_frameBitmap->GetBmiHeightAbs());
+	rect += GetLocation();
 
-	MxLong minX = m_location.GetX();
-	MxLong minY = m_location.GetY();
-
-	MxLong maxY = minY + heightAbs;
-	MxLong maxX = minX + m_frameBitmap->GetBmiWidth();
-
-	if (p_x < minX || p_x >= maxX || p_y < minY || p_y >= maxY) {
+	if (p_x < rect.GetLeft() || p_x >= rect.GetRight() || p_y < rect.GetTop() || p_y >= rect.GetBottom()) {
 		return FALSE;
 	}
 
-	MxU8* pixel;
-
-	MxLong biCompression = m_frameBitmap->GetBmiHeader()->biCompression;
-	MxLong height = m_frameBitmap->GetBmiHeight();
-	MxLong seekRow;
-
-	// DECOMP: Same basic layout as AlphaMask constructor
-	// The idea here is to again seek to the correct place in the bitmap's
-	// m_data buffer. The x,y args are (most likely) screen x and y, so we
-	// need to shift that to coordinates local to the bitmap by removing
-	// the MxPresenter location x and y coordinates.
-	if (biCompression == BI_RGB) {
-		if (biCompression == BI_RGB_TOPDOWN || height < 0) {
-			seekRow = p_y - m_location.GetY();
-		}
-		else {
-			height = height > 0 ? height : -height;
-			seekRow = height - p_y - 1 + m_location.GetY();
-		}
-		pixel = m_frameBitmap->GetBmiStride() * seekRow + m_frameBitmap->GetImage() - m_location.GetX() + p_x;
-	}
-	else if (biCompression == BI_RGB_TOPDOWN) {
-		pixel = m_frameBitmap->GetImage();
-	}
-	else {
-		height = height > 0 ? height : -height;
-		height--;
-		pixel = m_frameBitmap->GetBmiStride() * height + m_frameBitmap->GetImage();
-	}
+	MxU8* pixel = m_frameBitmap->GetStart(p_x - rect.GetLeft(), p_y - rect.GetTop());
 
 	if (GetBit4()) {
 		return (MxBool) *pixel;
