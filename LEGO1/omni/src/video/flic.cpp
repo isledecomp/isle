@@ -355,13 +355,22 @@ void DecodeLC(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data
 // FUNCTION: BETA10 0x1013e61d
 void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data, FLIC_HEADER* p_flcHeader)
 {
-	short width = (short) p_flcHeader->width - 1;
-	short row = (short) p_flcHeader->height - 1;
-	short lines = *((short*) p_data);
-	BYTE* data = p_data + 2;
+    short xofs = 0;
+    short yofs = 0;
+
+    short width = (short) p_flcHeader->width;
+    short token = 0;
+
+    short xmax = xofs + width - 1;
+
+    short row = yofs + p_flcHeader->height - 1;
+    short* data = (short*) p_data;
+
+    // The first word in the data following the chunk header contains the number of lines in the chunk.
+    // The line count does not include skipped lines.
+    short lines = *data++;
 
 	while (--lines > 0) {
-		short token;
 
 		while (TRUE) {
 			token = *((short*) data);
@@ -399,7 +408,7 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 			type += type;
 
 			if (type >= 0) {
-				WritePixels(p_bitmapHeader, p_pixelData, column, row, data, type);
+				WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*)data, type);
 				column += type;
 				data += type;
 			}
