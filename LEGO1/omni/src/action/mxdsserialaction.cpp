@@ -1,5 +1,6 @@
 #include "mxdsserialaction.h"
 
+#include "mxdebug.h"
 #include "mxdsmediaaction.h"
 
 DECOMP_SIZE_ASSERT(MxDSSerialAction, 0xa8)
@@ -8,33 +9,43 @@ DECOMP_SIZE_ASSERT(MxDSSerialAction, 0xa8)
 // FUNCTION: BETA10 0x10159cf3
 MxDSSerialAction::MxDSSerialAction()
 {
-	this->SetType(e_serialAction);
-	this->m_cursor = new MxDSActionListCursor(this->m_actions);
-	this->m_unk0xa0 = 0;
+	m_type = e_serialAction;
+	m_cursor = new MxDSActionListCursor(m_actionList);
+	m_unk0xa0 = 0;
 }
 
 // FUNCTION: LEGO1 0x100caac0
+// FUNCTION: BETA10 0x1015b280
 void MxDSSerialAction::SetDuration(MxLong p_duration)
 {
-	this->m_duration = p_duration;
+	m_duration = p_duration;
 }
 
 // FUNCTION: LEGO1 0x100cac10
+// FUNCTION: BETA10 0x10159dd1
 MxDSSerialAction::~MxDSSerialAction()
 {
-	if (this->m_cursor) {
-		delete this->m_cursor;
-	}
-
-	this->m_cursor = NULL;
+	delete m_cursor;
+	m_cursor = NULL;
 }
 
 // FUNCTION: LEGO1 0x100cac90
+// FUNCTION: BETA10 0x10159e73
 void MxDSSerialAction::CopyFrom(MxDSSerialAction& p_dsSerialAction)
 {
+	if (p_dsSerialAction.m_cursor->HasMatch() || p_dsSerialAction.m_unk0xa0) {
+		MxTrace("copying a serialAction while someone is traversing it's list\n");
+	}
+}
+
+// FUNCTION: BETA10 0x10159ec2
+MxDSSerialAction::MxDSSerialAction(MxDSSerialAction& p_dsSerialAction) : MxDSMultiAction(p_dsSerialAction)
+{
+	CopyFrom(p_dsSerialAction);
 }
 
 // FUNCTION: LEGO1 0x100caca0
+// FUNCTION: BETA10 0x10159f43
 MxDSSerialAction& MxDSSerialAction::operator=(MxDSSerialAction& p_dsSerialAction)
 {
 	if (this == &p_dsSerialAction) {
@@ -42,11 +53,12 @@ MxDSSerialAction& MxDSSerialAction::operator=(MxDSSerialAction& p_dsSerialAction
 	}
 
 	MxDSMultiAction::operator=(p_dsSerialAction);
-	this->CopyFrom(p_dsSerialAction);
+	CopyFrom(p_dsSerialAction);
 	return *this;
 }
 
 // FUNCTION: LEGO1 0x100cacd0
+// FUNCTION: BETA10 0x10159f8a
 MxDSAction* MxDSSerialAction::Clone()
 {
 	MxDSSerialAction* clone = new MxDSSerialAction();
@@ -59,30 +71,29 @@ MxDSAction* MxDSSerialAction::Clone()
 }
 
 // FUNCTION: LEGO1 0x100cad60
+// FUNCTION: BETA10 0x1015a034
 MxLong MxDSSerialAction::GetDuration()
 {
-	if (this->m_duration) {
-		return this->m_duration;
+	if (m_duration) {
+		return m_duration;
 	}
 
-	MxDSActionListCursor cursor(this->m_actions);
+	MxDSActionListCursor cursor(m_actionList);
 	MxDSAction* action;
 
 	while (cursor.Next(action)) {
-		if (!action) {
-			continue;
-		}
+		if (action) {
+			m_duration += action->GetDuration() + action->GetStartTime();
 
-		this->m_duration += action->GetDuration() + action->GetStartTime();
+			if (action->IsA("MxDSMediaAction")) {
+				MxLong sustainTime = ((MxDSMediaAction*) action)->GetSustainTime();
 
-		if (action->IsA("MxDSMediaAction")) {
-			MxLong sustainTime = ((MxDSMediaAction*) action)->GetSustainTime();
-
-			if (sustainTime && sustainTime != -1) {
-				this->m_duration += sustainTime;
+				if (sustainTime && sustainTime != -1) {
+					m_duration += sustainTime;
+				}
 			}
 		}
 	}
 
-	return this->m_duration;
+	return m_duration;
 }
