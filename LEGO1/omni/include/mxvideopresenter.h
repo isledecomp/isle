@@ -48,10 +48,13 @@ public:
 	virtual MxBool VTable0x7c() { return m_frameBitmap != NULL || m_alpha != NULL; } // vtable+0x7c
 
 	// FUNCTION: LEGO1 0x1000c7e0
-	virtual MxS32 GetWidth() { return m_alpha ? m_alpha->m_width : m_frameBitmap->GetBmiWidth(); } // vtable+0x80
+	virtual MxS32 GetWidth() { return m_alpha ? m_alpha->GetWidth() : m_frameBitmap->GetBmiWidth(); } // vtable+0x80
 
 	// FUNCTION: LEGO1 0x1000c800
-	virtual MxS32 GetHeight() { return m_alpha ? m_alpha->m_height : m_frameBitmap->GetBmiHeightAbs(); } // vtable+0x84
+	virtual MxS32 GetHeight()
+	{
+		return m_alpha ? m_alpha->GetHeight() : m_frameBitmap->GetBmiHeightAbs();
+	} // vtable+0x84
 
 	// FUNCTION: BETA10 0x100551b0
 	static const char* HandlerClassName()
@@ -85,19 +88,24 @@ public:
 
 	// VTABLE: LEGO1 0x100dc2bc
 	// SIZE 0x0c
-	struct AlphaMask {
-		MxU8* m_bitmask;
-		MxU16 m_width;
-		MxU16 m_height;
-
+	class AlphaMask {
+	public:
 		AlphaMask(const MxBitmap&);
 		AlphaMask(const AlphaMask&);
 		virtual ~AlphaMask();
 
 		MxS32 IsHit(MxU32 p_x, MxU32 p_y);
 
+		MxS32 GetWidth() const { return m_width; }
+		MxS32 GetHeight() const { return m_height; }
+
 		// SYNTHETIC: LEGO1 0x100b2650
 		// MxVideoPresenter::AlphaMask::`scalar deleting destructor'
+
+	private:
+		MxU8* m_bitmask; // 0x00
+		MxU16 m_width;   // 0x04
+		MxU16 m_height;  // 0x08
 	};
 
 	inline MxS32 PrepareRects(RECT& p_rectDest, RECT& p_rectSrc);
