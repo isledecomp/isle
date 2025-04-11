@@ -29,8 +29,8 @@ public:
 		return !strcmp(p_name, MxDSObjectAction::ClassName()) || MxDSMediaAction::IsA(p_name);
 	}
 
-	MxDSAction* Clone() override;                              // vtable+0x2c;
-	virtual void CopyFrom(MxDSObjectAction& p_dsObjectAction); // vtable+0x44;
+	MxDSAction* Clone() override;                              // vtable+0x2c
+	virtual void CopyFrom(MxDSObjectAction& p_dsObjectAction); // vtable+0x44
 
 	// SYNTHETIC: LEGO1 0x100c8a00
 	// SYNTHETIC: BETA10 0x1015c720

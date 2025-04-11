@@ -31,14 +31,14 @@ public:
 		return !strcmp(p_name, MxDSMultiAction::ClassName()) || MxDSAction::IsA(p_name);
 	}
 
-	undefined4 VTable0x14() override;                            // vtable+0x14;
-	MxU32 GetSizeOnDisk() override;                              // vtable+0x18;
-	void Deserialize(MxU8*& p_source, MxS16 p_unk0x24) override; // vtable+0x1c;
-	void SetAtomId(MxAtomId p_atomId) override;                  // vtable+0x20;
-	MxDSAction* Clone() override;                                // vtable+0x2c;
-	void MergeFrom(MxDSAction& p_dsAction) override;             // vtable+0x30;
-	MxBool HasId(MxU32 p_objectId) override;                     // vtable+0x34;
-	void SetUnknown90(MxLong p_unk0x90) override;                // vtable+0x38;
+	undefined4 VTable0x14() override;                            // vtable+0x14
+	MxU32 GetSizeOnDisk() override;                              // vtable+0x18
+	void Deserialize(MxU8*& p_source, MxS16 p_unk0x24) override; // vtable+0x1c
+	void SetAtomId(MxAtomId p_atomId) override;                  // vtable+0x20
+	MxDSAction* Clone() override;                                // vtable+0x2c
+	void MergeFrom(MxDSAction& p_dsAction) override;             // vtable+0x30
+	MxBool HasId(MxU32 p_objectId) override;                     // vtable+0x34
+	void SetUnknown90(MxLong p_unk0x90) override;                // vtable+0x38
 
 	// FUNCTION: BETA10 0x1004e180
 	MxDSActionList* GetActionList() const { return m_actionList; }

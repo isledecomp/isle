@@ -30,9 +30,9 @@ public:
 		return !strcmp(p_name, MxDSSound::ClassName()) || MxDSMediaAction::IsA(p_name);
 	}
 
-	MxU32 GetSizeOnDisk() override;                              // vtable+0x18;
-	void Deserialize(MxU8*& p_source, MxS16 p_unk0x24) override; // vtable+0x1c;
-	MxDSAction* Clone() override;                                // vtable+0x2c;
+	MxU32 GetSizeOnDisk() override;                              // vtable+0x18
+	void Deserialize(MxU8*& p_source, MxS16 p_unk0x24) override; // vtable+0x1c
+	MxDSAction* Clone() override;                                // vtable+0x2c
 
 	// FUNCTION: BETA10 0x1008d060
 	MxS32 GetVolume() const { return m_volume; }

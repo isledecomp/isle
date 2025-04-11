@@ -30,13 +30,13 @@ public:
 		return !strcmp(p_name, MxDSParallelAction::ClassName()) || MxDSMultiAction::IsA(p_name);
 	}
 
-	MxLong GetDuration() override; // vtable+0x24;
+	MxLong GetDuration() override; // vtable+0x24
 
 	// FUNCTION: LEGO1 0x100caef0
 	// FUNCTION: BETA10 0x1015b370
 	void SetDuration(MxLong p_duration) override { m_duration = p_duration; } // vtable+0x28
 
-	MxDSAction* Clone() override; // vtable+0x2c;
+	MxDSAction* Clone() override; // vtable+0x2c
 
 	// SYNTHETIC: LEGO1 0x100cb020
 	// SYNTHETIC: BETA10 0x1015b420
