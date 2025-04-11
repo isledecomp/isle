@@ -9,6 +9,7 @@
 class MxDSObjectAction : public MxDSMediaAction {
 public:
 	MxDSObjectAction();
+	MxDSObjectAction(MxDSObjectAction& p_dsObjectAction);
 	~MxDSObjectAction() override;
 
 	MxDSObjectAction& operator=(MxDSObjectAction& p_dsObjectAction);
@@ -22,15 +23,17 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100c88f0
+	// FUNCTION: BETA10 0x1015c640
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSObjectAction::ClassName()) || MxDSMediaAction::IsA(p_name);
 	}
 
-	MxDSAction* Clone() override;                              // vtable+2c;
-	virtual void CopyFrom(MxDSObjectAction& p_dsObjectAction); // vtable+44;
+	MxDSAction* Clone() override;                              // vtable+0x2c
+	virtual void CopyFrom(MxDSObjectAction& p_dsObjectAction); // vtable+0x44
 
 	// SYNTHETIC: LEGO1 0x100c8a00
+	// SYNTHETIC: BETA10 0x1015c720
 	// MxDSObjectAction::`scalar deleting destructor'
 };
 

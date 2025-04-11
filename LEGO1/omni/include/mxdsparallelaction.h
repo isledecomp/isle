@@ -9,6 +9,7 @@
 class MxDSParallelAction : public MxDSMultiAction {
 public:
 	MxDSParallelAction();
+	MxDSParallelAction(MxDSParallelAction& p_dsParallelAction);
 	~MxDSParallelAction() override;
 
 	void CopyFrom(MxDSParallelAction& p_dsParallelAction);
@@ -23,20 +24,23 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100caf10
+	// FUNCTION: BETA10 0x1015b3c0
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSParallelAction::ClassName()) || MxDSMultiAction::IsA(p_name);
 	}
 
-	// SYNTHETIC: LEGO1 0x100cb020
-	// MxDSParallelAction::`scalar deleting destructor'
-
-	MxLong GetDuration() override; // vtable+24;
+	MxLong GetDuration() override; // vtable+0x24
 
 	// FUNCTION: LEGO1 0x100caef0
+	// FUNCTION: BETA10 0x1015b370
 	void SetDuration(MxLong p_duration) override { m_duration = p_duration; } // vtable+0x28
 
-	MxDSAction* Clone() override; // vtable+2c;
+	MxDSAction* Clone() override; // vtable+0x2c
+
+	// SYNTHETIC: LEGO1 0x100cb020
+	// SYNTHETIC: BETA10 0x1015b420
+	// MxDSParallelAction::`scalar deleting destructor'
 };
 
 #endif // MXDSPARALLELACTION_H

@@ -16,7 +16,7 @@ public:
 
 	MxDSStreamingAction* CopyFrom(MxDSStreamingAction& p_dsStreamingAction);
 
-	MxBool HasId(MxU32 p_objectId) override; // vtable+0x34;
+	MxBool HasId(MxU32 p_objectId) override; // vtable+0x34
 
 	void Init();
 	void SetInternalAction(MxDSAction* p_dsAction);

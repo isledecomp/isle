@@ -10,6 +10,7 @@
 class MxDSMultiAction : public MxDSAction {
 public:
 	MxDSMultiAction();
+	MxDSMultiAction(MxDSMultiAction& p_dsMultiAction);
 	~MxDSMultiAction() override;
 
 	void CopyFrom(MxDSMultiAction& p_dsMultiAction);
@@ -24,29 +25,31 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100c9f60
+	// FUNCTION: BETA10 0x1015b1b0
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSMultiAction::ClassName()) || MxDSAction::IsA(p_name);
 	}
 
-	undefined4 VTable0x14() override;                            // vtable+14;
-	MxU32 GetSizeOnDisk() override;                              // vtable+18;
-	void Deserialize(MxU8*& p_source, MxS16 p_unk0x24) override; // vtable+1c;
-	void SetAtomId(MxAtomId p_atomId) override;                  // vtable+20;
-	MxDSAction* Clone() override;                                // vtable+2c;
-	void MergeFrom(MxDSAction& p_dsAction) override;             // vtable+30;
-	MxBool HasId(MxU32 p_objectId) override;                     // vtable+34;
-	void SetUnknown90(MxLong p_unk0x90) override;                // vtable+38;
+	undefined4 VTable0x14() override;                            // vtable+0x14
+	MxU32 GetSizeOnDisk() override;                              // vtable+0x18
+	void Deserialize(MxU8*& p_source, MxS16 p_unk0x24) override; // vtable+0x1c
+	void SetAtomId(MxAtomId p_atomId) override;                  // vtable+0x20
+	MxDSAction* Clone() override;                                // vtable+0x2c
+	void MergeFrom(MxDSAction& p_dsAction) override;             // vtable+0x30
+	MxBool HasId(MxU32 p_objectId) override;                     // vtable+0x34
+	void SetUnknown90(MxLong p_unk0x90) override;                // vtable+0x38
 
 	// FUNCTION: BETA10 0x1004e180
-	MxDSActionList* GetActionList() const { return m_actions; }
+	MxDSActionList* GetActionList() const { return m_actionList; }
 
 	// SYNTHETIC: LEGO1 0x100ca040
+	// SYNTHETIC: BETA10 0x1015b210
 	// MxDSMultiAction::`scalar deleting destructor'
 
 protected:
-	MxU32 m_sizeOnDisk;        // 0x94
-	MxDSActionList* m_actions; // 0x98
+	MxU32 m_sizeOnDisk;           // 0x94
+	MxDSActionList* m_actionList; // 0x98
 };
 
 // SYNTHETIC: LEGO1 0x1004ad10

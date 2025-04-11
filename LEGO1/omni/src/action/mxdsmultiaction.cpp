@@ -1,5 +1,7 @@
 #include "mxdsmultiaction.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(MxDSMultiAction, 0x9c)
 DECOMP_SIZE_ASSERT(MxDSActionList, 0x1c);
 DECOMP_SIZE_ASSERT(MxDSActionListCursor, 0x10);
@@ -8,33 +10,40 @@ DECOMP_SIZE_ASSERT(MxDSActionListCursor, 0x10);
 // FUNCTION: BETA10 0x10159410
 MxDSMultiAction::MxDSMultiAction()
 {
-	this->SetType(e_multiAction);
-	this->m_actions = new MxDSActionList;
-	this->m_actions->SetDestroy(MxDSActionList::Destroy);
+	m_type = e_multiAction;
+	m_actionList = new MxDSActionList;
+	assert(m_actionList);
+	m_actionList->SetDestroy(MxDSActionList::Destroy);
 }
 
 // FUNCTION: LEGO1 0x100ca060
+// FUNCTION: BETA10 0x10159518
 MxDSMultiAction::~MxDSMultiAction()
 {
-	if (this->m_actions) {
-		delete this->m_actions;
-	}
+	delete m_actionList;
 }
 
 // FUNCTION: LEGO1 0x100ca0d0
 // FUNCTION: BETA10 0x101595ad
 void MxDSMultiAction::CopyFrom(MxDSMultiAction& p_dsMultiAction)
 {
-	this->m_actions->DeleteAll();
+	m_actionList->DeleteAll();
 
-	MxDSActionListCursor cursor(p_dsMultiAction.m_actions);
+	MxDSActionListCursor cursor(p_dsMultiAction.m_actionList);
 	MxDSAction* action;
 	while (cursor.Next(action)) {
-		this->m_actions->Append(action->Clone());
+		m_actionList->Append(action->Clone());
 	}
 }
 
+// FUNCTION: BETA10 0x10159660
+MxDSMultiAction::MxDSMultiAction(MxDSMultiAction& p_dsMultiAction) : MxDSAction(p_dsMultiAction)
+{
+	CopyFrom(p_dsMultiAction);
+}
+
 // FUNCTION: LEGO1 0x100ca260
+// FUNCTION: BETA10 0x101596e1
 MxDSMultiAction& MxDSMultiAction::operator=(MxDSMultiAction& p_dsMultiAction)
 {
 	if (this == &p_dsMultiAction) {
@@ -42,16 +51,17 @@ MxDSMultiAction& MxDSMultiAction::operator=(MxDSMultiAction& p_dsMultiAction)
 	}
 
 	MxDSAction::operator=(p_dsMultiAction);
-	this->CopyFrom(p_dsMultiAction);
+	CopyFrom(p_dsMultiAction);
 	return *this;
 }
 
 // FUNCTION: LEGO1 0x100ca290
+// FUNCTION: BETA10 0x10159728
 void MxDSMultiAction::SetUnknown90(MxLong p_unk0x90)
 {
-	this->m_unk0x90 = p_unk0x90;
+	m_unk0x90 = p_unk0x90;
 
-	MxDSActionListCursor cursor(this->m_actions);
+	MxDSActionListCursor cursor(m_actionList);
 	MxDSAction* action;
 	while (cursor.Next(action)) {
 		action->SetUnknown90(p_unk0x90);
@@ -59,11 +69,12 @@ void MxDSMultiAction::SetUnknown90(MxLong p_unk0x90)
 }
 
 // FUNCTION: LEGO1 0x100ca370
+// FUNCTION: BETA10 0x101597ce
 void MxDSMultiAction::MergeFrom(MxDSAction& p_dsMultiAction)
 {
 	MxDSAction::MergeFrom(p_dsMultiAction);
 
-	MxDSActionListCursor cursor(this->m_actions);
+	MxDSActionListCursor cursor(m_actionList);
 	MxDSAction* action;
 	while (cursor.Next(action)) {
 		action->MergeFrom(p_dsMultiAction);
@@ -71,13 +82,14 @@ void MxDSMultiAction::MergeFrom(MxDSAction& p_dsMultiAction)
 }
 
 // FUNCTION: LEGO1 0x100ca450
+// FUNCTION: BETA10 0x10159874
 MxBool MxDSMultiAction::HasId(MxU32 p_objectId)
 {
-	if (this->GetObjectId() == p_objectId) {
+	if (GetObjectId() == p_objectId) {
 		return TRUE;
 	}
 
-	MxDSActionListCursor cursor(this->m_actions);
+	MxDSActionListCursor cursor(m_actionList);
 	MxDSAction* action;
 	while (cursor.Next(action)) {
 		if (action->HasId(p_objectId)) {
@@ -89,6 +101,7 @@ MxBool MxDSMultiAction::HasId(MxU32 p_objectId)
 }
 
 // FUNCTION: LEGO1 0x100ca550
+// FUNCTION: BETA10 0x10159959
 MxDSAction* MxDSMultiAction::Clone()
 {
 	MxDSMultiAction* clone = new MxDSMultiAction();
@@ -101,11 +114,12 @@ MxDSAction* MxDSMultiAction::Clone()
 }
 
 // FUNCTION: LEGO1 0x100ca5e0
+// FUNCTION: BETA10 0x10159a03
 undefined4 MxDSMultiAction::VTable0x14()
 {
 	undefined4 result = MxDSAction::VTable0x14();
 
-	MxDSActionListCursor cursor(this->m_actions);
+	MxDSActionListCursor cursor(m_actionList);
 	MxDSAction* action;
 	while (cursor.Next(action)) {
 		result += action->VTable0x14();
@@ -115,22 +129,26 @@ undefined4 MxDSMultiAction::VTable0x14()
 }
 
 // FUNCTION: LEGO1 0x100ca6c0
+// FUNCTION: BETA10 0x10159aaf
 MxU32 MxDSMultiAction::GetSizeOnDisk()
 {
-	MxU32 totalSizeOnDisk = MxDSAction::GetSizeOnDisk() + 16;
+	MxU32 totalSizeOnDisk = MxDSAction::GetSizeOnDisk();
+	totalSizeOnDisk += 12;
+	totalSizeOnDisk += 4;
 
-	MxDSActionListCursor cursor(this->m_actions);
+	MxDSActionListCursor cursor(m_actionList);
 	MxDSAction* action;
 	while (cursor.Next(action)) {
 		totalSizeOnDisk += action->GetSizeOnDisk();
 	}
 
-	this->m_sizeOnDisk = totalSizeOnDisk - MxDSAction::GetSizeOnDisk();
+	m_sizeOnDisk = totalSizeOnDisk - MxDSAction::GetSizeOnDisk();
 
 	return totalSizeOnDisk;
 }
 
 // FUNCTION: LEGO1 0x100ca7b0
+// FUNCTION: BETA10 0x10159b79
 void MxDSMultiAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
 {
 	MxDSAction::Deserialize(p_source, p_unk0x24);
@@ -149,7 +167,7 @@ void MxDSMultiAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
 			MxDSAction* action = (MxDSAction*) DeserializeDSObjectDispatch(p_source, p_unk0x24);
 			p_source += extraFlag;
 
-			this->m_actions->Append(action);
+			m_actionList->Append(action);
 		}
 	}
 
@@ -157,11 +175,12 @@ void MxDSMultiAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
 }
 
 // FUNCTION: LEGO1 0x100ca8c0
+// FUNCTION: BETA10 0x10159c37
 void MxDSMultiAction::SetAtomId(MxAtomId p_atomId)
 {
 	MxDSAction::SetAtomId(p_atomId);
 
-	MxDSActionListCursor cursor(this->m_actions);
+	MxDSActionListCursor cursor(m_actionList);
 	MxDSAction* action;
 	while (cursor.Next(action)) {
 		action->SetAtomId(p_atomId);

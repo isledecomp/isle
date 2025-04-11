@@ -9,6 +9,7 @@
 class MxDSStill : public MxDSMediaAction {
 public:
 	MxDSStill();
+	MxDSStill(MxDSStill& p_dsStill);
 	~MxDSStill() override;
 
 	void CopyFrom(MxDSStill& p_dsStill);
@@ -23,14 +24,16 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100c9940
+	// FUNCTION: BETA10 0x1015daf0
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSStill::ClassName()) || MxDSMediaAction::IsA(p_name);
 	}
 
-	MxDSAction* Clone() override; // vtable+2c;
+	MxDSAction* Clone() override; // vtable+0x2c
 
 	// SYNTHETIC: LEGO1 0x100c9a50
+	// SYNTHETIC: BETA10 0x1015db50
 	// MxDSStill::`scalar deleting destructor'
 };
 

@@ -9,6 +9,7 @@
 class MxDSAnim : public MxDSMediaAction {
 public:
 	MxDSAnim();
+	MxDSAnim(MxDSAnim& p_dsAnim);
 	~MxDSAnim() override;
 
 	void CopyFrom(MxDSAnim& p_dsAnim);
@@ -23,14 +24,16 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100c9070
+	// FUNCTION: BETA10 0x1015d8b0
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSAnim::ClassName()) || MxDSMediaAction::IsA(p_name);
 	}
 
-	MxDSAction* Clone() override; // vtable+2c;
+	MxDSAction* Clone() override; // vtable+0x2c
 
 	// SYNTHETIC: LEGO1 0x100c9180
+	// SYNTHETIC: BETA10 0x1015d910
 	// MxDSAnim::`scalar deleting destructor'
 };
 

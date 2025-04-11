@@ -8,20 +8,29 @@ DECOMP_SIZE_ASSERT(MxDSParallelAction, 0x9c)
 // FUNCTION: BETA10 0x1015a14d
 MxDSParallelAction::MxDSParallelAction()
 {
-	this->SetType(e_parallelAction);
+	m_type = e_parallelAction;
 }
 
 // FUNCTION: LEGO1 0x100cb040
+// FUNCTION: BETA10 0x1015a1c5
 MxDSParallelAction::~MxDSParallelAction()
 {
 }
 
 // FUNCTION: LEGO1 0x100cb090
+// FUNCTION: BETA10 0x1015a22d
 void MxDSParallelAction::CopyFrom(MxDSParallelAction& p_dsParallelAction)
 {
 }
 
+// FUNCTION: BETA10 0x1015a245
+MxDSParallelAction::MxDSParallelAction(MxDSParallelAction& p_dsParallelAction) : MxDSMultiAction(p_dsParallelAction)
+{
+	CopyFrom(p_dsParallelAction);
+}
+
 // FUNCTION: LEGO1 0x100cb0a0
+// FUNCTION: BETA10 0x1015a2c6
 MxDSParallelAction& MxDSParallelAction::operator=(MxDSParallelAction& p_dsParallelAction)
 {
 	if (this == &p_dsParallelAction) {
@@ -29,11 +38,12 @@ MxDSParallelAction& MxDSParallelAction::operator=(MxDSParallelAction& p_dsParall
 	}
 
 	MxDSMultiAction::operator=(p_dsParallelAction);
-	this->CopyFrom(p_dsParallelAction);
+	CopyFrom(p_dsParallelAction);
 	return *this;
 }
 
 // FUNCTION: LEGO1 0x100cb0d0
+// FUNCTION: BETA10 0x1015a30d
 MxDSAction* MxDSParallelAction::Clone()
 {
 	MxDSParallelAction* clone = new MxDSParallelAction();
@@ -46,13 +56,14 @@ MxDSAction* MxDSParallelAction::Clone()
 }
 
 // FUNCTION: LEGO1 0x100cb160
+// FUNCTION: BETA10 0x1015a3b7
 MxLong MxDSParallelAction::GetDuration()
 {
-	if (this->m_duration) {
-		return this->m_duration;
+	if (m_duration) {
+		return m_duration;
 	}
 
-	MxDSActionListCursor cursor(this->m_actions);
+	MxDSActionListCursor cursor(m_actionList);
 	MxDSAction* action;
 
 	while (cursor.Next(action)) {
@@ -62,7 +73,7 @@ MxLong MxDSParallelAction::GetDuration()
 
 		MxLong duration = action->GetDuration();
 		if (duration == -1) {
-			this->m_duration = -1;
+			m_duration = -1;
 			break;
 		}
 
@@ -79,18 +90,18 @@ MxLong MxDSParallelAction::GetDuration()
 		}
 
 		if (duration == -1) {
-			this->m_duration = -1;
+			m_duration = -1;
 			break;
 		}
 
-		if (this->m_duration < duration) {
-			this->m_duration = duration;
+		if (m_duration < duration) {
+			m_duration = duration;
 		}
 	}
 
-	if (this->IsBit3()) {
-		this->m_duration *= this->m_loopCount;
+	if (IsBit3()) {
+		m_duration *= m_loopCount;
 	}
 
-	return this->m_duration;
+	return m_duration;
 }

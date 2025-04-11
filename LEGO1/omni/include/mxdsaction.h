@@ -47,17 +47,17 @@ public:
 		return !strcmp(p_name, MxDSAction::ClassName()) || MxDSObject::IsA(p_name);
 	}
 
-	undefined4 VTable0x14() override;                            // vtable+14;
-	MxU32 GetSizeOnDisk() override;                              // vtable+18;
-	void Deserialize(MxU8*& p_source, MxS16 p_unk0x24) override; // vtable+1c;
-	virtual MxLong GetDuration();                                // vtable+24;
-	virtual void SetDuration(MxLong p_duration);                 // vtable+28;
-	virtual MxDSAction* Clone();                                 // vtable+2c;
-	virtual void MergeFrom(MxDSAction& p_dsAction);              // vtable+30;
-	virtual MxBool HasId(MxU32 p_objectId);                      // vtable+34;
-	virtual void SetUnknown90(MxLong p_unk0x90);                 // vtable+38;
-	virtual MxLong GetUnknown90();                               // vtable+3c;
-	virtual MxLong GetElapsedTime();                             // vtable+40;
+	undefined4 VTable0x14() override;                            // vtable+0x14
+	MxU32 GetSizeOnDisk() override;                              // vtable+0x18
+	void Deserialize(MxU8*& p_source, MxS16 p_unk0x24) override; // vtable+0x1c
+	virtual MxLong GetDuration();                                // vtable+0x24
+	virtual void SetDuration(MxLong p_duration);                 // vtable+0x28
+	virtual MxDSAction* Clone();                                 // vtable+0x2c
+	virtual void MergeFrom(MxDSAction& p_dsAction);              // vtable+0x30
+	virtual MxBool HasId(MxU32 p_objectId);                      // vtable+0x34
+	virtual void SetUnknown90(MxLong p_unk0x90);                 // vtable+0x38
+	virtual MxLong GetUnknown90();                               // vtable+0x3c
+	virtual MxLong GetElapsedTime();                             // vtable+0x40
 
 	void AppendExtra(MxU16 p_extraLength, const char* p_extraData);
 

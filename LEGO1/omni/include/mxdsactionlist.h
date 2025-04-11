@@ -29,6 +29,7 @@ public:
 	} // vtable+0x14
 
 	// FUNCTION: LEGO1 0x100c9cb0
+	// FUNCTION: BETA10 0x1015add0
 	static void Destroy(MxDSAction* p_action) { delete p_action; }
 
 	// SYNTHETIC: LEGO1 0x100c9dc0
@@ -138,5 +139,8 @@ public:
 
 // TEMPLATE: BETA10 0x1015bd90
 // MxList<MxDSAction *>::DeleteAll
+
+// TEMPLATE: BETA10 0x1015be20
+// MxListCursor<MxDSAction *>::HasMatch
 
 #endif // MXDSACTIONLIST_H

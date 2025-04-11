@@ -55,23 +55,23 @@ public:
 
 	// FUNCTION: LEGO1 0x100bf730
 	// FUNCTION: BETA10 0x1012bdd0
-	const char* ClassName() const override { return "MxDSObject"; } // vtable+0c
+	const char* ClassName() const override { return "MxDSObject"; } // vtable+0x0c
 
 	// FUNCTION: LEGO1 0x100bf740
 	// FUNCTION: BETA10 0x1012bd70
 	MxBool IsA(const char* p_name) const override
 	{
 		return !strcmp(p_name, MxDSObject::ClassName()) || MxCore::IsA(p_name);
-	} // vtable+10;
+	} // vtable+0x10
 
-	virtual undefined4 VTable0x14();                            // vtable+14;
-	virtual MxU32 GetSizeOnDisk();                              // vtable+18;
-	virtual void Deserialize(MxU8*& p_source, MxS16 p_unk0x24); // vtable+1c;
+	virtual undefined4 VTable0x14();                            // vtable+0x14
+	virtual MxU32 GetSizeOnDisk();                              // vtable+0x18
+	virtual void Deserialize(MxU8*& p_source, MxS16 p_unk0x24); // vtable+0x1c
 
 	// FUNCTION: ISLE 0x401c40
 	// FUNCTION: LEGO1 0x10005530
 	// FUNCTION: BETA10 0x100152e0
-	virtual void SetAtomId(MxAtomId p_atomId) { m_atomId = p_atomId; } // vtable+20;
+	virtual void SetAtomId(MxAtomId p_atomId) { m_atomId = p_atomId; } // vtable+0x20
 
 	// FUNCTION: BETA10 0x1012ef90
 	Type GetType() const { return (Type) m_type; }

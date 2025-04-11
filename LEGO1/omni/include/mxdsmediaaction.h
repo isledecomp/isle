@@ -10,10 +10,10 @@
 class MxDSMediaAction : public MxDSAction {
 public:
 	MxDSMediaAction();
+	MxDSMediaAction(MxDSMediaAction& p_dsMediaAction);
 	~MxDSMediaAction() override;
 
 	void CopyFrom(MxDSMediaAction& p_dsMediaAction);
-	MxDSMediaAction(MxDSMediaAction& p_dsMediaAction);
 	MxDSMediaAction& operator=(MxDSMediaAction& p_dsMediaAction);
 
 	// FUNCTION: LEGO1 0x100c8be0
@@ -35,10 +35,10 @@ public:
 	// SYNTHETIC: BETA10 0x1015d810
 	// MxDSMediaAction::`scalar deleting destructor'
 
-	undefined4 VTable0x14() override;                            // vtable+14;
-	MxU32 GetSizeOnDisk() override;                              // vtable+18;
-	void Deserialize(MxU8*& p_source, MxS16 p_unk0x24) override; // vtable+1c;
-	MxDSAction* Clone() override;                                // vtable+2c;
+	undefined4 VTable0x14() override;                            // vtable+0x14
+	MxU32 GetSizeOnDisk() override;                              // vtable+0x18
+	void Deserialize(MxU8*& p_source, MxS16 p_unk0x24) override; // vtable+0x1c
+	MxDSAction* Clone() override;                                // vtable+0x2c
 
 	void CopyMediaSrcPath(const char* p_mediaSrcPath);
 
