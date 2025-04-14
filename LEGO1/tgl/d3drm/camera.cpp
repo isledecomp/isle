@@ -6,6 +6,7 @@ DECOMP_SIZE_ASSERT(Camera, 0x04);
 DECOMP_SIZE_ASSERT(CameraImpl, 0x08);
 
 // FUNCTION: LEGO1 0x100a36f0
+// FUNCTION: BETA10 0x1016f2e0
 void* CameraImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);

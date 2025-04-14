@@ -5,6 +5,7 @@
 using namespace TglImpl;
 
 // FUNCTION: LEGO1 0x100a2bf0
+// FUNCTION: BETA10 0x1016ddf0
 void* DeviceImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);

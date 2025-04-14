@@ -8,6 +8,7 @@ DECOMP_SIZE_ASSERT(Mesh, 0x04);
 DECOMP_SIZE_ASSERT(MeshImpl, 0x08);
 
 // FUNCTION: LEGO1 0x100a3ed0
+// FUNCTION: BETA10 0x101704d0
 void* MeshImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);
