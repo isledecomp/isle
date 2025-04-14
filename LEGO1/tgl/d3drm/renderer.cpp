@@ -304,6 +304,7 @@ Result RendererImpl::SetTextureDefaultColorCount(unsigned long colorCount)
 }
 
 // FUNCTION: LEGO1 0x100a22b0
+// FUNCTION: BETA10 0x1016b050
 void* RendererImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);

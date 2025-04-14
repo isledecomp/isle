@@ -6,6 +6,7 @@ DECOMP_SIZE_ASSERT(Light, 0x04);
 DECOMP_SIZE_ASSERT(LightImpl, 0x08);
 
 // FUNCTION: LEGO1 0x100a3770
+// FUNCTION: BETA10 0x1016c9f0
 void* LightImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);

@@ -224,6 +224,7 @@ Result TextureImpl::SetPalette(int entryCount, PaletteEntry* pEntries)
 }
 
 // FUNCTION: LEGO1 0x100a3d70
+// FUNCTION: BETA10 0x1016c760
 void* TextureImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);

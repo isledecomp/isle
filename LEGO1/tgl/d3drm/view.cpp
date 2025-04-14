@@ -122,6 +122,7 @@ inline IDirect3DRMFrame* ViewportGetLightFrame(IDirect3DRMViewport* pViewport)
 }
 
 // FUNCTION: LEGO1 0x100a2d80
+// FUNCTION: BETA10 0x1016e640
 void* ViewImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);

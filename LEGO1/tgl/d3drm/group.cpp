@@ -3,6 +3,7 @@
 using namespace TglImpl;
 
 // FUNCTION: LEGO1 0x100a31d0
+// FUNCTION: BETA10 0x1016a480
 void* GroupImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);

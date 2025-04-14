@@ -43,9 +43,13 @@ class TextureImpl;
 class MeshBuilderImpl;
 
 // VTABLE: LEGO1 0x100db910
+// VTABLE: BETA10 0x101c30d8
 class RendererImpl : public Renderer {
 public:
+	// FUNCTION: BETA10 0x10169a20
 	RendererImpl() : m_data(0) {}
+
+	// FUNCTION: BETA10 0x10169d20
 	~RendererImpl() override { Destroy(); }
 
 	void* ImplementationDataPtr() override;
@@ -102,6 +106,7 @@ private:
 
 extern IDirect3DRM2* g_pD3DRM;
 
+// FUNCTION: BETA10 0x1016dd20
 inline void RendererDestroy(IDirect3DRM2* pRenderer)
 {
 	int refCount = pRenderer->Release();
@@ -111,6 +116,7 @@ inline void RendererDestroy(IDirect3DRM2* pRenderer)
 }
 
 // Inlined only
+// FUNCTION: BETA10 0x1016dce0
 void RendererImpl::Destroy()
 {
 	if (m_data) {
@@ -120,9 +126,13 @@ void RendererImpl::Destroy()
 }
 
 // VTABLE: LEGO1 0x100db988
+// VTABLE: BETA10 0x101c31f0
 class DeviceImpl : public Device {
 public:
+	// FUNCTION: BETA10 0x1016b2e0
 	DeviceImpl() : m_data(0) {}
+
+	// FUNCTION: BETA10 0x1016dd80
 	~DeviceImpl() override
 	{
 		if (m_data) {
@@ -158,9 +168,13 @@ private:
 };
 
 // VTABLE: LEGO1 0x100db9e8
+// VTABLE: BETA10 0x101c3220
 class ViewImpl : public View {
 public:
+	// FUNCTION: BETA10 0x1016b360
 	ViewImpl() : m_data(0) {}
+
+	// FUNCTION: BETA10 0x1016e5d0
 	~ViewImpl() override
 	{
 		if (m_data) {
@@ -211,9 +225,13 @@ private:
 };
 
 // VTABLE: LEGO1 0x100dbad8
+// VTABLE: BETA10 0x101c3260
 class CameraImpl : public Camera {
 public:
+	// FUNCTION: BETA10 0x1016b3e0
 	CameraImpl() : m_data(0) {}
+
+	// FUNCTION: BETA10 0x1016f200
 	~CameraImpl() override
 	{
 		if (m_data) {
@@ -236,9 +254,13 @@ private:
 };
 
 // VTABLE: LEGO1 0x100dbaf8
+// VTABLE: BETA10 0x101c31e0
 class LightImpl : public Light {
 public:
+	// FUNCTION: BETA10 0x1016b260
 	LightImpl() : m_data(0) {}
+
+	// FUNCTION: BETA10 0x1016c7e0
 	~LightImpl() override
 	{
 		if (m_data) {
@@ -262,9 +284,13 @@ private:
 };
 
 // VTABLE: LEGO1 0x100dbb88
+// VTABLE: BETA10 0x101c3340
 class MeshImpl : public Mesh {
 public:
+	// FUNCTION: BETA10 0x1016f970
 	MeshImpl() : m_data(0) {}
+
+	// FUNCTION: BETA10 0x10170460
 	~MeshImpl() override
 	{
 		if (m_data) {
@@ -305,9 +331,13 @@ private:
 };
 
 // VTABLE: LEGO1 0x100dba68
+// VTABLE: BETA10 0x101c3150
 class GroupImpl : public Group {
 public:
+	// FUNCTION: BETA10 0x1016a240
 	GroupImpl() : m_data(0) {}
+
+	// FUNCTION: BETA10 0x1016a410
 	~GroupImpl() override
 	{
 		if (m_data) {
@@ -346,9 +376,13 @@ private:
 };
 
 // VTABLE: LEGO1 0x100dbb18
+// VTABLE: BETA10 0x101c3270
 class MeshBuilderImpl : public MeshBuilder {
 public:
+	// FUNCTION: BETA10 0x1016b460
 	MeshBuilderImpl() : m_data(0) {}
+
+	// FUNCTION: BETA10 0x1016f5c0
 	~MeshBuilderImpl() override
 	{
 		if (m_data) {
@@ -419,9 +453,13 @@ public:
 };
 
 // VTABLE: LEGO1 0x100dbb48
+// VTABLE: BETA10 0x101c31c0
 class TextureImpl : public Texture {
 public:
+	// FUNCTION: BETA10 0x1016b1e0
 	TextureImpl() : m_data(0) {}
+
+	// FUNCTION: BETA10 0x1016c2d0
 	~TextureImpl() override
 	{
 		if (m_data) {
@@ -519,30 +557,39 @@ inline D3DRMMATRIX4D* Translate(FloatMatrix4& tglMatrix4x4, D3DRMMATRIX4D& rD3DR
 }
 
 // SYNTHETIC: LEGO1 0x100a16d0
+// SYNTHETIC: BETA10 0x10169aa0
 // TglImpl::RendererImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a22c0
+// SYNTHETIC: BETA10 0x1016b700
 // TglImpl::DeviceImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a23a0
+// SYNTHETIC: BETA10 0x1016b810
 // TglImpl::ViewImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a2480
+// SYNTHETIC: BETA10 0x1016a2c0
 // TglImpl::GroupImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a2560
+// SYNTHETIC: BETA10 0x1016b920
 // TglImpl::CameraImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a2640
+// SYNTHETIC: BETA10 0x1016b5f0
 // TglImpl::LightImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a2720
+// SYNTHETIC: BETA10 0x1016ba30
 // TglImpl::MeshBuilderImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a2800
+// SYNTHETIC: BETA10 0x1016b4e0
 // TglImpl::TextureImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a3d80
+// SYNTHETIC: BETA10 0x1016fa90
 // TglImpl::MeshImpl::`scalar deleting destructor'
 
 // GLOBAL: LEGO1 0x100dd1e0
