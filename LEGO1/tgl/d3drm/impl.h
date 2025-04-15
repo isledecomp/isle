@@ -229,6 +229,14 @@ public:
 	Result Remove(const LightImpl& rLight);
 	Result SetCamera(const CameraImpl& rCamera);
 	Result Render(const GroupImpl& rScene);
+	Result Pick(
+		unsigned long x,
+		unsigned long y,
+		const GroupImpl** ppGroupsToPickFrom,
+		int groupsToPickFromCount,
+		const Group**& rppPickedGroups,
+		int& rPickedGroupCount
+	);
 
 	friend class RendererImpl;
 
@@ -619,6 +627,7 @@ inline D3DRMRENDERQUALITY Translate(ShadingModel tglShadingModel)
 	return renderQuality;
 }
 
+// FUNCTION: BETA10 0x101703b0
 inline D3DRMPROJECTIONTYPE Translate(ProjectionType tglProjectionType)
 {
 	D3DRMPROJECTIONTYPE projectionType;
@@ -647,6 +656,16 @@ inline D3DRMMATRIX4D* Translate(FloatMatrix4& tglMatrix4x4, D3DRMMATRIX4D& rD3DR
 		}
 	}
 	return &rD3DRMMatrix4x4;
+}
+
+// FUNCTION: BETA10 0x1016fba0
+inline D3DVECTOR* Translate(const float tglVector[3], D3DVECTOR& rD3DVector)
+{
+	rD3DVector.x = D3DVAL(tglVector[0]);
+	rD3DVector.y = D3DVAL(tglVector[1]);
+	rD3DVector.z = D3DVAL(tglVector[2]);
+
+	return &rD3DVector;
 }
 
 // SYNTHETIC: LEGO1 0x100a16d0

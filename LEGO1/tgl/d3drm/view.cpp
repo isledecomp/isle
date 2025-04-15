@@ -104,11 +104,12 @@ void ViewportDestroyCallback(IDirect3DRMObject* pObject, void* pArg)
 }
 
 // FUNCTION: LEGO1 0x100a1290
+// FUNCTION: BETA10 0x10168eab
 Result ViewportPickImpl(
 	IDirect3DRMViewport* pViewport,
 	int x,
 	int y,
-	const Group** ppGroupsToPickFrom,
+	const GroupImpl** ppGroupsToPickFrom,
 	int groupsToPickFromCount,
 	const Group**& rppPickedGroups,
 	int& rPickedGroupCount
@@ -233,26 +234,51 @@ Result ViewImpl::SetCamera(const Camera* pCamera)
 	return SetCamera(*static_cast<const CameraImpl*>(pCamera));
 }
 
-// FUNCTION: LEGO1 0x100a2e70
-Result ViewImpl::SetProjection(ProjectionType type)
+// FUNCTION: BETA10 0x1016e870
+inline Result ViewSetProjection(IDirect3DRMViewport* pViewport, ProjectionType type)
 {
-	return ResultVal(m_data->SetProjection(Translate(type)));
+	D3DRMPROJECTIONTYPE projectionType = Translate(type);
+
+	return ResultVal(pViewport->SetProjection(projectionType));
 }
 
-// FUNCTION: LEGO1 0x100a2eb0
-Result ViewImpl::SetFrustrum(float frontClippingDistance, float backClippingDistance, float degrees)
+// FUNCTION: LEGO1 0x100a2e70
+// FUNCTION: BETA10 0x1016e810
+Result ViewImpl::SetProjection(ProjectionType type)
+{
+	assert(m_data);
+
+	return ViewSetProjection(m_data, type);
+}
+
+// FUNCTION: BETA10 0x1016e920
+inline Result ViewSetFrustrum(
+	IDirect3DRMViewport* pViewport,
+	float frontClippingDistance,
+	float backClippingDistance,
+	float degrees
+)
 {
 	float field = frontClippingDistance * tan(DegreesToRadians(degrees / 2));
 	Result result;
-	result = ResultVal(m_data->SetFront(frontClippingDistance));
+	result = ResultVal(pViewport->SetFront(frontClippingDistance));
 	if (Succeeded(result)) {
-		result = ResultVal(m_data->SetBack(backClippingDistance));
+		result = ResultVal(pViewport->SetBack(backClippingDistance));
 	}
 	if (Succeeded(result)) {
-		result = ResultVal(m_data->SetField(field));
+		result = ResultVal(pViewport->SetField(field));
 	}
 
 	return result;
+}
+
+// FUNCTION: LEGO1 0x100a2eb0
+// FUNCTION: BETA10 0x1016e8b0
+Result ViewImpl::SetFrustrum(float frontClippingDistance, float backClippingDistance, float degrees)
+{
+	assert(m_data);
+
+	return ViewSetFrustrum(m_data, frontClippingDistance, backClippingDistance, degrees);
 }
 
 // FUNCTION: BETA10 0x1016ea70
@@ -269,9 +295,8 @@ inline Result ViewSetBackgroundColor(IDirect3DRMViewport* pViewport, float r, fl
 
 	if (pViewportAppData->m_pLastRenderedFrame) {
 		result = ResultVal(pViewportAppData->m_pLastRenderedFrame->SetSceneBackgroundRGB(r, g, b));
+		assert(Succeeded(result));
 	}
-
-	assert(Succeeded(result));
 
 	return result;
 }
@@ -411,22 +436,39 @@ Result ViewImpl::Render(const Group* pGroup)
 	return Render(*static_cast<const GroupImpl*>(pGroup));
 }
 
-// FUNCTION: LEGO1 0x100a3080
-Result ViewImpl::ForceUpdate(unsigned long x, unsigned long y, unsigned long width, unsigned long height)
-{
-	return ResultVal(m_data->ForceUpdate(x, y, x + width - 1, y + height - 1));
-}
-
-// FUNCTION: LEGO1 0x100a30c0
-Result ViewImpl::Pick(
+// FUNCTION: BETA10 0x1016edd0
+inline Result ViewForceUpdate(
+	IDirect3DRMViewport* pViewport,
 	unsigned long x,
 	unsigned long y,
-	const Group** ppGroupsToPickFrom,
+	unsigned long width,
+	unsigned long height
+)
+{
+	return ResultVal(pViewport->ForceUpdate(x, y, x + width - 1, y + height - 1));
+}
+
+// FUNCTION: LEGO1 0x100a3080
+// FUNCTION: BETA10 0x1016ed60
+Result ViewImpl::ForceUpdate(unsigned long x, unsigned long y, unsigned long width, unsigned long height)
+{
+	assert(m_data);
+
+	return ViewForceUpdate(m_data, x, y, width, height);
+}
+
+// FUNCTION: BETA10 0x101710f0
+inline Result ViewImpl::Pick(
+	unsigned long x,
+	unsigned long y,
+	const GroupImpl** ppGroupsToPickFrom,
 	int groupsToPickFromCount,
 	const Group**& rppPickedGroups,
 	int& rPickedGroupCount
 )
 {
+	assert(m_data);
+
 	return ViewportPickImpl(
 		m_data,
 		x,
@@ -438,17 +480,38 @@ Result ViewImpl::Pick(
 	);
 }
 
-// FUNCTION: LEGO1 0x100a30f0
-Result ViewImpl::TransformWorldToScreen(const float world[3], float screen[4])
+// FUNCTION: LEGO1 0x100a30c0
+// FUNCTION: BETA10 0x1016ee10
+Result ViewImpl::Pick(
+	unsigned long x,
+	unsigned long y,
+	const Group** ppGroupsToPickFrom,
+	int groupsToPickFromCount,
+	const Group**& rppPickedGroups,
+	int& rPickedGroupCount
+)
+{
+	assert(m_data);
+
+	return Pick(
+		x,
+		y,
+		reinterpret_cast<const GroupImpl**>(ppGroupsToPickFrom),
+		groupsToPickFromCount,
+		rppPickedGroups,
+		rPickedGroupCount
+	);
+}
+
+// FUNCTION: BETA10 0x1016eff0
+inline Result ViewTransformWorldToScreen(IDirect3DRMViewport* pViewport, const float world[3], float screen[4])
 {
 	D3DRMVECTOR4D d3dRMScreen;
 	D3DVECTOR d3dRMWorld;
-	d3dRMWorld.x = world[0];
-	d3dRMWorld.y = world[1];
-	d3dRMWorld.z = world[2];
+	D3DVECTOR* pD3DRMWorld = Translate(world, d3dRMWorld);
 	Result result;
 
-	result = ResultVal(m_data->Transform(&d3dRMScreen, &d3dRMWorld));
+	result = ResultVal(pViewport->Transform(&d3dRMScreen, pD3DRMWorld));
 
 	if (Succeeded(result)) {
 		screen[0] = d3dRMScreen.x;
@@ -460,10 +523,18 @@ Result ViewImpl::TransformWorldToScreen(const float world[3], float screen[4])
 	return result;
 }
 
-// FUNCTION: LEGO1 0x100a3160
-Result ViewImpl::TransformScreenToWorld(const float screen[4], float world[3])
+// FUNCTION: LEGO1 0x100a30f0
+// FUNCTION: BETA10 0x1016ef90
+Result ViewImpl::TransformWorldToScreen(const float world[3], float screen[4])
 {
-	// 100% match minus instruction reordering.
+	assert(m_data);
+
+	return ViewTransformWorldToScreen(m_data, world, screen);
+}
+
+// FUNCTION: BETA10 0x1016f0d0
+inline Result ViewTransformScreenToWorld(IDirect3DRMViewport* pViewport, const float screen[4], float world[3])
+{
 	D3DVECTOR d3dRMWorld;
 	D3DRMVECTOR4D d3dScreen;
 	d3dScreen.x = screen[0];
@@ -472,7 +543,7 @@ Result ViewImpl::TransformScreenToWorld(const float screen[4], float world[3])
 	d3dScreen.w = screen[3];
 	Result result;
 
-	result = ResultVal(m_data->InverseTransform(&d3dRMWorld, &d3dScreen));
+	result = ResultVal(pViewport->InverseTransform(&d3dRMWorld, &d3dScreen));
 
 	if (Succeeded(result)) {
 		world[0] = d3dRMWorld.x;
@@ -481,4 +552,13 @@ Result ViewImpl::TransformScreenToWorld(const float screen[4], float world[3])
 	}
 
 	return result;
+}
+
+// FUNCTION: LEGO1 0x100a3160
+// FUNCTION: BETA10 0x1016f070
+Result ViewImpl::TransformScreenToWorld(const float screen[4], float world[3])
+{
+	assert(m_data);
+
+	return ViewTransformScreenToWorld(m_data, screen, world);
 }
