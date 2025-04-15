@@ -26,6 +26,7 @@ namespace TglImpl
 using namespace Tgl;
 
 // Utility function used by implementations
+// FUNCTION: BETA10 0x10169cf0
 inline Result ResultVal(HRESULT result)
 {
 	return SUCCEEDED(result) ? Success : Error;
@@ -133,13 +134,7 @@ public:
 	DeviceImpl() : m_data(0) {}
 
 	// FUNCTION: BETA10 0x1016dd80
-	~DeviceImpl() override
-	{
-		if (m_data) {
-			m_data->Release();
-			m_data = NULL;
-		}
-	}
+	~DeviceImpl() override { Destroy(); }
 
 	void* ImplementationDataPtr() override;
 
@@ -161,11 +156,28 @@ public:
 	IDirect3DRMDevice2* ImplementationData() const { return m_data; }
 	void SetImplementationData(IDirect3DRMDevice2* device) { m_data = device; }
 
+	inline void Destroy();
+
 	friend class RendererImpl;
 
 private:
 	IDirect3DRMDevice2* m_data;
 };
+
+// FUNCTION: BETA10 0x101708c0
+inline void DeviceDestroy(IDirect3DRMDevice2* pDevice)
+{
+	pDevice->Release();
+}
+
+// FUNCTION: BETA10 0x10170880
+void DeviceImpl::Destroy()
+{
+	if (m_data) {
+		DeviceDestroy(m_data);
+		m_data = NULL;
+	}
+}
 
 // VTABLE: LEGO1 0x100db9e8
 // VTABLE: BETA10 0x101c3220
@@ -175,13 +187,7 @@ public:
 	ViewImpl() : m_data(0) {}
 
 	// FUNCTION: BETA10 0x1016e5d0
-	~ViewImpl() override
-	{
-		if (m_data) {
-			m_data->Release();
-			m_data = NULL;
-		}
-	}
+	~ViewImpl() override { Destroy(); }
 
 	void* ImplementationDataPtr() override;
 
@@ -218,11 +224,40 @@ public:
 
 	static Result ViewportCreateAppData(IDirect3DRM2*, IDirect3DRMViewport*, IDirect3DRMFrame2*);
 
+	inline void Destroy();
+	Result Add(const LightImpl& rLight);
+	Result Remove(const LightImpl& rLight);
+	Result SetCamera(const CameraImpl& rCamera);
+	Result Render(const GroupImpl& rScene);
+	Result Pick(
+		unsigned long x,
+		unsigned long y,
+		const GroupImpl** ppGroupsToPickFrom,
+		int groupsToPickFromCount,
+		const Group**& rppPickedGroups,
+		int& rPickedGroupCount
+	);
+
 	friend class RendererImpl;
 
 private:
 	IDirect3DRMViewport* m_data;
 };
+
+// FUNCTION: BETA10 0x101711a0
+inline void ViewDestroy(IDirect3DRMViewport* pView)
+{
+	pView->Release();
+}
+
+// FUNCTION: BETA10 0x10171160
+void ViewImpl::Destroy()
+{
+	if (m_data) {
+		ViewDestroy(m_data);
+		m_data = NULL;
+	}
+}
 
 // VTABLE: LEGO1 0x100dbad8
 // VTABLE: BETA10 0x101c3260
@@ -232,13 +267,7 @@ public:
 	CameraImpl() : m_data(0) {}
 
 	// FUNCTION: BETA10 0x1016f200
-	~CameraImpl() override
-	{
-		if (m_data) {
-			m_data->Release();
-			m_data = NULL;
-		}
-	}
+	~CameraImpl() override { Destroy(); }
 
 	void* ImplementationDataPtr() override;
 
@@ -247,11 +276,28 @@ public:
 
 	IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
+	inline void Destroy();
+
 	friend class RendererImpl;
 
 private:
 	IDirect3DRMFrame2* m_data;
 };
+
+// FUNCTION: BETA10 0x10170940
+inline void CameraDestroy(IDirect3DRMFrame2* pFrame)
+{
+	pFrame->Release();
+}
+
+// FUNCTION: BETA10 0x10170900
+void CameraImpl::Destroy()
+{
+	if (m_data) {
+		CameraDestroy(m_data);
+		m_data = NULL;
+	}
+}
 
 // VTABLE: LEGO1 0x100dbaf8
 // VTABLE: BETA10 0x101c31e0
@@ -261,13 +307,7 @@ public:
 	LightImpl() : m_data(0) {}
 
 	// FUNCTION: BETA10 0x1016c7e0
-	~LightImpl() override
-	{
-		if (m_data) {
-			m_data->Release();
-			m_data = NULL;
-		}
-	}
+	~LightImpl() override { Destroy(); }
 
 	void* ImplementationDataPtr() override;
 
@@ -277,11 +317,28 @@ public:
 
 	IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
+	inline void Destroy();
+
 	friend class RendererImpl;
 
 private:
 	IDirect3DRMFrame2* m_data;
 };
+
+// FUNCTION: BETA10 0x10170390
+inline void LightDestroy(IDirect3DRMFrame2* pLight)
+{
+	pLight->Release();
+}
+
+// FUNCTION: BETA10 0x10170350
+void LightImpl::Destroy()
+{
+	if (m_data) {
+		LightDestroy(m_data);
+		m_data = NULL;
+	}
+}
 
 // VTABLE: LEGO1 0x100dbb88
 // VTABLE: BETA10 0x101c3340
@@ -291,13 +348,7 @@ public:
 	MeshImpl() : m_data(0) {}
 
 	// FUNCTION: BETA10 0x10170460
-	~MeshImpl() override
-	{
-		if (m_data) {
-			delete m_data;
-			m_data = NULL;
-		}
-	}
+	~MeshImpl() override { Destroy(); }
 
 	void* ImplementationDataPtr() override;
 
@@ -324,11 +375,28 @@ public:
 	const MeshDataType& ImplementationData() const { return m_data; }
 	MeshDataType& ImplementationData() { return m_data; }
 
+	inline void Destroy();
+
 	friend class RendererImpl;
 
 private:
 	MeshDataType m_data;
 };
+
+// FUNCTION: BETA10 0x10171b40
+inline void MeshDestroy(MeshImpl::MeshDataType pMesh)
+{
+	delete pMesh;
+}
+
+// FUNCTION: BETA10 0x10171b00
+void MeshImpl::Destroy()
+{
+	if (m_data) {
+		MeshDestroy(m_data);
+		m_data = NULL;
+	}
+}
 
 // VTABLE: LEGO1 0x100dba68
 // VTABLE: BETA10 0x101c3150
@@ -338,13 +406,7 @@ public:
 	GroupImpl() : m_data(0) {}
 
 	// FUNCTION: BETA10 0x1016a410
-	~GroupImpl() override
-	{
-		if (m_data) {
-			m_data->Release();
-			m_data = NULL;
-		}
-	}
+	~GroupImpl() override { Destroy(); }
 
 	void* ImplementationDataPtr() override;
 
@@ -369,11 +431,28 @@ public:
 
 	IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
+	inline void Destroy();
+
 	friend class RendererImpl;
 
 private:
 	IDirect3DRMFrame2* m_data;
 };
+
+// FUNCTION: BETA10 0x1016c2b0
+inline void GroupDestroy(IDirect3DRMFrame2* pGroup)
+{
+	pGroup->Release();
+}
+
+// FUNCTION: BETA10 0x1016c270
+void GroupImpl::Destroy()
+{
+	if (m_data) {
+		GroupDestroy(m_data);
+		m_data = NULL;
+	}
+}
 
 // VTABLE: LEGO1 0x100dbb18
 // VTABLE: BETA10 0x101c3270
@@ -383,13 +462,7 @@ public:
 	MeshBuilderImpl() : m_data(0) {}
 
 	// FUNCTION: BETA10 0x1016f5c0
-	~MeshBuilderImpl() override
-	{
-		if (m_data) {
-			m_data->Release();
-			m_data = NULL;
-		}
-	}
+	~MeshBuilderImpl() override { Destroy(); }
 
 	void* ImplementationDataPtr() override;
 
@@ -411,6 +484,8 @@ public:
 
 	IDirect3DRMMesh* ImplementationData() const { return m_data; }
 
+	inline void Destroy();
+
 	friend class RendererImpl;
 
 private:
@@ -428,6 +503,21 @@ private:
 
 	IDirect3DRMMesh* m_data;
 };
+
+// FUNCTION: BETA10 0x10171220
+inline void MeshBuilderDestroy(IDirect3DRMMesh* pMeshBuilder)
+{
+	pMeshBuilder->Release();
+}
+
+// FUNCTION: BETA10 0x101711e0
+void MeshBuilderImpl::Destroy()
+{
+	if (m_data) {
+		MeshBuilderDestroy(m_data);
+		m_data = NULL;
+	}
+}
 
 // No vtable, this is just a simple wrapper around D3DRMIMAGE
 class TglD3DRMIMAGE {
@@ -460,13 +550,7 @@ public:
 	TextureImpl() : m_data(0) {}
 
 	// FUNCTION: BETA10 0x1016c2d0
-	~TextureImpl() override
-	{
-		if (m_data) {
-			m_data->Release();
-			m_data = NULL;
-		}
-	}
+	~TextureImpl() override { Destroy(); }
 
 	void* ImplementationDataPtr() override;
 
@@ -489,6 +573,8 @@ public:
 	IDirect3DRMTexture* ImplementationData() const { return m_data; }
 	void SetImplementation(IDirect3DRMTexture* pData) { m_data = pData; }
 
+	inline void Destroy();
+
 	friend class RendererImpl;
 
 	static Result SetImage(IDirect3DRMTexture* pSelf, TglD3DRMIMAGE* pImage);
@@ -496,6 +582,21 @@ public:
 private:
 	IDirect3DRMTexture* m_data;
 };
+
+// FUNCTION: BETA10 0x1016fd40
+inline void TextureDestroy(IDirect3DRMTexture* pTexture)
+{
+	pTexture->Release();
+}
+
+// FUNCTION: BETA10 0x1016fd00
+void TextureImpl::Destroy()
+{
+	if (m_data) {
+		TextureDestroy(m_data);
+		m_data = NULL;
+	}
+}
 
 // Translation helpers
 inline D3DRMRENDERQUALITY Translate(ShadingModel tglShadingModel)
@@ -526,6 +627,7 @@ inline D3DRMRENDERQUALITY Translate(ShadingModel tglShadingModel)
 	return renderQuality;
 }
 
+// FUNCTION: BETA10 0x101703b0
 inline D3DRMPROJECTIONTYPE Translate(ProjectionType tglProjectionType)
 {
 	D3DRMPROJECTIONTYPE projectionType;
@@ -554,6 +656,16 @@ inline D3DRMMATRIX4D* Translate(FloatMatrix4& tglMatrix4x4, D3DRMMATRIX4D& rD3DR
 		}
 	}
 	return &rD3DRMMatrix4x4;
+}
+
+// FUNCTION: BETA10 0x1016fba0
+inline D3DVECTOR* Translate(const float tglVector[3], D3DVECTOR& rD3DVector)
+{
+	rD3DVector.x = D3DVAL(tglVector[0]);
+	rD3DVector.y = D3DVAL(tglVector[1]);
+	rD3DVector.z = D3DVAL(tglVector[2]);
+
+	return &rD3DVector;
 }
 
 // SYNTHETIC: LEGO1 0x100a16d0
