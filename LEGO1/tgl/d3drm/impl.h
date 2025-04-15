@@ -26,6 +26,7 @@ namespace TglImpl
 using namespace Tgl;
 
 // Utility function used by implementations
+// FUNCTION: BETA10 0x10169cf0
 inline Result ResultVal(HRESULT result)
 {
 	return SUCCEEDED(result) ? Success : Error;
@@ -224,6 +225,7 @@ public:
 	static Result ViewportCreateAppData(IDirect3DRM2*, IDirect3DRMViewport*, IDirect3DRMFrame2*);
 
 	inline void Destroy();
+	Result SetCamera(const CameraImpl& rCamera);
 
 	friend class RendererImpl;
 

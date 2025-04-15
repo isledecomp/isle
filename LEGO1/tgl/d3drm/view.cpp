@@ -1,5 +1,7 @@
 #include "impl.h"
 
+#include <assert.h>
+
 using namespace TglImpl;
 
 struct ViewportAppData {
@@ -61,6 +63,7 @@ Result ViewImpl::ViewportCreateAppData(IDirect3DRM2* pDevice, IDirect3DRMViewpor
 	return result;
 }
 
+// FUNCTION: BETA10 0x1016bd80
 inline Result ViewRestoreFrameAfterRender(
 	IDirect3DRMFrame* pFrame,
 	IDirect3DRMFrame* pCamera,
@@ -72,7 +75,11 @@ inline Result ViewRestoreFrameAfterRender(
 		// remove camera and light frame from frame that was rendered
 		// this doesn't destroy the camera as it is still the camera of the viewport...
 		result = ResultVal(pFrame->DeleteChild(pCamera));
+		assert(Succeeded(result));
+		assert((pCamera->AddRef(), pCamera->Release()) > 0);
+
 		result = ResultVal(pFrame->DeleteChild(pLightFrame));
+		assert(Succeeded(result));
 
 		// decrease frame's ref count (it was increased in ViewPrepareFrameForRender())
 		pFrame->Release();
@@ -144,25 +151,44 @@ Result ViewImpl::Remove(const Light* pLight)
 	return ResultVal(ViewportGetLightFrame(m_data)->DeleteChild(frame));
 }
 
-// FUNCTION: LEGO1 0x100a2df0
-Result ViewImpl::SetCamera(const Camera* pCamera)
+// FUNCTION: BETA10 0x10170cc0
+inline Result ViewSetCamera(IDirect3DRMViewport* pViewport, const IDirect3DRMFrame2* pCamera)
 {
-	const CameraImpl* camera = static_cast<const CameraImpl*>(pCamera);
-	IDirect3DRMFrame2* frame = camera->ImplementationData();
-
 	ViewportAppData* pViewportAppData;
 	Result result;
 
-	pViewportAppData = reinterpret_cast<ViewportAppData*>(m_data->GetAppData());
+	pViewportAppData = reinterpret_cast<ViewportAppData*>(pViewport->GetAppData());
+	assert(pViewportAppData);
+
 	result = ViewRestoreFrameAfterRender(
 		pViewportAppData->m_pLastRenderedFrame,
 		pViewportAppData->m_pCamera,
 		pViewportAppData->m_pLightFrame
 	);
-	pViewportAppData->m_pCamera = frame;
+	assert(Succeeded(result));
+	pViewportAppData->m_pCamera = const_cast<IDirect3DRMFrame2*>(pCamera);
 	pViewportAppData->m_pLastRenderedFrame = 0;
 
-	return ResultVal(m_data->SetCamera(frame));
+	return ResultVal(pViewport->SetCamera(const_cast<IDirect3DRMFrame2*>(pCamera)));
+}
+
+// FUNCTION: BETA10 0x10170c20
+inline Result ViewImpl::SetCamera(const CameraImpl& rCamera)
+{
+	assert(m_data);
+	assert(rCamera.ImplementationData());
+
+	return ViewSetCamera(m_data, rCamera.ImplementationData());
+}
+
+// FUNCTION: LEGO1 0x100a2df0
+// FUNCTION: BETA10 0x1016e790
+Result ViewImpl::SetCamera(const Camera* pCamera)
+{
+	assert(m_data);
+	assert(pCamera);
+
+	return SetCamera(*static_cast<const CameraImpl*>(pCamera));
 }
 
 // FUNCTION: LEGO1 0x100a2e70
