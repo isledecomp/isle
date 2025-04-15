@@ -123,9 +123,11 @@ inline ViewportAppData* ViewportGetData(IDirect3DRMViewport* pViewport)
 	return reinterpret_cast<ViewportAppData*>(pViewport->GetAppData());
 }
 
+// FUNCTION: BETA10 0x10170ab0
 inline IDirect3DRMFrame* ViewportGetLightFrame(IDirect3DRMViewport* pViewport)
 {
-	return ViewportGetData(pViewport)->m_pLightFrame;
+	assert(pViewport->GetAppData());
+	return reinterpret_cast<ViewportAppData*>(pViewport->GetAppData())->m_pLightFrame;
 }
 
 // FUNCTION: LEGO1 0x100a2d80
@@ -135,20 +137,60 @@ void* ViewImpl::ImplementationDataPtr()
 	return reinterpret_cast<void*>(&m_data);
 }
 
+// FUNCTION: BETA10 0x10170a40
+inline Result ViewAddLight(IDirect3DRMViewport* pViewport, const IDirect3DRMFrame* pLight)
+{
+	IDirect3DRMFrame* pLightFrame = ViewportGetLightFrame(pViewport);
+
+	assert(pLightFrame);
+	return ResultVal(pLightFrame->AddChild(const_cast<IDirect3DRMFrame*>(pLight)));
+}
+
+// FUNCTION: BETA10 0x101709a0
+inline Result ViewImpl::Add(const LightImpl& rLight)
+{
+	assert(m_data);
+	assert(rLight.ImplementationData());
+
+	return ViewAddLight(m_data, rLight.ImplementationData());
+}
+
 // FUNCTION: LEGO1 0x100a2d90
+// FUNCTION: BETA10 0x1016e690
 Result ViewImpl::Add(const Light* pLight)
 {
-	const LightImpl* light = static_cast<const LightImpl*>(pLight);
-	IDirect3DRMFrame* frame = light->ImplementationData();
-	return ResultVal(ViewportGetLightFrame(m_data)->AddChild(frame));
+	assert(m_data);
+	assert(pLight);
+
+	return Add(*static_cast<const LightImpl*>(pLight));
+}
+
+// FUNCTION: BETA10 0x10170bb0
+inline Result ViewRemoveLight(IDirect3DRMViewport* pViewport, const IDirect3DRMFrame* pLight)
+{
+	IDirect3DRMFrame* pLightFrame = ViewportGetLightFrame(pViewport);
+
+	assert(pLightFrame);
+	return ResultVal(pLightFrame->DeleteChild(const_cast<IDirect3DRMFrame*>(pLight)));
+}
+
+// FUNCTION: BETA10 0x10170b10
+inline Result ViewImpl::Remove(const LightImpl& rLight)
+{
+	assert(m_data);
+	assert(rLight.ImplementationData());
+
+	return ViewRemoveLight(m_data, rLight.ImplementationData());
 }
 
 // FUNCTION: LEGO1 0x100a2dc0
+// FUNCTION: BETA10 0x1016e710
 Result ViewImpl::Remove(const Light* pLight)
 {
-	const LightImpl* light = static_cast<const LightImpl*>(pLight);
-	IDirect3DRMFrame* frame = light->ImplementationData();
-	return ResultVal(ViewportGetLightFrame(m_data)->DeleteChild(frame));
+	assert(m_data);
+	assert(pLight);
+
+	return Remove(*static_cast<const LightImpl*>(pLight));
 }
 
 // FUNCTION: BETA10 0x10170cc0
@@ -213,38 +255,74 @@ Result ViewImpl::SetFrustrum(float frontClippingDistance, float backClippingDist
 	return result;
 }
 
-// FUNCTION: LEGO1 0x100a2f30
-Result ViewImpl::SetBackgroundColor(float r, float g, float b)
+// FUNCTION: BETA10 0x1016ea70
+inline Result ViewSetBackgroundColor(IDirect3DRMViewport* pViewport, float r, float g, float b)
 {
-	Result ret = Success;
-	// Note, this method in the shipped game is very diverged from
-	// the Tgl leak code.
-	ViewportAppData* data = ViewportGetData(m_data);
-	data->m_backgroundColorRed = r;
-	data->m_backgroundColorGreen = g;
-	data->m_backgroundColorBlue = b;
-	if (data->m_pLastRenderedFrame) {
-		ret = ResultVal(data->m_pLastRenderedFrame->SetSceneBackgroundRGB(r, g, b));
+	Result result = Success;
+
+	ViewportAppData* pViewportAppData = reinterpret_cast<ViewportAppData*>(pViewport->GetAppData());
+	assert(pViewportAppData);
+
+	pViewportAppData->m_backgroundColorRed = r;
+	pViewportAppData->m_backgroundColorGreen = g;
+	pViewportAppData->m_backgroundColorBlue = b;
+
+	if (pViewportAppData->m_pLastRenderedFrame) {
+		result = ResultVal(pViewportAppData->m_pLastRenderedFrame->SetSceneBackgroundRGB(r, g, b));
 	}
-	return ret;
+
+	assert(Succeeded(result));
+
+	return result;
 }
 
-// FUNCTION: LEGO1 0x100a2f80
-Result ViewImpl::GetBackgroundColor(float* r, float* g, float* b)
+// FUNCTION: LEGO1 0x100a2f30
+// FUNCTION: BETA10 0x1016ea00
+Result ViewImpl::SetBackgroundColor(float r, float g, float b)
 {
-	ViewportAppData* data = ViewportGetData(m_data);
-	*r = data->m_backgroundColorRed;
-	*g = data->m_backgroundColorGreen;
-	*b = data->m_backgroundColorBlue;
+	assert(m_data);
+
+	return ViewSetBackgroundColor(m_data, r, g, b);
+}
+
+// FUNCTION: BETA10 0x1016ebd0
+inline Result ViewGetBackgroundColor(IDirect3DRMViewport* pViewport, float* r, float* g, float* b)
+{
+	ViewportAppData* pViewportAppData = reinterpret_cast<ViewportAppData*>(pViewport->GetAppData());
+	assert(pViewportAppData);
+
+	*r = pViewportAppData->m_backgroundColorRed;
+	*g = pViewportAppData->m_backgroundColorGreen;
+	*b = pViewportAppData->m_backgroundColorBlue;
+
 	return Success;
 }
 
-// FUNCTION: LEGO1 0x100a2fb0
-Result ViewImpl::Clear()
+// FUNCTION: LEGO1 0x100a2f80
+// FUNCTION: BETA10 0x1016eb60
+Result ViewImpl::GetBackgroundColor(float* r, float* g, float* b)
 {
-	return ResultVal(m_data->Clear());
+	assert(m_data);
+
+	return ViewGetBackgroundColor(m_data, r, g, b);
 }
 
+// FUNCTION: BETA10 0x1016ecb0
+inline Result ViewClear(IDirect3DRMViewport* pViewport)
+{
+	return ResultVal(pViewport->Clear());
+}
+
+// FUNCTION: LEGO1 0x100a2fb0
+// FUNCTION: BETA10 0x1016ec50
+Result ViewImpl::Clear()
+{
+	assert(m_data);
+
+	return ViewClear(m_data);
+}
+
+// FUNCTION: BETA10 0x10170fb0
 inline Result ViewPrepareFrameForRender(
 	IDirect3DRMFrame* pFrame,
 	IDirect3DRMFrame* pCamera,
@@ -259,12 +337,15 @@ inline Result ViewPrepareFrameForRender(
 	if (pFrame) {
 		// set background color
 		result = ResultVal(pFrame->SetSceneBackgroundRGB(backgroundRed, backgroundGreen, backgroundBlue));
+		assert(Succeeded(result));
 
 		// add camera to frame to be rendered
 		result = ResultVal(pFrame->AddChild(pCamera));
+		assert(Succeeded(result));
 
 		// add light frame to frame to be rendered
 		result = ResultVal(pFrame->AddChild(pLightFrame));
+		assert(Succeeded(result));
 
 		// increase ref count of frame to ensure it does not get deleted underneath us
 		pFrame->AddRef();
@@ -273,12 +354,14 @@ inline Result ViewPrepareFrameForRender(
 	return result;
 }
 
+// FUNCTION: BETA10 0x10170e30
 inline Result ViewRender(IDirect3DRMViewport* pViewport, const IDirect3DRMFrame2* pGroup)
 {
 	ViewportAppData* pViewportAppData;
 	Result result;
 
 	pViewportAppData = reinterpret_cast<ViewportAppData*>(pViewport->GetAppData());
+	assert(pViewportAppData);
 
 	if (pViewportAppData->m_pLastRenderedFrame != pGroup) {
 		result = ViewRestoreFrameAfterRender(
@@ -286,6 +369,8 @@ inline Result ViewRender(IDirect3DRMViewport* pViewport, const IDirect3DRMFrame2
 			pViewportAppData->m_pCamera,
 			pViewportAppData->m_pLightFrame
 		);
+
+		assert(Succeeded(result));
 
 		pViewportAppData->m_pLastRenderedFrame = const_cast<IDirect3DRMFrame2*>(pGroup);
 
@@ -299,14 +384,31 @@ inline Result ViewRender(IDirect3DRMViewport* pViewport, const IDirect3DRMFrame2
 		);
 	}
 
+	assert(Succeeded(result));
+
 	result = ResultVal(pViewport->Render(const_cast<IDirect3DRMFrame2*>(pGroup)));
+	assert(Succeeded(result));
+
 	return result;
 }
 
+// FUNCTION: BETA10 0x10170d90
+inline Result ViewImpl::Render(const GroupImpl& rScene)
+{
+	assert(m_data);
+	assert(rScene.ImplementationData());
+
+	return ViewRender(m_data, rScene.ImplementationData());
+}
+
 // FUNCTION: LEGO1 0x100a2fd0
+// FUNCTION: BETA10 0x1016ece0
 Result ViewImpl::Render(const Group* pGroup)
 {
-	return ViewRender(m_data, static_cast<const GroupImpl*>(pGroup)->ImplementationData());
+	assert(m_data);
+	assert(pGroup);
+
+	return Render(*static_cast<const GroupImpl*>(pGroup));
 }
 
 // FUNCTION: LEGO1 0x100a3080

@@ -225,7 +225,10 @@ public:
 	static Result ViewportCreateAppData(IDirect3DRM2*, IDirect3DRMViewport*, IDirect3DRMFrame2*);
 
 	inline void Destroy();
+	Result Add(const LightImpl& rLight);
+	Result Remove(const LightImpl& rLight);
 	Result SetCamera(const CameraImpl& rCamera);
+	Result Render(const GroupImpl& rScene);
 
 	friend class RendererImpl;
 
