@@ -1,5 +1,7 @@
 #include "impl.h"
 
+#include <assert.h>
+
 using namespace TglImpl;
 
 DECOMP_SIZE_ASSERT(MeshBuilder, 0x04);
@@ -159,12 +161,12 @@ inline Result MeshBuilderImpl::CreateMeshImpl(
 	);
 }
 
-// FUNCTION: LEGO1 0x100a3ae0
-Result MeshBuilderImpl::GetBoundingBox(float min[3], float max[3]) const
+// FUNCTION: BETA10 0x1016e060
+inline Result MeshBuilderGetBoundingBox(IDirect3DRMMesh* pMesh, float min[3], float max[3])
 {
 	D3DRMBOX box;
-	Result result = ResultVal(m_data->GetBox(&box));
-	if (result == Success) {
+	Result result = ResultVal(pMesh->GetBox(&box));
+	if (Succeeded(result)) {
 		min[0] = box.min.x;
 		min[1] = box.min.y;
 		min[2] = box.min.z;
@@ -173,6 +175,15 @@ Result MeshBuilderImpl::GetBoundingBox(float min[3], float max[3]) const
 		max[2] = box.max.z;
 	}
 	return result;
+}
+
+// FUNCTION: LEGO1 0x100a3ae0
+// FUNCTION: BETA10 0x1016ce00
+Result MeshBuilderImpl::GetBoundingBox(float min[3], float max[3]) const
+{
+	assert(m_data);
+
+	return MeshBuilderGetBoundingBox(m_data, min, max);
 }
 
 // FUNCTION: LEGO1 0x100a3b40

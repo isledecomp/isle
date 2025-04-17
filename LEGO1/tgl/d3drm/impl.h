@@ -603,6 +603,7 @@ void TextureImpl::Destroy()
 }
 
 // Translation helpers
+// FUNCTION: BETA10 0x1016fc40
 inline D3DRMRENDERQUALITY Translate(ShadingModel tglShadingModel)
 {
 	D3DRMRENDERQUALITY renderQuality;

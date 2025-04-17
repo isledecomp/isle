@@ -1,5 +1,7 @@
 #include "impl.h"
 
+#include <assert.h>
+
 using namespace TglImpl;
 
 DECOMP_SIZE_ASSERT(D3DRMVERTEX, 0x24);
@@ -49,28 +51,19 @@ Result MeshImpl::SetTextureMappingMode(TextureMappingMode mode)
 	}
 }
 
+// FUNCTION: BETA10 0x10170750
+inline Result MeshSetShadingModel(MeshImpl::MeshData* pMesh, ShadingModel model)
+{
+	D3DRMRENDERQUALITY mode = Translate(model);
+	return ResultVal(pMesh->groupMesh->SetGroupQuality(pMesh->groupIndex, mode));
+}
+
 // FUNCTION: LEGO1 0x100a3fc0
+// FUNCTION: BETA10 0x101706f0
 Result MeshImpl::SetShadingModel(ShadingModel model)
 {
-	D3DRMRENDERQUALITY mode;
-	switch (model) {
-	case Wireframe:
-		mode = D3DRMRENDER_WIREFRAME;
-		break;
-	case UnlitFlat:
-		mode = D3DRMRENDER_UNLITFLAT;
-		break;
-	case Flat:
-		mode = D3DRMRENDER_FLAT;
-		break;
-	case Gouraud:
-		mode = D3DRMRENDER_GOURAUD;
-		break;
-	case Phong:
-		mode = D3DRMRENDER_PHONG;
-		break;
-	}
-	return ResultVal(m_data->groupMesh->SetGroupQuality(m_data->groupIndex, mode));
+	assert(m_data);
+	return MeshSetShadingModel(m_data, model);
 }
 
 // FUNCTION: LEGO1 0x100a4030
