@@ -100,6 +100,7 @@ public:
 public:
 	inline Result Create();
 	inline void Destroy();
+	inline Result CreateLight(LightType type, float r, float g, float b, LightImpl& rLight);
 
 private:
 	IDirect3DRM2* m_data;
@@ -315,14 +316,17 @@ public:
 	Result SetTransformation(FloatMatrix4&) override;
 	Result SetColor(float r, float g, float b) override;
 
-	IDirect3DRMFrame2* ImplementationData() const { return m_data; }
+	typedef IDirect3DRMFrame2* LightDataType;
+
+	const LightDataType& ImplementationData() const { return m_data; }
+	LightDataType& ImplementationData() { return m_data; }
 
 	inline void Destroy();
 
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMFrame2* m_data;
+	LightDataType m_data;
 };
 
 // FUNCTION: BETA10 0x10170390
@@ -666,6 +670,36 @@ inline D3DVECTOR* Translate(const float tglVector[3], D3DVECTOR& rD3DVector)
 	rD3DVector.z = D3DVAL(tglVector[2]);
 
 	return &rD3DVector;
+}
+
+// FUNCTION: BETA10 0x1016fd80
+inline D3DRMLIGHTTYPE Translate(LightType tglLightType)
+{
+	D3DRMLIGHTTYPE lightType;
+
+	// ??? use lookup table
+	switch (tglLightType) {
+	case Ambient:
+		lightType = D3DRMLIGHT_AMBIENT;
+		break;
+	case Point:
+		lightType = D3DRMLIGHT_POINT;
+		break;
+	case Spot:
+		lightType = D3DRMLIGHT_SPOT;
+		break;
+	case Directional:
+		lightType = D3DRMLIGHT_DIRECTIONAL;
+		break;
+	case ParallelPoint:
+		lightType = D3DRMLIGHT_PARALLELPOINT;
+		break;
+	default:
+		lightType = D3DRMLIGHT_AMBIENT;
+		break;
+	}
+
+	return lightType;
 }
 
 // SYNTHETIC: LEGO1 0x100a16d0
