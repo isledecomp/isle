@@ -100,6 +100,7 @@ public:
 public:
 	inline Result Create();
 	inline void Destroy();
+	inline Result CreateLight(LightType type, float r, float g, float b, LightImpl& rLight);
 
 private:
 	IDirect3DRM2* m_data;
@@ -300,13 +301,13 @@ void CameraImpl::Destroy()
 }
 
 // VTABLE: LEGO1 0x100dbaf8
-// VTABLE: BETA10 0x101c31e0
+// VTABLE: BETA10 0x101c3270
 class LightImpl : public Light {
 public:
-	// FUNCTION: BETA10 0x1016b260
+	// FUNCTION: BETA10 0x1016b460
 	LightImpl() : m_data(0) {}
 
-	// FUNCTION: BETA10 0x1016c7e0
+	// FUNCTION: BETA10 0x1016f5c0
 	~LightImpl() override { Destroy(); }
 
 	void* ImplementationDataPtr() override;
@@ -315,23 +316,26 @@ public:
 	Result SetTransformation(FloatMatrix4&) override;
 	Result SetColor(float r, float g, float b) override;
 
-	IDirect3DRMFrame2* ImplementationData() const { return m_data; }
+	typedef IDirect3DRMFrame2* LightDataType;
+
+	const LightDataType& ImplementationData() const { return m_data; }
+	LightDataType& ImplementationData() { return m_data; }
 
 	inline void Destroy();
 
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMFrame2* m_data;
+	LightDataType m_data;
 };
 
-// FUNCTION: BETA10 0x10170390
+// FUNCTION: BETA10 0x10171220
 inline void LightDestroy(IDirect3DRMFrame2* pLight)
 {
 	pLight->Release();
 }
 
-// FUNCTION: BETA10 0x10170350
+// FUNCTION: BETA10 0x101711e0
 void LightImpl::Destroy()
 {
 	if (m_data) {
@@ -455,13 +459,13 @@ void GroupImpl::Destroy()
 }
 
 // VTABLE: LEGO1 0x100dbb18
-// VTABLE: BETA10 0x101c3270
+// VTABLE: BETA10 0x101c31e0
 class MeshBuilderImpl : public MeshBuilder {
 public:
-	// FUNCTION: BETA10 0x1016b460
+	// FUNCTION: BETA10 0x1016b260
 	MeshBuilderImpl() : m_data(0) {}
 
-	// FUNCTION: BETA10 0x1016f5c0
+	// FUNCTION: BETA10 0x1016c7e0
 	~MeshBuilderImpl() override { Destroy(); }
 
 	void* ImplementationDataPtr() override;
@@ -504,13 +508,13 @@ private:
 	IDirect3DRMMesh* m_data;
 };
 
-// FUNCTION: BETA10 0x10171220
+// FUNCTION: BETA10 0x10170390
 inline void MeshBuilderDestroy(IDirect3DRMMesh* pMeshBuilder)
 {
 	pMeshBuilder->Release();
 }
 
-// FUNCTION: BETA10 0x101711e0
+// FUNCTION: BETA10 0x10170350
 void MeshBuilderImpl::Destroy()
 {
 	if (m_data) {
@@ -599,6 +603,7 @@ void TextureImpl::Destroy()
 }
 
 // Translation helpers
+// FUNCTION: BETA10 0x1016fc40
 inline D3DRMRENDERQUALITY Translate(ShadingModel tglShadingModel)
 {
 	D3DRMRENDERQUALITY renderQuality;
@@ -668,6 +673,36 @@ inline D3DVECTOR* Translate(const float tglVector[3], D3DVECTOR& rD3DVector)
 	return &rD3DVector;
 }
 
+// FUNCTION: BETA10 0x1016fd80
+inline D3DRMLIGHTTYPE Translate(LightType tglLightType)
+{
+	D3DRMLIGHTTYPE lightType;
+
+	// ??? use lookup table
+	switch (tglLightType) {
+	case Ambient:
+		lightType = D3DRMLIGHT_AMBIENT;
+		break;
+	case Point:
+		lightType = D3DRMLIGHT_POINT;
+		break;
+	case Spot:
+		lightType = D3DRMLIGHT_SPOT;
+		break;
+	case Directional:
+		lightType = D3DRMLIGHT_DIRECTIONAL;
+		break;
+	case ParallelPoint:
+		lightType = D3DRMLIGHT_PARALLELPOINT;
+		break;
+	default:
+		lightType = D3DRMLIGHT_AMBIENT;
+		break;
+	}
+
+	return lightType;
+}
+
 // SYNTHETIC: LEGO1 0x100a16d0
 // SYNTHETIC: BETA10 0x10169aa0
 // TglImpl::RendererImpl::`scalar deleting destructor'
@@ -689,11 +724,11 @@ inline D3DVECTOR* Translate(const float tglVector[3], D3DVECTOR& rD3DVector)
 // TglImpl::CameraImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a2640
-// SYNTHETIC: BETA10 0x1016b5f0
+// SYNTHETIC: BETA10 0x1016ba30
 // TglImpl::LightImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a2720
-// SYNTHETIC: BETA10 0x1016ba30
+// SYNTHETIC: BETA10 0x1016b5f0
 // TglImpl::MeshBuilderImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a2800

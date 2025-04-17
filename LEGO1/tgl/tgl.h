@@ -285,21 +285,21 @@ public:
 };
 
 // VTABLE: LEGO1 0x100dbb08
-// VTABLE: BETA10 0x101c32a0
+// VTABLE: BETA10 0x101c3330
 class Light : public Object {
 public:
 	virtual Result SetTransformation(FloatMatrix4&) = 0;
 	virtual Result SetColor(float r, float g, float b) = 0;
 
-	// SYNTHETIC: BETA10 0x1016b630
+	// SYNTHETIC: BETA10 0x1016ba70
 	// Tgl::Light::Light
 
 	// SYNTHETIC: LEGO1 0x100a26d0
-	// SYNTHETIC: BETA10 0x1016b6a0
+	// SYNTHETIC: BETA10 0x1016bae0
 	// Tgl::Light::~Light
 
 	// SYNTHETIC: LEGO1 0x100a2aa0
-	// SYNTHETIC: BETA10 0x1016bb80
+	// SYNTHETIC: BETA10 0x1016bc80
 	// Tgl::Light::`scalar deleting destructor'
 };
 
@@ -367,7 +367,7 @@ public:
 // was not in the leaked Tgl code. My suspicion is that it's
 // some kind of builder class for creating meshes.
 // VTABLE: LEGO1 0x100dbb30
-// VTABLE: BETA10 0x101c3330
+// VTABLE: BETA10 0x101c32a0
 class MeshBuilder : public Object {
 public:
 	virtual Mesh* CreateMesh(
@@ -383,15 +383,15 @@ public:
 	virtual Result GetBoundingBox(float min[3], float max[3]) const = 0;
 	virtual MeshBuilder* Clone() = 0;
 
-	// SYNTHETIC: BETA10 0x1016ba70
+	// SYNTHETIC: BETA10 0x1016b630
 	// Tgl::MeshBuilder::MeshBuilder
 
 	// SYNTHETIC: LEGO1 0x100a27b0
-	// SYNTHETIC: BETA10 0x1016bae0
+	// SYNTHETIC: BETA10 0x1016b6a0
 	// Tgl::MeshBuilder::~MeshBuilder
 
 	// SYNTHETIC: LEGO1 0x100a2b10
-	// SYNTHETIC: BETA10 0x1016bc80
+	// SYNTHETIC: BETA10 0x1016bb80
 	// Tgl::MeshBuilder::`scalar deleting destructor'
 };
 

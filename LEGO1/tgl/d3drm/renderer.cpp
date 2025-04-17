@@ -1,5 +1,7 @@
 #include "impl.h"
 
+#include <assert.h>
+
 using namespace TglImpl;
 
 // FUNCTION: LEGO1 0x100a15e0
@@ -156,56 +158,82 @@ Camera* RendererImpl::CreateCamera()
 	return camera;
 }
 
+// FUNCTION: BETA10 0x1016d580
+inline Result RendererCreateLight(
+	IDirect3DRM2* pD3DRM,
+	LightType type,
+	float r,
+	float g,
+	float b,
+	IDirect3DRMFrame2*& rpLight
+)
+{
+	D3DRMLIGHTTYPE lightType = Translate(type);
+	IDirect3DRMFrame2* pLightFrame;
+	IDirect3DRMLight* pLight;
+	Result result;
+
+	result = ResultVal(pD3DRM->CreateFrame(NULL, &pLightFrame));
+	assert(Succeeded(result));
+	if (!Succeeded(result)) {
+		return result;
+	}
+	// pLightFrame ref count is now 1
+	assert((pLightFrame->AddRef(), pLightFrame->Release()) == 1);
+
+	result = ResultVal(pD3DRM->CreateLightRGB(lightType, D3DVAL(r), D3DVAL(g), D3DVAL(b), &pLight));
+	assert(Succeeded(result));
+	if (!Succeeded(result)) {
+		pLightFrame->Release();
+		return result;
+	}
+	// pLight ref count is now 1
+	assert((pLight->AddRef(), pLight->Release()) == 1);
+
+	result = ResultVal(pLightFrame->AddLight(pLight));
+	assert(Succeeded(result));
+	if (!Succeeded(result)) {
+		pLightFrame->Release();
+		pLight->Release();
+		return result;
+	}
+	// pLightFrame ref count is still 1
+	assert((pLightFrame->AddRef(), pLightFrame->Release()) == 1);
+
+	// pLight ref count is now 2
+	assert((pLight->AddRef(), pLight->Release()) == 2);
+
+	// Release() pLight so it gets deleted when pLightFrame is Release()
+	pLight->Release();
+
+	rpLight = pLightFrame;
+
+	return result;
+}
+
+// FUNCTION: BETA10 0x1016d4e0
+inline Result RendererImpl::CreateLight(LightType type, float r, float g, float b, LightImpl& rLight)
+{
+	assert(m_data);
+	assert(!rLight.ImplementationData());
+
+	return RendererCreateLight(m_data, type, r, g, b, rLight.ImplementationData());
+}
+
 // FUNCTION: LEGO1 0x100a1cf0
+// FUNCTION: BETA10 0x1016aa90
 Light* RendererImpl::CreateLight(LightType type, float r, float g, float b)
 {
-	LightImpl* newLight = new LightImpl();
-	D3DRMLIGHTTYPE translatedType;
-	switch (type) {
-	case Ambient:
-		translatedType = D3DRMLIGHT_AMBIENT;
-		break;
-	case Point:
-		translatedType = D3DRMLIGHT_POINT;
-		break;
-	case Spot:
-		translatedType = D3DRMLIGHT_SPOT;
-		break;
-	case Directional:
-		translatedType = D3DRMLIGHT_DIRECTIONAL;
-		break;
-	case ParallelPoint:
-		translatedType = D3DRMLIGHT_PARALLELPOINT;
-		break;
-	default:
-		translatedType = D3DRMLIGHT_AMBIENT;
+	assert(m_data);
+
+	LightImpl* pLightImpl = new LightImpl;
+
+	if (!CreateLight(type, r, g, b, *pLightImpl)) {
+		delete pLightImpl;
+		pLightImpl = 0;
 	}
 
-	LPDIRECT3DRMFRAME2 frame;
-	Result result = ResultVal(m_data->CreateFrame(NULL, &frame));
-	if (Succeeded(result)) {
-		LPDIRECT3DRMLIGHT d3dLight;
-		result = ResultVal(m_data->CreateLightRGB(translatedType, r, g, b, &d3dLight));
-		if (!Succeeded(result)) {
-			frame->Release();
-		}
-		else {
-			result = ResultVal(frame->AddLight(d3dLight));
-			if (!Succeeded(result)) {
-				d3dLight->Release();
-				frame->Release();
-			}
-			else {
-				d3dLight->Release();
-				newLight->m_data = frame;
-			}
-		}
-	}
-	if (!Succeeded(result)) {
-		delete newLight;
-		newLight = NULL;
-	}
-	return newLight;
+	return pLightImpl;
 }
 
 // FUNCTION: LEGO1 0x100a1e90
