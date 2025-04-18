@@ -19,9 +19,12 @@ struct ViewportAppData {
 DECOMP_SIZE_ASSERT(ViewportAppData, 0x18);
 
 // FUNCTION: LEGO1 0x100a10b0
+// FUNCTION: BETA10 0x10168920
 ViewportAppData::ViewportAppData(IDirect3DRM2* pRenderer)
 {
-	pRenderer->CreateFrame(NULL, &m_pLightFrame);
+	Result result = ResultVal(pRenderer->CreateFrame(NULL, &m_pLightFrame));
+	assert(Succeeded(result));
+
 	m_pCamera = NULL;
 	m_pLastRenderedFrame = NULL;
 	m_backgroundColorRed = 0.0f;
@@ -30,36 +33,64 @@ ViewportAppData::ViewportAppData(IDirect3DRM2* pRenderer)
 }
 
 // FUNCTION: LEGO1 0x100a10e0
+// FUNCTION: BETA10 0x101689bd
 ViewportAppData::~ViewportAppData()
 {
+	int refCount;
 	IDirect3DRMFrameArray* pChildFrames;
 	IDirect3DRMFrame* pChildFrame = NULL;
-	m_pLightFrame->GetChildren(&pChildFrames);
+	Result result = ResultVal(m_pLightFrame->GetChildren(&pChildFrames));
+	assert(Succeeded(result));
+
 	for (int i = 0; i < (int) pChildFrames->GetSize(); i++) {
-		pChildFrames->GetElement(i, &pChildFrame);
-		m_pLightFrame->DeleteChild(pChildFrame);
-		pChildFrame->Release(); // GetElement() does AddRef()
+		result = ResultVal(pChildFrames->GetElement(i, &pChildFrame));
+		assert(Succeeded(result));
+
+		result = ResultVal(m_pLightFrame->DeleteChild(pChildFrame));
+		assert(Succeeded(result));
+
+		refCount = pChildFrame->Release(); // GetElement() does AddRef()
+		assert(refCount >= 1);
 	}
-	pChildFrames->Release();
-	m_pLightFrame->Release();
+
+	refCount = pChildFrames->Release();
+	assert(refCount == 0);
+
+	refCount = m_pLightFrame->Release();
+	assert(refCount == 0);
 }
 
 // Forward declare to satisfy order check
 void ViewportDestroyCallback(IDirect3DRMObject* pObject, void* pArg);
 
 // FUNCTION: LEGO1 0x100a1160
-Result ViewImpl::ViewportCreateAppData(IDirect3DRM2* pDevice, IDirect3DRMViewport* pView, IDirect3DRMFrame2* pCamera)
+// FUNCTION: BETA10 0x10168ba5
+Result ViewImpl::ViewportCreateAppData(
+	IDirect3DRM2* pDevice,
+	IDirect3DRMViewport* pViewport,
+	IDirect3DRMFrame2* pCamera
+)
 {
-	ViewportAppData* data = new ViewportAppData(pDevice);
-	data->m_pCamera = pCamera;
-	Result result = ResultVal(pView->SetAppData(reinterpret_cast<LPD3DRM_APPDATA>(data)));
+	ViewportAppData* pViewportAppData = new ViewportAppData(pDevice);
+	assert(pViewportAppData);
+
+	pViewportAppData->m_pCamera = pCamera;
+	assert(!pViewport->GetAppData());
+
+	Result result = ResultVal(pViewport->SetAppData(reinterpret_cast<LPD3DRM_APPDATA>(pViewportAppData)));
+	assert(Succeeded(result));
+	assert(reinterpret_cast<ViewportAppData*>(pViewport->GetAppData()) == pViewportAppData);
+
 	if (Succeeded(result)) {
-		result = ResultVal(pView->AddDestroyCallback(ViewportDestroyCallback, data));
+		result = ResultVal(pViewport->AddDestroyCallback(ViewportDestroyCallback, pViewportAppData));
+		assert(Succeeded(result));
 	}
+
 	if (!Succeeded(result)) {
-		delete data;
-		pView->SetAppData(0);
+		delete pViewportAppData;
+		pViewport->SetAppData(0);
 	}
+
 	return result;
 }
 
@@ -90,15 +121,20 @@ inline Result ViewRestoreFrameAfterRender(
 // FIXME: from LEGO1/tgl/d3drm/view.cpp
 
 // FUNCTION: LEGO1 0x100a1240
+// FUNCTION: BETA10 0x10168dc9
 void ViewportDestroyCallback(IDirect3DRMObject* pObject, void* pArg)
 {
 	ViewportAppData* pViewportAppData = reinterpret_cast<ViewportAppData*>(pArg);
+	assert(static_cast<ViewImpl::ViewDataType>(pObject));
+	assert(pViewportAppData);
 
-	ViewRestoreFrameAfterRender(
+	Result result = ViewRestoreFrameAfterRender(
 		pViewportAppData->m_pLastRenderedFrame,
 		pViewportAppData->m_pCamera,
 		pViewportAppData->m_pLightFrame
 	);
+
+	assert(Succeeded(result));
 
 	delete pViewportAppData;
 }

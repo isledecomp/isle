@@ -71,29 +71,69 @@ Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data)
 	return device;
 }
 
+// FUNCTION: BETA10 0x1016d1d0
 inline Result RendererCreateView(
 	IDirect3DRM2* pRenderer,
-	IDirect3DRMDevice2* pDevice,
-	IDirect3DRMFrame2* pCamera,
-	IDirect3DRMViewport*& rpView,
+	const IDirect3DRMDevice2* pDevice,
+	const IDirect3DRMFrame2* pCamera,
 	unsigned long x,
 	unsigned long y,
 	unsigned long width,
-	unsigned long height
+	unsigned long height,
+	IDirect3DRMViewport*& rpView
 )
 {
-	Result result = ResultVal(pRenderer->CreateViewport(pDevice, pCamera, x, y, width, height, &rpView));
+	Result result = ResultVal(pRenderer->CreateViewport(
+		const_cast<IDirect3DRMDevice2*>(pDevice),
+		const_cast<IDirect3DRMFrame2*>(pCamera),
+		x,
+		y,
+		width,
+		height,
+		&rpView
+	));
+
 	if (Succeeded(result)) {
-		result = ViewImpl::ViewportCreateAppData(pRenderer, rpView, pCamera);
+		result = ViewImpl::ViewportCreateAppData(pRenderer, rpView, const_cast<IDirect3DRMFrame2*>(pCamera));
 		if (!Succeeded(result)) {
 			rpView->Release();
 			rpView = NULL;
 		}
 	}
+
 	return result;
 }
 
+// FUNCTION: BETA10 0x1016d0b0
+inline Result RendererImpl::CreateView(
+	const DeviceImpl& rDevice,
+	const CameraImpl& rCamera,
+	unsigned long x,
+	unsigned long y,
+	unsigned long width,
+	unsigned long height,
+	ViewImpl& rView
+)
+{
+	assert(m_data);
+	assert(rDevice.ImplementationData());
+	assert(rCamera.ImplementationData());
+	assert(!rView.ImplementationData());
+
+	return RendererCreateView(
+		m_data,
+		rDevice.ImplementationData(),
+		rCamera.ImplementationData(),
+		x,
+		y,
+		width,
+		height,
+		rView.ImplementationData()
+	);
+}
+
 // FUNCTION: LEGO1 0x100a1a00
+// FUNCTION: BETA10 0x10169fb0
 View* RendererImpl::CreateView(
 	const Device* pDevice,
 	const Camera* pCamera,
@@ -103,21 +143,24 @@ View* RendererImpl::CreateView(
 	unsigned long height
 )
 {
+	assert(m_data);
+	assert(pDevice);
+	assert(pCamera);
+
 	ViewImpl* view = new ViewImpl();
-	Result result = RendererCreateView(
-		m_data,
-		static_cast<const DeviceImpl*>(pDevice)->m_data,
-		static_cast<const CameraImpl*>(pCamera)->m_data,
-		view->m_data,
-		x,
-		y,
-		width,
-		height
-	);
-	if (!result) {
+	if (!CreateView(
+			*static_cast<const DeviceImpl*>(pDevice),
+			*static_cast<const CameraImpl*>(pCamera),
+			x,
+			y,
+			width,
+			height,
+			*view
+		)) {
 		delete view;
 		view = NULL;
 	}
+
 	return view;
 }
 

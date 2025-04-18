@@ -105,6 +105,15 @@ public:
 	inline Result Create();
 	inline void Destroy();
 	inline Result CreateLight(LightType type, float r, float g, float b, LightImpl& rLight);
+	inline Result CreateView(
+		const DeviceImpl& rDevice,
+		const CameraImpl& rCamera,
+		unsigned long x,
+		unsigned long y,
+		unsigned long width,
+		unsigned long height,
+		ViewImpl& rView
+	);
 
 private:
 	RendererDataType m_data;
@@ -233,8 +242,9 @@ public:
 
 	typedef IDirect3DRMViewport* ViewDataType;
 
-	// FUNCTION: BETA10 0x101711c0
 	const ViewDataType& ImplementationData() const { return m_data; }
+
+	// FUNCTION: BETA10 0x101711c0
 	ViewDataType& ImplementationData() { return m_data; }
 
 	void SetImplementationData(IDirect3DRMViewport* viewport) { m_data = viewport; }
@@ -782,6 +792,9 @@ inline D3DRMLIGHTTYPE Translate(LightType tglLightType)
 // SYNTHETIC: LEGO1 0x100a3d80
 // SYNTHETIC: BETA10 0x1016fa90
 // TglImpl::MeshImpl::`scalar deleting destructor'
+
+// SYNTHETIC: BETA10 0x10169960
+// ViewportAppData::`scalar deleting destructor'
 
 // GLOBAL: LEGO1 0x100dd1e0
 // IID_IDirect3DRMMeshBuilder
