@@ -95,7 +95,11 @@ public:
 		return m_data->CreateTextureFromSurface(pSurface, pTexture2);
 	}
 
-	IDirect3DRM2* ImplementationData() const { return m_data; }
+	typedef IDirect3DRM2* RendererDataType;
+
+	const RendererDataType& ImplementationData() const { return m_data; }
+
+	RendererDataType& ImplementationData() { return m_data; }
 
 public:
 	inline Result Create();
@@ -103,7 +107,7 @@ public:
 	inline Result CreateLight(LightType type, float r, float g, float b, LightImpl& rLight);
 
 private:
-	IDirect3DRM2* m_data;
+	RendererDataType m_data;
 };
 
 extern IDirect3DRM2* g_pD3DRM;
@@ -154,7 +158,14 @@ public:
 	void HandleActivate(WORD) override;
 	void HandlePaint(HDC) override;
 
-	IDirect3DRMDevice2* ImplementationData() const { return m_data; }
+	typedef IDirect3DRMDevice2* DeviceDataType;
+
+	// FUNCTION: BETA10 0x101708e0
+	const DeviceDataType& ImplementationData() const { return m_data; }
+
+	// FUNCTION: BETA10 0x100d95
+	DeviceDataType& ImplementationData() { return m_data; }
+
 	void SetImplementationData(IDirect3DRMDevice2* device) { m_data = device; }
 
 	inline void Destroy();
@@ -162,7 +173,7 @@ public:
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMDevice2* m_data;
+	DeviceDataType m_data;
 };
 
 // FUNCTION: BETA10 0x101708c0
@@ -220,7 +231,12 @@ public:
 		int& rPickedGroupCount
 	) override;
 
-	IDirect3DRMViewport* ImplementationData() const { return m_data; }
+	typedef IDirect3DRMViewport* ViewDataType;
+
+	// FUNCTION: BETA10 0x101711c0
+	const ViewDataType& ImplementationData() const { return m_data; }
+	ViewDataType& ImplementationData() { return m_data; }
+
 	void SetImplementationData(IDirect3DRMViewport* viewport) { m_data = viewport; }
 
 	static Result ViewportCreateAppData(IDirect3DRM2*, IDirect3DRMViewport*, IDirect3DRMFrame2*);
@@ -242,7 +258,7 @@ public:
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMViewport* m_data;
+	ViewDataType m_data;
 };
 
 // FUNCTION: BETA10 0x101711a0
@@ -275,14 +291,20 @@ public:
 	// vtable+0x08
 	Result SetTransformation(FloatMatrix4&) override;
 
-	IDirect3DRMFrame2* ImplementationData() const { return m_data; }
+	typedef IDirect3DRMFrame2* CameraDataType;
+
+	// FUNCTION: BETA10 0x10170960
+	const CameraDataType& ImplementationData() const { return m_data; }
+
+	// FUNCTION: BETA10 0x10170980
+	CameraDataType& ImplementationData() { return m_data; }
 
 	inline void Destroy();
 
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMFrame2* m_data;
+	CameraDataType m_data;
 };
 
 // FUNCTION: BETA10 0x10170940
@@ -318,7 +340,10 @@ public:
 
 	typedef IDirect3DRMFrame2* LightDataType;
 
+	// FUNCTION: BETA10 0x10171b90
 	const LightDataType& ImplementationData() const { return m_data; }
+
+	// FUNCTION: BETA10 0x10171240
 	LightDataType& ImplementationData() { return m_data; }
 
 	inline void Destroy();
@@ -376,7 +401,10 @@ public:
 
 	typedef MeshData* MeshDataType;
 
+	// FUNCTION: BETA10 0x10170420
 	const MeshDataType& ImplementationData() const { return m_data; }
+
+	// FUNCTION: BETA10 0x10170440
 	MeshDataType& ImplementationData() { return m_data; }
 
 	inline void Destroy();
@@ -433,14 +461,20 @@ public:
 	// vtable+0x30
 	Result Bounds(D3DVECTOR* p_min, D3DVECTOR* p_max) override;
 
-	IDirect3DRMFrame2* ImplementationData() const { return m_data; }
+	typedef IDirect3DRMFrame2* GroupDataType;
+
+	// FUNCTION: BETA10 0x1016fc20
+	const GroupDataType& ImplementationData() const { return m_data; }
+
+	// FUNCTION: BETA10 0x1016fce0
+	GroupDataType& ImplementationData() { return m_data; }
 
 	inline void Destroy();
 
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMFrame2* m_data;
+	GroupDataType m_data;
 };
 
 // FUNCTION: BETA10 0x1016c2b0
@@ -486,7 +520,10 @@ public:
 	// vtable+0x10
 	MeshBuilder* Clone() override;
 
-	IDirect3DRMMesh* ImplementationData() const { return m_data; }
+	typedef IDirect3DRMMesh* MeshBuilderDataType;
+
+	const MeshBuilderDataType& ImplementationData() const { return m_data; }
+	MeshBuilderDataType& ImplementationData() { return m_data; }
 
 	inline void Destroy();
 
@@ -505,7 +542,7 @@ private:
 		ShadingModel shadingModel
 	);
 
-	IDirect3DRMMesh* m_data;
+	MeshBuilderDataType m_data;
 };
 
 // FUNCTION: BETA10 0x10170390
@@ -574,7 +611,14 @@ public:
 	) override;
 	Result SetPalette(int entryCount, PaletteEntry* entries) override;
 
-	IDirect3DRMTexture* ImplementationData() const { return m_data; }
+	typedef IDirect3DRMTexture* TextureDataType;
+
+	// FUNCTION: BETA10 0x1016fd60
+	const TextureDataType& ImplementationData() const { return m_data; }
+
+	// FUNCTION: BETA10 0x1016fe20
+	TextureDataType& ImplementationData() { return m_data; }
+
 	void SetImplementation(IDirect3DRMTexture* pData) { m_data = pData; }
 
 	inline void Destroy();
@@ -584,7 +628,7 @@ public:
 	static Result SetImage(IDirect3DRMTexture* pSelf, TglD3DRMIMAGE* pImage);
 
 private:
-	IDirect3DRMTexture* m_data;
+	TextureDataType m_data;
 };
 
 // FUNCTION: BETA10 0x1016fd40
