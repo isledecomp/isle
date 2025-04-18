@@ -90,7 +90,7 @@ public:
 	// Act3Ammo::`scalar deleting destructor'
 
 private:
-	MxResult FUN_10053db0(float p_param1, const Matrix4& p_param2);
+	MxResult FUN_10053db0(float p_param1, Matrix4& p_param2);
 
 	static Mx3DPointFloat g_unk0x10104f08;
 
