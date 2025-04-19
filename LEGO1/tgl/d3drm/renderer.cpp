@@ -88,7 +88,7 @@ inline Result RendererCreateDevice(
 
 	if (Succeeded(result)) {
 		if (rCreateData.m_pBackBuffer) {
-			// GLOBAL: LEGO1 0x10101040
+			// LEGO1 0x10101040
 			// GLOBAL: BETA10 0x102055f4
 			static int g_setBufferCount = 1;
 			if (g_setBufferCount) {
