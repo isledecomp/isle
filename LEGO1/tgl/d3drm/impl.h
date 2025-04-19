@@ -114,6 +114,7 @@ public:
 		unsigned long height,
 		ViewImpl& rView
 	);
+	inline Result CreateMeshBuilder(MeshBuilderImpl& rMesh);
 
 private:
 	RendererDataType m_data;
@@ -411,10 +412,9 @@ public:
 
 	typedef MeshData* MeshDataType;
 
-	// FUNCTION: BETA10 0x10170420
 	const MeshDataType& ImplementationData() const { return m_data; }
 
-	// FUNCTION: BETA10 0x10170440
+	// FUNCTION: BETA10 0x10171b70
 	MeshDataType& ImplementationData() { return m_data; }
 
 	inline void Destroy();
@@ -532,7 +532,10 @@ public:
 
 	typedef IDirect3DRMMesh* MeshBuilderDataType;
 
+	// FUNCTION: BETA10 0x10170420
 	const MeshBuilderDataType& ImplementationData() const { return m_data; }
+
+	// FUNCTION: BETA10 0x10170440
 	MeshBuilderDataType& ImplementationData() { return m_data; }
 
 	inline void Destroy();

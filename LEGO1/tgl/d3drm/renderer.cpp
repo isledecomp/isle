@@ -279,14 +279,33 @@ Light* RendererImpl::CreateLight(LightType type, float r, float g, float b)
 	return pLightImpl;
 }
 
+// FUNCTION: BETA10 0x1016d8e0
+inline Result RendererCreateMeshBuilder(IDirect3DRM2* pD3DRM, IDirect3DRMMesh*& rpMesh)
+{
+	return ResultVal(pD3DRM->CreateMesh(&rpMesh));
+}
+
+// FUNCTION: BETA10 0x1016d850
+inline Result RendererImpl::CreateMeshBuilder(MeshBuilderImpl& rMesh)
+{
+	assert(m_data);
+	assert(!rMesh.ImplementationData());
+
+	return RendererCreateMeshBuilder(m_data, rMesh.ImplementationData());
+}
+
 // FUNCTION: LEGO1 0x100a1e90
+// FUNCTION: BETA10 0x1016abf0
 MeshBuilder* RendererImpl::CreateMeshBuilder()
 {
+	assert(m_data);
 	MeshBuilderImpl* meshBuilder = new MeshBuilderImpl();
-	if (FAILED(m_data->CreateMesh(&meshBuilder->m_data))) {
+
+	if (!CreateMeshBuilder(*static_cast<MeshBuilderImpl*>(meshBuilder))) {
 		delete meshBuilder;
 		meshBuilder = NULL;
 	}
+
 	return meshBuilder;
 }
 
