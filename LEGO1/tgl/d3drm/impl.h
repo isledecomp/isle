@@ -418,6 +418,7 @@ public:
 	MeshDataType& ImplementationData() { return m_data; }
 
 	inline void Destroy();
+	inline Mesh* DeepClone(const MeshBuilderImpl& rMesh);
 
 	friend class RendererImpl;
 
