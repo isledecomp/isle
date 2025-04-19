@@ -36,64 +36,158 @@ Result RendererImpl::Create()
 	return (m_data != NULL) ? Success : Error;
 }
 
+// FUNCTION: BETA10 0x1016cf00
+inline Result RendererCreateDevice(
+	IDirect3DRM2* pD3DRM,
+	const DeviceDirect3DCreateData& rCreateData,
+	IDirect3DRMDevice2*& rpDevice
+)
+{
+	Result result =
+		ResultVal(pD3DRM->CreateDeviceFromD3D(rCreateData.m_pDirect3D, rCreateData.m_pDirect3DDevice, &rpDevice));
+	return result;
+}
+
+// FUNCTION: BETA10 0x1016ce60
+inline Result RendererImpl::CreateDevice(const DeviceDirect3DCreateData& rCreateData, DeviceImpl& rDevice)
+{
+	assert(m_data);
+	assert(!rDevice.ImplementationData());
+
+	return RendererCreateDevice(m_data, rCreateData, rDevice.ImplementationData());
+}
+
 // FUNCTION: LEGO1 0x100a1830
+// FUNCTION: BETA10 0x10169d90
 Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& data)
 {
+	assert(m_data);
 	DeviceImpl* device = new DeviceImpl();
-	HRESULT result = m_data->CreateDeviceFromD3D(data.m_pDirect3D, data.m_pDirect3DDevice, &device->m_data);
-	if (!SUCCEEDED(result)) {
+
+	if (!CreateDevice(data, *device)) {
 		delete device;
 		device = NULL;
 	}
+
 	return device;
+}
+
+// FUNCTION: BETA10 0x1016cfe0
+inline Result RendererCreateDevice(
+	IDirect3DRM2* pD3DRM,
+	const DeviceDirectDrawCreateData& rCreateData,
+	IDirect3DRMDevice2*& rpDevice
+)
+{
+	Result result = ResultVal(pD3DRM->CreateDeviceFromSurface(
+		const_cast<GUID*>(rCreateData.m_driverGUID),
+		rCreateData.m_pDirectDraw,
+		rCreateData.m_pBackBuffer,
+		&rpDevice
+	));
+
+	if (Succeeded(result)) {
+		if (rCreateData.m_pBackBuffer) {
+			// LEGO1 0x10101040
+			// GLOBAL: BETA10 0x102055f4
+			static int g_setBufferCount = 1;
+			if (g_setBufferCount) {
+				Result result2 = ResultVal(rpDevice->SetBufferCount(2));
+				assert(Succeeded(result));
+			}
+		}
+	}
+
+	return result;
+}
+
+// FUNCTION: BETA10 0x1016cf40
+inline Result RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& rCreateData, DeviceImpl& rDevice)
+{
+	assert(m_data);
+	assert(!rDevice.ImplementationData());
+
+	return RendererCreateDevice(m_data, rCreateData, rDevice.ImplementationData());
 }
 
 // FUNCTION: LEGO1 0x100a1900
+// FUNCTION: BETA10 0x10169ea0
 Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data)
 {
-	// at LEGO1 0x10101040, needs no annotation
-	static int g_SetBufferCount = 1;
-
+	assert(m_data);
 	DeviceImpl* device = new DeviceImpl();
-	HRESULT result = m_data->CreateDeviceFromSurface(
-		const_cast<LPGUID>(data.m_driverGUID),
-		data.m_pDirectDraw,
-		data.m_pBackBuffer,
-		&device->m_data
-	);
-	if (SUCCEEDED(result) && data.m_pBackBuffer && g_SetBufferCount) {
-		device->m_data->SetBufferCount(2);
-	}
-	if (!SUCCEEDED(result)) {
+
+	if (!CreateDevice(data, *device)) {
 		delete device;
 		device = NULL;
 	}
+
 	return device;
 }
 
+// FUNCTION: BETA10 0x1016d1d0
 inline Result RendererCreateView(
 	IDirect3DRM2* pRenderer,
-	IDirect3DRMDevice2* pDevice,
-	IDirect3DRMFrame2* pCamera,
-	IDirect3DRMViewport*& rpView,
+	const IDirect3DRMDevice2* pDevice,
+	const IDirect3DRMFrame2* pCamera,
 	unsigned long x,
 	unsigned long y,
 	unsigned long width,
-	unsigned long height
+	unsigned long height,
+	IDirect3DRMViewport*& rpView
 )
 {
-	Result result = ResultVal(pRenderer->CreateViewport(pDevice, pCamera, x, y, width, height, &rpView));
+	Result result = ResultVal(pRenderer->CreateViewport(
+		const_cast<IDirect3DRMDevice2*>(pDevice),
+		const_cast<IDirect3DRMFrame2*>(pCamera),
+		x,
+		y,
+		width,
+		height,
+		&rpView
+	));
+
 	if (Succeeded(result)) {
-		result = ViewImpl::ViewportCreateAppData(pRenderer, rpView, pCamera);
+		result = ViewImpl::ViewportCreateAppData(pRenderer, rpView, const_cast<IDirect3DRMFrame2*>(pCamera));
 		if (!Succeeded(result)) {
 			rpView->Release();
 			rpView = NULL;
 		}
 	}
+
 	return result;
 }
 
+// FUNCTION: BETA10 0x1016d0b0
+inline Result RendererImpl::CreateView(
+	const DeviceImpl& rDevice,
+	const CameraImpl& rCamera,
+	unsigned long x,
+	unsigned long y,
+	unsigned long width,
+	unsigned long height,
+	ViewImpl& rView
+)
+{
+	assert(m_data);
+	assert(rDevice.ImplementationData());
+	assert(rCamera.ImplementationData());
+	assert(!rView.ImplementationData());
+
+	return RendererCreateView(
+		m_data,
+		rDevice.ImplementationData(),
+		rCamera.ImplementationData(),
+		x,
+		y,
+		width,
+		height,
+		rView.ImplementationData()
+	);
+}
+
 // FUNCTION: LEGO1 0x100a1a00
+// FUNCTION: BETA10 0x10169fb0
 View* RendererImpl::CreateView(
 	const Device* pDevice,
 	const Camera* pCamera,
@@ -103,21 +197,24 @@ View* RendererImpl::CreateView(
 	unsigned long height
 )
 {
+	assert(m_data);
+	assert(pDevice);
+	assert(pCamera);
+
 	ViewImpl* view = new ViewImpl();
-	Result result = RendererCreateView(
-		m_data,
-		static_cast<const DeviceImpl*>(pDevice)->m_data,
-		static_cast<const CameraImpl*>(pCamera)->m_data,
-		view->m_data,
-		x,
-		y,
-		width,
-		height
-	);
-	if (!result) {
+	if (!CreateView(
+			*static_cast<const DeviceImpl*>(pDevice),
+			*static_cast<const CameraImpl*>(pCamera),
+			x,
+			y,
+			width,
+			height,
+			*view
+		)) {
 		delete view;
 		view = NULL;
 	}
+
 	return view;
 }
 
@@ -147,14 +244,33 @@ Group* RendererImpl::CreateGroup(const Group* pParent)
 	return group;
 }
 
+// FUNCTION: BETA10 0x1016d4b0
+inline Result RendererCreateCamera(IDirect3DRM2* pD3DRM, IDirect3DRMFrame2*& rpCamera)
+{
+	return ResultVal(pD3DRM->CreateFrame(NULL, &rpCamera));
+}
+
+// FUNCTION: BETA10 0x1016d420
+inline Result RendererImpl::CreateCamera(CameraImpl& rCamera)
+{
+	assert(m_data);
+	assert(!rCamera.ImplementationData());
+
+	return RendererCreateCamera(m_data, rCamera.ImplementationData());
+}
+
 // FUNCTION: LEGO1 0x100a1c30
+// FUNCTION: BETA10 0x1016a980
 Camera* RendererImpl::CreateCamera()
 {
+	assert(m_data);
 	CameraImpl* camera = new CameraImpl();
-	if (FAILED(m_data->CreateFrame(NULL, &camera->m_data))) {
+
+	if (!CreateCamera(*camera)) {
 		delete camera;
 		camera = NULL;
 	}
+
 	return camera;
 }
 
@@ -236,50 +352,106 @@ Light* RendererImpl::CreateLight(LightType type, float r, float g, float b)
 	return pLightImpl;
 }
 
+// FUNCTION: BETA10 0x1016d8e0
+inline Result RendererCreateMeshBuilder(IDirect3DRM2* pD3DRM, IDirect3DRMMesh*& rpMesh)
+{
+	return ResultVal(pD3DRM->CreateMesh(&rpMesh));
+}
+
+// FUNCTION: BETA10 0x1016d850
+inline Result RendererImpl::CreateMeshBuilder(MeshBuilderImpl& rMesh)
+{
+	assert(m_data);
+	assert(!rMesh.ImplementationData());
+
+	return RendererCreateMeshBuilder(m_data, rMesh.ImplementationData());
+}
+
 // FUNCTION: LEGO1 0x100a1e90
+// FUNCTION: BETA10 0x1016abf0
 MeshBuilder* RendererImpl::CreateMeshBuilder()
 {
+	assert(m_data);
 	MeshBuilderImpl* meshBuilder = new MeshBuilderImpl();
-	if (FAILED(m_data->CreateMesh(&meshBuilder->m_data))) {
+
+	if (!CreateMeshBuilder(*static_cast<MeshBuilderImpl*>(meshBuilder))) {
 		delete meshBuilder;
 		meshBuilder = NULL;
 	}
+
 	return meshBuilder;
 }
 
+// FUNCTION: BETA10 0x1016d9c0
 inline Result RendererCreateTexture(
-	IDirect3DRM2* renderer,
-	IDirect3DRMTexture*& texture,
+	IDirect3DRM2* pRenderer,
 	int width,
 	int height,
 	int bytesPerPixel,
 	void* pBuffer,
 	int useBuffer,
 	int paletteSize,
-	PaletteEntry* pEntries
+	PaletteEntry* pEntries,
+	IDirect3DRMTexture*& rpTexture
 )
 {
-	TglD3DRMIMAGE* image;
 	Result result;
 
-	image = new TglD3DRMIMAGE(width, height, bytesPerPixel, pBuffer, useBuffer, paletteSize, pEntries);
+	TglD3DRMIMAGE* pImage = new TglD3DRMIMAGE(width, height, bytesPerPixel, pBuffer, useBuffer, paletteSize, pEntries);
+	assert(pImage);
+
 	// TODO: LPDIRECT3DRMTEXTURE2?
-	result = ResultVal(renderer->CreateTexture(&image->m_image, (LPDIRECT3DRMTEXTURE2*) &texture));
+	result = ResultVal(pRenderer->CreateTexture(&pImage->m_image, (LPDIRECT3DRMTEXTURE2*) &rpTexture));
+	assert(Succeeded(result));
+	assert((rpTexture->AddRef(), rpTexture->Release()) == 1);
+
 	if (Succeeded(result)) {
-		result = TextureImpl::SetImage(texture, image);
+		result = TextureImpl::SetImage(rpTexture, pImage);
+		assert(Succeeded(result));
+
 		if (!Succeeded(result)) {
-			texture->Release();
-			texture = NULL;
-			delete image;
+			rpTexture->Release();
+			rpTexture = NULL;
+			delete pImage;
 		}
 	}
 	else {
-		delete image;
+		delete pImage;
 	}
+
 	return result;
 }
 
+// FUNCTION: BETA10 0x1016d910
+inline Result RendererImpl::CreateTexture(
+	TextureImpl& rTexture,
+	int width,
+	int height,
+	int bitsPerTexel,
+	const void* pTexels,
+	int texelsArePersistent,
+	int paletteEntryCount,
+	const PaletteEntry* pEntries
+)
+{
+	assert(m_data);
+	assert(!rTexture.ImplementationData());
+
+	return RendererCreateTexture(
+		m_data,
+		width,
+		height,
+		bitsPerTexel,
+		const_cast<void*>(pTexels),
+		texelsArePersistent,
+		paletteEntryCount,
+		const_cast<PaletteEntry*>(pEntries),
+		rTexture.ImplementationData()
+	);
+}
+
 // FUNCTION: LEGO1 0x100a1f50
+// FUNCTION: BETA10 0x1016ad00
 Texture* RendererImpl::CreateTexture(
 	int width,
 	int height,
@@ -290,10 +462,11 @@ Texture* RendererImpl::CreateTexture(
 	const PaletteEntry* pEntries
 )
 {
+	assert(m_data);
+
 	TextureImpl* texture = new TextureImpl();
-	if (!Succeeded(RendererCreateTexture(
-			m_data,
-			texture->m_data,
+	if (!CreateTexture(
+			*texture,
 			width,
 			height,
 			bitsPerTexel,
@@ -301,21 +474,40 @@ Texture* RendererImpl::CreateTexture(
 			texelsArePersistent,
 			paletteEntryCount,
 			const_cast<PaletteEntry*>(pEntries)
-		))) {
+		)) {
 		delete texture;
 		texture = NULL;
 	}
 	return texture;
 }
 
+// FUNCTION: BETA10 0x1016dcb0
+inline Result RendererCreateTexture(IDirect3DRM2* pRenderer, IDirect3DRMTexture*& rpTexture)
+{
+	return RendererCreateTexture(pRenderer, 0, 0, 0, NULL, FALSE, 0, NULL, rpTexture);
+}
+
+// FUNCTION: BETA10 0x1016dc20
+inline Result RendererImpl::CreateTexture(TextureImpl& rTexture)
+{
+	assert(m_data);
+	assert(!rTexture.ImplementationData());
+
+	return RendererCreateTexture(m_data, rTexture.ImplementationData());
+}
+
 // FUNCTION: LEGO1 0x100a20d0
+// FUNCTION: BETA10 0x1016ae20
 Texture* RendererImpl::CreateTexture()
 {
+	assert(m_data);
+
 	TextureImpl* texture = new TextureImpl();
-	if (!Succeeded(RendererCreateTexture(m_data, texture->m_data, 0, 0, 0, NULL, FALSE, 0, NULL))) {
+	if (!CreateTexture(*texture)) {
 		delete texture;
 		texture = NULL;
 	}
+
 	return texture;
 }
 
