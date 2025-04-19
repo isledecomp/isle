@@ -99,6 +99,7 @@ public:
 
 	const RendererDataType& ImplementationData() const { return m_data; }
 
+	// FUNCTION: BETA10 0x10174c10
 	RendererDataType& ImplementationData() { return m_data; }
 
 public:
@@ -115,6 +116,18 @@ public:
 		ViewImpl& rView
 	);
 	inline Result CreateMeshBuilder(MeshBuilderImpl& rMesh);
+	inline Result CreateCamera(CameraImpl& rCamera);
+	inline Result CreateTexture(TextureImpl& rTexture);
+	inline Result CreateTexture(
+		TextureImpl& rTexture,
+		int width,
+		int height,
+		int bitsPerTexel,
+		const void* pTexels,
+		int texelsArePersistent,
+		int paletteEntryCount,
+		const PaletteEntry* pEntries
+	);
 
 private:
 	RendererDataType m_data;

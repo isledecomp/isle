@@ -190,14 +190,33 @@ Group* RendererImpl::CreateGroup(const Group* pParent)
 	return group;
 }
 
+// FUNCTION: BETA10 0x1016d4b0
+inline Result RendererCreateCamera(IDirect3DRM2* pD3DRM, IDirect3DRMFrame2*& rpCamera)
+{
+	return ResultVal(pD3DRM->CreateFrame(NULL, &rpCamera));
+}
+
+// FUNCTION: BETA10 0x1016d420
+inline Result RendererImpl::CreateCamera(CameraImpl& rCamera)
+{
+	assert(m_data);
+	assert(!rCamera.ImplementationData());
+
+	return RendererCreateCamera(m_data, rCamera.ImplementationData());
+}
+
 // FUNCTION: LEGO1 0x100a1c30
+// FUNCTION: BETA10 0x1016a980
 Camera* RendererImpl::CreateCamera()
 {
+	assert(m_data);
 	CameraImpl* camera = new CameraImpl();
-	if (FAILED(m_data->CreateFrame(NULL, &camera->m_data))) {
+
+	if (!CreateCamera(*camera)) {
 		delete camera;
 		camera = NULL;
 	}
+
 	return camera;
 }
 
@@ -309,39 +328,76 @@ MeshBuilder* RendererImpl::CreateMeshBuilder()
 	return meshBuilder;
 }
 
+// FUNCTION: BETA10 0x1016d9c0
 inline Result RendererCreateTexture(
-	IDirect3DRM2* renderer,
-	IDirect3DRMTexture*& texture,
+	IDirect3DRM2* pRenderer,
 	int width,
 	int height,
 	int bytesPerPixel,
 	void* pBuffer,
 	int useBuffer,
 	int paletteSize,
-	PaletteEntry* pEntries
+	PaletteEntry* pEntries,
+	IDirect3DRMTexture*& rpTexture
 )
 {
-	TglD3DRMIMAGE* image;
 	Result result;
 
-	image = new TglD3DRMIMAGE(width, height, bytesPerPixel, pBuffer, useBuffer, paletteSize, pEntries);
+	TglD3DRMIMAGE* pImage = new TglD3DRMIMAGE(width, height, bytesPerPixel, pBuffer, useBuffer, paletteSize, pEntries);
+	assert(pImage);
+
 	// TODO: LPDIRECT3DRMTEXTURE2?
-	result = ResultVal(renderer->CreateTexture(&image->m_image, (LPDIRECT3DRMTEXTURE2*) &texture));
+	result = ResultVal(pRenderer->CreateTexture(&pImage->m_image, (LPDIRECT3DRMTEXTURE2*) &rpTexture));
+	assert(Succeeded(result));
+	assert((rpTexture->AddRef(), rpTexture->Release()) == 1);
+
 	if (Succeeded(result)) {
-		result = TextureImpl::SetImage(texture, image);
+		result = TextureImpl::SetImage(rpTexture, pImage);
+		assert(Succeeded(result));
+
 		if (!Succeeded(result)) {
-			texture->Release();
-			texture = NULL;
-			delete image;
+			rpTexture->Release();
+			rpTexture = NULL;
+			delete pImage;
 		}
 	}
 	else {
-		delete image;
+		delete pImage;
 	}
+
 	return result;
 }
 
+// FUNCTION: BETA10 0x1016d910
+inline Result RendererImpl::CreateTexture(
+	TextureImpl& rTexture,
+	int width,
+	int height,
+	int bitsPerTexel,
+	const void* pTexels,
+	int texelsArePersistent,
+	int paletteEntryCount,
+	const PaletteEntry* pEntries
+)
+{
+	assert(m_data);
+	assert(!rTexture.ImplementationData());
+
+	return RendererCreateTexture(
+		m_data,
+		width,
+		height,
+		bitsPerTexel,
+		const_cast<void*>(pTexels),
+		texelsArePersistent,
+		paletteEntryCount,
+		const_cast<PaletteEntry*>(pEntries),
+		rTexture.ImplementationData()
+	);
+}
+
 // FUNCTION: LEGO1 0x100a1f50
+// FUNCTION: BETA10 0x1016ad00
 Texture* RendererImpl::CreateTexture(
 	int width,
 	int height,
@@ -352,10 +408,11 @@ Texture* RendererImpl::CreateTexture(
 	const PaletteEntry* pEntries
 )
 {
+	assert(m_data);
+
 	TextureImpl* texture = new TextureImpl();
-	if (!Succeeded(RendererCreateTexture(
-			m_data,
-			texture->m_data,
+	if (!CreateTexture(
+			*texture,
 			width,
 			height,
 			bitsPerTexel,
@@ -363,21 +420,40 @@ Texture* RendererImpl::CreateTexture(
 			texelsArePersistent,
 			paletteEntryCount,
 			const_cast<PaletteEntry*>(pEntries)
-		))) {
+		)) {
 		delete texture;
 		texture = NULL;
 	}
 	return texture;
 }
 
+// FUNCTION: BETA10 0x1016dcb0
+inline Result RendererCreateTexture(IDirect3DRM2* pRenderer, IDirect3DRMTexture*& rpTexture)
+{
+	return RendererCreateTexture(pRenderer, 0, 0, 0, NULL, FALSE, 0, NULL, rpTexture);
+}
+
+// FUNCTION: BETA10 0x1016dc20
+inline Result RendererImpl::CreateTexture(TextureImpl& rTexture)
+{
+	assert(m_data);
+	assert(!rTexture.ImplementationData());
+
+	return RendererCreateTexture(m_data, rTexture.ImplementationData());
+}
+
 // FUNCTION: LEGO1 0x100a20d0
+// FUNCTION: BETA10 0x1016ae20
 Texture* RendererImpl::CreateTexture()
 {
+	assert(m_data);
+
 	TextureImpl* texture = new TextureImpl();
-	if (!Succeeded(RendererCreateTexture(m_data, texture->m_data, 0, 0, 0, NULL, FALSE, 0, NULL))) {
+	if (!CreateTexture(*texture)) {
 		delete texture;
 		texture = NULL;
 	}
+
 	return texture;
 }
 
