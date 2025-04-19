@@ -36,38 +36,92 @@ Result RendererImpl::Create()
 	return (m_data != NULL) ? Success : Error;
 }
 
+// FUNCTION: BETA10 0x1016cf00
+inline Result RendererCreateDevice(
+	IDirect3DRM2* pD3DRM,
+	const DeviceDirect3DCreateData& rCreateData,
+	IDirect3DRMDevice2*& rpDevice
+)
+{
+	Result result =
+		ResultVal(pD3DRM->CreateDeviceFromD3D(rCreateData.m_pDirect3D, rCreateData.m_pDirect3DDevice, &rpDevice));
+	return result;
+}
+
+// FUNCTION: BETA10 0x1016ce60
+inline Result RendererImpl::CreateDevice(const DeviceDirect3DCreateData& rCreateData, DeviceImpl& rDevice)
+{
+	assert(m_data);
+	assert(!rDevice.ImplementationData());
+
+	return RendererCreateDevice(m_data, rCreateData, rDevice.ImplementationData());
+}
+
 // FUNCTION: LEGO1 0x100a1830
+// FUNCTION: BETA10 0x10169d90
 Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& data)
 {
+	assert(m_data);
 	DeviceImpl* device = new DeviceImpl();
-	HRESULT result = m_data->CreateDeviceFromD3D(data.m_pDirect3D, data.m_pDirect3DDevice, &device->m_data);
-	if (!SUCCEEDED(result)) {
+
+	if (!CreateDevice(data, *device)) {
 		delete device;
 		device = NULL;
 	}
+
 	return device;
 }
 
+// FUNCTION: BETA10 0x1016cfe0
+inline Result RendererCreateDevice(
+	IDirect3DRM2* pD3DRM,
+	const DeviceDirectDrawCreateData& rCreateData,
+	IDirect3DRMDevice2*& rpDevice
+)
+{
+	Result result = ResultVal(pD3DRM->CreateDeviceFromSurface(
+		const_cast<GUID*>(rCreateData.m_driverGUID),
+		rCreateData.m_pDirectDraw,
+		rCreateData.m_pBackBuffer,
+		&rpDevice
+	));
+
+	if (Succeeded(result)) {
+		if (rCreateData.m_pBackBuffer) {
+			// GLOBAL: LEGO1 0x10101040
+			// GLOBAL: BETA10 0x102055f4
+			static int g_setBufferCount = 1;
+			if (g_setBufferCount) {
+				Result result2 = ResultVal(rpDevice->SetBufferCount(2));
+				assert(Succeeded(result));
+			}
+		}
+	}
+
+	return result;
+}
+
+// FUNCTION: BETA10 0x1016cf40
+inline Result RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& rCreateData, DeviceImpl& rDevice)
+{
+	assert(m_data);
+	assert(!rDevice.ImplementationData());
+
+	return RendererCreateDevice(m_data, rCreateData, rDevice.ImplementationData());
+}
+
 // FUNCTION: LEGO1 0x100a1900
+// FUNCTION: BETA10 0x10169ea0
 Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data)
 {
-	// at LEGO1 0x10101040, needs no annotation
-	static int g_SetBufferCount = 1;
-
+	assert(m_data);
 	DeviceImpl* device = new DeviceImpl();
-	HRESULT result = m_data->CreateDeviceFromSurface(
-		const_cast<LPGUID>(data.m_driverGUID),
-		data.m_pDirectDraw,
-		data.m_pBackBuffer,
-		&device->m_data
-	);
-	if (SUCCEEDED(result) && data.m_pBackBuffer && g_SetBufferCount) {
-		device->m_data->SetBufferCount(2);
-	}
-	if (!SUCCEEDED(result)) {
+
+	if (!CreateDevice(data, *device)) {
 		delete device;
 		device = NULL;
 	}
+
 	return device;
 }
 

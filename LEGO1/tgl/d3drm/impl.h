@@ -128,6 +128,8 @@ public:
 		int paletteEntryCount,
 		const PaletteEntry* pEntries
 	);
+	inline Result CreateDevice(const DeviceDirect3DCreateData& rCreateData, DeviceImpl& rDevice);
+	inline Result CreateDevice(const DeviceDirectDrawCreateData& rCreateData, DeviceImpl& rDevice);
 
 private:
 	RendererDataType m_data;
@@ -186,7 +188,7 @@ public:
 	// FUNCTION: BETA10 0x101708e0
 	const DeviceDataType& ImplementationData() const { return m_data; }
 
-	// FUNCTION: BETA10 0x100d95
+	// FUNCTION: BETA10 0x100d9540
 	DeviceDataType& ImplementationData() { return m_data; }
 
 	void SetImplementationData(IDirect3DRMDevice2* device) { m_data = device; }
