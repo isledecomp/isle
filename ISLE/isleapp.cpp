@@ -149,7 +149,7 @@ IsleApp::~IsleApp()
 void IsleApp::Close()
 {
 	MxDSAction ds;
-	ds.SetUnknown24(-2);
+	ds.SetFlags(-2);
 
 	if (Lego()) {
 		GameState()->Save(0);

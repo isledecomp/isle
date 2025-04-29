@@ -127,7 +127,7 @@ MxResult MxStreamController::VTable0x24(MxDSAction* p_action)
 		return FAILURE;
 	}
 	else {
-		p_action->SetUnknown24(m_action0x60->GetUnknown24());
+		p_action->SetFlags(m_action0x60->GetFlags());
 		p_action->SetObjectId(m_action0x60->GetObjectId());
 		return FUN_100c1f00(m_action0x60);
 	}
@@ -138,7 +138,7 @@ MxResult MxStreamController::VTable0x24(MxDSAction* p_action)
 MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
 {
 	MxNextActionDataStart* dataActionStart =
-		new MxNextActionDataStart(p_action->GetObjectId(), p_action->GetUnknown24(), p_val);
+		new MxNextActionDataStart(p_action->GetObjectId(), p_action->GetFlags(), p_val);
 	if (dataActionStart == NULL) {
 		return FAILURE;
 	}
@@ -151,7 +151,7 @@ MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
 // FUNCTION: BETA10 0x1014eb04
 MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 {
-	if (p_action->GetUnknown24() == -1) {
+	if (p_action->GetFlags() == -1) {
 		MxS16 newUnknown24 = -1;
 
 		// These loops might be a template function in the list classes
@@ -159,7 +159,7 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 			MxDSObject* action = *it;
 
 			if (action->GetObjectId() == p_action->GetObjectId()) {
-				newUnknown24 = Max(newUnknown24, action->GetUnknown24());
+				newUnknown24 = Max(newUnknown24, action->GetFlags());
 			}
 		}
 
@@ -168,7 +168,7 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 				MxDSObject* action = *it;
 
 				if (action->GetObjectId() == p_action->GetObjectId()) {
-					newUnknown24 = Max(newUnknown24, action->GetUnknown24());
+					newUnknown24 = Max(newUnknown24, action->GetFlags());
 				}
 			}
 
@@ -183,7 +183,7 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 			}
 		}
 
-		p_action->SetUnknown24(newUnknown24 + 1);
+		p_action->SetFlags(newUnknown24 + 1);
 	}
 	else {
 		if (m_unk0x3c.Find(p_action)) {
@@ -230,7 +230,7 @@ MxResult MxStreamController::VTable0x30(MxDSAction* p_action)
 	MxDSObject* action = m_unk0x3c.FindAndErase(p_action);
 
 	if (action != NULL) {
-		MxNextActionDataStart* data = m_nextActionList.FindAndErase(action->GetObjectId(), action->GetUnknown24());
+		MxNextActionDataStart* data = m_nextActionList.FindAndErase(action->GetObjectId(), action->GetFlags());
 		delete action;
 		delete data;
 		result = SUCCESS;
@@ -288,7 +288,7 @@ MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 	chunk->SetChunkFlags(DS_CHUNK_BIT3);
 	chunk->SetObjectId(objectId);
 
-	if (chunk->SendChunk(m_subscribers, FALSE, p_action->GetUnknown24()) != SUCCESS) {
+	if (chunk->SendChunk(m_subscribers, FALSE, p_action->GetFlags()) != SUCCESS) {
 		delete chunk;
 	}
 
@@ -311,7 +311,7 @@ MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 // FUNCTION: BETA10 0x1014f37d
 MxNextActionDataStart* MxStreamController::FindNextActionDataStartFromStreamingAction(MxDSStreamingAction* p_action)
 {
-	return m_nextActionList.Find(p_action->GetObjectId(), p_action->GetUnknown24());
+	return m_nextActionList.Find(p_action->GetObjectId(), p_action->GetFlags());
 }
 
 // FUNCTION: LEGO1 0x100c20d0

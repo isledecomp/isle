@@ -588,7 +588,7 @@ MxLong Act3::Notify(MxParam& p_param)
 					m_unk0x421e = 0;
 
 					while (--length >= 0) {
-						if (info[length].m_unk0x11 < 0 && info[length].m_boundary != NULL &&
+						if (info[length].m_Downshift < 0 && info[length].m_boundary != NULL &&
 							info[length].m_entity != NULL) {
 							m_unk0x421e++;
 						}

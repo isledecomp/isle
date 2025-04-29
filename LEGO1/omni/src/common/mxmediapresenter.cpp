@@ -118,7 +118,7 @@ MxResult MxMediaPresenter::StartAction(MxStreamController* p_controller, MxDSAct
 			m_subscriber = new MxDSSubscriber;
 
 			if (!m_subscriber ||
-				m_subscriber->Create(p_controller, p_action->GetObjectId(), p_action->GetUnknown24()) != SUCCESS) {
+				m_subscriber->Create(p_controller, p_action->GetObjectId(), p_action->GetFlags()) != SUCCESS) {
 				goto done;
 			}
 		}

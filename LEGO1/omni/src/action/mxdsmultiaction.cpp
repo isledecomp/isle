@@ -149,11 +149,11 @@ MxU32 MxDSMultiAction::GetSizeOnDisk()
 
 // FUNCTION: LEGO1 0x100ca7b0
 // FUNCTION: BETA10 0x10159b79
-void MxDSMultiAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
+void MxDSMultiAction::Deserialize(MxU8*& p_source, MxS16 p_flags)
 {
-	MxDSAction::Deserialize(p_source, p_unk0x24);
+	MxDSAction::Deserialize(p_source, p_flags);
 
-	MxU32 extraFlag = *(MxU32*) (p_source + 4) & 1;
+	MxU32 length = *(MxU32*) (p_source + 4) & 1;
 	p_source += 12;
 
 	MxU32 count = *(MxU32*) p_source;
@@ -161,17 +161,17 @@ void MxDSMultiAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
 
 	if (count) {
 		while (count--) {
-			MxU32 extraFlag = *(MxU32*) (p_source + 4) & 1;
+			MxU32 length = *(MxU32*) (p_source + 4) & 1;
 			p_source += 8;
 
-			MxDSAction* action = (MxDSAction*) DeserializeDSObjectDispatch(p_source, p_unk0x24);
-			p_source += extraFlag;
+			MxDSAction* action = (MxDSAction*) DeserializeDSObjectDispatch(p_source, p_flags);
+			p_source += length;
 
 			m_actionList->Append(action);
 		}
 	}
 
-	p_source += extraFlag;
+	p_source += length;
 }
 
 // FUNCTION: LEGO1 0x100ca8c0

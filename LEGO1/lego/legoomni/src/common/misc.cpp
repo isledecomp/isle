@@ -239,7 +239,7 @@ void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last)
 	MxDSAction action;
 
 	action.SetAtomId(*p_id);
-	action.SetUnknown24(-2);
+	action.SetFlags(-2);
 
 	for (MxS32 first = p_first, last = p_last; first <= last; first++) {
 		action.SetObjectId(first);

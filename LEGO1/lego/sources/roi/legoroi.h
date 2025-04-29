@@ -54,8 +54,8 @@ public:
 	static LegoResult FUN_100a8cb0(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix);
 	static void FUN_100a81b0(const LegoChar* p_error, const LegoChar* p_name);
 	static void configureLegoROI(int p_roi);
-	static void FUN_100a9d30(ROIHandler p_func);
-	static LegoBool FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha);
+	static void SetGlobalROIHandler(ROIHandler p_func);
+	static LegoBool GetColorFromGlobalHandlerOrAlias(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha);
 	static LegoBool ColorAliasLookup(
 		const LegoChar* p_param,
 		float& p_red,
@@ -86,7 +86,7 @@ public:
 private:
 	LegoChar* m_name;        // 0xe4
 	BoundingSphere m_sphere; // 0xe8
-	undefined m_unk0x100;    // 0x100
+	LegoU8 m_defined_elsewhere;    // 0x100
 	LegoEntity* m_entity;    // 0x104
 };
 

@@ -26,7 +26,7 @@ public:
 
 		m_action->SetAtomId(oldAction->GetAtomId());
 		m_action->SetObjectId(oldAction->GetObjectId());
-		m_action->SetUnknown24(oldAction->GetUnknown24());
+		m_action->SetFlags(oldAction->GetFlags());
 	}
 
 	// FUNCTION: LEGO1 0x10051050

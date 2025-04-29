@@ -301,7 +301,7 @@ void LegoBuildingManager::CreateBuilding(MxS32 p_index, LegoWorld* p_world)
 		LegoROI* roi = entity->GetROI();
 		AdjustHeight(p_index);
 		MxMatrix mat = roi->GetLocal2World();
-		mat[3][1] = g_buildingInfo[p_index].m_unk0x14;
+		mat[3][1] = g_buildingInfo[p_index].m_downshiftScale;
 		roi->UpdateTransformationRelativeToParent(mat);
 		VideoManager()->Get3DManager()->Moved(*roi);
 	}
@@ -376,11 +376,11 @@ MxResult LegoBuildingManager::Read(LegoStorage* p_storage)
 		if (p_storage->Read(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_unk0x11, sizeof(info->m_unk0x11)) != SUCCESS) {
+		if (p_storage->Read(&info->m_Downshift, sizeof(info->m_Downshift)) != SUCCESS) {
 			goto done;
 		}
 
-		info->m_initialUnk0x11 = info->m_unk0x11;
+		info->m_initialUnk0x11 = info->m_Downshift;
 		AdjustHeight(i);
 	}
 
@@ -402,15 +402,15 @@ done:
 // FUNCTION: BETA10 0x10063f1a
 void LegoBuildingManager::AdjustHeight(MxS32 p_index)
 {
-	if (g_buildingInfo[p_index].m_unk0x11 > 0) {
-		float value = g_buildingInfoDownshift[p_index] - g_buildingInfo[p_index].m_unk0x11;
-		g_buildingInfo[p_index].m_unk0x14 =
-			g_buildingInfoInit[p_index].m_unk0x14 - value * g_buildingInfoDownshiftScale[p_index];
+	if (g_buildingInfo[p_index].m_Downshift > 0) {
+		float value = g_buildingInfoDownshift[p_index] - g_buildingInfo[p_index].m_Downshift;
+		g_buildingInfo[p_index].m_downshiftScale =
+			g_buildingInfoInit[p_index].m_downshiftScale - value * g_buildingInfoDownshiftScale[p_index];
 	}
-	else if (g_buildingInfo[p_index].m_unk0x11 == 0) {
-		float value = g_buildingInfoDownshift[p_index] - g_buildingInfo[p_index].m_unk0x11;
-		g_buildingInfo[p_index].m_unk0x14 =
-			g_buildingInfoInit[p_index].m_unk0x14 - value * g_buildingInfoDownshiftScale[p_index];
+	else if (g_buildingInfo[p_index].m_Downshift == 0) {
+		float value = g_buildingInfoDownshift[p_index] - g_buildingInfo[p_index].m_Downshift;
+		g_buildingInfo[p_index].m_downshiftScale =
+			g_buildingInfoInit[p_index].m_downshiftScale - value * g_buildingInfoDownshiftScale[p_index];
 
 		if (g_buildingInfo[p_index].m_entity != NULL) {
 			LegoROI* roi = g_buildingInfo[p_index].m_entity->GetROI();
@@ -420,7 +420,7 @@ void LegoBuildingManager::AdjustHeight(MxS32 p_index)
 		}
 	}
 	else {
-		g_buildingInfo[p_index].m_unk0x14 = g_buildingInfoInit[p_index].m_unk0x14;
+		g_buildingInfo[p_index].m_downshiftScale = g_buildingInfoInit[p_index].m_downshiftScale;
 	}
 }
 
@@ -453,7 +453,7 @@ MxBool LegoBuildingManager::SwitchVariant(LegoEntity* p_entity)
 
 	LegoBuildingInfo* info = GetInfo(p_entity);
 
-	if (info != NULL && info->m_flags & LegoBuildingInfo::c_hasVariants && info->m_unk0x11 == -1) {
+	if (info != NULL && info->m_flags & LegoBuildingInfo::c_hasVariants && info->m_Downshift == -1) {
 		LegoROI* roi = p_entity->GetROI();
 		if (++m_nextVariant >= sizeOfArray(g_buildingInfoVariants)) {
 			m_nextVariant = 0;
@@ -621,25 +621,25 @@ MxBool LegoBuildingManager::FUN_10030030(MxS32 p_index)
 
 	MxBool result = TRUE;
 
-	if (info->m_unk0x11 < 0) {
-		info->m_unk0x11 = g_buildingInfoDownshift[p_index];
+	if (info->m_Downshift < 0) {
+		info->m_Downshift = g_buildingInfoDownshift[p_index];
 	}
 
-	if (info->m_unk0x11 <= 0) {
+	if (info->m_Downshift <= 0) {
 		result = FALSE;
 	}
 	else {
 		LegoROI* roi = info->m_entity->GetROI();
 
-		info->m_unk0x11 -= 2;
-		if (info->m_unk0x11 == 1) {
-			info->m_unk0x11 = 0;
+		info->m_Downshift -= 2;
+		if (info->m_Downshift == 1) {
+			info->m_Downshift = 0;
 			roi->SetVisibility(FALSE);
 		}
 		else {
 			AdjustHeight(p_index);
 			MxMatrix mat = roi->GetLocal2World();
-			mat[3][1] = g_buildingInfo[p_index].m_unk0x14;
+			mat[3][1] = g_buildingInfo[p_index].m_downshiftScale;
 			roi->UpdateTransformationRelativeToParent(mat);
 			VideoManager()->Get3DManager()->Moved(*roi);
 		}
@@ -741,16 +741,16 @@ MxResult LegoBuildingManager::Tickle()
 			if (entry->m_time < time) {
 				LegoBuildingInfo* info = GetInfo(entry->m_entity);
 
-				if (info->m_unk0x11 && !m_unk0x28) {
+				if (info->m_Downshift && !m_unk0x28) {
 					MxS32 index = info - g_buildingInfo;
 					AdjustHeight(index);
 					MxMatrix mat = entry->m_roi->GetLocal2World();
-					mat[3][1] = g_buildingInfo[index].m_unk0x14;
+					mat[3][1] = g_buildingInfo[index].m_downshiftScale;
 					entry->m_roi->UpdateTransformationRelativeToParent(mat);
 					VideoManager()->Get3DManager()->Moved(*entry->m_roi);
 				}
 				else {
-					info->m_unk0x11 = 0;
+					info->m_Downshift = 0;
 					entry->m_roi->SetVisibility(FALSE);
 				}
 
@@ -777,14 +777,14 @@ MxResult LegoBuildingManager::Tickle()
 void LegoBuildingManager::FUN_10030590()
 {
 	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
-		g_buildingInfo[i].m_unk0x11 = -1;
+		g_buildingInfo[i].m_Downshift = -1;
 		g_buildingInfo[i].m_initialUnk0x11 = -1;
 		AdjustHeight(i);
 
 		if (g_buildingInfo[i].m_entity != NULL) {
 			LegoROI* roi = g_buildingInfo[i].m_entity->GetROI();
 			MxMatrix mat = roi->GetLocal2World();
-			mat[3][1] = g_buildingInfo[i].m_unk0x14;
+			mat[3][1] = g_buildingInfo[i].m_downshiftScale;
 			roi->UpdateTransformationRelativeToParent(mat);
 			VideoManager()->Get3DManager()->Moved(*roi);
 		}
@@ -881,14 +881,14 @@ void LegoBuildingManager::FUN_100307b0(LegoEntity* p_entity, MxS32 p_adjust)
 	LegoBuildingInfo* info = GetInfo(p_entity);
 
 	if (info != NULL) {
-		if (info->m_unk0x11 < 0) {
-			info->m_unk0x11 = g_buildingInfoDownshift[info - g_buildingInfo];
+		if (info->m_Downshift < 0) {
+			info->m_Downshift = g_buildingInfoDownshift[info - g_buildingInfo];
 		}
 
-		if (info->m_unk0x11 > 0) {
-			info->m_unk0x11 += p_adjust;
-			if (info->m_unk0x11 <= 1 && p_adjust < 0) {
-				info->m_unk0x11 = 0;
+		if (info->m_Downshift > 0) {
+			info->m_Downshift += p_adjust;
+			if (info->m_Downshift <= 1 && p_adjust < 0) {
+				info->m_Downshift = 0;
 			}
 		}
 	}
@@ -898,6 +898,6 @@ void LegoBuildingManager::FUN_100307b0(LegoEntity* p_entity, MxS32 p_adjust)
 void LegoBuildingManager::FUN_10030800()
 {
 	for (MxU32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
-		g_buildingInfo[i].m_initialUnk0x11 = g_buildingInfo[i].m_unk0x11;
+		g_buildingInfo[i].m_initialUnk0x11 = g_buildingInfo[i].m_Downshift;
 	}
 }

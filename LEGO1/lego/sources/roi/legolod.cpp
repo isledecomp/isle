@@ -13,7 +13,7 @@ DECOMP_SIZE_ASSERT(LegoLOD, 0x20)
 DECOMP_SIZE_ASSERT(LegoLOD::Mesh, 0x08)
 
 // GLOBAL: LEGO1 0x101013d4
-LPDIRECT3DRMMATERIAL g_unk0x101013d4 = NULL;
+LPDIRECT3DRMMATERIAL g_d3d_material = NULL;
 
 // GLOBAL: LEGO1 0x101013dc
 const char* g_unk0x101013dc = "inh";
@@ -24,8 +24,8 @@ inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mes
 // FUNCTION: LEGO1 0x100aa380
 LegoLOD::LegoLOD(Tgl::Renderer* p_renderer) : ViewLOD(p_renderer)
 {
-	if (g_unk0x101013d4 == NULL) {
-		GetD3DRM(p_renderer)->CreateMaterial(10.0, &g_unk0x101013d4);
+	if (g_d3d_material == NULL) {
+		GetD3DRM(p_renderer)->CreateMaterial(10.0, &g_d3d_material);
 	}
 
 	m_melems = NULL;
@@ -211,7 +211,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		m_melems[meshIndex].m_tglMesh->SetShadingModel(shadingModel);
 
 		if (textureName != NULL) {
-			if (mesh->GetUnknown0x21()) {
+			if (mesh->GetUseColorAlias()) {
 				LegoROI::FUN_100a9cf0(textureName, paletteEntries, sizeOfArray(paletteEntries));
 			}
 
@@ -231,8 +231,8 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			LegoFloat blue = 1.0F;
 			LegoFloat alpha = 0.0F;
 
-			if (mesh->GetUnknown0x21()) {
-				LegoROI::FUN_100a9bf0(materialName, red, green, blue, alpha);
+			if (mesh->GetUseColorAlias()) {
+				LegoROI::GetColorFromGlobalHandlerOrAlias(materialName, red, green, blue, alpha);
 			}
 			else {
 				red = mesh->GetColor().GetRed() / 255.0;
@@ -248,7 +248,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			IDirect3DRMMesh* mesh;
 			D3DRMGROUPINDEX index;
 			GetMeshData(mesh, index, m_melems[meshIndex].m_tglMesh);
-			mesh->SetGroupMaterial(index, g_unk0x101013d4);
+			mesh->SetGroupMaterial(index, g_d3d_material);
 		}
 
 		if (mesh != NULL) {

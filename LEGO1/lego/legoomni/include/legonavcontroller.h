@@ -155,7 +155,7 @@ protected:
 	float m_unk0x60;             // 0x60
 	float m_unk0x64;             // 0x64
 	float m_unk0x68;             // 0x68
-	MxBool m_unk0x6c;            // 0x6c
+	MxBool m_isAccelerating;            // 0x6c
 
 	// one copy of defaults (these can be set by App.)
 	static int g_defdeadZone;

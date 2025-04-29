@@ -171,7 +171,7 @@ MxResult MxDSBuffer::CreateObject(
 		return FAILURE;
 	}
 
-	MxCore* header = ReadChunk(this, p_data, p_action->GetUnknown24());
+	MxCore* header = ReadChunk(this, p_data, p_action->GetFlags());
 
 	if (header == NULL) {
 		return FAILURE;
@@ -308,7 +308,7 @@ MxResult MxDSBuffer::ParseChunk(
 		}
 
 		if (p_header) {
-			if (p_header->SendChunk(p_controller->GetSubscriberList(), TRUE, p_action->GetUnknown24()) != SUCCESS) {
+			if (p_header->SendChunk(p_controller->GetSubscriberList(), TRUE, p_action->GetFlags()) != SUCCESS) {
 				delete p_header;
 			}
 		}

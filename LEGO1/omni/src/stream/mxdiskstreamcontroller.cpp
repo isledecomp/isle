@@ -280,7 +280,7 @@ MxDSStreamingAction* MxDiskStreamController::FUN_100c7db0()
 			MxDSStreamingAction* streamingAction = (MxDSStreamingAction*) *it2;
 
 			if (streamingAction->GetObjectId() == data->GetObjectId() &&
-				streamingAction->GetUnknown24() == data->GetUnknown24() &&
+				streamingAction->GetFlags() == data->GetUnknown24() &&
 				streamingAction->GetBufferOffset() == data->GetData()) {
 				m_nextActionList.erase(it);
 

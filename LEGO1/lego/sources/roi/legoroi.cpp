@@ -52,7 +52,7 @@ const char* g_unk0x10101380[] = {"bike", "moto", "haus", NULL};
 const char* g_unk0x10101390[] = {"rcuser", "jsuser", "dunebugy", "chtrblad", "chtrbody", "chtrshld", NULL};
 
 // GLOBAL: LEGO1 0x101013ac
-ROIHandler g_unk0x101013ac = NULL;
+ROIHandler g_roi_handler = NULL;
 
 // GLOBAL: LEGO1 0x101013b0
 TextureHandler g_unk0x101013b0 = NULL;
@@ -169,11 +169,11 @@ LegoResult LegoROI::Read(
 		textureName = NULL;
 	}
 
-	if (p_storage->Read(&m_unk0x100, sizeof(m_unk0x100)) != SUCCESS) {
+	if (p_storage->Read(&m_defined_elsewhere, sizeof(m_defined_elsewhere)) != SUCCESS) {
 		goto done;
 	}
 
-	if (m_unk0x100) {
+	if (m_defined_elsewhere) {
 		for (roiLength = strlen(m_name); roiLength; roiLength--) {
 			if (m_name[roiLength - 1] < '0' || m_name[roiLength - 1] > '9') {
 				break;
@@ -188,7 +188,7 @@ LegoResult LegoROI::Read(
 		delete[] roiName;
 
 		if (lodList == NULL) {
-			goto done;
+			goto done; // error
 		}
 	}
 	else {
@@ -307,7 +307,7 @@ LegoResult LegoROI::Read(
 			LegoFloat green = 0.0F;
 			LegoFloat blue = 1.0F;
 			LegoFloat alpha = 0.0F;
-			FUN_100a9bf0(textureName, red, green, blue, alpha);
+			GetColorFromGlobalHandlerOrAlias(textureName, red, green, blue, alpha);
 			FUN_100a9170(red, green, blue, alpha);
 		}
 	}
@@ -755,15 +755,15 @@ void TimeROI::FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time)
 }
 
 // FUNCTION: LEGO1 0x100a9bf0
-LegoBool LegoROI::FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha)
+LegoBool LegoROI::GetColorFromGlobalHandlerOrAlias(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha)
 {
 	if (p_param == NULL) {
 		return FALSE;
 	}
 
-	if (g_unk0x101013ac) {
+	if (g_roi_handler) {
 		char buf[32];
-		if (g_unk0x101013ac(p_param, buf, sizeof(buf))) {
+		if (g_roi_handler(p_param, buf, sizeof(buf))) {
 			p_param = buf;
 		}
 	}
@@ -804,9 +804,9 @@ LegoBool LegoROI::FUN_100a9cf0(const LegoChar* p_param, unsigned char* paletteEn
 }
 
 // FUNCTION: LEGO1 0x100a9d30
-void LegoROI::FUN_100a9d30(ROIHandler p_func)
+void LegoROI::SetGlobalROIHandler(ROIHandler p_func)
 {
-	g_unk0x101013ac = p_func;
+	g_roi_handler = p_func;
 }
 
 // FUNCTION: LEGO1 0x100a9d40

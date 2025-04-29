@@ -125,7 +125,7 @@ public:
 	// LegoWorld::`scalar deleting destructor'
 
 protected:
-	LegoPathControllerList m_list0x68;        // 0x68
+	LegoPathControllerList m_controllerList;        // 0x68
 	MxPresenterList m_animPresenters;         // 0x80
 	LegoCameraController* m_cameraController; // 0x98
 	LegoEntityList* m_entityList;             // 0x9c

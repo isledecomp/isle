@@ -198,7 +198,7 @@ LegoChar* LegoAnimPresenter::FUN_10069150(const LegoChar* p_und1)
 	}
 	else {
 		LegoChar buffer[32];
-		sprintf(buffer, "%d", m_action->GetUnknown24());
+		sprintf(buffer, "%d", m_action->GetFlags());
 		str = new LegoChar[strlen(p_und1) + strlen(buffer) + strlen(GetActionObjectName()) + 1];
 
 		if (str != NULL) {
