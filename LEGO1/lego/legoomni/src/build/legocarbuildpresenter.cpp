@@ -220,8 +220,8 @@ void LegoCarBuildAnimPresenter::StreamingTickle()
 				LegoROI* roi = m_roiMap[j];
 
 				if (roi && roi->GetName() && (strcmpi(name, roi->GetName()) == 0)) {
-					roi->FUN_100a9dd0();
-					roi->FUN_100a9350("lego red");
+					roi->ClearLodUnk0x1c();
+					roi->SetColorNamed("lego red");
 				}
 			}
 		}

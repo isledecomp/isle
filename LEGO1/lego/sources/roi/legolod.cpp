@@ -16,7 +16,7 @@ DECOMP_SIZE_ASSERT(LegoLOD::Mesh, 0x08)
 LPDIRECT3DRMMATERIAL g_d3d_material = NULL;
 
 // GLOBAL: LEGO1 0x101013dc
-const char* g_unk0x101013dc = "inh";
+const char* g_InhPrefix = "inh";
 
 inline IDirect3DRM2* GetD3DRM(Tgl::Renderer* pRenderer);
 inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* pMesh);
@@ -32,7 +32,7 @@ LegoLOD::LegoLOD(Tgl::Renderer* p_renderer) : ViewLOD(p_renderer)
 	m_numMeshes = 0;
 	m_numVertices = 0;
 	m_numPolys = 0;
-	m_unk0x1c = 0;
+	m_meshOffset = 0;
 }
 
 // FUNCTION: LEGO1 0x100aa450
@@ -66,7 +66,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	LegoU32(*textureIndices)[3] = NULL;
 	LegoTextureInfo* textureInfo = NULL;
 
-	LegoU32 i, meshUnd1, meshUnd2, tempNumVertsAndNormals;
+	LegoU32 i, meshIndexCounterDown, meshIndexCounterUp, tempNumVertsAndNormals;
 	unsigned char paletteEntries[256];
 
 	if (p_storage->Read(&m_unk0x08, sizeof(m_unk0x08)) != SUCCESS) {
@@ -93,8 +93,8 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	m_melems = new Mesh[m_numMeshes];
 	memset(m_melems, 0, sizeof(*m_melems) * m_numMeshes);
 
-	meshUnd1 = m_numMeshes - 1;
-	meshUnd2 = 0;
+	meshIndexCounterDown = m_numMeshes - 1;
+	meshIndexCounterUp = 0;
 
 	if (p_storage->Read(&tempNumVertsAndNormals, sizeof(tempNumVertsAndNormals)) != SUCCESS) {
 		goto done;
@@ -184,13 +184,13 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		textureName = mesh->GetTextureName();
 		materialName = mesh->GetMaterialName();
 
-		if (FUN_100aae20(textureName) || FUN_100aae20(materialName)) {
-			meshIndex = meshUnd1;
-			meshUnd1--;
+		if (StartWithInhPrefix(textureName) || StartWithInhPrefix(materialName)) {
+			meshIndex = meshIndexCounterDown;
+			meshIndexCounterDown--;
 		}
 		else {
-			meshIndex = meshUnd2;
-			meshUnd2++;
+			meshIndex = meshIndexCounterUp;
+			meshIndexCounterUp++;
 		}
 
 		m_melems[meshIndex].m_tglMesh = m_meshBuilder->CreateMesh(
@@ -212,7 +212,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 
 		if (textureName != NULL) {
 			if (mesh->GetUseColorAlias()) {
-				LegoROI::FUN_100a9cf0(textureName, paletteEntries, sizeOfArray(paletteEntries));
+				LegoROI::GetPaletteEntriesFromGlobalHandler(textureName, paletteEntries, sizeOfArray(paletteEntries));
 			}
 
 			textureInfo = p_textureContainer->Get(mesh->GetTextureName());
@@ -223,7 +223,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 
 			m_melems[meshIndex].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
 			LegoTextureInfo::SetGroupTexture(m_melems[meshIndex].m_tglMesh, textureInfo);
-			m_melems[meshIndex].m_unk0x04 = TRUE;
+			m_melems[meshIndex].m_Textured = TRUE;
 		}
 		else {
 			LegoFloat red = 1.0F;
@@ -265,7 +265,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		}
 	}
 
-	m_unk0x1c = meshUnd2;
+	m_meshOffset = meshIndexCounterUp;
 
 	if (textureVertices != NULL) {
 		delete[] textureVertices;
@@ -312,23 +312,23 @@ LegoLOD* LegoLOD::Clone(Tgl::Renderer* p_renderer)
 
 	for (LegoU32 i = 0; i < m_numMeshes; i++) {
 		dupLod->m_melems[i].m_tglMesh = m_melems[i].m_tglMesh->ShallowClone(dupLod->m_meshBuilder);
-		dupLod->m_melems[i].m_unk0x04 = m_melems[i].m_unk0x04;
+		dupLod->m_melems[i].m_Textured = m_melems[i].m_Textured;
 	}
 
 	dupLod->m_unk0x08 = m_unk0x08;
 	dupLod->m_numMeshes = m_numMeshes;
 	dupLod->m_numVertices = m_numVertices;
 	dupLod->m_numPolys = m_numPolys;
-	dupLod->m_unk0x1c = m_unk0x1c;
+	dupLod->m_meshOffset = m_meshOffset;
 
 	return dupLod;
 }
 
 // FUNCTION: LEGO1 0x100aacb0
-LegoResult LegoLOD::FUN_100aacb0(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
+LegoResult LegoLOD::SetMeshColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
 {
-	for (LegoU32 i = m_unk0x1c; i < m_numMeshes; i++) {
-		if (!m_melems[i].m_unk0x04) {
+	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
+		if (!m_melems[i].m_Textured) {
 			m_melems[i].m_tglMesh->SetColor(p_red, p_green, p_blue, p_alpha);
 		}
 	}
@@ -337,13 +337,13 @@ LegoResult LegoLOD::FUN_100aacb0(LegoFloat p_red, LegoFloat p_green, LegoFloat p
 }
 
 // FUNCTION: LEGO1 0x100aad00
-LegoResult LegoLOD::FUN_100aad00(LegoTextureInfo* p_textureInfo)
+LegoResult LegoLOD::SetTextureInfo(LegoTextureInfo* p_textureInfo)
 {
-	for (LegoU32 i = m_unk0x1c; i < m_numMeshes; i++) {
-		if (m_melems[i].m_unk0x04) {
+	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
+		if (m_melems[i].m_Textured) {
 			LegoTextureInfo::SetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo);
 			m_melems[i].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
-			m_melems[i].m_unk0x04 = TRUE;
+			m_melems[i].m_Textured = TRUE;
 		}
 	}
 
@@ -351,10 +351,10 @@ LegoResult LegoLOD::FUN_100aad00(LegoTextureInfo* p_textureInfo)
 }
 
 // FUNCTION: LEGO1 0x100aad70
-LegoResult LegoLOD::FUN_100aad70(LegoTextureInfo* p_textureInfo)
+LegoResult LegoLOD::SetTextureInfoUncolored(LegoTextureInfo* p_textureInfo)
 {
-	for (LegoU32 i = m_unk0x1c; i < m_numMeshes; i++) {
-		if (m_melems[i].m_unk0x04) {
+	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
+		if (m_melems[i].m_Textured) {
 			LegoTextureInfo::SetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo);
 		}
 	}
@@ -365,8 +365,8 @@ LegoResult LegoLOD::FUN_100aad70(LegoTextureInfo* p_textureInfo)
 // FUNCTION: LEGO1 0x100aadc0
 LegoResult LegoLOD::GetTexture(LegoTextureInfo*& p_textureInfo)
 {
-	for (LegoU32 i = m_unk0x1c; i < m_numMeshes; i++) {
-		if (m_melems[i].m_unk0x04) {
+	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
+		if (m_melems[i].m_Textured) {
 			if (LegoTextureInfo::GetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo) == TRUE) {
 				return SUCCESS;
 			}
@@ -377,10 +377,10 @@ LegoResult LegoLOD::GetTexture(LegoTextureInfo*& p_textureInfo)
 }
 
 // FUNCTION: LEGO1 0x100aae20
-LegoBool LegoLOD::FUN_100aae20(const LegoChar* p_name)
+LegoBool LegoLOD::StartWithInhPrefix(const LegoChar* p_name)
 {
 	if (p_name != NULL) {
-		if (!strnicmp(p_name, g_unk0x101013dc, strlen(g_unk0x101013dc))) {
+		if (!strnicmp(p_name, g_InhPrefix, strlen(g_InhPrefix))) {
 			return TRUE;
 		}
 	}
@@ -390,9 +390,9 @@ LegoBool LegoLOD::FUN_100aae20(const LegoChar* p_name)
 
 // FUNCTION: LEGO1 0x100aae60
 // FUNCTION: BETA10 0x1018e50f
-void LegoLOD::FUN_100aae60()
+void LegoLOD::ClearMeshOffset()
 {
-	m_unk0x1c = 0;
+	m_meshOffset = 0;
 }
 
 inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* pMesh)
