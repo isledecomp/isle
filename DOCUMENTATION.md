@@ -4,6 +4,12 @@
 - **Script**: SI File (it appears they wanted to use SI much more as actual scripts, but ended up hard-coding almost everything)
 - **Action**: Mostly media file inside SI
 
+## Core Concepts
+
+### Tickling
+
+MxCore objects can be registered to be tickled by the MxTickleManager. This is used to update them in a set interval. This is used for loading the next frame of a video, update 3D sound positions and more.
+
 ## Classes
 
 ### MxAtom
@@ -15,7 +21,7 @@ Dec()
 ### MxAtomId
 String with lookup method (upper case/lower case/exact). Used for IDs.
 
-MxOmni holds an AtomSet that contains MxAtoms for every MxAtom ID created + a counter of how many instances exists.
+MxOmni holds an AtomSet that contains MxAtoms for every MxAtomId created + a counter of how many instances exists (purpose unclear).
 
 ### MxString
 Typical string class with utility functions.
@@ -24,12 +30,18 @@ Typical string class with utility functions.
 Virtual base class.
 
 Tickle()
-Notifiy(MyParam)
+Notify(MyParam)
 GetId()
 ClassName()
 
 IsA()
 Checks ALL parents.
+
+### MxTickleManager : MxCore
+Holds a list of MxTickleClient*. Goes though the on Tickle() and calls Tickle() if interval time has passed.
+
+### MxTickleClient
+Holds a MxCore*, Interval, LastUpdateTime and Flags (only used for TICKLE_MANAGER_FLAG_DESTROY?).
 
 ### MxDSObject : MxCore
 Base Object for extracted objects from SI files.
@@ -139,13 +151,17 @@ PlaceActor(LegoNamedPlane&)
 Parses a string like ""ATTACH_CAMERA: location direction up", "SPEED speed", "SOUND sound" , "MUTE" and "VISIBILITY". Saves it into the corresponding member.
 
 ### LegoPathController : MxCore
-Has PathBoundary (LegoPathBoundary*)
+Has PathBoundary (LegoPathBoundary*) a set of actors and many other things. Presumably it controls the movement of actors along paths.
 
 #### PlaceActor(LegoPathActor*)
 Removes actor from current controller, and set it to this.
 
 #### PlaceActor(LegoPathActor*, LegoAnimPresenter*, ...)
 Removes actor from current controller, does through all boundaries, goes through all presenters of them
+
+
+### LegoPathActor : LegoActor
+
 
 ### LegoEdge
 Has FaceA (LegoWEEdge*), FaceB (LegoWEEdge*), PointA (Vector3), PointB (Vector3). Also utility functions like CWVertex (LegoWEEdge&), CCWVertex (LegoWEEdge&), GetClockwiseEdge(LegoWEEdge&) and GetCounterclockwiseEdge(LegoWEEdge&).
@@ -165,7 +181,14 @@ Has actors and presenters.
 ### LegoNamedPlane
 Has Name (char*), Position, Direction and Up. Can be serialized.
 
-### LegoPathActor : LegoActor
+### LegoStorage
+Abstract base class for a file-file object with positioning, reading/writing basic data types etc.
+
+### LegoMemory : LegoStorage
+LegoStorage operating on a U8 pointer.
+
+### LegoFile : LegoStorage
+LegoStorage operating on a File.
 
 ### Mx3DPointFloat : Vector3
 Just a Vector3, doesn't add much.
