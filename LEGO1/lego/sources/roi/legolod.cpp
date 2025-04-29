@@ -223,7 +223,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 
 			m_melems[meshIndex].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
 			LegoTextureInfo::SetGroupTexture(m_melems[meshIndex].m_tglMesh, textureInfo);
-			m_melems[meshIndex].m_unk0x04 = TRUE;
+			m_melems[meshIndex].m_textured = TRUE;
 		}
 		else {
 			LegoFloat red = 1.0F;
@@ -312,7 +312,7 @@ LegoLOD* LegoLOD::Clone(Tgl::Renderer* p_renderer)
 
 	for (LegoU32 i = 0; i < m_numMeshes; i++) {
 		dupLod->m_melems[i].m_tglMesh = m_melems[i].m_tglMesh->ShallowClone(dupLod->m_meshBuilder);
-		dupLod->m_melems[i].m_unk0x04 = m_melems[i].m_unk0x04;
+		dupLod->m_melems[i].m_textured = m_melems[i].m_textured;
 	}
 
 	dupLod->m_unk0x08 = m_unk0x08;
@@ -328,7 +328,7 @@ LegoLOD* LegoLOD::Clone(Tgl::Renderer* p_renderer)
 LegoResult LegoLOD::SetColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
 {
 	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
-		if (!m_melems[i].m_unk0x04) {
+		if (!m_melems[i].m_textured) {
 			m_melems[i].m_tglMesh->SetColor(p_red, p_green, p_blue, p_alpha);
 		}
 	}
@@ -340,10 +340,10 @@ LegoResult LegoLOD::SetColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blu
 LegoResult LegoLOD::SetTextureInfo(LegoTextureInfo* p_textureInfo)
 {
 	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
-		if (m_melems[i].m_unk0x04) {
+		if (m_melems[i].m_textured) {
 			LegoTextureInfo::SetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo);
 			m_melems[i].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
-			m_melems[i].m_unk0x04 = TRUE;
+			m_melems[i].m_textured = TRUE;
 		}
 	}
 
@@ -354,7 +354,7 @@ LegoResult LegoLOD::SetTextureInfo(LegoTextureInfo* p_textureInfo)
 LegoResult LegoLOD::FUN_100aad70(LegoTextureInfo* p_textureInfo)
 {
 	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
-		if (m_melems[i].m_unk0x04) {
+		if (m_melems[i].m_textured) {
 			LegoTextureInfo::SetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo);
 		}
 	}
@@ -366,7 +366,7 @@ LegoResult LegoLOD::FUN_100aad70(LegoTextureInfo* p_textureInfo)
 LegoResult LegoLOD::GetTextureInfo(LegoTextureInfo*& p_textureInfo)
 {
 	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
-		if (m_melems[i].m_unk0x04) {
+		if (m_melems[i].m_textured) {
 			if (LegoTextureInfo::GetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo) == TRUE) {
 				return SUCCESS;
 			}

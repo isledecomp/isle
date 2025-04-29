@@ -15,7 +15,7 @@ public:
 	// SIZE 0x08
 	struct Mesh {
 		Tgl::Mesh* m_tglMesh; // 0x00
-		BOOL m_unk0x04;       // 0x04
+		BOOL m_textured;      // 0x04
 	};
 
 	LegoLOD(Tgl::Renderer*);
