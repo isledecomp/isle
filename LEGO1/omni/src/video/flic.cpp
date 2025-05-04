@@ -380,28 +380,28 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 
 
 	do {
+		// TODO: Can the typecast be removed?
 		// LINE: BETA10 0x1013e692
-		token = *((short*) data);
-		data += 2; // TODO: likely an otherData assignment
+		token = *((short*) data++);
 
 		if (token < 0) {
 			if (token & 0x4000) {
 				// TODO: Make the compiler move this code all the way to the top of the loop
 				// // LINE: BETA10 0x1013e684
 				row += token;
-				// TODO: otherData assigment
 				continue;
 			}
 
 			WritePixel(p_bitmapHeader, p_pixelData, width, row, token);
-			token = *((WORD*) data);
-			data += 2;
+			token = *((WORD*) data++);
 
+			// LINE: BETA10 0x1013e6ef
 			if (!token) {
 				row--;
 				if (--lines <= 0) {
 					return;
 				}
+				// TODO: Something is off about these breaks and jumps -- too many JMP instructions
 			}
 			else {
 				break;
@@ -411,7 +411,7 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 			break;
 		}
 
-		short column = 0;
+		short column = xofs;
 		do {
 			column += *(data++);
 			short type = *((char*) data++);
