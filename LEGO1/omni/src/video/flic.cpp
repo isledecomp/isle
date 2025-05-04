@@ -375,18 +375,19 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 	short lines = *data++;
 
 
-	short height = p_flcHeader->height;
-	// LINE: BETA10 0x1013e66f
-	short row = height - yofs - 1;
+	// LINE: BETA10 0x1013e666
+	short row = p_flcHeader->height - yofs - 1;
 
 
 	do {
-
+		// LINE: BETA10 0x1013e692
 		token = *((short*) data);
 		data += 2; // TODO: likely an otherData assignment
 
 		if (token < 0) {
 			if (token & 0x4000) {
+				// TODO: Make the compiler move this code all the way to the top of the loop
+				// // LINE: BETA10 0x1013e684
 				row += token;
 				// TODO: otherData assigment
 				continue;
@@ -423,9 +424,9 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 			}
 			else {
 				type = -type;
-				// short p_pixel = *((WORD*) data); // removed for stack size
+				short p_pixel = *((WORD*) data); // removed for stack size
 				data += 2;
-				WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *((WORD*) data), type >> 1);
+				WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, p_pixel, type >> 1);
 				column += type;
 			}
 		} while (--token);
