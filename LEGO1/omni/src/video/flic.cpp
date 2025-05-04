@@ -412,7 +412,7 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 		}
 
 		short column = xofs;
-		do {
+		while (1) {
 			column += *(data++);
 			short type = *((char*) data++);
 			type += type;
@@ -421,15 +421,22 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 				WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
 				column += type;
 				data += type;
+				// LINE: BETA10 0x1013e797
+				if (--token == 0) {
+					break;
+				}
 			}
 			else {
 				type = -type;
-				short p_pixel = *((WORD*) data); // removed for stack size
-				data += 2;
+				short p_pixel = *((WORD*) data++);
 				WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, p_pixel, type >> 1);
 				column += type;
+				// LINE: BETA10 0x1013e813
+				if (--token == 0) {
+					break;
+				}
 			}
-		} while (--token);
+		}
 
 		row--;
 	} while (--lines > 0);
