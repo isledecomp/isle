@@ -361,9 +361,6 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 	short width = p_flcHeader->width;
 	short token = 0;
 
-
-
-
 	// LINE: BETA10 0x1013e643
 	short xmax = xofs + width - 1;
 
@@ -374,22 +371,26 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 	// The line count does not include skipped lines.
 	short lines = *data++;
 
-
 	// LINE: BETA10 0x1013e666
 	short row = p_flcHeader->height - yofs - 1;
 
+	goto loop;
+
+weird_code:
+	// This is very ugly, but it does yield the correct layout. This _may_ be correct.
+	// it may correlate to finishing one row of pixels.
+	// LINE: BETA10 0x1013e684
+	row += token;
 
 	do {
+	loop:
 		// TODO: Can the typecast be removed?
 		// LINE: BETA10 0x1013e692
 		token = *((short*) data++);
 
 		if (token < 0) {
 			if (token & 0x4000) {
-				// TODO: Make the compiler move this code all the way to the top of the loop
-				// // LINE: BETA10 0x1013e684
-				row += token;
-				continue;
+				goto weird_code;
 			}
 
 			WritePixel(p_bitmapHeader, p_pixelData, width, row, token);
@@ -413,6 +414,8 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 
 		short column = xofs;
 		while (1) {
+			// TODO: Try turning this while-loop into gotos
+
 			column += *(data++);
 			short type = *((char*) data++);
 			type += type;
@@ -420,11 +423,16 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 			if (type >= 0) {
 				WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
 				column += type;
-				data = (short*)( (char*)data + type);
+				data = (short*) ((char*) data + type);
 				// LINE: BETA10 0x1013e797
-				if (--token == 0) {
+				if (--token != 0) {
+					continue;
+				}
+				row--;
+				if (--lines > 0) {
 					break;
 				}
+				return;
 			}
 			else {
 				type = -type;
@@ -432,14 +440,19 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 				WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
 				column += type;
 				// LINE: BETA10 0x1013e813
-				if (--token == 0) {
+				if (--token != 0) {
+					continue;
+				}
+				row--;
+				if (--lines > 0) {
 					break;
 				}
+				return;
 			}
+			// break;
 		}
 
-		row--;
-	} while (--lines > 0);
+	} while (1);
 }
 
 // FUNCTION: LEGO1 0x100bdc00
