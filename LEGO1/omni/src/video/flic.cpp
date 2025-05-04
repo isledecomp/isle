@@ -355,50 +355,59 @@ void DecodeLC(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data
 // FUNCTION: BETA10 0x1013e61d
 void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data, FLIC_HEADER* p_flcHeader)
 {
-    short xofs = 0;
-    short yofs = 0;
+	short xofs = 0;
+	short yofs = 0;
 
-    short width = (short) p_flcHeader->width;
-    short token = 0;
+	short width = p_flcHeader->width;
+	short token = 0;
 
-    short xmax = xofs + width - 1;
 
-    short row = yofs + p_flcHeader->height - 1;
-    short* data = (short*) p_data;
 
-    // The first word in the data following the chunk header contains the number of lines in the chunk.
-    // The line count does not include skipped lines.
-    short lines = *data++;
 
-	while (--lines > 0) {
+	// LINE: BETA10 0x1013e643
+	short xmax = xofs + width - 1;
 
-		while (TRUE) {
-			token = *((short*) data);
+	// LINE: BETA10 0x1013e652
+	short* data = (short*) p_data;
+
+	// The first word in the data following the chunk header contains the number of lines in the chunk.
+	// The line count does not include skipped lines.
+	short lines = *data++;
+
+
+	short height = p_flcHeader->height;
+	// LINE: BETA10 0x1013e66f
+	short row = height - yofs - 1;
+
+
+	do {
+
+		token = *((short*) data);
+		data += 2; // TODO: likely an otherData assignment
+
+		if (token < 0) {
+			if (token & 0x4000) {
+				row += token;
+				// TODO: otherData assigment
+				continue;
+			}
+
+			WritePixel(p_bitmapHeader, p_pixelData, width, row, token);
+			token = *((WORD*) data);
 			data += 2;
 
-			if (token < 0) {
-				if (token & 0x4000) {
-					row += token;
-				}
-				else {
-					WritePixel(p_bitmapHeader, p_pixelData, width, row, token);
-					token = *((WORD*) data);
-					data += 2;
-
-					if (!token) {
-						row--;
-						if (--lines <= 0) {
-							return;
-						}
-					}
-					else {
-						break;
-					}
+			if (!token) {
+				row--;
+				if (--lines <= 0) {
+					return;
 				}
 			}
 			else {
 				break;
 			}
+		}
+		else {
+			break;
 		}
 
 		short column = 0;
@@ -408,21 +417,21 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 			type += type;
 
 			if (type >= 0) {
-				WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*)data, type);
+				WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
 				column += type;
 				data += type;
 			}
 			else {
 				type = -type;
-				short p_pixel = *((WORD*) data);
+				// short p_pixel = *((WORD*) data); // removed for stack size
 				data += 2;
-				WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, p_pixel, type >> 1);
+				WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *((WORD*) data), type >> 1);
 				column += type;
 			}
 		} while (--token);
 
 		row--;
-	}
+	} while (--lines > 0);
 }
 
 // FUNCTION: LEGO1 0x100bdc00
