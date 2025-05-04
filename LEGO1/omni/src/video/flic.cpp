@@ -374,7 +374,7 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 	// LINE: BETA10 0x1013e666
 	short row = p_flcHeader->height - yofs - 1;
 
-	goto loop;
+	goto row_loop;
 
 weird_code:
 	// This is very ugly, but it does yield the correct layout. This _may_ be correct.
@@ -382,8 +382,8 @@ weird_code:
 	// LINE: BETA10 0x1013e684
 	row += token;
 
-	do {
-	loop:
+	while (TRUE) {
+	row_loop:
 		// TODO: Can the typecast be removed?
 		// LINE: BETA10 0x1013e692
 		token = *((short*) data++);
@@ -413,46 +413,45 @@ weird_code:
 		}
 
 		short column = xofs;
-		while (1) {
-			// TODO: Try turning this while-loop into gotos
 
-			column += *(data++);
-			short type = *((char*) data++);
-			type += type;
+	column_loop:
 
-			if (type >= 0) {
-				WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
-				column += type;
-				data = (short*) ((char*) data + type);
-				// LINE: BETA10 0x1013e797
-				if (--token != 0) {
-					continue;
-				}
-				row--;
-				if (--lines > 0) {
-					break;
-				}
-				return;
+		column += *(data++);
+		short type = *((char*) data++);
+		type += type;
+
+		if (type >= 0) {
+			WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
+			column += type;
+			data = (short*) ((char*) data + type);
+			// LINE: BETA10 0x1013e797
+			if (--token != 0) {
+				goto column_loop;
 			}
-			else {
-				type = -type;
-				WORD* p_pixel = ((WORD*) data++);
-				WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
-				column += type;
-				// LINE: BETA10 0x1013e813
-				if (--token != 0) {
-					continue;
-				}
-				row--;
-				if (--lines > 0) {
-					break;
-				}
-				return;
+			row--;
+			if (--lines > 0) {
+				goto row_loop;
 			}
-			// break;
+			return;
 		}
+		else {
+			type = -type;
+			WORD* p_pixel = ((WORD*) data++);
+			WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
+			column += type;
+			// LINE: BETA10 0x1013e813
+			if (--token != 0) {
+				goto column_loop;
+			}
+			row--;
+			if (--lines > 0) {
+				goto row_loop;
+			}
+			return;
+		}
+		// break;
 
-	} while (1);
+	}
 }
 
 // FUNCTION: LEGO1 0x100bdc00
