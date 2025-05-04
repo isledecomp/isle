@@ -369,7 +369,7 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 
 	// The first word in the data following the chunk header contains the number of lines in the chunk.
 	// The line count does not include skipped lines.
-	short lines = *(short *)data;
+	short lines = *(short*) data;
 	data += 2;
 
 	// LINE: BETA10 0x1013e666
@@ -394,7 +394,7 @@ weird_code:
 				goto weird_code;
 			}
 
-			WritePixel(p_bitmapHeader, p_pixelData, width, row, token);
+			WritePixel(p_bitmapHeader, p_pixelData, xmax, row, token);
 			token = *(short*) data;
 			data += 2;
 
@@ -413,11 +413,9 @@ weird_code:
 		short column = xofs;
 
 	column_loop:
-
-		// TODO: some movzx / movsx discrepancy here
-
 		column += *data++;
-		short type = *data++;
+		// LINE: BETA10 0x1013e73a
+		short type = *(char*) data++;
 		type += type;
 
 		if (type >= 0) {
@@ -450,8 +448,6 @@ weird_code:
 			}
 			return;
 		}
-		// break;
-
 	}
 }
 
