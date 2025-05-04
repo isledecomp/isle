@@ -60,7 +60,7 @@ MxStreamController::~MxStreamController()
 		m_unk0x2c = NULL;
 	}
 
-	while (m_unk0x54.PopFront(action)) {
+	while (m_actionListUnknown.PopFront(action)) {
 		delete action;
 	}
 }
@@ -121,7 +121,7 @@ MxResult MxStreamController::VTable0x24(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
 	VTable0x30(p_action);
-	m_action0x60 = (MxDSAction*) m_unk0x54.FindAndErase(p_action);
+	m_action0x60 = (MxDSAction*) m_actionListUnknown.FindAndErase(p_action);
 
 	if (m_action0x60 == NULL) {
 		return FAILURE;
@@ -155,7 +155,7 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 		MxS16 newUnknown24 = -1;
 
 		// These loops might be a template function in the list classes
-		for (MxDSObjectList::iterator it = m_unk0x54.begin(); it != m_unk0x54.end(); it++) {
+		for (MxDSObjectList::iterator it = m_actionListUnknown.begin(); it != m_actionListUnknown.end(); it++) {
 			MxDSObject* action = *it;
 
 			if (action->GetObjectId() == p_action->GetObjectId()) {
@@ -250,7 +250,7 @@ MxResult MxStreamController::InsertActionToList54(MxDSAction* p_action)
 		return FAILURE;
 	}
 	else {
-		m_unk0x54.PushBack(action);
+		m_actionListUnknown.PushBack(action);
 		return SUCCESS;
 	}
 }

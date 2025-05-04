@@ -38,19 +38,19 @@ MxResult MxRAMStreamController::Open(const char* p_filename)
 MxResult MxRAMStreamController::VTable0x20(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
-	MxS32 unk0x24 = 0;
+	MxS32 flags = 0;
 	MxResult result = FAILURE;
 
 	if (p_action->GetFlags() == -1) {
 		p_action->SetFlags(-3);
-		MxDSObject* action = m_unk0x54.Find(p_action);
+		MxDSObject* action = m_actionListUnknown.Find(p_action);
 		if (action != NULL) {
-			unk0x24 = action->GetFlags() + 1;
+			flags = action->GetFlags() + 1;
 		}
-		p_action->SetFlags(unk0x24);
+		p_action->SetFlags(flags);
 	}
 	else {
-		if (m_unk0x54.Find(p_action)) {
+		if (m_actionListUnknown.Find(p_action)) {
 			return FAILURE;
 		}
 	}

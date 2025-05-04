@@ -65,7 +65,7 @@ MxDiskStreamProvider::~MxDiskStreamProvider()
 			g_unk0x10102878--;
 		}
 
-		((MxDiskStreamController*) m_pLookup)->FUN_100c8670((MxDSStreamingAction*) action);
+		((MxDiskStreamController*) m_pLookup)->AddStreamingAction((MxDSStreamingAction*) action);
 	} while (action);
 
 	if (m_remainingWork) {
@@ -137,7 +137,7 @@ void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 				g_unk0x10102878--;
 			}
 
-			((MxDiskStreamController*) m_pLookup)->FUN_100c8670((MxDSStreamingAction*) action);
+			((MxDiskStreamController*) m_pLookup)->AddStreamingAction((MxDSStreamingAction*) action);
 		} while (action);
 	}
 	else {
@@ -155,7 +155,7 @@ void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 				g_unk0x10102878--;
 			}
 
-			((MxDiskStreamController*) m_pLookup)->FUN_100c8670((MxDSStreamingAction*) action);
+			((MxDiskStreamController*) m_pLookup)->AddStreamingAction((MxDSStreamingAction*) action);
 		} while (action);
 	}
 }
@@ -256,7 +256,7 @@ void MxDiskStreamProvider::PerformWork()
 			}
 			else {
 				if (m_pLookup == NULL || !((MxDiskStreamController*) m_pLookup)->GetUnk0xc4()) {
-					controller->FUN_100c8670(((MxDSStreamingAction*) streamingAction));
+					controller->AddStreamingAction(((MxDSStreamingAction*) streamingAction));
 				}
 				else {
 					controller->FUN_100c7f40(((MxDSStreamingAction*) streamingAction));
@@ -269,7 +269,7 @@ void MxDiskStreamProvider::PerformWork()
 
 done:
 	if (streamingAction) {
-		controller->FUN_100c8670(((MxDSStreamingAction*) streamingAction));
+		controller->AddStreamingAction(((MxDSStreamingAction*) streamingAction));
 	}
 
 	m_thread.Sleep(0);

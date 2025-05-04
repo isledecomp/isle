@@ -345,7 +345,7 @@ void MxDiskStreamController::FUN_100c8120(MxDSAction* p_action)
 	}
 
 	while (TRUE) {
-		MxDSObject* found = m_unk0x54.FindAndErase(p_action);
+		MxDSObject* found = m_actionListUnknown.FindAndErase(p_action);
 		if (!found) {
 			break;
 		}
@@ -357,7 +357,7 @@ void MxDiskStreamController::FUN_100c8120(MxDSAction* p_action)
 MxResult MxDiskStreamController::VTable0x24(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
-	if (m_unk0x54.Find(p_action) == NULL) {
+	if (m_actionListUnknown.Find(p_action) == NULL) {
 		if (VTable0x30(p_action) == SUCCESS) {
 			MxOmni::GetInstance()->NotifyCurrentEntity(
 				MxEndActionNotificationParam(c_notificationEndAction, NULL, p_action, TRUE)
@@ -470,7 +470,7 @@ MxResult MxDiskStreamController::Tickle()
 }
 
 // FUNCTION: LEGO1 0x100c8670
-void MxDiskStreamController::FUN_100c8670(MxDSStreamingAction* p_streamingAction)
+void MxDiskStreamController::AddStreamingAction(MxDSStreamingAction* p_streamingAction)
 {
 	AUTOLOCK(m_critical9c);
 	m_list0xb8.push_back(p_streamingAction);

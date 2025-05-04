@@ -43,6 +43,14 @@ Holds a list of MxTickleClient*. Goes though the on Tickle() and calls Tickle() 
 ### MxTickleClient
 Holds a MxCore*, Interval, LastUpdateTime and Flags (only used for TICKLE_MANAGER_FLAG_DESTROY?).
 
+### IsleApp
+Main class and the entry point of the game.
+
+### MxOmni
+
+#### Start(MxDSAction*)
+
+
 ### MxDSObject : MxCore
 Base Object for extracted objects from SI files.
 
@@ -162,6 +170,70 @@ Removes actor from current controller, does through all boundaries, goes through
 
 ### LegoPathActor : LegoActor
 
+### MxStreamer : MxCore
+MxMisc holds a MxStreamer singleton. Also holds a list of MxStreamController.
+
+#### Open(const char*, MxU16 p_lookupType)
+Creates and calls Open() on a MxDiskStreamController or MxRAMStreamController depending on lookupType if not already exists.
+
+### MxDSSubscriber : MxCore
+
+#### Create(MxStreamController* p_controller, MxU32 p_objectId, MxS16 p_unk0x48)
+Calls MxStreamController::AddSubscriber() and sets some properties on itself.
+
+### MxStreamController : MxCore
+Holds a list of subscriber.
+
+#### AddSubscriber(MxDSSubscriber*)
+Puts it into the subscriber list.
+
+#### Open(const char* p_filename)
+Removes "<letter>:" and ".SI" from filename and stores it in m_atom.
+
+### MxRAMStreamController : MxStreamController
+Holds an MxDSBuffer.
+
+### MxDSBuffer : MxCore
+
+### MxStreamProvider : MxCore
+Abstract base class. Holds an MxDSFile.
+
+### MxRAMStreamProvider : MxStreamProvider
+
+#### SetResourceToGet(MxStreamController*)
+Gets the stream controllers Atom, adds ".SI". Tries to load it first from HDD and then from disk. Sets BufferSize to MxDSFile.BufferSize. Then reads the entire file into m_pContentsOfFile.
+
+#### MxU32 ReadData(MxU8* p_buffer, MxU32 p_size)
+Return total size of MxOb. Rearranged p_buffer so that split chunks are merged.
+
+### MxDSStreamingAction : MxDSAction
+Mostly unknown.
+
+### MxDiskStreamProvider : MxStreamProvider
+Holds a list of MxDSStreamingAction.
+
+#### SetResourceToGet(MxStreamController*)
+Gets the stream controllers Atom, adds ".SI". Tries to load it first from HDD and then from disk. Then starts a MxDiskStreamProviderThread with target this.
+
+#### MxDiskStreamProvider::WaitForWorkToComplete()
+Called by the thread. Run indefinitely until object is destroyed. Streams data, code mostly unknown.
+
+### MxThread
+Abstract base class for threads. Starts and manages one. Has abstract Run() method.
+
+### MxDiskStreamProviderThread : MxThread
+Calls MxDiskStreamProvider::WaitForWorkToComplete.
+
+### MxDSChunk : MxCore
+Holds Flags, ObjectId, Time, Data (U8*) and Length. Also some static utility functions.
+
+### MxDSSource : MxCore
+Holds a buffer, length and position and offers abstract function to read and write.
+
+### MxDSFile : MxDSSource
+Presumably this represents an SI file. Holds a MXIOINFO and on Open() opens m_filename and starts reading the starting chunks ("OMNI" etc.) also checks SI version (2.2). Then it reads the length of the MxOf chunk and puts it into m_pBuffer from parent class.
+
+Also holds the header chunk as ChunkHeader. GetBufferSize() returns the buffer size from the header.
 
 ### LegoEdge
 Has FaceA (LegoWEEdge*), FaceB (LegoWEEdge*), PointA (Vector3), PointB (Vector3). Also utility functions like CWVertex (LegoWEEdge&), CCWVertex (LegoWEEdge&), GetClockwiseEdge(LegoWEEdge&) and GetCounterclockwiseEdge(LegoWEEdge&).
@@ -176,7 +248,7 @@ Has Edges (LegoUnknown100db7f4*)
 Adds EdgeNormal, Flags and other lots of other stuff.
 
 ### LegoPathBoundary : LegoWEGEdge
-Has actors and presenters.
+Adds actors and presenters.
 
 ### LegoNamedPlane
 Has Name (char*), Position, Direction and Up. Can be serialized.

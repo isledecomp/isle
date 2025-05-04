@@ -14,7 +14,7 @@ MxRAMStreamProvider::MxRAMStreamProvider()
 {
 	m_bufferSize = 0;
 	m_fileSize = 0;
-	m_pBufferOfFileSize = NULL;
+	m_pContentsOfFile = NULL;
 	m_lengthInDWords = 0;
 	m_bufferForDWords = NULL;
 }
@@ -49,8 +49,8 @@ MxRAMStreamProvider::~MxRAMStreamProvider()
 	m_bufferSize = 0;
 	m_fileSize = 0;
 
-	delete[] m_pBufferOfFileSize;
-	m_pBufferOfFileSize = NULL;
+	delete[] m_pContentsOfFile;
+	m_pContentsOfFile = NULL;
 
 	m_lengthInDWords = 0;
 
@@ -81,9 +81,9 @@ MxResult MxRAMStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 		m_fileSize = m_pFile->CalcFileSize();
 		if (m_fileSize != 0) {
 			m_bufferSize = m_pFile->GetBufferSize();
-			m_pBufferOfFileSize = new MxU8[m_fileSize];
-			if (m_pBufferOfFileSize != NULL &&
-				m_pFile->Read((unsigned char*) m_pBufferOfFileSize, m_fileSize) == SUCCESS) {
+			m_pContentsOfFile = new MxU8[m_fileSize];
+			if (m_pContentsOfFile != NULL &&
+				m_pFile->Read((unsigned char*) m_pContentsOfFile, m_fileSize) == SUCCESS) {
 				m_lengthInDWords = m_pFile->GetLengthInDWords();
 				m_bufferForDWords = new MxU32[m_lengthInDWords];
 
@@ -107,43 +107,43 @@ MxU32 ReadData(MxU8* p_buffer, MxU32 p_size)
 {
 	MxU32 id;
 	MxU8* data = p_buffer;
-	MxU8* data2;
+	MxU8* startOfChunk;
 
 #define IntoType(p) ((MxU32*) (p))
 
 	while (data < p_buffer + p_size) {
 		if (*IntoType(data) == FOURCC('M', 'x', 'O', 'b')) {
-			data2 = data;
-			data = data2 + 8;
+			startOfChunk = data;
+			data = startOfChunk + 8;
 
 			MxDSObject* obj = DeserializeDSObjectDispatch(data, -1);
 			id = obj->GetObjectId();
 			delete obj;
 
-			data = MxDSChunk::End(data2);
+			data = MxDSChunk::End(startOfChunk);
 			while (data < p_buffer + p_size) {
 				if (*IntoType(data) == FOURCC('M', 'x', 'C', 'h')) {
-					MxU8* data3 = data;
-					data = MxDSChunk::End(data3);
+					MxU8* startOfSubChunk = data;
+					data = MxDSChunk::End(startOfSubChunk);
 
-					if ((*IntoType(data2) == FOURCC('M', 'x', 'C', 'h')) &&
-						(*MxStreamChunk::IntoFlags(data2) & DS_CHUNK_SPLIT)) {
-						if (*MxStreamChunk::IntoObjectId(data2) == *MxStreamChunk::IntoObjectId(data3) &&
-							(*MxStreamChunk::IntoFlags(data3) & DS_CHUNK_SPLIT) &&
-							*MxStreamChunk::IntoTime(data2) == *MxStreamChunk::IntoTime(data3)) {
-							MxDSBuffer::Append(data2, data3);
+					if ((*IntoType(startOfChunk) == FOURCC('M', 'x', 'C', 'h')) &&
+						(*MxStreamChunk::IntoFlags(startOfChunk) & DS_CHUNK_SPLIT)) {
+						if (*MxStreamChunk::IntoObjectId(startOfChunk) == *MxStreamChunk::IntoObjectId(startOfSubChunk) &&
+							(*MxStreamChunk::IntoFlags(startOfSubChunk) & DS_CHUNK_SPLIT) &&
+							*MxStreamChunk::IntoTime(startOfChunk) == *MxStreamChunk::IntoTime(startOfSubChunk)) {
+							MxDSBuffer::Append(startOfChunk, startOfSubChunk);
 							continue;
 						}
 						else {
-							*MxStreamChunk::IntoFlags(data2) &= ~DS_CHUNK_SPLIT;
+							*MxStreamChunk::IntoFlags(startOfChunk) &= ~DS_CHUNK_SPLIT;
 						}
 					}
 
-					data2 = MxDSChunk::End(data2);
-					memcpy(data2, data3, MxDSChunk::Size(data3));
+					startOfChunk = MxDSChunk::End(startOfChunk);
+					memcpy(startOfChunk, startOfSubChunk, MxDSChunk::Size(startOfSubChunk));
 
-					if (*MxStreamChunk::IntoObjectId(data2) == id &&
-						(*MxStreamChunk::IntoFlags(data2) & DS_CHUNK_END_OF_STREAM)) {
+					if (*MxStreamChunk::IntoObjectId(startOfChunk) == id &&
+						(*MxStreamChunk::IntoFlags(startOfChunk) & DS_CHUNK_END_OF_STREAM)) {
 						break;
 					}
 				}
@@ -157,8 +157,8 @@ MxU32 ReadData(MxU8* p_buffer, MxU32 p_size)
 		}
 	}
 
-	*MxStreamChunk::IntoFlags(data2) &= ~DS_CHUNK_SPLIT;
-	return MxDSChunk::Size(data2) + (MxU32) (data2 - p_buffer);
+	*MxStreamChunk::IntoFlags(startOfChunk) &= ~DS_CHUNK_SPLIT;
+	return MxDSChunk::Size(startOfChunk) + (MxU32) (startOfChunk - p_buffer);
 
 #undef IntoType
 }

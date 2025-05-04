@@ -84,7 +84,7 @@ public:
 	MxBool FUN_10030110(LegoBuildingInfo* p_data);
 	void ScheduleAnimation(LegoEntity* p_entity, MxLong p_length, MxBool p_haveSound, MxBool p_unk0x28);
 	void FUN_10030590();
-	void AdjustHeight(MxS32 p_index);
+	void AdjustY(MxS32 p_index);
 	MxResult FUN_10030630();
 	LegoBuildingInfo* GetInfoArray(MxS32& p_length);
 	void FUN_100307b0(LegoEntity* p_entity, MxS32 p_adjust);

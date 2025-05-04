@@ -31,12 +31,12 @@ public:
 	MxU32 GetLengthInDWords() override;                                 // vtable+0x24
 	MxU32* GetBufferForDWords() override;                               // vtable+0x28
 
-	MxU8* GetBufferOfFileSize() { return m_pBufferOfFileSize; }
+	MxU8* GetBufferOfFileSize() { return m_pContentsOfFile; }
 
 protected:
 	MxU32 m_bufferSize;        // 0x10
 	MxU32 m_fileSize;          // 0x14
-	MxU8* m_pBufferOfFileSize; // 0x18
+	MxU8* m_pContentsOfFile; // 0x18
 	MxU32 m_lengthInDWords;    // 0x1c
 	MxU32* m_bufferForDWords;  // 0x20
 };

@@ -299,7 +299,7 @@ void LegoBuildingManager::CreateBuilding(MxS32 p_index, LegoWorld* p_world)
 		entity->SetType(LegoEntity::e_building);
 		g_buildingInfo[p_index].m_entity = entity;
 		LegoROI* roi = entity->GetROI();
-		AdjustHeight(p_index);
+		AdjustY(p_index);
 		MxMatrix mat = roi->GetLocal2World();
 		mat[3][1] = g_buildingInfo[p_index].m_downshiftScale;
 		roi->UpdateTransformationRelativeToParent(mat);
@@ -381,7 +381,7 @@ MxResult LegoBuildingManager::Read(LegoStorage* p_storage)
 		}
 
 		info->m_initialUnk0x11 = info->m_Downshift;
-		AdjustHeight(i);
+		AdjustY(i);
 	}
 
 	if (p_storage->Read(&m_nextVariant, sizeof(m_nextVariant)) != SUCCESS) {
@@ -400,7 +400,7 @@ done:
 
 // FUNCTION: LEGO1 0x1002fcc0
 // FUNCTION: BETA10 0x10063f1a
-void LegoBuildingManager::AdjustHeight(MxS32 p_index)
+void LegoBuildingManager::AdjustY(MxS32 p_index)
 {
 	if (g_buildingInfo[p_index].m_Downshift > 0) {
 		float value = g_buildingInfoDownshift[p_index] - g_buildingInfo[p_index].m_Downshift;
@@ -637,7 +637,7 @@ MxBool LegoBuildingManager::FUN_10030030(MxS32 p_index)
 			roi->SetVisibility(FALSE);
 		}
 		else {
-			AdjustHeight(p_index);
+			AdjustY(p_index);
 			MxMatrix mat = roi->GetLocal2World();
 			mat[3][1] = g_buildingInfo[p_index].m_downshiftScale;
 			roi->UpdateTransformationRelativeToParent(mat);
@@ -743,7 +743,7 @@ MxResult LegoBuildingManager::Tickle()
 
 				if (info->m_Downshift && !m_unk0x28) {
 					MxS32 index = info - g_buildingInfo;
-					AdjustHeight(index);
+					AdjustY(index);
 					MxMatrix mat = entry->m_roi->GetLocal2World();
 					mat[3][1] = g_buildingInfo[index].m_downshiftScale;
 					entry->m_roi->UpdateTransformationRelativeToParent(mat);
@@ -779,7 +779,7 @@ void LegoBuildingManager::FUN_10030590()
 	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		g_buildingInfo[i].m_Downshift = -1;
 		g_buildingInfo[i].m_initialUnk0x11 = -1;
-		AdjustHeight(i);
+		AdjustY(i);
 
 		if (g_buildingInfo[i].m_entity != NULL) {
 			LegoROI* roi = g_buildingInfo[i].m_entity->GetROI();
