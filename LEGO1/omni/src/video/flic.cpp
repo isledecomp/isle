@@ -420,7 +420,7 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 			if (type >= 0) {
 				WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
 				column += type;
-				data += type;
+				data = (short*)( (char*)data + type);
 				// LINE: BETA10 0x1013e797
 				if (--token == 0) {
 					break;
@@ -428,8 +428,8 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 			}
 			else {
 				type = -type;
-				short p_pixel = *((WORD*) data++);
-				WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, p_pixel, type >> 1);
+				WORD* p_pixel = ((WORD*) data++);
+				WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
 				column += type;
 				// LINE: BETA10 0x1013e813
 				if (--token == 0) {
