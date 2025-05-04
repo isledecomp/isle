@@ -365,11 +365,12 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 	short xmax = xofs + width - 1;
 
 	// LINE: BETA10 0x1013e652
-	short* data = (short*) p_data;
+	BYTE* data = p_data;
 
 	// The first word in the data following the chunk header contains the number of lines in the chunk.
 	// The line count does not include skipped lines.
-	short lines = *data++;
+	short lines = *(short *)data;
+	data += 2;
 
 	// LINE: BETA10 0x1013e666
 	short row = p_flcHeader->height - yofs - 1;
@@ -384,9 +385,9 @@ weird_code:
 
 	while (TRUE) {
 	row_loop:
-		// TODO: Can the typecast be removed?
 		// LINE: BETA10 0x1013e692
-		token = *((short*) data++);
+		token = *(short*) data;
+		data += 2;
 
 		if (token < 0) {
 			if (token & 0x4000) {
@@ -394,49 +395,49 @@ weird_code:
 			}
 
 			WritePixel(p_bitmapHeader, p_pixelData, width, row, token);
-			token = *((WORD*) data++);
+			token = *(short*) data;
+			data += 2;
 
 			// LINE: BETA10 0x1013e6ef
 			if (!token) {
 				row--;
-				if (--lines <= 0) {
-					return;
+				if (--lines > 0) {
+					continue;
+					// return;
 				}
+				return;
 				// TODO: Something is off about these breaks and jumps -- too many JMP instructions
 			}
-			else {
-				break;
-			}
 		}
-		else {
-			break;
-		}
-
+		// LINE: BETA10 0x1013e71e
 		short column = xofs;
 
 	column_loop:
 
-		column += *(data++);
-		short type = *((char*) data++);
+		// TODO: some movzx / movsx discrepancy here
+
+		column += *data++;
+		short type = *data++;
 		type += type;
 
 		if (type >= 0) {
 			WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
 			column += type;
-			data = (short*) ((char*) data + type);
+			data += type;
 			// LINE: BETA10 0x1013e797
 			if (--token != 0) {
 				goto column_loop;
 			}
 			row--;
 			if (--lines > 0) {
-				goto row_loop;
+				continue;
 			}
 			return;
 		}
 		else {
 			type = -type;
-			WORD* p_pixel = ((WORD*) data++);
+			WORD* p_pixel = (WORD*) data;
+			data += 2;
 			WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
 			column += type;
 			// LINE: BETA10 0x1013e813
@@ -445,7 +446,7 @@ weird_code:
 			}
 			row--;
 			if (--lines > 0) {
-				goto row_loop;
+				continue;
 			}
 			return;
 		}
