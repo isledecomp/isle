@@ -144,7 +144,7 @@ MxResult MxCompositeMediaPresenter::Tickle()
 {
 	AUTOLOCK(m_criticalSection);
 
-	switch (m_currentTickleState) {
+	switch (GetCurrentTickleState()) {
 	case e_ready:
 		ProgressTickleState(e_starting);
 	case e_starting:
