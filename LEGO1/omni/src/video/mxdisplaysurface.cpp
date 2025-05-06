@@ -85,6 +85,7 @@ void MxDisplaySurface::ClearScreen()
 }
 
 // FUNCTION: LEGO1 0x100ba750
+// FUNCTION: BETA10 0x1013f6df
 MxU8 MxDisplaySurface::CountTotalBitsSetTo1(MxU32 p_param)
 {
 	MxU8 count = 0;
@@ -97,6 +98,7 @@ MxU8 MxDisplaySurface::CountTotalBitsSetTo1(MxU32 p_param)
 }
 
 // FUNCTION: LEGO1 0x100ba770
+// FUNCTION: BETA10 0x1013f724
 MxU8 MxDisplaySurface::CountContiguousBitsSetTo1(MxU32 p_param)
 {
 	MxU8 count = 0;
@@ -271,24 +273,21 @@ void MxDisplaySurface::Destroy()
 }
 
 // FUNCTION: LEGO1 0x100baae0
+// FUNCTION: BETA10 0x1013fe15
 void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 {
 	if (m_surfaceDesc.ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8) {
 		m_ddSurface1->SetPalette(p_palette->CreateNativePalette());
 		m_ddSurface2->SetPalette(p_palette->CreateNativePalette());
 
-		if ((m_videoParam.Flags().GetFullScreen() & 1) == 0) {
+		if (!m_videoParam.Flags().GetFullScreen()) {
 			struct {
 				WORD m_palVersion;
 				WORD m_palNumEntries;
 				PALETTEENTRY m_palPalEntry[256];
-			} lpal;
+			} lpal = {0x300, 256};
 
-			lpal.m_palVersion = 0x300;
-			lpal.m_palNumEntries = 256;
-
-			memset(lpal.m_palPalEntry, 0, sizeof(lpal.m_palPalEntry));
-			p_palette->GetEntries(lpal.m_palPalEntry);
+			p_palette->GetEntries((LPPALETTEENTRY) lpal.m_palPalEntry);
 
 			HPALETTE hpal = CreatePalette((LPLOGPALETTE) &lpal);
 			HDC hdc = ::GetDC(0);
@@ -299,7 +298,10 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 		}
 	}
 
-	if (m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount == 16) {
+	switch (m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount) {
+	case 8:
+		break;
+	case 16: {
 		if (!m_16bitPal) {
 			m_16bitPal = new MxU16[256];
 		}
@@ -315,10 +317,15 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 		MxU8 totalBitsBlue = CountTotalBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwBBitMask);
 
 		for (MxS32 i = 0; i < 256; i++) {
-			m_16bitPal[i] = (((palette[i].peRed >> ((8 - totalBitsRed) & 0x1f)) << (contiguousBitsRed & 0x1f))) |
-							(((palette[i].peGreen >> ((8 - totalBitsGreen) & 0x1f)) << (contiguousBitsGreen & 0x1f))) |
-							(((palette[i].peBlue >> ((8 - totalBitsBlue) & 0x1f)) << (contiguousBitsBlue & 0x1f)));
+			m_16bitPal[i] = ((palette[i].peRed >> (8 - totalBitsRed)) << contiguousBitsRed) |
+							((palette[i].peGreen >> (8 - totalBitsGreen)) << contiguousBitsGreen) |
+							((palette[i].peBlue >> (8 - totalBitsBlue)) << contiguousBitsBlue);
 		}
+
+		break;
+	}
+	default:
+		break;
 	}
 }
 
