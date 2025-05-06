@@ -284,8 +284,8 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 			struct {
 				WORD m_palVersion;
 				WORD m_palNumEntries;
-				DWORD m_palPalEntry[256];
-			} lpal = {0x300, 256, 0};
+				PALETTEENTRY m_palPalEntry[256];
+			} lpal = {0x300, 256};
 
 			p_palette->GetEntries((LPPALETTEENTRY) lpal.m_palPalEntry);
 
