@@ -252,15 +252,15 @@ int LegoDeviceEnumerate::SupportsCPUID()
 #ifdef _MSC_VER
 #if defined(_M_IX86)
 	__asm {
-    xor eax, eax                    ; Zero EAX register
-    pushfd                          ; Push EFLAGS register value on the stack
-    or dword ptr[esp], 0x200000     ; Set bit 0x200000: Able to use CPUID instruction (Pentium+)
-    popfd                           ; Write the updated value into the EFLAGS register
-    pushfd                          ; Push EFLAGS register value on the stack (again)
-    btr dword ptr[esp], 0x15        ; Test bit 0x15 (21) and reset (set CF)
-    adc eax, eax                    ; Add with carry: EAX = EAX + EAX + CF = CF
-    popfd                           ; Push EFLAGS register value on the stack (again, and makes sure the stack remains the same)
-    mov has_cpuid, eax              ; Save eax into C variable
+		xor eax, eax                    ; Zero EAX register
+		pushfd                          ; Push EFLAGS register value on the stack
+		or dword ptr[esp], 0x200000     ; Set bit 0x200000: Able to use CPUID instruction (Pentium+)
+		popfd                           ; Write the updated value into the EFLAGS register
+		pushfd                          ; Push EFLAGS register value on the stack (again)
+		btr dword ptr[esp], 0x15        ; Test bit 0x15 (21) and reset (set CF)
+		adc eax, eax                    ; Add with carry: EAX = EAX + EAX + CF = CF
+		popfd                           ; Push EFLAGS register value on the stack (again, and makes sure the stack remains the same)
+		mov has_cpuid, eax              ; Save eax into C variable
 	}
 #elif defined(_M_X64)
 	has_cpuid = 1;
