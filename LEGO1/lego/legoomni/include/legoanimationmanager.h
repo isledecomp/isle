@@ -43,7 +43,7 @@ struct AnimInfo {
 	MxU8 m_modelCount;   // 0x20
 	MxU16 m_unk0x22;     // 0x22
 	ModelInfo* m_models; // 0x24
-	MxS8 m_unk0x28;      // 0x28
+	MxS8 m_characterIndex;      // 0x28
 	MxBool m_unk0x29;    // 0x29
 	MxS8 m_unk0x2a[3];   // 0x2a
 };

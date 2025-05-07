@@ -400,7 +400,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b610(MxLong p_time)
 		}
 	}
 
-	m_action->SetUnknown90(Timer()->GetTime());
+	m_action->SetStartTime(Timer()->GetTime());
 
 	if (m_compositePresenter != NULL) {
 		m_compositePresenter->VTable0x60(this);

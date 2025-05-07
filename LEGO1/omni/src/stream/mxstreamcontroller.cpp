@@ -202,7 +202,7 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 	streamingAction->SetObjectId(p_action->GetObjectId());
 
 	MxLong time = Timer()->GetTime();
-	streamingAction->SetUnknown90(time);
+	streamingAction->SetStartTime(time);
 
 	m_unk0x3c.PushBack(streamingAction);
 	return SUCCESS;

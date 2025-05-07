@@ -679,7 +679,7 @@ MxResult LegoAnimationManager::LoadWorldInfo(LegoOmni::World p_worldId)
 				goto done;
 			}
 
-			m_anims[j].m_unk0x28 = GetCharacterIndex(m_anims[j].m_name + strlen(m_anims[j].m_name) - 2);
+			m_anims[j].m_characterIndex = GetCharacterIndex(m_anims[j].m_name + strlen(m_anims[j].m_name) - 2);
 			m_anims[j].m_unk0x29 = FALSE;
 
 			for (k = 0; k < 3; k++) {
@@ -1615,7 +1615,7 @@ MxU16 LegoAnimationManager::FUN_10062110(
 					MxS8 index = GetCharacterIndex(p_roi->GetName());
 
 					for (MxU16 i = m_unk0x0e; i <= m_unk0x10; i++) {
-						if (m_anims[i].m_unk0x28 == index && m_anims[i].m_unk0x0c & p_unk0x0c && m_anims[i].m_unk0x29) {
+						if (m_anims[i].m_characterIndex == index && m_anims[i].m_unk0x0c & p_unk0x0c && m_anims[i].m_unk0x29) {
 							MxS32 vehicleId = g_characters[index].m_vehicleId;
 							if (vehicleId >= 0) {
 								MxBool found = FALSE;
@@ -1636,7 +1636,7 @@ MxU16 LegoAnimationManager::FUN_10062110(
 							MxU16 unk0x22 = m_anims[i].m_unk0x22;
 
 							for (i = i + 1; i <= m_unk0x10; i++) {
-								if (m_anims[i].m_unk0x28 == index && m_anims[i].m_unk0x0c & p_unk0x0c &&
+								if (m_anims[i].m_characterIndex == index && m_anims[i].m_unk0x0c & p_unk0x0c &&
 									m_anims[i].m_unk0x29 && m_anims[i].m_unk0x22 < unk0x22) {
 									result = i;
 									unk0x22 = m_anims[i].m_unk0x22;

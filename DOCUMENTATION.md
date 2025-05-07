@@ -2,7 +2,6 @@
 
 ## Nomenclature
 - **Script**: SI File (it appears they wanted to use SI much more as actual scripts, but ended up hard-coding almost everything)
-- **Action**: Mostly media file inside SI
 
 ## Core Concepts
 
@@ -38,7 +37,7 @@ IsA()
 Checks ALL parents.
 
 ### MxTickleManager : MxCore
-Holds a list of MxTickleClient*. Goes though the on Tickle() and calls Tickle() if interval time has passed.
+Holds a list of MxTickleClient*. Goes though them on Tickle() and calls Tickle() if interval time has passed.
 
 ### MxTickleClient
 Holds a MxCore*, Interval, LastUpdateTime and Flags (only used for TICKLE_MANAGER_FLAG_DESTROY?).
@@ -82,8 +81,19 @@ Then reads a list of strings (presumably numbers) into a list. Then reads the sa
 ### MxDSSound : MxDSMediaAction
 Deserializes a volume.
 
+### MxDSObjectAction : MxDSMediaAction
+Adds nothing.
+
 ### MxVariableTable : MxHashTable<MxVariable*>
 MxOmni holds a VariableTable that is just a key/value store string/string.
+
+### MxPresenter : MxCore
+Abstract base class for all presenters. Separates the tickle down to ReadyTickle(), StartingTickle(), StreamingTickle(), RepeatingTickle(), FreezingTickle() and DoneTickle()
+
+Similar to DeserializeDSObjectDispatch, there is a PresenterNameDispatch() that reads the media format (" FLC", " SMK", " MID", " WAV") and returns the corresponding HandlerClassName().
+
+### MxMediaPresenter : MxPresenter
+Hold a MxDSSubscriber* and reads data from it on the tickles.
 
 ### LegoBuildingManager : MxCore
 
