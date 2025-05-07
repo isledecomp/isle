@@ -201,42 +201,45 @@ int LegoDeviceEnumerate::FUN_1009d0d0()
 // FUNCTION: BETA10 0x1011cf54
 int LegoDeviceEnumerate::SupportsMMX()
 {
-	if (!SupportsCPUID()) {
-		return 0;
-	}
-	int supports_mmx;
+	int supports_mmx = SupportsCPUID();
+
+	if (supports_mmx) {
 #ifdef _MSC_VER
-	__asm {
-      mov eax, 0x0            ; EAX=0: Highest Function Parameter and Manufacturer ID
+		__asm {
+			push ebx
+			mov eax, 0x0            ; EAX=0: Highest Function Parameter and Manufacturer ID
 #if _MSC_VER > 1100
-      cpuid                   ; Run CPUID
+			cpuid                   ; Run CPUID
 #else
-      __emit 0x0f
-      __emit 0xa2
+			__emit 0x0f
+			__emit 0xa2
 #endif
-      mov eax, 0x1            ; EAX=1: Processor Info and Feature Bits (unused)
+			mov eax, 0x1            ; EAX=1: Processor Info and Feature Bits (unused)
 #if _MSC_VER > 1100
-      cpuid                   ; Run CPUID
+			cpuid                   ; Run CPUID
 #else
-      __emit 0x0f
-      __emit 0xa2
+			__emit 0x0f
+			__emit 0xa2
 #endif
-      xor eax, eax            ; Zero EAX register
-      bt edx, 0x17            ; Test bit 0x17 (23): MMX instructions (64-bit SIMD) (Store in CF)
-      adc eax, eax            ; Add with carry: EAX = EAX + EAX + CF = CF
-      mov supports_mmx, eax   ; Save eax into C variable
+			xor eax, eax            ; Zero EAX register
+			bt edx, 0x17            ; Test bit 0x17 (23): MMX instructions (64-bit SIMD) (Store in CF)
+			adc eax, eax            ; Add with carry: EAX = EAX + EAX + CF = CF
+			pop ebx
+			mov supports_mmx, eax   ; Save eax into C variable
+		}
+#else
+		__asm__("movl $0x0, %%eax\n\t"  // EAX=0: Highest Function Parameter and Manufacturer ID
+				"cpuid\n\t"             // Run CPUID\n"
+				"mov $0x1, %%eax\n\t"   // EAX=1: Processor Info and Feature Bits (unused)
+				"cpuid\n\t"             // Run CPUID
+				"xorl %%eax, %%eax\n\t" // Zero EAX register
+				"btl $0x15, %%edx\n\t"  // Test bit 0x17 (23): MMX instructions (64-bit SIMD) (Store in CF)
+				"adc %%eax, %%eax"      // Add with carry: EAX = EAX + EAX + CF = CF
+				: "=a"(supports_mmx)    // supports_mmx == EAX
+		);
+#endif
 	}
-#else
-	__asm__("movl $0x0, %%eax\n\t"  // EAX=0: Highest Function Parameter and Manufacturer ID
-			"cpuid\n\t"             // Run CPUID\n"
-			"mov $0x1, %%eax\n\t"   // EAX=1: Processor Info and Feature Bits (unused)
-			"cpuid\n\t"             // Run CPUID
-			"xorl %%eax, %%eax\n\t" // Zero EAX register
-			"btl $0x15, %%edx\n\t"  // Test bit 0x17 (23): MMX instructions (64-bit SIMD) (Store in CF)
-			"adc %%eax, %%eax"      // Add with carry: EAX = EAX + EAX + CF = CF
-			: "=a"(supports_mmx)    // supports_mmx == EAX
-	);
-#endif
+
 	return supports_mmx;
 }
 
@@ -249,15 +252,15 @@ int LegoDeviceEnumerate::SupportsCPUID()
 #ifdef _MSC_VER
 #if defined(_M_IX86)
 	__asm {
-    xor eax, eax                    ; Zero EAX register
-    pushfd                          ; Push EFLAGS register value on the stack
-    or dword ptr[esp], 0x200000     ; Set bit 0x200000: Able to use CPUID instruction (Pentium+)
-    popfd                           ; Write the updated value into the EFLAGS register
-    pushfd                          ; Push EFLAGS register value on the stack (again)
-    btr dword ptr[esp], 0x15        ; Test bit 0x15 (21) and reset (set CF)
-    adc eax, eax                    ; Add with carry: EAX = EAX + EAX + CF = CF
-    popfd                           ; Push EFLAGS register value on the stack (again, and makes sure the stack remains the same)
-    mov has_cpuid, eax              ; Save eax into C variable
+		xor eax, eax                    ; Zero EAX register
+		pushfd                          ; Push EFLAGS register value on the stack
+		or dword ptr[esp], 0x200000     ; Set bit 0x200000: Able to use CPUID instruction (Pentium+)
+		popfd                           ; Write the updated value into the EFLAGS register
+		pushfd                          ; Push EFLAGS register value on the stack (again)
+		btr dword ptr[esp], 0x15        ; Test bit 0x15 (21) and reset (set CF)
+		adc eax, eax                    ; Add with carry: EAX = EAX + EAX + CF = CF
+		popfd                           ; Push EFLAGS register value on the stack (again, and makes sure the stack remains the same)
+		mov has_cpuid, eax              ; Save eax into C variable
 	}
 #elif defined(_M_X64)
 	has_cpuid = 1;
