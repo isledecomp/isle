@@ -34,46 +34,46 @@ LegoMouseController::~LegoMouseController()
 void LegoMouseController::LeftDown(int p_x, int p_y)
 {
 	m_isButtonDown = TRUE;
-	m_buttonX = p_x;
-	m_buttonY = p_y;
+	m_X = p_x;
+	m_Y = p_y;
 }
 
 // FUNCTION: LEGO1 0x10065640
 void LegoMouseController::LeftUp(int p_x, int p_y)
 {
 	m_isButtonDown = FALSE;
-	m_buttonX = p_x;
-	m_buttonY = p_y;
+	m_X = p_x;
+	m_Y = p_y;
 }
 
 // FUNCTION: LEGO1 0x10065660
 void LegoMouseController::LeftDrag(int p_x, int p_y)
 {
-	m_buttonX = p_x;
-	m_buttonY = p_y;
+	m_X = p_x;
+	m_Y = p_y;
 }
 
 // FUNCTION: LEGO1 0x10065680
 void LegoMouseController::RightDown(int p_x, int p_y)
 {
 	m_isButtonDown = TRUE;
-	m_buttonX = p_x;
-	m_buttonY = p_y;
+	m_X = p_x;
+	m_Y = p_y;
 }
 
 // FUNCTION: LEGO1 0x100656a0
 void LegoMouseController::RightUp(int p_x, int p_y)
 {
 	m_isButtonDown = FALSE;
-	m_buttonX = p_x;
-	m_buttonY = p_y;
+	m_X = p_x;
+	m_Y = p_y;
 }
 
 // FUNCTION: LEGO1 0x100656c0
 void LegoMouseController::RightDrag(int p_x, int p_y)
 {
-	m_buttonX = p_x;
-	m_buttonY = p_y;
+	m_X = p_x;
+	m_Y = p_y;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -134,7 +134,7 @@ void LegoPointOfViewController::LeftDrag(int p_x, int p_y)
 // FUNCTION: LEGO1 0x10065900
 void LegoPointOfViewController::AffectPointOfView()
 {
-	m_nav->SetTargets(GetButtonX(), GetButtonY(), GetIsButtonDown());
+	m_nav->SetTargets(GetX(), GetY(), GetIsButtonDown());
 }
 
 // FUNCTION: LEGO1 0x10065930

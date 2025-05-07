@@ -50,7 +50,7 @@ public:
 	void FUN_100c7f40(MxDSStreamingAction* p_streamingaction);
 	void FUN_100c8120(MxDSAction* p_action);
 	void InsertToList74(MxDSBuffer* p_buffer);
-	void FUN_100c8670(MxDSStreamingAction* p_streamingAction);
+	void AddStreamingAction(MxDSStreamingAction* p_streamingAction);
 
 private:
 	MxDSObjectList m_list0x64;      // 0x64

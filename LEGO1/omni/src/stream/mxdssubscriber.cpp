@@ -143,7 +143,7 @@ MxDSSubscriber* MxDSSubscriberList::Find(MxDSObject* p_object)
 {
 	for (iterator it = begin(); it != end(); it++) {
 		if (p_object->GetObjectId() == -1 || p_object->GetObjectId() == (*it)->GetObjectId()) {
-			if (p_object->GetUnknown24() == -2 || p_object->GetUnknown24() == (*it)->GetUnknown48()) {
+			if (p_object->GetFlags() == -2 || p_object->GetFlags() == (*it)->GetUnknown48()) {
 				return *it;
 			}
 		}

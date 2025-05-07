@@ -31,7 +31,7 @@ MxDSAction::MxDSAction()
 	m_unk0x84 = NULL;
 	m_unk0x88 = 0;
 	m_origin = NULL;
-	m_unk0x90 = INT_MIN;
+	m_startTime = INT_MIN;
 }
 
 // FUNCTION: LEGO1 0x100ad940
@@ -57,16 +57,16 @@ MxBool MxDSAction::HasId(MxU32 p_objectId)
 
 // FUNCTION: LEGO1 0x100ada40
 // FUNCTION: BETA10 0x1012bdf0
-void MxDSAction::SetUnknown90(MxLong p_unk0x90)
+void MxDSAction::SetStartTime(MxLong p_startTime)
 {
-	m_unk0x90 = p_unk0x90;
+	m_startTime = p_startTime;
 }
 
 // FUNCTION: LEGO1 0x100ada50
 // FUNCTION: BETA10 0x1012be20
-MxLong MxDSAction::GetUnknown90()
+MxLong MxDSAction::GetStartTIme()
 {
-	return m_unk0x90;
+	return m_startTime;
 }
 
 // FUNCTION: LEGO1 0x100ada80
@@ -92,7 +92,7 @@ void MxDSAction::CopyFrom(MxDSAction& p_dsAction)
 	m_unk0x84 = p_dsAction.m_unk0x84;
 	m_unk0x88 = p_dsAction.m_unk0x88;
 	m_origin = p_dsAction.m_origin;
-	m_unk0x90 = p_dsAction.m_unk0x90;
+	m_startTime = p_dsAction.m_startTime;
 }
 
 // FUNCTION: BETA10 0x1012b2b3
@@ -158,7 +158,7 @@ MxDSAction* MxDSAction::Clone()
 // FUNCTION: BETA10 0x1012b4ca
 MxLong MxDSAction::GetElapsedTime()
 {
-	return Timer()->GetTime() - m_unk0x90;
+	return Timer()->GetTime() - m_startTime;
 }
 
 // FUNCTION: LEGO1 0x100add00
@@ -256,9 +256,9 @@ void MxDSAction::AppendExtra(MxU16 p_extraLength, const char* p_extraData)
 
 // FUNCTION: LEGO1 0x100adf70
 // FUNCTION: BETA10 0x1012ba6a
-void MxDSAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
+void MxDSAction::Deserialize(MxU8*& p_source, MxS16 p_flags)
 {
-	MxDSObject::Deserialize(p_source, p_unk0x24);
+	MxDSObject::Deserialize(p_source, p_flags);
 
 	// clang-format off
 	m_flags           = *( MxU32*) p_source;  p_source += sizeof(m_flags);

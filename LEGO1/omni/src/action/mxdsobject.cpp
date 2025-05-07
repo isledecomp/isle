@@ -29,7 +29,7 @@ MxDSObject::MxDSObject()
 	m_unk0x14 = 0;
 	m_objectName = NULL;
 	m_objectId = -1;
-	m_unk0x24 = -1;
+	m_flags = -1;
 	m_unk0x28 = NULL;
 }
 
@@ -49,7 +49,7 @@ void MxDSObject::CopyFrom(MxDSObject& p_dsObject)
 	m_unk0x14 = p_dsObject.m_unk0x14;
 	SetObjectName(p_dsObject.m_objectName);
 	m_objectId = p_dsObject.m_objectId;
-	m_unk0x24 = p_dsObject.m_unk0x24;
+	m_flags = p_dsObject.m_flags;
 	m_atomId = p_dsObject.m_atomId;
 	m_unk0x28 = p_dsObject.m_unk0x28;
 }
@@ -156,7 +156,7 @@ MxU32 MxDSObject::GetSizeOnDisk()
 
 // FUNCTION: LEGO1 0x100bfa20
 // FUNCTION: BETA10 0x10147d73
-void MxDSObject::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
+void MxDSObject::Deserialize(MxU8*& p_source, MxS16 p_flags)
 {
 	SetSourceName((char*) p_source);
 	p_source += strlen(m_sourceName) + 1;
@@ -170,7 +170,7 @@ void MxDSObject::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
 	m_objectId = *(MxU32*) p_source;
 	p_source += sizeof(m_objectId);
 
-	m_unk0x24 = p_unk0x24;
+	m_flags = p_flags;
 }
 
 // FUNCTION: LEGO1 0x100bfa80
@@ -188,10 +188,10 @@ MxDSObject* MxDSObjectList::FindInternal(MxDSObject* p_action, MxBool p_delete)
 	for (iterator it = begin(); it != end(); it++) {
 #endif
 		if (p_action->GetObjectId() == -1 || p_action->GetObjectId() == (*it)->GetObjectId()) {
-			if (p_action->GetUnknown24() == -2 || p_action->GetUnknown24() == -3 ||
-				p_action->GetUnknown24() == (*it)->GetUnknown24()) {
+			if (p_action->GetFlags() == -2 || p_action->GetFlags() == -3 ||
+				p_action->GetFlags() == (*it)->GetFlags()) {
 				found = *it;
-				if (p_action->GetUnknown24() != -3) {
+				if (p_action->GetFlags() != -3) {
 					break;
 				}
 			}

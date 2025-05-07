@@ -15,7 +15,7 @@ LegoMesh::LegoMesh()
 	m_unk0x0d = 0;
 	m_unk0x10 = NULL;
 	m_unk0x20 = 0;
-	m_unk0x21 = FALSE;
+	m_use_color_alias = FALSE;
 	m_materialName = NULL;
 }
 
@@ -55,7 +55,7 @@ LegoResult LegoMesh::Read(LegoStorage* p_storage)
 	if ((result = p_storage->Read(&m_unk0x20, sizeof(m_unk0x20))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_unk0x21, sizeof(m_unk0x21))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_use_color_alias, sizeof(m_use_color_alias))) != SUCCESS) {
 		return result;
 	}
 

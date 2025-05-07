@@ -118,7 +118,7 @@ MxResult MxMediaPresenter::StartAction(MxStreamController* p_controller, MxDSAct
 			m_subscriber = new MxDSSubscriber;
 
 			if (!m_subscriber ||
-				m_subscriber->Create(p_controller, p_action->GetObjectId(), p_action->GetUnknown24()) != SUCCESS) {
+				m_subscriber->Create(p_controller, p_action->GetObjectId(), p_action->GetFlags()) != SUCCESS) {
 				goto done;
 			}
 		}
@@ -252,7 +252,7 @@ void MxMediaPresenter::Enable(MxBool p_enable)
 
 		if (p_enable) {
 			MxLong time = Timer()->GetTime();
-			m_action->SetUnknown90(time);
+			m_action->SetStartTime(time);
 			SetTickleState(e_repeating);
 		}
 		else {

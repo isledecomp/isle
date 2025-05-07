@@ -114,11 +114,11 @@ void LegoPathStruct::FUN_1001bc40(const char* p_name, MxU32 p_data, MxBool p_boo
 	action.SetAtomId(m_atomId);
 
 	if (p_bool) {
-		action.SetUnknown24(-1);
+		action.SetFlags(-1);
 		Start(&action);
 	}
 	else {
-		action.SetUnknown24(-2);
+		action.SetFlags(-2);
 		DeleteObject(action);
 	}
 }
@@ -155,7 +155,7 @@ void LegoPathStruct::PlayMusic(MxBool p_direction, MxU32 p_data)
 
 	MxDSAction action;
 	action.SetAtomId(*g_jukeboxScript);
-	action.SetUnknown24(-1);
+	action.SetFlags(-1);
 
 	if (p_data <= sizeOfArray(triggersReff)) {
 		action.SetObjectId(music[triggersReff[p_data - 1][p_direction == FALSE] - 1]);

@@ -171,7 +171,7 @@ MxResult MxDSBuffer::CreateObject(
 		return FAILURE;
 	}
 
-	MxCore* header = ReadChunk(this, p_data, p_action->GetUnknown24());
+	MxCore* header = ReadChunk(this, p_data, p_action->GetFlags());
 
 	if (header == NULL) {
 		return FAILURE;
@@ -209,7 +209,7 @@ MxResult MxDSBuffer::StartPresenterFromAction(
 		p_objectheader->SetUnknown28(p_action1->GetUnknown28());
 		p_objectheader->SetUnknown84(p_action1->GetUnknown84());
 		p_objectheader->SetOrigin(p_action1->GetOrigin());
-		p_objectheader->SetUnknown90(p_action1->GetUnknown90());
+		p_objectheader->SetStartTime(p_action1->GetStartTIme());
 		p_objectheader->MergeFrom(*p_action1);
 
 		m_unk0x30->SetInternalAction(p_objectheader->Clone());
@@ -308,7 +308,7 @@ MxResult MxDSBuffer::ParseChunk(
 		}
 
 		if (p_header) {
-			if (p_header->SendChunk(p_controller->GetSubscriberList(), TRUE, p_action->GetUnknown24()) != SUCCESS) {
+			if (p_header->SendChunk(p_controller->GetSubscriberList(), TRUE, p_action->GetFlags()) != SUCCESS) {
 				delete p_header;
 			}
 		}

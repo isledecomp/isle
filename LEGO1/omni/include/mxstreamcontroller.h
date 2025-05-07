@@ -73,7 +73,7 @@ public:
 	MxAtomId& GetAtom() { return m_atom; }
 	MxStreamProvider* GetProvider() { return m_provider; }
 	MxDSObjectList& GetUnk0x3c() { return m_unk0x3c; }
-	MxDSObjectList& GetUnk0x54() { return m_unk0x54; }
+	MxDSObjectList& GetUnk0x54() { return m_actionListUnknown; }
 	MxDSSubscriberList& GetSubscriberList() { return m_subscribers; }
 
 protected:
@@ -84,7 +84,7 @@ protected:
 	MxDSSubscriberList m_subscribers;           // 0x30
 	MxDSObjectList m_unk0x3c;                   // 0x3c
 	MxNextActionDataStartList m_nextActionList; // 0x48
-	MxDSObjectList m_unk0x54;                   // 0x54
+	MxDSObjectList m_actionListUnknown;                   // 0x54
 	MxDSAction* m_action0x60;                   // 0x60
 };
 

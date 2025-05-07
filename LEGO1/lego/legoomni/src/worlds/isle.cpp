@@ -401,7 +401,7 @@ MxLong Isle::HandleControl(LegoControlManagerNotificationParam& p_param)
 		case IsleScript::c_Observe_LCab_Ctl:
 			action.SetAtomId(*g_isleScript);
 			action.SetObjectId(IsleScript::c_Observe_Monkey_Flc);
-			action.SetUnknown24(0);
+			action.SetFlags(0);
 			Start(&action);
 			break;
 		case IsleScript::c_Observe_RCab_Ctl:

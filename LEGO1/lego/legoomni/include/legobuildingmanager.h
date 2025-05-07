@@ -26,10 +26,10 @@ struct LegoBuildingInfo {
 	MxU32 m_sound;                // 0x08
 	MxU32 m_move;                 // 0x0c
 	MxU8 m_mood;                  // 0x10
-	MxS8 m_unk0x11;               // 0x11
+	MxS8 m_Downshift;               // 0x11
 	MxS8 m_initialUnk0x11;        // 0x12 - initial value loaded to m_unk0x11
 	MxU8 m_flags;                 // 0x13
-	float m_unk0x14;              // 0x14
+	float m_downshiftScale;              // 0x14
 	const char* m_boundaryName;   // 0x18
 	float m_x;                    // 0x1c
 	float m_y;                    // 0x20
@@ -84,7 +84,7 @@ public:
 	MxBool FUN_10030110(LegoBuildingInfo* p_data);
 	void ScheduleAnimation(LegoEntity* p_entity, MxLong p_length, MxBool p_haveSound, MxBool p_unk0x28);
 	void FUN_10030590();
-	void AdjustHeight(MxS32 p_index);
+	void AdjustY(MxS32 p_index);
 	MxResult FUN_10030630();
 	LegoBuildingInfo* GetInfoArray(MxS32& p_length);
 	void FUN_100307b0(LegoEntity* p_entity, MxS32 p_adjust);

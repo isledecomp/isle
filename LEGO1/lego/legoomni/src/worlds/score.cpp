@@ -71,7 +71,7 @@ void Score::DeleteScript()
 		MxDSAction action;
 		action.SetObjectId(InfoscorScript::c_iicc31in_PlayWav);
 		action.SetAtomId(*g_infoscorScript);
-		action.SetUnknown24(-2);
+		action.SetFlags(-2);
 		DeleteObject(action);
 		m_state->SetTutorialFlag(FALSE);
 	}

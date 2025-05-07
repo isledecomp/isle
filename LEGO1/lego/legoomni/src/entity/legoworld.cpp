@@ -32,7 +32,7 @@ DECOMP_SIZE_ASSERT(LegoCacheSoundList, 0x18)
 DECOMP_SIZE_ASSERT(LegoCacheSoundListCursor, 0x10)
 
 // FUNCTION: LEGO1 0x1001ca40
-LegoWorld::LegoWorld() : m_list0x68(TRUE)
+LegoWorld::LegoWorld() : m_controllerList(TRUE)
 {
 	m_startupTicks = e_four;
 	m_cameraController = NULL;
@@ -100,7 +100,7 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 		SetCurrentWorld(NULL);
 	}
 
-	m_list0x68.DeleteAll();
+	m_controllerList.DeleteAll();
 
 	if (m_cameraController) {
 		delete m_cameraController;
@@ -273,7 +273,7 @@ MxResult LegoWorld::PlaceActor(
 	float p_destScale
 )
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_controllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -288,7 +288,7 @@ MxResult LegoWorld::PlaceActor(
 // FUNCTION: LEGO1 0x1001fa70
 MxResult LegoWorld::PlaceActor(LegoPathActor* p_actor)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_controllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -308,7 +308,7 @@ MxResult LegoWorld::PlaceActor(
 	Vector3& p_direction
 )
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_controllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -324,7 +324,7 @@ MxResult LegoWorld::PlaceActor(
 // FUNCTION: BETA10 0x100da4bf
 void LegoWorld::RemoveActor(LegoPathActor* p_actor)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_controllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -337,7 +337,7 @@ void LegoWorld::RemoveActor(LegoPathActor* p_actor)
 // FUNCTION: BETA10 0x100da560
 MxBool LegoWorld::ActorExists(LegoPathActor* p_actor)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_controllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -353,7 +353,7 @@ MxBool LegoWorld::ActorExists(LegoPathActor* p_actor)
 // FUNCTION: BETA10 0x100da621
 void LegoWorld::FUN_1001fda0(LegoAnimPresenter* p_presenter)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_controllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -365,7 +365,7 @@ void LegoWorld::FUN_1001fda0(LegoAnimPresenter* p_presenter)
 // FUNCTION: BETA10 0x100da6b5
 void LegoWorld::FUN_1001fe90(LegoAnimPresenter* p_presenter)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_controllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -377,14 +377,14 @@ void LegoWorld::FUN_1001fe90(LegoAnimPresenter* p_presenter)
 void LegoWorld::AddPath(LegoPathController* p_controller)
 {
 	p_controller->FUN_10046bb0(this);
-	m_list0x68.Append(p_controller);
+	m_controllerList.Append(p_controller);
 }
 
 // FUNCTION: LEGO1 0x10020020
 // FUNCTION: BETA10 0x100da77c
 LegoPathBoundary* LegoWorld::FindPathBoundary(const char* p_name)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_controllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -401,7 +401,7 @@ LegoPathBoundary* LegoWorld::FindPathBoundary(const char* p_name)
 // FUNCTION: LEGO1 0x10020120
 MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_boundaries, MxS32& p_numL)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_controllerList);
 	LegoPathController* controller;
 
 	cursor.Next(controller);
@@ -795,7 +795,7 @@ void LegoWorld::Enable(MxBool p_enable)
 			}
 		}
 
-		LegoPathControllerListCursor pathControllerCursor(&m_list0x68);
+		LegoPathControllerListCursor pathControllerCursor(&m_controllerList);
 
 		while (pathControllerCursor.Next(controller)) {
 			controller->Enable(FALSE);

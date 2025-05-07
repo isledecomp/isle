@@ -184,7 +184,7 @@ void MxOmni::Destroy()
 	{
 		MxDSAction action;
 		action.SetObjectId(-1);
-		action.SetUnknown24(-2);
+		action.SetFlags(-2);
 		DeleteObject(action);
 	}
 
