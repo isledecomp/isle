@@ -14,7 +14,7 @@ public:
 	// Note: Comes before virtual destructor
 	virtual MxResult Run();
 
-	MxResult Start(MxS32 p_stack, MxS32 p_flag);
+	MxResult Start(MxS32 p_stackSize, MxS32 p_flag);
 
 	void Terminate();
 	void Sleep(MxS32 p_milliseconds);
