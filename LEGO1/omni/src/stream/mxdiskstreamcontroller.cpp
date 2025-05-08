@@ -470,7 +470,7 @@ MxResult MxDiskStreamController::Tickle()
 }
 
 // FUNCTION: LEGO1 0x100c8670
-void MxDiskStreamController::FUN_100c8670(MxDSStreamingAction* p_streamingAction)
+void MxDiskStreamController::AddStreamingAction(MxDSStreamingAction* p_streamingAction)
 {
 	AUTOLOCK(m_critical9c);
 	m_list0xb8.push_back(p_streamingAction);
