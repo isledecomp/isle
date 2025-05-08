@@ -156,7 +156,7 @@ MxU32 MxDSObject::GetSizeOnDisk()
 
 // FUNCTION: LEGO1 0x100bfa20
 // FUNCTION: BETA10 0x10147d73
-void MxDSObject::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
+void MxDSObject::Deserialize(MxU8*& p_source, MxS16 p_flags)
 {
 	SetSourceName((char*) p_source);
 	p_source += strlen(m_sourceName) + 1;
@@ -170,7 +170,7 @@ void MxDSObject::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
 	m_objectId = *(MxU32*) p_source;
 	p_source += sizeof(m_objectId);
 
-	m_unk0x24 = p_unk0x24;
+	m_unk0x24 = p_flags;
 }
 
 // FUNCTION: LEGO1 0x100bfa80

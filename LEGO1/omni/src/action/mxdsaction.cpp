@@ -256,9 +256,9 @@ void MxDSAction::AppendExtra(MxU16 p_extraLength, const char* p_extraData)
 
 // FUNCTION: LEGO1 0x100adf70
 // FUNCTION: BETA10 0x1012ba6a
-void MxDSAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
+void MxDSAction::Deserialize(MxU8*& p_source, MxS16 p_flags)
 {
-	MxDSObject::Deserialize(p_source, p_unk0x24);
+	MxDSObject::Deserialize(p_source, p_flags);
 
 	// clang-format off
 	m_flags           = *( MxU32*) p_source;  p_source += sizeof(m_flags);
