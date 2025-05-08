@@ -30,3 +30,6 @@ LEGO1.DLL
 all_code.txt
 ask.py
 into-one.sh
+skeleton/
+.DS_Store
+node_modules

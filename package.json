@@ -1,0 +1,23 @@
+{
+	"name": "isle",
+	"version": "1.0.0",
+	"description": "[Development Vlog](https://www.youtube.com/playlist?list=PLbpl-gZkNl2COf_bB6cfgTapD5WduAfPz) | [Contributing](/CONTRIBUTING.md) | [Matrix](https://matrix.to/#/#isledecomp:matrix.org) | [Forums](https://forum.mattkc.com/viewforum.php?f=1) | [Patreon](https://www.patreon.com/mattkc)",
+	"main": "index.js",
+	"scripts": {
+		"start": "ts-node code_embedder.ts",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"ts-node": "^10.9.2",
+		"typescript": "^5.8.3"
+	},
+	"dependencies": {
+		"@libsql/client": "^0.15.4",
+		"dotenv": "^16.5.0",
+		"openai": "^4.97.0",
+		"zod": "^3.24.4"
+	}
+}
