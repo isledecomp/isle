@@ -38,7 +38,7 @@ public:
 	MxDSAction* Clone() override;                                // vtable+0x2c
 	void MergeFrom(MxDSAction& p_dsAction) override;             // vtable+0x30
 	MxBool HasId(MxU32 p_objectId) override;                     // vtable+0x34
-	void SetUnknown90(MxLong p_unk0x90) override;                // vtable+0x38
+	void SetStartTime(MxLong p_startTime) override;                // vtable+0x38
 
 	// FUNCTION: BETA10 0x1004e180
 	MxDSActionList* GetActionList() const { return m_actionList; }

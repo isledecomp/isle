@@ -84,7 +84,7 @@ MxResult MxCompositeMediaPresenter::StartAction(MxStreamController* p_controller
 		if (!m_compositePresenter) {
 			SetTickleState(e_ready);
 			MxLong time = Timer()->GetTime();
-			m_action->SetUnknown90(time);
+			m_action->SetStartTime(time);
 		}
 
 		result = SUCCESS;
@@ -134,7 +134,7 @@ void MxCompositeMediaPresenter::StartingTickle()
 		if (!m_unk0x4c) {
 			ProgressTickleState(e_streaming);
 			MxLong time = Timer()->GetTime();
-			m_action->SetUnknown90(time);
+			m_action->SetStartTime(time);
 		}
 	}
 }

@@ -55,8 +55,8 @@ public:
 	virtual MxDSAction* Clone();                                 // vtable+0x2c
 	virtual void MergeFrom(MxDSAction& p_dsAction);              // vtable+0x30
 	virtual MxBool HasId(MxU32 p_objectId);                      // vtable+0x34
-	virtual void SetUnknown90(MxLong p_unk0x90);                 // vtable+0x38
-	virtual MxLong GetUnknown90();                               // vtable+0x3c
+	virtual void SetStartTime(MxLong p_startTime);               // vtable+0x38
+	virtual MxLong GetStartTime();                               // vtable+0x3c
 	virtual MxLong GetElapsedTime();                             // vtable+0x40
 
 	void AppendExtra(MxU16 p_extraLength, const char* p_extraData);
@@ -130,7 +130,7 @@ protected:
 	MxCore* m_unk0x84;          // 0x84
 	undefined4 m_unk0x88;       // 0x88
 	MxCore* m_origin;           // 0x8c
-	MxLong m_unk0x90;           // 0x90
+	MxLong m_startTime;           // 0x90
 };
 
 #endif // MXDSACTION_H
