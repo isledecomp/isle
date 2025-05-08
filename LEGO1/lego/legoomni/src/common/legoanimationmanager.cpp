@@ -1012,7 +1012,7 @@ MxResult LegoAnimationManager::FUN_100605e0(
 
 		action.SetAtomId(*Lego()->GetWorldAtom(m_worldId));
 		action.SetObjectId(animInfo.m_objectId);
-		action.SetUnknown24(-1);
+		action.SetFlags(-1);
 		action.AppendExtra(strlen(buf) + 1, buf);
 
 		if (StartActionIfUnknown0x13c(action) == SUCCESS) {
@@ -1079,7 +1079,7 @@ MxResult LegoAnimationManager::FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix
 
 	action.SetAtomId(*Lego()->GetWorldAtom(m_worldId));
 	action.SetObjectId(p_objectId);
-	action.SetUnknown24(-1);
+	action.SetFlags(-1);
 	action.AppendExtra(strlen(buf) + 1, buf);
 
 	if (StartActionIfUnknown0x13c(action) == SUCCESS) {

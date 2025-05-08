@@ -294,7 +294,7 @@ void InvokeAction(Extra::ActionType p_actionId, const MxAtomId& p_pAtom, MxS32 p
 
 		break;
 	case Extra::ActionType::e_close:
-		action.SetUnknown24(-2);
+		action.SetFlags(-2);
 		DeleteObject(action);
 		Streamer()->Close(p_pAtom.GetInternal());
 		break;
@@ -308,7 +308,7 @@ void InvokeAction(Extra::ActionType p_actionId, const MxAtomId& p_pAtom, MxS32 p
 		break;
 	case Extra::ActionType::e_stop:
 		assert(p_streamId != DS_NOT_A_STREAM);
-		action.SetUnknown24(-2);
+		action.SetFlags(-2);
 
 		if (!RemoveFromCurrentWorld(p_pAtom, p_streamId)) {
 			DeleteObject(action);

@@ -149,7 +149,7 @@ IsleApp::~IsleApp()
 void IsleApp::Close()
 {
 	MxDSAction ds;
-	ds.SetUnknown24(-2);
+	ds.SetFlags(-2);
 
 	if (Lego()) {
 		GameState()->Save(0);
@@ -859,7 +859,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 			}
 
 			ds.SetAtomId(stream->GetAtom());
-			ds.SetUnknown24(-1);
+			ds.SetFlags(-1);
 			ds.SetObjectId(0);
 			VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
 
@@ -869,7 +869,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 		}
 		else {
 			ds.SetAtomId(stream->GetAtom());
-			ds.SetUnknown24(-1);
+			ds.SetFlags(-1);
 			ds.SetObjectId(0);
 			if (Start(&ds) != SUCCESS) {
 				return;

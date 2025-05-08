@@ -29,7 +29,7 @@ MxDSObject::MxDSObject()
 	m_unk0x14 = 0;
 	m_objectName = NULL;
 	m_objectId = -1;
-	m_unk0x24 = -1;
+	m_flags = -1;
 	m_unk0x28 = NULL;
 }
 
@@ -49,7 +49,7 @@ void MxDSObject::CopyFrom(MxDSObject& p_dsObject)
 	m_unk0x14 = p_dsObject.m_unk0x14;
 	SetObjectName(p_dsObject.m_objectName);
 	m_objectId = p_dsObject.m_objectId;
-	m_unk0x24 = p_dsObject.m_unk0x24;
+	m_flags = p_dsObject.m_flags;
 	m_atomId = p_dsObject.m_atomId;
 	m_unk0x28 = p_dsObject.m_unk0x28;
 }
@@ -170,7 +170,7 @@ void MxDSObject::Deserialize(MxU8*& p_source, MxS16 p_flags)
 	m_objectId = *(MxU32*) p_source;
 	p_source += sizeof(m_objectId);
 
-	m_unk0x24 = p_flags;
+	m_flags = p_flags;
 }
 
 // FUNCTION: LEGO1 0x100bfa80

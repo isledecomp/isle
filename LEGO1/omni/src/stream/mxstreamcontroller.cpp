@@ -127,7 +127,7 @@ MxResult MxStreamController::VTable0x24(MxDSAction* p_action)
 		return FAILURE;
 	}
 	else {
-		p_action->SetUnknown24(m_action0x60->GetUnknown24());
+		p_action->SetFlags(m_action0x60->GetUnknown24());
 		p_action->SetObjectId(m_action0x60->GetObjectId());
 		return FUN_100c1f00(m_action0x60);
 	}
@@ -183,7 +183,7 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 			}
 		}
 
-		p_action->SetUnknown24(newUnknown24 + 1);
+		p_action->SetFlags(newUnknown24 + 1);
 	}
 	else {
 		if (m_unk0x3c.Find(p_action)) {

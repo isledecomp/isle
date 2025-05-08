@@ -71,7 +71,7 @@ void MxBackgroundAudioManager::DestroyMusic()
 	if (m_script.GetInternal()) {
 		MxDSAction ds;
 		ds.SetAtomId(m_script);
-		ds.SetUnknown24(-2);
+		ds.SetFlags(-2);
 		DeleteObject(ds);
 		Streamer()->Close(m_script.GetInternal());
 		m_enabled = FALSE;
@@ -257,7 +257,7 @@ MxResult MxBackgroundAudioManager::PlayMusic(
 		MxDSAction action;
 		action.SetAtomId(GetCurrentAction().GetAtomId());
 		action.SetObjectId(GetCurrentAction().GetObjectId());
-		action.SetUnknown24(GetCurrentAction().GetUnknown24());
+		action.SetFlags(GetCurrentAction().GetUnknown24());
 
 		m_action2.SetAtomId(p_action.GetAtomId());
 		m_action2.SetObjectId(p_action.GetObjectId());
@@ -268,7 +268,7 @@ MxResult MxBackgroundAudioManager::PlayMusic(
 
 		GetCurrentAction().SetAtomId(action.GetAtomId());
 		GetCurrentAction().SetObjectId(action.GetObjectId());
-		GetCurrentAction().SetUnknown24(action.GetUnknown24());
+		GetCurrentAction().SetFlags(action.GetUnknown24());
 
 		if (result == SUCCESS) {
 			m_tickleState = p_tickleState;

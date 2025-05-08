@@ -42,12 +42,12 @@ MxResult MxRAMStreamController::VTable0x20(MxDSAction* p_action)
 	MxResult result = FAILURE;
 
 	if (p_action->GetUnknown24() == -1) {
-		p_action->SetUnknown24(-3);
+		p_action->SetFlags(-3);
 		MxDSObject* action = m_unk0x54.Find(p_action);
 		if (action != NULL) {
 			unk0x24 = action->GetUnknown24() + 1;
 		}
-		p_action->SetUnknown24(unk0x24);
+		p_action->SetFlags(unk0x24);
 	}
 	else {
 		if (m_unk0x54.Find(p_action)) {

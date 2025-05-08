@@ -98,7 +98,7 @@ done:
 MxLong MxStreamer::Close(const char* p_name)
 {
 	MxDSAction ds;
-	ds.SetUnknown24(-2);
+	ds.SetFlags(-2);
 
 	for (list<MxStreamController*>::iterator it = m_controllers.begin(); it != m_controllers.end(); it++) {
 		MxStreamController* c = *it;
@@ -192,10 +192,10 @@ MxResult MxStreamer::DeleteObject(MxDSAction* p_dsAction)
 	if (p_dsAction) {
 		tempAction.SetObjectId(p_dsAction->GetObjectId());
 		tempAction.SetAtomId(p_dsAction->GetAtomId());
-		tempAction.SetUnknown24(p_dsAction->GetUnknown24());
+		tempAction.SetFlags(p_dsAction->GetUnknown24());
 	}
 	else {
-		tempAction.SetUnknown24(-2);
+		tempAction.SetFlags(-2);
 	}
 
 	MxResult result = FAILURE;
@@ -233,7 +233,7 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 		MxStreamController* c = s.GetController();
 
 		MxDSAction ds;
-		ds.SetUnknown24(-2);
+		ds.SetFlags(-2);
 
 		if (c->IsStoped(&ds)) {
 			delete c;

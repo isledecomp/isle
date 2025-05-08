@@ -580,7 +580,7 @@ void LegoAct2::Enable(MxBool p_enable)
 		if (m_unk0x1144 != (Act2mainScript::Script) 0) {
 			MxDSAction action;
 			action.SetAtomId(m_atomId);
-			action.SetUnknown24(-2);
+			action.SetFlags(-2);
 			action.SetObjectId(m_unk0x1144);
 			DeleteObject(action);
 			m_unk0x1144 = (Act2mainScript::Script) 0;

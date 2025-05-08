@@ -1494,7 +1494,7 @@ void Infocenter::StopCredits()
 	MxDSAction action;
 	action.SetObjectId(CreditsScript::c_LegoCredits);
 	action.SetAtomId(*g_creditsScript);
-	action.SetUnknown24(-2);
+	action.SetFlags(-2);
 	DeleteObject(action);
 }
 
@@ -1519,7 +1519,7 @@ void Infocenter::StopCurrentAction()
 		MxDSAction action;
 		action.SetObjectId(m_currentInfomainScript);
 		action.SetAtomId(*g_infomainScript);
-		action.SetUnknown24(-2);
+		action.SetFlags(-2);
 		DeleteObject(action);
 		m_currentInfomainScript = InfomainScript::c_noneInfomain;
 	}
@@ -1540,7 +1540,7 @@ void Infocenter::StopBookAnimation()
 	MxDSAction action;
 	action.SetObjectId(SndanimScript::c_BookWig_Flic);
 	action.SetAtomId(*g_sndAnimScript);
-	action.SetUnknown24(-2);
+	action.SetFlags(-2);
 	DeleteObject(action);
 }
 

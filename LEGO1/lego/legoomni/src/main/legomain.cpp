@@ -550,7 +550,7 @@ MxResult LegoOmni::Start(MxDSAction* p_dsAction)
 	MxResult result = MxOmni::Start(p_dsAction);
 	this->m_action.SetAtomId(p_dsAction->GetAtomId());
 	this->m_action.SetObjectId(p_dsAction->GetObjectId());
-	this->m_action.SetUnknown24(p_dsAction->GetUnknown24());
+	this->m_action.SetFlags(p_dsAction->GetUnknown24());
 	return result;
 }
 
