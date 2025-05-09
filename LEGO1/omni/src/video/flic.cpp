@@ -383,8 +383,8 @@ weird_code:
 	// LINE: BETA10 0x1013e684
 	row += token;
 
+row_loop:
 	while (TRUE) {
-	row_loop:
 		// LINE: BETA10 0x1013e692
 		token = *(short*) data;
 		data += 2;
@@ -392,6 +392,7 @@ weird_code:
 		if (token >= 0) {
 			goto column_loop_2;
 		}
+		// TODO: Can't get this if-check to be quite right. Maybe a union type?
 		if (token & 0x4000) {
 			goto weird_code;
 		}
@@ -405,55 +406,49 @@ weird_code:
 			row--;
 			if (--lines > 0) {
 				continue;
-				// return;
 			}
 			return;
-			// TODO: Something is off about these breaks and jumps -- too many JMP instructions
 		}
 	}
-		// }
 
-	column_loop_2:
-		// LINE: BETA10 0x1013e71e
-		short column = xofs;
+column_loop_2:
+	// LINE: BETA10 0x1013e71e
+	short column = xofs;
 
-	column_loop:
-		column += *data++;
-		// LINE: BETA10 0x1013e73a
-		short type = *(char*) data++;
-		type += type;
+column_loop:
+	column += *data++;
+	// LINE: BETA10 0x1013e73a
+	short type = *(char*) data++;
+	type += type;
 
-		if (type >= 0) {
-			WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
-			column += type;
-			data += type;
-			// LINE: BETA10 0x1013e797
-			if (--token != 0) {
-				goto column_loop;
-			}
-			row--;
-			if (--lines > 0) {
-				goto row_loop;
-			}
-			return;
+	if (type >= 0) {
+		WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
+		column += type;
+		data += type;
+		// LINE: BETA10 0x1013e797
+		if (--token != 0) {
+			goto column_loop;
 		}
-		else {
-			type = -type;
-			WORD* p_pixel = (WORD*) data;
-			data += 2;
-			WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
-			column += type;
-			// LINE: BETA10 0x1013e813
-			if (--token != 0) {
-				goto column_loop;
-			}
-			row--;
-			if (--lines > 0) {
-				goto row_loop;
-			}
-			return;
+		row--;
+		if (--lines > 0) {
+			goto row_loop;
 		}
-	// }
+		return;
+	}
+
+	type = -type;
+	WORD* p_pixel = (WORD*) data;
+	data += 2;
+	WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
+	column += type;
+	// LINE: BETA10 0x1013e813
+	if (--token != 0) {
+		goto column_loop;
+	}
+	row--;
+	if (--lines > 0) {
+		goto row_loop;
+	}
 }
 
 // FUNCTION: LEGO1 0x100bdc00
