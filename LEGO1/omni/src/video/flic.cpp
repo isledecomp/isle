@@ -384,7 +384,8 @@ weird_code:
 	row += token;
 
 row_loop:
-	while (TRUE) {
+	// while (TRUE) {
+	do {
 		// LINE: BETA10 0x1013e692
 		token = *(short*) data;
 		data += 2;
@@ -392,7 +393,7 @@ row_loop:
 		if (token >= 0) {
 			goto column_loop_2;
 		}
-		// TODO: Can't get this if-check to be quite right. Maybe a union type?
+		// TODO: Can't get this if-check to be quite right. Union type didn't help either
 		if (token & 0x4000) {
 			goto weird_code;
 		}
@@ -405,50 +406,56 @@ row_loop:
 		if (!token) {
 			row--;
 			if (--lines > 0) {
-				continue;
+				goto row_loop;
 			}
-			return;
+			break;
 		}
-	}
+		break;
+	// }
 
 column_loop_2:
 	// LINE: BETA10 0x1013e71e
 	short column = xofs;
 
-column_loop:
-	column += *data++;
-	// LINE: BETA10 0x1013e73a
-	short type = *(char*) data++;
-	type += type;
+	// do {
+	column_loop_inner:
+		// LINE: BETA10 0x1013e726
+		column += *data++;
+		// LINE: BETA10 0x1013e73a
+		short type = *(char*) data++;
+		type += type;
 
-	if (type >= 0) {
-		WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
+		if (type >= 0) {
+			WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
+			column += type;
+			data += type;
+			// LINE: BETA10 0x1013e797
+			if (--token != 0) {
+				goto column_loop_inner;
+			}
+			row--;
+			if (--lines > 0) {
+				goto row_loop;
+			}
+			break;
+		}
+
+		type = -type;
+		WORD* p_pixel = (WORD*) data;
+		data += 2;
+		WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
 		column += type;
-		data += type;
-		// LINE: BETA10 0x1013e797
+		// LINE: BETA10 0x1013e813
 		if (--token != 0) {
-			goto column_loop;
+			// Should be equivalent to `continue`, but it doesn't produce the same assembly
+			goto column_loop_inner;
 		}
 		row--;
 		if (--lines > 0) {
 			goto row_loop;
 		}
 		return;
-	}
-
-	type = -type;
-	WORD* p_pixel = (WORD*) data;
-	data += 2;
-	WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
-	column += type;
-	// LINE: BETA10 0x1013e813
-	if (--token != 0) {
-		goto column_loop;
-	}
-	row--;
-	if (--lines > 0) {
-		goto row_loop;
-	}
+	} while (0);
 }
 
 // FUNCTION: LEGO1 0x100bdc00
