@@ -125,17 +125,17 @@ public:
 	// LegoWorld::`scalar deleting destructor'
 
 protected:
-	LegoPathControllerList m_list0x68;        // 0x68
-	MxPresenterList m_animPresenters;         // 0x80
-	LegoCameraController* m_cameraController; // 0x98
-	LegoEntityList* m_entityList;             // 0x9c
-	LegoCacheSoundList* m_cacheSoundList;     // 0xa0
-	MxBool m_destroyed;                       // 0xa4
-	MxCoreSet m_set0xa8;                      // 0xa8
-	MxPresenterList m_controlPresenters;      // 0xb8
-	MxCoreSet m_set0xd0;                      // 0xd0
-	list<LegoROI*> m_roiList;                 // 0xe0
-	LegoOmni::World m_worldId;                // 0xec
+	LegoPathControllerList m_pathControllerList; // 0x68
+	MxPresenterList m_animPresenters;            // 0x80
+	LegoCameraController* m_cameraController;    // 0x98
+	LegoEntityList* m_entityList;                // 0x9c
+	LegoCacheSoundList* m_cacheSoundList;        // 0xa0
+	MxBool m_destroyed;                          // 0xa4
+	MxCoreSet m_set0xa8;                         // 0xa8
+	MxPresenterList m_controlPresenters;         // 0xb8
+	MxCoreSet m_set0xd0;                         // 0xd0
+	list<LegoROI*> m_roiList;                    // 0xe0
+	LegoOmni::World m_worldId;                   // 0xec
 
 	// name verified by BETA10 0x100c7f59
 	LegoHideAnimPresenter* m_hideAnim; // 0xf0
