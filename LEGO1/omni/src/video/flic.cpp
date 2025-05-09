@@ -410,6 +410,7 @@ weird_code:
 			return;
 			// TODO: Something is off about these breaks and jumps -- too many JMP instructions
 		}
+	}
 		// }
 
 	column_loop_2:
@@ -432,7 +433,7 @@ weird_code:
 			}
 			row--;
 			if (--lines > 0) {
-				continue;
+				goto row_loop;
 			}
 			return;
 		}
@@ -448,11 +449,11 @@ weird_code:
 			}
 			row--;
 			if (--lines > 0) {
-				continue;
+				goto row_loop;
 			}
 			return;
 		}
-	}
+	// }
 }
 
 // FUNCTION: LEGO1 0x100bdc00
