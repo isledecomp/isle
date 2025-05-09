@@ -52,10 +52,10 @@ const char* g_unk0x10101380[] = {"bike", "moto", "haus", NULL};
 const char* g_unk0x10101390[] = {"rcuser", "jsuser", "dunebugy", "chtrblad", "chtrbody", "chtrshld", NULL};
 
 // GLOBAL: LEGO1 0x101013ac
-ROIHandler g_unk0x101013ac = NULL;
+ROIHandler g_roiHandler = NULL;
 
 // GLOBAL: LEGO1 0x101013b0
-TextureHandler g_unk0x101013b0 = NULL;
+TextureHandler g_textureHandler = NULL;
 
 // FUNCTION: LEGO1 0x100a81b0
 void LegoROI::FUN_100a81b0(const LegoChar* p_error, const LegoChar* p_name)
@@ -299,16 +299,16 @@ LegoResult LegoROI::Read(
 				goto done;
 			}
 
-			FUN_100a9210(textureInfo);
-			FUN_100a9170(1.0F, 1.0F, 1.0F, 0.0F);
+			SetTexture(textureInfo);
+			SetLodColor(1.0F, 1.0F, 1.0F, 0.0F);
 		}
 		else {
 			LegoFloat red = 1.0F;
 			LegoFloat green = 0.0F;
 			LegoFloat blue = 1.0F;
 			LegoFloat alpha = 0.0F;
-			FUN_100a9bf0(textureName, red, green, blue, alpha);
-			FUN_100a9170(red, green, blue, alpha);
+			GetColorFromGlobalHandlerOrAlias(textureName, red, green, blue, alpha);
+			SetLodColor(red, green, blue, alpha);
 		}
 	}
 
@@ -481,7 +481,7 @@ LegoResult LegoROI::SetFrame(LegoAnim* p_anim, LegoTime p_time)
 
 // FUNCTION: LEGO1 0x100a9170
 // FUNCTION: BETA10 0x1018ae09
-LegoResult LegoROI::FUN_100a9170(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
+LegoResult LegoROI::SetLodColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
 {
 	LegoResult result = SUCCESS;
 	CompoundObject::iterator it;
@@ -497,7 +497,7 @@ LegoResult LegoROI::FUN_100a9170(LegoFloat p_red, LegoFloat p_green, LegoFloat p
 
 	if (comp != NULL) {
 		for (it = comp->begin(); it != comp->end(); it++) {
-			if (((LegoROI*) *it)->FUN_100a9170(p_red, p_green, p_blue, p_alpha) != SUCCESS) {
+			if (((LegoROI*) *it)->SetLodColor(p_red, p_green, p_blue, p_alpha) != SUCCESS) {
 				result = FAILURE;
 			}
 		}
@@ -507,7 +507,7 @@ LegoResult LegoROI::FUN_100a9170(LegoFloat p_red, LegoFloat p_green, LegoFloat p
 }
 
 // FUNCTION: LEGO1 0x100a9210
-LegoResult LegoROI::FUN_100a9210(LegoTextureInfo* p_textureInfo)
+LegoResult LegoROI::SetTexture(LegoTextureInfo* p_textureInfo)
 {
 	LegoResult result = SUCCESS;
 	CompoundObject::iterator it;
@@ -516,14 +516,14 @@ LegoResult LegoROI::FUN_100a9210(LegoTextureInfo* p_textureInfo)
 	for (LegoU32 i = 0; i < lodCount; i++) {
 		LegoLOD* lod = (LegoLOD*) GetLOD(i);
 
-		if (lod->FUN_100aad00(p_textureInfo) != SUCCESS) {
+		if (lod->SetTextureInfo(p_textureInfo) != SUCCESS) {
 			result = FAILURE;
 		}
 	}
 
 	if (comp != NULL) {
 		for (it = comp->begin(); it != comp->end(); it++) {
-			if (((LegoROI*) *it)->FUN_100a9210(p_textureInfo) != SUCCESS) {
+			if (((LegoROI*) *it)->SetTexture(p_textureInfo) != SUCCESS) {
 				result = FAILURE;
 			}
 		}
@@ -560,18 +560,18 @@ LegoResult LegoROI::GetTexture(LegoTextureInfo*& p_textureInfo)
 
 // FUNCTION: LEGO1 0x100a9330
 // FUNCTION: BETA10 0x1018b22c
-LegoResult LegoROI::FUN_100a9330(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
+LegoResult LegoROI::SetCustomLodColor2(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
 {
-	return FUN_100a9170(p_red, p_green, p_blue, p_alpha);
+	return SetLodColor(p_red, p_green, p_blue, p_alpha);
 }
 
 // FUNCTION: LEGO1 0x100a9350
 // FUNCTION: BETA10 0x1018b25c
-LegoResult LegoROI::FUN_100a9350(const LegoChar* p_color)
+LegoResult LegoROI::SetColorNamed(const LegoChar* p_color)
 {
 	MxFloat red, green, blue, alpha;
 	if (ColorAliasLookup(p_color, red, green, blue, alpha)) {
-		return FUN_100a9170(red, green, blue, alpha);
+		return SetLodColor(red, green, blue, alpha);
 	}
 
 	return SUCCESS;
@@ -579,11 +579,11 @@ LegoResult LegoROI::FUN_100a9350(const LegoChar* p_color)
 
 // FUNCTION: LEGO1 0x100a93b0
 // FUNCTION: BETA10 0x1018b2c0
-LegoResult LegoROI::FUN_100a93b0(const LegoChar* p_color)
+LegoResult LegoROI::SetColorNamed2(const LegoChar* p_color)
 {
 	MxFloat red, green, blue, alpha;
 	if (ColorAliasLookup(p_color, red, green, blue, alpha)) {
-		return FUN_100a9330(red, green, blue, alpha);
+		return SetCustomLodColor2(red, green, blue, alpha);
 	}
 
 	return 0;
@@ -755,15 +755,21 @@ void TimeROI::FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time)
 }
 
 // FUNCTION: LEGO1 0x100a9bf0
-LegoBool LegoROI::FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha)
+LegoBool LegoROI::GetColorFromGlobalHandlerOrAlias(
+	const LegoChar* p_param,
+	float& p_red,
+	float& p_green,
+	float& p_blue,
+	float& p_alpha
+)
 {
 	if (p_param == NULL) {
 		return FALSE;
 	}
 
-	if (g_unk0x101013ac) {
+	if (g_roiHandler) {
 		char buf[32];
-		if (g_unk0x101013ac(p_param, buf, sizeof(buf))) {
+		if (g_roiHandler(p_param, buf, sizeof(buf))) {
 			p_param = buf;
 		}
 	}
@@ -789,14 +795,18 @@ LegoBool LegoROI::ColorAliasLookup(const LegoChar* p_param, float& p_red, float&
 }
 
 // FUNCTION: LEGO1 0x100a9cf0
-LegoBool LegoROI::FUN_100a9cf0(const LegoChar* p_param, unsigned char* paletteEntries, LegoU32 p_numEntries)
+LegoBool LegoROI::GetPaletteEntriesFromGlobalHandler(
+	const LegoChar* p_param,
+	unsigned char* paletteEntries,
+	LegoU32 p_numEntries
+)
 {
 	if (p_param == NULL) {
 		return FALSE;
 	}
 
-	if (g_unk0x101013b0 != NULL) {
-		return g_unk0x101013b0(p_param, paletteEntries, p_numEntries);
+	if (g_textureHandler != NULL) {
+		return g_textureHandler(p_param, paletteEntries, p_numEntries);
 	}
 
 	paletteEntries[0] = '\0';
@@ -804,9 +814,9 @@ LegoBool LegoROI::FUN_100a9cf0(const LegoChar* p_param, unsigned char* paletteEn
 }
 
 // FUNCTION: LEGO1 0x100a9d30
-void LegoROI::FUN_100a9d30(ROIHandler p_func)
+void LegoROI::SetGlobalROIHandler(ROIHandler p_func)
 {
-	g_unk0x101013ac = p_func;
+	g_roiHandler = p_func;
 }
 
 // FUNCTION: LEGO1 0x100a9d40
@@ -828,12 +838,12 @@ void LegoROI::SetName(const LegoChar* p_name)
 
 // FUNCTION: LEGO1 0x100a9dd0
 // FUNCTION: BETA10 0x1018bfdb
-void LegoROI::FUN_100a9dd0()
+void LegoROI::ClearMeshOffset()
 {
 	int lodCount = GetLODCount();
 	for (LegoS32 i = 0; i < lodCount; i++) {
 		LegoLOD* lod = (LegoLOD*) GetLOD(i);
-		lod->FUN_100aae60();
+		lod->ClearMeshOffset();
 	}
 }
 

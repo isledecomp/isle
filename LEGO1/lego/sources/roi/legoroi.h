@@ -36,26 +36,32 @@ public:
 	static void FUN_100a8e80(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap);
 	static void FUN_100a8fd0(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap);
 	LegoResult SetFrame(LegoAnim* p_anim, LegoTime p_time);
-	LegoResult FUN_100a9170(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
-	LegoResult FUN_100a9210(LegoTextureInfo* p_textureInfo);
+	LegoResult SetLodColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
+	LegoResult SetTexture(LegoTextureInfo* p_textureInfo);
 	LegoResult GetTexture(LegoTextureInfo*& p_textureInfo);
-	LegoResult FUN_100a9330(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
-	LegoResult FUN_100a9350(const LegoChar* p_color);
-	LegoResult FUN_100a93b0(const LegoChar* p_color);
+	LegoResult SetCustomLodColor2(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
+	LegoResult SetColorNamed(const LegoChar* p_color);
+	LegoResult SetColorNamed2(const LegoChar* p_color);
 	LegoU32 FUN_100a9410(Vector3& p_v1, Vector3& p_v2, float p_f1, float p_f2, Vector3& p_v3, LegoBool p_collideBox);
 	void SetName(const LegoChar* p_name);
 
 	float IntrinsicImportance() const override; // vtable+0x04
 	void UpdateWorldBoundingVolumes() override; // vtable+0x18
 
-	void FUN_100a9dd0();
+	void ClearMeshOffset();
 	void SetDisplayBB(int p_displayBB);
 
 	static LegoResult FUN_100a8cb0(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix);
 	static void FUN_100a81b0(const LegoChar* p_error, const LegoChar* p_name);
 	static void configureLegoROI(int p_roi);
-	static void FUN_100a9d30(ROIHandler p_func);
-	static LegoBool FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha);
+	static void SetGlobalROIHandler(ROIHandler p_func);
+	static LegoBool GetColorFromGlobalHandlerOrAlias(
+		const LegoChar* p_param,
+		float& p_red,
+		float& p_green,
+		float& p_blue,
+		float& p_alpha
+	);
 	static LegoBool ColorAliasLookup(
 		const LegoChar* p_param,
 		float& p_red,
@@ -63,7 +69,11 @@ public:
 		float& p_blue,
 		float& p_alpha
 	);
-	static LegoBool FUN_100a9cf0(const LegoChar* p_param, unsigned char* paletteEntries, LegoU32 p_numEntries);
+	static LegoBool GetPaletteEntriesFromGlobalHandler(
+		const LegoChar* p_param,
+		unsigned char* paletteEntries,
+		LegoU32 p_numEntries
+	);
 
 	// FUNCTION: BETA10 0x1000f320
 	const LegoChar* GetName() const { return m_name; }

@@ -1373,7 +1373,7 @@ void LegoCarBuild::FUN_10025350(MxS32 p_objectId)
 
 	m_Paint_Sound->Enable(FALSE);
 	m_Paint_Sound->Enable(TRUE);
-	m_unk0x110->FUN_100a93b0(color);
+	m_unk0x110->SetColorNamed2(color);
 	sprintf(buffer, "c_%s", m_unk0x110->GetName());
 	VariableTable()->SetVariable(buffer, color);
 }

@@ -176,7 +176,7 @@ LegoGameState::LegoGameState()
 // FUNCTION: LEGO1 0x10039720
 LegoGameState::~LegoGameState()
 {
-	LegoROI::FUN_100a9d30(NULL);
+	LegoROI::SetGlobalROIHandler(NULL);
 
 	if (m_stateCount) {
 		for (MxS16 i = 0; i < m_stateCount; i++) {
@@ -1062,7 +1062,7 @@ void LegoGameState::SetColors()
 // FUNCTION: LEGO1 0x1003bac0
 void LegoGameState::SetROIHandlerFunction()
 {
-	LegoROI::FUN_100a9d30(&ROIHandlerFunction);
+	LegoROI::SetGlobalROIHandler(&ROIHandlerFunction);
 }
 
 // FUNCTION: LEGO1 0x1003bad0
