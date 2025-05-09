@@ -28,10 +28,10 @@ MxResult ModelDbModel::Read(FILE* p_file)
 		return FAILURE;
 	}
 
-	if (fread(&m_unk0x04, sizeof(m_unk0x04), 1, p_file) != 1) {
+	if (fread(&m_modelDataLength, sizeof(m_modelDataLength), 1, p_file) != 1) {
 		return FAILURE;
 	}
-	if (fread(&m_unk0x08, sizeof(m_unk0x08), 1, p_file) != 1) {
+	if (fread(&m_modelDataOffset, sizeof(m_modelDataOffset), 1, p_file) != 1) {
 		return FAILURE;
 	}
 	if (fread(&len, sizeof(len), 1, p_file) != 1) {
