@@ -33,3 +33,4 @@ into-one.sh
 skeleton/
 .DS_Store
 node_modules
+code_embeddings.db

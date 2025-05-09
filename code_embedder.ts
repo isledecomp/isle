@@ -5,6 +5,15 @@ import path from "node:path";
 import { z } from "zod";
 import { OpenAI } from "openai";
 import { createClient } from "@libsql/client";
+import {
+	encode,
+	encodeChat,
+	decode,
+	isWithinTokenLimit,
+	encodeGenerator,
+	decodeGenerator,
+	decodeAsyncGenerator,
+} from "gpt-tokenizer";
 
 // configuration
 const DB_PATH = "file:code_embeddings.db";
@@ -28,7 +37,8 @@ await db.execute(
     checksum TEXT NOT NULL,
     embedding F32_BLOB(${EMBEDDING_DIMENSION}) NOT NULL,
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  )`,
+  );
+	CREATE INDEX IF NOT EXISTS file_embeddings_idx ON file_embeddings (libsql_vector_idx(embedding));`,
 );
 
 const getChecksum = (filePath: string): string => {
@@ -38,9 +48,14 @@ const getChecksum = (filePath: string): string => {
 };
 
 const getEmbedding = async (content: string): Promise<number[]> => {
+	const token_limit = 8000;
+	let c = content;
+	while (!isWithinTokenLimit(c, token_limit)) {
+		c = c.slice(0, c.length - 100);
+	}
 	const { data } = await openai.embeddings.create({
 		model: OPENAI_MODEL,
-		input: content,
+		input: c,
 		encoding_format: "float",
 	});
 	return data[0].embedding as unknown as number[];
@@ -84,9 +99,12 @@ const processFile = async (filePath: string) => {
 
 	const embedding = await getEmbedding(content);
 
+	// await db.execute(
+	// 	`INSERT INTO file_embeddings (file_path, checksum, embedding) VALUES ('${filePath}', '${checksum}', vector32('[${embedding.join(",")}]'))`,
+	// );
 	await db.execute(
 		"INSERT INTO file_embeddings (file_path, checksum, embedding) VALUES (?, ?, ?)",
-		[filePath, checksum, embedding],
+		[filePath, checksum, new Uint8Array(embedding)],
 	);
 };
 
