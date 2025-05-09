@@ -90,7 +90,7 @@ private:
 	MxU8 m_unk0x59;                 // 0x59
 	MxU32 m_animmanId;              // 0x5c
 	LegoTranInfo* m_tranInfo;       // 0x60
-	LegoWorld* m_unk0x64;           // 0x64
+	LegoWorld* m_world;             // 0x64
 	MxMatrix* m_unk0x68;            // 0x68
 	LegoROI** m_roiMap;             // 0x6c
 	MxU32 m_roiMapSize;             // 0x70
