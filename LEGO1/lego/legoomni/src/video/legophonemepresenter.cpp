@@ -56,7 +56,7 @@ void LegoPhonemePresenter::StartingTickle()
 			}
 
 			head = entityROI->FindChildROI("head", entityROI);
-			head->GetTexture(m_textureInfo);
+			head->GetTextureInfo(m_textureInfo);
 
 			LegoPhonemeList* phonemeList = VideoManager()->GetPhonemeList();
 			LegoPhoneme* phoneme = new LegoPhoneme(m_roiName.GetData(), 1);
