@@ -52,7 +52,7 @@ const char* g_unk0x10101380[] = {"bike", "moto", "haus", NULL};
 const char* g_unk0x10101390[] = {"rcuser", "jsuser", "dunebugy", "chtrblad", "chtrbody", "chtrshld", NULL};
 
 // GLOBAL: LEGO1 0x101013ac
-ROIHandler g_roiHandler = NULL;
+ColorOverride g_colorOverride = NULL;
 
 // GLOBAL: LEGO1 0x101013b0
 TextureHandler g_textureHandler = NULL;
@@ -299,7 +299,7 @@ LegoResult LegoROI::Read(
 				goto done;
 			}
 
-			SetTexture(textureInfo);
+			SetTextureInfo(textureInfo);
 			SetLodColor(1.0F, 1.0F, 1.0F, 0.0F);
 		}
 		else {
@@ -307,7 +307,7 @@ LegoResult LegoROI::Read(
 			LegoFloat green = 0.0F;
 			LegoFloat blue = 1.0F;
 			LegoFloat alpha = 0.0F;
-			GetColorFromGlobalHandlerOrAlias(textureName, red, green, blue, alpha);
+			GetRGBAColor(textureName, red, green, blue, alpha);
 			SetLodColor(red, green, blue, alpha);
 		}
 	}
@@ -490,7 +490,7 @@ LegoResult LegoROI::SetLodColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_
 	for (LegoU32 i = 0; i < lodCount; i++) {
 		LegoLOD* lod = (LegoLOD*) GetLOD(i);
 
-		if (lod->FUN_100aacb0(p_red, p_green, p_blue, p_alpha) != SUCCESS) {
+		if (lod->SetColor(p_red, p_green, p_blue, p_alpha) != SUCCESS) {
 			result = FAILURE;
 		}
 	}
@@ -507,7 +507,7 @@ LegoResult LegoROI::SetLodColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_
 }
 
 // FUNCTION: LEGO1 0x100a9210
-LegoResult LegoROI::SetTexture(LegoTextureInfo* p_textureInfo)
+LegoResult LegoROI::SetTextureInfo(LegoTextureInfo* p_textureInfo)
 {
 	LegoResult result = SUCCESS;
 	CompoundObject::iterator it;
@@ -523,7 +523,7 @@ LegoResult LegoROI::SetTexture(LegoTextureInfo* p_textureInfo)
 
 	if (comp != NULL) {
 		for (it = comp->begin(); it != comp->end(); it++) {
-			if (((LegoROI*) *it)->SetTexture(p_textureInfo) != SUCCESS) {
+			if (((LegoROI*) *it)->SetTextureInfo(p_textureInfo) != SUCCESS) {
 				result = FAILURE;
 			}
 		}
@@ -534,7 +534,7 @@ LegoResult LegoROI::SetTexture(LegoTextureInfo* p_textureInfo)
 
 // FUNCTION: LEGO1 0x100a92a0
 // FUNCTION: BETA10 0x1018b12d
-LegoResult LegoROI::GetTexture(LegoTextureInfo*& p_textureInfo)
+LegoResult LegoROI::GetTextureInfo(LegoTextureInfo*& p_textureInfo)
 {
 	CompoundObject::iterator it;
 
@@ -549,7 +549,7 @@ LegoResult LegoROI::GetTexture(LegoTextureInfo*& p_textureInfo)
 
 	if (comp != NULL) {
 		for (it = comp->begin(); it != comp->end(); it++) {
-			if (((LegoROI*) *it)->GetTexture(p_textureInfo) == SUCCESS) {
+			if (((LegoROI*) *it)->GetTextureInfo(p_textureInfo) == SUCCESS) {
 				return SUCCESS;
 			}
 		}
@@ -560,17 +560,17 @@ LegoResult LegoROI::GetTexture(LegoTextureInfo*& p_textureInfo)
 
 // FUNCTION: LEGO1 0x100a9330
 // FUNCTION: BETA10 0x1018b22c
-LegoResult LegoROI::SetCustomLodColor2(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
+LegoResult LegoROI::FUN_100a9330(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
 {
 	return SetLodColor(p_red, p_green, p_blue, p_alpha);
 }
 
 // FUNCTION: LEGO1 0x100a9350
 // FUNCTION: BETA10 0x1018b25c
-LegoResult LegoROI::SetColorNamed(const LegoChar* p_color)
+LegoResult LegoROI::SetLodColor(const LegoChar* p_name)
 {
 	MxFloat red, green, blue, alpha;
-	if (ColorAliasLookup(p_color, red, green, blue, alpha)) {
+	if (ColorAliasLookup(p_name, red, green, blue, alpha)) {
 		return SetLodColor(red, green, blue, alpha);
 	}
 
@@ -579,11 +579,11 @@ LegoResult LegoROI::SetColorNamed(const LegoChar* p_color)
 
 // FUNCTION: LEGO1 0x100a93b0
 // FUNCTION: BETA10 0x1018b2c0
-LegoResult LegoROI::SetColorNamed2(const LegoChar* p_color)
+LegoResult LegoROI::FUN_100a93b0(const LegoChar* p_name)
 {
 	MxFloat red, green, blue, alpha;
-	if (ColorAliasLookup(p_color, red, green, blue, alpha)) {
-		return SetCustomLodColor2(red, green, blue, alpha);
+	if (ColorAliasLookup(p_name, red, green, blue, alpha)) {
+		return FUN_100a9330(red, green, blue, alpha);
 	}
 
 	return 0;
@@ -755,26 +755,20 @@ void TimeROI::FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time)
 }
 
 // FUNCTION: LEGO1 0x100a9bf0
-LegoBool LegoROI::GetColorFromGlobalHandlerOrAlias(
-	const LegoChar* p_param,
-	float& p_red,
-	float& p_green,
-	float& p_blue,
-	float& p_alpha
-)
+LegoBool LegoROI::GetRGBAColor(const LegoChar* p_name, float& p_red, float& p_green, float& p_blue, float& p_alpha)
 {
-	if (p_param == NULL) {
+	if (p_name == NULL) {
 		return FALSE;
 	}
 
-	if (g_roiHandler) {
-		char buf[32];
-		if (g_roiHandler(p_param, buf, sizeof(buf))) {
-			p_param = buf;
+	char p_updatedName[32];
+	if (g_colorOverride) {
+		if (g_colorOverride(p_name, p_updatedName, sizeof(p_updatedName))) {
+			p_name = p_updatedName;
 		}
 	}
 
-	return ColorAliasLookup(p_param, p_red, p_green, p_blue, p_alpha);
+	return ColorAliasLookup(p_name, p_red, p_green, p_blue, p_alpha);
 }
 
 // FUNCTION: LEGO1 0x100a9c50
@@ -795,18 +789,15 @@ LegoBool LegoROI::ColorAliasLookup(const LegoChar* p_param, float& p_red, float&
 }
 
 // FUNCTION: LEGO1 0x100a9cf0
-LegoBool LegoROI::GetPaletteEntriesFromGlobalHandler(
-	const LegoChar* p_param,
-	unsigned char* paletteEntries,
-	LegoU32 p_numEntries
-)
+LegoBool LegoROI::GetPaletteEntries(const LegoChar* p_name, unsigned char* paletteEntries, LegoU32 p_numEntries)
 {
-	if (p_param == NULL) {
+	if (p_name == NULL) {
 		return FALSE;
 	}
 
+	// Note: g_textureHandler is never set in the code base
 	if (g_textureHandler != NULL) {
-		return g_textureHandler(p_param, paletteEntries, p_numEntries);
+		return g_textureHandler(p_name, paletteEntries, p_numEntries);
 	}
 
 	paletteEntries[0] = '\0';
@@ -814,9 +805,9 @@ LegoBool LegoROI::GetPaletteEntriesFromGlobalHandler(
 }
 
 // FUNCTION: LEGO1 0x100a9d30
-void LegoROI::SetGlobalROIHandler(ROIHandler p_func)
+void LegoROI::SetColorOverride(ColorOverride p_colorOverride)
 {
-	g_roiHandler = p_func;
+	g_colorOverride = p_colorOverride;
 }
 
 // FUNCTION: LEGO1 0x100a9d40

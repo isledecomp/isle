@@ -221,7 +221,7 @@ void LegoCarBuildAnimPresenter::StreamingTickle()
 
 				if (roi && roi->GetName() && (strcmpi(name, roi->GetName()) == 0)) {
 					roi->ClearMeshOffset();
-					roi->SetColorNamed("lego red");
+					roi->SetLodColor("lego red");
 				}
 			}
 		}

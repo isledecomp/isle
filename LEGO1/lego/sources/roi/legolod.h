@@ -29,7 +29,7 @@ public:
 
 	LegoResult Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_textureContainer, LegoStorage* p_storage);
 	LegoLOD* Clone(Tgl::Renderer* p_renderer);
-	LegoResult FUN_100aacb0(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
+	LegoResult SetColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
 	LegoResult SetTextureInfo(LegoTextureInfo* p_textureInfo);
 	LegoResult FUN_100aad70(LegoTextureInfo* p_textureInfo);
 	void ClearMeshOffset();

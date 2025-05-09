@@ -145,7 +145,7 @@ const char* g_strDisable = "disable";
 LegoGameState::LegoGameState()
 {
 	SetColors();
-	SetROIHandlerFunction();
+	SetROIColorOverride();
 
 	m_stateCount = 0;
 	m_actorId = 0;
@@ -176,7 +176,7 @@ LegoGameState::LegoGameState()
 // FUNCTION: LEGO1 0x10039720
 LegoGameState::~LegoGameState()
 {
-	LegoROI::SetGlobalROIHandler(NULL);
+	LegoROI::SetColorOverride(NULL);
 
 	if (m_stateCount) {
 		for (MxS16 i = 0; i < m_stateCount; i++) {
@@ -1060,13 +1060,13 @@ void LegoGameState::SetColors()
 }
 
 // FUNCTION: LEGO1 0x1003bac0
-void LegoGameState::SetROIHandlerFunction()
+void LegoGameState::SetROIColorOverride()
 {
-	LegoROI::SetGlobalROIHandler(&ROIHandlerFunction);
+	LegoROI::SetColorOverride(&ROIColorOverride);
 }
 
 // FUNCTION: LEGO1 0x1003bad0
-MxBool ROIHandlerFunction(const char* p_input, char* p_output, MxU32 p_copyLen)
+MxBool ROIColorOverride(const char* p_input, char* p_output, MxU32 p_copyLen)
 {
 	if (p_output != NULL && p_copyLen != 0 &&
 		(strnicmp(p_input, "INDIR-F-", strlen("INDIR-F-")) == 0 ||

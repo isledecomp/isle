@@ -228,7 +228,7 @@ private:
 	MxResult WriteEndOfVariables(LegoStorage* p_storage);
 	MxS32 ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to);
 	void SetColors();
-	void SetROIHandlerFunction();
+	void SetROIColorOverride();
 
 	char* m_savePath;                           // 0x00
 	MxS16 m_stateCount;                         // 0x04
@@ -255,7 +255,7 @@ public:
 	Area m_unk0x42c;                      // 0x42c
 };
 
-MxBool ROIHandlerFunction(const char* p_input, char* p_output, MxU32 p_copyLen);
+MxBool ROIColorOverride(const char* p_input, char* p_output, MxU32 p_copyLen);
 
 // SYNTHETIC: LEGO1 0x1003c860
 // LegoGameState::ScoreItem::ScoreItem

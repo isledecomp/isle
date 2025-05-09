@@ -212,7 +212,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 
 		if (textureName != NULL) {
 			if (mesh->GetUnknown0x21()) {
-				LegoROI::GetPaletteEntriesFromGlobalHandler(textureName, paletteEntries, sizeOfArray(paletteEntries));
+				LegoROI::GetPaletteEntries(textureName, paletteEntries, sizeOfArray(paletteEntries));
 			}
 
 			textureInfo = p_textureContainer->Get(mesh->GetTextureName());
@@ -232,7 +232,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			LegoFloat alpha = 0.0F;
 
 			if (mesh->GetUnknown0x21()) {
-				LegoROI::GetColorFromGlobalHandlerOrAlias(materialName, red, green, blue, alpha);
+				LegoROI::GetRGBAColor(materialName, red, green, blue, alpha);
 			}
 			else {
 				red = mesh->GetColor().GetRed() / 255.0;
@@ -325,7 +325,7 @@ LegoLOD* LegoLOD::Clone(Tgl::Renderer* p_renderer)
 }
 
 // FUNCTION: LEGO1 0x100aacb0
-LegoResult LegoLOD::FUN_100aacb0(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
+LegoResult LegoLOD::SetColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
 {
 	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
 		if (!m_melems[i].m_unk0x04) {

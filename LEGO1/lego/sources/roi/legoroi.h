@@ -4,7 +4,7 @@
 #include "misc/legotypes.h"
 #include "viewmanager/viewroi.h"
 
-typedef unsigned char (*ROIHandler)(const char*, char*, unsigned int);
+typedef unsigned char (*ColorOverride)(const char*, char*, unsigned int);
 typedef unsigned char (*TextureHandler)(const char*, unsigned char*, unsigned int);
 
 class LegoEntity;
@@ -37,11 +37,11 @@ public:
 	static void FUN_100a8fd0(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap);
 	LegoResult SetFrame(LegoAnim* p_anim, LegoTime p_time);
 	LegoResult SetLodColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
-	LegoResult SetTexture(LegoTextureInfo* p_textureInfo);
-	LegoResult GetTexture(LegoTextureInfo*& p_textureInfo);
-	LegoResult SetCustomLodColor2(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
-	LegoResult SetColorNamed(const LegoChar* p_color);
-	LegoResult SetColorNamed2(const LegoChar* p_color);
+	LegoResult SetTextureInfo(LegoTextureInfo* p_textureInfo);
+	LegoResult GetTextureInfo(LegoTextureInfo*& p_textureInfo);
+	LegoResult FUN_100a9330(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
+	LegoResult SetLodColor(const LegoChar* p_name);
+	LegoResult FUN_100a93b0(const LegoChar* p_name);
 	LegoU32 FUN_100a9410(Vector3& p_v1, Vector3& p_v2, float p_f1, float p_f2, Vector3& p_v3, LegoBool p_collideBox);
 	void SetName(const LegoChar* p_name);
 
@@ -54,14 +54,8 @@ public:
 	static LegoResult FUN_100a8cb0(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix);
 	static void FUN_100a81b0(const LegoChar* p_error, const LegoChar* p_name);
 	static void configureLegoROI(int p_roi);
-	static void SetGlobalROIHandler(ROIHandler p_func);
-	static LegoBool GetColorFromGlobalHandlerOrAlias(
-		const LegoChar* p_param,
-		float& p_red,
-		float& p_green,
-		float& p_blue,
-		float& p_alpha
-	);
+	static void SetColorOverride(ColorOverride p_colorOverride);
+	static LegoBool GetRGBAColor(const LegoChar* p_name, float& p_red, float& p_green, float& p_blue, float& p_alpha);
 	static LegoBool ColorAliasLookup(
 		const LegoChar* p_param,
 		float& p_red,
@@ -69,11 +63,7 @@ public:
 		float& p_blue,
 		float& p_alpha
 	);
-	static LegoBool GetPaletteEntriesFromGlobalHandler(
-		const LegoChar* p_param,
-		unsigned char* paletteEntries,
-		LegoU32 p_numEntries
-	);
+	static LegoBool GetPaletteEntries(const LegoChar* p_name, unsigned char* paletteEntries, LegoU32 p_numEntries);
 
 	// FUNCTION: BETA10 0x1000f320
 	const LegoChar* GetName() const { return m_name; }
