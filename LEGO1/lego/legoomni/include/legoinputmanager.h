@@ -74,7 +74,7 @@ public:
 		c_right = 0x02,
 		c_up = 0x04,
 		c_down = 0x08,
-		c_bit5 = 0x10,
+		c_ctrl = 0x10,
 
 		c_leftOrRight = c_left | c_right,
 		c_upOrDown = c_up | c_down
