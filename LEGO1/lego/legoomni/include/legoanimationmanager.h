@@ -32,20 +32,20 @@ struct ModelInfo {
 
 // SIZE 0x30
 struct AnimInfo {
-	char* m_name;        // 0x00
-	MxU32 m_objectId;    // 0x04
-	MxS16 m_location;    // 0x08
-	MxBool m_unk0x0a;    // 0x0a
-	MxU8 m_unk0x0b;      // 0x0b
-	MxU8 m_unk0x0c;      // 0x0c
-	MxU8 m_unk0x0d;      // 0x0d
-	float m_unk0x10[4];  // 0x10
-	MxU8 m_modelCount;   // 0x20
-	MxU16 m_unk0x22;     // 0x22
-	ModelInfo* m_models; // 0x24
-	MxS8 m_unk0x28;      // 0x28
-	MxBool m_unk0x29;    // 0x29
-	MxS8 m_unk0x2a[3];   // 0x2a
+	char* m_name;          // 0x00
+	MxU32 m_objectId;      // 0x04
+	MxS16 m_location;      // 0x08
+	MxBool m_unk0x0a;      // 0x0a
+	MxU8 m_unk0x0b;        // 0x0b
+	MxU8 m_unk0x0c;        // 0x0c
+	MxU8 m_unk0x0d;        // 0x0d
+	float m_unk0x10[4];    // 0x10
+	MxU8 m_modelCount;     // 0x20
+	MxU16 m_unk0x22;       // 0x22
+	ModelInfo* m_models;   // 0x24
+	MxS8 m_characterIndex; // 0x28
+	MxBool m_unk0x29;      // 0x29
+	MxS8 m_unk0x2a[3];     // 0x2a
 };
 
 // VTABLE: LEGO1 0x100d8d80
