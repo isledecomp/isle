@@ -33,7 +33,7 @@ public:
 	LegoResult SetTextureInfo(LegoTextureInfo* p_textureInfo);
 	LegoResult FUN_100aad70(LegoTextureInfo* p_textureInfo);
 	void ClearMeshOffset();
-	LegoResult GetTexture(LegoTextureInfo*& p_textureInfo);
+	LegoResult GetTextureInfo(LegoTextureInfo*& p_textureInfo);
 
 	static LegoBool FUN_100aae20(const LegoChar* p_name);
 

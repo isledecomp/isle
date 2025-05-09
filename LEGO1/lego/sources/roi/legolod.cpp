@@ -363,7 +363,7 @@ LegoResult LegoLOD::FUN_100aad70(LegoTextureInfo* p_textureInfo)
 }
 
 // FUNCTION: LEGO1 0x100aadc0
-LegoResult LegoLOD::GetTexture(LegoTextureInfo*& p_textureInfo)
+LegoResult LegoLOD::GetTextureInfo(LegoTextureInfo*& p_textureInfo)
 {
 	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
 		if (m_melems[i].m_unk0x04) {

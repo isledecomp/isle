@@ -542,7 +542,7 @@ LegoResult LegoROI::GetTextureInfo(LegoTextureInfo*& p_textureInfo)
 	for (LegoU32 i = 0; i < lodCount; i++) {
 		LegoLOD* lod = (LegoLOD*) GetLOD(i);
 
-		if (lod->GetTexture(p_textureInfo) == SUCCESS) {
+		if (lod->GetTextureInfo(p_textureInfo) == SUCCESS) {
 			return SUCCESS;
 		}
 	}
