@@ -195,7 +195,7 @@ MxResult LegoInputManager::GetNavigationKeyStates(MxU32& p_keyFlags)
 	}
 
 	if ((m_keyboardState[DIK_LCONTROL] | m_keyboardState[DIK_RCONTROL]) & 0x80) {
-		keyFlags |= c_bit5;
+		keyFlags |= c_ctrl;
 	}
 
 	p_keyFlags = keyFlags;
