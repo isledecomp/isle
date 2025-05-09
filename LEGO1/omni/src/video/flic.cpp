@@ -389,26 +389,30 @@ weird_code:
 		token = *(short*) data;
 		data += 2;
 
-		if (token < 0) {
-			if (token & 0x4000) {
-				goto weird_code;
-			}
-
-			WritePixel(p_bitmapHeader, p_pixelData, xmax, row, token);
-			token = *(short*) data;
-			data += 2;
-
-			// LINE: BETA10 0x1013e6ef
-			if (!token) {
-				row--;
-				if (--lines > 0) {
-					continue;
-					// return;
-				}
-				return;
-				// TODO: Something is off about these breaks and jumps -- too many JMP instructions
-			}
+		if (token >= 0) {
+			goto column_loop_2;
 		}
+		if (token & 0x4000) {
+			goto weird_code;
+		}
+
+		WritePixel(p_bitmapHeader, p_pixelData, xmax, row, token);
+		token = *(short*) data;
+		data += 2;
+
+		// LINE: BETA10 0x1013e6ef
+		if (!token) {
+			row--;
+			if (--lines > 0) {
+				continue;
+				// return;
+			}
+			return;
+			// TODO: Something is off about these breaks and jumps -- too many JMP instructions
+		}
+		// }
+
+	column_loop_2:
 		// LINE: BETA10 0x1013e71e
 		short column = xofs;
 
