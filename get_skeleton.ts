@@ -1,26 +1,83 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { config } from "dotenv";
+import "dotenv/config";
 import OpenAI from "openai";
 import pLimit from "p-limit";
+import { isWithinTokenLimit } from "gpt-tokenizer";
+import { readdirSync, readFileSync } from "node:fs";
 
-config();
+const embeddings = JSON.parse(
+	readFileSync("file_embeddings.json", "utf8"),
+) as Record<string, number[]>;
+
+const cosineDistance = (a: number[], b: number[]): number => {
+	const dotProduct = a.reduce((acc, val, i) => acc + val * b[i], 0);
+	const magnitudeA = Math.sqrt(a.reduce((acc, val) => acc + val * val, 0));
+	const magnitudeB = Math.sqrt(b.reduce((acc, val) => acc + val * val, 0));
+	return dotProduct / (magnitudeA * magnitudeB);
+};
+
+const getRelevantFiles = (embedding: number[], count: number): string[] => {
+	const result = Object.entries(embeddings)
+		.filter(([file, _]) => !file.includes("skeleton"))
+		.map(([file, fileEmbedding]) => ({
+			file,
+			distance: cosineDistance(fileEmbedding, embedding),
+		}));
+	return result
+		.sort((a, b) => a.distance - b.distance)
+		.slice(0, count)
+		.map((r) => r.file);
+};
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const getSkeleton = async (header: string, source: string): Promise<string> => {
+const OPENAI_MODEL = "text-embedding-3-large";
+const getEmbedding = async (content: string): Promise<number[]> => {
+	const token_limit = 8000;
+	let c = content;
+	while (!isWithinTokenLimit(c, token_limit)) {
+		c = c.slice(0, c.length - 100);
+	}
+	const { data } = await client.embeddings.create({
+		model: OPENAI_MODEL,
+		input: c,
+		encoding_format: "float",
+	});
+	return data[0].embedding as unknown as number[];
+};
+
+const returnInstructions =
+	"Only return the header file with added Doxygen annotations, nothing else. Do NOT return the source file. Do NOT put it into a ``` markdown code block";
+
+const getSkeleton = async (
+	header: string,
+	source: string | null,
+): Promise<string> => {
+	const embedding = await getEmbedding(header);
+	const relevantFiles = getRelevantFiles(embedding, 5);
+
+	const files = await Promise.all(
+		relevantFiles.map(async (f) => ({
+			content: await fs.readFile(f, "utf8"),
+			filename: f,
+		})),
+	);
+
 	const response = await client.responses.create({
 		model: "gpt-4.1",
 		instructions: `You will receive the code of a header and source file. Add Doxygen annotations to it.
 
 Use the documentation and source files to understand what every class, member, method and function does. Add detailed explanations for everything in the annotations.
 
-- Prefix everything you add with "[AI]" so that we can validate it later
+- Prefix everything you add with "[AI]" so that we can validate it later. Put [AI] always behind the annotation, e.g. @brief [AI]. Add this for every annotation you add: @brief [AI] / @param PARAM [AI] / @details [AI] and so on.
 - If there are already comment or annotations, add them to your annotations.
 - Ignore the cpp and reference files. They only there for you to give you some context for the annotations.
-- Don't add generic annotations that are not helpful. For example, if the function is getPosition, don't add an annotation like "Gets the position"
-- If you encounter a class/method or member that is unknown (e.g. m_unk0x10, FUN_10001510 etc.) and you know what it is or does, add a "[AI_SUGGESTED_NAME: <name>]" in the annotations to it.
-- Only return the annotated header file, nothing else. Do NOT return the source file. Do NOT put it into a \`\`\` markdown code block.
+- Don't add generic annotations that are not helpful. For example, if the function is GetPosition, don't add an annotation like "Gets the position" or if the result is LegoResult, don't add an annotation like "Result status"—thats obvious.
+- Don't add useless @return annotations that only state the type, e.g. @return unsigned long [AI]
+- If you encounter a class/method or member that is unknown (e.g. m_unk0x10, FUN_10001510, LegoUnknown100db7f4, VTable0x04 etc.) and you know what it is or does, add a "[AI_SUGGESTED_NAME: <name>]" with your suggested name in the annotations to it. But only do this if you know what it is.
+- If you encounter a class/method or member that is named the wrong way (you assume the name is wrong, misleading or erroneous) add a "[AI_SUGGESTED_CORRECTED_NAME: <name>]" in the annotations to it. Use this sparingly and only if your are sure that something is wrong. 
+- ${returnInstructions}
 
 I will now give you a rough documentation of the codebase to use as a reference:
 
@@ -312,14 +369,23 @@ Result:
 p_output = "456"
 Return value: TRUE
 
-Return just the annotated header file, nothing else. Do NOT return the source file. Do NOT put it into a \`\`\` markdown code block.
+Here are some relevant source and header files. They are just a reference for you to better understand the code:
+${files.map((f) => `### ${f.filename}\n${f.content}`).join("\n\n")}
 
-Here are some relevant source and header files. They are just a reference for you to better understand the code:`,
+${returnInstructions}`,
 		input: `Header: ${header}
-Source: $source
+${source ? `Source: ${source}` : ""}
 
-Now return just the annotated header file, nothing else. Do NOT return the source file. Do NOT put it into a \`\`\` markdown code block.`,
+${returnInstructions}`,
 	});
+	if (response.usage) {
+		console.log(
+			(
+				(response.usage.input_tokens / 1_000_000) * 2 +
+				(response.usage.output_tokens / 1_000_000) * 8
+			).toLocaleString("en-US", { style: "currency", currency: "USD" }),
+		);
+	}
 	return response.output_text;
 };
 
@@ -356,6 +422,26 @@ const ensureDir = async (dir: string): Promise<void> => {
 	await fs.mkdir(dir, { recursive: true });
 };
 
+export const findFileBackward = (dir: string, s: string): string | null => {
+	const entries = readdirSync(dir, { withFileTypes: true }).sort((a, b) =>
+		b.name.localeCompare(a.name),
+	);
+	for (let n = 0; n < entries.length; ++n) {
+		const entry = entries[n];
+		const p = path.join(dir, entry.name);
+		if (entry.isFile() && entry.name === s) {
+			return p;
+		}
+		if (entry.isDirectory()) {
+			const r = findFileBackward(p, s);
+			if (r) {
+				return r;
+			}
+		}
+	}
+	return null;
+};
+
 const handle = async (
 	n: number,
 	h: string,
@@ -363,26 +449,9 @@ const handle = async (
 	root: string,
 	outRoot: string,
 ): Promise<void> => {
-	let s = `${h.slice(0, -path.extname(h).length)}.cpp`;
-	if (!(await exists(s))) {
-		const rel = path.relative(root, h);
-		const parts = rel.split(path.sep);
-		const idx = parts.indexOf("include");
-		if (idx !== -1) {
-			parts[idx] = "source";
-			s = `${path.join(root, ...parts)}.cpp`;
-		}
-	}
-	if (!(await exists(s))) {
-		const base = `${path.basename(h, path.extname(h))}.cpp`;
-		const all = await walk(root);
-		const match = all.find((p) => path.basename(p) === base);
-		if (match) {
-			s = match;
-		}
-	}
-	if (!(await exists(s))) {
-		return;
+	const s = findFileBackward(root, `${path.basename(h, path.extname(h))}.cpp`);
+	if (!s) {
+		console.warn(`matching source file not found: ${h}`);
 	}
 	const relH = path.relative(root, h);
 	const oh = path.join(outRoot, relH);
@@ -390,15 +459,17 @@ const handle = async (
 	if (!(await exists(oh))) {
 		const skeleton = await getSkeleton(
 			await fs.readFile(h, "utf8"),
-			await fs.readFile(s, "utf8"),
+			s ? await fs.readFile(s, "utf8") : null,
 		);
 		await fs.writeFile(oh, skeleton);
 	}
-	const relS = path.relative(root, s);
-	const os = path.join(outRoot, relS);
-	await ensureDir(path.dirname(os));
-	if (!(await exists(os))) {
-		await fs.copyFile(s, os);
+	if (s) {
+		const relS = path.relative(root, s);
+		const os = path.join(outRoot, relS);
+		await ensureDir(path.dirname(os));
+		if (!(await exists(os))) {
+			await fs.copyFile(s, os);
+		}
 	}
 	console.log(`processed ${n}/${total}`);
 };
@@ -408,7 +479,7 @@ const main = async (): Promise<void> => {
 	const outRoot = path.join(root, "skeleton");
 	const headers = await walk(root);
 	const total = headers.length;
-	const limit = pLimit(1);
+	const limit = pLimit(20);
 	await Promise.all(
 		headers.map((h, i) => limit(() => handle(i + 1, h, total, root, outRoot))),
 	);

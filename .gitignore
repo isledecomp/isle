@@ -34,3 +34,4 @@ skeleton/
 .DS_Store
 node_modules
 code_embeddings.db
+file_embeddings.json
