@@ -201,6 +201,7 @@ void Hospital::ReadyWorld()
 
 		PlayAction(hospitalScript[m_hospitalState->m_unk0x0c]);
 		m_currentAction = hospitalScript[m_hospitalState->m_unk0x0c];
+		m_unk0x108 = 1;
 	}
 	else {
 		m_unk0x100 = 1;
@@ -210,9 +211,8 @@ void Hospital::ReadyWorld()
 
 		PlayAction(HospitalScript::c_hho003cl_RunAnim);
 		m_currentAction = HospitalScript::c_hho003cl_RunAnim;
+		m_unk0x108 = 1;
 	}
-
-	m_unk0x108 = 1;
 
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
