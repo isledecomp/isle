@@ -60,7 +60,7 @@ REM UAC stuff
 REM Sets
 set PATH=%cd%
 REM for /F %%A in ('echo prompt $E^| cmd') do set "ESC=%%A"
-set accuracyOfLego=Placeholder
+set accuracyOfLego=99%
 set funnyCoolThingBuildTypeIDunno=Release
 set sdkName=sdk
 setx CMakeDir /k "HKEY_LOCAL_MACHINE\SOFTWARE\Kitware\CMake\InstallDir" :: Makes a variable that returns the cmake install directory
