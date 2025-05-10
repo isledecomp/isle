@@ -875,48 +875,52 @@ undefined4 LegoCarBuild::FUN_100244e0(MxLong p_x, MxLong p_y)
 }
 
 // FUNCTION: LEGO1 0x100246e0
+// FUNCTION: BETA10 0x1006d25a
 undefined4 LegoCarBuild::FUN_100246e0(MxLong p_x, MxLong p_y)
 {
+	undefined4 result = 0;
+
 	switch (m_unk0x100) {
 	case 3:
 		FUN_10022f30();
-		return 1;
+		result = 1;
+		break;
 	case 4:
 		FUN_10022f00();
-		return 1;
+		result = 1;
+		break;
 	case 6:
-		if (m_unk0x258->PartIsPlaced(m_unk0x110->GetName())) {
-			if (SpheresIntersect(m_unk0x114, m_unk0x110->GetWorldBoundingSphere())) {
-				FUN_10024f70(FALSE);
-				FUN_100250e0(FALSE);
-				m_unk0x100 = 0;
-				m_unk0x110 = NULL;
-				m_PlaceBrick_Sound->Enable(FALSE);
-				m_PlaceBrick_Sound->Enable(TRUE);
-				m_unk0x258->SetUnknown0xbc(1);
-				return 1;
-			}
+		if (m_unk0x258->PartIsPlaced(m_unk0x110->GetName()) &&
+			SpheresIntersect(m_unk0x114, m_unk0x110->GetWorldBoundingSphere())) {
+			FUN_10024f70(FALSE);
+			FUN_100250e0(FALSE);
+			m_unk0x100 = 0;
+			m_unk0x110 = NULL;
+			m_PlaceBrick_Sound->Enable(FALSE);
+			m_PlaceBrick_Sound->Enable(TRUE);
+			m_unk0x258->SetUnknown0xbc(1);
 		}
-
-		if (m_unk0x258->FUN_10079c30(m_unk0x110->GetName())) {
+		else if (m_unk0x258->FUN_10079c30(m_unk0x110->GetName())) {
 			if (SpheresIntersect(m_unk0x114, m_unk0x110->GetWorldBoundingSphere())) {
 				m_PlaceBrick_Sound->Enable(FALSE);
 				m_PlaceBrick_Sound->Enable(TRUE);
 				FUN_100236d0();
-				return 1;
 			}
-
+			else {
+				VTable0x6c();
+				m_unk0x100 = 5;
+			}
+		}
+		else {
 			VTable0x6c();
 			m_unk0x100 = 5;
-			return 1;
 		}
 
-		VTable0x6c();
-		m_unk0x100 = 5;
-		return 1;
-	default:
-		return 0;
+		result = 1;
+		break;
 	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10024850
