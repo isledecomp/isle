@@ -97,7 +97,7 @@ if "%dumbAss%"=="1" goto SetDebug
 if "%dumbAss%"=="2" goto SetRelease
 if "%dumbAss%"=="3" goto SetMinSizeRel
 if "%dumbAss%"=="4" goto SetRelWithDebInfo
-if "%dumbAss%"=="5" goto CMakeDirTest
+REM if "%dumbAss%"=="5" goto CMakeDirTest
 
 :SetDebug
 set funnyCoolThingBuildTypeIDunno=Debug
