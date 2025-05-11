@@ -216,8 +216,8 @@ MxResult MxMusicManager::InitializeMIDI(MxU8* p_data, MxS32 p_loopCount)
 		MxU32 device = 0;
 
 		for (; device < total; device++) {
-			MIDIOUTCAPSA caps;
-			midiOutGetDevCaps(device, &caps, sizeof(MIDIOUTCAPSA));
+			MIDIOUTCAPS caps;
+			midiOutGetDevCaps(device, &caps, sizeof(MIDIOUTCAPS));
 			if (caps.wTechnology == MOD_FMSYNTH) {
 				break;
 			}
