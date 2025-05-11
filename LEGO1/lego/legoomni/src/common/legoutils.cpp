@@ -565,7 +565,7 @@ void EnableAnimations(MxBool p_enable)
 // FUNCTION: LEGO1 0x1003ef40
 void SetAppCursor(Cursor p_cursor)
 {
-	PostMessageA(MxOmni::GetInstance()->GetWindowHandle(), WM_ISLE_SETCURSOR, p_cursor, 0);
+	PostMessage(MxOmni::GetInstance()->GetWindowHandle(), WM_ISLE_SETCURSOR, p_cursor, 0);
 }
 
 // FUNCTION: LEGO1 0x1003ef60
