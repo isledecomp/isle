@@ -179,7 +179,7 @@ BOOL IsleApp::SetupLegoOmni()
 {
 	BOOL result = FALSE;
 	char mediaPath[256];
-	GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, sizeof(mediaPath));
+	GetProfileString("LEGO Island", "MediaPath", "", mediaPath, sizeof(mediaPath));
 
 #ifdef COMPAT_MODE
 	BOOL failure;
@@ -251,7 +251,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// Throw error if sound unavailable
 	if (!soundReady) {
-		MessageBoxA(
+		MessageBox(
 			NULL,
 			"\"LEGO\xAE Island\" is not detecting a DirectSound compatible sound card.  Please quit all other "
 			"applications and try again.",
@@ -266,7 +266,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// Create window
 	if (g_isle->SetupWindow(hInstance, lpCmdLine) != SUCCESS) {
-		MessageBoxA(
+		MessageBox(
 			NULL,
 			"\"LEGO\xAE Island\" failed to start.  Please quit all other applications and try again.",
 			"LEGO\xAE Island Error",
@@ -287,12 +287,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// sample for MSVC600. It's quite possible Mindscape derived this app from that example since they no longer had the
 	// luxury of the MFC AppWizard which we know they used for the frontend used during development (ISLEMFC.EXE,
 	// MAIN.EXE, et al.)
-	LoadAcceleratorsA(hInstance, "AppAccel");
+	LoadAccelerators(hInstance, "AppAccel");
 
 	MSG msg;
 
 	while (!g_closed) {
-		while (!PeekMessageA(&msg, NULL, 0, 0, PM_NOREMOVE)) {
+		while (!PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
 			if (g_isle) {
 				g_isle->Tick(1);
 			}
@@ -303,15 +303,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 
 		while (!g_closed) {
-			if (!PeekMessageA(&msg, NULL, 0, 0, PM_REMOVE)) {
+			if (!PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 				break;
 			}
 
 			MSG nextMsg;
 			if (!g_isle || !g_isle->GetWindowHandle() || msg.message != WM_MOUSEMOVE ||
-				!PeekMessageA(&nextMsg, NULL, 0, 0, PM_NOREMOVE) || nextMsg.message != WM_MOUSEMOVE) {
+				!PeekMessage(&nextMsg, NULL, 0, 0, PM_NOREMOVE) || nextMsg.message != WM_MOUSEMOVE) {
 				TranslateMessage(&msg);
-				DispatchMessageA(&msg);
+				DispatchMessage(&msg);
 			}
 
 			if (g_reqEnableRMDevice) {
@@ -343,7 +343,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 // FUNCTION: ISLE 0x401ca0
 BOOL FindExistingInstance()
 {
-	HWND hWnd = FindWindowA(WNDCLASS_NAME, WINDOW_TITLE);
+	HWND hWnd = FindWindow(WNDCLASS_NAME, WINDOW_TITLE);
 	if (hWnd) {
 		if (SetForegroundWindow(hWnd)) {
 			ShowWindow(hWnd, SW_RESTORE);
@@ -373,14 +373,14 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	unsigned char keyCode = 0;
 
 	if (!g_isle) {
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
 
 	switch (uMsg) {
 	case WM_PAINT:
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	case WM_ACTIVATE:
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	case WM_ACTIVATEAPP:
 		if (g_isle) {
 			if ((wParam != 0) && (g_isle->GetFullScreen())) {
@@ -395,7 +395,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 			g_isle->SetWindowActive(wParam);
 		}
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	case WM_CLOSE:
 		if (!g_closed && g_isle) {
 			delete g_isle;
@@ -403,7 +403,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			g_closed = TRUE;
 			return 0;
 		}
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	case WM_GETMINMAXINFO:
 		((MINMAXINFO*) lParam)->ptMaxTrackSize.x = (g_windowRect.right - g_windowRect.left) + 1;
 		((MINMAXINFO*) lParam)->ptMaxTrackSize.y = (g_windowRect.bottom - g_windowRect.top) + 1;
@@ -411,7 +411,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		((MINMAXINFO*) lParam)->ptMinTrackSize.y = (g_windowRect.bottom - g_windowRect.top) + 1;
 		return 0;
 	case WM_ENTERMENULOOP:
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	case WM_SYSCOMMAND:
 		if (wParam == SC_SCREENSAVE) {
 			return 0;
@@ -421,27 +421,27 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				if (g_rmDisabled) {
 					ShowWindow(g_isle->GetWindowHandle(), SW_RESTORE);
 				}
-				PostMessageA(g_isle->GetWindowHandle(), WM_CLOSE, 0, 0);
+				PostMessage(g_isle->GetWindowHandle(), WM_CLOSE, 0, 0);
 				return 0;
 			}
 		}
 		else if (g_isle && g_isle->GetFullScreen() && (wParam == SC_MOVE || wParam == SC_KEYMENU)) {
 			return 0;
 		}
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	case WM_EXITMENULOOP:
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	case WM_MOVING:
 		if (g_isle && g_isle->GetFullScreen()) {
 			GetWindowRect(hWnd, (LPRECT) lParam);
 			return 0;
 		}
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	case WM_NCPAINT:
 		if (g_isle && g_isle->GetFullScreen()) {
 			return 0;
 		}
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	case WM_DISPLAYCHANGE:
 		if (g_isle && VideoManager() && g_isle->GetFullScreen() && VideoManager()->GetDirect3D()) {
 			if (VideoManager()->GetDirect3D()->AssignedDevice()) {
@@ -474,12 +474,12 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 			}
 		}
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	case WM_KEYDOWN:
 		// While this probably should be (HIWORD(lParam) & KF_REPEAT), this seems
 		// to be what the assembly is actually doing
 		if (lParam & (KF_REPEAT << 16)) {
-			return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+			return DefWindowProc(hWnd, uMsg, wParam, lParam);
 		}
 		type = c_notificationKeyPress;
 		keyCode = wParam;
@@ -513,7 +513,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	default:
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
 
 	if (g_isle) {
@@ -559,7 +559,7 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 	MxOmni::SetSound3D(m_use3dSound);
 
 	srand(timeGetTime() / 1000);
-	SystemParametersInfoA(SPI_SETMOUSETRAILS, 0, NULL, 0);
+	SystemParametersInfo(SPI_SETMOUSETRAILS, 0, NULL, 0);
 
 	ZeroMemory(&wndclass, sizeof(WNDCLASSA));
 
@@ -567,22 +567,22 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 	wndclass.style = CS_HREDRAW | CS_VREDRAW;
 	wndclass.lpfnWndProc = WndProc;
 	wndclass.cbWndExtra = 0;
-	wndclass.hIcon = LoadIconA(hInstance, MAKEINTRESOURCEA(APP_ICON));
-	wndclass.hCursor = m_cursorArrow = m_cursorCurrent = LoadCursorA(hInstance, MAKEINTRESOURCEA(ISLE_ARROW));
-	m_cursorBusy = LoadCursorA(hInstance, MAKEINTRESOURCEA(ISLE_BUSY));
-	m_cursorNo = LoadCursorA(hInstance, MAKEINTRESOURCEA(ISLE_NO));
+	wndclass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(APP_ICON));
+	wndclass.hCursor = m_cursorArrow = m_cursorCurrent = LoadCursor(hInstance, MAKEINTRESOURCE(ISLE_ARROW));
+	m_cursorBusy = LoadCursor(hInstance, MAKEINTRESOURCE(ISLE_BUSY));
+	m_cursorNo = LoadCursor(hInstance, MAKEINTRESOURCE(ISLE_NO));
 	wndclass.hInstance = hInstance;
 	wndclass.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
 	wndclass.lpszClassName = WNDCLASS_NAME;
 
-	if (!RegisterClassA(&wndclass)) {
+	if (!RegisterClass(&wndclass)) {
 		return FAILURE;
 	}
 
 	if (m_fullScreen) {
 		AdjustWindowRectEx(&g_windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
 
-		m_windowHandle = CreateWindowExA(
+		m_windowHandle = CreateWindowEx(
 			WS_EX_APPWINDOW,
 			WNDCLASS_NAME,
 			WINDOW_TITLE,
@@ -600,7 +600,7 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 	else {
 		AdjustWindowRectEx(&g_windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
 
-		m_windowHandle = CreateWindowExA(
+		m_windowHandle = CreateWindowEx(
 			WS_EX_APPWINDOW,
 			WNDCLASS_NAME,
 			WINDOW_TITLE,
@@ -690,8 +690,8 @@ BOOL IsleApp::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 
 	BOOL out = FALSE;
 	DWORD size = outSize;
-	if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Mindscape\\LEGO Island", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
-		if (RegQueryValueExA(hKey, name, NULL, &valueType, (LPBYTE) outValue, &size) == ERROR_SUCCESS) {
+	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Mindscape\\LEGO Island", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+		if (RegQueryValueEx(hKey, name, NULL, &valueType, (LPBYTE) outValue, &size) == ERROR_SUCCESS) {
 			if (RegCloseKey(hKey) == ERROR_SUCCESS) {
 				out = TRUE;
 			}

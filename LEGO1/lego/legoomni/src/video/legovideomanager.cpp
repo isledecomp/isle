@@ -398,7 +398,7 @@ void LegoVideoManager::DrawFPS()
 	char zeros[8] = "0000.00";
 
 	if (m_unk0x528 == NULL) {
-		m_arialFont = CreateFontA(
+		m_arialFont = CreateFont(
 			12,
 			0,
 			0,
@@ -417,7 +417,7 @@ void LegoVideoManager::DrawFPS()
 
 		HDC dc = GetDC(NULL);
 		SelectObject(dc, m_arialFont);
-		GetTextExtentPointA(dc, zeros, strlen(zeros), &m_fpsSize);
+		GetTextExtentPoint(dc, zeros, strlen(zeros), &m_fpsSize);
 		ReleaseDC(NULL, dc);
 
 		m_unk0x528 = m_displaySurface->FUN_100bc8b0(m_fpsSize.cx, m_fpsSize.cy);
@@ -493,11 +493,11 @@ void LegoVideoManager::DrawFPS()
 			SetTextColor(dc, RGB(255, 255, 0));
 			SetBkColor(dc, RGB(0, 0, 0));
 			SetBkMode(dc, OPAQUE);
-			GetTextExtentPoint32A(dc, buffer, nb, &m_fpsSize);
+			GetTextExtentPoint32(dc, buffer, nb, &m_fpsSize);
 
 			RECT rect;
 			SetRect(&rect, 0, 0, m_fpsSize.cx, m_fpsSize.cy);
-			ExtTextOutA(dc, 0, 0, ETO_OPAQUE, &rect, buffer, nb, NULL);
+			ExtTextOut(dc, 0, 0, ETO_OPAQUE, &rect, buffer, nb, NULL);
 			m_unk0x528->ReleaseDC(dc);
 			m_unk0x550 = 1.f;
 		}

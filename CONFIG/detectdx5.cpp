@@ -22,7 +22,7 @@ void DetectDirectX(unsigned int* p_version, BOOL* p_found)
 	OSVERSIONINFOA os_version;
 
 	os_version.dwOSVersionInfoSize = sizeof(os_version);
-	if (!GetVersionExA(&os_version)) {
+	if (!GetVersionEx(&os_version)) {
 		*p_version = 0;
 		*p_found = 0;
 		return;
@@ -38,16 +38,16 @@ void DetectDirectX(unsigned int* p_version, BOOL* p_found)
 			return;
 		}
 		*p_version = 0x200;
-		HMODULE dinput_module = LoadLibraryA("DINPUT.DLL");
+		HMODULE dinput_module = LoadLibrary("DINPUT.DLL");
 		if (!dinput_module) {
-			OutputDebugStringA("Couldn't LoadLibrary DInput\r\n");
+			OutputDebugString("Couldn't LoadLibrary DInput\r\n");
 			return;
 		}
 		DirectInputCreateA_fn* func_DirectInputCreateA =
 			(DirectInputCreateA_fn*) GetProcAddress(dinput_module, "DirectInputCreateA");
 		FreeLibrary(dinput_module);
 		if (!func_DirectInputCreateA) {
-			OutputDebugStringA("Couldn't GetProcAddress DInputCreate\r\n");
+			OutputDebugString("Couldn't GetProcAddress DInputCreate\r\n");
 			return;
 		}
 		*p_version = 0x300;
@@ -58,7 +58,7 @@ void DetectDirectX(unsigned int* p_version, BOOL* p_found)
 		*p_version = 0x501;
 		return;
 	}
-	HMODULE ddraw_module = LoadLibraryA("DDRAW.DLL");
+	HMODULE ddraw_module = LoadLibrary("DDRAW.DLL");
 	if (!ddraw_module) {
 		*p_version = 0;
 		*p_found = 0;
@@ -71,7 +71,7 @@ void DetectDirectX(unsigned int* p_version, BOOL* p_found)
 		*p_version = 0;
 		*p_found = 0;
 		FreeLibrary(ddraw_module);
-		OutputDebugStringA("Couldn't LoadLibrary DDraw\r\n");
+		OutputDebugString("Couldn't LoadLibrary DDraw\r\n");
 		return;
 	}
 	LPDIRECTDRAW ddraw;
@@ -79,7 +79,7 @@ void DetectDirectX(unsigned int* p_version, BOOL* p_found)
 		*p_version = 0;
 		*p_found = 0;
 		FreeLibrary(ddraw_module);
-		OutputDebugStringA("Couldn't create DDraw\r\n");
+		OutputDebugString("Couldn't create DDraw\r\n");
 		return;
 	}
 	*p_version = 0x100;
@@ -87,14 +87,14 @@ void DetectDirectX(unsigned int* p_version, BOOL* p_found)
 	if (FAILED(ddraw->QueryInterface(IID_IDirectDraw2, (LPVOID*) &ddraw2))) {
 		ddraw->Release();
 		FreeLibrary(ddraw_module);
-		OutputDebugStringA("Couldn't QI DDraw2\r\n");
+		OutputDebugString("Couldn't QI DDraw2\r\n");
 		return;
 	}
 	ddraw->Release();
 	*p_version = 0x200;
-	HMODULE dinput_module = LoadLibraryA("DINPUT.DLL");
+	HMODULE dinput_module = LoadLibrary("DINPUT.DLL");
 	if (!dinput_module) {
-		OutputDebugStringA("Couldn't LoadLibrary DInput\r\n");
+		OutputDebugString("Couldn't LoadLibrary DInput\r\n");
 		ddraw2->Release();
 		FreeLibrary(ddraw_module);
 		return;
@@ -105,7 +105,7 @@ void DetectDirectX(unsigned int* p_version, BOOL* p_found)
 	if (!func_DirectInputCreateA) {
 		FreeLibrary(ddraw_module);
 		ddraw2->Release();
-		OutputDebugStringA("Couldn't GetProcAddress DInputCreate\r\n");
+		OutputDebugString("Couldn't GetProcAddress DInputCreate\r\n");
 		return;
 	}
 	*p_version = 0x300;
@@ -118,7 +118,7 @@ void DetectDirectX(unsigned int* p_version, BOOL* p_found)
 		ddraw2->Release();
 		FreeLibrary(ddraw_module);
 		*p_version = 0;
-		OutputDebugStringA("Couldn't Set coop level\r\n");
+		OutputDebugString("Couldn't Set coop level\r\n");
 		return;
 	}
 	LPDIRECTDRAWSURFACE surface;
@@ -126,7 +126,7 @@ void DetectDirectX(unsigned int* p_version, BOOL* p_found)
 		ddraw2->Release();
 		FreeLibrary(ddraw_module);
 		*p_version = 0;
-		OutputDebugStringA("Couldn't CreateSurface\r\n");
+		OutputDebugString("Couldn't CreateSurface\r\n");
 		return;
 	}
 	LPDIRECTDRAWSURFACE3 surface3;

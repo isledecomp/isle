@@ -106,7 +106,7 @@ BOOL CConfigApp::InitInstance()
 // FUNCTION: CONFIG 0x00403100
 BOOL CConfigApp::IsLegoNotRunning()
 {
-	HWND hWnd = FindWindowA("Lego Island MainNoM App", "LEGO\xae");
+	HWND hWnd = FindWindow("Lego Island MainNoM App", "LEGO\xae");
 	if (_stricmp(afxCurrentAppName, "config") == 0 || !hWnd) {
 		return TRUE;
 	}
@@ -122,7 +122,7 @@ BOOL CConfigApp::WriteReg(const char* p_key, const char* p_value) const
 	HKEY hKey;
 	DWORD pos;
 
-	if (RegCreateKeyExA(
+	if (RegCreateKeyEx(
 			HKEY_LOCAL_MACHINE,
 			"SOFTWARE\\Mindscape\\LEGO Island",
 			0,
@@ -133,7 +133,7 @@ BOOL CConfigApp::WriteReg(const char* p_key, const char* p_value) const
 			&hKey,
 			&pos
 		) == ERROR_SUCCESS) {
-		if (RegSetValueExA(hKey, p_key, 0, REG_SZ, (LPBYTE) p_value, strlen(p_value)) == ERROR_SUCCESS) {
+		if (RegSetValueEx(hKey, p_key, 0, REG_SZ, (LPBYTE) p_value, strlen(p_value)) == ERROR_SUCCESS) {
 			if (RegCloseKey(hKey) == ERROR_SUCCESS) {
 				return TRUE;
 			}
@@ -153,8 +153,8 @@ BOOL CConfigApp::ReadReg(LPCSTR p_key, LPCSTR p_value, DWORD p_size) const
 
 	BOOL out = FALSE;
 	DWORD size = p_size;
-	if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Mindscape\\LEGO Island", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
-		if (RegQueryValueExA(hKey, p_key, NULL, &valueType, (LPBYTE) p_value, &size) == ERROR_SUCCESS) {
+	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Mindscape\\LEGO Island", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+		if (RegQueryValueEx(hKey, p_key, NULL, &valueType, (LPBYTE) p_value, &size) == ERROR_SUCCESS) {
 			if (RegCloseKey(hKey) == ERROR_SUCCESS) {
 				out = TRUE;
 			}
