@@ -503,7 +503,7 @@ MxLong Isle::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 			break;
 		case 0x131:
 			if (m_act1state->m_unk0x018 != 10) {
-				AnimationManager()->FUN_10064740(FALSE);
+				AnimationManager()->FUN_10064740(NULL);
 			}
 			result = 1;
 			break;
