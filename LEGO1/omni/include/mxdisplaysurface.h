@@ -109,7 +109,7 @@ public:
 		MxU8 p_bpp
 	);
 
-	LPDIRECTDRAWSURFACE FUN_100bc8b0(MxS32 width, MxS32 height);
+	LPDIRECTDRAWSURFACE FUN_100bc8b0(MxS32 p_width, MxS32 p_height);
 
 private:
 	MxU8 CountTotalBitsSetTo1(MxU32 p_param);

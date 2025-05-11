@@ -1369,7 +1369,7 @@ void MxDisplaySurface::VTable0x2c(
 }
 
 // FUNCTION: LEGO1 0x100bc8b0
-LPDIRECTDRAWSURFACE MxDisplaySurface::FUN_100bc8b0(MxS32 width, MxS32 height)
+LPDIRECTDRAWSURFACE MxDisplaySurface::FUN_100bc8b0(MxS32 p_width, MxS32 p_height)
 {
 	LPDIRECTDRAWSURFACE surface = NULL;
 
@@ -1388,8 +1388,8 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::FUN_100bc8b0(MxS32 width, MxS32 height)
 		return NULL;
 	}
 
-	surfaceDesc.dwWidth = width;
-	surfaceDesc.dwHeight = height;
+	surfaceDesc.dwWidth = p_width;
+	surfaceDesc.dwHeight = p_height;
 	surfaceDesc.dwFlags = DDSD_PIXELFORMAT | DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
 	surfaceDesc.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
 
