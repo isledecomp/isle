@@ -18,6 +18,10 @@ RUN unzip cmake-3.26.6-windows-i386.zip -d ~/.wine/drive_c
 RUN mv ~/.wine/drive_c/cmake-3.26.6-windows-i386 ~/.wine/drive_c/cmake
 RUN rm cmake-3.26.6-windows-i386.zip
 
+RUN wget https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-win.zip
+RUN unzip ninja-win.zip -d ~/.wine/drive_c
+RUN rm ninja-win.zip
+
 # Set up entrypoint script to perform the build
 COPY entrypoint.sh entrypoint.sh
 RUN chmod +x entrypoint.sh
