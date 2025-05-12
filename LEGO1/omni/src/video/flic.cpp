@@ -375,27 +375,25 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 	// LINE: BETA10 0x1013e666
 	short row = p_flcHeader->height - yofs - 1;
 
-	goto row_loop;
+	goto start_packet;
 
-weird_code:
-	// This is very ugly, but it does yield the correct layout. This _may_ be correct.
-	// it may correlate to finishing one row of pixels.
+skip_lines:
+	// The layout in BETA10 strongly suggests that lots of `goto`s are used.
 	// LINE: BETA10 0x1013e684
 	row += token;
 
-row_loop:
-	// while (TRUE) {
+start_packet:
 	do {
 		// LINE: BETA10 0x1013e692
 		token = *(short*) data;
 		data += 2;
 
 		if (token >= 0) {
-			goto column_loop_2;
+			goto column_loop;
 		}
 		// TODO: Can't get this if-check to be quite right. Union type didn't help either
 		if (token & 0x4000) {
-			goto weird_code;
+			goto skip_lines;
 		}
 
 		WritePixel(p_bitmapHeader, p_pixelData, xmax, row, token);
@@ -406,18 +404,17 @@ row_loop:
 		if (!token) {
 			row--;
 			if (--lines > 0) {
-				goto row_loop;
+				goto start_packet;
 			}
 			break;
 		}
-		break;
-	// }
 
-column_loop_2:
-	// LINE: BETA10 0x1013e71e
-	short column = xofs;
+		// TODO: Something is still slightly incorrect here - orig has two `jmp`s, recomp only has one
 
-	// do {
+	column_loop:
+		// LINE: BETA10 0x1013e71e
+		short column = xofs;
+
 	column_loop_inner:
 		// LINE: BETA10 0x1013e726
 		column += *data++;
@@ -435,7 +432,7 @@ column_loop_2:
 			}
 			row--;
 			if (--lines > 0) {
-				goto row_loop;
+				goto start_packet;
 			}
 			break;
 		}
@@ -447,14 +444,14 @@ column_loop_2:
 		column += type;
 		// LINE: BETA10 0x1013e813
 		if (--token != 0) {
-			// Should be equivalent to `continue`, but it doesn't produce the same assembly
 			goto column_loop_inner;
 		}
 		row--;
 		if (--lines > 0) {
-			goto row_loop;
+			goto start_packet;
 		}
 		return;
+		// the `while (0)` looks off, but produces the correct `jmp` instructions near the end
 	} while (0);
 }
 
