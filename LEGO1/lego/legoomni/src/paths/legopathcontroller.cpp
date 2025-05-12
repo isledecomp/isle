@@ -71,12 +71,12 @@ LegoPathController::LegoPathController()
 {
 	m_boundaries = NULL;
 	m_edges = NULL;
-	m_unk0x10 = NULL;
+	m_nodes = NULL;
 	m_structs = NULL;
-	m_numL = 0;
-	m_numE = 0;
-	m_numN = 0;
-	m_numT = 0;
+	m_numBoundaries = 0;
+	m_numEdges = 0;
+	m_numNodes = 0;
+	m_numStructs = 0;
 }
 
 // FUNCTION: LEGO1 0x10045880
@@ -89,15 +89,15 @@ MxResult LegoPathController::Create(MxU8* p_data, const Vector3& p_location, con
 	if ((result = Read(&storage)) == SUCCESS) {
 		MxS32 i;
 
-		for (i = 0; i < m_numT; i++) {
+		for (i = 0; i < m_numStructs; i++) {
 			m_structs[i].SetAtomId(p_trigger);
 		}
 
-		for (i = 0; i < m_numN; i++) {
-			m_unk0x10[i] += p_location;
+		for (i = 0; i < m_numNodes; i++) {
+			m_nodes[i] += p_location;
 		}
 
-		for (i = 0; i < m_numL; i++) {
+		for (i = 0; i < m_numBoundaries; i++) {
 			LegoPathBoundary& boundary = m_boundaries[i];
 			MxS32 j;
 
@@ -142,25 +142,25 @@ void LegoPathController::Destroy()
 		delete[] m_boundaries;
 	}
 	m_boundaries = NULL;
-	m_numL = 0;
+	m_numBoundaries = 0;
 
-	if (m_unk0x10 != NULL) {
-		delete[] m_unk0x10;
+	if (m_nodes != NULL) {
+		delete[] m_nodes;
 	}
-	m_unk0x10 = NULL;
-	m_numN = 0;
+	m_nodes = NULL;
+	m_numNodes = 0;
 
 	if (m_structs != NULL) {
 		delete[] m_structs;
 	}
 	m_structs = NULL;
-	m_numT = 0;
+	m_numStructs = 0;
 
 	if (m_edges != NULL) {
 		delete[] m_edges;
 	}
 	m_edges = NULL;
-	m_numE = 0;
+	m_numEdges = 0;
 
 	MxS32 j;
 	for (j = 0; j < sizeOfArray(g_unk0x100f42f0); j++) {
@@ -253,7 +253,7 @@ MxResult LegoPathController::PlaceActor(
 		p_actor->SetController(NULL);
 	}
 
-	for (MxS32 i = 0; i < m_numL; i++) {
+	for (MxS32 i = 0; i < m_numBoundaries; i++) {
 		LegoPathBoundary& b = m_boundaries[i];
 		LegoAnimPresenterSet& presenters = b.GetPresenters();
 		LegoAnimPresenter* presenter = p_presenter;
@@ -333,7 +333,7 @@ MxResult LegoPathController::RemoveActor(LegoPathActor* p_actor)
 	p_actor->VTable0xc4();
 	m_actors.erase(p_actor);
 
-	for (MxS32 i = 0; i < m_numL; i++) {
+	for (MxS32 i = 0; i < m_numBoundaries; i++) {
 		if (m_boundaries[i].RemoveActor(p_actor) == SUCCESS) {
 			result = SUCCESS;
 		}
@@ -346,7 +346,7 @@ MxResult LegoPathController::RemoveActor(LegoPathActor* p_actor)
 // FUNCTION: BETA10 0x100b72f7
 void LegoPathController::FUN_100468f0(LegoAnimPresenter* p_presenter)
 {
-	for (MxS32 i = 0; i < m_numL; i++) {
+	for (MxS32 i = 0; i < m_numBoundaries; i++) {
 		if (!(m_boundaries[i].m_flags & LegoWEGEdge::c_bit3)) {
 			m_boundaries[i].FUN_10057fe0(p_presenter);
 		}
@@ -357,7 +357,7 @@ void LegoPathController::FUN_100468f0(LegoAnimPresenter* p_presenter)
 // FUNCTION: BETA10 0x100b737b
 void LegoPathController::FUN_10046930(LegoAnimPresenter* p_presenter)
 {
-	for (MxS32 i = 0; i < m_numL; i++) {
+	for (MxS32 i = 0; i < m_numBoundaries; i++) {
 		m_boundaries[i].FUN_100586e0(p_presenter);
 	}
 }
@@ -385,7 +385,7 @@ void LegoPathController::FUN_10046970()
 MxResult LegoPathController::FUN_10046b30(LegoPathBoundary*& p_boundaries, MxS32& p_numL)
 {
 	p_boundaries = m_boundaries;
-	p_numL = m_numL;
+	p_numL = m_numBoundaries;
 	return SUCCESS;
 }
 
@@ -393,7 +393,7 @@ MxResult LegoPathController::FUN_10046b30(LegoPathBoundary*& p_boundaries, MxS32
 // FUNCTION: BETA10 0x100b7531
 LegoPathBoundary* LegoPathController::GetPathBoundary(const char* p_name)
 {
-	for (MxS32 i = 0; i < m_numL; i++) {
+	for (MxS32 i = 0; i < m_numBoundaries; i++) {
 		if (!strcmpi(m_boundaries[i].GetName(), p_name)) {
 			return &m_boundaries[i];
 		}
@@ -406,7 +406,7 @@ LegoPathBoundary* LegoPathController::GetPathBoundary(const char* p_name)
 // FUNCTION: BETA10 0x100b75bc
 void LegoPathController::FUN_10046bb0(LegoWorld* p_world)
 {
-	for (MxS32 i = 0; i < m_numT; i++) {
+	for (MxS32 i = 0; i < m_numStructs; i++) {
 		m_structs[i].SetWorld(p_world);
 	}
 }
@@ -461,55 +461,55 @@ MxResult LegoPathController::Reset()
 // FUNCTION: BETA10 0x100b781f
 MxResult LegoPathController::Read(LegoStorage* p_storage)
 {
-	if (p_storage->Read(&m_numT, sizeof(m_numT)) != SUCCESS) {
+	if (p_storage->Read(&m_numStructs, sizeof(m_numStructs)) != SUCCESS) {
 		return FAILURE;
 	}
-	if (m_numT > 0) {
-		m_structs = new LegoPathStruct[m_numT];
+	if (m_numStructs > 0) {
+		m_structs = new LegoPathStruct[m_numStructs];
 	}
 
-	if (p_storage->Read(&m_numN, sizeof(m_numN)) != SUCCESS) {
+	if (p_storage->Read(&m_numNodes, sizeof(m_numNodes)) != SUCCESS) {
 		return FAILURE;
 	}
-	if (m_numN > 0) {
-		m_unk0x10 = new Mx3DPointFloat[m_numN];
+	if (m_numNodes > 0) {
+		m_nodes = new Mx3DPointFloat[m_numNodes];
 	}
 
-	if (p_storage->Read(&m_numE, sizeof(m_numE)) != SUCCESS) {
+	if (p_storage->Read(&m_numEdges, sizeof(m_numEdges)) != SUCCESS) {
 		return FAILURE;
 	}
-	if (m_numE > 0) {
-		m_edges = new LegoPathCtrlEdge[m_numE];
+	if (m_numEdges > 0) {
+		m_edges = new LegoPathCtrlEdge[m_numEdges];
 	}
 
-	if (p_storage->Read(&m_numL, sizeof(m_numL)) != SUCCESS) {
+	if (p_storage->Read(&m_numBoundaries, sizeof(m_numBoundaries)) != SUCCESS) {
 		return FAILURE;
 	}
-	if (m_numL > 0) {
-		m_boundaries = new LegoPathBoundary[m_numL];
+	if (m_numBoundaries > 0) {
+		m_boundaries = new LegoPathBoundary[m_numBoundaries];
 	}
 
-	if (m_numT > 0 && ReadStructs(p_storage) != SUCCESS) {
+	if (m_numStructs > 0 && ReadStructs(p_storage) != SUCCESS) {
 		return FAILURE;
 	}
 
-	if (m_numN > 0) {
-		for (MxS32 i = 0; i < m_numN; i++) {
-			if (ReadVector(p_storage, m_unk0x10[i]) != SUCCESS) {
+	if (m_numNodes > 0) {
+		for (MxS32 i = 0; i < m_numNodes; i++) {
+			if (ReadVector(p_storage, m_nodes[i]) != SUCCESS) {
 				return FAILURE;
 			}
 		}
 	}
 
-	if (m_numE > 0 && ReadEdges(p_storage) != SUCCESS) {
+	if (m_numEdges > 0 && ReadEdges(p_storage) != SUCCESS) {
 		return FAILURE;
 	}
 
-	if (m_numL > 0 && ReadBoundaries(p_storage) != SUCCESS) {
+	if (m_numBoundaries > 0 && ReadBoundaries(p_storage) != SUCCESS) {
 		return FAILURE;
 	}
 
-	for (MxS32 j = 0; j < m_numE; j++) {
+	for (MxS32 j = 0; j < m_numEdges; j++) {
 		m_pfsE.insert(&m_edges[j]);
 	}
 
@@ -520,7 +520,7 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 // FUNCTION: BETA10 0x100b7cd6
 MxResult LegoPathController::ReadStructs(LegoStorage* p_storage)
 {
-	for (MxS32 i = 0; i < m_numT; i++) {
+	for (MxS32 i = 0; i < m_numStructs; i++) {
 		MxU8 length = 0;
 
 		if (p_storage->Read(&length, sizeof(length)) != SUCCESS) {
@@ -549,7 +549,7 @@ MxResult LegoPathController::ReadStructs(LegoStorage* p_storage)
 // FUNCTION: BETA10 0x100b7df3
 MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 {
-	for (MxS32 i = 0; i < m_numE; i++) {
+	for (MxS32 i = 0; i < m_numEdges; i++) {
 		LegoPathCtrlEdge& edge = m_edges[i];
 		MxU16 s;
 
@@ -560,12 +560,12 @@ MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 		if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 			return FAILURE;
 		}
-		edge.m_pointA = &m_unk0x10[s];
+		edge.m_pointA = &m_nodes[s];
 
 		if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 			return FAILURE;
 		}
-		edge.m_pointB = &m_unk0x10[s];
+		edge.m_pointB = &m_nodes[s];
 
 		if (edge.m_flags & LegoUnknown100db7f4::c_bit3) {
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
@@ -617,7 +617,7 @@ MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 // FUNCTION: BETA10 0x100b8293
 MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 {
-	for (MxS32 i = 0; i < m_numL; i++) {
+	for (MxS32 i = 0; i < m_numBoundaries; i++) {
 		LegoPathBoundary& boundary = m_boundaries[i];
 		MxU8 numE;
 		MxU16 s;
@@ -975,7 +975,7 @@ MxResult LegoPathController::FUN_1004a380(
 	Mx3DPointFloat local24;
 	MxU32 local8 = TRUE;
 
-	for (MxS32 i = 0; i < m_numL; i++) {
+	for (MxS32 i = 0; i < m_numBoundaries; i++) {
 		if (m_boundaries[i].m_flags & LegoPathBoundary::c_bit3) {
 			continue;
 		}

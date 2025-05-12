@@ -189,12 +189,12 @@ private:
 
 	LegoPathBoundary* m_boundaries; // 0x08
 	LegoPathCtrlEdge* m_edges;      // 0x0c
-	Mx3DPointFloat* m_unk0x10;      // 0x10
+	Mx3DPointFloat* m_nodes;        // 0x10
 	LegoPathStruct* m_structs;      // 0x14
-	MxU16 m_numL;                   // 0x18
-	MxU16 m_numE;                   // 0x1a
-	MxU16 m_numN;                   // 0x1c
-	MxU16 m_numT;                   // 0x1e
+	MxU16 m_numBoundaries;          // 0x18
+	MxU16 m_numEdges;               // 0x1a
+	MxU16 m_numNodes;               // 0x1c
+	MxU16 m_numStructs;             // 0x1e
 	LegoPathCtrlEdgeSet m_pfsE;     // 0x20
 	LegoPathActorSet m_actors;      // 0x30
 
