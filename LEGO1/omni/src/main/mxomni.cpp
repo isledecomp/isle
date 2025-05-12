@@ -271,9 +271,9 @@ MxResult MxOmni::CreatePresenter(MxStreamController* p_controller, MxDSAction& p
 					NotificationManager()->Send(sender, MxType4NotificationParam(this, &p_action, object));
 				}
 
-				if (p_action.GetUnknown84()) {
+				if (p_action.GetNotificationObject()) {
 					NotificationManager()->Send(
-						p_action.GetUnknown84(),
+						p_action.GetNotificationObject(),
 						MxStartActionNotificationParam(c_notificationStartAction, object, &p_action, FALSE)
 					);
 				}
