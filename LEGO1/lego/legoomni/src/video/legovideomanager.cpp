@@ -119,7 +119,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 
 	if (deviceNum < 0) {
 		deviceEnumerate.FUN_1009d210();
-		deviceNum = deviceEnumerate.FUN_1009d0d0();
+		deviceNum = deviceEnumerate.GetBestDevice();
 		deviceNum = deviceEnumerate.GetDevice(deviceNum, driver, device);
 	}
 
