@@ -18,5 +18,8 @@ if [ "x$JOBS" = "x" ]; then
 fi
 wine cmake --build build --parallel $JOBS
 
+# Install to /install
+wine cmake --install build --prefix install
+
 # Unlock directories
-chmod -R 777 isle build
+chmod -R 777 isle install

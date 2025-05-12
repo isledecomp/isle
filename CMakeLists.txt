@@ -472,6 +472,7 @@ if(ISLE_BUILD_LEGO1)
     OUT_TARGETS lego1_targets
   )
   reccmp_add_target(lego1 ID LEGO1)
+  install(TARGETS lego1 DESTINATION ".")
 endif()
 
 if(ISLE_BUILD_BETA10)
@@ -484,6 +485,7 @@ if(ISLE_BUILD_BETA10)
   )
   reccmp_add_target(beta10 ID BETA10)
   target_compile_definitions(beta10 PRIVATE BETA10)
+  install(TARGETS beta10 DESTINATION ".")
 endif()
 
 if (ISLE_BUILD_APP)
@@ -513,6 +515,8 @@ if (ISLE_BUILD_APP)
   # Make sure filenames are ALL CAPS
   set_property(TARGET isle PROPERTY OUTPUT_NAME ISLE)
   set_property(TARGET isle PROPERTY SUFFIX ".EXE")
+
+  install(TARGETS isle DESTINATION ".")
 endif()
 
 if (ISLE_BUILD_CONFIG)

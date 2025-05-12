@@ -58,6 +58,7 @@ docker run -d \
 	-e CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo" \
 	-v <path-to-source>:/isle:rw \
 	-v <build-folder>:/build:rw \
+	-v ./legobin:/install:rw \
 	ghcr.io/isledecomp/isle:latest
 ```
 
