@@ -28,7 +28,7 @@ MxDSAction::MxDSAction()
 	m_location.Fill(FLT_MAX);
 	m_direction.Fill(FLT_MAX);
 	m_up.Fill(FLT_MAX);
-	m_unk0x84 = NULL;
+	m_notificationObject = NULL;
 	m_unk0x88 = 0;
 	m_origin = NULL;
 	m_unk0x90 = INT_MIN;
@@ -89,7 +89,7 @@ void MxDSAction::CopyFrom(MxDSAction& p_dsAction)
 	m_direction = p_dsAction.m_direction;
 	m_up = p_dsAction.m_up;
 	AppendExtra(p_dsAction.m_extraLength, p_dsAction.m_extraData);
-	m_unk0x84 = p_dsAction.m_unk0x84;
+	m_notificationObject = p_dsAction.m_notificationObject;
 	m_unk0x88 = p_dsAction.m_unk0x88;
 	m_origin = p_dsAction.m_origin;
 	m_unk0x90 = p_dsAction.m_unk0x90;

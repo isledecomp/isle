@@ -261,7 +261,7 @@ MxResult MxBackgroundAudioManager::PlayMusic(
 
 		m_action2.SetAtomId(p_action.GetAtomId());
 		m_action2.SetObjectId(p_action.GetObjectId());
-		m_action2.SetUnknown84(this);
+		m_action2.SetNotificationObject(this);
 		m_action2.SetOrigin(this);
 
 		MxResult result = Start(&m_action2);
