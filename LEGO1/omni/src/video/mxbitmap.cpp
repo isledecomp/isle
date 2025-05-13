@@ -28,10 +28,10 @@ MxBitmap::MxBitmap()
 MxBitmap::~MxBitmap()
 {
 	if (m_info) {
-		delete m_info;
+		delete[] ((MxU8*) m_info);
 	}
 	if (m_data) {
-		delete m_data;
+		delete[] m_data;
 	}
 	if (m_palette) {
 		delete m_palette;
