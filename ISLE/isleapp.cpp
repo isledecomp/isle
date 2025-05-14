@@ -218,7 +218,7 @@ void IsleApp::SetupVideoFlags(
 	m_videoParam.Flags().SetFullScreen(fullScreen);
 	m_videoParam.Flags().SetFlipSurfaces(flipSurfaces);
 	m_videoParam.Flags().SetBackBuffers(!backBuffers);
-	m_videoParam.Flags().SetF2bit0(!param_6);
+	m_videoParam.Flags().SetLacksLightSupport(!param_6);
 	m_videoParam.Flags().SetF1bit7(param_7);
 	m_videoParam.Flags().SetWideViewAngle(wideViewAngle);
 	m_videoParam.Flags().SetF2bit1(1);
