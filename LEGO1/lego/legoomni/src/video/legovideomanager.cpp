@@ -126,13 +126,13 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	m_direct3d->SetDevice(deviceEnumerate, driver, device);
 
 	if (!driver->m_ddCaps.dwCaps2 && driver->m_ddCaps.dwSVBRops[7] != 2) {
-		p_videoParam.Flags().SetF2bit0(TRUE);
+		p_videoParam.Flags().SetLacksLightSupport(TRUE);
 	}
 	else {
-		p_videoParam.Flags().SetF2bit0(FALSE);
+		p_videoParam.Flags().SetLacksLightSupport(FALSE);
 	}
 
-	ViewROI::SetUnk101013d8(p_videoParam.Flags().GetF2bit0() == FALSE);
+	ViewROI::SetUnk101013d8(p_videoParam.Flags().GetLacksLightSupport() == FALSE);
 
 	if (!m_direct3d->Create(
 			hwnd,
