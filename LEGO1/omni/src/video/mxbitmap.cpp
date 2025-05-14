@@ -80,7 +80,7 @@ MxResult MxBitmap::SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, 
 done:
 	if (ret) {
 		if (m_info) {
-			delete[] m_info;
+			delete[] ((MxU8*) m_info);
 			m_info = NULL;
 		}
 
@@ -118,7 +118,7 @@ MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO* p_info)
 done:
 	if (result != SUCCESS) {
 		if (m_info) {
-			delete[] m_info;
+			delete[] ((MxU8*) m_info);
 			m_info = NULL;
 		}
 
@@ -157,7 +157,7 @@ MxResult MxBitmap::ImportBitmap(MxBitmap* p_bitmap)
 done:
 	if (result != SUCCESS) {
 		if (m_info) {
-			delete[] m_info;
+			delete[] ((MxU8*) m_info);
 			m_info = NULL;
 		}
 
@@ -249,7 +249,7 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 done:
 	if (result != SUCCESS) {
 		if (m_info) {
-			delete[] m_info;
+			delete[] ((MxU8*) m_info);
 			m_info = NULL;
 		}
 
