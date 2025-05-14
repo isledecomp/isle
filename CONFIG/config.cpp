@@ -349,17 +349,17 @@ DWORD CConfigApp::GetConditionalDeviceRenderBitDepth() const
 	if (GetHardwareDeviceColorModel()) {
 		return 0;
 	}
-	return m_device->m_HELDesc.dwDeviceRenderBitDepth & 0x800;
+	return m_device->m_HELDesc.dwDeviceRenderBitDepth & DDBD_8;
 }
 
 // FUNCTION: CONFIG 0x004037e0
 DWORD CConfigApp::GetDeviceRenderBitStatus() const
 {
 	if (GetHardwareDeviceColorModel()) {
-		return m_device->m_HWDesc.dwDeviceRenderBitDepth & 0x400;
+		return m_device->m_HWDesc.dwDeviceRenderBitDepth & DDBD_16;
 	}
 	else {
-		return m_device->m_HELDesc.dwDeviceRenderBitDepth & 0x400;
+		return m_device->m_HELDesc.dwDeviceRenderBitDepth & DDBD_16;
 	}
 }
 
