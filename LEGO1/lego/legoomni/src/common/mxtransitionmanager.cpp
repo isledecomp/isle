@@ -291,10 +291,10 @@ void MxTransitionManager::MosaicTransition()
 		memset(&ddsd, 0, sizeof(ddsd));
 		ddsd.dwSize = sizeof(ddsd);
 
-		HRESULT res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+		HRESULT res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
 		if (res == DDERR_SURFACELOST) {
 			m_ddSurface->Restore();
-			res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+			res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
 		}
 
 		if (res == DD_OK) {
