@@ -22,4 +22,4 @@ wine cmake --build build --parallel $JOBS
 wine cmake --install build --prefix install
 
 # Unlock directories
-chmod -R 777 isle install
+chmod -R 777 isle install 2>/dev/null
