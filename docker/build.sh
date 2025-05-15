@@ -48,7 +48,7 @@ trap cleanup EXIT
 mkdir -p result
 rm -rf result/*
 
-if [[ "x${JOBS:-}" == "x" ]]; then
+if [ "x${JOBS:-}" = "x" ]; then
     JOBS=$(nproc)
 fi
 
