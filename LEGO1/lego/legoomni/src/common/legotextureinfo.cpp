@@ -112,7 +112,7 @@ LegoTextureInfo* LegoTextureInfo::Create(const char* p_name, LegoTexture* p_text
 			entries[i].peBlue = image->GetPaletteEntry(i).GetBlue();
 		}
 		else {
-			entries[i].peFlags = 0x80;
+			entries[i].peFlags = D3DPAL_RESERVED;
 		}
 	}
 
@@ -193,7 +193,7 @@ LegoResult LegoTextureInfo::FUN_10066010(const LegoU8* p_bits)
 		memset(&desc, 0, sizeof(desc));
 		desc.dwSize = sizeof(desc);
 
-		if (m_surface->Lock(NULL, &desc, 0, NULL) == DD_OK) {
+		if (m_surface->Lock(NULL, &desc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
 			MxU8* surface = (MxU8*) desc.lpSurface;
 			const LegoU8* bits = p_bits;
 
