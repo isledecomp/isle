@@ -22,18 +22,20 @@ cleanup () {
 
 trap cleanup EXIT
 
-declare oci_cmd
+declare OCI_CMD
 
-if whereis podman >/dev/null; then
-    oci_cmd=podman
-elif whereis docker >/dev/null; then
-    oci_cmd=docker
-else
-    echo "No container engine (docker/podman) found!"
-    exit 2
+if [ "x${OCI_CMD:-}" = "x" ]; then
+    if whereis docker >/dev/null; then
+        OCI_CMD=docker
+    elif whereis podman >/dev/null; then
+        OCI_CMD=podman
+    else
+        echo "No container engine (docker/podman) found!"
+        exit 2
+    fi
 fi
 
-"$oci_cmd" build -t isle "$SRCDIR/docker"
+"$OCI_CMD" build -t isle "$SRCDIR/docker"
 
 mkdir -p result
 rm -rf result/*
@@ -42,7 +44,7 @@ if [[ "x${JOBS:-}" == "x" ]]; then
     JOBS=$(nproc)
 fi
 
-"$oci_cmd" run -it \
+"$OCI_CMD" run -it \
     -e CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo" \
     -v "$SRCDIR":/isle:rw \
     -e JOBS="$JOBS" \
