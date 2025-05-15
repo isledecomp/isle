@@ -639,7 +639,7 @@ void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 	colorStrucure.peRed = (p_red * 255.0f);
 	colorStrucure.peGreen = (p_green * 255.0f);
 	colorStrucure.peBlue = (p_blue * 255.0f);
-	colorStrucure.peFlags = -124;
+	colorStrucure.peFlags = D3DPAL_RESERVED | PC_NOCOLLAPSE;
 	m_videoParam.GetPalette()->SetSkyColor(&colorStrucure);
 	m_videoParam.GetPalette()->SetOverrideSkyColor(TRUE);
 	m_3dManager->GetLego3DView()->GetView()->SetBackgroundColor(p_red, p_green, p_blue);
