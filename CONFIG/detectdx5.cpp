@@ -114,7 +114,7 @@ void DetectDirectX(unsigned int* p_version, BOOL* p_found)
 	surface_desc.dwSize = sizeof(surface_desc);
 	surface_desc.dwFlags = DDSD_CAPS;
 	surface_desc.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
-	if (FAILED(ddraw2->SetCooperativeLevel(NULL, DISCL_BACKGROUND))) {
+	if (FAILED(ddraw2->SetCooperativeLevel(NULL, DDSCL_NORMAL))) {
 		ddraw2->Release();
 		FreeLibrary(ddraw_module);
 		*p_version = 0;
