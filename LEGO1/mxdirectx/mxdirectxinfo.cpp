@@ -41,7 +41,7 @@ MxDriver::MxDriver(LPGUID p_guid)
 // FUNCTION: CONFIG 0x00401180
 // FUNCTION: LEGO1 0x1009ba80
 // FUNCTION: BETA10 0x1011d8b6
-MxDriver::MxDriver(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
+MxDriver::MxDriver(LPGUID p_guid, LPCSTR p_driverDesc, LPCSTR p_driverName)
 {
 	m_guid = NULL;
 	m_driverDesc = NULL;
@@ -70,7 +70,7 @@ MxDriver::~MxDriver()
 // FUNCTION: CONFIG 0x00401330
 // FUNCTION: LEGO1 0x1009bc30
 // FUNCTION: BETA10 0x1011da89
-void MxDriver::Init(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
+void MxDriver::Init(LPGUID p_guid, LPCSTR p_driverDesc, LPCSTR p_driverName)
 {
 	if (m_driverDesc) {
 		delete[] m_driverDesc;
@@ -103,8 +103,8 @@ void MxDriver::Init(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
 // FUNCTION: BETA10 0x1011dbd0
 Direct3DDeviceInfo::Direct3DDeviceInfo(
 	LPGUID p_guid,
-	LPSTR p_deviceDesc,
-	LPSTR p_deviceName,
+	LPCSTR p_deviceDesc,
+	LPCSTR p_deviceName,
 	LPD3DDEVICEDESC p_HWDesc,
 	LPD3DDEVICEDESC p_HELDesc
 )
@@ -135,8 +135,8 @@ Direct3DDeviceInfo::~Direct3DDeviceInfo()
 // FUNCTION: BETA10 0x1011dca6
 void Direct3DDeviceInfo::Initialize(
 	LPGUID p_guid,
-	LPSTR p_deviceDesc,
-	LPSTR p_deviceName,
+	LPCSTR p_deviceDesc,
+	LPCSTR p_deviceName,
 	LPD3DDEVICEDESC p_HWDesc,
 	LPD3DDEVICEDESC p_HELDesc
 )
@@ -320,8 +320,8 @@ HRESULT MxDeviceEnumerate::EnumDisplayModesCallback(LPDDSURFACEDESC p_ddsd)
 // FUNCTION: BETA10 0x1011e32f
 HRESULT MxDeviceEnumerate::EnumDevicesCallback(
 	LPGUID p_guid,
-	LPSTR p_deviceDesc,
-	LPSTR p_deviceName,
+	LPCSTR p_deviceDesc,
+	LPCSTR p_deviceName,
 	LPD3DDEVICEDESC p_HWDesc,
 	LPD3DDEVICEDESC p_HELDesc
 )

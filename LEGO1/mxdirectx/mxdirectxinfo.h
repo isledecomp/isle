@@ -67,16 +67,16 @@ struct Direct3DDeviceInfo {
 	~Direct3DDeviceInfo();
 	Direct3DDeviceInfo(
 		LPGUID p_guid,
-		LPSTR p_deviceDesc,
-		LPSTR p_deviceName,
+		LPCSTR p_deviceDesc,
+		LPCSTR p_deviceName,
 		LPD3DDEVICEDESC p_HWDesc,
 		LPD3DDEVICEDESC p_HELDesc
 	);
 
 	void Initialize(
 		LPGUID p_guid,
-		LPSTR p_deviceDesc,
-		LPSTR p_deviceName,
+		LPCSTR p_deviceDesc,
+		LPCSTR p_deviceName,
 		LPD3DDEVICEDESC p_HWDesc,
 		LPD3DDEVICEDESC p_HELDesc
 	);
@@ -115,9 +115,9 @@ struct MxDriver {
 	MxDriver() {}
 	~MxDriver();
 	MxDriver(LPGUID p_guid);
-	MxDriver(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
+	MxDriver(LPGUID p_guid, LPCSTR p_driverDesc, LPCSTR p_driverName);
 
-	void Init(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
+	void Init(LPGUID p_guid, LPCSTR p_driverDesc, LPCSTR p_driverName);
 
 	LPGUID m_guid;                      // 0x00
 	char* m_driverDesc;                 // 0x04
@@ -198,8 +198,8 @@ public:
 	HRESULT EnumDisplayModesCallback(LPDDSURFACEDESC p_ddsd);
 	HRESULT EnumDevicesCallback(
 		LPGUID p_guid,
-		LPSTR p_deviceDesc,
-		LPSTR p_deviceName,
+		LPCSTR p_deviceDesc,
+		LPCSTR p_deviceName,
 		LPD3DDEVICEDESC p_HWDesc,
 		LPD3DDEVICEDESC p_HELDesc
 	);
