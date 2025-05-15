@@ -65,7 +65,7 @@ LegoTextureInfo* LegoTextureInfo::Create(const char* p_name, LegoTexture* p_text
 	desc.dwFlags = DDSD_PIXELFORMAT | DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
 	desc.dwWidth = image->GetWidth();
 	desc.dwHeight = image->GetHeight();
-	desc.ddsCaps.dwCaps = DDCAPS_OVERLAYCANTCLIP | DDCAPS_OVERLAY;
+	desc.ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_SYSTEMMEMORY;
 	desc.ddpfPixelFormat.dwSize = sizeof(desc.ddpfPixelFormat);
 	desc.ddpfPixelFormat.dwFlags = DDPF_RGB | DDPF_PALETTEINDEXED8;
 	desc.ddpfPixelFormat.dwRGBBitCount = 8;
