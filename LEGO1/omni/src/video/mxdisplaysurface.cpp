@@ -863,9 +863,9 @@ void MxDisplaySurface::Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p
 			data.dwSize = sizeof(data);
 			data.dwDDFX = 8;
 
-			if (m_ddSurface1->Blt((LPRECT) &b, m_ddSurface2, (LPRECT) &a, DDBLT_NONE, &data) == DDERR_SURFACELOST) {
+			if (m_ddSurface1->Blt((LPRECT) &b, m_ddSurface2, (LPRECT) &a, 0, &data) == DDERR_SURFACELOST) {
 				m_ddSurface1->Restore();
-				m_ddSurface1->Blt((LPRECT) &b, m_ddSurface2, (LPRECT) &a, DDBLT_NONE, &data);
+				m_ddSurface1->Blt((LPRECT) &b, m_ddSurface2, (LPRECT) &a, 0, &data);
 			}
 		}
 	}
