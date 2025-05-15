@@ -164,19 +164,19 @@ BOOL MxDirectDraw::SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int pa
 	}
 
 	for (i = 0; i < 10; i++) {
-		m_paletteEntries[i].peFlags = 0x80;
+		m_paletteEntries[i].peFlags = D3DPAL_RESERVED;
 	}
 
 	for (; i < 142; i++) {
-		m_paletteEntries[i].peFlags = 0x44;
+		m_paletteEntries[i].peFlags = D3DPAL_READONLY | PC_NOCOLLAPSE;
 	}
 
 	for (; i < 246; i++) {
-		m_paletteEntries[i].peFlags = 0x84;
+		m_paletteEntries[i].peFlags = D3DPAL_RESERVED | PC_NOCOLLAPSE;
 	}
 
 	for (; i < 256; i++) {
-		m_paletteEntries[i].peFlags = 0x80;
+		m_paletteEntries[i].peFlags = D3DPAL_RESERVED;
 	}
 
 	if (paletteEntryCount != 0) {
@@ -561,10 +561,10 @@ void MxDirectDraw::FUN_1009e020()
 		memset(&ddsd, 0, sizeof(ddsd));
 		ddsd.dwSize = sizeof(ddsd);
 
-		result = m_pBackBuffer->Lock(NULL, &ddsd, 1, NULL);
+		result = m_pBackBuffer->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
 		if (result == DDERR_SURFACELOST) {
 			m_pBackBuffer->Restore();
-			result = m_pBackBuffer->Lock(NULL, &ddsd, 1, NULL);
+			result = m_pBackBuffer->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
 		}
 
 		if (result != DD_OK) {
