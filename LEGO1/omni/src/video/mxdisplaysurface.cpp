@@ -196,7 +196,7 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		ddsd.dwSize = sizeof(ddsd);
 		ddsd.dwBackBufferCount = m_videoParam.GetBackBuffers();
 		ddsd.dwFlags = DDSD_CAPS | DDSD_BACKBUFFERCOUNT;
-		ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE | DDSCAPS_PRIMARYSURFACE | DDSCAPS_FLIP | DDSCAPS_COMPLEX;
+		ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE | DDSCAPS_FLIP | DDSCAPS_3DDEVICE | DDSCAPS_COMPLEX;
 
 		if (lpDirectDraw->CreateSurface(&ddsd, &m_ddSurface1, NULL)) {
 			goto done;
