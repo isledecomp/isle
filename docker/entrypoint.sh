@@ -3,7 +3,7 @@
 set -e
 
 # Configure build with CMake
-wine cmake -B build isle -G "Ninja" $CMAKE_FLAGS
+wine cmake -B build isle -G "@builder@" $CMAKE_FLAGS
 
 # Start compiling LEGO Island
 if [ "x$JOBS" = "x" ]; then

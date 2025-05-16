@@ -43,7 +43,11 @@ cleanup () {
 
 trap cleanup EXIT
 
-"$OCI_CMD" build -t isle "$SRCDIR/docker"
+if whereis nix-build >/dev/null && ! [ -z ${USE_NIX_BUILD+x} ]; then
+    $(nix-build ./nix --no-out-link) | "$OCI_CMD" load
+else
+    "$OCI_CMD" build -t isle "$SRCDIR/docker"
+fi
 
 mkdir -p result
 rm -rf result/*

@@ -72,5 +72,8 @@ EOF
 
 # Set up entrypoint script to perform the build
 COPY entrypoint.sh entrypoint.sh
-RUN chmod +x entrypoint.sh
+RUN <<EOF
+chmod +x entrypoint.sh
+sed -i entrypoint.sh -e "s|@builder@|Ninja|g"
+EOF
 ENTRYPOINT [ "./entrypoint.sh" ]
