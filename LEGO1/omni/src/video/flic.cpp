@@ -355,65 +355,104 @@ void DecodeLC(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data
 // FUNCTION: BETA10 0x1013e61d
 void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data, FLIC_HEADER* p_flcHeader)
 {
-	short width = (short) p_flcHeader->width - 1;
-	short row = (short) p_flcHeader->height - 1;
-	short lines = *((short*) p_data);
-	BYTE* data = p_data + 2;
+	short xofs = 0;
+	short yofs = 0;
 
-	while (--lines > 0) {
-		short token;
+	short width = p_flcHeader->width;
+	short token = 0;
 
-		while (TRUE) {
-			token = *((short*) data);
-			data += 2;
+	// LINE: BETA10 0x1013e643
+	short xmax = xofs + width - 1;
 
-			if (token < 0) {
-				if (token & 0x4000) {
-					row += token;
-				}
-				else {
-					WritePixel(p_bitmapHeader, p_pixelData, width, row, token);
-					token = *((WORD*) data);
-					data += 2;
+	// LINE: BETA10 0x1013e652
+	BYTE* data = p_data;
 
-					if (!token) {
-						row--;
-						if (--lines <= 0) {
-							return;
-						}
-					}
-					else {
-						break;
-					}
-				}
-			}
-			else {
-				break;
-			}
+	// The first word in the data following the chunk header contains the number of lines in the chunk.
+	// The line count does not include skipped lines.
+	short lines = *(short*) data;
+	data += 2;
+
+	// LINE: BETA10 0x1013e666
+	short row = p_flcHeader->height - yofs - 1;
+
+	goto start_packet;
+
+skip_lines:
+	// The layout in BETA10 strongly suggests that lots of `goto`s are used.
+	// LINE: BETA10 0x1013e684
+	row += token;
+
+start_packet:
+	do {
+		// LINE: BETA10 0x1013e692
+		token = *(short*) data;
+		data += 2;
+
+		if (token >= 0) {
+			goto column_loop;
+		}
+		// TODO: Can't get this if-check to be quite right. Union type didn't help either
+		if (token & 0x4000) {
+			goto skip_lines;
 		}
 
-		short column = 0;
-		do {
-			column += *(data++);
-			short type = *((char*) data++);
-			type += type;
+		WritePixel(p_bitmapHeader, p_pixelData, xmax, row, token);
+		token = *(short*) data;
+		data += 2;
 
-			if (type >= 0) {
-				WritePixels(p_bitmapHeader, p_pixelData, column, row, data, type);
-				column += type;
-				data += type;
+		// LINE: BETA10 0x1013e6ef
+		if (!token) {
+			row--;
+			if (--lines > 0) {
+				goto start_packet;
 			}
-			else {
-				type = -type;
-				short p_pixel = *((WORD*) data);
-				data += 2;
-				WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, p_pixel, type >> 1);
-				column += type;
-			}
-		} while (--token);
+			break;
+		}
 
+		// TODO: Something is still slightly incorrect here - orig has two `jmp`s, recomp only has one
+
+	column_loop:
+		// LINE: BETA10 0x1013e71e
+		short column = xofs;
+
+	column_loop_inner:
+		// LINE: BETA10 0x1013e726
+		column += *data++;
+		// LINE: BETA10 0x1013e73a
+		short type = *(char*) data++;
+		type += type;
+
+		if (type >= 0) {
+			WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
+			column += type;
+			data += type;
+			// LINE: BETA10 0x1013e797
+			if (--token != 0) {
+				goto column_loop_inner;
+			}
+			row--;
+			if (--lines > 0) {
+				goto start_packet;
+			}
+			break;
+		}
+
+		type = -type;
+		WORD* p_pixel = (WORD*) data;
+		data += 2;
+		WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
+		column += type;
+		// LINE: BETA10 0x1013e813
+		if (--token != 0) {
+			goto column_loop_inner;
+		}
 		row--;
-	}
+		if (--lines > 0) {
+			goto start_packet;
+		}
+		return;
+		// the `while (0)` looks off, but produces the correct `jmp` instructions near the end
+	} while (0);
 }
 
 // FUNCTION: LEGO1 0x100bdc00
