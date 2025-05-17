@@ -53,7 +53,7 @@ void MxStillPresenter::CreateBitmap()
 	m_frameBitmap = new MxBitmap;
 	m_frameBitmap->ImportBitmapInfo(m_bitmapInfo);
 
-	delete m_bitmapInfo;
+	delete[] m_bitmapInfo;
 	m_bitmapInfo = NULL;
 }
 
