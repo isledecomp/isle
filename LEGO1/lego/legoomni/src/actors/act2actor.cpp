@@ -142,7 +142,7 @@ void Act2Actor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 
 // FUNCTION: LEGO1 0x10018980
 // FUNCTION: BETA10 0x1000c963
-void Act2Actor::FUN_10018980()
+void Act2Actor::SetShootAnimMap()
 {
 	for (MxS32 i = 0; i < m_animMaps.size(); i++) {
 		if (m_animMaps[i]->GetUnknown0x00() == -1.0f) {

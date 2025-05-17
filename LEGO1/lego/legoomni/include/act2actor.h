@@ -37,7 +37,7 @@ public:
 	MxResult VTable0x9c() override;                     // vtable+0x9c
 	MxS32 VTable0xa0() override;                        // vtable+0xa0
 
-	void FUN_10018980();
+	void SetShootAnimMap();
 	void FUN_10019250(MxFloat p_speed, MxFloat p_param2);
 	void FUN_10019520();
 	void FUN_10019560();

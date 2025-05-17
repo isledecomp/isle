@@ -1222,6 +1222,6 @@ MxResult LegoAct2::FUN_10052800()
 	ap->FUN_1006d680(m_unk0x1138, -1.0f);
 
 	actor->SetWorldSpeed(0.0f);
-	m_unk0x1138->FUN_10018980();
+	m_unk0x1138->SetShootAnimMap();
 	return SUCCESS;
 }
