@@ -35,7 +35,7 @@ LegoWEGEdge::~LegoWEGEdge()
 		delete[] m_edgeNormals;
 	}
 	if (m_pathTrigger) {
-		delete m_pathTrigger;
+		delete[] m_pathTrigger;
 	}
 	if (m_unk0x50) {
 		delete m_unk0x50;
