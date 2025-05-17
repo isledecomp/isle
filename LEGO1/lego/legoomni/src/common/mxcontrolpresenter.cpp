@@ -28,7 +28,7 @@ MxControlPresenter::MxControlPresenter()
 MxControlPresenter::~MxControlPresenter()
 {
 	if (m_states) {
-		delete m_states;
+		delete[] m_states;
 	}
 }
 
