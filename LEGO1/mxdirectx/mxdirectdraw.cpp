@@ -399,7 +399,7 @@ BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
 
 	DDSURFACEDESC ddsd;
 
-	FUN_1009e020();
+	ClearBackBuffers();
 
 	if (!GetDDSurfaceDesc(&ddsd, m_pBackBuffer)) {
 		return FALSE;
@@ -549,7 +549,7 @@ BOOL MxDirectDraw::DDCreateSurfaces()
 
 // FUNCTION: LEGO1 0x1009e020
 // FUNCTION: BETA10 0x10121700
-void MxDirectDraw::FUN_1009e020()
+void MxDirectDraw::ClearBackBuffers()
 {
 	HRESULT result;
 	byte* line;
