@@ -9,13 +9,13 @@ DECOMP_SIZE_ASSERT(LegoColor, 0x03)
 LegoResult LegoColor::Read(LegoStorage* p_storage)
 {
 	LegoResult result;
-	if ((result = p_storage->Read(&m_red, sizeof(m_red))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_red, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_green, sizeof(m_green))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_green, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_blue, sizeof(m_blue))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_blue, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
 	return SUCCESS;

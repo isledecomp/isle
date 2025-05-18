@@ -142,25 +142,25 @@ MxResult LegoAnimPresenter::CreateAnim(MxStreamChunk* p_chunk)
 	LegoS32 parseScene = 0;
 	MxS32 val3;
 
-	if (storage.Read(&magicSig, sizeof(magicSig)) != SUCCESS || magicSig != 0x11) {
+	if (storage.Read(&magicSig, sizeof(MxS32)) != SUCCESS || magicSig != 0x11) {
 		goto done;
 	}
-	if (storage.Read(&m_unk0xa4, sizeof(m_unk0xa4)) != SUCCESS) {
+	if (storage.Read(&m_unk0xa4, sizeof(float)) != SUCCESS) {
 		goto done;
 	}
-	if (storage.Read(&m_unk0xa8[0], sizeof(m_unk0xa8[0])) != SUCCESS) {
+	if (storage.Read(&m_unk0xa8[0], sizeof(float)) != SUCCESS) {
 		goto done;
 	}
-	if (storage.Read(&m_unk0xa8[1], sizeof(m_unk0xa8[1])) != SUCCESS) {
+	if (storage.Read(&m_unk0xa8[1], sizeof(float)) != SUCCESS) {
 		goto done;
 	}
-	if (storage.Read(&m_unk0xa8[2], sizeof(m_unk0xa8[2])) != SUCCESS) {
+	if (storage.Read(&m_unk0xa8[2], sizeof(float)) != SUCCESS) {
 		goto done;
 	}
-	if (storage.Read(&parseScene, sizeof(parseScene)) != SUCCESS) {
+	if (storage.Read(&parseScene, sizeof(LegoS32)) != SUCCESS) {
 		goto done;
 	}
-	if (storage.Read(&val3, sizeof(val3)) != SUCCESS) {
+	if (storage.Read(&val3, sizeof(MxS32)) != SUCCESS) {
 		goto done;
 	}
 

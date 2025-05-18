@@ -7,6 +7,8 @@
 DECOMP_SIZE_ASSERT(MxBitmap, 0x20);
 DECOMP_SIZE_ASSERT(MxBITMAPINFO, 0x428);
 
+DECOMP_SIZE_ASSERT(BITMAPFILEHEADER, 0xe);
+
 // GLOBAL: LEGO1 0x10102184
 // GLOBAL: BETA10 0x10203030
 MxU16 g_bitmapSignature = TWOCC('B', 'M');
@@ -207,7 +209,7 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 	MxLong size;
 	DWORD bytesRead;
 	BITMAPFILEHEADER hdr;
-	if (!ReadFile(p_handle, &hdr, sizeof(hdr), &bytesRead, NULL)) {
+	if (!ReadFile(p_handle, &hdr, 14, &bytesRead, NULL)) {
 		goto done;
 	}
 

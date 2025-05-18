@@ -65,29 +65,29 @@ MxResult LegoModelPresenter::CreateROI(MxDSChunk* p_chunk)
 	if (!(m_roi = new LegoROI(VideoManager()->GetRenderer()))) {
 		goto done;
 	}
-	if (storage.Read(&version, sizeof(version)) != SUCCESS) {
+	if (storage.Read(&version, sizeof(LegoU32)) != SUCCESS) {
 		goto done;
 	}
 	if (version != MODEL_VERSION) {
 		goto done;
 	}
-	if (storage.Read(&textureInfoOffset, sizeof(textureInfoOffset)) != SUCCESS) {
+	if (storage.Read(&textureInfoOffset, sizeof(LegoU32)) != SUCCESS) {
 		goto done;
 	}
 
 	storage.SetPosition(textureInfoOffset);
 
-	if (storage.Read(&numTextures, sizeof(numTextures)) != SUCCESS) {
+	if (storage.Read(&numTextures, sizeof(LegoU32)) != SUCCESS) {
 		goto done;
 	}
-	if (storage.Read(&skipTextures, sizeof(skipTextures)) != SUCCESS) {
+	if (storage.Read(&skipTextures, sizeof(LegoU32)) != SUCCESS) {
 		goto done;
 	}
 
 	for (i = 0; i < numTextures; i++) {
 		LegoU32 textureNameLength;
 
-		storage.Read(&textureNameLength, sizeof(textureNameLength));
+		storage.Read(&textureNameLength, sizeof(LegoU32));
 		textureName = new LegoChar[textureNameLength + 1];
 		storage.Read(textureName, textureNameLength);
 		textureName[textureNameLength] = '\0';
@@ -149,7 +149,7 @@ MxResult LegoModelPresenter::CreateROI(MxDSChunk* p_chunk)
 
 	storage.SetPosition(8);
 
-	if (storage.Read(&numROIs, sizeof(numROIs)) != SUCCESS) {
+	if (storage.Read(&numROIs, sizeof(LegoU32)) != SUCCESS) {
 		goto done;
 	}
 	if (anim.Read(&storage, FALSE) != SUCCESS) {

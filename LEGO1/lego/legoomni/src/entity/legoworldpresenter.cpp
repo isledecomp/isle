@@ -209,7 +209,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 	}
 
 	if (g_wdbOffset == 0) {
-		if (fread(&size, sizeof(size), 1, wdbFile) != 1) {
+		if (fread(&size, sizeof(MxU32), 1, wdbFile) != 1) {
 			return FAILURE;
 		}
 
@@ -229,7 +229,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 
 		delete[] buff;
 
-		if (fread(&size, sizeof(size), 1, wdbFile) != 1) {
+		if (fread(&size, sizeof(MxU32), 1, wdbFile) != 1) {
 			return FAILURE;
 		}
 
