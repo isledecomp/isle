@@ -236,7 +236,7 @@ BOOL CConfigApp::ReadRegisterSettings()
 	if (tmp != 0) {
 		is_modified = TRUE;
 		m_device_enumerator->FUN_1009d210();
-		tmp = m_device_enumerator->FUN_1009d0d0();
+		tmp = m_device_enumerator->GetBestDevice();
 		m_device_enumerator->GetDevice(tmp, m_driver, m_device);
 	}
 	if (!ReadRegInt("Display Bit Depth", &m_display_bit_depth)) {
@@ -349,17 +349,17 @@ DWORD CConfigApp::GetConditionalDeviceRenderBitDepth() const
 	if (GetHardwareDeviceColorModel()) {
 		return 0;
 	}
-	return m_device->m_HELDesc.dwDeviceRenderBitDepth & 0x800;
+	return m_device->m_HELDesc.dwDeviceRenderBitDepth & DDBD_8;
 }
 
 // FUNCTION: CONFIG 0x004037e0
 DWORD CConfigApp::GetDeviceRenderBitStatus() const
 {
 	if (GetHardwareDeviceColorModel()) {
-		return m_device->m_HWDesc.dwDeviceRenderBitDepth & 0x400;
+		return m_device->m_HWDesc.dwDeviceRenderBitDepth & DDBD_16;
 	}
 	else {
-		return m_device->m_HELDesc.dwDeviceRenderBitDepth & 0x400;
+		return m_device->m_HELDesc.dwDeviceRenderBitDepth & DDBD_16;
 	}
 }
 

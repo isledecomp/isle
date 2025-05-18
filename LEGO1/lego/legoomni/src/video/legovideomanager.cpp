@@ -119,20 +119,20 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 
 	if (deviceNum < 0) {
 		deviceEnumerate.FUN_1009d210();
-		deviceNum = deviceEnumerate.FUN_1009d0d0();
+		deviceNum = deviceEnumerate.GetBestDevice();
 		deviceNum = deviceEnumerate.GetDevice(deviceNum, driver, device);
 	}
 
 	m_direct3d->SetDevice(deviceEnumerate, driver, device);
 
 	if (!driver->m_ddCaps.dwCaps2 && driver->m_ddCaps.dwSVBRops[7] != 2) {
-		p_videoParam.Flags().SetF2bit0(TRUE);
+		p_videoParam.Flags().SetLacksLightSupport(TRUE);
 	}
 	else {
-		p_videoParam.Flags().SetF2bit0(FALSE);
+		p_videoParam.Flags().SetLacksLightSupport(FALSE);
 	}
 
-	ViewROI::SetUnk101013d8(p_videoParam.Flags().GetF2bit0() == FALSE);
+	ViewROI::SetUnk101013d8(p_videoParam.Flags().GetLacksLightSupport() == FALSE);
 
 	if (!m_direct3d->Create(
 			hwnd,
@@ -639,7 +639,7 @@ void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 	colorStrucure.peRed = (p_red * 255.0f);
 	colorStrucure.peGreen = (p_green * 255.0f);
 	colorStrucure.peBlue = (p_blue * 255.0f);
-	colorStrucure.peFlags = -124;
+	colorStrucure.peFlags = D3DPAL_RESERVED | PC_NOCOLLAPSE;
 	m_videoParam.GetPalette()->SetSkyColor(&colorStrucure);
 	m_videoParam.GetPalette()->SetOverrideSkyColor(TRUE);
 	m_3dManager->GetLego3DView()->GetView()->SetBackgroundColor(p_red, p_green, p_blue);
