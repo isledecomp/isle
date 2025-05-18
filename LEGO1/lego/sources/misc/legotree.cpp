@@ -91,7 +91,7 @@ LegoResult LegoTree::Write(LegoStorage* p_storage, LegoTreeNode* p_node)
 		}
 	}
 	LegoU32 numChildren = p_node->GetNumChildren();
-	if ((result = p_storage->Write(&numChildren, sizeof(numChildren))) != SUCCESS) {
+	if ((result = p_storage->Write(&numChildren, sizeof(LegoU32))) != SUCCESS) {
 		return result;
 	}
 	for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {

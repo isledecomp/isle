@@ -45,21 +45,21 @@ public:
 	// FUNCTION: BETA10 0x1004b0d0
 	LegoStorage* WriteU8(LegoU8 p_data)
 	{
-		Write(&p_data, sizeof(p_data));
+		Write(&p_data, sizeof(LegoU8));
 		return this;
 	}
 
 	// FUNCTION: BETA10 0x10017ce0
 	LegoStorage* WriteS16(LegoS16 p_data)
 	{
-		Write(&p_data, sizeof(p_data));
+		Write(&p_data, sizeof(LegoS16));
 		return this;
 	}
 
 	// FUNCTION: BETA10 0x1004b110
 	LegoStorage* WriteU16(LegoU16 p_data)
 	{
-		Write(&p_data, sizeof(p_data));
+		Write(&p_data, sizeof(LegoU16));
 		return this;
 	}
 
@@ -67,7 +67,7 @@ public:
 	// FUNCTION: BETA10 0x10088540
 	LegoStorage* WriteS32(MxS32 p_data)
 	{
-		Write(&p_data, sizeof(p_data));
+		Write(&p_data, sizeof(MxS32));
 		return this;
 	}
 
@@ -75,14 +75,14 @@ public:
 	// FUNCTION: BETA10 0x1004b150
 	LegoStorage* WriteU32(MxU32 p_data)
 	{
-		Write(&p_data, sizeof(p_data));
+		Write(&p_data, sizeof(MxU32));
 		return this;
 	}
 
 	// FUNCTION: BETA10 0x10073610
 	LegoStorage* WriteFloat(LegoFloat p_data)
 	{
-		Write(&p_data, sizeof(p_data));
+		Write(&p_data, sizeof(LegoFloat));
 		return this;
 	}
 
