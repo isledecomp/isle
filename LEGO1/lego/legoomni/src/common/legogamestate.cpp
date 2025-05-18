@@ -513,7 +513,7 @@ MxS32 LegoGameState::ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to)
 	MxS32 result = 1;
 	MxU8 len;
 
-	if (p_storage->Read(&len, sizeof(len)) != SUCCESS) {
+	if (p_storage->Read(&len, sizeof(MxU8)) != SUCCESS) {
 		goto done;
 	}
 
@@ -531,7 +531,7 @@ MxS32 LegoGameState::ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to)
 		goto done;
 	}
 
-	if (p_storage->Read(&len, sizeof(len)) != SUCCESS) {
+	if (p_storage->Read(&len, sizeof(MxU8)) != SUCCESS) {
 		goto done;
 	}
 

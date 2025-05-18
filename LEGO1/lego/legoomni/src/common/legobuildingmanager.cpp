@@ -334,21 +334,21 @@ MxResult LegoBuildingManager::Write(LegoStorage* p_storage)
 	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		LegoBuildingInfo* info = &g_buildingInfo[i];
 
-		if (p_storage->Write(&info->m_sound, sizeof(info->m_sound)) != SUCCESS) {
+		if (p_storage->Write(&info->m_sound, sizeof(MxU32)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&info->m_move, sizeof(info->m_move)) != SUCCESS) {
+		if (p_storage->Write(&info->m_move, sizeof(MxU32)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
+		if (p_storage->Write(&info->m_mood, sizeof(MxU8)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&info->m_initialUnk0x11, sizeof(info->m_initialUnk0x11)) != SUCCESS) {
+		if (p_storage->Write(&info->m_initialUnk0x11, sizeof(MxS8)) != SUCCESS) {
 			goto done;
 		}
 	}
 
-	if (p_storage->Write(&m_nextVariant, sizeof(m_nextVariant)) != SUCCESS) {
+	if (p_storage->Write(&m_nextVariant, sizeof(MxU8)) != SUCCESS) {
 		goto done;
 	}
 
@@ -367,16 +367,16 @@ MxResult LegoBuildingManager::Read(LegoStorage* p_storage)
 	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		LegoBuildingInfo* info = &g_buildingInfo[i];
 
-		if (p_storage->Read(&info->m_sound, sizeof(info->m_sound)) != SUCCESS) {
+		if (p_storage->Read(&info->m_sound, sizeof(MxU32)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_move, sizeof(info->m_move)) != SUCCESS) {
+		if (p_storage->Read(&info->m_move, sizeof(MxU32)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
+		if (p_storage->Read(&info->m_mood, sizeof(MxU8)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_unk0x11, sizeof(info->m_unk0x11)) != SUCCESS) {
+		if (p_storage->Read(&info->m_unk0x11, sizeof(MxS8)) != SUCCESS) {
 			goto done;
 		}
 

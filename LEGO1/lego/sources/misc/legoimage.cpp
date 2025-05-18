@@ -19,13 +19,13 @@ LegoPaletteEntry::LegoPaletteEntry()
 LegoResult LegoPaletteEntry::Read(LegoStorage* p_storage)
 {
 	LegoResult result;
-	if ((result = p_storage->Read(&m_red, sizeof(m_red))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_red, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_green, sizeof(m_green))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_green, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_blue, sizeof(m_blue))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_blue, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
 	return SUCCESS;
@@ -35,13 +35,13 @@ LegoResult LegoPaletteEntry::Read(LegoStorage* p_storage)
 LegoResult LegoPaletteEntry::Write(LegoStorage* p_storage)
 {
 	LegoResult result;
-	if ((result = p_storage->Write(&m_red, sizeof(m_red))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_red, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Write(&m_green, sizeof(m_green))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_green, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Write(&m_blue, sizeof(m_blue))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_blue, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
 	return SUCCESS;
@@ -77,13 +77,13 @@ LegoImage::~LegoImage()
 LegoResult LegoImage::Read(LegoStorage* p_storage, LegoU32 p_square)
 {
 	LegoResult result;
-	if ((result = p_storage->Read(&m_width, sizeof(m_width))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_width, sizeof(LegoU32))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_height, sizeof(m_height))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_height, sizeof(LegoU32))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_count, sizeof(m_height))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_count, sizeof(LegoU32))) != SUCCESS) {
 		return result;
 	}
 	for (LegoU32 i = 0; i < m_count; i++) {
@@ -153,13 +153,13 @@ LegoResult LegoImage::Read(LegoStorage* p_storage, LegoU32 p_square)
 LegoResult LegoImage::Write(LegoStorage* p_storage)
 {
 	LegoResult result;
-	if ((result = p_storage->Write(&m_width, sizeof(m_width))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_width, sizeof(LegoU32))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Write(&m_height, sizeof(m_height))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_height, sizeof(LegoU32))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Write(&m_count, sizeof(m_height))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_count, sizeof(LegoU32))) != SUCCESS) {
 		return result;
 	}
 	for (LegoU32 i = 0; i < m_count; i++) {

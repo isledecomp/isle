@@ -658,7 +658,7 @@ MxResult LegoAnimationManager::LoadWorldInfo(LegoOmni::World p_worldId)
 		}
 
 		MxU32 version;
-		if (storage.Read(&version, sizeof(version)) == FAILURE) {
+		if (storage.Read(&version, sizeof(MxU32)) == FAILURE) {
 			goto done;
 		}
 
@@ -667,7 +667,7 @@ MxResult LegoAnimationManager::LoadWorldInfo(LegoOmni::World p_worldId)
 			goto done;
 		}
 
-		if (storage.Read(&m_animCount, sizeof(m_animCount)) == FAILURE) {
+		if (storage.Read(&m_animCount, sizeof(MxU16)) == FAILURE) {
 			goto done;
 		}
 
@@ -760,7 +760,7 @@ MxResult LegoAnimationManager::ReadAnimInfo(LegoStorage* p_storage, AnimInfo* p_
 	MxU8 length;
 	MxS32 i, j;
 
-	if (p_storage->Read(&length, sizeof(length)) == FAILURE) {
+	if (p_storage->Read(&length, sizeof(MxU8)) == FAILURE) {
 		goto done;
 	}
 
@@ -770,33 +770,33 @@ MxResult LegoAnimationManager::ReadAnimInfo(LegoStorage* p_storage, AnimInfo* p_
 	}
 
 	p_info->m_name[length] = 0;
-	if (p_storage->Read(&p_info->m_objectId, sizeof(p_info->m_objectId)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_objectId, sizeof(MxU32)) == FAILURE) {
 		goto done;
 	}
 
-	if (p_storage->Read(&p_info->m_location, sizeof(p_info->m_location)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_location, sizeof(MxS16)) == FAILURE) {
 		goto done;
 	}
-	if (p_storage->Read(&p_info->m_unk0x0a, sizeof(p_info->m_unk0x0a)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_unk0x0a, sizeof(MxU8)) == FAILURE) {
 		goto done;
 	}
-	if (p_storage->Read(&p_info->m_unk0x0b, sizeof(p_info->m_unk0x0b)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_unk0x0b, sizeof(MxU8)) == FAILURE) {
 		goto done;
 	}
-	if (p_storage->Read(&p_info->m_unk0x0c, sizeof(p_info->m_unk0x0c)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_unk0x0c, sizeof(MxU8)) == FAILURE) {
 		goto done;
 	}
-	if (p_storage->Read(&p_info->m_unk0x0d, sizeof(p_info->m_unk0x0d)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_unk0x0d, sizeof(MxU8)) == FAILURE) {
 		goto done;
 	}
 
 	for (i = 0; i < (MxS32) sizeOfArray(p_info->m_unk0x10); i++) {
-		if (p_storage->Read(&p_info->m_unk0x10[i], sizeof(*p_info->m_unk0x10)) != SUCCESS) {
+		if (p_storage->Read(&p_info->m_unk0x10[i], sizeof(float)) != SUCCESS) {
 			goto done;
 		}
 	}
 
-	if (p_storage->Read(&p_info->m_modelCount, sizeof(p_info->m_modelCount)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_modelCount, sizeof(MxU8)) == FAILURE) {
 		goto done;
 	}
 
@@ -821,7 +821,7 @@ MxResult LegoAnimationManager::ReadModelInfo(LegoStorage* p_storage, ModelInfo* 
 	MxResult result = FAILURE;
 	MxU8 length;
 
-	if (p_storage->Read(&length, 1) == FAILURE) {
+	if (p_storage->Read(&length, sizeof(MxU8)) == FAILURE) {
 		goto done;
 	}
 
@@ -831,20 +831,20 @@ MxResult LegoAnimationManager::ReadModelInfo(LegoStorage* p_storage, ModelInfo* 
 	}
 
 	p_info->m_name[length] = 0;
-	if (p_storage->Read(&p_info->m_unk0x04, sizeof(p_info->m_unk0x04)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_unk0x04, sizeof(MxU8)) == FAILURE) {
 		goto done;
 	}
 
-	if (p_storage->Read(p_info->m_location, sizeof(p_info->m_location)) != SUCCESS) {
+	if (p_storage->Read(p_info->m_location, 3 * sizeof(float)) != SUCCESS) {
 		goto done;
 	}
-	if (p_storage->Read(p_info->m_direction, sizeof(p_info->m_direction)) != SUCCESS) {
+	if (p_storage->Read(p_info->m_direction, 3 * sizeof(float)) != SUCCESS) {
 		goto done;
 	}
-	if (p_storage->Read(p_info->m_up, sizeof(p_info->m_up)) != SUCCESS) {
+	if (p_storage->Read(p_info->m_up, 3 * sizeof(float)) != SUCCESS) {
 		goto done;
 	}
-	if (p_storage->Read(&p_info->m_unk0x2c, sizeof(p_info->m_unk0x2c)) == FAILURE) {
+	if (p_storage->Read(&p_info->m_unk0x2c, sizeof(MxU8)) == FAILURE) {
 		goto done;
 	}
 

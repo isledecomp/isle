@@ -178,43 +178,34 @@ MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
 	for (MxS32 i = 0; i < sizeOfArray(g_actorInfo); i++) {
 		LegoActorInfo* info = &g_actorInfo[i];
 
-		if (p_storage->Read(&info->m_sound, sizeof(info->m_sound)) != SUCCESS) {
+		if (p_storage->Read(&info->m_sound, sizeof(MxS32)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_move, sizeof(info->m_move)) != SUCCESS) {
+		if (p_storage->Read(&info->m_move, sizeof(MxS32)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
+		if (p_storage->Read(&info->m_mood, sizeof(MxU8)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_parts[c_infohatPart].m_unk0x08, sizeof(info->m_parts[c_infohatPart].m_unk0x08)) !=
-			SUCCESS) {
+		if (p_storage->Read(&info->m_parts[c_infohatPart].m_unk0x08, sizeof(MxU8)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_parts[c_infohatPart].m_unk0x14, sizeof(info->m_parts[c_infohatPart].m_unk0x14)) !=
-			SUCCESS) {
+		if (p_storage->Read(&info->m_parts[c_infohatPart].m_unk0x14, sizeof(MxU8)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(
-				&info->m_parts[c_infogronPart].m_unk0x14,
-				sizeof(info->m_parts[c_infogronPart].m_unk0x14)
-			) != SUCCESS) {
+		if (p_storage->Read(&info->m_parts[c_infogronPart].m_unk0x14, sizeof(MxU8)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_parts[c_armlftPart].m_unk0x14, sizeof(info->m_parts[c_armlftPart].m_unk0x14)) !=
-			SUCCESS) {
+		if (p_storage->Read(&info->m_parts[c_armlftPart].m_unk0x14, sizeof(MxU8)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_parts[c_armrtPart].m_unk0x14, sizeof(info->m_parts[c_armrtPart].m_unk0x14)) !=
-			SUCCESS) {
+		if (p_storage->Read(&info->m_parts[c_armrtPart].m_unk0x14, sizeof(MxU8)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_parts[c_leglftPart].m_unk0x14, sizeof(info->m_parts[c_leglftPart].m_unk0x14)) !=
-			SUCCESS) {
+		if (p_storage->Read(&info->m_parts[c_leglftPart].m_unk0x14, sizeof(MxU8)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_parts[c_legrtPart].m_unk0x14, sizeof(info->m_parts[c_legrtPart].m_unk0x14)) !=
-			SUCCESS) {
+		if (p_storage->Read(&info->m_parts[c_legrtPart].m_unk0x14, sizeof(MxU8)) != SUCCESS) {
 			goto done;
 		}
 	}

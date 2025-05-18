@@ -113,14 +113,14 @@ undefined4 MxDSAction::VTable0x14()
 MxU32 MxDSAction::GetSizeOnDisk()
 {
 	MxU32 size = MxDSObject::GetSizeOnDisk();
-	size += sizeof(m_flags);
-	size += sizeof(m_startTime);
-	size += sizeof(m_duration);
-	size += sizeof(m_loopCount);
+	size += sizeof(MxU32);
+	size += sizeof(MxS32);
+	size += sizeof(MxS32);
+	size += sizeof(MxS32);
 	size += sizeof(double) * 3; // m_location
 	size += sizeof(double) * 3; // m_direction
 	size += sizeof(double) * 3; // m_up
-	size += sizeof(m_extraLength);
+	size += sizeof(MxU16);
 	size += m_extraLength;
 
 	m_sizeOnDisk = size - MxDSObject::GetSizeOnDisk();
@@ -261,10 +261,10 @@ void MxDSAction::Deserialize(MxU8*& p_source, MxS16 p_flags)
 	MxDSObject::Deserialize(p_source, p_flags);
 
 	// clang-format off
-	m_flags           = *( MxU32*) p_source;  p_source += sizeof(m_flags);
-	m_startTime       = *(MxLong*) p_source;  p_source += sizeof(m_startTime);
-	m_duration        = *(MxLong*) p_source;  p_source += sizeof(m_duration);
-	m_loopCount       = *( MxS32*) p_source;  p_source += sizeof(m_loopCount);
+	m_flags           = *( MxU32*) p_source;  p_source += sizeof(MxU32);
+	m_startTime       = *(MxLong*) p_source;  p_source += sizeof(MxS32);
+	m_duration        = *(MxLong*) p_source;  p_source += sizeof(MxS32);
+	m_loopCount       = *( MxS32*) p_source;  p_source += sizeof(MxS32);
 	m_location[0]     = *(double*) p_source;  p_source += sizeof(double);
 	m_location[1]     = *(double*) p_source;  p_source += sizeof(double);
 	m_location[2]     = *(double*) p_source;  p_source += sizeof(double);
