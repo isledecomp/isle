@@ -79,7 +79,7 @@ protected:
 	void Error(const char* p_message, int p_error);
 
 	BOOL RecreateDirectDraw(GUID** a2);
-	void FUN_1009e020();
+	void ClearBackBuffers();
 	void FUN_1009d920();
 
 	// SYNTHETIC: LEGO1 0x1009d510
