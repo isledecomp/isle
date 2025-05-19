@@ -7,7 +7,7 @@
 DECOMP_SIZE_ASSERT(ViewROI, 0xe4)
 
 // GLOBAL: LEGO1 0x101013d8
-undefined g_unk101013d8 = 0;
+MxBool g_lightSupport = FALSE;
 
 // FUNCTION: LEGO1 0x100a9eb0
 float ViewROI::IntrinsicImportance() const
@@ -78,9 +78,9 @@ void ViewROI::VTable0x1c()
 }
 
 // FUNCTION: LEGO1 0x100aa500
-undefined ViewROI::SetUnk101013d8(undefined p_flag)
+MxBool ViewROI::SetLightSupport(MxBool p_flag)
 {
-	undefined oldFlag = g_unk101013d8;
-	g_unk101013d8 = p_flag;
+	MxBool oldFlag = g_lightSupport;
+	g_lightSupport = p_flag;
 	return oldFlag;
 }
