@@ -2,7 +2,6 @@
 #define VIEWROI_H
 
 #include "decomp.h"
-#include "omni/include/mxtypes.h"
 #include "realtime/orientableroi.h"
 #include "tgl/tgl.h"
 #include "viewlodlist.h"
@@ -60,7 +59,7 @@ public:
 	int GetUnknown0xe0() { return m_unk0xe0; }
 	void SetUnknown0xe0(int p_unk0xe0) { m_unk0xe0 = p_unk0xe0; }
 
-	static MxBool SetLightSupport(MxBool p_flag);
+	static unsigned char SetLightSupport(unsigned char p_flag);
 
 protected:
 	void UpdateWorldData(const Matrix4& parent2world) override; // vtable+0x28
