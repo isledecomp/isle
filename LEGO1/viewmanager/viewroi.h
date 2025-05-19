@@ -59,7 +59,7 @@ public:
 	int GetUnknown0xe0() { return m_unk0xe0; }
 	void SetUnknown0xe0(int p_unk0xe0) { m_unk0xe0 = p_unk0xe0; }
 
-	static unsigned char SetLightSupport(unsigned char p_flag);
+	static unsigned char SetLightSupport(unsigned char p_lightSupport);
 
 protected:
 	void UpdateWorldData(const Matrix4& parent2world) override; // vtable+0x28

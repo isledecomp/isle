@@ -78,9 +78,9 @@ void ViewROI::VTable0x1c()
 }
 
 // FUNCTION: LEGO1 0x100aa500
-unsigned char ViewROI::SetLightSupport(unsigned char p_flag)
+unsigned char ViewROI::SetLightSupport(unsigned char p_lightSupport)
 {
 	unsigned char oldFlag = g_lightSupport;
-	g_lightSupport = p_flag;
+	g_lightSupport = p_lightSupport;
 	return oldFlag;
 }
