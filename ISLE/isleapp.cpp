@@ -87,7 +87,7 @@ IsleApp::IsleApp()
 	m_backBuffersInVram = TRUE;
 	m_using8bit = FALSE;
 	m_using16bit = TRUE;
-	m_unk0x24 = 0;
+	m_hasLightSupport = FALSE;
 	m_drawCursor = FALSE;
 	m_use3dSound = TRUE;
 	m_useMusic = TRUE;
@@ -209,7 +209,7 @@ void IsleApp::SetupVideoFlags(
 	BOOL backBuffers,
 	BOOL using8bit,
 	BOOL using16bit,
-	BOOL param_6,
+	BOOL hasLightSupport,
 	BOOL param_7,
 	BOOL wideViewAngle,
 	char* deviceId
@@ -218,7 +218,7 @@ void IsleApp::SetupVideoFlags(
 	m_videoParam.Flags().SetFullScreen(fullScreen);
 	m_videoParam.Flags().SetFlipSurfaces(flipSurfaces);
 	m_videoParam.Flags().SetBackBuffers(!backBuffers);
-	m_videoParam.Flags().SetLacksLightSupport(!param_6);
+	m_videoParam.Flags().SetLacksLightSupport(!hasLightSupport);
 	m_videoParam.Flags().SetF1bit7(param_7);
 	m_videoParam.Flags().SetWideViewAngle(wideViewAngle);
 	m_videoParam.Flags().SetF2bit1(1);
@@ -550,7 +550,7 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 		m_backBuffersInVram,
 		m_using8bit,
 		m_using16bit,
-		m_unk0x24,
+		m_hasLightSupport,
 		FALSE,
 		m_wideViewAngle,
 		m_deviceId

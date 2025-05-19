@@ -132,7 +132,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 		p_videoParam.Flags().SetLacksLightSupport(FALSE);
 	}
 
-	ViewROI::SetUnk101013d8(p_videoParam.Flags().GetLacksLightSupport() == FALSE);
+	ViewROI::SetLightSupport(p_videoParam.Flags().GetLacksLightSupport() == FALSE);
 
 	if (!m_direct3d->Create(
 			hwnd,
