@@ -820,6 +820,6 @@ inline D3DRMLIGHTTYPE Translate(LightType tglLightType)
 // GLOBAL: LEGO1 0x100dd1e0
 // IID_IDirect3DRMMeshBuilder
 
-} /* namespace TglImpl *
+} /* namespace TglImpl */
 
-#endif/
+#endif
