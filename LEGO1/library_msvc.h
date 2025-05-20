@@ -1,4 +1,4 @@
-#ifdef 0
+#if 0
 // For LEGO1 symbols only
 
 // aka `operator new`
