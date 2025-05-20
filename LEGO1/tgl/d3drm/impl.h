@@ -1,3 +1,5 @@
+#ifndef TGL_D3DRM_IMPL_H
+#define TGL_D3DRM_IMPL_H
 
 #include "compat.h"
 #include "decomp.h"
@@ -819,3 +821,5 @@ inline D3DRMLIGHTTYPE Translate(LightType tglLightType)
 // IID_IDirect3DRMMeshBuilder
 
 } /* namespace TglImpl */
+
+#endif
