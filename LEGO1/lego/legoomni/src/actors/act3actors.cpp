@@ -138,8 +138,8 @@ MxU32 Act3Actor::VTable0x90(float p_time, Matrix4& p_transform)
 			m_unk0x1c = 0;
 
 			positionRef -= g_unk0x10104ef0;
-			m_roi->FUN_100a58f0(p_transform);
-			m_roi->VTable0x14();
+			m_roi->SetLocal2World(p_transform);
+			m_roi->WrappedUpdateWorldData();
 			return TRUE;
 		}
 	}
@@ -163,8 +163,8 @@ MxResult Act3Actor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 
 		Vector3(local2world[3]) += g_unk0x10104ef0;
 
-		roi->FUN_100a58f0(local2world);
-		roi->VTable0x14();
+		roi->SetLocal2World(local2world);
+		roi->WrappedUpdateWorldData();
 
 		p_actor->SetActorState(c_two | c_noCollide);
 	}

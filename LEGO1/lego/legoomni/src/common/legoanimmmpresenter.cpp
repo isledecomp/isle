@@ -364,7 +364,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b5b0(MxLong p_time)
 				LegoROI* roi = m_roiMap[i];
 
 				if (roi != NULL) {
-					roi->WrappedSetLocalTransform(m_unk0x68[i]);
+					roi->WrappedSetLocal2WorldWithWorldDataUpdate(m_unk0x68[i]);
 				}
 			}
 		}
@@ -450,7 +450,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 			}
 
 			if (und != 0) {
-				viewROI->WrappedSetLocalTransform(m_tranInfo->m_unk0x2c);
+				viewROI->WrappedSetLocal2WorldWithWorldDataUpdate(m_tranInfo->m_unk0x2c);
 				VideoManager()->Get3DManager()->Moved(*viewROI);
 				m_world->PlaceActor(actor);
 			}

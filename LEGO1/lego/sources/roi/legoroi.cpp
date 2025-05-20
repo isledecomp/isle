@@ -393,7 +393,7 @@ LegoResult LegoROI::FUN_100a8da0(LegoTreeNode* p_node, const Matrix4& p_matrix, 
 	if (roi != NULL) {
 		FUN_100a8cb0(data, p_time, mat);
 		roi->m_local2world.Product(mat, p_matrix);
-		roi->VTable0x1c();
+		roi->UpdateWorldData();
 
 		LegoBool und = data->FUN_100a0990(p_time);
 		roi->SetVisibility(und);
@@ -421,7 +421,7 @@ void LegoROI::FUN_100a8e80(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_t
 	LegoROI* roi = p_roiMap[data->GetUnknown0x20()];
 	if (roi != NULL) {
 		roi->m_local2world.Product(mat, p_matrix);
-		roi->VTable0x1c();
+		roi->UpdateWorldData();
 
 		LegoBool und = data->FUN_100a0990(p_time);
 		roi->SetVisibility(und);
@@ -750,7 +750,7 @@ void TimeROI::FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time)
 		targetPosition -= vec;
 		targetPosition /= time / 1000.0;
 
-		FUN_100a5a30(targetPosition);
+		SetWorldVelocity(targetPosition);
 	}
 }
 

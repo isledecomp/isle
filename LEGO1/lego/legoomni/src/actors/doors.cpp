@@ -89,24 +89,24 @@ void Doors::Animate(float p_time)
 			local10.Clear();
 			local58.RotateY(-local8);
 			local10 = m_ltDoorLocal[3];
-			m_ltDoor->FUN_100a58f0(local58);
-			m_ltDoor->VTable0x14();
+			m_ltDoor->SetLocal2World(local58);
+			m_ltDoor->WrappedUpdateWorldData();
 
 			local58 = m_rtDoorLocal;
 			local10.Clear();
 			local58.RotateY(local8);
 			local10 = m_rtDoorLocal[3];
-			m_rtDoor->FUN_100a58f0(local58);
-			m_rtDoor->VTable0x14();
+			m_rtDoor->SetLocal2World(local58);
+			m_rtDoor->WrappedUpdateWorldData();
 
 			m_unk0x1f4 = local8;
 		}
 
 		if (m_unk0x158 + g_unk0x100d8e84 < p_time) {
-			m_ltDoor->FUN_100a58f0(m_ltDoorLocal);
-			m_rtDoor->FUN_100a58f0(m_rtDoorLocal);
-			m_ltDoor->VTable0x14();
-			m_rtDoor->VTable0x14();
+			m_ltDoor->SetLocal2World(m_ltDoorLocal);
+			m_rtDoor->SetLocal2World(m_rtDoorLocal);
+			m_ltDoor->WrappedUpdateWorldData();
+			m_rtDoor->WrappedUpdateWorldData();
 			m_unk0x154 = 1;
 			m_actorState = c_initial;
 			m_unk0x1f4 = 0;

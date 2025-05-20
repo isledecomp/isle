@@ -391,8 +391,8 @@ void Helicopter::VTable0x74(Matrix4& p_transform)
 		FUN_10010c30();
 	}
 	else {
-		m_roi->FUN_100a58f0(p_transform);
-		m_roi->VTable0x14();
+		m_roi->SetLocal2World(p_transform);
+		m_roi->WrappedUpdateWorldData();
 		if (m_cameraFlag) {
 			FUN_10010c30();
 		}

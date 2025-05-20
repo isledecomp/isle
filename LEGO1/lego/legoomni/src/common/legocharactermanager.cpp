@@ -551,7 +551,7 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 			Mx3DPointFloat(g_actorLODs[i + 1].m_up),
 			mat
 		);
-		childROI->WrappedSetLocalTransform(mat);
+		childROI->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
 
 		if (g_actorLODs[i + 1].m_flags & LegoActorLOD::c_flag1 && (i != 0 || part.m_unk0x00[part.m_unk0x08] != 0)) {
 
@@ -577,7 +577,7 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 		Mx3DPointFloat(g_actorLODs[c_topLOD].m_up),
 		mat
 	);
-	roi->WrappedSetLocalTransform(mat);
+	roi->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
 
 	info->m_roi = roi;
 	success = TRUE;
@@ -1066,7 +1066,7 @@ MxResult LegoCharacterManager::FUN_10085870(LegoROI* p_roi)
 
 		p_roi->SetUnknown0x80(boundingBox);
 
-		p_roi->VTable0x14();
+		p_roi->WrappedUpdateWorldData();
 
 		result = SUCCESS;
 	}

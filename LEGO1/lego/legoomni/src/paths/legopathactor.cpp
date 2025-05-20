@@ -382,12 +382,12 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 void LegoPathActor::VTable0x74(Matrix4& p_transform)
 {
 	if (m_userNavFlag) {
-		m_roi->WrappedSetLocalTransform(p_transform);
+		m_roi->WrappedSetLocal2WorldWithWorldDataUpdate(p_transform);
 		FUN_10010c30();
 	}
 	else {
-		m_roi->WrappedSetLocalTransform(p_transform);
-		m_roi->VTable0x14();
+		m_roi->WrappedSetLocal2WorldWithWorldDataUpdate(p_transform);
+		m_roi->WrappedUpdateWorldData();
 
 		if (m_cameraFlag) {
 			FUN_10010c30();
@@ -731,11 +731,11 @@ void LegoPathActor::VTable0xa4(MxBool& p_und1, MxS32& p_und2)
 void LegoPathActor::VTable0xa8()
 {
 	m_lastTime = Timer()->GetTime();
-	m_roi->FUN_100a58f0(m_unk0xec);
-	m_roi->VTable0x14();
+	m_roi->SetLocal2World(m_unk0xec);
+	m_roi->WrappedUpdateWorldData();
 
 	if (m_userNavFlag) {
-		m_roi->WrappedSetLocalTransform(m_unk0xec);
+		m_roi->WrappedSetLocal2WorldWithWorldDataUpdate(m_unk0xec);
 		FUN_10010c30();
 	}
 }

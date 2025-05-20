@@ -630,7 +630,7 @@ void IslePathActor::VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundar
 		m_world->Add(this);
 	}
 
-	m_roi->FUN_100a58f0(p_transform);
+	m_roi->SetLocal2World(p_transform);
 	if (m_cameraFlag) {
 		FUN_1003eda0();
 		FUN_10010c30();
@@ -648,6 +648,6 @@ void IslePathActor::FUN_1001b660()
 
 	up *= -1.0f;
 	position.EqualsCross(direction, up);
-	m_roi->FUN_100a58f0(transform);
-	m_roi->VTable0x14();
+	m_roi->SetLocal2World(transform);
+	m_roi->WrappedUpdateWorldData();
 }

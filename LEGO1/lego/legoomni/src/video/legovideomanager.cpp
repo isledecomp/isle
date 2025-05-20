@@ -200,7 +200,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	pLODList->Release();
 
 	CalcLocalTransform(posVec, dirVec, upVec, outMatrix);
-	m_viewROI->WrappedSetLocalTransform(outMatrix);
+	m_viewROI->WrappedSetLocal2WorldWithWorldDataUpdate(outMatrix);
 
 	m_3dManager->Add(*m_viewROI);
 	m_3dManager->SetPointOfView(*m_viewROI);

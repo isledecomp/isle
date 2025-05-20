@@ -98,7 +98,7 @@ MxU32 LegoExtraActor::VTable0x90(float p_time, Matrix4& p_transform)
 			m_actorState = c_initial;
 			m_scheduledTime = 0.0f;
 			positionRef -= g_unk0x10104c18;
-			m_roi->FUN_100a58f0(p_transform);
+			m_roi->SetLocal2World(p_transform);
 			return TRUE;
 		}
 	}
@@ -229,8 +229,8 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			}
 
 			if (!b) {
-				m_roi->FUN_100a58f0(matrix2);
-				m_roi->VTable0x14();
+				m_roi->SetLocal2World(matrix2);
+				m_roi->WrappedUpdateWorldData();
 				FUN_1002ad8a();
 				assert(m_roi);
 				assert(SoundManager()->GetCacheSoundManager());
@@ -254,7 +254,7 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			MxMatrix matrix3 = MxMatrix(roi->GetLocal2World());
 			Vector3 positionRef(matrix3[3]);
 			positionRef += g_unk0x10104c18;
-			roi->FUN_100a58f0(matrix3);
+			roi->SetLocal2World(matrix3);
 
 			float dotX = dir.Dot(dir, Mx3DPointFloat(1.0f, 0, 0));
 			float dotZ = dir.Dot(dir, Mx3DPointFloat(0, 0, 1.0f));
@@ -346,7 +346,7 @@ void LegoExtraActor::Animate(float p_time)
 			m_whichAnim = 0;
 			m_actorState = c_initial;
 			SetWorldSpeed(m_prevWorldSpeed);
-			m_roi->FUN_100a58f0(m_unk0x18);
+			m_roi->SetLocal2World(m_unk0x18);
 			m_lastTime = p_time;
 			break;
 		}
