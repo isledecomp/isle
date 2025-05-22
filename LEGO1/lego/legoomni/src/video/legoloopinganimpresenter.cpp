@@ -75,8 +75,8 @@ void LegoLoopingAnimPresenter::PutFrame()
 				dir *= dirsqr;
 				up *= upsqr;
 
-				m_unk0x8c[i]->FUN_100a58f0(mat);
-				m_unk0x8c[i]->VTable0x14();
+				m_unk0x8c[i]->SetLocal2World(mat);
+				m_unk0x8c[i]->WrappedUpdateWorldData();
 			}
 		}
 	}

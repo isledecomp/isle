@@ -17,15 +17,15 @@ OrientableROI::OrientableROI()
 	IDENTMAT4(m_local2world);
 
 	m_parentROI = NULL;
-	ToggleUnknown0xd8(TRUE);
+	SetNeedsWorldDataUpdate(TRUE);
 }
 
 // Maybe an overload based on MxMatrix type
 // FUNCTION: LEGO1 0x100a46a0
 // FUNCTION: BETA10 0x10165268
-void OrientableROI::WrappedSetLocalTransform(const Matrix4& p_transform)
+void OrientableROI::WrappedSetLocal2WorldWithWorldDataUpdate(const Matrix4& p_local2world)
 {
-	SetLocalTransform(p_transform);
+	SetLocal2WorldWithWorldDataUpdate(p_local2world);
 }
 
 // FUNCTION: LEGO1 0x100a46b0
@@ -57,14 +57,14 @@ void OrientableROI::UpdateTransformationRelativeToParent(const Matrix4& p_transf
 		}
 	}
 
-	UpdateWorldData(mat);
+	UpdateWorldDataWithTransformAndChildren(mat);
 }
 
 // Maybe an overload based on MxMatrix type
 // FUNCTION: LEGO1 0x100a5090
-void OrientableROI::WrappedVTable0x24(const Matrix4& p_transform)
+void OrientableROI::WrappedUpdateWorldDataWithTransform(const Matrix4& p_transform)
 {
-	VTable0x24(p_transform);
+	UpdateWorldDataWithTransform(p_transform);
 }
 
 // FUNCTION: LEGO1 0x100a50a0
@@ -101,21 +101,21 @@ void OrientableROI::GetLocalTransform(Matrix4& p_transform)
 
 // FUNCTION: LEGO1 0x100a58f0
 // FUNCTION: BETA10 0x10167b77
-void OrientableROI::FUN_100a58f0(const Matrix4& p_transform)
+void OrientableROI::SetLocal2World(const Matrix4& p_local2world)
 {
-	m_local2world = p_transform;
-	ToggleUnknown0xd8(TRUE);
+	m_local2world = p_local2world;
+	SetNeedsWorldDataUpdate(TRUE);
 }
 
 // FUNCTION: LEGO1 0x100a5910
-void OrientableROI::VTable0x1c()
+void OrientableROI::UpdateWorldData()
 {
 	UpdateWorldBoundingVolumes();
 	UpdateWorldVelocity();
 }
 
 // FUNCTION: LEGO1 0x100a5930
-void OrientableROI::SetLocalTransform(const Matrix4& p_transform)
+void OrientableROI::SetLocal2WorldWithWorldDataUpdate(const Matrix4& p_transform)
 {
 	m_local2world = p_transform;
 	UpdateWorldBoundingVolumes();
@@ -123,7 +123,7 @@ void OrientableROI::SetLocalTransform(const Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x100a5960
-void OrientableROI::VTable0x24(const Matrix4& p_transform)
+void OrientableROI::UpdateWorldDataWithTransform(const Matrix4& p_transform)
 {
 	MxMatrix l_matrix(m_local2world);
 	m_local2world.Product(p_transform, l_matrix);
@@ -132,7 +132,7 @@ void OrientableROI::VTable0x24(const Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x100a59b0
-void OrientableROI::UpdateWorldData(const Matrix4& p_transform)
+void OrientableROI::UpdateWorldDataWithTransformAndChildren(const Matrix4& p_transform)
 {
 	MxMatrix l_matrix(m_local2world);
 	m_local2world.Product(l_matrix, p_transform);
@@ -143,13 +143,13 @@ void OrientableROI::UpdateWorldData(const Matrix4& p_transform)
 	if (comp) {
 		for (CompoundObject::iterator iter = comp->begin(); !(iter == comp->end()); iter++) {
 			ROI* child = *iter;
-			static_cast<OrientableROI*>(child)->UpdateWorldData(p_transform);
+			static_cast<OrientableROI*>(child)->UpdateWorldDataWithTransformAndChildren(p_transform);
 		}
 	}
 }
 
 // FUNCTION: LEGO1 0x100a5a30
-void OrientableROI::FUN_100a5a30(const Vector3& p_world_velocity)
+void OrientableROI::SetWorldVelocity(const Vector3& p_world_velocity)
 {
 	m_world_velocity = p_world_velocity;
 }

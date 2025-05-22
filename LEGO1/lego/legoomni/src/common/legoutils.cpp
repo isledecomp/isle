@@ -86,7 +86,7 @@ void RotateY(LegoROI* p_roi, MxFloat p_angle)
 		mat[i][2] = (local2world[i][2] * fcos) - (local2world[i][0] * fsin);
 	}
 
-	p_roi->WrappedSetLocalTransform(mat);
+	p_roi->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
 }
 
 // FUNCTION: LEGO1 0x1003de80
@@ -218,7 +218,7 @@ void FUN_1003e050(LegoAnimPresenter* p_presenter)
 	LegoROI* roi = video->GetViewROI();
 	Lego3DView* view = video->Get3DManager()->GetLego3DView();
 
-	roi->WrappedSetLocalTransform(viewMatrix);
+	roi->WrappedSetLocal2WorldWithWorldDataUpdate(viewMatrix);
 	view->Moved(*roi);
 	FUN_1003eda0();
 	video->Get3DManager()->SetFrustrum(cam, 0.1, 250.0);
@@ -480,7 +480,7 @@ void FUN_1003eda0()
 
 	LegoROI* viewROI = VideoManager()->GetViewROI();
 	if (viewROI) {
-		viewROI->FUN_100a5a30(vec);
+		viewROI->SetWorldVelocity(vec);
 		SoundManager()->UpdateListener(
 			viewROI->GetWorldPosition(),
 			viewROI->GetWorldDirection(),

@@ -659,8 +659,8 @@ void LegoAnimPresenter::PutFrame()
 					dir *= dirsqr;
 					up *= upsqr;
 
-					m_unk0x8c[i]->FUN_100a58f0(mat);
-					m_unk0x8c[i]->VTable0x14();
+					m_unk0x8c[i]->SetLocal2World(mat);
+					m_unk0x8c[i]->WrappedUpdateWorldData();
 				}
 			}
 		}
@@ -689,7 +689,7 @@ MxResult LegoAnimPresenter::FUN_1006afc0(MxMatrix*& p_matrix, float p_und)
 		if (m_roiMap[i] != NULL) {
 			mat = p_matrix[i];
 			p_matrix[i] = m_roiMap[i]->GetLocal2World();
-			m_roiMap[i]->FUN_100a58f0(mat);
+			m_roiMap[i]->SetLocal2World(mat);
 		}
 	}
 

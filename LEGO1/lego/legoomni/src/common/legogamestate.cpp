@@ -215,7 +215,7 @@ void LegoGameState::SetActor(MxU8 p_actorId)
 	newActor->SetROI(roi, FALSE, FALSE);
 
 	if (oldActor) {
-		newActor->GetROI()->FUN_100a58f0(oldActor->GetROI()->GetLocal2World());
+		newActor->GetROI()->SetLocal2World(oldActor->GetROI()->GetLocal2World());
 		newActor->SetBoundary(oldActor->GetBoundary());
 		delete oldActor;
 	}

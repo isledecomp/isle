@@ -2808,7 +2808,7 @@ void LegoAnimationManager::FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x
 
 		Mx3DPointFloat vec;
 		vec.Clear();
-		viewROI->FUN_100a5a30(vec);
+		viewROI->SetWorldVelocity(vec);
 	}
 }
 
@@ -2841,7 +2841,7 @@ void LegoAnimationManager::FUN_10064b50(MxLong p_time)
 
 		LegoROI* viewROI = VideoManager()->GetViewROI();
 
-		viewROI->WrappedSetLocalTransform(mat);
+		viewROI->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
 		VideoManager()->Get3DManager()->Moved(*viewROI);
 		SoundManager()->UpdateListener(
 			viewROI->GetWorldPosition(),

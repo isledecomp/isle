@@ -611,8 +611,8 @@ MxU32 Act2Actor::FUN_10019700(MxFloat p_param)
 
 	MxMatrix matrix = m_roi->GetLocal2World();
 	matrix[3][1] += 1.0f;
-	brickstrROI->FUN_100a58f0(matrix);
-	brickstrROI->VTable0x14();
+	brickstrROI->SetLocal2World(matrix);
+	brickstrROI->WrappedUpdateWorldData();
 
 	Vector3 col0(matrix[0]);
 	Vector3 col1(matrix[1]);

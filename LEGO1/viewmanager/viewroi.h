@@ -49,12 +49,12 @@ public:
 		}
 	}
 
-	float IntrinsicImportance() const override;                  // vtable+0x04
-	void VTable0x1c() override;                                  // vtable+0x1c
-	void SetLocalTransform(const Matrix4& p_transform) override; // vtable+0x20
-	void VTable0x24(const Matrix4& p_transform) override;        // vtable+0x24
-	virtual Tgl::Group* GetGeometry();                           // vtable+0x30
-	virtual const Tgl::Group* GetGeometry() const;               // vtable+0x34
+	float IntrinsicImportance() const override;                                  // vtable+0x04
+	void UpdateWorldData() override;                                             // vtable+0x1c
+	void SetLocal2WorldWithWorldDataUpdate(const Matrix4& p_transform) override; // vtable+0x20
+	void UpdateWorldDataWithTransform(const Matrix4& p_transform) override;      // vtable+0x24
+	virtual Tgl::Group* GetGeometry();                                           // vtable+0x30
+	virtual const Tgl::Group* GetGeometry() const;                               // vtable+0x34
 
 	int GetUnknown0xe0() { return m_unk0xe0; }
 	void SetUnknown0xe0(int p_unk0xe0) { m_unk0xe0 = p_unk0xe0; }
@@ -62,7 +62,7 @@ public:
 	static unsigned char SetLightSupport(unsigned char p_lightSupport);
 
 protected:
-	void UpdateWorldData(const Matrix4& parent2world) override; // vtable+0x28
+	void UpdateWorldDataWithTransformAndChildren(const Matrix4& parent2world) override; // vtable+0x28
 
 	Tgl::Group* geometry; // 0xdc
 	int m_unk0xe0;        // 0xe0

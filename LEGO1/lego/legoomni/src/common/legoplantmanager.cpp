@@ -666,8 +666,8 @@ MxResult LegoPlantManager::Tickle()
 
 			SET3(locald8[3], localec);
 
-			entry->m_roi->FUN_100a58f0(locald8);
-			entry->m_roi->VTable0x14();
+			entry->m_roi->SetLocal2World(locald8);
+			entry->m_roi->WrappedUpdateWorldData();
 
 			if (entry->m_time < time) {
 				LegoPlantInfo* info = GetInfo(entry->m_entity);

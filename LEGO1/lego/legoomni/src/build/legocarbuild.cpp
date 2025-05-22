@@ -318,7 +318,7 @@ void LegoCarBuild::FUN_10022f30()
 void LegoCarBuild::VTable0x6c()
 {
 	m_unk0x178 = m_unk0x1c0;
-	m_unk0x110->WrappedSetLocalTransform(m_unk0x178);
+	m_unk0x110->WrappedSetLocal2WorldWithWorldDataUpdate(m_unk0x178);
 	m_unk0x2a4 = Vector4(m_unk0x110->GetWorldPosition());
 
 	VTable0x70();
@@ -406,7 +406,7 @@ void LegoCarBuild::FUN_10023130(MxLong p_x, MxLong p_y)
 			local78[3][2] = m_unk0x178[3][2] + local18[2];
 			local78[3][3] = 1.0;
 
-			m_unk0x110->WrappedSetLocalTransform(local78);
+			m_unk0x110->WrappedSetLocal2WorldWithWorldDataUpdate(local78);
 		}
 	}
 }

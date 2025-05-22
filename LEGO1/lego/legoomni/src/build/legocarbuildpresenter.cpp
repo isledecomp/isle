@@ -267,7 +267,7 @@ void LegoCarBuildAnimPresenter::StreamingTickle()
 
 	CalcLocalTransform(cameraPosition, dirVec, upVec, localTransform);
 
-	videoManagerROI->WrappedSetLocalTransform(localTransform);
+	videoManagerROI->WrappedSetLocal2WorldWithWorldDataUpdate(localTransform);
 	lego3dview->Moved(*videoManagerROI);
 	videoManager->Get3DManager()->SetFrustrum(fov, 0.1, 250.0);
 
