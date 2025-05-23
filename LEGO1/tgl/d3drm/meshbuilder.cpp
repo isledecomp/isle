@@ -45,16 +45,6 @@ Mesh* MeshBuilderImpl::CreateMesh(
 	return pMeshImpl;
 }
 
-inline Result MeshSetTextureMappingMode(MeshImpl::MeshData* pMesh, TextureMappingMode mode)
-{
-	if (mode == PerspectiveCorrect) {
-		return ResultVal(pMesh->groupMesh->SetGroupMapping(pMesh->groupIndex, D3DRMMAP_PERSPCORRECT));
-	}
-	else {
-		return ResultVal(pMesh->groupMesh->SetGroupMapping(pMesh->groupIndex, 0));
-	}
-}
-
 inline Result CreateMesh(
 	IDirect3DRMMesh* pD3DRM,
 	unsigned long faceCount,
