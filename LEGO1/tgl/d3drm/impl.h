@@ -436,6 +436,9 @@ public:
 
 	inline void Destroy();
 	inline Mesh* DeepClone(const MeshBuilderImpl& rMesh);
+	inline Result GetTexture(TextureImpl** ppTexture);
+	inline Result SetTexture(const TextureImpl* pTexture);
+	inline Mesh* ShallowClone(const MeshBuilderImpl& rMesh);
 
 	friend class RendererImpl;
 
@@ -498,6 +501,12 @@ public:
 	GroupDataType& ImplementationData() { return m_data; }
 
 	inline void Destroy();
+	inline Result SetTexture(const TextureImpl* pTexture);
+	inline Result GetTexture(TextureImpl** ppTexture);
+	inline Result Add(const GroupImpl& rGroup);
+	inline Result Add(const MeshBuilderImpl& rMesh);
+	inline Result Remove(const GroupImpl& rGroup);
+	inline Result Remove(const MeshBuilderImpl& rMesh);
 
 	friend class RendererImpl;
 
@@ -677,6 +686,18 @@ void TextureImpl::Destroy()
 	}
 }
 
+// Used by both Mesh and MeshBuilder
+// FUNCTION: BETA10 0x10170270
+inline Result MeshSetTextureMappingMode(MeshImpl::MeshData* pMesh, TextureMappingMode mode)
+{
+	if (mode == PerspectiveCorrect) {
+		return ResultVal(pMesh->groupMesh->SetGroupMapping(pMesh->groupIndex, D3DRMMAP_PERSPCORRECT));
+	}
+	else {
+		return ResultVal(pMesh->groupMesh->SetGroupMapping(pMesh->groupIndex, 0));
+	}
+}
+
 // Translation helpers
 // FUNCTION: BETA10 0x1016fc40
 inline D3DRMRENDERQUALITY Translate(ShadingModel tglShadingModel)
@@ -728,6 +749,7 @@ inline D3DRMPROJECTIONTYPE Translate(ProjectionType tglProjectionType)
 // Yes this function serves no purpose, originally they intended it to
 // convert from doubles to floats but ended up using floats throughout
 // the software stack.
+// FUNCTION: BETA10 0x1016fa10
 inline D3DRMMATRIX4D* Translate(FloatMatrix4& tglMatrix4x4, D3DRMMATRIX4D& rD3DRMMatrix4x4)
 {
 	for (int i = 0; i < (sizeof(rD3DRMMatrix4x4) / sizeof(rD3DRMMatrix4x4[0])); i++) {
@@ -778,6 +800,26 @@ inline D3DRMLIGHTTYPE Translate(LightType tglLightType)
 	return lightType;
 }
 
+// FUNCTION: BETA10 0x101702e0
+inline D3DRMMATERIALMODE Translate(MaterialMode mode)
+{
+	D3DRMMATERIALMODE d3dMode;
+	switch (mode) {
+	case FromParent:
+		d3dMode = D3DRMMATERIAL_FROMPARENT;
+		break;
+	case FromFrame:
+		d3dMode = D3DRMMATERIAL_FROMFRAME;
+		break;
+	case FromMesh:
+		d3dMode = D3DRMMATERIAL_FROMMESH;
+		break;
+	}
+	return d3dMode;
+}
+
+} /* namespace TglImpl */
+
 // SYNTHETIC: LEGO1 0x100a16d0
 // SYNTHETIC: BETA10 0x10169aa0
 // TglImpl::RendererImpl::`scalar deleting destructor'
@@ -819,7 +861,5 @@ inline D3DRMLIGHTTYPE Translate(LightType tglLightType)
 
 // GLOBAL: LEGO1 0x100dd1e0
 // IID_IDirect3DRMMeshBuilder
-
-} /* namespace TglImpl */
 
 #endif
