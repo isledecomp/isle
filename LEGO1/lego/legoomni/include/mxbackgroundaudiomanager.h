@@ -37,11 +37,11 @@ public:
 
 	void StartAction(MxParam& p_param);
 	void StopAction(MxParam& p_param);
-	MxResult PlayMusic(MxDSAction& p_action, undefined4 p_speed, MxPresenter::TickleState p_tickleState);
+	MxResult PlayMusic(MxDSAction& p_action, MxS32 p_speed, MxPresenter::TickleState p_tickleState);
 
-	void FUN_1007ee70();
-	void FUN_1007ef40();
-	void FadeInOrFadeOut();
+	void MakePendingPresenterActive();
+	void FadeInPendingPresenter();
+	void FadeToTargetVolume();
 
 	void Enable(MxBool p_enable);
 	virtual MxResult Create(MxAtomId& p_script, MxU32 p_frequencyMS);
@@ -50,7 +50,7 @@ public:
 	void Stop();
 	void LowerVolume();
 	void RaiseVolume();
-	undefined4 FUN_1007f610(MxPresenter* p_unk0x138, MxS32 p_speed, MxPresenter::TickleState p_tickleState);
+	MxResult SetPendingPresenter(MxPresenter* p_presenter, MxS32 p_speed, MxPresenter::TickleState p_tickleState);
 
 	// SYNTHETIC: LEGO1 0x1007ec00
 	// MxBackgroundAudioManager::`scalar deleting destructor'
@@ -59,11 +59,11 @@ private:
 	MxResult OpenMusic(MxAtomId& p_script);
 	void DestroyMusic();
 
-	MxBool m_enabled;             // 0x08
-	MxDSAction m_action1;         // 0x0c
-	MxAudioPresenter* m_unk0xa0;  // 0xa0
-	MxDSAction m_action2;         // 0xa4
-	MxAudioPresenter* m_unk0x138; // 0x138
+	MxBool m_enabled;                     // 0x08
+	MxDSAction m_action1;                 // 0x0c
+	MxAudioPresenter* m_activePresenter;  // 0xa0
+	MxDSAction m_action2;                 // 0xa4
+	MxAudioPresenter* m_pendingPresenter; // 0x138
 
 	// name is inferred from context
 	MxPresenter::TickleState m_tickleState; // 0x13c
@@ -71,9 +71,9 @@ private:
 	// name inferred from parameter p_speed
 	MxS32 m_speed; // 0x140
 
-	MxS32 m_targetVolume; // 0x144
-	MxS16 m_unk0x148;     // 0x148
-	MxAtomId m_script;    // 0x14c
+	MxS32 m_targetVolume;            // 0x144
+	MxS16 m_volumeSuppressionAmount; // 0x148
+	MxAtomId m_script;               // 0x14c
 };
 
 #endif // MXBACKGROUNDAUDIOMANAGER_H
