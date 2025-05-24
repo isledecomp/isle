@@ -1231,7 +1231,7 @@ undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
 		m_unk0x338 = SoundManager()->FUN_100aebd0(*g_jukeboxScript, jukeboxScript);
 
 		if (m_unk0x338) {
-			BackgroundAudioManager()->FUN_1007f610(m_unk0x338, 5, MxPresenter::e_repeating);
+			BackgroundAudioManager()->SetPendingPresenter(m_unk0x338, 5, MxPresenter::e_repeating);
 			FUN_10024ef0();
 		}
 		else {
