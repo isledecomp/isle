@@ -391,8 +391,8 @@ start_packet:
 		if (token >= 0) {
 			goto column_loop;
 		}
-		// TODO: Can't get this if-check to be quite right. Union type didn't help either
-		if (token & 0x4000) {
+
+		if ((unsigned short) token & 0x4000) {
 			goto skip_lines;
 		}
 
