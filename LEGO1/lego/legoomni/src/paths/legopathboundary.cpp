@@ -1,7 +1,7 @@
 #include "legopathboundary.h"
 
 #include "decomp.h"
-#include "geom/legounkown100db7f4.h"
+#include "geom/legoorientededge.h"
 #include "legolocomotionanimpresenter.h"
 #include "legopathactor.h"
 #include "legopathstruct.h"
@@ -86,11 +86,11 @@ void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPa
 void LegoPathBoundary::SwitchBoundary(
 	LegoPathActor* p_actor,
 	LegoPathBoundary*& p_boundary,
-	LegoUnknown100db7f4*& p_edge,
+	LegoOrientedEdge*& p_edge,
 	float& p_unk0xe4
 )
 {
-	LegoUnknown100db7f4* e = p_edge;
+	LegoOrientedEdge* e = p_edge;
 
 	if (p_edge->BETA_100b53b0(*p_boundary)) {
 		LegoPathBoundary* newBoundary = (LegoPathBoundary*) p_edge->OtherFace(p_boundary);
@@ -110,7 +110,7 @@ void LegoPathBoundary::SwitchBoundary(
 		}
 
 		do {
-			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*newBoundary);
+			p_edge = (LegoOrientedEdge*) p_edge->GetCounterclockwiseEdge(*newBoundary);
 			LegoPathBoundary* local20 = (LegoPathBoundary*) p_edge->OtherFace(newBoundary);
 
 			if (p_edge->GetMask0x03() && (userNavFlag || p_edge->BETA_1004a830(*local20, 1))) {
@@ -133,10 +133,10 @@ void LegoPathBoundary::SwitchBoundary(
 
 		while (local8 > 0) {
 			if (localc) {
-				p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*newBoundary);
+				p_edge = (LegoOrientedEdge*) p_edge->GetCounterclockwiseEdge(*newBoundary);
 			}
 			else {
-				p_edge = (LegoUnknown100db7f4*) p_edge->GetClockwiseEdge(*newBoundary);
+				p_edge = (LegoOrientedEdge*) p_edge->GetClockwiseEdge(*newBoundary);
 			}
 
 			LegoPathBoundary* local20 = (LegoPathBoundary*) p_edge->OtherFace(newBoundary);
@@ -147,8 +147,8 @@ void LegoPathBoundary::SwitchBoundary(
 		}
 
 		if (p_edge == e) {
-			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*newBoundary);
-			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*newBoundary);
+			p_edge = (LegoOrientedEdge*) p_edge->GetCounterclockwiseEdge(*newBoundary);
+			p_edge = (LegoOrientedEdge*) p_edge->GetCounterclockwiseEdge(*newBoundary);
 		}
 
 		if (p_boundary != newBoundary) {
@@ -162,7 +162,7 @@ void LegoPathBoundary::SwitchBoundary(
 	}
 	else {
 		do {
-			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*p_boundary);
+			p_edge = (LegoOrientedEdge*) p_edge->GetCounterclockwiseEdge(*p_boundary);
 
 			if (p_edge->GetMask0x03()) {
 				break;
@@ -170,8 +170,8 @@ void LegoPathBoundary::SwitchBoundary(
 		} while (p_edge != e);
 
 		if (p_edge == e) {
-			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*p_boundary);
-			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*p_boundary);
+			p_edge = (LegoOrientedEdge*) p_edge->GetCounterclockwiseEdge(*p_boundary);
+			p_edge = (LegoOrientedEdge*) p_edge->GetCounterclockwiseEdge(*p_boundary);
 		}
 
 		p_unk0xe4 = 1.0 - p_unk0xe4;
@@ -185,17 +185,17 @@ MxU32 LegoPathBoundary::Intersect(
 	Vector3& p_point1,
 	Vector3& p_point2,
 	Vector3& p_point3,
-	LegoUnknown100db7f4*& p_edge
+	LegoOrientedEdge*& p_edge
 )
 {
-	LegoUnknown100db7f4* e = NULL;
+	LegoOrientedEdge* e = NULL;
 	float localc;
 	MxU32 local10 = 0;
 	float len = 0.0f;
 	Mx3DPointFloat vec;
 
 	for (MxS32 i = 0; i < m_numEdges; i++) {
-		LegoUnknown100db7f4* edge = (LegoUnknown100db7f4*) m_edges[i];
+		LegoOrientedEdge* edge = (LegoOrientedEdge*) m_edges[i];
 
 		if (p_point2.Dot(m_edgeNormals[i], p_point2) + m_edgeNormals[i][3] <= -1e-07) {
 			if (local10 == 0) {
@@ -240,17 +240,17 @@ MxU32 LegoPathBoundary::Intersect(
 		local50 = p_point2;
 		local50 -= *local5c;
 
-		e->FUN_1002ddc0(*this, local70);
+		e->GetFaceNormal(*this, local70);
 
 		float local58 = local50.Dot(local50, local70);
-		LegoUnknown100db7f4* local54 = NULL;
+		LegoOrientedEdge* local54 = NULL;
 
 		if (local58 < 0.0f) {
 			Mx3DPointFloat local84;
 
-			for (LegoUnknown100db7f4* local88 = (LegoUnknown100db7f4*) e->GetClockwiseEdge(*this); e != local88;
-				 local88 = (LegoUnknown100db7f4*) local88->GetClockwiseEdge(*this)) {
-				local88->FUN_1002ddc0(*this, local84);
+			for (LegoOrientedEdge* local88 = (LegoOrientedEdge*) e->GetClockwiseEdge(*this); e != local88;
+				 local88 = (LegoOrientedEdge*) local88->GetClockwiseEdge(*this)) {
+				local88->GetFaceNormal(*this, local84);
 
 				if (local84.Dot(local84, local70) <= 0.9) {
 					break;
@@ -262,7 +262,7 @@ MxU32 LegoPathBoundary::Intersect(
 
 				float local8c = locala4.Dot(locala4, local84);
 
-				if (local8c > local58 && local8c < local88->m_unk0x3c) {
+				if (local8c > local58 && local8c < local88->m_length) {
 					local54 = local88;
 					local58 = local8c;
 					local70 = local84;
@@ -271,13 +271,12 @@ MxU32 LegoPathBoundary::Intersect(
 			}
 		}
 		else {
-			if (e->m_unk0x3c < local58) {
+			if (e->m_length < local58) {
 				Mx3DPointFloat localbc;
 
-				for (LegoUnknown100db7f4* locala8 = (LegoUnknown100db7f4*) e->GetCounterclockwiseEdge(*this);
-					 e != locala8;
-					 locala8 = (LegoUnknown100db7f4*) locala8->GetCounterclockwiseEdge(*this)) {
-					locala8->FUN_1002ddc0(*this, localbc);
+				for (LegoOrientedEdge* locala8 = (LegoOrientedEdge*) e->GetCounterclockwiseEdge(*this); e != locala8;
+					 locala8 = (LegoOrientedEdge*) locala8->GetCounterclockwiseEdge(*this)) {
+					locala8->GetFaceNormal(*this, localbc);
 
 					if (localbc.Dot(localbc, local70) <= 0.9) {
 						break;
@@ -305,7 +304,7 @@ MxU32 LegoPathBoundary::Intersect(
 
 		if (local58 <= 0.0f) {
 			if (!e->GetMask0x03()) {
-				p_edge = (LegoUnknown100db7f4*) e->GetClockwiseEdge(*this);
+				p_edge = (LegoOrientedEdge*) e->GetClockwiseEdge(*this);
 			}
 			else {
 				p_edge = e;
@@ -314,7 +313,7 @@ MxU32 LegoPathBoundary::Intersect(
 			p_point3 = *local5c;
 			return 2;
 		}
-		else if (local58 > 0.0f && e->m_unk0x3c > local58) {
+		else if (local58 > 0.0f && e->m_length > local58) {
 			p_point3 = local70;
 			p_point3 *= local58;
 			p_point3 += *local5c;
@@ -325,7 +324,7 @@ MxU32 LegoPathBoundary::Intersect(
 			p_point3 = *e->CCWVertex(*this);
 
 			if (!e->GetMask0x03()) {
-				p_edge = (LegoUnknown100db7f4*) e->GetCounterclockwiseEdge(*this);
+				p_edge = (LegoOrientedEdge*) e->GetCounterclockwiseEdge(*this);
 			}
 			else {
 				p_edge = e;

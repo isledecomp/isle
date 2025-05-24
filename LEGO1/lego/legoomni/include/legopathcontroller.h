@@ -2,7 +2,7 @@
 #define LEGOPATHCONTROLLER_H
 
 #include "decomp.h"
-#include "geom/legounkown100db7f4.h"
+#include "geom/legoorientededge.h"
 #include "legopathactor.h"
 #include "legopathboundary.h"
 #include "legopathstruct.h"
@@ -21,7 +21,7 @@ class Vector3;
 
 // VTABLE: LEGO1 0x100d7da8
 // SIZE 0x40
-struct LegoPathCtrlEdge : public LegoUnknown100db7f4 {};
+struct LegoPathCtrlEdge : public LegoOrientedEdge {};
 
 struct LegoPathCtrlEdgeCompare {
 	MxU32 operator()(const LegoPathCtrlEdge* p_lhs, const LegoPathCtrlEdge* p_rhs) const
@@ -60,7 +60,7 @@ public:
 		}
 
 		LegoPathController* m_controller; // 0x00
-		LegoUnknown100db7f4* m_edge;      // 0x04
+		LegoOrientedEdge* m_edge;         // 0x04
 	};
 
 	LegoPathController();
@@ -126,7 +126,7 @@ public:
 		Vector3& p_v1,
 		Vector3& p_v2,
 		float p_f1,
-		LegoUnknown100db7f4*& p_edge,
+		LegoOrientedEdge*& p_edge,
 		LegoPathBoundary*& p_boundary
 	);
 	MxResult FUN_1004a380(
@@ -144,13 +144,13 @@ public:
 	static MxResult Reset();
 
 	// FUNCTION: BETA10 0x100cf580
-	static LegoUnknown100db7f4* GetControlEdgeA(MxS32 p_index) { return g_ctrlEdgesA[p_index].m_edge; }
+	static LegoOrientedEdge* GetControlEdgeA(MxS32 p_index) { return g_ctrlEdgesA[p_index].m_edge; }
 
 	// FUNCTION: BETA10 0x100cf5b0
 	static LegoPathBoundary* GetControlBoundaryA(MxS32 p_index) { return g_ctrlBoundariesA[p_index].m_boundary; }
 
 	// These two are an educated guess because BETA10 does not have the g_ctrl.*B globals
-	static LegoUnknown100db7f4* GetControlEdgeB(MxS32 p_index) { return g_ctrlEdgesB[p_index].m_edge; }
+	static LegoOrientedEdge* GetControlEdgeB(MxS32 p_index) { return g_ctrlEdgesB[p_index].m_edge; }
 	static LegoPathBoundary* GetControlBoundaryB(MxS32 p_index) { return g_ctrlBoundariesB[p_index].m_boundary; }
 
 private:

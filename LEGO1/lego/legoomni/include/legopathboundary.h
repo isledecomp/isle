@@ -43,16 +43,10 @@ public:
 	void SwitchBoundary(
 		LegoPathActor* p_actor,
 		LegoPathBoundary*& p_boundary,
-		LegoUnknown100db7f4*& p_edge,
+		LegoOrientedEdge*& p_edge,
 		float& p_unk0xe4
 	);
-	MxU32 Intersect(
-		float p_scale,
-		Vector3& p_point1,
-		Vector3& p_point2,
-		Vector3& p_point3,
-		LegoUnknown100db7f4*& p_edge
-	);
+	MxU32 Intersect(float p_scale, Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, LegoOrientedEdge*& p_edge);
 	MxU32 FUN_10057fe0(LegoAnimPresenter* p_presenter);
 	MxU32 FUN_100586e0(LegoAnimPresenter* p_presenter);
 

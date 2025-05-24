@@ -160,7 +160,7 @@ function(add_lego_libraries NAME)
   add_library(geom${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/geom/legoedge.cpp
     LEGO1/lego/sources/geom/legoweedge.cpp
-    LEGO1/lego/sources/geom/legounkown100db7f4.cpp
+    LEGO1/lego/sources/geom/legoorientededge.cpp
     LEGO1/lego/sources/geom/legowegedge.cpp
   )
   list(APPEND list_targets geom${ARG_SUFFIX})

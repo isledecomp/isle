@@ -316,12 +316,12 @@ void LegoRaceCar::FUN_10012ff0(float p_param)
 
 		if (a->GetDuration() <= deltaTime || deltaTime < 0.0) {
 			if (m_userState == LEGORACECAR_KICK1) {
-				LegoUnknown100db7f4** edges = m_kick1B->GetEdges();
+				LegoOrientedEdge** edges = m_kick1B->GetEdges();
 				m_destEdge = edges[2];
 				m_boundary = m_kick1B;
 			}
 			else {
-				LegoUnknown100db7f4** edges = m_kick1B->GetEdges();
+				LegoOrientedEdge** edges = m_kick1B->GetEdges();
 				m_destEdge = edges[1];
 				m_boundary = m_kick2B;
 			}

@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "misc/legotypes.h"
 
-struct LegoUnknown100db7f4;
+struct LegoOrientedEdge;
 
 // might be a struct with public members
 // VTABLE: LEGO1 0x100db7c0
@@ -20,12 +20,12 @@ public:
 	LegoU8 GetNumEdges() { return m_numEdges; }
 
 	// FUNCTION: BETA10 0x1001cc30
-	LegoUnknown100db7f4** GetEdges() { return m_edges; }
+	LegoOrientedEdge** GetEdges() { return m_edges; }
 
 	// FUNCTION: BETA10 0x100373f0
 	LegoU32 IsEqual(LegoWEEdge* p_other) { return this == p_other; }
 
-	void SetEdges(LegoUnknown100db7f4** p_edges, LegoU8 p_numEdges)
+	void SetEdges(LegoOrientedEdge** p_edges, LegoU8 p_numEdges)
 	{
 		m_edges = p_edges;
 		m_numEdges = p_numEdges;
@@ -35,8 +35,8 @@ public:
 	// LegoWEEdge::`scalar deleting destructor'
 
 protected:
-	LegoU8 m_numEdges;             // 0x04
-	LegoUnknown100db7f4** m_edges; // 0x08
+	LegoU8 m_numEdges;          // 0x04
+	LegoOrientedEdge** m_edges; // 0x08
 };
 
 #endif // __LEGOWEEDGE_H
