@@ -186,7 +186,7 @@ public:
 	// vtable+0x20
 	virtual Result Update() = 0;
 	virtual void HandleActivate(WORD) = 0;
-	virtual void HandlePaint(HDC) = 0;
+	virtual void HandlePaint(void*) = 0;
 
 	// SYNTHETIC: BETA10 0x1016b740
 	// Tgl::Device::Device
