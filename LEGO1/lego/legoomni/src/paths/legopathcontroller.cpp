@@ -224,7 +224,7 @@ MxResult LegoPathController::PlaceActor(
 
 	float time = Timer()->GetTime();
 	MxResult result =
-		p_actor->VTable0x88(pBoundary, time, *pSrcE, p_srcScale, (LegoUnknown100db7f4&) *pDestE, p_destScale);
+		p_actor->VTable0x88(pBoundary, time, *pSrcE, p_srcScale, (LegoOrientedEdge&) *pDestE, p_destScale);
 
 	if (result != SUCCESS) {
 		assert(0);
@@ -284,15 +284,14 @@ MxResult LegoPathController::PlaceActor(
 	}
 
 	for (MxS32 j = 0; j < boundary->GetNumEdges(); j++) {
-		LegoUnknown100db7f4* edge = (LegoUnknown100db7f4*) boundary->GetEdges()[j];
+		LegoOrientedEdge* edge = (LegoOrientedEdge*) boundary->GetEdges()[j];
 
 		if (edge->GetMask0x03()) {
 			Mx3DPointFloat vec;
 
-			if (((LegoUnknown100db7f4*) edge->GetClockwiseEdge(*boundary))->FUN_1002ddc0(*boundary, vec) == SUCCESS &&
+			if (((LegoOrientedEdge*) edge->GetClockwiseEdge(*boundary))->GetFaceNormal(*boundary, vec) == SUCCESS &&
 				vec.Dot(vec, p_direction) < 0.0f) {
-				edge =
-					(LegoUnknown100db7f4*) edge->GetCounterclockwiseEdge(*boundary)->GetCounterclockwiseEdge(*boundary);
+				edge = (LegoOrientedEdge*) edge->GetCounterclockwiseEdge(*boundary)->GetCounterclockwiseEdge(*boundary);
 			}
 
 			if (!edge->GetMask0x03()) {
@@ -567,7 +566,7 @@ MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 		}
 		edge.m_pointB = &m_unk0x10[s];
 
-		if (edge.m_flags & LegoUnknown100db7f4::c_bit3) {
+		if (edge.m_flags & LegoOrientedEdge::c_hasFaceA) {
 			if (p_storage->Read(&s, sizeof(MxU16)) != SUCCESS) {
 				return FAILURE;
 			}
@@ -584,7 +583,7 @@ MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 			edge.m_cwA = &m_edges[s];
 		}
 
-		if (edge.m_flags & LegoUnknown100db7f4::c_bit4) {
+		if (edge.m_flags & LegoOrientedEdge::c_hasFaceB) {
 			if (p_storage->Read(&s, sizeof(MxU16)) != SUCCESS) {
 				return FAILURE;
 			}
@@ -601,11 +600,11 @@ MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 			edge.m_cwB = &m_edges[s];
 		}
 
-		if (ReadVector(p_storage, edge.m_unk0x28) != SUCCESS) {
+		if (ReadVector(p_storage, edge.m_dir) != SUCCESS) {
 			return FAILURE;
 		}
 
-		if (p_storage->Read(&edge.m_unk0x3c, sizeof(float)) != SUCCESS) {
+		if (p_storage->Read(&edge.m_length, sizeof(float)) != SUCCESS) {
 			return FAILURE;
 		}
 	}
@@ -629,7 +628,7 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 
 		boundary.m_edgeNormals = new Mx4DPointFloat[numE];
 
-		LegoUnknown100db7f4** edges = new LegoUnknown100db7f4*[numE];
+		LegoOrientedEdge** edges = new LegoOrientedEdge*[numE];
 		boundary.SetEdges(edges, numE);
 
 		for (j = 0; j < numE; j++) {
@@ -818,7 +817,7 @@ MxResult LegoPathController::FUN_10048310(
 			while (boundarySetItA != boundarySet.end()) {
 				MxU32 shouldRemove = TRUE;
 
-				LegoUnknown100db7f4* e = (*boundarySetItA)->m_edge;
+				LegoOrientedEdge* e = (*boundarySetItA)->m_edge;
 				LegoPathBoundary* b = (*boundarySetItA)->m_boundary;
 				assert(e && b);
 
@@ -935,7 +934,7 @@ MxS32 LegoPathController::FUN_1004a240(
 	Vector3& p_v1,
 	Vector3& p_v2,
 	float p_f1,
-	LegoUnknown100db7f4*& p_edge,
+	LegoOrientedEdge*& p_edge,
 	LegoPathBoundary*& p_boundary
 )
 {
@@ -956,7 +955,7 @@ MxS32 LegoPathController::FUN_1004a240(
 	p_v1 -= *p_edge->CWVertex(*p_boundary);
 	p_v1 *= p_f1;
 	p_v1 += *p_edge->CWVertex(*p_boundary);
-	p_edge->FUN_1002ddc0(*p_boundary, vec);
+	p_edge->GetFaceNormal(*p_boundary, vec);
 	p_v2.EqualsCross(*p_boundary->GetUnknown0x14(), vec);
 	return 0;
 }

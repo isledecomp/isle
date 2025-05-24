@@ -119,11 +119,11 @@ void IslePathActor::Exit()
 
 		MxS32 i;
 		for (i = 0; i < m_boundary->GetNumEdges(); i++) {
-			LegoUnknown100db7f4* e = (LegoUnknown100db7f4*) m_boundary->GetEdges()[i];
+			LegoOrientedEdge* e = (LegoOrientedEdge*) m_boundary->GetEdges()[i];
 			assert(e);
 
 			Mx3DPointFloat local20;
-			e->FUN_1002ddc0(*m_boundary, local20);
+			e->GetFaceNormal(*m_boundary, local20);
 
 			local20 *= m_roi->GetWorldBoundingSphere().Radius();
 			local20 += GetWorldPosition();

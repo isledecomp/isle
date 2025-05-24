@@ -44,7 +44,7 @@ public:
 		Vector3& p_v3
 	) override;                          // vtable+0x6c
 	void Animate(float p_time) override; // vtable+0x70
-	void SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
+	void SwitchBoundary(LegoPathBoundary*& p_boundary, LegoOrientedEdge*& p_edge, float& p_unk0xe4)
 		override;                   // vtable+0x98
 	MxResult VTable0x9c() override; // vtable+0x9c
 

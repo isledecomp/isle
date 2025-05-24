@@ -10,7 +10,7 @@ struct LegoNamedPlane;
 class LegoPathBoundary;
 class LegoPathController;
 struct LegoPathEdgeContainer;
-struct LegoUnknown100db7f4;
+struct LegoOrientedEdge;
 class LegoWEEdge;
 
 extern MxLong g_unk0x100f3308;
@@ -67,7 +67,7 @@ public:
 		float p_time,
 		Vector3& p_p1,
 		Vector3& p_p4,
-		LegoUnknown100db7f4& p_destEdge,
+		LegoOrientedEdge& p_destEdge,
 		float p_destScale
 	); // vtable+0x84
 	virtual MxResult VTable0x88(
@@ -75,7 +75,7 @@ public:
 		float p_time,
 		LegoEdge& p_srcEdge,
 		float p_srcScale,
-		LegoUnknown100db7f4& p_destEdge,
+		LegoOrientedEdge& p_destEdge,
 		float p_destScale
 	);                                                            // vtable+0x88
 	virtual MxS32 VTable0x8c(float p_time, Matrix4& p_transform); // vtable+0x8c
@@ -88,7 +88,7 @@ public:
 
 	virtual void SwitchBoundary(
 		LegoPathBoundary*& p_boundary,
-		LegoUnknown100db7f4*& p_edge,
+		LegoOrientedEdge*& p_edge,
 		float& p_unk0xe4
 	);                             // vtable+0x98
 	virtual MxResult VTable0x9c(); // vtable+0x9c
@@ -182,7 +182,7 @@ protected:
 	LegoPathBoundary* m_boundary;         // 0x88
 	LegoUnknown m_unk0x8c;                // 0x8c
 	MxU32 m_actorState;                   // 0xdc
-	LegoUnknown100db7f4* m_destEdge;      // 0xe0
+	LegoOrientedEdge* m_destEdge;         // 0xe0
 	MxFloat m_unk0xe4;                    // 0xe4
 	MxBool m_collideBox;                  // 0xe8
 	MxBool m_unk0xe9;                     // 0xe9
