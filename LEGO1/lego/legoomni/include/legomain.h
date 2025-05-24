@@ -90,9 +90,6 @@ public:
 			return *this;
 		}
 
-		World GetId() { return m_id; }
-		const char* GetKey() { return m_key; }
-
 		World m_id;         // 0x00
 		char m_key[20];     // 0x04
 		MxAtomId* m_atomId; // 0x18
