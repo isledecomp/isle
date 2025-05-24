@@ -18,8 +18,8 @@ DECOMP_SIZE_ASSERT(MxBackgroundAudioManager, 0x150)
 MxBackgroundAudioManager::MxBackgroundAudioManager()
 {
 	NotificationManager()->Register(this);
-	m_activePresenter = 0;
-	m_pendingPresenter = 0;
+	m_activePresenter = NULL;
+	m_pendingPresenter = NULL;
 	m_tickleState = MxPresenter::e_idle;
 	m_speed = 0;
 	m_targetVolume = 0;
@@ -289,7 +289,7 @@ void MxBackgroundAudioManager::Stop()
 		DeleteObject(m_action2);
 	}
 
-	m_pendingPresenter = 0;
+	m_pendingPresenter = NULL;
 	m_action2.SetAtomId(MxAtomId());
 	m_action2.SetObjectId(-1);
 
@@ -297,7 +297,7 @@ void MxBackgroundAudioManager::Stop()
 		DeleteObject(m_action1);
 	}
 
-	m_activePresenter = 0;
+	m_activePresenter = NULL;
 	m_action1.SetAtomId(MxAtomId());
 	m_volumeSuppressionAmount = 0;
 	m_action1.SetObjectId(-1);
@@ -367,6 +367,6 @@ MxResult MxBackgroundAudioManager::SetPendingPresenter(
 // FUNCTION: BETA10 0x100e9663
 void MxBackgroundAudioManager::Init()
 {
-	this->m_activePresenter = 0;
+	this->m_activePresenter = NULL;
 	this->m_tickleState = MxPresenter::e_idle;
 }
