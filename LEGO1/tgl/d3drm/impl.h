@@ -183,7 +183,7 @@ public:
 	// vtable+0x20
 	Result Update() override;
 	void HandleActivate(WORD) override;
-	void HandlePaint(HDC) override;
+	void HandlePaint(void*) override;
 
 	typedef IDirect3DRMDevice2* DeviceDataType;
 
