@@ -264,7 +264,7 @@ private:
 // LegoPathCtrlEdge::~LegoPathCtrlEdge
 
 // SYNTHETIC: LEGO1 0x10047ae0
-// LegoUnknown100db7f4::~LegoUnknown100db7f4
+// LegoOrientedEdge::~LegoOrientedEdge
 
 // TEMPLATE: LEGO1 0x10048f00
 // list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >::begin
