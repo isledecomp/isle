@@ -99,7 +99,7 @@ public:
 	inline LegoU32 FUN_10048c40(const Vector3& p_position);
 
 	// SYNTHETIC: LEGO1 0x1009a6c0
-	// LegoUnknown100db7f4::`scalar deleting destructor'
+	// LegoOrientedEdge::`scalar deleting destructor'
 
 	LegoU16 m_flags;      // 0x24
 	Mx3DPointFloat m_dir; // 0x28
