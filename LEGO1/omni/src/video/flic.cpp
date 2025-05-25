@@ -381,28 +381,24 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 
 skip_lines:
 	// The layout in BETA10 strongly suggests that lots of `goto`s are used.
-	// LINE: LEGO1 0x100bdb05
 	// LINE: BETA10 0x1013e684
 	row += token;
 
 start_packet:
-	// LINE: LEGO1 0x100bdaef
 	// LINE: BETA10 0x1013e692
 	token = *(short*) data.word++;
-	// LINE: LEGO1 0x100bdafb
+
 	if (token >= 0) {
 		goto column_loop;
 	}
-	// LINE: LEGO1 0x100bdb00
+
 	if ((unsigned short) token & 0x4000) {
 		goto skip_lines;
 	}
 
-	// LINE: LEGO1 0x100bdb0a
 	WritePixel(p_bitmapHeader, p_pixelData, xmax, row, token);
 	token = *(short*) data.word++;
 
-	// LINE: LEGO1 0x100bdb2f
 	// LINE: BETA10 0x1013e6ef
 	if (!token) {
 		row--;
@@ -414,7 +410,6 @@ start_packet:
 	else {
 
 	column_loop:
-		// LINE: LEGO1 0x100bdb49
 		// LINE: BETA10 0x1013e71e
 		short column = xofs;
 
@@ -426,7 +421,7 @@ start_packet:
 		type += type;
 
 		if (type >= 0) {
-			WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data.byte, type);
+			WritePixels(p_bitmapHeader, p_pixelData, column, row, data.byte, type);
 			column += type;
 			data.byte += type;
 			// LINE: BETA10 0x1013e797
@@ -441,7 +436,7 @@ start_packet:
 		}
 
 		type = -type;
-		WORD* p_pixel = (WORD*) data.word++;
+		WORD* p_pixel = data.word++;
 		WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
 		column += type;
 		// LINE: BETA10 0x1013e813
