@@ -384,70 +384,53 @@ skip_lines:
 	row += token;
 
 start_packet:
-	do {
-		// LINE: LEGO1 0x100bdaef
-		// LINE: BETA10 0x1013e692
-		token = *(short*) data;
-		data += 2;
-		// LINE: LEGO1 0x100bdafb
-		if (token >= 0) {
-			goto column_loop;
+	// LINE: LEGO1 0x100bdaef
+	// LINE: BETA10 0x1013e692
+	token = *(short*) data;
+	data += 2;
+	// LINE: LEGO1 0x100bdafb
+	if (token >= 0) {
+		goto column_loop;
+	}
+	// LINE: LEGO1 0x100bdb00
+	if ((unsigned short) token & 0x4000) {
+		goto skip_lines;
+	}
+
+	// LINE: LEGO1 0x100bdb0a
+	WritePixel(p_bitmapHeader, p_pixelData, xmax, row, token);
+	token = *(short*) data;
+	data += 2;
+
+	// LINE: LEGO1 0x100bdb2f
+	// LINE: BETA10 0x1013e6ef
+	if (!token) {
+		row--;
+		if (--lines > 0) {
+			goto start_packet;
 		}
-		// LINE: LEGO1 0x100bdb00
-		if ((unsigned short) token & 0x4000) {
-			goto skip_lines;
-		}
+		return;
+	}
+	else {
 
-		// LINE: LEGO1 0x100bdb0a
-		WritePixel(p_bitmapHeader, p_pixelData, xmax, row, token);
-		token = *(short*) data;
-		data += 2;
+	column_loop:
+		// LINE: LEGO1 0x100bdb49
+		// LINE: BETA10 0x1013e71e
+		short column = xofs;
 
-		// LINE: LEGO1 0x100bdb2f
-		// LINE: BETA10 0x1013e6ef
-		if (!token) {
-			row--;
-			if (--lines > 0) {
-				goto start_packet;
-			}
-			return;
-		}
-		else {
+	column_loop_inner:
+		// LINE: LEGO1 0x100bdb50
+		// LINE: BETA10 0x1013e726
+		column += *data++;
+		// LINE: BETA10 0x1013e73a
+		short type = *(char*) data++;
+		type += type;
 
-		column_loop:
-			// LINE: LEGO1 0x100bdb49
-			// LINE: BETA10 0x1013e71e
-			short column = xofs;
-
-		column_loop_inner:
-			// LINE: LEGO1 0x100bdb50
-			// LINE: BETA10 0x1013e726
-			column += *data++;
-			// LINE: BETA10 0x1013e73a
-			short type = *(char*) data++;
-			type += type;
-
-			if (type >= 0) {
-				WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
-				column += type;
-				data += type;
-				// LINE: BETA10 0x1013e797
-				if (--token != 0) {
-					goto column_loop_inner;
-				}
-				row--;
-				if (--lines > 0) {
-					goto start_packet;
-				}
-				break;
-			}
-
-			type = -type;
-			WORD* p_pixel = (WORD*) data;
-			data += 2;
-			WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
+		if (type >= 0) {
+			WritePixels(p_bitmapHeader, p_pixelData, column, row, (BYTE*) data, type);
 			column += type;
-			// LINE: BETA10 0x1013e813
+			data += type;
+			// LINE: BETA10 0x1013e797
 			if (--token != 0) {
 				goto column_loop_inner;
 			}
@@ -456,9 +439,23 @@ start_packet:
 				goto start_packet;
 			}
 			return;
-			// the `while (0)` looks off, but produces the correct `jmp` instructions near the end
 		}
-	} while (0);
+
+		type = -type;
+		WORD* p_pixel = (WORD*) data;
+		data += 2;
+		WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
+		column += type;
+		// LINE: BETA10 0x1013e813
+		if (--token != 0) {
+			goto column_loop_inner;
+		}
+		row--;
+		if (--lines > 0) {
+			goto start_packet;
+		}
+		return;
+	}
 }
 
 // FUNCTION: LEGO1 0x100bdc00
