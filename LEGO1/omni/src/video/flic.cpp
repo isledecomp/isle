@@ -368,7 +368,7 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 	union {
 		BYTE* byte;
 		WORD* word;
-	 } data = { p_data };
+	} data = {p_data};
 
 	// The first word in the data following the chunk header contains the number of lines in the chunk.
 	// The line count does not include skipped lines.
