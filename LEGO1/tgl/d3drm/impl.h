@@ -636,7 +636,7 @@ public:
 	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels) override;
+	Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels, int pTexelsArePersistent) override;
 	void FillRowsOfTexture(int y, int height, void* pBuffer) override;
 
 	// vtable+0x10
@@ -647,7 +647,7 @@ public:
 		int* pDepth,
 		void** ppBuffer,
 		int* ppPaletteSize,
-		PaletteEntry** ppPalette
+		unsigned char (*pEntries)[3]
 	) override;
 	Result SetPalette(int entryCount, PaletteEntry* entries) override;
 
