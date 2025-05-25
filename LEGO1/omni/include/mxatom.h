@@ -144,7 +144,7 @@ private:
 // clang-format off
 // TEMPLATE: LEGO1 0x100af7e0
 // TEMPLATE: BETA10 0x10131210
-// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::erase
+// ?erase@?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@QAE?AViterator@1@V21@0@Z
 // clang-format on
 
 // clang-format off
@@ -178,7 +178,9 @@ private:
 
 // clang-format off
 // TEMPLATE: BETA10 0x10132170
-// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::begin
+// ?begin@?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@QAE?AViterator@1@XZ
+// Note: could also be
+// ?begin@?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@QBE?AVconst_iterator@1@XZ
 // clang-format on
 
 // TEMPLATE: BETA10 0x101321d0
