@@ -143,6 +143,8 @@ private:
 
 // clang-format off
 // TEMPLATE: LEGO1 0x100af7e0
+// ?erase@?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@QAE?AViterator@1@V21@@Z
+
 // TEMPLATE: BETA10 0x10131210
 // ?erase@?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@QAE?AViterator@1@V21@0@Z
 // clang-format on
