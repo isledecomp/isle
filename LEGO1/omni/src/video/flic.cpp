@@ -373,7 +373,6 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 	// The first word in the data following the chunk header contains the number of lines in the chunk.
 	// The line count does not include skipped lines.
 	short lines = *(short*) data.word++;
-	// data += 2;
 
 	// LINE: BETA10 0x1013e666
 	short row = p_flcHeader->height - yofs - 1;
@@ -389,8 +388,7 @@ skip_lines:
 start_packet:
 	// LINE: LEGO1 0x100bdaef
 	// LINE: BETA10 0x1013e692
-	token = *(short*) data.word;
-	data.byte += 2;
+	token = *(short*) data.word++;
 	// LINE: LEGO1 0x100bdafb
 	if (token >= 0) {
 		goto column_loop;
@@ -402,8 +400,7 @@ start_packet:
 
 	// LINE: LEGO1 0x100bdb0a
 	WritePixel(p_bitmapHeader, p_pixelData, xmax, row, token);
-	token = *(short*) data.word;
-	data.byte += 2;
+	token = *(short*) data.word++;
 
 	// LINE: LEGO1 0x100bdb2f
 	// LINE: BETA10 0x1013e6ef
@@ -422,7 +419,6 @@ start_packet:
 		short column = xofs;
 
 	column_loop_inner:
-		// LINE: LEGO1 0x100bdb50
 		// LINE: BETA10 0x1013e726
 		column += *data.byte++;
 		// LINE: BETA10 0x1013e73a
@@ -445,8 +441,7 @@ start_packet:
 		}
 
 		type = -type;
-		WORD* p_pixel = (WORD*) data.byte;
-		data.byte += 2;
+		WORD* p_pixel = (WORD*) data.word++;
 		WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
 		column += type;
 		// LINE: BETA10 0x1013e813
