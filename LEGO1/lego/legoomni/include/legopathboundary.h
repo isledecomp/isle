@@ -182,7 +182,7 @@ private:
 // _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::lower_bound
 
 // TEMPLATE: BETA10 0x10082b90
-// _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresenter *,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::_Kfn,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::const_iterator::operator++
+// ??Econst_iterator@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@QAE?AV01@H@Z
 
 // TEMPLATE: BETA10 0x10082ee0
 // set<LegoAnimPresenter *,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::end
@@ -191,13 +191,13 @@ private:
 // _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresenter *,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::_Kfn,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::const_iterator::operator*
 
 // TEMPLATE: BETA10 0x10021dc0
-// Set<LegoPathActor *,LegoPathActorSetCompare>::Set<LegoPathActor *,LegoPathActorSetCompare>
+// ??0?$Set@PAVLegoPathActor@@ULegoPathActorSetCompare@@@@QAE@ABV0@@Z
 
 // TEMPLATE: BETA10 0x100202d0
 // set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::begin
 
 // TEMPLATE: BETA10 0x10020030
-// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::const_iterator::operator++
+// ??Econst_iterator@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@QAE?AV01@H@Z
 
 // TEMPLATE: BETA10 0x100203d0
 // set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::end

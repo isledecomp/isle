@@ -364,10 +364,10 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 	// LINE: BETA10 0x1013e643
 	short xmax = xofs + width - 1;
 
-	// LINE: BETA10 0x1013e652
 	union {
 		BYTE* byte;
 		WORD* word;
+		// LINE: BETA10 0x1013e652
 	} data = {p_data};
 
 	// The first word in the data following the chunk header contains the number of lines in the chunk.
