@@ -146,7 +146,7 @@ void Score::ReadyWorld()
 	MxDSAction action;
 	action.SetObjectId(InfoscorScript::c_nin001pr_RunAnim);
 	action.SetAtomId(m_atomId);
-	action.SetUnknown84(this);
+	action.SetNotificationObject(this);
 	Start(&action);
 
 	if (m_state->GetTutorialFlag()) {

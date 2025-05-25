@@ -316,7 +316,7 @@ MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
 	if (entry) {
 		MxDSStreamingAction* action = new MxDSStreamingAction(*p_action, 0);
 		action->SetUnknown28(entry->GetUnknown28());
-		action->SetUnknown84(entry->GetUnknown84());
+		action->SetNotificationObject(entry->GetNotificationObject());
 		action->SetOrigin(entry->GetOrigin());
 		action->SetUnknowna0(entry->GetUnknowna4());
 

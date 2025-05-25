@@ -63,7 +63,7 @@ LegoTextureInfo* LegoTextureContainer::GetCached(LegoTextureInfo* p_textureInfo)
 	newDesc.dwHeight = desc.dwHeight;
 	newDesc.dwSize = sizeof(newDesc);
 	newDesc.dwFlags = DDSD_PIXELFORMAT | DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
-	newDesc.ddsCaps.dwCaps = DDCAPS_OVERLAYCANTCLIP | DDCAPS_OVERLAY;
+	newDesc.ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_SYSTEMMEMORY;
 	newDesc.ddpfPixelFormat.dwSize = sizeof(desc.ddpfPixelFormat);
 	newDesc.ddpfPixelFormat.dwFlags = DDPF_RGB | DDPF_PALETTEINDEXED8;
 	newDesc.ddpfPixelFormat.dwRGBBitCount = 8;

@@ -31,7 +31,7 @@ public:
 	void SetF1bit7(MxBool p_e) { m_flags1.m_bit7 = p_e; }
 
 	// FUNCTION: BETA10 0x100d81b0
-	void SetF2bit0(MxBool p_e) { m_flags2.m_bit0 = p_e; }
+	void SetLacksLightSupport(MxBool p_e) { m_flags2.m_bit0 = p_e; }
 
 	// inlined in ISLE
 	void SetF2bit1(MxBool p_e) { m_flags2.m_bit1 = p_e; }
@@ -55,7 +55,7 @@ public:
 	MxBool GetWideViewAngle() { return m_flags1.m_bit6; }
 
 	// FUNCTION: BETA10 0x100886b0
-	MxBool GetF2bit0() { return m_flags2.m_bit0; }
+	MxBool GetLacksLightSupport() { return m_flags2.m_bit0; }
 
 	// FUNCTION: BETA10 0x10142050
 	MxBool GetF2bit1() { return m_flags2.m_bit1; }

@@ -158,7 +158,7 @@ int LegoDeviceEnumerate::BETA_1011cc65(int p_idx, char* p_buffer)
 // FUNCTION: CONFIG 0x00402860
 // FUNCTION: LEGO1 0x1009d0d0
 // FUNCTION: BETA10 0x1011cdb4
-int LegoDeviceEnumerate::FUN_1009d0d0()
+int LegoDeviceEnumerate::GetBestDevice()
 {
 	if (!IsInitialized()) {
 		return -1;

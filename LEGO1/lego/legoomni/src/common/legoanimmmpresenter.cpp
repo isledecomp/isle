@@ -44,7 +44,7 @@ LegoAnimMMPresenter::~LegoAnimMMPresenter()
 		VideoManager()->UnregisterPresenter(*this);
 	}
 
-	delete m_unk0x68;
+	delete[] m_unk0x68;
 
 	NotificationManager()->Unregister(this);
 }

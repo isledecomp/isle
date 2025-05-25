@@ -443,9 +443,9 @@ inline Result ViewRender(IDirect3DRMViewport* pViewport, const IDirect3DRMFrame2
 			pViewportAppData->m_backgroundColorGreen,
 			pViewportAppData->m_backgroundColorBlue
 		);
-	}
 
-	assert(Succeeded(result));
+		assert(Succeeded(result));
+	}
 
 	result = ResultVal(pViewport->Render(const_cast<IDirect3DRMFrame2*>(pGroup)));
 	assert(Succeeded(result));
