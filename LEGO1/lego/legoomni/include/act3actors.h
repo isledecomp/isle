@@ -140,7 +140,7 @@ public:
 	MxResult HitActor(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 	void SwitchBoundary(
 		LegoPathBoundary*& p_boundary,
-		LegoUnknown100db7f4*& p_edge,
+		LegoOrientedEdge*& p_edge,
 		float& p_unk0xe4
 	) override;                     // vtable+0x98
 	MxResult VTable0x9c() override; // vtable+0x9c

@@ -1,5 +1,5 @@
-#ifndef __LEGOUNKNOWN100DB7F4_H
-#define __LEGOUNKNOWN100DB7F4_H
+#ifndef __LEGOORIENTEDEDGE_H
+#define __LEGOORIENTEDEDGE_H
 
 #include "legoedge.h"
 #include "legowegedge.h"
@@ -9,31 +9,31 @@
 
 // VTABLE: LEGO1 0x100db7f4
 // SIZE 0x40
-struct LegoUnknown100db7f4 : public LegoEdge {
+struct LegoOrientedEdge : public LegoEdge {
 public:
 	enum {
 		c_bit1 = 0x01,
 		c_bit2 = 0x02,
-		c_bit3 = 0x04,
-		c_bit4 = 0x08
+		c_hasFaceA = 0x04,
+		c_hasFaceB = 0x08
 	};
 
-	LegoUnknown100db7f4();
+	LegoOrientedEdge();
 
 	// FUNCTION: LEGO1 0x1002ddc0
 	// FUNCTION: BETA10 0x100372a0
-	LegoResult FUN_1002ddc0(LegoWEEdge& p_f, Vector3& p_point) const
+	LegoResult GetFaceNormal(LegoWEEdge& p_face, Vector3& p_point) const
 	{
-		if (p_f.IsEqual(m_faceA)) {
-			p_point[0] = -m_unk0x28[0];
-			p_point[1] = -m_unk0x28[1];
-			p_point[2] = -m_unk0x28[2];
+		if (p_face.IsEqual(m_faceA)) {
+			p_point[0] = -m_dir[0];
+			p_point[1] = -m_dir[1];
+			p_point[2] = -m_dir[2];
 		}
 		else {
 			// clang-format off
-			assert(p_f.IsEqual( m_faceB ));
+			assert(p_face.IsEqual( m_faceB ));
 			// clang-format on
-			p_point = m_unk0x28;
+			p_point = m_dir;
 		}
 
 		return SUCCESS;
@@ -78,7 +78,7 @@ public:
 	}
 
 	// FUNCTION: BETA10 0x100bd540
-	LegoFloat DistanceBetweenMidpoints(const LegoUnknown100db7f4& p_other)
+	LegoFloat DistanceBetweenMidpoints(const LegoOrientedEdge& p_other)
 	{
 		Mx3DPointFloat point1(*m_pointA);
 		Mx3DPointFloat point2(*p_other.m_pointA);
@@ -99,22 +99,22 @@ public:
 	inline LegoU32 FUN_10048c40(const Vector3& p_position);
 
 	// SYNTHETIC: LEGO1 0x1009a6c0
-	// LegoUnknown100db7f4::`scalar deleting destructor'
+	// LegoOrientedEdge::`scalar deleting destructor'
 
-	LegoU16 m_flags;          // 0x24
-	Mx3DPointFloat m_unk0x28; // 0x28
-	float m_unk0x3c;          // 0x3c
+	LegoU16 m_flags;      // 0x24
+	Mx3DPointFloat m_dir; // 0x28
+	float m_length;       // 0x3c
 };
 
 // FUNCTION: LEGO1 0x10048c40
 // FUNCTION: BETA10 0x1001cc90
-inline LegoU32 LegoUnknown100db7f4::FUN_10048c40(const Vector3& p_position)
+inline LegoU32 LegoOrientedEdge::FUN_10048c40(const Vector3& p_position)
 {
 	LegoFloat localc, local10;
 	LegoU32 result = FALSE;
 
-	if (m_unk0x28[0] > 0.001 || m_unk0x28[0] < -0.001) {
-		localc = (p_position[0] - (*m_pointA)[0]) / m_unk0x28[0];
+	if (m_dir[0] > 0.001 || m_dir[0] < -0.001) {
+		localc = (p_position[0] - (*m_pointA)[0]) / m_dir[0];
 
 		if (localc < 0 || localc > 1) {
 			return FALSE;
@@ -128,8 +128,8 @@ inline LegoU32 LegoUnknown100db7f4::FUN_10048c40(const Vector3& p_position)
 		}
 	}
 
-	if (m_unk0x28[1] > 0.001 || m_unk0x28[1] < -0.001) {
-		local10 = (p_position[1] - (*m_pointA)[1]) / m_unk0x28[1];
+	if (m_dir[1] > 0.001 || m_dir[1] < -0.001) {
+		local10 = (p_position[1] - (*m_pointA)[1]) / m_dir[1];
 
 		if (result) {
 			if (localc > local10 + 0.001 || localc < local10 - 0.001) {
@@ -147,8 +147,8 @@ inline LegoU32 LegoUnknown100db7f4::FUN_10048c40(const Vector3& p_position)
 		}
 	}
 
-	if (m_unk0x28[2] > 0.001 || m_unk0x28[2] < -0.001) {
-		local10 = (p_position[2] - (*m_pointA)[2]) / m_unk0x28[2];
+	if (m_dir[2] > 0.001 || m_dir[2] < -0.001) {
+		local10 = (p_position[2] - (*m_pointA)[2]) / m_dir[2];
 
 		if (result) {
 			if (localc > local10 + 0.001 || localc < local10 - 0.001) {
@@ -168,4 +168,4 @@ inline LegoU32 LegoUnknown100db7f4::FUN_10048c40(const Vector3& p_position)
 	return TRUE;
 }
 
-#endif // __LEGOUNKNOWN100DB7F4_H
+#endif // __LEGOORIENTEDEDGE_H

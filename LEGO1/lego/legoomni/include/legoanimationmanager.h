@@ -16,7 +16,7 @@ class LegoFile;
 class LegoPathActor;
 class LegoPathBoundary;
 class LegoROIList;
-struct LegoUnknown100db7f4;
+struct LegoOrientedEdge;
 class LegoWorld;
 class MxDSAction;
 
@@ -240,7 +240,7 @@ private:
 	void FUN_10063d10();
 	void FUN_10063e40(LegoAnimPresenter* p_presenter);
 	MxBool FUN_10063fb0(LegoLocation::Boundary* p_boundary, LegoWorld* p_world);
-	MxBool FUN_10064010(LegoPathBoundary* p_boundary, LegoUnknown100db7f4* p_edge, float p_destScale);
+	MxBool FUN_10064010(LegoPathBoundary* p_boundary, LegoOrientedEdge* p_edge, float p_destScale);
 	MxBool FUN_10064120(LegoLocation::Boundary* p_boundary, MxBool p_bool1, MxBool p_bool2);
 	MxResult FUN_10064380(
 		const char* p_name,

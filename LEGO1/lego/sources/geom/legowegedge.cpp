@@ -1,6 +1,6 @@
 #include "legowegedge.h"
 
-#include "legounkown100db7f4.h"
+#include "legoorientededge.h"
 
 #include <assert.h>
 
@@ -81,7 +81,7 @@ LegoS32 LegoWEGEdge::VTable0x04()
 	m_edgeNormals = new Mx4DPointFloat[m_numEdges];
 	assert(m_edgeNormals);
 
-	LegoUnknown100db7f4* edge;
+	LegoOrientedEdge* edge;
 	LegoS32 i;
 
 	for (i = 0; i < m_numEdges; i++) {
@@ -118,27 +118,27 @@ LegoS32 LegoWEGEdge::VTable0x04()
 
 	for (i = 0; i < m_numEdges; i++) {
 		edge = m_edges[i];
-		Vector3& local5c = edge->m_unk0x28;
+		Vector3& local5c = edge->m_dir;
 
-		if (edge->m_unk0x3c == 0) {
+		if (edge->m_length == 0) {
 			local5c = *m_edges[i]->m_pointB;
 			local5c -= *m_edges[i]->m_pointA;
-			edge->m_unk0x3c = local5c.LenSquared();
+			edge->m_length = local5c.LenSquared();
 
-			if (edge->m_unk0x3c <= 0.0f) {
+			if (edge->m_length <= 0.0f) {
 				assert(0);
 				if (result == 0) {
 					result = -1;
 				}
 			}
 
-			edge->m_unk0x3c = sqrt((double) edge->m_unk0x3c);
-			local5c /= edge->m_unk0x3c;
+			edge->m_length = sqrt((double) edge->m_length);
+			local5c /= edge->m_length;
 		}
 
 		Mx3DPointFloat local58;
 		Vector3 local64(&m_edgeNormals[i][0]);
-		edge->FUN_1002ddc0(*this, local58);
+		edge->GetFaceNormal(*this, local58);
 		local64.EqualsCross(local58, m_unk0x14);
 
 		m_edgeNormals[i][3] = -local64.Dot(*m_edges[i]->m_pointA, local64);
@@ -147,7 +147,7 @@ LegoS32 LegoWEGEdge::VTable0x04()
 		}
 
 		if (edge->GetFaceA() != NULL && edge->GetFaceB() != NULL) {
-			edge->SetFlags(LegoUnknown100db7f4::c_bit1 | LegoUnknown100db7f4::c_bit2);
+			edge->SetFlags(LegoOrientedEdge::c_bit1 | LegoOrientedEdge::c_bit2);
 		}
 	}
 

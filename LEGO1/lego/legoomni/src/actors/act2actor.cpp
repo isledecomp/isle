@@ -417,7 +417,7 @@ void Act2Actor::FUN_100192a0(undefined4 p_location)
 		newPosition,
 		newDirection,
 		newBoundary,
-		LegoUnknown100db7f4::c_bit1,
+		LegoOrientedEdge::c_bit1,
 		NULL
 	);
 

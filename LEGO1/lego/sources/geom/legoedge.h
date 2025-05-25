@@ -17,7 +17,7 @@ struct LegoEdge {
 	Vector3* CWVertex(LegoWEEdge& p_face);
 	Vector3* CCWVertex(LegoWEEdge& p_face);
 
-	LegoResult FUN_1002ddc0(LegoWEEdge& p_face, Vector3& p_point);
+	LegoResult GetFaceNormal(LegoWEEdge& p_face, Vector3& p_point);
 
 	// FUNCTION: BETA10 0x10184170
 	LegoWEEdge* GetFaceA() { return m_faceA; }

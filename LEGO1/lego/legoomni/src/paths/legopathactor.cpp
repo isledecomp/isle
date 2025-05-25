@@ -1,7 +1,7 @@
 #include "legopathactor.h"
 
 #include "define.h"
-#include "geom/legounkown100db7f4.h"
+#include "geom/legoorientededge.h"
 #include "legocachesoundmanager.h"
 #include "legocameracontroller.h"
 #include "legonamedplane.h"
@@ -95,7 +95,7 @@ MxResult LegoPathActor::VTable0x88(
 	float p_time,
 	LegoEdge& p_srcEdge,
 	float p_srcScale,
-	LegoUnknown100db7f4& p_destEdge,
+	LegoOrientedEdge& p_destEdge,
 	float p_destScale
 )
 {
@@ -122,7 +122,7 @@ MxResult LegoPathActor::VTable0x88(
 	m_unk0x7c = 0;
 	m_lastTime = p_time;
 	m_actorTime = p_time;
-	p_destEdge.FUN_1002ddc0(*p_boundary, p3);
+	p_destEdge.GetFaceNormal(*p_boundary, p3);
 
 	p4 = p2;
 	p4 -= p1;
@@ -172,7 +172,7 @@ MxResult LegoPathActor::VTable0x84(
 	float p_time,
 	Vector3& p_p1,
 	Vector3& p_p4,
-	LegoUnknown100db7f4& p_destEdge,
+	LegoOrientedEdge& p_destEdge,
 	float p_destScale
 )
 {
@@ -192,7 +192,7 @@ MxResult LegoPathActor::VTable0x84(
 	m_unk0x7c = 0;
 	m_lastTime = p_time;
 	m_actorTime = p_time;
-	p_destEdge.FUN_1002ddc0(*p_boundary, p3);
+	p_destEdge.GetFaceNormal(*p_boundary, p3);
 
 	MxMatrix matrix;
 	Vector3 pos(matrix[3]);
@@ -442,7 +442,7 @@ void LegoPathActor::Animate(float p_time)
 
 // FUNCTION: LEGO1 0x1002e8b0
 // FUNCTION: BETA10 0x100af2f7
-void LegoPathActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
+void LegoPathActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoOrientedEdge*& p_edge, float& p_unk0xe4)
 {
 	assert(m_boundary);
 	m_boundary->SwitchBoundary(this, p_boundary, p_edge, p_unk0xe4);
@@ -516,7 +516,7 @@ inline MxU32 LegoPathActor::FUN_1002edd0(
 
 	LegoS32 numEdges = p_boundary->GetNumEdges();
 	for (MxS32 i = 0; i < numEdges; i++) {
-		LegoUnknown100db7f4* edge = p_boundary->GetEdges()[i];
+		LegoOrientedEdge* edge = p_boundary->GetEdges()[i];
 		LegoPathBoundary* boundary = (LegoPathBoundary*) edge->OtherFace(p_boundary);
 
 		if (boundary != NULL) {
@@ -652,7 +652,7 @@ MxResult LegoPathActor::VTable0x9c()
 
 		LERP3(local34, v1, v2, m_unk0xe4);
 
-		m_destEdge->FUN_1002ddc0(*m_boundary, local78);
+		m_destEdge->GetFaceNormal(*m_boundary, local78);
 		local48.EqualsCross(*m_boundary->GetUnknown0x14(), local78);
 		local48.Unitize();
 	}
