@@ -16,36 +16,47 @@ inline TglD3DRMIMAGE* TextureGetImage(IDirect3DRMTexture* pTexture)
 void TextureDestroyCallback(IDirect3DRMObject* pObject, void* pArg);
 
 // FUNCTION: LEGO1 0x100a12a0
+// FUNCTION: BETA10 0x10169113
 Result TextureImpl::SetImage(IDirect3DRMTexture* pSelf, TglD3DRMIMAGE* pImage)
 {
 	void* appData;
 	Result result;
 
 	appData = pImage;
+	assert(reinterpret_cast<TglD3DRMIMAGE*>(appData) == pImage);
 
-	// This is here because in the original code they asserted
-	// on the return value being NULL.
-	TextureGetImage(pSelf);
+	if (TextureGetImage(pSelf)) {
+		assert(0);
+	}
 
 	result = ResultVal(pSelf->SetAppData((LPD3DRM_APPDATA) appData));
+	assert(Succeeded(result));
+
 	if (Succeeded(result) && pImage) {
 		result = ResultVal(pSelf->AddDestroyCallback(TextureDestroyCallback, NULL));
+		assert(Succeeded(result));
+
 		if (!Succeeded(result)) {
 			pSelf->SetAppData(0);
 		}
 	}
+
 	return result;
 }
 
 // FUNCTION: LEGO1 0x100a1300
+// FUNCTION: BETA10 0x10169278
 void TextureDestroyCallback(IDirect3DRMObject* pObject, void* pArg)
 {
 	TglD3DRMIMAGE* pImage = reinterpret_cast<TglD3DRMIMAGE*>(pObject->GetAppData());
+	assert(pImage);
+
 	delete pImage;
 	pObject->SetAppData(0);
 }
 
 // FUNCTION: LEGO1 0x100a1330
+// FUNCTION: BETA10 0x101692e1
 TglD3DRMIMAGE::TglD3DRMIMAGE(
 	int width,
 	int height,
@@ -56,10 +67,10 @@ TglD3DRMIMAGE::TglD3DRMIMAGE(
 	PaletteEntry* pEntries
 )
 {
-	m_image.aspectx = 1;
-	m_image.aspecty = 1;
 	m_image.width = 0;
 	m_image.height = 0;
+	m_image.aspectx = 1;
+	m_image.aspecty = 1;
 	m_image.depth = 0;
 	m_image.rgb = 0;
 	m_image.bytes_per_line = 0;
@@ -72,20 +83,27 @@ TglD3DRMIMAGE::TglD3DRMIMAGE(
 	m_image.palette_size = 0;
 	m_image.palette = NULL;
 	m_texelsAllocatedByClient = 0;
+
+	Result result;
 	if (pBuffer != NULL) {
-		CreateBuffer(width, height, depth, pBuffer, useBuffer);
+		result = CreateBuffer(width, height, depth, pBuffer, useBuffer);
+		assert(Succeeded(result));
 	}
+
 	if (pEntries != NULL) {
-		InitializePalette(paletteSize, pEntries);
+		result = InitializePalette(paletteSize, pEntries);
+		assert(Succeeded(result));
 	}
 }
 
 // FUNCTION: LEGO1 0x100a13b0
-void TglD3DRMIMAGE::Destroy()
+// FUNCTION: BETA10 0x1016944b
+TglD3DRMIMAGE::~TglD3DRMIMAGE()
 {
 	if (m_texelsAllocatedByClient == 0) {
 		delete[] ((char*) m_image.buffer1);
 	}
+
 	delete m_image.palette;
 }
 
@@ -172,6 +190,7 @@ Result TglD3DRMIMAGE::InitializePalette(int paletteSize, PaletteEntry* pEntries)
 			m_image.palette_size = paletteSize;
 		}
 	}
+
 	if (paletteSize > 0) {
 		for (int i = 0; i < paletteSize; i++) {
 			m_image.palette[i].red = pEntries[i].m_red;
@@ -180,6 +199,7 @@ Result TglD3DRMIMAGE::InitializePalette(int paletteSize, PaletteEntry* pEntries)
 			m_image.palette[i].flags = D3DRMPALETTE_READONLY;
 		}
 	}
+
 	return Success;
 }
 

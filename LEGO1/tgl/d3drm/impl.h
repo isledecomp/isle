@@ -612,7 +612,7 @@ public:
 		int paletteSize,
 		PaletteEntry* pEntries
 	);
-	~TglD3DRMIMAGE() { Destroy(); }
+	~TglD3DRMIMAGE();
 
 	Result CreateBuffer(int width, int height, int depth, void* pBuffer, int useBuffer);
 	void Destroy();
@@ -621,6 +621,9 @@ public:
 
 	D3DRMIMAGE m_image;
 	int m_texelsAllocatedByClient;
+
+	// SYNTHETIC: BETA10 0x1016abb0
+	// TglImpl::TglD3DRMIMAGE::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dbb48
