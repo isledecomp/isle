@@ -134,7 +134,7 @@ private:
 // list<MxStreamController *,allocator<MxStreamController *> >::end
 
 // TEMPLATE: BETA10 0x101461b0
-// list<MxStreamController *,allocator<MxStreamController *> >::iterator::operator++
+// ??Eiterator@?$list@PAVMxStreamController@@V?$allocator@PAVMxStreamController@@@@@@QAE?AV01@H@Z
 
 // SYNTHETIC: LEGO1 0x100b9120
 // SYNTHETIC: BETA10 0x101466e0

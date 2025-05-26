@@ -127,8 +127,10 @@ private:
 // _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::~_Tree<char const *,pair<char const * const,ViewLODList *>,map<char c
 
 // TEMPLATE: LEGO1 0x100a7960
+// ?erase@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAE?AViterator@1@V21@@Z
+
 // TEMPLATE: BETA10 0x1017ab40
-// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::erase
+// ?erase@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAE?AViterator@1@V21@0@Z
 
 // TEMPLATE: LEGO1 0x100a7db0
 // TEMPLATE: BETA10 0x1017aca0
@@ -156,7 +158,7 @@ private:
 // map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::begin
 
 // TEMPLATE: BETA10 0x10179070
-// map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::end
+// ?end@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAE?AViterator@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@
 
 // TEMPLATE: BETA10 0x10179250
 // pair<char const * const,ViewLODList *>::pair<char const * const,ViewLODList *>

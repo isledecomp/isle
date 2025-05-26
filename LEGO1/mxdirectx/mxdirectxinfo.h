@@ -168,12 +168,12 @@ struct MxDriver {
 // TEMPLATE: CONFIG 0x401b00
 // TEMPLATE: LEGO1 0x1009c400
 // TEMPLATE: BETA10 0x1011fad0
-// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::insert
+// ?insert@?$list@UDirect3DDeviceInfo@@V?$allocator@UDirect3DDeviceInfo@@@@@@QAE?AViterator@1@V21@ABUDirect3DDeviceInfo@@@Z
 
 // TEMPLATE: CONFIG 0x401b60
 // TEMPLATE: LEGO1 0x1009c460
 // TEMPLATE: BETA10 0x1011f9a0
-// list<MxDisplayMode,allocator<MxDisplayMode> >::insert
+// ?insert@?$list@UMxDisplayMode@@V?$allocator@UMxDisplayMode@@@@@@QAE?AViterator@1@V21@ABUMxDisplayMode@@@Z
 
 // SYNTHETIC: CONFIG 0x402be0
 // SYNTHETIC: LEGO1 0x1009d450
@@ -248,34 +248,38 @@ protected:
 // list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::iterator::operator*
 
 // TEMPLATE: BETA10 0x1011c200
-// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::iterator::operator++
+// ??Eiterator@?$list@UDirect3DDeviceInfo@@V?$allocator@UDirect3DDeviceInfo@@@@@@QAE?AV01@H@Z
 
 // TEMPLATE: BETA10 0x1011c290
-// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::begin
+// ?begin@?$list@UDirect3DDeviceInfo@@V?$allocator@UDirect3DDeviceInfo@@@@@@QAE?AViterator@1@XZ
+// Note: could also be
+// ?begin@?$list@UDirect3DDeviceInfo@@V?$allocator@UDirect3DDeviceInfo@@@@@@QBE?AVconst_iterator@1@XZ
 
 // TEMPLATE: BETA10 0x1011c300
-// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::end
+// ?end@?$list@UDirect3DDeviceInfo@@V?$allocator@UDirect3DDeviceInfo@@@@@@QAE?AViterator@1@XZ
+// Note: could also be
+// ?end@?$list@UDirect3DDeviceInfo@@V?$allocator@UDirect3DDeviceInfo@@@@@@QBE?AVconst_iterator@1@XZ
 
 // TEMPLATE: BETA10 0x1011c4d0
 // list<MxDriver,allocator<MxDriver> >::iterator::operator*
 
 // TEMPLATE: BETA10 0x1011c520
-// list<MxDriver,allocator<MxDriver> >::iterator::operator++
+// ??Eiterator@?$list@UMxDriver@@V?$allocator@UMxDriver@@@@@@QAE?AV01@H@Z
 
 // TEMPLATE: BETA10 0x1011c560
-// list<MxDriver,allocator<MxDriver> >::iterator::operator++
+// ??Eiterator@?$list@UMxDriver@@V?$allocator@UMxDriver@@@@@@QAEAAV01@XZ
 
 // TEMPLATE: BETA10 0x1011c590
 // list<MxDriver,allocator<MxDriver> >::_Acc::_Next
 
 // TEMPLATE: BETA10 0x1011c5b0
-// list<MxDriver,allocator<MxDriver> >::begin
+// ?begin@?$list@UMxDriver@@V?$allocator@UMxDriver@@@@@@QAE?AViterator@1@XZ
 
 // TEMPLATE: BETA10 0x1011c5f0
 // list<MxDriver,allocator<MxDriver> >::iterator::iterator
 
 // TEMPLATE: BETA10 0x1011c620
-// list<MxDriver,allocator<MxDriver> >::end
+// ?end@?$list@UMxDriver@@V?$allocator@UMxDriver@@@@@@QAE?AViterator@1@XZ
 
 // TEMPLATE: BETA10 0x1011c690
 // ??9@YAHABViterator@?$list@UMxDriver@@V?$allocator@UMxDriver@@@@@@0@Z
@@ -290,10 +294,10 @@ protected:
 // list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::size
 
 // TEMPLATE: BETA10 0x1011d3e0
-// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::erase
+// ?erase@?$list@UDirect3DDeviceInfo@@V?$allocator@UDirect3DDeviceInfo@@@@@@QAE?AViterator@1@V21@@Z
 
 // TEMPLATE: BETA10 0x1011d570
-// list<MxDriver,allocator<MxDriver> >::erase
+// ?erase@?$list@UMxDriver@@V?$allocator@UMxDriver@@@@@@QAE?AViterator@1@V21@@Z
 
 // TEMPLATE: BETA10 0x1011d6a0
 // list<MxDriver,allocator<MxDriver> >::_Freenode
