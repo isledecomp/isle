@@ -455,7 +455,9 @@ void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 	Vector3 vec3(m_unk0x1a8[0]); // locala8  // esp+0x20
 	Vector3 vec4(m_unk0x1a8[1]); // localb8  // esp+0x10
 	Vector3 vec5(m_unk0x1a8[2]); // EDI
-	Vector3 vec6((const float*)m_unk0x1a8[3]); // locala0  // esp+0x28
+
+	// the typecast makes this function match for unknown reasons
+	Vector3 vec6((const float*) m_unk0x1a8[3]); // locala0  // esp+0x28
 
 	m_world->GetCameraController()->FUN_100123b0(local48);
 	m_unk0x1a8.SetIdentity();
