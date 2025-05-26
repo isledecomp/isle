@@ -612,7 +612,7 @@ public:
 		int paletteSize,
 		PaletteEntry* pEntries
 	);
-	~TglD3DRMIMAGE() { Destroy(); }
+	~TglD3DRMIMAGE();
 
 	Result CreateBuffer(int width, int height, int depth, void* pBuffer, int useBuffer);
 	void Destroy();
@@ -621,6 +621,9 @@ public:
 
 	D3DRMIMAGE m_image;
 	int m_texelsAllocatedByClient;
+
+	// SYNTHETIC: BETA10 0x1016abb0
+	// TglImpl::TglD3DRMIMAGE::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dbb48
@@ -636,7 +639,7 @@ public:
 	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels) override;
+	Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels, int pTexelsArePersistent) override;
 	void FillRowsOfTexture(int y, int height, void* pBuffer) override;
 
 	// vtable+0x10
@@ -647,7 +650,7 @@ public:
 		int* pDepth,
 		void** ppBuffer,
 		int* ppPaletteSize,
-		PaletteEntry** ppPalette
+		unsigned char (*pEntries)[3]
 	) override;
 	Result SetPalette(int entryCount, PaletteEntry* entries) override;
 

@@ -400,7 +400,7 @@ public:
 class Texture : public Object {
 public:
 	// vtable+0x08
-	virtual Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels) = 0;
+	virtual Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels, int pTexelsArePersistent) = 0;
 	virtual void FillRowsOfTexture(int y, int height, void* pBuffer) = 0;
 
 	// vtable+0x10
@@ -411,7 +411,7 @@ public:
 		int* pDepth,
 		void** ppBuffer,
 		int* pPaletteSize,
-		PaletteEntry** ppPalette
+		unsigned char (*pEntries)[3]
 	) = 0;
 	virtual Result SetPalette(int entryCount, PaletteEntry* pEntries) = 0;
 
