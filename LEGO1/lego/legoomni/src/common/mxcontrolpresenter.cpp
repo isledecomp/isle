@@ -77,7 +77,7 @@ void MxControlPresenter::EndAction()
 MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_presenter)
 {
 	assert(p_presenter);
-	MxStillPresenter* presenter = (MxStillPresenter*) p_presenter;
+	MxVideoPresenter* presenter = (MxVideoPresenter*) p_presenter;
 
 	if (m_unk0x4c == 3) {
 		MxStillPresenter* map = (MxStillPresenter*) m_list.front();
