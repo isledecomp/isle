@@ -23,6 +23,7 @@ LegoActor::LegoActor()
 }
 
 // FUNCTION: LEGO1 0x1002d320
+// FUNCTION: BETA10 0x1003d08b
 LegoActor::~LegoActor()
 {
 	if (m_sound) {
@@ -31,6 +32,7 @@ LegoActor::~LegoActor()
 }
 
 // FUNCTION: LEGO1 0x1002d390
+// FUNCTION: BETA10 0x1003d10b
 void LegoActor::ParseAction(char* p_extra)
 {
 	MxFloat speed = 0.0F;
@@ -90,6 +92,8 @@ void LegoActor::ParseAction(char* p_extra)
 				up[2] = atof(token);
 			}
 
+			assert(token);
+
 			SetWorldTransform(location, direction, up);
 		}
 		else {
@@ -122,6 +126,7 @@ const char* LegoActor::GetActorName(MxU8 p_id)
 }
 
 // FUNCTION: LEGO1 0x1002d670
+// FUNCTION: BETA10 0x1003d65f
 void LegoActor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 {
 	if (p_roi) {
