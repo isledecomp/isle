@@ -68,6 +68,7 @@ LegoPathActor::~LegoPathActor()
 }
 
 // FUNCTION: LEGO1 0x1002d8d0
+// FUNCTION: BETA10 0x100ae8cd
 MxResult LegoPathActor::VTable0x80(const Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, Vector3& p_point4)
 {
 	Mx3DPointFloat p1, p2, p3;
@@ -84,8 +85,10 @@ MxResult LegoPathActor::VTable0x80(const Vector3& p_point1, Vector3& p_point2, V
 		m_BADuration /= 0.001;
 		return SUCCESS;
 	}
-
-	return FAILURE;
+	else {
+		MxTrace("Warning: m_BADuration = %g, roi = %s\n", m_BADuration, m_roi->GetName());
+		return FAILURE;
+	}
 }
 
 // FUNCTION: LEGO1 0x1002d9c0
@@ -167,17 +170,22 @@ MxResult LegoPathActor::VTable0x88(
 }
 
 // FUNCTION: LEGO1 0x1002de10
+// FUNCTION: BETA10 0x100aee61
 MxResult LegoPathActor::VTable0x84(
 	LegoPathBoundary* p_boundary,
 	float p_time,
 	Vector3& p_p1,
 	Vector3& p_p4,
-	LegoOrientedEdge& p_destEdge,
+	LegoOrientedEdge* p_destEdge,
 	float p_destScale
 )
 {
-	Vector3* v3 = p_destEdge.CWVertex(*p_boundary);
-	Vector3* v4 = p_destEdge.CCWVertex(*p_boundary);
+	assert(p_destEdge);
+
+	Vector3* v3 = p_destEdge->CWVertex(*p_boundary);
+	Vector3* v4 = p_destEdge->CCWVertex(*p_boundary);
+
+	assert(v3 && v4);
 
 	Mx3DPointFloat p2, p3, p5;
 
@@ -187,12 +195,12 @@ MxResult LegoPathActor::VTable0x84(
 	p2 += *v3;
 
 	m_boundary = p_boundary;
-	m_destEdge = &p_destEdge;
+	m_destEdge = p_destEdge;
 	m_unk0xe4 = p_destScale;
 	m_unk0x7c = 0;
 	m_lastTime = p_time;
 	m_actorTime = p_time;
-	p_destEdge.GetFaceNormal(*p_boundary, p3);
+	p_destEdge->GetFaceNormal(*p_boundary, p3);
 
 	MxMatrix matrix;
 	Vector3 pos(matrix[3]);
@@ -217,6 +225,7 @@ MxResult LegoPathActor::VTable0x84(
 		p5.Unitize();
 
 		if (VTable0x80(p_p1, p_p4, p2, p5) == SUCCESS) {
+			MxTrace("Warning: m_BADuration = %g, roi = %s\n", m_BADuration, m_roi->GetName());
 			m_boundary->AddActor(this);
 		}
 		else {
@@ -379,6 +388,7 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x1002e740
+// FUNCTION: BETA10 0x100b0f70
 void LegoPathActor::VTable0x74(Matrix4& p_transform)
 {
 	if (m_userNavFlag) {

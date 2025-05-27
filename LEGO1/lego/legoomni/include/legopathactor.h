@@ -51,9 +51,11 @@ public:
 	virtual void VTable0x74(Matrix4& p_transform); // vtable+0x74
 
 	// FUNCTION: LEGO1 0x10002d20
+	// FUNCTION: BETA10 0x1000f500
 	virtual void SetUserNavFlag(MxBool p_userNavFlag) { m_userNavFlag = p_userNavFlag; } // vtable+0x78
 
 	// FUNCTION: LEGO1 0x10002d30
+	// FUNCTION: BETA10 0x1000f530
 	virtual MxBool GetUserNavFlag() { return m_userNavFlag; } // vtable+0x7c
 
 	virtual MxResult VTable0x80(
@@ -67,7 +69,7 @@ public:
 		float p_time,
 		Vector3& p_p1,
 		Vector3& p_p4,
-		LegoOrientedEdge& p_destEdge,
+		LegoOrientedEdge* p_destEdge,
 		float p_destScale
 	); // vtable+0x84
 	virtual MxResult VTable0x88(
@@ -81,9 +83,11 @@ public:
 	virtual MxS32 VTable0x8c(float p_time, Matrix4& p_transform); // vtable+0x8c
 
 	// FUNCTION: LEGO1 0x10002d40
+	// FUNCTION: BETA10 0x1000f560
 	virtual MxU32 VTable0x90(float, Matrix4&) { return FALSE; } // vtable+0x90
 
 	// FUNCTION: LEGO1 0x10002d50
+	// FUNCTION: BETA10 0x1000f800
 	virtual MxResult HitActor(LegoPathActor*, MxBool) { return 0; } // vtable+0x94
 
 	virtual void SwitchBoundary(
@@ -94,30 +98,38 @@ public:
 	virtual MxResult VTable0x9c(); // vtable+0x9c
 
 	// FUNCTION: LEGO1 0x10002d60
+	// FUNCTION: BETA10 0x1000f820
 	virtual MxS32 VTable0xa0() { return 0; } // vtable+0xa0
 
 	virtual void VTable0xa4(MxBool& p_und1, MxS32& p_und2); // vtable+0xa4
 	virtual void VTable0xa8();                              // vtable+0xa8
 
 	// FUNCTION: LEGO1 0x10002d70
+	// FUNCTION: BETA10 0x1000f580
 	virtual void SetMaxLinearVel(MxFloat p_maxLinearVel) { m_maxLinearVel = p_maxLinearVel; } // vtable+0xac
 
 	// FUNCTION: LEGO1 0x10002d80
+	// FUNCTION: BETA10 0x1000f5b0
 	virtual MxFloat GetMaxLinearVel() { return m_maxLinearVel; } // vtable+0xb0
 
 	// FUNCTION: LEGO1 0x10002d90
+	// FUNCTION: BETA10 0x1000f5e0
 	virtual MxFloat VTable0xb4() { return m_unk0x140; } // vtable+0xb4
 
 	// FUNCTION: LEGO1 0x10002da0
+	// FUNCTION: BETA10 0x1000f610
 	virtual MxFloat VTable0xb8() { return m_unk0x144; } // vtable+0xb8
 
 	// FUNCTION: LEGO1 0x10002db0
+	// FUNCTION: BETA10 0x1000f640
 	virtual void VTable0xbc(MxFloat p_unk0x140) { m_unk0x140 = p_unk0x140; } // vtable+0xbc
 
 	// FUNCTION: LEGO1 0x10002dc0
+	// FUNCTION: BETA10 0x1000f670
 	virtual void VTable0xc0(MxFloat p_unk0x144) { m_unk0x144 = p_unk0x144; } // vtable+0xc0
 
 	// FUNCTION: LEGO1 0x10002dd0
+	// FUNCTION: BETA10 0x1000f6a0
 	virtual void VTable0xc4() {} // vtable+0xc4
 
 	// FUNCTION: LEGO1 0x10002de0
@@ -132,6 +144,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000c440
+	// FUNCTION: BETA10 0x100124c0
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoPathActor::ClassName()) || LegoActor::IsA(p_name);
@@ -161,6 +174,7 @@ public:
 	void PlaceActor(LegoNamedPlane& p_namedPlane);
 
 	// SYNTHETIC: LEGO1 0x1002d800
+	// SYNTHETIC: BETA10 0x100b04d0
 	// LegoPathActor::`scalar deleting destructor'
 
 protected:
