@@ -298,7 +298,7 @@ MxResult LegoPathController::PlaceActor(
 				return FAILURE;
 			}
 
-			if (p_actor->VTable0x84(boundary, time, p_position, p_direction, *edge, 0.5f) == SUCCESS) {
+			if (p_actor->VTable0x84(boundary, time, p_position, p_direction, edge, 0.5f) == SUCCESS) {
 				p_actor->SetController(this);
 				m_actors.insert(p_actor);
 				return SUCCESS;
