@@ -108,6 +108,7 @@ public:
 	inline Result Create();
 	inline void Destroy();
 	inline Result CreateLight(LightType type, float r, float g, float b, LightImpl& rLight);
+	inline Result CreateGroup(const GroupImpl* pParentGroup, GroupImpl& rpGroup);
 	inline Result CreateView(
 		const DeviceImpl& rDevice,
 		const CameraImpl& rCamera,
