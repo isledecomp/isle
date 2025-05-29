@@ -431,7 +431,7 @@ void LegoCarBuildAnimPresenter::FUN_10079160()
 	destData->SetName(data2->GetName());
 
 	destNode->SetNumChildren(1);
-	children = new LegoTreeNode*;
+	children = new LegoTreeNode*[1];
 	assert(children);
 	*children = FindNodeByName(m_anim->GetRoot(), "PLATFORM");
 
