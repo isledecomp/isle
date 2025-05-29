@@ -448,7 +448,7 @@ void LegoCarBuildAnimPresenter::FUN_100795d0(LegoChar* p_param)
 	if (data) {
 		LegoMorphKey* oldMorphKeys = data->GetMorphKeys();
 
-		LegoMorphKey* newHideKey = new LegoMorphKey;
+		LegoMorphKey* newHideKey = new LegoMorphKey();
 		assert(newHideKey);
 
 		newHideKey->SetTime(0);
