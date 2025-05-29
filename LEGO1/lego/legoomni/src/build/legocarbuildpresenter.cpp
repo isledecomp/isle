@@ -45,8 +45,8 @@ LegoCarBuildAnimPresenter::~LegoCarBuildAnimPresenter()
 {
 	if (m_parts) {
 		for (MxS16 i = 0; i < m_numberOfParts; i++) {
-			delete m_parts[i].m_name;
-			delete m_parts[i].m_wiredName;
+			delete[] m_parts[i].m_name;
+			delete[] m_parts[i].m_wiredName;
 		}
 		delete[] m_parts;
 	}
