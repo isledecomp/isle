@@ -431,7 +431,7 @@ void LegoCarBuildAnimPresenter::FUN_10079160()
 	destData->SetName(data2->GetName());
 
 	destNode->SetNumChildren(1);
-	children = new LegoTreeNode*;
+	children = new LegoTreeNode*[1];
 	assert(children);
 	*children = FindNodeByName(m_anim->GetRoot(), "PLATFORM");
 
@@ -448,7 +448,7 @@ void LegoCarBuildAnimPresenter::FUN_100795d0(LegoChar* p_param)
 	if (data) {
 		LegoMorphKey* oldMorphKeys = data->GetMorphKeys();
 
-		LegoMorphKey* newHideKey = new LegoMorphKey();
+		LegoMorphKey* newHideKey = new LegoMorphKey;
 		assert(newHideKey);
 
 		newHideKey->SetTime(0);
