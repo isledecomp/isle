@@ -218,11 +218,16 @@ View* RendererImpl::CreateView(
 	return view;
 }
 
-inline Result RendererCreateGroup(IDirect3DRM2* pRenderer, IDirect3DRMFrame2* pParent, IDirect3DRMFrame2*& rpGroup)
+// FUNCTION: BETA10 0x1016d380
+inline Result RendererCreateGroup(
+	IDirect3DRM2* pRenderer,
+	const IDirect3DRMFrame2* pParent,
+	IDirect3DRMFrame2*& rpGroup
+)
 {
 	Result result = ResultVal(pRenderer->CreateFrame(NULL, &rpGroup));
 	if (Succeeded(result) && pParent) {
-		result = ResultVal(pParent->AddVisual(rpGroup));
+		result = ResultVal(const_cast<IDirect3DRMFrame2*>(pParent)->AddVisual(rpGroup));
 		if (!Succeeded(result)) {
 			rpGroup->Release();
 			rpGroup = NULL;
@@ -231,13 +236,28 @@ inline Result RendererCreateGroup(IDirect3DRM2* pRenderer, IDirect3DRMFrame2* pP
 	return result;
 }
 
+// FUNCTION: BETA10 0x1016d280
+inline Result RendererImpl::CreateGroup(const GroupImpl* pParentGroup, GroupImpl& rGroup)
+{
+	assert(m_data);
+	assert(!pParentGroup || pParentGroup->ImplementationData());
+	assert(!rGroup.ImplementationData());
+
+	return RendererCreateGroup(
+		m_data,
+		pParentGroup ? pParentGroup->ImplementationData() : NULL,
+		rGroup.ImplementationData()
+	);
+}
+
 // FUNCTION: LEGO1 0x100a1b20
+// FUNCTION: BETA10 0x1016a130
 Group* RendererImpl::CreateGroup(const Group* pParent)
 {
+	assert(m_data);
+
 	GroupImpl* group = new GroupImpl();
-	Result result =
-		RendererCreateGroup(m_data, pParent ? static_cast<const GroupImpl*>(pParent)->m_data : NULL, group->m_data);
-	if (!result) {
+	if (!CreateGroup(static_cast<const GroupImpl*>(pParent), *group)) {
 		delete group;
 		group = NULL;
 	}
@@ -511,16 +531,34 @@ Texture* RendererImpl::CreateTexture()
 	return texture;
 }
 
+// FUNCTION: BETA10 0x1016af90
+inline Result RendererSetTextureDefaultShadeCount(IDirect3DRM2* pRenderer, unsigned long shadeCount)
+{
+	return ResultVal(pRenderer->SetDefaultTextureShades(shadeCount));
+}
+
 // FUNCTION: LEGO1 0x100a2270
+// FUNCTION: BETA10 0x1016af30
 Result RendererImpl::SetTextureDefaultShadeCount(unsigned long shadeCount)
 {
-	return ResultVal(m_data->SetDefaultTextureShades(shadeCount));
+	assert(m_data);
+
+	return RendererSetTextureDefaultShadeCount(m_data, shadeCount);
+}
+
+// FUNCTION: BETA10 0x1016b020
+inline Result RendererSetTextureDefaultColorCount(IDirect3DRM2* pRenderer, unsigned long colorCount)
+{
+	return ResultVal(pRenderer->SetDefaultTextureColors(colorCount));
 }
 
 // FUNCTION: LEGO1 0x100a2290
+// FUNCTION: BETA10 0x1016afc0
 Result RendererImpl::SetTextureDefaultColorCount(unsigned long colorCount)
 {
-	return ResultVal(m_data->SetDefaultTextureColors(colorCount));
+	assert(m_data);
+
+	return RendererSetTextureDefaultColorCount(m_data, colorCount);
 }
 
 // FUNCTION: LEGO1 0x100a22b0

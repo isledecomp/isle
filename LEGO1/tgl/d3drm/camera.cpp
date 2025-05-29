@@ -1,5 +1,7 @@
 #include "impl.h"
 
+#include <assert.h>
+
 using namespace TglImpl;
 
 DECOMP_SIZE_ASSERT(Camera, 0x04);
@@ -12,8 +14,8 @@ void* CameraImpl::ImplementationDataPtr()
 	return reinterpret_cast<void*>(&m_data);
 }
 
-// FUNCTION: LEGO1 0x100a3700
-Result CameraImpl::SetTransformation(FloatMatrix4& matrix)
+// FUNCTION: BETA10 0x1016f390
+inline Result CameraSetTransformation(IDirect3DRMFrame2* pCamera, FloatMatrix4& matrix)
 {
 	D3DRMMATRIX4D helper;
 	D3DRMMATRIX4D* pTransformation = Translate(matrix, helper);
@@ -22,10 +24,23 @@ Result CameraImpl::SetTransformation(FloatMatrix4& matrix)
 	Result result;
 	Result result2;
 
-	result2 = ResultVal(m_data->GetPosition(0, &position));
-	result = ResultVal(m_data->AddTransform(D3DRMCOMBINE_REPLACE, *pTransformation));
-	// The did this second call just to assert on the return value
-	result2 = ResultVal(m_data->GetPosition(0, &position));
+	result2 = ResultVal(pCamera->GetPosition(0, &position));
+	assert(Succeeded(result2));
+
+	result = ResultVal(pCamera->AddTransform(D3DRMCOMBINE_REPLACE, *pTransformation));
+	assert(Succeeded(result));
+
+	result2 = ResultVal(pCamera->GetPosition(0, &position));
+	assert(Succeeded(result2));
 
 	return result;
+}
+
+// FUNCTION: LEGO1 0x100a3700
+// FUNCTION: BETA10 0x1016f330
+Result CameraImpl::SetTransformation(FloatMatrix4& matrix)
+{
+	assert(m_data);
+
+	return CameraSetTransformation(m_data, matrix);
 }
