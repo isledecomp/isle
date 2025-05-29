@@ -1555,7 +1555,7 @@ MxResult LegoAnimationManager::Tickle()
 		return SUCCESS;
 	}
 
-	m_unk0x410 = (rand() * 10000 / SHRT_MAX) + 5000;
+	m_unk0x410 = (rand() * 10000 / RAND_MAX) + 5000;
 	m_unk0x408 = time;
 
 	if (time - m_unk0x404 > 10000) {
@@ -2013,10 +2013,10 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 
 											float speed;
 											if (m_extras[i].m_unk0x14) {
-												speed = ((float) (rand() * 1.5) / 32767.0f) + 0.9;
+												speed = ((float) (rand() * 1.5) / RAND_MAX) + 0.9;
 											}
 											else {
-												speed = ((float) (rand() * 1.4) / 32767.0f) + 0.6;
+												speed = ((float) (rand() * 1.4) / RAND_MAX) + 0.6;
 											}
 
 											actor->SetWorldSpeed(speed);
@@ -2419,10 +2419,10 @@ void LegoAnimationManager::FUN_10063d10()
 
 						if (speed < 0.0f) {
 							if (m_extras[i].m_unk0x14) {
-								speed = ((float) (rand() * 1.5) / 32767.0f) + 0.9;
+								speed = ((float) (rand() * 1.5) / RAND_MAX) + 0.9;
 							}
 							else {
-								speed = ((float) (rand() * 1.4) / 32767.0f) + 0.6;
+								speed = ((float) (rand() * 1.4) / RAND_MAX) + 0.6;
 							}
 						}
 
@@ -2506,7 +2506,7 @@ MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoOrie
 MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, MxBool p_bool1, MxBool p_bool2)
 {
 	MxU32 local2c = 12;
-	float destScale = ((rand() * 0.5) / 32767.0) + 0.25;
+	float destScale = ((rand() * 0.5) / RAND_MAX) + 0.25;
 	LegoPathActor* actor = UserActor();
 
 	if (actor == NULL) {
