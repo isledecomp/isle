@@ -861,18 +861,18 @@ void LegoAnimationManager::DeleteAnimations()
 
 	if (m_anims != NULL) {
 		for (MxS32 i = 0; i < m_animCount; i++) {
-			delete m_anims[i].m_name;
+			delete[] m_anims[i].m_name;
 
 			if (m_anims[i].m_models != NULL) {
 				for (MxS32 j = 0; j < m_anims[i].m_modelCount; j++) {
-					delete m_anims[i].m_models[j].m_name;
+					delete[] m_anims[i].m_models[j].m_name;
 				}
 
-				delete m_anims[i].m_models;
+				delete[] m_anims[i].m_models;
 			}
 		}
 
-		delete m_anims;
+		delete[] m_anims;
 	}
 
 	Init();
