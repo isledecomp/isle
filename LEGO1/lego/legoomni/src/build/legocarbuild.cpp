@@ -268,7 +268,9 @@ void LegoCarBuild::InitPresenters()
 	m_Decals_Ctl1 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl1");
 	m_Decals_Ctl2 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl2");
 	m_Decal_Bitmap = (MxStillPresenter*) Find("MxStillPresenter", "Decal_Bitmap");
+#ifdef BETA10
 	assert(m_Decal_Bitmap);
+#endif
 	if (m_Decal_Bitmap) {
 		m_Decals_Ctl3 = (MxControlPresenter*) Find("MxControlPresenter", "Decals_Ctl3");
 		assert(m_Decals_Ctl3);
