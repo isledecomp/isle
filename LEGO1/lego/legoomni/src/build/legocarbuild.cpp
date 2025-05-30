@@ -656,7 +656,7 @@ MxLong LegoCarBuild::Notify(MxParam& p_param)
 	if (m_worldStarted) {
 		switch (param.GetNotification()) {
 		case c_notificationType0:
-			FUN_10024c20((LegoEventNotificationParam*) &p_param);
+			FUN_10024c20((MxNotificationParam*) &p_param);
 			result = 1;
 			break;
 		case c_notificationEndAction:
@@ -1147,7 +1147,7 @@ undefined4 LegoCarBuild::FUN_10024890(MxParam* p_param)
 
 // FUNCTION: LEGO1 0x10024c20
 // FUNCTION: BETA10 0x1006db21
-undefined4 LegoCarBuild::FUN_10024c20(LegoEventNotificationParam* p_param)
+undefined4 LegoCarBuild::FUN_10024c20(MxNotificationParam* p_param)
 {
 	LegoEntity* entity;
 	assert(m_buildState);

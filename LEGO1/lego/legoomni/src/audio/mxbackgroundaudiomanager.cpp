@@ -3,7 +3,6 @@
 #include "legomain.h"
 #include "misc.h"
 #include "mxaudiopresenter.h"
-#include "mxcompositepresenter.h"
 #include "mxdssound.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
@@ -11,6 +10,7 @@
 #include "mxstreamer.h"
 #include "mxticklemanager.h"
 #include "mxutilities.h"
+#include "mxwavepresenter.h"
 
 DECOMP_SIZE_ASSERT(MxBackgroundAudioManager, 0x150)
 
@@ -356,7 +356,7 @@ MxResult MxBackgroundAudioManager::SetPendingPresenter(
 	m_pendingPresenter = (MxAudioPresenter*) p_presenter;
 	m_targetVolume = ((MxDSSound*) m_pendingPresenter->GetAction())->GetVolume();
 
-	((MxCompositePresenter*) m_pendingPresenter)->VTable0x60(NULL);
+	((MxWavePresenter*) m_pendingPresenter)->SetVolume(0);
 
 	m_speed = p_speed;
 	m_tickleState = p_tickleState;
