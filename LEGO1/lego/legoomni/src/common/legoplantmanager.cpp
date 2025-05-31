@@ -400,7 +400,7 @@ MxBool LegoPlantManager::SwitchColor(LegoEntity* p_entity)
 
 	roi->SetLODList(lodList);
 	lodList->Release();
-	CharacterManager()->FUN_10085870(roi);
+	CharacterManager()->UpdateBoundingSphereAndBox(roi);
 	return TRUE;
 }
 
@@ -429,7 +429,7 @@ MxBool LegoPlantManager::SwitchVariant(LegoEntity* p_entity)
 
 	roi->SetLODList(lodList);
 	lodList->Release();
-	CharacterManager()->FUN_10085870(roi);
+	CharacterManager()->UpdateBoundingSphereAndBox(roi);
 
 	if (info->m_move != 0 && info->m_move >= g_maxMove[info->m_variant]) {
 		info->m_move = g_maxMove[info->m_variant] - 1;
