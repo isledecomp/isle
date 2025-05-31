@@ -93,7 +93,9 @@ MxResult MxTransitionManager::StartTransition(
 	MxBool p_playMusicInAnim
 )
 {
+#ifdef BETA10
 	assert(m_mode == e_idle);
+#endif
 
 	if (m_mode == e_idle) {
 		if (!p_playMusicInAnim) {
