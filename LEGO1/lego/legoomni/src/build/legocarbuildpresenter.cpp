@@ -457,7 +457,7 @@ void LegoCarBuildAnimPresenter::FUN_100795d0(LegoChar* p_param)
 		data->SetNumMorphKeys(1);
 		data->SetMorphKeys(newHideKey);
 
-		delete oldMorphKeys;
+		delete[] oldMorphKeys;
 	}
 }
 
@@ -473,7 +473,7 @@ void LegoCarBuildAnimPresenter::FUN_10079680(LegoChar* p_param)
 		data->SetNumMorphKeys(0);
 		data->SetMorphKeys(NULL);
 
-		delete oldMorphKeys;
+		delete[] oldMorphKeys;
 	}
 }
 
