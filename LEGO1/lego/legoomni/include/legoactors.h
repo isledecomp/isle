@@ -31,8 +31,8 @@ struct LegoActorInfo {
 // SIZE 0x58
 struct LegoActorLOD {
 	enum {
-		c_flag1 = 0x01,
-		c_flag2 = 0x02
+		c_useTexture = 0x01,
+		c_useColor = 0x02
 	};
 
 	const char* m_name;        // 0x00
