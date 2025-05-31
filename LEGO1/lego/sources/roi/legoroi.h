@@ -78,7 +78,7 @@ public:
 
 	void SetComp(CompoundObject* p_comp) { comp = p_comp; }
 	void SetBoundingSphere(const BoundingSphere& p_sphere) { m_sphere = m_world_bounding_sphere = p_sphere; }
-	void SetUnknown0x80(const BoundingBox& p_unk0x80) { m_unk0x80 = p_unk0x80; }
+	void SetBoundingBox(const BoundingBox& p_box) { m_boundingBox = p_box; }
 
 	// SYNTHETIC: LEGO1 0x100a82b0
 	// LegoROI::`scalar deleting destructor'

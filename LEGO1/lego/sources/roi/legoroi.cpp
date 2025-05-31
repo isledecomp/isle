@@ -150,8 +150,8 @@ LegoResult LegoROI::Read(
 		goto done;
 	}
 
-	SET3(m_unk0x80.Min(), box.GetMin());
-	SET3(m_unk0x80.Max(), box.GetMax());
+	SET3(m_boundingBox.Min(), box.GetMin());
+	SET3(m_boundingBox.Max(), box.GetMax());
 
 	if (p_storage->Read(&length, sizeof(LegoU32)) != SUCCESS) {
 		goto done;
@@ -617,8 +617,8 @@ LegoU32 LegoROI::FUN_100a9410(
 
 		Mx3DPointFloat local4c(p_v1);
 
-		local58 = m_unk0x80.Min();
-		locala8 = m_unk0x80.Max();
+		local58 = m_boundingBox.Min();
+		locala8 = m_boundingBox.Max();
 
 		localc0[3] = local9c[3] = local168[3] = 1.0f;
 
