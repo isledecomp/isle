@@ -553,7 +553,8 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 		);
 		childROI->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
 
-		if (g_actorLODs[i + 1].m_flags & LegoActorLOD::c_flag1 && (i != 0 || part.m_unk0x00[part.m_unk0x08] != 0)) {
+		if (g_actorLODs[i + 1].m_flags & LegoActorLOD::c_useTexture &&
+			(i != 0 || part.m_unk0x00[part.m_unk0x08] != 0)) {
 
 			LegoTextureInfo* textureInfo = textureContainer->Get(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]]);
 
@@ -562,7 +563,7 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 				childROI->SetLodColor(1.0F, 1.0F, 1.0F, 0.0F);
 			}
 		}
-		else if (g_actorLODs[i + 1].m_flags & LegoActorLOD::c_flag2 || (i == 0 && part.m_unk0x00[part.m_unk0x08] == 0)) {
+		else if (g_actorLODs[i + 1].m_flags & LegoActorLOD::c_useColor || (i == 0 && part.m_unk0x00[part.m_unk0x08] == 0)) {
 			LegoFloat red, green, blue, alpha;
 			childROI->GetRGBAColor(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]], red, green, blue, alpha);
 			childROI->SetLodColor(red, green, blue, alpha);
@@ -765,7 +766,7 @@ MxBool LegoCharacterManager::SwitchColor(LegoROI* p_roi, LegoROI* p_targetROI)
 		findChild = FALSE;
 	}
 
-	if (!(g_actorLODs[partIndex + 1].m_flags & LegoActorLOD::c_flag2)) {
+	if (!(g_actorLODs[partIndex + 1].m_flags & LegoActorLOD::c_useColor)) {
 		return FALSE;
 	}
 
