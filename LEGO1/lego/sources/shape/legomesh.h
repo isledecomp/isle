@@ -56,7 +56,7 @@ public:
 	LegoU8 GetUnknown0x0d() { return m_unk0x0d; }
 	const LegoChar* GetTextureName() { return m_textureName; }
 	const LegoChar* GetMaterialName() { return m_materialName; }
-	LegoBool GetUnknown0x21() { return m_unk0x21; }
+	LegoBool GetUseAlias() { return m_useAlias; }
 	LegoResult Read(LegoStorage* p_storage);
 
 	// SYNTHETIC: LEGO1 0x100d3840
@@ -72,7 +72,7 @@ protected:
 	LegoChar* m_textureName;         // 0x18
 	LegoChar* m_materialName;        // 0x1c
 	undefined m_unk0x20;             // 0x20 - unused
-	LegoBool m_unk0x21;              // 0x21
+	LegoBool m_useAlias;             // 0x21
 };
 
 #endif // __LEGOMESH_H

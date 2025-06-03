@@ -211,7 +211,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		m_melems[meshIndex].m_tglMesh->SetShadingModel(shadingModel);
 
 		if (textureName != NULL) {
-			if (mesh->GetUnknown0x21()) {
+			if (mesh->GetUseAlias()) {
 				LegoROI::GetPaletteEntries(textureName, paletteEntries, sizeOfArray(paletteEntries));
 			}
 
@@ -231,7 +231,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			LegoFloat blue = 1.0F;
 			LegoFloat alpha = 0.0F;
 
-			if (mesh->GetUnknown0x21()) {
+			if (mesh->GetUseAlias()) {
 				LegoROI::GetRGBAColor(materialName, red, green, blue, alpha);
 			}
 			else {
