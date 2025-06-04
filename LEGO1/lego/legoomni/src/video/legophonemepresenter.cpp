@@ -66,7 +66,7 @@ void LegoPhonemePresenter::StartingTickle()
 			if (!cursor.Find(phoneme)) {
 				LegoTextureInfo* textureInfo = TextureContainer()->GetCached(m_textureInfo);
 
-				CharacterManager()->FUN_100849a0(entityROI, textureInfo);
+				CharacterManager()->SetHeadTexture(entityROI, textureInfo);
 
 				phoneme->VTable0x0c(m_textureInfo);
 				phoneme->VTable0x14(textureInfo);
@@ -147,7 +147,7 @@ void LegoPhonemePresenter::EndAction()
 				}
 
 				if (roi != NULL) {
-					CharacterManager()->FUN_100849a0(roi, NULL);
+					CharacterManager()->SetHeadTexture(roi, NULL);
 				}
 
 				if (!m_unk0x84) {

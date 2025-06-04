@@ -37,19 +37,19 @@ MxU32 g_characterAnimationId = 10;
 char* LegoCharacterManager::g_customizeAnimFile = NULL;
 
 // GLOBAL: LEGO1 0x100fc4d8
-MxU32 g_unk0x100fc4d8 = 50;
+MxU32 g_soundIdOffset = 50;
 
 // GLOBAL: LEGO1 0x100fc4dc
-MxU32 g_unk0x100fc4dc = 66;
+MxU32 g_soundIdMoodOffset = 66;
 
 // GLOBAL: LEGO1 0x100fc4e8
-MxU32 g_unk0x100fc4e8 = 0;
+MxU32 g_headTextureCounter = 0;
 
 // GLOBAL: LEGO1 0x100fc4ec
-MxU32 g_unk0x100fc4ec = 2;
+MxU32 g_infohatVariantCounter = 2;
 
 // GLOBAL: LEGO1 0x100fc4f0
-MxU32 g_unk0x100fc4f0 = 0;
+MxU32 g_autoRoiCounter = 0;
 
 // GLOBAL: LEGO1 0x10104f20
 LegoActorInfo g_actorInfo[66];
@@ -602,7 +602,7 @@ done:
 
 // FUNCTION: LEGO1 0x100849a0
 // FUNCTION: BETA10 0x10075b51
-MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_texture)
+MxBool LegoCharacterManager::SetHeadTexture(LegoROI* p_roi, LegoTextureInfo* p_texture)
 {
 	LegoResult result = SUCCESS;
 	LegoROI* head = FindChildROI(p_roi, g_actorLODs[c_headLOD].m_name);
@@ -614,7 +614,7 @@ MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_tex
 		assert(lodList);
 
 		MxS32 lodSize = lodList->Size();
-		sprintf(lodName, "%s%s%d", p_roi->GetName(), "head", g_unk0x100fc4e8++);
+		sprintf(lodName, "%s%s%d", p_roi->GetName(), "head", g_headTextureCounter++);
 		ViewLODList* dupLodList = GetViewLODListManager()->Create(lodName, lodSize);
 		assert(dupLodList);
 
@@ -758,17 +758,17 @@ MxBool LegoCharacterManager::SwitchColor(LegoROI* p_roi, LegoROI* p_targetROI)
 	assert(partIndex < numParts);
 
 	MxBool findChild = TRUE;
-	if (partIndex == 6) {
-		partIndex = 4;
+	if (partIndex == c_clawlftPart) {
+		partIndex = c_armlftPart;
 	}
-	else if (partIndex == 7) {
-		partIndex = 5;
+	else if (partIndex == c_clawrtPart) {
+		partIndex = c_armrtPart;
 	}
-	else if (partIndex == 3) {
-		partIndex = 1;
+	else if (partIndex == c_headPart) {
+		partIndex = c_infohatPart;
 	}
-	else if (partIndex == 0) {
-		partIndex = 2;
+	else if (partIndex == c_bodyPart) {
+		partIndex = c_infogronPart;
 	}
 	else {
 		findChild = FALSE;
@@ -813,11 +813,11 @@ MxBool LegoCharacterManager::SwitchVariant(LegoROI* p_roi)
 	LegoActorInfo::Part& part = info->m_parts[c_infohatPart];
 
 	part.m_partNameIndex++;
-	MxU8 unk0x00 = part.m_partNameIndices[part.m_partNameIndex];
+	MxU8 partNameIndex = part.m_partNameIndices[part.m_partNameIndex];
 
-	if (unk0x00 == 0xff) {
+	if (partNameIndex == 0xff) {
 		part.m_partNameIndex = 0;
-		unk0x00 = part.m_partNameIndices[part.m_partNameIndex];
+		partNameIndex = part.m_partNameIndices[part.m_partNameIndex];
 	}
 
 	LegoROI* childROI = FindChildROI(p_roi, g_actorLODs[c_infohatLOD].m_name);
@@ -825,9 +825,9 @@ MxBool LegoCharacterManager::SwitchVariant(LegoROI* p_roi)
 	if (childROI != NULL) {
 		char lodName[256];
 
-		ViewLODList* lodList = GetViewLODListManager()->Lookup(part.m_partName[unk0x00]);
+		ViewLODList* lodList = GetViewLODListManager()->Lookup(part.m_partName[partNameIndex]);
 		MxS32 lodSize = lodList->Size();
-		sprintf(lodName, "%s%d", p_roi->GetName(), g_unk0x100fc4ec++);
+		sprintf(lodName, "%s%d", p_roi->GetName(), g_infohatVariantCounter++);
 		ViewLODList* dupLodList = GetViewLODListManager()->Create(lodName, lodSize);
 
 		Tgl::Renderer* renderer = VideoManager()->GetRenderer();
@@ -936,11 +936,11 @@ MxU32 LegoCharacterManager::GetSoundId(LegoROI* p_roi, MxBool p_und)
 	LegoActorInfo* info = GetActorInfo(p_roi);
 
 	if (p_und) {
-		return info->m_mood + g_unk0x100fc4dc;
+		return info->m_mood + g_soundIdMoodOffset;
 	}
 
 	if (info != NULL) {
-		return info->m_sound + g_unk0x100fc4d8;
+		return info->m_sound + g_soundIdOffset;
 	}
 	else {
 		return 0;
@@ -1005,14 +1005,14 @@ LegoROI* LegoCharacterManager::CreateAutoROI(const char* p_name, const char* p_l
 		name = p_name;
 	}
 	else {
-		sprintf(buf, "autoROI_%d", g_unk0x100fc4f0++);
+		sprintf(buf, "autoROI_%d", g_autoRoiCounter++);
 		name = buf;
 	}
 
 	roi->SetName(name);
 	lodList->Release();
 
-	if (roi != NULL && FUN_10085870(roi) != SUCCESS) {
+	if (roi != NULL && UpdateBoundingSphereAndBox(roi) != SUCCESS) {
 		delete roi;
 		roi = NULL;
 	}
@@ -1042,7 +1042,7 @@ LegoROI* LegoCharacterManager::CreateAutoROI(const char* p_name, const char* p_l
 }
 
 // FUNCTION: LEGO1 0x10085870
-MxResult LegoCharacterManager::FUN_10085870(LegoROI* p_roi)
+MxResult LegoCharacterManager::UpdateBoundingSphereAndBox(LegoROI* p_roi)
 {
 	MxResult result = FAILURE;
 
