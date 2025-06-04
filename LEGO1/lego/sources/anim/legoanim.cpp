@@ -524,7 +524,7 @@ LegoAnimNodeData::LegoAnimNodeData()
 	m_translationKeys = NULL;
 	m_roiIndex = 0;
 	m_rotationKeys = NULL;
-	m_unk0x22 = 0;
+	m_boundaryIndex = 0;
 	m_scaleKeys = NULL;
 	m_morphKeys = NULL;
 	m_translationIndex = 0;

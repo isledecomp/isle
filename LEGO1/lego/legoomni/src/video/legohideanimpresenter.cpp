@@ -114,7 +114,7 @@ void LegoHideAnimPresenter::FUN_1006db60(LegoTreeNode* p_node, LegoTime p_time)
 	}
 
 	if (m_boundaryMap != NULL) {
-		LegoPathBoundary* boundary = m_boundaryMap[data->GetUnknown0x22()];
+		LegoPathBoundary* boundary = m_boundaryMap[data->GetBoundaryIndex()];
 
 		if (boundary != NULL) {
 			newB = data->GetVisibility(p_time);
@@ -163,7 +163,7 @@ void LegoHideAnimPresenter::FUN_1006e3f0(LegoHideAnimStructMap& p_map, LegoTreeN
 			FUN_1006e470(p_map, data, name, boundary);
 		}
 		else {
-			data->SetUnknown0x22(0);
+			data->SetBoundaryIndex(0);
 		}
 	}
 
@@ -190,7 +190,7 @@ void LegoHideAnimPresenter::FUN_1006e470(
 		animStruct.m_index = p_map.size() + 1;
 		animStruct.m_boundary = p_boundary;
 
-		p_data->SetUnknown0x22(animStruct.m_index);
+		p_data->SetBoundaryIndex(animStruct.m_index);
 
 		char* name = new char[strlen(p_name) + 1];
 		strcpy(name, p_name);
@@ -198,7 +198,7 @@ void LegoHideAnimPresenter::FUN_1006e470(
 		p_map[name] = animStruct;
 	}
 	else {
-		p_data->SetUnknown0x22((*it).second.m_index);
+		p_data->SetBoundaryIndex((*it).second.m_index);
 	}
 }
 

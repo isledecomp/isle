@@ -190,7 +190,7 @@ public:
 	LegoU16 GetROIIndex() { return m_roiIndex; }
 
 	// FUNCTION: BETA10 0x1005d5c0
-	LegoU16 GetUnknown0x22() { return m_unk0x22; }
+	LegoU16 GetBoundaryIndex() { return m_boundaryIndex; }
 
 	// FUNCTION: BETA10 0x10073b80
 	LegoRotationKey* GetRotationKey(MxS32 index) { return &m_rotationKeys[index]; }
@@ -217,7 +217,7 @@ public:
 	void SetROIIndex(LegoU16 p_roiIndex) { m_roiIndex = p_roiIndex; }
 
 	// FUNCTION: BETA10 0x1005f2e0
-	void SetUnknown0x22(LegoU16 p_unk0x22) { m_unk0x22 = p_unk0x22; }
+	void SetBoundaryIndex(LegoU16 p_boundaryIndex) { m_boundaryIndex = p_boundaryIndex; }
 
 	LegoResult CreateLocalTransform(LegoTime p_time, Matrix4& p_matrix)
 	{
@@ -280,7 +280,7 @@ protected:
 	LegoScaleKey* m_scaleKeys;             // 0x18
 	LegoMorphKey* m_morphKeys;             // 0x1c
 	LegoU16 m_roiIndex;                    // 0x20
-	LegoU16 m_unk0x22;                     // 0x22
+	LegoU16 m_boundaryIndex;               // 0x22
 	LegoU32 m_translationIndex;            // 0x24
 	LegoU32 m_rotationIndex;               // 0x28
 	LegoU32 m_scaleIndex;                  // 0x2c
