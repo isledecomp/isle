@@ -220,21 +220,20 @@ MxResult LegoPathActor::VTable0x84(
 	right.EqualsCross(up, dir);
 	m_roi->UpdateTransformationRelativeToParent(matrix);
 
-	if (!m_cameraFlag || !m_userNavFlag) {
+	if (m_cameraFlag && m_userNavFlag) {
+		m_boundary->AddActor(this);
+		FUN_10010c30();
+	}
+	else {
 		p5.EqualsCross(*p_boundary->GetUnknown0x14(), p3);
 		p5.Unitize();
 
-		if (VTable0x80(p_p1, p_p4, p2, p5) == SUCCESS) {
+		if (VTable0x80(p_p1, p_p4, p2, p5) != SUCCESS) {
 			MxTrace("Warning: m_BADuration = %g, roi = %s\n", m_BADuration, m_roi->GetName());
-			m_boundary->AddActor(this);
-		}
-		else {
 			return FAILURE;
 		}
-	}
-	else {
+
 		m_boundary->AddActor(this);
-		FUN_10010c30();
 	}
 
 	m_unk0xec = m_roi->GetLocal2World();
