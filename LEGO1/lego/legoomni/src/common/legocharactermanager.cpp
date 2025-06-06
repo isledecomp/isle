@@ -500,7 +500,7 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 	boundingBox.Max()[0] = g_actorLODs[c_topLOD].m_boundingBox[3];
 	boundingBox.Max()[1] = g_actorLODs[c_topLOD].m_boundingBox[4];
 	boundingBox.Max()[2] = g_actorLODs[c_topLOD].m_boundingBox[5];
-	roi->SetUnknown0x80(boundingBox);
+	roi->SetBoundingBox(boundingBox);
 
 	comp = new CompoundObject();
 	roi->SetComp(comp);
@@ -551,7 +551,7 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 		childBoundingBox.Max()[0] = g_actorLODs[i + 1].m_boundingBox[3];
 		childBoundingBox.Max()[1] = g_actorLODs[i + 1].m_boundingBox[4];
 		childBoundingBox.Max()[2] = g_actorLODs[i + 1].m_boundingBox[5];
-		childROI->SetUnknown0x80(childBoundingBox);
+		childROI->SetBoundingBox(childBoundingBox);
 
 		CalcLocalTransform(
 			Mx3DPointFloat(g_actorLODs[i + 1].m_position),
@@ -1073,7 +1073,7 @@ MxResult LegoCharacterManager::UpdateBoundingSphereAndBox(LegoROI* p_roi)
 		SET3(boundingBox.Min(), min);
 		SET3(boundingBox.Max(), max);
 
-		p_roi->SetUnknown0x80(boundingBox);
+		p_roi->SetBoundingBox(boundingBox);
 
 		p_roi->WrappedUpdateWorldData();
 
