@@ -16,6 +16,24 @@ class MxStillPresenter;
 // SIZE 0x18
 class HospitalState : public LegoState {
 public:
+	enum {
+		e_exitToClose = 0,
+		e_newState = 1,
+		e_unknown3 = 3,
+		e_unknown4 = 4,
+		e_introduction = 5,
+		e_explainQuestShort = 6,
+		e_explainQuest = 7,
+		e_waitAcceptingQuest = 8,
+		e_beforeEnteringAmbulance = 9,
+		e_unknown10 = 10, // Can never be reached
+		e_unknown11 = 11, // Can only be reached via e_unknown10
+		e_afterAcceptingQuest = 12,
+		e_exitImmediately = 13,
+		e_exitToFront = 14,
+		e_exitToInfocenter = 15,
+	};
+
 	HospitalState();
 	~HospitalState() override {}
 
