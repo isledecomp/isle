@@ -42,9 +42,9 @@ private:
 
 	MxS32 m_rectCount;              // 0x68
 	LegoTextureInfo* m_textureInfo; // 0x6c
-	MxBool m_unk0x70;               // 0x70
+	MxBool m_reusedPhoneme;         // 0x70
 	MxString m_roiName;             // 0x74
-	MxBool m_unk0x84;               // 0x84
+	MxBool m_isPartOfAnimMM;        // 0x84
 };
 
 // TEMPLATE: LEGO1 0x1004eb20
