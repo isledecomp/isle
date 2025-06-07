@@ -101,7 +101,7 @@ private:
 	HospitalScript::Script m_currentAction; // 0x10c
 	MxStillPresenter* m_copLedBitmap;       // 0x110
 	MxStillPresenter* m_pizzaLedBitmap;     // 0x114
-	undefined m_unk0x118;                   // 0x118
+	MxBool m_flashingLeds;                  // 0x118
 	MxLong m_copLedAnimTimer;               // 0x11c
 	MxLong m_pizzaLedAnimTimer;             // 0x120
 	MxLong m_time;                          // 0x124

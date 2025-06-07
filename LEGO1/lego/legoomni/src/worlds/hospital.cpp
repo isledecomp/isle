@@ -43,7 +43,7 @@ Hospital::Hospital()
 	m_currentAction = HospitalScript::c__StartUp;
 	m_copLedBitmap = NULL;
 	m_pizzaLedBitmap = NULL;
-	m_unk0x118 = 0;
+	m_flashingLeds = 0;
 	m_copLedAnimTimer = 0;
 	m_pizzaLedAnimTimer = 0;
 	m_unk0x128 = 0;
@@ -250,7 +250,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 		m_currentAction = HospitalScript::c_hho006cl_RunAnim;
 		m_unk0x108 = 1;
-		m_unk0x118 = 1;
+		m_flashingLeds = 1;
 		g_unk0x100f7918 = 0;
 		break;
 	case 6:
@@ -643,7 +643,7 @@ MxResult Hospital::Tickle()
 
 	MxLong time = Timer()->GetTime();
 
-	if (m_unk0x118 != 0) {
+	if (m_flashingLeds != 0) {
 		if (time - m_copLedAnimTimer > 300) {
 			m_copLedAnimTimer = time;
 			g_copLedEnabled = !g_copLedEnabled;
