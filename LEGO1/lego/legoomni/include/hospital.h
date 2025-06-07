@@ -95,9 +95,9 @@ private:
 
 	MxS16 m_currentActorId;                 // 0xf8
 	LegoGameState::Area m_destLocation;     // 0xfc
-	undefined2 m_unk0x100;                  // 0x100
+	MxU16 m_interactionMode;                // 0x100
 	HospitalState* m_hospitalState;         // 0x104
-	undefined2 m_unk0x108;                  // 0x108
+	MxU16 m_setWithCurrentAction;           // 0x108
 	HospitalScript::Script m_currentAction; // 0x10c
 	MxStillPresenter* m_copLedBitmap;       // 0x110
 	MxStillPresenter* m_pizzaLedBitmap;     // 0x114
