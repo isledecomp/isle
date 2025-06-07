@@ -47,6 +47,24 @@ public:
 	MxS16 m_statePapa;   // 0x12
 	MxS16 m_stateNick;   // 0x14
 	MxS16 m_stateLaura;  // 0x16
+
+	enum States {
+		e_exitToClose = 0,
+		e_newState = 1,
+		e_unknown3 = 3,
+		e_unknown4 = 4,
+		e_introduction = 5,
+		e_explainQuestShort = 6,
+		e_explainQuest = 7,
+		e_waitAcceptingQuest = 8,
+		e_beforeEnteringAmbulance = 9,
+		e_unknown10 = 10, // Can never be reached
+		e_unknown11 = 11, // Can only be reached via e_unknown10
+		e_afterAcceptingQuest = 12,
+		e_exitImmediately = 13,
+		e_exitViaDoor = 14,
+		e_exitViaInfo = 15,
+	};
 };
 
 // VTABLE: LEGO1 0x100d9730
