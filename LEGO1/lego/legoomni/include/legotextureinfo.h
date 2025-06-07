@@ -19,7 +19,7 @@ public:
 	static BOOL SetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo* p_textureInfo);
 	static BOOL GetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo*& p_textureInfo);
 
-	LegoResult FUN_10066010(const LegoU8* p_bits);
+	LegoResult LoadBits(const LegoU8* p_bits);
 
 	// private:
 	char* m_name;                   // 0x00
