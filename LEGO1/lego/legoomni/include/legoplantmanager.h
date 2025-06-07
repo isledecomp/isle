@@ -52,11 +52,11 @@ public:
 	MxU32 GetSoundId(LegoEntity* p_entity, MxBool p_state);
 	LegoPlantInfo* GetInfoArray(MxS32& p_length);
 	LegoEntity* CreatePlant(MxS32 p_index, LegoWorld* p_world, LegoOmni::World p_worldId);
-	MxBool FUN_10026c50(LegoEntity* p_entity);
+	MxBool DecrementCounter(LegoEntity* p_entity);
 	void ScheduleAnimation(LegoEntity* p_entity, MxLong p_length);
 	MxResult FUN_10026410();
-	void FUN_10027120();
-	void FUN_10027200();
+	void ClearCounters();
+	void SetInitialCounters();
 
 	static void SetCustomizeAnimFile(const char* p_value);
 
@@ -68,10 +68,10 @@ public:
 
 private:
 	void RemovePlant(MxS32 p_index, LegoOmni::World p_worldId);
-	void FUN_10026860(MxS32 p_index);
+	void AdjustHeight(MxS32 p_index);
 	LegoPlantInfo* GetInfo(LegoEntity* p_entity);
-	MxBool FUN_10026c80(MxS32 p_index);
-	void FUN_100271b0(LegoEntity* p_entity, MxS32 p_adjust);
+	MxBool DecrementCounter(MxS32 p_index);
+	void AdjustCounter(LegoEntity* p_entity, MxS32 p_adjust);
 
 	static char* g_customizeAnimFile;
 	static MxS32 g_maxMove[4];

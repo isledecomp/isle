@@ -1385,7 +1385,7 @@ void Infocenter::Reset()
 		break;
 	}
 
-	PlantManager()->FUN_10027120();
+	PlantManager()->ClearCounters();
 	BuildingManager()->FUN_10030590();
 	AnimationManager()->Reset(FALSE);
 	CharacterManager()->ReleaseAllActors();

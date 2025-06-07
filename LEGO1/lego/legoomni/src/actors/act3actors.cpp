@@ -607,8 +607,8 @@ void Act3Brickster::Animate(float p_time)
 		assert(m_shootAnim && m_pInfo);
 
 		if (m_unk0x50 < p_time) {
-			while (m_pInfo->m_unk0x16) {
-				PlantManager()->FUN_10026c50(m_pInfo->m_entity);
+			while (m_pInfo->m_counter) {
+				PlantManager()->DecrementCounter(m_pInfo->m_entity);
 			}
 
 			assert(SoundManager()->GetCacheSoundManager());
