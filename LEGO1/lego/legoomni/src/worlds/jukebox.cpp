@@ -247,7 +247,7 @@ MxResult JukeBox::Tickle()
 
 	if (m_unk0x100 == 1) {
 		m_unk0x100 = 0;
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+		Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 	}
 
 	return SUCCESS;

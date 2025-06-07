@@ -192,7 +192,7 @@ MxResult LegoAct2::Tickle()
 	case 2:
 		if (g_unk0x100f4474) {
 			if (AnimationManager()->FUN_10064ee0(g_unk0x100f4474)) {
-				FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+				Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 				g_unk0x100f4474 = (Act2mainScript::Script) 0;
 			}
 		}
@@ -200,7 +200,7 @@ MxResult LegoAct2::Tickle()
 		m_unk0x10d0 += 50;
 		break;
 	case 3:
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+		Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		m_unk0x10d0 = 0;
 		m_unk0x10c4 = 4;
 		FUN_10052560(Act2mainScript::c_tja009ni_RunAnim, TRUE, TRUE, NULL, NULL, NULL);
@@ -540,7 +540,7 @@ void LegoAct2::Enable(MxBool p_enable)
 			GameState()->StopArea(LegoGameState::e_infomain);
 		}
 
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+		Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 
 		if (m_unk0x10c4 != 6 && m_unk0x10c4 != 12) {
 			PlayMusic(m_music);

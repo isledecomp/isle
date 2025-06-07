@@ -140,10 +140,10 @@ ViewLODListManager* GetViewLODListManager()
 
 // FUNCTION: LEGO1 0x10015820
 // FUNCTION: BETA10 0x100e4c92
-void FUN_10015820(MxBool p_disable, MxU16 p_flags)
+void Disable(MxBool p_disable, MxU16 p_flags)
 {
 	assert(LegoOmni::GetInstance());
-	LegoOmni::GetInstance()->FUN_1005b4f0(p_disable, p_flags);
+	LegoOmni::GetInstance()->Disable(p_disable, p_flags);
 }
 
 // FUNCTION: LEGO1 0x10015840

@@ -159,7 +159,7 @@ void Score::ReadyWorld()
 		PlayMusic(JukeboxScript::c_InformationCenter_Music);
 	}
 
-	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+	Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
 // FUNCTION: LEGO1 0x100016d0

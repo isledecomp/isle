@@ -79,7 +79,7 @@ MxLong SkateBoard::HandleClick()
 		return 1;
 	}
 
-	FUN_10015820(TRUE, 0);
+	Disable(TRUE, 0);
 
 	((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::Area::e_skateboard);
 	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, TRUE);

@@ -518,7 +518,7 @@ LegoOmni::World LegoOmni::GetWorldId(const char* p_key)
 }
 
 // FUNCTION: LEGO1 0x1005b4f0
-void LegoOmni::FUN_1005b4f0(MxBool p_disable, MxU16 p_flags)
+void LegoOmni::Disable(MxBool p_disable, MxU16 p_flags)
 {
 	if (p_disable) {
 		if (p_flags & c_disableInput) {

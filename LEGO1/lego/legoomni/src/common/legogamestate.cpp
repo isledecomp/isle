@@ -851,7 +851,7 @@ void LegoGameState::SwitchArea(Area p_area)
 	m_previousArea = m_currentArea;
 	m_currentArea = p_area;
 
-	FUN_10015820(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d);
+	Disable(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d);
 	BackgroundAudioManager()->Stop();
 	AnimationManager()->Suspend();
 	VideoManager()->SetUnk0x554(FALSE);
