@@ -61,7 +61,7 @@ Hospital::~Hospital()
 	ControlManager()->Unregister(this);
 	TickleManager()->UnregisterClient(this);
 
-	m_hospitalState->m_unk0x08 = 3;
+	m_hospitalState->m_state = 3;
 
 	NotificationManager()->Unregister(this);
 	g_unk0x100f7918 = 3;
@@ -81,13 +81,13 @@ MxResult Hospital::Create(MxDSAction& p_dsAction)
 	m_hospitalState = (HospitalState*) GameState()->GetState("HospitalState");
 	if (!m_hospitalState) {
 		m_hospitalState = (HospitalState*) GameState()->CreateState("HospitalState");
-		m_hospitalState->m_unk0x08 = 1;
+		m_hospitalState->m_state = 1;
 	}
-	else if (m_hospitalState->m_unk0x08 == 4) {
-		m_hospitalState->m_unk0x08 = 4;
+	else if (m_hospitalState->m_state == 4) {
+		m_hospitalState->m_state = 4;
 	}
 	else {
-		m_hospitalState->m_unk0x08 = 3;
+		m_hospitalState->m_state = 3;
 	}
 
 	GameState()->m_currentArea = LegoGameState::e_hospital;
@@ -149,65 +149,65 @@ void Hospital::ReadyWorld()
 
 	switch (m_currentActorId) {
 	case LegoActor::c_pepper:
-		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x0e;
+		m_hospitalState->m_stateActor = m_hospitalState->m_statePepper;
 
-		if (m_hospitalState->m_unk0x0e < 5) {
-			m_hospitalState->m_unk0x0e += 1;
+		if (m_hospitalState->m_statePepper < 5) {
+			m_hospitalState->m_statePepper += 1;
 		}
 
 		break;
 	case LegoActor::c_mama:
-		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x10;
+		m_hospitalState->m_stateActor = m_hospitalState->m_stateMama;
 
-		if (m_hospitalState->m_unk0x10 < 5) {
-			m_hospitalState->m_unk0x10 += 1;
+		if (m_hospitalState->m_stateMama < 5) {
+			m_hospitalState->m_stateMama += 1;
 		}
 
 		break;
 	case LegoActor::c_papa:
-		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x12;
+		m_hospitalState->m_stateActor = m_hospitalState->m_statePapa;
 
-		if (m_hospitalState->m_unk0x12 < 5) {
-			m_hospitalState->m_unk0x12 += 1;
+		if (m_hospitalState->m_statePapa < 5) {
+			m_hospitalState->m_statePapa += 1;
 		}
 
 		break;
 	case LegoActor::c_nick:
-		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x14;
+		m_hospitalState->m_stateActor = m_hospitalState->m_stateNick;
 
-		if (m_hospitalState->m_unk0x14 < 5) {
-			m_hospitalState->m_unk0x14 += 1;
+		if (m_hospitalState->m_stateNick < 5) {
+			m_hospitalState->m_stateNick += 1;
 		}
 
 		break;
 	case LegoActor::c_laura:
-		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x16;
+		m_hospitalState->m_stateActor = m_hospitalState->m_stateLaura;
 
-		if (m_hospitalState->m_unk0x16 < 5) {
-			m_hospitalState->m_unk0x16 += 1;
+		if (m_hospitalState->m_stateLaura < 5) {
+			m_hospitalState->m_stateLaura += 1;
 		}
 
 		break;
 	}
 
-	if (m_hospitalState->m_unk0x0c < 3) {
+	if (m_hospitalState->m_stateActor < 3) {
 		HospitalScript::Script hospitalScript[] = {
 			HospitalScript::c_hho002cl_RunAnim,
 			HospitalScript::c_hho004jk_RunAnim,
 			HospitalScript::c_hho007p1_RunAnim
 		};
 
-		m_hospitalState->m_unk0x08 = 5;
+		m_hospitalState->m_state = 5;
 
-		PlayAction(hospitalScript[m_hospitalState->m_unk0x0c]);
-		m_currentAction = hospitalScript[m_hospitalState->m_unk0x0c];
+		PlayAction(hospitalScript[m_hospitalState->m_stateActor]);
+		m_currentAction = hospitalScript[m_hospitalState->m_stateActor];
 		m_unk0x108 = 1;
 	}
 	else {
 		m_unk0x100 = 1;
 		m_time = Timer()->GetTime();
 
-		m_hospitalState->m_unk0x08 = 6;
+		m_hospitalState->m_state = 6;
 
 		PlayAction(HospitalScript::c_hho003cl_RunAnim);
 		m_currentAction = HospitalScript::c_hho003cl_RunAnim;
@@ -243,9 +243,9 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 	m_unk0x108 = 0;
 
-	switch (m_hospitalState->m_unk0x08) {
+	switch (m_hospitalState->m_state) {
 	case 5:
-		m_hospitalState->m_unk0x08 = 7;
+		m_hospitalState->m_state = 7;
 		PlayAction(HospitalScript::c_hho006cl_RunAnim);
 
 		m_currentAction = HospitalScript::c_hho006cl_RunAnim;
@@ -259,24 +259,24 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 		break;
 	case 7:
 	case 10:
-		m_hospitalState->m_unk0x08 = 8;
+		m_hospitalState->m_state = 8;
 		m_unk0x100 = 1;
 		m_time = Timer()->GetTime();
 		break;
 	case 11:
 		switch (m_currentActorId) {
 		case LegoActor::c_pepper:
-			switch (m_hospitalState->m_unk0x0e) {
+			switch (m_hospitalState->m_statePepper) {
 			case 0:
 			case 1:
-				m_hospitalState->m_unk0x08 = 12;
+				m_hospitalState->m_state = 12;
 				PlayAction(HospitalScript::c_hho017cl_RunAnim);
 
 				m_currentAction = HospitalScript::c_hho017cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			default:
-				m_hospitalState->m_unk0x08 = 12;
+				m_hospitalState->m_state = 12;
 				PlayAction(HospitalScript::c_hho018cl_RunAnim);
 
 				m_currentAction = HospitalScript::c_hho018cl_RunAnim;
@@ -285,17 +285,17 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 			}
 			break;
 		case LegoActor::c_mama:
-			switch (m_hospitalState->m_unk0x10) {
+			switch (m_hospitalState->m_stateMama) {
 			case 0:
 			case 1:
-				m_hospitalState->m_unk0x08 = 12;
+				m_hospitalState->m_state = 12;
 				PlayAction(HospitalScript::c_hho019cl_RunAnim);
 
 				m_currentAction = HospitalScript::c_hho019cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			default:
-				m_hospitalState->m_unk0x08 = 12;
+				m_hospitalState->m_state = 12;
 				PlayAction(HospitalScript::c_hho020cl_RunAnim);
 
 				m_currentAction = HospitalScript::c_hho020cl_RunAnim;
@@ -304,17 +304,17 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 			}
 			break;
 		case LegoActor::c_papa:
-			switch (m_hospitalState->m_unk0x12) {
+			switch (m_hospitalState->m_statePapa) {
 			case 0:
 			case 1:
-				m_hospitalState->m_unk0x08 = 12;
+				m_hospitalState->m_state = 12;
 				PlayAction(HospitalScript::c_hho023cl_RunAnim);
 
 				m_currentAction = HospitalScript::c_hho023cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			default:
-				m_hospitalState->m_unk0x08 = 12;
+				m_hospitalState->m_state = 12;
 				PlayAction(HospitalScript::c_hho024cl_RunAnim);
 
 				m_currentAction = HospitalScript::c_hho024cl_RunAnim;
@@ -323,17 +323,17 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 			}
 			break;
 		case LegoActor::c_nick:
-			switch (m_hospitalState->m_unk0x14) {
+			switch (m_hospitalState->m_stateNick) {
 			case 0:
 			case 1:
-				m_hospitalState->m_unk0x08 = 12;
+				m_hospitalState->m_state = 12;
 				PlayAction(HospitalScript::c_hho021cl_RunAnim);
 
 				m_currentAction = HospitalScript::c_hho021cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			default:
-				m_hospitalState->m_unk0x08 = 12;
+				m_hospitalState->m_state = 12;
 				PlayAction(HospitalScript::c_hhoa22cl_RunAnim);
 
 				m_currentAction = HospitalScript::c_hhoa22cl_RunAnim;
@@ -342,17 +342,17 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 			}
 			break;
 		case LegoActor::c_laura:
-			switch (m_hospitalState->m_unk0x16) {
+			switch (m_hospitalState->m_stateLaura) {
 			case 0:
 			case 1:
-				m_hospitalState->m_unk0x08 = 12;
+				m_hospitalState->m_state = 12;
 				PlayAction(HospitalScript::c_hho025cl_RunAnim);
 
 				m_currentAction = HospitalScript::c_hho025cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			default:
-				m_hospitalState->m_unk0x08 = 12;
+				m_hospitalState->m_state = 12;
 				PlayAction(HospitalScript::c_hho026cl_RunAnim);
 
 				m_currentAction = HospitalScript::c_hho026cl_RunAnim;
@@ -363,7 +363,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 		}
 		break;
 	case 12:
-		m_hospitalState->m_unk0x08 = 9;
+		m_hospitalState->m_state = 9;
 		act1State = (Act1State*) GameState()->GetState("Act1State");
 		act1State->SetUnknown18(9);
 	case 14:
@@ -409,13 +409,13 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 
 				m_unk0x100 = 3;
 
-				if (m_hospitalState->m_unk0x08 == 6) {
+				if (m_hospitalState->m_state == 6) {
 					if (m_unk0x128 == 0) {
 						m_unk0x128 = 1;
 
 						TickleManager()->UnregisterClient(this);
 
-						m_hospitalState->m_unk0x08 = 9;
+						m_hospitalState->m_state = 9;
 						Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
 						assert(act1State);
 
@@ -430,9 +430,9 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 						TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 					}
 				}
-				else if (m_hospitalState->m_unk0x08 == 10 || m_hospitalState->m_unk0x08 == 8) {
-					if (m_hospitalState->m_unk0x08 == 10) {
-						m_hospitalState->m_unk0x08 = 11;
+				else if (m_hospitalState->m_state == 10 || m_hospitalState->m_state == 8) {
+					if (m_hospitalState->m_state == 10) {
+						m_hospitalState->m_state = 11;
 
 						BackgroundAudioManager()->RaiseVolume();
 						DeleteObjects(
@@ -444,17 +444,17 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 					else {
 						switch (m_currentActorId) {
 						case LegoActor::c_pepper:
-							switch (m_hospitalState->m_unk0x0e) {
+							switch (m_hospitalState->m_statePepper) {
 							case 0:
 							case 1:
-								m_hospitalState->m_unk0x08 = 12;
+								m_hospitalState->m_state = 12;
 								PlayAction(HospitalScript::c_hho017cl_RunAnim);
 
 								m_currentAction = HospitalScript::c_hho017cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							default:
-								m_hospitalState->m_unk0x08 = 12;
+								m_hospitalState->m_state = 12;
 								PlayAction(HospitalScript::c_hho018cl_RunAnim);
 
 								m_currentAction = HospitalScript::c_hho018cl_RunAnim;
@@ -463,17 +463,17 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 							}
 							break;
 						case LegoActor::c_mama:
-							switch (m_hospitalState->m_unk0x10) {
+							switch (m_hospitalState->m_stateMama) {
 							case 0:
 							case 1:
-								m_hospitalState->m_unk0x08 = 12;
+								m_hospitalState->m_state = 12;
 								PlayAction(HospitalScript::c_hho019cl_RunAnim);
 
 								m_currentAction = HospitalScript::c_hho019cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							default:
-								m_hospitalState->m_unk0x08 = 12;
+								m_hospitalState->m_state = 12;
 								PlayAction(HospitalScript::c_hho020cl_RunAnim);
 
 								m_currentAction = HospitalScript::c_hho020cl_RunAnim;
@@ -482,17 +482,17 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 							}
 							break;
 						case LegoActor::c_nick:
-							switch (m_hospitalState->m_unk0x14) {
+							switch (m_hospitalState->m_stateNick) {
 							case 0:
 							case 1:
-								m_hospitalState->m_unk0x08 = 12;
+								m_hospitalState->m_state = 12;
 								PlayAction(HospitalScript::c_hho021cl_RunAnim);
 
 								m_currentAction = HospitalScript::c_hho021cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							default:
-								m_hospitalState->m_unk0x08 = 12;
+								m_hospitalState->m_state = 12;
 								PlayAction(HospitalScript::c_hhoa22cl_RunAnim);
 
 								m_currentAction = HospitalScript::c_hhoa22cl_RunAnim;
@@ -501,17 +501,17 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 							}
 							break;
 						case LegoActor::c_papa:
-							switch (m_hospitalState->m_unk0x12) {
+							switch (m_hospitalState->m_statePapa) {
 							case 0:
 							case 1:
-								m_hospitalState->m_unk0x08 = 12;
+								m_hospitalState->m_state = 12;
 								PlayAction(HospitalScript::c_hho023cl_RunAnim);
 
 								m_currentAction = HospitalScript::c_hho023cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							default:
-								m_hospitalState->m_unk0x08 = 12;
+								m_hospitalState->m_state = 12;
 								PlayAction(HospitalScript::c_hho024cl_RunAnim);
 
 								m_currentAction = HospitalScript::c_hho024cl_RunAnim;
@@ -520,17 +520,17 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 							}
 							break;
 						case LegoActor::c_laura:
-							switch (m_hospitalState->m_unk0x16) {
+							switch (m_hospitalState->m_stateLaura) {
 							case 0:
 							case 1:
-								m_hospitalState->m_unk0x08 = 12;
+								m_hospitalState->m_state = 12;
 								PlayAction(HospitalScript::c_hho025cl_RunAnim);
 
 								m_currentAction = HospitalScript::c_hho025cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							default:
-								m_hospitalState->m_unk0x08 = 12;
+								m_hospitalState->m_state = 12;
 								PlayAction(HospitalScript::c_hho026cl_RunAnim);
 
 								m_currentAction = HospitalScript::c_hho026cl_RunAnim;
@@ -560,7 +560,7 @@ MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 			DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 
 			if (m_unk0x100 == 1) {
-				m_hospitalState->m_unk0x08 = 14;
+				m_hospitalState->m_state = 14;
 
 				PlayAction(HospitalScript::c_hho016cl_RunAnim);
 				m_currentAction = HospitalScript::c_hho016cl_RunAnim;
@@ -568,7 +568,7 @@ MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 			}
 			else if (m_unk0x128 == 0) {
 				m_unk0x128 = 1;
-				m_hospitalState->m_unk0x08 = 13;
+				m_hospitalState->m_state = 13;
 				m_destLocation = LegoGameState::e_infomain;
 
 				DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
@@ -581,7 +581,7 @@ MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 			DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 
 			if (m_unk0x100 == 1) {
-				m_hospitalState->m_unk0x08 = 15;
+				m_hospitalState->m_state = 15;
 
 				PlayAction(HospitalScript::c_hho016cl_RunAnim);
 				m_currentAction = HospitalScript::c_hho016cl_RunAnim;
@@ -589,7 +589,7 @@ MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 			}
 			else if (m_unk0x128 == 0) {
 				m_unk0x128 = 1;
-				m_hospitalState->m_unk0x08 = 13;
+				m_hospitalState->m_state = 13;
 				m_destLocation = LegoGameState::e_unk31;
 
 				DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
@@ -664,7 +664,7 @@ MxResult Hospital::Tickle()
 MxBool Hospital::Escape()
 {
 	DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, 999);
-	m_hospitalState->m_unk0x08 = 0;
+	m_hospitalState->m_state = 0;
 
 	m_destLocation = LegoGameState::e_infomain;
 
@@ -674,12 +674,12 @@ MxBool Hospital::Escape()
 // FUNCTION: LEGO1 0x10076370
 HospitalState::HospitalState()
 {
-	m_unk0x0c = 0;
-	m_unk0x0e = 0;
-	m_unk0x10 = 0;
-	m_unk0x12 = 0;
-	m_unk0x14 = 0;
-	m_unk0x16 = 0;
+	m_stateActor = 0;
+	m_statePepper = 0;
+	m_stateMama = 0;
+	m_statePapa = 0;
+	m_stateNick = 0;
+	m_stateLaura = 0;
 }
 
 // FUNCTION: LEGO1 0x10076530
@@ -689,20 +689,20 @@ MxResult HospitalState::Serialize(LegoStorage* p_storage)
 	LegoState::Serialize(p_storage);
 
 	if (p_storage->IsWriteMode()) {
-		p_storage->WriteS16(m_unk0x0c);
-		p_storage->WriteS16(m_unk0x0e);
-		p_storage->WriteS16(m_unk0x10);
-		p_storage->WriteS16(m_unk0x12);
-		p_storage->WriteS16(m_unk0x14);
-		p_storage->WriteS16(m_unk0x16);
+		p_storage->WriteS16(m_stateActor);
+		p_storage->WriteS16(m_statePepper);
+		p_storage->WriteS16(m_stateMama);
+		p_storage->WriteS16(m_statePapa);
+		p_storage->WriteS16(m_stateNick);
+		p_storage->WriteS16(m_stateLaura);
 	}
 	else if (p_storage->IsReadMode()) {
-		p_storage->ReadS16(m_unk0x0c);
-		p_storage->ReadS16(m_unk0x0e);
-		p_storage->ReadS16(m_unk0x10);
-		p_storage->ReadS16(m_unk0x12);
-		p_storage->ReadS16(m_unk0x14);
-		p_storage->ReadS16(m_unk0x16);
+		p_storage->ReadS16(m_stateActor);
+		p_storage->ReadS16(m_statePepper);
+		p_storage->ReadS16(m_stateMama);
+		p_storage->ReadS16(m_statePapa);
+		p_storage->ReadS16(m_stateNick);
+		p_storage->ReadS16(m_stateLaura);
 	}
 
 	return SUCCESS;
