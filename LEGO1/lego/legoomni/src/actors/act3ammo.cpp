@@ -337,7 +337,7 @@ void Act3Ammo::Animate(float p_time)
 			Vector3 local174(local104[2]);
 
 			if (IsPizza()) {
-				local184 = *m_boundary->GetUnknown0x14();
+				local184 = *m_boundary->GetUp();
 				local17c[0] = 1.0f;
 				local17c[1] = local17c[2] = 0.0f;
 				local174.EqualsCross(local17c, local184);
@@ -345,7 +345,7 @@ void Act3Ammo::Animate(float p_time)
 				local17c.EqualsCross(local184, local174);
 			}
 			else {
-				local17c = *m_boundary->GetUnknown0x14();
+				local17c = *m_boundary->GetUp();
 				local184[0] = 1.0f;
 				local184[1] = local184[2] = 0.0f;
 				local174.EqualsCross(local17c, local184);

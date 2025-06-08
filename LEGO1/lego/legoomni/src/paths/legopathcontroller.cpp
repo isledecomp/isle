@@ -71,7 +71,7 @@ LegoPathController::LegoPathController()
 {
 	m_boundaries = NULL;
 	m_edges = NULL;
-	m_unk0x10 = NULL;
+	m_nodes = NULL;
 	m_structs = NULL;
 	m_numL = 0;
 	m_numE = 0;
@@ -94,7 +94,7 @@ MxResult LegoPathController::Create(MxU8* p_data, const Vector3& p_location, con
 		}
 
 		for (i = 0; i < m_numN; i++) {
-			m_unk0x10[i] += p_location;
+			m_nodes[i] += p_location;
 		}
 
 		for (i = 0; i < m_numL; i++) {
@@ -144,10 +144,10 @@ void LegoPathController::Destroy()
 	m_boundaries = NULL;
 	m_numL = 0;
 
-	if (m_unk0x10 != NULL) {
-		delete[] m_unk0x10;
+	if (m_nodes != NULL) {
+		delete[] m_nodes;
 	}
-	m_unk0x10 = NULL;
+	m_nodes = NULL;
 	m_numN = 0;
 
 	if (m_structs != NULL) {
@@ -347,17 +347,17 @@ void LegoPathController::FUN_100468f0(LegoAnimPresenter* p_presenter)
 {
 	for (MxS32 i = 0; i < m_numL; i++) {
 		if (!(m_boundaries[i].m_flags & LegoWEGEdge::c_bit3)) {
-			m_boundaries[i].FUN_10057fe0(p_presenter);
+			m_boundaries[i].AddPresenterIfInRange(p_presenter);
 		}
 	}
 }
 
 // FUNCTION: LEGO1 0x10046930
 // FUNCTION: BETA10 0x100b737b
-void LegoPathController::FUN_10046930(LegoAnimPresenter* p_presenter)
+void LegoPathController::RemovePresenterFromBoundaries(LegoAnimPresenter* p_presenter)
 {
 	for (MxS32 i = 0; i < m_numL; i++) {
-		m_boundaries[i].FUN_100586e0(p_presenter);
+		m_boundaries[i].RemovePresenter(p_presenter);
 	}
 }
 
@@ -471,7 +471,7 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 		return FAILURE;
 	}
 	if (m_numN > 0) {
-		m_unk0x10 = new Mx3DPointFloat[m_numN];
+		m_nodes = new Mx3DPointFloat[m_numN];
 	}
 
 	if (p_storage->Read(&m_numE, sizeof(MxU16)) != SUCCESS) {
@@ -494,7 +494,7 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 
 	if (m_numN > 0) {
 		for (MxS32 i = 0; i < m_numN; i++) {
-			if (ReadVector(p_storage, m_unk0x10[i]) != SUCCESS) {
+			if (ReadVector(p_storage, m_nodes[i]) != SUCCESS) {
 				return FAILURE;
 			}
 		}
@@ -559,12 +559,12 @@ MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 		if (p_storage->Read(&s, sizeof(MxU16)) != SUCCESS) {
 			return FAILURE;
 		}
-		edge.m_pointA = &m_unk0x10[s];
+		edge.m_pointA = &m_nodes[s];
 
 		if (p_storage->Read(&s, sizeof(MxU16)) != SUCCESS) {
 			return FAILURE;
 		}
-		edge.m_pointB = &m_unk0x10[s];
+		edge.m_pointB = &m_nodes[s];
 
 		if (edge.m_flags & LegoOrientedEdge::c_hasFaceA) {
 			if (p_storage->Read(&s, sizeof(MxU16)) != SUCCESS) {
@@ -662,7 +662,7 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 			boundary.m_name[length] = '\0';
 		}
 
-		if (ReadVector(p_storage, boundary.m_unk0x14) != SUCCESS) {
+		if (ReadVector(p_storage, boundary.m_up) != SUCCESS) {
 			return FAILURE;
 		}
 
@@ -672,11 +672,11 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 			}
 		}
 
-		if (ReadVector(p_storage, boundary.m_unk0x30) != SUCCESS) {
+		if (ReadVector(p_storage, boundary.m_centerPoint) != SUCCESS) {
 			return FAILURE;
 		}
 
-		if (p_storage->Read(&boundary.m_unk0x44, sizeof(boundary.m_unk0x44)) != SUCCESS) {
+		if (p_storage->Read(&boundary.m_boundingRadius, sizeof(boundary.m_boundingRadius)) != SUCCESS) {
 			return FAILURE;
 		}
 
@@ -685,7 +685,7 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 		}
 
 		if (boundary.m_numTriggers > 0) {
-			boundary.m_unk0x50 = new Mx3DPointFloat;
+			boundary.m_direction = new Mx3DPointFloat;
 			boundary.m_pathTrigger = new PathWithTrigger[boundary.m_numTriggers];
 
 			for (j = 0; j < boundary.m_numTriggers; j++) {
@@ -701,14 +701,14 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 				}
 
 				if (p_storage->Read(
-						&boundary.m_pathTrigger[j].m_unk0x08,
-						sizeof(boundary.m_pathTrigger[j].m_unk0x08)
+						&boundary.m_pathTrigger[j].m_triggerLength,
+						sizeof(boundary.m_pathTrigger[j].m_triggerLength)
 					) != SUCCESS) {
 					return FAILURE;
 				}
 			}
 
-			if (ReadVector(p_storage, *boundary.m_unk0x50) != SUCCESS) {
+			if (ReadVector(p_storage, *boundary.m_direction) != SUCCESS) {
 				return FAILURE;
 			}
 		}
@@ -956,7 +956,7 @@ MxS32 LegoPathController::FUN_1004a240(
 	p_v1 *= p_f1;
 	p_v1 += *p_edge->CWVertex(*p_boundary);
 	p_edge->GetFaceNormal(*p_boundary, vec);
-	p_v2.EqualsCross(*p_boundary->GetUnknown0x14(), vec);
+	p_v2.EqualsCross(*p_boundary->GetUp(), vec);
 	return 0;
 }
 
@@ -980,7 +980,7 @@ MxResult LegoPathController::FUN_1004a380(
 		}
 
 		LegoPathBoundary* b = &m_boundaries[i];
-		Mx4DPointFloat* unk0x14 = b->GetUnknown0x14();
+		Mx4DPointFloat* unk0x14 = b->GetUp();
 		float local28 = p_param3[0].Dot(p_param3[0], *unk0x14);
 
 		if (local28 < 0.001 && local28 > -0.001) {

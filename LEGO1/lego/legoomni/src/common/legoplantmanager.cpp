@@ -160,7 +160,7 @@ MxResult LegoPlantManager::FUN_10026410()
 				}
 
 				if (g_plantInfo[i].m_boundary != NULL) {
-					Mx4DPointFloat& unk0x14 = *g_plantInfo[i].m_boundary->GetUnknown0x14();
+					Mx4DPointFloat& unk0x14 = *g_plantInfo[i].m_boundary->GetUp();
 
 					if (position.Dot(position, unk0x14) + unk0x14.index_operator(3) > 0.001 ||
 						position.Dot(position, unk0x14) + unk0x14.index_operator(3) < -0.001) {
