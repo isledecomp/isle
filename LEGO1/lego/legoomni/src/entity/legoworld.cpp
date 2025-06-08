@@ -369,7 +369,7 @@ void LegoWorld::FUN_1001fe90(LegoAnimPresenter* p_presenter)
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
-		controller->FUN_10046930(p_presenter);
+		controller->RemovePresenterFromBoundaries(p_presenter);
 	}
 }
 

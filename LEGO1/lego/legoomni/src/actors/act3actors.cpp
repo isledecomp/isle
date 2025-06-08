@@ -244,7 +244,7 @@ void Act3Cop::ParseAction(char* p_extra)
 				}
 			}
 
-			Mx4DPointFloat* boundary0x14 = boundary->GetUnknown0x14();
+			Mx4DPointFloat* boundary0x14 = boundary->GetUp();
 
 			if (point.Dot(point, *boundary0x14) + boundary0x14->index_operator(3) <= 0.001 &&
 				point.Dot(point, *boundary0x14) + boundary0x14->index_operator(3) >= -0.001) {
