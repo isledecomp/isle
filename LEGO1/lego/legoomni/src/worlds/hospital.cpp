@@ -560,7 +560,7 @@ MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 			DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 
 			if (m_interactionMode == 1) {
-				m_hospitalState->m_state = HospitalState::e_exitToFront;
+				m_hospitalState->m_state = HospitalState::e_exitToInfocenter;
 
 				PlayAction(HospitalScript::c_hho016cl_RunAnim);
 				m_currentAction = HospitalScript::c_hho016cl_RunAnim;
@@ -581,7 +581,7 @@ MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 			DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 
 			if (m_interactionMode == 1) {
-				m_hospitalState->m_state = HospitalState::e_exitToInfocenter;
+				m_hospitalState->m_state = HospitalState::e_exitToFront;
 
 				PlayAction(HospitalScript::c_hho016cl_RunAnim);
 				m_currentAction = HospitalScript::c_hho016cl_RunAnim;
