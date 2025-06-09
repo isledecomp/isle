@@ -30,8 +30,8 @@ public:
 		e_unknown11 = 11, // Can only be reached via e_unknown10
 		e_afterAcceptingQuest = 12,
 		e_exitImmediately = 13,
-		e_exitToFront = 14,
-		e_exitToInfocenter = 15,
+		e_exitToInfocenter = 14,
+		e_exitToFront = 15,
 	};
 
 	HospitalState();
