@@ -502,7 +502,7 @@ void LegoAnimationManager::Init()
 	m_unk0x1a = FALSE;
 	m_tranInfoList = NULL;
 	m_tranInfoList2 = NULL;
-	m_unk0x41c = g_legoAnimationManagerConfig <= 1 ? 10 : 20;
+	m_maxAllowedExtras = g_legoAnimationManagerConfig <= 1 ? 10 : 20;
 
 	MxS32 i;
 	for (i = 0; i < (MxS32) sizeOfArray(m_unk0x28); i++) {
@@ -1570,7 +1570,7 @@ MxResult LegoAnimationManager::Tickle()
 		if (elapsedSeconds > 0.2 && m_numAllowedExtras > 2) {
 			m_numAllowedExtras--;
 		}
-		else if (g_unk0x100f7500 < 0.16 && m_numAllowedExtras < m_unk0x41c) {
+		else if (g_unk0x100f7500 < 0.16 && m_numAllowedExtras < m_maxAllowedExtras) {
 			m_numAllowedExtras++;
 		}
 	}
