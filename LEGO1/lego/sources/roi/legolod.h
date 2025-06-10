@@ -35,7 +35,7 @@ public:
 	void ClearMeshOffset();
 	LegoResult GetTextureInfo(LegoTextureInfo*& p_textureInfo);
 
-	static LegoBool FUN_100aae20(const LegoChar* p_name);
+	static LegoBool HasInhPrefix(const LegoChar* p_name);
 
 	// SYNTHETIC: LEGO1 0x100aa430
 	// LegoLOD::`scalar deleting destructor'
