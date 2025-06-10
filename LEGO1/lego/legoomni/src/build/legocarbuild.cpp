@@ -96,7 +96,7 @@ LegoCarBuild::LegoCarBuild()
 	m_unk0x110 = 0;
 	m_unk0xf8 = c_unknownminusone;
 	m_unk0x2d4 = FALSE;
-	m_animPresenter = 0;
+	m_animPresenter = NULL;
 	m_ColorBook_Bitmap = NULL;
 	m_Yellow_Ctl = NULL;
 	m_Red_Ctl = NULL;
@@ -138,7 +138,7 @@ LegoCarBuild::~LegoCarBuild()
 	m_unk0x110 = NULL;
 
 	if (m_animPresenter) {
-		m_animPresenter->SetShelfState(0);
+		m_animPresenter->SetShelfState(LegoCarBuildAnimPresenter::e_selected);
 		m_animPresenter->SetTickleState(MxPresenter::e_idle);
 		m_animPresenter = NULL;
 	}
@@ -290,7 +290,7 @@ void LegoCarBuild::FUN_10022f00()
 {
 	if (m_unk0x110) {
 		VTable0x6c();
-		m_animPresenter->SetShelfState(0);
+		m_animPresenter->SetShelfState(LegoCarBuildAnimPresenter::e_selected);
 		m_unk0x100 = 5;
 	}
 }
@@ -308,7 +308,7 @@ void LegoCarBuild::FUN_10022f30()
 			m_PlaceBrick_Sound->Enable(TRUE);
 		}
 
-		m_animPresenter->SetShelfState(1);
+		m_animPresenter->SetShelfState(LegoCarBuildAnimPresenter::e_stopped);
 		m_animPresenter->PutFrame();
 		m_unk0x110 = NULL;
 		m_unk0x100 = 0;
@@ -481,7 +481,7 @@ void LegoCarBuild::FUN_100236d0()
 	FUN_10024f70(FALSE);
 	FUN_100250e0(FALSE);
 	m_animPresenter->FUN_10079790(m_unk0x110->GetName());
-	m_animPresenter->SetShelfState(1);
+	m_animPresenter->SetShelfState(LegoCarBuildAnimPresenter::e_stopped);
 	m_unk0x110 = NULL;
 	m_unk0x100 = 0;
 
@@ -872,7 +872,7 @@ undefined4 LegoCarBuild::FUN_100244e0(MxLong p_x, MxLong p_y)
 	m_GetBrick_Sound->Enable(FALSE);
 	m_GetBrick_Sound->Enable(TRUE);
 
-	m_animPresenter->SetShelfState(0);
+	m_animPresenter->SetShelfState(LegoCarBuildAnimPresenter::e_selected);
 	return 1;
 }
 
@@ -900,7 +900,7 @@ undefined4 LegoCarBuild::FUN_100246e0(MxLong p_x, MxLong p_y)
 			m_unk0x110 = NULL;
 			m_PlaceBrick_Sound->Enable(FALSE);
 			m_PlaceBrick_Sound->Enable(TRUE);
-			m_animPresenter->SetShelfState(1);
+			m_animPresenter->SetShelfState(LegoCarBuildAnimPresenter::e_stopped);
 		}
 		else if (m_animPresenter->FUN_10079c30(m_unk0x110->GetName())) {
 			if (SpheresIntersect(m_unk0x114, m_unk0x110->GetWorldBoundingSphere())) {
@@ -965,7 +965,7 @@ undefined4 LegoCarBuild::FUN_10024890(MxParam* p_param)
 					DeleteObjects(&m_atomId, 500, 510);
 				}
 
-				m_animPresenter->SetShelfState(0);
+				m_animPresenter->SetShelfState(LegoCarBuildAnimPresenter::e_selected);
 				m_destLocation = LegoGameState::e_infomain;
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 				result = 1;
@@ -979,7 +979,7 @@ undefined4 LegoCarBuild::FUN_10024890(MxParam* p_param)
 					DeleteObjects(&m_atomId, 500, 510);
 				}
 
-				m_animPresenter->SetShelfState(0);
+				m_animPresenter->SetShelfState(LegoCarBuildAnimPresenter::e_selected);
 
 				if (GameState()->GetCurrentAct() == LegoGameState::e_act2) {
 					FUN_100243a0();
@@ -1054,14 +1054,14 @@ undefined4 LegoCarBuild::FUN_10024890(MxParam* p_param)
 	if (param->m_unk0x28) {
 		switch (param->m_clickedObjectId) {
 		case CopterScript::c_Info_Ctl:
-			m_animPresenter->SetShelfState(0);
+			m_animPresenter->SetShelfState(LegoCarBuildAnimPresenter::e_selected);
 			m_destLocation = LegoGameState::e_infomain;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
 		case CopterScript::c_Exit_Ctl:
 			if (m_buildState->m_animationState != LegoVehicleBuildState::e_exiting) {
-				m_animPresenter->SetShelfState(0);
+				m_animPresenter->SetShelfState(LegoCarBuildAnimPresenter::e_selected);
 
 				if (m_animPresenter->AllPartsPlaced() || m_buildState->m_unk0x4d) {
 					m_buildState->m_unk0x4d = TRUE;
@@ -1261,7 +1261,7 @@ void LegoCarBuild::FUN_10024ef0()
 void LegoCarBuild::FUN_10024f30()
 {
 	FUN_10022f30();
-	m_animPresenter->SetShelfState(2);
+	m_animPresenter->SetShelfState(LegoCarBuildAnimPresenter::e_moving);
 }
 
 // FUNCTION: LEGO1 0x10024f50

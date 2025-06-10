@@ -23,15 +23,15 @@ DECOMP_SIZE_ASSERT(LegoCarBuildAnimPresenter, 0x150)
 // FUNCTION: BETA10 0x100707c0
 LegoCarBuildAnimPresenter::LegoCarBuildAnimPresenter()
 {
-	m_shelfState = 0;
+	m_shelfState = e_selected;
 	m_numberOfParts = 0;
 	m_placedPartCount = 0;
 	m_parts = NULL;
 	m_platformAnimNodeData = NULL;
-	m_ShelfFrame = 0;
-	m_ShelfFrameBuffer = 0;
-	m_ShelfFrameMax = 0;
-	m_ShelfFrameInterval = 0;
+	m_shelfFrame = 0;
+	m_shelfFrameBuffer = 0;
+	m_shelfFrameMax = 0;
+	m_shelfFrameInterval = 0;
 	m_unk0x13c = 0;
 	m_carBuildEntity = NULL;
 	m_unk0x144 = -1;
@@ -115,13 +115,13 @@ inline void LegoCarBuildAnimPresenter::Beta10Inline0x100733d0()
 void LegoCarBuildAnimPresenter::PutFrame()
 {
 	switch (m_shelfState) {
-	case 0:	//Selected piece for moving / recoloring / decal
+	case e_selected:
 		break;
-	case 2: //Shelf is moving
+	case e_moving:
 		MoveShelfForward();
-	case 1:	//Shelf is still, get next shelf
+	case e_stopped:
 		if (m_carBuildEntity->GetROI()) {
-			FUN_1006b9a0(m_anim, m_ShelfFrameBuffer, NULL);
+			FUN_1006b9a0(m_anim, m_shelfFrameBuffer, NULL);
 		}
 	default:
 		break;
@@ -167,7 +167,7 @@ void LegoCarBuildAnimPresenter::ReadyTickle()
 	if (m_carBuildEntity) {
 		((LegoCarBuild*) m_currentWorld)->SetCarBuildAnimPresenter(this);
 		m_placedPartCount = ((LegoCarBuild*) m_currentWorld)->GetPlacedPartCount();
-		SetShelfState(1);
+		SetShelfState(e_stopped);
 		m_previousTickleStates |= 1 << m_currentTickleState;
 		m_currentTickleState = e_starting;
 		m_compositePresenter->SendToCompositePresenter(Lego());
@@ -284,7 +284,7 @@ void LegoCarBuildAnimPresenter::EndAction()
 	if (m_action) {
 		AUTOLOCK(m_criticalSection);
 		MxVideoPresenter::EndAction();
-		m_shelfState = 0;
+		m_shelfState = e_selected;
 	}
 }
 
@@ -294,7 +294,7 @@ MxResult LegoCarBuildAnimPresenter::Serialize(LegoStorage* p_storage)
 {
 	if (p_storage->IsReadMode()) {
 		p_storage->ReadS16(m_placedPartCount);
-		p_storage->ReadFloat(m_ShelfFrame);
+		p_storage->ReadFloat(m_shelfFrame);
 		for (MxS16 i = 0; i < m_numberOfParts; i++) {
 			p_storage->ReadString(m_parts[i].m_name);
 			p_storage->ReadString(m_parts[i].m_wiredName);
@@ -303,7 +303,7 @@ MxResult LegoCarBuildAnimPresenter::Serialize(LegoStorage* p_storage)
 	}
 	else if (p_storage->IsWriteMode()) {
 		p_storage->WriteS16(m_placedPartCount);
-		p_storage->WriteFloat(m_ShelfFrame);
+		p_storage->WriteFloat(m_shelfFrame);
 		for (MxS16 i = 0; i < m_numberOfParts; i++) {
 			p_storage->WriteString(m_parts[i].m_name);
 			p_storage->WriteString(m_parts[i].m_wiredName);
@@ -372,9 +372,9 @@ void LegoCarBuildAnimPresenter::FUN_10079160()
 				m_numberOfParts++;
 			}
 			else {
-				if (m_ShelfFrameMax == 0.0f && StringEqualsShelf(name)) {
-					m_ShelfFrameMax = m_anim->GetDuration();
-					m_ShelfFrameInterval = m_ShelfFrameMax / (data->GetNumTranslationKeys() - 1);
+				if (m_shelfFrameMax == 0.0f && StringEqualsShelf(name)) {
+					m_shelfFrameMax = m_anim->GetDuration();
+					m_shelfFrameInterval = m_shelfFrameMax / (data->GetNumTranslationKeys() - 1);
 				}
 			}
 		}
@@ -585,7 +585,7 @@ void LegoCarBuildAnimPresenter::RotateAroundYAxis(MxFloat p_angle)
 		m_platformAnimNodeData->GetRotationKey(0)->SetAngle(newRotation[3]);
 
 		if (m_carBuildEntity->GetROI()) {
-			FUN_1006b9a0(&m_platformAnim, m_ShelfFrameBuffer, NULL);
+			FUN_1006b9a0(&m_platformAnim, m_shelfFrameBuffer, NULL);
 		}
 	}
 }
@@ -594,18 +594,18 @@ void LegoCarBuildAnimPresenter::RotateAroundYAxis(MxFloat p_angle)
 // FUNCTION: BETA10 0x10072412
 void LegoCarBuildAnimPresenter::MoveShelfForward()
 {
-	if (m_ShelfFrameBuffer >= m_ShelfFrameMax) {
-		m_ShelfFrame = 0.0;
-		m_ShelfFrameBuffer = m_ShelfFrame;
-		m_shelfState = 1;
+	if (m_shelfFrameBuffer >= m_shelfFrameMax) {
+		m_shelfFrame = 0.0;
+		m_shelfFrameBuffer = m_shelfFrame;
+		m_shelfState = e_stopped;
 	}
-	else if (m_ShelfFrameBuffer >= m_ShelfFrameInterval + m_ShelfFrame) {
-		m_ShelfFrame = m_ShelfFrameInterval + m_ShelfFrame;
-		m_ShelfFrameBuffer = m_ShelfFrame;
-		m_shelfState = 1;
+	else if (m_shelfFrameBuffer >= m_shelfFrameInterval + m_shelfFrame) {
+		m_shelfFrame = m_shelfFrameInterval + m_shelfFrame;
+		m_shelfFrameBuffer = m_shelfFrame;
+		m_shelfState = e_stopped;
 	}
 	else {
-		m_ShelfFrameBuffer = m_ShelfFrameInterval / 10.0f + m_ShelfFrameBuffer;
+		m_shelfFrameBuffer = m_shelfFrameInterval / 10.0f + m_shelfFrameBuffer;
 	}
 }
 
