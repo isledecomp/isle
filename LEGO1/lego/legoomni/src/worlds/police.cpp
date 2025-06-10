@@ -105,7 +105,7 @@ MxLong Police::HandleControl(LegoControlManagerNotificationParam& p_param)
 		switch (p_param.m_clickedObjectId) {
 		case PoliceScript::c_LeftArrow_Ctl:
 		case PoliceScript::c_RightArrow_Ctl:
-			if (m_policeState->GetPlayAnimation() == 1) {
+			if (m_policeState->GetState() == PoliceState::e_playingAnimation) {
 				DeleteObjects(&m_atomId, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
 			}
 
@@ -114,7 +114,7 @@ MxLong Police::HandleControl(LegoControlManagerNotificationParam& p_param)
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case PoliceScript::c_Info_Ctl:
-			if (m_policeState->GetPlayAnimation() == 1) {
+			if (m_policeState->GetState() == PoliceState::e_playingAnimation) {
 				DeleteObjects(&m_atomId, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
 			}
 
@@ -123,7 +123,7 @@ MxLong Police::HandleControl(LegoControlManagerNotificationParam& p_param)
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case PoliceScript::c_Door_Ctl:
-			if (m_policeState->GetPlayAnimation() == 1) {
+			if (m_policeState->GetState() == PoliceState::e_playingAnimation) {
 				DeleteObjects(&m_atomId, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
 			}
 
@@ -145,8 +145,8 @@ MxLong Police::HandleEndAction(MxEndActionNotificationParam& p_param)
 	MxDSAction* action = p_param.GetAction();
 
 	if (m_radio.Notify(p_param) == 0 && m_atomId == action->GetAtomId()) {
-		if (m_policeState->GetPlayAnimation() == 1) {
-			m_policeState->SetPlayAnimation(0);
+		if (m_policeState->GetState() == PoliceState::e_playingAnimation) {
+			m_policeState->SetState(PoliceState::e_noAnimation);
 			return 1;
 		}
 
@@ -161,9 +161,9 @@ MxLong Police::HandleKeyPress(LegoEventNotificationParam& p_param)
 {
 	MxLong result = 0;
 
-	if (p_param.GetKey() == VK_SPACE && m_policeState->GetPlayAnimation() == 1) {
+	if (p_param.GetKey() == VK_SPACE && m_policeState->GetState() == PoliceState::e_playingAnimation) {
 		DeleteObjects(&m_atomId, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
-		m_policeState->SetPlayAnimation(0);
+		m_policeState->SetState(PoliceState::e_noAnimation);
 		return 1;
 	}
 
@@ -197,7 +197,7 @@ MxBool Police::Escape()
 // FUNCTION: LEGO1 0x1005e7c0
 PoliceState::PoliceState()
 {
-	m_playAnimation = 0;
+	m_state = PoliceState::e_noAnimation;
 	m_policeScript = (rand() % 2 == 0) ? PoliceScript::c_nps002la_RunAnim : PoliceScript::c_nps001ni_RunAnim;
 }
 
@@ -222,7 +222,7 @@ void PoliceState::StartAnimation()
 {
 	PoliceScript::Script policeScript;
 
-	if (m_playAnimation == 1) {
+	if (m_state == PoliceState::e_playingAnimation) {
 		return;
 	}
 
@@ -248,5 +248,5 @@ void PoliceState::StartAnimation()
 		Start(&action);
 	}
 
-	m_playAnimation = 1;
+	m_state = PoliceState::e_playingAnimation;
 }
