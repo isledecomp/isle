@@ -148,7 +148,7 @@ void IslePathActor::Exit()
 		}
 
 		m_previousActor->SetActorState(c_initial);
-		GameState()->m_currentArea = LegoGameState::Area::e_unk66;
+		GameState()->m_currentArea = LegoGameState::Area::e_vehicleExited;
 	}
 
 	FUN_1001b660();
@@ -199,7 +199,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_Quiet_Audio
 	);
 	g_spawnLocations[3] = SpawnLocation(
-		LegoGameState::e_unk4,
+		LegoGameState::e_infocenterExited,
 		g_isleScript,
 		0,
 		"int46",
@@ -223,7 +223,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_Beach_Music
 	);
 	g_spawnLocations[5] = SpawnLocation(
-		LegoGameState::e_unk17,
+		LegoGameState::e_jetskibuildExited,
 		g_isleScript,
 		0,
 		"EDG00_46",
@@ -259,7 +259,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_CentralNorthRoad_Music
 	);
 	g_spawnLocations[8] = SpawnLocation(
-		LegoGameState::e_unk20,
+		LegoGameState::e_racecarbuildExited,
 		g_isleScript,
 		0,
 		"INT16",
@@ -295,7 +295,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_GarageArea_Music
 	);
 	g_spawnLocations[11] = SpawnLocation(
-		LegoGameState::e_unk28,
+		LegoGameState::e_garageExited,
 		g_isleScript,
 		0,
 		"INT24",
@@ -319,7 +319,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_Hospital_Music
 	);
 	g_spawnLocations[13] = SpawnLocation(
-		LegoGameState::e_unk31,
+		LegoGameState::e_hospitalExited,
 		g_isleScript,
 		0,
 		"EDG02_28",
@@ -343,7 +343,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_PoliceStation_Music
 	);
 	g_spawnLocations[15] = SpawnLocation(
-		LegoGameState::e_unk33,
+		LegoGameState::e_policeExited,
 		g_isleScript,
 		0,
 		"EDG02_64",

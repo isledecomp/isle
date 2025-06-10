@@ -784,11 +784,11 @@ void LegoCarBuild::FUN_100243a0()
 		TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
 		break;
 	case Jetski_Actor:
-		m_destLocation = LegoGameState::Area::e_unk17;
+		m_destLocation = LegoGameState::Area::e_jetskibuildExited;
 		TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
 		break;
 	case RaceCar_Actor:
-		m_destLocation = LegoGameState::Area::e_unk20;
+		m_destLocation = LegoGameState::Area::e_racecarbuildExited;
 		TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
 	}
 }

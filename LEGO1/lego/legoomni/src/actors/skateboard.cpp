@@ -112,7 +112,7 @@ MxLong SkateBoard::HandleControl(LegoControlManagerNotificationParam& p_param)
 
 	if (p_param.m_unk0x28 == 1 && p_param.m_clickedObjectId == IsleScript::c_SkateArms_Ctl) {
 		Exit();
-		GameState()->m_currentArea = LegoGameState::Area::e_unk66;
+		GameState()->m_currentArea = LegoGameState::Area::e_vehicleExited;
 		result = 1;
 	}
 
