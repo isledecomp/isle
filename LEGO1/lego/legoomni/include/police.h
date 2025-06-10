@@ -38,15 +38,15 @@ public:
 	// SYNTHETIC: LEGO1 0x1005e920
 	// PoliceState::`scalar deleting destructor'
 
-	undefined4 GetUnknown0x0c() { return m_unk0x0c; }
-	void SetUnknown0x0c(undefined4 p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
+	MxS32 GetPlayAnimation() { return m_playAnimation; }
+	void SetPlayAnimation(MxS32 p_playAnimation) { m_playAnimation = p_playAnimation; }
 
-	void FUN_1005ea40();
+	void StartAnimation();
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
 	PoliceScript::Script m_policeScript; // 0x08
-	undefined4 m_unk0x0c;                // 0x0c
+	MxS32 m_playAnimation;               // 0x0c
 };
 
 // VTABLE: LEGO1 0x100d8a80
