@@ -131,9 +131,9 @@ private:
 	// name derived from LegoVehicleBuildState, field 0x4f
 	MxS16 m_placedPartCount; // 0xc0
 
-	LegoAnimNodeData* m_platformAnimNodeData; // 0xc4
-	LegoAnim m_platformAnim;          // 0xc8
-	MxMatrix m_buildViewMatrix;          // 0xe0
+	LegoAnimNodeData* m_platformAnimNodeData; 	// 0xc4
+	LegoAnim m_platformAnim;          			// 0xc8
+	MxMatrix m_buildViewMatrix;          		// 0xe0
 
 	// variable name verified by BETA10 0x100719f0
 	UnknownListEntry* m_parts; // 0x128
