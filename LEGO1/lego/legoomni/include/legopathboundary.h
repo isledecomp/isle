@@ -39,7 +39,7 @@ public:
 
 	MxResult AddActor(LegoPathActor* p_actor);
 	MxResult RemoveActor(LegoPathActor* p_actor);
-	void FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPathActor* p_actor);
+	void CheckAndCallPathTriggers(Vector3& p_point1, Vector3& p_point2, LegoPathActor* p_actor);
 	void SwitchBoundary(
 		LegoPathActor* p_actor,
 		LegoPathBoundary*& p_boundary,
@@ -47,8 +47,8 @@ public:
 		float& p_unk0xe4
 	);
 	MxU32 Intersect(float p_scale, Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, LegoOrientedEdge*& p_edge);
-	MxU32 FUN_10057fe0(LegoAnimPresenter* p_presenter);
-	MxU32 FUN_100586e0(LegoAnimPresenter* p_presenter);
+	MxU32 AddPresenterIfInRange(LegoAnimPresenter* p_presenter);
+	MxU32 RemovePresenter(LegoAnimPresenter* p_presenter);
 
 	// FUNCTION: BETA10 0x1001ffb0
 	LegoPathActorSet& GetActors() { return m_actors; }

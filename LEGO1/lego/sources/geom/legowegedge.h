@@ -16,12 +16,12 @@ struct PathWithTrigger {
 	{
 		m_pathStruct = NULL;
 		m_data = 0;
-		m_unk0x08 = 0.0f;
+		m_triggerLength = 0.0f;
 	}
 
 	LegoPathStruct* m_pathStruct; // 0x00
 	unsigned int m_data;          // 0x04
-	float m_unk0x08;              // 0x08
+	float m_triggerLength;        // 0x08
 };
 
 #include "mxgeometry/mxgeometry3d.h"
@@ -42,7 +42,7 @@ public:
 	LegoWEGEdge();
 	~LegoWEGEdge() override;
 
-	LegoS32 VTable0x04() override; // vtable+0x04
+	LegoS32 LinkEdgesAndFaces() override; // vtable+0x04
 
 	// FUNCTION: BETA10 0x100270c0
 	LegoU32 GetFlag0x10()
@@ -57,7 +57,7 @@ public:
 
 	// TODO: Other BETA10 reference at 0x1001c9e0, not sure what is going on
 	// FUNCTION: BETA10 0x1001ff80
-	Mx4DPointFloat* GetUnknown0x14() { return &m_unk0x14; }
+	Mx4DPointFloat* GetUp() { return &m_up; }
 
 	// FUNCTION: BETA10 0x1001ca10
 	Mx4DPointFloat* GetEdgeNormal(int index) { return &m_edgeNormals[index]; }
@@ -85,18 +85,18 @@ public:
 	friend class LegoPathController;
 
 protected:
-	LegoS32 FUN_1009aea0();
+	LegoS32 ValidateFacePlanarity();
 
 	LegoU8 m_flags;                 // 0x0c
 	LegoU8 m_unk0x0d;               // 0x0d
 	LegoChar* m_name;               // 0x10
-	Mx4DPointFloat m_unk0x14;       // 0x14
+	Mx4DPointFloat m_up;            // 0x14
 	Mx4DPointFloat* m_edgeNormals;  // 0x2c
-	Mx3DPointFloat m_unk0x30;       // 0x30
-	float m_unk0x44;                // 0x44
+	Mx3DPointFloat m_centerPoint;   // 0x30
+	float m_boundingRadius;         // 0x44
 	LegoU8 m_numTriggers;           // 0x48
 	PathWithTrigger* m_pathTrigger; // 0x4c
-	Mx3DPointFloat* m_unk0x50;      // 0x50
+	Mx3DPointFloat* m_direction;    // 0x50
 };
 
 #endif // __LEGOWEGEDGE_H

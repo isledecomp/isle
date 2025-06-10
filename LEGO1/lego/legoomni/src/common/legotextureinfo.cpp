@@ -186,7 +186,7 @@ BOOL LegoTextureInfo::GetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo*& p_text
 }
 
 // FUNCTION: LEGO1 0x10066010
-LegoResult LegoTextureInfo::FUN_10066010(const LegoU8* p_bits)
+LegoResult LegoTextureInfo::LoadBits(const LegoU8* p_bits)
 {
 	if (m_surface != NULL && m_texture != NULL) {
 		DDSURFACEDESC desc;

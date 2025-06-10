@@ -20,7 +20,7 @@ LegoWEEdge::~LegoWEEdge()
 }
 
 // FUNCTION: LEGO1 0x1009a5b0
-LegoS32 LegoWEEdge::VTable0x04()
+LegoS32 LegoWEEdge::LinkEdgesAndFaces()
 {
 	for (LegoS32 i = 0; i < m_numEdges; i++) {
 		LegoOrientedEdge* e1 = m_edges[i];

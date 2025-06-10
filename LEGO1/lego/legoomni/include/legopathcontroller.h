@@ -105,7 +105,7 @@ public:
 	MxResult PlaceActor(LegoPathActor* p_actor);
 	MxResult RemoveActor(LegoPathActor* p_actor);
 	void FUN_100468f0(LegoAnimPresenter* p_presenter);
-	void FUN_10046930(LegoAnimPresenter* p_presenter);
+	void RemovePresenterFromBoundaries(LegoAnimPresenter* p_presenter);
 	MxResult FUN_10046b30(LegoPathBoundary*& p_boundaries, MxS32& p_numL);
 	LegoPathBoundary* GetPathBoundary(const char* p_name);
 	void Enable(MxBool p_enable);
@@ -189,12 +189,12 @@ private:
 
 	LegoPathBoundary* m_boundaries; // 0x08
 	LegoPathCtrlEdge* m_edges;      // 0x0c
-	Mx3DPointFloat* m_unk0x10;      // 0x10
+	Mx3DPointFloat* m_nodes;        // 0x10
 	LegoPathStruct* m_structs;      // 0x14
-	MxU16 m_numL;                   // 0x18
-	MxU16 m_numE;                   // 0x1a
-	MxU16 m_numN;                   // 0x1c
-	MxU16 m_numT;                   // 0x1e
+	MxU16 m_numL;                   // 0x18 Number of boundaries
+	MxU16 m_numE;                   // 0x1a Number of edges
+	MxU16 m_numN;                   // 0x1c Number of nodes
+	MxU16 m_numT;                   // 0x1e Number of structs
 	LegoPathCtrlEdgeSet m_pfsE;     // 0x20
 	LegoPathActorSet m_actors;      // 0x30
 

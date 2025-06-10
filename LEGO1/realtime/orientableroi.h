@@ -70,7 +70,7 @@ public:
 protected:
 	MxMatrix m_local2world;                 // 0x10
 	BoundingBox m_world_bounding_box;       // 0x58
-	BoundingBox m_unk0x80;                  // 0x80
+	BoundingBox m_bounding_box;             // 0x80
 	BoundingSphere m_world_bounding_sphere; // 0xa8
 	Mx3DPointFloat m_world_velocity;        // 0xc0
 	OrientableROI* m_parentROI;             // 0xd4

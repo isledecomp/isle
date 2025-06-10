@@ -104,7 +104,7 @@ MxResult LegoTexturePresenter::Store()
 			}
 		}
 		else {
-			textureInfo->FUN_10066010(texture->GetImage()->GetBits());
+			textureInfo->LoadBits(texture->GetImage()->GetBits());
 		}
 	}
 
