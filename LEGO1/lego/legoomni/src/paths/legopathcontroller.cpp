@@ -633,7 +633,6 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 		MxU16 s;
 		MxU8 j;
 
-
 		if (p_storage->Read(&numE, sizeof(numE)) != SUCCESS) {
 			return FAILURE;
 		}
