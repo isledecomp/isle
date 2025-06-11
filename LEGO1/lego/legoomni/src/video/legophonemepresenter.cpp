@@ -68,8 +68,8 @@ void LegoPhonemePresenter::StartingTickle()
 
 				CharacterManager()->SetHeadTexture(entityROI, textureInfo);
 
-				phoneme->VTable0x0c(m_textureInfo);
-				phoneme->VTable0x14(textureInfo);
+				phoneme->SetTextureInfo(m_textureInfo);
+				phoneme->SetCachedTextureInfo(textureInfo);
 				phonemeList->Append(phoneme);
 				m_textureInfo = textureInfo;
 			}
@@ -78,7 +78,7 @@ void LegoPhonemePresenter::StartingTickle()
 				cursor.Current(phoneme);
 				delete newPhoneme;
 
-				phoneme->VTable0x04(phoneme->VTable0x00() + 1);
+				phoneme->SetCount(phoneme->GetCount() + 1);
 				cursor.SetValue(phoneme);
 
 				m_unk0x70 = TRUE;
@@ -136,7 +136,7 @@ void LegoPhonemePresenter::EndAction()
 			cursor.Current(phoneme);
 			delete newPhoneme;
 
-			if (phoneme->VTable0x00() == 1) {
+			if (phoneme->GetCount() == 1) {
 				LegoROI* roi;
 
 				if (m_unk0x84) {
@@ -154,12 +154,12 @@ void LegoPhonemePresenter::EndAction()
 					CharacterManager()->ReleaseActor(m_roiName.GetData());
 				}
 
-				TextureContainer()->EraseCached(phoneme->VTable0x10());
-				TextureContainer()->EraseCached(phoneme->VTable0x08());
+				TextureContainer()->EraseCached(phoneme->GetCachedTextureInfo());
+				TextureContainer()->EraseCached(phoneme->GetTextureInfo());
 				cursor.Destroy();
 			}
 			else {
-				phoneme->VTable0x04(phoneme->VTable0x00() - 1);
+				phoneme->SetCount(phoneme->GetCount() - 1);
 				cursor.SetValue(phoneme);
 			}
 
