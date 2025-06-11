@@ -94,7 +94,7 @@ public:
 	void SetPartObjectIdByName(const LegoChar* p_name, MxS16 p_objectId);
 
 	// FUNCTION: BETA10 0x10070180
-	void SetShelfState(ShelfState p_shelfState) { m_shelfState = p_shelfState; }
+	void SetShelfState(MxU16 p_shelfState) { m_shelfState = p_shelfState; }
 
 	// FUNCTION: BETA10 0x100703b0
 	Matrix4& GetBuildViewMatrix() { return m_buildViewMatrix; }
@@ -123,7 +123,7 @@ public:
 private:
 	void Beta10Inline0x100733d0();
 
-	ShelfState m_shelfState; // 0xbc
+	MxU16 m_shelfState; // 0xbc
 
 	// variable name verified by BETA10 0x1007184f
 	MxS16 m_numberOfParts; // 0xbe
