@@ -131,21 +131,21 @@ private:
 	// name derived from LegoVehicleBuildState, field 0x4f
 	MxS16 m_placedPartCount; // 0xc0
 
-	LegoAnimNodeData* m_platformAnimNodeData; 	// 0xc4
-	LegoAnim m_platformAnim;          			// 0xc8
-	MxMatrix m_buildViewMatrix;          		// 0xe0
+	LegoAnimNodeData* m_platformAnimNodeData; // 0xc4
+	LegoAnim m_platformAnim;                  // 0xc8
+	MxMatrix m_buildViewMatrix;               // 0xe0
 
 	// variable name verified by BETA10 0x100719f0
 	UnknownListEntry* m_parts; // 0x128
 
-	MxFloat m_shelfFrameBuffer;     // 0x12c
-	MxFloat m_shelfFrame;			// 0x130
-	MxFloat m_shelfFrameMax;		// 0x134
-	MxFloat m_shelfFrameInterval;	// 0x138
-	MxULong m_unk0x13c;     		// 0x13c
-	LegoEntity* m_carBuildEntity; 	// 0x140
-	MxS32 m_unk0x144;       		// 0x144
-	MxS32 m_unk0x148;       		// 0x148
+	MxFloat m_shelfFrameBuffer;   // 0x12c
+	MxFloat m_shelfFrame;         // 0x130
+	MxFloat m_shelfFrameMax;      // 0x134
+	MxFloat m_shelfFrameInterval; // 0x138
+	MxULong m_unk0x13c;           // 0x13c
+	LegoEntity* m_carBuildEntity; // 0x140
+	MxS32 m_unk0x144;             // 0x144
+	MxS32 m_unk0x148;             // 0x148
 
 	// name verified by BETA10 0x10070d63
 	LegoChar* m_mainSourceId; // 0x14c
