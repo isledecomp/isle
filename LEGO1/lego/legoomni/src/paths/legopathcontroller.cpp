@@ -559,27 +559,32 @@ MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 		if (p_storage->Read(&s, sizeof(MxU16)) != SUCCESS) {
 			return FAILURE;
 		}
+		assert(s < m_numN);
 		edge.m_pointA = &m_nodes[s];
 
 		if (p_storage->Read(&s, sizeof(MxU16)) != SUCCESS) {
 			return FAILURE;
 		}
+		assert(s < m_numN);
 		edge.m_pointB = &m_nodes[s];
 
 		if (edge.m_flags & LegoOrientedEdge::c_hasFaceA) {
 			if (p_storage->Read(&s, sizeof(MxU16)) != SUCCESS) {
 				return FAILURE;
 			}
+			assert(s < m_numL);
 			edge.m_faceA = &m_boundaries[s];
 
 			if (p_storage->Read(&s, sizeof(MxU16)) != SUCCESS) {
 				return FAILURE;
 			}
+			assert(s < m_numE);
 			edge.m_ccwA = &m_edges[s];
 
 			if (p_storage->Read(&s, sizeof(MxU16)) != SUCCESS) {
 				return FAILURE;
 			}
+			assert(s < m_numE);
 			edge.m_cwA = &m_edges[s];
 		}
 
@@ -587,16 +592,19 @@ MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 			if (p_storage->Read(&s, sizeof(MxU16)) != SUCCESS) {
 				return FAILURE;
 			}
+			assert(s < m_numL);
 			edge.m_faceB = &m_boundaries[s];
 
 			if (p_storage->Read(&s, sizeof(MxU16)) != SUCCESS) {
 				return FAILURE;
 			}
+			assert(s < m_numE);
 			edge.m_ccwB = &m_edges[s];
 
 			if (p_storage->Read(&s, sizeof(MxU16)) != SUCCESS) {
 				return FAILURE;
 			}
+			assert(s < m_numE);
 			edge.m_cwB = &m_edges[s];
 		}
 
@@ -617,14 +625,20 @@ MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 {
 	for (MxS32 i = 0; i < m_numL; i++) {
+#ifdef BETA10
+		Mx4DPointFloat unused;
+#endif
 		LegoPathBoundary& boundary = m_boundaries[i];
 		MxU8 numE;
 		MxU16 s;
 		MxU8 j;
 
+
 		if (p_storage->Read(&numE, sizeof(numE)) != SUCCESS) {
 			return FAILURE;
 		}
+
+		assert(numE > 2);
 
 		boundary.m_edgeNormals = new Mx4DPointFloat[numE];
 
@@ -635,6 +649,8 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 				return FAILURE;
 			}
+
+			assert(s < m_numE);
 
 			edges[j] = &m_edges[s];
 		}
@@ -692,6 +708,8 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 				if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 					return FAILURE;
 				}
+
+				assert(s < m_numT);
 
 				boundary.m_pathTrigger[j].m_pathStruct = &m_structs[s];
 
