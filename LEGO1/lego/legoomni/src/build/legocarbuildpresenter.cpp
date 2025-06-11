@@ -355,7 +355,7 @@ void LegoCarBuildAnimPresenter::InitBuildPlatform()
 	LegoAnimNodeData* destData;
 	LegoTreeNode** children;
 
-	//Get Platform data, Shelf Frame data, and number of build parts
+	// Get Platform data, Shelf Frame data, and number of build parts
 	for (i = 0; i < totalNodes; i++) {
 		LegoAnimNodeData* data = (LegoAnimNodeData*) GetTreeNode(m_anim->GetRoot(), i)->GetData();
 		name = data->GetName();
@@ -385,7 +385,7 @@ void LegoCarBuildAnimPresenter::InitBuildPlatform()
 	m_parts = new UnknownListEntry[m_numberOfParts];
 	assert(m_parts);
 
-	//Go through and add the wired name of each part
+	// Go through and add the wired name of each part
 	for (i = 0; i < totalNodes; i++) {
 		name = ((LegoAnimNodeData*) GetTreeNode(m_anim->GetRoot(), i)->GetData())->GetName();
 
@@ -404,7 +404,7 @@ void LegoCarBuildAnimPresenter::InitBuildPlatform()
 
 	MxS16 counter = 0;
 
-	//Go through and add the normal name of each part
+	// Go through and add the normal name of each part
 	for (i = 0; i < totalNodes; i++) {
 		name = ((LegoAnimNodeData*) GetTreeNode(m_anim->GetRoot(), i)->GetData())->GetName();
 		if (StringEndsOnYOrN(name)) {
@@ -423,7 +423,7 @@ void LegoCarBuildAnimPresenter::InitBuildPlatform()
 		}
 	}
 
-	//Set Platform root node
+	// Set Platform root node
 	destNode = new LegoTreeNode();
 	assert(destNode);
 	destData = new LegoAnimNodeData();
