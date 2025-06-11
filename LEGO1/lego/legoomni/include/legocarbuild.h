@@ -161,7 +161,7 @@ public:
 	MxS32 FUN_10025ee0(undefined4 p_param1);
 
 	// FUNCTION: BETA10 0x100735b0
-	void SetUnknown0x258(LegoCarBuildAnimPresenter* p_unk0x258) { m_unk0x258 = p_unk0x258; }
+	void SetCarBuildAnimPresenter(LegoCarBuildAnimPresenter* p_animPresenter) { m_animPresenter = p_animPresenter; }
 
 	// SYNTHETIC: LEGO1 0x10022a60
 	// LegoCarBuild::`scalar deleting destructor'
@@ -193,8 +193,8 @@ private:
 	// This is likely a location in pixel space
 	MxS32 m_unk0x250[2]; // 0x250
 
-	LegoCarBuildAnimPresenter* m_unk0x258; // 0x258
-	MxQuaternionTransformer m_unk0x25c;    // 0x25c
+	LegoCarBuildAnimPresenter* m_animPresenter; // 0x258
+	MxQuaternionTransformer m_unk0x25c;         // 0x25c
 
 	// These two are likely locations in pixel space
 	MxS32 m_unk0x290[2]; // 0x290
