@@ -192,7 +192,9 @@ MxS32 LegoCarRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 			}
 			else {
 				m_unk0x7c = 0;
+#ifdef BETA10
 				assert(0);
+#endif
 				return 0; // BETA10 returns -1 here
 			}
 		}
