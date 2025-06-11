@@ -192,7 +192,7 @@ void LegoCarBuildAnimPresenter::StreamingTickle()
 	strcpy(m_mainSourceId, m_action->GetAtomId().GetInternal());
 	m_mainSourceId[strlen(m_mainSourceId) - 1] = 'M';
 
-	FUN_10079160();
+	InitBuildPlatform();
 
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act2) {
 		m_placedPartCount = 10;
@@ -344,7 +344,7 @@ void LegoCarBuildAnimPresenter::SwapNodesByName(LegoChar* p_name1, LegoChar* p_n
 
 // FUNCTION: LEGO1 0x10079160
 // FUNCTION: BETA10 0x1007165d
-void LegoCarBuildAnimPresenter::FUN_10079160()
+void LegoCarBuildAnimPresenter::InitBuildPlatform()
 {
 	LegoTreeNode* root;
 	LegoAnimNodeData* data2;
@@ -355,6 +355,7 @@ void LegoCarBuildAnimPresenter::FUN_10079160()
 	LegoAnimNodeData* destData;
 	LegoTreeNode** children;
 
+	//Get Platform data, Shelf Frame data, and number of build parts
 	for (i = 0; i < totalNodes; i++) {
 		LegoAnimNodeData* data = (LegoAnimNodeData*) GetTreeNode(m_anim->GetRoot(), i)->GetData();
 		name = data->GetName();
@@ -384,6 +385,7 @@ void LegoCarBuildAnimPresenter::FUN_10079160()
 	m_parts = new UnknownListEntry[m_numberOfParts];
 	assert(m_parts);
 
+	//Go through and add the wired name of each part
 	for (i = 0; i < totalNodes; i++) {
 		name = ((LegoAnimNodeData*) GetTreeNode(m_anim->GetRoot(), i)->GetData())->GetName();
 
@@ -402,6 +404,7 @@ void LegoCarBuildAnimPresenter::FUN_10079160()
 
 	MxS16 counter = 0;
 
+	//Go through and add the normal name of each part
 	for (i = 0; i < totalNodes; i++) {
 		name = ((LegoAnimNodeData*) GetTreeNode(m_anim->GetRoot(), i)->GetData())->GetName();
 		if (StringEndsOnYOrN(name)) {
@@ -420,6 +423,7 @@ void LegoCarBuildAnimPresenter::FUN_10079160()
 		}
 	}
 
+	//Set Platform root node
 	destNode = new LegoTreeNode();
 	assert(destNode);
 	destData = new LegoAnimNodeData();

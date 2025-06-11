@@ -76,7 +76,7 @@ public:
 
 	void FUN_10079050(MxS16 p_index);
 	void SwapNodesByName(LegoChar* p_param1, LegoChar* p_param2);
-	void FUN_10079160();
+	void InitBuildPlatform();
 	void FUN_100795d0(LegoChar* p_param);
 	void FUN_10079680(LegoChar* p_param);
 	LegoAnimNodeData* FindNodeDataByName(LegoTreeNode* p_treeNode, const LegoChar* p_name);
