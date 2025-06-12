@@ -728,7 +728,7 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		else {
 			for (i = 0; g_unk0x100f0f30[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f0f30[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f0f30[i]].m_counter) {
 					result = plantInfo[g_unk0x100f0f30[i]].m_entity;
 					break;
 				}
@@ -742,7 +742,7 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		else {
 			for (i = 0; g_unk0x100f0f50[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f0f50[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f0f50[i]].m_counter) {
 					result = plantInfo[g_unk0x100f0f50[i]].m_entity;
 					break;
 				}
@@ -760,7 +760,7 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		else {
 			for (i = 0; g_unk0x100f0f90[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f0f90[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f0f90[i]].m_counter) {
 					result = plantInfo[g_unk0x100f0f90[i]].m_entity;
 					break;
 				}
@@ -782,7 +782,7 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		else {
 			for (i = 0; g_unk0x100f0fa8[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f0fa8[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f0fa8[i]].m_counter) {
 					result = plantInfo[g_unk0x100f0fa8[i]].m_entity;
 					break;
 				}
@@ -800,7 +800,7 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		else {
 			for (i = 0; g_unk0x100f0fb8[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f0fb8[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f0fb8[i]].m_counter) {
 					result = plantInfo[g_unk0x100f0fb8[i]].m_entity;
 					break;
 				}
@@ -814,7 +814,7 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		else {
 			for (i = 0; g_unk0x100f0fe8[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f0fe8[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f0fe8[i]].m_counter) {
 					result = plantInfo[g_unk0x100f0fe8[i]].m_entity;
 					break;
 				}
@@ -828,7 +828,7 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		else {
 			for (i = 0; g_unk0x100f1000[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f1000[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f1000[i]].m_counter) {
 					result = plantInfo[g_unk0x100f1000[i]].m_entity;
 					break;
 				}
@@ -842,7 +842,7 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		else {
 			for (i = 0; g_unk0x100f1018[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f1018[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f1018[i]].m_counter) {
 					result = plantInfo[g_unk0x100f1018[i]].m_entity;
 					break;
 				}
@@ -851,7 +851,7 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		break;
 	case 8:
 		for (i = 0; g_unk0x100f1030[i] != -1; i++) {
-			if (plantInfo[g_unk0x100f1030[i]].m_unk0x16) {
+			if (plantInfo[g_unk0x100f1030[i]].m_counter) {
 				result = plantInfo[g_unk0x100f1030[i]].m_entity;
 				break;
 			}

@@ -664,7 +664,7 @@ MxLong Act3::HandleTransitionEnd()
 // FUNCTION: LEGO1 0x10073270
 void Act3::ReadyWorld()
 {
-	PlantManager()->FUN_10027200();
+	PlantManager()->SetInitialCounters();
 	BuildingManager()->FUN_10030800();
 	AnimationManager()->FUN_1005f6d0(FALSE);
 	VideoManager()->Get3DManager()->SetFrustrum(90.0f, 0.1f, 125.0f);
