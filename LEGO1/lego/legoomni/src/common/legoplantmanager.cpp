@@ -83,7 +83,7 @@ void LegoPlantManager::Init()
 	}
 
 	m_worldId = LegoOmni::e_undefined;
-	m_unk0x0c = 0;
+	m_boundariesDetermined = FALSE;
 	m_numEntries = 0;
 }
 
@@ -98,7 +98,7 @@ void LegoPlantManager::LoadWorldInfo(LegoOmni::World p_worldId)
 		CreatePlant(i, world, p_worldId);
 	}
 
-	m_unk0x0c = 0;
+	m_boundariesDetermined = FALSE;
 }
 
 // FUNCTION: LEGO1 0x100263a0
@@ -119,12 +119,12 @@ void LegoPlantManager::Reset(LegoOmni::World p_worldId)
 	}
 
 	m_worldId = LegoOmni::e_undefined;
-	m_unk0x0c = 0;
+	m_boundariesDetermined = FALSE;
 }
 
 // FUNCTION: LEGO1 0x10026410
 // FUNCTION: BETA10 0x100c50e9
-MxResult LegoPlantManager::FUN_10026410()
+MxResult LegoPlantManager::DetermineBoundaries()
 {
 	// similar to LegoBuildingManager::FUN_10030630()
 
@@ -192,7 +192,7 @@ MxResult LegoPlantManager::FUN_10026410()
 		}
 	}
 
-	m_unk0x0c = TRUE;
+	m_boundariesDetermined = TRUE;
 	return SUCCESS;
 }
 
@@ -200,8 +200,8 @@ MxResult LegoPlantManager::FUN_10026410()
 // FUNCTION: BETA10 0x100c55e0
 LegoPlantInfo* LegoPlantManager::GetInfoArray(MxS32& p_length)
 {
-	if (!m_unk0x0c) {
-		FUN_10026410();
+	if (!m_boundariesDetermined) {
+		DetermineBoundaries();
 	}
 
 	p_length = sizeOfArray(g_plantInfo);
