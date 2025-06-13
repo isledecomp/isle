@@ -26,7 +26,7 @@ DECOMP_SIZE_ASSERT(GasStation, 0x128)
 DECOMP_SIZE_ASSERT(GasStationState, 0x24)
 
 // GLOBAL: LEGO1 0x100f0160
-MxS32 g_animationSkipCounter = 3;
+MxS32 g_animationSkipCounterGasStation = 3;
 
 // GLOBAL: LEGO1 0x100f0164
 MxBool g_trackLedEnabled = FALSE;
@@ -59,7 +59,7 @@ GasStation::~GasStation()
 	ControlManager()->Unregister(this);
 	TickleManager()->UnregisterClient(this);
 	NotificationManager()->Unregister(this);
-	g_animationSkipCounter = 3;
+	g_animationSkipCounterGasStation = 3;
 }
 
 // FUNCTION: LEGO1 0x10004990
@@ -305,7 +305,7 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 			switch (m_state->m_state) {
 			case GasStationState::e_introduction:
-				g_animationSkipCounter = 0;
+				g_animationSkipCounterGasStation = 0;
 				m_state->m_state = GasStationState::e_explainQuest;
 				m_flashingLeds = TRUE;
 				PlayAction(GarageScript::c_wgs023nu_RunAnim);
@@ -313,7 +313,7 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 				m_waitingState = e_start;
 				break;
 			case GasStationState::e_explainQuest:
-				g_animationSkipCounter = 0;
+				g_animationSkipCounterGasStation = 0;
 				m_flashingLeds = TRUE;
 
 				if (m_waitingState == e_canceled) {
@@ -346,7 +346,7 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 // FUNCTION: LEGO1 0x10005920
 MxLong GasStation::HandleKeyPress(MxS8 p_key)
 {
-	if (p_key == VK_SPACE && g_animationSkipCounter == 0 && m_setWithCurrentAction != 0) {
+	if (p_key == VK_SPACE && g_animationSkipCounterGasStation == 0 && m_setWithCurrentAction != 0) {
 		m_state->StopActions();
 		return 1;
 	}
@@ -451,8 +451,8 @@ MxResult GasStation::Tickle()
 		return SUCCESS;
 	}
 
-	if (g_animationSkipCounter != 0) {
-		g_animationSkipCounter--;
+	if (g_animationSkipCounterGasStation != 0) {
+		g_animationSkipCounterGasStation--;
 	}
 
 	MxLong time = Timer()->GetTime();
