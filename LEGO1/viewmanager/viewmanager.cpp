@@ -308,7 +308,7 @@ inline int ViewManager::CalculateFrustumTransformations()
 	}
 	else {
 		float fVar7 = tan(view_angle / 2.0F);
-		view_area_at_one = view_angle * view_angle * 4.0F;
+		view_area_at_one = fVar7 * fVar7 * 4.0F;
 
 		float fVar1 = front * fVar7;
 		float fVar2 = (width / height) * fVar1;
