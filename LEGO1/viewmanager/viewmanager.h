@@ -31,12 +31,12 @@ public:
 	ViewROI* Pick(Tgl::View* p_view, unsigned long x, unsigned long y);
 	void SetResolution(int width, int height);
 	void SetFrustrum(float fov, float front, float back);
-	inline void ManageVisibilityAndDetailRecursively(ViewROI* p_roi, int p_und);
+	inline void ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_und);
 	void Update(float p_previousRenderTime, float);
 	inline int CalculateFrustumTransformations();
 	void UpdateViewTransformations();
 
-	inline static int CalculateLODLevel(float p_und1, float p_und2, ViewROI* p_roi);
+	inline static int CalculateLODLevel(float p_und1, float p_und2, ViewROI* from);
 	inline static int IsROIVisibleAtLOD(ViewROI* p_roi);
 
 	// FUNCTION: BETA10 0x100576b0
