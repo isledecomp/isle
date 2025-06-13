@@ -220,53 +220,55 @@ void ViewManager::RemoveROIDetailFromScene(ViewROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x100a66f0
-inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_roi, int p_und)
+// FUNCTION: BETA10 0x1017297f
+inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_und)
 {
-	if (!p_roi->GetVisibility() && p_und != -2) {
-		ManageVisibilityAndDetailRecursively(p_roi, -2);
+	assert(p_from);
+
+	if (!p_from->GetVisibility() && p_und != -2) {
+		ManageVisibilityAndDetailRecursively(p_from, -2);
 	}
 	else {
-		const CompoundObject* comp = p_roi->GetComp();
+		const CompoundObject* comp = p_from->GetComp();
 
 		if (p_und == -1) {
-			if (p_roi->GetWorldBoundingSphere().Radius() > 0.001F) {
-				float und = ProjectedSize(p_roi->GetWorldBoundingSphere());
+			if (p_from->GetWorldBoundingSphere().Radius() > 0.001F) {
+				float und = ProjectedSize(p_from->GetWorldBoundingSphere());
 
 				if (und < seconds_allowed * g_unk0x1010105c) {
-					if (p_roi->GetUnknown0xe0() == -2) {
-						return;
+					if (p_from->GetUnknown0xe0() != -2) {
+						ManageVisibilityAndDetailRecursively(p_from, -2);
 					}
 
-					ManageVisibilityAndDetailRecursively(p_roi, -2);
 					return;
 				}
-
-				p_und = CalculateLODLevel(und, RealtimeView::GetUserMaxLodPower() * seconds_allowed, p_roi);
+				else {
+					p_und = CalculateLODLevel(und, RealtimeView::GetUserMaxLodPower() * seconds_allowed, p_from);
+				}
 			}
 		}
 
 		if (p_und == -2) {
-			if (p_roi->GetUnknown0xe0() >= 0) {
-				RemoveROIDetailFromScene(p_roi);
-				p_roi->SetUnknown0xe0(-2);
+			if (p_from->GetUnknown0xe0() >= 0) {
+				RemoveROIDetailFromScene(p_from);
+				p_from->SetUnknown0xe0(-2);
 			}
 
 			if (comp != NULL) {
-				for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
+				for (CompoundObject::const_iterator it = comp->begin(); it != comp->end(); it++) {
 					ManageVisibilityAndDetailRecursively((ViewROI*) *it, p_und);
 				}
 			}
 		}
 		else if (comp == NULL) {
-			if (p_roi->GetLODs() != NULL && p_roi->GetLODCount() > 0) {
-				UpdateROIDetailBasedOnLOD(p_roi, p_und);
-				return;
+			if (p_from->GetLODs() != NULL && p_from->GetLODCount() > 0) {
+				UpdateROIDetailBasedOnLOD(p_from, p_und);
 			}
 		}
 		else {
-			p_roi->SetUnknown0xe0(-1);
+			p_from->SetUnknown0xe0(-1);
 
-			for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
+			for (CompoundObject::const_iterator it = comp->begin(); it != comp->end(); it++) {
 				ManageVisibilityAndDetailRecursively((ViewROI*) *it, p_und);
 			}
 		}
@@ -350,29 +352,37 @@ inline int ViewManager::CalculateFrustumTransformations()
 	}
 }
 
-inline int ViewManager::CalculateLODLevel(float p_und1, float p_und2, ViewROI* p_roi)
+// FUNCTION: BETA10 0x10172be5
+inline int ViewManager::CalculateLODLevel(float p_und1, float p_und2, ViewROI* from)
 {
 	int result;
-	float i;
 
-	if (IsROIVisibleAtLOD(p_roi) != 0) {
+	assert(from);
+
+	if (IsROIVisibleAtLOD(from) != 0) {
 		if (p_und1 < g_minLODThreshold) {
 			return 0;
 		}
-
-		result = 1;
+		else {
+			result = 1;
+		}
 	}
 	else {
 		result = 0;
 	}
 
-	for (i = p_und2; result < g_maxLODLevels && p_und1 >= i; i *= g_LODScaleFactor) {
-		result++;
+	for (float i = p_und2; result < g_maxLODLevels; result++) {
+		if (i >= p_und1) {
+			break;
+		}
+
+		i *= g_LODScaleFactor;
 	}
 
 	return result;
 }
 
+// FUNCTION: BETA10 0x10172cb0
 inline int ViewManager::IsROIVisibleAtLOD(ViewROI* p_roi)
 {
 	const LODListBase* lods = p_roi->GetLODs();
@@ -381,22 +391,24 @@ inline int ViewManager::IsROIVisibleAtLOD(ViewROI* p_roi)
 		if (((ViewLOD*) p_roi->GetLOD(0))->GetUnknown0x08Test8()) {
 			return 1;
 		}
-
-		return 0;
+		else {
+			return 0;
+		}
 	}
 
 	const CompoundObject* comp = p_roi->GetComp();
 
 	if (comp != NULL) {
-		for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
+		for (CompoundObject::const_iterator it = comp->begin(); it != comp->end(); it++) {
 			const LODListBase* lods = ((ViewROI*) *it)->GetLODs();
 
 			if (lods != NULL && lods->Size() > 0) {
 				if (((ViewLOD*) ((ViewROI*) *it)->GetLOD(0))->GetUnknown0x08Test8()) {
 					return 1;
 				}
-
-				return 0;
+				else {
+					return 0;
+				}
 			}
 		}
 	}
@@ -480,7 +492,7 @@ float ViewManager::ProjectedSize(const BoundingSphere& p_bounding_sphere)
 	// is then the ratio of the area of that projected circle to the view surface area
 	// at Z == 1.0.
 	//
-	float sphere_projected_area = 3.14159265359 * (p_bounding_sphere.Radius() * p_bounding_sphere.Radius());
+	float sphere_projected_area = 3.14159265359 * p_bounding_sphere.Radius() * p_bounding_sphere.Radius();
 	float square_dist_to_sphere = DISTSQRD3(p_bounding_sphere.Center(), pov[3]);
 	return sphere_projected_area / view_area_at_one / square_dist_to_sphere;
 }
