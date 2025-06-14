@@ -1653,19 +1653,19 @@ void Act1State::PlaceActors()
 		m_helicopter = NULL;
 
 		if (m_helicopterWindshield != NULL) {
-			FUN_1003f930(m_helicopterWindshield);
+			LoadFromNamedTexture(m_helicopterWindshield);
 			delete m_helicopterWindshield;
 			m_helicopterWindshield = NULL;
 		}
 
 		if (m_helicopterJetLeft != NULL) {
-			FUN_1003f930(m_helicopterJetLeft);
+			LoadFromNamedTexture(m_helicopterJetLeft);
 			delete m_helicopterJetLeft;
 			m_helicopterJetLeft = NULL;
 		}
 
 		if (m_helicopterJetRight != NULL) {
-			FUN_1003f930(m_helicopterJetRight);
+			LoadFromNamedTexture(m_helicopterJetRight);
 			delete m_helicopterJetRight;
 			m_helicopterJetRight = NULL;
 		}
@@ -1689,13 +1689,13 @@ void Act1State::PlaceActors()
 		m_jetski = NULL;
 
 		if (m_jetskiFront != NULL) {
-			FUN_1003f930(m_jetskiFront);
+			LoadFromNamedTexture(m_jetskiFront);
 			delete m_jetskiFront;
 			m_jetskiFront = NULL;
 		}
 
 		if (m_jetskiWindshield != NULL) {
-			FUN_1003f930(m_jetskiWindshield);
+			LoadFromNamedTexture(m_jetskiWindshield);
 			delete m_jetskiWindshield;
 			m_jetskiWindshield = NULL;
 		}
@@ -1723,7 +1723,7 @@ void Act1State::PlaceActors()
 		m_dunebuggy = NULL;
 
 		if (m_dunebuggyFront != NULL) {
-			FUN_1003f930(m_dunebuggyFront);
+			LoadFromNamedTexture(m_dunebuggyFront);
 			delete m_dunebuggyFront;
 			m_dunebuggyFront = NULL;
 		}
@@ -1751,19 +1751,19 @@ void Act1State::PlaceActors()
 		m_racecar = NULL;
 
 		if (m_racecarFront != NULL) {
-			FUN_1003f930(m_racecarFront);
+			LoadFromNamedTexture(m_racecarFront);
 			delete m_racecarFront;
 			m_racecarFront = NULL;
 		}
 
 		if (m_racecarBack != NULL) {
-			FUN_1003f930(m_racecarBack);
+			LoadFromNamedTexture(m_racecarBack);
 			delete m_racecarBack;
 			m_racecarBack = NULL;
 		}
 
 		if (m_racecarTail != NULL) {
-			FUN_1003f930(m_racecarTail);
+			LoadFromNamedTexture(m_racecarTail);
 			delete m_racecarTail;
 			m_racecarTail = NULL;
 		}

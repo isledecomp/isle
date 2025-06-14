@@ -40,7 +40,7 @@ MxResult RaceCar::Create(MxDSAction& p_dsAction)
 // FUNCTION: LEGO1 0x100284d0
 MxLong RaceCar::HandleClick()
 {
-	if (!FUN_1003ef60()) {
+	if (!CanExit()) {
 		return 1;
 	}
 

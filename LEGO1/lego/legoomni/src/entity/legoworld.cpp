@@ -424,7 +424,7 @@ void LegoWorld::Add(MxCore* p_object)
 #ifndef BETA10
 	if (p_object->IsA("LegoAnimPresenter")) {
 		if (!strcmpi(((LegoAnimPresenter*) p_object)->GetAction()->GetObjectName(), "ConfigAnimation")) {
-			FUN_1003e050((LegoAnimPresenter*) p_object);
+			CalculateViewFromAnimation((LegoAnimPresenter*) p_object);
 			((LegoAnimPresenter*) p_object)
 				->GetAction()
 				->SetDuration(((LegoAnimPresenter*) p_object)->GetAnimation()->GetDuration());
