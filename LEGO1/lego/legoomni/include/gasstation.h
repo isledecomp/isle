@@ -14,6 +14,19 @@ class MxStillPresenter;
 // SIZE 0x24
 class GasStationState : public LegoState {
 public:
+	enum {
+		e_unknown0 = 0,
+		e_newState = 1,
+		e_beforeExitingForQuest = 2,
+		e_unknown3 = 3,
+		e_unknown4 = 4,
+		e_introduction = 5,
+		e_explainQuest = 6,
+		e_waitAcceptingQuest = 7,
+		e_afterAcceptingQuest = 8,
+		e_cancelQuest = 9,
+	};
+
 	GasStationState();
 
 	// FUNCTION: LEGO1 0x100061d0
@@ -42,7 +55,7 @@ public:
 	// TODO: Most likely getters/setters are not used according to BETA.
 
 	GarageScript::Script m_actions[3]; // 0x08
-	undefined4 m_unk0x14;              // 0x14
+	MxS32 m_state;                     // 0x14
 	MxS16 m_pepperAction;              // 0x18
 	MxS16 m_mamaAction;                // 0x1a
 	MxS16 m_papaAction;                // 0x1c
@@ -88,6 +101,13 @@ public:
 	// GasStation::`scalar deleting destructor'
 
 private:
+	enum {
+		e_finished = 0,
+		e_start = 1,
+		e_started = 2,
+		e_canceled = 3,
+	};
+
 	inline void PlayAction(GarageScript::Script p_objectId);
 	inline void StopAction(GarageScript::Script p_objectId);
 
@@ -99,13 +119,13 @@ private:
 	undefined2 m_unk0xfa;               // 0xfa
 	LegoGameState::Area m_destLocation; // 0xfc
 	GasStationState* m_state;           // 0x100
-	undefined2 m_unk0x104;              // 0x104
-	undefined2 m_unk0x106;              // 0x106
+	MxS16 m_waitingState;               // 0x104
+	MxS16 m_setWithCurrentAction;       // 0x106
 	MxStillPresenter* m_trackLedBitmap; // 0x108
-	MxLong m_unk0x10c;                  // 0x10c
+	MxLong m_lastIdleAnimation;         // 0x10c
 	MxLong m_trackLedTimer;             // 0x110
-	MxBool m_unk0x114;                  // 0x114
-	MxBool m_unk0x115;                  // 0x115
+	MxBool m_waiting;                   // 0x114
+	MxBool m_flashingLeds;              // 0x115
 	Radio m_radio;                      // 0x118
 };
 
