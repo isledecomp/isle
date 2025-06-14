@@ -34,11 +34,11 @@ public:
 	// SYNTHETIC: LEGO1 0x10017ce0
 	// PizzeriaState::`scalar deleting destructor'
 
-	MxS16 FUN_10017d50();
+	MxS16 GetActorState();
 	MxU32 NextAction();
 
-	Playlist m_unk0x08[5]; // 0x08
-	MxS32 m_unk0x44[5];    // 0x44
+	Playlist m_playerPlaylists[5]; // 0x08
+	MxS32 m_states[5];             // 0x44
 
 	static IsleScript::Script g_pepperActions[];
 	static IsleScript::Script g_mamaActions[];
