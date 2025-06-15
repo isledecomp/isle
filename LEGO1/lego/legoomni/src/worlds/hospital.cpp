@@ -24,7 +24,7 @@ DECOMP_SIZE_ASSERT(Hospital, 0x12c)
 DECOMP_SIZE_ASSERT(HospitalState, 0x18)
 
 // GLOBAL: LEGO1 0x100f7918
-undefined4 g_animationSkipCounter = 3;
+undefined4 g_animationSkipCounterHospital = 3;
 
 // GLOBAL: LEGO1 0x100f791c
 MxBool g_copLedEnabled = FALSE;
@@ -64,7 +64,7 @@ Hospital::~Hospital()
 	m_hospitalState->m_state = HospitalState::e_unknown3;
 
 	NotificationManager()->Unregister(this);
-	g_animationSkipCounter = 3;
+	g_animationSkipCounterHospital = 3;
 }
 
 // FUNCTION: LEGO1 0x100748c0
@@ -222,7 +222,7 @@ MxLong Hospital::HandleKeyPress(MxS8 p_key)
 {
 	MxLong result = 0;
 
-	if (p_key == VK_SPACE && g_animationSkipCounter == 0) {
+	if (p_key == VK_SPACE && g_animationSkipCounterHospital == 0) {
 		DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 		result = 1;
 	}
@@ -251,7 +251,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 		m_currentAction = HospitalScript::c_hho006cl_RunAnim;
 		m_setWithCurrentAction = 1;
 		m_flashingLeds = 1;
-		g_animationSkipCounter = 0;
+		g_animationSkipCounterHospital = 0;
 		break;
 	case HospitalState::e_explainQuestShort:
 		m_time = Timer()->GetTime();
@@ -637,8 +637,8 @@ MxResult Hospital::Tickle()
 		return SUCCESS;
 	}
 
-	if (g_animationSkipCounter != 0) {
-		g_animationSkipCounter -= 1;
+	if (g_animationSkipCounterHospital != 0) {
+		g_animationSkipCounterHospital -= 1;
 	}
 
 	MxLong time = Timer()->GetTime();
