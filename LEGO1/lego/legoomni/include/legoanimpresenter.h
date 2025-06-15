@@ -103,12 +103,17 @@ protected:
 	LegoChar* FUN_10069150(const LegoChar* p_und1);
 	void FUN_100692b0();
 	void FUN_100695c0();
-	LegoChar* FUN_100697c0(const LegoChar* p_und1, const LegoChar* p_und2);
+	LegoChar* GetVariableOrIdentity(const LegoChar* p_varName, const LegoChar* p_prefix);
 	LegoBool FUN_100698b0(const CompoundObject& p_rois, const LegoChar* p_und2);
-	LegoROI* FUN_100699e0(const LegoChar* p_und);
+	LegoROI* FindROI(const LegoChar* p_und);
 	void FUN_10069b10();
-	void FUN_1006a3c0(LegoAnimStructMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi);
-	void FUN_1006a4f0(LegoAnimStructMap& p_map, LegoAnimNodeData* p_data, const LegoChar* p_und, LegoROI* p_roi);
+	void UpdateStructMapAndROIIndex(LegoAnimStructMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi);
+	void UpdateStructMapAndROIIndexForNode(
+		LegoAnimStructMap& p_map,
+		LegoAnimNodeData* p_data,
+		const LegoChar* p_und,
+		LegoROI* p_roi
+	);
 	void FUN_1006aa60();
 	void FUN_1006ab70();
 	LegoBool FUN_1006aba0();
@@ -121,8 +126,8 @@ protected:
 	LegoAnim* m_anim;             // 0x64
 	LegoROI** m_roiMap;           // 0x68
 	MxU32 m_roiMapSize;           // 0x6c
-	LegoROIList* m_unk0x70;       // 0x70
-	LegoROIList* m_unk0x74;       // 0x74
+	LegoROIList* m_sceneROIs;     // 0x70
+	LegoROIList* m_managedActors; // 0x74
 	Matrix4* m_unk0x78;           // 0x78
 	MxU32 m_flags;                // 0x7c
 	LegoWorld* m_currentWorld;    // 0x80
