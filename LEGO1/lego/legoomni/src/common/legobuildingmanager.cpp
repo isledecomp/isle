@@ -256,7 +256,7 @@ void LegoBuildingManager::Init()
 	m_boundariesDetermined = FALSE;
 	m_numEntries = 0;
 	m_sound = NULL;
-	m_unk0x28 = FALSE;
+	m_hideAfterAnimation = FALSE;
 }
 
 // FUNCTION: LEGO1 0x1002fa00
@@ -661,7 +661,12 @@ MxBool LegoBuildingManager::DecrementCounter(LegoBuildingInfo* p_data)
 }
 
 // FUNCTION: LEGO1 0x10030150
-void LegoBuildingManager::ScheduleAnimation(LegoEntity* p_entity, MxLong p_length, MxBool p_haveSound, MxBool p_unk0x28)
+void LegoBuildingManager::ScheduleAnimation(
+	LegoEntity* p_entity,
+	MxLong p_length,
+	MxBool p_haveSound,
+	MxBool p_hideAfterAnimation
+)
 {
 	m_world = CurrentWorld();
 
@@ -671,7 +676,7 @@ void LegoBuildingManager::ScheduleAnimation(LegoEntity* p_entity, MxLong p_lengt
 	}
 
 	if (m_numEntries == 0) {
-		m_unk0x28 = p_unk0x28;
+		m_hideAfterAnimation = p_hideAfterAnimation;
 		TickleManager()->RegisterClient(this, 50);
 	}
 
@@ -741,7 +746,7 @@ MxResult LegoBuildingManager::Tickle()
 			if (entry->m_time < time) {
 				LegoBuildingInfo* info = GetInfo(entry->m_entity);
 
-				if (info->m_counter && !m_unk0x28) {
+				if (info->m_counter && !m_hideAfterAnimation) {
 					MxS32 index = info - g_buildingInfo;
 					AdjustHeight(index);
 					MxMatrix mat = entry->m_roi->GetLocal2World();

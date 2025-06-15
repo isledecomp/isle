@@ -82,7 +82,7 @@ public:
 	MxBool DecrementCounter(LegoEntity* p_entity);
 	MxBool DecrementCounter(MxS32 p_index);
 	MxBool DecrementCounter(LegoBuildingInfo* p_data);
-	void ScheduleAnimation(LegoEntity* p_entity, MxLong p_length, MxBool p_haveSound, MxBool p_unk0x28);
+	void ScheduleAnimation(LegoEntity* p_entity, MxLong p_length, MxBool p_haveSound, MxBool p_hideAfterAnimation);
 	void ClearCounters();
 	void AdjustHeight(MxS32 p_index);
 	MxResult DetermineBoundaries();
@@ -105,7 +105,7 @@ private:
 	AnimEntry* m_entries[5];       // 0x0c
 	MxS8 m_numEntries;             // 0x20
 	LegoCacheSound* m_sound;       // 0x24
-	MxBool m_unk0x28;              // 0x28
+	MxBool m_hideAfterAnimation;   // 0x28
 	LegoWorld* m_world;            // 0x2c
 };
 
