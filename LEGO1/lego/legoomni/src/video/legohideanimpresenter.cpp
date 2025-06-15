@@ -104,10 +104,10 @@ void LegoHideAnimPresenter::FUN_1006db60(LegoTreeNode* p_node, LegoTime p_time)
 	MxBool previousB = FALSE;
 
 	if (m_roiMap != NULL) {
-		LegoROI* roi = m_roiMap[data->GetUnknown0x20()];
+		LegoROI* roi = m_roiMap[data->GetROIIndex()];
 
 		if (roi != NULL) {
-			newB = data->FUN_100a0990(p_time);
+			newB = data->GetVisibility(p_time);
 			previousB = roi->GetVisibility();
 			roi->SetVisibility(newB);
 		}
@@ -117,7 +117,7 @@ void LegoHideAnimPresenter::FUN_1006db60(LegoTreeNode* p_node, LegoTime p_time)
 		LegoPathBoundary* boundary = m_boundaryMap[data->GetUnknown0x22()];
 
 		if (boundary != NULL) {
-			newB = data->FUN_100a0990(p_time);
+			newB = data->GetVisibility(p_time);
 			previousB = boundary->GetFlag0x10();
 			boundary->SetFlag0x10(newB);
 		}

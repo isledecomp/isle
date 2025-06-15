@@ -32,7 +32,7 @@ public:
 		LegoStorage* p_storage
 	);
 	LegoROI* FindChildROI(const LegoChar* p_name, LegoROI* p_roi);
-	LegoResult FUN_100a8da0(LegoTreeNode* p_node, const Matrix4& p_matrix, LegoTime p_time, LegoROI* p_roi);
+	LegoResult Animate(LegoTreeNode* p_node, const Matrix4& p_matrix, LegoTime p_time, LegoROI* p_roi);
 	static void FUN_100a8e80(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap);
 	static void FUN_100a8fd0(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap);
 	LegoResult SetFrame(LegoAnim* p_anim, LegoTime p_time);
@@ -51,8 +51,8 @@ public:
 	void ClearMeshOffset();
 	void SetDisplayBB(int p_displayBB);
 
-	static LegoResult FUN_100a8cb0(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix);
-	static void FUN_100a81b0(const LegoChar* p_error, const LegoChar* p_name);
+	static LegoResult CreateLocalTransform(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix);
+	static void DoNothingWithError(const LegoChar* p_error, const LegoChar* p_name);
 	static void configureLegoROI(int p_roi);
 	static void SetColorOverride(ColorOverride p_colorOverride);
 	static LegoBool GetRGBAColor(const LegoChar* p_name, float& p_red, float& p_green, float& p_blue, float& p_alpha);
