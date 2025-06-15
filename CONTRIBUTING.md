@@ -15,8 +15,6 @@ To access the Ghidra repository, use the following details:
 - Address: `server.mattkc.com`
 - Port: `13100`
 
-**Please note that at the time of writing, much of the information found on the Ghidra server is severely outdated**. Generally, the source code found in this repository represents the latest "source of truth" and should be referenced whenever possible.
-
 ## General Guidelines
 
 If you feel fit to contribute, feel free to create a pull request! Someone will review and merge it (or provide feedback) as soon as possible.
