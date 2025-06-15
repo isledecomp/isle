@@ -369,7 +369,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 	case HospitalState::e_exitToFront:
 		if (m_unk0x128 == 0) {
 			m_unk0x128 = 1;
-			m_destLocation = LegoGameState::e_unk31;
+			m_destLocation = LegoGameState::e_hospitalExited;
 
 			DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
@@ -421,7 +421,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 
 						act1State->m_unk0x018 = 9;
 
-						m_destLocation = LegoGameState::e_unk31;
+						m_destLocation = LegoGameState::e_hospitalExited;
 						DeleteObjects(
 							&m_atomId,
 							HospitalScript::c_hho002cl_RunAnim,
@@ -590,7 +590,7 @@ MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 			else if (m_unk0x128 == 0) {
 				m_unk0x128 = 1;
 				m_hospitalState->m_state = HospitalState::e_exitImmediately;
-				m_destLocation = LegoGameState::e_unk31;
+				m_destLocation = LegoGameState::e_hospitalExited;
 
 				DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);

@@ -329,7 +329,7 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 			case GasStationState::e_afterAcceptingQuest:
 				m_state->m_state = GasStationState::e_beforeExitingForQuest;
 				((Act1State*) GameState()->GetState("Act1State"))->m_unk0x018 = 7;
-				m_destLocation = LegoGameState::e_unk28;
+				m_destLocation = LegoGameState::e_garageExited;
 				m_radio.Stop();
 				BackgroundAudioManager()->Stop();
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);

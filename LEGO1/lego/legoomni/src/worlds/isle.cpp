@@ -430,7 +430,7 @@ MxLong Isle::HandleControl(LegoControlManagerNotificationParam& p_param)
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case IsleScript::c_PoliDoor_Door_Ctl:
-			m_destLocation = LegoGameState::e_unk33;
+			m_destLocation = LegoGameState::e_policeExited;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case IsleScript::c_GaraDoor_LeftArrow_Ctl:
@@ -440,7 +440,7 @@ MxLong Isle::HandleControl(LegoControlManagerNotificationParam& p_param)
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case IsleScript::c_GaraDoor_Door_Ctl:
-			m_destLocation = LegoGameState::e_unk28;
+			m_destLocation = LegoGameState::e_garageExited;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		}
@@ -712,7 +712,7 @@ void Isle::Enable(MxBool p_enable)
 			if (GameState()->m_currentArea == LegoGameState::e_pizzeriaExterior) {
 				AnimationManager()->FUN_10064740(NULL);
 			}
-			else if (GameState()->m_currentArea == LegoGameState::e_unk66) {
+			else if (GameState()->m_currentArea == LegoGameState::e_vehicleExited) {
 				Mx3DPointFloat position(UserActor()->GetROI()->GetWorldPosition());
 
 				Mx3DPointFloat sub(-21.375f, 0.0f, -41.75f);
@@ -820,7 +820,7 @@ void Isle::Enable(MxBool p_enable)
 					TRUE,
 					IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 				);
-			GameState()->m_currentArea = LegoGameState::e_unk66;
+			GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 			EnableAnimations(TRUE);
 			m_jukebox->StartAction();
 			break;
@@ -863,21 +863,21 @@ void Isle::FUN_10032620()
 	VideoManager()->Get3DManager()->SetFrustrum(90.0, 0.1, 250.0);
 
 	switch (GameState()->m_currentArea) {
-	case LegoGameState::e_unk66: {
+	case LegoGameState::e_vehicleExited: {
 		MxMatrix mat(UserActor()->GetROI()->GetLocal2World());
 		LegoPathBoundary* boundary = UserActor()->GetBoundary();
 		((IslePathActor*) UserActor())->VTable0xec(mat, boundary, TRUE);
 		break;
 	}
-	case LegoGameState::e_unk4:
+	case LegoGameState::e_infocenterExited:
 	case LegoGameState::e_jetraceExterior:
-	case LegoGameState::e_unk17:
+	case LegoGameState::e_jetskibuildExited:
 	case LegoGameState::e_carraceExterior:
-	case LegoGameState::e_unk20:
+	case LegoGameState::e_racecarbuildExited:
 	case LegoGameState::e_pizzeriaExterior:
 	case LegoGameState::e_garageExterior:
 	case LegoGameState::e_hospitalExterior:
-	case LegoGameState::e_unk31:
+	case LegoGameState::e_hospitalExited:
 	case LegoGameState::e_policeExterior:
 		((IslePathActor*) UserActor())
 			->SpawnPlayer(
@@ -885,7 +885,7 @@ void Isle::FUN_10032620()
 				TRUE,
 				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 			);
-		GameState()->m_currentArea = LegoGameState::e_unk66;
+		GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 		break;
 	}
 }
@@ -955,7 +955,7 @@ MxLong Isle::HandleTransitionEnd()
 		VariableTable()->SetVariable("VISIBILITY", "Hide Gas");
 		FUN_10032d30(IsleScript::c_GaraDoor_Background_Bitmap, JukeboxScript::c_JBMusic2, "LCAMZG1,90", FALSE);
 		break;
-	case LegoGameState::e_unk28:
+	case LegoGameState::e_garageExited:
 		GameState()->SwitchArea(m_destLocation);
 		GameState()->StopArea(LegoGameState::e_previousArea);
 		m_destLocation = LegoGameState::e_undefined;
@@ -965,7 +965,7 @@ MxLong Isle::HandleTransitionEnd()
 		SetAppCursor(e_cursorArrow);
 		SetIsWorldActive(TRUE);
 		break;
-	case LegoGameState::e_unk33:
+	case LegoGameState::e_policeExited:
 		GameState()->SwitchArea(m_destLocation);
 		GameState()->StopArea(LegoGameState::e_previousArea);
 		m_destLocation = LegoGameState::e_undefined;

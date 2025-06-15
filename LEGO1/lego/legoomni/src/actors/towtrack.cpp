@@ -435,7 +435,7 @@ MxLong TowTrack::HandleClick()
 		FindROI("rcred")->SetVisibility(FALSE);
 	}
 	else {
-		SpawnPlayer(LegoGameState::e_unk28, TRUE, 0);
+		SpawnPlayer(LegoGameState::e_garageExited, TRUE, 0);
 		m_lastAction = IsleScript::c_noneIsle;
 		m_lastAnimation = IsleScript::c_noneIsle;
 		m_state->m_startTime = Timer()->GetTime();
@@ -486,14 +486,14 @@ MxLong TowTrack::HandleControl(LegoControlManagerNotificationParam& p_param)
 		switch (p_param.m_clickedObjectId) {
 		case IsleScript::c_TowTrackArms_Ctl:
 			Exit();
-			GameState()->m_currentArea = LegoGameState::e_unk66;
+			GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 			result = 1;
 			break;
 		case IsleScript::c_TowInfo_Ctl:
 			((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_infomain);
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			Exit();
-			GameState()->m_currentArea = LegoGameState::e_unk66;
+			GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 			result = 1;
 			break;
 		case IsleScript::c_TowHorn_Ctl:
