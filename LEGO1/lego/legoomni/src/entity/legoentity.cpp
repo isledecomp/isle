@@ -503,7 +503,7 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 				PlantManager()->DecrementCounter(this);
 				break;
 			case e_building:
-				BuildingManager()->FUN_10030000(this);
+				BuildingManager()->DecrementCounter(this);
 				break;
 			case e_autoROI:
 				break;
