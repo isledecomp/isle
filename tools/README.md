@@ -32,6 +32,13 @@ It is therefore advisable to search for the corresponding function in `BETA10` w
 
 Unfortunately, some code has been changed after this beta version was created. Therefore, we are not aiming for a perfect binary match of `BETA10`. In case of discrepancies, `LEGO1` (as defined above) is our "gold standard" for matching.
 
+## Pre-Alpha
+
+* `ALPHA` -> `LEGO1D.DLL`
+
+This debug build is hardly used since it has little benefit over `BETA10`.
+
+
 ### Re-compiling a beta build (**WIP**)
 
 If you want to match the code against `BETA10`, use the following `cmake` setup to create a debug build:
@@ -49,6 +56,3 @@ This is not a recipe, but rather a list of things you can try.
 * If that does not help, you can try to walk up the call tree and try to locate a function that calls the function you are interested in.
 * Assertions can also help you - most `.cpp` file names have already been matched based on `BETA10`, so you can search for the name of your `.cpp` file and check all the assertions in that file. While that does not find all functions in a given source file, it usually finds the more complex ones.
 * _If you have found any other strategies, please add them here._
-
-## Others (**WIP**)
-* `ALPHA` (only used twice)
