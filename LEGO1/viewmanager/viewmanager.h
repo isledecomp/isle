@@ -24,20 +24,20 @@ public:
 	void Remove(ViewROI* p_roi);
 	void RemoveAll(ViewROI* p_roi);
 	unsigned int IsBoundingBoxInFrustum(const BoundingBox& p_bounding_box);
-	void UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_und);
+	void UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel);
 	void RemoveROIDetailFromScene(ViewROI* p_roi);
 	void SetPOVSource(const OrientableROI* point_of_view);
 	float ProjectedSize(const BoundingSphere& p_bounding_sphere);
 	ViewROI* Pick(Tgl::View* p_view, unsigned long x, unsigned long y);
 	void SetResolution(int width, int height);
 	void SetFrustrum(float fov, float front, float back);
-	inline void ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_und);
+	inline void ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lodLevel);
 	void Update(float p_previousRenderTime, float);
 	inline int CalculateFrustumTransformations();
 	void UpdateViewTransformations();
 
-	inline static int CalculateLODLevel(float p_und1, float p_und2, ViewROI* from);
-	inline static int IsROIVisibleAtLOD(ViewROI* p_roi);
+	inline static int CalculateLODLevel(float p_maximumScale, float p_initalScale, ViewROI* from);
+	inline static int GetFirstLODIndex(ViewROI* p_roi);
 
 	// FUNCTION: BETA10 0x100576b0
 	const CompoundObject& GetROIs() { return rois; }

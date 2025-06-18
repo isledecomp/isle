@@ -16,11 +16,16 @@
 // SIZE 0xe4
 class ViewROI : public OrientableROI {
 public:
+	enum {
+		c_lodLevelUnset = -1,
+		c_lodLevelInvisible = -2,
+	};
+
 	ViewROI(Tgl::Renderer* pRenderer, ViewLODList* lodList)
 	{
 		SetLODList(lodList);
 		geometry = pRenderer->CreateGroup();
-		m_unk0xe0 = -1;
+		m_lodLevel = c_lodLevelUnset;
 	}
 
 	// FUNCTION: LEGO1 0x100a9e20
@@ -56,8 +61,8 @@ public:
 	virtual Tgl::Group* GetGeometry();                                           // vtable+0x30
 	virtual const Tgl::Group* GetGeometry() const;                               // vtable+0x34
 
-	int GetUnknown0xe0() { return m_unk0xe0; }
-	void SetUnknown0xe0(int p_unk0xe0) { m_unk0xe0 = p_unk0xe0; }
+	int GetLodLevel() { return m_lodLevel; }
+	void SetLodLevel(int p_lodLevel) { m_lodLevel = p_lodLevel; }
 
 	static unsigned char SetLightSupport(unsigned char p_lightSupport);
 
@@ -65,7 +70,7 @@ protected:
 	void UpdateWorldDataWithTransformAndChildren(const Matrix4& parent2world) override; // vtable+0x28
 
 	Tgl::Group* geometry; // 0xdc
-	int m_unk0xe0;        // 0xe0
+	int m_lodLevel;       // 0xe0
 };
 
 // SYNTHETIC: LEGO1 0x100aa250

@@ -394,7 +394,7 @@ MxBool LegoPlantManager::SwitchColor(LegoEntity* p_entity)
 
 	ViewLODList* lodList = GetViewLODListManager()->Lookup(g_plantLodNames[info->m_variant][info->m_color]);
 
-	if (roi->GetUnknown0xe0() >= 0) {
+	if (roi->GetLodLevel() >= 0) {
 		VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveROIDetailFromScene(roi);
 	}
 
@@ -423,7 +423,7 @@ MxBool LegoPlantManager::SwitchVariant(LegoEntity* p_entity)
 
 	ViewLODList* lodList = GetViewLODListManager()->Lookup(g_plantLodNames[info->m_variant][info->m_color]);
 
-	if (roi->GetUnknown0xe0() >= 0) {
+	if (roi->GetLodLevel() >= 0) {
 		VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveROIDetailFromScene(roi);
 	}
 

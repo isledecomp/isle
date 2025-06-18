@@ -701,7 +701,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 								Mx3DPointFloat roiPosition(roi->GetWorldPosition());
 								roiPosition -= viewPosition;
 
-								if (roiPosition.LenSquared() < 2000.0 || roi->GetUnknown0xe0() > 0) {
+								if (roiPosition.LenSquared() < 2000.0 || roi->GetLodLevel() > 0) {
 									entity->ClickAnimation();
 								}
 							}
