@@ -39,10 +39,13 @@ public:
 
 	// FUNCTION: BETA10 0x1001fac0
 	const Vector3& Center() const { return center; }
+
 	// FUNCTION: BETA10 0x100d55a0
 	Vector3& Center() { return center; }
+
 	// FUNCTION: BETA10 0x1001fd30
 	const float& Radius() const { return radius; }
+
 	// FUNCTION: BETA10 0x1001fae0
 	float& Radius() { return radius; }
 
