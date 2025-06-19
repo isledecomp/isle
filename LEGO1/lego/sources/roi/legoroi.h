@@ -17,6 +17,7 @@ class LegoTreeNode;
 struct LegoAnimActorEntry;
 
 // VTABLE: LEGO1 0x100dbe38
+// VTABLE: BETA10 0x101c3898
 // SIZE 0x108
 class LegoROI : public ViewROI {
 public:
@@ -52,7 +53,7 @@ public:
 	void SetDisplayBB(int p_displayBB);
 
 	static LegoResult FUN_100a8cb0(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix);
-	static void FUN_100a81b0(const LegoChar* p_error, const LegoChar* p_name);
+	static void FUN_100a81b0(const LegoChar* p_error, ...);
 	static void configureLegoROI(int p_roi);
 	static void SetColorOverride(ColorOverride p_colorOverride);
 	static LegoBool GetRGBAColor(const LegoChar* p_name, float& p_red, float& p_green, float& p_blue, float& p_alpha);
@@ -81,6 +82,7 @@ public:
 	void SetBoundingBox(const BoundingBox& p_box) { m_bounding_box = p_box; }
 
 	// SYNTHETIC: LEGO1 0x100a82b0
+	// SYNTHETIC: BETA10 0x1018c490
 	// LegoROI::`scalar deleting destructor'
 
 private:

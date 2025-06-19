@@ -160,6 +160,7 @@ void OrientableROI::UpdateWorldVelocity()
 }
 
 // FUNCTION: LEGO1 0x100a5a60
+// FUNCTION: BETA10 0x10167d7b
 void CalcWorldBoundingVolumes(
 	const BoundingSphere& modelling_sphere,
 	const Matrix4& local2world,
