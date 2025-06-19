@@ -13,6 +13,7 @@
 */
 
 // VTABLE: LEGO1 0x100dbe70
+// VTABLE: BETA10 0x101c3908
 // SIZE 0xe4
 class ViewROI : public OrientableROI {
 public:
@@ -68,6 +69,8 @@ public:
 
 protected:
 	void UpdateWorldDataWithTransformAndChildren(const Matrix4& parent2world) override; // vtable+0x28
+
+	void SetGeometryTransformation();
 
 	Tgl::Group* geometry; // 0xdc
 	int m_lodLevel;       // 0xe0

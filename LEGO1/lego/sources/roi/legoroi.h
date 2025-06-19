@@ -93,6 +93,7 @@ private:
 };
 
 // VTABLE: LEGO1 0x100dbea8
+// VTABLE: BETA10 0x101c38d0
 // SIZE 0x10c
 class TimeROI : public LegoROI {
 public:

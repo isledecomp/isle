@@ -23,6 +23,7 @@ public:
 	const BoundingSphere& GetWorldBoundingSphere() const override; // vtable+0x10
 
 	// FUNCTION: LEGO1 0x100a5db0
+	// FUNCTION: BETA10 0x101687d0
 	virtual void WrappedUpdateWorldData() { UpdateWorldData(); } // vtable+0x14
 
 	virtual void UpdateWorldBoundingVolumes() = 0;                                    // vtable+0x18
