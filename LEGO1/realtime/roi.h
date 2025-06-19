@@ -49,6 +49,9 @@ public:
 	// SYNTHETIC: BETA10 0x1001fb90
 	// BoundingSphere::operator=
 
+	// SYNTHETIC: BETA10 0x1001fc50
+	// BoundingSphere::BoundingSphere
+
 private:
 	Mx3DPointFloat center; // 0x00
 	float radius;          // 0x14
@@ -146,6 +149,7 @@ protected:
 // list<ROI *,allocator<ROI *> >::~list<ROI *,allocator<ROI *> >
 
 // SYNTHETIC: LEGO1 0x100a5d50
+// SYNTHETIC: BETA10 0x101686a0
 // ROI::~ROI
 
 #endif // ROI_H

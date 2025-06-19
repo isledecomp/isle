@@ -82,6 +82,7 @@ LegoROI::LegoROI(Tgl::Renderer* p_renderer) : ViewROI(p_renderer, NULL)
 }
 
 // FUNCTION: LEGO1 0x100a82d0
+// FUNCTION: BETA10 0x10189994
 LegoROI::LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList) : ViewROI(p_renderer, p_lodList)
 {
 	m_parentROI = NULL;
@@ -741,6 +742,7 @@ LegoU32 LegoROI::FUN_100a9410(
 }
 
 // FUNCTION: LEGO1 0x100a9a50
+// FUNCTION: BETA10 0x1018bb6b
 TimeROI::TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_time) : LegoROI(p_renderer, p_lodList)
 {
 	m_time = p_time;

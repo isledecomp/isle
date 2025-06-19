@@ -82,6 +82,7 @@ protected:
 // OrientableROI::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100aa2f0
+// SYNTHETIC: BETA10 0x10168600
 // OrientableROI::~OrientableROI
 
 #endif // ORIENTABLEROI_H

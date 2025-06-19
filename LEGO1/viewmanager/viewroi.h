@@ -22,6 +22,7 @@ public:
 		c_lodLevelInvisible = -2,
 	};
 
+	// FUNCTION: BETA10 0x1018c5e0
 	ViewROI(Tgl::Renderer* pRenderer, ViewLODList* lodList)
 	{
 		SetLODList(lodList);
@@ -30,6 +31,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100a9e20
+	// FUNCTION: BETA10 0x1018c680
 	~ViewROI() override
 	{
 		// SetLODList() will decrease refCount of LODList
@@ -37,6 +39,7 @@ public:
 		delete geometry;
 	}
 
+	// FUNCTION: BETA10 0x1007b540
 	void SetLODList(ViewLODList* lodList)
 	{
 		// ??? inherently type unsafe - kind of... because, now, ROI
