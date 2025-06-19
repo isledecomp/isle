@@ -99,11 +99,14 @@ class TimeROI : public LegoROI {
 public:
 	TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_time);
 
-	// SYNTHETIC: LEGO1 0x100a9ad0
-	// TimeROI::`scalar deleting destructor'
-
 	void FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time);
 
+	// SYNTHETIC: LEGO1 0x100a9ad0
+	// SYNTHETIC: BETA10 0x1018c540
+	// `scalar deleting destructor'
+
+	// SYNTHETIC: BETA10 0x1018c580
+	// ~TimeROI
 private:
 	LegoTime m_time; // 0x108
 };
