@@ -69,7 +69,7 @@ void Pizzeria::CreateState()
 // FUNCTION: BETA10 0x100efc91
 MxLong Pizzeria::HandleClick()
 {
-	if (CanExit() && m_pizzaMissionState->m_unk0x0c == 0) {
+	if (CanExit() && m_pizzaMissionState->m_state == PizzaMissionState::e_none) {
 		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
 			if (!UserActor()->IsA("SkateBoard")) {
 				((IslePathActor*) UserActor())->Exit();
@@ -79,7 +79,7 @@ MxLong Pizzeria::HandleClick()
 		AnimationManager()->FUN_10061010(FALSE);
 
 		Pizza* pizza = (Pizza*) CurrentWorld()->Find(*g_isleScript, IsleScript::c_Pizza_Actor);
-		pizza->FUN_10038220((IsleScript::Script) m_pizzeriaState->NextAction());
+		pizza->Start((IsleScript::Script) m_pizzeriaState->NextAction());
 	}
 
 	return 1;
