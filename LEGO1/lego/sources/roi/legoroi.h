@@ -107,6 +107,7 @@ public:
 
 	// SYNTHETIC: BETA10 0x1018c580
 	// ~TimeROI
+
 private:
 	LegoTime m_time; // 0x108
 };
