@@ -162,7 +162,7 @@ void Jetski::ActivateSceneActions()
 	PlayMusic(JukeboxScript::c_JetskiRace_Music);
 
 	Act1State* act1state = (Act1State*) GameState()->GetState("Act1State");
-	if (!act1state->m_unk0x018) {
+	if (!act1state->m_state) {
 		if (act1state->m_unk0x022) {
 			PlayCamAnim(this, FALSE, 68, TRUE);
 		}

@@ -214,7 +214,7 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 			Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
 			assert(act1State);
 			if (m_state->m_unk0x08 == 0) {
-				act1State->m_unk0x018 = 4;
+				act1State->m_state = Act1State::e_helicopter;
 				m_state->m_unk0x08 = 1;
 				m_world->RemoveActor(this);
 				InvokeAction(Extra::ActionType::e_start, script, IsleScript::c_HelicopterTakeOff_Anim, NULL);
@@ -318,7 +318,7 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 		if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 			Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
 			assert(act1State);
-			act1State->m_unk0x018 = 4;
+			act1State->m_state = Act1State::e_helicopter;
 			SpawnPlayer(
 				LegoGameState::e_unk42,
 				TRUE,
@@ -359,7 +359,7 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 		if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 			Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
 			assert(act1State);
-			act1State->m_unk0x018 = 0;
+			act1State->m_state = Act1State::e_none;
 			SpawnPlayer(
 				LegoGameState::e_unk41,
 				TRUE,

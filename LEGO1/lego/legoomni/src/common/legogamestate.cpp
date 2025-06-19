@@ -952,7 +952,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 		LoadIsle();
 
-		if (state->GetUnknown18() == 7) {
+		if (state->GetState() == Act1State::e_transitionToTowtrack) {
 			VideoManager()->Get3DManager()->SetFrustrum(90, 0.1f, 250.0f);
 		}
 		else {
