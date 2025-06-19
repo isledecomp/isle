@@ -103,10 +103,10 @@ public:
 
 	// SYNTHETIC: LEGO1 0x100a9ad0
 	// SYNTHETIC: BETA10 0x1018c540
-	// `scalar deleting destructor'
+	// TimeROI::`scalar deleting destructor'
 
 	// SYNTHETIC: BETA10 0x1018c580
-	// ~TimeROI
+	// TimeROI::~TimeROI
 
 private:
 	LegoTime m_time; // 0x108
