@@ -125,7 +125,7 @@ MxLong DuneBuggy::HandleControl(LegoControlManagerNotificationParam& p_param)
 		switch (p_param.m_clickedObjectId) {
 		case IsleScript::c_DuneCarArms_Ctl:
 			Exit();
-			GameState()->m_currentArea = LegoGameState::e_unk66;
+			GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 			result = 1;
 			break;
 		case IsleScript::c_DuneCarInfo_Ctl:

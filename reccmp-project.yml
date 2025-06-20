@@ -38,3 +38,8 @@ targets:
         - 0x100fb080
         # memset etc.
         - 0x100f9570
+  ALPHA:
+    filename: ALPHA.DLL
+    source-root: LEGO1
+    hash:
+      sha256: dc7e5ed8ec9d96851126a40c4d23755f1783a8df61def44c667dfaa992ac509e

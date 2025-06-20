@@ -67,7 +67,7 @@ public:
 		e_isle,
 		e_infomain,
 		e_infodoor,
-		e_unk4,
+		e_infocenterExited,
 		e_elevbott,
 		e_elevride,
 		e_elevride2,
@@ -80,10 +80,10 @@ public:
 		e_jetrace,
 		e_jetrace2,
 		e_jetraceExterior,
-		e_unk17,
+		e_jetskibuildExited,
 		e_carrace,
 		e_carraceExterior,
-		e_unk20,
+		e_racecarbuildExited,
 		e_unk21,
 		e_pizzeriaExterior,
 		e_unk23,
@@ -91,12 +91,12 @@ public:
 		e_garageExterior,
 		e_garage,
 		e_garadoor,
-		e_unk28,
+		e_garageExited,
 		e_hospitalExterior,
 		e_hospital,
-		e_unk31,
+		e_hospitalExited,
 		e_policeExterior,
-		e_unk33,
+		e_policeExited,
 		e_police,
 		e_polidoor,
 		e_copterbuild,
@@ -129,7 +129,7 @@ public:
 		e_towtrack,
 		e_jetski,
 
-		e_unk66 = 66
+		e_vehicleExited = 66
 	};
 
 	// SIZE 0x0e

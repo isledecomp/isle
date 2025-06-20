@@ -221,7 +221,7 @@ MxLong Ambulance::HandleEndAction(MxEndActionNotificationParam& p_param)
 		else if (objectId == IsleScript::c_hps117bd_RunAnim) {
 			CurrentWorld()->PlaceActor(UserActor());
 			HandleClick();
-			SpawnPlayer(LegoGameState::e_unk33, TRUE, 0);
+			SpawnPlayer(LegoGameState::e_policeExited, TRUE, 0);
 			m_unk0x172 = 0;
 			TickleManager()->RegisterClient(this, 40000);
 
@@ -388,7 +388,7 @@ MxLong Ambulance::HandleClick()
 	ControlManager()->Register(this);
 
 	if (m_state->m_unk0x08 == 1) {
-		SpawnPlayer(LegoGameState::e_unk31, TRUE, 0);
+		SpawnPlayer(LegoGameState::e_hospitalExited, TRUE, 0);
 		m_state->m_startTime = Timer()->GetTime();
 		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_pns018rd_RunAnim, NULL);
 	}
@@ -441,14 +441,14 @@ MxLong Ambulance::HandleControl(LegoControlManagerNotificationParam& p_param)
 		switch (p_param.m_clickedObjectId) {
 		case IsleScript::c_AmbulanceArms_Ctl:
 			Exit();
-			GameState()->m_currentArea = LegoGameState::e_unk66;
+			GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 			result = 1;
 			break;
 		case IsleScript::c_AmbulanceInfo_Ctl:
 			((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_infomain);
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			Exit();
-			GameState()->m_currentArea = LegoGameState::e_unk66;
+			GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 			result = 1;
 			break;
 		case IsleScript::c_AmbulanceHorn_Ctl:

@@ -70,7 +70,9 @@ MxResult Act3Ammo::Remove()
 // FUNCTION: BETA10 0x1001d8b3
 MxResult Act3Ammo::Create(Act3* p_world, MxU32 p_isPizza, MxS32 p_index)
 {
+#ifdef BETA10
 	assert(m_ammoFlag);
+#endif
 	char name[12];
 
 	if (p_isPizza) {

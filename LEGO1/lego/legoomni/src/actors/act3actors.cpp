@@ -607,8 +607,8 @@ void Act3Brickster::Animate(float p_time)
 		assert(m_shootAnim && m_pInfo);
 
 		if (m_unk0x50 < p_time) {
-			while (m_pInfo->m_unk0x16) {
-				PlantManager()->FUN_10026c50(m_pInfo->m_entity);
+			while (m_pInfo->m_counter) {
+				PlantManager()->DecrementCounter(m_pInfo->m_entity);
 			}
 
 			assert(SoundManager()->GetCacheSoundManager());
@@ -653,8 +653,8 @@ void Act3Brickster::Animate(float p_time)
 			assert(SoundManager()->GetCacheSoundManager());
 			SoundManager()->GetCacheSoundManager()->Play("thpt", NULL, FALSE);
 
-			while (m_bInfo->m_unk0x11 > 0 || m_bInfo->m_unk0x11 == -1) {
-				if (!BuildingManager()->FUN_10030110(m_bInfo)) {
+			while (m_bInfo->m_counter > 0 || m_bInfo->m_counter == -1) {
+				if (!BuildingManager()->DecrementCounter(m_bInfo)) {
 					break;
 				}
 			}
@@ -865,7 +865,7 @@ MxResult Act3Brickster::FUN_100417c0()
 		float local124;
 
 		for (MxS32 i = 0; i < length; i++) {
-			if (bInfo[i].m_unk0x11 < 0 && bInfo[i].m_boundary != NULL && bInfo[i].m_entity != NULL && i != 0 &&
+			if (bInfo[i].m_counter < 0 && bInfo[i].m_boundary != NULL && bInfo[i].m_entity != NULL && i != 0 &&
 				(local120 == -1 || i != 15)) {
 				Mx3DPointFloat local188(bInfo[i].m_x, bInfo[i].m_y, bInfo[i].m_z);
 

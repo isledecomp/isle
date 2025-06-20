@@ -868,17 +868,17 @@ void LegoGameState::SwitchArea(Area p_area)
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_infodoorScript, InfodoorScript::c__StartUp, NULL);
 		break;
-	case e_unk4:
+	case e_infocenterExited:
 	case e_jetrace2:
 	case e_jetraceExterior:
-	case e_unk17:
+	case e_jetskibuildExited:
 	case e_carraceExterior:
-	case e_unk20:
+	case e_racecarbuildExited:
 	case e_unk21:
 	case e_pizzeriaExterior:
 	case e_garageExterior:
 	case e_hospitalExterior:
-	case e_unk31:
+	case e_hospitalExited:
 	case e_policeExterior:
 	case e_bike:
 	case e_dunecar:
@@ -886,7 +886,7 @@ void LegoGameState::SwitchArea(Area p_area)
 	case e_copter:
 	case e_skateboard:
 	case e_jetski:
-	case e_unk66:
+	case e_vehicleExited:
 		LoadIsle();
 		break;
 	case e_elevbott:
@@ -948,7 +948,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		VideoManager()->Get3DManager()->SetFrustrum(90, 0.1f, 250.0f);
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, IsleScript::c_GaraDoor, NULL);
 		break;
-	case e_unk28: {
+	case e_garageExited: {
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 		LoadIsle();
 
@@ -973,7 +973,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_hospitalScript, HospitalScript::c__StartUp, NULL);
 		break;
-	case e_unk33:
+	case e_policeExited:
 		LoadIsle();
 		SetCameraControllerFromIsle();
 		UserActor()->ResetWorldTransform(TRUE);

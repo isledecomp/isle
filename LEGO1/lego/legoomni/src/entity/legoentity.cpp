@@ -500,10 +500,10 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 			case e_unk1:
 				break;
 			case e_plant:
-				PlantManager()->FUN_10026c50(this);
+				PlantManager()->DecrementCounter(this);
 				break;
 			case e_building:
-				BuildingManager()->FUN_10030000(this);
+				BuildingManager()->DecrementCounter(this);
 				break;
 			case e_autoROI:
 				break;

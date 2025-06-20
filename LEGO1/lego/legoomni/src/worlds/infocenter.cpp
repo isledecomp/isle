@@ -1385,8 +1385,8 @@ void Infocenter::Reset()
 		break;
 	}
 
-	PlantManager()->FUN_10027120();
-	BuildingManager()->FUN_10030590();
+	PlantManager()->ClearCounters();
+	BuildingManager()->ClearCounters();
 	AnimationManager()->Reset(FALSE);
 	CharacterManager()->ReleaseAllActors();
 	GameState()->SetCurrentAct(LegoGameState::e_act1);

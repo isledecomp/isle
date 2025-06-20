@@ -588,7 +588,7 @@ MxLong Act3::Notify(MxParam& p_param)
 					m_unk0x421e = 0;
 
 					while (--length >= 0) {
-						if (info[length].m_unk0x11 < 0 && info[length].m_boundary != NULL &&
+						if (info[length].m_counter < 0 && info[length].m_boundary != NULL &&
 							info[length].m_entity != NULL) {
 							m_unk0x421e++;
 						}
@@ -664,8 +664,8 @@ MxLong Act3::HandleTransitionEnd()
 // FUNCTION: LEGO1 0x10073270
 void Act3::ReadyWorld()
 {
-	PlantManager()->FUN_10027200();
-	BuildingManager()->FUN_10030800();
+	PlantManager()->SetInitialCounters();
+	BuildingManager()->SetInitialCounters();
 	AnimationManager()->FUN_1005f6d0(FALSE);
 	VideoManager()->Get3DManager()->SetFrustrum(90.0f, 0.1f, 125.0f);
 
