@@ -1441,9 +1441,11 @@ void LegoGameState::History::WriteScoreHistory()
 	MxU8 scores[5][5];
 
 	InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
+
 	if (!state->m_letters[0]) {
 		return;
 	}
+
 	JetskiRaceState* jetskiRaceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
 	CarRaceState* carRaceState = (CarRaceState*) GameState()->GetState("CarRaceState");
 	TowTrackMissionState* towTrackMissionState = (TowTrackMissionState*) GameState()->GetState("TowTrackMissionState");
@@ -1481,22 +1483,19 @@ void LegoGameState::History::WriteScoreHistory()
 		}
 		// LINE: BETA10 0x1008713f
 		if (i < m_count) {
-			// short sVar2 = m_count >= 20 ? m_indices[19] : m_count++;
-
-			MxS32 sVar2;
 			if (m_count < 20) {
-				sVar2 = m_count++;
+				unk0x2c = m_count++;
 			}
 			else {
-				// LINE: BETA10 0x10087171
-				sVar2 = m_indices[19];
+				unk0x2c = m_indices[19];
 			}
-			unk0x2c = sVar2;
-			// MxS32 count = m_count;
-			for (MxS32 j = m_count - 1; i < j; j--) {
+
+			MxS32 max = m_count - 1;
+			for (MxS32 j = max; i < j; j--) {
 				m_indices[j - 1] = m_indices[j - 2];
 			}
-			m_indices[i] = sVar2;
+
+			m_indices[i] = unk0x2c;
 			p_scorehist = (LegoGameState::ScoreItem*) m_scores[unk0x2c].m_scores;
 		}
 		else if (i < 20) {
@@ -1506,13 +1505,8 @@ void LegoGameState::History::WriteScoreHistory()
 	}
 	else if (p_scorehist->m_totalScore != totalScore) {
 		assert(totalScore > p_scorehist->m_totalScore);
-		// TODO: This decomp is likely still very wrong, first draft only.
-		// In particular, something is very confusing with a potential char->short typecast?
-		// But the types in Serialize do make sense.
-		//
-		// Potential explanation: There is another short[5][5] array in the parent type
 
-		for (MxS32 i = unk0x2c; (0 < i && (m_indices[i + -1] < m_indices[i])); i = i + -1) {
+		for (MxS32 i = unk0x2c; (0 < i && (m_indices[i - 1] < m_indices[i])); i = i - 1) {
 			MxU8 tmp = m_indices[i - 1];
 			m_indices[i - 1] = m_indices[i];
 			m_indices[i] = tmp;
@@ -1520,9 +1514,8 @@ void LegoGameState::History::WriteScoreHistory()
 	}
 	if (p_scorehist) {
 		p_scorehist->m_totalScore = totalScore;
-		memcpy(p_scorehist->m_scores[0], scores[0], 0x19);
+		memcpy(p_scorehist->m_scores[0], scores[0], sizeof(scores));
 
-		// TODO: or the other way around
 		p_scorehist->m_name = GameState()->m_players[0];
 		p_scorehist->m_unk0x2a = GameState()->m_unk0x24;
 	}
