@@ -157,8 +157,8 @@ void LegoLocomotionAnimPresenter::FUN_1006d680(LegoAnimActor* p_actor, MxFloat p
 
 	variableTable->SetVariable(key, "");
 
-	if (m_unk0x70 != NULL) {
-		delete m_unk0x70;
-		m_unk0x70 = NULL;
+	if (m_sceneROIs != NULL) {
+		delete m_sceneROIs;
+		m_sceneROIs = NULL;
 	}
 }
