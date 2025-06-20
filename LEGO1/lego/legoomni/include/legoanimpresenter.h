@@ -105,7 +105,7 @@ protected:
 	void FUN_100695c0();
 	LegoChar* GetVariableOrIdentity(const LegoChar* p_varName, const LegoChar* p_prefix);
 	LegoBool FUN_100698b0(const CompoundObject& p_rois, const LegoChar* p_und2);
-	LegoROI* FindROI(const LegoChar* p_und);
+	LegoROI* FindROI(const LegoChar* p_name);
 	void FUN_10069b10();
 	void UpdateStructMapAndROIIndex(LegoAnimStructMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi);
 	void UpdateStructMapAndROIIndexForNode(
