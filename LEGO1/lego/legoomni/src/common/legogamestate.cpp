@@ -1441,78 +1441,137 @@ void LegoGameState::History::WriteScoreHistory()
 	MxU8 scores[5][5];
 
 	InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
-	if (state->m_letters[0]) {
-		JetskiRaceState* jetskiRaceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
-		CarRaceState* carRaceState = (CarRaceState*) GameState()->GetState("CarRaceState");
-		TowTrackMissionState* towTrackMissionState =
-			(TowTrackMissionState*) GameState()->GetState("TowTrackMissionState");
-		PizzaMissionState* pizzaMissionState = (PizzaMissionState*) GameState()->GetState("PizzaMissionState");
-		AmbulanceMissionState* ambulanceMissionState =
-			(AmbulanceMissionState*) GameState()->GetState("AmbulanceMissionState");
+	if (!state->m_letters[0]) {
+		return;
+	}
+	JetskiRaceState* jetskiRaceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
+	CarRaceState* carRaceState = (CarRaceState*) GameState()->GetState("CarRaceState");
+	TowTrackMissionState* towTrackMissionState = (TowTrackMissionState*) GameState()->GetState("TowTrackMissionState");
+	PizzaMissionState* pizzaMissionState = (PizzaMissionState*) GameState()->GetState("PizzaMissionState");
+	AmbulanceMissionState* ambulanceMissionState =
+		(AmbulanceMissionState*) GameState()->GetState("AmbulanceMissionState");
 
-		for (MxS32 actor = 1; actor <= 5; actor++) {
-			scores[0][actor - 1] = carRaceState ? carRaceState->GetState(actor)->GetHighScore() : 0;
-			totalScore += scores[0][actor - 1];
+	for (MxS32 actor = 1; actor <= 5; actor++) {
+		scores[0][actor - 1] = carRaceState ? carRaceState->GetState(actor)->GetHighScore() : 0;
+		totalScore += scores[0][actor - 1];
 
-			scores[1][actor - 1] = jetskiRaceState ? jetskiRaceState->GetState(actor)->GetHighScore() : 0;
-			totalScore += scores[1][actor - 1];
+		scores[1][actor - 1] = jetskiRaceState ? jetskiRaceState->GetState(actor)->GetHighScore() : 0;
+		totalScore += scores[1][actor - 1];
 
-			scores[2][actor - 1] = pizzaMissionState ? pizzaMissionState->GetHighScore(actor) : 0;
-			totalScore += scores[2][actor - 1];
+		scores[2][actor - 1] = pizzaMissionState ? pizzaMissionState->GetHighScore(actor) : 0;
+		totalScore += scores[2][actor - 1];
 
-			scores[3][actor - 1] = towTrackMissionState ? towTrackMissionState->GetHighScore(actor) : 0;
-			totalScore += scores[3][actor - 1];
+		scores[3][actor - 1] = towTrackMissionState ? towTrackMissionState->GetHighScore(actor) : 0;
+		totalScore += scores[3][actor - 1];
 
-			scores[4][actor - 1] = ambulanceMissionState ? ambulanceMissionState->GetHighScore(actor) : 0;
-			totalScore += scores[4][actor - 1];
-		}
+		scores[4][actor - 1] = ambulanceMissionState ? ambulanceMissionState->GetHighScore(actor) : 0;
+		totalScore += scores[4][actor - 1];
+	}
 
-		MxS32 unk0x2c;
-		ScoreItem* p_scorehist = FUN_1003cc90(&GameState()->m_players[0], GameState()->m_unk0x24, unk0x2c);
+	MxS32 unk0x2c;
+	ScoreItem* p_scorehist = FUN_1003cc90(&GameState()->m_players[0], GameState()->m_unk0x24, unk0x2c);
 
-		if (p_scorehist != NULL) {
-			p_scorehist->m_totalScore = totalScore;
-			memcpy(p_scorehist->m_scores, scores, sizeof(p_scorehist->m_scores));
-		}
-		else {
-			if (m_count < (MxS16) sizeOfArray(m_scores)) {
-				m_scores[m_count].m_totalScore = totalScore;
-				memcpy(m_scores[m_count].m_scores, scores, sizeof(m_scores[m_count].m_scores));
-				m_scores[m_count].m_name = GameState()->m_players[0];
-				m_scores[m_count].m_unk0x2a = GameState()->m_unk0x24;
-				m_count++;
-			}
-			else if (m_scores[19].m_totalScore <= totalScore) {
-				m_scores[19].m_totalScore = totalScore;
-				memcpy(m_scores[19].m_scores, scores, sizeof(m_scores[19].m_scores));
-				m_scores[19].m_name = GameState()->m_players[0];
-				m_scores[19].m_unk0x2a = GameState()->m_unk0x24;
+	if (!p_scorehist) {
+		MxS32 i;
+		// LINE: BETA10 0x100870ee
+		for (i = 0; i < m_count; i++) {
+			if (totalScore > m_scores[m_indices[i]].m_totalScore) {
+				break;
 			}
 		}
+		// LINE: BETA10 0x1008713f
+		if (i < m_count) {
+			// short sVar2 = m_count >= 20 ? m_indices[19] : m_count++;
 
-		MxU8 tmpScores[5][5];
-		Username tmpPlayer;
-		MxS16 tmpUnk0x2a;
-
-		// TODO: Match bubble sort loops
-		for (MxS32 i = m_count - 1; i > 0; i--) {
-			for (MxS32 j = 1; j <= i; j++) {
-				if (m_scores[j - 1].m_totalScore < m_scores[j].m_totalScore) {
-					memcpy(tmpScores, m_scores[j - 1].m_scores, sizeof(tmpScores));
-					tmpPlayer = m_scores[j - 1].m_name;
-					tmpUnk0x2a = m_scores[j - 1].m_unk0x2a;
-
-					memcpy(m_scores[j - 1].m_scores, m_scores[j].m_scores, sizeof(m_scores[j - 1].m_scores));
-					m_scores[j - 1].m_name = m_scores[j].m_name;
-					m_scores[j - 1].m_unk0x2a = m_scores[j].m_unk0x2a;
-
-					memcpy(m_scores[j].m_scores, tmpScores, sizeof(m_scores[j].m_scores));
-					m_scores[j].m_name = tmpPlayer;
-					m_scores[j].m_unk0x2a = tmpUnk0x2a;
-				}
+			MxS32 sVar2;
+			if (m_count < 20) {
+				sVar2 = m_count++;
 			}
+			else {
+				// LINE: BETA10 0x10087171
+				sVar2 = m_indices[19];
+			}
+			unk0x2c = sVar2;
+			// MxS32 count = m_count;
+			for (MxS32 j = m_count - 1; i < j; j--) {
+				m_indices[j - 1] = m_indices[j - 2];
+			}
+			m_indices[i] = sVar2;
+			p_scorehist = (LegoGameState::ScoreItem*) m_scores[unk0x2c].m_scores;
+		}
+		else if (i < 20) {
+			m_indices[m_count] = m_count;
+			p_scorehist = &m_scores[m_count++];
 		}
 	}
+	else if (p_scorehist->m_totalScore != totalScore) {
+		assert(totalScore > p_scorehist->m_totalScore);
+		// TODO: This decomp is likely still very wrong, first draft only.
+		// In particular, something is very confusing with a potential char->short typecast?
+		// But the types in Serialize do make sense.
+		//
+		// Potential explanation: There is another short[5][5] array in the parent type
+
+		for (MxS32 i = unk0x2c; (0 < i && (m_indices[i + -1] < m_indices[i])); i = i + -1) {
+			MxU8 tmp = m_indices[i - 1];
+			m_indices[i - 1] = m_indices[i];
+			m_indices[i] = tmp;
+		}
+	}
+	if (p_scorehist) {
+		p_scorehist->m_totalScore = totalScore;
+		memcpy(p_scorehist->m_scores[0], scores[0], 0x19);
+
+		// TODO: or the other way around
+		p_scorehist->m_name = GameState()->m_players[0];
+		p_scorehist->m_unk0x2a = GameState()->m_unk0x24;
+	}
+
+	// 	if (p_scorehist != NULL) {
+	// 		p_scorehist->m_totalScore = totalScore;
+	// 		memcpy(p_scorehist->m_scores, scores, sizeof(p_scorehist->m_scores));
+	// 	}
+	// 	else {
+	// 		if (m_count < (MxS16) sizeOfArray(m_scores)) {
+	// 			assert(totalScore > p_scorehist->m_totalScore);
+
+	// 			m_scores[m_count].m_totalScore = totalScore;
+	// 			memcpy(m_scores[m_count].m_scores, scores, sizeof(m_scores[m_count].m_scores));
+	// 			m_scores[m_count].m_name = GameState()->m_players[0];
+	// 			m_scores[m_count].m_unk0x2a = GameState()->m_unk0x24;
+	// 			m_count++;
+	// 		}
+	// 		else if (m_scores[19].m_totalScore <= totalScore) {
+	// 			m_scores[19].m_totalScore = totalScore;
+	// 			memcpy(m_scores[19].m_scores, scores, sizeof(m_scores[19].m_scores));
+	// 			m_scores[19].m_name = GameState()->m_players[0];
+	// 			m_scores[19].m_unk0x2a = GameState()->m_unk0x24;
+	// 		}
+	// 	}
+
+	// 	MxU8 tmpScores[5][5];
+	// 	Username tmpPlayer;
+	// 	MxS16 tmpUnk0x2a;
+
+	// 	// TODO: Match bubble sort loops
+	// 	for (MxS32 i = m_count - 1; i > 0; i--) {
+	// 		for (MxS32 j = 1; j <= i; j++) {
+	// 			if (m_scores[j - 1].m_totalScore < m_scores[j].m_totalScore) {
+	// 				memcpy(tmpScores, m_scores[j - 1].m_scores, sizeof(tmpScores));
+	// 				tmpPlayer = m_scores[j - 1].m_name;
+	// 				tmpUnk0x2a = m_scores[j - 1].m_unk0x2a;
+
+	// 				memcpy(m_scores[j - 1].m_scores, m_scores[j].m_scores, sizeof(m_scores[j - 1].m_scores));
+	// 				m_scores[j - 1].m_name = m_scores[j].m_name;
+	// 				m_scores[j - 1].m_unk0x2a = m_scores[j].m_unk0x2a;
+
+	// 				memcpy(m_scores[j].m_scores, tmpScores, sizeof(m_scores[j].m_scores));
+	// 				m_scores[j].m_name = tmpPlayer;
+	// 				m_scores[j].m_unk0x2a = tmpUnk0x2a;
+	// 			}
+	// 		}
+	// 	}
+	// }
 }
 
 // FUNCTION: LEGO1 0x1003cc90
