@@ -168,13 +168,11 @@ public:
 		ScoreItem* GetScore(MxS32 p_index) { return p_index >= m_count ? NULL : &m_scores[p_index]; }
 
 		MxS16 m_count; // 0x00
-// TODO: Enable ifdefs when done
-// #ifdef BETA10
-		MxS16 m_indices[20];
-// #endif
-
-		ScoreItem m_scores[20]; // 0x02
-		MxS16 m_unk0x372;       // 0x372
+#ifdef BETA10
+		MxS16 m_indices[20]; // 0x02
+#endif
+		ScoreItem m_scores[20]; // 0x02 (0x22 for BETA10)
+		MxS16 m_unk0x372;       // 0x372 (0x392 for BETA10)
 	};
 
 	LegoGameState();

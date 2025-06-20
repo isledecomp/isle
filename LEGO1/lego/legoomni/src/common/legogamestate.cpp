@@ -1473,6 +1473,8 @@ void LegoGameState::History::WriteScoreHistory()
 	MxS32 unk0x2c;
 	ScoreItem* p_scorehist = FUN_1003cc90(&GameState()->m_players[0], GameState()->m_unk0x24, unk0x2c);
 
+#ifdef BETA10
+
 	if (!p_scorehist) {
 		MxS32 i;
 		// LINE: BETA10 0x100870ee
@@ -1520,51 +1522,54 @@ void LegoGameState::History::WriteScoreHistory()
 		p_scorehist->m_unk0x2a = GameState()->m_unk0x24;
 	}
 
-	// 	if (p_scorehist != NULL) {
-	// 		p_scorehist->m_totalScore = totalScore;
-	// 		memcpy(p_scorehist->m_scores, scores, sizeof(p_scorehist->m_scores));
-	// 	}
-	// 	else {
-	// 		if (m_count < (MxS16) sizeOfArray(m_scores)) {
-	// 			assert(totalScore > p_scorehist->m_totalScore);
+#else
+	// TODO: Improve based on BETA10 if possible
 
-	// 			m_scores[m_count].m_totalScore = totalScore;
-	// 			memcpy(m_scores[m_count].m_scores, scores, sizeof(m_scores[m_count].m_scores));
-	// 			m_scores[m_count].m_name = GameState()->m_players[0];
-	// 			m_scores[m_count].m_unk0x2a = GameState()->m_unk0x24;
-	// 			m_count++;
-	// 		}
-	// 		else if (m_scores[19].m_totalScore <= totalScore) {
-	// 			m_scores[19].m_totalScore = totalScore;
-	// 			memcpy(m_scores[19].m_scores, scores, sizeof(m_scores[19].m_scores));
-	// 			m_scores[19].m_name = GameState()->m_players[0];
-	// 			m_scores[19].m_unk0x2a = GameState()->m_unk0x24;
-	// 		}
-	// 	}
+	if (p_scorehist != NULL) {
+		p_scorehist->m_totalScore = totalScore;
+		memcpy(p_scorehist->m_scores, scores, sizeof(p_scorehist->m_scores));
+	}
+	else {
+		if (m_count < (MxS16) sizeOfArray(m_scores)) {
+			assert(totalScore > p_scorehist->m_totalScore);
 
-	// 	MxU8 tmpScores[5][5];
-	// 	Username tmpPlayer;
-	// 	MxS16 tmpUnk0x2a;
+			m_scores[m_count].m_totalScore = totalScore;
+			memcpy(m_scores[m_count].m_scores, scores, sizeof(m_scores[m_count].m_scores));
+			m_scores[m_count].m_name = GameState()->m_players[0];
+			m_scores[m_count].m_unk0x2a = GameState()->m_unk0x24;
+			m_count++;
+		}
+		else if (m_scores[19].m_totalScore <= totalScore) {
+			m_scores[19].m_totalScore = totalScore;
+			memcpy(m_scores[19].m_scores, scores, sizeof(m_scores[19].m_scores));
+			m_scores[19].m_name = GameState()->m_players[0];
+			m_scores[19].m_unk0x2a = GameState()->m_unk0x24;
+		}
+	}
 
-	// 	// TODO: Match bubble sort loops
-	// 	for (MxS32 i = m_count - 1; i > 0; i--) {
-	// 		for (MxS32 j = 1; j <= i; j++) {
-	// 			if (m_scores[j - 1].m_totalScore < m_scores[j].m_totalScore) {
-	// 				memcpy(tmpScores, m_scores[j - 1].m_scores, sizeof(tmpScores));
-	// 				tmpPlayer = m_scores[j - 1].m_name;
-	// 				tmpUnk0x2a = m_scores[j - 1].m_unk0x2a;
+	MxU8 tmpScores[5][5];
+	Username tmpPlayer;
+	MxS16 tmpUnk0x2a;
 
-	// 				memcpy(m_scores[j - 1].m_scores, m_scores[j].m_scores, sizeof(m_scores[j - 1].m_scores));
-	// 				m_scores[j - 1].m_name = m_scores[j].m_name;
-	// 				m_scores[j - 1].m_unk0x2a = m_scores[j].m_unk0x2a;
+	// TODO: Match bubble sort loops
+	for (MxS32 i = m_count - 1; i > 0; i--) {
+		for (MxS32 j = 1; j <= i; j++) {
+			if (m_scores[j - 1].m_totalScore < m_scores[j].m_totalScore) {
+				memcpy(tmpScores, m_scores[j - 1].m_scores, sizeof(tmpScores));
+				tmpPlayer = m_scores[j - 1].m_name;
+				tmpUnk0x2a = m_scores[j - 1].m_unk0x2a;
 
-	// 				memcpy(m_scores[j].m_scores, tmpScores, sizeof(m_scores[j].m_scores));
-	// 				m_scores[j].m_name = tmpPlayer;
-	// 				m_scores[j].m_unk0x2a = tmpUnk0x2a;
-	// 			}
-	// 		}
-	// 	}
-	// }
+				memcpy(m_scores[j - 1].m_scores, m_scores[j].m_scores, sizeof(m_scores[j - 1].m_scores));
+				m_scores[j - 1].m_name = m_scores[j].m_name;
+				m_scores[j - 1].m_unk0x2a = m_scores[j].m_unk0x2a;
+
+				memcpy(m_scores[j].m_scores, tmpScores, sizeof(m_scores[j].m_scores));
+				m_scores[j].m_name = tmpPlayer;
+				m_scores[j].m_unk0x2a = tmpUnk0x2a;
+			}
+		}
+	}
+#endif
 }
 
 // FUNCTION: LEGO1 0x1003cc90
