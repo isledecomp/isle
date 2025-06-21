@@ -19,9 +19,12 @@ public:
 
 	// FUNCTION: BETA10 0x1004a7a0
 	const Vector3& Min() const { return min; }
+
 	Vector3& Min() { return min; }
+
 	// FUNCTION: BETA10 0x1004a7c0
 	const Vector3& Max() const { return max; }
+
 	Vector3& Max() { return max; }
 
 private:
