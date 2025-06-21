@@ -23,6 +23,7 @@ public:
 	const BoundingSphere& GetWorldBoundingSphere() const override; // vtable+0x10
 
 	// FUNCTION: LEGO1 0x100a5db0
+	// FUNCTION: BETA10 0x101687d0
 	virtual void WrappedUpdateWorldData() { UpdateWorldData(); } // vtable+0x14
 
 	virtual void UpdateWorldBoundingVolumes() = 0;                                    // vtable+0x18
@@ -81,6 +82,7 @@ protected:
 // OrientableROI::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100aa2f0
+// SYNTHETIC: BETA10 0x10168600
 // OrientableROI::~OrientableROI
 
 #endif // ORIENTABLEROI_H

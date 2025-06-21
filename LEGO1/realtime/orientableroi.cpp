@@ -108,6 +108,7 @@ void OrientableROI::SetLocal2World(const Matrix4& p_local2world)
 }
 
 // FUNCTION: LEGO1 0x100a5910
+// FUNCTION: BETA10 0x10167bac
 void OrientableROI::UpdateWorldData()
 {
 	UpdateWorldBoundingVolumes();
@@ -115,6 +116,7 @@ void OrientableROI::UpdateWorldData()
 }
 
 // FUNCTION: LEGO1 0x100a5930
+// FUNCTION: BETA10 0x10167bd8
 void OrientableROI::SetLocal2WorldWithWorldDataUpdate(const Matrix4& p_transform)
 {
 	m_local2world = p_transform;
@@ -123,6 +125,7 @@ void OrientableROI::SetLocal2WorldWithWorldDataUpdate(const Matrix4& p_transform
 }
 
 // FUNCTION: LEGO1 0x100a5960
+// FUNCTION: BETA10 0x10167c19
 void OrientableROI::UpdateWorldDataWithTransform(const Matrix4& p_transform)
 {
 	MxMatrix l_matrix(m_local2world);
@@ -132,6 +135,7 @@ void OrientableROI::UpdateWorldDataWithTransform(const Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x100a59b0
+// FUNCTION: BETA10 0x10167c6d
 void OrientableROI::UpdateWorldDataWithTransformAndChildren(const Matrix4& p_transform)
 {
 	MxMatrix l_matrix(m_local2world);
@@ -155,11 +159,13 @@ void OrientableROI::SetWorldVelocity(const Vector3& p_world_velocity)
 }
 
 // FUNCTION: LEGO1 0x100a5a50
+// FUNCTION: BETA10 0x10167d65
 void OrientableROI::UpdateWorldVelocity()
 {
 }
 
 // FUNCTION: LEGO1 0x100a5a60
+// FUNCTION: BETA10 0x10167d7b
 void CalcWorldBoundingVolumes(
 	const BoundingSphere& modelling_sphere,
 	const Matrix4& local2world,
@@ -186,18 +192,21 @@ void CalcWorldBoundingVolumes(
 }
 
 // FUNCTION: LEGO1 0x100a5d80
+// FUNCTION: BETA10 0x10168760
 const float* OrientableROI::GetWorldVelocity() const
 {
 	return m_world_velocity.GetData();
 }
 
 // FUNCTION: LEGO1 0x100a5d90
+// FUNCTION: BETA10 0x10168790
 const BoundingBox& OrientableROI::GetWorldBoundingBox() const
 {
 	return m_world_bounding_box;
 }
 
 // FUNCTION: LEGO1 0x100a5da0
+// FUNCTION: BETA10 0x101687b0
 const BoundingSphere& OrientableROI::GetWorldBoundingSphere() const
 {
 	return m_world_bounding_sphere;

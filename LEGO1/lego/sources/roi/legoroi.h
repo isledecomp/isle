@@ -17,6 +17,7 @@ class LegoTreeNode;
 struct LegoAnimActorEntry;
 
 // VTABLE: LEGO1 0x100dbe38
+// VTABLE: BETA10 0x101c3898
 // SIZE 0x108
 class LegoROI : public ViewROI {
 public:
@@ -57,7 +58,7 @@ public:
 	void SetDisplayBB(int p_displayBB);
 
 	static LegoResult CreateLocalTransform(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix);
-	static void FUN_100a81b0(const LegoChar* p_error, const LegoChar* p_name);
+	static void FUN_100a81b0(const LegoChar* p_error, ...);
 	static void configureLegoROI(int p_roi);
 	static void SetColorOverride(ColorOverride p_colorOverride);
 	static LegoBool GetRGBAColor(const LegoChar* p_name, float& p_red, float& p_green, float& p_blue, float& p_alpha);
@@ -86,6 +87,7 @@ public:
 	void SetBoundingBox(const BoundingBox& p_box) { m_bounding_box = p_box; }
 
 	// SYNTHETIC: LEGO1 0x100a82b0
+	// SYNTHETIC: BETA10 0x1018c490
 	// LegoROI::`scalar deleting destructor'
 
 private:
@@ -96,15 +98,20 @@ private:
 };
 
 // VTABLE: LEGO1 0x100dbea8
+// VTABLE: BETA10 0x101c38d0
 // SIZE 0x10c
 class TimeROI : public LegoROI {
 public:
 	TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_time);
 
+	void FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time);
+
 	// SYNTHETIC: LEGO1 0x100a9ad0
+	// SYNTHETIC: BETA10 0x1018c540
 	// TimeROI::`scalar deleting destructor'
 
-	void FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time);
+	// SYNTHETIC: BETA10 0x1018c580
+	// TimeROI::~TimeROI
 
 private:
 	LegoTime m_time; // 0x108

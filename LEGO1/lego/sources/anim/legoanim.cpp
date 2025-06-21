@@ -725,6 +725,7 @@ void LegoAnimNodeData::SetName(LegoChar* p_name)
 }
 
 // FUNCTION: LEGO1 0x100a03c0
+// FUNCTION: BETA10 0x1017f254
 LegoResult LegoAnimNodeData::CreateLocalTransform(LegoFloat p_time, Matrix4& p_matrix)
 {
 	LegoU32 index;
