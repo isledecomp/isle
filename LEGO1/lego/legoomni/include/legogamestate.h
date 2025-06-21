@@ -151,6 +151,15 @@ public:
 		MxU8 m_scores[5][5]; // 0x02
 		Username m_name;     // 0x1c
 		MxS16 m_unk0x2a;     // 0x2a
+
+		ScoreItem& operator=(const ScoreItem& p_other)
+		{
+			m_totalScore = p_other.m_totalScore;
+			memcpy(m_scores, p_other.m_scores, sizeof(m_scores));
+			m_name = p_other.m_name;
+			m_unk0x2a = p_other.m_unk0x2a;
+			return *this;
+		}
 	};
 
 	// SIZE 0x372
