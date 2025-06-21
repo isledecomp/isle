@@ -150,7 +150,7 @@ public:
 		MxS16 m_totalScore;  // 0x00
 		MxU8 m_scores[5][5]; // 0x02
 		Username m_name;     // 0x1c
-		MxS16 m_unk0x2a;     // 0x2a
+		MxS16 m_playerId;    // 0x2a
 
 		ScoreItem& operator=(const ScoreItem& p_other);
 	};
@@ -174,7 +174,7 @@ public:
 		MxS16 m_indices[20]; // 0x02
 #endif
 		ScoreItem m_scores[20]; // 0x02 (0x22 for BETA10)
-		MxS16 m_nextPlayerId;       // 0x372 (0x392 for BETA10)
+		MxS16 m_nextPlayerId;   // 0x372 (0x392 for BETA10)
 	};
 
 	LegoGameState();
@@ -249,7 +249,7 @@ private:
 
 public:
 	// Probably m_currentPlayerId
-	MxS16 m_unk0x24;                      // 0x24
+	MxS16 m_currentPlayerId;              // 0x24
 	MxS16 m_playerCount;                  // 0x26
 	Username m_players[9];                // 0x28
 	History m_history;                    // 0xa6

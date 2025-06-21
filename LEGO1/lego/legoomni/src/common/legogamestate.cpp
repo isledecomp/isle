@@ -149,7 +149,7 @@ inline LegoGameState::ScoreItem& LegoGameState::ScoreItem::operator=(const Score
 	m_totalScore = p_other.m_totalScore;
 	memcpy(m_scores, p_other.m_scores, sizeof(m_scores));
 	m_name = p_other.m_name;
-	m_unk0x2a = p_other.m_unk0x2a;
+	m_playerId = p_other.m_playerId;
 	return *this;
 }
 
@@ -289,7 +289,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	}
 
 	storage.WriteS32(0x1000c);
-	storage.WriteS16(m_unk0x24);
+	storage.WriteS16(m_currentPlayerId);
 	storage.WriteU16(m_currentAct);
 	storage.WriteU8(m_actorId);
 
@@ -384,7 +384,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 		goto done;
 	}
 
-	storage.ReadS16(m_unk0x24);
+	storage.ReadS16(m_currentPlayerId);
 	storage.ReadS16(actArea);
 
 	SetCurrentAct((Act) actArea);
@@ -627,8 +627,8 @@ MxResult LegoGameState::AddPlayer(Username& p_player)
 
 	m_playerCount++;
 	m_players[0].Set(p_player);
-	m_unk0x24 = m_history.m_nextPlayerId;
-	m_history.m_nextPlayerId = m_unk0x24 + 1;
+	m_currentPlayerId = m_history.m_nextPlayerId;
+	m_history.m_nextPlayerId = m_currentPlayerId + 1;
 	m_history.WriteScoreHistory();
 	SetCurrentAct(e_act1);
 
@@ -1419,7 +1419,7 @@ MxResult LegoGameState::ScoreItem::Serialize(LegoStorage* p_storage)
 		}
 
 		m_name.Serialize(p_storage);
-		p_storage->ReadS16(m_unk0x2a);
+		p_storage->ReadS16(m_playerId);
 	}
 	else if (p_storage->IsWriteMode()) {
 		p_storage->WriteS16(m_totalScore);
@@ -1431,7 +1431,7 @@ MxResult LegoGameState::ScoreItem::Serialize(LegoStorage* p_storage)
 		}
 
 		m_name.Serialize(p_storage);
-		p_storage->WriteS16(m_unk0x2a);
+		p_storage->WriteS16(m_playerId);
 	}
 
 	return SUCCESS;
@@ -1489,7 +1489,7 @@ void LegoGameState::History::WriteScoreHistory()
 
 	MxS32 playerScoreHistoryIndex;
 	ScoreItem* p_scorehist =
-		FindPlayerInScoreHistory(GameState()->m_players, GameState()->m_unk0x24, playerScoreHistoryIndex);
+		FindPlayerInScoreHistory(GameState()->m_players, GameState()->m_currentPlayerId, playerScoreHistoryIndex);
 
 #ifdef BETA10
 	if (!p_scorehist) {
@@ -1535,7 +1535,7 @@ void LegoGameState::History::WriteScoreHistory()
 		p_scorehist->m_totalScore = totalScore;
 		memcpy(p_scorehist->m_scores[0], scores[0], sizeof(scores));
 		p_scorehist->m_name = GameState()->m_players[0];
-		p_scorehist->m_unk0x2a = GameState()->m_unk0x24;
+		p_scorehist->m_playerId = GameState()->m_currentPlayerId;
 	}
 #else
 	if (p_scorehist != NULL) {
@@ -1549,14 +1549,14 @@ void LegoGameState::History::WriteScoreHistory()
 			m_scores[m_count].m_totalScore = totalScore;
 			memcpy(m_scores[m_count].m_scores, scores, sizeof(m_scores[m_count].m_scores));
 			m_scores[m_count].m_name = GameState()->m_players[0];
-			m_scores[m_count].m_unk0x2a = GameState()->m_unk0x24;
+			m_scores[m_count].m_playerId = GameState()->m_currentPlayerId;
 			m_count++;
 		}
 		else if (m_scores[19].m_totalScore <= totalScore) {
 			m_scores[19].m_totalScore = totalScore;
 			memcpy(m_scores[19].m_scores, scores, sizeof(m_scores[19].m_scores));
 			m_scores[19].m_name = GameState()->m_players[0];
-			m_scores[19].m_unk0x2a = GameState()->m_unk0x24;
+			m_scores[19].m_playerId = GameState()->m_currentPlayerId;
 		}
 	}
 
@@ -1584,7 +1584,7 @@ LegoGameState::ScoreItem* LegoGameState::History::FindPlayerInScoreHistory(
 {
 	MxS32 i = 0;
 	for (; i < m_count; i++) {
-		if (!memcmp(p_player, &m_scores[i].m_name, sizeof(*p_player)) && m_scores[i].m_unk0x2a == p_unk0x24) {
+		if (!memcmp(p_player, &m_scores[i].m_name, sizeof(*p_player)) && m_scores[i].m_playerId == p_unk0x24) {
 			break;
 		}
 	}
