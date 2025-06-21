@@ -28,7 +28,7 @@ public:
 	};
 
 	enum {
-		c_altBit1 = 0x01
+		c_disabled = 0x01
 	};
 
 	LegoEntity() { Init(); }
@@ -83,7 +83,7 @@ public:
 	Mx3DPointFloat GetWorldUp();
 	Mx3DPointFloat GetWorldPosition();
 
-	MxBool GetUnknown0x10IsSet(MxU8 p_flag) { return m_unk0x10 & p_flag; }
+	MxBool IsInteraction(MxU8 p_flag) { return m_interaction & p_flag; }
 	MxBool GetFlagsIsSet(MxU8 p_flag) { return m_flags & p_flag; }
 	MxU8 GetFlags() { return m_flags; }
 
@@ -101,14 +101,14 @@ public:
 	void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
 	void SetFlag(MxU8 p_flag) { m_flags |= p_flag; }
 	void ClearFlag(MxU8 p_flag) { m_flags &= ~p_flag; }
-	void SetUnknown0x10Flag(MxU8 p_flag) { m_unk0x10 |= p_flag; }
-	void ClearUnknown0x10Flag(MxU8 p_flag) { m_unk0x10 &= ~p_flag; }
+	void SetInteractionFlag(MxU8 p_flag) { m_interaction |= p_flag; }
+	void ClearInteractionFlag(MxU8 p_flag) { m_interaction &= ~p_flag; }
 
 protected:
 	void Init();
 	void SetWorld();
 
-	MxU8 m_unk0x10;                  // 0x10
+	MxU8 m_interaction;              // 0x10
 	MxU8 m_flags;                    // 0x11
 	Mx3DPointFloat m_worldLocation;  // 0x14
 	Mx3DPointFloat m_worldDirection; // 0x28

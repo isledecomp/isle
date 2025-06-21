@@ -29,7 +29,7 @@ void LegoEntity::Init()
 	m_roi = NULL;
 	m_cameraFlag = FALSE;
 	m_siFile = NULL;
-	m_unk0x10 = 0;
+	m_interaction = 0;
 	m_flags = 0;
 	m_actionType = Extra::ActionType::e_unknown;
 	m_targetEntityId = -1;
@@ -265,7 +265,7 @@ void LegoEntity::ParseAction(char* p_extra)
 // FUNCTION: BETA10 0x1007ee87
 void LegoEntity::ClickSound(MxBool p_und)
 {
-	if (!GetUnknown0x10IsSet(c_altBit1)) {
+	if (!IsInteraction(c_disabled)) {
 		MxU32 objectId = 0;
 		const char* name = m_roi->GetName();
 
@@ -297,7 +297,7 @@ void LegoEntity::ClickSound(MxBool p_und)
 // FUNCTION: BETA10 0x1007f062
 void LegoEntity::ClickAnimation()
 {
-	if (!GetUnknown0x10IsSet(c_altBit1)) {
+	if (!IsInteraction(c_disabled)) {
 		MxU32 objectId = 0;
 		MxDSAction action;
 		const char* name = m_roi->GetName();
@@ -329,7 +329,7 @@ void LegoEntity::ClickAnimation()
 			action.SetObjectId(objectId);
 			action.AppendExtra(strlen(extra) + 1, extra);
 			LegoOmni::GetInstance()->GetAnimationManager()->StartEntityAction(action, this);
-			m_unk0x10 |= c_altBit1;
+			m_interaction |= c_disabled;
 		}
 	}
 }
