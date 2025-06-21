@@ -337,7 +337,7 @@ void LegoRaceCar::KickCamera(float p_param)
 			transformationMatrix.SetIdentity();
 
 			// Possible bug in the original code: The first argument is not initialized
-			a->GetAnimTreePtr()->GetCamAnim()->FUN_1009f490(deltaTime, transformationMatrix);
+			a->GetAnimTreePtr()->GetCamAnim()->CalculateCameraTransform(deltaTime, transformationMatrix);
 
 			if (r->GetCameraController()) {
 				r->GetCameraController()->TransformPointOfView(transformationMatrix, 0);

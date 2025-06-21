@@ -10,20 +10,20 @@ DECOMP_SIZE_ASSERT(LegoTranslationKey, 0x14)
 DECOMP_SIZE_ASSERT(LegoRotationKey, 0x18)
 DECOMP_SIZE_ASSERT(LegoScaleKey, 0x14)
 DECOMP_SIZE_ASSERT(LegoMorphKey, 0x0c)
-DECOMP_SIZE_ASSERT(LegoUnknownKey, 0x0c)
+DECOMP_SIZE_ASSERT(LegoRotationZKey, 0x0c)
 DECOMP_SIZE_ASSERT(LegoAnimNodeData, 0x34)
 DECOMP_SIZE_ASSERT(LegoAnimActorEntry, 0x08)
 DECOMP_SIZE_ASSERT(LegoAnimScene, 0x24)
 DECOMP_SIZE_ASSERT(LegoAnim, 0x18)
 
 // FUNCTION: LEGO1 0x1009f000
-LegoUnknownKey::LegoUnknownKey()
+LegoRotationZKey::LegoRotationZKey()
 {
 	m_z = 0.0f;
 }
 
 // FUNCTION: LEGO1 0x1009f020
-LegoResult LegoUnknownKey::Read(LegoStorage* p_storage)
+LegoResult LegoRotationZKey::Read(LegoStorage* p_storage)
 {
 	LegoResult result;
 
@@ -40,7 +40,7 @@ LegoResult LegoUnknownKey::Read(LegoStorage* p_storage)
 
 // FUNCTION: LEGO1 0x1009f060
 // FUNCTION: BETA10 0x1018133f
-LegoResult LegoUnknownKey::Write(LegoStorage* p_storage)
+LegoResult LegoRotationZKey::Write(LegoStorage* p_storage)
 {
 	LegoResult result;
 
@@ -58,33 +58,33 @@ LegoResult LegoUnknownKey::Write(LegoStorage* p_storage)
 // FUNCTION: LEGO1 0x1009f0a0
 LegoAnimScene::LegoAnimScene()
 {
-	m_unk0x00 = 0;
-	m_unk0x04 = NULL;
-	m_unk0x08 = 0;
-	m_unk0x0c = NULL;
-	m_unk0x10 = 0;
-	m_unk0x14 = NULL;
-	m_unk0x18 = 0;
-	m_unk0x1c = 0;
-	m_unk0x20 = 0;
+	m_translationKeysCount = 0;
+	m_translationKeys = NULL;
+	m_targetKeysCount = 0;
+	m_targetKeys = NULL;
+	m_rotationKeysCount = 0;
+	m_rotationKeys = NULL;
+	m_targetIndex = 0;
+	m_translationIndex = 0;
+	m_rotationIndex = 0;
 }
 
 // FUNCTION: LEGO1 0x1009f0d0
 LegoAnimScene::~LegoAnimScene()
 {
-	if (m_unk0x04 != NULL) {
-		delete[] m_unk0x04;
-		m_unk0x04 = NULL;
+	if (m_translationKeys != NULL) {
+		delete[] m_translationKeys;
+		m_translationKeys = NULL;
 	}
 
-	if (m_unk0x0c != NULL) {
-		delete[] m_unk0x0c;
-		m_unk0x0c = NULL;
+	if (m_targetKeys != NULL) {
+		delete[] m_targetKeys;
+		m_targetKeys = NULL;
 	}
 
-	if (m_unk0x14 != NULL) {
-		delete[] m_unk0x14;
-		m_unk0x14 = NULL;
+	if (m_rotationKeys != NULL) {
+		delete[] m_rotationKeys;
+		m_rotationKeys = NULL;
 	}
 }
 
@@ -95,34 +95,34 @@ LegoResult LegoAnimScene::Write(LegoStorage* p_storage)
 	LegoResult result;
 	LegoS32 i;
 
-	if ((result = p_storage->Write(&m_unk0x00, sizeof(LegoU16))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_translationKeysCount, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
-	if (m_unk0x00 != 0) {
-		for (i = 0; i < m_unk0x00; i++) {
-			if ((result = m_unk0x04[i].Write(p_storage)) != SUCCESS) {
+	if (m_translationKeysCount != 0) {
+		for (i = 0; i < m_translationKeysCount; i++) {
+			if ((result = m_translationKeys[i].Write(p_storage)) != SUCCESS) {
 				return result;
 			}
 		}
 	}
 
-	if ((result = p_storage->Write(&m_unk0x08, sizeof(LegoU16))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_targetKeysCount, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
-	if (m_unk0x08 != 0) {
-		for (i = 0; i < m_unk0x08; i++) {
-			if ((result = m_unk0x0c[i].Write(p_storage)) != SUCCESS) {
+	if (m_targetKeysCount != 0) {
+		for (i = 0; i < m_targetKeysCount; i++) {
+			if ((result = m_targetKeys[i].Write(p_storage)) != SUCCESS) {
 				return result;
 			}
 		}
 	}
 
-	if ((result = p_storage->Write(&m_unk0x10, sizeof(LegoU16))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_rotationKeysCount, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
-	if (m_unk0x10 != 0) {
-		for (i = 0; i < m_unk0x10; i++) {
-			if ((result = m_unk0x14[i].Write(p_storage)) != SUCCESS) {
+	if (m_rotationKeysCount != 0) {
+		for (i = 0; i < m_rotationKeysCount; i++) {
+			if ((result = m_rotationKeys[i].Write(p_storage)) != SUCCESS) {
 				return result;
 			}
 		}
@@ -137,37 +137,37 @@ LegoResult LegoAnimScene::Read(LegoStorage* p_storage)
 	LegoResult result;
 	LegoS32 i;
 
-	if ((result = p_storage->Read(&m_unk0x00, sizeof(LegoU16))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_translationKeysCount, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
-	if (m_unk0x00 != 0) {
-		m_unk0x04 = new LegoTranslationKey[m_unk0x00];
-		for (i = 0; i < m_unk0x00; i++) {
-			if ((result = m_unk0x04[i].Read(p_storage)) != SUCCESS) {
+	if (m_translationKeysCount != 0) {
+		m_translationKeys = new LegoTranslationKey[m_translationKeysCount];
+		for (i = 0; i < m_translationKeysCount; i++) {
+			if ((result = m_translationKeys[i].Read(p_storage)) != SUCCESS) {
 				goto done;
 			}
 		}
 	}
 
-	if ((result = p_storage->Read(&m_unk0x08, sizeof(LegoU16))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_targetKeysCount, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
-	if (m_unk0x08 != 0) {
-		m_unk0x0c = new LegoTranslationKey[m_unk0x08];
-		for (i = 0; i < m_unk0x08; i++) {
-			if ((result = m_unk0x0c[i].Read(p_storage)) != SUCCESS) {
+	if (m_targetKeysCount != 0) {
+		m_targetKeys = new LegoTranslationKey[m_targetKeysCount];
+		for (i = 0; i < m_targetKeysCount; i++) {
+			if ((result = m_targetKeys[i].Read(p_storage)) != SUCCESS) {
 				goto done;
 			}
 		}
 	}
 
-	if ((result = p_storage->Read(&m_unk0x10, sizeof(LegoU16))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_rotationKeysCount, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
-	if (m_unk0x10 != 0) {
-		m_unk0x14 = new LegoUnknownKey[m_unk0x10];
-		for (i = 0; i < m_unk0x10; i++) {
-			if ((result = m_unk0x14[i].Read(p_storage)) != SUCCESS) {
+	if (m_rotationKeysCount != 0) {
+		m_rotationKeys = new LegoRotationZKey[m_rotationKeysCount];
+		for (i = 0; i < m_rotationKeysCount; i++) {
+			if ((result = m_rotationKeys[i].Read(p_storage)) != SUCCESS) {
 				goto done;
 			}
 		}
@@ -176,22 +176,22 @@ LegoResult LegoAnimScene::Read(LegoStorage* p_storage)
 	return SUCCESS;
 
 done:
-	if (m_unk0x04 != NULL) {
-		delete[] m_unk0x04;
-		m_unk0x00 = 0;
-		m_unk0x04 = NULL;
+	if (m_translationKeys != NULL) {
+		delete[] m_translationKeys;
+		m_translationKeysCount = 0;
+		m_translationKeys = NULL;
 	}
 
-	if (m_unk0x0c != NULL) {
-		delete[] m_unk0x0c;
-		m_unk0x08 = 0;
-		m_unk0x0c = NULL;
+	if (m_targetKeys != NULL) {
+		delete[] m_targetKeys;
+		m_targetKeysCount = 0;
+		m_targetKeys = NULL;
 	}
 
-	if (m_unk0x14 != NULL) {
-		delete[] m_unk0x14;
-		m_unk0x10 = 0;
-		m_unk0x14 = NULL;
+	if (m_rotationKeys != NULL) {
+		delete[] m_rotationKeys;
+		m_rotationKeysCount = 0;
+		m_rotationKeys = NULL;
 	}
 
 	return result;
@@ -199,82 +199,95 @@ done:
 
 // FUNCTION: LEGO1 0x1009f490
 // FUNCTION: BETA10 0x10181a83
-LegoResult LegoAnimScene::FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix)
+LegoResult LegoAnimScene::CalculateCameraTransform(LegoFloat p_time, Matrix4& p_matrix)
 {
-	MxMatrix localb0;
-	MxMatrix local4c;
+	MxMatrix tempMatrix;
+	MxMatrix original;
 
-	Vector3 local5c(localb0[0]);
-	Vector3 local68(localb0[1]);
-	Vector3 local54(localb0[2]);
-	Vector3 localb8(localb0[3]);
+	Vector3 column0(tempMatrix[0]);
+	Vector3 column1(tempMatrix[1]);
+	Vector3 column2(tempMatrix[2]);
+	Vector3 column3(tempMatrix[3]);
 
-	Mx3DPointFloat localcc;
+	Mx3DPointFloat tempTranslation;
 
-	localb0.SetIdentity();
+	tempMatrix.SetIdentity();
 
-	LegoU32 local60;
-	if (m_unk0x08 != 0) {
-		local60 = GetUnknown0x18();
-		LegoAnimNodeData::GetTranslation(m_unk0x08, m_unk0x0c, p_time, localb0, local60);
-		SetUnknown0x18(local60);
-		localcc = localb8;
-		localb8.Clear();
+	LegoU32 translationIndex;
+	if (m_targetKeysCount != 0) {
+		translationIndex = GetTargetIndex();
+		LegoAnimNodeData::GetTranslation(m_targetKeysCount, m_targetKeys, p_time, tempMatrix, translationIndex);
+		SetTargetIndex(translationIndex);
+		tempTranslation = column3;
+		column3.Clear();
 	}
 
-	if (m_unk0x00 != 0) {
-		local60 = GetUnknown0x1c();
-		LegoAnimNodeData::GetTranslation(m_unk0x00, m_unk0x04, p_time, localb0, local60);
-		SetUnknown0x1c(local60);
+	if (m_translationKeysCount != 0) {
+		translationIndex = GetTranslationIndex();
+		LegoAnimNodeData::GetTranslation(
+			m_translationKeysCount,
+			m_translationKeys,
+			p_time,
+			tempMatrix,
+			translationIndex
+		);
+		SetTranslationIndex(translationIndex);
 	}
 
-	local54 = localcc;
-	local54 -= localb8;
+	column2 = tempTranslation;
+	column2 -= column3;
 
-	if (local54.Unitize() == 0) {
-		local5c.EqualsCross(local68, local54);
+	if (column2.Unitize() == 0) {
+		column0.EqualsCross(column1, column2);
 
-		if (local5c.Unitize() == 0) {
-			local68.EqualsCross(local54, local5c);
+		if (column0.Unitize() == 0) {
+			column1.EqualsCross(column2, column0);
 
-			localcc = p_matrix[3];
-			localcc += localb0[3];
+			tempTranslation = p_matrix[3];
+			tempTranslation += tempMatrix[3];
 
-			p_matrix[3][0] = p_matrix[3][1] = p_matrix[3][2] = localb0[3][0] = localb0[3][1] = localb0[3][2] = 0;
+			p_matrix[3][0] = p_matrix[3][1] = p_matrix[3][2] = tempMatrix[3][0] = tempMatrix[3][1] = tempMatrix[3][2] =
+				0;
 
-			if (m_unk0x10 != 0) {
-				LegoU32 locald0 = -1;
-				LegoU32 locald8;
-				locald0 = GetUnknown0x20();
+			if (m_rotationKeysCount != 0) {
+				LegoU32 old_index = -1;
+				LegoU32 i;
+				old_index = GetRotationIndex();
 
-				LegoU32 localdc =
-					LegoAnimNodeData::FindKeys(p_time, m_unk0x10, m_unk0x14, sizeof(*m_unk0x14), locald8, locald0);
+				LegoU32 count = LegoAnimNodeData::FindKeys(
+					p_time,
+					m_rotationKeysCount,
+					m_rotationKeys,
+					sizeof(*m_rotationKeys),
+					i,
+					old_index
+				);
 
-				SetUnknown0x20(locald0);
+				SetRotationIndex(old_index);
 
-				switch (localdc) {
+				switch (count) {
 				case 1:
-					p_matrix.RotateZ(m_unk0x14[locald8].GetZ());
+					p_matrix.RotateZ(m_rotationKeys[i].GetZ());
 					break;
 				case 2:
 					// Seems to be unused
 					LegoFloat z = LegoAnimNodeData::Interpolate(
 						p_time,
-						m_unk0x14[locald8],
-						m_unk0x14[locald8].GetZ(),
-						m_unk0x14[locald8 + 1],
-						m_unk0x14[locald8 + 1].GetZ()
+						m_rotationKeys[i],
+						m_rotationKeys[i].GetZ(),
+						m_rotationKeys[i + 1],
+						m_rotationKeys[i + 1].GetZ()
 					);
-					p_matrix.RotateZ(m_unk0x14[locald8].GetZ());
+					p_matrix.RotateZ(m_rotationKeys[i].GetZ());
 					break;
 				}
 			}
 
-			local4c = p_matrix;
-			p_matrix.Product(local4c.GetData(), localb0.GetData());
-			p_matrix[3][0] = localcc[0];
-			p_matrix[3][1] = localcc[1];
-			p_matrix[3][2] = localcc[2];
+			original = p_matrix;
+			p_matrix.Product(original.GetData(), tempMatrix.GetData());
+			p_matrix[3][0] = tempTranslation[0];
+			p_matrix[3][1] = tempTranslation[1];
+			p_matrix[3][2] = tempTranslation[2];
 		}
 	}
 
