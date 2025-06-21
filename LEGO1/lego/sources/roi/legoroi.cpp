@@ -346,7 +346,7 @@ done:
 
 // FUNCTION: LEGO1 0x100a8cb0
 // FUNCTION: BETA10 0x1018a7e8
-LegoResult LegoROI::FUN_100a8cb0(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix)
+LegoResult LegoROI::CreateLocalTransform(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix)
 {
 	p_matrix.SetIdentity();
 	p_data->CreateLocalTransform(p_time, p_matrix);
@@ -389,27 +389,32 @@ LegoROI* LegoROI::FindChildROI(const LegoChar* p_name, LegoROI* p_roi)
 
 // FUNCTION: LEGO1 0x100a8da0
 // FUNCTION: BETA10 0x1018a9fb
-LegoResult LegoROI::FUN_100a8da0(LegoTreeNode* p_node, const Matrix4& p_matrix, LegoTime p_time, LegoROI* p_roi)
+LegoResult LegoROI::ApplyAnimationTransformation(
+	LegoTreeNode* p_node,
+	const Matrix4& p_matrix,
+	LegoTime p_time,
+	LegoROI* p_parentROI
+)
 {
 	MxMatrix mat;
 	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
 	const LegoChar* name = data->GetName();
-	LegoROI* roi = FindChildROI(name, p_roi);
+	LegoROI* roi = FindChildROI(name, p_parentROI);
 
 	if (roi == NULL) {
 		roi = FindChildROI(name, this);
 	}
 
 	if (roi != NULL) {
-		FUN_100a8cb0(data, p_time, mat);
+		CreateLocalTransform(data, p_time, mat);
 		roi->m_local2world.Product(mat, p_matrix);
 		roi->UpdateWorldData();
 
-		LegoBool und = data->FUN_100a0990(p_time);
+		LegoBool und = data->GetVisibility(p_time);
 		roi->SetVisibility(und);
 
 		for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {
-			FUN_100a8da0(p_node->GetChild(i), roi->m_local2world, p_time, roi);
+			ApplyAnimationTransformation(p_node->GetChild(i), roi->m_local2world, p_time, roi);
 		}
 	}
 	else {
@@ -426,14 +431,14 @@ void LegoROI::FUN_100a8e80(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_t
 	MxMatrix mat;
 
 	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
-	FUN_100a8cb0(data, p_time, mat);
+	CreateLocalTransform(data, p_time, mat);
 
-	LegoROI* roi = p_roiMap[data->GetUnknown0x20()];
+	LegoROI* roi = p_roiMap[data->GetROIIndex()];
 	if (roi != NULL) {
 		roi->m_local2world.Product(mat, p_matrix);
 		roi->UpdateWorldData();
 
-		LegoBool und = data->FUN_100a0990(p_time);
+		LegoBool und = data->GetVisibility(p_time);
 		roi->SetVisibility(und);
 
 		for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {
@@ -457,9 +462,9 @@ void LegoROI::FUN_100a8fd0(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_t
 	MxMatrix mat;
 
 	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
-	FUN_100a8cb0(data, p_time, mat);
+	CreateLocalTransform(data, p_time, mat);
 
-	LegoROI* roi = p_roiMap[data->GetUnknown0x20()];
+	LegoROI* roi = p_roiMap[data->GetROIIndex()];
 	if (roi != NULL) {
 		roi->m_local2world.Product(mat, p_matrix);
 
@@ -485,9 +490,9 @@ LegoResult LegoROI::SetFrame(LegoAnim* p_anim, LegoTime p_time)
 	MxMatrix mat;
 
 	mat = m_local2world;
-	mat.SetIdentity();
+	mat.SetIdentity(); // this clears the matrix, assignment above is redundant
 
-	return FUN_100a8da0(root, mat, p_time, this);
+	return ApplyAnimationTransformation(root, mat, p_time, this);
 }
 
 // FUNCTION: LEGO1 0x100a9170

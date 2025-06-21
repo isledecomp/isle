@@ -125,10 +125,10 @@ public:
 	MxResult Serialize(LegoStorage* p_storage) override; // vtable+0x1c
 
 	// FUNCTION: BETA10 0x100ef470
-	void SetUnknown0xb0(MxU32 p_unk0xb0) { m_unk0xb0 = p_unk0xb0; }
+	void SetPlayedAction(MxU32 p_playedAction) { m_playedAction = p_playedAction; }
 
 	// FUNCTION: BETA10 0x100ef850
-	MxU32 GetUnknown0xb0() { return m_unk0xb0; }
+	MxU32 GetPlayedAction() { return m_playedAction; }
 
 	// FUNCTION: BETA10 0x10088850
 	MxS16 GetHighScore(MxU8 p_actorId) { return GetMission(p_actorId)->m_hiScore; }
@@ -137,12 +137,12 @@ public:
 	// PizzaMissionState::`scalar deleting destructor'
 
 	Mission* GetMission(MxU8 p_actorId);
-	MxS16 FUN_10039540();
+	MxS16 GetActorState();
 
 	PizzeriaState* m_pizzeriaState; // 0x08
 	undefined4 m_unk0x0c;           // 0x0c
 	Mission m_missions[5];          // 0x10
-	MxU32 m_unk0xb0;                // 0xb0
+	MxU32 m_playedAction;           // 0xb0
 
 	static IsleScript::Script g_pepperActions[];
 	static IsleScript::Script g_mamaActions[];
@@ -202,9 +202,9 @@ private:
 	PizzaMissionState::Mission* m_mission; // 0x80
 	SkateBoard* m_skateBoard;              // 0x84
 	Act1State* m_act1state;                // 0x88
-	IsleScript::Script m_unk0x8c;          // 0x8c
-	MxLong m_unk0x90;                      // 0x90
-	MxLong m_unk0x94;                      // 0x94
+	IsleScript::Script m_speechAction;     // 0x8c
+	MxLong m_startTime;                    // 0x90
+	MxLong m_duration;                     // 0x94
 	MxBool m_unk0x98;                      // 0x98
 };
 
