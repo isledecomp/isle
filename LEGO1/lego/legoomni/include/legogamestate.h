@@ -152,14 +152,7 @@ public:
 		Username m_name;     // 0x1c
 		MxS16 m_unk0x2a;     // 0x2a
 
-		ScoreItem& operator=(const ScoreItem& p_other)
-		{
-			m_totalScore = p_other.m_totalScore;
-			memcpy(m_scores, p_other.m_scores, sizeof(m_scores));
-			m_name = p_other.m_name;
-			m_unk0x2a = p_other.m_unk0x2a;
-			return *this;
-		}
+		ScoreItem& operator=(const ScoreItem& p_other);
 	};
 
 	// SIZE 0x372

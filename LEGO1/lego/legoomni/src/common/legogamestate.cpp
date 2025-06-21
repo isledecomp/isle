@@ -141,6 +141,18 @@ const char* g_strEnable = "enable";
 // STRING: LEGO1 0x100f3bf4
 const char* g_strDisable = "disable";
 
+inline LegoGameState::ScoreItem& LegoGameState::ScoreItem::operator=(const ScoreItem& p_other)
+{
+	// MSVC auto-generates an operator=, but LegoGameState::WriteScoreHistory() has a much better match
+	// with a manual implementation. Not sure if this function is supposed to go be in legogamestate.h
+	// instead of having an `inline` modifier.
+	m_totalScore = p_other.m_totalScore;
+	memcpy(m_scores, p_other.m_scores, sizeof(m_scores));
+	m_name = p_other.m_name;
+	m_unk0x2a = p_other.m_unk0x2a;
+	return *this;
+}
+
 // FUNCTION: LEGO1 0x10039550
 LegoGameState::LegoGameState()
 {
@@ -1474,7 +1486,6 @@ void LegoGameState::History::WriteScoreHistory()
 	ScoreItem* p_scorehist = FUN_1003cc90(&GameState()->m_players[0], GameState()->m_unk0x24, unk0x2c);
 
 #ifdef BETA10
-
 	if (!p_scorehist) {
 		MxS32 i;
 		// LINE: BETA10 0x100870ee
@@ -1521,10 +1532,7 @@ void LegoGameState::History::WriteScoreHistory()
 		p_scorehist->m_name = GameState()->m_players[0];
 		p_scorehist->m_unk0x2a = GameState()->m_unk0x24;
 	}
-
 #else
-	// TODO: Improve based on BETA10 if possible
-
 	if (p_scorehist != NULL) {
 		p_scorehist->m_totalScore = totalScore;
 		memcpy(p_scorehist->m_scores, scores, sizeof(p_scorehist->m_scores));
@@ -1547,51 +1555,13 @@ void LegoGameState::History::WriteScoreHistory()
 		}
 	}
 
-	// MxU8 tmpScores[5][5];
-	// Username tmpPlayer;
-	// MxS16 tmpUnk0x2a;
-
 	ScoreItem tmpItem;
 
-	// TODO: Match bubble sort loops
 	for (MxS32 i = m_count - 1; i >= 0; i--) {
 		for (MxS32 j = 1; j <= i; j++) {
-			// TODO: Maybe variables for j and j-1?
 			if (m_scores[j].m_totalScore > m_scores[j - 1].m_totalScore) {
-				// // LINE: LEGO1 0x1003cbc8
-				// experiment: copy manually -> doesn't produce `rep movsd dword ptr`
-				// for (int k = 0; k < 5; k++) {
-				// 	for (int l = 0; l < 5; l++)
-				// 		tmpScores[k][l] = m_scores[j - 1].m_scores[k][l];
-				// }
-
-				// TODO: Possible operator= ?
-
-				// tmpItem.m_totalScore = m_scores[j - 1].m_totalScore;
-				// memcpy(tmpItem.m_scores, m_scores[j - 1].m_scores, sizeof(tmpItem.m_scores));
-				// // LINE: LEGO1 0x1003cbd3
-				// tmpItem.m_name = m_scores[j - 1].m_name;
-				// tmpItem.m_unk0x2a = m_scores[j - 1].m_unk0x2a;
-
-				// m_scores[j - 1].m_totalScore = m_scores[j].m_totalScore;
-				// memcpy(m_scores[j - 1].m_scores, m_scores[j].m_scores, sizeof(m_scores[j - 1].m_scores));
-				// // LINE: LEGO1 0x1003cc05
-				// m_scores[j - 1].m_name = m_scores[j].m_name;
-				// m_scores[j - 1].m_unk0x2a = m_scores[j].m_unk0x2a;
-
-
-				// // LINE: LEGO1 0x1003cc1f
-				// m_scores[j - 1].m_totalScore = tmpItem.m_totalScore;
-				// memcpy(m_scores[j].m_scores, tmpItem.m_scores, sizeof(m_scores[j].m_scores));
-				// m_scores[j].m_name = tmpItem.m_name;
-				// m_scores[j].m_unk0x2a = tmpItem.m_unk0x2a;
-
-				// This version feels like it should be right, but it only produces 68.78 %
-
 				tmpItem = m_scores[j - 1];
-				// LINE: LEGO1 0x1003cbf3
 				m_scores[j - 1] = m_scores[j];
-				// LINE: LEGO1 0x1003cc1f
 				m_scores[j] = tmpItem;
 			}
 		}
