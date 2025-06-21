@@ -290,11 +290,11 @@ protected:
 // SIZE 0x08
 struct LegoAnimActorEntry {
 	enum {
-		e_actorType2 = 2,
-		e_actorType3 = 3,
-		e_actorType4 = 4,
-		e_actorType5 = 5,
-		e_actorType6 = 6,
+		e_managedLegoActor = 2,
+		e_managedInvisibleRoiTrimmed = 3,
+		e_managedInvisibleRoi = 4,
+		e_sceneRoi1 = 5,
+		e_sceneRoi2 = 6,
 	};
 
 	LegoChar* m_name; // 0x00

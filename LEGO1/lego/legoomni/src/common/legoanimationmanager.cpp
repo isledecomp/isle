@@ -2384,7 +2384,7 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 		presenter = (LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
 
 		if (presenter != NULL) {
-			presenter->FUN_1006d680(p_actor, 1.7f);
+			presenter->CreateROIAndBuildMap(p_actor, 1.7f);
 		}
 
 		g_vehicles[g_characters[p_characterId].m_vehicleId].m_unk0x04 = FALSE;
@@ -2397,7 +2397,7 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 			presenter = (LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
 
 			if (presenter != NULL) {
-				presenter->FUN_1006d680(p_actor, 0.7f);
+				presenter->CreateROIAndBuildMap(p_actor, 0.7f);
 			}
 		}
 
@@ -2410,7 +2410,7 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 			presenter = (LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
 
 			if (presenter != NULL) {
-				presenter->FUN_1006d680(p_actor, 4.0f);
+				presenter->CreateROIAndBuildMap(p_actor, 4.0f);
 			}
 		}
 
@@ -2423,7 +2423,7 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 			presenter = (LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
 
 			if (presenter != NULL) {
-				presenter->FUN_1006d680(p_actor, 0.0f);
+				presenter->CreateROIAndBuildMap(p_actor, 0.0f);
 			}
 		}
 
@@ -2712,12 +2712,12 @@ MxResult LegoAnimationManager::FUN_10064380(
 		LegoLocomotionAnimPresenter* presenter =
 			(LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", cycles[p_undIdx1]);
 		if (presenter != NULL) {
-			presenter->FUN_1006d680(actor, 0.0f);
+			presenter->CreateROIAndBuildMap(actor, 0.0f);
 		}
 
 		presenter = (LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", cycles[p_undIdx2]);
 		if (presenter != NULL) {
-			presenter->FUN_1006d680(actor, 4.0f);
+			presenter->CreateROIAndBuildMap(actor, 4.0f);
 		}
 
 		m_extras[i].m_unk0x08 = Timer()->GetTime();

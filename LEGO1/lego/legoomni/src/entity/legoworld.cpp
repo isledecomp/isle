@@ -117,8 +117,8 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 			if (presenter->IsA("LegoLocomotionAnimPresenter")) {
 				LegoLocomotionAnimPresenter* animPresenter = (LegoLocomotionAnimPresenter*) presenter;
 
-				animPresenter->DecrementUnknown0xd4();
-				if (animPresenter->GetUnknown0xd4() == 0) {
+				animPresenter->DecrementWorldRefCounter();
+				if (animPresenter->GetWorldRefCounter() == 0) {
 					ApplyMask(action, MxDSAction::c_world, FALSE);
 					presenter->EndAction();
 				}

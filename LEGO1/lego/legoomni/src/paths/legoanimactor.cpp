@@ -244,7 +244,7 @@ void LegoAnimActor::ParseAction(char* p_extra)
 					token = strtok(NULL, g_parseExtraTokens);
 
 					if (token) {
-						p->FUN_1006d680(this, atof(token));
+						p->CreateROIAndBuildMap(this, atof(token));
 					}
 				}
 

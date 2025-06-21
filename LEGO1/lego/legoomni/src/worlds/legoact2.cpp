@@ -1208,19 +1208,19 @@ MxResult LegoAct2::InitializeShooting()
 
 	ap = (LegoLocomotionAnimPresenter*) Find("LegoAnimPresenter", "Ambul_Anim0");
 	assert(ap);
-	ap->FUN_1006d680(m_unk0x1138, 0.0f);
+	ap->CreateROIAndBuildMap(m_unk0x1138, 0.0f);
 
 	ap = (LegoLocomotionAnimPresenter*) Find("LegoAnimPresenter", "Ambul_Anim2");
 	assert(ap);
-	ap->FUN_1006d680(m_unk0x1138, 6.0f);
+	ap->CreateROIAndBuildMap(m_unk0x1138, 6.0f);
 
 	ap = (LegoLocomotionAnimPresenter*) Find("LegoAnimPresenter", "Ambul_Anim3");
 	assert(ap);
-	ap->FUN_1006d680(m_unk0x1138, 3.0f);
+	ap->CreateROIAndBuildMap(m_unk0x1138, 3.0f);
 
 	ap = (LegoLocomotionAnimPresenter*) Find("LegoAnimPresenter", "BrShoot");
 	assert(ap);
-	ap->FUN_1006d680(m_unk0x1138, -1.0f);
+	ap->CreateROIAndBuildMap(m_unk0x1138, -1.0f);
 
 	actor->SetWorldSpeed(0.0f);
 	m_unk0x1138->InitializeNextShot();
