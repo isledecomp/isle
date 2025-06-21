@@ -1547,25 +1547,40 @@ void LegoGameState::History::WriteScoreHistory()
 		}
 	}
 
-	MxU8 tmpScores[5][5];
-	Username tmpPlayer;
-	MxS16 tmpUnk0x2a;
+	// MxU8 tmpScores[5][5];
+	// Username tmpPlayer;
+	// MxS16 tmpUnk0x2a;
+
+	ScoreItem tmpItem;
 
 	// TODO: Match bubble sort loops
-	for (MxS32 i = m_count - 1; i > 0; i--) {
+	for (MxS32 i = m_count - 1; i >= 0; i--) {
 		for (MxS32 j = 1; j <= i; j++) {
-			if (m_scores[j - 1].m_totalScore < m_scores[j].m_totalScore) {
-				memcpy(tmpScores, m_scores[j - 1].m_scores, sizeof(tmpScores));
-				tmpPlayer = m_scores[j - 1].m_name;
-				tmpUnk0x2a = m_scores[j - 1].m_unk0x2a;
+			// TODO: Maybe variables for j and j-1?
+			if (m_scores[j].m_totalScore >= m_scores[j - 1].m_totalScore) {
+				// LINE: LEGO1 0x1003cbc8
+				// experiment: copy manually -> doesn't produce `rep movsd dword ptr`
+				// for (int k = 0; k < 5; k++) {
+				// 	for (int l = 0; l < 5; l++)
+				// 		tmpScores[k][l] = m_scores[j - 1].m_scores[k][l];
+				// }
+				// memcpy(tmpScores, m_scores[j - 1].m_scores, sizeof(tmpScores));
+				// // LINE: LEGO1 0x1003cbd9
+				// tmpPlayer = m_scores[j - 1].m_name;
+				// tmpUnk0x2a = m_scores[j - 1].m_unk0x2a;
 
-				memcpy(m_scores[j - 1].m_scores, m_scores[j].m_scores, sizeof(m_scores[j - 1].m_scores));
-				m_scores[j - 1].m_name = m_scores[j].m_name;
-				m_scores[j - 1].m_unk0x2a = m_scores[j].m_unk0x2a;
+				tmpItem = m_scores[j - 1];
+				// memcpy(m_scores[j - 1].m_scores, m_scores[j].m_scores, sizeof(m_scores[j - 1].m_scores));
+				// // LINE: LEGO1 0x1003cc05
+				// m_scores[j - 1].m_name = m_scores[j].m_name;
+				// m_scores[j - 1].m_unk0x2a = m_scores[j].m_unk0x2a;
+				m_scores[j-1] = m_scores[j];
 
-				memcpy(m_scores[j].m_scores, tmpScores, sizeof(m_scores[j].m_scores));
-				m_scores[j].m_name = tmpPlayer;
-				m_scores[j].m_unk0x2a = tmpUnk0x2a;
+				m_scores[j] = tmpItem;
+
+				// memcpy(m_scores[j].m_scores, tmpScores, sizeof(m_scores[j].m_scores));
+				// m_scores[j].m_name = tmpPlayer;
+				// m_scores[j].m_unk0x2a = tmpUnk0x2a;
 			}
 		}
 	}
