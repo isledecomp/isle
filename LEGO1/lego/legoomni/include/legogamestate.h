@@ -248,7 +248,6 @@ private:
 	// TODO: Most likely getters/setters are not used according to BETA for the following members:
 
 public:
-	// Probably m_currentPlayerId
 	MxS16 m_currentPlayerId;              // 0x24
 	MxS16 m_playerCount;                  // 0x26
 	Username m_players[9];                // 0x28
