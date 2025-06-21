@@ -1564,24 +1564,35 @@ void LegoGameState::History::WriteScoreHistory()
 				// 	for (int l = 0; l < 5; l++)
 				// 		tmpScores[k][l] = m_scores[j - 1].m_scores[k][l];
 				// }
-				// memcpy(tmpScores, m_scores[j - 1].m_scores, sizeof(tmpScores));
-				// // LINE: LEGO1 0x1003cbd9
-				// tmpPlayer = m_scores[j - 1].m_name;
-				// tmpUnk0x2a = m_scores[j - 1].m_unk0x2a;
 
-				tmpItem = m_scores[j - 1];
-				// memcpy(m_scores[j - 1].m_scores, m_scores[j].m_scores, sizeof(m_scores[j - 1].m_scores));
-				// // LINE: LEGO1 0x1003cc05
-				// m_scores[j - 1].m_name = m_scores[j].m_name;
-				// m_scores[j - 1].m_unk0x2a = m_scores[j].m_unk0x2a;
-				// LINE: LEGO1 0x1003cbf8
-				m_scores[j - 1] = m_scores[j];
-				// LINE: LEGO1 0x1003cc24
-				m_scores[j] = tmpItem;
+				// TODO: Possible operator= ?
 
-				// memcpy(m_scores[j].m_scores, tmpScores, sizeof(m_scores[j].m_scores));
-				// m_scores[j].m_name = tmpPlayer;
-				// m_scores[j].m_unk0x2a = tmpUnk0x2a;
+				tmpItem.m_totalScore = m_scores[j - 1].m_totalScore;
+				memcpy(tmpItem.m_scores, m_scores[j - 1].m_scores, sizeof(tmpItem.m_scores));
+				// LINE: LEGO1 0x1003cbd3
+				tmpItem.m_name = m_scores[j - 1].m_name;
+				tmpItem.m_unk0x2a = m_scores[j - 1].m_unk0x2a;
+
+				m_scores[j - 1].m_totalScore = m_scores[j].m_totalScore;
+				memcpy(m_scores[j - 1].m_scores, m_scores[j].m_scores, sizeof(m_scores[j - 1].m_scores));
+				// LINE: LEGO1 0x1003cc05
+				m_scores[j - 1].m_name = m_scores[j].m_name;
+				m_scores[j - 1].m_unk0x2a = m_scores[j].m_unk0x2a;
+
+
+				// LINE: LEGO1 0x1003cc1f
+				m_scores[j - 1].m_totalScore = tmpItem.m_totalScore;
+				memcpy(m_scores[j].m_scores, tmpItem.m_scores, sizeof(m_scores[j].m_scores));
+				m_scores[j].m_name = tmpItem.m_name;
+				m_scores[j].m_unk0x2a = tmpItem.m_unk0x2a;
+
+				// This version feels like it should be right, but it only produces 68.78 %
+
+				// tmpItem = m_scores[j - 1];
+				// // LINE: LEGO1 0x1003cbf8
+				// m_scores[j - 1] = m_scores[j];
+				// // LINE: LEGO1 0x1003cc24
+				// m_scores[j] = tmpItem;
 			}
 		}
 	}
