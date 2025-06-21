@@ -30,9 +30,9 @@ public:
 	LegoU32 ShouldSkipInterpolation() { return m_flags & c_skipInterpolation; }
 
 	// FUNCTION: BETA10 0x100739a0
-	void FUN_100739a0(MxS32 p_param)
+	void SetActive(MxS32 p_active)
 	{
-		if (p_param) {
+		if (p_active) {
 			m_flags |= c_active;
 		}
 		else {
@@ -289,8 +289,16 @@ protected:
 
 // SIZE 0x08
 struct LegoAnimActorEntry {
-	LegoChar* m_name;     // 0x00
-	undefined4 m_unk0x04; // 0x04
+	enum {
+		e_actorType2 = 2,
+		e_actorType3 = 3,
+		e_actorType4 = 4,
+		e_actorType5 = 5,
+		e_actorType6 = 6,
+	};
+
+	LegoChar* m_name; // 0x00
+	LegoU32 m_type;   // 0x04
 };
 
 // TODO: Possibly called `LegoCameraAnim(ation)`?
@@ -338,7 +346,7 @@ public:
 	virtual LegoResult Read(LegoStorage* p_storage, LegoS32 p_parseScene); // vtable+0x10
 
 	const LegoChar* GetActorName(LegoU32 p_index);
-	undefined4 GetActorUnknown0x04(LegoU32 p_index);
+	LegoU32 GetActorType(LegoU32 p_index);
 
 	// FUNCTION: BETA10 0x1005abf0
 	LegoAnimScene* GetCamAnim() { return m_camAnim; }
