@@ -160,7 +160,7 @@ public:
 		History();
 		void WriteScoreHistory();
 		MxResult Serialize(LegoStorage* p_storage);
-		ScoreItem* FUN_1003cc90(Username* p_player, MxS16 p_unk0x24, MxS32& p_unk0x2c);
+		ScoreItem* FindPlayerInScoreHistory(Username* p_player, MxS16 p_unk0x24, MxS32& p_unk0x2c);
 
 		// FUNCTION: BETA10 0x1002c2b0
 		MxS16 GetCount() { return m_count; }
@@ -174,7 +174,7 @@ public:
 		MxS16 m_indices[20]; // 0x02
 #endif
 		ScoreItem m_scores[20]; // 0x02 (0x22 for BETA10)
-		MxS16 m_unk0x372;       // 0x372 (0x392 for BETA10)
+		MxS16 m_nextPlayerId;       // 0x372 (0x392 for BETA10)
 	};
 
 	LegoGameState();
@@ -248,6 +248,7 @@ private:
 	// TODO: Most likely getters/setters are not used according to BETA for the following members:
 
 public:
+	// Probably m_currentPlayerId
 	MxS16 m_unk0x24;                      // 0x24
 	MxS16 m_playerCount;                  // 0x26
 	Username m_players[9];                // 0x28

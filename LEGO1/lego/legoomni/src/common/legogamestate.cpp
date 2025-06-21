@@ -627,8 +627,8 @@ MxResult LegoGameState::AddPlayer(Username& p_player)
 
 	m_playerCount++;
 	m_players[0].Set(p_player);
-	m_unk0x24 = m_history.m_unk0x372;
-	m_history.m_unk0x372 = m_unk0x24 + 1;
+	m_unk0x24 = m_history.m_nextPlayerId;
+	m_history.m_nextPlayerId = m_unk0x24 + 1;
 	m_history.WriteScoreHistory();
 	SetCurrentAct(e_act1);
 
@@ -1442,7 +1442,7 @@ MxResult LegoGameState::ScoreItem::Serialize(LegoStorage* p_storage)
 LegoGameState::History::History()
 {
 	m_count = 0;
-	m_unk0x372 = 0;
+	m_nextPlayerId = 0;
 }
 
 // FUNCTION: LEGO1 0x1003c870
@@ -1469,7 +1469,12 @@ void LegoGameState::History::WriteScoreHistory()
 		scores[0][actor - 1] = carRaceState ? carRaceState->GetState(actor)->GetHighScore() : 0;
 		totalScore += scores[0][actor - 1];
 
+#ifdef BETA10
+		// likely a bug in BETA10
+		scores[1][actor - 1] = carRaceState ? carRaceState->GetState(actor)->GetHighScore() : 0;
+#else
 		scores[1][actor - 1] = jetskiRaceState ? jetskiRaceState->GetState(actor)->GetHighScore() : 0;
+#endif
 		totalScore += scores[1][actor - 1];
 
 		scores[2][actor - 1] = pizzaMissionState ? pizzaMissionState->GetHighScore(actor) : 0;
@@ -1482,36 +1487,37 @@ void LegoGameState::History::WriteScoreHistory()
 		totalScore += scores[4][actor - 1];
 	}
 
-	MxS32 unk0x2c;
-	ScoreItem* p_scorehist = FUN_1003cc90(&GameState()->m_players[0], GameState()->m_unk0x24, unk0x2c);
+	MxS32 playerScoreHistoryIndex;
+	ScoreItem* p_scorehist =
+		FindPlayerInScoreHistory(GameState()->m_players, GameState()->m_unk0x24, playerScoreHistoryIndex);
 
 #ifdef BETA10
 	if (!p_scorehist) {
-		MxS32 i;
+		MxS32 playerScoreRank;
 		// LINE: BETA10 0x100870ee
-		for (i = 0; i < m_count; i++) {
-			if (totalScore > m_scores[m_indices[i]].m_totalScore) {
+		for (playerScoreRank = 0; playerScoreRank < m_count; playerScoreRank++) {
+			if (totalScore > m_scores[m_indices[playerScoreRank]].m_totalScore) {
 				break;
 			}
 		}
 		// LINE: BETA10 0x1008713f
-		if (i < m_count) {
+		if (playerScoreRank < m_count) {
 			if (m_count < 20) {
-				unk0x2c = m_count++;
+				playerScoreHistoryIndex = m_count++;
 			}
 			else {
-				unk0x2c = m_indices[19];
+				playerScoreHistoryIndex = m_indices[19];
 			}
 
 			MxS32 max = m_count - 1;
-			for (MxS32 j = max; i < j; j--) {
+			for (MxS32 j = max; playerScoreRank < j; j--) {
 				m_indices[j - 1] = m_indices[j - 2];
 			}
 
-			m_indices[i] = unk0x2c;
-			p_scorehist = (LegoGameState::ScoreItem*) m_scores[unk0x2c].m_scores;
+			m_indices[playerScoreRank] = playerScoreHistoryIndex;
+			p_scorehist = &m_scores[playerScoreHistoryIndex];
 		}
-		else if (i < 20) {
+		else if (playerScoreRank < 20) {
 			m_indices[m_count] = m_count;
 			p_scorehist = &m_scores[m_count++];
 		}
@@ -1519,7 +1525,7 @@ void LegoGameState::History::WriteScoreHistory()
 	else if (p_scorehist->m_totalScore != totalScore) {
 		assert(totalScore > p_scorehist->m_totalScore);
 
-		for (MxS32 i = unk0x2c; (0 < i && (m_indices[i - 1] < m_indices[i])); i = i - 1) {
+		for (MxS32 i = playerScoreHistoryIndex; i > 0 && m_indices[i - 1] < m_indices[i]; i--) {
 			MxU8 tmp = m_indices[i - 1];
 			m_indices[i - 1] = m_indices[i];
 			m_indices[i] = tmp;
@@ -1528,7 +1534,6 @@ void LegoGameState::History::WriteScoreHistory()
 	if (p_scorehist) {
 		p_scorehist->m_totalScore = totalScore;
 		memcpy(p_scorehist->m_scores[0], scores[0], sizeof(scores));
-
 		p_scorehist->m_name = GameState()->m_players[0];
 		p_scorehist->m_unk0x2a = GameState()->m_unk0x24;
 	}
@@ -1571,7 +1576,7 @@ void LegoGameState::History::WriteScoreHistory()
 
 // FUNCTION: LEGO1 0x1003cc90
 // FUNCTION: BETA10 0x1008732a
-LegoGameState::ScoreItem* LegoGameState::History::FUN_1003cc90(
+LegoGameState::ScoreItem* LegoGameState::History::FindPlayerInScoreHistory(
 	LegoGameState::Username* p_player,
 	MxS16 p_unk0x24,
 	MxS32& p_unk0x2c
@@ -1598,7 +1603,7 @@ LegoGameState::ScoreItem* LegoGameState::History::FUN_1003cc90(
 MxResult LegoGameState::History::Serialize(LegoStorage* p_storage)
 {
 	if (p_storage->IsReadMode()) {
-		p_storage->ReadS16(m_unk0x372);
+		p_storage->ReadS16(m_nextPlayerId);
 		p_storage->ReadS16(m_count);
 
 		for (MxS16 i = 0; i < m_count; i++) {
@@ -1608,7 +1613,7 @@ MxResult LegoGameState::History::Serialize(LegoStorage* p_storage)
 		}
 	}
 	else if (p_storage->IsWriteMode()) {
-		p_storage->WriteS16(m_unk0x372);
+		p_storage->WriteS16(m_nextPlayerId);
 		p_storage->WriteS16(m_count);
 
 		for (MxS16 i = 0; i < m_count; i++) {
