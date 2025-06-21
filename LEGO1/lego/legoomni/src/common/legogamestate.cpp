@@ -1557,8 +1557,8 @@ void LegoGameState::History::WriteScoreHistory()
 	for (MxS32 i = m_count - 1; i >= 0; i--) {
 		for (MxS32 j = 1; j <= i; j++) {
 			// TODO: Maybe variables for j and j-1?
-			if (m_scores[j].m_totalScore >= m_scores[j - 1].m_totalScore) {
-				// LINE: LEGO1 0x1003cbc8
+			if (m_scores[j].m_totalScore > m_scores[j - 1].m_totalScore) {
+				// // LINE: LEGO1 0x1003cbc8
 				// experiment: copy manually -> doesn't produce `rep movsd dword ptr`
 				// for (int k = 0; k < 5; k++) {
 				// 	for (int l = 0; l < 5; l++)
@@ -1574,8 +1574,9 @@ void LegoGameState::History::WriteScoreHistory()
 				// // LINE: LEGO1 0x1003cc05
 				// m_scores[j - 1].m_name = m_scores[j].m_name;
 				// m_scores[j - 1].m_unk0x2a = m_scores[j].m_unk0x2a;
-				m_scores[j-1] = m_scores[j];
-
+				// LINE: LEGO1 0x1003cbf8
+				m_scores[j - 1] = m_scores[j];
+				// LINE: LEGO1 0x1003cc24
 				m_scores[j] = tmpItem;
 
 				// memcpy(m_scores[j].m_scores, tmpScores, sizeof(m_scores[j].m_scores));
