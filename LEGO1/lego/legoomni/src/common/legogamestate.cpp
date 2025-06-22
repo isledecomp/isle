@@ -141,18 +141,6 @@ const char* g_strEnable = "enable";
 // STRING: LEGO1 0x100f3bf4
 const char* g_strDisable = "disable";
 
-inline LegoGameState::ScoreItem& LegoGameState::ScoreItem::operator=(const ScoreItem& p_other)
-{
-	// MSVC auto-generates an operator=, but LegoGameState::WriteScoreHistory() has a much better match
-	// with a manual implementation. Not sure if this function is supposed to go be in legogamestate.h
-	// instead of having an `inline` modifier.
-	m_totalScore = p_other.m_totalScore;
-	memcpy(m_scores, p_other.m_scores, sizeof(m_scores));
-	m_name = p_other.m_name;
-	m_playerId = p_other.m_playerId;
-	return *this;
-}
-
 // FUNCTION: LEGO1 0x10039550
 LegoGameState::LegoGameState()
 {
