@@ -4,6 +4,8 @@
   
 This is a functionally complete decompilation of LEGO Island (Version 1.1, English). It aims to be as accurate as possible, matching the recompiled instructions to the original machine code as much as possible. The goal is to provide a workable codebase that can be modified, improved, and ported to other platforms later on.
 
+> **Note:** This repository is for decompilation only and its code is true to the original release. For a modern adaptation of the Lego Island codebase with native compatibility for Windows, Mac, Linux, and Web, see [isle-portable](https://github.com/isledecomp/isle-portable) instead.
+
 ## Status
 
 <img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="50%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="50%">
