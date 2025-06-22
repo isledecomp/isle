@@ -1532,8 +1532,6 @@ void LegoGameState::History::WriteScoreHistory()
 	}
 	else {
 		if (m_count < (MxS16) sizeOfArray(m_scores)) {
-			assert(totalScore > p_scorehist->m_totalScore);
-
 			m_scores[m_count].m_totalScore = totalScore;
 			memcpy(m_scores[m_count].m_scores, scores, sizeof(m_scores[m_count].m_scores));
 			m_scores[m_count].m_name = GameState()->m_players[0];
