@@ -141,7 +141,7 @@ MxResult LegoAct2::Create(MxDSAction& p_dsAction)
 		case LegoGameState::e_act1:
 		case LegoGameState::e_actNotFound:
 			GameState()->StopArea(LegoGameState::e_undefined);
-			if (GameState()->GetPreviousArea() == LegoGameState::e_infomain) {
+			if (GameState()->m_previousArea == LegoGameState::e_infomain) {
 				GameState()->StopArea(LegoGameState::e_isle);
 			}
 		}
@@ -149,7 +149,7 @@ MxResult LegoAct2::Create(MxDSAction& p_dsAction)
 		GameState()->m_currentArea = LegoGameState::e_act2main;
 		GameState()->SetCurrentAct(LegoGameState::e_act2);
 		InputManager()->Register(this);
-		GameState()->SetDirty(TRUE);
+		GameState()->m_isDirty = TRUE;
 	}
 
 	return result;
@@ -536,7 +536,7 @@ void LegoAct2::Enable(MxBool p_enable)
 
 		((IslePathActor*) m_pepper->GetEntity())->VTable0xec(m_unk0x10dc, m_unk0x1124, TRUE);
 
-		if (GameState()->GetPreviousArea() == LegoGameState::e_infomain) {
+		if (GameState()->m_previousArea == LegoGameState::e_infomain) {
 			GameState()->StopArea(LegoGameState::e_infomain);
 		}
 

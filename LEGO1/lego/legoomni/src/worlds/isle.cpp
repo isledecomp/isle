@@ -121,7 +121,7 @@ MxResult Isle::Create(MxDSAction& p_dsAction)
 		m_act1state = act1state;
 
 		EnableAnimations(TRUE);
-		GameState()->SetDirty(TRUE);
+		GameState()->m_isDirty = TRUE;
 	}
 
 	return result;
