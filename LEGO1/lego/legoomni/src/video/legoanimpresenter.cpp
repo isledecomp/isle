@@ -221,10 +221,10 @@ void LegoAnimPresenter::FUN_100692b0()
 
 		for (LegoU32 i = 0; i < numActors; i++) {
 			LegoChar* str = GetVariableOrIdentity(m_anim->GetActorName(i), NULL);
-			undefined4 unk0x04 = m_anim->GetActorUnknown0x04(i);
+			LegoU32 actorType = m_anim->GetActorType(i);
 			LegoROI* roi = NULL;
 
-			if (unk0x04 == 2) {
+			if (actorType == LegoAnimActorEntry::e_actorType2) {
 				LegoChar* src;
 				if (str[0] == '*') {
 					src = str + 1;
@@ -239,7 +239,7 @@ void LegoAnimPresenter::FUN_100692b0()
 					roi->SetVisibility(FALSE);
 				}
 			}
-			else if (unk0x04 == 4) {
+			else if (actorType == LegoAnimActorEntry::e_actorType4) {
 				LegoChar* baseName = new LegoChar[strlen(str)];
 				strcpy(baseName, str + 1);
 				strlwr(baseName);
@@ -254,7 +254,7 @@ void LegoAnimPresenter::FUN_100692b0()
 				delete[] baseName;
 				delete[] und;
 			}
-			else if (unk0x04 == 3) {
+			else if (actorType == LegoAnimActorEntry::e_actorType3) {
 				LegoChar* lodName = new LegoChar[strlen(str)];
 				strcpy(lodName, str + 1);
 
@@ -300,9 +300,9 @@ void LegoAnimPresenter::FUN_100695c0()
 
 		for (LegoU32 i = 0; i < numActors; i++) {
 			if (FUN_100698b0(rois, m_anim->GetActorName(i)) == FALSE) {
-				undefined4 unk0x04 = m_anim->GetActorUnknown0x04(i);
+				LegoU32 actorType = m_anim->GetActorType(i);
 
-				if (unk0x04 == 5 || unk0x04 == 6) {
+				if (actorType == LegoAnimActorEntry::e_actorType5 || actorType == LegoAnimActorEntry::e_actorType6) {
 					LegoChar lodName[256];
 					const LegoChar* actorName = m_anim->GetActorName(i);
 

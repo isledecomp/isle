@@ -577,10 +577,10 @@ void LegoCarBuildAnimPresenter::RotateAroundYAxis(MxFloat p_angle)
 		newRotation.EqualsHamiltonProduct(currentRotation, additionalRotation);
 
 		if (newRotation[3] < 0.9999) {
-			rotationKey->FUN_100739a0(TRUE);
+			rotationKey->SetActive(TRUE);
 		}
 		else {
-			rotationKey->FUN_100739a0(FALSE);
+			rotationKey->SetActive(FALSE);
 		}
 
 		m_platformAnimNodeData->GetRotationKey(0)->SetX(newRotation[0]);
