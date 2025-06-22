@@ -288,7 +288,7 @@ void DecodeBrun(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_da
 	while (--line >= 0) {
 		short column = 0;
 		data++;
-		char count = 0;
+		signed char count = 0;
 		while ((column += count) < width2) {
 			count = *data++;
 
@@ -331,7 +331,7 @@ void DecodeLC(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data
 
 		while (packets > 0) {
 			column += *data++; // skip byte
-			char type = *((char*) data++);
+			signed char type = *((signed char*) data++);
 
 			if (type < 0) {
 				type = -type;
@@ -417,7 +417,7 @@ start_packet:
 		// LINE: BETA10 0x1013e726
 		column += *data.byte++;
 		// LINE: BETA10 0x1013e73a
-		short type = *(char*) data.byte++;
+		short type = *(signed char*) data.byte++;
 		type += type;
 
 		if (type >= 0) {
