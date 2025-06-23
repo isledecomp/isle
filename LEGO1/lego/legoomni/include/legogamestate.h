@@ -223,14 +223,8 @@ public:
 	Act GetCurrentAct() { return m_currentAct; }
 
 	Act GetLoadedAct() { return m_loadedAct; }
-	Area GetPreviousArea() { return m_previousArea; }
-	Area GetUnknown0x42c() { return m_unk0x42c; }
 
-	void SetDirty(MxBool p_isDirty) { m_isDirty = p_isDirty; }
-	void SetPreviousArea(Area p_previousArea) { m_previousArea = p_previousArea; }
 	void SetActorId(MxU8 p_actorId) { m_actorId = p_actorId; }
-	Username* GetPlayersIndex(MxS32 p_index) { return &m_players[p_index]; }
-	MxS16 GetPlayerCount() { return m_playerCount; }
 	LegoBackgroundColor* GetBackgroundColor() { return m_backgroundColor; }
 
 	void SetCurrentAct(Act p_currentAct);
@@ -254,14 +248,11 @@ private:
 	LegoBackgroundColor* m_tempBackgroundColor; // 0x1c
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
 
-	// TODO: Most likely getters/setters are not used according to BETA for the following members:
-
 public:
 	MxS16 m_currentPlayerId;              // 0x24
 	MxS16 m_playerCount;                  // 0x26
 	Username m_players[9];                // 0x28
 	History m_history;                    // 0xa6
-	undefined2 m_unk0x41a;                // 0x41a
 	JukeboxScript::Script m_jukeboxMusic; // 0x41c
 	MxBool m_isDirty;                     // 0x420
 	Area m_currentArea;                   // 0x424

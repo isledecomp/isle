@@ -488,7 +488,7 @@ MxResult Act3::Create(MxDSAction& p_dsAction)
 		case LegoGameState::e_act1:
 		case LegoGameState::e_actNotFound:
 			GameState()->StopArea(LegoGameState::e_undefined);
-			if (GameState()->GetPreviousArea() == LegoGameState::e_infomain) {
+			if (GameState()->m_previousArea == LegoGameState::e_infomain) {
 				GameState()->StopArea(LegoGameState::e_isle);
 			}
 		}
@@ -505,7 +505,7 @@ MxResult Act3::Create(MxDSAction& p_dsAction)
 
 		GameState()->m_currentArea = LegoGameState::e_act3script;
 		GameState()->SetCurrentAct(LegoGameState::e_act3);
-		GameState()->SetDirty(TRUE);
+		GameState()->m_isDirty = TRUE;
 	}
 
 	return result;
@@ -883,7 +883,7 @@ void Act3::Enable(MxBool p_enable)
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		PlayMusic(JukeboxScript::c_Act3Music);
-		GameState()->SetDirty(TRUE);
+		GameState()->m_isDirty = TRUE;
 
 		if (m_time > 0) {
 			MxFloat delta = Timer()->GetTime() - m_time - 100.0f;

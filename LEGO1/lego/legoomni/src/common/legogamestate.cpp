@@ -1629,6 +1629,7 @@ void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
 }
 
 // FUNCTION: LEGO1 0x1003cea0
+// FUNCTION: BETA10 0x10017840
 void LegoGameState::SetCurrentAct(Act p_currentAct)
 {
 	m_currentAct = p_currentAct;
