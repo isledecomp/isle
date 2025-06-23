@@ -393,7 +393,7 @@ MxResult LegoWorldPresenter::LoadWorldModel(ModelDbModel& p_model, FILE* p_wdbFi
 	}
 
 	modelPresenter.SetAction(&action);
-	modelPresenter.FUN_1007ff70(chunk, createdEntity, p_model.m_unk0x34, p_world);
+	modelPresenter.FUN_1007ff70(chunk, createdEntity, p_model.m_visible, p_world);
 	delete[] buff;
 
 	return SUCCESS;
