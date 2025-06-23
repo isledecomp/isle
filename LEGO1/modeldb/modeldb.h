@@ -101,7 +101,7 @@ struct ModelDbModel {
 	float m_location[3];     // 0x10
 	float m_direction[3];    // 0x1c
 	float m_up[3];           // 0x28
-	undefined m_unk0x34;     // 0x34
+	MxU8 m_visible;          // 0x34
 };
 
 // SIZE 0x18

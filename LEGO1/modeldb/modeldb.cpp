@@ -52,7 +52,7 @@ MxResult ModelDbModel::Read(FILE* p_file)
 	if (fread(&m_up, sizeof(float), 3, p_file) != 3) {
 		return FAILURE;
 	}
-	if (fread(&m_unk0x34, sizeof(undefined), 1, p_file) != 1) {
+	if (fread(&m_visible, sizeof(MxU8), 1, p_file) != 1) {
 		return FAILURE;
 	}
 
