@@ -46,7 +46,7 @@ Hospital::Hospital()
 	m_flashingLeds = 0;
 	m_copLedAnimTimer = 0;
 	m_pizzaLedAnimTimer = 0;
-	m_unk0x128 = 0;
+	m_exited = FALSE;
 	NotificationManager()->Register(this);
 }
 
@@ -367,8 +367,8 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 		act1State = (Act1State*) GameState()->GetState("Act1State");
 		act1State->SetUnknown18(9);
 	case HospitalState::e_exitToFront:
-		if (m_unk0x128 == 0) {
-			m_unk0x128 = 1;
+		if (m_exited == FALSE) {
+			m_exited = TRUE;
 			m_destLocation = LegoGameState::e_hospitalExited;
 
 			DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
@@ -376,8 +376,8 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 		}
 		break;
 	case HospitalState::e_exitToInfocenter:
-		if (m_unk0x128 == 0) {
-			m_unk0x128 = 1;
+		if (m_exited == FALSE) {
+			m_exited = TRUE;
 			m_destLocation = LegoGameState::e_infomain;
 
 			DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
@@ -410,8 +410,8 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 				m_interactionMode = 3;
 
 				if (m_hospitalState->m_state == HospitalState::e_explainQuestShort) {
-					if (m_unk0x128 == 0) {
-						m_unk0x128 = 1;
+					if (m_exited == FALSE) {
+						m_exited = TRUE;
 
 						TickleManager()->UnregisterClient(this);
 
@@ -566,8 +566,8 @@ MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 				m_currentAction = HospitalScript::c_hho016cl_RunAnim;
 				m_setWithCurrentAction = 1;
 			}
-			else if (m_unk0x128 == 0) {
-				m_unk0x128 = 1;
+			else if (m_exited == FALSE) {
+				m_exited = TRUE;
 				m_hospitalState->m_state = HospitalState::e_exitImmediately;
 				m_destLocation = LegoGameState::e_infomain;
 
@@ -587,8 +587,8 @@ MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 				m_currentAction = HospitalScript::c_hho016cl_RunAnim;
 				m_setWithCurrentAction = 1;
 			}
-			else if (m_unk0x128 == 0) {
-				m_unk0x128 = 1;
+			else if (m_exited == FALSE) {
+				m_exited = TRUE;
 				m_hospitalState->m_state = HospitalState::e_exitImmediately;
 				m_destLocation = LegoGameState::e_hospitalExited;
 

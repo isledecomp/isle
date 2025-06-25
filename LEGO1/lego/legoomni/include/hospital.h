@@ -123,7 +123,7 @@ private:
 	MxLong m_copLedAnimTimer;               // 0x11c
 	MxLong m_pizzaLedAnimTimer;             // 0x120
 	MxLong m_time;                          // 0x124
-	undefined m_unk0x128;                   // 0x128
+	MxBool m_exited;                        // 0x128
 };
 
 #endif // HOSPITAL_H
