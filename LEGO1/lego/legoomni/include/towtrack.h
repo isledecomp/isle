@@ -12,6 +12,13 @@ class MxEndActionNotificationParam;
 // SIZE 0x28
 class TowTrackMissionState : public LegoState {
 public:
+	enum {
+		e_none = 0,
+		e_started = 1,
+		e_hookedUp = 2,
+		e_hookingUp = 3,
+	};
+
 	TowTrackMissionState();
 
 	// FUNCTION: LEGO1 0x1004dde0
@@ -126,19 +133,19 @@ public:
 	// SYNTHETIC: LEGO1 0x1004e060
 	// TowTrackMissionState::`scalar deleting destructor'
 
-	undefined4 m_unk0x08; // 0x08
-	MxLong m_startTime;   // 0x0c
-	MxBool m_unk0x10;     // 0x10
-	MxS16 m_peScore;      // 0x12
-	MxS16 m_maScore;      // 0x14
-	MxS16 m_paScore;      // 0x16
-	MxS16 m_niScore;      // 0x18
-	MxS16 m_laScore;      // 0x1a
-	MxS16 m_peHighScore;  // 0x1c
-	MxS16 m_maHighScore;  // 0x1e
-	MxS16 m_paHighScore;  // 0x20
-	MxS16 m_niHighScore;  // 0x22
-	MxS16 m_laHighScore;  // 0x24
+	MxU32 m_state;          // 0x08
+	MxLong m_startTime;     // 0x0c
+	MxBool m_takingTooLong; // 0x10
+	MxS16 m_peScore;        // 0x12
+	MxS16 m_maScore;        // 0x14
+	MxS16 m_paScore;        // 0x16
+	MxS16 m_niScore;        // 0x18
+	MxS16 m_laScore;        // 0x1a
+	MxS16 m_peHighScore;    // 0x1c
+	MxS16 m_maHighScore;    // 0x1e
+	MxS16 m_paHighScore;    // 0x20
+	MxS16 m_niHighScore;    // 0x22
+	MxS16 m_laHighScore;    // 0x24
 };
 
 // VTABLE: LEGO1 0x100d7ee0
@@ -174,10 +181,10 @@ public:
 	virtual MxLong HandleEndAction(MxEndActionNotificationParam& p_param);       // vtable+0xf0
 
 	void CreateState();
-	void FUN_1004dab0();
+	void Init();
 	void ActivateSceneActions();
 	void StopActions();
-	void FUN_1004dbe0();
+	void Reset();
 
 	// SYNTHETIC: LEGO1 0x1004c950
 	// TowTrack::`scalar deleting destructor'
@@ -192,8 +199,8 @@ private:
 	TowTrackMissionState* m_state;      // 0x164
 	MxS16 m_unk0x168;                   // 0x168
 	MxS16 m_actorId;                    // 0x16a
-	MxS16 m_unk0x16c;                   // 0x16c
-	MxS16 m_unk0x16e;                   // 0x16e
+	MxS16 m_treeBlockageTriggered;      // 0x16c
+	MxS16 m_speedComplaintTriggered;    // 0x16e
 	IsleScript::Script m_lastAction;    // 0x170
 	IsleScript::Script m_lastAnimation; // 0x174
 	MxFloat m_fuel;                     // 0x178
