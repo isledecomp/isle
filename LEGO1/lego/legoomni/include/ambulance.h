@@ -211,7 +211,7 @@ private:
 	MxS16 m_atPoliceTask;               // 0x16c
 	MxS16 m_atBeachTask;                // 0x16e
 	MxS16 m_taskState;                  // 0x170
-	MxS16 m_unk0x172;                   // 0x172
+	MxS16 m_enableRandomAudio;          // 0x172
 	IsleScript::Script m_lastAction;    // 0x174
 	IsleScript::Script m_lastAnimation; // 0x178
 	MxFloat m_fuel;                     // 0x17c
