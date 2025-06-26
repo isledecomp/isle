@@ -86,7 +86,7 @@ public:
 	MxBool SwitchMove(LegoROI* p_roi);
 	MxBool SwitchMood(LegoROI* p_roi);
 	MxU32 GetAnimationId(LegoROI* p_roi);
-	MxU32 GetSoundId(LegoROI* p_roi, MxBool p_und);
+	MxU32 GetSoundId(LegoROI* p_roi, MxBool p_basedOnMood);
 	MxU8 GetMood(LegoROI* p_roi);
 	LegoROI* CreateAutoROI(const char* p_name, const char* p_lodName, MxBool p_createEntity);
 	MxResult UpdateBoundingSphereAndBox(LegoROI* p_roi);

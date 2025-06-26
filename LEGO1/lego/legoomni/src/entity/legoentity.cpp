@@ -263,7 +263,7 @@ void LegoEntity::ParseAction(char* p_extra)
 
 // FUNCTION: LEGO1 0x10010f10
 // FUNCTION: BETA10 0x1007ee87
-void LegoEntity::ClickSound(MxBool p_und)
+void LegoEntity::ClickSound(MxBool p_basedOnMood)
 {
 	if (!IsInteraction(c_disabled)) {
 		MxU32 objectId = 0;
@@ -271,15 +271,15 @@ void LegoEntity::ClickSound(MxBool p_und)
 
 		switch (m_type) {
 		case e_actor:
-			objectId = CharacterManager()->GetSoundId(m_roi, p_und);
+			objectId = CharacterManager()->GetSoundId(m_roi, p_basedOnMood);
 			break;
 		case e_unk1:
 			break;
 		case e_plant:
-			objectId = PlantManager()->GetSoundId(this, p_und);
+			objectId = PlantManager()->GetSoundId(this, p_basedOnMood);
 			break;
 		case e_building:
-			objectId = BuildingManager()->GetSoundId(this, p_und);
+			objectId = BuildingManager()->GetSoundId(this, p_basedOnMood);
 			break;
 		}
 
