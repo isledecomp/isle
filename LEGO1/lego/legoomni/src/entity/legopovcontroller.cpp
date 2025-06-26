@@ -153,7 +153,7 @@ MxResult LegoPointOfViewController::Tickle()
 			MxMatrix mat;
 
 			CalcLocalTransform(newPos, newDir, pov->GetWorldUp(), mat);
-			((TimeROI*) pov)->FUN_100a9b40(mat, Timer()->GetTime());
+			((TimeROI*) pov)->CalculateWorldVelocity(mat, Timer()->GetTime());
 			pov->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
 			m_lego3DView->Moved(*pov);
 
