@@ -133,7 +133,7 @@ MxResult LegoAnimActor::FUN_1001c360(float p_und, Matrix4& p_transform)
 			}
 
 			for (MxS32 j = 0; j < n->GetNumChildren(); j++) {
-				LegoROI::FUN_100a8e80(n->GetChild(j), p_transform, p_und, roiMap);
+				LegoROI::ApplyAnimationTransformation(n->GetChild(j), p_transform, p_und, roiMap);
 			}
 
 			if (m_cameraFlag) {

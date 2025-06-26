@@ -906,7 +906,7 @@ void LegoAnimPresenter::FUN_1006b900(LegoAnim* p_anim, MxLong p_time, Matrix4* p
 		}
 	}
 
-	LegoROI::FUN_100a8fd0(root, mat, p_time, m_roiMap);
+	LegoROI::ApplyTransform(root, mat, p_time, m_roiMap);
 }
 
 // FUNCTION: LEGO1 0x1006b9a0
@@ -940,7 +940,7 @@ void LegoAnimPresenter::FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p
 		}
 	}
 
-	LegoROI::FUN_100a8e80(root, mat, p_time, m_roiMap);
+	LegoROI::ApplyAnimationTransformation(root, mat, p_time, m_roiMap);
 }
 
 // FUNCTION: LEGO1 0x1006bac0

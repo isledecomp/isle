@@ -26,21 +26,26 @@ public:
 	~LegoROI() override;
 
 	LegoResult Read(
-		OrientableROI* p_unk0xd4,
+		OrientableROI* p_parentROI,
 		Tgl::Renderer* p_renderer,
 		ViewLODListManager* p_viewLODListManager,
 		LegoTextureContainer* p_textureContainer,
 		LegoStorage* p_storage
 	);
 	LegoROI* FindChildROI(const LegoChar* p_name, LegoROI* p_roi);
-	LegoResult ApplyAnimationTransformation(
+	LegoResult ApplyChildAnimationTransformation(
 		LegoTreeNode* p_node,
 		const Matrix4& p_matrix,
 		LegoTime p_time,
 		LegoROI* p_roi
 	);
-	static void FUN_100a8e80(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap);
-	static void FUN_100a8fd0(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap);
+	static void ApplyAnimationTransformation(
+		LegoTreeNode* p_node,
+		Matrix4& p_matrix,
+		LegoTime p_time,
+		LegoROI** p_roiMap
+	);
+	static void ApplyTransform(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap);
 	LegoResult SetFrame(LegoAnim* p_anim, LegoTime p_time);
 	LegoResult SetLodColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
 	LegoResult SetTextureInfo(LegoTextureInfo* p_textureInfo);
@@ -91,10 +96,10 @@ public:
 	// LegoROI::`scalar deleting destructor'
 
 private:
-	LegoChar* m_name;        // 0xe4
-	BoundingSphere m_sphere; // 0xe8
-	undefined m_unk0x100;    // 0x100
-	LegoEntity* m_entity;    // 0x104
+	LegoChar* m_name;         // 0xe4
+	BoundingSphere m_sphere;  // 0xe8
+	LegoBool m_sharedLodList; // 0x100
+	LegoEntity* m_entity;     // 0x104
 };
 
 // VTABLE: LEGO1 0x100dbea8
