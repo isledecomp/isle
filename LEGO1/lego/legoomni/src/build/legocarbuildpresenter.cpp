@@ -336,9 +336,9 @@ void LegoCarBuildAnimPresenter::SwapNodesByName(LegoChar* p_name1, LegoChar* p_n
 		strcpy(node1->GetName(), node2->GetName());
 		strcpy(node2->GetName(), buffer);
 
-		LegoU16 val1 = node1->GetUnknown0x20();
-		node1->SetUnknown0x20(node2->GetUnknown0x20());
-		node2->SetUnknown0x20(val1);
+		LegoU16 val1 = node1->GetROIIndex();
+		node1->SetROIIndex(node2->GetROIIndex());
+		node2->SetROIIndex(val1);
 	}
 }
 
@@ -456,7 +456,7 @@ void LegoCarBuildAnimPresenter::FUN_100795d0(LegoChar* p_param)
 		assert(newHideKey);
 
 		newHideKey->SetTime(0);
-		newHideKey->SetUnknown0x08(FALSE);
+		newHideKey->SetVisible(FALSE);
 
 		data->SetNumMorphKeys(1);
 		data->SetMorphKeys(newHideKey);
@@ -577,10 +577,10 @@ void LegoCarBuildAnimPresenter::RotateAroundYAxis(MxFloat p_angle)
 		newRotation.EqualsHamiltonProduct(currentRotation, additionalRotation);
 
 		if (newRotation[3] < 0.9999) {
-			rotationKey->FUN_100739a0(TRUE);
+			rotationKey->SetActive(TRUE);
 		}
 		else {
-			rotationKey->FUN_100739a0(FALSE);
+			rotationKey->SetActive(FALSE);
 		}
 
 		m_platformAnimNodeData->GetRotationKey(0)->SetX(newRotation[0]);

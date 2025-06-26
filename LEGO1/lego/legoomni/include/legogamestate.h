@@ -150,7 +150,18 @@ public:
 		MxS16 m_totalScore;  // 0x00
 		MxU8 m_scores[5][5]; // 0x02
 		Username m_name;     // 0x1c
-		MxS16 m_unk0x2a;     // 0x2a
+		MxS16 m_playerId;    // 0x2a
+
+		ScoreItem& operator=(const ScoreItem& p_other)
+		{
+			// MSVC auto-generates an operator=, but LegoGameState::WriteScoreHistory() has a much better match
+			// with a manual implementation.
+			m_totalScore = p_other.m_totalScore;
+			memcpy(m_scores, p_other.m_scores, sizeof(m_scores));
+			m_name = p_other.m_name;
+			m_playerId = p_other.m_playerId;
+			return *this;
+		}
 	};
 
 	// SIZE 0x372
@@ -158,7 +169,7 @@ public:
 		History();
 		void WriteScoreHistory();
 		MxResult Serialize(LegoStorage* p_storage);
-		ScoreItem* FUN_1003cc90(Username* p_player, MxS16 p_unk0x24, MxS32& p_unk0x2c);
+		ScoreItem* FindPlayerInScoreHistory(Username* p_player, MxS16 p_unk0x24, MxS32& p_unk0x2c);
 
 		// FUNCTION: BETA10 0x1002c2b0
 		MxS16 GetCount() { return m_count; }
@@ -167,9 +178,12 @@ public:
 		// FUNCTION: BETA10 0x1002c540
 		ScoreItem* GetScore(MxS32 p_index) { return p_index >= m_count ? NULL : &m_scores[p_index]; }
 
-		MxS16 m_count;          // 0x00
-		ScoreItem m_scores[20]; // 0x02
-		MxS16 m_unk0x372;       // 0x372
+		MxS16 m_count; // 0x00
+#ifdef BETA10
+		MxS16 m_indices[20]; // 0x02
+#endif
+		ScoreItem m_scores[20]; // 0x02 (0x22 for BETA10)
+		MxS16 m_nextPlayerId;   // 0x372 (0x392 for BETA10)
 	};
 
 	LegoGameState();
@@ -209,14 +223,8 @@ public:
 	Act GetCurrentAct() { return m_currentAct; }
 
 	Act GetLoadedAct() { return m_loadedAct; }
-	Area GetPreviousArea() { return m_previousArea; }
-	Area GetUnknown0x42c() { return m_unk0x42c; }
 
-	void SetDirty(MxBool p_isDirty) { m_isDirty = p_isDirty; }
-	void SetPreviousArea(Area p_previousArea) { m_previousArea = p_previousArea; }
 	void SetActorId(MxU8 p_actorId) { m_actorId = p_actorId; }
-	Username* GetPlayersIndex(MxS32 p_index) { return &m_players[p_index]; }
-	MxS16 GetPlayerCount() { return m_playerCount; }
 	LegoBackgroundColor* GetBackgroundColor() { return m_backgroundColor; }
 
 	void SetCurrentAct(Act p_currentAct);
@@ -240,14 +248,11 @@ private:
 	LegoBackgroundColor* m_tempBackgroundColor; // 0x1c
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
 
-	// TODO: Most likely getters/setters are not used according to BETA for the following members:
-
 public:
-	MxS16 m_unk0x24;                      // 0x24
+	MxS16 m_currentPlayerId;              // 0x24
 	MxS16 m_playerCount;                  // 0x26
 	Username m_players[9];                // 0x28
 	History m_history;                    // 0xa6
-	undefined2 m_unk0x41a;                // 0x41a
 	JukeboxScript::Script m_jukeboxMusic; // 0x41c
 	MxBool m_isDirty;                     // 0x420
 	Area m_currentArea;                   // 0x424

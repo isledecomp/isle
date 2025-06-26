@@ -15,9 +15,16 @@
 // SIZE 0x28
 class BoundingBox {
 public:
+	// The BETA10 matches may reference the wrong version
+
+	// FUNCTION: BETA10 0x1004a7a0
 	const Vector3& Min() const { return min; }
+
 	Vector3& Min() { return min; }
+
+	// FUNCTION: BETA10 0x1004a7c0
 	const Vector3& Max() const { return max; }
+
 	Vector3& Max() { return max; }
 
 private:
@@ -31,13 +38,25 @@ private:
 // SIZE 0x18
 class BoundingSphere {
 public:
+	// The BETA10 matches may reference the wrong version
+
+	// FUNCTION: BETA10 0x1001fac0
 	const Vector3& Center() const { return center; }
+
+	// FUNCTION: BETA10 0x100d55a0
 	Vector3& Center() { return center; }
+
+	// FUNCTION: BETA10 0x1001fd30
 	const float& Radius() const { return radius; }
+
+	// FUNCTION: BETA10 0x1001fae0
 	float& Radius() { return radius; }
 
 	// SYNTHETIC: BETA10 0x1001fb90
 	// BoundingSphere::operator=
+
+	// SYNTHETIC: BETA10 0x1001fc50
+	// BoundingSphere::BoundingSphere
 
 private:
 	Mx3DPointFloat center; // 0x00
@@ -136,6 +155,7 @@ protected:
 // list<ROI *,allocator<ROI *> >::~list<ROI *,allocator<ROI *> >
 
 // SYNTHETIC: LEGO1 0x100a5d50
+// SYNTHETIC: BETA10 0x101686a0
 // ROI::~ROI
 
 #endif // ROI_H

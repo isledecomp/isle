@@ -13,6 +13,7 @@
 */
 
 // VTABLE: LEGO1 0x100dbe70
+// VTABLE: BETA10 0x101c3908
 // SIZE 0xe4
 class ViewROI : public OrientableROI {
 public:
@@ -21,6 +22,7 @@ public:
 		c_lodLevelInvisible = -2,
 	};
 
+	// FUNCTION: BETA10 0x1018c5e0
 	ViewROI(Tgl::Renderer* pRenderer, ViewLODList* lodList)
 	{
 		SetLODList(lodList);
@@ -29,6 +31,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100a9e20
+	// FUNCTION: BETA10 0x1018c680
 	~ViewROI() override
 	{
 		// SetLODList() will decrease refCount of LODList
@@ -36,6 +39,7 @@ public:
 		delete geometry;
 	}
 
+	// FUNCTION: BETA10 0x1007b540
 	void SetLODList(ViewLODList* lodList)
 	{
 		// ??? inherently type unsafe - kind of... because, now, ROI
@@ -68,6 +72,8 @@ public:
 
 protected:
 	void UpdateWorldDataWithTransformAndChildren(const Matrix4& parent2world) override; // vtable+0x28
+
+	void SetGeometryTransformation();
 
 	Tgl::Group* geometry; // 0xdc
 	int m_lodLevel;       // 0xe0

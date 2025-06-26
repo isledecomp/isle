@@ -866,4 +866,7 @@ inline D3DRMMATERIALMODE Translate(MaterialMode mode)
 // GLOBAL: LEGO1 0x100dd1e0
 // IID_IDirect3DRMMeshBuilder
 
+// GLOBAL: LEGO1 0x100dd1f0
+// IID_IDirect3DRMMesh
+
 #endif

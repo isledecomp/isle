@@ -351,7 +351,7 @@ LegoResult LegoLOD::SetTextureInfo(LegoTextureInfo* p_textureInfo)
 }
 
 // FUNCTION: LEGO1 0x100aad70
-LegoResult LegoLOD::FUN_100aad70(LegoTextureInfo* p_textureInfo)
+LegoResult LegoLOD::UpdateTextureInfo(LegoTextureInfo* p_textureInfo)
 {
 	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
 		if (m_melems[i].m_textured) {

@@ -634,7 +634,7 @@ MxBool LegoCharacterManager::SetHeadTexture(LegoROI* p_roi, LegoTextureInfo* p_t
 			LegoLOD* clone = lod->Clone(renderer);
 
 			if (p_texture != NULL) {
-				clone->FUN_100aad70(p_texture);
+				clone->UpdateTextureInfo(p_texture);
 			}
 
 			dupLodList->PushBack(clone);

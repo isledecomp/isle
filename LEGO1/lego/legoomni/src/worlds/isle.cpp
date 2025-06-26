@@ -121,7 +121,7 @@ MxResult Isle::Create(MxDSAction& p_dsAction)
 		m_act1state = act1state;
 
 		EnableAnimations(TRUE);
-		GameState()->SetDirty(TRUE);
+		GameState()->m_isDirty = TRUE;
 	}
 
 	return result;
@@ -810,7 +810,7 @@ void Isle::Enable(MxBool p_enable)
 			AnimationManager()->EnableCamAnims(FALSE);
 
 			g_isleFlags &= ~c_playMusic;
-			m_ambulance->FUN_10036e60();
+			m_ambulance->Init();
 			break;
 		case 11:
 			m_act1state->m_unk0x018 = 0;
@@ -1209,7 +1209,7 @@ MxBool Isle::Escape()
 	case 10:
 		if (UserActor() != NULL && !UserActor()->IsA("Ambulance")) {
 			m_ambulance->StopActions();
-			m_ambulance->FUN_10037250();
+			m_ambulance->Reset();
 		}
 		break;
 	}
@@ -1250,7 +1250,7 @@ void Isle::FUN_10033350()
 	if (m_act1state->m_unk0x018 == 10) {
 		if (UserActor() != NULL && !UserActor()->IsA("Ambulance")) {
 			m_ambulance->StopActions();
-			m_ambulance->FUN_10037250();
+			m_ambulance->Reset();
 		}
 	}
 
