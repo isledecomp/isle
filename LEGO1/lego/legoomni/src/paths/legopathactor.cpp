@@ -439,7 +439,7 @@ void LegoPathActor::Animate(float p_time)
 			LegoWorld* world = CurrentWorld();
 
 			if (world) {
-				world->GetCameraController()->FUN_10012290(DTOR(m_unk0x14c));
+				world->GetCameraController()->RotateZ(DTOR(m_unk0x14c));
 			}
 		}
 	}

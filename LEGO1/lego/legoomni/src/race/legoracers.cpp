@@ -340,7 +340,7 @@ void LegoRaceCar::KickCamera(float p_param)
 			a->GetAnimTreePtr()->GetCamAnim()->FUN_1009f490(deltaTime, transformationMatrix);
 
 			if (r->GetCameraController()) {
-				r->GetCameraController()->FUN_100123e0(transformationMatrix, 0);
+				r->GetCameraController()->TransformPointOfView(transformationMatrix, 0);
 			}
 
 			m_roi->SetLocal2World(transformationMatrix);
