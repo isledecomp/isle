@@ -62,8 +62,14 @@ public:
 	void SetWorldSpeed(MxFloat p_worldSpeed) override; // vtable+0x30
 
 	// FUNCTION: LEGO1 0x10014150
-	MxU32 VTable0x6c(LegoPathBoundary* p_boundary, Vector3& p_v1, Vector3& p_v2, float p_f1, float p_f2, Vector3& p_v3)
-		override
+	MxU32 VTable0x6c(
+		LegoPathBoundary* p_boundary,
+		Vector3& p_v1,
+		Vector3& p_v2,
+		float p_f1,
+		float p_f2,
+		Vector3& p_v3
+	) override
 	{
 		return LegoJetskiRaceActor::VTable0x6c(p_boundary, p_v1, p_v2, p_f1, p_f2, p_v3);
 	} // vtable+0x6c
@@ -125,8 +131,14 @@ public:
 
 	// FUNCTION: LEGO1 0x10014500
 	// FUNCTION: BETA10 0x100cd5e0
-	MxU32 VTable0x6c(LegoPathBoundary* p_boundary, Vector3& p_v1, Vector3& p_v2, float p_f1, float p_f2, Vector3& p_v3)
-		override
+	MxU32 VTable0x6c(
+		LegoPathBoundary* p_boundary,
+		Vector3& p_v1,
+		Vector3& p_v2,
+		float p_f1,
+		float p_f2,
+		Vector3& p_v3
+	) override
 	{
 		return LegoCarRaceActor::VTable0x6c(p_boundary, p_v1, p_v2, p_f1, p_f2, p_v3);
 	} // vtable+0x6c
@@ -155,7 +167,7 @@ public:
 
 private:
 	undefined m_userState;    // 0x54
-	float m_kickStart;          // 0x58
+	float m_kickStart;        // 0x58
 	Mx3DPointFloat m_unk0x5c; // 0x5c
 
 	// Names verified by BETA10 0x100cb4a9
