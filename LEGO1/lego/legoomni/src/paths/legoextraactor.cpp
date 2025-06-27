@@ -169,7 +169,7 @@ inline void LegoExtraActor::FUN_1002ad8a()
 		m_assAnimP->FUN_1006d680(this, -20.0f);
 
 		for (MxS32 i = 0; i < m_animMaps.size(); i++) {
-			if (m_animMaps[i]->GetUnknown0x00() == -20.0f) {
+			if (m_animMaps[i]->GetWorldSpeed() == -20.0f) {
 				m_assAnim = new LegoAnimActorStruct(*m_animMaps[i]);
 				break;
 			}
@@ -181,7 +181,7 @@ inline void LegoExtraActor::FUN_1002ad8a()
 		m_disAnimP->FUN_1006d680(this, -21.0f);
 
 		for (MxS32 i = 0; i < m_animMaps.size(); i++) {
-			if (m_animMaps[i]->GetUnknown0x00() == -21.0f) {
+			if (m_animMaps[i]->GetWorldSpeed() == -21.0f) {
 				m_disAnim = new LegoAnimActorStruct(*m_animMaps[i]);
 				break;
 			}
@@ -410,7 +410,7 @@ void LegoExtraActor::VTable0xc4()
 		if (b) {
 			float duration = m_animMaps[m_curAnim]->GetDuration();
 			MxMatrix matrix(m_unk0xec);
-			LegoAnimActor::FUN_1001c360(duration, matrix);
+			LegoAnimActor::AnimateWithTransform(duration, matrix);
 		}
 	}
 }

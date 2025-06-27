@@ -268,10 +268,10 @@ void LegoRaceCar::ParseAction(char* p_extra)
 		MxS32 i;
 
 		for (i = 0; i < m_animMaps.size(); i++) {
-			if (m_animMaps[i]->GetUnknown0x00() == -1.0f) {
+			if (m_animMaps[i]->GetWorldSpeed() == -1.0f) {
 				m_skelKick1Anim = m_animMaps[i];
 			}
-			else if (m_animMaps[i]->GetUnknown0x00() == -2.0f) {
+			else if (m_animMaps[i]->GetWorldSpeed() == -2.0f) {
 				m_skelKick2Anim = m_animMaps[i];
 			}
 		}

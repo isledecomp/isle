@@ -144,7 +144,7 @@ void Act2Actor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 void Act2Actor::FUN_10018980()
 {
 	for (MxS32 i = 0; i < m_animMaps.size(); i++) {
-		if (m_animMaps[i]->GetUnknown0x00() == -1.0f) {
+		if (m_animMaps[i]->GetWorldSpeed() == -1.0f) {
 			m_shootAnim = m_animMaps[i];
 		}
 	}

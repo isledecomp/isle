@@ -22,15 +22,15 @@ RaceSkel::~RaceSkel()
 
 // FUNCTION: LEGO1 0x10071b50
 // FUNCTION: BETA10 0x100f13cf
-MxResult RaceSkel::FUN_1001c360(float p_und, Matrix4& p_transform)
+MxResult RaceSkel::AnimateWithTransform(float p_time, Matrix4& p_transform)
 {
 	p_transform[3][0] = -630.0f;
 	p_transform[3][1] = -4.688f;
 	p_transform[3][2] = 323.0f;
 
-	m_animPosition = p_und;
+	m_animPosition = p_time;
 
-	return LegoAnimActor::FUN_1001c360(p_und, p_transform);
+	return LegoAnimActor::AnimateWithTransform(p_time, p_transform);
 }
 
 // FUNCTION: LEGO1 0x10071b90
