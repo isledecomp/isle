@@ -137,7 +137,7 @@ MxResult LegoAnimActor::FUN_1001c360(float p_und, Matrix4& p_transform)
 			}
 
 			if (m_cameraFlag) {
-				FUN_10010c30();
+				TransformPointOfView();
 			}
 		}
 

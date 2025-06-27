@@ -155,7 +155,12 @@ void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 
 // FUNCTION: LEGO1 0x100109b0
 // FUNCTION: BETA10 0x1007e8b8
-void LegoEntity::SetLocation(const Vector3& p_location, const Vector3& p_direction, const Vector3& p_up, MxBool p_und)
+void LegoEntity::SetLocation(
+	const Vector3& p_location,
+	const Vector3& p_direction,
+	const Vector3& p_up,
+	MxBool p_updateCamera
+)
 {
 	Mx3DPointFloat direction;
 	Mx3DPointFloat up;
@@ -182,14 +187,14 @@ void LegoEntity::SetLocation(const Vector3& p_location, const Vector3& p_directi
 		m_roi->UpdateTransformationRelativeToParent(mat);
 		VideoManager()->Get3DManager()->Moved(*m_roi);
 
-		if (p_und) {
-			FUN_10010c30();
+		if (p_updateCamera) {
+			TransformPointOfView();
 		}
 	}
 }
 
 // FUNCTION: LEGO1 0x10010c30
-void LegoEntity::FUN_10010c30()
+void LegoEntity::TransformPointOfView()
 {
 	LegoWorld* world = CurrentWorld();
 
