@@ -31,8 +31,8 @@ MxS32 LegoRaceActor::VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3)
 
 	if (m_userNavFlag && result) {
 		MxLong time = Timer()->GetTime();
-		if (time - g_unk0x100f3308 > 1000) {
-			g_unk0x100f3308 = time;
+		if (time - g_timeLastHitSoundPlayed > 1000) {
+			g_timeLastHitSoundPlayed = time;
 			const char* soundKey = VariableTable()->GetVariable(g_strHIT_ACTOR_SOUND);
 
 			if (soundKey && *soundKey) {

@@ -44,7 +44,7 @@ LegoCarRaceActor::LegoCarRaceActor()
 {
 	m_unk0x08 = 1.0f;
 	m_unk0x70 = 0.0f;
-	m_unk0x0c = 0;
+	m_animState = 0;
 	m_maxLinearVel = 0.0f;
 	m_frequencyFactor = 1.0f;
 	m_unk0x1c = 0;
@@ -223,18 +223,18 @@ void LegoCarRaceActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoOriente
 // FUNCTION: BETA10 0x100cdbae
 void LegoCarRaceActor::Animate(float p_time)
 {
-	// m_unk0x0c is not an MxBool, there are places where it is set to 2 or higher
-	if (m_unk0x0c == 0) {
+	// m_animState is not an MxBool, there are places where it is set to 2 or higher
+	if (m_animState == 0) {
 		const char* value = VariableTable()->GetVariable(g_raceState);
 
 		if (strcmpi(value, g_racing) == 0) {
-			m_unk0x0c = 1;
+			m_animState = 1;
 			m_lastTime = p_time - 1.0f;
 			m_unk0x1c = p_time;
 		}
 	}
 
-	if (m_unk0x0c == 1) {
+	if (m_animState == 1) {
 		LegoAnimActor::Animate(p_time);
 	}
 }
@@ -398,10 +398,10 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 // FUNCTION: LEGO1 0x10081550
 void LegoJetskiRaceActor::Animate(float p_time)
 {
-	if (m_unk0x0c == 0) {
+	if (m_animState == 0) {
 		const LegoChar* raceState = VariableTable()->GetVariable(g_raceState);
 		if (!stricmp(raceState, g_racing)) {
-			m_unk0x0c = 1;
+			m_animState = 1;
 			m_lastTime = p_time - 1.0f;
 			m_unk0x1c = p_time;
 		}
@@ -410,7 +410,7 @@ void LegoJetskiRaceActor::Animate(float p_time)
 		}
 	}
 
-	if (m_unk0x0c == 1) {
+	if (m_animState == 1) {
 		LegoAnimActor::Animate(p_time);
 	}
 }

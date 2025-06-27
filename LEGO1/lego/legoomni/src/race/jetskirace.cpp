@@ -130,7 +130,7 @@ MxLong JetskiRace::HandleClick(LegoEventNotificationParam& p_param)
 			m_act1State->m_unk0x018 = 0;
 			VariableTable()->SetVariable(g_raceState, "");
 			VariableTable()->SetVariable(g_strHIT_WALL_SOUND, "");
-			LegoRaceCar::FUN_10012de0();
+			LegoRaceCar::InitYouCantStopSound();
 			m_destLocation = LegoGameState::e_jetraceExterior;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
@@ -138,7 +138,7 @@ MxLong JetskiRace::HandleClick(LegoEventNotificationParam& p_param)
 			m_act1State->m_unk0x018 = 0;
 			VariableTable()->SetVariable(g_raceState, "");
 			VariableTable()->SetVariable(g_strHIT_WALL_SOUND, "");
-			LegoRaceCar::FUN_10012de0();
+			LegoRaceCar::InitYouCantStopSound();
 			m_destLocation = LegoGameState::e_infomain;
 			result = 1;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
@@ -191,7 +191,7 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 					VariableTable()->SetVariable(g_raceState, "");
 					VariableTable()->SetVariable(g_strHIT_WALL_SOUND, "");
-					LegoRaceCar::FUN_10012de0();
+					LegoRaceCar::InitYouCantStopSound();
 					m_raceState->m_unk0x28 = 2;
 
 					RaceState::Entry* raceStateEntry = m_raceState->GetState(GameState()->GetActorId());
@@ -292,6 +292,6 @@ MxBool JetskiRace::Escape()
 	VariableTable()->SetVariable(g_raceState, "");
 	VariableTable()->SetVariable(g_strHIT_WALL_SOUND, "");
 	m_destLocation = LegoGameState::e_infomain;
-	LegoRaceCar::FUN_10012de0();
+	LegoRaceCar::InitYouCantStopSound();
 	return TRUE;
 }

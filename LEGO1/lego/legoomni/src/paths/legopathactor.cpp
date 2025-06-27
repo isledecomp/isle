@@ -36,7 +36,7 @@ const char* g_strHIT_WALL_SOUND = "HIT_WALL_SOUND";
 
 // GLOBAL: LEGO1 0x100f3308
 // GLOBAL: BETA10 0x101f1e1c
-MxLong g_unk0x100f3308 = 0;
+MxLong g_timeLastHitSoundPlayed = 0;
 
 // FUNCTION: LEGO1 0x1002d700
 // FUNCTION: BETA10 0x100ae6e0
@@ -291,8 +291,8 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 				if (m_boundary == oldBoundary) {
 					MxLong time = Timer()->GetTime();
 
-					if (time - g_unk0x100f3308 > 1000) {
-						g_unk0x100f3308 = time;
+					if (time - g_timeLastHitSoundPlayed > 1000) {
+						g_timeLastHitSoundPlayed = time;
 						const char* var = VariableTable()->GetVariable(g_strHIT_WALL_SOUND);
 
 						if (var && var[0] != 0) {
