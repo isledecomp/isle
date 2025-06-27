@@ -83,7 +83,7 @@ public:
 
 protected:
 	MxFloat m_unk0x08; // 0x08
-	MxU8 m_unk0x0c;    // 0x0c
+	MxU8 m_animState;    // 0x0c
 
 	// Could be a multiplier for the maximum speed when going straight
 	MxFloat m_unk0x10; // 0x10

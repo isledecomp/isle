@@ -144,10 +144,10 @@ public:
 	MxResult VTable0x9c() override; // vtable+0x9c
 
 	virtual void SetMaxLinearVelocity(float p_maxLinearVelocity);
-	virtual void FUN_10012ff0(float p_param);
+	virtual void KickCamera(float p_param);
 	virtual MxU32 HandleSkeletonKicks(float p_param1);
 
-	static void FUN_10012de0();
+	static void InitYouCantStopSound();
 	static void InitSoundIndices();
 
 	// SYNTHETIC: LEGO1 0x10014240
@@ -155,7 +155,7 @@ public:
 
 private:
 	undefined m_userState;    // 0x54
-	float m_unk0x58;          // 0x58
+	float m_kickStart;          // 0x58
 	Mx3DPointFloat m_unk0x5c; // 0x5c
 
 	// Names verified by BETA10 0x100cb4a9
