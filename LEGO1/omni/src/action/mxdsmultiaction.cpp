@@ -57,14 +57,14 @@ MxDSMultiAction& MxDSMultiAction::operator=(MxDSMultiAction& p_dsMultiAction)
 
 // FUNCTION: LEGO1 0x100ca290
 // FUNCTION: BETA10 0x10159728
-void MxDSMultiAction::SetUnknown90(MxLong p_unk0x90)
+void MxDSMultiAction::SetTimeStarted(MxLong p_timeStarted)
 {
-	m_unk0x90 = p_unk0x90;
+	m_timeStarted = p_timeStarted;
 
 	MxDSActionListCursor cursor(m_actionList);
 	MxDSAction* action;
 	while (cursor.Next(action)) {
-		action->SetUnknown90(p_unk0x90);
+		action->SetTimeStarted(p_timeStarted);
 	}
 }
 

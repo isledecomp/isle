@@ -815,7 +815,7 @@ void LegoAnimPresenter::StartingTickle()
 		m_compositePresenter->VTable0x60(this);
 	}
 	else {
-		m_action->SetUnknown90(Timer()->GetTime());
+		m_action->SetTimeStarted(Timer()->GetTime());
 	}
 
 	ProgressTickleState(e_streaming);

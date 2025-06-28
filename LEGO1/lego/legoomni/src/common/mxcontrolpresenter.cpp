@@ -189,7 +189,7 @@ void MxControlPresenter::VTable0x6c(MxS16 p_unk0x4e)
 		m_unk0x4e = p_unk0x4e;
 	}
 
-	m_action->SetUnknown90(Timer()->GetTime());
+	m_action->SetTimeStarted(Timer()->GetTime());
 
 	MxS16 i = 0;
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
