@@ -71,7 +71,7 @@ protected:
 	void Destroy(MxBool p_fromDestructor);
 
 	MxS8 GetPlayedChunks();
-	MxBool FUN_100b1ba0();
+	MxBool ReadyForNextChunk();
 	void WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length);
 
 	WaveFormat* m_waveFormat;       // 0x54
