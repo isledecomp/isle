@@ -40,10 +40,10 @@ MxU8 g_counters[] = {1, 2, 2, 3};
 MxU32 LegoPlantManager::g_maxSound = 8;
 
 // GLOBAL: LEGO1 0x100f3160
-MxU32 g_unk0x100f3160 = 56;
+MxU32 g_plantSoundIdOffset = 56;
 
 // GLOBAL: LEGO1 0x100f3164
-MxU32 g_unk0x100f3164 = 66;
+MxU32 g_plantSoundIdMoodOffset = 66;
 
 // GLOBAL: LEGO1 0x100f3168
 MxS32 LegoPlantManager::g_maxMove[4] = {3, 3, 3, 3};
@@ -513,16 +513,16 @@ MxU32 LegoPlantManager::GetAnimationId(LegoEntity* p_entity)
 
 // FUNCTION: LEGO1 0x10026ba0
 // FUNCTION: BETA10 0x100c61ba
-MxU32 LegoPlantManager::GetSoundId(LegoEntity* p_entity, MxBool p_state)
+MxU32 LegoPlantManager::GetSoundId(LegoEntity* p_entity, MxBool p_basedOnMood)
 {
 	LegoPlantInfo* info = GetInfo(p_entity);
 
-	if (p_state) {
-		return (info->m_mood & 1) + g_unk0x100f3164;
+	if (p_basedOnMood) {
+		return (info->m_mood & 1) + g_plantSoundIdMoodOffset;
 	}
 
 	if (info != NULL) {
-		return info->m_sound + g_unk0x100f3160;
+		return info->m_sound + g_plantSoundIdOffset;
 	}
 
 	return 0;

@@ -78,7 +78,7 @@ public:
 	MxBool SwitchMove(LegoEntity* p_entity);
 	MxBool SwitchMood(LegoEntity* p_entity);
 	MxU32 GetAnimationId(LegoEntity* p_entity);
-	MxU32 GetSoundId(LegoEntity* p_entity, MxBool p_state);
+	MxU32 GetSoundId(LegoEntity* p_entity, MxBool p_basedOnMood);
 	MxBool DecrementCounter(LegoEntity* p_entity);
 	MxBool DecrementCounter(MxS32 p_index);
 	MxBool DecrementCounter(LegoBuildingInfo* p_data);
