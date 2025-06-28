@@ -131,9 +131,9 @@ void LegoControlManager::FUN_100293c0(MxU32 p_objectId, const char* p_atom, MxS1
 			MxDSAction* action = control->GetAction();
 
 			if (action->GetObjectId() == p_objectId && action->GetAtomId().GetInternal() == p_atom) {
-				((MxControlPresenter*) control)->VTable0x6c(p_unk0x4e);
+				((MxControlPresenter*) control)->UpdateEnabledChild(p_unk0x4e);
 
-				if (((MxControlPresenter*) control)->GetUnknown0x4e() == 0) {
+				if (((MxControlPresenter*) control)->GetEnabledChild() == 0) {
 					g_unk0x100f31b0 = -1;
 					g_unk0x100f31b4 = NULL;
 					break;
@@ -154,7 +154,7 @@ MxControlPresenter* LegoControlManager::FUN_100294e0(MxS32 p_x, MxS32 p_y)
 
 		if (presenter) {
 			while (cursor.Next(control)) {
-				if (((MxControlPresenter*) control)->FUN_10044270(p_x, p_y, presenter)) {
+				if (((MxControlPresenter*) control)->CheckButtonDown(p_x, p_y, presenter)) {
 					return (MxControlPresenter*) control;
 				}
 			}
@@ -185,7 +185,7 @@ MxBool LegoControlManager::FUN_10029630()
 	MxPresenter* presenter;
 
 	while (cursor.Next(presenter)) {
-		if (((MxControlPresenter*) presenter)->FUN_10044480(&m_event, m_unk0x14)) {
+		if (((MxControlPresenter*) presenter)->Notify(&m_event, m_unk0x14)) {
 			g_unk0x100f31b0 = m_event.m_clickedObjectId;
 			g_unk0x100f31b4 = m_event.GetClickedAtom();
 			FUN_100292e0();
@@ -206,7 +206,7 @@ MxBool LegoControlManager::FUN_10029750()
 	while (cursor.Next(presenter)) {
 		if (presenter->GetAction() && presenter->GetAction()->GetObjectId() == g_unk0x100f31b0 &&
 			presenter->GetAction()->GetAtomId().GetInternal() == g_unk0x100f31b4) {
-			if (((MxControlPresenter*) presenter)->FUN_10044480(&m_event, m_unk0x14)) {
+			if (((MxControlPresenter*) presenter)->Notify(&m_event, m_unk0x14)) {
 				FUN_100292e0();
 			}
 

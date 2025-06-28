@@ -1650,8 +1650,8 @@ void LegoCarBuild::FUN_10025db0(const char* p_param1, undefined4 p_param2)
 		}
 	}
 	else {
-		if (m_unk0x33c->GetUnknown0x4e() != sVar3) {
-			m_unk0x33c->VTable0x6c(sVar3);
+		if (m_unk0x33c->GetEnabledChild() != sVar3) {
+			m_unk0x33c->UpdateEnabledChild(sVar3);
 		}
 
 		g_unk0x100f11cc = -1;
@@ -1664,7 +1664,7 @@ void LegoCarBuild::FUN_10025e40()
 {
 	SetPresentersEnabled(m_presentersEnabled);
 	if (m_unk0x33c && m_Yellow_Ctl != m_unk0x33c) {
-		m_unk0x33c->VTable0x6c(0);
+		m_unk0x33c->UpdateEnabledChild(0);
 	}
 }
 
