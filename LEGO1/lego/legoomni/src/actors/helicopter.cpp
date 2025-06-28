@@ -189,7 +189,7 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 		break;
 	}
 
-	if (p_param.m_unk0x28 == 1) {
+	if (p_param.m_enabledChild == 1) {
 		MxU32 isPizza = FALSE;
 
 		switch (p_param.m_clickedObjectId) {

@@ -24,11 +24,11 @@ public:
 
 	void SetClickedObjectId(MxS32 p_clickedObjectId) { m_clickedObjectId = p_clickedObjectId; }
 	void SetClickedAtom(const char* p_clickedAtom) { m_clickedAtom = p_clickedAtom; }
-	void SetUnknown0x28(MxS16 p_unk0x28) { m_unk0x28 = p_unk0x28; }
+	void SetEnabledChild(MxS16 p_enabledChild) { m_enabledChild = p_enabledChild; }
 
 	MxS32 m_clickedObjectId;   // 0x20
 	const char* m_clickedAtom; // 0x24
-	MxS16 m_unk0x28;           // 0x28
+	MxS16 m_enabledChild;      // 0x28
 };
 
 // SYNTHETIC: LEGO1 0x10028bf0

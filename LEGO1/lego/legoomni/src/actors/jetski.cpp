@@ -137,7 +137,7 @@ void Jetski::RemoveFromWorld()
 // FUNCTION: LEGO1 0x1007e8e0
 MxLong Jetski::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
-	if (p_param.m_unk0x28 == 1 && CurrentWorld()->IsA("Isle")) {
+	if (p_param.m_enabledChild == 1 && CurrentWorld()->IsA("Isle")) {
 		switch (p_param.m_clickedObjectId) {
 		case IsleScript::c_JetskiArms_Ctl:
 			Exit();

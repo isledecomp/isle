@@ -96,7 +96,7 @@ MxLong InfocenterDoor::HandleControl(LegoControlManagerNotificationParam& p_para
 {
 	MxLong result = 0;
 
-	if (p_param.m_unk0x28 == 1) {
+	if (p_param.m_enabledChild == 1) {
 		DeleteObjects(&m_atomId, InfodoorScript::c_iic037in_PlayWav, 510);
 
 		switch (p_param.m_clickedObjectId) {

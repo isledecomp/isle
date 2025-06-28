@@ -129,7 +129,7 @@ MxLong LegoRaceMap::Notify(MxParam& p_param)
 	if (param.GetNotification() == c_notificationControl &&
 		m_Map_Ctl->GetAction()->GetObjectId() == ((LegoControlManagerNotificationParam&) p_param).m_clickedObjectId) {
 
-		if (((LegoControlManagerNotificationParam&) p_param).m_unk0x28 == 1) {
+		if (((LegoControlManagerNotificationParam&) p_param).m_enabledChild == 1) {
 			m_unk0x08 = TRUE;
 			FUN_1005d4b0();
 			m_stillPresenter->Enable(TRUE);

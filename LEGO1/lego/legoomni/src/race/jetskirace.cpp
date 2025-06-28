@@ -124,7 +124,7 @@ MxLong JetskiRace::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	MxLong result = 0;
 
-	if (p_param.m_unk0x28 == 1) {
+	if (p_param.m_enabledChild == 1) {
 		switch (p_param.m_clickedObjectId) {
 		case JetraceScript::c_JetskiArms_Ctl:
 			m_act1State->m_state = Act1State::e_none;

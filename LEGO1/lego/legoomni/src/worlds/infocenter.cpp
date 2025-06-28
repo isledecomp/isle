@@ -941,7 +941,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 // FUNCTION: BETA10 0x1002ffd4
 MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
-	if (p_param.m_unk0x28 == 1) {
+	if (p_param.m_enabledChild == 1) {
 		m_infoManDialogueTimer = 0;
 
 		InfomainScript::Script actionToPlay = InfomainScript::c_noneInfomain;

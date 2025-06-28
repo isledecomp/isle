@@ -123,7 +123,7 @@ MxBool JukeBox::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	MxStillPresenter* presenter;
 
-	if (p_param.m_unk0x28 == 1) {
+	if (p_param.m_enabledChild == 1) {
 		switch (p_param.m_clickedObjectId) {
 		case JukeboxwScript::c_Dback_Ctl:
 			switch (m_state->m_music) {
