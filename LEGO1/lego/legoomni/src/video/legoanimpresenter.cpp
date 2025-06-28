@@ -790,7 +790,7 @@ void LegoAnimPresenter::StartingTickle()
 	}
 
 	FUN_10069b10();
-	FUN_1006c8a0(TRUE);
+	SetDisabled(TRUE);
 
 	if (m_unk0x78 == NULL) {
 		if (fabs(m_action->GetDirection()[0]) >= 0.00000047683716F ||
@@ -1090,7 +1090,7 @@ void LegoAnimPresenter::EndAction()
 		}
 	}
 
-	FUN_1006c8a0(FALSE);
+	SetDisabled(FALSE);
 	FUN_1006ab70();
 	VTable0x90();
 
@@ -1151,18 +1151,18 @@ void LegoAnimPresenter::VTable0x90()
 }
 
 // FUNCTION: LEGO1 0x1006c8a0
-void LegoAnimPresenter::FUN_1006c8a0(MxBool p_bool)
+void LegoAnimPresenter::SetDisabled(MxBool p_disabled)
 {
 	if (m_roiMapSize != 0 && m_roiMap != NULL) {
 		for (MxU32 i = 1; i <= m_roiMapSize; i++) {
 			LegoEntity* entity = m_roiMap[i]->GetEntity();
 
 			if (entity != NULL) {
-				if (p_bool) {
-					entity->SetUnknown0x10Flag(LegoEntity::c_altBit1);
+				if (p_disabled) {
+					entity->SetInteractionFlag(LegoEntity::c_disabled);
 				}
 				else {
-					entity->ClearUnknown0x10Flag(LegoEntity::c_altBit1);
+					entity->ClearInteractionFlag(LegoEntity::c_disabled);
 				}
 			}
 		}
