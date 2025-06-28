@@ -13,8 +13,8 @@ class LegoCameraController;
 class LegoControlManager;
 class LegoWorld;
 
-extern MxS32 g_unk0x100f31b0;
-extern const char* g_unk0x100f31b4;
+extern MxS32 g_clickedObjectId;
+extern const char* g_clickedAtom;
 
 // VTABLE: LEGO1 0x100d87b8
 // class MxCollection<LegoEventNotificationParam>

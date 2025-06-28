@@ -17,10 +17,10 @@ DECOMP_SIZE_ASSERT(LegoEventNotificationParam, 0x20)
 LegoControlManager::LegoControlManager()
 {
 	m_presenterList = NULL;
-	m_unk0x08 = 0;
-	m_unk0x0c = 0;
-	m_unk0x10 = FALSE;
-	m_unk0x14 = NULL;
+	m_buttonDownState = e_idle;
+	m_handleUpNextTickle = 0;
+	m_secondButtonDown = FALSE;
+	m_handledPresenter = NULL;
 	TickleManager()->RegisterClient(this, 10);
 }
 
@@ -31,11 +31,11 @@ LegoControlManager::~LegoControlManager()
 }
 
 // FUNCTION: LEGO1 0x10028df0
-void LegoControlManager::FUN_10028df0(MxPresenterList* p_presenterList)
+void LegoControlManager::SetPresenterList(MxPresenterList* p_presenterList)
 {
 	m_presenterList = p_presenterList;
-	g_unk0x100f31b0 = -1;
-	g_unk0x100f31b4 = NULL;
+	g_clickedObjectId = -1;
+	g_clickedAtom = NULL;
 }
 
 // FUNCTION: LEGO1 0x10028e10
@@ -56,10 +56,10 @@ void LegoControlManager::Unregister(MxCore* p_listener)
 }
 
 // FUNCTION: LEGO1 0x10029210
-MxBool LegoControlManager::FUN_10029210(LegoEventNotificationParam& p_param, MxPresenter* p_presenter)
+MxBool LegoControlManager::HandleButtonDown(LegoEventNotificationParam& p_param, MxPresenter* p_presenter)
 {
 	if (m_presenterList != NULL && m_presenterList->GetNumElements() != 0) {
-		m_unk0x14 = p_presenter;
+		m_handledPresenter = p_presenter;
 
 		if (p_param.GetNotification() == c_notificationButtonUp ||
 			p_param.GetNotification() == c_notificationButtonDown) {
@@ -71,28 +71,28 @@ MxBool LegoControlManager::FUN_10029210(LegoEventNotificationParam& p_param, MxP
 			m_event.SetKey(p_param.GetKey());
 
 			if (p_param.GetNotification() == c_notificationButtonUp) {
-				if (m_unk0x10 == TRUE) {
-					m_unk0x10 = FALSE;
+				if (m_secondButtonDown == TRUE) {
+					m_secondButtonDown = FALSE;
 					return TRUE;
 				}
 
-				if (g_unk0x100f31b0 != -1 && g_unk0x100f31b4 != NULL) {
-					if (m_unk0x08 == 2) {
-						return FUN_10029750();
+				if (g_clickedObjectId != -1 && g_clickedAtom != NULL) {
+					if (m_buttonDownState == e_tickled) {
+						return HandleButtonUp();
 					}
 					else {
-						m_unk0x0c = 1;
+						m_handleUpNextTickle = 1;
 						return TRUE;
 					}
 				}
 			}
 			else if (p_param.GetNotification() == c_notificationButtonDown) {
-				if (m_unk0x0c == 1) {
-					m_unk0x10 = TRUE;
+				if (m_handleUpNextTickle == 1) {
+					m_secondButtonDown = TRUE;
 					return TRUE;
 				}
 				else {
-					return FUN_10029630();
+					return HandleButtonDown();
 				}
 			}
 		}
@@ -100,15 +100,15 @@ MxBool LegoControlManager::FUN_10029210(LegoEventNotificationParam& p_param, MxP
 		return FALSE;
 	}
 	else {
-		g_unk0x100f31b0 = -1;
-		g_unk0x100f31b4 = NULL;
+		g_clickedObjectId = -1;
+		g_clickedAtom = NULL;
 
 		return FALSE;
 	}
 }
 
 // FUNCTION: LEGO1 0x100292e0
-void LegoControlManager::FUN_100292e0()
+void LegoControlManager::Notify()
 {
 	LegoNotifyListCursor cursor(&m_notifyList);
 	MxCore* target;
@@ -121,7 +121,7 @@ void LegoControlManager::FUN_100292e0()
 }
 
 // FUNCTION: LEGO1 0x100293c0
-void LegoControlManager::FUN_100293c0(MxU32 p_objectId, const char* p_atom, MxS16 p_unk0x4e)
+void LegoControlManager::UpdateEnabledChild(MxU32 p_objectId, const char* p_atom, MxS16 p_enabledChild)
 {
 	if (m_presenterList) {
 		MxPresenterListCursor cursor(m_presenterList);
@@ -131,11 +131,11 @@ void LegoControlManager::FUN_100293c0(MxU32 p_objectId, const char* p_atom, MxS1
 			MxDSAction* action = control->GetAction();
 
 			if (action->GetObjectId() == p_objectId && action->GetAtomId().GetInternal() == p_atom) {
-				((MxControlPresenter*) control)->UpdateEnabledChild(p_unk0x4e);
+				((MxControlPresenter*) control)->UpdateEnabledChild(p_enabledChild);
 
 				if (((MxControlPresenter*) control)->GetEnabledChild() == 0) {
-					g_unk0x100f31b0 = -1;
-					g_unk0x100f31b4 = NULL;
+					g_clickedObjectId = -1;
+					g_clickedAtom = NULL;
 					break;
 				}
 			}
@@ -145,7 +145,7 @@ void LegoControlManager::FUN_100293c0(MxU32 p_objectId, const char* p_atom, MxS1
 
 // FUNCTION: LEGO1 0x100294e0
 // FUNCTION: BETA10 0x1007c92f
-MxControlPresenter* LegoControlManager::FUN_100294e0(MxS32 p_x, MxS32 p_y)
+MxControlPresenter* LegoControlManager::GetControlAt(MxS32 p_x, MxS32 p_y)
 {
 	if (m_presenterList) {
 		MxPresenterListCursor cursor(m_presenterList);
@@ -167,29 +167,29 @@ MxControlPresenter* LegoControlManager::FUN_100294e0(MxS32 p_x, MxS32 p_y)
 // FUNCTION: LEGO1 0x10029600
 MxResult LegoControlManager::Tickle()
 {
-	if (m_unk0x08 == 2 && m_unk0x0c == 1) {
+	if (m_buttonDownState == e_tickled && m_handleUpNextTickle == 1) {
 		m_event.SetNotification(c_notificationButtonUp);
-		FUN_10029750();
+		HandleButtonUp();
 		return 0;
 	}
-	else if (m_unk0x08 == 1) {
-		m_unk0x08 = 2;
+	else if (m_buttonDownState == e_waitNextTickle) {
+		m_buttonDownState = e_tickled;
 	}
 	return 0;
 }
 
 // FUNCTION: LEGO1 0x10029630
-MxBool LegoControlManager::FUN_10029630()
+MxBool LegoControlManager::HandleButtonDown()
 {
 	MxPresenterListCursor cursor(m_presenterList);
 	MxPresenter* presenter;
 
 	while (cursor.Next(presenter)) {
-		if (((MxControlPresenter*) presenter)->Notify(&m_event, m_unk0x14)) {
-			g_unk0x100f31b0 = m_event.m_clickedObjectId;
-			g_unk0x100f31b4 = m_event.GetClickedAtom();
-			FUN_100292e0();
-			m_unk0x08 = 1;
+		if (((MxControlPresenter*) presenter)->Notify(&m_event, m_handledPresenter)) {
+			g_clickedObjectId = m_event.m_clickedObjectId;
+			g_clickedAtom = m_event.GetClickedAtom();
+			Notify();
+			m_buttonDownState = e_waitNextTickle;
 			return TRUE;
 		}
 	}
@@ -198,29 +198,29 @@ MxBool LegoControlManager::FUN_10029630()
 }
 
 // FUNCTION: LEGO1 0x10029750
-MxBool LegoControlManager::FUN_10029750()
+MxBool LegoControlManager::HandleButtonUp()
 {
 	MxPresenterListCursor cursor(m_presenterList);
 	MxPresenter* presenter;
 
 	while (cursor.Next(presenter)) {
-		if (presenter->GetAction() && presenter->GetAction()->GetObjectId() == g_unk0x100f31b0 &&
-			presenter->GetAction()->GetAtomId().GetInternal() == g_unk0x100f31b4) {
-			if (((MxControlPresenter*) presenter)->Notify(&m_event, m_unk0x14)) {
-				FUN_100292e0();
+		if (presenter->GetAction() && presenter->GetAction()->GetObjectId() == g_clickedObjectId &&
+			presenter->GetAction()->GetAtomId().GetInternal() == g_clickedAtom) {
+			if (((MxControlPresenter*) presenter)->Notify(&m_event, m_handledPresenter)) {
+				Notify();
 			}
 
-			g_unk0x100f31b0 = -1;
-			g_unk0x100f31b4 = NULL;
+			g_clickedObjectId = -1;
+			g_clickedAtom = NULL;
 
-			m_unk0x08 = 0;
-			m_unk0x0c = 0;
+			m_buttonDownState = e_idle;
+			m_handleUpNextTickle = 0;
 
 			return TRUE;
 		}
 	}
 
-	g_unk0x100f31b0 = -1;
-	g_unk0x100f31b4 = NULL;
+	g_clickedObjectId = -1;
+	g_clickedAtom = NULL;
 	return FALSE;
 }
