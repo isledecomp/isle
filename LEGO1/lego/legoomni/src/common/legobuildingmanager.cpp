@@ -227,6 +227,8 @@ LegoBuildingInfo g_buildingInfo[16];
 // GLOBAL: LEGO1 0x100f3748
 MxS32 LegoBuildingManager::g_maxMove[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0};
 
+#define HAUS1_INDEX 12
+
 // FUNCTION: LEGO1 0x1002f8b0
 void LegoBuildingManager::configureLegoBuildingManager(MxS32 p_buildingManagerConfig)
 {
@@ -461,7 +463,7 @@ MxBool LegoBuildingManager::SwitchVariant(LegoEntity* p_entity)
 
 		roi->SetVisibility(FALSE);
 		info->m_variant = g_buildingInfoVariants[m_nextVariant];
-		CreateBuilding(12, CurrentWorld());
+		CreateBuilding(HAUS1_INDEX, CurrentWorld());
 
 		if (info->m_entity != NULL) {
 			info->m_entity->GetROI()->SetVisibility(TRUE);
