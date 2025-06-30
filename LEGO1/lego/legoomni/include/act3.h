@@ -129,7 +129,7 @@ public:
 	void RemoveDonut(Act3Ammo& p_p);
 	MxResult ShootPizza(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
 	MxResult ShootDonut(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
-	void HandleHitSound(undefined4 p_param1);
+	void TriggerHitSound(undefined4 p_param1);
 	MxResult FUN_10073360(Act3Ammo& p_ammo, const Vector3& p_param2);
 	MxResult FUN_10073390(Act3Ammo& p_ammo, const Vector3& p_param2);
 	void SetBrickster(Act3Brickster* p_brickster);

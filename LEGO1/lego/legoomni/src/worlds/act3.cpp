@@ -403,7 +403,7 @@ MxResult Act3::ShootDonut(LegoPathController* p_controller, Vector3& p_location,
 
 // FUNCTION: LEGO1 0x10072ad0
 // FUNCTION: BETA10 0x10015eec
-void Act3::HandleHitSound(undefined4 p_param1)
+void Act3::TriggerHitSound(undefined4 p_param1)
 {
 	float time = Timer()->GetTime();
 	Act3Script::Script objectId;
@@ -700,7 +700,7 @@ MxResult Act3::FUN_10073360(Act3Ammo& p_ammo, const Vector3& p_param2)
 {
 	assert(m_brickster);
 	m_brickster->FUN_100417a0(p_ammo, p_param2);
-	HandleHitSound(1);
+	TriggerHitSound(1);
 	return SUCCESS;
 }
 
@@ -717,7 +717,7 @@ MxResult Act3::FUN_10073390(Act3Ammo& p_ammo, const Vector3& p_param2)
 		m_cop2->FUN_10040350(p_ammo, p_param2);
 	}
 
-	HandleHitSound(3);
+	TriggerHitSound(3);
 	g_unk0x100f7814++;
 	return SUCCESS;
 }
