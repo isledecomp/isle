@@ -378,11 +378,11 @@ void Act3Ammo::Animate(float p_time)
 		if (IsBit4()) {
 			if (IsPizza()) {
 				m_world->RemovePizza(*this);
-				m_world->FUN_10072ad0(2);
+				m_world->TriggerHitSound(2);
 			}
 			else {
 				m_world->RemoveDonut(*this);
-				m_world->FUN_10072ad0(4);
+				m_world->TriggerHitSound(4);
 			}
 		}
 		else {
