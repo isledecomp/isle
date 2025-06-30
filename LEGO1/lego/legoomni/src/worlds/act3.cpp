@@ -446,7 +446,7 @@ void Act3::HandleHitSound(undefined4 p_param1)
 			m_islanderSound = 0;
 		}
 
-		objectId = g_IslanderSounds[m_islanderSound++];
+		objectId = g_islanderSounds[m_islanderSound++];
 		break;
 	}
 	case 6: {
