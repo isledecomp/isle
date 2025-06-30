@@ -129,7 +129,7 @@ public:
 	void RemoveDonut(Act3Ammo& p_p);
 	MxResult ShootPizza(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
 	MxResult ShootDonut(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
-	void FUN_10072ad0(undefined4 p_param1);
+	void HandleHitSound(undefined4 p_param1);
 	MxResult FUN_10073360(Act3Ammo& p_ammo, const Vector3& p_param2);
 	MxResult FUN_10073390(Act3Ammo& p_ammo, const Vector3& p_param2);
 	void SetBrickster(Act3Brickster* p_brickster);
@@ -168,12 +168,12 @@ protected:
 	Helicopter* m_copter;               // 0x420c
 	Act3Shark* m_shark;                 // 0x4210
 	MxFloat m_time;                     // 0x4214
-	MxU8 m_unk0x4218;                   // 0x4218
-	MxU8 m_unk0x4219;                   // 0x4219
-	MxU8 m_unk0x421a;                   // 0x421a
-	MxU8 m_unk0x421b;                   // 0x421b
-	MxU8 m_unk0x421c;                   // 0x421c
-	MxU8 m_unk0x421d;                   // 0x421d
+	MxU8 m_pizzaHitSound;               // 0x4218
+	MxU8 m_pizzaMissSound;              // 0x4219
+	MxU8 m_copDonutSound;               // 0x421a
+	MxU8 m_donutMissSound;              // 0x421b
+	MxU8 m_islanderSound;               // 0x421c
+	MxU8 m_bricksterDonutSound;         // 0x421d
 	undefined m_unk0x421e;              // 0x421e
 	Act3List m_unk0x4220;               // 0x4220
 	MxPresenter* m_helicopterDots[15];  // 0x4230
