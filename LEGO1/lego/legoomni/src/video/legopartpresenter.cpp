@@ -187,7 +187,7 @@ MxResult LegoPartPresenter::Read(MxDSChunk& p_chunk)
 			}
 
 			if (j == 0) {
-				if (surplusLODs != 0 && lod->GetUnknown0x08Test8()) {
+				if (surplusLODs != 0 && lod->IsExtraLOD()) {
 					numLODs++;
 					surplusLODs--;
 				}

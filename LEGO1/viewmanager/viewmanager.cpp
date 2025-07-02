@@ -165,7 +165,7 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 	if (lodLevel < 0) {
 		lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
 
-		if (lod->GetUnknown0x08() & ViewLOD::c_bit4) {
+		if (lod->GetFlags() & ViewLOD::c_hasMesh) {
 			scene->Add((Tgl::MeshBuilder*) group);
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
 		}
@@ -184,7 +184,7 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 		lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
 	}
 
-	if (lod->GetUnknown0x08() & ViewLOD::c_bit4) {
+	if (lod->GetFlags() & ViewLOD::c_hasMesh) {
 		meshBuilder = lod->GetMeshBuilder();
 
 		if (meshBuilder != NULL) {
@@ -389,7 +389,7 @@ inline int ViewManager::GetFirstLODIndex(ViewROI* p_roi)
 	const LODListBase* lods = p_roi->GetLODs();
 
 	if (lods != NULL && lods->Size() > 0) {
-		if (((ViewLOD*) p_roi->GetLOD(0))->GetUnknown0x08Test8()) {
+		if (((ViewLOD*) p_roi->GetLOD(0))->IsExtraLOD()) {
 			return 1;
 		}
 		else {
@@ -404,7 +404,7 @@ inline int ViewManager::GetFirstLODIndex(ViewROI* p_roi)
 			const LODListBase* lods = ((ViewROI*) *it)->GetLODs();
 
 			if (lods != NULL && lods->Size() > 0) {
-				if (((ViewLOD*) ((ViewROI*) *it)->GetLOD(0))->GetUnknown0x08Test8()) {
+				if (((ViewLOD*) ((ViewROI*) *it)->GetLOD(0))->IsExtraLOD()) {
 					return 1;
 				}
 				else {
