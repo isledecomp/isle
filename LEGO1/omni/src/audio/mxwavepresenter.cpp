@@ -67,7 +67,7 @@ MxS8 MxWavePresenter::GetPlayedChunks()
 }
 
 // FUNCTION: LEGO1 0x100b1ba0
-MxBool MxWavePresenter::FUN_100b1ba0()
+MxBool MxWavePresenter::ReadyForNextChunk()
 {
 	return !m_started || GetPlayedChunks() != m_writtenChunks;
 }
@@ -248,7 +248,7 @@ MxResult MxWavePresenter::PutData()
 	if (IsEnabled()) {
 		switch (m_currentTickleState) {
 		case e_streaming:
-			if (m_currentChunk && FUN_100b1ba0()) {
+			if (m_currentChunk && ReadyForNextChunk()) {
 				WriteToSoundBuffer(m_currentChunk->GetData(), m_currentChunk->GetLength());
 				m_subscriber->FreeDataChunk(m_currentChunk);
 				m_currentChunk = NULL;
