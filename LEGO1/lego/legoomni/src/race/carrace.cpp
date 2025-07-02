@@ -333,12 +333,10 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10017650
-MxLong CarRace::HandleClick(LegoEventNotificationParam& p_param)
+MxLong CarRace::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
-	LegoControlManagerNotificationParam* param = (LegoControlManagerNotificationParam*) &p_param;
-
-	if (param->m_unk0x28 == 1) {
-		switch (param->m_clickedObjectId) {
+	if (p_param.m_unk0x28 == 1) {
+		switch (p_param.m_clickedObjectId) {
 		case 3:
 			InvokeAction(Extra::e_stop, *g_carraceScript, CarraceScript::c_irtx08ra_PlayWav, NULL);
 			m_act1State->m_unk0x018 = 0;

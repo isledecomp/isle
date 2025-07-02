@@ -11,7 +11,7 @@
 #include "mxtypes.h"
 
 class Act1State;
-class LegoEventNotificationParam;
+class LegoControlManagerNotificationParam;
 class LegoPathActor;
 class MxEndActionNotificationParam;
 class MxNotificationParam;
@@ -117,7 +117,7 @@ public:
 
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 
-	virtual MxLong HandleClick(LegoEventNotificationParam&) = 0; // vtable+0x6c
+	virtual MxLong HandleControl(LegoControlManagerNotificationParam&) = 0; // vtable+0x6c
 
 	// FUNCTION: LEGO1 0x10015b70
 	virtual MxLong HandlePathStruct(LegoPathStructNotificationParam&) { return 0; } // vtable+0x70

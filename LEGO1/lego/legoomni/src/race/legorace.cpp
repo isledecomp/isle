@@ -82,8 +82,8 @@ MxLong LegoRace::Notify(MxParam& p_param)
 		case c_notificationEndAction:
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;
-		case c_notificationClick:
-			result = HandleClick((LegoEventNotificationParam&) p_param);
+		case c_notificationControl:
+			result = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;
 		case c_notificationPathStruct:
 			result = HandlePathStruct((LegoPathStructNotificationParam&) p_param);
