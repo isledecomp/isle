@@ -687,7 +687,7 @@ MxLong LegoCarBuild::Notify(MxParam& p_param)
 			if (((m_buildState->m_animationState != 4) && (m_buildState->m_animationState != 6)) &&
 				(m_buildState->m_animationState != 2)) {
 				m_buildState->m_animationState = LegoVehicleBuildState::e_unknown0;
-				result = FUN_100244e0(
+				result = SelectPartFromMousePosition(
 					((LegoEventNotificationParam&) p_param).GetX(),
 					((LegoEventNotificationParam&) p_param).GetY()
 				);
@@ -817,8 +817,7 @@ undefined4 LegoCarBuild::FUN_10024480(MxActionNotificationParam* p_param)
 
 // FUNCTION: LEGO1 0x100244e0
 // FUNCTION: BETA10 0x1006cfb6
-//Sets a part as selected for moving / coloring
-undefined4 LegoCarBuild::FUN_100244e0(MxLong p_x, MxLong p_y)
+undefined4 LegoCarBuild::SelectPartFromMousePosition(MxLong p_x, MxLong p_y)
 {
 	m_unk0x250[0] = p_x;
 	m_unk0x250[1] = p_y;

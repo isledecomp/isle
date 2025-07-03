@@ -139,7 +139,7 @@ public:
 	undefined4 FUN_10024250(LegoEventNotificationParam* p_param);
 	void FUN_100243a0();
 	undefined4 FUN_10024480(MxActionNotificationParam* p_param);
-	undefined4 FUN_100244e0(MxLong p_x, MxLong p_y);
+	undefined4 SelectPartFromMousePosition(MxLong p_x, MxLong p_y);
 	undefined4 FUN_100246e0(MxLong p_x, MxLong p_y);
 	MxS32 FUN_10024850(MxLong p_x, MxLong p_y);
 	undefined4 FUN_10024890(MxParam* p_param);
@@ -200,10 +200,10 @@ private:
 	MxS32 m_unk0x290[2]; // 0x290
 	MxS32 m_unk0x298[2]; // 0x298
 
-	MxFloat m_unk0x2a0;        		// 0x2a0
-	Mx4DPointFloat m_unk0x2a4; 		// 0x2a4
-	Mx4DPointFloat m_unk0x2bc; 		// 0x2bc
-	MxBool m_selectedPartIsPlaced;	// 0x2d4
+	MxFloat m_unk0x2a0;             // 0x2a0
+	Mx4DPointFloat m_unk0x2a4;      // 0x2a4
+	Mx4DPointFloat m_unk0x2bc;      // 0x2bc
+	MxBool m_selectedPartIsPlaced;  // 0x2d4
 
 	// variable names verified by BETA10 0x1006b27a
 	MxStillPresenter* m_ColorBook_Bitmap; // 0x2dc
