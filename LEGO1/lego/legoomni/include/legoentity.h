@@ -28,7 +28,7 @@ public:
 	};
 
 	enum {
-		c_altBit1 = 0x01
+		c_disabled = 0x01
 	};
 
 	LegoEntity() { Init(); }
@@ -68,13 +68,13 @@ public:
 	// FUNCTION: BETA10 0x10013260
 	virtual void SetWorldSpeed(MxFloat p_worldSpeed) { m_worldSpeed = p_worldSpeed; } // vtable+0x30
 
-	virtual void ClickSound(MxBool p_und);    // vtable+0x34
-	virtual void ClickAnimation();            // vtable+0x38
-	virtual void SwitchVariant();             // vtable+0x3c
-	virtual void SwitchSound();               // vtable+0x40
-	virtual void SwitchMove();                // vtable+0x44
-	virtual void SwitchColor(LegoROI* p_roi); // vtable+0x48
-	virtual void SwitchMood();                // vtable+0x4c
+	virtual void ClickSound(MxBool p_basedOnMood); // vtable+0x34
+	virtual void ClickAnimation();                 // vtable+0x38
+	virtual void SwitchVariant();                  // vtable+0x3c
+	virtual void SwitchSound();                    // vtable+0x40
+	virtual void SwitchMove();                     // vtable+0x44
+	virtual void SwitchColor(LegoROI* p_roi);      // vtable+0x48
+	virtual void SwitchMood();                     // vtable+0x4c
 
 	void FUN_10010c30();
 	void SetType(MxU8 p_type);
@@ -83,7 +83,7 @@ public:
 	Mx3DPointFloat GetWorldUp();
 	Mx3DPointFloat GetWorldPosition();
 
-	MxBool GetUnknown0x10IsSet(MxU8 p_flag) { return m_unk0x10 & p_flag; }
+	MxBool IsInteraction(MxU8 p_flag) { return m_interaction & p_flag; }
 	MxBool GetFlagsIsSet(MxU8 p_flag) { return m_flags & p_flag; }
 	MxU8 GetFlags() { return m_flags; }
 
@@ -101,14 +101,14 @@ public:
 	void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
 	void SetFlag(MxU8 p_flag) { m_flags |= p_flag; }
 	void ClearFlag(MxU8 p_flag) { m_flags &= ~p_flag; }
-	void SetUnknown0x10Flag(MxU8 p_flag) { m_unk0x10 |= p_flag; }
-	void ClearUnknown0x10Flag(MxU8 p_flag) { m_unk0x10 &= ~p_flag; }
+	void SetInteractionFlag(MxU8 p_flag) { m_interaction |= p_flag; }
+	void ClearInteractionFlag(MxU8 p_flag) { m_interaction &= ~p_flag; }
 
 protected:
 	void Init();
 	void SetWorld();
 
-	MxU8 m_unk0x10;                  // 0x10
+	MxU8 m_interaction;              // 0x10
 	MxU8 m_flags;                    // 0x11
 	Mx3DPointFloat m_worldLocation;  // 0x14
 	Mx3DPointFloat m_worldDirection; // 0x28

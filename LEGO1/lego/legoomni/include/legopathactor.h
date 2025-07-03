@@ -13,7 +13,7 @@ struct LegoPathEdgeContainer;
 struct LegoOrientedEdge;
 class LegoWEEdge;
 
-extern MxLong g_unk0x100f3308;
+extern MxLong g_timeLastHitSoundPlayed;
 extern const char* g_strHIT_WALL_SOUND;
 
 // VTABLE: LEGO1 0x100d6e28

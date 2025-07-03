@@ -120,12 +120,12 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 
 				animPresenter->DecrementUnknown0xd4();
 				if (animPresenter->GetUnknown0xd4() == 0) {
-					FUN_100b7220(action, MxDSAction::c_world, FALSE);
+					ApplyMask(action, MxDSAction::c_world, FALSE);
 					presenter->EndAction();
 				}
 			}
 			else {
-				FUN_100b7220(action, MxDSAction::c_world, FALSE);
+				ApplyMask(action, MxDSAction::c_world, FALSE);
 				presenter->EndAction();
 			}
 		}
@@ -141,7 +141,7 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 			MxDSAction* action = presenter->GetAction();
 
 			if (action) {
-				FUN_100b7220(action, MxDSAction::c_world, FALSE);
+				ApplyMask(action, MxDSAction::c_world, FALSE);
 				presenter->EndAction();
 			}
 		}
@@ -157,7 +157,7 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 
 		MxDSAction* action = presenter->GetAction();
 		if (action) {
-			FUN_100b7220(action, MxDSAction::c_world, FALSE);
+			ApplyMask(action, MxDSAction::c_world, FALSE);
 			presenter->EndAction();
 		}
 	}

@@ -150,16 +150,16 @@ void SetOmniUserMessage(void (*p_omniUserMessage)(const char*, MxS32))
 
 // FUNCTION: LEGO1 0x100b7220
 // FUNCTION: BETA10 0x10136f37
-void FUN_100b7220(MxDSAction* p_action, MxU32 p_newFlags, MxBool p_setFlags)
+void ApplyMask(MxDSAction* p_action, MxU32 p_mask, MxBool p_setFlags)
 {
 	MxU32 oldFlags = p_action->GetFlags();
 	MxU32 newFlags;
 
 	if (p_setFlags) {
-		newFlags = oldFlags | p_newFlags;
+		newFlags = oldFlags | p_mask;
 	}
 	else {
-		newFlags = oldFlags & ~p_newFlags;
+		newFlags = oldFlags & ~p_mask;
 	}
 
 	p_action->SetFlags(newFlags);
@@ -169,7 +169,7 @@ void FUN_100b7220(MxDSAction* p_action, MxU32 p_newFlags, MxBool p_setFlags)
 		MxDSAction* action;
 
 		while (cursor.Next(action)) {
-			FUN_100b7220(action, p_newFlags, p_setFlags);
+			ApplyMask(action, p_mask, p_setFlags);
 		}
 	}
 }

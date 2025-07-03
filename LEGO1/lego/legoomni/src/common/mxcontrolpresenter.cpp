@@ -44,7 +44,7 @@ MxResult MxControlPresenter::StartAction(MxStreamController* p_controller, MxDSA
 {
 	MxResult result = MxCompositePresenter::StartAction(p_controller, p_action);
 
-	FUN_100b7220(m_action, MxDSAction::c_world | MxDSAction::c_looping, TRUE);
+	ApplyMask(m_action, MxDSAction::c_world | MxDSAction::c_looping, TRUE);
 	ParseExtra();
 
 	MxS16 i = 0;

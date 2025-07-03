@@ -121,7 +121,7 @@ protected:
 	void SubstituteVariables();
 	void FUN_1006b900(LegoAnim* p_anim, MxLong p_time, Matrix4* p_matrix);
 	void FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p_matrix);
-	void FUN_1006c8a0(MxBool p_bool);
+	void SetDisabled(MxBool p_disabled);
 
 	LegoAnim* m_anim;             // 0x64
 	LegoROI** m_roiMap;           // 0x68

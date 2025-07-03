@@ -69,11 +69,11 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	LegoU32 i, indexBackwards, indexForwards, tempNumVertsAndNormals;
 	unsigned char paletteEntries[256];
 
-	if (p_storage->Read(&m_unk0x08, sizeof(undefined4)) != SUCCESS) {
+	if (p_storage->Read(&m_flags, sizeof(LegoU32)) != SUCCESS) {
 		goto done;
 	}
 
-	if (GetUnknown0x08Test4()) {
+	if (SkipReadingData()) {
 		return SUCCESS;
 	}
 
@@ -84,11 +84,11 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	}
 
 	if (m_numMeshes == 0) {
-		ClearFlag(c_bit4);
+		ClearFlag(c_hasMesh);
 		return SUCCESS;
 	}
 
-	SetFlag(c_bit4);
+	SetFlag(c_hasMesh);
 
 	m_melems = new Mesh[m_numMeshes];
 	memset(m_melems, 0, sizeof(*m_melems) * m_numMeshes);
@@ -315,7 +315,7 @@ LegoLOD* LegoLOD::Clone(Tgl::Renderer* p_renderer)
 		dupLod->m_melems[i].m_textured = m_melems[i].m_textured;
 	}
 
-	dupLod->m_unk0x08 = m_unk0x08;
+	dupLod->m_flags = m_flags;
 	dupLod->m_numMeshes = m_numMeshes;
 	dupLod->m_numVertices = m_numVertices;
 	dupLod->m_numPolys = m_numPolys;

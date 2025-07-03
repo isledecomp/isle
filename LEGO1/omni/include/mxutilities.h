@@ -75,7 +75,7 @@ void MakeSourceName(char*, const char*);
 void OmniError(const char* p_message, MxS32 p_status);
 void SetOmniUserMessage(void (*p_omniUserMessage)(const char*, MxS32));
 MxBool ContainsPresenter(MxCompositePresenterList& p_presenterList, MxPresenter* p_presenter);
-void FUN_100b7220(MxDSAction* p_action, MxU32 p_newFlags, MxBool p_setFlags);
+void ApplyMask(MxDSAction* p_action, MxU32 p_mask, MxBool p_setFlags);
 MxBool KeyValueStringParse(char*, const char*, const char*);
 
 // TEMPLATE: BETA10 0x1012dfd0
