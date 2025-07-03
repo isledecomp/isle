@@ -135,7 +135,7 @@ public:
 	void FUN_10022f00();
 	void FUN_10022f30();
 	void FUN_10023130(MxLong p_x, MxLong p_y);
-	void FUN_100236d0();
+	void AddSelectedPartToBuild();
 	undefined4 FUN_10024250(LegoEventNotificationParam* p_param);
 	void FUN_100243a0();
 	undefined4 FUN_10024480(MxActionNotificationParam* p_param);
@@ -182,7 +182,7 @@ private:
 	MxU8 m_unk0x109;           // 0x109
 	MxU16 m_unk0x10a;          // 0x10a
 	DWORD m_unk0x10c;          // 0x10c
-	LegoROI* m_unk0x110;       // 0x110
+	LegoROI* m_selectedPart;   // 0x110
 	BoundingSphere m_unk0x114; // 0x114
 	MxMatrix m_unk0x12c;       // 0x12c
 	undefined m_unk0x174;      // 0x174
@@ -200,10 +200,10 @@ private:
 	MxS32 m_unk0x290[2]; // 0x290
 	MxS32 m_unk0x298[2]; // 0x298
 
-	MxFloat m_unk0x2a0;        // 0x2a0
-	Mx4DPointFloat m_unk0x2a4; // 0x2a4
-	Mx4DPointFloat m_unk0x2bc; // 0x2bc
-	MxBool m_unk0x2d4;         // 0x2d4
+	MxFloat m_unk0x2a0;        		// 0x2a0
+	Mx4DPointFloat m_unk0x2a4; 		// 0x2a4
+	Mx4DPointFloat m_unk0x2bc; 		// 0x2bc
+	MxBool m_selectedPartIsPlaced;	// 0x2d4
 
 	// variable names verified by BETA10 0x1006b27a
 	MxStillPresenter* m_ColorBook_Bitmap; // 0x2dc

@@ -77,11 +77,11 @@ public:
 	void FUN_10079050(MxS16 p_index);
 	void SwapNodesByName(LegoChar* p_param1, LegoChar* p_param2);
 	void InitBuildPlatform();
-	void FUN_100795d0(LegoChar* p_param);
-	void FUN_10079680(LegoChar* p_param);
+	void HideBuildPartByName(LegoChar* p_param);
+	void ShowBuildPartByName(LegoChar* p_param);
 	LegoAnimNodeData* FindNodeDataByName(LegoTreeNode* p_treeNode, const LegoChar* p_name);
 	LegoTreeNode* FindNodeByName(LegoTreeNode* p_treeNode, const LegoChar* p_name);
-	void FUN_10079790(const LegoChar* p_name);
+	void AddPartToBuildByName(const LegoChar* p_name);
 	void RotateAroundYAxis(MxFloat p_angle);
 	MxBool FUN_10079c30(const LegoChar* p_name);
 	MxBool PartIsPlaced(const LegoChar* p_name);

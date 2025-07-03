@@ -202,15 +202,15 @@ void LegoCarBuildAnimPresenter::StreamingTickle()
 
 	for (i = 0; i < m_numberOfParts; i++) {
 		if (m_placedPartCount == i) {
-			FUN_10079680(m_parts[i].m_wiredName);
+			ShowBuildPartByName(m_parts[i].m_wiredName);
 		}
 		else {
-			FUN_100795d0(m_parts[i].m_wiredName);
+			HideBuildPartByName(m_parts[i].m_wiredName);
 		}
 
 		if (i < m_placedPartCount) {
 			FUN_10079050(i);
-			FUN_10079680(m_parts[i].m_name);
+			ShowBuildPartByName(m_parts[i].m_name);
 		}
 
 		LegoChar* name = m_parts[i].m_wiredName;
@@ -319,7 +319,7 @@ MxResult LegoCarBuildAnimPresenter::Serialize(LegoStorage* p_storage)
 void LegoCarBuildAnimPresenter::FUN_10079050(MxS16 p_index)
 {
 	SwapNodesByName(m_parts[p_index].m_wiredName, m_parts[p_index].m_name);
-	FUN_100795d0(m_parts[p_index].m_wiredName);
+	HideBuildPartByName(m_parts[p_index].m_wiredName);
 }
 
 // FUNCTION: LEGO1 0x10079090
@@ -445,7 +445,7 @@ void LegoCarBuildAnimPresenter::InitBuildPlatform()
 
 // FUNCTION: LEGO1 0x100795d0
 // FUNCTION: BETA10 0x10071d96
-void LegoCarBuildAnimPresenter::FUN_100795d0(LegoChar* p_param)
+void LegoCarBuildAnimPresenter::HideBuildPartByName(LegoChar* p_param)
 {
 	LegoAnimNodeData* data = FindNodeDataByName(m_anim->GetRoot(), p_param);
 
@@ -467,7 +467,7 @@ void LegoCarBuildAnimPresenter::FUN_100795d0(LegoChar* p_param)
 
 // FUNCTION: LEGO1 0x10079680
 // FUNCTION: BETA10 0x10071ec5
-void LegoCarBuildAnimPresenter::FUN_10079680(LegoChar* p_param)
+void LegoCarBuildAnimPresenter::ShowBuildPartByName(LegoChar* p_param)
 {
 	LegoAnimNodeData* data = FindNodeDataByName(m_anim->GetRoot(), p_param);
 
@@ -534,7 +534,7 @@ LegoTreeNode* LegoCarBuildAnimPresenter::FindNodeByName(LegoTreeNode* p_treeNode
 
 // FUNCTION: LEGO1 0x10079790
 // FUNCTION: BETA10 0x100720a3
-void LegoCarBuildAnimPresenter::FUN_10079790(const LegoChar* p_name)
+void LegoCarBuildAnimPresenter::AddPartToBuildByName(const LegoChar* p_name)
 {
 	MxS16 i;
 	LegoChar buffer[40];
@@ -557,7 +557,7 @@ void LegoCarBuildAnimPresenter::FUN_10079790(const LegoChar* p_name)
 	((LegoCarBuild*) m_currentWorld)->SetPlacedPartCount(m_placedPartCount);
 
 	if (m_placedPartCount < m_numberOfParts) {
-		FUN_10079680(m_parts[m_placedPartCount].m_wiredName);
+		ShowBuildPartByName(m_parts[m_placedPartCount].m_wiredName);
 	}
 }
 
