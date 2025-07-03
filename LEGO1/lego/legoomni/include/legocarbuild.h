@@ -200,10 +200,10 @@ private:
 	MxS32 m_unk0x290[2]; // 0x290
 	MxS32 m_unk0x298[2]; // 0x298
 
-	MxFloat m_unk0x2a0;             // 0x2a0
-	Mx4DPointFloat m_unk0x2a4;      // 0x2a4
-	Mx4DPointFloat m_unk0x2bc;      // 0x2bc
-	MxBool m_selectedPartIsPlaced;  // 0x2d4
+	MxFloat m_unk0x2a0;            // 0x2a0
+	Mx4DPointFloat m_unk0x2a4;     // 0x2a4
+	Mx4DPointFloat m_unk0x2bc;     // 0x2bc
+	MxBool m_selectedPartIsPlaced; // 0x2d4
 
 	// variable names verified by BETA10 0x1006b27a
 	MxStillPresenter* m_ColorBook_Bitmap; // 0x2dc
