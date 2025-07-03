@@ -861,7 +861,7 @@ void MxDisplaySurface::Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p
 			DDBLTFX data;
 			memset(&data, 0, sizeof(data));
 			data.dwSize = sizeof(data);
-			data.dwDDFX = 8;
+			data.dwDDFX = DDBLTFX_NOTEARING;
 
 			if (m_ddSurface1->Blt((LPRECT) &b, m_ddSurface2, (LPRECT) &a, 0, &data) == DDERR_SURFACELOST) {
 				m_ddSurface1->Restore();
