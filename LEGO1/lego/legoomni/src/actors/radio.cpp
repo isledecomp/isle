@@ -131,7 +131,7 @@ void Radio::Stop()
 		MxControlPresenter* presenter = (MxControlPresenter*) world->Find(world->GetAtomId(), IsleScript::c_Radio_Ctl);
 
 		if (presenter) {
-			presenter->VTable0x6c(0);
+			presenter->UpdateEnabledChild(0);
 		}
 
 		BackgroundAudioManager()->Stop();

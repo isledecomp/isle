@@ -16,12 +16,12 @@ DECOMP_SIZE_ASSERT(MxControlPresenter, 0x5c)
 // FUNCTION: LEGO1 0x10043f50
 MxControlPresenter::MxControlPresenter()
 {
-	m_unk0x4c = 0;
-	m_unk0x4e = -1;
+	m_style = e_none;
+	m_enabledChild = -1;
 	m_unk0x50 = FALSE;
-	m_unk0x52 = 0;
+	m_columnsOrRows = 0;
 	m_states = NULL;
-	m_unk0x54 = 0;
+	m_rowsOrColumns = 0;
 }
 
 // FUNCTION: LEGO1 0x10044110
@@ -35,7 +35,7 @@ MxControlPresenter::~MxControlPresenter()
 // FUNCTION: LEGO1 0x10044180
 MxResult MxControlPresenter::AddToManager()
 {
-	m_unk0x4e = 0;
+	m_enabledChild = 0;
 	return SUCCESS;
 }
 
@@ -49,11 +49,11 @@ MxResult MxControlPresenter::StartAction(MxStreamController* p_controller, MxDSA
 
 	MxS16 i = 0;
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
-		(*it)->Enable((m_unk0x4c != 3 || m_unk0x4e) && IsEnabled() ? m_unk0x4e == i : FALSE);
+		(*it)->Enable((m_style != e_map || m_enabledChild) && IsEnabled() ? m_enabledChild == i : FALSE);
 		i++;
 	}
 
-	if (m_unk0x4c == 3) {
+	if (m_style == e_map) {
 		MxDSAction* action = (*m_list.begin())->GetAction();
 		action->SetFlags(action->GetFlags() | MxDSAction::c_bit11);
 	}
@@ -74,12 +74,12 @@ void MxControlPresenter::EndAction()
 
 // FUNCTION: LEGO1 0x10044270
 // FUNCTION: BETA10 0x100eae68
-MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_presenter)
+MxBool MxControlPresenter::CheckButtonDown(MxS32 p_x, MxS32 p_y, MxPresenter* p_presenter)
 {
 	assert(p_presenter);
 	MxVideoPresenter* presenter = (MxVideoPresenter*) p_presenter;
 
-	if (m_unk0x4c == 3) {
+	if (m_style == e_map) {
 		MxStillPresenter* map = (MxStillPresenter*) m_list.front();
 		assert(map && map->IsA("MxStillPresenter"));
 
@@ -94,23 +94,23 @@ MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_pre
 									  ? NULL
 									  : map->GetBitmap()->GetStart(p_x - rect.GetLeft(), p_y - rect.GetTop());
 
-					m_unk0x56 = 0;
+					m_stateOrCellIndex = 0;
 					if (m_states) {
 						for (MxS16 i = 1; i <= *m_states; i++) {
 							// TODO: Can we match without the cast here?
 							if (m_states[i] == (MxS16) *start) {
-								m_unk0x56 = i;
+								m_stateOrCellIndex = i;
 								break;
 							}
 						}
 					}
 					else {
 						if (*start != 0) {
-							m_unk0x56 = 1;
+							m_stateOrCellIndex = 1;
 						}
 					}
 
-					if (m_unk0x56) {
+					if (m_stateOrCellIndex) {
 						return TRUE;
 					}
 				}
@@ -119,21 +119,21 @@ MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_pre
 	}
 	else {
 		if (ContainsPresenter(m_list, presenter)) {
-			if (m_unk0x4c == 2) {
+			if (m_style == e_grid) {
 				MxS32 width = presenter->GetWidth();
 				MxS32 height = presenter->GetHeight();
 
-				if (m_unk0x52 == 2 && m_unk0x54 == 2) {
+				if (m_columnsOrRows == 2 && m_rowsOrColumns == 2) {
 					if (p_x < presenter->GetX() + width / 2) {
-						m_unk0x56 = (p_y >= presenter->GetY() + height / 2) ? 3 : 1;
+						m_stateOrCellIndex = (p_y >= presenter->GetY() + height / 2) ? 3 : 1;
 					}
 					else {
-						m_unk0x56 = (p_y >= presenter->GetY() + height / 2) ? 4 : 2;
+						m_stateOrCellIndex = (p_y >= presenter->GetY() + height / 2) ? 4 : 2;
 					}
 				}
 			}
 			else {
-				m_unk0x56 = -1;
+				m_stateOrCellIndex = -1;
 			}
 
 			return TRUE;
@@ -144,27 +144,27 @@ MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_pre
 }
 
 // FUNCTION: LEGO1 0x10044480
-MxBool MxControlPresenter::FUN_10044480(LegoControlManagerNotificationParam* p_param, MxPresenter* p_presenter)
+MxBool MxControlPresenter::Notify(LegoControlManagerNotificationParam* p_param, MxPresenter* p_presenter)
 {
 	if (IsEnabled()) {
 		switch (p_param->GetNotification()) {
 		case c_notificationButtonUp:
-			if (m_unk0x4c == 0 || m_unk0x4c == 2 || m_unk0x4c == 3) {
+			if (m_style == e_none || m_style == e_grid || m_style == e_map) {
 				p_param->SetClickedObjectId(m_action->GetObjectId());
 				p_param->SetClickedAtom(m_action->GetAtomId().GetInternal());
-				VTable0x6c(0);
+				UpdateEnabledChild(0);
 				p_param->SetNotification(c_notificationControl);
-				p_param->SetUnknown0x28(m_unk0x4e);
+				p_param->SetUnknown0x28(m_enabledChild);
 				return TRUE;
 			}
 			break;
 		case c_notificationButtonDown:
-			if (FUN_10044270(p_param->GetX(), p_param->GetY(), p_presenter)) {
+			if (CheckButtonDown(p_param->GetX(), p_param->GetY(), p_presenter)) {
 				p_param->SetClickedObjectId(m_action->GetObjectId());
 				p_param->SetClickedAtom(m_action->GetAtomId().GetInternal());
-				VTable0x6c(m_unk0x56);
+				UpdateEnabledChild(m_stateOrCellIndex);
 				p_param->SetNotification(c_notificationControl);
-				p_param->SetUnknown0x28(m_unk0x4e);
+				p_param->SetUnknown0x28(m_enabledChild);
 				return TRUE;
 			}
 			break;
@@ -175,25 +175,25 @@ MxBool MxControlPresenter::FUN_10044480(LegoControlManagerNotificationParam* p_p
 }
 
 // FUNCTION: LEGO1 0x10044540
-void MxControlPresenter::VTable0x6c(MxS16 p_unk0x4e)
+void MxControlPresenter::UpdateEnabledChild(MxS16 p_enabledChild)
 {
-	if (p_unk0x4e == -1) {
-		if ((MxS16) ((MxDSMultiAction*) m_action)->GetActionList()->GetNumElements() - m_unk0x4e == 1) {
-			m_unk0x4e = 0;
+	if (p_enabledChild == -1) {
+		if ((MxS16) ((MxDSMultiAction*) m_action)->GetActionList()->GetNumElements() - m_enabledChild == 1) {
+			m_enabledChild = 0;
 		}
 		else {
-			m_unk0x4e++;
+			m_enabledChild++;
 		}
 	}
 	else {
-		m_unk0x4e = p_unk0x4e;
+		m_enabledChild = p_enabledChild;
 	}
 
 	m_action->SetTimeStarted(Timer()->GetTime());
 
 	MxS16 i = 0;
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
-		(*it)->Enable(((m_unk0x4c == 3 && m_unk0x4e == 0) || !IsEnabled()) ? FALSE : m_unk0x4e == i);
+		(*it)->Enable(((m_style == e_map && m_enabledChild == 0) || !IsEnabled()) ? FALSE : m_enabledChild == i);
 		i++;
 	}
 }
@@ -224,20 +224,20 @@ void MxControlPresenter::ParseExtra()
 			char* token = strtok(output, g_parseExtraTokens);
 
 			if (!strcmpi(token, g_strTOGGLE)) {
-				m_unk0x4c = 1;
+				m_style = e_toggle;
 			}
 			else if (!strcmpi(token, g_strGRID)) {
-				m_unk0x4c = 2;
+				m_style = e_grid;
 				token = strtok(NULL, g_parseExtraTokens);
 				assert(token);
-				m_unk0x52 = atoi(token);
+				m_columnsOrRows = atoi(token);
 
 				token = strtok(NULL, g_parseExtraTokens);
 				assert(token);
-				m_unk0x54 = atoi(token);
+				m_rowsOrColumns = atoi(token);
 			}
 			else if (!strcmpi(token, g_strMAP)) {
-				m_unk0x4c = 3;
+				m_style = e_map;
 				token = strtok(NULL, g_parseExtraTokens);
 
 				if (token) {
@@ -254,7 +254,7 @@ void MxControlPresenter::ParseExtra()
 				}
 			}
 			else {
-				m_unk0x4c = 0;
+				m_style = e_none;
 			}
 		}
 
@@ -274,8 +274,8 @@ void MxControlPresenter::Enable(MxBool p_enable)
 
 		MxS16 i = 0;
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
-			if (i == m_unk0x4e) {
-				(*it)->Enable((m_unk0x4c != 3 || i != 0) ? p_enable : 0);
+			if (i == m_enabledChild) {
+				(*it)->Enable((m_style != e_map || i != 0) ? p_enable : 0);
 				break;
 			}
 
@@ -283,7 +283,7 @@ void MxControlPresenter::Enable(MxBool p_enable)
 		}
 
 		if (!p_enable) {
-			m_unk0x4e = 0;
+			m_enabledChild = 0;
 		}
 	}
 }
@@ -294,10 +294,10 @@ MxBool MxControlPresenter::HasTickleStatePassed(TickleState p_tickleState)
 	MxCompositePresenterList::const_iterator it = m_list.begin();
 
 #ifdef COMPAT_MODE
-	advance(it, m_unk0x4e);
+	advance(it, m_enabledChild);
 #else
 	// Uses forward iterator logic instead of bidrectional for some reason.
-	_Advance(it, m_unk0x4e, forward_iterator_tag());
+	_Advance(it, m_enabledChild, forward_iterator_tag());
 #endif
 
 	return (*it)->HasTickleStatePassed(p_tickleState);
