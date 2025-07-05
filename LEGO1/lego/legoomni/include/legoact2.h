@@ -71,7 +71,7 @@ public:
 	void ReadyWorld() override;                       // vtable+0x50
 
 	// FUNCTION: LEGO1 0x1004fe10
-	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
+	MxBool WaitForTransition() override { return TRUE; } // vtable+0x5c
 
 	void VTable0x60() override;            // vtable+0x60
 	MxBool Escape() override;              // vtable+0x64

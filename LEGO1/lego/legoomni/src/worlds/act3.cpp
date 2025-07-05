@@ -888,7 +888,7 @@ void Act3::FUN_10073a60()
 // FUNCTION: LEGO1 0x10073a90
 void Act3::Enable(MxBool p_enable)
 {
-	if ((MxBool) m_set0xd0.empty() == p_enable) {
+	if ((MxBool) m_disabledObjects.empty() == p_enable) {
 		return;
 	}
 
