@@ -194,7 +194,7 @@ done:
 
 // FUNCTION: LEGO1 0x1007ff70
 // FUNCTION: BETA10 0x10099061
-MxResult LegoModelPresenter::FUN_1007ff70(
+MxResult LegoModelPresenter::CreateROI(
 	MxDSChunk& p_chunk,
 	LegoEntity* p_entity,
 	MxBool p_roiVisible,
