@@ -101,7 +101,7 @@ MxLong LegoRace::Notify(MxParam& p_param)
 // FUNCTION: BETA10 0x100c7c3f
 void LegoRace::Enable(MxBool p_enable)
 {
-	if (GetUnknown0xd0Empty() != p_enable && !p_enable) {
+	if (NoDisabledObjects() != p_enable && !p_enable) {
 		Remove(UserActor());
 
 		MxU8 oldActorId = GameState()->GetActorId();

@@ -75,7 +75,7 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10004770
-	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
+	MxBool EnabledAfterDestruction() override { return TRUE; } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x10004780
 	// FUNCTION: BETA10 0x10029d40
