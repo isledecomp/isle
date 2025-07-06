@@ -66,27 +66,33 @@ public:
 		return !strcmp(p_name, LegoControlManager::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	void FUN_10028df0(MxPresenterList* p_presenterList);
+	void SetPresenterList(MxPresenterList* p_presenterList);
 	void Register(MxCore* p_listener);
 	void Unregister(MxCore* p_listener);
-	MxBool FUN_10029210(LegoEventNotificationParam& p_param, MxPresenter* p_presenter);
-	void FUN_100293c0(MxU32 p_objectId, const char* p_atom, MxS16 p_unk0x4e);
-	MxControlPresenter* FUN_100294e0(MxS32 p_x, MxS32 p_y);
-	MxBool FUN_10029630();
-	MxBool FUN_10029750();
-	void FUN_100292e0();
+	MxBool HandleButtonDown(LegoEventNotificationParam& p_param, MxPresenter* p_presenter);
+	void UpdateEnabledChild(MxU32 p_objectId, const char* p_atom, MxS16 p_enabledChild);
+	MxControlPresenter* GetControlAt(MxS32 p_x, MxS32 p_y);
+	MxBool HandleButtonDown();
+	MxBool HandleButtonUp();
+	void Notify();
 
-	undefined4 GetUnknown0x0c() { return m_unk0x0c; }
-	undefined GetUnknown0x10() { return m_unk0x10; }
+	MxU32 HandleUpNextTickle() { return m_handleUpNextTickle; }
+	MxBool IsSecondButtonDown() { return m_secondButtonDown; }
 
 	// SYNTHETIC: LEGO1 0x10028d40
 	// LegoControlManager::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x08;                        // 0x08
-	undefined4 m_unk0x0c;                        // 0x0c
-	MxBool m_unk0x10;                            // 0x10
-	MxPresenter* m_unk0x14;                      // 0x14
+	enum {
+		e_idle = 0,
+		e_waitNextTickle = 1,
+		e_tickled = 2,
+	};
+
+	MxU32 m_buttonDownState;                     // 0x08
+	MxU32 m_handleUpNextTickle;                  // 0x0c
+	MxBool m_secondButtonDown;                   // 0x10
+	MxPresenter* m_handledPresenter;             // 0x14
 	LegoControlManagerNotificationParam m_event; // 0x18
 	MxPresenterList* m_presenterList;            // 0x44
 	LegoNotifyList m_notifyList;                 // 0x48
