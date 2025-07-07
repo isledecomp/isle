@@ -163,11 +163,11 @@ void Jetski::ActivateSceneActions()
 
 	Act1State* act1state = (Act1State*) GameState()->GetState("Act1State");
 	if (!act1state->m_state) {
-		if (act1state->m_unk0x022) {
+		if (act1state->m_playedExitExplanation) {
 			PlayCamAnim(this, FALSE, 68, TRUE);
 		}
 		else {
-			act1state->m_unk0x022 = TRUE;
+			act1state->m_playedExitExplanation = TRUE;
 
 			LegoPathActor* user = UserActor();
 			if (user != NULL) {
