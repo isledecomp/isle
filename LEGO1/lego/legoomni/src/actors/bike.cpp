@@ -52,7 +52,7 @@ void Bike::Exit()
 // FUNCTION: LEGO1 0x100769a0
 MxLong Bike::HandleClick()
 {
-	if (FUN_1003ef60()) {
+	if (CanExit()) {
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 		FUN_10015820(TRUE, 0);
 

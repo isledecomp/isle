@@ -84,7 +84,7 @@ void Motocycle::Exit()
 // FUNCTION: LEGO1 0x10035c50
 MxLong Motocycle::HandleClick()
 {
-	if (!FUN_1003ef60()) {
+	if (!CanExit()) {
 		return 1;
 	}
 

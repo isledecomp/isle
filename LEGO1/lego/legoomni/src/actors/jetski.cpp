@@ -81,7 +81,7 @@ void Jetski::Exit()
 MxLong Jetski::HandleClick()
 {
 #ifndef BETA10
-	if (!FUN_1003ef60()) {
+	if (!CanExit()) {
 		return 1;
 	}
 

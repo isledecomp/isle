@@ -153,7 +153,7 @@ void IslePathActor::Exit()
 
 	FUN_1001b660();
 	FUN_10010c30();
-	FUN_1003eda0();
+	ResetViewVelocity();
 }
 
 // GLOBAL: LEGO1 0x10102b28
@@ -598,7 +598,7 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_enter, MxU8
 		}
 
 		if (m_cameraFlag) {
-			FUN_1003eda0();
+			ResetViewVelocity();
 		}
 
 		if (p_flags & c_playMusic && g_spawnLocations[i].m_music != JukeboxScript::c_noneJukebox) {
@@ -632,7 +632,7 @@ void IslePathActor::VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundar
 
 	m_roi->SetLocal2World(p_transform);
 	if (m_cameraFlag) {
-		FUN_1003eda0();
+		ResetViewVelocity();
 		FUN_10010c30();
 	}
 }

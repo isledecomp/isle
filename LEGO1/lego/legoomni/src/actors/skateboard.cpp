@@ -75,7 +75,7 @@ MxLong SkateBoard::HandleClick()
 {
 	Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 
-	if (!FUN_1003ef60() && state->m_unk0x018 != 3) {
+	if (!CanExit() && state->m_unk0x018 != 3) {
 		return 1;
 	}
 

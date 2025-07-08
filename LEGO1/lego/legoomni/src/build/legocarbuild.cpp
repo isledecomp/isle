@@ -371,7 +371,7 @@ void LegoCarBuild::FUN_10023130(MxLong p_x, MxLong p_y)
 		pfVar3[0] = p_x;
 		pfVar3[1] = p_y;
 
-		if (FUN_1003ded0(pfVar3, local30, local84)) {
+		if (CalculateRayOriginDirection(pfVar3, local30, local84)) {
 			MxFloat local18[3];
 			MxFloat local8c[2];
 
@@ -421,7 +421,7 @@ void LegoCarBuild::VTable0x74(MxFloat p_param1[2], MxFloat p_param2[3])
 	MxFloat local20[3];
 	MxFloat local14[3];
 
-	FUN_1003ded0(p_param1, local14, local20);
+	CalculateRayOriginDirection(p_param1, local14, local20);
 
 	fVar1 = (m_unk0x2a4[2] - local20[2]) / local14[2];
 	p_param2[0] = (fVar1 * local14[0] + local20[0]) - m_unk0x2a4[0];
@@ -437,7 +437,7 @@ void LegoCarBuild::VTable0x78(MxFloat p_param1[2], MxFloat p_param2[3])
 	MxFloat local18[3];
 	MxFloat localc[3];
 
-	FUN_1003ded0(p_param1, local18, localc);
+	CalculateRayOriginDirection(p_param1, local18, localc);
 
 	p_param2[2] = m_unk0x2a4[2] +
 				  (m_unk0x2bc[2] - m_unk0x2a4[2]) * ((p_param1[1] - m_unk0x290[1]) / (m_unk0x298[1] - m_unk0x290[1]));
@@ -453,7 +453,7 @@ void LegoCarBuild::VTable0x7c(MxFloat p_param1[2], MxFloat p_param2[3])
 {
 	MxFloat local18[3];
 	MxFloat localc[3];
-	FUN_1003ded0(p_param1, local18, localc);
+	CalculateRayOriginDirection(p_param1, local18, localc);
 
 	MxFloat fVar1 = (m_unk0x2bc[1] - localc[1]) / local18[1];
 	p_param2[0] = fVar1 * local18[0] - m_unk0x2a4[0] + localc[0];
@@ -1249,7 +1249,7 @@ undefined4 LegoCarBuild::FUN_10024c20(MxNotificationParam* p_param)
 // FUNCTION: LEGO1 0x10024ef0
 void LegoCarBuild::FUN_10024ef0()
 {
-	FUN_1003eda0();
+	ResetViewVelocity();
 	m_buildState->m_animationState = LegoVehicleBuildState::e_cutscene;
 	FUN_10025720(FUN_10025d70());
 	m_buildState->m_unk0x4c += 1;

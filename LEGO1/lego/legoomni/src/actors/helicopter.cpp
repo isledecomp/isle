@@ -121,7 +121,7 @@ void Helicopter::Exit()
 // FUNCTION: BETA10 0x1002a3db
 MxLong Helicopter::HandleClick()
 {
-	if (!FUN_1003ef60()) {
+	if (!CanExit()) {
 		return 1;
 	}
 
