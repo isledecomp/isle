@@ -45,7 +45,7 @@ public:
 	inline void RotateX(const float& p_angle);
 	inline void RotateY(const float& p_angle);
 	inline void RotateZ(const float& p_angle);
-	inline int BETA_1005a590(Matrix4& p_mat);
+	inline int Invert(Matrix4& p_mat);
 	inline void Swap(int p_d1, int p_d2);
 
 	// FUNCTION: BETA10 0x1001c670

@@ -707,7 +707,7 @@ MxResult LegoAnimPresenter::FUN_1006b140(LegoROI* p_roi)
 	Matrix4* mn = new MxMatrix();
 	assert(mn);
 
-	MxMatrix local58;
+	MxMatrix inverse;
 	const Matrix4& local2world = p_roi->GetLocal2World();
 	MxMatrix* local5c;
 	MxU32 i;
@@ -718,7 +718,7 @@ MxResult LegoAnimPresenter::FUN_1006b140(LegoROI* p_roi)
 
 	for (i = 1; i <= m_roiMapSize; i++) {
 		if (m_roiMap[i] == p_roi) {
-			if (local5c[i].BETA_1005a590(local58) != SUCCESS) {
+			if (local5c[i].Invert(inverse) != SUCCESS) {
 				goto done;
 			}
 
@@ -727,7 +727,7 @@ MxResult LegoAnimPresenter::FUN_1006b140(LegoROI* p_roi)
 	}
 
 	{
-		mn->Product(local58, local2world);
+		mn->Product(inverse, local2world);
 		SetUnknown0xa0(mn);
 		delete[] local5c;
 		SetUnknown0x0cTo1();

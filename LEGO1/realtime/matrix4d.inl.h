@@ -288,62 +288,62 @@ void Matrix4::RotateZ(const float& p_angle)
 }
 
 // FUNCTION: BETA10 0x1005a590
-int Matrix4::BETA_1005a590(Matrix4& p_mat)
+int Matrix4::Invert(Matrix4& p_mat)
 {
-	float local5c[4][4];
-	Matrix4 localc(local5c);
-	localc = *this;
+	float copyData[4][4];
+	Matrix4 copy(copyData);
+	copy = *this;
 
 	p_mat.SetIdentity();
 
 	for (int i = 0; i < 4; i++) {
-		int local1c = i;
-		int local10;
+		int pivotColumn = i;
+		int column;
 
-		for (local10 = i + 1; local10 < 4; local10++) {
-			if (fabs(localc[local1c][i]) < fabs(localc[local10][i])) {
-				local1c = local10;
+		for (column = i + 1; column < 4; column++) {
+			if (fabs(copy[pivotColumn][i]) < fabs(copy[column][i])) {
+				pivotColumn = column;
 			}
 		}
 
-		if (local1c != i) {
-			localc.Swap(local1c, i);
-			p_mat.Swap(local1c, i);
+		if (pivotColumn != i) {
+			copy.Swap(pivotColumn, i);
+			p_mat.Swap(pivotColumn, i);
 		}
 
-		if (localc[i][i] < 0.001f && localc[i][i] > -0.001f) {
+		if (copy[i][i] < 0.001f && copy[i][i] > -0.001f) {
 			return -1;
 		}
 
-		float local60 = localc[i][i];
-		int local18;
+		float pivotValue = copy[i][i];
+		int k;
 
-		for (local18 = 0; local18 < 4; local18++) {
-			p_mat[i][local18] /= local60;
+		for (k = 0; k < 4; k++) {
+			p_mat[i][k] /= pivotValue;
 		}
 
-		for (local18 = 0; local18 < 4; local18++) {
-			localc[i][local18] /= local60;
+		for (k = 0; k < 4; k++) {
+			copy[i][k] /= pivotValue;
 		}
 
-		for (local10 = 0; local10 < 4; local10++) {
-			if (i != local10) {
-				float afStack70[4];
+		for (column = 0; column < 4; column++) {
+			if (i != column) {
+				float tempColumn[4];
 
-				for (local18 = 0; local18 < 4; local18++) {
-					afStack70[local18] = p_mat[i][local18] * localc[local10][i];
+				for (k = 0; k < 4; k++) {
+					tempColumn[k] = p_mat[i][k] * copy[column][i];
 				}
 
-				for (local18 = 0; local18 < 4; local18++) {
-					p_mat[local10][local18] -= afStack70[local18];
+				for (k = 0; k < 4; k++) {
+					p_mat[column][k] -= tempColumn[k];
 				}
 
-				for (local18 = 0; local18 < 4; local18++) {
-					afStack70[local18] = localc[i][local18] * localc[local10][i];
+				for (k = 0; k < 4; k++) {
+					tempColumn[k] = copy[i][k] * copy[column][i];
 				}
 
-				for (local18 = 0; local18 < 4; local18++) {
-					localc[local10][local18] -= afStack70[local18];
+				for (k = 0; k < 4; k++) {
+					copy[column][k] -= tempColumn[k];
 				}
 			}
 		}
