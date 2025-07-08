@@ -78,10 +78,20 @@ public:
 
 // SIZE 0x18
 struct InfocenterMapEntry {
+	enum {
+		e_infocenter = 3,
+		e_jetrace = 10,
+		e_carrace = 11,
+		e_pizzeria = 12,
+		e_garage = 13,
+		e_hospital = 14,
+		e_police = 15,
+	};
+
 	InfocenterMapEntry();
 
 	MxStillPresenter* m_destCtl; // 0x00
-	undefined4 m_unk0x04;        // 0x04
+	MxU32 m_target;              // 0x04
 	MxRect<MxS32> m_area;        // 0x08
 };
 
@@ -154,7 +164,7 @@ private:
 	void PlayCutscene(Cutscene p_entityId, MxBool p_scale);
 	void StopCutscene();
 
-	void FUN_10070d10(MxS32 p_x, MxS32 p_y);
+	void UpdateEnabledGlowControl(MxS32 p_x, MxS32 p_y);
 
 	void StartCredits();
 	void StopCredits();
@@ -173,12 +183,12 @@ private:
 	Radio m_radio;                                  // 0x10c
 	MxStillPresenter* m_dragPresenter;              // 0x11c
 	InfocenterMapEntry m_glowInfo[7];               // 0x120
-	MxS16 m_unk0x1c8;                               // 0x1c8
+	MxS16 m_enabledGlowControl;                     // 0x1c8
 	MxStillPresenter* m_frame;                      // 0x1cc
 	MxS16 m_infoManDialogueTimer;                   // 0x1d0
 	MxS16 m_bookAnimationTimer;                     // 0x1d2
-	MxU16 m_unk0x1d4;                               // 0x1d4
-	MxS16 m_unk0x1d6;                               // 0x1d6
+	MxU16 m_playingMovieCounter;                    // 0x1d4
+	MxS16 m_bigInfoBlinkTimer;                      // 0x1d6
 };
 
 #endif // INFOCENTER_H
