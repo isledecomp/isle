@@ -200,7 +200,7 @@ MxResult Act3Ammo::FUN_10053d30(LegoPathController* p_p, MxFloat p_unk0x19c)
 
 // FUNCTION: LEGO1 0x10053db0
 // FUNCTION: BETA10 0x1001e0f0
-MxResult Act3Ammo::FUN_10053db0(float p_param1, const Matrix4& p_param2)
+MxResult Act3Ammo::FUN_10053db0(float p_param1, Matrix4& p_param2)
 {
 	float local34 = p_param1 * p_param1;
 
@@ -384,6 +384,8 @@ void Act3Ammo::Animate(float p_time)
 				m_world->RemoveDonut(*this);
 				m_world->TriggerHitSound(4);
 			}
+
+			return;
 		}
 		else {
 			if (IsPizza()) {
@@ -394,89 +396,99 @@ void Act3Ammo::Animate(float p_time)
 				assert(SoundManager()->GetCacheSoundManager());
 				SoundManager()->GetCacheSoundManager()->Play("stickdn", NULL, FALSE);
 			}
+		}
 
-			LegoPathActorSet& plpas = m_boundary->GetActors();
-			LegoPathActorSet lpas(plpas);
+		LegoPathActorSet& plpas = m_boundary->GetActors();
+		LegoPathActorSet lpas(plpas);
 
-			for (LegoPathActorSet::iterator itpa = lpas.begin(); itpa != lpas.end(); itpa++) {
-				if (plpas.find(*itpa) != plpas.end() && this != *itpa) {
-					LegoROI* r = (*itpa)->GetROI();
-					assert(r);
+		for (LegoPathActorSet::iterator itpa = lpas.begin(); itpa != lpas.end(); itpa++) {
+			if (plpas.find(*itpa) == plpas.end()) {
+				continue;
+			}
 
-					if (!strncmp(r->GetName(), "pammo", 5)) {
-						Mx3DPointFloat local1c8;
-						Mx3DPointFloat local1b4;
+			if (this == *itpa) {
+				continue;
+			}
 
-						local1c8 = r->GetLocal2World()[3];
-						local1b4 = m_roi->GetLocal2World()[3];
+			LegoROI* r = (*itpa)->GetROI();
+			assert(r);
 
-						local1b4 -= local1c8;
+			if (!strncmp(r->GetName(), "pammo", 5)) {
+				Mx3DPointFloat local1c8;
+				Mx3DPointFloat local1b4;
 
-						float radius = r->GetWorldBoundingSphere().Radius();
-						if (local1b4.LenSquared() <= radius * radius) {
-							MxS32 index = -1;
-							if (sscanf(r->GetName(), "pammo%d", &index) != 1) {
-								assert(0);
-							}
+				local1c8 = r->GetLocal2World()[3];
+				local1b4 = m_roi->GetLocal2World()[3];
 
-							assert(m_world);
+				local1b4 -= local1c8;
 
-							if (m_world->m_pizzas[index].IsValid() && !m_world->m_pizzas[index].IsSharkFood()) {
-								m_world->EatPizza(index);
-								m_world->m_brickster->FUN_100417c0();
-							}
-
-							if (IsDonut()) {
-								assert(SoundManager()->GetCacheSoundManager());
-								SoundManager()->GetCacheSoundManager()->Play("dnhitpz", NULL, FALSE);
-								m_world->RemoveDonut(*this);
-								local14 = TRUE;
-								break;
-							}
-						}
+				float radius = r->GetWorldBoundingSphere().Radius();
+				if (local1b4.LenSquared() <= radius * radius) {
+					MxS32 index = -1;
+					if (sscanf(r->GetName(), "pammo%d", &index) != 1) {
+						assert(0);
 					}
-					else if (!strncmp(r->GetName(), "dammo", 5)) {
-						Mx3DPointFloat local1f8;
-						Mx3DPointFloat local1e4;
 
-						local1f8 = r->GetLocal2World()[3];
-						local1e4 = m_roi->GetLocal2World()[3];
+					assert(m_world);
 
-						local1e4 -= local1f8;
+#ifdef BETA10
+					m_world->EatPizza(index);
+#else
+					if (m_world->m_pizzas[index].IsValid() && !m_world->m_pizzas[index].IsSharkFood()) {
+						m_world->EatPizza(index);
+						m_world->m_brickster->FUN_100417c0();
+					}
+#endif
 
-						float radius = r->GetWorldBoundingSphere().Radius();
-						if (local1e4.LenSquared() <= radius * radius) {
-							MxS32 index = -1;
-							if (sscanf(r->GetName(), "dammo%d", &index) != 1) {
-								assert(0);
-							}
-
-							assert(m_world);
-
-							m_world->EatDonut(index);
-
-							if (IsPizza()) {
-								assert(SoundManager()->GetCacheSoundManager());
-								SoundManager()->GetCacheSoundManager()->Play("pzhitdn", NULL, FALSE);
-								m_world->RemovePizza(*this);
-								local14 = TRUE;
-								break;
-							}
-						}
+					if (IsDonut()) {
+						assert(SoundManager()->GetCacheSoundManager());
+						SoundManager()->GetCacheSoundManager()->Play("dnhitpz", NULL, FALSE);
+						m_world->RemoveDonut(*this);
+						local14 = TRUE;
+						break;
 					}
 				}
 			}
+			else if (!strncmp(r->GetName(), "dammo", 5)) {
+				Mx3DPointFloat local1f8;
+				Mx3DPointFloat local1e4;
 
-			if (!local14) {
-				if (IsPizza()) {
-					m_world->FUN_10073360(*this, local68);
-				}
-				else {
-					m_world->FUN_10073390(*this, local68);
-				}
+				local1f8 = r->GetLocal2World()[3];
+				local1e4 = m_roi->GetLocal2World()[3];
 
-				m_worldSpeed = -1.0f;
+				local1e4 -= local1f8;
+
+				float radius = r->GetWorldBoundingSphere().Radius();
+				if (local1e4.LenSquared() <= radius * radius) {
+					MxS32 index = -1;
+					if (sscanf(r->GetName(), "dammo%d", &index) != 1) {
+						assert(0);
+					}
+
+					assert(m_world);
+
+					m_world->EatDonut(index);
+
+					if (IsPizza()) {
+						assert(SoundManager()->GetCacheSoundManager());
+						SoundManager()->GetCacheSoundManager()->Play("pzhitdn", NULL, FALSE);
+						m_world->RemovePizza(*this);
+						local14 = TRUE;
+						break;
+					}
+				}
 			}
+		}
+
+		if (!local14) {
+			if (IsPizza()) {
+				m_world->FUN_10073360(*this, local68);
+			}
+			else {
+				m_world->FUN_10073390(*this, local68);
+			}
+
+			m_worldSpeed = -1.0f;
 		}
 	}
 }
