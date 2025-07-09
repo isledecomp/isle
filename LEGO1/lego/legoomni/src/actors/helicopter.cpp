@@ -121,7 +121,7 @@ void Helicopter::Exit()
 // FUNCTION: BETA10 0x1002a3db
 MxLong Helicopter::HandleClick()
 {
-	if (!FUN_1003ef60()) {
+	if (!CanExit()) {
 		return 1;
 	}
 
@@ -203,7 +203,7 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 			}
 
 			Exit();
-			GameState()->m_currentArea = LegoGameState::e_unk66;
+			GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 			result = 1;
 			break;
 		case IsleScript::c_Helicopter_TakeOff_Ctl: {
@@ -391,8 +391,8 @@ void Helicopter::VTable0x74(Matrix4& p_transform)
 		FUN_10010c30();
 	}
 	else {
-		m_roi->FUN_100a58f0(p_transform);
-		m_roi->VTable0x14();
+		m_roi->SetLocal2World(p_transform);
+		m_roi->WrappedUpdateWorldData();
 		if (m_cameraFlag) {
 			FUN_10010c30();
 		}
@@ -455,7 +455,9 @@ void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 	Vector3 vec3(m_unk0x1a8[0]); // locala8  // esp+0x20
 	Vector3 vec4(m_unk0x1a8[1]); // localb8  // esp+0x10
 	Vector3 vec5(m_unk0x1a8[2]); // EDI
-	Vector3 vec6(m_unk0x1a8[3]); // locala0  // esp+0x28
+
+	// the typecast makes this function match for unknown reasons
+	Vector3 vec6((const float*) m_unk0x1a8[3]); // locala0  // esp+0x28
 
 	m_world->GetCameraController()->FUN_100123b0(local48);
 	m_unk0x1a8.SetIdentity();

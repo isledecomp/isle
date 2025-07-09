@@ -35,7 +35,7 @@ DECOMP_SIZE_ASSERT(LegoWorldPresenter, 0x54)
 MxS32 g_legoWorldPresenterQuality = 1;
 
 // GLOBAL: LEGO1 0x100f75d8
-MxLong g_wdbOffset = 0;
+MxLong g_wdbSkipGlobalPartsOffset = 0;
 
 // FUNCTION: LEGO1 0x100665b0
 void LegoWorldPresenter::configureLegoWorldPresenter(MxS32 p_legoWorldPresenterQuality)
@@ -46,7 +46,7 @@ void LegoWorldPresenter::configureLegoWorldPresenter(MxS32 p_legoWorldPresenterQ
 // FUNCTION: LEGO1 0x100665c0
 LegoWorldPresenter::LegoWorldPresenter()
 {
-	m_unk0x50 = 50000;
+	m_nextObjectId = 50000;
 }
 
 // FUNCTION: LEGO1 0x10066770
@@ -208,8 +208,8 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		return FAILURE;
 	}
 
-	if (g_wdbOffset == 0) {
-		if (fread(&size, sizeof(size), 1, wdbFile) != 1) {
+	if (g_wdbSkipGlobalPartsOffset == 0) {
+		if (fread(&size, sizeof(MxU32), 1, wdbFile) != 1) {
 			return FAILURE;
 		}
 
@@ -229,7 +229,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 
 		delete[] buff;
 
-		if (fread(&size, sizeof(size), 1, wdbFile) != 1) {
+		if (fread(&size, sizeof(MxU32), 1, wdbFile) != 1) {
 			return FAILURE;
 		}
 
@@ -248,10 +248,10 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 
 		delete[] buff;
 
-		g_wdbOffset = ftell(wdbFile);
+		g_wdbSkipGlobalPartsOffset = ftell(wdbFile);
 	}
 	else {
-		if (fseek(wdbFile, g_wdbOffset, SEEK_SET) != 0) {
+		if (fseek(wdbFile, g_wdbSkipGlobalPartsOffset, SEEK_SET) != 0) {
 			return FAILURE;
 		}
 	}
@@ -261,7 +261,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 
 	while (cursor.Next(part)) {
 		if (GetViewLODListManager()->Lookup(part->m_roiName.GetData()) == NULL &&
-			FUN_10067360(*part, wdbFile) != SUCCESS) {
+			LoadWorldPart(*part, wdbFile) != SUCCESS) {
 			return FAILURE;
 		}
 	}
@@ -287,15 +287,15 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		}
 		else if (g_legoWorldPresenterQuality <= 1 && !strnicmp(worlds[i].m_models[j].m_modelName, "haus", 4)) {
 			if (worlds[i].m_models[j].m_modelName[4] == '3') {
-				if (FUN_100674b0(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
+				if (LoadWorldModel(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
 					return FAILURE;
 				}
 
-				if (FUN_100674b0(worlds[i].m_models[j - 2], wdbFile, p_world) != SUCCESS) {
+				if (LoadWorldModel(worlds[i].m_models[j - 2], wdbFile, p_world) != SUCCESS) {
 					return FAILURE;
 				}
 
-				if (FUN_100674b0(worlds[i].m_models[j - 1], wdbFile, p_world) != SUCCESS) {
+				if (LoadWorldModel(worlds[i].m_models[j - 1], wdbFile, p_world) != SUCCESS) {
 					return FAILURE;
 				}
 			}
@@ -303,7 +303,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 			continue;
 		}
 
-		if (FUN_100674b0(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
+		if (LoadWorldModel(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
 			return FAILURE;
 		}
 	}
@@ -314,7 +314,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 }
 
 // FUNCTION: LEGO1 0x10067360
-MxResult LegoWorldPresenter::FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile)
+MxResult LegoWorldPresenter::LoadWorldPart(ModelDbPart& p_part, FILE* p_wdbFile)
 {
 	MxResult result;
 	MxU8* buff = new MxU8[p_part.m_partDataLength];
@@ -340,17 +340,17 @@ MxResult LegoWorldPresenter::FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile)
 }
 
 // FUNCTION: LEGO1 0x100674b0
-MxResult LegoWorldPresenter::FUN_100674b0(ModelDbModel& p_model, FILE* p_wdbFile, LegoWorld* p_world)
+MxResult LegoWorldPresenter::LoadWorldModel(ModelDbModel& p_model, FILE* p_wdbFile, LegoWorld* p_world)
 {
-	MxU8* buff = new MxU8[p_model.m_unk0x04];
+	MxU8* buff = new MxU8[p_model.m_modelDataLength];
 
-	fseek(p_wdbFile, p_model.m_unk0x08, SEEK_SET);
-	if (fread(buff, p_model.m_unk0x04, 1, p_wdbFile) != 1) {
+	fseek(p_wdbFile, p_model.m_modelDataOffset, SEEK_SET);
+	if (fread(buff, p_model.m_modelDataLength, 1, p_wdbFile) != 1) {
 		return FAILURE;
 	}
 
 	MxDSChunk chunk;
-	chunk.SetLength(p_model.m_unk0x04);
+	chunk.SetLength(p_model.m_modelDataLength);
 	chunk.SetData(buff);
 
 	MxDSAction action;
@@ -359,8 +359,8 @@ MxResult LegoWorldPresenter::FUN_100674b0(ModelDbModel& p_model, FILE* p_wdbFile
 	action.SetDirection(p_model.m_direction);
 	action.SetUp(p_model.m_up);
 
-	MxU32 objectId = m_unk0x50;
-	m_unk0x50++;
+	MxU32 objectId = m_nextObjectId;
+	m_nextObjectId++;
 	action.SetObjectId(objectId);
 
 	action.SetAtomId(atom);
@@ -393,7 +393,7 @@ MxResult LegoWorldPresenter::FUN_100674b0(ModelDbModel& p_model, FILE* p_wdbFile
 	}
 
 	modelPresenter.SetAction(&action);
-	modelPresenter.FUN_1007ff70(chunk, createdEntity, p_model.m_unk0x34, p_world);
+	modelPresenter.CreateROI(chunk, createdEntity, p_model.m_visible, p_world);
 	delete[] buff;
 
 	return SUCCESS;

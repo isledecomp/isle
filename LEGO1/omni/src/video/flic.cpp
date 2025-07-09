@@ -288,7 +288,7 @@ void DecodeBrun(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_da
 	while (--line >= 0) {
 		short column = 0;
 		data++;
-		char count = 0;
+		signed char count = 0;
 		while ((column += count) < width2) {
 			count = *data++;
 
@@ -331,7 +331,7 @@ void DecodeLC(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data
 
 		while (packets > 0) {
 			column += *data++; // skip byte
-			char type = *((char*) data++);
+			signed char type = *((signed char*) data++);
 
 			if (type < 0) {
 				type = -type;
@@ -355,64 +355,99 @@ void DecodeLC(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data
 // FUNCTION: BETA10 0x1013e61d
 void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data, FLIC_HEADER* p_flcHeader)
 {
-	short width = (short) p_flcHeader->width - 1;
-	short row = (short) p_flcHeader->height - 1;
-	short lines = *((short*) p_data);
-	BYTE* data = p_data + 2;
+	short xofs = 0;
+	short yofs = 0;
 
-	while (--lines > 0) {
-		short token;
+	short width = p_flcHeader->width;
+	short token = 0;
 
-		while (TRUE) {
-			token = *((short*) data);
-			data += 2;
+	// LINE: BETA10 0x1013e643
+	short xmax = xofs + width - 1;
 
-			if (token < 0) {
-				if (token & 0x4000) {
-					row += token;
-				}
-				else {
-					WritePixel(p_bitmapHeader, p_pixelData, width, row, token);
-					token = *((WORD*) data);
-					data += 2;
+	union {
+		BYTE* byte;
+		WORD* word;
+		// LINE: BETA10 0x1013e652
+	} data = {p_data};
 
-					if (!token) {
-						row--;
-						if (--lines <= 0) {
-							return;
-						}
-					}
-					else {
-						break;
-					}
-				}
+	// The first word in the data following the chunk header contains the number of lines in the chunk.
+	// The line count does not include skipped lines.
+	short lines = *(short*) data.word++;
+
+	// LINE: BETA10 0x1013e666
+	short row = p_flcHeader->height - yofs - 1;
+
+	goto start_packet;
+
+skip_lines:
+	// The layout in BETA10 strongly suggests that lots of `goto`s are used.
+	// LINE: BETA10 0x1013e684
+	row += token;
+
+start_packet:
+	// LINE: BETA10 0x1013e692
+	token = *(short*) data.word++;
+
+	if (token >= 0) {
+		goto column_loop;
+	}
+
+	if ((unsigned short) token & 0x4000) {
+		goto skip_lines;
+	}
+
+	WritePixel(p_bitmapHeader, p_pixelData, xmax, row, token);
+	token = *(short*) data.word++;
+
+	// LINE: BETA10 0x1013e6ef
+	if (!token) {
+		row--;
+		if (--lines > 0) {
+			goto start_packet;
+		}
+		return;
+	}
+	else {
+
+	column_loop:
+		// LINE: BETA10 0x1013e71e
+		short column = xofs;
+
+	column_loop_inner:
+		// LINE: BETA10 0x1013e726
+		column += *data.byte++;
+		// LINE: BETA10 0x1013e73a
+		short type = *(signed char*) data.byte++;
+		type += type;
+
+		if (type >= 0) {
+			WritePixels(p_bitmapHeader, p_pixelData, column, row, data.byte, type);
+			column += type;
+			data.byte += type;
+			// LINE: BETA10 0x1013e797
+			if (--token != 0) {
+				goto column_loop_inner;
 			}
-			else {
-				break;
+			row--;
+			if (--lines > 0) {
+				goto start_packet;
 			}
+			return;
 		}
 
-		short column = 0;
-		do {
-			column += *(data++);
-			short type = *((char*) data++);
-			type += type;
-
-			if (type >= 0) {
-				WritePixels(p_bitmapHeader, p_pixelData, column, row, data, type);
-				column += type;
-				data += type;
-			}
-			else {
-				type = -type;
-				short p_pixel = *((WORD*) data);
-				data += 2;
-				WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, p_pixel, type >> 1);
-				column += type;
-			}
-		} while (--token);
-
+		type = -type;
+		WORD* p_pixel = data.word++;
+		WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, *p_pixel, type >> 1);
+		column += type;
+		// LINE: BETA10 0x1013e813
+		if (--token != 0) {
+			goto column_loop_inner;
+		}
 		row--;
+		if (--lines > 0) {
+			goto start_packet;
+		}
+		return;
 	}
 }
 

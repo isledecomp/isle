@@ -1,6 +1,6 @@
 #include "legowegedge.h"
 
-#include "legounkown100db7f4.h"
+#include "legoorientededge.h"
 
 #include <assert.h>
 
@@ -13,12 +13,12 @@ LegoWEGEdge::LegoWEGEdge()
 {
 	m_unk0x0d = 0;
 	m_name = NULL;
-	m_unk0x14.Clear();
+	m_up.Clear();
 	m_edgeNormals = NULL;
 	m_flags = 0;
 	m_numTriggers = 0;
 	m_pathTrigger = NULL;
-	m_unk0x50 = NULL;
+	m_direction = NULL;
 }
 
 // FUNCTION: LEGO1 0x1009a800
@@ -35,20 +35,20 @@ LegoWEGEdge::~LegoWEGEdge()
 		delete[] m_edgeNormals;
 	}
 	if (m_pathTrigger) {
-		delete m_pathTrigger;
+		delete[] m_pathTrigger;
 	}
-	if (m_unk0x50) {
-		delete m_unk0x50;
+	if (m_direction) {
+		delete m_direction;
 	}
 }
 
 // FUNCTION: LEGO1 0x1009a8c0
 // FUNCTION: BETA10 0x101832f7
-LegoS32 LegoWEGEdge::VTable0x04()
+LegoS32 LegoWEGEdge::LinkEdgesAndFaces()
 {
 	LegoS32 result = 0;
-	m_unk0x30.Clear();
-	LegoWEEdge::VTable0x04();
+	m_centerPoint.Clear();
+	LegoWEEdge::LinkEdgesAndFaces();
 
 	assert(m_numEdges > 1);
 
@@ -72,7 +72,7 @@ LegoS32 LegoWEGEdge::VTable0x04()
 		local14 = m_edges[1]->m_pointB;
 	}
 
-	result = FUN_1009aea0();
+	result = ValidateFacePlanarity();
 	if (result != 0) {
 		result = -2;
 	}
@@ -81,73 +81,73 @@ LegoS32 LegoWEGEdge::VTable0x04()
 	m_edgeNormals = new Mx4DPointFloat[m_numEdges];
 	assert(m_edgeNormals);
 
-	LegoUnknown100db7f4* edge;
+	LegoOrientedEdge* edge;
 	LegoS32 i;
 
 	for (i = 0; i < m_numEdges; i++) {
 		edge = m_edges[i];
-		m_unk0x30 += *edge->m_pointA;
-		m_unk0x30 += *edge->m_pointB;
+		m_centerPoint += *edge->m_pointA;
+		m_centerPoint += *edge->m_pointB;
 	}
 
-	m_unk0x30 /= m_numEdges * 2;
-	m_unk0x44 = 0.0f;
+	m_centerPoint /= m_numEdges * 2;
+	m_boundingRadius = 0.0f;
 
 	for (i = 0; i < m_numEdges; i++) {
 		Mx3DPointFloat local44;
 		edge = m_edges[i];
 
 		local44 = *edge->m_pointA;
-		local44 -= m_unk0x30;
+		local44 -= m_centerPoint;
 		float length = local44.LenSquared();
 
-		if (m_unk0x44 < length) {
-			m_unk0x44 = length;
+		if (m_boundingRadius < length) {
+			m_boundingRadius = length;
 		}
 
 		local44 = *edge->m_pointB;
-		local44 -= m_unk0x30;
+		local44 -= m_centerPoint;
 		length = local44.LenSquared();
 
-		if (m_unk0x44 < length) {
-			m_unk0x44 = length;
+		if (m_boundingRadius < length) {
+			m_boundingRadius = length;
 		}
 	}
 
-	m_unk0x44 = sqrt((double) m_unk0x44);
+	m_boundingRadius = sqrt((double) m_boundingRadius);
 
 	for (i = 0; i < m_numEdges; i++) {
 		edge = m_edges[i];
-		Vector3& local5c = edge->m_unk0x28;
+		Vector3& local5c = edge->m_dir;
 
-		if (edge->m_unk0x3c == 0) {
+		if (edge->m_length == 0) {
 			local5c = *m_edges[i]->m_pointB;
 			local5c -= *m_edges[i]->m_pointA;
-			edge->m_unk0x3c = local5c.LenSquared();
+			edge->m_length = local5c.LenSquared();
 
-			if (edge->m_unk0x3c <= 0.0f) {
+			if (edge->m_length <= 0.0f) {
 				assert(0);
 				if (result == 0) {
 					result = -1;
 				}
 			}
 
-			edge->m_unk0x3c = sqrt((double) edge->m_unk0x3c);
-			local5c /= edge->m_unk0x3c;
+			edge->m_length = sqrt((double) edge->m_length);
+			local5c /= edge->m_length;
 		}
 
 		Mx3DPointFloat local58;
 		Vector3 local64(&m_edgeNormals[i][0]);
-		edge->FUN_1002ddc0(*this, local58);
-		local64.EqualsCross(local58, m_unk0x14);
+		edge->GetFaceNormal(*this, local58);
+		local64.EqualsCross(local58, m_up);
 
 		m_edgeNormals[i][3] = -local64.Dot(*m_edges[i]->m_pointA, local64);
-		if (m_edgeNormals[i][3] + m_unk0x30.Dot(m_unk0x30, local64) < 0.0f) {
+		if (m_edgeNormals[i][3] + m_centerPoint.Dot(m_centerPoint, local64) < 0.0f) {
 			m_edgeNormals[i] *= -1.0f;
 		}
 
 		if (edge->GetFaceA() != NULL && edge->GetFaceB() != NULL) {
-			edge->SetFlags(LegoUnknown100db7f4::c_bit1 | LegoUnknown100db7f4::c_bit2);
+			edge->SetFlags(LegoOrientedEdge::c_bit1 | LegoOrientedEdge::c_bit2);
 		}
 	}
 
@@ -156,14 +156,14 @@ LegoS32 LegoWEGEdge::VTable0x04()
 		Vector3* vTrig2 = m_edges[1]->CCWVertex(*this);
 		assert(vTrig1 && vTrig2);
 
-		m_unk0x50 = new Mx3DPointFloat();
-		*m_unk0x50 = *vTrig2;
-		*m_unk0x50 -= *vTrig1;
+		m_direction = new Mx3DPointFloat();
+		*m_direction = *vTrig2;
+		*m_direction -= *vTrig1;
 
-		if (m_unk0x50->Unitize() < 0) {
+		if (m_direction->Unitize() < 0) {
 			assert(0);
-			delete m_unk0x50;
-			m_unk0x50 = NULL;
+			delete m_direction;
+			m_direction = NULL;
 		}
 
 		if (GetNumEdges() == 4) {
@@ -178,12 +178,12 @@ LegoS32 LegoWEGEdge::VTable0x04()
 			localb8 -= *vTrig1;
 			local80 -= *vTrig1;
 
-			float locala4 = localb8.Dot(*m_unk0x50, localb8);
+			float locala4 = localb8.Dot(*m_direction, localb8);
 			if (local98 < locala4) {
 				local98 = locala4;
 			}
 
-			locala4 = local80.Dot(*m_unk0x50, local80);
+			locala4 = local80.Dot(*m_direction, local80);
 			if (locala4 < local9c) {
 				local9c = locala4;
 			}
@@ -199,12 +199,12 @@ LegoS32 LegoWEGEdge::VTable0x04()
 			local9c -= 0.001;
 
 			for (LegoS32 j = 0; j < m_numTriggers; j++) {
-				if (m_pathTrigger[j].m_unk0x08 < local98) {
-					m_pathTrigger[j].m_unk0x08 = local98;
+				if (m_pathTrigger[j].m_triggerLength < local98) {
+					m_pathTrigger[j].m_triggerLength = local98;
 				}
 
-				if (m_pathTrigger[j].m_unk0x08 > local9c) {
-					m_pathTrigger[j].m_unk0x08 = local9c;
+				if (m_pathTrigger[j].m_triggerLength > local9c) {
+					m_pathTrigger[j].m_triggerLength = local9c;
 				}
 			}
 		}
@@ -218,7 +218,7 @@ LegoS32 LegoWEGEdge::VTable0x04()
 
 // FUNCTION: LEGO1 0x1009aea0
 // FUNCTION: BETA10 0x10183e2a
-LegoS32 LegoWEGEdge::FUN_1009aea0()
+LegoS32 LegoWEGEdge::ValidateFacePlanarity()
 {
 	LegoU32 localc = FALSE;
 	Mx3DPointFloat local24;
@@ -255,17 +255,17 @@ LegoS32 LegoWEGEdge::FUN_1009aea0()
 		local24 /= local58;
 
 		if (localc) {
-			float local54 = local24.Dot(m_unk0x14, local24);
+			float local54 = local24.Dot(m_up, local24);
 			if (local54 < 0.98) {
 				delete[] local8;
 				return -2;
 			}
 		}
 		else {
-			m_unk0x14[0] = local24[0];
-			m_unk0x14[1] = local24[1];
-			m_unk0x14[2] = local24[2];
-			m_unk0x14[3] = -local8[i]->Dot(*local8[i], local24);
+			m_up[0] = local24[0];
+			m_up[1] = local24[1];
+			m_up[2] = local24[2];
+			m_up[3] = -local8[i]->Dot(*local8[i], local24);
 			localc = TRUE;
 		}
 	}

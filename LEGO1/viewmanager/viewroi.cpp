@@ -7,7 +7,7 @@
 DECOMP_SIZE_ASSERT(ViewROI, 0xe4)
 
 // GLOBAL: LEGO1 0x101013d8
-undefined g_unk101013d8 = 0;
+unsigned char g_lightSupport = FALSE;
 
 // FUNCTION: LEGO1 0x100a9eb0
 float ViewROI::IntrinsicImportance() const
@@ -16,71 +16,66 @@ float ViewROI::IntrinsicImportance() const
 } // for now
 
 // FUNCTION: LEGO1 0x100a9ec0
+// FUNCTION: BETA10 0x1018c740
 Tgl::Group* ViewROI::GetGeometry()
 {
 	return geometry;
 }
 
 // FUNCTION: LEGO1 0x100a9ed0
+// FUNCTION: BETA10 0x1018c760
 const Tgl::Group* ViewROI::GetGeometry() const
 {
 	return geometry;
 }
 
 // FUNCTION: LEGO1 0x100a9ee0
-void ViewROI::UpdateWorldData(const Matrix4& parent2world)
+// FUNCTION: BETA10 0x1018c780
+void ViewROI::UpdateWorldDataWithTransformAndChildren(const Matrix4& parent2world)
 {
-	OrientableROI::UpdateWorldData(parent2world);
+	OrientableROI::UpdateWorldDataWithTransformAndChildren(parent2world);
+	SetGeometryTransformation();
+}
 
+// FUNCTION: BETA10 0x1018c7b0
+inline void ViewROI::SetGeometryTransformation()
+{
 	if (geometry) {
 		Tgl::FloatMatrix4 matrix;
 		Matrix4 in(matrix);
 		SETMAT4(in, m_local2world);
-		Tgl::Result result = geometry->SetTransformation(matrix);
-		// assert(Tgl::Succeeded(result));
+		geometry->SetTransformation(matrix);
 	}
 }
 
 // FUNCTION: LEGO1 0x100a9fc0
-void ViewROI::VTable0x24(const Matrix4& p_transform)
+// FUNCTION: BETA10 0x1018cad0
+void ViewROI::UpdateWorldDataWithTransform(const Matrix4& p_transform)
 {
-	OrientableROI::VTable0x24(p_transform);
-	if (geometry) {
-		Tgl::FloatMatrix4 matrix;
-		Matrix4 in(matrix);
-		SETMAT4(in, m_local2world);
-		geometry->SetTransformation(matrix);
-	}
+	OrientableROI::UpdateWorldDataWithTransform(p_transform);
+	SetGeometryTransformation();
 }
 
 // FUNCTION: LEGO1 0x100aa0a0
-void ViewROI::SetLocalTransform(const Matrix4& p_transform)
+// FUNCTION: BETA10 0x1018cb00
+void ViewROI::SetLocal2WorldWithWorldDataUpdate(const Matrix4& p_transform)
 {
-	OrientableROI::SetLocalTransform(p_transform);
-	if (geometry) {
-		Tgl::FloatMatrix4 matrix;
-		Matrix4 in(matrix);
-		SETMAT4(in, m_local2world);
-		geometry->SetTransformation(matrix);
-	}
+	OrientableROI::SetLocal2WorldWithWorldDataUpdate(p_transform);
+	SetGeometryTransformation();
 }
 
 // FUNCTION: LEGO1 0x100aa180
-void ViewROI::VTable0x1c()
+// FUNCTION: BETA10 0x1018cb30
+void ViewROI::UpdateWorldData()
 {
-	OrientableROI::VTable0x1c();
-	if (geometry) {
-		Tgl::FloatMatrix4 matrix;
-		Matrix4 in(matrix);
-		SETMAT4(in, m_local2world);
-		geometry->SetTransformation(matrix);
-	}
+	OrientableROI::UpdateWorldData();
+	SetGeometryTransformation();
 }
 
 // FUNCTION: LEGO1 0x100aa500
-undefined ViewROI::SetUnk101013d8(undefined p_flag)
+unsigned char ViewROI::SetLightSupport(unsigned char p_lightSupport)
 {
-	undefined oldFlag = g_unk101013d8;
-	g_unk101013d8 = p_flag;
+	unsigned char oldFlag = g_lightSupport;
+	g_lightSupport = p_lightSupport;
 	return oldFlag;
 }

@@ -64,7 +64,7 @@ void LegoFlcTexturePresenter::LoadFrame(MxStreamChunk* p_chunk)
 void LegoFlcTexturePresenter::PutFrame()
 {
 	if (m_texture != NULL && m_rectCount != 0) {
-		m_texture->FUN_10066010(m_frameBitmap->GetImage());
+		m_texture->LoadBits(m_frameBitmap->GetImage());
 		m_rectCount = 0;
 	}
 }

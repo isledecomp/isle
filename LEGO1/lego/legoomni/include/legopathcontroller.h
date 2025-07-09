@@ -2,7 +2,7 @@
 #define LEGOPATHCONTROLLER_H
 
 #include "decomp.h"
-#include "geom/legounkown100db7f4.h"
+#include "geom/legoorientededge.h"
 #include "legopathactor.h"
 #include "legopathboundary.h"
 #include "legopathstruct.h"
@@ -21,7 +21,7 @@ class Vector3;
 
 // VTABLE: LEGO1 0x100d7da8
 // SIZE 0x40
-struct LegoPathCtrlEdge : public LegoUnknown100db7f4 {};
+struct LegoPathCtrlEdge : public LegoOrientedEdge {};
 
 struct LegoPathCtrlEdgeCompare {
 	MxU32 operator()(const LegoPathCtrlEdge* p_lhs, const LegoPathCtrlEdge* p_rhs) const
@@ -60,7 +60,7 @@ public:
 		}
 
 		LegoPathController* m_controller; // 0x00
-		LegoUnknown100db7f4* m_edge;      // 0x04
+		LegoOrientedEdge* m_edge;         // 0x04
 	};
 
 	LegoPathController();
@@ -105,7 +105,7 @@ public:
 	MxResult PlaceActor(LegoPathActor* p_actor);
 	MxResult RemoveActor(LegoPathActor* p_actor);
 	void FUN_100468f0(LegoAnimPresenter* p_presenter);
-	void FUN_10046930(LegoAnimPresenter* p_presenter);
+	void RemovePresenterFromBoundaries(LegoAnimPresenter* p_presenter);
 	MxResult FUN_10046b30(LegoPathBoundary*& p_boundaries, MxS32& p_numL);
 	LegoPathBoundary* GetPathBoundary(const char* p_name);
 	void Enable(MxBool p_enable);
@@ -126,7 +126,7 @@ public:
 		Vector3& p_v1,
 		Vector3& p_v2,
 		float p_f1,
-		LegoUnknown100db7f4*& p_edge,
+		LegoOrientedEdge*& p_edge,
 		LegoPathBoundary*& p_boundary
 	);
 	MxResult FUN_1004a380(
@@ -144,13 +144,13 @@ public:
 	static MxResult Reset();
 
 	// FUNCTION: BETA10 0x100cf580
-	static LegoUnknown100db7f4* GetControlEdgeA(MxS32 p_index) { return g_ctrlEdgesA[p_index].m_edge; }
+	static LegoOrientedEdge* GetControlEdgeA(MxS32 p_index) { return g_ctrlEdgesA[p_index].m_edge; }
 
 	// FUNCTION: BETA10 0x100cf5b0
 	static LegoPathBoundary* GetControlBoundaryA(MxS32 p_index) { return g_ctrlBoundariesA[p_index].m_boundary; }
 
 	// These two are an educated guess because BETA10 does not have the g_ctrl.*B globals
-	static LegoUnknown100db7f4* GetControlEdgeB(MxS32 p_index) { return g_ctrlEdgesB[p_index].m_edge; }
+	static LegoOrientedEdge* GetControlEdgeB(MxS32 p_index) { return g_ctrlEdgesB[p_index].m_edge; }
 	static LegoPathBoundary* GetControlBoundaryB(MxS32 p_index) { return g_ctrlBoundariesB[p_index].m_boundary; }
 
 private:
@@ -189,12 +189,12 @@ private:
 
 	LegoPathBoundary* m_boundaries; // 0x08
 	LegoPathCtrlEdge* m_edges;      // 0x0c
-	Mx3DPointFloat* m_unk0x10;      // 0x10
+	Mx3DPointFloat* m_nodes;        // 0x10
 	LegoPathStruct* m_structs;      // 0x14
-	MxU16 m_numL;                   // 0x18
-	MxU16 m_numE;                   // 0x1a
-	MxU16 m_numN;                   // 0x1c
-	MxU16 m_numT;                   // 0x1e
+	MxU16 m_numL;                   // 0x18 Number of boundaries
+	MxU16 m_numE;                   // 0x1a Number of edges
+	MxU16 m_numN;                   // 0x1c Number of nodes
+	MxU16 m_numT;                   // 0x1e Number of structs
 	LegoPathCtrlEdgeSet m_pfsE;     // 0x20
 	LegoPathActorSet m_actors;      // 0x30
 
@@ -264,7 +264,7 @@ private:
 // LegoPathCtrlEdge::~LegoPathCtrlEdge
 
 // SYNTHETIC: LEGO1 0x10047ae0
-// LegoUnknown100db7f4::~LegoUnknown100db7f4
+// LegoOrientedEdge::~LegoOrientedEdge
 
 // TEMPLATE: LEGO1 0x10048f00
 // list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >::begin

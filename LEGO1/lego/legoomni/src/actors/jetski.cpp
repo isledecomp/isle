@@ -81,7 +81,7 @@ void Jetski::Exit()
 MxLong Jetski::HandleClick()
 {
 #ifndef BETA10
-	if (!FUN_1003ef60()) {
+	if (!CanExit()) {
 		return 1;
 	}
 
@@ -143,7 +143,7 @@ MxLong Jetski::HandleControl(LegoControlManagerNotificationParam& p_param)
 			Exit();
 			((IslePathActor*) UserActor())
 				->SpawnPlayer(LegoGameState::e_jetraceExterior, TRUE, c_spawnBit1 | c_playMusic | c_spawnBit3);
-			GameState()->m_currentArea = LegoGameState::e_unk66;
+			GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 			return 1;
 		case IsleScript::c_JetskiInfo_Ctl:
 			((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_infomain);

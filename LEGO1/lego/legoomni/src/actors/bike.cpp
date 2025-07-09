@@ -52,7 +52,7 @@ void Bike::Exit()
 // FUNCTION: LEGO1 0x100769a0
 MxLong Bike::HandleClick()
 {
-	if (FUN_1003ef60()) {
+	if (CanExit()) {
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 		FUN_10015820(TRUE, 0);
 
@@ -85,7 +85,7 @@ MxLong Bike::HandleControl(LegoControlManagerNotificationParam& p_param)
 		switch (p_param.m_clickedObjectId) {
 		case IsleScript::c_BikeArms_Ctl:
 			Exit();
-			GameState()->m_currentArea = LegoGameState::e_unk66;
+			GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 			result = 1;
 			break;
 		case IsleScript::c_BikeInfo_Ctl:

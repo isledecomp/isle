@@ -99,14 +99,14 @@ ColorStringStruct g_colorSaveData[43] = {
 	{"c_chljety1", "lego black"},  {"c_chrjety1", "lego black"}, // copter left jet, copter right jet
 	{"c_chmidly0", "lego black"},  {"c_chmotry0", "lego blue"},  // copter middle, copter motor
 	{"c_chsidly0", "lego black"},  {"c_chsidry0", "lego black"}, // copter side left, copter side right
-	{"c_chstuty0", "lego black"},  {"c_chtaily0", "lego black"}, // copter ???, copter tail
-	{"c_chwindy1", "lego black"},  {"c_dbfbrdy0", "lego red"},   // copter ???, dunebuggy ???
+	{"c_chstuty0", "lego black"},  {"c_chtaily0", "lego black"}, // copter skids, copter tail
+	{"c_chwindy1", "lego black"},  {"c_dbfbrdy0", "lego red"},   // copter windshield, dunebuggy body
 	{"c_dbflagy0", "lego yellow"}, {"c_dbfrfny4", "lego red"},   // dunebuggy flag, dunebuggy front fender
 	{"c_dbfrxly0", "lego white"},  {"c_dbhndly0", "lego white"}, // dunebuggy front axle, dunebuggy handlebar
-	{"c_dbltbry0", "lego white"},  {"c_jsdashy0", "lego white"}, // dunebuggy ???,  jetski dash
+	{"c_dbltbry0", "lego white"},  {"c_jsdashy0", "lego white"}, // dunebuggy rear lights,  jetski dash
 	{"c_jsexhy0", "lego black"},   {"c_jsfrnty5", "lego black"}, // jetski exhaust, jetski front
 	{"c_jshndly0", "lego red"},    {"c_jslsidy0", "lego black"}, // jetski handlebar, jetski left side
-	{"c_jsrsidy0", "lego black"},  {"c_jsskiby0", "lego red"},   // jetski right side, jetski ???
+	{"c_jsrsidy0", "lego black"},  {"c_jsskiby0", "lego red"},   // jetski right side, jetski base
 	{"c_jswnshy5", "lego white"},  {"c_rcbacky6", "lego green"}, // jetski windshield, racecar back
 	{"c_rcedgey0", "lego green"},  {"c_rcfrmey0", "lego red"},   // racecar edge, racecar frame
 	{"c_rcfrnty6", "lego green"},  {"c_rcmotry0", "lego white"}, // racecar front, racecar motor
@@ -145,7 +145,7 @@ const char* g_strDisable = "disable";
 LegoGameState::LegoGameState()
 {
 	SetColors();
-	SetROIHandlerFunction();
+	SetROIColorOverride();
 
 	m_stateCount = 0;
 	m_actorId = 0;
@@ -170,13 +170,13 @@ LegoGameState::LegoGameState()
 	VariableTable()->SetVariable(m_fullScreenMovie);
 
 	VariableTable()->SetVariable("lightposition", "2");
-	SerializeScoreHistory(1);
+	SerializeScoreHistory(LegoFile::c_read);
 }
 
 // FUNCTION: LEGO1 0x10039720
 LegoGameState::~LegoGameState()
 {
-	LegoROI::FUN_100a9d30(NULL);
+	LegoROI::SetColorOverride(NULL);
 
 	if (m_stateCount) {
 		for (MxS16 i = 0; i < m_stateCount; i++) {
@@ -215,7 +215,7 @@ void LegoGameState::SetActor(MxU8 p_actorId)
 	newActor->SetROI(roi, FALSE, FALSE);
 
 	if (oldActor) {
-		newActor->GetROI()->FUN_100a58f0(oldActor->GetROI()->GetLocal2World());
+		newActor->GetROI()->SetLocal2World(oldActor->GetROI()->GetLocal2World());
 		newActor->SetBoundary(oldActor->GetBoundary());
 		delete oldActor;
 	}
@@ -277,7 +277,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	}
 
 	storage.WriteS32(0x1000c);
-	storage.WriteS16(m_unk0x24);
+	storage.WriteS16(m_currentPlayerId);
 	storage.WriteU16(m_currentAct);
 	storage.WriteU8(m_actorId);
 
@@ -315,7 +315,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 
 	area = m_unk0x42c;
 	storage.WriteU16(area);
-	SerializeScoreHistory(2);
+	SerializeScoreHistory(LegoFile::c_write);
 	m_isDirty = FALSE;
 
 done:
@@ -372,7 +372,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 		goto done;
 	}
 
-	storage.ReadS16(m_unk0x24);
+	storage.ReadS16(m_currentPlayerId);
 	storage.ReadS16(actArea);
 
 	SetCurrentAct((Act) actArea);
@@ -513,7 +513,7 @@ MxS32 LegoGameState::ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to)
 	MxS32 result = 1;
 	MxU8 len;
 
-	if (p_storage->Read(&len, sizeof(len)) != SUCCESS) {
+	if (p_storage->Read(&len, sizeof(MxU8)) != SUCCESS) {
 		goto done;
 	}
 
@@ -531,7 +531,7 @@ MxS32 LegoGameState::ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to)
 		goto done;
 	}
 
-	if (p_storage->Read(&len, sizeof(len)) != SUCCESS) {
+	if (p_storage->Read(&len, sizeof(MxU8)) != SUCCESS) {
 		goto done;
 	}
 
@@ -615,8 +615,8 @@ MxResult LegoGameState::AddPlayer(Username& p_player)
 
 	m_playerCount++;
 	m_players[0].Set(p_player);
-	m_unk0x24 = m_history.m_unk0x372;
-	m_history.m_unk0x372 = m_unk0x24 + 1;
+	m_currentPlayerId = m_history.m_nextPlayerId;
+	m_history.m_nextPlayerId = m_currentPlayerId + 1;
 	m_history.WriteScoreHistory();
 	SetCurrentAct(e_act1);
 
@@ -868,17 +868,17 @@ void LegoGameState::SwitchArea(Area p_area)
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_infodoorScript, InfodoorScript::c__StartUp, NULL);
 		break;
-	case e_unk4:
+	case e_infocenterExited:
 	case e_jetrace2:
 	case e_jetraceExterior:
-	case e_unk17:
+	case e_jetskibuildExited:
 	case e_carraceExterior:
-	case e_unk20:
+	case e_racecarbuildExited:
 	case e_unk21:
 	case e_pizzeriaExterior:
 	case e_garageExterior:
 	case e_hospitalExterior:
-	case e_unk31:
+	case e_hospitalExited:
 	case e_policeExterior:
 	case e_bike:
 	case e_dunecar:
@@ -886,7 +886,7 @@ void LegoGameState::SwitchArea(Area p_area)
 	case e_copter:
 	case e_skateboard:
 	case e_jetski:
-	case e_unk66:
+	case e_vehicleExited:
 		LoadIsle();
 		break;
 	case e_elevbott:
@@ -948,7 +948,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		VideoManager()->Get3DManager()->SetFrustrum(90, 0.1f, 250.0f);
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, IsleScript::c_GaraDoor, NULL);
 		break;
-	case e_unk28: {
+	case e_garageExited: {
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 		LoadIsle();
 
@@ -973,7 +973,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_hospitalScript, HospitalScript::c__StartUp, NULL);
 		break;
-	case e_unk33:
+	case e_policeExited:
 		LoadIsle();
 		SetCameraControllerFromIsle();
 		UserActor()->ResetWorldTransform(TRUE);
@@ -1060,13 +1060,13 @@ void LegoGameState::SetColors()
 }
 
 // FUNCTION: LEGO1 0x1003bac0
-void LegoGameState::SetROIHandlerFunction()
+void LegoGameState::SetROIColorOverride()
 {
-	LegoROI::FUN_100a9d30(&ROIHandlerFunction);
+	LegoROI::SetColorOverride(&ROIColorOverride);
 }
 
 // FUNCTION: LEGO1 0x1003bad0
-MxBool ROIHandlerFunction(const char* p_input, char* p_output, MxU32 p_copyLen)
+MxBool ROIColorOverride(const char* p_input, char* p_output, MxU32 p_copyLen)
 {
 	if (p_output != NULL && p_copyLen != 0 &&
 		(strnicmp(p_input, "INDIR-F-", strlen("INDIR-F-")) == 0 ||
@@ -1303,7 +1303,7 @@ void LegoBackgroundColor::ToggleSkyColor()
 // FUNCTION: BETA10 0x10086984
 void LegoBackgroundColor::SetLightColor(float p_r, float p_g, float p_b)
 {
-	if (!VideoManager()->GetVideoParam().Flags().GetF2bit0()) {
+	if (!VideoManager()->GetVideoParam().Flags().GetLacksLightSupport()) {
 		// TODO: Computed constants based on what?
 		p_r *= 1. / 0.23;
 		p_g *= 1. / 0.63;
@@ -1407,7 +1407,7 @@ MxResult LegoGameState::ScoreItem::Serialize(LegoStorage* p_storage)
 		}
 
 		m_name.Serialize(p_storage);
-		p_storage->ReadS16(m_unk0x2a);
+		p_storage->ReadS16(m_playerId);
 	}
 	else if (p_storage->IsWriteMode()) {
 		p_storage->WriteS16(m_totalScore);
@@ -1419,7 +1419,7 @@ MxResult LegoGameState::ScoreItem::Serialize(LegoStorage* p_storage)
 		}
 
 		m_name.Serialize(p_storage);
-		p_storage->WriteS16(m_unk0x2a);
+		p_storage->WriteS16(m_playerId);
 	}
 
 	return SUCCESS;
@@ -1430,7 +1430,7 @@ MxResult LegoGameState::ScoreItem::Serialize(LegoStorage* p_storage)
 LegoGameState::History::History()
 {
 	m_count = 0;
-	m_unk0x372 = 0;
+	m_nextPlayerId = 0;
 }
 
 // FUNCTION: LEGO1 0x1003c870
@@ -1441,83 +1441,128 @@ void LegoGameState::History::WriteScoreHistory()
 	MxU8 scores[5][5];
 
 	InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
-	if (state->m_letters[0]) {
-		JetskiRaceState* jetskiRaceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
-		CarRaceState* carRaceState = (CarRaceState*) GameState()->GetState("CarRaceState");
-		TowTrackMissionState* towTrackMissionState =
-			(TowTrackMissionState*) GameState()->GetState("TowTrackMissionState");
-		PizzaMissionState* pizzaMissionState = (PizzaMissionState*) GameState()->GetState("PizzaMissionState");
-		AmbulanceMissionState* ambulanceMissionState =
-			(AmbulanceMissionState*) GameState()->GetState("AmbulanceMissionState");
 
-		for (MxS32 actor = 1; actor <= 5; actor++) {
-			scores[0][actor - 1] = carRaceState ? carRaceState->GetState(actor)->GetHighScore() : 0;
-			totalScore += scores[0][actor - 1];
+	if (!state->m_letters[0]) {
+		return;
+	}
 
-			scores[1][actor - 1] = jetskiRaceState ? jetskiRaceState->GetState(actor)->GetHighScore() : 0;
-			totalScore += scores[1][actor - 1];
+	JetskiRaceState* jetskiRaceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
+	CarRaceState* carRaceState = (CarRaceState*) GameState()->GetState("CarRaceState");
+	TowTrackMissionState* towTrackMissionState = (TowTrackMissionState*) GameState()->GetState("TowTrackMissionState");
+	PizzaMissionState* pizzaMissionState = (PizzaMissionState*) GameState()->GetState("PizzaMissionState");
+	AmbulanceMissionState* ambulanceMissionState =
+		(AmbulanceMissionState*) GameState()->GetState("AmbulanceMissionState");
 
-			scores[2][actor - 1] = pizzaMissionState ? pizzaMissionState->GetHighScore(actor) : 0;
-			totalScore += scores[2][actor - 1];
+	for (MxS32 actor = 1; actor <= 5; actor++) {
+		scores[0][actor - 1] = carRaceState ? carRaceState->GetState(actor)->GetHighScore() : 0;
+		totalScore += scores[0][actor - 1];
 
-			scores[3][actor - 1] = towTrackMissionState ? towTrackMissionState->GetHighScore(actor) : 0;
-			totalScore += scores[3][actor - 1];
+#ifdef BETA10
+		// likely a bug in BETA10
+		scores[1][actor - 1] = carRaceState ? carRaceState->GetState(actor)->GetHighScore() : 0;
+#else
+		scores[1][actor - 1] = jetskiRaceState ? jetskiRaceState->GetState(actor)->GetHighScore() : 0;
+#endif
+		totalScore += scores[1][actor - 1];
 
-			scores[4][actor - 1] = ambulanceMissionState ? ambulanceMissionState->GetHighScore(actor) : 0;
-			totalScore += scores[4][actor - 1];
-		}
+		scores[2][actor - 1] = pizzaMissionState ? pizzaMissionState->GetHighScore(actor) : 0;
+		totalScore += scores[2][actor - 1];
 
-		MxS32 unk0x2c;
-		ScoreItem* p_scorehist = FUN_1003cc90(&GameState()->m_players[0], GameState()->m_unk0x24, unk0x2c);
+		scores[3][actor - 1] = towTrackMissionState ? towTrackMissionState->GetHighScore(actor) : 0;
+		totalScore += scores[3][actor - 1];
 
-		if (p_scorehist != NULL) {
-			p_scorehist->m_totalScore = totalScore;
-			memcpy(p_scorehist->m_scores, scores, sizeof(p_scorehist->m_scores));
-		}
-		else {
-			if (m_count < (MxS16) sizeOfArray(m_scores)) {
-				m_scores[m_count].m_totalScore = totalScore;
-				memcpy(m_scores[m_count].m_scores, scores, sizeof(m_scores[m_count].m_scores));
-				m_scores[m_count].m_name = GameState()->m_players[0];
-				m_scores[m_count].m_unk0x2a = GameState()->m_unk0x24;
-				m_count++;
+		scores[4][actor - 1] = ambulanceMissionState ? ambulanceMissionState->GetHighScore(actor) : 0;
+		totalScore += scores[4][actor - 1];
+	}
+
+	MxS32 playerScoreHistoryIndex;
+	ScoreItem* p_scorehist =
+		FindPlayerInScoreHistory(GameState()->m_players, GameState()->m_currentPlayerId, playerScoreHistoryIndex);
+
+#ifdef BETA10
+	if (!p_scorehist) {
+		MxS32 playerScoreRank;
+		// LINE: BETA10 0x100870ee
+		for (playerScoreRank = 0; playerScoreRank < m_count; playerScoreRank++) {
+			if (totalScore > m_scores[m_indices[playerScoreRank]].m_totalScore) {
+				break;
 			}
-			else if (m_scores[19].m_totalScore <= totalScore) {
-				m_scores[19].m_totalScore = totalScore;
-				memcpy(m_scores[19].m_scores, scores, sizeof(m_scores[19].m_scores));
-				m_scores[19].m_name = GameState()->m_players[0];
-				m_scores[19].m_unk0x2a = GameState()->m_unk0x24;
-			}
 		}
+		// LINE: BETA10 0x1008713f
+		if (playerScoreRank < m_count) {
+			if (m_count < 20) {
+				playerScoreHistoryIndex = m_count++;
+			}
+			else {
+				playerScoreHistoryIndex = m_indices[19];
+			}
 
-		MxU8 tmpScores[5][5];
-		Username tmpPlayer;
-		MxS16 tmpUnk0x2a;
+			MxS32 max = m_count - 1;
+			for (MxS32 j = max; playerScoreRank < j; j--) {
+				m_indices[j - 1] = m_indices[j - 2];
+			}
 
-		// TODO: Match bubble sort loops
-		for (MxS32 i = m_count - 1; i > 0; i--) {
-			for (MxS32 j = 1; j <= i; j++) {
-				if (m_scores[j - 1].m_totalScore < m_scores[j].m_totalScore) {
-					memcpy(tmpScores, m_scores[j - 1].m_scores, sizeof(tmpScores));
-					tmpPlayer = m_scores[j - 1].m_name;
-					tmpUnk0x2a = m_scores[j - 1].m_unk0x2a;
+			m_indices[playerScoreRank] = playerScoreHistoryIndex;
+			p_scorehist = &m_scores[playerScoreHistoryIndex];
+		}
+		else if (playerScoreRank < 20) {
+			m_indices[m_count] = m_count;
+			p_scorehist = &m_scores[m_count++];
+		}
+	}
+	else if (p_scorehist->m_totalScore != totalScore) {
+		assert(totalScore > p_scorehist->m_totalScore);
 
-					memcpy(m_scores[j - 1].m_scores, m_scores[j].m_scores, sizeof(m_scores[j - 1].m_scores));
-					m_scores[j - 1].m_name = m_scores[j].m_name;
-					m_scores[j - 1].m_unk0x2a = m_scores[j].m_unk0x2a;
+		for (MxS32 i = playerScoreHistoryIndex; i > 0 && m_indices[i - 1] < m_indices[i]; i--) {
+			MxU8 tmp = m_indices[i - 1];
+			m_indices[i - 1] = m_indices[i];
+			m_indices[i] = tmp;
+		}
+	}
+	if (p_scorehist) {
+		p_scorehist->m_totalScore = totalScore;
+		memcpy(p_scorehist->m_scores[0], scores[0], sizeof(scores));
+		p_scorehist->m_name = GameState()->m_players[0];
+		p_scorehist->m_playerId = GameState()->m_currentPlayerId;
+	}
+#else
+	if (p_scorehist != NULL) {
+		p_scorehist->m_totalScore = totalScore;
+		memcpy(p_scorehist->m_scores, scores, sizeof(p_scorehist->m_scores));
+	}
+	else {
+		if (m_count < (MxS16) sizeOfArray(m_scores)) {
+			m_scores[m_count].m_totalScore = totalScore;
+			memcpy(m_scores[m_count].m_scores, scores, sizeof(m_scores[m_count].m_scores));
+			m_scores[m_count].m_name = GameState()->m_players[0];
+			m_scores[m_count].m_playerId = GameState()->m_currentPlayerId;
+			m_count++;
+		}
+		else if (m_scores[19].m_totalScore <= totalScore) {
+			m_scores[19].m_totalScore = totalScore;
+			memcpy(m_scores[19].m_scores, scores, sizeof(m_scores[19].m_scores));
+			m_scores[19].m_name = GameState()->m_players[0];
+			m_scores[19].m_playerId = GameState()->m_currentPlayerId;
+		}
+	}
 
-					memcpy(m_scores[j].m_scores, tmpScores, sizeof(m_scores[j].m_scores));
-					m_scores[j].m_name = tmpPlayer;
-					m_scores[j].m_unk0x2a = tmpUnk0x2a;
-				}
+	ScoreItem tmpItem;
+
+	for (MxS32 i = m_count - 1; i >= 0; i--) {
+		for (MxS32 j = 1; j <= i; j++) {
+			if (m_scores[j].m_totalScore > m_scores[j - 1].m_totalScore) {
+				tmpItem = m_scores[j - 1];
+				m_scores[j - 1] = m_scores[j];
+				m_scores[j] = tmpItem;
 			}
 		}
 	}
+#endif
 }
 
 // FUNCTION: LEGO1 0x1003cc90
 // FUNCTION: BETA10 0x1008732a
-LegoGameState::ScoreItem* LegoGameState::History::FUN_1003cc90(
+LegoGameState::ScoreItem* LegoGameState::History::FindPlayerInScoreHistory(
 	LegoGameState::Username* p_player,
 	MxS16 p_unk0x24,
 	MxS32& p_unk0x2c
@@ -1525,7 +1570,7 @@ LegoGameState::ScoreItem* LegoGameState::History::FUN_1003cc90(
 {
 	MxS32 i = 0;
 	for (; i < m_count; i++) {
-		if (!memcmp(p_player, &m_scores[i].m_name, sizeof(*p_player)) && m_scores[i].m_unk0x2a == p_unk0x24) {
+		if (!memcmp(p_player, &m_scores[i].m_name, sizeof(*p_player)) && m_scores[i].m_playerId == p_unk0x24) {
 			break;
 		}
 	}
@@ -1544,7 +1589,7 @@ LegoGameState::ScoreItem* LegoGameState::History::FUN_1003cc90(
 MxResult LegoGameState::History::Serialize(LegoStorage* p_storage)
 {
 	if (p_storage->IsReadMode()) {
-		p_storage->ReadS16(m_unk0x372);
+		p_storage->ReadS16(m_nextPlayerId);
 		p_storage->ReadS16(m_count);
 
 		for (MxS16 i = 0; i < m_count; i++) {
@@ -1554,7 +1599,7 @@ MxResult LegoGameState::History::Serialize(LegoStorage* p_storage)
 		}
 	}
 	else if (p_storage->IsWriteMode()) {
-		p_storage->WriteS16(m_unk0x372);
+		p_storage->WriteS16(m_nextPlayerId);
 		p_storage->WriteS16(m_count);
 
 		for (MxS16 i = 0; i < m_count; i++) {
@@ -1584,6 +1629,7 @@ void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
 }
 
 // FUNCTION: LEGO1 0x1003cea0
+// FUNCTION: BETA10 0x10017840
 void LegoGameState::SetCurrentAct(Act p_currentAct)
 {
 	m_currentAct = p_currentAct;

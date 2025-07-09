@@ -15,6 +15,7 @@ void* MeshBuilderImpl::ImplementationDataPtr()
 }
 
 // FUNCTION: LEGO1 0x100a3840
+// FUNCTION: BETA10 0x1016ca40
 Mesh* MeshBuilderImpl::CreateMesh(
 	unsigned long faceCount,
 	unsigned long vertexCount,
@@ -26,6 +27,8 @@ Mesh* MeshBuilderImpl::CreateMesh(
 	ShadingModel shadingModel
 )
 {
+	assert(m_data);
+
 	MeshImpl* pMeshImpl = new MeshImpl;
 	if (CreateMeshImpl(
 			pMeshImpl,
@@ -45,73 +48,67 @@ Mesh* MeshBuilderImpl::CreateMesh(
 	return pMeshImpl;
 }
 
-inline Result MeshSetTextureMappingMode(MeshImpl::MeshData* pMesh, TextureMappingMode mode)
-{
-	if (mode == PerspectiveCorrect) {
-		return ResultVal(pMesh->groupMesh->SetGroupMapping(pMesh->groupIndex, D3DRMMAP_PERSPCORRECT));
-	}
-	else {
-		return ResultVal(pMesh->groupMesh->SetGroupMapping(pMesh->groupIndex, 0));
-	}
-}
-
+// FUNCTION: BETA10 0x1016fef0
 inline Result CreateMesh(
 	IDirect3DRMMesh* pD3DRM,
-	unsigned long faceCount,
-	unsigned long vertexCount,
-	float (*pPositions)[3],
-	float (*pNormals)[3],
-	float (*pTextureCoordinates)[2],
-	unsigned long (*pFaceIndices)[3],
-	unsigned long (*pTextureIndices)[3],
+	unsigned long p_numFaces,
+	unsigned long p_numVertices,
+	float(*p_positions),
+	float(*p_normals),
+	float(*p_textureCoordinates),
+	unsigned long (*p_faceIndices)[3],
+	unsigned long (*p_textureIndices)[3],
 	ShadingModel shadingModel,
 	MeshImpl::MeshDataType& rpMesh
 )
 {
-	unsigned long* faceIndices = (unsigned long*) pFaceIndices;
+	unsigned short* faceIndices = (unsigned short*) p_faceIndices;
 	D3DRMGROUPINDEX groupIndex = 0;
-	int count = faceCount * 3;
-	int index = 0;
+	int faceCount = p_numFaces * 3;
+	int count = 0;
 
-	unsigned int* fData = new unsigned int[count];
+	unsigned int* fData = new unsigned int[faceCount];
 
-	D3DRMVERTEX* vertices = new D3DRMVERTEX[vertexCount];
-	memset(vertices, 0, sizeof(*vertices) * vertexCount);
+	D3DRMVERTEX* vertices = new D3DRMVERTEX[p_numVertices];
+	memset(vertices, 0, sizeof(*vertices) * p_numVertices);
 
 	rpMesh = new MeshImpl::MeshData;
 	rpMesh->groupMesh = pD3DRM;
 
-	for (int i = 0; i < count; i++) {
-		if ((*((unsigned short*) &faceIndices[i] + 1) >> 0x0f) & 0x01) {
-			unsigned long j = *(unsigned short*) &faceIndices[i];
-			vertices[index].position.x = pPositions[j][0];
-			vertices[index].position.y = pPositions[j][1];
-			vertices[index].position.z = pPositions[j][2];
-			j = *((unsigned short*) &faceIndices[i] + 1) & MAXSHORT;
-			vertices[index].normal.x = pNormals[j][0];
-			vertices[index].normal.y = pNormals[j][1];
-			vertices[index].normal.z = pNormals[j][2];
+	for (int i = 0; i < faceCount; i++) {
+		if (((faceIndices[2 * i + 1]) >> 0x0f) & 0x01) {
+			unsigned long j = 3 * faceIndices[2 * i];
+			vertices[count].position.x = p_positions[j];
+			vertices[count].position.y = p_positions[j + 1];
+			vertices[count].position.z = p_positions[j + 2];
 
-			if (pTextureIndices != NULL && pTextureCoordinates != NULL) {
-				j = ((unsigned long*) pTextureIndices)[i];
-				vertices[index].tu = pTextureCoordinates[j][0];
-				vertices[index].tv = pTextureCoordinates[j][1];
+			int k = 3 * (faceIndices[2 * i + 1] & MAXSHORT);
+			vertices[count].normal.x = p_normals[k];
+			vertices[count].normal.y = p_normals[k + 1];
+			vertices[count].normal.z = p_normals[k + 2];
+
+			if (p_textureIndices != NULL && p_textureCoordinates != NULL) {
+				int kk = 2 * ((unsigned long*) p_textureIndices)[i];
+				vertices[count].tu = p_textureCoordinates[kk];
+				vertices[count].tv = p_textureCoordinates[kk + 1];
 			}
 
-			fData[i] = index;
-			index++;
+			fData[i] = count;
+			count++;
 		}
 		else {
-			fData[i] = *(unsigned short*) &faceIndices[i];
+			fData[i] = faceIndices[2 * i];
 		}
 	}
 
+	assert(count == (int) p_numVertices);
+
 	Result result;
-	result = ResultVal(pD3DRM->AddGroup(vertexCount, faceCount, 3, fData, &groupIndex));
+	result = ResultVal(pD3DRM->AddGroup(p_numVertices, p_numFaces, 3, fData, &groupIndex));
 
 	if (Succeeded(result)) {
 		rpMesh->groupIndex = groupIndex;
-		result = ResultVal(pD3DRM->SetVertices(groupIndex, 0, vertexCount, vertices));
+		result = ResultVal(pD3DRM->SetVertices(groupIndex, 0, p_numVertices, vertices));
 	}
 
 	if (!Succeeded(result)) {
@@ -122,6 +119,7 @@ inline Result CreateMesh(
 	}
 	else {
 		result = MeshSetTextureMappingMode(rpMesh, PerspectiveCorrect);
+		assert(Succeeded(result));
 	}
 
 	if (fData != NULL) {
@@ -135,6 +133,7 @@ inline Result CreateMesh(
 	return result;
 }
 
+// FUNCTION: BETA10 0x1016fe40
 inline Result MeshBuilderImpl::CreateMeshImpl(
 	MeshImpl* pMeshImpl,
 	unsigned long faceCount,
@@ -147,13 +146,16 @@ inline Result MeshBuilderImpl::CreateMeshImpl(
 	ShadingModel shadingModel
 )
 {
+	assert(m_data);
+	assert(!pMeshImpl->ImplementationData());
+
 	return ::CreateMesh(
 		m_data,
 		faceCount,
 		vertexCount,
-		pPositions,
-		pNormals,
-		pTextureCoordinates,
+		reinterpret_cast<float*>(pPositions),
+		reinterpret_cast<float*>(pNormals),
+		reinterpret_cast<float*>(pTextureCoordinates),
 		pFaceIndices,
 		pTextureIndices,
 		shadingModel,

@@ -31,8 +31,8 @@ MxS32 LegoRaceActor::VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3)
 
 	if (m_userNavFlag && result) {
 		MxLong time = Timer()->GetTime();
-		if (time - g_unk0x100f3308 > 1000) {
-			g_unk0x100f3308 = time;
+		if (time - g_timeLastHitSoundPlayed > 1000) {
+			g_timeLastHitSoundPlayed = time;
 			const char* soundKey = VariableTable()->GetVariable(g_strHIT_ACTOR_SOUND);
 
 			if (soundKey && *soundKey) {
@@ -84,7 +84,7 @@ MxU32 LegoRaceActor::VTable0x90(float p_time, Matrix4& p_transform)
 			m_unk0x08 = 0;
 
 			positionRef -= g_unk0x10102b08;
-			m_roi->FUN_100a58f0(p_transform);
+			m_roi->SetLocal2World(p_transform);
 			return TRUE;
 		}
 	}
@@ -109,7 +109,7 @@ MxResult LegoRaceActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 
 			Vector3(matr[3]) += g_unk0x10102b08;
 
-			roi->FUN_100a58f0(matr);
+			roi->SetLocal2World(matr);
 
 			p_actor->SetActorState(c_two);
 		}

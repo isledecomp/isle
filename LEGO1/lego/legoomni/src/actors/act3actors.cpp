@@ -138,8 +138,8 @@ MxU32 Act3Actor::VTable0x90(float p_time, Matrix4& p_transform)
 			m_unk0x1c = 0;
 
 			positionRef -= g_unk0x10104ef0;
-			m_roi->FUN_100a58f0(p_transform);
-			m_roi->VTable0x14();
+			m_roi->SetLocal2World(p_transform);
+			m_roi->WrappedUpdateWorldData();
 			return TRUE;
 		}
 	}
@@ -163,8 +163,8 @@ MxResult Act3Actor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 
 		Vector3(local2world[3]) += g_unk0x10104ef0;
 
-		roi->FUN_100a58f0(local2world);
-		roi->VTable0x14();
+		roi->SetLocal2World(local2world);
+		roi->WrappedUpdateWorldData();
 
 		p_actor->SetActorState(c_two | c_noCollide);
 	}
@@ -244,7 +244,7 @@ void Act3Cop::ParseAction(char* p_extra)
 				}
 			}
 
-			Mx4DPointFloat* boundary0x14 = boundary->GetUnknown0x14();
+			Mx4DPointFloat* boundary0x14 = boundary->GetUp();
 
 			if (point.Dot(point, *boundary0x14) + boundary0x14->index_operator(3) <= 0.001 &&
 				point.Dot(point, *boundary0x14) + boundary0x14->index_operator(3) >= -0.001) {
@@ -353,7 +353,7 @@ MxResult Act3Cop::FUN_10040360()
 				local7c,
 				local5c,
 				boundary,
-				LegoUnknown100db7f4::c_bit1,
+				LegoOrientedEdge::c_bit1,
 				&local34
 			) != SUCCESS) {
 			delete grec;
@@ -391,7 +391,7 @@ MxResult Act3Cop::FUN_10040360()
 						local88,
 						localec,
 						donut->GetBoundary(),
-						LegoUnknown100db7f4::c_bit1,
+						LegoOrientedEdge::c_bit1,
 						&locald8
 					) == SUCCESS &&
 					(grec == NULL || locald8 < local18)) {
@@ -431,7 +431,7 @@ MxResult Act3Cop::FUN_10040360()
 						localf8,
 						local108,
 						boundary,
-						LegoUnknown100db7f4::c_bit1,
+						LegoOrientedEdge::c_bit1,
 						&local100
 					) != SUCCESS) {
 					local14c = local150 = grec;
@@ -579,7 +579,7 @@ void Act3Brickster::Animate(float p_time)
 	}
 
 	if (m_unk0x54 < p_time) {
-		((Act3*) m_world)->FUN_10072ad0(5);
+		((Act3*) m_world)->TriggerHitSound(5);
 		m_unk0x54 = p_time + 15000.0f;
 	}
 
@@ -595,7 +595,7 @@ void Act3Brickster::Animate(float p_time)
 		assert(SoundManager()->GetCacheSoundManager());
 
 		if (m_unk0x58 >= 8) {
-			((Act3*) m_world)->FUN_10072ad0(6);
+			((Act3*) m_world)->TriggerHitSound(6);
 		}
 		else {
 			SoundManager()->GetCacheSoundManager()->Play("eatpz", NULL, FALSE);
@@ -607,8 +607,8 @@ void Act3Brickster::Animate(float p_time)
 		assert(m_shootAnim && m_pInfo);
 
 		if (m_unk0x50 < p_time) {
-			while (m_pInfo->m_unk0x16) {
-				PlantManager()->FUN_10026c50(m_pInfo->m_entity);
+			while (m_pInfo->m_counter) {
+				PlantManager()->DecrementCounter(m_pInfo->m_entity);
 			}
 
 			assert(SoundManager()->GetCacheSoundManager());
@@ -653,8 +653,8 @@ void Act3Brickster::Animate(float p_time)
 			assert(SoundManager()->GetCacheSoundManager());
 			SoundManager()->GetCacheSoundManager()->Play("thpt", NULL, FALSE);
 
-			while (m_bInfo->m_unk0x11 > 0 || m_bInfo->m_unk0x11 == -1) {
-				if (!BuildingManager()->FUN_10030110(m_bInfo)) {
+			while (m_bInfo->m_counter > 0 || m_bInfo->m_counter == -1) {
+				if (!BuildingManager()->DecrementCounter(m_bInfo)) {
 					break;
 				}
 			}
@@ -831,7 +831,7 @@ MxResult Act3Brickster::FUN_100417c0()
 							local88,
 							localec,
 							pizza->GetBoundary(),
-							LegoUnknown100db7f4::c_bit1,
+							LegoOrientedEdge::c_bit1,
 							&locald8
 						) == SUCCESS &&
 						(grec == NULL || locald8 < local18)) {
@@ -865,7 +865,7 @@ MxResult Act3Brickster::FUN_100417c0()
 		float local124;
 
 		for (MxS32 i = 0; i < length; i++) {
-			if (bInfo[i].m_unk0x11 < 0 && bInfo[i].m_boundary != NULL && bInfo[i].m_entity != NULL && i != 0 &&
+			if (bInfo[i].m_counter < 0 && bInfo[i].m_boundary != NULL && bInfo[i].m_entity != NULL && i != 0 &&
 				(local120 == -1 || i != 15)) {
 				Mx3DPointFloat local188(bInfo[i].m_x, bInfo[i].m_y, bInfo[i].m_z);
 
@@ -915,7 +915,7 @@ MxResult Act3Brickster::FUN_100417c0()
 					local108,
 					local138,
 					localf4,
-					LegoUnknown100db7f4::c_bit1,
+					LegoOrientedEdge::c_bit1,
 					&local13c
 				) != SUCCESS) {
 				local1bc = local1c0 = grec;
@@ -1055,7 +1055,7 @@ MxS32 Act3Brickster::FUN_10042300()
 		assert(m_boundary && m_destEdge && m_roi);
 
 		LegoPathBoundary* boundaries[2];
-		LegoUnknown100db7f4* maxE = NULL;
+		LegoOrientedEdge* maxE = NULL;
 		boundaries[0] = m_boundary;
 
 		if (m_destEdge->FUN_10048c40(local38)) {
@@ -1069,7 +1069,7 @@ MxS32 Act3Brickster::FUN_10042300()
 		for (MxS32 i = 0; i < (MxS32) sizeOfArray(boundaries); i++) {
 			if (boundaries[i] != NULL) {
 				for (MxS32 j = 0; j < boundaries[i]->GetNumEdges(); j++) {
-					LegoUnknown100db7f4* e = boundaries[i]->GetEdges()[j];
+					LegoOrientedEdge* e = boundaries[i]->GetEdges()[j];
 
 					if (e->GetMask0x03()) {
 						Mx3DPointFloat local94(*e->GetPointA());
@@ -1109,7 +1109,7 @@ MxS32 Act3Brickster::FUN_10042300()
 
 // FUNCTION: LEGO1 0x10042990
 // FUNCTION: BETA10 0x1001b6e2
-void Act3Brickster::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
+void Act3Brickster::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoOrientedEdge*& p_edge, float& p_unk0xe4)
 {
 	if (m_unk0x38 != 8) {
 		m_boundary->SwitchBoundary(this, p_boundary, p_edge, p_unk0xe4);

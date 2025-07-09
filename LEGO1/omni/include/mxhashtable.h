@@ -13,7 +13,7 @@ class MxHashTableCursor;
 template <class T>
 class MxHashTableNode {
 public:
-	MxHashTableNode<T>(T p_obj, MxU32 p_hash, MxHashTableNode* p_prev, MxHashTableNode* p_next)
+	MxHashTableNode(T p_obj, MxU32 p_hash, MxHashTableNode* p_prev, MxHashTableNode* p_next)
 	{
 		m_obj = p_obj;
 		m_hash = p_hash;

@@ -14,7 +14,7 @@ public:
 };
 
 // SYNTHETIC: BETA10 0x10013710
-// MxParam::MxParam
+// ??0MxParam@@QAE@XZ
 
 // SYNTHETIC: ISLE 0x401540
 // SYNTHETIC: LEGO1 0x10010370

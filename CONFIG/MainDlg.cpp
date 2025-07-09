@@ -13,7 +13,7 @@ DECOMP_SIZE_ASSERT(CMainDialog, 0x70)
 CMainDialog::CMainDialog(CWnd* pParent) : CDialog(IDD, pParent)
 {
 	afxCurrentWinApp;
-	m_icon = LoadIconA(AfxFindResourceHandle(MAKEINTRESOURCE(IDI_CONFIG), RT_GROUP_ICON), MAKEINTRESOURCE(IDI_CONFIG));
+	m_icon = LoadIcon(AfxFindResourceHandle(MAKEINTRESOURCE(IDI_CONFIG), RT_GROUP_ICON), MAKEINTRESOURCE(IDI_CONFIG));
 }
 
 // FUNCTION: CONFIG 0x00403e50
@@ -52,8 +52,8 @@ BOOL CMainDialog::OnInitDialog()
 	CString about_text;
 	about_text.LoadString(IDS_ABOUT);
 	if (system_menu) {
-		AppendMenuA(system_menu->m_hMenu, MF_SEPARATOR, 0, NULL);
-		AppendMenuA(system_menu->m_hMenu, MF_STRING, 16, (LPCTSTR) about_text);
+		AppendMenu(system_menu->m_hMenu, MF_SEPARATOR, 0, NULL);
+		AppendMenu(system_menu->m_hMenu, MF_STRING, 16, (LPCTSTR) about_text);
 	}
 	SendMessage(WM_SETICON, ICON_BIG, (LPARAM) m_icon);
 	SendMessage(WM_SETICON, ICON_SMALL, (LPARAM) m_icon);

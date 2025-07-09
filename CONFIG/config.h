@@ -42,7 +42,7 @@ public:
 	DWORD GetConditionalDeviceRenderBitDepth() const;
 	DWORD GetDeviceRenderBitStatus() const;
 	BOOL AdjustDisplayBitDepthBasedOnRenderStatus();
-	void CConfigApp::WriteRegisterSettings() const;
+	void WriteRegisterSettings() const;
 
 	//{{AFX_MSG(CConfigApp)
 	// NOTE - the ClassWizard will add and remove member functions here.

@@ -56,7 +56,7 @@ private:
 	BOOL m_backBuffersInVram;  // 0x18
 	BOOL m_using8bit;          // 0x1c
 	BOOL m_using16bit;         // 0x20
-	int m_unk0x24;             // 0x24
+	BOOL m_hasLightSupport;    // 0x24
 	BOOL m_use3dSound;         // 0x28
 	BOOL m_useMusic;           // 0x2c
 	BOOL m_useJoystick;        // 0x30

@@ -76,7 +76,7 @@ public:
 	void ReleaseActor(const char* p_name);
 	void ReleaseActor(LegoROI* p_roi);
 	void ReleaseAutoROI(LegoROI* p_roi);
-	MxBool FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_texture);
+	MxBool SetHeadTexture(LegoROI* p_roi, LegoTextureInfo* p_texture);
 	LegoExtraActor* GetExtraActor(const char* p_name);
 	LegoActorInfo* GetActorInfo(const char* p_name);
 	LegoActorInfo* GetActorInfo(LegoROI* p_roi);
@@ -86,10 +86,10 @@ public:
 	MxBool SwitchMove(LegoROI* p_roi);
 	MxBool SwitchMood(LegoROI* p_roi);
 	MxU32 GetAnimationId(LegoROI* p_roi);
-	MxU32 GetSoundId(LegoROI* p_roi, MxBool p_und);
+	MxU32 GetSoundId(LegoROI* p_roi, MxBool p_basedOnMood);
 	MxU8 GetMood(LegoROI* p_roi);
 	LegoROI* CreateAutoROI(const char* p_name, const char* p_lodName, MxBool p_createEntity);
-	MxResult FUN_10085870(LegoROI* p_roi);
+	MxResult UpdateBoundingSphereAndBox(LegoROI* p_roi);
 	LegoROI* FUN_10085a80(const char* p_name, const char* p_lodName, MxBool p_createEntity);
 
 	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }

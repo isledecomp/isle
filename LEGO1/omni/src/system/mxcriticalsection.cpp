@@ -15,7 +15,7 @@ MxCriticalSection::MxCriticalSection()
 	HANDLE mutex;
 
 	if (g_useMutex) {
-		mutex = CreateMutexA(NULL, FALSE, NULL);
+		mutex = CreateMutex(NULL, FALSE, NULL);
 		m_mutex = mutex;
 	}
 	else {

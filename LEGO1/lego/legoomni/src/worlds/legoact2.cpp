@@ -141,7 +141,7 @@ MxResult LegoAct2::Create(MxDSAction& p_dsAction)
 		case LegoGameState::e_act1:
 		case LegoGameState::e_actNotFound:
 			GameState()->StopArea(LegoGameState::e_undefined);
-			if (GameState()->GetPreviousArea() == LegoGameState::e_infomain) {
+			if (GameState()->m_previousArea == LegoGameState::e_infomain) {
 				GameState()->StopArea(LegoGameState::e_isle);
 			}
 		}
@@ -149,7 +149,7 @@ MxResult LegoAct2::Create(MxDSAction& p_dsAction)
 		GameState()->m_currentArea = LegoGameState::e_act2main;
 		GameState()->SetCurrentAct(LegoGameState::e_act2);
 		InputManager()->Register(this);
-		GameState()->SetDirty(TRUE);
+		GameState()->m_isDirty = TRUE;
 	}
 
 	return result;
@@ -502,8 +502,8 @@ void LegoAct2::ReadyWorld()
 
 	MxMatrix local2world = roi->GetLocal2World();
 	local2world[3][0] -= 1.5;
-	roi->FUN_100a58f0(local2world);
-	roi->VTable0x14();
+	roi->SetLocal2World(local2world);
+	roi->WrappedUpdateWorldData();
 
 	roi = FindROI("Block02");
 	sphere = roi->GetBoundingSphere();
@@ -536,7 +536,7 @@ void LegoAct2::Enable(MxBool p_enable)
 
 		((IslePathActor*) m_pepper->GetEntity())->VTable0xec(m_unk0x10dc, m_unk0x1124, TRUE);
 
-		if (GameState()->GetPreviousArea() == LegoGameState::e_infomain) {
+		if (GameState()->m_previousArea == LegoGameState::e_infomain) {
 			GameState()->StopArea(LegoGameState::e_infomain);
 		}
 
@@ -688,8 +688,8 @@ void LegoAct2::FUN_100517b0()
 	local2world[3][1] += 1.5;
 
 	LegoROI* roi = brick.GetROI();
-	roi->FUN_100a58f0(local2world);
-	roi->VTable0x14();
+	roi->SetLocal2World(local2world);
+	roi->WrappedUpdateWorldData();
 	brick.PlayWhistleSound();
 	m_nextBrick++;
 }
@@ -828,9 +828,9 @@ void LegoAct2::SpawnBricks()
 	}
 
 	SET3(local2world[3], location);
-	roi->FUN_100a58f0(local2world);
+	roi->SetLocal2World(local2world);
 	roi->SetVisibility(TRUE);
-	roi->VTable0x14();
+	roi->WrappedUpdateWorldData();
 	entity = roi->GetEntity();
 	brick->PlayWhistleSound();
 	m_nextBrick++;
@@ -852,9 +852,9 @@ void LegoAct2::SpawnBricks()
 	}
 
 	SET3(local2world[3], location);
-	roi->FUN_100a58f0(local2world);
+	roi->SetLocal2World(local2world);
 	roi->SetVisibility(TRUE);
-	roi->VTable0x14();
+	roi->WrappedUpdateWorldData();
 	entity = roi->GetEntity();
 	brick->PlayWhistleSound();
 	m_nextBrick++;
@@ -876,9 +876,9 @@ void LegoAct2::SpawnBricks()
 	}
 
 	SET3(local2world[3], location);
-	roi->FUN_100a58f0(local2world);
+	roi->SetLocal2World(local2world);
 	roi->SetVisibility(TRUE);
-	roi->VTable0x14();
+	roi->WrappedUpdateWorldData();
 	entity = roi->GetEntity();
 	brick->PlayWhistleSound();
 	m_nextBrick++;
@@ -914,9 +914,9 @@ void LegoAct2::SpawnBricks()
 	}
 
 	SET3(local2world[3], location);
-	roi->FUN_100a58f0(local2world);
+	roi->SetLocal2World(local2world);
 	roi->SetVisibility(TRUE);
-	roi->VTable0x14();
+	roi->WrappedUpdateWorldData();
 	entity = roi->GetEntity();
 	brick->PlayWhistleSound();
 	m_nextBrick++;

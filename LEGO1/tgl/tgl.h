@@ -186,7 +186,7 @@ public:
 	// vtable+0x20
 	virtual Result Update() = 0;
 	virtual void HandleActivate(WORD) = 0;
-	virtual void HandlePaint(HDC) = 0;
+	virtual void HandlePaint(void*) = 0;
 
 	// SYNTHETIC: BETA10 0x1016b740
 	// Tgl::Device::Device
@@ -400,7 +400,7 @@ public:
 class Texture : public Object {
 public:
 	// vtable+0x08
-	virtual Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels) = 0;
+	virtual Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels, int pTexelsArePersistent) = 0;
 	virtual void FillRowsOfTexture(int y, int height, void* pBuffer) = 0;
 
 	// vtable+0x10
@@ -411,7 +411,7 @@ public:
 		int* pDepth,
 		void** ppBuffer,
 		int* pPaletteSize,
-		PaletteEntry** ppPalette
+		unsigned char (*pEntries)[3]
 	) = 0;
 	virtual Result SetPalette(int entryCount, PaletteEntry* pEntries) = 0;
 

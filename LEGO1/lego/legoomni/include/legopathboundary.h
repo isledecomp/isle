@@ -39,22 +39,16 @@ public:
 
 	MxResult AddActor(LegoPathActor* p_actor);
 	MxResult RemoveActor(LegoPathActor* p_actor);
-	void FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPathActor* p_actor);
+	void CheckAndCallPathTriggers(Vector3& p_point1, Vector3& p_point2, LegoPathActor* p_actor);
 	void SwitchBoundary(
 		LegoPathActor* p_actor,
 		LegoPathBoundary*& p_boundary,
-		LegoUnknown100db7f4*& p_edge,
+		LegoOrientedEdge*& p_edge,
 		float& p_unk0xe4
 	);
-	MxU32 Intersect(
-		float p_scale,
-		Vector3& p_point1,
-		Vector3& p_point2,
-		Vector3& p_point3,
-		LegoUnknown100db7f4*& p_edge
-	);
-	MxU32 FUN_10057fe0(LegoAnimPresenter* p_presenter);
-	MxU32 FUN_100586e0(LegoAnimPresenter* p_presenter);
+	MxU32 Intersect(float p_scale, Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, LegoOrientedEdge*& p_edge);
+	MxU32 AddPresenterIfInRange(LegoAnimPresenter* p_presenter);
+	MxU32 RemovePresenter(LegoAnimPresenter* p_presenter);
 
 	// FUNCTION: BETA10 0x1001ffb0
 	LegoPathActorSet& GetActors() { return m_actors; }
@@ -188,7 +182,7 @@ private:
 // _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::lower_bound
 
 // TEMPLATE: BETA10 0x10082b90
-// _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresenter *,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::_Kfn,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::const_iterator::operator++
+// ??Econst_iterator@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@QAE?AV01@H@Z
 
 // TEMPLATE: BETA10 0x10082ee0
 // set<LegoAnimPresenter *,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::end
@@ -203,13 +197,13 @@ private:
 // _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresenter *,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::_Kfn,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::find
 
 // TEMPLATE: BETA10 0x10021dc0
-// Set<LegoPathActor *,LegoPathActorSetCompare>::Set<LegoPathActor *,LegoPathActorSetCompare>
+// ??0?$Set@PAVLegoPathActor@@ULegoPathActorSetCompare@@@@QAE@ABV0@@Z
 
 // TEMPLATE: BETA10 0x100202d0
 // set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::begin
 
 // TEMPLATE: BETA10 0x10020030
-// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::const_iterator::operator++
+// ??Econst_iterator@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@QAE?AV01@H@Z
 
 // TEMPLATE: BETA10 0x100203d0
 // set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::end

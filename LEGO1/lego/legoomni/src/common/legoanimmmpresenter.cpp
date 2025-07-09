@@ -30,7 +30,7 @@ LegoAnimMMPresenter::LegoAnimMMPresenter()
 	m_unk0x59 = 0;
 	m_tranInfo = NULL;
 	m_unk0x54 = 0;
-	m_unk0x64 = NULL;
+	m_world = NULL;
 	m_unk0x68 = NULL;
 	m_roiMap = NULL;
 	m_roiMapSize = 0;
@@ -44,7 +44,7 @@ LegoAnimMMPresenter::~LegoAnimMMPresenter()
 		VideoManager()->UnregisterPresenter(*this);
 	}
 
-	delete m_unk0x68;
+	delete[] m_unk0x68;
 
 	NotificationManager()->Unregister(this);
 }
@@ -101,9 +101,9 @@ MxResult LegoAnimMMPresenter::StartAction(MxStreamController* p_controller, MxDS
 			}
 		}
 
-		m_unk0x64 = CurrentWorld();
-		if (m_unk0x64) {
-			m_unk0x64->Add(this);
+		m_world = CurrentWorld();
+		if (m_world) {
+			m_world->Add(this);
 		}
 		VideoManager()->RegisterPresenter(*this);
 
@@ -133,8 +133,8 @@ void LegoAnimMMPresenter::EndAction()
 	if (m_action != NULL) {
 		MxCompositePresenter::EndAction();
 
-		if (m_unk0x64 != NULL) {
-			m_unk0x64->Remove(this);
+		if (m_world != NULL) {
+			m_world->Remove(this);
 		}
 	}
 }
@@ -364,7 +364,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b5b0(MxLong p_time)
 				LegoROI* roi = m_roiMap[i];
 
 				if (roi != NULL) {
-					roi->WrappedSetLocalTransform(m_unk0x68[i]);
+					roi->WrappedSetLocal2WorldWithWorldDataUpdate(m_unk0x68[i]);
 				}
 			}
 		}
@@ -400,7 +400,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b610(MxLong p_time)
 		}
 	}
 
-	m_action->SetUnknown90(Timer()->GetTime());
+	m_action->SetTimeStarted(Timer()->GetTime());
 
 	if (m_compositePresenter != NULL) {
 		m_compositePresenter->VTable0x60(this);
@@ -429,11 +429,11 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 	LegoPathActor* actor = UserActor();
 
 	if (m_tranInfo != NULL && m_tranInfo->m_unk0x14 && m_tranInfo->m_location != -1 && actor != NULL) {
-		if (m_unk0x64 != NULL) {
+		if (m_world != NULL) {
 			undefined4 und = 1;
 
 			if (m_presenter != NULL) {
-				m_unk0x64->RemoveActor(actor);
+				m_world->RemoveActor(actor);
 
 				if (m_tranInfo->m_unk0x29) {
 					Mx3DPointFloat position, direction;
@@ -442,7 +442,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 					direction = viewROI->GetWorldDirection();
 					position[1] -= 1.25;
 
-					und = m_unk0x64->PlaceActor(actor, m_presenter, position, direction);
+					und = m_world->PlaceActor(actor, m_presenter, position, direction);
 				}
 				else {
 					und = 0;
@@ -450,9 +450,9 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 			}
 
 			if (und != 0) {
-				viewROI->WrappedSetLocalTransform(m_tranInfo->m_unk0x2c);
+				viewROI->WrappedSetLocal2WorldWithWorldDataUpdate(m_tranInfo->m_unk0x2c);
 				VideoManager()->Get3DManager()->Moved(*viewROI);
-				m_unk0x64->PlaceActor(actor);
+				m_world->PlaceActor(actor);
 			}
 
 			if (m_tranInfo->m_unk0x29) {

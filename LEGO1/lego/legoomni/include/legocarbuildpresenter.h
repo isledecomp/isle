@@ -13,6 +13,13 @@ public:
 		c_bit1 = 0x01
 	};
 
+	enum ShelfState {
+		e_undefined = -1,
+		e_selected = 0,
+		e_stopped = 1,
+		e_moving = 2
+	};
+
 	// SIZE 0x0c
 	struct UnknownListEntry {
 		// FUNCTION: LEGO1 0x100795c0
@@ -69,16 +76,16 @@ public:
 
 	void FUN_10079050(MxS16 p_index);
 	void SwapNodesByName(LegoChar* p_param1, LegoChar* p_param2);
-	void FUN_10079160();
-	void FUN_100795d0(LegoChar* p_param);
-	void FUN_10079680(LegoChar* p_param);
+	void InitBuildPlatform();
+	void HideBuildPartByName(LegoChar* p_param);
+	void ShowBuildPartByName(LegoChar* p_param);
 	LegoAnimNodeData* FindNodeDataByName(LegoTreeNode* p_treeNode, const LegoChar* p_name);
 	LegoTreeNode* FindNodeByName(LegoTreeNode* p_treeNode, const LegoChar* p_name);
-	void FUN_10079790(const LegoChar* p_name);
+	void AddPartToBuildByName(const LegoChar* p_name);
 	void RotateAroundYAxis(MxFloat p_angle);
 	MxBool FUN_10079c30(const LegoChar* p_name);
 	MxBool PartIsPlaced(const LegoChar* p_name);
-	void FUN_10079a90();
+	void MoveShelfForward();
 	MxBool StringEqualsPlatform(const LegoChar* p_string);
 	MxBool StringEqualsShelf(const LegoChar* p_string);
 	MxBool StringEndsOnY(const LegoChar* p_string);
@@ -87,10 +94,10 @@ public:
 	void SetPartObjectIdByName(const LegoChar* p_name, MxS16 p_objectId);
 
 	// FUNCTION: BETA10 0x10070180
-	void SetUnknown0xbc(undefined2 p_unk0xbc) { m_unk0xbc = p_unk0xbc; }
+	void SetShelfState(MxU16 p_shelfState) { m_shelfState = p_shelfState; }
 
 	// FUNCTION: BETA10 0x100703b0
-	Matrix4& GetUnknown0xe0() { return m_unk0xe0; }
+	Matrix4& GetBuildViewMatrix() { return m_buildViewMatrix; }
 
 	MxBool StringEndsOnW(LegoChar* p_param);
 	MxBool StringEndsOnYOrN(const LegoChar* p_string);
@@ -116,7 +123,7 @@ public:
 private:
 	void Beta10Inline0x100733d0();
 
-	MxU16 m_unk0xbc; // 0xbc
+	MxU16 m_shelfState; // 0xbc
 
 	// variable name verified by BETA10 0x1007184f
 	MxS16 m_numberOfParts; // 0xbe
@@ -124,21 +131,21 @@ private:
 	// name derived from LegoVehicleBuildState, field 0x4f
 	MxS16 m_placedPartCount; // 0xc0
 
-	LegoAnimNodeData* m_unk0xc4; // 0xc4
-	LegoAnim m_unk0xc8;          // 0xc8
-	MxMatrix m_unk0xe0;          // 0xe0
+	LegoAnimNodeData* m_platformAnimNodeData; // 0xc4
+	LegoAnim m_platformAnim;                  // 0xc8
+	MxMatrix m_buildViewMatrix;               // 0xe0
 
 	// variable name verified by BETA10 0x100719f0
 	UnknownListEntry* m_parts; // 0x128
 
-	MxFloat m_unk0x12c;     // 0x12c
-	MxFloat m_unk0x130;     // 0x130
-	MxFloat m_unk0x134;     // 0x134
-	MxFloat m_unk0x138;     // 0x138
-	MxULong m_unk0x13c;     // 0x13c
-	LegoEntity* m_unk0x140; // 0x140
-	MxS32 m_unk0x144;       // 0x144
-	MxS32 m_unk0x148;       // 0x148
+	MxFloat m_shelfFrameBuffer;   // 0x12c
+	MxFloat m_shelfFrame;         // 0x130
+	MxFloat m_shelfFrameMax;      // 0x134
+	MxFloat m_shelfFrameInterval; // 0x138
+	MxULong m_unk0x13c;           // 0x13c
+	LegoEntity* m_carBuildEntity; // 0x140
+	MxS32 m_unk0x144;             // 0x144
+	MxS32 m_unk0x148;             // 0x148
 
 	// name verified by BETA10 0x10070d63
 	LegoChar* m_mainSourceId; // 0x14c

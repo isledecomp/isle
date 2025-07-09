@@ -15,7 +15,7 @@ LegoMesh::LegoMesh()
 	m_unk0x0d = 0;
 	m_unk0x10 = NULL;
 	m_unk0x20 = 0;
-	m_unk0x21 = FALSE;
+	m_useAlias = FALSE;
 	m_materialName = NULL;
 }
 
@@ -43,23 +43,23 @@ LegoResult LegoMesh::Read(LegoStorage* p_storage)
 	if ((result = m_color.Read(p_storage)) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_alpha, sizeof(m_alpha))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_alpha, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_shading, sizeof(m_shading))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_shading, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_unk0x0d, sizeof(m_unk0x0d))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_unk0x0d, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_unk0x20, sizeof(m_unk0x20))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_unk0x20, sizeof(undefined))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_unk0x21, sizeof(m_unk0x21))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_useAlias, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Read(&textureLength, sizeof(textureLength))) != SUCCESS) {
+	if ((result = p_storage->Read(&textureLength, sizeof(LegoU32))) != SUCCESS) {
 		return result;
 	}
 	if (textureLength) {
@@ -73,7 +73,7 @@ LegoResult LegoMesh::Read(LegoStorage* p_storage)
 		strlwr(m_textureName);
 	}
 
-	if ((result = p_storage->Read(&materialLength, sizeof(materialLength))) != SUCCESS) {
+	if ((result = p_storage->Read(&materialLength, sizeof(LegoU32))) != SUCCESS) {
 		return result;
 	}
 	if (materialLength) {

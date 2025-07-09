@@ -36,7 +36,7 @@ MxLong JukeBoxEntity::Notify(MxParam& p_param)
 	MxNotificationParam& param = (MxNotificationParam&) p_param;
 
 	if (param.GetNotification() == c_notificationClick) {
-		if (!FUN_1003ef60()) {
+		if (!CanExit()) {
 			return 1;
 		}
 

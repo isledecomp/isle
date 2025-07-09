@@ -16,6 +16,11 @@ class MxDSAction;
 // SIZE 0x10
 class PoliceState : public LegoState {
 public:
+	enum {
+		e_noAnimation = 0,
+		e_playingAnimation = 1,
+	};
+
 	PoliceState();
 	~PoliceState() override {}
 
@@ -38,15 +43,15 @@ public:
 	// SYNTHETIC: LEGO1 0x1005e920
 	// PoliceState::`scalar deleting destructor'
 
-	undefined4 GetUnknown0x0c() { return m_unk0x0c; }
-	void SetUnknown0x0c(undefined4 p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
+	MxS32 GetState() { return m_state; }
+	void SetState(MxS32 p_state) { m_state = p_state; }
 
-	void FUN_1005ea40();
+	void StartAnimation();
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
 	PoliceScript::Script m_policeScript; // 0x08
-	undefined4 m_unk0x0c;                // 0x0c
+	MxS32 m_state;                       // 0x0c
 };
 
 // VTABLE: LEGO1 0x100d8a80

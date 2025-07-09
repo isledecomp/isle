@@ -15,7 +15,7 @@ CConfigCommandLineInfo::CConfigCommandLineInfo()
 void CConfigCommandLineInfo::ParseParam(LPCSTR pszParam, BOOL bFlag, BOOL bLast)
 {
 	if (bFlag) {
-		if (lstrcmpiA(pszParam, "config") == 0) {
+		if (lstrcmpi(pszParam, "config") == 0) {
 			currentConfigApp->m_run_config_dialog = TRUE;
 		}
 	}

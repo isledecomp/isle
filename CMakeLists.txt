@@ -160,7 +160,7 @@ function(add_lego_libraries NAME)
   add_library(geom${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/geom/legoedge.cpp
     LEGO1/lego/sources/geom/legoweedge.cpp
-    LEGO1/lego/sources/geom/legounkown100db7f4.cpp
+    LEGO1/lego/sources/geom/legoorientededge.cpp
     LEGO1/lego/sources/geom/legowegedge.cpp
   )
   list(APPEND list_targets geom${ARG_SUFFIX})
@@ -483,7 +483,12 @@ if(ISLE_BUILD_BETA10)
     OUT_TARGETS beta10_targets
   )
   reccmp_add_target(beta10 ID BETA10)
+
+  # Enable `#ifdef BETA10` conditions
   target_compile_definitions(beta10 PRIVATE BETA10)
+  foreach(tgt IN LISTS beta10_targets)
+    target_compile_definitions(${tgt} PRIVATE BETA10)
+  endforeach()
 endif()
 
 if (ISLE_BUILD_APP)
@@ -600,10 +605,13 @@ if (MSVC_FOR_DECOMP)
     endif()
   endif()
 
+  # Setting the MSVC_RUNTIME_LIBRARY for all libraries as well as `lego1` produces the results
+  # that are most consistent with the LEGO1.DLL and BETA10.DLL originals we have.
+  # Equivalent to target_compile_options(... PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+  set_property(TARGET ${lego1_targets} ${beta10_targets} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   if(TARGET lego1)
     target_link_options(lego1 PRIVATE "/OPT:REF")
-    # Equivalent to target_compile_options(... PRIVATE "/MT$<$<CONFIG:Debug>:d>")
-    set_property(TARGET lego1 ${lego1_targets} ${beta10_targets} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    set_property(TARGET lego1 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   endif()
 
   set(CMAKE_CXX_FLAGS "/W3 /GX /D \"WIN32\" /D \"_WINDOWS\"")

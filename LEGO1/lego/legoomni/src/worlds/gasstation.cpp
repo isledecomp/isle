@@ -26,7 +26,7 @@ DECOMP_SIZE_ASSERT(GasStation, 0x128)
 DECOMP_SIZE_ASSERT(GasStationState, 0x24)
 
 // GLOBAL: LEGO1 0x100f0160
-undefined4 g_unk0x100f0160 = 3;
+MxS32 g_animationSkipCounterGasStation = 3;
 
 // GLOBAL: LEGO1 0x100f0164
 MxBool g_trackLedEnabled = FALSE;
@@ -38,11 +38,11 @@ GasStation::GasStation()
 	m_state = NULL;
 	m_destLocation = LegoGameState::e_undefined;
 	m_trackLedBitmap = NULL;
-	m_unk0x104 = 0;
-	m_unk0x114 = FALSE;
-	m_unk0x106 = 0;
-	m_unk0x10c = 0;
-	m_unk0x115 = FALSE;
+	m_waitingState = e_finished;
+	m_waiting = FALSE;
+	m_setWithCurrentAction = 0;
+	m_lastIdleAnimation = 0;
+	m_flashingLeds = FALSE;
 	m_trackLedTimer = 0;
 
 	NotificationManager()->Register(this);
@@ -59,7 +59,7 @@ GasStation::~GasStation()
 	ControlManager()->Unregister(this);
 	TickleManager()->UnregisterClient(this);
 	NotificationManager()->Unregister(this);
-	g_unk0x100f0160 = 3;
+	g_animationSkipCounterGasStation = 3;
 }
 
 // FUNCTION: LEGO1 0x10004990
@@ -77,13 +77,13 @@ MxResult GasStation::Create(MxDSAction& p_dsAction)
 	m_state = (GasStationState*) GameState()->GetState("GasStationState");
 	if (!m_state) {
 		m_state = (GasStationState*) GameState()->CreateState("GasStationState");
-		m_state->m_unk0x14 = 1;
+		m_state->m_state = GasStationState::e_newState;
 	}
-	else if (m_state->m_unk0x14 == 4) {
-		m_state->m_unk0x14 = 4;
+	else if (m_state->m_state == GasStationState::e_unknown4) {
+		m_state->m_state = GasStationState::e_unknown4;
 	}
 	else {
-		m_state->m_unk0x14 = 3;
+		m_state->m_state = GasStationState::e_unknown3;
 	}
 
 	GameState()->m_currentArea = LegoGameState::e_garage;
@@ -139,25 +139,25 @@ void GasStation::ReadyWorld()
 	case LegoActor::c_pepper:
 		switch (m_state->m_pepperAction) {
 		case 0:
-			m_state->m_unk0x14 = 5;
+			m_state->m_state = GasStationState::e_introduction;
 			PlayAction(GarageScript::c_wgs002nu_RunAnim);
-			m_unk0x106 = 1;
+			m_setWithCurrentAction = 1;
 			break;
 		case 1:
-			m_state->m_unk0x14 = 5;
+			m_state->m_state = GasStationState::e_introduction;
 			PlayAction(GarageScript::c_wgs003nu_RunAnim);
-			m_unk0x106 = 1;
+			m_setWithCurrentAction = 1;
 			break;
 		case 2:
-			m_state->m_unk0x14 = 5;
+			m_state->m_state = GasStationState::e_introduction;
 			PlayAction(GarageScript::c_wgs004nu_RunAnim);
-			m_unk0x106 = 1;
+			m_setWithCurrentAction = 1;
 			break;
 		default:
-			m_state->m_unk0x14 = 6;
+			m_state->m_state = GasStationState::e_explainQuest;
 			PlayAction(GarageScript::c_wgs008nu_RunAnim);
-			m_unk0x106 = 1;
-			m_unk0x104 = 1;
+			m_setWithCurrentAction = 1;
+			m_waitingState = e_start;
 			break;
 		}
 
@@ -168,20 +168,20 @@ void GasStation::ReadyWorld()
 	case LegoActor::c_mama:
 		switch (m_state->m_mamaAction) {
 		case 0:
-			m_state->m_unk0x14 = 5;
+			m_state->m_state = GasStationState::e_introduction;
 			PlayAction(GarageScript::c_wgs006nu_RunAnim);
-			m_unk0x106 = 1;
+			m_setWithCurrentAction = 1;
 			break;
 		case 1:
-			m_state->m_unk0x14 = 5;
+			m_state->m_state = GasStationState::e_introduction;
 			PlayAction(GarageScript::c_wgs007nu_RunAnim);
-			m_unk0x106 = 1;
+			m_setWithCurrentAction = 1;
 			break;
 		default:
-			m_state->m_unk0x14 = 6;
+			m_state->m_state = GasStationState::e_explainQuest;
 			PlayAction(GarageScript::c_wgs008nu_RunAnim);
-			m_unk0x106 = 1;
-			m_unk0x104 = 1;
+			m_setWithCurrentAction = 1;
+			m_waitingState = e_start;
 			break;
 		}
 
@@ -192,20 +192,20 @@ void GasStation::ReadyWorld()
 	case LegoActor::c_nick:
 		switch (m_state->m_nickAction) {
 		case 0:
-			m_state->m_unk0x14 = 5;
+			m_state->m_state = GasStationState::e_introduction;
 			PlayAction(GarageScript::c_wgs009nu_RunAnim);
-			m_unk0x106 = 1;
+			m_setWithCurrentAction = 1;
 			break;
 		case 1:
-			m_state->m_unk0x14 = 5;
+			m_state->m_state = GasStationState::e_introduction;
 			PlayAction(GarageScript::c_wgs010nu_RunAnim);
-			m_unk0x106 = 1;
+			m_setWithCurrentAction = 1;
 			break;
 		default:
-			m_state->m_unk0x14 = 6;
+			m_state->m_state = GasStationState::e_explainQuest;
 			PlayAction(GarageScript::c_wgs008nu_RunAnim);
-			m_unk0x106 = 1;
-			m_unk0x104 = 1;
+			m_setWithCurrentAction = 1;
+			m_waitingState = e_start;
 			break;
 		}
 
@@ -216,20 +216,20 @@ void GasStation::ReadyWorld()
 	case LegoActor::c_papa:
 		switch (m_state->m_papaAction) {
 		case 0:
-			m_state->m_unk0x14 = 5;
+			m_state->m_state = GasStationState::e_introduction;
 			PlayAction(GarageScript::c_wgs012nu_RunAnim);
-			m_unk0x106 = 1;
+			m_setWithCurrentAction = 1;
 			break;
 		case 1:
-			m_state->m_unk0x14 = 5;
+			m_state->m_state = GasStationState::e_introduction;
 			PlayAction(GarageScript::c_wgs014nu_RunAnim);
-			m_unk0x106 = 1;
+			m_setWithCurrentAction = 1;
 			break;
 		default:
-			m_state->m_unk0x14 = 6;
+			m_state->m_state = GasStationState::e_explainQuest;
 			PlayAction(GarageScript::c_wgs017nu_RunAnim);
-			m_unk0x106 = 1;
-			m_unk0x104 = 1;
+			m_setWithCurrentAction = 1;
+			m_waitingState = e_start;
 			break;
 		}
 
@@ -240,20 +240,20 @@ void GasStation::ReadyWorld()
 	case LegoActor::c_laura:
 		switch (m_state->m_lauraAction) {
 		case 0:
-			m_state->m_unk0x14 = 5;
+			m_state->m_state = GasStationState::e_introduction;
 			PlayAction(GarageScript::c_wgs020nu_RunAnim);
-			m_unk0x106 = 1;
+			m_setWithCurrentAction = 1;
 			break;
 		case 1:
-			m_state->m_unk0x14 = 5;
+			m_state->m_state = GasStationState::e_introduction;
 			PlayAction(GarageScript::c_wgs021nu_RunAnim);
-			m_unk0x106 = 1;
+			m_setWithCurrentAction = 1;
 			break;
 		default:
-			m_state->m_unk0x14 = 6;
+			m_state->m_state = GasStationState::e_explainQuest;
 			PlayAction(GarageScript::c_wgs022nu_RunAnim);
-			m_unk0x106 = 1;
-			m_unk0x104 = 1;
+			m_setWithCurrentAction = 1;
+			m_waitingState = e_start;
 			break;
 		}
 
@@ -301,35 +301,35 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 		if (action->GetAtomId() == m_atomId && action->GetObjectId()) {
 			m_state->StopAction((GarageScript::Script) action->GetObjectId());
-			m_unk0x106 = 0;
+			m_setWithCurrentAction = 0;
 
-			switch (m_state->m_unk0x14) {
-			case 5:
-				g_unk0x100f0160 = 0;
-				m_state->m_unk0x14 = 6;
-				m_unk0x115 = TRUE;
+			switch (m_state->m_state) {
+			case GasStationState::e_introduction:
+				g_animationSkipCounterGasStation = 0;
+				m_state->m_state = GasStationState::e_explainQuest;
+				m_flashingLeds = TRUE;
 				PlayAction(GarageScript::c_wgs023nu_RunAnim);
-				m_unk0x106 = 1;
-				m_unk0x104 = 1;
+				m_setWithCurrentAction = 1;
+				m_waitingState = e_start;
 				break;
-			case 6:
-				g_unk0x100f0160 = 0;
-				m_unk0x115 = TRUE;
+			case GasStationState::e_explainQuest:
+				g_animationSkipCounterGasStation = 0;
+				m_flashingLeds = TRUE;
 
-				if (m_unk0x104 == 3) {
-					m_state->m_unk0x14 = 8;
+				if (m_waitingState == e_canceled) {
+					m_state->m_state = GasStationState::e_afterAcceptingQuest;
 					PlayAction(GarageScript::c_wgs029nu_RunAnim);
-					m_unk0x106 = 1;
+					m_setWithCurrentAction = 1;
 				}
 				else {
-					m_state->m_unk0x14 = 7;
-					m_unk0x114 = TRUE;
+					m_state->m_state = GasStationState::e_waitAcceptingQuest;
+					m_waiting = TRUE;
 				}
 				break;
-			case 8:
-				m_state->m_unk0x14 = 2;
+			case GasStationState::e_afterAcceptingQuest:
+				m_state->m_state = GasStationState::e_beforeExitingForQuest;
 				((Act1State*) GameState()->GetState("Act1State"))->m_unk0x018 = 7;
-				m_destLocation = LegoGameState::e_unk28;
+				m_destLocation = LegoGameState::e_garageExited;
 				m_radio.Stop();
 				BackgroundAudioManager()->Stop();
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
@@ -346,7 +346,7 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 // FUNCTION: LEGO1 0x10005920
 MxLong GasStation::HandleKeyPress(MxS8 p_key)
 {
-	if (p_key == VK_SPACE && g_unk0x100f0160 == 0 && m_unk0x106 != 0) {
+	if (p_key == VK_SPACE && g_animationSkipCounterGasStation == 0 && m_setWithCurrentAction != 0) {
 		m_state->StopActions();
 		return 1;
 	}
@@ -358,18 +358,18 @@ MxLong GasStation::HandleKeyPress(MxS8 p_key)
 // FUNCTION: BETA10 0x10029319
 MxLong GasStation::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 {
-	if (m_unk0x104 == 1 || m_unk0x104 == 2) {
+	if (m_waitingState == e_start || m_waitingState == e_started) {
 		LegoROI* roi = PickROI(p_param.GetX(), p_param.GetY());
 
 		if (roi != NULL) {
 			if (!strnicmp(roi->GetName(), "capdb", 5) || !strnicmp(roi->GetName(), "*capdb", 6)) {
-				m_unk0x104 = 3;
-				m_unk0x114 = FALSE;
+				m_waitingState = e_canceled;
+				m_waiting = FALSE;
 
-				if (m_state->m_unk0x14 == 7) {
-					m_state->m_unk0x14 = 8;
+				if (m_state->m_state == GasStationState::e_waitAcceptingQuest) {
+					m_state->m_state = GasStationState::e_afterAcceptingQuest;
 					PlayAction(GarageScript::c_wgs029nu_RunAnim);
-					m_unk0x106 = 1;
+					m_setWithCurrentAction = 1;
 				}
 				else {
 					StopAction(GarageScript::c_wgs023nu_RunAnim);
@@ -393,7 +393,7 @@ MxLong GasStation::HandleControl(LegoControlManagerNotificationParam& p_param)
 		switch (p_param.m_clickedObjectId) {
 		case GarageScript::c_LeftArrow_Ctl:
 		case GarageScript::c_RightArrow_Ctl:
-			m_state->m_unk0x14 = 0;
+			m_state->m_state = GasStationState::e_unknown0;
 			m_destLocation = LegoGameState::Area::e_garadoor;
 
 			m_state->StopActions();
@@ -402,7 +402,7 @@ MxLong GasStation::HandleControl(LegoControlManagerNotificationParam& p_param)
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case GarageScript::c_Info_Ctl:
-			m_state->m_unk0x14 = 0;
+			m_state->m_state = GasStationState::e_unknown0;
 			m_destLocation = LegoGameState::Area::e_infomain;
 
 			m_state->StopActions();
@@ -411,7 +411,7 @@ MxLong GasStation::HandleControl(LegoControlManagerNotificationParam& p_param)
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case GarageScript::c_Buggy_Ctl:
-			m_state->m_unk0x14 = 0;
+			m_state->m_state = GasStationState::e_unknown0;
 			m_destLocation = LegoGameState::Area::e_dunecarbuild;
 
 			m_state->StopActions();
@@ -451,29 +451,29 @@ MxResult GasStation::Tickle()
 		return SUCCESS;
 	}
 
-	if (g_unk0x100f0160 != 0) {
-		g_unk0x100f0160--;
+	if (g_animationSkipCounterGasStation != 0) {
+		g_animationSkipCounterGasStation--;
 	}
 
 	MxLong time = Timer()->GetTime();
 
-	if (m_unk0x114) {
-		if (time - m_unk0x10c > 15000) {
-			m_unk0x10c = time;
-			if (m_unk0x104 == 1) {
-				m_unk0x104 = 2;
+	if (m_waiting) {
+		if (time - m_lastIdleAnimation > 15000) {
+			m_lastIdleAnimation = time;
+			if (m_waitingState == e_start) {
+				m_waitingState = e_started;
 			}
-			else if (m_unk0x104 != 0) {
-				m_unk0x104 = 0;
+			else if (m_waitingState != e_finished) {
+				m_waitingState = e_finished;
 				MxDSAction action;
-				m_state->m_unk0x14 = 9;
+				m_state->m_state = GasStationState::e_cancelQuest;
 				PlayAction(GarageScript::c_wgs031nu_RunAnim);
-				m_unk0x106 = 1;
+				m_setWithCurrentAction = 1;
 			}
 		}
 	}
 
-	if (m_unk0x115) {
+	if (m_flashingLeds) {
 		if (time - m_trackLedTimer > 300) {
 			m_trackLedTimer = time;
 			g_trackLedEnabled = !g_trackLedEnabled;
@@ -489,7 +489,7 @@ MxBool GasStation::Escape()
 {
 	m_radio.Stop();
 	m_state->StopActions();
-	m_state->m_unk0x14 = 0;
+	m_state->m_state = GasStationState::e_unknown0;
 	m_destLocation = LegoGameState::Area::e_infomain;
 	return TRUE;
 }

@@ -39,14 +39,14 @@ public:
 
 	void SetActive(MxBool p_active) { m_active = p_active; }
 
-	undefined4 FUN_1002d090();
-	MxBool FUN_1002d0c0(const MxAtomId& p_atom, MxU32 p_objectId);
+	MxU32 NextPlaylistObjectId();
+	MxBool IsRadioObjectId(const MxAtomId& p_atom, MxU32 p_objectId);
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
-	Playlist m_unk0x08[3]; // 0x08
-	MxS16 m_unk0x2c;       // 0x2c
-	MxBool m_active;       // 0x2e
+	Playlist m_playlists[3]; // 0x08
+	MxS16 m_activePlaylist;  // 0x2c
+	MxBool m_active;         // 0x2e
 };
 
 // VTABLE: LEGO1 0x100d6d10
@@ -85,7 +85,7 @@ public:
 
 private:
 	RadioState* m_state;   // 0x08
-	MxBool m_unk0x0c;      // 0x0c
+	MxBool m_enabled;      // 0x0c
 	MxBool m_audioEnabled; // 0x0d
 
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);

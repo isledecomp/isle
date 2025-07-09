@@ -1,4 +1,4 @@
-#ifdef 0
+#if 0
 // For LEGO1 symbols only
 
 // aka `operator new`
@@ -35,7 +35,10 @@
 // __NLG_Notify
 
 // LIBRARY: LEGO1 0x1008b340
-// __FPinit
+// __fpmath
+
+// LIBRARY: LEGO1 0x1008b370
+// __cfltcvt_init
 
 // LIBRARY: LEGO1 0x1008b3dc
 // __CIacos
@@ -188,6 +191,39 @@
 // LIBRARY: LEGO1 0x1008d660
 // __freeptd
 
+// LIBRARY: LEGO1 0x1008d710
+// __setdefaultprecision
+
+// LIBRARY: LEGO1 0x1008d730
+// __ms_p5_test_fdiv
+
+// LIBRARY: LEGO1 0x1008d780
+// __ms_p5_mp_test_fdiv
+
+// LIBRARY: LEGO1 0x1008d7b0
+// __forcdecpt
+
+// LIBRARY: LEGO1 0x1008d820
+// __cropzeros
+
+// LIBRARY: LEGO1 0x1008d880
+// __positive
+
+// LIBRARY: LEGO1 0x1008d8a0
+// __fassign
+
+// LIBRARY: LEGO1 0x1008d8f0
+// __cftoe
+
+// LIBRARY: LEGO1 0x1008da60
+// __cftof
+
+// LIBRARY: LEGO1 0x1008db90
+// __cftog
+
+// LIBRARY: LEGO1 0x1008dc40
+// __cfltcvt
+
 // LIBRARY: LEGO1 0x1008dd90
 // __cintrindisp2
 
@@ -293,6 +329,9 @@
 // LIBRARY: LEGO1 0x10090080
 // __getstream
 
+// LIBRARY: LEGO1 0x10090180
+// _tolower
+
 // LIBRARY: LEGO1 0x100901f0
 // __tolower_lk
 
@@ -344,8 +383,23 @@
 // LIBRARY: LEGO1 0x10092130
 // _raise
 
-// LIBRARY: LEGO1 0x10092310
+// ~LIBRARY: LEGO1 0x10092310
 // _siglookup
+// Not public
+
+// LIBRARY: LEGO1 0x10092720
+// __control87
+
+// LIBRARY: LEGO1 0x10092760
+// __controlfp
+
+// ~LIBRARY: LEGO1 0x10092780
+// __abstract_cw
+// Not public
+
+// ~LIBRARY: LEGO1 0x10092830
+// __hw_cw
+// Not public
 
 // LIBRARY: LEGO1 0x100928c0
 // __fptrap
@@ -376,6 +430,24 @@
 
 // LIBRARY: LEGO1 0x10092d30
 // __ld12tod
+
+// LIBRARY: LEGO1 0x10092d50
+// __ld12tof
+
+// LIBRARY: LEGO1 0x10092d70
+// __atodbl
+
+// LIBRARY: LEGO1 0x10092db0
+// __atoflt
+
+// LIBRARY: LEGO1 0x10092df0
+// __fptostr
+
+// LIBRARY: LEGO1 0x10092e80
+// __fltout2
+
+// LIBRARY: LEGO1 0x10092f10
+// ___dtold
 
 // LIBRARY: LEGO1 0x10093037
 // __trandisp2
@@ -458,6 +530,9 @@
 // LIBRARY: LEGO1 0x100965b0
 // ___mtold12
 
+// LIBRARY: LEGO1 0x100966a0
+// _$I10_OUTPUT
+
 // LIBRARY: LEGO1 0x10097190
 // ___ld12mul
 
@@ -516,6 +591,12 @@
 // GLOBAL: LEGO1 0x100fc8bc
 // __NLG_Destination
 
+// GLOBAL: LEGO1 0x100fc8d8
+// __adjust_fdiv
+
+// GLOBAL: LEGO1 0x100fc8dc
+// __FPinit
+
 // GLOBAL: LEGO1 0x100fc8f0
 // __iob
 
@@ -563,6 +644,9 @@
 
 // GLOBAL: LEGO1 0x100fcf20
 // ___tlsindex
+
+// GLOBAL: LEGO1 0x100fcf28
+// __cfltcvt_tab
 
 // GLOBAL: LEGO1 0x100fcf60
 // __OP_ACOSjmptab
@@ -755,6 +839,9 @@
 
 // LIBRARY: BETA10 0x100f8ad0
 // strcmp
+
+// LIBRARY: BETA10 0x100f9f60
+// strtok
 
 // LIBRARY: BETA10 0x100f9610
 // rand

@@ -11,12 +11,12 @@ class LegoROI;
 struct LegoActorInfo {
 	// SIZE 0x18
 	struct Part {
-		MxU8* m_unk0x00;        // 0x00
-		const char** m_unk0x04; // 0x04
-		MxU8 m_unk0x08;         // 0x08
-		MxU8* m_unk0x0c;        // 0x0c
-		const char** m_unk0x10; // 0x10
-		MxU8 m_unk0x14;         // 0x14
+		MxU8* m_partNameIndices; // 0x00
+		const char** m_partName; // 0x04
+		MxU8 m_partNameIndex;    // 0x08
+		MxU8* m_nameIndices;     // 0x0c
+		const char** m_names;    // 0x10
+		MxU8 m_nameIndex;        // 0x14
 	};
 
 	const char* m_name;      // 0x00
@@ -31,8 +31,8 @@ struct LegoActorInfo {
 // SIZE 0x58
 struct LegoActorLOD {
 	enum {
-		c_flag1 = 0x01,
-		c_flag2 = 0x02
+		c_useTexture = 0x01,
+		c_useColor = 0x02
 	};
 
 	const char* m_name;        // 0x00

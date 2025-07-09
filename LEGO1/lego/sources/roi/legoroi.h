@@ -4,7 +4,7 @@
 #include "misc/legotypes.h"
 #include "viewmanager/viewroi.h"
 
-typedef unsigned char (*ROIHandler)(const char*, char*, unsigned int);
+typedef unsigned char (*ColorOverride)(const char*, char*, unsigned int);
 typedef unsigned char (*TextureHandler)(const char*, unsigned char*, unsigned int);
 
 class LegoEntity;
@@ -17,6 +17,7 @@ class LegoTreeNode;
 struct LegoAnimActorEntry;
 
 // VTABLE: LEGO1 0x100dbe38
+// VTABLE: BETA10 0x101c3898
 // SIZE 0x108
 class LegoROI : public ViewROI {
 public:
@@ -32,30 +33,35 @@ public:
 		LegoStorage* p_storage
 	);
 	LegoROI* FindChildROI(const LegoChar* p_name, LegoROI* p_roi);
-	LegoResult FUN_100a8da0(LegoTreeNode* p_node, const Matrix4& p_matrix, LegoTime p_time, LegoROI* p_roi);
+	LegoResult ApplyAnimationTransformation(
+		LegoTreeNode* p_node,
+		const Matrix4& p_matrix,
+		LegoTime p_time,
+		LegoROI* p_roi
+	);
 	static void FUN_100a8e80(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap);
 	static void FUN_100a8fd0(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap);
 	LegoResult SetFrame(LegoAnim* p_anim, LegoTime p_time);
-	LegoResult FUN_100a9170(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
-	LegoResult FUN_100a9210(LegoTextureInfo* p_textureInfo);
-	LegoResult GetTexture(LegoTextureInfo*& p_textureInfo);
+	LegoResult SetLodColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
+	LegoResult SetTextureInfo(LegoTextureInfo* p_textureInfo);
+	LegoResult GetTextureInfo(LegoTextureInfo*& p_textureInfo);
 	LegoResult FUN_100a9330(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
-	LegoResult FUN_100a9350(const LegoChar* p_color);
-	LegoResult FUN_100a93b0(const LegoChar* p_color);
+	LegoResult SetLodColor(const LegoChar* p_name);
+	LegoResult FUN_100a93b0(const LegoChar* p_name);
 	LegoU32 FUN_100a9410(Vector3& p_v1, Vector3& p_v2, float p_f1, float p_f2, Vector3& p_v3, LegoBool p_collideBox);
 	void SetName(const LegoChar* p_name);
 
 	float IntrinsicImportance() const override; // vtable+0x04
 	void UpdateWorldBoundingVolumes() override; // vtable+0x18
 
-	void FUN_100a9dd0();
+	void ClearMeshOffset();
 	void SetDisplayBB(int p_displayBB);
 
-	static LegoResult FUN_100a8cb0(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix);
-	static void FUN_100a81b0(const LegoChar* p_error, const LegoChar* p_name);
+	static LegoResult CreateLocalTransform(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix);
+	static void FUN_100a81b0(const LegoChar* p_error, ...);
 	static void configureLegoROI(int p_roi);
-	static void FUN_100a9d30(ROIHandler p_func);
-	static LegoBool FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha);
+	static void SetColorOverride(ColorOverride p_colorOverride);
+	static LegoBool GetRGBAColor(const LegoChar* p_name, float& p_red, float& p_green, float& p_blue, float& p_alpha);
 	static LegoBool ColorAliasLookup(
 		const LegoChar* p_param,
 		float& p_red,
@@ -63,7 +69,7 @@ public:
 		float& p_blue,
 		float& p_alpha
 	);
-	static LegoBool FUN_100a9cf0(const LegoChar* p_param, unsigned char* paletteEntries, LegoU32 p_numEntries);
+	static LegoBool GetPaletteEntries(const LegoChar* p_name, unsigned char* paletteEntries, LegoU32 p_numEntries);
 
 	// FUNCTION: BETA10 0x1000f320
 	const LegoChar* GetName() const { return m_name; }
@@ -78,9 +84,10 @@ public:
 
 	void SetComp(CompoundObject* p_comp) { comp = p_comp; }
 	void SetBoundingSphere(const BoundingSphere& p_sphere) { m_sphere = m_world_bounding_sphere = p_sphere; }
-	void SetUnknown0x80(const BoundingBox& p_unk0x80) { m_unk0x80 = p_unk0x80; }
+	void SetBoundingBox(const BoundingBox& p_box) { m_bounding_box = p_box; }
 
 	// SYNTHETIC: LEGO1 0x100a82b0
+	// SYNTHETIC: BETA10 0x1018c490
 	// LegoROI::`scalar deleting destructor'
 
 private:
@@ -91,15 +98,20 @@ private:
 };
 
 // VTABLE: LEGO1 0x100dbea8
+// VTABLE: BETA10 0x101c38d0
 // SIZE 0x10c
 class TimeROI : public LegoROI {
 public:
 	TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_time);
 
+	void FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time);
+
 	// SYNTHETIC: LEGO1 0x100a9ad0
+	// SYNTHETIC: BETA10 0x1018c540
 	// TimeROI::`scalar deleting destructor'
 
-	void FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time);
+	// SYNTHETIC: BETA10 0x1018c580
+	// TimeROI::~TimeROI
 
 private:
 	LegoTime m_time; // 0x108

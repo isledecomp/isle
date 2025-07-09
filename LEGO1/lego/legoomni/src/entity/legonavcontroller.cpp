@@ -135,7 +135,7 @@ LegoNavController::LegoNavController()
 	m_rotationalAccel = 0.0f;
 	m_trackDefault = FALSE;
 	m_unk0x5d = FALSE;
-	m_unk0x6c = FALSE;
+	m_isAccelerating = FALSE;
 	m_unk0x64 = 0.0f;
 	m_unk0x68 = 0.0f;
 	m_unk0x60 = 0.0f;
@@ -442,8 +442,8 @@ MxResult LegoNavController::UpdateLocation(const char* p_location)
 			Mx3DPointFloat vec;
 			vec.Clear();
 
-			viewROI->FUN_100a5a30(vec);
-			viewROI->WrappedSetLocalTransform(mat);
+			viewROI->SetWorldVelocity(vec);
+			viewROI->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
 			VideoManager()->Get3DManager()->Moved(*viewROI);
 
 			SoundManager()->UpdateListener(
@@ -480,8 +480,8 @@ MxResult LegoNavController::UpdateLocation(MxU32 p_location)
 		Mx3DPointFloat vec;
 		vec.Clear();
 
-		viewROI->FUN_100a5a30(vec);
-		viewROI->WrappedSetLocalTransform(mat);
+		viewROI->SetWorldVelocity(vec);
+		viewROI->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
 		VideoManager()->Get3DManager()->Moved(*viewROI);
 
 		SoundManager()->UpdateListener(
@@ -564,8 +564,8 @@ MxResult LegoNavController::ProcessJoystickInput(MxBool& p_und)
 // FUNCTION: LEGO1 0x100558b0
 MxResult LegoNavController::ProcessKeyboardInput()
 {
-	MxBool bool1 = FALSE;
-	MxBool bool2 = FALSE;
+	MxBool skipRotationVelAndAccelCalc = FALSE;
+	MxBool skipLinearVelAndAccelCalc = FALSE;
 	LegoInputManager* inputManager = LegoOmni::GetInstance()->GetInputManager();
 	MxU32 keyFlags;
 
@@ -574,18 +574,18 @@ MxResult LegoNavController::ProcessKeyboardInput()
 	}
 
 	if (keyFlags == 0) {
-		if (m_unk0x6c) {
+		if (m_isAccelerating) {
 			m_targetRotationalVel = 0.0;
 			m_targetLinearVel = 0.0;
 			m_rotationalAccel = m_maxRotationalDeccel;
 			m_linearAccel = m_maxLinearDeccel;
-			m_unk0x6c = FALSE;
+			m_isAccelerating = FALSE;
 		}
 
 		return FAILURE;
 	}
 
-	m_unk0x6c = TRUE;
+	m_isAccelerating = TRUE;
 
 	MxS32 hMax;
 	switch (keyFlags & LegoInputManager::c_leftOrRight) {
@@ -598,7 +598,7 @@ MxResult LegoNavController::ProcessKeyboardInput()
 	default:
 		m_targetRotationalVel = 0.0;
 		m_rotationalAccel = m_maxRotationalDeccel;
-		bool1 = TRUE;
+		skipRotationVelAndAccelCalc = TRUE;
 		break;
 	}
 
@@ -613,23 +613,31 @@ MxResult LegoNavController::ProcessKeyboardInput()
 	default:
 		m_targetLinearVel = 0.0;
 		m_linearAccel = m_maxLinearDeccel;
-		bool2 = TRUE;
+		skipLinearVelAndAccelCalc = TRUE;
 		break;
 	}
 
-	MxFloat val = keyFlags & LegoInputManager::c_bit5 ? 1.0f : 4.0f;
-	MxFloat val2 = keyFlags & LegoInputManager::c_bit5 ? 1.0f : 2.0f;
+	MxFloat maxAccelDivisor = keyFlags & LegoInputManager::c_ctrl ? 1.0f : 4.0f;
+	MxFloat minAccelDivisor = keyFlags & LegoInputManager::c_ctrl ? 1.0f : 2.0f;
 
-	if (!bool1) {
+	if (!skipRotationVelAndAccelCalc) {
 		m_targetRotationalVel = CalculateNewTargetVel(hMax, m_hMax / 2, m_maxRotationalVel);
-		m_rotationalAccel =
-			CalculateNewAccel(hMax, m_hMax / 2, m_maxRotationalAccel / val, (int) (m_minRotationalAccel / val2));
+		m_rotationalAccel = CalculateNewAccel(
+			hMax,
+			m_hMax / 2,
+			m_maxRotationalAccel / maxAccelDivisor,
+			(int) (m_minRotationalAccel / minAccelDivisor)
+		);
 	}
 
-	if (!bool2) {
+	if (!skipLinearVelAndAccelCalc) {
 		m_targetLinearVel = CalculateNewTargetVel(m_vMax - vMax, m_vMax / 2, m_maxLinearVel);
-		m_linearAccel =
-			CalculateNewAccel(m_vMax - vMax, m_vMax / 2, m_maxLinearAccel / val, (int) (m_minLinearAccel / val2));
+		m_linearAccel = CalculateNewAccel(
+			m_vMax - vMax,
+			m_vMax / 2,
+			m_maxLinearAccel / maxAccelDivisor,
+			(int) (m_minLinearAccel / minAccelDivisor)
+		);
 	}
 
 	return SUCCESS;
@@ -683,7 +691,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 				for (MxS32 i = 0; i < numPlants; i++) {
 					LegoEntity* entity = plantMgr->CreatePlant(i, NULL, LegoOmni::e_act1);
 
-					if (entity != NULL && !entity->GetUnknown0x10IsSet(LegoEntity::c_altBit1)) {
+					if (entity != NULL && !entity->IsInteraction(LegoEntity::c_disabled)) {
 						LegoROI* roi = entity->GetROI();
 
 						if (roi != NULL && roi->GetVisibility()) {
@@ -693,7 +701,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 								Mx3DPointFloat roiPosition(roi->GetWorldPosition());
 								roiPosition -= viewPosition;
 
-								if (roiPosition.LenSquared() < 2000.0 || roi->GetUnknown0xe0() > 0) {
+								if (roiPosition.LenSquared() < 2000.0 || roi->GetLodLevel() > 0) {
 									entity->ClickAnimation();
 								}
 							}
@@ -922,7 +930,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					MxMatrix mat;
 					mat.SetIdentity();
 					mat.RotateX(0.2618f);
-					roi->WrappedVTable0x24(mat);
+					roi->WrappedUpdateWorldDataWithTransform(mat);
 					break;
 				}
 				case 'J': {
@@ -930,7 +938,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					MxMatrix mat;
 					mat.SetIdentity();
 					mat.RotateZ(0.2618f);
-					roi->WrappedVTable0x24(mat);
+					roi->WrappedUpdateWorldDataWithTransform(mat);
 					break;
 				}
 				case 'K': {
@@ -938,7 +946,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					LegoROI* roi = LegoOmni::GetInstance()->GetVideoManager()->GetViewROI();
 					mat.SetIdentity();
 					mat.RotateZ(-0.2618f);
-					roi->WrappedVTable0x24(mat);
+					roi->WrappedUpdateWorldDataWithTransform(mat);
 					break;
 				}
 				case 'L':
@@ -949,7 +957,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					MxMatrix mat;
 					mat.SetIdentity();
 					mat.RotateX(-0.2618f);
-					roi->WrappedVTable0x24(mat);
+					roi->WrappedUpdateWorldDataWithTransform(mat);
 					break;
 				}
 				case 'N':

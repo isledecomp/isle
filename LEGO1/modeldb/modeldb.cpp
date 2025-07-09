@@ -19,7 +19,7 @@ MxResult ModelDbModel::Read(FILE* p_file)
 {
 	MxU32 len;
 
-	if (fread(&len, sizeof(len), 1, p_file) != 1) {
+	if (fread(&len, sizeof(MxU32), 1, p_file) != 1) {
 		return FAILURE;
 	}
 
@@ -28,13 +28,13 @@ MxResult ModelDbModel::Read(FILE* p_file)
 		return FAILURE;
 	}
 
-	if (fread(&m_unk0x04, sizeof(m_unk0x04), 1, p_file) != 1) {
+	if (fread(&m_modelDataLength, sizeof(MxU32), 1, p_file) != 1) {
 		return FAILURE;
 	}
-	if (fread(&m_unk0x08, sizeof(m_unk0x08), 1, p_file) != 1) {
+	if (fread(&m_modelDataOffset, sizeof(MxU32), 1, p_file) != 1) {
 		return FAILURE;
 	}
-	if (fread(&len, sizeof(len), 1, p_file) != 1) {
+	if (fread(&len, sizeof(MxU32), 1, p_file) != 1) {
 		return FAILURE;
 	}
 
@@ -43,16 +43,16 @@ MxResult ModelDbModel::Read(FILE* p_file)
 		return FAILURE;
 	}
 
-	if (fread(&m_location, sizeof(*m_location), 3, p_file) != 3) {
+	if (fread(&m_location, sizeof(float), 3, p_file) != 3) {
 		return FAILURE;
 	}
-	if (fread(&m_direction, sizeof(*m_direction), 3, p_file) != 3) {
+	if (fread(&m_direction, sizeof(float), 3, p_file) != 3) {
 		return FAILURE;
 	}
-	if (fread(&m_up, sizeof(*m_up), 3, p_file) != 3) {
+	if (fread(&m_up, sizeof(float), 3, p_file) != 3) {
 		return FAILURE;
 	}
-	if (fread(&m_unk0x34, sizeof(m_unk0x34), 1, p_file) != 1) {
+	if (fread(&m_visible, sizeof(MxU8), 1, p_file) != 1) {
 		return FAILURE;
 	}
 
@@ -65,7 +65,7 @@ MxResult ModelDbPart::Read(FILE* p_file)
 	MxU32 len;
 	char buff[128];
 
-	if (fread(&len, sizeof(len), 1, p_file) != 1) {
+	if (fread(&len, sizeof(MxU32), 1, p_file) != 1) {
 		return FAILURE;
 	}
 
@@ -76,10 +76,10 @@ MxResult ModelDbPart::Read(FILE* p_file)
 
 	m_roiName = buff;
 
-	if (fread(&m_partDataLength, sizeof(m_partDataLength), 1, p_file) != 1) {
+	if (fread(&m_partDataLength, sizeof(undefined4), 1, p_file) != 1) {
 		return FAILURE;
 	}
-	if (fread(&m_partDataOffset, sizeof(m_partDataOffset), 1, p_file) != 1) {
+	if (fread(&m_partDataOffset, sizeof(undefined4), 1, p_file) != 1) {
 		return FAILURE;
 	}
 
@@ -101,7 +101,7 @@ MxResult ReadModelDbWorlds(FILE* p_file, ModelDbWorld*& p_worlds, MxS32& p_numWo
 	MxS32 worldNameLen, numParts, i, j;
 
 	for (i = 0; i < numWorlds; i++) {
-		if (fread(&worldNameLen, sizeof(worldNameLen), 1, p_file) != 1) {
+		if (fread(&worldNameLen, sizeof(MxS32), 1, p_file) != 1) {
 			return FAILURE;
 		}
 
@@ -110,7 +110,7 @@ MxResult ReadModelDbWorlds(FILE* p_file, ModelDbWorld*& p_worlds, MxS32& p_numWo
 			return FAILURE;
 		}
 
-		if (fread(&numParts, sizeof(numParts), 1, p_file) != 1) {
+		if (fread(&numParts, sizeof(MxS32), 1, p_file) != 1) {
 			return FAILURE;
 		}
 
@@ -126,7 +126,7 @@ MxResult ReadModelDbWorlds(FILE* p_file, ModelDbWorld*& p_worlds, MxS32& p_numWo
 			worlds[i].m_partList->Append(part);
 		}
 
-		if (fread(&worlds[i].m_numModels, sizeof(worlds[i].m_numModels), 1, p_file) != 1) {
+		if (fread(&worlds[i].m_numModels, sizeof(MxS32), 1, p_file) != 1) {
 			return FAILURE;
 		}
 

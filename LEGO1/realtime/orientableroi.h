@@ -23,21 +23,22 @@ public:
 	const BoundingSphere& GetWorldBoundingSphere() const override; // vtable+0x10
 
 	// FUNCTION: LEGO1 0x100a5db0
-	virtual void VTable0x14() { VTable0x1c(); } // vtable+0x14
+	// FUNCTION: BETA10 0x101687d0
+	virtual void WrappedUpdateWorldData() { UpdateWorldData(); } // vtable+0x14
 
-	virtual void UpdateWorldBoundingVolumes() = 0;              // vtable+0x18
-	virtual void VTable0x1c();                                  // vtable+0x1c
-	virtual void SetLocalTransform(const Matrix4& p_transform); // vtable+0x20
-	virtual void VTable0x24(const Matrix4& p_transform);        // vtable+0x24
-	virtual void UpdateWorldData(const Matrix4& p_transform);   // vtable+0x28
-	virtual void UpdateWorldVelocity();                         // vtable+0x2c
+	virtual void UpdateWorldBoundingVolumes() = 0;                                    // vtable+0x18
+	virtual void UpdateWorldData();                                                   // vtable+0x1c
+	virtual void SetLocal2WorldWithWorldDataUpdate(const Matrix4& p_local2world);     // vtable+0x20
+	virtual void UpdateWorldDataWithTransform(const Matrix4& p_transform);            // vtable+0x24
+	virtual void UpdateWorldDataWithTransformAndChildren(const Matrix4& p_transform); // vtable+0x28
+	virtual void UpdateWorldVelocity();                                               // vtable+0x2c
 
-	void WrappedSetLocalTransform(const Matrix4& p_transform);
+	void WrappedSetLocal2WorldWithWorldDataUpdate(const Matrix4& p_local2world);
 	void UpdateTransformationRelativeToParent(const Matrix4& p_transform);
-	void WrappedVTable0x24(const Matrix4& p_transform);
+	void WrappedUpdateWorldDataWithTransform(const Matrix4& p_transform);
 	void GetLocalTransform(Matrix4& p_transform);
-	void FUN_100a58f0(const Matrix4& p_transform);
-	void FUN_100a5a30(const Vector3& p_world_velocity);
+	void SetLocal2World(const Matrix4& p_local2world);
+	void SetWorldVelocity(const Vector3& p_world_velocity);
 
 	// FUNCTION: BETA10 0x1000fbf0
 	const Matrix4& GetLocal2World() const { return m_local2world; }
@@ -57,9 +58,9 @@ public:
 	void SetParentROI(OrientableROI* p_parentROI) { m_parentROI = p_parentROI; }
 
 	// FUNCTION: BETA10 0x10168800
-	void ToggleUnknown0xd8(BOOL p_enable)
+	void SetNeedsWorldDataUpdate(BOOL p_needsWorldDataUpdate)
 	{
-		if (p_enable) {
+		if (p_needsWorldDataUpdate) {
 			m_unk0xd8 |= c_bit1 | c_bit2;
 		}
 		else {
@@ -70,7 +71,7 @@ public:
 protected:
 	MxMatrix m_local2world;                 // 0x10
 	BoundingBox m_world_bounding_box;       // 0x58
-	BoundingBox m_unk0x80;                  // 0x80
+	BoundingBox m_bounding_box;             // 0x80
 	BoundingSphere m_world_bounding_sphere; // 0xa8
 	Mx3DPointFloat m_world_velocity;        // 0xc0
 	OrientableROI* m_parentROI;             // 0xd4
@@ -81,6 +82,7 @@ protected:
 // OrientableROI::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100aa2f0
+// SYNTHETIC: BETA10 0x10168600
 // OrientableROI::~OrientableROI
 
 #endif // ORIENTABLEROI_H

@@ -71,7 +71,7 @@ MxResult MxDSFile::ReadChunks()
 	m_io.Read(&m_header, 0x0c);
 	if ((m_header.m_majorVersion != SI_MAJOR_VERSION) || (m_header.m_minorVersion != SI_MINOR_VERSION)) {
 		sprintf(tempBuffer, "Wrong SI file version. %d.%d expected.", SI_MAJOR_VERSION, SI_MINOR_VERSION);
-		MessageBoxA(NULL, tempBuffer, NULL, MB_ICONERROR);
+		MessageBox(NULL, tempBuffer, NULL, MB_ICONERROR);
 		return FAILURE;
 	}
 

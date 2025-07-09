@@ -17,13 +17,13 @@ LegoVertex::LegoVertex()
 LegoResult LegoVertex::Read(LegoStorage* p_storage)
 {
 	LegoResult result;
-	if ((result = p_storage->Read(&m_coordinates[0], sizeof(m_coordinates[0]))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_coordinates[0], sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_coordinates[1], sizeof(m_coordinates[1]))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_coordinates[1], sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
-	if ((result = p_storage->Read(&m_coordinates[2], sizeof(m_coordinates[2]))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_coordinates[2], sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 	return SUCCESS;

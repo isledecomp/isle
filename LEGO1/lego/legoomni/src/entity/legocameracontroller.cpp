@@ -172,7 +172,7 @@ void LegoCameraController::FUN_100123e0(const Matrix4& p_transform, MxU32 p_und)
 			}
 
 			((TimeROI*) pov)->FUN_100a9b40(mat, Timer()->GetTime());
-			pov->WrappedSetLocalTransform(mat);
+			pov->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
 			m_lego3DView->Moved(*pov);
 
 			SoundManager()->UpdateListener(

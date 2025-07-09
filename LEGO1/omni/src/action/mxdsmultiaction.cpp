@@ -57,14 +57,14 @@ MxDSMultiAction& MxDSMultiAction::operator=(MxDSMultiAction& p_dsMultiAction)
 
 // FUNCTION: LEGO1 0x100ca290
 // FUNCTION: BETA10 0x10159728
-void MxDSMultiAction::SetUnknown90(MxLong p_unk0x90)
+void MxDSMultiAction::SetTimeStarted(MxLong p_timeStarted)
 {
-	m_unk0x90 = p_unk0x90;
+	m_timeStarted = p_timeStarted;
 
 	MxDSActionListCursor cursor(m_actionList);
 	MxDSAction* action;
 	while (cursor.Next(action)) {
-		action->SetUnknown90(p_unk0x90);
+		action->SetTimeStarted(p_timeStarted);
 	}
 }
 
@@ -149,9 +149,9 @@ MxU32 MxDSMultiAction::GetSizeOnDisk()
 
 // FUNCTION: LEGO1 0x100ca7b0
 // FUNCTION: BETA10 0x10159b79
-void MxDSMultiAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
+void MxDSMultiAction::Deserialize(MxU8*& p_source, MxS16 p_flags)
 {
-	MxDSAction::Deserialize(p_source, p_unk0x24);
+	MxDSAction::Deserialize(p_source, p_flags);
 
 	MxU32 extraFlag = *(MxU32*) (p_source + 4) & 1;
 	p_source += 12;
@@ -164,7 +164,7 @@ void MxDSMultiAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
 			MxU32 extraFlag = *(MxU32*) (p_source + 4) & 1;
 			p_source += 8;
 
-			MxDSAction* action = (MxDSAction*) DeserializeDSObjectDispatch(p_source, p_unk0x24);
+			MxDSAction* action = (MxDSAction*) DeserializeDSObjectDispatch(p_source, p_flags);
 			p_source += extraFlag;
 
 			m_actionList->Append(action);

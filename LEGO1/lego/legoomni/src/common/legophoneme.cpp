@@ -8,39 +8,39 @@ LegoPhoneme::~LegoPhoneme()
 }
 
 // FUNCTION: LEGO1 0x10044eb0
-undefined4 LegoPhoneme::VTable0x00()
+MxU32 LegoPhoneme::GetCount()
 {
-	return m_unk0x14;
+	return m_count;
 }
 
 // FUNCTION: LEGO1 0x10044ec0
-void LegoPhoneme::VTable0x04(undefined4 p_unk0x14)
+void LegoPhoneme::SetCount(MxU32 p_count)
 {
-	m_unk0x14 = p_unk0x14;
+	m_count = p_count;
 }
 
 // FUNCTION: LEGO1 0x10044ed0
-LegoTextureInfo* LegoPhoneme::VTable0x08()
+LegoTextureInfo* LegoPhoneme::GetTextureInfo()
 {
-	return m_unk0x18;
+	return m_textureInfo;
 }
 
 // FUNCTION: LEGO1 0x10044ee0
-void LegoPhoneme::VTable0x0c(LegoTextureInfo* p_unk0x18)
+void LegoPhoneme::SetTextureInfo(LegoTextureInfo* p_textureInfo)
 {
-	m_unk0x18 = p_unk0x18;
+	m_textureInfo = p_textureInfo;
 }
 
 // FUNCTION: LEGO1 0x10044ef0
-LegoTextureInfo* LegoPhoneme::VTable0x10()
+LegoTextureInfo* LegoPhoneme::GetCachedTextureInfo()
 {
-	return m_unk0x1c;
+	return m_cachedTextureInfo;
 }
 
 // FUNCTION: LEGO1 0x10044f00
-void LegoPhoneme::VTable0x14(LegoTextureInfo* p_unk0x1c)
+void LegoPhoneme::SetCachedTextureInfo(LegoTextureInfo* p_cachedTextureInfo)
 {
-	m_unk0x1c = p_unk0x1c;
+	m_cachedTextureInfo = p_cachedTextureInfo;
 }
 
 // FUNCTION: LEGO1 0x10044f10
@@ -51,9 +51,9 @@ void LegoPhoneme::VTable0x18()
 // FUNCTION: LEGO1 0x10044f20
 void LegoPhoneme::Init()
 {
-	m_unk0x14 = 0;
-	m_unk0x18 = NULL;
-	m_unk0x1c = NULL;
+	m_count = 0;
+	m_textureInfo = NULL;
+	m_cachedTextureInfo = NULL;
 }
 
 // FUNCTION: LEGO1 0x10044f30

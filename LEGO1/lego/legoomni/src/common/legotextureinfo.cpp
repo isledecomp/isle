@@ -65,7 +65,7 @@ LegoTextureInfo* LegoTextureInfo::Create(const char* p_name, LegoTexture* p_text
 	desc.dwFlags = DDSD_PIXELFORMAT | DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
 	desc.dwWidth = image->GetWidth();
 	desc.dwHeight = image->GetHeight();
-	desc.ddsCaps.dwCaps = DDCAPS_OVERLAYCANTCLIP | DDCAPS_OVERLAY;
+	desc.ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_SYSTEMMEMORY;
 	desc.ddpfPixelFormat.dwSize = sizeof(desc.ddpfPixelFormat);
 	desc.ddpfPixelFormat.dwFlags = DDPF_RGB | DDPF_PALETTEINDEXED8;
 	desc.ddpfPixelFormat.dwRGBBitCount = 8;
@@ -112,7 +112,7 @@ LegoTextureInfo* LegoTextureInfo::Create(const char* p_name, LegoTexture* p_text
 			entries[i].peBlue = image->GetPaletteEntry(i).GetBlue();
 		}
 		else {
-			entries[i].peFlags = 0x80;
+			entries[i].peFlags = D3DPAL_RESERVED;
 		}
 	}
 
@@ -186,14 +186,14 @@ BOOL LegoTextureInfo::GetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo*& p_text
 }
 
 // FUNCTION: LEGO1 0x10066010
-LegoResult LegoTextureInfo::FUN_10066010(const LegoU8* p_bits)
+LegoResult LegoTextureInfo::LoadBits(const LegoU8* p_bits)
 {
 	if (m_surface != NULL && m_texture != NULL) {
 		DDSURFACEDESC desc;
 		memset(&desc, 0, sizeof(desc));
 		desc.dwSize = sizeof(desc);
 
-		if (m_surface->Lock(NULL, &desc, 0, NULL) == DD_OK) {
+		if (m_surface->Lock(NULL, &desc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
 			MxU8* surface = (MxU8*) desc.lpSurface;
 			const LegoU8* bits = p_bits;
 

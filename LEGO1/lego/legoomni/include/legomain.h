@@ -90,9 +90,6 @@ public:
 			return *this;
 		}
 
-		World GetId() { return m_id; }
-		const char* GetKey() { return m_key; }
-
 		World m_id;         // 0x00
 		char m_key[20];     // 0x04
 		MxAtomId* m_atomId; // 0x18
@@ -186,7 +183,7 @@ public:
 	MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction) { return m_unk0x13c ? Start(&p_dsAction) : SUCCESS; }
 	void SetUnknown13c(MxBool p_unk0x13c) { m_unk0x13c = p_unk0x13c; }
 
-	void CloseMainWindow() { PostMessageA(m_windowHandle, WM_CLOSE, 0, 0); }
+	void CloseMainWindow() { PostMessage(m_windowHandle, WM_CLOSE, 0, 0); }
 
 	// SYNTHETIC: LEGO1 0x10058b30
 	// LegoOmni::`scalar deleting destructor'

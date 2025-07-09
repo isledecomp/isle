@@ -31,7 +31,7 @@ LegoResult LegoUnknownKey::Read(LegoStorage* p_storage)
 		return result;
 	}
 
-	if ((result = p_storage->Read(&m_z, sizeof(m_z))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_z, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
@@ -48,7 +48,7 @@ LegoResult LegoUnknownKey::Write(LegoStorage* p_storage)
 		return result;
 	}
 
-	if ((result = p_storage->Write(&m_z, sizeof(m_z))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_z, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
@@ -95,7 +95,7 @@ LegoResult LegoAnimScene::Write(LegoStorage* p_storage)
 	LegoResult result;
 	LegoS32 i;
 
-	if ((result = p_storage->Write(&m_unk0x00, sizeof(m_unk0x00))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_unk0x00, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_unk0x00 != 0) {
@@ -106,7 +106,7 @@ LegoResult LegoAnimScene::Write(LegoStorage* p_storage)
 		}
 	}
 
-	if ((result = p_storage->Write(&m_unk0x08, sizeof(m_unk0x08))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_unk0x08, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_unk0x08 != 0) {
@@ -117,7 +117,7 @@ LegoResult LegoAnimScene::Write(LegoStorage* p_storage)
 		}
 	}
 
-	if ((result = p_storage->Write(&m_unk0x10, sizeof(m_unk0x10))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_unk0x10, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_unk0x10 != 0) {
@@ -137,7 +137,7 @@ LegoResult LegoAnimScene::Read(LegoStorage* p_storage)
 	LegoResult result;
 	LegoS32 i;
 
-	if ((result = p_storage->Read(&m_unk0x00, sizeof(m_unk0x00))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_unk0x00, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_unk0x00 != 0) {
@@ -149,7 +149,7 @@ LegoResult LegoAnimScene::Read(LegoStorage* p_storage)
 		}
 	}
 
-	if ((result = p_storage->Read(&m_unk0x08, sizeof(m_unk0x08))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_unk0x08, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_unk0x08 != 0) {
@@ -161,7 +161,7 @@ LegoResult LegoAnimScene::Read(LegoStorage* p_storage)
 		}
 	}
 
-	if ((result = p_storage->Read(&m_unk0x10, sizeof(m_unk0x10))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_unk0x10, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_unk0x10 != 0) {
@@ -295,7 +295,7 @@ LegoResult LegoAnimKey::Read(LegoStorage* p_storage)
 	LegoResult result;
 	LegoS32 timeAndFlags;
 
-	if ((result = p_storage->Read(&timeAndFlags, sizeof(timeAndFlags))) != SUCCESS) {
+	if ((result = p_storage->Read(&timeAndFlags, sizeof(LegoS32))) != SUCCESS) {
 		return result;
 	}
 
@@ -311,7 +311,7 @@ LegoResult LegoAnimKey::Write(LegoStorage* p_storage)
 	LegoResult result;
 	LegoS32 timeAndFlags = (LegoS32) m_time | (m_flags << 24);
 
-	if ((result = p_storage->Write(&timeAndFlags, sizeof(timeAndFlags))) != SUCCESS) {
+	if ((result = p_storage->Write(&timeAndFlags, sizeof(LegoS32))) != SUCCESS) {
 		return result;
 	}
 
@@ -335,20 +335,20 @@ LegoResult LegoTranslationKey::Read(LegoStorage* p_storage)
 		return result;
 	}
 
-	if ((result = p_storage->Read(&m_x, sizeof(m_x))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_x, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Read(&m_y, sizeof(m_y))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_y, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Read(&m_z, sizeof(m_z))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_z, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
 	if (m_x > 1e-05F || m_x < -1e-05F || m_y > 1e-05F || m_y < -1e-05F || m_z > 1e-05F || m_z < -1e-05F) {
-		m_flags |= c_bit1;
+		m_flags |= c_active;
 	}
 
 	return SUCCESS;
@@ -364,15 +364,15 @@ LegoResult LegoTranslationKey::Write(LegoStorage* p_storage)
 		return result;
 	}
 
-	if ((result = p_storage->Write(&m_x, sizeof(m_x))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_x, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Write(&m_y, sizeof(m_y))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_y, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Write(&m_z, sizeof(m_z))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_z, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
@@ -398,24 +398,24 @@ LegoResult LegoRotationKey::Read(LegoStorage* p_storage)
 		return result;
 	}
 
-	if ((result = p_storage->Read(&m_angle, sizeof(m_angle))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_angle, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Read(&m_x, sizeof(m_x))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_x, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Read(&m_y, sizeof(m_y))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_y, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Read(&m_z, sizeof(m_z))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_z, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
 	if (m_angle != 1.0F) {
-		m_flags |= c_bit1;
+		m_flags |= c_active;
 	}
 
 	return SUCCESS;
@@ -435,15 +435,15 @@ LegoResult LegoRotationKey::Write(LegoStorage* p_storage)
 		return result;
 	}
 
-	if ((result = p_storage->Write(&m_x, sizeof(m_x))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_x, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Write(&m_y, sizeof(m_y))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_y, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Write(&m_z, sizeof(m_z))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_z, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
@@ -467,20 +467,20 @@ LegoResult LegoScaleKey::Read(LegoStorage* p_storage)
 		return result;
 	}
 
-	if ((result = p_storage->Read(&m_x, sizeof(m_x))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_x, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Read(&m_y, sizeof(m_y))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_y, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Read(&m_z, sizeof(m_z))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_z, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
 	if (m_x > 1.00001 || m_x < 0.99999 || m_y > 1.00001 || m_y < 0.99999 || m_z > 1.00001 || m_z < 0.99999) {
-		m_flags |= c_bit1;
+		m_flags |= c_active;
 	}
 
 	return SUCCESS;
@@ -496,15 +496,15 @@ LegoResult LegoScaleKey::Write(LegoStorage* p_storage)
 		return result;
 	}
 
-	if ((result = p_storage->Write(&m_x, sizeof(m_x))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_x, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Write(&m_y, sizeof(m_y))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_y, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
-	if ((result = p_storage->Write(&m_z, sizeof(m_z))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_z, sizeof(LegoFloat))) != SUCCESS) {
 		return result;
 	}
 
@@ -522,7 +522,7 @@ LegoAnimNodeData::LegoAnimNodeData()
 
 	m_name = NULL;
 	m_translationKeys = NULL;
-	m_unk0x20 = 0;
+	m_roiIndex = 0;
 	m_rotationKeys = NULL;
 	m_unk0x22 = 0;
 	m_scaleKeys = NULL;
@@ -560,7 +560,7 @@ LegoResult LegoAnimNodeData::Read(LegoStorage* p_storage)
 	LegoResult result;
 
 	LegoU32 length;
-	if ((result = p_storage->Read(&length, sizeof(length))) != SUCCESS) {
+	if ((result = p_storage->Read(&length, sizeof(LegoU32))) != SUCCESS) {
 		return result;
 	}
 
@@ -578,7 +578,7 @@ LegoResult LegoAnimNodeData::Read(LegoStorage* p_storage)
 
 	LegoU32 i;
 
-	if ((result = p_storage->Read(&m_numTranslationKeys, sizeof(m_numTranslationKeys))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_numTranslationKeys, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_translationKeys) {
@@ -594,7 +594,7 @@ LegoResult LegoAnimNodeData::Read(LegoStorage* p_storage)
 		}
 	}
 
-	if ((result = p_storage->Read(&m_numRotationKeys, sizeof(m_numRotationKeys))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_numRotationKeys, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_rotationKeys) {
@@ -610,7 +610,7 @@ LegoResult LegoAnimNodeData::Read(LegoStorage* p_storage)
 		}
 	}
 
-	if ((result = p_storage->Read(&m_numScaleKeys, sizeof(m_numScaleKeys))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_numScaleKeys, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_scaleKeys) {
@@ -626,7 +626,7 @@ LegoResult LegoAnimNodeData::Read(LegoStorage* p_storage)
 		}
 	}
 
-	if ((result = p_storage->Read(&m_numMorphKeys, sizeof(m_numMorphKeys))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_numMorphKeys, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_morphKeys) {
@@ -665,7 +665,7 @@ LegoResult LegoAnimNodeData::Write(LegoStorage* p_storage)
 		return result;
 	}
 
-	if ((result = p_storage->Write(&m_numTranslationKeys, sizeof(m_numTranslationKeys))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_numTranslationKeys, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_numTranslationKeys != 0) {
@@ -676,7 +676,7 @@ LegoResult LegoAnimNodeData::Write(LegoStorage* p_storage)
 		}
 	}
 
-	if ((result = p_storage->Write(&m_numRotationKeys, sizeof(m_numRotationKeys))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_numRotationKeys, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_numRotationKeys != 0) {
@@ -687,7 +687,7 @@ LegoResult LegoAnimNodeData::Write(LegoStorage* p_storage)
 		}
 	}
 
-	if ((result = p_storage->Write(&m_numScaleKeys, sizeof(m_numScaleKeys))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_numScaleKeys, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_numScaleKeys != 0) {
@@ -698,7 +698,7 @@ LegoResult LegoAnimNodeData::Write(LegoStorage* p_storage)
 		}
 	}
 
-	if ((result = p_storage->Write(&m_numMorphKeys, sizeof(m_numMorphKeys))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_numMorphKeys, sizeof(LegoU16))) != SUCCESS) {
 		return result;
 	}
 	if (m_numMorphKeys != 0) {
@@ -725,6 +725,7 @@ void LegoAnimNodeData::SetName(LegoChar* p_name)
 }
 
 // FUNCTION: LEGO1 0x100a03c0
+// FUNCTION: BETA10 0x1017f254
 LegoResult LegoAnimNodeData::CreateLocalTransform(LegoFloat p_time, Matrix4& p_matrix)
 {
 	LegoU32 index;
@@ -785,7 +786,7 @@ inline void LegoAnimNodeData::GetTranslation(
 	case 0:
 		return;
 	case 1:
-		if (!p_translationKeys[i].TestBit1()) {
+		if (!p_translationKeys[i].IsActive()) {
 			return;
 		}
 
@@ -794,7 +795,7 @@ inline void LegoAnimNodeData::GetTranslation(
 		z = p_translationKeys[i].GetZ();
 		break;
 	case 2:
-		if (!p_translationKeys[i].TestBit1() && !p_translationKeys[i + 1].TestBit1()) {
+		if (!p_translationKeys[i].IsActive() && !p_translationKeys[i + 1].IsActive()) {
 			return;
 		}
 
@@ -841,7 +842,7 @@ inline void LegoAnimNodeData::GetTranslation(
 	case 0:
 		return;
 	case 1:
-		if (p_rotationKeys[i].TestBit1()) {
+		if (p_rotationKeys[i].IsActive()) {
 			p_matrix.FromQuaternion(Mx4DPointFloat(
 				p_rotationKeys[i].GetX(),
 				p_rotationKeys[i].GetY(),
@@ -854,19 +855,19 @@ inline void LegoAnimNodeData::GetTranslation(
 		Mx4DPointFloat a;
 		MxQuaternionTransformer b;
 
-		if (p_rotationKeys[i].TestBit1() || p_rotationKeys[i + 1].TestBit1()) {
+		if (p_rotationKeys[i].IsActive() || p_rotationKeys[i + 1].IsActive()) {
 			a[0] = p_rotationKeys[i].GetX();
 			a[1] = p_rotationKeys[i].GetY();
 			a[2] = p_rotationKeys[i].GetZ();
 			a[3] = p_rotationKeys[i].GetAngle();
 
-			if (p_rotationKeys[i + 1].TestBit3()) {
+			if (p_rotationKeys[i + 1].ShouldSkipInterpolation()) {
 				p_matrix.FromQuaternion(a);
 				return;
 			}
 
 			Mx4DPointFloat c;
-			if (p_rotationKeys[i + 1].TestBit2()) {
+			if (p_rotationKeys[i + 1].ShouldNegateRotation()) {
 				c[0] = -p_rotationKeys[i + 1].GetX();
 				c[1] = -p_rotationKeys[i + 1].GetY();
 				c[2] = -p_rotationKeys[i + 1].GetZ();
@@ -920,7 +921,7 @@ inline void LegoAnimNodeData::GetScale(
 }
 
 // FUNCTION: LEGO1 0x100a0990
-LegoBool LegoAnimNodeData::FUN_100a0990(LegoFloat p_time)
+LegoBool LegoAnimNodeData::GetVisibility(LegoFloat p_time)
 {
 	LegoU32 i, n;
 	LegoU32 index = GetMorphIndex();
@@ -935,7 +936,7 @@ LegoBool LegoAnimNodeData::FUN_100a0990(LegoFloat p_time)
 		break;
 	case 1:
 	case 2:
-		result = m_morphKeys[i].GetUnknown0x08();
+		result = m_morphKeys[i].IsVisible();
 		break;
 	}
 
@@ -1040,7 +1041,7 @@ LegoResult LegoAnim::Read(LegoStorage* p_storage, LegoS32 p_parseScene)
 	LegoResult result = FAILURE;
 	LegoU32 length, i;
 
-	if (p_storage->Read(&length, sizeof(length)) != SUCCESS) {
+	if (p_storage->Read(&length, sizeof(LegoU32)) != SUCCESS) {
 		goto done;
 	}
 
@@ -1049,7 +1050,7 @@ LegoResult LegoAnim::Read(LegoStorage* p_storage, LegoS32 p_parseScene)
 
 	for (i = 0; i < length; i++) {
 		LegoU32 length;
-		if (p_storage->Read(&length, sizeof(length)) != SUCCESS) {
+		if (p_storage->Read(&length, sizeof(LegoU32)) != SUCCESS) {
 			goto done;
 		}
 
@@ -1062,7 +1063,7 @@ LegoResult LegoAnim::Read(LegoStorage* p_storage, LegoS32 p_parseScene)
 
 			m_modelList[i].m_name[length] = '\0';
 
-			if (p_storage->Read(&m_modelList[i].m_unk0x04, sizeof(m_modelList[i].m_unk0x04)) != SUCCESS) {
+			if (p_storage->Read(&m_modelList[i].m_type, sizeof(LegoU32)) != SUCCESS) {
 				goto done;
 			}
 		}
@@ -1070,7 +1071,7 @@ LegoResult LegoAnim::Read(LegoStorage* p_storage, LegoS32 p_parseScene)
 		m_numActors++;
 	}
 
-	if ((result = p_storage->Read(&m_duration, sizeof(m_duration))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_duration, sizeof(LegoS32))) != SUCCESS) {
 		goto done;
 	}
 
@@ -1123,7 +1124,7 @@ LegoResult LegoAnim::Write(LegoStorage* p_storage)
 				goto done;
 			}
 
-			if (p_storage->Write(&m_modelList[i].m_unk0x04, sizeof(m_modelList[i].m_unk0x04)) != SUCCESS) {
+			if (p_storage->Write(&m_modelList[i].m_type, sizeof(m_modelList[i].m_type)) != SUCCESS) {
 				goto done;
 			}
 		}
@@ -1158,10 +1159,10 @@ const LegoChar* LegoAnim::GetActorName(LegoU32 p_index)
 
 // FUNCTION: LEGO1 0x100a0f40
 // FUNCTION: BETA10 0x1018023c
-undefined4 LegoAnim::GetActorUnknown0x04(LegoU32 p_index)
+LegoU32 LegoAnim::GetActorType(LegoU32 p_index)
 {
 	if (p_index < m_numActors) {
-		return m_modelList[p_index].m_unk0x04;
+		return m_modelList[p_index].m_type;
 	}
 
 	return 0;
@@ -1171,7 +1172,7 @@ undefined4 LegoAnim::GetActorUnknown0x04(LegoU32 p_index)
 // FUNCTION: BETA10 0x1018027c
 LegoMorphKey::LegoMorphKey()
 {
-	m_unk0x08 = 0;
+	m_visible = FALSE;
 }
 
 // FUNCTION: LEGO1 0x100a0f70
@@ -1183,7 +1184,7 @@ LegoResult LegoMorphKey::Read(LegoStorage* p_storage)
 		return result;
 	}
 
-	if ((result = p_storage->Read(&m_unk0x08, sizeof(m_unk0x08))) != SUCCESS) {
+	if ((result = p_storage->Read(&m_visible, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
 
@@ -1200,7 +1201,7 @@ LegoResult LegoMorphKey::Write(LegoStorage* p_storage)
 		return result;
 	}
 
-	if ((result = p_storage->Write(&m_unk0x08, sizeof(m_unk0x08))) != SUCCESS) {
+	if ((result = p_storage->Write(&m_visible, sizeof(LegoU8))) != SUCCESS) {
 		return result;
 	}
 

@@ -27,7 +27,7 @@ LegoMeterPresenter::LegoMeterPresenter()
 // FUNCTION: BETA10 0x1009764a
 LegoMeterPresenter::~LegoMeterPresenter()
 {
-	delete m_meterPixels;
+	delete[] m_meterPixels;
 }
 
 // FUNCTION: LEGO1 0x10043800

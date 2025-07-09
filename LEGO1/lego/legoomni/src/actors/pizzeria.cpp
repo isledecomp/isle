@@ -69,7 +69,7 @@ void Pizzeria::CreateState()
 // FUNCTION: BETA10 0x100efc91
 MxLong Pizzeria::HandleClick()
 {
-	if (FUN_1003ef60() && m_pizzaMissionState->m_unk0x0c == 0) {
+	if (CanExit() && m_pizzaMissionState->m_unk0x0c == 0) {
 		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
 			if (!UserActor()->IsA("SkateBoard")) {
 				((IslePathActor*) UserActor())->Exit();
@@ -89,18 +89,18 @@ MxLong Pizzeria::HandleClick()
 // FUNCTION: BETA10 0x100efd14
 PizzeriaState::PizzeriaState()
 {
-	m_unk0x08[0] = Playlist((MxU32*) g_pepperActions, sizeOfArray(g_pepperActions), Playlist::e_once);
-	m_unk0x08[1] = Playlist((MxU32*) g_mamaActions, sizeOfArray(g_mamaActions), Playlist::e_once);
-	m_unk0x08[2] = Playlist((MxU32*) g_papaActions, sizeOfArray(g_papaActions), Playlist::e_once);
-	m_unk0x08[3] = Playlist((MxU32*) g_nickActions, sizeOfArray(g_nickActions), Playlist::e_once);
-	m_unk0x08[4] = Playlist((MxU32*) g_lauraActions, sizeOfArray(g_lauraActions), Playlist::e_once);
-	memset(m_unk0x44, -1, sizeof(m_unk0x44));
+	m_playerPlaylists[0] = Playlist((MxU32*) g_pepperActions, sizeOfArray(g_pepperActions), Playlist::e_once);
+	m_playerPlaylists[1] = Playlist((MxU32*) g_mamaActions, sizeOfArray(g_mamaActions), Playlist::e_once);
+	m_playerPlaylists[2] = Playlist((MxU32*) g_papaActions, sizeOfArray(g_papaActions), Playlist::e_once);
+	m_playerPlaylists[3] = Playlist((MxU32*) g_nickActions, sizeOfArray(g_nickActions), Playlist::e_once);
+	m_playerPlaylists[4] = Playlist((MxU32*) g_lauraActions, sizeOfArray(g_lauraActions), Playlist::e_once);
+	memset(m_states, -1, sizeof(m_states));
 }
 
 // FUNCTION: LEGO1 0x10017d50
-MxS16 PizzeriaState::FUN_10017d50()
+MxS16 PizzeriaState::GetActorState()
 {
-	return m_unk0x44[GameState()->GetActorId() - 1];
+	return m_states[GameState()->GetActorId() - 1];
 }
 
 // FUNCTION: LEGO1 0x10017d70
@@ -109,11 +109,11 @@ MxU32 PizzeriaState::NextAction()
 {
 	MxU8 actorId = GameState()->GetActorId();
 
-	if (m_unk0x44[actorId - 1] < 2) {
-		m_unk0x44[actorId - 1]++;
+	if (m_states[actorId - 1] < 2) {
+		m_states[actorId - 1]++;
 	}
 
-	return m_unk0x08[actorId - 1].Next();
+	return m_playerPlaylists[actorId - 1].Next();
 }
 
 // FUNCTION: LEGO1 0x10017da0
@@ -124,12 +124,12 @@ MxResult PizzeriaState::Serialize(LegoStorage* p_storage)
 
 	if (p_storage->IsReadMode()) {
 		for (MxS16 i = 0; i < 5; i++) {
-			p_storage->ReadS16(m_unk0x08[i].m_nextIndex);
+			p_storage->ReadS16(m_playerPlaylists[i].m_nextIndex);
 		}
 	}
 	else {
 		for (MxS16 i = 0; i < 5; i++) {
-			p_storage->WriteS16(m_unk0x08[i].m_nextIndex);
+			p_storage->WriteS16(m_playerPlaylists[i].m_nextIndex);
 		}
 	}
 

@@ -25,7 +25,7 @@ float g_minLODThreshold = 0.00097656297;
 int g_maxLODLevels = 6;
 
 // GLOBAL: LEGO1 0x1010105c
-float g_unk0x1010105c = 0.000125F;
+float g_viewDistance = 0.000125F;
 
 // GLOBAL: LEGO1 0x10101060
 float g_elapsedSeconds = 0;
@@ -65,19 +65,19 @@ unsigned int ViewManager::IsBoundingBoxInFrustum(const BoundingBox& p_bounding_b
 {
 	const Vector3* box[] = {&p_bounding_box.Min(), &p_bounding_box.Max()};
 
-	float und[8][3];
+	float box_corners[8][3];
 	int i, j, k;
 
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 3; j++) {
-			und[i][j] = box[g_boundingBoxCornerMap[i][j]]->operator[](j);
+			box_corners[i][j] = box[g_boundingBoxCornerMap[i][j]]->operator[](j);
 		}
 	}
 
 	for (i = 0; i < 6; i++) {
 		for (k = 0; k < 8; k++) {
-			if (frustum_planes[i][0] * und[k][0] + frustum_planes[i][2] * und[k][2] + frustum_planes[i][1] * und[k][1] +
-					frustum_planes[i][3] >=
+			if (frustum_planes[i][0] * box_corners[k][0] + frustum_planes[i][2] * box_corners[k][2] +
+					frustum_planes[i][1] * box_corners[k][1] + frustum_planes[i][3] >=
 				0.0f) {
 				break;
 			}
@@ -98,7 +98,7 @@ void ViewManager::Remove(ViewROI* p_roi)
 		if (*it == p_roi) {
 			rois.erase(it);
 
-			if (p_roi->GetUnknown0xe0() >= 0) {
+			if (p_roi->GetLodLevel() >= 0) {
 				RemoveROIDetailFromScene(p_roi);
 			}
 
@@ -106,7 +106,7 @@ void ViewManager::Remove(ViewROI* p_roi)
 
 			if (comp != NULL) {
 				for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
-					if (((ViewROI*) *it)->GetUnknown0xe0() >= 0) {
+					if (((ViewROI*) *it)->GetLodLevel() >= 0) {
 						RemoveROIDetailFromScene((ViewROI*) *it);
 					}
 				}
@@ -128,11 +128,11 @@ void ViewManager::RemoveAll(ViewROI* p_roi)
 		rois.erase(rois.begin(), rois.end());
 	}
 	else {
-		if (p_roi->GetUnknown0xe0() >= 0) {
+		if (p_roi->GetLodLevel() >= 0) {
 			RemoveROIDetailFromScene(p_roi);
 		}
 
-		p_roi->SetUnknown0xe0(-1);
+		p_roi->SetLodLevel(ViewROI::c_lodLevelUnset);
 		const CompoundObject* comp = p_roi->GetComp();
 
 		if (comp != NULL) {
@@ -146,15 +146,15 @@ void ViewManager::RemoveAll(ViewROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x100a65b0
-void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_und)
+void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 {
-	if (p_roi->GetLODCount() <= p_und) {
-		p_und = p_roi->GetLODCount() - 1;
+	if (p_roi->GetLODCount() <= p_lodLevel) {
+		p_lodLevel = p_roi->GetLODCount() - 1;
 	}
 
-	int unk0xe0 = p_roi->GetUnknown0xe0();
+	int lodLevel = p_roi->GetLodLevel();
 
-	if (unk0xe0 == p_und) {
+	if (lodLevel == p_lodLevel) {
 		return;
 	}
 
@@ -162,16 +162,16 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_und)
 	Tgl::MeshBuilder* meshBuilder;
 	ViewLOD* lod;
 
-	if (unk0xe0 < 0) {
-		lod = (ViewLOD*) p_roi->GetLOD(p_und);
+	if (lodLevel < 0) {
+		lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
 
-		if (lod->GetUnknown0x08() & ViewLOD::c_bit4) {
+		if (lod->GetFlags() & ViewLOD::c_hasMesh) {
 			scene->Add((Tgl::MeshBuilder*) group);
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
 		}
 	}
 	else {
-		lod = (ViewLOD*) p_roi->GetLOD(unk0xe0);
+		lod = (ViewLOD*) p_roi->GetLOD(lodLevel);
 
 		if (lod != NULL) {
 			meshBuilder = lod->GetMeshBuilder();
@@ -181,27 +181,27 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_und)
 			}
 		}
 
-		lod = (ViewLOD*) p_roi->GetLOD(p_und);
+		lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
 	}
 
-	if (lod->GetUnknown0x08() & ViewLOD::c_bit4) {
+	if (lod->GetFlags() & ViewLOD::c_hasMesh) {
 		meshBuilder = lod->GetMeshBuilder();
 
 		if (meshBuilder != NULL) {
 			group->Add(meshBuilder);
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
-			p_roi->SetUnknown0xe0(p_und);
+			p_roi->SetLodLevel(p_lodLevel);
 			return;
 		}
 	}
 
-	p_roi->SetUnknown0xe0(-1);
+	p_roi->SetLodLevel(ViewROI::c_lodLevelUnset);
 }
 
 // FUNCTION: LEGO1 0x100a66a0
 void ViewManager::RemoveROIDetailFromScene(ViewROI* p_roi)
 {
-	const ViewLOD* lod = (const ViewLOD*) p_roi->GetLOD(p_roi->GetUnknown0xe0());
+	const ViewLOD* lod = (const ViewLOD*) p_roi->GetLOD(p_roi->GetLodLevel());
 
 	if (lod != NULL) {
 		const Tgl::MeshBuilder* meshBuilder = NULL;
@@ -216,58 +216,61 @@ void ViewManager::RemoveROIDetailFromScene(ViewROI* p_roi)
 		scene->Remove(roiGeometry);
 	}
 
-	p_roi->SetUnknown0xe0(-1);
+	p_roi->SetLodLevel(ViewROI::c_lodLevelUnset);
 }
 
 // FUNCTION: LEGO1 0x100a66f0
-inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_roi, int p_und)
+// FUNCTION: BETA10 0x1017297f
+inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lodLevel)
 {
-	if (!p_roi->GetVisibility() && p_und != -2) {
-		ManageVisibilityAndDetailRecursively(p_roi, -2);
+	assert(p_from);
+
+	if (!p_from->GetVisibility() && p_lodLevel != ViewROI::c_lodLevelInvisible) {
+		ManageVisibilityAndDetailRecursively(p_from, ViewROI::c_lodLevelInvisible);
 	}
 	else {
-		const CompoundObject* comp = p_roi->GetComp();
+		const CompoundObject* comp = p_from->GetComp();
 
-		if (p_und == -1) {
-			if (p_roi->GetWorldBoundingSphere().Radius() > 0.001F) {
-				float und = ProjectedSize(p_roi->GetWorldBoundingSphere());
+		if (p_lodLevel == ViewROI::c_lodLevelUnset) {
+			if (p_from->GetWorldBoundingSphere().Radius() > 0.001F) {
+				float projectedSize = ProjectedSize(p_from->GetWorldBoundingSphere());
 
-				if (und < seconds_allowed * g_unk0x1010105c) {
-					if (p_roi->GetUnknown0xe0() == -2) {
-						return;
+				if (projectedSize < seconds_allowed * g_viewDistance) {
+					if (p_from->GetLodLevel() != ViewROI::c_lodLevelInvisible) {
+						ManageVisibilityAndDetailRecursively(p_from, ViewROI::c_lodLevelInvisible);
 					}
 
-					ManageVisibilityAndDetailRecursively(p_roi, -2);
 					return;
 				}
-
-				p_und = CalculateLODLevel(und, RealtimeView::GetUserMaxLodPower() * seconds_allowed, p_roi);
+				else {
+					p_lodLevel =
+						CalculateLODLevel(projectedSize, RealtimeView::GetUserMaxLodPower() * seconds_allowed, p_from);
+				}
 			}
 		}
 
-		if (p_und == -2) {
-			if (p_roi->GetUnknown0xe0() >= 0) {
-				RemoveROIDetailFromScene(p_roi);
-				p_roi->SetUnknown0xe0(-2);
+		if (p_lodLevel == ViewROI::c_lodLevelInvisible) {
+			if (p_from->GetLodLevel() >= 0) {
+				RemoveROIDetailFromScene(p_from);
+				p_from->SetLodLevel(ViewROI::c_lodLevelInvisible);
 			}
 
 			if (comp != NULL) {
-				for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
-					ManageVisibilityAndDetailRecursively((ViewROI*) *it, p_und);
+				for (CompoundObject::const_iterator it = comp->begin(); it != comp->end(); it++) {
+					ManageVisibilityAndDetailRecursively((ViewROI*) *it, p_lodLevel);
 				}
 			}
 		}
 		else if (comp == NULL) {
-			if (p_roi->GetLODs() != NULL && p_roi->GetLODCount() > 0) {
-				UpdateROIDetailBasedOnLOD(p_roi, p_und);
-				return;
+			if (p_from->GetLODs() != NULL && p_from->GetLODCount() > 0) {
+				UpdateROIDetailBasedOnLOD(p_from, p_lodLevel);
 			}
 		}
 		else {
-			p_roi->SetUnknown0xe0(-1);
+			p_from->SetLodLevel(ViewROI::c_lodLevelUnset);
 
-			for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
-				ManageVisibilityAndDetailRecursively((ViewROI*) *it, p_und);
+			for (CompoundObject::const_iterator it = comp->begin(); it != comp->end(); it++) {
+				ManageVisibilityAndDetailRecursively((ViewROI*) *it, p_lodLevel);
 			}
 		}
 	}
@@ -290,7 +293,7 @@ void ViewManager::Update(float p_previousRenderTime, float)
 	}
 
 	for (CompoundObject::iterator it = rois.begin(); it != rois.end(); it++) {
-		ManageVisibilityAndDetailRecursively((ViewROI*) *it, -1);
+		ManageVisibilityAndDetailRecursively((ViewROI*) *it, ViewROI::c_lodLevelUnset);
 	}
 
 	stopWatch.Stop();
@@ -306,7 +309,7 @@ inline int ViewManager::CalculateFrustumTransformations()
 	}
 	else {
 		float fVar7 = tan(view_angle / 2.0F);
-		view_area_at_one = view_angle * view_angle * 4.0F;
+		view_area_at_one = fVar7 * fVar7 * 4.0F;
 
 		float fVar1 = front * fVar7;
 		float fVar2 = (width / height) * fVar1;
@@ -350,53 +353,63 @@ inline int ViewManager::CalculateFrustumTransformations()
 	}
 }
 
-inline int ViewManager::CalculateLODLevel(float p_und1, float p_und2, ViewROI* p_roi)
+// FUNCTION: BETA10 0x10172be5
+inline int ViewManager::CalculateLODLevel(float p_maximumScale, float p_initialScale, ViewROI* from)
 {
-	int result;
-	float i;
+	int lodLevel;
 
-	if (IsROIVisibleAtLOD(p_roi) != 0) {
-		if (p_und1 < g_minLODThreshold) {
+	assert(from);
+
+	if (GetFirstLODIndex(from) != 0) {
+		if (p_maximumScale < g_minLODThreshold) {
 			return 0;
 		}
-
-		result = 1;
+		else {
+			lodLevel = 1;
+		}
 	}
 	else {
-		result = 0;
+		lodLevel = 0;
 	}
 
-	for (i = p_und2; result < g_maxLODLevels && p_und1 >= i; i *= g_LODScaleFactor) {
-		result++;
+	for (float i = p_initialScale; lodLevel < g_maxLODLevels; lodLevel++) {
+		if (i >= p_maximumScale) {
+			break;
+		}
+
+		i *= g_LODScaleFactor;
 	}
 
-	return result;
+	return lodLevel;
 }
 
-inline int ViewManager::IsROIVisibleAtLOD(ViewROI* p_roi)
+// FUNCTION: BETA10 0x10172cb0
+inline int ViewManager::GetFirstLODIndex(ViewROI* p_roi)
 {
 	const LODListBase* lods = p_roi->GetLODs();
 
 	if (lods != NULL && lods->Size() > 0) {
-		if (((ViewLOD*) p_roi->GetLOD(0))->GetUnknown0x08Test8()) {
+		if (((ViewLOD*) p_roi->GetLOD(0))->IsExtraLOD()) {
 			return 1;
 		}
-
-		return 0;
+		else {
+			return 0;
+		}
 	}
 
 	const CompoundObject* comp = p_roi->GetComp();
 
 	if (comp != NULL) {
-		for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
+		for (CompoundObject::const_iterator it = comp->begin(); it != comp->end(); it++) {
 			const LODListBase* lods = ((ViewROI*) *it)->GetLODs();
 
 			if (lods != NULL && lods->Size() > 0) {
-				if (((ViewLOD*) ((ViewROI*) *it)->GetLOD(0))->GetUnknown0x08Test8()) {
+				if (((ViewLOD*) ((ViewROI*) *it)->GetLOD(0))->IsExtraLOD()) {
 					return 1;
 				}
-
-				return 0;
+				else {
+					return 0;
+				}
 			}
 		}
 	}
@@ -480,7 +493,7 @@ float ViewManager::ProjectedSize(const BoundingSphere& p_bounding_sphere)
 	// is then the ratio of the area of that projected circle to the view surface area
 	// at Z == 1.0.
 	//
-	float sphere_projected_area = 3.14159265359 * (p_bounding_sphere.Radius() * p_bounding_sphere.Radius());
+	float sphere_projected_area = 3.14159265359 * p_bounding_sphere.Radius() * p_bounding_sphere.Radius();
 	float square_dist_to_sphere = DISTSQRD3(p_bounding_sphere.Center(), pov[3]);
 	return sphere_projected_area / view_area_at_one / square_dist_to_sphere;
 }

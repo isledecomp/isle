@@ -32,7 +32,7 @@ DECOMP_SIZE_ASSERT(LegoCacheSoundList, 0x18)
 DECOMP_SIZE_ASSERT(LegoCacheSoundListCursor, 0x10)
 
 // FUNCTION: LEGO1 0x1001ca40
-LegoWorld::LegoWorld() : m_list0x68(TRUE)
+LegoWorld::LegoWorld() : m_pathControllerList(TRUE)
 {
 	m_startupTicks = e_four;
 	m_cameraController = NULL;
@@ -81,7 +81,7 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 		}
 
 		SetCurrentWorld(this);
-		ControlManager()->FUN_10028df0(&m_controlPresenters);
+		ControlManager()->SetPresenterList(&m_controlPresenters);
 	}
 
 	SetIsWorldActive(TRUE);
@@ -96,11 +96,11 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 	m_destroyed = TRUE;
 
 	if (CurrentWorld() == this) {
-		ControlManager()->FUN_10028df0(NULL);
+		ControlManager()->SetPresenterList(NULL);
 		SetCurrentWorld(NULL);
 	}
 
-	m_list0x68.DeleteAll();
+	m_pathControllerList.DeleteAll();
 
 	if (m_cameraController) {
 		delete m_cameraController;
@@ -120,12 +120,12 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 
 				animPresenter->DecrementUnknown0xd4();
 				if (animPresenter->GetUnknown0xd4() == 0) {
-					FUN_100b7220(action, MxDSAction::c_world, FALSE);
+					ApplyMask(action, MxDSAction::c_world, FALSE);
 					presenter->EndAction();
 				}
 			}
 			else {
-				FUN_100b7220(action, MxDSAction::c_world, FALSE);
+				ApplyMask(action, MxDSAction::c_world, FALSE);
 				presenter->EndAction();
 			}
 		}
@@ -141,7 +141,7 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 			MxDSAction* action = presenter->GetAction();
 
 			if (action) {
-				FUN_100b7220(action, MxDSAction::c_world, FALSE);
+				ApplyMask(action, MxDSAction::c_world, FALSE);
 				presenter->EndAction();
 			}
 		}
@@ -157,7 +157,7 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 
 		MxDSAction* action = presenter->GetAction();
 		if (action) {
-			FUN_100b7220(action, MxDSAction::c_world, FALSE);
+			ApplyMask(action, MxDSAction::c_world, FALSE);
 			presenter->EndAction();
 		}
 	}
@@ -273,7 +273,7 @@ MxResult LegoWorld::PlaceActor(
 	float p_destScale
 )
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_pathControllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -288,7 +288,7 @@ MxResult LegoWorld::PlaceActor(
 // FUNCTION: LEGO1 0x1001fa70
 MxResult LegoWorld::PlaceActor(LegoPathActor* p_actor)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_pathControllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -308,7 +308,7 @@ MxResult LegoWorld::PlaceActor(
 	Vector3& p_direction
 )
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_pathControllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -324,7 +324,7 @@ MxResult LegoWorld::PlaceActor(
 // FUNCTION: BETA10 0x100da4bf
 void LegoWorld::RemoveActor(LegoPathActor* p_actor)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_pathControllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -337,7 +337,7 @@ void LegoWorld::RemoveActor(LegoPathActor* p_actor)
 // FUNCTION: BETA10 0x100da560
 MxBool LegoWorld::ActorExists(LegoPathActor* p_actor)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_pathControllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -353,7 +353,7 @@ MxBool LegoWorld::ActorExists(LegoPathActor* p_actor)
 // FUNCTION: BETA10 0x100da621
 void LegoWorld::FUN_1001fda0(LegoAnimPresenter* p_presenter)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_pathControllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -365,11 +365,11 @@ void LegoWorld::FUN_1001fda0(LegoAnimPresenter* p_presenter)
 // FUNCTION: BETA10 0x100da6b5
 void LegoWorld::FUN_1001fe90(LegoAnimPresenter* p_presenter)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_pathControllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
-		controller->FUN_10046930(p_presenter);
+		controller->RemovePresenterFromBoundaries(p_presenter);
 	}
 }
 
@@ -377,14 +377,14 @@ void LegoWorld::FUN_1001fe90(LegoAnimPresenter* p_presenter)
 void LegoWorld::AddPath(LegoPathController* p_controller)
 {
 	p_controller->FUN_10046bb0(this);
-	m_list0x68.Append(p_controller);
+	m_pathControllerList.Append(p_controller);
 }
 
 // FUNCTION: LEGO1 0x10020020
 // FUNCTION: BETA10 0x100da77c
 LegoPathBoundary* LegoWorld::FindPathBoundary(const char* p_name)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_pathControllerList);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
@@ -401,7 +401,7 @@ LegoPathBoundary* LegoWorld::FindPathBoundary(const char* p_name)
 // FUNCTION: LEGO1 0x10020120
 MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_boundaries, MxS32& p_numL)
 {
-	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathControllerListCursor cursor(&m_pathControllerList);
 	LegoPathController* controller;
 
 	cursor.Next(controller);
@@ -424,7 +424,7 @@ void LegoWorld::Add(MxCore* p_object)
 #ifndef BETA10
 	if (p_object->IsA("LegoAnimPresenter")) {
 		if (!strcmpi(((LegoAnimPresenter*) p_object)->GetAction()->GetObjectName(), "ConfigAnimation")) {
-			FUN_1003e050((LegoAnimPresenter*) p_object);
+			CalculateViewFromAnimation((LegoAnimPresenter*) p_object);
 			((LegoAnimPresenter*) p_object)
 				->GetAction()
 				->SetDuration(((LegoAnimPresenter*) p_object)->GetAnimation()->GetDuration());
@@ -722,7 +722,7 @@ void LegoWorld::Enable(MxBool p_enable)
 		}
 
 		SetCurrentWorld(this);
-		ControlManager()->FUN_10028df0(&m_controlPresenters);
+		ControlManager()->SetPresenterList(&m_controlPresenters);
 		InputManager()->SetCamera(m_cameraController);
 
 		if (m_cameraController) {
@@ -779,7 +779,7 @@ void LegoWorld::Enable(MxBool p_enable)
 		}
 
 		if (CurrentWorld() && CurrentWorld() == this) {
-			ControlManager()->FUN_10028df0(NULL);
+			ControlManager()->SetPresenterList(NULL);
 			Lego()->SetCurrentWorld(NULL);
 		}
 
@@ -795,7 +795,7 @@ void LegoWorld::Enable(MxBool p_enable)
 			}
 		}
 
-		LegoPathControllerListCursor pathControllerCursor(&m_list0x68);
+		LegoPathControllerListCursor pathControllerCursor(&m_pathControllerList);
 
 		while (pathControllerCursor.Next(controller)) {
 			controller->Enable(FALSE);

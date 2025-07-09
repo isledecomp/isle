@@ -27,3 +27,5 @@ tools/ghidra_scripts/import.log
 # These entries are kept for now since that convention has not always been around.
 ISLE.EXE
 LEGO1.DLL
+
+.DS_Store

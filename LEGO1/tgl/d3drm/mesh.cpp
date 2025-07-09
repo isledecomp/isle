@@ -16,39 +16,60 @@ void* MeshImpl::ImplementationDataPtr()
 	return reinterpret_cast<void*>(&m_data);
 }
 
-// FUNCTION: LEGO1 0x100a3ee0
-Result MeshImpl::SetColor(float r, float g, float b, float a)
+// FUNCTION: BETA10 0x10170590
+inline Result MeshSetColor(MeshImpl::MeshData* pMesh, float r, float g, float b, float a)
 {
-	// The first instruction makes no sense here:
-	// cmp dword ptr [esp + 0x10], 0
-	// This compares a, which we know is a float because it immediately
-	// gets passed into D3DRMCreateColorRGBA, but does the comparison
-	// as though it's an int??
-	if (*reinterpret_cast<int*>(&a) > 0) {
+	if (a > 0) {
 		D3DCOLOR color = D3DRMCreateColorRGBA(r, g, b, a);
-		return ResultVal(m_data->groupMesh->SetGroupColor(m_data->groupIndex, color));
+		return ResultVal(pMesh->groupMesh->SetGroupColor(pMesh->groupIndex, color));
 	}
 	else {
-		return ResultVal(m_data->groupMesh->SetGroupColorRGB(m_data->groupIndex, r, g, b));
+		return ResultVal(pMesh->groupMesh->SetGroupColorRGB(pMesh->groupIndex, r, g, b));
 	}
+}
+
+// FUNCTION: LEGO1 0x100a3ee0
+// FUNCTION: BETA10 0x10170520
+Result MeshImpl::SetColor(float r, float g, float b, float a)
+{
+	assert(m_data);
+
+	return MeshSetColor(m_data, r, g, b, a);
+}
+
+// FUNCTION: BETA10 0x10171320
+inline Result MeshSetTexture(MeshImpl::MeshData* pMesh, IDirect3DRMTexture* pD3DTexture)
+{
+	Result result = ResultVal(pMesh->groupMesh->SetGroupTexture(pMesh->groupIndex, pD3DTexture));
+	return result;
+}
+
+// FUNCTION: BETA10 0x10171260
+inline Result MeshImpl::SetTexture(const TextureImpl* pTexture)
+{
+	assert(m_data);
+	assert(!pTexture || pTexture->ImplementationData());
+
+	IDirect3DRMTexture* pD3DTexture = pTexture ? pTexture->ImplementationData() : NULL;
+	return MeshSetTexture(m_data, pD3DTexture);
 }
 
 // FUNCTION: LEGO1 0x100a3f50
+// FUNCTION: BETA10 0x10170630
 Result MeshImpl::SetTexture(const Texture* pTexture)
 {
-	IDirect3DRMTexture* texture = pTexture ? static_cast<const TextureImpl*>(pTexture)->ImplementationData() : NULL;
-	return ResultVal(m_data->groupMesh->SetGroupTexture(m_data->groupIndex, texture));
+	assert(m_data);
+
+	return SetTexture(static_cast<const TextureImpl*>(pTexture));
 }
 
 // FUNCTION: LEGO1 0x100a3f80
+// FUNCTION: BETA10 0x10170690
 Result MeshImpl::SetTextureMappingMode(TextureMappingMode mode)
 {
-	if (mode == PerspectiveCorrect) {
-		return ResultVal(m_data->groupMesh->SetGroupMapping(m_data->groupIndex, D3DRMMAP_PERSPCORRECT));
-	}
-	else {
-		return ResultVal(m_data->groupMesh->SetGroupMapping(m_data->groupIndex, 0));
-	}
+	assert(m_data);
+
+	return MeshSetTextureMappingMode(m_data, mode);
 }
 
 // FUNCTION: BETA10 0x10170750
@@ -66,84 +87,173 @@ Result MeshImpl::SetShadingModel(ShadingModel model)
 	return MeshSetShadingModel(m_data, model);
 }
 
-// FUNCTION: LEGO1 0x100a4030
-Mesh* MeshImpl::DeepClone(MeshBuilder* pMeshBuilder)
+// FUNCTION: BETA10 0x101714e0
+inline Result MeshDeepClone(MeshImpl::MeshData* pSource, MeshImpl::MeshData*& rpTarget, IDirect3DRMMesh* pMesh)
 {
-	// Create group
-	MeshImpl* newMesh = new MeshImpl();
-	MeshData* data = new MeshData();
-	newMesh->m_data = data;
+	rpTarget = new MeshImpl::MeshData();
+	rpTarget->groupMesh = pMesh;
 
 	// Query information from old group
 	DWORD dataSize;
 	unsigned int vcount, fcount, vperface;
-	m_data->groupMesh->GetGroup(m_data->groupIndex, &vcount, &fcount, &vperface, &dataSize, NULL);
+
+	Result result =
+		ResultVal(pSource->groupMesh->GetGroup(pSource->groupIndex, &vcount, &fcount, &vperface, &dataSize, NULL));
+	assert(Succeeded(result));
+
 	unsigned int* faceBuffer = new unsigned int[dataSize];
-	m_data->groupMesh->GetGroup(m_data->groupIndex, &vcount, &fcount, &vperface, &dataSize, faceBuffer);
+	result =
+		ResultVal(pSource->groupMesh->GetGroup(pSource->groupIndex, &vcount, &fcount, &vperface, &dataSize, faceBuffer)
+		);
+	assert(Succeeded(result));
+
 	// We expect vertex to be sized 0x24, checked at start of file.
 	D3DRMVERTEX* vertexBuffer = new D3DRMVERTEX[vcount];
-	m_data->groupMesh->GetVertices(m_data->groupIndex, 0, vcount, vertexBuffer);
+	result = ResultVal(pSource->groupMesh->GetVertices(pSource->groupIndex, 0, vcount, vertexBuffer));
+	assert(Succeeded(result));
+
 	LPDIRECT3DRMTEXTURE textureRef;
-	m_data->groupMesh->GetGroupTexture(m_data->groupIndex, &textureRef);
-	D3DRMMAPPING mapping = m_data->groupMesh->GetGroupMapping(m_data->groupIndex);
-	D3DRMRENDERQUALITY quality = m_data->groupMesh->GetGroupQuality(m_data->groupIndex);
-	D3DCOLOR color = m_data->groupMesh->GetGroupColor(m_data->groupIndex);
+	result = ResultVal(pSource->groupMesh->GetGroupTexture(pSource->groupIndex, &textureRef));
+	assert(Succeeded(result));
+
+	D3DRMMAPPING mapping = pSource->groupMesh->GetGroupMapping(pSource->groupIndex);
+	D3DRMRENDERQUALITY quality = pSource->groupMesh->GetGroupQuality(pSource->groupIndex);
+	D3DCOLOR color = pSource->groupMesh->GetGroupColor(pSource->groupIndex);
 
 	// Push information to new group
-	MeshBuilderImpl* target = static_cast<MeshBuilderImpl*>(pMeshBuilder);
 	D3DRMGROUPINDEX index;
-	target->ImplementationData()->AddGroup(vcount, fcount, vperface, faceBuffer, &index);
-	newMesh->m_data->groupIndex = index;
-	target->ImplementationData()->SetVertices(index, 0, vcount, vertexBuffer);
-	target->ImplementationData()->SetGroupTexture(index, textureRef);
-	target->ImplementationData()->SetGroupMapping(index, mapping);
-	target->ImplementationData()->SetGroupQuality(index, quality);
-	Result result = ResultVal(target->ImplementationData()->SetGroupColor(index, color));
+	result = ResultVal(pMesh->AddGroup(vcount, fcount, 3, faceBuffer, &index));
+	assert(Succeeded(result));
+
+	rpTarget->groupIndex = index;
+	result = ResultVal(pMesh->SetVertices(index, 0, vcount, vertexBuffer));
+	assert(Succeeded(result));
+
+	result = ResultVal(pMesh->SetGroupTexture(index, textureRef));
+	assert(Succeeded(result));
+
+	result = ResultVal(pMesh->SetGroupMapping(index, mapping));
+	assert(Succeeded(result));
+
+	result = ResultVal(pMesh->SetGroupQuality(index, quality));
+	assert(Succeeded(result));
+
+	result = ResultVal(pMesh->SetGroupColor(index, color));
+	assert(Succeeded(result));
 
 	// Cleanup
-	delete[] faceBuffer;
-	delete[] vertexBuffer;
-	if (result == Error) {
-		delete newMesh;
-		newMesh = NULL;
+	if (faceBuffer) {
+		delete[] faceBuffer;
 	}
 
-	return newMesh;
+	if (vertexBuffer) {
+		delete[] vertexBuffer;
+	}
+
+	return result;
+}
+
+// FUNCTION: BETA10 0x10171360
+inline Mesh* MeshImpl::DeepClone(const MeshBuilderImpl& rMesh)
+{
+	assert(m_data);
+	assert(rMesh.ImplementationData());
+
+	MeshImpl* clone = new MeshImpl();
+	assert(!clone->ImplementationData());
+
+	if (!MeshDeepClone(m_data, clone->ImplementationData(), rMesh.ImplementationData())) {
+		delete clone;
+		clone = NULL;
+	}
+
+	return clone;
+}
+
+// FUNCTION: LEGO1 0x100a4030
+// FUNCTION: BETA10 0x101707a0
+Mesh* MeshImpl::DeepClone(MeshBuilder* pMesh)
+{
+	assert(m_data);
+	assert(pMesh);
+
+	return DeepClone(*static_cast<MeshBuilderImpl*>(pMesh));
+}
+
+inline Result MeshShallowClone(MeshImpl::MeshData* pSource, MeshImpl::MeshData*& rpTarget, IDirect3DRMMesh* pMesh)
+{
+	Result result = Error;
+	rpTarget = new MeshImpl::MeshData();
+
+	if (rpTarget) {
+		rpTarget->groupMesh = pMesh;
+		rpTarget->groupIndex = pSource->groupIndex;
+		result = Success;
+	}
+
+	return result;
+}
+
+inline Mesh* MeshImpl::ShallowClone(const MeshBuilderImpl& rMesh)
+{
+	assert(m_data);
+	assert(rMesh.ImplementationData());
+
+	MeshImpl* clone = new MeshImpl();
+	assert(!clone->ImplementationData());
+
+	if (!MeshShallowClone(m_data, clone->ImplementationData(), rMesh.ImplementationData())) {
+		delete clone;
+		clone = NULL;
+	}
+
+	return clone;
 }
 
 // FUNCTION: LEGO1 0x100a4240
 Mesh* MeshImpl::ShallowClone(MeshBuilder* pMeshBuilder)
 {
-	MeshImpl* newGroup = new MeshImpl();
-	MeshData* newData = new MeshData();
-	newGroup->m_data = newData;
-	if (newData) {
-		newData->groupIndex = m_data->groupIndex;
-		newData->groupMesh = static_cast<MeshBuilderImpl*>(pMeshBuilder)->ImplementationData();
+	assert(m_data);
+	assert(pMeshBuilder);
+
+	return ShallowClone(*static_cast<MeshBuilderImpl*>(pMeshBuilder));
+}
+
+// FUNCTION: BETA10 0x10171ac0
+inline Result MeshGetTexture(MeshImpl::MeshData* pMesh, IDirect3DRMTexture** pD3DTexture)
+{
+	return ResultVal(pMesh->groupMesh->GetGroupTexture(pMesh->groupIndex, pD3DTexture));
+}
+
+// FUNCTION: BETA10 0x10171980
+inline Result MeshImpl::GetTexture(TextureImpl** ppTexture)
+{
+	assert(m_data);
+	assert(ppTexture);
+
+	TextureImpl* pTextureImpl = new TextureImpl();
+	assert(pTextureImpl);
+
+	// TODO: This helps retail match, but it adds to the stack
+	IDirect3DRMTexture* tex;
+	Result result = MeshGetTexture(m_data, &tex);
+
+#ifndef BETA10
+	if (Succeeded(result)) {
+		result =
+			ResultVal(tex->QueryInterface(IID_IDirect3DRMTexture2, (LPVOID*) (&pTextureImpl->ImplementationData())));
 	}
-	else {
-		delete newGroup;
-		newGroup = NULL;
-	}
-	return newGroup;
+#endif
+
+	*ppTexture = pTextureImpl;
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100a4330
+// FUNCTION: BETA10 0x10170820
 Result MeshImpl::GetTexture(Texture*& rpTexture)
 {
-	IDirect3DRMTexture* texture;
-	TextureImpl* holder = new TextureImpl();
-	Result result = ResultVal(m_data->groupMesh->GetGroupTexture(m_data->groupIndex, &texture));
-	if (result) {
-		// Seems to actually call the first virtual method of holder here
-		// but that doesn't make any sense since it passes three arguments
-		// to the method (self + string constant? + an offset?).
+	assert(m_data);
 
-		// This line makes the start of the function match and is what I
-		// would expect to see there but it clearly isn't what's actually
-		// there.
-		holder->SetImplementation(texture);
-	}
-	rpTexture = holder;
-	return Success;
+	return GetTexture(reinterpret_cast<TextureImpl**>(&rpTexture));
 }

@@ -121,7 +121,7 @@ MxResult Isle::Create(MxDSAction& p_dsAction)
 		m_act1state = act1state;
 
 		EnableAnimations(TRUE);
-		GameState()->SetDirty(TRUE);
+		GameState()->m_isDirty = TRUE;
 	}
 
 	return result;
@@ -430,7 +430,7 @@ MxLong Isle::HandleControl(LegoControlManagerNotificationParam& p_param)
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case IsleScript::c_PoliDoor_Door_Ctl:
-			m_destLocation = LegoGameState::e_unk33;
+			m_destLocation = LegoGameState::e_policeExited;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case IsleScript::c_GaraDoor_LeftArrow_Ctl:
@@ -440,7 +440,7 @@ MxLong Isle::HandleControl(LegoControlManagerNotificationParam& p_param)
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case IsleScript::c_GaraDoor_Door_Ctl:
-			m_destLocation = LegoGameState::e_unk28;
+			m_destLocation = LegoGameState::e_garageExited;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		}
@@ -503,7 +503,7 @@ MxLong Isle::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 			break;
 		case 0x131:
 			if (m_act1state->m_unk0x018 != 10) {
-				AnimationManager()->FUN_10064740(FALSE);
+				AnimationManager()->FUN_10064740(NULL);
 			}
 			result = 1;
 			break;
@@ -712,7 +712,7 @@ void Isle::Enable(MxBool p_enable)
 			if (GameState()->m_currentArea == LegoGameState::e_pizzeriaExterior) {
 				AnimationManager()->FUN_10064740(NULL);
 			}
-			else if (GameState()->m_currentArea == LegoGameState::e_unk66) {
+			else if (GameState()->m_currentArea == LegoGameState::e_vehicleExited) {
 				Mx3DPointFloat position(UserActor()->GetROI()->GetWorldPosition());
 
 				Mx3DPointFloat sub(-21.375f, 0.0f, -41.75f);
@@ -810,7 +810,7 @@ void Isle::Enable(MxBool p_enable)
 			AnimationManager()->EnableCamAnims(FALSE);
 
 			g_isleFlags &= ~c_playMusic;
-			m_ambulance->FUN_10036e60();
+			m_ambulance->Init();
 			break;
 		case 11:
 			m_act1state->m_unk0x018 = 0;
@@ -820,7 +820,7 @@ void Isle::Enable(MxBool p_enable)
 					TRUE,
 					IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 				);
-			GameState()->m_currentArea = LegoGameState::e_unk66;
+			GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 			EnableAnimations(TRUE);
 			m_jukebox->StartAction();
 			break;
@@ -863,21 +863,21 @@ void Isle::FUN_10032620()
 	VideoManager()->Get3DManager()->SetFrustrum(90.0, 0.1, 250.0);
 
 	switch (GameState()->m_currentArea) {
-	case LegoGameState::e_unk66: {
+	case LegoGameState::e_vehicleExited: {
 		MxMatrix mat(UserActor()->GetROI()->GetLocal2World());
 		LegoPathBoundary* boundary = UserActor()->GetBoundary();
 		((IslePathActor*) UserActor())->VTable0xec(mat, boundary, TRUE);
 		break;
 	}
-	case LegoGameState::e_unk4:
+	case LegoGameState::e_infocenterExited:
 	case LegoGameState::e_jetraceExterior:
-	case LegoGameState::e_unk17:
+	case LegoGameState::e_jetskibuildExited:
 	case LegoGameState::e_carraceExterior:
-	case LegoGameState::e_unk20:
+	case LegoGameState::e_racecarbuildExited:
 	case LegoGameState::e_pizzeriaExterior:
 	case LegoGameState::e_garageExterior:
 	case LegoGameState::e_hospitalExterior:
-	case LegoGameState::e_unk31:
+	case LegoGameState::e_hospitalExited:
 	case LegoGameState::e_policeExterior:
 		((IslePathActor*) UserActor())
 			->SpawnPlayer(
@@ -885,7 +885,7 @@ void Isle::FUN_10032620()
 				TRUE,
 				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 			);
-		GameState()->m_currentArea = LegoGameState::e_unk66;
+		GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 		break;
 	}
 }
@@ -955,7 +955,7 @@ MxLong Isle::HandleTransitionEnd()
 		VariableTable()->SetVariable("VISIBILITY", "Hide Gas");
 		FUN_10032d30(IsleScript::c_GaraDoor_Background_Bitmap, JukeboxScript::c_JBMusic2, "LCAMZG1,90", FALSE);
 		break;
-	case LegoGameState::e_unk28:
+	case LegoGameState::e_garageExited:
 		GameState()->SwitchArea(m_destLocation);
 		GameState()->StopArea(LegoGameState::e_previousArea);
 		m_destLocation = LegoGameState::e_undefined;
@@ -965,7 +965,7 @@ MxLong Isle::HandleTransitionEnd()
 		SetAppCursor(e_cursorArrow);
 		SetIsWorldActive(TRUE);
 		break;
-	case LegoGameState::e_unk33:
+	case LegoGameState::e_policeExited:
 		GameState()->SwitchArea(m_destLocation);
 		GameState()->StopArea(LegoGameState::e_previousArea);
 		m_destLocation = LegoGameState::e_undefined;
@@ -1209,7 +1209,7 @@ MxBool Isle::Escape()
 	case 10:
 		if (UserActor() != NULL && !UserActor()->IsA("Ambulance")) {
 			m_ambulance->StopActions();
-			m_ambulance->FUN_10037250();
+			m_ambulance->Reset();
 		}
 		break;
 	}
@@ -1250,7 +1250,7 @@ void Isle::FUN_10033350()
 	if (m_act1state->m_unk0x018 == 10) {
 		if (UserActor() != NULL && !UserActor()->IsA("Ambulance")) {
 			m_ambulance->StopActions();
-			m_ambulance->FUN_10037250();
+			m_ambulance->Reset();
 		}
 	}
 
@@ -1653,19 +1653,19 @@ void Act1State::PlaceActors()
 		m_helicopter = NULL;
 
 		if (m_helicopterWindshield != NULL) {
-			FUN_1003f930(m_helicopterWindshield);
+			LoadFromNamedTexture(m_helicopterWindshield);
 			delete m_helicopterWindshield;
 			m_helicopterWindshield = NULL;
 		}
 
 		if (m_helicopterJetLeft != NULL) {
-			FUN_1003f930(m_helicopterJetLeft);
+			LoadFromNamedTexture(m_helicopterJetLeft);
 			delete m_helicopterJetLeft;
 			m_helicopterJetLeft = NULL;
 		}
 
 		if (m_helicopterJetRight != NULL) {
-			FUN_1003f930(m_helicopterJetRight);
+			LoadFromNamedTexture(m_helicopterJetRight);
 			delete m_helicopterJetRight;
 			m_helicopterJetRight = NULL;
 		}
@@ -1689,13 +1689,13 @@ void Act1State::PlaceActors()
 		m_jetski = NULL;
 
 		if (m_jetskiFront != NULL) {
-			FUN_1003f930(m_jetskiFront);
+			LoadFromNamedTexture(m_jetskiFront);
 			delete m_jetskiFront;
 			m_jetskiFront = NULL;
 		}
 
 		if (m_jetskiWindshield != NULL) {
-			FUN_1003f930(m_jetskiWindshield);
+			LoadFromNamedTexture(m_jetskiWindshield);
 			delete m_jetskiWindshield;
 			m_jetskiWindshield = NULL;
 		}
@@ -1723,7 +1723,7 @@ void Act1State::PlaceActors()
 		m_dunebuggy = NULL;
 
 		if (m_dunebuggyFront != NULL) {
-			FUN_1003f930(m_dunebuggyFront);
+			LoadFromNamedTexture(m_dunebuggyFront);
 			delete m_dunebuggyFront;
 			m_dunebuggyFront = NULL;
 		}
@@ -1751,19 +1751,19 @@ void Act1State::PlaceActors()
 		m_racecar = NULL;
 
 		if (m_racecarFront != NULL) {
-			FUN_1003f930(m_racecarFront);
+			LoadFromNamedTexture(m_racecarFront);
 			delete m_racecarFront;
 			m_racecarFront = NULL;
 		}
 
 		if (m_racecarBack != NULL) {
-			FUN_1003f930(m_racecarBack);
+			LoadFromNamedTexture(m_racecarBack);
 			delete m_racecarBack;
 			m_racecarBack = NULL;
 		}
 
 		if (m_racecarTail != NULL) {
-			FUN_1003f930(m_racecarTail);
+			LoadFromNamedTexture(m_racecarTail);
 			delete m_racecarTail;
 			m_racecarTail = NULL;
 		}

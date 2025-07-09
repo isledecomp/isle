@@ -119,20 +119,20 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 
 	if (deviceNum < 0) {
 		deviceEnumerate.FUN_1009d210();
-		deviceNum = deviceEnumerate.FUN_1009d0d0();
+		deviceNum = deviceEnumerate.GetBestDevice();
 		deviceNum = deviceEnumerate.GetDevice(deviceNum, driver, device);
 	}
 
 	m_direct3d->SetDevice(deviceEnumerate, driver, device);
 
 	if (!driver->m_ddCaps.dwCaps2 && driver->m_ddCaps.dwSVBRops[7] != 2) {
-		p_videoParam.Flags().SetF2bit0(TRUE);
+		p_videoParam.Flags().SetLacksLightSupport(TRUE);
 	}
 	else {
-		p_videoParam.Flags().SetF2bit0(FALSE);
+		p_videoParam.Flags().SetLacksLightSupport(FALSE);
 	}
 
-	ViewROI::SetUnk101013d8(p_videoParam.Flags().GetF2bit0() == FALSE);
+	ViewROI::SetLightSupport(p_videoParam.Flags().GetLacksLightSupport() == FALSE);
 
 	if (!m_direct3d->Create(
 			hwnd,
@@ -200,7 +200,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	pLODList->Release();
 
 	CalcLocalTransform(posVec, dirVec, upVec, outMatrix);
-	m_viewROI->WrappedSetLocalTransform(outMatrix);
+	m_viewROI->WrappedSetLocal2WorldWithWorldDataUpdate(outMatrix);
 
 	m_3dManager->Add(*m_viewROI);
 	m_3dManager->SetPointOfView(*m_viewROI);
@@ -398,7 +398,7 @@ void LegoVideoManager::DrawFPS()
 	char zeros[8] = "0000.00";
 
 	if (m_unk0x528 == NULL) {
-		m_arialFont = CreateFontA(
+		m_arialFont = CreateFont(
 			12,
 			0,
 			0,
@@ -417,7 +417,7 @@ void LegoVideoManager::DrawFPS()
 
 		HDC dc = GetDC(NULL);
 		SelectObject(dc, m_arialFont);
-		GetTextExtentPointA(dc, zeros, strlen(zeros), &m_fpsSize);
+		GetTextExtentPoint(dc, zeros, strlen(zeros), &m_fpsSize);
 		ReleaseDC(NULL, dc);
 
 		m_unk0x528 = m_displaySurface->FUN_100bc8b0(m_fpsSize.cx, m_fpsSize.cy);
@@ -493,11 +493,11 @@ void LegoVideoManager::DrawFPS()
 			SetTextColor(dc, RGB(255, 255, 0));
 			SetBkColor(dc, RGB(0, 0, 0));
 			SetBkMode(dc, OPAQUE);
-			GetTextExtentPoint32A(dc, buffer, nb, &m_fpsSize);
+			GetTextExtentPoint32(dc, buffer, nb, &m_fpsSize);
 
 			RECT rect;
 			SetRect(&rect, 0, 0, m_fpsSize.cx, m_fpsSize.cy);
-			ExtTextOutA(dc, 0, 0, ETO_OPAQUE, &rect, buffer, nb, NULL);
+			ExtTextOut(dc, 0, 0, ETO_OPAQUE, &rect, buffer, nb, NULL);
 			m_unk0x528->ReleaseDC(dc);
 			m_unk0x550 = 1.f;
 		}
@@ -639,7 +639,7 @@ void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 	colorStrucure.peRed = (p_red * 255.0f);
 	colorStrucure.peGreen = (p_green * 255.0f);
 	colorStrucure.peBlue = (p_blue * 255.0f);
-	colorStrucure.peFlags = -124;
+	colorStrucure.peFlags = D3DPAL_RESERVED | PC_NOCOLLAPSE;
 	m_videoParam.GetPalette()->SetSkyColor(&colorStrucure);
 	m_videoParam.GetPalette()->SetOverrideSkyColor(TRUE);
 	m_3dManager->GetLego3DView()->GetView()->SetBackgroundColor(p_red, p_green, p_blue);

@@ -47,8 +47,8 @@ void LegoAnimPresenter::Init()
 	m_anim = NULL;
 	m_roiMap = NULL;
 	m_roiMapSize = 0;
-	m_unk0x74 = NULL;
-	m_unk0x70 = NULL;
+	m_managedActors = NULL;
+	m_sceneROIs = NULL;
 	m_unk0x78 = NULL;
 	m_flags = 0;
 	m_unk0xa8.Clear();
@@ -81,13 +81,13 @@ void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 			delete[] m_roiMap;
 		}
 
-		if (m_unk0x70 != NULL) {
-			delete m_unk0x70;
+		if (m_sceneROIs != NULL) {
+			delete m_sceneROIs;
 		}
 
-		if (m_unk0x74 != NULL) {
+		if (m_managedActors != NULL) {
 			FUN_1006aa60();
-			delete m_unk0x74;
+			delete m_managedActors;
 		}
 
 		if (m_unk0x78 != NULL) {
@@ -142,25 +142,25 @@ MxResult LegoAnimPresenter::CreateAnim(MxStreamChunk* p_chunk)
 	LegoS32 parseScene = 0;
 	MxS32 val3;
 
-	if (storage.Read(&magicSig, sizeof(magicSig)) != SUCCESS || magicSig != 0x11) {
+	if (storage.Read(&magicSig, sizeof(MxS32)) != SUCCESS || magicSig != 0x11) {
 		goto done;
 	}
-	if (storage.Read(&m_unk0xa4, sizeof(m_unk0xa4)) != SUCCESS) {
+	if (storage.Read(&m_unk0xa4, sizeof(float)) != SUCCESS) {
 		goto done;
 	}
-	if (storage.Read(&m_unk0xa8[0], sizeof(m_unk0xa8[0])) != SUCCESS) {
+	if (storage.Read(&m_unk0xa8[0], sizeof(float)) != SUCCESS) {
 		goto done;
 	}
-	if (storage.Read(&m_unk0xa8[1], sizeof(m_unk0xa8[1])) != SUCCESS) {
+	if (storage.Read(&m_unk0xa8[1], sizeof(float)) != SUCCESS) {
 		goto done;
 	}
-	if (storage.Read(&m_unk0xa8[2], sizeof(m_unk0xa8[2])) != SUCCESS) {
+	if (storage.Read(&m_unk0xa8[2], sizeof(float)) != SUCCESS) {
 		goto done;
 	}
-	if (storage.Read(&parseScene, sizeof(parseScene)) != SUCCESS) {
+	if (storage.Read(&parseScene, sizeof(LegoS32)) != SUCCESS) {
 		goto done;
 	}
-	if (storage.Read(&val3, sizeof(val3)) != SUCCESS) {
+	if (storage.Read(&val3, sizeof(MxS32)) != SUCCESS) {
 		goto done;
 	}
 
@@ -214,17 +214,17 @@ LegoChar* LegoAnimPresenter::FUN_10069150(const LegoChar* p_und1)
 // FUNCTION: LEGO1 0x100692b0
 void LegoAnimPresenter::FUN_100692b0()
 {
-	m_unk0x74 = new LegoROIList();
+	m_managedActors = new LegoROIList();
 
-	if (m_unk0x74) {
+	if (m_managedActors) {
 		LegoU32 numActors = m_anim->GetNumActors();
 
 		for (LegoU32 i = 0; i < numActors; i++) {
-			LegoChar* str = FUN_100697c0(m_anim->GetActorName(i), NULL);
-			undefined4 unk0x04 = m_anim->GetActorUnknown0x04(i);
+			LegoChar* str = GetVariableOrIdentity(m_anim->GetActorName(i), NULL);
+			LegoU32 actorType = m_anim->GetActorType(i);
 			LegoROI* roi = NULL;
 
-			if (unk0x04 == 2) {
+			if (actorType == LegoAnimActorEntry::e_actorType2) {
 				LegoChar* src;
 				if (str[0] == '*') {
 					src = str + 1;
@@ -239,7 +239,7 @@ void LegoAnimPresenter::FUN_100692b0()
 					roi->SetVisibility(FALSE);
 				}
 			}
-			else if (unk0x04 == 4) {
+			else if (actorType == LegoAnimActorEntry::e_actorType4) {
 				LegoChar* baseName = new LegoChar[strlen(str)];
 				strcpy(baseName, str + 1);
 				strlwr(baseName);
@@ -254,7 +254,7 @@ void LegoAnimPresenter::FUN_100692b0()
 				delete[] baseName;
 				delete[] und;
 			}
-			else if (unk0x04 == 3) {
+			else if (actorType == LegoAnimActorEntry::e_actorType3) {
 				LegoChar* lodName = new LegoChar[strlen(str)];
 				strcpy(lodName, str + 1);
 
@@ -280,7 +280,7 @@ void LegoAnimPresenter::FUN_100692b0()
 			}
 
 			if (roi != NULL) {
-				m_unk0x74->Append(roi);
+				m_managedActors->Append(roi);
 			}
 
 			delete[] str;
@@ -292,17 +292,17 @@ void LegoAnimPresenter::FUN_100692b0()
 // FUNCTION: BETA10 0x1004f359
 void LegoAnimPresenter::FUN_100695c0()
 {
-	m_unk0x70 = new LegoROIList();
+	m_sceneROIs = new LegoROIList();
 
-	if (m_unk0x70) {
+	if (m_sceneROIs) {
 		const CompoundObject& rois = VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->GetROIs();
 		LegoU32 numActors = m_anim->GetNumActors();
 
 		for (LegoU32 i = 0; i < numActors; i++) {
 			if (FUN_100698b0(rois, m_anim->GetActorName(i)) == FALSE) {
-				undefined4 unk0x04 = m_anim->GetActorUnknown0x04(i);
+				LegoU32 actorType = m_anim->GetActorType(i);
 
-				if (unk0x04 == 5 || unk0x04 == 6) {
+				if (actorType == LegoAnimActorEntry::e_actorType5 || actorType == LegoAnimActorEntry::e_actorType6) {
 					LegoChar lodName[256];
 					const LegoChar* actorName = m_anim->GetActorName(i);
 
@@ -324,23 +324,23 @@ void LegoAnimPresenter::FUN_100695c0()
 }
 
 // FUNCTION: LEGO1 0x100697c0
-LegoChar* LegoAnimPresenter::FUN_100697c0(const LegoChar* p_und1, const LegoChar* p_und2)
+LegoChar* LegoAnimPresenter::GetVariableOrIdentity(const LegoChar* p_varName, const LegoChar* p_prefix)
 {
-	const LegoChar* str = p_und1;
-	const char* var = VariableTable()->GetVariable(p_und1);
+	const LegoChar* str = p_varName;
+	const char* var = VariableTable()->GetVariable(p_varName);
 
 	if (*var) {
 		str = var;
 	}
 
-	LegoU32 len = strlen(str) + (p_und2 ? strlen(p_und2) : 0) + 2;
+	LegoU32 len = strlen(str) + (p_prefix ? strlen(p_prefix) : 0) + 2;
 	LegoChar* result = new LegoChar[len];
 
 	if (result != NULL) {
 		*result = '\0';
 
-		if (p_und2) {
-			strcpy(result, p_und2);
+		if (p_prefix) {
+			strcpy(result, p_prefix);
 			strcat(result, ":");
 		}
 
@@ -356,7 +356,7 @@ LegoBool LegoAnimPresenter::FUN_100698b0(const CompoundObject& p_rois, const Leg
 	LegoBool result = FALSE;
 
 	LegoChar* str;
-	if (*(str = FUN_100697c0(p_und2, NULL)) == '*') {
+	if (*(str = GetVariableOrIdentity(p_und2, NULL)) == '*') {
 		LegoChar* tmp = FUN_10069150(str);
 		delete[] str;
 		str = tmp;
@@ -369,7 +369,7 @@ LegoBool LegoAnimPresenter::FUN_100698b0(const CompoundObject& p_rois, const Leg
 
 			if (name != NULL) {
 				if (!strcmpi(name, str)) {
-					m_unk0x70->Append(roi);
+					m_sceneROIs->Append(roi);
 					result = TRUE;
 					break;
 				}
@@ -382,20 +382,20 @@ LegoBool LegoAnimPresenter::FUN_100698b0(const CompoundObject& p_rois, const Leg
 }
 
 // FUNCTION: LEGO1 0x100699e0
-LegoROI* LegoAnimPresenter::FUN_100699e0(const LegoChar* p_und)
+LegoROI* LegoAnimPresenter::FindROI(const LegoChar* p_name)
 {
-	LegoROIListCursor cursor(m_unk0x70);
+	LegoROIListCursor cursor(m_sceneROIs);
 	LegoROI* roi;
 
 	while (cursor.Next(roi)) {
-		LegoChar* und = FUN_100697c0(roi->GetName(), NULL);
+		LegoChar* nameOrVar = GetVariableOrIdentity(roi->GetName(), NULL);
 
-		if (und != NULL && !strcmpi(und, p_und)) {
-			delete[] und;
+		if (nameOrVar != NULL && !strcmpi(nameOrVar, p_name)) {
+			delete[] nameOrVar;
 			return roi;
 		}
 
-		delete[] und;
+		delete[] nameOrVar;
 	}
 
 	return NULL;
@@ -410,7 +410,7 @@ void LegoAnimPresenter::FUN_10069b10()
 		memset(m_unk0x8c, 0, m_unk0x94 * sizeof(*m_unk0x8c));
 	}
 
-	FUN_1006a3c0(anims, m_anim->GetRoot(), NULL);
+	UpdateStructMapAndROIIndex(anims, m_anim->GetRoot(), NULL);
 
 	if (m_roiMap != NULL) {
 		delete[] m_roiMap;
@@ -443,7 +443,7 @@ void LegoAnimPresenter::FUN_10069b10()
 }
 
 // FUNCTION: LEGO1 0x1006a3c0
-void LegoAnimPresenter::FUN_1006a3c0(LegoAnimStructMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi)
+void LegoAnimPresenter::UpdateStructMapAndROIIndex(LegoAnimStructMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi)
 {
 	LegoROI* roi = p_roi;
 	LegoChar* und = NULL;
@@ -456,27 +456,27 @@ void LegoAnimPresenter::FUN_1006a3c0(LegoAnimStructMap& p_map, LegoTreeNode* p_n
 			name = und2 = FUN_10069150(name);
 		}
 
-		und = FUN_100697c0(name, p_roi != NULL ? p_roi->GetName() : NULL);
+		und = GetVariableOrIdentity(name, p_roi != NULL ? p_roi->GetName() : NULL);
 
 		if (p_roi == NULL) {
-			roi = FUN_100699e0(und);
+			roi = FindROI(und);
 
 			if (roi != NULL) {
-				FUN_1006a4f0(p_map, data, und, roi);
+				UpdateStructMapAndROIIndexForNode(p_map, data, und, roi);
 			}
 			else {
-				data->SetUnknown0x20(0);
+				data->SetROIIndex(0);
 			}
 		}
 		else {
 			LegoROI* child = p_roi->FindChildROI(name, p_roi);
 
 			if (child != NULL) {
-				FUN_1006a4f0(p_map, data, und, child);
+				UpdateStructMapAndROIIndexForNode(p_map, data, und, child);
 			}
 			else {
-				if (FUN_100699e0(name) != NULL) {
-					FUN_1006a3c0(p_map, p_node, NULL);
+				if (FindROI(name) != NULL) {
+					UpdateStructMapAndROIIndex(p_map, p_node, NULL);
 					delete[] und;
 					delete[] und2;
 					return;
@@ -490,12 +490,12 @@ void LegoAnimPresenter::FUN_1006a3c0(LegoAnimStructMap& p_map, LegoTreeNode* p_n
 
 	MxS32 count = p_node->GetNumChildren();
 	for (MxS32 i = 0; i < count; i++) {
-		FUN_1006a3c0(p_map, p_node->GetChild(i), roi);
+		UpdateStructMapAndROIIndex(p_map, p_node->GetChild(i), roi);
 	}
 }
 
 // FUNCTION: LEGO1 0x1006a4f0
-void LegoAnimPresenter::FUN_1006a4f0(
+void LegoAnimPresenter::UpdateStructMapAndROIIndexForNode(
 	LegoAnimStructMap& p_map,
 	LegoAnimNodeData* p_data,
 	const LegoChar* p_und,
@@ -510,7 +510,7 @@ void LegoAnimPresenter::FUN_1006a4f0(
 		animStruct.m_index = p_map.size() + 1;
 		animStruct.m_roi = p_roi;
 
-		p_data->SetUnknown0x20(animStruct.m_index);
+		p_data->SetROIIndex(animStruct.m_index);
 
 		LegoChar* und = new LegoChar[strlen(p_und) + 1];
 		strcpy(und, p_und);
@@ -518,7 +518,7 @@ void LegoAnimPresenter::FUN_1006a4f0(
 		p_map[und] = animStruct;
 	}
 	else {
-		p_data->SetUnknown0x20((*it).second.m_index);
+		p_data->SetROIIndex((*it).second.m_index);
 	}
 }
 
@@ -526,7 +526,7 @@ void LegoAnimPresenter::FUN_1006a4f0(
 // FUNCTION: BETA10 0x1004feee
 void LegoAnimPresenter::FUN_1006aa60()
 {
-	LegoROIListCursor cursor(m_unk0x74);
+	LegoROIListCursor cursor(m_managedActors);
 	LegoROI* roi;
 
 	while (cursor.Next(roi)) {
@@ -542,10 +542,10 @@ void LegoAnimPresenter::FUN_1006aa60()
 void LegoAnimPresenter::FUN_1006ab70()
 {
 	if (m_unk0x96) {
-		AnimationManager()->FUN_10063270(m_unk0x74, this);
+		AnimationManager()->FUN_10063270(m_managedActors, this);
 	}
 	else {
-		AnimationManager()->FUN_10063780(m_unk0x74);
+		AnimationManager()->FUN_10063780(m_managedActors);
 	}
 }
 
@@ -565,10 +565,10 @@ MxBool LegoAnimPresenter::FUN_1006abb0(LegoTreeNode* p_node, LegoROI* p_roi)
 	MxS32 i, count;
 
 	if (name != NULL && *name != '-') {
-		und = FUN_100697c0(name, p_roi != NULL ? p_roi->GetName() : NULL);
+		und = GetVariableOrIdentity(name, p_roi != NULL ? p_roi->GetName() : NULL);
 
 		if (p_roi == NULL) {
-			roi = FUN_100699e0(und);
+			roi = FindROI(und);
 
 			if (roi == NULL) {
 				goto done;
@@ -578,7 +578,7 @@ MxBool LegoAnimPresenter::FUN_1006abb0(LegoTreeNode* p_node, LegoROI* p_roi)
 			LegoROI* child = p_roi->FindChildROI(name, p_roi);
 
 			if (child == NULL) {
-				if (FUN_100699e0(name) != NULL) {
+				if (FindROI(name) != NULL) {
 					if (FUN_1006abb0(p_node, NULL)) {
 						result = TRUE;
 					}
@@ -659,8 +659,8 @@ void LegoAnimPresenter::PutFrame()
 					dir *= dirsqr;
 					up *= upsqr;
 
-					m_unk0x8c[i]->FUN_100a58f0(mat);
-					m_unk0x8c[i]->VTable0x14();
+					m_unk0x8c[i]->SetLocal2World(mat);
+					m_unk0x8c[i]->WrappedUpdateWorldData();
 				}
 			}
 		}
@@ -689,7 +689,7 @@ MxResult LegoAnimPresenter::FUN_1006afc0(MxMatrix*& p_matrix, float p_und)
 		if (m_roiMap[i] != NULL) {
 			mat = p_matrix[i];
 			p_matrix[i] = m_roiMap[i]->GetLocal2World();
-			m_roiMap[i]->FUN_100a58f0(mat);
+			m_roiMap[i]->SetLocal2World(mat);
 		}
 	}
 
@@ -790,7 +790,7 @@ void LegoAnimPresenter::StartingTickle()
 	}
 
 	FUN_10069b10();
-	FUN_1006c8a0(TRUE);
+	SetDisabled(TRUE);
 
 	if (m_unk0x78 == NULL) {
 		if (fabs(m_action->GetDirection()[0]) >= 0.00000047683716F ||
@@ -815,7 +815,7 @@ void LegoAnimPresenter::StartingTickle()
 		m_compositePresenter->VTable0x60(this);
 	}
 	else {
-		m_action->SetUnknown90(Timer()->GetTime());
+		m_action->SetTimeStarted(Timer()->GetTime());
 	}
 
 	ProgressTickleState(e_streaming);
@@ -828,9 +828,9 @@ void LegoAnimPresenter::StartingTickle()
 	VTable0x8c();
 
 done:
-	if (m_unk0x70 != NULL) {
-		delete m_unk0x70;
-		m_unk0x70 = NULL;
+	if (m_sceneROIs != NULL) {
+		delete m_sceneROIs;
+		m_sceneROIs = NULL;
 	}
 }
 
@@ -893,7 +893,7 @@ void LegoAnimPresenter::FUN_1006b900(LegoAnim* p_anim, MxLong p_time, Matrix4* p
 		mat = *p_matrix;
 	}
 	else {
-		LegoROI* roi = m_roiMap[data->GetUnknown0x20()];
+		LegoROI* roi = m_roiMap[data->GetROIIndex()];
 
 		if (roi != NULL) {
 			mat = roi->GetLocal2World();
@@ -918,7 +918,7 @@ void LegoAnimPresenter::FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p
 		mat = *p_matrix;
 	}
 	else {
-		LegoROI* roi = m_roiMap[data->GetUnknown0x20()];
+		LegoROI* roi = m_roiMap[data->GetROIIndex()];
 
 		if (roi != NULL) {
 			mat = roi->GetLocal2World();
@@ -1090,7 +1090,7 @@ void LegoAnimPresenter::EndAction()
 		}
 	}
 
-	FUN_1006c8a0(FALSE);
+	SetDisabled(FALSE);
 	FUN_1006ab70();
 	VTable0x90();
 
@@ -1151,18 +1151,18 @@ void LegoAnimPresenter::VTable0x90()
 }
 
 // FUNCTION: LEGO1 0x1006c8a0
-void LegoAnimPresenter::FUN_1006c8a0(MxBool p_bool)
+void LegoAnimPresenter::SetDisabled(MxBool p_disabled)
 {
 	if (m_roiMapSize != 0 && m_roiMap != NULL) {
 		for (MxU32 i = 1; i <= m_roiMapSize; i++) {
 			LegoEntity* entity = m_roiMap[i]->GetEntity();
 
 			if (entity != NULL) {
-				if (p_bool) {
-					entity->SetUnknown0x10Flag(LegoEntity::c_altBit1);
+				if (p_disabled) {
+					entity->SetInteractionFlag(LegoEntity::c_disabled);
 				}
 				else {
-					entity->ClearUnknown0x10Flag(LegoEntity::c_altBit1);
+					entity->ClearInteractionFlag(LegoEntity::c_disabled);
 				}
 			}
 		}

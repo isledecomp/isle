@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM docker.io/library/debian:stable-slim
 
 # Gather dependencies
 RUN dpkg --add-architecture i386

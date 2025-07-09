@@ -1,5 +1,7 @@
 #include "impl.h"
 
+#include <assert.h>
+
 using namespace TglImpl;
 
 // FUNCTION: LEGO1 0x100a31d0
@@ -9,164 +11,293 @@ void* GroupImpl::ImplementationDataPtr()
 	return reinterpret_cast<void*>(&m_data);
 }
 
-// FUNCTION: LEGO1 0x100a31e0
-Result GroupImpl::SetTransformation(FloatMatrix4& matrix)
+// FUNCTION: BETA10 0x1016c340
+inline Result GroupSetTransformation(IDirect3DRMFrame2* pGroup, FloatMatrix4& matrix)
 {
 	D3DRMMATRIX4D helper;
 	D3DRMMATRIX4D* d3dMatrix = Translate(matrix, helper);
-	return ResultVal(m_data->AddTransform(D3DRMCOMBINE_REPLACE, *d3dMatrix));
+	return ResultVal(pGroup->AddTransform(D3DRMCOMBINE_REPLACE, *d3dMatrix));
+}
+
+// FUNCTION: LEGO1 0x100a31e0
+// FUNCTION: BETA10 0x1016a4d0
+Result GroupImpl::SetTransformation(FloatMatrix4& matrix)
+{
+	assert(m_data);
+
+	return GroupSetTransformation(m_data, matrix);
+}
+
+// FUNCTION: BETA10 0x1016c400
+inline Result GroupSetColor(IDirect3DRMFrame2* pGroup, float r, float g, float b, float a)
+{
+	if (a > 0) {
+		D3DCOLOR color = D3DRMCreateColorRGBA(r, g, b, a);
+		return ResultVal(pGroup->SetColor(color));
+	}
+	else {
+		return ResultVal(pGroup->SetColorRGB(r, g, b));
+	}
 }
 
 // FUNCTION: LEGO1 0x100a3240
+// FUNCTION: BETA10 0x1016a530
 Result GroupImpl::SetColor(float r, float g, float b, float a)
 {
-	// The first instruction makes no sense here:
-	// cmp dword ptr [esp + 0x10], 0
-	// This compares a, which we know is a float because it immediately
-	// gets passed into D3DRMCreateColorRGBA, but does the comparison
-	// as though it's an int??
-	if (*reinterpret_cast<int*>(&a) > 0) {
-		D3DCOLOR color = D3DRMCreateColorRGBA(r, g, b, a);
-		return ResultVal(m_data->SetColor(color));
-	}
-	else {
-		return ResultVal(m_data->SetColorRGB(r, a, b));
-	}
+	assert(m_data);
+
+	return GroupSetColor(m_data, r, g, b, a);
+}
+
+// FUNCTION: BETA10 0x1016c5a0
+inline Result GroupSetTexture(IDirect3DRMFrame2* pGroup, IDirect3DRMTexture* pD3DTexture)
+{
+	return ResultVal(pGroup->SetTexture(pD3DTexture));
+}
+
+// FUNCTION: BETA10 0x1016bcc0
+inline Result GroupImpl::SetTexture(const TextureImpl* pTexture)
+{
+	assert(m_data);
+	assert(!pTexture || pTexture->ImplementationData());
+
+	IDirect3DRMTexture* pD3DTexture = pTexture ? pTexture->ImplementationData() : NULL;
+	return GroupSetTexture(m_data, pD3DTexture);
 }
 
 // FUNCTION: LEGO1 0x100a32b0
+// FUNCTION: BETA10 0x1016a5a0
 Result GroupImpl::SetTexture(const Texture* pTexture)
 {
-	IDirect3DRMTexture* pD3DTexture = pTexture ? static_cast<const TextureImpl*>(pTexture)->ImplementationData() : NULL;
-	return ResultVal(m_data->SetTexture(pD3DTexture));
+	assert(m_data);
+
+	return SetTexture(static_cast<const TextureImpl*>(pTexture));
+}
+
+// FUNCTION: BETA10 0x1016c640
+inline Result GroupGetTexture(IDirect3DRMFrame2* pGroup, IDirect3DRMTexture** pD3DTexture)
+{
+	return ResultVal(pGroup->GetTexture(pD3DTexture));
+}
+
+// FUNCTION: BETA10 0x1016beb0
+inline Result GroupImpl::GetTexture(TextureImpl** ppTexture)
+{
+	assert(m_data);
+	assert(ppTexture);
+
+	TextureImpl* pTextureImpl = new TextureImpl();
+	assert(pTextureImpl);
+
+	// TODO: This helps retail match, but it adds to the stack
+	IDirect3DRMTexture* tex;
+	Result result = GroupGetTexture(m_data, &tex);
+
+#ifndef BETA10
+	if (Succeeded(result)) {
+		result =
+			ResultVal(tex->QueryInterface(IID_IDirect3DRMTexture2, (LPVOID*) (&pTextureImpl->ImplementationData())));
+	}
+#endif
+
+	*ppTexture = pTextureImpl;
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100a32e0
+// FUNCTION: BETA10 0x1016a600
 Result GroupImpl::GetTexture(Texture*& pTexture)
 {
-	IDirect3DRMTexture* pD3DTexture;
-	TextureImpl* holder = new TextureImpl();
-	Result result = ResultVal(m_data->GetTexture(&pD3DTexture));
-	if (result) {
-		// Seems to actually call the first virtual method of holder here
-		// but that doesn't make any sense since it passes three arguments
-		// to the method (self + string constant? + an offset?).
+	assert(m_data);
 
-		// This line makes the start of the function match and is what I
-		// would expect to see there but it clearly isn't what's actually
-		// there.
-		holder->SetImplementation(pD3DTexture);
-	}
-	pTexture = holder;
-	return Success;
+	return GetTexture(reinterpret_cast<TextureImpl**>(&pTexture));
+}
+
+// FUNCTION: BETA10 0x1016c500
+inline Result GroupSetMaterialMode(IDirect3DRMFrame2* pGroup, MaterialMode mode)
+{
+	D3DRMMATERIALMODE d3dMode = Translate(mode);
+	return ResultVal(pGroup->SetMaterialMode(d3dMode));
 }
 
 // FUNCTION: LEGO1 0x100a33c0
+// FUNCTION: BETA10 0x1016a660
 Result GroupImpl::SetMaterialMode(MaterialMode mode)
 {
-	D3DRMMATERIALMODE d3dMode;
-	switch (mode) {
-	case FromParent:
-		d3dMode = D3DRMMATERIAL_FROMPARENT;
-		break;
-	case FromFrame:
-		d3dMode = D3DRMMATERIAL_FROMFRAME;
-		break;
-	case FromMesh:
-		d3dMode = D3DRMMATERIAL_FROMMESH;
-		break;
-	}
-	return ResultVal(m_data->SetMaterialMode(d3dMode));
+	assert(m_data);
+
+	return GroupSetMaterialMode(m_data, mode);
+}
+
+// FUNCTION: BETA10 0x1016c670
+inline Result GroupAddGroup(IDirect3DRMFrame2* pGroup, const IDirect3DRMFrame* pChildGroup)
+{
+	return ResultVal(pGroup->AddVisual(const_cast<IDirect3DRMFrame*>(pChildGroup)));
+}
+
+// FUNCTION: BETA10 0x1016c090
+inline Result GroupImpl::Add(const GroupImpl& rGroup)
+{
+	assert(m_data);
+	assert(rGroup.ImplementationData());
+
+	return GroupAddGroup(m_data, rGroup.ImplementationData());
 }
 
 // FUNCTION: LEGO1 0x100a3410
+// FUNCTION: BETA10 0x1016a6c0
 Result GroupImpl::Add(const Group* pGroup)
 {
-	const GroupImpl* pGroupImpl = static_cast<const GroupImpl*>(pGroup);
-	return ResultVal(m_data->AddVisual(pGroupImpl->m_data));
+	assert(m_data);
+	assert(pGroup);
+
+	return Add(*static_cast<const GroupImpl*>(pGroup));
+}
+
+// FUNCTION: BETA10 0x1016c700
+inline Result GroupAddMeshBuilder(IDirect3DRMFrame2* pGroup, const IDirect3DRMMesh* pMesh)
+{
+	return ResultVal(pGroup->AddVisual(const_cast<IDirect3DRMMesh*>(pMesh)));
+}
+
+// FUNCTION: BETA10 0x1016bff0
+inline Result GroupImpl::Add(const MeshBuilderImpl& rMesh)
+{
+	assert(m_data);
+	assert(rMesh.ImplementationData());
+
+	return GroupAddMeshBuilder(m_data, rMesh.ImplementationData());
 }
 
 // FUNCTION: LEGO1 0x100a3430
+// FUNCTION: BETA10 0x1016a740
 Result GroupImpl::Add(const MeshBuilder* pMeshBuilder)
 {
-	const MeshBuilderImpl* pMeshBuilderImpl = static_cast<const MeshBuilderImpl*>(pMeshBuilder);
-	return ResultVal(m_data->AddVisual(pMeshBuilderImpl->ImplementationData()));
+	assert(m_data);
+	assert(pMeshBuilder);
+
+	return Add(*static_cast<const MeshBuilderImpl*>(pMeshBuilder));
+}
+
+// FUNCTION: BETA10 0x1016c7b0
+inline Result GroupRemoveMeshBuilder(IDirect3DRMFrame2* pGroup, const IDirect3DRMMesh* pMesh)
+{
+	return ResultVal(pGroup->DeleteVisual(const_cast<IDirect3DRMMesh*>(pMesh)));
+}
+
+// FUNCTION: BETA10 0x1016c130
+inline Result GroupImpl::Remove(const MeshBuilderImpl& rMesh)
+{
+	assert(m_data);
+	assert(rMesh.ImplementationData());
+
+	return GroupRemoveMeshBuilder(m_data, rMesh.ImplementationData());
 }
 
 // FUNCTION: LEGO1 0x100a3450
+// FUNCTION: BETA10 0x1016a7c0
 Result GroupImpl::Remove(const MeshBuilder* pMeshBuilder)
 {
-	const MeshBuilderImpl* pMeshBuilderImpl = static_cast<const MeshBuilderImpl*>(pMeshBuilder);
-	return ResultVal(m_data->DeleteVisual(pMeshBuilderImpl->ImplementationData()));
+	assert(m_data);
+	assert(pMeshBuilder);
+
+	return Remove(*static_cast<const MeshBuilderImpl*>(pMeshBuilder));
+}
+
+// FUNCTION: BETA10 0x1016c730
+inline Result GroupRemoveGroup(IDirect3DRMFrame2* pGroup, const IDirect3DRMFrame* pChildGroup)
+{
+	return ResultVal(pGroup->DeleteVisual(const_cast<IDirect3DRMFrame*>(pChildGroup)));
+}
+
+// FUNCTION: BETA10 0x1016c1d0
+inline Result GroupImpl::Remove(const GroupImpl& rGroup)
+{
+	assert(m_data);
+	assert(rGroup.ImplementationData());
+
+	return GroupRemoveGroup(m_data, rGroup.ImplementationData());
 }
 
 // FUNCTION: LEGO1 0x100a3480
+// FUNCTION: BETA10 0x1016a840
 Result GroupImpl::Remove(const Group* pGroup)
 {
-	const GroupImpl* pGroupImpl = static_cast<const GroupImpl*>(pGroup);
-	return ResultVal(m_data->DeleteVisual(pGroupImpl->m_data));
+	assert(m_data);
+	assert(pGroup);
+
+	return Remove(*static_cast<const GroupImpl*>(pGroup));
 }
 
-// FUNCTION: LEGO1 0x100a34b0
-Result GroupImpl::RemoveAll()
+// FUNCTION: BETA10 0x1016c850
+inline Result GroupRemoveAll(IDirect3DRMFrame2* pFrame)
 {
 	IDirect3DRMVisualArray* visuals;
-	IDirect3DRMFrame2* frame = m_data;
-	Result result = (Result) SUCCEEDED(frame->GetVisuals(&visuals));
+	int refCount;
 
-	if (result == Success) {
+	Result result = ResultVal(pFrame->GetVisuals(&visuals));
+	assert(Succeeded(result));
+
+	if (Succeeded(result)) {
 		for (int i = 0; i < (int) visuals->GetSize(); i++) {
 			IDirect3DRMVisual* visual;
 
-			result = (Result) SUCCEEDED(visuals->GetElement(i, &visual));
-			frame->DeleteVisual(visual);
-			visual->Release();
+			result = ResultVal(visuals->GetElement(i, &visual));
+			assert(Succeeded(result));
+
+			result = ResultVal(pFrame->DeleteVisual(visual));
+			assert(Succeeded(result));
+
+			refCount = visual->Release();
 		}
 
-		visuals->Release();
+		refCount = visuals->Release();
+		assert(refCount == 0);
 	}
 
 	return result;
 }
 
-// FUNCTION: LEGO1 0x100a3540
-Result GroupImpl::Bounds(D3DVECTOR* p_min, D3DVECTOR* p_max)
+// FUNCTION: LEGO1 0x100a34b0
+// FUNCTION: BETA10 0x1016a8c0
+Result GroupImpl::RemoveAll()
+{
+	assert(m_data);
+
+	return GroupRemoveAll(m_data);
+}
+
+// FUNCTION: BETA10 0x1016cb70
+inline Result GroupBounds(IDirect3DRMFrame2* pFrame, D3DVECTOR* p_min, D3DVECTOR* p_max)
 {
 	D3DRMBOX size;
-	IDirect3DRMFrame2* frame = m_data;
+	int refCount;
 
-	size.min.x = 88888.f;
-	size.min.y = 88888.f;
-	size.min.z = 88888.f;
-	size.max.x = -88888.f;
-	size.max.y = -88888.f;
-	size.max.z = -88888.f;
+	size.min.x = size.min.y = size.min.z = 88888.f;
+	size.max.x = size.max.y = size.max.z = -88888.f;
 
 	IDirect3DRMVisualArray* visuals;
-	Result result = (Result) SUCCEEDED(frame->GetVisuals(&visuals));
+	Result result = ResultVal(pFrame->GetVisuals(&visuals));
+	assert(Succeeded(result));
 
-	if (result == Success) {
-		int i;
-		for (i = 0; i < (int) visuals->GetSize(); i++) {
+	if (Succeeded(result)) {
+		for (int i = 0; i < (int) visuals->GetSize(); i++) {
 			IDirect3DRMVisual* visual;
-			visuals->GetElement(i, &visual);
-			IDirect3DRMMesh* mesh;
+			result = ResultVal(visuals->GetElement(i, &visual));
+			assert(Succeeded(result));
+
 			/*
 			 * BUG: should be:
 			 *  visual->QueryInterface(IID_IDirect3DRMMesh, (void**)&mesh));
 			 */
-			result = (Result) SUCCEEDED(visual->QueryInterface(IID_IDirect3DRMMeshBuilder, (void**) &mesh));
+			IDirect3DRMMesh* mesh;
+			result = ResultVal(visual->QueryInterface(IID_IDirect3DRMMeshBuilder, (void**) &mesh));
 
-			if (result == Success) {
+			if (Succeeded(result)) {
 				D3DRMBOX box;
-				result = (Result) SUCCEEDED(mesh->GetBox(&box));
+				result = ResultVal(mesh->GetBox(&box));
+				assert(Succeeded(result));
 
-				if (size.max.y < box.max.y) {
-					size.max.y = box.max.y;
-				}
-				if (size.max.z < box.max.z) {
-					size.max.z = box.max.z;
-				}
 				if (box.min.x < size.min.x) {
 					size.min.x = box.min.x;
 				}
@@ -179,17 +310,36 @@ Result GroupImpl::Bounds(D3DVECTOR* p_min, D3DVECTOR* p_max)
 				if (size.max.x < box.max.x) {
 					size.max.x = box.max.x;
 				}
+				if (size.max.y < box.max.y) {
+					size.max.y = box.max.y;
+				}
+				if (size.max.z < box.max.z) {
+					size.max.z = box.max.z;
+				}
 
 				mesh->Release();
 			}
 
-			visual->Release();
+			refCount = visual->Release();
 		}
 
-		visuals->Release();
+		refCount = visuals->Release();
 	}
 
-	*p_min = size.min;
-	*p_max = size.max;
+	p_min->x = size.min.x;
+	p_min->y = size.min.y;
+	p_min->z = size.min.z;
+	p_max->x = size.max.x;
+	p_max->y = size.max.y;
+	p_max->z = size.max.z;
 	return result;
+}
+
+// FUNCTION: LEGO1 0x100a3540
+// FUNCTION: BETA10 0x1016a920
+Result GroupImpl::Bounds(D3DVECTOR* p_min, D3DVECTOR* p_max)
+{
+	assert(m_data);
+
+	return GroupBounds(m_data, p_min, p_max);
 }

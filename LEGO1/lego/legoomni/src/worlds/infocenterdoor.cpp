@@ -119,7 +119,7 @@ MxLong InfocenterDoor::HandleControl(LegoControlManagerNotificationParam& p_para
 			if (GameState()->GetActorId() != LegoActor::c_none) {
 				InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
 				if (state->HasRegistered()) {
-					m_destLocation = LegoGameState::e_unk4;
+					m_destLocation = LegoGameState::e_infocenterExited;
 				}
 				else {
 					MxDSAction action;

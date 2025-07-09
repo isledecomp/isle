@@ -34,6 +34,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1002d220
+	// FUNCTION: BETA10 0x10012530
 	MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoActor::ClassName()) || LegoEntity::IsA(p_name);
@@ -43,18 +44,22 @@ public:
 	void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2) override; // vtable+0x24
 
 	// FUNCTION: LEGO1 0x10002cc0
+	// FUNCTION: BETA10 0x1000f3e0
 	virtual MxFloat GetSoundFrequencyFactor() { return m_frequencyFactor; } // vtable+0x50
 
 	// FUNCTION: LEGO1 0x10002cd0
+	// FUNCTION: BETA10 0x1000f410
 	virtual void SetSoundFrequencyFactor(MxFloat p_frequencyFactor)
 	{
 		m_frequencyFactor = p_frequencyFactor;
 	} // vtable+0x54
 
 	// FUNCTION: LEGO1 0x10002ce0
+	// FUNCTION: BETA10 0x1000f440
 	virtual void VTable0x58(MxFloat p_unk0x70) { m_unk0x70 = p_unk0x70; } // vtable+0x58
 
 	// FUNCTION: LEGO1 0x10002cf0
+	// FUNCTION: BETA10 0x1000f470
 	virtual MxFloat VTable0x5c() { return m_unk0x70; } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x10002d00
@@ -62,6 +67,7 @@ public:
 	virtual MxU8 GetActorId() { return m_actorId; } // vtable+0x60
 
 	// FUNCTION: LEGO1 0x10002d10
+	// FUNCTION: BETA10 0x1000f4d0
 	virtual void SetActorId(MxU8 p_actorId) { m_actorId = p_actorId; } // vtable+0x64
 
 	static const char* GetActorName(MxU8 p_id);
@@ -76,6 +82,7 @@ protected:
 };
 
 // SYNTHETIC: LEGO1 0x1002d300
+// SYNTHETIC: BETA10 0x1003d900
 // LegoActor::`scalar deleting destructor'
 
 #endif // LEGOACTOR_H

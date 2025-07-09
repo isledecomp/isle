@@ -11,6 +11,12 @@ class MxEndActionNotificationParam;
 // SIZE 0x24
 class AmbulanceMissionState : public LegoState {
 public:
+	enum {
+		e_ready = 0,
+		e_enteredAmbulance = 1,
+		e_prepareAmbulance = 2,
+	};
+
 	AmbulanceMissionState();
 
 	// FUNCTION: LEGO1 0x10037440
@@ -125,18 +131,18 @@ public:
 	// SYNTHETIC: LEGO1 0x100376c0
 	// AmbulanceMissionState::`scalar deleting destructor'
 
-	undefined4 m_unk0x08; // 0x08
-	MxLong m_startTime;   // 0x0c
-	MxS16 m_peScore;      // 0x10
-	MxS16 m_maScore;      // 0x12
-	MxS16 m_paScore;      // 0x14
-	MxS16 m_niScore;      // 0x16
-	MxS16 m_laScore;      // 0x18
-	MxS16 m_peHighScore;  // 0x1a
-	MxS16 m_maHighScore;  // 0x1c
-	MxS16 m_paHighScore;  // 0x1e
-	MxS16 m_niHighScore;  // 0x20
-	MxS16 m_laHighScore;  // 0x22
+	MxU32 m_state;       // 0x08
+	MxLong m_startTime;  // 0x0c
+	MxS16 m_peScore;     // 0x10
+	MxS16 m_maScore;     // 0x12
+	MxS16 m_paScore;     // 0x14
+	MxS16 m_niScore;     // 0x16
+	MxS16 m_laScore;     // 0x18
+	MxS16 m_peHighScore; // 0x1a
+	MxS16 m_maHighScore; // 0x1c
+	MxS16 m_paHighScore; // 0x1e
+	MxS16 m_niHighScore; // 0x20
+	MxS16 m_laHighScore; // 0x22
 };
 
 // VTABLE: LEGO1 0x100d71a8
@@ -177,15 +183,21 @@ public:
 	virtual MxLong HandleEndAction(MxEndActionNotificationParam& p_param);         // vtable+0xf4
 
 	void CreateState();
-	void FUN_10036e60();
+	void Init();
 	void ActivateSceneActions();
 	void StopActions();
-	void FUN_10037250();
+	void Reset();
 
 	// SYNTHETIC: LEGO1 0x10036130
 	// Ambulance::`scalar deleting destructor'
 
 private:
+	enum {
+		e_none = 0,
+		e_waiting = 1,
+		e_finished = 3,
+	};
+
 	void PlayAnimation(IsleScript::Script p_objectId);
 	void PlayFinalAnimation(IsleScript::Script p_objectId);
 	void StopAction(IsleScript::Script p_objectId);
@@ -196,9 +208,9 @@ private:
 	AmbulanceMissionState* m_state;     // 0x164
 	MxS16 m_unk0x168;                   // 0x168
 	MxS16 m_actorId;                    // 0x16a
-	MxS16 m_unk0x16c;                   // 0x16c
-	MxS16 m_unk0x16e;                   // 0x16e
-	MxS16 m_unk0x170;                   // 0x170
+	MxS16 m_atPoliceTask;               // 0x16c
+	MxS16 m_atBeachTask;                // 0x16e
+	MxS16 m_taskState;                  // 0x170
 	MxS16 m_unk0x172;                   // 0x172
 	IsleScript::Script m_lastAction;    // 0x174
 	IsleScript::Script m_lastAnimation; // 0x178

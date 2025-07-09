@@ -207,9 +207,9 @@ MxResult MxDSBuffer::StartPresenterFromAction(
 	if (!m_unk0x30->GetInternalAction()) {
 		p_objectheader->SetAtomId(p_action1->GetAtomId());
 		p_objectheader->SetUnknown28(p_action1->GetUnknown28());
-		p_objectheader->SetUnknown84(p_action1->GetUnknown84());
+		p_objectheader->SetNotificationObject(p_action1->GetNotificationObject());
 		p_objectheader->SetOrigin(p_action1->GetOrigin());
-		p_objectheader->SetUnknown90(p_action1->GetUnknown90());
+		p_objectheader->SetTimeStarted(p_action1->GetTimeStarted());
 		p_objectheader->MergeFrom(*p_action1);
 
 		m_unk0x30->SetInternalAction(p_objectheader->Clone());

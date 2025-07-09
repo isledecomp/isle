@@ -108,8 +108,8 @@ void Act2Brick::FUN_1007a670(MxMatrix& p_param1, MxMatrix& p_param2, LegoPathBou
 	p_boundary->AddActor(this);
 
 	SetActorState(c_disabled);
-	m_roi->FUN_100a58f0(p_param1);
-	m_roi->VTable0x14();
+	m_roi->SetLocal2World(p_param1);
+	m_roi->WrappedUpdateWorldData();
 	m_roi->SetVisibility(TRUE);
 }
 
@@ -147,8 +147,8 @@ MxResult Act2Brick::Tickle()
 		VPV3(local2world[3], local2world[3], m_unk0x168);
 	}
 
-	m_roi->FUN_100a58f0(local2world);
-	m_roi->VTable0x14();
+	m_roi->SetLocal2World(local2world);
+	m_roi->WrappedUpdateWorldData();
 	return SUCCESS;
 }
 

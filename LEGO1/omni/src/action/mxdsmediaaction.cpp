@@ -116,12 +116,12 @@ MxU32 MxDSMediaAction::GetSizeOnDisk()
 		totalSizeOnDisk++;
 	}
 
-	totalSizeOnDisk += sizeof(m_unk0x9c.m_unk0x00);
-	totalSizeOnDisk += sizeof(m_unk0x9c.m_unk0x04);
-	totalSizeOnDisk += sizeof(m_framesPerSecond);
-	totalSizeOnDisk += sizeof(m_mediaFormat);
-	totalSizeOnDisk += sizeof(m_paletteManagement);
-	totalSizeOnDisk += sizeof(m_sustainTime);
+	totalSizeOnDisk += sizeof(undefined4);
+	totalSizeOnDisk += sizeof(undefined4);
+	totalSizeOnDisk += sizeof(MxS32);
+	totalSizeOnDisk += sizeof(MxS32);
+	totalSizeOnDisk += sizeof(MxS32);
+	totalSizeOnDisk += sizeof(MxS32);
 
 	m_sizeOnDisk = totalSizeOnDisk - MxDSAction::GetSizeOnDisk();
 	return totalSizeOnDisk;
@@ -129,20 +129,20 @@ MxU32 MxDSMediaAction::GetSizeOnDisk()
 
 // FUNCTION: LEGO1 0x100c8f60
 // FUNCTION: BETA10 0x1015cc93
-void MxDSMediaAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
+void MxDSMediaAction::Deserialize(MxU8*& p_source, MxS16 p_flags)
 {
-	MxDSAction::Deserialize(p_source, p_unk0x24);
+	MxDSAction::Deserialize(p_source, p_flags);
 
 	CopyMediaSrcPath((char*) p_source);
 	p_source += strlen(m_mediaSrcPath) + 1;
 
 	// clang-format off
-	m_unk0x9c.SetUnk0x00(*(MxU32*) p_source);  p_source += sizeof(m_unk0x9c.m_unk0x00);
-	m_unk0x9c.SetUnk0x04(*(MxU32*) p_source);  p_source += sizeof(m_unk0x9c.m_unk0x04);
+	m_unk0x9c.SetUnk0x00(*(MxU32*) p_source);  p_source += sizeof(undefined4);
+	m_unk0x9c.SetUnk0x04(*(MxU32*) p_source);  p_source += sizeof(undefined4);
 
-	m_framesPerSecond   = *(MxS32*) p_source;  p_source += sizeof(m_framesPerSecond);
-	m_mediaFormat       = *(MxS32*) p_source;  p_source += sizeof(m_mediaFormat);
-	m_paletteManagement = *(MxS32*) p_source;  p_source += sizeof(m_paletteManagement);
-	m_sustainTime       = *(MxS32*) p_source;  p_source += sizeof(m_sustainTime);
+	m_framesPerSecond   = *(MxS32*) p_source;  p_source += sizeof(MxS32);
+	m_mediaFormat       = *(MxS32*) p_source;  p_source += sizeof(MxS32);
+	m_paletteManagement = *(MxS32*) p_source;  p_source += sizeof(MxS32);
+	m_sustainTime       = *(MxS32*) p_source;  p_source += sizeof(MxS32);
 	// clang-format on
 }

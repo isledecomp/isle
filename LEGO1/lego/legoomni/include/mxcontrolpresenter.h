@@ -44,21 +44,28 @@ public:
 	void EndAction() override;                                       // vtable+0x40
 	MxBool HasTickleStatePassed(TickleState p_tickleState) override; // vtable+0x48
 	void Enable(MxBool p_enable) override;                           // vtable+0x54
-	virtual void VTable0x6c(MxS16 p_unk0x4e);                        // vtable+0x6c
+	virtual void UpdateEnabledChild(MxS16 p_enabledChild);           // vtable+0x6c
 
-	MxBool FUN_10044480(LegoControlManagerNotificationParam* p_param, MxPresenter* p_presenter);
-	MxBool FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_presenter);
+	MxBool Notify(LegoControlManagerNotificationParam* p_param, MxPresenter* p_presenter);
+	MxBool CheckButtonDown(MxS32 p_x, MxS32 p_y, MxPresenter* p_presenter);
 
-	MxS16 GetUnknown0x4e() { return m_unk0x4e; }
+	MxS16 GetEnabledChild() { return m_enabledChild; }
 
 private:
-	MxS16 m_unk0x4c;  // 0x4c
-	MxS16 m_unk0x4e;  // 0x4e
-	MxBool m_unk0x50; // 0x50
-	MxS16 m_unk0x52;  // 0x52
-	MxS16 m_unk0x54;  // 0x54
-	MxS16 m_unk0x56;  // 0x56
-	MxS16* m_states;  // 0x58
+	enum {
+		e_none,
+		e_toggle,
+		e_grid,
+		e_map,
+	};
+
+	MxS16 m_style;            // 0x4c
+	MxS16 m_enabledChild;     // 0x4e
+	MxBool m_unk0x50;         // 0x50
+	MxS16 m_columnsOrRows;    // 0x52
+	MxS16 m_rowsOrColumns;    // 0x54
+	MxS16 m_stateOrCellIndex; // 0x56
+	MxS16* m_states;          // 0x58
 };
 
 // SYNTHETIC: LEGO1 0x100440f0

@@ -119,11 +119,11 @@ void IslePathActor::Exit()
 
 		MxS32 i;
 		for (i = 0; i < m_boundary->GetNumEdges(); i++) {
-			LegoUnknown100db7f4* e = (LegoUnknown100db7f4*) m_boundary->GetEdges()[i];
+			LegoOrientedEdge* e = (LegoOrientedEdge*) m_boundary->GetEdges()[i];
 			assert(e);
 
 			Mx3DPointFloat local20;
-			e->FUN_1002ddc0(*m_boundary, local20);
+			e->GetFaceNormal(*m_boundary, local20);
 
 			local20 *= m_roi->GetWorldBoundingSphere().Radius();
 			local20 += GetWorldPosition();
@@ -148,12 +148,12 @@ void IslePathActor::Exit()
 		}
 
 		m_previousActor->SetActorState(c_initial);
-		GameState()->m_currentArea = LegoGameState::Area::e_unk66;
+		GameState()->m_currentArea = LegoGameState::Area::e_vehicleExited;
 	}
 
 	FUN_1001b660();
 	FUN_10010c30();
-	FUN_1003eda0();
+	ResetViewVelocity();
 }
 
 // GLOBAL: LEGO1 0x10102b28
@@ -199,7 +199,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_Quiet_Audio
 	);
 	g_spawnLocations[3] = SpawnLocation(
-		LegoGameState::e_unk4,
+		LegoGameState::e_infocenterExited,
 		g_isleScript,
 		0,
 		"int46",
@@ -223,7 +223,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_Beach_Music
 	);
 	g_spawnLocations[5] = SpawnLocation(
-		LegoGameState::e_unk17,
+		LegoGameState::e_jetskibuildExited,
 		g_isleScript,
 		0,
 		"EDG00_46",
@@ -259,7 +259,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_CentralNorthRoad_Music
 	);
 	g_spawnLocations[8] = SpawnLocation(
-		LegoGameState::e_unk20,
+		LegoGameState::e_racecarbuildExited,
 		g_isleScript,
 		0,
 		"INT16",
@@ -295,7 +295,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_GarageArea_Music
 	);
 	g_spawnLocations[11] = SpawnLocation(
-		LegoGameState::e_unk28,
+		LegoGameState::e_garageExited,
 		g_isleScript,
 		0,
 		"INT24",
@@ -319,7 +319,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_Hospital_Music
 	);
 	g_spawnLocations[13] = SpawnLocation(
-		LegoGameState::e_unk31,
+		LegoGameState::e_hospitalExited,
 		g_isleScript,
 		0,
 		"EDG02_28",
@@ -343,7 +343,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_PoliceStation_Music
 	);
 	g_spawnLocations[15] = SpawnLocation(
-		LegoGameState::e_unk33,
+		LegoGameState::e_policeExited,
 		g_isleScript,
 		0,
 		"EDG02_64",
@@ -598,7 +598,7 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_enter, MxU8
 		}
 
 		if (m_cameraFlag) {
-			FUN_1003eda0();
+			ResetViewVelocity();
 		}
 
 		if (p_flags & c_playMusic && g_spawnLocations[i].m_music != JukeboxScript::c_noneJukebox) {
@@ -630,9 +630,9 @@ void IslePathActor::VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundar
 		m_world->Add(this);
 	}
 
-	m_roi->FUN_100a58f0(p_transform);
+	m_roi->SetLocal2World(p_transform);
 	if (m_cameraFlag) {
-		FUN_1003eda0();
+		ResetViewVelocity();
 		FUN_10010c30();
 	}
 }
@@ -648,6 +648,6 @@ void IslePathActor::FUN_1001b660()
 
 	up *= -1.0f;
 	position.EqualsCross(direction, up);
-	m_roi->FUN_100a58f0(transform);
-	m_roi->VTable0x14();
+	m_roi->SetLocal2World(transform);
+	m_roi->WrappedUpdateWorldData();
 }

@@ -21,7 +21,7 @@ MxFlcPresenter::MxFlcPresenter()
 MxFlcPresenter::~MxFlcPresenter()
 {
 	if (this->m_flcHeader) {
-		delete this->m_flcHeader;
+		delete[] ((MxU8*) this->m_flcHeader);
 	}
 }
 

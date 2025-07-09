@@ -238,14 +238,14 @@ MxResult MxPalette::SetEntries(LPPALETTEENTRY p_entries)
 // FUNCTION: BETA10 0x101442aa
 MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_skyColor)
 {
-	MxResult status = 0;
+	MxResult status = SUCCESS;
 	if (m_palette != NULL) {
 		m_entries[141].peRed = p_skyColor->peRed;
 		m_entries[141].peGreen = p_skyColor->peGreen;
 		m_entries[141].peBlue = p_skyColor->peBlue;
 		m_skyColor = m_entries[141];
 		if (m_palette->SetEntries(0, 141, 1, &m_skyColor)) {
-			status = -1;
+			status = FAILURE;
 		}
 	}
 	return status;

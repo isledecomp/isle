@@ -154,7 +154,7 @@ MxResult LegoPointOfViewController::Tickle()
 
 			CalcLocalTransform(newPos, newDir, pov->GetWorldUp(), mat);
 			((TimeROI*) pov)->FUN_100a9b40(mat, Timer()->GetTime());
-			pov->WrappedSetLocalTransform(mat);
+			pov->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
 			m_lego3DView->Moved(*pov);
 
 			SoundManager()->UpdateListener(
@@ -171,7 +171,7 @@ MxResult LegoPointOfViewController::Tickle()
 				Mx3DPointFloat vel;
 
 				vel.Clear();
-				pov->FUN_100a5a30(vel);
+				pov->SetWorldVelocity(vel);
 
 				SoundManager()->UpdateListener(
 					pov->GetWorldPosition(),
@@ -210,7 +210,7 @@ void LegoPointOfViewController::SetEntity(LegoEntity* p_entity)
 			mat
 		);
 
-		pov->WrappedSetLocalTransform(mat);
+		pov->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
 	}
 	else {
 		TickleManager()->RegisterClient(this, 10);

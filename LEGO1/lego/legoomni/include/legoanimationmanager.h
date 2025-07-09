@@ -16,7 +16,7 @@ class LegoFile;
 class LegoPathActor;
 class LegoPathBoundary;
 class LegoROIList;
-struct LegoUnknown100db7f4;
+struct LegoOrientedEdge;
 class LegoWorld;
 class MxDSAction;
 
@@ -32,20 +32,20 @@ struct ModelInfo {
 
 // SIZE 0x30
 struct AnimInfo {
-	char* m_name;        // 0x00
-	MxU32 m_objectId;    // 0x04
-	MxS16 m_location;    // 0x08
-	MxBool m_unk0x0a;    // 0x0a
-	MxU8 m_unk0x0b;      // 0x0b
-	MxU8 m_unk0x0c;      // 0x0c
-	MxU8 m_unk0x0d;      // 0x0d
-	float m_unk0x10[4];  // 0x10
-	MxU8 m_modelCount;   // 0x20
-	MxU16 m_unk0x22;     // 0x22
-	ModelInfo* m_models; // 0x24
-	MxS8 m_unk0x28;      // 0x28
-	MxBool m_unk0x29;    // 0x29
-	MxS8 m_unk0x2a[3];   // 0x2a
+	char* m_name;          // 0x00
+	MxU32 m_objectId;      // 0x04
+	MxS16 m_location;      // 0x08
+	MxBool m_unk0x0a;      // 0x0a
+	MxU8 m_unk0x0b;        // 0x0b
+	MxU8 m_unk0x0c;        // 0x0c
+	MxU8 m_unk0x0d;        // 0x0d
+	float m_unk0x10[4];    // 0x10
+	MxU8 m_modelCount;     // 0x20
+	MxU16 m_unk0x22;       // 0x22
+	ModelInfo* m_models;   // 0x24
+	MxS8 m_characterIndex; // 0x28
+	MxBool m_unk0x29;      // 0x29
+	MxS8 m_unk0x2a[3];     // 0x2a
 };
 
 // VTABLE: LEGO1 0x100d8d80
@@ -240,7 +240,7 @@ private:
 	void FUN_10063d10();
 	void FUN_10063e40(LegoAnimPresenter* p_presenter);
 	MxBool FUN_10063fb0(LegoLocation::Boundary* p_boundary, LegoWorld* p_world);
-	MxBool FUN_10064010(LegoPathBoundary* p_boundary, LegoUnknown100db7f4* p_edge, float p_destScale);
+	MxBool FUN_10064010(LegoPathBoundary* p_boundary, LegoOrientedEdge* p_edge, float p_destScale);
 	MxBool FUN_10064120(LegoLocation::Boundary* p_boundary, MxBool p_bool1, MxBool p_bool2);
 	MxResult FUN_10064380(
 		const char* p_name,
@@ -284,7 +284,7 @@ private:
 	MxLong m_unk0x410;                  // 0x410
 	MxU32 m_unk0x414;                   // 0x414
 	MxU32 m_numAllowedExtras;           // 0x418
-	undefined4 m_unk0x41c;              // 0x41c
+	MxU32 m_maxAllowedExtras;           // 0x41c
 	AnimState* m_animState;             // 0x420
 	LegoROIList* m_unk0x424;            // 0x424
 	MxBool m_suspendedEnableCamAnims;   // 0x428

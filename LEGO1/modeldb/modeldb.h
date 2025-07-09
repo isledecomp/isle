@@ -94,14 +94,14 @@ struct ModelDbModel {
 	void Free();
 	MxResult Read(FILE* p_file);
 
-	char* m_modelName;     // 0x00
-	undefined4 m_unk0x04;  // 0x04
-	undefined4 m_unk0x08;  // 0x08
-	char* m_presenterName; // 0x0c
-	float m_location[3];   // 0x10
-	float m_direction[3];  // 0x1c
-	float m_up[3];         // 0x28
-	undefined m_unk0x34;   // 0x34
+	char* m_modelName;       // 0x00
+	MxU32 m_modelDataLength; // 0x04
+	MxU32 m_modelDataOffset; // 0x08
+	char* m_presenterName;   // 0x0c
+	float m_location[3];     // 0x10
+	float m_direction[3];    // 0x1c
+	float m_up[3];           // 0x28
+	MxU8 m_visible;          // 0x34
 };
 
 // SIZE 0x18

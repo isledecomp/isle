@@ -133,7 +133,6 @@ Act2Actor::Act2Actor()
 }
 
 // FUNCTION: LEGO1 0x10018940
-// FUNCTION: BETA10 0x1003d65f
 void Act2Actor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 {
 	LegoAnimActor::SetROI(p_roi, p_bool1, p_bool2);
@@ -417,7 +416,7 @@ void Act2Actor::FUN_100192a0(undefined4 p_location)
 		newPosition,
 		newDirection,
 		newBoundary,
-		LegoUnknown100db7f4::c_bit1,
+		LegoOrientedEdge::c_bit1,
 		NULL
 	);
 
@@ -611,8 +610,8 @@ MxU32 Act2Actor::FUN_10019700(MxFloat p_param)
 
 	MxMatrix matrix = m_roi->GetLocal2World();
 	matrix[3][1] += 1.0f;
-	brickstrROI->FUN_100a58f0(matrix);
-	brickstrROI->VTable0x14();
+	brickstrROI->SetLocal2World(matrix);
+	brickstrROI->WrappedUpdateWorldData();
 
 	Vector3 col0(matrix[0]);
 	Vector3 col1(matrix[1]);
@@ -719,17 +718,17 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 
 	switch (m_unk0x1d) {
 	case 0:
-		if (buildingInfo[12].m_unk0x11) {
+		if (buildingInfo[12].m_counter) {
 			result = buildingInfo[12].m_entity;
 			*p_param = TRUE;
 		}
-		else if (buildingInfo[14].m_unk0x11) {
+		else if (buildingInfo[14].m_counter) {
 			result = buildingInfo[14].m_entity;
 			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f0f30[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f0f30[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f0f30[i]].m_counter) {
 					result = plantInfo[g_unk0x100f0f30[i]].m_entity;
 					break;
 				}
@@ -737,13 +736,13 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		break;
 	case 1:
-		if (buildingInfo[13].m_unk0x11) {
+		if (buildingInfo[13].m_counter) {
 			result = buildingInfo[13].m_entity;
 			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f0f50[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f0f50[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f0f50[i]].m_counter) {
 					result = plantInfo[g_unk0x100f0f50[i]].m_entity;
 					break;
 				}
@@ -751,17 +750,17 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		break;
 	case 2:
-		if (buildingInfo[9].m_unk0x11) {
+		if (buildingInfo[9].m_counter) {
 			result = buildingInfo[9].m_entity;
 			*p_param = TRUE;
 		}
-		else if (buildingInfo[11].m_unk0x11) {
+		else if (buildingInfo[11].m_counter) {
 			result = buildingInfo[11].m_entity;
 			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f0f90[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f0f90[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f0f90[i]].m_counter) {
 					result = plantInfo[g_unk0x100f0f90[i]].m_entity;
 					break;
 				}
@@ -769,21 +768,21 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		break;
 	case 3:
-		if (buildingInfo[7].m_unk0x11) {
+		if (buildingInfo[7].m_counter) {
 			result = buildingInfo[7].m_entity;
 			*p_param = TRUE;
 		}
-		else if (buildingInfo[8].m_unk0x11) {
+		else if (buildingInfo[8].m_counter) {
 			result = buildingInfo[8].m_entity;
 			*p_param = TRUE;
 		}
-		else if (buildingInfo[3].m_unk0x11) {
+		else if (buildingInfo[3].m_counter) {
 			result = buildingInfo[3].m_entity;
 			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f0fa8[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f0fa8[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f0fa8[i]].m_counter) {
 					result = plantInfo[g_unk0x100f0fa8[i]].m_entity;
 					break;
 				}
@@ -791,17 +790,17 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		break;
 	case 4:
-		if (buildingInfo[5].m_unk0x11) {
+		if (buildingInfo[5].m_counter) {
 			result = buildingInfo[5].m_entity;
 			*p_param = TRUE;
 		}
-		else if (buildingInfo[10].m_unk0x11) {
+		else if (buildingInfo[10].m_counter) {
 			result = buildingInfo[10].m_entity;
 			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f0fb8[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f0fb8[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f0fb8[i]].m_counter) {
 					result = plantInfo[g_unk0x100f0fb8[i]].m_entity;
 					break;
 				}
@@ -809,13 +808,13 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		break;
 	case 5:
-		if (buildingInfo[4].m_unk0x11) {
+		if (buildingInfo[4].m_counter) {
 			result = buildingInfo[4].m_entity;
 			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f0fe8[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f0fe8[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f0fe8[i]].m_counter) {
 					result = plantInfo[g_unk0x100f0fe8[i]].m_entity;
 					break;
 				}
@@ -823,13 +822,13 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		break;
 	case 6:
-		if (buildingInfo[2].m_unk0x11) {
+		if (buildingInfo[2].m_counter) {
 			result = buildingInfo[2].m_entity;
 			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f1000[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f1000[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f1000[i]].m_counter) {
 					result = plantInfo[g_unk0x100f1000[i]].m_entity;
 					break;
 				}
@@ -837,13 +836,13 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		}
 		break;
 	case 7:
-		if (buildingInfo[6].m_unk0x11) {
+		if (buildingInfo[6].m_counter) {
 			result = buildingInfo[6].m_entity;
 			*p_param = TRUE;
 		}
 		else {
 			for (i = 0; g_unk0x100f1018[i] != -1; i++) {
-				if (plantInfo[g_unk0x100f1018[i]].m_unk0x16) {
+				if (plantInfo[g_unk0x100f1018[i]].m_counter) {
 					result = plantInfo[g_unk0x100f1018[i]].m_entity;
 					break;
 				}
@@ -852,7 +851,7 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 		break;
 	case 8:
 		for (i = 0; g_unk0x100f1030[i] != -1; i++) {
-			if (plantInfo[g_unk0x100f1030[i]].m_unk0x16) {
+			if (plantInfo[g_unk0x100f1030[i]].m_counter) {
 				result = plantInfo[g_unk0x100f1030[i]].m_entity;
 				break;
 			}
@@ -862,7 +861,7 @@ LegoEntity* Act2Actor::FUN_10019b90(MxBool* p_param)
 			return result;
 		}
 
-		if (buildingInfo[15].m_unk0x11) {
+		if (buildingInfo[15].m_counter) {
 			result = buildingInfo[15].m_entity;
 			*p_param = TRUE;
 		}

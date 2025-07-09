@@ -14,10 +14,10 @@
 class ViewLOD : public LODObject {
 public:
 	enum {
-		c_bit4 = 0x10
+		c_hasMesh = 0x10
 	};
 
-	ViewLOD(Tgl::Renderer* pRenderer) : m_meshBuilder(NULL), m_unk0x08(3) {}
+	ViewLOD(Tgl::Renderer* pRenderer) : m_meshBuilder(NULL), m_flags(3) {}
 	~ViewLOD() override;
 
 	// FUNCTION: LEGO1 0x100a6f30
@@ -28,19 +28,19 @@ public:
 
 	Tgl::MeshBuilder* GetMeshBuilder() { return m_meshBuilder; }
 	const Tgl::MeshBuilder* GetMeshBuilder() const { return m_meshBuilder; }
-	undefined4 GetUnknown0x08() { return m_unk0x08; }
-	unsigned char GetUnknown0x08Test4() { return m_unk0x08 & 0xffffff04; }
-	unsigned char GetUnknown0x08Test8() { return m_unk0x08 & 0xffffff08; }
+	unsigned int GetFlags() { return m_flags; }
+	unsigned char SkipReadingData() { return m_flags & 0xffffff04; }
+	unsigned char IsExtraLOD() { return m_flags & 0xffffff08; }
 
-	void SetFlag(unsigned char p_flag) { m_unk0x08 |= p_flag; }
-	void ClearFlag(unsigned char p_flag) { m_unk0x08 &= ~p_flag; }
+	void SetFlag(unsigned char p_flag) { m_flags |= p_flag; }
+	void ClearFlag(unsigned char p_flag) { m_flags &= ~p_flag; }
 
 	// SYNTHETIC: LEGO1 0x100a6f60
 	// ViewLOD::`scalar deleting destructor'
 
 protected:
 	Tgl::MeshBuilder* m_meshBuilder; // 0x04
-	undefined4 m_unk0x08;            // 0x08
+	unsigned int m_flags;            // 0x08
 };
 
 #endif // VIEWLOD_H
