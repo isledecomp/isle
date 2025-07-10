@@ -56,7 +56,7 @@ EdgeReference g_skBMap[] = {
 
 // GLOBAL: LEGO1 0x100f0a50
 // GLOBAL: BETA10 0x101f5e60
-const SkeletonKickPhase g_skeletonKickPhases[] = {
+SkeletonKickPhase g_skeletonKickPhases[] = {
 	{&g_skBMap[0], 0.1, 0.2, LEGORACECAR_KICK2},
 	{&g_skBMap[1], 0.2, 0.3, LEGORACECAR_KICK2},
 	{&g_skBMap[2], 0.3, 0.4, LEGORACECAR_KICK2},
