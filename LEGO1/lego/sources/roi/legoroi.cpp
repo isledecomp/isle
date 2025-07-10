@@ -43,13 +43,13 @@ ROIColorAlias g_roiColorAliases[22] = {
 int g_roiConfig = 100;
 
 // GLOBAL: LEGO1 0x10101370
-const char* g_unk0x10101370[] = {"bike", "moto", NULL};
+const char* g_sharedModelsHigh[] = {"bike", "moto", NULL};
 
 // GLOBAL: LEGO1 0x10101380
-const char* g_unk0x10101380[] = {"bike", "moto", "haus", NULL};
+const char* g_sharedModelsLow[] = {"bike", "moto", "haus", NULL};
 
 // GLOBAL: LEGO1 0x10101390
-const char* g_unk0x10101390[] = {"rcuser", "jsuser", "dunebugy", "chtrblad", "chtrbody", "chtrshld", NULL};
+const char* g_alwaysLoadNames[] = {"rcuser", "jsuser", "dunebugy", "chtrblad", "chtrbody", "chtrshld", NULL};
 
 // GLOBAL: LEGO1 0x101013ac
 ColorOverride g_colorOverride = NULL;
@@ -224,30 +224,30 @@ LegoResult LegoROI::Read(
 			}
 
 			if (g_roiConfig <= 2) {
-				for (i = 0; g_unk0x10101380[i] != NULL; i++) {
-					if (!strnicmp(m_name, g_unk0x10101380[i], 4)) {
-						roiName = g_unk0x10101380[i];
+				for (i = 0; g_sharedModelsLow[i] != NULL; i++) {
+					if (!strnicmp(m_name, g_sharedModelsLow[i], 4)) {
+						roiName = g_sharedModelsLow[i];
 						break;
 					}
 				}
 			}
 			else {
-				for (i = 0; g_unk0x10101370[i] != NULL; i++) {
-					if (!strnicmp(m_name, g_unk0x10101370[i], 4)) {
-						roiName = g_unk0x10101370[i];
+				for (i = 0; g_sharedModelsHigh[i] != NULL; i++) {
+					if (!strnicmp(m_name, g_sharedModelsHigh[i], 4)) {
+						roiName = g_sharedModelsHigh[i];
 						break;
 					}
 				}
 			}
 
 			if ((lodList = p_viewLODListManager->Lookup(roiName))) {
-				for (j = 0; g_unk0x10101390[j] != NULL; j++) {
-					if (!strcmpi(g_unk0x10101390[j], roiName)) {
+				for (j = 0; g_alwaysLoadNames[j] != NULL; j++) {
+					if (!strcmpi(g_alwaysLoadNames[j], roiName)) {
 						break;
 					}
 				}
 
-				if (g_unk0x10101390[j] != NULL) {
+				if (g_alwaysLoadNames[j] != NULL) {
 					while (lodList->Size()) {
 						delete const_cast<ViewLOD*>(lodList->PopBack());
 					}
