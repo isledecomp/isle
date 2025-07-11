@@ -25,8 +25,8 @@ void MxSmkPresenter::Init()
 {
 	m_currentFrame = 0;
 	memset(&m_mxSmk, 0, sizeof(m_mxSmk));
-	SetBit1(FALSE);
-	SetBit2(FALSE);
+	SetUseSurface(FALSE);
+	SetUseVideoMemory(FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b3900

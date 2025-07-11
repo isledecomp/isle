@@ -619,12 +619,12 @@ MxBool RegistrationBook::CreateSurface()
 		}
 
 		if (presenter) {
-			m_checkboxSurface = presenter->VTable0x78();
+			m_checkboxSurface = presenter->GetSurface();
 		}
 
 		presenter = (MxStillPresenter*) Find("MxStillPresenter", "CheckHiLite_Bitmap");
 		if (presenter) {
-			m_checkboxHilite = presenter->VTable0x78();
+			m_checkboxHilite = presenter->GetSurface();
 		}
 
 		if (m_checkboxSurface && m_checkboxHilite) {
