@@ -38,7 +38,7 @@ public:
 	void CreateBitmap() override;                     // vtable+0x60
 	void LoadFrame(MxStreamChunk* p_chunk) override;  // vtable+0x68
 	void RealizePalette() override;                   // vtable+0x70
-	virtual void VTable0x88();                        // vtable+0x88
+	virtual void ResetCurrentFrameAtEnd();            // vtable+0x88
 
 	// SYNTHETIC: LEGO1 0x100b3850
 	// MxSmkPresenter::`scalar deleting destructor'

@@ -70,7 +70,7 @@ void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 
 	MxBool paletteChanged = m_mxSmk.m_frameTypes[m_currentFrame] & 1;
 	m_currentFrame++;
-	VTable0x88();
+	ResetCurrentFrameAtEnd();
 
 	MxRect32List rects(TRUE);
 	MxSmk::LoadFrame(bitmapInfo, bitmapData, &m_mxSmk, chunkData, paletteChanged, &rects);
@@ -91,11 +91,11 @@ void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 }
 
 // FUNCTION: LEGO1 0x100b4260
-void MxSmkPresenter::VTable0x88()
+void MxSmkPresenter::ResetCurrentFrameAtEnd()
 {
 	if ((m_mxSmk.m_smackTag.SmackerType & 1) != 0) {
-		MxU32 und = (m_currentFrame % m_mxSmk.m_smackTag.Frames);
-		if (1 < m_currentFrame && und == 1) {
+		MxU32 validCurrentFrame = (m_currentFrame % m_mxSmk.m_smackTag.Frames);
+		if (1 < m_currentFrame && validCurrentFrame == 1) {
 			m_currentFrame = 1;
 		}
 	}
