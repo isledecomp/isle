@@ -34,6 +34,21 @@ public:
 		c_floor3
 	};
 
+	enum {
+		e_none = 0,
+		e_initial = 1,
+		e_elevator = 2,
+		e_pizza = 3,
+		e_helicopter = 4,
+		e_transitionToJetski = 5,
+		e_transitionToRacecar = 6,
+		e_transitionToTowtrack = 7,
+		e_towtrack = 8,
+		e_transitionToAmbulance = 9,
+		e_ambulance = 10,
+		e_jukebox = 11,
+	};
+
 	Act1State();
 
 	// FUNCTION: LEGO1 0x100338a0
@@ -58,11 +73,11 @@ public:
 	void RemoveActors();
 	void PlaceActors();
 
-	MxU32 GetUnknown18() { return m_unk0x018; }
+	MxU32 GetState() { return m_state; }
 	ElevatorFloor GetElevatorFloor() { return (ElevatorFloor) m_elevFloor; }
 	MxU8 GetUnknown21() { return m_unk0x021; }
 
-	void SetUnknown18(MxU32 p_unk0x18) { m_unk0x018 = p_unk0x18; }
+	void SetState(MxU32 p_state) { m_state = p_state; }
 	void SetElevatorFloor(ElevatorFloor p_elevFloor) { m_elevFloor = p_elevFloor; }
 	void SetUnknown21(MxU8 p_unk0x21) { m_unk0x021 = p_unk0x21; }
 
@@ -73,7 +88,7 @@ public:
 
 	Playlist m_cptClickDialogue;                  // 0x008
 	IsleScript::Script m_currentCptClickDialogue; // 0x014
-	MxU32 m_unk0x018;                             // 0x018
+	MxU32 m_state;                                // 0x018
 	MxS16 m_elevFloor;                            // 0x01c
 	MxBool m_unk0x01e;                            // 0x01e
 	MxBool m_unk0x01f;                            // 0x01f

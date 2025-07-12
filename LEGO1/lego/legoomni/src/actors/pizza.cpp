@@ -182,7 +182,7 @@ void Pizza::FUN_10038220(IsleScript::Script p_objectId)
 	AnimationManager()->FUN_10064740(NULL);
 	m_mission = m_state->GetMission(GameState()->GetActorId());
 	m_state->m_unk0x0c = 1;
-	m_act1state->m_unk0x018 = 3;
+	m_act1state->m_state = Act1State::e_pizza;
 	m_mission->m_startTime = INT_MIN;
 	g_isleFlags &= ~Isle::c_playMusic;
 	AnimationManager()->EnableCamAnims(FALSE);
@@ -200,7 +200,7 @@ void Pizza::FUN_100382b0()
 			InvokeAction(Extra::e_stop, *g_isleScript, m_speechAction, NULL);
 		}
 
-		m_act1state->m_unk0x018 = 0;
+		m_act1state->m_state = Act1State::e_none;
 		m_state->m_unk0x0c = 0;
 		UserActor()->SetActorState(LegoPathActor::c_initial);
 		g_isleFlags |= Isle::c_playMusic;
@@ -245,7 +245,7 @@ MxLong Pizza::HandleClick()
 	}
 
 	if (m_state->m_unk0x0c == 2) {
-		m_act1state->m_unk0x018 = 3;
+		m_act1state->m_state = Act1State::e_pizza;
 
 		if (m_skateBoard == NULL) {
 			m_skateBoard = (SkateBoard*) m_world->Find(m_atomId, IsleScript::c_SkateBoard_Actor);
@@ -558,7 +558,7 @@ MxLong Pizza::HandleEndAction(MxEndActionNotificationParam& p_param)
 		break;
 	case 8:
 		if (m_state->GetPlayedAction() == objectId) {
-			m_act1state->m_unk0x018 = 0;
+			m_act1state->m_state = Act1State::e_none;
 			m_state->m_unk0x0c = 0;
 			GameState()->m_currentArea = LegoGameState::e_isle;
 			TickleManager()->UnregisterClient(this);
