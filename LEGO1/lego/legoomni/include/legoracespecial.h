@@ -35,21 +35,21 @@ public:
 		return !strcmp(p_name, LegoCarRaceActor::ClassName()) || LegoRaceActor::IsA(p_name);
 	}
 
-	inline MxU32 VTable0x6c(
+	inline MxU32 CheckPresenterAndActorIntersections(
 		LegoPathBoundary* p_boundary,
-		Vector3& p_v1,
-		Vector3& p_v2,
-		float p_f1,
-		float p_f2,
-		Vector3& p_v3
+		Vector3& p_rayOrigin,
+		Vector3& p_rayDirection,
+		float p_rayLength,
+		float p_radius,
+		Vector3& p_intersectionPoint
 	) override;                          // vtable+0x6c
 	void Animate(float p_time) override; // vtable+0x70
 	void SwitchBoundary(
 		LegoPathBoundary*& p_boundary,
 		LegoOrientedEdge*& p_edge,
 		float& p_unk0xe4
-	) override;                     // vtable+0x98
-	MxResult VTable0x9c() override; // vtable+0x9c
+	) override;                          // vtable+0x98
+	MxResult CalculateSpline() override; // vtable+0x9c
 
 	// LegoCarRaceActor vtable
 
@@ -130,13 +130,13 @@ public:
 		return !strcmp(p_name, LegoJetskiRaceActor::ClassName()) || LegoCarRaceActor::IsA(p_name);
 	}
 
-	inline MxU32 VTable0x6c(
+	inline MxU32 CheckPresenterAndActorIntersections(
 		LegoPathBoundary* p_boundary,
-		Vector3& p_v1,
-		Vector3& p_v2,
-		float p_f1,
-		float p_f2,
-		Vector3& p_v3
+		Vector3& p_rayOrigin,
+		Vector3& p_rayDirection,
+		float p_rayLength,
+		float p_radius,
+		Vector3& p_intersectionPoint
 	) override;                                                                // vtable+0x6c
 	void Animate(float p_time) override;                                       // vtable+0x70
 	MxS32 VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edge) override; // vtable+0x1c

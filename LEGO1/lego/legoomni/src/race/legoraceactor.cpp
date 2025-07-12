@@ -25,9 +25,9 @@ LegoRaceActor::LegoRaceActor()
 
 // FUNCTION: LEGO1 0x10014750
 // FUNCTION: BETA10 0x100c9bba
-MxS32 LegoRaceActor::VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3)
+MxS32 LegoRaceActor::CheckIntersections(Vector3& p_rayOrigin, Vector3& p_rayEnd, Vector3& p_intersectionPoint)
 {
-	MxS32 result = LegoPathActor::VTable0x68(p_v1, p_v2, p_v3);
+	MxS32 result = LegoPathActor::CheckIntersections(p_rayOrigin, p_rayEnd, p_intersectionPoint);
 
 	if (m_userNavFlag && result) {
 		MxLong time = Timer()->GetTime();
@@ -46,20 +46,20 @@ MxS32 LegoRaceActor::VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3)
 
 // FUNCTION: LEGO1 0x100147f0
 // FUNCTION: BETA10 0x100c9c93
-MxU32 LegoRaceActor::VTable0x90(float p_time, Matrix4& p_transform)
+MxU32 LegoRaceActor::StepState(float p_time, Matrix4& p_transform)
 {
-	// Note: Code duplication with LegoExtraActor::VTable0x90
+	// Note: Code duplication with LegoExtraActor::StepState
 	switch (m_actorState) {
 	case c_initial:
-	case c_one:
+	case c_ready:
 		return TRUE;
-	case c_two:
+	case c_hit:
 		m_unk0x08 = p_time + 2000.0f;
-		m_actorState = c_three;
-		m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
-		m_lastTime = p_time;
+		m_actorState = c_hitAnimation;
+		m_actorTime += (p_time - m_transformTime) * m_worldSpeed;
+		m_transformTime = p_time;
 		return FALSE;
-	case c_three:
+	case c_hitAnimation:
 		assert(!m_userNavFlag);
 		Vector3 positionRef(p_transform[3]);
 
@@ -73,10 +73,10 @@ MxU32 LegoRaceActor::VTable0x90(float p_time, Matrix4& p_transform)
 			p_transform.RotateX(0.6);
 			positionRef = position;
 
-			m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
-			m_lastTime = p_time;
+			m_actorTime += (p_time - m_transformTime) * m_worldSpeed;
+			m_transformTime = p_time;
 
-			VTable0x74(p_transform);
+			ApplyTransform(p_transform);
 			return FALSE;
 		}
 		else {
@@ -111,7 +111,7 @@ MxResult LegoRaceActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 
 			roi->SetLocal2World(matr);
 
-			p_actor->SetActorState(c_two);
+			p_actor->SetActorState(c_hit);
 		}
 	}
 

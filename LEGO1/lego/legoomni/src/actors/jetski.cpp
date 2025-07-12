@@ -33,8 +33,8 @@ const char* g_varJSWNSHY5 = "c_jswnshy5";
 Jetski::Jetski()
 {
 	m_maxLinearVel = 25.0;
-	m_unk0x150 = 2.0;
-	m_unk0x148 = 1;
+	m_linearRotationRatio = 2.0;
+	m_canRotate = 1;
 }
 
 // FUNCTION: LEGO1 0x1007e630

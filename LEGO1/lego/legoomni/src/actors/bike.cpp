@@ -19,8 +19,8 @@ DECOMP_SIZE_ASSERT(Bike, 0x164)
 Bike::Bike()
 {
 	m_maxLinearVel = 20.0;
-	m_unk0x150 = 3.0;
-	m_unk0x148 = 1;
+	m_linearRotationRatio = 3.0;
+	m_canRotate = 1;
 }
 
 // FUNCTION: LEGO1 0x100768f0

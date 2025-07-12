@@ -24,9 +24,9 @@ public:
 	enum ActorState {
 		// States
 		c_initial = 0,
-		c_one = 1,
-		c_two = 2,
-		c_three = 3,
+		c_ready = 1,
+		c_hit = 2,
+		c_hitAnimation = 3,
 		c_disabled = 4,
 		c_maxState = 255,
 
@@ -37,18 +37,22 @@ public:
 	LegoPathActor();
 	~LegoPathActor() override;
 
-	void ParseAction(char* p_extra) override;                              // vtable+0x20
-	virtual MxS32 VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3); // vtable+0x68
-	virtual MxU32 VTable0x6c(
+	void ParseAction(char* p_extra) override; // vtable+0x20
+	virtual MxS32 CheckIntersections(
+		Vector3& p_rayOrigin,
+		Vector3& p_rayEnd,
+		Vector3& p_intersectionPoint
+	); // vtable+0x68
+	virtual MxU32 CheckPresenterAndActorIntersections(
 		LegoPathBoundary* p_boundary,
-		Vector3& p_v1,
-		Vector3& p_v2,
-		float p_f1,
-		float p_f2,
-		Vector3& p_v3
-	);                                             // vtable+0x6c
-	virtual void Animate(float p_time);            // vtable+0x70
-	virtual void VTable0x74(Matrix4& p_transform); // vtable+0x74
+		Vector3& p_rayOrigin,
+		Vector3& p_rayDirection,
+		float p_rayLength,
+		float p_radius,
+		Vector3& p_intersectionPoint
+	);                                                 // vtable+0x6c
+	virtual void Animate(float p_time);                // vtable+0x70
+	virtual void ApplyTransform(Matrix4& p_transform); // vtable+0x74
 
 	// FUNCTION: LEGO1 0x10002d20
 	// FUNCTION: BETA10 0x1000f500
@@ -58,33 +62,33 @@ public:
 	// FUNCTION: BETA10 0x1000f530
 	virtual MxBool GetUserNavFlag() { return m_userNavFlag; } // vtable+0x7c
 
-	virtual MxResult VTable0x80(
-		const Vector3& p_point1,
-		Vector3& p_point2,
-		Vector3& p_point3,
-		Vector3& p_point4
+	virtual MxResult SetSpline(
+		const Vector3& p_start,
+		Vector3& p_tangentAtStart,
+		Vector3& p_end,
+		Vector3& p_tangentAtEnd
 	); // vtable+0x80
-	virtual MxResult VTable0x84(
+	virtual MxResult SetTransformAndDestinationFromPoints(
 		LegoPathBoundary* p_boundary,
 		float p_time,
-		Vector3& p_p1,
-		Vector3& p_p4,
+		Vector3& p_start,
+		Vector3& p_direction,
 		LegoOrientedEdge* p_destEdge,
 		float p_destScale
 	); // vtable+0x84
-	virtual MxResult VTable0x88(
+	virtual MxResult SetTransformAndDestinationFromEdge(
 		LegoPathBoundary* p_boundary,
 		float p_time,
 		LegoEdge& p_srcEdge,
 		float p_srcScale,
 		LegoOrientedEdge& p_destEdge,
 		float p_destScale
-	);                                                            // vtable+0x88
-	virtual MxS32 VTable0x8c(float p_time, Matrix4& p_transform); // vtable+0x8c
+	);                                                                    // vtable+0x88
+	virtual MxS32 CalculateTransform(float p_time, Matrix4& p_transform); // vtable+0x8c
 
 	// FUNCTION: LEGO1 0x10002d40
 	// FUNCTION: BETA10 0x1000f560
-	virtual MxU32 VTable0x90(float, Matrix4&) { return FALSE; } // vtable+0x90
+	virtual MxU32 StepState(float, Matrix4&) { return FALSE; } // vtable+0x90
 
 	// FUNCTION: LEGO1 0x10002d50
 	// FUNCTION: BETA10 0x1000f800
@@ -93,16 +97,16 @@ public:
 	virtual void SwitchBoundary(
 		LegoPathBoundary*& p_boundary,
 		LegoOrientedEdge*& p_edge,
-		float& p_unk0xe4
-	);                             // vtable+0x98
-	virtual MxResult VTable0x9c(); // vtable+0x9c
+		float& p_scale
+	);                                  // vtable+0x98
+	virtual MxResult CalculateSpline(); // vtable+0x9c
 
 	// FUNCTION: LEGO1 0x10002d60
 	// FUNCTION: BETA10 0x1000f820
 	virtual MxS32 NextTargetLocation() { return 0; } // vtable+0xa0
 
-	virtual void VTable0xa4(MxBool& p_und1, MxS32& p_und2); // vtable+0xa4
-	virtual void VTable0xa8();                              // vtable+0xa8
+	virtual void GetWalkingBehavior(MxBool& p_countCounterclockWise, MxS32& p_selectedEdgeIndex); // vtable+0xa4
+	virtual void ApplyLocal2World();                                                              // vtable+0xa8
 
 	// FUNCTION: LEGO1 0x10002d70
 	// FUNCTION: BETA10 0x1000f580
@@ -114,26 +118,32 @@ public:
 
 	// FUNCTION: LEGO1 0x10002d90
 	// FUNCTION: BETA10 0x1000f5e0
-	virtual MxFloat VTable0xb4() { return m_unk0x140; } // vtable+0xb4
+	virtual MxFloat GetWallHitDirectionFactor() { return m_wallHitDirectionFactor; } // vtable+0xb4
 
 	// FUNCTION: LEGO1 0x10002da0
 	// FUNCTION: BETA10 0x1000f610
-	virtual MxFloat VTable0xb8() { return m_unk0x144; } // vtable+0xb8
+	virtual MxFloat GetWallHitDampening() { return m_wallHitDampening; } // vtable+0xb8
 
 	// FUNCTION: LEGO1 0x10002db0
 	// FUNCTION: BETA10 0x1000f640
-	virtual void VTable0xbc(MxFloat p_unk0x140) { m_unk0x140 = p_unk0x140; } // vtable+0xbc
+	virtual void SetWallHitDirectionFactor(MxFloat p_wallHitDirectionFactor)
+	{
+		m_wallHitDirectionFactor = p_wallHitDirectionFactor;
+	} // vtable+0xbc
 
 	// FUNCTION: LEGO1 0x10002dc0
 	// FUNCTION: BETA10 0x1000f670
-	virtual void VTable0xc0(MxFloat p_unk0x144) { m_unk0x144 = p_unk0x144; } // vtable+0xc0
+	virtual void SetWallHitDampening(MxFloat p_wallHitDampening)
+	{
+		m_wallHitDampening = p_wallHitDampening;
+	} // vtable+0xc0
 
 	// FUNCTION: LEGO1 0x10002dd0
 	// FUNCTION: BETA10 0x1000f6a0
 	virtual void VTable0xc4() {} // vtable+0xc4
 
 	// FUNCTION: LEGO1 0x10002de0
-	virtual void VTable0xc8(MxU8 p_unk0x148) { m_unk0x148 = p_unk0x148; } // vtable+0xc8
+	virtual void SetCanRotate(MxU8 p_canRotate) { m_canRotate = p_canRotate; } // vtable+0xc8
 
 	// FUNCTION: LEGO1 0x1000c430
 	// FUNCTION: BETA10 0x10012790
@@ -158,7 +168,7 @@ public:
 
 	LegoPathController* GetController() { return m_pathController; }
 	MxBool GetCollideBox() { return m_collideBox; }
-	MxFloat GetLastTime() { return m_lastTime; }
+	MxFloat GetTransformTime() { return m_transformTime; }
 	MxFloat GetActorTime() { return m_actorTime; }
 
 	void SetBoundary(LegoPathBoundary* p_boundary) { m_boundary = p_boundary; }
@@ -167,7 +177,7 @@ public:
 	void SetActorState(MxU32 p_actorState) { m_actorState = p_actorState; }
 
 	void SetController(LegoPathController* p_pathController) { m_pathController = p_pathController; }
-	void SetLastTime(MxFloat p_lastTime) { m_lastTime = p_lastTime; }
+	void SetTransformTime(MxFloat p_transformTime) { m_transformTime = p_transformTime; }
 	void SetActorTime(MxFloat p_actorTime) { m_actorTime = p_actorTime; }
 
 	void UpdatePlane(LegoNamedPlane& p_namedPlane);
@@ -178,42 +188,42 @@ public:
 	// LegoPathActor::`scalar deleting destructor'
 
 protected:
-	inline MxU32 FUN_1002edd0(
-		list<LegoPathBoundary*>& p_boundaries,
+	inline MxU32 CheckIntersectionBothFaces(
+		list<LegoPathBoundary*>& p_checkedBoundaries,
 		LegoPathBoundary* p_boundary,
-		Vector3& p_v1,
-		Vector3& p_v2,
-		float p_f1,
-		float p_f2,
-		Vector3& p_v3,
-		MxS32 p_und
+		Vector3& p_rayOrigin,
+		Vector3& p_rayDirection,
+		float p_rayLength,
+		float p_radius,
+		Vector3& p_intersectionPoint,
+		MxS32 p_depth
 	);
 
 	MxFloat m_BADuration;                 // 0x78
-	MxFloat m_unk0x7c;                    // 0x7c
+	MxFloat m_traveledDistance;           // 0x7c
 	MxFloat m_actorTime;                  // 0x80
-	MxFloat m_lastTime;                   // 0x84
+	MxFloat m_transformTime;              // 0x84
 	LegoPathBoundary* m_boundary;         // 0x88
 	LegoSpline m_spline;                  // 0x8c
 	MxU32 m_actorState;                   // 0xdc
 	LegoOrientedEdge* m_destEdge;         // 0xe0
-	MxFloat m_unk0xe4;                    // 0xe4
+	MxFloat m_destScale;                  // 0xe4
 	MxBool m_collideBox;                  // 0xe8
-	MxBool m_unk0xe9;                     // 0xe9
+	MxBool m_finishedTravel;              // 0xe9
 	MxBool m_userNavFlag;                 // 0xea
-	MxMatrix m_unk0xec;                   // 0xec
+	MxMatrix m_local2World;               // 0xec
 	LegoPathEdgeContainer* m_grec;        // 0x134
 	LegoPathController* m_pathController; // 0x138
 	MxFloat m_maxLinearVel;               // 0x13c
-	MxFloat m_unk0x140;                   // 0x140
-	MxFloat m_unk0x144;                   // 0x144
-	MxU8 m_unk0x148;                      // 0x148
-	MxS32 m_unk0x14c;                     // 0x14c
-	MxFloat m_unk0x150;                   // 0x150
+	MxFloat m_wallHitDirectionFactor;     // 0x140
+	MxFloat m_wallHitDampening;           // 0x144
+	MxU8 m_canRotate;                     // 0x148
+	MxS32 m_lastRotationAngle;            // 0x14c
+	MxFloat m_linearRotationRatio;        // 0x150
 };
 
 // FUNCTION: LEGO1 0x1002edd0
-// LegoPathActor::FUN_1002edd0
+// LegoPathActor::CheckIntersectionBothFaces
 
 // TEMPLATE: LEGO1 0x10018b70
 // List<LegoBoundaryEdge>::~List<LegoBoundaryEdge>

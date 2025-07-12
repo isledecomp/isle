@@ -166,9 +166,9 @@ MxResult Act3Ammo::Shoot(LegoPathController* p_p, LegoPathBoundary* p_boundary, 
 	m_boundary = p_boundary;
 	m_BADuration = 10000.0f;
 	m_apexParameter = p_apexParameter;
-	m_unk0x7c = 0.0f;
-	m_lastTime = -1.0f;
-	m_actorState = c_one;
+	m_traveledDistance = 0.0f;
+	m_transformTime = -1.0f;
+	m_actorState = c_ready;
 	return SUCCESS;
 }
 
@@ -193,15 +193,15 @@ MxResult Act3Ammo::Shoot(LegoPathController* p_p, MxFloat p_apexParameter)
 	m_pathController = p_p;
 	m_BADuration = 10000.0f;
 	m_apexParameter = p_apexParameter;
-	m_unk0x7c = 0.0f;
-	m_lastTime = -1.0f;
-	m_actorState = c_one;
+	m_traveledDistance = 0.0f;
+	m_transformTime = -1.0f;
+	m_actorState = c_ready;
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10053db0
 // FUNCTION: BETA10 0x1001e0f0
-MxResult Act3Ammo::CalculateTransform(float p_curveParameter, Matrix4& p_transform)
+MxResult Act3Ammo::CalculateTransformOnCurve(float p_curveParameter, Matrix4& p_transform)
 {
 	float curveParameterSquare = p_curveParameter * p_curveParameter;
 
@@ -255,13 +255,13 @@ void Act3Ammo::Animate(float p_time)
 
 	switch (m_actorState & c_maxState) {
 	case c_initial:
-	case c_one:
+	case c_ready:
 		break;
-	case c_two:
+	case c_hit:
 		m_rotateTimeout = p_time + 2000.0f;
-		m_actorState = c_three;
+		m_actorState = c_hitAnimation;
 		return;
-	case c_three:
+	case c_hitAnimation:
 		MxMatrix transform;
 		Vector3 positionRef(transform[3]);
 
@@ -293,15 +293,15 @@ void Act3Ammo::Animate(float p_time)
 		return;
 	}
 
-	if (m_lastTime < 0.0f) {
-		m_lastTime = p_time;
-		m_unk0x7c = 0.0f;
+	if (m_transformTime < 0.0f) {
+		m_transformTime = p_time;
+		m_traveledDistance = 0.0f;
 	}
 
 	MxMatrix transform;
 	MxMatrix additionalTransform;
 
-	float f = (m_BADuration - m_unk0x7c) / m_worldSpeed + m_lastTime;
+	float f = (m_BADuration - m_traveledDistance) / m_worldSpeed + m_transformTime;
 
 	undefined4 unused1 = 0;
 	undefined4 unused2 = 0;
@@ -309,19 +309,19 @@ void Act3Ammo::Animate(float p_time)
 	MxU32 reachedTarget = FALSE;
 
 	if (f >= p_time) {
-		m_actorTime = (p_time - m_lastTime) * m_worldSpeed + m_actorTime;
-		m_unk0x7c = (p_time - m_lastTime) * m_worldSpeed + m_unk0x7c;
-		m_lastTime = p_time;
+		m_actorTime = (p_time - m_transformTime) * m_worldSpeed + m_actorTime;
+		m_traveledDistance = (p_time - m_transformTime) * m_worldSpeed + m_traveledDistance;
+		m_transformTime = p_time;
 	}
 	else {
 		reachedTarget = TRUE;
-		m_unk0x7c = m_BADuration;
-		m_lastTime = p_time;
+		m_traveledDistance = m_BADuration;
+		m_transformTime = p_time;
 	}
 
 	transform.SetIdentity();
 
-	MxResult r = CalculateTransform((m_unk0x7c / m_BADuration) * m_apexParameter, transform);
+	MxResult r = CalculateTransformOnCurve((m_traveledDistance / m_BADuration) * m_apexParameter, transform);
 	assert(r == 0); // SUCCESS
 
 	additionalTransform.SetIdentity();
@@ -369,7 +369,7 @@ void Act3Ammo::Animate(float p_time)
 	m_roi->SetLocal2World(transform);
 	m_roi->WrappedUpdateWorldData();
 
-	if (m_BADuration <= m_unk0x7c) {
+	if (m_BADuration <= m_traveledDistance) {
 		m_worldSpeed = 0.0f;
 	}
 
