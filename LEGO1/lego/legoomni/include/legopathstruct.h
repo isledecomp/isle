@@ -94,8 +94,8 @@ public:
 	void SetAtomId(const MxAtomId& p_atomId) { m_atomId = p_atomId; }
 
 private:
-	MxBool HandleTrigger(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data, MxBool p_bool);
-	void FUN_1001bc40(const char* p_name, MxU32 p_data, MxBool p_bool);
+	MxBool HandleTrigger(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data, MxBool p_invertDirection);
+	void HandleAction(const char* p_name, MxU32 p_data, MxBool p_start);
 	void PlayMusic(MxBool p_direction, MxU32 p_data);
 
 	LegoWorld* m_world; // 0x0c

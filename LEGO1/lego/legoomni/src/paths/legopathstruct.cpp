@@ -19,24 +19,24 @@ DECOMP_SIZE_ASSERT(LegoPathStruct, 0x14)
 extern MxU32 g_isleFlags;
 
 // GLOBAL: LEGO1 0x100f119c
-MxBool g_unk0x100f119c = FALSE;
+MxBool g_alsoInvertDirection = FALSE;
 
 // FUNCTION: LEGO1 0x1001b700
 void LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data)
 {
-	if (!HandleTrigger(p_actor, p_direction, p_data, FALSE) && g_unk0x100f119c) {
+	if (!HandleTrigger(p_actor, p_direction, p_data, FALSE) && g_alsoInvertDirection) {
 		HandleTrigger(p_actor, p_direction, p_data, TRUE);
 	}
 }
 
 // FUNCTION: LEGO1 0x1001b740
 // FUNCTION: BETA10 0x100c26c5
-MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data, MxBool p_bool)
+MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data, MxBool p_invertDirection)
 {
 	MxBool triggered = FALSE;
-	MxBool bool2 = p_bool ? !p_direction : p_direction;
+	MxBool actualDirection = p_invertDirection ? !p_direction : p_direction;
 
-	MxU32 flags = bool2 ? c_bit5 : c_bit6;
+	MxU32 flags = actualDirection ? c_bit5 : c_bit6;
 	flags |= p_actor->GetCameraFlag() ? c_bit1 : (c_bit2 | c_bit3 | c_bit4);
 
 	if ((m_flags & flags & (c_bit5 | c_bit6 | c_bit7)) && (m_flags & flags & (c_bit1 | c_bit2 | c_bit3 | c_bit4))) {
@@ -45,7 +45,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 		switch (m_name[2]) {
 		case c_camAnim:
 			if (g_isleFlags & Isle::c_playCamAnims) {
-				PlayCamAnim(p_actor, bool2, p_data, TRUE);
+				PlayCamAnim(p_actor, actualDirection, p_data, TRUE);
 			}
 			break;
 		case c_d: {
@@ -61,7 +61,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 			break;
 		}
 		case c_e:
-			FUN_1001bc40(m_name, p_data, !(p_bool == FALSE));
+			HandleAction(m_name, p_data, !(p_invertDirection == FALSE));
 			break;
 		case c_g:
 			break;
@@ -87,7 +87,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 				}
 			}
 
-			FUN_1001bc40(m_name, p_data, p_bool == FALSE);
+			HandleAction(m_name, p_data, p_invertDirection == FALSE);
 			break;
 		}
 		case c_w: {
@@ -106,13 +106,13 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 
 // FUNCTION: LEGO1 0x1001bc40
 // FUNCTION: BETA10 0x100c2a6c
-void LegoPathStruct::FUN_1001bc40(const char* p_name, MxU32 p_data, MxBool p_bool)
+void LegoPathStruct::HandleAction(const char* p_name, MxU32 p_data, MxBool p_start)
 {
 	MxDSAction action;
 	action.SetObjectId(p_data);
 	action.SetAtomId(m_atomId);
 
-	if (p_bool) {
+	if (p_start) {
 		action.SetUnknown24(-1);
 		Start(&action);
 	}

@@ -23,7 +23,7 @@
 #include "scripts.h"
 
 // Defined in legopathstruct.cpp
-extern MxBool g_unk0x100f119c;
+extern MxBool g_alsoInvertDirection;
 
 // Defined in jetski.cpp
 extern const char* g_varJSFRNTY5;
@@ -70,7 +70,7 @@ MxResult JetskiRace::Create(MxDSAction& p_dsAction)
 	InvokeAction(Extra::e_start, m_atomId, raceCarDashboardStreamId, NULL);
 	InvokeAction(Extra::e_start, m_atomId, JetraceScript::c_JetskiDashboard, NULL);
 
-	g_unk0x100f119c = TRUE;
+	g_alsoInvertDirection = TRUE;
 
 	return result;
 }
