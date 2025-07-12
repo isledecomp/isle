@@ -224,7 +224,7 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 			// TODO: Something is wrong about these first two lines
 			// LINE: LEGO1 0x1007215d
 			it = begin();
-			it3 = begin();
+			it3 = it;
 
 			Act3ListElement& firstItem = *it++;
 
