@@ -116,6 +116,7 @@ void Act3List::Insert(MxS32 p_objectId, InsertMode p_option)
 	}
 
 	switch (p_option) {
+	// TODO: Consider using an enum
 	case InsertMode::e_replaceAction:
 		if (!empty()) {
 			DeleteActionWrapper();
@@ -175,49 +176,84 @@ void Act3List::Clear()
 // FUNCTION: LEGO1 0x100720d0
 void Act3List::FUN_100720d0(MxU32 p_objectId)
 {
+	// LINE: LEGO1 0x100720db
 	if (m_unk0x0c) {
 		return;
 	}
 
 	MxU32 removed = FALSE;
 
+
+	// LINE: LEGO1 0x100720e6
 	if (!empty()) {
-		if (p_objectId != 0) {
-			for (Act3List::iterator it = begin(); it != end(); it++) {
-				if ((*it).m_hasStarted && (*it).m_objectId == p_objectId) {
-					erase(it);
-					removed = TRUE;
-					break;
-				}
-			}
-		}
-		else {
+
+		if (!p_objectId) {
+			// LINE: LEGO1 0x10072131
 			pop_front();
+
 			removed = TRUE;
+		} else {
+
+			for (Act3List::iterator it = begin(); it != end(); it++) {
+
+				if ((*it).m_hasStarted && (*it).m_objectId == p_objectId) {
+
+					erase(it);
+
+					removed = TRUE;
+
+					break;
+
+				}
+
+			}
+
 		}
+
+
+
 
 		if (removed && size() > 0) {
-			Act3List::iterator it = begin();
-			Act3ListElement& firstItem = *(it++);
 
-			for (; it != end(); it++) {
+			// TODO: Something is wrong about these first two lines
+			// LINE: LEGO1 0x1007215d
+			Act3List::iterator its = begin()++;
+
+			Act3ListElement& firstItem = *(its++);
+
+			// // LINE: LEGO1 0x100721d4 Not pinnable, appears multiple times
+			for (Act3List::iterator it = its; it != end(); it++) {
+				// LINE: LEGO1 0x1007217c
 				if ((*it).m_unk0x04 == 1) {
-					for (Act3List::iterator it2 = begin(); it2 != it;) {
+					// LINE: LEGO1 0x100721a0
+					for (Act3List::iterator it2 = begin()++; it2 != it; it2 = erase(it2)) {
+						// LINE: LEGO1 0x10072191
 						if ((*it2).m_hasStarted) {
+							// LINE: LEGO1 0x10072202
 							DeleteActionWrapper();
+							// LINE: LEGO1 0x10072209
 							return;
+
 						}
 
-						it2 = erase(it2);
 					}
+
 				}
+
 			}
 
+
+			// LINE: LEGO1 0x100721d8
 			if (!firstItem.m_hasStarted) {
+				// LINE: LEGO1 0x100721de
 				firstItem.m_hasStarted = TRUE;
+				// // LINE: LEGO1 0x100721e4
 				InvokeAction(Extra::e_start, *g_act3Script, firstItem.m_objectId, NULL);
+
 			}
+
 		}
+
 	}
 }
 
