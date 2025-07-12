@@ -592,6 +592,10 @@ if (MSVC_FOR_DECOMP)
     set_property(TARGET isle ${lego1_targets} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   endif()
 
+  if (ISLE_BUILD_CONFIG)
+    target_link_libraries(config PRIVATE mfc42)
+  endif()
+
   if (ISLE_INCLUDE_ENTROPY)
     message(STATUS "Using entropy file: ${ISLE_ENTROPY_FILENAME}")
     foreach(tgt IN LISTS lego1_targets beta10_targets)
