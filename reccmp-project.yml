@@ -43,3 +43,8 @@ targets:
     source-root: LEGO1
     hash:
       sha256: dc7e5ed8ec9d96851126a40c4d23755f1783a8df61def44c667dfaa992ac509e
+  CONFIGD:
+    filename: CONFIGD.EXE
+    source-root: .
+    hash:
+      sha256: 9d2b7de2e53eee99cce24a64777a08a7f919a0401a393d9494bce27ef2e24c39
