@@ -22,6 +22,7 @@ These modules are the most important ones and refer to the English retail versio
 ## BETA v1.0
 
 * `BETA10` -> `LEGO1D.DLL`
+* `CONFIGD` -> `CONFIG.EXE`
 
 The Beta 1.0 version contains a debug build of the game. While it does not have debug symbols, it still has a number of benefits:
 * It is built with less or no optimisation, leading to better decompilations in Ghidra
@@ -31,6 +32,8 @@ The Beta 1.0 version contains a debug build of the game. While it does not have 
 It is therefore advisable to search for the corresponding function in `BETA10` when decompiling a function in `LEGO1`. Finding the correct function can be tricky, but is usually worth it, especially for longer functions.
 
 Unfortunately, some code has been changed after this beta version was created. Therefore, we are not aiming for a perfect binary match of `BETA10`. In case of discrepancies, `LEGO1` (as defined above) is our "gold standard" for matching.
+
+The beta version of the `CONFIG` application has provided some help with matching [MFC handler functions](https://en.wikipedia.org/wiki/Microsoft_Foundation_Class_Library) that are similar to the final version.
 
 ## Pre-Alpha
 
