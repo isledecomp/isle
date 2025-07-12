@@ -42,20 +42,22 @@ void MxDisplaySurface::Init()
 }
 
 // FUNCTION: LEGO1 0x100ba640
+// FUNCTION: BETA10 0x1013f506
 void MxDisplaySurface::ClearScreen()
 {
+	MxS32 i;
 	MxS32 backBuffers;
 	DDSURFACEDESC desc;
 	HRESULT hr;
 
-	if (!m_videoParam.Flags().GetFlipSurfaces()) {
-		backBuffers = 1;
-	}
-	else {
+	if (m_videoParam.Flags().GetFlipSurfaces()) {
 		backBuffers = m_videoParam.GetBackBuffers() + 1;
 	}
+	else {
+		backBuffers = 1;
+	}
 
-	for (MxS32 i = 0; i < backBuffers; i++) {
+	for (i = 0; i < backBuffers; i++) {
 		memset(&desc, 0, sizeof(DDSURFACEDESC));
 
 		desc.dwSize = sizeof(DDSURFACEDESC);

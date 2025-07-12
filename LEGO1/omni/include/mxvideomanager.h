@@ -41,7 +41,10 @@ public:
 
 	MxVideoParam& GetVideoParam() { return this->m_videoParam; }
 	LPDIRECTDRAW GetDirectDraw() { return this->m_pDirectDraw; }
+
+	// FUNCTION: BETA10 0x1002e290
 	MxDisplaySurface* GetDisplaySurface() { return this->m_displaySurface; }
+
 	MxRegion* GetRegion() { return this->m_region; }
 
 	// SYNTHETIC: LEGO1 0x100be280
