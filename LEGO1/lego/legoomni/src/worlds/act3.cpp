@@ -184,7 +184,11 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 	MxU32 removed = FALSE;
 
 	Act3List::iterator it;
+
+	// TODO: This extra iterator is still kind of dodgy
 	Act3List::iterator it3;
+
+
 	// LINE: LEGO1 0x100720e6
 	if (!empty()) {
 
@@ -196,8 +200,9 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 		} else {
 			// LINE: LEGO1 0x100720fa
 			for (it = begin(); it != end(); it++) {
+				Act3ListElement& current = *it;
 
-				if ((*it).m_hasStarted && (*it).m_objectId == p_objectId) {
+				if (current.m_hasStarted && current.m_objectId == p_objectId) {
 
 					erase(it);
 
@@ -224,11 +229,11 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 			Act3ListElement& firstItem = *it++;
 
 			// // LINE: LEGO1 0x100721d4 Not pinnable, appears multiple times
-			for (; it != end(); it++) {
+			for (; it != end(); ) {
 				// LINE: LEGO1 0x1007217c
 				if ((*it).m_unk0x04 == 1) {
 					// LINE: LEGO1 0x100721a0
-					for (Act3List::iterator it2 = begin(); it2 != it; erase(it2++)) {
+					for (Act3List::iterator it2 = begin(); it2 != it; ) {
 						// LINE: LEGO1 0x10072191
 						if ((*it2).m_hasStarted) {
 							// LINE: LEGO1 0x10072202
@@ -237,17 +242,18 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 							return;
 
 						}
-
-						it3++;
+						erase(it2++);
 
 					}
+						it++;
+						it3++;
 
 				}
 
 			}
 
 
-			// LINE: LEGO1 0x100721d8
+			// LINE: LEGO1 0x100721d4
 			if (!firstItem.m_hasStarted) {
 				// LINE: LEGO1 0x100721de
 				firstItem.m_hasStarted = TRUE;
