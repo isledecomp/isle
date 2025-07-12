@@ -117,6 +117,7 @@ public:
 	void SetUseJoystick(MxBool p_useJoystick) { m_useJoystick = p_useJoystick; }
 	void SetJoystickIndex(MxS32 p_joystickIndex) { m_joystickIndex = p_joystickIndex; }
 
+	// FUNCTION: BETA10 0x1002e290
 	void DisableInputProcessing()
 	{
 		m_unk0x88 = TRUE;

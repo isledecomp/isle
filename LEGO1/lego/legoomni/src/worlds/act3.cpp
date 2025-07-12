@@ -109,16 +109,16 @@ Act3Script::Script g_unk0x100d95e8[] =
 	{Act3Script::c_tlp053in_RunAnim, Act3Script::c_tlp064la_RunAnim, Act3Script::c_tlp068in_RunAnim};
 
 // FUNCTION: LEGO1 0x10071d40
-void Act3List::Insert(MxS32 p_objectId, MxS32 p_option)
+void Act3List::Insert(MxS32 p_objectId, InsertMode p_option)
 {
 	if (m_unk0x0c) {
 		return;
 	}
 
 	switch (p_option) {
-	case 1:
+	case InsertMode::e_replaceAction:
 		if (!empty()) {
-			FUN_10071fa0();
+			DeleteActionWrapper();
 			push_back(Act3ListElement(p_objectId, p_option, FALSE));
 		}
 		else {
@@ -126,7 +126,7 @@ void Act3List::Insert(MxS32 p_objectId, MxS32 p_option)
 			push_back(Act3ListElement(p_objectId, p_option, TRUE));
 		}
 		break;
-	case 2:
+	case InsertMode::e_queueAction:
 		if (empty()) {
 			push_back(Act3ListElement(p_objectId, p_option, TRUE));
 			InvokeAction(Extra::e_start, *g_act3Script, p_objectId, NULL);
@@ -135,7 +135,7 @@ void Act3List::Insert(MxS32 p_objectId, MxS32 p_option)
 			push_back(Act3ListElement(p_objectId, p_option, FALSE));
 		}
 		break;
-	case 3:
+	case InsertMode::e_onlyIfEmpty:
 		if (empty()) {
 			push_back(Act3ListElement(p_objectId, p_option, TRUE));
 			InvokeAction(Extra::e_start, *g_act3Script, p_objectId, NULL);
@@ -145,7 +145,7 @@ void Act3List::Insert(MxS32 p_objectId, MxS32 p_option)
 }
 
 // FUNCTION: LEGO1 0x10071fa0
-void Act3List::FUN_10071fa0()
+void Act3List::DeleteActionWrapper()
 {
 	DeleteAction();
 }
@@ -161,7 +161,7 @@ void Act3List::Clear()
 	}
 
 	for (Act3List::iterator it = begin(); it != end();) {
-		if ((*it).m_unk0x08) {
+		if ((*it).m_hasStarted) {
 			MxDSAction ds;
 			ds.SetAtomId(*g_act3Script);
 			ds.SetObjectId((*it).m_objectId);
@@ -175,46 +175,47 @@ void Act3List::Clear()
 // FUNCTION: LEGO1 0x100720d0
 void Act3List::FUN_100720d0(MxU32 p_objectId)
 {
-	if (m_unk0x0c == 0) {
-		MxU32 removed = FALSE;
+	if (m_unk0x0c) {
+		return;
+	}
 
-		if (!empty()) {
-			if (p_objectId != 0) {
-				for (Act3List::iterator it = begin(); it != end(); it++) {
-					if ((*it).m_unk0x08 && (*it).m_objectId == p_objectId) {
-						erase(it);
-						removed = TRUE;
-						break;
-					}
+	MxU32 removed = FALSE;
+
+	if (!empty()) {
+		if (p_objectId != 0) {
+			for (Act3List::iterator it = begin(); it != end(); it++) {
+				if ((*it).m_hasStarted && (*it).m_objectId == p_objectId) {
+					erase(it);
+					removed = TRUE;
+					break;
 				}
 			}
-			else {
-				pop_front();
-				removed = TRUE;
-			}
+		}
+		else {
+			pop_front();
+			removed = TRUE;
+		}
 
-			if (removed && size() > 0) {
-				// TODO: Match
-				Act3List::iterator it = begin();
-				Act3ListElement& item = *(it++);
+		if (removed && size() > 0) {
+			Act3List::iterator it = begin();
+			Act3ListElement& firstItem = *(it++);
 
-				for (; it != end(); it++) {
-					if ((*it).m_unk0x04 == 1) {
-						for (Act3List::iterator it2 = begin(); it2 != it;) {
-							if ((*it2).m_unk0x08) {
-								FUN_10071fa0();
-								return;
-							}
-
-							it2 = erase(it2);
+			for (; it != end(); it++) {
+				if ((*it).m_unk0x04 == 1) {
+					for (Act3List::iterator it2 = begin(); it2 != it;) {
+						if ((*it2).m_hasStarted) {
+							DeleteActionWrapper();
+							return;
 						}
+
+						it2 = erase(it2);
 					}
 				}
+			}
 
-				if (!item.m_unk0x08) {
-					item.m_unk0x08 = TRUE;
-					InvokeAction(Extra::e_start, *g_act3Script, item.m_objectId, NULL);
-				}
+			if (!firstItem.m_hasStarted) {
+				firstItem.m_hasStarted = TRUE;
+				InvokeAction(Extra::e_start, *g_act3Script, firstItem.m_objectId, NULL);
 			}
 		}
 	}
@@ -454,14 +455,14 @@ void Act3::TriggerHitSound(undefined4 p_param1)
 			m_bricksterDonutSound = 0;
 		}
 
-		m_unk0x4220.Insert(g_bricksterDonutSounds[m_bricksterDonutSound++], 1);
+		m_unk0x4220.Insert(g_bricksterDonutSounds[m_bricksterDonutSound++], Act3List::e_replaceAction);
 		return;
 	}
 	default:
 		return;
 	}
 
-	m_unk0x4220.Insert(objectId, 3);
+	m_unk0x4220.Insert(objectId, Act3List::e_onlyIfEmpty);
 }
 
 // FUNCTION: LEGO1 0x10072c30

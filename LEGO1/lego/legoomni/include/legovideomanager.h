@@ -62,7 +62,9 @@ public:
 	MxBool GetRender3D() { return m_render3d; }
 	double GetElapsedSeconds() { return m_elapsedSeconds; }
 
+	// FUNCTION: BETA10 0x1002e290
 	void SetRender3D(MxBool p_render3d) { m_render3d = p_render3d; }
+
 	void SetUnk0x554(MxBool p_unk0x554) { m_unk0x554 = p_unk0x554; }
 
 private:
