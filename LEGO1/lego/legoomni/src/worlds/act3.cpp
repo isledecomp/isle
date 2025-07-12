@@ -184,6 +184,7 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 	MxU32 removed = FALSE;
 
 	Act3List::iterator it;
+	Act3List::iterator it3;
 	// LINE: LEGO1 0x100720e6
 	if (!empty()) {
 
@@ -218,6 +219,7 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 			// TODO: Something is wrong about these first two lines
 			// LINE: LEGO1 0x1007215d
 			it = begin();
+			it3 = begin();
 
 			Act3ListElement& firstItem = *it++;
 
@@ -235,6 +237,8 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 							return;
 
 						}
+
+						it3++;
 
 					}
 
