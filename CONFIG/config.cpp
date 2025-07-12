@@ -4,6 +4,7 @@
 #include "MainDlg.h"
 #include "detectdx5.h"
 
+#include <assert.h>
 #include <direct.h> // _chdir
 #include <mxdirectx/legodxinfo.h>
 #include <mxdirectx/mxdirect3d.h>
@@ -19,6 +20,7 @@ ON_COMMAND(ID_HELP, OnHelp)
 END_MESSAGE_MAP()
 
 // FUNCTION: CONFIG 0x00402c40
+// FUNCTION: CONFIGD 0x00406900
 CConfigApp::CConfigApp()
 {
 }
@@ -26,11 +28,13 @@ CConfigApp::CConfigApp()
 #define MiB (1024 * 1024)
 
 // FUNCTION: CONFIG 0x00402dc0
+// FUNCTION: CONFIGD 0x004069dc
 BOOL CConfigApp::InitInstance()
 {
 	if (!IsLegoNotRunning()) {
 		return FALSE;
 	}
+
 	if (!DetectDirectX5()) {
 		AfxMessageBox(
 			"\"LEGO\xae Island\" is not detecting DirectX 5 or later.  Please quit all other applications and try "
@@ -38,20 +42,25 @@ BOOL CConfigApp::InitInstance()
 		);
 		return FALSE;
 	}
+
 #ifdef _AFXDLL
 	Enable3dControls();
 #else
 	Enable3dControlsStatic();
 #endif
+
 	CConfigCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 	if (_stricmp(afxCurrentAppName, "config") == 0) {
 		m_run_config_dialog = TRUE;
 	}
+
 	m_device_enumerator = new LegoDeviceEnumerate;
 	if (m_device_enumerator->DoEnumerate()) {
+		assert("Could not build device list." == NULL);
 		return FALSE;
 	}
+
 	m_driver = NULL;
 	m_device = NULL;
 	m_full_screen = TRUE;
@@ -76,11 +85,17 @@ BOOL CConfigApp::InitInstance()
 		m_texture_quality = 1;
 	}
 	else {
-		m_model_quality = 2;
 		m_3d_sound = TRUE;
+		m_model_quality = 2;
 		m_texture_quality = 1;
 	}
-	if (!m_run_config_dialog) {
+
+	if (m_run_config_dialog) {
+		CMainDialog main_dialog(NULL);
+		m_pMainWnd = &main_dialog;
+		main_dialog.DoModal();
+	}
+	else {
 		ReadRegisterSettings();
 		ValidateSettings();
 		WriteRegisterSettings();
@@ -89,17 +104,17 @@ BOOL CConfigApp::InitInstance()
 		m_driver = NULL;
 		m_device = NULL;
 		char password[256];
-		ReadReg("password", password, sizeof(password));
+		BOOL read = ReadReg("password", password, sizeof(password));
 		const char* exe = _stricmp("ogel", password) == 0 ? "isled.exe" : "isle.exe";
 		char diskpath[1024];
-		if (ReadReg("diskpath", diskpath, sizeof(diskpath))) {
+		read = ReadReg("diskpath", diskpath, sizeof(diskpath));
+		if (read) {
 			_chdir(diskpath);
 		}
+
 		_spawnl(_P_NOWAIT, exe, exe, "/diskstream", "/script", "\\lego\\scripts\\isle\\isle.si", NULL);
-		return FALSE;
 	}
-	CMainDialog main_dialog(NULL);
-	main_dialog.DoModal();
+
 	return FALSE;
 }
 
@@ -117,35 +132,40 @@ BOOL CConfigApp::IsLegoNotRunning()
 }
 
 // FUNCTION: CONFIG 0x004031b0
+// FUNCTION: CONFIGD 0x00406dc3
 BOOL CConfigApp::WriteReg(const char* p_key, const char* p_value) const
 {
 	HKEY hKey;
 	DWORD pos;
+	BOOL success = FALSE;
+	BOOL created = RegCreateKeyEx(
+		HKEY_LOCAL_MACHINE,
+		"SOFTWARE\\Mindscape\\LEGO Island",
+		0,
+		"string",
+		0,
+		KEY_READ | KEY_WRITE,
+		NULL,
+		&hKey,
+		&pos
+	);
 
-	if (RegCreateKeyEx(
-			HKEY_LOCAL_MACHINE,
-			"SOFTWARE\\Mindscape\\LEGO Island",
-			0,
-			"string",
-			0,
-			KEY_READ | KEY_WRITE,
-			NULL,
-			&hKey,
-			&pos
-		) == ERROR_SUCCESS) {
-		if (RegSetValueEx(hKey, p_key, 0, REG_SZ, (LPBYTE) p_value, strlen(p_value)) == ERROR_SUCCESS) {
+	if (created == ERROR_SUCCESS) {
+		if (RegSetValueEx(hKey, p_key, 0, REG_SZ, (LPBYTE) p_value, strlen(p_value) + 1) == ERROR_SUCCESS) {
 			if (RegCloseKey(hKey) == ERROR_SUCCESS) {
-				return TRUE;
+				success = TRUE;
 			}
 		}
 		else {
 			RegCloseKey(hKey);
 		}
 	}
-	return FALSE;
+
+	return success;
 }
 
 // FUNCTION: CONFIG 0x00403240
+// FUNCTION: CONFIGD 0x00406e6e
 BOOL CConfigApp::ReadReg(LPCSTR p_key, LPCSTR p_value, DWORD p_size) const
 {
 	HKEY hKey;
@@ -164,28 +184,30 @@ BOOL CConfigApp::ReadReg(LPCSTR p_key, LPCSTR p_value, DWORD p_size) const
 }
 
 // FUNCTION: CONFIG 0x004032b0
+// FUNCTION: CONFIGD 0x00406ef6
 BOOL CConfigApp::ReadRegBool(LPCSTR p_key, BOOL* p_bool) const
 {
 	char buffer[256];
+	BOOL read = TRUE;
 
-	BOOL read = ReadReg(p_key, buffer, sizeof(buffer));
+	read = ReadReg(p_key, buffer, sizeof(buffer));
 	if (read) {
 		if (strcmp("YES", buffer) == 0) {
 			*p_bool = TRUE;
-			return read;
 		}
-
-		if (strcmp("NO", buffer) == 0) {
+		else if (strcmp("NO", buffer) == 0) {
 			*p_bool = FALSE;
-			return read;
 		}
-
-		read = FALSE;
+		else {
+			read = FALSE;
+		}
 	}
+
 	return read;
 }
 
 // FUNCTION: CONFIG 0x00403380
+// FUNCTION: CONFIGD 0x00406fa1
 BOOL CConfigApp::ReadRegInt(LPCSTR p_key, int* p_value) const
 {
 	char buffer[256];
@@ -199,46 +221,63 @@ BOOL CConfigApp::ReadRegInt(LPCSTR p_key, int* p_value) const
 }
 
 // FUNCTION: CONFIG 0x004033d0
+// FUNCTION: CONFIGD 0x00407080
 BOOL CConfigApp::IsDeviceInBasicRGBMode() const
 {
 	/*
 	 * BUG: should be:
 	 *  return !GetHardwareDeviceColorModel() && (m_device->m_HELDesc.dcmColorModel & D3DCOLOR_RGB);
 	 */
+	assert(m_device);
 	return !GetHardwareDeviceColorModel() && m_device->m_HELDesc.dcmColorModel == D3DCOLOR_RGB;
 }
 
 // FUNCTION: CONFIG 0x00403400
+// FUNCTION: CONFIGD 0x004070fa
 D3DCOLORMODEL CConfigApp::GetHardwareDeviceColorModel() const
 {
+	assert(m_device);
 	return m_device->m_HWDesc.dcmColorModel;
 }
 
 // FUNCTION: CONFIG 0x00403410
+// FUNCTION: CONFIGD 0x0040714e
 BOOL CConfigApp::IsPrimaryDriver() const
 {
+	assert(m_driver && m_device_enumerator);
 	return m_driver == &m_device_enumerator->GetDriverList().front();
 }
 
 // FUNCTION: CONFIG 0x00403430
+// FUNCTION: CONFIGD 0x004071d2
 BOOL CConfigApp::ReadRegisterSettings()
 {
 	char buffer[256];
 	BOOL is_modified = FALSE;
-	int tmp = -1;
 
-	if (ReadReg("3D Device ID", buffer, sizeof(buffer))) {
-		tmp = m_device_enumerator->ParseDeviceName(buffer);
-		if (tmp >= 0) {
-			tmp = m_device_enumerator->GetDevice(tmp, m_driver, m_device);
+	BOOL read = ReadReg("3D Device ID", buffer, sizeof(buffer));
+	int r = -1;
+
+	if (read) {
+		r = m_device_enumerator->ParseDeviceName(buffer);
+		if (r >= 0) {
+			r = m_device_enumerator->GetDevice(r, m_driver, m_device);
+			if (r) {
+				r = -1;
+			}
 		}
 	}
-	if (tmp != 0) {
-		is_modified = TRUE;
+
+	if (r < 0) {
 		m_device_enumerator->FUN_1009d210();
-		tmp = m_device_enumerator->GetBestDevice();
-		m_device_enumerator->GetDevice(tmp, m_driver, m_device);
+		r = m_device_enumerator->GetBestDevice();
+		is_modified = TRUE;
+		assert(r >= 0);
+		r = m_device_enumerator->GetDevice(r, m_driver, m_device);
 	}
+
+	assert(r == 0 && m_driver && m_device);
+
 	if (!ReadRegInt("Display Bit Depth", &m_display_bit_depth)) {
 		is_modified = TRUE;
 	}
@@ -279,6 +318,7 @@ BOOL CConfigApp::ReadRegisterSettings()
 }
 
 // FUNCTION: CONFIG 0x00403630
+// FUNCTION: CONFIGD 0x00407547
 BOOL CConfigApp::ValidateSettings()
 {
 	BOOL is_modified = FALSE;
@@ -301,11 +341,7 @@ BOOL CConfigApp::ValidateSettings()
 			is_modified = TRUE;
 		}
 	}
-	if (!GetHardwareDeviceColorModel()) {
-		m_draw_cursor = FALSE;
-		is_modified = TRUE;
-	}
-	else {
+	if (GetHardwareDeviceColorModel()) {
 		if (!m_3d_video_ram) {
 			m_3d_video_ram = TRUE;
 			is_modified = TRUE;
@@ -314,6 +350,10 @@ BOOL CConfigApp::ValidateSettings()
 			m_flip_surfaces = TRUE;
 			is_modified = TRUE;
 		}
+	}
+	else {
+		m_draw_cursor = FALSE;
+		is_modified = TRUE;
 	}
 	if (m_flip_surfaces) {
 		if (!m_3d_video_ram) {
@@ -341,8 +381,10 @@ BOOL CConfigApp::ValidateSettings()
 }
 
 // FUNCTION: CONFIG 0x004037a0
+// FUNCTION: CONFIGD 0x00407793
 DWORD CConfigApp::GetConditionalDeviceRenderBitDepth() const
 {
+	assert(m_device);
 	if (IsDeviceInBasicRGBMode()) {
 		return 0;
 	}
@@ -353,8 +395,10 @@ DWORD CConfigApp::GetConditionalDeviceRenderBitDepth() const
 }
 
 // FUNCTION: CONFIG 0x004037e0
+// FUNCTION: CONFIGD 0x00407822
 DWORD CConfigApp::GetDeviceRenderBitStatus() const
 {
+	assert(m_device);
 	if (GetHardwareDeviceColorModel()) {
 		return m_device->m_HWDesc.dwDeviceRenderBitDepth & DDBD_16;
 	}
@@ -364,6 +408,7 @@ DWORD CConfigApp::GetDeviceRenderBitStatus() const
 }
 
 // FUNCTION: CONFIG 0x00403810
+// FUNCTION: CONFIGD 0x004078ac
 BOOL CConfigApp::AdjustDisplayBitDepthBasedOnRenderStatus()
 {
 	if (m_display_bit_depth == 8) {
@@ -388,7 +433,8 @@ BOOL CConfigApp::AdjustDisplayBitDepthBasedOnRenderStatus()
 	return TRUE;
 }
 
-// FUNCTION: CONFIG 00403890
+// FUNCTION: CONFIG 0x00403890
+// FUNCTION: CONFIGD 0x00407966
 void CConfigApp::WriteRegisterSettings() const
 
 {
@@ -401,6 +447,7 @@ void CConfigApp::WriteRegisterSettings() const
 		WriteReg(NAME, buffer);                                                                                        \
 	} while (0)
 
+	assert(m_device_enumerator && m_driver && m_device);
 	m_device_enumerator->FormatDeviceName(buffer, m_driver, m_device);
 	WriteReg("3D Device ID", buffer);
 	WriteReg("3D Device Name", m_device->m_deviceName);
@@ -422,6 +469,7 @@ void CConfigApp::WriteRegisterSettings() const
 }
 
 // FUNCTION: CONFIG 0x00403a90
+// FUNCTION: CONFIGD 0x00407c44
 int CConfigApp::ExitInstance()
 {
 	if (m_device_enumerator) {
