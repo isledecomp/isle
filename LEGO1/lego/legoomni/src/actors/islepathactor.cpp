@@ -367,7 +367,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_noneJukebox
 	);
 	g_spawnLocations[17] = SpawnLocation(
-		LegoGameState::e_unk41,
+		LegoGameState::e_helicopterLanded,
 		g_isleScript,
 		0,
 		"edg02_51",
@@ -415,7 +415,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_noneJukebox
 	);
 	g_spawnLocations[21] = SpawnLocation(
-		LegoGameState::e_unk42,
+		LegoGameState::e_helicopterTakenOff,
 		g_isleScript,
 		0,
 		"inv_05",
@@ -427,7 +427,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_noneJukebox
 	);
 	g_spawnLocations[22] = SpawnLocation(
-		LegoGameState::e_unk48,
+		LegoGameState::e_helicopterLandedAct3,
 		g_act3Script,
 		0,
 		"edg02_51",
@@ -439,7 +439,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_noneJukebox
 	);
 	g_spawnLocations[23] = SpawnLocation(
-		LegoGameState::e_unk49,
+		LegoGameState::e_helicopterTakenOffAct3,
 		g_act3Script,
 		0,
 		"inv_05",
@@ -451,7 +451,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_noneJukebox
 	);
 	g_spawnLocations[24] = SpawnLocation(
-		LegoGameState::e_unk50,
+		LegoGameState::e_pepperSpawnAct2,
 		g_act2mainScript,
 		0,
 		"EDG02_51",
@@ -499,7 +499,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_noneJukebox
 	);
 	g_spawnLocations[28] = SpawnLocation(
-		LegoGameState::e_unk55,
+		LegoGameState::e_helicopterExited,
 		g_isleScript,
 		0,
 		"edg02_50",

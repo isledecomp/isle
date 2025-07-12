@@ -95,7 +95,7 @@ void Helicopter::Exit()
 		if (UserActor() && UserActor()->IsA("IslePathActor")) {
 			((IslePathActor*) UserActor())
 				->SpawnPlayer(
-					LegoGameState::e_unk55,
+					LegoGameState::e_helicopterExited,
 					TRUE,
 					IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 				);
@@ -143,7 +143,7 @@ MxLong Helicopter::HandleClick()
 		m_script = *g_isleScript;
 		AnimationManager()->FUN_10064670(NULL);
 		SpawnPlayer(
-			LegoGameState::e_unk41,
+			LegoGameState::e_helicopterLanded,
 			TRUE,
 			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 		);
@@ -320,14 +320,14 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 			assert(act1State);
 			act1State->m_state = Act1State::e_helicopter;
 			SpawnPlayer(
-				LegoGameState::e_unk42,
+				LegoGameState::e_helicopterTakenOff,
 				TRUE,
 				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 			);
 		}
 		else {
 			SpawnPlayer(
-				LegoGameState::e_unk49,
+				LegoGameState::e_helicopterTakenOffAct3,
 				TRUE,
 				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 			);
@@ -361,14 +361,14 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 			assert(act1State);
 			act1State->m_state = Act1State::e_none;
 			SpawnPlayer(
-				LegoGameState::e_unk41,
+				LegoGameState::e_helicopterLanded,
 				TRUE,
 				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 			);
 		}
 		else {
 			SpawnPlayer(
-				LegoGameState::e_unk48,
+				LegoGameState::e_helicopterLandedAct3,
 				TRUE,
 				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 			);
