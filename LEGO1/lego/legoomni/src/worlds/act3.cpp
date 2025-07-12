@@ -226,7 +226,7 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 				// LINE: LEGO1 0x1007217c
 				if ((*it).m_unk0x04 == 1) {
 					// LINE: LEGO1 0x100721a0
-					for (Act3List::iterator it2 = begin(); it2 != it; it2 = erase(it2)) {
+					for (Act3List::iterator it2 = begin(); it2 != it; erase(it2++)) {
 						// LINE: LEGO1 0x10072191
 						if ((*it2).m_hasStarted) {
 							// LINE: LEGO1 0x10072202
