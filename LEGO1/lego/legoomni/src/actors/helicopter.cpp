@@ -148,7 +148,7 @@ MxLong Helicopter::HandleClick()
 			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 		);
 		((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_copter);
-		FUN_10015820(TRUE, 0);
+		Disable(TRUE, 0);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, TRUE);
 		SetActorState(c_disabled);
 		PlayMusic(JukeboxScript::c_Jail_Music);

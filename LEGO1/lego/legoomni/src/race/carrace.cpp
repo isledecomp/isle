@@ -124,7 +124,7 @@ void CarRace::ReadyWorld()
 
 	BackgroundAudioManager()->PlayMusic(action, 5, MxPresenter::e_repeating);
 	AnimationManager()->Resume();
-	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+	Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 
 	m_unk0x144 = g_unk0x100d5d10[rand() & 7];
 

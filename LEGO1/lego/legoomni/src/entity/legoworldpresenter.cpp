@@ -62,7 +62,7 @@ LegoWorldPresenter::~LegoWorldPresenter()
 	}
 
 	if (result == FALSE) {
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+		Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 	}
 
 	if (m_entity) {

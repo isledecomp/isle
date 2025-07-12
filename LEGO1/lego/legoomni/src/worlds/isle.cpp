@@ -277,7 +277,7 @@ void Isle::ReadyWorld()
 		EnableAnimations(TRUE);
 		FUN_10032620();
 		m_act1state->PlaceActors();
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+		Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 	}
 }
 
@@ -839,7 +839,7 @@ void Isle::Enable(MxBool p_enable)
 			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_jetski) &&
 			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_skateboard) &&
 			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_jetrace2)) {
-			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		}
 
 		SetROIVisible("stretch", FALSE);
@@ -961,7 +961,7 @@ MxLong Isle::HandleTransitionEnd()
 		m_destLocation = LegoGameState::e_undefined;
 		VariableTable()->SetVariable("VISIBILITY", "Show Gas");
 		AnimationManager()->Resume();
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+		Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		SetAppCursor(e_cursorArrow);
 		SetIsWorldActive(TRUE);
 		break;
@@ -971,7 +971,7 @@ MxLong Isle::HandleTransitionEnd()
 		m_destLocation = LegoGameState::e_undefined;
 		VariableTable()->SetVariable("VISIBILITY", "Show Policsta");
 		AnimationManager()->Resume();
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+		Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		SetAppCursor(e_cursorArrow);
 		SetIsWorldActive(TRUE);
 		break;
@@ -1082,7 +1082,7 @@ void Isle::FUN_10032d30(
 				VariableTable()->SetVariable(g_varCAMERALOCATION, p_cameraLocation);
 			}
 
-			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			SetAppCursor(e_cursorArrow);
 			m_destLocation = LegoGameState::e_undefined;
 			m_act1state->m_unk0x01f = FALSE;

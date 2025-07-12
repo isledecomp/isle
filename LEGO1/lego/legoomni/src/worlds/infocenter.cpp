@@ -465,7 +465,7 @@ void Infocenter::ReadyWorld()
 
 			PlayAction(InfomainScript::c_iicx18in_RunAnim);
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
-			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			return;
 		case 5:
 		default: {
@@ -478,7 +478,7 @@ void Infocenter::ReadyWorld()
 				m_bigInfoBlinkTimer = 1;
 			}
 
-			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 
 			if (!m_infocenterState->HasRegistered()) {
 				m_bookAnimationTimer = 1;
@@ -489,7 +489,7 @@ void Infocenter::ReadyWorld()
 		case 8:
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			PlayAction(InfomainScript::c_iic043in_RunAnim);
-			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			return;
 		case 0xf:
 			m_infocenterState->m_unk0x74 = 2;
@@ -499,7 +499,7 @@ void Infocenter::ReadyWorld()
 
 			PlayAction(InfomainScript::c_iicx17in_RunAnim);
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
-			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			return;
 		}
 		break;
@@ -508,7 +508,7 @@ void Infocenter::ReadyWorld()
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			bgRed->Enable(TRUE);
 			PlayAction(InfomainScript::c_iic043in_RunAnim);
-			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			return;
 		}
 
@@ -538,7 +538,7 @@ void Infocenter::ReadyWorld()
 			PlayAction(script);
 
 			InputManager()->DisableInputProcessing();
-			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			return;
 		}
 
@@ -553,7 +553,7 @@ void Infocenter::ReadyWorld()
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			bgRed->Enable(TRUE);
 			PlayAction(InfomainScript::c_iic043in_RunAnim);
-			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			return;
 		}
 
@@ -590,7 +590,7 @@ void Infocenter::ReadyWorld()
 			PlayAction(script);
 
 			InputManager()->DisableInputProcessing();
-			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			return;
 		}
 
@@ -603,7 +603,7 @@ void Infocenter::ReadyWorld()
 	}
 
 	m_infocenterState->m_unk0x74 = 11;
-	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+	Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
 // FUNCTION: LEGO1 0x1006f9a0
@@ -1284,7 +1284,7 @@ void Infocenter::StopCutscene()
 	VideoManager()->EnableFullScreenMovie(FALSE);
 	InputManager()->SetUnknown335(FALSE);
 	SetAppCursor(e_cursorArrow);
-	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+	Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
 // FUNCTION: LEGO1 0x10070d00

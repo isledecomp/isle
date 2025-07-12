@@ -95,7 +95,7 @@ void JetskiRace::ReadyWorld()
 	m_unk0x12c = (MxStillPresenter*) Find("MxPresenter", "JetskiLocator3");
 	m_unk0x12c->SetPosition(m_unk0x130.GetLeft(), m_unk0x130.GetTop());
 
-	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+	Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 
 	VariableTable()->SetVariable("DISTANCE", "0.036");
 

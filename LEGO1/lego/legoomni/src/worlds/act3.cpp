@@ -552,7 +552,7 @@ MxLong Act3::Notify(MxParam& p_param)
 			if (param.GetAction() != NULL && param.GetAction()->GetAtomId() == *g_act3Script) {
 				if (param.GetAction()->GetObjectId() == Act3Script::c_HelicopterDashboard) {
 					MxDSAction action;
-					FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+					Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 					SetAppCursor(e_cursorArrow);
 					VideoManager()->Get3DManager()->SetFrustrum(45.0f, 0.1f, 125.0f);
 
@@ -634,7 +634,7 @@ MxLong Act3::Notify(MxParam& p_param)
 				assert(m_copter && m_brickster && m_cop1 && m_cop2);
 				m_unk0x4220.FUN_100720d0(0);
 				m_state->m_unk0x08 = 0;
-				FUN_10015820(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+				Disable(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 				m_copter->HandleClick();
 				m_copter->m_state->m_unk0x08 = 1;
 				m_copter->HandleEndAnim((LegoEndAnimNotificationParam&) param);
@@ -685,7 +685,7 @@ MxResult Act3::Tickle()
 
 	if (m_unk0x426c != (Act3Script::Script) 0) {
 		if (AnimationManager()->FUN_10064ee0(m_unk0x426c)) {
-			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			TickleManager()->UnregisterClient(this);
 			m_unk0x426c = (Act3Script::Script) 0;
 		}
@@ -880,7 +880,7 @@ void Act3::Enable(MxBool p_enable)
 			GameState()->StopArea(LegoGameState::e_infomain);
 		}
 
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+		Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		PlayMusic(JukeboxScript::c_Act3Music);
 		GameState()->m_isDirty = TRUE;
 

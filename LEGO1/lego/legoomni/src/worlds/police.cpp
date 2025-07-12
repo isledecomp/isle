@@ -95,7 +95,7 @@ void Police::ReadyWorld()
 {
 	LegoWorld::ReadyWorld();
 	PlayMusic(JukeboxScript::c_PoliceStation_Music);
-	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+	Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
 // FUNCTION: LEGO1 0x1005e550

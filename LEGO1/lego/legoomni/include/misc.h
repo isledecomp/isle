@@ -48,7 +48,7 @@ LegoPlantManager* PlantManager();
 LegoBuildingManager* BuildingManager();
 LegoTextureContainer* TextureContainer();
 ViewLODListManager* GetViewLODListManager();
-void FUN_10015820(MxBool p_disable, MxU16 p_flags);
+void Disable(MxBool p_disable, MxU16 p_flags);
 LegoROI* FindROI(const char* p_name);
 void SetROIVisible(const char* p_name, MxBool p_visible);
 void SetUserActor(LegoPathActor* p_userActor);
