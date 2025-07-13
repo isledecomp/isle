@@ -226,7 +226,8 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 			it = begin();
 			it3 = it;
 
-			Act3ListElement& firstItem = *it++;
+			Act3ListElement& firstItem = front();
+			it++;
 
 			// // LINE: LEGO1 0x100721d4 Not pinnable, appears multiple times
 			for (; it != end(); ) {
