@@ -227,9 +227,9 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 						}
 						erase(it2++);
 					}
-					it++;
-					it3++;
 				}
+				it++;
+				it3++;
 			}
 
 			if (!firstItem.m_hasStarted) {
