@@ -172,51 +172,64 @@ void Act3List::Clear()
 	}
 }
 
+// Removes the element with the given objectId from the list, or the first if `p_objectId` is zero.
 // FUNCTION: LEGO1 0x100720d0
-void Act3List::FUN_100720d0(MxU32 p_objectId)
+void Act3List::RemoveByObjectIdOrFirst(MxU32 p_objectId)
 {
 	if (m_unk0x0c) {
 		return;
 	}
 
 	MxU32 removed = FALSE;
+	Act3List::iterator it;
+	// This iterator appears to be unnecessary - maybe left in by accident, or it was used for assertions.
+	// Removing it decreases the match percentage.
+	Act3List::iterator unusedIterator;
 
-	if (!empty()) {
-		if (p_objectId != 0) {
-			for (Act3List::iterator it = begin(); it != end(); it++) {
-				if ((*it).m_hasStarted && (*it).m_objectId == p_objectId) {
-					erase(it);
-					removed = TRUE;
-					break;
-				}
+	if (empty()) {
+		return;
+	}
+
+	if (!p_objectId) {
+		pop_front();
+		removed = TRUE;
+	}
+	else {
+		for (it = begin(); it != end(); it++) {
+			// Removing this variable decreases the match, but replacing `*it` by `unused` below also does.
+			Act3ListElement& unused = *it;
+
+			if ((*it).m_hasStarted && (*it).m_objectId == p_objectId) {
+				erase(it);
+				removed = TRUE;
+				break;
 			}
 		}
-		else {
-			pop_front();
-			removed = TRUE;
-		}
+	}
 
-		if (removed && size() > 0) {
-			Act3List::iterator it = begin();
-			Act3ListElement& firstItem = *(it++);
+	if (removed && size() > 0) {
+		it = begin();
+		unusedIterator = it;
+		Act3ListElement& firstItem = front();
+		it++;
 
-			for (; it != end(); it++) {
-				if ((*it).m_unk0x04 == 1) {
-					for (Act3List::iterator it2 = begin(); it2 != it;) {
-						if ((*it2).m_hasStarted) {
-							DeleteActionWrapper();
-							return;
-						}
-
-						it2 = erase(it2);
+		while (it != end()) {
+			if ((*it).m_unk0x04 == 1) {
+				for (Act3List::iterator it2 = begin(); it2 != it; erase(it2++)) {
+					if ((*it2).m_hasStarted) {
+						DeleteActionWrapper();
+						return;
 					}
 				}
 			}
 
-			if (!firstItem.m_hasStarted) {
-				firstItem.m_hasStarted = TRUE;
-				InvokeAction(Extra::e_start, *g_act3Script, firstItem.m_objectId, NULL);
-			}
+			it++;
+			unusedIterator++;
+		}
+
+		if (!firstItem.m_hasStarted) {
+			firstItem.m_hasStarted = TRUE;
+			InvokeAction(Extra::e_start, *g_act3Script, firstItem.m_objectId, NULL);
 		}
 	}
 }
@@ -613,7 +626,7 @@ MxLong Act3::Notify(MxParam& p_param)
 					} while (length < (MxS32) sizeOfArray(m_helicopterDots));
 				}
 				else {
-					m_unk0x4220.FUN_100720d0(param.GetAction()->GetObjectId());
+					m_unk0x4220.RemoveByObjectIdOrFirst(param.GetAction()->GetObjectId());
 				}
 			}
 			break;
@@ -633,7 +646,7 @@ MxLong Act3::Notify(MxParam& p_param)
 		case c_notificationEndAnim:
 			if (m_state->m_unk0x08 == 1) {
 				assert(m_copter && m_brickster && m_cop1 && m_cop2);
-				m_unk0x4220.FUN_100720d0(0);
+				m_unk0x4220.RemoveByObjectIdOrFirst(0);
 				m_state->m_unk0x08 = 0;
 				Disable(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 				m_copter->HandleClick();

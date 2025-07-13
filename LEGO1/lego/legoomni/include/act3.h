@@ -47,7 +47,7 @@ public:
 	void Insert(MxS32 p_objectId, InsertMode p_option);
 	void DeleteActionWrapper();
 	void Clear();
-	void FUN_100720d0(MxU32 p_objectId);
+	void RemoveByObjectIdOrFirst(MxU32 p_objectId);
 
 private:
 	undefined4 m_unk0x0c; // 0x0c
