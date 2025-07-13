@@ -185,7 +185,8 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 
 	Act3List::iterator it;
 
-	// TODO: This extra iterator is still kind of dodgy
+	// This iterator appears to be unnecessary - maybe left in by accident.
+	// Removing it decreases the match.
 	Act3List::iterator it3;
 
 
@@ -202,7 +203,7 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 			for (it = begin(); it != end(); it++) {
 				Act3ListElement& current = *it;
 
-				if (current.m_hasStarted && current.m_objectId == p_objectId) {
+				if (current.m_hasStarted && (*it).m_objectId == p_objectId) {
 
 					erase(it);
 
@@ -222,7 +223,7 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 		if (removed && size() > 0) {
 
 			// TODO: Something is wrong about these first two lines
-			// LINE: LEGO1 0x1007215d
+			// LINE: LEGO1 0x1007215f
 			it = begin();
 			it3 = it;
 
