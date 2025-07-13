@@ -184,7 +184,7 @@ void Act3List::RemoveByObjectIdOrFirst(MxU32 p_objectId)
 	Act3List::iterator it;
 	// This iterator appears to be unnecessary - maybe left in by accident, or it was used for assertions.
 	// Removing it decreases the match percentage.
-	Act3List::iterator unused_iterator;
+	Act3List::iterator unusedIterator;
 
 	if (empty()) {
 		return;
@@ -209,7 +209,7 @@ void Act3List::RemoveByObjectIdOrFirst(MxU32 p_objectId)
 
 	if (removed && size() > 0) {
 		it = begin();
-		unused_iterator = it;
+		unusedIterator = it;
 		Act3ListElement& firstItem = front();
 		it++;
 
@@ -224,7 +224,7 @@ void Act3List::RemoveByObjectIdOrFirst(MxU32 p_objectId)
 			}
 
 			it++;
-			unused_iterator++;
+			unusedIterator++;
 		}
 
 		if (!firstItem.m_hasStarted) {
