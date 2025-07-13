@@ -176,7 +176,6 @@ void Act3List::Clear()
 // FUNCTION: LEGO1 0x100720d0
 void Act3List::FUN_100720d0(MxU32 p_objectId)
 {
-	// LINE: LEGO1 0x100720db
 	if (m_unk0x0c) {
 		return;
 	}
@@ -189,17 +188,14 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 	// Removing it decreases the match.
 	Act3List::iterator it3;
 
-	// LINE: LEGO1 0x100720e6
 	if (!empty()) {
 
 		if (!p_objectId) {
-			// LINE: LEGO1 0x10072131
 			pop_front();
 
 			removed = TRUE;
 		}
 		else {
-			// LINE: LEGO1 0x100720fa
 			for (it = begin(); it != end(); it++) {
 				Act3ListElement& current = *it;
 				// No idea why `current` is used in one but not the other,
@@ -216,7 +212,6 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 		}
 
 		if (removed && size() > 0) {
-			// LINE: LEGO1 0x1007215f
 			it = begin();
 			it3 = it;
 
@@ -224,15 +219,10 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 			it++;
 
 			for (; it != end();) {
-				// LINE: LEGO1 0x1007217c
 				if ((*it).m_unk0x04 == 1) {
-					// LINE: LEGO1 0x100721a0
 					for (Act3List::iterator it2 = begin(); it2 != it;) {
-						// LINE: LEGO1 0x10072191
 						if ((*it2).m_hasStarted) {
-							// LINE: LEGO1 0x10072202
 							DeleteActionWrapper();
-							// LINE: LEGO1 0x10072209
 							return;
 						}
 						erase(it2++);
@@ -242,11 +232,8 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 				}
 			}
 
-			// LINE: LEGO1 0x100721d4
 			if (!firstItem.m_hasStarted) {
-				// LINE: LEGO1 0x100721de
 				firstItem.m_hasStarted = TRUE;
-				// // LINE: LEGO1 0x100721e4
 				InvokeAction(Extra::e_start, *g_act3Script, firstItem.m_objectId, NULL);
 			}
 		}
