@@ -211,16 +211,16 @@ void Act3List::RemoveByObjectIdOrFirst(MxU32 p_objectId)
 			Act3ListElement& firstItem = front();
 			it++;
 
-			for (; it != end();) {
+			while (it != end()) {
 				if ((*it).m_unk0x04 == 1) {
-					for (Act3List::iterator it2 = begin(); it2 != it;) {
+					for (Act3List::iterator it2 = begin(); it2 != it; erase(it2++)) {
 						if ((*it2).m_hasStarted) {
 							DeleteActionWrapper();
 							return;
 						}
-						erase(it2++);
 					}
 				}
+
 				it++;
 				unused_iterator++;
 			}
