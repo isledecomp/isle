@@ -92,7 +92,11 @@ public:
 	const char* GetActionObjectName();
 
 	void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
+
+	// FUNCTION: BETA10 0x1005aad0
 	void SetUnknown0x0cTo1() { m_unk0x9c = 1; }
+
+	// FUNCTION: BETA10 0x1005ab00
 	void SetUnknown0xa0(Matrix4* p_unk0xa0) { m_unk0xa0 = p_unk0xa0; }
 
 	LegoAnim* GetAnimation() { return m_anim; }

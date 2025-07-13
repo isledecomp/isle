@@ -703,6 +703,9 @@ MxResult LegoAnimPresenter::FUN_1006b140(LegoROI* p_roi)
 	if (p_roi == NULL) {
 		return FAILURE;
 	}
+#ifdef BETA10
+	MxMatrix unused_matrix;
+#endif
 
 	Matrix4* mn = new MxMatrix();
 	assert(mn);
