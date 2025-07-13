@@ -189,7 +189,6 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 	// Removing it decreases the match.
 	Act3List::iterator it3;
 
-
 	// LINE: LEGO1 0x100720e6
 	if (!empty()) {
 
@@ -198,11 +197,13 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 			pop_front();
 
 			removed = TRUE;
-		} else {
+		}
+		else {
 			// LINE: LEGO1 0x100720fa
 			for (it = begin(); it != end(); it++) {
 				Act3ListElement& current = *it;
-
+				// No idea why `current` is used in one but not the other,
+				// but this is what produces the best match.
 				if (current.m_hasStarted && (*it).m_objectId == p_objectId) {
 
 					erase(it);
@@ -210,19 +211,11 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 					removed = TRUE;
 
 					break;
-
 				}
-
 			}
-
 		}
 
-
-
-
 		if (removed && size() > 0) {
-
-			// TODO: Something is wrong about these first two lines
 			// LINE: LEGO1 0x1007215f
 			it = begin();
 			it3 = it;
@@ -230,30 +223,24 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 			Act3ListElement& firstItem = front();
 			it++;
 
-			// // LINE: LEGO1 0x100721d4 Not pinnable, appears multiple times
-			for (; it != end(); ) {
+			for (; it != end();) {
 				// LINE: LEGO1 0x1007217c
 				if ((*it).m_unk0x04 == 1) {
 					// LINE: LEGO1 0x100721a0
-					for (Act3List::iterator it2 = begin(); it2 != it; ) {
+					for (Act3List::iterator it2 = begin(); it2 != it;) {
 						// LINE: LEGO1 0x10072191
 						if ((*it2).m_hasStarted) {
 							// LINE: LEGO1 0x10072202
 							DeleteActionWrapper();
 							// LINE: LEGO1 0x10072209
 							return;
-
 						}
 						erase(it2++);
-
 					}
-						it++;
-						it3++;
-
+					it++;
+					it3++;
 				}
-
 			}
-
 
 			// LINE: LEGO1 0x100721d4
 			if (!firstItem.m_hasStarted) {
@@ -261,11 +248,8 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 				firstItem.m_hasStarted = TRUE;
 				// // LINE: LEGO1 0x100721e4
 				InvokeAction(Extra::e_start, *g_act3Script, firstItem.m_objectId, NULL);
-
 			}
-
 		}
-
 	}
 }
 
