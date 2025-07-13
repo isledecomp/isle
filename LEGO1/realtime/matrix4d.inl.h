@@ -356,7 +356,7 @@ int Matrix4::Invert(Matrix4& p_mat)
 // FUNCTION: BETA10 0x1005aa20
 void Matrix4::Swap(int p_d1, int p_d2)
 {
-	// TODO: Document entropy build result
+	// This function is affected by entropy even in debug builds
 	int i;
 	float e;
 	for (i = 0; i < 4; i++) {
