@@ -365,7 +365,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 	case HospitalState::e_afterAcceptingQuest:
 		m_hospitalState->m_state = HospitalState::e_beforeEnteringAmbulance;
 		act1State = (Act1State*) GameState()->GetState("Act1State");
-		act1State->SetUnknown18(9);
+		act1State->SetState(Act1State::e_transitionToAmbulance);
 	case HospitalState::e_exitToFront:
 		if (m_exited == FALSE) {
 			m_exited = TRUE;
@@ -419,7 +419,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 						Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
 						assert(act1State);
 
-						act1State->m_unk0x018 = 9;
+						act1State->m_state = Act1State::e_transitionToAmbulance;
 
 						m_destLocation = LegoGameState::e_hospitalExited;
 						DeleteObjects(

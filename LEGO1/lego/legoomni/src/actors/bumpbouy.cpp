@@ -45,7 +45,7 @@ MxLong BumpBouy::Notify(MxParam& p_param)
 
 		Act1State* isleState = (Act1State*) GameState()->GetState("Act1State");
 		assert(isleState);
-		isleState->m_unk0x018 = 5;
+		isleState->m_state = Act1State::e_transitionToJetski;
 
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 		assert(isle);

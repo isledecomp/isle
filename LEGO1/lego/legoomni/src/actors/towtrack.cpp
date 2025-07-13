@@ -272,7 +272,7 @@ MxLong TowTrack::HandleEndAction(MxEndActionNotificationParam& p_param)
 			m_state->UpdateScore(LegoState::e_yellow, m_actorId);
 		}
 		else if (objectId == IsleScript::c_wgs098nu_RunAnim || objectId == IsleScript::c_wgs099nu_RunAnim || objectId == IsleScript::c_wgs100nu_RunAnim || objectId == IsleScript::c_wgs101nu_RunAnim || objectId == IsleScript::c_wgs102nu_RunAnim || objectId == IsleScript::c_wgs085nu_RunAnim || objectId == IsleScript::c_wgs086nu_RunAnim || objectId == IsleScript::c_wgs087nu_RunAnim || objectId == IsleScript::c_wgs088nu_RunAnim || objectId == IsleScript::c_wgs089nu_RunAnim || objectId == IsleScript::c_wgs091nu_RunAnim || objectId == IsleScript::c_wgs092nu_RunAnim || objectId == IsleScript::c_wgs093nu_RunAnim || objectId == IsleScript::c_wgs094nu_RunAnim || objectId == IsleScript::c_wgs095nu_RunAnim) {
-			((Act1State*) GameState()->GetState("Act1State"))->m_unk0x018 = 0;
+			((Act1State*) GameState()->GetState("Act1State"))->m_state = Act1State::e_none;
 			AnimationManager()->FUN_1005f6d0(TRUE);
 			g_isleFlags |= Isle::c_playMusic;
 			AnimationManager()->EnableCamAnims(TRUE);
@@ -403,7 +403,7 @@ MxLong TowTrack::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 // FUNCTION: LEGO1 0x1004d690
 MxLong TowTrack::HandleClick()
 {
-	if (((Act1State*) GameState()->GetState("Act1State"))->m_unk0x018 != 8) {
+	if (((Act1State*) GameState()->GetState("Act1State"))->m_state != Act1State::e_towtrack) {
 		return 1;
 	}
 
@@ -549,7 +549,7 @@ void TowTrack::FUN_1004dbe0()
 		InvokeAction(Extra::e_stop, *g_isleScript, m_lastAction, NULL);
 	}
 
-	((Act1State*) GameState()->GetState("Act1State"))->m_unk0x018 = 0;
+	((Act1State*) GameState()->GetState("Act1State"))->m_state = Act1State::e_none;
 	m_state->m_unk0x08 = 0;
 	g_isleFlags |= Isle::c_playMusic;
 	AnimationManager()->EnableCamAnims(TRUE);

@@ -211,7 +211,7 @@ MxBool JukeBox::HandleControl(LegoControlManagerNotificationParam& p_param)
 			break;
 		case JukeboxwScript::c_Note_Ctl:
 			Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
-			act1State->m_unk0x018 = 11;
+			act1State->m_state = Act1State::e_jukebox;
 			m_destLocation = LegoGameState::Area::e_jukeboxExterior;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, 0, FALSE);
 			break;

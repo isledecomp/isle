@@ -364,7 +364,7 @@ MxLong Ambulance::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 // FUNCTION: BETA10 0x10023506
 MxLong Ambulance::HandleClick()
 {
-	if (((Act1State*) GameState()->GetState("Act1State"))->m_unk0x018 != 10) {
+	if (((Act1State*) GameState()->GetState("Act1State"))->m_state != Act1State::e_ambulance) {
 		return 1;
 	}
 
@@ -575,7 +575,7 @@ void Ambulance::Reset()
 {
 	StopAction(m_lastAction);
 	BackgroundAudioManager()->RaiseVolume();
-	((Act1State*) GameState()->GetState("Act1State"))->m_unk0x018 = 0;
+	((Act1State*) GameState()->GetState("Act1State"))->m_state = Act1State::e_none;
 	m_state->m_state = AmbulanceMissionState::e_ready;
 	m_atBeachTask = 0;
 	m_atPoliceTask = 0;

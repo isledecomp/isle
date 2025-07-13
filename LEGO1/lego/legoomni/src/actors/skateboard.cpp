@@ -56,7 +56,7 @@ MxResult SkateBoard::Create(MxDSAction& p_dsAction)
 // FUNCTION: LEGO1 0x10010050
 void SkateBoard::Exit()
 {
-	if (m_act1state->m_unk0x018 == 3) {
+	if (m_act1state->m_state == Act1State::e_pizza) {
 		Pizza* pizza = (Pizza*) CurrentWorld()->Find(*g_isleScript, IsleScript::c_Pizza_Actor);
 		pizza->StopActions();
 		pizza->FUN_100382b0();
@@ -75,7 +75,7 @@ MxLong SkateBoard::HandleClick()
 {
 	Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 
-	if (!CanExit() && state->m_unk0x018 != 3) {
+	if (!CanExit() && state->m_state != Act1State::e_pizza) {
 		return 1;
 	}
 
@@ -148,7 +148,7 @@ MxLong SkateBoard::HandleNotification0()
 // FUNCTION: LEGO1 0x10010510
 void SkateBoard::ActivateSceneActions()
 {
-	if (m_act1state->m_unk0x018 != 3) {
+	if (m_act1state->m_state != Act1State::e_pizza) {
 		PlayMusic(JukeboxScript::c_BeachBlvd_Music);
 
 		if (!m_act1state->m_unk0x022) {

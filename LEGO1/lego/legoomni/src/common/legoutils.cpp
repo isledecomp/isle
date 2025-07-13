@@ -583,9 +583,10 @@ MxBool CanExit()
 		GameState()->m_currentArea != LegoGameState::e_polidoor) {
 		if (UserActor() == NULL || !UserActor()->IsA("TowTrack")) {
 			if (UserActor() == NULL || !UserActor()->IsA("Ambulance")) {
-				MxU32 unk0x18 = act1State->GetUnknown18();
+				MxU32 mission = act1State->GetState();
 
-				if (unk0x18 != 10 && unk0x18 != 8 && unk0x18 != 3) {
+				if (mission != Act1State::e_ambulance && mission != Act1State::e_towtrack &&
+					mission != Act1State::e_pizza) {
 					return TRUE;
 				}
 			}
