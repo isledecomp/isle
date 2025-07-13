@@ -353,10 +353,14 @@ int Matrix4::Invert(Matrix4& p_mat)
 }
 
 // FUNCTION: LEGO1 0x1006b500
+// FUNCTION: BETA10 0x1005aa20
 void Matrix4::Swap(int p_d1, int p_d2)
 {
-	for (int i = 0; i < 4; i++) {
-		float e = m_data[p_d1][i];
+	// TODO: Document entropy build result
+	int i;
+	float e;
+	for (i = 0; i < 4; i++) {
+		e = m_data[p_d1][i];
 		m_data[p_d1][i] = m_data[p_d2][i];
 		m_data[p_d2][i] = e;
 	}
