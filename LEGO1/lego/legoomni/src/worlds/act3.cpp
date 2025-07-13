@@ -187,48 +187,50 @@ void Act3List::RemoveByObjectIdOrFirst(MxU32 p_objectId)
 	// Removing it decreases the match percentage.
 	Act3List::iterator unused_iterator;
 
-	if (!empty()) {
-		if (!p_objectId) {
-			pop_front();
-			removed = TRUE;
-		}
-		else {
-			for (it = begin(); it != end(); it++) {
-				Act3ListElement& current = *it;
-				// No idea why `current` is used in one comparison but not the other,
-				// but this is what produces the best match.
-				if (current.m_hasStarted && (*it).m_objectId == p_objectId) {
-					erase(it);
-					removed = TRUE;
-					break;
-				}
+	if (empty()) {
+		return;
+	}
+
+	if (!p_objectId) {
+		pop_front();
+		removed = TRUE;
+	}
+	else {
+		for (it = begin(); it != end(); it++) {
+			Act3ListElement& current = *it;
+			// No idea why `current` is used in one comparison but not the other,
+			// but this is what produces the best match.
+			if (current.m_hasStarted && (*it).m_objectId == p_objectId) {
+				erase(it);
+				removed = TRUE;
+				break;
 			}
 		}
+	}
 
-		if (removed && size() > 0) {
-			it = begin();
-			unused_iterator = it;
-			Act3ListElement& firstItem = front();
-			it++;
+	if (removed && size() > 0) {
+		it = begin();
+		unused_iterator = it;
+		Act3ListElement& firstItem = front();
+		it++;
 
-			while (it != end()) {
-				if ((*it).m_unk0x04 == 1) {
-					for (Act3List::iterator it2 = begin(); it2 != it; erase(it2++)) {
-						if ((*it2).m_hasStarted) {
-							DeleteActionWrapper();
-							return;
-						}
+		while (it != end()) {
+			if ((*it).m_unk0x04 == 1) {
+				for (Act3List::iterator it2 = begin(); it2 != it; erase(it2++)) {
+					if ((*it2).m_hasStarted) {
+						DeleteActionWrapper();
+						return;
 					}
 				}
-
-				it++;
-				unused_iterator++;
 			}
 
-			if (!firstItem.m_hasStarted) {
-				firstItem.m_hasStarted = TRUE;
-				InvokeAction(Extra::e_start, *g_act3Script, firstItem.m_objectId, NULL);
-			}
+			it++;
+			unused_iterator++;
+		}
+
+		if (!firstItem.m_hasStarted) {
+			firstItem.m_hasStarted = TRUE;
+			InvokeAction(Extra::e_start, *g_act3Script, firstItem.m_objectId, NULL);
 		}
 	}
 }
