@@ -290,6 +290,8 @@ void Matrix4::RotateZ(const float& p_angle)
 // FUNCTION: BETA10 0x1005a590
 int Matrix4::Invert(Matrix4& p_mat)
 {
+	// Inlined at LEGO1 0x1006b2d3
+
 	float copyData[4][4];
 	Matrix4 copy(copyData);
 	copy = *this;
@@ -312,6 +314,7 @@ int Matrix4::Invert(Matrix4& p_mat)
 		}
 
 		if (copy[i][i] < 0.001f && copy[i][i] > -0.001f) {
+			// FAILURE from mxtypes.h
 			return -1;
 		}
 
@@ -349,14 +352,19 @@ int Matrix4::Invert(Matrix4& p_mat)
 		}
 	}
 
+	// SUCCESS from mxtypes.h
 	return 0;
 }
 
 // FUNCTION: LEGO1 0x1006b500
+// FUNCTION: BETA10 0x1005aa20
 void Matrix4::Swap(int p_d1, int p_d2)
 {
-	for (int i = 0; i < 4; i++) {
-		float e = m_data[p_d1][i];
+	// This function is affected by entropy even in debug builds
+	int i;
+	float e;
+	for (i = 0; i < 4; i++) {
+		e = m_data[p_d1][i];
 		m_data[p_d1][i] = m_data[p_d2][i];
 		m_data[p_d2][i] = e;
 	}
