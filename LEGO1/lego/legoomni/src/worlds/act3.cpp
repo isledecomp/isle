@@ -173,39 +173,33 @@ void Act3List::Clear()
 	}
 }
 
+// Removes the element with the given objectId from the list, or the first if `p_objectId` is zero.
 // FUNCTION: LEGO1 0x100720d0
-void Act3List::FUN_100720d0(MxU32 p_objectId)
+void Act3List::RemoveByObjectIdOrFirst(MxU32 p_objectId)
 {
 	if (m_unk0x0c) {
 		return;
 	}
 
 	MxU32 removed = FALSE;
-
 	Act3List::iterator it;
-
-	// This iterator appears to be unnecessary - maybe left in by accident.
-	// Removing it decreases the match.
-	Act3List::iterator it3;
+	// This iterator appears to be unnecessary - maybe left in by accident, or it was used for assertions.
+	// Removing it decreases the match percentage.
+	Act3List::iterator unused_iterator;
 
 	if (!empty()) {
-
 		if (!p_objectId) {
 			pop_front();
-
 			removed = TRUE;
 		}
 		else {
 			for (it = begin(); it != end(); it++) {
 				Act3ListElement& current = *it;
-				// No idea why `current` is used in one but not the other,
+				// No idea why `current` is used in one comparison but not the other,
 				// but this is what produces the best match.
 				if (current.m_hasStarted && (*it).m_objectId == p_objectId) {
-
 					erase(it);
-
 					removed = TRUE;
-
 					break;
 				}
 			}
@@ -213,8 +207,7 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 
 		if (removed && size() > 0) {
 			it = begin();
-			it3 = it;
-
+			unused_iterator = it;
 			Act3ListElement& firstItem = front();
 			it++;
 
@@ -229,7 +222,7 @@ void Act3List::FUN_100720d0(MxU32 p_objectId)
 					}
 				}
 				it++;
-				it3++;
+				unused_iterator++;
 			}
 
 			if (!firstItem.m_hasStarted) {
@@ -632,7 +625,7 @@ MxLong Act3::Notify(MxParam& p_param)
 					} while (length < (MxS32) sizeOfArray(m_helicopterDots));
 				}
 				else {
-					m_unk0x4220.FUN_100720d0(param.GetAction()->GetObjectId());
+					m_unk0x4220.RemoveByObjectIdOrFirst(param.GetAction()->GetObjectId());
 				}
 			}
 			break;
@@ -652,7 +645,7 @@ MxLong Act3::Notify(MxParam& p_param)
 		case c_notificationEndAnim:
 			if (m_state->m_unk0x08 == 1) {
 				assert(m_copter && m_brickster && m_cop1 && m_cop2);
-				m_unk0x4220.FUN_100720d0(0);
+				m_unk0x4220.RemoveByObjectIdOrFirst(0);
 				m_state->m_unk0x08 = 0;
 				Disable(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 				m_copter->HandleClick();
