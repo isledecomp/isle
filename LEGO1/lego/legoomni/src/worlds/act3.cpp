@@ -116,7 +116,6 @@ void Act3List::Insert(MxS32 p_objectId, InsertMode p_option)
 	}
 
 	switch (p_option) {
-	// TODO: Consider using an enum
 	case InsertMode::e_replaceAction:
 		if (!empty()) {
 			DeleteActionWrapper();
@@ -197,10 +196,10 @@ void Act3List::RemoveByObjectIdOrFirst(MxU32 p_objectId)
 	}
 	else {
 		for (it = begin(); it != end(); it++) {
-			Act3ListElement& current = *it;
-			// No idea why `current` is used in one comparison but not the other,
-			// but this is what produces the best match.
-			if (current.m_hasStarted && (*it).m_objectId == p_objectId) {
+			// Removing this variable decreases the match, but replacing `*it` by `unused` below also does.
+			Act3ListElement& unused = *it;
+
+			if ((*it).m_hasStarted && (*it).m_objectId == p_objectId) {
 				erase(it);
 				removed = TRUE;
 				break;
