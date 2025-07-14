@@ -213,36 +213,37 @@ BOOL MxDeviceEnumerate::EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc
 
 	if (result != DD_OK) {
 		BuildErrorString("DirectDraw Create failed: %s\n", EnumerateErrorToString(result));
-	}
-	else {
-		lpDD->EnumDisplayModes(0, NULL, this, DisplayModesEnumerateCallback);
-		newDevice.m_ddCaps.dwSize = sizeof(newDevice.m_ddCaps);
-		result = lpDD->GetCaps(&newDevice.m_ddCaps, NULL);
-
-		if (result != DD_OK) {
-			BuildErrorString("GetCaps failed: %s\n", EnumerateErrorToString(result));
-		}
-		else {
-			result = lpDD->QueryInterface(IID_IDirect3D2, (LPVOID*) &lpDirect3d2);
-
-			if (result != DD_OK) {
-				BuildErrorString("D3D creation failed: %s\n", EnumerateErrorToString(result));
-			}
-			else {
-				result = lpDirect3d2->EnumDevices(DevicesEnumerateCallback, this);
-
-				if (result != DD_OK) {
-					BuildErrorString("D3D enum devices failed: %s\n", EnumerateErrorToString(result));
-				}
-				else {
-					if (!newDevice.m_devices.size()) {
-						m_ddInfo.pop_back();
-					}
-				}
-			}
-		}
+		goto done;
 	}
 
+	lpDD->EnumDisplayModes(0, NULL, this, DisplayModesEnumerateCallback);
+	newDevice.m_ddCaps.dwSize = sizeof(newDevice.m_ddCaps);
+	result = lpDD->GetCaps(&newDevice.m_ddCaps, NULL);
+
+	if (result != DD_OK) {
+		BuildErrorString("GetCaps failed: %s\n", EnumerateErrorToString(result));
+		goto done;
+	}
+
+	result = lpDD->QueryInterface(IID_IDirect3D2, (LPVOID*) &lpDirect3d2);
+
+	if (result != DD_OK) {
+		BuildErrorString("D3D creation failed: %s\n", EnumerateErrorToString(result));
+		goto done;
+	}
+
+	result = lpDirect3d2->EnumDevices(DevicesEnumerateCallback, this);
+
+	if (result != DD_OK) {
+		BuildErrorString("D3D enum devices failed: %s\n", EnumerateErrorToString(result));
+		goto done;
+	}
+
+	if (!newDevice.m_devices.size()) {
+		m_ddInfo.pop_back();
+	}
+
+done:
 	if (lpDirect3d2) {
 		lpDirect3d2->Release();
 	}
