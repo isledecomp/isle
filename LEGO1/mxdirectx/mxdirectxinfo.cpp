@@ -197,7 +197,7 @@ MxDeviceEnumerate::~MxDeviceEnumerate()
 BOOL MxDeviceEnumerate::EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
 {
 	MxDriver driver(p_guid, p_driverDesc, p_driverName);
-	m_list.push_back(driver);
+	m_ddInfo.push_back(driver);
 
 	// Must be zeroed because held resources are copied by pointer only
 	// and should not be freed at the end of this function
@@ -208,7 +208,7 @@ BOOL MxDeviceEnumerate::EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc
 
 	LPDIRECT3D2 lpDirect3d2 = NULL;
 	LPDIRECTDRAW lpDD = NULL;
-	MxDriver& newDevice = m_list.back();
+	MxDriver& newDevice = m_ddInfo.back();
 	HRESULT result = DirectDrawCreate(newDevice.m_guid, &lpDD, NULL);
 
 	if (result != DD_OK) {
@@ -236,7 +236,7 @@ BOOL MxDeviceEnumerate::EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc
 				}
 				else {
 					if (!newDevice.m_devices.size()) {
-						m_list.pop_back();
+						m_ddInfo.pop_back();
 					}
 				}
 			}
@@ -306,12 +306,12 @@ HRESULT CALLBACK MxDeviceEnumerate::DevicesEnumerateCallback(
 // FUNCTION: BETA10 0x1011e27f
 HRESULT MxDeviceEnumerate::EnumDisplayModesCallback(LPDDSURFACEDESC p_ddsd)
 {
-	assert(m_list.size() > 0);
+	assert(m_ddInfo.size() > 0);
 	assert(p_ddsd);
 
 	// TODO: compat_mode?
 	MxDisplayMode displayMode(p_ddsd->dwWidth, p_ddsd->dwHeight, p_ddsd->ddpfPixelFormat.dwRGBBitCount);
-	m_list.back().m_displayModes.push_back(displayMode);
+	m_ddInfo.back().m_displayModes.push_back(displayMode);
 	return DDENUMRET_OK;
 }
 
@@ -327,7 +327,7 @@ HRESULT MxDeviceEnumerate::EnumDevicesCallback(
 )
 {
 	Direct3DDeviceInfo device(p_guid, p_deviceDesc, p_deviceName, p_HWDesc, p_HELDesc);
-	m_list.back().m_devices.push_back(device);
+	m_ddInfo.back().m_devices.push_back(device);
 	memset(&device, 0, sizeof(device));
 	return DDENUMRET_OK;
 }
