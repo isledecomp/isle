@@ -29,13 +29,12 @@ MxAssignedDevice::~MxAssignedDevice()
 }
 
 // FUNCTION: BETA10 0x1011d7f0
-MxDriver::MxDriver(LPGUID p_guid)
+MxDriver::MxDriver()
 {
 	m_guid = NULL;
 	m_driverDesc = NULL;
 	m_driverName = NULL;
 	memset(&m_ddCaps, 0, sizeof(m_ddCaps));
-	// TODO: ret vs ret 4
 }
 
 // FUNCTION: CONFIG 0x00401180
@@ -96,6 +95,12 @@ void MxDriver::Init(LPGUID p_guid, LPCSTR p_driverDesc, LPCSTR p_driverName)
 		m_driverName = new char[strlen(p_driverName) + 1];
 		strcpy(m_driverName, p_driverName);
 	}
+}
+
+// FUNCTION: BETA10 0x1011dba4
+Direct3DDeviceInfo::Direct3DDeviceInfo()
+{
+	memset(this, 0, sizeof(*this));
 }
 
 // FUNCTION: CONFIG 0x401420

@@ -63,7 +63,7 @@ private:
 
 // SIZE 0x1a4
 struct Direct3DDeviceInfo {
-	Direct3DDeviceInfo() {}
+	Direct3DDeviceInfo();
 	~Direct3DDeviceInfo();
 	Direct3DDeviceInfo(
 		LPGUID p_guid,
@@ -112,9 +112,8 @@ struct MxDisplayMode {
 
 // SIZE 0x190
 struct MxDriver {
-	MxDriver() {}
+	MxDriver();
 	~MxDriver();
-	MxDriver(LPGUID p_guid);
 	MxDriver(LPGUID p_guid, LPCSTR p_driverDesc, LPCSTR p_driverName);
 
 	void Init(LPGUID p_guid, LPCSTR p_driverDesc, LPCSTR p_driverName);
