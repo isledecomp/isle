@@ -218,8 +218,8 @@ public:
 	);
 
 	friend class MxDirect3D;
-
-	const list<MxDriver>& GetDriverList() const { return m_list; }
+	friend class CConfigApp;
+	friend class CMainDialog;
 
 	// SIZE 0x10
 	struct GUID4 {
@@ -240,7 +240,7 @@ public:
 	unsigned char IsInitialized() const { return m_initialized; }
 
 protected:
-	list<MxDriver> m_list;       // 0x04
+	list<MxDriver> m_ddInfo;     // 0x04
 	unsigned char m_initialized; // 0x10
 };
 

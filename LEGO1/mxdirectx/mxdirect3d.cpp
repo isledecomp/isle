@@ -262,7 +262,7 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_dri
 	assert(d);
 	int i = 0;
 
-	for (list<MxDriver>::iterator it = p_deviceEnumerate.m_list.begin(); it != p_deviceEnumerate.m_list.end();
+	for (list<MxDriver>::iterator it = p_deviceEnumerate.m_ddInfo.begin(); it != p_deviceEnumerate.m_ddInfo.end();
 		 it++, i++) {
 		MxDriver& driver = *it;
 

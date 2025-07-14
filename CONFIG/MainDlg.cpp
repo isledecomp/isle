@@ -65,7 +65,7 @@ BOOL CMainDialog::OnInitDialog()
 	int device_i = 0;
 	int selected = 0;
 	char device_name[256];
-	const list<MxDriver>& driver_list = enumerator->GetDriverList();
+	const list<MxDriver>& driver_list = enumerator->m_ddInfo;
 	for (list<MxDriver>::const_iterator it_driver = driver_list.begin(); it_driver != driver_list.end(); it_driver++) {
 		const MxDriver& driver = *it_driver;
 		for (list<Direct3DDeviceInfo>::const_iterator it_device = driver.m_devices.begin();
