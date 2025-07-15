@@ -801,7 +801,7 @@ void Isle::Enable(MxBool p_enable)
 			AnimationManager()->EnableCamAnims(FALSE);
 
 			g_isleFlags &= ~c_playMusic;
-			m_towtrack->FUN_1004dab0();
+			m_towtrack->Init();
 			break;
 		case Act1State::e_transitionToAmbulance:
 			m_act1state->m_state = Act1State::e_ambulance;
@@ -1203,7 +1203,7 @@ MxBool Isle::Escape()
 	case Act1State::e_towtrack:
 		if (UserActor() != NULL && !UserActor()->IsA("TowTrack")) {
 			m_towtrack->StopActions();
-			m_towtrack->FUN_1004dbe0();
+			m_towtrack->Reset();
 		}
 		break;
 	case Act1State::e_ambulance:
@@ -1257,7 +1257,7 @@ void Isle::FUN_10033350()
 	if (m_act1state->m_state == Act1State::e_towtrack) {
 		if (UserActor() != NULL && !UserActor()->IsA("TowTrack")) {
 			m_towtrack->StopActions();
-			m_towtrack->FUN_1004dbe0();
+			m_towtrack->Reset();
 		}
 	}
 
