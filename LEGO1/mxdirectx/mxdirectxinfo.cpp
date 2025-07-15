@@ -315,9 +315,16 @@ HRESULT MxDeviceEnumerate::EnumDisplayModesCallback(LPDDSURFACEDESC p_ddsd)
 	assert(m_ddInfo.size() > 0);
 	assert(p_ddsd);
 
-	// TODO: compat_mode?
+#ifdef COMPAT_MODE
 	MxDisplayMode displayMode(p_ddsd->dwWidth, p_ddsd->dwHeight, p_ddsd->ddpfPixelFormat.dwRGBBitCount);
+	m_list.back().m_displayModes.push_back(displayMode);
 	m_ddInfo.back().m_displayModes.push_back(displayMode);
+#else
+	m_ddInfo.back().m_displayModes.push_back(
+		MxDisplayMode(p_ddsd->dwWidth, p_ddsd->dwHeight, p_ddsd->ddpfPixelFormat.dwRGBBitCount)
+	);
+#endif
+
 	return DDENUMRET_OK;
 }
 
