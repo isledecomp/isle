@@ -269,7 +269,7 @@ void MxDeviceEnumerate::BuildErrorString(const char* p_format, ...)
 	char buf[512];
 
 	va_start(args, p_format);
-	vsprintf(buf, p_format, args);
+	int count = vsprintf(buf, p_format, args);
 	va_end(args);
 
 	OutputDebugString(buf);
