@@ -278,13 +278,10 @@ void MxDeviceEnumerate::BuildErrorString(const char* p_format, ...)
 // FUNCTION: CONFIG 0x00401bf0
 // FUNCTION: LEGO1 0x1009c4f0
 // FUNCTION: BETA10 0x1011e1dd
-HRESULT CALLBACK MxDeviceEnumerate::DisplayModesEnumerateCallback(LPDDSURFACEDESC p_ddsd, LPVOID p_context)
+HRESULT CALLBACK MxDeviceEnumerate::DisplayModesEnumerateCallback(LPDDSURFACEDESC p_ddsd, LPVOID p_d)
 {
-	if (p_context == NULL) {
-		assert(0);
-	}
-
-	return ((MxDeviceEnumerate*) p_context)->EnumDisplayModesCallback(p_ddsd);
+	assert(p_d);
+	return ((MxDeviceEnumerate*) p_d)->EnumDisplayModesCallback(p_ddsd);
 }
 
 // FUNCTION: CONFIG 0x00401c10
@@ -296,15 +293,14 @@ HRESULT CALLBACK MxDeviceEnumerate::DevicesEnumerateCallback(
 	LPSTR p_deviceName,
 	LPD3DDEVICEDESC p_HWDesc,
 	LPD3DDEVICEDESC p_HELDesc,
-	LPVOID p_context
+	LPVOID p_d
 )
 {
-	if (p_context == NULL) {
+	if (p_d == NULL) {
 		assert(0);
 	}
 
-	return ((MxDeviceEnumerate*) p_context)
-		->EnumDevicesCallback(p_guid, p_deviceDesc, p_deviceName, p_HWDesc, p_HELDesc);
+	return ((MxDeviceEnumerate*) p_d)->EnumDevicesCallback(p_guid, p_deviceDesc, p_deviceName, p_HWDesc, p_HELDesc);
 }
 
 // FUNCTION: CONFIG 0x00401c40
@@ -368,13 +364,10 @@ int MxDeviceEnumerate::DoEnumerate()
 // FUNCTION: LEGO1 0x1009c710
 // FUNCTION: BETA10 0x1011e476
 BOOL CALLBACK
-MxDeviceEnumerate::DirectDrawEnumerateCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_context)
+MxDeviceEnumerate::DirectDrawEnumerateCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_d)
 {
-	if (p_context == NULL) {
-		assert(0);
-	}
-
-	return ((MxDeviceEnumerate*) p_context)->EnumDirectDrawCallback(p_guid, p_driverDesc, p_driverName);
+	assert(p_d);
+	return ((MxDeviceEnumerate*) p_d)->EnumDirectDrawCallback(p_guid, p_driverDesc, p_driverName);
 }
 
 // FUNCTION: CONFIG 0x00401e30

@@ -204,16 +204,15 @@ public:
 	);
 	const char* EnumerateErrorToString(HRESULT p_error);
 	static void BuildErrorString(const char*, ...);
-	static BOOL CALLBACK
-	DirectDrawEnumerateCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_context);
-	static HRESULT CALLBACK DisplayModesEnumerateCallback(LPDDSURFACEDESC p_ddsd, LPVOID p_context);
+	static BOOL CALLBACK DirectDrawEnumerateCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_d);
+	static HRESULT CALLBACK DisplayModesEnumerateCallback(LPDDSURFACEDESC p_ddsd, LPVOID p_d);
 	static HRESULT CALLBACK DevicesEnumerateCallback(
 		LPGUID p_guid,
 		LPSTR p_deviceDesc,
 		LPSTR p_deviceName,
 		LPD3DDEVICEDESC p_HWDesc,
 		LPD3DDEVICEDESC p_HELDesc,
-		LPVOID p_context
+		LPVOID p_d
 	);
 
 	friend class MxDirect3D;
