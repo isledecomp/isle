@@ -634,13 +634,13 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 // FUNCTION: LEGO1 0x1007c440
 void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 {
-	PALETTEENTRY colorStrucure;
+	PALETTEENTRY colorStructure;
 
-	colorStrucure.peRed = (p_red * 255.0f);
-	colorStrucure.peGreen = (p_green * 255.0f);
-	colorStrucure.peBlue = (p_blue * 255.0f);
-	colorStrucure.peFlags = D3DPAL_RESERVED | PC_NOCOLLAPSE;
-	m_videoParam.GetPalette()->SetSkyColor(&colorStrucure);
+	colorStructure.peRed = (p_red * 255.0f);
+	colorStructure.peGreen = (p_green * 255.0f);
+	colorStructure.peBlue = (p_blue * 255.0f);
+	colorStructure.peFlags = D3DPAL_RESERVED | PC_NOCOLLAPSE;
+	m_videoParam.GetPalette()->SetSkyColor(&colorStructure);
 	m_videoParam.GetPalette()->SetOverrideSkyColor(TRUE);
 	m_3dManager->GetLego3DView()->GetView()->SetBackgroundColor(p_red, p_green, p_blue);
 }
