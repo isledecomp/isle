@@ -593,6 +593,7 @@ if (MSVC_FOR_DECOMP)
   endif()
 
   if (ISLE_BUILD_CONFIG)
+    target_link_options(config PRIVATE "/OPT:REF")
     target_link_libraries(config PRIVATE mfc42)
   endif()
 
