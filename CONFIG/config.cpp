@@ -55,14 +55,14 @@ BOOL CConfigApp::InitInstance()
 		m_run_config_dialog = TRUE;
 	}
 
-	m_device_enumerator = new LegoDeviceEnumerate;
-	if (m_device_enumerator->DoEnumerate()) {
+	m_dxInfo = new LegoDeviceEnumerate;
+	if (m_dxInfo->DoEnumerate()) {
 		assert("Could not build device list." == NULL);
 		return FALSE;
 	}
 
-	m_driver = NULL;
-	m_device = NULL;
+	m_ddInfo = NULL;
+	m_d3dInfo = NULL;
 	m_full_screen = TRUE;
 	m_wide_view_angle = TRUE;
 	m_use_joystick = FALSE;
@@ -99,10 +99,10 @@ BOOL CConfigApp::InitInstance()
 		ReadRegisterSettings();
 		ValidateSettings();
 		WriteRegisterSettings();
-		delete m_device_enumerator;
-		m_device_enumerator = NULL;
-		m_driver = NULL;
-		m_device = NULL;
+		delete m_dxInfo;
+		m_dxInfo = NULL;
+		m_ddInfo = NULL;
+		m_d3dInfo = NULL;
 		char password[256];
 		BOOL read = ReadReg("password", password, sizeof(password));
 		const char* exe = _stricmp("ogel", password) == 0 ? "isled.exe" : "isle.exe";
@@ -226,26 +226,26 @@ BOOL CConfigApp::IsDeviceInBasicRGBMode() const
 {
 	/*
 	 * BUG: should be:
-	 *  return !GetHardwareDeviceColorModel() && (m_device->m_HELDesc.dcmColorModel & D3DCOLOR_RGB);
+	 *  return !GetHardwareDeviceColorModel() && (m_d3dInfo->m_HELDesc.dcmColorModel & D3DCOLOR_RGB);
 	 */
-	assert(m_device);
-	return !GetHardwareDeviceColorModel() && m_device->m_HELDesc.dcmColorModel == D3DCOLOR_RGB;
+	assert(m_d3dInfo);
+	return !GetHardwareDeviceColorModel() && m_d3dInfo->m_HELDesc.dcmColorModel == D3DCOLOR_RGB;
 }
 
 // FUNCTION: CONFIG 0x00403400
 // FUNCTION: CONFIGD 0x004070fa
 D3DCOLORMODEL CConfigApp::GetHardwareDeviceColorModel() const
 {
-	assert(m_device);
-	return m_device->m_HWDesc.dcmColorModel;
+	assert(m_d3dInfo);
+	return m_d3dInfo->m_HWDesc.dcmColorModel;
 }
 
 // FUNCTION: CONFIG 0x00403410
 // FUNCTION: CONFIGD 0x0040714e
 BOOL CConfigApp::IsPrimaryDriver() const
 {
-	assert(m_driver && m_device_enumerator);
-	return m_driver == &m_device_enumerator->m_ddInfo.front();
+	assert(m_ddInfo && m_dxInfo);
+	return m_ddInfo == &m_dxInfo->m_ddInfo.front();
 }
 
 // FUNCTION: CONFIG 0x00403430
@@ -259,9 +259,9 @@ BOOL CConfigApp::ReadRegisterSettings()
 	int r = -1;
 
 	if (read) {
-		r = m_device_enumerator->ParseDeviceName(buffer);
+		r = m_dxInfo->ParseDeviceName(buffer);
 		if (r >= 0) {
-			r = m_device_enumerator->GetDevice(r, m_driver, m_device);
+			r = m_dxInfo->GetDevice(r, m_ddInfo, m_d3dInfo);
 			if (r) {
 				r = -1;
 			}
@@ -269,14 +269,14 @@ BOOL CConfigApp::ReadRegisterSettings()
 	}
 
 	if (r < 0) {
-		m_device_enumerator->FUN_1009d210();
-		r = m_device_enumerator->GetBestDevice();
+		m_dxInfo->FUN_1009d210();
+		r = m_dxInfo->GetBestDevice();
 		is_modified = TRUE;
 		assert(r >= 0);
-		r = m_device_enumerator->GetDevice(r, m_driver, m_device);
+		r = m_dxInfo->GetDevice(r, m_ddInfo, m_d3dInfo);
 	}
 
-	assert(r == 0 && m_driver && m_device);
+	assert(r == 0 && m_ddInfo && m_d3dInfo);
 
 	if (!ReadRegInt("Display Bit Depth", &m_display_bit_depth)) {
 		is_modified = TRUE;
@@ -384,26 +384,26 @@ BOOL CConfigApp::ValidateSettings()
 // FUNCTION: CONFIGD 0x00407793
 DWORD CConfigApp::GetConditionalDeviceRenderBitDepth() const
 {
-	assert(m_device);
+	assert(m_d3dInfo);
 	if (IsDeviceInBasicRGBMode()) {
 		return 0;
 	}
 	if (GetHardwareDeviceColorModel()) {
 		return 0;
 	}
-	return m_device->m_HELDesc.dwDeviceRenderBitDepth & DDBD_8;
+	return m_d3dInfo->m_HELDesc.dwDeviceRenderBitDepth & DDBD_8;
 }
 
 // FUNCTION: CONFIG 0x004037e0
 // FUNCTION: CONFIGD 0x00407822
 DWORD CConfigApp::GetDeviceRenderBitStatus() const
 {
-	assert(m_device);
+	assert(m_d3dInfo);
 	if (GetHardwareDeviceColorModel()) {
-		return m_device->m_HWDesc.dwDeviceRenderBitDepth & DDBD_16;
+		return m_d3dInfo->m_HWDesc.dwDeviceRenderBitDepth & DDBD_16;
 	}
 	else {
-		return m_device->m_HELDesc.dwDeviceRenderBitDepth & DDBD_16;
+		return m_d3dInfo->m_HELDesc.dwDeviceRenderBitDepth & DDBD_16;
 	}
 }
 
@@ -447,10 +447,10 @@ void CConfigApp::WriteRegisterSettings() const
 		WriteReg(NAME, buffer);                                                                                        \
 	} while (0)
 
-	assert(m_device_enumerator && m_driver && m_device);
-	m_device_enumerator->FormatDeviceName(buffer, m_driver, m_device);
+	assert(m_dxInfo && m_ddInfo && m_d3dInfo);
+	m_dxInfo->FormatDeviceName(buffer, m_ddInfo, m_d3dInfo);
 	WriteReg("3D Device ID", buffer);
-	WriteReg("3D Device Name", m_device->m_deviceName);
+	WriteReg("3D Device Name", m_d3dInfo->m_deviceName);
 	WriteRegInt("Display Bit Depth", m_display_bit_depth);
 	WriteRegBool("Flip Surfaces", m_flip_surfaces);
 	WriteRegBool("Full Screen", m_full_screen);
@@ -472,9 +472,9 @@ void CConfigApp::WriteRegisterSettings() const
 // FUNCTION: CONFIGD 0x00407c44
 int CConfigApp::ExitInstance()
 {
-	if (m_device_enumerator) {
-		delete m_device_enumerator;
-		m_device_enumerator = NULL;
+	if (m_dxInfo) {
+		delete m_dxInfo;
+		m_dxInfo = NULL;
 	}
 	return CWinApp::ExitInstance();
 }

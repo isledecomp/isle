@@ -7,6 +7,7 @@
 #include "res/resource.h"
 
 // VTABLE: CONFIG 0x004063e0
+// VTABLE: CONFIGD 0x0040c500
 // SIZE 0x70
 class CMainDialog : public CDialog {
 public:
@@ -35,11 +36,14 @@ protected:
 	void OnCancel();
 	void OnDestroy();
 	void OnButtonCancel();
+	void OnCheckboxWideAngle();
 	void OnCheckbox3DSound();
 	void OnCheckbox3DVideoMemory();
 	void OnRadiobuttonPalette16bit();
 	void OnRadiobuttonPalette256();
 	void OnCheckboxFlipVideoMemPages();
+	void OnCheckboxFullScreen();
+	void OnRadiobuttonModelLowestQuality();
 	void OnRadiobuttonModelLowQuality();
 	void OnRadiobuttonModelHighQuality();
 	void OnRadiobuttonTextureLowQuality();
@@ -52,19 +56,28 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
+// SYNTHETIC: CONFIG 0x00403160
+// SYNTHETIC: CONFIGD 0x00408490
+// CMainDialog::~CMainDialog
+
 // SYNTHETIC: CONFIG 0x00403de0
+// SYNTHETIC: CONFIGD 0x00409910
 // CMainDialog::`scalar deleting destructor'
 
 // FUNCTION: CONFIG 0x00403e60
+// FUNCTION: CONFIGD 0x004087a9
 // CMainDialog::_GetBaseMessageMap
 
 // FUNCTION: CONFIG 0x00403e70
+// FUNCTION: CONFIGD 0x004087be
 // CMainDialog::GetMessageMap
 
 // GLOBAL: CONFIG 0x00406120
+// GLOBAL: CONFIGD 0x0040c1a8
 // CMainDialog::messageMap
 
 // GLOBAL: CONFIG 0x00406128
+// GLOBAL: CONFIGD 0x0040c1b0
 // CMainDialog::_messageEntries
 
 #endif // !defined(AFX_MAINDLG_H)
