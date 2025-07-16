@@ -114,7 +114,7 @@ LegoROI::~LegoROI()
 // FUNCTION: LEGO1 0x100a84a0
 // FUNCTION: BETA10 0x10189b99
 LegoResult LegoROI::Read(
-	OrientableROI* p_unk0xd4,
+	OrientableROI* p_parentROI,
 	Tgl::Renderer* p_renderer,
 	ViewLODListManager* p_viewLODListManager,
 	LegoTextureContainer* p_textureContainer,
@@ -134,7 +134,7 @@ LegoResult LegoROI::Read(
 	LegoSphere sphere;
 	LegoBox box;
 
-	m_parentROI = p_unk0xd4;
+	m_parentROI = p_parentROI;
 
 	if (p_storage->Read(&length, sizeof(LegoU32)) != SUCCESS) {
 		goto done;
@@ -177,11 +177,11 @@ LegoResult LegoROI::Read(
 		textureName = NULL;
 	}
 
-	if (p_storage->Read(&m_unk0x100, sizeof(undefined)) != SUCCESS) {
+	if (p_storage->Read(&m_sharedLodList, sizeof(LegoBool)) != SUCCESS) {
 		goto done;
 	}
 
-	if (m_unk0x100) {
+	if (m_sharedLodList) {
 		for (roiLength = strlen(m_name); roiLength; roiLength--) {
 			if (m_name[roiLength - 1] < '0' || m_name[roiLength - 1] > '9') {
 				break;
@@ -389,7 +389,7 @@ LegoROI* LegoROI::FindChildROI(const LegoChar* p_name, LegoROI* p_roi)
 
 // FUNCTION: LEGO1 0x100a8da0
 // FUNCTION: BETA10 0x1018a9fb
-LegoResult LegoROI::ApplyAnimationTransformation(
+LegoResult LegoROI::ApplyChildAnimationTransformation(
 	LegoTreeNode* p_node,
 	const Matrix4& p_matrix,
 	LegoTime p_time,
@@ -410,11 +410,11 @@ LegoResult LegoROI::ApplyAnimationTransformation(
 		roi->m_local2world.Product(mat, p_matrix);
 		roi->UpdateWorldData();
 
-		LegoBool und = data->GetVisibility(p_time);
-		roi->SetVisibility(und);
+		LegoBool visibility = data->GetVisibility(p_time);
+		roi->SetVisibility(visibility);
 
 		for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {
-			ApplyAnimationTransformation(p_node->GetChild(i), roi->m_local2world, p_time, roi);
+			ApplyChildAnimationTransformation(p_node->GetChild(i), roi->m_local2world, p_time, roi);
 		}
 	}
 	else {
@@ -426,7 +426,7 @@ LegoResult LegoROI::ApplyAnimationTransformation(
 
 // FUNCTION: LEGO1 0x100a8e80
 // FUNCTION: BETA10 0x1018ab3a
-void LegoROI::FUN_100a8e80(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap)
+void LegoROI::ApplyAnimationTransformation(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap)
 {
 	MxMatrix mat;
 
@@ -438,11 +438,11 @@ void LegoROI::FUN_100a8e80(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_t
 		roi->m_local2world.Product(mat, p_matrix);
 		roi->UpdateWorldData();
 
-		LegoBool und = data->GetVisibility(p_time);
-		roi->SetVisibility(und);
+		LegoBool visiblity = data->GetVisibility(p_time);
+		roi->SetVisibility(visiblity);
 
 		for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {
-			FUN_100a8e80(p_node->GetChild(i), roi->m_local2world, p_time, p_roiMap);
+			ApplyAnimationTransformation(p_node->GetChild(i), roi->m_local2world, p_time, p_roiMap);
 		}
 	}
 	else {
@@ -450,14 +450,14 @@ void LegoROI::FUN_100a8e80(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_t
 		local2world.Product(mat, p_matrix);
 
 		for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {
-			FUN_100a8e80(p_node->GetChild(i), local2world, p_time, p_roiMap);
+			ApplyAnimationTransformation(p_node->GetChild(i), local2world, p_time, p_roiMap);
 		}
 	}
 }
 
 // FUNCTION: LEGO1 0x100a8fd0
 // FUNCTION: BETA10 0x1018ac81
-void LegoROI::FUN_100a8fd0(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap)
+void LegoROI::ApplyTransform(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap)
 {
 	MxMatrix mat;
 
@@ -469,7 +469,7 @@ void LegoROI::FUN_100a8fd0(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_t
 		roi->m_local2world.Product(mat, p_matrix);
 
 		for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {
-			FUN_100a8fd0(p_node->GetChild(i), roi->m_local2world, p_time, p_roiMap);
+			ApplyTransform(p_node->GetChild(i), roi->m_local2world, p_time, p_roiMap);
 		}
 	}
 	else {
@@ -477,7 +477,7 @@ void LegoROI::FUN_100a8fd0(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_t
 		local2world.Product(mat, p_matrix);
 
 		for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {
-			FUN_100a8fd0(p_node->GetChild(i), local2world, p_time, p_roiMap);
+			ApplyTransform(p_node->GetChild(i), local2world, p_time, p_roiMap);
 		}
 	}
 }
@@ -492,7 +492,7 @@ LegoResult LegoROI::SetFrame(LegoAnim* p_anim, LegoTime p_time)
 	mat = m_local2world;
 	mat.SetIdentity(); // this clears the matrix, assignment above is redundant
 
-	return ApplyAnimationTransformation(root, mat, p_time, this);
+	return ApplyChildAnimationTransformation(root, mat, p_time, this);
 }
 
 // FUNCTION: LEGO1 0x100a9170

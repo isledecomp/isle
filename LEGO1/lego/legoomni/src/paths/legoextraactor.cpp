@@ -373,7 +373,7 @@ void LegoExtraActor::Animate(float p_time)
 		MxS32 count = root->GetNumChildren();
 
 		for (MxS32 i = 0; i < count; i++) {
-			LegoROI::FUN_100a8e80(root->GetChild(i), matrix, duration2, laas->m_roiMap);
+			LegoROI::ApplyAnimationTransformation(root->GetChild(i), matrix, duration2, laas->m_roiMap);
 		}
 	}
 }

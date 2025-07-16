@@ -631,7 +631,7 @@ MxU32 Act2Actor::FUN_10019700(MxFloat p_param)
 	MxFloat time = p_param - (m_unk0x2c - m_shootAnim->GetDuration());
 
 	for (MxS32 i = 0; i < root->GetNumChildren(); i++) {
-		LegoROI::FUN_100a8e80(root->GetChild(i), matrix, time, m_shootAnim->GetROIMap());
+		LegoROI::ApplyAnimationTransformation(root->GetChild(i), matrix, time, m_shootAnim->GetROIMap());
 	}
 
 	return FALSE;
