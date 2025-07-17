@@ -109,7 +109,7 @@ class TimeROI : public LegoROI {
 public:
 	TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_time);
 
-	void FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time);
+	void CalculateWorldVelocity(Matrix4& p_matrix, LegoTime p_time);
 
 	// SYNTHETIC: LEGO1 0x100a9ad0
 	// SYNTHETIC: BETA10 0x1018c540

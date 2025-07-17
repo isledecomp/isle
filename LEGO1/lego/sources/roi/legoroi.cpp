@@ -755,7 +755,7 @@ TimeROI::TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_t
 
 // FUNCTION: LEGO1 0x100a9b40
 // FUNCTION: BETA10 0x1018bbf0
-void TimeROI::FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time)
+void TimeROI::CalculateWorldVelocity(Matrix4& p_matrix, LegoTime p_time)
 {
 	LegoTime time = p_time - m_time;
 
