@@ -284,7 +284,7 @@ void Isle::ReadyWorld()
 // FUNCTION: LEGO1 0x10031030
 MxLong Isle::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
-	if (p_param.m_unk0x28 == 1) {
+	if (p_param.m_enabledChild == 1) {
 		MxDSAction action;
 
 		switch (p_param.m_clickedObjectId) {

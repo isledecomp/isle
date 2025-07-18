@@ -226,7 +226,7 @@ MxLong RegistrationBook::HandleKeyPress(MxU8 p_key)
 // FUNCTION: LEGO1 0x100774a0
 MxLong RegistrationBook::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
-	MxS16 buttonId = p_param.m_unk0x28;
+	MxS16 buttonId = p_param.m_enabledChild;
 
 	if (buttonId >= 1 && buttonId <= 28) {
 		if (p_param.m_clickedObjectId == RegbookScript::c_Alphabet_Ctl) {
