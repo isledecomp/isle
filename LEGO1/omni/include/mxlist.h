@@ -244,11 +244,11 @@ inline MxBool MxListCursor<T>::Next()
 template <class T>
 inline MxBool MxListCursor<T>::Next(T& p_obj)
 {
-	if (!m_match) {
-		m_match = m_list->m_first;
+	if (m_match) {
+		m_match = m_match->GetNext();
 	}
 	else {
-		m_match = m_match->GetNext();
+		m_match = m_list->m_first;
 	}
 
 	if (m_match) {
