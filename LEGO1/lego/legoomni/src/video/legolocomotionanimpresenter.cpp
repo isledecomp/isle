@@ -38,7 +38,7 @@ void LegoLocomotionAnimPresenter::Init()
 // FUNCTION: LEGO1 0x1006d0e0
 void LegoLocomotionAnimPresenter::Destroy(MxBool p_fromDestructor)
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	if (m_unk0xc4) {
 		delete[] m_unk0xc4;

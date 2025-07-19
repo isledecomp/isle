@@ -31,7 +31,7 @@ void LegoPalettePresenter::Init()
 // FUNCTION: LEGO1 0x1007a0e0
 void LegoPalettePresenter::Destroy(MxBool p_fromDestructor)
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 	if (m_palette) {
 		delete m_palette;
 	}

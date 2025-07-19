@@ -52,7 +52,7 @@ void MxSoundManager::Destroy(MxBool p_fromDestructor)
 		TickleManager()->UnregisterClient(this);
 	}
 
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	if (m_dsBuffer) {
 		m_dsBuffer->Release();
@@ -77,7 +77,7 @@ MxResult MxSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 		goto done;
 	}
 
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 	locked = TRUE;
 
 	if (DirectSoundCreate(NULL, &m_directSound, NULL) != DS_OK) {
@@ -166,7 +166,7 @@ void MxSoundManager::SetVolume(MxS32 p_volume)
 {
 	MxAudioManager::SetVolume(p_volume);
 
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	MxPresenter* presenter;
 	MxPresenterListCursor cursor(m_presenters);

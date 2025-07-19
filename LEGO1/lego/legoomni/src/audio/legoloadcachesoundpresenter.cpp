@@ -98,7 +98,7 @@ void LegoLoadCacheSoundPresenter::DoneTickle()
 // FUNCTION: LEGO1 0x10018700
 MxResult LegoLoadCacheSoundPresenter::PutData()
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	if (m_currentTickleState == e_done) {
 		m_cacheSound = SoundManager()->GetCacheSoundManager()->ManageSoundEntry(m_cacheSound);

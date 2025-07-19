@@ -34,7 +34,7 @@ void MxMIDIPresenter::Destroy(MxBool p_fromDestructor)
 		MusicManager()->DeinitializeMIDI();
 	}
 
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	if (m_subscriber && m_chunk) {
 		m_subscriber->FreeDataChunk(m_chunk);
@@ -98,7 +98,7 @@ void MxMIDIPresenter::Destroy()
 // FUNCTION: LEGO1 0x100c2970
 MxResult MxMIDIPresenter::PutData()
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	if (m_currentTickleState == e_streaming && m_chunk && !MusicManager()->GetMIDIInitialized()) {
 		SetVolume(((MxDSSound*) m_action)->GetVolume());

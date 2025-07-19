@@ -50,7 +50,7 @@ void MxEventPresenter::Destroy()
 		EventManager()->UnregisterPresenter(*this);
 	}
 
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	if (m_data) {
 		delete[] m_data;

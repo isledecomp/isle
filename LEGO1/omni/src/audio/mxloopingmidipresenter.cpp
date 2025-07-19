@@ -39,7 +39,7 @@ void MxLoopingMIDIPresenter::DoneTickle()
 // FUNCTION: LEGO1 0x100c2b00
 MxResult MxLoopingMIDIPresenter::PutData()
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	if (m_currentTickleState == e_streaming && m_chunk && !MusicManager()->GetMIDIInitialized()) {
 		SetVolume(((MxDSSound*) m_action)->GetVolume());

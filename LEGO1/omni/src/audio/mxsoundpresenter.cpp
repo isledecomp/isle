@@ -13,7 +13,7 @@ void MxSoundPresenter::Destroy(MxBool p_fromDestructor)
 		MSoundManager()->UnregisterPresenter(*this);
 	}
 
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 	MxMediaPresenter::Init();
 	m_criticalSection.Leave();
 
