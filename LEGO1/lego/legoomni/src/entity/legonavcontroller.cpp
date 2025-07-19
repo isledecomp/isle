@@ -896,7 +896,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					break;
 				case 'A':
 					if (g_animationCalcStep == 1) {
-						Lego()->m_unk0x13c = TRUE;
+						Lego()->m_initialized = TRUE;
 						AnimationManager()->FUN_10060570(TRUE);
 						g_animationCalcStep = 0;
 					}
