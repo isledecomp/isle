@@ -294,7 +294,7 @@ void MxWavePresenter::EndAction()
 // FUNCTION: LEGO1 0x100b2300
 void MxWavePresenter::SetVolume(MxS32 p_volume)
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	m_volume = p_volume;
 	if (m_dsBuffer != NULL) {

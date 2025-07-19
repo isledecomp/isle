@@ -26,7 +26,7 @@ void MxAudioManager::Init()
 // FUNCTION: LEGO1 0x100b8e00
 void MxAudioManager::Destroy(MxBool p_fromDestructor)
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 	g_count--;
 	Init();
 	m_criticalSection.Leave();
@@ -43,7 +43,7 @@ MxResult MxAudioManager::Create()
 	MxBool success = FALSE;
 
 	if (MxMediaManager::Create() == SUCCESS) {
-		m_criticalSection.Enter();
+		ENTER(m_criticalSection);
 		success = TRUE;
 		result = SUCCESS;
 		g_count++;
@@ -69,7 +69,7 @@ void MxAudioManager::Destroy()
 // FUNCTION: LEGO1 0x100b8ea0
 void MxAudioManager::SetVolume(MxS32 p_volume)
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 	m_volume = p_volume;
 	m_criticalSection.Leave();
 }

@@ -48,7 +48,7 @@ MxResult MxEventManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 	MxResult result = MxMediaManager::Create();
 	if (result == SUCCESS) {
 		if (p_createThread) {
-			this->m_criticalSection.Enter();
+			ENTER(this->m_criticalSection);
 			locked = TRUE;
 			this->m_thread = new MxTickleThread(this, p_frequencyMS);
 

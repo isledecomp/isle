@@ -17,7 +17,7 @@ DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);
 // FUNCTION: LEGO1 0x100b9c70
 void MxStillPresenter::Destroy(MxBool p_fromDestructor)
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	if (m_bitmapInfo) {
 		delete[] ((MxU8*) m_bitmapInfo);

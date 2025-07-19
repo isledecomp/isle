@@ -30,7 +30,7 @@ void MxMusicPresenter::Destroy(MxBool p_fromDestructor)
 		MusicManager()->UnregisterPresenter(*this);
 	}
 
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 	Init();
 	m_criticalSection.Leave();
 

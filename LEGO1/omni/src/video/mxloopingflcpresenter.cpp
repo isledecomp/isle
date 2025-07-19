@@ -29,7 +29,7 @@ void MxLoopingFlcPresenter::Init()
 // FUNCTION: LEGO1 0x100b4430
 void MxLoopingFlcPresenter::Destroy(MxBool p_fromDestructor)
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 	Init();
 	m_criticalSection.Leave();
 
@@ -117,7 +117,7 @@ MxResult MxLoopingFlcPresenter::AddToManager()
 	MxBool locked = FALSE;
 
 	if (MxFlcPresenter::AddToManager() == SUCCESS) {
-		m_criticalSection.Enter();
+		ENTER(m_criticalSection);
 		locked = TRUE;
 		result = SUCCESS;
 	}
