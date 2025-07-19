@@ -432,7 +432,7 @@ MxLong TowTrack::HandleClick()
 	}
 
 	if (m_state->m_state == TowTrackMissionState::e_hookedUp) {
-		SpawnPlayer(LegoGameState::e_unk52, TRUE, 0);
+		SpawnPlayer(LegoGameState::e_towTrackHookedUp, TRUE, 0);
 		FindROI("rcred")->SetVisibility(FALSE);
 	}
 	else {

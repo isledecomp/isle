@@ -82,7 +82,7 @@ void Helicopter::Exit()
 
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 		SpawnPlayer(
-			LegoGameState::e_unk40,
+			LegoGameState::e_helicopterSpawn,
 			TRUE,
 			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 		);

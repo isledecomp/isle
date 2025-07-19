@@ -355,7 +355,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_PoliceStation_Music
 	);
 	g_spawnLocations[16] = SpawnLocation(
-		LegoGameState::e_unk40,
+		LegoGameState::e_helicopterSpawn,
 		g_isleScript,
 		0,
 		"edg02_51",
@@ -379,7 +379,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_noneJukebox
 	);
 	g_spawnLocations[18] = SpawnLocation(
-		LegoGameState::e_unk43,
+		LegoGameState::e_dunebuggySpawn,
 		g_isleScript,
 		0,
 		"edg02_35",
@@ -391,7 +391,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_noneJukebox
 	);
 	g_spawnLocations[19] = SpawnLocation(
-		LegoGameState::e_unk44,
+		LegoGameState::e_racecarSpawn,
 		g_isleScript,
 		0,
 		"EDG03_01",
@@ -403,7 +403,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_noneJukebox
 	);
 	g_spawnLocations[20] = SpawnLocation(
-		LegoGameState::e_unk45,
+		LegoGameState::e_jetskiSpawn,
 		g_isleScript,
 		0,
 		"edg10_70",
@@ -475,7 +475,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_noneJukebox
 	);
 	g_spawnLocations[26] = SpawnLocation(
-		LegoGameState::e_unk52,
+		LegoGameState::e_towTrackHookedUp,
 		g_isleScript,
 		0,
 		"edg02_19",

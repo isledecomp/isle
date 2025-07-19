@@ -577,7 +577,7 @@ void Isle::Enable(MxBool p_enable)
 		if (UserActor() != NULL && UserActor()->IsA("Jetski")) {
 			IslePathActor* actor = (IslePathActor*) UserActor();
 			actor->SpawnPlayer(
-				LegoGameState::e_unk45,
+				LegoGameState::e_jetskiSpawn,
 				FALSE,
 				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 			);
@@ -1633,7 +1633,7 @@ void Act1State::PlaceActors()
 
 	if (m_helicopter != NULL) {
 		if (!m_helicopterPlane.IsPresent()) {
-			m_helicopter->SpawnPlayer(LegoGameState::e_unk40, FALSE, 0);
+			m_helicopter->SpawnPlayer(LegoGameState::e_helicopterSpawn, FALSE, 0);
 		}
 		else {
 			isle->PlaceActor(m_helicopter, m_helicopterPlane.GetName(), 0, 0.5f, 1, 0.5f);
@@ -1673,7 +1673,7 @@ void Act1State::PlaceActors()
 
 	if (m_jetski != NULL) {
 		if (!m_jetskiPlane.IsPresent()) {
-			m_jetski->SpawnPlayer(LegoGameState::e_unk45, FALSE, 0);
+			m_jetski->SpawnPlayer(LegoGameState::e_jetskiSpawn, FALSE, 0);
 		}
 		else {
 			isle->PlaceActor(m_jetski, m_jetskiPlane.GetName(), 0, 0.5f, 1, 0.5f);
@@ -1703,7 +1703,7 @@ void Act1State::PlaceActors()
 
 	if (m_dunebuggy != NULL) {
 		if (!m_dunebuggyPlane.IsPresent()) {
-			m_dunebuggy->SpawnPlayer(LegoGameState::e_unk43, FALSE, 0);
+			m_dunebuggy->SpawnPlayer(LegoGameState::e_dunebuggySpawn, FALSE, 0);
 		}
 		else {
 			isle->PlaceActor(m_dunebuggy, m_dunebuggyPlane.GetName(), 0, 0.5f, 1, 0.5f);
@@ -1731,7 +1731,7 @@ void Act1State::PlaceActors()
 
 	if (m_racecar != NULL) {
 		if (!m_racecarPlane.IsPresent()) {
-			m_racecar->SpawnPlayer(LegoGameState::e_unk44, FALSE, 0);
+			m_racecar->SpawnPlayer(LegoGameState::e_racecarSpawn, FALSE, 0);
 		}
 		else {
 			isle->PlaceActor(m_racecar, m_racecarPlane.GetName(), 0, 0.5f, 1, 0.5f);

@@ -67,7 +67,7 @@ void Jetski::Animate(float p_time)
 // FUNCTION: LEGO1 0x1007e6f0
 void Jetski::Exit()
 {
-	SpawnPlayer(LegoGameState::e_unk45, FALSE, c_spawnBit1 | c_playMusic | c_spawnBit3);
+	SpawnPlayer(LegoGameState::e_jetskiSpawn, FALSE, c_spawnBit1 | c_playMusic | c_spawnBit3);
 	IslePathActor::Exit();
 	GameState()->m_currentArea = LegoGameState::e_jetski;
 	RemoveFromWorld();
