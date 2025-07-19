@@ -100,6 +100,43 @@ jobs:
           build/LEGO1.DLL
           build/LEGO1.PDB
 
+  build-beta:
+    name: 'MSVC 4.20 (BETA10)'
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/checkout@v4
+      with:
+        repository: itsmattkc/msvc420
+        path: msvc420
+
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v2
+      with:
+        # Use minimum supported version
+        cmake-version: '3.15.x'
+
+    - name: Patch MSVC 4.2
+      run: |
+        tools/patch_c2.py msvc420/bin/C2.EXE
+
+    - name: Build
+      shell: cmd
+      run: |
+        call .\msvc420\bin\VCVARS32.BAT x86
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DISLE_INCLUDE_ENTROPY=OFF -DISLE_BUILD_BETA10=ON -DISLE_BUILD_LEGO1=OFF -DISLE_BUILD_APP=OFF -DISLE_BUILD_CONFIG=OFF -G "NMake Makefiles"
+        cmake --build build
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@main
+      with:
+        name: Win32-beta
+        path: |
+          build/BETA10.DLL
+          build/BETA10.PDB
+
   verify:
     name: Verify decomp
     needs: [build, fetch-deps]
