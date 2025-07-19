@@ -303,4 +303,7 @@ private:
 // TEMPLATE: LEGO1 0x10061750
 // MxListCursor<LegoTranInfo *>::MxListCursor<LegoTranInfo *>
 
+// TEMPLATE: BETA10 0x1004b5d0
+// MxListCursor<LegoTranInfo *>::Next
+
 #endif // LEGOANIMATIONMANAGER_H

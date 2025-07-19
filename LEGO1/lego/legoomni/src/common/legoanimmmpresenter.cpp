@@ -425,6 +425,21 @@ MxBool LegoAnimMMPresenter::FUN_1004b6b0(MxLong p_time)
 // FUNCTION: BETA10 0x1004ce18
 MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 {
+#ifdef BETA10
+	switch (m_unk0x58) {
+	case 0:
+		break;
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	}
+#endif
+
 	LegoROI* viewROI = VideoManager()->GetViewROI();
 	LegoPathActor* actor = UserActor();
 
@@ -455,9 +470,13 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 				m_world->PlaceActor(actor);
 			}
 
+#ifdef BETA10
+			actor->VTable0xa8();
+#else
 			if (m_tranInfo->m_unk0x29) {
 				actor->VTable0xa8();
 			}
+#endif
 		}
 
 		actor->SetActorState(LegoPathActor::c_initial);
@@ -491,9 +510,11 @@ void LegoAnimMMPresenter::FUN_1004b840()
 	FUN_1004b6d0(0);
 	EndAction();
 
+#ifndef BETA10
 	if (action != NULL) {
 		Streamer()->FUN_100b98f0(action);
 	}
+#endif
 }
 
 // FUNCTION: LEGO1 0x1004b8b0

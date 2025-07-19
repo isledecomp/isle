@@ -153,6 +153,7 @@ void OrientableROI::UpdateWorldDataWithTransformAndChildren(const Matrix4& p_tra
 }
 
 // FUNCTION: LEGO1 0x100a5a30
+// FUNCTION: BETA10 0x10167d31
 void OrientableROI::SetWorldVelocity(const Vector3& p_world_velocity)
 {
 	m_world_velocity = p_world_velocity;

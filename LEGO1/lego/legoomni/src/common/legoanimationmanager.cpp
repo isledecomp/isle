@@ -20,6 +20,7 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxdebug.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxticklemanager.h"
@@ -1225,12 +1226,10 @@ void LegoAnimationManager::CameraTriggerFire(LegoPathActor* p_actor, MxBool, MxU
 	}
 }
 
-// FUNCTION: LEGO1 0x10061010
+#ifdef BETA10
 // FUNCTION: BETA10 0x100422cc
 void LegoAnimationManager::FUN_10061010(MxBool p_und)
 {
-	MxBool unk0x39 = FALSE;
-
 	FUN_10064b50(-1);
 
 	if (m_tranInfoList != NULL) {
@@ -1238,17 +1237,47 @@ void LegoAnimationManager::FUN_10061010(MxBool p_und)
 		LegoTranInfo* tranInfo;
 
 		while (cursor.Next(tranInfo)) {
-			if (tranInfo->m_presenter != NULL) {
-				// TODO: Match
-				MxU32 flags = tranInfo->m_flags;
+			if (tranInfo->m_unk0x14 && tranInfo->m_location != -1) {
+				MxTrace("Releasing user from %d\n", tranInfo->m_objectId);
 
+				if (tranInfo->m_presenter != NULL) {
+					tranInfo->m_presenter->FUN_1004b8c0();
+				}
+
+				tranInfo->m_unk0x14 = FALSE;
+			}
+			else {
+				MxTrace("Stopping %d\n", tranInfo->m_objectId);
+
+				if (tranInfo->m_presenter != NULL) {
+					tranInfo->m_presenter->FUN_1004b840();
+				}
+			}
+		}
+	}
+
+	m_animRunning = FALSE;
+	m_unk0x404 = Timer()->GetTime();
+}
+#else
+// FUNCTION: LEGO1 0x10061010
+void LegoAnimationManager::FUN_10061010(MxBool p_und)
+{
+	MxBool animRunning = FALSE;
+	FUN_10064b50(-1);
+
+	if (m_tranInfoList != NULL) {
+		LegoTranInfoListCursor cursor(m_tranInfoList);
+		LegoTranInfo* tranInfo;
+
+		while (cursor.Next(tranInfo)) {
+			if (tranInfo->m_presenter) {
+				// LINE: LEGO1 0x100610e6
 				if (tranInfo->m_unk0x14 && tranInfo->m_location != -1 && p_und) {
-					LegoAnim* anim;
-
-					if (tranInfo->m_presenter->GetPresenter() != NULL &&
-						(anim = tranInfo->m_presenter->GetPresenter()->GetAnimation()) != NULL &&
-						anim->GetCamAnim() != NULL) {
-						if (flags & LegoTranInfo::c_bit2) {
+					if (tranInfo->m_presenter->GetPresenter() &&
+						tranInfo->m_presenter->GetPresenter()->GetAnimation() &&
+						tranInfo->m_presenter->GetPresenter()->GetAnimation()->GetCamAnim()) {
+						if (tranInfo->m_flags & LegoTranInfo::c_bit2) {
 							BackgroundAudioManager()->RaiseVolume();
 							tranInfo->m_flags &= ~LegoTranInfo::c_bit2;
 						}
@@ -1257,37 +1286,43 @@ void LegoAnimationManager::FUN_10061010(MxBool p_und)
 						tranInfo->m_unk0x14 = FALSE;
 					}
 					else {
+						MxTrace("Releasing user from %d\n", tranInfo->m_objectId);
+						// LINE: LEGO1 0x10061137
 						tranInfo->m_presenter->FUN_1004b8c0();
+						animRunning = TRUE;
 						tranInfo->m_unk0x14 = FALSE;
-						unk0x39 = TRUE;
 					}
 				}
 				else {
-					if (flags & LegoTranInfo::c_bit2) {
+					if (tranInfo->m_flags & LegoTranInfo::c_bit2) {
+						// LINE: LEGO1 0x10061150
 						BackgroundAudioManager()->RaiseVolume();
 						tranInfo->m_flags &= ~LegoTranInfo::c_bit2;
 					}
 
+					MxTrace("Stopping %d\n", tranInfo->m_objectId);
 					tranInfo->m_presenter->FUN_1004b840();
 				}
 			}
 			else {
 				if (m_tranInfoList2 != NULL) {
 					LegoTranInfoListCursor cursor(m_tranInfoList2);
-
 					if (!cursor.Find(tranInfo)) {
+						// TODO: For some reason, the embedded `MxListEntry` constructor is not inlined.
+						// This may be the key for getting this function to match correctly.
 						m_tranInfoList2->Append(tranInfo);
 					}
 				}
 
-				unk0x39 = TRUE;
+				animRunning = TRUE;
 			}
 		}
 	}
 
-	m_animRunning = unk0x39;
+	m_animRunning = animRunning;
 	m_unk0x404 = Timer()->GetTime();
 }
+#endif
 
 // FUNCTION: LEGO1 0x10061530
 void LegoAnimationManager::FUN_10061530()

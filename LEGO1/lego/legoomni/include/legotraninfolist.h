@@ -28,9 +28,11 @@ public:
 // class MxPtrListCursor<LegoTranInfo>
 
 // VTABLE: LEGO1 0x100d8d20
+// VTABLE: BETA10 0x101bad70
 // SIZE 0x10
 class LegoTranInfoListCursor : public MxPtrListCursor<LegoTranInfo> {
 public:
+	// FUNCTION: BETA10 0x100496d0
 	LegoTranInfoListCursor(LegoTranInfoList* p_list) : MxPtrListCursor<LegoTranInfo>(p_list) {}
 };
 
@@ -62,9 +64,14 @@ public:
 // MxPtrList<LegoTranInfo>::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100612f0
+// SYNTHETIC: BETA10 0x100498c0
 // LegoTranInfoListCursor::`scalar deleting destructor'
 
+// SYNTHETIC: BETA10 0x10049770
+// MxPtrListCursor<LegoTranInfo>::MxPtrListCursor<LegoTranInfo>
+
 // FUNCTION: LEGO1 0x10061360
+// FUNCTION: BETA10 0x10049910
 // MxPtrListCursor<LegoTranInfo>::~MxPtrListCursor<LegoTranInfo>
 
 // SYNTHETIC: LEGO1 0x100613b0
@@ -77,6 +84,7 @@ public:
 // MxListCursor<LegoTranInfo *>::~MxListCursor<LegoTranInfo *>
 
 // FUNCTION: LEGO1 0x100614e0
+// FUNCTION: BETA10 0x10049ab0
 // LegoTranInfoListCursor::~LegoTranInfoListCursor
 
 #endif // LEGOTRANINFOLIST_H
