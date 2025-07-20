@@ -53,7 +53,7 @@ void MxMusicManager::Destroy(MxBool p_fromDestructor)
 		TickleManager()->UnregisterClient(this);
 	}
 
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 	DeinitializeMIDI();
 	Init();
 	m_criticalSection.Leave();
@@ -146,7 +146,7 @@ MxResult MxMusicManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 
 	if (MxAudioManager::Create() == SUCCESS) {
 		if (p_createThread) {
-			m_criticalSection.Enter();
+			ENTER(m_criticalSection);
 			locked = TRUE;
 			m_thread = new MxTickleThread(this, p_frequencyMS);
 
@@ -183,7 +183,7 @@ void MxMusicManager::Destroy()
 void MxMusicManager::SetVolume(MxS32 p_volume)
 {
 	MxAudioManager::SetVolume(p_volume);
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 	SetMIDIVolume();
 	m_criticalSection.Leave();
 }
@@ -191,7 +191,7 @@ void MxMusicManager::SetVolume(MxS32 p_volume)
 // FUNCTION: LEGO1 0x100c0970
 void MxMusicManager::SetMultiplier(MxS32 p_multiplier)
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 	m_multiplier = p_multiplier;
 	SetMIDIVolume();
 	m_criticalSection.Leave();
@@ -209,7 +209,7 @@ MxResult MxMusicManager::InitializeMIDI(MxU8* p_data, MxS32 p_loopCount)
 {
 	MxResult result = FAILURE;
 
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	if (!m_midiInitialized) {
 		MxU32 total = midiOutGetNumDevs();
@@ -278,7 +278,7 @@ done:
 // FUNCTION: LEGO1 0x100c0b20
 void MxMusicManager::DeinitializeMIDI()
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	if (m_midiInitialized) {
 		m_midiInitialized = FALSE;

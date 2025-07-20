@@ -33,7 +33,7 @@ void LegoModelPresenter::configureLegoModelPresenter(MxS32 p_modelPresenterConfi
 // FUNCTION: LEGO1 0x1007f670
 void LegoModelPresenter::Destroy(MxBool p_fromDestructor)
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 	m_roi = NULL;
 	m_addedToView = FALSE;
 	m_criticalSection.Leave();

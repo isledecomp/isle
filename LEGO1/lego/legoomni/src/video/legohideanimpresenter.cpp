@@ -29,7 +29,7 @@ void LegoHideAnimPresenter::Init()
 // FUNCTION: LEGO1 0x1006da60
 void LegoHideAnimPresenter::Destroy(MxBool p_fromDestructor)
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	if (m_boundaryMap) {
 		delete[] m_boundaryMap;

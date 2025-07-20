@@ -32,7 +32,7 @@ void MxSmkPresenter::Init()
 // FUNCTION: LEGO1 0x100b3900
 void MxSmkPresenter::Destroy(MxBool p_fromDestructor)
 {
-	m_criticalSection.Enter();
+	ENTER(m_criticalSection);
 
 	MxSmk::Destroy(&m_mxSmk);
 	Init();
