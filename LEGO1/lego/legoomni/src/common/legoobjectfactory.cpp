@@ -71,7 +71,6 @@
 #include "legoentity.h"
 #include "legoentitypresenter.h"
 #include "legoflctexturepresenter.h"
-#include "legohideanimpresenter.h"
 #include "legoloadcachesoundpresenter.h"
 #include "legometerpresenter.h"
 #include "legomodelpresenter.h"
@@ -350,7 +349,8 @@ MxCore* LegoObjectFactory::Create(const char* p_name)
 	else if (m_idCarRace == atom) {
 		object = new CarRace();
 	}
-	else if (m_idLegoRaceCarBuildState == atom || m_idLegoCopterBuildState == atom || m_idLegoDuneCarBuildState == atom || m_idLegoJetskiBuildState == atom) {
+	else if (m_idLegoRaceCarBuildState == atom || m_idLegoCopterBuildState == atom ||
+			 m_idLegoDuneCarBuildState == atom || m_idLegoJetskiBuildState == atom) {
 		object = new LegoVehicleBuildState(p_name);
 	}
 	else if (m_idHospitalState == atom) {
