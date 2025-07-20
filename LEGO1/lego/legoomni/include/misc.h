@@ -52,7 +52,7 @@ void Disable(MxBool p_disable, MxU16 p_flags);
 LegoROI* FindROI(const char* p_name);
 void SetROIVisible(const char* p_name, MxBool p_visible);
 void SetUserActor(LegoPathActor* p_userActor);
-MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction);
+MxResult StartActionIfInitialized(MxDSAction& p_dsAction);
 void DeleteAction();
 LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
 MxDSAction& GetCurrentAction();

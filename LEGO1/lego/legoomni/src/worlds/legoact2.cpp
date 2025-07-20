@@ -1116,7 +1116,7 @@ MxResult LegoAct2::FUN_10052560(
 				action.SetDirection(*p_direction);
 			}
 
-			StartActionIfUnknown0x13c(action);
+			StartActionIfInitialized(action);
 		}
 		else {
 			MxMatrix matrix;

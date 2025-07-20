@@ -71,7 +71,7 @@ void LegoOmni::Init()
 	m_animationManager = NULL;
 	m_buildingManager = NULL;
 	m_bkgAudioManager = NULL;
-	m_unk0x13c = TRUE;
+	m_initialized = TRUE;
 	m_transitionManager = NULL;
 }
 
