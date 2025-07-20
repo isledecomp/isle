@@ -180,8 +180,8 @@ public:
 	// FUNCTION: BETA10 0x100d55c0
 	void SetExit(MxBool p_exit) { m_exit = p_exit; }
 
-	MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction) { return m_unk0x13c ? Start(&p_dsAction) : SUCCESS; }
-	void SetUnknown13c(MxBool p_unk0x13c) { m_unk0x13c = p_unk0x13c; }
+	MxResult StartActionIfInitialized(MxDSAction& p_dsAction) { return m_initialized ? Start(&p_dsAction) : SUCCESS; }
+	void SetInitialized(MxBool p_unk0x13c) { m_initialized = p_unk0x13c; }
 
 	void CloseMainWindow() { PostMessage(m_windowHandle, WM_CLOSE, 0, 0); }
 
@@ -208,7 +208,7 @@ private:
 	MxTransitionManager* m_transitionManager;    // 0x138
 
 public:
-	MxBool m_unk0x13c; // 0x13c
+	MxBool m_initialized; // 0x13c
 };
 
 #endif // LEGOMAIN_H

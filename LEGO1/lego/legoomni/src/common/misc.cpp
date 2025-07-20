@@ -172,9 +172,9 @@ void SetUserActor(LegoPathActor* p_userActor)
 
 // FUNCTION: LEGO1 0x10015890
 // FUNCTION: BETA10 0x100e4d80
-MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction)
+MxResult StartActionIfInitialized(MxDSAction& p_dsAction)
 {
-	return LegoOmni::GetInstance()->StartActionIfUnknown0x13c(p_dsAction);
+	return LegoOmni::GetInstance()->StartActionIfInitialized(p_dsAction);
 }
 
 // FUNCTION: LEGO1 0x100158b0

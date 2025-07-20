@@ -1016,7 +1016,7 @@ MxResult LegoAnimationManager::FUN_100605e0(
 		action.SetUnknown24(-1);
 		action.AppendExtra(strlen(buf) + 1, buf);
 
-		if (StartActionIfUnknown0x13c(action) == SUCCESS) {
+		if (StartActionIfInitialized(action) == SUCCESS) {
 			BackgroundAudioManager()->LowerVolume();
 			tranInfo->m_flags |= LegoTranInfo::c_bit2;
 			animInfo.m_unk0x22++;
@@ -1083,7 +1083,7 @@ MxResult LegoAnimationManager::FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix
 	action.SetUnknown24(-1);
 	action.AppendExtra(strlen(buf) + 1, buf);
 
-	if (StartActionIfUnknown0x13c(action) == SUCCESS) {
+	if (StartActionIfInitialized(action) == SUCCESS) {
 		BackgroundAudioManager()->LowerVolume();
 		info->m_flags |= LegoTranInfo::c_bit2;
 		m_animRunning = TRUE;
@@ -1126,7 +1126,7 @@ MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEnt
 		}
 	}
 
-	if (LegoOmni::GetInstance()->StartActionIfUnknown0x13c(p_dsAction) == SUCCESS) {
+	if (LegoOmni::GetInstance()->StartActionIfInitialized(p_dsAction) == SUCCESS) {
 		result = SUCCESS;
 	}
 
@@ -1150,7 +1150,7 @@ MxResult LegoAnimationManager::FUN_10060dc0(
 	MxResult result = FAILURE;
 	MxBool found = FALSE;
 
-	if (!Lego()->m_unk0x13c) {
+	if (!Lego()->m_initialized) {
 		return SUCCESS;
 	}
 
@@ -1187,7 +1187,7 @@ MxResult LegoAnimationManager::FUN_10060dc0(
 // FUNCTION: BETA10 0x1004206c
 void LegoAnimationManager::CameraTriggerFire(LegoPathActor* p_actor, MxBool, MxU32 p_location, MxBool p_bool)
 {
-	if (Lego()->m_unk0x13c && m_enableCamAnims && !m_animRunning) {
+	if (Lego()->m_initialized && m_enableCamAnims && !m_animRunning) {
 		LegoLocation* location = LegoNavController::GetLocation(p_location);
 
 		if (location != NULL) {
