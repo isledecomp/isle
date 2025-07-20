@@ -3,7 +3,7 @@
 #include "isle.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
-#include "legohideanimpresenter.h"
+#include "legoanimpresenter.h"
 #include "legopathactor.h"
 #include "legoutils.h"
 #include "misc.h"

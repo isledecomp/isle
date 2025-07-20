@@ -2,6 +2,7 @@
 #define LEGOANIMPRESENTER_H
 
 #include "legoroilist.h"
+#include "legoroimaplist.h"
 #include "mxatom.h"
 #include "mxvideopresenter.h"
 
@@ -147,14 +148,191 @@ protected:
 	MxS16 m_unk0x9c;              // 0x9c
 	Matrix4* m_unk0xa0;           // 0xa0
 
+	// SYNTHETIC: LEGO1 0x10068650
+	// LegoAnimPresenter::`scalar deleting destructor'
+
 public:
 	float m_unk0xa4;          // 0xa4
 	Mx3DPointFloat m_unk0xa8; // 0xa8
 };
 
+// VTABLE: LEGO1 0x100d4900
+// SIZE 0xc0
+class LegoLoopingAnimPresenter : public LegoAnimPresenter {
+public:
+	// FUNCTION: BETA10 0x1005c6f0
+	static const char* HandlerClassName()
+	{
+		// STRING: LEGO1 0x100f0700
+		return "LegoLoopingAnimPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1000c9a0
+	// FUNCTION: BETA10 0x1005c6c0
+	const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
+	}
+
+	// FUNCTION: LEGO1 0x1000c9b0
+	MxBool IsA(const char* p_name) const override // vtable+0x10
+	{
+		return !strcmp(p_name, ClassName()) || LegoAnimPresenter::IsA(p_name);
+	}
+
+	void StreamingTickle() override; // vtable+0x20
+	void PutFrame() override;        // vtable+0x6c
+
+	// SYNTHETIC: LEGO1 0x1006d000
+	// LegoLoopingAnimPresenter::~LegoLoopingAnimPresenter
+
+	// SYNTHETIC: LEGO1 0x1000f440
+	// LegoLoopingAnimPresenter::`scalar deleting destructor'
+
+private:
+	undefined4 m_unk0xbc; // 0xbc
+};
+
+class LegoAnimActor;
+
+// VTABLE: LEGO1 0x100d9170
+// SIZE 0xd8
+class LegoLocomotionAnimPresenter : public LegoLoopingAnimPresenter {
+public:
+	LegoLocomotionAnimPresenter();
+	~LegoLocomotionAnimPresenter() override;
+
+	// FUNCTION: BETA10 0x1005c4e0
+	static const char* HandlerClassName()
+	{
+		// STRING: LEGO1 0x100f06e4
+		return "LegoLocomotionAnimPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1006ce50
+	// FUNCTION: BETA10 0x1005c4b0
+	const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
+	}
+
+	// FUNCTION: LEGO1 0x1006ce60
+	MxBool IsA(const char* p_name) const override // vtable+0x10
+	{
+		return !strcmp(p_name, ClassName()) || LegoLoopingAnimPresenter::IsA(p_name);
+	}
+
+	void ReadyTickle() override;                          // vtable+0x18
+	void StartingTickle() override;                       // vtable+0x1c
+	void StreamingTickle() override;                      // vtable+0x20
+	MxResult AddToManager() override;                     // vtable+0x34
+	void Destroy() override;                              // vtable+0x38
+	void EndAction() override;                            // vtable+0x40
+	void PutFrame() override;                             // vtable+0x6c
+	MxResult CreateAnim(MxStreamChunk* p_chunk) override; // vtable+0x88
+
+	void FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value);
+
+	void DecrementUnknown0xd4()
+	{
+		if (m_unk0xd4) {
+			--m_unk0xd4;
+		}
+	}
+
+	undefined2 GetUnknown0xd4() { return m_unk0xd4; }
+
+	// SYNTHETIC: LEGO1 0x1006cfe0
+	// LegoLocomotionAnimPresenter::`scalar deleting destructor'
+
+private:
+	void Init();
+	void Destroy(MxBool p_fromDestructor);
+
+	undefined4 m_unk0xc0;         // 0xc0
+	undefined4* m_unk0xc4;        // 0xc4
+	LegoROIMapList* m_roiMapList; // 0xc8
+	MxS32 m_unk0xcc;              // 0xcc
+	MxS32 m_unk0xd0;              // 0xd0
+	undefined2 m_unk0xd4;         // 0xd4
+};
+
+class LegoPathBoundary;
+
+struct LegoHideAnimStructComparator {
+	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
+};
+
+// SIZE 0x08
+struct LegoHideAnimStruct {
+	LegoPathBoundary* m_boundary; // 0x00
+	MxU32 m_index;                // 0x04
+};
+
+typedef map<const char*, LegoHideAnimStruct, LegoHideAnimStructComparator> LegoHideAnimStructMap;
+
+// VTABLE: LEGO1 0x100d9278
+// SIZE 0xc4
+class LegoHideAnimPresenter : public LegoLoopingAnimPresenter {
+public:
+	LegoHideAnimPresenter();
+	~LegoHideAnimPresenter() override;
+
+	// FUNCTION: LEGO1 0x1006d860
+	void VTable0x8c() override {} // vtable+0x8c
+
+	// FUNCTION: LEGO1 0x1006d870
+	void VTable0x90() override {} // vtable+0x90
+
+	// FUNCTION: BETA10 0x1005d4a0
+	static const char* HandlerClassName()
+	{
+		// STRING: LEGO1 0x100f06cc
+		return "LegoHideAnimPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1006d880
+	// FUNCTION: BETA10 0x1005d470
+	const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
+	}
+
+	// FUNCTION: LEGO1 0x1006d890
+	MxBool IsA(const char* p_name) const override // vtable+0x10
+	{
+		return !strcmp(p_name, ClassName()) || LegoAnimPresenter::IsA(p_name);
+	}
+
+	void ReadyTickle() override;      // vtable+0x18
+	void StartingTickle() override;   // vtable+0x18
+	MxResult AddToManager() override; // vtable+0x34
+	void Destroy() override;          // vtable+0x38
+	void EndAction() override;        // vtable+0x40
+	void PutFrame() override;         // vtable+0x6c
+
+	void FUN_1006db40(LegoTime p_time);
+
+	// SYNTHETIC: LEGO1 0x1006d9d0
+	// LegoHideAnimPresenter::`scalar deleting destructor'
+
+private:
+	void Init();
+	void Destroy(MxBool p_fromDestructor);
+	void FUN_1006db60(LegoTreeNode* p_node, LegoTime p_time);
+	void FUN_1006dc10();
+	void FUN_1006e3f0(LegoHideAnimStructMap& p_map, LegoTreeNode* p_node);
+	void FUN_1006e470(
+		LegoHideAnimStructMap& p_map,
+		LegoAnimNodeData* p_data,
+		const char* p_name,
+		LegoPathBoundary* p_boundary
+	);
+
+	LegoPathBoundary** m_boundaryMap; // 0xc0
+};
+
 // clang-format off
-// SYNTHETIC: LEGO1 0x10068650
-// LegoAnimPresenter::`scalar deleting destructor'
 
 // TEMPLATE: LEGO1 0x100689c0
 // map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::~map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >
@@ -212,6 +390,33 @@ public:
 
 // GLOBAL: LEGO1 0x100f7688
 // _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Nil
+
+// TEMPLATE: LEGO1 0x1006ddb0
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::~_Tree<char const *,pair<ch
+
+// TEMPLATE: LEGO1 0x1006de80
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::iterator::_Inc
+
+// TEMPLATE: LEGO1 0x1006dec0
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::erase
+
+// TEMPLATE: LEGO1 0x1006e310
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Erase
+
+// TEMPLATE: LEGO1 0x1006e350
+// Map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator>::~Map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator>
+
+// TEMPLATE: LEGO1 0x1006e3a0
+// map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::~map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >
+
+// TEMPLATE: LEGO1 0x1006e6d0
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::iterator::_Dec
+
+// TEMPLATE: LEGO1 0x1006e720
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Insert
+
+// GLOBAL: LEGO1 0x100f768c
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Nil
 // clang-format on
 
 #endif // LEGOANIMPRESENTER_H

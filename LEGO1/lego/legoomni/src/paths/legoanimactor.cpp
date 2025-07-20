@@ -2,7 +2,7 @@
 
 #include "anim/legoanim.h"
 #include "define.h"
-#include "legolocomotionanimpresenter.h"
+#include "legoanimpresenter.h"
 #include "legopathboundary.h"
 #include "legoworld.h"
 #include "misc.h"

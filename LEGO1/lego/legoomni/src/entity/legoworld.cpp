@@ -9,7 +9,6 @@
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
-#include "legolocomotionanimpresenter.h"
 #include "legonavcontroller.h"
 #include "legoplantmanager.h"
 #include "legosoundmanager.h"
