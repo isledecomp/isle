@@ -37,7 +37,7 @@ void MxAudioManager::Destroy(MxBool p_fromDestructor)
 	m_criticalSection.Leave();
 
 	if (!p_fromDestructor) {
-		MxMediaManager::Destroy();
+		MxPresentationManager::Destroy();
 	}
 }
 
@@ -48,7 +48,7 @@ MxResult MxAudioManager::Create()
 	MxResult result = FAILURE;
 	MxBool success = FALSE;
 
-	if (MxMediaManager::Create() != SUCCESS) {
+	if (MxPresentationManager::Create() != SUCCESS) {
 		goto exit;
 	}
 
@@ -79,7 +79,7 @@ MxResult MxAudioManager::Create()
 	MxResult result = FAILURE;
 	MxBool success = FALSE;
 
-	if (MxMediaManager::Create() == SUCCESS) {
+	if (MxPresentationManager::Create() == SUCCESS) {
 		ENTER(m_criticalSection);
 		success = TRUE;
 		result = SUCCESS;

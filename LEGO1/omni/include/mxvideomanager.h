@@ -1,7 +1,7 @@
 #ifndef MXVIDEOMANAGER_H
 #define MXVIDEOMANAGER_H
 
-#include "mxmediamanager.h"
+#include "mxpresentationmanager.h"
 #include "mxvideoparam.h"
 
 #include <d3d.h>
@@ -13,7 +13,7 @@ class MxRegion;
 // VTABLE: LEGO1 0x100dc810
 // VTABLE: BETA10 0x101c1bf8
 // SIZE 0x64
-class MxVideoManager : public MxMediaManager {
+class MxVideoManager : public MxPresentationManager {
 public:
 	MxVideoManager();
 	~MxVideoManager() override;

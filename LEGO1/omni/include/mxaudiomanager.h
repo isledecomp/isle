@@ -2,12 +2,12 @@
 #define MXAUDIOMANAGER_H
 
 #include "decomp.h"
-#include "mxmediamanager.h"
+#include "mxpresentationmanager.h"
 
 // VTABLE: LEGO1 0x100dc6e0
 // VTABLE: BETA10 0x101c2348
 // SIZE 0x30
-class MxAudioManager : public MxMediaManager {
+class MxAudioManager : public MxPresentationManager {
 public:
 	MxAudioManager();
 	~MxAudioManager() override;

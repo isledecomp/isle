@@ -1,4 +1,4 @@
-#include "mxmediamanager.h"
+#include "mxpresentationmanager.h"
 
 #include "decomp.h"
 #include "mxautolock.h"
@@ -6,27 +6,27 @@
 #include "mxpresenter.h"
 #include "mxticklemanager.h"
 
-DECOMP_SIZE_ASSERT(MxMediaManager, 0x2c);
+DECOMP_SIZE_ASSERT(MxPresentationManager, 0x2c);
 DECOMP_SIZE_ASSERT(MxPresenterList, 0x18);
 DECOMP_SIZE_ASSERT(MxPresenterListCursor, 0x10);
 
 // FUNCTION: LEGO1 0x100b84c0
 // FUNCTION: BETA10 0x10144680
-MxMediaManager::MxMediaManager()
+MxPresentationManager::MxPresentationManager()
 {
 	Init();
 }
 
 // FUNCTION: LEGO1 0x100b8560
 // FUNCTION: BETA10 0x10144712
-MxMediaManager::~MxMediaManager()
+MxPresentationManager::~MxPresentationManager()
 {
 	Destroy();
 }
 
 // FUNCTION: LEGO1 0x100b85d0
 // FUNCTION: BETA10 0x1014479b
-MxResult MxMediaManager::Init()
+MxResult MxPresentationManager::Init()
 {
 	this->m_presenters = NULL;
 	this->m_thread = NULL;
@@ -35,8 +35,9 @@ MxResult MxMediaManager::Init()
 
 // FUNCTION: LEGO1 0x100b85e0
 // FUNCTION: BETA10 0x101447c5
-MxResult MxMediaManager::Create()
+MxResult MxPresentationManager::Create()
 {
+	// This validates the name of the source code file (and hence also the name of the class)
 	AUTOLOCK(m_criticalSection);
 
 	this->m_presenters = new MxPresenterList;
@@ -51,7 +52,7 @@ MxResult MxMediaManager::Create()
 
 // FUNCTION: LEGO1 0x100b8710
 // FUNCTION: BETA10 0x101448e4
-void MxMediaManager::Destroy()
+void MxPresentationManager::Destroy()
 {
 	AUTOLOCK(m_criticalSection);
 
@@ -64,7 +65,7 @@ void MxMediaManager::Destroy()
 
 // FUNCTION: LEGO1 0x100b8790
 // FUNCTION: BETA10 0x10144993
-MxResult MxMediaManager::Tickle()
+MxResult MxPresentationManager::Tickle()
 {
 	AUTOLOCK(m_criticalSection);
 	MxPresenter* presenter;
@@ -85,7 +86,7 @@ MxResult MxMediaManager::Tickle()
 
 // FUNCTION: LEGO1 0x100b88c0
 // FUNCTION: BETA10 0x10144a8b
-void MxMediaManager::RegisterPresenter(MxPresenter& p_presenter)
+void MxPresentationManager::RegisterPresenter(MxPresenter& p_presenter)
 {
 	AUTOLOCK(m_criticalSection);
 
@@ -94,7 +95,7 @@ void MxMediaManager::RegisterPresenter(MxPresenter& p_presenter)
 
 // FUNCTION: LEGO1 0x100b8980
 // FUNCTION: BETA10 0x10144b0c
-void MxMediaManager::UnregisterPresenter(MxPresenter& p_presenter)
+void MxPresentationManager::UnregisterPresenter(MxPresenter& p_presenter)
 {
 	AUTOLOCK(m_criticalSection);
 	MxPresenterListCursor cursor(this->m_presenters);
@@ -106,7 +107,7 @@ void MxMediaManager::UnregisterPresenter(MxPresenter& p_presenter)
 
 // FUNCTION: LEGO1 0x100b8ac0
 // FUNCTION: BETA10 0x10144bc3
-void MxMediaManager::StopPresenters()
+void MxPresentationManager::StopPresenters()
 {
 	AUTOLOCK(m_criticalSection);
 	MxPresenter* presenter;

@@ -1,5 +1,5 @@
-#ifndef MXMEDIAMANGER_H
-#define MXMEDIAMANGER_H
+#ifndef MXPRESENTATIONMANAGER_H
+#define MXPRESENTATIONMANAGER_H
 
 #include "mxcore.h"
 #include "mxcriticalsection.h"
@@ -11,10 +11,10 @@ class MxThread;
 // VTABLE: LEGO1 0x100dc6b0
 // VTABLE: BETA10 0x101c2318
 // SIZE 0x2c
-class MxMediaManager : public MxCore {
+class MxPresentationManager : public MxCore {
 public:
-	MxMediaManager();
-	~MxMediaManager() override;
+	MxPresentationManager();
+	~MxPresentationManager() override;
 
 	MxResult Tickle() override;                                 // vtable+08
 	virtual MxResult Create();                                  // vtable+14
@@ -27,7 +27,7 @@ public:
 
 	// SYNTHETIC: LEGO1 0x100b8540
 	// SYNTHETIC: BETA10 0x10144db0
-	// MxMediaManager::`scalar deleting destructor'
+	// MxPresentationManager::`scalar deleting destructor'
 
 protected:
 	MxPresenterList* m_presenters;       // 0x08
@@ -35,4 +35,4 @@ protected:
 	MxCriticalSection m_criticalSection; // 0x10
 };
 
-#endif // MXMEDIAMANGER_H
+#endif // MXPRESENTATIONMANAGER_H

@@ -35,7 +35,7 @@ void MxEventManager::Destroy(MxBool p_fromDestructor)
 	}
 
 	if (!p_fromDestructor) {
-		MxMediaManager::Destroy();
+		MxPresentationManager::Destroy();
 	}
 }
 
@@ -45,7 +45,7 @@ MxResult MxEventManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 	MxResult status = FAILURE;
 	MxBool locked = FALSE;
 
-	MxResult result = MxMediaManager::Create();
+	MxResult result = MxPresentationManager::Create();
 	if (result == SUCCESS) {
 		if (p_createThread) {
 			ENTER(this->m_criticalSection);

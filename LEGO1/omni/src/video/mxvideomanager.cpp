@@ -83,7 +83,7 @@ void MxVideoManager::Destroy(MxBool p_fromDestructor)
 	m_criticalSection.Leave();
 
 	if (!p_fromDestructor) {
-		MxMediaManager::Destroy();
+		MxPresentationManager::Destroy();
 	}
 }
 
@@ -153,7 +153,7 @@ MxResult MxVideoManager::VTable0x28(
 
 	m_unk0x60 = FALSE;
 
-	if (MxMediaManager::Create() != SUCCESS) {
+	if (MxPresentationManager::Create() != SUCCESS) {
 		goto done;
 	}
 
@@ -227,7 +227,7 @@ MxResult MxVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS,
 
 	m_unk0x60 = TRUE;
 
-	if (MxMediaManager::Create() != SUCCESS) {
+	if (MxPresentationManager::Create() != SUCCESS) {
 		goto done;
 	}
 

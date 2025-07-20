@@ -2,11 +2,11 @@
 #define MXEVENTMANAGER_H
 
 #include "decomp.h"
-#include "mxmediamanager.h"
+#include "mxpresentationmanager.h"
 
 // VTABLE: LEGO1 0x100dc900
 // SIZE 0x2c
-class MxEventManager : public MxMediaManager {
+class MxEventManager : public MxPresentationManager {
 public:
 	MxEventManager();
 	~MxEventManager() override;
