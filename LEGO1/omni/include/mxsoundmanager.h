@@ -25,7 +25,7 @@ public:
 
 	MxS32 GetAttenuation(MxU32 p_volume);
 
-	MxPresenter* FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_objectId);
+	MxPresenter* FindPresenter(const MxAtomId& p_atomId, MxU32 p_objectId);
 
 protected:
 	void Init();

@@ -179,7 +179,7 @@ void MxSoundManager::SetVolume(MxS32 p_volume)
 }
 
 // FUNCTION: LEGO1 0x100aebd0
-MxPresenter* MxSoundManager::FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_objectId)
+MxPresenter* MxSoundManager::FindPresenter(const MxAtomId& p_atomId, MxU32 p_objectId)
 {
 	AUTOLOCK(m_criticalSection);
 
