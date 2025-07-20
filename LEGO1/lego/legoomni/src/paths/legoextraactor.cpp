@@ -1,8 +1,8 @@
 #include "legoextraactor.h"
 
 #include "anim/legoanim.h"
+#include "legoanimpresenter.h"
 #include "legocachesoundmanager.h"
-#include "legolocomotionanimpresenter.h"
 #include "legosoundmanager.h"
 #include "legoworld.h"
 #include "misc.h"

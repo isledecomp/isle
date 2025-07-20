@@ -10,7 +10,7 @@
 #include "legoentity.h"
 #include "legopathactor.h"
 // The below header inclusions should be sound.
-#include "legoloopinganimpresenter.h"
+#include "legoanimpresenter.h"
 #include "mxcompositemediapresenter.h"
 #include "legoactorpresenter.h"
 #include "legomodelpresenter.h"
@@ -73,8 +73,6 @@
 #include "legoflctexturepresenter.h"
 #include "legohideanimpresenter.h"
 #include "legoloadcachesoundpresenter.h"
-#include "legolocomotionanimpresenter.h"
-#include "legoloopinganimpresenter.h"
 #include "legometerpresenter.h"
 #include "legomodelpresenter.h"
 #include "legopalettepresenter.h"
@@ -352,7 +350,8 @@ MxCore* LegoObjectFactory::Create(const char* p_name)
 	else if (m_idCarRace == atom) {
 		object = new CarRace();
 	}
-	else if (m_idLegoRaceCarBuildState == atom || m_idLegoCopterBuildState == atom || m_idLegoDuneCarBuildState == atom || m_idLegoJetskiBuildState == atom) {
+	else if (m_idLegoRaceCarBuildState == atom || m_idLegoCopterBuildState == atom ||
+			 m_idLegoDuneCarBuildState == atom || m_idLegoJetskiBuildState == atom) {
 		object = new LegoVehicleBuildState(p_name);
 	}
 	else if (m_idHospitalState == atom) {

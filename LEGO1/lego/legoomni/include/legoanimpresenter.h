@@ -2,6 +2,7 @@
 #define LEGOANIMPRESENTER_H
 
 #include "legoroilist.h"
+#include "legoroimaplist.h"
 #include "mxatom.h"
 #include "mxvideopresenter.h"
 
@@ -147,14 +148,116 @@ protected:
 	MxS16 m_unk0x9c;              // 0x9c
 	Matrix4* m_unk0xa0;           // 0xa0
 
+	// SYNTHETIC: LEGO1 0x10068650
+	// LegoAnimPresenter::`scalar deleting destructor'
+
 public:
 	float m_unk0xa4;          // 0xa4
 	Mx3DPointFloat m_unk0xa8; // 0xa8
 };
 
+// VTABLE: LEGO1 0x100d4900
+// SIZE 0xc0
+class LegoLoopingAnimPresenter : public LegoAnimPresenter {
+public:
+	// FUNCTION: BETA10 0x1005c6f0
+	static const char* HandlerClassName()
+	{
+		// STRING: LEGO1 0x100f0700
+		return "LegoLoopingAnimPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1000c9a0
+	// FUNCTION: BETA10 0x1005c6c0
+	const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
+	}
+
+	// FUNCTION: LEGO1 0x1000c9b0
+	MxBool IsA(const char* p_name) const override // vtable+0x10
+	{
+		return !strcmp(p_name, ClassName()) || LegoAnimPresenter::IsA(p_name);
+	}
+
+	void StreamingTickle() override; // vtable+0x20
+	void PutFrame() override;        // vtable+0x6c
+
+	// SYNTHETIC: LEGO1 0x1006d000
+	// LegoLoopingAnimPresenter::~LegoLoopingAnimPresenter
+
+	// SYNTHETIC: LEGO1 0x1000f440
+	// LegoLoopingAnimPresenter::`scalar deleting destructor'
+
+private:
+	undefined4 m_unk0xbc; // 0xbc
+};
+
+class LegoAnimActor;
+
+// VTABLE: LEGO1 0x100d9170
+// SIZE 0xd8
+class LegoLocomotionAnimPresenter : public LegoLoopingAnimPresenter {
+public:
+	LegoLocomotionAnimPresenter();
+	~LegoLocomotionAnimPresenter() override;
+
+	// FUNCTION: BETA10 0x1005c4e0
+	static const char* HandlerClassName()
+	{
+		// STRING: LEGO1 0x100f06e4
+		return "LegoLocomotionAnimPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1006ce50
+	// FUNCTION: BETA10 0x1005c4b0
+	const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
+	}
+
+	// FUNCTION: LEGO1 0x1006ce60
+	MxBool IsA(const char* p_name) const override // vtable+0x10
+	{
+		return !strcmp(p_name, ClassName()) || LegoLoopingAnimPresenter::IsA(p_name);
+	}
+
+	void ReadyTickle() override;                          // vtable+0x18
+	void StartingTickle() override;                       // vtable+0x1c
+	void StreamingTickle() override;                      // vtable+0x20
+	MxResult AddToManager() override;                     // vtable+0x34
+	void Destroy() override;                              // vtable+0x38
+	void EndAction() override;                            // vtable+0x40
+	void PutFrame() override;                             // vtable+0x6c
+	MxResult CreateAnim(MxStreamChunk* p_chunk) override; // vtable+0x88
+
+	void FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value);
+
+	void DecrementUnknown0xd4()
+	{
+		if (m_unk0xd4) {
+			--m_unk0xd4;
+		}
+	}
+
+	undefined2 GetUnknown0xd4() { return m_unk0xd4; }
+
+	// SYNTHETIC: LEGO1 0x1006cfe0
+	// LegoLocomotionAnimPresenter::`scalar deleting destructor'
+
+private:
+	void Init();
+	void Destroy(MxBool p_fromDestructor);
+
+	undefined4 m_unk0xc0;         // 0xc0
+	undefined4* m_unk0xc4;        // 0xc4
+	LegoROIMapList* m_roiMapList; // 0xc8
+	MxS32 m_unk0xcc;              // 0xcc
+	MxS32 m_unk0xd0;              // 0xd0
+	undefined2 m_unk0xd4;         // 0xd4
+};
+
 // clang-format off
-// SYNTHETIC: LEGO1 0x10068650
-// LegoAnimPresenter::`scalar deleting destructor'
 
 // TEMPLATE: LEGO1 0x100689c0
 // map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::~map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >

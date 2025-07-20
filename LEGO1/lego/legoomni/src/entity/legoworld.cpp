@@ -9,7 +9,6 @@
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
-#include "legolocomotionanimpresenter.h"
 #include "legonavcontroller.h"
 #include "legoplantmanager.h"
 #include "legosoundmanager.h"
@@ -454,7 +453,8 @@ void LegoWorld::Add(MxCore* p_object)
 
 		m_entityList->Append((LegoEntity*) p_object);
 	}
-	else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
+	else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") ||
+			 p_object->IsA("LegoLoopingAnimPresenter")) {
 		MxPresenterListCursor cursor(&m_animPresenters);
 
 		if (cursor.Find((MxPresenter*) p_object)) {
@@ -524,7 +524,8 @@ void LegoWorld::Remove(MxCore* p_object)
 			((MxControlPresenter*) p_object)->VTable0x68(TRUE);
 		}
 	}
-	else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
+	else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") ||
+			 p_object->IsA("LegoLoopingAnimPresenter")) {
 		MxPresenterListCursor cursor(&m_animPresenters);
 
 		if (cursor.Find((MxPresenter*) p_object)) {

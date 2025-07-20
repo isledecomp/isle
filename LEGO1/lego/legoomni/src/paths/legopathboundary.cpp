@@ -2,7 +2,7 @@
 
 #include "decomp.h"
 #include "geom/legoorientededge.h"
-#include "legolocomotionanimpresenter.h"
+#include "legoanimpresenter.h"
 #include "legopathactor.h"
 #include "legopathstruct.h"
 

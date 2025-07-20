@@ -11,7 +11,6 @@
 #include "legoentitylist.h"
 #include "legoextraactor.h"
 #include "legogamestate.h"
-#include "legolocomotionanimpresenter.h"
 #include "legomain.h"
 #include "legonavcontroller.h"
 #include "legoroilist.h"

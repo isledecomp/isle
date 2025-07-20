@@ -2,7 +2,8 @@
 #define LEGOHIDEANIMPRESENTER_H
 
 #include "decomp.h"
-#include "legoloopinganimpresenter.h"
+// TODO: Maybe this one is inlined as well?
+#include "legoanimpresenter.h"
 
 class LegoPathBoundary;
 
