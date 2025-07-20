@@ -35,6 +35,13 @@ class MxPresenterListCursor : public MxPtrListCursor<MxPresenter> {
 public:
 	// FUNCTION: BETA10 0x1007d130
 	MxPresenterListCursor(MxPresenterList* p_list) : MxPtrListCursor<MxPresenter>(p_list) {}
+
+	// SYNTHETIC: LEGO1 0x1001eed0
+	// MxPresenterListCursor::`scalar deleting destructor'
+
+	// SYNTHETIC: LEGO1 0x1001f0c0
+	// SYNTHETIC: BETA10 0x1007d510
+	// MxPresenterListCursor::~MxPresenterListCursor
 };
 
 // VTABLE: LEGO1 0x100d6350
@@ -73,10 +80,8 @@ public:
 // SYNTHETIC: LEGO1 0x1001d100
 // MxPresenterList::~MxPresenterList
 
-// SYNTHETIC: LEGO1 0x1001eed0
-// MxPresenterListCursor::`scalar deleting destructor'
-
 // TEMPLATE: LEGO1 0x1001ef40
+// TEMPLATE: BETA10 0x1007d370
 // MxPtrListCursor<MxPresenter>::~MxPtrListCursor<MxPresenter>
 
 // SYNTHETIC: LEGO1 0x1001ef90
@@ -86,10 +91,8 @@ public:
 // MxPtrListCursor<MxPresenter>::`scalar deleting destructor'
 
 // TEMPLATE: LEGO1 0x1001f070
+// TEMPLATE: BETA10 0x1007d490
 // MxListCursor<MxPresenter *>::~MxListCursor<MxPresenter *>
-
-// FUNCTION: LEGO1 0x1001f0c0
-// MxPresenterListCursor::~MxPresenterListCursor
 
 // TEMPLATE: LEGO1 0x10020760
 // MxListCursor<MxPresenter *>::MxListCursor<MxPresenter *>
@@ -105,6 +108,18 @@ public:
 
 // TEMPLATE: BETA10 0x1007d270
 // MxListCursor<MxPresenter *>::MxListCursor<MxPresenter *>
+
+// TEMPLATE: BETA10 0x1007dc60
+// MxListCursor<MxPresenter *>::Next
+
+// TEMPLATE: BETA10 0x100d8f20
+// MxListCursor<MxPresenter *>::Reset
+
+// TEMPLATE: BETA10 0x1007e070
+// MxListEntry<MxPresenter *>::GetNext
+
+// TEMPLATE: BETA10 0x1007e0a0
+// MxListEntry<MxPresenter *>::GetValue
 
 // TEMPLATE: BETA10 0x100d9420
 // ?Prev@?$MxListCursor@PAVMxPresenter@@@@QAEEAAPAVMxPresenter@@@Z

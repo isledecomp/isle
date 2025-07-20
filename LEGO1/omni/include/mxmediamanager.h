@@ -9,6 +9,7 @@
 class MxThread;
 
 // VTABLE: LEGO1 0x100dc6b0
+// VTABLE: BETA10 0x101c2318
 // SIZE 0x2c
 class MxMediaManager : public MxCore {
 public:
@@ -25,6 +26,7 @@ public:
 	MxResult Init();
 
 	// SYNTHETIC: LEGO1 0x100b8540
+	// SYNTHETIC: BETA10 0x10144db0
 	// MxMediaManager::`scalar deleting destructor'
 
 protected:

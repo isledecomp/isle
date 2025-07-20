@@ -11,6 +11,7 @@ class MxRect32;
 class MxRegion;
 
 // VTABLE: LEGO1 0x100dc810
+// VTABLE: BETA10 0x101c1bf8
 // SIZE 0x64
 class MxVideoManager : public MxMediaManager {
 public:
@@ -48,6 +49,7 @@ public:
 	MxRegion* GetRegion() { return this->m_region; }
 
 	// SYNTHETIC: LEGO1 0x100be280
+	// SYNTHETIC: BETA10 0x1012de00
 	// MxVideoManager::`scalar deleting destructor'
 
 protected:

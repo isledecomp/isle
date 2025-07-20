@@ -46,10 +46,13 @@ typedef set<LegoCacheSoundEntry, Set100d6b4cComparator> Set100d6b4c;
 typedef list<LegoCacheSoundEntry> List100d6b4c;
 
 // VTABLE: LEGO1 0x100d6b4c
+// VTABLE: BETA10 0x101becac
 // SIZE 0x20
 class LegoCacheSoundManager {
 public:
+	// FUNCTION: BETA10 0x100d0a60
 	LegoCacheSoundManager() {}
+
 	~LegoCacheSoundManager();
 
 	virtual MxResult Tickle(); // vtable+0x00
@@ -65,6 +68,9 @@ private:
 	Set100d6b4c m_set;   // 0x04
 	List100d6b4c m_list; // 0x14
 };
+
+// SYNTHETIC: BETA10 0x100d06b0
+// LegoCacheSoundManager::`scalar deleting destructor'
 
 // TODO: Function names subject to change.
 

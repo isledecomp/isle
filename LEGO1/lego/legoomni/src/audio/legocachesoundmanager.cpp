@@ -7,6 +7,7 @@ DECOMP_SIZE_ASSERT(LegoCacheSoundEntry, 0x08)
 DECOMP_SIZE_ASSERT(LegoCacheSoundManager, 0x20)
 
 // FUNCTION: LEGO1 0x1003cf20
+// STUB: BETA10 0x100d0700
 LegoCacheSoundManager::~LegoCacheSoundManager()
 {
 	LegoCacheSound* sound;
@@ -28,6 +29,7 @@ LegoCacheSoundManager::~LegoCacheSoundManager()
 }
 
 // FUNCTION: LEGO1 0x1003d050
+// STUB: BETA10 0x100652f0
 MxResult LegoCacheSoundManager::Tickle()
 {
 #ifdef COMPAT_MODE

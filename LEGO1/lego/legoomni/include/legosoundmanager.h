@@ -17,14 +17,14 @@ public:
 	void Destroy() override;                                              // vtable+0x18
 	MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread) override; // vtable+0x30
 
-	// SYNTHETIC: LEGO1 0x10029920
-	// SYNTHETIC: BETA10 0x100d0660
-	// LegoSoundManager::`scalar deleting destructor'
-
 	void UpdateListener(const float* p_position, const float* p_direction, const float* p_up, const float* p_velocity);
 
 	// FUNCTION: BETA10 0x1000f350
 	LegoCacheSoundManager* GetCacheSoundManager() { return m_cacheSoundManager; }
+
+	// SYNTHETIC: LEGO1 0x10029920
+	// SYNTHETIC: BETA10 0x100d0660
+	// LegoSoundManager::`scalar deleting destructor'
 
 private:
 	void Init();

@@ -5,6 +5,7 @@
 #include "mxmediamanager.h"
 
 // VTABLE: LEGO1 0x100dc6e0
+// VTABLE: BETA10 0x101c2348
 // SIZE 0x30
 class MxAudioManager : public MxMediaManager {
 public:
@@ -15,11 +16,13 @@ public:
 	void Destroy() override;    // vtable+18
 
 	// FUNCTION: LEGO1 0x10029910
+	// FUNCTION: BETA10 0x100d0630
 	virtual MxS32 GetVolume() { return m_volume; } // vtable+28
 
 	virtual void SetVolume(MxS32 p_volume); // vtable+2c
 
 	// SYNTHETIC: LEGO1 0x100b8d70
+	// SYNTHETIC: BETA10 0x10145110
 	// MxAudioManager::`scalar deleting destructor'
 
 private:
