@@ -27,6 +27,7 @@ MxCompositeMediaPresenter::~MxCompositeMediaPresenter()
 }
 
 // FUNCTION: LEGO1 0x10074090
+// FUNCTION: BETA10 0x100e9d37
 MxResult MxCompositeMediaPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
