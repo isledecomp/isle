@@ -358,7 +358,7 @@ void LegoWorld::AddPresenterIfInRange(LegoAnimPresenter* p_presenter)
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
-		controller->FUN_100468f0(p_presenter);
+		controller->AddPresenterIfInRange(p_presenter);
 	}
 }
 
@@ -377,7 +377,7 @@ void LegoWorld::RemovePresenterFromBoundaries(LegoAnimPresenter* p_presenter)
 // FUNCTION: LEGO1 0x1001ff80
 void LegoWorld::AddPath(LegoPathController* p_controller)
 {
-	p_controller->FUN_10046bb0(this);
+	p_controller->SetWorld(this);
 	m_pathControllerList.Append(p_controller);
 }
 
@@ -411,7 +411,7 @@ MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_boundaries, MxS32& p_nu
 		return FAILURE;
 	}
 
-	return controller->FUN_10046b30(*p_boundaries, p_numL);
+	return controller->GetBoundaries(*p_boundaries, p_numL);
 }
 
 // FUNCTION: LEGO1 0x10020220

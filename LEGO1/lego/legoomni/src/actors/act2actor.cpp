@@ -410,7 +410,7 @@ void Act2Actor::FindPath(MxU32 p_location)
 	newDirection = g_brickstrLocations[p_location].m_direction;
 	LegoPathBoundary* newBoundary = m_pathController->GetPathBoundary(g_brickstrLocations[p_location].m_boundary);
 
-	MxResult sts = m_pathController->FUN_10048310(
+	MxResult sts = m_pathController->FindPath(
 		m_grec,
 		m_roi->GetWorldPosition(),
 		m_roi->GetWorldDirection(),

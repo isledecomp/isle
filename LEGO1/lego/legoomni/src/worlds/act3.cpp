@@ -335,7 +335,7 @@ MxResult Act3::ShootPizza(LegoPathController* p_controller, Vector3& p_location,
 			}
 
 			MxFloat unk0x19c = *m_pizzas[nextPizza].GetApexParameter();
-			if (p_controller->FUN_1004a380(
+			if (p_controller->FindIntersectionBoundary(
 					p_location,
 					p_direction,
 					m_pizzas[nextPizza].GetCoefficients(),
@@ -390,7 +390,7 @@ MxResult Act3::ShootDonut(LegoPathController* p_controller, Vector3& p_location,
 			}
 
 			MxFloat unk0x19c = *m_donuts[nextDonut].GetApexParameter();
-			if (p_controller->FUN_1004a380(
+			if (p_controller->FindIntersectionBoundary(
 					p_location,
 					p_direction,
 					m_donuts[nextDonut].GetCoefficients(),

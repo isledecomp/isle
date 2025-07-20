@@ -635,7 +635,7 @@ MxResult LegoPathActor::VTable0x9c()
 			local20 = 0;
 
 			Mx3DPointFloat vec;
-			switch (m_pathController->FUN_1004a240(*m_grec, local34, local48, m_unk0xe4, m_destEdge, m_boundary)) {
+			switch (m_pathController->GetNextPathEdge(*m_grec, local34, local48, m_unk0xe4, m_destEdge, m_boundary)) {
 			case 0:
 			case 1:
 				break;
