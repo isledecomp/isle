@@ -376,7 +376,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/entity/legoworldpresenter.cpp
     LEGO1/lego/legoomni/src/actors/dunebuggy.cpp
     LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp
-    LEGO1/lego/legoomni/src/video/legohideanimpresenter.cpp
     LEGO1/lego/legoomni/src/worlds/infocenter.cpp
     LEGO1/lego/legoomni/src/race/raceskel.cpp
     LEGO1/lego/legoomni/src/worlds/act3.cpp
