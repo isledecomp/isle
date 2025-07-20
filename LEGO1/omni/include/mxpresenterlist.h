@@ -5,12 +5,15 @@
 #include "mxpresenter.h"
 
 // VTABLE: LEGO1 0x100d62f0
+// VTABLE: BETA10 0x101bf070
 // class MxPtrList<MxPresenter>
 
 // VTABLE: LEGO1 0x100d6308
+// VTABLE: BETA10 0x101bf050
 // SIZE 0x18
 class MxPresenterList : public MxPtrList<MxPresenter> {
 public:
+	// FUNCTION: BETA10 0x100dc900
 	MxPresenterList(MxBool p_ownership = FALSE) : MxPtrList<MxPresenter>(p_ownership) {}
 
 	// FUNCTION: LEGO1 0x1001cd00
@@ -65,7 +68,11 @@ public:
 // TEMPLATE: LEGO1 0x1001ce20
 // MxList<MxPresenter *>::~MxList<MxPresenter *>
 
+// TEMPLATE: BETA10 0x100dc9f0
+// MxPtrList<MxPresenter>::MxPtrList<MxPresenter>
+
 // TEMPLATE: LEGO1 0x1001cf20
+// TEMPLATE: BETA10 0x100dce70
 // MxPtrList<MxPresenter>::~MxPtrList<MxPresenter>
 
 // SYNTHETIC: LEGO1 0x1001cf70

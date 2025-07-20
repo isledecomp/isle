@@ -11,18 +11,21 @@ DECOMP_SIZE_ASSERT(MxPresenterList, 0x18);
 DECOMP_SIZE_ASSERT(MxPresenterListCursor, 0x10);
 
 // FUNCTION: LEGO1 0x100b84c0
+// FUNCTION: BETA10 0x10144680
 MxMediaManager::MxMediaManager()
 {
 	Init();
 }
 
 // FUNCTION: LEGO1 0x100b8560
+// FUNCTION: BETA10 0x10144712
 MxMediaManager::~MxMediaManager()
 {
 	Destroy();
 }
 
 // FUNCTION: LEGO1 0x100b85d0
+// FUNCTION: BETA10 0x1014479b
 MxResult MxMediaManager::Init()
 {
 	this->m_presenters = NULL;
@@ -31,6 +34,7 @@ MxResult MxMediaManager::Init()
 }
 
 // FUNCTION: LEGO1 0x100b85e0
+// FUNCTION: BETA10 0x101447c5
 MxResult MxMediaManager::Create()
 {
 	AUTOLOCK(m_criticalSection);
@@ -46,6 +50,7 @@ MxResult MxMediaManager::Create()
 }
 
 // FUNCTION: LEGO1 0x100b8710
+// FUNCTION: BETA10 0x101448e4
 void MxMediaManager::Destroy()
 {
 	AUTOLOCK(m_criticalSection);
@@ -58,6 +63,7 @@ void MxMediaManager::Destroy()
 }
 
 // FUNCTION: LEGO1 0x100b8790
+// FUNCTION: BETA10 0x10144993
 MxResult MxMediaManager::Tickle()
 {
 	AUTOLOCK(m_criticalSection);
@@ -78,6 +84,7 @@ MxResult MxMediaManager::Tickle()
 }
 
 // FUNCTION: LEGO1 0x100b88c0
+// FUNCTION: BETA10 0x10144a8b
 void MxMediaManager::RegisterPresenter(MxPresenter& p_presenter)
 {
 	AUTOLOCK(m_criticalSection);
@@ -86,6 +93,7 @@ void MxMediaManager::RegisterPresenter(MxPresenter& p_presenter)
 }
 
 // FUNCTION: LEGO1 0x100b8980
+// FUNCTION: BETA10 0x10144b0c
 void MxMediaManager::UnregisterPresenter(MxPresenter& p_presenter)
 {
 	AUTOLOCK(m_criticalSection);
@@ -97,6 +105,7 @@ void MxMediaManager::UnregisterPresenter(MxPresenter& p_presenter)
 }
 
 // FUNCTION: LEGO1 0x100b8ac0
+// FUNCTION: BETA10 0x10144bc3
 void MxMediaManager::StopPresenters()
 {
 	AUTOLOCK(m_criticalSection);
