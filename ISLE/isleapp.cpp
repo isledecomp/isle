@@ -221,7 +221,7 @@ void IsleApp::SetupVideoFlags(
 	m_videoParam.Flags().SetLacksLightSupport(!hasLightSupport);
 	m_videoParam.Flags().SetF1bit7(param_7);
 	m_videoParam.Flags().SetWideViewAngle(wideViewAngle);
-	m_videoParam.Flags().SetF2bit1(1);
+	m_videoParam.Flags().SetEnabled(TRUE);
 	m_videoParam.SetDeviceName(deviceId);
 	if (using8bit) {
 		m_videoParam.Flags().Set16Bit(0);

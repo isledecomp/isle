@@ -592,14 +592,14 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 			m_palette = m_videoParam.GetPalette()->Clone();
 			OverrideSkyColor(FALSE);
 
-			m_displaySurface->GetVideoParam().Flags().SetF1bit3(p_scale);
+			m_displaySurface->GetVideoParam().Flags().SetDoubleScaling(p_scale);
 
 			m_render3d = FALSE;
 			m_fullScreenMovie = TRUE;
 		}
 		else {
 			m_displaySurface->ClearScreen();
-			m_displaySurface->GetVideoParam().Flags().SetF1bit3(FALSE);
+			m_displaySurface->GetVideoParam().Flags().SetDoubleScaling(FALSE);
 
 			// restore previous pallete
 			RealizePalette(m_palette);
@@ -624,10 +624,10 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 	}
 
 	if (p_enable) {
-		m_displaySurface->GetVideoParam().Flags().SetF1bit3(p_scale);
+		m_displaySurface->GetVideoParam().Flags().SetDoubleScaling(p_scale);
 	}
 	else {
-		m_displaySurface->GetVideoParam().Flags().SetF1bit3(FALSE);
+		m_displaySurface->GetVideoParam().Flags().SetDoubleScaling(FALSE);
 	}
 }
 
