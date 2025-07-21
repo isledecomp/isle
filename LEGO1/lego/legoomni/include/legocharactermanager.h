@@ -46,6 +46,7 @@ struct LegoActorInfo;
 typedef map<char*, LegoCharacter*, LegoCharacterComparator> LegoCharacterMap;
 
 // VTABLE: LEGO1 0x100da878
+// VTABLE: BETA10 0x101bc028
 // SIZE 0x24
 class CustomizeAnimFileVariable : public MxVariable {
 public:

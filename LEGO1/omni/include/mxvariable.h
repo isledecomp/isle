@@ -9,6 +9,7 @@
 // SIZE 0x24
 class MxVariable {
 public:
+	// FUNCTION: BETA10 0x1007b750
 	MxVariable() {}
 
 	// FUNCTION: BETA10 0x1012a840
@@ -41,12 +42,16 @@ public:
 	// FUNCTION: BETA10 0x1012a7f0
 	const MxString* GetKey() const { return &m_key; }
 
+	// SYNTHETIC: BETA10 0x1007b8c0
+	// MxVariable::`scalar deleting destructor'
+
 protected:
 	MxString m_key;   // 0x04
 	MxString m_value; // 0x14
 };
 
 // SYNTHETIC: LEGO1 0x1003bf40
+// SYNTHETIC: BETA10 0x1007b910
 // MxVariable::~MxVariable
 
 #endif // MXVARIABLE_H

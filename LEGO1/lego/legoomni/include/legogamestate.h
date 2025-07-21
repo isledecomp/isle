@@ -23,6 +23,7 @@ struct ColorStringStruct {
 };
 
 // VTABLE: LEGO1 0x100d74a8
+// VTABLE: BETA10 0x101bc4f0
 // SIZE 0x30
 class LegoBackgroundColor : public MxVariable {
 public:
@@ -43,9 +44,11 @@ private:
 };
 
 // VTABLE: LEGO1 0x100d74b8
+// VTABLE: BETA10 0x101bc500
 // SIZE 0x24
 class LegoFullScreenMovie : public MxVariable {
 public:
+	LegoFullScreenMovie();
 	LegoFullScreenMovie(const char* p_key, const char* p_value);
 
 	void SetValue(const char* p_option) override; // vtable+0x04
