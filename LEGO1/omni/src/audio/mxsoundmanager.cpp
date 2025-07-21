@@ -194,8 +194,7 @@ MxPresenter* MxSoundManager::FindPresenter(const MxAtomId& p_atomId, MxU32 p_obj
 	MxPresenterListCursor cursor(m_presenters);
 
 	while (cursor.Next(presenter)) {
-		if (presenter->GetAction()->GetAtomId() == p_atomId &&
-			presenter->GetAction()->GetObjectId() == p_objectId) {
+		if (presenter->GetAction()->GetAtomId() == p_atomId && presenter->GetAction()->GetObjectId() == p_objectId) {
 			return presenter;
 		}
 	}
