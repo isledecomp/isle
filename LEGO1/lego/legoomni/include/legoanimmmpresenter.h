@@ -61,7 +61,7 @@ public:
 	void ParseExtra() override;                                                            // vtable+0x30
 	MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
 	void EndAction() override;                                                             // vtable+0x40
-	void VTable0x60(MxPresenter* p_presenter) override;                                    // vtable+0x60
+	void AdvanceSerialAction(MxPresenter* p_presenter) override;                           // vtable+0x60
 
 	// SYNTHETIC: LEGO1 0x1004aa40
 	// LegoAnimMMPresenter::`scalar deleting destructor'

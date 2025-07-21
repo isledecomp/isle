@@ -400,9 +400,9 @@ MxResult LegoWorldPresenter::LoadWorldModel(ModelDbModel& p_model, FILE* p_wdbFi
 }
 
 // FUNCTION: LEGO1 0x10067a70
-void LegoWorldPresenter::VTable0x60(MxPresenter* p_presenter)
+void LegoWorldPresenter::AdvanceSerialAction(MxPresenter* p_presenter)
 {
-	MxCompositePresenter::VTable0x60(p_presenter);
+	MxCompositePresenter::AdvanceSerialAction(p_presenter);
 	MxDSAction* action = p_presenter->GetAction();
 
 	if (action->GetDuration() != -1 && (action->GetFlags() & MxDSAction::c_looping) == 0) {

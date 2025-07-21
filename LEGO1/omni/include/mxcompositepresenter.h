@@ -43,15 +43,15 @@ public:
 	void SetTickleState(TickleState p_tickleState) override;                               // vtable+0x44
 	MxBool HasTickleStatePassed(TickleState p_tickleState) override;                       // vtable+0x48
 	void Enable(MxBool p_enable) override;                                                 // vtable+0x54
-	virtual void VTable0x58(MxEndActionNotificationParam& p_param);                        // vtable+0x58
-	virtual void VTable0x5c(MxNotificationParam& p_param);                                 // vtable+0x5c
-	virtual void VTable0x60(MxPresenter* p_presenter);                                     // vtable+0x60
+	virtual void HandleEndAction(MxEndActionNotificationParam& p_param);                   // vtable+0x58
+	virtual void HandlePresenter(MxNotificationParam& p_param);                            // vtable+0x5c
+	virtual void AdvanceSerialAction(MxPresenter* p_presenter);                            // vtable+0x60
 
 	// FUNCTION: LEGO1 0x1000caf0
-	virtual MxBool VTable0x64(undefined4 p_undefined)
+	virtual MxBool GetActionEnded(undefined4 p_undefined)
 	{
 		if (m_compositePresenter) {
-			return m_compositePresenter->VTable0x64(p_undefined);
+			return m_compositePresenter->GetActionEnded(p_undefined);
 		}
 		return TRUE;
 	} // vtable+0x64

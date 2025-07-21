@@ -42,7 +42,7 @@ public:
 	void StartingTickle() override;                                                        // vtable+0x1c
 	void ParseExtra() override;                                                            // vtable+0x30
 	MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
-	void VTable0x60(MxPresenter* p_presenter) override;                                    // vtable+0x60
+	void AdvanceSerialAction(MxPresenter* p_presenter) override;                           // vtable+0x60
 
 	MxResult LoadWorld(char* p_worldName, LegoWorld* p_world);
 

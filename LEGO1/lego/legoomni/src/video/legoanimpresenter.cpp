@@ -820,7 +820,7 @@ void LegoAnimPresenter::StartingTickle()
 
 	if ((m_action->GetDuration() == -1 || ((MxDSMediaAction*) m_action)->GetSustainTime() == -1) &&
 		m_compositePresenter) {
-		m_compositePresenter->VTable0x60(this);
+		m_compositePresenter->AdvanceSerialAction(this);
 	}
 	else {
 		m_action->SetTimeStarted(Timer()->GetTime());
@@ -830,7 +830,7 @@ void LegoAnimPresenter::StartingTickle()
 
 	if (m_compositePresenter && m_compositePresenter->IsA("LegoAnimMMPresenter")) {
 		m_unk0x96 = ((LegoAnimMMPresenter*) m_compositePresenter)->FUN_1004b8b0();
-		m_compositePresenter->VTable0x60(this);
+		m_compositePresenter->AdvanceSerialAction(this);
 	}
 
 	VTable0x8c();
@@ -854,7 +854,7 @@ void LegoAnimPresenter::StreamingTickle()
 		ProgressTickleState(e_done);
 		if (m_compositePresenter) {
 			if (m_compositePresenter->IsA("LegoAnimMMPresenter")) {
-				m_compositePresenter->VTable0x60(this);
+				m_compositePresenter->AdvanceSerialAction(this);
 			}
 		}
 	}
@@ -1235,7 +1235,7 @@ void LegoLoopingAnimPresenter::StreamingTickle()
 		ProgressTickleState(e_done);
 		if (m_compositePresenter) {
 			if (m_compositePresenter->IsA("LegoAnimMMPresenter")) {
-				m_compositePresenter->VTable0x60(this);
+				m_compositePresenter->AdvanceSerialAction(this);
 			}
 		}
 	}

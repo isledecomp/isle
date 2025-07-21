@@ -117,10 +117,10 @@ MxLong MxCompositePresenter::Notify(MxParam& p_param)
 
 	switch (param.GetNotification()) {
 	case c_notificationEndAction:
-		VTable0x58((MxEndActionNotificationParam&) p_param);
+		HandleEndAction((MxEndActionNotificationParam&) p_param);
 		break;
 	case c_notificationPresenter:
-		VTable0x5c((MxNotificationParam&) p_param);
+		HandlePresenter((MxNotificationParam&) p_param);
 		break;
 	default:
 		assert(0);
@@ -131,7 +131,7 @@ MxLong MxCompositePresenter::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x100b67f0
-void MxCompositePresenter::VTable0x58(MxEndActionNotificationParam& p_param)
+void MxCompositePresenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
 	MxPresenter* presenter = (MxPresenter*) p_param.GetSender();
 	MxDSAction* action = p_param.GetAction();
@@ -177,7 +177,7 @@ void MxCompositePresenter::VTable0x58(MxEndActionNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x100b69b0
-void MxCompositePresenter::VTable0x5c(MxNotificationParam& p_param)
+void MxCompositePresenter::HandlePresenter(MxNotificationParam& p_param)
 {
 	if (!m_list.empty()) {
 		MxPresenter* presenter = (MxPresenter*) p_param.GetSender();
@@ -218,13 +218,13 @@ void MxCompositePresenter::VTable0x5c(MxNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x100b6b40
-void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
+void MxCompositePresenter::AdvanceSerialAction(MxPresenter* p_presenter)
 {
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 		if (*it == p_presenter) {
 			if (++it == m_list.end()) {
 				if (m_compositePresenter) {
-					m_compositePresenter->VTable0x60(this);
+					m_compositePresenter->AdvanceSerialAction(this);
 				}
 			}
 			else if (m_action->IsA("MxDSSerialAction")) {

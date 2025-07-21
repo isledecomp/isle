@@ -132,7 +132,7 @@ void MxStillPresenter::StreamingTickle()
 		ProgressTickleState(e_repeating);
 
 		if (m_action->GetDuration() == -1 && m_compositePresenter) {
-			m_compositePresenter->VTable0x60(this);
+			m_compositePresenter->AdvanceSerialAction(this);
 		}
 	}
 }
