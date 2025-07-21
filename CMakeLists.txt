@@ -240,7 +240,7 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/common/mxutilities.cpp
     LEGO1/omni/src/common/mxvariabletable.cpp
     LEGO1/omni/src/stream/mxdssubscriber.cpp
-    LEGO1/omni/src/common/mxmediamanager.cpp
+    LEGO1/omni/src/common/mxpresentationmanager.cpp
     LEGO1/omni/src/system/mxticklethread.cpp
     LEGO1/omni/src/audio/mxaudiomanager.cpp
     LEGO1/omni/src/system/mxautolock.cpp
