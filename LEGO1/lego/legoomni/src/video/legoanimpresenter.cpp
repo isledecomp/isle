@@ -941,7 +941,7 @@ void LegoAnimPresenter::FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p
 		p_anim->GetCamAnim()->FUN_1009f490(p_time, transform);
 
 		if (m_currentWorld != NULL && m_currentWorld->GetCameraController() != NULL) {
-			m_currentWorld->GetCameraController()->FUN_100123e0(transform, 0);
+			m_currentWorld->GetCameraController()->TransformPointOfView(transform, FALSE);
 		}
 	}
 

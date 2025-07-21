@@ -426,7 +426,7 @@ void Helicopter::Animate(float p_time)
 			v2 *= f2;
 			v2 += v1;
 
-			m_world->GetCameraController()->FUN_100123e0(mat, 0);
+			m_world->GetCameraController()->TransformPointOfView(mat, 0);
 		}
 		else {
 			if (m_state->m_unk0x08 == 4) {
@@ -459,7 +459,7 @@ void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 	// the typecast makes this function match for unknown reasons
 	Vector3 vec6((const float*) m_unk0x1a8[3]); // locala0  // esp+0x28
 
-	m_world->GetCameraController()->FUN_100123b0(local48);
+	m_world->GetCameraController()->GetPointOfView(local48);
 	m_unk0x1a8.SetIdentity();
 	local90 = p_matrix;
 

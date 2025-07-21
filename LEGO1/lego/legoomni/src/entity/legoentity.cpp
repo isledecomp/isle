@@ -194,7 +194,7 @@ void LegoEntity::FUN_10010c30()
 	LegoWorld* world = CurrentWorld();
 
 	if (m_cameraFlag && world && world->GetCameraController() && m_roi) {
-		world->GetCameraController()->FUN_100123e0(m_roi->GetLocal2World(), 1);
+		world->GetCameraController()->TransformPointOfView(m_roi->GetLocal2World(), 1);
 	}
 }
 

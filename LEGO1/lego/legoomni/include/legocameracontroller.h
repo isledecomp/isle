@@ -38,17 +38,17 @@ public:
 	virtual MxResult Create();                                    // vtable+0x44
 
 	void SetWorldTransform(const Vector3& p_at, const Vector3& p_dir, const Vector3& p_up);
-	void FUN_10012290(float p_angle);
-	void FUN_10012320(float p_angle);
-	MxResult FUN_100123b0(Matrix4& p_matrix);
-	void FUN_100123e0(const Matrix4& p_transform, MxU32 p_und);
+	void RotateZ(float p_angle);
+	void RotateY(float p_angle);
+	MxResult GetPointOfView(Matrix4& p_matrix);
+	void TransformPointOfView(const Matrix4& p_transform, MxU32 p_multiply);
 	Mx3DPointFloat GetWorldUp();
 	Mx3DPointFloat GetWorldLocation();
 	Mx3DPointFloat GetWorldDirection();
 
 private:
-	MxMatrix m_matrix1; // 0x38
-	MxMatrix m_matrix2; // 0x80
+	MxMatrix m_currentTransform;  // 0x38
+	MxMatrix m_originalTransform; // 0x80
 };
 
 // SYNTHETIC: LEGO1 0x10011f50
