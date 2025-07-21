@@ -1334,6 +1334,11 @@ void LegoBackgroundColor::SetLightColor()
 	SetLightColor(convertedR, convertedG, convertedB);
 }
 
+// FUNCTION: BETA10 0x10086a87
+LegoFullScreenMovie::LegoFullScreenMovie()
+{
+}
+
 // FUNCTION: LEGO1 0x1003c500
 // FUNCTION: BETA10 0x10086af6
 LegoFullScreenMovie::LegoFullScreenMovie(const char* p_key, const char* p_value)

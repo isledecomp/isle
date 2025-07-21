@@ -6,6 +6,7 @@
 #include "legonavcontroller.h"
 #include "legovideomanager.h"
 #include "misc.h"
+#include "mxdebug.h"
 #include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(VisibilityVariable, 0x24)
@@ -101,6 +102,10 @@ const char* g_nick = "Nick";
 // STRING: LEGO1 0x100f39e0
 const char* g_laura = "Laura";
 
+// GLOBAL: BETA10 0x101f6ce4
+// STRING: BETA10 0x101f6d54
+const char* g_varDEBUG = "DEBUG";
+
 // FUNCTION: LEGO1 0x10037d00
 // FUNCTION: BETA10 0x100d5620
 void VisibilityVariable::SetValue(const char* p_value)
@@ -130,6 +135,7 @@ void VisibilityVariable::SetValue(const char* p_value)
 }
 
 // FUNCTION: LEGO1 0x10037d80
+// FUNCTION: BETA10 0x100d56ee
 void CameraLocationVariable::SetValue(const char* p_value)
 {
 	char buffer[256];
@@ -137,22 +143,25 @@ void CameraLocationVariable::SetValue(const char* p_value)
 
 	strcpy(buffer, p_value);
 
-	char* location = strtok(buffer, ",");
-	NavController()->UpdateLocation(location);
+	char* token = strtok(buffer, ",");
+	assert(token);
+	NavController()->UpdateLocation(token);
 
-	location = strtok(NULL, ",");
-	if (location) {
-		MxFloat pov = (MxFloat) atof(location);
+	token = strtok(NULL, ",");
+	if (token) {
+		MxFloat pov = (MxFloat) atof(token);
 		VideoManager()->Get3DManager()->SetFrustrum(pov, 0.1f, 250.0f);
 	}
 }
 
 // FUNCTION: LEGO1 0x10037e30
+// FUNCTION: BETA10 0x100d57e2
 void CursorVariable::SetValue(const char* p_value)
 {
 }
 
 // FUNCTION: LEGO1 0x10037e40
+// FUNCTION: BETA10 0x100d57fa
 void WhoAmIVariable::SetValue(const char* p_value)
 {
 	MxVariable::SetValue(p_value);
@@ -172,4 +181,11 @@ void WhoAmIVariable::SetValue(const char* p_value)
 	else if (!strcmpi(p_value, g_laura)) {
 		GameState()->SetActorId(LegoActor::c_laura);
 	}
+}
+
+// FUNCTION: BETA10 0x100d58fa
+void DebugVariable::SetValue(const char* p_value)
+{
+	MxVariable::SetValue(p_value);
+	MxTrace("%s\n", p_value);
 }
