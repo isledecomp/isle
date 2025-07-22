@@ -137,9 +137,9 @@ protected:
 };
 
 // SIZE 0x0c
-class LegoUnknownKey : public LegoAnimKey {
+class LegoRotationZKey : public LegoAnimKey {
 public:
-	LegoUnknownKey();
+	LegoRotationZKey();
 	LegoResult Read(LegoStorage* p_storage);
 	LegoResult Write(LegoStorage* p_storage);
 
@@ -309,26 +309,26 @@ public:
 	~LegoAnimScene();
 	LegoResult Read(LegoStorage* p_storage);
 	LegoResult Write(LegoStorage* p_storage);
-	LegoResult FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix);
+	LegoResult CalculateCameraTransform(LegoFloat p_time, Matrix4& p_matrix);
 
-	LegoU32 GetUnknown0x18() { return m_unk0x18; }
-	LegoU32 GetUnknown0x1c() { return m_unk0x1c; }
-	LegoU32 GetUnknown0x20() { return m_unk0x20; }
+	LegoU32 GetTargetIndex() { return m_targetIndex; }
+	LegoU32 GetTranslationIndex() { return m_translationIndex; }
+	LegoU32 GetRotationIndex() { return m_rotationIndex; }
 
-	void SetUnknown0x18(LegoU32 p_unk0x18) { m_unk0x18 = p_unk0x18; }
-	void SetUnknown0x1c(LegoU32 p_unk0x1c) { m_unk0x1c = p_unk0x1c; }
-	void SetUnknown0x20(LegoU32 p_unk0x20) { m_unk0x20 = p_unk0x20; }
+	void SetTargetIndex(LegoU32 p_targetIndex) { m_targetIndex = p_targetIndex; }
+	void SetTranslationIndex(LegoU32 p_translationIndex) { m_translationIndex = p_translationIndex; }
+	void SetRotationIndex(LegoU32 p_rotationIndex) { m_rotationIndex = p_rotationIndex; }
 
 private:
-	LegoU16 m_unk0x00;             // 0x00
-	LegoTranslationKey* m_unk0x04; // 0x04
-	LegoU16 m_unk0x08;             // 0x08
-	LegoTranslationKey* m_unk0x0c; // 0x0c
-	LegoU16 m_unk0x10;             // 0x10
-	LegoUnknownKey* m_unk0x14;     // 0x14
-	LegoU32 m_unk0x18;             // 0x18
-	LegoU32 m_unk0x1c;             // 0x1c
-	LegoU32 m_unk0x20;             // 0x20
+	LegoU16 m_translationKeysCount;        // 0x00
+	LegoTranslationKey* m_translationKeys; // 0x04
+	LegoU16 m_targetKeysCount;             // 0x08
+	LegoTranslationKey* m_targetKeys;      // 0x0c
+	LegoU16 m_rotationKeysCount;           // 0x10
+	LegoRotationZKey* m_rotationKeys;      // 0x14
+	LegoU32 m_targetIndex;                 // 0x18
+	LegoU32 m_translationIndex;            // 0x1c
+	LegoU32 m_rotationIndex;               // 0x20
 };
 
 // VTABLE: LEGO1 0x100db8d8
