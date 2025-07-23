@@ -41,7 +41,7 @@ Ambulance::Ambulance()
 	m_atBeachTask = 0;
 	m_taskState = Ambulance::e_none;
 	m_lastAction = IsleScript::c_noneIsle;
-	m_unk0x172 = 0;
+	m_enableRandomAudio = 0;
 	m_lastAnimation = IsleScript::c_noneIsle;
 	m_fuel = 1.0;
 }
@@ -173,7 +173,7 @@ MxLong Ambulance::HandleEndAction(MxEndActionNotificationParam& p_param)
 			m_state->m_state = AmbulanceMissionState::e_enteredAmbulance;
 			CurrentWorld()->PlaceActor(UserActor());
 			HandleClick();
-			m_unk0x172 = 0;
+			m_enableRandomAudio = 0;
 			TickleManager()->RegisterClient(this, 40000);
 		}
 		else if (objectId == IsleScript::c_hpz047pe_RunAnim || objectId == IsleScript::c_hpz048pe_RunAnim || objectId == IsleScript::c_hpz049bd_RunAnim || objectId == IsleScript::c_hpz053pa_RunAnim) {
@@ -198,7 +198,7 @@ MxLong Ambulance::HandleEndAction(MxEndActionNotificationParam& p_param)
 			CurrentWorld()->PlaceActor(UserActor());
 			HandleClick();
 			SpawnPlayer(LegoGameState::e_pizzeriaExterior, TRUE, 0);
-			m_unk0x172 = 0;
+			m_enableRandomAudio = 0;
 			TickleManager()->RegisterClient(this, 40000);
 
 			if (m_atPoliceTask != 0) {
@@ -222,7 +222,7 @@ MxLong Ambulance::HandleEndAction(MxEndActionNotificationParam& p_param)
 			CurrentWorld()->PlaceActor(UserActor());
 			HandleClick();
 			SpawnPlayer(LegoGameState::e_policeExited, TRUE, 0);
-			m_unk0x172 = 0;
+			m_enableRandomAudio = 0;
 			TickleManager()->RegisterClient(this, 40000);
 
 			if (m_atBeachTask != 0) {
@@ -513,8 +513,8 @@ void Ambulance::ActivateSceneActions()
 // FUNCTION: BETA10 0x100237df
 MxResult Ambulance::Tickle()
 {
-	if (m_unk0x172 == 0) {
-		m_unk0x172 = 1;
+	if (m_enableRandomAudio == 0) {
+		m_enableRandomAudio = 1;
 	}
 	else if (m_lastAction == IsleScript::c_noneIsle) {
 		IsleScript::Script objectId;
