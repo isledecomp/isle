@@ -20,6 +20,7 @@ class Renderer;
 }
 
 // VTABLE: LEGO1 0x100d9c88
+// VTABLE: BETA10 0x101bef08
 // SIZE 0x590
 class LegoVideoManager : public MxVideoManager {
 public:
@@ -41,6 +42,7 @@ public:
 	virtual MxPresenter* GetPresenterAt(MxS32 p_x, MxS32 p_y);                                        // vtable+0x38
 
 	// FUNCTION: LEGO1 0x1007ab10
+	// FUNCTION: BETA10 0x100d8010
 	virtual LegoPhonemeList* GetPhonemeList() { return m_phonemeRefList; } // vtable+0x3c
 
 	void SetSkyColor(float p_red, float p_green, float p_blue);
@@ -66,6 +68,10 @@ public:
 	void SetRender3D(MxBool p_render3d) { m_render3d = p_render3d; }
 
 	void SetUnk0x554(MxBool p_unk0x554) { m_unk0x554 = p_unk0x554; }
+
+	// SYNTHETIC: LEGO1 0x1007ab20
+	// SYNTHETIC: BETA10 0x100d8040
+	// LegoVideoManager::`scalar deleting destructor'
 
 private:
 	MxResult CreateDirect3D();
@@ -121,8 +127,5 @@ private:
 	BOOL m_dither;                        // 0x588
 	DWORD m_bufferCount;                  // 0x58c
 };
-
-// SYNTHETIC: LEGO1 0x1007ab20
-// LegoVideoManager::`scalar deleting destructor'
 
 #endif // LEGOVIDEOMANAGER_H

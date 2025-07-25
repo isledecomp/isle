@@ -15,6 +15,7 @@
 DECOMP_SIZE_ASSERT(MxBackgroundAudioManager, 0x150)
 
 // FUNCTION: LEGO1 0x1007ea90
+// FUNCTION: BETA10 0x100e8530
 MxBackgroundAudioManager::MxBackgroundAudioManager()
 {
 	NotificationManager()->Register(this);

@@ -37,23 +37,27 @@ MxOmni::MxOmni()
 }
 
 // FUNCTION: LEGO1 0x100aefb0
+// FUNCTION: BETA10 0x10130c50
 MxEntity* MxOmni::AddToWorld(const char*, MxS32, MxPresenter*)
 {
 	return NULL;
 }
 
 // FUNCTION: LEGO1 0x100aefc0
+// FUNCTION: BETA10 0x10130c70
 void MxOmni::NotifyCurrentEntity(const MxNotificationParam& p_param)
 {
 }
 
 // FUNCTION: LEGO1 0x100aeff0
+// STUB: BETA10 0x1012f2b7
 MxOmni::~MxOmni()
 {
 	Destroy();
 }
 
 // FUNCTION: LEGO1 0x100af080
+// FUNCTION: BETA10 0x1012f359
 void MxOmni::Init()
 {
 	m_windowHandle = NULL;
@@ -81,6 +85,8 @@ void MxOmni::SetInstance(MxOmni* p_instance)
 // FUNCTION: BETA10 0x1012f3ff
 MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 {
+	// TODO: File name is MxMain.cpp according to BETA10
+
 	MxResult result = FAILURE;
 
 	if (!(m_atomSet = new MxAtomSet())) {
@@ -223,6 +229,7 @@ void MxOmni::Destroy()
 }
 
 // FUNCTION: LEGO1 0x100b0090
+// STUB: BETA10 0x101303ce
 MxResult MxOmni::Start(MxDSAction* p_dsAction)
 {
 	MxResult result = FAILURE;
@@ -234,6 +241,7 @@ MxResult MxOmni::Start(MxDSAction* p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x100b00c0
+// FUNCTION: BETA10 0x101304aa
 void MxOmni::DeleteObject(MxDSAction& p_dsAction)
 {
 	if (m_streamer != NULL) {
@@ -242,6 +250,7 @@ void MxOmni::DeleteObject(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x100b00e0
+// FUNCTION: BETA10 0x101304de
 MxResult MxOmni::CreatePresenter(MxStreamController* p_controller, MxDSAction& p_action)
 {
 	MxResult result = FAILURE;
@@ -322,6 +331,7 @@ MxBool MxOmni::ActionSourceEquals(MxDSAction* p_action, const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x100b07f0
+// STUB: BETA10 0x1013082b
 MxLong MxOmni::Notify(MxParam& p_param)
 {
 	AUTOLOCK(m_criticalSection);
@@ -396,6 +406,7 @@ void MxOmni::SetSound3D(MxBool p_use3dSound)
 }
 
 // FUNCTION: LEGO1 0x100b09a0
+// FUNCTION: BETA10 0x101309f5
 MxBool MxOmni::DoesEntityExist(MxDSAction& p_dsAction)
 {
 	if (m_streamer->FUN_100b9b30(p_dsAction)) {

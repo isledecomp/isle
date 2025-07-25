@@ -14,6 +14,7 @@ DECOMP_SIZE_ASSERT(LegoControlManagerNotificationParam, 0x2c)
 DECOMP_SIZE_ASSERT(LegoEventNotificationParam, 0x20)
 
 // FUNCTION: LEGO1 0x10028520
+// STUB: BETA10 0x1008ae50
 LegoControlManager::LegoControlManager()
 {
 	m_presenterList = NULL;

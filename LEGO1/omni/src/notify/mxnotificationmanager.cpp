@@ -165,6 +165,7 @@ void MxNotificationManager::FlushPending(MxCore* p_listener)
 }
 
 // FUNCTION: LEGO1 0x100acd20
+// STUB: BETA10 0x1012666a
 void MxNotificationManager::Register(MxCore* p_listener)
 {
 	AUTOLOCK(m_lock);

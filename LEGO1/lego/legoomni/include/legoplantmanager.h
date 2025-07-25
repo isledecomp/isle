@@ -32,7 +32,7 @@ public:
 	const char* ClassName() const override // vtable+0x0c
 	{
 		// While this class exists in BETA10, it didn't have a ClassName().
-		// I suppose it did not inherit from MxCore back then and likely did not have a VTABLE.
+		// The constructor suggests that it did not inherit from MxCore back then and did not have a VTABLE.
 		// STRING: LEGO1 0x100f318c
 		return "LegoPlantManager";
 	}

@@ -780,6 +780,9 @@
 // LIBRARY: BETA10 0x100fa200
 // strcpy
 
+// LIBRARY: BETA10 0x100fa210
+// strcat
+
 // LIBRARY: BETA10 0x100f8a88
 // ??2@YAPAXI@Z
 

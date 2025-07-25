@@ -26,6 +26,7 @@ const char* g_clickedAtom = NULL;
 MxBool g_unk0x100f67b8 = TRUE;
 
 // FUNCTION: LEGO1 0x1005b790
+// STUB: BETA10 0x10088a8e
 LegoInputManager::LegoInputManager()
 {
 	m_keyboardNotifyList = NULL;
@@ -59,11 +60,13 @@ LegoInputManager::~LegoInputManager()
 }
 
 // FUNCTION: LEGO1 0x1005b960
+// STUB: BETA10 0x10088c9c
 MxResult LegoInputManager::Create(HWND p_hwnd)
 {
 	MxResult result = SUCCESS;
 
 	m_controlManager = new LegoControlManager;
+	assert(m_controlManager);
 
 	if (!m_keyboardNotifyList) {
 		m_keyboardNotifyList = new LegoNotifyList;

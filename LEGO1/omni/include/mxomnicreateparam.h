@@ -23,8 +23,13 @@ public:
 	MxOmniCreateFlags& CreateFlags() { return this->m_createFlags; }
 
 	const MxString& GetMediaPath() const { return m_mediaPath; }
+
+	// FUNCTION: BETA10 0x10092c50
 	const HWND GetWindowHandle() const { return m_windowHandle; }
+
+	// FUNCTION: BETA10 0x10092c80
 	MxVideoParam& GetVideoParam() { return m_videoParam; }
+
 	const MxVideoParam& GetVideoParam() const { return m_videoParam; }
 
 	// SYNTHETIC: LEGO1 0x100b0a70
