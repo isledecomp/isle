@@ -38,6 +38,7 @@ DECOMP_SIZE_ASSERT(LegoWorldList, 0x18)
 DECOMP_SIZE_ASSERT(LegoWorldListCursor, 0x10)
 
 // GLOBAL: LEGO1 0x100f6718
+// GLOBAL: BETA10 0x101ee748
 // STRING: LEGO1 0x100f6710
 const char* g_current = "current";
 
@@ -48,12 +49,14 @@ LegoOmni::LegoOmni()
 }
 
 // FUNCTION: LEGO1 0x10058b50
+// FUNCTION: BETA10 0x1008d128
 LegoOmni::~LegoOmni()
 {
 	Destroy();
 }
 
 // FUNCTION: LEGO1 0x10058bd0
+// FUNCTION: BETA10 0x1008d1b4
 void LegoOmni::Init()
 {
 	MxOmni::Init();
@@ -76,6 +79,7 @@ void LegoOmni::Init()
 }
 
 // FUNCTION: LEGO1 0x10058c30
+// STUB: BETA10 0x1008d299
 void LegoOmni::Destroy()
 {
 	AUTOLOCK(m_criticalSection);
@@ -151,6 +155,13 @@ void LegoOmni::Destroy()
 	MxOmni::Destroy();
 }
 
+#ifdef BETA10
+// FUNCTION: BETA10 0x100d4e5e
+void EmptyFunction(int p_unknown)
+{
+}
+#endif
+
 // FUNCTION: LEGO1 0x10058e70
 // FUNCTION: BETA10 0x1008d6bf
 MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
@@ -170,40 +181,67 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	if (MxOmni::Create(p_param) != SUCCESS) {
 		goto done;
 	}
-
+	// LINE: BETA10 0x1008d7fa
 	if (!(m_objectFactory = new LegoObjectFactory())) {
 		goto done;
 	}
-
+	// LINE: BETA10 0x1008d882
 	if (!(m_soundManager = new LegoSoundManager()) || m_soundManager->Create(10, 0) != SUCCESS) {
 		delete m_soundManager;
 		m_soundManager = NULL;
 		goto done;
 	}
-
+	// LINE: BETA10 0x1008d990
 	if (!(m_videoManager = new LegoVideoManager()) ||
 		m_videoManager->Create(p_param.GetVideoParam(), 100, 0) != SUCCESS) {
 		delete m_videoManager;
 		m_videoManager = NULL;
 		goto done;
 	}
-
+	// LINE: BETA10 0x1008daa7
 	if (!(m_inputManager = new LegoInputManager()) || m_inputManager->Create(p_param.GetWindowHandle()) != SUCCESS) {
 		delete m_inputManager;
 		m_inputManager = NULL;
 		goto done;
 	}
-
+	// LINE: BETA10 0x1008dbdb
 	m_viewLODListManager = new ViewLODListManager();
+
+	// LINE: BETA10 0x1008dc32
 	m_textureContainer = new LegoTextureContainer();
+
+#ifndef BETA10
 	m_textureContainer->SetOwnership(FALSE);
+#else
+	// One more class is instantiated here in BETA10 that we don't find in LEGO1.
+
+	// Based on `LegoOmni::getTextureContainer()` we know that `LegoTextureContainer` is at LegoOmni's offset 0x230,
+	// so the first instantiation is `LegoTextureContainer` and the second one is the unknown one.
+
+	// We repeat the initialisation of LegoTextureContainer for the sake of a structural match,
+	// even though it is wrong semantically.
+	// LINE: BETA10 0x1008dc89
+	m_textureContainer = new LegoTextureContainer();
+
+	// Something else happens here starting at BETA10 0x1008dcdd that has not been decompiled.
+	// It involves external calls, bit manipulation, and two globals.
+	// Those appear to involve classes that are either not present in LEGO1 or we have the wrong names for them
+	// (like LegoMaterialCache).
+#endif
+
+	// LINE: BETA10 0x1008dd17
 	LegoPathController::Init();
 
 	m_characterManager = new LegoCharacterManager();
+
 	m_plantManager = new LegoPlantManager();
+	// LINE: BETA10 0x1008ddca
 	m_animationManager = new LegoAnimationManager();
+
 	m_buildingManager = new LegoBuildingManager();
+	// LINE: BETA10 0x1008de7b
 	m_gameState = new LegoGameState();
+	// LINE: BETA10 0x1008ded5
 	m_worldList = new LegoWorldList(TRUE);
 
 	if (!m_viewLODListManager || !m_textureContainer || !m_worldList || !m_characterManager || !m_plantManager ||
@@ -211,56 +249,83 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 		goto done;
 	}
 
-	MxVariable* variable;
-
-	if (!(variable = new VisibilityVariable())) {
+	MxVariable *visibilityVar, *cameraLocationVar, *cursorVar, *whoAmIVar, *debugVar;
+	// LINE: BETA10 0x1008dfbd
+	visibilityVar = new VisibilityVariable();
+	if (!visibilityVar) {
 		goto done;
 	}
-	m_variableTable->SetVariable(variable);
+	m_variableTable->SetVariable(visibilityVar);
 
-	if (!(variable = new CameraLocationVariable())) {
+	// LINE: BETA10 0x1008e031
+	cameraLocationVar = new CameraLocationVariable();
+	if (!cameraLocationVar) {
 		goto done;
 	}
-	m_variableTable->SetVariable(variable);
+	m_variableTable->SetVariable(cameraLocationVar);
 
-	if (!(variable = new CursorVariable())) {
+	// LINE: BETA10 0x1008e0a5
+	cursorVar = new CursorVariable();
+	if (!cursorVar) {
 		goto done;
 	}
-	m_variableTable->SetVariable(variable);
+	m_variableTable->SetVariable(cursorVar);
 
-	if (!(variable = new WhoAmIVariable())) {
+	// LINE: BETA10 0x1008e119
+	whoAmIVar = new WhoAmIVariable();
+	if (!whoAmIVar) {
 		goto done;
 	}
-	m_variableTable->SetVariable(variable);
+	m_variableTable->SetVariable(whoAmIVar);
 
+#ifdef BETA10
+	debugVar = new DebugVariable();
+	if (!debugVar) {
+		goto done;
+	}
+	m_variableTable->SetVariable(debugVar);
+#endif
+
+	// LINE: BETA10 0x1008e201
 	CreateScripts();
+
+#ifndef BETA10
 	IslePathActor::RegisterSpawnLocations();
 	result = RegisterWorlds();
 
 	if (result != SUCCESS) {
 		goto done;
 	}
+#endif
 
-	if (!(m_bkgAudioManager = new MxBackgroundAudioManager())) {
+	// LINE: BETA10 0x1008e206
+	m_bkgAudioManager = new MxBackgroundAudioManager();
+	if (!m_bkgAudioManager) {
 		goto done;
 	}
 
-	if (!(m_transitionManager = new MxTransitionManager())) {
-		goto done;
+	// LINE: BETA10 0x1008e27d
+	m_transitionManager = new MxTransitionManager();
+
+	if (m_transitionManager) {
+		if (m_transitionManager->GetDDrawSurfaceFromVideoManager() != SUCCESS) {
+			goto done;
+		}
+
+#ifdef BETA10
+		NotificationManager()->Register(this);
+		EmptyFunction(0);
+#else
+		m_notificationManager->Register(this);
+		SetAppCursor(e_cursorBusy);
+		m_gameState->SetCurrentAct(LegoGameState::e_act1);
+#endif
+
+		result = SUCCESS;
 	}
-
-	if (m_transitionManager->GetDDrawSurfaceFromVideoManager() != SUCCESS) {
-		goto done;
-	}
-
-	m_notificationManager->Register(this);
-	SetAppCursor(e_cursorBusy);
-	m_gameState->SetCurrentAct(LegoGameState::e_act1);
-
-	result = SUCCESS;
-
 done:
 	return result;
+	// LINE: BETA10 0x1008e35d
 }
 
 // FUNCTION: LEGO1 0x1005a5f0
@@ -375,6 +440,7 @@ LegoWorld* LegoOmni::FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
 }
 
 // FUNCTION: LEGO1 0x1005b1d0
+// STUB: BETA10 0x1008e93e
 void LegoOmni::DeleteObject(MxDSAction& p_dsAction)
 {
 	if (p_dsAction.GetAtomId().GetInternal() != NULL) {
@@ -427,15 +493,16 @@ LegoROI* LegoOmni::FindROI(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x1005b2f0
+// FUNCTION: BETA10 0x1008eb66
 MxEntity* LegoOmni::AddToWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter)
 {
-	LegoWorld* world = NULL;
+	LegoWorld* world;
 
 	if (strcmpi(p_id, g_current)) {
 		world = FindWorld(MxAtomId(p_id, e_lowerCase2), p_entityId);
 	}
 	else {
-		world = this->m_currentWorld;
+		world = GetCurrentWorld();
 	}
 
 	if (world != NULL) {
@@ -446,14 +513,17 @@ MxEntity* LegoOmni::AddToWorld(const char* p_id, MxS32 p_entityId, MxPresenter* 
 }
 
 // FUNCTION: LEGO1 0x1005b3a0
+// FUNCTION: BETA10 0x1008ec27
 void LegoOmni::NotifyCurrentEntity(const MxNotificationParam& p_param)
 {
-	if (m_currentWorld) {
-		NotificationManager()->Send(m_currentWorld, p_param);
+	LegoWorld* currentWorld = GetCurrentWorld();
+	if (currentWorld) {
+		NotificationManager()->Send(currentWorld, p_param);
 	}
 }
 
 // FUNCTION: LEGO1 0x1005b3c0
+// FUNCTION: BETA10 0x1008ec72
 MxBool LegoOmni::DoesEntityExist(MxDSAction& p_dsAction)
 {
 	if (MxOmni::DoesEntityExist(p_dsAction)) {
@@ -559,12 +629,19 @@ void LegoOmni::CreateBackgroundAudio()
 }
 
 // FUNCTION: LEGO1 0x1005b580
+// FUNCTION: BETA10 0x1008f7e0
 MxResult LegoOmni::Start(MxDSAction* p_dsAction)
 {
 	MxResult result = MxOmni::Start(p_dsAction);
+#ifdef BETA10
+	this->m_action = *p_dsAction;
+#else
+	// TODO: This is likely an inlined `MxDsAction::operator=`, see the BETA10 code.
+	// As of this commit, the operator is not inlined automatically.
 	this->m_action.SetAtomId(p_dsAction->GetAtomId());
 	this->m_action.SetObjectId(p_dsAction->GetObjectId());
 	this->m_action.SetUnknown24(p_dsAction->GetUnknown24());
+#endif
 	return result;
 }
 

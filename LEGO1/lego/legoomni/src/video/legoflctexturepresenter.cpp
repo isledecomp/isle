@@ -4,6 +4,8 @@
 #include "misc/legocontainer.h"
 #include "mxdsaction.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoFlcTexturePresenter, 0x70)
 
 // FUNCTION: LEGO1 0x1005de80
@@ -27,11 +29,14 @@ void LegoFlcTexturePresenter::StartingTickle()
 	char* pp;
 	char extraCopy[128];
 	m_action->GetExtra(extraLength, pp);
+	assert(pp);
 
 	if (pp != NULL) {
 		strcpy(extraCopy, pp);
 		strcat(extraCopy, ".gif");
-		m_texture = TextureContainer()->Get(extraCopy);
+		LegoTextureContainer* textureContainer = TextureContainer();
+		assert(textureContainer);
+		m_texture = textureContainer->Get(extraCopy);
 	}
 
 	MxFlcPresenter::StartingTickle();

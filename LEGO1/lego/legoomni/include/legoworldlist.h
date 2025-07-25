@@ -16,12 +16,15 @@ class LegoWorld;
 // class MxPtrList<LegoWorld>
 
 // VTABLE: LEGO1 0x100d8680
+// VTABLE: BETA10 0x101bc900
 // SIZE 0x18
 class LegoWorldList : public MxPtrList<LegoWorld> {
 public:
+	// FUNCTION: BETA10 0x10092ce0
 	LegoWorldList(MxBool p_ownership = FALSE) : MxPtrList<LegoWorld>(p_ownership) {}
 
 	// FUNCTION: LEGO1 0x100598d0
+	// FUNCTION: BETA10 0x10092d80
 	MxS8 Compare(LegoWorld* p_a, LegoWorld* p_b) override { return p_a == p_b ? 0 : p_a < p_b ? -1 : 1; } // vtable+0x14
 
 	// SYNTHETIC: LEGO1 0x10059a00

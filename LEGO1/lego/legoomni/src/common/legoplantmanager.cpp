@@ -60,8 +60,11 @@ char* LegoPlantManager::g_customizeAnimFile = NULL;
 LegoPlantInfo g_plantInfo[81];
 
 // FUNCTION: LEGO1 0x10026220
+// FUNCTION: BETA10 0x100c4f90
 LegoPlantManager::LegoPlantManager()
 {
+	// Note that Init() is inlined in BETA10 and the class did not inherit from MxCore,
+	// so the BETA10 match is much better on Init().
 	Init();
 }
 
@@ -72,12 +75,10 @@ LegoPlantManager::~LegoPlantManager()
 	delete[] g_customizeAnimFile;
 }
 
+// // FUNCTION: BETA10 0x100c4f90 -- see the constructor
 // FUNCTION: LEGO1 0x10026330
-// FUNCTION: BETA10 0x100c4f90
 void LegoPlantManager::Init()
 {
-	// In BETA10 this appears to be LegoPlantManager::LegoPlantManager()
-
 	for (MxS32 i = 0; i < sizeOfArray(g_plantInfo); i++) {
 		g_plantInfo[i] = g_plantInfoInit[i];
 	}

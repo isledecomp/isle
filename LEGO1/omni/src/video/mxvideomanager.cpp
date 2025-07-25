@@ -13,6 +13,7 @@
 DECOMP_SIZE_ASSERT(MxVideoManager, 0x64)
 
 // FUNCTION: LEGO1 0x100be1f0
+// STUB: BETA10 0x1012ca40
 MxVideoManager::MxVideoManager()
 {
 	Init();

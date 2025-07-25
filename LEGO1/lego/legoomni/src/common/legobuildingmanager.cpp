@@ -47,6 +47,7 @@ MxU8 g_buildingInfoDownshift[16] = {
 };
 
 // GLOBAL: LEGO1 0x100f3478
+// GLOBAL: BETA10 0x101e4d78
 LegoBuildingInfo g_buildingInfoInit[16] = {
 	{
 		NULL, "infocen",
@@ -236,8 +237,11 @@ void LegoBuildingManager::configureLegoBuildingManager(MxS32 p_buildingManagerCo
 }
 
 // FUNCTION: LEGO1 0x1002f8c0
+// FUNCTION: BETA10 0x10063a30
 LegoBuildingManager::LegoBuildingManager()
 {
+	// Note that Init() is inlined in BETA10 and the class did not inherit from MxCore,
+	// so the BETA10 match is much better on Init().
 	Init();
 }
 
@@ -247,6 +251,7 @@ LegoBuildingManager::~LegoBuildingManager()
 	delete[] g_customizeAnimFile;
 }
 
+// // FUNCTION: BETA10 0x10063a30 -- see the constructor
 // FUNCTION: LEGO1 0x1002f9d0
 void LegoBuildingManager::Init()
 {

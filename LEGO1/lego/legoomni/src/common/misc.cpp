@@ -127,8 +127,10 @@ LegoBuildingManager* BuildingManager()
 }
 
 // FUNCTION: LEGO1 0x10015800
+// FUNCTION: BETA10 0x100e4bb7
 LegoTextureContainer* TextureContainer()
 {
+	assert(LegoOmni::GetInstance());
 	return LegoOmni::GetInstance()->GetTextureContainer();
 }
 

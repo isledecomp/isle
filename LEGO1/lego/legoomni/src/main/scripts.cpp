@@ -91,6 +91,7 @@ MxAtomId* g_creditsScript = NULL;
 MxAtomId* g_nocdSourceName = NULL;
 
 // FUNCTION: LEGO1 0x100528e0
+// STUB: BETA10 0x100f6133
 void CreateScripts()
 {
 	g_copterScript = new MxAtomId("\\lego\\scripts\\build\\copter", e_lowerCase2);

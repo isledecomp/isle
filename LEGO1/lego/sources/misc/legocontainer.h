@@ -122,6 +122,10 @@ public:
 	LegoTextureInfo* GetCached(LegoTextureInfo* p_textureInfo);
 	void EraseCached(LegoTextureInfo* p_textureInfo);
 
+	// Verified by LegoOmni::Create(), even though there have been significant changes.
+	// SYNTHETIC: BETA10 0x10093ea0
+	// LegoTextureContainer::LegoTextureContainer
+
 protected:
 	LegoCachedTextureList m_cached; // 0x18
 };

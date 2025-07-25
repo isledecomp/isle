@@ -58,7 +58,8 @@ public:
 	// FUNCTION: LEGO1 0x1002f930
 	const char* ClassName() const override // vtable+0x0c
 	{
-		// not in BETA10
+		// While this class exists in BETA10, it didn't have a ClassName().
+		// The constructor suggests that it did not inherit from MxCore back then and did not have a VTABLE.
 		// STRING: LEGO1 0x100f37d0
 		return "LegoBuildingManager";
 	}
