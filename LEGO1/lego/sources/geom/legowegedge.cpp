@@ -22,6 +22,7 @@ LegoWEGEdge::LegoWEGEdge()
 }
 
 // FUNCTION: LEGO1 0x1009a800
+// FUNCTION: BETA10 0x101831bd
 LegoWEGEdge::~LegoWEGEdge()
 {
 	if (m_edges) {

@@ -781,6 +781,7 @@ void Act3::GoodEnding(const Matrix4& p_destination)
 	m_cop2->SetActorState(LegoPathActor::c_disabled);
 	m_brickster->SetActorState(LegoPathActor::c_disabled);
 
+#ifndef BETA10
 	m_unk0x4220.Clear();
 	m_copter->FUN_10004640(p_destination);
 
@@ -792,6 +793,10 @@ void Act3::GoodEnding(const Matrix4& p_destination)
 		m_copter->m_unk0x1a8,
 		m_copter->m_unk0x1f4
 	);
+#else
+	m_state->m_unk0x08 = 2;
+	GameState()->SwitchArea(LegoGameState::Area::e_infomain);
+#endif
 }
 
 // FUNCTION: LEGO1 0x10073500

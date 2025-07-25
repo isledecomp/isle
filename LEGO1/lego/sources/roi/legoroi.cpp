@@ -9,6 +9,7 @@
 #include "shape/legobox.h"
 #include "shape/legosphere.h"
 
+#include <crtdbg.h>
 #include <string.h>
 #include <vec.h>
 
@@ -410,8 +411,7 @@ LegoResult LegoROI::ApplyChildAnimationTransformation(
 		roi->m_local2world.Product(mat, p_matrix);
 		roi->UpdateWorldData();
 
-		LegoBool visibility = data->GetVisibility(p_time);
-		roi->SetVisibility(visibility);
+		roi->SetVisibility(data->GetVisibility(p_time));
 
 		for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {
 			ApplyChildAnimationTransformation(p_node->GetChild(i), roi->m_local2world, p_time, roi);
@@ -419,6 +419,11 @@ LegoResult LegoROI::ApplyChildAnimationTransformation(
 	}
 	else {
 		FUN_100a81b0("%s ROI Not found\n", name);
+#ifdef BETA10
+		_RPT1(_CRT_ASSERT, "%s ROI Not Found", name);
+		// Note that the macro inserts an INT3, which breaks the assumption that INT3
+		// only occurs as a filler for empty space in the binary.
+#endif
 	}
 
 	return SUCCESS;
