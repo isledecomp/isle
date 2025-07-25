@@ -3,7 +3,7 @@
 #include "decomp.h"
 #include "mxdsbuffer.h"
 #include "mxdsfile.h"
-#include "mxomni.h"
+#include "mxmain.h"
 #include "mxstreamcontroller.h"
 
 DECOMP_SIZE_ASSERT(MxStreamProvider, 0x10)

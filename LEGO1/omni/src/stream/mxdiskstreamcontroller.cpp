@@ -4,8 +4,8 @@
 #include "mxautolock.h"
 #include "mxdiskstreamprovider.h"
 #include "mxdsstreamingaction.h"
+#include "mxmain.h"
 #include "mxmisc.h"
-#include "mxomni.h"
 #include "mxticklemanager.h"
 
 #include <assert.h>

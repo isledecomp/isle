@@ -5,8 +5,8 @@
 #include "mxautolock.h"
 #include "mxdssound.h"
 #include "mxdssubscriber.h"
+#include "mxmain.h"
 #include "mxmisc.h"
-#include "mxomni.h"
 #include "mxsoundmanager.h"
 #include "mxutilities.h"
 

@@ -1,4 +1,4 @@
-#include "mxomni.h"
+#include "mxmain.h"
 
 #include "mxactionnotificationparam.h"
 #include "mxatom.h"
@@ -85,8 +85,6 @@ void MxOmni::SetInstance(MxOmni* p_instance)
 // FUNCTION: BETA10 0x1012f3ff
 MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 {
-	// TODO: File name is MxMain.cpp according to BETA10
-
 	MxResult result = FAILURE;
 
 	if (!(m_atomSet = new MxAtomSet())) {

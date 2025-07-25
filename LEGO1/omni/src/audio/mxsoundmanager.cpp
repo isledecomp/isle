@@ -2,8 +2,8 @@
 
 #include "mxautolock.h"
 #include "mxdsaction.h"
+#include "mxmain.h"
 #include "mxmisc.h"
-#include "mxomni.h"
 #include "mxpresenter.h"
 #include "mxticklemanager.h"
 #include "mxticklethread.h"

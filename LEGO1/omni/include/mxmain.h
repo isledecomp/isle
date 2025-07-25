@@ -1,5 +1,5 @@
-#ifndef MXOMNI_H
-#define MXOMNI_H
+#ifndef MXMAIN_H
+#define MXMAIN_H
 
 #include "mxcore.h"
 #include "mxcriticalsection.h"
@@ -120,4 +120,4 @@ protected:
 	MxBool m_paused;                              // 0x64
 };
 
-#endif // MXOMNI_H
+#endif // MXMAIN_H

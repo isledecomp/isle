@@ -2,8 +2,8 @@
 
 #include "mxbitmap.h"
 #include "mxdebug.h"
+#include "mxmain.h"
 #include "mxmisc.h"
-#include "mxomni.h"
 #include "mxpalette.h"
 #include "mxutilities.h"
 #include "mxvideomanager.h"

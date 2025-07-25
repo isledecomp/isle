@@ -2,7 +2,7 @@
 
 #include "legocachesoundmanager.h"
 #include "mxautolock.h"
-#include "mxomni.h"
+#include "mxmain.h"
 
 #include <assert.h>
 
