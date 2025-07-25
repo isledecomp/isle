@@ -75,8 +75,8 @@ LegoPlantManager::~LegoPlantManager()
 	delete[] g_customizeAnimFile;
 }
 
-// FUNCTION: LEGO1 0x10026330
 // // FUNCTION: BETA10 0x100c4f90 -- see the constructor
+// FUNCTION: LEGO1 0x10026330
 void LegoPlantManager::Init()
 {
 	for (MxS32 i = 0; i < sizeOfArray(g_plantInfo); i++) {

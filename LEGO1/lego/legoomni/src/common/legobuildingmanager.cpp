@@ -251,8 +251,8 @@ LegoBuildingManager::~LegoBuildingManager()
 	delete[] g_customizeAnimFile;
 }
 
-// FUNCTION: LEGO1 0x1002f9d0
 // // FUNCTION: BETA10 0x10063a30 -- see the constructor
+// FUNCTION: LEGO1 0x1002f9d0
 void LegoBuildingManager::Init()
 {
 	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
