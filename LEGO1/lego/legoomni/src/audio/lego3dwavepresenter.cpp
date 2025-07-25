@@ -2,7 +2,7 @@
 
 #include "mxcompositepresenter.h"
 #include "mxdsaction.h"
-#include "mxomni.h"
+#include "mxmain.h"
 
 DECOMP_SIZE_ASSERT(Lego3DWavePresenter, 0xa0)
 

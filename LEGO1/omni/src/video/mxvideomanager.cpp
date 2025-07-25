@@ -2,8 +2,8 @@
 
 #include "mxautolock.h"
 #include "mxdisplaysurface.h"
+#include "mxmain.h"
 #include "mxmisc.h"
-#include "mxomni.h"
 #include "mxpalette.h"
 #include "mxpresenter.h"
 #include "mxregion.h"

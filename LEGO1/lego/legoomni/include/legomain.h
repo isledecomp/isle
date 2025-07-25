@@ -3,7 +3,7 @@
 
 #include "compat.h"
 #include "mxdsaction.h"
-#include "mxomni.h"
+#include "mxmain.h"
 
 class Isle;
 class LegoAnimationManager;

@@ -221,7 +221,7 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/common/mxcore.cpp
     LEGO1/omni/src/common/mxstring.cpp
     LEGO1/omni/src/audio/mxsoundmanager.cpp
-    LEGO1/omni/src/main/mxomni.cpp
+    LEGO1/omni/src/main/mxmain.cpp
     LEGO1/omni/src/notify/mxactionnotificationparam.cpp
     LEGO1/omni/src/main/mxomnicreateflags.cpp
     LEGO1/omni/src/main/mxomnicreateparam.cpp

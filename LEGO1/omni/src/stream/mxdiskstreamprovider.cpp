@@ -5,7 +5,7 @@
 #include "mxdsbuffer.h"
 #include "mxdsfile.h"
 #include "mxdsstreamingaction.h"
-#include "mxomni.h"
+#include "mxmain.h"
 #include "mxramstreamprovider.h"
 #include "mxstreamcontroller.h"
 #include "mxstring.h"

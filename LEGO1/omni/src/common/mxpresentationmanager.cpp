@@ -2,7 +2,7 @@
 
 #include "decomp.h"
 #include "mxautolock.h"
-#include "mxomni.h"
+#include "mxmain.h"
 #include "mxpresenter.h"
 #include "mxticklemanager.h"
 

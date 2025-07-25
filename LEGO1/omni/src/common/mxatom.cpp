@@ -1,8 +1,8 @@
 #include "mxatom.h"
 
 #include "decomp.h"
+#include "mxmain.h"
 #include "mxmisc.h"
-#include "mxomni.h"
 
 #include <assert.h>
 

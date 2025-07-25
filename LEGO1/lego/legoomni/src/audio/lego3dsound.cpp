@@ -5,7 +5,7 @@
 #include "legosoundmanager.h"
 #include "legovideomanager.h"
 #include "misc.h"
-#include "mxomni.h"
+#include "mxmain.h"
 
 #include <vec.h>
 

@@ -2,7 +2,7 @@
 
 #include "legosoundmanager.h"
 #include "misc.h"
-#include "mxomni.h"
+#include "mxmain.h"
 
 #include <assert.h>
 
