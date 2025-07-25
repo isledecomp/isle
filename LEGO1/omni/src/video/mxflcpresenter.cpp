@@ -13,8 +13,8 @@ DECOMP_SIZE_ASSERT(MxFlcPresenter, 0x68);
 MxFlcPresenter::MxFlcPresenter()
 {
 	m_flcHeader = NULL;
-	SetBit1(FALSE);
-	SetBit2(FALSE);
+	SetUseSurface(FALSE);
+	SetUseVideoMemory(FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b3420

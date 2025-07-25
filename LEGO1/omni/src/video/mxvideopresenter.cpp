@@ -93,19 +93,19 @@ void MxVideoPresenter::Init()
 {
 	m_frameBitmap = NULL;
 	m_alpha = NULL;
-	m_unk0x5c = 1;
-	m_unk0x58 = NULL;
-	m_unk0x60 = -1;
-	SetBit0(FALSE);
+	m_frameLoadTickleCount = 1;
+	m_surface = NULL;
+	m_frozenTime = -1;
+	SetLoadedFirstFrame(FALSE);
 
 	if (MVideoManager() != NULL) {
 		MVideoManager();
-		SetBit1(TRUE);
-		SetBit2(FALSE);
+		SetUseSurface(TRUE);
+		SetUseVideoMemory(FALSE);
 	}
 
-	SetBit3(FALSE);
-	SetBit4(FALSE);
+	SetDoNotWriteToSurface(FALSE);
+	SetBitmapIsMap(FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b27b0
@@ -115,11 +115,11 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 		MVideoManager()->UnregisterPresenter(*this);
 	}
 
-	if (m_unk0x58) {
-		m_unk0x58->Release();
-		m_unk0x58 = NULL;
-		SetBit1(FALSE);
-		SetBit2(FALSE);
+	if (m_surface) {
+		m_surface->Release();
+		m_surface = NULL;
+		SetUseSurface(FALSE);
+		SetUseVideoMemory(FALSE);
 	}
 
 	if (MVideoManager() && (m_alpha || m_frameBitmap)) {
@@ -183,7 +183,7 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 
 	MxU8* pixel = m_frameBitmap->GetStart(p_x - rect.GetLeft(), p_y - rect.GetTop());
 
-	if (GetBit4()) {
+	if (BitmapIsMap()) {
 		return (MxBool) *pixel;
 	}
 
@@ -241,7 +241,7 @@ void MxVideoPresenter::PutFrame()
 	LPDIRECTDRAWSURFACE ddSurface = displaySurface->GetDirectDrawSurface2();
 
 	if (m_action->GetFlags() & MxDSAction::c_bit5) {
-		if (m_unk0x58) {
+		if (m_surface) {
 			RECT src, dest;
 			src.top = 0;
 			src.left = 0;
@@ -255,10 +255,10 @@ void MxVideoPresenter::PutFrame()
 
 			switch (PrepareRects(src, dest)) {
 			case 0:
-				ddSurface->Blt(&dest, m_unk0x58, &src, DDBLT_KEYSRC, NULL);
+				ddSurface->Blt(&dest, m_surface, &src, DDBLT_KEYSRC, NULL);
 				break;
 			case 1:
-				ddSurface->BltFast(dest.left, dest.top, m_unk0x58, &src, DDBLTFAST_SRCCOLORKEY | DDBLTFAST_WAIT);
+				ddSurface->BltFast(dest.left, dest.top, m_surface, &src, DDBLTFAST_SRCCOLORKEY | DDBLTFAST_WAIT);
 			}
 		}
 		else {
@@ -282,7 +282,7 @@ void MxVideoPresenter::PutFrame()
 			if (regionRect->GetWidth() >= 1 && regionRect->GetHeight() >= 1) {
 				RECT src, dest;
 
-				if (m_unk0x58) {
+				if (m_surface) {
 					src.left = regionRect->GetLeft() - GetX();
 					src.top = regionRect->GetTop() - GetY();
 					src.right = src.left + regionRect->GetWidth();
@@ -295,9 +295,9 @@ void MxVideoPresenter::PutFrame()
 				}
 
 				if (m_action->GetFlags() & MxDSAction::c_bit4) {
-					if (m_unk0x58) {
+					if (m_surface) {
 						if (PrepareRects(src, dest) >= 0) {
-							ddSurface->Blt(&dest, m_unk0x58, &src, DDBLT_KEYSRC, NULL);
+							ddSurface->Blt(&dest, m_surface, &src, DDBLT_KEYSRC, NULL);
 						}
 					}
 					else {
@@ -313,9 +313,9 @@ void MxVideoPresenter::PutFrame()
 						);
 					}
 				}
-				else if (m_unk0x58) {
+				else if (m_surface) {
 					if (PrepareRects(src, dest) >= 0) {
-						ddSurface->Blt(&dest, m_unk0x58, &src, 0, NULL);
+						ddSurface->Blt(&dest, m_surface, &src, 0, NULL);
 					}
 				}
 				else {
@@ -372,7 +372,7 @@ void MxVideoPresenter::StreamingTickle()
 		}
 	}
 	else {
-		for (MxS16 i = 0; i < m_unk0x5c; i++) {
+		for (MxS16 i = 0; i < m_frameLoadTickleCount; i++) {
 			if (!m_currentChunk) {
 				MxMediaPresenter::StreamingTickle();
 
@@ -388,15 +388,15 @@ void MxVideoPresenter::StreamingTickle()
 			LoadFrame(m_currentChunk);
 			m_subscriber->FreeDataChunk(m_currentChunk);
 			m_currentChunk = NULL;
-			SetBit0(TRUE);
+			SetLoadedFirstFrame(TRUE);
 
 			if (m_currentTickleState != e_streaming) {
 				break;
 			}
 		}
 
-		if (GetBit0()) {
-			m_unk0x5c = 5;
+		if (LoadedFirstFrame()) {
+			m_frameLoadTickleCount = 5;
 		}
 	}
 }
@@ -416,7 +416,7 @@ void MxVideoPresenter::RepeatingTickle()
 			}
 		}
 		else {
-			for (MxS16 i = 0; i < m_unk0x5c; i++) {
+			for (MxS16 i = 0; i < m_frameLoadTickleCount; i++) {
 				if (!m_currentChunk) {
 					MxMediaPresenter::RepeatingTickle();
 
@@ -431,15 +431,15 @@ void MxVideoPresenter::RepeatingTickle()
 
 				LoadFrame(m_currentChunk);
 				m_currentChunk = NULL;
-				SetBit0(TRUE);
+				SetLoadedFirstFrame(TRUE);
 
 				if (m_currentTickleState != e_repeating) {
 					break;
 				}
 			}
 
-			if (GetBit0()) {
-				m_unk0x5c = 5;
+			if (LoadedFirstFrame()) {
+				m_frameLoadTickleCount = 5;
 			}
 		}
 	}
@@ -452,11 +452,11 @@ void MxVideoPresenter::FreezingTickle()
 
 	if (sustainTime != -1) {
 		if (sustainTime) {
-			if (m_unk0x60 == -1) {
-				m_unk0x60 = m_action->GetElapsedTime();
+			if (m_frozenTime == -1) {
+				m_frozenTime = m_action->GetElapsedTime();
 			}
 
-			if (m_action->GetElapsedTime() >= m_unk0x60 + ((MxDSMediaAction*) m_action)->GetSustainTime()) {
+			if (m_action->GetElapsedTime() >= m_frozenTime + ((MxDSMediaAction*) m_action)->GetSustainTime()) {
 				ProgressTickleState(e_done);
 			}
 		}

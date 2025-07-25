@@ -22,8 +22,8 @@ MxLoopingSmkPresenter::~MxLoopingSmkPresenter()
 void MxLoopingSmkPresenter::Init()
 {
 	m_elapsedDuration = 0;
-	SetBit1(FALSE);
-	SetBit2(FALSE);
+	SetUseSurface(FALSE);
+	SetUseVideoMemory(FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b49d0
@@ -82,7 +82,7 @@ void MxLoopingSmkPresenter::VTable0x8c()
 // FUNCTION: LEGO1 0x100b4b00
 void MxLoopingSmkPresenter::RepeatingTickle()
 {
-	for (MxS16 i = 0; i < m_unk0x5c; i++) {
+	for (MxS16 i = 0; i < m_frameLoadTickleCount; i++) {
 		if (!m_loopingChunkCursor->HasMatch()) {
 			MxStreamChunk* chunk;
 			MxStreamChunkListCursor cursor(m_loopingChunks);

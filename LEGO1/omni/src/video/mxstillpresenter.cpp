@@ -79,12 +79,12 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 	MxRect32 rect(x, y, width + x, height + y);
 	MVideoManager()->InvalidateRect(rect);
 
-	if (GetBit1()) {
-		undefined4 und = 0;
-		m_unk0x58 = MxOmni::GetInstance()->GetVideoManager()->GetDisplaySurface()->VTable0x44(
+	if (UseSurface()) {
+		undefined4 useVideoMemory = 0;
+		m_surface = MxOmni::GetInstance()->GetVideoManager()->GetDisplaySurface()->VTable0x44(
 			m_frameBitmap,
-			&und,
-			GetBit3(),
+			&useVideoMemory,
+			DoNotWriteToSurface(),
 			m_action->GetFlags() & MxDSAction::c_bit4
 		);
 
@@ -94,11 +94,11 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 		delete m_frameBitmap;
 		m_frameBitmap = NULL;
 
-		if (m_unk0x58 && und) {
-			SetBit2(TRUE);
+		if (m_surface && useVideoMemory) {
+			SetUseVideoMemory(TRUE);
 		}
 		else {
-			SetBit2(FALSE);
+			SetUseVideoMemory(FALSE);
 		}
 	}
 }
@@ -196,7 +196,7 @@ void MxStillPresenter::ParseExtra()
 	MxPresenter::ParseExtra();
 
 	if (m_action->GetFlags() & MxDSAction::c_bit5) {
-		SetBit3(TRUE);
+		SetDoNotWriteToSurface(TRUE);
 	}
 
 	MxU16 extraLength;
@@ -216,9 +216,9 @@ void MxStillPresenter::ParseExtra()
 		}
 
 		if (KeyValueStringParse(output, g_strBMP_ISMAP, extraCopy)) {
-			SetBit4(TRUE);
-			SetBit1(FALSE);
-			SetBit2(FALSE);
+			SetBitmapIsMap(TRUE);
+			SetUseSurface(FALSE);
+			SetUseVideoMemory(FALSE);
 		}
 	}
 }
@@ -234,11 +234,11 @@ MxStillPresenter* MxStillPresenter::Clone()
 			MxDSAction* action = GetAction()->Clone();
 
 			if (action && presenter->StartAction(NULL, action) == SUCCESS) {
-				presenter->SetBit0(GetBit0());
-				presenter->SetBit1(GetBit1());
-				presenter->SetBit2(GetBit2());
-				presenter->SetBit3(GetBit3());
-				presenter->SetBit4(GetBit4());
+				presenter->SetLoadedFirstFrame(LoadedFirstFrame());
+				presenter->SetUseSurface(UseSurface());
+				presenter->SetUseVideoMemory(UseVideoMemory());
+				presenter->SetDoNotWriteToSurface(DoNotWriteToSurface());
+				presenter->SetBitmapIsMap(BitmapIsMap());
 
 				if (m_frameBitmap) {
 					presenter->m_frameBitmap = new MxBitmap;
@@ -248,8 +248,8 @@ MxStillPresenter* MxStillPresenter::Clone()
 					}
 				}
 
-				if (m_unk0x58) {
-					presenter->m_unk0x58 = MxDisplaySurface::CopySurface(m_unk0x58);
+				if (m_surface) {
+					presenter->m_surface = MxDisplaySurface::CopySurface(m_surface);
 				}
 
 				if (m_alpha) {

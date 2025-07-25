@@ -84,7 +84,7 @@ MxBool MxControlPresenter::CheckButtonDown(MxS32 p_x, MxS32 p_y, MxPresenter* p_
 		assert(map && map->IsA("MxStillPresenter"));
 
 		if (presenter == map || map->GetDisplayZ() < presenter->GetDisplayZ()) {
-			if (map->VTable0x7c()) {
+			if (map->HasFrameBitmapOrAlpha()) {
 				MxRect32 rect(0, 0, map->GetWidth() - 1, map->GetHeight() - 1);
 				rect += map->GetLocation();
 

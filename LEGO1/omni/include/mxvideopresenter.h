@@ -42,10 +42,10 @@ public:
 	void Destroy() override { Destroy(FALSE); } // vtable+0x38
 
 	// FUNCTION: LEGO1 0x1000c7b0
-	virtual LPDIRECTDRAWSURFACE VTable0x78() { return m_unk0x58; } // vtable+0x78
+	virtual LPDIRECTDRAWSURFACE GetSurface() { return m_surface; } // vtable+0x78
 
 	// FUNCTION: LEGO1 0x1000c7c0
-	virtual MxBool VTable0x7c() { return m_frameBitmap != NULL || m_alpha != NULL; } // vtable+0x7c
+	virtual MxBool HasFrameBitmapOrAlpha() { return m_frameBitmap != NULL || m_alpha != NULL; } // vtable+0x7c
 
 	// FUNCTION: LEGO1 0x1000c7e0
 	virtual MxS32 GetWidth() { return m_alpha ? m_alpha->GetWidth() : m_frameBitmap->GetBmiWidth(); } // vtable+0x80
@@ -115,17 +115,17 @@ public:
 	// FUNCTION: BETA10 0x1002c2e0
 	MxU8* GetBitmapStart(MxS32 p_left, MxS32 p_top) { return m_frameBitmap->GetStart(p_left, p_top); }
 
-	void SetBit0(BOOL p_e) { m_flags.m_bit0 = p_e; }
-	void SetBit1(BOOL p_e) { m_flags.m_bit1 = p_e; }
-	void SetBit2(BOOL p_e) { m_flags.m_bit2 = p_e; }
-	void SetBit3(BOOL p_e) { m_flags.m_bit3 = p_e; }
-	void SetBit4(BOOL p_e) { m_flags.m_bit4 = p_e; }
+	void SetLoadedFirstFrame(BOOL p_loadedFirstFrame) { m_flags.m_bit0 = p_loadedFirstFrame; }
+	void SetUseSurface(BOOL p_useSurface) { m_flags.m_bit1 = p_useSurface; }
+	void SetUseVideoMemory(BOOL p_useVideoMemory) { m_flags.m_bit2 = p_useVideoMemory; }
+	void SetDoNotWriteToSurface(BOOL p_doNotWriteToSurface) { m_flags.m_bit3 = p_doNotWriteToSurface; }
+	void SetBitmapIsMap(BOOL p_bitmapIsMap) { m_flags.m_bit4 = p_bitmapIsMap; }
 
-	BYTE GetBit0() { return m_flags.m_bit0; }
-	BYTE GetBit1() { return m_flags.m_bit1; }
-	BYTE GetBit2() { return m_flags.m_bit2; }
-	BYTE GetBit3() { return m_flags.m_bit3; }
-	BYTE GetBit4() { return m_flags.m_bit4; }
+	BYTE LoadedFirstFrame() { return m_flags.m_bit0; }
+	BYTE UseSurface() { return m_flags.m_bit1; }
+	BYTE UseVideoMemory() { return m_flags.m_bit2; }
+	BYTE DoNotWriteToSurface() { return m_flags.m_bit3; }
+	BYTE BitmapIsMap() { return m_flags.m_bit4; }
 
 	// SYNTHETIC: LEGO1 0x1000c910
 	// MxVideoPresenter::`scalar deleting destructor'
@@ -138,10 +138,10 @@ protected:
 
 	MxBitmap* m_frameBitmap;       // 0x50
 	AlphaMask* m_alpha;            // 0x54
-	LPDIRECTDRAWSURFACE m_unk0x58; // 0x58
-	MxS16 m_unk0x5c;               // 0x5c
+	LPDIRECTDRAWSURFACE m_surface; // 0x58
+	MxS16 m_frameLoadTickleCount;  // 0x5c
 	FlagBitfield m_flags;          // 0x5e
-	MxLong m_unk0x60;              // 0x60
+	MxLong m_frozenTime;           // 0x60
 };
 
 #endif // MXVIDEOPRESENTER_H
