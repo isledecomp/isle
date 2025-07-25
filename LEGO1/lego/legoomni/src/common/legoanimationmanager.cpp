@@ -2812,7 +2812,11 @@ MxResult LegoAnimationManager::FUN_10064880(const char* p_name, MxS32 p_unk0x0c,
 // FUNCTION: BETA10 0x10045daf
 void LegoAnimationManager::FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x404)
 {
-	if (m_unk0x402 && p_tranInfo->m_unk0x14) {
+	if (
+#ifndef BETA10
+		m_unk0x402 &&
+#endif
+			p_tranInfo->m_unk0x14) {
 		p_tranInfo->m_flags |= LegoTranInfo::c_bit1;
 		m_unk0x430 = TRUE;
 		m_unk0x42c = p_tranInfo;
@@ -2833,11 +2837,13 @@ void LegoAnimationManager::FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x
 		if (location != NULL) {
 			CalcLocalTransform(location->m_position, location->m_direction, location->m_up, m_unk0x484);
 			m_unk0x4cc.SetStartEnd(m_unk0x43c, m_unk0x484);
+#ifndef BETA10
 			m_unk0x4cc.NormalizeDirection();
 		}
 		else {
 			p_tranInfo->m_flags &= ~LegoTranInfo::c_bit1;
 			m_unk0x430 = FALSE;
+#endif
 		}
 
 		Mx3DPointFloat vec;

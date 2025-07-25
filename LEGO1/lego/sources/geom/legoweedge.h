@@ -6,8 +6,8 @@
 
 struct LegoOrientedEdge;
 
-// might be a struct with public members
 // VTABLE: LEGO1 0x100db7c0
+// VTABLE: BETA10 0x101c3730
 // SIZE 0x0c
 class LegoWEEdge {
 public:
@@ -33,6 +33,7 @@ public:
 	}
 
 	// SYNTHETIC: LEGO1 0x1009a570
+	// SYNTHETIC: BETA10 0x10182b70
 	// LegoWEEdge::`scalar deleting destructor'
 
 protected:

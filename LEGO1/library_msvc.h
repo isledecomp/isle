@@ -132,9 +132,11 @@
 // ??_L@YGXPAXIHP6EX0@Z1@Z
 
 // LIBRARY: LEGO1 0x1008c2e0
+// LIBRARY: BETA10 0x100f9800
 // ??_M@YGXPAXIHP6EX0@Z@Z
 
 // LIBRARY: LEGO1 0x1008c370
+// LIBRARY: BETA10 0x100f98b0
 // ?__ArrayUnwind@@YGXPAXIHP6EX0@Z@Z
 
 // LIBRARY: LEGO1 0x1008c410
@@ -162,6 +164,7 @@
 // __amsg_exit
 
 // LIBRARY: LEGO1 0x1008c980
+// LIBRARY: BETA10 0x10101318
 // __except_handler3
 
 // LIBRARY: LEGO1 0x1008ca60
@@ -782,6 +785,61 @@
 
 // LIBRARY: BETA10 0x100fa210
 // strcat
+
+// LIBRARY: BETA10 0x100fed20
+// strncat
+
+// LIBRARY: BETA10 0x100faab0
+// strncpy
+
+// LIBRARY: BETA10 0x100ff490
+// setvbuf
+
+// LIBRARY: BETA10 0x100ff180
+// fflush
+
+// LIBRARY: BETA10 0x100fec40
+// __crtMessageBoxA
+
+// LIBRARY: BETA10 0x100fee50
+// _itoa
+
+// LIBRARY: BETA10 0x10106f70
+// _lock_file
+
+// LIBRARY: BETA10 0x100ff1e0
+// _fflush_lk
+
+// LIBRARY: BETA10 0x10107010
+// _unlock_file
+
+// LIBRARY: BETA10 0x10106ea0
+// _lock
+
+// LIBRARY: BETA10 0x10106f50
+// _unlock
+
+// LIBRARY: BETA10 0x100fdaf0
+// _getptd
+
+// LIBRARY: BETA10 0x10104040
+// _malloc_dbg
+
+// GLOBAL: BETA10 0x101fb7b0
+// _locktable
+
+// LIBRARY: BETA10 0x10104c00
+// _free_dbg
+
+// LIBRARY: BETA10 0x100fe900
+// raise
+
+// GLOBAL: BETA10 0x101fa950
+// _iob
+
+// GLOBAL: BETA10 0x102122d0
+// _bufin
+
 
 // LIBRARY: BETA10 0x100f8a88
 // ??2@YAPAXI@Z

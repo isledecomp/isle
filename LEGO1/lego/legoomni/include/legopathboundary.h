@@ -31,6 +31,7 @@ typedef set<LegoPathActor*, LegoPathActorSetCompare> LegoPathActorSet;
 typedef set<LegoAnimPresenter*, LegoAnimPresenterSetCompare> LegoAnimPresenterSet;
 
 // VTABLE: LEGO1 0x100d8618
+// VTABLE: BETA10 0x101bdd58
 // SIZE 0x74
 class LegoPathBoundary : public LegoWEGEdge {
 public:
@@ -57,6 +58,7 @@ public:
 	LegoAnimPresenterSet& GetPresenters() { return m_presenters; }
 
 	// SYNTHETIC: LEGO1 0x10047a80
+	// SYNTHETIC: BETA10 0x100bd300
 	// LegoPathBoundary::`vector deleting destructor'
 
 private:

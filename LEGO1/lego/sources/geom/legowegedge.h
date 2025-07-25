@@ -29,6 +29,7 @@ struct PathWithTrigger {
 
 // might be a struct with public members
 // VTABLE: LEGO1 0x100db7f8
+// VTABLE: BETA10 0x101c3798
 // SIZE 0x54
 class LegoWEGEdge : public LegoWEEdge {
 public:
@@ -80,6 +81,7 @@ public:
 	LegoU8 GetMask0x03() { return m_flags & (c_bit1 | c_bit2); }
 
 	// SYNTHETIC: LEGO1 0x1009a7e0
+	// SYNTHETIC: BETA10 0x10184130
 	// LegoWEGEdge::`scalar deleting destructor'
 
 	friend class LegoPathController;
