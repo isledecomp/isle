@@ -241,7 +241,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	m_buildingManager = new LegoBuildingManager();
 	// LINE: BETA10 0x1008de7b
 	m_gameState = new LegoGameState();
-	// LINE: BETA10 0x0x1008ded5
+	// LINE: BETA10 0x1008ded5
 	m_worldList = new LegoWorldList(TRUE);
 
 	if (!m_viewLODListManager || !m_textureContainer || !m_worldList || !m_characterManager || !m_plantManager ||
