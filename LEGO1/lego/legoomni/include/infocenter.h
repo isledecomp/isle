@@ -18,6 +18,25 @@ class LegoControlManagerNotificationParam;
 // SIZE 0x94
 class InfocenterState : public LegoState {
 public:
+	enum {
+		e_playCutscene = 0,
+		e_introCancelled = 1,
+		e_notRegistered = 2,
+		e_newState = 3,
+		e_selectedSave = 4,
+		e_selectedCharacterAndDestination = 5,
+		// e_6 = 6,
+		// e_7 = 7,
+		e_exitQueried = 8,
+		// e_9 = 9,
+		// e_10 = 10,
+		e_welcomeAnimation = 11,
+		e_exiting = 12,
+		e_playCredits = 13,
+		e_exitingToIsland = 14,
+		e_backToInfoAct1 = 15,
+	};
+
 	InfocenterState();
 	~InfocenterState() override;
 
@@ -72,7 +91,7 @@ public:
 	Playlist m_returnDialogue[3];   // 0x20
 	Playlist m_leaveDialogue[3];    // 0x44
 	Playlist m_bricksterDialogue;   // 0x68
-	MxU32 m_unk0x74;                // 0x74
+	MxU32 m_state;                  // 0x74
 	MxStillPresenter* m_letters[7]; // 0x78
 };
 
