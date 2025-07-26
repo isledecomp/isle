@@ -15,6 +15,7 @@ float g_userMaxLod = 3.6f;
 float g_partsThreshold = 1000.0f;
 
 // FUNCTION: LEGO1 0x100a5dc0
+// FUNCTION: BETA10 0x10168840
 RealtimeView::RealtimeView()
 {
 	UpdateMaxLOD();
@@ -51,6 +52,7 @@ float RealtimeView::GetPartsThreshold()
 }
 
 // FUNCTION: LEGO1 0x100a5e20
+// STUB: BETA10 0x101688d5
 void RealtimeView::UpdateMaxLOD()
 {
 	g_userMaxLodPower = pow(g_userMaxBase, -g_userMaxLod);

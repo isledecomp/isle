@@ -32,16 +32,51 @@ float g_elapsedSeconds = 0;
 
 inline void SetAppData(ViewROI* p_roi, LPD3DRM_APPDATA data);
 inline undefined4 GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
-inline undefined4 GetFrame(IDirect3DRMFrame2*& frame, Tgl::Group* scene);
+inline undefined4 GetFrame(IDirect3DRMFrame2** frame, Tgl::Group* scene);
+
+// STUB: BETA10 0x1017202e
+int userVisualCallback(
+	LPDIRECT3DRMUSERVISUAL obj,
+	LPVOID arg,
+	D3DRMUSERVISUALREASON reason,
+	LPDIRECT3DRMDEVICE dev,
+	LPDIRECT3DRMVIEWPORT view
+)
+{
+	// This function calls (among others) into LegoBSP.cpp, which might no longer exist in BETA10
+	return 0;
+}
+
+// FUNCTION: BETA10 0x10172074
+void addDestroyCallback(LPDIRECT3DRMOBJECT obj, LPVOID arg)
+{
+	// intentionally empty
+}
 
 // FUNCTION: LEGO1 0x100a5eb0
+// FUNCTION: BETA10 0x10171cb3
 ViewManager::ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const OrientableROI* point_of_view)
 	: scene(scene), flags(c_bit1 | c_bit2 | c_bit3 | c_bit4)
 {
 	SetPOVSource(point_of_view);
 	prev_render_time = 0.09;
 	GetD3DRM(d3drm, pRenderer);
-	GetFrame(frame, scene);
+	GetFrame(&frame, scene);
+
+#ifdef BETA10
+	LPDIRECT3DRMUSERVISUAL userVisual;
+	if (d3drm->CreateUserVisual(userVisualCallback, this, &userVisual)) {
+		assert(0);
+	}
+	if (userVisual->AddDestroyCallback(addDestroyCallback, this)) {
+		assert(0);
+	}
+	if (frame->AddVisual(userVisual)) {
+		assert(0);
+	}
+	userVisual->Release();
+#endif
+
 	width = 0.0;
 	height = 0.0;
 	view_angle = 0.0;
@@ -476,6 +511,7 @@ void ViewManager::SetFrustrum(float fov, float front, float back)
 }
 
 // FUNCTION: LEGO1 0x100a6da0
+// FUNCTION: BETA10 0x10173977
 void ViewManager::SetPOVSource(const OrientableROI* point_of_view)
 {
 	if (point_of_view != NULL) {
@@ -554,19 +590,28 @@ inline void SetAppData(ViewROI* p_roi, LPD3DRM_APPDATA data)
 {
 	IDirect3DRMFrame2* frame = NULL;
 
-	if (GetFrame(frame, p_roi->GetGeometry()) == 0) {
+	if (GetFrame(&frame, p_roi->GetGeometry()) == 0) {
 		frame->SetAppData(data);
 	}
 }
 
-inline undefined4 GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer)
+// FUNCTION: BETA10 0x10171f30
+inline undefined4 GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* p_tglRenderer)
 {
-	d3drm = ((TglImpl::RendererImpl*) pRenderer)->ImplementationData();
+	assert(p_tglRenderer);
+	TglImpl::RendererImpl* renderer = (TglImpl::RendererImpl*) p_tglRenderer;
+	// TODO: Not thunked in BETA10
+	d3drm = renderer->ImplementationData();
 	return 0;
 }
 
-inline undefined4 GetFrame(IDirect3DRMFrame2*& frame, Tgl::Group* scene)
+// FUNCTION: BETA10 0x10171f82
+inline undefined4 GetFrame(IDirect3DRMFrame2** p_f, Tgl::Group* p_group)
 {
-	frame = ((TglImpl::GroupImpl*) scene)->ImplementationData();
+	assert(p_f && p_group);
+	TglImpl::GroupImpl* cast = (TglImpl::GroupImpl*) p_group;
+	assert(cast);
+	*p_f = cast->ImplementationData();
+	assert(p_f);
 	return 0;
 }
