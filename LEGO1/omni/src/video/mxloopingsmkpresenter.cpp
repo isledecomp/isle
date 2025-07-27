@@ -39,7 +39,7 @@ void MxLoopingSmkPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // FUNCTION: LEGO1 0x100b4a00
-void MxLoopingSmkPresenter::VTable0x88()
+void MxLoopingSmkPresenter::ResetCurrentFrameAtEnd()
 {
 	if (m_mxSmk.m_smackTag.Frames == m_currentFrame) {
 		m_currentFrame = 0;
@@ -66,7 +66,7 @@ void MxLoopingSmkPresenter::NextFrame()
 }
 
 // FUNCTION: LEGO1 0x100b4a90
-void MxLoopingSmkPresenter::VTable0x8c()
+void MxLoopingSmkPresenter::LoadFrameIfRequired()
 {
 	if (m_action->GetDuration() < m_elapsedDuration) {
 		ProgressTickleState(e_freezing);
@@ -110,7 +110,7 @@ void MxLoopingSmkPresenter::RepeatingTickle()
 			break;
 		}
 
-		VTable0x8c();
+		LoadFrameIfRequired();
 
 		m_loopingChunkCursor->Next(chunk);
 
