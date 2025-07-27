@@ -49,7 +49,7 @@ MxLong InfoCenterEntity::HandleClick(LegoEventNotificationParam& p_param)
 		}
 
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
-		isle->FUN_10033350();
+		isle->SwitchToInfocenter();
 		isle->SetDestLocation(LegoGameState::Area::e_infomain);
 
 		Act1State* act1state = (Act1State*) GameState()->GetState("Act1State");
