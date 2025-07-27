@@ -25,11 +25,11 @@ public:
 		return HandlerClassName();
 	}
 
-	void RepeatingTickle() override;  // vtable+0x24
-	MxResult AddToManager() override; // vtable+0x34
-	void Destroy() override;          // vtable+0x38
-	void NextFrame() override;        // vtable+0x64
-	virtual void VTable0x88();        // vtable+0x88
+	void RepeatingTickle() override;    // vtable+0x24
+	MxResult AddToManager() override;   // vtable+0x34
+	void Destroy() override;            // vtable+0x38
+	void NextFrame() override;          // vtable+0x64
+	virtual void LoadFrameIfRequired(); // vtable+0x88
 
 	// SYNTHETIC: LEGO1 0x100b4390
 	// MxLoopingFlcPresenter::`scalar deleting destructor'

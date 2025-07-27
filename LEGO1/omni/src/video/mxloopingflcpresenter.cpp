@@ -56,7 +56,7 @@ void MxLoopingFlcPresenter::NextFrame()
 }
 
 // FUNCTION: LEGO1 0x100b44c0
-void MxLoopingFlcPresenter::VTable0x88()
+void MxLoopingFlcPresenter::LoadFrameIfRequired()
 {
 	if (m_action->GetDuration() < m_elapsedDuration) {
 		ProgressTickleState(e_freezing);
@@ -100,7 +100,7 @@ void MxLoopingFlcPresenter::RepeatingTickle()
 			break;
 		}
 
-		VTable0x88();
+		LoadFrameIfRequired();
 
 		m_loopingChunkCursor->Next(chunk);
 
