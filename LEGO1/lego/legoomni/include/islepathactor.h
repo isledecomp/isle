@@ -102,10 +102,10 @@ public:
 	// FUNCTION: LEGO1 0x10002e00
 	virtual MxLong HandlePathStruct(LegoPathStructNotificationParam&) { return 0; } // vtable+0xdc
 
-	virtual void Enter();                                                                        // vtable+0xe0
-	virtual void Exit();                                                                         // vtable+0xe4
-	virtual void SpawnPlayer(LegoGameState::Area p_area, MxBool p_enter, MxU8 p_flags);          // vtable+0xe8
-	virtual void VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundary, MxBool p_reset); // vtable+0xec
+	virtual void Enter();                                                                         // vtable+0xe0
+	virtual void Exit();                                                                          // vtable+0xe4
+	virtual void SpawnPlayer(LegoGameState::Area p_area, MxBool p_enter, MxU8 p_flags);           // vtable+0xe8
+	virtual void UpdateWorld(MxMatrix p_transform, LegoPathBoundary* p_boundary, MxBool p_reset); // vtable+0xec
 
 	// FUNCTION: LEGO1 0x10002e10
 	~IslePathActor() override { IslePathActor::Destroy(TRUE); }
@@ -129,7 +129,7 @@ public:
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
 
-	void FUN_1001b660();
+	void TurnAround();
 
 	void SetWorld(LegoWorld* p_world) { m_world = p_world; }
 
