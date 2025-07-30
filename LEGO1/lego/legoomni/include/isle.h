@@ -150,18 +150,18 @@ public:
 		return !strcmp(p_name, Isle::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	void ReadyWorld() override;                       // vtable+0x50
-	void Add(MxCore* p_object) override;              // vtable+0x58
-	void VTable0x60() override;                       // vtable+0x60
-	MxBool Escape() override;                         // vtable+0x64
-	void Enable(MxBool p_enable) override;            // vtable+0x68
-	virtual void VTable0x6c(LegoPathActor* p_actor);  // vtable+0x6c
+	MxResult Create(MxDSAction& p_dsAction) override;   // vtable+0x18
+	void ReadyWorld() override;                         // vtable+0x50
+	void Add(MxCore* p_object) override;                // vtable+0x58
+	void VTable0x60() override;                         // vtable+0x60
+	MxBool Escape() override;                           // vtable+0x64
+	void Enable(MxBool p_enable) override;              // vtable+0x68
+	virtual void RemoveVehicle(LegoPathActor* p_actor); // vtable+0x6c
 
 	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
 	MxBool HasHelicopter() { return m_helicopter != NULL; }
 
-	void FUN_10033350();
+	void SwitchToInfocenter();
 
 	friend class Act1State;
 
@@ -175,13 +175,13 @@ protected:
 	MxLong HandleTransitionEnd();
 	void HandleElevatorEndAction();
 	void UpdateGlobe();
-	void FUN_10032620();
+	void CheckAreaExiting();
 	void CreateState();
-	void FUN_10032d30(
+	void TransitionToOverlay(
 		IsleScript::Script p_script,
 		JukeboxScript::Script p_music,
 		const char* p_cameraLocation,
-		MxBool p_und
+		MxBool p_setCamera
 	);
 
 	Act1State* m_act1state;             // 0xf8

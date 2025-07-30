@@ -1164,28 +1164,28 @@ void LegoGameState::Init()
 		Helicopter* copter = (Helicopter*) isle->Find(*g_copterScript, CopterScript::c_Helicopter_Actor);
 		if (copter) {
 			isle->RemoveActor(copter);
-			isle->VTable0x6c(copter);
+			isle->RemoveVehicle(copter);
 			delete copter;
 		}
 
 		DuneBuggy* dunebuggy = (DuneBuggy*) isle->Find(*g_dunecarScript, DunecarScript::c_DuneBugy_Actor);
 		if (dunebuggy) {
 			isle->RemoveActor(dunebuggy);
-			isle->VTable0x6c(dunebuggy);
+			isle->RemoveVehicle(dunebuggy);
 			delete dunebuggy;
 		}
 
 		Jetski* jetski = (Jetski*) isle->Find(*g_jetskiScript, JetskiScript::c_Jetski_Actor);
 		if (jetski) {
 			isle->RemoveActor(jetski);
-			isle->VTable0x6c(jetski);
+			isle->RemoveVehicle(jetski);
 			delete jetski;
 		}
 
 		RaceCar* racecar = (RaceCar*) isle->Find(*g_racecarScript, RacecarScript::c_RaceCar_Actor);
 		if (racecar) {
 			isle->RemoveActor(racecar);
-			isle->VTable0x6c(racecar);
+			isle->RemoveVehicle(racecar);
 			delete racecar;
 		}
 	}
