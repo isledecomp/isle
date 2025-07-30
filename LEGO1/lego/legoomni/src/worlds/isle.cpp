@@ -81,7 +81,7 @@ Isle::~Isle()
 	}
 
 	if (UserActor() != NULL) {
-		VTable0x6c(UserActor());
+		RemoveVehicle(UserActor());
 	}
 
 	NotificationManager()->Unregister(this);
@@ -275,7 +275,7 @@ void Isle::ReadyWorld()
 	}
 	else if (GameState()->GetLoadedAct() != LegoGameState::e_act1) {
 		EnableAnimations(TRUE);
-		FUN_10032620();
+		CheckAreaExiting();
 		m_act1state->PlaceActors();
 		Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 	}
@@ -584,7 +584,7 @@ void Isle::Enable(MxBool p_enable)
 			actor->SetActorState(LegoPathActor::c_initial);
 		}
 		else {
-			FUN_10032620();
+			CheckAreaExiting();
 		}
 
 		switch (GameState()->m_currentArea) {
@@ -858,7 +858,7 @@ void Isle::Enable(MxBool p_enable)
 }
 
 // FUNCTION: LEGO1 0x10032620
-void Isle::FUN_10032620()
+void Isle::CheckAreaExiting()
 {
 	VideoManager()->Get3DManager()->SetFrustrum(90.0, 0.1, 250.0);
 
@@ -909,17 +909,27 @@ MxLong Isle::HandleTransitionEnd()
 	case LegoGameState::e_elevride:
 		m_act1state->m_unk0x01f = TRUE;
 		VariableTable()->SetVariable("VISIBILITY", "Hide infocen");
-		FUN_10032d30(IsleScript::c_ElevRide_Background_Bitmap, JukeboxScript::c_Elevator_Music, "LCAMZI1,90", FALSE);
+		TransitionToOverlay(
+			IsleScript::c_ElevRide_Background_Bitmap,
+			JukeboxScript::c_Elevator_Music,
+			"LCAMZI1,90",
+			FALSE
+		);
 		break;
 	case LegoGameState::e_elevride2:
-		FUN_10032d30(IsleScript::c_ElevRide_Background_Bitmap, JukeboxScript::c_Elevator_Music, "LCAMZI2,90", FALSE);
+		TransitionToOverlay(
+			IsleScript::c_ElevRide_Background_Bitmap,
+			JukeboxScript::c_Elevator_Music,
+			"LCAMZI2,90",
+			FALSE
+		);
 
 		if (m_destLocation == LegoGameState::e_undefined) {
 			((MxStillPresenter*) Find(m_atomId, IsleScript::c_Meter3_Bitmap))->Enable(TRUE);
 		}
 		break;
 	case LegoGameState::e_elevopen:
-		FUN_10032d30(
+		TransitionToOverlay(
 			IsleScript::c_ElevOpen_Background_Bitmap,
 			JukeboxScript::c_InfoCenter_3rd_Floor_Music,
 			"LCAMZIS,90",
@@ -927,7 +937,7 @@ MxLong Isle::HandleTransitionEnd()
 		);
 		break;
 	case LegoGameState::e_seaview:
-		FUN_10032d30(
+		TransitionToOverlay(
 			IsleScript::c_SeaView_Background_Bitmap,
 			JukeboxScript::c_InfoCenter_3rd_Floor_Music,
 			"LCAMZIE,90",
@@ -935,7 +945,7 @@ MxLong Isle::HandleTransitionEnd()
 		);
 		break;
 	case LegoGameState::e_observe:
-		FUN_10032d30(
+		TransitionToOverlay(
 			IsleScript::c_Observe_Background_Bitmap,
 			JukeboxScript::c_InfoCenter_3rd_Floor_Music,
 			"LCAMZIW,90",
@@ -943,7 +953,7 @@ MxLong Isle::HandleTransitionEnd()
 		);
 		break;
 	case LegoGameState::e_elevdown:
-		FUN_10032d30(
+		TransitionToOverlay(
 			IsleScript::c_ElevDown_Background_Bitmap,
 			JukeboxScript::c_InfoCenter_3rd_Floor_Music,
 			"LCAMZIN,90",
@@ -953,7 +963,7 @@ MxLong Isle::HandleTransitionEnd()
 	case LegoGameState::e_garadoor:
 		m_act1state->m_unk0x01f = TRUE;
 		VariableTable()->SetVariable("VISIBILITY", "Hide Gas");
-		FUN_10032d30(IsleScript::c_GaraDoor_Background_Bitmap, JukeboxScript::c_JBMusic2, "LCAMZG1,90", FALSE);
+		TransitionToOverlay(IsleScript::c_GaraDoor_Background_Bitmap, JukeboxScript::c_JBMusic2, "LCAMZG1,90", FALSE);
 		break;
 	case LegoGameState::e_garageExited:
 		GameState()->SwitchArea(m_destLocation);
@@ -978,7 +988,7 @@ MxLong Isle::HandleTransitionEnd()
 	case LegoGameState::e_polidoor:
 		m_act1state->m_unk0x01f = TRUE;
 		VariableTable()->SetVariable("VISIBILITY", "Hide Policsta");
-		FUN_10032d30(
+		TransitionToOverlay(
 			IsleScript::c_PoliDoor_Background_Bitmap,
 			JukeboxScript::c_PoliceStation_Music,
 			"LCAMZP1,90",
@@ -987,7 +997,7 @@ MxLong Isle::HandleTransitionEnd()
 		break;
 	case LegoGameState::e_bike:
 		m_act1state->m_unk0x01f = TRUE;
-		FUN_10032d30(IsleScript::c_BikeDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
+		TransitionToOverlay(IsleScript::c_BikeDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
 			m_bike->ActivateSceneActions();
@@ -995,7 +1005,7 @@ MxLong Isle::HandleTransitionEnd()
 		break;
 	case LegoGameState::e_dunecar:
 		m_act1state->m_unk0x01f = TRUE;
-		FUN_10032d30(IsleScript::c_DuneCarFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
+		TransitionToOverlay(IsleScript::c_DuneCarFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
 			m_dunebuggy->ActivateSceneActions();
@@ -1003,7 +1013,7 @@ MxLong Isle::HandleTransitionEnd()
 		break;
 	case LegoGameState::e_motocycle:
 		m_act1state->m_unk0x01f = TRUE;
-		FUN_10032d30(IsleScript::c_MotoBikeDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
+		TransitionToOverlay(IsleScript::c_MotoBikeDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
 			m_motocycle->ActivateSceneActions();
@@ -1011,11 +1021,11 @@ MxLong Isle::HandleTransitionEnd()
 		break;
 	case LegoGameState::e_copter:
 		m_act1state->m_unk0x01f = TRUE;
-		FUN_10032d30(IsleScript::c_HelicopterDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
+		TransitionToOverlay(IsleScript::c_HelicopterDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 		break;
 	case LegoGameState::e_skateboard:
 		m_act1state->m_unk0x01f = TRUE;
-		FUN_10032d30(IsleScript::c_SkatePizza_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
+		TransitionToOverlay(IsleScript::c_SkatePizza_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
 			m_skateboard->ActivateSceneActions();
@@ -1024,7 +1034,7 @@ MxLong Isle::HandleTransitionEnd()
 	case LegoGameState::e_ambulance:
 		m_act1state->m_unk0x01f = TRUE;
 		m_act1state->m_state = Act1State::e_ambulance;
-		FUN_10032d30(IsleScript::c_AmbulanceFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
+		TransitionToOverlay(IsleScript::c_AmbulanceFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
 			m_ambulance->ActivateSceneActions();
@@ -1033,7 +1043,7 @@ MxLong Isle::HandleTransitionEnd()
 	case LegoGameState::e_towtrack:
 		m_act1state->m_unk0x01f = TRUE;
 		m_act1state->m_state = Act1State::e_towtrack;
-		FUN_10032d30(IsleScript::c_TowFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
+		TransitionToOverlay(IsleScript::c_TowFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
 			m_towtrack->ActivateSceneActions();
@@ -1041,7 +1051,7 @@ MxLong Isle::HandleTransitionEnd()
 		break;
 	case LegoGameState::e_jetski:
 		m_act1state->m_unk0x01f = TRUE;
-		FUN_10032d30(
+		TransitionToOverlay(
 			(IsleScript::Script) m_jetski->GetJetskiDashboardStreamId(),
 			JukeboxScript::c_MusicTheme1,
 			NULL,
@@ -1061,11 +1071,11 @@ MxLong Isle::HandleTransitionEnd()
 }
 
 // FUNCTION: LEGO1 0x10032d30
-void Isle::FUN_10032d30(
+void Isle::TransitionToOverlay(
 	IsleScript::Script p_script,
 	JukeboxScript::Script p_music,
 	const char* p_cameraLocation,
-	MxBool p_und
+	MxBool p_setCamera
 )
 {
 	if (m_act1state->m_unk0x01f) {
@@ -1076,7 +1086,7 @@ void Isle::FUN_10032d30(
 				PlayMusic(p_music);
 			}
 
-			if (p_und) {
+			if (p_setCamera) {
 				InputManager()->SetCamera(m_cameraController);
 			}
 			else {
@@ -1148,7 +1158,7 @@ void Isle::Add(MxCore* p_object)
 }
 
 // FUNCTION: LEGO1 0x10033050
-void Isle::VTable0x6c(LegoPathActor* p_actor)
+void Isle::RemoveVehicle(LegoPathActor* p_actor)
 {
 	LegoWorld::Remove(p_actor);
 
@@ -1250,7 +1260,7 @@ MxBool Isle::Escape()
 }
 
 // FUNCTION: LEGO1 0x10033350
-void Isle::FUN_10033350()
+void Isle::SwitchToInfocenter()
 {
 	if (m_act1state->m_state == Act1State::e_ambulance) {
 		if (UserActor() != NULL && !UserActor()->IsA("Ambulance")) {
@@ -1577,7 +1587,7 @@ void Act1State::RemoveActors()
 		isle->m_helicopter->UpdatePlane(m_helicopterPlane);
 		m_helicopter = isle->m_helicopter;
 		isle->RemoveActor(m_helicopter);
-		isle->VTable0x6c(m_helicopter);
+		isle->RemoveVehicle(m_helicopter);
 		m_helicopter->SetBoundary(NULL);
 		m_helicopter->SetController(NULL);
 	}
@@ -1586,7 +1596,7 @@ void Act1State::RemoveActors()
 		isle->m_jetski->UpdatePlane(m_jetskiPlane);
 		m_jetski = isle->m_jetski;
 		isle->RemoveActor(m_jetski);
-		isle->VTable0x6c(m_jetski);
+		isle->RemoveVehicle(m_jetski);
 		m_jetski->SetBoundary(NULL);
 		m_jetski->SetController(NULL);
 	}
@@ -1595,7 +1605,7 @@ void Act1State::RemoveActors()
 		isle->m_dunebuggy->UpdatePlane(m_dunebuggyPlane);
 		m_dunebuggy = isle->m_dunebuggy;
 		isle->RemoveActor(m_dunebuggy);
-		isle->VTable0x6c(m_dunebuggy);
+		isle->RemoveVehicle(m_dunebuggy);
 		m_dunebuggy->SetBoundary(NULL);
 		m_dunebuggy->SetController(NULL);
 	}
@@ -1604,7 +1614,7 @@ void Act1State::RemoveActors()
 		isle->m_racecar->UpdatePlane(m_racecarPlane);
 		m_racecar = isle->m_racecar;
 		isle->RemoveActor(m_racecar);
-		isle->VTable0x6c(m_racecar);
+		isle->RemoveVehicle(m_racecar);
 		m_racecar->SetBoundary(NULL);
 		m_racecar->SetController(NULL);
 	}
