@@ -35,7 +35,7 @@ public:
 
 	void ActivateSceneActions();
 
-	MxS16 GetUnknown0x160() { return m_jetskiDashboardStreamId; }
+	MxS16 GetJetskiDashboardStreamId() { return m_jetskiDashboardStreamId; }
 
 	// SYNTHETIC: LEGO1 0x1007e5c0
 	// Jetski::`scalar deleting destructor'

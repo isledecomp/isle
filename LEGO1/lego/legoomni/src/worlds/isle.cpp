@@ -1051,7 +1051,12 @@ MxLong Isle::HandleTransitionEnd()
 		break;
 	case LegoGameState::e_jetski:
 		m_act1state->m_unk0x01f = TRUE;
-		TransitionToOverlay((IsleScript::Script) m_jetski->GetUnknown0x160(), JukeboxScript::c_MusicTheme1, NULL, TRUE);
+		TransitionToOverlay(
+			(IsleScript::Script) m_jetski->GetJetskiDashboardStreamId(),
+			JukeboxScript::c_MusicTheme1,
+			NULL,
+			TRUE
+		);
 
 		if (!m_act1state->m_unk0x01f) {
 			m_jetski->ActivateSceneActions();
