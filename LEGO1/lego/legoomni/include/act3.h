@@ -58,7 +58,14 @@ private:
 // SIZE 0x0c
 class Act3State : public LegoState {
 public:
-	Act3State() { m_unk0x08 = 0; }
+	enum {
+		e_initial = 0,
+		e_ready = 1,
+		e_goodEnding = 2,
+		e_badEnding = 3,
+	};
+
+	Act3State() { m_state = Act3State::e_initial; }
 
 	// FUNCTION: LEGO1 0x1000e2f0
 	MxBool IsSerializable() override { return FALSE; }
@@ -80,11 +87,11 @@ public:
 	// SYNTHETIC: LEGO1 0x1000e3c0
 	// Act3State::`scalar deleting destructor'
 
-	undefined4 GetUnknown0x08() { return m_unk0x08; }
+	MxU32 GetState() { return m_state; }
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
-	undefined4 m_unk0x08; // 0x08
+	MxU32 m_state; // 0x08
 };
 
 // VTABLE: LEGO1 0x100d9628

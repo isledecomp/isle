@@ -632,22 +632,22 @@ MxLong Act3::Notify(MxParam& p_param)
 			break;
 		}
 		case c_notificationKeyPress:
-			if (m_state->m_unk0x08 == 1 && ((LegoEventNotificationParam&) p_param).GetKey() == ' ') {
+			if (m_state->m_state == Act3State::e_ready && ((LegoEventNotificationParam&) p_param).GetKey() == ' ') {
 				AnimationManager()->FUN_10061010(FALSE);
 				return 1;
 			}
 			break;
 		case c_notificationButtonUp:
 		case c_notificationButtonDown:
-			if (m_state->m_unk0x08 == 1) {
+			if (m_state->m_state == Act3State::e_ready) {
 				return 1;
 			}
 			break;
 		case c_notificationEndAnim:
-			if (m_state->m_unk0x08 == 1) {
+			if (m_state->m_state == Act3State::e_ready) {
 				assert(m_copter && m_brickster && m_cop1 && m_cop2);
 				m_unk0x4220.RemoveByObjectIdOrFirst(0);
-				m_state->m_unk0x08 = 0;
+				m_state->m_state = Act3State::e_initial;
 				Disable(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 				m_copter->HandleClick();
 				m_copter->m_state->m_unk0x08 = 1;
@@ -686,7 +686,7 @@ void Act3::ReadyWorld()
 	AnimationManager()
 		->FUN_10060dc0(m_unk0x426c, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, TRUE, FALSE, FALSE, FALSE);
 
-	m_state->m_unk0x08 = 1;
+	m_state->m_state = Act3State::e_ready;
 }
 
 // FUNCTION: LEGO1 0x10073300
@@ -758,7 +758,7 @@ void Act3::SetBrickster(Act3Brickster* p_brickster)
 // FUNCTION: LEGO1 0x10073400
 void Act3::FUN_10073400()
 {
-	m_state->m_unk0x08 = 2;
+	m_state->m_state = Act3State::e_goodEnding;
 	m_destLocation = LegoGameState::e_infomain;
 	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 }
@@ -766,7 +766,7 @@ void Act3::FUN_10073400()
 // FUNCTION: LEGO1 0x10073430
 void Act3::FUN_10073430()
 {
-	m_state->m_unk0x08 = 3;
+	m_state->m_state = Act3State::e_badEnding;
 	m_destLocation = LegoGameState::e_infomain;
 	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 }
@@ -794,7 +794,7 @@ void Act3::GoodEnding(const Matrix4& p_destination)
 		m_copter->m_unk0x1f4
 	);
 #else
-	m_state->m_unk0x08 = 2;
+	m_state->m_state = Act3State::e_goodEnding;
 	GameState()->SwitchArea(LegoGameState::Area::e_infomain);
 #endif
 }
