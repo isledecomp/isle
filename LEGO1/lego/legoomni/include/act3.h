@@ -143,15 +143,15 @@ public:
 	MxResult ShootPizza(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
 	MxResult ShootDonut(LegoPathController* p_controller, Vector3& p_location, Vector3& p_direction, Vector3& p_up);
 	void TriggerHitSound(undefined4 p_param1);
-	MxResult FUN_10073360(Act3Ammo& p_ammo, const Vector3& p_param2);
-	MxResult FUN_10073390(Act3Ammo& p_ammo, const Vector3& p_param2);
+	MxResult HitBrickster(Act3Ammo& p_ammo, const Vector3& p_param2);
+	MxResult HitCop(Act3Ammo& p_ammo, const Vector3& p_param2);
 	void SetBrickster(Act3Brickster* p_brickster);
 	void AddCop(Act3Cop* p_cop);
-	void FUN_10073400();
-	void FUN_10073430();
+	void TransitionToGoodEnding();
+	void TransitionToBadEnding();
 	void GoodEnding(const Matrix4& p_destination);
 	void BadEnding(const Matrix4& p_destination);
-	void FUN_10073a60();
+	void DisableHelicopterDot();
 
 	// BETA indicates that the following classes access certain members directly.
 	friend class Act3Ammo;
@@ -171,27 +171,27 @@ protected:
 		const MxQuaternionTransformer& p_quatTransform
 	);
 
-	Act3State* m_state;                 // 0xf8
-	Act3Ammo m_pizzas[MAX_PIZZAS];      // 0xfc
-	Act3Ammo m_donuts[MAX_DONUTS];      // 0x217c
-	undefined m_unk0x41fc;              // 0x41fc
-	Act3Cop* m_cop1;                    // 0x4200
-	Act3Cop* m_cop2;                    // 0x4204
-	Act3Brickster* m_brickster;         // 0x4208
-	Helicopter* m_copter;               // 0x420c
-	Act3Shark* m_shark;                 // 0x4210
-	MxFloat m_time;                     // 0x4214
-	MxU8 m_pizzaHitSound;               // 0x4218
-	MxU8 m_pizzaMissSound;              // 0x4219
-	MxU8 m_copDonutSound;               // 0x421a
-	MxU8 m_donutMissSound;              // 0x421b
-	MxU8 m_islanderSound;               // 0x421c
-	MxU8 m_bricksterDonutSound;         // 0x421d
-	undefined m_unk0x421e;              // 0x421e
-	Act3List m_unk0x4220;               // 0x4220
-	MxPresenter* m_helicopterDots[15];  // 0x4230
-	Act3Script::Script m_unk0x426c;     // 0x426c
-	LegoGameState::Area m_destLocation; // 0x4270
+	Act3State* m_state;                        // 0xf8
+	Act3Ammo m_pizzas[MAX_PIZZAS];             // 0xfc
+	Act3Ammo m_donuts[MAX_DONUTS];             // 0x217c
+	undefined m_unk0x41fc;                     // 0x41fc
+	Act3Cop* m_cop1;                           // 0x4200
+	Act3Cop* m_cop2;                           // 0x4204
+	Act3Brickster* m_brickster;                // 0x4208
+	Helicopter* m_copter;                      // 0x420c
+	Act3Shark* m_shark;                        // 0x4210
+	MxFloat m_time;                            // 0x4214
+	MxU8 m_pizzaHitSound;                      // 0x4218
+	MxU8 m_pizzaMissSound;                     // 0x4219
+	MxU8 m_copDonutSound;                      // 0x421a
+	MxU8 m_donutMissSound;                     // 0x421b
+	MxU8 m_islanderSound;                      // 0x421c
+	MxU8 m_bricksterDonutSound;                // 0x421d
+	undefined m_helicopterDotCount;            // 0x421e
+	Act3List m_soundList;                      // 0x4220
+	MxPresenter* m_helicopterDots[15];         // 0x4230
+	Act3Script::Script m_explanationAnimation; // 0x426c
+	LegoGameState::Area m_destLocation;        // 0x4270
 };
 
 // TEMPLATE: LEGO1 0x10071f10
