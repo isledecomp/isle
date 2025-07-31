@@ -330,15 +330,15 @@ MxResult Act3::ShootPizza(LegoPathController* p_controller, Vector3& p_location,
 
 			m_pizzas[nextPizza].Create(this, TRUE, nextPizza);
 
-			if (m_pizzas[nextPizza].FUN_10053b40(p_location, p_direction, p_up) != SUCCESS) {
+			if (m_pizzas[nextPizza].CalculateArc(p_location, p_direction, p_up) != SUCCESS) {
 				return FAILURE;
 			}
 
-			MxFloat unk0x19c = *m_pizzas[nextPizza].GetUnknown0x19c();
+			MxFloat unk0x19c = *m_pizzas[nextPizza].GetApexParameter();
 			if (p_controller->FUN_1004a380(
 					p_location,
 					p_direction,
-					m_pizzas[nextPizza].GetUnknown0x160(),
+					m_pizzas[nextPizza].GetCoefficients(),
 					boundary,
 					unk0x19c
 				) == SUCCESS) {
@@ -353,7 +353,7 @@ MxResult Act3::ShootPizza(LegoPathController* p_controller, Vector3& p_location,
 				direction -= m_brickster->GetROI()->GetLocal2World()[3];
 
 				local18 = FALSE;
-				if (m_pizzas[nextPizza].FUN_10053cb0(p_controller, boundary, unk0x19c) == SUCCESS) {
+				if (m_pizzas[nextPizza].Shoot(p_controller, boundary, unk0x19c) == SUCCESS) {
 					p_controller->PlaceActor(&m_pizzas[nextPizza]);
 					boundary->AddActor(&m_pizzas[nextPizza]);
 					m_pizzas[nextPizza].SetWorldSpeed(10.0f);
@@ -361,7 +361,7 @@ MxResult Act3::ShootPizza(LegoPathController* p_controller, Vector3& p_location,
 				}
 			}
 
-			if (local18 && m_pizzas[nextPizza].FUN_10053d30(p_controller, unk0x19c) == SUCCESS) {
+			if (local18 && m_pizzas[nextPizza].Shoot(p_controller, unk0x19c) == SUCCESS) {
 				p_controller->PlaceActor(&m_pizzas[nextPizza]);
 				m_pizzas[nextPizza].SetWorldSpeed(10.0f);
 				return SUCCESS;
@@ -385,26 +385,26 @@ MxResult Act3::ShootDonut(LegoPathController* p_controller, Vector3& p_location,
 
 			m_donuts[nextDonut].Create(this, FALSE, nextDonut);
 
-			if (m_donuts[nextDonut].FUN_10053b40(p_location, p_direction, p_up) != SUCCESS) {
+			if (m_donuts[nextDonut].CalculateArc(p_location, p_direction, p_up) != SUCCESS) {
 				return FAILURE;
 			}
 
-			MxFloat unk0x19c = *m_donuts[nextDonut].GetUnknown0x19c();
+			MxFloat unk0x19c = *m_donuts[nextDonut].GetApexParameter();
 			if (p_controller->FUN_1004a380(
 					p_location,
 					p_direction,
-					m_donuts[nextDonut].GetUnknown0x160(),
+					m_donuts[nextDonut].GetCoefficients(),
 					boundary,
 					unk0x19c
 				) == SUCCESS) {
-				if (m_donuts[nextDonut].FUN_10053cb0(p_controller, boundary, unk0x19c) == SUCCESS) {
+				if (m_donuts[nextDonut].Shoot(p_controller, boundary, unk0x19c) == SUCCESS) {
 					p_controller->PlaceActor(&m_donuts[nextDonut]);
 					boundary->AddActor(&m_donuts[nextDonut]);
 					m_donuts[nextDonut].SetWorldSpeed(10.0f);
 					return SUCCESS;
 				}
 			}
-			else if (m_donuts[nextDonut].FUN_10053d30(p_controller, unk0x19c) == SUCCESS) {
+			else if (m_donuts[nextDonut].Shoot(p_controller, unk0x19c) == SUCCESS) {
 				p_controller->PlaceActor(&m_donuts[nextDonut]);
 				m_donuts[nextDonut].SetWorldSpeed(10.0f);
 				return SUCCESS;
@@ -936,7 +936,7 @@ void Act3::Enable(MxBool p_enable)
 				if (m_pizzas[i].IsValid()) {
 					m_pizzas[i].SetLastTime(m_pizzas[i].GetLastTime() + delta);
 					m_pizzas[i].SetActorTime(m_pizzas[i].GetActorTime() + delta);
-					m_pizzas[i].SetUnknown0x158(m_pizzas[i].GetUnknown0x158() + delta);
+					m_pizzas[i].SetRotateTimeout(m_pizzas[i].GetRotateTimeout() + delta);
 				}
 			}
 
@@ -944,7 +944,7 @@ void Act3::Enable(MxBool p_enable)
 				if (m_donuts[i].IsValid()) {
 					m_donuts[i].SetLastTime(m_donuts[i].GetLastTime() + delta);
 					m_donuts[i].SetActorTime(m_donuts[i].GetActorTime() + delta);
-					m_donuts[i].SetUnknown0x158(m_donuts[i].GetUnknown0x158() + delta);
+					m_donuts[i].SetRotateTimeout(m_donuts[i].GetRotateTimeout() + delta);
 				}
 			}
 
