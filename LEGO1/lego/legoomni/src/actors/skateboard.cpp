@@ -59,7 +59,7 @@ void SkateBoard::Exit()
 	if (m_act1state->m_state == Act1State::e_pizza) {
 		Pizza* pizza = (Pizza*) CurrentWorld()->Find(*g_isleScript, IsleScript::c_Pizza_Actor);
 		pizza->StopActions();
-		pizza->FUN_100382b0();
+		pizza->Reset();
 		m_pizzaVisible = FALSE;
 	}
 

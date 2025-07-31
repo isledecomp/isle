@@ -1212,7 +1212,7 @@ MxBool Isle::Escape()
 	case Act1State::e_pizza:
 		if (UserActor() != NULL) {
 			m_pizza->StopActions();
-			m_pizza->FUN_100382b0();
+			m_pizza->Reset();
 		}
 		break;
 	case Act1State::e_towtrack:
@@ -1279,7 +1279,7 @@ void Isle::SwitchToInfocenter()
 	if (m_act1state->m_state == Act1State::e_pizza) {
 		if (UserActor() != NULL) {
 			m_pizza->StopActions();
-			m_pizza->FUN_100382b0();
+			m_pizza->Reset();
 		}
 	}
 
