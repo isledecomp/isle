@@ -151,8 +151,8 @@ void Motocycle::ActivateSceneActions()
 	PlayMusic(JukeboxScript::c_PoliceStation_Music);
 
 	Act1State* act1state = (Act1State*) GameState()->GetState("Act1State");
-	if (!act1state->m_unk0x022) {
-		act1state->m_unk0x022 = TRUE;
+	if (!act1state->m_playedExitExplanation) {
+		act1state->m_playedExitExplanation = TRUE;
 
 		MxMatrix mat(UserActor()->GetROI()->GetLocal2World());
 		mat.TranslateBy(mat[2][0] * 2.5, mat[2][1] + 0.7, mat[2][2] * 2.5);

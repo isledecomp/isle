@@ -151,8 +151,8 @@ void SkateBoard::ActivateSceneActions()
 	if (m_act1state->m_state != Act1State::e_pizza) {
 		PlayMusic(JukeboxScript::c_BeachBlvd_Music);
 
-		if (!m_act1state->m_unk0x022) {
-			m_act1state->m_unk0x022 = TRUE;
+		if (!m_act1state->m_playedExitExplanation) {
+			m_act1state->m_playedExitExplanation = TRUE;
 
 			MxMatrix mat(UserActor()->GetROI()->GetLocal2World());
 			mat.TranslateBy(mat[2][0] * 2.5, mat[2][1] + 0.2, mat[2][2] * 2.5);
