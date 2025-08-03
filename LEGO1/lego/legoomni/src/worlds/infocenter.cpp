@@ -516,7 +516,7 @@ void Infocenter::ReadyWorld()
 		LegoAct2State* state = (LegoAct2State*) GameState()->GetState("LegoAct2State");
 		GameState()->FindLoadedAct();
 
-		if (state && state->GetUnknown0x08() == 0x68) {
+		if (state && state->GetState() == LegoAct2State::c_badEnding) {
 			bg->Enable(TRUE);
 			PlayCutscene(e_badEndMovie, TRUE);
 			m_infocenterState->m_state = InfocenterState::e_playCutscene;
