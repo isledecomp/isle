@@ -18,14 +18,20 @@ class MxQuaternionTransformer;
 
 // SIZE 0x0c
 struct Act3ListElement {
-	MxU32 m_objectId;     // 0x00
-	undefined4 m_unk0x04; // 0x04
-	MxBool m_hasStarted;  // 0x08
+	enum InsertMode {
+		e_replaceAction = 1,
+		e_queueAction = 2,
+		e_onlyIfEmpty = 3
+	};
+
+	MxU32 m_objectId;        // 0x00
+	InsertMode m_insertMode; // 0x04
+	MxBool m_hasStarted;     // 0x08
 
 	Act3ListElement() {}
 
-	Act3ListElement(MxU32 p_objectId, undefined4 p_unk0x04, MxBool p_hasStarted)
-		: m_objectId(p_objectId), m_unk0x04(p_unk0x04), m_hasStarted(p_hasStarted)
+	Act3ListElement(MxU32 p_objectId, InsertMode p_insertMode, MxBool p_hasStarted)
+		: m_objectId(p_objectId), m_insertMode(p_insertMode), m_hasStarted(p_hasStarted)
 	{
 	}
 
@@ -36,21 +42,15 @@ struct Act3ListElement {
 // SIZE 0x10
 class Act3List : private list<Act3ListElement> {
 public:
-	enum InsertMode {
-		e_replaceAction = 1,
-		e_queueAction = 2,
-		e_onlyIfEmpty = 3
-	};
+	Act3List() { m_cleared = FALSE; }
 
-	Act3List() { m_unk0x0c = 0; }
-
-	void Insert(MxS32 p_objectId, InsertMode p_option);
+	void Insert(MxS32 p_objectId, Act3ListElement::InsertMode p_option);
 	void DeleteActionWrapper();
 	void Clear();
 	void RemoveByObjectIdOrFirst(MxU32 p_objectId);
 
 private:
-	undefined4 m_unk0x0c; // 0x0c
+	MxU32 m_cleared; // 0x0c
 };
 
 // VTABLE: LEGO1 0x100d4fc8
