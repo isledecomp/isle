@@ -561,14 +561,14 @@ void Infocenter::ReadyWorld()
 		Act3State* state = (Act3State*) GameState()->GetState("Act3State");
 		GameState()->FindLoadedAct();
 
-		if (state && state->GetUnknown0x08() == 3) {
+		if (state && state->GetState() == Act3State::e_badEnding) {
 			bg->Enable(TRUE);
 			PlayCutscene(e_badEndMovie, TRUE);
 			m_infocenterState->m_state = InfocenterState::e_playCutscene;
 			return;
 		}
 
-		if (state && state->GetUnknown0x08() == 2) {
+		if (state && state->GetState() == Act3State::e_goodEnding) {
 			bg->Enable(TRUE);
 			PlayCutscene(e_goodEndMovie, TRUE);
 			m_infocenterState->m_state = InfocenterState::e_playCutscene;
