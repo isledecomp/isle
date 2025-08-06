@@ -282,6 +282,17 @@ MxResult MxBackgroundAudioManager::PlayMusic(
 	return FAILURE;
 }
 
+// FUNCTION: BETA10 0x100e92ec
+void MxBackgroundAudioManager::Adjust(MxS32 p_volume, MxS32 p_speed, MxPresenter::TickleState p_tickleState)
+{
+	assert(p_volume >= 0 && p_volume <= 100);
+	assert(p_speed > 0);
+
+	m_tickleState = p_tickleState;
+	m_speed = p_speed;
+	m_targetVolume = p_volume;
+}
+
 // FUNCTION: LEGO1 0x1007f470
 // FUNCTION: BETA10 0x100e9388
 void MxBackgroundAudioManager::Stop()
