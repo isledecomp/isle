@@ -317,6 +317,42 @@ void LegoCacheSound::MuteStop(MxBool p_muted)
 	}
 }
 
+// FUNCTION: BETA10 0x10066f4d
+MxResult LegoCacheSound::GetFrequency(LPDWORD p_freq)
+{
+	return m_dsBuffer->GetFrequency(p_freq);
+}
+
+// FUNCTION: BETA10 0x10066f7b
+MxResult LegoCacheSound::SetFrequency(DWORD p_freq)
+{
+	return m_dsBuffer->SetFrequency(p_freq);
+}
+
+// FUNCTION: BETA10 0x10066fa9
+LegoCacheSound::LegoCacheSound(LegoCacheSound& p_sound)
+{
+	CopyFrom(p_sound);
+}
+
+// FUNCTION: BETA10 0x10067062
+LegoCacheSound& LegoCacheSound::operator=(LegoCacheSound& p_sound)
+{
+	if (this == &p_sound) {
+		return *this;
+	}
+
+	CopyFrom(p_sound);
+	return *this;
+}
+
+// FUNCTION: BETA10 0x1006709d
+void LegoCacheSound::CopyFrom(LegoCacheSound& p_sound)
+{
+	MessageBox(NULL, "don't know how to copy DirectSoundBuffer", NULL, MB_OK);
+	assert(0);
+}
+
 // FUNCTION: LEGO1 0x10006d80
 // FUNCTION: BETA10 0x100670e7
 MxString LegoCacheSound::GetBaseFilename(MxString& p_path)

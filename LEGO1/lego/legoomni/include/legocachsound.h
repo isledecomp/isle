@@ -12,6 +12,7 @@
 class LegoCacheSound : public MxCore {
 public:
 	LegoCacheSound();
+	LegoCacheSound(LegoCacheSound& p_sound);
 	~LegoCacheSound() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10006580
@@ -48,6 +49,10 @@ public:
 	void SetDistance(MxS32 p_min, MxS32 p_max);
 	void MuteSilence(MxBool p_muted);
 	void MuteStop(MxBool p_mute);
+	MxResult GetFrequency(LPDWORD p_freq);
+	MxResult SetFrequency(DWORD p_freq);
+	LegoCacheSound& operator=(LegoCacheSound& p_sound);
+	void CopyFrom(LegoCacheSound& p_sound);
 
 	// SYNTHETIC: LEGO1 0x10006610
 	// SYNTHETIC: BETA10 0x100675b0
