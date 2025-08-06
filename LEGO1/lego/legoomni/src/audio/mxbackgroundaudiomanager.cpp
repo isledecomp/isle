@@ -283,14 +283,14 @@ MxResult MxBackgroundAudioManager::PlayMusic(
 }
 
 // FUNCTION: BETA10 0x100e92ec
-void MxBackgroundAudioManager::Adjust(MxS32 p_volume, MxS32 p_speed, MxPresenter::TickleState p_tickleState)
+void MxBackgroundAudioManager::Update(MxS32 p_targetVolume, MxS32 p_speed, MxPresenter::TickleState p_tickleState)
 {
-	assert(p_volume >= 0 && p_volume <= 100);
+	assert(p_targetVolume >= 0 && p_targetVolume <= 100);
 	assert(p_speed > 0);
 
 	m_tickleState = p_tickleState;
 	m_speed = p_speed;
-	m_targetVolume = p_volume;
+	m_targetVolume = p_targetVolume;
 }
 
 // FUNCTION: LEGO1 0x1007f470
