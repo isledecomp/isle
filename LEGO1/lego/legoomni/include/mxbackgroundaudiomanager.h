@@ -47,6 +47,7 @@ public:
 	virtual MxResult Create(MxAtomId& p_script, MxU32 p_frequencyMS);
 
 	void Init();
+	void Update(MxS32 p_targetVolume, MxS32 p_speed, MxPresenter::TickleState p_tickleState);
 	void Stop();
 	void LowerVolume();
 	void RaiseVolume();
