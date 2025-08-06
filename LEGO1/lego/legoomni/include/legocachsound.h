@@ -49,8 +49,8 @@ public:
 	void SetDistance(MxS32 p_min, MxS32 p_max);
 	void MuteSilence(MxBool p_muted);
 	void MuteStop(MxBool p_mute);
-	MxResult GetFrequency(MxULong* p_freq);
-	MxResult SetFrequency(MxULong p_freq);
+	MxResult GetFrequency(LPDWORD p_freq);
+	MxResult SetFrequency(DWORD p_freq);
 	LegoCacheSound& operator=(LegoCacheSound& p_sound);
 	void CopyFrom(LegoCacheSound& p_sound);
 

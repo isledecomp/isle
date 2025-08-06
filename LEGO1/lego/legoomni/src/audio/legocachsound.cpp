@@ -318,13 +318,13 @@ void LegoCacheSound::MuteStop(MxBool p_muted)
 }
 
 // FUNCTION: BETA10 0x10066f4d
-MxResult LegoCacheSound::GetFrequency(MxULong* p_freq)
+MxResult LegoCacheSound::GetFrequency(LPDWORD p_freq)
 {
 	return m_dsBuffer->GetFrequency(p_freq);
 }
 
 // FUNCTION: BETA10 0x10066f7b
-MxResult LegoCacheSound::SetFrequency(MxULong p_freq)
+MxResult LegoCacheSound::SetFrequency(DWORD p_freq)
 {
 	return m_dsBuffer->SetFrequency(p_freq);
 }
