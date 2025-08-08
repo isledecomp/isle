@@ -15,9 +15,13 @@ class MxEndActionNotificationParam;
 // SIZE 0x10
 class LegoAct2State : public LegoState {
 public:
+	enum {
+		c_badEnding = 104
+	};
+
 	LegoAct2State()
 	{
-		m_unk0x08 = 0;
+		m_state = 0;
 		m_enabled = FALSE;
 	}
 	~LegoAct2State() override {}
@@ -43,14 +47,14 @@ public:
 	// LegoAct2State::`scalar deleting destructor'
 
 	// FUNCTION: BETA10 0x100151b0
-	void SetUnknown0x08(undefined4 p_unk0x08) { m_unk0x08 = p_unk0x08; }
+	void SetState(MxU32 p_state) { m_state = p_state; }
 
-	undefined4 GetUnknown0x08() { return m_unk0x08; }
+	MxU32 GetState() { return m_state; }
 
 	// TODO: Most likely getters/setters are not used according to BETA. (?)
 
-	undefined4 m_unk0x08; // 0x08
-	MxBool m_enabled;     // 0x0c
+	MxU32 m_state;    // 0x08
+	MxBool m_enabled; // 0x0c
 };
 
 // VTABLE: LEGO1 0x100d82e0

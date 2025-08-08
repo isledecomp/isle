@@ -127,7 +127,7 @@ MxResult LegoAct2::Create(MxDSAction& p_dsAction)
 		}
 
 		m_gameState = state;
-		m_gameState->m_unk0x08 = 0;
+		m_gameState->m_state = 0;
 
 		switch (GameState()->GetLoadedAct()) {
 		case LegoGameState::e_act2:
@@ -933,7 +933,7 @@ MxResult LegoAct2::BadEnding()
 	LegoPathActor* actor = m_unk0x1138;
 	actor->SetActorState(LegoPathActor::c_disabled);
 
-	m_gameState->SetUnknown0x08(104);
+	m_gameState->SetState(LegoAct2State::c_badEnding);
 	m_destLocation = LegoGameState::e_infomain;
 	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 
