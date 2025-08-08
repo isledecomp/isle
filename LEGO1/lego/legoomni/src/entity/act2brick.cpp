@@ -31,7 +31,7 @@ MxLong Act2Brick::g_lastHitActorTime = 0;
 Act2Brick::Act2Brick()
 {
 	m_whistleSound = NULL;
-	m_unk0x164 = 0;
+	m_state = Act2Brick::e_removed;
 }
 
 // FUNCTION: LEGO1 0x1007a470
@@ -72,7 +72,7 @@ MxResult Act2Brick::Create(MxS32 p_index)
 
 	m_roi->SetEntity(this);
 	CurrentWorld()->Add(this);
-	m_unk0x164 = 1;
+	m_state = Act2Brick::e_created;
 	return SUCCESS;
 }
 
@@ -88,27 +88,27 @@ void Act2Brick::Remove()
 		m_roi = NULL;
 	}
 
-	m_unk0x164 = 0;
+	m_state = Act2Brick::e_removed;
 }
 
 // FUNCTION: LEGO1 0x1007a670
 // FUNCTION: BETA10 0x10012c04
-void Act2Brick::FUN_1007a670(MxMatrix& p_param1, MxMatrix& p_param2, LegoPathBoundary* p_boundary)
+void Act2Brick::Place(MxMatrix& p_localToWorld, MxMatrix& p_endLocalToWorld, LegoPathBoundary* p_boundary)
 {
-	m_unk0x17c = p_param2[3];
-	m_unk0x168 = p_param2[3];
-	m_unk0x168 -= p_param1[3];
-	m_unk0x168 /= 8.0f;
+	m_endLocalToWorld = p_endLocalToWorld[3];
+	m_localToWorldMovementStep = p_endLocalToWorld[3];
+	m_localToWorldMovementStep -= p_localToWorld[3];
+	m_localToWorldMovementStep /= 8.0f;
 
-	m_unk0x190 = 0;
+	m_step = 0;
 	TickleManager()->RegisterClient(this, 20);
 
-	m_unk0x164 = 2;
+	m_state = Act2Brick::e_placed;
 	CurrentWorld()->PlaceActor(this);
 	p_boundary->AddActor(this);
 
 	SetActorState(c_disabled);
-	m_roi->SetLocal2World(p_param1);
+	m_roi->SetLocal2World(p_localToWorld);
 	m_roi->WrappedUpdateWorldData();
 	m_roi->SetVisibility(TRUE);
 }
@@ -136,15 +136,15 @@ MxResult Act2Brick::HitActor(LegoPathActor* p_actor, MxBool)
 MxResult Act2Brick::Tickle()
 {
 	MxMatrix local2world(m_roi->GetLocal2World());
-	m_unk0x190++;
+	m_step++;
 
-	if (m_unk0x190 >= 8) {
-		local2world.SetTranslation(m_unk0x17c[0], m_unk0x17c[1], m_unk0x17c[2]);
-		m_unk0x164 = 3;
+	if (m_step >= 8) {
+		local2world.SetTranslation(m_endLocalToWorld[0], m_endLocalToWorld[1], m_endLocalToWorld[2]);
+		m_state = Act2Brick::e_atRest;
 		TickleManager()->UnregisterClient(this);
 	}
 	else {
-		VPV3(local2world[3], local2world[3], m_unk0x168);
+		VPV3(local2world[3], local2world[3], m_localToWorldMovementStep);
 	}
 
 	m_roi->SetLocal2World(local2world);
@@ -165,7 +165,7 @@ MxLong Act2Brick::Notify(MxParam& p_param)
 			StopWhistleSound();
 		}
 
-		MxNotificationParam param(c_notificationType22, this);
+		MxNotificationParam param(c_notificationAct2Brick, this);
 		NotificationManager()->Send(CurrentWorld(), param);
 		return 1;
 	}
