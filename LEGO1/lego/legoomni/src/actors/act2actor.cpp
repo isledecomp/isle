@@ -287,7 +287,7 @@ void Act2Actor::Animate(float p_time)
 			}
 
 			SetWorldSpeed(0.0f);
-			((LegoAct2*) CurrentWorld())->FUN_100517b0();
+			((LegoAct2*) CurrentWorld())->CreateBrick();
 			return;
 		}
 #endif
@@ -355,7 +355,7 @@ void Act2Actor::Animate(float p_time)
 									m_state = e_createdBrick;
 									m_createBrickTime = p_time;
 
-									if (((LegoAct2*) CurrentWorld())->CreateBrick() == SUCCESS) {
+									if (((LegoAct2*) CurrentWorld())->CreateDroppingBrick() == SUCCESS) {
 										PlayNextVoiceOver(VoiceOver::e_behind);
 									}
 #ifndef BETA10

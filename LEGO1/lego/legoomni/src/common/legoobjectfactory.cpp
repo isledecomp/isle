@@ -389,7 +389,7 @@ MxCore* LegoObjectFactory::Create(const char* p_name)
 	}
 	else if (m_idAct2Actor == atom) {
 		Act2Actor* actor = new Act2Actor();
-		((LegoAct2*) CurrentWorld())->SetUnknown0x1138(actor);
+		((LegoAct2*) CurrentWorld())->SetAmbulanceActor(actor);
 		object = actor;
 	}
 	else if (m_idAct2Brick == atom) {
