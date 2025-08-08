@@ -172,7 +172,7 @@ public:
 		History();
 		void WriteScoreHistory();
 		MxResult Serialize(LegoStorage* p_storage);
-		ScoreItem* FindPlayerInScoreHistory(Username* p_player, MxS16 p_unk0x24, MxS32& p_unk0x2c);
+		ScoreItem* FindPlayerInScoreHistory(Username* p_player, MxS16 p_playerId, MxS32& p_playerScoreHistoryIndex);
 
 		// FUNCTION: BETA10 0x1002c2b0
 		MxS16 GetCount() { return m_count; }
@@ -260,7 +260,7 @@ public:
 	MxBool m_isDirty;                     // 0x420
 	Area m_currentArea;                   // 0x424
 	Area m_previousArea;                  // 0x428
-	Area m_unk0x42c;                      // 0x42c
+	Area m_savedPreviousArea;             // 0x42c
 };
 
 MxBool ROIColorOverride(const char* p_input, char* p_output, MxU32 p_copyLen);

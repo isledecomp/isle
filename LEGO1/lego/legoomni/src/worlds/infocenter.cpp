@@ -220,7 +220,7 @@ MxResult Infocenter::Create(MxDSAction& p_dsAction)
 
 	if (m_infocenterState->m_state == InfocenterState::e_selectedSave) {
 		LegoGameState* state = GameState();
-		state->m_previousArea = GameState()->m_unk0x42c;
+		state->m_previousArea = GameState()->m_savedPreviousArea;
 	}
 
 	InputManager()->Register(this);
@@ -1082,7 +1082,7 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 			actionToPlay = GameState()->GetCurrentAct() != LegoGameState::e_act1 ? InfomainScript::c_GoTo_RegBook_Red
 																				 : InfomainScript::c_GoTo_RegBook;
 			m_radio.Stop();
-			GameState()->m_unk0x42c = GameState()->m_previousArea;
+			GameState()->m_savedPreviousArea = GameState()->m_previousArea;
 			InputManager()->DisableInputProcessing();
 			break;
 		case InfomainScript::c_Mama_Ctl:
@@ -1392,7 +1392,7 @@ void Infocenter::Reset()
 	CharacterManager()->ReleaseAllActors();
 	GameState()->SetCurrentAct(LegoGameState::e_act1);
 	GameState()->m_previousArea = LegoGameState::e_undefined;
-	GameState()->m_unk0x42c = LegoGameState::e_undefined;
+	GameState()->m_savedPreviousArea = LegoGameState::e_undefined;
 
 	InitializeBitmaps();
 	m_selectedCharacter = e_pepper;
