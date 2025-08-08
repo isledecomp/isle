@@ -355,7 +355,7 @@ void Act2Actor::Animate(float p_time)
 									m_unk0x1e = 3;
 									m_unk0x24 = p_time;
 
-									if (((LegoAct2*) CurrentWorld())->FUN_100516b0() == SUCCESS) {
+									if (((LegoAct2*) CurrentWorld())->CreateBrick() == SUCCESS) {
 										FUN_100199f0(1);
 									}
 #ifndef BETA10
@@ -648,13 +648,13 @@ void Act2Actor::FUN_100199f0(MxS8 p_param)
 		switch (g_nextHeadWavIndex) {
 		case 0:
 			((LegoAct2*) CurrentWorld())
-				->FUN_10052560(Act2mainScript::c_VOhead0_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+				->StartAction(Act2mainScript::c_VOhead0_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
 
 			g_nextHeadWavIndex++;
 			break;
 		default:
 			((LegoAct2*) CurrentWorld())
-				->FUN_10052560(Act2mainScript::c_VOhead1_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+				->StartAction(Act2mainScript::c_VOhead1_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
 			g_nextHeadWavIndex = 0;
 			break;
 		}
@@ -663,22 +663,22 @@ void Act2Actor::FUN_100199f0(MxS8 p_param)
 		switch (g_nextBehindWavIndex) {
 		case 0:
 			((LegoAct2*) CurrentWorld())
-				->FUN_10052560(Act2mainScript::c_VObehind0_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
+				->StartAction(Act2mainScript::c_VObehind0_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
 			g_nextBehindWavIndex++;
 			break;
 		case 1:
 			((LegoAct2*) CurrentWorld())
-				->FUN_10052560(Act2mainScript::c_VObehind1_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
+				->StartAction(Act2mainScript::c_VObehind1_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
 			g_nextBehindWavIndex++;
 			break;
 		case 2:
 			((LegoAct2*) CurrentWorld())
-				->FUN_10052560(Act2mainScript::c_VObehind2_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
+				->StartAction(Act2mainScript::c_VObehind2_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
 			g_nextBehindWavIndex++;
 			break;
 		default:
 			((LegoAct2*) CurrentWorld())
-				->FUN_10052560(Act2mainScript::c_VObehind3_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
+				->StartAction(Act2mainScript::c_VObehind3_PlayWav, FALSE, TRUE, NULL, NULL, NULL);
 			g_nextBehindWavIndex = 0;
 			break;
 		}
@@ -687,22 +687,22 @@ void Act2Actor::FUN_100199f0(MxS8 p_param)
 		switch (g_nextInterruptWavIndex) {
 		case 0:
 			((LegoAct2*) CurrentWorld())
-				->FUN_10052560(Act2mainScript::c_VOinterrupt0_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+				->StartAction(Act2mainScript::c_VOinterrupt0_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
 			g_nextInterruptWavIndex++;
 			break;
 		case 1:
 			((LegoAct2*) CurrentWorld())
-				->FUN_10052560(Act2mainScript::c_VOinterrupt1_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+				->StartAction(Act2mainScript::c_VOinterrupt1_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
 			g_nextInterruptWavIndex++;
 			break;
 		case 2:
 			((LegoAct2*) CurrentWorld())
-				->FUN_10052560(Act2mainScript::c_VOinterrupt2_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+				->StartAction(Act2mainScript::c_VOinterrupt2_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
 			g_nextInterruptWavIndex++;
 			break;
 		default:
 			((LegoAct2*) CurrentWorld())
-				->FUN_10052560(Act2mainScript::c_VOinterrupt3_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
+				->StartAction(Act2mainScript::c_VOinterrupt3_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
 			g_nextInterruptWavIndex = 0;
 			break;
 		}
