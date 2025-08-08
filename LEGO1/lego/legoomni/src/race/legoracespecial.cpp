@@ -32,11 +32,11 @@ const char* g_fuel = "FUEL";
 const char* g_racing = "RACING";
 
 // GLOBAL: LEGO1 0x100f7aec
-MxFloat LegoCarRaceActor::g_unk0x100f7aec = 8.0f;
+MxFloat LegoCarRaceActor::g_maxSpeed = 8.0f;
 
 // GLOBAL: LEGO1 0x100da044
 // GLOBAL: BETA10 0x101be9fc
-MxFloat g_unk0x100da044 = 8.0f;
+MxFloat g_maxWorldSpeed = 8.0f;
 
 // FUNCTION: LEGO1 0x10080350
 // FUNCTION: BETA10 0x100cd6b0
@@ -47,10 +47,10 @@ LegoCarRaceActor::LegoCarRaceActor()
 	m_animState = 0;
 	m_maxLinearVel = 0.0f;
 	m_frequencyFactor = 1.0f;
-	m_unk0x1c = 0;
-	m_unk0x10 = 0.65f;
-	m_unk0x14 = 0.03f;
-	m_unk0x18 = 0.6f;
+	m_lastAcceleration = 0;
+	m_curveSpeedFactor = 0.65f;
+	m_acceleration = 0.03f;
+	m_rubberBandFactor = 0.6f;
 	m_wallHitDirectionFactor = 0.1f;
 	m_linearRotationRatio = -5.0f;
 	m_canRotate = 1;
@@ -59,43 +59,43 @@ LegoCarRaceActor::LegoCarRaceActor()
 
 // FUNCTION: LEGO1 0x10080590
 // FUNCTION: BETA10 0x100cd8cf
-void LegoCarRaceActor::FUN_10080590(float p_time)
+void LegoCarRaceActor::UpdateWorldSpeed(float p_time)
 {
 	MxFloat maxSpeed = m_maxLinearVel;
-	Mx3DPointFloat destEdgeUnknownVector;
+	Mx3DPointFloat edgeNormal;
 	Mx3DPointFloat worldDirection = Mx3DPointFloat(m_roi->GetWorldDirection());
 
-	m_destEdge->GetFaceNormal(*m_boundary, destEdgeUnknownVector);
+	m_destEdge->GetFaceNormal(*m_boundary, edgeNormal);
 
-	if (abs(destEdgeUnknownVector.Dot(destEdgeUnknownVector.GetData(), worldDirection.GetData())) > 0.5) {
-		maxSpeed *= m_unk0x10;
+	if (abs(edgeNormal.Dot(edgeNormal.GetData(), worldDirection.GetData())) > 0.5) {
+		maxSpeed *= m_curveSpeedFactor;
 	}
 
-	MxS32 deltaUnk0x70;
+	MxS32 deltaPathStructs;
 	LegoPathActor* userActor = UserActor();
 
 	if (userActor) {
 		// All known implementations of LegoPathActor->GetLastPathStruct() return LegoPathActor::m_lastPathStruct
-		deltaUnk0x70 = m_lastPathStruct - userActor->GetLastPathStruct();
+		deltaPathStructs = m_lastPathStruct - userActor->GetLastPathStruct();
 	}
 	else {
-		deltaUnk0x70 = 0;
+		deltaPathStructs = 0;
 	}
 
-	if (deltaUnk0x70 > 1) {
-		if (deltaUnk0x70 > 3) {
-			deltaUnk0x70 = 3;
+	if (deltaPathStructs > 1) {
+		if (deltaPathStructs > 3) {
+			deltaPathStructs = 3;
 		}
 
-		maxSpeed *= (m_unk0x18 * (--deltaUnk0x70) * -0.25f + 1.0f);
+		maxSpeed *= (m_rubberBandFactor * (--deltaPathStructs) * -0.25f + 1.0f);
 	}
-	else if (deltaUnk0x70 < -1) {
+	else if (deltaPathStructs < -1) {
 		maxSpeed *= 1.3;
 	}
 
 	MxFloat deltaSpeed = maxSpeed - m_worldSpeed;
-	MxFloat changeInSpeed = (p_time - m_unk0x1c) * m_unk0x14;
-	m_unk0x1c = p_time;
+	MxFloat changeInSpeed = (p_time - m_lastAcceleration) * m_acceleration;
+	m_lastAcceleration = p_time;
 
 	if (deltaSpeed < 0.0f) {
 		changeInSpeed = -changeInSpeed;
@@ -112,16 +112,17 @@ void LegoCarRaceActor::FUN_10080590(float p_time)
 
 // FUNCTION: LEGO1 0x10080740
 // FUNCTION: BETA10 0x100cece0
-MxS32 LegoCarRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edge)
+MxS32 LegoCarRaceActor::HandleJump(LegoPathBoundary* p_boundary, LegoEdge* p_edge)
 {
-	Mx3DPointFloat pointUnknown;
+	Mx3DPointFloat targetPosition;
 	Mx3DPointFloat destEdgeUnknownVector;
-	Mx3DPointFloat crossProduct;
+	Mx3DPointFloat targetDirection;
 
 	if (m_actorState == c_ready) {
 		m_boundary = NULL;
 
-		// Not sure where the upper bound of 11 comes from, the underlying array has a size of 16
+		// The first 12 elements are used for the car race, the other 4 for jetski
+		// As it increments by 2, counting to 10 or 11 is the same.
 		for (MxS32 i = 0; i < 11; i += 2) {
 			if (LegoPathController::GetControlEdgeA(i + 1) == m_destEdge) {
 				m_boundary = LegoPathController::GetControlBoundaryA(i + 1);
@@ -147,8 +148,8 @@ MxS32 LegoCarRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 			if (LegoPathController::GetControlEdgeA(i) == p_edge) {
 				m_actorState = c_ready;
 
-				if (m_worldSpeed < g_unk0x100f7aec) {
-					m_worldSpeed = g_unk0x100f7aec;
+				if (m_worldSpeed < g_maxSpeed) {
+					m_worldSpeed = g_maxSpeed;
 				}
 
 				m_destEdge = LegoPathController::GetControlEdgeA(i + 1);
@@ -167,12 +168,12 @@ MxS32 LegoCarRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 			Vector3* v2 = m_destEdge->CWVertex(*m_boundary);
 			assert(v1 && v2);
 
-			LERP3(pointUnknown, *v1, *v2, m_destScale);
+			LERP3(targetPosition, *v1, *v2, m_destScale);
 
 			m_destEdge->GetFaceNormal(*m_boundary, destEdgeUnknownVector);
 
-			crossProduct.EqualsCross(*m_boundary->GetUp(), destEdgeUnknownVector);
-			crossProduct.Unitize();
+			targetDirection.EqualsCross(*m_boundary->GetUp(), destEdgeUnknownVector);
+			targetDirection.Unitize();
 
 			Mx3DPointFloat worldDirection(Vector3(m_roi->GetWorldDirection()));
 
@@ -181,10 +182,10 @@ MxS32 LegoCarRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 			}
 
 			worldDirection *= 5.0f;
-			crossProduct *= 5.0f;
+			targetDirection *= 5.0f;
 
 			MxResult callResult =
-				SetSpline(Vector3(m_roi->GetWorldPosition()), worldDirection, pointUnknown, crossProduct);
+				SetSpline(Vector3(m_roi->GetWorldPosition()), worldDirection, targetPosition, targetDirection);
 
 			if (callResult) {
 				m_traveledDistance = 0;
@@ -230,7 +231,7 @@ void LegoCarRaceActor::Animate(float p_time)
 		if (strcmpi(value, g_racing) == 0) {
 			m_animState = 1;
 			m_transformTime = p_time - 1.0f;
-			m_unk0x1c = p_time;
+			m_lastAcceleration = p_time;
 		}
 	}
 
@@ -245,7 +246,7 @@ MxResult LegoCarRaceActor::CalculateSpline()
 {
 	LegoOrientedEdge* d = m_destEdge;
 
-	if (VTable0x1c(m_boundary, m_destEdge)) {
+	if (HandleJump(m_boundary, m_destEdge)) {
 		LegoPathBoundary* b = m_boundary;
 
 		SwitchBoundary(m_boundary, m_destEdge, m_destScale);
@@ -256,27 +257,27 @@ MxResult LegoCarRaceActor::CalculateSpline()
 		Vector3* v2 = m_destEdge->CCWVertex(*m_boundary);
 		assert(v1 && v2);
 
-		Mx3DPointFloat point1;
-		LERP3(point1, *v1, *v2, m_destScale);
+		Mx3DPointFloat end;
+		LERP3(end, *v1, *v2, m_destScale);
 
-		Mx3DPointFloat point2;
-		Mx3DPointFloat point3;
-		Mx3DPointFloat point4;
-		Mx3DPointFloat point5;
+		Mx3DPointFloat startEdgeNormal;
+		Mx3DPointFloat endEdgeNormal;
+		Mx3DPointFloat startDirection;
+		Mx3DPointFloat endDirection;
 
-		d->GetFaceNormal(*b, point2);
-		m_destEdge->GetFaceNormal(*m_boundary, point3);
+		d->GetFaceNormal(*b, startEdgeNormal);
+		m_destEdge->GetFaceNormal(*m_boundary, endEdgeNormal);
 
-		point4.EqualsCross(point2, *m_boundary->GetUp());
-		point5.EqualsCross(*m_boundary->GetUp(), point3);
+		startDirection.EqualsCross(startEdgeNormal, *m_boundary->GetUp());
+		endDirection.EqualsCross(*m_boundary->GetUp(), endEdgeNormal);
 
-		point4.Unitize();
-		point5.Unitize();
+		startDirection.Unitize();
+		endDirection.Unitize();
 
-		point4 *= 5.0f;
-		point5 *= 5.0f;
+		startDirection *= 5.0f;
+		endDirection *= 5.0f;
 
-		MxResult res = SetSpline(m_roi->GetWorldPosition(), point4, point1, point5);
+		MxResult res = SetSpline(m_roi->GetWorldPosition(), startDirection, end, endDirection);
 
 #ifdef BETA10
 		if (res) {
@@ -295,15 +296,15 @@ MxResult LegoCarRaceActor::CalculateSpline()
 // FUNCTION: BETA10 0x100a8990
 LegoJetskiRaceActor::LegoJetskiRaceActor()
 {
-	m_unk0x10 = 0.95f;
-	m_unk0x14 = 0.04f;
-	m_unk0x18 = 0.5f;
+	m_curveSpeedFactor = 0.95f;
+	m_acceleration = 0.04f;
+	m_rubberBandFactor = 0.5f;
 	m_linearRotationRatio = 1.5f;
 }
 
 // FUNCTION: LEGO1 0x10081120
 // FUNCTION: BETA10 0x100ce19f
-MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edge)
+MxS32 LegoJetskiRaceActor::HandleJump(LegoPathBoundary* p_boundary, LegoEdge* p_edge)
 {
 	// These are almost certainly not the correct names, but they produce the correct BETA10 stack
 	Mx3DPointFloat a;
@@ -337,8 +338,8 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 		if (p_edge == LegoPathController::GetControlEdgeA(12)) {
 			m_actorState = c_ready;
 
-			if (m_worldSpeed < g_unk0x100da044) {
-				m_worldSpeed = g_unk0x100da044;
+			if (m_worldSpeed < g_maxWorldSpeed) {
+				m_worldSpeed = g_maxWorldSpeed;
 			}
 
 			m_destEdge = LegoPathController::GetControlEdgeA(13);
@@ -347,8 +348,8 @@ MxS32 LegoJetskiRaceActor::VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_
 		else if (p_edge == LegoPathController::GetControlEdgeA(14)) {
 			m_actorState = c_ready;
 
-			if (m_worldSpeed < g_unk0x100da044) {
-				m_worldSpeed = g_unk0x100da044;
+			if (m_worldSpeed < g_maxWorldSpeed) {
+				m_worldSpeed = g_maxWorldSpeed;
 			}
 
 			m_destEdge = LegoPathController::GetControlEdgeA(15);
@@ -403,7 +404,7 @@ void LegoJetskiRaceActor::Animate(float p_time)
 		if (!stricmp(raceState, g_racing)) {
 			m_animState = 1;
 			m_transformTime = p_time - 1.0f;
-			m_unk0x1c = p_time;
+			m_lastAcceleration = p_time;
 		}
 		else if (!m_userNavFlag) {
 			LegoAnimActor::Animate(m_transformTime + 1.0f);

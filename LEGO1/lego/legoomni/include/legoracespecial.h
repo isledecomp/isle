@@ -53,27 +53,33 @@ public:
 
 	// LegoCarRaceActor vtable
 
-	virtual void FUN_10080590(float p_time); // vtable+0x00
+	virtual void UpdateWorldSpeed(float p_time); // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10012bb0
-	virtual void FUN_10012bb0(float p_unk0x14) { m_unk0x14 = p_unk0x14; } // vtable+0x04
+	virtual void SetAcceleration(float p_acceleration) { m_acceleration = p_acceleration; } // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10012bc0
-	virtual float FUN_10012bc0() { return m_unk0x14; } // vtable+0x08
+	virtual float GetAcceleration() { return m_acceleration; } // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10012bd0
-	virtual void FUN_10012bd0(float p_unk0x10) { m_unk0x10 = p_unk0x10; } // vtable+0x0c
+	virtual void SetCurveSpeedFactor(float p_curveSpeedFactor)
+	{
+		m_curveSpeedFactor = p_curveSpeedFactor;
+	} // vtable+0x0c
 
 	// FUNCTION: LEGO1 0x10012be0
-	virtual float FUN_10012be0() { return m_unk0x10; } // vtable+0x10
+	virtual float GetCurveSpeedFactor() { return m_curveSpeedFactor; } // vtable+0x10
 
 	// FUNCTION: LEGO1 0x10012bf0
-	virtual void FUN_10012bf0(float p_unk0x18) { m_unk0x18 = p_unk0x18; } // vtable+0x14
+	virtual void SetRubberBandFactor(float p_rubberBandFactor)
+	{
+		m_rubberBandFactor = p_rubberBandFactor;
+	} // vtable+0x14
 
 	// FUNCTION: LEGO1 0x10012c00
-	virtual float FUN_10012c00() { return m_unk0x18; } // vtable+0x18
+	virtual float GetRubberBandFactor() { return m_rubberBandFactor; } // vtable+0x18
 
-	virtual MxS32 VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edge); // vtable+0x1c
+	virtual MxS32 HandleJump(LegoPathBoundary* p_boundary, LegoEdge* p_edge); // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x10012c30
 	// LegoCarRaceActor::`vbase destructor'
@@ -88,18 +94,18 @@ protected:
 	MxFloat m_unk0x08; // 0x08
 	MxU8 m_animState;  // 0x0c
 
-	// Could be a multiplier for the maximum speed when going straight
-	MxFloat m_unk0x10; // 0x10
+	// A multiplier for the maximum speed when going around a curve
+	MxFloat m_curveSpeedFactor; // 0x10
 
 	// Could be the acceleration
-	MxFloat m_unk0x14; // 0x14
+	MxFloat m_acceleration; // 0x14
 
-	MxFloat m_unk0x18; // 0x18
+	MxFloat m_rubberBandFactor; // 0x18
 
 	// Could be the current timestamp for time-based movement
-	MxFloat m_unk0x1c; // 0x1c
+	MxFloat m_lastAcceleration; // 0x1c
 
-	static MxFloat g_unk0x100f7aec;
+	static MxFloat g_maxSpeed;
 };
 
 // VTABLE: LEGO1 0x100da208 LegoCarRaceActor
@@ -139,7 +145,7 @@ public:
 		Vector3& p_intersectionPoint
 	) override;                                                                // vtable+0x6c
 	void Animate(float p_time) override;                                       // vtable+0x70
-	MxS32 VTable0x1c(LegoPathBoundary* p_boundary, LegoEdge* p_edge) override; // vtable+0x1c
+	MxS32 HandleJump(LegoPathBoundary* p_boundary, LegoEdge* p_edge) override; // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x10013a80
 	// LegoJetskiRaceActor::`vbase destructor'
