@@ -99,7 +99,7 @@ public:
 
 	// FUNCTION: LEGO1 0x10002d60
 	// FUNCTION: BETA10 0x1000f820
-	virtual MxS32 VTable0xa0() { return 0; } // vtable+0xa0
+	virtual MxS32 NextTargetLocation() { return 0; } // vtable+0xa0
 
 	virtual void VTable0xa4(MxBool& p_und1, MxS32& p_und2); // vtable+0xa4
 	virtual void VTable0xa8();                              // vtable+0xa8
