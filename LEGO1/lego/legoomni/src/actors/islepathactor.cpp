@@ -93,7 +93,7 @@ void IslePathActor::Enter()
 
 		SetUserActor(this);
 		FUN_1001b660();
-		FUN_10010c30();
+		TransformPointOfView();
 	}
 }
 
@@ -152,7 +152,7 @@ void IslePathActor::Exit()
 	}
 
 	FUN_1001b660();
-	FUN_10010c30();
+	TransformPointOfView();
 	ResetViewVelocity();
 }
 
@@ -633,7 +633,7 @@ void IslePathActor::VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundar
 	m_roi->SetLocal2World(p_transform);
 	if (m_cameraFlag) {
 		ResetViewVelocity();
-		FUN_10010c30();
+		TransformPointOfView();
 	}
 }
 

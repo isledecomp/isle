@@ -342,7 +342,7 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 
 		assert(m_world && m_world->GetCameraController());
 		m_world->GetCameraController()->SetWorldTransform(at, dir, up);
-		FUN_10010c30();
+		TransformPointOfView();
 		result = 1;
 		break;
 	}
@@ -388,13 +388,13 @@ void Helicopter::VTable0x74(Matrix4& p_transform)
 {
 	if (m_userNavFlag) {
 		m_roi->UpdateTransformationRelativeToParent(p_transform);
-		FUN_10010c30();
+		TransformPointOfView();
 	}
 	else {
 		m_roi->SetLocal2World(p_transform);
 		m_roi->WrappedUpdateWorldData();
 		if (m_cameraFlag) {
-			FUN_10010c30();
+			TransformPointOfView();
 		}
 	}
 }

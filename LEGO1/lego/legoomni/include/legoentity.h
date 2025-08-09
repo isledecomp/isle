@@ -76,9 +76,9 @@ public:
 	virtual void SwitchColor(LegoROI* p_roi);      // vtable+0x48
 	virtual void SwitchMood();                     // vtable+0x4c
 
-	void FUN_10010c30();
+	void TransformPointOfView();
 	void SetType(MxU8 p_type);
-	void SetLocation(const Vector3& p_location, const Vector3& p_direction, const Vector3& p_up, MxBool p_und);
+	void SetLocation(const Vector3& p_location, const Vector3& p_direction, const Vector3& p_up, MxBool p_updateCamera);
 	Mx3DPointFloat GetWorldDirection();
 	Mx3DPointFloat GetWorldUp();
 	Mx3DPointFloat GetWorldPosition();
