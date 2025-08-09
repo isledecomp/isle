@@ -13,9 +13,14 @@ DECOMP_SIZE_ASSERT(LegoAnimActorStruct, 0x20)
 
 // FUNCTION: LEGO1 0x1001bf80
 // FUNCTION: BETA10 0x1003dc10
-LegoAnimActorStruct::LegoAnimActorStruct(float p_unk0x00, LegoAnim* p_AnimTreePtr, LegoROI** p_roiMap, MxU32 p_numROIs)
+LegoAnimActorStruct::LegoAnimActorStruct(
+	float p_worldSpeed,
+	LegoAnim* p_AnimTreePtr,
+	LegoROI** p_roiMap,
+	MxU32 p_numROIs
+)
 {
-	m_unk0x00 = p_unk0x00;
+	m_worldSpeed = p_worldSpeed;
 	m_AnimTreePtr = p_AnimTreePtr;
 	m_roiMap = p_roiMap;
 	m_numROIs = p_numROIs;
@@ -50,22 +55,22 @@ LegoAnimActor::~LegoAnimActor()
 
 // FUNCTION: LEGO1 0x1001c1f0
 // FUNCTION: BETA10 0x1003f240
-MxResult LegoAnimActor::FUN_1001c1f0(float& p_und)
+MxResult LegoAnimActor::GetTimeInCycle(float& p_timeInCycle)
 {
 	float duration = (float) m_animMaps[m_curAnim]->m_AnimTreePtr->GetDuration();
-	p_und = m_actorTime - duration * ((MxS32) (m_actorTime / duration));
+	p_timeInCycle = m_actorTime - duration * ((MxS32) (m_actorTime / duration));
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x1001c240
 void LegoAnimActor::VTable0x74(Matrix4& p_transform)
 {
-	float und;
+	float timeInCycle;
 	LegoPathActor::VTable0x74(p_transform);
 
 	if (m_curAnim >= 0) {
-		FUN_1001c1f0(und);
-		FUN_1001c360(und, p_transform);
+		GetTimeInCycle(timeInCycle);
+		AnimateWithTransform(timeInCycle, p_transform);
 	}
 }
 
@@ -81,10 +86,10 @@ void LegoAnimActor::Animate(float p_time)
 
 	if (m_actorState == c_initial && !m_userNavFlag && m_worldSpeed <= 0) {
 		if (m_curAnim >= 0) {
-			MxMatrix matrix(m_unk0xec);
-			float f;
-			FUN_1001c1f0(f);
-			FUN_1001c360(f, matrix);
+			MxMatrix transform(m_unk0xec);
+			float timeInCycle;
+			GetTimeInCycle(timeInCycle);
+			AnimateWithTransform(timeInCycle, transform);
 		}
 
 		m_lastTime = m_actorTime = p_time;
@@ -96,9 +101,9 @@ void LegoAnimActor::Animate(float p_time)
 
 // FUNCTION: LEGO1 0x1001c360
 // FUNCTION: BETA10 0x1003e2d3
-MxResult LegoAnimActor::FUN_1001c360(float p_und, Matrix4& p_transform)
+MxResult LegoAnimActor::AnimateWithTransform(float p_time, Matrix4& p_transform)
 {
-	if (p_und >= 0) {
+	if (p_time >= 0) {
 		assert((m_curAnim >= 0) && (m_curAnim < m_animMaps.size()));
 
 		LegoROI** roiMap = m_animMaps[m_curAnim]->m_roiMap;
@@ -133,7 +138,7 @@ MxResult LegoAnimActor::FUN_1001c360(float p_und, Matrix4& p_transform)
 			}
 
 			for (MxS32 j = 0; j < n->GetNumChildren(); j++) {
-				LegoROI::ApplyAnimationTransformation(n->GetChild(j), p_transform, p_und, roiMap);
+				LegoROI::ApplyAnimationTransformation(n->GetChild(j), p_transform, p_time, roiMap);
 			}
 
 			if (m_cameraFlag) {
@@ -150,15 +155,20 @@ MxResult LegoAnimActor::FUN_1001c360(float p_und, Matrix4& p_transform)
 
 // FUNCTION: LEGO1 0x1001c450
 // FUNCTION: BETA10 0x1003e590
-MxResult LegoAnimActor::FUN_1001c450(LegoAnim* p_AnimTreePtr, float p_unk0x00, LegoROI** p_roiMap, MxU32 p_numROIs)
+MxResult LegoAnimActor::CreateAnimActorStruct(
+	LegoAnim* p_AnimTreePtr,
+	float p_worldSpeed,
+	LegoROI** p_roiMap,
+	MxU32 p_numROIs
+)
 {
 	// the capitalization of `p_AnimTreePtr` was taken from BETA10
 	assert(p_AnimTreePtr && p_roiMap);
 
-	LegoAnimActorStruct* laas = new LegoAnimActorStruct(p_unk0x00, p_AnimTreePtr, p_roiMap, p_numROIs);
+	LegoAnimActorStruct* laas = new LegoAnimActorStruct(p_worldSpeed, p_AnimTreePtr, p_roiMap, p_numROIs);
 
 	for (vector<LegoAnimActorStruct*>::iterator it = m_animMaps.begin(); it != m_animMaps.end(); it++) {
-		if (p_unk0x00 < (*it)->m_unk0x00) {
+		if (p_worldSpeed < (*it)->m_worldSpeed) {
 			m_animMaps.insert(it, laas);
 			SetWorldSpeed(m_worldSpeed);
 			return SUCCESS;
@@ -196,12 +206,12 @@ void LegoAnimActor::SetWorldSpeed(MxFloat p_worldSpeed)
 	if (m_animMaps.size() > 0) {
 		m_curAnim = 0;
 
-		if (m_worldSpeed >= m_animMaps[m_animMaps.size() - 1]->m_unk0x00) {
+		if (m_worldSpeed >= m_animMaps[m_animMaps.size() - 1]->m_worldSpeed) {
 			m_curAnim = m_animMaps.size() - 1;
 		}
 		else {
 			for (MxU32 i = 0; i < m_animMaps.size(); i++) {
-				if (m_worldSpeed <= m_animMaps[i]->m_unk0x00) {
+				if (m_worldSpeed <= m_animMaps[i]->m_worldSpeed) {
 					m_curAnim = i;
 					break;
 				}

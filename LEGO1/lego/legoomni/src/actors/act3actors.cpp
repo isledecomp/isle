@@ -270,7 +270,7 @@ void Act3Cop::ParseAction(char* p_extra)
 	}
 
 	for (i = 0; i < m_animMaps.size(); i++) {
-		if (m_animMaps[i]->GetUnknown0x00() == -1.0f) {
+		if (m_animMaps[i]->GetWorldSpeed() == -1.0f) {
 			m_eatAnim = m_animMaps[i];
 		}
 	}
@@ -558,7 +558,7 @@ void Act3Brickster::ParseAction(char* p_extra)
 	((Act3*) m_world)->SetBrickster(this);
 
 	for (MxS32 i = 0; i < m_animMaps.size(); i++) {
-		if (m_animMaps[i]->GetUnknown0x00() == -1.0f) {
+		if (m_animMaps[i]->GetWorldSpeed() == -1.0f) {
 			m_shootAnim = m_animMaps[i];
 		}
 	}

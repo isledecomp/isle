@@ -1435,7 +1435,7 @@ void LegoLocomotionAnimPresenter::FUN_1006d680(LegoAnimActor* p_actor, MxFloat p
 
 	if (m_roiMap != NULL) {
 		m_roiMapList->Append(m_roiMap);
-		p_actor->FUN_1001c450(m_anim, p_value, m_roiMap, m_roiMapSize);
+		p_actor->CreateAnimActorStruct(m_anim, p_value, m_roiMap, m_roiMapSize);
 		m_roiMap = NULL;
 	}
 
