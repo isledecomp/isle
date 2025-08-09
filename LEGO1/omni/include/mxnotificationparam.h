@@ -29,7 +29,7 @@ enum NotificationId {
 	c_notificationPathStruct = 19, // 100d6230
 	c_notificationType20 = 20,
 	c_notificationNewPresenter = 21,
-	c_notificationType22 = 22,
+	c_notificationAct2Brick = 22,
 	c_notificationType23 = 23,
 	c_notificationTransitioned = 24
 };

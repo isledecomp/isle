@@ -8,6 +8,13 @@
 // SIZE 0x194
 class Act2Brick : public LegoPathActor {
 public:
+	enum {
+		e_removed = 0,
+		e_created = 1,
+		e_placed = 2,
+		e_atRest = 3,
+	};
+
 	Act2Brick();
 	~Act2Brick() override; // vtable+0x00
 
@@ -35,7 +42,7 @@ public:
 
 	MxResult Create(MxS32 p_index);
 	void Remove();
-	void FUN_1007a670(MxMatrix& p_param1, MxMatrix& p_param2, LegoPathBoundary* p_boundary);
+	void Place(MxMatrix& p_localToWorld, MxMatrix& p_endLocalToWorld, LegoPathBoundary* p_boundary);
 	void PlayWhistleSound();
 	void StopWhistleSound();
 	void Mute(MxBool p_muted);
@@ -44,12 +51,12 @@ private:
 	static const LegoChar* g_lodNames[];
 	static MxLong g_lastHitActorTime;
 
-	LegoCacheSound* m_whistleSound; // 0x154
-	undefined m_unk0x158[0x0c];     // 0x158
-	undefined4 m_unk0x164;          // 0x164
-	Mx3DPointFloat m_unk0x168;      // 0x168
-	Mx3DPointFloat m_unk0x17c;      // 0x17c
-	MxS32 m_unk0x190;               // 0x190
+	LegoCacheSound* m_whistleSound;            // 0x154
+	undefined m_unk0x158[0x0c];                // 0x158
+	MxU32 m_state;                             // 0x164
+	Mx3DPointFloat m_localToWorldMovementStep; // 0x168
+	Mx3DPointFloat m_endLocalToWorld;          // 0x17c
+	MxS32 m_step;                              // 0x190
 };
 
 #endif // ACT2BRICK_H
