@@ -60,7 +60,7 @@ public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100010b0
-	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
+	MxBool EnabledAfterDestruction() override { return TRUE; } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x100010c0
 	// FUNCTION: BETA10 0x100f4f20

@@ -522,7 +522,7 @@ void LegoAct2::ReadyWorld()
 // FUNCTION: BETA10 0x1003bb2d
 void LegoAct2::Enable(MxBool p_enable)
 {
-	if ((MxBool) m_set0xd0.empty() == p_enable) {
+	if ((MxBool) m_disabledObjects.empty() == p_enable) {
 		return;
 	}
 

@@ -1289,7 +1289,7 @@ void Infocenter::StopCutscene()
 }
 
 // FUNCTION: LEGO1 0x10070d00
-MxBool Infocenter::VTable0x5c()
+MxBool Infocenter::EnabledAfterDestruction()
 {
 	return TRUE;
 }
@@ -1441,10 +1441,10 @@ void Infocenter::StartCredits()
 {
 	MxPresenter* presenter;
 
-	while (!m_set0xa8.empty()) {
-		MxCoreSet::iterator it = m_set0xa8.begin();
+	while (!m_objects.empty()) {
+		MxCoreSet::iterator it = m_objects.begin();
 		MxCore* object = *it;
-		m_set0xa8.erase(it);
+		m_objects.erase(it);
 
 		if (object->IsA("MxPresenter")) {
 			presenter = (MxPresenter*) object;

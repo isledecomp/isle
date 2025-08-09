@@ -153,7 +153,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000dae0
-	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
+	MxBool EnabledAfterDestruction() override { return TRUE; } // vtable+0x5c
 
 	void Enable(MxBool p_enable) override; // vtable+0x68
 
