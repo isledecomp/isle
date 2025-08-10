@@ -47,18 +47,18 @@ public:
 	LegoWorld();
 	~LegoWorld() override; // vtable+0x00
 
-	MxLong Notify(MxParam& p_param) override;         // vtable+0x04
-	MxResult Tickle() override;                       // vtable+0x08
-	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
-	virtual void ReadyWorld();                        // vtable+0x50
-	virtual LegoCameraController* VTable0x54();       // vtable+0x54
-	virtual void Add(MxCore* p_object);               // vtable+0x58
+	MxLong Notify(MxParam& p_param) override;                   // vtable+0x04
+	MxResult Tickle() override;                                 // vtable+0x08
+	MxResult Create(MxDSAction& p_dsAction) override;           // vtable+0x18
+	void Destroy(MxBool p_fromDestructor) override;             // vtable+0x1c
+	virtual void ReadyWorld();                                  // vtable+0x50
+	virtual LegoCameraController* InitializeCameraController(); // vtable+0x54
+	virtual void Add(MxCore* p_object);                         // vtable+0x58
 
 	// The BETA10 match could also be LegoWorld::Escape(), only the child classes might be able to tell
 	// FUNCTION: LEGO1 0x1001d670
 	// FUNCTION: BETA10 0x10017530
-	virtual MxBool VTable0x5c() { return FALSE; } // vtable+0x5c
+	virtual MxBool EnabledAfterDestruction() { return FALSE; } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x100010a0
 	virtual void VTable0x60() {} // vtable+0x60
@@ -102,8 +102,8 @@ public:
 	);
 	void RemoveActor(LegoPathActor* p_actor);
 	MxBool ActorExists(LegoPathActor* p_actor);
-	void FUN_1001fda0(LegoAnimPresenter* p_presenter);
-	void FUN_1001fe90(LegoAnimPresenter* p_presenter);
+	void AddPresenterIfInRange(LegoAnimPresenter* p_presenter);
+	void RemovePresenterFromBoundaries(LegoAnimPresenter* p_presenter);
 	LegoPathBoundary* FindPathBoundary(const char* p_name);
 	void AddPath(LegoPathController* p_controller);
 	MxResult GetCurrPathInfo(LegoPathBoundary** p_boundaries, MxS32& p_numL);
@@ -115,7 +115,7 @@ public:
 
 	LegoEntityList* GetEntityList() { return m_entityList; }
 	LegoOmni::World GetWorldId() { return m_worldId; }
-	MxBool GetUnknown0xd0Empty() { return m_set0xd0.empty(); }
+	MxBool NoDisabledObjects() { return m_disabledObjects.empty(); }
 	list<LegoROI*>& GetROIList() { return m_roiList; }
 	LegoHideAnimPresenter* GetHideAnimPresenter() { return m_hideAnim; }
 
@@ -131,9 +131,9 @@ protected:
 	LegoEntityList* m_entityList;                // 0x9c
 	LegoCacheSoundList* m_cacheSoundList;        // 0xa0
 	MxBool m_destroyed;                          // 0xa4
-	MxCoreSet m_set0xa8;                         // 0xa8
+	MxCoreSet m_objects;                         // 0xa8
 	MxPresenterList m_controlPresenters;         // 0xb8
-	MxCoreSet m_set0xd0;                         // 0xd0
+	MxCoreSet m_disabledObjects;                 // 0xd0
 	list<LegoROI*> m_roiList;                    // 0xe0
 	LegoOmni::World m_worldId;                   // 0xec
 

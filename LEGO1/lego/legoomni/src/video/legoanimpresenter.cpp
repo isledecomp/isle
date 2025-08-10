@@ -1136,7 +1136,7 @@ void LegoAnimPresenter::VTable0x8c()
 	}
 
 	if (m_currentWorld) {
-		m_currentWorld->FUN_1001fda0(this);
+		m_currentWorld->AddPresenterIfInRange(this);
 		if (!m_compositePresenter || !m_compositePresenter->IsA("LegoAnimMMPresenter")) {
 			m_currentWorld->Add(this);
 		}
@@ -1148,7 +1148,7 @@ void LegoAnimPresenter::VTable0x8c()
 void LegoAnimPresenter::VTable0x90()
 {
 	if (m_currentWorld != NULL) {
-		m_currentWorld->FUN_1001fe90(this);
+		m_currentWorld->RemovePresenterFromBoundaries(this);
 
 		if (m_compositePresenter != NULL && m_compositePresenter->IsA("LegoAnimMMPresenter")) {
 			return;

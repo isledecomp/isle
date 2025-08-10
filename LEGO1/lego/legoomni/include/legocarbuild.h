@@ -94,7 +94,7 @@ public:
 
 	// FUNCTION: LEGO1 0x10022930
 	// FUNCTION: BETA10 0x10070070
-	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
+	MxBool EnabledAfterDestruction() override { return TRUE; } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x10022940
 	// FUNCTION: BETA10 0x10070090
