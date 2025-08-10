@@ -60,7 +60,12 @@ MxBool RemoveFromCurrentWorld(const MxAtomId& p_atomId, MxS32 p_id);
 void EnableAnimations(MxBool p_enable);
 void SetAppCursor(Cursor p_cursor);
 MxBool CanExit();
-MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_worldAtom, MxS32 p_worldEntityId);
+MxBool RemoveFromWorld(
+	const MxAtomId& p_entityAtom,
+	MxS32 p_entityId,
+	const MxAtomId& p_worldAtom,
+	MxS32 p_worldEntityId
+);
 MxS32 UpdateLightPosition(MxS32 p_increase);
 void SetLightPosition(MxS32 p_index);
 LegoNamedTexture* ReadNamedTexture(LegoStorage* p_storage);

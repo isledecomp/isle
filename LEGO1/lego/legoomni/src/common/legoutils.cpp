@@ -521,7 +521,12 @@ MxBool RemoveFromCurrentWorld(const MxAtomId& p_atomId, MxS32 p_id)
 }
 
 // FUNCTION: LEGO1 0x1003ee80
-MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_worldAtom, MxS32 p_worldEntityId)
+MxBool RemoveFromWorld(
+	const MxAtomId& p_entityAtom,
+	MxS32 p_entityId,
+	const MxAtomId& p_worldAtom,
+	MxS32 p_worldEntityId
+)
 {
 	LegoWorld* world = FindWorld(p_worldAtom, p_worldEntityId);
 
