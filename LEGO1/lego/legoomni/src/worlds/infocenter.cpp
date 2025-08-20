@@ -4,6 +4,7 @@
 #include "credits_actions.h"
 #include "helicopter.h"
 #include "infomain_actions.h"
+#include "intro_actions.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
 #include "legoact2.h"
@@ -128,13 +129,13 @@ InfomainScript::Script g_bricksterDialogue[2] = {
 // FUNCTION: LEGO1 0x1006ea20
 Infocenter::Infocenter()
 {
-	m_selectedCharacter = e_noCharacter;
+	m_selectedCharacter = LegoActor::c_none;
 	m_dragPresenter = NULL;
 	m_infocenterState = NULL;
 	m_frame = NULL;
 	m_destLocation = LegoGameState::e_undefined;
 	m_currentInfomainScript = InfomainScript::c_noneInfomain;
-	m_currentCutscene = e_noIntro;
+	m_currentCutscene = IntroScript::c_noneIntro;
 
 	memset(&m_glowInfo, 0, sizeof(m_glowInfo));
 
@@ -306,19 +307,19 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 			GameState()->SetActor(m_selectedCharacter);
 
 			switch (m_selectedCharacter) {
-			case e_pepper:
+			case LegoActor::c_pepper:
 				PlayAction(InfomainScript::c_avo901in_RunAnim);
 				break;
-			case e_mama:
+			case LegoActor::c_mama:
 				PlayAction(InfomainScript::c_avo902in_RunAnim);
 				break;
-			case e_papa:
+			case LegoActor::c_papa:
 				PlayAction(InfomainScript::c_avo903in_RunAnim);
 				break;
-			case e_nick:
+			case LegoActor::c_nick:
 				PlayAction(InfomainScript::c_avo904in_RunAnim);
 				break;
-			case e_laura:
+			case LegoActor::c_laura:
 				PlayAction(InfomainScript::c_avo905in_RunAnim);
 				break;
 			default:
@@ -343,23 +344,23 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 	switch (m_infocenterState->m_state) {
 	case InfocenterState::e_playCutscene:
 		switch (m_currentCutscene) {
-		case e_legoMovie:
-			PlayCutscene(e_mindscapeMovie, FALSE);
+		case IntroScript::c_Lego_Movie:
+			PlayCutscene(IntroScript::c_Mindscape_Movie, FALSE);
 			return 1;
-		case e_mindscapeMovie:
-			PlayCutscene(e_introMovie, TRUE);
+		case IntroScript::c_Mindscape_Movie:
+			PlayCutscene(IntroScript::c_Intro_Movie, TRUE);
 			return 1;
-		case e_badEndMovie:
+		case IntroScript::c_BadEnd_Movie:
 			StopCutscene();
 			m_infocenterState->m_state = InfocenterState::e_welcomeAnimation;
 			PlayAction(InfomainScript::c_tic092in_RunAnim);
-			m_currentCutscene = e_noIntro;
+			m_currentCutscene = IntroScript::c_noneIntro;
 			return 1;
-		case e_goodEndMovie:
+		case IntroScript::c_GoodEnd_Movie:
 			StopCutscene();
 			m_infocenterState->m_state = InfocenterState::e_welcomeAnimation;
 			PlayAction(InfomainScript::c_tic089in_RunAnim);
-			m_currentCutscene = e_noIntro;
+			m_currentCutscene = IntroScript::c_noneIntro;
 			return 1;
 		}
 
@@ -367,7 +368,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		StopCutscene();
 		m_infocenterState->m_state = InfocenterState::e_welcomeAnimation;
 		PlayAction(InfomainScript::c_iic001in_RunAnim);
-		m_currentCutscene = e_noIntro;
+		m_currentCutscene = IntroScript::c_noneIntro;
 
 		if (!m_infocenterState->HasRegistered()) {
 			m_bookAnimationTimer = 1;
@@ -378,17 +379,17 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		m_infocenterState->m_state = InfocenterState::e_welcomeAnimation;
 
 		switch (m_currentCutscene) {
-		case e_badEndMovie:
+		case IntroScript::c_BadEnd_Movie:
 			PlayAction(InfomainScript::c_tic092in_RunAnim);
 			break;
-		case e_goodEndMovie:
+		case IntroScript::c_GoodEnd_Movie:
 			PlayAction(InfomainScript::c_tic089in_RunAnim);
 			break;
 		default:
 			PlayAction(InfomainScript::c_iic001in_RunAnim);
 		}
 
-		m_currentCutscene = e_noIntro;
+		m_currentCutscene = IntroScript::c_noneIntro;
 		return 1;
 	case InfocenterState::e_notRegistered:
 		SetROIVisible(g_object2x4red, FALSE);
@@ -405,7 +406,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		break;
 	case InfocenterState::e_selectedCharacterAndDestination:
 		if (action->GetObjectId() == m_currentInfomainScript) {
-			if (GameState()->GetCurrentAct() != LegoGameState::e_act3 && m_selectedCharacter != e_noCharacter) {
+			if (GameState()->GetCurrentAct() != LegoGameState::e_act3 && m_selectedCharacter != LegoActor::c_none) {
 				GameState()->SetActor(m_selectedCharacter);
 			}
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
@@ -455,7 +456,7 @@ void Infocenter::ReadyWorld()
 
 		switch (m_infocenterState->m_state) {
 		case InfocenterState::e_newState:
-			PlayCutscene(e_legoMovie, TRUE);
+			PlayCutscene(IntroScript::c_Lego_Movie, TRUE);
 			m_infocenterState->m_state = InfocenterState::e_playCutscene;
 			return;
 		case InfocenterState::e_selectedSave:
@@ -518,7 +519,7 @@ void Infocenter::ReadyWorld()
 
 		if (state && state->GetState() == LegoAct2State::c_badEnding) {
 			bg->Enable(TRUE);
-			PlayCutscene(e_badEndMovie, TRUE);
+			PlayCutscene(IntroScript::c_BadEnd_Movie, TRUE);
 			m_infocenterState->m_state = InfocenterState::e_playCutscene;
 			return;
 		}
@@ -563,14 +564,14 @@ void Infocenter::ReadyWorld()
 
 		if (state && state->GetState() == Act3State::e_badEnding) {
 			bg->Enable(TRUE);
-			PlayCutscene(e_badEndMovie, TRUE);
+			PlayCutscene(IntroScript::c_BadEnd_Movie, TRUE);
 			m_infocenterState->m_state = InfocenterState::e_playCutscene;
 			return;
 		}
 
 		if (state && state->GetState() == Act3State::e_goodEnding) {
 			bg->Enable(TRUE);
-			PlayCutscene(e_goodEndMovie, TRUE);
+			PlayCutscene(IntroScript::c_GoodEnd_Movie, TRUE);
 			m_infocenterState->m_state = InfocenterState::e_playCutscene;
 			return;
 		}
@@ -752,19 +753,19 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 
 		switch (m_dragPresenter->GetAction()->GetObjectId()) {
 		case InfomainScript::c_PepperHot_Bitmap:
-			m_selectedCharacter = e_pepper;
+			m_selectedCharacter = LegoActor::c_pepper;
 			break;
 		case InfomainScript::c_MamaHot_Bitmap:
-			m_selectedCharacter = e_mama;
+			m_selectedCharacter = LegoActor::c_mama;
 			break;
 		case InfomainScript::c_PapaHot_Bitmap:
-			m_selectedCharacter = e_papa;
+			m_selectedCharacter = LegoActor::c_papa;
 			break;
 		case InfomainScript::c_NickHot_Bitmap:
-			m_selectedCharacter = e_nick;
+			m_selectedCharacter = LegoActor::c_nick;
 			break;
 		case InfomainScript::c_LauraHot_Bitmap:
-			m_selectedCharacter = e_laura;
+			m_selectedCharacter = LegoActor::c_laura;
 			break;
 		}
 
@@ -773,7 +774,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 
 			switch (control->GetAction()->GetObjectId()) {
 			case InfomainScript::c_Pepper_Ctl:
-				if (m_selectedCharacter == e_pepper) {
+				if (m_selectedCharacter == LegoActor::c_pepper) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(InfomainScript::c_Pepper_All_Movie);
@@ -781,7 +782,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				break;
 			case InfomainScript::c_Mama_Ctl:
-				if (m_selectedCharacter == e_mama) {
+				if (m_selectedCharacter == LegoActor::c_mama) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(InfomainScript::c_Mama_All_Movie);
@@ -789,7 +790,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				break;
 			case InfomainScript::c_Papa_Ctl:
-				if (m_selectedCharacter == e_papa) {
+				if (m_selectedCharacter == LegoActor::c_papa) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(InfomainScript::c_Papa_All_Movie);
@@ -797,7 +798,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				break;
 			case InfomainScript::c_Nick_Ctl:
-				if (m_selectedCharacter == e_nick) {
+				if (m_selectedCharacter == LegoActor::c_nick) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(InfomainScript::c_Nick_All_Movie);
@@ -805,7 +806,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				break;
 			case InfomainScript::c_Laura_Ctl:
-				if (m_selectedCharacter == e_laura) {
+				if (m_selectedCharacter == LegoActor::c_laura) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(InfomainScript::c_Laura_All_Movie);
@@ -823,19 +824,19 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 					GameState()->SetActor(m_selectedCharacter);
 
 					switch (m_selectedCharacter) {
-					case e_pepper:
+					case LegoActor::c_pepper:
 						PlayAction(InfomainScript::c_avo901in_RunAnim);
 						break;
-					case e_mama:
+					case LegoActor::c_mama:
 						PlayAction(InfomainScript::c_avo902in_RunAnim);
 						break;
-					case e_papa:
+					case LegoActor::c_papa:
 						PlayAction(InfomainScript::c_avo903in_RunAnim);
 						break;
-					case e_nick:
+					case LegoActor::c_nick:
 						PlayAction(InfomainScript::c_avo904in_RunAnim);
 						break;
-					case e_laura:
+					case LegoActor::c_laura:
 						PlayAction(InfomainScript::c_avo905in_RunAnim);
 						break;
 					}
@@ -894,23 +895,23 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				else {
 					switch (m_selectedCharacter) {
-					case e_pepper:
+					case LegoActor::c_pepper:
 						dialogueToPlay = InfomainScript::c_avo901in_RunAnim;
 						GameState()->SetActorId(m_selectedCharacter);
 						break;
-					case e_mama:
+					case LegoActor::c_mama:
 						dialogueToPlay = InfomainScript::c_avo902in_RunAnim;
 						GameState()->SetActorId(m_selectedCharacter);
 						break;
-					case e_papa:
+					case LegoActor::c_papa:
 						dialogueToPlay = InfomainScript::c_avo903in_RunAnim;
 						GameState()->SetActorId(m_selectedCharacter);
 						break;
-					case e_nick:
+					case LegoActor::c_nick:
 						dialogueToPlay = InfomainScript::c_avo904in_RunAnim;
 						GameState()->SetActorId(m_selectedCharacter);
 						break;
-					case e_laura:
+					case LegoActor::c_laura:
 						dialogueToPlay = InfomainScript::c_avo905in_RunAnim;
 						GameState()->SetActorId(m_selectedCharacter);
 						break;
@@ -1255,7 +1256,7 @@ MxResult Infocenter::Tickle()
 }
 
 // FUNCTION: LEGO1 0x10070c20
-void Infocenter::PlayCutscene(Cutscene p_entityId, MxBool p_scale)
+void Infocenter::PlayCutscene(IntroScript::Script p_entityId, MxBool p_scale)
 {
 	m_currentCutscene = p_entityId;
 
@@ -1265,9 +1266,9 @@ void Infocenter::PlayCutscene(Cutscene p_entityId, MxBool p_scale)
 	SetAppCursor(e_cursorNone);
 	VideoManager()->GetDisplaySurface()->ClearScreen();
 
-	if (m_currentCutscene != e_noIntro) {
+	if (m_currentCutscene != IntroScript::c_noneIntro) {
 		// check if the cutscene is an ending
-		if (m_currentCutscene >= e_badEndMovie && m_currentCutscene <= e_goodEndMovie) {
+		if (m_currentCutscene >= IntroScript::c_BadEnd_Movie && m_currentCutscene <= IntroScript::c_GoodEnd_Movie) {
 			Reset();
 		}
 
@@ -1278,7 +1279,7 @@ void Infocenter::PlayCutscene(Cutscene p_entityId, MxBool p_scale)
 // FUNCTION: LEGO1 0x10070cb0
 void Infocenter::StopCutscene()
 {
-	if (m_currentCutscene != e_noIntro) {
+	if (m_currentCutscene != IntroScript::c_noneIntro) {
 		InvokeAction(Extra::ActionType::e_close, *g_introScript, m_currentCutscene, NULL);
 	}
 
@@ -1395,9 +1396,9 @@ void Infocenter::Reset()
 	GameState()->m_savedPreviousArea = LegoGameState::e_undefined;
 
 	InitializeBitmaps();
-	m_selectedCharacter = e_pepper;
+	m_selectedCharacter = LegoActor::c_pepper;
 
-	GameState()->SetActor(e_pepper);
+	GameState()->SetActor(LegoActor::c_pepper);
 
 	HelicopterState* state = (HelicopterState*) GameState()->GetState("HelicopterState");
 

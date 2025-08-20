@@ -119,25 +119,6 @@ struct InfocenterMapEntry {
 // SIZE 0x1d8
 class Infocenter : public LegoWorld {
 public:
-	enum Cutscene {
-		e_noIntro = -1,
-		e_legoMovie,
-		e_mindscapeMovie,
-		e_introMovie,
-		e_outroMovie,
-		e_badEndMovie,
-		e_goodEndMovie
-	};
-
-	enum Character {
-		e_noCharacter = 0,
-		e_pepper,
-		e_mama,
-		e_papa,
-		e_nick,
-		e_laura
-	};
-
 	Infocenter();
 	~Infocenter() override;
 
@@ -180,7 +161,7 @@ private:
 	void UpdateFrameHot(MxBool p_display);
 	void Reset();
 
-	void PlayCutscene(Cutscene p_entityId, MxBool p_scale);
+	void PlayCutscene(IntroScript::Script p_entityId, MxBool p_scale);
 	void StopCutscene();
 
 	void UpdateEnabledGlowControl(MxS32 p_x, MxS32 p_y);
@@ -198,7 +179,7 @@ private:
 	MxS16 m_selectedCharacter;                      // 0xfc
 	InfocenterState* m_infocenterState;             // 0x100
 	LegoGameState::Area m_destLocation;             // 0x104
-	Cutscene m_currentCutscene;                     // 0x108
+	IntroScript::Script m_currentCutscene;          // 0x108
 	Radio m_radio;                                  // 0x10c
 	MxStillPresenter* m_dragPresenter;              // 0x11c
 	InfocenterMapEntry m_glowInfo[7];               // 0x120
