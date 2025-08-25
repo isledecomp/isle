@@ -106,7 +106,7 @@ public:
 	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10072500
-	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
+	MxBool WaitForTransition() override { return TRUE; } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x10072510
 	// FUNCTION: BETA10 0x10017550
