@@ -54,12 +54,12 @@ private:
 	struct {
 		MxS16 m_letters[7];                // 0x00
 		MxS16 m_cursorPos;                 // 0x0e
-	} m_unk0x280;                          // 0x280
+	} m_newName;                           // 0x280
 	MxControlPresenter* m_checkmark[10];   // 0x290
-	undefined2 m_unk0x2b8;                 // 0x2b8
+	undefined2 m_vehiclesToPosition;       // 0x2b8
 	InfocenterState* m_infocenterState;    // 0x2bc
 	undefined m_unk0x2c0;                  // 0x2c0
-	undefined m_unk0x2c1;                  // 0x2c1
+	undefined m_awaitLoad;                 // 0x2c1
 	undefined m_unk0x2c2[0x02];            // 0x2c2
 	LPDIRECTDRAWSURFACE m_checkboxHilite;  // 0x2c4
 	LPDIRECTDRAWSURFACE m_checkboxSurface; // 0x2c8
@@ -69,9 +69,9 @@ private:
 	MxLong HandleKeyPress(MxU8 p_key);
 	MxLong HandleControl(LegoControlManagerNotificationParam& p_param);
 	MxLong HandlePathStruct(LegoPathStructNotificationParam& p_param);
-	void FUN_100775c0(MxS16 p_playerIndex);
+	void LoadSave(MxS16 p_checkMarkIndex);
 	void WriteInfocenterLetters(MxS16);
-	void FUN_100778c0();
+	void LoadVehicles();
 	MxBool CreateSurface();
 };
 
