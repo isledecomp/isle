@@ -38,6 +38,10 @@ targets:
         - 0x100fb080
         # memset etc.
         - 0x100f9570
+      name-substitutions:
+        # Rename matched functions named like `FUN_12345678` to `LEGO1_12345678`
+        # so we can distinguish them from non-matched functions
+        - ["FUN_([0-9a-f]{8})", "LEGO1_\\1"]
   ALPHA:
     filename: ALPHA.DLL
     source-root: LEGO1
