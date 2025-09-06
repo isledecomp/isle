@@ -68,6 +68,7 @@ const LegoChar* g_strCRCEDGEY0 = "C_RCEDGEY0";
 MxS32 g_unk0x100f0c7c = 2;
 
 // FUNCTION: LEGO1 0x10016a90
+// FUNCTION: BETA10 0x100c82e8
 CarRace::CarRace()
 {
 	m_skeleton = NULL;

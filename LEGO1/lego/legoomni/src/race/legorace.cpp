@@ -53,6 +53,7 @@ MxResult LegoRace::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10015d40
+// FUNCTION: BETA10 0x100c7ab5
 LegoRace::~LegoRace()
 {
 	g_unk0x100f119c = FALSE;

@@ -111,16 +111,15 @@ public:
 	void SetWorld(LegoWorld* p_world);
 	void ClearWorld();
 
-	void SetUnknown88(MxBool p_unk0x88) { m_unk0x88 = p_unk0x88; }
 	void SetUnknown335(MxBool p_unk0x335) { m_unk0x335 = p_unk0x335; }
 	void SetUnknown336(MxBool p_unk0x336) { m_unk0x336 = p_unk0x336; }
 	void SetUseJoystick(MxBool p_useJoystick) { m_useJoystick = p_useJoystick; }
 	void SetJoystickIndex(MxS32 p_joystickIndex) { m_joystickIndex = p_joystickIndex; }
 
-	// FUNCTION: BETA10 0x1002e290
+	// FUNCTION: BETA10 0x1002e390
 	void DisableInputProcessing()
 	{
-		m_unk0x88 = TRUE;
+		m_inputProcessingDisabled = TRUE;
 		m_unk0x336 = FALSE;
 	}
 
@@ -155,7 +154,7 @@ private:
 	MxBool m_unk0x80;                        // 0x80
 	MxBool m_unk0x81;                        // 0x81
 	LegoControlManager* m_controlManager;    // 0x84
-	MxBool m_unk0x88;                        // 0x88
+	MxBool m_inputProcessingDisabled;        // 0x88
 	IDirectInput* m_directInput;             // 0x8c
 	IDirectInputDevice* m_directInputDevice; // 0x90
 	MxBool m_kbStateSuccess;                 // 0x94
