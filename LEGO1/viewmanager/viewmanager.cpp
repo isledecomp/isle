@@ -270,6 +270,7 @@ inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, i
 			p_from->SetLodLevel(ViewROI::c_lodLevelUnset);
 
 			for (CompoundObject::const_iterator it = comp->begin(); it != comp->end(); it++) {
+				// LINE: BETA10 0x10172bbd
 				ManageVisibilityAndDetailRecursively((ViewROI*) *it, p_lodLevel);
 			}
 		}

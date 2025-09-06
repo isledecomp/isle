@@ -22,11 +22,11 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100343a0
-	// FUNCTION: BETA10 0x10011600
+	// FUNCTION: BETA10 0x100151e0
 	Mx3DPointFloat(const Mx3DPointFloat& p_other) : Vector3(m_elements) { EqualsImpl(p_other.m_data); }
 
 	// FUNCTION: LEGO1 0x10048ed0
-	// FUNCTION: BETA10 0x100151e0
+	// FUNCTION: BETA10 0x10011600
 	Mx3DPointFloat(const Vector3& p_other) : Vector3(m_elements) { EqualsImpl(p_other.m_data); }
 
 	// FUNCTION: LEGO1 0x10003c10
