@@ -1794,7 +1794,7 @@ void LegoAnimationManager::FUN_10062580(AnimInfo& p_info)
 
 // FUNCTION: LEGO1 0x10062650
 // FUNCTION: BETA10 0x100436e2
-MxBool LegoAnimationManager::FUN_10062650(Vector3& p_position, float p_und, LegoROI* p_roi)
+MxBool LegoAnimationManager::FUN_10062650(Mx3DPointFloat& p_position, float p_und, LegoROI* p_roi)
 {
 	if (p_roi != NULL) {
 		Mx3DPointFloat position(p_position);
