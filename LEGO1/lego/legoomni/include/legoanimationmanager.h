@@ -231,7 +231,7 @@ private:
 	MxBool FUN_100623a0(AnimInfo& p_info);
 	MxBool ModelExists(AnimInfo& p_info, const char* p_name);
 	void FUN_10062580(AnimInfo& p_info);
-	MxBool FUN_10062650(Vector3& p_position, float p_und, LegoROI* p_roi);
+	MxBool FUN_10062650(Mx3DPointFloat& p_position, float p_und, LegoROI* p_roi);
 	MxBool FUN_10062710(AnimInfo& p_info);
 	MxBool FUN_10062e20(LegoROI* p_roi, LegoAnimPresenter* p_presenter);
 	void FUN_10063950(LegoROI* p_roi);
