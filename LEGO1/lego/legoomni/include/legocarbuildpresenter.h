@@ -21,10 +21,10 @@ public:
 	};
 
 	// SIZE 0x0c
-	struct UnknownListEntry {
+	struct CarBuildPart {
 		// FUNCTION: LEGO1 0x100795c0
 		// FUNCTION: BETA10 0x10073850
-		UnknownListEntry()
+		CarBuildPart()
 		{
 			m_name = NULL;
 			m_wiredName = NULL;
@@ -74,7 +74,7 @@ public:
 
 	virtual MxResult Serialize(LegoStorage* p_storage);
 
-	void FUN_10079050(MxS16 p_index);
+	void MakePartPlaced(MxS16 p_index);
 	void SwapNodesByName(LegoChar* p_param1, LegoChar* p_param2);
 	void InitBuildPlatform();
 	void HideBuildPartByName(LegoChar* p_param);
@@ -83,7 +83,7 @@ public:
 	LegoTreeNode* FindNodeByName(LegoTreeNode* p_treeNode, const LegoChar* p_name);
 	void AddPartToBuildByName(const LegoChar* p_name);
 	void RotateAroundYAxis(MxFloat p_angle);
-	MxBool FUN_10079c30(const LegoChar* p_name);
+	MxBool IsNextPartToPlace(const LegoChar* p_name);
 	MxBool PartIsPlaced(const LegoChar* p_name);
 	void MoveShelfForward();
 	MxBool StringEqualsPlatform(const LegoChar* p_string);
@@ -102,7 +102,7 @@ public:
 	MxBool StringEndsOnW(LegoChar* p_param);
 	MxBool StringEndsOnYOrN(const LegoChar* p_string);
 
-	const BoundingSphere& FUN_10079e20();
+	const BoundingSphere& GetTargetBoundingSphere();
 
 	// FUNCTION: BETA10 0x100703e0
 	const LegoChar* GetWiredNameOfLastPlacedPart() { return m_parts[m_placedPartCount].m_wiredName; }
@@ -121,7 +121,7 @@ public:
 	// LegoCarBuildAnimPresenter::`scalar deleting destructor'
 
 private:
-	void Beta10Inline0x100733d0();
+	void UpdateFlashingPartVisibility();
 
 	MxU16 m_shelfState; // 0xbc
 
@@ -136,16 +136,16 @@ private:
 	MxMatrix m_buildViewMatrix;               // 0xe0
 
 	// variable name verified by BETA10 0x100719f0
-	UnknownListEntry* m_parts; // 0x128
+	CarBuildPart* m_parts; // 0x128
 
-	MxFloat m_shelfFrameBuffer;   // 0x12c
-	MxFloat m_shelfFrame;         // 0x130
-	MxFloat m_shelfFrameMax;      // 0x134
-	MxFloat m_shelfFrameInterval; // 0x138
-	MxULong m_unk0x13c;           // 0x13c
-	LegoEntity* m_carBuildEntity; // 0x140
-	MxS32 m_unk0x144;             // 0x144
-	MxS32 m_unk0x148;             // 0x148
+	MxFloat m_shelfFrameBuffer;      // 0x12c
+	MxFloat m_shelfFrame;            // 0x130
+	MxFloat m_shelfFrameMax;         // 0x134
+	MxFloat m_shelfFrameInterval;    // 0x138
+	MxULong m_flashingPartTimeState; // 0x13c
+	LegoEntity* m_carBuildEntity;    // 0x140
+	MxS32 m_unk0x144;                // 0x144
+	MxS32 m_unk0x148;                // 0x148
 
 	// name verified by BETA10 0x10070d63
 	LegoChar* m_mainSourceId; // 0x14c

@@ -855,8 +855,8 @@ undefined4 LegoCarBuild::SelectPartFromMousePosition(MxLong p_x, MxLong p_y)
 		}
 	}
 	else {
-		if (m_animPresenter->FUN_10079c30(m_selectedPart->GetName())) {
-			m_unk0x114 = m_animPresenter->FUN_10079e20();
+		if (m_animPresenter->IsNextPartToPlace(m_selectedPart->GetName())) {
+			m_unk0x114 = m_animPresenter->GetTargetBoundingSphere();
 		}
 	}
 
@@ -902,7 +902,7 @@ undefined4 LegoCarBuild::FUN_100246e0(MxLong p_x, MxLong p_y)
 			m_PlaceBrick_Sound->Enable(TRUE);
 			m_animPresenter->SetShelfState(LegoCarBuildAnimPresenter::e_stopped);
 		}
-		else if (m_animPresenter->FUN_10079c30(m_selectedPart->GetName())) {
+		else if (m_animPresenter->IsNextPartToPlace(m_selectedPart->GetName())) {
 			if (SpheresIntersect(m_unk0x114, m_selectedPart->GetWorldBoundingSphere())) {
 				m_PlaceBrick_Sound->Enable(FALSE);
 				m_PlaceBrick_Sound->Enable(TRUE);
@@ -1418,7 +1418,7 @@ void LegoCarBuild::FUN_10025450()
 	else {
 		const LegoChar* wiredName;
 
-		if (!m_animPresenter->FUN_10079c30(m_selectedPart->GetName())) {
+		if (!m_animPresenter->IsNextPartToPlace(m_selectedPart->GetName())) {
 			wiredName = m_animPresenter->GetWiredNameByPartName(m_selectedPart->GetName());
 		}
 		else {
