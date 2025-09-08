@@ -20,11 +20,11 @@ class MxActionNotificationParam;
 class LegoVehicleBuildState : public LegoState {
 public:
 	enum AnimationState {
-		e_unknown0 = 0,
+		e_none = 0,
 		e_entering = 1,
-		e_unknown2 = 2,
+		e_settingUpMovie = 2,
 		e_cutscene = 3,
-		e_unknown4 = 4,
+		e_finishedBuild = 4,
 		e_exiting = 6
 	};
 
@@ -57,9 +57,9 @@ public:
 	MxString m_className; // 0x38
 
 	AnimationState m_animationState; // 0x48
-	MxU8 m_unk0x4c;                  // 0x4c
-	MxBool m_unk0x4d;                // 0x4d
-	MxBool m_unk0x4e;                // 0x4e
+	MxU8 m_introductionCounter;      // 0x4c
+	MxBool m_finishedBuild;          // 0x4d
+	MxBool m_playedExitScript;       // 0x4e
 	MxU8 m_placedPartCount;          // 0x4f
 };
 
