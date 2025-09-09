@@ -14,10 +14,10 @@ public:
 
 	// FUNCTION: LEGO1 0x10032770
 	// FUNCTION: BETA10 0x1001ff30
-	MxMatrix(const MxMatrix& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
+	MxMatrix(const MxMatrix& p_matrix) : Matrix4(m_elements) { CopyFrom(p_matrix); }
 
 	// FUNCTION: BETA10 0x1000fc20
-	MxMatrix(const Matrix4& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
+	MxMatrix(const Matrix4& p_matrix) : Matrix4(m_elements) { CopyFrom(p_matrix); }
 
 	// FUNCTION: BETA10 0x10010860
 	float* operator[](int idx) { return m_data[idx]; }
@@ -25,10 +25,10 @@ public:
 	const float* operator[](int idx) const { return m_data[idx]; }
 
 	// FUNCTION: LEGO1 0x10002850
-	void operator=(const Matrix4& p_matrix) override { Equals(p_matrix); } // vtable+0x28
+	void operator=(const Matrix4& p_matrix) override { CopyFrom(p_matrix); } // vtable+0x28
 
 	// FUNCTION: LEGO1 0x10002860
-	virtual void operator=(const MxMatrix& p_matrix) { Equals(p_matrix); } // vtable+0x48
+	virtual void operator=(const MxMatrix& p_matrix) { CopyFrom(p_matrix); } // vtable+0x48
 
 private:
 	float m_elements[4][4]; // 0x08

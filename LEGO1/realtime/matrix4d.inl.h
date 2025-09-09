@@ -8,14 +8,14 @@
 
 // FUNCTION: LEGO1 0x10002320
 // FUNCTION: BETA10 0x1000fcb0
-void Matrix4::Equals(float (*p_data)[4])
+void Matrix4::CopyFrom(float (*p_data)[4])
 {
 	memcpy(m_data, p_data, sizeof(float) * 4 * 4);
 }
 
 // FUNCTION: LEGO1 0x10002340
 // FUNCTION: BETA10 0x1000fcf0
-void Matrix4::Equals(const Matrix4& p_matrix)
+void Matrix4::CopyFrom(const Matrix4& p_matrix)
 {
 	memcpy(m_data, p_matrix.m_data, sizeof(float) * 4 * 4);
 }
@@ -84,7 +84,7 @@ void Matrix4::SetIdentity()
 // FUNCTION: BETA10 0x1000ff20
 void Matrix4::operator=(const Matrix4& p_matrix)
 {
-	Equals(p_matrix);
+	CopyFrom(p_matrix);
 }
 
 // FUNCTION: LEGO1 0x10002430
