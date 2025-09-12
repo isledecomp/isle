@@ -14,7 +14,13 @@ public:
 		MxFloat m_position[3];  // 0x00
 		MxFloat m_direction[3]; // 0x0c
 		const char* m_boundary; // 0x18
-		MxBool m_unk0x1c;       // 0x1c
+		MxBool m_cleared;       // 0x1c
+	};
+
+	enum VoiceOver {
+		e_head = 0,
+		e_behind = 1,
+		e_interrupt = 2,
 	};
 
 	Act2Actor();
@@ -25,7 +31,7 @@ public:
 	// FUNCTION: LEGO1 0x1001a180
 	MxS32 VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3) override
 	{
-		if (m_unk0x1f) {
+		if (m_animatingHit) {
 			return 0;
 		}
 
@@ -35,16 +41,16 @@ public:
 	void Animate(float p_time) override;                // vtable+0x70
 	MxResult HitActor(LegoPathActor*, MxBool) override; // vtable+0x94
 	MxResult VTable0x9c() override;                     // vtable+0x9c
-	MxS32 VTable0xa0() override;                        // vtable+0xa0
+	MxS32 NextTargetLocation() override;                // vtable+0xa0
 
-	void FUN_10018980();
-	void FUN_10019250(MxFloat p_speed, MxFloat p_param2);
-	void FUN_10019520();
-	void FUN_10019560();
-	MxU32 FUN_10019700(MxFloat p_param);
-	void FUN_100199f0(MxS8 p_param);
-	void FUN_100192a0(undefined4 p_location);
-	LegoEntity* FUN_10019b90(MxBool* p_param);
+	void InitializeNextShot();
+	void SetWorldSpeed(MxFloat p_speed, MxFloat p_resetWorldSpeedAt);
+	void GoingToHide();
+	void Hide();
+	MxU32 UpdateShot(MxFloat p_time);
+	void PlayNextVoiceOver(MxS8 p_voiceOverType);
+	void FindPath(MxU32 p_location);
+	LegoEntity* GetNextEntity(MxBool* p_isBuilding);
 
 	// SYNTHETIC: LEGO1 0x1001a0a0
 	// Act2Actor::`scalar deleting destructor'
@@ -54,22 +60,31 @@ public:
 	// `vbtable'
 
 private:
-	undefined m_unk0x1c;              // 0x1c
-	MxS8 m_unk0x1d;                   // 0x1d
-	undefined m_unk0x1e;              // 0x1e
-	MxBool m_unk0x1f;                 // 0x1f
-	MxFloat m_unk0x20;                // 0x20
-	MxFloat m_unk0x24;                // 0x24
-	MxS8 m_unk0x28;                   // 0x28
-	MxFloat m_unk0x2c;                // 0x2c
-	MxFloat m_unk0x30;                // 0x30
-	LegoAnimActorStruct* m_shootAnim; // 0x34
-	LegoCacheSound* m_unk0x38;        // 0x38
-	undefined4 m_unk0x3c;             // 0x3c
-	undefined m_unk0x40;              // 0x40
-	MxFloat m_unk0x44;                // 0x44
-	MxS8 m_unk0x48;                   // 0x48
-	LegoEntity* m_unk0x4c;            // 0x4c
+	enum {
+		e_readyToShoot = 0,
+		e_endShot = 1,
+		e_roaming = 2,
+		e_createdBrick = 3,
+		e_goingToHide = 4,
+		e_hiding = 5,
+	};
+
+	MxBool m_skipAnimation;             // 0x1c
+	MxS8 m_targetLocation;              // 0x1d
+	MxU8 m_state;                       // 0x1e
+	MxBool m_animatingHit;              // 0x1f
+	MxFloat m_animationDuration;        // 0x20
+	MxFloat m_createBrickTime;          // 0x24
+	MxS8 m_baseWorldSpeed;              // 0x28
+	MxFloat m_shootAnimEnd;             // 0x2c
+	MxFloat m_entityAnimationTime;      // 0x30
+	LegoAnimActorStruct* m_shootAnim;   // 0x34
+	LegoCacheSound* m_cachedShootSound; // 0x38
+	undefined4 m_unk0x3c;               // 0x3c
+	MxBool m_initializing;              // 0x40
+	MxFloat m_resetWorldSpeedAt;        // 0x44
+	MxS8 m_visitedLocations;            // 0x48
+	LegoEntity* m_nextEntity;           // 0x4c
 };
 
 // TEMPLATE: LEGO1 0x100194f0

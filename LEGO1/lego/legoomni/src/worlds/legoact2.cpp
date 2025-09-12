@@ -246,7 +246,7 @@ MxResult LegoAct2::Tickle()
 			else {
 				m_state = LegoAct2::e_goingToHide;
 				m_timeSinceLastStage = 0;
-				m_unk0x1138->FUN_10019520();
+				m_unk0x1138->GoingToHide();
 			}
 		}
 
@@ -631,7 +631,7 @@ MxLong LegoAct2::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 			m_currentAction = Act2mainScript::c_VOhide_PlayWav;
 		}
 
-		m_unk0x1138->FUN_10019560();
+		m_unk0x1138->Hide();
 
 		m_state = LegoAct2::e_hidden;
 		m_timeSinceLastStage = 0;
@@ -1223,6 +1223,6 @@ MxResult LegoAct2::InitializeShooting()
 	ap->FUN_1006d680(m_unk0x1138, -1.0f);
 
 	actor->SetWorldSpeed(0.0f);
-	m_unk0x1138->FUN_10018980();
+	m_unk0x1138->InitializeNextShot();
 	return SUCCESS;
 }
