@@ -135,9 +135,9 @@ Act2Actor::Act2Actor()
 }
 
 // FUNCTION: LEGO1 0x10018940
-void Act2Actor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
+void Act2Actor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_updateTransform)
 {
-	LegoAnimActor::SetROI(p_roi, p_bool1, p_bool2);
+	LegoAnimActor::SetROI(p_roi, p_bool1, p_updateTransform);
 	m_roi->SetVisibility(FALSE);
 }
 

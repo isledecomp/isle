@@ -124,12 +124,12 @@ void LegoEntity::SetWorld()
 
 // FUNCTION: LEGO1 0x100108a0
 // FUNCTION: BETA10 0x1007e724
-void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
+void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_updateTransform)
 {
 	m_roi = p_roi;
 
 	if (m_roi != NULL) {
-		if (p_bool2) {
+		if (p_updateTransform) {
 			MxMatrix mat;
 			CalcLocalTransform(
 				Mx3DPointFloat(m_worldLocation[0], m_worldLocation[1], m_worldLocation[2]),
