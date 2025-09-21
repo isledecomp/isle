@@ -40,8 +40,8 @@ public:
 		return !strcmp(p_name, LegoActor::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
-	void ParseAction(char* p_extra) override;                             // vtable+0x20
-	void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2) override; // vtable+0x24
+	void ParseAction(char* p_extra) override;                                       // vtable+0x20
+	void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_updateTransform) override; // vtable+0x24
 
 	// FUNCTION: LEGO1 0x10002cc0
 	// FUNCTION: BETA10 0x1000f3e0

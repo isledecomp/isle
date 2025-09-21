@@ -53,10 +53,10 @@ public:
 		return !strcmp(p_name, LegoEntity::ClassName()) || MxEntity::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSAction& p_dsAction);                     // vtable+0x18
-	virtual void Destroy(MxBool p_fromDestructor);                       // vtable+0x1c
-	virtual void ParseAction(char* p_extra);                             // vtable+0x20
-	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2); // vtable+0x24
+	virtual MxResult Create(MxDSAction& p_dsAction);                               // vtable+0x18
+	virtual void Destroy(MxBool p_fromDestructor);                                 // vtable+0x1c
+	virtual void ParseAction(char* p_extra);                                       // vtable+0x20
+	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_updateTransform); // vtable+0x24
 	virtual void SetWorldTransform(
 		const Vector3& p_location,
 		const Vector3& p_direction,
