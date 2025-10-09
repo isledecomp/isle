@@ -88,8 +88,7 @@ inline Result RendererCreateDevice(
 
 	if (Succeeded(result)) {
 		if (rCreateData.m_pBackBuffer) {
-			// LEGO1 0x10101040
-			// GLOBAL: BETA10 0x102055f4
+			// annotated below
 			static int g_setBufferCount = 1;
 			if (g_setBufferCount) {
 				Result result2 = ResultVal(rpDevice->SetBufferCount(2));
@@ -100,6 +99,10 @@ inline Result RendererCreateDevice(
 
 	return result;
 }
+
+// GLOBAL: LEGO1 0x10101040
+// GLOBAL: BETA10 0x102055f4
+// ?g_setBufferCount@?3??RendererCreateDevice@@YA?AW4Result@Tgl@@PAUIDirect3DRM2@@ABUDeviceDirectDrawCreateData@3@AAPAUIDirect3DRMDevice2@@@Z@4HA
 
 // FUNCTION: BETA10 0x1016cf40
 inline Result RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& rCreateData, DeviceImpl& rDevice)
