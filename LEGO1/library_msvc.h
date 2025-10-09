@@ -937,8 +937,22 @@
 // GLOBAL: LEGO1 0x100db6e0
 // GUID_SysKeyboard
 
-// Cannot be handled right now due to anonymous pointer in struct
+// GLOBAL: LEGO1 0x100dd1c0
+// IID_IDirect3DRM2
+
+// Cannot be handled right now due to anonymous pointer in struct.
+// We can annotate it on the original side, but we have no symbol on the recomp side.
+// We would need a way of annotating "the pointer at c_dfDIKeyboard+0x14 has orig address 0x10097f80".
 // // GLOBAL: LEGO1 0x10098f80
 // c_dfDIKeyboard
+
+
+/// Globals from libraries without symbols
+
+// STRING: LEGO1 0x100dabb0
+static const char* ___crtLCMapStringA_str = "\0";
+
+// STRING: LEGO1 0x100dabb4
+static const wchar_t *___crtLCMapStringA_wstr = L"\0";
 
 #endif
