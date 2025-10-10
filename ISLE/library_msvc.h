@@ -324,9 +324,6 @@
 // GLOBAL: ISLE 0x411850
 // __cflush
 
-// XGLOBAL ISLE 0x4125f8
-// ?_pnhHeap@@3P6AHI@ZA
-
 // GLOBAL: ISLE 0x412888
 // ___setlc_active
 
