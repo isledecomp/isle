@@ -243,9 +243,6 @@
 // LIBRARY: LEGO1 0x1008ade0
 // _MemCheckPtr@8
 
-// LIBRARY: LEGO1 0x1008c980
-// __except_handler3
-
 // GLOBAL: LEGO1 0x100da970
 // _szLibName
 
