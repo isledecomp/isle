@@ -38,7 +38,7 @@ jobs:
     - name: Cache venv
       uses: actions/cache@v4
       with:
-        key: venv-entropy-${{ github.run_id }}
+        key: venv-entropy-${{ github.run_id }}-${{ github.run_attempt }}
         path: .venv
 
     - name: Install python packages
@@ -97,7 +97,7 @@ jobs:
     - name: Restore cached virtualenv
       uses: actions/cache@v4
       with:
-        key: venv-entropy-${{ github.run_id }}
+        key: venv-entropy-${{ github.run_id }}-${{ github.run_attempt }}
         path: .venv
   
     - name: Prepare builds
@@ -166,7 +166,7 @@ jobs:
     - name: Restore cached virtualenv
       uses: actions/cache@v4
       with:
-        key: venv-entropy-${{ github.run_id }}
+        key: venv-entropy-${{ github.run_id }}-${{ github.run_attempt }}
         path: .venv
 
     - name: Aggregate Accuracy
