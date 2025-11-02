@@ -53,7 +53,7 @@ float RealtimeView::GetUserMaxLOD()
 }
 
 // FUNCTION: LEGO1 0x100a5e10
-// FUNCTION: LEGO1 0x101688bf
+// FUNCTION: BETA10 0x101688bf
 float RealtimeView::GetPartsThreshold()
 {
 	return g_partsThreshold;
