@@ -65,6 +65,9 @@
 // LIBRARY: LEGO1 0x1008b680
 // _strncmp
 
+// LIBRARY: BETA10 0x100f9a80
+// strncmp
+
 // LIBRARY: LEGO1 0x1008b6c0
 // _atof
 
@@ -718,6 +721,7 @@
 // __fmode
 
 // GLOBAL: LEGO1 0x101028da
+// GLOBAL: BETA10 0x101fbcca
 // __OP_POWjmptab
 
 // GLOBAL: LEGO1 0x1010292a
@@ -841,6 +845,12 @@
 // LIBRARY: BETA10 0x100f9420
 // memcpy
 
+// Issue: These symbols are inside `memcpy`. If enabled, the tail of the function mismatches.
+// // GLOBAL: BETA10 0x100f9458
+// TrailingVecs
+// // GLOBAL: BETA10 0x100f94f0
+// TrailingVecs_copydown
+
 // LIBRARY: BETA10 0x100faa00
 // memcmp
 
@@ -876,6 +886,9 @@
 
 // LIBRARY: BETA10 0x100ff82b
 // __ctrandisp1
+
+// LIBRARY: BETA10 0x100ff6ab
+// __ctrandisp2
 
 // LIBRARY: BETA10 0x100f8a92
 // operator delete
@@ -942,6 +955,93 @@
 
 // GLOBAL: LEGO1 0x100fd8ec
 // __newmode
+
+// LIBRARY: BETA10 0x1018f410
+// _pow
+
+// GLOBAL: BETA10 0x101fa910
+// _assertstring
+
+// GLOBAL: BETA10 0x101fa940
+// dblnewline
+
+// GLOBAL: BETA10 0x101fa938
+// dotdotdot
+
+// GLOBAL: BETA10 0x101fa93c
+// newline
+
+// LIBRARY: BETA10 0x100fbe10
+// doexit
+
+// LIBRARY: BETA10 0x100feeb0
+// xtoa
+
+// LIBRARY: BETA10 0x100ff330
+// flsall
+
+// GLOBAL: BETA10 0x101fbb08
+// rterrs
+
+// GLOBAL: BETA10 0x101faf64
+// __proc_attached
+
+// GLOBAL: BETA10 0x10211f6c
+// _pRawDllMain
+
+// GLOBAL: BETA10 0x101fafa0
+// ctrlc_action
+
+// GLOBAL: BETA10 0x101fafa4
+// ctrlbreak_action
+
+// GLOBAL: BETA10 0x101fafa8
+// abort_action
+
+// GLOBAL: BETA10 0x101fafac
+// term_action
+
+// GLOBAL: BETA10 0x101fbc18
+// _First_FPE_Indx
+
+// GLOBAL: BETA10 0x101fbc1c
+// _Num_FPE
+
+// GLOBAL: BETA10 0x101fafe8
+// _crtAssertBusy
+
+// GLOBAL: BETA10 0x101fb01c
+// pfnwsprintfA
+
+// GLOBAL: BETA10 0x10211f50
+// _pfnReportHook
+
+// GLOBAL: BETA10 0x101faff0
+// _CrtDbgMode
+
+// GLOBAL: BETA10 0x101fb000
+// _CrtDbgFile
+
+// LIBRARY: BETA10 0x100fc740
+// _CRT_INIT
+
+// LIBRARY: BETA10 0x100feb90
+// siglookup
+
+// LIBRARY: BETA10 0x10109920
+// $$$00001(2)
+
+// LIBRARY: BETA10 0x10100a70
+// _CrtDbgBreak
+
+// LIBRARY: BETA10 0x100fc650
+// _vsnprintf
+
+// LIBRARY: BETA10 0x1010cc20
+// _snprintf
+
+// LIBRARY: BETA10 0x10100fe0
+// CrtMessageWindow
 
 // Cannot be handled right now due to anonymous pointer in struct.
 // We can annotate it on the original side, but we have no symbol on the recomp side.

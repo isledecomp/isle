@@ -122,7 +122,9 @@ void Doors::ParseAction(char* p_extra)
 
 	assert(m_ltDoor == NULL && m_rtDoor == NULL);
 	assert(m_roi);
-	assert(!strncmp(m_roi->GetName(), "rcdor", 5));
+	// clang-format off
+	assert(!strncmp( m_roi->GetName(), "rcdor", 5 ));
+	// clang-format on
 
 	const CompoundObject* comp = m_roi->GetComp();
 

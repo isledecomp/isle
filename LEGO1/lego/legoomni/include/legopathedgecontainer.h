@@ -106,4 +106,10 @@ struct LegoPathEdgeContainer : public list<LegoBoundaryEdge> {
 	MxU8 m_flags;                 // 0x38
 };
 
+// SYNTHETIC: BETA10 0x10012080
+// LegoPathEdgeContainer::`scalar deleting destructor'
+
+// SYNTHETIC: BETA10 0x100120d0
+// LegoPathEdgeContainer::~LegoPathEdgeContainer
+
 #endif // LEGOPATHEDGECONTAINER_H

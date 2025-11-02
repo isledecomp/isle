@@ -8,6 +8,7 @@
 #include <d3drm.h>
 
 // VTABLE: LEGO1 0x100dbd88
+// VTABLE: BETA10 0x101c34bc
 // SIZE 0x1bc
 class ViewManager {
 public:
@@ -46,6 +47,7 @@ public:
 	void Add(ViewROI* p_roi) { rois.push_back(p_roi); }
 
 	// SYNTHETIC: LEGO1 0x100a6000
+	// SYNTHETIC: BETA10 0x10174410
 	// ViewManager::`scalar deleting destructor'
 
 private:
@@ -73,10 +75,17 @@ private:
 // TEMPLATE: LEGO1 0x10022030
 // list<ROI *,allocator<ROI *> >::insert
 
+// TEMPLATE: BETA10 0x1007b0b0
+// List<ROI *>::List<ROI *>
+
 // TEMPLATE: LEGO1 0x100a6020
 // List<ROI *>::~List<ROI *>
 
+// TEMPLATE: BETA10 0x101755d0
+// Vector<ROI const *>::Vector<ROI const *>
+
 // TEMPLATE: LEGO1 0x100a6070
+// TEMPLATE: BETA10 0x10174510
 // Vector<ROI const *>::~Vector<ROI const *>
 
 // TEMPLATE: LEGO1 0x100a6f80
