@@ -605,7 +605,7 @@ inline undefined4 GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* p_tglRenderer)
 {
 	assert(p_tglRenderer);
 	TglImpl::RendererImpl* renderer = (TglImpl::RendererImpl*) p_tglRenderer;
-	// TODO: Not thunked in BETA10
+	// Note: Diff in BETA10 (thunked in recompile but not in orig)
 	d3drm = renderer->ImplementationData();
 	return 0;
 }
