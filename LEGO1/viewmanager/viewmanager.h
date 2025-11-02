@@ -47,6 +47,7 @@ public:
 	void Add(ViewROI* p_roi) { rois.push_back(p_roi); }
 
 	// SYNTHETIC: LEGO1 0x100a6000
+	// SYNTHETIC: BETA10 0x10174410
 	// ViewManager::`scalar deleting destructor'
 
 private:

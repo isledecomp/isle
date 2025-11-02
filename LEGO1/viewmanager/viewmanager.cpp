@@ -9,6 +9,7 @@
 DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 
 // GLOBAL: LEGO1 0x100dbc78
+// GLOBAL: BETA10 0x101c3398
 int g_boundingBoxCornerMap[8][3] =
 	{{0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}, {1, 1, 1}};
 
@@ -16,12 +17,15 @@ int g_boundingBoxCornerMap[8][3] =
 int g_planePointIndexMap[18] = {0, 1, 5, 6, 2, 3, 3, 0, 4, 1, 2, 6, 0, 3, 2, 4, 5, 6};
 
 // GLOBAL: LEGO1 0x10101050
+// GLOBAL: BETA10 0x10205914
 float g_LODScaleFactor = 4.0F;
 
 // GLOBAL: LEGO1 0x10101054
-float g_minLODThreshold = 0.00097656297;
+// GLOBAL: BETA10 0x10205918
+float g_minLODThreshold = 1.0000005F / 1024;
 
 // GLOBAL: LEGO1 0x10101058
+// GLOBAL: BETA10 0x1020591c
 int g_maxLODLevels = 6;
 
 // GLOBAL: LEGO1 0x1010105c
@@ -43,7 +47,7 @@ int userVisualCallback(
 	LPDIRECT3DRMVIEWPORT view
 )
 {
-	// This function calls (among others) into LegoBSP.cpp, which might no longer exist in BETA10
+	// This function calls into LegoBSP.cpp, which has likely been removed in LEGO1
 	return 0;
 }
 
@@ -401,6 +405,7 @@ inline int ViewManager::CalculateLODLevel(float p_maximumScale, float p_initialS
 			return 0;
 		}
 		else {
+			// LINE: BETA10 0x10172c4d
 			lodLevel = 1;
 		}
 	}

@@ -2833,7 +2833,7 @@ void LegoAnimationManager::FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x
 			actor->SetWorldSpeed(0.0f);
 		}
 
-		LegoLocation* location = NavController()->GetLocation(p_tranInfo->m_location);
+		const LegoLocation* location = NavController()->GetLocation(p_tranInfo->m_location);
 		if (location != NULL) {
 			CalcLocalTransform(location->m_position, location->m_direction, location->m_up, m_unk0x484);
 			m_unk0x4cc.SetStartEnd(m_unk0x43c, m_unk0x484);

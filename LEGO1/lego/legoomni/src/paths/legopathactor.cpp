@@ -640,6 +640,7 @@ MxResult LegoPathActor::VTable0x9c()
 			case 1:
 				break;
 			default:
+				assert(0);
 				return FAILURE;
 			}
 		}
@@ -656,10 +657,14 @@ MxResult LegoPathActor::VTable0x9c()
 	if (local20 != 0) {
 		Mx3DPointFloat local78;
 
-		Vector3& v1 = *m_destEdge->CWVertex(*m_boundary);
-		Vector3& v2 = *m_destEdge->CCWVertex(*m_boundary);
+		assert(m_boundary && m_destEdge);
 
-		LERP3(local34, v1, v2, m_unk0xe4);
+		Vector3* v1 = m_destEdge->CWVertex(*m_boundary);
+		Vector3* v2 = m_destEdge->CCWVertex(*m_boundary);
+
+		assert(v1 && v2);
+
+		LERP3(local34, *v1, *v2, m_unk0xe4);
 
 		m_destEdge->GetFaceNormal(*m_boundary, local78);
 		local48.EqualsCross(*m_boundary->GetUp(), local78);
@@ -695,6 +700,7 @@ MxResult LegoPathActor::VTable0x9c()
 	}
 
 	if (VTable0x80(localc0, local84, local34, local48) != SUCCESS) {
+		MxTrace("Warning: m_BADuration = %g, roi = %s\n", m_BADuration, m_roi->GetName());
 		return FAILURE;
 	}
 
