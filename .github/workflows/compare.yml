@@ -73,7 +73,7 @@ jobs:
       uses: jwlawson/actions-setup-cmake@v2
       with:
         # Use minimum supported version
-        cmake-version: '3.15.x'
+        cmake-version: '3.25.x'
 
     - name: Patch MSVC 4.2
       run: |
