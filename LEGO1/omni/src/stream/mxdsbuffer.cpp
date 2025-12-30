@@ -456,31 +456,34 @@ void MxDSBuffer::FUN_100c6f80(MxU32 p_writeOffset)
 }
 
 // FUNCTION: LEGO1 0x100c6fa0
+// FUNCTION: BETA10 0x101582f2
 MxU8* MxDSBuffer::FUN_100c6fa0(MxU8* p_data)
 {
-	MxU8* current = p_data ? p_data : m_pBuffer;
-	MxU8* end = m_writeOffset + m_pBuffer - 8;
+	MxU8* volatile current = p_data ? p_data : m_pBuffer;
 
-	while (current <= end) {
-		switch (*((MxU32*) current)) {
-		case FOURCC('L', 'I', 'S', 'T'):
-		case FOURCC('R', 'I', 'F', 'F'):
-			current += 12;
+	while (current <= m_writeOffset + m_pBuffer - 8) {
+		switch (*(MxU32*) current) {
+		case FOURCC('M', 'x', 'O', 'b'):
+		case FOURCC('M', 'x', 'C', 'h'):
+			if (current == p_data) {
+				MxU32 size = *(MxU32*) (current + 4);
+				current += (size & 1) + size;
+				current += 8;
+			}
+			else {
+				return current;
+			}
 			break;
 		case FOURCC('M', 'x', 'D', 'a'):
 		case FOURCC('M', 'x', 'S', 't'):
 			current += 8;
 			break;
-		case FOURCC('M', 'x', 'O', 'b'):
-		case FOURCC('M', 'x', 'C', 'h'):
-			if (current != p_data) {
-				return current;
-			}
-			current = ((MxU32) current & 1) + current;
-			current += 8;
-			break;
 		case FOURCC('M', 'x', 'H', 'd'):
-			current += (((MxU32*) current)[1] + 8);
+			current += *(MxU32*) (current + 4) + 8;
+			break;
+		case FOURCC('L', 'I', 'S', 'T'):
+		case FOURCC('R', 'I', 'F', 'F'):
+			current += 12;
 			break;
 		default:
 			return NULL;
