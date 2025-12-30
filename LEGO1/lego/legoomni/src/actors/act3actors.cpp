@@ -375,7 +375,7 @@ MxResult Act3Cop::FUN_10040360()
 				MxMatrix locald0 = proi->GetLocal2World();
 				Vector3 local88(locald0[3]);
 				Mx3DPointFloat localec(local88);
-				localec -= local88;
+				localec -= local2c;
 
 				LegoPathEdgeContainer* r2 = new LegoPathEdgeContainer();
 				assert(r2);
