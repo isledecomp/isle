@@ -69,6 +69,7 @@ LegoLOD::~LegoLOD()
 }
 
 // FUNCTION: LEGO1 0x100aa510
+// STUB: BETA10 0x1018d15d
 LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_textureContainer, LegoStorage* p_storage)
 {
 	float(*normals)[3] = NULL;
@@ -319,12 +320,15 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100aabb0
+// FUNCTION: BETA10 0x1018e02a
 LegoLOD* LegoLOD::Clone(Tgl::Renderer* p_renderer)
 {
 	LegoLOD* dupLod = new LegoLOD(p_renderer);
 
 	dupLod->m_meshBuilder = m_meshBuilder->Clone();
 	dupLod->m_melems = new Mesh[m_numMeshes];
+
+	assert(dupLod->m_melems);
 
 	for (LegoU32 i = 0; i < m_numMeshes; i++) {
 		dupLod->m_melems[i].m_tglMesh = m_melems[i].m_tglMesh->ShallowClone(dupLod->m_meshBuilder);
@@ -353,11 +357,22 @@ LegoResult LegoLOD::SetColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blu
 }
 
 // FUNCTION: LEGO1 0x100aad00
+// FUNCTION: BETA10 0x1018e241
 LegoResult LegoLOD::SetTextureInfo(LegoTextureInfo* p_textureInfo)
 {
+	using Tgl::Succeeded;
+
 	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
 		if (m_melems[i].m_textured) {
+#ifdef BETA10
+			// This function likely had a different signature in BETA10
+			Tgl::Result tglResult = m_melems[i].m_tglMesh->SetTexture((const Tgl::Texture *)p_textureInfo);
+			// clang-format off
+			assert(Succeeded( tglResult ));
+			// clang-format on
+#else
 			LegoTextureInfo::SetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo);
+#endif
 			m_melems[i].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
 			m_melems[i].m_textured = TRUE;
 		}
