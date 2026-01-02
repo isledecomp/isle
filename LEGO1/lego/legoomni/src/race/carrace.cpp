@@ -72,7 +72,7 @@ MxS32 g_unk0x100f0c7c = 2;
 CarRace::CarRace()
 {
 	m_skeleton = NULL;
-	m_unk0x130 = MxRect32(0x16c, 0x154, 0x1ec, 0x15e);
+	m_progressBarRect = MxRect32(0x16c, 0x154, 0x1ec, 0x15e);
 }
 
 // FUNCTION: LEGO1 0x10016ce0
@@ -132,11 +132,11 @@ void CarRace::ReadyWorld()
 	AnimationManager()
 		->FUN_10060dc0(m_unk0x144, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, TRUE, FALSE, TRUE);
 
-	m_unk0x128 = (MxStillPresenter*) Find("MxPresenter", "CarLocator2");
-	m_unk0x128->SetPosition(m_unk0x130.GetLeft(), m_unk0x130.GetTop());
+	m_opponent1Locator = (MxStillPresenter*) Find("MxPresenter", "CarLocator2");
+	m_opponent1Locator->SetPosition(m_progressBarRect.GetLeft(), m_progressBarRect.GetTop());
 
-	m_unk0x12c = (MxStillPresenter*) Find("MxPresenter", "CarLocator3");
-	m_unk0x12c->SetPosition(m_unk0x130.GetLeft(), m_unk0x130.GetTop());
+	m_opponent2Locator = (MxStillPresenter*) Find("MxPresenter", "CarLocator3");
+	m_opponent2Locator->SetPosition(m_progressBarRect.GetLeft(), m_progressBarRect.GetTop());
 	VariableTable()->SetVariable("DISTANCE", "0.036");
 }
 
@@ -155,9 +155,9 @@ MxLong CarRace::HandleEndAction(MxEndActionNotificationParam& p_param)
 			result = 1;
 		}
 		else if (objectId == CarraceScript::c_irtx08ra_PlayWav && m_destLocation == LegoGameState::e_undefined) {
-			m_maps[0]->Mute(FALSE);
-			m_maps[1]->Mute(FALSE);
-			m_maps[2]->Mute(FALSE);
+			m_mapsLocators[0]->Mute(FALSE);
+			m_mapsLocators[1]->Mute(FALSE);
+			m_mapsLocators[2]->Mute(FALSE);
 
 			VariableTable()->SetVariable(g_raceState, g_racing);
 			result = 1;
@@ -186,46 +186,50 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 		switch (sender->GetEntityId()) {
 		case 10:
-			if (paramData <= m_unk0x104 || paramData >= m_unk0x104 + 5) {
+			if (paramData <= m_playerLastPathStruct || paramData >= m_playerLastPathStruct + 5) {
 				break;
 			}
 
-			m_unk0x104 = paramData;
+			m_playerLastPathStruct = paramData;
 			LegoChar buffer[20];
-			sprintf(buffer, "%g", 0.036 + 0.928 * (m_unk0xf8 * 20.0 + m_unk0x104) / (g_unk0x100f0c7c * 20.0));
+			sprintf(
+				buffer,
+				"%g",
+				0.036 + 0.928 * (m_playerLaps * 20.0 + m_playerLastPathStruct) / (g_unk0x100f0c7c * 20.0)
+			);
 			VariableTable()->SetVariable("DISTANCE", buffer);
 
-			if (m_unk0x104 == 0x14) {
-				m_unk0x104 = 0;
-				m_unk0xf8++;
+			if (m_playerLastPathStruct == 0x14) {
+				m_playerLastPathStruct = 0;
+				m_playerLaps++;
 
-				if (g_unk0x100f0c7c == m_unk0xf8) {
+				if (g_unk0x100f0c7c == m_playerLaps) {
 					VariableTable()->SetVariable(g_raceState, "");
 
-					m_maps[0]->Mute(TRUE);
-					m_maps[1]->Mute(TRUE);
-					m_maps[2]->Mute(TRUE);
+					m_mapsLocators[0]->Mute(TRUE);
+					m_mapsLocators[1]->Mute(TRUE);
+					m_mapsLocators[2]->Mute(TRUE);
 
-					m_maps[0]->SetMaxLinearVel(-1.0);
-					m_maps[1]->SetMaxLinearVel(-1.0);
-					m_maps[2]->SetMaxLinearVel(-1.0);
+					m_mapsLocators[0]->SetMaxLinearVel(-1.0);
+					m_mapsLocators[1]->SetMaxLinearVel(-1.0);
+					m_mapsLocators[2]->SetMaxLinearVel(-1.0);
 
-					RemoveActor(m_maps[1]);
-					m_maps[1]->ClearMaps();
+					RemoveActor(m_mapsLocators[1]);
+					m_mapsLocators[1]->ClearMaps();
 
-					RemoveActor(m_maps[2]);
-					m_maps[2]->ClearMaps();
+					RemoveActor(m_mapsLocators[2]);
+					m_mapsLocators[2]->ClearMaps();
 
 					MxS32 position;
 
-					if (m_unk0xfc < m_unk0xf8 && m_unk0x100 < m_unk0xf8) {
+					if (m_opponent1Laps < m_playerLaps && m_opponent2Laps < m_playerLaps) {
 						position = 3;
 						m_unk0x148 = g_unk0x100d5d40[rand() % 3];
 						m_unk0x14c = g_unk0x100d5d60[rand() % 3];
 					}
-					else if (m_unk0xfc < m_unk0xf8 || m_unk0x100 < m_unk0xf8) {
+					else if (m_opponent1Laps < m_playerLaps || m_opponent2Laps < m_playerLaps) {
 						position = 2;
-						if (m_unk0xfc == g_unk0x100f0c7c) {
+						if (m_opponent1Laps == g_unk0x100f0c7c) {
 							m_unk0x148 = g_unk0x100d5d30[rand() % 4];
 							m_unk0x14c = g_unk0x100d5d60[rand() % 3];
 						}
@@ -246,10 +250,10 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 					NavController()->SetDeadZone(NavController()->GetDefaultDeadZone());
 					NavController()->SetTrackDefault(1);
 					LegoRaceCar::InitYouCantStopSound();
-					m_raceState->m_unk0x28 = 2;
+					m_raceState->m_state = RaceState::e_finished;
 
 					RaceState::Entry* raceState = m_raceState->GetState(GameState()->GetActorId());
-					raceState->m_unk0x02 = position;
+					raceState->m_lastScore = position;
 
 					if (raceState->m_score < (MxS16) position) {
 						raceState->m_score = position;
@@ -273,22 +277,22 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 			break;
 		case 11:
-			if (paramData <= m_unk0x108 || paramData >= m_unk0x108 + 5) {
+			if (paramData <= m_opponent1LastPathStruct || paramData >= m_opponent1LastPathStruct + 5) {
 				break;
 			}
 
 			FUN_10017820(11, paramData);
-			m_unk0x108 = paramData;
+			m_opponent1LastPathStruct = paramData;
 
-			if (m_unk0x108 == 0x14) {
-				m_unk0x108 = 0;
-				m_unk0xfc++;
+			if (m_opponent1LastPathStruct == 0x14) {
+				m_opponent1LastPathStruct = 0;
+				m_opponent1Laps++;
 
-				if (g_unk0x100f0c7c == m_unk0xfc) {
-					m_maps[1]->SetMaxLinearVel(-1.0);
-					RemoveActor(m_maps[1]);
-					m_maps[1]->ClearMaps();
-					m_maps[1]->GetROI()->SetVisibility(FALSE);
+				if (g_unk0x100f0c7c == m_opponent1Laps) {
+					m_mapsLocators[1]->SetMaxLinearVel(-1.0);
+					RemoveActor(m_mapsLocators[1]);
+					m_mapsLocators[1]->ClearMaps();
+					m_mapsLocators[1]->GetROI()->SetVisibility(FALSE);
 
 					LegoROI* roi = FindROI("rcblack");
 
@@ -300,23 +304,22 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 			break;
 		case 12:
-			if (paramData <= m_unk0x10c || paramData >= m_unk0x10c + 5) {
+			if (paramData <= m_opponent2LastPathStruct || paramData >= m_opponent2LastPathStruct + 5) {
 				break;
 			}
 
 			FUN_10017820(12, paramData);
+			m_opponent2LastPathStruct = paramData;
 
-			m_unk0x10c = paramData;
+			if (m_opponent2LastPathStruct == 0x14) {
+				m_opponent2LastPathStruct = 0;
+				m_opponent2Laps++;
 
-			if (m_unk0x10c == 0x14) {
-				m_unk0x10c = 0;
-				m_unk0x100++;
-
-				if (g_unk0x100f0c7c == m_unk0x100) {
-					m_maps[2]->SetMaxLinearVel(-1.0);
-					RemoveActor(m_maps[2]);
-					m_maps[2]->ClearMaps();
-					m_maps[2]->GetROI()->SetVisibility(FALSE);
+				if (g_unk0x100f0c7c == m_opponent2Laps) {
+					m_mapsLocators[2]->SetMaxLinearVel(-1.0);
+					RemoveActor(m_mapsLocators[2]);
+					m_mapsLocators[2]->ClearMaps();
+					m_mapsLocators[2]->GetROI()->SetVisibility(FALSE);
 
 					LegoROI* roi = FindROI("rcgreen");
 
@@ -373,7 +376,7 @@ MxLong CarRace::HandleControl(LegoControlManagerNotificationParam& p_param)
 // FUNCTION: BETA10 0x100c8f59
 MxLong CarRace::HandleType0Notification(MxNotificationParam&)
 {
-	if (m_raceState->m_unk0x28 == 2) {
+	if (m_raceState->m_state == RaceState::e_finished) {
 		m_destLocation = LegoGameState::e_unk21;
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 	}
@@ -389,19 +392,21 @@ void CarRace::FUN_10017820(MxS32 p_param1, MxS16 p_param2)
 	MxS32 x, y;
 
 	if (p_param1 == 11) {
-		presenter = m_unk0x128;
-		local4 = m_unk0xfc;
+		presenter = m_opponent1Locator;
+		local4 = m_opponent1Laps;
 	}
 	else if (p_param1 == 12) {
-		presenter = m_unk0x12c;
-		local4 = m_unk0x100;
+		presenter = m_opponent2Locator;
+		local4 = m_opponent2Laps;
 	}
 
 	if (presenter) {
-		x = m_unk0x130.GetLeft() + 0.5 +
-			(m_unk0x130.GetRight() - m_unk0x130.GetLeft() + 1) * (local4 * 20.0 + p_param2) / (g_unk0x100f0c7c * 20.0);
-		y = m_unk0x130.GetTop() + 0.5 +
-			(m_unk0x130.GetBottom() - m_unk0x130.GetTop() + 1) * (local4 * 20.0 + p_param2) / (g_unk0x100f0c7c * 20.0);
+		x = m_progressBarRect.GetLeft() + 0.5 +
+			(m_progressBarRect.GetRight() - m_progressBarRect.GetLeft() + 1) * (local4 * 20.0 + p_param2) /
+				(g_unk0x100f0c7c * 20.0);
+		y = m_progressBarRect.GetTop() + 0.5 +
+			(m_progressBarRect.GetBottom() - m_progressBarRect.GetTop() + 1) * (local4 * 20.0 + p_param2) /
+				(g_unk0x100f0c7c * 20.0);
 
 		presenter->SetPosition(x, y);
 	}
