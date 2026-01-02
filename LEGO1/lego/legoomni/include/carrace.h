@@ -78,10 +78,10 @@ private:
 	static MxS32 g_unk0x100d5d50[];
 	static MxS32 g_unk0x100d5d60[];
 
-	MxS32 m_unk0x144;     // 0x144
-	MxS32 m_unk0x148;     // 0x148
-	MxS32 m_unk0x14c;     // 0x14c
-	RaceSkel* m_skeleton; // 0x150
+	MxS32 m_introAnimation; // 0x144
+	MxS32 m_unk0x148;       // 0x148
+	MxS32 m_unk0x14c;       // 0x14c
+	RaceSkel* m_skeleton;   // 0x150
 };
 
 #endif // CARRACE_H

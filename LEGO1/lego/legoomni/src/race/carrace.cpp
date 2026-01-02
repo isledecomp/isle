@@ -25,7 +25,7 @@
 DECOMP_SIZE_ASSERT(CarRace, 0x154)
 
 // GLOBAL: LEGO1 0x100d5d10
-MxS32 CarRace::g_unk0x100d5d10[] = {
+MxS32 CarRace::g_introAnimations[] = {
 	CarraceScript::c_srt001sl_RunAnim,
 	CarraceScript::c_srt002sl_RunAnim,
 	CarraceScript::c_srt003sl_RunAnim,
@@ -97,7 +97,7 @@ MxResult CarRace::Create(MxDSAction& p_dsAction)
 	m_raceState = raceState;
 
 	m_act1State->m_state = Act1State::e_transitionToRacecar;
-	m_unk0x144 = -1;
+	m_introAnimation = -1;
 	m_unk0x148 = -1;
 	m_unk0x14c = -1;
 
@@ -127,10 +127,10 @@ void CarRace::ReadyWorld()
 	AnimationManager()->Resume();
 	Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 
-	m_unk0x144 = g_unk0x100d5d10[rand() & 7];
+	m_introAnimation = g_introAnimations[rand() & 7];
 
 	AnimationManager()
-		->FUN_10060dc0(m_unk0x144, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, TRUE, FALSE, TRUE);
+		->FUN_10060dc0(m_introAnimation, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, TRUE, FALSE, TRUE);
 
 	m_opponent1Locator = (MxStillPresenter*) Find("MxPresenter", "CarLocator2");
 	m_opponent1Locator->SetPosition(m_progressBarRect.GetLeft(), m_progressBarRect.GetTop());
@@ -150,7 +150,7 @@ MxLong CarRace::HandleEndAction(MxEndActionNotificationParam& p_param)
 		MxDSAction* action = p_param.GetAction();
 		MxU32 objectId = action->GetObjectId();
 
-		if (m_unk0x144 == objectId) {
+		if (m_introAnimation == objectId) {
 			InvokeAction(Extra::e_start, *g_carraceScript, CarraceScript::c_irtx08ra_PlayWav, NULL);
 			result = 1;
 		}
