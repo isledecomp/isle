@@ -20,9 +20,9 @@ LPDIRECT3DRMMATERIAL g_unk0x101013d4 = NULL;
 const char* g_InhPrefix = "inh";
 
 #ifdef BETA10
-inline BOOL GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
+inline BOOL GetD3DRM_legolod(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
 #else
-inline IDirect3DRM2* GetD3DRM(Tgl::Renderer* pRenderer);
+inline IDirect3DRM2* GetD3DRM_legolod(Tgl::Renderer* pRenderer);
 #endif
 inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* pMesh);
 
@@ -34,12 +34,12 @@ LegoLOD::LegoLOD(Tgl::Renderer* p_renderer) : ViewLOD(p_renderer)
 #ifdef BETA10
 		IDirect3DRM2* d3drm = NULL;
 		assert((p_renderer != NULL));
-		GetD3DRM(d3drm, p_renderer);
+		GetD3DRM_legolod(d3drm, p_renderer);
 		if (d3drm->CreateMaterial(10.0, &g_unk0x101013d4)) {
 			assert(0);
 		}
 #else
-		GetD3DRM(p_renderer)->CreateMaterial(10.0, &g_unk0x101013d4);
+		GetD3DRM_legolod(p_renderer)->CreateMaterial(10.0, &g_unk0x101013d4);
 #endif
 	}
 
@@ -424,7 +424,7 @@ inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mes
 
 #ifdef BETA10
 // FUNCTION: BETA10 0x1018cfc5
-inline BOOL GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* p_tglRenderer)
+inline BOOL GetD3DRM_legolod(IDirect3DRM2*& d3drm, Tgl::Renderer* p_tglRenderer)
 {
 	// Note: Code duplication with viewmanager.cpp:GetD3DRM()
 	assert(p_tglRenderer);
@@ -434,7 +434,7 @@ inline BOOL GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* p_tglRenderer)
 	return 0;
 }
 #else
-inline IDirect3DRM2* GetD3DRM(Tgl::Renderer* pRenderer)
+inline IDirect3DRM2* GetD3DRM_legolod(Tgl::Renderer* pRenderer)
 {
 	return ((TglImpl::RendererImpl*) pRenderer)->ImplementationData();
 }

@@ -35,7 +35,7 @@ float g_viewDistance = 0.000125F;
 float g_elapsedSeconds = 0;
 
 inline void SetAppData(ViewROI* p_roi, LPD3DRM_APPDATA data);
-inline undefined4 GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
+inline undefined4 GetD3DRM_viewmanager(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
 inline undefined4 GetFrame(IDirect3DRMFrame2** frame, Tgl::Group* scene);
 
 // STUB: BETA10 0x1017202e
@@ -64,7 +64,7 @@ ViewManager::ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const Orie
 {
 	SetPOVSource(point_of_view);
 	prev_render_time = 0.09;
-	GetD3DRM(d3drm, pRenderer);
+	GetD3DRM_viewmanager(d3drm, pRenderer);
 	GetFrame(&frame, scene);
 
 #ifdef BETA10
@@ -601,7 +601,7 @@ inline void SetAppData(ViewROI* p_roi, LPD3DRM_APPDATA data)
 }
 
 // FUNCTION: BETA10 0x10171f30
-inline undefined4 GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* p_tglRenderer)
+inline undefined4 GetD3DRM_viewmanager(IDirect3DRM2*& d3drm, Tgl::Renderer* p_tglRenderer)
 {
 	assert(p_tglRenderer);
 	TglImpl::RendererImpl* renderer = (TglImpl::RendererImpl*) p_tglRenderer;
