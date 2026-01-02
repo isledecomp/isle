@@ -594,7 +594,7 @@ void Isle::Enable(MxBool p_enable)
 			SetIsWorldActive(FALSE);
 			break;
 		case LegoGameState::e_jetrace2:
-			if (((JetskiRaceState*) GameState()->GetState("JetskiRaceState"))->m_unk0x28 == 2) {
+			if (((JetskiRaceState*) GameState()->GetState("JetskiRaceState"))->m_state == RaceState::e_finished) {
 				m_act1state->m_state = Act1State::e_transitionToJetski;
 			}
 
@@ -737,10 +737,10 @@ void Isle::Enable(MxBool p_enable)
 				);
 			JetskiRaceState* raceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
 
-			if (raceState->m_unk0x28 == 2) {
+			if (raceState->m_state == RaceState::e_finished) {
 				IsleScript::Script script = IsleScript::c_noneIsle;
 
-				switch (raceState->GetState(GameState()->GetActorId())->GetUnknown0x02()) {
+				switch (raceState->GetState(GameState()->GetActorId())->GetLastScore()) {
 				case 1:
 					script = IsleScript::c_sjs014in_RunAnim;
 					break;
@@ -771,10 +771,10 @@ void Isle::Enable(MxBool p_enable)
 				);
 			CarRaceState* raceState = (CarRaceState*) GameState()->GetState("CarRaceState");
 
-			if (raceState->m_unk0x28 == 2) {
+			if (raceState->m_state == RaceState::e_finished) {
 				IsleScript::Script script = IsleScript::c_noneIsle;
 
-				switch (raceState->GetState(GameState()->GetActorId())->GetUnknown0x02()) {
+				switch (raceState->GetState(GameState()->GetActorId())->GetLastScore()) {
 				case 1:
 					script = IsleScript::c_srt003in_RunAnim;
 					break;
