@@ -87,7 +87,7 @@ public:
 		e_carrace,
 		e_carraceExterior,
 		e_racecarbuildExited,
-		e_unk21,
+		e_carraceFinished,
 		e_pizzeriaExterior,
 		e_unk23,
 		e_unk24,
