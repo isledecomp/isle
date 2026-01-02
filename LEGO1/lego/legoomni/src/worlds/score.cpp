@@ -93,7 +93,7 @@ MxLong Score::Notify(MxParam& p_param)
 			ret = 1;
 			break;
 		case c_notificationEndAction:
-			ret = FUN_10001510((MxEndActionNotificationParam&) p_param);
+			ret = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;
 		case c_notificationKeyPress:
 			if (((LegoEventNotificationParam&) p_param).GetKey() == VK_SPACE) {
@@ -102,7 +102,7 @@ MxLong Score::Notify(MxParam& p_param)
 			ret = 1;
 			break;
 		case c_notificationControl:
-			ret = FUN_100016d0((LegoControlManagerNotificationParam&) p_param);
+			ret = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;
 		case c_notificationTransitioned:
 			DeleteObjects(g_infoscorScript, InfoscorScript::c_LegoBox1_Flc, InfoscorScript::c_LegoBox3_Flc);
@@ -118,7 +118,7 @@ MxLong Score::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10001510
-MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
+MxLong Score::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
 	MxDSAction* action = p_param.GetAction();
 
@@ -163,11 +163,11 @@ void Score::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x100016d0
-MxLong Score::FUN_100016d0(LegoControlManagerNotificationParam& p_param)
+MxLong Score::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
-	MxS16 unk0x28 = p_param.m_enabledChild;
+	MxS16 enabledChild = p_param.m_enabledChild;
 
-	if (unk0x28 == 1 || p_param.m_clickedObjectId == InfoscorScript::c_LegoBox_Ctl) {
+	if (enabledChild == 1 || p_param.m_clickedObjectId == InfoscorScript::c_LegoBox_Ctl) {
 		switch (p_param.m_clickedObjectId) {
 		case InfoscorScript::c_LeftArrow_Ctl:
 			m_destLocation = LegoGameState::e_infomain;
@@ -190,7 +190,7 @@ MxLong Score::FUN_100016d0(LegoControlManagerNotificationParam& p_param)
 			break;
 		}
 		case InfoscorScript::c_LegoBox_Ctl: {
-			switch (unk0x28) {
+			switch (enabledChild) {
 			case 1: {
 				MxDSAction action;
 				action.SetObjectId(InfoscorScript::c_LegoBox1_Flc);
@@ -293,21 +293,21 @@ void Score::Paint()
 // FUNCTION: BETA10 0x100f4a52
 void Score::FillArea(MxS32 i_activity, MxS32 i_actor, MxS16 score)
 {
-	MxS32 local3c[] = {0x2b00, 0x5700, 0x8000, 0xab00, 0xd600};
-	MxS32 local14[] = {0x2a, 0x27, 0x29, 0x29, 0x2a};
-	MxS32 local50[] = {0x2f, 0x56, 0x81, 0xaa, 0xd4};
-	MxS32 local28[] = {0x25, 0x29, 0x27, 0x28, 0x28};
+	MxS32 areaYOffsets[] = {0x2b00, 0x5700, 0x8000, 0xab00, 0xd600};
+	MxS32 areaHeights[] = {0x2a, 0x27, 0x29, 0x29, 0x2a};
+	MxS32 areaXOffsets[] = {0x2f, 0x56, 0x81, 0xaa, 0xd4};
+	MxS32 areaWidths[] = {0x25, 0x29, 0x27, 0x28, 0x28};
 	MxS32 colors[] = {0x11, 0x0f, 0x08, 0x05};
 
 	assert(i_activity >= 0 && i_activity < 5);
 	assert(i_actor >= 0 && i_actor < 5);
 	assert(score >= 0 && score < 4);
 
-	MxU8* ptr = m_surface + local3c[i_actor] + local50[i_activity];
+	MxU8* ptr = m_surface + areaYOffsets[i_actor] + areaXOffsets[i_activity];
 	MxS32 color = colors[score];
-	MxS32 size = local28[i_activity];
+	MxS32 size = areaWidths[i_activity];
 
-	for (MxS32 i = 0; i < local14[i_actor]; i++) {
+	for (MxS32 i = 0; i < areaHeights[i_actor]; i++) {
 		memset(ptr, color, size);
 		ptr += 0x100;
 	}
