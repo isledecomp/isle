@@ -13,19 +13,34 @@ DECOMP_SIZE_ASSERT(LegoLOD, 0x20)
 DECOMP_SIZE_ASSERT(LegoLOD::Mesh, 0x08)
 
 // GLOBAL: LEGO1 0x101013d4
+// GLOBAL: BETA10 0x10207230
 LPDIRECT3DRMMATERIAL g_unk0x101013d4 = NULL;
 
 // GLOBAL: LEGO1 0x101013dc
 const char* g_InhPrefix = "inh";
 
+#ifdef BETA10
+inline BOOL GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
+#else
 inline IDirect3DRM2* GetD3DRM(Tgl::Renderer* pRenderer);
+#endif
 inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* pMesh);
 
 // FUNCTION: LEGO1 0x100aa380
+// FUNCTION: BETA10 0x1018ce90
 LegoLOD::LegoLOD(Tgl::Renderer* p_renderer) : ViewLOD(p_renderer)
 {
 	if (g_unk0x101013d4 == NULL) {
+#ifdef BETA10
+		IDirect3DRM2* d3drm = NULL;
+		assert((p_renderer != NULL));
+		GetD3DRM(d3drm, p_renderer);
+		if (d3drm->CreateMaterial(10.0, &g_unk0x101013d4)) {
+			assert(0);
+		}
+#else
 		GetD3DRM(p_renderer)->CreateMaterial(10.0, &g_unk0x101013d4);
+#endif
 	}
 
 	m_melems = NULL;
@@ -36,6 +51,7 @@ LegoLOD::LegoLOD(Tgl::Renderer* p_renderer) : ViewLOD(p_renderer)
 }
 
 // FUNCTION: LEGO1 0x100aa450
+// FUNCTION: BETA10 0x1018d017
 LegoLOD::~LegoLOD()
 {
 	if (m_numMeshes && m_melems != NULL) {
@@ -395,14 +411,31 @@ void LegoLOD::ClearMeshOffset()
 	m_meshOffset = 0;
 }
 
-inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* pMesh)
+// FUNCTION: BETA10 0x1018dfc4
+inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* p_tglElem)
 {
-	mesh = ((TglImpl::MeshImpl*) pMesh)->ImplementationData()->groupMesh;
-	index = ((TglImpl::MeshImpl*) pMesh)->ImplementationData()->groupIndex;
+	assert(p_tglElem);
+	TglImpl::MeshImpl* meshImpl = (TglImpl::MeshImpl*) p_tglElem;
+	// Note: Diff in BETA10 (thunked in recompile but not in orig)
+	mesh = meshImpl->ImplementationData()->groupMesh;
+	index = meshImpl->ImplementationData()->groupIndex;
 	return FALSE;
 }
 
+#ifdef BETA10
+// FUNCTION: BETA10 0x1018cfc5
+inline BOOL GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* p_tglRenderer)
+{
+	// Note: Code duplication with viewmanager.cpp:GetD3DRM()
+	assert(p_tglRenderer);
+	TglImpl::RendererImpl* renderer = (TglImpl::RendererImpl*) p_tglRenderer;
+	// Note: Diff in BETA10 (thunked in recompile but not in orig)
+	d3drm = renderer->ImplementationData();
+	return 0;
+}
+#else
 inline IDirect3DRM2* GetD3DRM(Tgl::Renderer* pRenderer)
 {
 	return ((TglImpl::RendererImpl*) pRenderer)->ImplementationData();
 }
+#endif
