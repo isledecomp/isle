@@ -43,7 +43,7 @@ MxFloat g_unk0x100da044 = 8.0f;
 LegoCarRaceActor::LegoCarRaceActor()
 {
 	m_unk0x08 = 1.0f;
-	m_unk0x70 = 0.0f;
+	m_lastPathStruct = 0.0f;
 	m_animState = 0;
 	m_maxLinearVel = 0.0f;
 	m_frequencyFactor = 1.0f;
@@ -75,8 +75,8 @@ void LegoCarRaceActor::FUN_10080590(float p_time)
 	LegoPathActor* userActor = UserActor();
 
 	if (userActor) {
-		// All known implementations of LegoPathActor->VTable0x5c() return LegoPathActor::m_unk0x70
-		deltaUnk0x70 = m_unk0x70 - userActor->VTable0x5c();
+		// All known implementations of LegoPathActor->GetLastPathStruct() return LegoPathActor::m_lastPathStruct
+		deltaUnk0x70 = m_lastPathStruct - userActor->GetLastPathStruct();
 	}
 	else {
 		deltaUnk0x70 = 0;

@@ -19,7 +19,7 @@ Mx3DPointFloat LegoRaceActor::g_unk0x10102b08 = Mx3DPointFloat(0.0, 2.0, 0.0);
 // FUNCTION: LEGO1 0x100145d0
 LegoRaceActor::LegoRaceActor()
 {
-	m_unk0x70 = 0;
+	m_lastPathStruct = 0;
 	m_unk0x08 = 0;
 }
 
