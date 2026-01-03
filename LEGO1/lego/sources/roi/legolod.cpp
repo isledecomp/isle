@@ -366,7 +366,7 @@ LegoResult LegoLOD::SetTextureInfo(LegoTextureInfo* p_textureInfo)
 		if (m_melems[i].m_textured) {
 #ifdef BETA10
 			// This function likely had a different signature in BETA10
-			Tgl::Result tglResult = m_melems[i].m_tglMesh->SetTexture((const Tgl::Texture *)p_textureInfo);
+			Tgl::Result tglResult = m_melems[i].m_tglMesh->SetTexture((const Tgl::Texture*) p_textureInfo);
 			// clang-format off
 			assert(Succeeded( tglResult ));
 			// clang-format on
@@ -382,11 +382,22 @@ LegoResult LegoLOD::SetTextureInfo(LegoTextureInfo* p_textureInfo)
 }
 
 // FUNCTION: LEGO1 0x100aad70
+// FUNCTION: BETA10 0x1018e32c
 LegoResult LegoLOD::UpdateTextureInfo(LegoTextureInfo* p_textureInfo)
 {
+	using Tgl::Succeeded;
+
 	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
 		if (m_melems[i].m_textured) {
+#ifdef BETA10
+			// This function likely had a different signature in BETA10
+			Tgl::Result tglResult = m_melems[i].m_tglMesh->SetTexture((const Tgl::Texture*) p_textureInfo);
+			// clang-format off
+			assert(Succeeded( tglResult ));
+			// clang-format on
+#else
 			LegoTextureInfo::SetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo);
+#endif
 		}
 	}
 

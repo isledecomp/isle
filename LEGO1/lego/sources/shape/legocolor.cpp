@@ -6,6 +6,7 @@
 DECOMP_SIZE_ASSERT(LegoColor, 0x03)
 
 // FUNCTION: LEGO1 0x100d3a20
+// FUNCTION: BETA10 0x10190730
 LegoResult LegoColor::Read(LegoStorage* p_storage)
 {
 	LegoResult result;

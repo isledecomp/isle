@@ -28,6 +28,7 @@ targets:
         - LegoAct2
         - LegoCarBuild
         - LegoCarBuildAnimPresenter
+        - LegoLOD
         - LegoRace
         - LegoWorld
       ignore-functions:

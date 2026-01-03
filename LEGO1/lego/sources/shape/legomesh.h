@@ -9,6 +9,7 @@ class LegoStorage;
 
 // SIZE 0x1c
 struct LegoMeshUnkComponent {
+	// FUNCTION: BETA10 0x101905b0
 	~LegoMeshUnkComponent()
 	{
 		if (m_unk0x08) {
@@ -36,7 +37,11 @@ struct LegoMeshUnkComponent {
 	undefined* m_unk0x18;   // 0x18
 };
 
+// SYNTHETIC: BETA10 0x10190530
+// LegoMeshUnkComponent::`scalar deleting destructor'
+
 // VTABLE: LEGO1 0x100dd228
+// VTABLE: BETA10 0x101c39c4
 // SIZE 0x24
 class LegoMesh {
 public:
@@ -60,6 +65,7 @@ public:
 	LegoResult Read(LegoStorage* p_storage);
 
 	// SYNTHETIC: LEGO1 0x100d3840
+	// SYNTHETIC: BETA10 0x101904f0
 	// LegoMesh::`scalar deleting destructor'
 
 protected:
