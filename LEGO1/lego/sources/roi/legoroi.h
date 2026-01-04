@@ -63,7 +63,7 @@ public:
 	void SetDisplayBB(int p_displayBB);
 
 	static LegoResult CreateLocalTransform(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix);
-	static void FUN_100a81b0(const LegoChar* p_error, ...);
+	static void ReportError(const LegoChar* p_error, ...);
 	static void configureLegoROI(int p_roi);
 	static void SetColorOverride(ColorOverride p_colorOverride);
 	static LegoBool GetRGBAColor(const LegoChar* p_name, float& p_red, float& p_green, float& p_blue, float& p_alpha);

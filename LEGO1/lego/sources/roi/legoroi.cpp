@@ -61,7 +61,7 @@ TextureHandler g_textureHandler = NULL;
 // FUNCTION: LEGO1 0x100a81b0
 // FUNCTION: BETA10 0x101898c0
 // FUNCTION: ALPHA 0x100bb1c0
-void LegoROI::FUN_100a81b0(const LegoChar* p_error, ...)
+void LegoROI::ReportError(const LegoChar* p_error, ...)
 {
 	// Probably a printf-like debug function that was removed early.
 	// No known implementation in any of the binaries.
@@ -418,7 +418,7 @@ LegoResult LegoROI::ApplyChildAnimationTransformation(
 		}
 	}
 	else {
-		FUN_100a81b0("%s ROI Not found\n", name);
+		ReportError("%s ROI Not found\n", name);
 #ifdef BETA10
 		_RPT1(_CRT_ASSERT, "%s ROI Not Found", name);
 		// Note that the macro inserts an INT3, which breaks the assumption that INT3
