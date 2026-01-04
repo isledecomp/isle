@@ -1388,7 +1388,7 @@ void LegoCarBuild::SetPartColor(MxS32 p_objectId)
 
 	m_Paint_Sound->Enable(FALSE);
 	m_Paint_Sound->Enable(TRUE);
-	m_selectedPart->FUN_100a93b0(color);
+	m_selectedPart->SetColorByName(color);
 	sprintf(buffer, "c_%s", m_selectedPart->GetName());
 	VariableTable()->SetVariable(buffer, color);
 }

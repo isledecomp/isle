@@ -601,7 +601,7 @@ LegoResult LegoROI::SetLodColor(const LegoChar* p_name)
 
 // FUNCTION: LEGO1 0x100a93b0
 // FUNCTION: BETA10 0x1018b2c0
-LegoResult LegoROI::FUN_100a93b0(const LegoChar* p_name)
+LegoResult LegoROI::SetColorByName(const LegoChar* p_name)
 {
 	MxFloat red, green, blue, alpha;
 	if (ColorAliasLookup(p_name, red, green, blue, alpha)) {
