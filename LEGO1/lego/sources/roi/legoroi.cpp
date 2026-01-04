@@ -706,10 +706,10 @@ LegoU32 LegoROI::Intersect(
 		Mx3DPointFloat v1(p_v1);
 		v1 -= GetWorldBoundingSphere().Center();
 
-		float local10 = GetWorldBoundingSphere().Radius();
+		float radius = GetWorldBoundingSphere().Radius();
 		float local8 = p_v2.Dot(p_v2, p_v2);
 		float localc = p_v2.Dot(p_v2, v1) * 2.0f;
-		float local14 = v1.Dot(v1, v1) - (local10 * local10);
+		float local14 = v1.Dot(v1, v1) - (radius * radius);
 
 		if (local8 >= 0.001 || local8 <= -0.001) {
 			float local1c = -1.0f;
