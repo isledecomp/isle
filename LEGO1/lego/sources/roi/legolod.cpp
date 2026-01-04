@@ -17,6 +17,7 @@ DECOMP_SIZE_ASSERT(LegoLOD::Mesh, 0x08)
 LPDIRECT3DRMMATERIAL g_unk0x101013d4 = NULL;
 
 // GLOBAL: LEGO1 0x101013dc
+// GLOBAL: BETA10 0x10207238
 const char* g_InhPrefix = "inh";
 
 #ifdef BETA10
@@ -419,15 +420,15 @@ LegoResult LegoLOD::GetTextureInfo(LegoTextureInfo*& p_textureInfo)
 }
 
 // FUNCTION: LEGO1 0x100aae20
+// FUNCTION: BETA10 0x1018e46d
 LegoBool LegoLOD::HasInhPrefix(const LegoChar* p_name)
 {
-	if (p_name != NULL) {
-		if (!strnicmp(p_name, g_InhPrefix, strlen(g_InhPrefix))) {
-			return TRUE;
-		}
+	if (p_name != NULL && !strnicmp(p_name, g_InhPrefix, strlen(g_InhPrefix))) {
+		return TRUE;
 	}
-
-	return FALSE;
+	else {
+		return FALSE;
+	}
 }
 
 // FUNCTION: LEGO1 0x100aae60

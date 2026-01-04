@@ -56,6 +56,7 @@ const char* g_alwaysLoadNames[] = {"rcuser", "jsuser", "dunebugy", "chtrblad", "
 ColorOverride g_colorOverride = NULL;
 
 // GLOBAL: LEGO1 0x101013b0
+// GLOBAL: BETA10 0x10206f24
 TextureHandler g_textureHandler = NULL;
 
 // FUNCTION: LEGO1 0x100a81b0
@@ -813,6 +814,7 @@ LegoBool LegoROI::ColorAliasLookup(const LegoChar* p_param, float& p_red, float&
 }
 
 // FUNCTION: LEGO1 0x100a9cf0
+// FUNCTION: BETA10 0x1018bead
 LegoBool LegoROI::GetPaletteEntries(const LegoChar* p_name, unsigned char* paletteEntries, LegoU32 p_numEntries)
 {
 	if (p_name == NULL) {
@@ -823,8 +825,10 @@ LegoBool LegoROI::GetPaletteEntries(const LegoChar* p_name, unsigned char* palet
 	if (g_textureHandler != NULL) {
 		return g_textureHandler(p_name, paletteEntries, p_numEntries);
 	}
+	else {
+		paletteEntries[0] = '\0';
+	}
 
-	paletteEntries[0] = '\0';
 	return FALSE;
 }
 

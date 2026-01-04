@@ -53,15 +53,32 @@ public:
 
 	LegoMesh();
 	virtual ~LegoMesh();
+
+	// FUNCTION: BETA10 0x1018e6f0
 	LegoColor GetColor() { return m_color; }
+
 	void SetColor(LegoColor p_color) { m_color = p_color; }
+
+	// FUNCTION: BETA10 0x1018e720
 	LegoFloat GetAlpha() { return m_alpha; }
+
+	// FUNCTION: BETA10 0x1018e740
 	LegoU8 GetShading() { return m_shading; }
+
 	void SetShading(LegoU8 p_shading) { m_shading = p_shading; }
+
+	// FUNCTION: BETA10 0x1018e760
 	LegoU8 GetUnknown0x0d() { return m_unk0x0d; }
+
+	// FUNCTION: BETA10 0x1018e780
 	const LegoChar* GetTextureName() { return m_textureName; }
+
+	// FUNCTION: BETA10 0x1018e7a0
 	const LegoChar* GetMaterialName() { return m_materialName; }
+
+	// FUNCTION: BETA10 0x1018e7c0
 	LegoBool GetUseAlias() { return m_useAlias; }
+
 	LegoResult Read(LegoStorage* p_storage);
 
 	// SYNTHETIC: LEGO1 0x100d3840
