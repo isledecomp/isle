@@ -614,18 +614,18 @@ LegoResult LegoROI::SetColorByName(const LegoChar* p_name)
 // FUNCTION: LEGO1 0x100a9410
 // FUNCTION: BETA10 0x1018b324
 LegoU32 LegoROI::Intersect(
-	Vector3& p_v1,
-	Vector3& p_v2,
-	float p_f1,
-	float p_f2,
-	Vector3& p_v3,
+	Vector3& p_rayOrigin,
+	Vector3& p_rayDirection,
+	float p_rayLength,
+	float p_unused,
+	Vector3& p_intersectionPoint,
 	LegoBool p_collideBox
 )
 {
 	if (p_collideBox) {
-		Mx3DPointFloat v2(p_v2);
-		v2 *= p_f1;
-		v2 += p_v1;
+		Mx3DPointFloat v2(p_rayDirection);
+		v2 *= p_rayLength;
+		v2 += p_rayOrigin;
 
 		Mx4DPointFloat minPoint;
 		Mx4DPointFloat maxPoint;
@@ -637,7 +637,7 @@ LegoU32 LegoROI::Intersect(
 		Vector3 boundingBoxMax(&maxPoint[0]);
 		Vector3 boundingBoxCenter(&centerPoint[0]);
 
-		Mx3DPointFloat rayOrigin(p_v1);
+		Mx3DPointFloat rayOrigin(p_rayOrigin);
 
 		boundingBoxMin = m_bounding_box.Min();
 		boundingBoxMax = m_bounding_box.Max();
@@ -657,7 +657,7 @@ LegoU32 LegoROI::Intersect(
 		untransformedPoint = centerPoint;
 		centerPoint.SetMatrixProduct(untransformedPoint, (float*) m_local2world.GetData());
 
-		p_v3 = m_local2world[3];
+		p_intersectionPoint = m_local2world[3];
 
 		LegoS32 i;
 		for (i = 0; i < 6; i++) {
@@ -676,13 +676,13 @@ LegoU32 LegoROI::Intersect(
 		}
 
 		for (i = 0; i < 6; i++) {
-			float intersectionDistance = p_v2.Dot(p_v2, boxFacePlanes[i]);
+			float intersectionDistance = p_rayDirection.Dot(p_rayDirection, boxFacePlanes[i]);
 
 			if (intersectionDistance >= 0.01 || intersectionDistance < -0.01) {
 				intersectionDistance = -((boxFacePlanes[i][3] + rayOrigin.Dot(rayOrigin, boxFacePlanes[i])) / intersectionDistance);
 
-				if (intersectionDistance >= 0.0f && intersectionDistance <= p_f1) {
-					Mx3DPointFloat intersectionPoint(p_v2);
+				if (intersectionDistance >= 0.0f && intersectionDistance <= p_rayLength) {
+					Mx3DPointFloat intersectionPoint(p_rayDirection);
 					intersectionPoint *= intersectionDistance;
 					intersectionPoint += rayOrigin;
 
@@ -703,13 +703,13 @@ LegoU32 LegoROI::Intersect(
 		}
 	}
 	else {
-		Mx3DPointFloat v1(p_v1);
+		Mx3DPointFloat v1(p_rayOrigin);
 		v1 -= GetWorldBoundingSphere().Center();
 
 		float radius = GetWorldBoundingSphere().Radius();
 		// Quadratic equation to solve for ray-sphere intersection: at^2 + bt + c = 0
-		float a = p_v2.Dot(p_v2, p_v2);
-		float b = p_v2.Dot(p_v2, v1) * 2.0f;
+		float a = p_rayDirection.Dot(p_rayDirection, p_rayDirection);
+		float b = p_rayDirection.Dot(p_rayDirection, v1) * 2.0f;
 		float c = v1.Dot(v1, v1) - (radius * radius);
 
 		if (a >= 0.001 || a <= -0.001) {
@@ -739,10 +739,10 @@ LegoU32 LegoROI::Intersect(
 					distance = b / a;
 				}
 
-				if (distance >= 0.0f && p_f1 >= distance) {
-					p_v3 = p_v2;
-					p_v3 *= distance;
-					p_v3 += p_v1;
+				if (distance >= 0.0f && p_rayLength >= distance) {
+					p_intersectionPoint = p_rayDirection;
+					p_intersectionPoint *= distance;
+					p_intersectionPoint += p_rayOrigin;
 					return 1;
 				}
 			}
