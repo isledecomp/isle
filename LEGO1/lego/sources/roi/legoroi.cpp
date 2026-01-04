@@ -707,22 +707,22 @@ LegoU32 LegoROI::Intersect(
 		v1 -= GetWorldBoundingSphere().Center();
 
 		float radius = GetWorldBoundingSphere().Radius();
-		float local8 = p_v2.Dot(p_v2, p_v2);
-		float localc = p_v2.Dot(p_v2, v1) * 2.0f;
-		float local14 = v1.Dot(v1, v1) - (radius * radius);
+		float a = p_v2.Dot(p_v2, p_v2);
+		float b = p_v2.Dot(p_v2, v1) * 2.0f;
+		float c = v1.Dot(v1, v1) - (radius * radius);
 
-		if (local8 >= 0.001 || local8 <= -0.001) {
+		if (a >= 0.001 || a <= -0.001) {
 			float local1c = -1.0f;
-			float discriminant = (localc * localc) - (local14 * local8 * 4.0f);
+			float discriminant = (b * b) - (c * a * 4.0f);
 
 			if (discriminant >= -0.001) {
-				local8 *= 2.0f;
-				localc = -localc;
+				a *= 2.0f;
+				b = -b;
 
 				if (discriminant > 0.0f) {
 					discriminant = sqrt(discriminant);
-					float local184 = (localc + discriminant) / local8;
-					float local188 = (localc - discriminant) / local8;
+					float local184 = (b + discriminant) / a;
+					float local188 = (b - discriminant) / a;
 
 					if (local184 > 0.0f && local188 > local184) {
 						local1c = local184;
@@ -735,7 +735,7 @@ LegoU32 LegoROI::Intersect(
 					}
 				}
 				else {
-					local1c = localc / local8;
+					local1c = b / a;
 				}
 
 				if (local1c >= 0.0f && p_f1 >= local1c) {
