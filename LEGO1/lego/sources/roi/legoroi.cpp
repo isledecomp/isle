@@ -707,12 +707,13 @@ LegoU32 LegoROI::Intersect(
 		v1 -= GetWorldBoundingSphere().Center();
 
 		float radius = GetWorldBoundingSphere().Radius();
+		// Quadratic equation to solve for ray-sphere intersection: at^2 + bt + c = 0
 		float a = p_v2.Dot(p_v2, p_v2);
 		float b = p_v2.Dot(p_v2, v1) * 2.0f;
 		float c = v1.Dot(v1, v1) - (radius * radius);
 
 		if (a >= 0.001 || a <= -0.001) {
-			float local1c = -1.0f;
+			float distance = -1.0f;
 			float discriminant = (b * b) - (c * a * 4.0f);
 
 			if (discriminant >= -0.001) {
@@ -721,26 +722,26 @@ LegoU32 LegoROI::Intersect(
 
 				if (discriminant > 0.0f) {
 					discriminant = sqrt(discriminant);
-					float local184 = (b + discriminant) / a;
-					float local188 = (b - discriminant) / a;
+					float root1 = (b + discriminant) / a;
+					float root2 = (b - discriminant) / a;
 
-					if (local184 > 0.0f && local188 > local184) {
-						local1c = local184;
+					if (root1 > 0.0f && root2 > root1) {
+						distance = root1;
 					}
-					else if (local188 > 0.0f) {
-						local1c = local188;
+					else if (root2 > 0.0f) {
+						distance = root2;
 					}
 					else {
 						return 0;
 					}
 				}
 				else {
-					local1c = b / a;
+					distance = b / a;
 				}
 
-				if (local1c >= 0.0f && p_f1 >= local1c) {
+				if (distance >= 0.0f && p_f1 >= distance) {
 					p_v3 = p_v2;
-					p_v3 *= local1c;
+					p_v3 *= distance;
 					p_v3 += p_v1;
 					return 1;
 				}
