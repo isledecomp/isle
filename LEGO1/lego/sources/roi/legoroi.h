@@ -50,7 +50,7 @@ public:
 	LegoResult SetLodColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
 	LegoResult SetTextureInfo(LegoTextureInfo* p_textureInfo);
 	LegoResult GetTextureInfo(LegoTextureInfo*& p_textureInfo);
-	LegoResult FUN_100a9330(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
+	LegoResult SetColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
 	LegoResult SetLodColor(const LegoChar* p_name);
 	LegoResult FUN_100a93b0(const LegoChar* p_name);
 	LegoU32 Intersect(Vector3& p_v1, Vector3& p_v2, float p_f1, float p_f2, Vector3& p_v3, LegoBool p_collideBox);
