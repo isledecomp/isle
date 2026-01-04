@@ -633,20 +633,20 @@ LegoU32 LegoROI::Intersect(
 		Mx4DPointFloat local70;
 		Mx4DPointFloat local150[6];
 
-		Vector3 local58(&localc0[0]);
-		Vector3 locala8(&local9c[0]);
-		Vector3 local38(&local168[0]);
+		Vector3 boundingBoxMin(&localc0[0]);
+		Vector3 boundingBoxMax(&local9c[0]);
+		Vector3 boundingBoxCenter(&local168[0]);
 
 		Mx3DPointFloat local4c(p_v1);
 
-		local58 = m_bounding_box.Min();
-		locala8 = m_bounding_box.Max();
+		boundingBoxMin = m_bounding_box.Min();
+		boundingBoxMax = m_bounding_box.Max();
 
 		localc0[3] = local9c[3] = local168[3] = 1.0f;
 
-		local38 = local58;
-		local38 += locala8;
-		local38 *= 0.5f;
+		boundingBoxCenter = boundingBoxMin;
+		boundingBoxCenter += boundingBoxMax;
+		boundingBoxCenter *= 0.5f;
 
 		local70 = localc0;
 		localc0.SetMatrixProduct(local70, (float*) m_local2world.GetData());
@@ -664,13 +664,13 @@ LegoU32 LegoROI::Intersect(
 			local150[i] = m_local2world[i % 3];
 
 			if (i > 2) {
-				local150[i][3] = -local58.Dot(local58, local150[i]);
+				local150[i][3] = -boundingBoxMin.Dot(boundingBoxMin, local150[i]);
 			}
 			else {
-				local150[i][3] = -locala8.Dot(locala8, local150[i]);
+				local150[i][3] = -boundingBoxMax.Dot(boundingBoxMax, local150[i]);
 			}
 
-			if (local150[i][3] + local38.Dot(local38, local150[i]) < 0.0f) {
+			if (local150[i][3] + boundingBoxCenter.Dot(boundingBoxCenter, local150[i]) < 0.0f) {
 				local150[i] *= -1.0f;
 			}
 		}
