@@ -682,14 +682,14 @@ LegoU32 LegoROI::Intersect(
 				local50 = -((local150[i][3] + rayOrigin.Dot(rayOrigin, local150[i])) / local50);
 
 				if (local50 >= 0.0f && local50 <= p_f1) {
-					Mx3DPointFloat local17c(p_v2);
-					local17c *= local50;
-					local17c += rayOrigin;
+					Mx3DPointFloat intersectionPoint(p_v2);
+					intersectionPoint *= local50;
+					intersectionPoint += rayOrigin;
 
 					LegoS32 j;
 					for (j = 0; j < 6; j++) {
 						if (i != j && i - j != 3 && j - i != 3) {
-							if (local150[j][3] + local17c.Dot(local17c, local150[j]) < 0.0f) {
+							if (local150[j][3] + intersectionPoint.Dot(intersectionPoint, local150[j]) < 0.0f) {
 								break;
 							}
 						}
