@@ -69,10 +69,50 @@ LegoLOD::~LegoLOD()
 	}
 }
 
+// TODO: Consider moving somewhere else and refactor other code;
+// alternative: AssertIfBeta10(0), more versatile
+#ifdef BETA10
+#define Assert0IfBeta10() assert(0)
+#else
+#define Assert0IfBeta10()
+#endif
+
+#ifdef BETA10
+/// This class does not appear to exist in LEGO1.
+class UnknownBeta0x1018e7e0 {
+public:
+	// FUNCTION: BETA10 0x1018e7e0
+	UnknownBeta0x1018e7e0()
+	{
+		m_unk0x00 = 0;
+		m_unk0x04 = 0;
+		m_unk0x08 = 0;
+		m_unk0x0c = 0;
+		m_unk0x10 = 0;
+		m_unk0x14 = 0;
+		m_unk0x18 = 0;
+	}
+
+	// STUB: BETA10 0x1018e840
+	undefined4 BETA10_1018e840(LegoStorage* p_storage) { return 0; }
+
+	undefined4 m_unk0x00;
+	undefined4 m_unk0x04;
+	undefined4 m_unk0x08;
+	undefined4 m_unk0x0c;
+	undefined4 m_unk0x10;
+	undefined4 m_unk0x14;
+	undefined4 m_unk0x18;
+	undefined4 m_unk0x1c;
+};
+#endif
+
 // FUNCTION: LEGO1 0x100aa510
-// STUB: BETA10 0x1018d15d
+// FUNCTION: BETA10 0x1018d15d
 LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_textureContainer, LegoStorage* p_storage)
 {
+	using Tgl::Succeeded;
+
 	float(*normals)[3] = NULL;
 	float(*vertices)[3] = NULL;
 	float(*textureVertices)[2] = NULL;
@@ -85,6 +125,8 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	LegoTextureInfo* textureInfo = NULL;
 
 	LegoU32 i, indexBackwards, indexForwards, tempNumVertsAndNormals;
+	LegoU8 local4c = 0; // BETA10 only, only written, never read
+
 	unsigned char paletteEntries[256];
 
 	if (p_storage->Read(&m_flags, sizeof(LegoU32)) != SUCCESS) {
@@ -92,7 +134,15 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	}
 
 	if (SkipReadingData()) {
+#ifdef BETA10
+		// There was an additional field of the correct type here in BETA10
+		m_flags = (unsigned int) new UnknownBeta0x1018e7e0();
+		if (((UnknownBeta0x1018e7e0*) m_flags)->BETA10_1018e840(p_storage)) {
+			assert(0);
+			return FAILURE;
+		}
 		return SUCCESS;
+#endif
 	}
 
 	m_meshBuilder = p_renderer->CreateMeshBuilder();
@@ -102,11 +152,15 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	}
 
 	if (m_numMeshes == 0) {
+#ifndef BETA10
 		ClearFlag(c_hasMesh);
+#endif
 		return SUCCESS;
 	}
 
+#ifndef BETA10
 	SetFlag(c_hasMesh);
+#endif
 
 	m_melems = new Mesh[m_numMeshes];
 	memset(m_melems, 0, sizeof(*m_melems) * m_numMeshes);
@@ -115,19 +169,24 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	indexForwards = 0;
 
 	if (p_storage->Read(&tempNumVertsAndNormals, sizeof(LegoU32)) != SUCCESS) {
+		Assert0IfBeta10();
 		goto done;
 	}
 
+	// TODO: Can't get this one right
 	numVerts = *((LegoU16*) &tempNumVertsAndNormals) & MAXSHORT;
 	numNormals = (*((LegoU16*) &tempNumVertsAndNormals + 1) >> 1) & MAXSHORT;
 
 	if (p_storage->Read(&numTextureVertices, sizeof(LegoS32)) != SUCCESS) {
+		Assert0IfBeta10();
 		goto done;
 	}
 
 	if (numVerts > 0) {
 		vertices = new float[numVerts][sizeOfArray(*vertices)];
 		if (p_storage->Read(vertices, numVerts * 3 * sizeof(float)) != SUCCESS) {
+			// LINE: BETA10 0x1018d443
+			Assert0IfBeta10();
 			goto done;
 		}
 	}
@@ -135,6 +194,8 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	if (numNormals > 0) {
 		normals = new float[numNormals][sizeOfArray(*normals)];
 		if (p_storage->Read(normals, numNormals * 3 * sizeof(float)) != SUCCESS) {
+			// LINE: BETA10
+			Assert0IfBeta10();
 			goto done;
 		}
 	}
@@ -142,37 +203,50 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	if (numTextureVertices > 0) {
 		textureVertices = new float[numTextureVertices][sizeOfArray(*textureVertices)];
 		if (p_storage->Read(textureVertices, numTextureVertices * 2 * sizeof(float)) != SUCCESS) {
+			// LINE: BETA10 0x1018d513
+			Assert0IfBeta10();
 			goto done;
 		}
 	}
 
 	for (i = 0; i < m_numMeshes; i++) {
+		local4c = 0;
 		LegoU32 numPolys, numVertices, numTextureIndices, meshIndex;
 		const LegoChar *textureName, *materialName;
 		Tgl::ShadingModel shadingModel;
 
 		if (p_storage->Read(&numPolys, 2) != SUCCESS) {
+			// LINE: BETA10
+			Assert0IfBeta10();
 			goto done;
 		}
 
 		m_numPolys += numPolys & USHRT_MAX;
 
 		if (p_storage->Read(&numVertices, 2) != SUCCESS) {
+			// LINE: BETA10
+			Assert0IfBeta10();
 			goto done;
 		}
 
 		polyIndices = new LegoU32[numPolys & USHRT_MAX][sizeOfArray(*polyIndices)];
 		if (p_storage->Read(polyIndices, (numPolys & USHRT_MAX) * 3 * sizeof(LegoU32)) != SUCCESS) {
+			// LINE: BETA10
+			Assert0IfBeta10();
 			goto done;
 		}
 
 		if (p_storage->Read(&numTextureIndices, sizeof(numTextureIndices)) != SUCCESS) {
+			// LINE: BETA10
+			Assert0IfBeta10();
 			goto done;
 		}
 
 		if (numTextureIndices > 0) {
 			textureIndices = new LegoU32[numPolys & USHRT_MAX][sizeOfArray(*textureIndices)];
 			if (p_storage->Read(textureIndices, (numPolys & USHRT_MAX) * 3 * sizeof(LegoU32)) != SUCCESS) {
+				// LINE: BETA10
+				Assert0IfBeta10();
 				goto done;
 			}
 		}
@@ -183,6 +257,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		mesh = new LegoMesh();
 
 		if (mesh->Read(p_storage) != SUCCESS) {
+			Assert0IfBeta10();
 			goto done;
 		}
 
@@ -207,11 +282,15 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			indexBackwards--;
 		}
 		else {
+			local4c = 1;
 			meshIndex = indexForwards;
 			indexForwards++;
 		}
 
-		m_melems[meshIndex].m_tglMesh = m_meshBuilder->CreateMesh(
+		Tgl::MeshBuilder* locMesh = m_meshBuilder;
+		assert(locMesh);
+
+		m_melems[meshIndex].m_tglMesh = locMesh->CreateMesh(
 			numPolys & USHRT_MAX,
 			numVertices & USHRT_MAX,
 			vertices,
@@ -223,24 +302,43 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		);
 
 		if (m_melems[meshIndex].m_tglMesh == NULL) {
+			Assert0IfBeta10();
 			goto done;
 		}
 
-		m_melems[meshIndex].m_tglMesh->SetShadingModel(shadingModel);
+		Tgl::Result tglResult = m_melems[meshIndex].m_tglMesh->SetShadingModel(shadingModel);
+
+		// clang-format off
+		assert(Succeeded( tglResult ));
+		// clang-format on
 
 		if (textureName != NULL) {
-			if (mesh->GetUseAlias()) {
-				LegoROI::GetPaletteEntries(textureName, paletteEntries, sizeOfArray(paletteEntries));
+			if (mesh->GetUseAlias() &&
+				LegoROI::GetPaletteEntries(textureName, paletteEntries, sizeOfArray(paletteEntries))) {
+				// TODO: BETA10 only?
+				textureName = (const LegoChar*) paletteEntries;
 			}
 
 			textureInfo = p_textureContainer->Get(mesh->GetTextureName());
 
 			if (textureInfo == NULL) {
+				Assert0IfBeta10();
 				goto done;
 			}
 
-			m_melems[meshIndex].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
+			tglResult = m_melems[meshIndex].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
+			// clang-format off
+			assert(Succeeded( tglResult ));
+			// clang-format on
+
+			// TODO: Fix BETA10 call
+
 			LegoTextureInfo::SetGroupTexture(m_melems[meshIndex].m_tglMesh, textureInfo);
+
+			// clang-format off
+			assert(Succeeded( tglResult ));
+			// clang-format on
+
 			m_melems[meshIndex].m_textured = TRUE;
 		}
 		else {
@@ -259,7 +357,11 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 				alpha = mesh->GetAlpha();
 			}
 
-			m_melems[meshIndex].m_tglMesh->SetColor(red, green, blue, alpha);
+			tglResult = m_melems[meshIndex].m_tglMesh->SetColor(red, green, blue, alpha);
+			// clang-format off
+			// LINE: BETA10 0x1018dc72
+			assert(Succeeded( tglResult ));
+			// clang-format on
 		}
 
 		if (mesh->GetUnknown0x0d() > 0) {
