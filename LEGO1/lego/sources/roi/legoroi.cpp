@@ -613,7 +613,7 @@ LegoResult LegoROI::FUN_100a93b0(const LegoChar* p_name)
 
 // FUNCTION: LEGO1 0x100a9410
 // FUNCTION: BETA10 0x1018b324
-LegoU32 LegoROI::FUN_100a9410(
+LegoU32 LegoROI::Intersect(
 	Vector3& p_v1,
 	Vector3& p_v2,
 	float p_f1,
