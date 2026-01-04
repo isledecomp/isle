@@ -627,35 +627,35 @@ LegoU32 LegoROI::Intersect(
 		v2 *= p_f1;
 		v2 += p_v1;
 
-		Mx4DPointFloat localc0;
-		Mx4DPointFloat local9c;
-		Mx4DPointFloat local168;
+		Mx4DPointFloat minPoint;
+		Mx4DPointFloat maxPoint;
+		Mx4DPointFloat centerPoint;
 		Mx4DPointFloat local70;
 		Mx4DPointFloat local150[6];
 
-		Vector3 boundingBoxMin(&localc0[0]);
-		Vector3 boundingBoxMax(&local9c[0]);
-		Vector3 boundingBoxCenter(&local168[0]);
+		Vector3 boundingBoxMin(&minPoint[0]);
+		Vector3 boundingBoxMax(&maxPoint[0]);
+		Vector3 boundingBoxCenter(&centerPoint[0]);
 
 		Mx3DPointFloat local4c(p_v1);
 
 		boundingBoxMin = m_bounding_box.Min();
 		boundingBoxMax = m_bounding_box.Max();
 
-		localc0[3] = local9c[3] = local168[3] = 1.0f;
+		minPoint[3] = maxPoint[3] = centerPoint[3] = 1.0f;
 
 		boundingBoxCenter = boundingBoxMin;
 		boundingBoxCenter += boundingBoxMax;
 		boundingBoxCenter *= 0.5f;
 
-		local70 = localc0;
-		localc0.SetMatrixProduct(local70, (float*) m_local2world.GetData());
+		local70 = minPoint;
+		minPoint.SetMatrixProduct(local70, (float*) m_local2world.GetData());
 
-		local70 = local9c;
-		local9c.SetMatrixProduct(local70, (float*) m_local2world.GetData());
+		local70 = maxPoint;
+		maxPoint.SetMatrixProduct(local70, (float*) m_local2world.GetData());
 
-		local70 = local168;
-		local168.SetMatrixProduct(local70, (float*) m_local2world.GetData());
+		local70 = centerPoint;
+		centerPoint.SetMatrixProduct(local70, (float*) m_local2world.GetData());
 
 		p_v3 = m_local2world[3];
 
