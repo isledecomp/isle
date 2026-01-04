@@ -631,7 +631,7 @@ LegoU32 LegoROI::Intersect(
 		Mx4DPointFloat maxPoint;
 		Mx4DPointFloat centerPoint;
 		Mx4DPointFloat untransformedPoint;
-		Mx4DPointFloat local150[6];
+		Mx4DPointFloat boxFacePlanes[6];
 
 		Vector3 boundingBoxMin(&minPoint[0]);
 		Vector3 boundingBoxMax(&maxPoint[0]);
@@ -661,25 +661,25 @@ LegoU32 LegoROI::Intersect(
 
 		LegoS32 i;
 		for (i = 0; i < 6; i++) {
-			local150[i] = m_local2world[i % 3];
+			boxFacePlanes[i] = m_local2world[i % 3];
 
 			if (i > 2) {
-				local150[i][3] = -boundingBoxMin.Dot(boundingBoxMin, local150[i]);
+				boxFacePlanes[i][3] = -boundingBoxMin.Dot(boundingBoxMin, boxFacePlanes[i]);
 			}
 			else {
-				local150[i][3] = -boundingBoxMax.Dot(boundingBoxMax, local150[i]);
+				boxFacePlanes[i][3] = -boundingBoxMax.Dot(boundingBoxMax, boxFacePlanes[i]);
 			}
 
-			if (local150[i][3] + boundingBoxCenter.Dot(boundingBoxCenter, local150[i]) < 0.0f) {
-				local150[i] *= -1.0f;
+			if (boxFacePlanes[i][3] + boundingBoxCenter.Dot(boundingBoxCenter, boxFacePlanes[i]) < 0.0f) {
+				boxFacePlanes[i] *= -1.0f;
 			}
 		}
 
 		for (i = 0; i < 6; i++) {
-			float local50 = p_v2.Dot(p_v2, local150[i]);
+			float local50 = p_v2.Dot(p_v2, boxFacePlanes[i]);
 
 			if (local50 >= 0.01 || local50 < -0.01) {
-				local50 = -((local150[i][3] + rayOrigin.Dot(rayOrigin, local150[i])) / local50);
+				local50 = -((boxFacePlanes[i][3] + rayOrigin.Dot(rayOrigin, boxFacePlanes[i])) / local50);
 
 				if (local50 >= 0.0f && local50 <= p_f1) {
 					Mx3DPointFloat intersectionPoint(p_v2);
@@ -689,7 +689,7 @@ LegoU32 LegoROI::Intersect(
 					LegoS32 j;
 					for (j = 0; j < 6; j++) {
 						if (i != j && i - j != 3 && j - i != 3) {
-							if (local150[j][3] + intersectionPoint.Dot(intersectionPoint, local150[j]) < 0.0f) {
+							if (boxFacePlanes[j][3] + intersectionPoint.Dot(intersectionPoint, boxFacePlanes[j]) < 0.0f) {
 								break;
 							}
 						}
