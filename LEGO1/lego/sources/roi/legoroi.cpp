@@ -630,7 +630,7 @@ LegoU32 LegoROI::Intersect(
 		Mx4DPointFloat minPoint;
 		Mx4DPointFloat maxPoint;
 		Mx4DPointFloat centerPoint;
-		Mx4DPointFloat local70;
+		Mx4DPointFloat untransformedPoint;
 		Mx4DPointFloat local150[6];
 
 		Vector3 boundingBoxMin(&minPoint[0]);
@@ -648,14 +648,14 @@ LegoU32 LegoROI::Intersect(
 		boundingBoxCenter += boundingBoxMax;
 		boundingBoxCenter *= 0.5f;
 
-		local70 = minPoint;
-		minPoint.SetMatrixProduct(local70, (float*) m_local2world.GetData());
+		untransformedPoint = minPoint;
+		minPoint.SetMatrixProduct(untransformedPoint, (float*) m_local2world.GetData());
 
-		local70 = maxPoint;
-		maxPoint.SetMatrixProduct(local70, (float*) m_local2world.GetData());
+		untransformedPoint = maxPoint;
+		maxPoint.SetMatrixProduct(untransformedPoint, (float*) m_local2world.GetData());
 
-		local70 = centerPoint;
-		centerPoint.SetMatrixProduct(local70, (float*) m_local2world.GetData());
+		untransformedPoint = centerPoint;
+		centerPoint.SetMatrixProduct(untransformedPoint, (float*) m_local2world.GetData());
 
 		p_v3 = m_local2world[3];
 
