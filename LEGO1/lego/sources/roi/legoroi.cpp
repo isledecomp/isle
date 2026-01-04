@@ -713,16 +713,16 @@ LegoU32 LegoROI::Intersect(
 
 		if (local8 >= 0.001 || local8 <= -0.001) {
 			float local1c = -1.0f;
-			float local18 = (localc * localc) - (local14 * local8 * 4.0f);
+			float discriminant = (localc * localc) - (local14 * local8 * 4.0f);
 
-			if (local18 >= -0.001) {
+			if (discriminant >= -0.001) {
 				local8 *= 2.0f;
 				localc = -localc;
 
-				if (local18 > 0.0f) {
-					local18 = sqrt(local18);
-					float local184 = (localc + local18) / local8;
-					float local188 = (localc - local18) / local8;
+				if (discriminant > 0.0f) {
+					discriminant = sqrt(discriminant);
+					float local184 = (localc + discriminant) / local8;
+					float local188 = (localc - discriminant) / local8;
 
 					if (local184 > 0.0f && local188 > local184) {
 						local1c = local184;
