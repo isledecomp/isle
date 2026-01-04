@@ -141,8 +141,8 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			assert(0);
 			return FAILURE;
 		}
-		return SUCCESS;
 #endif
+		return SUCCESS;
 	}
 
 	m_meshBuilder = p_renderer->CreateMeshBuilder();
@@ -315,8 +315,9 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		if (textureName != NULL) {
 			if (mesh->GetUseAlias() &&
 				LegoROI::GetPaletteEntries(textureName, paletteEntries, sizeOfArray(paletteEntries))) {
-				// TODO: BETA10 only?
+#ifdef BETA10
 				textureName = (const LegoChar*) paletteEntries;
+#endif
 			}
 
 			textureInfo = p_textureContainer->Get(mesh->GetTextureName());
@@ -385,6 +386,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		}
 	}
 
+	// LINE: LEGO1 0x100aab45
 	m_meshOffset = indexForwards;
 
 	if (textureVertices != NULL) {
