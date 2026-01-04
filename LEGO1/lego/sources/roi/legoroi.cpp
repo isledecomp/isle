@@ -637,7 +637,7 @@ LegoU32 LegoROI::Intersect(
 		Vector3 boundingBoxMax(&maxPoint[0]);
 		Vector3 boundingBoxCenter(&centerPoint[0]);
 
-		Mx3DPointFloat local4c(p_v1);
+		Mx3DPointFloat rayOrigin(p_v1);
 
 		boundingBoxMin = m_bounding_box.Min();
 		boundingBoxMax = m_bounding_box.Max();
@@ -679,12 +679,12 @@ LegoU32 LegoROI::Intersect(
 			float local50 = p_v2.Dot(p_v2, local150[i]);
 
 			if (local50 >= 0.01 || local50 < -0.01) {
-				local50 = -((local150[i][3] + local4c.Dot(local4c, local150[i])) / local50);
+				local50 = -((local150[i][3] + rayOrigin.Dot(rayOrigin, local150[i])) / local50);
 
 				if (local50 >= 0.0f && local50 <= p_f1) {
 					Mx3DPointFloat local17c(p_v2);
 					local17c *= local50;
-					local17c += local4c;
+					local17c += rayOrigin;
 
 					LegoS32 j;
 					for (j = 0; j < 6; j++) {
