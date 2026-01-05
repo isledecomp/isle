@@ -50,7 +50,7 @@ private:
 	// inversely scales the map in y direction (either convert world->screen space or to control the size)
 	float m_worldYScale; // 0x20
 	// scales the map in x direction (either convert world->screen space or to change the size)
-	float m_unk0x24; // 0x24
+	float m_screenXScale; // 0x24
 	// scales the map in y direction (either convert world->screen space or to change the size)
 	float m_unk0x28; // 0x28
 	// likely an x-offset of the race map in screen space
