@@ -17,18 +17,18 @@ extern MxBool g_unk0x100f119c;
 // FUNCTION: LEGO1 0x10015aa0
 LegoRace::LegoRace()
 {
-	m_unk0xf8 = 0;
-	m_unk0xfc = 0;
-	m_unk0x100 = 0;
-	m_unk0x104 = 0;
-	m_unk0x108 = 0;
-	m_unk0x10c = 0;
+	m_playerLaps = 0;
+	m_opponent1Laps = 0;
+	m_opponent2Laps = 0;
+	m_playerLastPathStruct = 0;
+	m_opponent1LastPathStruct = 0;
+	m_opponent2LastPathStruct = 0;
 	m_raceState = NULL;
-	m_maps[0] = NULL;
-	m_maps[1] = NULL;
-	m_maps[2] = NULL;
-	m_unk0x128 = 0;
-	m_unk0x12c = 0;
+	m_mapsLocators[0] = NULL;
+	m_mapsLocators[1] = NULL;
+	m_mapsLocators[2] = NULL;
+	m_opponent1Locator = 0;
+	m_opponent2Locator = 0;
 	m_pathActor = 0;
 	m_act1State = NULL;
 	m_destLocation = LegoGameState::e_undefined;
@@ -116,22 +116,22 @@ void LegoRace::Enable(MxBool p_enable)
 // FUNCTION: LEGO1 0x10015f30
 RaceState::RaceState()
 {
-	m_state[0].m_id = 1;
-	m_state[0].m_unk0x02 = 0;
-	m_state[0].m_score = 0;
-	m_state[1].m_id = 2;
-	m_state[1].m_unk0x02 = 0;
-	m_state[1].m_score = 0;
-	m_state[2].m_id = 3;
-	m_state[2].m_unk0x02 = 0;
-	m_state[2].m_score = 0;
-	m_state[3].m_id = 4;
-	m_state[3].m_unk0x02 = 0;
-	m_state[3].m_score = 0;
-	m_state[4].m_id = 5;
-	m_state[4].m_unk0x02 = 0;
-	m_state[4].m_score = 0;
-	m_unk0x28 = 0;
+	m_entries[0].m_id = 1;
+	m_entries[0].m_lastScore = 0;
+	m_entries[0].m_score = 0;
+	m_entries[1].m_id = 2;
+	m_entries[1].m_lastScore = 0;
+	m_entries[1].m_score = 0;
+	m_entries[2].m_id = 3;
+	m_entries[2].m_lastScore = 0;
+	m_entries[2].m_score = 0;
+	m_entries[3].m_id = 4;
+	m_entries[3].m_lastScore = 0;
+	m_entries[3].m_score = 0;
+	m_entries[4].m_id = 5;
+	m_entries[4].m_lastScore = 0;
+	m_entries[4].m_score = 0;
+	m_state = RaceState::e_carrace;
 }
 
 // FUNCTION: LEGO1 0x10016140
@@ -141,7 +141,7 @@ MxResult RaceState::Serialize(LegoStorage* p_storage)
 	LegoState::Serialize(p_storage);
 
 	for (MxS16 i = 0; i < 5; i++) {
-		m_state[i].Serialize(p_storage);
+		m_entries[i].Serialize(p_storage);
 	}
 
 	return SUCCESS;
@@ -156,8 +156,8 @@ RaceState::Entry* RaceState::GetState(MxU8 p_id)
 			return NULL;
 		}
 
-		if (m_state[i].m_id == p_id) {
-			return m_state + i;
+		if (m_entries[i].m_id == p_id) {
+			return m_entries + i;
 		}
 	}
 }
