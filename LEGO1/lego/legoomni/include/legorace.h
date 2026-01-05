@@ -29,11 +29,11 @@ public:
 		Entry()
 		{
 			m_id = 0;
-			m_unk0x02 = 0;
+			m_lastScore = 0;
 			m_score = 0;
 		}
 
-		MxS16 GetUnknown0x02() { return m_unk0x02; }
+		MxS16 GetLastScore() { return m_lastScore; }
 
 		// FUNCTION: BETA10 0x10088970
 		MxS16 GetHighScore() { return m_score; }
@@ -43,12 +43,12 @@ public:
 		{
 			if (p_storage->IsReadMode()) {
 				p_storage->ReadU8(m_id);
-				p_storage->ReadS16(m_unk0x02);
+				p_storage->ReadS16(m_lastScore);
 				p_storage->ReadS16(m_score);
 			}
 			else if (p_storage->IsWriteMode()) {
 				p_storage->WriteU8(m_id);
-				p_storage->WriteS16(m_unk0x02);
+				p_storage->WriteS16(m_lastScore);
 				p_storage->WriteS16(m_score);
 			}
 			else {
@@ -59,9 +59,15 @@ public:
 		}
 
 		// TODO: Possibly private
-		MxU8 m_id;       // 0x00
-		MxS16 m_unk0x02; // 0x02
-		MxS16 m_score;   // 0x04
+		MxU8 m_id;         // 0x00
+		MxS16 m_lastScore; // 0x02
+		MxS16 m_score;     // 0x04
+	};
+
+	enum {
+		e_carrace = 0,
+		e_jetrace = 1,
+		e_finished = 2,
 	};
 
 	RaceState();
@@ -94,8 +100,8 @@ public:
 
 	// TODO: Most likely getters/setters are not used according to BETA.
 
-	Entry m_state[5];     // 0x08
-	undefined4 m_unk0x28; // 0x28
+	Entry m_entries[5]; // 0x08
+	MxU32 m_state;      // 0x28
 };
 
 // VTABLE: LEGO1 0x100d5db0
@@ -147,9 +153,9 @@ public:
 
 	// FUNCTION: LEGO1 0x1000dac0
 	// FUNCTION: BETA10 0x100a87d0
-	virtual void VTable0x7c(LegoRaceMap* p_map, MxU32 p_index) // vtable+0x7c
+	virtual void SetMapLocator(LegoRaceMap* p_map, MxU32 p_index) // vtable+0x7c
 	{
-		m_maps[p_index] = p_map;
+		m_mapsLocators[p_index] = p_map;
 	}
 
 	// FUNCTION: LEGO1 0x1000dae0
@@ -161,20 +167,20 @@ public:
 	// LegoRace::`scalar deleting destructor'
 
 protected:
-	MxS32 m_unk0xf8;                    // 0xf8
-	MxS32 m_unk0xfc;                    // 0xfc
-	MxS32 m_unk0x100;                   // 0x100
-	MxS32 m_unk0x104;                   // 0x104
-	MxS32 m_unk0x108;                   // 0x108
-	MxS32 m_unk0x10c;                   // 0x10c
-	LegoRaceMap* m_maps[3];             // 0x110
-	LegoGameState::Area m_destLocation; // 0x11c
-	LegoPathActor* m_pathActor;         // 0x120
-	Act1State* m_act1State;             // 0x124
-	MxStillPresenter* m_unk0x128;       // 0x128
-	MxStillPresenter* m_unk0x12c;       // 0x12c
-	MxRect32 m_unk0x130;                // 0x130
-	RaceState* m_raceState;             // 0x140
+	MxS32 m_playerLaps;                   // 0xf8
+	MxS32 m_opponent1Laps;                // 0xfc
+	MxS32 m_opponent2Laps;                // 0x100
+	MxS32 m_playerLastPathStruct;         // 0x104
+	MxS32 m_opponent1LastPathStruct;      // 0x108
+	MxS32 m_opponent2LastPathStruct;      // 0x10c
+	LegoRaceMap* m_mapsLocators[3];       // 0x110
+	LegoGameState::Area m_destLocation;   // 0x11c
+	LegoPathActor* m_pathActor;           // 0x120
+	Act1State* m_act1State;               // 0x124
+	MxStillPresenter* m_opponent1Locator; // 0x128
+	MxStillPresenter* m_opponent2Locator; // 0x12c
+	MxRect32 m_progressBarRect;           // 0x130
+	RaceState* m_raceState;               // 0x140
 };
 
 #endif // LEGORACE_H

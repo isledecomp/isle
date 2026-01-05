@@ -58,11 +58,11 @@ MxResult JetskiRace::Create(MxDSAction& p_dsAction)
 		return FAILURE;
 	}
 
-	m_raceState->m_unk0x28 = 1;
-	m_unk0x130.SetLeft(397);
-	m_unk0x130.SetTop(317);
-	m_unk0x130.SetRight(543);
-	m_unk0x130.SetBottom(333);
+	m_raceState->m_state = RaceState::e_jetrace;
+	m_progressBarRect.SetLeft(397);
+	m_progressBarRect.SetTop(317);
+	m_progressBarRect.SetRight(543);
+	m_progressBarRect.SetBottom(333);
 	LegoJetski::InitSoundIndices();
 
 	MxS32 streamId =
@@ -90,10 +90,10 @@ void JetskiRace::ReadyWorld()
 
 	AnimationManager()->Resume();
 
-	m_unk0x128 = (MxStillPresenter*) Find("MxPresenter", "JetskiLocator2");
-	m_unk0x128->SetPosition(m_unk0x130.GetLeft(), m_unk0x130.GetTop());
-	m_unk0x12c = (MxStillPresenter*) Find("MxPresenter", "JetskiLocator3");
-	m_unk0x12c->SetPosition(m_unk0x130.GetLeft(), m_unk0x130.GetTop());
+	m_opponent1Locator = (MxStillPresenter*) Find("MxPresenter", "JetskiLocator2");
+	m_opponent1Locator->SetPosition(m_progressBarRect.GetLeft(), m_progressBarRect.GetTop());
+	m_opponent2Locator = (MxStillPresenter*) Find("MxPresenter", "JetskiLocator3");
+	m_opponent2Locator->SetPosition(m_progressBarRect.GetLeft(), m_progressBarRect.GetTop());
 
 	Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 
@@ -108,9 +108,9 @@ MxLong JetskiRace::HandleEndAction(MxEndActionNotificationParam& p_param)
 	MxLong result = 0;
 
 	if ((p_param.GetAction()) && (p_param.GetAction()->GetObjectId() == JetraceScript::c_AirHorn_PlayWav)) {
-		m_maps[0]->Mute(FALSE);
-		m_maps[1]->Mute(FALSE);
-		m_maps[2]->Mute(FALSE);
+		m_mapsLocators[0]->Mute(FALSE);
+		m_mapsLocators[1]->Mute(FALSE);
+		m_mapsLocators[2]->Mute(FALSE);
 
 		VariableTable()->SetVariable(g_raceState, g_racing);
 		result = 1;
@@ -163,26 +163,30 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 		switch (sender->GetEntityId()) {
 		case 10:
-			if (paramData <= m_unk0x104 || paramData >= m_unk0x104 + 5) {
+			if (paramData <= m_playerLastPathStruct || paramData >= m_playerLastPathStruct + 5) {
 				break;
 			}
 
-			m_unk0x104 = paramData;
+			m_playerLastPathStruct = paramData;
 			LegoChar buffer[20];
-			sprintf(buffer, "%g", 0.032 + 0.936 * (m_unk0xf8 * 20.0 + m_unk0x104) / (g_unk0x100f0c78 * 20.0));
+			sprintf(
+				buffer,
+				"%g",
+				0.032 + 0.936 * (m_playerLaps * 20.0 + m_playerLastPathStruct) / (g_unk0x100f0c78 * 20.0)
+			);
 			VariableTable()->SetVariable("DISTANCE", buffer);
 
-			if (m_unk0x104 == 0x14) {
-				m_unk0x104 = 0;
-				m_unk0xf8++;
+			if (m_playerLastPathStruct == 0x14) {
+				m_playerLastPathStruct = 0;
+				m_playerLaps++;
 
-				if (g_unk0x100f0c78 == m_unk0xf8) {
+				if (g_unk0x100f0c78 == m_playerLaps) {
 					MxS32 position;
 
-					if (m_unk0xfc < m_unk0xf8 && m_unk0x100 < m_unk0xf8) {
+					if (m_opponent1Laps < m_playerLaps && m_opponent2Laps < m_playerLaps) {
 						position = 3;
 					}
-					else if (m_unk0xfc < m_unk0xf8 || m_unk0x100 < m_unk0xf8) {
+					else if (m_opponent1Laps < m_playerLaps || m_opponent2Laps < m_playerLaps) {
 						position = 2;
 					}
 					else {
@@ -192,10 +196,10 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 					VariableTable()->SetVariable(g_raceState, "");
 					VariableTable()->SetVariable(g_strHIT_WALL_SOUND, "");
 					LegoRaceCar::InitYouCantStopSound();
-					m_raceState->m_unk0x28 = 2;
+					m_raceState->m_state = RaceState::e_finished;
 
 					RaceState::Entry* raceStateEntry = m_raceState->GetState(GameState()->GetActorId());
-					raceStateEntry->m_unk0x02 = position;
+					raceStateEntry->m_lastScore = position;
 
 					if (raceStateEntry->m_score < (MxS16) position) {
 						raceStateEntry->m_score = position;
@@ -208,44 +212,44 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 				result = 1;
 			}
-			else if (m_unk0x104 == 0xf) {
-				m_hideAnim->FUN_1006db40(m_unk0xf8 * 200 + 100);
+			else if (m_playerLastPathStruct == 0xf) {
+				m_hideAnim->FUN_1006db40(m_playerLaps * 200 + 100);
 				result = 1;
 			}
 
 			break;
 		case 11:
-			if (paramData <= m_unk0x108 || paramData >= m_unk0x108 + 5) {
+			if (paramData <= m_opponent1LastPathStruct || paramData >= m_opponent1LastPathStruct + 5) {
 				break;
 			}
 
 			FUN_10016930(11, paramData);
-			m_unk0x108 = paramData;
+			m_opponent1LastPathStruct = paramData;
 
-			if (m_unk0x108 == 0x14) {
-				m_unk0x108 = 0;
-				m_unk0xfc++;
+			if (m_opponent1LastPathStruct == 0x14) {
+				m_opponent1LastPathStruct = 0;
+				m_opponent1Laps++;
 
-				if (g_unk0x100f0c78 == m_unk0xfc) {
+				if (g_unk0x100f0c78 == m_opponent1Laps) {
 					((LegoPathActor*) p_param.GetSender())->SetMaxLinearVel(0.1);
 				}
 			}
 
 			break;
 		case 12:
-			if (paramData <= m_unk0x10c || paramData >= m_unk0x10c + 5) {
+			if (paramData <= m_opponent2LastPathStruct || paramData >= m_opponent2LastPathStruct + 5) {
 				break;
 			}
 
 			FUN_10016930(12, paramData);
 
-			m_unk0x10c = paramData;
+			m_opponent2LastPathStruct = paramData;
 
-			if (m_unk0x10c == 0x14) {
-				m_unk0x10c = 0;
-				m_unk0x100++;
+			if (m_opponent2LastPathStruct == 0x14) {
+				m_opponent2LastPathStruct = 0;
+				m_opponent2Laps++;
 
-				if (g_unk0x100f0c78 == m_unk0x100) {
+				if (g_unk0x100f0c78 == m_opponent2Laps) {
 					((LegoPathActor*) p_param.GetSender())->SetMaxLinearVel(0.1);
 				}
 			}
@@ -265,19 +269,21 @@ void JetskiRace::FUN_10016930(MxS32 p_param1, MxS16 p_param2)
 	MxS32 x, y;
 
 	if (p_param1 == 11) {
-		presenter = m_unk0x128;
-		local4 = m_unk0xfc;
+		presenter = m_opponent1Locator;
+		local4 = m_opponent1Laps;
 	}
 	else if (p_param1 == 12) {
-		presenter = m_unk0x12c;
-		local4 = m_unk0x100;
+		presenter = m_opponent2Locator;
+		local4 = m_opponent2Laps;
 	}
 
 	if (presenter) {
-		x = m_unk0x130.GetLeft() + 0.5 +
-			(m_unk0x130.GetRight() - m_unk0x130.GetLeft() + 1) * (local4 * 20.0 + p_param2) / (g_unk0x100f0c78 * 20.0);
-		y = m_unk0x130.GetTop() + 0.5 +
-			(m_unk0x130.GetBottom() - m_unk0x130.GetTop() + 1) * (local4 * 20.0 + p_param2) / (g_unk0x100f0c78 * 20.0);
+		x = m_progressBarRect.GetLeft() + 0.5 +
+			(m_progressBarRect.GetRight() - m_progressBarRect.GetLeft() + 1) * (local4 * 20.0 + p_param2) /
+				(g_unk0x100f0c78 * 20.0);
+		y = m_progressBarRect.GetTop() + 0.5 +
+			(m_progressBarRect.GetBottom() - m_progressBarRect.GetTop() + 1) * (local4 * 20.0 + p_param2) /
+				(g_unk0x100f0c78 * 20.0);
 
 		presenter->SetPosition(x, y);
 	}
