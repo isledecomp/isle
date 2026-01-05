@@ -456,14 +456,8 @@ inline MxU32 LegoCarRaceActor::VTable0x6c(
 
 							LegoROI* firstROI = (LegoROI*) co->front();
 
-							if (firstROI->Intersect(
-									p_v1,
-									p_v2,
-									p_f1,
-									p_f2,
-									p_v3,
-									m_collideBox && actor->GetCollideBox()
-								)) {
+							if (firstROI
+									->Intersect(p_v1, p_v2, p_f1, p_f2, p_v3, m_collideBox && actor->GetCollideBox())) {
 								HitActor(actor, TRUE);
 
 								if (actor->HitActor(this, FALSE) < 0) {
@@ -476,14 +470,8 @@ inline MxU32 LegoCarRaceActor::VTable0x6c(
 
 							LegoROI* lastROI = (LegoROI*) co->back();
 
-							if (lastROI->Intersect(
-									p_v1,
-									p_v2,
-									p_f1,
-									p_f2,
-									p_v3,
-									m_collideBox && actor->GetCollideBox()
-								)) {
+							if (lastROI
+									->Intersect(p_v1, p_v2, p_f1, p_f2, p_v3, m_collideBox && actor->GetCollideBox())) {
 								HitActor(actor, TRUE);
 
 								if (actor->HitActor(this, FALSE) < 0) {
