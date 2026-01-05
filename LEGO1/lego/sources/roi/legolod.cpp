@@ -234,7 +234,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		if (numTextureIndices > 0) {
 			textureIndices = new LegoU32[numPolys & USHRT_MAX][sizeOfArray(*textureIndices)];
 			if (p_storage->Read(textureIndices, (numPolys & USHRT_MAX) * 3 * sizeof(LegoU32)) != SUCCESS) {
-					assertIfBeta10(0);
+				assertIfBeta10(0);
 				goto done;
 			}
 		}
