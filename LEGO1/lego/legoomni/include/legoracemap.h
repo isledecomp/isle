@@ -35,7 +35,7 @@ public:
 	// LegoRaceMap::`scalar deleting destructor'
 
 private:
-	MxBool m_unk0x08;                   // 0x08
+	MxBool m_mapEnabled;                // 0x08
 	MxStillPresenter* m_stillPresenter; // 0x0c
 
 	// variable name verified by BETA10 0x100ca82b

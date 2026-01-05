@@ -15,7 +15,7 @@ DECOMP_SIZE_ASSERT(LegoRaceMap, 0x1b4)
 // FUNCTION: BETA10 0x100ca2c0
 LegoRaceMap::LegoRaceMap()
 {
-	m_unk0x08 = FALSE;
+	m_mapEnabled = FALSE;
 	m_stillPresenter = NULL;
 	m_Map_Ctl = 0;
 	ControlManager()->Register(this);
@@ -108,7 +108,7 @@ void LegoRaceMap::ParseAction(char* p_extra)
 // FUNCTION: BETA10 0x100ca849
 void LegoRaceMap::UpdateMapLocatorPosition()
 {
-	if (m_unk0x08) {
+	if (m_mapEnabled) {
 		short xPos = (GetWorldPosition()[0] - m_unk0x14) / m_unk0x18 * m_unk0x24;
 		short yPos = (GetWorldPosition()[2] - m_unk0x1c) / m_unk0x20 * m_unk0x28;
 
@@ -130,12 +130,12 @@ MxLong LegoRaceMap::Notify(MxParam& p_param)
 		m_Map_Ctl->GetAction()->GetObjectId() == ((LegoControlManagerNotificationParam&) p_param).m_clickedObjectId) {
 
 		if (((LegoControlManagerNotificationParam&) p_param).m_enabledChild == 1) {
-			m_unk0x08 = TRUE;
+			m_mapEnabled = TRUE;
 			UpdateMapLocatorPosition();
 			m_stillPresenter->Enable(TRUE);
 		}
 		else {
-			m_unk0x08 = FALSE;
+			m_mapEnabled = FALSE;
 			m_stillPresenter->Enable(FALSE);
 		}
 	}
