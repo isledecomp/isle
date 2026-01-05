@@ -869,12 +869,12 @@ void LegoGameState::SwitchArea(Area p_area)
 		InvokeAction(Extra::ActionType::e_opendisk, *g_infodoorScript, InfodoorScript::c__StartUp, NULL);
 		break;
 	case e_infocenterExited:
-	case e_jetrace2:
+	case e_jetraceFinished:
 	case e_jetraceExterior:
 	case e_jetskibuildExited:
 	case e_carraceExterior:
 	case e_racecarbuildExited:
-	case e_unk21:
+	case e_carraceFinished:
 	case e_pizzeriaExterior:
 	case e_garageExterior:
 	case e_hospitalExterior:
@@ -920,7 +920,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		break;
 	case e_jetrace:
 		if (m_previousArea == e_infomain) {
-			m_currentArea = e_jetrace2;
+			m_currentArea = e_jetraceFinished;
 			LoadIsle();
 		}
 		else {

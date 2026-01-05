@@ -30,7 +30,7 @@ Mx3DPointFloat g_unk0x10104c18 = Mx3DPointFloat(0.0f, 2.5f, 0.0f);
 // FUNCTION: BETA10 0x10080908
 LegoExtraActor::LegoExtraActor()
 {
-	m_unk0x70 = 0.0f;
+	m_lastPathStruct = 0.0f;
 	m_scheduledTime = 0;
 	m_unk0x0c = 0;
 	m_unk0x0e = 0;
