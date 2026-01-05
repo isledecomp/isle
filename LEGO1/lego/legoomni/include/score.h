@@ -85,8 +85,8 @@ public:
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	void Paint();
-	MxLong FUN_10001510(MxEndActionNotificationParam& p_param);
-	MxLong FUN_100016d0(LegoControlManagerNotificationParam& p_param);
+	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
+	MxLong HandleControl(LegoControlManagerNotificationParam& p_param);
 	void FillArea(MxS32 i_activity, MxS32 i_actor, MxS16 score);
 
 protected:
