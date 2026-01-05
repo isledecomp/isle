@@ -23,6 +23,12 @@
 #define sizeOfArray(arr) (sizeof(arr) / sizeof(arr[0]))
 #endif
 
+#ifdef BETA10
+#define assertIfBeta10(A) assert(A)
+#else
+#define assertIfBeta10(A)
+#endif
+
 typedef unsigned char undefined;
 typedef unsigned short undefined2;
 typedef unsigned int undefined4;
