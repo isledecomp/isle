@@ -56,7 +56,7 @@ private:
 	// likely an x-offset of the race map in screen space
 	float m_screenXOffset; // 0x2c
 	// likely a y-offset of the race map in screen space
-	float m_unk0x30; // 0x30
+	float m_screenYOffset; // 0x30
 };
 
 // GLOBAL: LEGO1 0x100d8848
