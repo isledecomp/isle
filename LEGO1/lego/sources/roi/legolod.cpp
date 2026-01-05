@@ -25,7 +25,7 @@ inline BOOL GetD3DRM_legolod(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
 #else
 inline IDirect3DRM2* GetD3DRM_legolod(Tgl::Renderer* pRenderer);
 #endif
-inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* pMesh);
+inline BOOL GetMeshData(IDirect3DRMMesh** mesh, D3DRMGROUPINDEX* index, Tgl::Mesh* pMesh);
 
 // FUNCTION: LEGO1 0x100aa380
 // FUNCTION: BETA10 0x1018ce90
@@ -301,7 +301,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			polyIndices,
 			textureIndices,
 			shadingModel
-			// LINE: LEGO1 0x100aa88b
+			// LINE: LEGO1 0x100aa885
 		);
 
 		if (m_melems[meshIndex].m_tglMesh == NULL) {
@@ -370,7 +370,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		}
 
 		if (mesh->GetUnknown0x0d() > 0) {
-			GetMeshData(mesh2, index, m_melems[meshIndex].m_tglMesh);
+			GetMeshData(&mesh2, &index, m_melems[meshIndex].m_tglMesh);
 			mesh2->SetGroupMaterial(index, g_unk0x101013d4);
 		}
 
@@ -545,13 +545,13 @@ void LegoLOD::ClearMeshOffset()
 }
 
 // FUNCTION: BETA10 0x1018dfc4
-inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* p_tglElem)
+inline BOOL GetMeshData(IDirect3DRMMesh** mesh, D3DRMGROUPINDEX* index, Tgl::Mesh* p_tglElem)
 {
 	assert(p_tglElem);
 	TglImpl::MeshImpl* meshImpl = (TglImpl::MeshImpl*) p_tglElem;
 	// Note: Diff in BETA10 (thunked in recompile but not in orig)
-	mesh = meshImpl->ImplementationData()->groupMesh;
-	index = meshImpl->ImplementationData()->groupIndex;
+	*mesh = meshImpl->ImplementationData()->groupMesh;
+	*index = meshImpl->ImplementationData()->groupIndex;
 	return FALSE;
 }
 
