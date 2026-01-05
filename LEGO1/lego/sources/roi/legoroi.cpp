@@ -679,7 +679,8 @@ LegoU32 LegoROI::Intersect(
 			float intersectionDistance = p_rayDirection.Dot(p_rayDirection, boxFacePlanes[i]);
 
 			if (intersectionDistance >= 0.01 || intersectionDistance < -0.01) {
-				intersectionDistance = -((boxFacePlanes[i][3] + rayOrigin.Dot(rayOrigin, boxFacePlanes[i])) / intersectionDistance);
+				intersectionDistance =
+					-((boxFacePlanes[i][3] + rayOrigin.Dot(rayOrigin, boxFacePlanes[i])) / intersectionDistance);
 
 				if (intersectionDistance >= 0.0f && intersectionDistance <= p_rayLength) {
 					Mx3DPointFloat intersectionPoint(p_rayDirection);
@@ -689,7 +690,8 @@ LegoU32 LegoROI::Intersect(
 					LegoS32 j;
 					for (j = 0; j < 6; j++) {
 						if (i != j && i - j != 3 && j - i != 3) {
-							if (boxFacePlanes[j][3] + intersectionPoint.Dot(intersectionPoint, boxFacePlanes[j]) < 0.0f) {
+							if (boxFacePlanes[j][3] + intersectionPoint.Dot(intersectionPoint, boxFacePlanes[j]) <
+								0.0f) {
 								break;
 							}
 						}
