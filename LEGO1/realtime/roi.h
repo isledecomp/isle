@@ -70,12 +70,14 @@ private:
  * a geometric object.
  */
 // VTABLE: LEGO1 0x100dbd90
+// VTABLE: BETA10 0x101c34c0
 // SIZE 0x04
 class LODObject {
 public:
 	// LODObject();
 
 	// FUNCTION: LEGO1 0x100a6f00
+	// FUNCTION: BETA10 0x10174c70
 	virtual ~LODObject() {}
 
 	virtual double AveragePolyArea() const = 0; // vtable+0x04
@@ -84,8 +86,12 @@ public:
 	virtual float VTable0x10() = 0;             // vtable+0x10
 
 	// SYNTHETIC: LEGO1 0x100a6f10
+	// SYNTHETIC: BETA10 0x10174c90
 	// LODObject::`scalar deleting destructor'
 };
+
+// SYNTHETIC: BETA10 0x1018e620
+// LODObject::LODObject
 
 /*
  * A CompoundObject is simply a set of ROI objects which
