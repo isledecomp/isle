@@ -1198,7 +1198,7 @@ MxU32 LegoAnimPresenter::VTable0x94(Vector3& p_v1, Vector3& p_v2, float p_f1, fl
 	len = sqrt(len);
 	if (len <= m_unk0xa4 + p_f2 && m_roiMapSize != 0 && m_roiMap != NULL) {
 		for (MxU32 i = 1; i <= m_roiMapSize; i++) {
-			if (m_roiMap[i]->GetLODCount() != 0 && m_roiMap[i]->FUN_100a9410(p_v1, p_v2, p_f1, p_f2, p_v3, FALSE)) {
+			if (m_roiMap[i]->GetLODCount() != 0 && m_roiMap[i]->Intersect(p_v1, p_v2, p_f1, p_f2, p_v3, FALSE)) {
 				return TRUE;
 			}
 		}
