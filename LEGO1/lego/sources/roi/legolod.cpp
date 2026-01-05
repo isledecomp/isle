@@ -123,9 +123,12 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	LegoU32(*polyIndices)[3] = NULL;
 	LegoU32(*textureIndices)[3] = NULL;
 	LegoTextureInfo* textureInfo = NULL;
-
-	LegoU32 i, indexBackwards, indexForwards, tempNumVertsAndNormals;
 	LegoU8 local4c = 0; // BETA10 only, only written, never read
+	LegoU32 numPolys, numVertices, numTextureIndices, meshIndex;
+	LegoU32 i, indexBackwards, indexForwards, tempNumVertsAndNormals;
+	LegoFloat red, green, blue, alpha;
+	IDirect3DRMMesh* mesh2;
+	D3DRMGROUPINDEX index;
 
 	unsigned char paletteEntries[256];
 
@@ -211,7 +214,6 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 
 	for (i = 0; i < m_numMeshes; i++) {
 		local4c = 0;
-		LegoU32 numPolys, numVertices, numTextureIndices, meshIndex;
 		const LegoChar *textureName, *materialName;
 		Tgl::ShadingModel shadingModel;
 
@@ -299,6 +301,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			polyIndices,
 			textureIndices,
 			shadingModel
+			// LINE: LEGO1 0x100aa88b
 		);
 
 		if (m_melems[meshIndex].m_tglMesh == NULL) {
@@ -343,10 +346,11 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			m_melems[meshIndex].m_textured = TRUE;
 		}
 		else {
-			LegoFloat red = 1.0F;
-			LegoFloat green = 0.0F;
-			LegoFloat blue = 1.0F;
-			LegoFloat alpha = 0.0F;
+			red = 1.0F;
+			// LINE: BETA10 0x1018db2d
+			green = 0.0F;
+			blue = 1.0F;
+			alpha = 0.0F;
 
 			if (mesh->GetUseAlias()) {
 				LegoROI::GetRGBAColor(materialName, red, green, blue, alpha);
@@ -366,10 +370,8 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		}
 
 		if (mesh->GetUnknown0x0d() > 0) {
-			IDirect3DRMMesh* mesh;
-			D3DRMGROUPINDEX index;
-			GetMeshData(mesh, index, m_melems[meshIndex].m_tglMesh);
-			mesh->SetGroupMaterial(index, g_unk0x101013d4);
+			GetMeshData(mesh2, index, m_melems[meshIndex].m_tglMesh);
+			mesh2->SetGroupMaterial(index, g_unk0x101013d4);
 		}
 
 		if (mesh != NULL) {
