@@ -64,7 +64,7 @@ void LegoRaceMap::ParseAction(char* p_extra)
 
 		token = strtok(NULL, g_parseExtraTokens);
 		if (token != NULL) {
-			m_unk0x1c = atof(token);
+			m_worldYOffset = atof(token);
 		}
 
 		token = strtok(NULL, g_parseExtraTokens);
@@ -110,7 +110,7 @@ void LegoRaceMap::UpdateMapLocatorPosition()
 {
 	if (m_mapEnabled) {
 		short xPos = (GetWorldPosition()[0] - m_worldXOffset) / m_unk0x18 * m_unk0x24;
-		short yPos = (GetWorldPosition()[2] - m_unk0x1c) / m_unk0x20 * m_unk0x28;
+		short yPos = (GetWorldPosition()[2] - m_worldYOffset) / m_unk0x20 * m_unk0x28;
 
 		m_stillPresenter->SetPosition(xPos + m_unk0x2c, m_unk0x30 - yPos);
 	}
