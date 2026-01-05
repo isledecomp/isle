@@ -42,7 +42,7 @@ private:
 	MxControlPresenter* m_Map_Ctl; // 0x10
 
 	// likely an x-offset of the race map in world space
-	float m_unk0x14; // 0x14
+	float m_worldXOffset; // 0x14
 	// inversely scales the map in x direction (either convert world->screen space or to control the size)
 	float m_unk0x18; // 0x18
 	// likely a y-offset of the race map in world space
