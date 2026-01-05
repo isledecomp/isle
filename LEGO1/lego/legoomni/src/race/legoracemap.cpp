@@ -106,7 +106,7 @@ void LegoRaceMap::ParseAction(char* p_extra)
 
 // FUNCTION: LEGO1 0x1005d4b0
 // FUNCTION: BETA10 0x100ca849
-void LegoRaceMap::FUN_1005d4b0()
+void LegoRaceMap::UpdateMapLocatorPosition()
 {
 	if (m_unk0x08) {
 		short xPos = (GetWorldPosition()[0] - m_unk0x14) / m_unk0x18 * m_unk0x24;
@@ -131,7 +131,7 @@ MxLong LegoRaceMap::Notify(MxParam& p_param)
 
 		if (((LegoControlManagerNotificationParam&) p_param).m_enabledChild == 1) {
 			m_unk0x08 = TRUE;
-			FUN_1005d4b0();
+			UpdateMapLocatorPosition();
 			m_stillPresenter->Enable(TRUE);
 		}
 		else {

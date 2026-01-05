@@ -411,7 +411,7 @@ void LegoRaceCar::Animate(float p_time)
 	}
 
 	if (LegoCarRaceActor::m_animState == 1) {
-		FUN_1005d4b0();
+		UpdateMapLocatorPosition();
 
 		if (!m_userNavFlag) {
 			FUN_10080590(p_time);
@@ -610,7 +610,7 @@ void LegoJetski::Animate(float p_time)
 	LegoJetskiRaceActor::Animate(p_time);
 
 	if (LegoCarRaceActor::m_animState == 1) {
-		FUN_1005d4b0();
+		UpdateMapLocatorPosition();
 
 		if (!m_userNavFlag) {
 			FUN_10080590(p_time);

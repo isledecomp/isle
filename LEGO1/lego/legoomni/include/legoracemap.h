@@ -26,7 +26,7 @@ public:
 	void Animate(float p_time) override = 0;  // vtable+0x70
 
 	// LegoRaceMap vtable
-	virtual void FUN_1005d4b0(); // vtable+0x00
+	virtual void UpdateMapLocatorPosition(); // vtable+0x00
 
 	// SYNTHETIC: LEGO1 0x10012c50
 	// LegoRaceMap::`vbase destructor'
