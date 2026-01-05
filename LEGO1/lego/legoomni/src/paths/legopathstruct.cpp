@@ -49,7 +49,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 			}
 			break;
 		case c_d: {
-			p_actor->VTable0x58(p_data);
+			p_actor->SetLastPathStruct(p_data);
 
 			LegoPathStructNotificationParam param(c_notificationPathStruct, p_actor, m_name[2], p_data);
 			p_actor->Notify(param);

@@ -17,7 +17,7 @@ LegoActor::LegoActor()
 {
 	m_frequencyFactor = 0.0f;
 	m_sound = NULL;
-	m_unk0x70 = 0.0f;
+	m_lastPathStruct = 0.0f;
 	m_interaction = 0;
 	m_actorId = 0;
 }
