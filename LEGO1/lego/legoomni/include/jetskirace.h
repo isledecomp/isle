@@ -36,10 +36,10 @@ public:
 	MxLong HandlePathStruct(LegoPathStructNotificationParam&) override;  // vtable+0x70
 	MxLong HandleEndAction(MxEndActionNotificationParam&) override;      // vtable+0x74
 
-	void FUN_10016930(MxS32 p_param1, MxS16 p_param2);
+	void SetProgressPosition(MxS32 p_actorId, MxS16 p_progress);
 
 private:
-	static MxS32 g_unk0x100f0c78;
+	static MxS32 g_lapsCount;
 };
 
 // VTABLE: LEGO1 0x100d4fa8

@@ -593,7 +593,7 @@ void Isle::Enable(MxBool p_enable)
 			NotificationManager()->Send(this, MxNotificationParam(c_notificationTransitioned, NULL));
 			SetIsWorldActive(FALSE);
 			break;
-		case LegoGameState::e_jetrace2:
+		case LegoGameState::e_jetraceFinished:
 			if (((JetskiRaceState*) GameState()->GetState("JetskiRaceState"))->m_state == RaceState::e_finished) {
 				m_act1state->m_state = Act1State::e_transitionToJetski;
 			}
@@ -731,7 +731,7 @@ void Isle::Enable(MxBool p_enable)
 		case Act1State::e_transitionToJetski: {
 			((IslePathActor*) UserActor())
 				->SpawnPlayer(
-					LegoGameState::e_jetrace2,
+					LegoGameState::e_jetraceFinished,
 					FALSE,
 					IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 				);
@@ -838,7 +838,8 @@ void Isle::Enable(MxBool p_enable)
 			(m_act1state->m_state != Act1State::e_none || GameState()->m_currentArea != LegoGameState::e_copter) &&
 			(m_act1state->m_state != Act1State::e_none || GameState()->m_currentArea != LegoGameState::e_jetski) &&
 			(m_act1state->m_state != Act1State::e_none || GameState()->m_currentArea != LegoGameState::e_skateboard) &&
-			(m_act1state->m_state != Act1State::e_none || GameState()->m_currentArea != LegoGameState::e_jetrace2)) {
+			(m_act1state->m_state != Act1State::e_none || GameState()->m_currentArea != LegoGameState::e_jetraceFinished
+			)) {
 			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		}
 

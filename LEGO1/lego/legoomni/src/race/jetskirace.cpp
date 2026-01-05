@@ -35,7 +35,7 @@ extern const char* g_strHIT_WALL_SOUND;
 DECOMP_SIZE_ASSERT(JetskiRace, 0x144)
 
 // GLOBAL: LEGO1 0x100f0c78
-MxS32 JetskiRace::g_unk0x100f0c78 = 2;
+MxS32 JetskiRace::g_lapsCount = 2;
 
 // FUNCTION: LEGO1 0x100162c0
 // FUNCTION: BETA10 0x100c7e6f
@@ -65,9 +65,9 @@ MxResult JetskiRace::Create(MxDSAction& p_dsAction)
 	m_progressBarRect.SetBottom(333);
 	LegoJetski::InitSoundIndices();
 
-	MxS32 streamId =
+	MxS32 raceCarDashboardStreamId =
 		DuneBuggy::GetColorOffset(g_varJSFRNTY5) + (DuneBuggy::GetColorOffset(g_varJSWNSHY5) * 5 + 0xf) * 2;
-	InvokeAction(Extra::e_start, m_atomId, streamId, NULL);
+	InvokeAction(Extra::e_start, m_atomId, raceCarDashboardStreamId, NULL);
 	InvokeAction(Extra::e_start, m_atomId, JetraceScript::c_JetskiDashboard, NULL);
 
 	g_unk0x100f119c = TRUE;
@@ -162,7 +162,7 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 		MxS32 paramData = p_param.GetData();
 
 		switch (sender->GetEntityId()) {
-		case 10:
+		case JetraceScript::c_UserJetski_Actor:
 			if (paramData <= m_playerLastPathStruct || paramData >= m_playerLastPathStruct + 5) {
 				break;
 			}
@@ -172,7 +172,7 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 			sprintf(
 				buffer,
 				"%g",
-				0.032 + 0.936 * (m_playerLaps * 20.0 + m_playerLastPathStruct) / (g_unk0x100f0c78 * 20.0)
+				0.032 + 0.936 * (m_playerLaps * 20.0 + m_playerLastPathStruct) / (g_lapsCount * 20.0)
 			);
 			VariableTable()->SetVariable("DISTANCE", buffer);
 
@@ -180,17 +180,17 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				m_playerLastPathStruct = 0;
 				m_playerLaps++;
 
-				if (g_unk0x100f0c78 == m_playerLaps) {
-					MxS32 position;
+				if (g_lapsCount == m_playerLaps) {
+					MxS32 score;
 
 					if (m_opponent1Laps < m_playerLaps && m_opponent2Laps < m_playerLaps) {
-						position = 3;
+						score = 3;
 					}
 					else if (m_opponent1Laps < m_playerLaps || m_opponent2Laps < m_playerLaps) {
-						position = 2;
+						score = 2;
 					}
 					else {
-						position = 1;
+						score = 1;
 					}
 
 					VariableTable()->SetVariable(g_raceState, "");
@@ -199,13 +199,13 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 					m_raceState->m_state = RaceState::e_finished;
 
 					RaceState::Entry* raceStateEntry = m_raceState->GetState(GameState()->GetActorId());
-					raceStateEntry->m_lastScore = position;
+					raceStateEntry->m_lastScore = score;
 
-					if (raceStateEntry->m_score < (MxS16) position) {
-						raceStateEntry->m_score = position;
+					if (raceStateEntry->m_score < (MxS16) score) {
+						raceStateEntry->m_score = score;
 					}
 
-					m_destLocation = LegoGameState::e_jetrace2;
+					m_destLocation = LegoGameState::e_jetraceFinished;
 
 					TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 				}
@@ -218,30 +218,30 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 			}
 
 			break;
-		case 11:
+		case JetraceScript::c_Snap_Actor:
 			if (paramData <= m_opponent1LastPathStruct || paramData >= m_opponent1LastPathStruct + 5) {
 				break;
 			}
 
-			FUN_10016930(11, paramData);
+			SetProgressPosition(JetraceScript::c_Snap_Actor, paramData);
 			m_opponent1LastPathStruct = paramData;
 
 			if (m_opponent1LastPathStruct == 0x14) {
 				m_opponent1LastPathStruct = 0;
 				m_opponent1Laps++;
 
-				if (g_unk0x100f0c78 == m_opponent1Laps) {
+				if (g_lapsCount == m_opponent1Laps) {
 					((LegoPathActor*) p_param.GetSender())->SetMaxLinearVel(0.1);
 				}
 			}
 
 			break;
-		case 12:
+		case JetraceScript::c_Valerie_Actor:
 			if (paramData <= m_opponent2LastPathStruct || paramData >= m_opponent2LastPathStruct + 5) {
 				break;
 			}
 
-			FUN_10016930(12, paramData);
+			SetProgressPosition(JetraceScript::c_Valerie_Actor, paramData);
 
 			m_opponent2LastPathStruct = paramData;
 
@@ -249,7 +249,7 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				m_opponent2LastPathStruct = 0;
 				m_opponent2Laps++;
 
-				if (g_unk0x100f0c78 == m_opponent2Laps) {
+				if (g_lapsCount == m_opponent2Laps) {
 					((LegoPathActor*) p_param.GetSender())->SetMaxLinearVel(0.1);
 				}
 			}
@@ -262,28 +262,28 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10016930
-void JetskiRace::FUN_10016930(MxS32 p_param1, MxS16 p_param2)
+void JetskiRace::SetProgressPosition(MxS32 p_actorId, MxS16 p_progress)
 {
-	MxS32 local4;
+	MxS32 laps;
 	MxStillPresenter* presenter;
 	MxS32 x, y;
 
-	if (p_param1 == 11) {
+	if (p_actorId == JetraceScript::c_Snap_Actor) {
 		presenter = m_opponent1Locator;
-		local4 = m_opponent1Laps;
+		laps = m_opponent1Laps;
 	}
-	else if (p_param1 == 12) {
+	else if (p_actorId == JetraceScript::c_Valerie_Actor) {
 		presenter = m_opponent2Locator;
-		local4 = m_opponent2Laps;
+		laps = m_opponent2Laps;
 	}
 
 	if (presenter) {
 		x = m_progressBarRect.GetLeft() + 0.5 +
-			(m_progressBarRect.GetRight() - m_progressBarRect.GetLeft() + 1) * (local4 * 20.0 + p_param2) /
-				(g_unk0x100f0c78 * 20.0);
+			(m_progressBarRect.GetRight() - m_progressBarRect.GetLeft() + 1) * (laps * 20.0 + p_progress) /
+				(g_lapsCount * 20.0);
 		y = m_progressBarRect.GetTop() + 0.5 +
-			(m_progressBarRect.GetBottom() - m_progressBarRect.GetTop() + 1) * (local4 * 20.0 + p_param2) /
-				(g_unk0x100f0c78 * 20.0);
+			(m_progressBarRect.GetBottom() - m_progressBarRect.GetTop() + 1) * (laps * 20.0 + p_progress) /
+				(g_lapsCount * 20.0);
 
 		presenter->SetPosition(x, y);
 	}

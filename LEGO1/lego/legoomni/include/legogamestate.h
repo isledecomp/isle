@@ -81,7 +81,7 @@ public:
 		e_regbook,
 		e_infoscor,
 		e_jetrace,
-		e_jetrace2,
+		e_jetraceFinished,
 		e_jetraceExterior,
 		e_jetskibuildExited,
 		e_carrace,
