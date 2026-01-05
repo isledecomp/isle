@@ -765,7 +765,7 @@ void Isle::Enable(MxBool p_enable)
 			GameState()->m_currentArea = LegoGameState::e_carraceExterior;
 			((IslePathActor*) UserActor())
 				->SpawnPlayer(
-					LegoGameState::e_unk21,
+					LegoGameState::e_carraceFinished,
 					FALSE,
 					IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 				);

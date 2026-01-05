@@ -271,7 +271,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_CentralNorthRoad_Music
 	);
 	g_spawnLocations[9] = SpawnLocation(
-		LegoGameState::e_unk21,
+		LegoGameState::e_carraceFinished,
 		g_isleScript,
 		0,
 		"INT62",

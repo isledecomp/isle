@@ -874,7 +874,7 @@ void LegoGameState::SwitchArea(Area p_area)
 	case e_jetskibuildExited:
 	case e_carraceExterior:
 	case e_racecarbuildExited:
-	case e_unk21:
+	case e_carraceFinished:
 	case e_pizzeriaExterior:
 	case e_garageExterior:
 	case e_hospitalExterior:
