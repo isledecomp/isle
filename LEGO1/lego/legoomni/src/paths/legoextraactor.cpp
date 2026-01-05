@@ -502,7 +502,7 @@ inline MxU32 LegoExtraActor::VTable0x6c(
 						}
 					}
 					else {
-						if (roi->FUN_100a9410(p_v1, p_v2, p_f1, p_f2, p_v3, m_collideBox && actor->GetCollideBox())) {
+						if (roi->Intersect(p_v1, p_v2, p_f1, p_f2, p_v3, m_collideBox && actor->GetCollideBox())) {
 							if (HitActor(actor, TRUE) < 0) {
 								return 0;
 							}
