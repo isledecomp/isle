@@ -102,7 +102,7 @@ void Helicopter::Exit()
 		}
 	}
 
-	m_state->m_unk0x08 = 0;
+	m_state->m_status = 0;
 	RemoveFromCurrentWorld(m_script, IsleScript::c_HelicopterDashboard_Bitmap);
 	RemoveFromCurrentWorld(m_script, IsleScript::c_HelicopterArms_Ctl);
 	RemoveFromCurrentWorld(m_script, IsleScript::c_Helicopter_TakeOff_Ctl);
@@ -198,7 +198,7 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 				((Act3*) CurrentWorld())->SetDestLocation(LegoGameState::e_infomain);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			}
-			else if (m_state->m_unk0x08 != 0) {
+			else if (m_state->m_status != 0) {
 				break;
 			}
 
@@ -213,9 +213,9 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 
 			Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
 			assert(act1State);
-			if (m_state->m_unk0x08 == 0) {
+			if (m_state->m_status == 0) {
 				act1State->m_state = Act1State::e_helicopter;
-				m_state->m_unk0x08 = 1;
+				m_state->m_status = 1;
 				m_world->RemoveActor(this);
 				InvokeAction(Extra::ActionType::e_start, script, IsleScript::c_HelicopterTakeOff_Anim, NULL);
 				SetActorState(c_initial);
@@ -229,8 +229,8 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 				break;
 			}
 
-			if (m_state->m_unk0x08 == 2) {
-				m_state->m_unk0x08 = 3;
+			if (m_state->m_status == 2) {
+				m_state->m_status = 3;
 				m_world->RemoveActor(this);
 				InvokeAction(Extra::ActionType::e_start, script, IsleScript::c_HelicopterLand_Anim, NULL);
 				SetActorState(c_disabled);
@@ -313,7 +313,7 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 {
 	MxLong result = 0;
 
-	switch (m_state->m_unk0x08) {
+	switch (m_state->m_status) {
 	case 1: {
 		if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 			Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
@@ -333,7 +333,7 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 			);
 		}
 
-		m_state->m_unk0x08 = 2;
+		m_state->m_status = 2;
 
 		MxMatrix matrix;
 		matrix.SetIdentity();
@@ -374,7 +374,7 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 			);
 		}
 
-		m_state->m_unk0x08 = 0;
+		m_state->m_status = 0;
 		result = 1;
 		break;
 	}
@@ -402,8 +402,8 @@ void Helicopter::VTable0x74(Matrix4& p_transform)
 // FUNCTION: LEGO1 0x10003ee0
 void Helicopter::Animate(float p_time)
 {
-	if (m_state->m_unk0x08 == 4 || m_state->m_unk0x08 == 5) {
-		float f = m_unk0x1f0 - p_time + 3000.0f;
+	if (m_state->m_status == 4 || m_state->m_status == 5) {
+		float f = m_cameraTransitionTime - p_time + 3000.0f;
 		if (f >= 0) {
 			float f2 = f / -3000.0f + 1;
 			if (f2 < 0) {
@@ -429,7 +429,7 @@ void Helicopter::Animate(float p_time)
 			m_world->GetCameraController()->TransformPointOfView(mat, 0);
 		}
 		else {
-			if (m_state->m_unk0x08 == 4) {
+			if (m_state->m_status == 4) {
 				((Act3*) m_world)->FUN_10073400();
 			}
 			else {
@@ -491,8 +491,8 @@ void Helicopter::SetupCameraTransition(const Matrix4& p_matrix)
 // FUNCTION: LEGO1 0x10004640
 void Helicopter::StartGoodEndingCamera(const Matrix4& p_matrix)
 {
-	if (m_state->m_unk0x08 != 4 && m_state->m_unk0x08 != 5) {
-		m_state->m_unk0x08 = 4;
+	if (m_state->m_status != 4 && m_state->m_status != 5) {
+		m_state->m_status = 4;
 		SetupCameraTransition(p_matrix);
 	}
 }
@@ -500,8 +500,8 @@ void Helicopter::StartGoodEndingCamera(const Matrix4& p_matrix)
 // FUNCTION: LEGO1 0x10004670
 void Helicopter::StartBadEndingCamera(const Matrix4& p_matrix)
 {
-	if (m_state->m_unk0x08 != 4 && m_state->m_unk0x08 != 5) {
-		m_state->m_unk0x08 = 5;
+	if (m_state->m_status != 4 && m_state->m_status != 5) {
+		m_state->m_status = 5;
 		SetupCameraTransition(p_matrix);
 	}
 }

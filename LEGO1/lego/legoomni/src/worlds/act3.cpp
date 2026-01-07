@@ -650,7 +650,7 @@ MxLong Act3::Notify(MxParam& p_param)
 				m_state->m_state = Act3State::e_initial;
 				Disable(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 				m_copter->HandleClick();
-				m_copter->m_state->m_unk0x08 = 1;
+				m_copter->m_state->m_status = 1;
 				m_copter->HandleEndAnim((LegoEndAnimNotificationParam&) param);
 			}
 			break;

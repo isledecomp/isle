@@ -12,7 +12,7 @@ class Act3;
 // SIZE 0x0c
 class HelicopterState : public LegoState {
 public:
-	HelicopterState() : m_unk0x08(0) {}
+	HelicopterState() : m_status(0) {}
 
 	// FUNCTION: LEGO1 0x1000e0b0
 	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
@@ -20,7 +20,7 @@ public:
 	// FUNCTION: LEGO1 0x1000e0c0
 	MxBool Reset() override
 	{
-		m_unk0x08 = 0;
+		m_status = 0;
 		return TRUE;
 	} // vtable+0x18
 
@@ -41,7 +41,7 @@ public:
 	// SYNTHETIC: LEGO1 0x1000e190
 	// HelicopterState::`scalar deleting destructor'
 
-	MxU32 m_unk0x08; // 0x08
+	MxU32 m_status; // 0x08
 };
 
 // VTABLE: LEGO1 0x100d40f8
