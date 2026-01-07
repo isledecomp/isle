@@ -450,8 +450,8 @@ void Helicopter::SetupCameraTransition(const Matrix4& p_matrix)
 	MxMatrix local48;
 	MxMatrix local90;
 
-	Vector3 vec1(local48[3]);    // local98  // esp+0x30
-	Vector3 vec2(local90[3]);    // localac  // esp+0x1c
+	Vector3 vec1(local48[3]);                     // local98  // esp+0x30
+	Vector3 vec2(local90[3]);                     // localac  // esp+0x1c
 	Vector3 vec3(m_cameraTransitionEndMatrix[0]); // locala8  // esp+0x20
 	Vector3 vec4(m_cameraTransitionEndMatrix[1]); // localb8  // esp+0x10
 	Vector3 vec5(m_cameraTransitionEndMatrix[2]); // EDI

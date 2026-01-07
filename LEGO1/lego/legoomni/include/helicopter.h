@@ -88,12 +88,12 @@ public:
 protected:
 	void SetupCameraTransition(const Matrix4& p_matrix);
 
-	MxMatrix m_cameraTransitionStartMatrix;                // 0x160
-	MxMatrix m_cameraTransitionEndMatrix;                // 0x1a8
-	float m_cameraTransitionTime;                   // 0x1f0
+	MxMatrix m_cameraTransitionStartMatrix;                 // 0x160
+	MxMatrix m_cameraTransitionEndMatrix;                   // 0x1a8
+	float m_cameraTransitionTime;                           // 0x1f0
 	MxQuaternionTransformer m_cameraTransitionInterpolator; // 0x1f4
-	HelicopterState* m_state;           // 0x228
-	MxAtomId m_script;                  // 0x22c
+	HelicopterState* m_state;                               // 0x228
+	MxAtomId m_script;                                      // 0x22c
 };
 
 #endif // HELICOPTER_H
