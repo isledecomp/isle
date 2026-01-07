@@ -192,7 +192,7 @@ public:
 private:
 	void Leave();
 	void PlayFinalAnimation(IsleScript::Script p_objectId);
-	void FUN_1004dcb0(IsleScript::Script p_objectId);
+	void PlayActorAnimation(IsleScript::Script p_objectId);
 	void PlayAction(IsleScript::Script p_objectId);
 
 	undefined4 m_unk0x160;              // 0x160
