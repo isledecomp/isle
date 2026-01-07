@@ -450,11 +450,11 @@ void Helicopter::SetupCameraTransition(const Matrix4& p_matrix)
 	MxMatrix startMatrix;
 	MxMatrix endMatrix;
 
-	Vector3 startPos(startMatrix[3]);                     // local98  // esp+0x30
-	Vector3 endPos(endMatrix[3]);                         // localac  // esp+0x1c
-	Vector3 endMatrixX(m_cameraTransitionEndMatrix[0]);   // locala8  // esp+0x20
-	Vector3 endMatrixY(m_cameraTransitionEndMatrix[1]);   // localb8  // esp+0x10
-	Vector3 endMatrixZ(m_cameraTransitionEndMatrix[2]);   // EDI
+	Vector3 startPos(startMatrix[3]);                   // local98  // esp+0x30
+	Vector3 endPos(endMatrix[3]);                       // localac  // esp+0x1c
+	Vector3 endMatrixX(m_cameraTransitionEndMatrix[0]); // locala8  // esp+0x20
+	Vector3 endMatrixY(m_cameraTransitionEndMatrix[1]); // localb8  // esp+0x10
+	Vector3 endMatrixZ(m_cameraTransitionEndMatrix[2]); // EDI
 
 	// the typecast makes this function match for unknown reasons
 	Vector3 endMatrixPos((const float*) m_cameraTransitionEndMatrix[3]); // locala0  // esp+0x28
