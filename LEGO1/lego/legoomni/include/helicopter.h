@@ -86,7 +86,7 @@ public:
 	friend class Act3;
 
 protected:
-	void FUN_100042a0(const Matrix4& p_matrix);
+	void SetupCameraTransition(const Matrix4& p_matrix);
 
 	MxMatrix m_unk0x160;                // 0x160
 	MxMatrix m_unk0x1a8;                // 0x1a8

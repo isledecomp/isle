@@ -445,7 +445,7 @@ void Helicopter::Animate(float p_time)
 }
 
 // FUNCTION: LEGO1 0x100042a0
-void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
+void Helicopter::SetupCameraTransition(const Matrix4& p_matrix)
 {
 	MxMatrix local48;
 	MxMatrix local90;
@@ -493,7 +493,7 @@ void Helicopter::FUN_10004640(const Matrix4& p_matrix)
 {
 	if (m_state->m_unk0x08 != 4 && m_state->m_unk0x08 != 5) {
 		m_state->m_unk0x08 = 4;
-		FUN_100042a0(p_matrix);
+		SetupCameraTransition(p_matrix);
 	}
 }
 
@@ -502,6 +502,6 @@ void Helicopter::FUN_10004670(const Matrix4& p_matrix)
 {
 	if (m_state->m_unk0x08 != 4 && m_state->m_unk0x08 != 5) {
 		m_state->m_unk0x08 = 5;
-		FUN_100042a0(p_matrix);
+		SetupCameraTransition(p_matrix);
 	}
 }
