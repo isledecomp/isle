@@ -414,12 +414,12 @@ void Helicopter::Animate(float p_time)
 			}
 
 			MxMatrix mat;
-			Vector3 v1(m_unk0x160[3]);
+			Vector3 v1(m_cameraTransitionStartMatrix[3]);
 			Vector3 v2(mat[3]);
-			Vector3 v3(m_unk0x1a8[3]);
+			Vector3 v3(m_cameraTransitionEndMatrix[3]);
 
 			mat.SetIdentity();
-			m_unk0x1f4.InterpolateToMatrix(mat, f2);
+			m_cameraTransitionInterpolator.InterpolateToMatrix(mat, f2);
 
 			v2 = v3;
 			v2 -= v1;
@@ -452,15 +452,15 @@ void Helicopter::SetupCameraTransition(const Matrix4& p_matrix)
 
 	Vector3 vec1(local48[3]);    // local98  // esp+0x30
 	Vector3 vec2(local90[3]);    // localac  // esp+0x1c
-	Vector3 vec3(m_unk0x1a8[0]); // locala8  // esp+0x20
-	Vector3 vec4(m_unk0x1a8[1]); // localb8  // esp+0x10
-	Vector3 vec5(m_unk0x1a8[2]); // EDI
+	Vector3 vec3(m_cameraTransitionEndMatrix[0]); // locala8  // esp+0x20
+	Vector3 vec4(m_cameraTransitionEndMatrix[1]); // localb8  // esp+0x10
+	Vector3 vec5(m_cameraTransitionEndMatrix[2]); // EDI
 
 	// the typecast makes this function match for unknown reasons
-	Vector3 vec6((const float*) m_unk0x1a8[3]); // locala0  // esp+0x28
+	Vector3 vec6((const float*) m_cameraTransitionEndMatrix[3]); // locala0  // esp+0x28
 
 	m_world->GetCameraController()->GetPointOfView(local48);
-	m_unk0x1a8.SetIdentity();
+	m_cameraTransitionEndMatrix.SetIdentity();
 	local90 = p_matrix;
 
 	vec2[1] += 20.0f;
@@ -476,16 +476,16 @@ void Helicopter::SetupCameraTransition(const Matrix4& p_matrix)
 	vec4.EqualsCross(vec5, vec3);
 	vec6 = vec2;
 
-	local90 = m_unk0x1a8;
-	m_unk0x160 = local48;
+	local90 = m_cameraTransitionEndMatrix;
+	m_cameraTransitionStartMatrix = local48;
 
 	vec1.Clear();
 	vec2.Clear();
 
-	m_unk0x1f0 = Timer()->GetTime();
+	m_cameraTransitionTime = Timer()->GetTime();
 
-	m_unk0x1f4.SetStartEnd(local48, local90);
-	m_unk0x1f4.NormalizeDirection();
+	m_cameraTransitionInterpolator.SetStartEnd(local48, local90);
+	m_cameraTransitionInterpolator.NormalizeDirection();
 }
 
 // FUNCTION: LEGO1 0x10004640

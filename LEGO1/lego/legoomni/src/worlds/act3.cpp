@@ -789,9 +789,9 @@ void Act3::GoodEnding(const Matrix4& p_destination)
 	DebugCopter(
 		m_copter->GetROI()->GetLocal2World(),
 		p_destination,
-		m_copter->m_unk0x160,
-		m_copter->m_unk0x1a8,
-		m_copter->m_unk0x1f4
+		m_copter->m_cameraTransitionStartMatrix,
+		m_copter->m_cameraTransitionEndMatrix,
+		m_copter->m_cameraTransitionInterpolator
 	);
 #else
 	m_state->m_state = Act3State::e_goodEnding;
@@ -874,7 +874,7 @@ void Act3::BadEnding(const Matrix4& p_destination)
 		p_destination,
 		m_copter->m_unk0x160,
 		m_copter->m_unk0x1a8,
-		m_copter->m_unk0x1f4
+		m_copter->m_cameraTransitionInterpolator
 	);
 }
 
