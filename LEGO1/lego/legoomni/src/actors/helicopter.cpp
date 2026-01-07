@@ -261,11 +261,11 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 				lookat *= 3.0f;
 				location += lookat;
 
-				Mx3DPointFloat v68, va4, up;
-				Mx3DPointFloat v90(0, 1, 0);
-				v68 = m_world->GetCameraController()->GetWorldUp();
-				va4.EqualsCross(v68, direction);
-				up.EqualsCross(va4, v90);
+				Mx3DPointFloat cameraUp, right, up;
+				Mx3DPointFloat worldUp(0, 1, 0);
+				cameraUp = m_world->GetCameraController()->GetWorldUp();
+				right.EqualsCross(cameraUp, direction);
+				up.EqualsCross(right, worldUp);
 
 				if (isPizza) {
 					if (((Act3*) m_world)->ShootPizza(m_pathController, location, direction, up) != SUCCESS) {
