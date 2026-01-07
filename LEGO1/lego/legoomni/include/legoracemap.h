@@ -45,10 +45,10 @@ private:
 	float m_worldXOffset; // 0x14
 	// inversely scales the map in x direction (either convert world->screen space or to control the size)
 	float m_worldXScale; // 0x18
-	// likely a y-offset of the race map in world space
-	float m_worldYOffset; // 0x1c
-	// inversely scales the map in y direction (either convert world->screen space or to control the size)
-	float m_worldYScale; // 0x20
+	// likely a z-offset of the race map in world space
+	float m_worldZOffset; // 0x1c
+	// inversely scales the map in z direction (either convert world->screen space or to control the size)
+	float m_worldZScale; // 0x20
 	// scales the map in x direction (either convert world->screen space or to change the size)
 	float m_screenXScale; // 0x24
 	// scales the map in y direction (either convert world->screen space or to change the size)
