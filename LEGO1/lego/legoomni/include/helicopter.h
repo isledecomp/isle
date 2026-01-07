@@ -41,6 +41,13 @@ public:
 	// SYNTHETIC: LEGO1 0x1000e190
 	// HelicopterState::`scalar deleting destructor'
 
+	// Status of the helicopter:
+	// 0: Landed
+	// 1: Taking off
+	// 2: In the air
+	// 3: Landing
+	// 4: Good ending
+	// 5: Bad ending
 	MxU32 m_status; // 0x08
 };
 
