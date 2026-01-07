@@ -447,44 +447,44 @@ void Helicopter::Animate(float p_time)
 // FUNCTION: LEGO1 0x100042a0
 void Helicopter::SetupCameraTransition(const Matrix4& p_matrix)
 {
-	MxMatrix local48;
-	MxMatrix local90;
+	MxMatrix startMatrix;
+	MxMatrix endMatrix;
 
-	Vector3 vec1(local48[3]);                     // local98  // esp+0x30
-	Vector3 vec2(local90[3]);                     // localac  // esp+0x1c
-	Vector3 vec3(m_cameraTransitionEndMatrix[0]); // locala8  // esp+0x20
-	Vector3 vec4(m_cameraTransitionEndMatrix[1]); // localb8  // esp+0x10
-	Vector3 vec5(m_cameraTransitionEndMatrix[2]); // EDI
+	Vector3 startPos(startMatrix[3]);                     // local98  // esp+0x30
+	Vector3 endPos(endMatrix[3]);                         // localac  // esp+0x1c
+	Vector3 endMatrixX(m_cameraTransitionEndMatrix[0]);   // locala8  // esp+0x20
+	Vector3 endMatrixY(m_cameraTransitionEndMatrix[1]);   // localb8  // esp+0x10
+	Vector3 endMatrixZ(m_cameraTransitionEndMatrix[2]);   // EDI
 
 	// the typecast makes this function match for unknown reasons
-	Vector3 vec6((const float*) m_cameraTransitionEndMatrix[3]); // locala0  // esp+0x28
+	Vector3 endMatrixPos((const float*) m_cameraTransitionEndMatrix[3]); // locala0  // esp+0x28
 
-	m_world->GetCameraController()->GetPointOfView(local48);
+	m_world->GetCameraController()->GetPointOfView(startMatrix);
 	m_cameraTransitionEndMatrix.SetIdentity();
-	local90 = p_matrix;
+	endMatrix = p_matrix;
 
-	vec2[1] += 20.0f;
-	vec4 = vec2;
-	vec4 -= vec1;
-	vec4.Unitize();
+	endPos[1] += 20.0f;
+	endMatrixY = endPos;
+	endMatrixY -= startPos;
+	endMatrixY.Unitize();
 
-	vec5[0] = vec5[2] = 0.0f;
-	vec5[1] = -1.0f;
+	endMatrixZ[0] = endMatrixZ[2] = 0.0f;
+	endMatrixZ[1] = -1.0f;
 
-	vec3.EqualsCross(vec4, vec5);
-	vec3.Unitize();
-	vec4.EqualsCross(vec5, vec3);
-	vec6 = vec2;
+	endMatrixX.EqualsCross(endMatrixY, endMatrixZ);
+	endMatrixX.Unitize();
+	endMatrixY.EqualsCross(endMatrixZ, endMatrixX);
+	endMatrixPos = endPos;
 
-	local90 = m_cameraTransitionEndMatrix;
-	m_cameraTransitionStartMatrix = local48;
+	endMatrix = m_cameraTransitionEndMatrix;
+	m_cameraTransitionStartMatrix = startMatrix;
 
-	vec1.Clear();
-	vec2.Clear();
+	startPos.Clear();
+	endPos.Clear();
 
 	m_cameraTransitionTime = Timer()->GetTime();
 
-	m_cameraTransitionInterpolator.SetStartEnd(local48, local90);
+	m_cameraTransitionInterpolator.SetStartEnd(startMatrix, endMatrix);
 	m_cameraTransitionInterpolator.NormalizeDirection();
 }
 
