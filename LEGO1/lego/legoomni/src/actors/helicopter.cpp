@@ -403,30 +403,30 @@ void Helicopter::VTable0x74(Matrix4& p_transform)
 void Helicopter::Animate(float p_time)
 {
 	if (m_state->m_status == 4 || m_state->m_status == 5) {
-		float f = m_cameraTransitionTime - p_time + 3000.0f;
-		if (f >= 0) {
-			float f2 = f / -3000.0f + 1;
-			if (f2 < 0) {
-				f2 = 0;
+		float remainingTime = m_cameraTransitionTime - p_time + 3000.0f;
+		if (remainingTime >= 0) {
+			float interpolationFactor = remainingTime / -3000.0f + 1;
+			if (interpolationFactor < 0) {
+				interpolationFactor = 0;
 			}
-			if (f2 > 1.0f) {
-				f2 = 1.0f;
+			if (interpolationFactor > 1.0f) {
+				interpolationFactor = 1.0f;
 			}
 
-			MxMatrix mat;
-			Vector3 v1(m_cameraTransitionStartMatrix[3]);
-			Vector3 v2(mat[3]);
-			Vector3 v3(m_cameraTransitionEndMatrix[3]);
+			MxMatrix transform;
+			Vector3 startPosition(m_cameraTransitionStartMatrix[3]);
+			Vector3 interpolatedPosition(transform[3]);
+			Vector3 endPosition(m_cameraTransitionEndMatrix[3]);
 
-			mat.SetIdentity();
-			m_cameraTransitionInterpolator.InterpolateToMatrix(mat, f2);
+			transform.SetIdentity();
+			m_cameraTransitionInterpolator.InterpolateToMatrix(transform, interpolationFactor);
 
-			v2 = v3;
-			v2 -= v1;
-			v2 *= f2;
-			v2 += v1;
+			interpolatedPosition = endPosition;
+			interpolatedPosition -= startPosition;
+			interpolatedPosition *= interpolationFactor;
+			interpolatedPosition += startPosition;
 
-			m_world->GetCameraController()->TransformPointOfView(mat, 0);
+			m_world->GetCameraController()->TransformPointOfView(transform, 0);
 		}
 		else {
 			if (m_state->m_status == 4) {
