@@ -197,7 +197,7 @@ private:
 
 	undefined4 m_unused_0x160;          // 0x160
 	TowTrackMissionState* m_state;      // 0x164
-	MxS16 m_unk0x168;                   // 0x168
+	MxS16 m_unused_0x168;               // 0x168
 	MxS16 m_actorId;                    // 0x16a
 	MxS16 m_treeBlockageTriggered;      // 0x16c
 	MxS16 m_speedComplaintTriggered;    // 0x16e
