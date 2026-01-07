@@ -6,6 +6,7 @@ DECOMP_SIZE_ASSERT(LegoMeshUnkComponent, 0x1c)
 DECOMP_SIZE_ASSERT(LegoMesh, 0x24)
 
 // FUNCTION: LEGO1 0x100d3810
+// FUNCTION: BETA10 0x1018fd60
 LegoMesh::LegoMesh()
 {
 	m_alpha = 0.0F;
@@ -20,6 +21,7 @@ LegoMesh::LegoMesh()
 }
 
 // FUNCTION: LEGO1 0x100d3860
+// FUNCTION: BETA10 0x1018fddb
 LegoMesh::~LegoMesh()
 {
 	if (m_textureName != NULL) {
@@ -36,6 +38,7 @@ LegoMesh::~LegoMesh()
 }
 
 // FUNCTION: LEGO1 0x100d38f0
+// FUNCTION: BETA10 0x1018ff5d
 LegoResult LegoMesh::Read(LegoStorage* p_storage)
 {
 	LegoResult result;
