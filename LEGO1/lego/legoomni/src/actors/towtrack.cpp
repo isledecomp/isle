@@ -29,7 +29,7 @@ extern MxU32 g_isleFlags;
 // FUNCTION: LEGO1 0x1004c720
 TowTrack::TowTrack()
 {
-	m_unused_0x168 = 0;
+	m_unused0x168 = 0;
 	m_actorId = -1;
 	m_state = NULL;
 	m_treeBlockageTriggered = 0;
