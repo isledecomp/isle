@@ -76,8 +76,8 @@ public:
 	void Exit() override;                                                        // vtable+0xe4
 
 	void CreateState();
-	void FUN_10004640(const Matrix4& p_matrix);
-	void FUN_10004670(const Matrix4& p_matrix);
+	void StartGoodEndingCamera(const Matrix4& p_matrix);
+	void StartBadEndingCamera(const Matrix4& p_matrix);
 
 	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'

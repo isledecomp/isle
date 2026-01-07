@@ -489,7 +489,7 @@ void Helicopter::SetupCameraTransition(const Matrix4& p_matrix)
 }
 
 // FUNCTION: LEGO1 0x10004640
-void Helicopter::FUN_10004640(const Matrix4& p_matrix)
+void Helicopter::StartGoodEndingCamera(const Matrix4& p_matrix)
 {
 	if (m_state->m_unk0x08 != 4 && m_state->m_unk0x08 != 5) {
 		m_state->m_unk0x08 = 4;
@@ -498,7 +498,7 @@ void Helicopter::FUN_10004640(const Matrix4& p_matrix)
 }
 
 // FUNCTION: LEGO1 0x10004670
-void Helicopter::FUN_10004670(const Matrix4& p_matrix)
+void Helicopter::StartBadEndingCamera(const Matrix4& p_matrix)
 {
 	if (m_state->m_unk0x08 != 4 && m_state->m_unk0x08 != 5) {
 		m_state->m_unk0x08 = 5;

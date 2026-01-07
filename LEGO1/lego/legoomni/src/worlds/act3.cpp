@@ -783,7 +783,7 @@ void Act3::GoodEnding(const Matrix4& p_destination)
 
 #ifndef BETA10
 	m_unk0x4220.Clear();
-	m_copter->FUN_10004640(p_destination);
+	m_copter->StartGoodEndingCamera(p_destination);
 
 	DebugPrintf("In Good Ending...");
 	DebugCopter(
@@ -866,7 +866,7 @@ void Act3::BadEnding(const Matrix4& p_destination)
 	m_brickster->SetActorState(LegoPathActor::c_disabled);
 
 	m_unk0x4220.Clear();
-	m_copter->FUN_10004670(p_destination);
+	m_copter->StartBadEndingCamera(p_destination);
 
 	DebugPrintf("In Bad Ending...");
 	DebugCopter(
