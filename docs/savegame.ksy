@@ -47,9 +47,7 @@ seq:
       variables, background color, light position, and ends with
       "END_OF_VARIABLES" marker.
   - id: characters
-    type: character_entry
-    repeat: expr
-    repeat-expr: 66
+    type: character_manager
     doc: Character manager data for all 66 actors in the game.
   - id: plants
     type: plant_entry
@@ -110,10 +108,163 @@ types:
         value: name == "END_OF_VARIABLES"
         doc: True if this is the end-of-variables marker.
 
-  character_entry:
+  character_manager:
     doc: |
-      Character customization and state for a single actor.
-      Total size is 16 bytes per character.
+      All 66 character entries in the game, in the order defined by g_actorInfoInit.
+      Each entry is 16 bytes, for a total of 1056 bytes.
+    seq:
+      - id: pepper
+        type: pepper_character_entry
+        doc: Pepper Roni
+      - id: mama
+        type: standard_character_entry
+        doc: Mama Brickolini
+      - id: papa
+        type: standard_character_entry
+        doc: Papa Brickolini
+      - id: nick
+        type: standard_character_entry
+        doc: Nick Brick
+      - id: laura
+        type: standard_character_entry
+        doc: Laura Brick
+      - id: infoman
+        type: infoman_character_entry
+        doc: Infomaniac
+      - id: brickstr
+        type: standard_character_entry
+        doc: Brickster
+      - id: studs
+        type: standard_character_entry
+        doc: Studs Linkin
+      - id: rhoda
+        type: standard_character_entry
+        doc: Rhoda Hogg
+      - id: valerie
+        type: standard_character_entry
+        doc: Valerie Stubbins
+      - id: snap
+        type: standard_character_entry
+        doc: Snap Lockitt
+      - id: pt
+        type: standard_character_entry
+      - id: mg
+        type: standard_character_entry
+        doc: Margaret Patricia "Maggie" Post
+      - id: bu
+        type: standard_character_entry
+      - id: ml
+        type: standard_character_entry
+      - id: nu
+        type: standard_character_entry
+      - id: na
+        type: standard_character_entry
+        doc: Nancy Nubbins
+      - id: cl
+        type: standard_character_entry
+      - id: en
+        type: standard_character_entry
+      - id: re
+        type: standard_character_entry
+      - id: ro
+        type: standard_character_entry
+      - id: d1
+        type: standard_character_entry
+      - id: d2
+        type: standard_character_entry
+      - id: d3
+        type: standard_character_entry
+      - id: d4
+        type: standard_character_entry
+      - id: l1
+        type: standard_character_entry
+      - id: l2
+        type: standard_character_entry
+      - id: l3
+        type: standard_character_entry
+      - id: l4
+        type: standard_character_entry
+      - id: l5
+        type: standard_character_entry
+      - id: l6
+        type: standard_character_entry
+      - id: b1
+        type: standard_character_entry
+      - id: b2
+        type: standard_character_entry
+      - id: b3
+        type: standard_character_entry
+      - id: b4
+        type: standard_character_entry
+      - id: cm
+        type: standard_character_entry
+      - id: gd
+        type: standard_character_entry
+      - id: rd
+        type: standard_character_entry
+      - id: pg
+        type: standard_character_entry
+        doc: Polly Gone
+      - id: bd
+        type: standard_character_entry
+      - id: sy
+        type: standard_character_entry
+      - id: gn
+        type: standard_character_entry
+      - id: df
+        type: standard_character_entry
+      - id: bs
+        type: standard_character_entry
+      - id: lt
+        type: standard_character_entry
+      - id: st
+        type: standard_character_entry
+      - id: bm
+        type: standard_character_entry
+      - id: jk
+        type: standard_character_entry
+      - id: ghost
+        type: ghost_character_entry
+      - id: ghost01
+        type: ghost_character_entry
+      - id: ghost02
+        type: ghost_character_entry
+      - id: ghost03
+        type: ghost_character_entry
+      - id: ghost04
+        type: ghost_character_entry
+      - id: ghost05
+        type: ghost_character_entry
+      - id: hg
+        type: standard_character_entry
+      - id: pntgy
+        type: standard_character_entry
+      - id: pep
+        type: pepper_character_entry
+      - id: cop01
+        type: standard_character_entry
+      - id: actor_01
+        type: standard_character_entry
+      - id: actor_02
+        type: standard_character_entry
+      - id: actor_03
+        type: standard_character_entry
+      - id: actor_04
+        type: standard_character_entry
+      - id: actor_05
+        type: standard_character_entry
+      - id: btmncycl
+        type: standard_character_entry
+      - id: cboycycl
+        type: standard_character_entry
+      - id: boatman
+        type: standard_character_entry
+
+  standard_character_entry:
+    doc: |
+      Character customization and state for actors using the standard hat parts
+      (g_hatPartIndices). Hat index 0-19 maps directly to hat_part enum.
+      Total size is 16 bytes.
     seq:
       - id: sound
         type: s4
@@ -126,25 +277,164 @@ types:
         doc: Character mood state.
       - id: hat_part_name_index
         type: u1
-        doc: Hat part name table index.
+        enum: standard_hat
+        doc: Index into standard hat parts (0-19 = standard hats).
       - id: hat_name_index
         type: u1
-        doc: Hat variant name table index.
+        enum: lego_color
+        doc: Hat color.
       - id: infogron_name_index
         type: u1
-        doc: Torso (infogron) variant name table index.
+        enum: lego_color
+        doc: Torso (infogron) color.
       - id: armlft_name_index
         type: u1
-        doc: Left arm variant name table index.
+        enum: lego_color
+        doc: Left arm color.
       - id: armrt_name_index
         type: u1
-        doc: Right arm variant name table index.
+        enum: lego_color
+        doc: Right arm color.
       - id: leglft_name_index
         type: u1
-        doc: Left leg variant name table index.
+        enum: lego_color
+        doc: Left leg color.
       - id: legrt_name_index
         type: u1
-        doc: Right leg variant name table index.
+        enum: lego_color
+        doc: Right leg color.
+
+  pepper_character_entry:
+    doc: |
+      Character customization and state for Pepper (uses g_pepperHatPartIndices).
+      Hat index 0=phat, 1-20 map to standard hats 0-19.
+      Total size is 16 bytes.
+    seq:
+      - id: sound
+        type: s4
+        doc: Sound/voice variant index.
+      - id: move
+        type: s4
+        doc: Movement/animation variant index.
+      - id: mood
+        type: u1
+        doc: Character mood state.
+      - id: hat_part_name_index
+        type: u1
+        enum: pepper_hat
+        doc: Index into Pepper's hat parts (0=phat, 1-20=standard hats 0-19).
+      - id: hat_name_index
+        type: u1
+        enum: lego_color
+        doc: Hat color.
+      - id: infogron_name_index
+        type: u1
+        enum: lego_color
+        doc: Torso (infogron) color.
+      - id: armlft_name_index
+        type: u1
+        enum: lego_color
+        doc: Left arm color.
+      - id: armrt_name_index
+        type: u1
+        enum: lego_color
+        doc: Right arm color.
+      - id: leglft_name_index
+        type: u1
+        enum: lego_color
+        doc: Left leg color.
+      - id: legrt_name_index
+        type: u1
+        enum: lego_color
+        doc: Right leg color.
+
+  infoman_character_entry:
+    doc: |
+      Character customization and state for Infoman (uses g_infomanHatPartIndices).
+      Hat index 0=icap (only option).
+      Total size is 16 bytes.
+    seq:
+      - id: sound
+        type: s4
+        doc: Sound/voice variant index.
+      - id: move
+        type: s4
+        doc: Movement/animation variant index.
+      - id: mood
+        type: u1
+        doc: Character mood state.
+      - id: hat_part_name_index
+        type: u1
+        enum: infoman_hat_index
+        doc: Index into Infoman's hat parts (0=icap only).
+      - id: hat_name_index
+        type: u1
+        enum: lego_color
+        doc: Hat color.
+      - id: infogron_name_index
+        type: u1
+        enum: lego_color
+        doc: Torso (infogron) color.
+      - id: armlft_name_index
+        type: u1
+        enum: lego_color
+        doc: Left arm color.
+      - id: armrt_name_index
+        type: u1
+        enum: lego_color
+        doc: Right arm color.
+      - id: leglft_name_index
+        type: u1
+        enum: lego_color
+        doc: Left leg color.
+      - id: legrt_name_index
+        type: u1
+        enum: lego_color
+        doc: Right leg color.
+
+  ghost_character_entry:
+    doc: |
+      Character customization and state for ghosts (uses g_ghostHatPartIndices).
+      Hat index 0=sheet (only option).
+      Total size is 16 bytes.
+    seq:
+      - id: sound
+        type: s4
+        doc: Sound/voice variant index.
+      - id: move
+        type: s4
+        doc: Movement/animation variant index.
+      - id: mood
+        type: u1
+        doc: Character mood state.
+      - id: hat_part_name_index
+        type: u1
+        enum: ghost_hat_index
+        doc: Index into ghost hat parts (0=sheet only).
+      - id: hat_name_index
+        type: u1
+        enum: lego_color
+        doc: Hat color.
+      - id: infogron_name_index
+        type: u1
+        enum: lego_color
+        doc: Torso (infogron) color.
+      - id: armlft_name_index
+        type: u1
+        enum: lego_color
+        doc: Left arm color.
+      - id: armrt_name_index
+        type: u1
+        enum: lego_color
+        doc: Right arm color.
+      - id: leglft_name_index
+        type: u1
+        enum: lego_color
+        doc: Left leg color.
+      - id: legrt_name_index
+        type: u1
+        enum: lego_color
+        doc: Right leg color.
 
   plant_entry:
     doc: |
@@ -172,7 +462,7 @@ types:
         type: s1
         doc: |
           Growth/interaction counter. Affects plant height.
-          Negative values indicate special states.
+          This is used in Act 2/3.
 
   building_entry:
     doc: |
@@ -192,7 +482,7 @@ types:
         type: s1
         doc: |
           Interaction counter. Affects building height adjustment.
-          Used for destructible buildings.
+          This is used in Act 2/3.
 
   game_state:
     doc: |
@@ -263,9 +553,11 @@ types:
         doc: Mission attempt counter.
       - id: score
         type: s2
+        enum: score_color
         doc: Current/last mission score.
       - id: hi_score
         type: s2
+        enum: score_color
         doc: High score for this mission.
 
   score_mission_state_data:
@@ -276,33 +568,43 @@ types:
     seq:
       - id: pe_score
         type: s2
+        enum: score_color
         doc: Pepper's current/last score.
       - id: ma_score
         type: s2
+        enum: score_color
         doc: Mama's current/last score.
       - id: pa_score
         type: s2
+        enum: score_color
         doc: Papa's current/last score.
       - id: ni_score
         type: s2
+        enum: score_color
         doc: Nick's current/last score.
       - id: la_score
         type: s2
+        enum: score_color
         doc: Laura's current/last score.
       - id: pe_high_score
         type: s2
+        enum: score_color
         doc: Pepper's high score.
       - id: ma_high_score
         type: s2
+        enum: score_color
         doc: Mama's high score.
       - id: pa_high_score
         type: s2
+        enum: score_color
         doc: Papa's high score.
       - id: ni_high_score
         type: s2
+        enum: score_color
         doc: Nick's high score.
       - id: la_high_score
         type: s2
+        enum: score_color
         doc: Laura's high score.
 
   hospital_state_data:
@@ -376,12 +678,15 @@ types:
     seq:
       - id: id
         type: u1
-        doc: Actor ID (1-5).
+        enum: actor
+        doc: Actor ID.
       - id: last_score
         type: s2
+        enum: score_color
         doc: Score from last race.
       - id: high_score
         type: s2
+        enum: score_color
         doc: Best score (high score).
 
   vehicle_build_state_data:
@@ -479,7 +784,7 @@ types:
         repeat-expr: 3
         if: racecar_plane.name_length > 0
         doc: Racecar textures (front, back, tail).
-      - id: dialogue_next_index
+      - id: cpt_click_dialogue_next_index
         type: s2
         doc: Next dialogue index for Captain Click.
       - id: played_exit_explanation
@@ -585,3 +890,95 @@ enums:
     2: yellow
     3: red
     4: green
+
+  lego_color:
+    0: white
+    1: black
+    2: yellow
+    3: red
+    4: blue
+    5: brown
+    6: lt_grey
+    7: green
+
+  hat_part:
+    0: baseball
+    1: chef
+    2: cap
+    3: cophat
+    4: helmet
+    5: ponytail
+    6: pageboy
+    7: shrthair
+    8: bald
+    9: flower
+    10: cboyhat
+    11: cuphat
+    12: cathat
+    13: backbcap
+    14: pizhat
+    15: caprc
+    16: capch
+    17: capdb
+    18: capjs
+    19: capmd
+    20: sheet
+    21: phat
+    22: icap
+
+  standard_hat:
+    0: baseball
+    1: chef
+    2: cap
+    3: cophat
+    4: helmet
+    5: ponytail
+    6: pageboy
+    7: shrthair
+    8: bald
+    9: flower
+    10: cboyhat
+    11: cuphat
+    12: cathat
+    13: backbcap
+    14: pizhat
+    15: caprc
+    16: capch
+    17: capdb
+    18: capjs
+    19: capmd
+
+  pepper_hat:
+    0: phat
+    1: baseball
+    2: chef
+    3: cap
+    4: cophat
+    5: helmet
+    6: ponytail
+    7: pageboy
+    8: shrthair
+    9: bald
+    10: flower
+    11: cboyhat
+    12: cuphat
+    13: cathat
+    14: backbcap
+    15: pizhat
+    16: caprc
+    17: capch
+    18: capdb
+    19: capjs
+    20: capmd
+
+  infoman_hat_index:
+    0: icap
+
+  ghost_hat_index:
+    0: sheet
+
+  score_color:
+    0: grey
+    1: yellow
+    2: blue
+    3: red

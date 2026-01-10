@@ -116,19 +116,19 @@ void LegoRace::Enable(MxBool p_enable)
 // FUNCTION: LEGO1 0x10015f30
 RaceState::RaceState()
 {
-	m_entries[0].m_id = 1;
+	m_entries[0].m_id = LegoActor::c_pepper;
 	m_entries[0].m_lastScore = 0;
 	m_entries[0].m_score = 0;
-	m_entries[1].m_id = 2;
+	m_entries[1].m_id = LegoActor::c_mama;
 	m_entries[1].m_lastScore = 0;
 	m_entries[1].m_score = 0;
-	m_entries[2].m_id = 3;
+	m_entries[2].m_id = LegoActor::c_papa;
 	m_entries[2].m_lastScore = 0;
 	m_entries[2].m_score = 0;
-	m_entries[3].m_id = 4;
+	m_entries[3].m_id = LegoActor::c_nick;
 	m_entries[3].m_lastScore = 0;
 	m_entries[3].m_score = 0;
-	m_entries[4].m_id = 5;
+	m_entries[4].m_id = LegoActor::c_laura;
 	m_entries[4].m_lastScore = 0;
 	m_entries[4].m_score = 0;
 	m_state = RaceState::e_carrace;
