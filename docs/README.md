@@ -9,7 +9,7 @@ Kaitai Struct allows you to define binary formats in a YAML-based `.ksy` file, w
 - Visualized interactively using the [Kaitai Struct Visualizer](https://github.com/kaitai-io/kaitai_struct_visualizer)
 - Dumped to human-readable formats using `ksdump`
 
-<img width="1902" height="1002" alt="image" src="https://github.com/user-attachments/assets/9c34a078-40fa-44cb-81df-af073d647521" />
+<img width="1877" height="706" alt="image" src="https://github.com/user-attachments/assets/0d124219-1208-48ce-83bb-f433d9bb84b1" />
 
 ## Documented Formats
 
