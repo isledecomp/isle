@@ -9,6 +9,8 @@ Kaitai Struct allows you to define binary formats in a YAML-based `.ksy` file, w
 - Visualized interactively using the [Kaitai Struct Visualizer](https://github.com/kaitai-io/kaitai_struct_visualizer)
 - Dumped to human-readable formats using `ksdump`
 
+<img width="1902" height="1002" alt="image" src="https://github.com/user-attachments/assets/9c34a078-40fa-44cb-81df-af073d647521" />
+
 ## Documented Formats
 
 | File | Extension | Description |
@@ -17,6 +19,10 @@ Kaitai Struct allows you to define binary formats in a YAML-based `.ksy` file, w
 | [`history.ksy`](/docs/history.ksy) | `.gsi` | Score history and high scores |
 
 ## Using the Tools
+
+### Installation
+
+See the [Kaitai Struct Visualizer installation instructions](https://github.com/kaitai-io/kaitai_struct_visualizer#installing) for setup details.
 
 ### Kaitai Struct Visualizer (ksv)
 
@@ -36,15 +42,11 @@ ksv samples/History.gsi history.ksy
 
 ```bash
 # Dump Players.gsi to JSON
-ksdump samples/Players.gsi players.ksy
+ksdump --format json samples/Players.gsi players.ksy
 
 # Dump History.gsi to YAML
 ksdump --format yaml samples/History.gsi history.ksy
 ```
-
-### Installation
-
-See the [Kaitai Struct Visualizer installation instructions](https://github.com/kaitai-io/kaitai_struct_visualizer#installing) for setup details.
 
 ## Sample Files
 
