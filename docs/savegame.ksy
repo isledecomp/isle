@@ -525,22 +525,42 @@ types:
       Pizzeria state tracking playlist indices for each actor.
       Total size is 10 bytes (5 x S16).
     seq:
-      - id: playlist_indices
+      - id: pepper_playlist_index
         type: s2
-        repeat: expr
-        repeat-expr: 5
-        doc: Next playlist index for each of the 5 playable actors.
+        doc: Pepper's next playlist index.
+      - id: mama_playlist_index
+        type: s2
+        doc: Mama's next playlist index.
+      - id: papa_playlist_index
+        type: s2
+        doc: Papa's next playlist index.
+      - id: nick_playlist_index
+        type: s2
+        doc: Nick's next playlist index.
+      - id: laura_playlist_index
+        type: s2
+        doc: Laura's next playlist index.
 
   pizza_mission_state_data:
     doc: |
       Pizza delivery mission state for all 5 actors.
       Total size is 40 bytes (5 missions x 4 x S16).
     seq:
-      - id: missions
+      - id: pepper
         type: pizza_mission_entry
-        repeat: expr
-        repeat-expr: 5
-        doc: Mission data for each playable actor.
+        doc: Pepper's pizza delivery mission data.
+      - id: mama
+        type: pizza_mission_entry
+        doc: Mama's pizza delivery mission data.
+      - id: papa
+        type: pizza_mission_entry
+        doc: Papa's pizza delivery mission data.
+      - id: nick
+        type: pizza_mission_entry
+        doc: Nick's pizza delivery mission data.
+      - id: laura
+        type: pizza_mission_entry
+        doc: Laura's pizza delivery mission data.
 
   pizza_mission_entry:
     doc: Single actor's pizza mission data (8 bytes).
@@ -566,43 +586,43 @@ types:
       Used by TowTrackMissionState and AmbulanceMissionState.
       Total size is 20 bytes (10 x S16).
     seq:
-      - id: pe_score
+      - id: pepper_score
         type: s2
         enum: score_color
         doc: Pepper's current/last score.
-      - id: ma_score
+      - id: mama_score
         type: s2
         enum: score_color
         doc: Mama's current/last score.
-      - id: pa_score
+      - id: papa_score
         type: s2
         enum: score_color
         doc: Papa's current/last score.
-      - id: ni_score
+      - id: nick_score
         type: s2
         enum: score_color
         doc: Nick's current/last score.
-      - id: la_score
+      - id: laura_score
         type: s2
         enum: score_color
         doc: Laura's current/last score.
-      - id: pe_high_score
+      - id: pepper_high_score
         type: s2
         enum: score_color
         doc: Pepper's high score.
-      - id: ma_high_score
+      - id: mama_high_score
         type: s2
         enum: score_color
         doc: Mama's high score.
-      - id: pa_high_score
+      - id: papa_high_score
         type: s2
         enum: score_color
         doc: Papa's high score.
-      - id: ni_high_score
+      - id: nick_high_score
         type: s2
         enum: score_color
         doc: Nick's high score.
-      - id: la_high_score
+      - id: laura_high_score
         type: s2
         enum: score_color
         doc: Laura's high score.
@@ -667,11 +687,21 @@ types:
       Used by JetskiRaceState and CarRaceState.
       Total size is 25 bytes (5 entries x 5 bytes).
     seq:
-      - id: entries
+      - id: pepper
         type: race_entry
-        repeat: expr
-        repeat-expr: 5
-        doc: Race entry for each playable actor.
+        doc: Pepper's race scores.
+      - id: mama
+        type: race_entry
+        doc: Mama's race scores.
+      - id: papa
+        type: race_entry
+        doc: Papa's race scores.
+      - id: nick
+        type: race_entry
+        doc: Nick's race scores.
+      - id: laura
+        type: race_entry
+        doc: Laura's race scores.
 
   race_entry:
     doc: Single actor's race score entry (5 bytes).
