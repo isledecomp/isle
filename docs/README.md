@@ -5,7 +5,7 @@ This folder contains documentation for LEGO Island's custom binary file formats 
 ## What is Kaitai Struct?
 
 Kaitai Struct allows you to define binary formats in a YAML-based `.ksy` file, which can then be:
-- Compiled into parser libraries for [many programming languages](https://doc.kaitai.io/lang_cpp_stl.html) (C++, Python, JavaScript, etc.)
+- Compiled into parser libraries for [many programming languages](https://kaitai.io/#quick-start) (C++, Python, JavaScript, etc.)
 - Visualized interactively using the [Kaitai Struct Visualizer](https://github.com/kaitai-io/kaitai_struct_visualizer)
 - Dumped to human-readable formats using `ksdump`
 
