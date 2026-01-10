@@ -2,7 +2,7 @@
 #define LEGOPATHACTOR_H
 
 #include "legoactor.h"
-#include "misc/legounknown.h"
+#include "misc/legospline.h"
 #include "mxtypes.h"
 
 struct LegoEdge;
@@ -194,7 +194,7 @@ protected:
 	MxFloat m_actorTime;                  // 0x80
 	MxFloat m_lastTime;                   // 0x84
 	LegoPathBoundary* m_boundary;         // 0x88
-	LegoUnknown m_unk0x8c;                // 0x8c
+	LegoSpline m_spline;                  // 0x8c
 	MxU32 m_actorState;                   // 0xdc
 	LegoOrientedEdge* m_destEdge;         // 0xe0
 	MxFloat m_unk0xe4;                    // 0xe4

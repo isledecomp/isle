@@ -189,11 +189,11 @@ function(add_lego_libraries NAME)
 
   add_library(misc${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/misc/legotexture.cpp
+    LEGO1/lego/sources/misc/legospline.cpp
     LEGO1/lego/sources/misc/legostorage.cpp
     LEGO1/lego/sources/misc/legoimage.cpp
     LEGO1/lego/sources/misc/legocontainer.cpp
     LEGO1/lego/sources/misc/legotree.cpp
-    LEGO1/lego/sources/misc/legounknown.cpp
   )
   list(APPEND list_targets misc${ARG_SUFFIX})
   set_property(TARGET misc${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "misc$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
