@@ -81,7 +81,7 @@ MxResult LegoPathActor::VTable0x80(const Vector3& p_point1, Vector3& p_point2, V
 		m_BADuration = sqrtf(m_BADuration);
 		p2 = p_point2;
 		p3 = p_point4;
-		m_unk0x8c.FUN_1009a140(p_point1, p2, p_point3, p3);
+		m_spline.SetSpline(p_point1, p2, p_point3, p3);
 		m_BADuration /= 0.001;
 		return SUCCESS;
 	}
@@ -354,10 +354,10 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 
 		LegoResult r;
 		if (m_userNavFlag) {
-			r = m_unk0x8c.FUN_1009a1e0(m_unk0x7c / m_BADuration, p_transform, *m_boundary->GetUp(), 0);
+			r = m_spline.Evaluate(m_unk0x7c / m_BADuration, p_transform, *m_boundary->GetUp(), FALSE);
 		}
 		else {
-			r = m_unk0x8c.FUN_1009a1e0(m_unk0x7c / m_BADuration, p_transform, *m_boundary->GetUp(), 1);
+			r = m_spline.Evaluate(m_unk0x7c / m_BADuration, p_transform, *m_boundary->GetUp(), TRUE);
 		}
 
 		assert(r == 0); // SUCCESS
