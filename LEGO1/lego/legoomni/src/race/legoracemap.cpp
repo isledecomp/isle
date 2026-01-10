@@ -15,7 +15,7 @@ DECOMP_SIZE_ASSERT(LegoRaceMap, 0x1b4)
 // FUNCTION: BETA10 0x100ca2c0
 LegoRaceMap::LegoRaceMap()
 {
-	m_unk0x08 = FALSE;
+	m_mapEnabled = FALSE;
 	m_stillPresenter = NULL;
 	m_Map_Ctl = 0;
 	ControlManager()->Register(this);
@@ -54,42 +54,42 @@ void LegoRaceMap::ParseAction(char* p_extra)
 	if (KeyValueStringParse(value, g_mapGeometry, p_extra)) {
 		char* token = strtok(value, g_parseExtraTokens);
 		if (token != NULL) {
-			m_unk0x14 = atof(token);
+			m_worldXOffset = atof(token);
 		}
 
 		token = strtok(NULL, g_parseExtraTokens);
 		if (token != NULL) {
-			m_unk0x18 = atof(token);
+			m_worldXScale = atof(token);
 		}
 
 		token = strtok(NULL, g_parseExtraTokens);
 		if (token != NULL) {
-			m_unk0x1c = atof(token);
+			m_worldZOffset = atof(token);
 		}
 
 		token = strtok(NULL, g_parseExtraTokens);
 		if (token != NULL) {
-			m_unk0x20 = atof(token);
+			m_worldZScale = atof(token);
 		}
 
 		token = strtok(NULL, g_parseExtraTokens);
 		if (token != NULL) {
-			m_unk0x24 = atof(token);
+			m_screenXScale = atof(token);
 		}
 
 		token = strtok(NULL, g_parseExtraTokens);
 		if (token != NULL) {
-			m_unk0x28 = atof(token);
+			m_screenYScale = atof(token);
 		}
 
 		token = strtok(NULL, g_parseExtraTokens);
 		if (token != NULL) {
-			m_unk0x2c = atof(token);
+			m_screenXOffset = atof(token);
 		}
 
 		token = strtok(NULL, g_parseExtraTokens);
 		if (token != NULL) {
-			m_unk0x30 = atof(token);
+			m_screenYOffset = atof(token);
 		}
 	}
 
@@ -106,13 +106,13 @@ void LegoRaceMap::ParseAction(char* p_extra)
 
 // FUNCTION: LEGO1 0x1005d4b0
 // FUNCTION: BETA10 0x100ca849
-void LegoRaceMap::FUN_1005d4b0()
+void LegoRaceMap::UpdateMapLocatorPosition()
 {
-	if (m_unk0x08) {
-		short xPos = (GetWorldPosition()[0] - m_unk0x14) / m_unk0x18 * m_unk0x24;
-		short yPos = (GetWorldPosition()[2] - m_unk0x1c) / m_unk0x20 * m_unk0x28;
+	if (m_mapEnabled) {
+		short xPos = (GetWorldPosition()[0] - m_worldXOffset) / m_worldXScale * m_screenXScale;
+		short yPos = (GetWorldPosition()[2] - m_worldZOffset) / m_worldZScale * m_screenYScale;
 
-		m_stillPresenter->SetPosition(xPos + m_unk0x2c, m_unk0x30 - yPos);
+		m_stillPresenter->SetPosition(xPos + m_screenXOffset, m_screenYOffset - yPos);
 	}
 }
 
@@ -130,12 +130,12 @@ MxLong LegoRaceMap::Notify(MxParam& p_param)
 		m_Map_Ctl->GetAction()->GetObjectId() == ((LegoControlManagerNotificationParam&) p_param).m_clickedObjectId) {
 
 		if (((LegoControlManagerNotificationParam&) p_param).m_enabledChild == 1) {
-			m_unk0x08 = TRUE;
-			FUN_1005d4b0();
+			m_mapEnabled = TRUE;
+			UpdateMapLocatorPosition();
 			m_stillPresenter->Enable(TRUE);
 		}
 		else {
-			m_unk0x08 = FALSE;
+			m_mapEnabled = FALSE;
 			m_stillPresenter->Enable(FALSE);
 		}
 	}

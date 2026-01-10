@@ -26,7 +26,7 @@ public:
 	void Animate(float p_time) override = 0;  // vtable+0x70
 
 	// LegoRaceMap vtable
-	virtual void FUN_1005d4b0(); // vtable+0x00
+	virtual void UpdateMapLocatorPosition(); // vtable+0x00
 
 	// SYNTHETIC: LEGO1 0x10012c50
 	// LegoRaceMap::`vbase destructor'
@@ -35,28 +35,28 @@ public:
 	// LegoRaceMap::`scalar deleting destructor'
 
 private:
-	MxBool m_unk0x08;                   // 0x08
+	MxBool m_mapEnabled;                // 0x08
 	MxStillPresenter* m_stillPresenter; // 0x0c
 
 	// variable name verified by BETA10 0x100ca82b
 	MxControlPresenter* m_Map_Ctl; // 0x10
 
 	// likely an x-offset of the race map in world space
-	float m_unk0x14; // 0x14
+	float m_worldXOffset; // 0x14
 	// inversely scales the map in x direction (either convert world->screen space or to control the size)
-	float m_unk0x18; // 0x18
-	// likely a y-offset of the race map in world space
-	float m_unk0x1c; // 0x1c
-	// inversely scales the map in y direction (either convert world->screen space or to control the size)
-	float m_unk0x20; // 0x20
+	float m_worldXScale; // 0x18
+	// likely a z-offset of the race map in world space
+	float m_worldZOffset; // 0x1c
+	// inversely scales the map in z direction (either convert world->screen space or to control the size)
+	float m_worldZScale; // 0x20
 	// scales the map in x direction (either convert world->screen space or to change the size)
-	float m_unk0x24; // 0x24
+	float m_screenXScale; // 0x24
 	// scales the map in y direction (either convert world->screen space or to change the size)
-	float m_unk0x28; // 0x28
+	float m_screenYScale; // 0x28
 	// likely an x-offset of the race map in screen space
-	float m_unk0x2c; // 0x2c
+	float m_screenXOffset; // 0x2c
 	// likely a y-offset of the race map in screen space
-	float m_unk0x30; // 0x30
+	float m_screenYOffset; // 0x30
 };
 
 // GLOBAL: LEGO1 0x100d8848
