@@ -22,7 +22,7 @@ Kaitai Struct allows you to define binary formats in a YAML-based `.ksy` file, w
 
 ### Installation
 
-See the [Kaitai Struct Visualizer installation instructions](https://github.com/kaitai-io/kaitai_struct_visualizer#installing) for setup details.
+See the [Kaitai Struct Visualizer installation instructions](https://github.com/kaitai-io/kaitai_struct_visualizer?tab=readme-ov-file#downloading-and-installing) for setup details.
 
 ### Kaitai Struct Visualizer (ksv)
 
