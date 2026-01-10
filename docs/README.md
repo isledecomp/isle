@@ -15,6 +15,7 @@ Kaitai Struct allows you to define binary formats in a YAML-based `.ksy` file, w
 
 | File | Extension | Description |
 |------|-----------|-------------|
+| [`savegame.ksy`](/docs/savegame.ksy) | `.GS` | Main game save data (game state, progress, customizations) |
 | [`players.ksy`](/docs/players.ksy) | `.gsi` | Player profile save data (usernames) |
 | [`history.ksy`](/docs/history.ksy) | `.gsi` | Score history and high scores |
 
@@ -29,6 +30,9 @@ See the [Kaitai Struct Visualizer installation instructions](https://github.com/
 The [Kaitai Struct Visualizer](https://github.com/kaitai-io/kaitai_struct_visualizer) (`ksv`) provides an interactive terminal UI for exploring binary files.
 
 ```bash
+# View a save game file
+ksv samples/G0.GS savegame.ksy
+
 # View a Players.gsi file
 ksv samples/Players.gsi players.ksy
 
@@ -41,6 +45,9 @@ ksv samples/History.gsi history.ksy
 `ksdump` outputs the parsed structure as JSON or YAML for scripting and inspection.
 
 ```bash
+# Dump a save game to JSON
+ksdump --format json samples/G0.GS savegame.ksy
+
 # Dump Players.gsi to JSON
 ksdump --format json samples/Players.gsi players.ksy
 
@@ -51,5 +58,6 @@ ksdump --format yaml samples/History.gsi history.ksy
 ## Sample Files
 
 The [`samples/`](/docs/samples/) directory contains example save files for testing:
+- `G0.GS`, `G1.GS`, `G2.GS` - Sample main game save files (slots 0, 1, 2)
 - `Players.gsi` - Sample player profile data
 - `History.gsi` - Sample score history data
