@@ -315,7 +315,7 @@ MxLong Ambulance::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 			PlayAction(IsleScript::c_Avo915In_PlayWav);
 		}
 	}
-	else if (p_param.GetTrigger() == LegoPathStruct::c_s && p_param.GetData() == 0x131 && m_atBeachTask == 0) {
+	else if (p_param.GetTrigger() == LegoPathStruct::c_specialMissionWaypointAndAction && p_param.GetData() == 0x131 && m_atBeachTask == 0) {
 		m_atBeachTask = 1;
 		m_taskState = Ambulance::e_waiting;
 

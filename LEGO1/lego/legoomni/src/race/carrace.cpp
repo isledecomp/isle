@@ -189,7 +189,7 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 {
 	MxLong result = 0;
 
-	if (p_param.GetTrigger() == LegoPathStruct::c_d) {
+	if (p_param.GetTrigger() == LegoPathStruct::c_waypoint) {
 		MxEntity* sender = (MxEntity*) p_param.GetSender();
 		MxS32 paramData = p_param.GetData();
 

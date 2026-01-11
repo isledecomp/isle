@@ -158,7 +158,7 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 	MxLong result = 0;
 	MxEntity* sender = (MxEntity*) p_param.GetSender();
 
-	if (p_param.GetTrigger() == LegoPathStruct::c_d) {
+	if (p_param.GetTrigger() == LegoPathStruct::c_waypoint) {
 		MxS32 paramData = p_param.GetData();
 
 		switch (sender->GetEntityId()) {

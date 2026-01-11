@@ -48,7 +48,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 				PlayCamAnim(p_actor, actualDirection, p_data, TRUE);
 			}
 			break;
-		case c_d: {
+		case c_waypoint: {
 			p_actor->SetLastPathStruct(p_data);
 
 			LegoPathStructNotificationParam param(c_notificationPathStruct, p_actor, m_name[2], p_data);
@@ -60,12 +60,12 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 			}
 			break;
 		}
-		case c_e:
+		case c_deleteAction:
 			HandleAction(m_name, p_data, !(p_invertDirection == FALSE));
 			break;
-		case c_g:
+		case c_nothing:
 			break;
-		case c_h: {
+		case c_hideAnim: {
 			LegoHideAnimPresenter* presenter = m_world->GetHideAnimPresenter();
 			if (presenter != NULL) {
 				presenter->ApplyVisibility(p_data * 100);
@@ -77,7 +77,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 				PlayMusic(p_direction, p_data);
 			}
 			break;
-		case c_s: {
+		case c_specialMissionWaypointAndAction: {
 			LegoWorld* world = CurrentWorld();
 			if (world != NULL) {
 				LegoPathStructNotificationParam param(c_notificationPathStruct, p_actor, m_name[2], p_data);
@@ -90,7 +90,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 			HandleAction(m_name, p_data, p_invertDirection == FALSE);
 			break;
 		}
-		case c_w: {
+		case c_missionFinalWaypoint: {
 			LegoWorld* world = CurrentWorld();
 			if (world != NULL) {
 				LegoPathStructNotificationParam param(c_notificationPathStruct, p_actor, m_name[2], p_data);
