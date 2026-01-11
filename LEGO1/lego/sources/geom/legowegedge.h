@@ -37,7 +37,7 @@ public:
 		c_bit1 = 0x01,
 		c_bit2 = 0x02,
 		c_bit3 = 0x04,
-		c_bit5 = 0x10
+		c_visible = 0x10
 	};
 
 	LegoWEGEdge();
@@ -46,9 +46,9 @@ public:
 	LegoS32 LinkEdgesAndFaces() override; // vtable+0x04
 
 	// FUNCTION: BETA10 0x100270c0
-	LegoU32 GetFlag0x10()
+	LegoU32 GetVisibility()
 	{
-		if (m_flags & c_bit5) {
+		if (m_flags & c_visible) {
 			return FALSE;
 		}
 		else {
@@ -67,13 +67,13 @@ public:
 	const LegoChar* GetName() { return m_name; }
 
 	// FUNCTION: BETA10 0x1005d5f0
-	void SetFlag0x10(LegoU32 p_disable)
+	void SetVisibility(LegoU32 p_disable)
 	{
 		if (p_disable) {
-			m_flags &= ~c_bit5;
+			m_flags &= ~c_visible;
 		}
 		else {
-			m_flags |= c_bit5;
+			m_flags |= c_visible;
 		}
 	}
 

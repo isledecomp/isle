@@ -68,7 +68,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 		case c_h: {
 			LegoHideAnimPresenter* presenter = m_world->GetHideAnimPresenter();
 			if (presenter != NULL) {
-				presenter->FUN_1006db40(p_data * 100);
+				presenter->ApplyVisibility(p_data * 100);
 			}
 			break;
 		}

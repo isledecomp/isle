@@ -1535,20 +1535,20 @@ void LegoHideAnimPresenter::StartingTickle()
 
 	if (m_currentTickleState == e_streaming) {
 		AssignIndiciesWithMap();
-		FUN_1006db40(0);
+		ApplyVisibility(0);
 	}
 }
 
 // FUNCTION: LEGO1 0x1006db40
 // FUNCTION: BETA10 0x100531ab
-void LegoHideAnimPresenter::FUN_1006db40(LegoTime p_time)
+void LegoHideAnimPresenter::ApplyVisibility(LegoTime p_time)
 {
-	FUN_1006db60(m_anim->GetRoot(), p_time);
+	ApplyVisibility(m_anim->GetRoot(), p_time);
 }
 
 // FUNCTION: LEGO1 0x1006db60
 // FUNCTION: BETA10 0x100531de
-void LegoHideAnimPresenter::FUN_1006db60(LegoTreeNode* p_node, LegoTime p_time)
+void LegoHideAnimPresenter::ApplyVisibility(LegoTreeNode* p_node, LegoTime p_time)
 {
 	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
 	MxBool newB = FALSE;
@@ -1569,13 +1569,13 @@ void LegoHideAnimPresenter::FUN_1006db60(LegoTreeNode* p_node, LegoTime p_time)
 
 		if (boundary != NULL) {
 			newB = data->GetVisibility(p_time);
-			previousB = boundary->GetFlag0x10();
-			boundary->SetFlag0x10(newB);
+			previousB = boundary->GetVisibility();
+			boundary->SetVisibility(newB);
 		}
 	}
 
 	for (MxS32 i = 0; i < p_node->GetNumChildren(); i++) {
-		FUN_1006db60(p_node->GetChild(i), p_time);
+		ApplyVisibility(p_node->GetChild(i), p_time);
 	}
 }
 

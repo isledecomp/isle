@@ -317,7 +317,7 @@ public:
 	void EndAction() override;        // vtable+0x40
 	void PutFrame() override;         // vtable+0x6c
 
-	void FUN_1006db40(LegoTime p_time);
+	void ApplyVisibility(LegoTime p_time);
 
 	// SYNTHETIC: LEGO1 0x1006d9d0
 	// LegoHideAnimPresenter::`scalar deleting destructor'
@@ -325,7 +325,7 @@ public:
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
-	void FUN_1006db60(LegoTreeNode* p_node, LegoTime p_time);
+	void ApplyVisibility(LegoTreeNode* p_node, LegoTime p_time);
 	void AssignIndiciesWithMap();
 	void BuildMap(LegoHideAnimStructMap& p_map, LegoTreeNode* p_node);
 	void CheckedAdd(

@@ -81,7 +81,7 @@ void JetskiRace::ReadyWorld()
 {
 	assert(m_hideAnim);
 	LegoWorld::ReadyWorld();
-	m_hideAnim->FUN_1006db40(0);
+	m_hideAnim->ApplyVisibility(0);
 
 	MxDSAction action;
 	action.SetAtomId(*g_jukeboxScript);
@@ -213,7 +213,7 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				result = 1;
 			}
 			else if (m_playerLastPathStruct == 0xf) {
-				m_hideAnim->FUN_1006db40(m_playerLaps * 200 + 100);
+				m_hideAnim->ApplyVisibility(m_playerLaps * 200 + 100);
 				result = 1;
 			}
 
