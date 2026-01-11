@@ -12,7 +12,7 @@
 DECOMP_SIZE_ASSERT(LegoExtraActor, 0x1dc)
 
 // GLOBAL: LEGO1 0x100f31d0
-LegoWorld* g_unk0x100f31d0 = NULL;
+LegoWorld* g_reassemblyAnimWorld = NULL;
 
 // GLOBAL: LEGO1 0x100f31d4
 LegoLocomotionAnimPresenter* m_assAnimP = NULL;
@@ -21,7 +21,7 @@ LegoLocomotionAnimPresenter* m_assAnimP = NULL;
 LegoLocomotionAnimPresenter* m_disAnimP = NULL;
 
 // GLOBAL: LEGO1 0x100f31dc
-MxS32 g_unk0x100f31dc = 0;
+MxS32 g_hitCounter = 0;
 
 // GLOBAL: LEGO1 0x10104c18
 Mx3DPointFloat g_unk0x10104c18 = Mx3DPointFloat(0.0f, 2.5f, 0.0f);
@@ -33,11 +33,11 @@ LegoExtraActor::LegoExtraActor()
 	m_lastPathStruct = 0.0f;
 	m_scheduledTime = 0;
 	m_unk0x0c = 0;
-	m_unk0x0e = 0;
-	m_whichAnim = 0;
+	m_animationAtCurrentBoundary = FALSE;
+	m_reassemblyAnimation = e_none;
 	m_assAnim = NULL;
 	m_disAnim = NULL;
-	m_unk0x15 = 0;
+	m_hitBlockCounter = 0;
 }
 
 // FUNCTION: LEGO1 0x1002a6b0
@@ -128,7 +128,7 @@ void LegoExtraActor::VTable0xa4(MxBool& p_und1, MxS32& p_und2)
 }
 
 // FUNCTION: LEGO1 0x1002aae0
-MxResult LegoExtraActor::FUN_1002aae0()
+MxResult LegoExtraActor::SwitchDirection()
 {
 	LegoPathBoundary* oldEdge = m_boundary;
 	Vector3 rightRef(m_unk0xec[0]);
@@ -154,12 +154,12 @@ MxResult LegoExtraActor::FUN_1002aae0()
 	return SUCCESS;
 }
 
-inline void LegoExtraActor::FUN_1002ad8a()
+inline void LegoExtraActor::InitializeReassemblyAnim()
 {
 	LegoWorld* w = CurrentWorld();
 
-	if (g_unk0x100f31d0 != w) {
-		g_unk0x100f31d0 = w;
+	if (g_reassemblyAnimWorld != w) {
+		g_reassemblyAnimWorld = w;
 		m_assAnimP = (LegoLocomotionAnimPresenter*) w->Find("LegoAnimPresenter", "BNsAss01");
 		m_disAnimP = (LegoLocomotionAnimPresenter*) w->Find("LegoAnimPresenter", "BNsDis01");
 	}
@@ -198,26 +198,26 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 	}
 
 	if (p_bool) {
-		if (m_unk0x15 != 0) {
+		if (m_hitBlockCounter != 0) {
 			return FAILURE;
 		}
 
-		m_unk0x15 = 100;
-		FUN_1002aae0();
+		m_hitBlockCounter = 100;
+		SwitchDirection();
 	}
 	else {
 		MxU32 b = FALSE;
 
-		if (++g_unk0x100f31dc % 2 == 0) {
-			MxMatrix matrix(p_actor->GetROI()->GetLocal2World());
-			MxMatrix matrix2(m_roi->GetLocal2World());
+		if (++g_hitCounter % 2 == 0) {
+			MxMatrix otherActorLocal(p_actor->GetROI()->GetLocal2World());
+			MxMatrix local(m_roi->GetLocal2World());
 
-			m_unk0x18 = matrix2;
-			Vector3 positionRef(matrix2[3]);
-			Mx3DPointFloat dir(matrix[2]);
+			m_localBeforeHit = local;
+			Vector3 positionRef(local[3]);
+			Mx3DPointFloat otherActorDir(otherActorLocal[2]);
 
-			dir *= 2.0f;
-			positionRef += dir;
+			otherActorDir *= 2.0f;
+			positionRef += otherActorDir;
 
 			for (MxS32 i = 0; i < m_boundary->GetNumEdges(); i++) {
 				Mx4DPointFloat* normal = m_boundary->GetEdgeNormal(i);
@@ -229,9 +229,9 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			}
 
 			if (!b) {
-				m_roi->SetLocal2World(matrix2);
+				m_roi->SetLocal2World(local);
 				m_roi->WrappedUpdateWorldData();
-				FUN_1002ad8a();
+				InitializeReassemblyAnim();
 				assert(m_roi);
 				assert(SoundManager()->GetCacheSoundManager());
 				SoundManager()->GetCacheSoundManager()->Play("crash5", m_roi->GetName(), FALSE);
@@ -239,7 +239,7 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 				m_prevWorldSpeed = GetWorldSpeed();
 				VTable0xc4();
 				SetWorldSpeed(0);
-				m_whichAnim = 1;
+				m_reassemblyAnimation = e_disassemble;
 				SetActorState(c_one | c_noCollide);
 			}
 		}
@@ -278,19 +278,19 @@ MxResult LegoExtraActor::VTable0x9c()
 	MxResult result = LegoPathActor::VTable0x9c();
 
 	if (m_boundary != oldBoundary) {
-		MxU32 b = FALSE;
+		MxU32 foundAnimation = FALSE;
 		LegoAnimPresenterSet& presenters = m_boundary->GetPresenters();
 
 		for (LegoAnimPresenterSet::iterator it = presenters.begin(); it != presenters.end(); it++) {
 			MxU32 roiMapSize;
 			if ((*it)->GetROIMap(roiMapSize)) {
-				b = TRUE;
+				foundAnimation = TRUE;
 				break;
 			}
 		}
 
-		if (b) {
-			m_unk0x0e = 1;
+		if (foundAnimation) {
+			m_animationAtCurrentBoundary = TRUE;
 			m_prevWorldSpeed = GetWorldSpeed();
 			SetWorldSpeed(0);
 		}
@@ -302,21 +302,21 @@ MxResult LegoExtraActor::VTable0x9c()
 // FUNCTION: LEGO1 0x1002b370
 void LegoExtraActor::Restart()
 {
-	if (m_unk0x0e != 0) {
-		MxU32 b = FALSE;
+	if (m_animationAtCurrentBoundary != 0) {
+		MxU32 foundAnimation = FALSE;
 		LegoAnimPresenterSet& presenters = m_boundary->GetPresenters();
 
 		for (LegoAnimPresenterSet::iterator it = presenters.begin(); it != presenters.end(); it++) {
 			MxU32 roiMapSize;
 			if ((*it)->GetROIMap(roiMapSize)) {
-				b = TRUE;
+				foundAnimation = TRUE;
 				break;
 			}
 		}
 
-		if (!b) {
+		if (!foundAnimation) {
 			SetWorldSpeed(m_prevWorldSpeed);
-			m_unk0x0e = 0;
+			m_animationAtCurrentBoundary = FALSE;
 		}
 	}
 }
@@ -326,13 +326,13 @@ void LegoExtraActor::Animate(float p_time)
 {
 	LegoAnimActorStruct* laas = NULL;
 
-	switch (m_whichAnim) {
-	case 0:
+	switch (m_reassemblyAnimation) {
+	case e_none:
 		LegoAnimActor::Animate(p_time);
 		break;
-	case 1:
+	case e_disassemble:
 		if (m_scheduledTime < p_time) {
-			m_whichAnim = 2;
+			m_reassemblyAnimation = e_assemble;
 			m_actorState = c_one | c_noCollide;
 			m_scheduledTime = m_assAnim->GetDuration() + p_time;
 			break;
@@ -341,12 +341,12 @@ void LegoExtraActor::Animate(float p_time)
 			laas = m_disAnim;
 			break;
 		}
-	case 2:
+	case e_assemble:
 		if (m_scheduledTime < p_time) {
-			m_whichAnim = 0;
+			m_reassemblyAnimation = e_none;
 			m_actorState = c_initial;
 			SetWorldSpeed(m_prevWorldSpeed);
-			m_roi->SetLocal2World(m_unk0x18);
+			m_roi->SetLocal2World(m_localBeforeHit);
 			m_lastTime = p_time;
 			break;
 		}
@@ -381,7 +381,7 @@ void LegoExtraActor::Animate(float p_time)
 // FUNCTION: LEGO1 0x1002b5d0
 void LegoExtraActor::VTable0x74(Matrix4& p_transform)
 {
-	if (m_whichAnim == 0) {
+	if (m_reassemblyAnimation == e_none) {
 		LegoAnimActor::VTable0x74(p_transform);
 	}
 }
@@ -460,7 +460,7 @@ inline MxU32 LegoExtraActor::VTable0x6c(
 						float local24 = p_v2.Dot(p_v2, local54) * 2.0f;
 						float local20 = local54.Dot(local54, local54);
 
-						if (m_unk0x15 != 0 && local20 < 10.0f) {
+						if (m_hitBlockCounter != 0 && local20 < 10.0f) {
 							return 0;
 						}
 
@@ -516,8 +516,8 @@ inline MxU32 LegoExtraActor::VTable0x6c(
 		}
 	}
 
-	if (m_unk0x15 != 0) {
-		m_unk0x15--;
+	if (m_hitBlockCounter != 0) {
+		m_hitBlockCounter--;
 	}
 
 	return 0;

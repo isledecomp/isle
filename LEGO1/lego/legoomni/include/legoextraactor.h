@@ -54,10 +54,10 @@ public:
 	void VTable0xa4(MxBool& p_und1, MxS32& p_und2) override;           // vtable+0xa4
 	void VTable0xc4() override;                                        // vtable+0xc4
 
-	virtual MxResult FUN_1002aae0();
+	virtual MxResult SwitchDirection();
 
 	void Restart();
-	inline void FUN_1002ad8a();
+	inline void InitializeReassemblyAnim();
 
 	void SetUnknown0x0c(undefined p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
 
@@ -65,16 +65,22 @@ public:
 	// LegoExtraActor::`scalar deleting destructor'
 
 private:
-	MxFloat m_scheduledTime;        // 0x08
-	undefined m_unk0x0c;            // 0x0c
-	MxU8 m_axis;                    // 0x0d
-	undefined m_unk0x0e;            // 0x0e
-	MxFloat m_prevWorldSpeed;       // 0x10
-	MxU8 m_whichAnim;               // 0x14
-	MxU8 m_unk0x15;                 // 0x15
-	MxMatrix m_unk0x18;             // 0x18
-	LegoAnimActorStruct* m_assAnim; // 0x60
-	LegoAnimActorStruct* m_disAnim; // 0x64
+	enum {
+		e_none = 0,
+		e_disassemble = 1,
+		e_assemble = 2,
+	};
+
+	MxFloat m_scheduledTime;             // 0x08
+	undefined m_unk0x0c;                 // 0x0c
+	MxU8 m_axis;                         // 0x0d
+	MxBool m_animationAtCurrentBoundary; // 0x0e
+	MxFloat m_prevWorldSpeed;            // 0x10
+	MxU8 m_reassemblyAnimation;          // 0x14
+	MxU8 m_hitBlockCounter;              // 0x15
+	MxMatrix m_localBeforeHit;           // 0x18
+	LegoAnimActorStruct* m_assAnim;      // 0x60
+	LegoAnimActorStruct* m_disAnim;      // 0x64
 };
 
 // GLOBAL: LEGO1 0x100d6be8
