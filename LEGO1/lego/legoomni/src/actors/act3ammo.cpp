@@ -17,7 +17,7 @@ DECOMP_SIZE_ASSERT(Act3Ammo, 0x1a0)
 
 // Initialized at LEGO1 0x100537c0
 // GLOBAL: LEGO1 0x10104f08
-Mx3DPointFloat Act3Ammo::g_unk0x10104f08 = Mx3DPointFloat(0.0, 5.0, 0.0);
+Mx3DPointFloat Act3Ammo::g_hitTranslation = Mx3DPointFloat(0.0, 5.0, 0.0);
 
 // FUNCTION: LEGO1 0x100537f0
 // FUNCTION: BETA10 0x1001d648
@@ -111,43 +111,44 @@ MxResult Act3Ammo::Create(Act3* p_world, MxU32 p_isPizza, MxS32 p_index)
 
 // FUNCTION: LEGO1 0x10053b40
 // FUNCTION: BETA10 0x1001db2a
-MxResult Act3Ammo::FUN_10053b40(const Vector3& p_srcLoc, const Vector3& p_srcDir, const Vector3& p_srcUp)
+MxResult Act3Ammo::CalculateArc(const Vector3& p_srcLoc, const Vector3& p_srcDir, const Vector3& p_srcUp)
 {
 	assert(p_srcDir[1] != 0);
 
-	MxFloat local1c = -(p_srcLoc[1] / p_srcDir[1]);
-	Mx3DPointFloat local18(p_srcDir);
-	Mx3DPointFloat local34;
+	MxFloat yRatioLocDir = -(p_srcLoc[1] / p_srcDir[1]);
+	Mx3DPointFloat groundPoint(p_srcDir);
+	Mx3DPointFloat negNormalUp;
 
-	local18 *= local1c;
-	local18 += p_srcLoc;
+	groundPoint *= yRatioLocDir;
+	groundPoint += p_srcLoc;
 
-	local34[0] = local34[2] = 0.0f;
-	local34[1] = -1.0f;
+	negNormalUp[0] = negNormalUp[2] = 0.0f;
+	negNormalUp[1] = -1.0f;
 
-	m_eq[1] = p_srcUp;
-	m_eq[2] = p_srcLoc;
+	m_coefficients[1] = p_srcUp;
+	m_coefficients[2] = p_srcLoc;
 
-	Mx3DPointFloat local48(local34);
-	local48 -= m_eq[1];
+	Mx3DPointFloat upRelative(negNormalUp);
+	upRelative -= m_coefficients[1];
 
 	for (MxS32 i = 0; i < 3; i++) {
-		if (local18[0] == p_srcLoc[0]) {
+		if (groundPoint[0] == p_srcLoc[0]) {
 			return FAILURE;
 		}
 
-		m_eq[0][i] = (local48[i] * local48[i] + local48[i] * m_eq[1][i] * 2.0f) / ((local18[i] - p_srcLoc[i]) * 4.0f);
+		m_coefficients[0][i] = (upRelative[i] * upRelative[i] + upRelative[i] * m_coefficients[1][i] * 2.0f) /
+							   ((groundPoint[i] - p_srcLoc[i]) * 4.0f);
 	}
 
-	assert(m_eq[0][0] > 0.000001 || m_eq[0][0] < -0.000001);
+	assert(m_coefficients[0][0] > 0.000001 || m_coefficients[0][0] < -0.000001);
 
-	m_unk0x19c = local48[0] / (m_eq[0][0] * 2.0f);
+	m_apexParameter = upRelative[0] / (m_coefficients[0][0] * 2.0f);
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10053cb0
 // FUNCTION: BETA10 0x1001ddf4
-MxResult Act3Ammo::FUN_10053cb0(LegoPathController* p_p, LegoPathBoundary* p_boundary, MxFloat p_unk0x19c)
+MxResult Act3Ammo::Shoot(LegoPathController* p_p, LegoPathBoundary* p_boundary, MxFloat p_apexParameter)
 {
 	assert(p_p);
 	assert(IsValid());
@@ -164,7 +165,7 @@ MxResult Act3Ammo::FUN_10053cb0(LegoPathController* p_p, LegoPathBoundary* p_bou
 	m_pathController = p_p;
 	m_boundary = p_boundary;
 	m_BADuration = 10000.0f;
-	m_unk0x19c = p_unk0x19c;
+	m_apexParameter = p_apexParameter;
 	m_unk0x7c = 0.0f;
 	m_lastTime = -1.0f;
 	m_actorState = c_one;
@@ -173,12 +174,12 @@ MxResult Act3Ammo::FUN_10053cb0(LegoPathController* p_p, LegoPathBoundary* p_bou
 
 // FUNCTION: LEGO1 0x10053d30
 // FUNCTION: BETA10 0x1001df73
-MxResult Act3Ammo::FUN_10053d30(LegoPathController* p_p, MxFloat p_unk0x19c)
+MxResult Act3Ammo::Shoot(LegoPathController* p_p, MxFloat p_apexParameter)
 {
 	assert(p_p);
 	assert(IsValid());
 
-	SetBit4(TRUE);
+	SetShootWithoutBoundary(TRUE);
 
 	if (IsPizza()) {
 		assert(SoundManager()->GetCacheSoundManager());
@@ -191,7 +192,7 @@ MxResult Act3Ammo::FUN_10053d30(LegoPathController* p_p, MxFloat p_unk0x19c)
 
 	m_pathController = p_p;
 	m_BADuration = 10000.0f;
-	m_unk0x19c = p_unk0x19c;
+	m_apexParameter = p_apexParameter;
 	m_unk0x7c = 0.0f;
 	m_lastTime = -1.0f;
 	m_actorState = c_one;
@@ -200,49 +201,49 @@ MxResult Act3Ammo::FUN_10053d30(LegoPathController* p_p, MxFloat p_unk0x19c)
 
 // FUNCTION: LEGO1 0x10053db0
 // FUNCTION: BETA10 0x1001e0f0
-MxResult Act3Ammo::FUN_10053db0(float p_param1, Matrix4& p_param2)
+MxResult Act3Ammo::CalculateTransform(float p_curveParameter, Matrix4& p_transform)
 {
-	float local34 = p_param1 * p_param1;
+	float curveParameterSquare = p_curveParameter * p_curveParameter;
 
-	Vector3 local14(p_param2[0]);
-	Vector3 local3c(p_param2[1]);
-	Vector3 localc(p_param2[2]);
-	Vector3 local30(p_param2[3]);
-	Mx3DPointFloat local28;
+	Vector3 right(p_transform[0]);
+	Vector3 up(p_transform[1]);
+	Vector3 dir(p_transform[2]);
+	Vector3 pos(p_transform[3]);
+	Mx3DPointFloat sndCoeff;
 
-	local28 = m_eq[1];
-	local28 *= p_param1;
-	local30 = m_eq[0];
-	local30 *= local34;
-	local30 += local28;
-	local30 += m_eq[2];
-	localc = m_eq[0];
-	localc *= 2.0f;
-	localc *= p_param1;
-	localc += m_eq[1];
-	localc *= -1.0f;
+	sndCoeff = m_coefficients[1];
+	sndCoeff *= p_curveParameter;
+	pos = m_coefficients[0];
+	pos *= curveParameterSquare;
+	pos += sndCoeff;
+	pos += m_coefficients[2];
+	dir = m_coefficients[0];
+	dir *= 2.0f;
+	dir *= p_curveParameter;
+	dir += m_coefficients[1];
+	dir *= -1.0f;
 
-	if (localc.Unitize() != 0) {
+	if (dir.Unitize() != 0) {
 		assert(0);
 		return FAILURE;
 	}
 
-	local14[1] = local14[2] = 0.0f;
-	local14[0] = 1.0f;
-	local3c.EqualsCross(localc, local14);
+	right[1] = right[2] = 0.0f;
+	right[0] = 1.0f;
+	up.EqualsCross(dir, right);
 
-	if (local3c.Unitize() != 0) {
-		local14[0] = local14[1] = 0.0f;
-		local14[2] = 1.0f;
-		local3c.EqualsCross(localc, local14);
+	if (up.Unitize() != 0) {
+		right[0] = right[1] = 0.0f;
+		right[2] = 1.0f;
+		up.EqualsCross(dir, right);
 
-		if (local3c.Unitize() != 0) {
+		if (up.Unitize() != 0) {
 			assert(0);
 			return FAILURE;
 		}
 	}
 
-	local14.EqualsCross(local3c, localc);
+	right.EqualsCross(up, dir);
 	return SUCCESS;
 }
 
@@ -257,7 +258,7 @@ void Act3Ammo::Animate(float p_time)
 	case c_one:
 		break;
 	case c_two:
-		m_unk0x158 = p_time + 2000.0f;
+		m_rotateTimeout = p_time + 2000.0f;
 		m_actorState = c_three;
 		return;
 	case c_three:
@@ -266,7 +267,7 @@ void Act3Ammo::Animate(float p_time)
 
 		transform = m_roi->GetLocal2World();
 
-		if (m_unk0x158 > p_time) {
+		if (m_rotateTimeout > p_time) {
 			Mx3DPointFloat position;
 
 			position = positionRef;
@@ -279,9 +280,9 @@ void Act3Ammo::Animate(float p_time)
 		}
 		else {
 			m_actorState = c_initial;
-			m_unk0x158 = 0;
+			m_rotateTimeout = 0;
 
-			positionRef -= g_unk0x10104f08;
+			positionRef -= g_hitTranslation;
 			m_roi->SetLocal2World(transform);
 			m_roi->WrappedUpdateWorldData();
 			return;
@@ -297,15 +298,15 @@ void Act3Ammo::Animate(float p_time)
 		m_unk0x7c = 0.0f;
 	}
 
-	MxMatrix local104;
-	MxMatrix local60;
+	MxMatrix transform;
+	MxMatrix additionalTransform;
 
 	float f = (m_BADuration - m_unk0x7c) / m_worldSpeed + m_lastTime;
 
-	undefined4 localb4 = 0;
-	undefined4 localbc = 0;
-	MxU32 local14 = FALSE;
-	MxU32 localb8 = FALSE;
+	undefined4 unused1 = 0;
+	undefined4 unused2 = 0;
+	MxU32 annihilated = FALSE;
+	MxU32 reachedTarget = FALSE;
 
 	if (f >= p_time) {
 		m_actorTime = (p_time - m_lastTime) * m_worldSpeed + m_actorTime;
@@ -313,69 +314,69 @@ void Act3Ammo::Animate(float p_time)
 		m_lastTime = p_time;
 	}
 	else {
-		localb8 = TRUE;
+		reachedTarget = TRUE;
 		m_unk0x7c = m_BADuration;
 		m_lastTime = p_time;
 	}
 
-	local104.SetIdentity();
+	transform.SetIdentity();
 
-	MxResult r = FUN_10053db0((m_unk0x7c / m_BADuration) * m_unk0x19c, local104);
+	MxResult r = CalculateTransform((m_unk0x7c / m_BADuration) * m_apexParameter, transform);
 	assert(r == 0); // SUCCESS
 
-	local60.SetIdentity();
+	additionalTransform.SetIdentity();
 
 	if (IsPizza()) {
-		local60.Scale(2.0f, 2.0f, 2.0f);
+		additionalTransform.Scale(2.0f, 2.0f, 2.0f);
 	}
 	else {
-		local60.Scale(5.0f, 5.0f, 5.0f);
+		additionalTransform.Scale(5.0f, 5.0f, 5.0f);
 	}
 
-	if (localb8) {
+	if (reachedTarget) {
 		if (m_boundary != NULL) {
-			Vector3 local17c(local104[0]);
-			Vector3 local184(local104[1]);
-			Vector3 local174(local104[2]);
+			Vector3 right(transform[0]);
+			Vector3 up(transform[1]);
+			Vector3 dir(transform[2]);
 
 			if (IsPizza()) {
-				local184 = *m_boundary->GetUp();
-				local17c[0] = 1.0f;
-				local17c[1] = local17c[2] = 0.0f;
-				local174.EqualsCross(local17c, local184);
-				local174.Unitize();
-				local17c.EqualsCross(local184, local174);
+				up = *m_boundary->GetUp();
+				right[0] = 1.0f;
+				right[1] = right[2] = 0.0f;
+				dir.EqualsCross(right, up);
+				dir.Unitize();
+				right.EqualsCross(up, dir);
 			}
 			else {
-				local17c = *m_boundary->GetUp();
-				local184[0] = 1.0f;
-				local184[1] = local184[2] = 0.0f;
-				local174.EqualsCross(local17c, local184);
-				local174.Unitize();
-				local184.EqualsCross(local174, local17c);
+				right = *m_boundary->GetUp();
+				up[0] = 1.0f;
+				up[1] = up[2] = 0.0f;
+				dir.EqualsCross(right, up);
+				dir.Unitize();
+				up.EqualsCross(dir, right);
 			}
 		}
 
 		m_actorState = c_initial;
 	}
 	else {
-		local60.RotateX(m_actorTime / 10.0f);
-		local60.RotateY(m_actorTime / 6.0f);
+		additionalTransform.RotateX(m_actorTime / 10.0f);
+		additionalTransform.RotateY(m_actorTime / 6.0f);
 	}
 
-	MxMatrix localb0(local104);
-	local104.Product(local60, localb0);
-	m_roi->SetLocal2World(local104);
+	MxMatrix transformCopy(transform);
+	transform.Product(additionalTransform, transformCopy);
+	m_roi->SetLocal2World(transform);
 	m_roi->WrappedUpdateWorldData();
 
 	if (m_BADuration <= m_unk0x7c) {
 		m_worldSpeed = 0.0f;
 	}
 
-	Vector3 local68(local104[3]);
+	Vector3 position(transform[3]);
 
-	if (localb8) {
-		if (IsBit4()) {
+	if (reachedTarget) {
+		if (IsShootWithoutBoundary()) {
 			if (IsPizza()) {
 				m_world->RemovePizza(*this);
 				m_world->TriggerHitSound(2);
@@ -414,16 +415,16 @@ void Act3Ammo::Animate(float p_time)
 			assert(r);
 
 			if (!strncmp(r->GetName(), "pammo", 5)) {
-				Mx3DPointFloat local1c8;
-				Mx3DPointFloat local1b4;
+				Mx3DPointFloat otherPosition;
+				Mx3DPointFloat distance;
 
-				local1c8 = r->GetLocal2World()[3];
-				local1b4 = m_roi->GetLocal2World()[3];
+				otherPosition = r->GetLocal2World()[3];
+				distance = m_roi->GetLocal2World()[3];
 
-				local1b4 -= local1c8;
+				distance -= otherPosition;
 
 				float radius = r->GetWorldBoundingSphere().Radius();
-				if (local1b4.LenSquared() <= radius * radius) {
+				if (distance.LenSquared() <= radius * radius) {
 					MxS32 index = -1;
 					if (sscanf(r->GetName(), "pammo%d", &index) != 1) {
 						assert(0);
@@ -444,22 +445,22 @@ void Act3Ammo::Animate(float p_time)
 						assert(SoundManager()->GetCacheSoundManager());
 						SoundManager()->GetCacheSoundManager()->Play("dnhitpz", NULL, FALSE);
 						m_world->RemoveDonut(*this);
-						local14 = TRUE;
+						annihilated = TRUE;
 						break;
 					}
 				}
 			}
 			else if (!strncmp(r->GetName(), "dammo", 5)) {
-				Mx3DPointFloat local1f8;
-				Mx3DPointFloat local1e4;
+				Mx3DPointFloat otherPosition;
+				Mx3DPointFloat distance;
 
-				local1f8 = r->GetLocal2World()[3];
-				local1e4 = m_roi->GetLocal2World()[3];
+				otherPosition = r->GetLocal2World()[3];
+				distance = m_roi->GetLocal2World()[3];
 
-				local1e4 -= local1f8;
+				distance -= otherPosition;
 
 				float radius = r->GetWorldBoundingSphere().Radius();
-				if (local1e4.LenSquared() <= radius * radius) {
+				if (distance.LenSquared() <= radius * radius) {
 					MxS32 index = -1;
 					if (sscanf(r->GetName(), "dammo%d", &index) != 1) {
 						assert(0);
@@ -473,19 +474,19 @@ void Act3Ammo::Animate(float p_time)
 						assert(SoundManager()->GetCacheSoundManager());
 						SoundManager()->GetCacheSoundManager()->Play("pzhitdn", NULL, FALSE);
 						m_world->RemovePizza(*this);
-						local14 = TRUE;
+						annihilated = TRUE;
 						break;
 					}
 				}
 			}
 		}
 
-		if (!local14) {
+		if (!annihilated) {
 			if (IsPizza()) {
-				m_world->FUN_10073360(*this, local68);
+				m_world->FUN_10073360(*this, position);
 			}
 			else {
-				m_world->FUN_10073390(*this, local68);
+				m_world->FUN_10073390(*this, position);
 			}
 
 			m_worldSpeed = -1.0f;
