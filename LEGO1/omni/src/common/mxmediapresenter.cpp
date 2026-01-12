@@ -142,7 +142,8 @@ void MxMediaPresenter::EndAction()
 
 	m_currentChunk = NULL;
 
-	if (m_action->GetFlags() & MxDSAction::c_world && (!m_compositePresenter || !m_compositePresenter->VTable0x64(2))) {
+	if (m_action->GetFlags() & MxDSAction::c_world &&
+		(!m_compositePresenter || !m_compositePresenter->GetActionEnded(2))) {
 		MxPresenter::Enable(FALSE);
 		SetTickleState(e_idle);
 	}

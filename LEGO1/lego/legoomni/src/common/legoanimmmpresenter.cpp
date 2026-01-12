@@ -225,7 +225,7 @@ MxLong LegoAnimMMPresenter::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1004b360
-void LegoAnimMMPresenter::VTable0x60(MxPresenter* p_presenter)
+void LegoAnimMMPresenter::AdvanceSerialAction(MxPresenter* p_presenter)
 {
 	if (m_presenter == p_presenter && ((MxU8) p_presenter->GetCurrentTickleState() == MxPresenter::e_streaming ||
 									   (MxU8) p_presenter->GetCurrentTickleState() == MxPresenter::e_done)) {
@@ -403,7 +403,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b610(MxLong p_time)
 	m_action->SetTimeStarted(Timer()->GetTime());
 
 	if (m_compositePresenter != NULL) {
-		m_compositePresenter->VTable0x60(this);
+		m_compositePresenter->AdvanceSerialAction(this);
 	}
 
 	return TRUE;
