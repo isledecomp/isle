@@ -44,7 +44,7 @@ public:
 		const Vector3& p_curDir,
 		Vector3& p_newPos,
 		Vector3& p_newDir,
-		const Vector3* p_und
+		const Vector3* p_up
 	);
 
 	static void GetDefaults(
@@ -126,36 +126,36 @@ protected:
 	float CalculateNewTargetVel(int p_pos, int p_center, float p_max);
 	float CalculateNewAccel(int p_pos, int p_center, float p_max, int p_min);
 
-	MxResult ProcessJoystickInput(MxBool& p_und);
+	MxResult ProcessJoystickInput(MxBool& p_rotatedY);
 	MxResult ProcessKeyboardInput();
 
-	int m_hMax;                  // 0x08
-	int m_vMax;                  // 0x0c
-	int m_deadZone;              // 0x10
-	float m_zeroThreshold;       // 0x14
-	float m_linearVel;           // 0x18
-	float m_rotationalVel;       // 0x1c
-	float m_targetLinearVel;     // 0x20
-	float m_targetRotationalVel; // 0x24
-	float m_maxLinearVel;        // 0x28
-	float m_maxRotationalVel;    // 0x2c
-	float m_linearAccel;         // 0x30
-	float m_rotationalAccel;     // 0x34
-	float m_maxLinearAccel;      // 0x38
-	float m_maxRotationalAccel;  // 0x3c
-	float m_minLinearAccel;      // 0x40
-	float m_minRotationalAccel;  // 0x44
-	float m_maxLinearDeccel;     // 0x48
-	float m_maxRotationalDeccel; // 0x4c
-	float m_rotSensitivity;      // 0x50
-	MxBool m_useRotationalVel;   // 0x54
-	MxTime m_lastTime;           // 0x58
-	MxBool m_trackDefault;       // 0x5c
-	MxBool m_unk0x5d;            // 0x5d
-	float m_unk0x60;             // 0x60
-	float m_unk0x64;             // 0x64
-	float m_unk0x68;             // 0x68
-	MxBool m_isAccelerating;     // 0x6c
+	int m_hMax;                     // 0x08
+	int m_vMax;                     // 0x0c
+	int m_deadZone;                 // 0x10
+	float m_zeroThreshold;          // 0x14
+	float m_linearVel;              // 0x18
+	float m_rotationalVel;          // 0x1c
+	float m_targetLinearVel;        // 0x20
+	float m_targetRotationalVel;    // 0x24
+	float m_maxLinearVel;           // 0x28
+	float m_maxRotationalVel;       // 0x2c
+	float m_linearAccel;            // 0x30
+	float m_rotationalAccel;        // 0x34
+	float m_maxLinearAccel;         // 0x38
+	float m_maxRotationalAccel;     // 0x3c
+	float m_minLinearAccel;         // 0x40
+	float m_minRotationalAccel;     // 0x44
+	float m_maxLinearDeccel;        // 0x48
+	float m_maxRotationalDeccel;    // 0x4c
+	float m_rotSensitivity;         // 0x50
+	MxBool m_useRotationalVel;      // 0x54
+	MxTime m_lastTime;              // 0x58
+	MxBool m_trackDefault;          // 0x5c
+	MxBool m_keyPressed;            // 0x5d
+	float m_additionalHeightOffset; // 0x60
+	float m_additionalScale;        // 0x64
+	float m_additionalRotationY;    // 0x68
+	MxBool m_isAccelerating;        // 0x6c
 
 	// one copy of defaults (these can be set by App.)
 	static int g_defdeadZone;
