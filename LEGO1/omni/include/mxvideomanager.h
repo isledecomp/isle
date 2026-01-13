@@ -58,7 +58,7 @@ protected:
 	LPDIRECT3D2 m_pDirect3D;            // 0x54
 	MxDisplaySurface* m_displaySurface; // 0x58
 	MxRegion* m_region;                 // 0x5c
-	MxBool m_unk0x60;                   // 0x60
+	MxBool m_created;                   // 0x60
 };
 
 #endif // MXVIDEOMANAGER_H
