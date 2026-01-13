@@ -109,7 +109,7 @@ MxResult LegoAnimActor::AnimateWithTransform(float p_time, Matrix4& p_transform)
 		LegoROI** roiMap = m_animMaps[m_curAnim]->m_roiMap;
 		MxU32 numROIs = m_animMaps[m_curAnim]->m_numROIs;
 
-		if (!m_boundary->GetFlag0x10()) {
+		if (!m_boundary->GetVisibility()) {
 			MxU32 i;
 			m_roi->SetVisibility(FALSE);
 
@@ -244,7 +244,7 @@ void LegoAnimActor::ParseAction(char* p_extra)
 					token = strtok(NULL, g_parseExtraTokens);
 
 					if (token) {
-						p->FUN_1006d680(this, atof(token));
+						p->CreateROIAndBuildMap(this, atof(token));
 					}
 				}
 

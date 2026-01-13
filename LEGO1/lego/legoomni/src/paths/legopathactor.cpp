@@ -471,7 +471,7 @@ MxU32 LegoPathActor::VTable0x6c(
 	LegoAnimPresenterSet& presenters = p_boundary->GetPresenters();
 
 	for (LegoAnimPresenterSet::iterator itap = presenters.begin(); itap != presenters.end(); itap++) {
-		if ((*itap)->VTable0x94(p_v1, p_v2, p_f1, p_f2, p_v3)) {
+		if ((*itap)->Intersect(p_v1, p_v2, p_f1, p_f2, p_v3)) {
 			return 1;
 		}
 	}

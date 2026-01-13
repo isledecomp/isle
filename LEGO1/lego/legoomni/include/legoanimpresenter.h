@@ -62,21 +62,27 @@ public:
 		return !strcmp(p_name, LegoAnimPresenter::ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
 
-	void ReadyTickle() override;                                                                   // vtable+0x18
-	void StartingTickle() override;                                                                // vtable+0x1c
-	void StreamingTickle() override;                                                               // vtable+0x20
-	void DoneTickle() override;                                                                    // vtable+0x2c
-	void ParseExtra() override;                                                                    // vtable+0x30
-	MxResult AddToManager() override;                                                              // vtable+0x34
-	void Destroy() override;                                                                       // vtable+0x38
-	MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override;         // vtable+0x3c
-	void EndAction() override;                                                                     // vtable+0x40
-	void PutFrame() override;                                                                      // vtable+0x6c
-	virtual MxResult CreateAnim(MxStreamChunk* p_chunk);                                           // vtable+0x88
-	virtual void VTable0x8c();                                                                     // vtable+0x8c
-	virtual void VTable0x90();                                                                     // vtable+0x90
-	virtual MxU32 VTable0x94(Vector3& p_v1, Vector3& p_v2, float p_f1, float p_f2, Vector3& p_v3); // vtable+0x94
-	virtual MxResult VTable0x98(LegoPathBoundary* p_boundary);                                     // vtable+0x98
+	void ReadyTickle() override;                                                           // vtable+0x18
+	void StartingTickle() override;                                                        // vtable+0x1c
+	void StreamingTickle() override;                                                       // vtable+0x20
+	void DoneTickle() override;                                                            // vtable+0x2c
+	void ParseExtra() override;                                                            // vtable+0x30
+	MxResult AddToManager() override;                                                      // vtable+0x34
+	void Destroy() override;                                                               // vtable+0x38
+	MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
+	void EndAction() override;                                                             // vtable+0x40
+	void PutFrame() override;                                                              // vtable+0x6c
+	virtual MxResult CreateAnim(MxStreamChunk* p_chunk);                                   // vtable+0x88
+	virtual void AddToWorld();                                                             // vtable+0x8c
+	virtual void RemoveFromWorld();                                                        // vtable+0x90
+	virtual MxU32 Intersect(
+		Vector3& p_rayOrigin,
+		Vector3& p_rayDirection,
+		float p_rayLength,
+		float p_radius,
+		Vector3& p_intersectionPoint
+	);                                                        // vtable+0x94
+	virtual MxResult AddActors(LegoPathBoundary* p_boundary); // vtable+0x98
 
 	// FUNCTION: LEGO1 0x1000c990
 	virtual LegoROI** GetROIMap(MxU32& p_roiMapSize)
@@ -85,47 +91,47 @@ public:
 		return m_roiMap;
 	} // vtable+0x9c
 
-	virtual void VTable0xa0(Matrix4& p_matrix); // vtable+0xa0
+	virtual void SetTransform(Matrix4& p_matrix); // vtable+0xa0
 
-	MxResult FUN_1006afc0(MxMatrix*& p_matrix, float p_und);
-	MxResult FUN_1006b140(LegoROI* p_roi);
-	void FUN_1006c7a0();
+	MxResult GetTransforms(MxMatrix*& p_matrix, float p_time);
+	MxResult CopyTransform(LegoROI* p_roi);
+	void ApplyFinishedTransform();
 	const char* GetActionObjectName();
 
 	void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
 
 	// FUNCTION: BETA10 0x1005aad0
-	void SetUnknown0x0cTo1() { m_unk0x9c = 1; }
+	void SetRoiTransformApplied() { m_roiTransformApplied = 1; }
 
 	// FUNCTION: BETA10 0x1005ab00
-	void SetUnknown0xa0(Matrix4* p_unk0xa0) { m_unk0xa0 = p_unk0xa0; }
+	void SetRoiTransform(Matrix4* p_roiTransform) { m_roiTransform = p_roiTransform; }
 
 	LegoAnim* GetAnimation() { return m_anim; }
 
 protected:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
-	LegoChar* FUN_10069150(const LegoChar* p_und1);
-	void FUN_100692b0();
-	void FUN_100695c0();
+	LegoChar* GetActorName(const LegoChar* p_name);
+	void CreateManagedActors();
+	void CreateSceneROIs();
 	LegoChar* GetVariableOrIdentity(const LegoChar* p_varName, const LegoChar* p_prefix);
-	LegoBool FUN_100698b0(const CompoundObject& p_rois, const LegoChar* p_und2);
+	LegoBool AppendROIToScene(const CompoundObject& p_rois, const LegoChar* p_varName);
 	LegoROI* FindROI(const LegoChar* p_name);
-	void FUN_10069b10();
+	void BuildROIMap();
 	void UpdateStructMapAndROIIndex(LegoAnimStructMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi);
 	void UpdateStructMapAndROIIndexForNode(
 		LegoAnimStructMap& p_map,
 		LegoAnimNodeData* p_data,
-		const LegoChar* p_und,
+		const LegoChar* p_key,
 		LegoROI* p_roi
 	);
-	void FUN_1006aa60();
-	void FUN_1006ab70();
-	LegoBool FUN_1006aba0();
-	MxBool FUN_1006abb0(LegoTreeNode* p_node, LegoROI* p_roi);
+	void ReleaseManagedActors();
+	void AppendManagedActors();
+	LegoBool VerifyAnimationTree();
+	MxBool VerifyAnimationNode(LegoTreeNode* p_node, LegoROI* p_roi);
 	void SubstituteVariables();
-	void FUN_1006b900(LegoAnim* p_anim, MxLong p_time, Matrix4* p_matrix);
-	void FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p_matrix);
+	void ApplyTransform(LegoAnim* p_anim, MxLong p_time, Matrix4* p_matrix);
+	void ApplyTransformWithVisibilityAndCam(LegoAnim* p_anim, MxLong p_time, Matrix4* p_matrix);
 	void SetDisabled(MxBool p_disabled);
 
 	LegoAnim* m_anim;             // 0x64
@@ -133,27 +139,27 @@ protected:
 	MxU32 m_roiMapSize;           // 0x6c
 	LegoROIList* m_sceneROIs;     // 0x70
 	LegoROIList* m_managedActors; // 0x74
-	Matrix4* m_unk0x78;           // 0x78
+	Matrix4* m_transform;         // 0x78
 	MxU32 m_flags;                // 0x7c
 	LegoWorld* m_currentWorld;    // 0x80
 	MxAtomId m_worldAtom;         // 0x84
 	MxS32 m_worldId;              // 0x88
-	LegoROI** m_unk0x8c;          // 0x8c
-	char** m_unk0x90;             // 0x90
-	MxU8 m_unk0x94;               // 0x94
-	MxBool m_unk0x95;             // 0x95
-	MxBool m_unk0x96;             // 0x96
+	LegoROI** m_ptAtCamROI;       // 0x8c
+	char** m_ptAtCamNames;        // 0x90
+	MxU8 m_ptAtCamCount;          // 0x94
+	MxBool m_animationFinished;   // 0x95
+	MxBool m_localActors;         // 0x96
 	undefined m_unk0x97;          // 0x97
 	LegoAnimSubstMap* m_substMap; // 0x98
-	MxS16 m_unk0x9c;              // 0x9c
-	Matrix4* m_unk0xa0;           // 0xa0
+	MxS16 m_roiTransformApplied;  // 0x9c
+	Matrix4* m_roiTransform;      // 0xa0
 
 	// SYNTHETIC: LEGO1 0x10068650
 	// LegoAnimPresenter::`scalar deleting destructor'
 
 public:
-	float m_unk0xa4;          // 0xa4
-	Mx3DPointFloat m_unk0xa8; // 0xa8
+	float m_boundingRadius;       // 0xa4
+	Mx3DPointFloat m_centerPoint; // 0xa8
 };
 
 // VTABLE: LEGO1 0x100d4900
@@ -231,16 +237,16 @@ public:
 	void PutFrame() override;                             // vtable+0x6c
 	MxResult CreateAnim(MxStreamChunk* p_chunk) override; // vtable+0x88
 
-	void FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value);
+	void CreateROIAndBuildMap(LegoAnimActor* p_actor, MxFloat p_worldSpeed);
 
-	void DecrementUnknown0xd4()
+	void DecrementWorldRefCounter()
 	{
-		if (m_unk0xd4) {
-			--m_unk0xd4;
+		if (m_worldRefCounter) {
+			--m_worldRefCounter;
 		}
 	}
 
-	undefined2 GetUnknown0xd4() { return m_unk0xd4; }
+	MxS16 GetWorldRefCounter() { return m_worldRefCounter; }
 
 	// SYNTHETIC: LEGO1 0x1006cfe0
 	// LegoLocomotionAnimPresenter::`scalar deleting destructor'
@@ -254,7 +260,7 @@ private:
 	LegoROIMapList* m_roiMapList; // 0xc8
 	MxS32 m_unk0xcc;              // 0xcc
 	MxS32 m_unk0xd0;              // 0xd0
-	undefined2 m_unk0xd4;         // 0xd4
+	MxS16 m_worldRefCounter;      // 0xd4
 };
 
 class LegoPathBoundary;
@@ -279,10 +285,10 @@ public:
 	~LegoHideAnimPresenter() override;
 
 	// FUNCTION: LEGO1 0x1006d860
-	void VTable0x8c() override {} // vtable+0x8c
+	void AddToWorld() override {} // vtable+0x8c
 
 	// FUNCTION: LEGO1 0x1006d870
-	void VTable0x90() override {} // vtable+0x90
+	void RemoveFromWorld() override {} // vtable+0x90
 
 	// FUNCTION: BETA10 0x1005d4a0
 	static const char* HandlerClassName()
@@ -311,7 +317,7 @@ public:
 	void EndAction() override;        // vtable+0x40
 	void PutFrame() override;         // vtable+0x6c
 
-	void FUN_1006db40(LegoTime p_time);
+	void ApplyVisibility(LegoTime p_time);
 
 	// SYNTHETIC: LEGO1 0x1006d9d0
 	// LegoHideAnimPresenter::`scalar deleting destructor'
@@ -319,10 +325,10 @@ public:
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
-	void FUN_1006db60(LegoTreeNode* p_node, LegoTime p_time);
-	void FUN_1006dc10();
-	void FUN_1006e3f0(LegoHideAnimStructMap& p_map, LegoTreeNode* p_node);
-	void FUN_1006e470(
+	void ApplyVisibility(LegoTreeNode* p_node, LegoTime p_time);
+	void AssignIndiciesWithMap();
+	void BuildMap(LegoHideAnimStructMap& p_map, LegoTreeNode* p_node);
+	void CheckedAdd(
 		LegoHideAnimStructMap& p_map,
 		LegoAnimNodeData* p_data,
 		const char* p_name,

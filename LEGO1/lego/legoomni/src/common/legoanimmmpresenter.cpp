@@ -152,7 +152,7 @@ void LegoAnimMMPresenter::ReadyTickle()
 	}
 
 	if (m_tranInfo != NULL && m_tranInfo->m_unk0x0c != NULL) {
-		m_presenter->VTable0xa0(*m_tranInfo->m_unk0x0c);
+		m_presenter->SetTransform(*m_tranInfo->m_unk0x0c);
 	}
 
 	if (m_presenter != NULL) {
@@ -168,7 +168,7 @@ void LegoAnimMMPresenter::StartingTickle()
 {
 	if (m_presenter == NULL || m_presenter->GetCurrentTickleState() == e_idle) {
 		if (m_tranInfo != NULL && m_tranInfo->m_unk0x08 != NULL) {
-			m_presenter->FUN_1006b140(m_tranInfo->m_unk0x08);
+			m_presenter->CopyTransform(m_tranInfo->m_unk0x08);
 		}
 
 		m_unk0x50 = Timer()->GetTime();
@@ -316,7 +316,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b450()
 MxBool LegoAnimMMPresenter::FUN_1004b530(MxLong p_time)
 {
 	if (m_presenter != NULL) {
-		m_presenter->FUN_1006afc0(m_unk0x68, 0);
+		m_presenter->GetTransforms(m_unk0x68, 0);
 		m_roiMap = m_presenter->GetROIMap(m_roiMapSize);
 		m_roiMapSize++;
 	}
@@ -498,7 +498,7 @@ void LegoAnimMMPresenter::FUN_1004b840()
 	MxDSAction* action = m_action;
 
 	if (m_presenter != NULL) {
-		m_presenter->FUN_1006c7a0();
+		m_presenter->ApplyFinishedTransform();
 	}
 
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {

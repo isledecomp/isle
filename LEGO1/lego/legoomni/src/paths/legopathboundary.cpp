@@ -341,15 +341,15 @@ MxU32 LegoPathBoundary::Intersect(
 // FUNCTION: BETA10 0x100b2220
 MxU32 LegoPathBoundary::AddPresenterIfInRange(LegoAnimPresenter* p_presenter)
 {
-	Mx3DPointFloat unk0x30;
+	Mx3DPointFloat centerDistance;
 
-	unk0x30 = m_centerPoint;
-	unk0x30 -= p_presenter->m_unk0xa8;
+	centerDistance = m_centerPoint;
+	centerDistance -= p_presenter->m_centerPoint;
 
-	float len = unk0x30.LenSquared();
-	float local20 = p_presenter->m_unk0xa4 + m_boundingRadius;
+	float len = centerDistance.LenSquared();
+	float radiusSquared = p_presenter->m_boundingRadius + m_boundingRadius;
 
-	if (len > 0.001 && len > local20 * local20) {
+	if (len > 0.001 && len > radiusSquared * radiusSquared) {
 		return 0;
 	}
 

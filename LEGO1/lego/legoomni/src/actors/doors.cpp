@@ -70,7 +70,7 @@ void Doors::Animate(float p_time)
 	assert(m_ltDoor && m_rtDoor);
 
 	// TODO: Match
-	m_roi->SetVisibility(m_boundary->GetFlag0x10());
+	m_roi->SetVisibility(m_boundary->GetVisibility());
 
 	switch (m_state) {
 	case e_none:

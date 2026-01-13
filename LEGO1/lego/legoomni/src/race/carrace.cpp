@@ -117,7 +117,7 @@ void CarRace::ReadyWorld()
 {
 	assert(m_hideAnim);
 	LegoWorld::ReadyWorld();
-	m_hideAnim->FUN_1006db40(0);
+	m_hideAnim->ApplyVisibility(0);
 
 	MxDSAction action;
 	action.SetAtomId(*g_jukeboxScript);

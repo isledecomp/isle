@@ -166,7 +166,7 @@ inline void LegoExtraActor::InitializeReassemblyAnim()
 
 	if (!m_assAnim) {
 		MxS32 index = 0;
-		m_assAnimP->FUN_1006d680(this, -20.0f);
+		m_assAnimP->CreateROIAndBuildMap(this, -20.0f);
 
 		for (MxS32 i = 0; i < m_animMaps.size(); i++) {
 			if (m_animMaps[i]->GetWorldSpeed() == -20.0f) {
@@ -178,7 +178,7 @@ inline void LegoExtraActor::InitializeReassemblyAnim()
 
 	if (!m_disAnim) {
 		MxS32 index = 0;
-		m_disAnimP->FUN_1006d680(this, -21.0f);
+		m_disAnimP->CreateROIAndBuildMap(this, -21.0f);
 
 		for (MxS32 i = 0; i < m_animMaps.size(); i++) {
 			if (m_animMaps[i]->GetWorldSpeed() == -21.0f) {
@@ -434,7 +434,7 @@ inline MxU32 LegoExtraActor::VTable0x6c(
 	LegoAnimPresenterSet& presenters = p_boundary->GetPresenters();
 
 	for (LegoAnimPresenterSet::iterator itap = presenters.begin(); itap != presenters.end(); itap++) {
-		if ((*itap)->VTable0x94(p_v1, p_v2, p_f1, p_f2, p_v3)) {
+		if ((*itap)->Intersect(p_v1, p_v2, p_f1, p_f2, p_v3)) {
 			return 1;
 		}
 	}

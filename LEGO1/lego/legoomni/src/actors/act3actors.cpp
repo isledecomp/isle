@@ -1216,7 +1216,7 @@ void Act3Shark::ParseAction(char* p_extra)
 				token = strtok(NULL, g_parseExtraTokens);
 
 				if (token != NULL) {
-					presenter->FUN_1006d680(this, atof(token));
+					presenter->CreateROIAndBuildMap(this, atof(token));
 				}
 			}
 
