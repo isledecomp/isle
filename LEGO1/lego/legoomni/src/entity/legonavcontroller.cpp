@@ -134,11 +134,11 @@ LegoNavController::LegoNavController()
 	m_linearAccel = 0.0f;
 	m_rotationalAccel = 0.0f;
 	m_trackDefault = FALSE;
-	m_unk0x5d = FALSE;
+	m_keyPressed = FALSE;
 	m_isAccelerating = FALSE;
-	m_unk0x64 = 0.0f;
-	m_unk0x68 = 0.0f;
-	m_unk0x60 = 0.0f;
+	m_additionalScale = 0.0f;
+	m_additionalRotationY = 0.0f;
+	m_additionalHeightOffset = 0.0f;
 
 	m_lastTime = Timer()->GetTime();
 
@@ -322,7 +322,7 @@ MxBool LegoNavController::CalculateNewPosDir(
 	const Vector3& p_curDir,
 	Vector3& p_newPos,
 	Vector3& p_newDir,
-	const Vector3* p_und
+	const Vector3* p_up
 )
 {
 	if (!g_isWorldActive) {
@@ -330,14 +330,14 @@ MxBool LegoNavController::CalculateNewPosDir(
 	}
 
 	MxBool changed = FALSE;
-	MxBool und = FALSE;
+	MxBool rotatedY = FALSE;
 
 	MxTime currentTime = Timer()->GetTime();
 	float deltaTime = (currentTime - m_lastTime) / 1000.0;
 	m_lastTime = currentTime;
 
 	if (ProcessKeyboardInput() == FAILURE) {
-		ProcessJoystickInput(und);
+		ProcessJoystickInput(rotatedY);
 	}
 
 	if (m_useRotationalVel) {
@@ -349,7 +349,7 @@ MxBool LegoNavController::CalculateNewPosDir(
 
 	m_linearVel = CalculateNewVel(m_targetLinearVel, m_linearVel, m_linearAccel, deltaTime);
 
-	if (und || (Abs(m_rotationalVel) > m_zeroThreshold) || (Abs(m_linearVel) > m_zeroThreshold)) {
+	if (rotatedY || (Abs(m_rotationalVel) > m_zeroThreshold) || (Abs(m_linearVel) > m_zeroThreshold)) {
 		float rot_mat[3][3];
 		Mx3DPointFloat delta_pos, new_dir, new_pos;
 
@@ -368,7 +368,7 @@ MxBool LegoNavController::CalculateNewPosDir(
 			delta_rad = DTOR(m_rotationalVel * m_rotSensitivity);
 		}
 
-		if (p_und != NULL && (*p_und)[1] < 0.0f) {
+		if (p_up != NULL && (*p_up)[1] < 0.0f) {
 			delta_rad = -delta_rad;
 		}
 
@@ -381,7 +381,7 @@ MxBool LegoNavController::CalculateNewPosDir(
 		changed = TRUE;
 	}
 
-	if (m_unk0x5d) {
+	if (m_keyPressed) {
 		float rot_mat[3][3];
 		Mx3DPointFloat delta_pos, new_pos, new_dir;
 
@@ -394,20 +394,20 @@ MxBool LegoNavController::CalculateNewPosDir(
 			SET3(new_dir, p_curDir);
 		}
 
-		if (m_unk0x64 != 0.0f) {
-			delta_pos[0] = new_dir[0] * m_unk0x64;
-			delta_pos[1] = new_dir[1] * m_unk0x64;
-			delta_pos[2] = new_dir[2] * m_unk0x64;
+		if (m_additionalScale != 0.0f) {
+			delta_pos[0] = new_dir[0] * m_additionalScale;
+			delta_pos[1] = new_dir[1] * m_additionalScale;
+			delta_pos[2] = new_dir[2] * m_additionalScale;
 		}
 		else {
 			FILLVEC3(delta_pos, 0.0f);
 		}
 
-		delta_pos[1] += m_unk0x60;
+		delta_pos[1] += m_additionalHeightOffset;
 		VPV3(p_newPos, new_pos, delta_pos);
 
-		if (m_unk0x68 != 0.0f) {
-			float delta_rad = DTOR(m_unk0x68);
+		if (m_additionalRotationY != 0.0f) {
+			float delta_rad = DTOR(m_additionalRotationY);
 			IDENTMAT3(rot_mat);
 			rot_mat[0][0] = rot_mat[2][2] = cos(delta_rad);
 			rot_mat[0][2] = rot_mat[2][0] = sin(delta_rad);
@@ -418,8 +418,8 @@ MxBool LegoNavController::CalculateNewPosDir(
 			SET3(p_newDir, new_dir);
 		}
 
-		m_unk0x60 = m_unk0x64 = m_unk0x68 = 0.0f;
-		m_unk0x5d = FALSE;
+		m_additionalHeightOffset = m_additionalScale = m_additionalRotationY = 0.0f;
+		m_keyPressed = FALSE;
 		changed = TRUE;
 	}
 
@@ -515,7 +515,7 @@ MxS32 LegoNavController::GetNumLocations()
 }
 
 // FUNCTION: LEGO1 0x10055750
-MxResult LegoNavController::ProcessJoystickInput(MxBool& p_und)
+MxResult LegoNavController::ProcessJoystickInput(MxBool& p_rotatedY)
 {
 	LegoOmni* instance = LegoOmni::GetInstance();
 
@@ -550,7 +550,7 @@ MxResult LegoNavController::ProcessJoystickInput(MxBool& p_und)
 
 				if (world && world->GetCameraController()) {
 					world->GetCameraController()->RotateY(DTOR(povPosition));
-					p_und = TRUE;
+					p_rotatedY = TRUE;
 				}
 			}
 
@@ -648,7 +648,7 @@ MxResult LegoNavController::ProcessKeyboardInput()
 MxLong LegoNavController::Notify(MxParam& p_param)
 {
 	if (((MxNotificationParam&) p_param).GetNotification() == c_notificationKeyPress) {
-		m_unk0x5d = TRUE;
+		m_keyPressed = TRUE;
 		MxU8 key = ((LegoEventNotificationParam&) p_param).GetKey();
 
 		switch (key) {
@@ -767,7 +767,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 						g_fpsEnabled = TRUE;
 					}
 				default:
-					m_unk0x5d = FALSE;
+					m_keyPressed = FALSE;
 					break;
 				case '0':
 				case '1':
@@ -914,7 +914,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					g_locationCalcStep = 1;
 					break;
 				case 'D':
-					m_unk0x60 = -1.0;
+					m_additionalHeightOffset = -1.0;
 					break;
 				case 'F':
 					RealtimeView::SetUserMaxLOD(0.0);
@@ -980,7 +980,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					BackgroundAudioManager()->Enable(g_enableMusic);
 					break;
 				case 'U':
-					m_unk0x60 = 1.0;
+					m_additionalHeightOffset = 1.0;
 					break;
 				case 'V':
 					if (g_nextAnimation > 0 && g_animationCalcStep == 0) {
