@@ -36,11 +36,11 @@ void LegoActionControlPresenter::ReadyTickle()
 void LegoActionControlPresenter::RepeatingTickle()
 {
 	if (IsEnabled()) {
-		if (m_unk0x50 == 0) {
+		if (m_actionType == 0) {
 			ParseExtra();
 		}
 
-		InvokeAction(m_unk0x50, MxAtomId(m_unk0x54.GetData(), e_lowerCase2), m_unk0x64, NULL);
+		InvokeAction(m_actionType, MxAtomId(m_sourceName.GetData(), e_lowerCase2), m_streamId, NULL);
 		ProgressTickleState(e_done);
 	}
 }
@@ -84,15 +84,15 @@ void LegoActionControlPresenter::ParseExtra()
 
 		char output[1024];
 		if (KeyValueStringParse(output, g_strACTION, extraCopy)) {
-			m_unk0x50 = MatchActionString(strtok(output, g_parseExtraTokens));
+			m_actionType = MatchActionString(strtok(output, g_parseExtraTokens));
 
-			if (m_unk0x50 != Extra::ActionType::e_exit) {
+			if (m_actionType != Extra::ActionType::e_exit) {
 				MakeSourceName(extraCopy, strtok(NULL, g_parseExtraTokens));
 
-				m_unk0x54 = extraCopy;
-				m_unk0x54.ToLowerCase();
-				if (m_unk0x50 != Extra::ActionType::e_run) {
-					m_unk0x64 = atoi(strtok(NULL, g_parseExtraTokens));
+				m_sourceName = extraCopy;
+				m_sourceName.ToLowerCase();
+				if (m_actionType != Extra::ActionType::e_run) {
+					m_streamId = atoi(strtok(NULL, g_parseExtraTokens));
 				}
 			}
 		}
