@@ -27,56 +27,61 @@ struct LegoBoundaryEdge {
 };
 
 // SIZE 0x10
-struct LegoBEWithFloat {
-	LegoBEWithFloat()
+struct LegoBEWithMidpoint {
+	LegoBEWithMidpoint()
 	{
 		m_edge = NULL;
 		m_boundary = NULL;
 		m_next = NULL;
-		m_unk0x0c = 0.0f;
+		m_distanceToMidpoint = 0.0f;
 	}
 
 	// FUNCTION: BETA10 0x100bd9a0
-	LegoBEWithFloat(LegoPathCtrlEdge* p_edge, LegoPathBoundary* p_boundary, MxFloat p_unk0x0c)
+	LegoBEWithMidpoint(LegoPathCtrlEdge* p_edge, LegoPathBoundary* p_boundary, MxFloat p_distanceToMidpoint)
 	{
 		m_edge = p_edge;
 		m_boundary = p_boundary;
 		m_next = NULL;
-		m_unk0x0c = p_unk0x0c;
+		m_distanceToMidpoint = p_distanceToMidpoint;
 	}
 
 	// FUNCTION: BETA10 0x100bd9f0
-	LegoBEWithFloat(LegoPathCtrlEdge* p_edge, LegoPathBoundary* p_boundary, LegoBEWithFloat* p_next, MxFloat p_unk0x0c)
+	LegoBEWithMidpoint(
+		LegoPathCtrlEdge* p_edge,
+		LegoPathBoundary* p_boundary,
+		LegoBEWithMidpoint* p_next,
+		MxFloat p_distanceToMidpoint
+	)
 	{
 		m_edge = p_edge;
 		m_boundary = p_boundary;
 		m_next = p_next;
-		m_unk0x0c = p_unk0x0c;
+		m_distanceToMidpoint = p_distanceToMidpoint;
 	}
 
 	LegoPathCtrlEdge* m_edge;     // 0x00
 	LegoPathBoundary* m_boundary; // 0x04
-	LegoBEWithFloat* m_next;      // 0x08
-	MxFloat m_unk0x0c;            // 0x0c
+	LegoBEWithMidpoint* m_next;   // 0x08
+	MxFloat m_distanceToMidpoint; // 0x0c
 
-	int operator==(LegoBEWithFloat) const { return 0; }
-	int operator<(LegoBEWithFloat) const { return 0; }
+	int operator==(LegoBEWithMidpoint) const { return 0; }
+	int operator<(LegoBEWithMidpoint) const { return 0; }
 };
 
-struct LegoBEWithFloatComparator {
+struct LegoBEWithMidpointComparator {
 	// FUNCTION: BETA10 0x100bef80
-	bool operator()(LegoBEWithFloat* const& p_a, LegoBEWithFloat* const& p_b) const
+	bool operator()(LegoBEWithMidpoint* const& p_a, LegoBEWithMidpoint* const& p_b) const
 	{
-		return p_a->m_unk0x0c < p_b->m_unk0x0c;
+		return p_a->m_distanceToMidpoint < p_b->m_distanceToMidpoint;
 	}
 };
 
-typedef multiset<LegoBEWithFloat*, LegoBEWithFloatComparator> LegoBEWithFloatSet;
+typedef multiset<LegoBEWithMidpoint*, LegoBEWithMidpointComparator> LegoBEWithMidpointSet;
 
 // SIZE 0x3c
 struct LegoPathEdgeContainer : public list<LegoBoundaryEdge> {
 	enum {
-		c_bit1 = 0x01
+		c_hasPath = 0x01
 	};
 
 	// FUNCTION: BETA10 0x100118e0
@@ -87,18 +92,18 @@ struct LegoPathEdgeContainer : public list<LegoBoundaryEdge> {
 	}
 
 	// FUNCTION: BETA10 0x100bd660
-	void SetBit1(MxU32 p_set)
+	void SetPath(MxU32 p_set)
 	{
 		if (p_set) {
-			m_flags |= c_bit1;
+			m_flags |= c_hasPath;
 		}
 		else {
-			m_flags &= ~c_bit1;
+			m_flags &= ~c_hasPath;
 		}
 	}
 
 	// FUNCTION: BETA10 0x1001cb50
-	MxU32 GetBit1() { return m_flags & c_bit1; }
+	MxU32 HasPath() { return m_flags & c_hasPath; }
 
 	Mx3DPointFloat m_position;    // 0x0c
 	Mx3DPointFloat m_direction;   // 0x20

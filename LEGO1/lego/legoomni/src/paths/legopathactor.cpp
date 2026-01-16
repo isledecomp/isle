@@ -630,7 +630,7 @@ MxResult LegoPathActor::VTable0x9c()
 	MxU32 local20 = 1;
 
 	if (m_grec != NULL) {
-		if (m_grec->GetBit1()) {
+		if (m_grec->HasPath()) {
 			local1c = 0;
 			local20 = 0;
 
