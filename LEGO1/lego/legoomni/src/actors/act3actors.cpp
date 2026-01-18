@@ -510,7 +510,7 @@ MxResult Act3Cop::FUN_10040360()
 // FUNCTION: BETA10 0x1001942c
 MxResult Act3Cop::VTable0x9c()
 {
-	if (m_grec && !m_grec->GetBit1()) {
+	if (m_grec && !m_grec->HasPath()) {
 		delete m_grec;
 		m_grec = NULL;
 		m_lastTime = Timer()->GetTime();
@@ -1120,7 +1120,7 @@ void Act3Brickster::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoOrientedEd
 // FUNCTION: BETA10 0x1001b75b
 MxResult Act3Brickster::VTable0x9c()
 {
-	if (m_grec && !m_grec->GetBit1()) {
+	if (m_grec && !m_grec->HasPath()) {
 		delete m_grec;
 		m_grec = NULL;
 		m_lastTime = Timer()->GetTime();
