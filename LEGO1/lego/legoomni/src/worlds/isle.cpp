@@ -867,7 +867,7 @@ void Isle::CheckAreaExiting()
 	case LegoGameState::e_vehicleExited: {
 		MxMatrix mat(UserActor()->GetROI()->GetLocal2World());
 		LegoPathBoundary* boundary = UserActor()->GetBoundary();
-		((IslePathActor*) UserActor())->VTable0xec(mat, boundary, TRUE);
+		((IslePathActor*) UserActor())->UpdateWorld(mat, boundary, TRUE);
 		break;
 	}
 	case LegoGameState::e_infocenterExited:

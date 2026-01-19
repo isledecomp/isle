@@ -92,7 +92,7 @@ void IslePathActor::Enter()
 		NavController()->ResetMaxLinearVel(m_maxLinearVel);
 
 		SetUserActor(this);
-		FUN_1001b660();
+		TurnAround();
 		TransformPointOfView();
 	}
 }
@@ -151,7 +151,7 @@ void IslePathActor::Exit()
 		GameState()->m_currentArea = LegoGameState::Area::e_vehicleExited;
 	}
 
-	FUN_1001b660();
+	TurnAround();
 	TransformPointOfView();
 	ResetViewVelocity();
 }
@@ -611,7 +611,7 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_enter, MxU8
 }
 
 // FUNCTION: LEGO1 0x1001b5b0
-void IslePathActor::VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundary, MxBool p_reset)
+void IslePathActor::UpdateWorld(MxMatrix p_transform, LegoPathBoundary* p_boundary, MxBool p_reset)
 {
 	if (m_world) {
 		m_world->RemoveActor(this);
@@ -639,15 +639,15 @@ void IslePathActor::VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundar
 
 // FUNCTION: LEGO1 0x1001b660
 // FUNCTION: BETA10 0x10036ea2
-void IslePathActor::FUN_1001b660()
+void IslePathActor::TurnAround()
 {
 	MxMatrix transform(m_roi->GetLocal2World());
-	Vector3 position(transform[0]);
-	Vector3 direction(transform[1]);
-	Vector3 up(transform[2]);
+	Vector3 right(transform[0]);
+	Vector3 up(transform[1]);
+	Vector3 direction(transform[2]);
 
-	up *= -1.0f;
-	position.EqualsCross(direction, up);
+	direction *= -1.0f;
+	right.EqualsCross(up, direction);
 	m_roi->SetLocal2World(transform);
 	m_roi->WrappedUpdateWorldData();
 }

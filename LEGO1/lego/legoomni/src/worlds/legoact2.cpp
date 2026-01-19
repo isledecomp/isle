@@ -534,7 +534,7 @@ void LegoAct2::Enable(MxBool p_enable)
 		GameState()->SetActor(LegoActor::c_pepper);
 		m_pepper = FindROI("pepper");
 
-		((IslePathActor*) m_pepper->GetEntity())->VTable0xec(m_transformOnDisable, m_boundaryOnDisable, TRUE);
+		((IslePathActor*) m_pepper->GetEntity())->UpdateWorld(m_transformOnDisable, m_boundaryOnDisable, TRUE);
 
 		if (GameState()->m_previousArea == LegoGameState::e_infomain) {
 			GameState()->StopArea(LegoGameState::e_infomain);
