@@ -6,9 +6,11 @@
 // clang-format on
 #include "legoracemap.h"
 
-#define LEGORACECAR_UNKNOWN_0 0
-#define LEGORACECAR_UNKNOWN_1 1
+#define LEGORACECAR_NONE 0
+#define LEGORACECAR_NEAR_SKELETON 1
+// kick to the left
 #define LEGORACECAR_KICK1 2 // name guessed
+// kick to the right
 #define LEGORACECAR_KICK2 4 // name validated by BETA10 0x100cb659
 
 // SIZE 0x08
@@ -23,7 +25,7 @@ struct SkeletonKickPhase {
 	EdgeReference* m_edgeRef; // 0x00
 	float m_lower;            // 0x04
 	float m_upper;            // 0x08
-	MxU8 m_userState;         // 0x0c
+	MxU8 m_kickState;         // 0x0c
 };
 
 // VTABLE: LEGO1 0x100d5a08 LegoCarRaceActor
@@ -80,7 +82,7 @@ public:
 	// FUNCTION: LEGO1 0x10014210
 	MxResult VTable0x9c() override { return LegoJetskiRaceActor::VTable0x9c(); } // vtable+0x9c
 
-	virtual void FUN_100136f0(float p_worldSpeed);
+	virtual void SetMaxLinearVelocity(float p_worldSpeed);
 
 	static void InitSoundIndices();
 
@@ -154,7 +156,7 @@ public:
 	// LegoRaceCar::`scalar deleting destructor'
 
 private:
-	undefined m_userState;    // 0x54
+	MxU8 m_kickState;         // 0x54
 	float m_kickStart;        // 0x58
 	Mx3DPointFloat m_unk0x5c; // 0x5c
 
