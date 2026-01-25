@@ -15,6 +15,8 @@ To access the Ghidra repository, use the following details:
 - Address: `server.mattkc.com`
 - Port: `13100`
 
+Make sure that you enabled "Request Anonymous Request" if you didn't get permission to edit.
+
 ## General Guidelines
 
 If you feel fit to contribute, feel free to create a pull request! Someone will review and merge it (or provide feedback) as soon as possible.
