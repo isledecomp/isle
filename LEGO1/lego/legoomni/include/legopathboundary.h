@@ -45,9 +45,15 @@ public:
 		LegoPathActor* p_actor,
 		LegoPathBoundary*& p_boundary,
 		LegoOrientedEdge*& p_edge,
-		float& p_unk0xe4
+		float& p_scale
 	);
-	MxU32 Intersect(float p_scale, Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, LegoOrientedEdge*& p_edge);
+	MxU32 Intersect(
+		float p_scale,
+		Vector3& p_oldPos,
+		Vector3& p_newPos,
+		Vector3& p_intersectionPoint,
+		LegoOrientedEdge*& p_edge
+	);
 	MxU32 AddPresenterIfInRange(LegoAnimPresenter* p_presenter);
 	MxU32 RemovePresenter(LegoAnimPresenter* p_presenter);
 

@@ -87,7 +87,7 @@ void LegoPathBoundary::SwitchBoundary(
 	LegoPathActor* p_actor,
 	LegoPathBoundary*& p_boundary,
 	LegoOrientedEdge*& p_edge,
-	float& p_unk0xe4
+	float& p_scale
 )
 {
 	LegoOrientedEdge* e = p_edge;
@@ -99,7 +99,7 @@ void LegoPathBoundary::SwitchBoundary(
 			newBoundary = p_boundary;
 		}
 
-		MxS32 local10 = 0;
+		MxS32 availableEdgeCount = 0;
 		MxU8 userNavFlag;
 
 		if (e->BETA_1004a830(*newBoundary, 1)) {
@@ -111,38 +111,38 @@ void LegoPathBoundary::SwitchBoundary(
 
 		do {
 			p_edge = (LegoOrientedEdge*) p_edge->GetCounterclockwiseEdge(*newBoundary);
-			LegoPathBoundary* local20 = (LegoPathBoundary*) p_edge->OtherFace(newBoundary);
+			LegoPathBoundary* otherBoundary = (LegoPathBoundary*) p_edge->OtherFace(newBoundary);
 
-			if (p_edge->GetMask0x03() && (userNavFlag || p_edge->BETA_1004a830(*local20, 1))) {
-				local10++;
+			if (p_edge->GetMask0x03() && (userNavFlag || p_edge->BETA_1004a830(*otherBoundary, 1))) {
+				availableEdgeCount++;
 			}
 		} while (p_edge != e);
 
-		MxBool localc = TRUE;
-		MxS32 local8 = local10 - 1;
+		MxBool countCounterclockwise = TRUE;
+		MxS32 selectedEdgeIndex = availableEdgeCount - 1;
 
-		if (local10 <= 1) {
-			local8 = 0;
+		if (availableEdgeCount <= 1) {
+			selectedEdgeIndex = 0;
 		}
-		else if (local10 == 2) {
-			local8 = 1;
+		else if (availableEdgeCount == 2) {
+			selectedEdgeIndex = 1;
 		}
 		else {
-			p_actor->VTable0xa4(localc, local8);
+			p_actor->VTable0xa4(countCounterclockwise, selectedEdgeIndex);
 		}
 
-		while (local8 > 0) {
-			if (localc) {
+		while (selectedEdgeIndex > 0) {
+			if (countCounterclockwise) {
 				p_edge = (LegoOrientedEdge*) p_edge->GetCounterclockwiseEdge(*newBoundary);
 			}
 			else {
 				p_edge = (LegoOrientedEdge*) p_edge->GetClockwiseEdge(*newBoundary);
 			}
 
-			LegoPathBoundary* local20 = (LegoPathBoundary*) p_edge->OtherFace(newBoundary);
+			LegoPathBoundary* otherBoundary = (LegoPathBoundary*) p_edge->OtherFace(newBoundary);
 
-			if (p_edge->GetMask0x03() && (userNavFlag || p_edge->BETA_1004a830(*local20, 1))) {
-				local8--;
+			if (p_edge->GetMask0x03() && (userNavFlag || p_edge->BETA_1004a830(*otherBoundary, 1))) {
+				selectedEdgeIndex--;
 			}
 		}
 
@@ -157,7 +157,7 @@ void LegoPathBoundary::SwitchBoundary(
 			p_boundary->AddActor(p_actor);
 		}
 		else {
-			p_unk0xe4 = 1.0 - p_unk0xe4;
+			p_scale = 1.0 - p_scale;
 		}
 	}
 	else {
@@ -174,7 +174,7 @@ void LegoPathBoundary::SwitchBoundary(
 			p_edge = (LegoOrientedEdge*) p_edge->GetCounterclockwiseEdge(*p_boundary);
 		}
 
-		p_unk0xe4 = 1.0 - p_unk0xe4;
+		p_scale = 1.0 - p_scale;
 	}
 }
 
@@ -182,127 +182,128 @@ void LegoPathBoundary::SwitchBoundary(
 // FUNCTION: BETA10 0x100b1adc
 MxU32 LegoPathBoundary::Intersect(
 	float p_scale,
-	Vector3& p_point1,
-	Vector3& p_point2,
-	Vector3& p_point3,
+	Vector3& p_oldPos,
+	Vector3& p_newPos,
+	Vector3& p_intersectionPoint,
 	LegoOrientedEdge*& p_edge
 )
 {
 	LegoOrientedEdge* e = NULL;
-	float localc;
-	MxU32 local10 = 0;
+	float minHitDistance;
+	MxU32 normalizedCalculated = 0;
 	float len = 0.0f;
-	Mx3DPointFloat vec;
+	Mx3DPointFloat direction;
 
 	for (MxS32 i = 0; i < m_numEdges; i++) {
 		LegoOrientedEdge* edge = (LegoOrientedEdge*) m_edges[i];
 
-		if (p_point2.Dot(m_edgeNormals[i], p_point2) + m_edgeNormals[i][3] <= -1e-07) {
-			if (local10 == 0) {
-				local10 = 1;
-				vec = p_point2;
-				vec -= p_point1;
+		if (p_newPos.Dot(m_edgeNormals[i], p_newPos) + m_edgeNormals[i][3] <= -1e-07) {
+			if (normalizedCalculated == FALSE) {
+				normalizedCalculated = TRUE;
+				direction = p_newPos;
+				direction -= p_oldPos;
 
-				len = vec.LenSquared();
+				len = direction.LenSquared();
 				if (len <= 0.0f) {
 					return 0;
 				}
 
 				len = sqrt(len);
-				vec /= len;
+				direction /= len;
 			}
 
-			float dot = vec.Dot(vec, m_edgeNormals[i]);
+			float dot = direction.Dot(direction, m_edgeNormals[i]);
 			if (dot != 0.0f) {
-				float local34 = (-m_edgeNormals[i][3] - p_point1.Dot(p_point1, m_edgeNormals[i])) / dot;
+				float hitDistance = (-m_edgeNormals[i][3] - p_oldPos.Dot(p_oldPos, m_edgeNormals[i])) / dot;
 
-				if (local34 >= -0.001 && local34 <= len && (e == NULL || local34 < localc)) {
+				if (hitDistance >= -0.001 && hitDistance <= len && (e == NULL || hitDistance < minHitDistance)) {
 					e = edge;
-					localc = local34;
+					minHitDistance = hitDistance;
 				}
 			}
 		}
 	}
 
 	if (e != NULL) {
-		if (localc < 0.0f) {
-			localc = 0.0f;
+		if (minHitDistance < 0.0f) {
+			minHitDistance = 0.0f;
 		}
 
-		Mx3DPointFloat local50;
-		Mx3DPointFloat local70;
-		Vector3* local5c = e->CWVertex(*this);
+		Mx3DPointFloat startToPosition;
+		Mx3DPointFloat edgeNormal;
+		Vector3* start = e->CWVertex(*this);
 
-		p_point3 = vec;
-		p_point3 *= localc;
-		p_point3 += p_point1;
+		p_intersectionPoint = direction;
+		p_intersectionPoint *= minHitDistance;
+		p_intersectionPoint += p_oldPos;
 
-		local50 = p_point2;
-		local50 -= *local5c;
+		startToPosition = p_newPos;
+		startToPosition -= *start;
 
-		e->GetFaceNormal(*this, local70);
+		e->GetFaceNormal(*this, edgeNormal);
 
-		float local58 = local50.Dot(local50, local70);
-		LegoOrientedEdge* local54 = NULL;
+		float projection = startToPosition.Dot(startToPosition, edgeNormal);
+		LegoOrientedEdge* candidateEdge = NULL;
 
-		if (local58 < 0.0f) {
-			Mx3DPointFloat local84;
+		if (projection < 0.0f) {
+			Mx3DPointFloat candidateEdgeNormal;
 
-			for (LegoOrientedEdge* local88 = (LegoOrientedEdge*) e->GetClockwiseEdge(*this); e != local88;
-				 local88 = (LegoOrientedEdge*) local88->GetClockwiseEdge(*this)) {
-				local88->GetFaceNormal(*this, local84);
+			for (LegoOrientedEdge* cwEdge = (LegoOrientedEdge*) e->GetClockwiseEdge(*this); e != cwEdge;
+				 cwEdge = (LegoOrientedEdge*) cwEdge->GetClockwiseEdge(*this)) {
+				cwEdge->GetFaceNormal(*this, candidateEdgeNormal);
 
-				if (local84.Dot(local84, local70) <= 0.9) {
+				if (candidateEdgeNormal.Dot(candidateEdgeNormal, edgeNormal) <= 0.9) {
 					break;
 				}
 
-				Vector3* local90 = local88->CWVertex(*this);
-				Mx3DPointFloat locala4(p_point3);
-				locala4 -= *local90;
+				Vector3* candidateStart = cwEdge->CWVertex(*this);
+				Mx3DPointFloat candidateToIntersection(p_intersectionPoint);
+				candidateToIntersection -= *candidateStart;
 
-				float local8c = locala4.Dot(locala4, local84);
+				float candidateProjection = candidateToIntersection.Dot(candidateToIntersection, candidateEdgeNormal);
 
-				if (local8c > local58 && local8c < local88->m_length) {
-					local54 = local88;
-					local58 = local8c;
-					local70 = local84;
-					local5c = local90;
+				if (candidateProjection > projection && candidateProjection < cwEdge->m_length) {
+					candidateEdge = cwEdge;
+					projection = candidateProjection;
+					edgeNormal = candidateEdgeNormal;
+					start = candidateStart;
 				}
 			}
 		}
 		else {
-			if (e->m_length < local58) {
-				Mx3DPointFloat localbc;
+			if (e->m_length < projection) {
+				Mx3DPointFloat candidateEdgeNormal;
 
-				for (LegoOrientedEdge* locala8 = (LegoOrientedEdge*) e->GetCounterclockwiseEdge(*this); e != locala8;
-					 locala8 = (LegoOrientedEdge*) locala8->GetCounterclockwiseEdge(*this)) {
-					locala8->GetFaceNormal(*this, localbc);
+				for (LegoOrientedEdge* ccwEdge = (LegoOrientedEdge*) e->GetCounterclockwiseEdge(*this); e != ccwEdge;
+					 ccwEdge = (LegoOrientedEdge*) ccwEdge->GetCounterclockwiseEdge(*this)) {
+					ccwEdge->GetFaceNormal(*this, candidateEdgeNormal);
 
-					if (localbc.Dot(localbc, local70) <= 0.9) {
+					if (candidateEdgeNormal.Dot(candidateEdgeNormal, edgeNormal) <= 0.9) {
 						break;
 					}
 
-					Vector3* localc4 = locala8->CWVertex(*this);
-					Mx3DPointFloat locald8(p_point3);
-					locald8 -= *localc4;
+					Vector3* candidateStart = ccwEdge->CWVertex(*this);
+					Mx3DPointFloat candidateToIntersection(p_intersectionPoint);
+					candidateToIntersection -= *candidateStart;
 
-					float localc0 = locald8.Dot(locald8, localbc);
+					float candidateProjection =
+						candidateToIntersection.Dot(candidateToIntersection, candidateEdgeNormal);
 
-					if (localc0 < local58 && localc0 >= 0.0f) {
-						local54 = locala8;
-						local58 = localc0;
-						local70 = localbc;
-						local5c = localc4;
+					if (candidateProjection < projection && candidateProjection >= 0.0f) {
+						candidateEdge = ccwEdge;
+						projection = candidateProjection;
+						edgeNormal = candidateEdgeNormal;
+						start = candidateStart;
 					}
 				}
 			}
 		}
 
-		if (local54 != NULL) {
-			e = local54;
+		if (candidateEdge != NULL) {
+			e = candidateEdge;
 		}
 
-		if (local58 <= 0.0f) {
+		if (projection <= 0.0f) {
 			if (!e->GetMask0x03()) {
 				p_edge = (LegoOrientedEdge*) e->GetClockwiseEdge(*this);
 			}
@@ -310,18 +311,18 @@ MxU32 LegoPathBoundary::Intersect(
 				p_edge = e;
 			}
 
-			p_point3 = *local5c;
+			p_intersectionPoint = *start;
 			return 2;
 		}
-		else if (local58 > 0.0f && e->m_length > local58) {
-			p_point3 = local70;
-			p_point3 *= local58;
-			p_point3 += *local5c;
+		else if (projection > 0.0f && e->m_length > projection) {
+			p_intersectionPoint = edgeNormal;
+			p_intersectionPoint *= projection;
+			p_intersectionPoint += *start;
 			p_edge = e;
 			return 1;
 		}
 		else {
-			p_point3 = *e->CCWVertex(*this);
+			p_intersectionPoint = *e->CCWVertex(*this);
 
 			if (!e->GetMask0x03()) {
 				p_edge = (LegoOrientedEdge*) e->GetCounterclockwiseEdge(*this);
