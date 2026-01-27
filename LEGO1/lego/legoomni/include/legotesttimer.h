@@ -11,14 +11,14 @@
 class LegoTestTimer : public MxCore {
 public:
 	LegoTestTimer(LegoS32 p_numTimers, LegoS32 p_interval, LegoS32 p_numBins, LegoS32 p_type);
-	virtual ~LegoTestTimer();                // vtable+00
-	virtual MxLong Notify(MxParam& p_param); // vtable+04
+	~LegoTestTimer() override;                // vtable+00
+	MxLong Notify(MxParam& p_param) override; // vtable+04
 
 	// FUNCTION: BETA10 0x100d18e0
 	static const char* HandlerClassName() { return "LegoTestTimer"; }
 
 	// FUNCTION: BETA10 0x100d18b0
-	virtual const char* ClassName() const // vtable+0c
+	const char* ClassName() const override // vtable+0c
 	{
 		return HandlerClassName();
 	}
