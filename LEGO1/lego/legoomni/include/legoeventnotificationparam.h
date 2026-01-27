@@ -41,8 +41,13 @@ public:
 	{
 	}
 
+	// FUNCTION: BETA10 0x10026070
 	LegoROI* GetROI() { return m_roi; }
+
+	// FUNCTION: BETA10 0x1006aab0
 	MxU8 GetModifier() { return m_modifier; }
+
+	// FUNCTION: BETA10 0x100179a0
 	MxU8 GetKey() const { return m_key; }
 
 	// FUNCTION: LEGO1 0x10012190
