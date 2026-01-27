@@ -8,8 +8,7 @@ MxU32 MxCore::g_nextCoreId = 0;
 
 // FUNCTION: LEGO1 0x100ae1a0
 // FUNCTION: BETA10 0x1012c020
-MxCore::MxCore()
-{
+MxCore::MxCore() {
 	m_id = g_nextCoreId++;
 	assert(g_nextCoreId);
 }
