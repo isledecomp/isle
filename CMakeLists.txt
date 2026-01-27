@@ -371,6 +371,7 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/worlds/police.cpp
     LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp
     LEGO1/lego/legoomni/src/entity/legopovcontroller.cpp
+    LEGO1/lego/legoomni/src/common/legotesttimer.cpp
     LEGO1/lego/legoomni/src/common/legotextureinfo.cpp
     LEGO1/lego/legoomni/src/actors/doors.cpp
     LEGO1/lego/legoomni/src/entity/legoworldpresenter.cpp
