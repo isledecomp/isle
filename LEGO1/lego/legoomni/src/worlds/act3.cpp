@@ -650,7 +650,7 @@ MxLong Act3::Notify(MxParam& p_param)
 				m_state->m_state = Act3State::e_initial;
 				Disable(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 				m_copter->HandleClick();
-				m_copter->m_state->m_unk0x08 = 1;
+				m_copter->m_state->m_status = 1;
 				m_copter->HandleEndAnim((LegoEndAnimNotificationParam&) param);
 			}
 			break;
@@ -783,15 +783,15 @@ void Act3::GoodEnding(const Matrix4& p_destination)
 
 #ifndef BETA10
 	m_unk0x4220.Clear();
-	m_copter->FUN_10004640(p_destination);
+	m_copter->StartGoodEndingCamera(p_destination);
 
 	DebugPrintf("In Good Ending...");
 	DebugCopter(
 		m_copter->GetROI()->GetLocal2World(),
 		p_destination,
-		m_copter->m_unk0x160,
-		m_copter->m_unk0x1a8,
-		m_copter->m_unk0x1f4
+		m_copter->m_cameraTransitionStartMatrix,
+		m_copter->m_cameraTransitionEndMatrix,
+		m_copter->m_cameraTransitionInterpolator
 	);
 #else
 	m_state->m_state = Act3State::e_goodEnding;
@@ -866,15 +866,15 @@ void Act3::BadEnding(const Matrix4& p_destination)
 	m_brickster->SetActorState(LegoPathActor::c_disabled);
 
 	m_unk0x4220.Clear();
-	m_copter->FUN_10004670(p_destination);
+	m_copter->StartBadEndingCamera(p_destination);
 
 	DebugPrintf("In Bad Ending...");
 	DebugCopter(
 		m_copter->GetROI()->GetLocal2World(),
 		p_destination,
-		m_copter->m_unk0x160,
-		m_copter->m_unk0x1a8,
-		m_copter->m_unk0x1f4
+		m_copter->m_cameraTransitionStartMatrix,
+		m_copter->m_cameraTransitionEndMatrix,
+		m_copter->m_cameraTransitionInterpolator
 	);
 }
 
