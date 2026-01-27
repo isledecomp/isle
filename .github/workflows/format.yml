@@ -16,4 +16,4 @@ jobs:
         pipx run "clang-format>=17,<18" \
           --style=file \
           -i
-        git diff --exit-code
+        git diff --color --exit-code
