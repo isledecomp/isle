@@ -81,12 +81,12 @@ void LegoTestTimer::Tick(LegoS32 p_timer)
 			}
 
 			m_lastTime[p_timer] = time;
-			LegoS32 local_14 = dtim / m_interval;
-			if (local_14 >= m_numBins) {
-				local_14 = m_numBins - 1;
+			LegoS32 binIndex = dtim / m_interval;
+			if (binIndex >= m_numBins) {
+				binIndex = m_numBins - 1;
 			}
 
-			m_timers[p_timer][local_14]++;
+			m_timers[p_timer][binIndex]++;
 			m_totalTime[p_timer] += dtim;
 		}
 	}
