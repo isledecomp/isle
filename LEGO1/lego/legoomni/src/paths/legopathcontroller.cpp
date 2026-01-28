@@ -223,8 +223,14 @@ MxResult LegoPathController::PlaceActor(
 	assert(pSrcE && pDestE);
 
 	float time = Timer()->GetTime();
-	MxResult result =
-		p_actor->VTable0x88(pBoundary, time, *pSrcE, p_srcScale, (LegoOrientedEdge&) *pDestE, p_destScale);
+	MxResult result = p_actor->SetTransformAndDestinationFromEdge(
+		pBoundary,
+		time,
+		*pSrcE,
+		p_srcScale,
+		(LegoOrientedEdge&) *pDestE,
+		p_destScale
+	);
 
 	if (result != SUCCESS) {
 		assert(0);
@@ -298,7 +304,8 @@ MxResult LegoPathController::PlaceActor(
 				return FAILURE;
 			}
 
-			if (p_actor->VTable0x84(boundary, time, p_position, p_direction, edge, 0.5f) == SUCCESS) {
+			if (p_actor->SetTransformAndDestinationFromPoints(boundary, time, p_position, p_direction, edge, 0.5f) ==
+				SUCCESS) {
 				p_actor->SetController(this);
 				m_actors.insert(p_actor);
 				return SUCCESS;

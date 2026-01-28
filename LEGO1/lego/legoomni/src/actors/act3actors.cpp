@@ -100,20 +100,20 @@ Act3Actor::Act3Actor()
 
 // FUNCTION: LEGO1 0x1003fb70
 // FUNCTION: BETA10 0x100180ab
-MxU32 Act3Actor::VTable0x90(float p_time, Matrix4& p_transform)
+MxU32 Act3Actor::StepState(float p_time, Matrix4& p_transform)
 {
-	// Note: Code duplication with LegoExtraActor::VTable0x90
+	// Note: Code duplication with LegoExtraActor::StepState
 	switch (m_actorState & c_maxState) {
 	case c_initial:
-	case c_one:
+	case c_ready:
 		return TRUE;
-	case c_two:
+	case c_hit:
 		m_unk0x1c = p_time + 2000.0f;
-		m_actorState = c_three;
-		m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
-		m_lastTime = p_time;
+		m_actorState = c_hitAnimation;
+		m_actorTime += (p_time - m_transformTime) * m_worldSpeed;
+		m_transformTime = p_time;
 		return FALSE;
-	case c_three:
+	case c_hitAnimation:
 		assert(!m_userNavFlag);
 		Vector3 positionRef(p_transform[3]);
 
@@ -127,10 +127,10 @@ MxU32 Act3Actor::VTable0x90(float p_time, Matrix4& p_transform)
 			p_transform.RotateX(0.6);
 			positionRef = position;
 
-			m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
-			m_lastTime = p_time;
+			m_actorTime += (p_time - m_transformTime) * m_worldSpeed;
+			m_transformTime = p_time;
 
-			VTable0x74(p_transform);
+			ApplyTransform(p_transform);
 			return FALSE;
 		}
 		else {
@@ -166,7 +166,7 @@ MxResult Act3Actor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 		roi->SetLocal2World(local2world);
 		roi->WrappedUpdateWorldData();
 
-		p_actor->SetActorState(c_two | c_noCollide);
+		p_actor->SetActorState(c_hit | c_noCollide);
 	}
 
 	return SUCCESS;
@@ -195,7 +195,7 @@ MxResult Act3Cop::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 
 		assert(m_world);
 		((Act3*) m_world)->EatDonut(index);
-		m_unk0x20 = m_lastTime + 2000;
+		m_unk0x20 = m_transformTime + 2000;
 		SetWorldSpeed(6.0);
 
 		assert(SoundManager()->GetCacheSoundManager());
@@ -284,7 +284,7 @@ void Act3Cop::Animate(float p_time)
 {
 	Act3Actor::Animate(p_time);
 
-	if (m_unk0x20 > 0.0f && m_unk0x20 < m_lastTime) {
+	if (m_unk0x20 > 0.0f && m_unk0x20 < m_transformTime) {
 		SetWorldSpeed(2.0f);
 		m_unk0x20 = -1.0f;
 	}
@@ -328,7 +328,7 @@ MxResult Act3Cop::FUN_10040360()
 	LegoPathEdgeContainer* grec = NULL;
 	Act3* a3 = (Act3*) m_world;
 
-	MxMatrix local74(m_unk0xec);
+	MxMatrix local74(m_local2World);
 	Vector3 local2c(local74[3]);
 	Vector3 local20(local74[2]);
 
@@ -456,7 +456,7 @@ MxResult Act3Cop::FUN_10040360()
 			vecUnk = m_grec->m_position;
 			m_boundary = m_grec->m_boundary;
 
-			m_grec->m_direction = m_unk0xec[3];
+			m_grec->m_direction = m_local2World[3];
 			m_grec->m_direction -= vecUnk;
 		}
 		else {
@@ -469,7 +469,7 @@ MxResult Act3Cop::FUN_10040360()
 
 			local128 = *v2;
 			local128 -= *v1;
-			local128 *= m_unk0xe4;
+			local128 *= m_destScale;
 			local128 += *v1;
 			local128 *= -1.0f;
 			local128 += m_grec->m_position;
@@ -484,14 +484,14 @@ MxResult Act3Cop::FUN_10040360()
 
 			vecUnk = *v2;
 			vecUnk -= *v1;
-			vecUnk *= m_unk0xe4;
+			vecUnk *= m_destScale;
 			vecUnk += *v1;
 		}
 
-		Vector3 v1(m_unk0xec[0]);
-		Vector3 v2(m_unk0xec[1]);
-		Vector3 v3(m_unk0xec[2]);
-		Vector3 v4(m_unk0xec[3]);
+		Vector3 v1(m_local2World[0]);
+		Vector3 v2(m_local2World[1]);
+		Vector3 v3(m_local2World[2]);
+		Vector3 v4(m_local2World[3]);
 
 		v3 = v4;
 		v3 -= vecUnk;
@@ -500,7 +500,7 @@ MxResult Act3Cop::FUN_10040360()
 		v1.Unitize();
 		v2.EqualsCross(v3, v1);
 
-		VTable0x9c();
+		CalculateSpline();
 	}
 
 	return SUCCESS;
@@ -508,17 +508,17 @@ MxResult Act3Cop::FUN_10040360()
 
 // FUNCTION: LEGO1 0x10040d20
 // FUNCTION: BETA10 0x1001942c
-MxResult Act3Cop::VTable0x9c()
+MxResult Act3Cop::CalculateSpline()
 {
 	if (m_grec && !m_grec->HasPath()) {
 		delete m_grec;
 		m_grec = NULL;
-		m_lastTime = Timer()->GetTime();
+		m_transformTime = Timer()->GetTime();
 		FUN_10040360();
 		return SUCCESS;
 	}
 
-	return Act3Actor::VTable0x9c();
+	return Act3Actor::CalculateSpline();
 }
 
 // FUNCTION: LEGO1 0x10040e10
@@ -570,7 +570,7 @@ void Act3Brickster::ParseAction(char* p_extra)
 // FUNCTION: BETA10 0x100197d7
 void Act3Brickster::Animate(float p_time)
 {
-	if (m_lastTime <= m_unk0x20 && m_unk0x20 <= p_time) {
+	if (m_transformTime <= m_unk0x20 && m_unk0x20 <= p_time) {
 		SetWorldSpeed(5.0f);
 	}
 
@@ -618,7 +618,7 @@ void Act3Brickster::Animate(float p_time)
 		}
 		else {
 			MxMatrix local70;
-			local70 = m_unk0xec;
+			local70 = m_local2World;
 
 			Vector3 local14(local70[0]);
 			Vector3 local28(local70[1]);
@@ -642,7 +642,7 @@ void Act3Brickster::Animate(float p_time)
 			}
 		}
 
-		m_lastTime = p_time;
+		m_transformTime = p_time;
 		break;
 	case 4:
 		assert(m_shootAnim && m_bInfo);
@@ -663,7 +663,7 @@ void Act3Brickster::Animate(float p_time)
 		}
 		else {
 			MxMatrix locale4;
-			locale4 = m_unk0xec;
+			locale4 = m_local2World;
 
 			Vector3 local88(locale4[0]);
 			Vector3 local9c(locale4[1]);
@@ -689,7 +689,7 @@ void Act3Brickster::Animate(float p_time)
 			}
 		}
 
-		m_lastTime = p_time;
+		m_transformTime = p_time;
 		break;
 	case 5:
 		if (m_grec == NULL) {
@@ -793,11 +793,11 @@ MxResult Act3Brickster::FUN_100417c0()
 	LegoPathEdgeContainer* grec = NULL;
 	Act3* a3 = (Act3*) m_world;
 
-	MxMatrix local70(m_unk0xec);
+	MxMatrix local70(m_local2World);
 	Vector3 local28(local70[3]);
 	Vector3 local20(local70[2]);
 
-	if (m_unk0x58 < 8 && m_unk0x24 + 5000.0f < m_lastTime) {
+	if (m_unk0x58 < 8 && m_unk0x24 + 5000.0f < m_transformTime) {
 		float local18;
 
 		for (MxS32 i = 0; i < MAX_PIZZAS; i++) {
@@ -950,7 +950,7 @@ MxResult Act3Brickster::FUN_100417c0()
 			vecUnk = m_grec->m_position;
 			m_boundary = m_grec->m_boundary;
 
-			m_grec->m_direction = m_unk0xec[3];
+			m_grec->m_direction = m_local2World[3];
 			m_grec->m_direction -= vecUnk;
 
 			local150 = m_grec->m_direction;
@@ -964,7 +964,7 @@ MxResult Act3Brickster::FUN_100417c0()
 
 			local150 = *v2;
 			local150 -= *v1;
-			local150 *= m_unk0xe4;
+			local150 *= m_destScale;
 			local150 += *v1;
 			local150 *= -1.0f;
 			local150 += m_grec->m_position;
@@ -979,14 +979,14 @@ MxResult Act3Brickster::FUN_100417c0()
 
 			vecUnk = *v2;
 			vecUnk -= *v1;
-			vecUnk *= m_unk0xe4;
+			vecUnk *= m_destScale;
 			vecUnk += *v1;
 		}
 
-		Vector3 v1(m_unk0xec[0]);
-		Vector3 v2(m_unk0xec[1]);
-		Vector3 v3(m_unk0xec[2]);
-		Vector3 v4(m_unk0xec[3]);
+		Vector3 v1(m_local2World[0]);
+		Vector3 v2(m_local2World[1]);
+		Vector3 v3(m_local2World[2]);
+		Vector3 v4(m_local2World[3]);
 
 		v3 = v4;
 		v3 -= vecUnk;
@@ -995,7 +995,7 @@ MxResult Act3Brickster::FUN_100417c0()
 		v1.Unitize();
 		v2.EqualsCross(v3, v1);
 
-		VTable0x9c();
+		CalculateSpline();
 
 		if (m_pInfo != NULL) {
 			m_unk0x38 = 5;
@@ -1098,10 +1098,10 @@ MxS32 Act3Brickster::FUN_10042300()
 		m_destEdge = maxE;
 
 		if (m_boundary != boundaries[0]) {
-			m_unk0xe4 = 1.0 - m_unk0xe4;
+			m_destScale = 1.0 - m_destScale;
 		}
 
-		VTable0x9c();
+		CalculateSpline();
 	}
 
 	return -1;
@@ -1118,16 +1118,16 @@ void Act3Brickster::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoOrientedEd
 
 // FUNCTION: LEGO1 0x100429d0
 // FUNCTION: BETA10 0x1001b75b
-MxResult Act3Brickster::VTable0x9c()
+MxResult Act3Brickster::CalculateSpline()
 {
 	if (m_grec && !m_grec->HasPath()) {
 		delete m_grec;
 		m_grec = NULL;
-		m_lastTime = Timer()->GetTime();
+		m_transformTime = Timer()->GetTime();
 		return SUCCESS;
 	}
 
-	return Act3Actor::VTable0x9c();
+	return Act3Actor::CalculateSpline();
 }
 
 // FUNCTION: LEGO1 0x10042ab0

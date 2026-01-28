@@ -57,7 +57,7 @@ class Act3Actor : public LegoAnimActor {
 public:
 	Act3Actor();
 
-	MxU32 VTable0x90(float p_time, Matrix4& p_transform) override;     // vtable+0x90
+	MxU32 StepState(float p_time, Matrix4& p_transform) override;      // vtable+0x90
 	MxResult HitActor(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 
 	// FUNCTION: LEGO1 0x100431b0
@@ -105,7 +105,7 @@ public:
 	void ParseAction(char* p_extra) override;           // vtable+0x20
 	void Animate(float p_time) override;                // vtable+0x70
 	MxResult HitActor(LegoPathActor*, MxBool) override; // vtable+0x94
-	MxResult VTable0x9c() override;                     // vtable+0x9c
+	MxResult CalculateSpline() override;                // vtable+0x9c
 
 	MxFloat GetUnknown0x20() { return m_unk0x20; }
 
@@ -142,8 +142,8 @@ public:
 		LegoPathBoundary*& p_boundary,
 		LegoOrientedEdge*& p_edge,
 		float& p_unk0xe4
-	) override;                     // vtable+0x98
-	MxResult VTable0x9c() override; // vtable+0x9c
+	) override;                          // vtable+0x98
+	MxResult CalculateSpline() override; // vtable+0x9c
 
 	MxFloat GetUnknown0x20() { return m_unk0x20; }
 	MxFloat GetUnknown0x24() { return m_unk0x24; }

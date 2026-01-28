@@ -32,7 +32,7 @@ LegoExtraActor::LegoExtraActor()
 {
 	m_lastPathStruct = 0.0f;
 	m_scheduledTime = 0;
-	m_unk0x0c = 0;
+	m_pathWalkingMode = 0;
 	m_animationAtCurrentBoundary = FALSE;
 	m_reassemblyAnimation = e_none;
 	m_assAnim = NULL;
@@ -48,19 +48,19 @@ LegoExtraActor::~LegoExtraActor()
 }
 
 // FUNCTION: LEGO1 0x1002a720
-MxU32 LegoExtraActor::VTable0x90(float p_time, Matrix4& p_transform)
+MxU32 LegoExtraActor::StepState(float p_time, Matrix4& p_transform)
 {
 	switch (m_actorState & c_maxState) {
 	case c_initial:
-	case c_one:
+	case c_ready:
 		return TRUE;
-	case c_two:
+	case c_hit:
 		m_scheduledTime = p_time + 2000.0f;
-		m_actorState = c_three;
-		m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
-		m_lastTime = p_time;
+		m_actorState = c_hitAnimation;
+		m_actorTime += (p_time - m_transformTime) * m_worldSpeed;
+		m_transformTime = p_time;
 		return FALSE;
-	case c_three: {
+	case c_hitAnimation: {
 		Vector3 positionRef(p_transform[3]);
 		p_transform = m_roi->GetLocal2World();
 
@@ -89,9 +89,9 @@ MxU32 LegoExtraActor::VTable0x90(float p_time, Matrix4& p_transform)
 			}
 
 			positionRef = position;
-			m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
-			m_lastTime = p_time;
-			VTable0x74(p_transform);
+			m_actorTime += (p_time - m_transformTime) * m_worldSpeed;
+			m_transformTime = p_time;
+			ApplyTransform(p_transform);
 			return FALSE;
 		}
 		else {
@@ -109,20 +109,20 @@ MxU32 LegoExtraActor::VTable0x90(float p_time, Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x1002aa90
-void LegoExtraActor::VTable0xa4(MxBool& p_und1, MxS32& p_und2)
+void LegoExtraActor::GetWalkingBehavior(MxBool& p_countCounterclockWise, MxS32& p_selectedEdgeIndex)
 {
-	switch (m_unk0x0c) {
+	switch (m_pathWalkingMode) {
 	case 1:
-		p_und1 = TRUE;
-		p_und2 = 1;
+		p_countCounterclockWise = TRUE;
+		p_selectedEdgeIndex = 1;
 		break;
 	case 2:
-		p_und1 = FALSE;
-		p_und2 = 1;
+		p_countCounterclockWise = FALSE;
+		p_selectedEdgeIndex = 1;
 		break;
 	default:
-		p_und1 = TRUE;
-		p_und2 = rand() % p_und2 + 1;
+		p_countCounterclockWise = TRUE;
+		p_selectedEdgeIndex = rand() % p_selectedEdgeIndex + 1;
 		break;
 	}
 }
@@ -131,10 +131,10 @@ void LegoExtraActor::VTable0xa4(MxBool& p_und1, MxS32& p_und2)
 MxResult LegoExtraActor::SwitchDirection()
 {
 	LegoPathBoundary* oldEdge = m_boundary;
-	Vector3 rightRef(m_unk0xec[0]);
-	Vector3 upRef(m_unk0xec[1]);
-	Vector3 dirRef(m_unk0xec[2]);
-	Vector3 positionRef(m_unk0xec[3]);
+	Vector3 rightRef(m_local2World[0]);
+	Vector3 upRef(m_local2World[1]);
+	Vector3 dirRef(m_local2World[2]);
+	Vector3 positionRef(m_local2World[3]);
 
 	dirRef *= -1.0f;
 	rightRef.EqualsCross(upRef, dirRef);
@@ -150,7 +150,7 @@ MxResult LegoExtraActor::SwitchDirection()
 		m_boundary = oldEdge;
 	}
 
-	LegoPathActor::VTable0x9c();
+	LegoPathActor::CalculateSpline();
 	return SUCCESS;
 }
 
@@ -240,7 +240,7 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 				VTable0xc4();
 				SetWorldSpeed(0);
 				m_reassemblyAnimation = e_disassemble;
-				SetActorState(c_one | c_noCollide);
+				SetActorState(c_ready | c_noCollide);
 			}
 		}
 
@@ -249,7 +249,7 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			assert(roi);
 			SoundManager()->GetCacheSoundManager()->Play("crash5", m_roi->GetName(), FALSE);
 			VTable0xc4();
-			SetActorState(c_two | c_noCollide);
+			SetActorState(c_hit | c_noCollide);
 			Mx3DPointFloat dir = p_actor->GetWorldDirection();
 			MxMatrix matrix3 = MxMatrix(roi->GetLocal2World());
 			Vector3 positionRef(matrix3[3]);
@@ -272,10 +272,10 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 }
 
 // FUNCTION: LEGO1 0x1002b290
-MxResult LegoExtraActor::VTable0x9c()
+MxResult LegoExtraActor::CalculateSpline()
 {
 	LegoPathBoundary* oldBoundary = m_boundary;
-	MxResult result = LegoPathActor::VTable0x9c();
+	MxResult result = LegoPathActor::CalculateSpline();
 
 	if (m_boundary != oldBoundary) {
 		MxU32 foundAnimation = FALSE;
@@ -333,7 +333,7 @@ void LegoExtraActor::Animate(float p_time)
 	case e_disassemble:
 		if (m_scheduledTime < p_time) {
 			m_reassemblyAnimation = e_assemble;
-			m_actorState = c_one | c_noCollide;
+			m_actorState = c_ready | c_noCollide;
 			m_scheduledTime = m_assAnim->GetDuration() + p_time;
 			break;
 		}
@@ -347,7 +347,7 @@ void LegoExtraActor::Animate(float p_time)
 			m_actorState = c_initial;
 			SetWorldSpeed(m_prevWorldSpeed);
 			m_roi->SetLocal2World(m_localBeforeHit);
-			m_lastTime = p_time;
+			m_transformTime = p_time;
 			break;
 		}
 		else {
@@ -379,10 +379,10 @@ void LegoExtraActor::Animate(float p_time)
 }
 
 // FUNCTION: LEGO1 0x1002b5d0
-void LegoExtraActor::VTable0x74(Matrix4& p_transform)
+void LegoExtraActor::ApplyTransform(Matrix4& p_transform)
 {
 	if (m_reassemblyAnimation == e_none) {
-		LegoAnimActor::VTable0x74(p_transform);
+		LegoAnimActor::ApplyTransform(p_transform);
 	}
 }
 
@@ -409,32 +409,32 @@ void LegoExtraActor::VTable0xc4()
 
 		if (b) {
 			float duration = m_animMaps[m_curAnim]->GetDuration();
-			MxMatrix matrix(m_unk0xec);
+			MxMatrix matrix(m_local2World);
 			LegoAnimActor::AnimateWithTransform(duration, matrix);
 		}
 	}
 }
 
 // FUNCTION: LEGO1 0x1002b6f0
-MxS32 LegoExtraActor::VTable0x68(Vector3& p_point1, Vector3& p_point2, Vector3& p_point3)
+MxS32 LegoExtraActor::CheckIntersections(Vector3& p_rayOrigin, Vector3& p_rayEnd, Vector3& p_intersectionPoint)
 {
-	return LegoPathActor::VTable0x68(p_point1, p_point2, p_point3);
+	return LegoPathActor::CheckIntersections(p_rayOrigin, p_rayEnd, p_intersectionPoint);
 }
 
 // FUNCTION: LEGO1 0x1002b980
-inline MxU32 LegoExtraActor::VTable0x6c(
+inline MxU32 LegoExtraActor::CheckPresenterAndActorIntersections(
 	LegoPathBoundary* p_boundary,
-	Vector3& p_v1,
-	Vector3& p_v2,
-	float p_f1,
-	float p_f2,
-	Vector3& p_v3
+	Vector3& p_rayOrigin,
+	Vector3& p_rayDirection,
+	float p_rayLength,
+	float p_radius,
+	Vector3& p_intersectionPoint
 )
 {
 	LegoAnimPresenterSet& presenters = p_boundary->GetPresenters();
 
 	for (LegoAnimPresenterSet::iterator itap = presenters.begin(); itap != presenters.end(); itap++) {
-		if ((*itap)->Intersect(p_v1, p_v2, p_f1, p_f2, p_v3)) {
+		if ((*itap)->Intersect(p_rayOrigin, p_rayDirection, p_rayLength, p_radius, p_intersectionPoint)) {
 			return 1;
 		}
 	}
@@ -453,11 +453,11 @@ inline MxU32 LegoExtraActor::VTable0x6c(
 					if (actor->GetUserNavFlag()) {
 						MxMatrix local2world = roi->GetLocal2World();
 						Vector3 local60(local2world[3]);
-						Mx3DPointFloat local54(p_v1);
+						Mx3DPointFloat local54(p_rayOrigin);
 
 						local54 -= local60;
-						float local1c = p_v2.Dot(p_v2, p_v2);
-						float local24 = p_v2.Dot(p_v2, local54) * 2.0f;
+						float local1c = p_rayDirection.Dot(p_rayDirection, p_rayDirection);
+						float local24 = p_rayDirection.Dot(p_rayDirection, local54) * 2.0f;
 						float local20 = local54.Dot(local54, local54);
 
 						if (m_hitBlockCounter != 0 && local20 < 10.0f) {
@@ -487,9 +487,10 @@ inline MxU32 LegoExtraActor::VTable0x6c(
 									local1cX = local40;
 								}
 
-								if ((local20X >= 0.0f && local20X <= p_f1) || (local1cX >= 0.0f && local1cX <= p_f1) ||
-									(local20X <= -0.01 && p_f1 + 0.01 <= local1cX)) {
-									p_v3 = p_v1;
+								if ((local20X >= 0.0f && local20X <= p_rayLength) ||
+									(local1cX >= 0.0f && local1cX <= p_rayLength) ||
+									(local20X <= -0.01 && p_rayLength + 0.01 <= local1cX)) {
+									p_intersectionPoint = p_rayOrigin;
 
 									if (HitActor(actor, TRUE) < 0) {
 										return 0;
@@ -502,7 +503,14 @@ inline MxU32 LegoExtraActor::VTable0x6c(
 						}
 					}
 					else {
-						if (roi->Intersect(p_v1, p_v2, p_f1, p_f2, p_v3, m_collideBox && actor->GetCollideBox())) {
+						if (roi->Intersect(
+								p_rayOrigin,
+								p_rayDirection,
+								p_rayLength,
+								p_radius,
+								p_intersectionPoint,
+								m_collideBox && actor->GetCollideBox()
+							)) {
 							if (HitActor(actor, TRUE) < 0) {
 								return 0;
 							}

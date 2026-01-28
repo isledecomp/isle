@@ -36,30 +36,31 @@ public:
 		return !strcmp(p_name, LegoExtraActor::ClassName()) || LegoAnimActor::IsA(p_name);
 	}
 
-	void SetWorldSpeed(MxFloat p_worldSpeed) override;                                  // vtable+0x30
-	MxS32 VTable0x68(Vector3& p_point1, Vector3& p_point2, Vector3& p_point3) override; // vtable+0x68
-	inline MxU32 VTable0x6c(
+	void SetWorldSpeed(MxFloat p_worldSpeed) override; // vtable+0x30
+	MxS32 CheckIntersections(Vector3& p_rayOrigin, Vector3& p_rayEnd, Vector3& p_intersectionPoint)
+		override; // vtable+0x68
+	inline MxU32 CheckPresenterAndActorIntersections(
 		LegoPathBoundary* p_boundary,
-		Vector3& p_v1,
-		Vector3& p_v2,
-		float p_f1,
-		float p_f2,
-		Vector3& p_v3
-	) override;                                                        // vtable+0x6c
-	void Animate(float p_time) override;                               // vtable+0x70
-	void VTable0x74(Matrix4& p_transform) override;                    // vtable+0x74
-	MxU32 VTable0x90(float p_time, Matrix4& p_matrix) override;        // vtable+0x90
-	MxResult HitActor(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
-	MxResult VTable0x9c() override;                                    // vtable+0x9c
-	void VTable0xa4(MxBool& p_und1, MxS32& p_und2) override;           // vtable+0xa4
-	void VTable0xc4() override;                                        // vtable+0xc4
+		Vector3& p_rayOrigin,
+		Vector3& p_rayDirection,
+		float p_rayLength,
+		float p_radius,
+		Vector3& p_intersectionPoint
+	) override;                                                                                    // vtable+0x6c
+	void Animate(float p_time) override;                                                           // vtable+0x70
+	void ApplyTransform(Matrix4& p_transform) override;                                            // vtable+0x74
+	MxU32 StepState(float p_time, Matrix4& p_matrix) override;                                     // vtable+0x90
+	MxResult HitActor(LegoPathActor* p_actor, MxBool p_bool) override;                             // vtable+0x94
+	MxResult CalculateSpline() override;                                                           // vtable+0x9c
+	void GetWalkingBehavior(MxBool& p_countCounterclockWise, MxS32& p_selectedEdgeIndex) override; // vtable+0xa4
+	void VTable0xc4() override;                                                                    // vtable+0xc4
 
 	virtual MxResult SwitchDirection();
 
 	void Restart();
 	inline void InitializeReassemblyAnim();
 
-	void SetUnknown0x0c(undefined p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
+	void SetPathWalkingMode(MxU8 p_pathWalkingMode) { m_pathWalkingMode = p_pathWalkingMode; }
 
 	// SYNTHETIC: LEGO1 0x1002b760
 	// LegoExtraActor::`scalar deleting destructor'
@@ -72,7 +73,7 @@ private:
 	};
 
 	MxFloat m_scheduledTime;             // 0x08
-	undefined m_unk0x0c;                 // 0x0c
+	MxU8 m_pathWalkingMode;              // 0x0c
 	MxU8 m_axis;                         // 0x0d
 	MxBool m_animationAtCurrentBoundary; // 0x0e
 	MxFloat m_prevWorldSpeed;            // 0x10

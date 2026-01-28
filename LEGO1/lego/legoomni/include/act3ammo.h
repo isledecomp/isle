@@ -90,7 +90,7 @@ public:
 	// Act3Ammo::`scalar deleting destructor'
 
 private:
-	MxResult CalculateTransform(float p_curveParameter, Matrix4& p_transform);
+	MxResult CalculateTransformOnCurve(float p_curveParameter, Matrix4& p_transform);
 
 	static Mx3DPointFloat g_hitTranslation;
 

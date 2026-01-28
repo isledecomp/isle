@@ -179,7 +179,7 @@ MxResult Act2Actor::HitActor(LegoPathActor*, MxBool)
 }
 
 // FUNCTION: LEGO1 0x10018a20
-MxResult Act2Actor::VTable0x9c()
+MxResult Act2Actor::CalculateSpline()
 {
 	if (m_grec && !m_grec->HasPath()) {
 		delete m_grec;
@@ -198,7 +198,7 @@ MxResult Act2Actor::VTable0x9c()
 			brickstrROI->UpdateTransformationRelativeToParent(brickstrMatrix);
 		}
 
-		return LegoPathActor::VTable0x9c();
+		return LegoPathActor::CalculateSpline();
 	}
 }
 
@@ -607,7 +607,7 @@ MxU32 Act2Actor::UpdateShot(MxFloat p_time)
 		return FALSE;
 	}
 
-	m_lastTime = p_time;
+	m_transformTime = p_time;
 	LegoROI* brickstrROI = FindROI("brickstr");
 
 	MxMatrix initialTransform = m_roi->GetLocal2World();

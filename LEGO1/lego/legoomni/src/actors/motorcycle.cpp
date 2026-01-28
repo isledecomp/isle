@@ -22,8 +22,8 @@ DECOMP_SIZE_ASSERT(Motocycle, 0x16c)
 Motocycle::Motocycle()
 {
 	m_maxLinearVel = 40.0;
-	m_unk0x150 = 1.75;
-	m_unk0x148 = 1;
+	m_linearRotationRatio = 1.75;
+	m_canRotate = 1;
 	m_fuel = 1.0;
 }
 

@@ -69,7 +69,7 @@ public:
 
 	MxResult Create(MxDSAction& p_dsAction) override;                            // vtable+0x18
 	void Animate(float p_time) override;                                         // vtable+0x70
-	void VTable0x74(Matrix4& p_transform) override;                              // vtable+0x74
+	void ApplyTransform(Matrix4& p_transform) override;                          // vtable+0x74
 	MxLong HandleClick() override;                                               // vtable+0xcc
 	MxLong HandleControl(LegoControlManagerNotificationParam& p_param) override; // vtable+0xd4
 	MxLong HandleEndAnim(LegoEndAnimNotificationParam& p_param) override;        // vtable+0xd8
