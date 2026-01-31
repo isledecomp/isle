@@ -685,32 +685,67 @@ types:
         doc: Vertex indices for each triangle.
       - id: num_texture_indices
         type: u4
-        doc: Number of texture index sets (0 if untextured).
+        doc: |
+          Total number of texture indices. Should equal num_polygons * 3
+          if textured, or 0 if untextured.
       - id: texture_indices
-        type: polygon_indices
+        type: texture_indices
         repeat: expr
         repeat-expr: num_polygons
         if: num_texture_indices > 0
-        doc: Texture coordinate indices for each triangle.
+        doc: |
+          Texture coordinate indices for each triangle. Unlike polygon_indices,
+          these are simple U32 indices into the LOD's texture_vertices array,
+          not packed values. Each index directly references a UV coordinate pair.
       - id: properties
         type: mesh_properties
         doc: Material and rendering properties.
 
   polygon_indices:
     doc: |
-      Three vertex/normal index pairs forming a triangle. Each 32-bit value
-      is a packed index used by Direct3D Retained Mode, containing both
-      vertex and normal indices.
+      Three packed indices forming a triangle. Each 32-bit value contains
+      vertex index, normal index, and a "create vertex" flag used by
+      Direct3D Retained Mode mesh building.
+
+      Bit layout of each packed value:
+      - Bits 0-15 (16 bits): When create flag is set, this is the index into
+        the LOD's vertices array. When create flag is clear, this is the index
+        into the mesh's built vertex buffer (referencing a previously created vertex).
+      - Bits 16-30 (15 bits): Index into the LOD's normals array
+      - Bit 31: Create vertex flag. When set (1), a new mesh vertex is created
+        combining position, normal, and texture UV. When clear (0), the value
+        in bits 0-15 references an existing mesh vertex by index.
+
+      The mesh builder creates a vertex buffer where each unique position+normal+UV
+      combination gets an entry. Texture indices (in texture_indices) are only
+      consumed when the create flag is set.
     seq:
       - id: a
         type: u4
-        doc: First packed vertex/normal index.
+        doc: First packed vertex/normal index with create flag.
       - id: b
         type: u4
-        doc: Second packed vertex/normal index.
+        doc: Second packed vertex/normal index with create flag.
       - id: c
         type: u4
-        doc: Third packed vertex/normal index.
+        doc: Third packed vertex/normal index with create flag.
+
+  texture_indices:
+    doc: |
+      Three texture coordinate indices forming a triangle. Unlike polygon_indices,
+      these are simple U32 values that directly index into the LOD's texture_vertices
+      array. Each value is only used when the corresponding polygon_indices entry
+      has its create flag (bit 31) set.
+    seq:
+      - id: a
+        type: u4
+        doc: First texture vertex index.
+      - id: b
+        type: u4
+        doc: Second texture vertex index.
+      - id: c
+        type: u4
+        doc: Third texture vertex index.
 
   mesh_properties:
     doc: |
