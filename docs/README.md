@@ -18,6 +18,7 @@ Kaitai Struct allows you to define binary formats in a YAML-based `.ksy` file, w
 | [`savegame.ksy`](/docs/savegame.ksy) | `.GS` | Main game save data (game state, progress, customizations) |
 | [`players.ksy`](/docs/players.ksy) | `.gsi` | Player profile save data (usernames) |
 | [`history.ksy`](/docs/history.ksy) | `.gsi` | Score history and high scores |
+| [`animation.ksy`](/docs/animation.ksy) | `.ani` | Animation data (keyframes, actor references, camera animation) |
 
 ## Using the Tools
 
@@ -38,6 +39,9 @@ ksv samples/Players.gsi players.ksy
 
 # View a History.gsi file
 ksv samples/History.gsi history.ksy
+
+# View an animation file
+ksv samples/pns065rd.ani animation.ksy
 ```
 
 ### Kaitai Struct Dump (ksdump)
@@ -53,11 +57,15 @@ ksdump --format json samples/Players.gsi players.ksy
 
 # Dump History.gsi to YAML
 ksdump --format yaml samples/History.gsi history.ksy
+
+# Dump an animation file to JSON
+ksdump --format json samples/pns065rd.ani animation.ksy
 ```
 
 ## Sample Files
 
-The [`samples/`](/docs/samples/) directory contains example save files for testing:
+The [`samples/`](/docs/samples/) directory contains example files for testing:
 - `G0.GS`, `G1.GS`, `G2.GS` - Sample main game save files (slots 0, 1, 2)
 - `Players.gsi` - Sample player profile data
 - `History.gsi` - Sample score history data
+- `pns065rd.ani` - Sample animation file
