@@ -22,8 +22,8 @@ SkateBoard::SkateBoard()
 {
 	m_pizzaVisible = FALSE;
 	m_maxLinearVel = 15.0;
-	m_unk0x150 = 3.5;
-	m_unk0x148 = 1;
+	m_linearRotationRatio = 3.5;
+	m_canRotate = 1;
 
 	NotificationManager()->Register(this);
 }

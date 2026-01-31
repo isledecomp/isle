@@ -63,10 +63,10 @@ MxResult LegoAnimActor::GetTimeInCycle(float& p_timeInCycle)
 }
 
 // FUNCTION: LEGO1 0x1001c240
-void LegoAnimActor::VTable0x74(Matrix4& p_transform)
+void LegoAnimActor::ApplyTransform(Matrix4& p_transform)
 {
 	float timeInCycle;
-	LegoPathActor::VTable0x74(p_transform);
+	LegoPathActor::ApplyTransform(p_transform);
 
 	if (m_curAnim >= 0) {
 		GetTimeInCycle(timeInCycle);
@@ -80,19 +80,19 @@ void LegoAnimActor::Animate(float p_time)
 {
 	assert(m_roi);
 
-	if (m_lastTime == 0) {
-		m_lastTime = p_time - 1.0f;
+	if (m_transformTime == 0) {
+		m_transformTime = p_time - 1.0f;
 	}
 
 	if (m_actorState == c_initial && !m_userNavFlag && m_worldSpeed <= 0) {
 		if (m_curAnim >= 0) {
-			MxMatrix transform(m_unk0xec);
+			MxMatrix transform(m_local2World);
 			float timeInCycle;
 			GetTimeInCycle(timeInCycle);
 			AnimateWithTransform(timeInCycle, transform);
 		}
 
-		m_lastTime = m_actorTime = p_time;
+		m_transformTime = m_actorTime = p_time;
 	}
 	else {
 		LegoPathActor::Animate(p_time);

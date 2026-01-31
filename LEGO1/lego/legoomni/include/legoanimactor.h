@@ -42,10 +42,10 @@ public:
 
 	~LegoAnimActor() override;
 
-	void ParseAction(char* p_extra) override;          // vtable+0x20
-	void SetWorldSpeed(MxFloat p_worldSpeed) override; // vtable+0x30
-	void Animate(float p_time) override;               // vtable+0x70
-	void VTable0x74(Matrix4& p_transform) override;    // vtable+0x74
+	void ParseAction(char* p_extra) override;           // vtable+0x20
+	void SetWorldSpeed(MxFloat p_worldSpeed) override;  // vtable+0x30
+	void Animate(float p_time) override;                // vtable+0x70
+	void ApplyTransform(Matrix4& p_transform) override; // vtable+0x74
 
 	virtual MxResult GetTimeInCycle(float& p_timeInCycle);
 	virtual MxResult AnimateWithTransform(float p_time, Matrix4& p_transform);

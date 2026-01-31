@@ -40,7 +40,7 @@ public:
 
 	MxResult AddActor(LegoPathActor* p_actor);
 	MxResult RemoveActor(LegoPathActor* p_actor);
-	void CheckAndCallPathTriggers(Vector3& p_point1, Vector3& p_point2, LegoPathActor* p_actor);
+	void CheckAndCallPathTriggers(Vector3& p_from, Vector3& p_to, LegoPathActor* p_actor);
 	void SwitchBoundary(
 		LegoPathActor* p_actor,
 		LegoPathBoundary*& p_boundary,

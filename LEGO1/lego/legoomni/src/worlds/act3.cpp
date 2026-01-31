@@ -582,13 +582,13 @@ MxLong Act3::Notify(MxParam& p_param)
 
 					m_cop1->SetActorState(LegoPathActor::c_initial);
 					m_cop1->SetWorldSpeed(2.0f);
-					m_cop1->VTable0xa8();
+					m_cop1->ApplyLocal2World();
 
 					m_cop2->SetActorState(LegoPathActor::c_initial);
 					m_cop2->SetWorldSpeed(2.0f);
-					m_cop2->VTable0xa8();
+					m_cop2->ApplyLocal2World();
 
-					m_brickster->VTable0xa8();
+					m_brickster->ApplyLocal2World();
 					m_pizzaHitSound = 0;
 					m_pizzaMissSound = 0;
 					m_copDonutSound = 0;
@@ -907,34 +907,34 @@ void Act3::Enable(MxBool p_enable)
 			MxFloat delta = Timer()->GetTime() - m_time - 100.0f;
 			m_time = -1.0f;
 
-			m_cop1->SetLastTime(m_cop1->GetLastTime() + delta);
+			m_cop1->SetTransformTime(m_cop1->GetTransformTime() + delta);
 			m_cop1->SetActorTime(m_cop1->GetActorTime() + delta);
 			m_cop1->SetUnknown0x20(m_cop1->GetUnknown0x20() + delta);
 			m_cop1->SetUnknown0x1c(m_cop1->GetUnknown0x1c() + delta);
 
-			m_cop2->SetLastTime(m_cop2->GetLastTime() + delta);
+			m_cop2->SetTransformTime(m_cop2->GetTransformTime() + delta);
 			m_cop2->SetActorTime(m_cop2->GetActorTime() + delta);
 			m_cop2->SetUnknown0x20(m_cop2->GetUnknown0x20() + delta);
 			m_cop2->SetUnknown0x1c(m_cop2->GetUnknown0x1c() + delta);
 
-			m_brickster->SetLastTime(m_brickster->GetLastTime() + delta);
+			m_brickster->SetTransformTime(m_brickster->GetTransformTime() + delta);
 			m_brickster->SetActorTime(m_brickster->GetActorTime() + delta);
 			m_brickster->SetUnknown0x20(m_brickster->GetUnknown0x20() + delta);
 			m_brickster->SetUnknown0x24(m_brickster->GetUnknown0x24() + delta);
 			m_brickster->SetUnknown0x50(m_brickster->GetUnknown0x50() + delta);
 			m_brickster->SetUnknown0x1c(m_brickster->GetUnknown0x1c() + delta);
 
-			m_copter->SetLastTime(m_copter->GetLastTime() + delta);
+			m_copter->SetTransformTime(m_copter->GetTransformTime() + delta);
 			m_copter->SetActorTime(m_copter->GetActorTime() + delta);
 
-			m_shark->SetLastTime(m_shark->GetLastTime() + delta);
+			m_shark->SetTransformTime(m_shark->GetTransformTime() + delta);
 			m_shark->SetActorTime(m_shark->GetActorTime() + delta);
 			m_shark->SetUnknown0x2c(m_shark->GetUnknown0x2c() + delta);
 
 			MxS32 i;
 			for (i = 0; i < (MxS32) sizeOfArray(m_pizzas); i++) {
 				if (m_pizzas[i].IsValid()) {
-					m_pizzas[i].SetLastTime(m_pizzas[i].GetLastTime() + delta);
+					m_pizzas[i].SetTransformTime(m_pizzas[i].GetTransformTime() + delta);
 					m_pizzas[i].SetActorTime(m_pizzas[i].GetActorTime() + delta);
 					m_pizzas[i].SetRotateTimeout(m_pizzas[i].GetRotateTimeout() + delta);
 				}
@@ -942,7 +942,7 @@ void Act3::Enable(MxBool p_enable)
 
 			for (i = 0; i < (MxS32) sizeOfArray(m_donuts); i++) {
 				if (m_donuts[i].IsValid()) {
-					m_donuts[i].SetLastTime(m_donuts[i].GetLastTime() + delta);
+					m_donuts[i].SetTransformTime(m_donuts[i].GetTransformTime() + delta);
 					m_donuts[i].SetActorTime(m_donuts[i].GetActorTime() + delta);
 					m_donuts[i].SetRotateTimeout(m_donuts[i].GetRotateTimeout() + delta);
 				}
@@ -954,7 +954,7 @@ void Act3::Enable(MxBool p_enable)
 			InputManager()->SetWorld(this);
 			InputManager()->Register(this);
 			SetUserActor(m_copter);
-			m_copter->VTable0xa8();
+			m_copter->ApplyLocal2World();
 			SetAppCursor(e_cursorArrow);
 		}
 	}

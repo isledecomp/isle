@@ -128,7 +128,7 @@ void LegoPathBoundary::SwitchBoundary(
 			selectedEdgeIndex = 1;
 		}
 		else {
-			p_actor->VTable0xa4(countCounterclockwise, selectedEdgeIndex);
+			p_actor->GetWalkingBehavior(countCounterclockwise, selectedEdgeIndex);
 		}
 
 		while (selectedEdgeIndex > 0) {

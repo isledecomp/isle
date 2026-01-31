@@ -123,7 +123,7 @@ public:
 	Vector4(float* p_data) : Vector3(p_data) {}
 
 	// Some code initializes a Vector4 from a `const float*` source.
-	// Example: `LegoCarBuild::VTable0x6c`
+	// Example: `LegoCarBuild::CheckIntersections`
 	// Vector4 however is a class that can mutate its underlying source, making
 	// initialization with a const source fundamentally incompatible.
 	// BETA10 appears to have two separate constructors for Vector4 as well,

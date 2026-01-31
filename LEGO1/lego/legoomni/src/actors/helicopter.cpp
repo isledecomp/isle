@@ -384,7 +384,7 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10003e90
-void Helicopter::VTable0x74(Matrix4& p_transform)
+void Helicopter::ApplyTransform(Matrix4& p_transform)
 {
 	if (m_userNavFlag) {
 		m_roi->UpdateTransformationRelativeToParent(p_transform);

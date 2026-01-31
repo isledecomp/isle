@@ -471,7 +471,7 @@ MxResult LegoRaceCar::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			Vector3(matr[3]) += g_hitOffset;
 			roi->SetLocal2World(matr);
 
-			p_actor->SetActorState(c_two);
+			p_actor->SetActorState(c_hit);
 		}
 
 		if (m_userNavFlag) {
@@ -531,12 +531,12 @@ MxResult LegoRaceCar::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 
 // FUNCTION: LEGO1 0x10013600
 // FUNCTION: BETA10 0x100cbe60
-MxResult LegoRaceCar::VTable0x9c()
+MxResult LegoRaceCar::CalculateSpline()
 {
 	MxResult result;
 
 	if (m_userNavFlag) {
-		result = LegoCarRaceActor::VTable0x9c();
+		result = LegoCarRaceActor::CalculateSpline();
 
 		if (m_boundary) {
 			MxS32 onSkeletonBoundary = FALSE;
@@ -560,7 +560,7 @@ MxResult LegoRaceCar::VTable0x9c()
 		}
 	}
 	else {
-		result = LegoCarRaceActor::VTable0x9c();
+		result = LegoCarRaceActor::CalculateSpline();
 	}
 
 	return result;
@@ -685,7 +685,7 @@ MxResult LegoJetski::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			Vector3(matr[3]) += g_hitOffset;
 			roi->SetLocal2World(matr);
 
-			p_actor->SetActorState(c_two);
+			p_actor->SetActorState(c_hit);
 		}
 
 		if (m_userNavFlag) {

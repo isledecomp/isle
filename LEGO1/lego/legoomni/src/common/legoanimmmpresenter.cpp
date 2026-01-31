@@ -471,10 +471,10 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 			}
 
 #ifdef BETA10
-			actor->VTable0xa8();
+			actor->ApplyLocal2World();
 #else
 			if (m_tranInfo->m_unk0x29) {
-				actor->VTable0xa8();
+				actor->ApplyLocal2World();
 			}
 #endif
 		}
