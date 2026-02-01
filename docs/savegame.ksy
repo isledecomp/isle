@@ -104,7 +104,7 @@ types:
           For backgroundcolor and tempBackgroundColor this is "set H S V" where
           H, S, V are HSV color values scaled 0-100 (not RGB). The game internally
           converts to RGB using ConvertHSVToRGB().
-          For lightposition this is a number "1" or "2".
+          For lightposition this is a number "0" through "5" (6 sun positions).
     instances:
       is_end_marker:
         value: name == "END_OF_VARIABLES"
