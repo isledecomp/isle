@@ -101,7 +101,9 @@ types:
         if: not is_end_marker
         doc: |
           Variable value. For colors this is a color name like "lego red".
-          For backgroundcolor this is "set R G B".
+          For backgroundcolor and tempBackgroundColor this is "set H S V" where
+          H, S, V are HSV color values scaled 0-100 (not RGB). The game internally
+          converts to RGB using ConvertHSVToRGB().
           For lightposition this is a number "1" or "2".
     instances:
       is_end_marker:
