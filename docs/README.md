@@ -20,6 +20,7 @@ Kaitai Struct allows you to define binary formats in a YAML-based `.ksy` file, w
 | [`history.ksy`](/docs/history.ksy) | `.gsi` | Score history and high scores |
 | [`animation.ksy`](/docs/animation.ksy) | `.ani` | Animation data (keyframes, actor references, camera animation) |
 | [`wdb.ksy`](/docs/wdb.ksy) | `.wdb` | World database (textures, parts, models, ROI hierarchies, LODs) |
+| [`dta.ksy`](/docs/dta.ksy) | `.dta` | Animation data (world animation info, model placement) |
 
 ## Using the Tools
 
@@ -46,6 +47,9 @@ ksv samples/pns065rd.ani animation.ksy
 
 # View the world database (from game installation)
 ksv /path/to/lego/data/world.wdb wdb.ksy
+
+# View an animation data file
+ksv samples/BLDRINF.DTA dta.ksy
 ```
 
 ### Kaitai Struct Dump (ksdump)
@@ -67,6 +71,9 @@ ksdump --format json samples/pns065rd.ani animation.ksy
 
 # Dump world database to YAML (from game installation)
 ksdump --format yaml /path/to/lego/data/world.wdb wdb.ksy
+
+# Dump an animation data file to JSON
+ksdump --format json samples/BLDRINF.DTA dta.ksy
 ```
 
 ## Sample Files
@@ -76,5 +83,6 @@ The [`samples/`](/docs/samples/) directory contains example files for testing:
 - `Players.gsi` - Sample player profile data
 - `History.gsi` - Sample score history data
 - `pns065rd.ani` - Sample animation file
+- `BLDRINF.DTA` - Sample animation data file
 
 Note: The world database (`world.wdb`) can be found in your LEGO Island installation at `lego/data/world.wdb`.
