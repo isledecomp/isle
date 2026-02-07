@@ -194,16 +194,18 @@ void LegoEntity::SetLocation(
 }
 
 // FUNCTION: LEGO1 0x10010c30
+// FUNCTION: BETA10 0x1007ea5a
 void LegoEntity::TransformPointOfView()
 {
 	LegoWorld* world = CurrentWorld();
 
-	if (m_cameraFlag && world && world->GetCameraController() && m_roi) {
+	if (GetCameraFlag() && world && world->GetCameraController() && m_roi) {
 		world->GetCameraController()->TransformPointOfView(m_roi->GetLocal2World(), 1);
 	}
 }
 
 // FUNCTION: LEGO1 0x10010c60
+// FUNCTION: BETA10 0x1007ead0
 Mx3DPointFloat LegoEntity::GetWorldDirection()
 {
 	if (m_roi != NULL) {
@@ -215,6 +217,7 @@ Mx3DPointFloat LegoEntity::GetWorldDirection()
 }
 
 // FUNCTION: LEGO1 0x10010cf0
+// FUNCTION: BETA10 0x1007eb47
 Mx3DPointFloat LegoEntity::GetWorldUp()
 {
 	if (m_roi != NULL) {

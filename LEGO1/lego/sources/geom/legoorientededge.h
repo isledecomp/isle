@@ -8,6 +8,7 @@
 #include <assert.h>
 
 // VTABLE: LEGO1 0x100db7f4
+// VTABLE: BETA10 0x101c3794
 // SIZE 0x40
 struct LegoOrientedEdge : public LegoEdge {
 public:
@@ -99,7 +100,11 @@ public:
 	inline LegoU32 FUN_10048c40(const Vector3& p_position);
 
 	// SYNTHETIC: LEGO1 0x1009a6c0
+	// SYNTHETIC: BETA10 0x101840f0
 	// LegoOrientedEdge::`scalar deleting destructor'
+
+	// SYNTHETIC: BETA10 0x100bd390
+	// LegoOrientedEdge::~LegoOrientedEdge
 
 	LegoU16 m_flags;      // 0x24
 	Mx3DPointFloat m_dir; // 0x28
