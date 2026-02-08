@@ -155,88 +155,127 @@ types:
         doc: Margaret Patricia "Maggie" Post
       - id: bu
         type: standard_character_entry
+        doc: Buck Pounds
       - id: ml
         type: standard_character_entry
+        doc: Ed Mail
       - id: nu
         type: standard_character_entry
+        doc: Nubby Stevens
       - id: na
         type: standard_character_entry
         doc: Nancy Nubbins
       - id: cl
         type: standard_character_entry
+        doc: Dr. Clickitt
       - id: en
         type: standard_character_entry
+        doc: Enter
       - id: re
         type: standard_character_entry
+        doc: Return
       - id: ro
         type: standard_character_entry
+        doc: Captain D. Rom
       - id: d1
         type: standard_character_entry
+        doc: Bill Ding (Race Car)
       - id: d2
         type: standard_character_entry
+        doc: Bill Ding (Helicopter)
       - id: d3
         type: standard_character_entry
+        doc: Bill Ding (Dune Buggy)
       - id: d4
         type: standard_character_entry
+        doc: Bill Ding (Jetski)
       - id: l1
         type: standard_character_entry
+        doc: The Flying Legandos #1
       - id: l2
         type: standard_character_entry
+        doc: The Flying Legandos #2
       - id: l3
         type: standard_character_entry
+        doc: The Flying Legandos #3
       - id: l4
         type: standard_character_entry
+        doc: The Flying Legandos #4
       - id: l5
         type: standard_character_entry
+        doc: The Flying Legandos #5
       - id: l6
         type: standard_character_entry
+        doc: The Flying Legandos #6
       - id: b1
         type: standard_character_entry
+        doc: The Legobobs #1
       - id: b2
         type: standard_character_entry
+        doc: The Legobobs #2
       - id: b3
         type: standard_character_entry
+        doc: The Legobobs #3
       - id: b4
         type: standard_character_entry
+        doc: The Legobobs #4
       - id: cm
         type: standard_character_entry
+        doc: Brazilian Carmen
       - id: gd
         type: standard_character_entry
+        doc: Gideon Worse
       - id: rd
         type: standard_character_entry
+        doc: Red Greenbase
       - id: pg
         type: standard_character_entry
         doc: Polly Gone
       - id: bd
         type: standard_character_entry
+        doc: Bradford Brickford
       - id: sy
         type: standard_character_entry
+        doc: Shiney Doris
       - id: gn
         type: standard_character_entry
+        doc: Glen Funberg
       - id: df
         type: standard_character_entry
+        doc: Dorothy Funberg
       - id: bs
         type: standard_character_entry
+        doc: Brian Shrimp
       - id: lt
         type: standard_character_entry
+        doc: Luke Tepid
       - id: st
         type: standard_character_entry
+        doc: Shorty Tails
       - id: bm
         type: standard_character_entry
+        doc: Bumpy Kindergreen
       - id: jk
         type: standard_character_entry
+        doc: Jack O'Trades
       - id: ghost
         type: ghost_character_entry
+        doc: Ghost #1
       - id: ghost01
         type: ghost_character_entry
+        doc: Ghost #2
       - id: ghost02
         type: ghost_character_entry
+        doc: Ghost #3
       - id: ghost03
         type: ghost_character_entry
+        doc: Ghost #4
       - id: ghost04
         type: ghost_character_entry
+        doc: Ghost #5
       - id: ghost05
         type: ghost_character_entry
+        doc: Ghost #6
       - id: hg
         type: standard_character_entry
       - id: pntgy
