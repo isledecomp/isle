@@ -29,6 +29,7 @@ void OrientableROI::WrappedSetLocal2WorldWithWorldDataUpdate(const Matrix4& p_lo
 }
 
 // FUNCTION: LEGO1 0x100a46b0
+// FUNCTION: BETA10 0x1016528f
 void OrientableROI::UpdateTransformationRelativeToParent(const Matrix4& p_transform)
 {
 	MxMatrix mat;

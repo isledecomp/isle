@@ -7,11 +7,14 @@ class LegoWEEdge;
 class Vector3;
 
 // VTABLE: LEGO1 0x100db7b8
+// VTABLE: BETA10 0x101c3728
 // SIZE 0x24
 struct LegoEdge {
 	LegoEdge();
 	virtual ~LegoEdge(); // vtable+0x00
 
+	LegoResult SetCounterclockwiseEdge(LegoWEEdge& p_face, LegoEdge* p_edge);
+	LegoResult SetClockwiseEdge(LegoWEEdge& p_face, LegoEdge* p_edge);
 	LegoEdge* GetClockwiseEdge(LegoWEEdge& p_face);
 	LegoEdge* GetCounterclockwiseEdge(LegoWEEdge& p_face);
 	Vector3* CWVertex(LegoWEEdge& p_face);
@@ -32,6 +35,7 @@ struct LegoEdge {
 	Vector3* GetPointB() { return m_pointB; }
 
 	// SYNTHETIC: LEGO1 0x1009a4a0
+	// SYNTHETIC: BETA10 0x10182b30
 	// LegoEdge::`scalar deleting destructor'
 
 	LegoWEEdge* m_faceA; // 0x04

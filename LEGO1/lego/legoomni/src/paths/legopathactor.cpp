@@ -188,23 +188,31 @@ MxResult LegoPathActor::SetTransformAndDestinationFromPoints(
 	assert(p_destEdge);
 
 	Vector3* v3 = p_destEdge->CWVertex(*p_boundary);
+	// LINE: LEGO1 0x1002de35
 	Vector3* v4 = p_destEdge->CCWVertex(*p_boundary);
 
 	assert(v3 && v4);
 
 	Mx3DPointFloat end, destNormal, endDirection;
 
+	// LINE: LEGO1 0x1002de8f
 	end = *v4;
 	end -= *v3;
 	end *= p_destScale;
+	// LINE: LEGO1 0x1002deae
 	end += *v3;
 
+	// LINE: LEGO1 0x1002deba
 	m_boundary = p_boundary;
+	// LINE: LEGO1 0x1002dece
 	m_destEdge = p_destEdge;
+	// LINE: LEGO1 0x1002ded4
 	m_destScale = p_destScale;
 	m_traveledDistance = 0;
 	m_transformTime = p_time;
 	m_actorTime = p_time;
+	// TODO: this one fails to inline
+	// LINE: LEGO1 0x1002deed
 	p_destEdge->GetFaceNormal(*p_boundary, destNormal);
 
 	MxMatrix matrix;
@@ -515,6 +523,95 @@ MxU32 LegoPathActor::CheckPresenterAndActorIntersections(
 	return 0;
 }
 
+#ifdef BETA10
+// FUNCTION: BETA10 0x100af35e
+MxS32 LegoPathActor::CheckIntersections(Vector3& p_rayOrigin, Vector3& p_rayEnd, Vector3& p_intersectionPoint)
+{
+	assert(m_boundary && m_roi);
+
+	Mx3DPointFloat rayDirection(p_rayEnd);
+	rayDirection -= p_rayOrigin;
+
+	float len = rayDirection.LenSquared();
+
+	if (len <= 0.001) {
+		return 0;
+	}
+
+	len = sqrt((double) len);
+	rayDirection /= len;
+
+	float radius = m_roi->GetWorldBoundingSphere().Radius();
+	LegoPathBoundary* b = m_boundary;
+	LegoOrientedEdge* local14 = *m_boundary->GetEdges();
+	LegoOrientedEdge* local18 = NULL;
+
+	while (1) {
+		assert(b);
+
+		MxU32 result =
+			CheckPresenterAndActorIntersections(b, p_rayOrigin, rayDirection, len, radius, p_intersectionPoint);
+
+		if (result != 0) {
+			return result;
+		}
+
+		if (local18 == NULL) {
+			local18 = (LegoOrientedEdge*) local14->GetCounterclockwiseEdge(*m_boundary);
+			b = (LegoPathBoundary*) local14->OtherFace(m_boundary);
+		}
+		else {
+			b = NULL;
+		}
+
+		while (!b) {
+			if (local18 == local14) {
+				return 0;
+			}
+
+			b = (LegoPathBoundary*) local18->OtherFace(m_boundary);
+			local18 = (LegoOrientedEdge*) local18->GetCounterclockwiseEdge(*m_boundary);
+		}
+	}
+
+	return 0;
+}
+#else
+// FUNCTION: LEGO1 0x1002ebe0
+MxS32 LegoPathActor::CheckIntersections(Vector3& p_rayOrigin, Vector3& p_rayEnd, Vector3& p_intersectionPoint)
+{
+	assert(m_boundary && m_roi);
+
+	Mx3DPointFloat rayDirection(p_rayEnd);
+	rayDirection -= p_rayOrigin;
+
+	float len = rayDirection.LenSquared();
+
+	if (len <= 0.001) {
+		return 0;
+	}
+
+	len = sqrt((double) len);
+	rayDirection /= len;
+
+	float radius = m_roi->GetWorldBoundingSphere().Radius();
+	list<LegoPathBoundary*> boundaries;
+	// This function is inlined once. The recursion calls into the actual function.
+	// Matching `CheckIntersectionBothFaces` will likely match `CheckIntersections` as well.
+	return CheckIntersectionBothFaces(
+		boundaries,
+		m_boundary,
+		p_rayOrigin,
+		rayDirection,
+		len,
+		radius,
+		p_intersectionPoint,
+		0
+	);
+}
+#endif
+
+// FUNCTION: LEGO1 0x1002edd0
 inline MxU32 LegoPathActor::CheckIntersectionBothFaces(
 	list<LegoPathBoundary*>& p_checkedBoundaries,
 	LegoPathBoundary* p_boundary,
@@ -548,17 +645,22 @@ inline MxU32 LegoPathActor::CheckIntersectionBothFaces(
 	LegoS32 numEdges = p_boundary->GetNumEdges();
 	for (MxS32 i = 0; i < numEdges; i++) {
 		LegoOrientedEdge* edge = p_boundary->GetEdges()[i];
+		// LINE: LEGO1 0x1002ee8c
 		LegoPathBoundary* boundary = (LegoPathBoundary*) edge->OtherFace(p_boundary);
 
+		// LINE: LEGO1 0x1002ee9f
 		if (boundary != NULL) {
 			list<LegoPathBoundary*>::const_iterator it;
 
+			// LINE: LEGO1 0x1002eead
 			for (it = p_checkedBoundaries.begin(); !(it == p_checkedBoundaries.end()); it++) {
+				// LINE: LEGO1 0x1002eeb3
 				if ((*it) == boundary) {
 					break;
 				}
 			}
 
+			// LINE: LEGO1 0x1002eec4
 			if (it == p_checkedBoundaries.end()) {
 				result = CheckIntersectionBothFaces(
 					p_checkedBoundaries,
@@ -579,39 +681,6 @@ inline MxU32 LegoPathActor::CheckIntersectionBothFaces(
 	}
 
 	return 0;
-}
-
-// FUNCTION: LEGO1 0x1002ebe0
-// FUNCTION: BETA10 0x100af35e
-MxS32 LegoPathActor::CheckIntersections(Vector3& p_rayOrigin, Vector3& p_rayEnd, Vector3& p_intersectionPoint)
-{
-	assert(m_boundary && m_roi);
-
-	Mx3DPointFloat rayDirection(p_rayEnd);
-	rayDirection -= p_rayOrigin;
-
-	float len = rayDirection.LenSquared();
-
-	if (len <= 0.001) {
-		return 0;
-	}
-
-	len = sqrt((double) len);
-	rayDirection /= len;
-
-	float radius = m_roi->GetWorldBoundingSphere().Radius();
-	list<LegoPathBoundary*> boundaries;
-
-	return CheckIntersectionBothFaces(
-		boundaries,
-		m_boundary,
-		p_rayOrigin,
-		rayDirection,
-		len,
-		radius,
-		p_intersectionPoint,
-		0
-	);
 }
 
 // FUNCTION: LEGO1 0x1002f020
