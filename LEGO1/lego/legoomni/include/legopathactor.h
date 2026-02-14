@@ -222,9 +222,6 @@ protected:
 	MxFloat m_linearRotationRatio;        // 0x150
 };
 
-// FUNCTION: LEGO1 0x1002edd0
-// LegoPathActor::CheckIntersectionBothFaces
-
 // TEMPLATE: LEGO1 0x10018b70
 // List<LegoBoundaryEdge>::~List<LegoBoundaryEdge>
 
