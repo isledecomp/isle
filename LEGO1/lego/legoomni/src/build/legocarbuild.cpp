@@ -1681,8 +1681,7 @@ void LegoCarBuild::HandleEndAnim()
 MxBool LegoCarBuild::Escape()
 {
 	BackgroundAudioManager()->Init();
-	MxS32 targetEntityId = GetBuildMovieId(m_carId);
-	InvokeAction(Extra::ActionType::e_stop, *g_jukeboxScript, targetEntityId, NULL);
+	InvokeAction(Extra::ActionType::e_stop, *g_jukeboxScript, GetBuildMovieId(m_carId), NULL);
 	DeleteObjects(&m_atomId, 500, 999);
 
 	m_buildState->m_animationState = LegoVehicleBuildState::e_none;
