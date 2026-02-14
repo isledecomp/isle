@@ -549,23 +549,18 @@ MxS32 LegoPathActor::CheckIntersections(Vector3& p_rayOrigin, Vector3& p_rayEnd,
 	while (1) {
 		assert(b);
 
-		MxU32 result = CheckPresenterAndActorIntersections(
-			b,
-			p_rayOrigin,
-			rayDirection,
-			len,
-			radius,
-			p_intersectionPoint
-		);
+		MxU32 result =
+			CheckPresenterAndActorIntersections(b, p_rayOrigin, rayDirection, len, radius, p_intersectionPoint);
 
 		if (result != 0) {
 			return result;
 		}
 
 		if (local18 == NULL) {
-			local18 = (LegoOrientedEdge*)local14->GetCounterclockwiseEdge(*m_boundary);
+			local18 = (LegoOrientedEdge*) local14->GetCounterclockwiseEdge(*m_boundary);
 			b = (LegoPathBoundary*) local14->OtherFace(m_boundary);
-		} else {
+		}
+		else {
 			b = NULL;
 		}
 
@@ -601,7 +596,8 @@ MxS32 LegoPathActor::CheckIntersections(Vector3& p_rayOrigin, Vector3& p_rayEnd,
 
 	float radius = m_roi->GetWorldBoundingSphere().Radius();
 	list<LegoPathBoundary*> boundaries;
-	// TODO: Looks like this function is inlined by one level. The outer one may get fixed by getting the inner one straight
+	// This function is inlined once. The recursion calls into the actual function.
+	// Matching `CheckIntersectionBothFaces` will likely match `CheckIntersections` as well.
 	return CheckIntersectionBothFaces(
 		boundaries,
 		m_boundary,
@@ -686,7 +682,6 @@ inline MxU32 LegoPathActor::CheckIntersectionBothFaces(
 
 	return 0;
 }
-
 
 // FUNCTION: LEGO1 0x1002f020
 // FUNCTION: BETA10 0x100af54a
