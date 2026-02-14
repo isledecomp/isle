@@ -52,6 +52,7 @@ inline ViewManager* Lego3DView::GetViewManager()
 	return m_pViewManager;
 }
 
+// FUNCTION: BETA10 0x1006aae0
 inline ViewROI* Lego3DView::GetPointOfView()
 {
 	return m_pPointOfView;
