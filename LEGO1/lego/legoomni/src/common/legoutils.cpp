@@ -90,11 +90,13 @@ void RotateY(LegoROI* p_roi, MxFloat p_angle)
 }
 
 // FUNCTION: LEGO1 0x1003de80
+// FUNCTION: BETA10 0x100d3684
 MxBool SpheresIntersect(const BoundingSphere& p_sphere1, const BoundingSphere& p_sphere2)
 {
 	// This doesn't look clean, but it matches.
 	// p_sphere1.Center().GetData() doesn't work out
-	return sqrt(DISTSQRD3(&p_sphere1.Center()[0], &p_sphere2.Center()[0])) < p_sphere1.Radius() + p_sphere2.Radius();
+	float distance = DISTSQRD3(p_sphere1.Center(), p_sphere2.Center());
+	return sqrt(distance) < p_sphere1.Radius() + p_sphere2.Radius();
 }
 
 // FUNCTION: LEGO1 0x1003ded0

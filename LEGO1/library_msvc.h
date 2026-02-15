@@ -873,6 +873,12 @@
 // LIBRARY: BETA10 0x100fa0e0
 // atof
 
+// LIBRARY: BETA10 0x1005a500
+// sqrt
+
+// LIBRARY: BETA10 0x1005a530
+// sqrtf
+
 // LIBRARY: BETA10 0x1005a9c0
 // fabs
 
