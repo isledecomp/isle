@@ -102,7 +102,7 @@ void Helicopter::Exit()
 		}
 	}
 
-	m_state->m_unk0x08 = 0;
+	m_state->m_status = 0;
 	RemoveFromCurrentWorld(m_script, IsleScript::c_HelicopterDashboard_Bitmap);
 	RemoveFromCurrentWorld(m_script, IsleScript::c_HelicopterArms_Ctl);
 	RemoveFromCurrentWorld(m_script, IsleScript::c_Helicopter_TakeOff_Ctl);
@@ -198,7 +198,7 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 				((Act3*) CurrentWorld())->SetDestLocation(LegoGameState::e_infomain);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			}
-			else if (m_state->m_unk0x08 != 0) {
+			else if (m_state->m_status != 0) {
 				break;
 			}
 
@@ -213,9 +213,9 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 
 			Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
 			assert(act1State);
-			if (m_state->m_unk0x08 == 0) {
+			if (m_state->m_status == 0) {
 				act1State->m_state = Act1State::e_helicopter;
-				m_state->m_unk0x08 = 1;
+				m_state->m_status = 1;
 				m_world->RemoveActor(this);
 				InvokeAction(Extra::ActionType::e_start, script, IsleScript::c_HelicopterTakeOff_Anim, NULL);
 				SetActorState(c_initial);
@@ -229,8 +229,8 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 				break;
 			}
 
-			if (m_state->m_unk0x08 == 2) {
-				m_state->m_unk0x08 = 3;
+			if (m_state->m_status == 2) {
+				m_state->m_status = 3;
 				m_world->RemoveActor(this);
 				InvokeAction(Extra::ActionType::e_start, script, IsleScript::c_HelicopterLand_Anim, NULL);
 				SetActorState(c_disabled);
@@ -261,11 +261,11 @@ MxLong Helicopter::HandleControl(LegoControlManagerNotificationParam& p_param)
 				lookat *= 3.0f;
 				location += lookat;
 
-				Mx3DPointFloat v68, va4, up;
-				Mx3DPointFloat v90(0, 1, 0);
-				v68 = m_world->GetCameraController()->GetWorldUp();
-				va4.EqualsCross(v68, direction);
-				up.EqualsCross(va4, v90);
+				Mx3DPointFloat cameraUp, right, up;
+				Mx3DPointFloat worldUp(0, 1, 0);
+				cameraUp = m_world->GetCameraController()->GetWorldUp();
+				right.EqualsCross(cameraUp, direction);
+				up.EqualsCross(right, worldUp);
 
 				if (isPizza) {
 					if (((Act3*) m_world)->ShootPizza(m_pathController, location, direction, up) != SUCCESS) {
@@ -313,7 +313,7 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 {
 	MxLong result = 0;
 
-	switch (m_state->m_unk0x08) {
+	switch (m_state->m_status) {
 	case 1: {
 		if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 			Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
@@ -333,7 +333,7 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 			);
 		}
 
-		m_state->m_unk0x08 = 2;
+		m_state->m_status = 2;
 
 		MxMatrix matrix;
 		matrix.SetIdentity();
@@ -374,7 +374,7 @@ MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 			);
 		}
 
-		m_state->m_unk0x08 = 0;
+		m_state->m_status = 0;
 		result = 1;
 		break;
 	}
@@ -402,34 +402,34 @@ void Helicopter::ApplyTransform(Matrix4& p_transform)
 // FUNCTION: LEGO1 0x10003ee0
 void Helicopter::Animate(float p_time)
 {
-	if (m_state->m_unk0x08 == 4 || m_state->m_unk0x08 == 5) {
-		float f = m_unk0x1f0 - p_time + 3000.0f;
-		if (f >= 0) {
-			float f2 = f / -3000.0f + 1;
-			if (f2 < 0) {
-				f2 = 0;
+	if (m_state->m_status == 4 || m_state->m_status == 5) {
+		float remainingTime = m_cameraTransitionTime - p_time + 3000.0f;
+		if (remainingTime >= 0) {
+			float interpolationFactor = remainingTime / -3000.0f + 1;
+			if (interpolationFactor < 0) {
+				interpolationFactor = 0;
 			}
-			if (f2 > 1.0f) {
-				f2 = 1.0f;
+			if (interpolationFactor > 1.0f) {
+				interpolationFactor = 1.0f;
 			}
 
-			MxMatrix mat;
-			Vector3 v1(m_unk0x160[3]);
-			Vector3 v2(mat[3]);
-			Vector3 v3(m_unk0x1a8[3]);
+			MxMatrix transform;
+			Vector3 startPosition(m_cameraTransitionStartMatrix[3]);
+			Vector3 interpolatedPosition(transform[3]);
+			Vector3 endPosition(m_cameraTransitionEndMatrix[3]);
 
-			mat.SetIdentity();
-			m_unk0x1f4.InterpolateToMatrix(mat, f2);
+			transform.SetIdentity();
+			m_cameraTransitionInterpolator.InterpolateToMatrix(transform, interpolationFactor);
 
-			v2 = v3;
-			v2 -= v1;
-			v2 *= f2;
-			v2 += v1;
+			interpolatedPosition = endPosition;
+			interpolatedPosition -= startPosition;
+			interpolatedPosition *= interpolationFactor;
+			interpolatedPosition += startPosition;
 
-			m_world->GetCameraController()->TransformPointOfView(mat, 0);
+			m_world->GetCameraController()->TransformPointOfView(transform, 0);
 		}
 		else {
-			if (m_state->m_unk0x08 == 4) {
+			if (m_state->m_status == 4) {
 				((Act3*) m_world)->FUN_10073400();
 			}
 			else {
@@ -445,63 +445,63 @@ void Helicopter::Animate(float p_time)
 }
 
 // FUNCTION: LEGO1 0x100042a0
-void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
+void Helicopter::SetupCameraTransition(const Matrix4& p_matrix)
 {
-	MxMatrix local48;
-	MxMatrix local90;
+	MxMatrix startMatrix;
+	MxMatrix endMatrix;
 
-	Vector3 vec1(local48[3]);    // local98  // esp+0x30
-	Vector3 vec2(local90[3]);    // localac  // esp+0x1c
-	Vector3 vec3(m_unk0x1a8[0]); // locala8  // esp+0x20
-	Vector3 vec4(m_unk0x1a8[1]); // localb8  // esp+0x10
-	Vector3 vec5(m_unk0x1a8[2]); // EDI
+	Vector3 startPos(startMatrix[3]);                   // local98  // esp+0x30
+	Vector3 endPos(endMatrix[3]);                       // localac  // esp+0x1c
+	Vector3 endMatrixX(m_cameraTransitionEndMatrix[0]); // locala8  // esp+0x20
+	Vector3 endMatrixY(m_cameraTransitionEndMatrix[1]); // localb8  // esp+0x10
+	Vector3 endMatrixZ(m_cameraTransitionEndMatrix[2]); // EDI
 
 	// the typecast makes this function match for unknown reasons
-	Vector3 vec6((const float*) m_unk0x1a8[3]); // locala0  // esp+0x28
+	Vector3 endMatrixPos((const float*) m_cameraTransitionEndMatrix[3]); // locala0  // esp+0x28
 
-	m_world->GetCameraController()->GetPointOfView(local48);
-	m_unk0x1a8.SetIdentity();
-	local90 = p_matrix;
+	m_world->GetCameraController()->GetPointOfView(startMatrix);
+	m_cameraTransitionEndMatrix.SetIdentity();
+	endMatrix = p_matrix;
 
-	vec2[1] += 20.0f;
-	vec4 = vec2;
-	vec4 -= vec1;
-	vec4.Unitize();
+	endPos[1] += 20.0f;
+	endMatrixY = endPos;
+	endMatrixY -= startPos;
+	endMatrixY.Unitize();
 
-	vec5[0] = vec5[2] = 0.0f;
-	vec5[1] = -1.0f;
+	endMatrixZ[0] = endMatrixZ[2] = 0.0f;
+	endMatrixZ[1] = -1.0f;
 
-	vec3.EqualsCross(vec4, vec5);
-	vec3.Unitize();
-	vec4.EqualsCross(vec5, vec3);
-	vec6 = vec2;
+	endMatrixX.EqualsCross(endMatrixY, endMatrixZ);
+	endMatrixX.Unitize();
+	endMatrixY.EqualsCross(endMatrixZ, endMatrixX);
+	endMatrixPos = endPos;
 
-	local90 = m_unk0x1a8;
-	m_unk0x160 = local48;
+	endMatrix = m_cameraTransitionEndMatrix;
+	m_cameraTransitionStartMatrix = startMatrix;
 
-	vec1.Clear();
-	vec2.Clear();
+	startPos.Clear();
+	endPos.Clear();
 
-	m_unk0x1f0 = Timer()->GetTime();
+	m_cameraTransitionTime = Timer()->GetTime();
 
-	m_unk0x1f4.SetStartEnd(local48, local90);
-	m_unk0x1f4.NormalizeDirection();
+	m_cameraTransitionInterpolator.SetStartEnd(startMatrix, endMatrix);
+	m_cameraTransitionInterpolator.NormalizeDirection();
 }
 
 // FUNCTION: LEGO1 0x10004640
-void Helicopter::FUN_10004640(const Matrix4& p_matrix)
+void Helicopter::StartGoodEndingCamera(const Matrix4& p_matrix)
 {
-	if (m_state->m_unk0x08 != 4 && m_state->m_unk0x08 != 5) {
-		m_state->m_unk0x08 = 4;
-		FUN_100042a0(p_matrix);
+	if (m_state->m_status != 4 && m_state->m_status != 5) {
+		m_state->m_status = 4;
+		SetupCameraTransition(p_matrix);
 	}
 }
 
 // FUNCTION: LEGO1 0x10004670
-void Helicopter::FUN_10004670(const Matrix4& p_matrix)
+void Helicopter::StartBadEndingCamera(const Matrix4& p_matrix)
 {
-	if (m_state->m_unk0x08 != 4 && m_state->m_unk0x08 != 5) {
-		m_state->m_unk0x08 = 5;
-		FUN_100042a0(p_matrix);
+	if (m_state->m_status != 4 && m_state->m_status != 5) {
+		m_state->m_status = 5;
+		SetupCameraTransition(p_matrix);
 	}
 }

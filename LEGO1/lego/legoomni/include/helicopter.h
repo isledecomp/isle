@@ -12,7 +12,7 @@ class Act3;
 // SIZE 0x0c
 class HelicopterState : public LegoState {
 public:
-	HelicopterState() : m_unk0x08(0) {}
+	HelicopterState() : m_status(0) {}
 
 	// FUNCTION: LEGO1 0x1000e0b0
 	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
@@ -20,7 +20,7 @@ public:
 	// FUNCTION: LEGO1 0x1000e0c0
 	MxBool Reset() override
 	{
-		m_unk0x08 = 0;
+		m_status = 0;
 		return TRUE;
 	} // vtable+0x18
 
@@ -41,7 +41,14 @@ public:
 	// SYNTHETIC: LEGO1 0x1000e190
 	// HelicopterState::`scalar deleting destructor'
 
-	MxU32 m_unk0x08; // 0x08
+	// Status of the helicopter:
+	// 0: Landed
+	// 1: Taking off
+	// 2: In the air
+	// 3: Landing
+	// 4: Good ending
+	// 5: Bad ending
+	MxU32 m_status; // 0x08
 };
 
 // VTABLE: LEGO1 0x100d40f8
@@ -76,8 +83,8 @@ public:
 	void Exit() override;                                                        // vtable+0xe4
 
 	void CreateState();
-	void FUN_10004640(const Matrix4& p_matrix);
-	void FUN_10004670(const Matrix4& p_matrix);
+	void StartGoodEndingCamera(const Matrix4& p_matrix);
+	void StartBadEndingCamera(const Matrix4& p_matrix);
 
 	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'
@@ -86,14 +93,14 @@ public:
 	friend class Act3;
 
 protected:
-	void FUN_100042a0(const Matrix4& p_matrix);
+	void SetupCameraTransition(const Matrix4& p_matrix);
 
-	MxMatrix m_unk0x160;                // 0x160
-	MxMatrix m_unk0x1a8;                // 0x1a8
-	float m_unk0x1f0;                   // 0x1f0
-	MxQuaternionTransformer m_unk0x1f4; // 0x1f4
-	HelicopterState* m_state;           // 0x228
-	MxAtomId m_script;                  // 0x22c
+	MxMatrix m_cameraTransitionStartMatrix;                 // 0x160
+	MxMatrix m_cameraTransitionEndMatrix;                   // 0x1a8
+	float m_cameraTransitionTime;                           // 0x1f0
+	MxQuaternionTransformer m_cameraTransitionInterpolator; // 0x1f4
+	HelicopterState* m_state;                               // 0x228
+	MxAtomId m_script;                                      // 0x22c
 };
 
 #endif // HELICOPTER_H
