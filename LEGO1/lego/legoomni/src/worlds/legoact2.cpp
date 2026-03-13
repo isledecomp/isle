@@ -488,7 +488,7 @@ void LegoAct2::ReadyWorld()
 	m_pepper = FindROI("pepper");
 	IslePathActor* pepper = (IslePathActor*) m_pepper->GetEntity();
 	pepper->SpawnPlayer(
-		LegoGameState::e_unk50,
+		LegoGameState::e_pepperSpawnAct2,
 		TRUE,
 		IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 	);
