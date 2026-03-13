@@ -52,7 +52,7 @@ MxS32 g_animationsBricksterIsLoose[] = {
 const LegoChar* g_charactersBricksterIsLoose[] = {"bd", "pg", "rd", "sy", "ro", "cl"};
 
 // GLOBAL: LEGO1 0x100f4428
-MxS32 g_unk0x100f4428[] = {
+MxS32 g_animationsAfterChase[] = {
 	Act2mainScript::c_snsx07pa_RunAnim,
 	Act2mainScript::c_snsx12ni_RunAnim,
 	Act2mainScript::c_snsx15la_RunAnim,
@@ -68,7 +68,7 @@ MxS32 g_unk0x100f4428[] = {
 };
 
 // GLOBAL: LEGO1 0x100f4458
-const LegoChar* g_unk0x100f4458[] = {"papa", "nick", "laura", "cl", "pg", "rd", "sy"};
+const LegoChar* g_charactersAfterChase[] = {"papa", "nick", "laura", "cl", "pg", "rd", "sy"};
 
 // FUNCTION: LEGO1 0x1004fce0
 // FUNCTION: BETA10 0x1003a5a0
@@ -82,7 +82,7 @@ LegoAct2::LegoAct2()
 	m_unk0x1130 = 0;
 	m_nextBrick = 0;
 	m_removedBricks = 0;
-	m_unk0x1138 = NULL;
+	m_ambulanceActor = NULL;
 	m_currentAction = (Act2mainScript::Script) 0;
 	m_infomanDirecting = (Act2mainScript::Script) 0;
 	m_destLocation = LegoGameState::e_undefined;
@@ -100,7 +100,7 @@ LegoAct2::~LegoAct2()
 		TickleManager()->UnregisterClient(this);
 	}
 
-	FUN_10051900();
+	DisableAnimations();
 	InputManager()->UnRegister(this);
 	if (UserActor()) {
 		Remove(UserActor());
@@ -246,7 +246,7 @@ MxResult LegoAct2::Tickle()
 			else {
 				m_state = LegoAct2::e_goingToHide;
 				m_timeSinceLastStage = 0;
-				m_unk0x1138->GoingToHide();
+				m_ambulanceActor->GoingToHide();
 			}
 		}
 
@@ -303,30 +303,30 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 
 				LegoEntity* entity = (LegoEntity*) param.GetSender();
 
-				Mx3DPointFloat local20(entity->GetROI()->GetWorldPosition());
-				Mx3DPointFloat locale8(m_pepper->GetWorldPosition());
-				Mx3DPointFloat locala4(locale8);
+				Mx3DPointFloat pepperToBrick(entity->GetROI()->GetWorldPosition());
+				Mx3DPointFloat pepperPosition(m_pepper->GetWorldPosition());
+				Mx3DPointFloat position(pepperPosition);
 
-				local20 -= locale8;
+				pepperToBrick -= pepperPosition;
 
 				MxMatrix local2world(m_pepper->GetLocal2World());
-				Vector3 local30(local2world[0]);
-				Vector3 localac(local2world[1]);
-				Vector3 local28(local2world[2]);
+				Vector3 right(local2world[0]);
+				Vector3 up(local2world[1]);
+				Vector3 dir(local2world[2]);
 
-				local28 = local20;
-				local28.Unitize();
+				dir = pepperToBrick;
+				dir.Unitize();
 
-				Mx3DPointFloat local90(local28);
-				local90 *= 1.25f;
-				locala4 += local90;
-				locala4[1] += 0.25;
-				local30.EqualsCross(localac, local28);
-				local30.Unitize();
+				Mx3DPointFloat positionOffset(dir);
+				positionOffset *= 1.25f;
+				position += positionOffset;
+				position[1] += 0.25;
+				right.EqualsCross(up, dir);
+				right.Unitize();
 
-				Mx3DPointFloat locald4(local2world[2]);
+				Mx3DPointFloat direction(local2world[2]);
 				Mx3DPointFloat localc0(local2world[1]);
-				StartAction(Act2mainScript::c_tns051in_RunAnim, TRUE, TRUE, &locala4, &locald4, NULL);
+				StartAction(Act2mainScript::c_tns051in_RunAnim, TRUE, TRUE, &position, &direction, NULL);
 
 				m_state = LegoAct2::e_allPiecesCollected;
 				m_timeSinceLastStage = 0;
@@ -414,8 +414,8 @@ MxLong LegoAct2::HandleEndAction(MxEndActionNotificationParam& p_param)
 			((LegoPathActor*) m_pepper->GetEntity())->SetActorState(LegoPathActor::c_disabled);
 			AnimationManager()->EnableCamAnims(TRUE);
 			AnimationManager()->FUN_1005f6d0(TRUE);
-			AnimationManager()->FUN_100604f0(g_unk0x100f4428, sizeOfArray(g_unk0x100f4428));
-			AnimationManager()->FUN_10060480(g_unk0x100f4458, sizeOfArray(g_unk0x100f4458));
+			AnimationManager()->FUN_100604f0(g_animationsAfterChase, sizeOfArray(g_animationsAfterChase));
+			AnimationManager()->FUN_10060480(g_charactersAfterChase, sizeOfArray(g_charactersAfterChase));
 			break;
 		case LegoAct2::e_distributeRemainingBricks: {
 			LegoROI* roi;
@@ -452,7 +452,7 @@ MxLong LegoAct2::HandleEndAction(MxEndActionNotificationParam& p_param)
 				m_bricks[i].Remove();
 			}
 
-			FUN_10051900();
+			DisableAnimations();
 			m_destLocation = LegoGameState::e_copterbuild;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
@@ -513,7 +513,7 @@ void LegoAct2::ReadyWorld()
 	PlaceActor(actor, "EDG00_149", 0, 0.5f, 2, 0.5f);
 
 	PlayMusic(JukeboxScript::c_Jail_Music);
-	FUN_10051900();
+	DisableAnimations();
 	VideoManager()->Get3DManager()->SetFrustrum(90.0f, 0.1f, 250.f);
 	m_gameState->m_enabled = TRUE;
 }
@@ -573,7 +573,7 @@ void LegoAct2::Enable(MxBool p_enable)
 		m_transformOnDisable = m_pepper->GetLocal2World();
 		m_boundaryOnDisable = ((LegoPathActor*) m_pepper->GetEntity())->GetBoundary();
 
-		FUN_10051900();
+		DisableAnimations();
 		BackgroundAudioManager()->Stop();
 		UninitBricks();
 		DeleteObjects(&m_atomId, Act2mainScript::c_VOhead0_PlayWav, Act2mainScript::c_VOhide_PlayWav);
@@ -599,7 +599,7 @@ MxLong LegoAct2::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 		LegoPathActor* actor = (LegoPathActor*) m_pepper->GetEntity();
 		actor->SetActorState(LegoPathActor::c_disabled);
 		actor->SetWorldSpeed(0.0f);
-		FUN_10051900();
+		DisableAnimations();
 
 		if (m_timeSinceLastStage < 90000) {
 			StartAction(Act2mainScript::c_tra031ni_RunAnim, TRUE, TRUE, NULL, NULL, NULL);
@@ -631,7 +631,7 @@ MxLong LegoAct2::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 			m_currentAction = Act2mainScript::c_VOhide_PlayWav;
 		}
 
-		m_unk0x1138->Hide();
+		m_ambulanceActor->Hide();
 
 		m_state = LegoAct2::e_hidden;
 		m_timeSinceLastStage = 0;
@@ -644,7 +644,7 @@ MxLong LegoAct2::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 		MxMatrix local2world = m_ambulance->GetLocal2World();
 		MxMatrix local2world2 = local2world;
 
-		LegoPathBoundary* boundary = m_unk0x1138->GetBoundary();
+		LegoPathBoundary* boundary = m_ambulanceActor->GetBoundary();
 		local2world[3][1] += 1.5;
 		local2world2[3][1] -= 0.1;
 
@@ -656,7 +656,7 @@ MxLong LegoAct2::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 // FUNCTION: LEGO1 0x100516b0
 // FUNCTION: BETA10 0x1003bcbc
-MxResult LegoAct2::CreateBrick()
+MxResult LegoAct2::CreateDroppingBrick()
 {
 	if (m_nextBrick > 4) {
 		return FAILURE;
@@ -668,7 +668,7 @@ MxResult LegoAct2::CreateBrick()
 	MxMatrix local2world = m_ambulance->GetLocal2World();
 	MxMatrix local2world2 = local2world;
 
-	LegoPathBoundary* boundary = m_unk0x1138->GetBoundary();
+	LegoPathBoundary* boundary = m_ambulanceActor->GetBoundary();
 	local2world[3][1] += 1.3;
 	local2world2[3][1] -= 0.1;
 
@@ -680,7 +680,7 @@ MxResult LegoAct2::CreateBrick()
 }
 
 // FUNCTION: LEGO1 0x100517b0
-void LegoAct2::FUN_100517b0()
+void LegoAct2::CreateBrick()
 {
 	Act2Brick& brick = m_bricks[m_nextBrick];
 	brick.Create(m_nextBrick);
@@ -708,7 +708,7 @@ void LegoAct2::PlayMusic(JukeboxScript::Script p_objectId)
 
 // FUNCTION: LEGO1 0x10051900
 // FUNCTION: BETA10 0x1003bed1
-void LegoAct2::FUN_10051900()
+void LegoAct2::DisableAnimations()
 {
 	if (AnimationManager()) {
 		AnimationManager()->Suspend();
@@ -931,7 +931,7 @@ MxResult LegoAct2::BadEnding()
 		m_bricks[i].Remove();
 	}
 
-	LegoPathActor* actor = m_unk0x1138;
+	LegoPathActor* actor = m_ambulanceActor;
 	actor->SetActorState(LegoPathActor::c_disabled);
 
 	m_gameState->SetState(LegoAct2State::c_badEnding);
@@ -1095,7 +1095,7 @@ MxResult LegoAct2::StartAction(
 	MxBool p_ignoreCurrentAction,
 	Mx3DPointFloat* p_location,
 	Mx3DPointFloat* p_direction,
-	Mx3DPointFloat* p_param6
+	Mx3DPointFloat* p_up
 )
 {
 	if (m_currentAction == (Act2mainScript::Script) 0 || p_ignoreCurrentAction) {
@@ -1139,19 +1139,19 @@ MxResult LegoAct2::StartAction(
 				oneVectorNotNull = TRUE;
 			}
 
-			if (p_param6) {
-				matrix[1][0] = (*p_param6)[0];
-				matrix[1][1] = (*p_param6)[1];
-				matrix[1][2] = (*p_param6)[2];
+			if (p_up) {
+				matrix[1][0] = (*p_up)[0];
+				matrix[1][1] = (*p_up)[1];
+				matrix[1][2] = (*p_up)[2];
 				oneVectorNotNull = TRUE;
 			}
 
-			Vector3 firstColumn(matrix[0]);
-			Vector3 secondColumn(matrix[1]);
-			Vector3 thirdColumn(matrix[2]);
+			Vector3 right(matrix[0]);
+			Vector3 up(matrix[1]);
+			Vector3 dir(matrix[2]);
 
-			firstColumn.EqualsCross(secondColumn, thirdColumn);
-			firstColumn.Unitize();
+			right.EqualsCross(up, dir);
+			right.Unitize();
 
 			MxMatrix* pmatrix = NULL;
 
@@ -1201,28 +1201,28 @@ MxResult LegoAct2::StartAction(
 // FUNCTION: BETA10 0x10014aa8
 MxResult LegoAct2::InitializeShooting()
 {
-	LegoPathActor* actor = m_unk0x1138;
+	LegoPathActor* actor = m_ambulanceActor;
 	LegoLocomotionAnimPresenter* ap;
 
 	PlaceActor(actor, "EDG01_27", 2, 0.5f, 0, 0.5f);
 
 	ap = (LegoLocomotionAnimPresenter*) Find("LegoAnimPresenter", "Ambul_Anim0");
 	assert(ap);
-	ap->CreateROIAndBuildMap(m_unk0x1138, 0.0f);
+	ap->CreateROIAndBuildMap(m_ambulanceActor, 0.0f);
 
 	ap = (LegoLocomotionAnimPresenter*) Find("LegoAnimPresenter", "Ambul_Anim2");
 	assert(ap);
-	ap->CreateROIAndBuildMap(m_unk0x1138, 6.0f);
+	ap->CreateROIAndBuildMap(m_ambulanceActor, 6.0f);
 
 	ap = (LegoLocomotionAnimPresenter*) Find("LegoAnimPresenter", "Ambul_Anim3");
 	assert(ap);
-	ap->CreateROIAndBuildMap(m_unk0x1138, 3.0f);
+	ap->CreateROIAndBuildMap(m_ambulanceActor, 3.0f);
 
 	ap = (LegoLocomotionAnimPresenter*) Find("LegoAnimPresenter", "BrShoot");
 	assert(ap);
-	ap->CreateROIAndBuildMap(m_unk0x1138, -1.0f);
+	ap->CreateROIAndBuildMap(m_ambulanceActor, -1.0f);
 
 	actor->SetWorldSpeed(0.0f);
-	m_unk0x1138->InitializeNextShot();
+	m_ambulanceActor->InitializeNextShot();
 	return SUCCESS;
 }

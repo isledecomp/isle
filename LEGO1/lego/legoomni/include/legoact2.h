@@ -77,19 +77,19 @@ public:
 	MxBool Escape() override;              // vtable+0x64
 	void Enable(MxBool p_enable) override; // vtable+0x68
 
-	void SetUnknown0x1138(Act2Actor* p_unk0x1138) { m_unk0x1138 = p_unk0x1138; }
+	void SetAmbulanceActor(Act2Actor* p_ambulanceActor) { m_ambulanceActor = p_ambulanceActor; }
 	void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
 
-	MxResult CreateBrick();
-	void FUN_100517b0();
+	MxResult CreateDroppingBrick();
+	void CreateBrick();
 	MxResult BadEnding();
 	MxResult StartAction(
 		Act2mainScript::Script p_objectId,
-		MxBool p_param2,
-		MxBool p_param3,
+		MxBool p_isAnimation,
+		MxBool p_ignoreCurrentAction,
 		Mx3DPointFloat* p_location,
 		Mx3DPointFloat* p_direction,
-		Mx3DPointFloat* p_param6
+		Mx3DPointFloat* p_up
 	);
 
 	// SYNTHETIC: LEGO1 0x1004fe20
@@ -117,7 +117,7 @@ private:
 	MxLong HandleTransitionEnd();
 	MxLong HandlePathStruct(LegoPathStructNotificationParam& p_param);
 	void PlayMusic(JukeboxScript::Script p_objectId);
-	void FUN_10051900();
+	void DisableAnimations();
 	void HideMaPaInfo();
 	void InitBricks();
 	void UninitBricks();
@@ -145,7 +145,7 @@ private:
 	undefined4 m_unk0x112c;                    // 0x112c
 	undefined4 m_unk0x1130;                    // 0x1130
 	undefined4 m_unk0x1134;                    // 0x1134
-	Act2Actor* m_unk0x1138;                    // 0x1138
+	Act2Actor* m_ambulanceActor;               // 0x1138
 	undefined m_unk0x113c;                     // 0x113c
 	Act2mainScript::Script m_currentAction;    // 0x1140
 	Act2mainScript::Script m_infomanDirecting; // 0x1144
