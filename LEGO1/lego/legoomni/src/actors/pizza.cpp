@@ -281,7 +281,7 @@ MxLong Pizza::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 	if (m_state->m_state == PizzaMissionState::e_delivering) {
 		MxLong time = Timer()->GetTime() - m_mission->m_startTime;
 
-		if (p_param.GetTrigger() == LegoPathStruct::c_s && p_param.GetData() == 0x12e &&
+		if (p_param.GetTrigger() == LegoPathStruct::c_specialMissionWaypointAndAction && p_param.GetData() == 0x12e &&
 			GameState()->GetActorId() == LegoActor::c_pepper) {
 			m_state->m_state = PizzaMissionState::e_arrivedAtDestination;
 			m_state->SetPlayedAction(SndanimScript::c_TRS302_OpenJailDoor);
@@ -303,7 +303,7 @@ MxLong Pizza::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 			(p_param.GetData() == 0x33 && GameState()->GetActorId() == LegoActor::c_papa) ||
 			((p_param.GetData() == 0x08 || p_param.GetData() == 0x09) && GameState()->GetActorId() == LegoActor::c_nick) ||
 			(p_param.GetData() == 0x0b && GameState()->GetActorId() == LegoActor::c_laura)
-		)) || (p_param.GetTrigger() == LegoPathStruct::c_w && p_param.GetData() == 0x169 && GameState()->GetActorId() == LegoActor::c_nick)) {
+		)) || (p_param.GetTrigger() == LegoPathStruct::c_missionFinalWaypoint && p_param.GetData() == 0x169 && GameState()->GetActorId() == LegoActor::c_nick)) {
 			IsleScript::Script action;
 
 			if (time < m_mission->GetRedFinishTime()) {
@@ -353,7 +353,7 @@ MxLong Pizza::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 			MxTrace("Pizza mission: ending\n");
 		}
-		else if (p_param.GetTrigger() == LegoPathStruct::c_w) {
+		else if (p_param.GetTrigger() == LegoPathStruct::c_missionFinalWaypoint) {
 			if (p_param.GetData() == 0x15e && GameState()->GetActorId() == LegoActor::c_pepper) {
 				if (!m_playedLocationAnimation) {
 					m_playedLocationAnimation = TRUE;

@@ -300,7 +300,7 @@ MxLong TowTrack::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 	if (m_state->m_state == TowTrackMissionState::e_hookedUp &&
 		((p_param.GetTrigger() == LegoPathStruct::c_camAnim && (p_param.GetData() == 9 || p_param.GetData() == 8)) ||
-		 (p_param.GetTrigger() == LegoPathStruct::c_w && p_param.GetData() == 0x169))) {
+		 (p_param.GetTrigger() == LegoPathStruct::c_missionFinalWaypoint && p_param.GetData() == 0x169))) {
 		m_state->m_state = TowTrackMissionState::e_none;
 
 		MxLong time = Timer()->GetTime() - m_state->m_startTime;
@@ -327,7 +327,7 @@ MxLong TowTrack::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 		Leave();
 		PlayFinalAnimation(IsleScript::c_wrt060bm_RunAnim);
 	}
-	else if (p_param.GetTrigger() == LegoPathStruct::c_w && m_state->m_state == TowTrackMissionState::e_started) {
+	else if (p_param.GetTrigger() == LegoPathStruct::c_missionFinalWaypoint && m_state->m_state == TowTrackMissionState::e_started) {
 		if (p_param.GetData() == 0x15f) {
 			if (m_treeBlockageTriggered == 0) {
 				m_treeBlockageTriggered = 1;
