@@ -648,7 +648,7 @@ void Act3Brickster::Animate(float p_time)
 		assert(m_shootAnim && m_bInfo);
 
 		if (m_unk0x50 < p_time) {
-			((Act3*) m_world)->FUN_10073a60();
+			((Act3*) m_world)->DisableHelicopterDot();
 			m_unk0x58 = 0;
 			assert(SoundManager()->GetCacheSoundManager());
 			SoundManager()->GetCacheSoundManager()->Play("thpt", NULL, FALSE);

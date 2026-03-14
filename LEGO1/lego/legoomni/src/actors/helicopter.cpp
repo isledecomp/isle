@@ -430,10 +430,10 @@ void Helicopter::Animate(float p_time)
 		}
 		else {
 			if (m_state->m_unk0x08 == 4) {
-				((Act3*) m_world)->FUN_10073400();
+				((Act3*) m_world)->TransitionToGoodEnding();
 			}
 			else {
-				((Act3*) m_world)->FUN_10073430();
+				((Act3*) m_world)->TransitionToBadEnding();
 			}
 
 			SetActorState(c_disabled);

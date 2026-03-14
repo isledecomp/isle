@@ -102,10 +102,10 @@ Act3Script::Script g_bricksterDonutSounds[] = {
 };
 
 // GLOBAL: LEGO1 0x100f7814
-MxU8 g_unk0x100f7814 = 0;
+MxU8 g_copSelector = 0;
 
 // GLOBAL: LEGO1 0x100d95e8
-Act3Script::Script g_unk0x100d95e8[] =
+Act3Script::Script g_explanationAnimations[] =
 	{Act3Script::c_tlp053in_RunAnim, Act3Script::c_tlp064la_RunAnim, Act3Script::c_tlp068in_RunAnim};
 
 // FUNCTION: LEGO1 0x10071d40
@@ -246,7 +246,7 @@ Act3::Act3()
 	m_copter = NULL;
 	m_shark = NULL;
 	m_time = -1;
-	m_unk0x421e = 0;
+	m_helicopterDotCount = 0;
 
 	memset(m_helicopterDots, 0, sizeof(m_helicopterDots));
 
@@ -326,7 +326,7 @@ MxResult Act3::ShootPizza(LegoPathController* p_controller, Vector3& p_location,
 	for (nextPizza = 0; nextPizza < (MxS32) sizeOfArray(m_pizzas); nextPizza++) {
 		if (!m_pizzas[nextPizza].IsValid()) {
 			LegoPathBoundary* boundary = NULL;
-			MxU32 local18 = TRUE;
+			MxU32 noBoundaryIntersected = TRUE;
 
 			m_pizzas[nextPizza].Create(this, TRUE, nextPizza);
 
@@ -334,26 +334,26 @@ MxResult Act3::ShootPizza(LegoPathController* p_controller, Vector3& p_location,
 				return FAILURE;
 			}
 
-			MxFloat unk0x19c = *m_pizzas[nextPizza].GetApexParameter();
+			MxFloat apexParameter = *m_pizzas[nextPizza].GetApexParameter();
 			if (p_controller->FindIntersectionBoundary(
 					p_location,
 					p_direction,
 					m_pizzas[nextPizza].GetCoefficients(),
 					boundary,
-					unk0x19c
+					apexParameter
 				) == SUCCESS) {
 				Mx3DPointFloat direction;
 
 				direction = p_direction;
-				direction *= unk0x19c;
+				direction *= apexParameter;
 				direction += p_location;
 
 				assert(m_brickster && m_brickster->GetROI());
 
 				direction -= m_brickster->GetROI()->GetLocal2World()[3];
 
-				local18 = FALSE;
-				if (m_pizzas[nextPizza].Shoot(p_controller, boundary, unk0x19c) == SUCCESS) {
+				noBoundaryIntersected = FALSE;
+				if (m_pizzas[nextPizza].Shoot(p_controller, boundary, apexParameter) == SUCCESS) {
 					p_controller->PlaceActor(&m_pizzas[nextPizza]);
 					boundary->AddActor(&m_pizzas[nextPizza]);
 					m_pizzas[nextPizza].SetWorldSpeed(10.0f);
@@ -361,7 +361,7 @@ MxResult Act3::ShootPizza(LegoPathController* p_controller, Vector3& p_location,
 				}
 			}
 
-			if (local18 && m_pizzas[nextPizza].Shoot(p_controller, unk0x19c) == SUCCESS) {
+			if (noBoundaryIntersected && m_pizzas[nextPizza].Shoot(p_controller, apexParameter) == SUCCESS) {
 				p_controller->PlaceActor(&m_pizzas[nextPizza]);
 				m_pizzas[nextPizza].SetWorldSpeed(10.0f);
 				return SUCCESS;
@@ -389,22 +389,22 @@ MxResult Act3::ShootDonut(LegoPathController* p_controller, Vector3& p_location,
 				return FAILURE;
 			}
 
-			MxFloat unk0x19c = *m_donuts[nextDonut].GetApexParameter();
+			MxFloat apexParameter = *m_donuts[nextDonut].GetApexParameter();
 			if (p_controller->FindIntersectionBoundary(
 					p_location,
 					p_direction,
 					m_donuts[nextDonut].GetCoefficients(),
 					boundary,
-					unk0x19c
+					apexParameter
 				) == SUCCESS) {
-				if (m_donuts[nextDonut].Shoot(p_controller, boundary, unk0x19c) == SUCCESS) {
+				if (m_donuts[nextDonut].Shoot(p_controller, boundary, apexParameter) == SUCCESS) {
 					p_controller->PlaceActor(&m_donuts[nextDonut]);
 					boundary->AddActor(&m_donuts[nextDonut]);
 					m_donuts[nextDonut].SetWorldSpeed(10.0f);
 					return SUCCESS;
 				}
 			}
-			else if (m_donuts[nextDonut].Shoot(p_controller, unk0x19c) == SUCCESS) {
+			else if (m_donuts[nextDonut].Shoot(p_controller, apexParameter) == SUCCESS) {
 				p_controller->PlaceActor(&m_donuts[nextDonut]);
 				m_donuts[nextDonut].SetWorldSpeed(10.0f);
 				return SUCCESS;
@@ -468,14 +468,14 @@ void Act3::TriggerHitSound(undefined4 p_param1)
 			m_bricksterDonutSound = 0;
 		}
 
-		m_unk0x4220.Insert(g_bricksterDonutSounds[m_bricksterDonutSound++], Act3ListElement::e_replaceAction);
+		m_soundList.Insert(g_bricksterDonutSounds[m_bricksterDonutSound++], Act3ListElement::e_replaceAction);
 		return;
 	}
 	default:
 		return;
 	}
 
-	m_unk0x4220.Insert(objectId, Act3ListElement::e_onlyIfEmpty);
+	m_soundList.Insert(objectId, Act3ListElement::e_onlyIfEmpty);
 }
 
 // FUNCTION: LEGO1 0x10072c30
@@ -598,24 +598,24 @@ MxLong Act3::Notify(MxParam& p_param)
 
 					MxS32 length;
 					LegoBuildingInfo* info = BuildingManager()->GetInfoArray(length);
-					m_unk0x421e = 0;
+					m_helicopterDotCount = 0;
 
 					while (--length >= 0) {
 						if (info[length].m_counter < 0 && info[length].m_boundary != NULL &&
 							info[length].m_entity != NULL) {
-							m_unk0x421e++;
+							m_helicopterDotCount++;
 						}
 					}
 
 					length = 0;
-					m_unk0x421e--;
+					m_helicopterDotCount--;
 					char buf[80];
 
 					do {
 						sprintf(buf, "HelicopterDotOn%d_Bitmap", length + 1);
 						m_helicopterDots[length] = (MxPresenter*) Find("MxPresenter", buf);
 
-						if (m_unk0x421e > length) {
+						if (m_helicopterDotCount > length) {
 							m_helicopterDots[length]->Enable(TRUE);
 						}
 						else {
@@ -626,7 +626,7 @@ MxLong Act3::Notify(MxParam& p_param)
 					} while (length < (MxS32) sizeOfArray(m_helicopterDots));
 				}
 				else {
-					m_unk0x4220.RemoveByObjectIdOrFirst(param.GetAction()->GetObjectId());
+					m_soundList.RemoveByObjectIdOrFirst(param.GetAction()->GetObjectId());
 				}
 			}
 			break;
@@ -646,7 +646,7 @@ MxLong Act3::Notify(MxParam& p_param)
 		case c_notificationEndAnim:
 			if (m_state->m_state == Act3State::e_ready) {
 				assert(m_copter && m_brickster && m_cop1 && m_cop2);
-				m_unk0x4220.RemoveByObjectIdOrFirst(0);
+				m_soundList.RemoveByObjectIdOrFirst(0);
 				m_state->m_state = Act3State::e_initial;
 				Disable(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 				m_copter->HandleClick();
@@ -682,9 +682,18 @@ void Act3::ReadyWorld()
 	AnimationManager()->FUN_1005f6d0(FALSE);
 	VideoManager()->Get3DManager()->SetFrustrum(90.0f, 0.1f, 125.0f);
 
-	m_unk0x426c = g_unk0x100d95e8[rand() % 3];
-	AnimationManager()
-		->FUN_10060dc0(m_unk0x426c, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, TRUE, FALSE, FALSE, FALSE);
+	m_explanationAnimation = g_explanationAnimations[rand() % 3];
+	AnimationManager()->FUN_10060dc0(
+		m_explanationAnimation,
+		NULL,
+		TRUE,
+		LegoAnimationManager::e_unk0,
+		NULL,
+		TRUE,
+		FALSE,
+		FALSE,
+		FALSE
+	);
 
 	m_state->m_state = Act3State::e_ready;
 }
@@ -697,11 +706,11 @@ MxResult Act3::Tickle()
 		return SUCCESS;
 	}
 
-	if (m_unk0x426c != (Act3Script::Script) 0) {
-		if (AnimationManager()->FUN_10064ee0(m_unk0x426c)) {
+	if (m_explanationAnimation != (Act3Script::Script) 0) {
+		if (AnimationManager()->FUN_10064ee0(m_explanationAnimation)) {
 			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			TickleManager()->UnregisterClient(this);
-			m_unk0x426c = (Act3Script::Script) 0;
+			m_explanationAnimation = (Act3Script::Script) 0;
 		}
 	}
 
@@ -710,7 +719,7 @@ MxResult Act3::Tickle()
 
 // FUNCTION: LEGO1 0x10073360
 // FUNCTION: BETA10 0x100169d5
-MxResult Act3::FUN_10073360(Act3Ammo& p_ammo, const Vector3& p_param2)
+MxResult Act3::HitBrickster(Act3Ammo& p_ammo, const Vector3& p_param2)
 {
 	assert(m_brickster);
 	m_brickster->FUN_100417a0(p_ammo, p_param2);
@@ -720,11 +729,11 @@ MxResult Act3::FUN_10073360(Act3Ammo& p_ammo, const Vector3& p_param2)
 
 // FUNCTION: LEGO1 0x10073390
 // FUNCTION: BETA10 0x10016a40
-MxResult Act3::FUN_10073390(Act3Ammo& p_ammo, const Vector3& p_param2)
+MxResult Act3::HitCop(Act3Ammo& p_ammo, const Vector3& p_param2)
 {
 	assert(m_cop1 && m_cop2);
 
-	if (!(g_unk0x100f7814 & 1)) {
+	if (!(g_copSelector & 1)) {
 		m_cop1->FUN_10040350(p_ammo, p_param2);
 	}
 	else {
@@ -732,7 +741,7 @@ MxResult Act3::FUN_10073390(Act3Ammo& p_ammo, const Vector3& p_param2)
 	}
 
 	TriggerHitSound(3);
-	g_unk0x100f7814++;
+	g_copSelector++;
 	return SUCCESS;
 }
 
@@ -756,7 +765,7 @@ void Act3::SetBrickster(Act3Brickster* p_brickster)
 }
 
 // FUNCTION: LEGO1 0x10073400
-void Act3::FUN_10073400()
+void Act3::TransitionToGoodEnding()
 {
 	m_state->m_state = Act3State::e_goodEnding;
 	m_destLocation = LegoGameState::e_infomain;
@@ -764,7 +773,7 @@ void Act3::FUN_10073400()
 }
 
 // FUNCTION: LEGO1 0x10073430
-void Act3::FUN_10073430()
+void Act3::TransitionToBadEnding()
 {
 	m_state->m_state = Act3State::e_badEnding;
 	m_destLocation = LegoGameState::e_infomain;
@@ -782,7 +791,7 @@ void Act3::GoodEnding(const Matrix4& p_destination)
 	m_brickster->SetActorState(LegoPathActor::c_disabled);
 
 #ifndef BETA10
-	m_unk0x4220.Clear();
+	m_soundList.Clear();
 	m_copter->FUN_10004640(p_destination);
 
 	DebugPrintf("In Good Ending...");
@@ -865,7 +874,7 @@ void Act3::BadEnding(const Matrix4& p_destination)
 	m_cop2->SetActorState(LegoPathActor::c_disabled);
 	m_brickster->SetActorState(LegoPathActor::c_disabled);
 
-	m_unk0x4220.Clear();
+	m_soundList.Clear();
 	m_copter->FUN_10004670(p_destination);
 
 	DebugPrintf("In Bad Ending...");
@@ -879,10 +888,10 @@ void Act3::BadEnding(const Matrix4& p_destination)
 }
 
 // FUNCTION: LEGO1 0x10073a60
-void Act3::FUN_10073a60()
+void Act3::DisableHelicopterDot()
 {
-	m_unk0x421e--;
-	m_helicopterDots[m_unk0x421e]->Enable(FALSE);
+	m_helicopterDotCount--;
+	m_helicopterDots[m_helicopterDotCount]->Enable(FALSE);
 }
 
 // FUNCTION: LEGO1 0x10073a90
