@@ -12,7 +12,7 @@ DECOMP_SIZE_ASSERT(RaceState::Entry, 0x06)
 DECOMP_SIZE_ASSERT(RaceState, 0x2c)
 
 // Defined in legopathstruct.cpp
-extern MxBool g_alsoInvertDirection;
+extern MxBool g_triggerHandlingIgnoreDirection;
 
 // FUNCTION: LEGO1 0x10015aa0
 LegoRace::LegoRace()
@@ -56,7 +56,7 @@ MxResult LegoRace::Create(MxDSAction& p_dsAction)
 // FUNCTION: BETA10 0x100c7ab5
 LegoRace::~LegoRace()
 {
-	g_alsoInvertDirection = FALSE;
+	g_triggerHandlingIgnoreDirection = FALSE;
 	if (m_pathActor) {
 		SetUserActor(m_pathActor);
 		NavController()->ResetMaxLinearVel(m_pathActor->GetMaxLinearVel());

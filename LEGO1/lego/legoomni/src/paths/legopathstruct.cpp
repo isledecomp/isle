@@ -19,12 +19,12 @@ DECOMP_SIZE_ASSERT(LegoPathStruct, 0x14)
 extern MxU32 g_isleFlags;
 
 // GLOBAL: LEGO1 0x100f119c
-MxBool g_alsoInvertDirection = FALSE;
+MxBool g_triggerHandlingIgnoreDirection = FALSE;
 
 // FUNCTION: LEGO1 0x1001b700
 void LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data)
 {
-	if (!HandleTrigger(p_actor, p_direction, p_data, FALSE) && g_alsoInvertDirection) {
+	if (!HandleTrigger(p_actor, p_direction, p_data, FALSE) && g_triggerHandlingIgnoreDirection) {
 		HandleTrigger(p_actor, p_direction, p_data, TRUE);
 	}
 }
