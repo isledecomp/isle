@@ -150,6 +150,7 @@ types:
         doc: Snap Lockitt
       - id: pt
         type: standard_character_entry
+        doc: Pitt Stop
       - id: mg
         type: standard_character_entry
         doc: Margaret Patricia "Maggie" Post
