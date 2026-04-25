@@ -21,9 +21,10 @@ foreach($a in $artifacts) {
 
     foreach($i in $build_ids) {
         $params = @{
-            FilePath = "reccmp-reccmp"
+            FilePath = "python"
             PassThru = $null
             ArgumentList = @(
+                "-m", "reccmp.tools.asmcmp",
                 "--paths",
                 $("legobin/" + $a["binfile"]),
                 $($build_dirs[$i] + "/" + $a["binfile"]),
