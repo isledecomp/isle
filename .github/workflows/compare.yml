@@ -175,9 +175,9 @@ jobs:
         find build-entropy -type f -name "CONFIGPROGRESS*.json" > configsamples.txt
         find build-entropy -type f -name "ISLEPROGRESS*.json" > islesamples.txt
         find build-entropy -type f -name "LEGO1PROGRESS*.json" > lego1samples.txt
-        reccmp-aggregate --samples @configsamples.txt --output CONFIGPROGRESS-agg.json --html CONFIGPROGRESS-agg.html
-        reccmp-aggregate --samples @islesamples.txt --output ISLEPROGRESS-agg.json --html ISLEPROGRESS-agg.html
-        reccmp-aggregate --samples @lego1samples.txt --output LEGO1PROGRESS-agg.json --html LEGO1PROGRESS-agg.html
+        reccmp-aggregate --samples @configsamples.txt --output CONFIGPROGRESS-agg.json --html CONFIGPROGRESS-agg.html --svg CONFIGPROGRESS-agg.svg --svg-icon assets/config.png
+        reccmp-aggregate --samples @islesamples.txt --output ISLEPROGRESS-agg.json --html ISLEPROGRESS-agg.html --svg ISLEPROGRESS-agg.svg --svg-icon assets/isle.png
+        reccmp-aggregate --samples @lego1samples.txt --output LEGO1PROGRESS-agg.json --html LEGO1PROGRESS-agg.html --svg LEGO1PROGRESS-agg.svg --svg-icon assets/lego1.png
 
     - name: Compare Aggregate Accuracy With Current Master
       shell: bash
@@ -208,6 +208,10 @@ jobs:
     needs: [compare]
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     steps:
     - uses: actions/checkout@v4
       with:
@@ -220,10 +224,26 @@ jobs:
     - name: Upload Continuous Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        UPLOAD_KEY: ${{ secrets.UPLOAD_KEY }}
       run: |
         export UPLOADTOOL_SUFFIX=accuracy
         ./upload.sh \
           CONFIGPROGRESS* \
           ISLEPROGRESS* \
           LEGO1PROGRESS*
+
+    - name: Prepare Pages
+      run: |
+        mkdir -p progress
+        cp CONFIGPROGRESS-agg.svg progress/CONFIGPROGRESS.SVG
+        cp ISLEPROGRESS-agg.svg progress/ISLEPROGRESS.SVG
+        cp LEGO1PROGRESS-agg.svg progress/LEGO1PROGRESS.SVG
+        cp CONFIGPROGRESS-agg.html progress/CONFIGPROGRESS.HTML
+        cp ISLEPROGRESS-agg.html progress/ISLEPROGRESS.HTML
+        cp LEGO1PROGRESS-agg.html progress/LEGO1PROGRESS.HTML
+
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        path: progress/
+
+    - name: Deploy to GitHub Pages
+      uses: actions/deploy-pages@v5
