@@ -155,7 +155,7 @@ class VariableNameRule(object):
             return self.scope_prefix_rule.global_prefix
         elif (scope is CursorKind.CLASS_DECL) or (scope is CursorKind.CLASS_TEMPLATE):
             return self.scope_prefix_rule.class_member_prefix
-        elif (scope is CursorKind.STRUCT_DECL):
+        elif (scope is CursorKind.STRUCT_DECL) or (scope is CursorKind.UNION_DECL):
             return self.scope_prefix_rule.struct_member_prefix
         return ""
 
@@ -617,7 +617,7 @@ def do_validate(options, filename):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s',
-                        filename='log.txt', filemode='w')
+                        filemode='w')
 
     """ Parse all command line arguments and validate """
     op = Options()
