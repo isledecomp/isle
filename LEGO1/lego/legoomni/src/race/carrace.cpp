@@ -130,7 +130,7 @@ void CarRace::ReadyWorld()
 	m_introAnimation = g_introAnimations[rand() & 7];
 
 	AnimationManager()
-		->FUN_10060dc0(m_introAnimation, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, TRUE, FALSE, TRUE);
+		->StartManagedAnimation(m_introAnimation, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, TRUE, FALSE, TRUE);
 
 	m_opponent1Locator = (MxStillPresenter*) Find("MxPresenter", "CarLocator2");
 	m_opponent1Locator->SetPosition(m_progressBarRect.GetLeft(), m_progressBarRect.GetTop());
@@ -163,7 +163,7 @@ MxLong CarRace::HandleEndAction(MxEndActionNotificationParam& p_param)
 			result = 1;
 		}
 		else if (m_firstFinishAnimation == objectId) {
-			AnimationManager()->FUN_10060dc0(
+			AnimationManager()->StartManagedAnimation(
 				m_secondFinishAnimation,
 				NULL,
 				TRUE,
@@ -268,7 +268,7 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 						raceState->m_score = score;
 					}
 
-					AnimationManager()->FUN_10060dc0(
+					AnimationManager()->StartManagedAnimation(
 						m_firstFinishAnimation,
 						NULL,
 						TRUE,
@@ -426,7 +426,7 @@ MxBool CarRace::Escape()
 {
 	InvokeAction(Extra::e_stop, *g_carraceScript, CarraceScript::c_irtx08ra_PlayWav, NULL);
 
-	AnimationManager()->FUN_10061010(FALSE);
+	AnimationManager()->StopAnimations(FALSE);
 	DeleteObjects(&m_atomId, 500, 999);
 	m_act1State->m_state = Act1State::e_none;
 	VariableTable()->SetVariable(g_strHIT_WALL_SOUND, "");

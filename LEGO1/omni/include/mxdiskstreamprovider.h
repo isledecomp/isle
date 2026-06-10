@@ -44,10 +44,10 @@ public:
 	}
 
 	MxResult WaitForWorkToComplete();
-	MxResult FUN_100d1780(MxDSStreamingAction* p_action);
+	MxResult QueueDiskRead(MxDSStreamingAction* p_action);
 	void PerformWork();
-	static MxBool FUN_100d1af0(MxDSStreamingAction* p_action);
-	MxResult FUN_100d1b20(MxDSStreamingAction* p_action);
+	static MxBool CanStartReadNow(MxDSStreamingAction* p_action);
+	MxResult StitchSplitStreamBuffer(MxDSStreamingAction* p_action);
 
 	MxResult SetResourceToGet(MxStreamController* p_resource) override; // vtable+0x14
 	MxU32 GetFileSize() override;                                       // vtable+0x18

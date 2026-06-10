@@ -35,7 +35,7 @@ public:
 
 	MxResult AllocateBuffer(MxU32 p_bufferSize, Type p_mode);
 	MxResult SetBufferPointer(MxU8* p_buffer, MxU32 p_size);
-	MxResult FUN_100c67b0(
+	MxResult ParseDataChunks(
 		MxStreamController* p_controller,
 		MxDSAction* p_action,
 		MxDSStreamingAction** p_streamingAction
@@ -58,9 +58,9 @@ public:
 	MxU8 ReleaseRef(MxDSChunk*);
 	void AddRef(MxDSChunk* p_chunk);
 	MxResult CalcBytesRemaining(MxU8* p_data);
-	void FUN_100c6f80(MxU32 p_writeOffset);
-	MxU8* FUN_100c6fa0(MxU8* p_data);
-	MxResult FUN_100c7090(MxDSBuffer* p_buf);
+	void SeekBufferCursor(MxU32 p_writeOffset);
+	MxU8* FindNextChunk(MxU8* p_data);
+	MxResult CopyBufferStateFrom(MxDSBuffer* p_buf);
 
 	static MxCore* ReadChunk(MxDSBuffer* p_buffer, MxU32* p_chunkData, MxU16 p_flags);
 	static MxResult Append(MxU8* p_buffer1, MxU8* p_buffer2);

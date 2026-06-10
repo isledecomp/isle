@@ -180,7 +180,7 @@ void LegoAnimMMPresenter::StartingTickle()
 // FUNCTION: BETA10 0x1004c372
 void LegoAnimMMPresenter::StreamingTickle()
 {
-	if (FUN_1004b450()) {
+	if (RunStartupSequence()) {
 		ProgressTickleState(e_repeating);
 	}
 }
@@ -262,49 +262,49 @@ void LegoAnimMMPresenter::ParseExtra()
 
 // FUNCTION: LEGO1 0x1004b450
 // FUNCTION: BETA10 0x1004c71d
-MxBool LegoAnimMMPresenter::FUN_1004b450()
+MxBool LegoAnimMMPresenter::RunStartupSequence()
 {
 	MxBool result = FALSE;
 	MxLong time = Timer()->GetTime() - m_unk0x50;
 
 	switch (m_unk0x58) {
 	case e_unk0:
-		if (!FUN_1004b530(time)) {
+		if (!CaptureAnimationState(time)) {
 			break;
 		}
 		m_unk0x58 = e_unk1;
 	case e_unk1:
-		if (!FUN_1004b570(time)) {
+		if (!WaitForPreRoll(time)) {
 			break;
 		}
 		m_unk0x58 = e_unk2;
 	case e_unk2:
-		if (!FUN_1004b580(time)) {
+		if (!WaitForTransitionSound(time)) {
 			break;
 		}
 		m_unk0x58 = e_unk3;
 	case e_unk3:
-		if (!FUN_1004b5b0(time)) {
+		if (!RestoreInitialTransforms(time)) {
 			break;
 		}
 		m_unk0x58 = e_unk4;
 	case e_unk4:
-		if (!FUN_1004b600(time)) {
+		if (!PreparePresentersForStart(time)) {
 			break;
 		}
 		m_unk0x58 = e_unk5;
 	case e_unk5:
-		if (!FUN_1004b610(time)) {
+		if (!StartChildPresenters(time)) {
 			break;
 		}
 		m_unk0x58 = e_unk6;
 	case e_unk6:
-		if (!FUN_1004b6b0(time)) {
+		if (!WaitForAnimationPresenterIdle(time)) {
 			break;
 		}
 		m_unk0x58 = e_unk7;
 	case e_unk7:
-		FUN_1004b6d0(time);
+		RestoreUserActorAfterAnimation(time);
 		result = TRUE;
 	}
 
@@ -313,7 +313,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b450()
 
 // FUNCTION: LEGO1 0x1004b530
 // FUNCTION: BETA10 0x1004c8c4
-MxBool LegoAnimMMPresenter::FUN_1004b530(MxLong p_time)
+MxBool LegoAnimMMPresenter::CaptureAnimationState(MxLong p_time)
 {
 	if (m_presenter != NULL) {
 		m_presenter->GetTransforms(m_unk0x68, 0);
@@ -326,14 +326,14 @@ MxBool LegoAnimMMPresenter::FUN_1004b530(MxLong p_time)
 
 // FUNCTION: LEGO1 0x1004b570
 // FUNCTION: BETA10 0x1004c9cc
-MxBool LegoAnimMMPresenter::FUN_1004b570(MxLong p_time)
+MxBool LegoAnimMMPresenter::WaitForPreRoll(MxLong p_time)
 {
 	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x1004b580
 // FUNCTION: BETA10 0x1004ca3f
-MxBool LegoAnimMMPresenter::FUN_1004b580(MxLong p_time)
+MxBool LegoAnimMMPresenter::WaitForTransitionSound(MxLong p_time)
 {
 	switch (m_unk0x59) {
 	case 0:
@@ -355,7 +355,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b580(MxLong p_time)
 
 // FUNCTION: LEGO1 0x1004b5b0
 // FUNCTION: BETA10 0x1004cb09
-MxBool LegoAnimMMPresenter::FUN_1004b5b0(MxLong p_time)
+MxBool LegoAnimMMPresenter::RestoreInitialTransforms(MxLong p_time)
 {
 	switch (m_unk0x59) {
 	case 0:
@@ -382,14 +382,14 @@ MxBool LegoAnimMMPresenter::FUN_1004b5b0(MxLong p_time)
 
 // FUNCTION: LEGO1 0x1004b600
 // FUNCTION: BETA10 0x1004cbfb
-MxBool LegoAnimMMPresenter::FUN_1004b600(MxLong p_time)
+MxBool LegoAnimMMPresenter::PreparePresentersForStart(MxLong p_time)
 {
 	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x1004b610
 // FUNCTION: BETA10 0x1004cc6e
-MxBool LegoAnimMMPresenter::FUN_1004b610(MxLong p_time)
+MxBool LegoAnimMMPresenter::StartChildPresenters(MxLong p_time)
 {
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 		if ((*it)->IsA("LegoAnimPresenter") || (*it)->IsA("LegoLoopingAnimPresenter")) {
@@ -411,7 +411,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b610(MxLong p_time)
 
 // FUNCTION: LEGO1 0x1004b6b0
 // FUNCTION: BETA10 0x1004cdc5
-MxBool LegoAnimMMPresenter::FUN_1004b6b0(MxLong p_time)
+MxBool LegoAnimMMPresenter::WaitForAnimationPresenterIdle(MxLong p_time)
 {
 	if (m_presenter != NULL && m_presenter->GetCurrentTickleState() != e_idle) {
 		return FALSE;
@@ -423,7 +423,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b6b0(MxLong p_time)
 
 // FUNCTION: LEGO1 0x1004b6d0
 // FUNCTION: BETA10 0x1004ce18
-MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
+MxBool LegoAnimMMPresenter::RestoreUserActorAfterAnimation(MxLong p_time)
 {
 #ifdef BETA10
 	switch (m_unk0x58) {
@@ -486,14 +486,14 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 }
 
 // FUNCTION: LEGO1 0x1004b830
-MxBool LegoAnimMMPresenter::FUN_1004b830()
+MxBool LegoAnimMMPresenter::HasPassedPresenterStart()
 {
 	return m_unk0x58 >= e_unk6;
 }
 
 // FUNCTION: LEGO1 0x1004b840
 // FUNCTION: BETA10 0x1004d033
-void LegoAnimMMPresenter::FUN_1004b840()
+void LegoAnimMMPresenter::StopAndFinishAnimation()
 {
 	MxDSAction* action = m_action;
 
@@ -507,26 +507,26 @@ void LegoAnimMMPresenter::FUN_1004b840()
 		}
 	}
 
-	FUN_1004b6d0(0);
+	RestoreUserActorAfterAnimation(0);
 	EndAction();
 
 #ifndef BETA10
 	if (action != NULL) {
-		Streamer()->FUN_100b98f0(action);
+		Streamer()->StopDiskAction(action);
 	}
 #endif
 }
 
 // FUNCTION: LEGO1 0x1004b8b0
 // FUNCTION: BETA10 0x1004d104
-MxBool LegoAnimMMPresenter::FUN_1004b8b0()
+MxBool LegoAnimMMPresenter::UsesLocalActors()
 {
 	return m_tranInfo != NULL ? m_tranInfo->m_unk0x28 : TRUE;
 }
 
 // FUNCTION: LEGO1 0x1004b8c0
 // FUNCTION: BETA10 0x1004d13d
-void LegoAnimMMPresenter::FUN_1004b8c0()
+void LegoAnimMMPresenter::ReleaseUserActor()
 {
-	FUN_1004b6d0(0);
+	RestoreUserActorAfterAnimation(0);
 }

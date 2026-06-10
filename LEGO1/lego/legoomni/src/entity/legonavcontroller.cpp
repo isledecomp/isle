@@ -675,7 +675,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 			break;
 		}
 		case VK_SPACE: // Interrupt/end animations or free navigation
-			AnimationManager()->FUN_10061010(TRUE);
+			AnimationManager()->StopAnimations(TRUE);
 			break;
 		case 'Z': { // Make nearby plants "dance"
 			LegoOmni* omni = Lego();
@@ -815,7 +815,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 							// Add to animation object ID offset
 							g_nextAnimation += key - '0';
 							g_animationCalcStep = 0;
-							AnimationManager()->FUN_10060dc0(
+							AnimationManager()->StartManagedAnimation(
 								g_nextAnimation,
 								NULL,
 								TRUE,
@@ -897,7 +897,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 				case 'A':
 					if (g_animationCalcStep == 1) {
 						Lego()->m_initialized = TRUE;
-						AnimationManager()->FUN_10060570(TRUE);
+						AnimationManager()->SetAutoPlayAnimations(TRUE);
 						g_animationCalcStep = 0;
 					}
 					else {
@@ -984,7 +984,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 					break;
 				case 'V':
 					if (g_nextAnimation > 0 && g_animationCalcStep == 0) {
-						AnimationManager()->FUN_10061010(FALSE);
+						AnimationManager()->StopAnimations(FALSE);
 					}
 
 					if (g_animationCalcStep != 0) {

@@ -115,8 +115,8 @@ MxLong Jetski::HandleClick()
 #else
 	GetCurrentAction().SetObjectId(-1);
 
-	AnimationManager()->FUN_1005f6d0(FALSE);
-	AnimationManager()->FUN_10064670(NULL);
+	AnimationManager()->EnableExtras(FALSE);
+	AnimationManager()->SpawnBricksterAtPoliceStation(NULL);
 	Enter();
 	ControlManager()->Register(this);
 #endif
@@ -174,7 +174,7 @@ void Jetski::ActivateSceneActions()
 				MxMatrix mat(user->GetROI()->GetLocal2World());
 				mat.TranslateBy(mat[2][0] * 2.5, mat[2][1] + 0.6, mat[2][2] * 2.5);
 
-				AnimationManager()->FUN_10060dc0(
+				AnimationManager()->StartManagedAnimation(
 					IsleScript::c_sjs007in_RunAnim,
 					&mat,
 					TRUE,

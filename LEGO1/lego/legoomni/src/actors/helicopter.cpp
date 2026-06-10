@@ -113,7 +113,7 @@ void Helicopter::Exit()
 	RemoveFromCurrentWorld(m_script, 0x1d);
 	RemoveFromCurrentWorld(m_script, 0x1e);
 	RemoveFromCurrentWorld(m_script, 0x1f);
-	AnimationManager()->FUN_1005f6d0(TRUE);
+	AnimationManager()->EnableExtras(TRUE);
 	ControlManager()->Unregister(this);
 }
 
@@ -130,7 +130,7 @@ MxLong Helicopter::HandleClick()
 		assert(m_world);
 	}
 
-	AnimationManager()->FUN_1005f6d0(FALSE);
+	AnimationManager()->EnableExtras(FALSE);
 
 	if (UserActor()) {
 		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
@@ -141,7 +141,7 @@ MxLong Helicopter::HandleClick()
 	switch (GameState()->GetCurrentAct()) {
 	case LegoGameState::e_act1:
 		m_script = *g_isleScript;
-		AnimationManager()->FUN_10064670(NULL);
+		AnimationManager()->SpawnBricksterAtPoliceStation(NULL);
 		SpawnPlayer(
 			LegoGameState::e_helicopterLanded,
 			TRUE,
@@ -445,7 +445,7 @@ void Helicopter::Animate(float p_time)
 }
 
 // FUNCTION: LEGO1 0x100042a0
-void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
+void Helicopter::PrepareEndingFlightTransform(const Matrix4& p_matrix)
 {
 	MxMatrix local48;
 	MxMatrix local90;
@@ -489,19 +489,19 @@ void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 }
 
 // FUNCTION: LEGO1 0x10004640
-void Helicopter::FUN_10004640(const Matrix4& p_matrix)
+void Helicopter::StartGoodEndingFlight(const Matrix4& p_matrix)
 {
 	if (m_state->m_unk0x08 != 4 && m_state->m_unk0x08 != 5) {
 		m_state->m_unk0x08 = 4;
-		FUN_100042a0(p_matrix);
+		PrepareEndingFlightTransform(p_matrix);
 	}
 }
 
 // FUNCTION: LEGO1 0x10004670
-void Helicopter::FUN_10004670(const Matrix4& p_matrix)
+void Helicopter::StartBadEndingFlight(const Matrix4& p_matrix)
 {
 	if (m_state->m_unk0x08 != 4 && m_state->m_unk0x08 != 5) {
 		m_state->m_unk0x08 = 5;
-		FUN_100042a0(p_matrix);
+		PrepareEndingFlightTransform(p_matrix);
 	}
 }

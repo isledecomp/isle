@@ -581,7 +581,7 @@ void Ambulance::Reset()
 	m_atPoliceTask = 0;
 	g_isleFlags |= Isle::c_playMusic;
 	AnimationManager()->EnableCamAnims(TRUE);
-	AnimationManager()->FUN_1005f6d0(TRUE);
+	AnimationManager()->EnableExtras(TRUE);
 	m_state->m_startTime = INT_MIN;
 	m_state = NULL;
 }
@@ -591,7 +591,7 @@ void Ambulance::Reset()
 void Ambulance::PlayAnimation(IsleScript::Script p_objectId)
 {
 	AnimationManager()
-		->FUN_10060dc0(p_objectId, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, FALSE, FALSE, TRUE);
+		->StartManagedAnimation(p_objectId, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, FALSE, FALSE, TRUE);
 	m_lastAnimation = p_objectId;
 }
 
@@ -600,7 +600,7 @@ void Ambulance::PlayAnimation(IsleScript::Script p_objectId)
 void Ambulance::PlayFinalAnimation(IsleScript::Script p_objectId)
 {
 	AnimationManager()
-		->FUN_10060dc0(p_objectId, NULL, TRUE, LegoAnimationManager::e_unk1, NULL, FALSE, FALSE, TRUE, TRUE);
+		->StartManagedAnimation(p_objectId, NULL, TRUE, LegoAnimationManager::e_unk1, NULL, FALSE, FALSE, TRUE, TRUE);
 	m_lastAnimation = p_objectId;
 }
 

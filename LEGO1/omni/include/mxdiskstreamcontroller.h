@@ -45,12 +45,12 @@ public:
 
 	MxBool GetUnk0xc4() const { return m_unk0xc4; }
 
-	MxResult FUN_100c7890(MxDSStreamingAction* p_action);
-	void FUN_100c7cb0(MxDSStreamingAction* p_action);
-	void FUN_100c7f40(MxDSStreamingAction* p_streamingaction);
-	void FUN_100c8120(MxDSAction* p_action);
+	MxResult QueueReadAheadAction(MxDSStreamingAction* p_action);
+	void DeleteStreamingAction(MxDSStreamingAction* p_action);
+	void QueueCompletedRead(MxDSStreamingAction* p_streamingaction);
+	void CancelDiskAction(MxDSAction* p_action);
 	void InsertToList74(MxDSBuffer* p_buffer);
-	void FUN_100c8670(MxDSStreamingAction* p_streamingAction);
+	void QueueActionForDeletion(MxDSStreamingAction* p_streamingAction);
 
 private:
 	MxDSObjectList m_list0x64;      // 0x64
@@ -63,14 +63,14 @@ private:
 	MxDSObjectList m_list0xb8;      // 0xb8
 	MxBool m_unk0xc4;               // 0xc4
 
-	void FUN_100c7970();
-	void FUN_100c7ce0(MxDSBuffer* p_buffer);
-	MxResult FUN_100c7d10();
-	void FUN_100c7980();
-	MxDSStreamingAction* FUN_100c7db0();
-	MxResult FUN_100c8360(MxDSStreamingAction* p_action);
-	void FUN_100c8540();
-	void FUN_100c8720();
+	void OnReadAheadQueued();
+	void ReleaseStreamBuffer(MxDSBuffer* p_buffer);
+	MxResult ProcessNextCachedRead();
+	void ScheduleNextDiskRead();
+	MxDSStreamingAction* PopReadyStreamingAction();
+	MxResult ConsumeStreamBuffer(MxDSStreamingAction* p_action);
+	void PurgeReleasedBuffers();
+	void DeleteQueuedActions();
 };
 
 // TEMPLATE: LEGO1 0x100c14d0

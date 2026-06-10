@@ -218,7 +218,7 @@ MxLong TowTrack::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 			m_state->UpdateScore(LegoState::e_red, m_actorId);
 
-			AnimationManager()->FUN_1005f6d0(TRUE);
+			AnimationManager()->EnableExtras(TRUE);
 			g_isleFlags |= Isle::c_playMusic;
 			AnimationManager()->EnableCamAnims(TRUE);
 		}
@@ -274,7 +274,7 @@ MxLong TowTrack::HandleEndAction(MxEndActionNotificationParam& p_param)
 		}
 		else if (objectId == IsleScript::c_wgs098nu_RunAnim || objectId == IsleScript::c_wgs099nu_RunAnim || objectId == IsleScript::c_wgs100nu_RunAnim || objectId == IsleScript::c_wgs101nu_RunAnim || objectId == IsleScript::c_wgs102nu_RunAnim || objectId == IsleScript::c_wgs085nu_RunAnim || objectId == IsleScript::c_wgs086nu_RunAnim || objectId == IsleScript::c_wgs087nu_RunAnim || objectId == IsleScript::c_wgs088nu_RunAnim || objectId == IsleScript::c_wgs089nu_RunAnim || objectId == IsleScript::c_wgs091nu_RunAnim || objectId == IsleScript::c_wgs092nu_RunAnim || objectId == IsleScript::c_wgs093nu_RunAnim || objectId == IsleScript::c_wgs094nu_RunAnim || objectId == IsleScript::c_wgs095nu_RunAnim) {
 			((Act1State*) GameState()->GetState("Act1State"))->m_state = Act1State::e_none;
-			AnimationManager()->FUN_1005f6d0(TRUE);
+			AnimationManager()->EnableExtras(TRUE);
 			g_isleFlags |= Isle::c_playMusic;
 			AnimationManager()->EnableCamAnims(TRUE);
 		}
@@ -554,7 +554,7 @@ void TowTrack::Reset()
 	m_state->m_state = TowTrackMissionState::e_none;
 	g_isleFlags |= Isle::c_playMusic;
 	AnimationManager()->EnableCamAnims(TRUE);
-	AnimationManager()->FUN_1005f6d0(TRUE);
+	AnimationManager()->EnableExtras(TRUE);
 	m_state->m_startTime = INT_MIN;
 	m_state->m_takingTooLong = FALSE;
 	m_state = NULL;
@@ -567,16 +567,16 @@ void TowTrack::Reset()
 void TowTrack::PlayFinalAnimation(IsleScript::Script p_objectId)
 {
 	AnimationManager()
-		->FUN_10060dc0(p_objectId, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, FALSE, FALSE, TRUE);
+		->StartManagedAnimation(p_objectId, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, FALSE, FALSE, TRUE);
 	m_lastAnimation = p_objectId;
 }
 
 // FUNCTION: LEGO1 0x1004dcb0
 void TowTrack::PlayActorAnimation(IsleScript::Script p_objectId)
 {
-	AnimationManager()->FUN_1005f6d0(TRUE);
+	AnimationManager()->EnableExtras(TRUE);
 	AnimationManager()
-		->FUN_10060dc0(p_objectId, NULL, TRUE, LegoAnimationManager::e_unk1, NULL, FALSE, TRUE, TRUE, TRUE);
+		->StartManagedAnimation(p_objectId, NULL, TRUE, LegoAnimationManager::e_unk1, NULL, FALSE, TRUE, TRUE, TRUE);
 	m_lastAnimation = p_objectId;
 }
 

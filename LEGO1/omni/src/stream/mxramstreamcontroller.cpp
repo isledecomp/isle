@@ -86,9 +86,9 @@ MxResult MxRAMStreamController::DeserializeObject(MxDSStreamingAction& p_action)
 	MxDSStreamingAction* value = NULL;
 
 	do {
-		m_buffer.FUN_100c6f80(p_action.GetUnknown94());
+		m_buffer.SeekBufferCursor(p_action.GetUnknown94());
 		// Probably not MxResult, see below
-		result = m_buffer.FUN_100c67b0(this, &p_action, &value);
+		result = m_buffer.ParseDataChunks(this, &p_action, &value);
 	} while (m_unk0x3c.Find(&p_action) != NULL);
 
 	return result == SUCCESS ? SUCCESS : FAILURE;

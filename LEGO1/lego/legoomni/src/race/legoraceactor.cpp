@@ -120,7 +120,7 @@ MxResult LegoRaceActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 
 // FUNCTION: LEGO1 0x10014aa0
 // FUNCTION: BETA10 0x100ca038
-MxResult LegoRaceActor::FUN_10014aa0()
+MxResult LegoRaceActor::OnRaceActorAction()
 {
 	return SUCCESS;
 }

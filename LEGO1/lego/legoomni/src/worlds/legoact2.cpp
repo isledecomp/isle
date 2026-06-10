@@ -191,7 +191,7 @@ MxResult LegoAct2::Tickle()
 		break;
 	case LegoAct2::e_holdingSpeech:
 		if (g_bricksterSpeech) {
-			if (AnimationManager()->FUN_10064ee0(g_bricksterSpeech)) {
+			if (AnimationManager()->IsAnimationFinished(g_bricksterSpeech)) {
 				Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 				g_bricksterSpeech = (Act2mainScript::Script) 0;
 			}
@@ -206,9 +206,9 @@ MxResult LegoAct2::Tickle()
 		StartAction(Act2mainScript::c_tja009ni_RunAnim, TRUE, TRUE, NULL, NULL, NULL);
 
 		AnimationManager()->EnableCamAnims(TRUE);
-		AnimationManager()->FUN_1005f6d0(TRUE);
-		AnimationManager()->FUN_100604f0(g_animationsBricksterIsLoose, sizeOfArray(g_animationsBricksterIsLoose));
-		AnimationManager()->FUN_10060480(g_charactersBricksterIsLoose, sizeOfArray(g_charactersBricksterIsLoose));
+		AnimationManager()->EnableExtras(TRUE);
+		AnimationManager()->EnableAnimationsByObjectId(g_animationsBricksterIsLoose, sizeOfArray(g_animationsBricksterIsLoose));
+		AnimationManager()->EnableCharactersByName(g_charactersBricksterIsLoose, sizeOfArray(g_charactersBricksterIsLoose));
 		break;
 	case LegoAct2::e_explaining:
 		m_timeSinceLastStage += 50;
@@ -413,9 +413,9 @@ MxLong LegoAct2::HandleEndAction(MxEndActionNotificationParam& p_param)
 			StartAction(Act2mainScript::c_tra045la_RunAnim, TRUE, TRUE, NULL, NULL, NULL);
 			((LegoPathActor*) m_pepper->GetEntity())->SetActorState(LegoPathActor::c_disabled);
 			AnimationManager()->EnableCamAnims(TRUE);
-			AnimationManager()->FUN_1005f6d0(TRUE);
-			AnimationManager()->FUN_100604f0(g_animationsAfterChase, sizeOfArray(g_animationsAfterChase));
-			AnimationManager()->FUN_10060480(g_charactersAfterChase, sizeOfArray(g_charactersAfterChase));
+			AnimationManager()->EnableExtras(TRUE);
+			AnimationManager()->EnableAnimationsByObjectId(g_animationsAfterChase, sizeOfArray(g_animationsAfterChase));
+			AnimationManager()->EnableCharactersByName(g_charactersAfterChase, sizeOfArray(g_charactersAfterChase));
 			break;
 		case LegoAct2::e_distributeRemainingBricks: {
 			LegoROI* roi;
@@ -713,10 +713,10 @@ void LegoAct2::DisableAnimations()
 	if (AnimationManager()) {
 		AnimationManager()->Suspend();
 		AnimationManager()->Resume();
-		AnimationManager()->FUN_10060540(FALSE);
-		AnimationManager()->FUN_100604d0(FALSE);
+		AnimationManager()->SetAllAnimationsEnabled(FALSE);
+		AnimationManager()->SetAllCharactersAnimationEnabled(FALSE);
 		AnimationManager()->EnableCamAnims(FALSE);
-		AnimationManager()->FUN_1005f6d0(FALSE);
+		AnimationManager()->EnableExtras(FALSE);
 	}
 }
 
@@ -754,7 +754,7 @@ void LegoAct2::VTable0x60()
 MxBool LegoAct2::Escape()
 {
 	BackgroundAudioManager()->Stop();
-	AnimationManager()->FUN_10061010(FALSE);
+	AnimationManager()->StopAnimations(FALSE);
 	DeleteObjects(&m_atomId, Act2mainScript::c_snsx50bu_RunAnim, 999);
 
 	if (UserActor() != NULL) {
@@ -1162,7 +1162,7 @@ MxResult LegoAct2::StartAction(
 			MxResult result;
 
 			if (p_objectId == Act2mainScript::c_tja009ni_RunAnim) {
-				result = AnimationManager()->FUN_10060dc0(
+				result = AnimationManager()->StartManagedAnimation(
 					p_objectId,
 					pmatrix,
 					TRUE,
@@ -1175,7 +1175,7 @@ MxResult LegoAct2::StartAction(
 				);
 			}
 			else {
-				result = AnimationManager()->FUN_10060dc0(
+				result = AnimationManager()->StartManagedAnimation(
 					p_objectId,
 					pmatrix,
 					TRUE,

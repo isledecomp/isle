@@ -291,7 +291,7 @@ int LegoDeviceEnumerate::SupportsCPUID()
 // FUNCTION: CONFIG 0x004029a0
 // FUNCTION: LEGO1 0x1009d210
 // FUNCTION: BETA10 0x1011cfc4
-int LegoDeviceEnumerate::FUN_1009d210()
+int LegoDeviceEnumerate::FilterSupportedDrivers()
 {
 	if (!IsInitialized()) {
 		return -1;
@@ -306,7 +306,7 @@ int LegoDeviceEnumerate::FUN_1009d210()
 		MxDriver& driver = *it;
 
 		for (list<Direct3DDeviceInfo>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end();) {
-			if (!FUN_1009d3d0(*it2)) {
+			if (!DeviceSupportsRequiredCaps(*it2)) {
 				driver.m_devices.erase(it2++);
 			}
 			else {
@@ -349,7 +349,7 @@ unsigned char LegoDeviceEnumerate::DriverSupportsRequiredDisplayMode(MxDriver& p
 // FUNCTION: CONFIG 0x00402b60
 // FUNCTION: LEGO1 0x1009d3d0
 // FUNCTION: BETA10 0x1011d235
-unsigned char LegoDeviceEnumerate::FUN_1009d3d0(Direct3DDeviceInfo& p_device)
+unsigned char LegoDeviceEnumerate::DeviceSupportsRequiredCaps(Direct3DDeviceInfo& p_device)
 {
 	if (m_ddInfo.size() <= 0) {
 		return FALSE;

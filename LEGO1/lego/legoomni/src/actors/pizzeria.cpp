@@ -76,7 +76,7 @@ MxLong Pizzeria::HandleClick()
 			}
 		}
 
-		AnimationManager()->FUN_10061010(FALSE);
+		AnimationManager()->StopAnimations(FALSE);
 
 		Pizza* pizza = (Pizza*) CurrentWorld()->Find(*g_isleScript, IsleScript::c_Pizza_Actor);
 		pizza->Start((IsleScript::Script) m_pizzeriaState->NextAction());

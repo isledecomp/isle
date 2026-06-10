@@ -153,7 +153,7 @@ MxResult LegoCacheSound::Play(const char* p_name, MxBool p_looping)
 	}
 
 	m_unk0x6a = FALSE;
-	m_sound.FUN_10011a60(m_dsBuffer, p_name);
+	m_sound.AttachToSoundTarget(m_dsBuffer, p_name);
 
 	if (p_name != NULL) {
 		m_unk0x74 = p_name;
@@ -227,7 +227,7 @@ void LegoCacheSound::Stop()
 
 // FUNCTION: LEGO1 0x10006be0
 // FUNCTION: BETA10 0x10066d23
-void LegoCacheSound::FUN_10006be0()
+void LegoCacheSound::UpdatePlayback()
 {
 	if (!m_looping) {
 		DWORD dwStatus;
@@ -280,7 +280,7 @@ void LegoCacheSound::SetDistance(MxS32 p_min, MxS32 p_max)
 
 // FUNCTION: LEGO1 0x10006cd0
 // FUNCTION: BETA10 0x10066eb0
-void LegoCacheSound::FUN_10006cd0(undefined4, undefined4)
+void LegoCacheSound::HandleSoundCallback(undefined4, undefined4)
 {
 }
 

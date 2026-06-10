@@ -250,7 +250,7 @@ void LegoAnimPresenter::CreateManagedActors()
 				strlwr(baseName);
 
 				LegoChar* roiName = GetActorName(str);
-				roi = CharacterManager()->FUN_10085a80(roiName, baseName, TRUE);
+				roi = CharacterManager()->CreateAutoROIWrapper(roiName, baseName, TRUE);
 
 				if (roi != NULL) {
 					roi->SetVisibility(FALSE);
@@ -547,10 +547,10 @@ void LegoAnimPresenter::ReleaseManagedActors()
 void LegoAnimPresenter::AppendManagedActors()
 {
 	if (m_localActors) {
-		AnimationManager()->FUN_10063270(m_managedActors, this);
+		AnimationManager()->ClaimExtraActorsFromPresenterList(m_managedActors, this);
 	}
 	else {
-		AnimationManager()->FUN_10063780(m_managedActors);
+		AnimationManager()->StashPresenterActors(m_managedActors);
 	}
 }
 
@@ -829,7 +829,7 @@ void LegoAnimPresenter::StartingTickle()
 	ProgressTickleState(e_streaming);
 
 	if (m_compositePresenter && m_compositePresenter->IsA("LegoAnimMMPresenter")) {
-		m_localActors = ((LegoAnimMMPresenter*) m_compositePresenter)->FUN_1004b8b0();
+		m_localActors = ((LegoAnimMMPresenter*) m_compositePresenter)->UsesLocalActors();
 		m_compositePresenter->AdvanceSerialAction(this);
 	}
 

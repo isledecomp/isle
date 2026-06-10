@@ -185,7 +185,7 @@ MxU32 Lego3DSound::UpdatePosition(LPDIRECTSOUNDBUFFER p_directSoundBuffer)
 
 // FUNCTION: LEGO1 0x10011a60
 // FUNCTION: BETA10 0x10039d04
-void Lego3DSound::FUN_10011a60(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char* p_name)
+void Lego3DSound::AttachToSoundTarget(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char* p_name)
 {
 	assert(p_directSoundBuffer);
 

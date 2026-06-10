@@ -91,7 +91,7 @@ public:
 	MxU8 GetMood(LegoROI* p_roi);
 	LegoROI* CreateAutoROI(const char* p_name, const char* p_lodName, MxBool p_createEntity);
 	MxResult UpdateBoundingSphereAndBox(LegoROI* p_roi);
-	LegoROI* FUN_10085a80(const char* p_name, const char* p_lodName, MxBool p_createEntity);
+	LegoROI* CreateAutoROIWrapper(const char* p_name, const char* p_lodName, MxBool p_createEntity);
 
 	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }
 

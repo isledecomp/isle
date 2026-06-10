@@ -127,7 +127,7 @@ void LegoPlantManager::Reset(LegoOmni::World p_worldId)
 // FUNCTION: BETA10 0x100c50e9
 MxResult LegoPlantManager::DetermineBoundaries()
 {
-	// similar to LegoBuildingManager::FUN_10030630()
+	// similar to LegoBuildingManager::DetermineBoundaries()
 
 	LegoWorld* world = CurrentWorld();
 

@@ -84,7 +84,7 @@ void IslePathActor::Enter()
 		}
 	}
 
-	AnimationManager()->FUN_10061010(FALSE);
+	AnimationManager()->StopAnimations(FALSE);
 	if (!m_cameraFlag) {
 		ResetWorldTransform(TRUE);
 		SetUserNavFlag(TRUE);
@@ -585,7 +585,7 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_enter, MxU8
 
 			if (state != NULL && state->m_finishedBuild && !state->m_playedExitScript) {
 				if (AnimationManager()
-						->FUN_10060dc0(anim, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, TRUE, TRUE, TRUE) ==
+						->StartManagedAnimation(anim, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, TRUE, TRUE, TRUE) ==
 					SUCCESS) {
 					state->m_playedExitScript = TRUE;
 					camAnim = FALSE;

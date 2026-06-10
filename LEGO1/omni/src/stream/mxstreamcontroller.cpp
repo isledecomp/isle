@@ -129,13 +129,13 @@ MxResult MxStreamController::VTable0x24(MxDSAction* p_action)
 	else {
 		p_action->SetUnknown24(m_action0x60->GetUnknown24());
 		p_action->SetObjectId(m_action0x60->GetObjectId());
-		return FUN_100c1f00(m_action0x60);
+		return SendEndOfStreamChunk(m_action0x60);
 	}
 }
 
 // FUNCTION: LEGO1 0x100c1800
 // FUNCTION: BETA10 0x1014ea36
-MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
+MxResult MxStreamController::QueueNextActionDataStart(MxDSAction* p_action, MxU32 p_val)
 {
 	MxNextActionDataStart* dataActionStart =
 		new MxNextActionDataStart(p_action->GetObjectId(), p_action->GetUnknown24(), p_val);
@@ -149,7 +149,7 @@ MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
 
 // FUNCTION: LEGO1 0x100c1a00
 // FUNCTION: BETA10 0x1014eb04
-MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
+MxResult MxStreamController::CreateStreamingAction(MxDSAction* p_action, MxU32 p_offset)
 {
 	if (p_action->GetUnknown24() == -1) {
 		MxS16 newUnknown24 = -1;
@@ -214,11 +214,11 @@ MxResult MxStreamController::VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
 {
 	AUTOLOCK(m_criticalSection);
 
-	if (FUN_100c1a00(p_action, p_bufferval) != SUCCESS) {
+	if (CreateStreamingAction(p_action, p_bufferval) != SUCCESS) {
 		return FAILURE;
 	}
 
-	return FUN_100c1800(p_action, (p_bufferval / m_provider->GetFileSize()) * m_provider->GetFileSize());
+	return QueueNextActionDataStart(p_action, (p_bufferval / m_provider->GetFileSize()) * m_provider->GetFileSize());
 }
 
 // FUNCTION: LEGO1 0x100c1ce0
@@ -257,7 +257,7 @@ MxResult MxStreamController::InsertActionToList54(MxDSAction* p_action)
 
 // FUNCTION: LEGO1 0x100c1e70
 // FUNCTION: BETA10 0x1014f0a1
-MxPresenter* MxStreamController::FUN_100c1e70(MxDSAction& p_action)
+MxPresenter* MxStreamController::FindPresenterForAction(MxDSAction& p_action)
 {
 	AUTOLOCK(m_criticalSection);
 	MxPresenter* result = NULL;
@@ -274,7 +274,7 @@ MxPresenter* MxStreamController::FUN_100c1e70(MxDSAction& p_action)
 
 // FUNCTION: LEGO1 0x100c1f00
 // FUNCTION: BETA10 0x1014f162
-MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
+MxResult MxStreamController::SendEndOfStreamChunk(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
 
@@ -298,7 +298,7 @@ MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 		MxDSAction* action;
 
 		while (cursor.Next(action)) {
-			if (FUN_100c1f00(action) != SUCCESS) {
+			if (SendEndOfStreamChunk(action) != SUCCESS) {
 				return FAILURE;
 			}
 		}

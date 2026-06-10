@@ -133,7 +133,7 @@ public:
 
 	void ProcessEvents();
 	MxBool ProcessOneEvent(LegoEventNotificationParam& p_param);
-	MxBool FUN_1005cdf0(LegoEventNotificationParam& p_param);
+	MxBool TranslateMouseEventToClickOrDrag(LegoEventNotificationParam& p_param);
 	void GetKeyboardState();
 	MxResult GetNavigationKeyStates(MxU32& p_keyFlags);
 

@@ -564,9 +564,9 @@ void EnableAnimations(MxBool p_enable)
 		AnimationManager()->Resume();
 	}
 
-	AnimationManager()->FUN_1005f6d0(p_enable);
-	AnimationManager()->FUN_10060540(p_enable);
-	AnimationManager()->FUN_100604d0(p_enable);
+	AnimationManager()->EnableExtras(p_enable);
+	AnimationManager()->SetAllAnimationsEnabled(p_enable);
+	AnimationManager()->SetAllCharactersAnimationEnabled(p_enable);
 }
 
 // FUNCTION: LEGO1 0x1003ef40

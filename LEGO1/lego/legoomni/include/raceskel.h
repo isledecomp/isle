@@ -17,7 +17,7 @@ public:
 
 	MxResult AnimateWithTransform(float p_time, Matrix4& p_transform) override;
 
-	virtual void FUN_10071c80(Vector3& p_vec);
+	virtual void GetFixedRaceSkeletonPosition(Vector3& p_vec);
 
 	void GetCurrentAnimData(float* p_outCurAnimPosition, float* p_outCurAnimDuration);
 

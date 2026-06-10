@@ -1483,7 +1483,7 @@ void Infocenter::StartCredits()
 		i++;
 	} while (i < m_infocenterState->GetMaxNameLength());
 
-	VideoManager()->FUN_1007c520();
+	VideoManager()->PrepareCreditsScreen();
 	GetViewManager()->RemoveAll(NULL);
 
 	InvokeAction(Extra::e_opendisk, *g_creditsScript, CreditsScript::c_LegoCredits, NULL);

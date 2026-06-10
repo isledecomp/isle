@@ -72,7 +72,7 @@ MxLong InfoCenterEntity::HandleClick(LegoEventNotificationParam& p_param)
 		break;
 	}
 
-	AnimationManager()->FUN_10061010(FALSE);
+	AnimationManager()->StopAnimations(FALSE);
 	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 	return 1;
 }
@@ -93,7 +93,7 @@ MxLong GasStationEntity::HandleClick(LegoEventNotificationParam& p_param)
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 			isle->SetDestLocation(LegoGameState::Area::e_garage);
 
-			AnimationManager()->FUN_10061010(FALSE);
+			AnimationManager()->StopAnimations(FALSE);
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		}
 	}
@@ -117,7 +117,7 @@ MxLong HospitalEntity::HandleClick(LegoEventNotificationParam& p_param)
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 			isle->SetDestLocation(LegoGameState::Area::e_hospital);
 
-			AnimationManager()->FUN_10061010(FALSE);
+			AnimationManager()->StopAnimations(FALSE);
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		}
 	}
@@ -141,7 +141,7 @@ MxLong PoliceEntity::HandleClick(LegoEventNotificationParam& p_param)
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 			isle->SetDestLocation(LegoGameState::Area::e_police);
 
-			AnimationManager()->FUN_10061010(FALSE);
+			AnimationManager()->StopAnimations(FALSE);
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		}
 	}
@@ -163,7 +163,7 @@ MxLong BeachHouseEntity::HandleClick(LegoEventNotificationParam& p_param)
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 		isle->SetDestLocation(LegoGameState::Area::e_jetskibuild);
 
-		AnimationManager()->FUN_10061010(FALSE);
+		AnimationManager()->StopAnimations(FALSE);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 	}
 
@@ -184,7 +184,7 @@ MxLong RaceStandsEntity::HandleClick(LegoEventNotificationParam& p_param)
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 		isle->SetDestLocation(LegoGameState::Area::e_racecarbuild);
 
-		AnimationManager()->FUN_10061010(FALSE);
+		AnimationManager()->StopAnimations(FALSE);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 	}
 

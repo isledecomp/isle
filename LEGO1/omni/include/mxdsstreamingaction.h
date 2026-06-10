@@ -20,7 +20,7 @@ public:
 
 	void Init();
 	void SetInternalAction(MxDSAction* p_dsAction);
-	void FUN_100cd2d0();
+	void AdvanceLoopPlaybackWindow();
 
 	// FUNCTION: BETA10 0x10156530
 	MxU32 GetUnknown94() { return m_unk0x94; }

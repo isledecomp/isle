@@ -457,7 +457,7 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 				}
 			}
 
-			if (FUN_1005cdf0(p_param)) {
+			if (TranslateMouseEventToClickOrDrag(p_param)) {
 				if (processRoi && p_param.GetNotification() == c_notificationClick) {
 					LegoROI* roi = PickROI(p_param.GetX(), p_param.GetY());
 					p_param.SetROI(roi);
@@ -486,7 +486,7 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 
 // FUNCTION: LEGO1 0x1005cdf0
 // FUNCTION: BETA10 0x10089cc1
-MxBool LegoInputManager::FUN_1005cdf0(LegoEventNotificationParam& p_param)
+MxBool LegoInputManager::TranslateMouseEventToClickOrDrag(LegoEventNotificationParam& p_param)
 {
 	MxBool result = FALSE;
 

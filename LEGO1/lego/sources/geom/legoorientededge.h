@@ -97,7 +97,7 @@ public:
 	// FUNCTION: BETA10 0x101841b0
 	void SetFlags(LegoU16 p_flags) { m_flags = p_flags; }
 
-	inline LegoU32 FUN_10048c40(const Vector3& p_position);
+	inline LegoU32 ContainsPointOnEdge(const Vector3& p_position);
 
 	// SYNTHETIC: LEGO1 0x1009a6c0
 	// SYNTHETIC: BETA10 0x101840f0
@@ -113,7 +113,7 @@ public:
 
 // FUNCTION: LEGO1 0x10048c40
 // FUNCTION: BETA10 0x1001cc90
-inline LegoU32 LegoOrientedEdge::FUN_10048c40(const Vector3& p_position)
+inline LegoU32 LegoOrientedEdge::ContainsPointOnEdge(const Vector3& p_position)
 {
 	LegoFloat localc, local10;
 	LegoU32 result = FALSE;

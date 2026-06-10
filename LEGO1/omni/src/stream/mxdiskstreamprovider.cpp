@@ -65,7 +65,7 @@ MxDiskStreamProvider::~MxDiskStreamProvider()
 			g_unk0x10102878--;
 		}
 
-		((MxDiskStreamController*) m_pLookup)->FUN_100c8670((MxDSStreamingAction*) action);
+		((MxDiskStreamController*) m_pLookup)->QueueActionForDeletion((MxDSStreamingAction*) action);
 	} while (action);
 
 	if (m_remainingWork) {
@@ -137,7 +137,7 @@ void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 				g_unk0x10102878--;
 			}
 
-			((MxDiskStreamController*) m_pLookup)->FUN_100c8670((MxDSStreamingAction*) action);
+			((MxDiskStreamController*) m_pLookup)->QueueActionForDeletion((MxDSStreamingAction*) action);
 		} while (action);
 	}
 	else {
@@ -155,7 +155,7 @@ void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 				g_unk0x10102878--;
 			}
 
-			((MxDiskStreamController*) m_pLookup)->FUN_100c8670((MxDSStreamingAction*) action);
+			((MxDiskStreamController*) m_pLookup)->QueueActionForDeletion((MxDSStreamingAction*) action);
 		} while (action);
 	}
 }
@@ -175,7 +175,7 @@ MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 }
 
 // FUNCTION: LEGO1 0x100d1780
-MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
+MxResult MxDiskStreamProvider::QueueDiskRead(MxDSStreamingAction* p_action)
 {
 	if (!m_remainingWork) {
 		return FAILURE;
@@ -221,7 +221,7 @@ void MxDiskStreamProvider::PerformWork()
 		if (!m_list.empty()) {
 			streamingAction = m_list.front();
 
-			if (streamingAction && !FUN_100d1af0((MxDSStreamingAction*) streamingAction)) {
+			if (streamingAction && !CanStartReadNow((MxDSStreamingAction*) streamingAction)) {
 				m_thread.Sleep(500);
 				m_busySemaphore.Release(1);
 				return;
@@ -253,14 +253,14 @@ void MxDiskStreamProvider::PerformWork()
 			buffer->SetUnknown1c(m_pFile->GetPosition());
 
 			if (((MxDSStreamingAction*) streamingAction)->GetUnknown9c() > 0) {
-				FUN_100d1b20(((MxDSStreamingAction*) streamingAction));
+				StitchSplitStreamBuffer(((MxDSStreamingAction*) streamingAction));
 			}
 			else {
 				if (m_pLookup == NULL || !((MxDiskStreamController*) m_pLookup)->GetUnk0xc4()) {
-					controller->FUN_100c8670(((MxDSStreamingAction*) streamingAction));
+					controller->QueueActionForDeletion(((MxDSStreamingAction*) streamingAction));
 				}
 				else {
-					controller->FUN_100c7f40(((MxDSStreamingAction*) streamingAction));
+					controller->QueueCompletedRead(((MxDSStreamingAction*) streamingAction));
 				}
 			}
 
@@ -270,14 +270,14 @@ void MxDiskStreamProvider::PerformWork()
 
 done:
 	if (streamingAction) {
-		controller->FUN_100c8670(((MxDSStreamingAction*) streamingAction));
+		controller->QueueActionForDeletion(((MxDSStreamingAction*) streamingAction));
 	}
 
 	m_thread.Sleep(0);
 }
 
 // FUNCTION: LEGO1 0x100d1af0
-MxBool MxDiskStreamProvider::FUN_100d1af0(MxDSStreamingAction* p_action)
+MxBool MxDiskStreamProvider::CanStartReadNow(MxDSStreamingAction* p_action)
 {
 	if (p_action->GetUnknowna0()->GetWriteOffset() == 0x20000) {
 		return g_unk0x10102878 == 0;
@@ -288,7 +288,7 @@ MxBool MxDiskStreamProvider::FUN_100d1af0(MxDSStreamingAction* p_action)
 
 // FUNCTION: LEGO1 0x100d1b20
 // FUNCTION: BETA10 0x10163712
-MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
+MxResult MxDiskStreamProvider::StitchSplitStreamBuffer(MxDSStreamingAction* p_action)
 {
 	MxDSBuffer* buffer = new MxDSBuffer();
 
@@ -307,7 +307,7 @@ MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
 	MxU8* data;
 
 	if (p_action->GetUnknowna4()) {
-		buffer->FUN_100c7090(p_action->GetUnknowna4());
+		buffer->CopyBufferStateFrom(p_action->GetUnknowna4());
 		data = buffer->GetBuffer() + p_action->GetUnknowna4()->GetWriteOffset();
 
 		memcpy(data, p_action->GetUnknowna0()->GetBuffer(), p_action->GetUnknowna0()->GetWriteOffset());
@@ -362,16 +362,16 @@ MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
 			p_action->SetBufferOffset(p_action->GetUnknowna0()->GetUnknown14());
 			delete p_action->GetUnknowna0();
 			p_action->ClearUnknowna0();
-			((MxDiskStreamController*) m_pLookup)->FUN_100c7890(p_action);
+			((MxDiskStreamController*) m_pLookup)->QueueReadAheadAction(p_action);
 			return SUCCESS;
 		}
 
-		data = buffer->FUN_100c6fa0(data);
+		data = buffer->FindNextChunk(data);
 	}
 
 	p_action->SetUnknown94(GetFileSize() + p_action->GetBufferOffset());
 	p_action->SetBufferOffset(GetFileSize() + p_action->GetBufferOffset());
-	FUN_100d1780(p_action);
+	QueueDiskRead(p_action);
 	return SUCCESS;
 
 #undef IntoType

@@ -119,7 +119,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	}
 
 	if (deviceNum < 0) {
-		deviceEnumerate.FUN_1009d210();
+		deviceEnumerate.FilterSupportedDrivers();
 		deviceNum = deviceEnumerate.GetBestDevice();
 		deviceNum = deviceEnumerate.GetDevice(deviceNum, driver, device);
 	}
@@ -424,7 +424,7 @@ void LegoVideoManager::DrawFPS()
 		GetTextExtentPoint(dc, zeros, strlen(zeros), &m_fpsSize);
 		ReleaseDC(NULL, dc);
 
-		m_unk0x528 = m_displaySurface->FUN_100bc8b0(m_fpsSize.cx, m_fpsSize.cy);
+		m_unk0x528 = m_displaySurface->Create16BitOffscreenSurface(m_fpsSize.cx, m_fpsSize.cy);
 		SetRect(&m_fpsRect, 0, 0, m_fpsSize.cx, m_fpsSize.cy);
 
 		if (m_unk0x528 == NULL) {
@@ -674,7 +674,7 @@ void LegoVideoManager::UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_h
 }
 
 // FUNCTION: LEGO1 0x1007c520
-void LegoVideoManager::FUN_1007c520()
+void LegoVideoManager::PrepareCreditsScreen()
 {
 	m_unk0xe5 = TRUE;
 	m_render3d = FALSE;

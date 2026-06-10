@@ -494,22 +494,22 @@ MxLong Isle::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 		// These values correspond to certain paths on the island
 		switch (p_param.GetData()) {
 		case 0x12c:
-			AnimationManager()->FUN_10064670(NULL);
+			AnimationManager()->SpawnBricksterAtPoliceStation(NULL);
 			result = 1;
 			break;
 		case 0x12d:
-			AnimationManager()->FUN_10064880("brickstr", 0, 20000);
+			AnimationManager()->SetExtraActorTiming("brickstr", 0, 20000);
 			result = 1;
 			break;
 		case 0x131:
 			if (m_act1state->m_state != Act1State::e_ambulance) {
-				AnimationManager()->FUN_10064740(NULL);
+				AnimationManager()->SpawnParentsAtHospital(NULL);
 			}
 			result = 1;
 			break;
 		case 0x132:
-			AnimationManager()->FUN_10064880("mama", 0, 20000);
-			AnimationManager()->FUN_10064880("papa", 0, 20000);
+			AnimationManager()->SetExtraActorTiming("mama", 0, 20000);
+			AnimationManager()->SetExtraActorTiming("papa", 0, 20000);
 			result = 1;
 			break;
 		case 0x136:
@@ -710,7 +710,7 @@ void Isle::Enable(MxBool p_enable)
 			m_act1state->m_state = Act1State::e_none;
 
 			if (GameState()->m_currentArea == LegoGameState::e_pizzeriaExterior) {
-				AnimationManager()->FUN_10064740(NULL);
+				AnimationManager()->SpawnParentsAtHospital(NULL);
 			}
 			else if (GameState()->m_currentArea == LegoGameState::e_vehicleExited) {
 				Mx3DPointFloat position(UserActor()->GetROI()->GetWorldPosition());
@@ -718,13 +718,13 @@ void Isle::Enable(MxBool p_enable)
 				Mx3DPointFloat sub(-21.375f, 0.0f, -41.75f);
 				sub -= position;
 				if (sub.LenSquared() < 1024.0f) {
-					AnimationManager()->FUN_10064740(NULL);
+					AnimationManager()->SpawnParentsAtHospital(NULL);
 				}
 
 				Mx3DPointFloat sub2(98.874992f, 0.0f, -46.156292f);
 				sub2 -= position;
 				if (sub2.LenSquared() < 1024.0f) {
-					AnimationManager()->FUN_10064670(NULL);
+					AnimationManager()->SpawnBricksterAtPoliceStation(NULL);
 				}
 			}
 			break;
@@ -753,12 +753,12 @@ void Isle::Enable(MxBool p_enable)
 				}
 
 				AnimationManager()
-					->FUN_10060dc0(script, NULL, TRUE, LegoAnimationManager::e_unk1, NULL, FALSE, FALSE, TRUE, FALSE);
+					->StartManagedAnimation(script, NULL, TRUE, LegoAnimationManager::e_unk1, NULL, FALSE, FALSE, TRUE, FALSE);
 			}
 
 			m_act1state->m_state = Act1State::e_none;
 			EnableAnimations(FALSE);
-			AnimationManager()->FUN_10064670(NULL);
+			AnimationManager()->SpawnBricksterAtPoliceStation(NULL);
 			break;
 		}
 		case Act1State::e_transitionToRacecar: {
@@ -787,7 +787,7 @@ void Isle::Enable(MxBool p_enable)
 				}
 
 				AnimationManager()
-					->FUN_10060dc0(script, NULL, TRUE, LegoAnimationManager::e_unk1, NULL, FALSE, FALSE, TRUE, FALSE);
+					->StartManagedAnimation(script, NULL, TRUE, LegoAnimationManager::e_unk1, NULL, FALSE, FALSE, TRUE, FALSE);
 			}
 
 			m_act1state->m_state = Act1State::e_none;
@@ -797,7 +797,7 @@ void Isle::Enable(MxBool p_enable)
 		case Act1State::e_transitionToTowtrack:
 			m_act1state->m_state = Act1State::e_towtrack;
 
-			AnimationManager()->FUN_1005f6d0(FALSE);
+			AnimationManager()->EnableExtras(FALSE);
 			AnimationManager()->EnableCamAnims(FALSE);
 
 			g_isleFlags &= ~c_playMusic;
@@ -806,7 +806,7 @@ void Isle::Enable(MxBool p_enable)
 		case Act1State::e_transitionToAmbulance:
 			m_act1state->m_state = Act1State::e_ambulance;
 
-			AnimationManager()->FUN_1005f6d0(FALSE);
+			AnimationManager()->EnableExtras(FALSE);
 			AnimationManager()->EnableCamAnims(FALSE);
 
 			g_isleFlags &= ~c_playMusic;
@@ -1237,7 +1237,7 @@ MxBool Isle::Escape()
 
 	m_act1state->m_elevFloor = Act1State::c_floor1;
 
-	AnimationManager()->FUN_10061010(FALSE);
+	AnimationManager()->StopAnimations(FALSE);
 	DeleteObjects(&m_atomId, IsleScript::c_sba001bu_RunAnim, IsleScript::c_FNS018EN_Wav_518);
 
 	if (UserActor()) {
@@ -1284,7 +1284,7 @@ void Isle::SwitchToInfocenter()
 		}
 	}
 
-	AnimationManager()->FUN_10061010(FALSE);
+	AnimationManager()->StopAnimations(FALSE);
 
 	if (UserActor()) {
 		if (UserActor()->GetActorId() != GameState()->GetActorId()) {

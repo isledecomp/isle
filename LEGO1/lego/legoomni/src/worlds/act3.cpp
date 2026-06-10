@@ -578,7 +578,7 @@ MxLong Act3::Notify(MxParam& p_param)
 					action.SetObjectId(Act3Script::c_pzhitdn_PlayWav);
 
 					BackgroundAudioManager()->PlayMusic(action, 5, MxPresenter::e_repeating);
-					m_brickster->FUN_100417c0();
+					m_brickster->ChooseBricksterDestination();
 
 					m_cop1->SetActorState(LegoPathActor::c_initial);
 					m_cop1->SetWorldSpeed(2.0f);
@@ -633,7 +633,7 @@ MxLong Act3::Notify(MxParam& p_param)
 		}
 		case c_notificationKeyPress:
 			if (m_state->m_state == Act3State::e_ready && ((LegoEventNotificationParam&) p_param).GetKey() == ' ') {
-				AnimationManager()->FUN_10061010(FALSE);
+				AnimationManager()->StopAnimations(FALSE);
 				return 1;
 			}
 			break;
@@ -679,11 +679,11 @@ void Act3::ReadyWorld()
 {
 	PlantManager()->SetInitialCounters();
 	BuildingManager()->SetInitialCounters();
-	AnimationManager()->FUN_1005f6d0(FALSE);
+	AnimationManager()->EnableExtras(FALSE);
 	VideoManager()->Get3DManager()->SetFrustrum(90.0f, 0.1f, 125.0f);
 
 	m_explanationAnimation = g_explanationAnimations[rand() % 3];
-	AnimationManager()->FUN_10060dc0(
+	AnimationManager()->StartManagedAnimation(
 		m_explanationAnimation,
 		NULL,
 		TRUE,
@@ -707,7 +707,7 @@ MxResult Act3::Tickle()
 	}
 
 	if (m_explanationAnimation != (Act3Script::Script) 0) {
-		if (AnimationManager()->FUN_10064ee0(m_explanationAnimation)) {
+		if (AnimationManager()->IsAnimationFinished(m_explanationAnimation)) {
 			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			TickleManager()->UnregisterClient(this);
 			m_explanationAnimation = (Act3Script::Script) 0;
@@ -722,7 +722,7 @@ MxResult Act3::Tickle()
 MxResult Act3::HitBrickster(Act3Ammo& p_ammo, const Vector3& p_param2)
 {
 	assert(m_brickster);
-	m_brickster->FUN_100417a0(p_ammo, p_param2);
+	m_brickster->RespondToAmmoHit(p_ammo, p_param2);
 	TriggerHitSound(1);
 	return SUCCESS;
 }
@@ -734,10 +734,10 @@ MxResult Act3::HitCop(Act3Ammo& p_ammo, const Vector3& p_param2)
 	assert(m_cop1 && m_cop2);
 
 	if (!(g_copSelector & 1)) {
-		m_cop1->FUN_10040350(p_ammo, p_param2);
+		m_cop1->RespondToAmmoHit(p_ammo, p_param2);
 	}
 	else {
-		m_cop2->FUN_10040350(p_ammo, p_param2);
+		m_cop2->RespondToAmmoHit(p_ammo, p_param2);
 	}
 
 	TriggerHitSound(3);
@@ -792,7 +792,7 @@ void Act3::GoodEnding(const Matrix4& p_destination)
 
 #ifndef BETA10
 	m_soundList.Clear();
-	m_copter->FUN_10004640(p_destination);
+	m_copter->StartGoodEndingFlight(p_destination);
 
 	DebugPrintf("In Good Ending...");
 	DebugCopter(
@@ -875,7 +875,7 @@ void Act3::BadEnding(const Matrix4& p_destination)
 	m_brickster->SetActorState(LegoPathActor::c_disabled);
 
 	m_soundList.Clear();
-	m_copter->FUN_10004670(p_destination);
+	m_copter->StartBadEndingFlight(p_destination);
 
 	DebugPrintf("In Bad Ending...");
 	DebugCopter(
@@ -985,7 +985,7 @@ void Act3::VTable0x60()
 MxBool Act3::Escape()
 {
 	BackgroundAudioManager()->Stop();
-	AnimationManager()->FUN_10061010(FALSE);
+	AnimationManager()->StopAnimations(FALSE);
 	DeleteObjects(&m_atomId, Act3Script::c_tlp053in_RunAnim, 999);
 	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;

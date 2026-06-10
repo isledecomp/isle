@@ -37,7 +37,7 @@ public:
 		MxU32 p_dataSize
 	);                                                 // vtable+0x14
 	virtual void Destroy();                            // vtable+0x18
-	virtual void FUN_10006cd0(undefined4, undefined4); // vtable+0x1c
+	virtual void HandleSoundCallback(undefined4, undefined4); // vtable+0x1c
 
 	const MxString& GetUnknown0x48() const { return m_unk0x48; }
 	const MxBool GetUnknown0x58() const { return m_unk0x58; }
@@ -45,7 +45,7 @@ public:
 	LegoCacheSound* Clone();
 	MxResult Play(const char* p_name, MxBool p_looping);
 	void Stop();
-	void FUN_10006be0();
+	void UpdatePlayback();
 	void SetDistance(MxS32 p_min, MxS32 p_max);
 	void MuteSilence(MxBool p_muted);
 	void MuteStop(MxBool p_mute);

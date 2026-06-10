@@ -66,7 +66,7 @@ BOOL CMainDialog::OnInitDialog()
 	LegoDeviceEnumerate* info = currentConfigApp->m_dxInfo;
 	assert(info);
 
-	info->FUN_1009d210();
+	info->FilterSupportedDrivers();
 	m_modified = currentConfigApp->ReadRegisterSettings();
 	CListBox* list_3d_devices = (CListBox*) GetDlgItem(IDC_LIST_3DDEVICES);
 	int driver_i = 0;

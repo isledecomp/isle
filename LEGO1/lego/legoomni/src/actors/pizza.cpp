@@ -179,14 +179,14 @@ void Pizza::CreateState()
 // FUNCTION: BETA10 0x100edb81
 void Pizza::Start(IsleScript::Script p_objectId)
 {
-	AnimationManager()->FUN_10064740(NULL);
+	AnimationManager()->SpawnParentsAtHospital(NULL);
 	m_mission = m_state->GetMission(GameState()->GetActorId());
 	m_state->m_state = PizzaMissionState::e_introduction;
 	m_act1state->m_state = Act1State::e_pizza;
 	m_mission->m_startTime = INT_MIN;
 	g_isleFlags &= ~Isle::c_playMusic;
 	AnimationManager()->EnableCamAnims(FALSE);
-	AnimationManager()->FUN_1005f6d0(FALSE);
+	AnimationManager()->EnableExtras(FALSE);
 	PlayAction(p_objectId, FALSE);
 	m_speechAction = IsleScript::c_noneIsle;
 }
@@ -205,7 +205,7 @@ void Pizza::Reset()
 		UserActor()->SetActorState(LegoPathActor::c_initial);
 		g_isleFlags |= Isle::c_playMusic;
 		AnimationManager()->EnableCamAnims(TRUE);
-		AnimationManager()->FUN_1005f6d0(TRUE);
+		AnimationManager()->EnableExtras(TRUE);
 		m_mission->m_startTime = INT_MIN;
 		m_mission = NULL;
 		m_playedLocationAnimation = FALSE;
@@ -241,7 +241,7 @@ MxLong Pizza::HandleClick()
 		m_state->m_state = PizzaMissionState::e_waitAcceptingQuest;
 		m_mission->m_startTime = Timer()->GetTime();
 		TickleManager()->RegisterClient(this, 200);
-		AnimationManager()->FUN_10061010(FALSE);
+		AnimationManager()->StopAnimations(FALSE);
 	}
 
 	if (m_state->m_state == PizzaMissionState::e_waitAcceptingQuest) {
@@ -430,7 +430,7 @@ MxResult Pizza::Tickle()
 				TickleManager()->UnregisterClient(this);
 				m_mission->UpdateScore(LegoState::e_grey);
 				m_state->m_state = PizzaMissionState::e_timeoutAcceptingQuest;
-				AnimationManager()->FUN_1005f6d0(TRUE);
+				AnimationManager()->EnableExtras(TRUE);
 				PlayAction(m_mission->GetUnknownFinishAction(), TRUE);
 				MxTrace("Pizza mission: timeout, declining\n");
 			}
@@ -587,7 +587,7 @@ void Pizza::PlayAction(MxU32 p_objectId, MxBool p_param7)
 	}
 
 	AnimationManager()
-		->FUN_10060dc0(p_objectId, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, p_param7, TRUE, TRUE);
+		->StartManagedAnimation(p_objectId, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, p_param7, TRUE, TRUE);
 }
 
 // FUNCTION: LEGO1 0x10039030

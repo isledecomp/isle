@@ -38,7 +38,7 @@ public:
 	MxU32 StepState(float p_time, Matrix4& p_matrix) override;         // vtable+0x90
 	MxResult HitActor(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 
-	virtual MxResult FUN_10014aa0();
+	virtual MxResult OnRaceActorAction();
 
 	// SYNTHETIC: LEGO1 0x10012c10
 	// LegoRaceActor::`vbase destructor'

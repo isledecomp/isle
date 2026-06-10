@@ -926,7 +926,7 @@ MxResult LegoPathController::FindPath(
 		if (p_grec->size() > 0) {
 			LegoPathCtrlEdge* edge = p_grec->front().m_edge;
 
-			if (edge->FUN_10048c40(p_oldPosition)) {
+			if (edge->ContainsPointOnEdge(p_oldPosition)) {
 				p_grec->pop_front();
 			}
 		}
@@ -934,7 +934,7 @@ MxResult LegoPathController::FindPath(
 		if (p_grec->size() > 0) {
 			LegoPathCtrlEdge* edge = p_grec->back().m_edge;
 
-			if (edge->FUN_10048c40(p_newPosition)) {
+			if (edge->ContainsPointOnEdge(p_newPosition)) {
 				if (edge->OtherFace(p_grec->back().m_boundary) != NULL &&
 					edge->OtherFace(p_grec->back().m_boundary)->IsEqual(p_newBoundary)) {
 					p_grec->m_boundary = p_grec->back().m_boundary;

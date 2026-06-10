@@ -65,23 +65,23 @@ public:
 
 	// SYNTHETIC: LEGO1 0x1004aa40
 	// LegoAnimMMPresenter::`scalar deleting destructor'
-	MxBool FUN_1004b830();
-	void FUN_1004b840();
-	MxBool FUN_1004b8b0();
-	void FUN_1004b8c0();
+	MxBool HasPassedPresenterStart();
+	void StopAndFinishAnimation();
+	MxBool UsesLocalActors();
+	void ReleaseUserActor();
 
 	LegoAnimPresenter* GetPresenter() { return m_presenter; }
 
 private:
-	MxBool FUN_1004b450();
-	MxBool FUN_1004b530(MxLong p_time);
-	MxBool FUN_1004b570(MxLong p_time);
-	MxBool FUN_1004b580(MxLong p_time);
-	MxBool FUN_1004b5b0(MxLong p_time);
-	MxBool FUN_1004b600(MxLong p_time);
-	MxBool FUN_1004b610(MxLong p_time);
-	MxBool FUN_1004b6b0(MxLong p_time);
-	MxBool FUN_1004b6d0(MxLong p_time);
+	MxBool RunStartupSequence();
+	MxBool CaptureAnimationState(MxLong p_time);
+	MxBool WaitForPreRoll(MxLong p_time);
+	MxBool WaitForTransitionSound(MxLong p_time);
+	MxBool RestoreInitialTransforms(MxLong p_time);
+	MxBool PreparePresentersForStart(MxLong p_time);
+	MxBool StartChildPresenters(MxLong p_time);
+	MxBool WaitForAnimationPresenterIdle(MxLong p_time);
+	MxBool RestoreUserActorAfterAnimation(MxLong p_time);
 
 	LegoAnimPresenter* m_presenter; // 0x4c
 	MxLong m_unk0x50;               // 0x50

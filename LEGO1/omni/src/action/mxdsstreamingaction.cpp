@@ -87,7 +87,7 @@ void MxDSStreamingAction::SetInternalAction(MxDSAction* p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x100cd2d0
-void MxDSStreamingAction::FUN_100cd2d0()
+void MxDSStreamingAction::AdvanceLoopPlaybackWindow()
 {
 	if (m_duration == -1) {
 		return;

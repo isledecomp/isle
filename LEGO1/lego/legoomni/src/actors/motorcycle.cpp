@@ -104,8 +104,8 @@ MxLong Motocycle::HandleClick()
 	GetCurrentAction().SetObjectId(-1);
 
 	Vector3 position = m_roi->GetWorldPosition();
-	AnimationManager()->FUN_10064670(&position);
-	AnimationManager()->FUN_10064740(&position);
+	AnimationManager()->SpawnBricksterAtPoliceStation(&position);
+	AnimationManager()->SpawnParentsAtHospital(&position);
 	ControlManager()->Register(this);
 	return 1;
 }
@@ -157,7 +157,7 @@ void Motocycle::ActivateSceneActions()
 		MxMatrix mat(UserActor()->GetROI()->GetLocal2World());
 		mat.TranslateBy(mat[2][0] * 2.5, mat[2][1] + 0.7, mat[2][2] * 2.5);
 
-		AnimationManager()->FUN_10060dc0(
+		AnimationManager()->StartManagedAnimation(
 			IsleScript::c_sns006in_RunAnim,
 			&mat,
 			TRUE,

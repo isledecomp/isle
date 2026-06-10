@@ -80,7 +80,7 @@ protected:
 
 	BOOL RecreateDirectDraw(GUID** a2);
 	void ClearBackBuffers();
-	void FUN_1009d920();
+	void RestoreDisplayMode();
 
 	// SYNTHETIC: LEGO1 0x1009d510
 	// SYNTHETIC: BETA10 0x10122f80

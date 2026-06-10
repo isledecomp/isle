@@ -141,11 +141,11 @@ MxStreamController* MxStreamer::GetOpenStream(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x100b98f0
-void MxStreamer::FUN_100b98f0(MxDSAction* p_action)
+void MxStreamer::StopDiskAction(MxDSAction* p_action)
 {
 	MxStreamController* controller = GetOpenStream(p_action->GetAtomId().GetInternal());
 	if (controller && controller->IsA("MxDiskStreamController")) {
-		((MxDiskStreamController*) controller)->FUN_100c8120(p_action);
+		((MxDiskStreamController*) controller)->CancelDiskAction(p_action);
 	}
 }
 
@@ -168,7 +168,7 @@ MxResult MxStreamer::AddStreamControllerToOpenList(MxStreamController* p_stream)
 
 // FUNCTION: LEGO1 0x100b99b0
 // FUNCTION: BETA10 0x101459ad
-MxResult MxStreamer::FUN_100b99b0(MxDSAction* p_action)
+MxResult MxStreamer::StartObjectStreaming(MxDSAction* p_action)
 {
 	// TODO: MxAtomId operator== used here for NULL test. BETA10 0x1007dc20
 	if (p_action == NULL || p_action->GetAtomId().GetInternal() == NULL || p_action->GetObjectId() == -1) {
@@ -212,7 +212,7 @@ MxResult MxStreamer::DeleteObject(MxDSAction* p_dsAction)
 
 // FUNCTION: LEGO1 0x100b9b30
 // FUNCTION: BETA10 0x10145d01
-MxBool MxStreamer::FUN_100b9b30(MxDSObject& p_dsObject)
+MxBool MxStreamer::IsObjectStopped(MxDSObject& p_dsObject)
 {
 	MxStreamController* controller = GetOpenStream(p_dsObject.GetAtomId().GetInternal());
 	if (controller) {

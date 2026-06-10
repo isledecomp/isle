@@ -437,7 +437,7 @@ void Act3Ammo::Animate(float p_time)
 #else
 					if (m_world->m_pizzas[index].IsValid() && !m_world->m_pizzas[index].IsSharkFood()) {
 						m_world->EatPizza(index);
-						m_world->m_brickster->FUN_100417c0();
+						m_world->m_brickster->ChooseBricksterDestination();
 					}
 #endif
 

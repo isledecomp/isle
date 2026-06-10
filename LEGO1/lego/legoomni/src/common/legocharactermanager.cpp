@@ -1084,7 +1084,7 @@ MxResult LegoCharacterManager::UpdateBoundingSphereAndBox(LegoROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x10085a80
-LegoROI* LegoCharacterManager::FUN_10085a80(const char* p_name, const char* p_lodName, MxBool p_createEntity)
+LegoROI* LegoCharacterManager::CreateAutoROIWrapper(const char* p_name, const char* p_lodName, MxBool p_createEntity)
 {
 	return CreateAutoROI(p_name, p_lodName, p_createEntity);
 }

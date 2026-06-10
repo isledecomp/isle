@@ -71,7 +71,7 @@ BOOL MxDirect3D::Create(
 
 done:
 	if (!success) {
-		FUN_1009d920();
+		RestoreDisplayMode();
 	}
 
 	return success;

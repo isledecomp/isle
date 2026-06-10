@@ -50,7 +50,7 @@ public:
 	MxResult ResetPalette(MxBool p_ignoreSkyColor);
 	MxPresenter* GetPresenterByActionObjectName(const char* p_char);
 
-	void FUN_1007c520();
+	void PrepareCreditsScreen();
 
 	Tgl::Renderer* GetRenderer() { return m_renderer; }
 

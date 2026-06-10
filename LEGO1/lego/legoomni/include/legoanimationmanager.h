@@ -160,19 +160,19 @@ public:
 	void Reset(MxBool p_und);
 	void Suspend();
 	void Resume();
-	void FUN_1005f6d0(MxBool p_unk0x400);
+	void EnableExtras(MxBool p_unk0x400);
 	void EnableCamAnims(MxBool p_enableCamAnims);
 	MxResult LoadWorldInfo(LegoOmni::World p_worldId);
 	MxBool FindVehicle(const char* p_name, MxU32& p_index);
 	MxResult ReadAnimInfo(LegoStorage* p_storage, AnimInfo* p_info);
 	MxResult ReadModelInfo(LegoStorage* p_storage, ModelInfo* p_info);
-	void FUN_10060480(const LegoChar* p_characterNames[], MxU32 p_numCharacterNames);
-	void FUN_100604d0(MxBool p_unk0x08);
-	void FUN_100604f0(MxS32 p_objectIds[], MxU32 p_numObjectIds);
-	void FUN_10060540(MxBool p_unk0x29);
-	void FUN_10060570(MxBool p_unk0x1a);
+	void EnableCharactersByName(const LegoChar* p_characterNames[], MxU32 p_numCharacterNames);
+	void SetAllCharactersAnimationEnabled(MxBool p_unk0x08);
+	void EnableAnimationsByObjectId(MxS32 p_objectIds[], MxU32 p_numObjectIds);
+	void SetAllAnimationsEnabled(MxBool p_unk0x29);
+	void SetAutoPlayAnimations(MxBool p_unk0x1a);
 	MxResult StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity);
-	MxResult FUN_10060dc0(
+	MxResult StartManagedAnimation(
 		MxU32 p_objectId,
 		MxMatrix* p_matrix,
 		MxBool p_param3,
@@ -184,17 +184,17 @@ public:
 		MxBool p_param9
 	);
 	void CameraTriggerFire(LegoPathActor* p_actor, MxBool, MxU32 p_location, MxBool p_bool);
-	void FUN_10061010(MxBool p_und);
+	void StopAnimations(MxBool p_und);
 	LegoTranInfo* GetTranInfo(MxU32 p_index);
-	void FUN_10062770();
+	void CacheTransitionSounds();
 	void PurgeExtra(MxBool p_und);
 	void AddExtra(MxS32 p_location, MxBool p_und);
-	void FUN_10063270(LegoROIList* p_list, LegoAnimPresenter* p_presenter);
-	void FUN_10063780(LegoROIList* p_list);
-	MxResult FUN_10064670(Vector3* p_position);
-	MxResult FUN_10064740(Vector3* p_position);
-	MxResult FUN_10064880(const char* p_name, MxS32 p_unk0x0c, MxS32 p_unk0x10);
-	MxBool FUN_10064ee0(MxU32 p_objectId);
+	void ClaimExtraActorsFromPresenterList(LegoROIList* p_list, LegoAnimPresenter* p_presenter);
+	void StashPresenterActors(LegoROIList* p_list);
+	MxResult SpawnBricksterAtPoliceStation(Vector3* p_position);
+	MxResult SpawnParentsAtHospital(Vector3* p_position);
+	MxResult SetExtraActorTiming(const char* p_name, MxS32 p_unk0x0c, MxS32 p_unk0x10);
+	MxBool IsAnimationFinished(MxU32 p_objectId);
 
 	static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
 
@@ -203,7 +203,7 @@ public:
 
 private:
 	void Init();
-	MxResult FUN_100605e0(
+	MxResult StartAnimationByIndex(
 		MxU32 p_index,
 		MxBool p_unk0x0a,
 		MxMatrix* p_matrix,
@@ -214,11 +214,11 @@ private:
 		MxBool p_bool4,
 		MxBool p_bool5
 	);
-	MxResult FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix, MxBool p_und1, MxBool p_und2);
+	MxResult StartRawObjectAnimation(MxU32 p_objectId, MxMatrix* p_matrix, MxBool p_und1, MxBool p_und2);
 	void DeleteAnimations();
-	void FUN_10061530();
-	MxResult FUN_100617c0(MxS32 p_unk0x08, MxU16& p_unk0x0e, MxU16& p_unk0x10);
-	MxU16 FUN_10062110(
+	void StopDeferredAnimations();
+	MxResult GetAnimationRangeByLocation(MxS32 p_unk0x08, MxU16& p_unk0x0e, MxU16& p_unk0x10);
+	MxU16 FindAmbientAnimationForExtra(
 		LegoROI* p_roi,
 		Vector3& p_direction,
 		Vector3& p_position,
@@ -228,21 +228,21 @@ private:
 		MxBool p_unk0x14
 	);
 	MxS8 GetCharacterIndex(const char* p_name);
-	MxBool FUN_100623a0(AnimInfo& p_info);
+	MxBool IsAnimationBlockedByVisibleActor(AnimInfo& p_info);
 	MxBool ModelExists(AnimInfo& p_info, const char* p_name);
-	void FUN_10062580(AnimInfo& p_info);
-	MxBool FUN_10062650(Mx3DPointFloat& p_position, float p_und, LegoROI* p_roi);
-	MxBool FUN_10062710(AnimInfo& p_info);
-	MxBool FUN_10062e20(LegoROI* p_roi, LegoAnimPresenter* p_presenter);
-	void FUN_10063950(LegoROI* p_roi);
-	void FUN_10063aa0();
-	MxBool FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_actor, MxU8 p_mood, MxU32 p_characterId);
-	void FUN_10063d10();
-	void FUN_10063e40(LegoAnimPresenter* p_presenter);
-	MxBool FUN_10063fb0(LegoLocation::Boundary* p_boundary, LegoWorld* p_world);
-	MxBool FUN_10064010(LegoPathBoundary* p_boundary, LegoOrientedEdge* p_edge, float p_destScale);
-	MxBool FUN_10064120(LegoLocation::Boundary* p_boundary, MxBool p_bool1, MxBool p_bool2);
-	MxResult FUN_10064380(
+	void DetachActorsUsedByAnimation(AnimInfo& p_info);
+	MxBool IsROIWithinSphere(Mx3DPointFloat& p_position, float p_und, LegoROI* p_roi);
+	MxBool IsAnimationRejectedForPlayer(AnimInfo& p_info);
+	MxBool PromoteROIToExtraActor(LegoROI* p_roi, LegoAnimPresenter* p_presenter);
+	void ReleaseStashedActor(LegoROI* p_roi);
+	void ReleaseAllStashedActors();
+	MxBool BuildExtraActorCycles(LegoWorld* p_world, LegoExtraActor* p_actor, MxU8 p_mood, MxU32 p_characterId);
+	void UpdateExtraActorSpeeds();
+	void FlushStashedActorsToWorld(LegoAnimPresenter* p_presenter);
+	MxBool IsLocationBoundarySpawnable(LegoLocation::Boundary* p_boundary, LegoWorld* p_world);
+	MxBool IsEdgeSpawnPointOffscreen(LegoPathBoundary* p_boundary, LegoOrientedEdge* p_edge, float p_destScale);
+	MxBool FindRandomSpawnBoundary(LegoLocation::Boundary* p_boundary, MxBool p_bool1, MxBool p_bool2);
+	MxResult PlaceNamedExtraActor(
 		const char* p_name,
 		const char* p_boundaryName,
 		MxS32 p_src,
@@ -255,8 +255,8 @@ private:
 		MxS32 p_unk0x10,
 		float p_speed
 	);
-	void FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x404);
-	void FUN_10064b50(MxLong p_time);
+	void BeginAnimationCameraTransition(LegoTranInfo* p_tranInfo, MxLong p_unk0x404);
+	void UpdateAnimationCameraTransition(MxLong p_time);
 
 	LegoOmni::World m_worldId;          // 0x08
 	MxU16 m_animCount;                  // 0x0c

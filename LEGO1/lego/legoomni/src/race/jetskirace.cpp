@@ -292,7 +292,7 @@ void JetskiRace::SetProgressPosition(MxS32 p_actorId, MxS16 p_progress)
 // FUNCTION: LEGO1 0x10016a10
 MxBool JetskiRace::Escape()
 {
-	AnimationManager()->FUN_10061010(FALSE);
+	AnimationManager()->StopAnimations(FALSE);
 	DeleteObjects(&m_atomId, 500, 999);
 	m_act1State->m_state = Act1State::e_none;
 	VariableTable()->SetVariable(g_raceState, "");

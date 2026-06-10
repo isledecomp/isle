@@ -40,7 +40,7 @@ MxResult LegoCacheSoundManager::Tickle()
 #endif
 		LegoCacheSound* sound = (*setIter).GetSound();
 		if (sound->GetUnknown0x58()) {
-			sound->FUN_10006be0();
+			sound->UpdatePlayback();
 		}
 	}
 
@@ -49,7 +49,7 @@ MxResult LegoCacheSoundManager::Tickle()
 		LegoCacheSound* sound = (*listIter).GetSound();
 
 		if (sound->GetUnknown0x58()) {
-			sound->FUN_10006be0();
+			sound->UpdatePlayback();
 			listIter++;
 		}
 		else {
