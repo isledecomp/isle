@@ -321,6 +321,9 @@
 // GLOBAL: ISLE 0x410d98
 // ___small_block_heap
 
+// GLOBAL: ISLE 0x4115d0
+// __iob
+
 // GLOBAL: ISLE 0x411850
 // __cflush
 
@@ -344,5 +347,14 @@
 
 // GLOBAL: ISLE 0x4139c0
 // __acmdln
+
+
+/// Globals from libraries without symbols
+
+// STRING: ISLE 0x40f4a4
+static const char* ___crtLCMapStringA_str = "\0";
+
+// STRING: ISLE 0x40f4a8
+static const wchar_t* ___crtLCMapStringA_wstr = L"\0";
 
 #endif

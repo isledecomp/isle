@@ -608,6 +608,48 @@ if (MSVC_FOR_DECOMP)
     endif()
   endif()
 
+  # Per-TU entropy: force-include a generated entropy header into individual
+  # translation units. The manifest is a text file with lines of the form
+  #   <source-path-relative-to-repo-root> <seed>
+  # (blank lines and lines starting with # are ignored). Headers are generated
+  # at configure time with tools/entropy.py, cached per seed in the build dir.
+  set(ISLE_TU_ENTROPY_MANIFEST "" CACHE FILEPATH "Per-TU entropy manifest file")
+  if (ISLE_TU_ENTROPY_MANIFEST)
+    find_package(Python3 COMPONENTS Interpreter REQUIRED)
+    message(STATUS "Using per-TU entropy manifest: ${ISLE_TU_ENTROPY_MANIFEST}")
+    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${ISLE_TU_ENTROPY_MANIFEST}")
+    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tu-entropy")
+    file(STRINGS "${ISLE_TU_ENTROPY_MANIFEST}" tu_entropy_lines)
+    foreach(line IN LISTS tu_entropy_lines)
+      if (line MATCHES "^[ \t]*(#.*)?$")
+        continue()
+      endif()
+      separate_arguments(parts UNIX_COMMAND "${line}")
+      list(LENGTH parts nparts)
+      if (NOT nparts EQUAL 2)
+        message(FATAL_ERROR "Malformed entropy manifest line: '${line}'")
+      endif()
+      list(GET parts 0 tu_src)
+      list(GET parts 1 tu_seed)
+      if (NOT EXISTS "${PROJECT_SOURCE_DIR}/${tu_src}")
+        message(FATAL_ERROR "Entropy manifest references missing source: '${tu_src}'")
+      endif()
+      set(tu_hdr "${CMAKE_BINARY_DIR}/tu-entropy/entropy_${tu_seed}.h")
+      if (NOT EXISTS "${tu_hdr}")
+        execute_process(
+          COMMAND ${Python3_EXECUTABLE} "${PROJECT_SOURCE_DIR}/tools/entropy.py" "${tu_seed}"
+          OUTPUT_FILE "${tu_hdr}"
+          RESULT_VARIABLE tu_rc
+        )
+        if (NOT tu_rc EQUAL 0 OR NOT EXISTS "${tu_hdr}")
+          file(REMOVE "${tu_hdr}")
+          message(FATAL_ERROR "tools/entropy.py failed for seed ${tu_seed}")
+        endif()
+      endif()
+      set_property(SOURCE "${PROJECT_SOURCE_DIR}/${tu_src}" APPEND PROPERTY COMPILE_OPTIONS "/FI${tu_hdr}")
+    endforeach()
+  endif()
+
   # Setting the MSVC_RUNTIME_LIBRARY for all libraries as well as `lego1` produces the results
   # that are most consistent with the LEGO1.DLL and BETA10.DLL originals we have.
   # Equivalent to target_compile_options(... PRIVATE "/MT$<$<CONFIG:Debug>:d>")
