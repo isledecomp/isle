@@ -302,74 +302,79 @@ void Act2Actor::Animate(float p_time)
 			m_state = e_roaming;
 			SetWorldSpeed(m_baseWorldSpeed + 4, p_time + 15000.0f);
 		}
+
+		return;
 	}
-	else {
-		LegoROI* roiPepper = FindROI("pepper");
 
-		if (roiPepper) {
-			ViewManager* vm = VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager();
-			assert(vm);
+	LegoROI* roiPepper = FindROI("pepper");
 
-			MxU32 inFrustum = vm->IsBoundingBoxInFrustum(m_roi->GetWorldBoundingBox());
+	if (!roiPepper) {
+		return;
+	}
 
-			if (inFrustum) {
-				Mx3DPointFloat local18(roiPepper->GetWorldDirection());
-				Mx3DPointFloat local30(m_roi->GetWorldPosition());
-				Mx3DPointFloat local60(roiPepper->GetWorldPosition());
-				local30 -= local60;
-				local30.Unitize();
+	ViewManager* vm = VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager();
+	assert(vm);
 
-				MxFloat dotproduct = local18.Dot(local30, local18);
+	MxU32 inFrustum = vm->IsBoundingBoxInFrustum(m_roi->GetWorldBoundingBox());
 
-				if (dotproduct >= 0.0) {
-					const MxFloat* pepperWorldPosition = roiPepper->GetWorldPosition();
-					const MxFloat* worldPosition = m_roi->GetWorldPosition();
+	if (!inFrustum) {
+		return;
+	}
 
-					MxFloat distanceToAmbulance = DISTSQRD3(pepperWorldPosition, worldPosition);
+	Mx3DPointFloat local18(roiPepper->GetWorldDirection());
+	Mx3DPointFloat local30(m_roi->GetWorldPosition());
+	Mx3DPointFloat local60(roiPepper->GetWorldPosition());
+	local30 -= local60;
+	local30.Unitize();
 
-					if (distanceToAmbulance < 75.0f) {
-						if (!m_skipAnimation) {
-							m_skipAnimation = TRUE;
+	MxFloat dotproduct = local18.Dot(local30, local18);
 
-							if (!m_state) {
-								PlayNextVoiceOver(VoiceOver::e_interrupt);
-								m_state = e_endShot;
-							}
-							else {
-								LegoROI* childROI = m_roi->FindChildROI("windsd", m_roi);
-								const MxFloat* childPosition = childROI->GetWorldPosition();
-								MxFloat distanceToWindshield = DISTSQRD3(pepperWorldPosition, childPosition);
+	if (dotproduct >= 0.0) {
+		const MxFloat* pepperWorldPosition = roiPepper->GetWorldPosition();
+		const MxFloat* worldPosition = m_roi->GetWorldPosition();
 
-								childROI = m_roi->FindChildROI("reardr", m_roi);
-								childPosition = childROI->GetWorldPosition();
-								MxFloat distanceToRearDoor = DISTSQRD3(pepperWorldPosition, childPosition);
+		MxFloat distanceToAmbulance = DISTSQRD3(pepperWorldPosition, worldPosition);
 
-								if (distanceToRearDoor > distanceToWindshield) {
-									PlayNextVoiceOver(VoiceOver::e_head);
-								}
-								else
-#ifndef BETA10
-									if (p_time - m_createBrickTime > 3000.0f) {
-#endif
-									SetWorldSpeed(m_baseWorldSpeed - 1);
-									m_state = e_createdBrick;
-									m_createBrickTime = p_time;
+		if (distanceToAmbulance < 75.0f) {
+			if (!m_skipAnimation) {
+				m_skipAnimation = TRUE;
 
-									if (((LegoAct2*) CurrentWorld())->CreateDroppingBrick() == SUCCESS) {
-										PlayNextVoiceOver(VoiceOver::e_behind);
-									}
-#ifndef BETA10
-								}
-#endif
-							}
-						}
-					}
-					else {
-						if (m_skipAnimation) {
-							m_skipAnimation = FALSE;
-						}
-					}
+				if (!m_state) {
+					PlayNextVoiceOver(VoiceOver::e_interrupt);
+					m_state = e_endShot;
 				}
+				else {
+					LegoROI* childROI = m_roi->FindChildROI("windsd", m_roi);
+					const MxFloat* childPosition = childROI->GetWorldPosition();
+					MxFloat distanceToWindshield = DISTSQRD3(pepperWorldPosition, childPosition);
+
+					childROI = m_roi->FindChildROI("reardr", m_roi);
+					childPosition = childROI->GetWorldPosition();
+					MxFloat distanceToRearDoor = DISTSQRD3(pepperWorldPosition, childPosition);
+
+					if (distanceToRearDoor > distanceToWindshield) {
+						PlayNextVoiceOver(VoiceOver::e_head);
+					}
+					else
+#ifndef BETA10
+						if (p_time - m_createBrickTime > 3000.0f) {
+#endif
+						SetWorldSpeed(m_baseWorldSpeed - 1);
+						m_state = e_createdBrick;
+						m_createBrickTime = p_time;
+
+						if (((LegoAct2*) CurrentWorld())->CreateDroppingBrick() == SUCCESS) {
+							PlayNextVoiceOver(VoiceOver::e_behind);
+						}
+#ifndef BETA10
+					}
+#endif
+				}
+			}
+		}
+		else {
+			if (m_skipAnimation) {
+				m_skipAnimation = FALSE;
 			}
 		}
 	}
@@ -859,14 +864,13 @@ LegoEntity* Act2Actor::GetNextEntity(MxBool* p_isBuilding)
 			}
 		}
 
-		if (result) {
-			return result;
+		if (!result) {
+			if (buildingInfo[15].m_counter) {
+				result = buildingInfo[15].m_entity;
+				*p_isBuilding = TRUE;
+			}
 		}
 
-		if (buildingInfo[15].m_counter) {
-			result = buildingInfo[15].m_entity;
-			*p_isBuilding = TRUE;
-		}
 		break;
 	}
 
