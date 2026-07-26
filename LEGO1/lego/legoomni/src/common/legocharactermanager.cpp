@@ -23,6 +23,16 @@
 DECOMP_SIZE_ASSERT(LegoCharacter, 0x08)
 DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)
 DECOMP_SIZE_ASSERT(CustomizeAnimFileVariable, 0x24)
+DECOMP_SIZE_ASSERT(BoundingBox, 0x28)
+DECOMP_SIZE_ASSERT(BoundingSphere, 0x18)
+DECOMP_SIZE_ASSERT(ROI, 0x10)
+DECOMP_SIZE_ASSERT(MxVariableTable, 0x28)
+
+enum {
+	c_maxMood = 3,
+	c_numParts = 10,
+	c_indexEnd = 0xff
+};
 
 // GLOBAL: LEGO1 0x100fc4d0
 MxU32 LegoCharacterManager::g_maxMove = 4;
@@ -30,17 +40,17 @@ MxU32 LegoCharacterManager::g_maxMove = 4;
 // GLOBAL: LEGO1 0x100fc4d4
 MxU32 LegoCharacterManager::g_maxSound = 9;
 
-// GLOBAL: LEGO1 0x100fc4e0
-MxU32 g_characterAnimationId = 10;
-
-// GLOBAL: LEGO1 0x100fc4e4
-char* LegoCharacterManager::g_customizeAnimFile = NULL;
-
 // GLOBAL: LEGO1 0x100fc4d8
 MxU32 g_characterSoundIdOffset = 50;
 
 // GLOBAL: LEGO1 0x100fc4dc
 MxU32 g_characterSoundIdMoodOffset = 66;
+
+// GLOBAL: LEGO1 0x100fc4e0
+MxU32 g_characterAnimationId = 10;
+
+// GLOBAL: LEGO1 0x100fc4e4
+char* LegoCharacterManager::g_customizeAnimFile = NULL;
 
 // GLOBAL: LEGO1 0x100fc4e8
 MxU32 g_headTextureCounter = 0;
@@ -658,7 +668,9 @@ MxBool LegoCharacterManager::SetHeadTexture(LegoROI* p_roi, LegoTextureInfo* p_t
 MxBool LegoCharacterManager::IsActor(const char* p_name)
 {
 	for (MxU32 i = 0; i < sizeOfArray(g_actorInfo); i++) {
-		if (!strcmpi(g_actorInfo[i].m_name, p_name)) {
+		const char* name = g_actorInfo[i].m_name;
+
+		if (!strcmpi(name, p_name)) {
 			return TRUE;
 		}
 	}
@@ -685,7 +697,9 @@ LegoActorInfo* LegoCharacterManager::GetActorInfo(const char* p_name)
 	MxU32 i;
 
 	for (i = 0; i < sizeOfArray(g_actorInfo); i++) {
-		if (!strcmpi(g_actorInfo[i].m_name, p_name)) {
+		const char* name = g_actorInfo[i].m_name;
+
+		if (!strcmpi(name, p_name)) {
 			break;
 		}
 	}
@@ -705,7 +719,9 @@ LegoActorInfo* LegoCharacterManager::GetActorInfo(LegoROI* p_roi)
 	MxU32 i;
 
 	for (i = 0; i < sizeOfArray(g_actorInfo); i++) {
-		if (g_actorInfo[i].m_roi == p_roi) {
+		LegoROI* roi = g_actorInfo[i].m_roi;
+
+		if (roi == p_roi) {
 			break;
 		}
 	}
@@ -745,7 +761,7 @@ LegoROI* LegoCharacterManager::FindChildROI(LegoROI* p_roi, const char* p_name)
 // FUNCTION: BETA10 0x10076223
 MxBool LegoCharacterManager::SwitchColor(LegoROI* p_roi, LegoROI* p_targetROI)
 {
-	MxS32 numParts = 10;
+	MxS32 numParts = c_numParts;
 	const char* targetName = p_targetROI->GetName();
 
 	MxS32 partIndex;
@@ -791,7 +807,7 @@ MxBool LegoCharacterManager::SwitchColor(LegoROI* p_roi, LegoROI* p_targetROI)
 	LegoActorInfo::Part& part = info->m_parts[partIndex];
 
 	part.m_nameIndex++;
-	if (part.m_nameIndices[part.m_nameIndex] == 0xff) {
+	if (part.m_nameIndices[part.m_nameIndex] == c_indexEnd) {
 		part.m_nameIndex = 0;
 	}
 
@@ -815,7 +831,7 @@ MxBool LegoCharacterManager::SwitchVariant(LegoROI* p_roi)
 	part.m_partNameIndex++;
 	MxU8 partNameIndex = part.m_partNameIndices[part.m_partNameIndex];
 
-	if (partNameIndex == 0xff) {
+	if (partNameIndex == c_indexEnd) {
 		part.m_partNameIndex = 0;
 		partNameIndex = part.m_partNameIndices[part.m_partNameIndex];
 	}
@@ -905,7 +921,7 @@ MxBool LegoCharacterManager::SwitchMood(LegoROI* p_roi)
 	if (info != NULL) {
 		info->m_mood++;
 
-		if (info->m_mood > 3) {
+		if (info->m_mood > c_maxMood) {
 			info->m_mood = 0;
 		}
 
