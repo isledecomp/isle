@@ -117,7 +117,7 @@ void IslePathActor::Exit()
 		m_previousActor->SetUserNavFlag(TRUE);
 		m_previousActor->SetBoundary(m_boundary);
 
-		MxS32 i;
+		MxS32 i, j;
 		for (i = 0; i < m_boundary->GetNumEdges(); i++) {
 			LegoOrientedEdge* e = (LegoOrientedEdge*) m_boundary->GetEdges()[i];
 			assert(e);
@@ -128,7 +128,6 @@ void IslePathActor::Exit()
 			local20 *= m_roi->GetWorldBoundingSphere().Radius();
 			local20 += GetWorldPosition();
 
-			MxS32 j;
 			for (j = 0; j < m_boundary->GetNumEdges(); j++) {
 				Mx4DPointFloat& normal = *m_boundary->GetEdgeNormal(j);
 
