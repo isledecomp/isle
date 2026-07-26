@@ -693,9 +693,7 @@ void LegoBuildingManager::ScheduleAnimation(
 	entry->m_entity = p_entity;
 	entry->m_roi = p_entity->GetROI();
 
-	MxLong time = Timer()->GetTime();
-	time += p_length;
-	entry->m_time = time + 1000;
+	entry->m_time = Timer()->GetTime() + p_length + 1000;
 
 	entry->m_y = entry->m_roi->GetWorldPosition()[1];
 	entry->m_muted = p_haveSound == FALSE;
