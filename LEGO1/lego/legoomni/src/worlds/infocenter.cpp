@@ -579,7 +579,7 @@ void Infocenter::ReadyWorld()
 		if (m_infocenterState->m_state == InfocenterState::e_selectedSave) {
 			bgRed->Enable(TRUE);
 
-			if (GameState()->GetCurrentAct() == GameState()->GetLoadedAct()) {
+			if (GameState()->GetLoadedAct() == GameState()->GetCurrentAct()) {
 				GameState()->m_currentArea = LegoGameState::e_act3script;
 				GameState()->StopArea(LegoGameState::e_act3script);
 				GameState()->m_currentArea = LegoGameState::e_infomain;
@@ -597,8 +597,7 @@ void Infocenter::ReadyWorld()
 		}
 
 		PlayMusic(JukeboxScript::c_InformationCenter_Music);
-		InfomainScript::Script script = m_infocenterState->GetNextReturnDialogue();
-		PlayAction(script);
+		PlayAction(m_infocenterState->GetNextReturnDialogue());
 		bgRed->Enable(TRUE);
 		break;
 	}
@@ -1302,10 +1301,10 @@ void Infocenter::UpdateEnabledGlowControl(MxS32 p_x, MxS32 p_y)
 {
 	MxS16 i;
 	for (i = 0; i < (MxS32) (sizeof(m_glowInfo) / sizeof(m_glowInfo[0])); i++) {
-		MxS32 right = m_glowInfo[i].m_area.GetRight();
-		MxS32 bottom = m_glowInfo[i].m_area.GetBottom();
 		MxS32 left = m_glowInfo[i].m_area.GetLeft();
 		MxS32 top = m_glowInfo[i].m_area.GetTop();
+		MxS32 right = m_glowInfo[i].m_area.GetRight();
+		MxS32 bottom = m_glowInfo[i].m_area.GetBottom();
 
 		if (left <= p_x && p_x <= right && top <= p_y && p_y <= bottom) {
 			break;
