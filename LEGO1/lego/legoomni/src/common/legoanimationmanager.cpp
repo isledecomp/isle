@@ -1201,11 +1201,12 @@ void LegoAnimationManager::CameraTriggerFire(LegoPathActor* p_actor, MxBool, MxU
 
 		MxU16 unk0x0e, unk0x10;
 		if (FUN_100617c0(p_location, unk0x0e, unk0x10) == SUCCESS) {
+			MxU16 i;
 			MxU16 index = unk0x0e;
 			MxU32 unk0x22 = -1;
 			MxBool success = FALSE;
 
-			for (MxU16 i = unk0x0e; i <= unk0x10; i++) {
+			for (i = unk0x0e; i <= unk0x10; i++) {
 				AnimInfo& animInfo = m_anims[i];
 
 				if ((p_bool || !FUN_100623a0(animInfo)) && !FUN_10062710(animInfo) && animInfo.m_unk0x29 &&
@@ -2435,7 +2436,9 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 // FUNCTION: BETA10 0x10045034
 void LegoAnimationManager::FUN_10063d10()
 {
-	if (CurrentWorld() != NULL) {
+	LegoWorld* world = CurrentWorld();
+
+	if (world != NULL) {
 		MxLong time = Timer()->GetTime();
 
 		for (MxS32 i = 0; i < (MxS32) sizeOfArray(m_extras); i++) {
@@ -2447,7 +2450,8 @@ void LegoAnimationManager::FUN_10063d10()
 
 					m_extras[i].m_unk0x0c = FALSE;
 
-					LegoExtraActor* actor = CharacterManager()->GetExtraActor(roi->GetName());
+					const char* name = roi->GetName();
+					LegoExtraActor* actor = CharacterManager()->GetExtraActor(name);
 					if (actor != NULL) {
 						float speed = m_extras[i].m_speed;
 
