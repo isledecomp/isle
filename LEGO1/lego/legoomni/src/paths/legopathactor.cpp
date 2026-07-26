@@ -137,7 +137,7 @@ MxResult LegoPathActor::SetTransformAndDestinationFromEdge(
 	startDirection.Unitize();
 
 	MxMatrix matrix;
-	Vector3 pos(matrix[3]);
+	Vector3 pos((const float*) matrix[3]);
 	Vector3 dir(matrix[2]);
 	Vector3 up(matrix[1]);
 	Vector3 right(matrix[0]);
@@ -216,10 +216,10 @@ MxResult LegoPathActor::SetTransformAndDestinationFromPoints(
 	p_destEdge->GetFaceNormal(*p_boundary, destNormal);
 
 	MxMatrix matrix;
-	Vector3 pos(matrix[3]);
-	Vector3 dir(matrix[2]);
-	Vector3 up(matrix[1]);
-	Vector3 right(matrix[0]);
+	Vector3 pos((const float*) matrix[3]);
+	Vector3 dir((const float*) matrix[2]);
+	Vector3 up((const float*) matrix[1]);
+	Vector3 right((const float*) matrix[0]);
 
 	matrix.SetIdentity();
 	pos = p_start;
@@ -650,10 +650,10 @@ inline MxU32 LegoPathActor::CheckIntersectionBothFaces(
 
 		// LINE: LEGO1 0x1002ee9f
 		if (boundary != NULL) {
-			list<LegoPathBoundary*>::const_iterator it;
+			list<LegoPathBoundary*>::iterator it;
 
 			// LINE: LEGO1 0x1002eead
-			for (it = p_checkedBoundaries.begin(); !(it == p_checkedBoundaries.end()); ++it) {
+			for (it = p_checkedBoundaries.begin(); it != p_checkedBoundaries.end(); ++it) {
 				// LINE: LEGO1 0x1002eeb3
 				if ((*it) == boundary) {
 					break;
