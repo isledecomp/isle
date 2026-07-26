@@ -337,7 +337,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 	}
 
 	if (action->GetObjectId() == InfomainScript::c_iicx26in_RunAnim) {
-		ControlManager()->UpdateEnabledChild(InfomainScript::c_BigInfo_Ctl, action->GetAtomId().GetInternal(), 0);
+		ControlManager()->UpdateEnabledChild(InfomainScript::c_BigInfo_Ctl, m_atomId.GetInternal(), 0);
 		m_bigInfoBlinkTimer = 0;
 	}
 
