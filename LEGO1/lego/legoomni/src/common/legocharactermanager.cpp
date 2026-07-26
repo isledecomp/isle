@@ -1049,13 +1049,14 @@ MxResult LegoCharacterManager::UpdateBoundingSphereAndBox(LegoROI* p_roi)
 	BoundingSphere boundingSphere;
 	BoundingBox boundingBox;
 
-	const Tgl::MeshBuilder* meshBuilder = ((ViewLOD*) p_roi->GetLOD(0))->GetMeshBuilder();
+	ViewLOD* lod = (ViewLOD*) p_roi->GetLOD(0);
+	const Tgl::MeshBuilder* meshBuilder = lod->GetMeshBuilder();
 
 	if (meshBuilder != NULL) {
 		float min[3], max[3];
 
-		FILLVEC3(min, 88888.0);
-		FILLVEC3(max, -88888.0);
+		min[0] = min[1] = min[2] = 88888.0;
+		max[0] = max[1] = max[2] = -88888.0;
 		meshBuilder->GetBoundingBox(min, max);
 
 		float center[3];
