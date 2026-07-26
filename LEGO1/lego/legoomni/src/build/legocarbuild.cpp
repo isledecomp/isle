@@ -160,62 +160,62 @@ MxResult LegoCarBuild::Create(MxDSAction& p_dsAction)
 {
 	MxResult result = LegoWorld::Create(p_dsAction);
 
-	if (!result) {
-		// TickleManager()->RegisterClient(this, 100);
-		InputManager()->SetWorld(this);
-		ControlManager()->Register(this);
-
-		SetIsWorldActive(FALSE);
-
-		InputManager()->Register(this);
-
-		// variable name verified by BETA10 0x1006b1a6
-		const char* buildStateClassName = NULL;
-
-		if (m_atomId == *g_copterScript) {
-			buildStateClassName = "LegoCopterBuildState";
-			GameState()->m_currentArea = LegoGameState::e_copterbuild;
-			m_carId = Helicopter_Actor;
-		}
-		else if (m_atomId == *g_dunecarScript) {
-			buildStateClassName = "LegoDuneCarBuildState";
-			GameState()->m_currentArea = LegoGameState::e_dunecarbuild;
-			m_carId = DuneBugy_Actor;
-		}
-		else if (m_atomId == *g_jetskiScript) {
-			buildStateClassName = "LegoJetskiBuildState";
-			GameState()->m_currentArea = LegoGameState::e_jetskibuild;
-			m_carId = Jetski_Actor;
-		}
-		else if (m_atomId == *g_racecarScript) {
-			buildStateClassName = "LegoRaceCarBuildState";
-			GameState()->m_currentArea = LegoGameState::e_racecarbuild;
-			m_carId = RaceCar_Actor;
-		}
-
-		LegoGameState* gameState = GameState();
-
-		LegoVehicleBuildState* buildState = (LegoVehicleBuildState*) gameState->GetState(buildStateClassName);
-
-		if (!buildState) {
-			buildState = (LegoVehicleBuildState*) gameState->CreateState(buildStateClassName);
-		}
-
-		m_buildState = buildState;
-		m_alreadyFinished = m_buildState->m_finishedBuild;
-
-		GameState()->StopArea(LegoGameState::e_previousArea);
-
-		m_buildState->m_animationState = LegoVehicleBuildState::e_entering;
-		m_clickState = e_idle;
-
-		BackgroundAudioManager()->Stop();
-		EnableAnimations(FALSE);
-
-		result = SUCCESS;
+	if (result != SUCCESS) {
+		return result;
 	}
 
-	return result;
+	// TickleManager()->RegisterClient(this, 100);
+	InputManager()->SetWorld(this);
+	ControlManager()->Register(this);
+
+	SetIsWorldActive(FALSE);
+
+	InputManager()->Register(this);
+
+	// variable name verified by BETA10 0x1006b1a6
+	const char* buildStateClassName = NULL;
+
+	if (m_atomId == *g_copterScript) {
+		buildStateClassName = "LegoCopterBuildState";
+		GameState()->m_currentArea = LegoGameState::e_copterbuild;
+		m_carId = Helicopter_Actor;
+	}
+	else if (m_atomId == *g_dunecarScript) {
+		buildStateClassName = "LegoDuneCarBuildState";
+		GameState()->m_currentArea = LegoGameState::e_dunecarbuild;
+		m_carId = DuneBugy_Actor;
+	}
+	else if (m_atomId == *g_jetskiScript) {
+		buildStateClassName = "LegoJetskiBuildState";
+		GameState()->m_currentArea = LegoGameState::e_jetskibuild;
+		m_carId = Jetski_Actor;
+	}
+	else if (m_atomId == *g_racecarScript) {
+		buildStateClassName = "LegoRaceCarBuildState";
+		GameState()->m_currentArea = LegoGameState::e_racecarbuild;
+		m_carId = RaceCar_Actor;
+	}
+
+	LegoGameState* gameState = GameState();
+
+	LegoVehicleBuildState* buildState = (LegoVehicleBuildState*) gameState->GetState(buildStateClassName);
+
+	if (!buildState) {
+		buildState = (LegoVehicleBuildState*) gameState->CreateState(buildStateClassName);
+	}
+
+	m_buildState = buildState;
+	m_alreadyFinished = m_buildState->m_finishedBuild;
+
+	GameState()->StopArea(LegoGameState::e_previousArea);
+
+	m_buildState->m_animationState = LegoVehicleBuildState::e_entering;
+	m_clickState = e_idle;
+
+	BackgroundAudioManager()->Stop();
+	EnableAnimations(FALSE);
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10022cd0
