@@ -372,7 +372,7 @@ void LegoPathController::RemovePresenterFromBoundaries(LegoAnimPresenter* p_pres
 // FUNCTION: BETA10 0x100b73d8
 void LegoPathController::AnimateActors()
 {
-	float time = (float) Timer()->GetTime();
+	float time = Timer()->GetTime();
 
 	LegoPathActorSet lpas(m_actors);
 
@@ -1015,7 +1015,7 @@ MxResult LegoPathController::FindIntersectionBoundary(
 
 		float coeffBDotUp = p_coefficients[1].Dot(p_coefficients[1], *up);
 		float coeffCDotUp = p_coefficients[2].Dot(p_coefficients[2], *up) + up->index_operator(3);
-		float quadraticDiscriminant = coeffBDotUp * coeffBDotUp - coeffCDotUp * coeffADotUp * 4.0f;
+		float quadraticDiscriminant = coeffBDotUp * coeffBDotUp + (coeffCDotUp * coeffADotUp) * -4.0f;
 
 		if (quadraticDiscriminant < -0.001) {
 			continue;
