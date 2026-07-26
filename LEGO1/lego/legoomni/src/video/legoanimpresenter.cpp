@@ -368,7 +368,9 @@ LegoBool LegoAnimPresenter::AppendROIToScene(const CompoundObject& p_rois, const
 	}
 
 	if (str != NULL && *str != '\0' && p_rois.size() > 0) {
-		for (CompoundObject::const_iterator it = p_rois.begin(); it != p_rois.end(); it++) {
+		CompoundObject::const_iterator it;
+
+		for (it = p_rois.begin(); it != p_rois.end(); it++) {
 			LegoROI* roi = (LegoROI*) *it;
 			const char* name = roi->GetName();
 
@@ -566,7 +568,8 @@ MxBool LegoAnimPresenter::VerifyAnimationNode(LegoTreeNode* p_node, LegoROI* p_r
 	MxBool result = FALSE;
 	LegoROI* roi = p_roi;
 	LegoChar* varOrName = NULL;
-	const LegoChar* name = ((LegoAnimNodeData*) p_node->GetData())->GetName();
+	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
+	const LegoChar* name = data->GetName();
 	MxS32 i, count;
 
 	if (name != NULL && *name != '-') {
