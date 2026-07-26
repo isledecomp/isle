@@ -140,8 +140,8 @@ MxLong JetskiRace::HandleControl(LegoControlManagerNotificationParam& p_param)
 			VariableTable()->SetVariable(g_strHIT_WALL_SOUND, "");
 			LegoRaceCar::InitYouCantStopSound();
 			m_destLocation = LegoGameState::e_infomain;
-			result = 1;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			result = 1;
 			break;
 		default:
 			break;

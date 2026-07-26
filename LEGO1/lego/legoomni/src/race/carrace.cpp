@@ -127,7 +127,8 @@ void CarRace::ReadyWorld()
 	AnimationManager()->Resume();
 	Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 
-	m_introAnimation = g_introAnimations[rand() & 7];
+	MxS32 index = rand() & 7;
+	m_introAnimation = g_introAnimations[index];
 
 	AnimationManager()
 		->FUN_10060dc0(m_introAnimation, NULL, TRUE, LegoAnimationManager::e_unk0, NULL, FALSE, TRUE, FALSE, TRUE);

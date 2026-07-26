@@ -210,13 +210,13 @@ void MxMediaPresenter::RepeatingTickle()
 		}
 
 		if (m_currentChunk) {
-			MxLong time = m_currentChunk->GetTime();
-			if (time <= m_action->GetElapsedTime() % m_action->GetLoopCount()) {
+			if (m_currentChunk->GetTime() <= m_action->GetElapsedTime() % m_action->GetLoopCount()) {
 				ProgressTickleState(e_freezing);
 			}
 		}
 		else {
-			if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration()) {
+			MxDSAction* action = m_action;
+			if (action->GetElapsedTime() >= action->GetStartTime() + action->GetDuration()) {
 				ProgressTickleState(e_freezing);
 			}
 		}
@@ -236,9 +236,8 @@ void MxMediaPresenter::LoopChunk(MxStreamChunk* p_chunk)
 {
 	MxStreamChunk* chunk = new MxStreamChunk;
 
-	MxU32 length = p_chunk->GetLength();
-	chunk->SetLength(length);
-	chunk->SetData(new MxU8[length]);
+	chunk->SetLength(p_chunk->GetLength());
+	chunk->SetData(new MxU8[chunk->GetLength()]);
 	chunk->SetTime(p_chunk->GetTime());
 
 	memcpy(chunk->GetData(), p_chunk->GetData(), chunk->GetLength());
