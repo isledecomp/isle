@@ -102,9 +102,11 @@ const char* g_nick = "Nick";
 // STRING: LEGO1 0x100f39e0
 const char* g_laura = "Laura";
 
+#ifdef BETA10
 // GLOBAL: BETA10 0x101f6ce4
 // STRING: BETA10 0x101f6d54
 const char* g_varDEBUG = "DEBUG";
+#endif
 
 // FUNCTION: LEGO1 0x10037d00
 // FUNCTION: BETA10 0x100d5620
