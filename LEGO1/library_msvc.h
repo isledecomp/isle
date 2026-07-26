@@ -839,7 +839,6 @@
 // GLOBAL: BETA10 0x102122d0
 // _bufin
 
-
 // LIBRARY: BETA10 0x100f8a88
 // ??2@YAPAXI@Z
 
@@ -1056,13 +1055,10 @@
 // // GLOBAL: LEGO1 0x10098f80
 // c_dfDIKeyboard
 
-
 /// Globals from libraries without symbols
 
 // STRING: LEGO1 0x100dabb0
 static const char* ___crtLCMapStringA_str = "\0";
 
 // STRING: LEGO1 0x100dabb4
-static const wchar_t *___crtLCMapStringA_wstr = L"\0";
-
-
+static const wchar_t* ___crtLCMapStringA_wstr = L"\0";

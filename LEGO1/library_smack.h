@@ -29,5 +29,3 @@
 
 // LIBRARY: LEGO1 0x100d0654
 // _SmackRemapTables
-
-

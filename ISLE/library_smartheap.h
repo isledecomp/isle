@@ -308,5 +308,3 @@
 
 // GLOBAL: ISLE 0x412870
 // __shi_mutexGlobal
-
-

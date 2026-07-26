@@ -308,5 +308,3 @@
 
 // GLOBAL: LEGO1 0x101095e0
 // __shi_mutexGlobal
-
-
