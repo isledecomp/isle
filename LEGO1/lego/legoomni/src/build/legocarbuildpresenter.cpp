@@ -18,6 +18,11 @@
 
 DECOMP_SIZE_ASSERT(LegoCarBuildAnimPresenter::CarBuildPart, 0x0c)
 DECOMP_SIZE_ASSERT(LegoCarBuildAnimPresenter, 0x150)
+DECOMP_SIZE_ASSERT(LegoAnimNodeData, 0x34)
+DECOMP_SIZE_ASSERT(LegoTreeNode, 0x10)
+DECOMP_SIZE_ASSERT(LegoROI, 0x108)
+DECOMP_SIZE_ASSERT(LegoEntity, 0x68)
+DECOMP_SIZE_ASSERT(LegoCarBuild, 0x34c)
 
 // FUNCTION: LEGO1 0x10078400
 // FUNCTION: BETA10 0x100707c0
@@ -302,12 +307,13 @@ MxResult LegoCarBuildAnimPresenter::Serialize(LegoStorage* p_storage)
 		}
 	}
 	else if (p_storage->IsWriteMode()) {
-		p_storage->WriteS16(m_placedPartCount);
-		p_storage->WriteFloat(m_shelfFrame);
+		LegoStorage* storage = p_storage;
+		storage->WriteS16(m_placedPartCount);
+		storage->WriteFloat(m_shelfFrame);
 		for (MxS16 i = 0; i < m_numberOfParts; i++) {
-			p_storage->WriteString(m_parts[i].m_name);
-			p_storage->WriteString(m_parts[i].m_wiredName);
-			p_storage->WriteS16(m_parts[i].m_objectId);
+			storage->WriteString(m_parts[i].m_name);
+			storage->WriteString(m_parts[i].m_wiredName);
+			storage->WriteS16(m_parts[i].m_objectId);
 		}
 	}
 
