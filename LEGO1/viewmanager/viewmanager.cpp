@@ -205,7 +205,7 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 		lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
 
 		if (lod->GetFlags() & ViewLOD::c_hasMesh) {
-			scene->Add((Tgl::MeshBuilder*) group);
+			scene->Add(group);
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
 		}
 	}
