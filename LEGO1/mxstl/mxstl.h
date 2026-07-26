@@ -168,7 +168,10 @@ public:
   typedef Vector<_TYPE> _Myt;
   typedef allocator<_TYPE> _A;
 
-  explicit Vector(const _A& _Al = _A()) : vector<_TYPE, _A>(_Al)
+  explicit Vector() : vector<_TYPE, _A>()
+  {}
+
+  explicit Vector(size_type _N, const _TYPE& _V = _TYPE()) : vector<_TYPE, _A>(_N, _V)
   {}
 
   void swap(_Myt& _X)
