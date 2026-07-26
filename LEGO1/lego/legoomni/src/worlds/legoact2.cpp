@@ -303,7 +303,7 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 
 				LegoEntity* entity = (LegoEntity*) param.GetSender();
 
-				Mx3DPointFloat pepperToBrick(entity->GetROI()->GetWorldPosition());
+				Mx3DPointFloat pepperToBrick((float*) entity->GetROI()->GetWorldPosition());
 				Mx3DPointFloat pepperPosition(m_pepper->GetWorldPosition());
 				Mx3DPointFloat position(pepperPosition);
 
@@ -346,7 +346,8 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 MxLong LegoAct2::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
 	if (m_gameState->m_enabled && p_param.GetAction() != NULL) {
-		MxU32 objectId = p_param.GetAction()->GetObjectId();
+		MxDSAction* action = p_param.GetAction();
+		MxU32 objectId = action->GetObjectId();
 
 		if (m_state == LegoAct2::e_goingToResidentialArea && m_infomanDirecting == objectId) {
 			m_infomanDirecting = (Act2mainScript::Script) 0;
@@ -497,8 +498,7 @@ void LegoAct2::ReadyWorld()
 	BoundingSphere sphere = roi->GetBoundingSphere();
 	sphere.Radius() *= 1.5;
 	roi->SetBoundingSphere(sphere);
-	LegoPathActor* actor = (LegoPathActor*) roi->GetEntity();
-	PlaceActor(actor, "EDG01_04", 1, 0.5f, 3, 0.5f);
+	PlaceActor((LegoPathActor*) roi->GetEntity(), "EDG01_04", 1, 0.5f, 3, 0.5f);
 
 	MxMatrix local2world = roi->GetLocal2World();
 	local2world[3][0] -= 1.5;
@@ -509,8 +509,7 @@ void LegoAct2::ReadyWorld()
 	sphere = roi->GetBoundingSphere();
 	sphere.Radius() *= 1.5;
 	roi->SetBoundingSphere(sphere);
-	actor = (LegoPathActor*) roi->GetEntity();
-	PlaceActor(actor, "EDG00_149", 0, 0.5f, 2, 0.5f);
+	PlaceActor((LegoPathActor*) roi->GetEntity(), "EDG00_149", 0, 0.5f, 2, 0.5f);
 
 	PlayMusic(JukeboxScript::c_Jail_Music);
 	DisableAnimations();
@@ -1172,7 +1171,7 @@ MxResult LegoAct2::StartAction(
 					TRUE,
 					TRUE,
 					TRUE,
-					TRUE
+					FALSE
 				);
 			}
 			else {
@@ -1185,7 +1184,7 @@ MxResult LegoAct2::StartAction(
 					TRUE,
 					TRUE,
 					TRUE,
-					FALSE
+					TRUE
 				);
 			}
 
