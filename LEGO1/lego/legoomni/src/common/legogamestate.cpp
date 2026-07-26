@@ -82,6 +82,10 @@ const char* g_playersGSI = "Players.gsi";
 // STRING: LEGO1 0x100f3e24
 const char* g_historyGSI = "History.gsi";
 
+// GLOBAL: LEGO1 0x100f3e4c
+// STRING: LEGO1 0x100f3e14
+const char* g_texturesGST = "Textures.gst";
+
 // This is a pointer to the end of the global variable name table, which has
 // the text "END_OF_VARIABLES" in it.
 // TODO: make g_endOfVariables reference the actual end of the variable array.
