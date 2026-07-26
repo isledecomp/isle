@@ -420,7 +420,7 @@ MxResult Act3::ShootDonut(LegoPathController* p_controller, Vector3& p_location,
 void Act3::TriggerHitSound(undefined4 p_param1)
 {
 	float time = Timer()->GetTime();
-	Act3Script::Script objectId;
+	MxS32 objectId;
 
 	switch (p_param1) {
 	case 1: {
@@ -428,7 +428,8 @@ void Act3::TriggerHitSound(undefined4 p_param1)
 			m_pizzaHitSound = 0;
 		}
 
-		objectId = g_pizzaHitSounds[m_pizzaHitSound++];
+		objectId = m_pizzaHitSound++;
+		objectId = g_pizzaHitSounds[objectId];
 		break;
 	}
 	case 2: {
@@ -436,7 +437,8 @@ void Act3::TriggerHitSound(undefined4 p_param1)
 			m_pizzaMissSound = 0;
 		}
 
-		objectId = g_pizzaMissSounds[m_pizzaMissSound++];
+		objectId = m_pizzaMissSound++;
+		objectId = g_pizzaMissSounds[objectId];
 		break;
 	}
 	case 3: {
@@ -444,7 +446,8 @@ void Act3::TriggerHitSound(undefined4 p_param1)
 			m_copDonutSound = 0;
 		}
 
-		objectId = g_copDonutSounds[m_copDonutSound++];
+		objectId = m_copDonutSound++;
+		objectId = g_copDonutSounds[objectId];
 		break;
 	}
 	case 4: {
@@ -452,7 +455,8 @@ void Act3::TriggerHitSound(undefined4 p_param1)
 			m_donutMissSound = 0;
 		}
 
-		objectId = g_donutMissSounds[m_donutMissSound++];
+		objectId = m_donutMissSound++;
+		objectId = g_donutMissSounds[objectId];
 		break;
 	}
 	case 5: {
@@ -460,7 +464,8 @@ void Act3::TriggerHitSound(undefined4 p_param1)
 			m_islanderSound = 0;
 		}
 
-		objectId = g_islanderSounds[m_islanderSound++];
+		objectId = m_islanderSound++;
+		objectId = g_islanderSounds[objectId];
 		break;
 	}
 	case 6: {
