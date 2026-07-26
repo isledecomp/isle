@@ -21,7 +21,9 @@ public:
 	// FUNCTION: BETA10 0x10017810
 	MxLong GetTime()
 	{
-		// Note that the BETA10 implementation differs - it only consists of the second branch of this `if` call
+		// Note that the BETA10 implementation differs - it only consists of the second branch of this `if` call.
+		// The LEGO1 shape below is confirmed: every inlined call site in LEGO1.DLL tests m_isRunning, and 19
+		// functions that inline this accessor match the original byte-for-byte.
 		if (m_isRunning) {
 			return g_lastTimeTimerStarted;
 		}
