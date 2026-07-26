@@ -859,10 +859,10 @@ void MxDisplaySurface::Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p
 			p_left2 += m_videoParam.GetRect().GetLeft() + point.GetX();
 			p_top2 += m_videoParam.GetRect().GetTop() + point.GetY();
 
+			DDBLTFX data;
 			MxRect32 a(MxPoint32(p_left, p_top), MxSize32(p_width + 1, p_height + 1));
 			MxRect32 b(MxPoint32(p_left2, p_top2), MxSize32(p_width + 1, p_height + 1));
 
-			DDBLTFX data;
 			memset(&data, 0, sizeof(data));
 			data.dwSize = sizeof(data);
 			data.dwDDFX = DDBLTFX_NOTEARING;
@@ -1186,10 +1186,11 @@ void MxDisplaySurface::VTable0x24(
 			MxLong stride = -p_width + GetAdjustedStride(p_bitmap);
 
 			MxLong length = -2 * p_width + p_desc->lPitch;
+			MxS32 i;
 			while (p_height--) {
 				MxU8* surfaceBefore = surface;
 
-				for (MxS32 i = 0; p_width > i; i++) {
+				for (i = 0; p_width > i; i++) {
 					*surface++ = *data;
 					*surface++ = *data++;
 				}
@@ -1209,7 +1210,6 @@ void MxDisplaySurface::VTable0x24(
 			MxS32 length = -4 * p_width + p_desc->lPitch;
 			MxS32 height = p_height;
 			MxS32 width = p_width;
-			MxS32 copyWidth = width * 4;
 			MxU16* p16bitPal = m_16bitPal;
 
 			MxS32 i;
@@ -1227,7 +1227,7 @@ void MxDisplaySurface::VTable0x24(
 						surface += 2;
 					}
 
-					memcpy(surface, surfaceBefore, copyWidth);
+					memcpy(surface, surfaceBefore, width * 4);
 					surface += p_desc->lPitch;
 				}
 			}
@@ -1338,8 +1338,9 @@ void MxDisplaySurface::VTable0x2c(
 			MxLong srcSkip = GetAdjustedStride(p_bitmap) - p_width;
 			MxLong destSkip = destStride - p_width;
 
+			MxS32 j;
 			for (MxS32 i = 0; i < p_height; i++, src += srcSkip, dest += destSkip) {
-				for (MxS32 j = 0; j < p_width; j++, src++, dest++) {
+				for (j = 0; j < p_width; j++, src++, dest++) {
 					if (*src) {
 						*dest = *src;
 					}
@@ -1356,12 +1357,13 @@ void MxDisplaySurface::VTable0x2c(
 			DrawTransparentRLE(src, dest, p_bitmap->GetBmiHeader()->biSizeImage, p_width, p_height, p_desc->lPitch, 16);
 		}
 		else {
+			MxS32 j;
 			MxLong srcStride = GetAdjustedStride(p_bitmap);
 			MxLong srcSkip = srcStride - p_width;
 			MxLong destSkip = destStride - 2 * p_width;
 
 			for (MxS32 i = 0; i < p_height; i++, src += srcSkip, dest += destSkip) {
-				for (MxS32 j = 0; j < p_width; j++, src++, dest += 2) {
+				for (j = 0; j < p_width; j++, src++, dest += 2) {
 					if (*src != 0) {
 						*(MxU16*) dest = m_16bitPal[*src];
 					}
