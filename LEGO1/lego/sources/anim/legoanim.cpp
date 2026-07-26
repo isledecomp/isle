@@ -864,7 +864,7 @@ inline void LegoAnimNodeData::GetTranslation(
 			));
 		}
 		break;
-	case 2:
+	case 2: {
 		Mx4DPointFloat a;
 		MxQuaternionTransformer b;
 
@@ -900,6 +900,7 @@ inline void LegoAnimNodeData::GetTranslation(
 				(p_time - p_rotationKeys[i].GetTime()) / (p_rotationKeys[i + 1].GetTime() - p_rotationKeys[i].GetTime())
 			);
 		}
+	}
 	}
 }
 
