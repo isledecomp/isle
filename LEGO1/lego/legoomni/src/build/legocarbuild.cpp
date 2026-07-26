@@ -46,6 +46,12 @@ DECOMP_SIZE_ASSERT(LegoCarBuild::LookupTableActions, 0x1c);
 
 // These four structs can be matched to the vehicle types using BETA10 0x10070520
 
+// GLOBAL: LEGO1 0x100d65a4
+MxFloat LegoCarBuild::g_selectedPartRotationAngleStepYAxis = -0.1f;
+
+// GLOBAL: LEGO1 0x100d65a8
+MxFloat LegoCarBuild::g_rotationAngleStepYAxis = 0.07;
+
 // GLOBAL: LEGO1 0x100d65b0
 // GLOBAL: BETA10 0x101bb7c0
 LegoCarBuild::LookupTableActions LegoCarBuild::g_actorScripts[] = {
@@ -78,12 +84,6 @@ LegoCarBuild::LookupTableActions LegoCarBuild::g_actorScripts[] = {
 	 RacecarScript::c_irt004d1_RunAnim,
 	 RacecarScript::c_irtxx4d1_RunAnim}
 };
-
-// GLOBAL: LEGO1 0x100d65a4
-MxFloat LegoCarBuild::g_selectedPartRotationAngleStepYAxis = -0.1f;
-
-// GLOBAL: LEGO1 0x100d65a8
-MxFloat LegoCarBuild::g_rotationAngleStepYAxis = 0.07;
 
 // GLOBAL: LEGO1 0x100f11cc
 MxS16 LegoCarBuild::g_lastTickleState = -1;

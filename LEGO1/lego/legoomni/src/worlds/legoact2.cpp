@@ -32,9 +32,6 @@
 DECOMP_SIZE_ASSERT(LegoAct2, 0x1154)
 DECOMP_SIZE_ASSERT(LegoAct2State, 0x10)
 
-// GLOBAL: LEGO1 0x100f4474
-Act2mainScript::Script g_bricksterSpeech = (Act2mainScript::Script) 0;
-
 // GLOBAL: LEGO1 0x100f43f0
 // GLOBAL: BETA10 0x101e14a8
 MxS32 g_animationsBricksterIsLoose[] = {
@@ -69,6 +66,9 @@ MxS32 g_animationsAfterChase[] = {
 
 // GLOBAL: LEGO1 0x100f4458
 const LegoChar* g_charactersAfterChase[] = {"papa", "nick", "laura", "cl", "pg", "rd", "sy"};
+
+// GLOBAL: LEGO1 0x100f4474
+Act2mainScript::Script g_bricksterSpeech = (Act2mainScript::Script) 0;
 
 // FUNCTION: LEGO1 0x1004fce0
 // FUNCTION: BETA10 0x1003a5a0
