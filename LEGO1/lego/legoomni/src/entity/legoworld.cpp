@@ -136,7 +136,7 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 		m_objects.erase(it);
 
 		if (object->IsA("MxPresenter")) {
-			MxPresenter* presenter = (MxPresenter*) object;
+			presenter = (MxPresenter*) object;
 			MxDSAction* action = presenter->GetAction();
 
 			if (action) {
@@ -771,7 +771,7 @@ void LegoWorld::Enable(MxBool p_enable)
 			}
 		}
 
-		for (MxCoreSet::iterator it = m_objects.begin(); it != m_objects.end(); it++) {
+		for (it = m_objects.begin(); it != m_objects.end(); it++) {
 			if ((*it)->IsA("LegoActionControlPresenter") ||
 				((*it)->IsA("MxPresenter") && ((MxPresenter*) *it)->IsEnabled())) {
 				m_disabledObjects.insert(*it);
