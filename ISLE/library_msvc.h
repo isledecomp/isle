@@ -333,6 +333,12 @@
 // GLOBAL: ISLE 0x41288c
 // ___unguarded_readlc_active
 
+// GLOBAL: ISLE 0x412890
+// ___piob
+
+// GLOBAL: ISLE 0x4138a0
+// __nstream
+
 // GLOBAL: ISLE 0x4138a4
 // __crtheap
 
