@@ -78,8 +78,8 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	MxResult result = FAILURE;
 	MxBool paletteCreated = FALSE;
 	MxS32 deviceNum = -1;
-	Direct3DDeviceInfo* device = NULL;
 	MxDriver* driver = NULL;
+	Direct3DDeviceInfo* device = NULL;
 	LegoDeviceEnumerate deviceEnumerate;
 	Mx3DPointFloat posVec(0.0, 1.25, -50.0);
 	Mx3DPointFloat dirVec(0.0, 0.0, 1.0);
@@ -126,7 +126,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 
 	m_direct3d->SetDevice(deviceEnumerate, driver, device);
 
-	if (!driver->m_ddCaps.dwCaps2 && driver->m_ddCaps.dwSVBRops[7] != 2) {
+	if (!device->m_HWDesc.dcmColorModel && device->m_HELDesc.dcmColorModel != D3DCOLOR_RGB) {
 		p_videoParam.Flags().SetLacksLightSupport(TRUE);
 	}
 	else {
@@ -448,10 +448,9 @@ void LegoVideoManager::DrawFPS()
 			m_arialFont = NULL;
 		}
 		else {
-			DWORD i;
 			char* ptr = (char*) surfaceDesc.lpSurface;
 
-			for (i = 0; i < surfaceDesc.dwHeight; i++) {
+			for (DWORD i = 0; i < surfaceDesc.dwHeight; i++) {
 				memset(ptr, 0, surfaceDesc.dwWidth * surfaceDesc.ddpfPixelFormat.dwRGBBitCount / 8);
 				ptr += surfaceDesc.lPitch;
 			}
@@ -473,10 +472,9 @@ void LegoVideoManager::DrawFPS()
 			surfaceDesc.dwSize = sizeof(surfaceDesc);
 
 			if (m_unk0x528->Lock(NULL, &surfaceDesc, DDLOCK_WAIT, NULL) == DD_OK) {
-				DWORD i;
 				char* ptr = (char*) surfaceDesc.lpSurface;
 
-				for (i = 0; i < surfaceDesc.dwHeight; i++) {
+				for (DWORD i = 0; i < surfaceDesc.dwHeight; i++) {
 					memset(ptr, 0, surfaceDesc.dwWidth * surfaceDesc.ddpfPixelFormat.dwRGBBitCount / 8);
 					ptr += surfaceDesc.lPitch;
 				}
