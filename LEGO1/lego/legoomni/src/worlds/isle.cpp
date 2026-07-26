@@ -39,7 +39,6 @@
 #include "viewmanager/viewmanager.h"
 
 DECOMP_SIZE_ASSERT(Act1State, 0x26c)
-DECOMP_SIZE_ASSERT(LegoNamedPlane, 0x4c)
 DECOMP_SIZE_ASSERT(Isle, 0x140)
 
 // GLOBAL: LEGO1 0x100f1198
@@ -452,9 +451,10 @@ MxLong Isle::HandleControl(LegoControlManagerNotificationParam& p_param)
 // FUNCTION: LEGO1 0x10031590
 void Isle::UpdateGlobe()
 {
+	MxS32 i;
 	MxS32 lightPosition = atoi(VariableTable()->GetVariable("lightposition"));
 
-	for (MxS32 i = 0; i < 6; i++) {
+	for (i = 0; i < 6; i++) {
 		MxStillPresenter* presenter = (MxStillPresenter*) Find(*g_isleScript, IsleScript::c_Observe_Globe1_Bitmap + i);
 
 		if (presenter != NULL) {
@@ -879,15 +879,16 @@ void Isle::CheckAreaExiting()
 	case LegoGameState::e_garageExterior:
 	case LegoGameState::e_hospitalExterior:
 	case LegoGameState::e_hospitalExited:
-	case LegoGameState::e_policeExterior:
-		((IslePathActor*) UserActor())
-			->SpawnPlayer(
-				GameState()->m_currentArea,
-				TRUE,
-				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
-			);
+	case LegoGameState::e_policeExterior: {
+		IslePathActor* actor = (IslePathActor*) UserActor();
+		actor->SpawnPlayer(
+			GameState()->m_currentArea,
+			TRUE,
+			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+		);
 		GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 		break;
+	}
 	}
 }
 
