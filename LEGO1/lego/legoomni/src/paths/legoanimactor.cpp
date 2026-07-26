@@ -109,19 +109,7 @@ MxResult LegoAnimActor::AnimateWithTransform(float p_time, Matrix4& p_transform)
 		LegoROI** roiMap = m_animMaps[m_curAnim]->m_roiMap;
 		MxU32 numROIs = m_animMaps[m_curAnim]->m_numROIs;
 
-		if (!m_boundary->GetVisibility()) {
-			MxU32 i;
-			m_roi->SetVisibility(FALSE);
-
-			for (i = 0; i < numROIs; i++) {
-				LegoROI* roi = roiMap[i];
-
-				if (roi != NULL && m_roi != roi) {
-					roi->SetVisibility(FALSE);
-				}
-			}
-		}
-		else {
+		if (m_boundary->GetVisibility()) {
 			// name verified by BETA10 0x1003e407
 			LegoTreeNode* n = m_animMaps[m_curAnim]->m_AnimTreePtr->GetRoot();
 
@@ -143,6 +131,18 @@ MxResult LegoAnimActor::AnimateWithTransform(float p_time, Matrix4& p_transform)
 
 			if (m_cameraFlag) {
 				TransformPointOfView();
+			}
+		}
+		else {
+			MxU32 i;
+			m_roi->SetVisibility(FALSE);
+
+			for (i = 0; i < numROIs; i++) {
+				LegoROI* roi = roiMap[i];
+
+				if (roi != NULL && m_roi != roi) {
+					roi->SetVisibility(FALSE);
+				}
 			}
 		}
 
