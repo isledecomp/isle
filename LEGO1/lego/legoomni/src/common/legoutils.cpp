@@ -716,11 +716,14 @@ void WriteDefaultTexture(LegoStorage* p_storage, const char* p_name)
 					memcpy(image->GetBits(), desc.lpSurface, desc.dwWidth * desc.dwHeight);
 				}
 				else {
-					MxU8* surface = (MxU8*) desc.lpSurface;
 					LegoU8* bits = image->GetBits();
+					MxU8* surface = (MxU8*) desc.lpSurface;
 
 					for (MxS32 i = 0; i < desc.dwHeight; i++) {
-						memcpy(bits, surface, desc.dwWidth);
+						// Note: this appears to be a bug. The copy runs the wrong way round -
+						// the branch above reads the surface into the image, while this one
+						// writes the still-uninitialized image into the locked surface.
+						memcpy(surface, bits, desc.dwWidth);
 						surface += desc.lPitch;
 						bits += desc.dwWidth;
 					}
