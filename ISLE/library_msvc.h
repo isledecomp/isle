@@ -1,4 +1,4 @@
-#ifdef 0
+
 // For ISLE symbols only
 
 // aka `operator new`
@@ -344,5 +344,3 @@
 
 // GLOBAL: ISLE 0x4139c0
 // __acmdln
-
-#endif
