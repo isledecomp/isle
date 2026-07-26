@@ -388,8 +388,8 @@ MxResult LegoWorldPresenter::LoadWorldModel(ModelDbModel& p_model, FILE* p_wdbFi
 
 	if (createdEntity != NULL) {
 		action.SetLocation(Mx3DPointFloat(0.0, 0.0, 0.0));
-		action.SetUp(Mx3DPointFloat(0.0, 0.0, 1.0));
-		action.SetDirection(Mx3DPointFloat(0.0, 1.0, 0.0));
+		action.SetDirection(Mx3DPointFloat(0.0, 0.0, 1.0));
+		action.SetUp(Mx3DPointFloat(0.0, 1.0, 0.0));
 	}
 
 	modelPresenter.SetAction(&action);
