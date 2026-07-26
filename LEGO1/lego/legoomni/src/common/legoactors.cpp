@@ -7,7 +7,7 @@ DECOMP_SIZE_ASSERT(LegoActorLOD, 0x58)
 // Unclear whether g_actorLODs[0] (top) is its own global, see: LegoCharacterManager::CreateActorROI
 
 // GLOBAL: LEGO1 0x100da3b0
-LegoActorLOD g_actorLODs[] = {
+const LegoActorLOD g_actorLODs[] = {
 	{"top",    "top",     0,    0.000267f, 0.780808f, -0.01906f, 0.951612f, -0.461166f, -0.002794f, -0.299442f, 0.4617f,
 	 1.56441f, 0.261321f, 0.0f, 0.0f,      0.0f,      0.0f,      0.0f,      1.0f,       0.0f,       1.0f,       0.0f},
 	{"body",      "body",     LegoActorLOD::c_useTexture,
@@ -93,44 +93,44 @@ LegoActorLOD g_actorLODs[] = {
 };
 
 // GLOBAL: LEGO1 0x100da778
-MxU8 g_hatPartIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0xff};
+const MxU8 g_hatPartIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0xff};
 
 // GLOBAL: LEGO1 0x100da790
-MxU8 g_pepperHatPartIndices[] = {21, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0xff};
+const MxU8 g_pepperHatPartIndices[] = {21, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0xff};
 
 // GLOBAL: LEGO1 0x100da7a8
-MxU8 g_infomanHatPartIndices[] = {22, 0xff};
+const MxU8 g_infomanHatPartIndices[] = {22, 0xff};
 
 // GLOBAL: LEGO1 0x100da7ac
-MxU8 g_ghostHatPartIndices[] = {20, 0xff};
+const MxU8 g_ghostHatPartIndices[] = {20, 0xff};
 
 // GLOBAL: LEGO1 0x100da7b0
-MxU8 g_bodyPartIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+const MxU8 g_bodyPartIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
 
 // GLOBAL: LEGO1 0x100da7c0
-MxU8 g_hatColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+const MxU8 g_hatColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
 
 // GLOBAL: LEGO1 0x100da7d0
-MxU8 g_faceTextureIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0xff};
+const MxU8 g_faceTextureIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0xff};
 
 // GLOBAL: LEGO1 0x100da7e0
-MxU8 g_chestTextureIndices[] = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13,
-								14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 0xff};
+const MxU8 g_chestTextureIndices[] = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13,
+									  14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 0xff};
 
 // GLOBAL: LEGO1 0x100da800
-MxU8 g_armColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+const MxU8 g_armColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
 
 // GLOBAL: LEGO1 0x100da810
-MxU8 g_clawRightColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+const MxU8 g_clawRightColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
 
 // GLOBAL: LEGO1 0x100da820
-MxU8 g_clawLeftColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+const MxU8 g_clawLeftColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
 
 // GLOBAL: LEGO1 0x100da830
-MxU8 g_gronColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+const MxU8 g_gronColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
 
 // GLOBAL: LEGO1 0x100da840
-MxU8 g_legColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+const MxU8 g_legColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
 
 // GLOBAL: LEGO1 0x100f7f78
 const char* g_hatPartName[] = {"baseball", "chef",   "cap",     "cophat", "helmet", "ponytail", "pageboy", "shrthair",

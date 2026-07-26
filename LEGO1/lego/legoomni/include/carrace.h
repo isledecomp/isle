@@ -72,11 +72,11 @@ public:
 	// CarRace::`scalar deleting destructor'
 
 private:
-	static MxS32 g_introAnimations[];
-	static MxS32 g_studsWinsAnimations[];
-	static MxS32 g_studsLoosesAnimation[];
-	static MxS32 g_rhodaWinsAnimations[];
-	static MxS32 g_rhodaLoosesAnimation[];
+	static const MxS32 g_introAnimations[];
+	static const MxS32 g_studsWinsAnimations[];
+	static const MxS32 g_studsLoosesAnimation[];
+	static const MxS32 g_rhodaWinsAnimations[];
+	static const MxS32 g_rhodaLoosesAnimation[];
 
 	MxS32 m_introAnimation;        // 0x144
 	MxS32 m_firstFinishAnimation;  // 0x148

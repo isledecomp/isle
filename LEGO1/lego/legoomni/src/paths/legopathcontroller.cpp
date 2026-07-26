@@ -12,10 +12,10 @@ DECOMP_SIZE_ASSERT(LegoPathController::CtrlBoundary, 0x08)
 DECOMP_SIZE_ASSERT(LegoPathController::CtrlEdge, 0x08)
 
 // GLOBAL: LEGO1 0x100d7cc8
-MxU32 g_ctrlEdgesNamesA[] = {2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0};
+const MxU32 g_ctrlEdgesNamesA[] = {2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0};
 
 // GLOBAL: LEGO1 0x100d7d08
-MxU32 g_ctrlEdgesNamesB[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+const MxU32 g_ctrlEdgesNamesB[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 // GLOBAL: LEGO1 0x100f42e8
 // GLOBAL: BETA10 0x101f25f0

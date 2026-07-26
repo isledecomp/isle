@@ -25,7 +25,7 @@
 DECOMP_SIZE_ASSERT(CarRace, 0x154)
 
 // GLOBAL: LEGO1 0x100d5d10
-MxS32 CarRace::g_introAnimations[] = {
+const MxS32 CarRace::g_introAnimations[] = {
 	CarraceScript::c_srt001sl_RunAnim,
 	CarraceScript::c_srt002sl_RunAnim,
 	CarraceScript::c_srt003sl_RunAnim,
@@ -37,7 +37,7 @@ MxS32 CarRace::g_introAnimations[] = {
 };
 
 // GLOBAL: LEGO1 0x100d5d30
-MxS32 CarRace::g_studsWinsAnimations[] = {
+const MxS32 CarRace::g_studsWinsAnimations[] = {
 	CarraceScript::c_srt011sl_RunAnim,
 	CarraceScript::c_srt012sl_RunAnim,
 	CarraceScript::c_srt013sl_RunAnim,
@@ -45,15 +45,15 @@ MxS32 CarRace::g_studsWinsAnimations[] = {
 };
 
 // GLOBAL: LEGO1 0x100d5d40
-MxS32 CarRace::g_studsLoosesAnimation[] =
+const MxS32 CarRace::g_studsLoosesAnimation[] =
 	{CarraceScript::c_srt015sl_RunAnim, CarraceScript::c_srt016sl_RunAnim, CarraceScript::c_srt017sl_RunAnim};
 
 // GLOBAL: LEGO1 0x100d5d50
-MxS32 CarRace::g_rhodaWinsAnimations[] =
+const MxS32 CarRace::g_rhodaWinsAnimations[] =
 	{CarraceScript::c_srt007rh_RunAnim, CarraceScript::c_srt008rh_RunAnim, CarraceScript::c_srt009rh_RunAnim};
 
 // GLOBAL: LEGO1 0x100d5d60
-MxS32 CarRace::g_rhodaLoosesAnimation[] =
+const MxS32 CarRace::g_rhodaLoosesAnimation[] =
 	{CarraceScript::c_srt010rh_RunAnim, CarraceScript::c_srt011rh_RunAnim, CarraceScript::c_srt012rh_RunAnim};
 
 // GLOBAL: LEGO1 0x100f0c70
