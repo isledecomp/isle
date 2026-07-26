@@ -540,24 +540,29 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 	// Check if wait indicator has started
 	if (m_waitIndicator->GetCurrentTickleState() >= MxPresenter::e_streaming) {
 		// Setup the copy rect
+		MxS32 x = m_waitIndicator->GetLocation().GetX();
+		MxS32 y = m_waitIndicator->GetLocation().GetY();
+
 		MxU32 copyPitch = (p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8) *
 						  (m_copyRect.right - m_copyRect.left + 1); // This uses m_copyRect, seemingly erroneously
 		MxU32 bytesPerPixel = p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
 
-		m_copyRect.left = m_waitIndicator->GetLocation().GetX();
-		m_copyRect.top = m_waitIndicator->GetLocation().GetY();
+		MxS32 i;
 
 		MxS32 height = m_waitIndicator->GetHeight();
 		MxS32 width = m_waitIndicator->GetWidth();
 
-		m_copyRect.right = m_copyRect.left + width - 1;
-		m_copyRect.bottom = m_copyRect.top + height - 1;
+		m_copyRect.left = x;
+		m_copyRect.top = y;
+		m_copyRect.right = x + width - 1;
+		m_copyRect.bottom = y + height - 1;
 
 		// Allocate the copy buffer
 		const MxU8* src =
 			(const MxU8*) p_ddsc->lpSurface + m_copyRect.top * p_ddsc->lPitch + bytesPerPixel * m_copyRect.left;
 
-		m_copyBuffer = new MxU8[bytesPerPixel * width * height];
+		m_copyBuffer = new MxU8
+			[(m_copyRect.bottom - m_copyRect.top + 1) * (m_copyRect.right - m_copyRect.left + 1) * bytesPerPixel];
 		if (!m_copyBuffer) {
 			return;
 		}
@@ -565,7 +570,7 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 		// Copy into the copy buffer
 		MxU8* dst = m_copyBuffer;
 
-		for (MxS32 i = 0; i < (m_copyRect.bottom - m_copyRect.top + 1); i++) {
+		for (i = 0; i < (m_copyRect.bottom - m_copyRect.top + 1); i++) {
 			memcpy(dst, src, copyPitch);
 			src += p_ddsc->lPitch;
 			dst += copyPitch;
