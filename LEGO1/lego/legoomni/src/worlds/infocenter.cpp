@@ -732,6 +732,8 @@ MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 			case InfocenterState::e_welcomeAnimation:
 				break;
 			}
+
+			break;
 		}
 		case InfocenterState::e_playCredits:
 			StopCredits();
@@ -989,8 +991,8 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 			break;
 		case InfomainScript::c_Door_Ctl:
 			if (m_infocenterState->m_state != InfocenterState::e_exitQueried) {
-				actionToPlay = InfomainScript::c_iic043in_RunAnim;
 				m_radio.Stop();
+				actionToPlay = InfomainScript::c_iic043in_RunAnim;
 				m_infocenterState->m_state = InfocenterState::e_exitQueried;
 			}
 
