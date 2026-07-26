@@ -153,9 +153,10 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 {
 	if (p_action->GetUnknown24() == -1) {
 		MxS16 newUnknown24 = -1;
+		MxDSObjectList::iterator it;
 
 		// These loops might be a template function in the list classes
-		for (MxDSObjectList::iterator it = m_unk0x54.begin(); it != m_unk0x54.end(); it++) {
+		for (it = m_unk0x54.begin(); it != m_unk0x54.end(); it++) {
 			MxDSObject* action = *it;
 
 			if (action->GetObjectId() == p_action->GetObjectId()) {
@@ -164,7 +165,7 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 		}
 
 		if (newUnknown24 == -1) {
-			for (MxDSObjectList::iterator it = m_unk0x3c.begin(); it != m_unk0x3c.end(); it++) {
+			for (it = m_unk0x3c.begin(); it != m_unk0x3c.end(); it++) {
 				MxDSObject* action = *it;
 
 				if (action->GetObjectId() == p_action->GetObjectId()) {
