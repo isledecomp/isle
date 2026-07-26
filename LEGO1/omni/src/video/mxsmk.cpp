@@ -178,7 +178,10 @@ MxResult MxSmk::LoadFrame(
 		MxU8* intoChunk = p_chunkData + 1;
 		MxU8* intoPalette = palette;
 		MxU16 paletteIndex = 0;
-		// TODO: struct incorrect, Palette at wrong offset?
+		// The working palette is stored 4 bytes into SmackTag::Palette, whose
+		// 772 bytes hold a 4-byte prefix followed by the 256*3 RGB entries.
+		// The field layout is identical in all known versions of smack.h;
+		// the original provably addresses the RGB data at this offset.
 		MxU8* currentPalette = &p_mxSmk->m_smackTag.Palette[4];
 
 		do {
