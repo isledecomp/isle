@@ -332,7 +332,7 @@ void ViewManager::Update(float p_previousRenderTime, float)
 		UpdateViewTransformations();
 	}
 
-	for (CompoundObject::iterator it = rois.begin(); it != rois.end(); it++) {
+	for (CompoundObject::iterator it = rois.begin(); !(it == rois.end()); it++) {
 		ManageVisibilityAndDetailRecursively((ViewROI*) *it, ViewROI::c_lodLevelUnset);
 	}
 
@@ -476,12 +476,13 @@ void ViewManager::UpdateViewTransformations()
 	}
 
 	for (i = 0; i < 6; i++) {
-		Vector3 a(transformed_points[g_planePointIndexMap[i * 3]]);
-		Vector3 b(transformed_points[g_planePointIndexMap[i * 3 + 1]]);
+		Vector3 a((const float*) transformed_points[g_planePointIndexMap[i * 3]]);
+		Vector3 b((const float*) transformed_points[g_planePointIndexMap[i * 3 + 1]]);
 		Vector3 c(transformed_points[g_planePointIndexMap[i * 3 + 2]]);
 		Mx3DPointFloat x;
 		Mx3DPointFloat y;
-		Vector3 normal(frustum_planes[i]);
+		float* plane = frustum_planes[i];
+		Vector3 normal(plane);
 
 		x = c;
 		x -= b;
@@ -492,7 +493,7 @@ void ViewManager::UpdateViewTransformations()
 		normal.EqualsCross(x, y);
 		normal.Unitize();
 
-		frustum_planes[i][3] = -normal.Dot(normal, a);
+		plane[3] = -normal.Dot(normal, a);
 	}
 
 	flags |= c_bit4;
