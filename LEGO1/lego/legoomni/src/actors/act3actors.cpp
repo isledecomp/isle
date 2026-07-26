@@ -156,9 +156,9 @@ MxResult Act3Actor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			return FAILURE;
 		}
 
+		MxMatrix local2world;
 		LegoROI* roi = p_actor->GetROI();
 
-		MxMatrix local2world;
 		local2world = roi->GetLocal2World();
 
 		Vector3(local2world[3]) += g_unk0x10104ef0;
@@ -531,11 +531,11 @@ Act3Brickster::Act3Brickster()
 	m_shootAnim = NULL;
 	m_unk0x38 = 0;
 	m_unk0x20 = 0.0f;
-	m_unk0x24 = 0.0f;
 	m_unk0x54 = 0.0f;
 
 	SetActorState(c_disabled);
 	m_unk0x58 = 0;
+	m_unk0x24 = 0.0f;
 
 	m_unk0x3c.Clear();
 }
