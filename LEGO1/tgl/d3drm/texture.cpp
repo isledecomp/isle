@@ -19,8 +19,8 @@ void TextureDestroyCallback(IDirect3DRMObject* pObject, void* pArg);
 // FUNCTION: BETA10 0x10169113
 Result TextureImpl::SetImage(IDirect3DRMTexture* pSelf, TglD3DRMIMAGE* pImage)
 {
-	void* appData;
 	Result result;
+	void* appData;
 
 	appData = pImage;
 	assert(reinterpret_cast<TglD3DRMIMAGE*>(appData) == pImage);
