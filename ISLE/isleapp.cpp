@@ -32,6 +32,16 @@
 
 DECOMP_SIZE_ASSERT(IsleApp, 0x8c)
 
+enum {
+	c_defaultWidth = 640,
+	c_defaultHeight = 480,
+	c_defaultDepth = 16,
+	c_frameDelta = 10,
+	c_startupDelay = 200,
+	c_registryBufferSize = 256,
+	c_configBufferSize = 1024
+};
+
 // GLOBAL: ISLE 0x410030
 IsleApp* g_isle = NULL;
 
@@ -45,7 +55,7 @@ unsigned char g_mousemoved = 0;
 BOOL g_closed = FALSE;
 
 // GLOBAL: ISLE 0x410040
-RECT g_windowRect = {0, 0, 640, 480};
+RECT g_windowRect = {0, 0, c_defaultWidth, c_defaultHeight};
 
 // GLOBAL: ISLE 0x410050
 BOOL g_rmDisabled = FALSE;
@@ -54,13 +64,13 @@ BOOL g_rmDisabled = FALSE;
 BOOL g_waitingForTargetDepth = TRUE;
 
 // GLOBAL: ISLE 0x410058
-int g_targetWidth = 640;
+int g_targetWidth = c_defaultWidth;
 
 // GLOBAL: ISLE 0x41005c
-int g_targetHeight = 480;
+int g_targetHeight = c_defaultHeight;
 
 // GLOBAL: ISLE 0x410060
-int g_targetDepth = 16;
+int g_targetDepth = c_defaultDepth;
 
 // GLOBAL: ISLE 0x410064
 BOOL g_reqEnableRMDevice = FALSE;
@@ -97,7 +107,7 @@ IsleApp::IsleApp()
 	m_islandQuality = 1;
 	m_islandTexture = 1;
 	m_gameStarted = FALSE;
-	m_frameDelta = 10;
+	m_frameDelta = c_frameDelta;
 	m_windowActive = TRUE;
 
 #ifdef COMPAT_MODE
@@ -451,7 +461,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 				if (g_waitingForTargetDepth) {
 					g_waitingForTargetDepth = FALSE;
-					g_targetDepth = targetDepth;
+					g_targetDepth = wParam;
 				}
 				else {
 					BOOL valid = FALSE;
@@ -523,11 +533,11 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		if (g_isle && g_isle->GetDrawCursor() && type == c_notificationMouseMove) {
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			if (x >= 640) {
-				x = 639;
+			if (x >= c_defaultWidth) {
+				x = c_defaultWidth - 1;
 			}
-			if (y >= 480) {
-				y = 479;
+			if (y >= c_defaultHeight) {
+				y = c_defaultHeight - 1;
 			}
 			VideoManager()->MoveCursor(x, y);
 		}
@@ -558,7 +568,8 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 
 	MxOmni::SetSound3D(m_use3dSound);
 
-	srand(timeGetTime() / 1000);
+	DWORD seed = timeGetTime() / 1000;
+	srand(seed);
 	SystemParametersInfo(SPI_SETMOUSETRAILS, 0, NULL, 0);
 
 	ZeroMemory(&wndclass, sizeof(WNDCLASSA));
@@ -567,15 +578,18 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 	wndclass.style = CS_HREDRAW | CS_VREDRAW;
 	wndclass.lpfnWndProc = WndProc;
 	wndclass.cbWndExtra = 0;
-	wndclass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(APP_ICON));
-	wndclass.hCursor = m_cursorArrow = m_cursorCurrent = LoadCursor(hInstance, MAKEINTRESOURCE(ISLE_ARROW));
+	HICON icon = LoadIcon(hInstance, MAKEINTRESOURCE(APP_ICON));
+	wndclass.hIcon = icon;
+	HCURSOR cursorArrow = LoadCursor(hInstance, MAKEINTRESOURCE(ISLE_ARROW));
+	wndclass.hCursor = m_cursorArrow = m_cursorCurrent = cursorArrow;
 	m_cursorBusy = LoadCursor(hInstance, MAKEINTRESOURCE(ISLE_BUSY));
 	m_cursorNo = LoadCursor(hInstance, MAKEINTRESOURCE(ISLE_NO));
 	wndclass.hInstance = hInstance;
 	wndclass.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
 	wndclass.lpszClassName = WNDCLASS_NAME;
 
-	if (!RegisterClass(&wndclass)) {
+	ATOM atom = RegisterClass(&wndclass);
+	if (!atom) {
 		return FAILURE;
 	}
 
@@ -633,7 +647,8 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 
 	ShowWindow(m_windowHandle, SW_SHOWNORMAL);
 	UpdateWindow(m_windowHandle);
-	if (!SetupLegoOmni()) {
+	BOOL omniReady = SetupLegoOmni();
+	if (!omniReady) {
 		return FAILURE;
 	}
 
@@ -690,9 +705,12 @@ BOOL IsleApp::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 
 	BOOL out = FALSE;
 	DWORD size = outSize;
-	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Mindscape\\LEGO Island", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
-		if (RegQueryValueEx(hKey, name, NULL, &valueType, (LPBYTE) outValue, &size) == ERROR_SUCCESS) {
-			if (RegCloseKey(hKey) == ERROR_SUCCESS) {
+	LONG openResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Mindscape\\LEGO Island", 0, KEY_READ, &hKey);
+	if (openResult == ERROR_SUCCESS) {
+		LONG queryResult = RegQueryValueEx(hKey, name, NULL, &valueType, (LPBYTE) outValue, &size);
+		if (queryResult == ERROR_SUCCESS) {
+			LONG closeResult = RegCloseKey(hKey);
+			if (closeResult == ERROR_SUCCESS) {
 				out = TRUE;
 			}
 		}
@@ -704,7 +722,7 @@ BOOL IsleApp::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 // FUNCTION: ISLE 0x4027b0
 BOOL IsleApp::ReadRegBool(LPCSTR name, BOOL* out)
 {
-	char buffer[256];
+	char buffer[c_registryBufferSize];
 
 	BOOL read = ReadReg(name, buffer, sizeof(buffer));
 	if (read) {
@@ -726,11 +744,12 @@ BOOL IsleApp::ReadRegBool(LPCSTR name, BOOL* out)
 // FUNCTION: ISLE 0x402880
 BOOL IsleApp::ReadRegInt(LPCSTR name, int* out)
 {
-	char buffer[256];
+	char buffer[c_registryBufferSize];
 
 	BOOL read = ReadReg(name, buffer, sizeof(buffer));
 	if (read) {
-		*out = atoi(buffer);
+		int value = atoi(buffer);
+		*out = value;
 	}
 
 	return read;
@@ -739,13 +758,15 @@ BOOL IsleApp::ReadRegInt(LPCSTR name, int* out)
 // FUNCTION: ISLE 0x4028d0
 void IsleApp::LoadConfig()
 {
-	char buffer[1024];
+	char buffer[c_configBufferSize];
+	int length;
 
 	if (!ReadReg("diskpath", buffer, sizeof(buffer))) {
 		strcpy(buffer, MxOmni::GetHD());
 	}
 
-	m_hdPath = new char[strlen(buffer) + 1];
+	length = strlen(buffer) + 1;
+	m_hdPath = new char[length];
 	strcpy(m_hdPath, buffer);
 	MxOmni::SetHD(m_hdPath);
 
@@ -753,7 +774,8 @@ void IsleApp::LoadConfig()
 		strcpy(buffer, MxOmni::GetCD());
 	}
 
-	m_cdPath = new char[strlen(buffer) + 1];
+	length = strlen(buffer) + 1;
+	m_cdPath = new char[length];
 	strcpy(m_cdPath, buffer);
 	MxOmni::SetCD(m_cdPath);
 
@@ -784,7 +806,8 @@ void IsleApp::LoadConfig()
 	if (!ReadReg("Island Quality", buffer, sizeof(buffer))) {
 		strcpy(buffer, "1");
 	}
-	m_islandQuality = atoi(buffer);
+	int islandQuality = atoi(buffer);
+	m_islandQuality = islandQuality;
 
 	if (!ReadReg("Island Texture", buffer, sizeof(buffer))) {
 		strcpy(buffer, "1");
@@ -792,12 +815,14 @@ void IsleApp::LoadConfig()
 	m_islandTexture = atoi(buffer);
 
 	if (ReadReg("3D Device ID", buffer, sizeof(buffer))) {
-		m_deviceId = new char[strlen(buffer) + 1];
+		length = strlen(buffer) + 1;
+		m_deviceId = new char[length];
 		strcpy(m_deviceId, buffer);
 	}
 
 	if (ReadReg("savepath", buffer, sizeof(buffer))) {
-		m_savePath = new char[strlen(buffer) + 1];
+		length = strlen(buffer) + 1;
+		m_savePath = new char[length];
 		strcpy(m_savePath, buffer);
 	}
 }
@@ -809,7 +834,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 	static MxLong g_lastFrameTime = 0;
 
 	// GLOBAL: ISLE 0x4101bc
-	static int g_startupDelay = 200;
+	static int g_startupDelay = c_startupDelay;
 
 	if (!m_windowActive) {
 		Sleep(0);
