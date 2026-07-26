@@ -6,9 +6,6 @@
 
 DECOMP_SIZE_ASSERT(ViewROI, 0xe4)
 
-// GLOBAL: LEGO1 0x101013d8
-unsigned char g_lightSupport = FALSE;
-
 // FUNCTION: LEGO1 0x100a9eb0
 float ViewROI::IntrinsicImportance() const
 {
@@ -70,12 +67,4 @@ void ViewROI::UpdateWorldData()
 {
 	OrientableROI::UpdateWorldData();
 	SetGeometryTransformation();
-}
-
-// FUNCTION: LEGO1 0x100aa500
-unsigned char ViewROI::SetLightSupport(unsigned char p_lightSupport)
-{
-	unsigned char oldFlag = g_lightSupport;
-	g_lightSupport = p_lightSupport;
-	return oldFlag;
 }

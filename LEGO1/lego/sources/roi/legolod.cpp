@@ -16,6 +16,10 @@ DECOMP_SIZE_ASSERT(LegoLOD::Mesh, 0x08)
 // GLOBAL: BETA10 0x10207230
 LPDIRECT3DRMMATERIAL g_lodMaterial = NULL;
 
+// GLOBAL: LEGO1 0x101013d8
+// GLOBAL: BETA10 0x10207234
+unsigned char g_lightSupport = FALSE;
+
 // GLOBAL: LEGO1 0x101013dc
 // GLOBAL: BETA10 0x10207238
 const char* g_InhPrefix = "inh";
@@ -102,6 +106,15 @@ public:
 	undefined4 m_unk0x1c;
 };
 #endif
+
+// FUNCTION: LEGO1 0x100aa500
+// FUNCTION: BETA10 0x1018d137
+unsigned char ViewROI::SetLightSupport(unsigned char p_lightSupport)
+{
+	unsigned char oldFlag = g_lightSupport;
+	g_lightSupport = p_lightSupport;
+	return oldFlag;
+}
 
 // FUNCTION: LEGO1 0x100aa510
 // FUNCTION: BETA10 0x1018d15d
