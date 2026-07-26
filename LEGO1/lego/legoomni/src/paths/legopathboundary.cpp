@@ -197,7 +197,7 @@ MxU32 LegoPathBoundary::Intersect(
 	for (MxS32 i = 0; i < m_numEdges; i++) {
 		LegoOrientedEdge* edge = (LegoOrientedEdge*) m_edges[i];
 
-		if (p_newPos.Dot(m_edgeNormals[i], p_newPos) + m_edgeNormals[i][3] <= -1e-07) {
+		if (p_newPos.Dot(p_newPos, m_edgeNormals[i]) + m_edgeNormals[i][3] <= -1e-07) {
 			if (normalizedCalculated == FALSE) {
 				normalizedCalculated = TRUE;
 				direction = p_newPos;
@@ -217,8 +217,8 @@ MxU32 LegoPathBoundary::Intersect(
 				float hitDistance = (-m_edgeNormals[i][3] - p_oldPos.Dot(p_oldPos, m_edgeNormals[i])) / dot;
 
 				if (hitDistance >= -0.001 && hitDistance <= len && (e == NULL || hitDistance < minHitDistance)) {
-					e = edge;
 					minHitDistance = hitDistance;
+					e = edge;
 				}
 			}
 		}
