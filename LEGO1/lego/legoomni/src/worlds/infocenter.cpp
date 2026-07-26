@@ -1127,58 +1127,52 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 {
 	// This function has changed significantly since BETA10
 
-	MxCore* sender = p_param.GetSender();
+	if (p_param.GetSender() != NULL) {
+		if (p_param.GetSender()->IsA("MxEntity") &&
+			m_infocenterState->m_state != InfocenterState::e_selectedCharacterAndDestination &&
+			m_infocenterState->m_state != InfocenterState::e_exiting) {
+			switch (((MxEntity*) p_param.GetSender())->GetEntityId()) {
+			case 5: {
+				m_infoManDialogueTimer = 0;
 
-	if (sender == NULL) {
-		if (m_infocenterState->m_state == InfocenterState::e_exitQueried) {
-			m_infoManDialogueTimer = 0;
-			StopCutscene();
-			PlayAction(InfomainScript::c_iic043in_RunAnim);
-		}
-	}
-	else if (sender->IsA("MxEntity") && m_infocenterState->m_state != InfocenterState::e_selectedCharacterAndDestination && m_infocenterState->m_state != InfocenterState::e_exiting) {
-		switch (((MxEntity*) sender)->GetEntityId()) {
-		case 5: {
-			m_infoManDialogueTimer = 0;
+				InfocenterState* infocenterState = m_infocenterState;
+				InfomainScript::Script objectId;
 
-			InfomainScript::Script objectId;
-			if (GameState()->GetCurrentAct() != LegoGameState::e_act1) {
-				objectId = (InfomainScript::Script) m_infocenterState->GetExitDialogueAct23().Next();
-			}
-			else {
-				objectId = (InfomainScript::Script) m_infocenterState->GetExitDialogueAct1().Next();
-			}
-
-			PlayAction(objectId);
-			SetROIVisible(g_object2x4red, FALSE);
-			SetROIVisible(g_object2x4grn, FALSE);
-			return 1;
-		}
-		case 6:
-			if (m_infocenterState->m_state == InfocenterState::e_exitQueried) {
-				StopCurrentAction();
-				SetROIVisible(g_object2x4red, FALSE);
-				SetROIVisible(g_object2x4grn, FALSE);
-				m_infocenterState->m_state = InfocenterState::e_notRegistered;
-				PlayAction(InfomainScript::c_iicb28in_RunAnim);
-				return 1;
-			}
-		case 7:
-			if (m_infocenterState->m_state == InfocenterState::e_exitQueried) {
-				if (m_infocenterState->HasRegistered()) {
-					GameState()->Save(0);
+				if (GameState()->GetCurrentAct() != LegoGameState::e_act1) {
+					objectId = (InfomainScript::Script) infocenterState->GetExitDialogueAct23().Next();
+				}
+				else {
+					objectId = (InfomainScript::Script) infocenterState->GetExitDialogueAct1().Next();
 				}
 
-				m_infocenterState->m_state = InfocenterState::e_exiting;
-				PlayAction(InfomainScript::c_iic046in_RunAnim);
-				InputManager()->DisableInputProcessing();
-				InputManager()->SetUnknown336(TRUE);
+				PlayAction(objectId);
+				SetROIVisible(g_object2x4red, FALSE);
+				SetROIVisible(g_object2x4grn, FALSE);
 				return 1;
 			}
+			case 6:
+				if (m_infocenterState->m_state == InfocenterState::e_exitQueried) {
+					StopCurrentAction();
+					SetROIVisible(g_object2x4red, FALSE);
+					SetROIVisible(g_object2x4grn, FALSE);
+					m_infocenterState->m_state = InfocenterState::e_notRegistered;
+					PlayAction(InfomainScript::c_iicb28in_RunAnim);
+					return 1;
+				}
+			case 7:
+				if (m_infocenterState->m_state == InfocenterState::e_exitQueried) {
+					if (m_infocenterState->HasRegistered()) {
+						GameState()->Save(0);
+					}
+
+					m_infocenterState->m_state = InfocenterState::e_exiting;
+					PlayAction(InfomainScript::c_iic046in_RunAnim);
+					InputManager()->DisableInputProcessing();
+					InputManager()->SetUnknown336(TRUE);
+				}
+			}
 		}
-	}
-	else {
-		if (sender->IsA("Radio") && m_radio.GetState()->IsActive()) {
+		else if (p_param.GetSender()->IsA("Radio") && m_radio.GetState()->IsActive()) {
 			if (m_currentInfomainScript == InfomainScript::c_Mama_All_Movie ||
 				m_currentInfomainScript == InfomainScript::c_Papa_All_Movie ||
 				m_currentInfomainScript == InfomainScript::c_Pepper_All_Movie ||
@@ -1194,6 +1188,11 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 				StopCurrentAction();
 			}
 		}
+	}
+	else if (m_infocenterState->m_state == InfocenterState::e_exitQueried) {
+		m_infoManDialogueTimer = 0;
+		StopCutscene();
+		PlayAction(InfomainScript::c_iic043in_RunAnim);
 	}
 
 	return 1;
