@@ -205,6 +205,9 @@ MxU32 g_buildingSoundIdOffset = 0x3c;
 // GLOBAL: LEGO1 0x100f3740
 MxU32 g_buildingSoundIdMoodOffset = 0x42;
 
+// GLOBAL: LEGO1 0x100f3748
+MxS32 LegoBuildingManager::g_maxMove[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0};
+
 // clang-format off
 // GLOBAL: LEGO1 0x100f3788
 MxU32 g_buildingAnimationId[16] = {
@@ -224,9 +227,6 @@ MxS32 g_buildingManagerConfig = 1;
 // GLOBAL: LEGO1 0x10104c30
 // GLOBAL: BETA10 0x10209fa0
 LegoBuildingInfo g_buildingInfo[16];
-
-// GLOBAL: LEGO1 0x100f3748
-MxS32 LegoBuildingManager::g_maxMove[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0};
 
 #define HAUS1_INDEX 12
 

@@ -64,7 +64,7 @@ const LegoChar* g_strCRCFRNTY6 = "C_RCFRNTY6";
 // STRING: LEGO1 0x100f0c3c
 const LegoChar* g_strCRCEDGEY0 = "C_RCEDGEY0";
 
-// GLOBAL: LEGO1 0x100f0c7c
+// GLOBAL: LEGO1 0x100f0c78
 MxS32 g_lapsCount = 2;
 
 // FUNCTION: LEGO1 0x10016a90

@@ -34,7 +34,7 @@ extern const char* g_strHIT_WALL_SOUND;
 
 DECOMP_SIZE_ASSERT(JetskiRace, 0x144)
 
-// GLOBAL: LEGO1 0x100f0c78
+// GLOBAL: LEGO1 0x100f0c7c
 MxS32 JetskiRace::g_lapsCount = 2;
 
 // FUNCTION: LEGO1 0x100162c0

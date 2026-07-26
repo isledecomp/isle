@@ -31,7 +31,7 @@ DECOMP_SIZE_ASSERT(Act3ListElement, 0x0c)
 DECOMP_SIZE_ASSERT(Act3List, 0x10)
 
 // GLOBAL: LEGO1 0x100d94f8
-Act3Script::Script g_pizzaHitSounds[] = {
+const Act3Script::Script g_pizzaHitSounds[] = {
 	Act3Script::c_sns02xni_PlayWav,
 	Act3Script::c_sns03xni_PlayWav,
 	Act3Script::c_sns04xni_PlayWav,
@@ -51,7 +51,7 @@ Act3Script::Script g_pizzaHitSounds[] = {
 };
 
 // GLOBAL: LEGO1 0x100d9538
-Act3Script::Script g_pizzaMissSounds[] = {
+const Act3Script::Script g_pizzaMissSounds[] = {
 	Act3Script::c_sns19xni_PlayWav,
 	Act3Script::c_sns20xni_PlayWav,
 	Act3Script::c_sns22xni_PlayWav,
@@ -61,7 +61,7 @@ Act3Script::Script g_pizzaMissSounds[] = {
 };
 
 // GLOBAL: LEGO1 0x100d9550
-Act3Script::Script g_copDonutSounds[] = {
+const Act3Script::Script g_copDonutSounds[] = {
 	Act3Script::c_sns25xni_PlayWav,
 	Act3Script::c_sns26xni_PlayWav,
 	Act3Script::c_sns27xni_PlayWav,
@@ -73,7 +73,7 @@ Act3Script::Script g_copDonutSounds[] = {
 };
 
 // GLOBAL: LEGO1 0x100d9570
-Act3Script::Script g_donutMissSounds[] = {
+const Act3Script::Script g_donutMissSounds[] = {
 	Act3Script::c_sns30xni_PlayWav,
 	Act3Script::c_sns31xni_PlayWav,
 	Act3Script::c_sns32xni_PlayWav,
@@ -83,7 +83,7 @@ Act3Script::Script g_donutMissSounds[] = {
 };
 
 // GLOBAL: LEGO1 0x100d9588
-Act3Script::Script g_islanderSounds[] = {
+const Act3Script::Script g_islanderSounds[] = {
 	Act3Script::c_sns43xma_PlayWav, Act3Script::c_sns46xin_PlayWav, Act3Script::c_sns60xna_PlayWav,
 	Act3Script::c_sns52xro_PlayWav, Act3Script::c_sns58xna_PlayWav, Act3Script::c_sns68xbu_PlayWav,
 	Act3Script::c_sns59xna_PlayWav, Act3Script::c_sns51xin_PlayWav, Act3Script::c_sns61xva_PlayWav,
@@ -94,7 +94,7 @@ Act3Script::Script g_islanderSounds[] = {
 };
 
 // GLOBAL: LEGO1 0x100d95d8
-Act3Script::Script g_bricksterDonutSounds[] = {
+const Act3Script::Script g_bricksterDonutSounds[] = {
 	Act3Script::c_tns080br_PlayWav,
 	Act3Script::c_tnsx07br_PlayWav,
 	Act3Script::c_snsxx2br_PlayWav,
@@ -105,7 +105,7 @@ Act3Script::Script g_bricksterDonutSounds[] = {
 MxU8 g_copSelector = 0;
 
 // GLOBAL: LEGO1 0x100d95e8
-Act3Script::Script g_explanationAnimations[] =
+const Act3Script::Script g_explanationAnimations[] =
 	{Act3Script::c_tlp053in_RunAnim, Act3Script::c_tlp064la_RunAnim, Act3Script::c_tlp068in_RunAnim};
 
 // FUNCTION: LEGO1 0x10071d40

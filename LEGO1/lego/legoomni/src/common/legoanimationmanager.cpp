@@ -41,7 +41,7 @@ DECOMP_SIZE_ASSERT(AnimInfo, 0x30)
 DECOMP_SIZE_ASSERT(ModelInfo, 0x30)
 
 // GLOBAL: LEGO1 0x100d8b28
-MxU8 g_unk0x100d8b28[] = {0, 1, 2, 4, 8, 16};
+const MxU8 g_unk0x100d8b28[] = {0, 1, 2, 4, 8, 16};
 
 // GLOBAL: LEGO1 0x100f6d20
 LegoAnimationManager::Vehicle g_vehicles[] = {

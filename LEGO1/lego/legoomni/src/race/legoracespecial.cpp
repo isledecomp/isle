@@ -15,28 +15,16 @@
 DECOMP_SIZE_ASSERT(LegoCarRaceActor, 0x1a0)
 DECOMP_SIZE_ASSERT(LegoJetskiRaceActor, 0x1a8)
 
-// GLOBAL: LEGO1 0x100f0c68
-// STRING: LEGO1 0x100f0c5c
-// GLOBAL: BETA10 0x101f5b04
-// STRING: BETA10 0x101f5b14
-const char* g_raceState = "RACE_STATE";
+// GLOBAL: LEGO1 0x100f7aec
+MxFloat LegoCarRaceActor::g_maxSpeed = 8.0f;
 
 // GLOBAL: LEGO1 0x100f7af0
 // STRING: LEGO1 0x100f7ae4
 const char* g_fuel = "FUEL";
 
-// GLOBAL: LEGO1 0x100f0c6c
-// STRING: LEGO1 0x100f0c54
-// GLOBAL: BETA10 0x101f5b08
-// STRING: BETA10 0x101f5b20
-const char* g_racing = "RACING";
-
-// GLOBAL: LEGO1 0x100f7aec
-MxFloat LegoCarRaceActor::g_maxSpeed = 8.0f;
-
 // GLOBAL: LEGO1 0x100da044
 // GLOBAL: BETA10 0x101be9fc
-MxFloat g_maxWorldSpeed = 8.0f;
+const MxFloat g_maxWorldSpeed = 8.0f;
 
 // FUNCTION: LEGO1 0x10080350
 // FUNCTION: BETA10 0x100cd6b0

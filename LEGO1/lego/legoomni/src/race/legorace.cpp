@@ -14,6 +14,18 @@ DECOMP_SIZE_ASSERT(RaceState, 0x2c)
 // Defined in legopathstruct.cpp
 extern MxBool g_triggerHandlingIgnoreDirection;
 
+// GLOBAL: LEGO1 0x100f0c68
+// STRING: LEGO1 0x100f0c5c
+// GLOBAL: BETA10 0x101f5b04
+// STRING: BETA10 0x101f5b14
+const char* g_raceState = "RACE_STATE";
+
+// GLOBAL: LEGO1 0x100f0c6c
+// STRING: LEGO1 0x100f0c54
+// GLOBAL: BETA10 0x101f5b08
+// STRING: BETA10 0x101f5b20
+const char* g_racing = "RACING";
+
 // FUNCTION: LEGO1 0x10015aa0
 LegoRace::LegoRace()
 {
