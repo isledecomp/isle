@@ -13,8 +13,9 @@ LegoCacheSoundManager::~LegoCacheSoundManager()
 	LegoCacheSound* sound;
 
 	while (!m_set.empty()) {
-		sound = (*m_set.begin()).GetSound();
-		m_set.erase(m_set.begin());
+		Set100d6b4c::iterator it = m_set.begin();
+		sound = (*it).GetSound();
+		m_set.erase(it);
 		sound->Stop();
 		delete sound;
 	}
