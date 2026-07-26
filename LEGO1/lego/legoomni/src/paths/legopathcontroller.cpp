@@ -222,7 +222,7 @@ MxResult LegoPathController::PlaceActor(
 
 	assert(pSrcE && pDestE);
 
-	float time = Timer()->GetTime();
+	float time = (float) Timer()->GetTime();
 	MxResult result = p_actor->SetTransformAndDestinationFromEdge(
 		pBoundary,
 		time,
@@ -252,7 +252,7 @@ MxResult LegoPathController::PlaceActor(
 )
 {
 	LegoPathBoundary* boundary = NULL;
-	float time = Timer()->GetTime();
+	float time = (float) Timer()->GetTime();
 
 	if (p_actor->GetController() != NULL) {
 		p_actor->GetController()->RemoveActor(p_actor);
@@ -264,7 +264,7 @@ MxResult LegoPathController::PlaceActor(
 		LegoAnimPresenterSet& presenters = b.GetPresenters();
 		LegoAnimPresenter* presenter = p_presenter;
 
-		if (presenters.find(presenter) != presenters.end()) {
+		if (presenters.end() != presenters.find(presenter)) {
 			MxS32 j;
 
 			for (j = 0; j < b.GetNumEdges(); j++) {
@@ -372,14 +372,14 @@ void LegoPathController::RemovePresenterFromBoundaries(LegoAnimPresenter* p_pres
 // FUNCTION: BETA10 0x100b73d8
 void LegoPathController::AnimateActors()
 {
-	float time = Timer()->GetTime();
+	float time = (float) Timer()->GetTime();
 
 	LegoPathActorSet lpas(m_actors);
 
 	for (LegoPathActorSet::iterator itpa = lpas.begin(); itpa != lpas.end(); itpa++) {
 		LegoPathActor* actor = *itpa;
 
-		if (m_actors.find(actor) != m_actors.end()) {
+		if (m_actors.end() != m_actors.find(actor)) {
 			if (!((MxU8) actor->GetActorState() & LegoPathActor::c_disabled)) {
 				actor->Animate(time);
 			}
