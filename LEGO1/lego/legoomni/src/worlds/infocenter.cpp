@@ -527,7 +527,7 @@ void Infocenter::ReadyWorld()
 		if (m_infocenterState->m_state == InfocenterState::e_selectedSave) {
 			bgRed->Enable(TRUE);
 
-			if (GameState()->GetCurrentAct() == GameState()->GetLoadedAct()) {
+			if (GameState()->GetLoadedAct() == GameState()->GetCurrentAct()) {
 				GameState()->m_currentArea = LegoGameState::e_act2main;
 				GameState()->StopArea(LegoGameState::e_act2main);
 				GameState()->m_currentArea = LegoGameState::e_infomain;

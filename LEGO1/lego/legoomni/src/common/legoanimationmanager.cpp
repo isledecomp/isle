@@ -2624,9 +2624,9 @@ MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, Mx
 				else {
 					local34 = (LegoOrientedEdge*) local34->GetClockwiseEdge(*boundary);
 				}
-			} while (!local34->GetMask0x03() && local34 != local50);
+			} while (!local34->GetMask0x03() && local50 != local34);
 
-			if (local34 == local50) {
+			if (local50 == local34) {
 				return FALSE;
 			}
 		}

@@ -451,10 +451,9 @@ MxLong Isle::HandleControl(LegoControlManagerNotificationParam& p_param)
 // FUNCTION: LEGO1 0x10031590
 void Isle::UpdateGlobe()
 {
-	MxS32 i;
 	MxS32 lightPosition = atoi(VariableTable()->GetVariable("lightposition"));
 
-	for (i = 0; i < 6; i++) {
+	for (MxS32 i = 0; i < 6; i++) {
 		MxStillPresenter* presenter = (MxStillPresenter*) Find(*g_isleScript, IsleScript::c_Observe_Globe1_Bitmap + i);
 
 		if (presenter != NULL) {

@@ -71,8 +71,7 @@ void MxPresenter::EndAction()
 	}
 
 	m_action = NULL;
-	MxS32 previousTickleState = 1 << m_currentTickleState;
-	m_previousTickleStates |= previousTickleState;
+	m_previousTickleStates |= 1 << m_currentTickleState;
 	m_currentTickleState = e_idle;
 }
 
