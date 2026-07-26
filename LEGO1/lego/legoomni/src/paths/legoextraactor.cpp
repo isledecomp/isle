@@ -50,12 +50,14 @@ LegoExtraActor::~LegoExtraActor()
 // FUNCTION: LEGO1 0x1002a720
 MxU32 LegoExtraActor::StepState(float p_time, Matrix4& p_transform)
 {
+	static const float g_hitAnimationDelay = 2000.0f;
+
 	switch (m_actorState & c_maxState) {
 	case c_initial:
 	case c_ready:
 		return TRUE;
 	case c_hit:
-		m_scheduledTime = p_time + 2000.0f;
+		m_scheduledTime = g_hitAnimationDelay + p_time;
 		m_actorState = c_hitAnimation;
 		m_actorTime += (p_time - m_transformTime) * m_worldSpeed;
 		m_transformTime = p_time;
@@ -213,7 +215,7 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			MxMatrix local(m_roi->GetLocal2World());
 
 			m_localBeforeHit = local;
-			Vector3 positionRef(local[3]);
+			Vector3 positionRef((const float*) local[3]);
 			Mx3DPointFloat otherActorDir(otherActorLocal[2]);
 
 			otherActorDir *= 2.0f;
