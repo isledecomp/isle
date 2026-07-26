@@ -335,7 +335,8 @@ void RegistrationBook::LoadSave(MxS16 p_checkMarkIndex)
 void RegistrationBook::WriteInfocenterLetters(MxS16 p_user)
 {
 	for (MxS16 i = 0; i < 7; i++) {
-		delete m_infocenterState->GetNameLetter(i);
+		MxStillPresenter* letter = m_infocenterState->GetNameLetter(i);
+		delete letter;
 		m_infocenterState->SetNameLetter(i, m_name[p_user][i]);
 		m_name[p_user][i] = NULL;
 	}
@@ -609,14 +610,13 @@ MxLong RegistrationBook::HandlePathStruct(LegoPathStructNotificationParam& p_par
 MxBool RegistrationBook::CreateSurface()
 {
 	MxCompositePresenterList* presenters = m_checkmark[0]->GetList();
-	MxStillPresenter *presenter, *uninitialized;
+	MxStillPresenter* presenter; // intentionally uninitialized
 
 	if (presenters) {
-		if (presenters->begin() != presenters->end()) {
-			presenter = (MxStillPresenter*) presenters->front();
-		}
-		else {
-			presenter = uninitialized; // intentionally uninitialized variable
+		MxCompositePresenterList::iterator it = presenters->begin();
+
+		if (it != presenters->end()) {
+			presenter = (MxStillPresenter*) *it;
 		}
 
 		if (presenter) {
