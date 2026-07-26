@@ -339,9 +339,8 @@ done:
 // FUNCTION: BETA10 0x100c5be0
 void LegoPlantManager::AdjustHeight(MxS32 p_index)
 {
-	MxU8 variant = g_plantInfo[p_index].m_variant;
-
 	if (g_plantInfo[p_index].m_counter >= 0) {
+		MxU8 variant = g_plantInfo[p_index].m_variant;
 		float value = g_counters[variant] - g_plantInfo[p_index].m_counter;
 		g_plantInfo[p_index].m_position[1] = g_plantInfoInit[p_index].m_position[1] - value * g_heightPerCount[variant];
 	}
