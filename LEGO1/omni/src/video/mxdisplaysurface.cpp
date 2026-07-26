@@ -343,6 +343,8 @@ void MxDisplaySurface::VTable0x28(
 	MxS32 p_height
 )
 {
+	MxU8* data;
+
 	if (!GetRectIntersection(
 			p_bitmap->GetBmiWidth(),
 			p_bitmap->GetBmiHeightAbs(),
@@ -371,7 +373,7 @@ void MxDisplaySurface::VTable0x28(
 		return;
 	}
 
-	MxU8* data = p_bitmap->GetStart(p_left, p_top);
+	data = p_bitmap->GetStart(p_left, p_top);
 
 	if (m_videoParam.Flags().GetDoubleScaling()) {
 		p_bottom *= 2;
@@ -1100,13 +1102,16 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::CreateCursorSurface()
 		goto done;
 	}
 	else {
+		MxU16* surface2;
 		MxU16* surface = (MxU16*) ddsd.lpSurface;
 		MxLong pitch = ddsd.lPitch;
+		MxS32 x;
+		MxS32 y;
 
 		// draw a simple cursor to the surface
-		for (MxS32 x = 0; x < 16; x++) {
-			MxU16* surface2 = surface;
-			for (MxS32 y = 0; y < 16; y++) {
+		for (x = 0; x < 16; x++) {
+			surface2 = surface;
+			for (y = 0; y < 16; y++) {
 				if ((y > 10 || x) && (x > 10 || y) && x + y != 10) {
 					if (x + y > 10) {
 						*surface2 = RGB555_CREATE(0x1f, 0, 0x1f);
