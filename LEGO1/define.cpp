@@ -69,6 +69,14 @@ const char* g_strHIDE_ON_STOP = "HIDE_ON_STOP";
 // STRING: LEGO1 0x10101f94
 const char* g_strLEFT_TO_RIGHT = "LEFT_TO_RIGHT";
 
+// GLOBAL: LEGO1 0x1010208c
+// STRING: LEGO1 0x10101f88
+const char* g_mapLocator = "MAP_LOCATOR";
+
+// GLOBAL: LEGO1 0x10102090
+// STRING: LEGO1 0x10101f78
+const char* g_mapGeometry = "MAP_GEOMETRY";
+
 // GLOBAL: LEGO1 0x10102094
 // STRING: LEGO1 0x10101f70
 const char* g_strTYPE = "TYPE";
