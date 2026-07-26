@@ -38,8 +38,7 @@ void MxStillPresenter::LoadHeader(MxStreamChunk* p_chunk)
 		delete[] ((MxU8*) m_bitmapInfo);
 	}
 
-	MxU8* data = new MxU8[p_chunk->GetLength()];
-	m_bitmapInfo = (MxBITMAPINFO*) data;
+	m_bitmapInfo = (MxBITMAPINFO*) new MxU8[p_chunk->GetLength()];
 	memcpy(m_bitmapInfo, p_chunk->GetData(), p_chunk->GetLength());
 }
 
