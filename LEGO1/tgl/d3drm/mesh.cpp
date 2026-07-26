@@ -222,7 +222,18 @@ Mesh* MeshImpl::ShallowClone(MeshBuilder* pMeshBuilder)
 // FUNCTION: BETA10 0x10171ac0
 inline Result MeshGetTexture(MeshImpl::MeshData* pMesh, IDirect3DRMTexture** pD3DTexture)
 {
+#ifdef BETA10
 	return ResultVal(pMesh->groupMesh->GetGroupTexture(pMesh->groupIndex, pD3DTexture));
+#else
+	IDirect3DRMTexture* tex;
+	Result result = ResultVal(pMesh->groupMesh->GetGroupTexture(pMesh->groupIndex, &tex));
+
+	if (Succeeded(result)) {
+		result = ResultVal(tex->QueryInterface(IID_IDirect3DRMTexture2, (LPVOID*) pD3DTexture));
+	}
+
+	return result;
+#endif
 }
 
 // FUNCTION: BETA10 0x10171980
@@ -234,16 +245,7 @@ inline Result MeshImpl::GetTexture(TextureImpl** ppTexture)
 	TextureImpl* pTextureImpl = new TextureImpl();
 	assert(pTextureImpl);
 
-	// TODO: This helps retail match, but it adds to the stack
-	IDirect3DRMTexture* tex;
-	Result result = MeshGetTexture(m_data, &tex);
-
-#ifndef BETA10
-	if (Succeeded(result)) {
-		result =
-			ResultVal(tex->QueryInterface(IID_IDirect3DRMTexture2, (LPVOID*) (&pTextureImpl->ImplementationData())));
-	}
-#endif
+	Result result = MeshGetTexture(m_data, &pTextureImpl->ImplementationData());
 
 	*ppTexture = pTextureImpl;
 	return result;

@@ -77,7 +77,18 @@ Result GroupImpl::SetTexture(const Texture* pTexture)
 // FUNCTION: BETA10 0x1016c640
 inline Result GroupGetTexture(IDirect3DRMFrame2* pGroup, IDirect3DRMTexture** pD3DTexture)
 {
+#ifdef BETA10
 	return ResultVal(pGroup->GetTexture(pD3DTexture));
+#else
+	IDirect3DRMTexture* tex;
+	Result result = ResultVal(pGroup->GetTexture(&tex));
+
+	if (Succeeded(result)) {
+		result = ResultVal(tex->QueryInterface(IID_IDirect3DRMTexture2, (LPVOID*) pD3DTexture));
+	}
+
+	return result;
+#endif
 }
 
 // FUNCTION: BETA10 0x1016beb0
@@ -89,16 +100,7 @@ inline Result GroupImpl::GetTexture(TextureImpl** ppTexture)
 	TextureImpl* pTextureImpl = new TextureImpl();
 	assert(pTextureImpl);
 
-	// TODO: This helps retail match, but it adds to the stack
-	IDirect3DRMTexture* tex;
-	Result result = GroupGetTexture(m_data, &tex);
-
-#ifndef BETA10
-	if (Succeeded(result)) {
-		result =
-			ResultVal(tex->QueryInterface(IID_IDirect3DRMTexture2, (LPVOID*) (&pTextureImpl->ImplementationData())));
-	}
-#endif
+	Result result = GroupGetTexture(m_data, &pTextureImpl->ImplementationData());
 
 	*ppTexture = pTextureImpl;
 	return result;
