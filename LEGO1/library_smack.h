@@ -1,4 +1,4 @@
-#if 0
+
 
 // LIBRARY: LEGO1 0x100cd782
 // LIBRARY: BETA10 0x1015fb82
@@ -30,4 +30,4 @@
 // LIBRARY: LEGO1 0x100d0654
 // _SmackRemapTables
 
-#endif
+

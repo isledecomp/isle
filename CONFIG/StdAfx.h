@@ -9,7 +9,7 @@
 #include <afxcmn.h> // MFC support for Windows Common Controls
 #endif              // _AFX_NO_AFXCMN_SUPPORT
 
-#if 0
+
 
 // FUNCTION: CONFIG 0x402ca0
 // CObject::Serialize
@@ -26,6 +26,6 @@
 // FUNCTION: CONFIG 0x00403ca0
 // CWnd::EndModalState
 
-#endif
+
 
 #endif // !defined(AFX_STDAFX_H)

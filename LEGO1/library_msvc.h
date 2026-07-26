@@ -1,4 +1,4 @@
-#if 0
+
 // For LEGO1 symbols only
 
 // aka `operator new`
@@ -1065,4 +1065,4 @@ static const char* ___crtLCMapStringA_str = "\0";
 // STRING: LEGO1 0x100dabb4
 static const wchar_t *___crtLCMapStringA_wstr = L"\0";
 
-#endif
+
