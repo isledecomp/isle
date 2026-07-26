@@ -614,6 +614,7 @@ LegoResult LegoROI::SetColorByName(const LegoChar* p_name)
 
 // FUNCTION: LEGO1 0x100a9410
 // FUNCTION: BETA10 0x1018b324
+#pragma optimize("y", off)
 LegoU32 LegoROI::Intersect(
 	Vector3& p_rayOrigin,
 	Vector3& p_rayDirection,
@@ -676,14 +677,15 @@ LegoU32 LegoROI::Intersect(
 			}
 		}
 
+		float intersectionDistance;
 		for (i = 0; i < 6; i++) {
-			float intersectionDistance = p_rayDirection.Dot(p_rayDirection, boxFacePlanes[i]);
+			intersectionDistance = p_rayDirection.Dot(p_rayDirection, boxFacePlanes[i]);
 
 			if (intersectionDistance >= 0.01 || intersectionDistance < -0.01) {
 				intersectionDistance =
 					-((boxFacePlanes[i][3] + rayOrigin.Dot(rayOrigin, boxFacePlanes[i])) / intersectionDistance);
 
-				if (intersectionDistance >= 0.0f && intersectionDistance <= p_rayLength) {
+				if (intersectionDistance >= 0.0f && p_rayLength >= intersectionDistance) {
 					Mx3DPointFloat intersectionPoint(p_rayDirection);
 					intersectionPoint *= intersectionDistance;
 					intersectionPoint += rayOrigin;
@@ -704,56 +706,64 @@ LegoU32 LegoROI::Intersect(
 				}
 			}
 		}
+
+		return 0;
+	}
+
+	Mx3DPointFloat v1(p_rayOrigin);
+	v1 -= GetWorldBoundingSphere().Center();
+
+	float radius = GetWorldBoundingSphere().Radius();
+	// Quadratic equation to solve for ray-sphere intersection: at^2 + bt + c = 0
+	float a = p_rayDirection.Dot(p_rayDirection, p_rayDirection);
+	float b = p_rayDirection.Dot(p_rayDirection, v1) * 2.0f;
+	float c = v1.Dot(v1, v1) - (radius * radius);
+	float distance;
+
+	if (a < 0.001 && a > -0.001) {
+		return 0;
+	}
+
+	distance = -1.0f;
+	float discriminant = (b * b) + (c * a * -4.0f);
+
+	if (discriminant < -0.001) {
+		return 0;
+	}
+
+	a *= 2.0f;
+	b = -b;
+
+	if (discriminant > 0.0f) {
+		discriminant = sqrt(discriminant);
+		float root1 = (b + discriminant) / a;
+		float root2 = (b - discriminant) / a;
+
+		if (root1 > 0.0f && root2 > root1) {
+			distance = root1;
+		}
+		else if (root2 > 0.0f) {
+			distance = root2;
+		}
+		else {
+			return 0;
+		}
 	}
 	else {
-		Mx3DPointFloat v1(p_rayOrigin);
-		v1 -= GetWorldBoundingSphere().Center();
+		distance = b / a;
+	}
 
-		float radius = GetWorldBoundingSphere().Radius();
-		// Quadratic equation to solve for ray-sphere intersection: at^2 + bt + c = 0
-		float a = p_rayDirection.Dot(p_rayDirection, p_rayDirection);
-		float b = p_rayDirection.Dot(p_rayDirection, v1) * 2.0f;
-		float c = v1.Dot(v1, v1) - (radius * radius);
-
-		if (a >= 0.001 || a <= -0.001) {
-			float distance = -1.0f;
-			float discriminant = (b * b) - (c * a * 4.0f);
-
-			if (discriminant >= -0.001) {
-				a *= 2.0f;
-				b = -b;
-
-				if (discriminant > 0.0f) {
-					discriminant = sqrt(discriminant);
-					float root1 = (b + discriminant) / a;
-					float root2 = (b - discriminant) / a;
-
-					if (root1 > 0.0f && root2 > root1) {
-						distance = root1;
-					}
-					else if (root2 > 0.0f) {
-						distance = root2;
-					}
-					else {
-						return 0;
-					}
-				}
-				else {
-					distance = b / a;
-				}
-
-				if (distance >= 0.0f && p_rayLength >= distance) {
-					p_intersectionPoint = p_rayDirection;
-					p_intersectionPoint *= distance;
-					p_intersectionPoint += p_rayOrigin;
-					return 1;
-				}
-			}
-		}
+	if (distance >= 0.0f && p_rayLength >= distance) {
+		p_intersectionPoint = p_rayDirection;
+		p_intersectionPoint *= distance;
+		p_intersectionPoint += p_rayOrigin;
+		return 1;
 	}
 
 	return 0;
 }
+
+#pragma optimize("", on)
 
 // FUNCTION: LEGO1 0x100a9a50
 // FUNCTION: BETA10 0x1018bb6b
