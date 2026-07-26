@@ -43,8 +43,8 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 	// are just for counting the pixels.
 	MxS32 offset = 0;
 
+	MxU8* tPtr = bitmapSrcPtr;
 	for (MxS32 j = 0; j < m_height; j++) {
-		MxU8* tPtr = bitmapSrcPtr;
 		for (MxS32 i = 0; i < m_width; i++) {
 			if (*tPtr) {
 				m_bitmask[offset / 8] |= (1 << (offset % 8));
@@ -221,14 +221,14 @@ inline MxS32 MxVideoPresenter::PrepareRects(RECT& p_rectDest, RECT& p_rectSrc)
 		(width = (p_rectDest.right - p_rectDest.left) + 1) <= 1) {
 		return -1;
 	}
-	else if ((p_rectSrc.right - p_rectSrc.left + 1) == width && (p_rectSrc.bottom - p_rectSrc.top + 1) == height) {
+
+	if ((p_rectSrc.right - p_rectSrc.left + 1) == width && (p_rectSrc.bottom - p_rectSrc.top + 1) == height) {
 		return 1;
 	}
-	else {
-		p_rectSrc.right = (p_rectSrc.left + width) - 1;
-		p_rectSrc.bottom = (p_rectSrc.top + height) - 1;
-		return 0;
-	}
+
+	p_rectSrc.right = (p_rectSrc.left + width) - 1;
+	p_rectSrc.bottom = (p_rectSrc.top + height) - 1;
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x100b2a70
@@ -242,7 +242,7 @@ void MxVideoPresenter::PutFrame()
 
 	if (m_action->GetFlags() & MxDSAction::c_bit5) {
 		if (m_surface) {
-			RECT src, dest;
+			RECT dest, src;
 			src.top = 0;
 			src.left = 0;
 			src.right = GetWidth();
@@ -253,7 +253,7 @@ void MxVideoPresenter::PutFrame()
 			dest.right = dest.left + GetWidth();
 			dest.bottom = dest.top + GetHeight();
 
-			switch (PrepareRects(src, dest)) {
+			switch (PrepareRects(dest, src)) {
 			case 0:
 				ddSurface->Blt(&dest, m_surface, &src, DDBLT_KEYSRC, NULL);
 				break;
@@ -280,7 +280,7 @@ void MxVideoPresenter::PutFrame()
 
 		while ((regionRect = cursor.Next(rect))) {
 			if (regionRect->GetWidth() >= 1 && regionRect->GetHeight() >= 1) {
-				RECT src, dest;
+				RECT dest, src;
 
 				if (m_surface) {
 					src.left = regionRect->GetLeft() - GetX();
@@ -296,7 +296,7 @@ void MxVideoPresenter::PutFrame()
 
 				if (m_action->GetFlags() & MxDSAction::c_bit4) {
 					if (m_surface) {
-						if (PrepareRects(src, dest) >= 0) {
+						if (PrepareRects(dest, src) >= 0) {
 							ddSurface->Blt(&dest, m_surface, &src, DDBLT_KEYSRC, NULL);
 						}
 					}
@@ -314,7 +314,7 @@ void MxVideoPresenter::PutFrame()
 					}
 				}
 				else if (m_surface) {
-					if (PrepareRects(src, dest) >= 0) {
+					if (PrepareRects(dest, src) >= 0) {
 						ddSurface->Blt(&dest, m_surface, &src, 0, NULL);
 					}
 				}
