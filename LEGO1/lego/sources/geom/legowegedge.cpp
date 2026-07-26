@@ -84,6 +84,7 @@ LegoS32 LegoWEGEdge::LinkEdgesAndFaces()
 
 	LegoOrientedEdge* edge;
 	LegoS32 i;
+	float length;
 
 	for (i = 0; i < m_numEdges; i++) {
 		edge = m_edges[i];
@@ -100,7 +101,7 @@ LegoS32 LegoWEGEdge::LinkEdgesAndFaces()
 
 		local44 = *edge->m_pointA;
 		local44 -= m_centerPoint;
-		float length = local44.LenSquared();
+		length = local44.LenSquared();
 
 		if (m_boundingRadius < length) {
 			m_boundingRadius = length;
