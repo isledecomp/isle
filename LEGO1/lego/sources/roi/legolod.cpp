@@ -20,6 +20,10 @@ LPDIRECT3DRMMATERIAL g_lodMaterial = NULL;
 // GLOBAL: BETA10 0x10207238
 const char* g_InhPrefix = "inh";
 
+// GLOBAL: LEGO1 0x101013e0
+// GLOBAL: BETA10 0x1020723c
+const char* g_IndPrefix = "ind";
+
 #ifdef BETA10
 inline BOOL GetD3DRM_legolod(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
 #else
