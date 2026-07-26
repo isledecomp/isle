@@ -92,8 +92,8 @@ MxS16 LegoCarBuild::g_lastTickleState = -1;
 // FUNCTION: BETA10 0x1006ac10
 LegoCarBuild::LegoCarBuild()
 {
-	m_clickState = e_idle;
 	m_selectedPart = 0;
+	m_clickState = e_idle;
 	m_resetPlacedSelectedPart = c_disabled;
 	m_displayedPartIsPlaced = FALSE;
 	m_animPresenter = NULL;
@@ -352,7 +352,7 @@ void LegoCarBuild::CalculateStartAndTargetScreenPositions()
 	m_selectedPartTargetScreenPosition[1] = screenPos[1] / screenPos[3];
 
 	m_normalizedDistance =
-		sqrt((MxDouble) DISTSQRD2(m_selectedPartStartScreenPosition, m_selectedPartTargetScreenPosition));
+		sqrt((MxDouble) DISTSQRD2(m_selectedPartTargetScreenPosition, m_selectedPartStartScreenPosition));
 
 	m_draggingQuarternionTransformer.SetStartEnd(m_selectedPartStartTransform, m_selectedPartTargetTransform);
 }
@@ -372,45 +372,47 @@ void LegoCarBuild::CalculateSelectedPartMatrix(MxLong p_x, MxLong p_y)
 		screenCoordinatesForRay[0] = p_x;
 		screenCoordinatesForRay[1] = p_y;
 
-		if (CalculateRayOriginDirection(screenCoordinatesForRay, local30, local84)) {
-			MxFloat positionOffset[3];
-			MxFloat screenPosition[2];
-
-			screenPosition[0] = p_x;
-			screenPosition[1] = p_y;
-
-			positionOffset[0] = 0;
-			positionOffset[1] = 0;
-			positionOffset[2] = 0;
-
-			MxMatrix transform;
-
-			if (p_y < m_selectedPartStartScreenPosition[1]) {
-				CalculateDragPositionAbove(screenPosition, positionOffset);
-			}
-			else if (p_y > m_selectedPartTargetScreenPosition[1]) {
-				CalculateDragPositionOnGround(screenPosition, positionOffset);
-			}
-			else if (p_y >= m_selectedPartStartScreenPosition[1]) {
-				CalculateDragPositionBetween(screenPosition, positionOffset);
-			}
-
-			MxS32 currentDistance[2];
-
-			currentDistance[0] = p_x - m_selectedPartStartScreenPosition[0];
-			currentDistance[1] = p_y - m_selectedPartStartScreenPosition[1];
-
-			MxFloat distanceRatio = sqrt((double) (NORMSQRD2(currentDistance))) / m_normalizedDistance;
-
-			m_draggingQuarternionTransformer.InterpolateToMatrix(transform, distanceRatio);
-
-			transform[3][0] = m_selectedPartStartTransform[3][0] + positionOffset[0];
-			transform[3][1] = m_selectedPartStartTransform[3][1] + positionOffset[1];
-			transform[3][2] = m_selectedPartStartTransform[3][2] + positionOffset[2];
-			transform[3][3] = 1.0;
-
-			m_selectedPart->WrappedSetLocal2WorldWithWorldDataUpdate(transform);
+		if (!CalculateRayOriginDirection(screenCoordinatesForRay, local30, local84)) {
+			return;
 		}
+
+		MxFloat positionOffset[3];
+		MxFloat screenPosition[2];
+
+		screenPosition[0] = p_x;
+		screenPosition[1] = p_y;
+
+		positionOffset[0] = 0;
+		positionOffset[1] = 0;
+		positionOffset[2] = 0;
+
+		MxMatrix transform;
+
+		if (p_y < m_selectedPartStartScreenPosition[1]) {
+			CalculateDragPositionAbove(screenPosition, positionOffset);
+		}
+		else if (p_y > m_selectedPartTargetScreenPosition[1]) {
+			CalculateDragPositionOnGround(screenPosition, positionOffset);
+		}
+		else if (p_y >= m_selectedPartStartScreenPosition[1]) {
+			CalculateDragPositionBetween(screenPosition, positionOffset);
+		}
+
+		MxS32 currentDistance[2];
+
+		currentDistance[0] = p_x - m_selectedPartStartScreenPosition[0];
+		currentDistance[1] = p_y - m_selectedPartStartScreenPosition[1];
+
+		MxFloat distanceRatio = sqrt((double) (NORMSQRD2(currentDistance))) / m_normalizedDistance;
+
+		m_draggingQuarternionTransformer.InterpolateToMatrix(transform, distanceRatio);
+
+		transform[3][0] = m_selectedPartStartTransform[3][0] + positionOffset[0];
+		transform[3][1] = m_selectedPartStartTransform[3][1] + positionOffset[1];
+		transform[3][2] = m_selectedPartStartTransform[3][2] + positionOffset[2];
+		transform[3][3] = 1.0;
+
+		m_selectedPart->WrappedSetLocal2WorldWithWorldDataUpdate(transform);
 	}
 }
 
@@ -425,8 +427,8 @@ void LegoCarBuild::CalculateDragPositionAbove(MxFloat p_coordinates[2], MxFloat 
 	CalculateRayOriginDirection(p_coordinates, direction, origin);
 
 	planeFactor = (m_selectedPartStartPosition[2] - origin[2]) / direction[2];
-	p_position[0] = (planeFactor * direction[0] + origin[0]) - m_selectedPartStartPosition[0];
-	p_position[1] = (planeFactor * direction[1] + origin[1]) - m_selectedPartStartPosition[1];
+	p_position[0] = planeFactor * direction[0] - m_selectedPartStartPosition[0] + origin[0];
+	p_position[1] = planeFactor * direction[1] - m_selectedPartStartPosition[1] + origin[1];
 	p_position[2] = 0.0;
 }
 
@@ -1355,7 +1357,7 @@ void LegoCarBuild::EnableDecalForSelectedPart(MxBool p_enabled)
 
 // FUNCTION: LEGO1 0x10025350
 // FUNCTION: BETA10 0x1006e3c0
-void LegoCarBuild::SetPartColor(MxS32 p_objectId)
+void LegoCarBuild::SetPartColor(MxU32 p_objectId)
 {
 	const LegoChar* color;
 	LegoChar buffer[256];

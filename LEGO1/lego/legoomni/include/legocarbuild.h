@@ -161,7 +161,7 @@ public:
 	void SetColorControlsEnabled(MxBool p_enabled);
 	void ToggleColorControlsEnabled();
 	void EnableDecalForSelectedPart(MxBool p_enabled);
-	void SetPartColor(MxS32 p_objectId);
+	void SetPartColor(MxU32 p_objectId);
 	void CalculateStartAndTargetTransforms();
 	void StartActorScriptByType(MxS32 p_actionType);
 	void StartActorScript(MxS32 p_streamId);
