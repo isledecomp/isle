@@ -161,7 +161,3 @@ const char* g_strBMP_ISMAP = "BMP_ISMAP";
 // STRING: LEGO1 0x10101eac
 // GLOBAL: BETA10 0x10202948
 const char* g_parseExtraTokens = ":;";
-
-// GLOBAL: LEGO1 0x100f0c14
-// STRING: LEGO1 0x100f0c04
-const char* g_strHIT_ACTOR_SOUND = "HIT_ACTOR_SOUND";
