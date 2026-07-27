@@ -41,12 +41,14 @@ LegoAnimPresenter::LegoAnimPresenter()
 }
 
 // FUNCTION: LEGO1 0x10068670
+// FUNCTION: BETA10 0x1004e696
 LegoAnimPresenter::~LegoAnimPresenter()
 {
 	Destroy(TRUE);
 }
 
 // FUNCTION: LEGO1 0x100686f0
+// FUNCTION: BETA10 0x1004e724
 void LegoAnimPresenter::Init()
 {
 	m_anim = NULL;
@@ -139,6 +141,7 @@ void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // FUNCTION: LEGO1 0x10068fb0
+// FUNCTION: BETA10 0x1004ebde
 MxResult LegoAnimPresenter::CreateAnim(MxStreamChunk* p_chunk)
 {
 	MxResult result = FAILURE;
@@ -190,6 +193,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x10069150
+// FUNCTION: BETA10 0x1004eeaf
 LegoChar* LegoAnimPresenter::GetActorName(const LegoChar* p_name)
 {
 	LegoChar* str;
@@ -217,6 +221,7 @@ LegoChar* LegoAnimPresenter::GetActorName(const LegoChar* p_name)
 }
 
 // FUNCTION: LEGO1 0x100692b0
+// FUNCTION: BETA10 0x1004efb6
 void LegoAnimPresenter::CreateManagedActors()
 {
 	m_managedActors = new LegoROIList();
@@ -329,6 +334,7 @@ void LegoAnimPresenter::CreateSceneROIs()
 }
 
 // FUNCTION: LEGO1 0x100697c0
+// FUNCTION: BETA10 0x1004f62c
 LegoChar* LegoAnimPresenter::GetVariableOrIdentity(const LegoChar* p_varName, const LegoChar* p_prefix)
 {
 	const LegoChar* str = p_varName;
@@ -356,6 +362,7 @@ LegoChar* LegoAnimPresenter::GetVariableOrIdentity(const LegoChar* p_varName, co
 }
 
 // FUNCTION: LEGO1 0x100698b0
+// FUNCTION: BETA10 0x1004f704
 LegoBool LegoAnimPresenter::AppendROIToScene(const CompoundObject& p_rois, const LegoChar* p_varName)
 {
 	LegoBool result = FALSE;
@@ -389,6 +396,7 @@ LegoBool LegoAnimPresenter::AppendROIToScene(const CompoundObject& p_rois, const
 }
 
 // FUNCTION: LEGO1 0x100699e0
+// FUNCTION: BETA10 0x1004f857
 LegoROI* LegoAnimPresenter::FindROI(const LegoChar* p_name)
 {
 	LegoROIListCursor cursor(m_sceneROIs);
@@ -409,6 +417,7 @@ LegoROI* LegoAnimPresenter::FindROI(const LegoChar* p_name)
 }
 
 // FUNCTION: LEGO1 0x10069b10
+// FUNCTION: BETA10 0x1004f976
 void LegoAnimPresenter::BuildROIMap()
 {
 	LegoAnimStructMap anims;
@@ -450,6 +459,7 @@ void LegoAnimPresenter::BuildROIMap()
 }
 
 // FUNCTION: LEGO1 0x1006a3c0
+// FUNCTION: BETA10 0x1004fc10
 void LegoAnimPresenter::UpdateStructMapAndROIIndex(LegoAnimStructMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi)
 {
 	LegoROI* roi = p_roi;
@@ -502,6 +512,7 @@ void LegoAnimPresenter::UpdateStructMapAndROIIndex(LegoAnimStructMap& p_map, Leg
 }
 
 // FUNCTION: LEGO1 0x1006a4f0
+// FUNCTION: BETA10 0x1004fe1f
 void LegoAnimPresenter::UpdateStructMapAndROIIndexForNode(
 	LegoAnimStructMap& p_map,
 	LegoAnimNodeData* p_data,
@@ -546,6 +557,7 @@ void LegoAnimPresenter::ReleaseManagedActors()
 }
 
 // FUNCTION: LEGO1 0x1006ab70
+// FUNCTION: BETA10 0x10050012
 void LegoAnimPresenter::AppendManagedActors()
 {
 	if (m_localActors) {
@@ -557,12 +569,14 @@ void LegoAnimPresenter::AppendManagedActors()
 }
 
 // FUNCTION: LEGO1 0x1006aba0
+// FUNCTION: BETA10 0x10050042
 LegoBool LegoAnimPresenter::VerifyAnimationTree()
 {
 	return VerifyAnimationNode(m_anim->GetRoot(), NULL);
 }
 
 // FUNCTION: LEGO1 0x1006abb0
+// FUNCTION: BETA10 0x10050071
 MxBool LegoAnimPresenter::VerifyAnimationNode(LegoTreeNode* p_node, LegoROI* p_roi)
 {
 	MxBool result = FALSE;
@@ -628,6 +642,7 @@ void LegoAnimPresenter::SubstituteVariables()
 }
 
 // FUNCTION: LEGO1 0x1006ad30
+// FUNCTION: BETA10 0x100502c2
 void LegoAnimPresenter::PutFrame()
 {
 	if (m_currentTickleState == e_streaming) {
@@ -846,6 +861,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x1006b840
+// FUNCTION: BETA10 0x10050f1b
 void LegoAnimPresenter::StreamingTickle()
 {
 	if (m_subscriber->PeekData()) {
@@ -869,24 +885,28 @@ void LegoAnimPresenter::StreamingTickle()
 }
 
 // FUNCTION: LEGO1 0x1006b8c0
+// FUNCTION: BETA10 0x1005105b
 void LegoAnimPresenter::DoneTickle()
 {
 	MxVideoPresenter::DoneTickle();
 }
 
 // FUNCTION: LEGO1 0x1006b8d0
+// FUNCTION: BETA10 0x10051079
 MxResult LegoAnimPresenter::AddToManager()
 {
 	return MxVideoPresenter::AddToManager();
 }
 
 // FUNCTION: LEGO1 0x1006b8e0
+// FUNCTION: BETA10 0x10051097
 void LegoAnimPresenter::Destroy()
 {
 	Destroy(FALSE);
 }
 
 // FUNCTION: LEGO1 0x1006b8f0
+// FUNCTION: BETA10 0x100510b7
 const char* LegoAnimPresenter::GetActionObjectName()
 {
 	return m_action->GetObjectName();
@@ -1162,6 +1182,7 @@ void LegoAnimPresenter::RemoveFromWorld()
 }
 
 // FUNCTION: LEGO1 0x1006c8a0
+// FUNCTION: BETA10 0x10051fc7
 void LegoAnimPresenter::SetDisabled(MxBool p_disabled)
 {
 	if (m_roiMapSize != 0 && m_roiMap != NULL) {
@@ -1307,18 +1328,21 @@ void LegoLoopingAnimPresenter::PutFrame()
 }
 
 // FUNCTION: LEGO1 0x1006cdd0
+// FUNCTION: BETA10 0x10052672
 LegoLocomotionAnimPresenter::LegoLocomotionAnimPresenter()
 {
 	Init();
 }
 
 // FUNCTION: LEGO1 0x1006d050
+// FUNCTION: BETA10 0x100526e9
 LegoLocomotionAnimPresenter::~LegoLocomotionAnimPresenter()
 {
 	Destroy(TRUE);
 }
 
 // FUNCTION: LEGO1 0x1006d0b0
+// FUNCTION: BETA10 0x1005275b
 void LegoLocomotionAnimPresenter::Init()
 {
 	m_unk0xc0 = 0;
@@ -1330,6 +1354,7 @@ void LegoLocomotionAnimPresenter::Init()
 }
 
 // FUNCTION: LEGO1 0x1006d0e0
+// FUNCTION: BETA10 0x100527be
 void LegoLocomotionAnimPresenter::Destroy(MxBool p_fromDestructor)
 {
 	ENTER(m_criticalSection);
@@ -1353,6 +1378,7 @@ void LegoLocomotionAnimPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // FUNCTION: LEGO1 0x1006d140
+// FUNCTION: BETA10 0x1005288c
 MxResult LegoLocomotionAnimPresenter::CreateAnim(MxStreamChunk* p_chunk)
 {
 	MxResult result = LegoAnimPresenter::CreateAnim(p_chunk);
@@ -1373,18 +1399,21 @@ MxResult LegoLocomotionAnimPresenter::AddToManager()
 }
 
 // FUNCTION: LEGO1 0x1006d5b0
+// FUNCTION: BETA10 0x1005297d
 void LegoLocomotionAnimPresenter::Destroy()
 {
 	Destroy(FALSE);
 }
 
 // FUNCTION: LEGO1 0x1006d5c0
+// FUNCTION: BETA10 0x1005299d
 void LegoLocomotionAnimPresenter::PutFrame()
 {
 	// Empty
 }
 
 // FUNCTION: LEGO1 0x1006d5d0
+// FUNCTION: BETA10 0x100529b3
 void LegoLocomotionAnimPresenter::ReadyTickle()
 {
 	LegoLoopingAnimPresenter::ReadyTickle();
@@ -1414,6 +1443,7 @@ void LegoLocomotionAnimPresenter::StartingTickle()
 }
 
 // FUNCTION: LEGO1 0x1006d660
+// FUNCTION: BETA10 0x10052adf
 void LegoLocomotionAnimPresenter::StreamingTickle()
 {
 	if (m_worldRefCounter == 0) {
@@ -1422,6 +1452,7 @@ void LegoLocomotionAnimPresenter::StreamingTickle()
 }
 
 // FUNCTION: LEGO1 0x1006d670
+// FUNCTION: BETA10 0x10052b12
 void LegoLocomotionAnimPresenter::EndAction()
 {
 	if (m_action) {

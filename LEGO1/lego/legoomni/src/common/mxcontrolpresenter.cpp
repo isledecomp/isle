@@ -144,6 +144,7 @@ MxBool MxControlPresenter::CheckButtonDown(MxS32 p_x, MxS32 p_y, MxPresenter* p_
 }
 
 // FUNCTION: LEGO1 0x10044480
+// FUNCTION: BETA10 0x100eb1ae
 MxBool MxControlPresenter::Notify(LegoControlManagerNotificationParam* p_param, MxPresenter* p_presenter)
 {
 	if (IsEnabled()) {
@@ -175,6 +176,7 @@ MxBool MxControlPresenter::Notify(LegoControlManagerNotificationParam* p_param, 
 }
 
 // FUNCTION: LEGO1 0x10044540
+// FUNCTION: BETA10 0x100eb3ba
 void MxControlPresenter::UpdateEnabledChild(MxS16 p_enabledChild)
 {
 	if (p_enabledChild == -1) {
@@ -199,6 +201,7 @@ void MxControlPresenter::UpdateEnabledChild(MxS16 p_enabledChild)
 }
 
 // FUNCTION: LEGO1 0x10044610
+// FUNCTION: BETA10 0x100eb59b
 void MxControlPresenter::ReadyTickle()
 {
 	MxPresenter::ParseExtra();

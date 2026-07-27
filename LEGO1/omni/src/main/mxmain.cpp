@@ -76,6 +76,7 @@ void MxOmni::Init()
 }
 
 // FUNCTION: LEGO1 0x100af0b0
+// FUNCTION: BETA10 0x1012f3e7
 void MxOmni::SetInstance(MxOmni* p_instance)
 {
 	g_instance = p_instance;

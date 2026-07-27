@@ -113,6 +113,7 @@ MxU8 MxDisplaySurface::CountContiguousBitsSetTo1(MxU32 p_param)
 }
 
 // FUNCTION: LEGO1 0x100ba790
+// FUNCTION: BETA10 0x1013f759
 MxResult MxDisplaySurface::Init(
 	MxVideoParam& p_videoParam,
 	LPDIRECTDRAWSURFACE p_ddSurface1,
@@ -139,6 +140,7 @@ MxResult MxDisplaySurface::Init(
 }
 
 // FUNCTION: LEGO1 0x100ba7f0
+// FUNCTION: BETA10 0x1013f7f1
 MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 {
 	DDSURFACEDESC ddsd;
@@ -251,6 +253,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100baa90
+// FUNCTION: BETA10 0x1013fd5c
 void MxDisplaySurface::Destroy()
 {
 	if (m_initialized) {
@@ -825,6 +828,7 @@ void MxDisplaySurface::VTable0x34(MxU8* p_pixels, MxS32 p_bpp, MxS32 p_width, Mx
 }
 
 // FUNCTION: LEGO1 0x100bba50
+// FUNCTION: BETA10 0x10141498
 void MxDisplaySurface::Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p_top2, MxS32 p_width, MxS32 p_height)
 {
 	if (m_videoParam.Flags().GetEnabled()) {
@@ -876,6 +880,7 @@ void MxDisplaySurface::Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p
 }
 
 // FUNCTION: LEGO1 0x100bbc10
+// FUNCTION: BETA10 0x101416a6
 void MxDisplaySurface::GetDC(HDC* p_hdc)
 {
 	if (m_ddSurface2 && !m_ddSurface2->GetDC(p_hdc)) {
@@ -886,6 +891,7 @@ void MxDisplaySurface::GetDC(HDC* p_hdc)
 }
 
 // FUNCTION: LEGO1 0x100bbc40
+// FUNCTION: BETA10 0x10141700
 void MxDisplaySurface::ReleaseDC(HDC p_hdc)
 {
 	if (m_ddSurface2 && p_hdc) {

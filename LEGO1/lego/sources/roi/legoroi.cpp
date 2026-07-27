@@ -69,6 +69,7 @@ void LegoROI::ReportError(const LegoChar* p_error, ...)
 }
 
 // FUNCTION: LEGO1 0x100a81c0
+// FUNCTION: BETA10 0x101898d0
 void LegoROI::configureLegoROI(int p_roiConfig)
 {
 	g_roiConfig = p_roiConfig;

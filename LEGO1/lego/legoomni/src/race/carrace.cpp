@@ -347,6 +347,7 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10017650
+// FUNCTION: BETA10 0x100c8eeb
 MxLong CarRace::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	if (p_param.m_enabledChild == 1) {

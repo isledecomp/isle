@@ -66,6 +66,7 @@ MxStreamController::~MxStreamController()
 }
 
 // FUNCTION: LEGO1 0x100c1520
+// FUNCTION: BETA10 0x1014e652
 MxResult MxStreamController::Open(const char* p_filename)
 {
 	char sourceName[256];
@@ -91,6 +92,7 @@ void MxStreamController::RemoveSubscriber(MxDSSubscriber* p_subscriber)
 }
 
 // FUNCTION: LEGO1 0x100c1690
+// FUNCTION: BETA10 0x1014e838
 MxResult MxStreamController::VTable0x20(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);

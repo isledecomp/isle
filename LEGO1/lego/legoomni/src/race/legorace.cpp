@@ -126,6 +126,7 @@ void LegoRace::Enable(MxBool p_enable)
 }
 
 // FUNCTION: LEGO1 0x10015f30
+// FUNCTION: BETA10 0x100c7ca3
 RaceState::RaceState()
 {
 	m_entries[0].m_id = LegoActor::c_pepper;

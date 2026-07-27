@@ -317,6 +317,7 @@ MxBool LegoCharacterManager::Exists(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x10083bc0
+// FUNCTION: BETA10 0x1007466a
 MxU32 LegoCharacterManager::GetRefCount(LegoROI* p_roi)
 {
 	LegoCharacter* character = NULL;
@@ -666,6 +667,7 @@ MxBool LegoCharacterManager::SetHeadTexture(LegoROI* p_roi, LegoTextureInfo* p_t
 }
 
 // FUNCTION: LEGO1 0x10084c00
+// FUNCTION: BETA10 0x10075e40
 MxBool LegoCharacterManager::IsActor(const char* p_name)
 {
 	for (MxU32 i = 0; i < sizeOfArray(g_actorInfo); i++) {
@@ -680,6 +682,7 @@ MxBool LegoCharacterManager::IsActor(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x10084c40
+// FUNCTION: BETA10 0x10075ea0
 LegoExtraActor* LegoCharacterManager::GetExtraActor(const char* p_name)
 {
 	LegoActorInfo* info = GetActorInfo(p_name);
@@ -819,6 +822,7 @@ MxBool LegoCharacterManager::SwitchColor(LegoROI* p_roi, LegoROI* p_targetROI)
 }
 
 // FUNCTION: LEGO1 0x10084ec0
+// FUNCTION: BETA10 0x10076436
 MxBool LegoCharacterManager::SwitchVariant(LegoROI* p_roi)
 {
 	LegoActorInfo* info = GetActorInfo(p_roi->GetName());
@@ -979,6 +983,7 @@ MxU8 LegoCharacterManager::GetMood(LegoROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x100851a0
+// FUNCTION: BETA10 0x10076908
 void LegoCharacterManager::SetCustomizeAnimFile(const char* p_value)
 {
 	if (g_customizeAnimFile != NULL) {
@@ -1059,6 +1064,7 @@ LegoROI* LegoCharacterManager::CreateAutoROI(const char* p_name, const char* p_l
 }
 
 // FUNCTION: LEGO1 0x10085870
+// FUNCTION: BETA10 0x10076d64
 MxResult LegoCharacterManager::UpdateBoundingSphereAndBox(LegoROI* p_roi)
 {
 	MxResult result = FAILURE;
@@ -1102,6 +1108,7 @@ MxResult LegoCharacterManager::UpdateBoundingSphereAndBox(LegoROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x10085a80
+// FUNCTION: BETA10 0x10077011
 LegoROI* LegoCharacterManager::FUN_10085a80(const char* p_name, const char* p_lodName, MxBool p_createEntity)
 {
 	return CreateAutoROI(p_name, p_lodName, p_createEntity);

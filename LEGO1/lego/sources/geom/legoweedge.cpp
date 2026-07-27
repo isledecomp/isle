@@ -5,6 +5,7 @@
 DECOMP_SIZE_ASSERT(LegoWEEdge, 0x0c)
 
 // FUNCTION: LEGO1 0x1009a550
+// FUNCTION: BETA10 0x101824fd
 LegoWEEdge::LegoWEEdge()
 {
 	m_edges = NULL;

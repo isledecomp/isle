@@ -108,6 +108,7 @@ MxResult Lego3DSound::Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char
 }
 
 // FUNCTION: LEGO1 0x10011880
+// FUNCTION: BETA10 0x1003997e
 void Lego3DSound::Destroy()
 {
 	if (m_ds3dBuffer) {

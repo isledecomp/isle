@@ -375,6 +375,7 @@ void LegoWorld::RemovePresenterFromBoundaries(LegoAnimPresenter* p_presenter)
 }
 
 // FUNCTION: LEGO1 0x1001ff80
+// FUNCTION: BETA10 0x100da749
 void LegoWorld::AddPath(LegoPathController* p_controller)
 {
 	p_controller->SetWorld(this);
@@ -400,6 +401,7 @@ LegoPathBoundary* LegoWorld::FindPathBoundary(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x10020120
+// FUNCTION: BETA10 0x100da842
 MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_boundaries, MxS32& p_numL)
 {
 	LegoPathControllerListCursor cursor(&m_pathControllerList);

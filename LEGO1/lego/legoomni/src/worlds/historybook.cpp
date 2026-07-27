@@ -51,6 +51,7 @@ HistoryBook::~HistoryBook()
 }
 
 // FUNCTION: LEGO1 0x10082610
+// FUNCTION: BETA10 0x1002b80f
 MxResult HistoryBook::Create(MxDSAction& p_dsAction)
 {
 	MxResult result = LegoWorld::Create(p_dsAction);

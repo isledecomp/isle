@@ -132,6 +132,7 @@ MxBool ContainsPresenter(MxCompositePresenterList& p_presenterList, MxPresenter*
 }
 
 // FUNCTION: LEGO1 0x100b71e0
+// FUNCTION: BETA10 0x10136edd
 void OmniError(const char* p_message, MxS32 p_status)
 {
 	if (g_omniUserMessage) {
@@ -143,6 +144,7 @@ void OmniError(const char* p_message, MxS32 p_status)
 }
 
 // FUNCTION: LEGO1 0x100b7210
+// FUNCTION: BETA10 0x10136f1f
 void SetOmniUserMessage(void (*p_omniUserMessage)(const char*, MxS32))
 {
 	g_omniUserMessage = p_omniUserMessage;

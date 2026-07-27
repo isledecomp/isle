@@ -40,6 +40,7 @@ IsleScript::Script g_nextChestAction = IsleScript::c_nca001ca_RunAnim;
 IsleScript::Script g_nextCavedoorAction = IsleScript::c_Avo900Ps_PlayWav;
 
 // FUNCTION: LEGO1 0x100150c0
+// FUNCTION: BETA10 0x10024e9a
 MxLong InfoCenterEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	switch (GameState()->GetCurrentAct()) {
@@ -78,6 +79,7 @@ MxLong InfoCenterEntity::HandleClick(LegoEventNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x100151d0
+// FUNCTION: BETA10 0x10024f5e
 MxLong GasStationEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
@@ -102,6 +104,7 @@ MxLong GasStationEntity::HandleClick(LegoEventNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10015270
+// FUNCTION: BETA10 0x100250e1
 MxLong HospitalEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
@@ -126,6 +129,7 @@ MxLong HospitalEntity::HandleClick(LegoEventNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10015310
+// FUNCTION: BETA10 0x10025267
 MxLong PoliceEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
@@ -150,6 +154,7 @@ MxLong PoliceEntity::HandleClick(LegoEventNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x100153b0
+// FUNCTION: BETA10 0x100253f0
 MxLong BeachHouseEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
@@ -171,6 +176,7 @@ MxLong BeachHouseEntity::HandleClick(LegoEventNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10015450
+// FUNCTION: BETA10 0x1002556c
 MxLong RaceStandsEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {

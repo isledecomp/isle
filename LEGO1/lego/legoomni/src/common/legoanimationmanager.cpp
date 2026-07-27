@@ -580,6 +580,7 @@ void LegoAnimationManager::EnableCamAnims(MxBool p_enableCamAnims)
 }
 
 // FUNCTION: LEGO1 0x1005f720
+// FUNCTION: BETA10 0x10040291
 MxResult LegoAnimationManager::LoadWorldInfo(LegoOmni::World p_worldId)
 {
 	MxResult result = FAILURE;
@@ -741,6 +742,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x10060140
+// FUNCTION: BETA10 0x10040c2e
 MxBool LegoAnimationManager::FindVehicle(const char* p_name, MxU32& p_index)
 {
 	for (MxS32 i = 0; i < sizeOfArray(g_vehicles); i++) {
@@ -754,6 +756,7 @@ MxBool LegoAnimationManager::FindVehicle(const char* p_name, MxU32& p_index)
 }
 
 // FUNCTION: LEGO1 0x10060180
+// FUNCTION: BETA10 0x10040c94
 MxResult LegoAnimationManager::ReadAnimInfo(LegoStorage* p_storage, AnimInfo* p_info)
 {
 	MxResult result = FAILURE;
@@ -816,6 +819,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x10060310
+// FUNCTION: BETA10 0x10040fad
 MxResult LegoAnimationManager::ReadModelInfo(LegoStorage* p_storage, ModelInfo* p_info)
 {
 	MxResult result = FAILURE;
@@ -855,6 +859,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100603c0
+// FUNCTION: BETA10 0x10041156
 void LegoAnimationManager::DeleteAnimations()
 {
 	MxBool suspended = m_suspended;
@@ -1094,6 +1099,7 @@ MxResult LegoAnimationManager::FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix
 }
 
 // FUNCTION: LEGO1 0x10060d00
+// FUNCTION: BETA10 0x10041d6a
 MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity)
 {
 	MxResult result = FAILURE;
@@ -2897,6 +2903,7 @@ void LegoAnimationManager::FUN_10064b50(MxLong p_time)
 }
 
 // FUNCTION: LEGO1 0x10064ee0
+// FUNCTION: BETA10 0x100461a3
 MxBool LegoAnimationManager::FUN_10064ee0(MxU32 p_objectId)
 {
 	if (m_tranInfoList != NULL) {
@@ -2919,6 +2926,7 @@ MxBool LegoAnimationManager::FUN_10064ee0(MxU32 p_objectId)
 }
 
 // FUNCTION: LEGO1 0x10064ff0
+// FUNCTION: BETA10 0x10046227
 AnimState::AnimState()
 {
 	m_unk0x0c = 0;
@@ -2928,6 +2936,7 @@ AnimState::AnimState()
 }
 
 // FUNCTION: LEGO1 0x10065150
+// FUNCTION: BETA10 0x100462be
 AnimState::~AnimState()
 {
 	delete[] m_unk0x10;
@@ -2935,6 +2944,7 @@ AnimState::~AnimState()
 }
 
 // FUNCTION: LEGO1 0x100651d0
+// FUNCTION: BETA10 0x1004635c
 void AnimState::CopyToAnims(MxU32, AnimInfo* p_anims, MxU32& p_outExtraCharacterId)
 {
 	if (m_unk0x10 != NULL) {
@@ -2954,6 +2964,7 @@ void AnimState::CopyToAnims(MxU32, AnimInfo* p_anims, MxU32& p_outExtraCharacter
 }
 
 // FUNCTION: LEGO1 0x10065240
+// FUNCTION: BETA10 0x1004648a
 void AnimState::InitFromAnims(MxU32 p_animsLength, AnimInfo* p_anims, MxU32 p_extraCharacterId)
 {
 	if (m_unk0x10 == NULL) {

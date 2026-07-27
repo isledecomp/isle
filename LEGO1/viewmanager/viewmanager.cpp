@@ -131,6 +131,7 @@ unsigned int ViewManager::IsBoundingBoxInFrustum(const BoundingBox& p_bounding_b
 }
 
 // FUNCTION: LEGO1 0x100a6410
+// FUNCTION: BETA10 0x101722cd
 void ViewManager::Remove(ViewROI* p_roi)
 {
 	for (CompoundObject::iterator it = rois.begin(); it != rois.end(); it++) {
@@ -157,6 +158,7 @@ void ViewManager::Remove(ViewROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x100a64d0
+// FUNCTION: BETA10 0x101723f5
 void ViewManager::RemoveAll(ViewROI* p_roi)
 {
 	if (p_roi == NULL) {
@@ -185,6 +187,7 @@ void ViewManager::RemoveAll(ViewROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x100a65b0
+// FUNCTION: BETA10 0x1017254b
 void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 {
 	if (p_roi->GetLODCount() <= p_lodLevel) {
@@ -238,6 +241,7 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 }
 
 // FUNCTION: LEGO1 0x100a66a0
+// FUNCTION: BETA10 0x101727c7
 void ViewManager::RemoveROIDetailFromScene(ViewROI* p_roi)
 {
 	const ViewLOD* lod = (const ViewLOD*) p_roi->GetLOD(p_roi->GetLodLevel());

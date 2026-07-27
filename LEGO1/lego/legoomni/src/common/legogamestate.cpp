@@ -453,6 +453,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x10039f00
+// FUNCTION: BETA10 0x100847b8
 void LegoGameState::SetSavePath(char* p_savePath)
 {
 	if (m_savePath != NULL) {
@@ -577,6 +578,7 @@ void LegoGameState::GetFileSavePath(MxString* p_outPath, MxS16 p_slotn)
 }
 
 // FUNCTION: LEGO1 0x1003a2e0
+// FUNCTION: BETA10 0x10084c68
 void LegoGameState::SerializePlayersInfo(MxS16 p_flags)
 {
 	LegoFile storage;
@@ -600,6 +602,7 @@ void LegoGameState::SerializePlayersInfo(MxS16 p_flags)
 }
 
 // FUNCTION: LEGO1 0x1003a3f0
+// FUNCTION: BETA10 0x10084db7
 MxResult LegoGameState::AddPlayer(Username& p_player)
 {
 	MxString from, to;
@@ -659,6 +662,7 @@ void LegoGameState::SwitchPlayer(MxS16 p_playerId)
 }
 
 // FUNCTION: LEGO1 0x1003a6e0
+// FUNCTION: BETA10 0x1008519b
 MxS16 LegoGameState::FindPlayer(Username& p_player)
 {
 	for (MxS16 i = 0; i < m_playerCount; i++) {

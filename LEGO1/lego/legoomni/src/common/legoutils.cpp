@@ -227,6 +227,7 @@ void CalculateViewFromAnimation(LegoAnimPresenter* p_presenter)
 }
 
 // FUNCTION: LEGO1 0x1003e300
+// FUNCTION: BETA10 0x100d3e50
 Extra::ActionType MatchActionString(const char* p_str)
 {
 	Extra::ActionType result = Extra::ActionType::e_unknown;

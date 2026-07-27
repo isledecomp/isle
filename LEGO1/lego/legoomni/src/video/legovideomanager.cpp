@@ -55,6 +55,7 @@ LegoVideoManager::LegoVideoManager()
 }
 
 // FUNCTION: LEGO1 0x1007ab40
+// FUNCTION: BETA10 0x100d5b57
 LegoVideoManager::~LegoVideoManager()
 {
 	Destroy();
@@ -62,6 +63,7 @@ LegoVideoManager::~LegoVideoManager()
 }
 
 // FUNCTION: LEGO1 0x1007abb0
+// FUNCTION: BETA10 0x100d5c31
 MxResult LegoVideoManager::CreateDirect3D()
 {
 	if (!m_direct3d) {

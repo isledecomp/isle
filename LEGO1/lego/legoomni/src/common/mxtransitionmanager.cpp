@@ -32,6 +32,7 @@ MxTransitionManager::MxTransitionManager()
 }
 
 // FUNCTION: LEGO1 0x1004ba00
+// FUNCTION: BETA10 0x100ec34c
 MxTransitionManager::~MxTransitionManager()
 {
 	delete[] m_copyBuffer;
@@ -45,6 +46,7 @@ MxTransitionManager::~MxTransitionManager()
 }
 
 // FUNCTION: LEGO1 0x1004baa0
+// FUNCTION: BETA10 0x100ec3d1
 MxResult MxTransitionManager::GetDDrawSurfaceFromVideoManager() // vtable+0x14
 {
 	LegoVideoManager* videoManager = VideoManager();
@@ -53,6 +55,7 @@ MxResult MxTransitionManager::GetDDrawSurfaceFromVideoManager() // vtable+0x14
 }
 
 // FUNCTION: LEGO1 0x1004bac0
+// FUNCTION: BETA10 0x100ec402
 MxResult MxTransitionManager::Tickle()
 {
 	MxULong time = m_animationSpeed + m_systemTime;

@@ -56,6 +56,7 @@ LegoResult LegoRotationZKey::Write(LegoStorage* p_storage)
 }
 
 // FUNCTION: LEGO1 0x1009f0a0
+// FUNCTION: BETA10 0x101813a3
 LegoAnimScene::LegoAnimScene()
 {
 	m_translationKeysCount = 0;
@@ -70,6 +71,7 @@ LegoAnimScene::LegoAnimScene()
 }
 
 // FUNCTION: LEGO1 0x1009f0d0
+// FUNCTION: BETA10 0x10181412
 LegoAnimScene::~LegoAnimScene()
 {
 	if (m_translationKeys != NULL) {
@@ -132,6 +134,7 @@ LegoResult LegoAnimScene::Write(LegoStorage* p_storage)
 }
 
 // FUNCTION: LEGO1 0x1009f200
+// FUNCTION: BETA10 0x1018167e
 LegoResult LegoAnimScene::Read(LegoStorage* p_storage)
 {
 	LegoResult result;
@@ -303,6 +306,7 @@ LegoAnimKey::LegoAnimKey()
 }
 
 // FUNCTION: LEGO1 0x1009f910
+// FUNCTION: BETA10 0x1017dfb9
 LegoResult LegoAnimKey::Read(LegoStorage* p_storage)
 {
 	LegoResult result;
@@ -332,6 +336,7 @@ LegoResult LegoAnimKey::Write(LegoStorage* p_storage)
 }
 
 // FUNCTION: LEGO1 0x1009f990
+// FUNCTION: BETA10 0x1017e074
 LegoTranslationKey::LegoTranslationKey()
 {
 	m_x = 0.0F;
@@ -340,6 +345,7 @@ LegoTranslationKey::LegoTranslationKey()
 }
 
 // FUNCTION: LEGO1 0x1009f9b0
+// FUNCTION: BETA10 0x1017e0b3
 LegoResult LegoTranslationKey::Read(LegoStorage* p_storage)
 {
 	LegoResult result;
@@ -403,6 +409,7 @@ LegoRotationKey::LegoRotationKey()
 }
 
 // FUNCTION: LEGO1 0x1009fac0
+// FUNCTION: BETA10 0x1017e2fc
 LegoResult LegoRotationKey::Read(LegoStorage* p_storage)
 {
 	LegoResult result;
@@ -464,6 +471,7 @@ LegoResult LegoRotationKey::Write(LegoStorage* p_storage)
 }
 
 // FUNCTION: LEGO1 0x1009fba0
+// FUNCTION: BETA10 0x1017e4db
 LegoScaleKey::LegoScaleKey()
 {
 	m_x = 1.0F;
@@ -472,6 +480,7 @@ LegoScaleKey::LegoScaleKey()
 }
 
 // FUNCTION: LEGO1 0x1009fbc0
+// FUNCTION: BETA10 0x1017e51a
 LegoResult LegoScaleKey::Read(LegoStorage* p_storage)
 {
 	LegoResult result;
@@ -547,6 +556,7 @@ LegoAnimNodeData::LegoAnimNodeData()
 }
 
 // FUNCTION: LEGO1 0x1009fda0
+// FUNCTION: BETA10 0x1017e819
 LegoAnimNodeData::~LegoAnimNodeData()
 {
 	if (m_name) {
@@ -776,6 +786,7 @@ LegoResult LegoAnimNodeData::CreateLocalTransform(LegoFloat p_time, Matrix4& p_m
 }
 
 // FUNCTION: LEGO1 0x100a0600
+// FUNCTION: BETA10 0x1017f415
 inline void LegoAnimNodeData::GetTranslation(
 	LegoU16 p_numTranslationKeys,
 	LegoTranslationKey* p_translationKeys,
@@ -840,6 +851,7 @@ inline void LegoAnimNodeData::GetTranslation(
 }
 
 // FUNCTION: LEGO1 0x100a06f0
+// FUNCTION: BETA10 0x1017f4c9
 /*inline*/ void LegoAnimNodeData::GetRotation(
 	LegoU16 p_numRotationKeys,
 	LegoRotationKey* p_rotationKeys,
@@ -935,6 +947,7 @@ inline void LegoAnimNodeData::GetScale(
 }
 
 // FUNCTION: LEGO1 0x100a0990
+// FUNCTION: BETA10 0x1017f6dd
 LegoBool LegoAnimNodeData::GetVisibility(LegoFloat p_time)
 {
 	LegoU32 i, n;
@@ -958,6 +971,7 @@ LegoBool LegoAnimNodeData::GetVisibility(LegoFloat p_time)
 }
 
 // FUNCTION: LEGO1 0x100a0a00
+// FUNCTION: BETA10 0x1017f72c
 LegoU32 LegoAnimNodeData::FindKeys(
 	LegoFloat p_time,
 	LegoU32 p_numKeys,
@@ -1008,6 +1022,7 @@ LegoU32 LegoAnimNodeData::FindKeys(
 }
 
 // FUNCTION: LEGO1 0x100a0b00
+// FUNCTION: BETA10 0x1017f7c3
 inline LegoFloat LegoAnimNodeData::Interpolate(
 	LegoFloat p_time,
 	LegoAnimKey& p_key1,
@@ -1025,6 +1040,7 @@ inline LegoAnimKey& LegoAnimNodeData::GetKey(LegoU32 p_i, LegoAnimKey* p_keys, L
 }
 
 // FUNCTION: LEGO1 0x100a0b30
+// FUNCTION: BETA10 0x1017f8cc
 LegoAnim::LegoAnim()
 {
 	m_duration = 0;
@@ -1034,6 +1050,7 @@ LegoAnim::LegoAnim()
 }
 
 // FUNCTION: LEGO1 0x100a0bc0
+// FUNCTION: BETA10 0x1017f92e
 LegoAnim::~LegoAnim()
 {
 	if (m_modelList != NULL) {
@@ -1050,6 +1067,7 @@ LegoAnim::~LegoAnim()
 }
 
 // FUNCTION: LEGO1 0x100a0c70
+// FUNCTION: BETA10 0x1017fb47
 LegoResult LegoAnim::Read(LegoStorage* p_storage, LegoS32 p_parseScene)
 {
 	LegoResult result = FAILURE;
@@ -1190,6 +1208,7 @@ LegoMorphKey::LegoMorphKey()
 }
 
 // FUNCTION: LEGO1 0x100a0f70
+// FUNCTION: BETA10 0x101802a4
 LegoResult LegoMorphKey::Read(LegoStorage* p_storage)
 {
 	LegoResult result;

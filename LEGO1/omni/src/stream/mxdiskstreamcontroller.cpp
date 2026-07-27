@@ -100,6 +100,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100c7880
+// FUNCTION: BETA10 0x10154045
 MxResult MxDiskStreamController::VTable0x18(undefined4, undefined4)
 {
 	return SUCCESS;
@@ -120,12 +121,14 @@ MxResult MxDiskStreamController::FUN_100c7890(MxDSStreamingAction* p_action)
 }
 
 // FUNCTION: LEGO1 0x100c7960
+// FUNCTION: BETA10 0x1015447a
 MxResult MxDiskStreamController::VTable0x34(undefined4)
 {
 	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100c7970
+// FUNCTION: BETA10 0x101545ff
 void MxDiskStreamController::FUN_100c7970()
 {
 	// Empty

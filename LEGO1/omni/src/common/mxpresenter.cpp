@@ -56,6 +56,7 @@ MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 }
 
 // FUNCTION: LEGO1 0x100b4e40
+// FUNCTION: BETA10 0x1012e21b
 void MxPresenter::EndAction()
 {
 	if (m_action == NULL) {
@@ -76,6 +77,7 @@ void MxPresenter::EndAction()
 }
 
 // FUNCTION: LEGO1 0x100b4fc0
+// FUNCTION: BETA10 0x1012e3c2
 void MxPresenter::ParseExtra()
 {
 	AUTOLOCK(m_criticalSection);
@@ -122,6 +124,7 @@ void MxPresenter::SendToCompositePresenter(MxOmni* p_omni)
 }
 
 // FUNCTION: LEGO1 0x100b5200
+// FUNCTION: BETA10 0x1012e6d5
 MxResult MxPresenter::Tickle()
 {
 	AUTOLOCK(m_criticalSection);
@@ -167,6 +170,7 @@ MxResult MxPresenter::Tickle()
 }
 
 // FUNCTION: LEGO1 0x100b52d0
+// FUNCTION: BETA10 0x1012e848
 void MxPresenter::Enable(MxBool p_enable)
 {
 	if (m_action && IsEnabled() != p_enable) {
@@ -237,6 +241,7 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 }
 
 // FUNCTION: LEGO1 0x100b5410
+// FUNCTION: BETA10 0x1012eaad
 MxEntity* MxPresenter::CreateEntity(const char* p_defaultName)
 {
 	// create an object from LegoObjectFactory based on OBJECT: value in extra data.

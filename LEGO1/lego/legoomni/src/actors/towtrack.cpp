@@ -153,6 +153,7 @@ MxLong TowTrack::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1004cd30
+// FUNCTION: BETA10 0x100f6f02
 MxLong TowTrack::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 {
 	return 1;

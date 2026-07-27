@@ -26,6 +26,7 @@ RealtimeView::RealtimeView()
 }
 
 // FUNCTION: LEGO1 0x100a5dd0
+// FUNCTION: BETA10 0x1016885e
 RealtimeView::~RealtimeView()
 {
 }

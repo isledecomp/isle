@@ -388,6 +388,7 @@ void LegoPathController::AnimateActors()
 }
 
 // FUNCTION: LEGO1 0x10046b30
+// FUNCTION: BETA10 0x100b74fe
 MxResult LegoPathController::GetBoundaries(LegoPathBoundary*& p_boundaries, MxS32& p_numL)
 {
 	p_boundaries = m_boundaries;

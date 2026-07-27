@@ -166,6 +166,7 @@ void MxMediaPresenter::EndAction()
 }
 
 // FUNCTION: LEGO1 0x100b5d10
+// FUNCTION: BETA10 0x10136415
 MxResult MxMediaPresenter::Tickle()
 {
 	AUTOLOCK(m_criticalSection);
@@ -176,6 +177,7 @@ MxResult MxMediaPresenter::Tickle()
 }
 
 // FUNCTION: LEGO1 0x100b5d90
+// FUNCTION: BETA10 0x1013649f
 void MxMediaPresenter::StreamingTickle()
 {
 	if (!m_currentChunk) {
@@ -200,6 +202,7 @@ void MxMediaPresenter::StreamingTickle()
 }
 
 // FUNCTION: LEGO1 0x100b5e10
+// FUNCTION: BETA10 0x10136597
 void MxMediaPresenter::RepeatingTickle()
 {
 	if (IsEnabled() && !m_currentChunk) {
@@ -224,6 +227,7 @@ void MxMediaPresenter::RepeatingTickle()
 }
 
 // FUNCTION: LEGO1 0x100b5ef0
+// FUNCTION: BETA10 0x101366c0
 void MxMediaPresenter::DoneTickle()
 {
 	ProgressTickleState(e_idle);

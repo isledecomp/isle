@@ -86,6 +86,7 @@ MxResult MxDSBuffer::AllocateBuffer(MxU32 p_bufferSize, Type p_mode)
 }
 
 // FUNCTION: LEGO1 0x100c6780
+// FUNCTION: BETA10 0x1015723b
 MxResult MxDSBuffer::SetBufferPointer(MxU8* p_buffer, MxU32 p_size)
 {
 	m_pBuffer = p_buffer;
@@ -198,6 +199,7 @@ MxResult MxDSBuffer::CreateObject(
 }
 
 // FUNCTION: LEGO1 0x100c6960
+// FUNCTION: BETA10 0x1015759a
 MxResult MxDSBuffer::StartPresenterFromAction(
 	MxStreamController* p_controller,
 	MxDSAction* p_action1,
@@ -396,6 +398,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100c6ec0
+// FUNCTION: BETA10 0x10157fb2
 MxU8 MxDSBuffer::ReleaseRef(MxDSChunk*)
 {
 	if (m_referenceCount != 0) {
@@ -405,6 +408,7 @@ MxU8 MxDSBuffer::ReleaseRef(MxDSChunk*)
 }
 
 // FUNCTION: LEGO1 0x100c6ee0
+// FUNCTION: BETA10 0x10158074
 void MxDSBuffer::AddRef(MxDSChunk* p_chunk)
 {
 	if (p_chunk) {

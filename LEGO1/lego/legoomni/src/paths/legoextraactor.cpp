@@ -41,6 +41,7 @@ LegoExtraActor::LegoExtraActor()
 }
 
 // FUNCTION: LEGO1 0x1002a6b0
+// FUNCTION: BETA10 0x10080a7e
 LegoExtraActor::~LegoExtraActor()
 {
 	delete m_assAnim;
@@ -48,6 +49,7 @@ LegoExtraActor::~LegoExtraActor()
 }
 
 // FUNCTION: LEGO1 0x1002a720
+// FUNCTION: BETA10 0x10080b4c
 MxU32 LegoExtraActor::StepState(float p_time, Matrix4& p_transform)
 {
 	static const float g_hitAnimationDelay = 2000.0f;
@@ -111,6 +113,7 @@ MxU32 LegoExtraActor::StepState(float p_time, Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x1002aa90
+// FUNCTION: BETA10 0x10080ea9
 void LegoExtraActor::GetWalkingBehavior(MxBool& p_countCounterclockWise, MxS32& p_selectedEdgeIndex)
 {
 	switch (m_pathWalkingMode) {
@@ -130,6 +133,7 @@ void LegoExtraActor::GetWalkingBehavior(MxBool& p_countCounterclockWise, MxS32& 
 }
 
 // FUNCTION: LEGO1 0x1002aae0
+// FUNCTION: BETA10 0x10080f35
 MxResult LegoExtraActor::SwitchDirection()
 {
 	LegoPathBoundary* oldEdge = m_boundary;

@@ -1568,12 +1568,14 @@ LegoLocation* LegoNavController::GetLocation(MxU32 p_location)
 }
 
 // FUNCTION: LEGO1 0x10055740
+// FUNCTION: BETA10 0x1009c28c
 MxS32 LegoNavController::GetNumLocations()
 {
 	return sizeOfArray(g_locations);
 }
 
 // FUNCTION: LEGO1 0x10055750
+// FUNCTION: BETA10 0x1009c2a1
 MxResult LegoNavController::ProcessJoystickInput(MxBool& p_rotatedY)
 {
 	LegoOmni* instance = LegoOmni::GetInstance();
@@ -1621,6 +1623,7 @@ MxResult LegoNavController::ProcessJoystickInput(MxBool& p_rotatedY)
 }
 
 // FUNCTION: LEGO1 0x100558b0
+// FUNCTION: BETA10 0x1009c49a
 MxResult LegoNavController::ProcessKeyboardInput()
 {
 	MxBool skipRotationVelAndAccelCalc = FALSE;

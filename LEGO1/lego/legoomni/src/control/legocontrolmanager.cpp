@@ -63,6 +63,7 @@ void LegoControlManager::Unregister(MxCore* p_listener)
 }
 
 // FUNCTION: LEGO1 0x10029210
+// FUNCTION: BETA10 0x1007c406
 MxBool LegoControlManager::HandleButtonDown(LegoEventNotificationParam& p_param, MxPresenter* p_presenter)
 {
 	if (m_presenterList != NULL && m_presenterList->GetNumElements() != 0) {
@@ -115,6 +116,7 @@ MxBool LegoControlManager::HandleButtonDown(LegoEventNotificationParam& p_param,
 }
 
 // FUNCTION: LEGO1 0x100292e0
+// FUNCTION: BETA10 0x1007c772
 void LegoControlManager::Notify()
 {
 	LegoNotifyListCursor cursor(&m_notifyList);
@@ -128,6 +130,7 @@ void LegoControlManager::Notify()
 }
 
 // FUNCTION: LEGO1 0x100293c0
+// FUNCTION: BETA10 0x1007c81b
 void LegoControlManager::UpdateEnabledChild(MxU32 p_objectId, const char* p_atom, MxS16 p_enabledChild)
 {
 	if (m_presenterList) {

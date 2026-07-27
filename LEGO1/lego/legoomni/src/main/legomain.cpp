@@ -623,6 +623,7 @@ void LegoOmni::Disable(MxBool p_disable, MxU16 p_flags)
 }
 
 // FUNCTION: LEGO1 0x1005b560
+// FUNCTION: BETA10 0x1008efb9
 void LegoOmni::CreateBackgroundAudio()
 {
 	if (m_bkgAudioManager) {

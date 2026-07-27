@@ -225,6 +225,7 @@ MxLong LegoAnimMMPresenter::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1004b360
+// FUNCTION: BETA10 0x1004c560
 void LegoAnimMMPresenter::AdvanceSerialAction(MxPresenter* p_presenter)
 {
 	if (m_presenter == p_presenter && ((MxU8) p_presenter->GetCurrentTickleState() == MxPresenter::e_streaming ||

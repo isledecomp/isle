@@ -286,6 +286,7 @@ void LegoCarBuild::InitPresenters()
 }
 
 // FUNCTION: LEGO1 0x10022f00
+// FUNCTION: BETA10 0x1006b7e7
 void LegoCarBuild::DisplaySelectedPart()
 {
 	if (m_selectedPart) {

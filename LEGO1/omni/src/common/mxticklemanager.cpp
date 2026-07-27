@@ -13,6 +13,7 @@ DECOMP_SIZE_ASSERT(MxTickleClient, 0x10);
 DECOMP_SIZE_ASSERT(MxTickleManager, 0x14);
 
 // FUNCTION: LEGO1 0x100bdd10
+// FUNCTION: BETA10 0x1013ea10
 MxTickleClient::MxTickleClient(MxCore* p_client, MxTime p_interval)
 {
 	m_flags = 0;
@@ -22,6 +23,7 @@ MxTickleClient::MxTickleClient(MxCore* p_client, MxTime p_interval)
 }
 
 // FUNCTION: LEGO1 0x100bdd30
+// FUNCTION: BETA10 0x1013ea53
 MxTickleManager::~MxTickleManager()
 {
 	while (m_clients.size() != 0) {

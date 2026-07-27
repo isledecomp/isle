@@ -575,6 +575,7 @@ MxU32 LegoBuildingManager::GetSoundId(LegoEntity* p_entity, MxBool p_basedOnMood
 }
 
 // FUNCTION: LEGO1 0x1002ff90
+// FUNCTION: BETA10 0x1006442f
 void LegoBuildingManager::SetCustomizeAnimFile(const char* p_value)
 {
 	if (g_customizeAnimFile != NULL) {
@@ -594,6 +595,7 @@ void LegoBuildingManager::SetCustomizeAnimFile(const char* p_value)
 }
 
 // FUNCTION: LEGO1 0x10030000
+// FUNCTION: BETA10 0x10064472
 MxBool LegoBuildingManager::DecrementCounter(LegoEntity* p_entity)
 {
 	LegoBuildingInfo* info = GetInfo(p_entity);
@@ -615,6 +617,7 @@ inline LegoBuildingInfo* GetBuildingInfo(MxS32 p_index)
 }
 
 // FUNCTION: LEGO1 0x10030030
+// FUNCTION: BETA10 0x100644ff
 MxBool LegoBuildingManager::DecrementCounter(MxS32 p_index)
 {
 	if (p_index >= sizeOfArray(g_buildingInfo)) {
@@ -656,6 +659,7 @@ MxBool LegoBuildingManager::DecrementCounter(MxS32 p_index)
 }
 
 // FUNCTION: LEGO1 0x10030110
+// FUNCTION: BETA10 0x10064556
 MxBool LegoBuildingManager::DecrementCounter(LegoBuildingInfo* p_data)
 {
 	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
@@ -668,6 +672,7 @@ MxBool LegoBuildingManager::DecrementCounter(LegoBuildingInfo* p_data)
 }
 
 // FUNCTION: LEGO1 0x10030150
+// FUNCTION: BETA10 0x100645ad
 void LegoBuildingManager::ScheduleAnimation(
 	LegoEntity* p_entity,
 	MxLong p_length,
@@ -701,6 +706,7 @@ void LegoBuildingManager::ScheduleAnimation(
 }
 
 // FUNCTION: LEGO1 0x10030220
+// FUNCTION: BETA10 0x100646e8
 MxResult LegoBuildingManager::Tickle()
 {
 	MxLong time = Timer()->GetTime();
