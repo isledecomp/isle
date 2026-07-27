@@ -34,9 +34,35 @@ float g_viewDistance = 0.000125F;
 // GLOBAL: LEGO1 0x10101060
 float g_elapsedSeconds = 0;
 
-inline void SetAppData(ViewROI* p_roi, LPD3DRM_APPDATA data);
-inline undefined4 GetD3DRM_viewmanager(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
-inline undefined4 GetFrame(IDirect3DRMFrame2** frame, Tgl::Group* scene);
+// FUNCTION: BETA10 0x10171f30
+inline undefined4 GetD3DRM_viewmanager(IDirect3DRM2*& d3drm, Tgl::Renderer* p_tglRenderer)
+{
+	assert(p_tglRenderer);
+	TglImpl::RendererImpl* renderer = (TglImpl::RendererImpl*) p_tglRenderer;
+	// Note: Diff in BETA10 (thunked in recompile but not in orig)
+	d3drm = renderer->ImplementationData();
+	return 0;
+}
+
+// FUNCTION: BETA10 0x10171f82
+inline undefined4 GetFrame(IDirect3DRMFrame2** p_f, Tgl::Group* p_group)
+{
+	assert(p_f && p_group);
+	TglImpl::GroupImpl* cast = (TglImpl::GroupImpl*) p_group;
+	assert(cast);
+	*p_f = cast->ImplementationData();
+	assert(p_f);
+	return 0;
+}
+
+inline void SetAppData(ViewROI* p_roi, LPD3DRM_APPDATA data)
+{
+	IDirect3DRMFrame2* frame = NULL;
+
+	if (GetFrame(&frame, p_roi->GetGeometry()) == 0) {
+		frame->SetAppData(data);
+	}
+}
 
 // STUB: BETA10 0x1017202e
 int userVisualCallback(
@@ -203,12 +229,14 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 	Tgl::Group* group = p_roi->GetGeometry();
 	Tgl::MeshBuilder* meshBuilder;
 	ViewLOD* lod;
+	Tgl::Result result;
 
 	if (lodLevel < 0) {
 		lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
 
 		if (lod->GetFlags() & ViewLOD::c_hasMesh) {
-			scene->Add(group);
+			result = scene->Add(group);
+			assert(Succeeded(result));
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
 		}
 	}
@@ -594,34 +622,4 @@ ViewROI* ViewManager::Pick(Tgl::View* p_view, unsigned long x, unsigned long y)
 	}
 
 	return result;
-}
-
-inline void SetAppData(ViewROI* p_roi, LPD3DRM_APPDATA data)
-{
-	IDirect3DRMFrame2* frame = NULL;
-
-	if (GetFrame(&frame, p_roi->GetGeometry()) == 0) {
-		frame->SetAppData(data);
-	}
-}
-
-// FUNCTION: BETA10 0x10171f30
-inline undefined4 GetD3DRM_viewmanager(IDirect3DRM2*& d3drm, Tgl::Renderer* p_tglRenderer)
-{
-	assert(p_tglRenderer);
-	TglImpl::RendererImpl* renderer = (TglImpl::RendererImpl*) p_tglRenderer;
-	// Note: Diff in BETA10 (thunked in recompile but not in orig)
-	d3drm = renderer->ImplementationData();
-	return 0;
-}
-
-// FUNCTION: BETA10 0x10171f82
-inline undefined4 GetFrame(IDirect3DRMFrame2** p_f, Tgl::Group* p_group)
-{
-	assert(p_f && p_group);
-	TglImpl::GroupImpl* cast = (TglImpl::GroupImpl*) p_group;
-	assert(cast);
-	*p_f = cast->ImplementationData();
-	assert(p_f);
-	return 0;
 }

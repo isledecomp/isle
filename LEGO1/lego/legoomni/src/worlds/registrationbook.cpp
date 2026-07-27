@@ -464,12 +464,11 @@ void RegistrationBook::ReadyWorld()
 #ifdef BETA10
 	InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
 	assert(infocenterState);
-
-	if (infocenterState->HasRegistered())
 #else
-	if (m_infocenterState->HasRegistered())
+	InfocenterState* infocenterState = m_infocenterState;
 #endif
-	{
+
+	if (infocenterState->HasRegistered()) {
 		PlayAction(RegbookScript::c_iic008in_PlayWav);
 
 		LegoROI* infoman = FindROI(g_infoman);
