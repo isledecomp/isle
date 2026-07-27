@@ -829,9 +829,11 @@ MxResult LegoPathController::FindPath(
 	}
 
 	if (!p_grec->HasPath()) {
+		MxFloat minDist;
+
 		while (pathCtrlEdgeSet.size() > 0) {
 			LegoBEWithMidpoint edgeWithMidpoint;
-			MxFloat minDist = 999999.0f;
+			minDist = 999999.0f;
 
 			boundarySetItA = boundarySetItB = boundarySet.begin();
 
@@ -839,14 +841,19 @@ MxResult LegoPathController::FindPath(
 				boundarySetItB++;
 			}
 
-			while (boundarySetItA != boundarySet.end()) {
-				MxU32 shouldRemove = TRUE;
+			MxU32 shouldRemove;
+			LegoOrientedEdge* e;
+			LegoPathBoundary* b;
+			LegoPathBoundary* bOther;
 
-				LegoOrientedEdge* e = (*boundarySetItA)->m_edge;
-				LegoPathBoundary* b = (*boundarySetItA)->m_boundary;
+			while (boundarySetItA != boundarySet.end()) {
+				shouldRemove = TRUE;
+
+				e = (*boundarySetItA)->m_edge;
+				b = (*boundarySetItA)->m_boundary;
 				assert(e && b);
 
-				LegoPathBoundary* bOther = (LegoPathBoundary*) e->OtherFace(b);
+				bOther = (LegoPathBoundary*) e->OtherFace(b);
 				assert(bOther);
 
 				if (!e->BETA_1004a830(*bOther, p_mask)) {

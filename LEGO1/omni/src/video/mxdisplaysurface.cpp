@@ -1212,13 +1212,14 @@ void MxDisplaySurface::VTable0x24(
 			MxS32 width = p_width;
 			MxU16* p16bitPal = m_16bitPal;
 
+			MxU16 element;
 			MxS32 i;
 			if (!stride && !length) {
 				while (height--) {
 					MxU8* surfaceBefore = surface;
 
 					for (i = 0; i < width; i++) {
-						MxU16 element = p16bitPal[*data];
+						element = p16bitPal[*data];
 						*(MxU16*) surface = element;
 						surface += 2;
 						*(MxU16*) surface = element;
@@ -1236,7 +1237,7 @@ void MxDisplaySurface::VTable0x24(
 					MxU8* surfaceBefore = surface;
 
 					for (i = 0; i < width; i++) {
-						MxU16 element = p16bitPal[*data];
+						element = p16bitPal[*data];
 						*(MxU16*) surface = element;
 						surface += 2;
 						*(MxU16*) surface = element;
