@@ -182,6 +182,7 @@ MxLong Isle::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10030d90
+// FUNCTION: BETA10 0x10032ea7
 MxLong Isle::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
 	MxLong result;
