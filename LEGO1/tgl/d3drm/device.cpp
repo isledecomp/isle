@@ -163,6 +163,35 @@ Result DeviceImpl::Update()
 	return DeviceUpdate(m_data);
 }
 
+// FUNCTION: BETA10 0x1016e4f0
+// tglRL40.h L688-L697 in 1997. The two asserts BETA10 records at L692 and L697
+// are both assert(Succeeded(result)), which is what pins the shape: one status
+// check after fetching the Direct3D device and one after reading the stats.
+inline unsigned long DeviceGetTrianglesDrawn(IDirect3DRMDevice2* pDevice)
+{
+	IDirect3DDevice2* pD3DDevice;
+	Result result = ResultVal(pDevice->GetDirect3DDevice2(&pD3DDevice));
+	assert(Succeeded(result));
+
+	D3DSTATS stats;
+	memset(&stats, 0, sizeof(stats));
+	stats.dwSize = sizeof(stats);
+	result = ResultVal(pD3DDevice->GetStats(&stats));
+	assert(Succeeded(result));
+
+	pD3DDevice->Release();
+
+	return stats.dwTrianglesDrawn;
+}
+
+// FUNCTION: BETA10 0x1016e490
+unsigned long DeviceImpl::GetTrianglesDrawn()
+{
+	assert(m_data);
+
+	return DeviceGetTrianglesDrawn(m_data);
+}
+
 // GLOBAL: LEGO1 0x100dd1d0
 // GLOBAL: BETA10 0x101c30b0
 // IID_IDirect3DRMWinDevice

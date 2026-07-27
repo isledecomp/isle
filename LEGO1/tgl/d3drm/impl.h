@@ -186,6 +186,12 @@ public:
 	void HandleActivate(WORD) override;
 	void HandlePaint(void*) override;
 
+	// FUNCTION: BETA10 0x1016e490
+	// Not in retail: nothing calls it, so /Gy dropped it. BETA10 places it at
+	// tglImpl.h L643 with its assert(m_data) at L646, directly after Update
+	// (L636). Non-virtual -- a virtual would have been kept alive by the vtable.
+	unsigned long GetTrianglesDrawn();
+
 	typedef IDirect3DRMDevice2* DeviceDataType;
 
 	// FUNCTION: BETA10 0x101708e0
