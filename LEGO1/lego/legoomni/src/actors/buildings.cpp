@@ -3,6 +3,7 @@
 #include "act2main_actions.h"
 #include "act3.h"
 #include "act3_actions.h"
+#include "buildingentity.h"
 #include "isle.h"
 #include "isle_actions.h"
 #include "islepathactor.h"
@@ -14,10 +15,14 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxmisc.h"
+#include "mxnotificationmanager.h"
+#include "mxnotificationparam.h"
 #include "mxtransitionmanager.h"
 #include "scripts.h"
 
 DECOMP_SIZE_ASSERT(BeachHouseEntity, 0x68)
+DECOMP_SIZE_ASSERT(BuildingEntity, 0x68)
 DECOMP_SIZE_ASSERT(GasStationEntity, 0x68)
 DECOMP_SIZE_ASSERT(HospitalEntity, 0x68)
 DECOMP_SIZE_ASSERT(InfoCenterEntity, 0x68)
@@ -38,6 +43,31 @@ IsleScript::Script g_nextChestAction = IsleScript::c_nca001ca_RunAnim;
 
 // GLOBAL: LEGO1 0x100f0c38
 IsleScript::Script g_nextCavedoorAction = IsleScript::c_Avo900Ps_PlayWav;
+
+// FUNCTION: LEGO1 0x10014e20
+BuildingEntity::BuildingEntity()
+{
+	NotificationManager()->Register(this);
+}
+
+// FUNCTION: LEGO1 0x10015030
+BuildingEntity::~BuildingEntity()
+{
+	NotificationManager()->Unregister(this);
+}
+
+// FUNCTION: LEGO1 0x100150a0
+// FUNCTION: BETA10 0x10024e37
+MxLong BuildingEntity::Notify(MxParam& p_param)
+{
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
+
+	if (param.GetNotification() == c_notificationClick) {
+		return HandleClick((LegoEventNotificationParam&) p_param);
+	}
+
+	return 0;
+}
 
 // FUNCTION: LEGO1 0x100150c0
 // FUNCTION: BETA10 0x10024e9a

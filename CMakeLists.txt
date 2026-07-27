@@ -157,9 +157,7 @@ function(add_lego_libraries NAME)
   target_link_libraries(roi${ARG_SUFFIX} PRIVATE viewmanager${ARG_SUFFIX} Vec::Vec)
 
   add_library(geom${ARG_SUFFIX} STATIC
-    LEGO1/lego/sources/geom/legoedge.cpp
     LEGO1/lego/sources/geom/legoweedge.cpp
-    LEGO1/lego/sources/geom/legoorientededge.cpp
     LEGO1/lego/sources/geom/legowegedge.cpp
   )
   list(APPEND list_targets geom${ARG_SUFFIX})
@@ -306,12 +304,9 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/race/legoracers.cpp
     LEGO1/lego/legoomni/src/race/legoraceactor.cpp
     LEGO1/lego/legoomni/src/common/legostate.cpp
-    LEGO1/lego/legoomni/src/actors/buildingentity.cpp
     LEGO1/lego/legoomni/src/actors/buildings.cpp
     LEGO1/lego/legoomni/src/common/misc.cpp
     LEGO1/lego/legoomni/src/race/legorace.cpp
-    LEGO1/lego/legoomni/src/race/jetskirace.cpp
-    LEGO1/lego/legoomni/src/race/carrace.cpp
     LEGO1/lego/legoomni/src/actors/pizzeria.cpp
     LEGO1/lego/legoomni/src/worlds/elevatorbottom.cpp
     LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp

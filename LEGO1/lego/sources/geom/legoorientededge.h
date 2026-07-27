@@ -21,6 +21,23 @@ public:
 
 	LegoOrientedEdge();
 
+	// FUNCTION: BETA10 0x100b53b0
+	LegoU32 BETA_100b53b0(LegoWEGEdge& p_face)
+	{
+		// clang-format off
+		assert(p_face.IsEqual( m_faceA ) || p_face.IsEqual( m_faceB ));
+		// clang-format on
+		return (p_face.IsEqual(m_faceA) && (m_flags & c_bit1)) || (p_face.IsEqual(m_faceB) && (m_flags & c_bit2));
+	}
+
+	// FUNCTION: BETA10 0x1004a830
+	LegoU32 BETA_1004a830(LegoWEGEdge& p_face, LegoU8 p_mask)
+	{
+		assert(p_face.IsEqual(m_faceA) || p_face.IsEqual(m_faceB));
+		return (p_face.IsEqual(m_faceB) && (m_flags & c_bit1) && (p_face.GetMask0x03() & p_mask) == p_mask) ||
+			   (p_face.IsEqual(m_faceA) && (m_flags & c_bit2) && (p_face.GetMask0x03() & p_mask) == p_mask);
+	}
+
 	// FUNCTION: LEGO1 0x1002ddc0
 	// FUNCTION: BETA10 0x100372a0
 	LegoResult GetFaceNormal(LegoWEEdge& p_face, Vector3& p_point) const
@@ -38,23 +55,6 @@ public:
 		}
 
 		return SUCCESS;
-	}
-
-	// FUNCTION: BETA10 0x1004a830
-	LegoU32 BETA_1004a830(LegoWEGEdge& p_face, LegoU8 p_mask)
-	{
-		assert(p_face.IsEqual(m_faceA) || p_face.IsEqual(m_faceB));
-		return (p_face.IsEqual(m_faceB) && (m_flags & c_bit1) && (p_face.GetMask0x03() & p_mask) == p_mask) ||
-			   (p_face.IsEqual(m_faceA) && (m_flags & c_bit2) && (p_face.GetMask0x03() & p_mask) == p_mask);
-	}
-
-	// FUNCTION: BETA10 0x100b53b0
-	LegoU32 BETA_100b53b0(LegoWEGEdge& p_face)
-	{
-		// clang-format off
-		assert(p_face.IsEqual( m_faceA ) || p_face.IsEqual( m_faceB ));
-		// clang-format on
-		return (p_face.IsEqual(m_faceA) && (m_flags & c_bit1)) || (p_face.IsEqual(m_faceB) && (m_flags & c_bit2));
 	}
 
 	// FUNCTION: BETA10 0x1001cbe0

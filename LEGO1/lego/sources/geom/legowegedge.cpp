@@ -4,8 +4,18 @@
 
 #include <assert.h>
 
+DECOMP_SIZE_ASSERT(LegoOrientedEdge, 0x40)
 DECOMP_SIZE_ASSERT(LegoWEGEdge, 0x54)
 DECOMP_SIZE_ASSERT(PathWithTrigger, 0x0c)
+
+// FUNCTION: LEGO1 0x1009a630
+// FUNCTION: BETA10 0x10183050
+LegoOrientedEdge::LegoOrientedEdge()
+{
+	m_flags = 0;
+	m_dir.Clear();
+	m_length = 0.0f;
+}
 
 // FUNCTION: LEGO1 0x1009a730
 // FUNCTION: BETA10 0x101830ec
