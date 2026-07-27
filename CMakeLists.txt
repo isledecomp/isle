@@ -293,6 +293,7 @@ function(add_lego_libraries NAME)
   target_link_libraries(omni${ARG_SUFFIX} PRIVATE dsound winmm Smacker::Smacker)
 
   add_library(${NAME} SHARED
+    LEGO1/res/lego1.rc
     LEGO1/lego/legoomni/src/worlds/score.cpp
     LEGO1/lego/legoomni/src/actors/helicopter.cpp
     LEGO1/lego/legoomni/src/worlds/gasstation.cpp
