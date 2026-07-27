@@ -1,8 +1,10 @@
 #include "isleapp.h"
 
-#include "3dmanager/lego3dmanager.h"
-#include "decomp.h"
+// clang-format off
 #include "legoanimationmanager.h"
+#include "3dmanager/lego3dmanager.h"
+// clang-format on
+#include "decomp.h"
 #include "legobuildingmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
