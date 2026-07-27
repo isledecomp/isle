@@ -457,6 +457,7 @@ LegoLOD* LegoLOD::Clone(Tgl::Renderer* p_renderer)
 }
 
 // FUNCTION: LEGO1 0x100aacb0
+// FUNCTION: BETA10 0x1018e1c1
 LegoResult LegoLOD::SetColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
 {
 	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
@@ -517,6 +518,7 @@ LegoResult LegoLOD::UpdateTextureInfo(LegoTextureInfo* p_textureInfo)
 }
 
 // FUNCTION: LEGO1 0x100aadc0
+// FUNCTION: BETA10 0x1018e3d8
 LegoResult LegoLOD::GetTextureInfo(LegoTextureInfo*& p_textureInfo)
 {
 	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {

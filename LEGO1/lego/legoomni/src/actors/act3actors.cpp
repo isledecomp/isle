@@ -102,13 +102,15 @@ Act3Actor::Act3Actor()
 // FUNCTION: BETA10 0x100180ab
 MxU32 Act3Actor::StepState(float p_time, Matrix4& p_transform)
 {
+	static const float g_hitAnimationDelay = 2000.0f;
+
 	// Note: Code duplication with LegoExtraActor::StepState
 	switch (m_actorState & c_maxState) {
 	case c_initial:
 	case c_ready:
 		return TRUE;
 	case c_hit:
-		m_unk0x1c = p_time + 2000.0f;
+		m_unk0x1c = g_hitAnimationDelay + p_time;
 		m_actorState = c_hitAnimation;
 		m_actorTime += (p_time - m_transformTime) * m_worldSpeed;
 		m_transformTime = p_time;

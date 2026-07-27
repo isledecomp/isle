@@ -27,6 +27,7 @@ LegoAnimActorStruct::LegoAnimActorStruct(
 }
 
 // FUNCTION: LEGO1 0x1001c0a0
+// FUNCTION: BETA10 0x1003dca1
 LegoAnimActorStruct::~LegoAnimActorStruct()
 {
 	for (MxU16 i = 0; i < m_unk0x10.size(); i++) {
@@ -63,6 +64,7 @@ MxResult LegoAnimActor::GetTimeInCycle(float& p_timeInCycle)
 }
 
 // FUNCTION: LEGO1 0x1001c240
+// FUNCTION: BETA10 0x1003e0db
 void LegoAnimActor::ApplyTransform(Matrix4& p_transform)
 {
 	float timeInCycle;
