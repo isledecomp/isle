@@ -554,7 +554,9 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)
 {
 	if (p_param.m_enabledChild == 1) {
-		switch (p_param.m_clickedObjectId) {
+		MxS32 objectId = p_param.m_clickedObjectId;
+
+		switch (objectId) {
 		case HospitalScript::c_Info_Ctl:
 			BackgroundAudioManager()->RaiseVolume();
 			DeleteObjects(&m_atomId, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);

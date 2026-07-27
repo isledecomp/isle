@@ -643,6 +643,12 @@ MxBool LegoCarBuildAnimPresenter::StringEqualsShelf(const LegoChar* p_string)
 	return strnicmp(p_string, "SHELF", strlen("SHELF")) == 0;
 }
 
+// FUNCTION: BETA10 0x1007266c
+MxBool LegoCarBuildAnimPresenter::StringEqualsView(const LegoChar* p_string)
+{
+	return stricmp(p_string, "VIEW") == 0;
+}
+
 // FUNCTION: LEGO1 0x10079c30
 // FUNCTION: BETA10 0x100726a6
 MxBool LegoCarBuildAnimPresenter::IsNextPartToPlace(const LegoChar* p_name)
