@@ -45,9 +45,11 @@ MxResult LegoCacheSoundManager::Tickle()
 		}
 	}
 
+	LegoCacheSound* sound;
 	List100d6b4c::iterator listIter = m_list.begin();
+
 	while (listIter != m_list.end()) {
-		LegoCacheSound* sound = (*listIter).GetSound();
+		sound = (*listIter).GetSound();
 
 		if (sound->GetUnknown0x58()) {
 			sound->FUN_10006be0();

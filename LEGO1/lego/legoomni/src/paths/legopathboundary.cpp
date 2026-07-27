@@ -375,7 +375,9 @@ MxU32 LegoPathBoundary::RemovePresenter(LegoAnimPresenter* p_presenter)
 		}
 	}
 	else {
-		for (LegoAnimPresenterSet::iterator it = m_presenters.begin(); it != m_presenters.end(); it++) {
+		LegoAnimPresenterSet::iterator it;
+
+		for (it = m_presenters.begin(); it != m_presenters.end(); it++) {
 			(*it)->SetCurrentWorld(NULL);
 		}
 	}

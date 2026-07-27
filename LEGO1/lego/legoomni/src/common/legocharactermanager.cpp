@@ -319,10 +319,11 @@ MxBool LegoCharacterManager::Exists(const char* p_name)
 // FUNCTION: LEGO1 0x10083bc0
 MxU32 LegoCharacterManager::GetRefCount(LegoROI* p_roi)
 {
+	LegoCharacter* character = NULL;
 	LegoCharacterMap::iterator it;
 
 	for (it = m_characters->begin(); it != m_characters->end(); it++) {
-		LegoCharacter* character = (*it).second;
+		character = (*it).second;
 		LegoROI* roi = character->m_roi;
 
 		if (roi == p_roi) {

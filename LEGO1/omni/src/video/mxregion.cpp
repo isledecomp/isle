@@ -334,6 +334,7 @@ void MxRegionCursor::SetRect(MxS32 p_left, MxS32 p_top, MxS32 p_right, MxS32 p_b
 void MxRegionCursor::NextSpan(MxRect32& p_rect)
 {
 	MxSpan* span;
+	MxSegment* segment;
 	while (m_spanListCursor->Next(span)) {
 		if (p_rect.GetBottom() <= span->GetMin()) {
 			Reset();
@@ -343,7 +344,6 @@ void MxRegionCursor::NextSpan(MxRect32& p_rect)
 		if (p_rect.GetTop() < span->GetMax()) {
 			CreateSegmentListCursor(span->m_segList);
 
-			MxSegment* segment;
 			while (m_segListCursor->Next(segment)) {
 				if (p_rect.GetRight() <= segment->GetMin()) {
 					break;
