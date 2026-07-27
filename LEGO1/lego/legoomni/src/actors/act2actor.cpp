@@ -1,6 +1,7 @@
 #include "act2actor.h"
 
 #include "3dmanager/lego3dmanager.h"
+#include "act2genactor.h"
 #include "act2main_actions.h"
 #include "anim/legoanim.h"
 #include "legoact2.h"
@@ -40,6 +41,9 @@ Act2Actor::Location g_brickstrLocations[] = {
 	{{-44.6, 0.1, 45.3}, {0.95, 0.0, -0.3}, "edg00_154", FALSE},
 #endif
 };
+
+// GLOBAL: LEGO1 0x100f0f18
+MxLong Act2GenActor::g_lastHitActorTime = 0;
 
 // GLOBAL: LEGO1 0x100f0f1c
 MxFloat g_lastAnimationTime = 0.0f;
@@ -97,15 +101,15 @@ MxS32 g_location8Plants[] = {1, 27, 37, 44, 47, 54, 61, 64, -1};
 
 // GLOBAL: LEGO1 0x10102b1c
 // GLOBAL: BETA10 0x10209f60
-MxU32 g_nextHeadWavIndex = 0;
+MxU32 g_nextHeadWavIndex;
 
 // GLOBAL: LEGO1 0x10102b20
 // GLOBAL: BETA10 0x10209f64
-MxU32 g_nextBehindWavIndex = 0;
+MxU32 g_nextBehindWavIndex;
 
 // GLOBAL: LEGO1 0x10102b24
 // GLOBAL: BETA10 0x10209f68
-MxU32 g_nextInterruptWavIndex = 0;
+MxU32 g_nextInterruptWavIndex;
 
 // FUNCTION: LEGO1 0x100187e0
 // FUNCTION: BETA10 0x1000c7fb

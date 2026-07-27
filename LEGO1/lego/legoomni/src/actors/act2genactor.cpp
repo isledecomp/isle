@@ -9,9 +9,6 @@
 
 DECOMP_SIZE_ASSERT(Act2GenActor, 0x154)
 
-// GLOBAL: LEGO1 0x100f0f18
-MxLong Act2GenActor::g_lastHitActorTime = 0;
-
 // FUNCTION: LEGO1 0x10018740
 // FUNCTION: BETA10 0x1000c7a0
 MxResult Act2GenActor::HitActor(LegoPathActor* p_actor, MxBool)

@@ -14,46 +14,6 @@ DECOMP_SIZE_ASSERT(CameraLocationVariable, 0x24)
 DECOMP_SIZE_ASSERT(CursorVariable, 0x24)
 DECOMP_SIZE_ASSERT(WhoAmIVariable, 0x24)
 
-// GLOBAL: LEGO1 0x100f7ab0
-// STRING: LEGO1 0x100f09c0
-const char* g_varJETSPEED = "jetSPEED";
-
-// GLOBAL: LEGO1 0x100f7ab4
-// STRING: LEGO1 0x100f7aa8
-const char* g_varJETFUEL = "jetFUEL";
-
-// GLOBAL: LEGO1 0x100f7658
-// STRING: LEGO1 0x100f764c
-const char* g_varDUNESPEED = "duneSPEED";
-
-// GLOBAL: LEGO1 0x100f765c
-// STRING: LEGO1 0x100f7640
-const char* g_varDUNEFUEL = "duneFUEL";
-
-// GLOBAL: LEGO1 0x100f3994
-// STRING: LEGO1 0x100f3988
-const char* g_varMOTOSPEED = "motoSPEED";
-
-// GLOBAL: LEGO1 0x100f3998
-// STRING: LEGO1 0x100f397c
-const char* g_varMOTOFUEL = "motoFUEL";
-
-// GLOBAL: LEGO1 0x100f39b8
-// STRING: LEGO1 0x100f39ac
-const char* g_varAMBULSPEED = "ambulSPEED";
-
-// GLOBAL: LEGO1 0x100f39bc
-// STRING: LEGO1 0x100f39a0
-const char* g_varAMBULFUEL = "ambulFUEL";
-
-// GLOBAL: LEGO1 0x100f43b0
-// STRING: LEGO1 0x100f43a4
-const char* g_varTOWSPEED = "towSPEED";
-
-// GLOBAL: LEGO1 0x100f43b4
-// STRING: LEGO1 0x100f439c
-const char* g_varTOWFUEL = "towFUEL";
-
 // the STRING is already declared for GLOBAL 0x101020cc
 // GLOBAL: LEGO1 0x100f3a40
 const char* g_varVISIBILITY = "VISIBILITY";

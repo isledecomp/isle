@@ -20,6 +20,14 @@
 
 DECOMP_SIZE_ASSERT(DuneBuggy, 0x16c)
 
+// GLOBAL: LEGO1 0x100f7658
+// STRING: LEGO1 0x100f764c
+const char* g_varDUNESPEED = "duneSPEED";
+
+// GLOBAL: LEGO1 0x100f765c
+// STRING: LEGO1 0x100f7640
+const char* g_varDUNEFUEL = "duneFUEL";
+
 // GLOBAL: LEGO1 0x100f7660
 // STRING: LEGO1 0x100f7634
 const char* g_varDBFRFNY4 = "C_DBFRFNY4";
