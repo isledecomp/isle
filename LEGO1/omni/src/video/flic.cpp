@@ -325,10 +325,11 @@ void DecodeLC(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data
 	short row = p_flcHeader->height - (*word_data + yofs) - 1;
 
 	word_data++;
+	short column;
 	short lines = *word_data;
 
 	while (--lines >= 0) {
-		short column = xofs;
+		column = xofs;
 		BYTE packets = *data++;
 
 		while (packets > 0) {

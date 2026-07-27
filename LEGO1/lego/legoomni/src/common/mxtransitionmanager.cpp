@@ -319,7 +319,7 @@ void MxTransitionManager::MosaicTransition()
 					MxS32 bytesPerPixel = ddsd.ddpfPixelFormat.dwRGBBitCount / 8;
 
 					// Seek to the sample position.
-					MxU8* source = (MxU8*) ddsd.lpSurface + 10 * row * ddsd.lPitch + bytesPerPixel * xShift;
+					MxU8* source = (MxU8*) ddsd.lpSurface + 10 * row * ddsd.lPitch + xShift * bytesPerPixel;
 
 					// Sample byte or word depending on display mode.
 					MxU32 sample = bytesPerPixel == 1 ? *source : *(MxU16*) source;
