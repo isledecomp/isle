@@ -16,12 +16,6 @@ DECOMP_SIZE_ASSERT(LegoNotifyList, 0x18)
 DECOMP_SIZE_ASSERT(LegoNotifyListCursor, 0x10)
 DECOMP_SIZE_ASSERT(LegoEventQueue, 0x18)
 
-// GLOBAL: LEGO1 0x100f31b0
-MxS32 g_clickedObjectId = -1;
-
-// GLOBAL: LEGO1 0x100f31b4
-const char* g_clickedAtom = NULL;
-
 // GLOBAL: LEGO1 0x100f67b8
 MxBool g_unk0x100f67b8 = TRUE;
 

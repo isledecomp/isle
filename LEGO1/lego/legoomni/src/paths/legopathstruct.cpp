@@ -15,8 +15,8 @@
 DECOMP_SIZE_ASSERT(LegoPathStructBase, 0x0c)
 DECOMP_SIZE_ASSERT(LegoPathStruct, 0x14)
 
-// Flags used in isle.cpp
-extern MxU32 g_isleFlags;
+// GLOBAL: LEGO1 0x100f1198
+MxU32 g_isleFlags = 0x7f;
 
 // GLOBAL: LEGO1 0x100f119c
 MxBool g_triggerHandlingIgnoreDirection = FALSE;

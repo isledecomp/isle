@@ -9,8 +9,7 @@
 #include "roi/legoroi.h"
 #include "scripts.h"
 
-// GLOBAL: LEGO1 0x100f4c58
-MxBool g_isWorldActive = TRUE;
+// g_isWorldActive is defined in legonavcontroller.cpp
 
 // FUNCTION: LEGO1 0x10015700
 LegoOmni* Lego()

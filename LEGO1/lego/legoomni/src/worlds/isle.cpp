@@ -41,8 +41,8 @@
 DECOMP_SIZE_ASSERT(Act1State, 0x26c)
 DECOMP_SIZE_ASSERT(Isle, 0x140)
 
-// GLOBAL: LEGO1 0x100f1198
-MxU32 g_isleFlags = 0x7f;
+// Defined in legopathstruct.cpp
+extern MxU32 g_isleFlags;
 
 // GLOBAL: LEGO1 0x100f37f0
 IsleScript::Script g_cptClickDialogue[] =

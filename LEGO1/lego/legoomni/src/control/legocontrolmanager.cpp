@@ -13,6 +13,12 @@ DECOMP_SIZE_ASSERT(LegoControlManager, 0x60)
 DECOMP_SIZE_ASSERT(LegoControlManagerNotificationParam, 0x2c)
 DECOMP_SIZE_ASSERT(LegoEventNotificationParam, 0x20)
 
+// GLOBAL: LEGO1 0x100f31b0
+MxS32 g_clickedObjectId = -1;
+
+// GLOBAL: LEGO1 0x100f31b4
+const char* g_clickedAtom = NULL;
+
 // FUNCTION: LEGO1 0x10028520
 // STUB: BETA10 0x1008ae50
 LegoControlManager::LegoControlManager()
