@@ -769,12 +769,12 @@ MxResult LegoPathActor::CalculateSpline()
 
 		assert(m_boundary && m_destEdge);
 
-		Vector3* cw = m_destEdge->CWVertex(*m_boundary);
-		Vector3* ccw = m_destEdge->CCWVertex(*m_boundary);
+		Vector3* v1 = m_destEdge->CWVertex(*m_boundary);
+		Vector3* v2 = m_destEdge->CCWVertex(*m_boundary);
 
-		assert(cw && ccw);
+		assert(v1 && v2);
 
-		LERP3(targetPosition, *cw, *ccw, m_destScale);
+		LERP3(targetPosition, *v1, *v2, m_destScale);
 
 		m_destEdge->GetFaceNormal(*m_boundary, normal);
 		endDirection.EqualsCross(*m_boundary->GetUp(), normal);
