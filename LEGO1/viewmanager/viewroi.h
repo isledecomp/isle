@@ -2,8 +2,13 @@
 #define VIEWROI_H
 
 #include "decomp.h"
-#include "realtime/orientableroi.h"
+// clang-format off
+// MSVC 4.20 lays out .rdata in declaration order of internal-linkage consts, so
+// the order these two are parsed decides where Tgl's Pi lands relative to
+// realtime's constants. 1997 parsed tgl first; alphabetising inverts it.
 #include "tgl/tgl.h"
+#include "realtime/orientableroi.h"
+// clang-format on
 #include "viewlodlist.h"
 
 /*

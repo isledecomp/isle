@@ -140,6 +140,9 @@ void Matrix4::Product(const Matrix4& p_a, const Matrix4& p_b)
 	Product(p_a.m_data, p_b.m_data);
 }
 
+// GLOBAL: LEGO1 0x100d4090
+static const int rotateIndex[] = {1, 2, 0};
+
 // FUNCTION: LEGO1 0x10002550
 // FUNCTION: BETA10 0x100101c0
 void Matrix4::ToQuaternion(Vector4& p_outQuat)
@@ -156,9 +159,6 @@ void Matrix4::ToQuaternion(Vector4& p_outQuat)
 		p_outQuat[2] = (m_data[1][0] - m_data[0][1]) * trace;
 	}
 	else {
-		// GLOBAL: LEGO1 0x100d4090
-		static int rotateIndex[] = {1, 2, 0};
-
 		// Largest element along the trace
 		int largest = 0;
 		if (m_data[0][0] < m_data[1][1]) {
