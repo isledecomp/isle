@@ -398,70 +398,6 @@ void LightImpl::Destroy()
 	}
 }
 
-// VTABLE: LEGO1 0x100dbb88
-// VTABLE: BETA10 0x101c3340
-class MeshImpl : public Mesh {
-public:
-	// FUNCTION: BETA10 0x1016f970
-	MeshImpl() : m_data(0) {}
-
-	// FUNCTION: BETA10 0x10170460
-	~MeshImpl() override { Destroy(); }
-
-	void* ImplementationDataPtr() override;
-
-	// vtable+0x08
-	Result SetColor(float r, float g, float b, float a) override;
-	Result SetTexture(const Texture*) override;
-
-	// vtable+0x10
-	Result GetTexture(Texture*&) override;
-	Result SetTextureMappingMode(TextureMappingMode) override;
-	Result SetShadingModel(ShadingModel) override;
-	Mesh* DeepClone(MeshBuilder*) override;
-
-	// vtable+0x20
-	Mesh* ShallowClone(MeshBuilder*) override;
-
-	struct MeshData {
-		IDirect3DRMMesh* groupMesh;
-		D3DRMGROUPINDEX groupIndex;
-	};
-
-	typedef MeshData* MeshDataType;
-
-	const MeshDataType& ImplementationData() const { return m_data; }
-
-	// FUNCTION: BETA10 0x10171b70
-	MeshDataType& ImplementationData() { return m_data; }
-
-	inline void Destroy();
-	inline Mesh* DeepClone(const MeshBuilderImpl& rMesh);
-	inline Result GetTexture(TextureImpl** ppTexture);
-	inline Result SetTexture(const TextureImpl* pTexture);
-	inline Mesh* ShallowClone(const MeshBuilderImpl& rMesh);
-
-	friend class RendererImpl;
-
-private:
-	MeshDataType m_data;
-};
-
-// FUNCTION: BETA10 0x10171b40
-inline void MeshDestroy(MeshImpl::MeshDataType pMesh)
-{
-	delete pMesh;
-}
-
-// FUNCTION: BETA10 0x10171b00
-void MeshImpl::Destroy()
-{
-	if (m_data) {
-		MeshDestroy(m_data);
-		m_data = NULL;
-	}
-}
-
 // VTABLE: LEGO1 0x100dba68
 // VTABLE: BETA10 0x101c3150
 class GroupImpl : public Group {
@@ -597,6 +533,70 @@ void MeshBuilderImpl::Destroy()
 {
 	if (m_data) {
 		MeshBuilderDestroy(m_data);
+		m_data = NULL;
+	}
+}
+
+// VTABLE: LEGO1 0x100dbb88
+// VTABLE: BETA10 0x101c3340
+class MeshImpl : public Mesh {
+public:
+	// FUNCTION: BETA10 0x1016f970
+	MeshImpl() : m_data(0) {}
+
+	// FUNCTION: BETA10 0x10170460
+	~MeshImpl() override { Destroy(); }
+
+	void* ImplementationDataPtr() override;
+
+	// vtable+0x08
+	Result SetColor(float r, float g, float b, float a) override;
+	Result SetTexture(const Texture*) override;
+
+	// vtable+0x10
+	Result GetTexture(Texture*&) override;
+	Result SetTextureMappingMode(TextureMappingMode) override;
+	Result SetShadingModel(ShadingModel) override;
+	Mesh* DeepClone(MeshBuilder*) override;
+
+	// vtable+0x20
+	Mesh* ShallowClone(MeshBuilder*) override;
+
+	struct MeshData {
+		IDirect3DRMMesh* groupMesh;
+		D3DRMGROUPINDEX groupIndex;
+	};
+
+	typedef MeshData* MeshDataType;
+
+	const MeshDataType& ImplementationData() const { return m_data; }
+
+	// FUNCTION: BETA10 0x10171b70
+	MeshDataType& ImplementationData() { return m_data; }
+
+	inline void Destroy();
+	inline Mesh* DeepClone(const MeshBuilderImpl& rMesh);
+	inline Result GetTexture(TextureImpl** ppTexture);
+	inline Result SetTexture(const TextureImpl* pTexture);
+	inline Mesh* ShallowClone(const MeshBuilderImpl& rMesh);
+
+	friend class RendererImpl;
+
+private:
+	MeshDataType m_data;
+};
+
+// FUNCTION: BETA10 0x10171b40
+inline void MeshDestroy(MeshImpl::MeshDataType pMesh)
+{
+	delete pMesh;
+}
+
+// FUNCTION: BETA10 0x10171b00
+void MeshImpl::Destroy()
+{
+	if (m_data) {
+		MeshDestroy(m_data);
 		m_data = NULL;
 	}
 }
