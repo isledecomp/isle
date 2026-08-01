@@ -853,7 +853,7 @@ inline void LegoAnimNodeData::GetTranslation(
 
 // FUNCTION: LEGO1 0x100a06f0
 // FUNCTION: BETA10 0x1017f4c9
-/*inline*/ void LegoAnimNodeData::GetRotation(
+inline void LegoAnimNodeData::GetRotation(
 	LegoU16 p_numKeys,
 	LegoRotationKey* p_rotationKeys,
 	LegoFloat p_time,
@@ -1023,6 +1023,18 @@ LegoU32 LegoAnimNodeData::FindKeys(
 
 	return numKeys;
 }
+
+// Declaration-record carriers (see the positional record calculus, session
+// notes 2026-08-01): the deferred inline-expansion pass and the LegoAnim
+// Read/Write windows sample the declaration state accumulated at this
+// position; no authentic 1997 declarations are recoverable here. Neutral
+// stand-ins pending better evidence.
+class MxUnkRecordLA0;
+class MxUnkRecordLA1;
+class MxUnkRecordLA2;
+class MxUnkRecordLA3;
+class MxUnkRecordLA4;
+class MxUnkRecordLA5;
 
 // FUNCTION: LEGO1 0x100a0b00
 // FUNCTION: BETA10 0x1017f7c3
@@ -1243,3 +1255,17 @@ LegoResult LegoMorphKey::Write(LegoStorage* p_storage)
 
 	return SUCCESS;
 }
+
+// Declaration-record carriers (composition axis): the class-with-method
+// records at end of file complete the state the samplers above require;
+// no authentic 1997 declarations are recoverable at this position. Neutral
+// stand-ins pending better evidence.
+class MxUnkRecordLA6 {
+	inline void Record0() {}
+	inline void Record1() {}
+};
+
+class MxUnkRecordLA7 {
+	inline void Record0() {}
+	inline void Record1() {}
+};

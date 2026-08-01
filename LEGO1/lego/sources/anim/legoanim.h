@@ -234,7 +234,7 @@ public:
 		Matrix4& p_matrix,
 		LegoU32& p_old_index
 	);
-	/*inline*/ static void GetRotation(
+	inline static void GetRotation(
 		LegoU16 p_numKeys,
 		LegoRotationKey* p_rotationKeys,
 		LegoFloat p_time,
