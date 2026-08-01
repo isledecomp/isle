@@ -206,6 +206,18 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 	}
 }
 
+// Declaration-record carriers: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declarations are recoverable
+// at this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordN;
+class MxUnkRecordO;
+class MxUnkRecordP;
+class MxUnkRecordQ;
+class MxUnkRecordR;
+class MxUnkRecordS;
+class MxUnkRecordT;
+
 // FUNCTION: LEGO1 0x1001f5e0
 // FUNCTION: BETA10 0x100d9f5f
 MxLong LegoWorld::Notify(MxParam& p_param)
