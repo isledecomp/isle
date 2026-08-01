@@ -192,6 +192,22 @@ done:
 	return result;
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordA {
+	inline void Record() {}
+};
+
+class MxUnkRecordB {
+	inline void Record() {}
+};
+
+class MxUnkRecordC {
+	inline void Record() {}
+};
+
 // FUNCTION: LEGO1 0x10069150
 // FUNCTION: BETA10 0x1004eeaf
 LegoChar* LegoAnimPresenter::GetActorName(const LegoChar* p_name)
@@ -510,6 +526,18 @@ void LegoAnimPresenter::UpdateStructMapAndROIIndex(LegoAnimStructMap& p_map, Leg
 		UpdateStructMapAndROIIndex(p_map, p_node->GetChild(i), roi);
 	}
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordD {
+	inline void Record() {}
+};
+
+class MxUnkRecordE {
+	inline void Record() {}
+};
 
 // FUNCTION: LEGO1 0x1006a4f0
 // FUNCTION: BETA10 0x1004fe1f
