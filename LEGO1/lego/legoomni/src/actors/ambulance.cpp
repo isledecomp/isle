@@ -23,6 +23,8 @@
 #include "mxvariabletable.h"
 #include "scripts.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(Ambulance, 0x184)
 DECOMP_SIZE_ASSERT(AmbulanceMissionState, 0x24)
 
@@ -375,6 +377,8 @@ MxLong Ambulance::HandleClick()
 	if (((Act1State*) GameState()->GetState("Act1State"))->m_state != Act1State::e_ambulance) {
 		return 1;
 	}
+
+	assert(m_state);
 
 	if (m_state->m_state == AmbulanceMissionState::e_prepareAmbulance) {
 		return 1;
