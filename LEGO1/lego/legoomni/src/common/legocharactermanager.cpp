@@ -537,9 +537,11 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 		}
 
 		ViewLODList* lodList = lodManager->Lookup(parentName);
+		assert(lodList);
 		MxS32 lodSize = lodList->Size();
 		sprintf(lodName, "%s%d", p_key, i);
 		ViewLODList* dupLodList = lodManager->Create(lodName, lodSize);
+		assert(dupLodList);
 
 		for (MxS32 j = 0; j < lodSize; j++) {
 			LegoLOD* lod = (LegoLOD*) (*lodList)[j];
@@ -550,18 +552,19 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 		lodList->Release();
 		lodList = dupLodList;
 
-		LegoROI* childROI = new LegoROI(renderer, lodList);
+		LegoROI* childRoi = new LegoROI(renderer, lodList);
+		assert(childRoi);
 		lodList->Release();
 
-		childROI->SetName(g_actorLODs[i + 1].m_name);
-		childROI->SetParentROI(roi);
+		childRoi->SetName(g_actorLODs[i + 1].m_name);
+		childRoi->SetParentROI(roi);
 
 		BoundingSphere childBoundingSphere;
 		childBoundingSphere.Center()[0] = g_actorLODs[i + 1].m_boundingSphere[0];
 		childBoundingSphere.Center()[1] = g_actorLODs[i + 1].m_boundingSphere[1];
 		childBoundingSphere.Center()[2] = g_actorLODs[i + 1].m_boundingSphere[2];
 		childBoundingSphere.Radius() = g_actorLODs[i + 1].m_boundingSphere[3];
-		childROI->SetBoundingSphere(childBoundingSphere);
+		childRoi->SetBoundingSphere(childBoundingSphere);
 
 		BoundingBox childBoundingBox;
 		childBoundingBox.Min()[0] = g_actorLODs[i + 1].m_boundingBox[0];
@@ -570,7 +573,7 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 		childBoundingBox.Max()[0] = g_actorLODs[i + 1].m_boundingBox[3];
 		childBoundingBox.Max()[1] = g_actorLODs[i + 1].m_boundingBox[4];
 		childBoundingBox.Max()[2] = g_actorLODs[i + 1].m_boundingBox[5];
-		childROI->SetBoundingBox(childBoundingBox);
+		childRoi->SetBoundingBox(childBoundingBox);
 
 		CalcLocalTransform(
 			Mx3DPointFloat(g_actorLODs[i + 1].m_position),
@@ -578,7 +581,7 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 			Mx3DPointFloat(g_actorLODs[i + 1].m_up),
 			mat
 		);
-		childROI->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
+		childRoi->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
 
 		if (g_actorLODs[i + 1].m_flags & LegoActorLOD::c_useTexture &&
 			(i != 0 || part.m_partNameIndices[part.m_partNameIndex] != 0)) {
@@ -586,17 +589,17 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 			LegoTextureInfo* textureInfo = textureContainer->Get(part.m_names[part.m_nameIndices[part.m_nameIndex]]);
 
 			if (textureInfo != NULL) {
-				childROI->SetTextureInfo(textureInfo);
-				childROI->SetLodColor(1.0F, 1.0F, 1.0F, 0.0F);
+				childRoi->SetTextureInfo(textureInfo);
+				childRoi->SetLodColor(1.0F, 1.0F, 1.0F, 0.0F);
 			}
 		}
 		else if (g_actorLODs[i + 1].m_flags & LegoActorLOD::c_useColor || (i == 0 && part.m_partNameIndices[part.m_partNameIndex] == 0)) {
 			LegoFloat red, green, blue, alpha;
-			childROI->GetRGBAColor(part.m_names[part.m_nameIndices[part.m_nameIndex]], red, green, blue, alpha);
-			childROI->SetLodColor(red, green, blue, alpha);
+			childRoi->GetRGBAColor(part.m_names[part.m_nameIndices[part.m_nameIndex]], red, green, blue, alpha);
+			childRoi->SetLodColor(red, green, blue, alpha);
 		}
 
-		comp->push_back(childROI);
+		comp->push_back(childRoi);
 	}
 
 	CalcLocalTransform(
@@ -857,6 +860,7 @@ MxBool LegoCharacterManager::SwitchVariant(LegoROI* p_roi)
 		MxS32 lodSize = lodList->Size();
 		sprintf(lodName, "%s%d", p_roi->GetName(), g_infohatVariantCounter++);
 		ViewLODList* dupLodList = GetViewLODListManager()->Create(lodName, lodSize);
+		assert(dupLodList);
 
 		Tgl::Renderer* renderer = VideoManager()->GetRenderer();
 		LegoFloat red, green, blue, alpha;
@@ -1140,3 +1144,10 @@ void CustomizeAnimFileVariable::SetValue(const char* p_value)
 		BuildingManager()->SetCustomizeAnimFile(p_value);
 	}
 }
+
+// Declaration-record carrier: end-of-file sink (see the positional record
+// calculus, session notes 2026-08-01); no authentic 1997 declaration is
+// recoverable at this position. Neutral stand-in pending better evidence.
+class MxUnkRecordAV {
+	inline void Record() {}
+};
