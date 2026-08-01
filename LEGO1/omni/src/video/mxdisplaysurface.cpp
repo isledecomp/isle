@@ -1,3 +1,7 @@
+// clang-format off
+#include "mxdisplaysurfacerecords.h"
+// clang-format on
+
 #include "mxdisplaysurface.h"
 
 #include "mxbitmap.h"
