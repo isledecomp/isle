@@ -457,7 +457,7 @@ inline int ViewManager::CalculateLODLevel(float p_maximumScale, float p_initialS
 			break;
 		}
 
-		i *= g_LODScaleFactor;
+		i = g_LODScaleFactor * i;
 	}
 
 	return lodLevel;

@@ -346,9 +346,8 @@ MxU16 MXIOINFO::Flush(MxU16 p_unused)
 		if (pchBuffer) {
 			// if we have a file open for writing
 			if (RAW_M_FILE && (dwFlags & MMIO_RWMODE)) {
-				// DECOMP: pulling this value out into a variable forces it into EBX
-				MxLong cchBuffer = cchBuffer;
-				if (cchBuffer > 0) {
+				MxLong cch = cchBuffer;
+				if (cch > 0) {
 					if (lBufOffset != lDiskOffset) {
 						lDiskOffset = _llseek(M_FILE, lBufOffset, SEEK_SET);
 					}
@@ -359,9 +358,9 @@ MxU16 MXIOINFO::Flush(MxU16 p_unused)
 						lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 					}
 					else {
-						bytesWritten = _hwrite(M_FILE, pchBuffer, cchBuffer);
+						bytesWritten = _hwrite(M_FILE, pchBuffer, cch);
 
-						if (bytesWritten == -1 || bytesWritten != cchBuffer) {
+						if (bytesWritten == -1 || bytesWritten != cch) {
 							result = MMIOERR_CANNOTWRITE;
 							lDiskOffset = _llseek(M_FILE, 0, SEEK_CUR);
 						}
@@ -521,7 +520,10 @@ MxU16 MXIOINFO::Descend(MMCKINFO* p_chunkInfo, const MMCKINFO* p_parentInfo, MxU
 					result = MMIOERR_CHUNKNOTFOUND;
 					running = FALSE;
 				}
-				else if ((p_descend == MMIO_FINDLIST && tmp.ckid == FOURCC_LIST) || (p_descend == MMIO_FINDRIFF && tmp.ckid == FOURCC_RIFF)) {
+				else if (
+					(p_descend == MMIO_FINDLIST && tmp.ckid == FOURCC_LIST) ||
+					(p_descend == MMIO_FINDRIFF && tmp.ckid == FOURCC_RIFF)
+				) {
 					if (Read(&tmp.fccType, 4) != 4) {
 						result = MMIOERR_CANNOTREAD;
 						running = FALSE;
