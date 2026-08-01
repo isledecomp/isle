@@ -28,8 +28,9 @@
 // this position. Neutral stand-in pending better evidence.
 class MxUnkRecordAO {
 	inline void Record0() {}
-	inline void Record1() {}
 };
+
+class MxUnkRecordLV0;
 
 DECOMP_SIZE_ASSERT(LegoVideoManager, 0x590)
 DECOMP_SIZE_ASSERT(MxStopWatch, 0x18)
