@@ -26,7 +26,7 @@ public:
 	void RemoveAll(ViewROI* p_roi);
 	unsigned int IsBoundingBoxInFrustum(const BoundingBox& p_bounding_box);
 	void UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel);
-	void RemoveROIDetailFromScene(ViewROI* p_roi);
+	void RemoveROIDetailFromScene(ViewROI* p_from);
 	void SetPOVSource(const OrientableROI* point_of_view);
 	float ProjectedSize(const BoundingSphere& p_bounding_sphere);
 	ViewROI* Pick(Tgl::View* p_view, unsigned long x, unsigned long y);

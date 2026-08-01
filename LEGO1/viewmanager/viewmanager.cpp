@@ -228,37 +228,41 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 
 	Tgl::Group* group = p_roi->GetGeometry();
 	Tgl::MeshBuilder* meshBuilder;
-	ViewLOD* lod;
+	ViewLOD* new_lod;
 	Tgl::Result result;
 
 	if (lodLevel < 0) {
-		lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
+		new_lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
+		assert(new_lod);
 
-		if (lod->GetFlags() & ViewLOD::c_hasMesh) {
+		if (new_lod->GetFlags() & ViewLOD::c_hasMesh) {
 			result = scene->Add(group);
 			assert(Succeeded(result));
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
 		}
 	}
 	else {
-		lod = (ViewLOD*) p_roi->GetLOD(lodLevel);
+		new_lod = (ViewLOD*) p_roi->GetLOD(lodLevel);
 
-		if (lod != NULL) {
-			meshBuilder = lod->GetMeshBuilder();
+		if (new_lod != NULL) {
+			meshBuilder = new_lod->GetMeshBuilder();
 
 			if (meshBuilder != NULL) {
-				group->Remove(meshBuilder);
+				result = group->Remove(meshBuilder);
+				assert(Succeeded(result));
 			}
 		}
 
-		lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
+		new_lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
+		assert(new_lod);
 	}
 
-	if (lod->GetFlags() & ViewLOD::c_hasMesh) {
-		meshBuilder = lod->GetMeshBuilder();
+	if (new_lod->GetFlags() & ViewLOD::c_hasMesh) {
+		meshBuilder = new_lod->GetMeshBuilder();
 
 		if (meshBuilder != NULL) {
-			group->Add(meshBuilder);
+			result = group->Add(meshBuilder);
+			assert(Succeeded(result));
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
 			p_roi->SetLodLevel(p_lodLevel);
 			return;
@@ -270,24 +274,27 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 
 // FUNCTION: LEGO1 0x100a66a0
 // FUNCTION: BETA10 0x101727c7
-void ViewManager::RemoveROIDetailFromScene(ViewROI* p_roi)
+void ViewManager::RemoveROIDetailFromScene(ViewROI* p_from)
 {
-	const ViewLOD* lod = (const ViewLOD*) p_roi->GetLOD(p_roi->GetLodLevel());
+	const ViewLOD* lod = (const ViewLOD*) p_from->GetLOD(p_from->GetLodLevel());
 
 	if (lod != NULL) {
 		const Tgl::MeshBuilder* meshBuilder = NULL;
-		Tgl::Group* roiGeometry = p_roi->GetGeometry();
+		Tgl::Group* roiGeometry = p_from->GetGeometry();
+		Tgl::Result result;
 
 		meshBuilder = lod->GetMeshBuilder();
 
 		if (meshBuilder != NULL) {
-			roiGeometry->Remove(meshBuilder);
+			result = roiGeometry->Remove(meshBuilder);
+			assert(Succeeded(result));
 		}
 
-		scene->Remove(roiGeometry);
+		result = scene->Remove(roiGeometry);
+		assert(Succeeded(result));
 	}
 
-	p_roi->SetLodLevel(ViewROI::c_lodLevelUnset);
+	p_from->SetLodLevel(ViewROI::c_lodLevelUnset);
 }
 
 // FUNCTION: LEGO1 0x100a66f0
