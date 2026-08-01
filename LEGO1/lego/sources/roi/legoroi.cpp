@@ -13,6 +13,8 @@
 #include <string.h>
 #include <vec.h>
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoROI, 0x108)
 DECOMP_SIZE_ASSERT(TimeROI, 0x10c)
 
@@ -199,6 +201,7 @@ LegoResult LegoROI::Read(
 		delete[] roiName;
 
 		if (lodList == NULL) {
+			assert(0);
 			goto done;
 		}
 	}
@@ -299,6 +302,7 @@ LegoResult LegoROI::Read(
 	SetLODList(lodList);
 
 	if (lodList != NULL) {
+		assert((lodList->AddRef(), lodList->Release()) >= 2);
 		lodList->Release();
 	}
 
@@ -360,6 +364,9 @@ LegoResult LegoROI::CreateLocalTransform(LegoAnimNodeData* p_data, LegoTime p_ti
 // FUNCTION: BETA10 0x1018a815
 LegoROI* LegoROI::FindChildROI(const LegoChar* p_name, LegoROI* p_roi)
 {
+	assert(p_name);
+	assert(p_roi);
+
 	CompoundObject::iterator it;
 	const LegoChar* name = p_roi->GetName();
 
