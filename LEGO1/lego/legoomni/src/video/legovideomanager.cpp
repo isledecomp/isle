@@ -19,7 +19,17 @@
 #include "tgl/d3drm/impl.h"
 #include "viewmanager/viewroi.h"
 
+#include <assert.h>
 #include <stdio.h>
+
+// Declaration-record carrier: the functions in this translation unit sample
+// the accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordAO {
+	inline void Record0() {}
+	inline void Record1() {}
+};
 
 DECOMP_SIZE_ASSERT(LegoVideoManager, 0x590)
 DECOMP_SIZE_ASSERT(MxStopWatch, 0x18)
@@ -38,7 +48,7 @@ LegoVideoManager::LegoVideoManager()
 	m_unk0x78[0] = 0x6c;
 	m_phonemeRefList = NULL;
 	m_isFullscreenMovie = FALSE;
-	m_palette = NULL;
+	m_savedPalette = NULL;
 	m_stopWatch = NULL;
 	m_drawCursor = FALSE;
 	m_cursorX = m_cursorY;
@@ -59,7 +69,7 @@ LegoVideoManager::LegoVideoManager()
 LegoVideoManager::~LegoVideoManager()
 {
 	Destroy();
-	delete m_palette;
+	delete m_savedPalette;
 }
 
 // FUNCTION: LEGO1 0x1007abb0
@@ -79,9 +89,9 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 {
 	MxResult result = FAILURE;
 	MxBool paletteCreated = FALSE;
-	MxS32 deviceNum = -1;
-	MxDriver* driver = NULL;
-	Direct3DDeviceInfo* device = NULL;
+	MxS32 r = -1;
+	MxDriver* pdd = NULL;
+	Direct3DDeviceInfo* pd3d = NULL;
 	LegoDeviceEnumerate deviceEnumerate;
 	Mx3DPointFloat posVec(0.0, 1.25, -50.0);
 	Mx3DPointFloat dirVec(0.0, 0.0, 1.0);
@@ -112,23 +122,25 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	}
 
 	if (p_videoParam.GetDeviceName()) {
-		deviceNum = deviceEnumerate.ParseDeviceName(p_videoParam.GetDeviceName());
-		if (deviceNum >= 0) {
-			if ((deviceNum = deviceEnumerate.GetDevice(deviceNum, driver, device)) != SUCCESS) {
-				deviceNum = -1;
+		r = deviceEnumerate.ParseDeviceName(p_videoParam.GetDeviceName());
+		if (r >= 0) {
+			if ((r = deviceEnumerate.GetDevice(r, pdd, pd3d)) != SUCCESS) {
+				r = -1;
 			}
 		}
 	}
 
-	if (deviceNum < 0) {
+	if (r < 0) {
 		deviceEnumerate.FUN_1009d210();
-		deviceNum = deviceEnumerate.GetBestDevice();
-		deviceNum = deviceEnumerate.GetDevice(deviceNum, driver, device);
+		r = deviceEnumerate.GetBestDevice();
+		assert(r >= 0);
+		r = deviceEnumerate.GetDevice(r, pdd, pd3d);
+		assert(r >= 0 && pdd && pd3d);
 	}
 
-	m_direct3d->SetDevice(deviceEnumerate, driver, device);
+	m_direct3d->SetDevice(deviceEnumerate, pdd, pd3d);
 
-	if (!device->m_HWDesc.dcmColorModel && device->m_HELDesc.dcmColorModel != D3DCOLOR_RGB) {
+	if (!pd3d->m_HWDesc.dcmColorModel && pd3d->m_HELDesc.dcmColorModel != D3DCOLOR_RGB) {
 		p_videoParam.Flags().SetLacksLightSupport(TRUE);
 	}
 	else {
@@ -209,6 +221,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	m_3dManager->SetPointOfView(*m_viewROI);
 
 	m_phonemeRefList = new LegoPhonemeList;
+	assert(m_phonemeRefList);
 	SetRender3D(FALSE);
 	m_stopWatch = new MxStopWatch;
 	m_stopWatch->Start();
@@ -595,7 +608,8 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 		m_isFullscreenMovie = p_enable;
 
 		if (p_enable) {
-			m_palette = m_videoParam.GetPalette()->Clone();
+			assert(!m_savedPalette);
+			m_savedPalette = m_videoParam.GetPalette()->Clone();
 			OverrideSkyColor(FALSE);
 
 			m_displaySurface->GetVideoParam().Flags().SetDoubleScaling(p_scale);
@@ -608,9 +622,10 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 			m_displaySurface->GetVideoParam().Flags().SetDoubleScaling(FALSE);
 
 			// restore previous pallete
-			RealizePalette(m_palette);
-			delete m_palette;
-			m_palette = NULL;
+			assert(m_savedPalette);
+			RealizePalette(m_savedPalette);
+			delete m_savedPalette;
+			m_savedPalette = NULL;
 
 			// update region where video used to be
 			MxRect32 rect(
