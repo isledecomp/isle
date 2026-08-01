@@ -474,10 +474,11 @@ void Isle::UpdateGlobe()
 	MxS32 lightPosition = atoi(VariableTable()->GetVariable("lightposition"));
 
 	for (MxS32 i = 0; i < 6; i++) {
-		MxStillPresenter* presenter = (MxStillPresenter*) Find(*g_isleScript, IsleScript::c_Observe_Globe1_Bitmap + i);
+		MxStillPresenter* bmap = (MxStillPresenter*) Find(*g_isleScript, IsleScript::c_Observe_Globe1_Bitmap + i);
+		assert(bmap);
 
-		if (presenter != NULL) {
-			presenter->Enable(i == lightPosition);
+		if (bmap != NULL) {
+			bmap->Enable(i == lightPosition);
 		}
 	}
 }
