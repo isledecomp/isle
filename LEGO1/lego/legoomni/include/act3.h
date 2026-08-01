@@ -1,10 +1,14 @@
 #ifndef ACT3_H
 #define ACT3_H
 
+// clang-format off
+// See viewroi.h: parse order decides .rdata layout.
+#include "legoworld.h"
+
 #include "act3ammo.h"
+// clang-format on
 #include "legogamestate.h"
 #include "legostate.h"
-#include "legoworld.h"
 
 class Act3Brickster;
 class Act3Cop;
