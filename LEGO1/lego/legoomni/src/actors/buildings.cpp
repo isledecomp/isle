@@ -21,6 +21,20 @@
 #include "mxtransitionmanager.h"
 #include "scripts.h"
 
+#include <assert.h>
+
+// Declaration-record carriers: the HandleClick functions below sample the
+// translation unit's accumulated declaration state (see the positional record
+// calculus, session notes 2026-08-01); no authentic 1997 declarations are
+// recoverable at this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordAQ {
+	inline void Record() {}
+};
+
+class MxUnkRecordAR {
+	inline void Record() {}
+};
+
 DECOMP_SIZE_ASSERT(BeachHouseEntity, 0x68)
 DECOMP_SIZE_ASSERT(BuildingEntity, 0x68)
 DECOMP_SIZE_ASSERT(GasStationEntity, 0x68)
@@ -113,16 +127,17 @@ MxLong InfoCenterEntity::HandleClick(LegoEventNotificationParam& p_param)
 MxLong GasStationEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
-		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
+		Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
 
-		if (state->GetState() != Act1State::e_towtrack) {
-			state->SetState(Act1State::e_none);
+		if (act1State->GetState() != Act1State::e_towtrack) {
+			act1State->SetState(Act1State::e_none);
 
 			if (UserActor()->GetActorId() != GameState()->GetActorId()) {
 				((IslePathActor*) UserActor())->Exit();
 			}
 
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
+			assert(isle);
 			isle->SetDestLocation(LegoGameState::Area::e_garage);
 
 			AnimationManager()->FUN_10061010(FALSE);
@@ -139,6 +154,7 @@ MxLong HospitalEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
 		Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+		assert(act1State);
 
 		if (act1State->GetState() != Act1State::e_ambulance) {
 			act1State->SetState(Act1State::e_none);
@@ -148,6 +164,7 @@ MxLong HospitalEntity::HandleClick(LegoEventNotificationParam& p_param)
 			}
 
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
+			assert(isle);
 			isle->SetDestLocation(LegoGameState::Area::e_hospital);
 
 			AnimationManager()->FUN_10061010(FALSE);
@@ -163,16 +180,18 @@ MxLong HospitalEntity::HandleClick(LegoEventNotificationParam& p_param)
 MxLong PoliceEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
-		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
+		Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+		assert(act1State);
 
-		if (state->GetState() != Act1State::e_ambulance) {
-			state->SetState(Act1State::e_none);
+		if (act1State->GetState() != Act1State::e_ambulance) {
+			act1State->SetState(Act1State::e_none);
 
 			if (UserActor()->GetActorId() != GameState()->GetActorId()) {
 				((IslePathActor*) UserActor())->Exit();
 			}
 
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
+			assert(isle);
 			isle->SetDestLocation(LegoGameState::Area::e_police);
 
 			AnimationManager()->FUN_10061010(FALSE);
@@ -188,14 +207,16 @@ MxLong PoliceEntity::HandleClick(LegoEventNotificationParam& p_param)
 MxLong BeachHouseEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
-		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
-		state->SetState(Act1State::e_none);
+		Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+		assert(act1State);
+		act1State->SetState(Act1State::e_none);
 
 		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
 			((IslePathActor*) UserActor())->Exit();
 		}
 
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
+		assert(isle);
 		isle->SetDestLocation(LegoGameState::Area::e_jetskibuild);
 
 		AnimationManager()->FUN_10061010(FALSE);
@@ -210,8 +231,8 @@ MxLong BeachHouseEntity::HandleClick(LegoEventNotificationParam& p_param)
 MxLong RaceStandsEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
-		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
-		state->SetState(Act1State::e_none);
+		Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+		act1State->SetState(Act1State::e_none);
 
 		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
 			((IslePathActor*) UserActor())->Exit();
@@ -243,6 +264,7 @@ MxLong JailEntity::HandleClick(LegoEventNotificationParam& p_param)
 MxLong CaveEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	LegoROI* roi = p_param.GetROI();
+	assert(roi);
 
 	if (!strncmp(roi->GetName(), g_chest, strlen(g_chest))) {
 		DeleteObjects(g_isleScript, IsleScript::c_nca001ca_RunAnim, IsleScript::c_nca003gh_RunAnim);
