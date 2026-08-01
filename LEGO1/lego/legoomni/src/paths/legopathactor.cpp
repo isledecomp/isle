@@ -703,18 +703,23 @@ void LegoPathActor::ParseAction(char* p_extra)
 		char name[12];
 
 		token = strtok(value, g_parseExtraTokens);
+		assert(token);
 		strcpy(name, token);
 
 		token = strtok(NULL, g_parseExtraTokens);
+		assert(token);
 		MxS32 src = atoi(token);
 
 		token = strtok(NULL, g_parseExtraTokens);
+		assert(token);
 		float srcScale = atof(token);
 
 		token = strtok(NULL, g_parseExtraTokens);
+		assert(token);
 		MxS32 dest = atoi(token);
 
 		token = strtok(NULL, g_parseExtraTokens);
+		assert(token);
 		float destScale = atof(token);
 
 		LegoWorld* world = CurrentWorld();
@@ -725,6 +730,7 @@ void LegoPathActor::ParseAction(char* p_extra)
 
 	if (KeyValueStringParse(value, g_strCOLLIDEBOX, p_extra)) {
 		token = strtok(value, g_parseExtraTokens);
+		assert(token);
 		m_collideBox = atoi(token);
 	}
 }
@@ -855,6 +861,8 @@ void LegoPathActor::GetWalkingBehavior(MxBool& p_countCounterclockWise, MxS32& p
 // FUNCTION: BETA10 0x100afe4c
 void LegoPathActor::ApplyLocal2World()
 {
+	assert(m_roi);
+
 	m_transformTime = Timer()->GetTime();
 	m_roi->SetLocal2World(m_local2World);
 	m_roi->WrappedUpdateWorldData();
