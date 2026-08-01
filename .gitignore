@@ -6,6 +6,7 @@ Release/
 /.vs
 /.vscode
 /.idea
+/.cache
 .env
 .venv
 env/
@@ -14,7 +15,7 @@ ENV/
 VENV/
 env.bak/
 venv.bak/
-/build/
+/build*
 /build_debug/
 /legobin/
 *.swp
