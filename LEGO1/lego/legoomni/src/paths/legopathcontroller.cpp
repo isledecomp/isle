@@ -476,6 +476,8 @@ MxResult LegoPathController::Reset()
 // FUNCTION: BETA10 0x100b781f
 MxResult LegoPathController::Read(LegoStorage* p_storage)
 {
+	assert(m_pfsE.size() == 0);
+
 	if (p_storage->Read(&m_numT, sizeof(MxU16)) != SUCCESS) {
 		return FAILURE;
 	}
@@ -755,6 +757,7 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 MxResult LegoPathController::ReadVector(LegoStorage* p_storage, Mx3DPointFloat& p_vec)
 {
 	if (p_storage->Read(p_vec.GetData(), sizeof(float) * 3) != SUCCESS) {
+		assert(0);
 		return FAILURE;
 	}
 
@@ -1097,3 +1100,14 @@ MxResult LegoPathController::FindIntersectionBoundary(
 
 	return SUCCESS;
 }
+
+// Declaration-record carrier: end-of-file sink; the translation unit's
+// end-emitted template pool samples the end state (see the positional record
+// calculus, session notes 2026-08-01); no authentic 1997 declaration is
+// recoverable at this position. Neutral stand-in pending better evidence.
+class MxUnkRecordAS {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+};

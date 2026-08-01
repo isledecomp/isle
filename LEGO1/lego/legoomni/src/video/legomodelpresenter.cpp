@@ -19,6 +19,8 @@
 #include "realtime/realtime.h"
 #include "roi/legoroi.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoModelPresenter, 0x6c)
 
 // GLOBAL: LEGO1 0x100f7ae0
@@ -195,7 +197,7 @@ done:
 // FUNCTION: LEGO1 0x1007ff70
 // FUNCTION: BETA10 0x10099061
 MxResult LegoModelPresenter::CreateROI(
-	MxDSChunk& p_chunk,
+	MxDSChunk* p_chunk,
 	LegoEntity* p_entity,
 	MxBool p_roiVisible,
 	LegoWorld* p_world
@@ -203,9 +205,10 @@ MxResult LegoModelPresenter::CreateROI(
 {
 	MxResult result = SUCCESS;
 
+	assert(p_chunk);
 	ParseExtra();
 
-	if (m_roi == NULL && (result = CreateROI(&p_chunk)) == SUCCESS && p_entity != NULL) {
+	if (m_roi == NULL && (result = CreateROI(p_chunk)) == SUCCESS && p_entity != NULL) {
 		VideoManager()->Get3DManager()->Add(*m_roi);
 		VideoManager()->Get3DManager()->Moved(*m_roi);
 	}
@@ -299,6 +302,7 @@ void LegoModelPresenter::ParseExtra()
 
 		if (KeyValueStringParse(output, g_strAUTO_CREATE, extraCopy) != 0) {
 			char* token = strtok(output, g_parseExtraTokens);
+			assert(token);
 
 			if (m_roi == NULL) {
 				m_roi = CharacterManager()->GetActorROI(token, FALSE);
@@ -320,6 +324,8 @@ void LegoModelPresenter::ParseExtra()
 					break;
 				}
 			}
+
+			assert(m_roi);
 		}
 	}
 }

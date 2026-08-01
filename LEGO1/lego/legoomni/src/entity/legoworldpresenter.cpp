@@ -404,7 +404,7 @@ MxResult LegoWorldPresenter::LoadWorldModel(ModelDbModel& p_model, FILE* p_wdbFi
 	}
 
 	modelPresenter.SetAction(&action);
-	modelPresenter.CreateROI(chunk, createdEntity, p_model.m_visible, p_world);
+	modelPresenter.CreateROI(&chunk, createdEntity, p_model.m_visible, p_world);
 	delete[] buff;
 
 	return SUCCESS;
