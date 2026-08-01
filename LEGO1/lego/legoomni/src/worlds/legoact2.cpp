@@ -1,3 +1,5 @@
+#include "legoact2records.h"
+
 #include "legoact2.h"
 
 #include "3dmanager/lego3dmanager.h"
