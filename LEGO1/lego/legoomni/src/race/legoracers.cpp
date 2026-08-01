@@ -314,7 +314,7 @@ void LegoRaceCar::KickCamera(float p_param)
 	if (a->GetAnimTreePtr()) {
 		deltaTime = p_param - m_kickStart;
 
-		if (a->GetDuration() <= deltaTime || deltaTime < 0.0) {
+		if (a->GetDuration() <= deltaTime || deltaTime < 0.0f) {
 			if (m_userState == LEGORACECAR_KICK1) {
 				LegoOrientedEdge** edges = m_kick1B->GetEdges();
 				m_destEdge = edges[2];
