@@ -1,3 +1,7 @@
+// clang-format off
+#include "legoworldrecords.h"
+// clang-format on
+
 #include "legoworld.h"
 
 #include "anim/legoanim.h"
