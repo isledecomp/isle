@@ -1728,10 +1728,10 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 				InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
 				assert(state);
 
-				if (state != NULL && state->m_state != InfocenterState::e_exitQueried && currentWorld->Escape()) {
+				if (state != NULL && state->m_step != InfocenterState::e_exitQueried && currentWorld->Escape()) {
 					BackgroundAudioManager()->Stop();
 					TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
-					state->m_state = InfocenterState::e_exitQueried;
+					state->m_step = InfocenterState::e_exitQueried;
 				}
 			}
 			break;

@@ -238,10 +238,10 @@ MxLong RegistrationBook::HandleControl(LegoControlManagerNotificationParam& p_pa
 				DeleteObjects(&m_atomId, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 
 				if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
-					m_infocenterState->m_state = InfocenterState::e_backToInfoAct1;
+					m_infocenterState->m_step = InfocenterState::e_backToInfoAct1;
 				}
 				else {
-					m_infocenterState->m_state = InfocenterState::e_notRegistered;
+					m_infocenterState->m_step = InfocenterState::e_notRegistered;
 				}
 
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
@@ -324,7 +324,7 @@ void RegistrationBook::LoadSave(MxS16 p_checkMarkIndex)
 		break;
 	}
 
-	m_infocenterState->m_state = InfocenterState::e_selectedSave;
+	m_infocenterState->m_step = InfocenterState::e_selectedSave;
 	if (m_vehiclesToPosition == 0 && !m_awaitLoad) {
 		DeleteObjects(&m_atomId, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
