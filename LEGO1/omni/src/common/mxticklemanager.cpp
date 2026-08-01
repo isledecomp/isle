@@ -104,6 +104,8 @@ void MxTickleManager::SetClientTickleInterval(MxCore* p_client, MxTime p_interva
 			return;
 		}
 	}
+
+	assert("Tickle Manager client is not registered!" == NULL);
 }
 
 // FUNCTION: LEGO1 0x100be000
@@ -120,5 +122,6 @@ MxTime MxTickleManager::GetClientTickleInterval(MxCore* p_client)
 		it++;
 	}
 
+	assert("Tickle Manager client is not registered!" == NULL);
 	return TICKLE_MANAGER_NOT_FOUND;
 }

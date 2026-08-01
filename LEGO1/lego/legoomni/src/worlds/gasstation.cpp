@@ -22,6 +22,8 @@
 #include "radio.h"
 #include "scripts.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(GasStation, 0x128)
 DECOMP_SIZE_ASSERT(GasStationState, 0x24)
 
@@ -328,7 +330,9 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			case GasStationState::e_afterAcceptingQuest:
 				m_state->m_state = GasStationState::e_beforeExitingForQuest;
-				((Act1State*) GameState()->GetState("Act1State"))->m_state = Act1State::e_transitionToTowtrack;
+				Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+				assert(act1State);
+				act1State->m_state = Act1State::e_transitionToTowtrack;
 				m_destLocation = LegoGameState::e_garageExited;
 				m_radio.Stop();
 				BackgroundAudioManager()->Stop();

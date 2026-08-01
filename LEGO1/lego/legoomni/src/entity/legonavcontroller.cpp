@@ -1726,7 +1726,6 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 			LegoWorld* currentWorld = CurrentWorld();
 			if (currentWorld != NULL) {
 				InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
-				assert(state);
 
 				if (state != NULL && state->m_step != InfocenterState::e_exitQueried && currentWorld->Escape()) {
 					BackgroundAudioManager()->Stop();
@@ -1810,6 +1809,8 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 		}
 		case VK_F12: { // Saves the game
 			InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
+			assert(state);
+
 			if (state && state->HasRegistered()) {
 				GameState()->Save(0);
 			}

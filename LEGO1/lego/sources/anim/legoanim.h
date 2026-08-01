@@ -172,7 +172,7 @@ public:
 	LegoU16 GetNumRotationKeys() { return m_numRotationKeys; }
 
 	// FUNCTION: BETA10 0x100737e0
-	void SetNumRotationKeys(LegoU16 p_numRotationKeys) { m_numRotationKeys = p_numRotationKeys; }
+	void SetNumRotationKeys(LegoU16 p_numKeys) { m_numRotationKeys = p_numKeys; }
 
 	// FUNCTION: BETA10 0x10073810
 	void SetRotationKeys(LegoRotationKey* p_keys)
@@ -235,7 +235,7 @@ public:
 		LegoU32& p_old_index
 	);
 	/*inline*/ static void GetRotation(
-		LegoU16 p_numRotationKeys,
+		LegoU16 p_numKeys,
 		LegoRotationKey* p_rotationKeys,
 		LegoFloat p_time,
 		Matrix4& p_matrix,

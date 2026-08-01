@@ -12,6 +12,8 @@
 #include "mxnotificationmanager.h"
 #include "scripts.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoPathStructBase, 0x0c)
 DECOMP_SIZE_ASSERT(LegoPathStruct, 0x14)
 
@@ -155,6 +157,8 @@ void LegoPathStruct::PlayMusic(MxBool p_direction, MxU32 p_data)
 	MxDSAction action;
 	action.SetAtomId(*g_jukeboxScript);
 	action.SetUnknown24(-1);
+
+	assert(p_data <= sizeOfArray(triggersReff));
 
 	if (p_data <= sizeOfArray(triggersReff)) {
 		action.SetObjectId(music[triggersReff[p_data - 1][p_direction == FALSE] - 1]);

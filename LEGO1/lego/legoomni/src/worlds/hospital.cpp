@@ -1,3 +1,7 @@
+// clang-format off
+#include "hospitalrecords.h"
+// clang-format on
+
 #include "hospital.h"
 
 #include "hospital_actions.h"
@@ -19,6 +23,8 @@
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "scripts.h"
+
+#include <assert.h>
 
 DECOMP_SIZE_ASSERT(Hospital, 0x12c)
 DECOMP_SIZE_ASSERT(HospitalState, 0x18)
@@ -122,6 +128,8 @@ MxLong Hospital::Notify(MxParam& p_param)
 			result = HandleControl((LegoControlManagerNotificationParam&) p_param);
 			break;
 		case c_notificationTransitioned:
+			assert(m_destLocation != LegoGameState::e_undefined);
+
 			if (m_destLocation != LegoGameState::e_undefined) {
 				GameState()->SwitchArea(m_destLocation);
 			}
@@ -365,6 +373,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 	case HospitalState::e_afterAcceptingQuest:
 		m_hospitalState->m_state = HospitalState::e_beforeEnteringAmbulance;
 		act1State = (Act1State*) GameState()->GetState("Act1State");
+		assert(act1State);
 		act1State->SetState(Act1State::e_transitionToAmbulance);
 	case HospitalState::e_exitToFront:
 		if (m_exited == FALSE) {

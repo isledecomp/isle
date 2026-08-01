@@ -3,6 +3,7 @@
 #include "mxgeometry/mxmatrix.h"
 #include "mxgeometry/mxquaternion.h"
 
+#include <assert.h>
 #include <limits.h>
 
 DECOMP_SIZE_ASSERT(LegoAnimKey, 0x08)
@@ -853,7 +854,7 @@ inline void LegoAnimNodeData::GetTranslation(
 // FUNCTION: LEGO1 0x100a06f0
 // FUNCTION: BETA10 0x1017f4c9
 /*inline*/ void LegoAnimNodeData::GetRotation(
-	LegoU16 p_numRotationKeys,
+	LegoU16 p_numKeys,
 	LegoRotationKey* p_rotationKeys,
 	LegoFloat p_time,
 	Matrix4& p_matrix,
@@ -861,7 +862,9 @@ inline void LegoAnimNodeData::GetTranslation(
 )
 {
 	LegoU32 i, n;
-	n = FindKeys(p_time, p_numRotationKeys & USHRT_MAX, p_rotationKeys, sizeof(*p_rotationKeys), i, p_old_index);
+	n = FindKeys(p_time, p_numKeys & USHRT_MAX, p_rotationKeys, sizeof(*p_rotationKeys), i, p_old_index);
+
+	assert((p_old_index >= 0) && (p_old_index <= p_numKeys - 1));
 
 	switch (n) {
 	case 0:

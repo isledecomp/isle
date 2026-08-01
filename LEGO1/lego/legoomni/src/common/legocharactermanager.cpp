@@ -586,10 +586,11 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 		if (g_actorLODs[i + 1].m_flags & LegoActorLOD::c_useTexture &&
 			(i != 0 || part.m_partNameIndices[part.m_partNameIndex] != 0)) {
 
-			LegoTextureInfo* textureInfo = textureContainer->Get(part.m_names[part.m_nameIndices[part.m_nameIndex]]);
+			LegoTextureInfo* texture = textureContainer->Get(part.m_names[part.m_nameIndices[part.m_nameIndex]]);
+			assert(texture);
 
-			if (textureInfo != NULL) {
-				childRoi->SetTextureInfo(textureInfo);
+			if (texture != NULL) {
+				childRoi->SetTextureInfo(texture);
 				childRoi->SetLodColor(1.0F, 1.0F, 1.0F, 0.0F);
 			}
 		}
@@ -857,6 +858,7 @@ MxBool LegoCharacterManager::SwitchVariant(LegoROI* p_roi)
 		char lodName[256];
 
 		ViewLODList* lodList = GetViewLODListManager()->Lookup(part.m_partName[partNameIndex]);
+		assert(lodList);
 		MxS32 lodSize = lodList->Size();
 		sprintf(lodName, "%s%d", p_roi->GetName(), g_infohatVariantCounter++);
 		ViewLODList* dupLodList = GetViewLODListManager()->Create(lodName, lodSize);

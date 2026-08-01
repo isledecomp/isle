@@ -7,6 +7,8 @@
 #include "mxcompositepresenter.h"
 #include "mxdsaction.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoPhonemePresenter, 0x88)
 
 // FUNCTION: LEGO1 0x1004e180
@@ -114,6 +116,7 @@ void LegoPhonemePresenter::LoadFrame(MxStreamChunk* p_chunk)
 void LegoPhonemePresenter::PutFrame()
 {
 	if (m_textureInfo != NULL && m_rectCount != 0) {
+		assert(m_frameBitmap->GetImage());
 		m_textureInfo->LoadBits(m_frameBitmap->GetImage());
 		m_rectCount = 0;
 	}

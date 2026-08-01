@@ -25,6 +25,7 @@
 #include "mxutilities.h"
 #include "mxwavepresenter.h"
 
+#include <assert.h>
 #include <string.h>
 
 DECOMP_SIZE_ASSERT(MxPresenter, 0x40);
@@ -242,13 +243,15 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 
 // FUNCTION: LEGO1 0x100b5410
 // FUNCTION: BETA10 0x1012eaad
-MxEntity* MxPresenter::CreateEntity(const char* p_defaultName)
+MxEntity* MxPresenter::CreateEntity(const char* p_defaultObjectName)
 {
 	// create an object from LegoObjectFactory based on OBJECT: value in extra data.
-	// If that is missing, p_defaultName is used
+	// If that is missing, p_defaultObjectName is used
+
+	assert(p_defaultObjectName);
 
 	char objectName[512];
-	strcpy(objectName, p_defaultName);
+	strcpy(objectName, p_defaultObjectName);
 
 	MxU16 extraLength;
 	char* extraData;

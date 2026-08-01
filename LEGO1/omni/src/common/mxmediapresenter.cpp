@@ -238,14 +238,14 @@ void MxMediaPresenter::DoneTickle()
 // FUNCTION: BETA10 0x101366e9
 void MxMediaPresenter::LoopChunk(MxStreamChunk* p_chunk)
 {
-	MxStreamChunk* chunk = new MxStreamChunk;
+	MxStreamChunk* clone = new MxStreamChunk;
 
-	chunk->SetLength(p_chunk->GetLength());
-	chunk->SetData(new MxU8[chunk->GetLength()]);
-	chunk->SetTime(p_chunk->GetTime());
+	clone->SetLength(p_chunk->GetLength());
+	clone->SetData(new MxU8[clone->GetLength()]);
+	clone->SetTime(p_chunk->GetTime());
 
-	memcpy(chunk->GetData(), p_chunk->GetData(), chunk->GetLength());
-	m_loopingChunks->Append(chunk);
+	memcpy(clone->GetData(), p_chunk->GetData(), clone->GetLength());
+	m_loopingChunks->Append(clone);
 }
 
 // FUNCTION: LEGO1 0x100b6030

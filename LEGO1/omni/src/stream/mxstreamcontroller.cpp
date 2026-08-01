@@ -12,6 +12,8 @@
 #include "mxtimer.h"
 #include "mxutilities.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(MxStreamController, 0x64)
 DECOMP_SIZE_ASSERT(MxNextActionDataStart, 0x14)
 DECOMP_SIZE_ASSERT(MxNextActionDataStartList, 0x0c)
@@ -202,6 +204,7 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 		return FAILURE;
 	}
 
+	assert(m_provider);
 	MxU32 fileSize = m_provider->GetFileSize();
 	streamingAction->SetBufferOffset(fileSize * (p_offset / fileSize));
 	streamingAction->SetObjectId(p_action->GetObjectId());
@@ -223,6 +226,7 @@ MxResult MxStreamController::VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
 		return FAILURE;
 	}
 
+	assert(m_provider);
 	return FUN_100c1800(p_action, (p_bufferval / m_provider->GetFileSize()) * m_provider->GetFileSize());
 }
 

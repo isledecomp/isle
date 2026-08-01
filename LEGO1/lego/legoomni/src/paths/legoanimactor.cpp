@@ -8,6 +8,8 @@
 #include "misc.h"
 #include "mxutilities.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoAnimActor, 0x174)
 DECOMP_SIZE_ASSERT(LegoAnimActorStruct, 0x20)
 
@@ -244,6 +246,7 @@ void LegoAnimActor::ParseAction(char* p_extra)
 
 				if (p != NULL) {
 					token = strtok(NULL, g_parseExtraTokens);
+					assert(token);
 
 					if (token) {
 						p->CreateROIAndBuildMap(this, atof(token));

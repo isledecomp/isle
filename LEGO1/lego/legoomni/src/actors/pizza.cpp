@@ -22,6 +22,8 @@
 #include "skateboard.h"
 #include "sndanim_actions.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(Pizza, 0x9c)
 DECOMP_SIZE_ASSERT(PizzaMissionState, 0xb4)
 DECOMP_SIZE_ASSERT(PizzaMissionState::Mission, 0x20)
@@ -305,6 +307,7 @@ MxLong Pizza::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 			(p_param.GetData() == 0x0b && GameState()->GetActorId() == LegoActor::e_laura)
 		)) || (p_param.GetTrigger() == LegoPathStruct::c_missionFinalWaypoint && p_param.GetData() == 0x169 && GameState()->GetActorId() == LegoActor::e_nick)) {
 			IsleScript::Script action;
+			assert(m_mission);
 
 			if (time < m_mission->GetRedFinishTime()) {
 				action = m_mission->GetRedFinishAction();
@@ -601,6 +604,7 @@ PizzaMissionState::PizzaMissionState()
 	m_missions[3] = Mission(LegoActor::e_nick, 2, g_nickFinishTimes, g_nickActions, 4);
 	m_missions[4] = Mission(LegoActor::e_laura, 2, g_lauraFinishTimes, g_lauraActions, 4);
 	m_pizzeriaState = (PizzeriaState*) GameState()->GetState("PizzeriaState");
+	assert(m_pizzeriaState);
 	m_playedAction = IsleScript::c_noneIsle;
 }
 

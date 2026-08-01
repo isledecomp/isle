@@ -9,6 +9,8 @@
 #include "mxmisc.h"
 #include "mxtimer.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoExtraActor, 0x1dc)
 
 // GLOBAL: LEGO1 0x100f31d0
@@ -144,6 +146,7 @@ MxResult LegoExtraActor::SwitchDirection()
 
 	dirRef *= -1.0f;
 	rightRef.EqualsCross(upRef, dirRef);
+	assert(m_destEdge && m_boundary);
 
 	if (m_boundary == m_destEdge->m_faceA) {
 		m_boundary = (LegoPathBoundary*) m_destEdge->m_faceB;
@@ -151,6 +154,8 @@ MxResult LegoExtraActor::SwitchDirection()
 	else {
 		m_boundary = (LegoPathBoundary*) m_destEdge->m_faceA;
 	}
+
+	assert(m_destEdge && m_boundary);
 
 	if (!m_boundary) {
 		m_boundary = oldEdge;
@@ -375,11 +380,12 @@ void LegoExtraActor::Animate(float p_time)
 		}
 
 		MxMatrix matrix(m_roi->GetLocal2World());
-		LegoTreeNode* root = laas->m_AnimTreePtr->GetRoot();
-		MxS32 count = root->GetNumChildren();
+		LegoTreeNode* n = laas->m_AnimTreePtr->GetRoot();
+		assert(n);
+		MxS32 count = n->GetNumChildren();
 
 		for (MxS32 i = 0; i < count; i++) {
-			LegoROI::ApplyAnimationTransformation(root->GetChild(i), matrix, duration2, laas->m_roiMap);
+			LegoROI::ApplyAnimationTransformation(n->GetChild(i), matrix, duration2, laas->m_roiMap);
 		}
 	}
 }

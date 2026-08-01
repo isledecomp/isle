@@ -32,6 +32,8 @@
 #include "scripts.h"
 #include "viewmanager/viewmanager.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoOmni, 0x140)
 DECOMP_SIZE_ASSERT(LegoOmni::WorldContainer, 0x1c)
 DECOMP_SIZE_ASSERT(LegoWorldList, 0x18)
@@ -375,6 +377,7 @@ LegoOmni* LegoOmni::GetInstance()
 // FUNCTION: LEGO1 0x1005ad20
 void LegoOmni::AddWorld(LegoWorld* p_world)
 {
+	assert(p_world);
 	m_worldList->Append(p_world);
 }
 
