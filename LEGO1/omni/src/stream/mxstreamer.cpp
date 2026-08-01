@@ -16,6 +16,18 @@ DECOMP_SIZE_ASSERT(MxMemoryPool128, 0x0c);
 DECOMP_SIZE_ASSERT(MxBitset<22>, 0x04);
 DECOMP_SIZE_ASSERT(MxBitset<2>, 0x04);
 
+// Declaration-record carriers: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declarations are recoverable
+// at this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordX {
+	inline void Record() {}
+};
+
+class MxUnkRecordY {
+	inline void Record() {}
+};
+
 // FUNCTION: LEGO1 0x100b8f00
 // FUNCTION: BETA10 0x10145150
 MxStreamer::MxStreamer()
