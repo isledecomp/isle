@@ -1,6 +1,5 @@
 #include "legowegedge.h"
 
-#include "legoorientededge.h"
 
 #include <assert.h>
 

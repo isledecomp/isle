@@ -3,7 +3,7 @@
 #include "assert.h"
 #include "decomp.h"
 #include "legoedge.h"
-#include "legoorientededge.h"
+#include "legowegedge.h"
 
 DECOMP_SIZE_ASSERT(LegoEdge, 0x24)
 DECOMP_SIZE_ASSERT(LegoWEEdge, 0x0c)

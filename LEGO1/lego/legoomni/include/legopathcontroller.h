@@ -2,7 +2,7 @@
 #define LEGOPATHCONTROLLER_H
 
 #include "decomp.h"
-#include "geom/legoorientededge.h"
+#include "geom/legowegedge.h"
 // clang-format off
 // See viewroi.h: parse order decides .rdata layout.
 #include "legopathboundary.h"
