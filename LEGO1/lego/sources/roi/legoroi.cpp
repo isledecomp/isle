@@ -462,6 +462,18 @@ void LegoROI::ApplyAnimationTransformation(LegoTreeNode* p_node, Matrix4& p_matr
 	}
 }
 
+// Declaration-record carriers: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declarations are recoverable
+// at this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordU {
+	inline void Record() {}
+};
+
+class MxUnkRecordV {
+	inline void Record() {}
+};
+
 // FUNCTION: LEGO1 0x100a8fd0
 // FUNCTION: BETA10 0x1018ac81
 void LegoROI::ApplyTransform(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap)
