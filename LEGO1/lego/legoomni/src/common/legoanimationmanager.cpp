@@ -689,7 +689,7 @@ MxResult LegoAnimationManager::LoadWorldInfo(LegoOmni::World p_worldId)
 
 			if (m_anims[j].m_location == -1) {
 				for (MxS32 l = 0; l < m_anims[j].m_modelCount; l++) {
-					MxS32 index = GetCharacterIndex(m_anims[j].m_models[l].m_name);
+					MxS32 index = GetCharacterIndex(m_anims[j].m_modarr[l].m_name);
 
 					if (index >= 0) {
 						g_characters[index].m_active = TRUE;
@@ -701,7 +701,7 @@ MxResult LegoAnimationManager::LoadWorldInfo(LegoOmni::World p_worldId)
 			for (MxS32 m = 0; m < m_anims[j].m_modelCount; m++) {
 				MxU32 n;
 
-				if (FindVehicle(m_anims[j].m_models[m].m_name, n) && m_anims[j].m_models[m].m_unk0x2c) {
+				if (FindVehicle(m_anims[j].m_modarr[m].m_name, n) && m_anims[j].m_modarr[m].m_unk0x2c) {
 					m_anims[j].m_unk0x2a[count++] = n;
 					if (count > 3) {
 						break;
@@ -803,11 +803,11 @@ MxResult LegoAnimationManager::ReadAnimInfo(LegoStorage* p_storage, AnimInfo* p_
 		goto done;
 	}
 
-	p_info->m_models = new ModelInfo[p_info->m_modelCount];
-	memset(p_info->m_models, 0, p_info->m_modelCount * sizeof(*p_info->m_models));
+	p_info->m_modarr = new ModelInfo[p_info->m_modelCount];
+	memset(p_info->m_modarr, 0, p_info->m_modelCount * sizeof(*p_info->m_modarr));
 
 	for (j = 0; j < p_info->m_modelCount; j++) {
-		if (ReadModelInfo(p_storage, &p_info->m_models[j]) == FAILURE) {
+		if (ReadModelInfo(p_storage, &p_info->m_modarr[j]) == FAILURE) {
 			goto done;
 		}
 	}
@@ -880,12 +880,12 @@ void LegoAnimationManager::DeleteAnimations()
 		for (MxS32 i = 0; i < m_animCount; i++) {
 			delete[] m_anims[i].m_name;
 
-			if (m_anims[i].m_models != NULL) {
+			if (m_anims[i].m_modarr != NULL) {
 				for (MxS32 j = 0; j < m_anims[i].m_modelCount; j++) {
-					delete[] m_anims[i].m_models[j].m_name;
+					delete[] m_anims[i].m_modarr[j].m_name;
 				}
 
-				delete[] m_anims[i].m_models;
+				delete[] m_anims[i].m_modarr;
 			}
 		}
 
@@ -1769,7 +1769,7 @@ MxBool LegoAnimationManager::FUN_100623a0(AnimInfo& p_info)
 // FUNCTION: BETA10 0x100434bf
 MxBool LegoAnimationManager::ModelExists(AnimInfo& p_info, const char* p_name)
 {
-	ModelInfo* models = p_info.m_models;
+	ModelInfo* models = p_info.m_modarr;
 	MxU8 modelCount = p_info.m_modelCount;
 
 	if (models != NULL && modelCount) {
@@ -1787,7 +1787,7 @@ MxBool LegoAnimationManager::ModelExists(AnimInfo& p_info, const char* p_name)
 // FUNCTION: BETA10 0x10043552
 void LegoAnimationManager::FUN_10062580(AnimInfo& p_info)
 {
-	ModelInfo* models = p_info.m_models;
+	ModelInfo* models = p_info.m_modarr;
 	MxU8 modelCount = p_info.m_modelCount;
 
 	if (models != NULL && modelCount) {

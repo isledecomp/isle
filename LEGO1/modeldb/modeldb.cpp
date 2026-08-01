@@ -1,5 +1,7 @@
 #include "modeldb.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(ModelDbWorld, 0x18)
 DECOMP_SIZE_ASSERT(ModelDbPart, 0x18)
 DECOMP_SIZE_ASSERT(ModelDbModel, 0x38)
@@ -87,59 +89,69 @@ MxResult ModelDbPart::Read(FILE* p_file)
 }
 
 // FUNCTION: LEGO1 0x10027910
-MxResult ReadModelDbWorlds(FILE* p_file, ModelDbWorld*& p_worlds, MxS32& p_numWorlds)
+MxResult ReadModelDbWorlds(FILE* dbf, ModelDbWorld*& newworld, MxS32& p_numWorlds)
 {
-	p_worlds = NULL;
+	assert(dbf);
+	assert(newworld);
+
+	newworld = NULL;
 	p_numWorlds = 0;
 
 	MxS32 numWorlds;
-	if (fread(&numWorlds, sizeof(numWorlds), 1, p_file) != 1) {
+	if (fread(&numWorlds, sizeof(numWorlds), 1, dbf) != 1) {
 		return FAILURE;
 	}
 
-	ModelDbWorld* worlds = new ModelDbWorld[numWorlds];
-	MxS32 worldNameLen, numParts, i, j;
+	ModelDbWorld* world = new ModelDbWorld[numWorlds];
+	assert(world);
 
-	for (i = 0; i < numWorlds; i++) {
-		if (fread(&worldNameLen, sizeof(MxS32), 1, p_file) != 1) {
+	MxS32 worldNameLen, numParts, ii, j;
+
+	for (ii = 0; ii < numWorlds; ii++) {
+		if (fread(&worldNameLen, sizeof(MxS32), 1, dbf) != 1) {
 			return FAILURE;
 		}
 
-		worlds[i].m_worldName = new char[worldNameLen];
-		if (fread(worlds[i].m_worldName, worldNameLen, 1, p_file) != 1) {
+		world[ii].m_worldName = new char[worldNameLen];
+		assert(world[ii].m_worldName);
+
+		if (fread(world[ii].m_worldName, worldNameLen, 1, dbf) != 1) {
 			return FAILURE;
 		}
 
-		if (fread(&numParts, sizeof(MxS32), 1, p_file) != 1) {
+		if (fread(&numParts, sizeof(MxS32), 1, dbf) != 1) {
 			return FAILURE;
 		}
 
-		worlds[i].m_partList = new ModelDbPartList();
+		world[ii].m_partlist = new ModelDbPartList();
+		assert(world[ii].m_partlist);
 
 		for (j = 0; j < numParts; j++) {
 			ModelDbPart* part = new ModelDbPart();
+			assert(part);
 
-			if (part->Read(p_file) != SUCCESS) {
+			if (part->Read(dbf) != SUCCESS) {
 				return FAILURE;
 			}
 
-			worlds[i].m_partList->Append(part);
+			world[ii].m_partlist->Append(part);
 		}
 
-		if (fread(&worlds[i].m_numModels, sizeof(MxS32), 1, p_file) != 1) {
+		if (fread(&world[ii].m_numModels, sizeof(MxS32), 1, dbf) != 1) {
 			return FAILURE;
 		}
 
-		worlds[i].m_models = new ModelDbModel[worlds[i].m_numModels];
+		world[ii].m_modarr = new ModelDbModel[world[ii].m_numModels];
+		assert(world[ii].m_modarr);
 
-		for (j = 0; j < worlds[i].m_numModels; j++) {
-			if (worlds[i].m_models[j].Read(p_file) != SUCCESS) {
+		for (j = 0; j < world[ii].m_numModels; j++) {
+			if (world[ii].m_modarr[j].Read(dbf) != SUCCESS) {
 				return FAILURE;
 			}
 		}
 	}
 
-	p_worlds = worlds;
+	newworld = world;
 	p_numWorlds = numWorlds;
 	return SUCCESS;
 }
@@ -153,21 +165,21 @@ void FreeModelDbWorlds(ModelDbWorld*& p_worlds, MxS32 p_numWorlds)
 	for (MxS32 i = 0; i < p_numWorlds; i++) {
 		delete[] worlds[i].m_worldName;
 
-		ModelDbPartListCursor cursor(worlds[i].m_partList);
+		ModelDbPartListCursor cursor(worlds[i].m_partlist);
 		ModelDbPart* part;
 
 		while (cursor.Next(part)) {
 			delete part;
 		}
 
-		delete worlds[i].m_partList;
+		delete worlds[i].m_partlist;
 
-		ModelDbModel* models = worlds[i].m_models;
+		ModelDbModel* models = worlds[i].m_modarr;
 		for (MxS32 j = 0; j < worlds[i].m_numModels; j++) {
 			models[j].Free();
 		}
 
-		delete[] worlds[i].m_models;
+		delete[] worlds[i].m_modarr;
 	}
 
 	delete[] p_worlds;

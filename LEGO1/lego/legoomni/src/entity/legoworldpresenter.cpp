@@ -256,7 +256,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		}
 	}
 
-	ModelDbPartListCursor cursor(worlds[i].m_partList);
+	ModelDbPartListCursor cursor(worlds[i].m_partlist);
 	ModelDbPart* part;
 
 	while (cursor.Next(part)) {
@@ -267,35 +267,35 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 	}
 
 	for (j = 0; j < worlds[i].m_numModels; j++) {
-		if (!strnicmp(worlds[i].m_models[j].m_modelName, "isle", 4)) {
+		if (!strnicmp(worlds[i].m_modarr[j].m_modelName, "isle", 4)) {
 			switch (g_legoWorldPresenterQuality) {
 			case 0:
-				if (strcmpi(worlds[i].m_models[j].m_modelName, "isle_lo")) {
+				if (strcmpi(worlds[i].m_modarr[j].m_modelName, "isle_lo")) {
 					continue;
 				}
 				break;
 			case 1:
-				if (strcmpi(worlds[i].m_models[j].m_modelName, "isle")) {
+				if (strcmpi(worlds[i].m_modarr[j].m_modelName, "isle")) {
 					continue;
 				}
 				break;
 			case 2:
-				if (strcmpi(worlds[i].m_models[j].m_modelName, "isle_hi")) {
+				if (strcmpi(worlds[i].m_modarr[j].m_modelName, "isle_hi")) {
 					continue;
 				}
 			}
 		}
-		else if (g_legoWorldPresenterQuality <= 1 && !strnicmp(worlds[i].m_models[j].m_modelName, "haus", 4)) {
-			if (worlds[i].m_models[j].m_modelName[4] == '3') {
-				if (LoadWorldModel(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
+		else if (g_legoWorldPresenterQuality <= 1 && !strnicmp(worlds[i].m_modarr[j].m_modelName, "haus", 4)) {
+			if (worlds[i].m_modarr[j].m_modelName[4] == '3') {
+				if (LoadWorldModel(worlds[i].m_modarr[j], wdbFile, p_world) != SUCCESS) {
 					return FAILURE;
 				}
 
-				if (LoadWorldModel(worlds[i].m_models[j - 2], wdbFile, p_world) != SUCCESS) {
+				if (LoadWorldModel(worlds[i].m_modarr[j - 2], wdbFile, p_world) != SUCCESS) {
 					return FAILURE;
 				}
 
-				if (LoadWorldModel(worlds[i].m_models[j - 1], wdbFile, p_world) != SUCCESS) {
+				if (LoadWorldModel(worlds[i].m_modarr[j - 1], wdbFile, p_world) != SUCCESS) {
 					return FAILURE;
 				}
 			}
@@ -303,7 +303,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 			continue;
 		}
 
-		if (LoadWorldModel(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
+		if (LoadWorldModel(worlds[i].m_modarr[j], wdbFile, p_world) != SUCCESS) {
 			return FAILURE;
 		}
 	}
