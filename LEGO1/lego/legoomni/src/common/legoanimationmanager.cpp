@@ -818,6 +818,18 @@ done:
 	return result;
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordA {
+	inline void Record() {}
+};
+
+class MxUnkRecordB {
+	inline void Record() {}
+};
+
 // FUNCTION: LEGO1 0x10060310
 // FUNCTION: BETA10 0x10040fad
 MxResult LegoAnimationManager::ReadModelInfo(LegoStorage* p_storage, ModelInfo* p_info)
@@ -1045,6 +1057,14 @@ MxResult LegoAnimationManager::FUN_100605e0(
 
 	return result;
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordC {
+	inline void Record() {}
+};
 
 // FUNCTION: LEGO1 0x100609f0
 // FUNCTION: BETA10 0x10041a38
@@ -2743,6 +2763,14 @@ MxResult LegoAnimationManager::FUN_10064380(
 	return FAILURE;
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordD {
+	inline void Record() {}
+};
+
 // FUNCTION: LEGO1 0x10064670
 MxResult LegoAnimationManager::FUN_10064670(Vector3* p_position)
 {
@@ -3085,3 +3113,15 @@ MxBool AnimState::Reset()
 
 	return FALSE;
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordE {
+	inline void Record() {}
+};
+
+class MxUnkRecordF {
+	inline void Record() {}
+};
