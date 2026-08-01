@@ -304,7 +304,7 @@ void LegoBuildingManager::CreateBuilding(MxS32 p_index, LegoWorld* p_world)
 
 	if (entity) {
 		entity->SetType(LegoEntity::e_building);
-		g_buildingInfo[p_index].m_entity = entity;
+		g_buildingInfo[p_index].entity = entity;
 		LegoROI* roi = entity->GetROI();
 		AdjustHeight(p_index);
 		MxMatrix mat = roi->GetLocal2World();
@@ -320,7 +320,7 @@ void LegoBuildingManager::Reset()
 	MxU32 i;
 
 	for (i = 0; i < sizeOfArray(g_buildingInfo); i++) {
-		g_buildingInfo[i].m_entity = NULL;
+		g_buildingInfo[i].entity = NULL;
 	}
 
 	m_boundariesDetermined = FALSE;
@@ -431,8 +431,8 @@ void LegoBuildingManager::AdjustHeight(MxS32 p_index)
 		g_buildingInfo[p_index].m_adjustedY =
 			g_buildingInfoInit[p_index].m_adjustedY - value * g_buildingInfoDownshiftScale[p_index];
 
-		if (g_buildingInfo[p_index].m_entity != NULL) {
-			LegoROI* roi = g_buildingInfo[p_index].m_entity->GetROI();
+		if (g_buildingInfo[p_index].entity != NULL) {
+			LegoROI* roi = g_buildingInfo[p_index].entity->GetROI();
 			if (roi != NULL) {
 				roi->SetVisibility(FALSE);
 			}
@@ -450,7 +450,7 @@ LegoBuildingInfo* LegoBuildingManager::GetInfo(LegoEntity* p_entity)
 	MxS32 i;
 
 	for (i = 0; i < sizeOfArray(g_buildingInfo); i++) {
-		if (g_buildingInfo[i].m_entity == p_entity) {
+		if (g_buildingInfo[i].entity == p_entity) {
 			break;
 		}
 	}
@@ -482,8 +482,8 @@ MxBool LegoBuildingManager::SwitchVariant(LegoEntity* p_entity)
 		info->m_variant = g_buildingInfoVariants[m_nextVariant];
 		CreateBuilding(HAUS1_INDEX, CurrentWorld());
 
-		if (info->m_entity != NULL) {
-			info->m_entity->GetROI()->SetVisibility(TRUE);
+		if (info->entity != NULL) {
+			info->entity->GetROI()->SetVisibility(TRUE);
 		}
 
 		return TRUE;
@@ -651,7 +651,7 @@ MxBool LegoBuildingManager::DecrementCounter(MxS32 p_index)
 		result = FALSE;
 	}
 	else {
-		LegoROI* roi = info->m_entity->GetROI();
+		LegoROI* roi = info->entity->GetROI();
 
 		info->m_counter -= 2;
 		if (info->m_counter == 1) {
@@ -822,8 +822,8 @@ void LegoBuildingManager::ClearCounters()
 		g_buildingInfo[i].m_initialCounter = -1;
 		AdjustHeight(i);
 
-		if (g_buildingInfo[i].m_entity != NULL) {
-			LegoROI* roi = g_buildingInfo[i].m_entity->GetROI();
+		if (g_buildingInfo[i].entity != NULL) {
+			LegoROI* roi = g_buildingInfo[i].entity->GetROI();
 			MxMatrix mat = roi->GetLocal2World();
 			mat[3][1] = g_buildingInfo[i].m_adjustedY;
 			roi->UpdateTransformationRelativeToParent(mat);
@@ -843,7 +843,7 @@ MxResult LegoBuildingManager::DetermineBoundaries()
 	}
 
 	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
-		if (g_buildingInfo[i].m_entity != NULL && g_buildingInfo[i].m_boundaryName != NULL) {
+		if (g_buildingInfo[i].entity != NULL && g_buildingInfo[i].m_boundaryName != NULL) {
 			g_buildingInfo[i].m_boundary = world->FindPathBoundary(g_buildingInfo[i].m_boundaryName);
 
 			if (g_buildingInfo[i].m_boundary != NULL) {

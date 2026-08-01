@@ -679,7 +679,7 @@ void Act3Brickster::Animate(float p_time)
 			Vector3 local94(locale4[3]);
 
 			local80 = local94;
-			assert(m_bInfo->m_entity && m_bInfo->m_entity->GetROI());
+			assert(m_bInfo->entity && m_bInfo->entity->GetROI());
 
 			local80 -= m_unk0x3c;
 			local80.Unitize();
@@ -718,8 +718,8 @@ void Act3Brickster::Animate(float p_time)
 			m_unk0x50 = p_time + m_shootAnim->GetDuration();
 			assert(SoundManager()->GetCacheSoundManager());
 			SoundManager()->GetCacheSoundManager()->Play("xarrow", NULL, FALSE);
-			BuildingManager()->ScheduleAnimation(m_bInfo->m_entity, 0, FALSE, TRUE);
-			m_unk0x3c = m_bInfo->m_entity->GetROI()->GetLocal2World()[3];
+			BuildingManager()->ScheduleAnimation(m_bInfo->entity, 0, FALSE, TRUE);
+			m_unk0x3c = m_bInfo->entity->GetROI()->GetLocal2World()[3];
 		}
 		else {
 			FUN_10042300();
@@ -873,7 +873,7 @@ MxResult Act3Brickster::FUN_100417c0()
 		float local124;
 
 		for (MxS32 i = 0; i < length; i++) {
-			if (bInfo[i].m_counter < 0 && bInfo[i].m_boundary != NULL && bInfo[i].m_entity != NULL && i != 0 &&
+			if (bInfo[i].m_counter < 0 && bInfo[i].m_boundary != NULL && bInfo[i].entity != NULL && i != 0 &&
 				(local120 == -1 || i != 15)) {
 				Mx3DPointFloat local188(bInfo[i].m_x, bInfo[i].m_y, bInfo[i].m_z);
 
