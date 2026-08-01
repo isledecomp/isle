@@ -5,6 +5,7 @@
 #include "decomp.h"
 #include "extra.h"
 #include "mxtypes.h"
+#include "roi/legoroi.h"
 
 #include <windows.h>
 
@@ -34,7 +35,6 @@ class LegoEntity;
 class LegoAnimPresenter;
 class LegoNamedTexture;
 class LegoPathActor;
-class LegoROI;
 class LegoStorage;
 class LegoTreeNode;
 
