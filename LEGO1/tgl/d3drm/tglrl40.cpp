@@ -331,3 +331,6 @@ Renderer* Tgl::CreateRenderer()
 	}
 	return pRenderer;
 }
+
+class MxUnkRecordTG0;
+class MxUnkRecordTG1;
