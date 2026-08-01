@@ -164,7 +164,7 @@ void ViewManager::Remove(ViewROI* p_roi)
 		if (*it == p_roi) {
 			rois.erase(it);
 
-			if (p_roi->GetLodLevel() >= 0) {
+			if (p_roi->GetToken() >= 0) {
 				RemoveROIDetailFromScene(p_roi);
 			}
 
@@ -172,7 +172,7 @@ void ViewManager::Remove(ViewROI* p_roi)
 
 			if (comp != NULL) {
 				for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
-					if (((ViewROI*) *it)->GetLodLevel() >= 0) {
+					if (((ViewROI*) *it)->GetToken() >= 0) {
 						RemoveROIDetailFromScene((ViewROI*) *it);
 					}
 				}
@@ -195,11 +195,11 @@ void ViewManager::RemoveAll(ViewROI* p_roi)
 		rois.erase(rois.begin(), rois.end());
 	}
 	else {
-		if (p_roi->GetLodLevel() >= 0) {
+		if (p_roi->GetToken() >= 0) {
 			RemoveROIDetailFromScene(p_roi);
 		}
 
-		p_roi->SetLodLevel(ViewROI::c_lodLevelUnset);
+		p_roi->SetToken(ViewROI::c_tokenUnset);
 		const CompoundObject* comp = p_roi->GetComp();
 
 		if (comp != NULL) {
@@ -220,7 +220,7 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 		p_lodLevel = p_roi->GetLODCount() - 1;
 	}
 
-	int lodLevel = p_roi->GetLodLevel();
+	int lodLevel = p_roi->GetToken();
 
 	if (lodLevel == p_lodLevel) {
 		return;
@@ -264,19 +264,19 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 			result = group->Add(meshBuilder);
 			assert(Succeeded(result));
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
-			p_roi->SetLodLevel(p_lodLevel);
+			p_roi->SetToken(p_lodLevel);
 			return;
 		}
 	}
 
-	p_roi->SetLodLevel(ViewROI::c_lodLevelUnset);
+	p_roi->SetToken(ViewROI::c_tokenUnset);
 }
 
 // FUNCTION: LEGO1 0x100a66a0
 // FUNCTION: BETA10 0x101727c7
 void ViewManager::RemoveROIDetailFromScene(ViewROI* p_from)
 {
-	const ViewLOD* lod = (const ViewLOD*) p_from->GetLOD(p_from->GetLodLevel());
+	const ViewLOD* lod = (const ViewLOD*) p_from->GetLOD(p_from->GetToken());
 
 	if (lod != NULL) {
 		const Tgl::MeshBuilder* meshBuilder = NULL;
@@ -294,7 +294,7 @@ void ViewManager::RemoveROIDetailFromScene(ViewROI* p_from)
 		assert(Succeeded(result));
 	}
 
-	p_from->SetLodLevel(ViewROI::c_lodLevelUnset);
+	p_from->SetToken(ViewROI::c_tokenUnset);
 }
 
 // FUNCTION: LEGO1 0x100a66f0
@@ -303,19 +303,19 @@ inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, i
 {
 	assert(p_from);
 
-	if (!p_from->GetVisibility() && p_lodLevel != ViewROI::c_lodLevelInvisible) {
-		ManageVisibilityAndDetailRecursively(p_from, ViewROI::c_lodLevelInvisible);
+	if (!p_from->GetVisibility() && p_lodLevel != ViewROI::c_tokenInvisible) {
+		ManageVisibilityAndDetailRecursively(p_from, ViewROI::c_tokenInvisible);
 	}
 	else {
 		const CompoundObject* comp = p_from->GetComp();
 
-		if (p_lodLevel == ViewROI::c_lodLevelUnset) {
+		if (p_lodLevel == ViewROI::c_tokenUnset) {
 			if (p_from->GetWorldBoundingSphere().Radius() > 0.001F) {
 				float projectedSize = ProjectedSize(p_from->GetWorldBoundingSphere());
 
 				if (projectedSize < seconds_allowed * g_viewDistance) {
-					if (p_from->GetLodLevel() != ViewROI::c_lodLevelInvisible) {
-						ManageVisibilityAndDetailRecursively(p_from, ViewROI::c_lodLevelInvisible);
+					if (p_from->GetToken() != ViewROI::c_tokenInvisible) {
+						ManageVisibilityAndDetailRecursively(p_from, ViewROI::c_tokenInvisible);
 					}
 
 					return;
@@ -327,10 +327,10 @@ inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, i
 			}
 		}
 
-		if (p_lodLevel == ViewROI::c_lodLevelInvisible) {
-			if (p_from->GetLodLevel() >= 0) {
+		if (p_lodLevel == ViewROI::c_tokenInvisible) {
+			if (p_from->GetToken() >= 0) {
 				RemoveROIDetailFromScene(p_from);
-				p_from->SetLodLevel(ViewROI::c_lodLevelInvisible);
+				p_from->SetToken(ViewROI::c_tokenInvisible);
 			}
 
 			if (comp != NULL) {
@@ -345,7 +345,7 @@ inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, i
 			}
 		}
 		else {
-			p_from->SetLodLevel(ViewROI::c_lodLevelUnset);
+			p_from->SetToken(ViewROI::c_tokenUnset);
 
 			for (CompoundObject::const_iterator it = comp->begin(); it != comp->end(); it++) {
 				// LINE: BETA10 0x10172bbd
@@ -372,7 +372,7 @@ void ViewManager::Update(float p_previousRenderTime, float)
 	}
 
 	for (CompoundObject::iterator it = rois.begin(); !(it == rois.end()); it++) {
-		ManageVisibilityAndDetailRecursively((ViewROI*) *it, ViewROI::c_lodLevelUnset);
+		ManageVisibilityAndDetailRecursively((ViewROI*) *it, ViewROI::c_tokenUnset);
 	}
 
 	stopWatch.Stop();
