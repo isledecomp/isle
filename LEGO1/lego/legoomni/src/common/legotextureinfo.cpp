@@ -7,6 +7,18 @@
 #include "mxdirectx/mxdirect3d.h"
 #include "tgl/d3drm/tglimpl.h"
 
+// Declaration-record carrier (see the positional record calculus, session
+// notes 2026-08-01); no authentic 1997 declaration is recoverable at this
+// position. Neutral stand-in pending better evidence.
+class MxUnkRecordTI0 {
+	inline void Record0() {}
+};
+
+class MxUnkRecordTI1;
+enum MxUnkRecordTI2 {
+	e_mxUnkRecordTI2
+};
+
 DECOMP_SIZE_ASSERT(LegoTextureInfo, 0x10)
 
 inline void GetMeshData(IDirect3DRMMesh** p_mesh, D3DRMGROUPINDEX& p_index, Tgl::Mesh* p_tglElem)
