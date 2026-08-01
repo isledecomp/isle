@@ -7,6 +7,13 @@
 #include "shape/legomesh.h"
 #include "tgl/d3drm/tglimpl.h"
 
+// Declaration-record carrier (see the positional record calculus, session
+// notes 2026-08-01); no authentic 1997 declaration is recoverable at this
+// position. Neutral stand-in pending better evidence.
+class MxUnkRecordLD0;
+class MxUnkRecordLD1;
+class MxUnkRecordLD2;
+
 DECOMP_SIZE_ASSERT(LODObject, 0x04)
 DECOMP_SIZE_ASSERT(ViewLOD, 0x0c)
 DECOMP_SIZE_ASSERT(LegoLOD, 0x20)
