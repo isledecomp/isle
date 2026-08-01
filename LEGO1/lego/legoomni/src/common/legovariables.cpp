@@ -129,19 +129,19 @@ void WhoAmIVariable::SetValue(const char* p_value)
 	MxVariable::SetValue(p_value);
 
 	if (!strcmpi(p_value, g_papa)) {
-		GameState()->SetActorId(LegoActor::c_papa);
+		GameState()->SetActorId(LegoActor::e_papa);
 	}
 	else if (!strcmpi(p_value, g_mama)) {
-		GameState()->SetActorId(LegoActor::c_mama);
+		GameState()->SetActorId(LegoActor::e_mama);
 	}
 	else if (!strcmpi(p_value, g_pepper)) {
-		GameState()->SetActorId(LegoActor::c_pepper);
+		GameState()->SetActorId(LegoActor::e_pepper);
 	}
 	else if (!strcmpi(p_value, g_nick)) {
-		GameState()->SetActorId(LegoActor::c_nick);
+		GameState()->SetActorId(LegoActor::e_nick);
 	}
 	else if (!strcmpi(p_value, g_laura)) {
-		GameState()->SetActorId(LegoActor::c_laura);
+		GameState()->SetActorId(LegoActor::e_laura);
 	}
 }
 

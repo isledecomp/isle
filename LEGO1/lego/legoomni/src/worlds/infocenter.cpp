@@ -129,7 +129,7 @@ InfomainScript::Script g_bricksterDialogue[2] = {
 // FUNCTION: LEGO1 0x1006ea20
 Infocenter::Infocenter()
 {
-	m_selectedCharacter = LegoActor::c_none;
+	m_selectedCharacter = LegoActor::e_none;
 	m_dragPresenter = NULL;
 	m_infocenterState = NULL;
 	m_frame = NULL;
@@ -307,19 +307,19 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 			GameState()->SetActor(m_selectedCharacter);
 
 			switch (m_selectedCharacter) {
-			case LegoActor::c_pepper:
+			case LegoActor::e_pepper:
 				PlayAction(InfomainScript::c_avo901in_RunAnim);
 				break;
-			case LegoActor::c_mama:
+			case LegoActor::e_mama:
 				PlayAction(InfomainScript::c_avo902in_RunAnim);
 				break;
-			case LegoActor::c_papa:
+			case LegoActor::e_papa:
 				PlayAction(InfomainScript::c_avo903in_RunAnim);
 				break;
-			case LegoActor::c_nick:
+			case LegoActor::e_nick:
 				PlayAction(InfomainScript::c_avo904in_RunAnim);
 				break;
-			case LegoActor::c_laura:
+			case LegoActor::e_laura:
 				PlayAction(InfomainScript::c_avo905in_RunAnim);
 				break;
 			default:
@@ -406,7 +406,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		break;
 	case InfocenterState::e_selectedCharacterAndDestination:
 		if (action->GetObjectId() == m_currentInfomainScript) {
-			if (GameState()->GetCurrentAct() != LegoGameState::e_act3 && m_selectedCharacter != LegoActor::c_none) {
+			if (GameState()->GetCurrentAct() != LegoGameState::e_act3 && m_selectedCharacter != LegoActor::e_none) {
 				GameState()->SetActor(m_selectedCharacter);
 			}
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
@@ -754,19 +754,19 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 
 		switch (m_dragPresenter->GetAction()->GetObjectId()) {
 		case InfomainScript::c_PepperHot_Bitmap:
-			m_selectedCharacter = LegoActor::c_pepper;
+			m_selectedCharacter = LegoActor::e_pepper;
 			break;
 		case InfomainScript::c_MamaHot_Bitmap:
-			m_selectedCharacter = LegoActor::c_mama;
+			m_selectedCharacter = LegoActor::e_mama;
 			break;
 		case InfomainScript::c_PapaHot_Bitmap:
-			m_selectedCharacter = LegoActor::c_papa;
+			m_selectedCharacter = LegoActor::e_papa;
 			break;
 		case InfomainScript::c_NickHot_Bitmap:
-			m_selectedCharacter = LegoActor::c_nick;
+			m_selectedCharacter = LegoActor::e_nick;
 			break;
 		case InfomainScript::c_LauraHot_Bitmap:
-			m_selectedCharacter = LegoActor::c_laura;
+			m_selectedCharacter = LegoActor::e_laura;
 			break;
 		}
 
@@ -775,7 +775,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 
 			switch (control->GetAction()->GetObjectId()) {
 			case InfomainScript::c_Pepper_Ctl:
-				if (m_selectedCharacter == LegoActor::c_pepper) {
+				if (m_selectedCharacter == LegoActor::e_pepper) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(InfomainScript::c_Pepper_All_Movie);
@@ -783,7 +783,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				break;
 			case InfomainScript::c_Mama_Ctl:
-				if (m_selectedCharacter == LegoActor::c_mama) {
+				if (m_selectedCharacter == LegoActor::e_mama) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(InfomainScript::c_Mama_All_Movie);
@@ -791,7 +791,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				break;
 			case InfomainScript::c_Papa_Ctl:
-				if (m_selectedCharacter == LegoActor::c_papa) {
+				if (m_selectedCharacter == LegoActor::e_papa) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(InfomainScript::c_Papa_All_Movie);
@@ -799,7 +799,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				break;
 			case InfomainScript::c_Nick_Ctl:
-				if (m_selectedCharacter == LegoActor::c_nick) {
+				if (m_selectedCharacter == LegoActor::e_nick) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(InfomainScript::c_Nick_All_Movie);
@@ -807,7 +807,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				break;
 			case InfomainScript::c_Laura_Ctl:
-				if (m_selectedCharacter == LegoActor::c_laura) {
+				if (m_selectedCharacter == LegoActor::e_laura) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(InfomainScript::c_Laura_All_Movie);
@@ -825,19 +825,19 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 					GameState()->SetActor(m_selectedCharacter);
 
 					switch (m_selectedCharacter) {
-					case LegoActor::c_pepper:
+					case LegoActor::e_pepper:
 						PlayAction(InfomainScript::c_avo901in_RunAnim);
 						break;
-					case LegoActor::c_mama:
+					case LegoActor::e_mama:
 						PlayAction(InfomainScript::c_avo902in_RunAnim);
 						break;
-					case LegoActor::c_papa:
+					case LegoActor::e_papa:
 						PlayAction(InfomainScript::c_avo903in_RunAnim);
 						break;
-					case LegoActor::c_nick:
+					case LegoActor::e_nick:
 						PlayAction(InfomainScript::c_avo904in_RunAnim);
 						break;
-					case LegoActor::c_laura:
+					case LegoActor::e_laura:
 						PlayAction(InfomainScript::c_avo905in_RunAnim);
 						break;
 					}
@@ -896,23 +896,23 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				else {
 					switch (m_selectedCharacter) {
-					case LegoActor::c_pepper:
+					case LegoActor::e_pepper:
 						dialogueToPlay = InfomainScript::c_avo901in_RunAnim;
 						GameState()->SetActorId(m_selectedCharacter);
 						break;
-					case LegoActor::c_mama:
+					case LegoActor::e_mama:
 						dialogueToPlay = InfomainScript::c_avo902in_RunAnim;
 						GameState()->SetActorId(m_selectedCharacter);
 						break;
-					case LegoActor::c_papa:
+					case LegoActor::e_papa:
 						dialogueToPlay = InfomainScript::c_avo903in_RunAnim;
 						GameState()->SetActorId(m_selectedCharacter);
 						break;
-					case LegoActor::c_nick:
+					case LegoActor::e_nick:
 						dialogueToPlay = InfomainScript::c_avo904in_RunAnim;
 						GameState()->SetActorId(m_selectedCharacter);
 						break;
-					case LegoActor::c_laura:
+					case LegoActor::e_laura:
 						dialogueToPlay = InfomainScript::c_avo905in_RunAnim;
 						GameState()->SetActorId(m_selectedCharacter);
 						break;
@@ -1044,7 +1044,7 @@ MxU8 Infocenter::HandleControl(LegoControlManagerNotificationParam& p_param)
 					case LegoGameState::e_elevdown:
 						break;
 					default:
-						if (state->GetActorId() != LegoActor::c_none) {
+						if (state->GetActorId() != LegoActor::e_none) {
 							if (!m_infocenterState->HasRegistered()) {
 								PlayAction(InfomainScript::c_iic007in_PlayWav);
 								m_infocenterState->m_state = InfocenterState::e_notRegistered;
@@ -1336,23 +1336,23 @@ void Infocenter::UpdateFrameHot(MxBool p_display)
 		MxS32 x, y;
 
 		switch (GameState()->GetActorId()) {
-		case LegoActor::c_pepper:
+		case LegoActor::e_pepper:
 			x = 302;
 			y = 81;
 			break;
-		case LegoActor::c_mama:
+		case LegoActor::e_mama:
 			x = 204;
 			y = 81;
 			break;
-		case LegoActor::c_papa:
+		case LegoActor::e_papa:
 			x = 253;
 			y = 81;
 			break;
-		case LegoActor::c_nick:
+		case LegoActor::e_nick:
 			x = 353;
 			y = 81;
 			break;
-		case LegoActor::c_laura:
+		case LegoActor::e_laura:
 			x = 399;
 			y = 81;
 			break;
@@ -1397,9 +1397,9 @@ void Infocenter::Reset()
 	GameState()->m_savedPreviousArea = LegoGameState::e_undefined;
 
 	InitializeBitmaps();
-	m_selectedCharacter = LegoActor::c_pepper;
+	m_selectedCharacter = LegoActor::e_pepper;
 
-	GameState()->SetActor(LegoActor::c_pepper);
+	GameState()->SetActor(LegoActor::e_pepper);
 
 	HelicopterState* state = (HelicopterState*) GameState()->GetState("HelicopterState");
 

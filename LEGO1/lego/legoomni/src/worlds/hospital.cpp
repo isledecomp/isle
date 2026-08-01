@@ -35,7 +35,7 @@ MxBool g_pizzaLedEnabled = FALSE;
 // FUNCTION: LEGO1 0x100745e0
 Hospital::Hospital()
 {
-	m_currentActorId = LegoActor::c_none;
+	m_currentActorId = LegoActor::e_none;
 	m_interactionMode = 0;
 	m_hospitalState = NULL;
 	m_setWithCurrentAction = 0;
@@ -141,14 +141,14 @@ void Hospital::ReadyWorld()
 	m_pizzaLedBitmap = (MxStillPresenter*) Find("MxStillPresenter", "PizzaLed_Bitmap");
 
 	if (UserActor() == NULL) {
-		m_currentActorId = LegoActor::c_laura;
+		m_currentActorId = LegoActor::e_laura;
 	}
 	else {
 		m_currentActorId = UserActor()->GetActorId();
 	}
 
 	switch (m_currentActorId) {
-	case LegoActor::c_pepper:
+	case LegoActor::e_pepper:
 		m_hospitalState->m_stateActor = m_hospitalState->m_statePepper;
 
 		if (m_hospitalState->m_statePepper < 5) {
@@ -156,7 +156,7 @@ void Hospital::ReadyWorld()
 		}
 
 		break;
-	case LegoActor::c_mama:
+	case LegoActor::e_mama:
 		m_hospitalState->m_stateActor = m_hospitalState->m_stateMama;
 
 		if (m_hospitalState->m_stateMama < 5) {
@@ -164,7 +164,7 @@ void Hospital::ReadyWorld()
 		}
 
 		break;
-	case LegoActor::c_papa:
+	case LegoActor::e_papa:
 		m_hospitalState->m_stateActor = m_hospitalState->m_statePapa;
 
 		if (m_hospitalState->m_statePapa < 5) {
@@ -172,7 +172,7 @@ void Hospital::ReadyWorld()
 		}
 
 		break;
-	case LegoActor::c_nick:
+	case LegoActor::e_nick:
 		m_hospitalState->m_stateActor = m_hospitalState->m_stateNick;
 
 		if (m_hospitalState->m_stateNick < 5) {
@@ -180,7 +180,7 @@ void Hospital::ReadyWorld()
 		}
 
 		break;
-	case LegoActor::c_laura:
+	case LegoActor::e_laura:
 		m_hospitalState->m_stateActor = m_hospitalState->m_stateLaura;
 
 		if (m_hospitalState->m_stateLaura < 5) {
@@ -265,7 +265,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 		break;
 	case HospitalState::e_unknown11:
 		switch (m_currentActorId) {
-		case LegoActor::c_pepper:
+		case LegoActor::e_pepper:
 			switch (m_hospitalState->m_statePepper) {
 			case 0:
 			case 1:
@@ -284,7 +284,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			}
 			break;
-		case LegoActor::c_mama:
+		case LegoActor::e_mama:
 			switch (m_hospitalState->m_stateMama) {
 			case 0:
 			case 1:
@@ -303,7 +303,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			}
 			break;
-		case LegoActor::c_papa:
+		case LegoActor::e_papa:
 			switch (m_hospitalState->m_statePapa) {
 			case 0:
 			case 1:
@@ -322,7 +322,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			}
 			break;
-		case LegoActor::c_nick:
+		case LegoActor::e_nick:
 			switch (m_hospitalState->m_stateNick) {
 			case 0:
 			case 1:
@@ -341,7 +341,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			}
 			break;
-		case LegoActor::c_laura:
+		case LegoActor::e_laura:
 			switch (m_hospitalState->m_stateLaura) {
 			case 0:
 			case 1:
@@ -443,7 +443,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 					}
 					else {
 						switch (m_currentActorId) {
-						case LegoActor::c_pepper:
+						case LegoActor::e_pepper:
 							switch (m_hospitalState->m_statePepper) {
 							case 0:
 							case 1:
@@ -462,7 +462,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 								break;
 							}
 							break;
-						case LegoActor::c_mama:
+						case LegoActor::e_mama:
 							switch (m_hospitalState->m_stateMama) {
 							case 0:
 							case 1:
@@ -481,7 +481,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 								break;
 							}
 							break;
-						case LegoActor::c_nick:
+						case LegoActor::e_nick:
 							switch (m_hospitalState->m_stateNick) {
 							case 0:
 							case 1:
@@ -500,7 +500,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 								break;
 							}
 							break;
-						case LegoActor::c_papa:
+						case LegoActor::e_papa:
 							switch (m_hospitalState->m_statePapa) {
 							case 0:
 							case 1:
@@ -519,7 +519,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 								break;
 							}
 							break;
-						case LegoActor::c_laura:
+						case LegoActor::e_laura:
 							switch (m_hospitalState->m_stateLaura) {
 							case 0:
 							case 1:

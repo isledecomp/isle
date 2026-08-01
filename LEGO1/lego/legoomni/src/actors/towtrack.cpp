@@ -178,8 +178,8 @@ MxLong TowTrack::HandleEndAction(MxEndActionNotificationParam& p_param)
 			m_lastAction = IsleScript::c_noneIsle;
 		}
 		else if (objectId == IsleScript::c_wrt060bm_RunAnim) {
-			if (m_actorId < LegoActor::c_pepper || m_actorId > LegoActor::c_laura) {
-				m_actorId = LegoActor::c_laura;
+			if (m_actorId < LegoActor::e_pepper || m_actorId > LegoActor::e_laura) {
+				m_actorId = LegoActor::e_laura;
 			}
 
 			switch ((rand() % ((m_actorId != 4 ? 4 : 3))) + 1) {
@@ -203,24 +203,24 @@ MxLong TowTrack::HandleEndAction(MxEndActionNotificationParam& p_param)
 			HandleClick();
 		}
 		else if (objectId == IsleScript::c_wgs083nu_RunAnim) {
-			if (m_actorId < LegoActor::c_pepper || m_actorId > LegoActor::c_laura) {
-				m_actorId = LegoActor::c_laura;
+			if (m_actorId < LegoActor::e_pepper || m_actorId > LegoActor::e_laura) {
+				m_actorId = LegoActor::e_laura;
 			}
 
 			switch (m_actorId) {
-			case c_pepper:
+			case e_pepper:
 				PlayActorAnimation(IsleScript::c_wgs085nu_RunAnim);
 				break;
-			case c_mama:
+			case e_mama:
 				PlayActorAnimation(IsleScript::c_wgs086nu_RunAnim);
 				break;
-			case c_papa:
+			case e_papa:
 				PlayActorAnimation(IsleScript::c_wgs088nu_RunAnim);
 				break;
-			case c_nick:
+			case e_nick:
 				PlayActorAnimation(IsleScript::c_wgs087nu_RunAnim);
 				break;
-			case c_laura:
+			case e_laura:
 				PlayActorAnimation(IsleScript::c_wgs089nu_RunAnim);
 				break;
 			}
@@ -232,24 +232,24 @@ MxLong TowTrack::HandleEndAction(MxEndActionNotificationParam& p_param)
 			AnimationManager()->EnableCamAnims(TRUE);
 		}
 		else if (objectId == IsleScript::c_wgs090nu_RunAnim) {
-			if (m_actorId < LegoActor::c_pepper || m_actorId > LegoActor::c_laura) {
-				m_actorId = LegoActor::c_laura;
+			if (m_actorId < LegoActor::e_pepper || m_actorId > LegoActor::e_laura) {
+				m_actorId = LegoActor::e_laura;
 			}
 
 			switch (m_actorId) {
-			case c_pepper:
+			case e_pepper:
 				PlayActorAnimation(IsleScript::c_wgs091nu_RunAnim);
 				break;
-			case c_mama:
+			case e_mama:
 				PlayActorAnimation(IsleScript::c_wgs092nu_RunAnim);
 				break;
-			case c_papa:
+			case e_papa:
 				PlayActorAnimation(IsleScript::c_wgs094nu_RunAnim);
 				break;
-			case c_nick:
+			case e_nick:
 				PlayActorAnimation(IsleScript::c_wgs093nu_RunAnim);
 				break;
-			case c_laura:
+			case e_laura:
 				PlayActorAnimation(IsleScript::c_wgs095nu_RunAnim);
 				break;
 			}
@@ -257,24 +257,24 @@ MxLong TowTrack::HandleEndAction(MxEndActionNotificationParam& p_param)
 			m_state->UpdateScore(LegoState::e_blue, m_actorId);
 		}
 		else if (objectId == IsleScript::c_wgs097nu_RunAnim) {
-			if (m_actorId < LegoActor::c_pepper || m_actorId > LegoActor::c_laura) {
-				m_actorId = LegoActor::c_laura;
+			if (m_actorId < LegoActor::e_pepper || m_actorId > LegoActor::e_laura) {
+				m_actorId = LegoActor::e_laura;
 			}
 
 			switch (m_actorId) {
-			case c_pepper:
+			case e_pepper:
 				PlayActorAnimation(IsleScript::c_wgs098nu_RunAnim);
 				break;
-			case c_mama:
+			case e_mama:
 				PlayActorAnimation(IsleScript::c_wgs099nu_RunAnim);
 				break;
-			case c_papa:
+			case e_papa:
 				PlayActorAnimation(IsleScript::c_wgs101nu_RunAnim);
 				break;
-			case c_nick:
+			case e_nick:
 				PlayActorAnimation(IsleScript::c_wgs100nu_RunAnim);
 				break;
-			case c_laura:
+			case e_laura:
 				PlayActorAnimation(IsleScript::c_wgs102nu_RunAnim);
 				break;
 			}
@@ -350,17 +350,17 @@ MxLong TowTrack::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 			}
 
 			if (!m_state->m_takingTooLong && m_lastAction == IsleScript::c_noneIsle) {
-				if (m_actorId < LegoActor::c_pepper || m_actorId > LegoActor::c_laura) {
-					m_actorId = LegoActor::c_laura;
+				if (m_actorId < LegoActor::e_pepper || m_actorId > LegoActor::e_laura) {
+					m_actorId = LegoActor::e_laura;
 				}
 
 				IsleScript::Script objectId;
 
 				switch (m_actorId) {
-				case c_pepper:
+				case e_pepper:
 					objectId = IsleScript::c_wns034na_PlayWav;
 					break;
-				case c_mama:
+				case e_mama:
 					switch ((rand() % 2) + 1) {
 					case 1:
 						objectId = IsleScript::c_wns037na_PlayWav;
@@ -370,7 +370,7 @@ MxLong TowTrack::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 						break;
 					}
 					break;
-				case c_papa:
+				case e_papa:
 					switch ((rand() % 2) + 1) {
 					case 1:
 						objectId = IsleScript::c_wns041na_PlayWav;
@@ -380,7 +380,7 @@ MxLong TowTrack::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 						break;
 					}
 					break;
-				case c_nick:
+				case e_nick:
 					switch ((rand() % 2) + 1) {
 					case 1:
 						objectId = IsleScript::c_wns039na_PlayWav;
@@ -390,7 +390,7 @@ MxLong TowTrack::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 						break;
 					}
 					break;
-				case c_laura:
+				case e_laura:
 					switch ((rand() % 2) + 1) {
 					case 1:
 						objectId = IsleScript::c_wns043na_PlayWav;

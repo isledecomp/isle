@@ -564,8 +564,8 @@ void Isle::Enable(MxBool p_enable)
 		VideoManager()->ResetPalette(FALSE);
 		m_act1state->PlaceActors();
 
-		if (UserActor() != NULL && UserActor()->GetActorId() != LegoActor::c_none) {
-			IsleScript::Script noPizzaSign = UserActor()->GetActorId() == LegoActor::c_pepper
+		if (UserActor() != NULL && UserActor()->GetActorId() != LegoActor::e_none) {
+			IsleScript::Script noPizzaSign = UserActor()->GetActorId() == LegoActor::e_pepper
 												 ? IsleScript::c_NoPizaz_Texture
 												 : IsleScript::c_NoPizza_Texture;
 
