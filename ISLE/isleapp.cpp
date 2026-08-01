@@ -1,5 +1,7 @@
 #include "isleapp.h"
 
+#include "realtime/orientableroi.h"
+
 // clang-format off
 #include "legoanimationmanager.h"
 #include "3dmanager/lego3dmanager.h"
