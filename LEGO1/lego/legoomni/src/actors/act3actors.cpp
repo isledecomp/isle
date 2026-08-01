@@ -174,6 +174,12 @@ MxResult Act3Actor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 	return SUCCESS;
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordM;
+
 // FUNCTION: LEGO1 0x1003fe30
 // FUNCTION: BETA10 0x10018412
 Act3Cop::Act3Cop()
