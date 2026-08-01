@@ -1991,10 +1991,10 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 						LegoLocation* location = LegoNavController::GetLocation(p_location);
 
 						if (location != NULL) {
-							if (location->m_boundaryA.m_unk0x10 || FUN_10063fb0(&location->m_boundaryA, world)) {
+							if (location->m_boundaryA.m_unk0x10 || FUN_10063fb0(location->m_boundaryA, world)) {
 								boundary = &location->m_boundaryA;
 							}
-							else if (location->m_boundaryB.m_unk0x10 || FUN_10063fb0(&location->m_boundaryB, world)) {
+							else if (location->m_boundaryB.m_unk0x10 || FUN_10063fb0(location->m_boundaryB, world)) {
 								boundary = &location->m_boundaryB;
 							}
 						}
@@ -2532,17 +2532,17 @@ void LegoAnimationManager::FUN_10063e40(LegoAnimPresenter* p_presenter)
 
 // FUNCTION: LEGO1 0x10063fb0
 // FUNCTION: BETA10 0x100452a7
-MxBool LegoAnimationManager::FUN_10063fb0(LegoLocation::Boundary* p_hl, LegoWorld* p_world)
+MxBool LegoAnimationManager::FUN_10063fb0(LegoLocation::Boundary& p_hl, LegoWorld* p_world)
 {
-	if (p_hl->m_name != NULL) {
+	if (p_hl.m_name != NULL) {
 		Mx3DPointFloat vec;
-		LegoPathBoundary* boundary = p_world->FindPathBoundary(p_hl->m_name);
+		LegoPathBoundary* boundary = p_world->FindPathBoundary(p_hl.m_name);
 		assert(boundary);
-		assert(p_hl->src < boundary->GetNumEdges());
+		assert(p_hl.src < boundary->GetNumEdges());
 
-		LegoOrientedEdge* pSrcE = (LegoOrientedEdge*) boundary->GetEdges()[p_hl->src];
+		LegoOrientedEdge* pSrcE = (LegoOrientedEdge*) boundary->GetEdges()[p_hl.src];
 		assert(pSrcE);
-		return FUN_10064010(boundary, pSrcE, p_hl->m_srcScale);
+		return FUN_10064010(boundary, pSrcE, p_hl.m_srcScale);
 	}
 
 	return FALSE;

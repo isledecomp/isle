@@ -239,7 +239,7 @@ private:
 	MxBool FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_actor, MxU8 p_mood, MxU32 p_characterId);
 	void FUN_10063d10();
 	void FUN_10063e40(LegoAnimPresenter* p_presenter);
-	MxBool FUN_10063fb0(LegoLocation::Boundary* p_boundary, LegoWorld* p_world);
+	MxBool FUN_10063fb0(LegoLocation::Boundary& p_hl, LegoWorld* p_world);
 	MxBool FUN_10064010(LegoPathBoundary* p_boundary, LegoOrientedEdge* p_edge, float p_destScale);
 	MxBool FUN_10064120(LegoLocation::Boundary* p_boundary, MxBool p_bool1, MxBool p_bool2);
 	MxResult FUN_10064380(
