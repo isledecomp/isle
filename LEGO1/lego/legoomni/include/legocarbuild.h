@@ -256,9 +256,9 @@ private:
 	MxU8 m_presentersEnabled;             // 0x348
 
 	static MxS16 g_lastTickleState;
-	static MxFloat g_selectedPartRotationAngleStepYAxis;
-	static MxFloat g_rotationAngleStepYAxis;
-	static LookupTableActions g_actorScripts[];
+	static const MxFloat g_selectedPartRotationAngleStepYAxis;
+	static const MxFloat g_rotationAngleStepYAxis;
+	static const LookupTableActions g_actorScripts[];
 };
 
 #endif // LEGOCARBUILD_H
