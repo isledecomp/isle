@@ -1569,7 +1569,7 @@ LegoLocation* LegoNavController::GetLocation(MxU32 p_location)
 
 // FUNCTION: LEGO1 0x10055740
 // FUNCTION: BETA10 0x1009c28c
-MxS32 LegoNavController::GetNumLocations()
+MxS32 LegoNavController::GetNumCameras()
 {
 	return sizeOfArray(g_locations);
 }

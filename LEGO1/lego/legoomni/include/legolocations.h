@@ -9,7 +9,7 @@ struct LegoLocation {
 	// SIZE 0x18
 	struct Boundary {
 		const char* m_name; // 0x00
-		MxS32 m_src;        // 0x04
+		MxS32 src;          // 0x04
 		float m_srcScale;   // 0x08
 		MxS32 m_dest;       // 0x0c
 		float m_destScale;  // 0x10

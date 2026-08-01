@@ -22,7 +22,7 @@ class MxDSAction;
 
 // SIZE 0x30
 struct ModelInfo {
-	char* m_name;         // 0x00
+	char* modelName;      // 0x00
 	MxU8 m_unk0x04;       // 0x04
 	float m_location[3];  // 0x08
 	float m_direction[3]; // 0x14
@@ -32,7 +32,7 @@ struct ModelInfo {
 
 // SIZE 0x30
 struct AnimInfo {
-	char* m_name;          // 0x00
+	char* animName;        // 0x00
 	MxU32 m_objectId;      // 0x04
 	MxS16 m_location;      // 0x08
 	MxBool m_unk0x0a;      // 0x0a
@@ -42,7 +42,7 @@ struct AnimInfo {
 	float m_unk0x10[4];    // 0x10
 	MxU8 m_modelCount;     // 0x20
 	MxU16 m_unk0x22;       // 0x22
-	ModelInfo* m_modarr;   // 0x24
+	ModelInfo* models;     // 0x24
 	MxS8 m_characterIndex; // 0x28
 	MxBool m_unk0x29;      // 0x29
 	MxS8 m_unk0x2a[3];     // 0x2a
@@ -73,8 +73,8 @@ public:
 	MxBool Reset() override;                             // vtable+0x18
 	MxResult Serialize(LegoStorage* p_storage) override; // vtable+0x1c
 
-	void CopyToAnims(MxU32, AnimInfo* p_anims, MxU32& p_outExtraCharacterId);
-	void InitFromAnims(MxU32 p_animsLength, AnimInfo* p_anims, MxU32 p_extraCharacterId);
+	void CopyToAnims(MxU32 p_numAnims, AnimInfo* p_anims, MxU32& p_outExtraCharacterId);
+	void InitFromAnims(MxU32 p_numAnims, AnimInfo* p_anims, MxU32 p_extraCharacterId);
 
 	// SYNTHETIC: LEGO1 0x10065130
 	// AnimState::`scalar deleting destructor'
@@ -82,14 +82,14 @@ public:
 private:
 	MxU32 m_extraCharacterId; // 0x08
 
-	// appears to store the length of m_unk0x10
-	MxU32 m_unk0x0c; // 0x0c
+	// appears to store the length of m_animSaveInfo
+	MxU32 m_numAnims; // 0x0c
 	// dynamically sized array of MxU16, corresponding to AnimInfo::m_unk0x22
-	MxU16* m_unk0x10; // 0x10
+	MxU16* m_animSaveInfo; // 0x10
 
-	MxU32 m_locationsFlagsLength; // 0x14
+	MxU32 m_numCams; // 0x14
 	// dynamically sized array of bools, corresponding to LegoLocation.m_unk0x5c
-	MxBool* m_locationsFlags; // 0x18
+	MxBool* m_camAnimFired; // 0x18
 };
 
 // VTABLE: LEGO1 0x100d8c18
@@ -122,7 +122,7 @@ public:
 
 	// SIZE 0x18
 	struct Extra {
-		LegoROI* m_roi;      // 0x00
+		LegoROI* roi;        // 0x00
 		MxS32 m_characterId; // 0x04
 		MxLong m_unk0x08;    // 0x08
 		MxBool m_unk0x0c;    // 0x0c
