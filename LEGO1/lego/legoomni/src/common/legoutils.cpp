@@ -406,7 +406,7 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_gO
 
 	double sDbl = p_s;
 
-	if (p_s > 0.5f) {
+	if (p_s > 0.5) {
 		calc = (1.0f - p_v) * p_s + p_v;
 	}
 	else {
@@ -462,6 +462,87 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_gO
 	default:
 		return;
 	}
+}
+
+
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+// ConvertHSVToRGB's counterpart. Present in BETA10 and compiled into the
+// retail LEGO1 object file, but stripped by /OPT:REF since nothing references
+// it. Its parse-time-pooled literals (5.0, 3.0, 1.0/6.0) remain in retail
+// .rdata, which is why this translation unit's constant pool only matches
+// retail with the function present.
+// FUNCTION: BETA10 0x100d4801
+void ConvertRGBToHSV(float p_r, float p_g, float p_b, float* p_hOut, float* p_sOut, float* p_vOut)
+{
+	double h, min, delta, s, max, gc, l, rc, bc;
+
+	h = 0.0;
+	l = 0.0;
+	s = 0.0;
+
+	max = MAX(max = MAX(p_g, p_r), p_b);
+
+	if ((l = ((min = MIN(p_b, min = MIN(p_r, p_g))) + max) / 2.0) <= 0.0) {
+		l = 0.0;
+		goto done;
+	}
+
+	delta = max - min;
+	s = delta;
+
+	if (s > 0.0) {
+		if (l > 0.5) {
+			s = s / (2.0 - max - min);
+		}
+		else {
+			s = s / (min + max);
+		}
+	}
+	else {
+		goto done;
+	}
+
+	rc = (max - p_r) / delta;
+	gc = (max - p_g) / delta;
+	bc = (max - p_b) / delta;
+
+	if (max == p_r) {
+		h = (min == p_g) ? bc + 5.0 : 1.0 - gc;
+	}
+	else if (max == p_g) {
+		h = (min == p_b) ? rc + 1.0 : 3.0 - bc;
+	}
+	else {
+		h = (min == p_r) ? gc + 3.0 : 5.0 - rc;
+	}
+
+	h = h * (1.0 / 6.0); // BETA10 (1996) still divides: h = h / 6.0;
+
+done:
+	if (h < 0.0) {
+		h += 1.0;
+	}
+	if (h > 1.0) {
+		h -= 1.0;
+	}
+	if (l < 0.0) {
+		l = 0.0;
+	}
+	if (l > 1.0) {
+		l = 1.0;
+	}
+	if (s < 0.0) {
+		s = 0.0;
+	}
+	if (s > 1.0) {
+		s = 1.0;
+	}
+
+	*p_hOut = h;
+	*p_sOut = l;
+	*p_vOut = s;
 }
 
 // FUNCTION: LEGO1 0x1003ecc0
