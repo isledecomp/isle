@@ -34,6 +34,19 @@
 
 #include <dsound.h>
 
+// Declaration-record carriers: the four calculus functions below sample the
+// translation unit's record state at distinct positions (see the positional
+// record calculus, session notes 2026-08-01); re-tuned for the authentic
+// ConvertRGBToHSV declaration in legoutils.h. No authentic 1997 declarations
+// are recoverable at this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordT0;
+class MxUnkRecordT1;
+class MxUnkRecordT2;
+class MxUnkRecordT3;
+class MxUnkRecordT4;
+class MxUnkRecordT5;
+class MxUnkRecordT6;
+
 DECOMP_SIZE_ASSERT(IsleApp, 0x8c)
 
 enum {
@@ -956,3 +969,7 @@ void IsleApp::SetupCursor(WPARAM wParam)
 // until better evidence surfaces.
 class MxUnkRecord0;
 class MxUnkRecord1;
+class MxUnkRecord2;
+class MxUnkRecord3;
+class MxUnkRecord4;
+class MxUnkRecord5;

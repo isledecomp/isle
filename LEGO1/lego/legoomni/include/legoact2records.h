@@ -10,4 +10,8 @@ class MxUnkRecordAW;
 class MxUnkRecordAX;
 class MxUnkRecordAY;
 
+class MxUnkRecordAZ {
+	inline void Record() {}
+};
+
 #endif // LEGOACT2RECORDS_H
