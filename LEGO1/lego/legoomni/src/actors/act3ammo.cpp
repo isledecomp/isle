@@ -125,24 +125,24 @@ MxResult Act3Ammo::CalculateArc(const Vector3& p_srcLoc, const Vector3& p_srcDir
 	negNormalUp[0] = negNormalUp[2] = 0.0f;
 	negNormalUp[1] = -1.0f;
 
-	m_coefficients[1] = p_srcUp;
-	m_coefficients[2] = p_srcLoc;
+	m_eq[1] = p_srcUp;
+	m_eq[2] = p_srcLoc;
 
 	Mx3DPointFloat upRelative(negNormalUp);
-	upRelative -= m_coefficients[1];
+	upRelative -= m_eq[1];
 
 	for (MxS32 i = 0; i < 3; i++) {
 		if (groundPoint[0] == p_srcLoc[0]) {
 			return FAILURE;
 		}
 
-		m_coefficients[0][i] = (upRelative[i] * upRelative[i] + upRelative[i] * m_coefficients[1][i] * 2.0f) /
+		m_eq[0][i] = (upRelative[i] * upRelative[i] + upRelative[i] * m_eq[1][i] * 2.0f) /
 							   ((groundPoint[i] - p_srcLoc[i]) * 4.0f);
 	}
 
-	assert(m_coefficients[0][0] > 0.000001 || m_coefficients[0][0] < -0.000001);
+	assert(m_eq[0][0] > 0.000001 || m_eq[0][0] < -0.000001);
 
-	m_apexParameter = upRelative[0] / (m_coefficients[0][0] * 2.0f);
+	m_apexParameter = upRelative[0] / (m_eq[0][0] * 2.0f);
 	return SUCCESS;
 }
 
@@ -211,16 +211,16 @@ MxResult Act3Ammo::CalculateTransformOnCurve(float p_curveParameter, Matrix4& p_
 	Vector3 pos(p_transform[3]);
 	Mx3DPointFloat sndCoeff;
 
-	sndCoeff = m_coefficients[1];
+	sndCoeff = m_eq[1];
 	sndCoeff *= p_curveParameter;
-	pos = m_coefficients[0];
+	pos = m_eq[0];
 	pos *= curveParameterSquare;
 	pos += sndCoeff;
-	pos += m_coefficients[2];
-	dir = m_coefficients[0];
+	pos += m_eq[2];
+	dir = m_eq[0];
 	dir *= 2.0f;
 	dir *= p_curveParameter;
-	dir += m_coefficients[1];
+	dir += m_eq[1];
 	dir *= -1.0f;
 
 	if (dir.Unitize() != 0) {

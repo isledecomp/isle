@@ -26,7 +26,7 @@ MxDSBuffer::MxDSBuffer()
 	m_writeOffset = 0;
 	m_bytesRemaining = 0;
 	m_mode = e_preallocated;
-	m_unk0x30 = 0;
+	m_parentRequest = 0;
 }
 
 // FUNCTION: LEGO1 0x100c6530
@@ -109,8 +109,8 @@ MxResult MxDSBuffer::FUN_100c67b0(
 	MxResult result = FAILURE;
 	MxU8* data = m_pBuffer;
 
-	m_unk0x30 = (MxDSStreamingAction*) p_controller->GetUnk0x3c().Find(p_action);
-	if (m_unk0x30 == NULL) {
+	m_parentRequest = (MxDSStreamingAction*) p_controller->GetUnk0x3c().Find(p_action);
+	if (m_parentRequest == NULL) {
 		return FAILURE;
 	}
 
@@ -123,7 +123,7 @@ MxResult MxDSBuffer::FUN_100c67b0(
 			}
 
 			if (buffer->GetBytesRemaining() == 0) {
-				buffer->m_unk0x30 = m_unk0x30;
+				buffer->m_parentRequest = m_parentRequest;
 
 				result = buffer->CreateObject(p_controller, (MxU32*) buffer->GetBuffer(), p_action, p_streamingAction);
 				if (result == SUCCESS) {
@@ -184,7 +184,7 @@ MxResult MxDSBuffer::CreateObject(
 	}
 	else if (*p_data == FOURCC('M', 'x', 'C', 'h')) {
 		MxStreamChunk* chunk = (MxStreamChunk*) header;
-		if (!m_unk0x30->HasId((chunk)->GetObjectId())) {
+		if (!m_parentRequest->HasId((chunk)->GetObjectId())) {
 			delete header;
 			return SUCCESS;
 		}
@@ -206,7 +206,7 @@ MxResult MxDSBuffer::StartPresenterFromAction(
 	MxDSAction* p_objectheader
 )
 {
-	if (!m_unk0x30->GetInternalAction()) {
+	if (!m_parentRequest->GetAction()) {
 		p_objectheader->SetAtomId(p_action1->GetAtomId());
 		p_objectheader->SetUnknown28(p_action1->GetUnknown28());
 		p_objectheader->SetNotificationObject(p_action1->GetNotificationObject());
@@ -214,7 +214,7 @@ MxResult MxDSBuffer::StartPresenterFromAction(
 		p_objectheader->SetTimeStarted(p_action1->GetTimeStarted());
 		p_objectheader->MergeFrom(*p_action1);
 
-		m_unk0x30->SetInternalAction(p_objectheader->Clone());
+		m_parentRequest->SetAction(p_objectheader->Clone());
 
 		p_controller->InsertActionToList54(p_objectheader);
 
@@ -222,11 +222,11 @@ MxResult MxDSBuffer::StartPresenterFromAction(
 			return FAILURE;
 		}
 
-		m_unk0x30->SetLoopCount(p_objectheader->GetLoopCount());
-		m_unk0x30->SetFlags(p_objectheader->GetFlags());
-		m_unk0x30->SetDuration(p_objectheader->GetDuration());
+		m_parentRequest->SetLoopCount(p_objectheader->GetLoopCount());
+		m_parentRequest->SetFlags(p_objectheader->GetFlags());
+		m_parentRequest->SetDuration(p_objectheader->GetDuration());
 
-		if (m_unk0x30->GetInternalAction() == NULL) {
+		if (m_parentRequest->GetAction() == NULL) {
 			return FAILURE;
 		}
 	}
@@ -249,12 +249,12 @@ MxResult MxDSBuffer::ParseChunk(
 {
 	MxResult result = SUCCESS;
 
-	if (m_unk0x30->GetFlags() & MxDSAction::c_bit3 && m_unk0x30->GetUnknowna8() && p_header->GetTime() < 0) {
+	if (m_parentRequest->GetFlags() & MxDSAction::c_bit3 && m_parentRequest->GetUnknowna8() && p_header->GetTime() < 0) {
 		delete p_header;
 		return SUCCESS;
 	}
 
-	p_header->SetTime(p_header->GetTime() + m_unk0x30->GetUnknowna8());
+	p_header->SetTime(p_header->GetTime() + m_parentRequest->GetUnknowna8());
 
 	if (p_header->GetChunkFlags() & DS_CHUNK_SPLIT) {
 		MxU32 length = p_header->GetLength() + MxDSChunk::GetHeaderSize() + 8;
@@ -276,24 +276,24 @@ MxResult MxDSBuffer::ParseChunk(
 	}
 	else {
 		if (p_header->GetChunkFlags() & DS_CHUNK_END_OF_STREAM) {
-			if (m_unk0x30->HasId(p_header->GetObjectId())) {
-				if (m_unk0x30->GetFlags() & MxDSAction::c_bit3 &&
-					(m_unk0x30->GetLoopCount() > 1 || m_unk0x30->GetDuration() == -1)) {
+			if (m_parentRequest->HasId(p_header->GetObjectId())) {
+				if (m_parentRequest->GetFlags() & MxDSAction::c_bit3 &&
+					(m_parentRequest->GetLoopCount() > 1 || m_parentRequest->GetDuration() == -1)) {
 
 					if (p_action->GetObjectId() == p_header->GetObjectId()) {
-						MxU32 val = p_controller->GetProvider()->GetBufferForDWords()[m_unk0x30->GetObjectId()];
+						MxU32 val = p_controller->GetProvider()->GetBufferForDWords()[m_parentRequest->GetObjectId()];
 
-						m_unk0x30->SetUnknown94(val);
-						m_unk0x30->SetBufferOffset(m_writeOffset * (val / m_writeOffset));
+						m_parentRequest->SetUnknown94(val);
+						m_parentRequest->SetBufferOffset(m_writeOffset * (val / m_writeOffset));
 
 						MxNextActionDataStart* data =
-							p_controller->FindNextActionDataStartFromStreamingAction(m_unk0x30);
+							p_controller->FindNextActionDataStartFromStreamingAction(m_parentRequest);
 
 						if (data) {
-							data->SetData(m_unk0x30->GetBufferOffset());
+							data->SetData(m_parentRequest->GetBufferOffset());
 						}
 
-						m_unk0x30->FUN_100cd2d0();
+						m_parentRequest->FUN_100cd2d0();
 					}
 
 					delete p_header;

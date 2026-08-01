@@ -26,7 +26,7 @@ LegoCacheSound::~LegoCacheSound()
 // FUNCTION: BETA10 0x10066498
 void LegoCacheSound::Init()
 {
-	m_dsBuffer = NULL;
+	m_directSoundBuffer = NULL;
 	m_data = NULL;
 	m_unk0x58 = FALSE;
 	memset(&m_wfx, 0, sizeof(m_wfx));
@@ -73,7 +73,7 @@ MxResult LegoCacheSound::Create(
 	desc.dwBufferBytes = p_dataSize;
 	desc.lpwfxFormat = &wfx;
 
-	if (SoundManager()->GetDirectSound()->CreateSoundBuffer(&desc, &m_dsBuffer, NULL) != DS_OK) {
+	if (SoundManager()->GetDirectSound()->CreateSoundBuffer(&desc, &m_directSoundBuffer, NULL) != DS_OK) {
 		return FAILURE;
 	}
 
@@ -81,11 +81,11 @@ MxResult LegoCacheSound::Create(
 
 	MxS32 volume = m_volume * SoundManager()->GetVolume() / 100;
 	MxS32 attenuation = SoundManager()->GetAttenuation(volume);
-	m_dsBuffer->SetVolume(attenuation);
+	m_directSoundBuffer->SetVolume(attenuation);
 
-	if (m_sound.Create(m_dsBuffer, NULL, m_volume) != SUCCESS) {
-		m_dsBuffer->Release();
-		m_dsBuffer = NULL;
+	if (m_sound.Create(m_directSoundBuffer, NULL, m_volume) != SUCCESS) {
+		m_directSoundBuffer->Release();
+		m_directSoundBuffer = NULL;
 		return FAILURE;
 	}
 
@@ -115,10 +115,10 @@ void LegoCacheSound::CopyData(MxU8* p_data, MxU32 p_dataSize)
 // FUNCTION: BETA10 0x1006685b
 void LegoCacheSound::Destroy()
 {
-	if (m_dsBuffer) {
-		m_dsBuffer->Stop();
-		m_dsBuffer->Release();
-		m_dsBuffer = NULL;
+	if (m_directSoundBuffer) {
+		m_directSoundBuffer->Stop();
+		m_directSoundBuffer->Release();
+		m_directSoundBuffer = NULL;
 	}
 
 	delete[] m_data;
@@ -146,42 +146,42 @@ LegoCacheSound* LegoCacheSound::Clone()
 // FUNCTION: BETA10 0x10066a23
 MxResult LegoCacheSound::Play(const char* p_name, MxBool p_looping)
 {
-	assert(m_dsBuffer);
+	assert(m_directSoundBuffer);
 
 	if (m_data == NULL || m_dataSize == 0) {
 		return FAILURE;
 	}
 
 	m_unk0x6a = FALSE;
-	m_sound.FUN_10011a60(m_dsBuffer, p_name);
+	m_sound.FUN_10011a60(m_directSoundBuffer, p_name);
 
 	if (p_name != NULL) {
 		m_unk0x74 = p_name;
 	}
 
 	DWORD dwStatus;
-	m_dsBuffer->GetStatus(&dwStatus);
+	m_directSoundBuffer->GetStatus(&dwStatus);
 
 	if (dwStatus == DSBSTATUS_BUFFERLOST) {
-		m_dsBuffer->Restore();
-		m_dsBuffer->GetStatus(&dwStatus);
+		m_directSoundBuffer->Restore();
+		m_directSoundBuffer->GetStatus(&dwStatus);
 	}
 
 	if (dwStatus != DSBSTATUS_BUFFERLOST) {
 		LPVOID pvAudioPtr1, pvAudioPtr2;
 		DWORD dwAudioBytes1, dwAudioBytes2;
 
-		if (m_dsBuffer->Lock(0, m_dataSize, &pvAudioPtr1, &dwAudioBytes1, &pvAudioPtr2, &dwAudioBytes2, 0) == DS_OK) {
+		if (m_directSoundBuffer->Lock(0, m_dataSize, &pvAudioPtr1, &dwAudioBytes1, &pvAudioPtr2, &dwAudioBytes2, 0) == DS_OK) {
 			memcpy(pvAudioPtr1, m_data, dwAudioBytes1);
 
 			if (dwAudioBytes2 != 0) {
 				memcpy(pvAudioPtr2, m_data + dwAudioBytes1, dwAudioBytes2);
 			}
 
-			DWORD sts = m_dsBuffer->Unlock(pvAudioPtr1, dwAudioBytes1, pvAudioPtr2, dwAudioBytes2);
+			DWORD sts = m_directSoundBuffer->Unlock(pvAudioPtr1, dwAudioBytes1, pvAudioPtr2, dwAudioBytes2);
 			assert(!sts);
-			m_dsBuffer->SetCurrentPosition(0);
-			if (m_dsBuffer->Play(0, 0, p_looping)) {
+			m_directSoundBuffer->SetCurrentPosition(0);
+			if (m_directSoundBuffer->Play(0, 0, p_looping)) {
 				assert(0);
 			}
 		}
@@ -210,10 +210,10 @@ MxResult LegoCacheSound::Play(const char* p_name, MxBool p_looping)
 void LegoCacheSound::Stop()
 {
 	DWORD dwStatus;
-	m_dsBuffer->GetStatus(&dwStatus);
+	m_directSoundBuffer->GetStatus(&dwStatus);
 
 	if (dwStatus) {
-		m_dsBuffer->Stop();
+		m_directSoundBuffer->Stop();
 	}
 
 	m_unk0x58 = FALSE;
@@ -231,7 +231,7 @@ void LegoCacheSound::FUN_10006be0()
 {
 	if (!m_looping) {
 		DWORD dwStatus;
-		m_dsBuffer->GetStatus(&dwStatus);
+		m_directSoundBuffer->GetStatus(&dwStatus);
 
 		if (m_unk0x70) {
 			if (dwStatus == 0) {
@@ -242,7 +242,7 @@ void LegoCacheSound::FUN_10006be0()
 		}
 
 		if (dwStatus == 0) {
-			m_dsBuffer->Stop();
+			m_directSoundBuffer->Stop();
 			m_sound.Reset();
 			if (m_unk0x74.GetLength() != 0) {
 				m_unk0x74 = "";
@@ -258,14 +258,14 @@ void LegoCacheSound::FUN_10006be0()
 	}
 
 	if (!m_muted) {
-		if (!m_sound.UpdatePosition(m_dsBuffer)) {
+		if (!m_sound.UpdatePosition(m_directSoundBuffer)) {
 			if (!m_unk0x6a) {
-				m_dsBuffer->Stop();
+				m_directSoundBuffer->Stop();
 				m_unk0x6a = TRUE;
 			}
 		}
 		else if (m_unk0x6a) {
-			m_dsBuffer->Play(0, 0, m_looping);
+			m_directSoundBuffer->Play(0, 0, m_looping);
 			m_unk0x6a = FALSE;
 		}
 	}
@@ -291,12 +291,12 @@ void LegoCacheSound::MuteSilence(MxBool p_muted)
 		m_muted = p_muted;
 
 		if (m_muted) {
-			m_dsBuffer->SetVolume(-3000);
+			m_directSoundBuffer->SetVolume(-3000);
 		}
 		else {
 			MxS32 volume = m_volume * SoundManager()->GetVolume() / 100;
 			MxS32 attenuation = SoundManager()->GetAttenuation(volume);
-			m_dsBuffer->SetVolume(attenuation);
+			m_directSoundBuffer->SetVolume(attenuation);
 		}
 	}
 }
@@ -309,10 +309,10 @@ void LegoCacheSound::MuteStop(MxBool p_muted)
 		m_muted = p_muted;
 
 		if (m_muted) {
-			m_dsBuffer->Stop();
+			m_directSoundBuffer->Stop();
 		}
 		else {
-			m_dsBuffer->Play(0, 0, m_looping);
+			m_directSoundBuffer->Play(0, 0, m_looping);
 		}
 	}
 }
@@ -320,13 +320,13 @@ void LegoCacheSound::MuteStop(MxBool p_muted)
 // FUNCTION: BETA10 0x10066f4d
 MxResult LegoCacheSound::GetFrequency(LPDWORD p_freq)
 {
-	return m_dsBuffer->GetFrequency(p_freq);
+	return m_directSoundBuffer->GetFrequency(p_freq);
 }
 
 // FUNCTION: BETA10 0x10066f7b
 MxResult LegoCacheSound::SetFrequency(DWORD p_freq)
 {
-	return m_dsBuffer->SetFrequency(p_freq);
+	return m_directSoundBuffer->SetFrequency(p_freq);
 }
 
 // FUNCTION: BETA10 0x10066fa9
