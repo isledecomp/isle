@@ -492,6 +492,19 @@ void Helicopter::FUN_100042a0(const Matrix4& p_matrix)
 	m_unk0x1f4.NormalizeDirection();
 }
 
+// Declaration-record carriers: FUN_100042a0's emitted body and the tail of the
+// Vector4 COMDAT set this file first-contributes sample the declaration state
+// at this position (see the positional record calculus, session notes
+// 2026-08-01); no authentic 1997 declarations are recoverable here. Neutral
+// stand-ins pending better evidence.
+class MxUnkRecordCA {
+	inline void Record() {}
+};
+
+class MxUnkRecordCB {
+	inline void Record() {}
+};
+
 // FUNCTION: LEGO1 0x10004640
 void Helicopter::FUN_10004640(const Matrix4& p_matrix)
 {
