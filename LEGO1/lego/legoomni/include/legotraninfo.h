@@ -1,13 +1,17 @@
 #ifndef LEGOTRANINFO_H
 #define LEGOTRANINFO_H
 
+// clang-format off
+// See viewroi.h: parse order decides .rdata layout.
+#include "roi/legoroi.h"
+
 #include "decomp.h"
+// clang-format on
 #include "mxgeometry/mxmatrix.h"
 #include "mxtypes.h"
 
 struct AnimInfo;
 class LegoAnimMMPresenter;
-class LegoROI;
 class MxPresenter;
 
 // SIZE 0x78
