@@ -1,3 +1,7 @@
+// clang-format off
+#include "mxtransitionmanagerrecords.h"
+// clang-format on
+
 #include "mxtransitionmanager.h"
 
 #include "legoinputmanager.h"
