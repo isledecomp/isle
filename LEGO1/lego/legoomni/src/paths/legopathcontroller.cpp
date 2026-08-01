@@ -1110,4 +1110,5 @@ class MxUnkRecordAS {
 	inline void Record1() {}
 	inline void Record2() {}
 	inline void Record3() {}
+	inline void Record4() {}
 };
