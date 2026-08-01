@@ -4,6 +4,8 @@
 
 using namespace TglImpl;
 
+class MxUnkRecordTGA;
+
 DECOMP_SIZE_ASSERT(Camera, 0x04);
 DECOMP_SIZE_ASSERT(CameraImpl, 0x08);
 DECOMP_SIZE_ASSERT(Light, 0x04);
@@ -333,4 +335,3 @@ Renderer* Tgl::CreateRenderer()
 }
 
 class MxUnkRecordTG0;
-class MxUnkRecordTG1;
