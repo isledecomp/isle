@@ -20,6 +20,22 @@
 #include "mxtimer.h"
 #include "mxutilities.h"
 
+#include <assert.h>
+
+// Declaration-record carriers: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declarations are recoverable
+// at this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordAT {
+	inline void Record0() {}
+	inline void Record1() {}
+};
+
+class MxUnkRecordAU {
+	inline void Record0() {}
+	inline void Record1() {}
+};
+
 DECOMP_SIZE_ASSERT(LegoAnimMMPresenter, 0x74)
 
 // FUNCTION: LEGO1 0x1004a8d0
@@ -110,6 +126,7 @@ MxResult LegoAnimMMPresenter::StartAction(MxStreamController* p_controller, MxDS
 		result = SUCCESS;
 	}
 
+	assert(result == SUCCESS);
 	return result;
 }
 
@@ -250,6 +267,7 @@ void LegoAnimMMPresenter::ParseExtra()
 		char output[1024];
 		if (KeyValueStringParse(output, g_strANIMMAN_ID, extraCopy)) {
 			char* token = strtok(output, g_parseExtraTokens);
+			assert(token);
 			m_animmanId = atoi(token);
 			m_tranInfo = AnimationManager()->GetTranInfo(m_animmanId);
 
@@ -319,6 +337,8 @@ MxBool LegoAnimMMPresenter::FUN_1004b530(MxLong p_time)
 	if (m_presenter != NULL) {
 		m_presenter->GetTransforms(m_unk0x68, 0);
 		m_roiMap = m_presenter->GetROIMap(m_roiMapSize);
+		assert(m_roiMap);
+		assert(m_roiMapSize);
 		m_roiMapSize++;
 	}
 
