@@ -650,18 +650,7 @@ inline MxU32 LegoPathActor::CheckIntersectionBothFaces(
 
 		// LINE: LEGO1 0x1002ee9f
 		if (boundary != NULL) {
-			list<LegoPathBoundary*>::iterator it;
-
-			// LINE: LEGO1 0x1002eead
-			for (it = p_checkedBoundaries.begin(); it != p_checkedBoundaries.end(); ++it) {
-				// LINE: LEGO1 0x1002eeb3
-				if ((*it) == boundary) {
-					break;
-				}
-			}
-
-			// LINE: LEGO1 0x1002eec4
-			if (it == p_checkedBoundaries.end()) {
+			if (find(p_checkedBoundaries.begin(), p_checkedBoundaries.end(), boundary) == p_checkedBoundaries.end()) {
 				result = CheckIntersectionBothFaces(
 					p_checkedBoundaries,
 					boundary,
