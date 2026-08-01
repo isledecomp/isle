@@ -46,10 +46,10 @@ RegistrationBook::RegistrationBook() : m_registerDialogueTimer(0x80000000), m_un
 {
 	memset(m_alphabet, 0, sizeof(m_alphabet));
 	memset(m_name, 0, sizeof(m_name));
-	m_newName.m_cursorPos = 0;
+	m_cursorPos = 0;
 
 	memset(m_checkmark, 0, sizeof(m_checkmark));
-	memset(&m_newName, -1, sizeof(m_newName) - 2);
+	memset(m_letters, -1, sizeof(m_letters));
 
 	m_vehiclesToPosition = 0;
 	m_infocenterState = NULL;
@@ -186,37 +186,38 @@ MxLong RegistrationBook::HandleKeyPress(MxU8 p_key)
 			BackgroundAudioManager()->RaiseVolume();
 		}
 	}
-	else if (key != VK_BACK && m_newName.m_cursorPos < 7) {
-		m_name[0][m_newName.m_cursorPos] = m_alphabet[key - 'A']->Clone();
+	else if (key != VK_BACK && m_cursorPos < 7) {
+		m_name[0][m_cursorPos] = m_alphabet[key - 'A']->Clone();
+		assert(m_name[0][m_cursorPos]);
 
-		if (m_name[0][m_newName.m_cursorPos] != NULL) {
+		if (m_name[0][m_cursorPos] != NULL) {
 			m_alphabet[key - 'A']->GetAction()->SetUnknown24(m_alphabet[key - 'A']->GetAction()->GetUnknown24() + 1);
-			m_name[0][m_newName.m_cursorPos]->Enable(TRUE);
-			m_name[0][m_newName.m_cursorPos]->SetTickleState(MxPresenter::e_repeating);
-			m_name[0][m_newName.m_cursorPos]->SetPosition(m_newName.m_cursorPos * 23 + 343, 121);
+			m_name[0][m_cursorPos]->Enable(TRUE);
+			m_name[0][m_cursorPos]->SetTickleState(MxPresenter::e_repeating);
+			m_name[0][m_cursorPos]->SetPosition(m_cursorPos * 23 + 343, 121);
 
-			if (m_newName.m_cursorPos == 0) {
+			if (m_cursorPos == 0) {
 				m_checkmark[0]->Enable(TRUE);
 			}
 
-			m_newName.m_letters[m_newName.m_cursorPos] = key - 'A';
-			m_newName.m_cursorPos++;
+			m_letters[m_cursorPos] = key - 'A';
+			m_cursorPos++;
 		}
 	}
 	else {
-		if (key == VK_BACK && m_newName.m_cursorPos > 0) {
-			m_newName.m_cursorPos--;
+		if (key == VK_BACK && m_cursorPos > 0) {
+			m_cursorPos--;
 
-			m_name[0][m_newName.m_cursorPos]->Enable(FALSE);
+			m_name[0][m_cursorPos]->Enable(FALSE);
 
-			delete m_name[0][m_newName.m_cursorPos];
-			m_name[0][m_newName.m_cursorPos] = NULL;
+			delete m_name[0][m_cursorPos];
+			m_name[0][m_cursorPos] = NULL;
 
-			if (m_newName.m_cursorPos == 0) {
+			if (m_cursorPos == 0) {
 				m_checkmark[0]->Enable(FALSE);
 			}
 
-			m_newName.m_letters[m_newName.m_cursorPos] = -1;
+			m_letters[m_cursorPos] = -1;
 		}
 	}
 
@@ -283,8 +284,8 @@ void RegistrationBook::LoadSave(MxS16 p_checkMarkIndex)
 
 	// The first checkmark searches for the name and is -1 if not found, while all other checkmarks start at 1
 	// TODO: structure incorrect
-	MxS16 player = p_checkMarkIndex == 0 ? GameState()->FindPlayer(*(LegoGameState::Username*) &m_newName.m_letters)
-										 : p_checkMarkIndex - 1;
+	MxS16 player =
+		p_checkMarkIndex == 0 ? GameState()->FindPlayer(*(LegoGameState::Username*) &m_letters) : p_checkMarkIndex - 1;
 
 	switch (player) {
 	case 0: // Current save
@@ -302,7 +303,7 @@ void RegistrationBook::LoadSave(MxS16 p_checkMarkIndex)
 		m_awaitLoad = TRUE;
 
 		// TOOD: structure incorrect
-		GameState()->AddPlayer(*(LegoGameState::Username*) &m_newName.m_letters);
+		GameState()->AddPlayer(*(LegoGameState::Username*) &m_letters);
 		GameState()->Save(0);
 
 		WriteInfocenterLetters(0);
