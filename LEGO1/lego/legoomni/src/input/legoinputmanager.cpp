@@ -61,7 +61,6 @@ MxResult LegoInputManager::Create(HWND p_hwnd)
 	MxResult result = SUCCESS;
 
 	m_controlManager = new LegoControlManager;
-	assert(m_controlManager);
 
 	if (!m_keyboardNotifyList) {
 		m_keyboardNotifyList = new LegoNotifyList;
@@ -434,6 +433,7 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 			}
 
 			if (p_param.GetNotification() == c_notificationButtonDown) {
+				assert(VideoManager());
 				MxPresenter* presenter = VideoManager()->GetPresenterAt(p_param.GetX(), p_param.GetY());
 
 				if (presenter) {

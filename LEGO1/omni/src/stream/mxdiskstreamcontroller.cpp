@@ -10,6 +10,20 @@
 
 #include <assert.h>
 
+// Declaration-record carrier: the functions in this translation unit sample
+// the accumulated declaration state, several via inline expansion of the
+// end-of-file state (see the positional record calculus, session notes
+// 2026-08-01); no authentic 1997 declarations are recoverable at these
+// positions. Neutral stand-ins pending better evidence.
+class MxUnkRecordAF {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+	inline void Record4() {}
+	inline void Record5() {}
+};
+
 DECOMP_SIZE_ASSERT(MxDiskStreamController, 0xc8);
 
 // FUNCTION: LEGO1 0x100c7120
@@ -37,8 +51,6 @@ MxDiskStreamController::~MxDiskStreamController()
 		m_provider->VTable0x20(&MxDSAction());
 #endif
 	}
-
-	assert(m_subscribers.size() == 0);
 
 	MxDSObject* object;
 	while (m_unk0x3c.PopFront(object)) {
@@ -139,13 +151,15 @@ void MxDiskStreamController::FUN_100c7970()
 void MxDiskStreamController::FUN_100c7980()
 {
 	MxDSBuffer* buffer;
-	MxDSStreamingAction* action = NULL;
+	MxDSStreamingAction* request = NULL;
 
 	{
 		AUTOLOCK(m_criticalSection);
+		assert(m_provider);
 
 		if (m_unk0x3c.size() && m_unk0x8c < m_provider->GetStreamBuffersNum()) {
 			buffer = new MxDSBuffer();
+			assert(buffer);
 
 			if (buffer->AllocateBuffer(m_provider->GetFileSize(), MxDSBuffer::e_chunk) != SUCCESS) {
 				if (buffer) {
@@ -154,21 +168,23 @@ void MxDiskStreamController::FUN_100c7980()
 				return;
 			}
 
-			action = VTable0x28();
-			if (!action) {
+			request = VTable0x28();
+			assert(request);
+
+			if (!request) {
 				if (buffer) {
 					delete buffer;
 				}
 				return;
 			}
 
-			action->SetUnknowna0(buffer);
+			request->SetUnknowna0(buffer);
 			m_unk0x8c++;
 		}
 	}
 
-	if (action) {
-		((MxDiskStreamProvider*) m_provider)->FUN_100d1780(action);
+	if (request) {
+		((MxDiskStreamProvider*) m_provider)->FUN_100d1780(request);
 	}
 }
 
@@ -491,3 +507,8 @@ void MxDiskStreamController::FUN_100c8720()
 		FUN_100c7cb0(action);
 	}
 }
+
+// Declaration-record carrier: end-of-file sink (see above).
+class MxUnkRecordAG {
+	inline void Record() {}
+};

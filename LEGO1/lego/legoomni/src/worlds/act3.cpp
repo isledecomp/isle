@@ -638,6 +638,7 @@ MxLong Act3::Notify(MxParam& p_param)
 		}
 		case c_notificationKeyPress:
 			if (m_state->m_state == Act3State::e_ready && ((LegoEventNotificationParam&) p_param).GetKey() == ' ') {
+				assert(AnimationManager());
 				AnimationManager()->FUN_10061010(FALSE);
 				return 1;
 			}

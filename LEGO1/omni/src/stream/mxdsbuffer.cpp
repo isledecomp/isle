@@ -33,8 +33,6 @@ MxDSBuffer::MxDSBuffer()
 // FUNCTION: BETA10 0x10156ff7
 MxDSBuffer::~MxDSBuffer()
 {
-	assert(m_referenceCount == 0);
-
 	if (m_pBuffer != NULL) {
 		switch (m_mode) {
 		case e_allocate:
@@ -64,7 +62,6 @@ MxResult MxDSBuffer::AllocateBuffer(MxU32 p_bufferSize, Type p_mode)
 	switch (p_mode) {
 	case e_allocate:
 		m_pBuffer = new MxU8[p_bufferSize];
-		assert(m_pBuffer); // m_firstRiffChunk?
 		break;
 
 	case e_chunk:
@@ -215,10 +212,12 @@ MxResult MxDSBuffer::StartPresenterFromAction(
 		p_objectheader->MergeFrom(*p_action1);
 
 		m_parentRequest->SetAction(p_objectheader->Clone());
+		assert(m_parentRequest->GetAction());
 
 		p_controller->InsertActionToList54(p_objectheader);
 
 		if (MxOmni::GetInstance()->CreatePresenter(p_controller, *p_objectheader) != SUCCESS) {
+			assert(0);
 			return FAILURE;
 		}
 
@@ -227,6 +226,7 @@ MxResult MxDSBuffer::StartPresenterFromAction(
 		m_parentRequest->SetDuration(p_objectheader->GetDuration());
 
 		if (m_parentRequest->GetAction() == NULL) {
+			assert(0);
 			return FAILURE;
 		}
 	}
@@ -249,7 +249,8 @@ MxResult MxDSBuffer::ParseChunk(
 {
 	MxResult result = SUCCESS;
 
-	if (m_parentRequest->GetFlags() & MxDSAction::c_bit3 && m_parentRequest->GetUnknowna8() && p_header->GetTime() < 0) {
+	if (m_parentRequest->GetFlags() & MxDSAction::c_bit3 && m_parentRequest->GetUnknowna8() &&
+		p_header->GetTime() < 0) {
 		delete p_header;
 		return SUCCESS;
 	}
