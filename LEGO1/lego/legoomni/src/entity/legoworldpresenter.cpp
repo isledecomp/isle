@@ -27,6 +27,7 @@
 #include "mxstl/stlcompat.h"
 #include "mxutilities.h"
 
+#include <assert.h>
 #include <io.h>
 
 DECOMP_SIZE_ASSERT(LegoWorldPresenter, 0x54)
@@ -130,6 +131,8 @@ MxResult LegoWorldPresenter::StartAction(MxStreamController* p_controller, MxDSA
 void LegoWorldPresenter::ReadyTickle()
 {
 	m_entity = (LegoEntity*) MxPresenter::CreateEntity("LegoWorld");
+	assert(m_entity);
+
 	if (m_entity) {
 		m_entity->Create(*m_action);
 		Lego()->AddWorld((LegoWorld*) m_entity);
@@ -214,6 +217,8 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		}
 
 		buff = new MxU8[size];
+		assert(buff);
+
 		if (fread(buff, size, 1, wdbFile) != 1) {
 			return FAILURE;
 		}
@@ -234,6 +239,8 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		}
 
 		buff = new MxU8[size];
+		assert(buff);
+
 		if (fread(buff, size, 1, wdbFile) != 1) {
 			return FAILURE;
 		}
@@ -318,6 +325,7 @@ MxResult LegoWorldPresenter::LoadWorldPart(ModelDbPart& p_part, FILE* p_wdbFile)
 {
 	MxResult result;
 	MxU8* buff = new MxU8[p_part.m_partDataLength];
+	assert(buff);
 
 	fseek(p_wdbFile, p_part.m_partDataOffset, SEEK_SET);
 	if (fread(buff, p_part.m_partDataLength, 1, p_wdbFile) != 1) {
@@ -343,6 +351,7 @@ MxResult LegoWorldPresenter::LoadWorldPart(ModelDbPart& p_part, FILE* p_wdbFile)
 MxResult LegoWorldPresenter::LoadWorldModel(ModelDbModel& p_model, FILE* p_wdbFile, LegoWorld* p_world)
 {
 	MxU8* buff = new MxU8[p_model.m_modelDataLength];
+	assert(buff);
 
 	fseek(p_wdbFile, p_model.m_modelDataOffset, SEEK_SET);
 	if (fread(buff, p_model.m_modelDataLength, 1, p_wdbFile) != 1) {
@@ -371,6 +380,7 @@ MxResult LegoWorldPresenter::LoadWorldModel(ModelDbModel& p_model, FILE* p_wdbFi
 		LegoActorPresenter presenter;
 		presenter.SetAction(&action);
 		LegoEntity* entity = (LegoEntity*) presenter.CreateEntity("LegoActor");
+		assert(entity);
 		presenter.SetInternalEntity(entity);
 		presenter.SetEntityLocation(p_model.m_location, p_model.m_direction, p_model.m_up);
 		entity->Create(action);
@@ -379,6 +389,7 @@ MxResult LegoWorldPresenter::LoadWorldModel(ModelDbModel& p_model, FILE* p_wdbFi
 		LegoEntityPresenter presenter;
 		presenter.SetAction(&action);
 		createdEntity = (LegoEntity*) presenter.CreateEntity("LegoEntity");
+		assert(createdEntity);
 		presenter.SetInternalEntity(createdEntity);
 		presenter.SetEntityLocation(p_model.m_location, p_model.m_direction, p_model.m_up);
 		createdEntity->Create(action);
@@ -418,6 +429,7 @@ void LegoWorldPresenter::AdvanceSerialAction(MxPresenter* p_presenter)
 	if (!p_presenter->IsA("LegoAnimPresenter") && !p_presenter->IsA("MxControlPresenter") &&
 		!p_presenter->IsA("MxCompositePresenter")) {
 		p_presenter->SendToCompositePresenter(Lego());
+		assert(m_entity);
 		((LegoWorld*) m_entity)->Add(p_presenter);
 	}
 }
@@ -436,9 +448,11 @@ void LegoWorldPresenter::ParseExtra()
 
 		char output[1024];
 		if (KeyValueStringParse(output, g_strWORLD, extraCopy)) {
-			char* worldKey = strtok(output, g_parseExtraTokens);
-			LoadWorld(worldKey, (LegoWorld*) m_entity);
-			((LegoWorld*) m_entity)->SetWorldId(Lego()->GetWorldId(worldKey));
+			char* token = strtok(output, g_parseExtraTokens);
+			assert(token);
+
+			LoadWorld(token, (LegoWorld*) m_entity);
+			((LegoWorld*) m_entity)->SetWorldId(Lego()->GetWorldId(token));
 		}
 	}
 }
