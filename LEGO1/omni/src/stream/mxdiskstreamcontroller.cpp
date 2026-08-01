@@ -1,3 +1,7 @@
+// clang-format off
+#include "mxdiskstreamcontrollerrecords.h"
+// clang-format on
+
 #include "mxdiskstreamcontroller.h"
 
 #include "mxactionnotificationparam.h"
