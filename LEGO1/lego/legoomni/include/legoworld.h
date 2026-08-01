@@ -116,7 +116,7 @@ public:
 	LegoEntityList* GetEntityList() { return m_entityList; }
 	LegoOmni::World GetWorldId() { return m_worldId; }
 	MxBool NoDisabledObjects() { return m_disabledObjects.empty(); }
-	list<LegoROI*>& GetROIList() { return m_roiList; }
+	list<LegoROI*>* GetROIList() { return &m_roiList; }
 	LegoHideAnimPresenter* GetHideAnimPresenter() { return m_hideAnim; }
 
 	void SetWorldId(LegoOmni::World p_worldId) { m_worldId = p_worldId; }

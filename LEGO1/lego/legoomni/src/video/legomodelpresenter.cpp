@@ -222,7 +222,9 @@ MxResult LegoModelPresenter::CreateROI(
 		p_entity->ClearFlag(LegoEntity::c_managerOwned);
 	}
 	else {
-		p_world->GetROIList().push_back(m_roi);
+		list<LegoROI*>* rl = p_world->GetROIList();
+		assert(rl);
+		rl->push_back(m_roi);
 	}
 
 	return result;
@@ -311,12 +313,13 @@ void LegoModelPresenter::ParseExtra()
 		}
 		else if (KeyValueStringParse(output, g_strDB_CREATE, extraCopy) != 0 && m_roi == NULL) {
 			LegoWorld* currentWorld = CurrentWorld();
-			list<LegoROI*>& roiList = currentWorld->GetROIList();
+			list<LegoROI*>* rl = currentWorld->GetROIList();
+			assert(rl);
 
-			for (list<LegoROI*>::iterator it = roiList.begin(); it != roiList.end(); it++) {
+			for (list<LegoROI*>::iterator it = rl->begin(); it != rl->end(); it++) {
 				if (!strcmpi((*it)->GetName(), output)) {
 					m_roi = *it;
-					roiList.erase(it);
+					rl->erase(it);
 
 					m_addedToView = TRUE;
 					VideoManager()->Get3DManager()->Add(*m_roi);
