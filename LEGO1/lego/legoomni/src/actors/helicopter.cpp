@@ -1,25 +1,6 @@
-// Declaration-record carriers: helicopter.cpp is the link-order owner of the
-// shared realtime vector/matrix COMDATs, so its declaration state decides
-// their bytes binary-wide (see the positional record calculus, session notes
-// 2026-08-01). No authentic 1997 declarations are recoverable at this
-// position. Neutral stand-ins pending better evidence.
-class MxUnkRecordAA {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-};
-
-class MxUnkRecordAB {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-};
-
-class MxUnkRecordAC {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-};
+// clang-format off
+#include "helicopterrecords.h"
+// clang-format on
 
 #include "helicopter.h"
 
