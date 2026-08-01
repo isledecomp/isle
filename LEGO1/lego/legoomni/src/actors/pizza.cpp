@@ -24,12 +24,22 @@
 
 #include <assert.h>
 
+#ifdef BETA10
+#include "legocontrolmanager.h"
+#endif
+
 DECOMP_SIZE_ASSERT(Pizza, 0x9c)
 DECOMP_SIZE_ASSERT(PizzaMissionState, 0xb4)
 DECOMP_SIZE_ASSERT(PizzaMissionState::Mission, 0x20)
 
 // Flags used in isle.cpp
 extern MxU32 g_isleFlags;
+
+// GLOBAL: LEGO1 0x100f3a78
+// GLOBAL: BETA10 0x101f92a0
+// STRING: LEGO1 0x100f3840
+// STRING: BETA10 0x101f9410
+const char* g_pizPie = "pizpie";
 
 // GLOBAL: LEGO1 0x100f3a80
 IsleScript::Script PizzaMissionState::g_pepperActions[] = {
@@ -372,6 +382,30 @@ MxLong Pizza::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 	return 0;
 }
+
+#ifdef BETA10
+// FUNCTION: BETA10 0x100ee1f8
+MxLong Pizza::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
+{
+	assert(m_mission);
+
+	if (m_state->m_state == PizzaMissionState::e_introduction ||
+		m_state->m_state == PizzaMissionState::e_transitionToAct2) {
+		AnimationManager()->FUN_10061010(FALSE);
+	}
+
+	LegoROI* roi = PickROI(p_param.GetX(), p_param.GetY());
+
+	if (roi == NULL || strcmpi(roi->GetName(), g_pizPie) != 0) {
+		if (m_state->m_state == PizzaMissionState::e_introduction) {
+			Reset();
+			return 1;
+		}
+	}
+
+	return 0;
+}
+#endif
 
 // FUNCTION: LEGO1 0x100388a0
 // FUNCTION: BETA10 0x100ee2d9
