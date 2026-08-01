@@ -19,6 +19,8 @@
 #include <stdio.h>
 #include <vec.h>
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoPlantManager, 0x2c)
 DECOMP_SIZE_ASSERT(LegoPlantManager::AnimEntry, 0x0c)
 DECOMP_SIZE_ASSERT(LegoPlantInfo, 0x54)
@@ -2165,6 +2167,7 @@ LegoEntity* LegoPlantManager::CreatePlant(MxS32 p_index, LegoWorld* p_world, Leg
 	LegoEntity* entity = NULL;
 
 	if (p_index < sizeOfArray(g_plantInfo)) {
+		assert(p_worldId < 32);
 		MxU32 world = 1 << (MxU8) p_worldId;
 
 		if (g_plantInfo[p_index].m_worlds & world && g_plantInfo[p_index].m_counter != 0) {
@@ -2179,6 +2182,7 @@ LegoEntity* LegoPlantManager::CreatePlant(MxS32 p_index, LegoWorld* p_world, Leg
 				roi->SetVisibility(TRUE);
 
 				entity = roi->GetEntity();
+				assert(entity);
 				entity->SetLocation(
 					g_plantInfo[p_index].m_position,
 					g_plantInfo[p_index].m_direction,
@@ -2202,6 +2206,7 @@ LegoEntity* LegoPlantManager::CreatePlant(MxS32 p_index, LegoWorld* p_world, Leg
 void LegoPlantManager::RemovePlant(MxS32 p_index, LegoOmni::World p_worldId)
 {
 	if (p_index < sizeOfArray(g_plantInfo)) {
+		assert(p_worldId < 32);
 		MxU32 world = 1 << (MxU8) p_worldId;
 
 		if (g_plantInfo[p_index].m_worlds & world && g_plantInfo[p_index].m_entity != NULL) {
@@ -2342,6 +2347,7 @@ MxBool LegoPlantManager::SwitchColor(LegoEntity* p_entity)
 	}
 
 	ViewLODList* lodList = GetViewLODListManager()->Lookup(g_plantLodNames[info->m_variant][info->m_color]);
+	assert(lodList);
 
 	if (roi->GetLodLevel() >= 0) {
 		VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveROIDetailFromScene(roi);
@@ -2371,6 +2377,7 @@ MxBool LegoPlantManager::SwitchVariant(LegoEntity* p_entity)
 	}
 
 	ViewLODList* lodList = GetViewLODListManager()->Lookup(g_plantLodNames[info->m_variant][info->m_color]);
+	assert(lodList);
 
 	if (roi->GetLodLevel() >= 0) {
 		VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveROIDetailFromScene(roi);
