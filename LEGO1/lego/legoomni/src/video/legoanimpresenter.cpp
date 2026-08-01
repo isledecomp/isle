@@ -268,6 +268,7 @@ void LegoAnimPresenter::CreateManagedActors()
 			else if (actorType == LegoAnimActorEntry::e_managedInvisibleRoi) {
 				LegoChar* baseName = new LegoChar[strlen(str)];
 				strcpy(baseName, str + 1);
+				assert(*baseName);
 				strlwr(baseName);
 
 				LegoChar* roiName = GetActorName(str);
@@ -283,6 +284,7 @@ void LegoAnimPresenter::CreateManagedActors()
 			else if (actorType == LegoAnimActorEntry::e_managedInvisibleRoiTrimmed) {
 				LegoChar* lodName = new LegoChar[strlen(str)];
 				strcpy(lodName, str + 1);
+				assert(*lodName);
 
 				for (LegoChar* c = &lodName[strlen(lodName) - 1]; c > lodName; c--) {
 					if ((*c < '0' || *c > '9') && *c != '_') {
@@ -333,6 +335,7 @@ void LegoAnimPresenter::CreateSceneROIs()
 					const LegoChar* actorName = m_anim->GetActorName(i);
 
 					LegoU32 len = strlen(actorName);
+					assert(len < sizeof(lodName));
 					strcpy(lodName, actorName);
 
 					for (LegoChar* i = &lodName[len - 1]; isdigit(*i) || *i == '_'; i--) {
@@ -894,6 +897,7 @@ void LegoAnimPresenter::StreamingTickle()
 {
 	if (m_subscriber->PeekData()) {
 		MxStreamChunk* chunk = m_subscriber->PopData();
+		assert(chunk->GetChunkFlags() & DS_CHUNK_END_OF_STREAM);
 		m_subscriber->FreeDataChunk(chunk);
 	}
 
@@ -1032,6 +1036,7 @@ void LegoAnimPresenter::ParseExtra()
 
 		if (KeyValueStringParse(output, g_strSUBST, extraCopy)) {
 			m_substMap = new LegoAnimSubstMap();
+			assert(m_substMap);
 
 			char* substToken = output;
 			char *key, *value;
@@ -1051,9 +1056,11 @@ void LegoAnimPresenter::ParseExtra()
 
 		if (KeyValueStringParse(output, g_strWORLD, extraCopy)) {
 			char* token = strtok(output, g_parseExtraTokens);
+			assert(token);
 			m_worldAtom = MxAtomId(token, e_lowerCase2);
 
 			token = strtok(NULL, g_parseExtraTokens);
+			assert(token);
 			m_worldId = atoi(token);
 		}
 
@@ -1288,6 +1295,7 @@ void LegoLoopingAnimPresenter::StreamingTickle()
 {
 	if (m_subscriber->PeekData()) {
 		MxStreamChunk* chunk = m_subscriber->PopData();
+		assert(chunk->GetChunkFlags() & DS_CHUNK_END_OF_STREAM);
 		m_subscriber->FreeDataChunk(chunk);
 	}
 
@@ -1462,6 +1470,7 @@ void LegoLocomotionAnimPresenter::StartingTickle()
 {
 	if (m_subscriber->PeekData()) {
 		MxStreamChunk* chunk = m_subscriber->PopData();
+		assert(chunk->GetChunkFlags() & DS_CHUNK_END_OF_STREAM);
 		m_subscriber->FreeDataChunk(chunk);
 	}
 
@@ -1727,3 +1736,14 @@ void LegoHideAnimPresenter::EndAction()
 		}
 	}
 }
+
+// Declaration-record carrier: end-of-file sink; the translation unit's
+// end-emitted template pool and late functions sample the end state (see the
+// positional record calculus, session notes 2026-08-01); no authentic 1997
+// declaration is recoverable at this position. Neutral stand-in pending
+// better evidence.
+class MxUnkRecordAP {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+};
