@@ -10,6 +10,12 @@
 DECOMP_SIZE_ASSERT(CDialog, 0x60)
 DECOMP_SIZE_ASSERT(CMainDialog, 0x70)
 
+enum {
+	c_aboutSysCommandId = 16,
+	c_deviceNameBufferSize = 256,
+	c_16BitDisplayDepth = 16
+};
+
 // FUNCTION: CONFIG 0x00403d50
 // FUNCTION: CONFIGD 0x004086f7
 CMainDialog::CMainDialog(CWnd* pParent) : CDialog(IDD, pParent)
@@ -57,7 +63,7 @@ BOOL CMainDialog::OnInitDialog()
 	about_text.LoadString(IDS_ABOUT);
 	if (!about_text.IsEmpty()) {
 		system_menu->AppendMenu(MF_SEPARATOR, 0, (LPCTSTR) NULL);
-		system_menu->AppendMenu(MF_STRING, 16, (LPCTSTR) about_text);
+		system_menu->AppendMenu(MF_STRING, c_aboutSysCommandId, (LPCTSTR) about_text);
 	}
 
 	CWnd::SetIcon(m_icon, TRUE);
@@ -85,7 +91,7 @@ BOOL CMainDialog::OnInitDialog()
 				selected = device_i;
 			}
 
-			char device_name[256];
+			char device_name[c_deviceNameBufferSize];
 			if (driver_i == 0) {
 				sprintf(device_name, "%s ( Primary Device )", (*it_device).m_deviceName);
 			}
@@ -107,7 +113,7 @@ BOOL CMainDialog::OnInitDialog()
 // FUNCTION: CONFIGD 0x00408ab7
 void CMainDialog::OnSysCommand(UINT nID, LPARAM lParam)
 {
-	if ((nID & 0xfff0) == 0x10) {
+	if ((nID & 0xfff0) == c_aboutSysCommandId) {
 		CAboutDialog about_dialog;
 		about_dialog.DoModal();
 	}
@@ -299,7 +305,7 @@ void CMainDialog::OnCheckbox3DVideoMemory()
 // FUNCTION: CONFIGD 0x00409224
 void CMainDialog::OnRadiobuttonPalette16bit()
 {
-	currentConfigApp->m_display_bit_depth = 16;
+	currentConfigApp->m_display_bit_depth = c_16BitDisplayDepth;
 	m_modified = TRUE;
 	UpdateInterface();
 }
