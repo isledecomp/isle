@@ -156,6 +156,7 @@ void Act2Actor::InitializeNextShot()
 	}
 
 	assert(m_shootAnim);
+	assert(SoundManager()->GetCacheSoundManager());
 
 	m_cachedShootSound = SoundManager()->GetCacheSoundManager()->FindSoundByKey("xarrow");
 #ifdef BETA10

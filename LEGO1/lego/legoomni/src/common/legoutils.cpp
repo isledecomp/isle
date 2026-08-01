@@ -34,6 +34,8 @@
 #include <string.h>
 #include <vec.h>
 
+#include <assert.h>
+
 // FUNCTION: LEGO1 0x1003dd70
 // FUNCTION: BETA10 0x100d3410
 LegoROI* PickROI(MxLong p_x, MxLong p_y)
@@ -179,20 +181,20 @@ void CalculateViewFromAnimation(LegoAnimPresenter* p_presenter)
 {
 	MxMatrix viewMatrix;
 	LegoTreeNode* rootNode = p_presenter->GetAnimation()->GetRoot();
-	LegoAnimNodeData* camData = NULL;
+	LegoAnimNodeData* cameraData = NULL;
 	LegoAnimNodeData* targetData = NULL;
 	MxS16 nodesCount = CountTotalTreeNodes(rootNode);
 
 	MxFloat fov;
 	for (MxS16 i = 0; i < nodesCount; i++) {
-		if (camData && targetData) {
+		if (cameraData && targetData) {
 			break;
 		}
 
 		LegoAnimNodeData* data = (LegoAnimNodeData*) GetTreeNode(rootNode, i)->GetData();
 
 		if (!strnicmp(data->GetName(), "CAM", strlen("CAM"))) {
-			camData = data;
+			cameraData = data;
 			fov = atof(&data->GetName()[strlen(data->GetName()) - 2]);
 		}
 		else if (!strcmpi(data->GetName(), "TARGET")) {
@@ -205,7 +207,10 @@ void CalculateViewFromAnimation(LegoAnimPresenter* p_presenter)
 	matrixCam.SetIdentity();
 	matrixTarget.SetIdentity();
 
-	camData->CreateLocalTransform(0.0f, matrixCam);
+	assert(cameraData);
+	assert(targetData);
+
+	cameraData->CreateLocalTransform(0.0f, matrixCam);
 	targetData->CreateLocalTransform(0.0f, matrixTarget);
 
 	Mx3DPointFloat dir;
@@ -384,7 +389,9 @@ void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender
 // FUNCTION: LEGO1 0x1003eab0
 void SetCameraControllerFromIsle()
 {
-	InputManager()->SetCamera(FindWorld(*g_isleScript, IsleScript::c__Isle)->GetCameraController());
+	Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
+	assert(isle);
+	InputManager()->SetCamera(isle->GetCameraController());
 }
 
 // FUNCTION: LEGO1 0x1003eae0
