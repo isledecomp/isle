@@ -2,8 +2,10 @@
 """Regenerate 3rdparty/smartheap/SHLW32MT.LIB (SmartHeap 3.31) from the 3.30 lib.
 
 The original ISLE.EXE/LEGO1.DLL link SmartHeap 3.31; the lib previously in the
-repo is 3.30 (members dated 1997-03-19). Exactly eight .text sections differ,
-plus the version string 'SmartHeap330MutexMovShrName' -> '...331...':
+repo is 3.30 (members dated 1997-03-19). Nineteen .text sections differ, plus
+the version string 'SmartHeap330MutexMovShrName' -> '...331...'.
+
+Eight small deltas (addends preserved, layout unchanged):
 
   task.obj   sec8   @_shi_taskRemovePool@4        one immediate byte 01->11
   info.obj   sec23  @_shi_isBlockInUseFS@12       regalloc recompile, 0 relocs
@@ -14,14 +16,32 @@ plus the version string 'SmartHeap330MutexMovShrName' -> '...331...':
   heap.obj   sec58  @_shi_resizeAny@16            same-size recompile
   syswin32.obj sec101 _shi_enterPoolInitMutexWriter  tail change, 16 relocs rebuilt
 
+Six more of the same kind (SPLICE_INPLACE): info.obj @shi_walkPoolSmall@12 /
+@_shi_walkPoolExternal@8, syswin32.obj @shi_findAddrInProcess@20 /
+@_shi_sysFreePool@8, pool.obj @_shi_normalizePageSize@4, check.obj
+@_shi_validateFreeListVar@4 -- all a flipped compare direction plus the
+matching branch condition.
+
+And five wholesale recompiles (SPLICE) that change size and move (or reorder)
+their relocation sites:
+
+  syswin32.obj sec25 @shi_sysAllocRegion@16       0x138 -> 0x13a,  7 relocs
+  syswin32.obj sec27 @_shi_sysAllocNamedShared@32 0x227 -> 0x22b, 19 relocs
+  syswin32.obj sec29 @shi_findSharedAddress@16    0x1d4 -> 0x1d2, 11 relocs
+  syswin32.obj sec76 @shi_initPoolMutexShr@4      0x069 -> 0x068,  4 relocs (reordered)
+  pool.obj     sec16 @_shi_initPool@36            0x2a9 -> 0x2a4, 25 relocs
+
 New code bytes are taken from the original ISLE.EXE (legobin/); relocation
 addends are restored from the 3.30 lib where layout is unchanged, and for
 _shi_enterPoolInitMutexWriter the relocation entries are rebuilt by resolving
 each DIR32 site via PE base relocs + annotations (ISLE/library_smartheap.h)
-and each external REL32 branch via the same annotations. The same four
-public functions differ in LEGO1.DLL at 0x10087910/0x10089350/0x10089f70/
-0x1008aac0; ISLE and LEGO1 SmartHeap bytes are identical, so one lib fixes
-both binaries.
+and each external REL32 branch via the same annotations. The five SPLICE
+functions resolve their sites the same way but against ISLE_SYMS, and require
+the (symbol, type, addend) multiset to match 3.30 exactly. Every size change
+is absorbed by the 16-byte COMDAT padding, so no other function moves in
+either binary. ISLE and LEGO1 SmartHeap bytes are identical, so one lib fixes
+both: after this patch ISLE.EXE's .text differs from retail only in import
+address-table operands (a .idata ordering issue) and .reloc is byte-identical.
 
 Usage:
   python3 tools/patch_smartheap_331.py --from-git <rev-with-3.30-lib> --check
@@ -51,6 +71,67 @@ IMAGE_REL_I386_REL32 = 20
 RELOC_TYPES = {6: "DIR32", 7: "DIR32NB", 20: "REL32", 11: "SECTION", 12: "SECREL"}
 
 md = Cs(CS_ARCH_X86, CS_MODE_32)
+
+# ---------------------------------------------------------------- 3.31 splices
+# Retail ISLE.EXE addresses of the SmartHeap symbols referenced by the five
+# recompiled functions below.  ISLE.EXE's .text layout is reproduced exactly by
+# the repo build, so these are stable; every use is cross-checked against the
+# 3.30 relocation table (same symbol, same type, same addend) before it is used.
+ISLE_SYMS = {
+    "@shi_insertSharedPool@8":       0x405b50,
+    "@shi_initPoolMutexShr@4":       0x405d70,
+    "@shi_deleteSharedPool@4":       0x405c60,
+    "@shi_freeFreeRegion@8":         0x405b00,
+    "@shi_findSharedAddress@16":     0x4050a0,
+    "_shi_isNT":                     0x406180,
+    "@shi_putSharedPoolMapping@16":  0x4052f0,
+    "@_shi_sysAllocNear@4":          0x404bd0,
+    "@shi_findAddrInProcess@20":     0x405280,
+    "_rand":                         0x4081f0,
+    "@_shi_sysFreeNear@4":           0x404bf0,
+    "@shi_findSharedPool@4":         0x405d10,
+    "@shi_genMutexName@8":           0x405de0,
+    "_shi_enterPoolInitMutexReader": 0x405fd0,
+    "_shi_poolAttachShared":         0x4061d0,
+    "@_shi_sysAllocNamedShared@32":  0x404e70,
+    "@shi_sysAllocRegion@16":        0x404d30,
+    "@_shi_sysAllocPool@12":         0x405300,
+    "@_shi_invokeErrorHandler1@8":   0x4068c0,
+    "_shi_leavePoolInitMutexReader": 0x406060,
+    "@_shi_registerShared@16":       0x405800,
+    "@_shi_sysFreePool@8":           0x405640,
+    "__shi_createAndEnterMutex":     0x405ec0,
+    "@_shi_getNextPool@4":           0x405b20,
+    "_MemPoolSetBlockSizeFS@8":      0x406630,
+    "@_shi_poolFree@8":              0x406710,
+    "_MemPoolPreAllocate@12":        0x403180,
+    "__shi_TaskRecord":              0x4105b0,
+    "__shi_mutexGlobal":             0x412870,
+    "__shi_mutexGlobalInit":         0x41032c,
+}
+
+# (object, symbol, retail VA, VA of the next .text COMDAT) for the five
+# functions whose 3.31 codegen differs from 3.30 by more than address operands.
+# The real size is "up to the last non-int3 byte before the next COMDAT"; the
+# linker re-pads to the same 16-byte boundary, so no other function moves.
+SPLICE = [
+    ("syswin32.obj", "@shi_sysAllocRegion@16",      0x404d30, 0x404e70),
+    ("syswin32.obj", "@_shi_sysAllocNamedShared@32", 0x404e70, 0x4050a0),
+    ("syswin32.obj", "@shi_findSharedAddress@16",   0x4050a0, 0x405280),
+    ("syswin32.obj", "@shi_initPoolMutexShr@4",     0x405d70, 0x405de0),
+    ("pool.obj",     "@_shi_initPool@36",           0x406270, 0x406520),
+]
+
+# Same size, same relocation layout: 3.31 only flips a compare direction (and
+# the matching branch condition) or swaps a base/displacement pair.
+SPLICE_INPLACE = [
+    ("info.obj",     "@shi_walkPoolSmall@12",      0x407420),
+    ("info.obj",     "@_shi_walkPoolExternal@8",   0x407380),
+    ("syswin32.obj", "@shi_findAddrInProcess@20",  0x405280),
+    ("syswin32.obj", "@_shi_sysFreePool@8",        0x405640),
+    ("pool.obj",     "@_shi_normalizePageSize@4",  0x4065e0),
+    ("check.obj",    "@_shi_validateFreeListVar@4", 0x407a50),
+]
 
 
 # ---------------------------------------------------------------- COFF archive
@@ -362,6 +443,98 @@ def main():
               f"at {[hex(x) for x in changed[:24]]}")
         return bytes(new)
 
+    def splice(member, symname, va, next_va):
+        """Splice a whole 3.31 function out of ISLE.EXE, rebuilding its relocs.
+
+        The 3.31 recompile keeps the same set of external references but moves
+        (and, for one function, reorders) their sites, and changes the function
+        size.  Sites are recovered from the image: DIR32 from the PE base-reloc
+        table, REL32 from every branch that leaves the function.  Each site is
+        resolved against the candidate symbols named by the 3.30 relocation
+        table of that very section, and the resulting (symbol, type, addend)
+        multiset must match 3.30 exactly.
+        """
+        c = Coff(member.data)
+        s0 = [s for s in c.symbols if s.name == symname]
+        assert len(s0) == 1, symname
+        secidx = s0[0].secnum
+        assert s0[0].value == 0
+        sec = c.sections[secidx - 1]
+        symbyidx = {s.idx: s for s in c.symbols}
+        old_rel = [(off, symbyidx[si].name, typ,
+                    struct.unpack_from("<I", c.section_data(sec), off)[0])
+                   for off, si, typ in c.relocs(sec)]
+
+        # size: up to the last byte before the next COMDAT that is not int3 pad
+        blob = isle_bytes(va, next_va - va)
+        end = len(blob)
+        while end and blob[end - 1] == 0xCC:
+            end -= 1
+        code = bytearray(blob[:end])
+        pos = 0
+        for ins in md.disasm(bytes(code), va):
+            assert ins.address - va == pos, (symname, hex(ins.address))
+            pos += ins.size
+        assert pos == end, (symname, pos, end)
+
+        cand = {}
+        for _, name, typ, _ in old_rel:
+            if not name.startswith("__imp__"):
+                assert name in ISLE_SYMS, (symname, name)
+                cand.setdefault(typ, {})[name] = ISLE_SYMS[name]
+
+        def resolve(value, typ, exact):
+            best = None
+            for name, sva in cand.get(typ, {}).items():
+                d = value - sva
+                if 0 <= d < 0x1000 and (best is None or d < best[1]):
+                    best = (name, d)
+            assert best is not None, (symname, typ, hex(value))
+            assert not exact or best[1] == 0, (symname, hex(value), best)
+            return best
+
+        sites = []
+        for a in sorted(base_relocs):
+            if not va <= a < va + end:
+                continue
+            off = a - va
+            value = struct.unpack_from("<I", code, off)[0]
+            if value in iat:
+                name, addend = "__imp__" + iat[value], 0
+            else:
+                name, addend = resolve(value, IMAGE_REL_I386_DIR32, False)
+            sites.append((off, name, IMAGE_REL_I386_DIR32, addend))
+        for off, tgt in external_rel32_sites(code, va):
+            name, addend = resolve(tgt, IMAGE_REL_I386_REL32, True)
+            sites.append((off, name, IMAGE_REL_I386_REL32, addend))
+        sites.sort()
+
+        def key(name, typ, addend):
+            return (name.split("@")[0] if name.startswith("__imp__") else name,
+                    typ, addend)
+        want = sorted(key(n, t, a) for _, n, t, a in old_rel)
+        got = sorted(key(n, t, a) for _, n, t, a in sites)
+        assert want == got, (symname, [x for x in want if x not in got],
+                             [x for x in got if x not in want])
+
+        entries = []
+        for off, name, typ, addend in sites:
+            if name.startswith("__imp__"):
+                cs = [x for x in c.symbols
+                      if x.name == name or x.name.startswith(name + "@")]
+            else:
+                cs = [x for x in c.symbols if x.name == name]
+            assert len(cs) == 1, (name, [x.name for x in cs])
+            entries.append((off, cs[0].idx, typ))
+            struct.pack_into("<I", code, off, addend)
+
+        order = ("order kept" if [key(n, t, a) for _, n, t, a in sites] ==
+                 [key(n, t, a) for _, n, t, a in old_rel] else "REORDERED")
+        print(f"  {member.name} sec{secidx} {symname}: "
+              f"0x{sec.size_raw:x} -> 0x{end:x} bytes, {len(entries)} relocs, {order}")
+        patch_obj(member, secidx, bytes(code), new_reloc_entries=entries,
+                  fpo_cbproc=end)
+
     # task.obj: single immediate byte
     m = by_name["task.obj"]
     c = Coff(m.data)
@@ -405,6 +578,17 @@ def main():
     assert soff == 0x1160
     patch_obj(m, 101, FUNC["enterPool"]["raw"], new_reloc_entries=entries,
               fpo_cbproc=0xc9, extra_edits=[(soff + 11, ord("0"), ord("1"))])
+
+    # ---- the five wholesale 3.31 recompiles (syswin32 x4, pool x1)
+    print("3.31 whole-function splices:")
+    for objname, symname, va, next_va in SPLICE:
+        splice(by_name[objname], symname, va, next_va)
+
+    print("3.31 same-layout recompiles:")
+    for objname, symname, va in SPLICE_INPLACE:
+        m = by_name[objname]
+        secidx = [s for s in Coff(m.data).symbols if s.name == symname][0].secnum
+        patch_obj(m, secidx, raw_from_isle_preserving_addends(m, secidx, va))
 
     # ---- rebuild archive, fix both linker members' offset tables
     blob, new_off = rebuild_archive(members)
