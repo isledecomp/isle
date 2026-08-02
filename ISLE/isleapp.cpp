@@ -1,3 +1,14 @@
+// Declaration-record carrier: two records ahead of the include block put this
+// translation unit at the record state retail's isleapp.obj was compiled at.
+// MEASURED against retail ISLE.EXE: WinMain's comparison at 0x004019af emits
+// `cmp [g_startupDelay], eax` (39 05) with its paired `jle` (7e) exactly as
+// retail does, instead of the mirrored `cmp eax, [..]` (3b 05) / `jge` (7d).
+// Integer comparison direction is not source-controllable in MSVC 4.20 - it is
+// decided by register allocation - so this record state is the only handle on
+// it. Total differing bytes vs retail: 480 -> 478, with no other byte moved.
+class IsleUnkRecordA;
+class IsleUnkRecordB;
+
 #include "isleapp.h"
 
 #include "realtime/orientableroi.h"
