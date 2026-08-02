@@ -45,6 +45,20 @@ MxMatrix::MxMatrix(const Matrix4& p_matrix) : Matrix4(m_elements)
 	CopyFrom(p_matrix);
 }
 
+// FUNCTION: LEGO1 0x10002850
+// FUNCTION: BETA10 0x10010800
+void MxMatrix::operator=(const Matrix4& p_matrix)
+{
+	CopyFrom(p_matrix);
+}
+
+// FUNCTION: LEGO1 0x10002860
+// FUNCTION: BETA10 0x10010830
+void MxMatrix::operator=(const MxMatrix& p_matrix)
+{
+	CopyFrom(p_matrix);
+}
+
 // FUNCTION: BETA10 0x10010860
 float* MxMatrix::operator[](int idx)
 {
@@ -56,25 +70,12 @@ const float* MxMatrix::operator[](int idx) const
 	return m_data[idx];
 }
 
-// FUNCTION: LEGO1 0x10002850
-void MxMatrix::operator=(const Matrix4& p_matrix)
-{
-	CopyFrom(p_matrix);
-}
-
-// FUNCTION: LEGO1 0x10002860
-void MxMatrix::operator=(const MxMatrix& p_matrix)
-{
-	CopyFrom(p_matrix);
-}
-
 // The non-virtual Matrix4 members are defined after the MxMatrix class.
 // BETA10 emission order attests this placement: RotateX (0x1001c6a0) directly
 // follows Matrix4::operator[] (0x1001c670), and RotateY/Scale (0x1001fd60,
 // 0x1001fe60) precede MxMatrix(const MxMatrix&) (0x1001ff30).
 
-class MxUnkRecordMCA;
-class MxUnkRecordMCB;
+float MxUnkRecordMFA(const float*, const float*);
 // FUNCTION: BETA10 0x1001c6a0
 void Matrix4::RotateX(const float& p_angle)
 {

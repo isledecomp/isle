@@ -6,15 +6,6 @@
 #include <math.h>
 #include <memory.h>
 
-// FUNCTION: LEGO1 0x10002460
-// FUNCTION: BETA10 0x1000ffc0
-void Matrix4::TranslateBy(const float& p_x, const float& p_y, const float& p_z)
-{
-	m_data[3][0] += p_x;
-	m_data[3][1] += p_y;
-	m_data[3][2] += p_z;
-}
-
 // FUNCTION: LEGO1 0x100024a0
 // FUNCTION: BETA10 0x10010040
 void Matrix4::SetTranslation(const float& p_x, const float& p_y, const float& p_z)
@@ -23,6 +14,9 @@ void Matrix4::SetTranslation(const float& p_x, const float& p_y, const float& p_
 	m_data[3][1] = p_y;
 	m_data[3][2] = p_z;
 }
+
+class MxUnkRecordZ0600;
+class MxUnkRecordZ0601;
 
 // FUNCTION: LEGO1 0x100024d0
 // FUNCTION: BETA10 0x100100a0
@@ -91,6 +85,12 @@ void Matrix4::ToQuaternion(Vector4& p_outQuat)
 	}
 }
 
+enum MxUnkRecordMEA {
+	e_unkRecordMEA
+};
+enum MxUnkRecordMEB {
+	e_unkRecordMEB
+};
 // FUNCTION: LEGO1 0x10002710
 // FUNCTION: BETA10 0x10010550
 int Matrix4::FromQuaternion(const Vector4& p_vec)
