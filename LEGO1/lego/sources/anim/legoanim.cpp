@@ -803,7 +803,7 @@ LegoResult LegoAnimNodeData::CreateLocalTransform(LegoFloat p_time, Matrix4& p_m
 
 // FUNCTION: LEGO1 0x100a0600
 // FUNCTION: BETA10 0x1017f415
-inline void LegoAnimNodeData::GetTranslation(
+void LegoAnimNodeData::GetTranslation(
 	LegoU16 p_numTranslationKeys,
 	LegoTranslationKey* p_translationKeys,
 	LegoFloat p_time,

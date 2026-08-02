@@ -227,7 +227,7 @@ public:
 	// FUNCTION: BETA10 0x1005d580
 	LegoBool GetVisibility(LegoTime p_time) { return GetVisibility((LegoFloat) p_time); }
 
-	inline static void GetTranslation(
+	static void GetTranslation(
 		LegoU16 p_numTranslationKeys,
 		LegoTranslationKey* p_translationKeys,
 		LegoFloat p_time,
