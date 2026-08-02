@@ -31,7 +31,8 @@ LegoTextureInfo* LegoTextureContainer::GetCached(LegoTextureInfo* p_textureInfo)
 	for (LegoCachedTextureList::iterator it = m_cached.begin(); it != m_cached.end(); it++) {
 		if ((*it).second == FALSE && (*it).first->m_texture->AddRef() != 0 && (*it).first->m_texture->Release() == 1) {
 			if (!strcmp((*it).first->m_name, p_textureInfo->m_name)) {
-				LPDIRECTDRAWSURFACE surface = (*it).first->m_surface;
+				LegoTextureInfo* cached = (*it).first;
+				LPDIRECTDRAWSURFACE surface = cached->m_surface;
 				memset(&newDesc, 0, sizeof(newDesc));
 				newDesc.dwSize = sizeof(newDesc);
 
@@ -45,8 +46,8 @@ LegoTextureInfo* LegoTextureContainer::GetCached(LegoTextureInfo* p_textureInfo)
 
 					if (und) {
 						(*it).second = TRUE;
-						(*it).first->m_texture->AddRef();
-						return (*it).first;
+						cached->m_texture->AddRef();
+						return cached;
 					}
 				}
 			}
