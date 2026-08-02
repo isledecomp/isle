@@ -15,6 +15,16 @@
 
 #include <assert.h>
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class ZzM0 { public: void zzm0() {} };
+class ZzM1 { public: void zzm1() {} };
+class ZzM2 { public: void zzm2() {} };
+class ZzM3 { public: void zzm3() {} };
+class ZzM4 { public: void zzm4() {} };
+class ZzM5 { public: void zzm5() {} };
+class ZzM6 { public: void zzm6() {} };
+
 DECOMP_SIZE_ASSERT(LegoROI, 0x108)
 DECOMP_SIZE_ASSERT(TimeROI, 0x10c)
 
