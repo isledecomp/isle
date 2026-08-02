@@ -573,6 +573,25 @@ if (MSVC_FOR_DECOMP)
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.
   if (ISLE_BUILD_APP)
     target_link_options(isle PRIVATE "/OPT:REF")
+    if (ISLE_BYTE_IDENTICAL)
+      # Goal 2: ISLE.EXE's CRT resolution order diverges from retail's. Retail pulls
+      # LIBCMT's hooks.obj (terminate/unexpected/_inconsistency/__pInconsistency)
+      # right after ctype.obj; we pull it after winsig.obj, which slides every
+      # contribution in between and lands section alignment padding in different
+      # places. Forcing that member to resolve early reproduces retail's layout.
+      #
+      # MEASURED (build-identical ISLE.EXE vs retail, differing bytes):
+      #   .text  9745 -> 6776      .rdata 2759 -> 814      .data 1064 -> 116
+      #   .reloc 1186 ->  263
+      # and .rdata (3504 -> 3496) and .data (14804 -> 14788) become EXACTLY
+      # retail's VirtualSize -- the +8/+16 surpluses were alignment padding
+      # downstream of the ordering, not a vendor-CRT difference.
+      #
+      # ISLE ONLY: measured on LEGO1.DLL it is neutral-to-slightly-worse (.text
+      # 796147 -> 796054 but .rdata/.data/.reloc regress), because LEGO1 links
+      # 200+ of our objects and the CRT is a small fraction of its link.
+      target_link_options(isle PRIVATE "/INCLUDE:?terminate@@YAXXZ")
+    endif()
     set_property(TARGET isle ${lego1_targets} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   endif()
 
