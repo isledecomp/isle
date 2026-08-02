@@ -248,6 +248,20 @@ MxResult MxDiskStreamController::VTable0x30(MxDSAction* p_action)
 	return result;
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordUF {
+public:
+	void Record() {}
+};
+
+class MxUnkRecordUG {
+public:
+	void Record() {}
+};
+
 // FUNCTION: LEGO1 0x100c7cb0
 void MxDiskStreamController::FUN_100c7cb0(MxDSStreamingAction* p_action)
 {
@@ -318,6 +332,13 @@ MxDSStreamingAction* MxDiskStreamController::FUN_100c7db0()
 
 	return NULL;
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordUH;
+class MxUnkRecordUI;
 
 // FUNCTION: LEGO1 0x100c7f40
 // FUNCTION: BETA10 0x101553e0

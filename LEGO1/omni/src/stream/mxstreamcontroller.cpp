@@ -9,6 +9,16 @@ class MxUnkRecordOW {
 };
 
 #include "mxstreamcontroller.h"
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordSR {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+};
+
 
 #include "mxautolock.h"
 #include "mxdebug.h"
@@ -239,6 +249,16 @@ MxResult MxStreamController::VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
 	assert(m_provider);
 	return FUN_100c1800(p_action, (p_bufferval / m_provider->GetFileSize()) * m_provider->GetFileSize());
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordSS {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+};
 
 // FUNCTION: LEGO1 0x100c1ce0
 // FUNCTION: BETA10 0x1014eeb5

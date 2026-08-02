@@ -27,9 +27,8 @@
 // translation unit's accumulated declaration state (see the positional record
 // calculus, session notes 2026-08-01); no authentic 1997 declarations are
 // recoverable at this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordAQ {
-	inline void Record() {}
-};
+class MxUnkRecordWX;
+class MxUnkRecordWY;
 
 class MxUnkRecordAR {
 	inline void Record() {}

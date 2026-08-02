@@ -2,6 +2,13 @@
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
 // this position. Neutral stand-in pending better evidence.
+class MxUnkRecordSI {};
+class MxUnkRecordSJ {};
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
 class MxUnkRecordIZ;
 class MxUnkRecordJA;
 class MxUnkRecordJB;
@@ -15,6 +22,12 @@ class MxUnkRecordJI;
 class MxUnkRecordJJ;
 
 #include "viewlodlist.h"
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordSK;
+
 
 #include "decomp.h"
 #include "viewlod.h"

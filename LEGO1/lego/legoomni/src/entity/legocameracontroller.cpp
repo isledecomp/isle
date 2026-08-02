@@ -1,3 +1,18 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordVY;
+class MxUnkRecordVZ;
+class MxUnkRecordWA;
+class MxUnkRecordWB;
+class MxUnkRecordWC;
+class MxUnkRecordWD;
+class MxUnkRecordWE;
+class MxUnkRecordWF;
+class MxUnkRecordWG;
+class MxUnkRecordWH;
+
 #include "legocameracontroller.h"
 
 #include "3dmanager/lego3dmanager.h"

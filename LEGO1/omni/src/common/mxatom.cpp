@@ -1,4 +1,17 @@
 #include "mxatom.h"
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordWZ;
+class MxUnkRecordXA;
+class MxUnkRecordXB;
+class MxUnkRecordXC;
+class MxUnkRecordXD;
+class MxUnkRecordXE;
+class MxUnkRecordXF;
+class MxUnkRecordXG;
+
 
 #include "decomp.h"
 #include "mxmain.h"

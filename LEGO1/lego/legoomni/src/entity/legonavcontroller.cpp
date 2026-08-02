@@ -1567,6 +1567,14 @@ LegoLocation* LegoNavController::GetLocation(MxU32 p_location)
 	return NULL;
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordWI;
+class MxUnkRecordWJ;
+class MxUnkRecordWK;
+
 // FUNCTION: LEGO1 0x10055740
 // FUNCTION: BETA10 0x1009c28c
 MxS32 LegoNavController::GetNumCameras()

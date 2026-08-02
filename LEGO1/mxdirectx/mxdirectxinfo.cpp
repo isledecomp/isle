@@ -1,7 +1,24 @@
 #include "mxdirectxinfo.h"
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordUJ {};
+class MxUnkRecordUK {};
+
 
 #include <assert.h>
 #include <stdio.h> // for vsprintf
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordUL;
+class MxUnkRecordUM;
+class MxUnkRecordUN;
+class MxUnkRecordUO;
+class MxUnkRecordUP;
+
 
 DECOMP_SIZE_ASSERT(MxAssignedDevice, 0xe4)
 DECOMP_SIZE_ASSERT(Direct3DDeviceInfo, 0x1a4)

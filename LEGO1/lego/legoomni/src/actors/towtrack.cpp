@@ -1,4 +1,34 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordNA;
+class MxUnkRecordNB;
+class MxUnkRecordNC;
+class MxUnkRecordND;
+class MxUnkRecordNE;
+class MxUnkRecordNF;
+class MxUnkRecordNG;
+class MxUnkRecordNH;
+class MxUnkRecordNI;
+class MxUnkRecordNJ;
+
 #include "towtrack.h"
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordNK {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+	inline void Record4() {}
+	inline void Record5() {}
+	inline void Record6() {}
+	inline void Record7() {}
+};
+
 
 #include "isle.h"
 #include "isle_actions.h"

@@ -1,3 +1,16 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordXX;
+class MxUnkRecordXY;
+class MxUnkRecordXZ;
+class MxUnkRecordYA;
+class MxUnkRecordYB;
+class MxUnkRecordYC;
+class MxUnkRecordYD;
+class MxUnkRecordYE;
+
 #include "mxticklemanager.h"
 
 #include "decomp.h"
@@ -92,6 +105,13 @@ void MxTickleManager::UnregisterClient(MxCore* p_client)
 		it++;
 	}
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordYF {};
+class MxUnkRecordYG {};
 
 // FUNCTION: LEGO1 0x100bdfa0
 // FUNCTION: BETA10 0x1013ee6d

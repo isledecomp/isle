@@ -29,6 +29,18 @@ class MxUnkRecordPX {
 #include "mxtimer.h"
 #include "mxvariabletable.h"
 #include "mxvideomanager.h"
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordYP {
+	inline void Record() {}
+};
+
+class MxUnkRecordYQ {
+	inline void Record() {}
+};
+
 
 // GLOBAL: LEGO1 0x101015b0
 MxOmni* MxOmni::g_instance = NULL;
