@@ -1,5 +1,13 @@
 ; LegoOmni.def : Declares the module paarameters for the LEGO1.DLL.
 
+; The retail LEGO1.DLL's export directory names the module "Lego1.dll" in mixed
+; case, and retail ISLE.EXE imports it under that spelling; the all-caps file
+; name on the disc is the ISO 9660 master, not the linker's. Without this the
+; linker derives the export name from /OUT: and writes "LEGO1.DLL", which also
+; propagates into LEGO1.lib and so into ISLE.EXE's .idata.
+; MEASURED (ISLE.EXE vs retail): 486 -> 480 differing bytes.
+LIBRARY      Lego1.dll
+
 DESCRIPTION  "Lego OMNI Windows Dynamic Link Library"
 
 EXPORTS

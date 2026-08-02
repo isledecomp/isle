@@ -503,7 +503,19 @@ if (ISLE_BUILD_APP)
   else()
     target_link_libraries(isle PRIVATE beta10)
   endif()
-  target_link_libraries(isle PRIVATE kernel32)
+  # kernel32 is deliberately NOT listed. Naming it here (or leaving it in CMake's
+  # default library list) puts kernel32.lib AHEAD of LIBCMT in the search order,
+  # so LINK scans it twice and pulls __IMPORT_DESCRIPTOR_KERNEL32 at the end of
+  # the FIRST scan. That member carries the "KERNEL32.dll" name string, which
+  # then lands in the MIDDLE of .idata$6 and displaces ~42 hint/name entries by
+  # 12 bytes. Retail has it at the very END of .idata$6, i.e. kernel32.lib was
+  # searched exactly once, after LIBCMT, reached only through the
+  # /DEFAULTLIB:kernel32.lib directive the compiler embeds in every object.
+  # MEASURED (ISLE.EXE vs retail): 1254 -> 486 differing bytes, .idata 988 -> 218.
+  # Both occurrences must go; removing only one leaves 1248.
+  # The import DESCRIPTOR order above is unaffected - kernel32 still comes last.
+  string(REPLACE "kernel32.lib" "" CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES}")
+  string(REPLACE "kernel32.lib" "" CMAKE_C_STANDARD_LIBRARIES "${CMAKE_C_STANDARD_LIBRARIES}")
 
   # Make sure filenames are ALL CAPS
   set_property(TARGET isle PROPERTY OUTPUT_NAME ISLE)
