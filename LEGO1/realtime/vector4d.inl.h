@@ -137,14 +137,14 @@ int Vector4::NormalizeQuaternion()
 // FUNCTION: BETA10 0x10048c20
 int Vector4::EqualsHamiltonProduct(const Vector4& p_a, const Vector4& p_b)
 {
-	m_data[3] = p_a.m_data[3] * p_b.m_data[3] -
-				(p_a.m_data[0] * p_b.m_data[0] + p_a.m_data[2] * p_b.m_data[2] + p_a.m_data[1] * p_b.m_data[1]);
+	m_data[3] = p_b.m_data[3] * p_a.m_data[3] -
+				(p_b.m_data[1] * p_a.m_data[1] + p_b.m_data[2] * p_a.m_data[2] + p_b.m_data[0] * p_a.m_data[0]);
 
 	Vector3::EqualsCrossImpl(p_a.m_data, p_b.m_data);
 
 	m_data[0] = p_b.m_data[3] * p_a.m_data[0] + p_a.m_data[3] * p_b.m_data[0] + m_data[0];
-	m_data[1] = p_b.m_data[1] * p_a.m_data[3] + p_a.m_data[1] * p_b.m_data[3] + m_data[1];
-	m_data[2] = p_b.m_data[2] * p_a.m_data[3] + p_a.m_data[2] * p_b.m_data[3] + m_data[2];
+	m_data[1] = p_a.m_data[1] * p_b.m_data[3] + p_b.m_data[1] * p_a.m_data[3] + m_data[1];
+	m_data[2] = p_a.m_data[2] * p_b.m_data[3] + p_b.m_data[2] * p_a.m_data[3] + m_data[2];
 	return 0;
 }
 

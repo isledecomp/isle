@@ -149,7 +149,6 @@ public:
 };
 
 #ifdef COMPAT_MODE
-#include "vector2d.inl.h"
 #include "vector3d.inl.h"
 #include "vector4d.inl.h"
 #endif
