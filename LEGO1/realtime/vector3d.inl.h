@@ -281,6 +281,8 @@ float Vector3::DotImpl(const float* p_a, const float* p_b) const
 	return p_a[0] * p_b[0] + p_a[1] * p_b[1] + p_a[2] * p_b[2];
 }
 
+class MxUnkRecordMAA;
+class MxUnkRecordMAB;
 // FUNCTION: LEGO1 0x10002270
 // FUNCTION: BETA10 0x10011350
 void Vector3::EqualsCrossImpl(const float* p_a, const float* p_b)

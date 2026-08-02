@@ -18,7 +18,12 @@ public:
 	inline void SetStart(Matrix4& p_m);
 	inline void SetEnd(Matrix4& p_m);
 	inline void SetStart(Vector4& p_v);
-	inline void SetEnd(Vector4& p_v);
+	// FUNCTION: BETA10 0x10180bc0
+	void SetEnd(Vector4& p_v)
+	{
+		m_endQuat = p_v;
+		m_flags |= c_endSet;
+	}
 	inline int InterpolateToMatrix(Matrix4& p_matrix, float p_f);
 
 	void GetQuat(Vector4& p_startQuat, Vector4& p_endQuat) const
@@ -37,6 +42,7 @@ private:
 	MxU32 m_flags;              // 0x30
 };
 
+class MxUnkRecordMBA;
 // FUNCTION: LEGO1 0x10004520
 long MxQuaternionTransformer::NormalizeDirection()
 {
@@ -87,13 +93,6 @@ void MxQuaternionTransformer::SetStart(Vector4& p_v)
 {
 	m_startQuat = p_v;
 	m_flags |= c_startSet;
-}
-
-// FUNCTION: BETA10 0x10180bc0
-void MxQuaternionTransformer::SetEnd(Vector4& p_v)
-{
-	m_endQuat = p_v;
-	m_flags |= c_endSet;
 }
 
 // FUNCTION: BETA10 0x1004aaa0

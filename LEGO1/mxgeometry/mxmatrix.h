@@ -8,37 +8,73 @@
 // SIZE 0x48
 class MxMatrix : public Matrix4 {
 public:
-	// FUNCTION: LEGO1 0x1006b120
-	// FUNCTION: BETA10 0x10015370
-	MxMatrix() : Matrix4(m_elements) {}
+	inline MxMatrix();
 
-	// FUNCTION: LEGO1 0x10032770
-	// FUNCTION: BETA10 0x1001ff30
-	MxMatrix(const MxMatrix& p_matrix) : Matrix4(m_elements) { CopyFrom(p_matrix); }
+	inline MxMatrix(const MxMatrix& p_matrix);
 
-	// FUNCTION: BETA10 0x1000fc20
-	MxMatrix(const Matrix4& p_matrix) : Matrix4(m_elements) { CopyFrom(p_matrix); }
+	inline MxMatrix(const Matrix4& p_matrix);
 
-	// FUNCTION: BETA10 0x10010860
-	float* operator[](int idx) { return m_data[idx]; }
+	inline float* operator[](int idx);
 
-	const float* operator[](int idx) const { return m_data[idx]; }
+	inline const float* operator[](int idx) const;
 
-	// FUNCTION: LEGO1 0x10002850
-	void operator=(const Matrix4& p_matrix) override { CopyFrom(p_matrix); } // vtable+0x28
+	inline void operator=(const Matrix4& p_matrix) override; // vtable+0x28
 
-	// FUNCTION: LEGO1 0x10002860
-	virtual void operator=(const MxMatrix& p_matrix) { CopyFrom(p_matrix); } // vtable+0x48
+	inline virtual void operator=(const MxMatrix& p_matrix); // vtable+0x48
 
 private:
 	float m_elements[4][4]; // 0x08
 };
+
+// FUNCTION: LEGO1 0x1006b120
+// FUNCTION: BETA10 0x10015370
+MxMatrix::MxMatrix() : Matrix4(m_elements)
+{
+}
+
+// FUNCTION: LEGO1 0x10032770
+// FUNCTION: BETA10 0x1001ff30
+MxMatrix::MxMatrix(const MxMatrix& p_matrix) : Matrix4(m_elements)
+{
+	CopyFrom(p_matrix);
+}
+
+// FUNCTION: BETA10 0x1000fc20
+MxMatrix::MxMatrix(const Matrix4& p_matrix) : Matrix4(m_elements)
+{
+	CopyFrom(p_matrix);
+}
+
+// FUNCTION: BETA10 0x10010860
+float* MxMatrix::operator[](int idx)
+{
+	return m_data[idx];
+}
+
+const float* MxMatrix::operator[](int idx) const
+{
+	return m_data[idx];
+}
+
+// FUNCTION: LEGO1 0x10002850
+void MxMatrix::operator=(const Matrix4& p_matrix)
+{
+	CopyFrom(p_matrix);
+}
+
+// FUNCTION: LEGO1 0x10002860
+void MxMatrix::operator=(const MxMatrix& p_matrix)
+{
+	CopyFrom(p_matrix);
+}
 
 // The non-virtual Matrix4 members are defined after the MxMatrix class.
 // BETA10 emission order attests this placement: RotateX (0x1001c6a0) directly
 // follows Matrix4::operator[] (0x1001c670), and RotateY/Scale (0x1001fd60,
 // 0x1001fe60) precede MxMatrix(const MxMatrix&) (0x1001ff30).
 
+class MxUnkRecordMCA;
+class MxUnkRecordMCB;
 // FUNCTION: BETA10 0x1001c6a0
 void Matrix4::RotateX(const float& p_angle)
 {
@@ -91,6 +127,11 @@ void Matrix4::RotateZ(const float& p_angle)
 		m_data[i][1] = matrix[i][1] * c + matrix[i][0] * s;
 	}
 }
+
+// Must be included here (not before MxMatrix) for correct ordering in binary.
+// FromQuaternion and ToQuaternion in Matrix4 depend on Vector4.
+// There's a chance they included mxgeometry4d.h after including this somewhere.
+#include "realtime/vector4d.inl.h"
 
 // FUNCTION: BETA10 0x1005a590
 int Matrix4::Invert(Matrix4& p_mat)
@@ -174,10 +215,5 @@ void Matrix4::Swap(int p_d1, int p_d2)
 		m_data[p_d2][i] = e;
 	}
 }
-
-// Must be included here (not before MxMatrix) for correct ordering in binary.
-// FromQuaternion and ToQuaternion in Matrix4 depend on Vector4.
-// There's a chance they included mxgeometry4d.h after including this somewhere.
-#include "realtime/vector4d.inl.h"
 
 #endif // MXMATRIX_H
