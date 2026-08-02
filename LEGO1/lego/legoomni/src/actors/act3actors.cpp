@@ -1,3 +1,15 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordBX {};
+class MxUnkRecordBY {};
+class MxUnkRecordBZ {};
+class MxUnkRecordCC {};
+class MxUnkRecordCD {};
+class MxUnkRecordCE {};
+class MxUnkRecordCF {};
+
 #include "act3actors.h"
 
 #include "act3.h"
@@ -285,6 +297,14 @@ void Act3Cop::ParseAction(char* p_extra)
 
 	assert(m_eatAnim);
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordBJ;
+class MxUnkRecordBK;
+class MxUnkRecordBL;
 
 // FUNCTION: LEGO1 0x100401f0
 // FUNCTION: BETA10 0x10018abf

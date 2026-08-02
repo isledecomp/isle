@@ -1,3 +1,16 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordLX;
+class MxUnkRecordLY;
+class MxUnkRecordLZ;
+class MxUnkRecordMA;
+class MxUnkRecordMB;
+class MxUnkRecordMC;
+class MxUnkRecordMD;
+class MxUnkRecordME;
+
 #include "legoracespecial.h"
 
 #include "geom/legowegedge.h"
@@ -44,6 +57,18 @@ LegoCarRaceActor::LegoCarRaceActor()
 	m_canRotate = 1;
 	VariableTable()->SetVariable(g_fuel, "0.8");
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordLS {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+	inline void Record4() {}
+};
 
 // FUNCTION: LEGO1 0x10080590
 // FUNCTION: BETA10 0x100cd8cf

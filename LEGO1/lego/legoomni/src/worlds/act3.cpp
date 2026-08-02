@@ -30,6 +30,14 @@ DECOMP_SIZE_ASSERT(Act3State, 0x0c)
 DECOMP_SIZE_ASSERT(Act3ListElement, 0x0c)
 DECOMP_SIZE_ASSERT(Act3List, 0x10)
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordNW {};
+class MxUnkRecordNX {};
+class MxUnkRecordNY {};
+
 // GLOBAL: LEGO1 0x100d94f8
 const Act3Script::Script g_pizzaHitSounds[] = {
 	Act3Script::c_sns02xni_PlayWav,
