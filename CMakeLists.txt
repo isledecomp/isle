@@ -68,6 +68,7 @@ option(ISLE_BUILD_LEGO1 "Build LEGO1.DLL library" ON)
 option(ISLE_BUILD_BETA10 "Build BETA10.DLL library" OFF)
 option(ISLE_INCLUDE_ENTROPY "Build with entropy.h" OFF)
 option(ISLE_ENTROPY_FILENAME "Entropy header filename" "entropy.h")
+option(ISLE_BYTE_IDENTICAL "Build for byte-identity with the retail binaries: emit no debug information, so the image carries no DEBUG data directory (the originals have none). Produces no PDB, so reccmp cannot be used on such a build - configure it in a SEPARATE build directory and keep the default one for reccmp work." OFF)
 
 if(NOT (ISLE_BUILD_LEGO1 OR ISLE_BUILD_BETA10))
   message(FATAL_ERROR "ISLE_BUILD_LEGO1 AND ISLE_BUILD_BETA10 cannot be both disabled")
@@ -663,6 +664,28 @@ if (MSVC_FOR_DECOMP)
   set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/incremental:no")
   set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
   set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
+
+  if(ISLE_BYTE_IDENTICAL)
+    # Goal 2 (byte-identical binaries): the retail images carry NO debug data
+    # directory, while linking with /debug adds one (a 28-byte
+    # IMAGE_DEBUG_DIRECTORY plus its MISC record) at the head of .rdata --
+    # measured at 88 bytes in ISLE.EXE.
+    #
+    # Drop ONLY the linker's /debug. /Zi MUST STAY: it is a compile flag, and
+    # removing it measurably CHANGES CODEGEN -- 31 of 561 COMDATs in the first
+    # 16 objects flipped, all of them commutative `cmp` operand-direction
+    # tie-breaks. Debug records occupy the compiler's symbol arena, which is
+    # exactly the entropy channel this project's per-TU tuning rides on, so a
+    # /Zi-less build silently re-rolls the tuned state. Compile identically,
+    # link without debug info.
+    foreach(_cfg "" _DEBUG _RELEASE _RELWITHDEBINFO _MINSIZEREL)
+      foreach(_kind EXE SHARED STATIC)
+        string(REPLACE "/debug" "" CMAKE_${_kind}_LINKER_FLAGS${_cfg}
+               "${CMAKE_${_kind}_LINKER_FLAGS${_cfg}}")
+      endforeach()
+    endforeach()
+    message(STATUS "ISLE_BYTE_IDENTICAL: linking without /debug (no DEBUG data directory); /Zi retained so codegen is unchanged")
+  endif()
 
   # Older MSVC versions don't support building in parallel.
   # Force non-parallel builds of isle and lego1 by putting them in a pool with 1 available job.

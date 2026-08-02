@@ -46,7 +46,10 @@ function(reccmp_configure)
         get_property(id TARGET "${target}" PROPERTY INTERFACE_RECCMP_ID)
         string(APPEND build_yml_txt "  ${id}:\n")
         string(APPEND build_yml_txt "    path: '$<TARGET_FILE:${target}>'\n")
-        if(WIN32 AND MSVC)
+        # A byte-identity build emits no debug information, so there is no PDB to
+        # point at and reccmp cannot be run against it (use a separate default
+        # build directory for that).
+        if(WIN32 AND MSVC AND NOT ISLE_BYTE_IDENTICAL)
             string(APPEND build_yml_txt "    pdb: '$<TARGET_PDB_FILE:${target}>'\n")
         endif()
     endforeach()
