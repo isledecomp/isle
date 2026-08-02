@@ -795,7 +795,7 @@ LegoU32 LegoROI::Intersect(
 		distance = b / a;
 	}
 
-	if (distance >= 0.0f && p_rayLength >= distance) {
+	if (distance >= 0.0f && distance <= p_rayLength) {
 		p_intersectionPoint = p_rayDirection;
 		p_intersectionPoint *= distance;
 		p_intersectionPoint += p_rayOrigin;
