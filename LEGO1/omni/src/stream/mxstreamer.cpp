@@ -9,6 +9,23 @@
 
 #include <algorithm>
 #include <assert.h>
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class QqP0 { public: void qqp0a() {} void qqp0b() {} };
+class QqP1 { public: void qqp1a() {} void qqp1b() {} };
+class QqP2 { public: void qqp2a() {} void qqp2b() {} };
+class QqP3 { public: void qqp3a() {} void qqp3b() {} };
+class QqP4 { public: void qqp4a() {} void qqp4b() {} };
+class QqP5 { public: void qqp5a() {} void qqp5b() {} };
+class QqP6 { public: void qqp6a() {} void qqp6b() {} };
+class QqP7 { public: void qqp7a() {} void qqp7b() {} };
+class QqP8 { public: void qqp8a() {} void qqp8b() {} };
+class QqP9 { public: void qqp9a() {} void qqp9b() {} };
+class QqP10 { public: void qqp10a() {} void qqp10b() {} };
+class QqP11 { public: void qqp11a() {} void qqp11b() {} };
+class QqP12 { public: void qqp12a() {} void qqp12b() {} };
+class QqP13 { public: void qqp13a() {} void qqp13b() {} };
+class QqP14 { public: void qqp14a() {} void qqp14b() {} };
 
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
