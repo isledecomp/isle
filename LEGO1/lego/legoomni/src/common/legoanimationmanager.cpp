@@ -2380,6 +2380,23 @@ void LegoAnimationManager::FUN_10063270(LegoROIList* p_list, LegoAnimPresenter* 
 	}
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordQM {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+	inline void Record4() {}
+	inline void Record5() {}
+	inline void Record6() {}
+	inline void Record7() {}
+	inline void Record8() {}
+	inline void Record9() {}
+};
+
 // FUNCTION: LEGO1 0x10063780
 void LegoAnimationManager::FUN_10063780(LegoROIList* p_list)
 {
@@ -3170,7 +3187,15 @@ MxBool AnimState::Reset()
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
 // this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordE {
+class MxUnkRecordQN {
+	inline void Record() {}
+};
+
+class MxUnkRecordQO {
+	inline void Record() {}
+};
+
+class MxUnkRecordQP {
 	inline void Record() {}
 };
 

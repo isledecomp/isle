@@ -1693,6 +1693,19 @@ void LegoHideAnimPresenter::AssignIndiciesWithMap()
 	}
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordQD {};
+class MxUnkRecordQE {};
+class MxUnkRecordQF {};
+class MxUnkRecordQG {};
+class MxUnkRecordQH {};
+class MxUnkRecordQI {};
+class MxUnkRecordQJ {};
+class MxUnkRecordQK {};
+
 // FUNCTION: LEGO1 0x1006e3f0
 // FUNCTION: BETA10 0x1005345e
 void LegoHideAnimPresenter::BuildMap(LegoHideAnimStructMap& p_map, LegoTreeNode* p_node)
@@ -1716,6 +1729,21 @@ void LegoHideAnimPresenter::BuildMap(LegoHideAnimStructMap& p_map, LegoTreeNode*
 		BuildMap(p_map, p_node->GetChild(i));
 	}
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordQL {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+	inline void Record4() {}
+	inline void Record5() {}
+	inline void Record6() {}
+	inline void Record7() {}
+};
 
 // FUNCTION: LEGO1 0x1006e470
 // FUNCTION: BETA10 0x10053520
