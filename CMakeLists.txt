@@ -700,6 +700,35 @@ if (MSVC_FOR_DECOMP)
       endforeach()
     endforeach()
     message(STATUS "ISLE_BYTE_IDENTICAL: linking without /debug (no DEBUG data directory); /Zi retained so codegen is unchanged")
+
+    # Two classes of bytes are stamped from the wall clock at link time and are
+    # not derivable from source: the COFF header's TimeDateStamp, and every
+    # TimeDateStamp in the .rsrc resource directory tree. MSVC 4.20's linker has
+    # no switch for either, so restore them from the original binary after the
+    # link. Measured on ISLE.EXE: 76 bytes (4 + 72 across 18 resource nodes).
+    set(ISLE_ORIGINAL_DIR "${PROJECT_SOURCE_DIR}/legobin" CACHE PATH
+        "Directory holding the original retail binaries, used by ISLE_BYTE_IDENTICAL to restore link-time timestamps")
+    find_package(Python3 COMPONENTS Interpreter QUIET)
+    if(NOT Python3_Interpreter_FOUND)
+      set(Python3_EXECUTABLE python3)
+    endif()
+    foreach(_t isle lego1 config)
+      if(TARGET ${_t})
+        get_property(_out TARGET ${_t} PROPERTY OUTPUT_NAME)
+        get_property(_sfx TARGET ${_t} PROPERTY SUFFIX)
+        if(EXISTS "${ISLE_ORIGINAL_DIR}/${_out}${_sfx}")
+          add_custom_command(TARGET ${_t} POST_BUILD
+            COMMAND "${Python3_EXECUTABLE}"
+                    "${PROJECT_SOURCE_DIR}/tools/pe_stamp.py"
+                    "$<TARGET_FILE:${_t}>"
+                    "${ISLE_ORIGINAL_DIR}/${_out}${_sfx}"
+            COMMENT "Restoring original PE/resource timestamps in ${_out}${_sfx}"
+            VERBATIM)
+        else()
+          message(STATUS "ISLE_BYTE_IDENTICAL: no original at ${ISLE_ORIGINAL_DIR}/${_out}${_sfx}, timestamps left as linked")
+        endif()
+      endif()
+    endforeach()
   endif()
 
   # Older MSVC versions don't support building in parallel.
