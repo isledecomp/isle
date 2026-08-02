@@ -121,12 +121,13 @@ void Matrix4::SetTranslation(const float& p_x, const float& p_y, const float& p_
 void Matrix4::Product(float (*p_a)[4], float (*p_b)[4])
 {
 	float* cur = (float*) m_data;
+	int row, col, k;
 
-	for (int row = 0; row < 4; row++) {
-		for (int col = 0; col < 4; col++) {
+	for (row = 0; row < 4; row++) {
+		for (col = 0; col < 4; col++) {
 			*cur = 0.0f;
-			for (int k = 0; k < 4; k++) {
-				*cur += p_a[row][k] * p_b[k][col];
+			for (k = 0; k < 4; k++) {
+				*cur += p_b[k][col] * p_a[row][k];
 			}
 			cur++;
 		}
