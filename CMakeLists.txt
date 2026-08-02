@@ -491,13 +491,19 @@ if (ISLE_BUILD_APP)
     target_link_libraries(isle PRIVATE SmartHeap::SmartHeap)
   endif()
 
-  # Link DSOUND, WINMM, and LEGO1
-  target_link_libraries(isle PRIVATE dsound winmm)
+  # Link DSOUND, WINMM, and LEGO1.
+  # Goal 2: the .idata import-descriptor order IS the link line's library order,
+  # and retail's is winmm, advapi32, gdi32, user32, dsound, Lego1, kernel32.
+  # MEASURED (ISLE.EXE vs retail): .idata 4634 -> 988, .text 1289 -> 1130.
+  # Later duplicates from the default library list are inert (a second occurrence
+  # loads nothing new), and SmartHeap must stay first.
+  target_link_libraries(isle PRIVATE winmm advapi32 gdi32 user32 dsound)
   if(ISLE_BUILD_LEGO1)
     target_link_libraries(isle PRIVATE lego1)
   else()
     target_link_libraries(isle PRIVATE beta10)
   endif()
+  target_link_libraries(isle PRIVATE kernel32)
 
   # Make sure filenames are ALL CAPS
   set_property(TARGET isle PROPERTY OUTPUT_NAME ISLE)
@@ -573,25 +579,15 @@ if (MSVC_FOR_DECOMP)
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.
   if (ISLE_BUILD_APP)
     target_link_options(isle PRIVATE "/OPT:REF")
-    if (ISLE_BYTE_IDENTICAL)
-      # Goal 2: ISLE.EXE's CRT resolution order diverges from retail's. Retail pulls
-      # LIBCMT's hooks.obj (terminate/unexpected/_inconsistency/__pInconsistency)
-      # right after ctype.obj; we pull it after winsig.obj, which slides every
-      # contribution in between and lands section alignment padding in different
-      # places. Forcing that member to resolve early reproduces retail's layout.
-      #
-      # MEASURED (build-identical ISLE.EXE vs retail, differing bytes):
-      #   .text  9745 -> 6776      .rdata 2759 -> 814      .data 1064 -> 116
-      #   .reloc 1186 ->  263
-      # and .rdata (3504 -> 3496) and .data (14804 -> 14788) become EXACTLY
-      # retail's VirtualSize -- the +8/+16 surpluses were alignment padding
-      # downstream of the ordering, not a vendor-CRT difference.
-      #
-      # ISLE ONLY: measured on LEGO1.DLL it is neutral-to-slightly-worse (.text
-      # 796147 -> 796054 but .rdata/.data/.reloc regress), because LEGO1 links
-      # 200+ of our objects and the CRT is a small fraction of its link.
-      target_link_options(isle PRIVATE "/INCLUDE:?terminate@@YAXXZ")
-    endif()
+    # Goal 2 note: ISLE.EXE's CRT member load order is a single global FIFO seeded
+    # by isleapp.obj's undefined-symbol table. Retail seats LIBCMT's hooks.obj
+    # (terminate/unexpected/_inconsistency/__pInconsistency) at 0x4092e0. We used
+    # to force that with /INCLUDE:?terminate@@YAXXZ, which reproduced the RESULT
+    # by fiat but seated the member at the FRONT of the CRT region and left
+    # .reloc's VirtualSize 28 bytes short. The CAUSE is a `delete[]` of a
+    # destructible type in 1997's isleapp.cpp that /OPT:REF stripped -- see the
+    # carrier at the end of ISLE/isleapp.cpp. With that in place the /INCLUDE is
+    # actively harmful, so it is deliberately NOT used.
     set_property(TARGET isle ${lego1_targets} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   endif()
 

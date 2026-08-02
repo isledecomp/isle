@@ -973,3 +973,17 @@ class MxUnkRecord2;
 class MxUnkRecord3;
 class MxUnkRecord4;
 class MxUnkRecord5;
+
+// The 1997 isleapp.obj carried one undefined symbol we do not:
+// ??_M@YGXPAXIHP6EX0@Z@Z, the vector destructor iterator, which only a heap
+// delete[] of a type with a destructor emits. Its carrier was removed by
+// /OPT:REF (it contributes zero bytes to the image), but the symbol still makes
+// the linker load LIBCMT's ehvecdtr.obj, whose own reference to terminate() is
+// what seats hooks.obj at retail's 0x4092e0. Restores .rdata/.data byte
+// exactness and .reloc's VirtualSize. The finding is proven; this carrier is a
+// stand-in for the unknown 1997 function, same standing as the record carriers
+// above - replace it if a genuine dead code path is ever recovered.
+void IsleUnusedArrayHelper(IsleApp* p_array)
+{
+	delete[] p_array;
+}
