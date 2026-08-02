@@ -1,3 +1,13 @@
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class ZzC0 {};
+class ZzC1 {};
+class ZzC2 {};
+class ZzC3 {};
+class ZzC4 {};
+class ZzC5 {};
+class ZzC6 {};
+
 #include "mxstreamer.h"
 
 #include "mxdebug.h"
