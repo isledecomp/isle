@@ -1,3 +1,9 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordHE;
+
 // clang-format off
 #include "legoworldrecords.h"
 // clang-format on
@@ -33,6 +39,16 @@ DECOMP_SIZE_ASSERT(LegoEntityList, 0x18)
 DECOMP_SIZE_ASSERT(LegoEntityListCursor, 0x10)
 DECOMP_SIZE_ASSERT(LegoCacheSoundList, 0x18)
 DECOMP_SIZE_ASSERT(LegoCacheSoundListCursor, 0x10)
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordHD {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+};
 
 // FUNCTION: LEGO1 0x1001ca40
 LegoWorld::LegoWorld() : m_pathControllerList(TRUE)

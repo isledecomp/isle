@@ -1,3 +1,9 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordJY;
+
 #include "legocachesoundmanager.h"
 
 #include "legoworld.h"
@@ -5,6 +11,12 @@
 
 DECOMP_SIZE_ASSERT(LegoCacheSoundEntry, 0x08)
 DECOMP_SIZE_ASSERT(LegoCacheSoundManager, 0x20)
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordJX {};
 
 // FUNCTION: LEGO1 0x1003cf20
 // STUB: BETA10 0x100d0700

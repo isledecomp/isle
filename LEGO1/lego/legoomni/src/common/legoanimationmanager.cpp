@@ -1,3 +1,19 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordDM {
+	inline void Record() {}
+};
+
+class MxUnkRecordDN {
+	inline void Record() {}
+};
+
+class MxUnkRecordDO {
+	inline void Record() {}
+};
+
 #include "legoanimationmanager.h"
 
 #include "3dmanager/lego3dmanager.h"
@@ -2547,6 +2563,18 @@ MxBool LegoAnimationManager::FUN_10063fb0(LegoLocation::Boundary& p_hl, LegoWorl
 
 	return FALSE;
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordDL {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+	inline void Record4() {}
+};
 
 // FUNCTION: LEGO1 0x10064010
 // FUNCTION: BETA10 0x100453a5

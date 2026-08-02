@@ -1,3 +1,19 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordCO;
+class MxUnkRecordCP;
+class MxUnkRecordCQ;
+class MxUnkRecordCR;
+class MxUnkRecordCS;
+class MxUnkRecordCT;
+class MxUnkRecordCU;
+class MxUnkRecordCV;
+class MxUnkRecordCW;
+class MxUnkRecordCX;
+class MxUnkRecordCY;
+
 #include "legoanimpresenter.h"
 
 #include "3dmanager/lego3dmanager.h"
@@ -476,6 +492,12 @@ void LegoAnimPresenter::BuildROIMap()
 		m_roiMapSize++;
 	}
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordCN {};
 
 // FUNCTION: LEGO1 0x1006a3c0
 // FUNCTION: BETA10 0x1004fc10

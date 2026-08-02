@@ -1,3 +1,11 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordBG {};
+class MxUnkRecordBH {};
+class MxUnkRecordBI {};
+
 #include "legopathcontroller.h"
 
 #include "legopathedgecontainer.h"
@@ -403,6 +411,26 @@ MxResult LegoPathController::GetBoundaries(LegoPathBoundary*& p_boundaries, MxS3
 	p_numL = m_numL;
 	return SUCCESS;
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordAA {
+	inline void Record() {}
+};
+
+class MxUnkRecordAB {
+	inline void Record() {}
+};
+
+class MxUnkRecordAC {
+	inline void Record() {}
+};
+
+class MxUnkRecordAZ {
+	inline void Record() {}
+};
 
 // FUNCTION: LEGO1 0x10046b50
 // FUNCTION: BETA10 0x100b7531

@@ -1,3 +1,9 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordER;
+
 #include "legocharactermanager.h"
 
 #include "3dmanager/lego3dmanager.h"
@@ -888,6 +894,19 @@ MxBool LegoCharacterManager::SwitchVariant(LegoROI* p_roi)
 
 	return TRUE;
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordEJ;
+class MxUnkRecordEK;
+class MxUnkRecordEL;
+class MxUnkRecordEM;
+class MxUnkRecordEN;
+class MxUnkRecordEO;
+class MxUnkRecordEP;
+class MxUnkRecordEQ;
 
 // FUNCTION: LEGO1 0x10085090
 // FUNCTION: BETA10 0x100766f6

@@ -1,3 +1,20 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordKW {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+	inline void Record4() {}
+	inline void Record5() {}
+	inline void Record6() {}
+	inline void Record7() {}
+	inline void Record8() {}
+	inline void Record9() {}
+};
+
 #include "mxregion.h"
 
 #include <limits.h>
@@ -485,6 +502,12 @@ void MxSpan::AddSegment(MxS32 p_min, MxS32 p_max)
 		m_segList->Append(copy);
 	}
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordKV;
 
 // FUNCTION: LEGO1 0x100c55d0
 MxSpan* MxSpan::Clone()
