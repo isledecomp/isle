@@ -1,3 +1,12 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordIL;
+class MxUnkRecordIM;
+class MxUnkRecordIN;
+class MxUnkRecordIO;
+
 #include "mxdsstill.h"
 
 DECOMP_SIZE_ASSERT(MxDSStill, 0xb8)

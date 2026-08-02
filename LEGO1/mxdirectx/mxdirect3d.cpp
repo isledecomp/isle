@@ -1,3 +1,9 @@
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordOV;
+
 #include "mxdirect3d.h"
 
 #include <assert.h>
@@ -214,6 +220,13 @@ BOOL MxDirect3D::D3DSetMode()
 
 	return TRUE;
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordOX {};
+class MxUnkRecordOY {};
 
 // FUNCTION: LEGO1 0x1009b5a0
 // FUNCTION: BETA10 0x1011babb

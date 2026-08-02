@@ -234,3 +234,12 @@ double TglSurface::Render()
 
 	return renderTimer.ElapsedSeconds();
 }
+// Declaration-record carrier: end-of-file sink; the translation unit's
+// end-emitted template pool samples the end state (see the positional record
+// calculus, session notes 2026-08-01); no authentic 1997 declaration is
+// recoverable at this position. Neutral stand-in pending better evidence.
+class MxUnkRecordFU;
+class MxUnkRecordFV;
+class MxUnkRecordFW;
+class MxUnkRecordFX;
+

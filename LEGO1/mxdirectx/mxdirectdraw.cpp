@@ -60,6 +60,16 @@ MxDirectDraw::~MxDirectDraw()
 	}
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordTQ {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+};
+
 // FUNCTION: LEGO1 0x1009d570
 // FUNCTION: BETA10 0x101204fe
 int MxDirectDraw::GetPrimaryBitDepth()

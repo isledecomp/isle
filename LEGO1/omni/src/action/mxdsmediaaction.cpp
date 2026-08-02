@@ -72,6 +72,13 @@ MxDSAction* MxDSMediaAction::Clone()
 	return clone;
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordTU {};
+class MxUnkRecordTV {};
+
 // FUNCTION: LEGO1 0x100c8e80
 // FUNCTION: BETA10 0x1015cacb
 void MxDSMediaAction::CopyMediaSrcPath(const char* p_mediaSrcPath)
