@@ -1,13 +1,3 @@
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class ZzC0 {};
-class ZzC1 {};
-class ZzC2 {};
-class ZzC3 {};
-class ZzC4 {};
-class ZzC5 {};
-class ZzC6 {};
-
 #include "mxstreamer.h"
 
 #include "mxdebug.h"
@@ -19,6 +9,17 @@ class ZzC6 {};
 
 #include <algorithm>
 #include <assert.h>
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+enum ZzE0 { zze0_0 };
+enum ZzE1 { zze1_0 };
+enum ZzE2 { zze2_0 };
+enum ZzE3 { zze3_0 };
+enum ZzE4 { zze4_0 };
+enum ZzE5 { zze5_0 };
+enum ZzE6 { zze6_0 };
+enum ZzE7 { zze7_0 };
 
 DECOMP_SIZE_ASSERT(MxStreamer, 0x2c);
 DECOMP_SIZE_ASSERT(MxMemoryPool64, 0x0c);

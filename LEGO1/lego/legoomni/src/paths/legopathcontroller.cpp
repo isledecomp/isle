@@ -1,13 +1,3 @@
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class ZzM0 { public: void zzm0() {} };
-class ZzM1 { public: void zzm1() {} };
-class ZzM2 { public: void zzm2() {} };
-class ZzM3 { public: void zzm3() {} };
-class ZzM4 { public: void zzm4() {} };
-class ZzM5 { public: void zzm5() {} };
-class ZzM6 { public: void zzm6() {} };
-
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
@@ -23,6 +13,15 @@ class MxUnkRecordBI {};
 #include "mxmisc.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+enum ZzE0 { zze0_0 };
+enum ZzE1 { zze1_0 };
+enum ZzE2 { zze2_0 };
+enum ZzE3 { zze3_0 };
+enum ZzE4 { zze4_0 };
+enum ZzE5 { zze5_0 };
 
 DECOMP_SIZE_ASSERT(LegoPathController, 0x40)
 DECOMP_SIZE_ASSERT(LegoPathCtrlEdge, 0x40)

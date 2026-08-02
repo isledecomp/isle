@@ -1,14 +1,3 @@
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-enum ZzE0 { zze0_0 };
-enum ZzE1 { zze1_0 };
-enum ZzE2 { zze2_0 };
-enum ZzE3 { zze3_0 };
-enum ZzE4 { zze4_0 };
-enum ZzE5 { zze5_0 };
-enum ZzE6 { zze6_0 };
-enum ZzE7 { zze7_0 };
-
 // clang-format off
 #include "mxdiskstreamcontrollerrecords.h"
 // clang-format on
@@ -24,6 +13,12 @@ enum ZzE7 { zze7_0 };
 #include "mxticklemanager.h"
 
 #include <assert.h>
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class ZzC0 {};
+class ZzC1 {};
+class ZzC2 {};
 
 // Declaration-record carrier: the functions in this translation unit sample
 // the accumulated declaration state, several via inline expansion of the
