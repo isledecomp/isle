@@ -72,6 +72,7 @@ public:
 	// CarRace::`scalar deleting destructor'
 
 private:
+	static MxS32 g_lapsCount;
 	static const MxS32 g_introAnimations[];
 	static const MxS32 g_studsWinsAnimations[];
 	static const MxS32 g_studsLoosesAnimation[];

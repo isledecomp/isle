@@ -104,7 +104,7 @@ const LegoChar* g_strCRCEDGEY0 = "C_RCEDGEY0";
 MxS32 g_lapsCount = 2;
 
 // GLOBAL: LEGO1 0x100f0c7c
-MxS32 JetskiRace::g_lapsCount = 2;
+MxS32 CarRace::g_lapsCount = 2;
 
 // FUNCTION: LEGO1 0x10015aa0
 LegoRace::LegoRace()
