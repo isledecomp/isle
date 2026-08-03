@@ -22,6 +22,13 @@
 #include <assert.h>
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
+class RkD0 {};
+class RkD1 {};
+class RkD2 {};
+class RkD3 {};
+class RkD4 {};
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
 class RkF0;
 class RkF1;
 class RkF2;
