@@ -22,6 +22,12 @@ class MxUnkRecordME;
 #include "mxvariabletable.h"
 
 #include <vec.h>
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkP0 { public: void rkp0a() {} void rkp0b() {} };
+class RkP1 { public: void rkp1a() {} void rkp1b() {} };
+class RkP2 { public: void rkp2a() {} void rkp2b() {} };
+class RkP3 { public: void rkp3a() {} void rkp3b() {} };
 
 // File name verified by BETA10 0x100cedf7
 

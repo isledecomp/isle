@@ -17,6 +17,16 @@ class MxUnkRecordQS;
 #include "mxstreamcontroller.h"
 #include "mxstreamer.h"
 #include "mxstreamprovider.h"
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkC0 {};
+class RkC1 {};
+class RkC2 {};
+class RkC3 {};
+class RkC4 {};
+class RkC5 {};
+class RkC6 {};
+class RkC7 {};
 
 DECOMP_SIZE_ASSERT(MxDSBuffer, 0x34);
 

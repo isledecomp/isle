@@ -9,6 +9,11 @@
 #include "mxobjectfactory.h"
 
 #include <assert.h>
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkC0 {};
+class RkC1 {};
+class RkC2 {};
 
 DECOMP_SIZE_ASSERT(MxCompositePresenter, 0x4c);
 

@@ -49,6 +49,9 @@ class MxUnkRecordMX {
 #include "skateboard.h"
 #include "towtrack.h"
 #include "viewmanager/viewmanager.h"
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkM0 { public: void rkm0() {} };
 
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
