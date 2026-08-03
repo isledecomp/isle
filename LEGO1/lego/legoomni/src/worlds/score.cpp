@@ -30,6 +30,18 @@ class MxUnkRecordWN;
 #include "scripts.h"
 #include "towtrack.h"
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.  [6 units]
+enum RkScE0 {
+	c_rkScE0
+};
+enum RkScE1 {
+	c_rkScE1
+};
+enum RkScE2 {
+	c_rkScE2
+};
+
 DECOMP_SIZE_ASSERT(Score, 0x104)
 DECOMP_SIZE_ASSERT(ScoreState, 0x0c)
 

@@ -38,6 +38,32 @@ class MxUnkRecordWO {
 #include "regbook_actions.h"
 #include "scripts.h"
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.  [67 units]
+class RkRbP0 {
+	inline void Record0() {}
+	inline void Record1() {}
+};
+class RkRbP1 {
+	inline void Record0() {}
+	inline void Record1() {}
+};
+class RkRbP2 {
+	inline void Record0() {}
+	inline void Record1() {}
+};
+class RkRbP3 {
+	inline void Record0() {}
+	inline void Record1() {}
+};
+class RkRbP4 {
+	inline void Record0() {}
+	inline void Record1() {}
+};
+enum RkRbE0 {
+	c_rkRbE0
+};
+
 DECOMP_SIZE_ASSERT(RegistrationBook, 0x2d0)
 
 // GLOBAL: LEGO1 0x100d9924

@@ -5,6 +5,18 @@
 
 #include <assert.h>
 #include <limits.h>
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.  [27 units]
+class RkLaP0 {
+	inline void Record0() {}
+	inline void Record1() {}
+};
+class RkLaP1 {
+	inline void Record0() {}
+	inline void Record1() {}
+};
+class RkLaF0;
+
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
@@ -19,7 +31,6 @@ class MxUnkRecordSQ {
 	inline void Record6() {}
 	inline void Record7() {}
 };
-
 
 DECOMP_SIZE_ASSERT(LegoAnimKey, 0x08)
 DECOMP_SIZE_ASSERT(LegoTranslationKey, 0x14)
