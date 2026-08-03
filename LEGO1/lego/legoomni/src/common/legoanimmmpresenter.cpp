@@ -21,6 +21,16 @@
 #include "mxutilities.h"
 
 #include <assert.h>
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class QqC0 {};
+class QqC1 {};
+class QqC2 {};
+class QqC3 {};
+class QqC4 {};
+class QqC5 {};
+class QqC6 {};
+class QqC7 {};
 
 // Declaration-record carriers: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
