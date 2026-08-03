@@ -26,8 +26,14 @@ class MxUnkRecordVR {
 #include "mxtimer.h"
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
-class RkM0 { public: void rkm0() {} };
-class RkM1 { public: void rkm1() {} };
+class RkM0 {
+public:
+	void rkm0() {}
+};
+class RkM1 {
+public:
+	void rkm1() {}
+};
 
 DECOMP_SIZE_ASSERT(MxMediaPresenter, 0x50);
 DECOMP_SIZE_ASSERT(MxStreamChunkList, 0x18);

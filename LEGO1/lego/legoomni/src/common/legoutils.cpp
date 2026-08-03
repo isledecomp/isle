@@ -45,11 +45,10 @@ class MxUnkRecordRC;
 #include "realtime/realtime.h"
 #include "scripts.h"
 
+#include <assert.h>
 #include <process.h>
 #include <string.h>
 #include <vec.h>
-
-#include <assert.h>
 
 // FUNCTION: LEGO1 0x1003dd70
 // FUNCTION: BETA10 0x100d3410
@@ -489,7 +488,6 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_gO
 		return;
 	}
 }
-
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))

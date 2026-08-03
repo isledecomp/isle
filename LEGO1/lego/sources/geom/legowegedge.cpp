@@ -1,6 +1,5 @@
 #include "legowegedge.h"
 
-
 #include <assert.h>
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.

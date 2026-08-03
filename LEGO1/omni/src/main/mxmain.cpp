@@ -41,7 +41,6 @@ class MxUnkRecordYQ {
 	inline void Record() {}
 };
 
-
 // GLOBAL: LEGO1 0x101015b0
 MxOmni* MxOmni::g_instance = NULL;
 

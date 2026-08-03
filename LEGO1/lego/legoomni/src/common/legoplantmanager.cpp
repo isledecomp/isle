@@ -16,10 +16,9 @@
 #include "sndanim_actions.h"
 #include "viewmanager/viewmanager.h"
 
+#include <assert.h>
 #include <stdio.h>
 #include <vec.h>
-
-#include <assert.h>
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
 class RkD0 {};

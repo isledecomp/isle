@@ -901,8 +901,8 @@ void Isle::Enable(MxBool p_enable)
 			(m_act1state->m_state != Act1State::e_none || GameState()->m_currentArea != LegoGameState::e_copter) &&
 			(m_act1state->m_state != Act1State::e_none || GameState()->m_currentArea != LegoGameState::e_jetski) &&
 			(m_act1state->m_state != Act1State::e_none || GameState()->m_currentArea != LegoGameState::e_skateboard) &&
-			(m_act1state->m_state != Act1State::e_none ||
-			 GameState()->m_currentArea != LegoGameState::e_jetraceFinished)) {
+			(m_act1state->m_state != Act1State::e_none || GameState()->m_currentArea != LegoGameState::e_jetraceFinished
+			)) {
 			Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		}
 

@@ -44,31 +44,14 @@ class MeshBuilderImpl;
 // tglRL40.h and every assert of the Impl methods in tglImpl.h.
 Result RendererCreateDevice(IDirect3DRM2*, const DeviceDirect3DCreateData&, IDirect3DRMDevice2*&);
 Result RendererCreateDevice(IDirect3DRM2*, const DeviceDirectDrawCreateData&, IDirect3DRMDevice2*&);
-Result RendererCreateView(
-	IDirect3DRM2*,
-	const IDirect3DRMDevice2*,
-	const IDirect3DRMFrame2*,
-	unsigned long x,
-	unsigned long y,
-	unsigned long width,
-	unsigned long height,
-	IDirect3DRMViewport*&
-);
+Result
+RendererCreateView(IDirect3DRM2*, const IDirect3DRMDevice2*, const IDirect3DRMFrame2*, unsigned long x, unsigned long y, unsigned long width, unsigned long height, IDirect3DRMViewport*&);
 Result RendererCreateGroup(IDirect3DRM2*, const IDirect3DRMFrame2*, IDirect3DRMFrame2*&);
 Result RendererCreateCamera(IDirect3DRM2*, IDirect3DRMFrame2*&);
 Result RendererCreateLight(IDirect3DRM2*, LightType, float r, float g, float b, IDirect3DRMFrame2*&);
 Result RendererCreateMeshBuilder(IDirect3DRM2*, IDirect3DRMMesh*&);
-Result RendererCreateTexture(
-	IDirect3DRM2*,
-	int width,
-	int height,
-	int bytesPerPixel,
-	void* pBuffer,
-	int useBuffer,
-	int paletteSize,
-	PaletteEntry* pEntries,
-	IDirect3DRMTexture*&
-);
+Result
+RendererCreateTexture(IDirect3DRM2*, int width, int height, int bytesPerPixel, void* pBuffer, int useBuffer, int paletteSize, PaletteEntry* pEntries, IDirect3DRMTexture*&);
 Result RendererCreateTexture(IDirect3DRM2*, IDirect3DRMTexture*&);
 Result RendererSetTextureDefaultShadeCount(IDirect3DRM2*, unsigned long);
 Result RendererSetTextureDefaultColorCount(IDirect3DRM2*, unsigned long);

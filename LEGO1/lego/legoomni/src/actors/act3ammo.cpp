@@ -137,7 +137,7 @@ MxResult Act3Ammo::CalculateArc(const Vector3& p_srcLoc, const Vector3& p_srcDir
 		}
 
 		m_eq[0][i] = (upRelative[i] * upRelative[i] + upRelative[i] * m_eq[1][i] * 2.0f) /
-							   ((groundPoint[i] - p_srcLoc[i]) * 4.0f);
+					 ((groundPoint[i] - p_srcLoc[i]) * 4.0f);
 	}
 
 	assert(m_eq[0][0] > 0.000001 || m_eq[0][0] < -0.000001);

@@ -8,16 +8,36 @@
 #include "mxvideomanager.h"
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
-enum QqE0 { qqe0_0 };
-enum QqE1 { qqe1_0 };
-enum QqE2 { qqe2_0 };
-enum QqE3 { qqe3_0 };
-enum QqE4 { qqe4_0 };
-enum QqE5 { qqe5_0 };
-enum QqE6 { qqe6_0 };
-enum QqE7 { qqe7_0 };
-enum QqE8 { qqe8_0 };
-enum QqE9 { qqe9_0 };
+enum QqE0 {
+	qqe0_0
+};
+enum QqE1 {
+	qqe1_0
+};
+enum QqE2 {
+	qqe2_0
+};
+enum QqE3 {
+	qqe3_0
+};
+enum QqE4 {
+	qqe4_0
+};
+enum QqE5 {
+	qqe5_0
+};
+enum QqE6 {
+	qqe6_0
+};
+enum QqE7 {
+	qqe7_0
+};
+enum QqE8 {
+	qqe8_0
+};
+enum QqE9 {
+	qqe9_0
+};
 
 DECOMP_SIZE_ASSERT(MxFlcPresenter, 0x68);
 

@@ -354,7 +354,6 @@
 // GLOBAL: ISLE 0x4139c0
 // __acmdln
 
-
 /// Globals from libraries without symbols
 
 // STRING: ISLE 0x40f4a4

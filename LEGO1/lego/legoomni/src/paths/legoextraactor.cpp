@@ -1,17 +1,53 @@
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
-class QqM0 { public: void qqm0() {} };
-class QqM1 { public: void qqm1() {} };
-class QqM2 { public: void qqm2() {} };
-class QqM3 { public: void qqm3() {} };
-class QqM4 { public: void qqm4() {} };
-class QqM5 { public: void qqm5() {} };
-class QqM6 { public: void qqm6() {} };
-class QqM7 { public: void qqm7() {} };
-class QqM8 { public: void qqm8() {} };
-class QqM9 { public: void qqm9() {} };
-class QqM10 { public: void qqm10() {} };
-class QqM11 { public: void qqm11() {} };
+class QqM0 {
+public:
+	void qqm0() {}
+};
+class QqM1 {
+public:
+	void qqm1() {}
+};
+class QqM2 {
+public:
+	void qqm2() {}
+};
+class QqM3 {
+public:
+	void qqm3() {}
+};
+class QqM4 {
+public:
+	void qqm4() {}
+};
+class QqM5 {
+public:
+	void qqm5() {}
+};
+class QqM6 {
+public:
+	void qqm6() {}
+};
+class QqM7 {
+public:
+	void qqm7() {}
+};
+class QqM8 {
+public:
+	void qqm8() {}
+};
+class QqM9 {
+public:
+	void qqm9() {}
+};
+class QqM10 {
+public:
+	void qqm10() {}
+};
+class QqM11 {
+public:
+	void qqm11() {}
+};
 
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
@@ -53,10 +89,26 @@ class MxUnkRecordIH {
 #include <assert.h>
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
-class RkP0 { public: void rkp0a() {} void rkp0b() {} };
-class RkP1 { public: void rkp1a() {} void rkp1b() {} };
-class RkP2 { public: void rkp2a() {} void rkp2b() {} };
-class RkP3 { public: void rkp3a() {} void rkp3b() {} };
+class RkP0 {
+public:
+	void rkp0a() {}
+	void rkp0b() {}
+};
+class RkP1 {
+public:
+	void rkp1a() {}
+	void rkp1b() {}
+};
+class RkP2 {
+public:
+	void rkp2a() {}
+	void rkp2b() {}
+};
+class RkP3 {
+public:
+	void rkp3a() {}
+	void rkp3b() {}
+};
 
 DECOMP_SIZE_ASSERT(LegoExtraActor, 0x1dc)
 

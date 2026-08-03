@@ -171,7 +171,8 @@ MxResult LegoCacheSound::Play(const char* p_name, MxBool p_looping)
 		LPVOID pvAudioPtr1, pvAudioPtr2;
 		DWORD dwAudioBytes1, dwAudioBytes2;
 
-		if (m_directSoundBuffer->Lock(0, m_dataSize, &pvAudioPtr1, &dwAudioBytes1, &pvAudioPtr2, &dwAudioBytes2, 0) == DS_OK) {
+		if (m_directSoundBuffer->Lock(0, m_dataSize, &pvAudioPtr1, &dwAudioBytes1, &pvAudioPtr2, &dwAudioBytes2, 0) ==
+			DS_OK) {
 			memcpy(pvAudioPtr1, m_data, dwAudioBytes1);
 
 			if (dwAudioBytes2 != 0) {

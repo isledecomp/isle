@@ -5,8 +5,6 @@
 class MxUnkRecordST {};
 class MxUnkRecordSU {};
 
-#include "legoact2records.h"
-
 #include "legoact2.h"
 
 #include "3dmanager/lego3dmanager.h"
@@ -15,6 +13,7 @@ class MxUnkRecordSU {};
 #include "infomain_actions.h"
 #include "islepathactor.h"
 #include "jukebox_actions.h"
+#include "legoact2records.h"
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
 #include "legocachesoundmanager.h"

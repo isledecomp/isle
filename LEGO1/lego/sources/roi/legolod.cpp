@@ -20,7 +20,10 @@ class MxUnkRecordRL {
 #include "tgl/d3drm/tglimpl.h"
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
-class RkM0 { public: void rkm0() {} };
+class RkM0 {
+public:
+	void rkm0() {}
+};
 
 // Declaration-record carrier (see the positional record calculus, session
 // notes 2026-08-01); no authentic 1997 declaration is recoverable at this
@@ -144,9 +147,9 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 {
 	using Tgl::Succeeded;
 
-	float (*normals)[3] = NULL;
-	float (*vertices)[3] = NULL;
-	float (*textureVertices)[2] = NULL;
+	float(*normals)[3] = NULL;
+	float(*vertices)[3] = NULL;
+	float(*textureVertices)[2] = NULL;
 	LegoS32 numVerts = 0;
 	LegoS32 numNormals = 0;
 	LegoS32 numTextureVertices = 0;

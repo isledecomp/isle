@@ -1255,9 +1255,9 @@ inline Result MeshDeepClone(MeshImpl::MeshData* pSource, MeshImpl::MeshData*& rp
 	assert(Succeeded(result));
 
 	unsigned int* faceBuffer = new unsigned int[dataSize];
-	result = ResultVal(
-		pSource->groupMesh->GetGroup(pSource->groupIndex, &vcount, &fcount, &vperface, &dataSize, faceBuffer)
-	);
+	result =
+		ResultVal(pSource->groupMesh->GetGroup(pSource->groupIndex, &vcount, &fcount, &vperface, &dataSize, faceBuffer)
+		);
 	assert(Succeeded(result));
 
 	// We expect vertex to be sized 0x24, checked in tglrl40.cpp.

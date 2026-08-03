@@ -48,19 +48,45 @@ class MxUnkRecordDO {
 #include <vec.h>
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
-enum RkE0 { rke0_0 };
-enum RkE1 { rke1_0 };
-enum RkE2 { rke2_0 };
-enum RkE3 { rke3_0 };
-enum RkE4 { rke4_0 };
-enum RkE5 { rke5_0 };
-enum RkE6 { rke6_0 };
-enum RkE7 { rke7_0 };
-enum RkE8 { rke8_0 };
-enum RkE9 { rke9_0 };
-enum RkE10 { rke10_0 };
-enum RkE11 { rke11_0 };
-enum RkE12 { rke12_0 };
+enum RkE0 {
+	rke0_0
+};
+enum RkE1 {
+	rke1_0
+};
+enum RkE2 {
+	rke2_0
+};
+enum RkE3 {
+	rke3_0
+};
+enum RkE4 {
+	rke4_0
+};
+enum RkE5 {
+	rke5_0
+};
+enum RkE6 {
+	rke6_0
+};
+enum RkE7 {
+	rke7_0
+};
+enum RkE8 {
+	rke8_0
+};
+enum RkE9 {
+	rke9_0
+};
+enum RkE10 {
+	rke10_0
+};
+enum RkE11 {
+	rke11_0
+};
+enum RkE12 {
+	rke12_0
+};
 
 DECOMP_SIZE_ASSERT(LegoAnimationManager, 0x500)
 DECOMP_SIZE_ASSERT(LegoAnimationManager::Character, 0x18)

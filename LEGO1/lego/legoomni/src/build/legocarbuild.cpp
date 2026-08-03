@@ -31,7 +31,6 @@ class MxUnkRecordVH;
 class MxUnkRecordVI;
 class MxUnkRecordVJ;
 
-
 #include "copter_actions.h"
 #include "dunebuggy.h"
 #include "dunecar_actions.h"

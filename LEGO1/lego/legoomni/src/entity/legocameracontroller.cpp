@@ -72,9 +72,7 @@ MxLong LegoCameraController::Notify(MxParam& p_param)
 				((LegoEventNotificationParam&) p_param).GetY()
 			));
 		}
-		else if (
-			((((LegoEventNotificationParam&) p_param).GetModifier()) & LegoEventNotificationParam::c_rButtonState) == 0
-		) {
+		else if (((((LegoEventNotificationParam&) p_param).GetModifier()) & LegoEventNotificationParam::c_rButtonState) == 0) {
 			OnRButtonUp(MxPoint32(
 				((LegoEventNotificationParam&) p_param).GetX(),
 				((LegoEventNotificationParam&) p_param).GetY()

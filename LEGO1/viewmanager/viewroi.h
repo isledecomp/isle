@@ -81,7 +81,7 @@ protected:
 	void SetGeometryTransformation();
 
 	Tgl::Group* geometry; // 0xdc
-	int m_token;       // 0xe0
+	int m_token;          // 0xe0
 };
 
 // SYNTHETIC: LEGO1 0x100aa250

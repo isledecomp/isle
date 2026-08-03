@@ -76,12 +76,7 @@ void CalcLocalTransform(const Vector3& p_posVec, const Vector3& p_dirVec, const 
 
 // utility to help derived ROI classes implement
 // update_world_bounding_volumes() using a modelling sphere
-void CalcWorldBoundingVolumes(
-	const BoundingSphere& modelling_sphere,
-	const Matrix4& local2world,
-	BoundingBox&,
-	BoundingSphere&
-);
+void CalcWorldBoundingVolumes(const BoundingSphere& modelling_sphere, const Matrix4& local2world, BoundingBox&, BoundingSphere&);
 
 /*
  * Abstract base class representing a single LOD version of

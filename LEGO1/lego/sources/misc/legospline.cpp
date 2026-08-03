@@ -11,20 +11,62 @@ class MxUnkRecordYL {};
 #include "mxgeometry/mxmatrix.h"
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
-class RkM0 { public: void rkm0() {} };
-class RkM1 { public: void rkm1() {} };
-class RkM2 { public: void rkm2() {} };
-class RkM3 { public: void rkm3() {} };
-class RkM4 { public: void rkm4() {} };
-class RkM5 { public: void rkm5() {} };
-class RkM6 { public: void rkm6() {} };
-class RkM7 { public: void rkm7() {} };
-class RkM8 { public: void rkm8() {} };
-class RkM9 { public: void rkm9() {} };
-class RkM10 { public: void rkm10() {} };
-class RkM11 { public: void rkm11() {} };
-class RkM12 { public: void rkm12() {} };
-class RkM13 { public: void rkm13() {} };
+class RkM0 {
+public:
+	void rkm0() {}
+};
+class RkM1 {
+public:
+	void rkm1() {}
+};
+class RkM2 {
+public:
+	void rkm2() {}
+};
+class RkM3 {
+public:
+	void rkm3() {}
+};
+class RkM4 {
+public:
+	void rkm4() {}
+};
+class RkM5 {
+public:
+	void rkm5() {}
+};
+class RkM6 {
+public:
+	void rkm6() {}
+};
+class RkM7 {
+public:
+	void rkm7() {}
+};
+class RkM8 {
+public:
+	void rkm8() {}
+};
+class RkM9 {
+public:
+	void rkm9() {}
+};
+class RkM10 {
+public:
+	void rkm10() {}
+};
+class RkM11 {
+public:
+	void rkm11() {}
+};
+class RkM12 {
+public:
+	void rkm12() {}
+};
+class RkM13 {
+public:
+	void rkm13() {}
+};
 
 DECOMP_SIZE_ASSERT(LegoSpline, 0x50)
 

@@ -6,7 +6,6 @@
 class MxUnkRecordUJ {};
 class MxUnkRecordUK {};
 
-
 #include <assert.h>
 #include <stdio.h> // for vsprintf
 // Declaration-record carrier: the functions below sample the translation
@@ -18,7 +17,6 @@ class MxUnkRecordUM;
 class MxUnkRecordUN;
 class MxUnkRecordUO;
 class MxUnkRecordUP;
-
 
 DECOMP_SIZE_ASSERT(MxAssignedDevice, 0xe4)
 DECOMP_SIZE_ASSERT(Direct3DDeviceInfo, 0x1a4)

@@ -48,23 +48,68 @@ class RkF0;
 class RkF1;
 class RkF2;
 class RkF3;
-class RkM0 { public: void rkm0() {} };
-class RkM1 { public: void rkm1() {} };
-class RkM2 { public: void rkm2() {} };
+class RkM0 {
+public:
+	void rkm0() {}
+};
+class RkM1 {
+public:
+	void rkm1() {}
+};
+class RkM2 {
+public:
+	void rkm2() {}
+};
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
-class QqM0 { public: void qqm0() {} };
-class QqM1 { public: void qqm1() {} };
-class QqM2 { public: void qqm2() {} };
-class QqM3 { public: void qqm3() {} };
-class QqM4 { public: void qqm4() {} };
-class QqM5 { public: void qqm5() {} };
-class QqM6 { public: void qqm6() {} };
-class QqM7 { public: void qqm7() {} };
-class QqM8 { public: void qqm8() {} };
-class QqM9 { public: void qqm9() {} };
-class QqM10 { public: void qqm10() {} };
-class QqM11 { public: void qqm11() {} };
+class QqM0 {
+public:
+	void qqm0() {}
+};
+class QqM1 {
+public:
+	void qqm1() {}
+};
+class QqM2 {
+public:
+	void qqm2() {}
+};
+class QqM3 {
+public:
+	void qqm3() {}
+};
+class QqM4 {
+public:
+	void qqm4() {}
+};
+class QqM5 {
+public:
+	void qqm5() {}
+};
+class QqM6 {
+public:
+	void qqm6() {}
+};
+class QqM7 {
+public:
+	void qqm7() {}
+};
+class QqM8 {
+public:
+	void qqm8() {}
+};
+class QqM9 {
+public:
+	void qqm9() {}
+};
+class QqM10 {
+public:
+	void qqm10() {}
+};
+class QqM11 {
+public:
+	void qqm11() {}
+};
 
 DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xbc)
 DECOMP_SIZE_ASSERT(LegoLoopingAnimPresenter, 0xc0)

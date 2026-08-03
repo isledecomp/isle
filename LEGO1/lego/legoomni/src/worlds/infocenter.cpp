@@ -46,11 +46,26 @@ class MxUnkRecordGX {
 #include "viewmanager/viewmanager.h"
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
-class RkM0 { public: void rkm0() {} };
-class RkM1 { public: void rkm1() {} };
-class RkM2 { public: void rkm2() {} };
-class RkM3 { public: void rkm3() {} };
-class RkM4 { public: void rkm4() {} };
+class RkM0 {
+public:
+	void rkm0() {}
+};
+class RkM1 {
+public:
+	void rkm1() {}
+};
+class RkM2 {
+public:
+	void rkm2() {}
+};
+class RkM3 {
+public:
+	void rkm3() {}
+};
+class RkM4 {
+public:
+	void rkm4() {}
+};
 
 DECOMP_SIZE_ASSERT(Infocenter, 0x1d8)
 DECOMP_SIZE_ASSERT(InfocenterMapEntry, 0x18)
