@@ -29,6 +29,13 @@ class MxUnkRecordHJ;
 #include "mxtimer.h"
 #include "scripts.h"
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.  [11 units]
+class RkRM0 {
+	void m0() {}
+};
+class RkRF0;
+
 DECOMP_SIZE_ASSERT(Radio, 0x10)
 DECOMP_SIZE_ASSERT(RadioState, 0x30)
 

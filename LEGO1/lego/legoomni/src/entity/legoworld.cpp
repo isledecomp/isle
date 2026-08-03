@@ -1,10 +1,25 @@
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
-class ZzM0 { public: void zzm0() {} };
-class ZzM1 { public: void zzm1() {} };
-class ZzM2 { public: void zzm2() {} };
-class ZzM3 { public: void zzm3() {} };
-class ZzM4 { public: void zzm4() {} };
+class ZzM0 {
+public:
+	void zzm0() {}
+};
+class ZzM1 {
+public:
+	void zzm1() {}
+};
+class ZzM2 {
+public:
+	void zzm2() {}
+};
+class ZzM3 {
+public:
+	void zzm3() {}
+};
+class ZzM4 {
+public:
+	void zzm4() {}
+};
 
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
@@ -41,6 +56,22 @@ class MxUnkRecordHE;
 #include "mxticklemanager.h"
 #include "mxutilities.h"
 #include "viewmanager/viewmanager.h"
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.  [47 units]
+class RkWM0 {
+	void m0() {}
+};
+class RkWM1 {
+	void m1() {}
+};
+class RkWM2 {
+	void m2() {}
+};
+class RkWM3 {
+	void m3() {}
+};
+class RkWC0 {};
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
 class RkC0 {};
@@ -502,7 +533,10 @@ void LegoWorld::Add(MxCore* p_object)
 
 		m_entityList->Append((LegoEntity*) p_object);
 	}
-	else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
+	else if (
+		p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") ||
+		p_object->IsA("LegoLoopingAnimPresenter")
+	) {
 		MxPresenterListCursor cursor(&m_animPresenters);
 
 		if (cursor.Find((MxPresenter*) p_object)) {
@@ -572,7 +606,10 @@ void LegoWorld::Remove(MxCore* p_object)
 			((MxControlPresenter*) p_object)->VTable0x68(TRUE);
 		}
 	}
-	else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
+	else if (
+		p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") ||
+		p_object->IsA("LegoLoopingAnimPresenter")
+	) {
 		MxPresenterListCursor cursor(&m_animPresenters);
 
 		if (cursor.Find((MxPresenter*) p_object)) {

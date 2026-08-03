@@ -62,6 +62,48 @@
 #include <assert.h>
 #include <stdio.h>
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.  [123 units]
+class RkSM0 {
+	void m0() {}
+};
+class RkSM1 {
+	void m1() {}
+};
+class RkSM2 {
+	void m2() {}
+};
+class RkSM3 {
+	void m3() {}
+};
+class RkSM4 {
+	void m4() {}
+};
+class RkSM5 {
+	void m5() {}
+};
+class RkSM6 {
+	void m6() {}
+};
+class RkSM7 {
+	void m7() {}
+};
+class RkSM8 {
+	void m8() {}
+};
+class RkSM9 {
+	void m9() {}
+};
+class RkSM10 {
+	void m10() {}
+};
+class RkSM11 {
+	void m11() {}
+};
+class RkSF0;
+class RkSF1;
+class RkSF2;
+
 DECOMP_SIZE_ASSERT(LegoGameState::Username, 0x0e)
 DECOMP_SIZE_ASSERT(LegoGameState::ScoreItem, 0x2c)
 DECOMP_SIZE_ASSERT(LegoGameState::History, 0x374)

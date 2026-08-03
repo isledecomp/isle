@@ -21,6 +21,9 @@
 
 #include <assert.h>
 #include <stdio.h>
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkC0 {};
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
@@ -32,7 +35,6 @@ class MxUnkRecordYR {
 	inline void Record3() {}
 	inline void Record4() {}
 };
-
 
 // Declaration-record carrier: the functions in this translation unit sample
 // the accumulated declaration state (see the positional record calculus,

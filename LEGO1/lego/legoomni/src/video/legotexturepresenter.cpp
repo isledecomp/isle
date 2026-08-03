@@ -1,18 +1,70 @@
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
-class RkP0 { public: void rkp0a() {} void rkp0b() {} };
-class RkP1 { public: void rkp1a() {} void rkp1b() {} };
-class RkP2 { public: void rkp2a() {} void rkp2b() {} };
-class RkP3 { public: void rkp3a() {} void rkp3b() {} };
-class RkP4 { public: void rkp4a() {} void rkp4b() {} };
-class RkP5 { public: void rkp5a() {} void rkp5b() {} };
-class RkP6 { public: void rkp6a() {} void rkp6b() {} };
-class RkP7 { public: void rkp7a() {} void rkp7b() {} };
-class RkP8 { public: void rkp8a() {} void rkp8b() {} };
-class RkP9 { public: void rkp9a() {} void rkp9b() {} };
-class RkP10 { public: void rkp10a() {} void rkp10b() {} };
-class RkP11 { public: void rkp11a() {} void rkp11b() {} };
-class RkP12 { public: void rkp12a() {} void rkp12b() {} };
+class RkP0 {
+public:
+	void rkp0a() {}
+	void rkp0b() {}
+};
+class RkP1 {
+public:
+	void rkp1a() {}
+	void rkp1b() {}
+};
+class RkP2 {
+public:
+	void rkp2a() {}
+	void rkp2b() {}
+};
+class RkP3 {
+public:
+	void rkp3a() {}
+	void rkp3b() {}
+};
+class RkP4 {
+public:
+	void rkp4a() {}
+	void rkp4b() {}
+};
+class RkP5 {
+public:
+	void rkp5a() {}
+	void rkp5b() {}
+};
+class RkP6 {
+public:
+	void rkp6a() {}
+	void rkp6b() {}
+};
+class RkP7 {
+public:
+	void rkp7a() {}
+	void rkp7b() {}
+};
+class RkP8 {
+public:
+	void rkp8a() {}
+	void rkp8b() {}
+};
+class RkP9 {
+public:
+	void rkp9a() {}
+	void rkp9b() {}
+};
+class RkP10 {
+public:
+	void rkp10a() {}
+	void rkp10b() {}
+};
+class RkP11 {
+public:
+	void rkp11a() {}
+	void rkp11b() {}
+};
+class RkP12 {
+public:
+	void rkp12a() {}
+	void rkp12b() {}
+};
 
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
@@ -34,6 +86,15 @@ class MxUnkRecordRE {
 #include "mxcompositepresenter.h"
 #include "mxdirectx/mxdirect3d.h"
 #include "mxdssubscriber.h"
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.  [19 units]
+class RkTM0 {
+	void m0() {}
+};
+class RkTC0 {};
+class RkTF0;
+class RkTF1;
 
 DECOMP_SIZE_ASSERT(LegoTexturePresenter, 0x54)
 DECOMP_SIZE_ASSERT(LegoNamedTexture, 0x14)

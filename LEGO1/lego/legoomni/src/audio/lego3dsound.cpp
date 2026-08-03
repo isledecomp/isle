@@ -24,6 +24,10 @@ class MxUnkRecordXQ;
 
 #include <assert.h>
 #include <vec.h>
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkC0 {};
+class RkC1 {};
 
 DECOMP_SIZE_ASSERT(Lego3DSound, 0x30)
 

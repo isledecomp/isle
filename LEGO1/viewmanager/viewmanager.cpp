@@ -5,6 +5,9 @@
 #include "viewlod.h"
 
 #include <vec.h>
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkF0;
 
 DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 

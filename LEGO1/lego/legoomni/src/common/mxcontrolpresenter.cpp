@@ -24,6 +24,13 @@ class MxUnkRecordOP;
 
 #include <assert.h>
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.  [4 units]
+class RkPF0;
+class RkPF1;
+class RkPF2;
+class RkPF3;
+
 DECOMP_SIZE_ASSERT(MxControlPresenter, 0x5c)
 
 // FUNCTION: LEGO1 0x10043f50
@@ -327,4 +334,3 @@ class MxUnkRecordOR;
 class MxUnkRecordOS;
 class MxUnkRecordOT;
 class MxUnkRecordOU;
-

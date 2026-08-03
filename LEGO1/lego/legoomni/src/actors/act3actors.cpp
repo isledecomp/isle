@@ -32,6 +32,22 @@ class MxUnkRecordCF {};
 
 #include <assert.h>
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.  [34 units]
+class RkAM0 {
+	void m0() {}
+};
+class RkAM1 {
+	void m1() {}
+};
+class RkAM2 {
+	void m2() {}
+};
+class RkAF0;
+class RkAF1;
+class RkAF2;
+class RkAF3;
+
 DECOMP_SIZE_ASSERT(Act3Actor, 0x178)
 DECOMP_SIZE_ASSERT(Act3Cop, 0x188)
 DECOMP_SIZE_ASSERT(Act3Cop::Act3CopDest, 0x20)
