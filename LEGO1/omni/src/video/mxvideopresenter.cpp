@@ -20,6 +20,21 @@ class MxUnkRecordJS {
 #include "mxmisc.h"
 #include "mxregion.h"
 #include "mxvideomanager.h"
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkC0 {};
+class RkC1 {};
+class RkC2 {};
+class RkC3 {};
+class RkC4 {};
+class RkC5 {};
+class RkC6 {};
+class RkC7 {};
+class RkC8 {};
+class RkC9 {};
+class RkC10 {};
+class RkC11 {};
+class RkC12 {};
 
 DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
 DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0x0c);
