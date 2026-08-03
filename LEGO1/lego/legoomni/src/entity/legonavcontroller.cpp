@@ -1,3 +1,28 @@
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.  [73 units]
+class RkNCP0 {
+	void m0() {}
+	void m1() {}
+};
+class RkNCP1 {
+	void m0() {}
+	void m1() {}
+};
+class RkNCP2 {
+	void m0() {}
+	void m1() {}
+};
+class RkNCP3 {
+	void m0() {}
+	void m1() {}
+};
+class RkNCP4 {
+	void m0() {}
+	void m1() {}
+};
+class RkNCC0 {};
+class RkNCF0;
+
 #include "legonavcontroller.h"
 
 #include "3dmanager/lego3dmanager.h"

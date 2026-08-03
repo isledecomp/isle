@@ -6,6 +6,27 @@ class MxUnkRecordVS;
 class MxUnkRecordVT;
 class MxUnkRecordVU;
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.  [60 units]
+class RkAMM0 {
+	void m0() {}
+};
+class RkAMM1 {
+	void m0() {}
+};
+class RkAMM2 {
+	void m0() {}
+};
+class RkAMM3 {
+	void m0() {}
+};
+class RkAMM4 {
+	void m0() {}
+};
+class RkAMM5 {
+	void m0() {}
+};
+
 #include "ambulance.h"
 
 #include "decomp.h"

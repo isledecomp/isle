@@ -10,6 +10,39 @@ class MxUnkRecordCD {};
 class MxUnkRecordCE {};
 class MxUnkRecordCF {};
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.  [100 units]
+class RkA3M0 {
+	void m0() {}
+};
+class RkA3M1 {
+	void m0() {}
+};
+class RkA3M2 {
+	void m0() {}
+};
+class RkA3M3 {
+	void m0() {}
+};
+class RkA3M4 {
+	void m0() {}
+};
+class RkA3M5 {
+	void m0() {}
+};
+class RkA3M6 {
+	void m0() {}
+};
+class RkA3M7 {
+	void m0() {}
+};
+class RkA3M8 {
+	void m0() {}
+};
+class RkA3M9 {
+	void m0() {}
+};
+
 #include "act3actors.h"
 
 #include "act3.h"
