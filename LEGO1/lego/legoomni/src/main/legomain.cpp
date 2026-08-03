@@ -25,6 +25,10 @@ class MxUnkRecordGR {
 	inline void Record7() {}
 };
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkF0;
+
 #include "legomain.h"
 
 #include "3dmanager/lego3dmanager.h"

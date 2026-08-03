@@ -23,6 +23,9 @@ enum QqE8 { qqe8_0 };
 #include "mxpalette.h"
 #include "mxutilities.h"
 #include "mxvideomanager.h"
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkF0;
 
 DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);
 
