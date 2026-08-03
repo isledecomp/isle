@@ -5,6 +5,21 @@ cmake_policy(SET CMP0091 NEW)
 
 project(isle CXX)
 
+# MSVC < 12 writes one compiler PDB per TARGET (/Fd<target>.dir/) and cannot
+# have two cl processes writing it at once ("fatal error C1033: cannot open
+# program database"), which is why the build has been -j1 for MSVC 4.20.
+# One PDB per OBJECT removes the shared resource. /Fo and /Fd are codegen- and
+# emission-order-inert, and the final images are identical apart from the
+# linker's timestamps (which vary between any two links anyway).
+option(ISLE_PER_OBJECT_PDB "Emit one compiler PDB per object file so MSVC < 12 can compile in parallel" ON)
+if(ISLE_PER_OBJECT_PDB AND CMAKE_CXX_COMPILE_OBJECT MATCHES "/Fd<TARGET_COMPILE_PDB>")
+  string(REPLACE "/Fd<TARGET_COMPILE_PDB>" "/Fd<OBJECT>.pdb"
+         CMAKE_CXX_COMPILE_OBJECT "${CMAKE_CXX_COMPILE_OBJECT}")
+  string(REPLACE "/Fd<TARGET_COMPILE_PDB>" "/Fd<OBJECT>.pdb"
+         CMAKE_C_COMPILE_OBJECT "${CMAKE_C_COMPILE_OBJECT}")
+  message(STATUS "Per-object compiler PDBs enabled: parallel builds are safe")
+endif()
+
 include(CheckCXXSourceCompiles)
 include(CMakeDependentOption)
 include(CMakePushCheckState)
@@ -745,7 +760,9 @@ if (MSVC_FOR_DECOMP)
 
   # Older MSVC versions don't support building in parallel.
   # Force non-parallel builds of isle and lego1 by putting them in a pool with 1 available job.
-  if (CMAKE_CXX_COMPILER_ID VERSION_LESS 12)
+  # Giving every object its own PDB (see ISLE_PER_OBJECT_PDB) removes the shared
+  # resource, so the 1-job pools are only needed when that option is off.
+  if (CMAKE_CXX_COMPILER_ID VERSION_LESS 12 AND NOT ISLE_PER_OBJECT_PDB)
     foreach(tgt IN LISTS lego1_targets beta10_targets)
       set_property(GLOBAL APPEND PROPERTY JOB_POOLS "msvc_${tgt}=1")
       set_property(TARGET ${tgt} PROPERTY JOB_POOL_COMPILE "msvc_${tgt}")
