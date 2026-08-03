@@ -44,6 +44,15 @@ class MxUnkRecordCY;
 #include "viewmanager/viewmanager.h"
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
+class RkF0;
+class RkF1;
+class RkF2;
+class RkF3;
+class RkM0 { public: void rkm0() {} };
+class RkM1 { public: void rkm1() {} };
+class RkM2 { public: void rkm2() {} };
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
 class QqM0 { public: void qqm0() {} };
 class QqM1 { public: void qqm1() {} };
 class QqM2 { public: void qqm2() {} };
