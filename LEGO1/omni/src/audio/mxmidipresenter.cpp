@@ -6,6 +6,12 @@
 #include "mxdssubscriber.h"
 #include "mxmisc.h"
 #include "mxmusicmanager.h"
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class QqF0;
+class QqF1;
+class QqF2;
+class QqF3;
 
 DECOMP_SIZE_ASSERT(MxMIDIPresenter, 0x58);
 

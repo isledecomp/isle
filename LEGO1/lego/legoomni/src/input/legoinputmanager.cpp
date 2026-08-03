@@ -10,6 +10,20 @@
 #include "mxautolock.h"
 #include "mxdebug.h"
 #include "roi/legoroi.h"
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class QqF0;
+class QqF1;
+class QqF2;
+class QqF3;
+class QqF4;
+class QqF5;
+class QqF6;
+class QqF7;
+class QqF8;
+class QqF9;
+class QqF10;
+class QqF11;
 
 DECOMP_SIZE_ASSERT(LegoInputManager, 0x338)
 DECOMP_SIZE_ASSERT(LegoNotifyList, 0x18)
