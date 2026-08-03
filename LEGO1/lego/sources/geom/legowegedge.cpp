@@ -2,6 +2,13 @@
 
 
 #include <assert.h>
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class QqF0;
+class QqF1;
+class QqF2;
+class QqF3;
+class QqF4;
 
 DECOMP_SIZE_ASSERT(LegoOrientedEdge, 0x40)
 DECOMP_SIZE_ASSERT(LegoWEGEdge, 0x54)
