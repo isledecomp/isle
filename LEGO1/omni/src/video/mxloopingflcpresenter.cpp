@@ -3,6 +3,9 @@
 #include "decomp.h"
 #include "mxdsaction.h"
 #include "mxdssubscriber.h"
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class QqF0;
 
 DECOMP_SIZE_ASSERT(MxLoopingFlcPresenter, 0x6c);
 
