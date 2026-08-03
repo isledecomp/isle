@@ -41,6 +41,13 @@ class MxUnkRecordHE;
 #include "mxticklemanager.h"
 #include "mxutilities.h"
 #include "viewmanager/viewmanager.h"
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkC0 {};
+class RkC1 {};
+class RkC2 {};
+class RkC3 {};
+class RkC4 {};
 
 DECOMP_SIZE_ASSERT(LegoWorld, 0xf8)
 DECOMP_SIZE_ASSERT(LegoEntityList, 0x18)

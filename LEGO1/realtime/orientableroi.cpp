@@ -13,6 +13,24 @@ class MxUnkRecordHW {
 #include "realtime.h"
 
 #include <vec.h>
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkC0 {};
+class RkC1 {};
+class RkC2 {};
+class RkC3 {};
+class RkC4 {};
+class RkC5 {};
+class RkC6 {};
+class RkC7 {};
+class RkC8 {};
+class RkC9 {};
+class RkC10 {};
+class RkC11 {};
+class RkC12 {};
+class RkC13 {};
+class RkC14 {};
+class RkC15 {};
 
 DECOMP_SIZE_ASSERT(OrientableROI, 0xdc)
 
