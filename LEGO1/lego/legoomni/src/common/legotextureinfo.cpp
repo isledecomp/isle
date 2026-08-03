@@ -1,3 +1,10 @@
+// Declaration-record carrier (dial campaign, PRE): samples this translation
+// unit's accumulated declaration state before the include block. [17 units]
+class RkRoM0 {
+	void m0() {}
+};
+class RkRoC0 {};
+
 #include "legotextureinfo.h"
 
 #include "legovideomanager.h"

@@ -1,3 +1,10 @@
+// Declaration-record carrier (dial campaign, PRE): samples this translation
+// unit's accumulated declaration state before the include block. [4 units]
+class RkRuF0;
+class RkRuF1;
+class RkRuF2;
+class RkRuF3;
+
 #include "mxdsmediaaction.h"
 
 #include "mxdebug.h"

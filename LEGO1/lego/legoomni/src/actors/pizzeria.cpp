@@ -1,3 +1,7 @@
+// Declaration-record carrier (dial campaign, PRE): samples this translation
+// unit's accumulated declaration state before the include block. [1 units]
+class RkReF0;
+
 #include "pizzeria.h"
 
 #include "isle_actions.h"

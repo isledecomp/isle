@@ -1,3 +1,26 @@
+// Declaration-record carrier (dial campaign, PRE): samples this translation
+// unit's accumulated declaration state before the include block. [68 units]
+class RkRaM0 {
+	void m0() {}
+};
+class RkRaM1 {
+	void m1() {}
+};
+class RkRaM2 {
+	void m2() {}
+};
+class RkRaM3 {
+	void m3() {}
+};
+class RkRaM4 {
+	void m4() {}
+};
+class RkRaM5 {
+	void m5() {}
+};
+class RkRaC0 {};
+class RkRaF0;
+
 #include "legoracers.h"
 
 #include "anim/legoanim.h"

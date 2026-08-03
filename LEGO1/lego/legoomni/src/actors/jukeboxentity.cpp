@@ -1,3 +1,11 @@
+// Declaration-record carrier (dial campaign, PRE): samples this translation
+// unit's accumulated declaration state before the include block. [5 units]
+class RkRpF0;
+class RkRpF1;
+class RkRpF2;
+class RkRpF3;
+class RkRpF4;
+
 #include "jukeboxentity.h"
 
 #include "isle.h"

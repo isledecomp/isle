@@ -1,3 +1,10 @@
+// Declaration-record carrier (dial campaign, PRE): samples this translation
+// unit's accumulated declaration state before the include block. [17 units]
+class RkRhM0 {
+	void m0() {}
+};
+class RkRhC0 {};
+
 #include "islepathactor.h"
 
 #include "3dmanager/lego3dmanager.h"

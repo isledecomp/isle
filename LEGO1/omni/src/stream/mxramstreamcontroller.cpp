@@ -1,3 +1,15 @@
+// Declaration-record carrier (dial campaign, PRE): samples this translation
+// unit's accumulated declaration state before the include block. [16 units]
+class RkRsM0 {
+	void m0() {}
+};
+class RkRsF0;
+class RkRsF1;
+class RkRsF2;
+class RkRsF3;
+class RkRsF4;
+class RkRsF5;
+
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
