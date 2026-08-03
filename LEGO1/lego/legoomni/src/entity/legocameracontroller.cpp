@@ -1,3 +1,10 @@
+// Declaration-record carrier (dial campaign, PRE): samples this translation
+// unit's accumulated declaration state before the include block. [17 units]
+class RkCCM0 {
+	void m0() {}
+};
+class RkCCC0 {};
+
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
@@ -65,7 +72,9 @@ MxLong LegoCameraController::Notify(MxParam& p_param)
 				((LegoEventNotificationParam&) p_param).GetY()
 			));
 		}
-		else if (((((LegoEventNotificationParam&) p_param).GetModifier()) & LegoEventNotificationParam::c_rButtonState) == 0) {
+		else if (
+			((((LegoEventNotificationParam&) p_param).GetModifier()) & LegoEventNotificationParam::c_rButtonState) == 0
+		) {
 			OnRButtonUp(MxPoint32(
 				((LegoEventNotificationParam&) p_param).GetX(),
 				((LegoEventNotificationParam&) p_param).GetY()

@@ -1,3 +1,42 @@
+// Declaration-record carrier (dial campaign, PRE): samples this translation
+// unit's accumulated declaration state before the include block. [119 units]
+class RkRSM0 {
+	void m0() {}
+};
+class RkRSM1 {
+	void m1() {}
+};
+class RkRSM2 {
+	void m2() {}
+};
+class RkRSM3 {
+	void m3() {}
+};
+class RkRSM4 {
+	void m4() {}
+};
+class RkRSM5 {
+	void m5() {}
+};
+class RkRSM6 {
+	void m6() {}
+};
+class RkRSM7 {
+	void m7() {}
+};
+class RkRSM8 {
+	void m8() {}
+};
+class RkRSM9 {
+	void m9() {}
+};
+class RkRSM10 {
+	void m10() {}
+};
+class RkRSC0 {};
+class RkRSF0;
+class RkRSF1;
+
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
@@ -24,10 +63,26 @@ class MxUnkRecordME;
 #include <vec.h>
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
-class RkP0 { public: void rkp0a() {} void rkp0b() {} };
-class RkP1 { public: void rkp1a() {} void rkp1b() {} };
-class RkP2 { public: void rkp2a() {} void rkp2b() {} };
-class RkP3 { public: void rkp3a() {} void rkp3b() {} };
+class RkP0 {
+public:
+	void rkp0a() {}
+	void rkp0b() {}
+};
+class RkP1 {
+public:
+	void rkp1a() {}
+	void rkp1b() {}
+};
+class RkP2 {
+public:
+	void rkp2a() {}
+	void rkp2b() {}
+};
+class RkP3 {
+public:
+	void rkp3a() {}
+	void rkp3b() {}
+};
 
 // File name verified by BETA10 0x100cedf7
 

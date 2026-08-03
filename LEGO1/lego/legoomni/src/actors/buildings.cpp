@@ -1,3 +1,13 @@
+// Declaration-record carrier (dial campaign, PRE): samples this translation
+// unit's accumulated declaration state before the include block. [27 units]
+class RkBUM0 {
+	void m0() {}
+};
+class RkBUM1 {
+	void m1() {}
+};
+class RkBUC0 {};
+
 #include "buildings.h"
 
 #include "act2main_actions.h"
