@@ -1,5 +1,9 @@
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
+class RkF0;
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
 class RkC0 {};
 class RkC1 {};
 class RkC2 {};

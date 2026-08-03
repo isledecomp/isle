@@ -17,6 +17,22 @@ class MxUnkRecordRQ;
 #include "mxutilities.h"
 
 #include <assert.h>
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkF0;
+class RkF1;
+class RkF2;
+class RkF3;
+class RkF4;
+class RkF5;
+class RkF6;
+class RkF7;
+class RkF8;
+class RkF9;
+class RkF10;
+class RkF11;
+class RkF12;
+class RkF13;
 
 DECOMP_SIZE_ASSERT(LegoAnimActor, 0x174)
 DECOMP_SIZE_ASSERT(LegoAnimActorStruct, 0x20)

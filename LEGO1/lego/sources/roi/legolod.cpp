@@ -18,6 +18,9 @@ class MxUnkRecordRL {
 #include "misc/legostorage.h"
 #include "shape/legomesh.h"
 #include "tgl/d3drm/tglimpl.h"
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkM0 { public: void rkm0() {} };
 
 // Declaration-record carrier (see the positional record calculus, session
 // notes 2026-08-01); no authentic 1997 declaration is recoverable at this

@@ -22,6 +22,24 @@ class MxUnkRecordYZ;
 #include "mxtimer.h"
 
 #include <vec.h>
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkF0;
+class RkF1;
+class RkF2;
+class RkF3;
+class RkF4;
+class RkF5;
+class RkF6;
+class RkF7;
+class RkF8;
+class RkF9;
+class RkF10;
+class RkF11;
+class RkF12;
+class RkF13;
+class RkF14;
+class RkF15;
 
 DECOMP_SIZE_ASSERT(LegoBuildingManager, 0x30)
 DECOMP_SIZE_ASSERT(LegoBuildingInfo, 0x2c)
