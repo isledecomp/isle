@@ -567,17 +567,17 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 	// Check if wait indicator has started
 	if (m_waitIndicator->GetCurrentTickleState() >= MxPresenter::e_streaming) {
 		// Setup the copy rect
-		MxS32 x = m_waitIndicator->GetLocation().GetX();
+		MxU32 bytesPerPixel = p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
 		MxS32 y = m_waitIndicator->GetLocation().GetY();
+		MxS32 x = m_waitIndicator->GetLocation().GetX();
 
 		MxU32 copyPitch = (p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8) *
 						  (m_copyRect.right - m_copyRect.left + 1); // This uses m_copyRect, seemingly erroneously
-		MxU32 bytesPerPixel = p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
 
 		MxS32 i;
 
-		MxS32 height = m_waitIndicator->GetHeight();
 		MxS32 width = m_waitIndicator->GetWidth();
+		MxS32 height = m_waitIndicator->GetHeight();
 
 		m_copyRect.left = x;
 		m_copyRect.top = y;
