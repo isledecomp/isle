@@ -1291,10 +1291,10 @@ void LegoAnimationManager::CameraTriggerFire(LegoPathActor* p_actor, MxBool, MxU
 
 		MxU16 unk0x0e, unk0x10;
 		if (FUN_100617c0(p_location, unk0x0e, unk0x10) == SUCCESS) {
-			MxU16 i;
 			MxU16 index = unk0x0e;
-			MxU32 unk0x22 = -1;
 			MxBool success = FALSE;
+			MxU16 i;
+			MxU32 unk0x22 = -1;
 
 			for (i = unk0x0e; i <= unk0x10; i++) {
 				AnimInfo& animInfo = m_anims[i];
