@@ -84,6 +84,8 @@ class QqF4;
 class QqF5;
 class QqF6;
 class QqF7;
+class VzJt00;
+class VzJt01;
 
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
@@ -688,7 +690,6 @@ MxResult LegoPathController::ReadStructs(LegoStorage* p_storage)
 // this position. Neutral stand-in pending better evidence.
 class MxUnkRecordQA {};
 class MxUnkRecordQB {};
-class MxUnkRecordQC {};
 
 // FUNCTION: LEGO1 0x10047c10
 // FUNCTION: BETA10 0x100b7df3
@@ -903,6 +904,8 @@ MxResult LegoPathController::ReadVector(LegoStorage* p_storage, Mx4DPointFloat& 
 	return SUCCESS;
 }
 
+class VzJp00;
+class VzJp01;
 // FUNCTION: LEGO1 0x10048310
 // FUNCTION: BETA10 0x100b8911
 MxResult LegoPathController::FindPath(

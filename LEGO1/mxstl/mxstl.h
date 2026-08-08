@@ -146,8 +146,10 @@ public:
   typedef Multiset<_K, _Pr> _Myt;
   typedef allocator<_K> _A;
 
-  explicit Multiset(const _Pr& _Pred = _Pr())
-    : multiset<_K, _Pr, _A>(_Pred)
+  explicit Multiset() : multiset<_K, _Pr, _A>()
+  {}
+
+  explicit Multiset(const _Pr& _Pred) : multiset<_K, _Pr, _A>(_Pred)
   {}
 
   void swap(_Myt& _X)
