@@ -1905,6 +1905,24 @@ MxBool LegoAnimationManager::FUN_10062650(Mx3DPointFloat& p_position, float p_un
 	return FALSE;
 }
 
+// Declaration-record carrier, mid-unit companion to the three at the top of
+// this file. The record state the back end carries into FUN_10064740 is set by
+// how many declarations precede it, not by anything in its own body; sampling
+// it here is what gives that function retail's register assignment. No
+// authentic 1997 declaration is recoverable at this position -- neutral
+// stand-in pending better evidence.
+class MxUnkRecordDP {
+	inline void Record() {}
+	inline void Sample() {}
+	inline void Reset() {}
+};
+
+class MxUnkRecordDQ {
+	inline void Record() {}
+	inline void Sample() {}
+	inline void Reset() {}
+};
+
 // FUNCTION: LEGO1 0x10062710
 // FUNCTION: BETA10 0x10043787
 MxBool LegoAnimationManager::FUN_10062710(AnimInfo& p_info)
