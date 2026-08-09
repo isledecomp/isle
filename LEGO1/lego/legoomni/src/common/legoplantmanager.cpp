@@ -36,7 +36,6 @@ class RkF4;
 class RkF5;
 class RkF6;
 class RkF7;
-class RkF8;
 
 DECOMP_SIZE_ASSERT(LegoPlantManager, 0x2c)
 DECOMP_SIZE_ASSERT(LegoPlantManager::AnimEntry, 0x0c)

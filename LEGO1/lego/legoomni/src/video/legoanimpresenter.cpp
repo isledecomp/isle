@@ -47,7 +47,6 @@ class MxUnkRecordCY;
 class RkF0;
 class RkF1;
 class RkF2;
-class RkF3;
 class RkM0 {
 public:
 	void rkm0() {}

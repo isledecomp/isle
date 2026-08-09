@@ -1,8 +1,5 @@
 // Declaration-record carrier (dial campaign, PRE): samples this translation
-// unit's accumulated declaration state before the include block. [17 units]
-class RkISM0 {
-	void m0() {}
-};
+// unit's accumulated declaration state before the include block.
 class RkISC0 {};
 
 // Declaration-record carrier: the functions below sample the translation
@@ -56,6 +53,18 @@ class MxUnkRecordMX {
 #include "skateboard.h"
 #include "towtrack.h"
 #include "viewmanager/viewmanager.h"
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkISQ000;
+class RkISQ001;
+class RkISQ002;
+class RkISQ003;
+class RkISQ004;
+class RkISQ005;
+class RkISQ006;
+class RkISQ007;
+class RkISQ008;
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
 class RkM0 {

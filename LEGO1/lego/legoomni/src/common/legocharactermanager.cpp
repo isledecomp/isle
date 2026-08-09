@@ -29,7 +29,6 @@ class MxUnkRecordER;
 // sample this translation unit's accumulated declaration state at this
 // point.  Neutral stand-in; no authentic 1997 declaration is
 // recoverable here.
-class MxUnkRecordZC000;
 
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.

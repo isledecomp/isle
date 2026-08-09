@@ -2,10 +2,6 @@
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
 // this position. Neutral stand-in pending better evidence.
-class MxUnkRecordDM {
-	inline void Record() {}
-};
-
 class MxUnkRecordDN {
 	inline void Record() {}
 };
@@ -46,6 +42,18 @@ class MxUnkRecordDO {
 
 #include <io.h>
 #include <vec.h>
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class MxUnkRecordDQ000;
+class MxUnkRecordDQ001;
+class MxUnkRecordDQ002;
+class MxUnkRecordDQ003;
+class MxUnkRecordDQ004;
+class MxUnkRecordDQ005;
+class MxUnkRecordDQ006;
+class MxUnkRecordDQ007;
+class MxUnkRecordDQ008;
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
 enum RkE0 {

@@ -3,7 +3,6 @@
 class MxUnkRecord000 {};
 class MxUnkRecord001 {};
 class MxUnkRecord002;
-class MxUnkRecord003;
 
 #include "act2actor.h"
 

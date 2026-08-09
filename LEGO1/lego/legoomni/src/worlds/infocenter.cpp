@@ -48,7 +48,6 @@ class MxUnkRecord042;
 class MxUnkRecord043;
 class MxUnkRecord044;
 class MxUnkRecord045;
-class MxUnkRecord046;
 
 #include "infocenter.h"
 

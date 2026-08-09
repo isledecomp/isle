@@ -32,7 +32,6 @@ class MxUnkRecordInstantiations026;
 class MxUnkRecordInstantiations027;
 class MxUnkRecordInstantiations028;
 class MxUnkRecordInstantiations029;
-class MxUnkRecordInstantiations030;
 
 #include "legonavcontroller.h"
 
