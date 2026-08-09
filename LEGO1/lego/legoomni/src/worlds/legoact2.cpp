@@ -13,7 +13,15 @@ class MxUnkRecordSU {};
 #include "infomain_actions.h"
 #include "islepathactor.h"
 #include "jukebox_actions.h"
-#include "legoact2records.h"
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state at this point in the parse. No
+// authentic 1997 declaration is recoverable here. Neutral stand-ins
+// pending better evidence.
+class MxUnkRecordAW;
+class MxUnkRecordAX;
+class MxUnkRecordAY;
+
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
 #include "legocachesoundmanager.h"

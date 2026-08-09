@@ -19,10 +19,6 @@ class RkRvF2;
 #include <assert.h>
 #include <stdio.h>
 
-// clang-format off
-#include "act3ammorecords.h"
-// clang-format on
-
 DECOMP_SIZE_ASSERT(Act3Ammo, 0x1a0)
 
 // Initialized at LEGO1 0x100537c0

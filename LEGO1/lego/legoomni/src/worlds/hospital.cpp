@@ -1,6 +1,10 @@
-// clang-format off
-#include "hospitalrecords.h"
-// clang-format on
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state at this point in the parse. No
+// authentic 1997 declaration is recoverable here. Neutral stand-ins
+// pending better evidence.
+class MxUnkRecordBP {
+	inline void Record() {}
+};
 
 #include "hospital.h"
 
