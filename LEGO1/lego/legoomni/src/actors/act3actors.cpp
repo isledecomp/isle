@@ -395,6 +395,13 @@ void Act3Cop::Animate(float p_time)
 // FUNCTION: BETA10 0x10018c4a
 MxResult Act3Cop::FUN_10040350(Act3Ammo& p_ammo, const Vector3&)
 {
+	// Declaration-record carrier: the constructor below samples this
+	// translation unit's accumulated declaration state (positional record
+	// calculus). These four locals are dead and are eliminated; they exist
+	// only to place the record state. No authentic 1997 declaration is
+	// recoverable at this position.
+	MxU32 unkRecord0, unkRecord1, unkRecord2, unkRecord3;
+
 	return FUN_10040360();
 }
 
