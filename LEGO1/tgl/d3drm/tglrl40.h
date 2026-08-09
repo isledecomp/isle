@@ -25,6 +25,11 @@ class MxUnkRecordTGH18;
 class MxUnkRecordTGH19;
 class MxUnkRecordTGH20;
 
+class MxUnkRecordPre00;
+class MxUnkRecordPre01;
+class MxUnkRecordPre02;
+class MxUnkRecordPre03;
+class MxUnkRecordPre04;
 #include "tglimpl.h"
 
 #include <d3drmwin.h>
@@ -1485,4 +1490,22 @@ inline void TextureImpl::Destroy()
 
 } /* namespace TglImpl */
 
+class MxUnkRecordPost00;
+class MxUnkRecordPost01;
+class MxUnkRecordPost02;
+class MxUnkRecordPost03;
+class MxUnkRecordPost04;
+class MxUnkRecordPost05;
+class MxUnkRecordPost06;
+class MxUnkRecordPost07;
+class MxUnkRecordPost08;
+class MxUnkRecordPost09;
+class MxUnkRecordPost10;
+class MxUnkRecordPost11;
+class MxUnkRecordPost12;
+class MxUnkRecordPost13;
+class MxUnkRecordPost14;
+class MxUnkRecordPost15;
+class MxUnkRecordPost16;
+class MxUnkRecordPost17;
 #endif

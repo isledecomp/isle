@@ -800,9 +800,9 @@ inline Result RendererImpl::CreateTexture(
 	);
 }
 
-// FUNCTION: LEGO1 0x100a1900
-// FUNCTION: BETA10 0x10169ea0
-inline Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data)
+// FUNCTION: LEGO1 0x100a1830
+// FUNCTION: BETA10 0x10169d90
+inline Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& data)
 {
 	assert(m_data);
 	DeviceImpl* device = new DeviceImpl();
@@ -815,9 +815,9 @@ inline Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data
 	return device;
 }
 
-// FUNCTION: LEGO1 0x100a1830
-// FUNCTION: BETA10 0x10169d90
-inline Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& data)
+// FUNCTION: LEGO1 0x100a1900
+// FUNCTION: BETA10 0x10169ea0
+inline Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data)
 {
 	assert(m_data);
 	DeviceImpl* device = new DeviceImpl();
@@ -862,6 +862,20 @@ inline View* RendererImpl::CreateView(
 	return view;
 }
 
+// FUNCTION: LEGO1 0x100a1b20
+// FUNCTION: BETA10 0x1016a130
+inline Group* RendererImpl::CreateGroup(const Group* pParent)
+{
+	assert(m_data);
+
+	GroupImpl* group = new GroupImpl();
+	if (!CreateGroup(static_cast<const GroupImpl*>(pParent), *group)) {
+		delete group;
+		group = NULL;
+	}
+	return group;
+}
+
 // FUNCTION: LEGO1 0x100a1c30
 // FUNCTION: BETA10 0x1016a980
 inline Camera* RendererImpl::CreateCamera()
@@ -893,6 +907,15 @@ inline Light* RendererImpl::CreateLight(LightType type, float r, float g, float 
 	return pLightImpl;
 }
 
+// FUNCTION: BETA10 0x1016d850
+inline Result RendererImpl::CreateMeshBuilder(MeshBuilderImpl& rMesh)
+{
+	assert(m_data);
+	assert(!rMesh.ImplementationData());
+
+	return RendererCreateMeshBuilder(m_data, rMesh.ImplementationData());
+}
+
 // FUNCTION: LEGO1 0x100a1e90
 // FUNCTION: BETA10 0x1016abf0
 inline MeshBuilder* RendererImpl::CreateMeshBuilder()
@@ -906,44 +929,6 @@ inline MeshBuilder* RendererImpl::CreateMeshBuilder()
 	}
 
 	return meshBuilder;
-}
-
-// FUNCTION: BETA10 0x1016d850
-inline Result RendererImpl::CreateMeshBuilder(MeshBuilderImpl& rMesh)
-{
-	assert(m_data);
-	assert(!rMesh.ImplementationData());
-
-	return RendererCreateMeshBuilder(m_data, rMesh.ImplementationData());
-}
-
-// FUNCTION: LEGO1 0x100a1b20
-// FUNCTION: BETA10 0x1016a130
-inline Group* RendererImpl::CreateGroup(const Group* pParent)
-{
-	assert(m_data);
-
-	GroupImpl* group = new GroupImpl();
-	if (!CreateGroup(static_cast<const GroupImpl*>(pParent), *group)) {
-		delete group;
-		group = NULL;
-	}
-	return group;
-}
-
-// FUNCTION: LEGO1 0x100a20d0
-// FUNCTION: BETA10 0x1016ae20
-inline Texture* RendererImpl::CreateTexture()
-{
-	assert(m_data);
-
-	TextureImpl* texture = new TextureImpl();
-	if (!CreateTexture(*texture)) {
-		delete texture;
-		texture = NULL;
-	}
-
-	return texture;
 }
 
 // FUNCTION: LEGO1 0x100a1f50
@@ -977,6 +962,21 @@ inline Texture* RendererImpl::CreateTexture(
 	return texture;
 }
 
+// FUNCTION: LEGO1 0x100a20d0
+// FUNCTION: BETA10 0x1016ae20
+inline Texture* RendererImpl::CreateTexture()
+{
+	assert(m_data);
+
+	TextureImpl* texture = new TextureImpl();
+	if (!CreateTexture(*texture)) {
+		delete texture;
+		texture = NULL;
+	}
+
+	return texture;
+}
+
 // FUNCTION: LEGO1 0x100a2270
 // FUNCTION: BETA10 0x1016af30
 inline Result RendererImpl::SetTextureDefaultShadeCount(unsigned long shadeCount)
@@ -1002,6 +1002,33 @@ inline void* RendererImpl::ImplementationDataPtr()
 	assert(m_data);
 
 	return reinterpret_cast<void*>(&m_data);
+}
+
+// FUNCTION: LEGO1 0x100a2bf0
+// FUNCTION: BETA10 0x1016ddf0
+inline void* DeviceImpl::ImplementationDataPtr()
+{
+	assert(m_data);
+
+	return reinterpret_cast<void*>(&m_data);
+}
+
+// FUNCTION: LEGO1 0x100a2c00
+// FUNCTION: BETA10 0x1016de40
+inline unsigned long DeviceImpl::GetWidth()
+{
+	assert(m_data);
+
+	return DeviceGetWidth(m_data);
+}
+
+// FUNCTION: LEGO1 0x100a2c10
+// FUNCTION: BETA10 0x1016dec0
+inline unsigned long DeviceImpl::GetHeight()
+{
+	assert(m_data);
+
+	return DeviceGetHeight(m_data);
 }
 
 // FUNCTION: LEGO1 0x100a2c20
@@ -1040,24 +1067,6 @@ inline Result DeviceImpl::SetDither(int dither)
 	return DeviceSetDither(m_data, dither);
 }
 
-// FUNCTION: LEGO1 0x100a2c00
-// FUNCTION: BETA10 0x1016de40
-inline unsigned long DeviceImpl::GetWidth()
-{
-	assert(m_data);
-
-	return DeviceGetWidth(m_data);
-}
-
-// FUNCTION: LEGO1 0x100a2c10
-// FUNCTION: BETA10 0x1016dec0
-inline unsigned long DeviceImpl::GetHeight()
-{
-	assert(m_data);
-
-	return DeviceGetHeight(m_data);
-}
-
 // FUNCTION: LEGO1 0x100a2ce0
 // FUNCTION: BETA10 0x1016e200
 inline void DeviceImpl::HandleActivate(WORD wParam)
@@ -1076,15 +1085,6 @@ inline void DeviceImpl::HandlePaint(void* p_data)
 	DeviceHandlePaint(m_data, p_data);
 }
 
-// FUNCTION: LEGO1 0x100a2d60
-// FUNCTION: BETA10 0x1016e400
-inline Result DeviceImpl::Update()
-{
-	assert(m_data);
-
-	return DeviceUpdate(m_data);
-}
-
 // FUNCTION: BETA10 0x1016e490
 inline unsigned long DeviceImpl::GetTrianglesDrawn()
 {
@@ -1093,13 +1093,13 @@ inline unsigned long DeviceImpl::GetTrianglesDrawn()
 	return DeviceGetTrianglesDrawn(m_data);
 }
 
-// FUNCTION: LEGO1 0x100a2bf0
-// FUNCTION: BETA10 0x1016ddf0
-inline void* DeviceImpl::ImplementationDataPtr()
+// FUNCTION: LEGO1 0x100a2d60
+// FUNCTION: BETA10 0x1016e400
+inline Result DeviceImpl::Update()
 {
 	assert(m_data);
 
-	return reinterpret_cast<void*>(&m_data);
+	return DeviceUpdate(m_data);
 }
 
 // FUNCTION: BETA10 0x101709a0
@@ -1161,6 +1161,45 @@ inline Result ViewImpl::Pick(
 	);
 }
 
+// FUNCTION: LEGO1 0x100a2d80
+// FUNCTION: BETA10 0x1016e640
+inline void* ViewImpl::ImplementationDataPtr()
+{
+	assert(m_data);
+
+	return reinterpret_cast<void*>(&m_data);
+}
+
+// FUNCTION: LEGO1 0x100a2d90
+// FUNCTION: BETA10 0x1016e690
+inline Result ViewImpl::Add(const Light* pLight)
+{
+	assert(m_data);
+	assert(pLight);
+
+	return Add(*static_cast<const LightImpl*>(pLight));
+}
+
+// FUNCTION: LEGO1 0x100a2dc0
+// FUNCTION: BETA10 0x1016e710
+inline Result ViewImpl::Remove(const Light* pLight)
+{
+	assert(m_data);
+	assert(pLight);
+
+	return Remove(*static_cast<const LightImpl*>(pLight));
+}
+
+// FUNCTION: LEGO1 0x100a2df0
+// FUNCTION: BETA10 0x1016e790
+inline Result ViewImpl::SetCamera(const Camera* pCamera)
+{
+	assert(m_data);
+	assert(pCamera);
+
+	return SetCamera(*static_cast<const CameraImpl*>(pCamera));
+}
+
 // FUNCTION: LEGO1 0x100a2e70
 // FUNCTION: BETA10 0x1016e810
 inline Result ViewImpl::SetProjection(ProjectionType type)
@@ -1204,36 +1243,6 @@ inline Result ViewImpl::Clear()
 	assert(m_data);
 
 	return ViewClear(m_data);
-}
-
-// FUNCTION: LEGO1 0x100a2d90
-// FUNCTION: BETA10 0x1016e690
-inline Result ViewImpl::Add(const Light* pLight)
-{
-	assert(m_data);
-	assert(pLight);
-
-	return Add(*static_cast<const LightImpl*>(pLight));
-}
-
-// FUNCTION: LEGO1 0x100a2dc0
-// FUNCTION: BETA10 0x1016e710
-inline Result ViewImpl::Remove(const Light* pLight)
-{
-	assert(m_data);
-	assert(pLight);
-
-	return Remove(*static_cast<const LightImpl*>(pLight));
-}
-
-// FUNCTION: LEGO1 0x100a2df0
-// FUNCTION: BETA10 0x1016e790
-inline Result ViewImpl::SetCamera(const Camera* pCamera)
-{
-	assert(m_data);
-	assert(pCamera);
-
-	return SetCamera(*static_cast<const CameraImpl*>(pCamera));
 }
 
 // FUNCTION: LEGO1 0x100a2fd0
@@ -1296,58 +1305,49 @@ inline Result ViewImpl::TransformScreenToWorld(const float screen[4], float worl
 	return ViewTransformScreenToWorld(m_data, screen, world);
 }
 
-// FUNCTION: LEGO1 0x100a2d80
-// FUNCTION: BETA10 0x1016e640
-inline void* ViewImpl::ImplementationDataPtr()
+// FUNCTION: LEGO1 0x100a31d0
+// FUNCTION: BETA10 0x1016a480
+inline void* GroupImpl::ImplementationDataPtr()
 {
 	assert(m_data);
 
 	return reinterpret_cast<void*>(&m_data);
 }
 
-// FUNCTION: LEGO1 0x100a3700
-// FUNCTION: BETA10 0x1016f330
-inline Result CameraImpl::SetTransformation(FloatMatrix4& matrix)
+// FUNCTION: LEGO1 0x100a31e0
+// FUNCTION: BETA10 0x1016a4d0
+inline Result GroupImpl::SetTransformation(FloatMatrix4& matrix)
 {
 	assert(m_data);
 
-	return CameraSetTransformation(m_data, matrix);
+	return GroupSetTransformation(m_data, matrix);
 }
 
-// FUNCTION: LEGO1 0x100a36f0
-// FUNCTION: BETA10 0x1016f2e0
-inline void* CameraImpl::ImplementationDataPtr()
+// FUNCTION: LEGO1 0x100a3240
+// FUNCTION: BETA10 0x1016a530
+inline Result GroupImpl::SetColor(float r, float g, float b, float a)
 {
 	assert(m_data);
 
-	return reinterpret_cast<void*>(&m_data);
+	return GroupSetColor(m_data, r, g, b, a);
 }
 
-// FUNCTION: LEGO1 0x100a3780
-// FUNCTION: BETA10 0x1016f680
-inline Result LightImpl::SetTransformation(FloatMatrix4& matrix)
+// FUNCTION: LEGO1 0x100a32b0
+// FUNCTION: BETA10 0x1016a5a0
+inline Result GroupImpl::SetTexture(const Texture* pTexture)
 {
 	assert(m_data);
 
-	return LightSetTransformation(m_data, matrix);
+	return SetTexture(static_cast<const TextureImpl*>(pTexture));
 }
 
-// FUNCTION: LEGO1 0x100a37e0
-// FUNCTION: BETA10 0x1016f7f0
-inline Result LightImpl::SetColor(float r, float g, float b)
+// FUNCTION: LEGO1 0x100a32e0
+// FUNCTION: BETA10 0x1016a600
+inline Result GroupImpl::GetTexture(Texture*& pTexture)
 {
 	assert(m_data);
 
-	return LightSetColor(m_data, r, g, b);
-}
-
-// FUNCTION: LEGO1 0x100a3770
-// FUNCTION: BETA10 0x1016f630
-inline void* LightImpl::ImplementationDataPtr()
-{
-	assert(m_data);
-
-	return reinterpret_cast<void*>(&m_data);
+	return GetTexture(reinterpret_cast<TextureImpl**>(&pTexture));
 }
 
 // FUNCTION: BETA10 0x1016bcc0
@@ -1411,33 +1411,6 @@ inline Result GroupImpl::Remove(const MeshBuilderImpl& rMesh)
 	return GroupRemoveMeshBuilder(m_data, rMesh.ImplementationData());
 }
 
-// FUNCTION: LEGO1 0x100a34b0
-// FUNCTION: BETA10 0x1016a8c0
-inline Result GroupImpl::RemoveAll()
-{
-	assert(m_data);
-
-	return GroupRemoveAll(m_data);
-}
-
-// FUNCTION: LEGO1 0x100a31e0
-// FUNCTION: BETA10 0x1016a4d0
-inline Result GroupImpl::SetTransformation(FloatMatrix4& matrix)
-{
-	assert(m_data);
-
-	return GroupSetTransformation(m_data, matrix);
-}
-
-// FUNCTION: LEGO1 0x100a3240
-// FUNCTION: BETA10 0x1016a530
-inline Result GroupImpl::SetColor(float r, float g, float b, float a)
-{
-	assert(m_data);
-
-	return GroupSetColor(m_data, r, g, b, a);
-}
-
 // FUNCTION: LEGO1 0x100a33c0
 // FUNCTION: BETA10 0x1016a660
 inline Result GroupImpl::SetMaterialMode(MaterialMode mode)
@@ -1445,24 +1418,6 @@ inline Result GroupImpl::SetMaterialMode(MaterialMode mode)
 	assert(m_data);
 
 	return GroupSetMaterialMode(m_data, mode);
-}
-
-// FUNCTION: LEGO1 0x100a32b0
-// FUNCTION: BETA10 0x1016a5a0
-inline Result GroupImpl::SetTexture(const Texture* pTexture)
-{
-	assert(m_data);
-
-	return SetTexture(static_cast<const TextureImpl*>(pTexture));
-}
-
-// FUNCTION: LEGO1 0x100a32e0
-// FUNCTION: BETA10 0x1016a600
-inline Result GroupImpl::GetTexture(Texture*& pTexture)
-{
-	assert(m_data);
-
-	return GetTexture(reinterpret_cast<TextureImpl**>(&pTexture));
 }
 
 // FUNCTION: LEGO1 0x100a3410
@@ -1485,16 +1440,6 @@ inline Result GroupImpl::Add(const MeshBuilder* pMesh)
 	return Add(*static_cast<const MeshBuilderImpl*>(pMesh));
 }
 
-// FUNCTION: LEGO1 0x100a3480
-// FUNCTION: BETA10 0x1016a840
-inline Result GroupImpl::Remove(const Group* pGroup)
-{
-	assert(m_data);
-	assert(pGroup);
-
-	return Remove(*static_cast<const GroupImpl*>(pGroup));
-}
-
 // FUNCTION: LEGO1 0x100a3450
 // FUNCTION: BETA10 0x1016a7c0
 inline Result GroupImpl::Remove(const MeshBuilder* pMesh)
@@ -1505,13 +1450,23 @@ inline Result GroupImpl::Remove(const MeshBuilder* pMesh)
 	return Remove(*static_cast<const MeshBuilderImpl*>(pMesh));
 }
 
-// FUNCTION: LEGO1 0x100a31d0
-// FUNCTION: BETA10 0x1016a480
-inline void* GroupImpl::ImplementationDataPtr()
+// FUNCTION: LEGO1 0x100a3480
+// FUNCTION: BETA10 0x1016a840
+inline Result GroupImpl::Remove(const Group* pGroup)
+{
+	assert(m_data);
+	assert(pGroup);
+
+	return Remove(*static_cast<const GroupImpl*>(pGroup));
+}
+
+// FUNCTION: LEGO1 0x100a34b0
+// FUNCTION: BETA10 0x1016a8c0
+inline Result GroupImpl::RemoveAll()
 {
 	assert(m_data);
 
-	return reinterpret_cast<void*>(&m_data);
+	return GroupRemoveAll(m_data);
 }
 
 // FUNCTION: LEGO1 0x100a3540
@@ -1523,13 +1478,49 @@ inline Result GroupImpl::Bounds(D3DVECTOR* p_min, D3DVECTOR* p_max)
 	return GroupBounds(m_data, p_min, p_max);
 }
 
-// FUNCTION: LEGO1 0x100a3ae0
-// FUNCTION: BETA10 0x1016ce00
-inline Result MeshBuilderImpl::GetBoundingBox(float min[3], float max[3]) const
+// FUNCTION: LEGO1 0x100a36f0
+// FUNCTION: BETA10 0x1016f2e0
+inline void* CameraImpl::ImplementationDataPtr()
 {
 	assert(m_data);
 
-	return MeshBuilderGetBoundingBox(m_data, min, max);
+	return reinterpret_cast<void*>(&m_data);
+}
+
+// FUNCTION: LEGO1 0x100a3700
+// FUNCTION: BETA10 0x1016f330
+inline Result CameraImpl::SetTransformation(FloatMatrix4& matrix)
+{
+	assert(m_data);
+
+	return CameraSetTransformation(m_data, matrix);
+}
+
+// FUNCTION: LEGO1 0x100a3770
+// FUNCTION: BETA10 0x1016f630
+inline void* LightImpl::ImplementationDataPtr()
+{
+	assert(m_data);
+
+	return reinterpret_cast<void*>(&m_data);
+}
+
+// FUNCTION: LEGO1 0x100a3780
+// FUNCTION: BETA10 0x1016f680
+inline Result LightImpl::SetTransformation(FloatMatrix4& matrix)
+{
+	assert(m_data);
+
+	return LightSetTransformation(m_data, matrix);
+}
+
+// FUNCTION: LEGO1 0x100a37e0
+// FUNCTION: BETA10 0x1016f7f0
+inline Result LightImpl::SetColor(float r, float g, float b)
+{
+	assert(m_data);
+
+	return LightSetColor(m_data, r, g, b);
 }
 
 // FUNCTION: LEGO1 0x100a3830
@@ -1539,36 +1530,6 @@ inline void* MeshBuilderImpl::ImplementationDataPtr()
 	assert(m_data);
 
 	return reinterpret_cast<void*>(&m_data);
-}
-
-// FUNCTION: BETA10 0x1016fe40
-inline Result MeshBuilderImpl::CreateMeshImpl(
-	MeshImpl& p_elem,
-	unsigned long faceCount,
-	unsigned long vertexCount,
-	float (*pPositions)[3],
-	float (*pNormals)[3],
-	float (*pTextureCoordinates)[2],
-	unsigned long (*pFaceIndices)[3],
-	unsigned long (*pTextureIndices)[3],
-	ShadingModel shadingModel
-)
-{
-	assert(m_data);
-	assert(!p_elem.ImplementationData());
-
-	return TglImpl::CreateMesh(
-		m_data,
-		faceCount,
-		vertexCount,
-		reinterpret_cast<float*>(pPositions),
-		reinterpret_cast<float*>(pNormals),
-		reinterpret_cast<float*>(pTextureCoordinates),
-		pFaceIndices,
-		pTextureIndices,
-		shadingModel,
-		p_elem.ImplementationData()
-	);
 }
 
 // FUNCTION: LEGO1 0x100a3840
@@ -1605,6 +1566,45 @@ inline Mesh* MeshBuilderImpl::CreateMesh(
 	return pMeshImpl;
 }
 
+// FUNCTION: BETA10 0x1016fe40
+inline Result MeshBuilderImpl::CreateMeshImpl(
+	MeshImpl& p_elem,
+	unsigned long faceCount,
+	unsigned long vertexCount,
+	float (*pPositions)[3],
+	float (*pNormals)[3],
+	float (*pTextureCoordinates)[2],
+	unsigned long (*pFaceIndices)[3],
+	unsigned long (*pTextureIndices)[3],
+	ShadingModel shadingModel
+)
+{
+	assert(m_data);
+	assert(!p_elem.ImplementationData());
+
+	return TglImpl::CreateMesh(
+		m_data,
+		faceCount,
+		vertexCount,
+		reinterpret_cast<float*>(pPositions),
+		reinterpret_cast<float*>(pNormals),
+		reinterpret_cast<float*>(pTextureCoordinates),
+		pFaceIndices,
+		pTextureIndices,
+		shadingModel,
+		p_elem.ImplementationData()
+	);
+}
+
+// FUNCTION: LEGO1 0x100a3ae0
+// FUNCTION: BETA10 0x1016ce00
+inline Result MeshBuilderImpl::GetBoundingBox(float min[3], float max[3]) const
+{
+	assert(m_data);
+
+	return MeshBuilderGetBoundingBox(m_data, min, max);
+}
+
 // FUNCTION: LEGO1 0x100a3b40
 inline MeshBuilder* MeshBuilderImpl::Clone()
 {
@@ -1625,126 +1625,6 @@ inline Result MeshImpl::SetTexture(const TextureImpl* pTexture)
 
 	IDirect3DRMTexture* pD3DTexture = pTexture ? pTexture->ImplementationData() : NULL;
 	return MeshSetTexture(m_data, pD3DTexture);
-}
-
-// FUNCTION: LEGO1 0x100a3f80
-// FUNCTION: BETA10 0x10170690
-inline Result MeshImpl::SetTextureMappingMode(TextureMappingMode mode)
-{
-	assert(m_data);
-
-	return MeshSetTextureMappingMode(m_data, mode);
-}
-
-// FUNCTION: LEGO1 0x100a3fc0
-// FUNCTION: BETA10 0x101706f0
-inline Result MeshImpl::SetShadingModel(ShadingModel model)
-{
-	assert(m_data);
-	return MeshSetShadingModel(m_data, model);
-}
-
-// FUNCTION: LEGO1 0x100a3ee0
-// FUNCTION: BETA10 0x10170520
-inline Result MeshImpl::SetColor(float r, float g, float b, float a)
-{
-	assert(m_data);
-
-	return MeshSetColor(m_data, r, g, b, a);
-}
-
-// FUNCTION: LEGO1 0x100a3f50
-// FUNCTION: BETA10 0x10170630
-inline Result MeshImpl::SetTexture(const Texture* pTexture)
-{
-	assert(m_data);
-
-	return SetTexture(static_cast<const TextureImpl*>(pTexture));
-}
-
-// FUNCTION: LEGO1 0x100a3ed0
-// FUNCTION: BETA10 0x101704d0
-inline void* MeshImpl::ImplementationDataPtr()
-{
-	assert(m_data);
-
-	return reinterpret_cast<void*>(&m_data);
-}
-
-// FUNCTION: LEGO1 0x100a4030
-// FUNCTION: BETA10 0x101707a0
-inline Mesh* MeshImpl::DeepClone(MeshBuilder* pMesh)
-{
-	assert(m_data);
-	assert(pMesh);
-
-	return DeepClone(*static_cast<MeshBuilderImpl*>(pMesh));
-}
-
-// FUNCTION: BETA10 0x10171360
-inline Mesh* MeshImpl::DeepClone(const MeshBuilderImpl& rMesh)
-{
-	assert(m_data);
-	assert(rMesh.ImplementationData());
-
-	MeshImpl* clone = new MeshImpl();
-	assert(!clone->ImplementationData());
-
-	if (!MeshDeepClone(m_data, clone->ImplementationData(), rMesh.ImplementationData())) {
-		delete clone;
-		clone = NULL;
-	}
-
-	return clone;
-}
-
-// FUNCTION: BETA10 0x10171980
-inline Result MeshImpl::GetTexture(TextureImpl** ppTexture)
-{
-	assert(m_data);
-	assert(ppTexture);
-
-	TextureImpl* pTextureImpl = new TextureImpl();
-	assert(pTextureImpl);
-
-	Result result = MeshGetTexture(m_data, &pTextureImpl->ImplementationData());
-
-	*ppTexture = pTextureImpl;
-	return result;
-}
-
-// FUNCTION: LEGO1 0x100a4330
-// FUNCTION: BETA10 0x10170820
-inline Result MeshImpl::GetTexture(Texture*& rpTexture)
-{
-	assert(m_data);
-
-	return GetTexture(reinterpret_cast<TextureImpl**>(&rpTexture));
-}
-
-inline Mesh* MeshImpl::ShallowClone(const MeshBuilderImpl& rMesh)
-{
-	assert(m_data);
-	assert(rMesh.ImplementationData());
-
-	MeshImpl* clone = new MeshImpl();
-	assert(!clone->ImplementationData());
-
-	if (!MeshShallowClone(m_data, clone->ImplementationData(), rMesh.ImplementationData())) {
-		delete clone;
-		clone = NULL;
-	}
-
-	return clone;
-}
-
-// FUNCTION: LEGO1 0x100a4240
-inline Mesh* MeshImpl::ShallowClone(MeshBuilder* pMeshBuilder)
-{
-	assert(m_data);
-	assert(pMeshBuilder);
-
-	return ShallowClone(*static_cast<MeshBuilderImpl*>(pMeshBuilder));
 }
 
 // FUNCTION: LEGO1 0x100a3c10
@@ -1806,6 +1686,126 @@ inline void* TextureImpl::ImplementationDataPtr()
 	assert(m_data);
 
 	return reinterpret_cast<void*>(&m_data);
+}
+
+// FUNCTION: BETA10 0x10171360
+inline Mesh* MeshImpl::DeepClone(const MeshBuilderImpl& rMesh)
+{
+	assert(m_data);
+	assert(rMesh.ImplementationData());
+
+	MeshImpl* clone = new MeshImpl();
+	assert(!clone->ImplementationData());
+
+	if (!MeshDeepClone(m_data, clone->ImplementationData(), rMesh.ImplementationData())) {
+		delete clone;
+		clone = NULL;
+	}
+
+	return clone;
+}
+
+// FUNCTION: BETA10 0x10171980
+inline Result MeshImpl::GetTexture(TextureImpl** ppTexture)
+{
+	assert(m_data);
+	assert(ppTexture);
+
+	TextureImpl* pTextureImpl = new TextureImpl();
+	assert(pTextureImpl);
+
+	Result result = MeshGetTexture(m_data, &pTextureImpl->ImplementationData());
+
+	*ppTexture = pTextureImpl;
+	return result;
+}
+
+// FUNCTION: LEGO1 0x100a3ed0
+// FUNCTION: BETA10 0x101704d0
+inline void* MeshImpl::ImplementationDataPtr()
+{
+	assert(m_data);
+
+	return reinterpret_cast<void*>(&m_data);
+}
+
+inline Mesh* MeshImpl::ShallowClone(const MeshBuilderImpl& rMesh)
+{
+	assert(m_data);
+	assert(rMesh.ImplementationData());
+
+	MeshImpl* clone = new MeshImpl();
+	assert(!clone->ImplementationData());
+
+	if (!MeshShallowClone(m_data, clone->ImplementationData(), rMesh.ImplementationData())) {
+		delete clone;
+		clone = NULL;
+	}
+
+	return clone;
+}
+
+// FUNCTION: LEGO1 0x100a3ee0
+// FUNCTION: BETA10 0x10170520
+inline Result MeshImpl::SetColor(float r, float g, float b, float a)
+{
+	assert(m_data);
+
+	return MeshSetColor(m_data, r, g, b, a);
+}
+
+// FUNCTION: LEGO1 0x100a3f50
+// FUNCTION: BETA10 0x10170630
+inline Result MeshImpl::SetTexture(const Texture* pTexture)
+{
+	assert(m_data);
+
+	return SetTexture(static_cast<const TextureImpl*>(pTexture));
+}
+
+// FUNCTION: LEGO1 0x100a3f80
+// FUNCTION: BETA10 0x10170690
+inline Result MeshImpl::SetTextureMappingMode(TextureMappingMode mode)
+{
+	assert(m_data);
+
+	return MeshSetTextureMappingMode(m_data, mode);
+}
+
+// FUNCTION: LEGO1 0x100a3fc0
+// FUNCTION: BETA10 0x101706f0
+inline Result MeshImpl::SetShadingModel(ShadingModel model)
+{
+	assert(m_data);
+	return MeshSetShadingModel(m_data, model);
+}
+
+// FUNCTION: LEGO1 0x100a4030
+// FUNCTION: BETA10 0x101707a0
+inline Mesh* MeshImpl::DeepClone(MeshBuilder* pMesh)
+{
+	assert(m_data);
+	assert(pMesh);
+
+	return DeepClone(*static_cast<MeshBuilderImpl*>(pMesh));
+}
+
+// FUNCTION: LEGO1 0x100a4240
+inline Mesh* MeshImpl::ShallowClone(MeshBuilder* pMeshBuilder)
+{
+	assert(m_data);
+	assert(pMeshBuilder);
+
+	return ShallowClone(*static_cast<MeshBuilderImpl*>(pMeshBuilder));
+}
+
+// FUNCTION: LEGO1 0x100a4330
+// FUNCTION: BETA10 0x10170820
+inline Result MeshImpl::GetTexture(Texture*& rpTexture)
+{
+	assert(m_data);
+
+	return GetTexture(reinterpret_cast<TextureImpl**>(&rpTexture));
 }
 
 } /* namespace TglImpl */
