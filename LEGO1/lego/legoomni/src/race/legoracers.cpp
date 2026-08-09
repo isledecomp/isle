@@ -215,17 +215,12 @@ LegoRaceCar::~LegoRaceCar()
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
 // this position. Neutral stand-in pending better evidence.
-class MxUnkRecordUX {
-	inline void Record() {}
-};
-
-class MxUnkRecordUY {
-	inline void Record() {}
-};
-
-class MxUnkRecordUZ {
-	inline void Record() {}
-};
+class MxUnkRecordUX;
+class MxUnkRecordUY;
+class MxUnkRecordUZ;
+class MxUnkRecordGD;
+class MxUnkRecordGE;
+class MxUnkRecordGS;
 
 // FUNCTION: LEGO1 0x10012d90
 // FUNCTION: BETA10 0x100cb0bd
