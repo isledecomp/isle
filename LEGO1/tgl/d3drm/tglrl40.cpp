@@ -130,6 +130,20 @@ Result ViewportPickImpl(
 {
 	// The BETA10 body (tglRL40.cpp L140-L230, asserts at L153/L171/L193)
 	// walks the D3DRM pick array; left unimplemented in shipped game.
+
+	// Record carriers (scaffolding), warning-free local form.
+	typedef int MxUnkRecordTGP00;
+	typedef int MxUnkRecordTGP01;
+	typedef int MxUnkRecordTGP02;
+	typedef int MxUnkRecordTGP03;
+	typedef int MxUnkRecordTGP04;
+	typedef int MxUnkRecordTGP05;
+	typedef int MxUnkRecordTGP06;
+	typedef int MxUnkRecordTGP07;
+	typedef int MxUnkRecordTGP08;
+	typedef int MxUnkRecordTGP09;
+	typedef int MxUnkRecordTGP10;
+	typedef int MxUnkRecordTGP11;
 	return Error;
 }
 
@@ -335,3 +349,4 @@ Renderer* Tgl::CreateRenderer()
 }
 
 class MxUnkRecordTG0;
+class MxUnkRecordTG1;

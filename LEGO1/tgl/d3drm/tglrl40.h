@@ -1,6 +1,30 @@
 #ifndef TGL_D3DRM_TGLRL40_H
 #define TGL_D3DRM_TGLRL40_H
 
+// Record carriers (scaffolding): 21 units seated ahead of tglImpl.h so the
+// deferred inline bodies below land on the 1997 register schedule.
+class MxUnkRecordTGH00;
+class MxUnkRecordTGH01;
+class MxUnkRecordTGH02;
+class MxUnkRecordTGH03;
+class MxUnkRecordTGH04;
+class MxUnkRecordTGH05;
+class MxUnkRecordTGH06;
+class MxUnkRecordTGH07;
+class MxUnkRecordTGH08;
+class MxUnkRecordTGH09;
+class MxUnkRecordTGH10;
+class MxUnkRecordTGH11;
+class MxUnkRecordTGH12;
+class MxUnkRecordTGH13;
+class MxUnkRecordTGH14;
+class MxUnkRecordTGH15;
+class MxUnkRecordTGH16;
+class MxUnkRecordTGH17;
+class MxUnkRecordTGH18;
+class MxUnkRecordTGH19;
+class MxUnkRecordTGH20;
+
 #include "tglimpl.h"
 
 #include <d3drmwin.h>
