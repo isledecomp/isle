@@ -33,6 +33,7 @@ class RkF10;
 class RkF11;
 class RkF12;
 class RkF13;
+class RkF14;
 
 DECOMP_SIZE_ASSERT(LegoAnimActor, 0x174)
 DECOMP_SIZE_ASSERT(LegoAnimActorStruct, 0x20)
@@ -145,7 +146,7 @@ MxResult LegoAnimActor::AnimateWithTransform(float p_time, Matrix4& p_transform)
 
 			m_roi->SetVisibility(TRUE);
 
-			for (MxU32 i = 0; i < numROIs; i++) {
+			for (MxS32 i = 0; i < numROIs; i++) {
 				LegoROI* roi = roiMap[i];
 
 				if (roi != NULL && m_roi != roi) {
@@ -153,8 +154,8 @@ MxResult LegoAnimActor::AnimateWithTransform(float p_time, Matrix4& p_transform)
 				}
 			}
 
-			for (MxS32 j = 0; j < n->GetNumChildren(); j++) {
-				LegoROI::ApplyAnimationTransformation(n->GetChild(j), p_transform, p_time, roiMap);
+			for (i = 0; i < n->GetNumChildren(); i++) {
+				LegoROI::ApplyAnimationTransformation(n->GetChild(i), p_transform, p_time, roiMap);
 			}
 
 			if (m_cameraFlag) {
