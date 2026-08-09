@@ -217,29 +217,28 @@ MxResult LegoPathActor::SetTransformAndDestinationFromPoints(
 	m_traveledDistance = 0;
 	m_transformTime = p_time;
 	m_actorTime = p_time;
-	// TODO: this one fails to inline
 	// LINE: LEGO1 0x1002deed
 	p_destEdge->GetFaceNormal(*p_boundary, destNormal);
 
 	MxMatrix matrix;
-	Vector3 pos((const float*) matrix[3]);
-	Vector3 dir((const float*) matrix[2]);
-	Vector3 up((const float*) matrix[1]);
-	Vector3 right((const float*) matrix[0]);
+	Vector3 pos(matrix[3]);
+	Vector3 dir(matrix[2]);
+	Vector3 up(matrix[1]);
+	Vector3 right(matrix[0]);
 
 	matrix.SetIdentity();
 	pos = p_start;
 	dir = p_direction;
 	up = *m_boundary->GetUp();
 
-	if (!m_cameraFlag || !m_userNavFlag) {
+	if (m_cameraFlag == FALSE || m_userNavFlag == FALSE) {
 		dir *= -1.0f;
 	}
 
 	right.EqualsCross(up, dir);
 	m_roi->UpdateTransformationRelativeToParent(matrix);
 
-	if (m_cameraFlag && m_userNavFlag) {
+	if (m_cameraFlag != FALSE && m_userNavFlag != FALSE) {
 		m_boundary->AddActor(this);
 		TransformPointOfView();
 	}
