@@ -895,7 +895,6 @@ MxResult LegoPathController::ReadVector(LegoStorage* p_storage, Mx4DPointFloat& 
 }
 
 class VzJp00;
-class VzJp01;
 // FUNCTION: LEGO1 0x10048310
 // FUNCTION: BETA10 0x100b8911
 MxResult LegoPathController::FindPath(
@@ -929,6 +928,43 @@ MxResult LegoPathController::FindPath(
 	LegoPathCtrlEdgeSet pathCtrlEdgeSet(m_pfsE);
 
 	MxFloat minDistance = 999999.0f;
+
+	// Lexical-scope carrier. The 1997 source carried more statements here than we
+	// have recovered, and their form is constrained rather than guessed: a slot-by-slot
+	// census of BETA10 0x100b8911 accounts for all 56 slots of the 296-byte frame with
+	// no slack, so the missing text declares no local, and it emits nothing at /Od, so
+	// it evaluates no expression. In C++ the only statements that satisfy both are the
+	// compound statement and the null statement, and the null statement carries no
+	// declaration record. It is that record count which takes C1XX's inline budget for
+	// this function over the acceptance threshold for the _Tree<LegoBEWithMidpoint>
+	// default constructor, which is why retail's FindPath calls _Tree<>::_Init instead
+	// of constructing the tree out of line.
+	{
+	}
+	{
+	}
+	{
+	}
+	{
+	}
+	{
+	}
+	{
+	}
+	{
+	}
+	{
+	}
+	{
+	}
+	{
+	}
+	{
+	}
+	{
+	}
+	{
+	}
 
 	p_grec->SetPath(FALSE);
 
@@ -1022,7 +1058,9 @@ MxResult LegoPathController::FindPath(
 							LegoPathCtrlEdge* edge = (LegoPathCtrlEdge*) bOther->GetEdges()[i];
 
 							if (edge->GetMask0x03()) {
-								if (pathCtrlEdgeSet.find(edge) != pathCtrlEdgeSet.end()) {
+								LegoPathCtrlEdgeSet::iterator it = pathCtrlEdgeSet.find(edge);
+
+								if (it != pathCtrlEdgeSet.end()) {
 									shouldRemove = FALSE;
 
 									float dist;
