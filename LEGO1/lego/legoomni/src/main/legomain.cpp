@@ -16,6 +16,45 @@ class QqM3 {
 public:
 	void qqm3() {}
 };
+
+#include "legomain.h"
+
+#include "3dmanager/lego3dmanager.h"
+#include "islepathactor.h"
+#include "legoanimationmanager.h"
+#include "legobuildingmanager.h"
+#include "legocharactermanager.h"
+#include "legogamestate.h"
+#include "legoinputmanager.h"
+#include "legoobjectfactory.h"
+#include "legoplantmanager.h"
+#include "legosoundmanager.h"
+#include "legoutils.h"
+#include "legovariables.h"
+#include "legovideomanager.h"
+#include "legoworld.h"
+#include "legoworldlist.h"
+#include "misc.h"
+#include "misc/legocontainer.h"
+#include "mxactionnotificationparam.h"
+#include "mxautolock.h"
+#include "mxbackgroundaudiomanager.h"
+#include "mxdisplaysurface.h"
+#include "mxmisc.h"
+#include "mxnotificationmanager.h"
+#include "mxomnicreateflags.h"
+#include "mxomnicreateparam.h"
+#include "mxstreamer.h"
+#include "mxticklemanager.h"
+#include "mxtransitionmanager.h"
+#include "mxvariabletable.h"
+#include "scripts.h"
+#include "viewmanager/viewmanager.h"
+
+#include <assert.h>
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
 class QqM4 {
 public:
 	void qqm4() {}
@@ -55,42 +94,6 @@ class MxUnkRecordGR {
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
 class RkF0;
-
-#include "legomain.h"
-
-#include "3dmanager/lego3dmanager.h"
-#include "islepathactor.h"
-#include "legoanimationmanager.h"
-#include "legobuildingmanager.h"
-#include "legocharactermanager.h"
-#include "legogamestate.h"
-#include "legoinputmanager.h"
-#include "legoobjectfactory.h"
-#include "legoplantmanager.h"
-#include "legosoundmanager.h"
-#include "legoutils.h"
-#include "legovariables.h"
-#include "legovideomanager.h"
-#include "legoworld.h"
-#include "legoworldlist.h"
-#include "misc.h"
-#include "misc/legocontainer.h"
-#include "mxactionnotificationparam.h"
-#include "mxautolock.h"
-#include "mxbackgroundaudiomanager.h"
-#include "mxdisplaysurface.h"
-#include "mxmisc.h"
-#include "mxnotificationmanager.h"
-#include "mxomnicreateflags.h"
-#include "mxomnicreateparam.h"
-#include "mxstreamer.h"
-#include "mxticklemanager.h"
-#include "mxtransitionmanager.h"
-#include "mxvariabletable.h"
-#include "scripts.h"
-#include "viewmanager/viewmanager.h"
-
-#include <assert.h>
 
 DECOMP_SIZE_ASSERT(LegoOmni, 0x140)
 DECOMP_SIZE_ASSERT(LegoOmni::WorldContainer, 0x1c)
