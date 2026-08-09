@@ -37,7 +37,6 @@ class RkF5;
 class RkF6;
 class RkF7;
 class RkF8;
-class RkF9;
 
 DECOMP_SIZE_ASSERT(LegoPlantManager, 0x2c)
 DECOMP_SIZE_ASSERT(LegoPlantManager::AnimEntry, 0x0c)
@@ -2320,9 +2319,11 @@ done:
 // FUNCTION: BETA10 0x100c5be0
 void LegoPlantManager::AdjustHeight(MxS32 p_index)
 {
-	if (g_plantInfo[p_index].m_counter >= 0) {
-		MxU8 variant = g_plantInfo[p_index].m_variant;
-		float value = g_counters[variant] - g_plantInfo[p_index].m_counter;
+	MxS8 counter = g_plantInfo[p_index].m_counter;
+	MxU8 variant = g_plantInfo[p_index].m_variant;
+
+	if (counter >= 0) {
+		float value = g_counters[variant] - counter;
 		g_plantInfo[p_index].m_position[1] = g_plantInfoInit[p_index].m_position[1] - value * g_heightPerCount[variant];
 	}
 	else {
