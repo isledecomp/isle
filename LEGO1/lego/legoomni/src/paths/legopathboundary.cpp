@@ -217,6 +217,17 @@ void LegoPathBoundary::SwitchBoundary(
 	}
 }
 
+// Declaration-record carrier (dial campaign): samples this translation unit's
+// accumulated declaration state at the point BETWEEN SwitchBoundary and
+// Intersect. Unlike the top-of-file carriers this position is downstream of
+// the LegoPathActor set's instantiation, which is what separates _Distance
+// from the rest of the end-of-unit pool. Neutral stand-in.
+class RkD0 {};
+class RkD1;
+class RkD2;
+class RkD3;
+class RkD4;
+
 // FUNCTION: LEGO1 0x10057950
 // FUNCTION: BETA10 0x100b1adc
 MxU32 LegoPathBoundary::Intersect(
