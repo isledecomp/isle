@@ -1,14 +1,9 @@
 // Declaration-record carrier (dial campaign, PRE): samples this translation
 // unit's accumulated declaration state before the include block. [16 units]
-class RkRgM0 {
-	void m0() {}
-};
-class RkRgF0;
-class RkRgF1;
-class RkRgF2;
-class RkRgF3;
-class RkRgF4;
-class RkRgF5;
+class MxUnkRecord000 {};
+class MxUnkRecord001 {};
+class MxUnkRecord002;
+class MxUnkRecord003;
 
 #include "act2actor.h"
 

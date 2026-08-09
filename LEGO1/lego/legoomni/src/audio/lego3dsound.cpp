@@ -2,16 +2,10 @@
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
 // this position. Neutral stand-in pending better evidence.
-class MxUnkRecordXH;
-class MxUnkRecordXI;
-class MxUnkRecordXJ;
-class MxUnkRecordXK;
-class MxUnkRecordXL;
-class MxUnkRecordXM;
-class MxUnkRecordXN;
-class MxUnkRecordXO;
-class MxUnkRecordXP;
-class MxUnkRecordXQ;
+class MxUnkRecord000 {};
+class MxUnkRecord001;
+class MxUnkRecord002;
+class MxUnkRecord003;
 
 #include "lego3dsound.h"
 

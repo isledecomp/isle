@@ -2,14 +2,8 @@
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
 // this position. Neutral stand-in pending better evidence.
-class MxUnkRecordXX;
-class MxUnkRecordXY;
-class MxUnkRecordXZ;
-class MxUnkRecordYA;
-class MxUnkRecordYB;
-class MxUnkRecordYC;
-class MxUnkRecordYD;
-class MxUnkRecordYE;
+class MxUnkRecord000 {};
+class MxUnkRecord001;
 
 #include "mxticklemanager.h"
 

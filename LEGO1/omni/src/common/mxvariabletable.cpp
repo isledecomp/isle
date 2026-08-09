@@ -2,48 +2,25 @@
 // sample this translation unit's accumulated declaration state at this
 // point.  Neutral stand-in; no authentic 1997 declaration is
 // recoverable here.
-class MxUnkRecordSW7000;
-class MxUnkRecordSW7001;
-class MxUnkRecordSW7002;
-class MxUnkRecordSW7003;
-class MxUnkRecordSW7004;
-class MxUnkRecordSW7005;
-class MxUnkRecordSW7006;
-class MxUnkRecordSW7007;
-class MxUnkRecordSW7008;
-class MxUnkRecordSW7009;
-class MxUnkRecordSW7010;
-class MxUnkRecordSW7011;
-class MxUnkRecordSW7012;
-class MxUnkRecordSW7013;
-class MxUnkRecordSW7014;
-class MxUnkRecordSW7015;
-class MxUnkRecordSW7016;
-class MxUnkRecordSW7017;
-class MxUnkRecordSW7018;
-class MxUnkRecordSW7019;
-class MxUnkRecordSW7020;
-class MxUnkRecordSW7021;
-class MxUnkRecordSW7022;
-class MxUnkRecordSW7023;
-class MxUnkRecordSW7024;
-class MxUnkRecordSW7025;
-class MxUnkRecordSW7026;
-class MxUnkRecordSW7027;
-class MxUnkRecordSW7028;
-class MxUnkRecordSW7029;
-class MxUnkRecordSW7030;
-class MxUnkRecordSW7031;
-class MxUnkRecordSW7032;
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordPL;
-class MxUnkRecordPM;
-class MxUnkRecordPN;
-class MxUnkRecordPO;
+class MxUnkRecord000 {};
+class MxUnkRecord001 {};
+class MxUnkRecord002 {};
+class MxUnkRecord003;
+class MxUnkRecord004;
+class MxUnkRecord005;
+class MxUnkRecord006;
+class MxUnkRecord007;
+class MxUnkRecord008;
+class MxUnkRecord009;
+class MxUnkRecord010;
+class MxUnkRecord011;
+class MxUnkRecord012;
+class MxUnkRecord013;
+class MxUnkRecord014;
+class MxUnkRecord015;
+class MxUnkRecord016;
+class MxUnkRecord017;
+class MxUnkRecord018;
 
 #include "mxvariabletable.h"
 

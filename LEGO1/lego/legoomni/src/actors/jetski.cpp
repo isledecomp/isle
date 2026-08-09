@@ -2,14 +2,8 @@
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
 // this position. Neutral stand-in pending better evidence.
-class MxUnkRecordHO;
-class MxUnkRecordHP;
-class MxUnkRecordHQ;
-class MxUnkRecordHR;
-class MxUnkRecordHS;
-class MxUnkRecordHT;
-class MxUnkRecordHU;
-class MxUnkRecordHV;
+class MxUnkRecord000 {};
+class MxUnkRecord001;
 
 #include "jetski.h"
 
