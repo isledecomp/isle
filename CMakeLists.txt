@@ -462,6 +462,18 @@ if (ISLE_USE_SMARTHEAP)
   list(APPEND lego1_link_libraries SmartHeap::SmartHeap libcmt)
 endif()
 
+# 1997 scanned the OS/DirectX import libraries BEFORE the game's own static
+# libraries, so the imports those static libraries demand arrive in a SECOND
+# library pass. That is directly visible in the retail image: LEGO1.DLL's
+# `.idata$6` hint/name pool is in library-scan order and comes out in two
+# waves -- WINMM 3, DINPUT 1, KERNEL32 85, USER32 10, GDI32 9, then WINMM 12,
+# DSOUND 1, DDRAW 2, KERNEL32 11, USER32 7, GDI32 6, d3drm 2. Listing these
+# eight import libraries here (i.e. ahead of misc/geom/omni/... on the link
+# line) reproduces that structure exactly, and the import-descriptor order
+# with it. Purely a link-order property: no object changes, and reccmp is
+# unaffected because it masks IAT operands.
+list(APPEND lego1_link_libraries winmm dinput dsound ddraw kernel32 user32 gdi32 d3drm)
+
 if(ISLE_BUILD_LEGO1)
   add_lego_libraries(lego1
     LINK_LIBRARIES ${lego1_link_libraries}
