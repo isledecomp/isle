@@ -75,6 +75,18 @@ class MxUnkRecordIH {
 	inline void Record18() {}
 };
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class QqN000;
+class QqN001;
+class QqN002;
+class QqN003;
+class QqN004;
+class QqN005;
+class QqN006;
+class QqN007;
+class QqN008;
+
 #include "legoextraactor.h"
 
 #include "anim/legoanim.h"
@@ -87,6 +99,31 @@ class MxUnkRecordIH {
 #include "mxtimer.h"
 
 #include <assert.h>
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkQ000;
+class RkQ001;
+class RkQ002;
+class RkQ003;
+class RkQ004;
+class RkQ005;
+class RkQ006;
+class RkQ007;
+class RkQ008;
+class RkQ009;
+class RkQ010;
+class RkQ011;
+class RkQ012;
+class RkQ013;
+class RkQ014;
+class RkQ015;
+class RkQ016;
+class RkQ017;
+class RkQ018;
+class RkQ019;
+class RkQ020;
+class RkQ021;
+class RkQ022;
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
 class RkP0 {
@@ -299,18 +336,6 @@ inline void LegoExtraActor::InitializeReassemblyAnim()
 	}
 }
 
-// Declaration-record carrier (dial campaign): the functions below
-// sample this translation unit's accumulated declaration state at this
-// point.  Neutral stand-in; no authentic 1997 declaration is
-// recoverable here.
-class MxUnkRecordZE000;
-class MxUnkRecordZE001;
-class MxUnkRecordZE002;
-class MxUnkRecordZE003;
-class MxUnkRecordZE004;
-class MxUnkRecordZE005;
-class MxUnkRecordZE006;
-
 // FUNCTION: LEGO1 0x1002aba0
 // FUNCTION: BETA10 0x1008114a
 MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
@@ -392,19 +417,6 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 
 	return SUCCESS;
 }
-
-// Declaration-record carrier (dial campaign): the functions below
-// sample this translation unit's accumulated declaration state at this
-// point.  Neutral stand-in; no authentic 1997 declaration is
-// recoverable here.
-class MxUnkRecordZE007;
-class MxUnkRecordZE008;
-class MxUnkRecordZE009;
-class MxUnkRecordZE010;
-class MxUnkRecordZE011;
-class MxUnkRecordZE012;
-class MxUnkRecordZE013;
-class MxUnkRecordZE014;
 
 // FUNCTION: LEGO1 0x1002b290
 MxResult LegoExtraActor::CalculateSpline()
@@ -677,8 +689,3 @@ inline MxU32 LegoExtraActor::CheckPresenterAndActorIntersections(
 
 	return 0;
 }
-
-// Declaration-record carrier (dial campaign): end-of-file sink for
-// this translation unit's declaration state.  Neutral stand-in.
-class MxUnkRecordZE015;
-class MxUnkRecordZE016;
