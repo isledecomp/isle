@@ -1121,14 +1121,6 @@ MxResult LegoAnimationManager::FUN_100605e0(
 	return result;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordC {
-	inline void Record() {}
-};
-
 // FUNCTION: LEGO1 0x100609f0
 // FUNCTION: BETA10 0x10041a38
 MxResult LegoAnimationManager::FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix, MxBool p_und1, MxBool p_und2)
@@ -1882,6 +1874,14 @@ void LegoAnimationManager::FUN_10062580(AnimInfo& p_info)
 		}
 	}
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordC {
+	inline void Record() {}
+};
 
 // FUNCTION: LEGO1 0x10062650
 // FUNCTION: BETA10 0x100436e2
