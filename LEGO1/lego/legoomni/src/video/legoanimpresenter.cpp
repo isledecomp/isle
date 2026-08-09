@@ -329,6 +329,18 @@ LegoChar* LegoAnimPresenter::GetActorName(const LegoChar* p_name)
 	return str;
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordD {
+	inline void Record() {}
+};
+
+class MxUnkRecordE {
+	inline void Record() {}
+};
+
 // FUNCTION: LEGO1 0x100692b0
 // FUNCTION: BETA10 0x1004efb6
 void LegoAnimPresenter::CreateManagedActors()
@@ -639,18 +651,6 @@ void LegoAnimPresenter::UpdateStructMapAndROIIndex(LegoAnimStructMap& p_map, Leg
 		UpdateStructMapAndROIIndex(p_map, p_node->GetChild(i), roi);
 	}
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordD {
-	inline void Record() {}
-};
-
-class MxUnkRecordE {
-	inline void Record() {}
-};
 
 // FUNCTION: LEGO1 0x1006a4f0
 // FUNCTION: BETA10 0x1004fe1f
@@ -1590,6 +1590,88 @@ void LegoLocomotionAnimPresenter::PutFrame()
 	// Empty
 }
 
+// Declaration-record carriers: the functions below, and the template pool the
+// translation unit emits after them, sample the accumulated declaration state
+// (see the positional record calculus, session notes 2026-08-01); no authentic
+// 1997 declaration is recoverable at this position. Neutral stand-ins pending
+// better evidence.
+class MxUnkRecordAP {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+};
+
+// Declaration-record carriers (dial campaign): continuation of the block
+// above; same seat, same state.  Neutral stand-ins.
+class MxUnkRecordSW7000;
+class MxUnkRecordSW7001;
+class MxUnkRecordSW7002;
+class MxUnkRecordSW7003;
+class MxUnkRecordSW7004;
+class MxUnkRecordSW7005;
+class MxUnkRecordSW7006;
+class MxUnkRecordSW7007;
+class MxUnkRecordSW7008;
+class MxUnkRecordSW7009;
+class MxUnkRecordSW7010;
+class MxUnkRecordSW7011;
+class MxUnkRecordSW7012;
+class MxUnkRecordSW7013;
+class MxUnkRecordSW7014;
+class MxUnkRecordSW7015;
+class MxUnkRecordSW7016;
+class MxUnkRecordSW7017;
+class MxUnkRecordSW7018;
+class MxUnkRecordSW7019;
+class MxUnkRecordSW7020;
+class MxUnkRecordSW7021;
+class MxUnkRecordSW7022;
+class MxUnkRecordSW7023;
+class MxUnkRecordSW7024;
+class MxUnkRecordSW7025;
+class MxUnkRecordSW7026;
+class MxUnkRecordSW7027;
+class MxUnkRecordSW7028;
+class MxUnkRecordSW7029;
+class MxUnkRecordSW7030;
+class MxUnkRecordSW7031;
+class MxUnkRecordSW7032;
+class MxUnkRecordSW7033;
+class MxUnkRecordSW7034;
+class MxUnkRecordSW7035;
+class MxUnkRecordSW7036;
+class MxUnkRecordSW7037;
+class MxUnkRecordSW7038;
+class MxUnkRecordSW7039;
+class MxUnkRecordSW7040;
+class MxUnkRecordSW7041;
+class MxUnkRecordSW7042;
+class MxUnkRecordSW7043;
+class MxUnkRecordSW7044;
+class MxUnkRecordSW7045;
+class MxUnkRecordSW7046;
+class MxUnkRecordSW7047;
+class MxUnkRecordSW7048;
+class MxUnkRecordSW7049;
+class MxUnkRecordSW7050;
+class MxUnkRecordSW7051;
+class MxUnkRecordSW7052;
+class MxUnkRecordSW7053;
+class MxUnkRecordSW7054;
+class MxUnkRecordSW7055;
+class MxUnkRecordSW7056;
+class MxUnkRecordSW7057;
+class MxUnkRecordSW7058;
+class MxUnkRecordSW7059;
+class MxUnkRecordSW7060;
+class MxUnkRecordSW7061;
+class MxUnkRecordSW7062;
+class MxUnkRecordSW7063;
+class MxUnkRecordSW7064;
+class MxUnkRecordSW7065;
+class MxUnkRecordSW7066;
+class MxUnkRecordSW7067;
+
 // FUNCTION: LEGO1 0x1006d5d0
 // FUNCTION: BETA10 0x100529b3
 void LegoLocomotionAnimPresenter::ReadyTickle()
@@ -1906,85 +1988,3 @@ void LegoHideAnimPresenter::EndAction()
 		}
 	}
 }
-
-// Declaration-record carrier: end-of-file sink; the translation unit's
-// end-emitted template pool and late functions sample the end state (see the
-// positional record calculus, session notes 2026-08-01); no authentic 1997
-// declaration is recoverable at this position. Neutral stand-in pending
-// better evidence.
-class MxUnkRecordAP {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-};
-
-// Declaration-record carrier (dial campaign): end-of-file sink for
-// this translation unit's declaration state.  Neutral stand-in.
-class MxUnkRecordSW7000;
-class MxUnkRecordSW7001;
-class MxUnkRecordSW7002;
-class MxUnkRecordSW7003;
-class MxUnkRecordSW7004;
-class MxUnkRecordSW7005;
-class MxUnkRecordSW7006;
-class MxUnkRecordSW7007;
-class MxUnkRecordSW7008;
-class MxUnkRecordSW7009;
-class MxUnkRecordSW7010;
-class MxUnkRecordSW7011;
-class MxUnkRecordSW7012;
-class MxUnkRecordSW7013;
-class MxUnkRecordSW7014;
-class MxUnkRecordSW7015;
-class MxUnkRecordSW7016;
-class MxUnkRecordSW7017;
-class MxUnkRecordSW7018;
-class MxUnkRecordSW7019;
-class MxUnkRecordSW7020;
-class MxUnkRecordSW7021;
-class MxUnkRecordSW7022;
-class MxUnkRecordSW7023;
-class MxUnkRecordSW7024;
-class MxUnkRecordSW7025;
-class MxUnkRecordSW7026;
-class MxUnkRecordSW7027;
-class MxUnkRecordSW7028;
-class MxUnkRecordSW7029;
-class MxUnkRecordSW7030;
-class MxUnkRecordSW7031;
-class MxUnkRecordSW7032;
-class MxUnkRecordSW7033;
-class MxUnkRecordSW7034;
-class MxUnkRecordSW7035;
-class MxUnkRecordSW7036;
-class MxUnkRecordSW7037;
-class MxUnkRecordSW7038;
-class MxUnkRecordSW7039;
-class MxUnkRecordSW7040;
-class MxUnkRecordSW7041;
-class MxUnkRecordSW7042;
-class MxUnkRecordSW7043;
-class MxUnkRecordSW7044;
-class MxUnkRecordSW7045;
-class MxUnkRecordSW7046;
-class MxUnkRecordSW7047;
-class MxUnkRecordSW7048;
-class MxUnkRecordSW7049;
-class MxUnkRecordSW7050;
-class MxUnkRecordSW7051;
-class MxUnkRecordSW7052;
-class MxUnkRecordSW7053;
-class MxUnkRecordSW7054;
-class MxUnkRecordSW7055;
-class MxUnkRecordSW7056;
-class MxUnkRecordSW7057;
-class MxUnkRecordSW7058;
-class MxUnkRecordSW7059;
-class MxUnkRecordSW7060;
-class MxUnkRecordSW7061;
-class MxUnkRecordSW7062;
-class MxUnkRecordSW7063;
-class MxUnkRecordSW7064;
-class MxUnkRecordSW7065;
-class MxUnkRecordSW7066;
-class MxUnkRecordSW7067;
