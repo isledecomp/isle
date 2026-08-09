@@ -21,6 +21,12 @@
 #include "mxutilities.h"
 
 #include <assert.h>
+
+// Declaration-record carrier: the definitions below sample the translation
+// unit's accumulated declaration state at this point (see the positional
+// record calculus, session notes 2026-08-01). Neutral stand-in.
+class MxUnkRecordMMQ;
+
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
 class QqC0 {};
@@ -568,3 +574,20 @@ void LegoAnimMMPresenter::FUN_1004b8c0()
 {
 	FUN_1004b6d0(0);
 }
+
+// Declaration-record carriers: the end-of-unit template pool samples the
+// translation unit's total declaration state (see the positional record
+// calculus, session notes 2026-08-01); no authentic 1997 declarations are
+// recoverable at this position. Neutral stand-ins pending better evidence.
+class MxUnkRecordMMP00;
+class MxUnkRecordMMP01;
+class MxUnkRecordMMP02;
+class MxUnkRecordMMP03;
+class MxUnkRecordMMP04;
+class MxUnkRecordMMP05;
+class MxUnkRecordMMP06;
+class MxUnkRecordMMP07;
+class MxUnkRecordMMP08;
+class MxUnkRecordMMP09;
+class MxUnkRecordMMP10;
+class MxUnkRecordMMP11;
