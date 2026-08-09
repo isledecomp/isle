@@ -258,3 +258,14 @@ void LegoAnimActor::ParseAction(char* p_extra)
 		}
 	}
 }
+
+// Record carriers (scaffolding): 8 units at end of unit for LegoAnimActor::CreateAnimActorStruct.
+// ClearMaps wants 7 and the vector dtor 18/19: the three are anti-phase.
+class MxUnkRecordLAA00;
+class MxUnkRecordLAA01;
+class MxUnkRecordLAA02;
+class MxUnkRecordLAA03;
+class MxUnkRecordLAA04;
+class MxUnkRecordLAA05;
+class MxUnkRecordLAA06;
+class MxUnkRecordLAA07;

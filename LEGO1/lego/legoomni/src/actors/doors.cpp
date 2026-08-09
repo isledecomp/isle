@@ -167,3 +167,6 @@ void Doors::ParseAction(char* p_extra)
 
 	assert(m_ltDoor && m_rtDoor);
 }
+
+// Record carriers (scaffolding): 1 unit at end of unit for Doors::Animate.
+class MxUnkRecordDOR00;

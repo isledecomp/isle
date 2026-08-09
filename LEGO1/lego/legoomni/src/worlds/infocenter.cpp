@@ -1650,3 +1650,22 @@ InfocenterState::~InfocenterState()
 		i++;
 	} while (i < GetMaxNameLength());
 }
+
+// Record carriers (scaffolding): 17 units at end of unit (tot in {17,34}) for Infocenter::StartCredits.
+class MxUnkRecordINF00;
+class MxUnkRecordINF01;
+class MxUnkRecordINF02;
+class MxUnkRecordINF03;
+class MxUnkRecordINF04;
+class MxUnkRecordINF05;
+class MxUnkRecordINF06;
+class MxUnkRecordINF07;
+class MxUnkRecordINF08;
+class MxUnkRecordINF09;
+class MxUnkRecordINF10;
+class MxUnkRecordINF11;
+class MxUnkRecordINF12;
+class MxUnkRecordINF13;
+class MxUnkRecordINF14;
+class MxUnkRecordINF15;
+class MxUnkRecordINF16;
