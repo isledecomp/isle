@@ -299,6 +299,18 @@ inline void LegoExtraActor::InitializeReassemblyAnim()
 	}
 }
 
+// Declaration-record carrier (dial campaign): the functions below
+// sample this translation unit's accumulated declaration state at this
+// point.  Neutral stand-in; no authentic 1997 declaration is
+// recoverable here.
+class MxUnkRecordZE000;
+class MxUnkRecordZE001;
+class MxUnkRecordZE002;
+class MxUnkRecordZE003;
+class MxUnkRecordZE004;
+class MxUnkRecordZE005;
+class MxUnkRecordZE006;
+
 // FUNCTION: LEGO1 0x1002aba0
 // FUNCTION: BETA10 0x1008114a
 MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
@@ -380,6 +392,19 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 
 	return SUCCESS;
 }
+
+// Declaration-record carrier (dial campaign): the functions below
+// sample this translation unit's accumulated declaration state at this
+// point.  Neutral stand-in; no authentic 1997 declaration is
+// recoverable here.
+class MxUnkRecordZE007;
+class MxUnkRecordZE008;
+class MxUnkRecordZE009;
+class MxUnkRecordZE010;
+class MxUnkRecordZE011;
+class MxUnkRecordZE012;
+class MxUnkRecordZE013;
+class MxUnkRecordZE014;
 
 // FUNCTION: LEGO1 0x1002b290
 MxResult LegoExtraActor::CalculateSpline()
@@ -652,3 +677,8 @@ inline MxU32 LegoExtraActor::CheckPresenterAndActorIntersections(
 
 	return 0;
 }
+
+// Declaration-record carrier (dial campaign): end-of-file sink for
+// this translation unit's declaration state.  Neutral stand-in.
+class MxUnkRecordZE015;
+class MxUnkRecordZE016;

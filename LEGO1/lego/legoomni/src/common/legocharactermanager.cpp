@@ -25,6 +25,12 @@ class MxUnkRecordER;
 
 #include <assert.h>
 #include <vec.h>
+// Declaration-record carrier (dial campaign): the functions below
+// sample this translation unit's accumulated declaration state at this
+// point.  Neutral stand-in; no authentic 1997 declaration is
+// recoverable here.
+class MxUnkRecordZC000;
+
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
 class RkC0 {};
@@ -1189,3 +1195,30 @@ void CustomizeAnimFileVariable::SetValue(const char* p_value)
 class MxUnkRecordAV {
 	inline void Record() {}
 };
+
+// Declaration-record carrier (dial campaign): end-of-file sink for
+// this translation unit's declaration state.  Neutral stand-in.
+class MxUnkRecordZC001;
+class MxUnkRecordZC002;
+class MxUnkRecordZC003;
+class MxUnkRecordZC004;
+class MxUnkRecordZC005;
+class MxUnkRecordZC006;
+class MxUnkRecordZC007;
+class MxUnkRecordZC008;
+class MxUnkRecordZC009;
+class MxUnkRecordZC010;
+class MxUnkRecordZC011;
+class MxUnkRecordZC012;
+class MxUnkRecordZC013;
+class MxUnkRecordZC014;
+class MxUnkRecordZC015;
+class MxUnkRecordZC016;
+class MxUnkRecordZC017;
+class MxUnkRecordZC018;
+class MxUnkRecordZC019;
+class MxUnkRecordZC020;
+class MxUnkRecordZC021;
+class MxUnkRecordZC022;
+class MxUnkRecordZC023;
+class MxUnkRecordZC024;
