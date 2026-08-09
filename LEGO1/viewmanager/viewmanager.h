@@ -32,7 +32,7 @@ public:
 	ViewROI* Pick(Tgl::View* p_view, unsigned long x, unsigned long y);
 	void SetResolution(int width, int height);
 	void SetFrustrum(float fov, float front, float back);
-	inline void ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lodLevel);
+	void ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lodLevel);
 	void Update(float p_previousRenderTime, float);
 	inline int CalculateFrustumTransformations();
 	void UpdateViewTransformations();

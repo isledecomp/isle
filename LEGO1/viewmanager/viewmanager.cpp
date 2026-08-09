@@ -302,7 +302,7 @@ void ViewManager::RemoveROIDetailFromScene(ViewROI* p_from)
 
 // FUNCTION: LEGO1 0x100a66f0
 // FUNCTION: BETA10 0x1017297f
-inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lodLevel)
+void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lodLevel)
 {
 	assert(p_from);
 
