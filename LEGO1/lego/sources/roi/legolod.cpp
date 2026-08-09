@@ -546,11 +546,7 @@ LegoResult LegoLOD::UpdateTextureInfo(LegoTextureInfo* p_textureInfo)
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
 // this position. Neutral stand-in pending better evidence.
-class MxUnkRecordRM {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-};
+class MxUnkRecordRM {};
 
 // FUNCTION: LEGO1 0x100aadc0
 // FUNCTION: BETA10 0x1018e3d8
@@ -566,6 +562,13 @@ LegoResult LegoLOD::GetTextureInfo(LegoTextureInfo*& p_textureInfo)
 
 	return FAILURE;
 }
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class MxUnkRecordRN {
+	void Record0();
+	void Record1();
+};
 
 // FUNCTION: LEGO1 0x100aae20
 // FUNCTION: BETA10 0x1018e46d

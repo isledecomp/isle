@@ -191,9 +191,6 @@ class MxUnkRecordWP {
 	inline void Record2() {}
 	inline void Record3() {}
 	inline void Record4() {}
-	inline void Record5() {}
-	inline void Record6() {}
-	inline void Record7() {}
 };
 
 // FUNCTION: LEGO1 0x100b69b0
@@ -236,6 +233,13 @@ void MxCompositePresenter::HandlePresenter(MxNotificationParam& p_param)
 		NotificationManager()->Send(this, p_param);
 	}
 }
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class MxUnkRecordWQ {
+	void Record0();
+	void Record1();
+};
 
 // FUNCTION: LEGO1 0x100b6b40
 void MxCompositePresenter::AdvanceSerialAction(MxPresenter* p_presenter)
