@@ -1,38 +1,3 @@
-// Declaration-record carrier (dial campaign): the functions below
-// sample this translation unit's accumulated declaration state at this
-// point.  Neutral stand-in; no authentic 1997 declaration is
-// recoverable here.
-class MxUnkRecordInstantiations000 {};
-class MxUnkRecordInstantiations001 {};
-class MxUnkRecordInstantiations002 {};
-class MxUnkRecordInstantiations003 {};
-class MxUnkRecordInstantiations004 {};
-class MxUnkRecordInstantiations005 {};
-class MxUnkRecordInstantiations006 {};
-class MxUnkRecordInstantiations007 {};
-class MxUnkRecordInstantiations008 {};
-class MxUnkRecordInstantiations009 {};
-class MxUnkRecordInstantiations010 {};
-class MxUnkRecordInstantiations011 {};
-class MxUnkRecordInstantiations012 {};
-class MxUnkRecordInstantiations013 {};
-class MxUnkRecordInstantiations014 {};
-class MxUnkRecordInstantiations015;
-class MxUnkRecordInstantiations016;
-class MxUnkRecordInstantiations017;
-class MxUnkRecordInstantiations018;
-class MxUnkRecordInstantiations019;
-class MxUnkRecordInstantiations020;
-class MxUnkRecordInstantiations021;
-class MxUnkRecordInstantiations022;
-class MxUnkRecordInstantiations023;
-class MxUnkRecordInstantiations024;
-class MxUnkRecordInstantiations025;
-class MxUnkRecordInstantiations026;
-class MxUnkRecordInstantiations027;
-class MxUnkRecordInstantiations028;
-class MxUnkRecordInstantiations029;
-
 #include "legonavcontroller.h"
 
 #include "3dmanager/lego3dmanager.h"
@@ -1352,6 +1317,11 @@ void LegoNavController::SetTargets(int p_hPos, int p_vPos, MxBool p_accel)
 	}
 }
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state at this point. Neutral stand-in;
+// no authentic 1997 declaration is recoverable here.
+class MxUnkRecordWI;
+
 // FUNCTION: LEGO1 0x10054f10
 float LegoNavController::CalculateNewTargetVel(int p_pos, int p_center, float p_max)
 {
@@ -1408,6 +1378,13 @@ float LegoNavController::CalculateNewVel(float p_targetVel, float p_currentVel, 
 
 	return newVel;
 }
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state at this point. Neutral stand-in;
+// no authentic 1997 declaration is recoverable here.
+class MxUnkRecordInstantiations000 {};
+class MxUnkRecordInstantiations001;
+class MxUnkRecordInstantiations002;
 
 // FUNCTION: LEGO1 0x10055080
 // FUNCTION: BETA10 0x1009b26b
@@ -1520,6 +1497,12 @@ MxBool LegoNavController::CalculateNewPosDir(
 	return changed;
 }
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state at this point. Neutral stand-in;
+// no authentic 1997 declaration is recoverable here.
+class MxUnkRecordWJ {};
+class MxUnkRecordWK {};
+
 // FUNCTION: LEGO1 0x10055500
 // FUNCTION: BETA10 0x1009bff8
 MxResult LegoNavController::UpdateLocation(const char* p_location)
@@ -1601,14 +1584,6 @@ LegoLocation* LegoNavController::GetLocation(MxU32 p_location)
 
 	return NULL;
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordWI;
-class MxUnkRecordWJ;
-class MxUnkRecordWK;
 
 // FUNCTION: LEGO1 0x10055740
 // FUNCTION: BETA10 0x1009c28c

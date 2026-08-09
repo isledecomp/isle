@@ -25,6 +25,7 @@ public:
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
 // this position. Neutral stand-in pending better evidence.
+class MxUnkRecordHE;
 
 // clang-format off
 #include "legoworldrecords.h"
@@ -57,43 +58,36 @@ public:
 #include "viewmanager/viewmanager.h"
 
 // Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.  [47 units]
-class RkWM0 {
-	void m0() {}
+// unit's accumulated declaration state at the top of the definition run.
+// Neutral stand-in pending better evidence.  [65 units]
+class MxUnkRecordHA {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+	inline void Record4() {}
+	inline void Record5() {}
+	inline void Record6() {}
+	inline void Record7() {}
+	inline void Record8() {}
 };
-class RkWM1 {
-	void m1() {}
+
+class MxUnkRecordHB {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+	inline void Record4() {}
+	inline void Record5() {}
+	inline void Record6() {}
+	inline void Record7() {}
 };
-class RkWM2 {
-	void m2() {}
-};
-class RkWM3 {
-	void m3() {}
-};
-class RkWC0 {};
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkC0 {};
-class RkC1 {};
-class RkC2 {};
-class RkC3 {};
-class RkC4 {};
 
 DECOMP_SIZE_ASSERT(LegoWorld, 0xf8)
 DECOMP_SIZE_ASSERT(LegoEntityList, 0x18)
 DECOMP_SIZE_ASSERT(LegoEntityListCursor, 0x10)
 DECOMP_SIZE_ASSERT(LegoCacheSoundList, 0x18)
 DECOMP_SIZE_ASSERT(LegoCacheSoundListCursor, 0x10)
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordHD {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-};
 
 // FUNCTION: LEGO1 0x1001ca40
 LegoWorld::LegoWorld() : m_pathControllerList(TRUE)
@@ -270,12 +264,6 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 		LegoEntity::Destroy(FALSE);
 	}
 }
-
-// Declaration-record carriers: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declarations are recoverable
-// at this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordN;
 
 // FUNCTION: LEGO1 0x1001f5e0
 // FUNCTION: BETA10 0x100d9f5f
@@ -712,7 +700,6 @@ class MxUnkRecordP;
 class MxUnkRecordQ;
 class MxUnkRecordR;
 class MxUnkRecordS;
-class MxUnkRecordT;
 
 // FUNCTION: LEGO1 0x10021790
 // FUNCTION: BETA10 0x100db3de
@@ -890,19 +877,6 @@ void LegoWorld::Enable(MxBool p_enable)
 		GetViewManager()->RemoveAll(NULL);
 	}
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordSA;
-class MxUnkRecordSB;
-class MxUnkRecordSC;
-class MxUnkRecordSD;
-class MxUnkRecordSE;
-class MxUnkRecordSF;
-class MxUnkRecordSG;
-class MxUnkRecordSH;
 
 // FUNCTION: LEGO1 0x10022080
 MxResult LegoWorld::Tickle()

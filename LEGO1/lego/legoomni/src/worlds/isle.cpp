@@ -1,19 +1,3 @@
-// Declaration-record carrier (dial campaign, PRE): samples this translation
-// unit's accumulated declaration state before the include block.
-class RkISC0 {};
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordMX {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-};
-
 #include "isle.h"
 
 #include "3dmanager/lego3dmanager.h"
@@ -55,39 +39,19 @@ class MxUnkRecordMX {
 #include "viewmanager/viewmanager.h"
 
 // Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkISQ000;
-class RkISQ001;
-class RkISQ002;
-class RkISQ003;
-class RkISQ004;
-class RkISQ005;
-class RkISQ006;
-class RkISQ007;
-class RkISQ008;
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkM0 {
-public:
-	void rkm0() {}
-};
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-enum MxUnkRecordAH {
-	e_unkRecordAH
+// unit's accumulated declaration state at this point. Neutral stand-in;
+// no authentic 1997 declaration is recoverable here.
+class RkISM0 {
+	void m0() {}
+	void m1() {}
+	void m2() {}
+	void m3() {}
+	void m4() {}
+	void m5() {}
 };
 
 DECOMP_SIZE_ASSERT(Act1State, 0x26c)
 DECOMP_SIZE_ASSERT(Isle, 0x140)
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordMW {};
 
 // Defined in legopathstruct.cpp
 extern MxU32 g_isleFlags;

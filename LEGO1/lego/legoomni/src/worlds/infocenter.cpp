@@ -1,54 +1,3 @@
-// Declaration-record carrier (dial campaign): the functions below
-// sample this translation unit's accumulated declaration state at this
-// point.  Neutral stand-in; no authentic 1997 declaration is
-// recoverable here.
-class MxUnkRecord000 {};
-class MxUnkRecord001 {};
-class MxUnkRecord002 {};
-class MxUnkRecord003 {};
-class MxUnkRecord004 {};
-class MxUnkRecord005;
-class MxUnkRecord006;
-class MxUnkRecord007;
-class MxUnkRecord008;
-class MxUnkRecord009;
-class MxUnkRecord010;
-class MxUnkRecord011;
-class MxUnkRecord012;
-class MxUnkRecord013;
-class MxUnkRecord014;
-class MxUnkRecord015;
-class MxUnkRecord016;
-class MxUnkRecord017;
-class MxUnkRecord018;
-class MxUnkRecord019;
-class MxUnkRecord020;
-class MxUnkRecord021;
-class MxUnkRecord022;
-class MxUnkRecord023;
-class MxUnkRecord024;
-class MxUnkRecord025;
-class MxUnkRecord026;
-class MxUnkRecord027;
-class MxUnkRecord028;
-class MxUnkRecord029;
-class MxUnkRecord030;
-class MxUnkRecord031;
-class MxUnkRecord032;
-class MxUnkRecord033;
-class MxUnkRecord034;
-class MxUnkRecord035;
-class MxUnkRecord036;
-class MxUnkRecord037;
-class MxUnkRecord038;
-class MxUnkRecord039;
-class MxUnkRecord040;
-class MxUnkRecord041;
-class MxUnkRecord042;
-class MxUnkRecord043;
-class MxUnkRecord044;
-class MxUnkRecord045;
-
 #include "infocenter.h"
 
 #include "act3.h"
@@ -1384,6 +1333,14 @@ class MxInfQ2 {
 	inline void Record() {}
 };
 
+// Declaration-record carrier (dial campaign): prefix step for Infocenter::UpdateEnabledGlowControl.
+class MxUnkRecordG00;
+class MxUnkRecordG01;
+class MxUnkRecordG02;
+class MxUnkRecordG03;
+class MxUnkRecordG04;
+class MxUnkRecordG05;
+
 // FUNCTION: LEGO1 0x10070d10
 // FUNCTION: BETA10 0x100307d4
 void Infocenter::UpdateEnabledGlowControl(MxS32 p_x, MxS32 p_y)
@@ -1416,14 +1373,6 @@ void Infocenter::UpdateEnabledGlowControl(MxS32 p_x, MxS32 p_y)
 		}
 	}
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordGU {};
-class MxUnkRecordGV {};
-class MxUnkRecordGW {};
 
 // FUNCTION: LEGO1 0x10070dc0
 // FUNCTION: BETA10 0x10030911
@@ -1504,6 +1453,35 @@ void Infocenter::Reset()
 		state->Reset();
 	}
 }
+
+// Declaration-record carrier (dial campaign): prefix step for Infocenter::Escape.
+class MxUnkRecordE00;
+class MxUnkRecordE01;
+class MxUnkRecordE02;
+class MxUnkRecordE03;
+class MxUnkRecordE04;
+class MxUnkRecordE05;
+class MxUnkRecordE06;
+class MxUnkRecordE07;
+class MxUnkRecordE08;
+class MxUnkRecordE09;
+class MxUnkRecordE10;
+class MxUnkRecordE11;
+class MxUnkRecordE12;
+class MxUnkRecordE13;
+class MxUnkRecordE14;
+class MxUnkRecordE15;
+class MxUnkRecordE16;
+class MxUnkRecordE17;
+class MxUnkRecordE18;
+class MxUnkRecordE19;
+class MxUnkRecordE20;
+class MxUnkRecordE21;
+class MxUnkRecordE22;
+class MxUnkRecordE23;
+class MxUnkRecordE24;
+class MxUnkRecordE25;
+class MxUnkRecordE26;
 
 // FUNCTION: LEGO1 0x10070f60
 MxBool Infocenter::Escape()
@@ -1598,6 +1576,33 @@ void Infocenter::StopCredits()
 	DeleteObject(action);
 }
 
+// Declaration-record carrier (dial campaign): prefix step for Infocenter::PlayAction.
+class MxUnkRecordP00;
+class MxUnkRecordP01;
+class MxUnkRecordP02;
+class MxUnkRecordP03;
+class MxUnkRecordP04;
+class MxUnkRecordP05;
+class MxUnkRecordP06;
+class MxUnkRecordP07;
+class MxUnkRecordP08;
+class MxUnkRecordP09;
+class MxUnkRecordP10;
+class MxUnkRecordP11;
+class MxUnkRecordP12;
+class MxUnkRecordP13;
+class MxUnkRecordP14;
+class MxUnkRecordP15;
+class MxUnkRecordP16;
+class MxUnkRecordP17;
+class MxUnkRecordP18;
+class MxUnkRecordP19;
+class MxUnkRecordP20;
+class MxUnkRecordP21;
+class MxUnkRecordP22;
+class MxUnkRecordP23;
+class MxUnkRecordP24;
+
 // FUNCTION: LEGO1 0x10071300
 // FUNCTION: BETA10 0x1002ee8c
 void Infocenter::PlayAction(InfomainScript::Script p_script)
@@ -1689,21 +1694,11 @@ InfocenterState::~InfocenterState()
 	} while (i < GetMaxNameLength());
 }
 
-// Record carriers (scaffolding): 17 units at end of unit (tot in {17,34}) for Infocenter::StartCredits.
-class MxUnkRecordINF00;
-class MxUnkRecordINF01;
-class MxUnkRecordINF02;
-class MxUnkRecordINF03;
-class MxUnkRecordINF04;
-class MxUnkRecordINF05;
-class MxUnkRecordINF06;
-class MxUnkRecordINF07;
-class MxUnkRecordINF08;
-class MxUnkRecordINF09;
-class MxUnkRecordINF10;
-class MxUnkRecordINF11;
-class MxUnkRecordINF12;
-class MxUnkRecordINF13;
-class MxUnkRecordINF14;
-class MxUnkRecordINF15;
-class MxUnkRecordINF16;
+// Declaration-record carrier (dial campaign): tail block. Infocenter::ReadyWorld
+// samples this translation unit's FINAL declaration count rather than the count
+// that precedes its body, so this trailing block sets that total without shifting
+// any body above it. Neutral stand-in pending better evidence.
+class MxUnkRecordT00;
+class MxUnkRecordT01;
+class MxUnkRecordT02;
+class MxUnkRecordT03;

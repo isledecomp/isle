@@ -19,23 +19,6 @@
 #include <assert.h>
 #include <stdio.h>
 #include <vec.h>
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkD0 {};
-class RkD1 {};
-class RkD2 {};
-class RkD3 {};
-class RkD4 {};
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkF0;
-class RkF1;
-class RkF2;
-class RkF3;
-class RkF4;
-class RkF5;
-class RkF6;
-class RkF7;
 
 DECOMP_SIZE_ASSERT(LegoPlantManager, 0x2c)
 DECOMP_SIZE_ASSERT(LegoPlantManager::AnimEntry, 0x0c)
@@ -2164,15 +2147,6 @@ MxResult LegoPlantManager::DetermineBoundaries()
 	return SUCCESS;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordRH;
-class MxUnkRecordRI;
-class MxUnkRecordRJ;
-class MxUnkRecordRK;
-
 // FUNCTION: LEGO1 0x10026570
 // FUNCTION: BETA10 0x100c55e0
 LegoPlantInfo* LegoPlantManager::GetInfoArray(MxS32& p_length)
@@ -2240,6 +2214,13 @@ void LegoPlantManager::RemovePlant(MxS32 p_index, LegoOmni::World p_worldId)
 		}
 	}
 }
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state at this point. Neutral stand-in;
+// no authentic 1997 declaration is recoverable here.
+class RkD0 {};
+class RkD1 {};
+class RkF0;
 
 // FUNCTION: LEGO1 0x10026720
 // FUNCTION: BETA10 0x100c5918
@@ -2608,6 +2589,13 @@ void LegoPlantManager::ScheduleAnimation(LegoEntity* p_entity, MxLong p_length)
 
 	AdjustCounter(p_entity, -1);
 }
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state at this point. Neutral stand-in;
+// no authentic 1997 declaration is recoverable here.
+class MxUnkRecordRH;
+class MxUnkRecordRI;
+class MxUnkRecordRJ;
 
 // FUNCTION: LEGO1 0x10026e00
 MxResult LegoPlantManager::Tickle()

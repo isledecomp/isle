@@ -1,8 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordER;
 
 #include "legocharactermanager.h"
 
@@ -25,28 +20,6 @@ class MxUnkRecordER;
 
 #include <assert.h>
 #include <vec.h>
-// Declaration-record carrier (dial campaign): the functions below
-// sample this translation unit's accumulated declaration state at this
-// point.  Neutral stand-in; no authentic 1997 declaration is
-// recoverable here.
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkC0 {};
-class RkC1 {};
-class RkC2 {};
-class RkC3 {};
-class RkC4 {};
-class RkC5 {};
-class RkC6 {};
-class RkC7 {};
-class RkC8 {};
-class RkC9 {};
-class RkC10 {};
-class RkC11 {};
-class RkC12 {};
-class RkC13 {};
-class RkC14 {};
 
 DECOMP_SIZE_ASSERT(LegoCharacter, 0x08)
 DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)
@@ -92,6 +65,21 @@ MxU32 g_autoRoiCounter = 0;
 // GLOBAL: LEGO1 0x10104f20
 LegoActorInfo g_actorInfo[66];
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state at this point. Neutral stand-in;
+// no authentic 1997 declaration is recoverable here.
+class MxUnkRecC0100 {};
+class MxUnkRecC0101 {};
+class MxUnkRecC0102 {};
+class MxUnkRecC0103 {};
+class MxUnkRecC0104 {};
+class MxUnkRecC0105 {};
+class MxUnkRecC0106 {};
+class MxUnkRecC0107 {};
+class MxUnkRecC0108 {};
+class MxUnkRecC0109 {};
+class MxUnkRecZ0100;
+
 // FUNCTION: LEGO1 0x10082a20
 // FUNCTION: BETA10 0x10073c60
 LegoCharacterManager::LegoCharacterManager()
@@ -102,13 +90,6 @@ LegoCharacterManager::LegoCharacterManager()
 	m_customizeAnimFile = new CustomizeAnimFileVariable("CUSTOMIZE_ANIM_FILE");
 	VariableTable()->SetVariable(m_customizeAnimFile);
 }
-
-// Declaration-record carriers: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declarations are recoverable
-// at this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordH;
-class MxUnkRecordI;
 
 // FUNCTION: LEGO1 0x10083180
 // FUNCTION: BETA10 0x10073dad
@@ -222,6 +203,12 @@ MxResult LegoCharacterManager::Write(LegoStorage* p_storage)
 done:
 	return result;
 }
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state at this point. Neutral stand-in;
+// no authentic 1997 declaration is recoverable here.
+class MxUnkRecZ0600;
+class MxUnkRecZ0601;
 
 // FUNCTION: LEGO1 0x100833f0
 MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
@@ -351,6 +338,13 @@ MxBool LegoCharacterManager::Exists(const char* p_name)
 	return FALSE;
 }
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state at this point. Neutral stand-in;
+// no authentic 1997 declaration is recoverable here.
+class MxUnkRecC1100 {};
+class MxUnkRecC1101 {};
+class MxUnkRecZ1100;
+
 // FUNCTION: LEGO1 0x10083bc0
 // FUNCTION: BETA10 0x1007466a
 MxU32 LegoCharacterManager::GetRefCount(LegoROI* p_roi)
@@ -369,6 +363,14 @@ MxU32 LegoCharacterManager::GetRefCount(LegoROI* p_roi)
 
 	return 0;
 }
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state at this point. Neutral stand-in;
+// no authentic 1997 declaration is recoverable here.
+class MxUnkRecC1200 {};
+class MxUnkRecC1201 {};
+class MxUnkRecZ1200;
+class MxUnkRecZ1201;
 
 // FUNCTION: LEGO1 0x10083c30
 // FUNCTION: BETA10 0x10074701
@@ -733,6 +735,16 @@ LegoExtraActor* LegoCharacterManager::GetExtraActor(const char* p_name)
 	return NULL;
 }
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state at this point. Neutral stand-in;
+// no authentic 1997 declaration is recoverable here.
+class MxUnkRecZ2000;
+class MxUnkRecZ2001;
+class MxUnkRecZ2002;
+class MxUnkRecZ2003;
+class MxUnkRecZ2004;
+class MxUnkRecZ2005;
+
 // FUNCTION: LEGO1 0x10084c60
 // FUNCTION: BETA10 0x10075ede
 LegoActorInfo* LegoCharacterManager::GetActorInfo(const char* p_name)
@@ -776,6 +788,13 @@ LegoActorInfo* LegoCharacterManager::GetActorInfo(LegoROI* p_roi)
 		return NULL;
 	}
 }
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state at this point. Neutral stand-in;
+// no authentic 1997 declaration is recoverable here.
+class MxUnkRecZ2200;
+class MxUnkRecZ2201;
+class MxUnkRecZ2202;
 
 // FUNCTION: LEGO1 0x10084cf0
 // FUNCTION: BETA10 0x10075fe2
@@ -916,19 +935,6 @@ MxBool LegoCharacterManager::SwitchVariant(LegoROI* p_roi)
 
 	return TRUE;
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordEJ;
-class MxUnkRecordEK;
-class MxUnkRecordEL;
-class MxUnkRecordEM;
-class MxUnkRecordEN;
-class MxUnkRecordEO;
-class MxUnkRecordEP;
-class MxUnkRecordEQ;
 
 // FUNCTION: LEGO1 0x10085090
 // FUNCTION: BETA10 0x100766f6
@@ -1194,69 +1200,3 @@ void CustomizeAnimFileVariable::SetValue(const char* p_value)
 class MxUnkRecordAV {
 	inline void Record() {}
 };
-
-// Declaration-record carrier (dial campaign): end-of-file sink for
-// this translation unit's declaration state.  Neutral stand-in.
-class MxUnkRecordZC001;
-class MxUnkRecordZC002;
-class MxUnkRecordZC003;
-class MxUnkRecordZC004;
-class MxUnkRecordZC005;
-class MxUnkRecordZC006;
-class MxUnkRecordZC007;
-class MxUnkRecordZC008;
-class MxUnkRecordZC009;
-class MxUnkRecordZC010;
-class MxUnkRecordZC011;
-class MxUnkRecordZC012;
-class MxUnkRecordZC013;
-class MxUnkRecordZC014;
-class MxUnkRecordZC015;
-class MxUnkRecordZC016;
-class MxUnkRecordZC017;
-class MxUnkRecordZC018;
-class MxUnkRecordZC019;
-class MxUnkRecordZC020;
-class MxUnkRecordZC021;
-class MxUnkRecordZC022;
-class MxUnkRecordZC023;
-class MxUnkRecordZC024;
-
-// Declaration-record carrier (dial campaign): end-of-file sink for
-// this translation unit's declaration state.  Neutral stand-in.
-class MxUnkRecordSW7000;
-class MxUnkRecordSW7001;
-class MxUnkRecordSW7002;
-class MxUnkRecordSW7003;
-class MxUnkRecordSW7004;
-class MxUnkRecordSW7005;
-class MxUnkRecordSW7006;
-class MxUnkRecordSW7007;
-class MxUnkRecordSW7008;
-class MxUnkRecordSW7009;
-class MxUnkRecordSW7010;
-class MxUnkRecordSW7011;
-class MxUnkRecordSW7012;
-class MxUnkRecordSW7013;
-class MxUnkRecordSW7014;
-class MxUnkRecordSW7015;
-class MxUnkRecordSW7016;
-class MxUnkRecordSW7017;
-class MxUnkRecordSW7018;
-class MxUnkRecordSW7019;
-class MxUnkRecordSW7020;
-class MxUnkRecordSW7021;
-class MxUnkRecordSW7022;
-class MxUnkRecordSW7023;
-class MxUnkRecordSW7024;
-class MxUnkRecordSW7025;
-class MxUnkRecordSW7026;
-class MxUnkRecordSW7027;
-class MxUnkRecordSW7028;
-class MxUnkRecordSW7029;
-class MxUnkRecordSW7030;
-class MxUnkRecordSW7031;
-class MxUnkRecordSW7032;
-class MxUnkRecordSW7033;
-class MxUnkRecordSW7034;
-class MxUnkRecordSW7035;

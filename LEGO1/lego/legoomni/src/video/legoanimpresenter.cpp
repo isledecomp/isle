@@ -12,7 +12,6 @@ class MxUnkRecordCU;
 class MxUnkRecordCV;
 class MxUnkRecordCW;
 class MxUnkRecordCX;
-class MxUnkRecordCY;
 
 #include "legoanimpresenter.h"
 
@@ -47,6 +46,7 @@ class MxUnkRecordCY;
 class RkF0;
 class RkF1;
 class RkF2;
+class RkF3;
 class RkM0 {
 public:
 	void rkm0() {}

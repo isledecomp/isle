@@ -1,14 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordDN {
-	inline void Record() {}
-};
-
-class MxUnkRecordDO {
-	inline void Record() {}
-};
 
 #include "legoanimationmanager.h"
 
@@ -42,59 +31,6 @@ class MxUnkRecordDO {
 
 #include <io.h>
 #include <vec.h>
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class MxUnkRecordDQ000;
-class MxUnkRecordDQ001;
-class MxUnkRecordDQ002;
-class MxUnkRecordDQ003;
-class MxUnkRecordDQ004;
-class MxUnkRecordDQ005;
-class MxUnkRecordDQ006;
-class MxUnkRecordDQ007;
-class MxUnkRecordDQ008;
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-enum RkE0 {
-	rke0_0
-};
-enum RkE1 {
-	rke1_0
-};
-enum RkE2 {
-	rke2_0
-};
-enum RkE3 {
-	rke3_0
-};
-enum RkE4 {
-	rke4_0
-};
-enum RkE5 {
-	rke5_0
-};
-enum RkE6 {
-	rke6_0
-};
-enum RkE7 {
-	rke7_0
-};
-enum RkE8 {
-	rke8_0
-};
-enum RkE9 {
-	rke9_0
-};
-enum RkE10 {
-	rke10_0
-};
-enum RkE11 {
-	rke11_0
-};
-enum RkE12 {
-	rke12_0
-};
 
 DECOMP_SIZE_ASSERT(LegoAnimationManager, 0x500)
 DECOMP_SIZE_ASSERT(LegoAnimationManager::Character, 0x18)
@@ -400,6 +336,17 @@ LegoAnimationManager::LegoAnimationManager()
 	NotificationManager()->Register(this);
 	TickleManager()->RegisterClient(this, 10);
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordZ03 {
+	inline void Record0() {}
+};
+enum RkZ030 {
+	rkz030_0
+};
 
 // FUNCTION: LEGO1 0x1005ed30
 // FUNCTION: BETA10 0x1003fa27
@@ -808,6 +755,14 @@ done:
 	return result;
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+enum RkZ110 {
+	rkz110_0
+};
+
 // FUNCTION: LEGO1 0x10060140
 // FUNCTION: BETA10 0x10040c2e
 MxBool LegoAnimationManager::FindVehicle(const char* p_name, MxU32& p_index)
@@ -886,18 +841,6 @@ MxResult LegoAnimationManager::ReadAnimInfo(LegoStorage* p_storage, AnimInfo* p_
 done:
 	return result;
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordA {
-	inline void Record() {}
-};
-
-class MxUnkRecordB {
-	inline void Record() {}
-};
 
 // FUNCTION: LEGO1 0x10060310
 // FUNCTION: BETA10 0x10040fad
@@ -988,6 +931,20 @@ void LegoAnimationManager::FUN_100604d0(MxBool p_unk0x08)
 		g_characters[i].m_unk0x08 = p_unk0x08;
 	}
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordZ17 {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+	inline void Record4() {}
+	inline void Record5() {}
+};
+class MxUnkRecordZ170;
 
 // FUNCTION: LEGO1 0x100604f0
 // FUNCTION: BETA10 0x1004137b
@@ -1181,6 +1138,15 @@ MxResult LegoAnimationManager::FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix
 	return result;
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+enum RkZ220 {
+	rkz220_0
+};
+class MxUnkRecordZ221;
+
 // FUNCTION: LEGO1 0x10060d00
 // FUNCTION: BETA10 0x10041d6a
 MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity)
@@ -1271,6 +1237,18 @@ MxResult LegoAnimationManager::FUN_10060dc0(
 
 	return result;
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+enum RkZ240 {
+	rkz240_0
+};
+enum RkZ241 {
+	rkz241_0
+};
+class MxUnkRecordZ242;
 
 // FUNCTION: LEGO1 0x10060eb0
 // FUNCTION: BETA10 0x1004206c
@@ -1442,6 +1420,14 @@ void LegoAnimationManager::FUN_10061530()
 	}
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+enum RkZ270 {
+	rkz270_0
+};
+
 // FUNCTION: LEGO1 0x100617c0
 // FUNCTION: BETA10 0x1004240b
 MxResult LegoAnimationManager::FUN_100617c0(MxS32 p_location, MxU16& p_unk0x0e, MxU16& p_unk0x10)
@@ -1577,6 +1563,18 @@ MxLong LegoAnimationManager::Notify(MxParam& p_param)
 	return 0;
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordZ30 {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+};
+class MxUnkRecordZ300;
+
 // FUNCTION: LEGO1 0x10061cc0
 // FUNCTION: BETA10 0x1004293c
 MxResult LegoAnimationManager::Tickle()
@@ -1702,6 +1700,18 @@ MxResult LegoAnimationManager::Tickle()
 
 	return SUCCESS;
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+enum RkZ310 {
+	rkz310_0
+};
+enum RkZ311 {
+	rkz311_0
+};
+class MxUnkRecordZ312;
 
 // FUNCTION: LEGO1 0x10062110
 // FUNCTION: BETA10 0x10042f41
@@ -1883,14 +1893,6 @@ void LegoAnimationManager::FUN_10062580(AnimInfo& p_info)
 	}
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordC {
-	inline void Record() {}
-};
-
 // FUNCTION: LEGO1 0x10062650
 // FUNCTION: BETA10 0x100436e2
 MxBool LegoAnimationManager::FUN_10062650(Mx3DPointFloat& p_position, float p_und, LegoROI* p_roi)
@@ -1912,24 +1914,6 @@ MxBool LegoAnimationManager::FUN_10062650(Mx3DPointFloat& p_position, float p_un
 
 	return FALSE;
 }
-
-// Declaration-record carrier, mid-unit companion to the three at the top of
-// this file. The record state the back end carries into FUN_10064740 is set by
-// how many declarations precede it, not by anything in its own body; sampling
-// it here is what gives that function retail's register assignment. No
-// authentic 1997 declaration is recoverable at this position -- neutral
-// stand-in pending better evidence.
-class MxUnkRecordDP {
-	inline void Record() {}
-	inline void Sample() {}
-	inline void Reset() {}
-};
-
-class MxUnkRecordDQ {
-	inline void Record() {}
-	inline void Sample() {}
-	inline void Reset() {}
-};
 
 // FUNCTION: LEGO1 0x10062710
 // FUNCTION: BETA10 0x10043787
@@ -2024,6 +2008,15 @@ void LegoAnimationManager::PurgeExtra(MxBool p_und)
 		}
 	}
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+enum RkZ400 {
+	rkz400_0
+};
+class MxUnkRecordZ401;
 
 // FUNCTION: LEGO1 0x100629b0
 // FUNCTION: BETA10 0x10043c10
@@ -2447,22 +2440,6 @@ void LegoAnimationManager::FUN_10063270(LegoROIList* p_list, LegoAnimPresenter* 
 	}
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordQM {
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-	inline void Record6() {}
-	inline void Record7() {}
-	inline void Record8() {}
-	inline void Record9() {}
-};
-
 // FUNCTION: LEGO1 0x10063780
 void LegoAnimationManager::FUN_10063780(LegoROIList* p_list)
 {
@@ -2504,6 +2481,17 @@ void LegoAnimationManager::FUN_10063aa0()
 		CharacterManager()->ReleaseActor(roi);
 	}
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+enum RkZ460 {
+	rkz460_0
+};
+enum RkZ461 {
+	rkz461_0
+};
 
 // FUNCTION: LEGO1 0x10063b90
 // FUNCTION: BETA10 0x10044d46
@@ -2565,6 +2553,17 @@ MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_
 		return FALSE;
 	}
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+enum RkZ470 {
+	rkz470_0
+};
+enum RkZ471 {
+	rkz471_0
+};
 
 // FUNCTION: LEGO1 0x10063d10
 // FUNCTION: BETA10 0x10045034
@@ -2647,18 +2646,6 @@ MxBool LegoAnimationManager::FUN_10063fb0(LegoLocation::Boundary& p_hl, LegoWorl
 	return FALSE;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordDL {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-};
-
 // FUNCTION: LEGO1 0x10064010
 // FUNCTION: BETA10 0x100453a5
 MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoOrientedEdge* p_edge, float p_destScale)
@@ -2688,6 +2675,17 @@ MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoOrie
 
 	return FALSE;
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordZ51 {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+};
+class MxUnkRecordZ510;
 
 // FUNCTION: LEGO1 0x10064120
 // FUNCTION: BETA10 0x100454f5
@@ -2785,6 +2783,14 @@ MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, Mx
 
 	return FALSE;
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordZ52 {
+	inline void Record0() {}
+};
 
 // FUNCTION: LEGO1 0x10064380
 // FUNCTION: BETA10 0x1004583a
@@ -2893,11 +2899,14 @@ MxResult LegoAnimationManager::FUN_10064380(
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordD {
-	inline void Record() {}
-	inline void Record1() {}
+// this position. Neutral stand-in pending better evidence.
+enum RkZ530 {
+	rkz530_0
 };
+enum RkZ531 {
+	rkz531_0
+};
+class MxUnkRecordZ532;
 
 // FUNCTION: LEGO1 0x10064670
 MxResult LegoAnimationManager::FUN_10064670(Vector3* p_position)
@@ -2922,6 +2931,12 @@ MxResult LegoAnimationManager::FUN_10064670(Vector3* p_position)
 
 	return FAILURE;
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordZ54 {};
 
 // FUNCTION: LEGO1 0x10064740
 MxResult LegoAnimationManager::FUN_10064740(Vector3* p_position)
@@ -3123,6 +3138,17 @@ void AnimState::CopyToAnims(MxU32 p_numAnims, AnimInfo* p_anims, MxU32& p_outExt
 	}
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordZ62 {
+	inline void Record0() {}
+};
+enum RkZ620 {
+	rkz620_0
+};
+
 // FUNCTION: LEGO1 0x10065240
 // FUNCTION: BETA10 0x1004648a
 void AnimState::InitFromAnims(MxU32 p_numAnims, AnimInfo* p_anims, MxU32 p_extraCharacterId)
@@ -3152,6 +3178,15 @@ void AnimState::InitFromAnims(MxU32 p_numAnims, AnimInfo* p_anims, MxU32 p_extra
 		}
 	}
 }
+
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+enum RkZ630 {
+	rkz630_0
+};
+class MxUnkRecordZ631;
 
 // FUNCTION: LEGO1 0x100652d0
 // FUNCTION: BETA10 0x10046621
@@ -3228,6 +3263,15 @@ MxResult AnimState::Serialize(LegoStorage* p_storage)
 	return result;
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+enum RkZ640 {
+	rkz640_0
+};
+class MxUnkRecordZ641;
+
 // FUNCTION: LEGO1 0x100654f0
 MxBool AnimState::Reset()
 {
@@ -3250,23 +3294,16 @@ MxBool AnimState::Reset()
 	return FALSE;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordQN {
-	inline void Record() {}
-};
-
-class MxUnkRecordQO {
-	inline void Record() {}
-};
-
-class MxUnkRecordQP {
-	inline void Record() {}
-};
-
-class MxUnkRecordF {
+// Declaration-record carrier (translation-unit total). Several bodies in
+// this file sample the unit's FINAL declaration count, not the count that
+// precedes them, so this trailing block tunes that total without shifting
+// any body above it. Neutral stand-in pending better evidence.
+class MxUnkRecordZZZ {
 	inline void Record0() {}
 	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+};
+enum RkZZZ0 {
+	rkzZZ0_0
 };

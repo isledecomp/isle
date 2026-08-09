@@ -91,9 +91,6 @@ class MxUnkRecordGR {
 	inline void Record7() {}
 };
 
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-
 DECOMP_SIZE_ASSERT(LegoOmni, 0x140)
 DECOMP_SIZE_ASSERT(LegoOmni::WorldContainer, 0x1c)
 DECOMP_SIZE_ASSERT(LegoWorldList, 0x18)
