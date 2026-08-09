@@ -20,6 +20,23 @@ class MxUnkRecordUQ {
 #include "mxtypes.h"
 
 #include <assert.h>
+class MxUnkRecordAO;
+class MxUnkRecordAP;
+class MxUnkRecordAQ;
+class MxUnkRecordAR;
+class MxUnkRecordAS;
+class MxUnkRecordAT;
+class MxUnkRecordAU;
+class MxUnkRecordAV;
+class MxUnkRecordAW;
+class MxUnkRecordAX;
+class MxUnkRecordAY;
+class MxUnkRecordAZ;
+class MxUnkRecordBA;
+class MxUnkRecordBB;
+class MxUnkRecordBC;
+class MxUnkRecordBD;
+class MxUnkRecordBE;
 
 DECOMP_SIZE_ASSERT(MxNotification, 0x08);
 DECOMP_SIZE_ASSERT(MxNotificationManager, 0x40);

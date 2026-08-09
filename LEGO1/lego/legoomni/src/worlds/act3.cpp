@@ -51,6 +51,8 @@ public:
 #include "scripts.h"
 
 #include <vec.h>
+class MxUnkRecordNZ;
+class MxUnkRecordOA;
 
 DECOMP_SIZE_ASSERT(Act3, 0x4274)
 DECOMP_SIZE_ASSERT(Act3State, 0x0c)
