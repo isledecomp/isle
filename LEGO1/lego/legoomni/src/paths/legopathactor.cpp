@@ -739,7 +739,7 @@ MxResult LegoPathActor::CalculateSpline()
 	MxU32 noPath1 = TRUE;
 	MxU32 noPath2 = TRUE;
 
-	if (m_grec != NULL) {
+	if (m_grec) {
 		if (m_grec->HasPath()) {
 			noPath1 = FALSE;
 			noPath2 = FALSE;
