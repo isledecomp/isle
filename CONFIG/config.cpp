@@ -25,6 +25,12 @@ CConfigApp::CConfigApp()
 {
 }
 
+// The one and only CConfigApp object. Its dynamic initializer and atexit thunk
+// are emitted where it is defined, and retail has them between the destructor
+// group and InitInstance.
+// GLOBAL: CONFIG 0x00408e50
+CConfigApp g_theApp;
+
 #define MiB (1024 * 1024)
 
 // FUNCTION: CONFIG 0x00402dc0
@@ -478,6 +484,3 @@ int CConfigApp::ExitInstance()
 	}
 	return CWinApp::ExitInstance();
 }
-
-// GLOBAL: CONFIG 0x00408e50
-CConfigApp g_theApp;
