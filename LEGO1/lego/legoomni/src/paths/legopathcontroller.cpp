@@ -512,18 +512,8 @@ MxResult LegoPathController::GetBoundaries(LegoPathBoundary*& p_boundaries, MxS3
 // this position. Neutral stand-in pending better evidence.
 class MxUnkRecordAA {
 	inline void Record() {}
-};
-
-class MxUnkRecordAB {
-	inline void Record() {}
-};
-
-class MxUnkRecordAC {
-	inline void Record() {}
-};
-
-class MxUnkRecordAZ {
-	inline void Record() {}
+	void Record1();
+	void Record2();
 };
 
 // FUNCTION: LEGO1 0x10046b50
@@ -1242,4 +1232,14 @@ class MxUnkRecordAS {
 	inline void Record2() {}
 	inline void Record3() {}
 	inline void Record4() {}
+	inline void Record5() {}
+	inline void Record6() {}
+	inline void Record7() {}
+	inline void Record8() {}
+	inline void Record9() {}
+	inline void Record10() {}
+	inline void Record11() {}
+	inline void Record12() {}
+	inline void Record13() {}
+	void Record14();
 };

@@ -2444,7 +2444,6 @@ void LegoAnimationManager::FUN_10063270(LegoROIList* p_list, LegoAnimPresenter* 
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at
 // this position. Neutral stand-in pending better evidence.
 class MxUnkRecordQM {
-	inline void Record0() {}
 	inline void Record1() {}
 	inline void Record2() {}
 	inline void Record3() {}
@@ -2889,6 +2888,7 @@ MxResult LegoAnimationManager::FUN_10064380(
 // this position. Neutral stand-ins pending better evidence.
 class MxUnkRecordD {
 	inline void Record() {}
+	inline void Record1() {}
 };
 
 // FUNCTION: LEGO1 0x10064670
