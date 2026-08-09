@@ -1281,17 +1281,3 @@ LegoResult LegoMorphKey::Write(LegoStorage* p_storage)
 
 	return SUCCESS;
 }
-
-// Declaration-record carriers (composition axis): the class-with-method
-// records at end of file complete the state the samplers above require;
-// no authentic 1997 declarations are recoverable at this position. Neutral
-// stand-ins pending better evidence.
-class MxUnkRecordLA6 {
-	inline void Record0() {}
-	inline void Record1() {}
-};
-
-class MxUnkRecordLA7 {
-	inline void Record0() {}
-	inline void Record1() {}
-};

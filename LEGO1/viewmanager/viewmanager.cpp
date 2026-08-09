@@ -633,5 +633,3 @@ ViewROI* ViewManager::Pick(Tgl::View* p_view, unsigned long x, unsigned long y)
 
 	return result;
 }
-
-class MxUnkRecordVM0;
