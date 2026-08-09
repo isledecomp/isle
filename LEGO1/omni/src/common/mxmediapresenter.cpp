@@ -14,6 +14,15 @@ class MxUnkRecordVR {
 	inline void Record() {}
 };
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class VpN000;
+class VpN001;
+class VpN002;
+class VpN003;
+class VpN004;
+class VpN005;
+
 #include "mxmediapresenter.h"
 
 #include "mxactionnotificationparam.h"
@@ -24,6 +33,33 @@ class MxUnkRecordVR {
 #include "mxnotificationmanager.h"
 #include "mxstreamchunk.h"
 #include "mxtimer.h"
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class RkN000;
+class RkN001;
+class RkN002;
+class RkN003;
+class RkN004;
+class RkN005;
+class RkN006;
+class RkN007;
+class RkN008;
+class RkN009;
+class RkN010;
+class RkN011;
+class RkN012;
+class RkN013;
+class RkN014;
+class RkN015;
+class RkN016;
+class RkN017;
+class RkN018;
+class RkN019;
+class RkN020;
+class RkN021;
+class RkN022;
+class RkN023;
+class RkN024;
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
 class RkM0 {
