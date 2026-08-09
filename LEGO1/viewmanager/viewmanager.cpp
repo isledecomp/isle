@@ -7,7 +7,6 @@
 #include <vec.h>
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
-class RkF0;
 
 DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 
@@ -159,6 +158,75 @@ unsigned int ViewManager::IsBoundingBoxInFrustum(const BoundingBox& p_bounding_b
 	return TRUE;
 }
 
+// FUNCTION: LEGO1 0x100a6200
+int ViewManager::FlushBuffers()
+{
+	LPDIRECT3DRMDEVICEARRAY deviceArray = NULL;
+
+	if (d3drm != NULL && d3drm->GetDevices(&deviceArray) == D3DRM_OK) {
+		if (deviceArray->GetSize() != 0) {
+			LPDIRECT3DRMDEVICE device = NULL;
+
+			if (deviceArray->GetElement(0, &device) == D3DRM_OK && device != NULL) {
+				LPDIRECT3DRMDEVICE2 device2 = NULL;
+
+				if (device->QueryInterface(IID_IDirect3DRMDevice2, (LPVOID*) &device2) == D3DRM_OK && device2 != NULL) {
+					LPDIRECT3DRMVIEWPORTARRAY viewportArray = NULL;
+
+					if (device->GetViewports(&viewportArray) == D3DRM_OK && viewportArray != NULL) {
+						if (viewportArray->GetSize() != 0) {
+							LPDIRECT3DRMVIEWPORT viewport = NULL;
+
+							if (viewportArray->GetElement(0, &viewport) == D3DRM_OK && viewport != NULL) {
+								LPDIRECT3DRMVISUALARRAY visuals = NULL;
+
+								if (frame->GetVisuals(&visuals) == D3DRM_OK && visuals != NULL) {
+									int i;
+									int numVisuals = visuals->GetSize();
+
+									for (i = 0; i < numVisuals; i++) {
+										LPDIRECT3DRMVISUAL visual = NULL;
+
+										if (visuals->GetElement(i, &visual) == D3DRM_OK && visual != NULL) {
+											frame->DeleteVisual(visual);
+										}
+									}
+
+									for (i = 0; i < 10; i++) {
+										viewport->Render(frame);
+										device->Update();
+									}
+
+									for (i = 0; i < numVisuals; i++) {
+										LPDIRECT3DRMVISUAL visual = NULL;
+
+										if (visuals->GetElement(i, &visual) == D3DRM_OK && visual != NULL) {
+											frame->AddVisual(visual);
+											visual->Release();
+										}
+									}
+
+									visuals->Release();
+								}
+
+								viewport->Release();
+							}
+						}
+
+						viewportArray->Release();
+					}
+
+					device2->Release();
+				}
+
+				device->Release();
+			}
+		}
+	}
+
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x100a6410
 // FUNCTION: BETA10 0x101722cd
 void ViewManager::Remove(ViewROI* p_roi)
@@ -299,6 +367,37 @@ void ViewManager::RemoveROIDetailFromScene(ViewROI* p_from)
 
 	p_from->SetToken(ViewROI::c_tokenUnset);
 }
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class VmRec9000;
+class VmRec9001;
+class VmRec9002;
+class VmRec9003;
+class VmRec9004;
+class VmRec9005;
+class VmRec9006;
+class VmRec9007;
+class VmRec9008;
+class VmRec9009;
+class VmRec9010;
+class VmRec9011;
+class VmRec9012;
+class VmRec9013;
+class VmRec9014;
+class VmRec9015;
+class VmRec9016;
+class VmRec9017;
+class VmRec9018;
+class VmRec9019;
+class VmRec9020;
+class VmRec9021;
+class VmRec9022;
+class VmRec9023;
+class VmRec9024;
+class VmRec9025;
+class VmRec9026;
+class VmRec9027;
 
 // FUNCTION: LEGO1 0x100a66f0
 // FUNCTION: BETA10 0x1017297f
@@ -499,6 +598,12 @@ inline int ViewManager::GetFirstLODIndex(ViewROI* p_roi)
 
 	return 0;
 }
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class VmRec11000;
+class VmRec11001;
+class VmRec11002;
 
 // FUNCTION: LEGO1 0x100a6b90
 void ViewManager::UpdateViewTransformations()

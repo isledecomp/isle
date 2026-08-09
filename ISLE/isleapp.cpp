@@ -248,6 +248,22 @@ BOOL IsleApp::SetupLegoOmni()
 	return result;
 }
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class IaRec5000;
+class IaRec5001;
+class IaRec5002;
+class IaRec5003;
+class IaRec5004;
+class IaRec5005;
+class IaRec5006;
+class IaRec5007;
+class IaRec5008;
+class IaRec5009;
+class IaRec5010;
+class IaRec5011;
+class IaRec5012;
+
 // FUNCTION: ISLE 0x401560
 void IsleApp::SetupVideoFlags(
 	BOOL fullScreen,
@@ -276,6 +292,12 @@ void IsleApp::SetupVideoFlags(
 		m_videoParam.Flags().Set16Bit(1);
 	}
 }
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class IaRec6000;
+class IaRec6001;
+class IaRec6002;
 
 // FUNCTION: ISLE 0x401610
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)

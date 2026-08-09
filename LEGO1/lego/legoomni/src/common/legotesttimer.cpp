@@ -5,6 +5,7 @@
 #include "misc.h"
 #include "mxnotificationparam.h"
 
+#include <conio.h>
 #include <stdio.h>
 
 // FUNCTION: BETA10 0x100d1030
@@ -153,4 +154,27 @@ MxLong LegoTestTimer::Notify(MxParam& p_param)
 	}
 
 	return 0;
+}
+
+// The console single-step control for the timer instrumentation. Nothing in the
+// shipped build reaches it, so /OPT:REF discarded its code -- but LINK had
+// already pulled getch.obj (and, through it, initcon.obj) out of LIBCMT to
+// satisfy these calls, and their non-COMDAT .data survives /OPT:REF. That data
+// is present in the original LEGO1.DLL, which is how we know a call like this
+// was here.
+void LegoTestTimerConsoleControl(LegoTestTimer* p_timer)
+{
+	while (!_kbhit()) {
+	}
+
+	switch (_getch()) {
+	case 's':
+	case 'S':
+		p_timer->ResetAtNextTick();
+		break;
+	case 'p':
+	case 'P':
+		p_timer->Print();
+		break;
+	}
 }
