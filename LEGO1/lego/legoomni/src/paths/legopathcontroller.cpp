@@ -1002,11 +1002,10 @@ MxResult LegoPathController::FindPath(
 						float dist;
 						if ((dist = pfs->m_edge->DistanceToMidpoint(p_newPosition) + pfs->m_distanceToMidpoint) <
 							minDist) {
-							edgeWithMidpoint.m_edge = NULL;
 							minDist = dist;
+							edgeWithMidpoint.m_edge = NULL;
 
-							// TODO: Match
-							if (dist < minDistance) {
+							if (minDistance > dist) {
 								minDistance = dist;
 								p_grec->erase(p_grec->begin(), p_grec->end());
 								p_grec->SetPath(TRUE);
@@ -1030,7 +1029,7 @@ MxResult LegoPathController::FindPath(
 									if ((dist = edge->DistanceBetweenMidpoints(*e) +
 												(*boundarySetItA)->m_distanceToMidpoint) < minDist) {
 										minDist = dist;
-										edgeWithMidpoint = LegoBEWithMidpoint(edge, bOther, *boundarySetItA, dist);
+										edgeWithMidpoint = LegoBEWithMidpoint(edge, bOther, *boundarySetItA, minDist);
 									}
 								}
 							}
