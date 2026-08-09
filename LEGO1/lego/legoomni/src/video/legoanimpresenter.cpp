@@ -1874,6 +1874,10 @@ void LegoHideAnimPresenter::ApplyVisibility(LegoTreeNode* p_node, LegoTime p_tim
 	}
 }
 
+// Declaration-record carrier (dial campaign): one unit of this translation
+// unit's declaration state, seated ahead of the function below.
+class MxUnkRecordQC;
+
 // FUNCTION: LEGO1 0x1006dc10
 // FUNCTION: BETA10 0x100532fd
 void LegoHideAnimPresenter::AssignIndiciesWithMap()
@@ -1944,7 +1948,8 @@ class MxUnkRecordQL {
 	inline void Record4() {}
 	inline void Record5() {}
 	inline void Record6() {}
-	inline void Record7() {}
+	void Record7();
+	void Record8();
 };
 
 // FUNCTION: LEGO1 0x1006e470
