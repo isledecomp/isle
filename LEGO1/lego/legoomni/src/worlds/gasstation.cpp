@@ -1,3 +1,10 @@
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.  [11 units]
+class RkGM0 {
+	void m0() {}
+};
+class RkGF0;
+
 #include "gasstation.h"
 
 #include "garage_actions.h"
@@ -23,13 +30,6 @@
 #include "scripts.h"
 
 #include <assert.h>
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.  [11 units]
-class RkGM0 {
-	void m0() {}
-};
-class RkGF0;
 
 DECOMP_SIZE_ASSERT(GasStation, 0x128)
 DECOMP_SIZE_ASSERT(GasStationState, 0x24)
