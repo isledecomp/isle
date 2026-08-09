@@ -688,6 +688,7 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 					m_mapsLocators[2]->ClearMaps();
 
 					MxS32 score;
+					MxS32 secondAnim;
 
 					if (m_opponent1Laps < m_playerLaps && m_opponent2Laps < m_playerLaps) {
 						score = 3;
@@ -698,12 +699,13 @@ MxLong CarRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 						score = 2;
 						if (m_opponent1Laps == g_lapsCount) {
 							m_firstFinishAnimation = g_studsWinsAnimations[rand() % 4];
-							m_secondFinishAnimation = g_rhodaLoosesAnimation[rand() % 3];
+							secondAnim = g_rhodaLoosesAnimation[rand() % 3];
 						}
 						else {
 							m_firstFinishAnimation = g_rhodaWinsAnimations[rand() % 3];
-							m_secondFinishAnimation = g_studsLoosesAnimation[rand() % 3];
+							secondAnim = g_studsLoosesAnimation[rand() % 3];
 						}
+						m_secondFinishAnimation = secondAnim;
 					}
 					else {
 						score = 1;
