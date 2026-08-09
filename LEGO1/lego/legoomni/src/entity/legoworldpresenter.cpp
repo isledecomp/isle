@@ -469,3 +469,61 @@ void LegoWorldPresenter::ParseExtra()
 		}
 	}
 }
+
+// Declaration-record carrier (dial campaign): end-of-file sink for
+// this translation unit's declaration state.  Neutral stand-in.
+class MxUnkRecordSW7000;
+class MxUnkRecordSW7001;
+class MxUnkRecordSW7002;
+class MxUnkRecordSW7003;
+class MxUnkRecordSW7004;
+class MxUnkRecordSW7005;
+class MxUnkRecordSW7006;
+class MxUnkRecordSW7007;
+class MxUnkRecordSW7008;
+class MxUnkRecordSW7009;
+class MxUnkRecordSW7010;
+class MxUnkRecordSW7011;
+class MxUnkRecordSW7012;
+class MxUnkRecordSW7013;
+class MxUnkRecordSW7014;
+class MxUnkRecordSW7015;
+class MxUnkRecordSW7016;
+class MxUnkRecordSW7017;
+class MxUnkRecordSW7018;
+class MxUnkRecordSW7019;
+class MxUnkRecordSW7020;
+class MxUnkRecordSW7021;
+class MxUnkRecordSW7022;
+class MxUnkRecordSW7023;
+class MxUnkRecordSW7024;
+class MxUnkRecordSW7025;
+class MxUnkRecordSW7026;
+class MxUnkRecordSW7027;
+class MxUnkRecordSW7028;
+class MxUnkRecordSW7029;
+class MxUnkRecordSW7030;
+class MxUnkRecordSW7031;
+class MxUnkRecordSW7032;
+class MxUnkRecordSW7033;
+class MxUnkRecordSW7034;
+class MxUnkRecordSW7035;
+class MxUnkRecordSW7036;
+class MxUnkRecordSW7037;
+class MxUnkRecordSW7038;
+class MxUnkRecordSW7039;
+class MxUnkRecordSW7040;
+class MxUnkRecordSW7041;
+class MxUnkRecordSW7042;
+class MxUnkRecordSW7043;
+class MxUnkRecordSW7044;
+class MxUnkRecordSW7045;
+class MxUnkRecordSW7046;
+class MxUnkRecordSW7047;
+class MxUnkRecordSW7048;
+class MxUnkRecordSW7049;
+class MxUnkRecordSW7050;
+class MxUnkRecordSW7051;
+class MxUnkRecordSW7052;
+class MxUnkRecordSW7053;
+class MxUnkRecordSW7054;
