@@ -180,6 +180,20 @@ MxResult LegoPathActor::SetTransformAndDestinationFromEdge(
 	return SUCCESS;
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordJK {
+	inline void Record0() {}
+	inline void Record1() {}
+	inline void Record2() {}
+	inline void Record3() {}
+	inline void Record4() {}
+	inline void Record5() {}
+};
+class MxUnkRecordJL;
+
 // FUNCTION: LEGO1 0x1002de10
 // FUNCTION: BETA10 0x100aee61
 MxResult LegoPathActor::SetTransformAndDestinationFromPoints(
@@ -359,8 +373,8 @@ MxS32 LegoPathActor::CalculateTransform(float p_time, Matrix4& p_transform)
 		float endTime = (m_BADuration - m_traveledDistance) / m_worldSpeed + m_transformTime;
 
 		if (endTime < p_time) {
-			m_traveledDistance = m_BADuration;
 			m_finishedTravel = TRUE;
+			m_traveledDistance = m_BADuration;
 		}
 		else {
 			endTime = p_time;
@@ -405,6 +419,11 @@ MxS32 LegoPathActor::CalculateTransform(float p_time, Matrix4& p_transform)
 
 	return 0;
 }
+
+// Declaration-record carrier: see the note above; this second block splits the
+// unit's declaration state at the boundary the functions below sample it from.
+class MxUnkRecordJM {};
+class MxUnkRecordJN;
 
 // FUNCTION: LEGO1 0x1002e740
 // FUNCTION: BETA10 0x100b0f70
@@ -527,22 +546,6 @@ MxU32 LegoPathActor::CheckPresenterAndActorIntersections(
 
 	return 0;
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordJK {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-	inline void Record6() {}
-	inline void Record7() {}
-	inline void Record8() {}
-};
 
 #ifdef BETA10
 // FUNCTION: BETA10 0x100af35e
