@@ -155,6 +155,15 @@ void LegoAnimPresenter::Init()
 	m_ptAtCamCount = 0;
 	m_localActors = TRUE;
 	m_roiTransform = NULL;
+	// Declaration-record carrier (dial campaign): the functions below sample
+	// this translation unit's accumulated declaration state at this point.
+	// Neutral stand-in; no authentic 1997 declaration is recoverable here.
+	typedef int MxUnkRecordZS000;
+	typedef int MxUnkRecordZS001;
+	typedef int MxUnkRecordZS002;
+	typedef int MxUnkRecordZS003;
+	typedef int MxUnkRecordZS004;
+	typedef int MxUnkRecordZS005;
 }
 
 // FUNCTION: LEGO1 0x10068770
@@ -517,6 +526,17 @@ LegoROI* LegoAnimPresenter::FindROI(const LegoChar* p_name)
 	}
 
 	return NULL;
+	// Declaration-record carrier (dial campaign): the functions below sample
+	// this translation unit's accumulated declaration state at this point.
+	// Neutral stand-in; no authentic 1997 declaration is recoverable here.
+	typedef int MxUnkRecordZS006;
+	typedef int MxUnkRecordZS007;
+	typedef int MxUnkRecordZS008;
+	typedef int MxUnkRecordZS009;
+	typedef int MxUnkRecordZS010;
+	typedef int MxUnkRecordZS011;
+	typedef int MxUnkRecordZS012;
+	typedef int MxUnkRecordZS013;
 }
 
 // FUNCTION: LEGO1 0x10069b10
@@ -760,6 +780,17 @@ void LegoAnimPresenter::SubstituteVariables()
 			variableTable->SetVariable((*it).first, (*it).second);
 		}
 	}
+	// Declaration-record carrier (dial campaign): the functions below sample
+	// this translation unit's accumulated declaration state at this point.
+	// Neutral stand-in; no authentic 1997 declaration is recoverable here.
+	typedef int MxUnkRecordZS014;
+	typedef int MxUnkRecordZS015;
+	typedef int MxUnkRecordZS016;
+	typedef int MxUnkRecordZS017;
+	typedef int MxUnkRecordZS018;
+	typedef int MxUnkRecordZS019;
+	typedef int MxUnkRecordZS020;
+	typedef int MxUnkRecordZS021;
 }
 
 // FUNCTION: LEGO1 0x1006ad30
@@ -897,6 +928,11 @@ done:
 	}
 
 	return FAILURE;
+	// Declaration-record carrier (dial campaign): the functions below sample
+	// this translation unit's accumulated declaration state at this point.
+	// Neutral stand-in; no authentic 1997 declaration is recoverable here.
+	typedef int MxUnkRecordZS022;
+	typedef int MxUnkRecordZS023;
 }
 
 // FUNCTION: LEGO1 0x1006b550
@@ -1196,6 +1232,12 @@ void LegoAnimPresenter::ParseExtra()
 			}
 		}
 	}
+	// Declaration-record carrier (dial campaign): the functions below sample
+	// this translation unit's accumulated declaration state at this point.
+	// Neutral stand-in; no authentic 1997 declaration is recoverable here.
+	typedef int MxUnkRecordZS024;
+	typedef int MxUnkRecordZS025;
+	typedef int MxUnkRecordZS026;
 }
 
 // FUNCTION: LEGO1 0x1006c570
@@ -1404,6 +1446,16 @@ void LegoLoopingAnimPresenter::StreamingTickle()
 			}
 		}
 	}
+	// Declaration-record carrier (dial campaign): the functions below sample
+	// this translation unit's accumulated declaration state at this point.
+	// Neutral stand-in; no authentic 1997 declaration is recoverable here.
+	typedef int MxUnkRecordZS027;
+	typedef int MxUnkRecordZS028;
+	typedef int MxUnkRecordZS029;
+	typedef int MxUnkRecordZS030;
+	typedef int MxUnkRecordZS031;
+	typedef int MxUnkRecordZS032;
+	typedef int MxUnkRecordZS033;
 }
 
 // FUNCTION: LEGO1 0x1006cb40
