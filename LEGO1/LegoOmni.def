@@ -8,7 +8,9 @@
 ; MEASURED (ISLE.EXE vs retail): 486 -> 480 differing bytes.
 LIBRARY      Lego1.dll
 
-DESCRIPTION  "Lego OMNI Windows Dynamic Link Library"
+; LINK 4.20 copies a double-quoted DESCRIPTION into .rdata verbatim, quotes and
+; all; retail's string has none, so 1997 used the single-quoted form.
+DESCRIPTION  'Lego OMNI Windows Dynamic Link Library'
 
 EXPORTS
 
