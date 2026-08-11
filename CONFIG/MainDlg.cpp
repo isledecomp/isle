@@ -1,6 +1,5 @@
 #include "MainDlg.h"
 
-#include "AboutDlg.h"
 #include "config.h"
 #include "res/resource.h"
 
@@ -9,6 +8,71 @@
 
 DECOMP_SIZE_ASSERT(CDialog, 0x60)
 DECOMP_SIZE_ASSERT(CMainDialog, 0x70)
+
+/////////////////////////////////////////////////////////////////////////////
+// CAboutDialog dialog used for App About
+
+// VTABLE: CONFIG 0x00406308
+// VTABLE: CONFIGD 0x0040c3f8
+// SIZE 0x60
+class CAboutDialog : public CDialog {
+public:
+	CAboutDialog();
+	enum {
+		IDD = IDD_ABOUT
+	};
+
+protected:
+	void DoDataExchange(CDataExchange* pDX) override;
+
+protected:
+	DECLARE_MESSAGE_MAP()
+};
+
+// SYNTHETIC: CONFIG 0x00403cb0
+// SYNTHETIC: CONFIGD 0x00409840
+// CAboutDialog::`scalar deleting destructor'
+
+// SYNTHETIC: CONFIG 0x00404100
+// SYNTHETIC: CONFIGD 0x00409890
+// CAboutDialog::~CAboutDialog
+
+// FUNCTION: CONFIG 0x00403d30
+// FUNCTION: CONFIGD 0x004086c7
+// CAboutDialog::_GetBaseMessageMap
+
+// FUNCTION: CONFIG 0x00403d40
+// FUNCTION: CONFIGD 0x004086dc
+// CAboutDialog::GetMessageMap
+
+// GLOBAL: CONFIG 0x00406100
+// GLOBAL: CONFIGD 0x0040c188
+// CAboutDialog::messageMap
+
+// GLOBAL: CONFIG 0x00406108
+// GLOBAL: CONFIGD 0x0040c190
+// CAboutDialog::_messageEntries
+
+DECOMP_SIZE_ASSERT(CAboutDialog, 0x60)
+
+// FUNCTION: CONFIG 0x00403c20
+// FUNCTION: CONFIGD 0x00408630
+CAboutDialog::CAboutDialog() : CDialog(IDD)
+{
+}
+
+// FUNCTION: CONFIG 0x00403d20
+// FUNCTION: CONFIGD 0x004086a3
+void CAboutDialog::DoDataExchange(CDataExchange* pDX)
+{
+	CWnd::DoDataExchange(pDX);
+}
+
+BEGIN_MESSAGE_MAP(CAboutDialog, CDialog)
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// CMainDialog dialog
 
 enum {
 	c_aboutSysCommandId = 16,

@@ -564,7 +564,6 @@ if (ISLE_BUILD_CONFIG)
     LEGO1/mxdirectx/legodxinfo.cpp
     CONFIG/config.cpp
     CONFIG/ConfigCommandLineInfo.cpp
-    CONFIG/AboutDlg.cpp
     CONFIG/MainDlg.cpp
     CONFIG/detectdx5.cpp
     CONFIG/StdAfx.cpp
