@@ -137,7 +137,6 @@ function(add_lego_libraries NAME)
     LEGO1/viewmanager/viewlod.cpp
     LEGO1/viewmanager/viewmanager.cpp
     LEGO1/viewmanager/viewlodlist.cpp
-    LEGO1/viewmanager/viewroi.cpp
   )
   list(APPEND list_targets viewmanager${ARG_SUFFIX})
   set_property(TARGET viewmanager${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "viewmanager$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
@@ -155,8 +154,14 @@ function(add_lego_libraries NAME)
   target_include_directories(mxdirectx${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
   target_link_libraries(mxdirectx${ARG_SUFFIX} PRIVATE ddraw)
 
+  # `viewroi.cpp` is a member of THIS archive, not of viewmanager: retail places
+  # its block strictly between legoroi's and legolod's, and LINK's per-library
+  # scan is contiguous in load order, so ViewROI cannot be pulled from a library
+  # scanned before roi. Measured: module-order inversions 572 -> 496, functions
+  # at retail's exact VA 927 -> 929, reccmp unchanged (4737, zero movers).
   add_library(roi${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/roi/legoroi.cpp
+    LEGO1/viewmanager/viewroi.cpp
     LEGO1/lego/sources/roi/legolod.cpp
   )
   list(APPEND list_targets roi${ARG_SUFFIX})
