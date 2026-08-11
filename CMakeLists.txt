@@ -247,6 +247,14 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/common/mxmediapresenter.cpp
     LEGO1/omni/src/common/mxcompositepresenter.cpp
     LEGO1/omni/src/system/mxcriticalsection.cpp
+    # The action-extra keyword table is an omni-side TU: retail seats its 40
+    # globals at 0x10102048..0x101020e4, i.e. between mxcriticalsection's
+    # .data and mxutilities', and a `lego1.dir` object's .data can never land
+    # there (LINK emits every command-line object before any library member).
+    # `g_parseExtraTokens` -- referenced by mxpresenter.cpp among others --
+    # is what pulls it, immediately ahead of mxutilities' KeyValueStringParse,
+    # reproducing retail's adjacency exactly.
+    LEGO1/define.cpp
     LEGO1/omni/src/common/mxutilities.cpp
     LEGO1/omni/src/common/mxvariabletable.cpp
     LEGO1/omni/src/stream/mxdssubscriber.cpp
@@ -408,7 +416,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp
     # We need to get rid of / refactor the below units into existing/other ones
     LEGO1/main.cpp
-    LEGO1/define.cpp
   )
   list(APPEND list_targets ${NAME})
 
