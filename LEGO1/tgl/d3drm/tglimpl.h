@@ -607,7 +607,7 @@ Result MeshGetTexture(MeshImpl::MeshData*, IDirect3DRMTexture**);
 void MeshDestroy(MeshImpl::MeshDataType);
 
 // No vtable, this is just a simple wrapper around D3DRMIMAGE
-class TglD3DRMIMAGE {
+class TglD3DRMIMAGE : public D3DRMIMAGE {
 public:
 	TglD3DRMIMAGE(
 		int width,
@@ -620,12 +620,11 @@ public:
 	);
 	~TglD3DRMIMAGE();
 
-	Result CreateBuffer(int width, int height, int depth, void* pBuffer, int useBuffer);
+	Result CreateBuffer(int width, int height, int depth, void* pTexels, int useBuffer);
 	void Destroy();
 	Result FillRowsOfTexture(int y, int height, char* content);
 	Result InitializePalette(int paletteSize, PaletteEntry* pEntries);
 
-	D3DRMIMAGE m_image;
 	int m_texelsAllocatedByClient;
 
 	// SYNTHETIC: BETA10 0x1016abb0

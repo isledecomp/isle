@@ -426,21 +426,21 @@ TglD3DRMIMAGE::TglD3DRMIMAGE(
 	PaletteEntry* pEntries
 )
 {
-	m_image.width = 0;
-	m_image.height = 0;
-	m_image.aspectx = 1;
-	m_image.aspecty = 1;
-	m_image.depth = 0;
-	m_image.rgb = 0;
-	m_image.bytes_per_line = 0;
-	m_image.buffer1 = NULL;
-	m_image.buffer2 = NULL;
-	m_image.red_mask = 0xFF;
-	m_image.green_mask = 0xFF;
-	m_image.blue_mask = 0xFF;
-	m_image.alpha_mask = 0xFF;
-	m_image.palette_size = 0;
-	m_image.palette = NULL;
+	D3DRMIMAGE::width = 0;
+	D3DRMIMAGE::height = 0;
+	D3DRMIMAGE::aspectx = 1;
+	D3DRMIMAGE::aspecty = 1;
+	D3DRMIMAGE::depth = 0;
+	D3DRMIMAGE::rgb = 0;
+	D3DRMIMAGE::bytes_per_line = 0;
+	D3DRMIMAGE::buffer1 = NULL;
+	D3DRMIMAGE::buffer2 = NULL;
+	D3DRMIMAGE::red_mask = 0xFF;
+	D3DRMIMAGE::green_mask = 0xFF;
+	D3DRMIMAGE::blue_mask = 0xFF;
+	D3DRMIMAGE::alpha_mask = 0xFF;
+	D3DRMIMAGE::palette_size = 0;
+	D3DRMIMAGE::palette = NULL;
 	m_texelsAllocatedByClient = 0;
 
 	Result result;
@@ -460,10 +460,10 @@ TglD3DRMIMAGE::TglD3DRMIMAGE(
 TglD3DRMIMAGE::~TglD3DRMIMAGE()
 {
 	if (m_texelsAllocatedByClient == 0) {
-		delete[] ((char*) m_image.buffer1);
+		delete[] ((char*) D3DRMIMAGE::buffer1);
 	}
 
-	delete m_image.palette;
+	delete D3DRMIMAGE::palette;
 }
 
 // FUNCTION: BETA10 0x101699a0
@@ -481,7 +481,7 @@ inline static int IsPowerOfTwo(int v)
 
 // FUNCTION: LEGO1 0x100a13e0
 // FUNCTION: BETA10 0x101694a4
-Result TglD3DRMIMAGE::CreateBuffer(int width, int height, int depth, void* pBuffer, int useBuffer)
+Result TglD3DRMIMAGE::CreateBuffer(int width, int height, int depth, void* pTexels, int useBuffer)
 {
 	int bytesPerScanline = width;
 
@@ -493,26 +493,26 @@ Result TglD3DRMIMAGE::CreateBuffer(int width, int height, int depth, void* pBuff
 		return Error;
 	}
 
-	assert(!m_image.buffer1 || (m_image.buffer1 == pBuffer));
+	assert(!D3DRMIMAGE::buffer1 || (D3DRMIMAGE::buffer1 == pTexels));
 
-	m_image.width = width;
-	m_image.height = height;
-	m_image.depth = depth;
-	m_image.bytes_per_line = bytesPerScanline;
+	D3DRMIMAGE::width = width;
+	D3DRMIMAGE::height = height;
+	D3DRMIMAGE::depth = depth;
+	D3DRMIMAGE::bytes_per_line = bytesPerScanline;
 
 	if (!m_texelsAllocatedByClient) {
-		delete[] ((char*) m_image.buffer1);
-		m_image.buffer1 = NULL;
+		delete[] ((char*) D3DRMIMAGE::buffer1);
+		D3DRMIMAGE::buffer1 = NULL;
 	}
 
 	if (useBuffer) {
-		m_image.buffer1 = (char*) pBuffer;
+		D3DRMIMAGE::buffer1 = (char*) pTexels;
 		m_texelsAllocatedByClient = 1;
 	}
 	else {
 		int size = bytesPerScanline * height;
-		m_image.buffer1 = new char[size];
-		memcpy(m_image.buffer1, pBuffer, size);
+		D3DRMIMAGE::buffer1 = new char[size];
+		memcpy(D3DRMIMAGE::buffer1, pTexels, size);
 		m_texelsAllocatedByClient = 0;
 	}
 
@@ -523,11 +523,11 @@ Result TglD3DRMIMAGE::CreateBuffer(int width, int height, int depth, void* pBuff
 // FUNCTION: BETA10 0x1016969c
 Result TglD3DRMIMAGE::FillRowsOfTexture(int destVOffset, int srcHeight, char* pTexels)
 {
-	assert(m_image.buffer1 && pTexels);
-	assert((destVOffset + srcHeight) <= m_image.height);
+	assert(D3DRMIMAGE::buffer1 && pTexels);
+	assert((destVOffset + srcHeight) <= D3DRMIMAGE::height);
 
-	int size = srcHeight * m_image.bytes_per_line;
-	char* pSrc = (char*) m_image.buffer1 + (destVOffset * m_image.bytes_per_line);
+	int size = srcHeight * D3DRMIMAGE::bytes_per_line;
+	char* pSrc = (char*) D3DRMIMAGE::buffer1 + (destVOffset * D3DRMIMAGE::bytes_per_line);
 	memcpy(pSrc, pTexels, size);
 	return Success;
 }
@@ -536,24 +536,24 @@ Result TglD3DRMIMAGE::FillRowsOfTexture(int destVOffset, int srcHeight, char* pT
 // FUNCTION: BETA10 0x10169758
 Result TglD3DRMIMAGE::InitializePalette(int paletteSize, PaletteEntry* pEntries)
 {
-	if (m_image.palette_size != paletteSize) {
-		if (m_image.palette != NULL) {
-			delete m_image.palette;
-			m_image.palette = NULL;
-			m_image.palette_size = 0;
+	if (D3DRMIMAGE::palette_size != paletteSize) {
+		if (D3DRMIMAGE::palette != NULL) {
+			delete D3DRMIMAGE::palette;
+			D3DRMIMAGE::palette = NULL;
+			D3DRMIMAGE::palette_size = 0;
 		}
 		if (paletteSize > 0) {
-			m_image.palette = new D3DRMPALETTEENTRY[paletteSize];
-			m_image.palette_size = paletteSize;
+			D3DRMIMAGE::palette = new D3DRMPALETTEENTRY[paletteSize];
+			D3DRMIMAGE::palette_size = paletteSize;
 		}
 	}
 
 	if (paletteSize > 0) {
 		for (int i = 0; i < paletteSize; i++) {
-			m_image.palette[i].red = pEntries[i].m_red;
-			m_image.palette[i].green = pEntries[i].m_green;
-			m_image.palette[i].blue = pEntries[i].m_blue;
-			m_image.palette[i].flags = D3DRMPALETTE_READONLY;
+			D3DRMIMAGE::palette[i].red = pEntries[i].m_red;
+			D3DRMIMAGE::palette[i].green = pEntries[i].m_green;
+			D3DRMIMAGE::palette[i].blue = pEntries[i].m_blue;
+			D3DRMIMAGE::palette[i].flags = D3DRMPALETTE_READONLY;
 		}
 	}
 

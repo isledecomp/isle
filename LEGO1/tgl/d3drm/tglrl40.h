@@ -435,7 +435,7 @@ inline Result RendererCreateTexture(
 	assert(pImage);
 
 	// TODO: LPDIRECT3DRMTEXTURE2?
-	result = ResultVal(pRenderer->CreateTexture(&pImage->m_image, (LPDIRECT3DRMTEXTURE2*) &rpTexture));
+	result = ResultVal(pRenderer->CreateTexture(pImage, (LPDIRECT3DRMTEXTURE2*) &rpTexture));
 	assert(Succeeded(result));
 	assert((rpTexture->AddRef(), rpTexture->Release()) == 1);
 
@@ -1445,16 +1445,16 @@ inline Result TextureGetBufferAndPalette(
 	TglD3DRMIMAGE* pImage = TextureGetImage(pTexture);
 	assert(pImage);
 
-	*width = pImage->m_image.width;
-	*height = pImage->m_image.height;
-	*depth = pImage->m_image.depth;
-	*pBuffer = pImage->m_image.buffer1;
-	*paletteSize = pImage->m_image.palette_size;
+	*width = pImage->width;
+	*height = pImage->height;
+	*depth = pImage->depth;
+	*pBuffer = pImage->buffer1;
+	*paletteSize = pImage->palette_size;
 
 	for (int i = 0; i < *paletteSize; i++) {
-		pEntries[i][0] = pImage->m_image.palette[i].red;
-		pEntries[i][1] = pImage->m_image.palette[i].green;
-		pEntries[i][2] = pImage->m_image.palette[i].blue;
+		pEntries[i][0] = pImage->palette[i].red;
+		pEntries[i][1] = pImage->palette[i].green;
+		pEntries[i][2] = pImage->palette[i].blue;
 	}
 
 	return Success;
