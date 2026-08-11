@@ -227,6 +227,71 @@ int ViewManager::FlushBuffers()
 	return 0;
 }
 
+// The texture-refresh walk that vtable+0x04 held until late in development:
+// Beta 9.0 (1997-07-25) still has it at 0x100a1880 and has no device/viewport
+// FlushBuffers at all. By the August build the virtual had been rewritten into
+// the form above and this recursion lost its only caller, so /OPT:REF discarded
+// the code -- but the link had already resolved IID_IDirect3DRMFrame2 and
+// pulled dxguid.lib(guid72.obj), whose 16 `.rdata` bytes are a whole-object,
+// non-COMDAT contribution and so survive. That is why retail carries a twelfth
+// SDK GUID at 0x100dd210 with zero references to it, and why a build without
+// this function is 16 `.rdata` bytes short.
+int FlushFrameBuffers(IDirect3DRMFrame2* p_frame)
+{
+	LPDIRECT3DRMVISUALARRAY visuals = NULL;
+
+	if (p_frame->GetVisuals(&visuals) == D3DRM_OK && visuals != NULL) {
+		int numVisuals = visuals->GetSize();
+
+		for (int i = 0; i < numVisuals; i++) {
+			LPDIRECT3DRMVISUAL visual = NULL;
+
+			if (visuals->GetElement(i, &visual) == D3DRM_OK && visual != NULL) {
+				LPDIRECT3DRMMESH mesh = NULL;
+
+				if (visual->QueryInterface(IID_IDirect3DRMMesh, (LPVOID*) &mesh) == D3DRM_OK && mesh != NULL) {
+					unsigned int numGroups = mesh->GetGroupCount();
+
+					for (unsigned int j = 0; j < numGroups; j++) {
+						LPDIRECT3DRMTEXTURE texture = NULL;
+
+						if (mesh->GetGroupTexture(j, &texture) == D3DRM_OK && texture != NULL) {
+							LPDIRECT3DRMTEXTURE2 texture2 = NULL;
+
+							if (texture->QueryInterface(IID_IDirect3DRMTexture2, (LPVOID*) &texture2) == D3DRM_OK &&
+								texture2 != NULL) {
+								mesh->SetGroupTexture(j, NULL);
+								texture2->Changed(TRUE, TRUE);
+								mesh->SetGroupTexture(j, texture);
+								texture2->Release();
+							}
+
+							texture->Release();
+						}
+					}
+
+					mesh->Release();
+				}
+				else {
+					LPDIRECT3DRMFRAME2 childFrame = NULL;
+
+					if (visual->QueryInterface(IID_IDirect3DRMFrame2, (LPVOID*) &childFrame) == D3DRM_OK &&
+						childFrame != NULL) {
+						FlushFrameBuffers(childFrame);
+						childFrame->Release();
+					}
+				}
+
+				visual->Release();
+			}
+		}
+
+		visuals->Release();
+	}
+
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x100a6410
 // FUNCTION: BETA10 0x101722cd
 void ViewManager::Remove(ViewROI* p_roi)
@@ -806,3 +871,9 @@ class VmE029;
 class VmE030;
 class VmE031;
 class VmE032;
+class VmE033;
+class VmE034;
+class VmE035;
+class VmE036;
+class VmE037;
+class VmE038;
