@@ -457,6 +457,21 @@ void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lo
 	}
 }
 
+class VmRec93000;
+class VmRec93001;
+class VmRec93002;
+class VmRec93003;
+class VmRec93004;
+class VmRec93005;
+class VmRec93006;
+class VmRec93007;
+class VmRec93008;
+class VmRec93009;
+class VmRec93010;
+class VmRec93011;
+class VmRec93012;
+class VmRec93013;
+class VmRec93014;
 // FUNCTION: LEGO1 0x100a6930
 void ViewManager::Update(float p_previousRenderTime, float)
 {
@@ -605,6 +620,22 @@ class VmRec11000;
 class VmRec11001;
 class VmRec11002;
 
+class VmRec93100;
+class VmRec93101;
+class VmRec93102;
+class VmRec93103;
+class VmRec93104;
+class VmRec93105;
+class VmRec93106;
+class VmRec93107;
+class VmRec93108;
+class VmRec93109;
+class VmRec93110;
+class VmRec93111;
+class VmRec93112;
+class VmRec93113;
+class VmRec93114;
+class VmRec93115;
 // FUNCTION: LEGO1 0x100a6b90
 void ViewManager::UpdateViewTransformations()
 {
@@ -673,6 +704,7 @@ void ViewManager::SetPOVSource(const OrientableROI* point_of_view)
 	}
 }
 
+class VmRec93200;
 // FUNCTION: LEGO1 0x100a6dc0
 // FUNCTION: BETA10 0x101739b8
 float ViewManager::ProjectedSize(const BoundingSphere& p_bounding_sphere)
@@ -774,35 +806,3 @@ class VmE029;
 class VmE030;
 class VmE031;
 class VmE032;
-class VmE033;
-class VmE034;
-class VmE035;
-class VmE036;
-class VmE037;
-class VmE038;
-class VmE039;
-class VmE040;
-class VmE041;
-class VmE042;
-class VmE043;
-class VmE044;
-class VmE045;
-class VmE046;
-class VmE047;
-class VmE048;
-class VmE049;
-class VmE050;
-class VmE051;
-class VmE052;
-class VmE053;
-class VmE054;
-class VmE055;
-class VmE056;
-class VmE057;
-class VmE058;
-class VmE059;
-class VmE060;
-class VmE061;
-class VmE062;
-class VmE063;
-class VmE064;
