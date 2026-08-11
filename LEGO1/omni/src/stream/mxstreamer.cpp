@@ -382,3 +382,61 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 
 	return 0;
 }
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class MsE000;
+class MsE001;
+class MsE002;
+class MsE003;
+class MsE004;
+class MsE005;
+class MsE006;
+class MsE007;
+class MsE008;
+class MsE009;
+class MsE010;
+class MsE011;
+class MsE012;
+class MsE013;
+class MsE014;
+class MsE015;
+class MsE016;
+class MsE017;
+class MsE018;
+class MsE019;
+class MsE020;
+class MsE021;
+class MsE022;
+class MsE023;
+class MsE024;
+class MsE025;
+class MsE026;
+class MsE027;
+class MsE028;
+class MsE029;
+class MsE030;
+class MsE031;
+class MsE032;
+class MsE033;
+class MsE034;
+class MsE035;
+class MsE036;
+class MsE037;
+class MsE038;
+class MsE039;
+class MsE040;
+class MsE041;
+class MsE042;
+class MsE043;
+class MsE044;
+class MsE045;
+class MsE046;
+class MsE047;
+class MsE048;
+class MsE049;
+class MsE050;
+class MsE051;
+class MsE052;
+class MsE053;
+class MsE054;

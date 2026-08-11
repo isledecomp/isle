@@ -536,6 +536,7 @@ MxResult MxDiskStreamController::FUN_100c8360(MxDSStreamingAction* p_action)
 }
 
 // FUNCTION: LEGO1 0x100c84a0
+// FUNCTION: BETA10 0x10155a05
 void MxDiskStreamController::InsertToList74(MxDSBuffer* p_buffer)
 {
 	AUTOLOCK(m_criticalSection);
@@ -543,7 +544,7 @@ void MxDiskStreamController::InsertToList74(MxDSBuffer* p_buffer)
 }
 
 // FUNCTION: LEGO1 0x100c8540
-// FUNCTION: BETA10 0x10155a05
+// FUNCTION: BETA10 0x10155a8c
 void MxDiskStreamController::FUN_100c8540()
 {
 	AUTOLOCK(m_criticalSection);
