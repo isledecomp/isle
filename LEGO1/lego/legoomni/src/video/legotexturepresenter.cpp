@@ -144,7 +144,7 @@ MxResult LegoTexturePresenter::Read(MxDSChunk& p_chunk)
 		}
 
 		textureName[textureNameLength] = '\0';
-		strlwr(textureName);
+		_strlwr(textureName);
 
 		texture = new LegoTexture();
 		if (texture->Read(&storage, hardwareMode) != SUCCESS) {
