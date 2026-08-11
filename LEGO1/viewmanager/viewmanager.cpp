@@ -381,7 +381,7 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 
 		if (new_lod->GetFlags() & ViewLOD::c_hasMesh) {
 			result = scene->Add(group);
-			assert(Succeeded(result));
+			assert(Tgl::Succeeded(result));
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
 		}
 	}
@@ -393,7 +393,7 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 
 			if (meshBuilder != NULL) {
 				result = group->Remove(meshBuilder);
-				assert(Succeeded(result));
+				assert(Tgl::Succeeded(result));
 			}
 		}
 
@@ -406,7 +406,7 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 
 		if (meshBuilder != NULL) {
 			result = group->Add(meshBuilder);
-			assert(Succeeded(result));
+			assert(Tgl::Succeeded(result));
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
 			p_roi->SetToken(p_lodLevel);
 			return;
@@ -431,11 +431,11 @@ void ViewManager::RemoveROIDetailFromScene(ViewROI* p_from)
 
 		if (meshBuilder != NULL) {
 			result = roiGeometry->Remove(meshBuilder);
-			assert(Succeeded(result));
+			assert(Tgl::Succeeded(result));
 		}
 
 		result = scene->Remove(roiGeometry);
-		assert(Succeeded(result));
+		assert(Tgl::Succeeded(result));
 	}
 
 	p_from->SetToken(ViewROI::c_tokenUnset);

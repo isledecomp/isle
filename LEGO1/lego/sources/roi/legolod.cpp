@@ -340,7 +340,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		Tgl::Result tglResult = m_melems[meshIndex].m_tglMesh->SetShadingModel(shadingModel);
 
 		// clang-format off
-		assert(Succeeded( tglResult ));
+		assert(Tgl::Succeeded( tglResult ));
 		// clang-format on
 
 		if (textureName != NULL) {
@@ -360,14 +360,14 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 
 			tglResult = m_melems[meshIndex].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
 			// clang-format off
-			assert(Succeeded( tglResult ));
+			assert(Tgl::Succeeded( tglResult ));
 			// clang-format on
 
 #ifdef BETA10
 			// This typecast is invalid, `textureInfo` had a different type in BETA10
 			tglResult = m_melems[meshIndex].m_tglMesh->SetTexture((TglImpl::TextureImpl*) textureInfo);
 			// clang-format off
-			assert(Succeeded( tglResult ));
+			assert(Tgl::Succeeded( tglResult ));
 			// clang-format on
 #else
 			LegoTextureInfo::SetGroupTexture(m_melems[meshIndex].m_tglMesh, textureInfo);
@@ -395,7 +395,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			tglResult = m_melems[meshIndex].m_tglMesh->SetColor(red, green, blue, alpha);
 			// clang-format off
 			// LINE: BETA10 0x1018dc72
-			assert(Succeeded( tglResult ));
+			assert(Tgl::Succeeded( tglResult ));
 			// clang-format on
 		}
 
@@ -506,7 +506,7 @@ LegoResult LegoLOD::SetTextureInfo(LegoTextureInfo* p_textureInfo)
 			// This function likely had a different signature in BETA10
 			Tgl::Result tglResult = m_melems[i].m_tglMesh->SetTexture((const Tgl::Texture*) p_textureInfo);
 			// clang-format off
-			assert(Succeeded( tglResult ));
+			assert(Tgl::Succeeded( tglResult ));
 			// clang-format on
 #else
 			LegoTextureInfo::SetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo);
@@ -531,7 +531,7 @@ LegoResult LegoLOD::UpdateTextureInfo(LegoTextureInfo* p_textureInfo)
 			// This function likely had a different signature in BETA10
 			Tgl::Result tglResult = m_melems[i].m_tglMesh->SetTexture((const Tgl::Texture*) p_textureInfo);
 			// clang-format off
-			assert(Succeeded( tglResult ));
+			assert(Tgl::Succeeded( tglResult ));
 			// clang-format on
 #else
 			LegoTextureInfo::SetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo);
