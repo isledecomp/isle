@@ -200,6 +200,11 @@ LegoTreeNode* GetTreeNode(LegoTreeNode* p_node, MxU32 p_index)
 	return result;
 }
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class LuRec000;
+class LuRec001;
+
 // FUNCTION: LEGO1 0x1003e050
 // FUNCTION: BETA10 0x100d3abc
 void CalculateViewFromAnimation(LegoAnimPresenter* p_presenter)
