@@ -529,6 +529,12 @@ LegoPathBoundary* LegoPathController::GetPathBoundary(const char* p_name)
 	return NULL;
 }
 
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class PcM000;
+class PcM001;
+class PcM002;
+
 // FUNCTION: LEGO1 0x10046bb0
 // FUNCTION: BETA10 0x100b75bc
 void LegoPathController::SetWorld(LegoWorld* p_world)
@@ -895,6 +901,35 @@ MxResult LegoPathController::ReadVector(LegoStorage* p_storage, Mx4DPointFloat& 
 }
 
 class VzJp00;
+class VzJp01;
+class VzJp02;
+class VzJp03;
+class VzJp04;
+class VzJp05;
+class VzJp06;
+class VzJp07;
+class VzJp08;
+class VzJp09;
+class VzJp10;
+class VzJp11;
+class VzJp12;
+class VzJp13;
+class VzJp14;
+class VzJp15;
+class VzJp16;
+class VzJp17;
+class VzJp18;
+class VzJp19;
+class VzJp20;
+class VzJp21;
+class VzJp22;
+class VzJp23;
+class VzJp24;
+class VzJp25;
+class VzJp26;
+class VzJp27;
+class VzJp28;
+class VzJp29;
 // FUNCTION: LEGO1 0x10048310
 // FUNCTION: BETA10 0x100b8911
 MxResult LegoPathController::FindPath(
@@ -1131,6 +1166,8 @@ MxResult LegoPathController::FindPath(
 }
 class PcS000;
 class PcS001;
+class PcS002;
+class PcS003;
 
 // FUNCTION: LEGO1 0x1004a240
 // FUNCTION: BETA10 0x100b9160
@@ -1314,37 +1351,3 @@ class PcE025;
 class PcE026;
 class PcE027;
 class PcE028;
-class PcE029;
-class PcE030;
-class PcE031;
-class PcE032;
-class PcE033;
-class PcE034;
-class PcE035;
-class PcE036;
-class PcE037;
-class PcE038;
-class PcE039;
-class PcE040;
-class PcE041;
-class PcE042;
-class PcE043;
-class PcE044;
-class PcE045;
-class PcE046;
-class PcE047;
-class PcE048;
-class PcE049;
-class PcE050;
-class PcE051;
-class PcE052;
-class PcE053;
-class PcE054;
-class PcE055;
-class PcE056;
-class PcE057;
-class PcE058;
-class PcE059;
-class PcE060;
-class PcE061;
-class PcE062;
