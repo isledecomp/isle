@@ -32,6 +32,20 @@ class MxUnkRecord026;
 class MxUnkRecord027;
 
 #include "tglrl40.h"
+class TgA000;
+class TgA001;
+class TgA002;
+class TgA003;
+class TgA004;
+class TgA005;
+class TgA006;
+class TgA007;
+class TgA008;
+class TgA009;
+class TgA010;
+class TgA011;
+class TgA012;
+class TgA013;
 
 #include <assert.h>
 // Declaration-record carrier (dial campaign): samples this translation
@@ -381,6 +395,24 @@ void TextureDestroyCallback(IDirect3DRMObject* pObject, void* pArg)
 	delete pImage;
 	pObject->SetAppData(0);
 }
+class TgB000;
+class TgB001;
+class TgB002;
+class TgB003;
+class TgB004;
+class TgB005;
+class TgB006;
+class TgB007;
+class TgB008;
+class TgB009;
+class TgB010;
+class TgB011;
+class TgB012;
+class TgB013;
+class TgB014;
+class TgB015;
+class TgB016;
+class TgB017;
 
 // FUNCTION: LEGO1 0x100a1330
 // FUNCTION: BETA10 0x101692e1
