@@ -444,6 +444,8 @@ void CMainDialog::OnRadiobuttonTextureHighQuality()
 	UpdateInterface();
 }
 
+DECOMP_SIZE_ASSERT(CConfigApp, 0x108)
+
 // FUNCTION: CONFIG 0x00404790
 // FUNCTION: CONFIGD 0x0040945b
 void CMainDialog::OnCheckboxJoystick()

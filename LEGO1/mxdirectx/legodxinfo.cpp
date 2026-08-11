@@ -231,6 +231,9 @@ int LegoDeviceEnumerate::BETA_1011cc65(int p_idx, char* p_buffer)
 	return -1;
 }
 
+DECOMP_SIZE_ASSERT(MxDriver, 0x190)
+DECOMP_SIZE_ASSERT(Direct3DDeviceInfo, 0x1a4)
+
 // FUNCTION: CONFIG 0x00402860
 // FUNCTION: LEGO1 0x1009d0d0
 // FUNCTION: BETA10 0x1011cdb4
@@ -421,6 +424,9 @@ unsigned char LegoDeviceEnumerate::DriverSupportsRequiredDisplayMode(MxDriver& p
 
 	return FALSE;
 }
+
+DECOMP_SIZE_ASSERT(MxDisplayMode, 0xc)
+DECOMP_SIZE_ASSERT(DeviceModesInfo, 0x17c)
 
 // FUNCTION: CONFIG 0x00402b60
 // FUNCTION: LEGO1 0x1009d3d0
