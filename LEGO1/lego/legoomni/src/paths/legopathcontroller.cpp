@@ -1129,6 +1129,8 @@ MxResult LegoPathController::FindPath(
 
 	return FAILURE;
 }
+class PcS000;
+class PcS001;
 
 // FUNCTION: LEGO1 0x1004a240
 // FUNCTION: BETA10 0x100b9160
@@ -1346,5 +1348,3 @@ class PcE059;
 class PcE060;
 class PcE061;
 class PcE062;
-class PcE063;
-class PcE064;
