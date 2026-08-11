@@ -534,6 +534,15 @@ MxBool LegoAnimMMPresenter::FUN_1004b830()
 {
 	return m_unk0x58 >= e_unk6;
 }
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class MmA000;
+class MmA001;
+class MmA002;
+class MmA003;
+class MmA004;
+class MmA005;
+class MmA006;
 
 // FUNCTION: LEGO1 0x1004b840
 // FUNCTION: BETA10 0x1004d033
@@ -584,10 +593,3 @@ class MxUnkRecordMMP01;
 class MxUnkRecordMMP02;
 class MxUnkRecordMMP03;
 class MxUnkRecordMMP04;
-class MxUnkRecordMMP05;
-class MxUnkRecordMMP06;
-class MxUnkRecordMMP07;
-class MxUnkRecordMMP08;
-class MxUnkRecordMMP09;
-class MxUnkRecordMMP10;
-class MxUnkRecordMMP11;
