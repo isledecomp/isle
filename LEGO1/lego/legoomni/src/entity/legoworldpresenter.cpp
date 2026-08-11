@@ -67,6 +67,16 @@ class WpL063;
 class WpL064;
 class WpL065;
 class WpL066;
+class WpL067;
+class WpL068;
+class WpL069;
+class WpL070;
+class WpL071;
+class WpL072;
+class WpL073;
+class WpL074;
+class WpL075;
+class WpL076;
 #include "legoworldpresenter.h"
 
 #include "define.h"

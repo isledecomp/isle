@@ -10,6 +10,8 @@
 
 // SIZE 0x18
 struct ModelDbPart {
+	void Dump(FILE* p_file);
+	MxResult Write(FILE* p_file);
 	MxResult Read(FILE* p_file);
 
 	MxString m_roiName;          // 0x00
@@ -92,6 +94,8 @@ public:
 // SIZE 0x38
 struct ModelDbModel {
 	void Free();
+	void Dump(FILE* p_file);
+	MxResult Write(FILE* p_file);
 	MxResult Read(FILE* p_file);
 
 	char* m_modelName;       // 0x00
