@@ -641,7 +641,14 @@ if (MSVC_FOR_DECOMP)
 
   if (ISLE_BUILD_CONFIG)
     target_link_options(config PRIVATE "/OPT:REF")
-    target_link_libraries(config PRIVATE mfc42)
+    # Import-descriptor order is library-scan order, and retail CONFIG.EXE's is
+    # DDRAW, MFC42, MSVCRT, KERNEL32, USER32, ADVAPI32. Left implicit, MSVCRT
+    # and KERNEL32 arrive only via /DEFAULTLIB after CMake's standard library
+    # list, which puts USER32 and ADVAPI32 ahead of them. Naming them here --
+    # the same thing `lego1_link_libraries` does for LEGO1, and for the same
+    # reason -- reproduces retail's descriptor order exactly.
+    # MEASURED: .idata differing 1577 -> 1537, CONFIG total 2881 -> 2837.
+    target_link_libraries(config PRIVATE mfc42 msvcrt kernel32)
   endif()
 
   if (ISLE_INCLUDE_ENTROPY)
