@@ -2,6 +2,7 @@
 
 #include <ddraw.h>
 #include <dinput.h>
+#include <dsound.h>
 
 typedef HRESULT(WINAPI* DIRECTDRAWCREATE)(GUID*, LPDIRECTDRAW*, IUnknown*);
 typedef HRESULT(WINAPI* DIRECTINPUTCREATE)(HINSTANCE, DWORD, LPDIRECTINPUT*, IUnknown*);
@@ -254,4 +255,27 @@ void GetDXVersion(LPDWORD pdwDXVersion, LPDWORD pdwDXPlatform)
 	FreeLibrary(DDHinst);
 
 	return;
+}
+
+BOOL Detect3DSound()
+{
+	LPDIRECTSOUND lpDirectSound;
+	DSCAPS caps;
+
+	/*
+	 * If DirectSound will not create at all there is no point asking about
+	 * hardware 3D support.
+	 */
+	if (FAILED(DirectSoundCreate(NULL, &lpDirectSound, NULL))) {
+		return FALSE;
+	}
+
+	caps.dwSize = sizeof(caps);
+	if (FAILED(lpDirectSound->GetCaps(&caps))) {
+		lpDirectSound->Release();
+		return FALSE;
+	}
+
+	lpDirectSound->Release();
+	return caps.dwFlags & DSCAPS_PRIMARY16BIT;
 }
