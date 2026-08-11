@@ -1,3 +1,11 @@
+class VmL000;
+class VmL001;
+class VmL002;
+class VmL003;
+class VmL004;
+class VmL005;
+class VmL006;
+class VmL007;
 #include "viewmanager.h"
 
 #include "mxdirectx/mxstopwatch.h"
