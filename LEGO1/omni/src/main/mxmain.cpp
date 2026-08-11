@@ -479,3 +479,50 @@ void MxOmni::Resume()
 		m_paused = FALSE;
 	}
 }
+
+// Retail places these two constructors immediately after MxOmni::Resume --
+// 0x100b0a00 -> 0x100b0a30 -> 0x100b0b00, contiguous and in this order, inside
+// the span mxmain.cpp.obj occupies -- so they are the tail of THIS translation
+// unit rather than TUs of their own. BETA10 corroborates from the other side:
+// MxOmniCreateFlags::MxOmniCreateFlags sits at 0x10130a1c and
+// MxOmniCreateParam::MxOmniCreateParam at 0x10130b6b, neither 16-aligned, and a
+// separately-placed COMDAT would be. Keeping them as their own .cpp files left
+// them with no first-level referrer, so LINK could only satisfy the .def
+// exports for them in a trailing pass and both landed at the very end of the
+// image instead of here.
+
+DECOMP_SIZE_ASSERT(MxOmniCreateFlags, 0x02)
+
+// FUNCTION: LEGO1 0x100b0a30
+// FUNCTION: BETA10 0x10130a1c
+MxOmniCreateFlags::MxOmniCreateFlags()
+{
+	m_flags1.m_bit0 = TRUE; // CreateObjectFactory
+	m_flags1.m_bit1 = TRUE; // CreateVariableTable
+	m_flags1.m_bit2 = TRUE; // CreateTickleManager
+	m_flags1.m_bit3 = TRUE; // CreateNotificationManager
+	m_flags1.m_bit4 = TRUE; // CreateVideoManager
+	m_flags1.m_bit5 = TRUE; // CreateSoundManager
+	m_flags1.m_bit6 = TRUE; // CreateMusicManager
+	m_flags1.m_bit7 = TRUE; // CreateEventManager
+
+	m_flags2.m_bit1 = TRUE; // CreateTimer
+	m_flags2.m_bit2 = TRUE; // CreateStreamer
+}
+
+DECOMP_SIZE_ASSERT(MxOmniCreateParam, 0x40)
+
+// FUNCTION: LEGO1 0x100b0b00
+// FUNCTION: BETA10 0x10130b6b
+MxOmniCreateParam::MxOmniCreateParam(
+	const char* p_mediaPath,
+	struct HWND__* p_windowHandle,
+	MxVideoParam& p_vparam,
+	MxOmniCreateFlags p_flags
+)
+{
+	this->m_mediaPath = p_mediaPath;
+	this->m_windowHandle = (HWND) p_windowHandle;
+	this->m_videoParam = p_vparam;
+	this->m_createFlags = p_flags;
+}

@@ -233,8 +233,6 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/audio/mxsoundmanager.cpp
     LEGO1/omni/src/main/mxmain.cpp
     LEGO1/omni/src/notify/mxactionnotificationparam.cpp
-    LEGO1/omni/src/main/mxomnicreateflags.cpp
-    LEGO1/omni/src/main/mxomnicreateparam.cpp
     LEGO1/omni/src/common/mxobjectfactory.cpp
     LEGO1/omni/src/audio/mxsoundpresenter.cpp
     LEGO1/omni/src/audio/mxwavepresenter.cpp
@@ -273,7 +271,6 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/video/mxvideoparamflags.cpp
     LEGO1/omni/src/video/mxvideoparam.cpp
     LEGO1/omni/src/video/mxpalette.cpp
-    LEGO1/omni/src/system/mxscheduler.cpp
     LEGO1/omni/src/system/mxthread.cpp
     LEGO1/omni/src/action/mxdsobject.cpp
     LEGO1/omni/src/event/mxeventmanager.cpp

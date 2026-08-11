@@ -1,10 +1,33 @@
 #include "mxthread.h"
 
 #include "decomp.h"
+#include "mxscheduler.h"
 
 #include <process.h>
 
 DECOMP_SIZE_ASSERT(MxThread, 0x1c)
+
+// MxScheduler's two stubs open THIS translation unit rather than one of their
+// own. Retail emits them at 0x100bf4f0 and 0x100bf500 with MxThread::MxThread
+// immediately after at 0x100bf510, and BETA10 has StartMultiTasking's `ret 4`
+// ending at 0x1014753f with MxThread::MxThread beginning at 0x10147540 -- zero
+// bytes of padding between them. Split out, they had no first-level referrer
+// (retail contains no call to either) so LINK could satisfy the .def exports
+// only in a trailing pass, which put mxscheduler.cpp.obj at the very end of the
+// image instead of here, 34 module positions late.
+
+// FUNCTION: LEGO1 0x100bf4f0
+MxScheduler* MxScheduler::GetInstance()
+{
+	// Intentionally empty
+	return 0;
+}
+
+// FUNCTION: LEGO1 0x100bf500
+void MxScheduler::StartMultiTasking(MxULong)
+{
+	// Intentionally empty
+}
 
 // FUNCTION: LEGO1 0x100bf510
 // FUNCTION: BETA10 0x10147540
