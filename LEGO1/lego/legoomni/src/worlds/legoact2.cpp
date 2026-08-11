@@ -299,23 +299,6 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 		case c_notificationEndAction:
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;
-		case c_notificationPathStruct: {
-			MxTrace("trigger %d\n", ((LegoPathStructNotificationParam&) p_param).GetData());
-
-			LegoPathStructNotificationParam& param = (LegoPathStructNotificationParam&) p_param;
-			LegoEntity* entity = (LegoEntity*) param.GetSender();
-
-			if (m_ambulance == NULL) {
-				m_ambulance = FindROI("ambul");
-			}
-
-			if (entity->GetROI() == m_pepper) {
-				HandlePathStruct(param);
-			}
-
-			result = 1;
-			break;
-		}
 		case c_notificationAct2Brick:
 			SoundManager()->GetCacheSoundManager()->Play("28bng", NULL, FALSE);
 
@@ -355,6 +338,23 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 				((LegoPathActor*) m_pepper->GetEntity())->SetActorState(LegoPathActor::c_disabled);
 			}
 			break;
+		case c_notificationPathStruct: {
+			MxTrace("trigger %d\n", ((LegoPathStructNotificationParam&) p_param).GetData());
+
+			LegoPathStructNotificationParam& param = (LegoPathStructNotificationParam&) p_param;
+			LegoEntity* entity = (LegoEntity*) param.GetSender();
+
+			if (m_ambulance == NULL) {
+				m_ambulance = FindROI("ambul");
+			}
+
+			if (entity->GetROI() == m_pepper) {
+				HandlePathStruct(param);
+			}
+
+			result = 1;
+			break;
+		}
 		case c_notificationTransitioned:
 			result = HandleTransitionEnd();
 			break;

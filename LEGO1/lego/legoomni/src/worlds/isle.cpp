@@ -960,6 +960,21 @@ MxLong Isle::HandleTransitionEnd()
 			FALSE
 		);
 		break;
+	case LegoGameState::e_polidoor:
+		m_act1state->m_switchedToArea = TRUE;
+		VariableTable()->SetVariable("VISIBILITY", "Hide Policsta");
+		TransitionToOverlay(
+			IsleScript::c_PoliDoor_Background_Bitmap,
+			JukeboxScript::c_PoliceStation_Music,
+			"LCAMZP1,90",
+			FALSE
+		);
+		break;
+	case LegoGameState::e_garadoor:
+		m_act1state->m_switchedToArea = TRUE;
+		VariableTable()->SetVariable("VISIBILITY", "Hide Gas");
+		TransitionToOverlay(IsleScript::c_GaraDoor_Background_Bitmap, JukeboxScript::c_JBMusic2, "LCAMZG1,90", FALSE);
+		break;
 	case LegoGameState::e_elevride2:
 		TransitionToOverlay(
 			IsleScript::c_ElevRide_Background_Bitmap,
@@ -1004,11 +1019,6 @@ MxLong Isle::HandleTransitionEnd()
 			FALSE
 		);
 		break;
-	case LegoGameState::e_garadoor:
-		m_act1state->m_switchedToArea = TRUE;
-		VariableTable()->SetVariable("VISIBILITY", "Hide Gas");
-		TransitionToOverlay(IsleScript::c_GaraDoor_Background_Bitmap, JukeboxScript::c_JBMusic2, "LCAMZG1,90", FALSE);
-		break;
 	case LegoGameState::e_garageExited:
 		GameState()->SwitchArea(m_destLocation);
 		GameState()->StopArea(LegoGameState::e_previousArea);
@@ -1028,16 +1038,6 @@ MxLong Isle::HandleTransitionEnd()
 		Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		SetAppCursor(e_cursorArrow);
 		SetIsWorldActive(TRUE);
-		break;
-	case LegoGameState::e_polidoor:
-		m_act1state->m_switchedToArea = TRUE;
-		VariableTable()->SetVariable("VISIBILITY", "Hide Policsta");
-		TransitionToOverlay(
-			IsleScript::c_PoliDoor_Background_Bitmap,
-			JukeboxScript::c_PoliceStation_Music,
-			"LCAMZP1,90",
-			FALSE
-		);
 		break;
 	case LegoGameState::e_bike:
 		m_act1state->m_switchedToArea = TRUE;
