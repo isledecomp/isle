@@ -828,13 +828,13 @@ MxResult LegoPathActor::CalculateSpline()
 		direction *= -1.0f;
 	}
 
-	if (SetSpline(start, direction, targetPosition, endDirection) != SUCCESS) {
-		MxTrace("Warning: m_BADuration = %g, roi = %s\n", m_BADuration, m_roi->GetName());
-		return FAILURE;
+	if (SetSpline(start, direction, targetPosition, endDirection) == SUCCESS) {
+		m_traveledDistance = 0.0f;
+		return SUCCESS;
 	}
 
-	m_traveledDistance = 0.0f;
-	return SUCCESS;
+	MxTrace("Warning: m_BADuration = %g, roi = %s\n", m_BADuration, m_roi->GetName());
+	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x1002f650
