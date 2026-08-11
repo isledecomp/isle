@@ -579,8 +579,8 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 
 		MxS32 i;
 
-		MxS32 width = m_waitIndicator->GetWidth();
 		MxS32 height = m_waitIndicator->GetHeight();
+		MxS32 width = m_waitIndicator->GetWidth();
 
 		m_copyRect.left = x;
 		m_copyRect.top = y;
