@@ -227,7 +227,7 @@ void CalculateViewFromAnimation(LegoAnimPresenter* p_presenter)
 			cameraData = data;
 			fov = atof(&data->GetName()[strlen(data->GetName()) - 2]);
 		}
-		else if (!strcmpi(data->GetName(), "TARGET")) {
+		else if (!_strcmpi(data->GetName(), "TARGET")) {
 			targetData = data;
 		}
 	}
@@ -267,34 +267,34 @@ Extra::ActionType MatchActionString(const char* p_str)
 {
 	Extra::ActionType result = Extra::ActionType::e_unknown;
 
-	if (!strcmpi("openram", p_str)) {
+	if (!_strcmpi("openram", p_str)) {
 		result = Extra::ActionType::e_openram;
 	}
-	else if (!strcmpi("opendisk", p_str)) {
+	else if (!_strcmpi("opendisk", p_str)) {
 		result = Extra::ActionType::e_opendisk;
 	}
-	else if (!strcmpi("close", p_str)) {
+	else if (!_strcmpi("close", p_str)) {
 		result = Extra::ActionType::e_close;
 	}
-	else if (!strcmpi("start", p_str)) {
+	else if (!_strcmpi("start", p_str)) {
 		result = Extra::ActionType::e_start;
 	}
-	else if (!strcmpi("stop", p_str)) {
+	else if (!_strcmpi("stop", p_str)) {
 		result = Extra::ActionType::e_stop;
 	}
-	else if (!strcmpi("run", p_str)) {
+	else if (!_strcmpi("run", p_str)) {
 		result = Extra::ActionType::e_run;
 	}
-	else if (!strcmpi("exit", p_str)) {
+	else if (!_strcmpi("exit", p_str)) {
 		result = Extra::ActionType::e_exit;
 	}
-	else if (!strcmpi("enable", p_str)) {
+	else if (!_strcmpi("enable", p_str)) {
 		result = Extra::ActionType::e_enable;
 	}
-	else if (!strcmpi("disable", p_str)) {
+	else if (!_strcmpi("disable", p_str)) {
 		result = Extra::ActionType::e_disable;
 	}
-	else if (!strcmpi("notify", p_str)) {
+	else if (!_strcmpi("notify", p_str)) {
 		result = Extra::ActionType::e_notify;
 	}
 
