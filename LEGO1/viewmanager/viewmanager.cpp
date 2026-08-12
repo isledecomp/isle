@@ -13,6 +13,8 @@ class VmL007;
 #include "viewlod.h"
 
 #include <vec.h>
+
+using namespace Tgl;
 // Declaration-record carrier (dial campaign): samples this translation
 // unit's accumulated declaration state. Neutral stand-in.
 
@@ -381,7 +383,7 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 
 		if (new_lod->GetFlags() & ViewLOD::c_hasMesh) {
 			result = scene->Add(group);
-			assert(Tgl::Succeeded(result));
+			assert(Succeeded(result));
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
 		}
 	}
@@ -393,7 +395,7 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 
 			if (meshBuilder != NULL) {
 				result = group->Remove(meshBuilder);
-				assert(Tgl::Succeeded(result));
+				assert(Succeeded(result));
 			}
 		}
 
@@ -406,7 +408,7 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 
 		if (meshBuilder != NULL) {
 			result = group->Add(meshBuilder);
-			assert(Tgl::Succeeded(result));
+			assert(Succeeded(result));
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
 			p_roi->SetToken(p_lodLevel);
 			return;
@@ -431,11 +433,11 @@ void ViewManager::RemoveROIDetailFromScene(ViewROI* p_from)
 
 		if (meshBuilder != NULL) {
 			result = roiGeometry->Remove(meshBuilder);
-			assert(Tgl::Succeeded(result));
+			assert(Succeeded(result));
 		}
 
 		result = scene->Remove(roiGeometry);
-		assert(Tgl::Succeeded(result));
+		assert(Succeeded(result));
 	}
 
 	p_from->SetToken(ViewROI::c_tokenUnset);
