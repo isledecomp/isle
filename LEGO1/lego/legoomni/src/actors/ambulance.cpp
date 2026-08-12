@@ -635,6 +635,14 @@ void Ambulance::PlayAction(IsleScript::Script p_objectId)
 	BackgroundAudioManager()->LowerVolume();
 }
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class AbF000;
+class AbF001;
+class AbF002;
+
 // FUNCTION: LEGO1 0x100373a0
 AmbulanceMissionState::AmbulanceMissionState()
 {

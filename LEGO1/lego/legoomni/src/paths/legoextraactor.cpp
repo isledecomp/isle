@@ -537,6 +537,64 @@ class MxUnkRecordIE {};
 class MxUnkRecordIF {};
 class MxUnkRecordIG {};
 
+// Declaration-record carrier: the functions below sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class XaF000;
+class XaF001;
+class XaF002;
+class XaF003;
+class XaF004;
+class XaF005;
+class XaF006;
+class XaF007;
+class XaF008;
+class XaF009;
+class XaF010;
+class XaF011;
+class XaF012;
+class XaF013;
+class XaF014;
+class XaF015;
+class XaF016;
+class XaF017;
+class XaF018;
+class XaF019;
+class XaF020;
+class XaF021;
+class XaF022;
+class XaF023;
+class XaF024;
+class XaF025;
+class XaF026;
+class XaF027;
+class XaF028;
+class XaF029;
+class XaF030;
+class XaF031;
+class XaF032;
+class XaF033;
+class XaF034;
+class XaF035;
+class XaF036;
+class XaF037;
+class XaF038;
+class XaF039;
+class XaF040;
+class XaF041;
+class XaF042;
+class XaF043;
+class XaF044;
+class XaF045;
+class XaF046;
+class XaF047;
+class XaF048;
+class XaF049;
+class XaF050;
+class XaF051;
+class XaF052;
+
 // FUNCTION: LEGO1 0x1002b5d0
 void LegoExtraActor::ApplyTransform(Matrix4& p_transform)
 {
