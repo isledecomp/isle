@@ -242,6 +242,37 @@ int LegoDeviceEnumerate::BETA_1011cc65(int p_idx, char* p_buffer)
 DECOMP_SIZE_ASSERT(MxDriver, 0x190)
 DECOMP_SIZE_ASSERT(Direct3DDeviceInfo, 0x1a4)
 
+// Declaration-record carriers (dial campaign): these sample the translation
+// unit's accumulated declaration state at this position.  Neutral stand-ins.
+// LEGO1 only: the CONFIG build of this TU carries its own carrier set below.
+#ifdef MXDIRECTX_FOR_CONFIG
+#else
+class LgD3dA00;
+class LgD3dA01;
+class LgD3dA02;
+class LgD3dA03;
+class LgD3dA04;
+class LgD3dA05;
+class LgD3dA06;
+class LgD3dA07;
+class LgD3dA08;
+class LgD3dA09;
+class LgD3dA10;
+class LgD3dA11;
+class LgD3dA12;
+class LgD3dA13;
+class LgD3dA14;
+class LgD3dA15;
+class LgD3dA16;
+class LgD3dA17;
+class LgD3dA18;
+class LgD3dA19;
+class LgD3dA20;
+class LgD3dA21;
+class LgD3dA22;
+class LgD3dA23;
+#endif
+
 // FUNCTION: CONFIG 0x00402860
 // FUNCTION: LEGO1 0x1009d0d0
 // FUNCTION: BETA10 0x1011cdb4
@@ -374,6 +405,23 @@ int LegoDeviceEnumerate::SupportsCPUID()
 #endif
 	return has_cpuid;
 }
+
+// Declaration-record carriers (dial campaign): these sample the translation
+// unit's accumulated declaration state at this position.  Neutral stand-ins.
+// LEGO1 only: the CONFIG build of this TU carries its own carrier set below.
+#ifdef MXDIRECTX_FOR_CONFIG
+#else
+class LgD3dB00;
+class LgD3dB01;
+class LgD3dB02;
+class LgD3dB03;
+class LgD3dB04;
+class LgD3dB05;
+class LgD3dB06;
+class LgD3dB07;
+class LgD3dB08;
+class LgD3dB09;
+#endif
 
 // FUNCTION: CONFIG 0x004029a0
 // FUNCTION: LEGO1 0x1009d210

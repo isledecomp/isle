@@ -544,9 +544,6 @@ class VmRec93008;
 class VmRec93009;
 class VmRec93010;
 class VmRec93011;
-class VmRec93012;
-class VmRec93013;
-class VmRec93014;
 // FUNCTION: LEGO1 0x100a6930
 void ViewManager::Update(float p_previousRenderTime, float)
 {
@@ -711,6 +708,9 @@ class VmRec93112;
 class VmRec93113;
 class VmRec93114;
 class VmRec93115;
+class VmRec93116;
+class VmRec93117;
+class VmRec93118;
 // FUNCTION: LEGO1 0x100a6b90
 void ViewManager::UpdateViewTransformations()
 {
