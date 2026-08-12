@@ -211,6 +211,14 @@ MxDeviceEnumerate::~MxDeviceEnumerate()
 {
 }
 
+// Declaration-record carrier, CONFIG only: the 1997 CONFIG build reaches this
+// function with a different accumulated declaration state than the LEGO1 build.
+// These two restore the CONFIG register assignment; removing either reverts it.
+#ifdef MXDIRECTX_FOR_CONFIG
+class CfgEnumRecordA;
+class CfgEnumRecordB;
+#endif
+
 // FUNCTION: CONFIG 0x00401770
 // FUNCTION: LEGO1 0x1009c070
 // FUNCTION: BETA10 0x1011dedf
@@ -226,8 +234,17 @@ BOOL MxDeviceEnumerate::EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc
 	driver.m_driverName = NULL;
 	memset(&driver.m_ddCaps, 0, sizeof(driver.m_ddCaps));
 
+	// The two 1997 builds disagree here: CONFIG.EXE schedules the `lpDD` init
+	// ahead of the NULL argument push and keeps the list cursor live across the
+	// insert, LEGO1.DLL does neither. Per-target declaration order reproduces
+	// both. See the CONFIG 0x00401770 / LEGO1 0x1009c070 pair.
+#ifdef MXDIRECTX_FOR_CONFIG
+	LPDIRECTDRAW lpDD = NULL;
+	LPDIRECT3D2 lpDirect3d2 = NULL;
+#else
 	LPDIRECT3D2 lpDirect3d2 = NULL;
 	LPDIRECTDRAW lpDD = NULL;
+#endif
 	MxDriver& newDevice = m_ddInfo.back();
 	HRESULT result = DirectDrawCreate(newDevice.m_guid, &lpDD, NULL);
 
@@ -274,6 +291,13 @@ done:
 
 	return DDENUMRET_OK;
 }
+
+// Declaration-record carrier, CONFIG only: closes the trailing basic block of
+// EnumDirectDrawCallback above (the tail of a function is settled after the
+// following declarations are read).
+#ifdef MXDIRECTX_FOR_CONFIG
+class CfgEnumRecordC;
+#endif
 
 // FUNCTION: CONFIG 0x00401bc0
 // FUNCTION: LEGO1 0x1009c4c0
