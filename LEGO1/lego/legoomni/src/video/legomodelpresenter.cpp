@@ -26,6 +26,7 @@
 // this position. Neutral stand-in pending better evidence.
 class MxUnkRecordYH;
 class MxUnkRecordYI;
+class MxUnkRecordYJ;
 
 DECOMP_SIZE_ASSERT(LegoModelPresenter, 0x6c)
 
@@ -228,9 +229,7 @@ MxResult LegoModelPresenter::CreateROI(
 		p_entity->ClearFlag(LegoEntity::c_managerOwned);
 	}
 	else {
-		list<LegoROI*>* rl = p_world->GetROIList();
-		assert(rl);
-		rl->push_back(m_roi);
+		p_world->GetROIList()->push_back(m_roi);
 	}
 
 	return result;
