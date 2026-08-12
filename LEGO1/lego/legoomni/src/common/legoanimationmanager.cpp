@@ -1331,7 +1331,7 @@ void LegoAnimationManager::FUN_10061010(MxBool p_und)
 // FUNCTION: LEGO1 0x10061010
 void LegoAnimationManager::FUN_10061010(MxBool p_und)
 {
-	MxBool animRunning = FALSE;
+	MxS32 animRunning = FALSE;
 	FUN_10064b50(-1);
 
 	if (m_tranInfoList != NULL) {
@@ -3049,12 +3049,12 @@ void LegoAnimationManager::FUN_10064b50(MxLong p_time)
 		else {
 			float und = (float) (p_time - m_unk0x434) / (float) (m_unk0x438 - m_unk0x434);
 
+			m_unk0x4cc.InterpolateToMatrix(mat, (float) (p_time - m_unk0x434) / 1000.0f);
+
 			float sub[3];
 			sub[0] = (m_unk0x484[3][0] - m_unk0x43c[3][0]) * und;
 			sub[1] = (m_unk0x484[3][1] - m_unk0x43c[3][1]) * und;
 			sub[2] = (m_unk0x484[3][2] - m_unk0x43c[3][2]) * und;
-
-			m_unk0x4cc.InterpolateToMatrix(mat, (float) (p_time - m_unk0x434) / 1000.0f);
 
 			VPV3(mat[3], m_unk0x43c[3], sub);
 			mat[3][3] = 1.0f;
