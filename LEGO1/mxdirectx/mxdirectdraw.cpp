@@ -1151,3 +1151,23 @@ const char* MxDirectDraw::ErrorToString(HRESULT p_error)
 		return "Unrecognized error value.\0";
 	}
 }
+
+// FUNCTION: LEGO1 0x1009efb0
+// FUNCTION: BETA10 0x10122ee2
+DeviceModesInfo::DeviceModesInfo()
+{
+	memset(this, 0, sizeof(*this));
+}
+
+// FUNCTION: LEGO1 0x1009efd0
+// FUNCTION: BETA10 0x10122f0e
+DeviceModesInfo::~DeviceModesInfo()
+{
+	if (m_guid != NULL) {
+		delete m_guid;
+	}
+
+	if (m_modeArray != NULL) {
+		delete[] m_modeArray;
+	}
+}

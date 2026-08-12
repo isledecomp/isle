@@ -620,15 +620,15 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 	}
 }
 
-// FUNCTION: LEGO1 0x1009efb0
-// FUNCTION: BETA10 0x10122ee2
+#ifdef MXDIRECTX_FOR_CONFIG
+// CONFIG.EXE compiles this file without mxdirectdraw.cpp, so it keeps its own
+// copy of the two DeviceModesInfo bodies; LEGO1 takes them from
+// mxdirectdraw.cpp, which is where retail emits them.
 DeviceModesInfo::DeviceModesInfo()
 {
 	memset(this, 0, sizeof(*this));
 }
 
-// FUNCTION: LEGO1 0x1009efd0
-// FUNCTION: BETA10 0x10122f0e
 DeviceModesInfo::~DeviceModesInfo()
 {
 	if (m_guid != NULL) {
@@ -639,3 +639,19 @@ DeviceModesInfo::~DeviceModesInfo()
 		delete[] m_modeArray;
 	}
 }
+#else
+// Declaration-record carrier: the functions above sample the translation
+// unit's accumulated declaration state (see the positional record calculus,
+// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
+// this position. Neutral stand-in pending better evidence.
+class MxUnkRecordSAA;
+class MxUnkRecordSAB;
+class MxUnkRecordSAC;
+class MxUnkRecordSAD;
+class MxUnkRecordSAE;
+class MxUnkRecordSAF;
+class MxUnkRecordSAG;
+class MxUnkRecordSAH;
+class MxUnkRecordSAI;
+class MxUnkRecordSAJ;
+#endif
