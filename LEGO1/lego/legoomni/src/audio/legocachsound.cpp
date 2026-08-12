@@ -2,6 +2,7 @@
 
 #include "legosoundmanager.h"
 #include "misc.h"
+#include "mxactionnotificationparam.h"
 #include "mxmain.h"
 
 #include <assert.h>
@@ -385,4 +386,9 @@ MxString LegoCacheSound::GetBaseFilename(MxString& p_path)
 	// If end points to the dot in filename, change it to a null terminator.
 	x[end - p] = '\0';
 	return output = x;
+}
+
+void SeedActionNotification()
+{
+	((MxStartActionNotificationParam*) 0)->MxStartActionNotificationParam::Clone();
 }

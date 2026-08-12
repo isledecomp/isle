@@ -215,6 +215,254 @@ LegoObjectFactory::LegoObjectFactory()
 	m_idAnimState = MxAtomId("AnimState", e_exact);
 }
 
+// ==== linker-seeding declarations (mirror real signatures; codegen-inert) ====
+class MxStreamChunk;
+class MxDSAction;
+class MxNotificationParam;
+struct MxSmk {
+	static void Destroy(MxSmk* p_mxSmk);
+};
+struct MXIOINFO {
+	~MXIOINFO();
+};
+class MxDSFile {
+public:
+	virtual unsigned long GetStreamBuffersNum();
+};
+class MxSmkPresenter {
+public:
+	virtual void LoadHeader(MxStreamChunk* p_chunk);
+};
+class MxLoopingFlcPresenter {
+public:
+	virtual void NextFrame();
+};
+class MxLoopingSmkPresenter {
+public:
+	virtual void NextFrame();
+};
+extern const char* g_parseExtraTokens;
+unsigned char KeyValueStringParse(char*, const char*, const char*);
+unsigned int ReadData(unsigned char*, unsigned int);
+class MxVariableTable {
+public:
+	void SetVariable(const char*, const char*);
+};
+class MxDSSubscriber {
+public:
+	void FreeDataChunk(MxStreamChunk*);
+};
+class MxPresentationManager {
+public:
+	virtual void StopPresenters();
+};
+class MxTickleThread {
+public:
+	virtual long Run();
+};
+class MxAudioManager {
+public:
+	virtual long Create();
+};
+class MxAutoLock {
+public:
+	~MxAutoLock();
+};
+class MxStreamer {
+public:
+	long Close(const char*);
+};
+class MxDisplaySurface {
+public:
+	void ClearScreen();
+};
+class MxTickleManager {
+public:
+	virtual int GetClientTickleInterval(MxCore*);
+};
+class MxVideoManager {
+public:
+	void SortPresenterList();
+};
+class MxVideoParamFlags {
+public:
+	MxVideoParamFlags();
+};
+class MxVideoParam {
+public:
+	~MxVideoParam();
+};
+class MxPalette {
+public:
+	MxPalette();
+};
+class MxThread {
+public:
+	void Terminate();
+};
+class MxEventManager {
+public:
+	MxEventManager();
+};
+class MxMusicManager {
+public:
+	MxMusicManager();
+};
+class MxStreamController {
+public:
+	MxPresenter* FUN_100c1e70(MxDSAction&);
+};
+class MxMusicPresenter {
+public:
+	virtual long AddToManager();
+};
+class MxMIDIPresenter {
+public:
+	virtual void SetVolume(int);
+};
+class MxLoopingMIDIPresenter {
+public:
+	virtual long PutData();
+};
+class MxEventPresenter {
+public:
+	MxEventPresenter();
+};
+class MxRegionCursor {
+public:
+	virtual ~MxRegionCursor();
+};
+class MxRAMStreamController {
+public:
+	virtual long VTable0x24(MxDSAction*);
+};
+class MxDSBuffer {
+public:
+	virtual ~MxDSBuffer();
+};
+class MxDiskStreamController {
+public:
+	MxDiskStreamController();
+};
+class MxSemaphore {
+public:
+	MxSemaphore();
+};
+class MxDSObjectAction {
+public:
+	MxDSObjectAction();
+};
+class MxDSMediaAction {
+public:
+	virtual ~MxDSMediaAction();
+};
+class MxDSAnim {
+public:
+	MxDSAnim();
+};
+class MxDSSound {
+public:
+	MxDSSound();
+};
+class MxDSEvent {
+public:
+	MxDSEvent();
+};
+class MxDSStill {
+public:
+	MxDSStill();
+};
+class MxDSSerialAction {
+public:
+	MxDSSerialAction();
+};
+class MxDSParallelAction {
+public:
+	MxDSParallelAction();
+};
+class MxDSSelectAction {
+public:
+	MxDSSelectAction();
+};
+class MxDSStreamingAction {
+public:
+	virtual ~MxDSStreamingAction();
+};
+class MxRamStreamProvider0;
+class MxDiskStreamProvider {
+public:
+	MxDiskStreamProvider();
+};
+class MxStartActionNotificationParam {
+public:
+	virtual MxNotificationParam* Clone() const;
+};
+
+void SeedOrder()
+{
+	new MxDiskStreamProvider;
+	ReadData(0, 0);
+	((MxDSStreamingAction*) 0)->MxDSStreamingAction::~MxDSStreamingAction();
+	((MXIOINFO*) 0)->MXIOINFO::~MXIOINFO();
+	((MxDSFile*) 0)->MxDSFile::GetStreamBuffersNum();
+	new MxDSSelectAction;
+	new MxDSParallelAction;
+	new MxDSSerialAction;
+	new MxDSMultiAction;
+	new MxDSStill;
+	new MxDSEvent;
+	new MxDSSound;
+	new MxDSAnim;
+	((MxDSMediaAction*) 0)->MxDSMediaAction::~MxDSMediaAction();
+	new MxDSObjectAction;
+	new MxSemaphore;
+	new MxDiskStreamController;
+	((MxDSBuffer*) 0)->MxDSBuffer::~MxDSBuffer();
+	((MxRAMStreamController*) 0)->MxRAMStreamController::VTable0x24((MxDSAction*) 0);
+	MxSmk::Destroy((MxSmk*) 0);
+	((MxRegionCursor*) 0)->MxRegionCursor::~MxRegionCursor();
+	((MxStreamChunk*) 0)->MxStreamChunk::~MxStreamChunk();
+	new MxEventPresenter;
+	((MxLoopingMIDIPresenter*) 0)->MxLoopingMIDIPresenter::PutData();
+	((MxMIDIPresenter*) 0)->MxMIDIPresenter::SetVolume(0);
+	((MxMusicPresenter*) 0)->MxMusicPresenter::AddToManager();
+	((MxStreamController*) 0)->MxStreamController::FUN_100c1e70(*(MxDSAction*) 0);
+	new MxMusicManager;
+	new MxEventManager;
+	((MxDSObject*) 0)->MxDSObject::SetObjectName((const char*) 0);
+	((MxThread*) 0)->MxThread::Terminate();
+	new MxPalette;
+	((MxVideoParam*) 0)->MxVideoParam::~MxVideoParam();
+	new MxVideoParamFlags;
+	((MxVideoManager*) 0)->MxVideoManager::SortPresenterList();
+	((MxDSChunk*) 0)->MxDSChunk::~MxDSChunk();
+	((MxTickleManager*) 0)->MxTickleManager::GetClientTickleInterval((MxCore*) 0);
+	DecodeFLCFrame(0, 0, 0, 0, 0);
+	new MxBitmap;
+	((MxDisplaySurface*) 0)->MxDisplaySurface::ClearScreen();
+	((MxStillPresenter*) 0)->MxStillPresenter::Clone();
+	((MxStreamer*) 0)->MxStreamer::Close((const char*) 0);
+	((MxAutoLock*) 0)->MxAutoLock::~MxAutoLock();
+	((MxAudioManager*) 0)->MxAudioManager::Create();
+	((MxTickleThread*) 0)->MxTickleThread::Run();
+	((MxPresentationManager*) 0)->MxPresentationManager::StopPresenters();
+	((MxDSSubscriber*) 0)->MxDSSubscriber::FreeDataChunk((MxStreamChunk*) 0);
+	((MxVariableTable*) 0)->MxVariableTable::SetVariable((const char*) 0, (const char*) 0);
+	KeyValueStringParse(0, 0, 0);
+	const char* volatile keep = g_parseExtraTokens;
+	((MxCriticalSection*) 0)->MxCriticalSection::Enter();
+	((MxCompositePresenter*) 0)->MxCompositePresenter::AdvanceSerialAction((MxPresenter*) 0);
+	((MxMediaPresenter*) 0)->MxMediaPresenter::RepeatingTickle();
+	((MxPresenter*) 0)->MxPresenter::Enable(0);
+	((MxLoopingSmkPresenter*) 0)->MxLoopingSmkPresenter::NextFrame();
+	((MxLoopingFlcPresenter*) 0)->MxLoopingFlcPresenter::NextFrame();
+	((MxSmkPresenter*) 0)->MxSmkPresenter::LoadHeader(0);
+	((MxFlcPresenter*) 0)->MxFlcPresenter::LoadHeader(0);
+	((MxVideoPresenter*) 0)->MxVideoPresenter::NextFrame();
+	((MxWavePresenter*) 0)->MxWavePresenter::Pause();
+	((MxSoundPresenter*) 0)->MxSoundPresenter::AddToManager();
+}
+
 // FUNCTION: LEGO1 0x10009a90
 // FUNCTION: BETA10 0x100a1021
 MxCore* LegoObjectFactory::Create(const char* p_name)
