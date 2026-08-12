@@ -4,6 +4,20 @@
 // this position. Neutral stand-in pending better evidence.
 class MxUnkRecordRF {};
 
+class SmF001;
+class SmF002;
+class SmF003;
+class SmF004;
+class SmF005;
+class SmF006;
+class SmF007;
+class SmF008;
+class SmF009;
+class SmF010;
+class SmF011;
+class SmF012;
+class SmF013;
+class SmF014;
 #include "legosoundmanager.h"
 
 #include "legocachesoundmanager.h"
