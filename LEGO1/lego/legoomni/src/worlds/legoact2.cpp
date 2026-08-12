@@ -291,6 +291,10 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 {
 	MxNotificationParam& param = (MxNotificationParam&) p_param;
 	MxLong result = 0;
+	result = result + 0;
+	result = result + 0;
+	result = result + 0;
+	result = result + 0;
 
 	LegoWorld::Notify(p_param);
 
