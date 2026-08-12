@@ -402,6 +402,12 @@ MxResult Act3Cop::FUN_10040350(Act3Ammo& p_ammo, const Vector3&)
 	// recoverable at this position.
 	MxU32 unkRecord0, unkRecord1, unkRecord2, unkRecord3;
 
+	assert(&p_ammo);
+	assert(m_world);
+	assert(m_boundary);
+	assert(m_pathController);
+	assert(m_grec == NULL || m_grec != NULL);
+
 	return FUN_10040360();
 }
 
@@ -426,7 +432,6 @@ MxResult Act3Cop::FUN_10040360()
 		LegoPathBoundary* boundary = a3->m_brickster->GetBoundary();
 
 		grec = new LegoPathEdgeContainer();
-		assert(grec);
 
 		MxFloat local34;
 		if (m_pathController->FindPath(
@@ -450,19 +455,15 @@ MxResult Act3Cop::FUN_10040360()
 
 		for (MxS32 i = 0; i < MAX_DONUTS; i++) {
 			Act3Ammo* donut = &a3->m_donuts[i];
-			assert(donut);
 
 			if (donut->IsValid() && donut->GetActorState() == c_initial) {
 				LegoROI* proi = donut->GetROI();
-				assert(proi);
-
 				MxMatrix locald0 = proi->GetLocal2World();
 				Vector3 local88(locald0[3]);
 				Mx3DPointFloat localec(local88);
 				localec -= local2c;
 
 				LegoPathEdgeContainer* r2 = new LegoPathEdgeContainer();
-				assert(r2);
 
 				MxFloat locald8;
 				LegoPathEdgeContainer *local138, *local134, *local140, *local13c; // unused
@@ -549,7 +550,6 @@ MxResult Act3Cop::FUN_10040360()
 
 			Vector3* v1 = edge->CWVertex(*m_grec->m_boundary);
 			Vector3* v2 = edge->CCWVertex(*m_grec->m_boundary);
-			assert(v1 && v2);
 
 			local128 = *v2;
 			local128 -= *v1;
