@@ -160,7 +160,9 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	LegoU32(*textureIndices)[3] = NULL;
 	LegoTextureInfo* textureInfo = NULL;
 	LegoU8 local4c = 0; // BETA10 only, only written, never read
-	LegoU32 numPolys, numVertices, numTextureIndices, meshIndex;
+	LegoU32 numPolys;
+	LegoU16 numVertices;
+	LegoU32 numTextureIndices, meshIndex;
 	LegoU32 i, indexBackwards, indexForwards, tempNumVertsAndNormals;
 	LegoFloat red, green, blue, alpha;
 	IDirect3DRMMesh* d3dmesh;
