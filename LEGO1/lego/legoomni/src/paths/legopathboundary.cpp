@@ -227,6 +227,19 @@ class RkD1;
 class RkD2;
 class RkD3;
 class RkD4;
+class RkD5;
+class RkD6;
+class RkD7;
+class RkD8;
+class RkD9;
+class RkD10;
+class RkD11;
+class RkD12;
+class RkD13;
+class RkD14;
+class RkD15;
+class RkD16;
+class RkD17;
 
 // FUNCTION: LEGO1 0x10057950
 // FUNCTION: BETA10 0x100b1adc
