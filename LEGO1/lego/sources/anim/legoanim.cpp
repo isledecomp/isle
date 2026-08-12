@@ -1072,7 +1072,9 @@ inline LegoFloat LegoAnimNodeData::Interpolate(
 	LegoFloat p_value2
 )
 {
-	return p_value1 + (p_value2 - p_value1) * (p_time - p_key1.GetTime()) / (p_key2.GetTime() - p_key1.GetTime());
+	LegoFloat delta = p_value2 - p_value1;
+
+	return p_value1 + delta * (p_time - p_key1.GetTime()) / (p_key2.GetTime() - p_key1.GetTime());
 }
 
 inline LegoAnimKey& LegoAnimNodeData::GetKey(LegoU32 p_i, LegoAnimKey* p_keys, LegoU32 p_size)
