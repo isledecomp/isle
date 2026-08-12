@@ -10,11 +10,6 @@ class MxUnkRecordKO {
 	inline void Record4() {}
 	inline void Record5() {}
 	inline void Record6() {}
-	inline void Record7() {}
-	inline void Record8() {}
-	inline void Record9() {}
-	inline void Record10() {}
-	inline void Record11() {}
 };
 
 #include "modeldb.h"
@@ -271,6 +266,18 @@ MxResult ReadModelDbWorlds(FILE* dbf, ModelDbWorld*& newworld, MxS32& p_numWorld
 	newworld = world;
 	p_numWorlds = numWorlds;
 	return SUCCESS;
+}
+
+// Forces the ModelDbPartListCursor destructor group to be emitted at this
+// point in the translation unit rather than after FreeModelDbWorlds.
+void ModelDbPartListRecord(ModelDbPartList* p_partlist)
+{
+	ModelDbPartListCursor cursor(p_partlist);
+	ModelDbPart* part;
+
+	while (cursor.Next(part)) {
+		delete part;
+	}
 }
 
 // FUNCTION: LEGO1 0x10028080

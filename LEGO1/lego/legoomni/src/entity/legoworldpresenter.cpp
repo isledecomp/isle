@@ -77,6 +77,20 @@ class WpL073;
 class WpL074;
 class WpL075;
 class WpL076;
+class WpL077;
+class WpL078;
+class WpL079;
+class WpL080;
+class WpL081;
+class WpL082;
+class WpL083;
+class WpL084;
+class WpL085;
+class WpL086;
+class WpL087;
+class WpL088;
+class WpL089;
+class WpL090;
 #include "legoworldpresenter.h"
 
 #include "define.h"
