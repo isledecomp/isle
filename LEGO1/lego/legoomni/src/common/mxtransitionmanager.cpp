@@ -38,6 +38,7 @@ class MxUnkRecord014;
 // unit's accumulated declaration state. Neutral stand-in.
 class RkC0 {};
 class RkC1 {};
+class RkC2 {};
 
 DECOMP_SIZE_ASSERT(MxTransitionManager, 0x900)
 
@@ -85,8 +86,7 @@ MxResult MxTransitionManager::GetDDrawSurfaceFromVideoManager() // vtable+0x14
 // FUNCTION: BETA10 0x100ec402
 MxResult MxTransitionManager::Tickle()
 {
-	MxULong time = m_animationSpeed + m_systemTime;
-	if (time > timeGetTime()) {
+	if (m_animationSpeed + m_systemTime > timeGetTime()) {
 		return SUCCESS;
 	}
 

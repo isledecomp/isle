@@ -9,8 +9,6 @@
 class MxUnkRecordBW {
 	inline void Record0() {}
 	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
 };
 
 #endif // MXTRANSITIONMANAGERRECORDS_H
