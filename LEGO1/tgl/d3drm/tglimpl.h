@@ -607,18 +607,10 @@ Result MeshGetTexture(MeshImpl::MeshData*, IDirect3DRMTexture**);
 void MeshDestroy(MeshImpl::MeshDataType);
 
 // No vtable, this is just a simple wrapper around D3DRMIMAGE
-class TglD3DRMIMAGE : public D3DRMIMAGE {
+class Image : public D3DRMIMAGE {
 public:
-	TglD3DRMIMAGE(
-		int width,
-		int height,
-		int depth,
-		void* pBuffer,
-		int useBuffer,
-		int paletteSize,
-		PaletteEntry* pEntries
-	);
-	~TglD3DRMIMAGE();
+	Image(int width, int height, int depth, void* pBuffer, int useBuffer, int paletteSize, PaletteEntry* pEntries);
+	~Image();
 
 	Result CreateBuffer(int width, int height, int depth, void* pTexels, int useBuffer);
 	void Destroy();
@@ -628,7 +620,7 @@ public:
 	int m_texelsAllocatedByClient;
 
 	// SYNTHETIC: BETA10 0x1016abb0
-	// TglImpl::TglD3DRMIMAGE::`scalar deleting destructor'
+	// TglImpl::Image::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dbb48
@@ -673,7 +665,7 @@ public:
 
 	friend class RendererImpl;
 
-	static Result SetImage(IDirect3DRMTexture* pSelf, TglD3DRMIMAGE* pImage);
+	static Result SetImage(IDirect3DRMTexture* pSelf, Image* pImage);
 
 private:
 	TextureDataType m_data;

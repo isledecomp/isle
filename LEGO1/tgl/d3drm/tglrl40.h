@@ -431,7 +431,7 @@ inline Result RendererCreateTexture(
 {
 	Result result;
 
-	TglD3DRMIMAGE* pImage = new TglD3DRMIMAGE(width, height, bytesPerPixel, pBuffer, useBuffer, paletteSize, pEntries);
+	Image* pImage = new Image(width, height, bytesPerPixel, pBuffer, useBuffer, paletteSize, pEntries);
 	assert(pImage);
 
 	// TODO: LPDIRECT3DRMTEXTURE2?
@@ -1382,9 +1382,9 @@ inline void MeshImpl::Destroy()
 }
 
 // FUNCTION: BETA10 0x1016f9f0
-inline TglD3DRMIMAGE* TextureGetImage(IDirect3DRMTexture* pTexture)
+inline Image* TextureGetImage(IDirect3DRMTexture* pTexture)
 {
-	return reinterpret_cast<TglD3DRMIMAGE*>(pTexture->GetAppData());
+	return reinterpret_cast<Image*>(pTexture->GetAppData());
 }
 
 // FUNCTION: BETA10 0x1016ee80
@@ -1397,7 +1397,7 @@ inline Result TextureSetTexels(
 	int pTexelsArePersistent
 )
 {
-	TglD3DRMIMAGE* pImage = TextureGetImage(pTexture);
+	Image* pImage = TextureGetImage(pTexture);
 	assert(pImage);
 
 	Result result = pImage->CreateBuffer(width, height, bitsPerTexel, pTexels, pTexelsArePersistent);
@@ -1414,7 +1414,7 @@ inline Result TextureSetTexels(
 // FUNCTION: BETA10 0x1016f160
 inline Result TextureFillRowsOfTexture(IDirect3DRMTexture* pTexture, int y, int height, void* pBuffer)
 {
-	TglD3DRMIMAGE* pImage = TextureGetImage(pTexture);
+	Image* pImage = TextureGetImage(pTexture);
 	assert(pImage);
 
 	Result result = pImage->FillRowsOfTexture(y, height, (char*) pBuffer);
@@ -1442,7 +1442,7 @@ inline Result TextureGetBufferAndPalette(
 	unsigned char (*pEntries)[3]
 )
 {
-	TglD3DRMIMAGE* pImage = TextureGetImage(pTexture);
+	Image* pImage = TextureGetImage(pTexture);
 	assert(pImage);
 
 	*width = pImage->width;
@@ -1463,7 +1463,7 @@ inline Result TextureGetBufferAndPalette(
 // FUNCTION: BETA10 0x1016f730
 inline Result TextureSetPalette(IDirect3DRMTexture* pTexture, int entryCount, PaletteEntry* pEntries)
 {
-	TglD3DRMIMAGE* pImage = TextureGetImage(pTexture);
+	Image* pImage = TextureGetImage(pTexture);
 	assert(pImage);
 
 	pImage->InitializePalette(entryCount, pEntries);

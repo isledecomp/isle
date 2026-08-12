@@ -224,7 +224,7 @@ DECOMP_SIZE_ASSERT(MeshBuilderImpl, 0x08);
 DECOMP_SIZE_ASSERT(D3DRMVERTEX, 0x24);
 DECOMP_SIZE_ASSERT(Mesh, 0x04);
 DECOMP_SIZE_ASSERT(MeshImpl, 0x08);
-DECOMP_SIZE_ASSERT(TglD3DRMIMAGE, 0x40);
+DECOMP_SIZE_ASSERT(Image, 0x40);
 DECOMP_SIZE_ASSERT(ViewportAppData, 0x18);
 
 namespace TglImpl
@@ -358,13 +358,13 @@ Result ViewportPickImpl(
 
 // FUNCTION: LEGO1 0x100a12a0
 // FUNCTION: BETA10 0x10169113
-Result TextureImpl::SetImage(IDirect3DRMTexture* pSelf, TglD3DRMIMAGE* pImage)
+Result TextureImpl::SetImage(IDirect3DRMTexture* pSelf, Image* pImage)
 {
 	Result result;
 	void* appData;
 
 	appData = pImage;
-	assert(reinterpret_cast<TglD3DRMIMAGE*>(appData) == pImage);
+	assert(reinterpret_cast<Image*>(appData) == pImage);
 
 	if (TextureGetImage(pSelf)) {
 		assert(0);
@@ -389,7 +389,7 @@ Result TextureImpl::SetImage(IDirect3DRMTexture* pSelf, TglD3DRMIMAGE* pImage)
 // FUNCTION: BETA10 0x10169278
 void TextureDestroyCallback(IDirect3DRMObject* pObject, void* pArg)
 {
-	TglD3DRMIMAGE* pImage = reinterpret_cast<TglD3DRMIMAGE*>(pObject->GetAppData());
+	Image* pImage = reinterpret_cast<Image*>(pObject->GetAppData());
 	assert(pImage);
 
 	delete pImage;
@@ -416,15 +416,7 @@ class TgB017;
 
 // FUNCTION: LEGO1 0x100a1330
 // FUNCTION: BETA10 0x101692e1
-TglD3DRMIMAGE::TglD3DRMIMAGE(
-	int width,
-	int height,
-	int depth,
-	void* pBuffer,
-	int useBuffer,
-	int paletteSize,
-	PaletteEntry* pEntries
-)
+Image::Image(int width, int height, int depth, void* pBuffer, int useBuffer, int paletteSize, PaletteEntry* pEntries)
 {
 	D3DRMIMAGE::width = 0;
 	D3DRMIMAGE::height = 0;
@@ -457,7 +449,7 @@ TglD3DRMIMAGE::TglD3DRMIMAGE(
 
 // FUNCTION: LEGO1 0x100a13b0
 // FUNCTION: BETA10 0x1016944b
-TglD3DRMIMAGE::~TglD3DRMIMAGE()
+Image::~Image()
 {
 	if (m_texelsAllocatedByClient == 0) {
 		delete[] ((char*) D3DRMIMAGE::buffer1);
@@ -481,7 +473,7 @@ inline static int IsPowerOfTwo(int v)
 
 // FUNCTION: LEGO1 0x100a13e0
 // FUNCTION: BETA10 0x101694a4
-Result TglD3DRMIMAGE::CreateBuffer(int width, int height, int depth, void* pTexels, int useBuffer)
+Result Image::CreateBuffer(int width, int height, int depth, void* pTexels, int useBuffer)
 {
 	int bytesPerScanline = width;
 
@@ -521,7 +513,7 @@ Result TglD3DRMIMAGE::CreateBuffer(int width, int height, int depth, void* pTexe
 
 // FUNCTION: LEGO1 0x100a1510
 // FUNCTION: BETA10 0x1016969c
-Result TglD3DRMIMAGE::FillRowsOfTexture(int destVOffset, int srcHeight, char* pTexels)
+Result Image::FillRowsOfTexture(int destVOffset, int srcHeight, char* pTexels)
 {
 	assert(D3DRMIMAGE::buffer1 && pTexels);
 	assert((destVOffset + srcHeight) <= D3DRMIMAGE::height);
@@ -534,7 +526,7 @@ Result TglD3DRMIMAGE::FillRowsOfTexture(int destVOffset, int srcHeight, char* pT
 
 // FUNCTION: LEGO1 0x100a1550
 // FUNCTION: BETA10 0x10169758
-Result TglD3DRMIMAGE::InitializePalette(int paletteSize, PaletteEntry* pEntries)
+Result Image::InitializePalette(int paletteSize, PaletteEntry* pEntries)
 {
 	if (D3DRMIMAGE::palette_size != paletteSize) {
 		if (D3DRMIMAGE::palette != NULL) {
