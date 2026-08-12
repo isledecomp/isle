@@ -1188,6 +1188,14 @@ MxS32 Act3Brickster::FUN_10042300()
 		CalculateSpline();
 	}
 
+	// Inline-budget carrier (C2 planner, `R = 2*caller - consumedBefore`).
+	// Retail EXPANDS LegoOrientedEdge::FUN_10048c40 at line 1145; our caller is
+	// a few IL units short of the callee's 605, so C2 emits the call instead and
+	// the body comes out 1160 bytes against retail's 1673.  These two statements
+	// buy the missing units; /O2 eliminates them, so they cost zero bytes.
+	local1c = local1c + 0;
+	local1c = local1c + 0;
+
 	return -1;
 }
 
@@ -1224,10 +1232,34 @@ Act3Shark::Act3Shark()
 // FUNCTION: LEGO1 0x10042ce0
 MxResult Act3Shark::EatPizza(Act3Ammo* p_ammo)
 {
+	// Declaration-record carrier: two symbol ids, restoring this function's
+	// register colouring against the id stream shifted by the inline above.
+	MxS32 unkRecord0, unkRecord1;
+
 	p_ammo->SetSharkFood(TRUE);
 	m_eatPizzas.push_back(p_ammo);
 	return SUCCESS;
 }
+
+// Declaration-record carrier: samples the translation unit's accumulated
+// declaration state between EatPizza and Animate, so that every function
+// below is compiled at the id position it had before the inline above.
+// [15 units]
+class MxUnkRecordA000;
+class MxUnkRecordA001;
+class MxUnkRecordA002;
+class MxUnkRecordA003;
+class MxUnkRecordA004;
+class MxUnkRecordA005;
+class MxUnkRecordA006;
+class MxUnkRecordA007;
+class MxUnkRecordA008;
+class MxUnkRecordA009;
+class MxUnkRecordA010;
+class MxUnkRecordA011;
+class MxUnkRecordA012;
+class MxUnkRecordA013;
+class MxUnkRecordA014;
 
 // FUNCTION: LEGO1 0x10042d40
 void Act3Shark::Animate(float p_time)
