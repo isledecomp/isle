@@ -436,6 +436,13 @@ unsigned char LegoDeviceEnumerate::DriverSupportsRequiredDisplayMode(MxDriver& p
 DECOMP_SIZE_ASSERT(MxDisplayMode, 0xc)
 DECOMP_SIZE_ASSERT(DeviceModesInfo, 0x17c)
 
+#ifdef MXDIRECTX_FOR_CONFIG
+class CfgD3d00;
+class CfgD3d01;
+class CfgD3d02;
+class CfgD3d03;
+#endif
+
 // FUNCTION: CONFIG 0x00402b60
 // FUNCTION: LEGO1 0x1009d3d0
 // FUNCTION: BETA10 0x1011d235
