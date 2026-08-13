@@ -633,6 +633,7 @@ void MxDisplaySurface::DrawTransparentRLE(
 	MxU32 skipCount;
 	MxU32 drawCount;
 	MxU32 t;
+	MxU32 rowRemainder;
 
 	if (p_bpp == 16) {
 		// DECOMP: why goto?
@@ -646,7 +647,7 @@ void MxDisplaySurface::DrawTransparentRLE(
 		t = *p_bitmapData++;
 		skipCount += t << 16;
 
-		MxU32 rowRemainder = p_width - count % p_width;
+		rowRemainder = p_width - count % p_width;
 		count += skipCount;
 
 		if (skipCount >= rowRemainder) {
