@@ -354,6 +354,7 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/legovariables.cpp
     LEGO1/lego/legoomni/src/actors/pizza.cpp
     LEGO1/lego/legoomni/src/common/legogamestate.cpp
+    LEGO1/lego/legoomni/src/audio/legocachesoundlist.cpp
     LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp
     LEGO1/lego/legoomni/src/common/legoutils.cpp
     LEGO1/lego/legoomni/src/actors/act3actors.cpp
@@ -362,12 +363,14 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/mxcontrolpresenter.cpp
     LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
     LEGO1/lego/legoomni/src/common/legophoneme.cpp
+    LEGO1/lego/legoomni/src/paths/legoanimpresenterset.cpp
     LEGO1/lego/legoomni/src/paths/legopathctrledge.cpp
     LEGO1/lego/legoomni/src/paths/legopathctrledgeset.cpp
     LEGO1/lego/legoomni/src/paths/legopathactorset.cpp
     LEGO1/lego/legoomni/src/paths/legopathactorsetcompare.cpp
     LEGO1/lego/legoomni/src/paths/legopathactorsetiterator.cpp
     LEGO1/lego/legoomni/src/paths/legoboundaryedge.cpp
+    LEGO1/lego/legoomni/src/paths/legopathctrledgeiterator.cpp
     LEGO1/lego/legoomni/src/paths/legopathctrledgecompare.cpp
     LEGO1/lego/legoomni/src/paths/legopathcontrollerlist.cpp
     LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp
@@ -386,6 +389,7 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
     LEGO1/lego/legoomni/src/actors/act3ammo.cpp
     LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp
+    LEGO1/lego/legoomni/src/paths/legoanimpresentercontainer.cpp
     LEGO1/lego/legoomni/src/paths/legopathboundary.cpp
     LEGO1/lego/legoomni/src/main/legomain.cpp
     LEGO1/lego/legoomni/src/input/legoinputmanager.cpp
