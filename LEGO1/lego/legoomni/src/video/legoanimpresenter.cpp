@@ -349,7 +349,7 @@ void LegoAnimPresenter::CreateManagedActors()
 	if (m_managedActors) {
 		LegoU32 numActors = m_anim->GetNumActors();
 
-		for (LegoU32 i = 0; i < numActors; i++) {
+		for (LegoS32 i = 0; i < numActors; i++) {
 			LegoChar* str = GetVariableOrIdentity(m_anim->GetActorName(i), NULL);
 			LegoU32 actorType = m_anim->GetActorType(i);
 			LegoROI* roi = NULL;
