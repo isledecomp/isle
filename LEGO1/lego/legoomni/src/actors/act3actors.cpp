@@ -423,6 +423,7 @@ MxResult Act3Cop::FUN_10040360()
 	Vector3 local20(local74[2]);
 
 	Mx3DPointFloat local7c;
+	float local18;
 	local7c = a3->m_brickster->GetROI()->GetLocal2World()[3];
 	local7c -= local2c;
 
@@ -451,8 +452,6 @@ MxResult Act3Cop::FUN_10040360()
 	}
 
 	if (grec == NULL) {
-		float local18;
-
 		for (MxS32 i = 0; i < MAX_DONUTS; i++) {
 			Act3Ammo* donut = &a3->m_donuts[i];
 
@@ -874,6 +873,7 @@ MxResult Act3Brickster::FUN_100417c0()
 	m_pInfo = NULL;
 	m_bInfo = NULL;
 	m_unk0x38 = 0;
+	MxS32 i;
 	LegoPathEdgeContainer* grec = NULL;
 	Act3* a3 = (Act3*) m_world;
 
@@ -884,7 +884,7 @@ MxResult Act3Brickster::FUN_100417c0()
 	if (m_unk0x58 < 8 && m_unk0x24 + 5000.0f < m_transformTime) {
 		float local18;
 
-		for (MxS32 i = 0; i < MAX_PIZZAS; i++) {
+		for (i = 0; i < MAX_PIZZAS; i++) {
 			Act3Ammo* pizza = &a3->m_pizzas[i];
 			assert(pizza);
 

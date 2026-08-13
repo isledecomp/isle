@@ -276,6 +276,7 @@ void MxVideoPresenter::PutFrame()
 	MxRect32 rect(MxPoint32(0, 0), MxSize32(GetWidth(), GetHeight()));
 	rect += GetLocation();
 	LPDIRECTDRAWSURFACE ddSurface = displaySurface->GetDirectDrawSurface2();
+	MxRect32* regionRect;
 
 	if (m_action->GetFlags() & MxDSAction::c_bit5) {
 		if (m_surface) {
@@ -313,7 +314,6 @@ void MxVideoPresenter::PutFrame()
 	}
 	else {
 		MxRegionCursor cursor(region);
-		MxRect32* regionRect;
 
 		while ((regionRect = cursor.Next(rect))) {
 			if (regionRect->GetWidth() >= 1 && regionRect->GetHeight() >= 1) {

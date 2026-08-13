@@ -168,6 +168,7 @@ LegoResult LegoROI::Read(
 	LegoStorage* p_storage
 )
 {
+	LegoU32 offset;
 	LegoResult result = FAILURE;
 	LegoU32 i, j;
 	LegoU32 numLODs, surplusLODs;
@@ -257,7 +258,6 @@ LegoResult LegoROI::Read(
 		}
 		else {
 			const LegoChar* roiName = m_name;
-			LegoU32 offset;
 
 			if (p_storage->Read(&offset, sizeof(LegoU32)) != SUCCESS) {
 				goto done;

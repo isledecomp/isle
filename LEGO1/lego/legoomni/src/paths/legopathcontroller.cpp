@@ -950,6 +950,7 @@ MxResult LegoPathController::FindPath(
 		return SUCCESS;
 	}
 
+	LegoOrientedEdge* e;
 	list<LegoBEWithMidpoint> boundaryList;
 	list<LegoBEWithMidpoint>::iterator boundaryListIt;
 
@@ -960,6 +961,7 @@ MxResult LegoPathController::FindPath(
 	LegoPathCtrlEdgeSet pathCtrlEdgeSet(m_pfsE);
 
 	MxFloat minDistance = 999999.0f;
+	float dist;
 
 	// Lexical-scope carrier. The 1997 source carried more statements here than we
 	// have recovered, and their form is constrained rather than guessed: a slot-by-slot
@@ -1008,7 +1010,6 @@ MxResult LegoPathController::FindPath(
 
 			if (otherFace != NULL && edge->BETA_1004a830(*otherFace, p_mask)) {
 				if (p_newBoundary == otherFace) {
-					float dist;
 					if ((dist = edge->DistanceToMidpoint(p_oldPosition) + edge->DistanceToMidpoint(p_newPosition)) <
 						minDistance) {
 						minDistance = dist;
@@ -1043,7 +1044,6 @@ MxResult LegoPathController::FindPath(
 			}
 
 			MxU32 shouldRemove;
-			LegoOrientedEdge* e;
 			LegoPathBoundary* b;
 			LegoPathBoundary* bOther;
 

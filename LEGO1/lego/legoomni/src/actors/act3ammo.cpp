@@ -304,6 +304,7 @@ void Act3Ammo::Animate(float p_time)
 		m_traveledDistance = 0.0f;
 	}
 
+	float radius;
 	MxMatrix transform;
 	MxMatrix additionalTransform;
 
@@ -429,7 +430,7 @@ void Act3Ammo::Animate(float p_time)
 
 				distance -= otherPosition;
 
-				float radius = r->GetWorldBoundingSphere().Radius();
+				radius = r->GetWorldBoundingSphere().Radius();
 				if (distance.LenSquared() <= radius * radius) {
 					MxS32 index = -1;
 					if (sscanf(r->GetName(), "pammo%d", &index) != 1) {
