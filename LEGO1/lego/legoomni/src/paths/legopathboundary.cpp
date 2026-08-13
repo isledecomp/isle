@@ -452,3 +452,41 @@ MxU32 LegoPathBoundary::RemovePresenter(LegoAnimPresenter* p_presenter)
 
 	return 0;
 }
+
+// Declaration-record carrier (dial campaign): samples this translation
+// unit's accumulated declaration state. Neutral stand-in.
+class ZbP000;
+class ZbP001;
+class ZbP002;
+class ZbP003;
+class ZbP004;
+class ZbP005;
+class ZbP006;
+class ZbP007;
+class ZbP008;
+class ZbP009;
+class ZbP010;
+class ZbP011;
+class ZbP012;
+class ZbP013;
+class ZbP014;
+class ZbP015;
+class ZbP016;
+class ZbP017;
+class ZbP018;
+class ZbP019;
+class ZbP020;
+class ZbP021;
+class ZbP022;
+class ZbP023;
+class ZbP024;
+class ZbP025;
+class ZbP026;
+class ZbP027;
+class ZbP028;
+class ZbP029;
+class ZbP030;
+class ZbP031;
+class ZbP032;
+class ZbP033;
+class ZbP034;
