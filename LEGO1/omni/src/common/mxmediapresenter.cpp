@@ -25,6 +25,16 @@ class VpN005;
 
 #include "mxmediapresenter.h"
 
+// Declaration-record carrier (seat A): seated BELOW the block above and
+// ABOVE the remaining includes. That placement is load-bearing -- a carrier
+// at the very head also moves MxStreamChunkList::Compare, which is already
+// exact and which no later seat can reach back to repair. Neutral stand-in.
+class MxUnkRecordMA000;
+class MxUnkRecordMA001;
+class MxUnkRecordMA002;
+class MxUnkRecordMA003;
+class MxUnkRecordMA004;
+
 #include "mxactionnotificationparam.h"
 #include "mxautolock.h"
 #include "mxcompositepresenter.h"
@@ -140,6 +150,38 @@ MxStreamChunk* MxMediaPresenter::CurrentChunk()
 
 	return chunk;
 }
+
+// Declaration-record carrier (seat B): seat A fixes CurrentChunk but moves
+// LoopChunk and RepeatingTickle with it; those two are still reachable from
+// this seat while CurrentChunk no longer is, so this repairs them without
+// undoing seat A. Neutral stand-in.
+class MxUnkRecordMB000;
+class MxUnkRecordMB001;
+class MxUnkRecordMB002;
+class MxUnkRecordMB003;
+class MxUnkRecordMB004;
+class MxUnkRecordMB005;
+class MxUnkRecordMB006;
+class MxUnkRecordMB007;
+class MxUnkRecordMB008;
+class MxUnkRecordMB009;
+class MxUnkRecordMB010;
+class MxUnkRecordMB011;
+class MxUnkRecordMB012;
+class MxUnkRecordMB013;
+class MxUnkRecordMB014;
+class MxUnkRecordMB015;
+class MxUnkRecordMB016;
+class MxUnkRecordMB017;
+class MxUnkRecordMB018;
+class MxUnkRecordMB019;
+class MxUnkRecordMB020;
+class MxUnkRecordMB021;
+class MxUnkRecordMB022;
+class MxUnkRecordMB023;
+class MxUnkRecordMB024;
+class MxUnkRecordMB025;
+class MxUnkRecordMB026;
 
 // FUNCTION: LEGO1 0x100b56b0
 MxStreamChunk* MxMediaPresenter::NextChunk()
