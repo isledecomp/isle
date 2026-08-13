@@ -646,7 +646,7 @@ void MxDisplaySurface::DrawTransparentRLE(
 		t = *p_bitmapData++;
 		skipCount += t << 16;
 
-		MxS32 rowRemainder = p_width - count % p_width;
+		MxU32 rowRemainder = p_width - count % p_width;
 		count += skipCount;
 
 		if (skipCount >= rowRemainder) {
@@ -704,7 +704,7 @@ sixteen_bit:
 		t = *p_bitmapData++;
 		skipCount += t << 16;
 
-		MxS32 rowRemainder = p_width - count % p_width;
+		MxU32 rowRemainder = p_width - count % p_width;
 		count += skipCount;
 
 		if (skipCount >= rowRemainder) {
@@ -738,7 +738,7 @@ sixteen_bit:
 			drawCount -= rowRemainder;
 
 			p_surfaceData += p_pitch - 2 * p_width;
-			MxS32 rows = drawCount / p_width;
+			MxU32 rows = drawCount / p_width;
 
 			for (MxU32 i = 0; i < rows; i++) {
 				// memcpy

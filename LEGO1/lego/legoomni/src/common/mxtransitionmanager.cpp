@@ -572,9 +572,9 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 		// Setup the copy rect
 		MxU32 bytesPerPixel = p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
 		MxS32 y = m_waitIndicator->GetLocation().GetY();
-		MxS32 x = m_waitIndicator->GetLocation().GetX();
+		MxU32 x = m_waitIndicator->GetLocation().GetX();
 
-		MxU32 copyPitch = (p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8) *
+		MxS32 copyPitch = (p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8) *
 						  (m_copyRect.right - m_copyRect.left + 1); // This uses m_copyRect, seemingly erroneously
 
 		MxS32 i;
