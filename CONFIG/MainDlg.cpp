@@ -139,8 +139,8 @@ BOOL CMainDialog::OnInitDialog()
 	info->FUN_1009d210();
 	m_modified = currentConfigApp->ReadRegisterSettings();
 	CListBox* list_3d_devices = (CListBox*) GetDlgItem(IDC_LIST_3DDEVICES);
-	int driver_i = 0;
 	int device_i = 0;
+	int driver_i = 0;
 	int selected = 0;
 
 	for (list<MxDriver>::iterator it_driver = info->m_ddInfo.begin(); it_driver != info->m_ddInfo.end();
