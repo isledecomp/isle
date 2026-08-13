@@ -719,12 +719,12 @@ LegoBool LegoAnimPresenter::VerifyAnimationTree()
 // FUNCTION: BETA10 0x10050071
 MxBool LegoAnimPresenter::VerifyAnimationNode(LegoTreeNode* p_node, LegoROI* p_roi)
 {
-	MxBool result = FALSE;
 	LegoROI* roi = p_roi;
 	LegoChar* varOrName = NULL;
 	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
 	const LegoChar* name = data->GetName();
 	MxS32 i, count;
+	MxBool result = FALSE;
 
 	if (name != NULL && *name != '-') {
 		varOrName = GetVariableOrIdentity(name, p_roi != NULL ? p_roi->GetName() : NULL);
