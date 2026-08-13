@@ -361,8 +361,8 @@ void MxBitmap::BitBltTransparent(
 
 	MxU8* srcStart = p_src->GetStart(p_srcLeft, p_srcTop);
 	MxU8* dstStart = GetStart(p_dstLeft, p_dstTop);
-	MxLong srcStride = -p_width + GetAdjustedStride(p_src);
 	MxLong dstStride = -p_width + GetAdjustedStride(this);
+	MxLong srcStride = -p_width + GetAdjustedStride(p_src);
 	MxS32 w, h;
 
 	for (h = 0; h < p_height; h++) {

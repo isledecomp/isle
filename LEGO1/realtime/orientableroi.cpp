@@ -65,6 +65,7 @@ void OrientableROI::UpdateTransformationRelativeToParent(const Matrix4& p_transf
 	double local2world[4][4];
 	double local2parent[4][4];
 	int i, j;
+	double local_inverse[4][4];
 
 	for (i = 0; i < 4; i++) {
 		for (j = 0; j < 4; j++) {
@@ -73,7 +74,6 @@ void OrientableROI::UpdateTransformationRelativeToParent(const Matrix4& p_transf
 		}
 	}
 
-	double local_inverse[4][4];
 	INVERTMAT4d(local_inverse, local2parent);
 
 	double parent2world[4][4];
@@ -103,6 +103,7 @@ void OrientableROI::GetLocalTransform(Matrix4& p_transform)
 	MxMatrix mat;
 
 	if (m_parentROI != NULL) {
+		double local_inverse[4][4];
 		double local2parent[4][4];
 		unsigned int i, j;
 
@@ -112,7 +113,6 @@ void OrientableROI::GetLocalTransform(Matrix4& p_transform)
 			}
 		}
 
-		double local_inverse[4][4];
 		INVERTMAT4d(local_inverse, local2parent);
 
 		for (i = 0; i < 4; i++) {

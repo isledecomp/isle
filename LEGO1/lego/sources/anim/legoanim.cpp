@@ -608,8 +608,9 @@ LegoAnimNodeData::~LegoAnimNodeData()
 LegoResult LegoAnimNodeData::Read(LegoStorage* p_storage)
 {
 	LegoResult result;
-
 	LegoU32 length;
+	LegoU32 i;
+
 	if ((result = p_storage->Read(&length, sizeof(LegoU32))) != SUCCESS) {
 		return result;
 	}
@@ -625,8 +626,6 @@ LegoResult LegoAnimNodeData::Read(LegoStorage* p_storage)
 		}
 		m_name[length] = '\0';
 	}
-
-	LegoU32 i;
 
 	if ((result = p_storage->Read(&m_numTranslationKeys, sizeof(LegoU16))) != SUCCESS) {
 		return result;

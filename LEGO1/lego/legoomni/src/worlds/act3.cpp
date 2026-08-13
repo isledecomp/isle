@@ -213,11 +213,12 @@ void Act3List::Clear()
 // FUNCTION: LEGO1 0x100720d0
 void Act3List::RemoveByObjectIdOrFirst(MxU32 p_objectId)
 {
+	MxU32 removed = FALSE;
+
 	if (m_cleared) {
 		return;
 	}
 
-	MxU32 removed = FALSE;
 	Act3List::iterator it;
 	// This iterator appears to be unnecessary - maybe left in by accident, or it was used for assertions.
 	// Removing it decreases the match percentage.
