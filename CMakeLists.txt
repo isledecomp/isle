@@ -466,7 +466,6 @@ function(add_lego_libraries NAME)
     omni${ARG_SUFFIX}
     shape${ARG_SUFFIX}
     Vec::Vec
-    dxguid
   )
 
   foreach(tgt IN LISTS list_targets)
@@ -499,6 +498,16 @@ endif()
 # with it. Purely a link-order property: no object changes, and reccmp is
 # unaffected because it masks IAT operands.
 list(APPEND lego1_link_libraries winmm dinput dsound ddraw kernel32 user32 gdi32 d3drm)
+
+# dxguid.lib belongs to that first wave too, not after the game's own static
+# libraries. Retail's .rdata proves it: five GUID objects -- IID_IDirectSound-
+# 3DBuffer, IID_IDirectSound3DListener, GUID_SysKeyboard, IID_IDirect3DRMTexture2
+# and GUID_Key, i.e. exactly the ones LEGO1's own objects reference -- sit at
+# .rdata 0x76c0, roughly 6.7 KB ahead of the seven Direct3D/Direct3DRM GUIDs that
+# only tglrl40/3dmanager pull. Scanning dxguid.lib early reproduces that split:
+# the seven land at retail's exact offsets and the five come within 80 bytes,
+# where before ALL TWELVE sat together 6,744 bytes late.
+list(APPEND lego1_link_libraries dxguid)
 
 if(ISLE_BUILD_LEGO1)
   add_lego_libraries(lego1
