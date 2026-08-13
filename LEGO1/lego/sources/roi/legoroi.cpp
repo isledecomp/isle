@@ -170,7 +170,6 @@ LegoResult LegoROI::Read(
 {
 	LegoU32 offset;
 	LegoResult result = FAILURE;
-	LegoU32 i, j;
 	LegoU32 numLODs, surplusLODs;
 	LegoROI* roi;
 	LegoLOD* lod;
@@ -179,6 +178,7 @@ LegoResult LegoROI::Read(
 	LegoTextureInfo* textureInfo;
 	ViewLODList* lodList;
 	LegoU32 numROIs;
+	LegoU32 i, j;
 	LegoSphere sphere;
 	LegoBox box;
 

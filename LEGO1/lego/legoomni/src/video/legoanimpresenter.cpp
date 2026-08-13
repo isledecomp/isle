@@ -602,11 +602,11 @@ class MxUnkRecordCN {};
 // FUNCTION: BETA10 0x1004fc10
 void LegoAnimPresenter::UpdateStructMapAndROIIndex(LegoAnimStructMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi)
 {
-	LegoROI* roi = p_roi;
+	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
 	LegoChar* und = NULL;
 	LegoChar* und2 = NULL;
-	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
 	const LegoChar* name = data->GetName();
+	LegoROI* roi = p_roi;
 
 	if (name != NULL && *name != '-') {
 		if (*name == '*') {
