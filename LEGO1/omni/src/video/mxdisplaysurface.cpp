@@ -350,8 +350,6 @@ void MxDisplaySurface::VTable0x28(
 	MxS32 p_height
 )
 {
-	MxU8* data;
-
 	if (!GetRectIntersection(
 			p_bitmap->GetBmiWidth(),
 			p_bitmap->GetBmiHeightAbs(),
@@ -375,6 +373,8 @@ void MxDisplaySurface::VTable0x28(
 		m_ddSurface2->Restore();
 		hr = m_ddSurface2->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
 	}
+
+	MxU8* data;
 
 	if (hr != DD_OK) {
 		return;
