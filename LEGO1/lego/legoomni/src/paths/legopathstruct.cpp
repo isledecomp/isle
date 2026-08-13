@@ -86,18 +86,19 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 				PlayCamAnim(p_actor, actualDirection, p_data, TRUE);
 			}
 			break;
-		case c_waypoint: {
+		case c_waypoint:
 			p_actor->SetLastPathStruct(p_data);
 
-			LegoPathStructNotificationParam param(c_notificationPathStruct, p_actor, m_name[2], p_data);
-			p_actor->Notify(param);
+			{
+				LegoPathStructNotificationParam param(c_notificationPathStruct, p_actor, m_name[2], p_data);
+				p_actor->Notify(param);
 
-			LegoWorld* world = CurrentWorld();
-			if (world != NULL) {
-				NotificationManager()->Send(world, param);
+				LegoWorld* world = CurrentWorld();
+				if (world != NULL) {
+					NotificationManager()->Send(world, param);
+				}
 			}
 			break;
-		}
 		case c_deleteAction:
 			HandleAction(m_name, p_data, !(p_invertDirection == FALSE));
 			break;
