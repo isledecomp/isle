@@ -1,3 +1,9 @@
+#ifdef MXDIRECTX_FOR_CONFIG
+// CONFIG-only declaration-record carrier. It must precede the include
+// below, because that is where the compared list node type is declared;
+// seated after it the dial cannot reach these comparisons at all.
+class MxUnkRecordCG001; class MxUnkRecordCG002; class MxUnkRecordCG003; class MxUnkRecordCG004; class MxUnkRecordCG005; class MxUnkRecordCG006; class MxUnkRecordCG007; class MxUnkRecordCG008; class MxUnkRecordCG009; class MxUnkRecordCG010; class MxUnkRecordCG011; class MxUnkRecordCG012; class MxUnkRecordCG013; class MxUnkRecordCG014; class MxUnkRecordCG015; class MxUnkRecordCG016; class MxUnkRecordCG017; class MxUnkRecordCG018; class MxUnkRecordCG019; class MxUnkRecordCG020; class MxUnkRecordCG021; class MxUnkRecordCG022; class MxUnkRecordCG023; class MxUnkRecordCG024; class MxUnkRecordCG025; class MxUnkRecordCG026; class MxUnkRecordCG027; class MxUnkRecordCG028; class MxUnkRecordCG029; class MxUnkRecordCG030; class MxUnkRecordCG031; class MxUnkRecordCG032;
+#endif
 #include "mxdirectxinfo.h"
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
