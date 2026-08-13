@@ -337,3 +337,41 @@ void LegoModelPresenter::ParseExtra()
 		}
 	}
 }
+
+// Declaration-record carrier: LegoModelPresenter::CreateROI(MxDSChunk*) is
+// decided by the declaration state accumulated at the END of the unit -- the
+// three position classes of this TU are {head}, {post-include}, {tail}, and only
+// the tail class reaches CreateROI without dragging its siblings. Neutral
+// stand-in pending better evidence.
+class MxUnkRecordMP000;
+class MxUnkRecordMP001;
+class MxUnkRecordMP002;
+class MxUnkRecordMP003;
+class MxUnkRecordMP004;
+class MxUnkRecordMP005;
+class MxUnkRecordMP006;
+class MxUnkRecordMP007;
+class MxUnkRecordMP008;
+class MxUnkRecordMP009;
+class MxUnkRecordMP010;
+class MxUnkRecordMP011;
+class MxUnkRecordMP012;
+class MxUnkRecordMP013;
+class MxUnkRecordMP014;
+class MxUnkRecordMP015;
+class MxUnkRecordMP016;
+class MxUnkRecordMP017;
+class MxUnkRecordMP018;
+class MxUnkRecordMP019;
+class MxUnkRecordMP020;
+class MxUnkRecordMP021;
+class MxUnkRecordMP022;
+class MxUnkRecordMP023;
+class MxUnkRecordMP024;
+class MxUnkRecordMP025;
+class MxUnkRecordMP026;
+class MxUnkRecordMP027;
+class MxUnkRecordMP028;
+class MxUnkRecordMP029;
+class MxUnkRecordMP030;
+class MxUnkRecordMP031;
