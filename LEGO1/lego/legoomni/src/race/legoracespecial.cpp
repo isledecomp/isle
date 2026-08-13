@@ -191,6 +191,9 @@ MxS32 LegoCarRaceActor::HandleJump(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 	Mx3DPointFloat targetPosition;
 	Mx3DPointFloat destEdgeUnknownVector;
 	Mx3DPointFloat targetDirection;
+	// Shadowed by the two `for (MxS32 i ...)` loops below, but its presence is
+	// what gives the last loop retail's register assignment.
+	MxS32 i;
 
 	if (m_actorState == c_ready) {
 		m_boundary = NULL;
@@ -275,7 +278,7 @@ MxS32 LegoCarRaceActor::HandleJump(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 		}
 		else {
 			// This `for` loop does not exist in BETA10
-			for (MxS32 i = 0; i < 10; i++) {
+			for (i = 0; i < 10; i++) {
 				if (LegoPathController::GetControlEdgeB(i) == p_edge &&
 					LegoPathController::GetControlBoundaryB(i) == m_boundary) {
 					return 0;

@@ -409,6 +409,7 @@ LegoROI* LegoROI::FindChildROI(const LegoChar* p_name, LegoROI* p_roi)
 	assert(p_name);
 	assert(p_roi);
 
+	LegoROI* roi;
 	CompoundObject::iterator it;
 	const LegoChar* name = p_roi->GetName();
 
@@ -419,7 +420,7 @@ LegoROI* LegoROI::FindChildROI(const LegoChar* p_name, LegoROI* p_roi)
 	CompoundObject* comp = p_roi->comp;
 	if (comp != NULL) {
 		for (it = comp->begin(); it != comp->end(); it++) {
-			LegoROI* roi = (LegoROI*) *it;
+			roi = (LegoROI*) *it;
 			name = roi->GetName();
 
 			if (name != NULL && *name != '\0' && !strcmpi(name, p_name)) {
