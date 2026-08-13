@@ -430,6 +430,7 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/paths/legordatapad2.cpp
     LEGO1/lego/legoomni/src/paths/legordatapad3.cpp
     LEGO1/lego/legoomni/src/paths/legordatapad4.cpp
+    LEGO1/lego/legoomni/src/paths/legorelocpad.cpp
   )
   list(APPEND list_targets ${NAME})
 
