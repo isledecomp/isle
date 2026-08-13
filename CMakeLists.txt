@@ -82,7 +82,10 @@ cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libr
 option(ISLE_BUILD_LEGO1 "Build LEGO1.DLL library" ON)
 option(ISLE_BUILD_BETA10 "Build BETA10.DLL library" OFF)
 option(ISLE_INCLUDE_ENTROPY "Build with entropy.h" OFF)
-option(ISLE_ENTROPY_FILENAME "Entropy header filename" "entropy.h")
+# NOTE: must NOT be option() -- option() only creates BOOLs, so the default
+# "entropy.h" was coerced to OFF and the force-include became /FI<root>/OFF,
+# failing every compile with C1083 while callers read the stale DLL as a score.
+set(ISLE_ENTROPY_FILENAME "entropy.h" CACHE STRING "Entropy header filename")
 option(ISLE_BYTE_IDENTICAL "Build for byte-identity with the retail binaries: emit no debug information, so the image carries no DEBUG data directory (the originals have none). Produces no PDB, so reccmp cannot be used on such a build - configure it in a SEPARATE build directory and keep the default one for reccmp work." OFF)
 
 if(NOT (ISLE_BUILD_LEGO1 OR ISLE_BUILD_BETA10))
@@ -679,14 +682,26 @@ if (MSVC_FOR_DECOMP)
 
   if (ISLE_INCLUDE_ENTROPY)
     message(STATUS "Using entropy file: ${ISLE_ENTROPY_FILENAME}")
+    set(_entropy_hdr "${PROJECT_SOURCE_DIR}/${ISLE_ENTROPY_FILENAME}")
+    # A /FI force-include is NOT in the dependency graph, so editing the entropy
+    # header rebuilds NOTHING and the next score is silently stale.  Declare it
+    # as an explicit object dependency of every source it is forced into.
+    function(isle_force_include tgt hdr)
+      target_compile_options(${tgt} PRIVATE /FI${hdr})
+      get_target_property(_srcs ${tgt} SOURCES)
+      if(_srcs)
+        set_property(SOURCE ${_srcs} TARGET_DIRECTORY ${tgt}
+                     APPEND PROPERTY OBJECT_DEPENDS "${hdr}")
+      endif()
+    endfunction()
     foreach(tgt IN LISTS lego1_targets beta10_targets)
-      target_compile_options(${tgt} PRIVATE /FI${PROJECT_SOURCE_DIR}/${ISLE_ENTROPY_FILENAME})
+      isle_force_include(${tgt} "${_entropy_hdr}")
     endforeach()
     if (TARGET isle)
-      target_compile_options(isle PRIVATE /FI${PROJECT_SOURCE_DIR}/${ISLE_ENTROPY_FILENAME})
+      isle_force_include(isle "${_entropy_hdr}")
     endif()
     if (TARGET config)
-      target_compile_options(config PRIVATE /FI${PROJECT_SOURCE_DIR}/${ISLE_ENTROPY_FILENAME})
+      isle_force_include(config "${_entropy_hdr}")
     endif()
   endif()
 
