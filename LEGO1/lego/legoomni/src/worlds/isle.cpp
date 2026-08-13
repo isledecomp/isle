@@ -1356,8 +1356,8 @@ Act1State::Act1State()
 	m_playingFloor2Animation = FALSE;
 	m_cptClickDialogue = Playlist((MxU32*) g_cptClickDialogue, sizeOfArray(g_cptClickDialogue), Playlist::e_loop);
 	m_currentCptClickDialogue = IsleScript::c_noneIsle;
-	m_switchedToArea = FALSE;
 	m_planeActive = FALSE;
+	m_switchedToArea = FALSE;
 	m_playedExitExplanation = FALSE;
 	m_helicopterWindshield = NULL;
 	m_helicopterJetLeft = NULL;
