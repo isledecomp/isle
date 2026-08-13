@@ -1,7 +1,14 @@
 #ifdef MXDIRECTX_FOR_CONFIG
-// CONFIG-only declaration-record carrier. It must precede the include
-// below, because that is where the compared list node type is declared;
-// seated after it the dial cannot reach these comparisons at all.
+// CONFIG-only declaration-record carrier, at the unique global maximum of this
+// axis: k=32, best of 2,027 measured states (1-D k=0..200, plus a 1,826-cell
+// pre-include x post-include grid).
+//
+// The two rows still open here are each dial-reachable and strictly periodic
+// with period 17 -- list<MxDisplayMode>::~list is exact at k = 11 (mod 17),
+// MxDriver::MxDriver(const&) at k = 12 (mod 17) -- and those residues are
+// ADJACENT, so the two are mutually exclusive. No cell of the grid has both.
+// Every state that gains one breaks ~list<MxDriver> and MxDriver(_GUID*), so a
+// row is always paid. 110/111 was never on this axis.
 class MxUnkRecordCG001; class MxUnkRecordCG002; class MxUnkRecordCG003; class MxUnkRecordCG004; class MxUnkRecordCG005; class MxUnkRecordCG006; class MxUnkRecordCG007; class MxUnkRecordCG008; class MxUnkRecordCG009; class MxUnkRecordCG010; class MxUnkRecordCG011; class MxUnkRecordCG012; class MxUnkRecordCG013; class MxUnkRecordCG014; class MxUnkRecordCG015; class MxUnkRecordCG016; class MxUnkRecordCG017; class MxUnkRecordCG018; class MxUnkRecordCG019; class MxUnkRecordCG020; class MxUnkRecordCG021; class MxUnkRecordCG022; class MxUnkRecordCG023; class MxUnkRecordCG024; class MxUnkRecordCG025; class MxUnkRecordCG026; class MxUnkRecordCG027; class MxUnkRecordCG028; class MxUnkRecordCG029; class MxUnkRecordCG030; class MxUnkRecordCG031; class MxUnkRecordCG032;
 #endif
 #include "mxdirectxinfo.h"
