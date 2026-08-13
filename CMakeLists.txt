@@ -363,7 +363,16 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
     LEGO1/lego/legoomni/src/common/legophoneme.cpp
     LEGO1/lego/legoomni/src/paths/legopathctrledge.cpp
+    LEGO1/lego/legoomni/src/paths/legopathctrledgeset.cpp
+    LEGO1/lego/legoomni/src/paths/legopathactorset.cpp
+    LEGO1/lego/legoomni/src/paths/legopathactorsetcompare.cpp
+    LEGO1/lego/legoomni/src/paths/legopathactorsetiterator.cpp
+    LEGO1/lego/legoomni/src/paths/legoboundaryedge.cpp
+    LEGO1/lego/legoomni/src/paths/legopathctrledgecompare.cpp
+    LEGO1/lego/legoomni/src/paths/legopathcontrollerlist.cpp
     LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp
+    LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp
+    LEGO1/lego/legoomni/src/paths/legobewithmidpointcomparator.cpp
     LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp
     LEGO1/lego/legoomni/src/audio/lego3dwavepresenter.cpp
     LEGO1/lego/legoomni/src/common/legoanimmmpresenter.cpp
