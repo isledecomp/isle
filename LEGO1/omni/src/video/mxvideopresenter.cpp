@@ -273,8 +273,7 @@ void MxVideoPresenter::PutFrame()
 {
 	MxDisplaySurface* displaySurface = MVideoManager()->GetDisplaySurface();
 	MxRegion* region = MVideoManager()->GetRegion();
-	MxRect32 rect(MxPoint32(0, 0), MxSize32(GetWidth(), GetHeight()));
-	rect += GetLocation();
+	MxRect32 rect(MxPoint32(GetX(), GetY()), MxSize32(GetWidth(), GetHeight()));
 	LPDIRECTDRAWSURFACE ddSurface = displaySurface->GetDirectDrawSurface2();
 	MxRect32* regionRect;
 
