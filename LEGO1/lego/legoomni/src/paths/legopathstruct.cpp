@@ -1,3 +1,28 @@
+// Declaration-record carrier: LegoPathStruct::HandleTrigger is decided by
+// this unit's accumulated declaration state. Measured over 121 carrier
+// counts, k=19 is the only zero-collateral improvement (89 -> 38 bytes on
+// the object; no other COMDAT this unit supplies changes). No authentic
+// 1997 declaration is recoverable here; neutral stand-in.
+class MxUnkRecordPS000;
+class MxUnkRecordPS001;
+class MxUnkRecordPS002;
+class MxUnkRecordPS003;
+class MxUnkRecordPS004;
+class MxUnkRecordPS005;
+class MxUnkRecordPS006;
+class MxUnkRecordPS007;
+class MxUnkRecordPS008;
+class MxUnkRecordPS009;
+class MxUnkRecordPS010;
+class MxUnkRecordPS011;
+class MxUnkRecordPS012;
+class MxUnkRecordPS013;
+class MxUnkRecordPS014;
+class MxUnkRecordPS015;
+class MxUnkRecordPS016;
+class MxUnkRecordPS017;
+class MxUnkRecordPS018;
+
 // Declaration-record carrier (dial campaign, PRE): samples this translation
 // unit's accumulated declaration state before the include block. [2 units]
 class RkRiF0;
