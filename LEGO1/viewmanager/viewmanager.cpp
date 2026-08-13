@@ -478,6 +478,7 @@ class VmRec9027;
 // FUNCTION: BETA10 0x1017297f
 void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lodLevel)
 {
+	float projectedSize;
 	assert(p_from);
 
 	if (!p_from->GetVisibility() && p_lodLevel != ViewROI::c_tokenInvisible) {
@@ -488,7 +489,7 @@ void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lo
 
 		if (p_lodLevel == ViewROI::c_tokenUnset) {
 			if (p_from->GetWorldBoundingSphere().Radius() > 0.001F) {
-				float projectedSize = ProjectedSize(p_from->GetWorldBoundingSphere());
+				projectedSize = ProjectedSize(p_from->GetWorldBoundingSphere());
 
 				if (projectedSize < seconds_allowed * g_viewDistance) {
 					if (p_from->GetToken() != ViewROI::c_tokenInvisible) {

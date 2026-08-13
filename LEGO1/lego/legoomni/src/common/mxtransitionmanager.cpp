@@ -229,6 +229,7 @@ void MxTransitionManager::DissolveTransition()
 	}
 
 	// Run one tick of the animation
+	MxS32 col;
 	DDSURFACEDESC ddsd;
 	memset(&ddsd, 0, sizeof(ddsd));
 	ddsd.dwSize = sizeof(ddsd);
@@ -242,7 +243,7 @@ void MxTransitionManager::DissolveTransition()
 	if (res == DD_OK) {
 		SubmitCopyRect(&ddsd);
 
-		for (MxS32 col = 0; col < 640; col++) {
+		for (col = 0; col < 640; col++) {
 			// Select 16 columns on each tick
 			if (m_animationTimer * 16 > m_columnOrder[col]) {
 				continue;
@@ -559,6 +560,7 @@ void MxTransitionManager::SubmitCopyRect(LPDDSURFACEDESC p_ddsc)
 // FUNCTION: LEGO1 0x1004c580
 void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 {
+	MxS32 y;
 	// Check if the copy rect is setup
 	if (m_copyFlags.m_bit0 == FALSE || m_waitIndicator == NULL) {
 		return;
@@ -571,7 +573,7 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 	if (m_waitIndicator->GetCurrentTickleState() >= MxPresenter::e_streaming) {
 		// Setup the copy rect
 		MxU32 bytesPerPixel = p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
-		MxS32 y = m_waitIndicator->GetLocation().GetY();
+		y = m_waitIndicator->GetLocation().GetY();
 		MxU32 x = m_waitIndicator->GetLocation().GetX();
 
 		MxS32 copyPitch = (p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8) *
