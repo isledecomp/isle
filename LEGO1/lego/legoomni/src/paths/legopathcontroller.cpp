@@ -164,9 +164,6 @@ const char* LegoPathController::g_ctrlBoundariesNamesB[] = {
 // GLOBAL: LEGO1 0x100f4358
 LegoPathController::CtrlBoundary* LegoPathController::g_ctrlBoundariesB = NULL;
 
-// GLOBAL: LEGO1 0x100f435c
-LegoPathController::CtrlEdge* LegoPathController::g_ctrlEdgesB = NULL;
-
 // FUNCTION: LEGO1 0x10044f40
 // FUNCTION: BETA10 0x100b6860
 LegoPathController::LegoPathController()

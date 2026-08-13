@@ -362,6 +362,8 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/mxcontrolpresenter.cpp
     LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
     LEGO1/lego/legoomni/src/common/legophoneme.cpp
+    LEGO1/lego/legoomni/src/paths/legopathctrledge.cpp
+    LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp
     LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp
     LEGO1/lego/legoomni/src/audio/lego3dwavepresenter.cpp
     LEGO1/lego/legoomni/src/common/legoanimmmpresenter.cpp
