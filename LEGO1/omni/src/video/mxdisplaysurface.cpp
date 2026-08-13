@@ -147,8 +147,8 @@ MxResult MxDisplaySurface::Init(
 // FUNCTION: BETA10 0x1013f7f1
 MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 {
-	DDSURFACEDESC ddsd;
 	MxResult result = FAILURE;
+	DDSURFACEDESC ddsd;
 	LPDIRECTDRAW lpDirectDraw = MVideoManager()->GetDirectDraw();
 	HWND hWnd = MxOmni::GetInstance()->GetWindowHandle();
 
