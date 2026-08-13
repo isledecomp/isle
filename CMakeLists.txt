@@ -426,6 +426,10 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/legoactors.cpp
     LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
     LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp
+    LEGO1/lego/legoomni/src/paths/legordatapad1.cpp
+    LEGO1/lego/legoomni/src/paths/legordatapad2.cpp
+    LEGO1/lego/legoomni/src/paths/legordatapad3.cpp
+    LEGO1/lego/legoomni/src/paths/legordatapad4.cpp
   )
   list(APPEND list_targets ${NAME})
 
