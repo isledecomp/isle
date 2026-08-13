@@ -634,3 +634,14 @@ TowTrackMissionState::TowTrackMissionState()
 	m_niHighScore = 0;
 	m_laHighScore = 0;
 }
+
+// Emission trigger: retail's towtrack.cpp.obj emits MxBitmap::VTable0x28 as its
+// last COMDAT (0x1004e0d0). A qualified call under inline_depth(0) materialises
+// the body; /OPT:REF discards this stub, leaving only the COMDAT in the image.
+#pragma inline_depth(0)
+MxS32 TowTrackBitmapEmitter(MxBitmap* p_bitmap)
+{
+	return p_bitmap->MxBitmap::VTable0x28(0);
+}
+#pragma inline_depth()
+class MxUnkRecord004 {};

@@ -573,8 +573,10 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 	if (m_waitIndicator->GetCurrentTickleState() >= MxPresenter::e_streaming) {
 		// Setup the copy rect
 		MxU32 bytesPerPixel = p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
-		y = m_waitIndicator->GetLocation().GetY();
-		MxU32 x = m_waitIndicator->GetLocation().GetX();
+		MxPoint32 loc;
+		loc = m_waitIndicator->GetLocation();
+		y = loc.GetY();
+		MxU32 x = loc.GetX();
 
 		MxS32 copyPitch = (p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8) *
 						  (m_copyRect.right - m_copyRect.left + 1); // This uses m_copyRect, seemingly erroneously
@@ -618,8 +620,8 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 			m_waitIndicator->GetBitmap(),
 			0,
 			0,
-			m_waitIndicator->GetLocation().GetX(),
-			m_waitIndicator->GetLocation().GetY(),
+			m_waitIndicator->GetX(),
+			m_waitIndicator->GetY(),
 			m_waitIndicator->GetWidth(),
 			m_waitIndicator->GetHeight(),
 			und
@@ -632,8 +634,8 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 			m_waitIndicator->GetBitmap(),
 			0,
 			0,
-			m_waitIndicator->GetLocation().GetX(),
-			m_waitIndicator->GetLocation().GetY(),
+			m_waitIndicator->GetX(),
+			m_waitIndicator->GetY(),
 			m_waitIndicator->GetWidth(),
 			m_waitIndicator->GetHeight()
 		);
