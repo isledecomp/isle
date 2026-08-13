@@ -1,3 +1,79 @@
+// Declaration-record carrier: this unit's accumulated declaration state
+// decides the operand order and register roles of the code below (see the
+// positional record calculus). No authentic 1997 declaration is recoverable
+// at this position; neutral stand-in pending better evidence.
+class MxUnkRecordCP000;
+class MxUnkRecordCP001;
+class MxUnkRecordCP002;
+class MxUnkRecordCP003;
+class MxUnkRecordCP004;
+class MxUnkRecordCP005;
+class MxUnkRecordCP006;
+class MxUnkRecordCP007;
+class MxUnkRecordCP008;
+class MxUnkRecordCP009;
+class MxUnkRecordCP010;
+class MxUnkRecordCP011;
+class MxUnkRecordCP012;
+class MxUnkRecordCP013;
+class MxUnkRecordCP014;
+class MxUnkRecordCP015;
+class MxUnkRecordCP016;
+class MxUnkRecordCP017;
+class MxUnkRecordCP018;
+class MxUnkRecordCP019;
+class MxUnkRecordCP020;
+class MxUnkRecordCP021;
+class MxUnkRecordCP022;
+class MxUnkRecordCP023;
+class MxUnkRecordCP024;
+class MxUnkRecordCP025;
+class MxUnkRecordCP026;
+class MxUnkRecordCP027;
+class MxUnkRecordCP028;
+class MxUnkRecordCP029;
+class MxUnkRecordCP030;
+class MxUnkRecordCP031;
+class MxUnkRecordCP032;
+class MxUnkRecordCP033;
+class MxUnkRecordCP034;
+class MxUnkRecordCP035;
+class MxUnkRecordCP036;
+class MxUnkRecordCP037;
+class MxUnkRecordCP038;
+class MxUnkRecordCP039;
+class MxUnkRecordCP040;
+class MxUnkRecordCP041;
+class MxUnkRecordCP042;
+class MxUnkRecordCP043;
+class MxUnkRecordCP044;
+class MxUnkRecordCP045;
+class MxUnkRecordCP046;
+class MxUnkRecordCP047;
+class MxUnkRecordCP048;
+class MxUnkRecordCP049;
+class MxUnkRecordCP050;
+class MxUnkRecordCP051;
+class MxUnkRecordCP052;
+class MxUnkRecordCP053;
+class MxUnkRecordCP054;
+class MxUnkRecordCP055;
+class MxUnkRecordCP056;
+class MxUnkRecordCP057;
+class MxUnkRecordCP058;
+class MxUnkRecordCP059;
+class MxUnkRecordCP060;
+class MxUnkRecordCP061;
+class MxUnkRecordCP062;
+class MxUnkRecordCP063;
+class MxUnkRecordCP064;
+class MxUnkRecordCP065;
+class MxUnkRecordCP066;
+class MxUnkRecordCP067;
+class MxUnkRecordCP068;
+class MxUnkRecordCP069;
+class MxUnkRecordCP070;
+
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at

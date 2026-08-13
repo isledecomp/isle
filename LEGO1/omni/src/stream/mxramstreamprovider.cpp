@@ -1,3 +1,29 @@
+// Declaration-record carrier: this unit's accumulated declaration state
+// decides the operand order and register roles of the code below (see the
+// positional record calculus). No authentic 1997 declaration is recoverable
+// at this position; neutral stand-in pending better evidence.
+class MxUnkRecordRP000;
+class MxUnkRecordRP001;
+class MxUnkRecordRP002;
+class MxUnkRecordRP003;
+class MxUnkRecordRP004;
+class MxUnkRecordRP005;
+class MxUnkRecordRP006;
+class MxUnkRecordRP007;
+class MxUnkRecordRP008;
+class MxUnkRecordRP009;
+class MxUnkRecordRP010;
+class MxUnkRecordRP011;
+class MxUnkRecordRP012;
+class MxUnkRecordRP013;
+class MxUnkRecordRP014;
+class MxUnkRecordRP015;
+class MxUnkRecordRP016;
+class MxUnkRecordRP017;
+class MxUnkRecordRP018;
+class MxUnkRecordRP019;
+class MxUnkRecordRP020;
+
 #include "mxramstreamprovider.h"
 
 #include "decomp.h"

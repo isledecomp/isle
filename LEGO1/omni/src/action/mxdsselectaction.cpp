@@ -1,3 +1,28 @@
+// Declaration-record carrier: this unit's accumulated declaration state
+// decides the operand order and register roles of the code below (see the
+// positional record calculus). No authentic 1997 declaration is recoverable
+// at this position; neutral stand-in pending better evidence.
+class MxUnkRecordSA000;
+class MxUnkRecordSA001;
+class MxUnkRecordSA002;
+class MxUnkRecordSA003;
+class MxUnkRecordSA004;
+class MxUnkRecordSA005;
+class MxUnkRecordSA006;
+class MxUnkRecordSA007;
+class MxUnkRecordSA008;
+class MxUnkRecordSA009;
+class MxUnkRecordSA010;
+class MxUnkRecordSA011;
+class MxUnkRecordSA012;
+class MxUnkRecordSA013;
+class MxUnkRecordSA014;
+class MxUnkRecordSA015;
+class MxUnkRecordSA016;
+class MxUnkRecordSA017;
+class MxUnkRecordSA018;
+class MxUnkRecordSA019;
+
 // Declaration-record carrier: the functions below sample the translation
 // unit's accumulated declaration state (see the positional record calculus,
 // session notes 2026-08-01); no authentic 1997 declaration is recoverable at

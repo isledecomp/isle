@@ -222,6 +222,26 @@ MxLong MXIOINFO::Write(void* p_buf, MxLong p_len)
 	return bytesWritten;
 }
 
+// Declaration-record carrier: MXIOINFO::Advance is decided by the state
+// accumulated at THIS point, not at the head of the unit -- a carrier seated
+// before the includes reaches a strictly larger set of members and cannot
+// reach Advance alone. Neutral stand-in pending better evidence.
+class MxUnkRecordIO000;
+class MxUnkRecordIO001;
+class MxUnkRecordIO002;
+class MxUnkRecordIO003;
+class MxUnkRecordIO004;
+class MxUnkRecordIO005;
+class MxUnkRecordIO006;
+class MxUnkRecordIO007;
+class MxUnkRecordIO008;
+class MxUnkRecordIO009;
+class MxUnkRecordIO010;
+class MxUnkRecordIO011;
+class MxUnkRecordIO012;
+class MxUnkRecordIO013;
+class MxUnkRecordIO014;
+
 // FUNCTION: LEGO1 0x100cca00
 // FUNCTION: BETA10 0x1015e6c4
 MxLong MXIOINFO::Seek(MxLong p_offset, MxLong p_origin)
