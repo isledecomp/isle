@@ -86,7 +86,7 @@ option(ISLE_INCLUDE_ENTROPY "Build with entropy.h" OFF)
 # "entropy.h" was coerced to OFF and the force-include became /FI<root>/OFF,
 # failing every compile with C1083 while callers read the stale DLL as a score.
 set(ISLE_ENTROPY_FILENAME "entropy.h" CACHE STRING "Entropy header filename")
-option(ISLE_BYTE_IDENTICAL "Build for byte-identity with the retail binaries: emit no debug information, so the image carries no DEBUG data directory (the originals have none). Produces no PDB, so reccmp cannot be used on such a build - configure it in a SEPARATE build directory and keep the default one for reccmp work." OFF)
+option(ISLE_BYTE_IDENTICAL "Build the no-link-debug main images in a dedicated tree while retaining compile-time /Zi; the manifest framework remains fail-closed until composition, a diagnostic PDB relink, and final MD5 gates are implemented." OFF)
 
 if(NOT (ISLE_BUILD_LEGO1 OR ISLE_BUILD_BETA10))
   message(FATAL_ERROR "ISLE_BUILD_LEGO1 AND ISLE_BUILD_BETA10 cannot be both disabled")
@@ -797,34 +797,14 @@ if (MSVC_FOR_DECOMP)
     endforeach()
     message(STATUS "ISLE_BYTE_IDENTICAL: linking without /debug (no DEBUG data directory); /Zi retained so codegen is unchanged")
 
-    # Two classes of bytes are stamped from the wall clock at link time and are
-    # not derivable from source: the COFF header's TimeDateStamp, and every
-    # TimeDateStamp in the .rsrc resource directory tree. MSVC 4.20's linker has
-    # no switch for either, so restore them from the original binary after the
-    # link. Measured on ISLE.EXE: 76 bytes (4 + 72 across 18 resource nodes).
-    set(ISLE_ORIGINAL_DIR "${PROJECT_SOURCE_DIR}/legobin" CACHE PATH
-        "Directory holding the original retail binaries, used by ISLE_BYTE_IDENTICAL to restore link-time timestamps")
-    find_package(Python3 COMPONENTS Interpreter QUIET)
-    if(NOT Python3_Interpreter_FOUND)
-      set(Python3_EXECUTABLE python3)
-    endif()
-    foreach(_t isle lego1 config)
-      if(TARGET ${_t})
-        get_property(_out TARGET ${_t} PROPERTY OUTPUT_NAME)
-        get_property(_sfx TARGET ${_t} PROPERTY SUFFIX)
-        if(EXISTS "${ISLE_ORIGINAL_DIR}/${_out}${_sfx}")
-          add_custom_command(TARGET ${_t} POST_BUILD
-            COMMAND "${Python3_EXECUTABLE}"
-                    "${PROJECT_SOURCE_DIR}/tools/pe_stamp.py"
-                    "$<TARGET_FILE:${_t}>"
-                    "${ISLE_ORIGINAL_DIR}/${_out}${_sfx}"
-            COMMENT "Restoring original PE/resource timestamps in ${_out}${_sfx}"
-            VERBATIM)
-        else()
-          message(STATUS "ISLE_BYTE_IDENTICAL: no original at ${ISLE_ORIGINAL_DIR}/${_out}${_sfx}, timestamps left as linked")
-        endif()
-      endif()
-    endforeach()
+    # Retail binaries are comparison oracles only.  The old pe_stamp.py
+    # POST_BUILD action copied timestamp bytes out of legobin and also rewrote
+    # the linked image in place.  That violates the hard provenance and atomic
+    # output rules, so timestamp reproduction remains an explicit migration
+    # blocker until it has a source/toolchain-derived recipe and final MD5 gate.
+    message(STATUS
+      "ISLE_BYTE_IDENTICAL: retail timestamp copying is disabled; "
+      "final timestamp/MD5 completion remains fail-closed")
   endif()
 
   # Older MSVC versions don't support building in parallel.
@@ -848,6 +828,15 @@ if (MSVC_FOR_DECOMP)
       set_property(TARGET config PROPERTY JOB_POOL_LINK "msvc_config")
     endif()
   endif()
+endif()
+
+# The source-controlled manifest is deliberately invisible to normal builds.
+# Its validator/materializer/launcher are loaded only in a dedicated
+# ISLE_BYTE_IDENTICAL tree, after every candidate target has been declared.
+if(ISLE_BYTE_IDENTICAL)
+  include("${PROJECT_SOURCE_DIR}/cmake/byte_identity.cmake")
+  isle_enable_byte_identity(
+    "${PROJECT_SOURCE_DIR}/tools/byte_identity_manifest.json")
 endif()
 
 find_program(CLANGFORMAT_BIN NAMES clang-format)

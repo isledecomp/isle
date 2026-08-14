@@ -1,0 +1,246 @@
+include_guard(GLOBAL)
+
+# Enable the first, deliberately incomplete byte-identity production phase.
+# This module is included only from an ISLE_BYTE_IDENTICAL=ON configure.  It
+# validates the fixed source-controlled manifest, materializes build-tree-only
+# entropy headers, and installs an atomic pass-through launcher on affected
+# targets.  Unsupported COMDAT/archive/image recipes fail during configure.
+function(isle_enable_byte_identity manifest)
+  if(NOT ISLE_BYTE_IDENTICAL)
+    message(FATAL_ERROR
+      "byte_identity.cmake may be used only with ISLE_BYTE_IDENTICAL=ON")
+  endif()
+  if(NOT MSVC_FOR_DECOMP)
+    message(FATAL_ERROR
+      "ISLE_BYTE_IDENTICAL manifest composition requires the MSVC 4.20 toolchain")
+  endif()
+  if(NOT CMAKE_GENERATOR STREQUAL "Ninja" AND
+     NOT CMAKE_GENERATOR STREQUAL "Unix Makefiles")
+    message(FATAL_ERROR
+      "ISLE_BYTE_IDENTICAL manifest composition supports only Ninja and Unix Makefiles")
+  endif()
+  # CMAKE_SYSTEM_NAME is Windows for this cross-build, so UNIX describes the
+  # target and is false even though the launcher itself runs on macOS/Linux.
+  if(NOT CMAKE_HOST_UNIX)
+    message(FATAL_ERROR
+      "The byte-identity launcher requires POSIX process-group and file-lock semantics")
+  endif()
+  get_filename_component(_source_root "${PROJECT_SOURCE_DIR}" REALPATH)
+  get_filename_component(_build_root "${CMAKE_BINARY_DIR}" REALPATH)
+  if("${_source_root}" STREQUAL "${_build_root}")
+    message(FATAL_ERROR "In-source byte-identity builds are forbidden")
+  endif()
+  get_property(_rule_launcher DIRECTORY PROPERTY RULE_LAUNCH_COMPILE)
+  if(_rule_launcher)
+    message(FATAL_ERROR
+      "A directory RULE_LAUNCH_COMPILE hook is not permitted in a byte-identity build")
+  endif()
+  if(ISLE_INCLUDE_ENTROPY OR ISLE_TU_ENTROPY_MANIFEST)
+    message(FATAL_ERROR
+      "The byte-identity manifest owns entropy; disable ISLE_INCLUDE_ENTROPY and ISLE_TU_ENTROPY_MANIFEST")
+  endif()
+  if(NOT ISLE_PER_OBJECT_PDB)
+    message(FATAL_ERROR
+      "The byte-identity launcher requires ISLE_PER_OBJECT_PDB=ON for isolated compiler PDBs")
+  endif()
+  if(NOT CMAKE_CXX_COMPILE_OBJECT MATCHES "[/-]Fd<OBJECT>\\.pdb")
+    message(FATAL_ERROR
+      "The byte-identity launcher requires the active compile rule to use one /Fd<OBJECT>.pdb per object")
+  endif()
+
+  string(TOUPPER "${CMAKE_BUILD_TYPE}" _config_upper)
+  set(_config_flags_var "CMAKE_CXX_FLAGS_${_config_upper}")
+  set(_effective_compile_flags
+    "${CMAKE_CXX_FLAGS} ${${_config_flags_var}}")
+  string(TOLOWER "${_effective_compile_flags}" _effective_compile_flags)
+  if(NOT _effective_compile_flags MATCHES "(^|[ \t])[-/]zi([ \t]|$)")
+    message(FATAL_ERROR
+      "ISLE_BYTE_IDENTICAL requires an active /Zi build configuration")
+  endif()
+  foreach(_link_kind EXE SHARED)
+    set(_config_link_flags_var
+      "CMAKE_${_link_kind}_LINKER_FLAGS_${_config_upper}")
+    set(_effective_link_flags
+      "${CMAKE_${_link_kind}_LINKER_FLAGS} ${${_config_link_flags_var}}")
+    string(TOLOWER "${_effective_link_flags}" _effective_link_flags)
+    if(_effective_link_flags MATCHES "(^|[ \t])[-/]debug([ :\t]|$)")
+      message(FATAL_ERROR
+        "ISLE_BYTE_IDENTICAL main ${_link_kind} link still enables /debug")
+    endif()
+  endforeach()
+
+  get_filename_component(_manifest "${manifest}" REALPATH
+                         BASE_DIR "${PROJECT_SOURCE_DIR}")
+  if(NOT EXISTS "${_manifest}")
+    message(FATAL_ERROR "Missing fixed byte-identity manifest: ${_manifest}")
+  endif()
+  set(_tool "${PROJECT_SOURCE_DIR}/tools/byte_identity.py")
+  set(_entropy_tool "${PROJECT_SOURCE_DIR}/tools/entropy.py")
+  if(NOT EXISTS "${_tool}" OR NOT EXISTS "${_entropy_tool}")
+    message(FATAL_ERROR "Byte-identity tools are missing")
+  endif()
+  find_package(Python3 3.10 COMPONENTS Interpreter REQUIRED)
+
+  set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+    "${_manifest}" "${_tool}" "${_entropy_tool}")
+  set(_state_dir "${CMAKE_BINARY_DIR}/byte-identity")
+  set(_plan "${_state_dir}/plan.cmake")
+  file(MAKE_DIRECTORY "${_state_dir}")
+  execute_process(
+    COMMAND "${Python3_EXECUTABLE}" "${_tool}" plan
+            --manifest "${_manifest}"
+            --source-dir "${PROJECT_SOURCE_DIR}"
+            --build-dir "${CMAKE_BINARY_DIR}"
+            --compiler "${CMAKE_CXX_COMPILER}"
+            --compiler-id "${CMAKE_CXX_COMPILER_ID}"
+            --compiler-version "${CMAKE_CXX_COMPILER_VERSION}"
+            --generator "${CMAKE_GENERATOR}"
+            --output "${_plan}"
+    RESULT_VARIABLE _plan_result
+    OUTPUT_VARIABLE _plan_output
+    ERROR_VARIABLE _plan_error
+  )
+  if(NOT _plan_result EQUAL 0 OR NOT EXISTS "${_plan}")
+    file(REMOVE "${_plan}")
+    message(FATAL_ERROR
+      "Byte-identity manifest planning failed (${_plan_result}):\n${_plan_output}${_plan_error}")
+  endif()
+  include("${_plan}")
+  if(NOT ISLE_BYTE_IDENTITY_PHASE STREQUAL "pass_through_launcher_v1")
+    message(FATAL_ERROR "Generated byte-identity plan has an unsupported phase")
+  endif()
+  if(NOT ISLE_BYTE_IDENTITY_COMPLETION STREQUAL "planned_not_composed")
+    message(FATAL_ERROR "Pass-through plan improperly claims byte-identity completion")
+  endif()
+
+  # An earlier framework verdict must never survive a later failed rebuild.
+  # This always-run dependency invalidates it before any affected target starts.
+  add_custom_target(byte-identity-invalidate
+    COMMAND "${Python3_EXECUTABLE}" "${_tool}" invalidate
+            --build-dir "${CMAKE_BINARY_DIR}"
+    VERBATIM
+  )
+
+  set(_listed_sources)
+  foreach(_index IN LISTS ISLE_BYTE_IDENTITY_TU_INDICES)
+    set(_prefix "ISLE_BYTE_IDENTITY_TU_${_index}")
+    list(APPEND _listed_sources "${${_prefix}_SOURCE}")
+    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+      "${${_prefix}_SOURCE}")
+  endforeach()
+
+  set(_materialized_outputs)
+  foreach(_recipe_id IN LISTS ISLE_BYTE_IDENTITY_RECIPE_IDS)
+    set(_output_var "ISLE_BYTE_IDENTITY_RECIPE_${_recipe_id}_OUTPUT")
+    set(_output "${${_output_var}}")
+    if(NOT _output)
+      message(FATAL_ERROR "Generated plan omitted output for recipe ${_recipe_id}")
+    endif()
+    add_custom_command(
+      OUTPUT "${_output}"
+      BYPRODUCTS
+        "${_state_dir}/audit/materialization/${_recipe_id}.json"
+      COMMAND "${Python3_EXECUTABLE}" "${_tool}" materialize
+              --manifest "${_manifest}"
+              --source-dir "${PROJECT_SOURCE_DIR}"
+              --build-dir "${CMAKE_BINARY_DIR}"
+              --recipe-id "${_recipe_id}"
+              --output "${_output}"
+      DEPENDS "${_manifest}" "${_tool}" "${_entropy_tool}" ${_listed_sources}
+      COMMENT "Materializing verified non-emitting entropy ${_recipe_id}"
+      VERBATIM
+    )
+    list(APPEND _materialized_outputs "${_output}")
+  endforeach()
+  add_custom_target(byte-identity-materialize DEPENDS ${_materialized_outputs})
+
+  set(_affected_targets)
+  foreach(_index IN LISTS ISLE_BYTE_IDENTITY_TU_INDICES)
+    set(_prefix "ISLE_BYTE_IDENTITY_TU_${_index}")
+    set(_target "${${_prefix}_TARGET}")
+    set(_source "${${_prefix}_SOURCE}")
+    set(_outputs "${${_prefix}_OUTPUTS}")
+    set(_audit "${${_prefix}_AUDIT}")
+    if(NOT TARGET "${_target}")
+      message(FATAL_ERROR "Byte-identity manifest references missing target: ${_target}")
+    endif()
+    get_target_property(_target_link_options "${_target}" LINK_OPTIONS)
+    if(_target_link_options)
+      string(TOLOWER "${_target_link_options}" _target_link_options_lower)
+      if(_target_link_options_lower MATCHES "(^|[ ;])[-/]debug([ :;]|$)")
+        message(FATAL_ERROR
+          "ISLE_BYTE_IDENTICAL target ${_target} still enables /debug")
+      endif()
+    endif()
+
+    get_target_property(_target_sources "${_target}" SOURCES)
+    set(_source_is_member FALSE)
+    foreach(_candidate IN LISTS _target_sources)
+      if(IS_ABSOLUTE "${_candidate}")
+        get_filename_component(_candidate_abs "${_candidate}" REALPATH)
+      else()
+        get_filename_component(_candidate_abs "${_candidate}" REALPATH
+                               BASE_DIR "${PROJECT_SOURCE_DIR}")
+      endif()
+      if("${_candidate_abs}" STREQUAL "${_source}")
+        set(_source_is_member TRUE)
+        break()
+      endif()
+    endforeach()
+    if(NOT _source_is_member)
+      message(FATAL_ERROR
+        "Byte-identity source ${_source} is not a member of target ${_target}")
+    endif()
+
+    list(FIND _affected_targets "${_target}" _launcher_index)
+    if(_launcher_index EQUAL -1)
+      get_property(_existing_launcher TARGET "${_target}"
+                   PROPERTY CXX_COMPILER_LAUNCHER)
+      if(_existing_launcher)
+        message(FATAL_ERROR
+          "Byte-identity target ${_target} already has a compiler launcher; "
+          "an unpinned launcher is not permitted")
+      endif()
+      set(_launcher
+        "${Python3_EXECUTABLE}"
+        "${_tool}"
+        compile-launch
+        --manifest "${_manifest}"
+        --source-dir "${PROJECT_SOURCE_DIR}"
+        --build-dir "${CMAKE_BINARY_DIR}"
+        --target "${_target}"
+        --configured-compiler "${CMAKE_CXX_COMPILER}"
+        --
+      )
+      set_property(TARGET "${_target}" PROPERTY CXX_COMPILER_LAUNCHER
+                   ${_launcher})
+      add_dependencies("${_target}" byte-identity-invalidate)
+      list(APPEND _affected_targets "${_target}")
+    endif()
+
+    # All project targets are declared in this top-level directory.  Avoid the
+    # newer TARGET_DIRECTORY form so the project's CMake 3.15 minimum remains
+    # valid.
+    set_property(SOURCE "${_source}" APPEND PROPERTY OBJECT_DEPENDS
+      "${_manifest}" "${_tool}" "${_entropy_tool}" ${_outputs})
+    set_property(SOURCE "${_source}" APPEND PROPERTY OBJECT_OUTPUTS
+      "${_audit}")
+    set_property(TARGET "${_target}" APPEND PROPERTY LINK_DEPENDS
+      "${_manifest}" "${_tool}")
+  endforeach()
+  list(REMOVE_DUPLICATES _affected_targets)
+
+  add_custom_target(byte-identity-verify
+    COMMAND "${Python3_EXECUTABLE}" "${_tool}" verify
+            --manifest "${_manifest}"
+            --source-dir "${PROJECT_SOURCE_DIR}"
+            --build-dir "${CMAKE_BINARY_DIR}"
+            --compiler "${CMAKE_CXX_COMPILER}"
+    DEPENDS byte-identity-materialize ${_affected_targets}
+    COMMENT "Verifying byte-identity framework audits (composition remains fail-closed)"
+    VERBATIM
+  )
+  message(STATUS
+    "ISLE_BYTE_IDENTICAL manifest framework enabled (${ISLE_BYTE_IDENTITY_PHASE}); "
+    "COMDAT composition remains unsupported/fatal")
+endfunction()
