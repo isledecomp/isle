@@ -65,21 +65,6 @@ MxU32 g_autoRoiCounter = 0;
 // GLOBAL: LEGO1 0x10104f20
 LegoActorInfo g_actorInfo[66];
 
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class MxUnkRecC0100 {};
-class MxUnkRecC0101 {};
-class MxUnkRecC0102 {};
-class MxUnkRecC0103 {};
-class MxUnkRecC0104 {};
-class MxUnkRecC0105 {};
-class MxUnkRecC0106 {};
-class MxUnkRecC0107 {};
-class MxUnkRecC0108 {};
-class MxUnkRecC0109 {};
-class MxUnkRecZ0100;
-
 // FUNCTION: LEGO1 0x10082a20
 // FUNCTION: BETA10 0x10073c60
 LegoCharacterManager::LegoCharacterManager()
@@ -203,12 +188,6 @@ MxResult LegoCharacterManager::Write(LegoStorage* p_storage)
 done:
 	return result;
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class MxUnkRecZ0600;
-class MxUnkRecZ0601;
 
 // FUNCTION: LEGO1 0x100833f0
 MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
@@ -338,13 +317,6 @@ MxBool LegoCharacterManager::Exists(const char* p_name)
 	return FALSE;
 }
 
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class MxUnkRecC1100 {};
-class MxUnkRecC1101 {};
-class MxUnkRecZ1100;
-
 // FUNCTION: LEGO1 0x10083bc0
 // FUNCTION: BETA10 0x1007466a
 MxU32 LegoCharacterManager::GetRefCount(LegoROI* p_roi)
@@ -363,14 +335,6 @@ MxU32 LegoCharacterManager::GetRefCount(LegoROI* p_roi)
 
 	return 0;
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class MxUnkRecC1200 {};
-class MxUnkRecC1201 {};
-class MxUnkRecZ1200;
-class MxUnkRecZ1201;
 
 // FUNCTION: LEGO1 0x10083c30
 // FUNCTION: BETA10 0x10074701
@@ -735,16 +699,6 @@ LegoExtraActor* LegoCharacterManager::GetExtraActor(const char* p_name)
 	return NULL;
 }
 
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class MxUnkRecZ2000;
-class MxUnkRecZ2001;
-class MxUnkRecZ2002;
-class MxUnkRecZ2003;
-class MxUnkRecZ2004;
-class MxUnkRecZ2005;
-
 // FUNCTION: LEGO1 0x10084c60
 // FUNCTION: BETA10 0x10075ede
 LegoActorInfo* LegoCharacterManager::GetActorInfo(const char* p_name)
@@ -788,13 +742,6 @@ LegoActorInfo* LegoCharacterManager::GetActorInfo(LegoROI* p_roi)
 		return NULL;
 	}
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class MxUnkRecZ2200;
-class MxUnkRecZ2201;
-class MxUnkRecZ2202;
 
 // FUNCTION: LEGO1 0x10084cf0
 // FUNCTION: BETA10 0x10075fe2
@@ -1193,75 +1140,3 @@ void CustomizeAnimFileVariable::SetValue(const char* p_value)
 		BuildingManager()->SetCustomizeAnimFile(p_value);
 	}
 }
-
-// Declaration-record carrier: end-of-file sink (see the positional record
-// calculus, session notes 2026-08-01); no authentic 1997 declaration is
-// recoverable at this position. Neutral stand-in pending better evidence.
-class MxUnkRecordAV {
-	inline void Record() {}
-};
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class AvT000;
-class AvT001;
-class AvT002;
-class AvT003;
-class AvT004;
-class AvT005;
-class AvT006;
-class AvT007;
-class AvT008;
-class AvT009;
-class AvT010;
-class AvT011;
-class AvT012;
-class AvT013;
-class AvT014;
-class AvT015;
-class AvT016;
-class AvT017;
-class AvT018;
-class AvT019;
-class AvT020;
-class AvT021;
-class AvT022;
-class AvT023;
-class AvT024;
-class AvT025;
-class AvT026;
-class AvT027;
-class AvT028;
-class AvT029;
-class AvT030;
-class AvT031;
-class AvT032;
-class AvT033;
-class AvT034;
-class AvT035;
-class AvT036;
-class AvT037;
-class AvT038;
-class AvT039;
-class AvT040;
-class AvT041;
-class AvT042;
-class AvT043;
-class AvT044;
-class AvT045;
-class AvT046;
-class AvT047;
-class AvT048;
-class AvT049;
-class AvT050;
-class AvT051;
-class AvT052;
-class AvT053;
-class AvT054;
-class AvT055;
-class AvT056;
-class AvT057;
-class AvT058;
-class AvT059;
-class AvT060;
-class AvT061;

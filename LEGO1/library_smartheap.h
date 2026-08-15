@@ -1,4 +1,4 @@
-#if 0
+
 
 // LIBRARY: LEGO1 0x100861d0
 // ?shi_New@@YAPAXKIPAU_SHI_Pool@@@Z
@@ -311,5 +311,3 @@
 
 // GLOBAL: LEGO1 0x101095e0
 // __shi_mutexGlobal
-
-#endif

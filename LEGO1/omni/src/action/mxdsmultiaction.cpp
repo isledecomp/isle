@@ -1,10 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordVW {};
-class MxUnkRecordVX {};
-
 #include "mxdsmultiaction.h"
 
 #include <assert.h>
@@ -193,27 +186,3 @@ void MxDSMultiAction::SetAtomId(MxAtomId p_atomId)
 		action->SetAtomId(p_atomId);
 	}
 }
-
-// Record carriers (scaffolding): 21 units at end of unit: MxDSMultiAction::Deserialize and SetAtomId
-// both land on the 1997 schedule only at tot in {20,21,22}.
-class MxUnkRecordMDS00;
-class MxUnkRecordMDS01;
-class MxUnkRecordMDS02;
-class MxUnkRecordMDS03;
-class MxUnkRecordMDS04;
-class MxUnkRecordMDS05;
-class MxUnkRecordMDS06;
-class MxUnkRecordMDS07;
-class MxUnkRecordMDS08;
-class MxUnkRecordMDS09;
-class MxUnkRecordMDS10;
-class MxUnkRecordMDS11;
-class MxUnkRecordMDS12;
-class MxUnkRecordMDS13;
-class MxUnkRecordMDS14;
-class MxUnkRecordMDS15;
-class MxUnkRecordMDS16;
-class MxUnkRecordMDS17;
-class MxUnkRecordMDS18;
-class MxUnkRecordMDS19;
-class MxUnkRecordMDS20;

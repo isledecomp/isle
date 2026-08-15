@@ -1,21 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordWL;
-class MxUnkRecordWM;
-class MxUnkRecordWN;
-class MxUnkRecordWS000;
-class MxUnkRecordWS001;
-class MxUnkRecordWS002;
-class MxUnkRecordWS003;
-class MxUnkRecordWS004;
-class MxUnkRecordWS005;
-class MxUnkRecordWS006;
-class MxUnkRecordWS007;
-class MxUnkRecordWS008;
-class MxUnkRecordWS009;
-
 #include "score.h"
 
 #include "ambulance.h"
@@ -39,18 +21,6 @@ class MxUnkRecordWS009;
 #include "pizza.h"
 #include "scripts.h"
 #include "towtrack.h"
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.  [6 units]
-enum RkScE0 {
-	c_rkScE0
-};
-enum RkScE1 {
-	c_rkScE1
-};
-enum RkScE2 {
-	c_rkScE2
-};
 
 DECOMP_SIZE_ASSERT(Score, 0x104)
 DECOMP_SIZE_ASSERT(ScoreState, 0x0c)
@@ -191,35 +161,6 @@ void Score::ReadyWorld()
 
 	Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
-
-// Declaration-record carrier: a SECOND seat is required here. The unit's
-// head carrier fixes the map _Lbound it supplies, but doing so moves
-// Score::FillArea and Score::Paint; only a carrier seated at this point
-// reaches those two without disturbing _Lbound again. Neutral stand-in
-// pending recovery of the 1997 declaration text.
-class MxUnkRecordWT000;
-class MxUnkRecordWT001;
-class MxUnkRecordWT002;
-class MxUnkRecordWT003;
-class MxUnkRecordWT004;
-class MxUnkRecordWT005;
-class MxUnkRecordWT006;
-class MxUnkRecordWT007;
-class MxUnkRecordWT008;
-class MxUnkRecordWT009;
-class MxUnkRecordWT010;
-class MxUnkRecordWT011;
-class MxUnkRecordWT012;
-class MxUnkRecordWT013;
-class MxUnkRecordWT014;
-class MxUnkRecordWT015;
-class MxUnkRecordWT016;
-class MxUnkRecordWT017;
-class MxUnkRecordWT018;
-class MxUnkRecordWT019;
-class MxUnkRecordWT020;
-class MxUnkRecordWT021;
-class MxUnkRecordWT022;
 
 // FUNCTION: LEGO1 0x100016d0
 MxLong Score::HandleControl(LegoControlManagerNotificationParam& p_param)

@@ -1,16 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordRL {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-};
-
 #include "legolod.h"
 
 #include "legoroi.h"
@@ -20,20 +7,6 @@ class MxUnkRecordRL {
 #include "tgl/d3drm/tglimpl.h"
 
 using namespace Tgl;
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkM0 {
-public:
-	void rkm0() {}
-};
-
-// Declaration-record carrier (see the positional record calculus, session
-// notes 2026-08-01); no authentic 1997 declaration is recoverable at this
-// position. Neutral stand-in pending better evidence.
-class MxUnkRecordLD0;
-class MxUnkRecordLD1;
-class MxUnkRecordLD2;
-
 DECOMP_SIZE_ASSERT(LODObject, 0x04)
 DECOMP_SIZE_ASSERT(ViewLOD, 0x0c)
 DECOMP_SIZE_ASSERT(LegoLOD, 0x20)
@@ -546,12 +519,6 @@ LegoResult LegoLOD::UpdateTextureInfo(LegoTextureInfo* p_textureInfo)
 	return SUCCESS;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordRM {};
-
 // FUNCTION: LEGO1 0x100aadc0
 // FUNCTION: BETA10 0x1018e3d8
 LegoResult LegoLOD::GetTextureInfo(LegoTextureInfo*& p_textureInfo)
@@ -566,13 +533,6 @@ LegoResult LegoLOD::GetTextureInfo(LegoTextureInfo*& p_textureInfo)
 
 	return FAILURE;
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class MxUnkRecordRN {
-	void Record0();
-	void Record1();
-};
 
 // FUNCTION: LEGO1 0x100aae20
 // FUNCTION: BETA10 0x1018e46d

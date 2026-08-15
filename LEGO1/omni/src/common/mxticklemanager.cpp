@@ -1,10 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecord000 {};
-class MxUnkRecord001;
-
 #include "mxticklemanager.h"
 
 #include "decomp.h"
@@ -100,18 +93,6 @@ void MxTickleManager::UnregisterClient(MxCore* p_client)
 	}
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordYF {};
-class MxUnkRecordYG {};
-class MxUnkRecordYH {};
-class MxUnkRecordYI {};
-class MxUnkRecordYJ {};
-class MxUnkRecordYK;
-class MxUnkRecordYL;
-
 // FUNCTION: LEGO1 0x100bdfa0
 // FUNCTION: BETA10 0x1013ee6d
 void MxTickleManager::SetClientTickleInterval(MxCore* p_client, MxTime p_interval)
@@ -126,11 +107,6 @@ void MxTickleManager::SetClientTickleInterval(MxCore* p_client, MxTime p_interva
 
 	assert("Tickle Manager client is not registered!" == NULL);
 }
-
-// Declaration-record carrier: separates this function's accumulated
-// declaration state from the end-of-unit template instantiations the
-// functions above reference. Neutral stand-in pending better evidence.
-class MxUnkRecordYM {};
 
 // FUNCTION: LEGO1 0x100be000
 // FUNCTION: BETA10 0x1013ef2d

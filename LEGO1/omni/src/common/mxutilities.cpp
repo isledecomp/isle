@@ -1,27 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordPE {
-public:
-	void Record() {}
-};
-
-class MxUnkRecordPF {
-public:
-	void Record() {}
-};
-
-class MxUnkRecordPG {
-public:
-	void Record() {}
-};
-
-class MxUnkRecordPH {
-public:
-	void Record() {}
-};
-
 #include "mxutilities.h"
 
 #include "mxcompositepresenter.h"
@@ -34,12 +10,6 @@ public:
 #include "mxpresenterlist.h"
 
 #include <assert.h>
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkC0 {};
-class RkC1 {};
-class RkC2 {};
-
 // GLOBAL: LEGO1 0x101020e8
 void (*g_omniUserMessage)(const char*, MxS32) = NULL;
 
@@ -90,14 +60,6 @@ MxBool GetRectIntersection(
 	*p_height = rect.GetHeight();
 	return TRUE;
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordPI;
-class MxUnkRecordPJ;
-class MxUnkRecordPK;
 
 // FUNCTION: LEGO1 0x100b6ff0
 void MakeSourceName(char* p_output, const char* p_input)

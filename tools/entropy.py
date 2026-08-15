@@ -1,55 +1,4 @@
-"""Generate deterministic, non-emitting C++ declaration entropy."""
-
-from __future__ import annotations
-
-import argparse
-import io
-import os
-from pathlib import Path
-import random
-import string
-import sys
-import tempfile
-
-
-# Parameters for tweaking:
-MAX_CLASSES = 10
-MAX_FUNC_PER_CLASS = 10
-
-# Only the unique suffix, not counting "Class" or "Function"
-CLASS_NAME_LEN = 6
-FUNC_NAME_LEN = 8
-
-
-def random_camel_case(generator: random.Random, length: int) -> str:
-    """Return a random string with first letter capitalized."""
-    return "".join(
-        [
-            generator.choice(string.ascii_uppercase),
-            *generator.choices(string.ascii_lowercase, k=length - 1),
-        ]
-    )
-
-
-def generate(seed: int) -> str:
-    """Return the exact historical entropy header for ``seed``."""
-    generator = random.Random(seed)
-    stream = io.StringIO()
-    print(f"// Seed: {seed}\n", file=stream)
-
-    num_classes = generator.randint(1, MAX_CLASSES)
-    for _ in range(num_classes):
-        class_name = "Class" + random_camel_case(generator, CLASS_NAME_LEN)
-        print(f"class {class_name} {{", file=stream)
-        num_functions = generator.randint(1, MAX_FUNC_PER_CLASS)
-        for _ in range(num_functions):
-            function_name = "Function" + random_camel_case(generator, FUNC_NAME_LEN)
-            print(f"\tinline void {function_name}() {{}}", file=stream)
-
-        print("};\n", file=stream)
-
-    print(file=stream)
-    return stream.getvalue()
+"""Render deterministic, non-emitting C++ declaration shapes."""
 
 
 def _shape_suffix(number: int, width: int) -> str:
@@ -59,6 +8,72 @@ def _shape_suffix(number: int, width: int) -> str:
         characters.append(chr(ord("a") + number % 26))
         number //= 26
     return "".join(reversed(characters))
+
+
+def generate_forward_run(prefix: str, count: int, width: int) -> str:
+    """Return a deterministic run of bare forward declarations.
+
+    A forward declaration allocates one compiler name record and nothing
+    else: no code, data, strings, vtables, or linker directives can be
+    emitted from it.  The run is the stem-inert carrier form (`class X;`)
+    with fixed-width decimal suffixes so a given (prefix, count, width)
+    always renders identical bytes.
+    """
+    if not (prefix and prefix[0].isalpha() and prefix.isalnum()):
+        raise ValueError("forward run prefix must be an identifier stem")
+    if not 1 <= count <= 999:
+        raise ValueError("forward run count must be in [1, 999]")
+    if not 1 <= width <= 3 or count > 10 ** width:
+        raise ValueError("forward run width cannot represent the count")
+    return "".join(
+        f"class {prefix}{number:0{width}d};\n" for number in range(count)
+    )
+
+
+def generate_extern_run(prefix: str, count: int, width: int) -> str:
+    """Return a deterministic run of extern int object declarations.
+
+    An extern declaration of a never-defined, never-referenced object
+    allocates a compiler symbol record and emits nothing: no code, data,
+    strings, vtables, or linker directives.  This is the historical
+    seat-unit carrier form (`extern int g_p<i>;`).
+    """
+    if not (prefix and prefix[0].isalpha()
+            and all(c.isalnum() or c == "_" for c in prefix)):
+        raise ValueError("extern run prefix must be an identifier stem")
+    if not 1 <= count <= 999:
+        raise ValueError("extern run count must be in [1, 999]")
+    if not 1 <= width <= 3 or count > 10 ** width:
+        raise ValueError("extern run width cannot represent the count")
+    return "".join(
+        f"extern int {prefix}{number:0{width}d};\n"
+        for number in range(count)
+    )
+
+
+def generate_pad_shape(classes: int, functions_per_class: int) -> str:
+    """Return the padded uniform declaration-shape family.
+
+    A grid of classes each holding the same number of unused inline
+    members, with fixed-width numeric naming.  Like generate_shape it can
+    steer compiler allocation decisions but emits no code, data, strings,
+    vtables, or linker directives.
+    """
+    if not 1 <= classes <= 99:
+        raise ValueError("pad shape classes must be in [1, 99]")
+    if not 1 <= functions_per_class <= 99:
+        raise ValueError("pad shape functions-per-class must be in [1, 99]")
+    parts = []
+    for class_number in range(classes):
+        lines = [f"class ClassPad{class_number:02d} {{"]
+        for function_number in range(functions_per_class):
+            lines.append(
+                f"\tinline void FunctionPad{class_number:02d}"
+                f"x{function_number:02d}() {{}}"
+            )
+        lines.append("};")
+        parts.append("\n".join(lines))
+    return "\n\n".join(parts) + "\n"
 
 
 def generate_shape(classes: int, functions: int) -> str:
@@ -96,43 +111,3 @@ def generate_shape(classes: int, functions: int) -> str:
             function_number += 1
         lines.extend(["};", ""])
     return "\n".join(lines) + "\n"
-
-
-def atomic_write(path: Path, data: bytes) -> None:
-    """Install ``data`` without exposing a partial generated header."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
-    try:
-        with os.fdopen(descriptor, "wb") as stream:
-            stream.write(data)
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.replace(temporary, path)
-    except BaseException:
-        try:
-            os.unlink(temporary)
-        except FileNotFoundError:
-            pass
-        raise
-
-
-def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("seed", type=int, nargs="?")
-    parser.add_argument("--output", type=Path)
-    arguments = parser.parse_args(argv)
-    seed = (
-        arguments.seed
-        if arguments.seed is not None
-        else random.SystemRandom().randint(0, 10000)
-    )
-    data = generate(seed).encode("utf-8")
-    if arguments.output is None:
-        sys.stdout.buffer.write(data)
-    else:
-        atomic_write(arguments.output, data)
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

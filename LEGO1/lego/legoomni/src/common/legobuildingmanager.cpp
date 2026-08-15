@@ -1,10 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordYY;
-class MxUnkRecordYZ;
-
 #include "legobuildingmanager.h"
 
 #include "3dmanager/lego3dmanager.h"
@@ -22,25 +15,6 @@ class MxUnkRecordYZ;
 #include "mxtimer.h"
 
 #include <vec.h>
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkF0;
-class RkF1;
-class RkF2;
-class RkF3;
-class RkF4;
-class RkF5;
-class RkF6;
-class RkF7;
-class RkF8;
-class RkF9;
-class RkF10;
-class RkF11;
-class RkF12;
-class RkF13;
-class RkF14;
-class RkF15;
-
 DECOMP_SIZE_ASSERT(LegoBuildingManager, 0x30)
 DECOMP_SIZE_ASSERT(LegoBuildingInfo, 0x2c)
 DECOMP_SIZE_ASSERT(LegoBuildingManager::AnimEntry, 0x14)
@@ -390,18 +364,6 @@ done:
 	return result;
 }
 
-// Declaration-record carriers: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declarations are recoverable
-// at this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordAD {
-	inline void Record() {}
-};
-
-class MxUnkRecordAE {
-	inline void Record() {}
-};
-
 // FUNCTION: LEGO1 0x1002fc10
 // FUNCTION: BETA10 0x10063dde
 MxResult LegoBuildingManager::Read(LegoStorage* p_storage)
@@ -694,19 +656,6 @@ MxBool LegoBuildingManager::DecrementCounter(MxS32 p_index)
 
 	return result;
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordZ {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-};
 
 // FUNCTION: LEGO1 0x10030110
 // FUNCTION: BETA10 0x10064556

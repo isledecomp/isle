@@ -1,10 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordST {};
-class MxUnkRecordSU {};
-
 #include "legoact2.h"
 
 #include "3dmanager/lego3dmanager.h"
@@ -13,15 +6,6 @@ class MxUnkRecordSU {};
 #include "infomain_actions.h"
 #include "islepathactor.h"
 #include "jukebox_actions.h"
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point in the parse. No
-// authentic 1997 declaration is recoverable here. Neutral stand-ins
-// pending better evidence.
-class MxUnkRecordAW;
-class MxUnkRecordAX;
-class MxUnkRecordAY;
-
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
 #include "legocachesoundmanager.h"
@@ -279,23 +263,12 @@ MxResult LegoAct2::Tickle()
 	return SUCCESS;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordSV {};
-
 // FUNCTION: LEGO1 0x10050380
 // FUNCTION: BETA10 0x1003b049
 MxLong LegoAct2::Notify(MxParam& p_param)
 {
 	MxNotificationParam& param = (MxNotificationParam&) p_param;
 	MxLong result = 0;
-	result = result + 0;
-	result = result + 0;
-	result = result + 0;
-	result = result + 0;
-
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {

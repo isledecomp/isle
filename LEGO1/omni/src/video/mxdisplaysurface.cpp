@@ -1,7 +1,3 @@
-// clang-format off
-#include "mxdisplaysurfacerecords.h"
-// clang-format on
-
 #include "mxdisplaysurface.h"
 
 #include "mxbitmap.h"
@@ -483,8 +479,9 @@ void MxDisplaySurface::VTable0x28(
 			MxLong stride = -p_width + GetAdjustedStride(p_bitmap);
 
 			MxLong length = -2 * p_width + ddsd.lPitch;
+			MxS32 j;
 			for (MxS32 i = 0; i < p_height; i++) {
-				for (MxS32 j = 0; j < p_width; j++) {
+				for (j = 0; j < p_width; j++) {
 					*(MxU16*) surface = m_16bitPal[*data++];
 					surface += 2;
 				}
@@ -582,8 +579,9 @@ void MxDisplaySurface::VTable0x30(
 			MxLong stride = -p_width + GetAdjustedStride(p_bitmap);
 
 			MxLong length = -2 * p_width + ddsd.lPitch;
+			MxS32 j;
 			for (MxS32 i = 0; i < p_height; i++) {
-				for (MxS32 j = 0; j < p_width; j++) {
+				for (j = 0; j < p_width; j++) {
 					if (*data != 0) {
 						*(MxU16*) surface = m_16bitPal[*data];
 					}

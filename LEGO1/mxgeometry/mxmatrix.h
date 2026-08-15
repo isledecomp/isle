@@ -75,7 +75,6 @@ const float* MxMatrix::operator[](int idx) const
 // follows Matrix4::operator[] (0x1001c670), and RotateY/Scale (0x1001fd60,
 // 0x1001fe60) precede MxMatrix(const MxMatrix&) (0x1001ff30).
 
-float MxUnkRecordMFA(const float*, const float*);
 // FUNCTION: BETA10 0x1001c6a0
 void Matrix4::RotateX(const float& p_angle)
 {

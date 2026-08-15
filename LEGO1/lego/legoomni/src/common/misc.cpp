@@ -8,10 +8,6 @@
 #include "mxmisc.h"
 #include "roi/legoroi.h"
 #include "scripts.h"
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class QqF0;
-
 // g_isWorldActive is defined in legonavcontroller.cpp
 
 // FUNCTION: LEGO1 0x10015700

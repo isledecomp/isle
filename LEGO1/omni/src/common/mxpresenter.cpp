@@ -1,10 +1,3 @@
-// Declaration-record carrier (dial campaign, PRE): samples this translation
-// unit's accumulated declaration state before the include block. [17 units]
-class RkRrM0 {
-	void m0() {}
-};
-class RkRrC0 {};
-
 #include "mxpresenter.h"
 
 #include "decomp.h"

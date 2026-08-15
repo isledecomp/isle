@@ -21,31 +21,6 @@
 
 #include <assert.h>
 #include <stdio.h>
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkC0 {};
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordYR {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-};
-
-// Declaration-record carrier: the functions in this translation unit sample
-// the accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordAO {
-	inline void Record0() {}
-};
-
-class MxUnkRecordLV0;
-
 DECOMP_SIZE_ASSERT(LegoVideoManager, 0x590)
 DECOMP_SIZE_ASSERT(MxStopWatch, 0x18)
 DECOMP_SIZE_ASSERT(MxFrequencyMeter, 0x20)

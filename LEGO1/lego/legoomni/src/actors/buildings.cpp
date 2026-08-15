@@ -1,13 +1,3 @@
-// Declaration-record carrier (dial campaign, PRE): samples this translation
-// unit's accumulated declaration state before the include block. [27 units]
-class RkBUM0 {
-	void m0() {}
-};
-class RkBUM1 {
-	void m1() {}
-};
-class RkBUC0 {};
-
 #include "buildings.h"
 
 #include "act2main_actions.h"
@@ -32,17 +22,6 @@ class RkBUC0 {};
 #include "scripts.h"
 
 #include <assert.h>
-
-// Declaration-record carriers: the HandleClick functions below sample the
-// translation unit's accumulated declaration state (see the positional record
-// calculus, session notes 2026-08-01); no authentic 1997 declarations are
-// recoverable at this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordWX;
-class MxUnkRecordWY;
-
-class MxUnkRecordAR {
-	inline void Record() {}
-};
 
 DECOMP_SIZE_ASSERT(BeachHouseEntity, 0x68)
 DECOMP_SIZE_ASSERT(BuildingEntity, 0x68)

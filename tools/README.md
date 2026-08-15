@@ -13,58 +13,30 @@ The following scripts are specific to LEGO Island and have thus remained here:
 * [`patch_smartheap_331.py`](/tools/patch_smartheap_331.py): Regenerates `3rdparty/smartheap/SHLW32MT.LIB` (SmartHeap 3.31, as linked by the original binaries) from the 3.30 lib in git history plus the original `ISLE.EXE`.
 * [`gen_smacker_lib.py`](/tools/gen_smacker_lib.py): Regenerates `3rdparty/smacker/smackw32.lib` by carving the original Win32 Smacker contribution out of the original `LEGO1.DLL`.
 
-## Modules
+## Byte-identical builds: `isle_build.py`
 
-The following is a list of all the modules found in the annotations (e.g. `// FUNCTION: [module] [address]`) and which binaries they refer to. See also [this list of all known versions of the game](https://www.legoisland.org/wiki/LEGO_Island#Download).
-
-### Retail v1.1.0.0 (v1.1)
-
-* `LEGO1` -> `LEGO1.DLL`
-* `CONFIG`-> `CONFIG.EXE`
-* `ISLE` -> `ISLE.EXE`
-
-These modules are the most important ones and refer to the English retail version 1.1.0.0 (often shortened to v1.1), which is the most widely released one. These are the ones we attempt to decompile and match as best as possible.
-
-### BETA v1.0
-
-* `BETA10` -> `LEGO1D.DLL`
-* `CONFIGD` -> `CONFIG.EXE`
-
-The Beta 1.0 version contains a debug build of the game. While it does not have debug symbols, it still has a number of benefits:
-
-* It is built with less or no optimisation, leading to better decompilations in Ghidra
-* Far fewer functions are inlined by the compiler, so it can be used to recognise inlined functions
-* It contains assertions that tell us original variable names and code file paths
-
-It is therefore advisable to search for the corresponding function in `BETA10` when decompiling a function in `LEGO1`. Finding the correct function can be tricky, but is usually worth it, especially for longer functions.
-
-Unfortunately, some code has been changed after this beta version was created. Therefore, we are not aiming for a perfect binary match of `BETA10`. In case of discrepancies, `LEGO1` (as defined above) is our "gold standard" for matching.
-
-The beta version of the `CONFIG` application has provided some help with matching [MFC handler functions](https://en.wikipedia.org/wiki/Microsoft_Foundation_Class_Library) that are similar to the final version.
-
-### Pre-Alpha
-
-* `ALPHA` -> `LEGO1D.DLL`
-
-This debug build is hardly used since it has little benefit over `BETA10`.
-
-## Re-compiling a beta build
-
-If you want to match the code against `BETA10`, use the following `cmake` setup to create a debug build:
+The byte-identity build is driven by `tools/isle_build.py`. It renders the
+typed entropy manifest into an effective source view, builds it with the
+pinned MSVC 4.2 toolchain through the ordinary CMake graph, applies the
+manifest's COMDAT compositions, scores the result with the pinned reccmp,
+and enforces the row/MD5 gates:
 
 ```bash
-cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_BUILD_TYPE=Debug -DISLE_USE_SMARTHEAP=OFF -DISLE_BUILD_BETA10=ON -DISLE_BUILD_LEGO1=OFF
+export ISLE_BYTE_IDENTITY_RECCMP_EXECUTABLE=/absolute/path/to/reccmp-reccmp
+python3 tools/isle_build.py \
+  --build-dir /absolute/path/outside/the/tree \
+  --compiler /absolute/path/to/msvc420/wine/x86/cl        # or a native CL wrapper
 ```
 
-If you can figure out how to make a debug build with SmartHeap enabled, please add it here.
+Authenticity is carried by pins and outputs, not by environment modeling:
+the compiler/linker binaries, the manifest and rendered sources, the reccmp
+verifier, and the produced objects/image/report are all hash-checked; a
+misbehaving host can only fail the gates, never fake a pass. Iteration runs
+are incremental (an unchanged cycle takes ~10 seconds; a full build a few
+minutes) and print named row gains/losses against the pinned accepted set.
+`--terminal` additionally requires 4933/4933 and the retail LEGO1.DLL MD5.
 
-If you want to run scripts to compare your debug build to `BETA10` (e.g. `reccmp-reccmp`), it is advisable to add a copy of `LEGO1D.DLL` from Beta 1.0 to `/legobin` and rename it to `BETA10.DLL`. Analogously, you can add `LEGO1D.DLL` from the Pre-Alpha and rename it to `ALPHA.DLL`.
-
-## Finding matching functions
-
-This is not a recipe, but rather a list of things you can try.
-
-* If you are working on a virtual function in a class, try to find the class' vtable. Many (but not all) classes implement `ClassName()`. These functions are usually easy to find by searching the memory for the string consisting of the class name. Keep in mind that not all child classes overwrite this function, so if the function you found is used in multiple vtables (or if you found multiple `ClassName()`-like functions), make sure you actually have the parent's vtable.
-* If that does not help, you can try to walk up the call tree and try to locate a function that calls the function you are interested in.
-* Assertions can also help you - most `.cpp` file names have already been matched based on `BETA10`, so you can search for the name of your `.cpp` file and check all the assertions in that file. While that does not find all functions in a given source file, it usually finds the more complex ones.
-* _If you have found any other strategies, please add them here._
+The current pinned source-true baseline is 4769/4933. The historical 4816
+accepted set additionally contained retained-corpus donor objects whose
+source recipes are not yet in the manifest; that 47-row delta plus the
+remaining open rows form the queue toward 4933/4933.

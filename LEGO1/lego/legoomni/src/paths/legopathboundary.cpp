@@ -1,14 +1,3 @@
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkC0 {};
-class RkC1 {};
-class RkC2 {};
-class RkC3 {};
-class RkC4 {};
-class RkC5 {};
-class RkC6 {};
-class RkC7 {};
-
 #include "legopathboundary.h"
 
 #include "decomp.h"
@@ -29,7 +18,7 @@ LegoPathBoundary::LegoPathBoundary()
 // FUNCTION: BETA10 0x100b140d
 LegoPathBoundary::~LegoPathBoundary()
 {
-	for (LegoPathActorSet::iterator it = m_actors.begin(); !(it == m_actors.end()); it++) {
+	for (LegoPathActorSet::iterator it = m_actors.begin(); it != m_actors.end(); it++) {
 		(*it)->SetBoundary(NULL);
 	}
 
@@ -188,30 +177,6 @@ void LegoPathBoundary::SwitchBoundary(
 		p_scale = 1.0 - p_scale;
 	}
 }
-
-// Declaration-record carrier (dial campaign): samples this translation unit's
-// accumulated declaration state at the point BETWEEN SwitchBoundary and
-// Intersect. Unlike the top-of-file carriers this position is downstream of
-// the LegoPathActor set's instantiation, which is what separates _Distance
-// from the rest of the end-of-unit pool. Neutral stand-in.
-class RkD0 {};
-class RkD1;
-class RkD2;
-class RkD3;
-class RkD4;
-class RkD5;
-class RkD6;
-class RkD7;
-class RkD8;
-class RkD9;
-class RkD10;
-class RkD11;
-class RkD12;
-class RkD13;
-class RkD14;
-class RkD15;
-class RkD16;
-class RkD17;
 
 // FUNCTION: LEGO1 0x10057950
 // FUNCTION: BETA10 0x100b1adc
@@ -373,39 +338,6 @@ MxU32 LegoPathBoundary::Intersect(
 	return 0;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordFH {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-	inline void Record6() {}
-	inline void Record7() {}
-};
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in.
-class RkPbG00;
-class RkPbG01;
-class RkPbG02;
-class RkPbG03;
-class RkPbG04;
-class RkPbG05;
-class RkPbG06;
-class RkPbG07;
-class RkPbG08;
-class RkPbG09;
-class RkPbG10;
-class RkPbG11;
-class RkPbG12;
-class RkPbG13;
-class RkPbG14;
-
 // FUNCTION: LEGO1 0x10057fe0
 // FUNCTION: BETA10 0x100b2220
 MxU32 LegoPathBoundary::AddPresenterIfInRange(LegoAnimPresenter* p_presenter)
@@ -452,41 +384,3 @@ MxU32 LegoPathBoundary::RemovePresenter(LegoAnimPresenter* p_presenter)
 
 	return 0;
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class ZbP000;
-class ZbP001;
-class ZbP002;
-class ZbP003;
-class ZbP004;
-class ZbP005;
-class ZbP006;
-class ZbP007;
-class ZbP008;
-class ZbP009;
-class ZbP010;
-class ZbP011;
-class ZbP012;
-class ZbP013;
-class ZbP014;
-class ZbP015;
-class ZbP016;
-class ZbP017;
-class ZbP018;
-class ZbP019;
-class ZbP020;
-class ZbP021;
-class ZbP022;
-class ZbP023;
-class ZbP024;
-class ZbP025;
-class ZbP026;
-class ZbP027;
-class ZbP028;
-class ZbP029;
-class ZbP030;
-class ZbP031;
-class ZbP032;
-class ZbP033;
-class ZbP034;

@@ -1,246 +1,257 @@
 include_guard(GLOBAL)
+set(_ISLE_BYTE_IDENTITY_MODULE "${CMAKE_CURRENT_LIST_FILE}")
 
-# Enable the first, deliberately incomplete byte-identity production phase.
-# This module is included only from an ISLE_BYTE_IDENTICAL=ON configure.  It
-# validates the fixed source-controlled manifest, materializes build-tree-only
-# entropy headers, and installs an atomic pass-through launcher on affected
-# targets.  Unsupported COMDAT/archive/image recipes fail during configure.
-function(isle_enable_byte_identity manifest)
-  if(NOT ISLE_BYTE_IDENTICAL)
-    message(FATAL_ERROR
-      "byte_identity.cmake may be used only with ISLE_BYTE_IDENTICAL=ON")
+function(_isle_byte_identity_lexical_target_source target source output)
+  get_target_property(_source_directory "${target}" SOURCE_DIR)
+  if(IS_ABSOLUTE "${source}")
+    get_filename_component(_absolute "${source}" ABSOLUTE)
+  else()
+    get_filename_component(_absolute "${source}" ABSOLUTE
+                           BASE_DIR "${_source_directory}")
   endif()
-  if(NOT MSVC_FOR_DECOMP)
-    message(FATAL_ERROR
-      "ISLE_BYTE_IDENTICAL manifest composition requires the MSVC 4.20 toolchain")
+  set(${output} "${_absolute}" PARENT_SCOPE)
+endfunction()
+
+function(_isle_apply_byte_identity_source_overlay_graph)
+  if(NOT ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_PREBUILT_SOURCE_ARTIFACTS
+     STREQUAL "forbidden")
+    message(FATAL_ERROR "Source overlay prebuilt source artifacts are not forbidden")
   endif()
-  if(NOT CMAKE_GENERATOR STREQUAL "Ninja" AND
-     NOT CMAKE_GENERATOR STREQUAL "Unix Makefiles")
-    message(FATAL_ERROR
-      "ISLE_BYTE_IDENTICAL manifest composition supports only Ninja and Unix Makefiles")
-  endif()
-  # CMAKE_SYSTEM_NAME is Windows for this cross-build, so UNIX describes the
-  # target and is false even though the launcher itself runs on macOS/Linux.
-  if(NOT CMAKE_HOST_UNIX)
-    message(FATAL_ERROR
-      "The byte-identity launcher requires POSIX process-group and file-lock semantics")
-  endif()
-  get_filename_component(_source_root "${PROJECT_SOURCE_DIR}" REALPATH)
-  get_filename_component(_build_root "${CMAKE_BINARY_DIR}" REALPATH)
-  if("${_source_root}" STREQUAL "${_build_root}")
-    message(FATAL_ERROR "In-source byte-identity builds are forbidden")
-  endif()
-  get_property(_rule_launcher DIRECTORY PROPERTY RULE_LAUNCH_COMPILE)
-  if(_rule_launcher)
-    message(FATAL_ERROR
-      "A directory RULE_LAUNCH_COMPILE hook is not permitted in a byte-identity build")
-  endif()
-  if(ISLE_INCLUDE_ENTROPY OR ISLE_TU_ENTROPY_MANIFEST)
-    message(FATAL_ERROR
-      "The byte-identity manifest owns entropy; disable ISLE_INCLUDE_ENTROPY and ISLE_TU_ENTROPY_MANIFEST")
-  endif()
-  if(NOT ISLE_PER_OBJECT_PDB)
-    message(FATAL_ERROR
-      "The byte-identity launcher requires ISLE_PER_OBJECT_PDB=ON for isolated compiler PDBs")
-  endif()
-  if(NOT CMAKE_CXX_COMPILE_OBJECT MATCHES "[/-]Fd<OBJECT>\\.pdb")
-    message(FATAL_ERROR
-      "The byte-identity launcher requires the active compile rule to use one /Fd<OBJECT>.pdb per object")
+  if(NOT ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_ENABLED)
+    if(ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_OUTPUTS OR
+       ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_TU_INDICES OR
+       ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_LINK_INDICES OR
+       ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_FORBIDDEN_INTERFACES)
+      message(FATAL_ERROR "Disabled source overlay emitted graph policy")
+    endif()
+    return()
   endif()
 
-  string(TOUPPER "${CMAKE_BUILD_TYPE}" _config_upper)
-  set(_config_flags_var "CMAKE_CXX_FLAGS_${_config_upper}")
-  set(_effective_compile_flags
-    "${CMAKE_CXX_FLAGS} ${${_config_flags_var}}")
-  string(TOLOWER "${_effective_compile_flags}" _effective_compile_flags)
-  if(NOT _effective_compile_flags MATCHES "(^|[ \t])[-/]zi([ \t]|$)")
-    message(FATAL_ERROR
-      "ISLE_BYTE_IDENTICAL requires an active /Zi build configuration")
-  endif()
-  foreach(_link_kind EXE SHARED)
-    set(_config_link_flags_var
-      "CMAKE_${_link_kind}_LINKER_FLAGS_${_config_upper}")
-    set(_effective_link_flags
-      "${CMAKE_${_link_kind}_LINKER_FLAGS} ${${_config_link_flags_var}}")
-    string(TOLOWER "${_effective_link_flags}" _effective_link_flags)
-    if(_effective_link_flags MATCHES "(^|[ \t])[-/]debug([ :\t]|$)")
+  foreach(_interface IN LISTS
+      ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_FORBIDDEN_INTERFACES)
+    if(DEFINED ${_interface})
       message(FATAL_ERROR
-        "ISLE_BYTE_IDENTICAL main ${_link_kind} link still enables /debug")
+        "Legacy entropy interface remains defined in typed-overlay mode: ${_interface}")
     endif()
   endforeach()
 
-  get_filename_component(_manifest "${manifest}" REALPATH
-                         BASE_DIR "${PROJECT_SOURCE_DIR}")
-  if(NOT EXISTS "${_manifest}")
-    message(FATAL_ERROR "Missing fixed byte-identity manifest: ${_manifest}")
-  endif()
-  set(_tool "${PROJECT_SOURCE_DIR}/tools/byte_identity.py")
-  set(_entropy_tool "${PROJECT_SOURCE_DIR}/tools/entropy.py")
-  if(NOT EXISTS "${_tool}" OR NOT EXISTS "${_entropy_tool}")
-    message(FATAL_ERROR "Byte-identity tools are missing")
-  endif()
-  find_package(Python3 3.10 COMPONENTS Interpreter REQUIRED)
-
-  set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
-    "${_manifest}" "${_tool}" "${_entropy_tool}")
-  set(_state_dir "${CMAKE_BINARY_DIR}/byte-identity")
-  set(_plan "${_state_dir}/plan.cmake")
-  file(MAKE_DIRECTORY "${_state_dir}")
-  execute_process(
-    COMMAND "${Python3_EXECUTABLE}" "${_tool}" plan
-            --manifest "${_manifest}"
-            --source-dir "${PROJECT_SOURCE_DIR}"
-            --build-dir "${CMAKE_BINARY_DIR}"
-            --compiler "${CMAKE_CXX_COMPILER}"
-            --compiler-id "${CMAKE_CXX_COMPILER_ID}"
-            --compiler-version "${CMAKE_CXX_COMPILER_VERSION}"
-            --generator "${CMAKE_GENERATOR}"
-            --output "${_plan}"
-    RESULT_VARIABLE _plan_result
-    OUTPUT_VARIABLE _plan_output
-    ERROR_VARIABLE _plan_error
-  )
-  if(NOT _plan_result EQUAL 0 OR NOT EXISTS "${_plan}")
-    file(REMOVE "${_plan}")
-    message(FATAL_ERROR
-      "Byte-identity manifest planning failed (${_plan_result}):\n${_plan_output}${_plan_error}")
-  endif()
-  include("${_plan}")
-  if(NOT ISLE_BYTE_IDENTITY_PHASE STREQUAL "pass_through_launcher_v1")
-    message(FATAL_ERROR "Generated byte-identity plan has an unsupported phase")
-  endif()
-  if(NOT ISLE_BYTE_IDENTITY_COMPLETION STREQUAL "planned_not_composed")
-    message(FATAL_ERROR "Pass-through plan improperly claims byte-identity completion")
-  endif()
-
-  # An earlier framework verdict must never survive a later failed rebuild.
-  # This always-run dependency invalidates it before any affected target starts.
-  add_custom_target(byte-identity-invalidate
-    COMMAND "${Python3_EXECUTABLE}" "${_tool}" invalidate
-            --build-dir "${CMAKE_BINARY_DIR}"
-    VERBATIM
-  )
-
-  set(_listed_sources)
-  foreach(_index IN LISTS ISLE_BYTE_IDENTITY_TU_INDICES)
-    set(_prefix "ISLE_BYTE_IDENTITY_TU_${_index}")
-    list(APPEND _listed_sources "${${_prefix}_SOURCE}")
-    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
-      "${${_prefix}_SOURCE}")
-  endforeach()
-
-  set(_materialized_outputs)
-  foreach(_recipe_id IN LISTS ISLE_BYTE_IDENTITY_RECIPE_IDS)
-    set(_output_var "ISLE_BYTE_IDENTITY_RECIPE_${_recipe_id}_OUTPUT")
-    set(_output "${${_output_var}}")
-    if(NOT _output)
-      message(FATAL_ERROR "Generated plan omitted output for recipe ${_recipe_id}")
+  set(_expected_tu_index 0)
+  set(_overlay_tu_paths)
+  set(_overlay_tu_ordinals)
+  foreach(_index IN LISTS ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_TU_INDICES)
+    if(NOT "${_index}" MATCHES "^(0|[1-9][0-9]*)$" OR
+       NOT _index EQUAL _expected_tu_index)
+      message(FATAL_ERROR
+        "Source overlay generated-TU indices are not canonical")
     endif()
-    add_custom_command(
-      OUTPUT "${_output}"
-      BYPRODUCTS
-        "${_state_dir}/audit/materialization/${_recipe_id}.json"
-      COMMAND "${Python3_EXECUTABLE}" "${_tool}" materialize
-              --manifest "${_manifest}"
-              --source-dir "${PROJECT_SOURCE_DIR}"
-              --build-dir "${CMAKE_BINARY_DIR}"
-              --recipe-id "${_recipe_id}"
-              --output "${_output}"
-      DEPENDS "${_manifest}" "${_tool}" "${_entropy_tool}" ${_listed_sources}
-      COMMENT "Materializing verified non-emitting entropy ${_recipe_id}"
-      VERBATIM
-    )
-    list(APPEND _materialized_outputs "${_output}")
+    math(EXPR _expected_tu_index "${_expected_tu_index} + 1")
+    set(_prefix "ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_TU_${_index}")
+    list(FIND _overlay_tu_paths "${${_prefix}_PATH}" _duplicate_path)
+    list(FIND _overlay_tu_ordinals
+         "${${_prefix}_SOURCE_ORDINAL}" _duplicate_ordinal)
+    list(FIND ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_OUTPUTS
+         "${${_prefix}_PATH}" _owned_output)
+    if(NOT _duplicate_path EQUAL -1 OR
+       NOT _duplicate_ordinal EQUAL -1 OR
+       _owned_output EQUAL -1)
+      message(FATAL_ERROR
+        "Source overlay generated-TU path/ordinal authority is duplicated or absent")
+    endif()
+    list(APPEND _overlay_tu_paths "${${_prefix}_PATH}")
+    list(APPEND _overlay_tu_ordinals "${${_prefix}_SOURCE_ORDINAL}")
   endforeach()
-  add_custom_target(byte-identity-materialize DEPENDS ${_materialized_outputs})
 
-  set(_affected_targets)
-  foreach(_index IN LISTS ISLE_BYTE_IDENTITY_TU_INDICES)
-    set(_prefix "ISLE_BYTE_IDENTITY_TU_${_index}")
-    set(_target "${${_prefix}_TARGET}")
-    set(_source "${${_prefix}_SOURCE}")
-    set(_outputs "${${_prefix}_OUTPUTS}")
-    set(_audit "${${_prefix}_AUDIT}")
+  set(_overlay_target_count 0)
+  foreach(_target lego1 beta10)
     if(NOT TARGET "${_target}")
-      message(FATAL_ERROR "Byte-identity manifest references missing target: ${_target}")
+      continue()
     endif()
-    get_target_property(_target_link_options "${_target}" LINK_OPTIONS)
-    if(_target_link_options)
-      string(TOLOWER "${_target_link_options}" _target_link_options_lower)
-      if(_target_link_options_lower MATCHES "(^|[ ;])[-/]debug([ :;]|$)")
+    math(EXPR _overlay_target_count "${_overlay_target_count} + 1")
+    get_target_property(_sources "${_target}" SOURCES)
+    if(_sources MATCHES "-NOTFOUND$")
+      set(_sources)
+    endif()
+    foreach(_index IN LISTS ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_TU_INDICES)
+      set(_prefix "ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_TU_${_index}")
+      list(LENGTH ${_prefix}_GENERATION_OPERATION_IDS
+           _generation_operation_count)
+      string(LENGTH "${${_prefix}_OUTPUT_SHA256}" _output_sha_length)
+      string(LENGTH "${${_prefix}_OUTPUT_TOKEN_SHA256}"
+             _output_token_sha_length)
+      if(NOT "${${_prefix}_TARGET_FAMILY}" STREQUAL
+             "list_targets_from_add_lego_libraries" OR
+         NOT "${${_prefix}_LANGUAGE}" STREQUAL "CXX" OR
+         NOT "${${_prefix}_TARGETS}" STREQUAL "lego1;beta10" OR
+         _generation_operation_count LESS 1 OR
+         NOT _output_sha_length EQUAL 64 OR
+         NOT "${${_prefix}_OUTPUT_SHA256}" MATCHES "^[0-9a-f]+$" OR
+         NOT _output_token_sha_length EQUAL 64 OR
+         NOT "${${_prefix}_OUTPUT_TOKEN_SHA256}" MATCHES "^[0-9a-f]+$" OR
+         NOT "${${_prefix}_OUTPUT_SIZE}" MATCHES "^[0-9]+$" OR
+         NOT "${${_prefix}_OUTPUT_LINE_COUNT}" MATCHES "^[0-9]+$")
+        message(FATAL_ERROR "Source overlay generated-TU policy differs")
+      endif()
+      set(_generated "${PROJECT_SOURCE_DIR}/${${_prefix}_PATH}")
+      if(ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_MATERIALIZED)
+        # The runner materialized the effective view (generated TUs
+        # included) into this source tree before configure.
+        if(NOT EXISTS "${_generated}" OR IS_SYMLINK "${_generated}")
+          message(FATAL_ERROR
+            "Source overlay generated TU is not materialized: ${_generated}")
+        endif()
+      elseif(EXISTS "${_generated}" OR IS_SYMLINK "${_generated}")
         message(FATAL_ERROR
-          "ISLE_BYTE_IDENTICAL target ${_target} still enables /debug")
+          "Source overlay generated-only TU unexpectedly exists: ${_generated}")
       endif()
-    endif()
+      set(_generated_parent "${_generated}")
+      while(NOT "${_generated_parent}" STREQUAL "${PROJECT_SOURCE_DIR}")
+        get_filename_component(_next_parent "${_generated_parent}" DIRECTORY)
+        string(FIND "${_next_parent}/" "${PROJECT_SOURCE_DIR}/"
+               _source_root_prefix)
+        if("${_next_parent}" STREQUAL "${_generated_parent}" OR
+           NOT _source_root_prefix EQUAL 0)
+          message(FATAL_ERROR
+            "Source overlay generated-TU parent escapes the source root")
+        endif()
+        if(IS_SYMLINK "${_next_parent}")
+          message(FATAL_ERROR
+            "Source overlay generated-TU parent is redirected: ${_next_parent}")
+        endif()
+        set(_generated_parent "${_next_parent}")
+      endwhile()
+      math(EXPR _insert_index "${${_prefix}_SOURCE_ORDINAL} - 1")
+      list(LENGTH _sources _source_count)
+      if(_insert_index LESS 0 OR _insert_index GREATER _source_count)
+        message(FATAL_ERROR
+          "Source overlay TU ordinal is outside ${_target}: ${_generated}")
+      endif()
+      list(INSERT _sources ${_insert_index} "${_generated}")
+      set_property(SOURCE "${_generated}" TARGET_DIRECTORY "${_target}"
+        PROPERTY GENERATED TRUE)
+      set_property(SOURCE "${_generated}" TARGET_DIRECTORY "${_target}"
+        PROPERTY LANGUAGE CXX)
+    endforeach()
+    set_property(TARGET "${_target}" PROPERTY SOURCES ${_sources})
 
-    get_target_property(_target_sources "${_target}" SOURCES)
-    set(_source_is_member FALSE)
-    foreach(_candidate IN LISTS _target_sources)
-      if(IS_ABSOLUTE "${_candidate}")
-        get_filename_component(_candidate_abs "${_candidate}" REALPATH)
-      else()
-        get_filename_component(_candidate_abs "${_candidate}" REALPATH
-                               BASE_DIR "${PROJECT_SOURCE_DIR}")
+    foreach(_index IN LISTS ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_TU_INDICES)
+      set(_prefix "ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_TU_${_index}")
+      math(EXPR _seat "${${_prefix}_SOURCE_ORDINAL} - 1")
+      math(EXPR _after_seat "${_seat} - 1")
+      math(EXPR _before_seat "${_seat} + 1")
+      list(LENGTH _sources _final_count)
+      if(_after_seat LESS 0)
+        message(FATAL_ERROR "Source overlay TU lacks its predecessor")
       endif()
-      if("${_candidate_abs}" STREQUAL "${_source}")
-        set(_source_is_member TRUE)
-        break()
+      list(GET _sources ${_seat} _actual)
+      list(GET _sources ${_after_seat} _actual_after)
+      _isle_byte_identity_lexical_target_source(
+        "${_target}" "${_actual}" _actual_abs)
+      _isle_byte_identity_lexical_target_source(
+        "${_target}" "${_actual_after}" _actual_after_abs)
+      if(NOT "${_actual_abs}" STREQUAL
+             "${PROJECT_SOURCE_DIR}/${${_prefix}_PATH}" OR
+         NOT "${_actual_after_abs}" STREQUAL
+             "${PROJECT_SOURCE_DIR}/${${_prefix}_INSERT_AFTER}")
+        message(FATAL_ERROR
+          "Source overlay TU graph seat differs on ${_target}: ${${_prefix}_PATH}")
+      endif()
+      if("${${_prefix}_INSERT_BEFORE}" STREQUAL "")
+        # The tail contract is about C++ compile order: non-compiled sources
+        # a target appends later (module-definition or resource scripts) may
+        # legitimately trail the final generated TU, but no C/C++ TU may.
+        math(EXPR _last_seat "${_final_count} - 1")
+        if(NOT _seat EQUAL _last_seat)
+          math(EXPR _trailing_first "${_seat} + 1")
+          foreach(_trailing_seat RANGE ${_trailing_first} ${_last_seat})
+            list(GET _sources ${_trailing_seat} _trailing_source)
+            if("${_trailing_source}" MATCHES "\\.(c|cc|cpp|cxx)$")
+              message(FATAL_ERROR
+                "Source overlay final TU is not the C++ compile tail: "
+                "${_trailing_source}")
+            endif()
+          endforeach()
+        endif()
+      else()
+        if(_before_seat GREATER_EQUAL _final_count)
+          message(FATAL_ERROR "Source overlay TU lacks its successor")
+        endif()
+        list(GET _sources ${_before_seat} _actual_before)
+        _isle_byte_identity_lexical_target_source(
+          "${_target}" "${_actual_before}" _actual_before_abs)
+        if(NOT "${_actual_before_abs}" STREQUAL
+               "${PROJECT_SOURCE_DIR}/${${_prefix}_INSERT_BEFORE}")
+          message(FATAL_ERROR
+            "Source overlay TU successor differs on ${_target}: ${${_prefix}_PATH}")
+        endif()
       endif()
     endforeach()
-    if(NOT _source_is_member)
-      message(FATAL_ERROR
-        "Byte-identity source ${_source} is not a member of target ${_target}")
-    endif()
-
-    list(FIND _affected_targets "${_target}" _launcher_index)
-    if(_launcher_index EQUAL -1)
-      get_property(_existing_launcher TARGET "${_target}"
-                   PROPERTY CXX_COMPILER_LAUNCHER)
-      if(_existing_launcher)
-        message(FATAL_ERROR
-          "Byte-identity target ${_target} already has a compiler launcher; "
-          "an unpinned launcher is not permitted")
-      endif()
-      set(_launcher
-        "${Python3_EXECUTABLE}"
-        "${_tool}"
-        compile-launch
-        --manifest "${_manifest}"
-        --source-dir "${PROJECT_SOURCE_DIR}"
-        --build-dir "${CMAKE_BINARY_DIR}"
-        --target "${_target}"
-        --configured-compiler "${CMAKE_CXX_COMPILER}"
-        --
-      )
-      set_property(TARGET "${_target}" PROPERTY CXX_COMPILER_LAUNCHER
-                   ${_launcher})
-      add_dependencies("${_target}" byte-identity-invalidate)
-      list(APPEND _affected_targets "${_target}")
-    endif()
-
-    # All project targets are declared in this top-level directory.  Avoid the
-    # newer TARGET_DIRECTORY form so the project's CMake 3.15 minimum remains
-    # valid.
-    set_property(SOURCE "${_source}" APPEND PROPERTY OBJECT_DEPENDS
-      "${_manifest}" "${_tool}" "${_entropy_tool}" ${_outputs})
-    set_property(SOURCE "${_source}" APPEND PROPERTY OBJECT_OUTPUTS
-      "${_audit}")
-    set_property(TARGET "${_target}" APPEND PROPERTY LINK_DEPENDS
-      "${_manifest}" "${_tool}")
   endforeach()
-  list(REMOVE_DUPLICATES _affected_targets)
+  if(ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_TU_INDICES AND
+     _overlay_target_count EQUAL 0)
+    message(FATAL_ERROR "Source overlay has no configured LEGO target instance")
+  endif()
 
-  add_custom_target(byte-identity-verify
-    COMMAND "${Python3_EXECUTABLE}" "${_tool}" verify
-            --manifest "${_manifest}"
-            --source-dir "${PROJECT_SOURCE_DIR}"
-            --build-dir "${CMAKE_BINARY_DIR}"
-            --compiler "${CMAKE_CXX_COMPILER}"
-    DEPENDS byte-identity-materialize ${_affected_targets}
-    COMMENT "Verifying byte-identity framework audits (composition remains fail-closed)"
-    VERBATIM
-  )
-  message(STATUS
-    "ISLE_BYTE_IDENTICAL manifest framework enabled (${ISLE_BYTE_IDENTITY_PHASE}); "
-    "COMDAT composition remains unsupported/fatal")
+  set(_expected_link_index 0)
+  foreach(_index IN LISTS ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_LINK_INDICES)
+    if(NOT "${_index}" MATCHES "^(0|[1-9][0-9]*)$" OR
+       NOT _index EQUAL _expected_link_index)
+      message(FATAL_ERROR "Source overlay link indices are not canonical")
+    endif()
+    math(EXPR _expected_link_index "${_expected_link_index} + 1")
+    set(_prefix "ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_LINK_${_index}")
+    set(_target "${${_prefix}_TARGET}")
+    if(NOT TARGET "${_target}" OR
+       NOT "${${_prefix}_VISIBILITY}" STREQUAL "PRIVATE" OR
+       NOT "${${_prefix}_ADMISSION_ID}" STREQUAL
+           "config_private_dsound_probe_v1" OR
+       NOT "${${_prefix}_SOURCE_OUTPUT}" STREQUAL
+           "CONFIG/detectdx5.cpp" OR
+       NOT "${${_prefix}_REQUIRED_OPERATION_IDS}" STREQUAL
+           "op_3624_config_dsound_probe")
+      message(FATAL_ERROR "Source overlay link target/visibility differs")
+    endif()
+    get_target_property(_links "${_target}" LINK_LIBRARIES)
+    if(_links MATCHES "-NOTFOUND$")
+      set(_links)
+    endif()
+    set(_seat_count 0)
+    list(LENGTH _links _link_count)
+    if(_link_count GREATER 1)
+      math(EXPR _last_pair "${_link_count} - 2")
+      foreach(_seat RANGE 0 ${_last_pair})
+        math(EXPR _next "${_seat} + 1")
+        list(GET _links ${_seat} _after)
+        list(GET _links ${_next} _before)
+        if("${_after}" STREQUAL "${${_prefix}_INSERT_AFTER}" AND
+           "${_before}" STREQUAL "${${_prefix}_INSERT_BEFORE}")
+          math(EXPR _seat_count "${_seat_count} + 1")
+          set(_link_insert_index ${_next})
+        endif()
+      endforeach()
+    endif()
+    if(NOT _seat_count EQUAL 1)
+      message(FATAL_ERROR "Source overlay link neighbor seat is not unique")
+    endif()
+    list(FIND _links "${${_prefix}_LIBRARY}" _existing_library)
+    if(NOT _existing_library EQUAL -1)
+      message(FATAL_ERROR "Source overlay link library already exists")
+    endif()
+    list(INSERT _links ${_link_insert_index} "${${_prefix}_LIBRARY}")
+    set_property(TARGET "${_target}" PROPERTY LINK_LIBRARIES ${_links})
+    get_target_property(_final_links "${_target}" LINK_LIBRARIES)
+    list(FIND _final_links "${${_prefix}_LIBRARY}" _actual_link_seat)
+    math(EXPR _expected_after_seat "${_actual_link_seat} - 1")
+    math(EXPR _expected_before_seat "${_actual_link_seat} + 1")
+    list(LENGTH _final_links _final_link_count)
+    if(_actual_link_seat LESS 1 OR
+       _expected_before_seat GREATER_EQUAL _final_link_count)
+      message(FATAL_ERROR "Source overlay inserted link seat is incomplete")
+    endif()
+    list(GET _final_links ${_expected_after_seat} _actual_link_after)
+    list(GET _final_links ${_expected_before_seat} _actual_link_before)
+    if(NOT "${_actual_link_after}" STREQUAL "${${_prefix}_INSERT_AFTER}" OR
+       NOT "${_actual_link_before}" STREQUAL "${${_prefix}_INSERT_BEFORE}")
+      message(FATAL_ERROR "Source overlay inserted link seat differs")
+    endif()
+  endforeach()
 endfunction()

@@ -22,36 +22,6 @@
 
 #include <assert.h>
 
-// Declaration-record carrier: the definitions below sample the translation
-// unit's accumulated declaration state at this point (see the positional
-// record calculus, session notes 2026-08-01). Neutral stand-in.
-class MxUnkRecordMMQ;
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class QqC0 {};
-class QqC1 {};
-class QqC2 {};
-class QqC3 {};
-class QqC4 {};
-class QqC5 {};
-class QqC6 {};
-class QqC7 {};
-
-// Declaration-record carriers: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declarations are recoverable
-// at this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordAT {
-	inline void Record0() {}
-	inline void Record1() {}
-};
-
-class MxUnkRecordAU {
-	inline void Record0() {}
-	inline void Record1() {}
-};
-
 DECOMP_SIZE_ASSERT(LegoAnimMMPresenter, 0x74)
 
 // FUNCTION: LEGO1 0x1004a8d0
@@ -346,13 +316,6 @@ MxBool LegoAnimMMPresenter::FUN_1004b450()
 	return result;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordVN;
-class MxUnkRecordVO;
-
 // FUNCTION: LEGO1 0x1004b530
 // FUNCTION: BETA10 0x1004c8c4
 MxBool LegoAnimMMPresenter::FUN_1004b530(MxLong p_time)
@@ -534,16 +497,6 @@ MxBool LegoAnimMMPresenter::FUN_1004b830()
 {
 	return m_unk0x58 >= e_unk6;
 }
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class MmA000;
-class MmA001;
-class MmA002;
-class MmA003;
-class MmA004;
-class MmA005;
-class MmA006;
-
 // FUNCTION: LEGO1 0x1004b840
 // FUNCTION: BETA10 0x1004d033
 void LegoAnimMMPresenter::FUN_1004b840()
@@ -583,13 +536,3 @@ void LegoAnimMMPresenter::FUN_1004b8c0()
 {
 	FUN_1004b6d0(0);
 }
-
-// Declaration-record carriers: the end-of-unit template pool samples the
-// translation unit's total declaration state (see the positional record
-// calculus, session notes 2026-08-01); no authentic 1997 declarations are
-// recoverable at this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordMMP00;
-class MxUnkRecordMMP01;
-class MxUnkRecordMMP02;
-class MxUnkRecordMMP03;
-class MxUnkRecordMMP04;

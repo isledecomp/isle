@@ -1,35 +1,6 @@
 #ifndef TGL_D3DRM_TGLRL40_H
 #define TGL_D3DRM_TGLRL40_H
 
-// Record carriers (scaffolding): 21 units seated ahead of tglImpl.h so the
-// deferred inline bodies below land on the 1997 register schedule.
-class MxUnkRecordTGH00;
-class MxUnkRecordTGH01;
-class MxUnkRecordTGH02;
-class MxUnkRecordTGH03;
-class MxUnkRecordTGH04;
-class MxUnkRecordTGH05;
-class MxUnkRecordTGH06;
-class MxUnkRecordTGH07;
-class MxUnkRecordTGH08;
-class MxUnkRecordTGH09;
-class MxUnkRecordTGH10;
-class MxUnkRecordTGH11;
-class MxUnkRecordTGH12;
-class MxUnkRecordTGH13;
-class MxUnkRecordTGH14;
-class MxUnkRecordTGH15;
-class MxUnkRecordTGH16;
-class MxUnkRecordTGH17;
-class MxUnkRecordTGH18;
-class MxUnkRecordTGH19;
-class MxUnkRecordTGH20;
-
-class MxUnkRecordPre00;
-class MxUnkRecordPre01;
-class MxUnkRecordPre02;
-class MxUnkRecordPre03;
-class MxUnkRecordPre04;
 #include "tglimpl.h"
 
 #include <d3drmwin.h>
@@ -1490,22 +1461,4 @@ inline void TextureImpl::Destroy()
 
 } /* namespace TglImpl */
 
-class MxUnkRecordPost00;
-class MxUnkRecordPost01;
-class MxUnkRecordPost02;
-class MxUnkRecordPost03;
-class MxUnkRecordPost04;
-class MxUnkRecordPost05;
-class MxUnkRecordPost06;
-class MxUnkRecordPost07;
-class MxUnkRecordPost08;
-class MxUnkRecordPost09;
-class MxUnkRecordPost10;
-class MxUnkRecordPost11;
-class MxUnkRecordPost12;
-class MxUnkRecordPost13;
-class MxUnkRecordPost14;
-class MxUnkRecordPost15;
-class MxUnkRecordPost16;
-class MxUnkRecordPost17;
 #endif

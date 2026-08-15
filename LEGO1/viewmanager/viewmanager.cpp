@@ -1,11 +1,3 @@
-class VmL000;
-class VmL001;
-class VmL002;
-class VmL003;
-class VmL004;
-class VmL005;
-class VmL006;
-class VmL007;
 #include "viewmanager.h"
 
 #include "mxdirectx/mxstopwatch.h"
@@ -15,9 +7,6 @@ class VmL007;
 #include <vec.h>
 
 using namespace Tgl;
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-
 DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 
 // GLOBAL: LEGO1 0x100dbc78
@@ -443,37 +432,6 @@ void ViewManager::RemoveROIDetailFromScene(ViewROI* p_from)
 	p_from->SetToken(ViewROI::c_tokenUnset);
 }
 
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class VmRec9000;
-class VmRec9001;
-class VmRec9002;
-class VmRec9003;
-class VmRec9004;
-class VmRec9005;
-class VmRec9006;
-class VmRec9007;
-class VmRec9008;
-class VmRec9009;
-class VmRec9010;
-class VmRec9011;
-class VmRec9012;
-class VmRec9013;
-class VmRec9014;
-class VmRec9015;
-class VmRec9016;
-class VmRec9017;
-class VmRec9018;
-class VmRec9019;
-class VmRec9020;
-class VmRec9021;
-class VmRec9022;
-class VmRec9023;
-class VmRec9024;
-class VmRec9025;
-class VmRec9026;
-class VmRec9027;
-
 // FUNCTION: LEGO1 0x100a66f0
 // FUNCTION: BETA10 0x1017297f
 void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lodLevel)
@@ -533,18 +491,6 @@ void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lo
 	}
 }
 
-class VmRec93000;
-class VmRec93001;
-class VmRec93002;
-class VmRec93003;
-class VmRec93004;
-class VmRec93005;
-class VmRec93006;
-class VmRec93007;
-class VmRec93008;
-class VmRec93009;
-class VmRec93010;
-class VmRec93011;
 // FUNCTION: LEGO1 0x100a6930
 void ViewManager::Update(float p_previousRenderTime, float)
 {
@@ -687,31 +633,6 @@ inline int ViewManager::GetFirstLODIndex(ViewROI* p_roi)
 	return 0;
 }
 
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class VmRec11000;
-class VmRec11001;
-class VmRec11002;
-
-class VmRec93100;
-class VmRec93101;
-class VmRec93102;
-class VmRec93103;
-class VmRec93104;
-class VmRec93105;
-class VmRec93106;
-class VmRec93107;
-class VmRec93108;
-class VmRec93109;
-class VmRec93110;
-class VmRec93111;
-class VmRec93112;
-class VmRec93113;
-class VmRec93114;
-class VmRec93115;
-class VmRec93116;
-class VmRec93117;
-class VmRec93118;
 // FUNCTION: LEGO1 0x100a6b90
 void ViewManager::UpdateViewTransformations()
 {
@@ -780,7 +701,6 @@ void ViewManager::SetPOVSource(const OrientableROI* point_of_view)
 	}
 }
 
-class VmRec93200;
 // FUNCTION: LEGO1 0x100a6dc0
 // FUNCTION: BETA10 0x101739b8
 float ViewManager::ProjectedSize(const BoundingSphere& p_bounding_sphere)
@@ -846,45 +766,3 @@ ViewROI* ViewManager::Pick(Tgl::View* p_view, unsigned long x, unsigned long y)
 
 	return result;
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class VmE000;
-class VmE001;
-class VmE002;
-class VmE003;
-class VmE004;
-class VmE005;
-class VmE006;
-class VmE007;
-class VmE008;
-class VmE009;
-class VmE010;
-class VmE011;
-class VmE012;
-class VmE013;
-class VmE014;
-class VmE015;
-class VmE016;
-class VmE017;
-class VmE018;
-class VmE019;
-class VmE020;
-class VmE021;
-class VmE022;
-class VmE023;
-class VmE024;
-class VmE025;
-class VmE026;
-class VmE027;
-class VmE028;
-class VmE029;
-class VmE030;
-class VmE031;
-class VmE032;
-class VmE033;
-class VmE034;
-class VmE035;
-class VmE036;
-class VmE037;
-class VmE038;

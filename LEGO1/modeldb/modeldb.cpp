@@ -1,17 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordKO {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-	inline void Record6() {}
-};
-
 #include "modeldb.h"
 
 #include <assert.h>
@@ -266,18 +252,6 @@ MxResult ReadModelDbWorlds(FILE* dbf, ModelDbWorld*& newworld, MxS32& p_numWorld
 	newworld = world;
 	p_numWorlds = numWorlds;
 	return SUCCESS;
-}
-
-// Forces the ModelDbPartListCursor destructor group to be emitted at this
-// point in the translation unit rather than after FreeModelDbWorlds.
-void ModelDbPartListRecord(ModelDbPartList* p_partlist)
-{
-	ModelDbPartListCursor cursor(p_partlist);
-	ModelDbPart* part;
-
-	while (cursor.Next(part)) {
-		delete part;
-	}
 }
 
 // FUNCTION: LEGO1 0x10028080

@@ -1,11 +1,3 @@
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point in the parse. No
-// authentic 1997 declaration is recoverable here. Neutral stand-ins
-// pending better evidence.
-class MxUnkRecordBP {
-	inline void Record() {}
-};
-
 #include "hospital.h"
 
 #include "hospital_actions.h"
@@ -29,19 +21,6 @@ class MxUnkRecordBP {
 #include "scripts.h"
 
 #include <assert.h>
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordNL;
-class MxUnkRecordNM;
-class MxUnkRecordNN;
-class MxUnkRecordNO;
-class MxUnkRecordNP;
-class MxUnkRecordNQ;
-class MxUnkRecordNR;
-class MxUnkRecordNS;
-
 DECOMP_SIZE_ASSERT(Hospital, 0x12c)
 DECOMP_SIZE_ASSERT(HospitalState, 0x18)
 
@@ -574,13 +553,6 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerNotificationParam& p_param)
 
 	return 0;
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordNT;
-class MxUnkRecordNU;
 
 // FUNCTION: LEGO1 0x10075f90
 MxBool Hospital::HandleControl(LegoControlManagerNotificationParam& p_param)

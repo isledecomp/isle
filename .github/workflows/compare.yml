@@ -1,9 +1,9 @@
 name: Compare
 
+# The legacy entropy sweep is parked until it is expressed through the typed
+# byte-identity manifest. Keep it manual so ordinary pushes do not spend CPU
+# building identical clean trees.
 on:
-  push:
-    branches:
-      - master
   workflow_dispatch:
     inputs:
       builds_per_job:

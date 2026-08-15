@@ -70,20 +70,6 @@ void Vector4::EqualsImpl(const float* p_data)
 	memcpy(m_data, p_data, sizeof(float) * 4);
 }
 
-class MxUnkRecordZ0500;
-class MxUnkRecordZ0501;
-class MxUnkRecordZ0502;
-class MxUnkRecordZ0503;
-class MxUnkRecordZ0504;
-class MxUnkRecordZ0505;
-class MxUnkRecordZ0506;
-class MxUnkRecordZ0507;
-class MxUnkRecordZ0508;
-class MxUnkRecordZ0509;
-class MxUnkRecordZ0510;
-class MxUnkRecordZ0511;
-class MxUnkRecordZ0512;
-
 // FUNCTION: LEGO1 0x10002a40
 // FUNCTION: BETA10 0x10048800
 void Vector4::SetMatrixProduct(const float* p_vec, const float* p_mat)
@@ -146,26 +132,6 @@ int Vector4::NormalizeQuaternion()
 		return -1;
 	}
 }
-
-#include "vector3dtail.inl.h"
-
-class MxUnkRecordZ0300;
-class MxUnkRecordZ0301;
-class MxUnkRecordZ0302;
-class MxUnkRecordZ0303;
-class MxUnkRecordZ0304;
-class MxUnkRecordZ0305;
-class MxUnkRecordZ0306;
-class MxUnkRecordZ0307;
-class MxUnkRecordZ0308;
-class MxUnkRecordZ0309;
-class MxUnkRecordZ0310;
-class MxUnkRecordZ0311;
-class MxUnkRecordZ0312;
-class MxUnkRecordZ0313;
-class MxUnkRecordZ0314;
-class MxUnkRecordZ0315;
-class MxUnkRecordZ0316;
 
 // FUNCTION: LEGO1 0x10002bf0
 // FUNCTION: BETA10 0x10048c20

@@ -1,14 +1,3 @@
-// Declaration-record carrier: two records ahead of the include block put this
-// translation unit at the record state retail's isleapp.obj was compiled at.
-// MEASURED against retail ISLE.EXE: WinMain's comparison at 0x004019af emits
-// `cmp [g_startupDelay], eax` (39 05) with its paired `jle` (7e) exactly as
-// retail does, instead of the mirrored `cmp eax, [..]` (3b 05) / `jge` (7d).
-// Integer comparison direction is not source-controllable in MSVC 4.20 - it is
-// decided by register allocation - so this record state is the only handle on
-// it. Total differing bytes vs retail: 480 -> 478, with no other byte moved.
-class IsleUnkRecordA;
-class IsleUnkRecordB;
-
 #include "isleapp.h"
 
 #include "realtime/orientableroi.h"
@@ -44,19 +33,6 @@ class IsleUnkRecordB;
 #include "viewmanager/viewmanager.h"
 
 #include <dsound.h>
-
-// Declaration-record carriers: the four calculus functions below sample the
-// translation unit's record state at distinct positions (see the positional
-// record calculus, session notes 2026-08-01); re-tuned for the authentic
-// ConvertRGBToHSV declaration in legoutils.h. No authentic 1997 declarations
-// are recoverable at this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordT0;
-class MxUnkRecordT1;
-class MxUnkRecordT2;
-class MxUnkRecordT3;
-class MxUnkRecordT4;
-class MxUnkRecordT5;
-class MxUnkRecordT6;
 
 DECOMP_SIZE_ASSERT(IsleApp, 0x8c)
 
@@ -248,22 +224,6 @@ BOOL IsleApp::SetupLegoOmni()
 	return result;
 }
 
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class IaRec5000;
-class IaRec5001;
-class IaRec5002;
-class IaRec5003;
-class IaRec5004;
-class IaRec5005;
-class IaRec5006;
-class IaRec5007;
-class IaRec5008;
-class IaRec5009;
-class IaRec5010;
-class IaRec5011;
-class IaRec5012;
-
 // FUNCTION: ISLE 0x401560
 void IsleApp::SetupVideoFlags(
 	BOOL fullScreen,
@@ -292,12 +252,6 @@ void IsleApp::SetupVideoFlags(
 		m_videoParam.Flags().Set16Bit(1);
 	}
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class IaRec6000;
-class IaRec6001;
-class IaRec6002;
 
 // FUNCTION: ISLE 0x401610
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
@@ -992,31 +946,4 @@ void IsleApp::SetupCursor(WPARAM wParam)
 	}
 
 	SetCursor(m_cursorCurrent);
-}
-
-// The two trailing declarations are record-count carriers: WinMain's code
-// generation samples the end-of-translation-unit declaration total (see
-// isle-tools/isleprobe.py; verified window is +2..+4 after IsleApp::Tick).
-// No authentic 1997 declaration is recoverable at this position - ISLE.EXE
-// has no BETA10 counterpart - so neutral forward declarations stand in
-// until better evidence surfaces.
-class MxUnkRecord0;
-class MxUnkRecord1;
-class MxUnkRecord2;
-class MxUnkRecord3;
-class MxUnkRecord4;
-class MxUnkRecord5;
-
-// The 1997 isleapp.obj carried one undefined symbol we do not:
-// ??_M@YGXPAXIHP6EX0@Z@Z, the vector destructor iterator, which only a heap
-// delete[] of a type with a destructor emits. Its carrier was removed by
-// /OPT:REF (it contributes zero bytes to the image), but the symbol still makes
-// the linker load LIBCMT's ehvecdtr.obj, whose own reference to terminate() is
-// what seats hooks.obj at retail's 0x4092e0. Restores .rdata/.data byte
-// exactness and .reloc's VirtualSize. The finding is proven; this carrier is a
-// stand-in for the unknown 1997 function, same standing as the record carriers
-// above - replace it if a genuine dead code path is ever recovered.
-void IsleUnusedArrayHelper(IsleApp* p_array)
-{
-	delete[] p_array;
 }

@@ -1,36 +1,7 @@
-#ifdef MXDIRECTX_FOR_CONFIG
-// CONFIG-only declaration-record carrier, at the unique global maximum of this
-// axis: k=32, best of 2,027 measured states (1-D k=0..200, plus a 1,826-cell
-// pre-include x post-include grid).
-//
-// The two rows still open here are each dial-reachable and strictly periodic
-// with period 17 -- list<MxDisplayMode>::~list is exact at k = 11 (mod 17),
-// MxDriver::MxDriver(const&) at k = 12 (mod 17) -- and those residues are
-// ADJACENT, so the two are mutually exclusive. No cell of the grid has both.
-// Every state that gains one breaks ~list<MxDriver> and MxDriver(_GUID*), so a
-// row is always paid. 110/111 was never on this axis.
-class MxUnkRecordCG001; class MxUnkRecordCG002; class MxUnkRecordCG003; class MxUnkRecordCG004; class MxUnkRecordCG005; class MxUnkRecordCG006; class MxUnkRecordCG007; class MxUnkRecordCG008; class MxUnkRecordCG009; class MxUnkRecordCG010; class MxUnkRecordCG011; class MxUnkRecordCG012; class MxUnkRecordCG013; class MxUnkRecordCG014; class MxUnkRecordCG015; class MxUnkRecordCG016; class MxUnkRecordCG017; class MxUnkRecordCG018; class MxUnkRecordCG019; class MxUnkRecordCG020; class MxUnkRecordCG021; class MxUnkRecordCG022; class MxUnkRecordCG023; class MxUnkRecordCG024; class MxUnkRecordCG025; class MxUnkRecordCG026; class MxUnkRecordCG027; class MxUnkRecordCG028; class MxUnkRecordCG029; class MxUnkRecordCG030; class MxUnkRecordCG031; class MxUnkRecordCG032;
-#endif
 #include "mxdirectxinfo.h"
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordUJ {};
-class MxUnkRecordUK {};
 
 #include <assert.h>
 #include <stdio.h> // for vsprintf
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordUL;
-class MxUnkRecordUM;
-class MxUnkRecordUN;
-class MxUnkRecordUO;
-class MxUnkRecordUP;
-
 DECOMP_SIZE_ASSERT(MxAssignedDevice, 0xe4)
 DECOMP_SIZE_ASSERT(Direct3DDeviceInfo, 0x1a4)
 DECOMP_SIZE_ASSERT(MxDisplayMode, 0x0c)
@@ -224,14 +195,6 @@ MxDeviceEnumerate::~MxDeviceEnumerate()
 {
 }
 
-// Declaration-record carrier, CONFIG only: the 1997 CONFIG build reaches this
-// function with a different accumulated declaration state than the LEGO1 build.
-// These two restore the CONFIG register assignment; removing either reverts it.
-#ifdef MXDIRECTX_FOR_CONFIG
-class CfgEnumRecordA;
-class CfgEnumRecordB;
-#endif
-
 // FUNCTION: CONFIG 0x00401770
 // FUNCTION: LEGO1 0x1009c070
 // FUNCTION: BETA10 0x1011dedf
@@ -304,13 +267,6 @@ done:
 
 	return DDENUMRET_OK;
 }
-
-// Declaration-record carrier, CONFIG only: closes the trailing basic block of
-// EnumDirectDrawCallback above (the tail of a function is settled after the
-// following declarations are read).
-#ifdef MXDIRECTX_FOR_CONFIG
-class CfgEnumRecordC;
-#endif
 
 // FUNCTION: CONFIG 0x00401bc0
 // FUNCTION: LEGO1 0x1009c4c0
@@ -653,18 +609,4 @@ DeviceModesInfo::~DeviceModesInfo()
 	}
 }
 #else
-// Declaration-record carrier: the functions above sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordSAA;
-class MxUnkRecordSAB;
-class MxUnkRecordSAC;
-class MxUnkRecordSAD;
-class MxUnkRecordSAE;
-class MxUnkRecordSAF;
-class MxUnkRecordSAG;
-class MxUnkRecordSAH;
-class MxUnkRecordSAI;
-class MxUnkRecordSAJ;
 #endif

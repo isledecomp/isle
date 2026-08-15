@@ -13,23 +13,6 @@ DECOMP_SIZE_ASSERT(BITMAPFILEHEADER, 0xe);
 // GLOBAL: BETA10 0x10203030
 MxU16 g_bitmapSignature = TWOCC('B', 'M');
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordKP;
-class MxUnkRecordKT;
-class MxUnkRecordKU;
-class MxUnkRecordKX;
-class MxUnkRecordKY;
-class MxUnkRecordKZ;
-class MxUnkRecordOA;
-class MxUnkRecordOB;
-class MxUnkRecordOC;
-class MxUnkRecordOD;
-class MxUnkRecordOE;
-class MxUnkRecordOF;
-
 // FUNCTION: LEGO1 0x100bc980
 // FUNCTION: BETA10 0x1013cab0
 MxBitmap::MxBitmap()
@@ -319,18 +302,6 @@ void MxBitmap::BitBlt(
 		srcStart += srcStride;
 	}
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordOG {
-	inline void Record() {}
-};
-
-class MxUnkRecordOH {
-	inline void Record() {}
-};
 
 // FUNCTION: LEGO1 0x100bd020
 // FUNCTION: BETA10 0x1013d4ea

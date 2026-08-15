@@ -1317,11 +1317,6 @@ void LegoNavController::SetTargets(int p_hPos, int p_vPos, MxBool p_accel)
 	}
 }
 
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class MxUnkRecordWI;
-
 // FUNCTION: LEGO1 0x10054f10
 float LegoNavController::CalculateNewTargetVel(int p_pos, int p_center, float p_max)
 {
@@ -1378,13 +1373,6 @@ float LegoNavController::CalculateNewVel(float p_targetVel, float p_currentVel, 
 
 	return newVel;
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class MxUnkRecordInstantiations000 {};
-class MxUnkRecordInstantiations001;
-class MxUnkRecordInstantiations002;
 
 // FUNCTION: LEGO1 0x10055080
 // FUNCTION: BETA10 0x1009b26b
@@ -1496,12 +1484,6 @@ MxBool LegoNavController::CalculateNewPosDir(
 
 	return changed;
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class MxUnkRecordWJ {};
-class MxUnkRecordWK {};
 
 // FUNCTION: LEGO1 0x10055500
 // FUNCTION: BETA10 0x1009bff8
@@ -1728,8 +1710,8 @@ MxResult LegoNavController::ProcessKeyboardInput()
 MxLong LegoNavController::Notify(MxParam& p_param)
 {
 	if (((MxNotificationParam&) p_param).GetNotification() == c_notificationKeyPress) {
-		m_keyPressed = TRUE;
 		MxU8 key = ((LegoEventNotificationParam&) p_param).GetKey();
+		m_keyPressed = TRUE;
 
 		switch (key) {
 		case VK_PAUSE: // Pause game

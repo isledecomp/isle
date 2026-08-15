@@ -1,9 +1,3 @@
-// Declaration-record carrier (dial campaign, PRE): samples this translation
-// unit's accumulated declaration state before the include block. [3 units]
-class RkRvF0;
-class RkRvF1;
-class RkRvF2;
-
 #include "act3ammo.h"
 
 #include "act3.h"

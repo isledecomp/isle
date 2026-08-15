@@ -81,12 +81,6 @@ option(ISLE_DECOMP_ASSERT "Assert struct size" ${MSVC_FOR_DECOMP})
 cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libraries" ON ISLE_USE_DX5 OFF)
 option(ISLE_BUILD_LEGO1 "Build LEGO1.DLL library" ON)
 option(ISLE_BUILD_BETA10 "Build BETA10.DLL library" OFF)
-option(ISLE_INCLUDE_ENTROPY "Build with entropy.h" OFF)
-# NOTE: must NOT be option() -- option() only creates BOOLs, so the default
-# "entropy.h" was coerced to OFF and the force-include became /FI<root>/OFF,
-# failing every compile with C1083 while callers read the stale DLL as a score.
-set(ISLE_ENTROPY_FILENAME "entropy.h" CACHE STRING "Entropy header filename")
-option(ISLE_BYTE_IDENTICAL "Build the no-link-debug main images in a dedicated tree while retaining compile-time /Zi; the manifest framework remains fail-closed until composition, a diagnostic PDB relink, and final MD5 gates are implemented." OFF)
 
 if(NOT (ISLE_BUILD_LEGO1 OR ISLE_BUILD_BETA10))
   message(FATAL_ERROR "ISLE_BUILD_LEGO1 AND ISLE_BUILD_BETA10 cannot be both disabled")
@@ -357,7 +351,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/legovariables.cpp
     LEGO1/lego/legoomni/src/actors/pizza.cpp
     LEGO1/lego/legoomni/src/common/legogamestate.cpp
-    LEGO1/lego/legoomni/src/audio/legocachesoundlist.cpp
     LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp
     LEGO1/lego/legoomni/src/common/legoutils.cpp
     LEGO1/lego/legoomni/src/actors/act3actors.cpp
@@ -366,19 +359,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/mxcontrolpresenter.cpp
     LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
     LEGO1/lego/legoomni/src/common/legophoneme.cpp
-    LEGO1/lego/legoomni/src/paths/legoanimpresenterset.cpp
-    LEGO1/lego/legoomni/src/paths/legopathctrledge.cpp
-    LEGO1/lego/legoomni/src/paths/legopathctrledgeset.cpp
-    LEGO1/lego/legoomni/src/paths/legopathactorset.cpp
-    LEGO1/lego/legoomni/src/paths/legopathactorsetcompare.cpp
-    LEGO1/lego/legoomni/src/paths/legopathactorsetiterator.cpp
-    LEGO1/lego/legoomni/src/paths/legoboundaryedge.cpp
-    LEGO1/lego/legoomni/src/paths/legopathctrledgeiterator.cpp
-    LEGO1/lego/legoomni/src/paths/legopathctrledgecompare.cpp
-    LEGO1/lego/legoomni/src/paths/legopathcontrollerlist.cpp
-    LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp
-    LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp
-    LEGO1/lego/legoomni/src/paths/legobewithmidpointcomparator.cpp
     LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp
     LEGO1/lego/legoomni/src/audio/lego3dwavepresenter.cpp
     LEGO1/lego/legoomni/src/common/legoanimmmpresenter.cpp
@@ -392,7 +372,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
     LEGO1/lego/legoomni/src/actors/act3ammo.cpp
     LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp
-    LEGO1/lego/legoomni/src/paths/legoanimpresentercontainer.cpp
     LEGO1/lego/legoomni/src/paths/legopathboundary.cpp
     LEGO1/lego/legoomni/src/main/legomain.cpp
     LEGO1/lego/legoomni/src/input/legoinputmanager.cpp
@@ -429,11 +408,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/legoactors.cpp
     LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
     LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp
-    LEGO1/lego/legoomni/src/paths/legordatapad1.cpp
-    LEGO1/lego/legoomni/src/paths/legordatapad2.cpp
-    LEGO1/lego/legoomni/src/paths/legordatapad3.cpp
-    LEGO1/lego/legoomni/src/paths/legordatapad4.cpp
-    LEGO1/lego/legoomni/src/paths/legorelocpad.cpp
   )
   list(APPEND list_targets ${NAME})
 
@@ -606,6 +580,10 @@ if (ISLE_BUILD_CONFIG)
     target_link_libraries(config PRIVATE DirectX5::DirectX5)
   endif()
   target_compile_definitions(config PRIVATE DIRECT3D_VERSION=0x500)
+  # Retail CONFIG.EXE carries a DSOUND.dll import descriptor with zero
+  # functions: the original link consumed dsound.lib and /OPT:REF discarded
+  # the referencing code (Detect3DSound in detectdx5.cpp) after the import
+  # members were pulled.  dsound is therefore original build configuration.
   target_link_libraries(config PRIVATE ddraw dsound dxguid)
   set_property(TARGET config PROPERTY OUTPUT_NAME "CONFIG")
   set_property(TARGET config PROPERTY SUFFIX ".EXE")
@@ -662,9 +640,10 @@ if (MSVC_FOR_DECOMP)
     # to force that with /INCLUDE:?terminate@@YAXXZ, which reproduced the RESULT
     # by fiat but seated the member at the FRONT of the CRT region and left
     # .reloc's VirtualSize 28 bytes short. The CAUSE is a `delete[]` of a
-    # destructible type in 1997's isleapp.cpp that /OPT:REF stripped -- see the
-    # carrier at the end of ISLE/isleapp.cpp. With that in place the /INCLUDE is
-    # actively harmful, so it is deliberately NOT used.
+    # destructible type in 1997's isleapp.cpp that /OPT:REF stripped; its
+    # stand-in is owned by the byte-identity manifest overlay (the checked
+    # source stays clean). With that in place the /INCLUDE is actively
+    # harmful, so it is deliberately NOT used.
     set_property(TARGET isle ${lego1_targets} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   endif()
 
@@ -678,73 +657,6 @@ if (MSVC_FOR_DECOMP)
     # reason -- reproduces retail's descriptor order exactly.
     # MEASURED: .idata differing 1577 -> 1537, CONFIG total 2881 -> 2837.
     target_link_libraries(config PRIVATE mfc42 msvcrt kernel32)
-  endif()
-
-  if (ISLE_INCLUDE_ENTROPY)
-    message(STATUS "Using entropy file: ${ISLE_ENTROPY_FILENAME}")
-    set(_entropy_hdr "${PROJECT_SOURCE_DIR}/${ISLE_ENTROPY_FILENAME}")
-    # A /FI force-include is NOT in the dependency graph, so editing the entropy
-    # header rebuilds NOTHING and the next score is silently stale.  Declare it
-    # as an explicit object dependency of every source it is forced into.
-    function(isle_force_include tgt hdr)
-      target_compile_options(${tgt} PRIVATE /FI${hdr})
-      get_target_property(_srcs ${tgt} SOURCES)
-      if(_srcs)
-        set_property(SOURCE ${_srcs} TARGET_DIRECTORY ${tgt}
-                     APPEND PROPERTY OBJECT_DEPENDS "${hdr}")
-      endif()
-    endfunction()
-    foreach(tgt IN LISTS lego1_targets beta10_targets)
-      isle_force_include(${tgt} "${_entropy_hdr}")
-    endforeach()
-    if (TARGET isle)
-      isle_force_include(isle "${_entropy_hdr}")
-    endif()
-    if (TARGET config)
-      isle_force_include(config "${_entropy_hdr}")
-    endif()
-  endif()
-
-  # Per-TU entropy: force-include a generated entropy header into individual
-  # translation units. The manifest is a text file with lines of the form
-  #   <source-path-relative-to-repo-root> <seed>
-  # (blank lines and lines starting with # are ignored). Headers are generated
-  # at configure time with tools/entropy.py, cached per seed in the build dir.
-  set(ISLE_TU_ENTROPY_MANIFEST "" CACHE FILEPATH "Per-TU entropy manifest file")
-  if (ISLE_TU_ENTROPY_MANIFEST)
-    find_package(Python3 COMPONENTS Interpreter REQUIRED)
-    message(STATUS "Using per-TU entropy manifest: ${ISLE_TU_ENTROPY_MANIFEST}")
-    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${ISLE_TU_ENTROPY_MANIFEST}")
-    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tu-entropy")
-    file(STRINGS "${ISLE_TU_ENTROPY_MANIFEST}" tu_entropy_lines)
-    foreach(line IN LISTS tu_entropy_lines)
-      if (line MATCHES "^[ \t]*(#.*)?$")
-        continue()
-      endif()
-      separate_arguments(parts UNIX_COMMAND "${line}")
-      list(LENGTH parts nparts)
-      if (NOT nparts EQUAL 2)
-        message(FATAL_ERROR "Malformed entropy manifest line: '${line}'")
-      endif()
-      list(GET parts 0 tu_src)
-      list(GET parts 1 tu_seed)
-      if (NOT EXISTS "${PROJECT_SOURCE_DIR}/${tu_src}")
-        message(FATAL_ERROR "Entropy manifest references missing source: '${tu_src}'")
-      endif()
-      set(tu_hdr "${CMAKE_BINARY_DIR}/tu-entropy/entropy_${tu_seed}.h")
-      if (NOT EXISTS "${tu_hdr}")
-        execute_process(
-          COMMAND ${Python3_EXECUTABLE} "${PROJECT_SOURCE_DIR}/tools/entropy.py" "${tu_seed}"
-          OUTPUT_FILE "${tu_hdr}"
-          RESULT_VARIABLE tu_rc
-        )
-        if (NOT tu_rc EQUAL 0 OR NOT EXISTS "${tu_hdr}")
-          file(REMOVE "${tu_hdr}")
-          message(FATAL_ERROR "tools/entropy.py failed for seed ${tu_seed}")
-        endif()
-      endif()
-      set_property(SOURCE "${PROJECT_SOURCE_DIR}/${tu_src}" APPEND PROPERTY COMPILE_OPTIONS "/FI${tu_hdr}")
-    endforeach()
   endif()
 
   # Setting the MSVC_RUNTIME_LIBRARY for all libraries as well as `lego1` produces the results
@@ -776,8 +688,8 @@ if (MSVC_FOR_DECOMP)
   set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
   set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
-  if(ISLE_BYTE_IDENTICAL)
-    # Goal 2 (byte-identical binaries): the retail images carry NO debug data
+  if(ISLE_BYTE_IDENTITY_TERMINAL)
+    # Byte-identical terminal links: the retail images carry NO debug data
     # directory, while linking with /debug adds one (a 28-byte
     # IMAGE_DEBUG_DIRECTORY plus its MISC record) at the head of .rdata --
     # measured at 88 bytes in ISLE.EXE.
@@ -795,16 +707,7 @@ if (MSVC_FOR_DECOMP)
                "${CMAKE_${_kind}_LINKER_FLAGS${_cfg}}")
       endforeach()
     endforeach()
-    message(STATUS "ISLE_BYTE_IDENTICAL: linking without /debug (no DEBUG data directory); /Zi retained so codegen is unchanged")
-
-    # Retail binaries are comparison oracles only.  The old pe_stamp.py
-    # POST_BUILD action copied timestamp bytes out of legobin and also rewrote
-    # the linked image in place.  That violates the hard provenance and atomic
-    # output rules, so timestamp reproduction remains an explicit migration
-    # blocker until it has a source/toolchain-derived recipe and final MD5 gate.
-    message(STATUS
-      "ISLE_BYTE_IDENTICAL: retail timestamp copying is disabled; "
-      "final timestamp/MD5 completion remains fail-closed")
+    message(STATUS "ISLE_BYTE_IDENTITY_TERMINAL: linking without /debug (no DEBUG data directory); /Zi retained so codegen is unchanged")
   endif()
 
   # Older MSVC versions don't support building in parallel.
@@ -831,12 +734,12 @@ if (MSVC_FOR_DECOMP)
 endif()
 
 # The source-controlled manifest is deliberately invisible to normal builds.
-# Its validator/materializer/launcher are loaded only in a dedicated
-# ISLE_BYTE_IDENTICAL tree, after every candidate target has been declared.
-if(ISLE_BYTE_IDENTICAL)
+# tools/isle_build.py materializes the effective source view and writes the
+# overlay plan; only the graph seating runs here.
+if(ISLE_BYTE_IDENTITY_PLAN)
   include("${PROJECT_SOURCE_DIR}/cmake/byte_identity.cmake")
-  isle_enable_byte_identity(
-    "${PROJECT_SOURCE_DIR}/tools/byte_identity_manifest.json")
+  include("${ISLE_BYTE_IDENTITY_PLAN}")
+  _isle_apply_byte_identity_source_overlay_graph()
 endif()
 
 find_program(CLANGFORMAT_BIN NAMES clang-format)

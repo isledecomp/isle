@@ -1,22 +1,3 @@
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class QqM0 {
-public:
-	void qqm0() {}
-};
-class QqM1 {
-public:
-	void qqm1() {}
-};
-class QqM2 {
-public:
-	void qqm2() {}
-};
-class QqM3 {
-public:
-	void qqm3() {}
-};
-
 #include "legomain.h"
 
 #include "3dmanager/lego3dmanager.h"
@@ -52,44 +33,6 @@ public:
 #include "viewmanager/viewmanager.h"
 
 #include <assert.h>
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class QqM4 {
-public:
-	void qqm4() {}
-};
-class QqM5 {
-public:
-	void qqm5() {}
-};
-class QqM6 {
-public:
-	void qqm6() {}
-};
-class QqM7 {
-public:
-	void qqm7() {}
-};
-class QqM8 {
-public:
-	void qqm8() {}
-};
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordGR {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-	inline void Record6() {}
-	inline void Record7() {}
-};
 
 DECOMP_SIZE_ASSERT(LegoOmni, 0x140)
 DECOMP_SIZE_ASSERT(LegoOmni::WorldContainer, 0x1c)
@@ -682,23 +625,6 @@ void LegoOmni::Disable(MxBool p_disable, MxU16 p_flags)
 #endif
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordGF;
-class MxUnkRecordGG;
-class MxUnkRecordGH;
-class MxUnkRecordGI;
-class MxUnkRecordGJ;
-class MxUnkRecordGK;
-class MxUnkRecordGL;
-class MxUnkRecordGM;
-class MxUnkRecordGN;
-class MxUnkRecordGO;
-class MxUnkRecordGP;
-class MxUnkRecordGQ;
-
 // FUNCTION: LEGO1 0x1005b560
 // FUNCTION: BETA10 0x1008efb9
 void LegoOmni::CreateBackgroundAudio()
@@ -766,103 +692,3 @@ void LegoOmni::Resume()
 	MxOmni::Resume();
 	SetAppCursor(e_cursorArrow);
 }
-
-// Declaration-record carrier (dial campaign): end-of-file sink for
-// this translation unit's declaration state.  Neutral stand-in.
-class MxUnkRecordSW7000;
-class MxUnkRecordSW7001;
-class MxUnkRecordSW7002;
-class MxUnkRecordSW7003;
-class MxUnkRecordSW7004;
-class MxUnkRecordSW7005;
-class MxUnkRecordSW7006;
-class MxUnkRecordSW7007;
-class MxUnkRecordSW7008;
-class MxUnkRecordSW7009;
-class MxUnkRecordSW7010;
-class MxUnkRecordSW7011;
-class MxUnkRecordSW7012;
-class MxUnkRecordSW7013;
-class MxUnkRecordSW7014;
-class MxUnkRecordSW7015;
-class MxUnkRecordSW7016;
-class MxUnkRecordSW7017;
-class MxUnkRecordSW7018;
-class MxUnkRecordSW7019;
-class MxUnkRecordSW7020;
-class MxUnkRecordSW7021;
-class MxUnkRecordSW7022;
-class MxUnkRecordSW7023;
-class MxUnkRecordSW7024;
-class MxUnkRecordSW7025;
-class MxUnkRecordSW7026;
-class MxUnkRecordSW7027;
-class MxUnkRecordSW7028;
-class MxUnkRecordSW7029;
-class MxUnkRecordSW7030;
-class MxUnkRecordSW7031;
-class MxUnkRecordSW7032;
-class MxUnkRecordSW7033;
-class MxUnkRecordSW7034;
-class MxUnkRecordSW7035;
-class MxUnkRecordSW7036;
-class MxUnkRecordSW7037;
-class MxUnkRecordSW7038;
-class MxUnkRecordSW7039;
-class MxUnkRecordSW7040;
-class MxUnkRecordSW7041;
-class MxUnkRecordSW7042;
-class MxUnkRecordSW7043;
-class MxUnkRecordSW7044;
-class MxUnkRecordSW7045;
-class MxUnkRecordSW7046;
-class MxUnkRecordSW7047;
-class MxUnkRecordSW7048;
-class MxUnkRecordSW7049;
-class MxUnkRecordSW7050;
-class MxUnkRecordSW7051;
-class MxUnkRecordSW7052;
-class MxUnkRecordSW7053;
-class MxUnkRecordSW7054;
-class MxUnkRecordSW7055;
-class MxUnkRecordSW7056;
-class MxUnkRecordSW7057;
-class MxUnkRecordSW7058;
-class MxUnkRecordSW7059;
-class MxUnkRecordSW7060;
-class MxUnkRecordSW7061;
-class MxUnkRecordSW7062;
-class MxUnkRecordSW7063;
-class MxUnkRecordSW7064;
-class MxUnkRecordSW7065;
-class MxUnkRecordSW7066;
-class MxUnkRecordSW7067;
-class MxUnkRecordSW7068;
-class MxUnkRecordSW7069;
-class MxUnkRecordSW7070;
-class MxUnkRecordSW7071;
-class MxUnkRecordSW7072;
-class MxUnkRecordSW7073;
-class MxUnkRecordSW7074;
-class MxUnkRecordSW7075;
-class MxUnkRecordSW7076;
-class MxUnkRecordSW7077;
-class MxUnkRecordSW7078;
-class MxUnkRecordSW7079;
-class MxUnkRecordSW7080;
-class MxUnkRecordSW7081;
-class MxUnkRecordSW7082;
-class MxUnkRecordSW7083;
-class MxUnkRecordSW7084;
-class MxUnkRecordSW7085;
-class MxUnkRecordSW7086;
-class MxUnkRecordSW7087;
-class MxUnkRecordSW7088;
-class MxUnkRecordSW7089;
-class MxUnkRecordSW7090;
-class MxUnkRecordSW7091;
-class MxUnkRecordSW7092;
-class MxUnkRecordSW7093;
-class MxUnkRecordSW7094;
-class MxUnkRecordSW7095;
-class MxUnkRecordSW7096;

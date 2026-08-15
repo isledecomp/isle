@@ -5,33 +5,6 @@
 
 #include <assert.h>
 #include <limits.h>
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.  [27 units]
-class RkLaP0 {
-	inline void Record0() {}
-	inline void Record1() {}
-};
-class RkLaP1 {
-	inline void Record0() {}
-	inline void Record1() {}
-};
-class RkLaF0;
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordSQ {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-	inline void Record6() {}
-	inline void Record7() {}
-};
-
 DECOMP_SIZE_ASSERT(LegoAnimKey, 0x08)
 DECOMP_SIZE_ASSERT(LegoTranslationKey, 0x14)
 DECOMP_SIZE_ASSERT(LegoRotationKey, 0x18)
@@ -1048,18 +1021,6 @@ LegoU32 LegoAnimNodeData::FindKeys(
 
 	return numKeys;
 }
-
-// Declaration-record carriers (see the positional record calculus, session
-// notes 2026-08-01): the deferred inline-expansion pass and the LegoAnim
-// Read/Write windows sample the declaration state accumulated at this
-// position; no authentic 1997 declarations are recoverable here. Neutral
-// stand-ins pending better evidence.
-class MxUnkRecordLA0;
-class MxUnkRecordLA1;
-class MxUnkRecordLA2;
-class MxUnkRecordLA3;
-class MxUnkRecordLA4;
-class MxUnkRecordLA5;
 
 // FUNCTION: LEGO1 0x100a0b00
 // FUNCTION: BETA10 0x1017f7c3

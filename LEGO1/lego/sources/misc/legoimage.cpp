@@ -3,25 +3,6 @@
 #include "decomp.h"
 #include "legostorage.h"
 #include "memory.h"
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class QqC0 {};
-class QqC1 {};
-class QqC2 {};
-class QqC3 {};
-class QqC4 {};
-class QqC5 {};
-class QqC6 {};
-class QqC7 {};
-class QqC8 {};
-class QqC9 {};
-class QqC10 {};
-class QqC11 {};
-class QqC12 {};
-class QqC13 {};
-class QqC14 {};
-class QqC15 {};
-
 DECOMP_SIZE_ASSERT(LegoPaletteEntry, 0x03);
 DECOMP_SIZE_ASSERT(LegoImage, 0x310);
 

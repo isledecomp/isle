@@ -1,23 +1,4 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordOW {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-};
-
 #include "mxstreamcontroller.h"
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordSR {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-};
 
 #include "mxautolock.h"
 #include "mxdebug.h"
@@ -32,39 +13,6 @@ class MxUnkRecordSR {
 #include "mxutilities.h"
 
 #include <assert.h>
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.  [33 units]
-class RkSM0 {
-	void m0() {}
-};
-class RkSM1 {
-	void m1() {}
-};
-class RkSM2 {
-	void m2() {}
-};
-class RkSF0;
-class RkSF1;
-class RkSF2;
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkM0 {
-public:
-	void rkm0() {}
-};
-class RkM1 {
-public:
-	void rkm1() {}
-};
-class RkM2 {
-public:
-	void rkm2() {}
-};
-class RkM3 {
-public:
-	void rkm3() {}
-};
 
 DECOMP_SIZE_ASSERT(MxStreamController, 0x64)
 DECOMP_SIZE_ASSERT(MxNextActionDataStart, 0x14)
@@ -281,16 +229,6 @@ MxResult MxStreamController::VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
 	assert(m_provider);
 	return FUN_100c1800(p_action, (p_bufferval / m_provider->GetFileSize()) * m_provider->GetFileSize());
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordSS {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-};
 
 // FUNCTION: LEGO1 0x100c1ce0
 // FUNCTION: BETA10 0x1014eeb5

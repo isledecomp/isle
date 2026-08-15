@@ -1,7 +1,3 @@
-// clang-format off
-#include "mxdiskstreamcontrollerrecords.h"
-// clang-format on
-
 #include "mxdiskstreamcontroller.h"
 
 #include "mxactionnotificationparam.h"
@@ -13,93 +9,6 @@
 #include "mxticklemanager.h"
 
 #include <assert.h>
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class QqM0 {
-public:
-	void qqm0() {}
-};
-class QqM1 {
-public:
-	void qqm1() {}
-};
-class QqM2 {
-public:
-	void qqm2() {}
-};
-class QqM3 {
-public:
-	void qqm3() {}
-};
-class QqM4 {
-public:
-	void qqm4() {}
-};
-class QqM5 {
-public:
-	void qqm5() {}
-};
-class QqM6 {
-public:
-	void qqm6() {}
-};
-class QqM7 {
-public:
-	void qqm7() {}
-};
-class QqM8 {
-public:
-	void qqm8() {}
-};
-class QqM9 {
-public:
-	void qqm9() {}
-};
-class QqM10 {
-public:
-	void qqm10() {}
-};
-class QqM11 {
-public:
-	void qqm11() {}
-};
-class QqM12 {
-public:
-	void qqm12() {}
-};
-class QqM13 {
-public:
-	void qqm13() {}
-};
-class QqM14 {
-public:
-	void qqm14() {}
-};
-class QqM15 {
-public:
-	void qqm15() {}
-};
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class ZzC0 {};
-class ZzC1 {};
-class ZzC2 {};
-
-// Declaration-record carrier: the functions in this translation unit sample
-// the accumulated declaration state, several via inline expansion of the
-// end-of-file state (see the positional record calculus, session notes
-// 2026-08-01); no authentic 1997 declarations are recoverable at these
-// positions. Neutral stand-ins pending better evidence.
-class MxUnkRecordAF {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-};
-
 DECOMP_SIZE_ASSERT(MxDiskStreamController, 0xc8);
 
 // FUNCTION: LEGO1 0x100c7120
@@ -320,20 +229,6 @@ MxResult MxDiskStreamController::VTable0x30(MxDSAction* p_action)
 	return result;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordUF {
-public:
-	void Record() {}
-};
-
-class MxUnkRecordUG {
-public:
-	void Record() {}
-};
-
 // FUNCTION: LEGO1 0x100c7cb0
 void MxDiskStreamController::FUN_100c7cb0(MxDSStreamingAction* p_action)
 {
@@ -404,13 +299,6 @@ MxDSStreamingAction* MxDiskStreamController::FUN_100c7db0()
 
 	return NULL;
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordUH;
-class MxUnkRecordUI;
 
 // FUNCTION: LEGO1 0x100c7f40
 // FUNCTION: BETA10 0x101553e0
@@ -605,8 +493,3 @@ void MxDiskStreamController::FUN_100c8720()
 		FUN_100c7cb0(action);
 	}
 }
-
-// Declaration-record carrier: end-of-file sink (see above).
-class MxUnkRecordAG {
-	inline void Record() {}
-};

@@ -1,13 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordUQ {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-};
-
 #include "mxnotificationmanager.h"
 
 #include "compat.h"
@@ -20,24 +10,6 @@ class MxUnkRecordUQ {
 #include "mxtypes.h"
 
 #include <assert.h>
-class MxUnkRecordAO;
-class MxUnkRecordAP;
-class MxUnkRecordAQ;
-class MxUnkRecordAR;
-class MxUnkRecordAS;
-class MxUnkRecordAT;
-class MxUnkRecordAU;
-class MxUnkRecordAV;
-class MxUnkRecordAW;
-class MxUnkRecordAX;
-class MxUnkRecordAY;
-class MxUnkRecordAZ;
-class MxUnkRecordBA;
-class MxUnkRecordBB;
-class MxUnkRecordBC;
-class MxUnkRecordBD;
-class MxUnkRecordBE;
-
 DECOMP_SIZE_ASSERT(MxNotification, 0x08);
 DECOMP_SIZE_ASSERT(MxNotificationManager, 0x40);
 
@@ -221,33 +193,6 @@ void MxNotificationManager::Register(MxCore* p_listener)
 
 	m_listenerIds.push_back(p_listener->GetId());
 }
-
-// Declaration-record carriers: the functions in this translation unit sample
-// the accumulated declaration state, positionally and via the end-emitted
-// template pool (see the positional record calculus, session notes
-// 2026-08-01); no authentic 1997 declarations are recoverable at this
-// position. Neutral stand-ins pending better evidence.
-class MxUnkRecordAM {
-	inline void R0() {}
-	inline void R1() {}
-	inline void R2() {}
-	inline void R3() {}
-	inline void R4() {}
-	inline void R5() {}
-	inline void R6() {}
-	inline void R7() {}
-};
-
-class MxUnkRecordAN {
-	inline void R0() {}
-	inline void R1() {}
-	inline void R2() {}
-	inline void R3() {}
-	inline void R4() {}
-	inline void R5() {}
-	inline void R6() {}
-	inline void R7() {}
-};
 
 // FUNCTION: LEGO1 0x100acdf0
 // FUNCTION: BETA10 0x10126785

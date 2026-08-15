@@ -1,18 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordCO;
-class MxUnkRecordCP;
-class MxUnkRecordCQ;
-class MxUnkRecordCR;
-class MxUnkRecordCS;
-class MxUnkRecordCT;
-class MxUnkRecordCU;
-class MxUnkRecordCV;
-class MxUnkRecordCW;
-class MxUnkRecordCX;
-
 #include "legoanimpresenter.h"
 
 #include "3dmanager/lego3dmanager.h"
@@ -41,75 +26,6 @@ class MxUnkRecordCX;
 #include "mxvideomanager.h"
 #include "realtime/realtime.h"
 #include "viewmanager/viewmanager.h"
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkF0;
-class RkF1;
-class RkF2;
-class RkF3;
-class RkM0 {
-public:
-	void rkm0() {}
-};
-class RkM1 {
-public:
-	void rkm1() {}
-};
-class RkM2 {
-public:
-	void rkm2() {}
-};
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class QqM0 {
-public:
-	void qqm0() {}
-};
-class QqM1 {
-public:
-	void qqm1() {}
-};
-class QqM2 {
-public:
-	void qqm2() {}
-};
-class QqM3 {
-public:
-	void qqm3() {}
-};
-class QqM4 {
-public:
-	void qqm4() {}
-};
-class QqM5 {
-public:
-	void qqm5() {}
-};
-class QqM6 {
-public:
-	void qqm6() {}
-};
-class QqM7 {
-public:
-	void qqm7() {}
-};
-class QqM8 {
-public:
-	void qqm8() {}
-};
-class QqM9 {
-public:
-	void qqm9() {}
-};
-class QqM10 {
-public:
-	void qqm10() {}
-};
-class QqM11 {
-public:
-	void qqm11() {}
-};
-
 DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xbc)
 DECOMP_SIZE_ASSERT(LegoLoopingAnimPresenter, 0xc0)
 DECOMP_SIZE_ASSERT(LegoLocomotionAnimPresenter, 0xd8)
@@ -154,15 +70,6 @@ void LegoAnimPresenter::Init()
 	m_ptAtCamCount = 0;
 	m_localActors = TRUE;
 	m_roiTransform = NULL;
-	// Declaration-record carrier (dial campaign): the functions below sample
-	// this translation unit's accumulated declaration state at this point.
-	// Neutral stand-in; no authentic 1997 declaration is recoverable here.
-	typedef int MxUnkRecordZS000;
-	typedef int MxUnkRecordZS001;
-	typedef int MxUnkRecordZS002;
-	typedef int MxUnkRecordZS003;
-	typedef int MxUnkRecordZS004;
-	typedef int MxUnkRecordZS005;
 }
 
 // FUNCTION: LEGO1 0x10068770
@@ -284,22 +191,6 @@ done:
 	return result;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordA {
-	inline void Record() {}
-};
-
-class MxUnkRecordB {
-	inline void Record() {}
-};
-
-class MxUnkRecordC {
-	inline void Record() {}
-};
-
 // FUNCTION: LEGO1 0x10069150
 // FUNCTION: BETA10 0x1004eeaf
 LegoChar* LegoAnimPresenter::GetActorName(const LegoChar* p_name)
@@ -327,18 +218,6 @@ LegoChar* LegoAnimPresenter::GetActorName(const LegoChar* p_name)
 
 	return str;
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordD {
-	inline void Record() {}
-};
-
-class MxUnkRecordE {
-	inline void Record() {}
-};
 
 // FUNCTION: LEGO1 0x100692b0
 // FUNCTION: BETA10 0x1004efb6
@@ -537,17 +416,6 @@ LegoROI* LegoAnimPresenter::FindROI(const LegoChar* p_name)
 	}
 
 	return NULL;
-	// Declaration-record carrier (dial campaign): the functions below sample
-	// this translation unit's accumulated declaration state at this point.
-	// Neutral stand-in; no authentic 1997 declaration is recoverable here.
-	typedef int MxUnkRecordZS006;
-	typedef int MxUnkRecordZS007;
-	typedef int MxUnkRecordZS008;
-	typedef int MxUnkRecordZS009;
-	typedef int MxUnkRecordZS010;
-	typedef int MxUnkRecordZS011;
-	typedef int MxUnkRecordZS012;
-	typedef int MxUnkRecordZS013;
 }
 
 // FUNCTION: LEGO1 0x10069b10
@@ -591,12 +459,6 @@ void LegoAnimPresenter::BuildROIMap()
 		m_roiMapSize++;
 	}
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordCN {};
 
 // FUNCTION: LEGO1 0x1006a3c0
 // FUNCTION: BETA10 0x1004fc10
@@ -779,17 +641,6 @@ void LegoAnimPresenter::SubstituteVariables()
 			variableTable->SetVariable((*it).first, (*it).second);
 		}
 	}
-	// Declaration-record carrier (dial campaign): the functions below sample
-	// this translation unit's accumulated declaration state at this point.
-	// Neutral stand-in; no authentic 1997 declaration is recoverable here.
-	typedef int MxUnkRecordZS014;
-	typedef int MxUnkRecordZS015;
-	typedef int MxUnkRecordZS016;
-	typedef int MxUnkRecordZS017;
-	typedef int MxUnkRecordZS018;
-	typedef int MxUnkRecordZS019;
-	typedef int MxUnkRecordZS020;
-	typedef int MxUnkRecordZS021;
 }
 
 // FUNCTION: LEGO1 0x1006ad30
@@ -927,11 +778,6 @@ done:
 	}
 
 	return FAILURE;
-	// Declaration-record carrier (dial campaign): the functions below sample
-	// this translation unit's accumulated declaration state at this point.
-	// Neutral stand-in; no authentic 1997 declaration is recoverable here.
-	typedef int MxUnkRecordZS022;
-	typedef int MxUnkRecordZS023;
 }
 
 // FUNCTION: LEGO1 0x1006b550
@@ -1231,12 +1077,6 @@ void LegoAnimPresenter::ParseExtra()
 			}
 		}
 	}
-	// Declaration-record carrier (dial campaign): the functions below sample
-	// this translation unit's accumulated declaration state at this point.
-	// Neutral stand-in; no authentic 1997 declaration is recoverable here.
-	typedef int MxUnkRecordZS024;
-	typedef int MxUnkRecordZS025;
-	typedef int MxUnkRecordZS026;
 }
 
 // FUNCTION: LEGO1 0x1006c570
@@ -1445,16 +1285,6 @@ void LegoLoopingAnimPresenter::StreamingTickle()
 			}
 		}
 	}
-	// Declaration-record carrier (dial campaign): the functions below sample
-	// this translation unit's accumulated declaration state at this point.
-	// Neutral stand-in; no authentic 1997 declaration is recoverable here.
-	typedef int MxUnkRecordZS027;
-	typedef int MxUnkRecordZS028;
-	typedef int MxUnkRecordZS029;
-	typedef int MxUnkRecordZS030;
-	typedef int MxUnkRecordZS031;
-	typedef int MxUnkRecordZS032;
-	typedef int MxUnkRecordZS033;
 }
 
 // FUNCTION: LEGO1 0x1006cb40
@@ -1588,88 +1418,6 @@ void LegoLocomotionAnimPresenter::PutFrame()
 {
 	// Empty
 }
-
-// Declaration-record carriers: the functions below, and the template pool the
-// translation unit emits after them, sample the accumulated declaration state
-// (see the positional record calculus, session notes 2026-08-01); no authentic
-// 1997 declaration is recoverable at this position. Neutral stand-ins pending
-// better evidence.
-class MxUnkRecordAP {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-};
-
-// Declaration-record carriers (dial campaign): continuation of the block
-// above; same seat, same state.  Neutral stand-ins.
-class MxUnkRecordSW7000;
-class MxUnkRecordSW7001;
-class MxUnkRecordSW7002;
-class MxUnkRecordSW7003;
-class MxUnkRecordSW7004;
-class MxUnkRecordSW7005;
-class MxUnkRecordSW7006;
-class MxUnkRecordSW7007;
-class MxUnkRecordSW7008;
-class MxUnkRecordSW7009;
-class MxUnkRecordSW7010;
-class MxUnkRecordSW7011;
-class MxUnkRecordSW7012;
-class MxUnkRecordSW7013;
-class MxUnkRecordSW7014;
-class MxUnkRecordSW7015;
-class MxUnkRecordSW7016;
-class MxUnkRecordSW7017;
-class MxUnkRecordSW7018;
-class MxUnkRecordSW7019;
-class MxUnkRecordSW7020;
-class MxUnkRecordSW7021;
-class MxUnkRecordSW7022;
-class MxUnkRecordSW7023;
-class MxUnkRecordSW7024;
-class MxUnkRecordSW7025;
-class MxUnkRecordSW7026;
-class MxUnkRecordSW7027;
-class MxUnkRecordSW7028;
-class MxUnkRecordSW7029;
-class MxUnkRecordSW7030;
-class MxUnkRecordSW7031;
-class MxUnkRecordSW7032;
-class MxUnkRecordSW7033;
-class MxUnkRecordSW7034;
-class MxUnkRecordSW7035;
-class MxUnkRecordSW7036;
-class MxUnkRecordSW7037;
-class MxUnkRecordSW7038;
-class MxUnkRecordSW7039;
-class MxUnkRecordSW7040;
-class MxUnkRecordSW7041;
-class MxUnkRecordSW7042;
-class MxUnkRecordSW7043;
-class MxUnkRecordSW7044;
-class MxUnkRecordSW7045;
-class MxUnkRecordSW7046;
-class MxUnkRecordSW7047;
-class MxUnkRecordSW7048;
-class MxUnkRecordSW7049;
-class MxUnkRecordSW7050;
-class MxUnkRecordSW7051;
-class MxUnkRecordSW7052;
-class MxUnkRecordSW7053;
-class MxUnkRecordSW7054;
-class MxUnkRecordSW7055;
-class MxUnkRecordSW7056;
-class MxUnkRecordSW7057;
-class MxUnkRecordSW7058;
-class MxUnkRecordSW7059;
-class MxUnkRecordSW7060;
-class MxUnkRecordSW7061;
-class MxUnkRecordSW7062;
-class MxUnkRecordSW7063;
-class MxUnkRecordSW7064;
-class MxUnkRecordSW7065;
-class MxUnkRecordSW7066;
-class MxUnkRecordSW7067;
 
 // FUNCTION: LEGO1 0x1006d5d0
 // FUNCTION: BETA10 0x100529b3
@@ -1873,10 +1621,6 @@ void LegoHideAnimPresenter::ApplyVisibility(LegoTreeNode* p_node, LegoTime p_tim
 	}
 }
 
-// Declaration-record carrier (dial campaign): one unit of this translation
-// unit's declaration state, seated ahead of the function below.
-class MxUnkRecordQC;
-
 // FUNCTION: LEGO1 0x1006dc10
 // FUNCTION: BETA10 0x100532fd
 void LegoHideAnimPresenter::AssignIndiciesWithMap()
@@ -1892,24 +1636,11 @@ void LegoHideAnimPresenter::AssignIndiciesWithMap()
 	m_boundaryMap = new LegoPathBoundary*[anims.size() + 1];
 	m_boundaryMap[0] = NULL;
 
-	for (LegoHideAnimStructMap::iterator it = anims.begin(); !(it == anims.end()); it++) {
+	for (LegoHideAnimStructMap::iterator it = anims.begin(); !(it == anims.end()); ++it) {
 		m_boundaryMap[(*it).second.m_index] = (*it).second.m_boundary;
 		delete[] const_cast<char*>((*it).first);
 	}
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordQD {};
-class MxUnkRecordQE {};
-class MxUnkRecordQF {};
-class MxUnkRecordQG {};
-class MxUnkRecordQH {};
-class MxUnkRecordQI {};
-class MxUnkRecordQJ {};
-class MxUnkRecordQK {};
 
 // FUNCTION: LEGO1 0x1006e3f0
 // FUNCTION: BETA10 0x1005345e
@@ -1934,22 +1665,6 @@ void LegoHideAnimPresenter::BuildMap(LegoHideAnimStructMap& p_map, LegoTreeNode*
 		BuildMap(p_map, p_node->GetChild(i));
 	}
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordQL {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-	inline void Record6() {}
-	void Record7();
-	void Record8();
-};
 
 // FUNCTION: LEGO1 0x1006e470
 // FUNCTION: BETA10 0x10053520

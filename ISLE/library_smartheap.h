@@ -1,4 +1,4 @@
-#ifdef 0
+
 
 // LIBRARY: ISLE 0x402f10
 // ?shi_New@@YAPAXKIPAU_SHI_Pool@@@Z
@@ -252,6 +252,9 @@
 // GLOBAL: ISLE 0x4102fc
 // _MemDefaultPool
 
+// GLOBAL: ISLE 0x410308
+// __shi_freeFns
+
 // GLOBAL: ISLE 0x41031c
 // __shi_compactPoolFn
 
@@ -308,5 +311,3 @@
 
 // GLOBAL: ISLE 0x412870
 // __shi_mutexGlobal
-
-#endif

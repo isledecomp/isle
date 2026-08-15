@@ -1,10 +1,3 @@
-// Declaration-record carrier (dial campaign, PRE): samples this translation
-// unit's accumulated declaration state before the include block. [17 units]
-class RkRoM0 {
-	void m0() {}
-};
-class RkRoC0 {};
-
 #include "legotextureinfo.h"
 
 #include "legovideomanager.h"
@@ -13,18 +6,6 @@ class RkRoC0 {};
 #include "misc/legotexture.h"
 #include "mxdirectx/mxdirect3d.h"
 #include "tgl/d3drm/tglimpl.h"
-
-// Declaration-record carrier (see the positional record calculus, session
-// notes 2026-08-01); no authentic 1997 declaration is recoverable at this
-// position. Neutral stand-in pending better evidence.
-class MxUnkRecordTI0 {
-	inline void Record0() {}
-};
-
-class MxUnkRecordTI1;
-enum MxUnkRecordTI2 {
-	e_mxUnkRecordTI2
-};
 
 DECOMP_SIZE_ASSERT(LegoTextureInfo, 0x10)
 

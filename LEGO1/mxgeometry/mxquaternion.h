@@ -42,9 +42,6 @@ private:
 	MxU32 m_flags;              // 0x30
 };
 
-class MxUnkRecordZ0200;
-class MxUnkRecordZ0201;
-
 // FUNCTION: LEGO1 0x10004520
 long MxQuaternionTransformer::NormalizeDirection()
 {
@@ -68,7 +65,6 @@ long MxQuaternionTransformer::NormalizeDirection()
 	return 0;
 }
 
-class MxUnkRecordMGA;
 // FUNCTION: BETA10 0x1004a9b0
 void MxQuaternionTransformer::SetStartEnd(Matrix4& p_m1, Matrix4& p_m2)
 {
@@ -110,17 +106,6 @@ int MxQuaternionTransformer::InterpolateToMatrix(Matrix4& p_matrix, float p_f)
 
 	return -1;
 }
-
-class MxUnkRecordZ0100;
-class MxUnkRecordZ0101;
-class MxUnkRecordZ0102;
-class MxUnkRecordZ0103;
-class MxUnkRecordZ0104;
-class MxUnkRecordZ0105;
-class MxUnkRecordZ0106;
-class MxUnkRecordZ0107;
-class MxUnkRecordZ0108;
-class MxUnkRecordZ0109;
 
 // FUNCTION: LEGO1 0x100040a0
 // FUNCTION: BETA10 0x1004ab10
@@ -178,11 +163,5 @@ int MxQuaternionTransformer::Interpolate(Vector4& p_v, float p_f)
 
 	return -1;
 }
-
-class MxUnkRecordZ0000;
-class MxUnkRecordZ0001;
-class MxUnkRecordZ0002;
-class MxUnkRecordZ0003;
-class MxUnkRecordZ0004;
 
 #endif // MXQUATERNION_H

@@ -31,29 +31,6 @@
 #include "scripts.h"
 #include "sndanim_actions.h"
 #include "viewmanager/viewmanager.h"
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkM0 {
-public:
-	void rkm0() {}
-};
-class RkM1 {
-public:
-	void rkm1() {}
-};
-class RkM2 {
-public:
-	void rkm2() {}
-};
-class RkM3 {
-public:
-	void rkm3() {}
-};
-class RkM4 {
-public:
-	void rkm4() {}
-};
-
 DECOMP_SIZE_ASSERT(Infocenter, 0x1d8)
 DECOMP_SIZE_ASSERT(InfocenterMapEntry, 0x18)
 DECOMP_SIZE_ASSERT(InfocenterState, 0x94)
@@ -1321,26 +1298,6 @@ MxBool Infocenter::WaitForTransition()
 	return TRUE;
 }
 
-class MxInfQ0 {
-	inline void Record() {}
-};
-
-class MxInfQ1 {
-	inline void Record() {}
-};
-
-class MxInfQ2 {
-	inline void Record() {}
-};
-
-// Declaration-record carrier (dial campaign): prefix step for Infocenter::UpdateEnabledGlowControl.
-class MxUnkRecordG00;
-class MxUnkRecordG01;
-class MxUnkRecordG02;
-class MxUnkRecordG03;
-class MxUnkRecordG04;
-class MxUnkRecordG05;
-
 // FUNCTION: LEGO1 0x10070d10
 // FUNCTION: BETA10 0x100307d4
 void Infocenter::UpdateEnabledGlowControl(MxS32 p_x, MxS32 p_y)
@@ -1454,35 +1411,6 @@ void Infocenter::Reset()
 	}
 }
 
-// Declaration-record carrier (dial campaign): prefix step for Infocenter::Escape.
-class MxUnkRecordE00;
-class MxUnkRecordE01;
-class MxUnkRecordE02;
-class MxUnkRecordE03;
-class MxUnkRecordE04;
-class MxUnkRecordE05;
-class MxUnkRecordE06;
-class MxUnkRecordE07;
-class MxUnkRecordE08;
-class MxUnkRecordE09;
-class MxUnkRecordE10;
-class MxUnkRecordE11;
-class MxUnkRecordE12;
-class MxUnkRecordE13;
-class MxUnkRecordE14;
-class MxUnkRecordE15;
-class MxUnkRecordE16;
-class MxUnkRecordE17;
-class MxUnkRecordE18;
-class MxUnkRecordE19;
-class MxUnkRecordE20;
-class MxUnkRecordE21;
-class MxUnkRecordE22;
-class MxUnkRecordE23;
-class MxUnkRecordE24;
-class MxUnkRecordE25;
-class MxUnkRecordE26;
-
 // FUNCTION: LEGO1 0x10070f60
 MxBool Infocenter::Escape()
 {
@@ -1576,33 +1504,6 @@ void Infocenter::StopCredits()
 	DeleteObject(action);
 }
 
-// Declaration-record carrier (dial campaign): prefix step for Infocenter::PlayAction.
-class MxUnkRecordP00;
-class MxUnkRecordP01;
-class MxUnkRecordP02;
-class MxUnkRecordP03;
-class MxUnkRecordP04;
-class MxUnkRecordP05;
-class MxUnkRecordP06;
-class MxUnkRecordP07;
-class MxUnkRecordP08;
-class MxUnkRecordP09;
-class MxUnkRecordP10;
-class MxUnkRecordP11;
-class MxUnkRecordP12;
-class MxUnkRecordP13;
-class MxUnkRecordP14;
-class MxUnkRecordP15;
-class MxUnkRecordP16;
-class MxUnkRecordP17;
-class MxUnkRecordP18;
-class MxUnkRecordP19;
-class MxUnkRecordP20;
-class MxUnkRecordP21;
-class MxUnkRecordP22;
-class MxUnkRecordP23;
-class MxUnkRecordP24;
-
 // FUNCTION: LEGO1 0x10071300
 // FUNCTION: BETA10 0x1002ee8c
 void Infocenter::PlayAction(InfomainScript::Script p_script)
@@ -1693,12 +1594,3 @@ InfocenterState::~InfocenterState()
 		i++;
 	} while (i < GetMaxNameLength());
 }
-
-// Declaration-record carrier (dial campaign): tail block. Infocenter::ReadyWorld
-// samples this translation unit's FINAL declaration count rather than the count
-// that precedes its body, so this trailing block sets that total without shifting
-// any body above it. Neutral stand-in pending better evidence.
-class MxUnkRecordT00;
-class MxUnkRecordT01;
-class MxUnkRecordT02;
-class MxUnkRecordT03;
