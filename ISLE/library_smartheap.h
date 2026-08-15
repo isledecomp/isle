@@ -252,6 +252,9 @@
 // GLOBAL: ISLE 0x4102fc
 // _MemDefaultPool
 
+// GLOBAL: ISLE 0x410308
+// __shi_freeFns
+
 // GLOBAL: ISLE 0x41031c
 // __shi_compactPoolFn
 

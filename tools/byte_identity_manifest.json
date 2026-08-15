@@ -886,11 +886,11 @@
    "row_identity_sha256": "4c18e27056d3f06a967d551ad11abe6370e2de8b12669886a5ba87b3be395cbb",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 171,
-    "accepted_row_identity_sha256": "31ea1548112596f949e6f85d2dbdf8ab9b7a57ee83a1a6a6fea8ce0438da1d6d",
+    "exact_raw_1_0_count": 172,
+    "accepted_row_identity_sha256": "4c18e27056d3f06a967d551ad11abe6370e2de8b12669886a5ba87b3be395cbb",
     "require_zero_losses": true,
     "reference_target": {
-     "note": "The single open row is the SmartHeap _MemFreePtr@4 comparison metadata closure; the image reached retail MD5 identity historically, so the row is parser-level, not codegen.",
+     "note": "All 172 rows exact and the terminal image is retail-MD5-identical; ISLE is complete at both gates.",
      "historical_accepted_count": 172
     }
    },
