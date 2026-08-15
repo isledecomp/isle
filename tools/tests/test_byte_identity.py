@@ -1344,74 +1344,19 @@ class ByteIdentityTests(unittest.TestCase):
     def write_manifest(self):
         self.manifest.write_text(json.dumps(self.document, indent=2) + "\n")
     @staticmethod
-    def source_overlay_fragment(
-        data: bytes, structural_effect: str, *, declared=(), referenced=(),
-        emitted=(),
-    ):
+    def source_overlay_line_reservation(count=1):
+        return {"k": "lines", "n": count}
+    @staticmethod
+    def source_overlay_literal_use():
         return {
-            "baseline_sha256": byte_identity.sha256_bytes(data),
-            "baseline_size": len(data),
-            "baseline_line_count": data.count(b"\n"),
-            "baseline_significant_token_sha256":
-                byte_identity.source_overlay_significant_sha256(data),
-            "declared_identifiers": sorted(declared),
-            "referenced_identifiers": sorted(referenced),
-            "emitted_identifiers": sorted(emitted),
-            "structural_effect": structural_effect,
-        }
-    def source_overlay_line_reservation(self, count=1):
-        rendered = b"\n" * count
-        return {
-            "kind": "line_reservation_v1",
-            "emission_class": "source_layout_only",
-            "params": {
-                "content_role": "renderer_owned_layout_comment",
-                "physical_line_count": count,
-                "renderer_layout": {
-                    "kind": "typed_line_canvas_v1",
-                    "physical_line_count": count,
-                    "content_lines": [],
-                    "transparent_line_runs": [{
-                        "first": 1, "count": count,
-                        "indentation_units": [],
-                    }],
-                    "line_ending": "lf", "terminal_newline": True,
-                },
-            },
-            "baseline_fragment": self.source_overlay_fragment(
-                rendered, "physical_line_reservation"
-            ),
-        }
-    def source_overlay_literal_use(self):
-        rendered = b"configAppName"
-        return {
-            "kind": "literal_first_use_alias_v1",
-            "emission_class": "compiler_state_only",
-            "params": {
-                "literal": "config", "local_identifier": "configAppName",
-                "owner_function": "CConfigApp::InitInstance",
-                "use_ordinal": 1,
-                "renderer_layout": {
-                    "kind": "typed_line_canvas_v1",
-                    "physical_line_count": 1,
-                    "content_lines": [{
-                        "semantic_line": 1, "relative_line": 1,
-                        "indentation_units": [],
-                    }],
-                    "transparent_line_runs": [],
-                    "line_ending": "none", "terminal_newline": False,
-                },
-            },
-            "baseline_fragment": self.source_overlay_fragment(
-                rendered, "literal_first_use_reseat",
-                referenced=("configAppName",),
-            ),
+            "k": "literal_alias",
+            "literal": "config", "local_identifier": "configAppName",
+            "owner_function": "CConfigApp::InitInstance",
+            "use_ordinal": 1,
+            "nl": False,
         }
     @staticmethod
-    def source_overlay_anchor(
-        data: bytes, relative: str, operation_id: str, offset: int,
-        boundary_kind: str,
-    ):
+    def source_overlay_anchor(data: bytes, offset: int, boundary_kind: str):
         matches = byte_identity.source_overlay_tokens(data)
         token_boundary = None
         for index in range(len(matches) + 1):
@@ -1423,76 +1368,42 @@ class ByteIdentityTests(unittest.TestCase):
         if token_boundary is None:
             raise AssertionError("fixture offset is outside every token gap")
         tokens = [item[0] for item in matches]
-        tiers = []
-        for width in (32, 16, 8):
-            before_count = min(width, token_boundary)
-            after_count = min(width, len(tokens) - token_boundary)
-            signature = (
-                tokens[token_boundary - before_count:token_boundary]
-                + ["<SEAT>"]
-                + tokens[token_boundary:token_boundary + after_count]
-            )
-            context_sha = byte_identity.source_overlay_token_sha256(signature)
-            occurrences = 0
-            for candidate in range(len(tokens) + 1):
-                if (candidate < before_count
-                        or len(tokens) - candidate < after_count):
-                    continue
-                candidate_signature = (
-                    tokens[candidate - before_count:candidate]
-                    + ["<SEAT>"]
-                    + tokens[candidate:candidate + after_count]
-                )
-                if (byte_identity.source_overlay_token_sha256(
-                        candidate_signature) == context_sha):
-                    occurrences += 1
-            tiers.append({
-                "context_tokens_each_side": width,
-                "before_token_count": before_count,
-                "after_token_count": after_count,
-                "context_sha256": context_sha,
-                "occurrences": occurrences,
-            })
-        boundary = {"kind": boundary_kind}
-        return {
-            "anchor_kind": "significant_token_context_v1",
-            "logical_path": relative,
-            "operation_ids": [operation_id],
-            "policy": byte_identity.SOURCE_OVERLAY_ANCHOR_POLICY,
-            "structural_seat": byte_identity.source_overlay_structural_seat(
-                data, offset, boundary
-            ),
-            "tiers": tiers,
+        before_count = min(32, token_boundary)
+        after_count = min(32, len(tokens) - token_boundary)
+        signature = (
+            tokens[token_boundary - before_count:token_boundary]
+            + ["<SEAT>"]
+            + tokens[token_boundary:token_boundary + after_count]
+        )
+        anchor = {
+            "ctx": byte_identity.source_overlay_token_sha256(signature),
         }
+        if before_count != 32:
+            anchor["b"] = before_count
+        if after_count != 32:
+            anchor["a"] = after_count
+        boundary_short = {
+            "after_newline": None, "file_start": "start", "file_end": "end",
+            "before_next_token": "before_token",
+            "after_previous_token": "after_token",
+        }[boundary_kind]
+        if boundary_short:
+            anchor["at"] = boundary_short
+        if boundary_kind == "after_newline":
+            before_line, after_line = byte_identity.source_overlay_seat_lines(
+                data, offset
+            )
+            anchor["line_before"] = byte_identity.sha256_bytes(before_line)
+            anchor["line_after"] = byte_identity.sha256_bytes(after_line)
+        return anchor
     @staticmethod
     def source_overlay_payload(outputs):
-        paths = sorted(item["logical_path"] for item in outputs)
         return {
             "schema": byte_identity.SOURCE_OVERLAY_SCHEMA,
-            "status": byte_identity.SOURCE_OVERLAY_STATUS,
-            "renderer": byte_identity.SOURCE_OVERLAY_RENDERER,
-            "generator_registry_sha256":
-                byte_identity.SOURCE_OVERLAY_GENERATOR_REGISTRY_SHA256,
-            "closed_universe": {
-                "physical_output_count": len(paths),
-                "sorted_logical_paths_sha256": byte_identity.sha256_bytes(
-                    "".join(path + "\n" for path in paths).encode("utf-8")
-                ),
-            },
-            "drift_contract": byte_identity.SOURCE_OVERLAY_DRIFT_CONTRACT,
-            "runtime_trust": byte_identity.SOURCE_OVERLAY_RUNTIME_TRUST,
-            "outputs": sorted(outputs, key=lambda item: item["logical_path"]),
-            "graph": {
-                "generated_translation_units": [],
-                "link_admissions": [],
-                "forbidden_legacy_interfaces": [
-                    "ISLE_INCLUDE_ENTROPY", "ISLE_ENTROPY_FILENAME",
-                    "ISLE_TU_ENTROPY_MANIFEST",
-                ],
-                "prebuilt_source_artifacts": "forbidden",
-            },
+            "outputs": sorted(outputs, key=lambda item: item["path"]),
+            "graph": {"generated_tus": [], "link_admissions": []},
         }
-    def test_source_overlay_renderer_layout_is_the_only_byte_authority(self):
+    def test_source_overlay_renderer_owns_bytes_with_residual_overrides(self):
         raw = self.source_overlay_line_reservation()
         generator = byte_identity.validate_source_overlay_generator(
             raw, "fixture.generator"
@@ -1504,54 +1415,71 @@ class ByteIdentityTests(unittest.TestCase):
             byte_identity.render_source_overlay_generator(generator), b"\n"
         )
 
-        different_layout = json.loads(json.dumps(generator))
-        different_layout["params"]["renderer_layout"] = {
-            "kind": "typed_line_canvas_v1",
-            "physical_line_count": 1,
-            "content_lines": [],
-            "transparent_line_runs": [{
-                "first": 1, "count": 1,
-                "indentation_units": [{"unit": "space", "count": 1}],
-            }],
-            "line_ending": "lf", "terminal_newline": True,
-        }
+        blank_override = dict(raw)
+        blank_override["lines"] = 1
+        blank_override["blank_indent"] = [
+            [1, 1, [{"unit": "space", "count": 1}]]
+        ]
         self.assertEqual(
-            byte_identity._seat_source_overlay_fragment(
-                different_layout, b""
+            byte_identity.render_source_overlay_generator(
+                byte_identity.validate_source_overlay_generator(
+                    blank_override, "fixture.generator"
+                )
             ),
             b" \n",
         )
 
-        wrong_pin = json.loads(json.dumps(generator))
-        wrong_pin["baseline_fragment"]["baseline_sha256"] = "0" * 64
-        self.assertEqual(
-            byte_identity._seat_source_overlay_fragment(wrong_pin, b""),
-            b"\n",
+        declaration = byte_identity.validate_source_overlay_generator(
+            {"k": "fwd", "id": "FixtureRecordA"}, "fixture.forward"
         )
-        with self.assertRaisesRegex(
-            byte_identity.ByteIdentityError, "canonical pins"
-        ):
-            byte_identity.render_source_overlay_generator(wrong_pin)
+        self.assertEqual(
+            byte_identity.render_source_overlay_generator(declaration),
+            b"class FixtureRecordA;\n",
+        )
+        seated = byte_identity.validate_source_overlay_generator(
+            {"k": "fwd", "id": "FixtureRecordA", "lines": 3, "at": [2]},
+            "fixture.forward",
+        )
+        self.assertEqual(
+            byte_identity.render_source_overlay_generator(seated),
+            b"\nclass FixtureRecordA;\n\n",
+        )
+        unterminated = byte_identity.validate_source_overlay_generator(
+            self.source_overlay_literal_use(), "fixture.literal"
+        )
+        self.assertEqual(
+            byte_identity.render_source_overlay_generator(unterminated),
+            b"configAppName",
+        )
 
-        unknown = json.loads(json.dumps(raw))
-        unknown["params"]["literal_payload"] = "free-form text"
+        unknown = dict(raw)
+        unknown["literal_payload"] = "free-form text"
         with self.assertRaisesRegex(
             byte_identity.ByteIdentityError, "schema differs"
         ):
             byte_identity.validate_source_overlay_generator(
                 unknown, "fixture.generator"
             )
+        unknown_kind = {"k": "raw_text", "text": "free-form text"}
+        with self.assertRaisesRegex(
+            byte_identity.ByteIdentityError, "is unsupported"
+        ):
+            byte_identity.validate_source_overlay_generator(
+                unknown_kind, "fixture.generator"
+            )
     def test_source_overlay_after_newline_boundary_handles_drift_fail_closed(self):
-        relative = "src/anchor.cpp"
-        operation_id = "op_anchor_fixture"
         unique = b"int a;\n\nint b;\n"
         anchor = self.source_overlay_anchor(
-            unique, relative, operation_id,
-            unique.index(b"\n") + 1, "after_newline",
+            unique, unique.index(b"\n") + 1, "after_newline",
         )
         normalized = byte_identity.validate_source_overlay_anchor(
-            anchor, "fixture.anchor", logical_path=relative,
-            operation_id=operation_id,
+            anchor, "fixture.anchor"
+        )
+        self.assertEqual(
+            byte_identity.resolve_source_overlay_anchor(
+                unique, normalized, "fixture baseline"
+            ),
+            unique.index(b"\n") + 1,
         )
         harmless_blank_drift = b"int a;\n\n\nint b;\n"
         self.assertEqual(
@@ -1564,12 +1492,10 @@ class ByteIdentityTests(unittest.TestCase):
         ambiguous_base = b"int a;\n\n\nint b;\n"
         middle = ambiguous_base.index(b"\n") + 2
         ambiguous_anchor = self.source_overlay_anchor(
-            ambiguous_base, relative, operation_id,
-            middle, "after_newline",
+            ambiguous_base, middle, "after_newline",
         )
         normalized_ambiguous = byte_identity.validate_source_overlay_anchor(
-            ambiguous_anchor, "fixture.ambiguous_anchor",
-            logical_path=relative, operation_id=operation_id,
+            ambiguous_anchor, "fixture.ambiguous_anchor"
         )
         with self.assertRaisesRegex(
             byte_identity.ByteIdentityError,
@@ -1579,69 +1505,65 @@ class ByteIdentityTests(unittest.TestCase):
                 b"int a;\n\n\n\nint b;\n", normalized_ambiguous,
                 "fixture ambiguous drift",
             )
-    def test_source_overlay_present_drift_and_generated_absence_are_exact(self):
+        with self.assertRaisesRegex(
+            byte_identity.ByteIdentityError, "missing from its clean input"
+        ):
+            byte_identity.resolve_source_overlay_anchor(
+                b"int other;\n", normalized, "fixture absent context"
+            )
+    def test_source_overlay_clean_drift_and_generated_absence_fail_closed(self):
         relative = "overlay/example.h"
         path = self.source_dir / relative
         path.parent.mkdir()
         clean = b"int baseline;\n"
         path.write_bytes(clean)
-        generator = self.source_overlay_line_reservation()
-        operation_id = "op_fixture_insert"
         effective = clean + b"\n"
         output = {
-            "logical_path": relative,
-            "clean": {
-                "state": "present",
-                "baseline_sha256": byte_identity.sha256_bytes(clean),
-                "baseline_size": len(clean),
-            },
-            "effective": {
-                "mode": byte_identity.SOURCE_OVERLAY_EFFECTIVE_MODE,
-                "baseline_sha256": byte_identity.sha256_bytes(effective),
-                "baseline_size": len(effective),
-                "baseline_line_count": effective.count(b"\n"),
-                "baseline_significant_token_sha256":
-                    byte_identity.source_overlay_significant_sha256(effective),
-            },
-            "operations": [{
-                "id": operation_id, "action": "insert",
-                "start_anchor": self.source_overlay_anchor(
-                    clean, relative, operation_id, len(clean), "file_end"
+            "path": relative,
+            "clean": byte_identity.sha256_bytes(clean),
+            "effective": byte_identity.sha256_bytes(effective),
+            "size": len(effective),
+            "ops": [{
+                "op": "insert",
+                "anchor": self.source_overlay_anchor(
+                    clean, len(clean), "file_end"
                 ),
-                "generator": generator,
+                "gen": self.source_overlay_line_reservation(),
             }],
         }
         payload = self.source_overlay_payload([output])
         baseline = byte_identity.validate_source_overlay(
             payload, self.source_dir
         )
-        self.assertTrue(baseline["actual_records"][0]["clean_baseline_match"])
+        self.assertEqual(baseline["actual_records"][0]["clean_state"], "present")
+        self.assertEqual(
+            baseline["effective_by_path"][relative]["sha256"],
+            byte_identity.sha256_bytes(effective),
+        )
+        self.assertEqual(
+            baseline["outputs"][0]["effective"]["baseline_line_count"],
+            effective.count(b"\n"),
+        )
 
+        # The tolerated-drift path is retired: a clean input that differs
+        # from its pin refuses instead of rebasing the overlay.
         drift = b"// harmless unrelated comment\n" + clean
         path.write_bytes(drift)
-        accepted = byte_identity.validate_source_overlay(
-            payload, self.source_dir
-        )
-        self.assertFalse(accepted["actual_records"][0]["clean_baseline_match"])
-        self.assertEqual(
-            accepted["effective_by_path"][relative]["sha256"],
-            byte_identity.sha256_bytes(drift + b"\n"),
-        )
+        with self.assertRaisesRegex(
+            byte_identity.ByteIdentityError,
+            "clean source overlay input differs from its pin",
+        ):
+            byte_identity.validate_source_overlay(payload, self.source_dir)
+        path.write_bytes(clean)
 
         generated_relative = "overlay/generated.h"
         generated_output = {
-            "logical_path": generated_relative,
-            "clean": {"state": "absent"},
-            "effective": {
-                "mode": byte_identity.SOURCE_OVERLAY_EFFECTIVE_MODE,
-                "baseline_sha256": byte_identity.sha256_bytes(b"\n"),
-                "baseline_size": 1, "baseline_line_count": 1,
-                "baseline_significant_token_sha256":
-                    byte_identity.source_overlay_significant_sha256(b"\n"),
-            },
-            "operations": [{
-                "id": "op_fixture_generated", "action": "whole_file_append",
-                "generator": self.source_overlay_line_reservation(),
+            "path": generated_relative,
+            "effective": byte_identity.sha256_bytes(b"\n"),
+            "size": 1,
+            "ops": [{
+                "op": "append",
+                "gen": self.source_overlay_line_reservation(),
             }],
         }
         generated_payload = self.source_overlay_payload([generated_output])
@@ -1663,7 +1585,7 @@ class ByteIdentityTests(unittest.TestCase):
         redirected_target.mkdir()
         redirected_parent.symlink_to(redirected_target, target_is_directory=True)
         redirected_output = json.loads(json.dumps(generated_output))
-        redirected_output["logical_path"] = "redirected-overlay/generated.h"
+        redirected_output["path"] = "redirected-overlay/generated.h"
         redirected_payload = self.source_overlay_payload([redirected_output])
         with self.assertRaisesRegex(
             byte_identity.ByteIdentityError,
@@ -1682,7 +1604,6 @@ class ByteIdentityTests(unittest.TestCase):
             b"int after;\n"
         )
         path.write_bytes(clean)
-        operation_id = "op_fixture_replace"
         start = clean.index(b"\n") + 1
         end = clean.index(b"int after")
         removed = clean[start:end]
@@ -1690,38 +1611,24 @@ class ByteIdentityTests(unittest.TestCase):
         effective = clean[:start] + fragment + clean[end:]
         generator = self.source_overlay_literal_use()
         output = {
-            "logical_path": relative,
-            "clean": {
-                "state": "present",
-                "baseline_sha256": byte_identity.sha256_bytes(clean),
-                "baseline_size": len(clean),
-            },
-            "effective": {
-                "mode": byte_identity.SOURCE_OVERLAY_EFFECTIVE_MODE,
-                "baseline_sha256": byte_identity.sha256_bytes(effective),
-                "baseline_size": len(effective),
-                "baseline_line_count": effective.count(b"\n"),
-                "baseline_significant_token_sha256":
-                    byte_identity.source_overlay_significant_sha256(effective),
-            },
-            "operations": [{
-                "id": operation_id, "action": "replace",
-                "start_anchor": self.source_overlay_anchor(
-                    clean, relative, operation_id, start,
-                    "after_newline",
+            "path": relative,
+            "clean": byte_identity.sha256_bytes(clean),
+            "effective": byte_identity.sha256_bytes(effective),
+            "size": len(effective),
+            "ops": [{
+                "op": "replace",
+                "id": "op_fixture_replace",
+                "from": self.source_overlay_anchor(
+                    clean, start, "after_newline"
                 ),
-                "end_anchor": self.source_overlay_anchor(
-                    clean, relative, operation_id, end,
-                    "before_next_token",
+                "to": self.source_overlay_anchor(
+                    clean, end, "before_next_token"
                 ),
-                "generator": generator,
-                "baseline_input_range": {
-                    "baseline_sha256": byte_identity.sha256_bytes(removed),
-                    "baseline_size": len(removed),
-                    "baseline_line_count": removed.count(b"\n"),
-                    "baseline_significant_token_sha256":
-                        byte_identity.source_overlay_significant_sha256(removed),
+                "removed": {
+                    "sha256": byte_identity.sha256_bytes(removed),
+                    "size": len(removed),
                 },
+                "gen": generator,
             }],
         }
         payload = self.source_overlay_payload([output])
@@ -1733,17 +1640,30 @@ class ByteIdentityTests(unittest.TestCase):
             evidence["actual_removed_range_sha256"],
             byte_identity.sha256_bytes(removed),
         )
-
-        wrong_role = json.loads(json.dumps(generator))
-        wrong_role["baseline_fragment"]["declared_identifiers"] = [
-            "configAppName"
+        # The literal-alias census is derived from the typed params, never
+        # stored: the reseated identifier is a reference, not a declaration.
+        normalized_generator = accepted["outputs"][0]["operations"][0][
+            "generator"
         ]
-        wrong_role["baseline_fragment"]["referenced_identifiers"] = []
+        self.assertEqual(
+            byte_identity.source_overlay_expected_identifier_roles(
+                normalized_generator["kind"], normalized_generator["params"]
+            ),
+            {
+                "declared_identifiers": [],
+                "referenced_identifiers": ["configAppName"],
+                "emitted_identifiers": [],
+            },
+        )
+
+        tampered_range = json.loads(json.dumps(payload))
+        tampered_range["outputs"][0]["ops"][0]["removed"]["sha256"] = "0" * 64
         with self.assertRaisesRegex(
-            byte_identity.ByteIdentityError, "literal alias census differs"
+            byte_identity.ByteIdentityError,
+            "authenticated input-range pins",
         ):
-            byte_identity.validate_source_overlay_generator(
-                wrong_role, "fixture.literal_use"
+            byte_identity.validate_source_overlay(
+                tampered_range, self.source_dir
             )
 
         path.write_bytes(clean.replace(
@@ -1751,39 +1671,25 @@ class ByteIdentityTests(unittest.TestCase):
         ))
         with self.assertRaisesRegex(
             byte_identity.ByteIdentityError,
-            "authenticated input-range pins",
+            "clean source overlay input differs from its pin",
         ):
             byte_identity.validate_source_overlay(payload, self.source_dir)
     def test_source_overlay_composite_child_and_output_pins_are_exact(self):
-        rendered = b"\n\n"
-        child = self.source_overlay_line_reservation(2)
+        rendered = (
+            b"\n"
+            b"class FixtureRecordA;\n"
+            b"class FixtureRun0;\n"
+            b"class FixtureRun1;\n"
+            b"class FixtureRun2;\n"
+            b"\n"
+        )
         composite = {
-            "kind": "composed_typed_sequence_v1",
-            "emission_class": "composed",
-            "params": {
-                "physical_line_count": 2,
-                "comment_policy": "strip_prose_preserve_physical_lines_v1",
-                "composition_policy":
-                    "line_overlay_disjoint_nonblank_conflict_reject_v2",
-                "items": [{
-                    "index": 0, "relative_lines": [1, 2],
-                    "transparent_relative_lines": [1, 2],
-                    "generator": child,
-                }],
-                "renderer_layout": {
-                    "kind": "typed_line_canvas_v1",
-                    "physical_line_count": 2,
-                    "content_lines": [],
-                    "transparent_line_runs": [{
-                        "first": 1, "count": 2,
-                        "indentation_units": [],
-                    }],
-                    "line_ending": "lf", "terminal_newline": True,
-                },
-            },
-            "baseline_fragment": self.source_overlay_fragment(
-                rendered, "line_indexed_nonblank_overlay"
-            ),
+            "k": "seq", "lines": 6,
+            "items": [
+                {"k": "fwd", "id": "FixtureRecordA", "line": 2},
+                {"k": "fwd_run", "stem": "FixtureRun", "first": 0,
+                 "count": 3, "line": 3},
+            ],
         }
         normalized = byte_identity.validate_source_overlay_generator(
             composite, "fixture.composite"
@@ -1791,52 +1697,82 @@ class ByteIdentityTests(unittest.TestCase):
         self.assertEqual(
             byte_identity.render_source_overlay_generator(normalized), rendered
         )
+        self.assertEqual(
+            [
+                leaf["params"]["identifier"]
+                for leaf in byte_identity.iter_source_overlay_leaf_generators(
+                    normalized
+                )
+            ],
+            ["FixtureRecordA", "FixtureRun0", "FixtureRun1", "FixtureRun2"],
+        )
 
-        child_tamper = json.loads(json.dumps(normalized))
-        child_tamper["params"]["items"][0]["generator"][
-            "baseline_fragment"
-        ]["baseline_sha256"] = "0" * 64
+        conflict = json.loads(json.dumps(composite))
+        conflict["items"][1]["line"] = 2
         with self.assertRaisesRegex(
-            byte_identity.ByteIdentityError, "canonical pins"
+            byte_identity.ByteIdentityError, "nonblank conflict"
         ):
-            byte_identity.render_source_overlay_generator(child_tamper)
-
-        parent_tamper = json.loads(json.dumps(normalized))
-        parent_tamper["baseline_fragment"]["baseline_sha256"] = "0" * 64
+            byte_identity.render_source_overlay_generator(
+                byte_identity.validate_source_overlay_generator(
+                    conflict, "fixture.composite"
+                )
+            )
+        overflow = json.loads(json.dumps(composite))
+        overflow["items"].append({"k": "lines", "n": 3, "line": 5})
         with self.assertRaisesRegex(
-            byte_identity.ByteIdentityError, "canonical pins"
+            byte_identity.ByteIdentityError, "child span differs"
         ):
-            byte_identity.render_source_overlay_generator(parent_tamper)
+            byte_identity.render_source_overlay_generator(
+                byte_identity.validate_source_overlay_generator(
+                    overflow, "fixture.composite"
+                )
+            )
 
         relative = "overlay/composite.h"
         (self.source_dir / "overlay").mkdir(exist_ok=True)
         output = {
-            "logical_path": relative,
-            "clean": {"state": "absent"},
-            "effective": {
-                "mode": byte_identity.SOURCE_OVERLAY_EFFECTIVE_MODE,
-                "baseline_sha256": byte_identity.sha256_bytes(rendered),
-                "baseline_size": len(rendered),
-                "baseline_line_count": rendered.count(b"\n"),
-                "baseline_significant_token_sha256":
-                    byte_identity.source_overlay_significant_sha256(rendered),
-            },
-            "operations": [{
-                "id": "op_fixture_composite",
-                "action": "whole_file_append", "generator": composite,
+            "path": relative,
+            "effective": byte_identity.sha256_bytes(rendered),
+            "size": len(rendered),
+            "ops": [{
+                "op": "append", "gen": composite,
             }],
         }
         byte_identity.validate_source_overlay(
             self.source_overlay_payload([output]), self.source_dir
         )
-        output["effective"]["baseline_sha256"] = "0" * 64
+        output["effective"] = "0" * 64
         with self.assertRaisesRegex(
             byte_identity.ByteIdentityError,
-            "baseline source overlay output differs",
+            "differs from its effective pin",
         ):
             byte_identity.validate_source_overlay(
                 self.source_overlay_payload([output]), self.source_dir
             )
+    def test_source_overlay_type_strings_round_trip_the_closed_grammar(self):
+        for spelling in (
+            "MxBitmap", "const char*", "unsigned int",
+            "LegoPathEdgeContainer*", "MxAtomId&", "float* const",
+            "const LegoChar*&",
+            "_Tree<LegoCacheSoundEntry, LegoCacheSoundEntry, "
+            "Set100d6b4c::_Kfn, Set100d6b4cComparator, "
+            "allocator<LegoCacheSoundEntry>>",
+        ):
+            normalized = byte_identity.validate_source_overlay_cpp_type(
+                spelling, "fixture.type"
+            )
+            self.assertEqual(
+                byte_identity.render_source_overlay_cpp_type(normalized),
+                spelling,
+            )
+        for wrong in (
+            "char *", "char  const", "vector<int >", "int[4]", "T<>",
+            "int**", "void()",
+        ):
+            with self.assertRaises(byte_identity.ByteIdentityError):
+                byte_identity.validate_source_overlay_cpp_type(
+                    wrong, "fixture.type"
+                )
     def make_fake_cmake_install(
         self, name: str, *, resource_names: tuple[str, ...] = ("cmake",),
         resource_files: bool = True,
