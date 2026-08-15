@@ -695,8 +695,9 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
     if any(target not in image_by_target for target in relink_targets):
         relink_targets.add("lego1")
     for target in sorted(relink_targets):
-        image = build / image_by_target.get(target, "")
-        if image.name and image.exists():
+        recompiled = image_by_target.get(target)
+        image = build / recompiled if recompiled else None
+        if image is not None and image.exists():
             image.unlink()
         run(["cmake", "--build", str(build), "--target", target,
              "-j", str(jobs)],

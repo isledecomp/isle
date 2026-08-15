@@ -724,6 +724,61 @@
     "reason": "Closes the CONFIG final-two cmp-orientation rows 0x401070 and 0x401990 from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "roi",
+   "source": "LEGO1/lego/sources/roi/legoroi.cpp",
+   "source_sha256": "12135578db06a0029c0c55bc4ba3830b91cd1a642cfc197f716eaadded94dc83",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_18d725c72058",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "prefix",
+      "prefix": "MxUnkRecVA",
+      "count": 3,
+      "width": 3,
+      "generated_header_sha256": "18d725c72058e535fef1ee5b8830a79b759af0c210106afbcc1fd7991a4b96bd",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated forward-declaration run prepended to the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?FindChildROI@LegoROI@@QAEPAV1@PBDPAV1@@Z",
+     "donor": "d_18d725c72058",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 182,
+     "expected_body_sha256": "3f1333c85ca7ce0b7b26973fdb2f897f1fc1dd152bee8c8efc1b016e2f37211a",
+     "expected_changed_offsets": [
+      79
+     ]
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes LegoROI::FindChildROI 0x100a8ce0 from a generated forward-run carrier state over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -798,8 +853,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4769,
-    "accepted_row_identity_sha256": "76c8e54350e3edf896a4e7dd7c3943140a3f6dd7dfafd95d4605c3e5434d6b2f",
+    "exact_raw_1_0_count": 4770,
+    "accepted_row_identity_sha256": "307cdb240212c13c413101335b2c580081151a11df94ba356069027aeebd1781",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
