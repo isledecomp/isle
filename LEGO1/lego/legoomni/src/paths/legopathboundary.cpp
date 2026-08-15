@@ -18,7 +18,7 @@ LegoPathBoundary::LegoPathBoundary()
 // FUNCTION: BETA10 0x100b140d
 LegoPathBoundary::~LegoPathBoundary()
 {
-	for (LegoPathActorSet::iterator it = m_actors.begin(); !(it == m_actors.end()); it++) {
+	for (LegoPathActorSet::iterator it = m_actors.begin(); it != m_actors.end(); it++) {
 		(*it)->SetBoundary(NULL);
 	}
 
