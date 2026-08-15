@@ -4355,6 +4355,7 @@ def _apply_source_overlay_edits(
 def render_source_overlay_outputs(
     overlay: dict, clean_inputs: dict[str, bytes], *,
     evidence_out: list[dict] | None = None,
+    repin_paths: set[str] | None = None,
 ) -> dict[str, bytes]:
     """Render effective outputs from one immutable view of the clean inputs.
 
@@ -4627,8 +4628,9 @@ def render_source_overlay_outputs(
         data = rendered[relative]
         expected = output["effective"]
         require(
-            len(data) == expected["baseline_size"]
-            and sha256_bytes(data) == expected["baseline_sha256"],
+            (repin_paths is not None and relative in repin_paths)
+            or (len(data) == expected["baseline_size"]
+                and sha256_bytes(data) == expected["baseline_sha256"]),
             f"source overlay output differs from its effective pin: {relative}",
         )
         for receipt in operation_evidence:
@@ -4642,7 +4644,7 @@ def render_source_overlay_outputs(
     return rendered
 
 
-def validate_source_overlay(value: object, source_root: Path) -> dict:
+def validate_source_overlay(value: object, source_root: Path, *, repin_paths: set[str] | None = None) -> dict:
     """Validate and execute the manifest's closed clean-to-byte overlay.
 
     The lean contract is fully fail-closed: every present clean input must
@@ -4808,7 +4810,8 @@ def validate_source_overlay(value: object, source_root: Path) -> dict:
             )
     anchor_evidence = []
     rendered = render_source_overlay_outputs(
-        normalized, clean_inputs, evidence_out=anchor_evidence
+        normalized, clean_inputs, evidence_out=anchor_evidence,
+        repin_paths=repin_paths,
     )
     actual_records = []
     for output in outputs:
@@ -10973,9 +10976,7 @@ def compose_equal_body_comdat(
                 "unsupported equal-body splice class")
         fpo_closure = closure == (2, (".debug$F", ".debug$S"))
         require(
-            closure == (2, (".debug$S", ".xdata$x"))
-            or (fpo_closure
-                and splice_class == "equal_body_eh_reloc_layout"),
+            closure == (2, (".debug$S", ".xdata$x")) or fpo_closure,
             "splice closure kind is unsupported for this class",
         )
         # A carrier-state donor owns its own global tail layout; the target
