@@ -1942,6 +1942,119 @@
     "reason": "Closes 4 row(s) in LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/common/legocharactermanager.cpp",
+   "source_sha256": "0acb7af321c2bbcec086a2d3394bcf2d0f79989030fa29acfd16c2302f62ccf6",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_93806ad84a84",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "prefix",
+      "prefix": "MxUnkRecVA",
+      "count": 10,
+      "width": 3,
+      "generated_header_sha256": "93806ad84a84990c801c0677d0ae420e84bc2ee85e8a6818a1ad8777ddecce0e",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_55a88a58284c",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 27,
+      "width": 3,
+      "generated_header_sha256": "55a88a58284c70d29d3e9c1b0de1678e6335378c4106095b0c25f56e6f5bae07",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_c15e6e4702a9",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 2,
+      "width": 3,
+      "generated_header_sha256": "c15e6e4702a930e5cbe3c3c4467268942873ee70bb9c2beffe9c3648347125b1",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?SwitchSound@LegoCharacterManager@@QAEEPAVLegoROI@@@Z",
+     "expected_body_length": 47,
+     "expected_body_sha256": "04b476fc7978c99ba0b079ec380b265bc974e4bdb135d54691b8e48c9d4a665a",
+     "expected_changed_offsets": [
+      24,
+      30
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_93806ad84a84"
+    },
+    {
+     "mangled": "??1?$list@PAVROI@@V?$allocator@PAVROI@@@@@@QAE@XZ",
+     "expected_body_length": 100,
+     "expected_body_sha256": "6bb8b587649799c8cbae1debfa7bc57028a3fe57d7e8f6f82d55db2e042410eb",
+     "expected_changed_offsets": [
+      19,
+      62
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_55a88a58284c"
+    },
+    {
+     "mangled": "?ReleaseAutoROI@LegoCharacterManager@@QAEXPAVLegoROI@@@Z",
+     "expected_body_length": 248,
+     "expected_body_sha256": "7f85bc047da5eb6f0a642926ea09843fb22cbb282ae604fe84532b14dbdac333",
+     "expected_changed_offsets": [
+      19
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_c15e6e4702a9"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 3 row(s) in LEGO1/lego/legoomni/src/common/legocharactermanager.cpp from generated carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -2016,8 +2129,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4790,
-    "accepted_row_identity_sha256": "d8d952c06613f1462b79e7578cdcebdc448f177810f73b9c796e3fe0c0923fe8",
+    "exact_raw_1_0_count": 4793,
+    "accepted_row_identity_sha256": "aea97b3d827dd7e6beb8ec9eedb7011496cb7fb2dace8b45365d4184d1e6e62c",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
