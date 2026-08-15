@@ -51,6 +51,31 @@ def generate_extern_run(prefix: str, count: int, width: int) -> str:
     )
 
 
+def generate_pad_shape(classes: int, functions_per_class: int) -> str:
+    """Return the padded uniform declaration-shape family.
+
+    A grid of classes each holding the same number of unused inline
+    members, with fixed-width numeric naming.  Like generate_shape it can
+    steer compiler allocation decisions but emits no code, data, strings,
+    vtables, or linker directives.
+    """
+    if not 1 <= classes <= 99:
+        raise ValueError("pad shape classes must be in [1, 99]")
+    if not 1 <= functions_per_class <= 99:
+        raise ValueError("pad shape functions-per-class must be in [1, 99]")
+    parts = []
+    for class_number in range(classes):
+        lines = [f"class ClassPad{class_number:02d} {{"]
+        for function_number in range(functions_per_class):
+            lines.append(
+                f"\tinline void FunctionPad{class_number:02d}"
+                f"x{function_number:02d}() {{}}"
+            )
+        lines.append("};")
+        parts.append("\n".join(lines))
+    return "\n\n".join(parts) + "\n"
+
+
 def generate_shape(classes: int, functions: int) -> str:
     """Return a deterministic, declaration-only compiler-state shape.
 

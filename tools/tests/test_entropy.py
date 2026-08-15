@@ -120,10 +120,22 @@ class EntropyTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             entropy.generate_extern_run("g_p", 1000, 3)
 
+    def test_pad_shape_matches_exact_authenticated_bytes(self):
+        actual = entropy.generate_pad_shape(3, 6).encode("utf-8")
+        self.assertEqual(
+            digest(actual),
+            "2130c5d7c158e364c10db715e425e7829a73f6a3b1e7a25f2f6fa52d5ae275de",
+        )
+        with self.assertRaises(ValueError):
+            entropy.generate_pad_shape(0, 1)
+        with self.assertRaises(ValueError):
+            entropy.generate_pad_shape(1, 100)
+
     def test_legacy_generator_and_cli_surface_are_absent(self):
         self.assertEqual(
             {name for name in vars(entropy) if not name.startswith("_")},
-            {"generate_shape", "generate_forward_run", "generate_extern_run"},
+            {"generate_shape", "generate_forward_run", "generate_extern_run",
+             "generate_pad_shape"},
         )
         for name in (
             "atomic_write",
