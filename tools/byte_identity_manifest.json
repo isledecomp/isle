@@ -1531,6 +1531,22 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_ba68e8998543",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 3,
+      "generated_header_sha256": "ba68e899854373abf86fd4f93e9c17cda6d6b11e14c19eed055a3c4a74870ca5",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -1573,6 +1589,39 @@
      "expected_donor_length": 1462,
      "expected_linked_span": 1472,
      "donor": "d_be786f55fc37"
+    },
+    {
+     "mangled": "?_Lrotate@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@IAEXPAU_Node@1@@Z",
+     "expected_body_length": 83,
+     "expected_body_sha256": "9e79791cb446112945ee237d6e61168e422d26911c46762d89c10ab592587f34",
+     "expected_changed_offsets": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      6,
+      9,
+      11,
+      14,
+      24,
+      27,
+      30,
+      39,
+      43,
+      46,
+      50,
+      53,
+      55,
+      62,
+      64,
+      66,
+      73,
+      75,
+      77
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_ba68e8998543"
     }
    ],
    "completion": {
@@ -3098,8 +3147,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4810,
-    "accepted_row_identity_sha256": "7df2567d5d5e3398b2b036da72ef0deb26661e8822fb76382cce88ebbe1c52ac",
+    "exact_raw_1_0_count": 4811,
+    "accepted_row_identity_sha256": "e2af138e7ce828ec7d7868106fa628778233cc3a7419b3e900ae70bc382c3807",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
