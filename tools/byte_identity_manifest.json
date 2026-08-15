@@ -1432,6 +1432,98 @@
     "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/worlds/isle.cpp from a generated carrier state over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/actors/ambulance.cpp",
+   "source_sha256": "1fcd5aedd6030ed5a0d0609d659239049cff14833a7fed821f12c05caac8398b",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_8ac6b4ca0987",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 2,
+      "functions": 2,
+      "generated_header_sha256": "8ac6b4ca098707dc7bedc9b71b551721555a9190abf0b72a3c05f21b9418da2d",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_eec6c33322bc",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 2,
+      "functions": 4,
+      "generated_header_sha256": "eec6c33322bcb2cd4aacff89c604bd9a73df547bb00867341ba8a77c3aa43370",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?CreateState@Ambulance@@QAEXXZ",
+     "expected_body_length": 48,
+     "expected_body_sha256": "4619a6769d10e8670bd15cb9a95e3ea1993096986c030c891d6f4c4f310acc15",
+     "expected_changed_offsets": [
+      3,
+      12,
+      33,
+      39,
+      40,
+      41,
+      42,
+      43,
+      45
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_8ac6b4ca0987"
+    },
+    {
+     "mangled": "?HandleClick@Ambulance@@UAEJXZ",
+     "expected_body_length": 369,
+     "expected_body_sha256": "fe845dd5d70125a5f6168a556e9df2ebefa304c3924123f7a646b8ea0eaa06c0",
+     "expected_changed_offsets": [
+      123,
+      125,
+      132,
+      134,
+      136,
+      139
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_eec6c33322bc"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/actors/ambulance.cpp from generated carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -1506,8 +1598,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4779,
-    "accepted_row_identity_sha256": "3144f11a7977d5cd173e0cd06d560e9b832e4c3a890be8718b2e963576767206",
+    "exact_raw_1_0_count": 4781,
+    "accepted_row_identity_sha256": "d7cc7bca9f2c6c74cdf610b6dae8052ecb63f2fe2a917822659b90ca920e4e44",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
