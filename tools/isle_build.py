@@ -419,41 +419,45 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
     CodeView range) is composed into the seed object by the pure composer.
     """
     import shlex
+    import entropy
     units = manifest.get("translation_units", [])
     if not units:
         return
     commands = {}
     for entry in json.loads((build / "compile_commands.json").read_text()):
-        commands[Path(entry["file"]).resolve()] = entry
-    relink = False
+        commands.setdefault(Path(entry["file"]).resolve(), []).append(entry)
+    image_by_target = {
+        image["target"]: image["recompiled"]
+        for image in manifest.get("images", {}).values()
+    }
+    relink_targets = set()
     for unit in units:
         source = (shadow / unit["source"]).resolve()
-        entry = commands.get(source)
-        if entry is None:
+        entries = commands.get(source)
+        if not entries:
             fail(f"no compile command for listed TU: {unit['source']}")
-        child = shlex.split(entry["command"])
-        cwd = Path(entry["directory"])
+
+        def lane(predicate, description):
+            matches = [entry for entry in entries
+                       if predicate(entry["command"])]
+            if len(matches) != 1:
+                fail(f"expected one {description} compile lane for "
+                     f"{unit['source']}, found {len(matches)}")
+            return matches[0]
+
+        target_marker = f"CMakeFiles/{unit['target']}.dir/"
+        seed_entry = lane(lambda command: target_marker in command,
+                          unit["target"])
+        child = shlex.split(seed_entry["command"])
+        cwd = Path(seed_entry["directory"])
         parsed = byte_identity.validate_compile_arguments(child)
         seed_object = (cwd / parsed["Fo"][1]).resolve()
         seed_pdb = (cwd / parsed["Fd"][1]).resolve()
         if not seed_object.is_file():
             fail(f"listed TU object is absent: {seed_object}")
-        donor = unit["donors"][0]
-        recipe = donor["recipe"]
-        import entropy
-        header_bytes = entropy.generate_shape(
-            recipe["classes"], recipe["functions"]
-        ).encode("utf-8")
-        header_sha = hashlib.sha256(header_bytes).hexdigest()
-        if header_sha != recipe["generated_header_sha256"]:
-            fail(f"donor header rendering differs: {unit['source']}")
-        header = (build.parent / "generated"
-                  / f"declaration_{header_sha}.h")
-        header.parent.mkdir(parents=True, exist_ok=True)
-        if not header.exists() or header.read_bytes() != header_bytes:
-            header.write_bytes(header_bytes)
         marker = build.parent / (
-            "composed-" + unit["source"].replace("/", "_") + ".json"
+            "composed-" + unit["target"] + "-"
+            + unit["source"].replace("/", "_") + ".json"
         )
         seed_bytes = seed_object.read_bytes()
         seed_sha = hashlib.sha256(seed_bytes).hexdigest()
@@ -461,24 +465,103 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
             state = json.loads(marker.read_text())
             if state.get("composed_sha") == seed_sha:
                 continue
-        donor_command = list(child)
-        donor_command.insert(parsed["Fo"][0], f"/FI{header}")
-        # Compile the donor with identical /Fo /Fd: hold the seed aside.
-        seed_pdb_bytes = seed_pdb.read_bytes() if seed_pdb.is_file() else None
-        try:
-            run(donor_command, cwd=cwd, env=build_environment(compiler),
-                log=build.parent / "donor-compile.log")
-            donor_bytes = seed_object.read_bytes()
-        finally:
-            seed_object.write_bytes(seed_bytes)
-            if seed_pdb_bytes is not None:
-                seed_pdb.write_bytes(seed_pdb_bytes)
-        identifiers = byte_identity.declaration_identifiers(header_bytes)
-        composed = seed_bytes
-        for function in unit["functions"]:
-            composed, detail = byte_identity.compose_equal_linked_span_fpo(
-                composed, donor_bytes, function, identifiers
-            )
+        # The object on disk is not attested as this unit's fresh seed (it
+        # may hold a previous composition), so recompile it in place first.
+        run(child, cwd=cwd, env=build_environment(compiler),
+            log=build.parent / "seed-compile.log")
+        seed_bytes = seed_object.read_bytes()
+        seed_sha = hashlib.sha256(seed_bytes).hexdigest()
+
+        donor_objects = {}
+        if unit["mode"] == "compose_equal_linked_span_fpo":
+            donor = unit["donors"][0]
+            recipe = donor["recipe"]
+            header_bytes = entropy.generate_shape(
+                recipe["classes"], recipe["functions"]
+            ).encode("utf-8")
+            header_sha = hashlib.sha256(header_bytes).hexdigest()
+            if header_sha != recipe["generated_header_sha256"]:
+                fail(f"donor header rendering differs: {unit['source']}")
+            header = (build.parent / "generated"
+                      / f"declaration_{header_sha}.h")
+            header.parent.mkdir(parents=True, exist_ok=True)
+            if not header.exists() or header.read_bytes() != header_bytes:
+                header.write_bytes(header_bytes)
+            donor_command = list(child)
+            donor_command.insert(parsed["Fo"][0], f"/FI{header}")
+            # Compile the donor with identical /Fo /Fd: hold the seed aside.
+            seed_pdb_bytes = (seed_pdb.read_bytes()
+                              if seed_pdb.is_file() else None)
+            try:
+                run(donor_command, cwd=cwd, env=build_environment(compiler),
+                    log=build.parent / "donor-compile.log")
+                donor_objects[donor["id"]] = seed_object.read_bytes()
+            finally:
+                seed_object.write_bytes(seed_bytes)
+                if seed_pdb_bytes is not None:
+                    seed_pdb.write_bytes(seed_pdb_bytes)
+            identifiers = byte_identity.declaration_identifiers(header_bytes)
+            composed = seed_bytes
+            for function in unit["functions"]:
+                composed, detail = byte_identity.compose_equal_linked_span_fpo(
+                    composed, donor_objects[function["donor"]], function,
+                    identifiers,
+                )
+        else:
+            for donor in unit["donors"]:
+                recipe = donor["recipe"]
+                run_bytes = entropy.generate_forward_run(
+                    recipe["prefix"], recipe["count"], recipe["width"]
+                ).encode("utf-8")
+                run_sha = hashlib.sha256(run_bytes).hexdigest()
+                if run_sha != recipe["generated_header_sha256"]:
+                    fail(f"donor forward run rendering differs: "
+                         f"{unit['source']}")
+                define = recipe["compile_lane"]["required_define"]
+                lane_entry = lane(
+                    lambda command: f"-D{define}" in shlex.split(command),
+                    define,
+                )
+                lane_child = shlex.split(lane_entry["command"])
+                lane_parsed = byte_identity.validate_compile_arguments(
+                    lane_child
+                )
+                probe = build.parent / "donors" / donor["id"]
+                probe.mkdir(parents=True, exist_ok=True)
+                shadow_bytes = source.read_bytes()
+                if recipe["placement"] == "prefix":
+                    (probe / "s.cpp").write_bytes(run_bytes + shadow_bytes)
+                    force_include = []
+                else:
+                    (probe / "s.cpp").write_bytes(shadow_bytes)
+                    (probe / "run.h").write_bytes(run_bytes)
+                    force_include = ["/FIrun.h"]
+                donor_command = []
+                include_seated = False
+                for index, token in enumerate(lane_child):
+                    if not include_seated and token.startswith(("-I", "/I")):
+                        donor_command.append(f"/I{source.parent}")
+                        include_seated = True
+                    if token.startswith(("/Fo", "-Fo")):
+                        donor_command.extend(force_include)
+                        donor_command.append("/Foo.obj")
+                        continue
+                    if token.startswith(("/Fd", "-Fd")):
+                        donor_command.append("/Fdo.pdb")
+                        continue
+                    if index == len(lane_child) - 1:
+                        donor_command.append("s.cpp")
+                        continue
+                    donor_command.append(token)
+                run(donor_command, cwd=probe,
+                    env=build_environment(compiler),
+                    log=build.parent / "donor-compile.log")
+                donor_objects[donor["id"]] = (probe / "o.obj").read_bytes()
+            composed = seed_bytes
+            for function in unit["functions"]:
+                composed, detail = byte_identity.compose_equal_body_comdat(
+                    composed, donor_objects[function["donor"]], function
+                )
         byte_identity.validate_first_party_object_directive(
             composed, "composed object"
         )
@@ -488,13 +571,13 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
             "composed_sha": hashlib.sha256(composed).hexdigest(),
         }, indent=1) + "\n")
         print(f"[isle_build] composed {len(unit['functions'])} function(s) "
-              f"into {unit['source']}")
-        relink = True
-    if relink:
-        image = build / "LEGO1.DLL"
-        if image.exists():
+              f"into {unit['target']}:{unit['source']}")
+        relink_targets.add(unit["target"])
+    for target in sorted(relink_targets):
+        image = build / image_by_target.get(target, "")
+        if image.name and image.exists():
             image.unlink()
-        run(["cmake", "--build", str(build), "--target", "lego1",
+        run(["cmake", "--build", str(build), "--target", target,
              "-j", str(jobs)],
             env=build_environment(compiler),
             log=build.parent / "relink.log")

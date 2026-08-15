@@ -10,6 +10,26 @@ def _shape_suffix(number: int, width: int) -> str:
     return "".join(reversed(characters))
 
 
+def generate_forward_run(prefix: str, count: int, width: int) -> str:
+    """Return a deterministic run of bare forward declarations.
+
+    A forward declaration allocates one compiler name record and nothing
+    else: no code, data, strings, vtables, or linker directives can be
+    emitted from it.  The run is the stem-inert carrier form (`class X;`)
+    with fixed-width decimal suffixes so a given (prefix, count, width)
+    always renders identical bytes.
+    """
+    if not (prefix and prefix[0].isalpha() and prefix.isalnum()):
+        raise ValueError("forward run prefix must be an identifier stem")
+    if not 1 <= count <= 999:
+        raise ValueError("forward run count must be in [1, 999]")
+    if not 1 <= width <= 3 or count > 10 ** width:
+        raise ValueError("forward run width cannot represent the count")
+    return "".join(
+        f"class {prefix}{number:0{width}d};\n" for number in range(count)
+    )
+
+
 def generate_shape(classes: int, functions: int) -> str:
     """Return a deterministic, declaration-only compiler-state shape.
 

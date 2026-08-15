@@ -8002,7 +8002,8 @@ def validate_manifest(
         owners.add(owner)
         mode = unit.get("mode")
         require(
-            mode == "compose_equal_linked_span_fpo"
+            mode in ("compose_equal_linked_span_fpo",
+                     "compose_equal_body_comdat")
             or (
                 mode == "pass_through"
                 and diagnostic_policy == NATIVE_DIAGNOSTIC_MANIFEST_POLICY
@@ -8051,9 +8052,9 @@ def validate_manifest(
                     f"{donor_context}.id is duplicated within this TU")
             local_recipe_ids.add(recipe_id)
             expected_status = (
-                "compiler_generated_current_source"
-                if mode == "compose_equal_linked_span_fpo"
-                else "planned_not_composed"
+                "planned_not_composed"
+                if mode == "pass_through"
+                else "compiler_generated_current_source"
             )
             require(donor.get("status") == expected_status,
                     f"{donor_context}.status must be {expected_status}")
@@ -8064,29 +8065,72 @@ def validate_manifest(
             recipe = donor.get("recipe")
             require(isinstance(recipe, dict), f"{donor_context}.recipe must be an object")
             kind = recipe.get("kind")
-            require(
-                kind == "declaration_shape",
-                f"{donor_context}: donors require declaration_shape",
-            )
-            exact_keys(
-                recipe,
-                {
-                    "kind", "classes", "functions", "generated_header_sha256",
-                    "emission_policy", "authenticity_rationale",
-                },
-                f"{donor_context}.recipe",
-            )
-            classes = recipe.get("classes")
-            functions = recipe.get("functions")
-            require(isinstance(classes, int) and not isinstance(classes, bool)
-                    and 1 <= classes <= 10,
-                    f"{donor_context}.classes is invalid")
-            require(isinstance(functions, int) and not isinstance(functions, bool)
-                    and classes <= functions <= 10 * classes,
-                    f"{donor_context}.functions is invalid")
-            generated = entropy_generator.generate_shape(
-                classes, functions
-            ).encode("utf-8")
+            if mode == "compose_equal_body_comdat":
+                require(
+                    kind == "forward_declaration_run",
+                    f"{donor_context}: equal-body donors require "
+                    "forward_declaration_run",
+                )
+                exact_keys(
+                    recipe,
+                    {
+                        "kind", "placement", "prefix", "count", "width",
+                        "generated_header_sha256", "compile_lane",
+                        "emission_policy", "authenticity_rationale",
+                    },
+                    f"{donor_context}.recipe",
+                )
+                require(recipe.get("placement") in ("prefix", "force_include"),
+                        f"{donor_context}.placement is invalid")
+                run_prefix = recipe.get("prefix")
+                run_count = recipe.get("count")
+                run_width = recipe.get("width")
+                require(isinstance(run_prefix, str)
+                        and isinstance(run_count, int)
+                        and not isinstance(run_count, bool)
+                        and isinstance(run_width, int)
+                        and not isinstance(run_width, bool),
+                        f"{donor_context} forward-run parameters are invalid")
+                lane = recipe.get("compile_lane")
+                require(
+                    isinstance(lane, dict)
+                    and set(lane) == {"required_define"}
+                    and isinstance(lane.get("required_define"), str)
+                    and lane["required_define"],
+                    f"{donor_context}.compile_lane must select by a define",
+                )
+                try:
+                    generated = entropy_generator.generate_forward_run(
+                        run_prefix, run_count, run_width
+                    ).encode("utf-8")
+                except ValueError as error:
+                    raise ByteIdentityError(
+                        f"{donor_context} forward-run parameters: {error}"
+                    ) from error
+            else:
+                require(
+                    kind == "declaration_shape",
+                    f"{donor_context}: donors require declaration_shape",
+                )
+                exact_keys(
+                    recipe,
+                    {
+                        "kind", "classes", "functions", "generated_header_sha256",
+                        "emission_policy", "authenticity_rationale",
+                    },
+                    f"{donor_context}.recipe",
+                )
+                classes = recipe.get("classes")
+                functions = recipe.get("functions")
+                require(isinstance(classes, int) and not isinstance(classes, bool)
+                        and 1 <= classes <= 10,
+                        f"{donor_context}.classes is invalid")
+                require(isinstance(functions, int) and not isinstance(functions, bool)
+                        and classes <= functions <= 10 * classes,
+                        f"{donor_context}.functions is invalid")
+                generated = entropy_generator.generate_shape(
+                    classes, functions
+                ).encode("utf-8")
             required_prefix = "d_"
             serialized_recipe = json.dumps(recipe, sort_keys=True).casefold()
             require(not any(word in serialized_recipe for word in FORBIDDEN_RECIPE_WORDS),
@@ -8139,9 +8183,70 @@ def validate_manifest(
             "expected_local_symbol_updates", "compiler_output_body_sha256",
             "expected_donor_fpo", "retail_oracle",
         }
+        equal_body_function_keys = {
+            "mangled", "donor", "splice_class", "expected_body_length",
+            "expected_body_sha256", "expected_changed_offsets",
+            "expected_code_renames", "expected_xdata_rename_offsets",
+        }
         for function_index, function in enumerate(functions):
             function_context = f"{context}.functions[{function_index}]"
             require(isinstance(function, dict), f"{function_context} must be an object")
+            if mode == "compose_equal_body_comdat":
+                mangled = function.get("mangled")
+                require(isinstance(mangled, str) and mangled.startswith("?")
+                        and len(mangled) >= 8,
+                        f"{function_context}.mangled is invalid")
+                require(mangled not in seen_functions,
+                        f"{function_context}.mangled is duplicated")
+                seen_functions.add(mangled)
+                donor_id = function.get("donor")
+                require(donor_id in local_recipe_ids,
+                        f"{function_context}.donor is not declared by this TU")
+                function_recipe_ids.add(donor_id)
+                splice_class = function.get("splice_class")
+                require(splice_class in ("equal_body_strict",
+                                         "equal_body_eh_structural_local"),
+                        f"{function_context}: unsupported splice class")
+                required_keys = set(equal_body_function_keys)
+                if splice_class == "equal_body_strict":
+                    required_keys -= {"expected_code_renames",
+                                      "expected_xdata_rename_offsets"}
+                exact_keys(function, required_keys, function_context)
+                length = function.get("expected_body_length")
+                require(isinstance(length, int) and not isinstance(length, bool)
+                        and length > 0,
+                        f"{function_context}.expected_body_length is invalid")
+                require_sha(function.get("expected_body_sha256"),
+                            f"{function_context}.expected_body_sha256")
+                offsets = function.get("expected_changed_offsets")
+                require(isinstance(offsets, list) and offsets
+                        and all(isinstance(item, int)
+                                and not isinstance(item, bool)
+                                and 0 <= item < length
+                                for item in offsets)
+                        and offsets == sorted(set(offsets)),
+                        f"{function_context}.expected_changed_offsets is invalid")
+                if splice_class == "equal_body_eh_structural_local":
+                    renames = function.get("expected_code_renames")
+                    require(
+                        isinstance(renames, list)
+                        and all(isinstance(item, list) and len(item) == 2
+                                and isinstance(item[0], int)
+                                and item[1] in ("L", "T")
+                                for item in renames),
+                        f"{function_context}.expected_code_renames is invalid",
+                    )
+                    xdata_offsets = function.get("expected_xdata_rename_offsets")
+                    require(
+                        isinstance(xdata_offsets, list)
+                        and all(isinstance(item, int)
+                                and not isinstance(item, bool)
+                                for item in xdata_offsets),
+                        f"{function_context}.expected_xdata_rename_offsets "
+                        "is invalid",
+                    )
+                normalized_functions.append(dict(function))
+                continue
             exact_keys(function, allowed_function_keys, function_context)
             mangled = function.get("mangled")
             require(isinstance(mangled, str) and mangled.startswith("?") and len(mangled) >= 8,
@@ -8223,14 +8328,14 @@ def validate_manifest(
         exact_keys(completion, {"state", "reason", "may_replace_compiler_output"},
                    f"{context}.completion")
         expected_completion = (
-            "object_composition_enabled_final_gates_incomplete"
-            if mode == "compose_equal_linked_span_fpo"
-            else "planned_not_composed"
+            "planned_not_composed"
+            if mode == "pass_through"
+            else "object_composition_enabled_final_gates_incomplete"
         )
         require(completion.get("state") == expected_completion,
                 f"{context}.completion.state must be {expected_completion}")
         require(completion.get("may_replace_compiler_output")
-                is (mode == "compose_equal_linked_span_fpo"),
+                is (mode != "pass_through"),
                 f"{context}.completion replacement policy is invalid")
         require(isinstance(completion.get("reason"), str) and len(completion["reason"]) >= 24,
                 f"{context}.completion.reason is too weak")
@@ -10164,6 +10269,211 @@ def validate_manifest_fpo_record(value: object, context: str) -> dict:
             and normalized["cbProlog"] <= normalized["cbProcSize"],
             f"{context} is structurally invalid")
     return normalized
+
+
+def _comdat_child_closure(coff: CoffObject, primary: dict) -> tuple:
+    """Return (count, sorted child section names) of a COMDAT's selection-5
+    associates."""
+    definitions = section_definitions(coff)
+    children = tuple(sorted(
+        section["name"]
+        for section in coff.sections
+        if definitions.get(section["number"], {}).get("selection") == 5
+        and definitions[section["number"]]["associated"] == primary["number"]
+    ))
+    return (len(children), children)
+
+
+def _comdat_child(coff: CoffObject, primary: dict, name: str) -> dict:
+    definitions = section_definitions(coff)
+    matches = [
+        section
+        for section in coff.sections
+        if section["name"] == name
+        and definitions.get(section["number"], {}).get("selection") == 5
+        and definitions[section["number"]]["associated"] == primary["number"]
+    ]
+    require(len(matches) == 1, f"expected one {name} child, found {len(matches)}")
+    return matches[0]
+
+
+def _normalized_relocation_renames(
+    seed: CoffObject, seed_section: dict,
+    donor: CoffObject, donor_section: dict,
+    context: str,
+) -> list[tuple[int, str]]:
+    """Require literal relocation equality except paired object-local $L/$T
+    serial renames whose targets are structurally identical."""
+    left = detailed_relocations(seed, seed_section)
+    right = detailed_relocations(donor, donor_section)
+    require(len(left) == len(right), f"{context}: relocation counts differ")
+    renames = []
+    for a, b in zip(left, right):
+        require(
+            (a["offset"], a["type"], a["addend"])
+            == (b["offset"], b["type"], b["addend"]),
+            f"{context}: relocation offset/type/addend differs",
+        )
+        if a["target"] == b["target"]:
+            continue
+        kind = local_symbol_kind(a["target"])
+        require(
+            kind is not None and kind == local_symbol_kind(b["target"]),
+            f"{context}: non-local relocation rename "
+            f"{a['target']!r} -> {b['target']!r}",
+        )
+        require(
+            all(a["target_" + field] == b["target_" + field]
+                for field in ("section", "value", "type", "storage")),
+            f"{context}: renamed local relocation target structure differs",
+        )
+        renames.append((a["offset"], kind))
+    return renames
+
+
+def compose_equal_body_comdat(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+) -> tuple[bytes, dict]:
+    """Copy one equal-size compiler-produced COMDAT code body from a donor
+    object into the seed object, retaining every seed relocation, xdata,
+    debug, and symbol byte.
+
+    Two proved splice classes:
+    - equal_body_strict: (.debug$F, .debug$S) closure, literal-equal
+      relocation tuples.
+    - equal_body_eh_structural_local: (.debug$S, .xdata$x) closure with
+      byte-identical xdata and paired object-local $L/$T relocation renames
+      resolving to structurally identical targets.
+    """
+    seed = CoffObject(seed_bytes)
+    donor = CoffObject(donor_bytes)
+    mangled = function["mangled"]
+    splice_class = function["splice_class"]
+    seed_primary = seed.function_section(mangled)
+    donor_primary = donor.function_section(mangled)
+
+    require(
+        seed_primary["raw_size"] == donor_primary["raw_size"]
+        == function["expected_body_length"],
+        "target COMDAT body length changed",
+    )
+    for field in ("name", "characteristics"):
+        require(seed_primary[field] == donor_primary[field],
+                f"target section {field} differs")
+    seed_definitions = section_definitions(seed)
+    donor_definitions = section_definitions(donor)
+    seed_definition = seed_definitions.get(seed_primary["number"])
+    donor_definition = donor_definitions.get(donor_primary["number"])
+    require(seed_definition is not None and donor_definition is not None,
+            "target COMDAT definition record is missing")
+    require(
+        all(
+            seed_definition[field] == donor_definition[field]
+            for field in ("selection", "associated", "length", "relocations")
+        ),
+        "target COMDAT definition record differs",
+    )
+
+    donor_body = coff_body(donor, donor_primary)
+    require(sha256_bytes(donor_body) == function["expected_body_sha256"],
+            "donor body differs from its pinned compiler output")
+    seed_body = coff_body(seed, seed_primary)
+    changed = [
+        index for index, pair in enumerate(zip(seed_body, donor_body))
+        if pair[0] != pair[1]
+    ]
+    require(changed == function["expected_changed_offsets"],
+            "seed/donor body delta changed")
+
+    closure = _comdat_child_closure(seed, seed_primary)
+    require(closure == _comdat_child_closure(donor, donor_primary),
+            "target COMDAT child closure differs")
+
+    if splice_class == "equal_body_strict":
+        require(closure == (2, (".debug$F", ".debug$S")),
+                "strict splice requires the FPO debug closure")
+        renames = _normalized_relocation_renames(
+            seed, seed_primary, donor, donor_primary, "code"
+        )
+        require(renames == [], "strict splice forbids relocation renames")
+        detail = {"code_renames": []}
+    else:
+        require(splice_class == "equal_body_eh_structural_local",
+                "unsupported equal-body splice class")
+        require(closure == (2, (".debug$S", ".xdata$x")),
+                "structural-local splice requires the EH closure")
+        require(
+            len(seed.sections) == len(donor.sections)
+            and all(
+                (a["number"], a["name"], a["characteristics"])
+                == (b["number"], b["name"], b["characteristics"])
+                for a, b in zip(seed.sections, donor.sections)
+            ),
+            "global section order/name/characteristics differ",
+        )
+        seed_xdata = _comdat_child(seed, seed_primary, ".xdata$x")
+        donor_xdata = _comdat_child(donor, donor_primary, ".xdata$x")
+        require(coff_body(seed, seed_xdata) == coff_body(donor, donor_xdata),
+                "EH xdata raw bytes differ")
+        xdata_renames = _normalized_relocation_renames(
+            seed, seed_xdata, donor, donor_xdata, "xdata"
+        )
+        require(
+            [offset for offset, _ in xdata_renames]
+            == function["expected_xdata_rename_offsets"],
+            "xdata local-relocation rename set changed",
+        )
+        code_renames = _normalized_relocation_renames(
+            seed, seed_primary, donor, donor_primary, "code"
+        )
+        require(
+            [[offset, kind] for offset, kind in code_renames]
+            == function["expected_code_renames"],
+            "code local-relocation rename set changed",
+        )
+        relocation_mask = {
+            record["offset"] + byte
+            for record in detailed_relocations(donor, donor_primary)
+            for byte in range(record["width"])
+        }
+        require(all(offset not in relocation_mask for offset in changed),
+                "donor changes a relocated operand")
+        detail = {
+            "code_renames": code_renames,
+            "xdata_rename_offsets": [o for o, _ in xdata_renames],
+        }
+
+    composed = bytearray(seed_bytes)
+    start = seed_primary["raw_offset"]
+    composed[start:start + seed_primary["raw_size"]] = donor_body
+    composed = bytes(composed)
+
+    checked = CoffObject(composed)
+    checked_primary = checked.function_section(mangled)
+    require(coff_body(checked, checked_primary) == donor_body,
+            "composed body differs from the donor")
+    require(
+        detailed_relocations(checked, checked_primary)
+        == detailed_relocations(seed, seed_primary),
+        "composed relocations differ from the seed",
+    )
+    changed_offsets = [
+        index for index, pair in enumerate(zip(seed_bytes, composed))
+        if pair[0] != pair[1]
+    ]
+    allowed = set(range(start, start + seed_primary["raw_size"]))
+    require(set(changed_offsets) <= allowed,
+            "composition changed bytes outside the selected body")
+    return composed, {
+        "mangled": mangled,
+        "splice_class": splice_class,
+        "section_number": seed_primary["number"],
+        "body_length": seed_primary["raw_size"],
+        "body_changed_offsets": changed,
+        **detail,
+    }
 
 
 def compose_equal_linked_span_fpo(
