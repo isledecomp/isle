@@ -594,9 +594,12 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
         )
         seed_bytes = seed_object.read_bytes()
         seed_sha = hashlib.sha256(seed_bytes).hexdigest()
+        unit_sha = hashlib.sha256(
+            json.dumps(unit, sort_keys=True).encode()).hexdigest()
         if marker.exists():
             state = json.loads(marker.read_text())
-            if state.get("composed_sha") == seed_sha:
+            if (state.get("composed_sha") == seed_sha
+                    and state.get("unit_sha") == unit_sha):
                 continue
         # The object on disk is not attested as this unit's fresh seed (it
         # may hold a previous composition), so recompile it in place first.
@@ -617,6 +620,7 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
             marker.write_text(json.dumps({
                 "seed_sha": seed_sha,
                 "composed_sha": hashlib.sha256(composed).hexdigest(),
+            "unit_sha": unit_sha,
             }, indent=1) + "\n")
             print(f"[isle_build] swapped COMDAT group order in "
                   f"{unit['target']}:{unit['source']}")
@@ -737,6 +741,7 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
         marker.write_text(json.dumps({
             "seed_sha": seed_sha,
             "composed_sha": hashlib.sha256(composed).hexdigest(),
+            "unit_sha": unit_sha,
         }, indent=1) + "\n")
         print(f"[isle_build] composed {len(unit['functions'])} function(s) "
               f"into {unit['target']}:{unit['source']}")

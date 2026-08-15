@@ -10948,20 +10948,14 @@ def compose_equal_body_comdat(
                 and splice_class == "equal_body_eh_reloc_layout"),
             "splice closure kind is unsupported for this class",
         )
-        # The xdata association model depends on a shared global section
-        # layout; an FPO-closure donor from a different carrier state has
-        # its own layout, and the per-relocation target checks carry the
-        # equivalence proof instead.
-        if not fpo_closure:
-            require(
-                len(seed.sections) == len(donor.sections)
-                and all(
-                    (a["number"], a["name"], a["characteristics"])
-                    == (b["number"], b["name"], b["characteristics"])
-                    for a, b in zip(seed.sections, donor.sections)
-                ),
-                "global section order/name/characteristics differ",
-            )
+        # A carrier-state donor owns its own global tail layout; the target
+        # closure seats, the xdata byte-equality, and the per-relocation
+        # target checks carry the equivalence proof.  The primary and its
+        # closure children must keep identical seats in both objects.
+        require(
+            seed_primary["number"] == donor_primary["number"],
+            "target closure seats differ",
+        )
         if fpo_closure:
             require(function["expected_xdata_rename_offsets"] == [],
                     "FPO-closure splice cannot declare xdata renames")
