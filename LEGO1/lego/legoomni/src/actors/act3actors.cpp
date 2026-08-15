@@ -277,7 +277,9 @@ void Act3Cop::ParseAction(char* p_extra)
 		}
 	}
 
+#ifdef BETA10
 	assert(m_eatAnim);
+#endif
 }
 
 // FUNCTION: LEGO1 0x100401f0

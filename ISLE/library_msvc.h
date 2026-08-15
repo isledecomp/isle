@@ -1,4 +1,4 @@
-#ifdef 0
+
 // For ISLE symbols only
 
 // aka `operator new`
@@ -361,5 +361,3 @@ static const char* ___crtLCMapStringA_str = "\0";
 
 // STRING: ISLE 0x40f4a8
 static const wchar_t* ___crtLCMapStringA_wstr = L"\0";
-
-#endif
