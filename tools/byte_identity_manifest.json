@@ -949,6 +949,77 @@
     "reason": "Closes LegoPathActor::CheckIntersections 0x1002ebe0 from a generated declaration-shape carrier state over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/common/mxatom.cpp",
+   "source_sha256": "80b06530a1ec2e1c01ebbaee4bcfa7a3547efbd505379c3a5e1c3eabc3524ecb",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_6d3dd9e3e989",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 2,
+      "generated_header_sha256": "6d3dd9e3e989656da5af44acb35b5567f490c45f9e577d74f06ff9e7380f0437",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?GetAtom@MxAtomId@@AAEPAVMxAtom@@PBDW4LookupMode@@@Z",
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_body_length": 610,
+     "expected_body_sha256": "3daa94544de053f4297e68dd45df838e3f4a3ae41d1446a1c1a4bca1321e7d1b",
+     "expected_changed_offsets": [
+      327,
+      408
+     ],
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       593,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60
+     ],
+     "donor": "d_6d3dd9e3e989"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes MxAtomId::GetAtom 0x100ad210 from a generated declaration-shape carrier state over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -1023,8 +1094,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4773,
-    "accepted_row_identity_sha256": "e58e8f8ec0c3974558534b79436037a217ee8ff4cd32824b24f09f51e9a738d2",
+    "exact_raw_1_0_count": 4774,
+    "accepted_row_identity_sha256": "c108cbd769c2ca583bfe9518a68d61198347bca15cf257ab643f893c740fcd9c",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
