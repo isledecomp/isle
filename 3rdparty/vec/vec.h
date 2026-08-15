@@ -493,8 +493,8 @@
 		 (to)[2][j] = _DOTcol3((m)[2],M,j))
 #define _DET3(v0,v1,v2,i0,i1,i2)	\
 		((v0)[i0]* _DET2(v1,v2,i1,i2) + \
-		 ((v0)[i1]*-_DET2(v1,v2,i0,i2) + \
-		  (v0)[i2]* _DET2(v1,v2,i0,i1)))
+		 (v0)[i1]*-_DET2(v1,v2,i0,i2) + \
+		 (v0)[i2]* _DET2(v1,v2,i0,i1))
 #define VXV3(to,v1,v2)	\
 		((to)[0] =  _DET2(v1,v2, 1,2), \
 		 (to)[1] = -_DET2(v1,v2, 0,2), \
@@ -771,9 +771,9 @@
 		 (to)[3][j] = _DOTcol4((m)[3],M,j))
 #define _DET4(v0,v1,v2,v3,i0,i1,i2,i3)	\
 		((v0)[i0]* _DET3(v1,v2,v3,i1,i2,i3) + \
-		 ((v0)[i1]*-_DET3(v1,v2,v3,i0,i2,i3) + \
-		  ((v0)[i2]* _DET3(v1,v2,v3,i0,i1,i3) + \
-		   (v0)[i3]*-_DET3(v1,v2,v3,i0,i1,i2))))
+		 (v0)[i1]*-_DET3(v1,v2,v3,i0,i2,i3) + \
+		 (v0)[i2]* _DET3(v1,v2,v3,i0,i1,i3) + \
+		 (v0)[i3]*-_DET3(v1,v2,v3,i0,i1,i2))
 #define VXVXV4(to,v1,v2,v3)	\
 		((to)[0] = -_DET3(v1,v2,v3, 1,2,3), \
 		 (to)[1] =  _DET3(v1,v2,v3, 0,2,3), \
