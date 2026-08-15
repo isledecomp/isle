@@ -2107,6 +2107,245 @@
     "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/video/mxdisplaysurface.cpp",
+   "source_sha256": "da4817bafbf6510a34441e6f9c6bd9ed484811fe520cbc09ff272004180d5a69",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_539742b2cc3d",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "prefix",
+      "prefix": "MxUnkRecVA",
+      "count": 82,
+      "width": 3,
+      "generated_header_sha256": "539742b2cc3d9ac35fcf9ed6e0ef8c6abb837d69cd1289af240d59867cf18480",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_93806ad84a84",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "prefix",
+      "prefix": "MxUnkRecVA",
+      "count": 10,
+      "width": 3,
+      "generated_header_sha256": "93806ad84a84990c801c0677d0ae420e84bc2ee85e8a6818a1ad8777ddecce0e",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_aa8c762dddc2",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "prefix",
+      "prefix": "MxUnkRecVA",
+      "count": 23,
+      "width": 3,
+      "generated_header_sha256": "aa8c762dddc2fe9011467c5b7f37a8f52a544455cbedcf5d7b80bb431159d53c",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?VTable0x24@MxDisplaySurface@@UAEXPAU_DDSURFACEDESC@@PAVMxBitmap@@HHHHHH@Z",
+     "expected_body_sha256": "aa63004e7dc38b56d0e47d221eacc11ce34ba5676da7e209cf0f87521bd79cb7",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1066,
+     "expected_donor_length": 1067,
+     "expected_linked_span": 1072,
+     "donor": "d_539742b2cc3d"
+    },
+    {
+     "mangled": "?Display@MxDisplaySurface@@UAEXHHHHHH@Z",
+     "expected_body_length": 448,
+     "expected_body_sha256": "c5660ed556247431717e09f5c829aa49d2ec59cd3b66377096c2d160f2efcbb1",
+     "expected_changed_offsets": [
+      97,
+      101,
+      103,
+      113,
+      116,
+      143,
+      147,
+      268,
+      282,
+      283,
+      284,
+      285,
+      286,
+      287,
+      288,
+      289,
+      291,
+      292,
+      293,
+      294,
+      295,
+      296,
+      297,
+      298,
+      299,
+      300,
+      301,
+      302,
+      303,
+      304,
+      305,
+      306,
+      307,
+      308,
+      309,
+      310,
+      311,
+      312,
+      313,
+      314,
+      315,
+      316,
+      317,
+      318,
+      319,
+      320,
+      321,
+      322,
+      323,
+      324,
+      325,
+      326,
+      327,
+      328,
+      329,
+      330,
+      331,
+      332,
+      333,
+      334,
+      335,
+      336,
+      337,
+      338
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_539742b2cc3d"
+    },
+    {
+     "mangled": "?CreateCursorSurface@MxDisplaySurface@@SAPAUIDirectDrawSurface@@XZ",
+     "expected_body_length": 391,
+     "expected_body_sha256": "3d14e08dcbabb06053c63f90f21f1d574d72035b45b546faa75c687fdeabadfb",
+     "expected_changed_offsets": [
+      265,
+      287,
+      290,
+      298,
+      305,
+      312,
+      316
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_539742b2cc3d"
+    },
+    {
+     "mangled": "?DrawTransparentRLE@MxDisplaySurface@@QAEXAAPAE0IHHJE@Z",
+     "expected_body_length": 839,
+     "expected_body_sha256": "8cd71529fe7e2059a557eb04faca2574ca0c8020c7779f61784d631ebfc707c0",
+     "expected_changed_offsets": [
+      44,
+      46,
+      190,
+      195,
+      481,
+      486,
+      606,
+      611,
+      819,
+      824
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_93806ad84a84"
+    },
+    {
+     "mangled": "?VTable0x44@MxDisplaySurface@@UAEPAUIDirectDrawSurface@@PAVMxBitmap@@PAIII@Z",
+     "expected_body_length": 846,
+     "expected_body_sha256": "e6446014c5e1be111dc7240f3ca7c13d86c3d8c91f694ed2811ed406647fbf89",
+     "expected_changed_offsets": [
+      341,
+      344,
+      348,
+      361,
+      366,
+      369,
+      373,
+      379,
+      380,
+      382,
+      385,
+      388,
+      392,
+      394,
+      397,
+      488,
+      490,
+      506,
+      510,
+      669,
+      676,
+      697,
+      698,
+      700,
+      706,
+      710,
+      781,
+      782,
+      788,
+      792,
+      798,
+      802
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_aa8c762dddc2"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 5 row(s) in LEGO1/omni/src/video/mxdisplaysurface.cpp from generated carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -2181,8 +2420,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4794,
-    "accepted_row_identity_sha256": "a45a2dd64f66007bf44eb8f4d7fb1772d494045a70054755c8f3f39a1f507ce0",
+    "exact_raw_1_0_count": 4799,
+    "accepted_row_identity_sha256": "18fc90aa73063db2c0645661a6547c8166a6c7a74d9d085ffcd3609579cdbada",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
