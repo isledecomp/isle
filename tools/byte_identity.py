@@ -46,6 +46,9 @@ from contextlib import contextmanager, ExitStack, nullcontext
 import ctypes
 
 
+import functools
+
+
 import hashlib
 
 
@@ -667,12 +670,15 @@ def source_overlay_logical_path(source_root: Path, relative: str) -> Path:
     return root.joinpath(*parts)
 
 
-def source_overlay_tokens(data: bytes) -> list[tuple[str, int, int]]:
+@functools.lru_cache(maxsize=256)
+def source_overlay_tokens(data: bytes) -> tuple[tuple[str, int, int], ...]:
     """Lex C/C++ significant tokens with stable byte spans.
 
     Latin-1 provides a one-to-one byte/character mapping.  Comments never
     participate in anchor authority; string and character literals remain
-    single exact tokens.
+    single exact tokens.  The result is a pure function of the input bytes
+    and is memoized (returned as an immutable tuple) because anchor
+    resolution lexes the same clean input once per operation.
     """
     text = data.decode("latin1")
     result = []
@@ -681,7 +687,7 @@ def source_overlay_tokens(data: bytes) -> list[tuple[str, int, int]]:
         if token.startswith(("//", "/*")):
             continue
         result.append((token, match.start(), match.end()))
-    return result
+    return tuple(result)
 
 
 def source_overlay_token_sha256(tokens: list[str]) -> str:
@@ -692,6 +698,34 @@ def source_overlay_significant_sha256(data: bytes) -> str:
     return source_overlay_token_sha256(
         [token for token, _, _ in source_overlay_tokens(data)]
     )
+
+
+@functools.lru_cache(maxsize=64)
+def _source_overlay_anchor_seat_index(
+    data: bytes, before_count: int, after_count: int,
+) -> dict[str, tuple[int, ...]]:
+    """Map every seat signature sha to its token boundaries, once per input.
+
+    This is a pure restatement of the exhaustive per-anchor scan: for each
+    token boundary the same ``before/<SEAT>/after`` signature sha is
+    computed, so a lookup yields exactly the candidate set the linear scan
+    would have produced.  Memoizing per (input, window) lets every anchor
+    that shares a clean input and window reuse one scan.
+    """
+    tokens = [item[0] for item in source_overlay_tokens(data)]
+    seats: dict[str, list[int]] = {}
+    for index in range(len(tokens) + 1):
+        if index < before_count or len(tokens) - index < after_count:
+            continue
+        signature = (
+            tokens[index - before_count:index]
+            + ["<SEAT>"]
+            + tokens[index:index + after_count]
+        )
+        seats.setdefault(
+            source_overlay_token_sha256(signature), []
+        ).append(index)
+    return {sha: tuple(indices) for sha, indices in seats.items()}
 
 
 def source_overlay_strip_comments_preserve_lines(data: bytes) -> bytes:
@@ -810,20 +844,11 @@ def resolve_source_overlay_anchor(
 ) -> int:
     """Resolve the unique token context to one exact byte seat."""
     matches = source_overlay_tokens(data)
-    tokens = [item[0] for item in matches]
     before_count = anchor["before_token_count"]
     after_count = anchor["after_token_count"]
-    candidates = []
-    for index in range(len(tokens) + 1):
-        if index < before_count or len(tokens) - index < after_count:
-            continue
-        signature = (
-            tokens[index - before_count:index]
-            + ["<SEAT>"]
-            + tokens[index:index + after_count]
-        )
-        if source_overlay_token_sha256(signature) == anchor["context_sha256"]:
-            candidates.append(index)
+    candidates = list(_source_overlay_anchor_seat_index(
+        data, before_count, after_count,
+    ).get(anchor["context_sha256"], ()))
     require(len(candidates) <= 1, f"{context} is ambiguous")
     require(candidates, f"{context} is missing from its clean input")
     index = candidates[0]
@@ -4637,6 +4662,7 @@ def validate_source_overlay(value: object, source_root: Path) -> dict:
         disabled["actual_records"] = []
         disabled["anchor_evidence"] = []
         disabled["effective_by_path"] = {}
+        disabled["rendered_by_path"] = {}
         return disabled
     context = "manifest.source_overlay"
     require(isinstance(value, dict), f"{context} must be an object")
@@ -4851,6 +4877,10 @@ def validate_source_overlay(value: object, source_root: Path) -> dict:
         }
         for item in outputs
     }
+    # The validated render itself: every output above was checked against its
+    # effective pin, so consumers can install these bytes directly instead of
+    # rendering the overlay a second time.
+    normalized["rendered_by_path"] = rendered
     return normalized
 
 
