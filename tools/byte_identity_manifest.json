@@ -859,11 +859,11 @@
    "row_identity_sha256": "a2e8d50ef82f3d573fff272a9a58a65cab87ba0a2355e072f6b4e813b295ee75",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 110,
-    "accepted_row_identity_sha256": "a301226db6717b72b62b8a52a420748b81aa7757fa174968d1324ec8d41b60d3",
+    "exact_raw_1_0_count": 111,
+    "accepted_row_identity_sha256": "a2e8d50ef82f3d573fff272a9a58a65cab87ba0a2355e072f6b4e813b295ee75",
     "require_zero_losses": true,
     "reference_target": {
-     "note": "The single open row is _WinMainCRTStartup (0.9846); the S79 emission-flush history says it was exact under the lone ___xi_a anchor, so the residue is a CRT startup code or anchor-state delta to diagnose.",
+     "note": "All 111 rows exact from the source-true pipeline (S79 emission-flush closure + S68 equal-body compositions + loaded csv anchor). Remaining CONFIG work is terminal-only: address alignment (103/111 recomp-aligned) and the no-debug MD5 image.",
      "historical_accepted_count": 111
     }
    },

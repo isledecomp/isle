@@ -219,6 +219,33 @@ def write_plan(plan_path: Path, overlay: dict) -> None:
     plan_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def write_reccmp_project_files(build: Path, shadow: Path,
+                               gates: dict) -> None:
+    """Emit reccmp-build.yml (build dir) and reccmp-user.yml (shadow root)
+    so target-mode reccmp discovers the shadow project with its per-target
+    source roots and data-source annotation files."""
+    build_lines = [f"project: {shadow}", "targets:"]
+    user_lines = ["targets:"]
+    for identity, gate in gates.items():
+        recompiled = build / gate["recompiled"]
+        build_lines += [
+            f"  {identity}:",
+            f"    path: {recompiled}",
+            f"    pdb: {recompiled.with_suffix('.pdb')}",
+        ]
+        user_lines += [
+            f"  {identity}:",
+            f"    path: {ROOT / gate['original']}",
+        ]
+    for path, lines in (
+        (build / "reccmp-build.yml", build_lines),
+        (shadow / "reccmp-user.yml", user_lines),
+    ):
+        data = "\n".join(lines) + "\n"
+        if not path.exists() or path.read_text() != data:
+            path.write_text(data)
+
+
 def run(command: list[str], *, cwd: Path | None = None,
         env: dict | None = None, log: Path | None = None) -> None:
     started = time.monotonic()
@@ -343,6 +370,10 @@ def main() -> int:
         "compiler_sha256": sha256_file(compiler),
     }
     summary = []
+    # Target-mode reccmp: the project yml's per-target source roots and
+    # data-sources (annotation csv files) only load through project
+    # discovery, never through --paths.
+    write_reccmp_project_files(build, shadow, gates)
     for identity, gate in gates.items():
         image = build / gate["recompiled"]
         pdb = image.with_suffix(".pdb")
@@ -354,11 +385,10 @@ def main() -> int:
 
         report_path = build_root / f"{identity}-report.json"
         run([
-            str(reccmp), "--paths", str(ROOT / gate["original"]),
-            str(image), str(pdb), str(shadow),
+            str(reccmp), "--target", identity,
             "--json", str(report_path), "--json-diet", "--print-rec-addr",
             "--silent",
-        ], log=build_root / f"reccmp-{identity}.log")
+        ], cwd=build, log=build_root / f"reccmp-{identity}.log")
 
         report_bytes = report_path.read_bytes()
         try:
