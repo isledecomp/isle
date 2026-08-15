@@ -1892,7 +1892,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/video/mxdisplaysurface.cpp",
-   "source_sha256": "da4817bafbf6510a34441e6f9c6bd9ed484811fe520cbc09ff272004180d5a69",
+   "source_sha256": "01951cdf289a4110ac626c149f7cb6dbd579496c4c0cbba560f6a5d5bab894c2",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -25573,9 +25573,9 @@
    },
    {
     "path": "LEGO1/omni/src/video/mxdisplaysurface.cpp",
-    "clean": "da4817bafbf6510a34441e6f9c6bd9ed484811fe520cbc09ff272004180d5a69",
-    "effective": "4cd0007e1b8fc2431cea66312b245e70113de480467972be1b8157ebf4b06511",
-    "size": 33777,
+    "clean": "01951cdf289a4110ac626c149f7cb6dbd579496c4c0cbba560f6a5d5bab894c2",
+    "effective": "b77d628e984c4939f011d4e0d56c5581694268dc6ea4c14a6bad53b0ed942f22",
+    "size": 33789,
     "ops": [
      {
       "op": "insert",
