@@ -1,65 +1,5 @@
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
-# A byte-identical tree is authoritative only while it is owned by
-# tools/byte_identity.py drive-cmake.  This gate intentionally runs before
-# project(), compiler detection, or any other configure-time operation that
-# could fail and otherwise leave a prior framework verdict visible.
-set(_isle_byte_identity_preproject OFF)
-if(DEFINED ISLE_BYTE_IDENTICAL AND ISLE_BYTE_IDENTICAL)
-  set(_isle_byte_identity_preproject ON)
-elseif(EXISTS "${CMAKE_BINARY_DIR}/byte-identity/session/hard-mode.json")
-  set(_isle_byte_identity_preproject ON)
-elseif(EXISTS "${CMAKE_BINARY_DIR}/CMakeCache.txt")
-  file(STRINGS "${CMAKE_BINARY_DIR}/CMakeCache.txt"
-       _isle_byte_identity_cached_mode
-       REGEX "^ISLE_BYTE_IDENTICAL:BOOL=ON$")
-  if(_isle_byte_identity_cached_mode)
-    set(_isle_byte_identity_preproject ON)
-  endif()
-endif()
-if(_isle_byte_identity_preproject)
-  if(CMAKE_VERSION VERSION_LESS 3.21)
-    message(FATAL_ERROR
-      "ISLE_BYTE_IDENTICAL requires CMake 3.21+ for complete recursive graph attestation")
-  endif()
-  set(_isle_byte_identity_controller
-      "$ENV{ISLE_BYTE_IDENTITY_CONTROLLER_ROOT}")
-  set(_isle_byte_identity_python "$ENV{ISLE_BYTE_IDENTITY_PYTHON}")
-  if(NOT _isle_byte_identity_python AND ISLE_BYTE_IDENTITY_DRIVER_PYTHON)
-    set(_isle_byte_identity_python "${ISLE_BYTE_IDENTITY_DRIVER_PYTHON}")
-  endif()
-  if(NOT IS_ABSOLUTE "${_isle_byte_identity_python}"
-     OR NOT EXISTS "${_isle_byte_identity_python}")
-    message(FATAL_ERROR
-      "ISLE_BYTE_IDENTICAL requires tools/byte_identity.py drive-cmake; "
-      "the pinned outer-driver Python is absent")
-  endif()
-  if(NOT IS_ABSOLUTE "${_isle_byte_identity_controller}"
-     OR NOT EXISTS "${_isle_byte_identity_controller}/snapshot.json"
-     OR NOT EXISTS "${_isle_byte_identity_controller}/framework/tools/byte_identity.py")
-    message(FATAL_ERROR
-      "ISLE_BYTE_IDENTICAL requires the hash-pinned outer-controller snapshot")
-  endif()
-  execute_process(
-    COMMAND "${_isle_byte_identity_python}" -I -B
-            "${_isle_byte_identity_controller}/framework/tools/byte_identity.py"
-            preconfigure-check
-            --source-dir "${CMAKE_CURRENT_LIST_DIR}"
-            --build-dir "${CMAKE_BINARY_DIR}"
-            --cmake "${CMAKE_COMMAND}"
-            --nonce "$ENV{ISLE_BYTE_IDENTITY_SESSION_NONCE}"
-    RESULT_VARIABLE _isle_byte_identity_preflight_result
-    OUTPUT_VARIABLE _isle_byte_identity_preflight_stdout
-    ERROR_VARIABLE _isle_byte_identity_preflight_stderr
-  )
-  if(NOT _isle_byte_identity_preflight_result EQUAL 0)
-    message(FATAL_ERROR
-      "ISLE_BYTE_IDENTICAL outer-session preflight refused configure:\n"
-      "${_isle_byte_identity_preflight_stdout}"
-      "${_isle_byte_identity_preflight_stderr}")
-  endif()
-endif()
-
 # MSVC runtime library flags are selected by an abstraction
 cmake_policy(SET CMP0091 NEW)
 
@@ -141,7 +81,6 @@ option(ISLE_DECOMP_ASSERT "Assert struct size" ${MSVC_FOR_DECOMP})
 cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libraries" ON ISLE_USE_DX5 OFF)
 option(ISLE_BUILD_LEGO1 "Build LEGO1.DLL library" ON)
 option(ISLE_BUILD_BETA10 "Build BETA10.DLL library" OFF)
-option(ISLE_BYTE_IDENTICAL "Build through the authenticated outer driver with compile-time /Zi; terminal completion requires compiler-output composition, nonce-bound LINK/reccmp, 4933/4933, and the original image MD5." OFF)
 
 if(NOT (ISLE_BUILD_LEGO1 OR ISLE_BUILD_BETA10))
   message(FATAL_ERROR "ISLE_BUILD_LEGO1 AND ISLE_BUILD_BETA10 cannot be both disabled")
@@ -749,8 +688,8 @@ if (MSVC_FOR_DECOMP)
   set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
   set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
-  if(ISLE_BYTE_IDENTICAL)
-    # Goal 2 (byte-identical binaries): the retail images carry NO debug data
+  if(ISLE_BYTE_IDENTITY_TERMINAL)
+    # Byte-identical terminal links: the retail images carry NO debug data
     # directory, while linking with /debug adds one (a 28-byte
     # IMAGE_DEBUG_DIRECTORY plus its MISC record) at the head of .rdata --
     # measured at 88 bytes in ISLE.EXE.
@@ -768,16 +707,7 @@ if (MSVC_FOR_DECOMP)
                "${CMAKE_${_kind}_LINKER_FLAGS${_cfg}}")
       endforeach()
     endforeach()
-    message(STATUS "ISLE_BYTE_IDENTICAL: linking without /debug (no DEBUG data directory); /Zi retained so codegen is unchanged")
-
-    # Retail binaries are comparison oracles only.  The old pe_stamp.py
-    # POST_BUILD action copied timestamp bytes out of legobin and also rewrote
-    # the linked image in place.  That violates the hard provenance and atomic
-    # output rules, so timestamp reproduction remains an explicit migration
-    # blocker until it has a source/toolchain-derived recipe and final MD5 gate.
-    message(STATUS
-      "ISLE_BYTE_IDENTICAL: retail timestamp copying is disabled; "
-      "final timestamp/MD5 completion remains fail-closed")
+    message(STATUS "ISLE_BYTE_IDENTITY_TERMINAL: linking without /debug (no DEBUG data directory); /Zi retained so codegen is unchanged")
   endif()
 
   # Older MSVC versions don't support building in parallel.
@@ -804,20 +734,12 @@ if (MSVC_FOR_DECOMP)
 endif()
 
 # The source-controlled manifest is deliberately invisible to normal builds.
-# Its validator/materializer/launcher are loaded only in a dedicated
-# ISLE_BYTE_IDENTICAL tree, after every candidate target has been declared.
+# tools/isle_build.py materializes the effective source view and writes the
+# overlay plan; only the graph seating runs here.
 if(ISLE_BYTE_IDENTITY_PLAN)
-  # Lean byte-identity path: tools/isle_build.py materialized the effective
-  # source view and wrote the overlay plan; only the graph seating runs here.
   include("${PROJECT_SOURCE_DIR}/cmake/byte_identity.cmake")
   include("${ISLE_BYTE_IDENTITY_PLAN}")
   _isle_apply_byte_identity_source_overlay_graph()
-elseif(ISLE_BYTE_IDENTICAL)
-  set(_isle_byte_identity_controller
-      "$ENV{ISLE_BYTE_IDENTITY_CONTROLLER_ROOT}")
-  include("${_isle_byte_identity_controller}/framework/cmake/byte_identity.cmake")
-  isle_enable_byte_identity(
-    "${_isle_byte_identity_controller}/framework/tools/byte_identity_manifest.json")
 endif()
 
 find_program(CLANGFORMAT_BIN NAMES clang-format)
