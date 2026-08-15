@@ -25,6 +25,7 @@ import shutil
 import subprocess
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 TOOLS = Path(__file__).resolve().parent
@@ -104,17 +105,10 @@ def render_overlay(manifest: dict) -> tuple[dict, dict[str, bytes]]:
     overlay = byte_identity.validate_source_overlay(
         manifest["source_overlay"], ROOT
     )
-    clean_inputs = {}
-    for output in overlay["outputs"]:
-        path = output["logical_path"]
-        clean_inputs[path] = (
-            (ROOT / path).read_bytes()
-            if output["clean"]["state"] == "present" else b""
-        )
-    rendered = byte_identity.render_source_overlay_outputs(
-        overlay, clean_inputs
-    )
-    return overlay, rendered
+    # validate_source_overlay already rendered every output and checked it
+    # against its effective pin; reuse that render instead of running the
+    # whole overlay a second time.
+    return overlay, overlay["rendered_by_path"]
 
 
 def sync_shadow(shadow: Path, rendered: dict[str, bytes]) -> int:
@@ -344,6 +338,7 @@ def terminal_lane(manifest: dict, gates: dict, build_root: Path,
     compose_translation_units(manifest, terminal_build, shadow, compiler,
                               jobs)
     results = {}
+    states = []
     for identity, gate in gates.items():
         image = terminal_build / gate["recompiled"]
         if not image.is_file():
@@ -384,9 +379,13 @@ def terminal_lane(manifest: dict, gates: dict, build_root: Path,
         }
         state = ("IDENTICAL" if identical
                  else f"distance {distance}{size_note}")
-        print(f"[isle_build] terminal {identity}: {state}")
+        states.append(f"[isle_build] terminal {identity}: {state}")
         if require_md5 and not identical:
+            print("\n".join(states))
             fail(f"terminal {identity} MD5 differs from retail: {md5}")
+    # One print per lane: the terminal lane may overlap the image scoring,
+    # so its report lines are emitted together.
+    print("\n".join(states))
     return results
 
 
@@ -476,6 +475,21 @@ def main() -> int:
     # data-sources (annotation csv files) only load through project
     # discovery, never through --paths.
     write_reccmp_project_files(build, shadow, gates)
+
+    # The terminal lane operates on its own build tree and only reads the
+    # shared shadow, so it can overlap the image scoring below.
+    terminal_future = None
+    terminal_pool = None
+    if arguments.terminal or arguments.md5_distance:
+        terminal_pool = ThreadPoolExecutor(max_workers=1)
+        terminal_future = terminal_pool.submit(
+            terminal_lane, manifest, gates, build_root, shadow, plan,
+            compiler, arguments.jobs, arguments.terminal,
+        )
+
+    # The three image comparisons are independent processes; launch them
+    # together and gate on each result in manifest order.
+    scorers = {}
     for identity, gate in gates.items():
         image = build / gate["recompiled"]
         pdb = image.with_suffix(".pdb")
@@ -484,13 +498,24 @@ def main() -> int:
         if not pdb.is_file():
             fail(f"{pdb.name} was not produced "
                  "(diagnostic /debug link expected)")
-
         report_path = build_root / f"{identity}-report.json"
-        run([
+        scorers[identity] = (subprocess.Popen([
             str(reccmp), "--target", identity,
             "--json", str(report_path), "--json-diet", "--print-rec-addr",
             "--silent",
-        ], cwd=build, log=build_root / f"reccmp-{identity}.log")
+        ], cwd=build, stdout=subprocess.PIPE, stderr=subprocess.STDOUT),
+            report_path, image, pdb)
+    outputs = {
+        identity: scorer.communicate()[0]
+        for identity, (scorer, _, _, _) in scorers.items()
+    }
+    for identity, (scorer, report_path, image, pdb) in scorers.items():
+        gate = gates[identity]
+        (build_root / f"reccmp-{identity}.log").write_bytes(outputs[identity])
+        if scorer.returncode != 0:
+            tail = outputs[identity][-4000:].decode("utf-8", "replace")
+            fail(f"command failed ({scorer.returncode}): "
+                 f"{reccmp} --target {identity}\n{tail}")
 
         report_bytes = report_path.read_bytes()
         try:
@@ -529,11 +554,9 @@ def main() -> int:
         summary.append(f"{identity} {result['raw_1_0_count']}"
                        f"/{result['row_count']}")
 
-    if arguments.terminal or arguments.md5_distance:
-        verdict["terminal"] = terminal_lane(
-            manifest, gates, build_root, shadow, plan, compiler,
-            arguments.jobs, require_md5=arguments.terminal,
-        )
+    if terminal_future is not None:
+        verdict["terminal"] = terminal_future.result()
+        terminal_pool.shutdown()
 
     verdict["elapsed_seconds"] = round(time.monotonic() - started, 1)
     verdict_path = build_root / "verdict.json"
