@@ -1,12 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordBG {};
-class MxUnkRecordBH {};
-class MxUnkRecordBI {};
-class MxUnkRecordGC;
-
 #include "legopathcontroller.h"
 
 #include "legopathedgecontainer.h"
@@ -14,100 +5,6 @@ class MxUnkRecordGC;
 #include "mxmisc.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class QqM0 {
-public:
-	void qqm0() {}
-};
-class QqM1 {
-public:
-	void qqm1() {}
-};
-class QqM2 {
-public:
-	void qqm2() {}
-};
-class QqM3 {
-public:
-	void qqm3() {}
-};
-class QqM4 {
-public:
-	void qqm4() {}
-};
-class QqM5 {
-public:
-	void qqm5() {}
-};
-class QqM6 {
-public:
-	void qqm6() {}
-};
-class QqM7 {
-public:
-	void qqm7() {}
-};
-class QqM8 {
-public:
-	void qqm8() {}
-};
-class QqM9 {
-public:
-	void qqm9() {}
-};
-class QqM10 {
-public:
-	void qqm10() {}
-};
-class QqM11 {
-public:
-	void qqm11() {}
-};
-class QqM12 {
-public:
-	void qqm12() {}
-};
-class QqM13 {
-public:
-	void qqm13() {}
-};
-class QqM14 {
-public:
-	void qqm14() {}
-};
-class QqF0;
-class QqF1;
-class QqF2;
-class QqF3;
-class QqF4;
-class QqF5;
-class QqF6;
-class QqF7;
-class VzJt00;
-class VzJt01;
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-enum ZzE0 {
-	zze0_0
-};
-enum ZzE1 {
-	zze1_0
-};
-enum ZzE2 {
-	zze2_0
-};
-enum ZzE3 {
-	zze3_0
-};
-enum ZzE4 {
-	zze4_0
-};
-enum ZzE5 {
-	zze5_0
-};
-
 DECOMP_SIZE_ASSERT(LegoPathController, 0x40)
 DECOMP_SIZE_ASSERT(LegoPathCtrlEdge, 0x40)
 DECOMP_SIZE_ASSERT(LegoPathController::CtrlBoundary, 0x08)
@@ -163,6 +60,9 @@ const char* LegoPathController::g_ctrlBoundariesNamesB[] = {
 
 // GLOBAL: LEGO1 0x100f4358
 LegoPathController::CtrlBoundary* LegoPathController::g_ctrlBoundariesB = NULL;
+
+// GLOBAL: LEGO1 0x100f435c
+LegoPathController::CtrlEdge* LegoPathController::g_ctrlEdgesB = NULL;
 
 // FUNCTION: LEGO1 0x10044f40
 // FUNCTION: BETA10 0x100b6860
@@ -458,14 +358,6 @@ void LegoPathController::AddPresenterIfInRange(LegoAnimPresenter* p_presenter)
 	}
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordG {
-	inline void Record() {}
-};
-
 // FUNCTION: LEGO1 0x10046930
 // FUNCTION: BETA10 0x100b737b
 void LegoPathController::RemovePresenterFromBoundaries(LegoAnimPresenter* p_presenter)
@@ -503,16 +395,6 @@ MxResult LegoPathController::GetBoundaries(LegoPathBoundary*& p_boundaries, MxS3
 	return SUCCESS;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordAA {
-	inline void Record() {}
-	void Record1();
-	void Record2();
-};
-
 // FUNCTION: LEGO1 0x10046b50
 // FUNCTION: BETA10 0x100b7531
 LegoPathBoundary* LegoPathController::GetPathBoundary(const char* p_name)
@@ -525,12 +407,6 @@ LegoPathBoundary* LegoPathController::GetPathBoundary(const char* p_name)
 
 	return NULL;
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class PcM000;
-class PcM001;
-class PcM002;
 
 // FUNCTION: LEGO1 0x10046bb0
 // FUNCTION: BETA10 0x100b75bc
@@ -676,13 +552,6 @@ MxResult LegoPathController::ReadStructs(LegoStorage* p_storage)
 
 	return SUCCESS;
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordQA {};
-class MxUnkRecordQB {};
 
 // FUNCTION: LEGO1 0x10047c10
 // FUNCTION: BETA10 0x100b7df3
@@ -897,36 +766,6 @@ MxResult LegoPathController::ReadVector(LegoStorage* p_storage, Mx4DPointFloat& 
 	return SUCCESS;
 }
 
-class VzJp00;
-class VzJp01;
-class VzJp02;
-class VzJp03;
-class VzJp04;
-class VzJp05;
-class VzJp06;
-class VzJp07;
-class VzJp08;
-class VzJp09;
-class VzJp10;
-class VzJp11;
-class VzJp12;
-class VzJp13;
-class VzJp14;
-class VzJp15;
-class VzJp16;
-class VzJp17;
-class VzJp18;
-class VzJp19;
-class VzJp20;
-class VzJp21;
-class VzJp22;
-class VzJp23;
-class VzJp24;
-class VzJp25;
-class VzJp26;
-class VzJp27;
-class VzJp28;
-class VzJp29;
 // FUNCTION: LEGO1 0x10048310
 // FUNCTION: BETA10 0x100b8911
 MxResult LegoPathController::FindPath(
@@ -962,43 +801,6 @@ MxResult LegoPathController::FindPath(
 
 	MxFloat minDistance = 999999.0f;
 	float dist;
-
-	// Lexical-scope carrier. The 1997 source carried more statements here than we
-	// have recovered, and their form is constrained rather than guessed: a slot-by-slot
-	// census of BETA10 0x100b8911 accounts for all 56 slots of the 296-byte frame with
-	// no slack, so the missing text declares no local, and it emits nothing at /Od, so
-	// it evaluates no expression. In C++ the only statements that satisfy both are the
-	// compound statement and the null statement, and the null statement carries no
-	// declaration record. It is that record count which takes C1XX's inline budget for
-	// this function over the acceptance threshold for the _Tree<LegoBEWithMidpoint>
-	// default constructor, which is why retail's FindPath calls _Tree<>::_Init instead
-	// of constructing the tree out of line.
-	{
-	}
-	{
-	}
-	{
-	}
-	{
-	}
-	{
-	}
-	{
-	}
-	{
-	}
-	{
-	}
-	{
-	}
-	{
-	}
-	{
-	}
-	{
-	}
-	{
-	}
 
 	p_grec->SetPath(FALSE);
 
@@ -1161,11 +963,6 @@ MxResult LegoPathController::FindPath(
 
 	return FAILURE;
 }
-class PcS000;
-class PcS001;
-class PcS002;
-class PcS003;
-
 // FUNCTION: LEGO1 0x1004a240
 // FUNCTION: BETA10 0x100b9160
 MxS32 LegoPathController::GetNextPathEdge(
@@ -1294,60 +1091,3 @@ MxResult LegoPathController::FindIntersectionBoundary(
 
 	return SUCCESS;
 }
-
-// Declaration-record carrier: end-of-file sink; the translation unit's
-// end-emitted template pool samples the end state (see the positional record
-// calculus, session notes 2026-08-01); no authentic 1997 declaration is
-// recoverable at this position. Neutral stand-in pending better evidence.
-class MxUnkRecordAS {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-	inline void Record6() {}
-	inline void Record7() {}
-	inline void Record8() {}
-	inline void Record9() {}
-	inline void Record10() {}
-	inline void Record11() {}
-	inline void Record12() {}
-	inline void Record13() {}
-	void Record14();
-};
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class PcE000;
-class PcE001;
-class PcE002;
-class PcE003;
-class PcE004;
-class PcE005;
-class PcE006;
-class PcE007;
-class PcE008;
-class PcE009;
-class PcE010;
-class PcE011;
-class PcE012;
-class PcE013;
-class PcE014;
-class PcE015;
-class PcE016;
-class PcE017;
-class PcE018;
-class PcE019;
-class PcE020;
-class PcE021;
-class PcE022;
-class PcE023;
-class PcE024;
-class PcE025;
-class PcE026;
-class PcE027;
-class PcE028;
-class PcE029;
-class PcE030;
-class PcE031;

@@ -13,50 +13,6 @@
 #include <crtdbg.h>
 #include <string.h>
 #include <vec.h>
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class QqC0 {};
-class QqC1 {};
-class QqC2 {};
-class QqC3 {};
-class QqC4 {};
-class QqC5 {};
-class QqC6 {};
-class QqC7 {};
-class QqC8 {};
-class QqC9 {};
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class ZzM0 {
-public:
-	void zzm0() {}
-};
-class ZzM1 {
-public:
-	void zzm1() {}
-};
-class ZzM2 {
-public:
-	void zzm2() {}
-};
-class ZzM3 {
-public:
-	void zzm3() {}
-};
-class ZzM4 {
-public:
-	void zzm4() {}
-};
-class ZzM5 {
-public:
-	void zzm5() {}
-};
-class ZzM6 {
-public:
-	void zzm6() {}
-};
-
 DECOMP_SIZE_ASSERT(LegoROI, 0x108)
 DECOMP_SIZE_ASSERT(TimeROI, 0x10c)
 
@@ -481,22 +437,6 @@ LegoResult LegoROI::ApplyChildAnimationTransformation(
 	return SUCCESS;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordSL {
-	inline void Record() {}
-};
-
-class MxUnkRecordSM {
-	inline void Record() {}
-};
-
-class MxUnkRecordSN {
-	inline void Record() {}
-};
-
 // FUNCTION: LEGO1 0x100a8e80
 // FUNCTION: BETA10 0x1018ab3a
 void LegoROI::ApplyAnimationTransformation(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap)
@@ -527,24 +467,6 @@ void LegoROI::ApplyAnimationTransformation(LegoTreeNode* p_node, Matrix4& p_matr
 		}
 	}
 }
-
-// Declaration-record carriers: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declarations are recoverable
-// at this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordU {
-	inline void Record() {}
-};
-
-class MxUnkRecordV {
-	inline void Record() {}
-};
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordSO;
 
 // FUNCTION: LEGO1 0x100a8fd0
 // FUNCTION: BETA10 0x1018ac81

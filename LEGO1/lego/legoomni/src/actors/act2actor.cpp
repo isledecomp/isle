@@ -21,13 +21,6 @@
 
 #include <vec.h>
 
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class MxUnkRecord000 {};
-class MxUnkRecord001 {};
-class MxUnkRecord002;
-
 DECOMP_SIZE_ASSERT(Act2Actor, 0x1a8)
 DECOMP_SIZE_ASSERT(Act2Actor::Location, 0x20)
 
@@ -655,18 +648,6 @@ MxU32 Act2Actor::UpdateShot(MxFloat p_time)
 
 	return FALSE;
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class MxUnkRecordSX;
-class MxUnkRecordSY;
-class MxUnkRecordSZ;
-class MxUnkRecordUA;
-class MxUnkRecordUB;
-class MxUnkRecordUC;
-class MxUnkRecordUD;
-class MxUnkRecordUE;
 
 // FUNCTION: LEGO1 0x100199f0
 // FUNCTION: BETA10 0x1000e11a

@@ -1,48 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordBX {};
-class MxUnkRecordBY {};
-class MxUnkRecordBZ {};
-class MxUnkRecordCC {};
-class MxUnkRecordCD {};
-class MxUnkRecordCE {};
-class MxUnkRecordCF {};
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.  [100 units]
-class RkA3M0 {
-	void m0() {}
-};
-class RkA3M1 {
-	void m0() {}
-};
-class RkA3M2 {
-	void m0() {}
-};
-class RkA3M3 {
-	void m0() {}
-};
-class RkA3M4 {
-	void m0() {}
-};
-class RkA3M5 {
-	void m0() {}
-};
-class RkA3M6 {
-	void m0() {}
-};
-class RkA3M7 {
-	void m0() {}
-};
-class RkA3M8 {
-	void m0() {}
-};
-class RkA3M9 {
-	void m0() {}
-};
-
 #include "act3actors.h"
 
 #include "act3.h"
@@ -64,22 +19,6 @@ class RkA3M9 {
 #include "roi/legoroi.h"
 
 #include <assert.h>
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.  [34 units]
-class RkAM0 {
-	void m0() {}
-};
-class RkAM1 {
-	void m1() {}
-};
-class RkAM2 {
-	void m2() {}
-};
-class RkAF0;
-class RkAF1;
-class RkAF2;
-class RkAF3;
 
 DECOMP_SIZE_ASSERT(Act3Actor, 0x178)
 DECOMP_SIZE_ASSERT(Act3Cop, 0x188)
@@ -235,12 +174,6 @@ MxResult Act3Actor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 	return SUCCESS;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordM;
-
 // FUNCTION: LEGO1 0x1003fe30
 // FUNCTION: BETA10 0x10018412
 Act3Cop::Act3Cop()
@@ -347,14 +280,6 @@ void Act3Cop::ParseAction(char* p_extra)
 	assert(m_eatAnim);
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordBJ;
-class MxUnkRecordBK;
-class MxUnkRecordBL;
-
 // FUNCTION: LEGO1 0x100401f0
 // FUNCTION: BETA10 0x10018abf
 void Act3Cop::Animate(float p_time)
@@ -395,19 +320,6 @@ void Act3Cop::Animate(float p_time)
 // FUNCTION: BETA10 0x10018c4a
 MxResult Act3Cop::FUN_10040350(Act3Ammo& p_ammo, const Vector3&)
 {
-	// Declaration-record carrier: the constructor below samples this
-	// translation unit's accumulated declaration state (positional record
-	// calculus). These four locals are dead and are eliminated; they exist
-	// only to place the record state. No authentic 1997 declaration is
-	// recoverable at this position.
-	MxU32 unkRecord0, unkRecord1, unkRecord2, unkRecord3;
-
-	assert(&p_ammo);
-	assert(m_world);
-	assert(m_boundary);
-	assert(m_pathController);
-	assert(m_grec == NULL || m_grec != NULL);
-
 	return FUN_10040360();
 }
 
@@ -433,6 +345,7 @@ MxResult Act3Cop::FUN_10040360()
 		LegoPathBoundary* boundary = a3->m_brickster->GetBoundary();
 
 		grec = new LegoPathEdgeContainer();
+		assert(grec);
 
 		MxFloat local34;
 		if (m_pathController->FindPath(
@@ -454,15 +367,18 @@ MxResult Act3Cop::FUN_10040360()
 	if (grec == NULL) {
 		for (MxS32 i = 0; i < MAX_DONUTS; i++) {
 			Act3Ammo* donut = &a3->m_donuts[i];
+			assert(donut);
 
 			if (donut->IsValid() && donut->GetActorState() == c_initial) {
 				LegoROI* proi = donut->GetROI();
+				assert(proi);
 				MxMatrix locald0 = proi->GetLocal2World();
 				Vector3 local88(locald0[3]);
 				Mx3DPointFloat localec(local88);
 				localec -= local2c;
 
 				LegoPathEdgeContainer* r2 = new LegoPathEdgeContainer();
+				assert(r2);
 
 				MxFloat locald8;
 				LegoPathEdgeContainer *local138, *local134, *local140, *local13c; // unused
@@ -549,6 +465,7 @@ MxResult Act3Cop::FUN_10040360()
 
 			Vector3* v1 = edge->CWVertex(*m_grec->m_boundary);
 			Vector3* v2 = edge->CCWVertex(*m_grec->m_boundary);
+			assert(v1 && v2);
 
 			local128 = *v2;
 			local128 -= *v1;
@@ -1188,14 +1105,6 @@ MxS32 Act3Brickster::FUN_10042300()
 		CalculateSpline();
 	}
 
-	// Inline-budget carrier (C2 planner, `R = 2*caller - consumedBefore`).
-	// Retail EXPANDS LegoOrientedEdge::FUN_10048c40 at line 1145; our caller is
-	// a few IL units short of the callee's 605, so C2 emits the call instead and
-	// the body comes out 1160 bytes against retail's 1673.  These two statements
-	// buy the missing units; /O2 eliminates them, so they cost zero bytes.
-	local1c = local1c + 0;
-	local1c = local1c + 0;
-
 	return -1;
 }
 
@@ -1232,34 +1141,10 @@ Act3Shark::Act3Shark()
 // FUNCTION: LEGO1 0x10042ce0
 MxResult Act3Shark::EatPizza(Act3Ammo* p_ammo)
 {
-	// Declaration-record carrier: two symbol ids, restoring this function's
-	// register colouring against the id stream shifted by the inline above.
-	MxS32 unkRecord0, unkRecord1;
-
 	p_ammo->SetSharkFood(TRUE);
 	m_eatPizzas.push_back(p_ammo);
 	return SUCCESS;
 }
-
-// Declaration-record carrier: samples the translation unit's accumulated
-// declaration state between EatPizza and Animate, so that every function
-// below is compiled at the id position it had before the inline above.
-// [15 units]
-class MxUnkRecordA000;
-class MxUnkRecordA001;
-class MxUnkRecordA002;
-class MxUnkRecordA003;
-class MxUnkRecordA004;
-class MxUnkRecordA005;
-class MxUnkRecordA006;
-class MxUnkRecordA007;
-class MxUnkRecordA008;
-class MxUnkRecordA009;
-class MxUnkRecordA010;
-class MxUnkRecordA011;
-class MxUnkRecordA012;
-class MxUnkRecordA013;
-class MxUnkRecordA014;
 
 // FUNCTION: LEGO1 0x10042d40
 void Act3Shark::Animate(float p_time)

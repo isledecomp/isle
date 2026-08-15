@@ -1,15 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordPW {
-	inline void Record() {}
-};
-
-class MxUnkRecordPX {
-	inline void Record() {}
-};
-
 #include "mxmain.h"
 
 #include "mxactionnotificationparam.h"
@@ -29,37 +17,6 @@ class MxUnkRecordPX {
 #include "mxtimer.h"
 #include "mxvariabletable.h"
 #include "mxvideomanager.h"
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class MmP000;
-class MmP001;
-class MmP002;
-class MmP003;
-class MmP004;
-class MmP005;
-class MmP006;
-class MmP007;
-class MmP008;
-class MmP009;
-class MmP010;
-class MmP011;
-class MmP012;
-class MmP013;
-class MmP014;
-class MmP015;
-class MmP016;
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordYP {
-	inline void Record() {}
-};
-
-class MxUnkRecordYQ {
-	inline void Record() {}
-};
-
 // GLOBAL: LEGO1 0x101015b0
 MxOmni* MxOmni::g_instance = NULL;
 

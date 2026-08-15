@@ -1,12 +1,3 @@
-// Declaration-record carrier (dial campaign, PRE): samples this translation
-// unit's accumulated declaration state before the include block. [18 units]
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-class MxUnkRecord000 {};
-class MxUnkRecord001 {};
-class MxUnkRecord002 {};
-class MxUnkRecord003 {};
-
 #include "legostate.h"
 
 #include <stdlib.h>

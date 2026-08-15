@@ -1,51 +1,6 @@
-// Declaration-record carrier: this unit's accumulated declaration state
-// decides the operand order and register roles of the code below (see the
-// positional record calculus). No authentic 1997 declaration is recoverable
-// at this position; neutral stand-in pending better evidence.
-class MxUnkRecordWG000;
-class MxUnkRecordWG001;
-class MxUnkRecordWG002;
-class MxUnkRecordWG003;
-class MxUnkRecordWG004;
-class MxUnkRecordWG005;
-class MxUnkRecordWG006;
-class MxUnkRecordWG007;
-class MxUnkRecordWG008;
-class MxUnkRecordWG009;
-class MxUnkRecordWG010;
-class MxUnkRecordWG011;
-class MxUnkRecordWG012;
-class MxUnkRecordWG013;
-class MxUnkRecordWG014;
-class MxUnkRecordWG015;
-class MxUnkRecordWG016;
-class MxUnkRecordWG017;
-class MxUnkRecordWG018;
-class MxUnkRecordWG019;
-class MxUnkRecordWG020;
-class MxUnkRecordWG021;
-class MxUnkRecordWG022;
-class MxUnkRecordWG023;
-class MxUnkRecordWG024;
-class MxUnkRecordWG025;
-class MxUnkRecordWG026;
-class MxUnkRecordWG027;
-class MxUnkRecordWG028;
-class MxUnkRecordWG029;
-class MxUnkRecordWG030;
-class MxUnkRecordWG031;
-
 #include "legowegedge.h"
 
 #include <assert.h>
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class QqF0;
-class QqF1;
-class QqF2;
-class QqF3;
-class QqF4;
-
 DECOMP_SIZE_ASSERT(LegoOrientedEdge, 0x40)
 DECOMP_SIZE_ASSERT(LegoWEGEdge, 0x54)
 DECOMP_SIZE_ASSERT(PathWithTrigger, 0x0c)

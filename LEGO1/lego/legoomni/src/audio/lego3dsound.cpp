@@ -1,12 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecord000 {};
-class MxUnkRecord001;
-class MxUnkRecord002;
-class MxUnkRecord003;
-
 #include "lego3dsound.h"
 
 #include "legoactor.h"
@@ -18,11 +9,6 @@ class MxUnkRecord003;
 
 #include <assert.h>
 #include <vec.h>
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkC0 {};
-class RkC1 {};
-
 DECOMP_SIZE_ASSERT(Lego3DSound, 0x30)
 
 // FUNCTION: LEGO1 0x10011630

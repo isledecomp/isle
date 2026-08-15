@@ -9,128 +9,11 @@
 
 #include <algorithm>
 #include <assert.h>
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class QqP0 {
-public:
-	void qqp0a() {}
-	void qqp0b() {}
-};
-class QqP1 {
-public:
-	void qqp1a() {}
-	void qqp1b() {}
-};
-class QqP2 {
-public:
-	void qqp2a() {}
-	void qqp2b() {}
-};
-class QqP3 {
-public:
-	void qqp3a() {}
-	void qqp3b() {}
-};
-class QqP4 {
-public:
-	void qqp4a() {}
-	void qqp4b() {}
-};
-class QqP5 {
-public:
-	void qqp5a() {}
-	void qqp5b() {}
-};
-class QqP6 {
-public:
-	void qqp6a() {}
-	void qqp6b() {}
-};
-class QqP7 {
-public:
-	void qqp7a() {}
-	void qqp7b() {}
-};
-class QqP8 {
-public:
-	void qqp8a() {}
-	void qqp8b() {}
-};
-class QqP9 {
-public:
-	void qqp9a() {}
-	void qqp9b() {}
-};
-class QqP10 {
-public:
-	void qqp10a() {}
-	void qqp10b() {}
-};
-class QqP11 {
-public:
-	void qqp11a() {}
-	void qqp11b() {}
-};
-class QqP12 {
-public:
-	void qqp12a() {}
-	void qqp12b() {}
-};
-class QqP13 {
-public:
-	void qqp13a() {}
-	void qqp13b() {}
-};
-class QqP14 {
-public:
-	void qqp14a() {}
-	void qqp14b() {}
-};
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-enum ZzE0 {
-	zze0_0
-};
-enum ZzE1 {
-	zze1_0
-};
-enum ZzE2 {
-	zze2_0
-};
-enum ZzE3 {
-	zze3_0
-};
-enum ZzE4 {
-	zze4_0
-};
-enum ZzE5 {
-	zze5_0
-};
-enum ZzE6 {
-	zze6_0
-};
-enum ZzE7 {
-	zze7_0
-};
-
 DECOMP_SIZE_ASSERT(MxStreamer, 0x2c);
 DECOMP_SIZE_ASSERT(MxMemoryPool64, 0x0c);
 DECOMP_SIZE_ASSERT(MxMemoryPool128, 0x0c);
 DECOMP_SIZE_ASSERT(MxBitset<22>, 0x04);
 DECOMP_SIZE_ASSERT(MxBitset<2>, 0x04);
-
-// Declaration-record carriers: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declarations are recoverable
-// at this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordX {
-	inline void Record() {}
-};
-
-class MxUnkRecordY {
-	inline void Record() {}
-};
 
 // FUNCTION: LEGO1 0x100b8f00
 // FUNCTION: BETA10 0x10145150
@@ -256,21 +139,6 @@ MxStreamController* MxStreamer::GetOpenStream(const char* p_name)
 	return NULL;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordVV {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-	inline void Record6() {}
-	inline void Record7() {}
-};
-
 // FUNCTION: LEGO1 0x100b98f0
 void MxStreamer::FUN_100b98f0(MxDSAction* p_action)
 {
@@ -382,61 +250,3 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 
 	return 0;
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class MsE000;
-class MsE001;
-class MsE002;
-class MsE003;
-class MsE004;
-class MsE005;
-class MsE006;
-class MsE007;
-class MsE008;
-class MsE009;
-class MsE010;
-class MsE011;
-class MsE012;
-class MsE013;
-class MsE014;
-class MsE015;
-class MsE016;
-class MsE017;
-class MsE018;
-class MsE019;
-class MsE020;
-class MsE021;
-class MsE022;
-class MsE023;
-class MsE024;
-class MsE025;
-class MsE026;
-class MsE027;
-class MsE028;
-class MsE029;
-class MsE030;
-class MsE031;
-class MsE032;
-class MsE033;
-class MsE034;
-class MsE035;
-class MsE036;
-class MsE037;
-class MsE038;
-class MsE039;
-class MsE040;
-class MsE041;
-class MsE042;
-class MsE043;
-class MsE044;
-class MsE045;
-class MsE046;
-class MsE047;
-class MsE048;
-class MsE049;
-class MsE050;
-class MsE051;
-class MsE052;
-class MsE053;
-class MsE054;

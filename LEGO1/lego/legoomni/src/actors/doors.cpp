@@ -14,17 +14,6 @@ DECOMP_SIZE_ASSERT(Doors, 0x1f8)
 // GLOBAL: BETA10 0x101b954c
 const MxFloat g_timeMoving = 1000.0f;
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordZA;
-class MxUnkRecordZB;
-class MxUnkRecordZC;
-class MxUnkRecordZD;
-class MxUnkRecordZE;
-class MxUnkRecordZF;
-
 // GLOBAL: LEGO1 0x100d8e80
 // GLOBAL: BETA10 0x101b9550
 const MxFloat g_timeOpened = 4000.0f;

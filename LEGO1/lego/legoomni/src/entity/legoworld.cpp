@@ -1,36 +1,3 @@
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class ZzM0 {
-public:
-	void zzm0() {}
-};
-class ZzM1 {
-public:
-	void zzm1() {}
-};
-class ZzM2 {
-public:
-	void zzm2() {}
-};
-class ZzM3 {
-public:
-	void zzm3() {}
-};
-class ZzM4 {
-public:
-	void zzm4() {}
-};
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordHE;
-
-// clang-format off
-#include "legoworldrecords.h"
-// clang-format on
-
 #include "legoworld.h"
 
 #include "anim/legoanim.h"
@@ -56,32 +23,6 @@ class MxUnkRecordHE;
 #include "mxticklemanager.h"
 #include "mxutilities.h"
 #include "viewmanager/viewmanager.h"
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at the top of the definition run.
-// Neutral stand-in pending better evidence.  [65 units]
-class MxUnkRecordHA {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-	inline void Record6() {}
-	inline void Record7() {}
-	inline void Record8() {}
-};
-
-class MxUnkRecordHB {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-	inline void Record6() {}
-	inline void Record7() {}
-};
 
 DECOMP_SIZE_ASSERT(LegoWorld, 0xf8)
 DECOMP_SIZE_ASSERT(LegoEntityList, 0x18)
@@ -690,51 +631,6 @@ MxCore* LegoWorld::Find(const char* p_class, const char* p_name)
 
 	return NULL;
 }
-
-// Declaration-record carriers: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declarations are recoverable
-// at this position. Neutral stand-ins pending better evidence.
-class MxUnkRecordO;
-class MxUnkRecordP;
-class MxUnkRecordQ;
-class MxUnkRecordR;
-class MxUnkRecordS;
-class MxUnkRecordT;
-class MxUnkRecordU;
-class MxUnkRecordV;
-class MxUnkRecordW;
-class MxUnkRecordX;
-class MxUnkRecordY;
-class MxUnkRecordZ;
-class MxUnkRecordAA;
-class MxUnkRecordAB;
-class MxUnkRecordAC;
-class MxUnkRecordAD;
-class MxUnkRecordAE;
-class MxUnkRecordAF;
-class MxUnkRecordAG;
-class MxUnkRecordAH;
-class MxUnkRecordAI;
-class MxUnkRecordAJ;
-class MxUnkRecordAK;
-class MxUnkRecordAL;
-class MxUnkRecordAM;
-class MxUnkRecordAN;
-class MxUnkRecordAO;
-class MxUnkRecordAP;
-class MxUnkRecordAQ;
-class MxUnkRecordAR;
-class MxUnkRecordAS;
-class MxUnkRecordAT;
-class MxUnkRecordAU;
-class MxUnkRecordAV;
-class MxUnkRecordAW;
-class MxUnkRecordAX;
-class MxUnkRecordAY;
-class MxUnkRecordAZ;
-class MxUnkRecordBA;
-class MxUnkRecordBB;
 
 // FUNCTION: LEGO1 0x10021790
 // FUNCTION: BETA10 0x100db3de

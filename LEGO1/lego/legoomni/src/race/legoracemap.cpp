@@ -1,17 +1,3 @@
-// Declaration-record carrier (dial campaign, PRE): samples this translation
-// unit's accumulated declaration state before the include block. [1 units]
-class RkRmF0;
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordDJ;
-class MxUnkRecordDK;
-class MxUnkRecordDP;
-class MxUnkRecordDQ;
-class MxUnkRecordDR;
-
 #include "legoracemap.h"
 
 #include "define.h"

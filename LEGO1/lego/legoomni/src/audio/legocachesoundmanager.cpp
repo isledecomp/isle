@@ -1,48 +1,9 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordJY;
-
 #include "legocachesoundmanager.h"
 
 #include "legoworld.h"
 #include "misc.h"
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-enum RkE0 {
-	rke0_0
-};
-enum RkE1 {
-	rke1_0
-};
-enum RkE2 {
-	rke2_0
-};
-enum RkE3 {
-	rke3_0
-};
-enum RkE4 {
-	rke4_0
-};
-enum RkE5 {
-	rke5_0
-};
-enum RkE6 {
-	rke6_0
-};
-enum RkE7 {
-	rke7_0
-};
-
 DECOMP_SIZE_ASSERT(LegoCacheSoundEntry, 0x08)
 DECOMP_SIZE_ASSERT(LegoCacheSoundManager, 0x20)
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordJX {};
 
 // FUNCTION: LEGO1 0x1003cf20
 // STUB: BETA10 0x100d0700

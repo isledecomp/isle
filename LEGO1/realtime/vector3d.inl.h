@@ -3,7 +3,6 @@
 
 #include "vector2d.inl.h"
 
-float MxUnkRecordMAA(const float*, const float*);
 // FUNCTION: LEGO1 0x10002270
 // FUNCTION: BETA10 0x10011350
 void Vector3::EqualsCrossImpl(const float* p_a, const float* p_b)
@@ -34,9 +33,6 @@ void Vector3::EqualsCross(const float* p_a, const Vector3& p_b)
 	EqualsCrossImpl(p_a, p_b.m_data);
 }
 
-enum MxUnkRecordMBA {
-	e_unkRecordMBA
-};
 // FUNCTION: LEGO1 0x10003a60
 // FUNCTION: BETA10 0x10011100
 void Vector3::AddImpl(const float* p_value)
@@ -86,12 +82,6 @@ void Vector3::DivImpl(const float& p_value)
 	m_data[2] /= p_value;
 }
 
-class MxUnkRecordMCA {
-	inline void Record0() {}
-};
-enum MxUnkRecordMDA {
-	e_unkRecordMDA
-};
 // FUNCTION: LEGO1 0x10003b80
 // FUNCTION: BETA10 0x10011300
 float Vector3::DotImpl(const float* p_a, const float* p_b) const
@@ -111,6 +101,13 @@ void Vector3::EqualsImpl(const float* p_data)
 void Vector3::Clear()
 {
 	memset(m_data, 0, sizeof(float) * 3);
+}
+
+// FUNCTION: LEGO1 0x10003bd0
+// FUNCTION: BETA10 0x10011530
+float Vector3::LenSquared() const
+{
+	return m_data[0] * m_data[0] + m_data[1] * m_data[1] + m_data[2] * m_data[2];
 }
 
 // FUNCTION: LEGO1 0x10003bf0

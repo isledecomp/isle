@@ -1,23 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordRF {};
-
-class SmF001;
-class SmF002;
-class SmF003;
-class SmF004;
-class SmF005;
-class SmF006;
-class SmF007;
-class SmF008;
-class SmF009;
-class SmF010;
-class SmF011;
-class SmF012;
-class SmF013;
-class SmF014;
 #include "legosoundmanager.h"
 
 #include "legocachesoundmanager.h"
@@ -25,10 +5,6 @@ class SmF014;
 #include "mxmain.h"
 
 #include <assert.h>
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkC0 {};
-
 DECOMP_SIZE_ASSERT(LegoSoundManager, 0x44)
 
 // FUNCTION: LEGO1 0x100298a0
@@ -167,20 +143,3 @@ void LegoSoundManager::UpdateListener(
 		m_listener->CommitDeferredSettings();
 	}
 }
-
-// Declaration-record carrier: end-of-file sink; the translation unit's
-// end-emitted template pool samples the end state (see the positional record
-// calculus, session notes 2026-08-01); no authentic 1997 declaration is
-// recoverable at this position. Neutral stand-in pending better evidence.
-class MxUnkRecordRG {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-	inline void Record6() {}
-	inline void Record7() {}
-	inline void Record8() {}
-	inline void Record9() {}
-};

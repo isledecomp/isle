@@ -1,12 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordWO {
-	inline void Record0() {}
-	inline void Record1() {}
-};
-
 #include "registrationbook.h"
 
 #include "copter_actions.h"
@@ -37,32 +28,6 @@ class MxUnkRecordWO {
 #include "racecar_actions.h"
 #include "regbook_actions.h"
 #include "scripts.h"
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.  [67 units]
-class RkRbP0 {
-	inline void Record0() {}
-	inline void Record1() {}
-};
-class RkRbP1 {
-	inline void Record0() {}
-	inline void Record1() {}
-};
-class RkRbP2 {
-	inline void Record0() {}
-	inline void Record1() {}
-};
-class RkRbP3 {
-	inline void Record0() {}
-	inline void Record1() {}
-};
-class RkRbP4 {
-	inline void Record0() {}
-	inline void Record1() {}
-};
-enum RkRbE0 {
-	c_rkRbE0
-};
 
 DECOMP_SIZE_ASSERT(RegistrationBook, 0x2d0)
 

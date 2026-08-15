@@ -37,8 +37,6 @@ CConfigApp g_theApp;
 // FUNCTION: CONFIGD 0x004069dc
 BOOL CConfigApp::InitInstance()
 {
-	const char* configAppName = "config";
-
 	if (!IsLegoNotRunning()) {
 		return FALSE;
 	}
@@ -59,7 +57,7 @@ BOOL CConfigApp::InitInstance()
 
 	CConfigCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
-	if (stricmp(afxCurrentAppName, configAppName) == 0) {
+	if (stricmp(afxCurrentAppName, "config") == 0) {
 		m_run_config_dialog = TRUE;
 	}
 

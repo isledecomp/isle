@@ -1,18 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordQT;
-class MxUnkRecordQU;
-class MxUnkRecordQV;
-class MxUnkRecordQW;
-class MxUnkRecordQX;
-class MxUnkRecordQY;
-class MxUnkRecordQZ;
-class MxUnkRecordRA;
-class MxUnkRecordRB;
-class MxUnkRecordRC;
-
 #include "legoutils.h"
 
 #include "3dmanager/lego3dmanager.h"
@@ -115,17 +100,6 @@ MxBool SpheresIntersect(const BoundingSphere& p_sphere1, const BoundingSphere& p
 	return sqrt(distance) < p_sphere1.Radius() + p_sphere2.Radius();
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordRD {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-};
-
 // FUNCTION: LEGO1 0x1003ded0
 // FUNCTION: BETA10 0x100d3802
 MxBool CalculateRayOriginDirection(MxFloat p_coordinates[2], MxFloat p_direction[3], MxFloat p_origin[3])
@@ -199,11 +173,6 @@ LegoTreeNode* GetTreeNode(LegoTreeNode* p_node, MxU32 p_index)
 
 	return result;
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class LuRec000;
-class LuRec001;
 
 // FUNCTION: LEGO1 0x1003e050
 // FUNCTION: BETA10 0x100d3abc

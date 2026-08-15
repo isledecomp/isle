@@ -1,16 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordJS {
-	inline void Record0() {}
-	inline void Record1() {}
-	inline void Record2() {}
-	inline void Record3() {}
-	inline void Record4() {}
-	inline void Record5() {}
-};
-
 #include "mxvideopresenter.h"
 
 #include "mxautolock.h"
@@ -20,22 +7,6 @@ class MxUnkRecordJS {
 #include "mxmisc.h"
 #include "mxregion.h"
 #include "mxvideomanager.h"
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkC0 {};
-class RkC1 {};
-class RkC2 {};
-class RkC3 {};
-class RkC4 {};
-class RkC5 {};
-class RkC6 {};
-class RkC7 {};
-class RkC8 {};
-class RkC9 {};
-class RkC10 {};
-class RkC11 {};
-class RkC12 {};
-
 DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
 DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0x0c);
 
@@ -258,15 +229,6 @@ inline MxS32 MxVideoPresenter::PrepareRects(RECT& p_rectDest, RECT& p_rectSrc)
 	p_rectSrc.bottom = (p_rectSrc.top + height) - 1;
 	return 0;
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordJO;
-class MxUnkRecordJP;
-class MxUnkRecordJQ;
-class MxUnkRecordJR;
 
 // FUNCTION: LEGO1 0x100b2a70
 void MxVideoPresenter::PutFrame()

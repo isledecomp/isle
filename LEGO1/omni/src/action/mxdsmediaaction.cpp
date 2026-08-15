@@ -1,10 +1,3 @@
-// Declaration-record carrier (dial campaign, PRE): samples this translation
-// unit's accumulated declaration state before the include block. [4 units]
-class RkRuF0;
-class RkRuF1;
-class RkRuF2;
-class RkRuF3;
-
 #include "mxdsmediaaction.h"
 
 #include "mxdebug.h"
@@ -78,13 +71,6 @@ MxDSAction* MxDSMediaAction::Clone()
 
 	return clone;
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordTU {};
-class MxUnkRecordTV {};
 
 // FUNCTION: LEGO1 0x100c8e80
 // FUNCTION: BETA10 0x1015cacb

@@ -1,84 +1,7 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordSP {
-	inline void Record0() {}
-	inline void Record1() {}
-};
-
 #include "legodxinfo.h"
 
 #include <assert.h>
 #include <stdio.h> // for vsprintf
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class QqP0 {
-public:
-	void qqp0a() {}
-	void qqp0b() {}
-};
-class QqP1 {
-public:
-	void qqp1a() {}
-	void qqp1b() {}
-};
-class QqP2 {
-public:
-	void qqp2a() {}
-	void qqp2b() {}
-};
-class QqP3 {
-public:
-	void qqp3a() {}
-	void qqp3b() {}
-};
-class QqP4 {
-public:
-	void qqp4a() {}
-	void qqp4b() {}
-};
-class QqP5 {
-public:
-	void qqp5a() {}
-	void qqp5b() {}
-};
-class QqP6 {
-public:
-	void qqp6a() {}
-	void qqp6b() {}
-};
-class QqP7 {
-public:
-	void qqp7a() {}
-	void qqp7b() {}
-};
-class QqP8 {
-public:
-	void qqp8a() {}
-	void qqp8b() {}
-};
-class QqP9 {
-public:
-	void qqp9a() {}
-	void qqp9b() {}
-};
-class QqP10 {
-public:
-	void qqp10a() {}
-	void qqp10b() {}
-};
-class QqP11 {
-public:
-	void qqp11a() {}
-	void qqp11b() {}
-};
-class QqP12 {
-public:
-	void qqp12a() {}
-	void qqp12b() {}
-};
-
 // File name validated by BETA10 0x1011cba3; directory unknown
 
 // FUNCTION: CONFIG 0x00402560
@@ -239,40 +162,6 @@ int LegoDeviceEnumerate::BETA_1011cc65(int p_idx, char* p_buffer)
 	return -1;
 }
 
-DECOMP_SIZE_ASSERT(MxDriver, 0x190)
-DECOMP_SIZE_ASSERT(Direct3DDeviceInfo, 0x1a4)
-
-// Declaration-record carriers (dial campaign): these sample the translation
-// unit's accumulated declaration state at this position.  Neutral stand-ins.
-// LEGO1 only: the CONFIG build of this TU carries its own carrier set below.
-#ifdef MXDIRECTX_FOR_CONFIG
-#else
-class LgD3dA00;
-class LgD3dA01;
-class LgD3dA02;
-class LgD3dA03;
-class LgD3dA04;
-class LgD3dA05;
-class LgD3dA06;
-class LgD3dA07;
-class LgD3dA08;
-class LgD3dA09;
-class LgD3dA10;
-class LgD3dA11;
-class LgD3dA12;
-class LgD3dA13;
-class LgD3dA14;
-class LgD3dA15;
-class LgD3dA16;
-class LgD3dA17;
-class LgD3dA18;
-class LgD3dA19;
-class LgD3dA20;
-class LgD3dA21;
-class LgD3dA22;
-class LgD3dA23;
-#endif
-
 // FUNCTION: CONFIG 0x00402860
 // FUNCTION: LEGO1 0x1009d0d0
 // FUNCTION: BETA10 0x1011cdb4
@@ -406,23 +295,6 @@ int LegoDeviceEnumerate::SupportsCPUID()
 	return has_cpuid;
 }
 
-// Declaration-record carriers (dial campaign): these sample the translation
-// unit's accumulated declaration state at this position.  Neutral stand-ins.
-// LEGO1 only: the CONFIG build of this TU carries its own carrier set below.
-#ifdef MXDIRECTX_FOR_CONFIG
-#else
-class LgD3dB00;
-class LgD3dB01;
-class LgD3dB02;
-class LgD3dB03;
-class LgD3dB04;
-class LgD3dB05;
-class LgD3dB06;
-class LgD3dB07;
-class LgD3dB08;
-class LgD3dB09;
-#endif
-
 // FUNCTION: CONFIG 0x004029a0
 // FUNCTION: LEGO1 0x1009d210
 // FUNCTION: BETA10 0x1011cfc4
@@ -480,16 +352,6 @@ unsigned char LegoDeviceEnumerate::DriverSupportsRequiredDisplayMode(MxDriver& p
 
 	return FALSE;
 }
-
-DECOMP_SIZE_ASSERT(MxDisplayMode, 0xc)
-DECOMP_SIZE_ASSERT(DeviceModesInfo, 0x17c)
-
-#ifdef MXDIRECTX_FOR_CONFIG
-class CfgD3d00;
-class CfgD3d01;
-class CfgD3d02;
-class CfgD3d03;
-#endif
 
 // FUNCTION: CONFIG 0x00402b60
 // FUNCTION: LEGO1 0x1009d3d0

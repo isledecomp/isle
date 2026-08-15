@@ -1,17 +1,3 @@
-// Declaration-record carrier: this unit's accumulated declaration state
-// decides the operand order and register roles of the code below (see the
-// positional record calculus). No authentic 1997 declaration is recoverable
-// at this position; neutral stand-in pending better evidence.
-class MxUnkRecordPP000;
-class MxUnkRecordPP001;
-class MxUnkRecordPP002;
-class MxUnkRecordPP003;
-class MxUnkRecordPP004;
-class MxUnkRecordPP005;
-class MxUnkRecordPP006;
-class MxUnkRecordPP007;
-class MxUnkRecordPP008;
-
 #include "legopartpresenter.h"
 
 #include "legovideomanager.h"

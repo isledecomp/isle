@@ -38,18 +38,6 @@
 #include "towtrack.h"
 #include "viewmanager/viewmanager.h"
 
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class RkISM0 {
-	void m0() {}
-	void m1() {}
-	void m2() {}
-	void m3() {}
-	void m4() {}
-	void m5() {}
-};
-
 DECOMP_SIZE_ASSERT(Act1State, 0x26c)
 DECOMP_SIZE_ASSERT(Isle, 0x140)
 

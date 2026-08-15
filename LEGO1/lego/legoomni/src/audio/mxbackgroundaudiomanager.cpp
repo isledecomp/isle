@@ -1,12 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordTP {
-	inline void Record0() {}
-	inline void Record1() {}
-};
-
 #include "mxbackgroundaudiomanager.h"
 
 #include "legomain.h"
@@ -20,29 +11,6 @@ class MxUnkRecordTP {
 #include "mxticklemanager.h"
 #include "mxutilities.h"
 #include "mxwavepresenter.h"
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkM0 {
-public:
-	void rkm0() {}
-};
-class RkM1 {
-public:
-	void rkm1() {}
-};
-class RkM2 {
-public:
-	void rkm2() {}
-};
-class RkM3 {
-public:
-	void rkm3() {}
-};
-class RkM4 {
-public:
-	void rkm4() {}
-};
-
 DECOMP_SIZE_ASSERT(MxBackgroundAudioManager, 0x150)
 
 // FUNCTION: LEGO1 0x1007ea90

@@ -1,18 +1,3 @@
-// Declaration-record carrier (dial campaign): the functions below
-// sample this translation unit's accumulated declaration state at this
-// point.  Neutral stand-in; no authentic 1997 declaration is
-// recoverable here.
-class MxUnkRecord000 {};
-class MxUnkRecord001 {};
-class MxUnkRecord002 {};
-class MxUnkRecord003 {};
-class MxUnkRecord004 {};
-class MxUnkRecord005 {};
-class MxUnkRecord006 {};
-class MxUnkRecord007 {};
-class MxUnkRecord008 {};
-class MxUnkRecord009;
-
 #include "flic.h"
 
 DECOMP_SIZE_ASSERT(FLIC_CHUNK, 0x06)
@@ -132,20 +117,6 @@ int ClampLine(LPBITMAPINFOHEADER p_bitmapHeader, short& p_column, short& p_row, 
 	return 1;
 }
 
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordWQ {
-public:
-	void Record() {}
-};
-
-class MxUnkRecordWR {
-public:
-	void Record() {}
-};
-
 // FUNCTION: LEGO1 0x100bd680
 // FUNCTION: BETA10 0x1013df77
 void WritePixelRun(
@@ -249,12 +220,6 @@ short DecodeChunks(
 
 	return 0;
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordWS;
 
 // FUNCTION: LEGO1 0x100bd880
 // FUNCTION: BETA10 0x1013e22c

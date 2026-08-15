@@ -1,5 +1,65 @@
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
+# A byte-identical tree is authoritative only while it is owned by
+# tools/byte_identity.py drive-cmake.  This gate intentionally runs before
+# project(), compiler detection, or any other configure-time operation that
+# could fail and otherwise leave a prior framework verdict visible.
+set(_isle_byte_identity_preproject OFF)
+if(DEFINED ISLE_BYTE_IDENTICAL AND ISLE_BYTE_IDENTICAL)
+  set(_isle_byte_identity_preproject ON)
+elseif(EXISTS "${CMAKE_BINARY_DIR}/byte-identity/session/hard-mode.json")
+  set(_isle_byte_identity_preproject ON)
+elseif(EXISTS "${CMAKE_BINARY_DIR}/CMakeCache.txt")
+  file(STRINGS "${CMAKE_BINARY_DIR}/CMakeCache.txt"
+       _isle_byte_identity_cached_mode
+       REGEX "^ISLE_BYTE_IDENTICAL:BOOL=ON$")
+  if(_isle_byte_identity_cached_mode)
+    set(_isle_byte_identity_preproject ON)
+  endif()
+endif()
+if(_isle_byte_identity_preproject)
+  if(CMAKE_VERSION VERSION_LESS 3.21)
+    message(FATAL_ERROR
+      "ISLE_BYTE_IDENTICAL requires CMake 3.21+ for complete recursive graph attestation")
+  endif()
+  set(_isle_byte_identity_controller
+      "$ENV{ISLE_BYTE_IDENTITY_CONTROLLER_ROOT}")
+  set(_isle_byte_identity_python "$ENV{ISLE_BYTE_IDENTITY_PYTHON}")
+  if(NOT _isle_byte_identity_python AND ISLE_BYTE_IDENTITY_DRIVER_PYTHON)
+    set(_isle_byte_identity_python "${ISLE_BYTE_IDENTITY_DRIVER_PYTHON}")
+  endif()
+  if(NOT IS_ABSOLUTE "${_isle_byte_identity_python}"
+     OR NOT EXISTS "${_isle_byte_identity_python}")
+    message(FATAL_ERROR
+      "ISLE_BYTE_IDENTICAL requires tools/byte_identity.py drive-cmake; "
+      "the pinned outer-driver Python is absent")
+  endif()
+  if(NOT IS_ABSOLUTE "${_isle_byte_identity_controller}"
+     OR NOT EXISTS "${_isle_byte_identity_controller}/snapshot.json"
+     OR NOT EXISTS "${_isle_byte_identity_controller}/framework/tools/byte_identity.py")
+    message(FATAL_ERROR
+      "ISLE_BYTE_IDENTICAL requires the hash-pinned outer-controller snapshot")
+  endif()
+  execute_process(
+    COMMAND "${_isle_byte_identity_python}" -I -B
+            "${_isle_byte_identity_controller}/framework/tools/byte_identity.py"
+            preconfigure-check
+            --source-dir "${CMAKE_CURRENT_LIST_DIR}"
+            --build-dir "${CMAKE_BINARY_DIR}"
+            --cmake "${CMAKE_COMMAND}"
+            --nonce "$ENV{ISLE_BYTE_IDENTITY_SESSION_NONCE}"
+    RESULT_VARIABLE _isle_byte_identity_preflight_result
+    OUTPUT_VARIABLE _isle_byte_identity_preflight_stdout
+    ERROR_VARIABLE _isle_byte_identity_preflight_stderr
+  )
+  if(NOT _isle_byte_identity_preflight_result EQUAL 0)
+    message(FATAL_ERROR
+      "ISLE_BYTE_IDENTICAL outer-session preflight refused configure:\n"
+      "${_isle_byte_identity_preflight_stdout}"
+      "${_isle_byte_identity_preflight_stderr}")
+  endif()
+endif()
+
 # MSVC runtime library flags are selected by an abstraction
 cmake_policy(SET CMP0091 NEW)
 
@@ -81,12 +141,7 @@ option(ISLE_DECOMP_ASSERT "Assert struct size" ${MSVC_FOR_DECOMP})
 cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libraries" ON ISLE_USE_DX5 OFF)
 option(ISLE_BUILD_LEGO1 "Build LEGO1.DLL library" ON)
 option(ISLE_BUILD_BETA10 "Build BETA10.DLL library" OFF)
-option(ISLE_INCLUDE_ENTROPY "Build with entropy.h" OFF)
-# NOTE: must NOT be option() -- option() only creates BOOLs, so the default
-# "entropy.h" was coerced to OFF and the force-include became /FI<root>/OFF,
-# failing every compile with C1083 while callers read the stale DLL as a score.
-set(ISLE_ENTROPY_FILENAME "entropy.h" CACHE STRING "Entropy header filename")
-option(ISLE_BYTE_IDENTICAL "Build the no-link-debug main images in a dedicated tree while retaining compile-time /Zi; the manifest framework remains fail-closed until composition, a diagnostic PDB relink, and final MD5 gates are implemented." OFF)
+option(ISLE_BYTE_IDENTICAL "Build through the authenticated outer driver with compile-time /Zi; terminal completion requires compiler-output composition, nonce-bound LINK/reccmp, 4933/4933, and the original image MD5." OFF)
 
 if(NOT (ISLE_BUILD_LEGO1 OR ISLE_BUILD_BETA10))
   message(FATAL_ERROR "ISLE_BUILD_LEGO1 AND ISLE_BUILD_BETA10 cannot be both disabled")
@@ -357,7 +412,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/legovariables.cpp
     LEGO1/lego/legoomni/src/actors/pizza.cpp
     LEGO1/lego/legoomni/src/common/legogamestate.cpp
-    LEGO1/lego/legoomni/src/audio/legocachesoundlist.cpp
     LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp
     LEGO1/lego/legoomni/src/common/legoutils.cpp
     LEGO1/lego/legoomni/src/actors/act3actors.cpp
@@ -366,19 +420,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/mxcontrolpresenter.cpp
     LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
     LEGO1/lego/legoomni/src/common/legophoneme.cpp
-    LEGO1/lego/legoomni/src/paths/legoanimpresenterset.cpp
-    LEGO1/lego/legoomni/src/paths/legopathctrledge.cpp
-    LEGO1/lego/legoomni/src/paths/legopathctrledgeset.cpp
-    LEGO1/lego/legoomni/src/paths/legopathactorset.cpp
-    LEGO1/lego/legoomni/src/paths/legopathactorsetcompare.cpp
-    LEGO1/lego/legoomni/src/paths/legopathactorsetiterator.cpp
-    LEGO1/lego/legoomni/src/paths/legoboundaryedge.cpp
-    LEGO1/lego/legoomni/src/paths/legopathctrledgeiterator.cpp
-    LEGO1/lego/legoomni/src/paths/legopathctrledgecompare.cpp
-    LEGO1/lego/legoomni/src/paths/legopathcontrollerlist.cpp
-    LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp
-    LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp
-    LEGO1/lego/legoomni/src/paths/legobewithmidpointcomparator.cpp
     LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp
     LEGO1/lego/legoomni/src/audio/lego3dwavepresenter.cpp
     LEGO1/lego/legoomni/src/common/legoanimmmpresenter.cpp
@@ -392,7 +433,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
     LEGO1/lego/legoomni/src/actors/act3ammo.cpp
     LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp
-    LEGO1/lego/legoomni/src/paths/legoanimpresentercontainer.cpp
     LEGO1/lego/legoomni/src/paths/legopathboundary.cpp
     LEGO1/lego/legoomni/src/main/legomain.cpp
     LEGO1/lego/legoomni/src/input/legoinputmanager.cpp
@@ -429,11 +469,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/legoactors.cpp
     LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
     LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp
-    LEGO1/lego/legoomni/src/paths/legordatapad1.cpp
-    LEGO1/lego/legoomni/src/paths/legordatapad2.cpp
-    LEGO1/lego/legoomni/src/paths/legordatapad3.cpp
-    LEGO1/lego/legoomni/src/paths/legordatapad4.cpp
-    LEGO1/lego/legoomni/src/paths/legorelocpad.cpp
   )
   list(APPEND list_targets ${NAME})
 
@@ -606,6 +641,10 @@ if (ISLE_BUILD_CONFIG)
     target_link_libraries(config PRIVATE DirectX5::DirectX5)
   endif()
   target_compile_definitions(config PRIVATE DIRECT3D_VERSION=0x500)
+  # Retail CONFIG.EXE carries a DSOUND.dll import descriptor with zero
+  # functions: the original link consumed dsound.lib and /OPT:REF discarded
+  # the referencing code (Detect3DSound in detectdx5.cpp) after the import
+  # members were pulled.  dsound is therefore original build configuration.
   target_link_libraries(config PRIVATE ddraw dsound dxguid)
   set_property(TARGET config PROPERTY OUTPUT_NAME "CONFIG")
   set_property(TARGET config PROPERTY SUFFIX ".EXE")
@@ -662,9 +701,10 @@ if (MSVC_FOR_DECOMP)
     # to force that with /INCLUDE:?terminate@@YAXXZ, which reproduced the RESULT
     # by fiat but seated the member at the FRONT of the CRT region and left
     # .reloc's VirtualSize 28 bytes short. The CAUSE is a `delete[]` of a
-    # destructible type in 1997's isleapp.cpp that /OPT:REF stripped -- see the
-    # carrier at the end of ISLE/isleapp.cpp. With that in place the /INCLUDE is
-    # actively harmful, so it is deliberately NOT used.
+    # destructible type in 1997's isleapp.cpp that /OPT:REF stripped; its
+    # stand-in is owned by the byte-identity manifest overlay (the checked
+    # source stays clean). With that in place the /INCLUDE is actively
+    # harmful, so it is deliberately NOT used.
     set_property(TARGET isle ${lego1_targets} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   endif()
 
@@ -678,73 +718,6 @@ if (MSVC_FOR_DECOMP)
     # reason -- reproduces retail's descriptor order exactly.
     # MEASURED: .idata differing 1577 -> 1537, CONFIG total 2881 -> 2837.
     target_link_libraries(config PRIVATE mfc42 msvcrt kernel32)
-  endif()
-
-  if (ISLE_INCLUDE_ENTROPY)
-    message(STATUS "Using entropy file: ${ISLE_ENTROPY_FILENAME}")
-    set(_entropy_hdr "${PROJECT_SOURCE_DIR}/${ISLE_ENTROPY_FILENAME}")
-    # A /FI force-include is NOT in the dependency graph, so editing the entropy
-    # header rebuilds NOTHING and the next score is silently stale.  Declare it
-    # as an explicit object dependency of every source it is forced into.
-    function(isle_force_include tgt hdr)
-      target_compile_options(${tgt} PRIVATE /FI${hdr})
-      get_target_property(_srcs ${tgt} SOURCES)
-      if(_srcs)
-        set_property(SOURCE ${_srcs} TARGET_DIRECTORY ${tgt}
-                     APPEND PROPERTY OBJECT_DEPENDS "${hdr}")
-      endif()
-    endfunction()
-    foreach(tgt IN LISTS lego1_targets beta10_targets)
-      isle_force_include(${tgt} "${_entropy_hdr}")
-    endforeach()
-    if (TARGET isle)
-      isle_force_include(isle "${_entropy_hdr}")
-    endif()
-    if (TARGET config)
-      isle_force_include(config "${_entropy_hdr}")
-    endif()
-  endif()
-
-  # Per-TU entropy: force-include a generated entropy header into individual
-  # translation units. The manifest is a text file with lines of the form
-  #   <source-path-relative-to-repo-root> <seed>
-  # (blank lines and lines starting with # are ignored). Headers are generated
-  # at configure time with tools/entropy.py, cached per seed in the build dir.
-  set(ISLE_TU_ENTROPY_MANIFEST "" CACHE FILEPATH "Per-TU entropy manifest file")
-  if (ISLE_TU_ENTROPY_MANIFEST)
-    find_package(Python3 COMPONENTS Interpreter REQUIRED)
-    message(STATUS "Using per-TU entropy manifest: ${ISLE_TU_ENTROPY_MANIFEST}")
-    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${ISLE_TU_ENTROPY_MANIFEST}")
-    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tu-entropy")
-    file(STRINGS "${ISLE_TU_ENTROPY_MANIFEST}" tu_entropy_lines)
-    foreach(line IN LISTS tu_entropy_lines)
-      if (line MATCHES "^[ \t]*(#.*)?$")
-        continue()
-      endif()
-      separate_arguments(parts UNIX_COMMAND "${line}")
-      list(LENGTH parts nparts)
-      if (NOT nparts EQUAL 2)
-        message(FATAL_ERROR "Malformed entropy manifest line: '${line}'")
-      endif()
-      list(GET parts 0 tu_src)
-      list(GET parts 1 tu_seed)
-      if (NOT EXISTS "${PROJECT_SOURCE_DIR}/${tu_src}")
-        message(FATAL_ERROR "Entropy manifest references missing source: '${tu_src}'")
-      endif()
-      set(tu_hdr "${CMAKE_BINARY_DIR}/tu-entropy/entropy_${tu_seed}.h")
-      if (NOT EXISTS "${tu_hdr}")
-        execute_process(
-          COMMAND ${Python3_EXECUTABLE} "${PROJECT_SOURCE_DIR}/tools/entropy.py" "${tu_seed}"
-          OUTPUT_FILE "${tu_hdr}"
-          RESULT_VARIABLE tu_rc
-        )
-        if (NOT tu_rc EQUAL 0 OR NOT EXISTS "${tu_hdr}")
-          file(REMOVE "${tu_hdr}")
-          message(FATAL_ERROR "tools/entropy.py failed for seed ${tu_seed}")
-        endif()
-      endif()
-      set_property(SOURCE "${PROJECT_SOURCE_DIR}/${tu_src}" APPEND PROPERTY COMPILE_OPTIONS "/FI${tu_hdr}")
-    endforeach()
   endif()
 
   # Setting the MSVC_RUNTIME_LIBRARY for all libraries as well as `lego1` produces the results
@@ -833,10 +806,18 @@ endif()
 # The source-controlled manifest is deliberately invisible to normal builds.
 # Its validator/materializer/launcher are loaded only in a dedicated
 # ISLE_BYTE_IDENTICAL tree, after every candidate target has been declared.
-if(ISLE_BYTE_IDENTICAL)
+if(ISLE_BYTE_IDENTITY_PLAN)
+  # Lean byte-identity path: tools/isle_build.py materialized the effective
+  # source view and wrote the overlay plan; only the graph seating runs here.
   include("${PROJECT_SOURCE_DIR}/cmake/byte_identity.cmake")
+  include("${ISLE_BYTE_IDENTITY_PLAN}")
+  _isle_apply_byte_identity_source_overlay_graph()
+elseif(ISLE_BYTE_IDENTICAL)
+  set(_isle_byte_identity_controller
+      "$ENV{ISLE_BYTE_IDENTITY_CONTROLLER_ROOT}")
+  include("${_isle_byte_identity_controller}/framework/cmake/byte_identity.cmake")
   isle_enable_byte_identity(
-    "${PROJECT_SOURCE_DIR}/tools/byte_identity_manifest.json")
+    "${_isle_byte_identity_controller}/framework/tools/byte_identity_manifest.json")
 endif()
 
 find_program(CLANGFORMAT_BIN NAMES clang-format)

@@ -1,26 +1,3 @@
-// Declaration-record carrier (dial campaign): the functions below
-// sample this translation unit's accumulated declaration state at this
-// point.  Neutral stand-in; no authentic 1997 declaration is
-// recoverable here.
-class MxUnkRecord000 {};
-class MxUnkRecord001 {};
-class MxUnkRecord002 {};
-class MxUnkRecord003 {};
-class MxUnkRecord004 {};
-class MxUnkRecord005 {};
-class MxUnkRecord006 {};
-class MxUnkRecord007 {};
-class MxUnkRecord008 {};
-class MxUnkRecord009 {};
-class MxUnkRecord010 {};
-class MxUnkRecord011 {};
-class MxUnkRecord012 {};
-class MxUnkRecord013 {};
-class MxUnkRecord014;
-
-#include "mxtransitionmanagerrecords.h"
-// clang-format on
-
 #include "mxtransitionmanager.h"
 
 #include "legoinputmanager.h"
@@ -34,12 +11,6 @@ class MxUnkRecord014;
 #include "mxparam.h"
 #include "mxticklemanager.h"
 #include "mxvideopresenter.h"
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.
-class RkC0 {};
-class RkC1 {};
-class RkC2 {};
-
 DECOMP_SIZE_ASSERT(MxTransitionManager, 0x900)
 
 // GLOBAL: LEGO1 0x100f4378

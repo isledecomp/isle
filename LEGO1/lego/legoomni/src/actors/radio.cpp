@@ -1,18 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordPY;
-class MxUnkRecordPZ;
-class MxUnkRecordHA;
-class MxUnkRecordHB;
-class MxUnkRecordHC;
-class MxUnkRecordHF;
-class MxUnkRecordHG;
-class MxUnkRecordHH;
-class MxUnkRecordHI;
-class MxUnkRecordHJ;
-
 #include "radio.h"
 
 #include "isle_actions.h"
@@ -28,13 +13,6 @@ class MxUnkRecordHJ;
 #include "mxnotificationmanager.h"
 #include "mxtimer.h"
 #include "scripts.h"
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state. Neutral stand-in.  [11 units]
-class RkRM0 {
-	void m0() {}
-};
-class RkRF0;
 
 DECOMP_SIZE_ASSERT(Radio, 0x10)
 DECOMP_SIZE_ASSERT(RadioState, 0x30)

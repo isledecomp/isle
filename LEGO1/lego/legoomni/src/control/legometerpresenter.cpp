@@ -1,15 +1,3 @@
-// Declaration-record carrier: this unit's accumulated declaration state
-// decides the operand order and register roles of the code below (see the
-// positional record calculus). No authentic 1997 declaration is recoverable
-// at this position; neutral stand-in pending better evidence.
-class MxUnkRecordMP000;
-class MxUnkRecordMP001;
-class MxUnkRecordMP002;
-class MxUnkRecordMP003;
-class MxUnkRecordMP004;
-class MxUnkRecordMP005;
-class MxUnkRecordMP006;
-
 #include "legometerpresenter.h"
 
 #include "decomp.h"

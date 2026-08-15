@@ -1,25 +1,3 @@
-// Declaration-record carrier (dial campaign, PRE): samples this translation
-// unit's accumulated declaration state before the include block. [14 units]
-class RkRkM0 {
-	void m0() {}
-};
-class RkRkF0;
-class RkRkF1;
-class RkRkF2;
-class RkRkF3;
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordVK {
-	inline void Record() {}
-};
-
-class MxUnkRecordVL {
-	inline void Record() {}
-};
-
 #include "legocontrolmanager.h"
 
 #include "legoeventnotificationparam.h"
@@ -73,12 +51,6 @@ void LegoControlManager::Register(MxCore* p_listener)
 {
 	m_notifyList.Append(p_listener);
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordVM;
 
 // FUNCTION: LEGO1 0x10028ea0
 // FUNCTION: BETA10 0x1007c330

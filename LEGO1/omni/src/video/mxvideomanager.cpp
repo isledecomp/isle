@@ -1,10 +1,3 @@
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordWT {};
-class MxUnkRecordWU {};
-
 #include "mxvideomanager.h"
 
 #include "mxautolock.h"
@@ -107,13 +100,6 @@ void MxVideoManager::UpdateRegion()
 			->Display(rect.GetLeft(), rect.GetTop(), rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
 	}
 }
-
-// Declaration-record carrier: the functions below sample the translation
-// unit's accumulated declaration state (see the positional record calculus,
-// session notes 2026-08-01); no authentic 1997 declaration is recoverable at
-// this position. Neutral stand-in pending better evidence.
-class MxUnkRecordWV {};
-class MxUnkRecordWW {};
 
 // FUNCTION: LEGO1 0x100be440
 // FUNCTION: BETA10 0x1012ce5e

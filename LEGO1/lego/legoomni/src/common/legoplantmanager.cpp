@@ -2215,13 +2215,6 @@ void LegoPlantManager::RemovePlant(MxS32 p_index, LegoOmni::World p_worldId)
 	}
 }
 
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class RkD0 {};
-class RkD1 {};
-class RkF0;
-
 // FUNCTION: LEGO1 0x10026720
 // FUNCTION: BETA10 0x100c5918
 MxResult LegoPlantManager::Write(LegoStorage* p_storage)
@@ -2589,13 +2582,6 @@ void LegoPlantManager::ScheduleAnimation(LegoEntity* p_entity, MxLong p_length)
 
 	AdjustCounter(p_entity, -1);
 }
-
-// Declaration-record carrier (dial campaign): samples this translation
-// unit's accumulated declaration state at this point. Neutral stand-in;
-// no authentic 1997 declaration is recoverable here.
-class MxUnkRecordRH;
-class MxUnkRecordRI;
-class MxUnkRecordRJ;
 
 // FUNCTION: LEGO1 0x10026e00
 MxResult LegoPlantManager::Tickle()
