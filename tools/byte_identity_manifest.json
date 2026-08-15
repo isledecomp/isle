@@ -3354,6 +3354,77 @@
     "reason": "Closes 1 row(s) in LEGO1/omni/src/notify/mxnotificationmanager.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/stream/mxstreamcontroller.cpp",
+   "source_sha256": "a68d44d75c62409d19ab3d398cd9524dd3c6e0548b83321016f8554e7f4e07e6",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_135bff217f9e",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 3,
+      "functions": 30,
+      "generated_header_sha256": "135bff217f9eebb59af2e507aae82cdcba07f097da4ffe25faca7a89d5de4a40",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?FUN_100c1a00@MxStreamController@@QAEJPAVMxDSAction@@I@Z",
+     "expected_body_length": 446,
+     "expected_body_sha256": "a573f5af0f44525a4ab2ed0143306e5ff0f0d29bdc097ae9f72ea9b5696be25f",
+     "expected_changed_offsets": [
+      62,
+      66,
+      69,
+      72,
+      78
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       424,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36
+     ],
+     "donor": "d_135bff217f9e"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row(s) in LEGO1/omni/src/stream/mxstreamcontroller.cpp from generated carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -3428,8 +3499,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4815,
-    "accepted_row_identity_sha256": "1cdd6131458d73a15d93ca9d5c565e5e231551a9794b2dd38dc3f17ca0f7d094",
+    "exact_raw_1_0_count": 4816,
+    "accepted_row_identity_sha256": "fa306e059be8edfb8d798765009e74c50ab952e9bf46b18df75a83386bbf29db",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
