@@ -110,10 +110,20 @@ class EntropyTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     entropy.generate_forward_run(prefix, count, width)
 
+    def test_extern_run_is_deterministic_and_declaration_only(self):
+        first = entropy.generate_extern_run("g_p", 17, 2)
+        self.assertEqual(entropy.generate_extern_run("g_p", 17, 2), first)
+        for line in first.splitlines():
+            self.assertRegex(line, r"^extern int [A-Za-z_][A-Za-z0-9_]*\d+;$")
+        with self.assertRaises(ValueError):
+            entropy.generate_extern_run("", 1, 1)
+        with self.assertRaises(ValueError):
+            entropy.generate_extern_run("g_p", 1000, 3)
+
     def test_legacy_generator_and_cli_surface_are_absent(self):
         self.assertEqual(
             {name for name in vars(entropy) if not name.startswith("_")},
-            {"generate_shape", "generate_forward_run"},
+            {"generate_shape", "generate_forward_run", "generate_extern_run"},
         )
         for name in (
             "atomic_write",

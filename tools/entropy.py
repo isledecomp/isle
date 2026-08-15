@@ -30,6 +30,27 @@ def generate_forward_run(prefix: str, count: int, width: int) -> str:
     )
 
 
+def generate_extern_run(prefix: str, count: int, width: int) -> str:
+    """Return a deterministic run of extern int object declarations.
+
+    An extern declaration of a never-defined, never-referenced object
+    allocates a compiler symbol record and emits nothing: no code, data,
+    strings, vtables, or linker directives.  This is the historical
+    seat-unit carrier form (`extern int g_p<i>;`).
+    """
+    if not (prefix and prefix[0].isalpha()
+            and all(c.isalnum() or c == "_" for c in prefix)):
+        raise ValueError("extern run prefix must be an identifier stem")
+    if not 1 <= count <= 999:
+        raise ValueError("extern run count must be in [1, 999]")
+    if not 1 <= width <= 3 or count > 10 ** width:
+        raise ValueError("extern run width cannot represent the count")
+    return "".join(
+        f"extern int {prefix}{number:0{width}d};\n"
+        for number in range(count)
+    )
+
+
 def generate_shape(classes: int, functions: int) -> str:
     """Return a deterministic, declaration-only compiler-state shape.
 
