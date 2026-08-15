@@ -8067,30 +8067,10 @@ def validate_manifest(
             kind = recipe.get("kind")
             if mode == "compose_equal_body_comdat":
                 require(
-                    kind == "forward_declaration_run",
-                    f"{donor_context}: equal-body donors require "
-                    "forward_declaration_run",
+                    kind in ("forward_declaration_run", "declaration_shape"),
+                    f"{donor_context}: equal-body donors require a "
+                    "generated declaration recipe",
                 )
-                exact_keys(
-                    recipe,
-                    {
-                        "kind", "placement", "prefix", "count", "width",
-                        "generated_header_sha256", "compile_lane",
-                        "emission_policy", "authenticity_rationale",
-                    },
-                    f"{donor_context}.recipe",
-                )
-                require(recipe.get("placement") in ("prefix", "force_include"),
-                        f"{donor_context}.placement is invalid")
-                run_prefix = recipe.get("prefix")
-                run_count = recipe.get("count")
-                run_width = recipe.get("width")
-                require(isinstance(run_prefix, str)
-                        and isinstance(run_count, int)
-                        and not isinstance(run_count, bool)
-                        and isinstance(run_width, int)
-                        and not isinstance(run_width, bool),
-                        f"{donor_context} forward-run parameters are invalid")
                 lane = recipe.get("compile_lane")
                 require(
                     isinstance(lane, dict)
@@ -8099,14 +8079,61 @@ def validate_manifest(
                     and lane["required_define"],
                     f"{donor_context}.compile_lane must select by a define",
                 )
-                try:
-                    generated = entropy_generator.generate_forward_run(
-                        run_prefix, run_count, run_width
+                if kind == "forward_declaration_run":
+                    exact_keys(
+                        recipe,
+                        {
+                            "kind", "placement", "prefix", "count", "width",
+                            "generated_header_sha256", "compile_lane",
+                            "emission_policy", "authenticity_rationale",
+                        },
+                        f"{donor_context}.recipe",
+                    )
+                    require(
+                        recipe.get("placement") in ("prefix",
+                                                    "force_include"),
+                        f"{donor_context}.placement is invalid")
+                    run_prefix = recipe.get("prefix")
+                    run_count = recipe.get("count")
+                    run_width = recipe.get("width")
+                    require(isinstance(run_prefix, str)
+                            and isinstance(run_count, int)
+                            and not isinstance(run_count, bool)
+                            and isinstance(run_width, int)
+                            and not isinstance(run_width, bool),
+                            f"{donor_context} forward-run parameters "
+                            "are invalid")
+                    try:
+                        generated = entropy_generator.generate_forward_run(
+                            run_prefix, run_count, run_width
+                        ).encode("utf-8")
+                    except ValueError as error:
+                        raise ByteIdentityError(
+                            f"{donor_context} forward-run parameters: {error}"
+                        ) from error
+                else:
+                    exact_keys(
+                        recipe,
+                        {
+                            "kind", "classes", "functions",
+                            "generated_header_sha256", "compile_lane",
+                            "emission_policy", "authenticity_rationale",
+                        },
+                        f"{donor_context}.recipe",
+                    )
+                    classes = recipe.get("classes")
+                    functions_count = recipe.get("functions")
+                    require(isinstance(classes, int)
+                            and not isinstance(classes, bool)
+                            and 1 <= classes <= 10,
+                            f"{donor_context}.classes is invalid")
+                    require(isinstance(functions_count, int)
+                            and not isinstance(functions_count, bool)
+                            and classes <= functions_count <= 10 * classes,
+                            f"{donor_context}.functions is invalid")
+                    generated = entropy_generator.generate_shape(
+                        classes, functions_count
                     ).encode("utf-8")
-                except ValueError as error:
-                    raise ByteIdentityError(
-                        f"{donor_context} forward-run parameters: {error}"
-                    ) from error
             else:
                 require(
                     kind == "declaration_shape",
@@ -8187,6 +8214,7 @@ def validate_manifest(
             "mangled", "donor", "splice_class", "expected_body_length",
             "expected_body_sha256", "expected_changed_offsets",
             "expected_code_renames", "expected_xdata_rename_offsets",
+            "expected_relocation_moves",
         }
         for function_index, function in enumerate(functions):
             function_context = f"{context}.functions[{function_index}]"
@@ -8205,12 +8233,18 @@ def validate_manifest(
                 function_recipe_ids.add(donor_id)
                 splice_class = function.get("splice_class")
                 require(splice_class in ("equal_body_strict",
-                                         "equal_body_eh_structural_local"),
+                                         "equal_body_eh_structural_local",
+                                         "equal_body_eh_reloc_layout"),
                         f"{function_context}: unsupported splice class")
                 required_keys = set(equal_body_function_keys)
                 if splice_class == "equal_body_strict":
                     required_keys -= {"expected_code_renames",
-                                      "expected_xdata_rename_offsets"}
+                                      "expected_xdata_rename_offsets",
+                                      "expected_relocation_moves"}
+                elif splice_class == "equal_body_eh_structural_local":
+                    required_keys -= {"expected_relocation_moves"}
+                else:
+                    required_keys -= {"expected_code_renames"}
                 exact_keys(function, required_keys, function_context)
                 length = function.get("expected_body_length")
                 require(isinstance(length, int) and not isinstance(length, bool)
@@ -8236,6 +8270,21 @@ def validate_manifest(
                                 for item in renames),
                         f"{function_context}.expected_code_renames is invalid",
                     )
+                if splice_class == "equal_body_eh_reloc_layout":
+                    moves = function.get("expected_relocation_moves")
+                    require(
+                        isinstance(moves, list) and moves
+                        and all(isinstance(item, list) and len(item) == 2
+                                and all(isinstance(v, int)
+                                        and not isinstance(v, bool)
+                                        and 0 <= v < length
+                                        for v in item)
+                                for item in moves),
+                        f"{function_context}.expected_relocation_moves "
+                        "is invalid",
+                    )
+                if splice_class in ("equal_body_eh_structural_local",
+                                    "equal_body_eh_reloc_layout"):
                     xdata_offsets = function.get("expected_xdata_rename_offsets")
                     require(
                         isinstance(xdata_offsets, list)
@@ -10408,6 +10457,32 @@ def compose_equal_body_comdat(
     require(closure == _comdat_child_closure(donor, donor_primary),
             "target COMDAT child closure differs")
 
+    relocation_moves = []
+    if splice_class == "equal_body_eh_reloc_layout":
+        # The donor reschedules instructions, moving relocated operands.
+        # Pair the tables by ordinal, require identical types and
+        # structurally identical targets, and record the offset moves; the
+        # seed's relocation records then take the donor's operand offsets.
+        left = detailed_relocations(seed, seed_primary)
+        right = detailed_relocations(donor, donor_primary)
+        require(len(left) == len(right),
+                "reloc-layout splice: relocation counts differ")
+        for a, b in zip(left, right):
+            require(a["type"] == b["type"] and a["addend"] == b["addend"],
+                    "reloc-layout splice: relocation type/addend differs")
+            if a["target"] != b["target"]:
+                kind = local_symbol_kind(a["target"])
+                require(kind is not None
+                        and kind == local_symbol_kind(b["target"])
+                        and all(a["target_" + field] == b["target_" + field]
+                                for field in ("section", "value", "type",
+                                              "storage")),
+                        "reloc-layout splice: non-local relocation rename")
+            if a["offset"] != b["offset"]:
+                relocation_moves.append([a["offset"], b["offset"]])
+        require(relocation_moves == function["expected_relocation_moves"],
+                "reloc-layout splice: relocation move set changed")
+
     if splice_class == "equal_body_strict":
         require(closure == (2, (".debug$F", ".debug$S")),
                 "strict splice requires the FPO debug closure")
@@ -10417,7 +10492,8 @@ def compose_equal_body_comdat(
         require(renames == [], "strict splice forbids relocation renames")
         detail = {"code_renames": []}
     else:
-        require(splice_class == "equal_body_eh_structural_local",
+        require(splice_class in ("equal_body_eh_structural_local",
+                                 "equal_body_eh_reloc_layout"),
                 "unsupported equal-body splice class")
         require(closure == (2, (".debug$S", ".xdata$x")),
                 "structural-local splice requires the EH closure")
@@ -10442,45 +10518,74 @@ def compose_equal_body_comdat(
             == function["expected_xdata_rename_offsets"],
             "xdata local-relocation rename set changed",
         )
-        code_renames = _normalized_relocation_renames(
-            seed, seed_primary, donor, donor_primary, "code"
-        )
-        require(
-            [[offset, kind] for offset, kind in code_renames]
-            == function["expected_code_renames"],
-            "code local-relocation rename set changed",
-        )
-        relocation_mask = {
-            record["offset"] + byte
-            for record in detailed_relocations(donor, donor_primary)
-            for byte in range(record["width"])
-        }
-        require(all(offset not in relocation_mask for offset in changed),
-                "donor changes a relocated operand")
-        detail = {
-            "code_renames": code_renames,
-            "xdata_rename_offsets": [o for o, _ in xdata_renames],
-        }
+        if splice_class == "equal_body_eh_structural_local":
+            code_renames = _normalized_relocation_renames(
+                seed, seed_primary, donor, donor_primary, "code"
+            )
+            require(
+                [[offset, kind] for offset, kind in code_renames]
+                == function["expected_code_renames"],
+                "code local-relocation rename set changed",
+            )
+            relocation_mask = {
+                record["offset"] + byte
+                for record in detailed_relocations(donor, donor_primary)
+                for byte in range(record["width"])
+            }
+            require(all(offset not in relocation_mask for offset in changed),
+                    "donor changes a relocated operand")
+            detail = {
+                "code_renames": code_renames,
+                "xdata_rename_offsets": [o for o, _ in xdata_renames],
+            }
+        else:
+            detail = {
+                "relocation_moves": relocation_moves,
+                "xdata_rename_offsets": [o for o, _ in xdata_renames],
+            }
 
     composed = bytearray(seed_bytes)
     start = seed_primary["raw_offset"]
     composed[start:start + seed_primary["raw_size"]] = donor_body
+    if relocation_moves:
+        donor_offsets = [
+            record["offset"]
+            for record in detailed_relocations(donor, donor_primary)
+        ]
+        for ordinal, offset in enumerate(donor_offsets):
+            record_at = seed_primary["relocation_offset"] + ordinal * 10
+            composed[record_at:record_at + 4] = offset.to_bytes(4, "little")
     composed = bytes(composed)
 
     checked = CoffObject(composed)
     checked_primary = checked.function_section(mangled)
     require(coff_body(checked, checked_primary) == donor_body,
             "composed body differs from the donor")
-    require(
-        detailed_relocations(checked, checked_primary)
-        == detailed_relocations(seed, seed_primary),
-        "composed relocations differ from the seed",
-    )
+    checked_relocations = detailed_relocations(checked, checked_primary)
+    seed_relocations = detailed_relocations(seed, seed_primary)
+    if relocation_moves:
+        donor_relocations = detailed_relocations(donor, donor_primary)
+        require(
+            [(r["offset"], r["type"], r["addend"], r["symbol_index"])
+             for r in checked_relocations]
+            == [(d["offset"], d["type"], d["addend"], s["symbol_index"])
+                for d, s in zip(donor_relocations, seed_relocations)],
+            "composed relocations differ from the donor layout",
+        )
+    else:
+        require(checked_relocations == seed_relocations,
+                "composed relocations differ from the seed")
     changed_offsets = [
         index for index, pair in enumerate(zip(seed_bytes, composed))
         if pair[0] != pair[1]
     ]
     allowed = set(range(start, start + seed_primary["raw_size"]))
+    if relocation_moves:
+        allowed |= {
+            seed_primary["relocation_offset"] + ordinal * 10 + byte
+            for ordinal in range(seed_primary["relocation_count"])
+            for byte in range(4)
+        }
     require(set(changed_offsets) <= allowed,
             "composition changed bytes outside the selected body")
     return composed, {

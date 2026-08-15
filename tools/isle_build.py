@@ -627,12 +627,19 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
         else:
             for donor in unit["donors"]:
                 recipe = donor["recipe"]
-                run_bytes = entropy.generate_forward_run(
-                    recipe["prefix"], recipe["count"], recipe["width"]
-                ).encode("utf-8")
+                if recipe["kind"] == "declaration_shape":
+                    run_bytes = entropy.generate_shape(
+                        recipe["classes"], recipe["functions"]
+                    ).encode("utf-8")
+                    placement = "force_include"
+                else:
+                    run_bytes = entropy.generate_forward_run(
+                        recipe["prefix"], recipe["count"], recipe["width"]
+                    ).encode("utf-8")
+                    placement = recipe["placement"]
                 run_sha = hashlib.sha256(run_bytes).hexdigest()
                 if run_sha != recipe["generated_header_sha256"]:
-                    fail(f"donor forward run rendering differs: "
+                    fail(f"donor carrier rendering differs: "
                          f"{unit['source']}")
                 define = recipe["compile_lane"]["required_define"]
                 lane_entry = lane(
@@ -646,7 +653,7 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                 probe = build.parent / "donors" / donor["id"]
                 probe.mkdir(parents=True, exist_ok=True)
                 shadow_bytes = source.read_bytes()
-                if recipe["placement"] == "prefix":
+                if placement == "prefix":
                     (probe / "s.cpp").write_bytes(run_bytes + shadow_bytes)
                     force_include = []
                 else:

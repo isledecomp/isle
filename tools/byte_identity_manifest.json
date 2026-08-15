@@ -849,6 +849,106 @@
     "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/paths/legopathactor.cpp",
+   "source_sha256": "692b1eba7ba74c81c553e68862f29b4620a5afedaae65c1489a2193be60bf3f2",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_3856333840b7",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 9,
+      "functions": 88,
+      "generated_header_sha256": "3856333840b7d1b6296472f1fd5f28567411c458942859f199469cab0bdb134c",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?CheckIntersections@LegoPathActor@@UAEHAAVVector3@@00@Z",
+     "splice_class": "equal_body_eh_reloc_layout",
+     "expected_body_length": 485,
+     "expected_body_sha256": "610f8d81b83a0dd850669571d972350ddb51379b4de3bc7ef21b64f1491689ff",
+     "expected_changed_offsets": [
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      91,
+      94,
+      243,
+      244,
+      245,
+      246,
+      248,
+      249,
+      250,
+      251,
+      252,
+      254,
+      255,
+      256,
+      257,
+      258,
+      259,
+      260,
+      261,
+      262,
+      263,
+      264,
+      265,
+      357,
+      372,
+      377
+     ],
+     "expected_relocation_moves": [
+      [
+       48,
+       44
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44
+     ],
+     "donor": "d_3856333840b7"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes LegoPathActor::CheckIntersections 0x1002ebe0 from a generated declaration-shape carrier state over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -923,8 +1023,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4772,
-    "accepted_row_identity_sha256": "9a3914b42b45bcd9070e740589c2c7411d3b8bbcb8471413427b542df25fbcd5",
+    "exact_raw_1_0_count": 4773,
+    "accepted_row_identity_sha256": "e58e8f8ec0c3974558534b79436037a217ee8ff4cd32824b24f09f51e9a738d2",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
