@@ -24,6 +24,7 @@ import os
 import shutil
 import subprocess
 import sys
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -420,7 +421,11 @@ def main() -> int:
     parser.add_argument("--compiler", type=Path, required=True)
     parser.add_argument("--manifest", type=Path,
                         default=ROOT / "tools/byte_identity_manifest.json")
-    parser.add_argument("--jobs", type=int, default=4)
+    # Per-object compiler PDBs (ISLE_PER_OBJECT_PDB) make parallel VC4.2
+    # compiles safe; 8 wine children measured fastest on an 8+-core host and
+    # the fail-closed row/MD5 gates hold at every parallelism level.
+    parser.add_argument("--jobs", type=int,
+                        default=min(8, os.cpu_count() or 4))
     parser.add_argument("--terminal", action="store_true",
                         help="require complete rows and the retail MD5s")
     parser.add_argument("--md5-distance", action="store_true",
@@ -586,8 +591,14 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
         image["target"]: image["recompiled"]
         for image in manifest.get("images", {}).values()
     }
-    relink_targets = set()
-    for unit in units:
+
+    def compose_unit(unit: dict) -> tuple[str | None, str | None]:
+        """Compose one listed TU; returns (relink target, report line).
+
+        Each unit owns its own seed object, per-object PDB, probe
+        directories, logs and marker, so units are independent of one
+        another and safe to run concurrently.
+        """
         source = (shadow / unit["source"]).resolve()
         entries = commands.get(source)
         if not entries:
@@ -620,11 +631,11 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
         if marker.exists():
             state = json.loads(marker.read_text())
             if state.get("composed_sha") == seed_sha:
-                continue
+                return None, None
         # The object on disk is not attested as this unit's fresh seed (it
         # may hold a previous composition), so recompile it in place first.
         run(child, cwd=cwd, env=build_environment(compiler),
-            log=build.parent / "seed-compile.log")
+            log=build.parent / f"{marker.stem}-seed.log")
         seed_bytes = seed_object.read_bytes()
         seed_sha = hashlib.sha256(seed_bytes).hexdigest()
 
@@ -641,10 +652,10 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                 "seed_sha": seed_sha,
                 "composed_sha": hashlib.sha256(composed).hexdigest(),
             }, indent=1) + "\n")
-            print(f"[isle_build] swapped COMDAT group order in "
-                  f"{unit['target']}:{unit['source']}")
-            relink_targets.add(unit["target"])
-            continue
+            return unit["target"], (
+                f"[isle_build] swapped COMDAT group order in "
+                f"{unit['target']}:{unit['source']}"
+            )
         if unit["mode"] == "compose_equal_linked_span_fpo":
             donor = unit["donors"][0]
             recipe = donor["recipe"]
@@ -658,7 +669,13 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                       / f"declaration_{header_sha}.h")
             header.parent.mkdir(parents=True, exist_ok=True)
             if not header.exists() or header.read_bytes() != header_bytes:
-                header.write_bytes(header_bytes)
+                # The name is the content sha, so concurrent writers hold
+                # identical bytes; stage + rename keeps readers whole.
+                staging = header.with_name(
+                    f"{header.name}.{os.getpid()}-{threading.get_ident()}"
+                )
+                staging.write_bytes(header_bytes)
+                staging.replace(header)
             donor_command = list(child)
             donor_command.insert(parsed["Fo"][0], f"/FI{header}")
             # Compile the donor with identical /Fo /Fd: hold the seed aside.
@@ -666,7 +683,7 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                               if seed_pdb.is_file() else None)
             try:
                 run(donor_command, cwd=cwd, env=build_environment(compiler),
-                    log=build.parent / "donor-compile.log")
+                    log=build.parent / f"{marker.stem}-donor.log")
                 donor_objects[donor["id"]] = seed_object.read_bytes()
             finally:
                 seed_object.write_bytes(seed_bytes)
@@ -705,7 +722,10 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                 lane_parsed = byte_identity.validate_compile_arguments(
                     lane_child
                 )
-                probe = build.parent / "donors" / donor["id"]
+                # Donor ids repeat across units, so the probe directory is
+                # namespaced by unit to keep concurrent units independent.
+                probe = (build.parent / "donors"
+                         / f"{marker.stem}-{donor['id']}")
                 probe.mkdir(parents=True, exist_ok=True)
                 shadow_bytes = source.read_bytes()
                 if placement == "prefix":
@@ -739,7 +759,7 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                     donor_command.append(token)
                 run(donor_command, cwd=probe,
                     env=build_environment(compiler),
-                    log=build.parent / "donor-compile.log")
+                    log=build.parent / f"{marker.stem}-{donor['id']}.log")
                 donor_objects[donor["id"]] = (probe / "o.obj").read_bytes()
             composed = seed_bytes
             for function in unit["functions"]:
@@ -761,9 +781,29 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
             "seed_sha": seed_sha,
             "composed_sha": hashlib.sha256(composed).hexdigest(),
         }, indent=1) + "\n")
-        print(f"[isle_build] composed {len(unit['functions'])} function(s) "
-              f"into {unit['target']}:{unit['source']}")
-        relink_targets.add(unit["target"])
+        return unit["target"], (
+            f"[isle_build] composed {len(unit['functions'])} function(s) "
+            f"into {unit['target']}:{unit['source']}"
+        )
+
+    relink_targets = set()
+    # Units are independent (own objects, PDBs, probes, markers), so the
+    # donor/seed compiles run through a small pool; the relink stays serial.
+    with ThreadPoolExecutor(
+        max_workers=max(1, min(jobs, len(units)))
+    ) as pool:
+        futures = [pool.submit(compose_unit, unit) for unit in units]
+        try:
+            for future in futures:
+                target, message = future.result()
+                if message:
+                    print(message)
+                if target:
+                    relink_targets.add(target)
+        except BaseException:
+            for pending in futures:
+                pending.cancel()
+            raise
     # A composed library-member target relinks its library and the LEGO1
     # image that consumes it.
     if any(target not in image_by_target for target in relink_targets):
