@@ -1022,58 +1022,6 @@
    }
   },
   {
-   "target": "lego1",
-   "source": "LEGO1/lego/legoomni/src/actors/act3actors.cpp",
-   "source_sha256": "630187aa5185a4457950b90d0c3be8aca962967a47b2d20d94fa8ae0bedef4ba",
-   "mode": "compose_equal_body_comdat",
-   "command_policy": {
-    "required_flags": [
-     "/Zi",
-     "-c"
-    ],
-    "forbidden_prefixes": [
-     "/GL",
-     "-GL",
-     "/Z7",
-     "-Z7"
-    ]
-   },
-   "donors": [
-    {
-     "id": "d_0dacb1141cf1",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "declaration_shape",
-      "classes": 2,
-      "functions": 5,
-      "generated_header_sha256": "0dacb1141cf12d9e39861109e2822b10e5645f3c4645ce7ef1bbe6b5469384e8",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    }
-   ],
-   "functions": [
-    {
-     "mangled": "?FUN_10042300@Act3Brickster@@AAEHXZ",
-     "splice_class": "same_slot_resize",
-     "expected_seed_length": 1670,
-     "expected_donor_length": 1673,
-     "expected_linked_span": 1680,
-     "expected_body_sha256": "e4c69259d60ae1577bf9d0a8e7662b54659f03f433f623c202cb449bc4e49b84",
-     "donor": "d_0dacb1141cf1"
-    }
-   ],
-   "completion": {
-    "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes Act3Brickster::FUN_10042300 0x10042300 with a same-slot resize splice from a generated declaration-shape carrier state.",
-    "may_replace_compiler_output": true
-   }
-  },
-  {
    "target": "config",
    "source": "CONFIG/config.cpp",
    "source_sha256": "266d94cf3e3c26e7d0c9f21588fdf0b32bdf9a5f3c27e671aba7dd6f3e87ebba",
@@ -3589,6 +3537,122 @@
     "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/worlds/gasstation.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/actors/act3actors.cpp",
+   "source_sha256": "d36f594e2e7a9cf59d31f0607e14989bc6a2b3f9cd3333257c8f790710ca5f96",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_b1bca8d999d4",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 6,
+      "functions": 60,
+      "generated_header_sha256": "b1bca8d999d475d179430411bb44094bd978d8beadfa209e7df897a03732f8fb",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_0bedea41e1e7",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "prefix",
+      "prefix": "MxUnkRecVA",
+      "count": 90,
+      "width": 3,
+      "generated_header_sha256": "0bedea41e1e7836615f5b1240cadb91e596a5a947d507521e3d90a5ca5550901",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?FUN_10042300@Act3Brickster@@AAEHXZ",
+     "expected_body_sha256": "e4c69259d60ae1577bf9d0a8e7662b54659f03f433f623c202cb449bc4e49b84",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1670,
+     "expected_donor_length": 1673,
+     "expected_linked_span": 1680,
+     "donor": "d_b1bca8d999d4"
+    },
+    {
+     "mangled": "?StepState@Act3Actor@@UAEIMAAVMatrix4@@@Z",
+     "expected_body_length": 540,
+     "expected_body_sha256": "88114272713b6ac12a9f250bf7767dc7278eb88799e9eb63f5c8b5e6cf60dd35",
+     "expected_changed_offsets": [
+      274,
+      286,
+      314,
+      320,
+      331,
+      337
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       38,
+       "L"
+      ],
+      [
+       239,
+       "T"
+      ],
+      [
+       277,
+       "T"
+      ],
+      [
+       524,
+       "L"
+      ],
+      [
+       528,
+       "L"
+      ],
+      [
+       532,
+       "L"
+      ],
+      [
+       536,
+       "L"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_0bedea41e1e7"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/actors/act3actors.cpp from generated carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -4611,9 +4675,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/actors/act3actors.cpp",
-    "clean": "630187aa5185a4457950b90d0c3be8aca962967a47b2d20d94fa8ae0bedef4ba",
-    "effective": "a219b734c806c650bd866f379307db23142b396e240c30bde181c09ffcbd7991",
-    "size": 28085,
+    "clean": "d36f594e2e7a9cf59d31f0607e14989bc6a2b3f9cd3333257c8f790710ca5f96",
+    "effective": "124e76b7db51db23ec9a896554d19644fef83db4e1ace912be8b76212c83df6d",
+    "size": 28106,
     "ops": [
      {
       "op": "insert",
@@ -4830,7 +4894,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "51f8e9501c79e95436207c7033e3816f04c03d827ea1f4c4a52809df6279ae6e",
+       "ctx": "7b52092b1d065e31b8c9d98dc378a6919063eb95fbd9eacd9b02d75a8fab9d4f",
        "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
        "line_after": "c904567cba50ab902d461866024788871edc3b59509cf28c500947b085954484"
       },
