@@ -71,10 +71,49 @@ class EntropyTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     entropy.generate_shape(classes, functions)
 
+    def test_forward_run_matches_exact_authenticated_bytes(self):
+        expected = b"".join(
+            b"class Zq%02d;\n" % number for number in range(13)
+        )
+        actual = entropy.generate_forward_run("Zq", 13, 2).encode("utf-8")
+        self.assertEqual(actual, expected)
+        self.assertEqual(
+            digest(actual),
+            "51fbda28b802be9f2b7ca3ea2d04830811034a677df18eba799443c021d2d394",
+        )
+        self.assertEqual(
+            digest(entropy.generate_forward_run(
+                "MxUnkRecVA", 57, 3).encode("utf-8")),
+            "c081b11da0c6102c839a9ae7c34b4b342ab634b2f9aed182e9b18ceab539f759",
+        )
+
+    def test_forward_run_is_deterministic_and_declaration_only(self):
+        first = entropy.generate_forward_run("MxUnkRecVA", 57, 3)
+        self.assertEqual(entropy.generate_forward_run("MxUnkRecVA", 57, 3),
+                         first)
+        for line in first.splitlines():
+            self.assertRegex(line, r"^class [A-Za-z][A-Za-z0-9]*\d+;$")
+
+    def test_forward_run_rejects_invalid_parameters(self):
+        invalid = (
+            ("", 1, 1),
+            ("9bad", 1, 1),
+            ("Has Space", 1, 1),
+            ("Zq", 0, 2),
+            ("Zq", 1000, 3),
+            ("Zq", 1, 0),
+            ("Zq", 1, 4),
+            ("Zq", 101, 2),
+        )
+        for prefix, count, width in invalid:
+            with self.subTest(prefix=prefix, count=count, width=width):
+                with self.assertRaises(ValueError):
+                    entropy.generate_forward_run(prefix, count, width)
+
     def test_legacy_generator_and_cli_surface_are_absent(self):
         self.assertEqual(
             {name for name in vars(entropy) if not name.startswith("_")},
-            {"generate_shape"},
+            {"generate_shape", "generate_forward_run"},
         )
         for name in (
             "atomic_write",
