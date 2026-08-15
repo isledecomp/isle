@@ -10974,7 +10974,8 @@ def compose_equal_body_comdat(
         require(splice_class in ("equal_body_eh_structural_local",
                                  "equal_body_eh_reloc_layout"),
                 "unsupported equal-body splice class")
-        fpo_closure = closure == (2, (".debug$F", ".debug$S"))
+        fpo_closure = closure in ((2, (".debug$F", ".debug$S")),
+                                  (1, (".debug$S",)))
         require(
             closure == (2, (".debug$S", ".xdata$x")) or fpo_closure,
             "splice closure kind is unsupported for this class",
