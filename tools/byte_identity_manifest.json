@@ -3425,6 +3425,78 @@
     "reason": "Closes 1 row(s) in LEGO1/omni/src/stream/mxstreamcontroller.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "viewmanager",
+   "source": "LEGO1/viewmanager/viewmanager.cpp",
+   "source_sha256": "61d70c384293c2b302f9708c62681201c9133b47a86d685750da66cbad3ec2d5",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_6a529ee42428",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 5,
+      "generated_header_sha256": "6a529ee42428a533a29271f0e2d7cebf4ef0898dbd6d3e746c919f92c419d645",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?IsBoundingBoxInFrustum@ViewManager@@QAEIABVBoundingBox@@@Z",
+     "expected_body_length": 173,
+     "expected_body_sha256": "0610aef1b0e7d5c72709c00b85d3e33e50abaa6beb5c021f7fb2e3f0c9cbb29d",
+     "expected_changed_offsets": [
+      83,
+      85,
+      89,
+      95,
+      105,
+      121,
+      123,
+      129,
+      133
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       33,
+       "S"
+      ],
+      [
+       70,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_6a529ee42428"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row(s) in LEGO1/viewmanager/viewmanager.cpp from generated carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -3499,8 +3571,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4816,
-    "accepted_row_identity_sha256": "fa306e059be8edfb8d798765009e74c50ab952e9bf46b18df75a83386bbf29db",
+    "exact_raw_1_0_count": 4817,
+    "accepted_row_identity_sha256": "4975cbbd3865b92786f11964d6cc908be35e23b00691f240e713ad9464397b20",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",

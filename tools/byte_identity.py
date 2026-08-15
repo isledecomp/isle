@@ -8176,7 +8176,7 @@ def validate_manifest(
                         isinstance(renames, list)
                         and all(isinstance(item, list) and len(item) == 2
                                 and isinstance(item[0], int)
-                                and item[1] in ("L", "T")
+                                and item[1] in ("L", "T", "S")
                                 for item in renames),
                         f"{function_context}.expected_code_renames is invalid",
                     )
@@ -10308,8 +10308,22 @@ def _normalized_relocation_renames(
         if a["target"] == b["target"]:
             continue
         kind = local_symbol_kind(a["target"])
+        if kind is None:
+            # function-static data: <base>$S<serial> renumbered by state
+            left_base, _, left_serial = a["target"].rpartition("$S")
+            right_base, _, right_serial = b["target"].rpartition("$S")
+            require(
+                left_base and left_base == right_base
+                and left_serial.isdigit() and right_serial.isdigit()
+                and a["target_type"] == b["target_type"]
+                and a["target_storage"] == b["target_storage"],
+                f"{context}: non-local relocation rename "
+                f"{a['target']!r} -> {b['target']!r}",
+            )
+            renames.append((a["offset"], "S"))
+            continue
         require(
-            kind is not None and kind == local_symbol_kind(b["target"]),
+            kind == local_symbol_kind(b["target"]),
             f"{context}: non-local relocation rename "
             f"{a['target']!r} -> {b['target']!r}",
         )
