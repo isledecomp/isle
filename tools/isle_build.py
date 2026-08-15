@@ -273,7 +273,7 @@ def build_environment(compiler: Path) -> dict:
 
 
 def configure(build: Path, shadow: Path, plan: Path, compiler: Path,
-              jobs: int) -> None:
+              jobs: int, extra: list[str] | None = None) -> None:
     cache = build / "CMakeCache.txt"
     if cache.exists() and (build / "Makefile").exists():
         return
@@ -288,7 +288,90 @@ def configure(build: Path, shadow: Path, plan: Path, compiler: Path,
         "-DCMAKE_RC_COMPILER=rc",
         f"-DISLE_BYTE_IDENTITY_PLAN={plan}",
         "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        *(extra or []),
     ], env=build_environment(compiler), log=build / "configure.log")
+
+
+def stamp_link_time(data: bytes, link_time: int,
+                    resource_time: int) -> bytes:
+    """Set the PE header, export directory, and resource directory
+    timestamps to the manifest-pinned retail values.  These four-byte
+    fields are the recorded 1997 build facts; every other byte is
+    untouched."""
+    stamped = bytearray(data)
+    pe = int.from_bytes(data[0x3C:0x40], "little")
+    stamped[pe + 8:pe + 12] = link_time.to_bytes(4, "little")
+    for offset in byte_identity.pe_resource_directory_offsets(data):
+        stamped[offset + 4:offset + 8] = resource_time.to_bytes(4, "little")
+    optional = pe + 24
+    export_rva = int.from_bytes(data[optional + 96:optional + 100], "little")
+    if export_rva:
+        section_count = int.from_bytes(data[pe + 6:pe + 8], "little")
+        optional_size = int.from_bytes(data[pe + 20:pe + 22], "little")
+        table = optional + optional_size
+        for index in range(section_count):
+            header = table + index * 40
+            virtual, raw_size, raw_offset = (
+                int.from_bytes(data[header + 12:header + 16], "little"),
+                int.from_bytes(data[header + 16:header + 20], "little"),
+                int.from_bytes(data[header + 20:header + 24], "little"),
+            )
+            if virtual <= export_rva < virtual + raw_size:
+                offset = raw_offset + export_rva - virtual
+                stamped[offset + 4:offset + 8] = link_time.to_bytes(
+                    4, "little")
+                break
+    return bytes(stamped)
+
+
+def terminal_lane(manifest: dict, gates: dict, build_root: Path,
+                  shadow: Path, plan: Path, compiler: Path, jobs: int,
+                  require_md5: bool) -> dict:
+    """Configure and link the no-/debug terminal images, stamp the pinned
+    retail link times, and report per-image MD5 and byte distance."""
+    terminal_build = build_root / "terminal"
+    terminal_build.mkdir(parents=True, exist_ok=True)
+    configure(terminal_build, shadow, plan, compiler, jobs,
+              extra=["-DISLE_BYTE_IDENTITY_TERMINAL=TRUE"])
+    targets = [gates[identity]["target"] for identity in gates]
+    run(["cmake", "--build", str(terminal_build), "--target", *targets,
+         "-j", str(jobs)],
+        env=build_environment(compiler),
+        log=build_root / "terminal-build.log")
+    compose_translation_units(manifest, terminal_build, shadow, compiler,
+                              jobs)
+    results = {}
+    for identity, gate in gates.items():
+        image = terminal_build / gate["recompiled"]
+        if not image.is_file():
+            fail(f"terminal {gate['recompiled']} was not produced")
+        stamped = stamp_link_time(image.read_bytes(), gate["link_time"],
+                                  gate["resource_time"])
+        stamped_path = terminal_build / f"stamped-{gate['recompiled']}"
+        stamped_path.write_bytes(stamped)
+        original = (ROOT / gate["original"]).read_bytes()
+        md5 = hashlib.md5(stamped).hexdigest()
+        identical = md5 == gate["original_md5"]
+        if len(stamped) == len(original):
+            distance = sum(1 for a, b in zip(stamped, original) if a != b)
+            size_note = ""
+        else:
+            distance = None
+            size_note = f" size {len(stamped)} vs retail {len(original)}"
+        results[identity] = {
+            "md5": md5,
+            "retail_md5": gate["original_md5"],
+            "identical": identical,
+            "byte_distance": distance,
+            "size": len(stamped),
+            "retail_size": len(original),
+        }
+        state = ("IDENTICAL" if identical
+                 else f"distance {distance}{size_note}")
+        print(f"[isle_build] terminal {identity}: {state}")
+        if require_md5 and not identical:
+            fail(f"terminal {identity} MD5 differs from retail: {md5}")
+    return results
 
 
 def gains_losses(report: dict, baseline_path: Path | None) -> str:
@@ -324,7 +407,10 @@ def main() -> int:
                         default=ROOT / "tools/byte_identity_manifest.json")
     parser.add_argument("--jobs", type=int, default=4)
     parser.add_argument("--terminal", action="store_true",
-                        help="require 4933/4933 and the retail MD5")
+                        help="require complete rows and the retail MD5s")
+    parser.add_argument("--md5-distance", action="store_true",
+                        help="also link the no-/debug terminal images and "
+                             "report byte distance to retail (no MD5 gate)")
     parser.add_argument("--baseline-report", type=Path,
                         default=Path("/tmp/lego1-4816-full.json"))
     arguments = parser.parse_args()
@@ -396,9 +482,6 @@ def main() -> int:
                 result = byte_identity.validate_complete_reccmp_report(
                     report_bytes, gate
                 )
-                image_md5 = hashlib.md5(image.read_bytes()).hexdigest()
-                if image_md5 != gate["original_md5"]:
-                    fail(f"{identity} MD5 differs from retail: {image_md5}")
             else:
                 result = byte_identity.validate_iteration_reccmp_report(
                     report_bytes, gate
@@ -427,10 +510,14 @@ def main() -> int:
             "pdb_sha256": sha256_file(pdb),
             "report_sha256": hashlib.sha256(report_bytes).hexdigest(),
         }
-        if arguments.terminal:
-            verdict["images"][identity]["image_md5"] = image_md5
         summary.append(f"{identity} {result['raw_1_0_count']}"
                        f"/{result['row_count']}")
+
+    if arguments.terminal or arguments.md5_distance:
+        verdict["terminal"] = terminal_lane(
+            manifest, gates, build_root, shadow, plan, compiler,
+            arguments.jobs, require_md5=arguments.terminal,
+        )
 
     verdict["elapsed_seconds"] = round(time.monotonic() - started, 1)
     verdict_path = build_root / "verdict.json"
@@ -485,7 +572,7 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
         seed_pdb = (cwd / parsed["Fd"][1]).resolve()
         if not seed_object.is_file():
             fail(f"listed TU object is absent: {seed_object}")
-        marker = build.parent / (
+        marker = build / (
             "composed-" + unit["target"] + "-"
             + unit["source"].replace("/", "_") + ".json"
         )
@@ -603,6 +690,10 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
         print(f"[isle_build] composed {len(unit['functions'])} function(s) "
               f"into {unit['target']}:{unit['source']}")
         relink_targets.add(unit["target"])
+    # A composed library-member target relinks its library and the LEGO1
+    # image that consumes it.
+    if any(target not in image_by_target for target in relink_targets):
+        relink_targets.add("lego1")
     for target in sorted(relink_targets):
         image = build / image_by_target.get(target, "")
         if image.name and image.exists():

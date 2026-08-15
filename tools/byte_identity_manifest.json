@@ -813,7 +813,9 @@
     "require_recompiled_md5_equal_original": true,
     "require_recompiled_sha256_equal_original": true,
     "require_recompiled_address_equal_retail": true
-   }
+   },
+   "link_time": 873496219,
+   "resource_time": 873496215
   },
   "ISLE": {
    "kind": "final_image_identity_gate",
@@ -843,7 +845,9 @@
     "require_recompiled_md5_equal_original": true,
     "require_recompiled_sha256_equal_original": true,
     "require_recompiled_address_equal_retail": true
-   }
+   },
+   "link_time": 873748568,
+   "resource_time": 873748567
   },
   "CONFIG": {
    "kind": "final_image_identity_gate",
@@ -873,7 +877,9 @@
     "require_recompiled_md5_equal_original": true,
     "require_recompiled_sha256_equal_original": true,
     "require_recompiled_address_equal_retail": true
-   }
+   },
+   "link_time": 873747873,
+   "resource_time": 873747871
   }
  },
  "terminal_producers": {

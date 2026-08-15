@@ -8530,6 +8530,7 @@ def validate_manifest(
                 "original_md5", "original_size", "recompiled",
                 "reccmp_report", "reccmp_schema", "required_row_count",
                 "row_identity_sha256", "iteration_baseline", "completion",
+                "link_time", "resource_time",
             },
             context,
         )
@@ -8562,6 +8563,22 @@ def validate_manifest(
             and sha256_bytes(original_data) == original_sha256
             and md5_bytes(original_data) == original_md5,
             f"{context} retail oracle image differs from its pins",
+        )
+        # The declared link and resource times must be exactly the retail
+        # image's own fields: they are recorded 1997 build facts, never
+        # chosen values.
+        pe_offset = int.from_bytes(original_data[0x3C:0x40], "little")
+        header_time = int.from_bytes(
+            original_data[pe_offset + 8:pe_offset + 12], "little"
+        )
+        require(
+            image.get("link_time") == header_time,
+            f"{context}.link_time differs from the retail PE header",
+        )
+        resource_times = pe_resource_directory_times(original_data)
+        require(
+            resource_times == {image.get("resource_time")},
+            f"{context}.resource_time differs from the retail resource tree",
         )
         require(
             image.get("recompiled") == contract["recompiled"]
@@ -10924,6 +10941,56 @@ def compose_equal_linked_span_fpo(
         "donor_sha256": sha256_bytes(donor_bytes),
         "output_sha256": sha256_bytes(output_bytes),
         "provenance": provenance,
+    }
+
+
+def pe_resource_sections(data: bytes) -> tuple[int, int, int] | None:
+    """Return (virtual_address, raw_offset, raw_size) of .rsrc, or None."""
+    pe = int.from_bytes(data[0x3C:0x40], "little")
+    section_count = int.from_bytes(data[pe + 6:pe + 8], "little")
+    optional_size = int.from_bytes(data[pe + 20:pe + 22], "little")
+    table = pe + 24 + optional_size
+    for index in range(section_count):
+        header = table + index * 40
+        if data[header:header + 8].rstrip(b"\0") == b".rsrc":
+            virtual = int.from_bytes(data[header + 12:header + 16], "little")
+            raw_size = int.from_bytes(data[header + 16:header + 20], "little")
+            raw_offset = int.from_bytes(data[header + 20:header + 24],
+                                        "little")
+            return (virtual, raw_offset, raw_size)
+    return None
+
+
+def pe_resource_directory_offsets(data: bytes) -> list[int]:
+    """File offsets of every resource DIRECTORY record in the .rsrc tree."""
+    section = pe_resource_sections(data)
+    if section is None:
+        return []
+    _, raw_offset, _ = section
+    offsets = []
+
+    def walk(directory: int) -> None:
+        offsets.append(raw_offset + directory)
+        named = int.from_bytes(
+            data[raw_offset + directory + 12:raw_offset + directory + 14],
+            "little")
+        idents = int.from_bytes(
+            data[raw_offset + directory + 14:raw_offset + directory + 16],
+            "little")
+        for index in range(named + idents):
+            entry = raw_offset + directory + 16 + index * 8
+            value = int.from_bytes(data[entry + 4:entry + 8], "little")
+            if value & 0x80000000:
+                walk(value & 0x7FFFFFFF)
+
+    walk(0)
+    return offsets
+
+
+def pe_resource_directory_times(data: bytes) -> set[int]:
+    return {
+        int.from_bytes(data[offset + 4:offset + 8], "little")
+        for offset in pe_resource_directory_offsets(data)
     }
 
 
