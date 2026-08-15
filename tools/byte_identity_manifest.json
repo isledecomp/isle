@@ -1840,7 +1840,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/video/mxdisplaysurface.cpp",
-   "source_sha256": "da4817bafbf6510a34441e6f9c6bd9ed484811fe520cbc09ff272004180d5a69",
+   "source_sha256": "01951cdf289a4110ac626c149f7cb6dbd579496c4c0cbba560f6a5d5bab894c2",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -10946,8 +10946,8 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp",
-    "clean": "afffc8400b4f12226699e99f66e0a6bf2b7edce83aea7e4f0ac37db337fc4351",
-    "effective": "8a3dc5159e6b2a985d95ddc50f56fe590da3997f698206770c370996bb152e52",
+    "clean": "dee9583871f2e8c2591b23d944b1f5a3c9a8be15b15e894313b0a22d156f0a34",
+    "effective": "396a748df7f88d8cc297b0a1a3f95357b792f81e8ead4b5cbea644b597ca44ee",
     "size": 42154,
     "ops": [
      {
@@ -25729,9 +25729,9 @@
    },
    {
     "path": "LEGO1/omni/src/video/mxdisplaysurface.cpp",
-    "clean": "da4817bafbf6510a34441e6f9c6bd9ed484811fe520cbc09ff272004180d5a69",
-    "effective": "4cd0007e1b8fc2431cea66312b245e70113de480467972be1b8157ebf4b06511",
-    "size": 33777,
+    "clean": "01951cdf289a4110ac626c149f7cb6dbd579496c4c0cbba560f6a5d5bab894c2",
+    "effective": "b77d628e984c4939f011d4e0d56c5581694268dc6ea4c14a6bad53b0ed942f22",
+    "size": 33789,
     "ops": [
      {
       "op": "insert",

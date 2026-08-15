@@ -1710,8 +1710,8 @@ MxResult LegoNavController::ProcessKeyboardInput()
 MxLong LegoNavController::Notify(MxParam& p_param)
 {
 	if (((MxNotificationParam&) p_param).GetNotification() == c_notificationKeyPress) {
-		m_keyPressed = TRUE;
 		MxU8 key = ((LegoEventNotificationParam&) p_param).GetKey();
+		m_keyPressed = TRUE;
 
 		switch (key) {
 		case VK_PAUSE: // Pause game
