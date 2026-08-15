@@ -1664,129 +1664,6 @@
   },
   {
    "target": "lego1",
-   "source": "LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp",
-   "source_sha256": "9fae97d1a19e8fd636952c2f8f55f977523a2f3a7e94511d075d52d5ceb2b9c3",
-   "mode": "compose_equal_body_comdat",
-   "command_policy": {
-    "required_flags": [
-     "/Zi",
-     "-c"
-    ],
-    "forbidden_prefixes": [
-     "/GL",
-     "-GL",
-     "/Z7",
-     "-Z7"
-    ]
-   },
-   "donors": [
-    {
-     "id": "d_babdb5608f31",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "forward_declaration_run",
-      "placement": "prefix",
-      "prefix": "MxUnkRecVA",
-      "count": 7,
-      "width": 3,
-      "generated_header_sha256": "babdb5608f312202d29c18981d6cf7a9c627ef21a3d7c23426cb811a90a55011",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_b844979adf28",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "forward_declaration_run",
-      "placement": "suffix",
-      "prefix": "MxUnkRecVC",
-      "count": 10,
-      "width": 3,
-      "generated_header_sha256": "b844979adf28a2c9788ea9c58a7201e1119680d75b592467c2ac9655d0de3920",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    }
-   ],
-   "functions": [
-    {
-     "mangled": "?_Erase@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@IAEXPAU_Node@1@@Z",
-     "expected_body_length": 57,
-     "expected_body_sha256": "7dba54f1c147d535023347d216a46167950f9ef7785788c8481b05a6a464dc30",
-     "expected_changed_offsets": [
-      11,
-      43
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_babdb5608f31"
-    },
-    {
-     "mangled": "?BuildMap@LegoHideAnimPresenter@@AAEXAAV?$Map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@@@PAVLegoTreeNode@@@Z",
-     "expected_body_length": 116,
-     "expected_body_sha256": "81544adbb7258e229432911212086bc4cdf8d7bcf89f12a0903b247f8ccd246f",
-     "expected_changed_offsets": [
-      16,
-      19,
-      22,
-      29,
-      46,
-      48,
-      50,
-      51,
-      52,
-      53,
-      54,
-      55,
-      56,
-      66,
-      71,
-      75,
-      78,
-      80,
-      86,
-      89,
-      92,
-      103
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_babdb5608f31"
-    },
-    {
-     "mangled": "?_Dec@iterator@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@QAEXXZ",
-     "expected_body_sha256": "6d237e259d3ffe88f76ad80dbdc1e67d026498210496c73ad232e870ed6a5052",
-     "splice_class": "same_slot_resize",
-     "expected_seed_length": 75,
-     "expected_donor_length": 71,
-     "expected_linked_span": 80,
-     "donor": "d_b844979adf28"
-    },
-    {
-     "mangled": "?_Dec@iterator@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@QAEXXZ",
-     "expected_body_sha256": "fd0c8773e9de2b52ceeed4da95799c7eaab44cac469badf1ec15b05269bae328",
-     "splice_class": "same_slot_resize",
-     "expected_seed_length": 75,
-     "expected_donor_length": 71,
-     "expected_linked_span": 80,
-     "donor": "d_b844979adf28"
-    }
-   ],
-   "completion": {
-    "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 4 row(s) in LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp from generated carrier states over the rendered current source.",
-    "may_replace_compiler_output": true
-   }
-  },
-  {
-   "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
    "source_sha256": "35488e2d5e531223235582721a54cde31b4d5775268bf76a1054f2be1df10c50",
    "mode": "compose_equal_body_comdat",
@@ -3653,6 +3530,209 @@
     "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/actors/act3actors.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp",
+   "source_sha256": "66ed8dfb2de8331e8f9d7683103f166ba36b123740c6b091f9e0ee9fc556a554",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_fd5ee69dfee7",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 15,
+      "width": 3,
+      "generated_header_sha256": "fd5ee69dfee70ee814c15fe1aa4e4fc66b53b06b94c8c591bd0307bcd5346708",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_e7a4c0df2b73",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 1,
+      "width": 3,
+      "generated_header_sha256": "e7a4c0df2b7395f5b948ea8c1d3d38fbf1c7a25d05485a027abfeda393503b3a",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_8bb91a6844e6",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "prefix",
+      "prefix": "MxUnkRecVA",
+      "count": 40,
+      "width": 3,
+      "generated_header_sha256": "8bb91a6844e646af50a9e313dd130da676d38c4cae84f43fd16cdfc1b7bd9aa3",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "??1?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@QAE@XZ",
+     "expected_body_length": 196,
+     "expected_body_sha256": "e7dd1b8dcb448c69151f4b51b88f22f0a454b84568903ad98531b83478730023",
+     "expected_changed_offsets": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      24,
+      25,
+      26,
+      27,
+      28,
+      44,
+      89,
+      91,
+      92,
+      93,
+      94,
+      96,
+      97,
+      98
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_fd5ee69dfee7"
+    },
+    {
+     "mangled": "?CheckedAdd@LegoHideAnimPresenter@@AAEXAAV?$Map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@@@PAVLegoAnimNodeData@@PBDPAVLegoPathBoundary@@@Z",
+     "expected_body_length": 601,
+     "expected_body_sha256": "53c49db8371466eaf7eff0c7145225ad3c8a8cd62e9fad8d4236e5a14a85055c",
+     "expected_changed_offsets": [
+      296,
+      370
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_fd5ee69dfee7"
+    },
+    {
+     "mangled": "?_Dec@iterator@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@QAEXXZ",
+     "expected_body_sha256": "6d237e259d3ffe88f76ad80dbdc1e67d026498210496c73ad232e870ed6a5052",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 75,
+     "expected_donor_length": 71,
+     "expected_linked_span": 80,
+     "donor": "d_fd5ee69dfee7"
+    },
+    {
+     "mangled": "??1?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@QAE@XZ",
+     "expected_body_length": 196,
+     "expected_body_sha256": "c6081a91359d102c22fd42415785fa987fb2071f7a7b9885aff4a33e5cc5edd8",
+     "expected_changed_offsets": [
+      18,
+      28,
+      44,
+      112,
+      122,
+      126
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_e7a4c0df2b73"
+    },
+    {
+     "mangled": "?_Dec@iterator@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@QAEXXZ",
+     "expected_body_sha256": "fd0c8773e9de2b52ceeed4da95799c7eaab44cac469badf1ec15b05269bae328",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 75,
+     "expected_donor_length": 71,
+     "expected_linked_span": 80,
+     "donor": "d_e7a4c0df2b73"
+    },
+    {
+     "mangled": "?BuildMap@LegoHideAnimPresenter@@AAEXAAV?$Map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@@@PAVLegoTreeNode@@@Z",
+     "expected_body_length": 116,
+     "expected_body_sha256": "81544adbb7258e229432911212086bc4cdf8d7bcf89f12a0903b247f8ccd246f",
+     "expected_changed_offsets": [
+      16,
+      19,
+      22,
+      29,
+      46,
+      48,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      66,
+      71,
+      75,
+      78,
+      80,
+      86,
+      89,
+      92,
+      103
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_8bb91a6844e6"
+    },
+    {
+     "mangled": "?_Erase@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@IAEXPAU_Node@1@@Z",
+     "expected_body_length": 57,
+     "expected_body_sha256": "7dba54f1c147d535023347d216a46167950f9ef7785788c8481b05a6a464dc30",
+     "expected_changed_offsets": [
+      11,
+      43
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_8bb91a6844e6"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 7 row(s) in LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp from generated carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -3727,8 +3807,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4818,
-    "accepted_row_identity_sha256": "7806344ce3c47344d6b8d475b7c54d28a9af1dbb9aa51aa837053833352d4373",
+    "exact_raw_1_0_count": 4819,
+    "accepted_row_identity_sha256": "91b8230c81f6aba72293a17d16d38c7a6a14425b47b08be734ae7b9d38fd23d7",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
@@ -17190,8 +17270,8 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp",
-    "clean": "9fae97d1a19e8fd636952c2f8f55f977523a2f3a7e94511d075d52d5ceb2b9c3",
-    "effective": "ccc18fc19ce198887bd3ef70e7f49d5446df0f07215af80a84769d17060d596d",
+    "clean": "66ed8dfb2de8331e8f9d7683103f166ba36b123740c6b091f9e0ee9fc556a554",
+    "effective": "2ade6ff2579b1cccec3f92fc61082612c61b21b6b4326d1a169db1d6d371284b",
     "size": 43027,
     "ops": [
      {
