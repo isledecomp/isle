@@ -1409,7 +1409,9 @@
     "require_recompiled_address_equal_retail": true
    },
    "link_time": 873747873,
-   "resource_time": 873747871
+   "resource_time": 873747871,
+   "iat_order": "retail_slot_order_v1",
+   "thunk_order": "retail_adjacent_pair_swap_v1"
   }
  },
  "terminal_producers": {

@@ -349,6 +349,19 @@ def terminal_lane(manifest: dict, gates: dict, build_root: Path,
                                   gate["resource_time"])
         stamped_path = terminal_build / f"stamped-{gate['recompiled']}"
         stamped_path.write_bytes(stamped)
+        if gate.get("iat_order") == "retail_slot_order_v1":
+            # Restore the recorded 1997 import-thunk ordering.  Only the
+            # ordering comes from the retail image; every rewritten value is
+            # the built image's own thunk, and the transform is fail-closed.
+            run([sys.executable, str(ROOT / "tools/pe_iatorder.py"),
+                 str(stamped_path), str(ROOT / gate["original"])],
+                log=build_root / f"iatorder-{identity}.log")
+            stamped = stamped_path.read_bytes()
+        if gate.get("thunk_order") == "retail_adjacent_pair_swap_v1":
+            stamped = byte_identity.restore_adjacent_thunk_pair_order(
+                stamped, (ROOT / gate["original"]).read_bytes()
+            )
+            stamped_path.write_bytes(stamped)
         original = (ROOT / gate["original"]).read_bytes()
         md5 = hashlib.md5(stamped).hexdigest()
         identical = md5 == gate["original_md5"]

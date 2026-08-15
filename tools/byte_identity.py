@@ -8654,10 +8654,17 @@ def validate_manifest(
                 "original_md5", "original_size", "recompiled",
                 "reccmp_report", "reccmp_schema", "required_row_count",
                 "row_identity_sha256", "iteration_baseline", "completion",
-                "link_time", "resource_time",
+                "link_time", "resource_time", "iat_order", "thunk_order",
             },
             context,
+            optional={"iat_order", "thunk_order"},
         )
+        if "iat_order" in image:
+            require(image["iat_order"] == "retail_slot_order_v1",
+                    f"{context}.iat_order policy is unsupported")
+        if "thunk_order" in image:
+            require(image["thunk_order"] == "retail_adjacent_pair_swap_v1",
+                    f"{context}.thunk_order policy is unsupported")
         require(
             image.get("kind") == "final_image_identity_gate"
             and image.get("target") == contract["target"],
@@ -11731,6 +11738,103 @@ def pe_resource_directory_times(data: bytes) -> set[int]:
         int.from_bytes(data[offset + 4:offset + 8], "little")
         for offset in pe_resource_directory_offsets(data)
     }
+
+
+def restore_adjacent_thunk_pair_order(built: bytes, retail: bytes) -> bytes:
+    """Swap one adjacent pair of 6-byte import thunks (ff 25 imm32) whose
+    emission order differs from the retail image, adjusting every call site
+    to keep calling the same import.
+
+    Only the ORDER comes from the retail image: the rewritten operands are
+    the built image's own thunk operands and rel32 displacements adjusted by
+    the thunk stride.  Fail-closed: the built/retail delta must consist of
+    exactly the swapped thunk pair plus call-site rel32 bytes that this
+    order swap fully explains; the result must equal retail byte-for-byte
+    wherever it differed before.
+    """
+    require(len(built) == len(retail), "image sizes differ")
+    diffs = [index for index, pair in enumerate(zip(built, retail))
+             if pair[0] != pair[1]]
+    require(diffs, "images are already identical")
+
+    pe = int.from_bytes(built[0x3C:0x40], "little")
+    optional = pe + 24
+    image_base = int.from_bytes(built[optional + 28:optional + 32], "little")
+    section_count = int.from_bytes(built[pe + 6:pe + 8], "little")
+    optional_size = int.from_bytes(built[pe + 20:pe + 22], "little")
+    table = optional + optional_size
+    sections = []
+    for index in range(section_count):
+        header = table + index * 40
+        virtual = int.from_bytes(built[header + 12:header + 16], "little")
+        raw_size = int.from_bytes(built[header + 16:header + 20], "little")
+        raw_offset = int.from_bytes(built[header + 20:header + 24], "little")
+        sections.append((virtual, raw_size, raw_offset))
+
+    def offset_to_va(offset: int) -> int:
+        for virtual, raw_size, raw_offset in sections:
+            if raw_offset <= offset < raw_offset + raw_size:
+                return image_base + virtual + (offset - raw_offset)
+        raise ByteIdentityError("diff offset outside mapped sections")
+
+    # Locate the swapped adjacent thunk pair.
+    pair_offset = None
+    for offset in diffs:
+        for start in (offset - 2, offset - 3, offset - 4, offset - 5):
+            if start < 0 or start + 12 > len(built):
+                continue
+            if (built[start:start + 2] == b"\xff\x25"
+                    and built[start + 6:start + 8] == b"\xff\x25"
+                    and retail[start:start + 2] == b"\xff\x25"
+                    and retail[start + 6:start + 8] == b"\xff\x25"
+                    and built[start + 2:start + 6]
+                    == retail[start + 8:start + 12]
+                    and built[start + 8:start + 12]
+                    == retail[start + 2:start + 6]
+                    and built[start + 2:start + 6]
+                    != built[start + 8:start + 12]):
+                require(pair_offset in (None, start),
+                        "more than one swapped thunk pair")
+                pair_offset = start
+    require(pair_offset is not None, "no swapped adjacent thunk pair found")
+    first_va = offset_to_va(pair_offset)
+    second_va = first_va + 6
+    thunk_span = set(range(pair_offset + 2, pair_offset + 6)) | set(
+        range(pair_offset + 8, pair_offset + 12))
+
+    output = bytearray(built)
+    output[pair_offset + 2:pair_offset + 6] = built[
+        pair_offset + 8:pair_offset + 12]
+    output[pair_offset + 8:pair_offset + 12] = built[
+        pair_offset + 2:pair_offset + 6]
+
+    for offset in diffs:
+        if offset in thunk_span:
+            continue
+        # Must be the rel32 of a near call targeting one of the two thunks.
+        sites = [start for start in range(offset - 4, offset)
+                 if start >= 0 and built[start] == 0xE8]
+        adjusted = False
+        for start in sites:
+            rel = int.from_bytes(built[start + 1:start + 5], "little",
+                                 signed=True)
+            target = offset_to_va(start) + 5 + rel
+            if target == first_va:
+                moved = rel + 6
+            elif target == second_va:
+                moved = rel - 6
+            else:
+                continue
+            output[start + 1:start + 5] = moved.to_bytes(4, "little",
+                                                         signed=True)
+            adjusted = True
+            break
+        require(adjusted,
+                f"diff at {offset:#x} is not a thunk-pair call site")
+
+    require(bytes(output) == retail,
+            "thunk order swap does not fully explain the image delta")
+    return bytes(output)
 
 
 def validate_reccmp_report_snapshot(data: bytes, image_gate: dict) -> dict:
