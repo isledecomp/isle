@@ -155,85 +155,10 @@ IMPORTED_TARGET_RE = re.compile(
 SUPPORTED_GENERATORS = {"Ninja", "Unix Makefiles"}
 
 
-SOURCE_OVERLAY_SCHEMA = 1
-
-
-SOURCE_OVERLAY_STATUS = "TYPED_SOURCE_OVERLAY"
-
-
-SOURCE_OVERLAY_RENDERER = "closed_typed_source_overlay_v1"
-
-
-SOURCE_OVERLAY_EFFECTIVE_MODE = "mirror_clean_then_typed_overlay"
+SOURCE_OVERLAY_SCHEMA = 2
 
 
 NATIVE_DIAGNOSTIC_MANIFEST_POLICY = "native_tests_no_identity_authority_v1"
-
-
-SOURCE_OVERLAY_GENERATOR_REGISTRY_SHA256 = (
-    "9759a8612ef7a9c4b28aa2896a39ef53091849b586a5a07155d7e10a9293d53d"
-)
-
-
-SOURCE_OVERLAY_ANCHOR_POLICY = (
-    "use strongest unique tier; fall back 32->16->8 only on zero matches; "
-    "ambiguity at any attempted tier fails"
-)
-
-
-SOURCE_OVERLAY_DRIFT_CONTRACT = {
-    "ambiguity": "fail_closed",
-    "destructive_range_policy": (
-        "delete/replace is authorized only when the uniquely anchored actual "
-        "input range matches the operation baseline_input_range "
-        "byte/size/line/token pins"
-    ),
-    "generated_only_path": (
-        "clean state must remain absent and full effective baseline pins "
-        "remain exact"
-    ),
-    "present_input_drift_path": (
-        "otherwise every operation anchor resolves strongest-to-narrowest "
-        "uniquely and every generated fragment matches its fixed baseline "
-        "fragment pins"
-    ),
-    "present_input_fast_path": (
-        "baseline effective pin may be compared directly only when actual "
-        "clean hash and size equal baseline clean pins"
-    ),
-    "receipt_required_fields": [
-        "logical_path", "actual_clean_sha256", "actual_clean_size",
-        "operation_id", "chosen_anchor_tier", "resolved_token_offset",
-        "actual_generated_fragment_sha256", "actual_removed_range_sha256",
-        "actual_removed_range_size", "actual_removed_range_line_count",
-        "actual_removed_range_significant_token_sha256",
-        "actual_effective_sha256", "actual_effective_size",
-    ],
-    "receipt_field_applicability": (
-        "actual_removed_range_* fields are mandatory for delete/replace "
-        "operations and absent for non-destructive operations"
-    ),
-    "relocation_policy": (
-        "capture each exact-one producer range from authenticated clean input "
-        "before mutation; source and destination recipes share dependency ID, "
-        "source operation ID, and identical range pins"
-    ),
-    "relocation_receipt_required_fields": [
-        "range_dependency_id", "source_operation_id",
-        "actual_held_source_range_sha256",
-        "actual_held_source_range_size",
-        "actual_held_source_range_line_count",
-        "actual_held_source_range_significant_token_sha256",
-        "consumer_operation_id",
-    ],
-}
-
-
-SOURCE_OVERLAY_RUNTIME_TRUST = {
-    "effective_hashes": "verification assertions only; never source payloads",
-    "reconstruction": "authenticated clean inputs plus closed typed recipes only",
-    "scratch_artifacts": "excluded",
-}
 
 
 SOURCE_OVERLAY_TOKEN_RE = re.compile(
@@ -255,14 +180,65 @@ SOURCE_OVERLAY_QUALIFIED_IDENTIFIER_RE = re.compile(
 )
 
 
-SOURCE_OVERLAY_STRUCTURAL_SEATS = frozenset({
-    "before_first_significant_token", "after_final_significant_token",
-    "before_include", "before_annotated_definition", "unique_token_boundary",
+SOURCE_OVERLAY_ACTIONS = frozenset({
+    "insert", "replace", "delete", "whole_file_append",
 })
 
 
-SOURCE_OVERLAY_ACTIONS = frozenset({
-    "insert", "replace", "delete", "whole_file_append",
+SOURCE_OVERLAY_LEAN_ACTIONS = {
+    "insert": "insert", "replace": "replace", "delete": "delete",
+    "append": "whole_file_append",
+}
+
+
+SOURCE_OVERLAY_LEAN_BOUNDARIES = {
+    "start": "file_start", "end": "file_end",
+    "before_token": "before_next_token", "after_token": "after_previous_token",
+}
+
+
+SOURCE_OVERLAY_LEAN_KINDS = {
+    "lines": "line_reservation_v1",
+    "include": "include_dependency_v1",
+    "include_seat": "include_seat_v1",
+    "empty_scopes": "empty_compound_statements_v1",
+    "noop_assign": "inline_budget_noop_statements_v1",
+    "size_asserts": "compile_time_layout_assert_seat_v1",
+    "cond": "conditional_declarations_v1",
+    "seq": "composed_typed_sequence_v1",
+    "local_ids": "local_symbol_id_carrier_v1",
+    "member_probe": "qualified_member_comdat_emission_probe_v1",
+    "cursor_probe": "list_cursor_delete_emission_probe_v1",
+    "console_pull": "discarded_console_crt_pull_v1",
+    "import_probe": "discarded_import_library_probe_v1",
+    "texture_probe": "recursive_frame_texture_refresh_probe_v1",
+    "crt_pull": "synthetic_crt_pull_v1",
+    "seed_fn": "archive_pull_seed_function_v1",
+    "seed_seq": "archive_pull_seed_sequence_v1",
+    "reloc": "source_range_relocation_v1",
+    "template_supplier": "synthetic_template_member_supplier_v1",
+    "call_supplier": "synthetic_member_call_supplier_v1",
+    "reloc_ring": "synthetic_discarded_relocation_ring_v1",
+    "record_header": "record_header_v1",
+    "assert_reseat": "debug_assert_reseat_v1",
+    "const_pool": "synthetic_constant_pool_tu_v1",
+    "literal_alias": "literal_first_use_alias_v1",
+}
+
+
+SOURCE_OVERLAY_LEAN_SHAPES = {
+    "fwd": "forward",
+    "fwd_seq": "forward_sequence",
+    "empty_class": "empty_class",
+    "enum": "enum",
+    "typedef": "typedef_builtin",
+    "proto": "function_prototype",
+    "class": "unused_class_void_member_sequence",
+}
+
+
+SOURCE_OVERLAY_LEAN_LAYOUT_KEYS = frozenset({
+    "lines", "at", "indent", "nl", "blank_indent",
 })
 
 
@@ -769,150 +745,62 @@ def source_overlay_render_relocated_range(data: bytes, policy: object) -> bytes:
     return source_overlay_strip_comments_preserve_lines(data)
 
 
-def source_overlay_structural_seat(
-    data: bytes, offset: int, byte_boundary: dict,
-) -> dict:
+def source_overlay_seat_lines(data: bytes, offset: int) -> tuple[bytes, bytes]:
+    """Return the physical line ending before and starting at ``offset``."""
     require(0 <= offset <= len(data), "source overlay seat offset is invalid")
-    prefix = data[:offset]
-    suffix = data[offset:]
-    prefix_lines = prefix.splitlines()
-    suffix_lines = suffix.splitlines()
+    prefix_lines = data[:offset].splitlines()
+    suffix_lines = data[offset:].splitlines()
     before = prefix_lines[-1] if prefix_lines else b""
     after = suffix_lines[0] if suffix_lines else b""
-    if not prefix.strip():
-        kind = "before_first_significant_token"
-    elif not suffix.strip():
-        kind = "after_final_significant_token"
-    elif after.lstrip().startswith(b"#include"):
-        kind = "before_include"
-    elif re.match(br"\s*//\s*(?:FUNCTION|GLOBAL|VTABLE)", after):
-        kind = "before_annotated_definition"
-    else:
-        kind = "unique_token_boundary"
-    return {
-        "kind": kind,
-        "before_line_sha256": sha256_bytes(before),
-        "after_line_sha256": sha256_bytes(after),
-        "byte_boundary": byte_boundary,
-    }
+    return before, after
 
 
-def validate_source_overlay_anchor(
-    value: object, context: str, *, logical_path: str, operation_id: str,
-) -> dict:
+def validate_source_overlay_anchor(value: object, context: str) -> dict:
+    """Validate one lean single-tier structural anchor.
+
+    The anchor is one 32/32 significant-token context sha (narrower only at
+    file edges), a byte-boundary kind, and -- exclusively for the default
+    ``after_newline`` boundary, where several newlines can sit between the
+    same two tokens -- the shas of the physical lines surrounding the seat.
+    Zero matches and ambiguity both refuse at resolve time.
+    """
     require(isinstance(value, dict), f"{context} must be an object")
     exact_audit_keys(
-        value, {
-            "anchor_kind", "logical_path", "operation_ids", "policy",
-            "structural_seat", "tiers",
-        }, context
+        value, {"ctx", "b", "a", "at", "line_before", "line_after"}, context,
+        optional={"b", "a", "at", "line_before", "line_after"},
     )
-    require(value.get("anchor_kind") == "significant_token_context_v1",
-            f"{context} has an unsupported anchor kind")
-    normalized_path = source_overlay_relative_path(
-        value.get("logical_path"), context + ".logical_path"
+    before_count = require_exact_int(
+        value.get("b", 32), context + ".b", minimum=0, maximum=32,
     )
-    operation_ids = value.get("operation_ids")
-    require(
-        normalized_path == logical_path
-        and isinstance(operation_ids, list) and operation_ids
-        and len(operation_ids) == len(set(operation_ids))
-        and all(
-            isinstance(item, str)
-            and re.fullmatch(r"op_[a-z0-9_]{1,120}", item) is not None
-            for item in operation_ids
-        )
-        and operation_id in operation_ids
-        and value.get("policy") == SOURCE_OVERLAY_ANCHOR_POLICY,
-        f"{context} ownership/policy differs",
+    after_count = require_exact_int(
+        value.get("a", 32), context + ".a", minimum=0, maximum=32,
     )
-    seat = value.get("structural_seat")
-    require(isinstance(seat, dict), f"{context}.structural_seat must be an object")
-    exact_audit_keys(
-        seat, {
-            "kind", "before_line_sha256", "after_line_sha256",
-            "byte_boundary",
-        },
-        f"{context}.structural_seat",
-    )
-    require(seat.get("kind") in SOURCE_OVERLAY_STRUCTURAL_SEATS,
-            f"{context}.structural_seat kind is unsupported")
-    raw_boundary = seat.get("byte_boundary")
-    require(isinstance(raw_boundary, dict),
-            f"{context}.structural_seat.byte_boundary must be an object")
-    boundary_kind = raw_boundary.get("kind")
-    if boundary_kind == "after_newline":
-        exact_audit_keys(raw_boundary, {"kind"},
-                         f"{context}.structural_seat.byte_boundary")
-        normalized_boundary = {"kind": boundary_kind}
+    require(before_count or after_count,
+            f"{context} cannot match an empty context")
+    raw_boundary = value.get("at")
+    if raw_boundary is None:
+        boundary = "after_newline"
     else:
-        require(boundary_kind in {
-            "file_start", "file_end", "after_previous_token",
-            "before_next_token",
-        }, f"{context}.structural_seat.byte_boundary kind is unsupported")
-        exact_audit_keys(raw_boundary, {"kind"},
-                         f"{context}.structural_seat.byte_boundary")
-        normalized_boundary = {"kind": boundary_kind}
-    normalized_seat = {
-        "kind": seat["kind"],
-        "before_line_sha256": require_sha(
-            seat.get("before_line_sha256"),
-            f"{context}.structural_seat.before_line_sha256",
-        ),
-        "after_line_sha256": require_sha(
-            seat.get("after_line_sha256"),
-            f"{context}.structural_seat.after_line_sha256",
-        ),
-        "byte_boundary": normalized_boundary,
+        require(raw_boundary in SOURCE_OVERLAY_LEAN_BOUNDARIES,
+                f"{context}.at is unsupported")
+        boundary = SOURCE_OVERLAY_LEAN_BOUNDARIES[raw_boundary]
+    normalized = {
+        "context_sha256": require_sha(value.get("ctx"), context + ".ctx"),
+        "before_token_count": before_count,
+        "after_token_count": after_count,
+        "boundary": boundary,
     }
-    tiers = value.get("tiers")
-    require(isinstance(tiers, list) and len(tiers) == 3,
-            f"{context}.tiers must contain the exact 32/16/8 fallback chain")
-    normalized_tiers = []
-    for index, (tier, width) in enumerate(zip(tiers, (32, 16, 8))):
-        tier_context = f"{context}.tiers[{index}]"
-        require(isinstance(tier, dict), f"{tier_context} must be an object")
-        exact_audit_keys(tier, {
-            "context_tokens_each_side", "before_token_count",
-            "after_token_count", "context_sha256", "occurrences",
-        }, tier_context)
-        require(require_exact_int(
-            tier.get("context_tokens_each_side"), tier_context + ".width",
-            minimum=width, maximum=width,
-        ) == width, f"{tier_context} width differs")
-        before_count = require_exact_int(
-            tier.get("before_token_count"), tier_context + ".before_token_count",
-            minimum=0, maximum=width,
+    if boundary == "after_newline":
+        normalized["before_line_sha256"] = require_sha(
+            value.get("line_before"), context + ".line_before"
         )
-        after_count = require_exact_int(
-            tier.get("after_token_count"), tier_context + ".after_token_count",
-            minimum=0, maximum=width,
+        normalized["after_line_sha256"] = require_sha(
+            value.get("line_after"), context + ".line_after"
         )
-        require(before_count or after_count,
-                f"{tier_context} cannot match an empty context")
-        occurrences = require_exact_int(
-            tier.get("occurrences"), tier_context + ".occurrences",
-            minimum=1, maximum=2_000_000,
-        )
-        require(index != 0 or occurrences == 1,
-                f"{tier_context} strongest tier is not uniquely authored")
-        normalized_tiers.append({
-            "context_tokens_each_side": width,
-            "before_token_count": before_count,
-            "after_token_count": after_count,
-            "context_sha256": require_sha(
-                tier.get("context_sha256"), tier_context + ".context_sha256"
-            ),
-            "occurrences": occurrences,
-        })
-    return {
-        "anchor_kind": "significant_token_context_v1",
-        "logical_path": normalized_path,
-        "operation_ids": list(operation_ids),
-        "policy": SOURCE_OVERLAY_ANCHOR_POLICY,
-        "structural_seat": normalized_seat,
-        "tiers": normalized_tiers,
-    }
+    else:
+        require("line_before" not in value and "line_after" not in value,
+                f"{context} line shas belong to after_newline seats only")
+    return normalized
 
 
 def resolve_source_overlay_anchor(
@@ -920,83 +808,66 @@ def resolve_source_overlay_anchor(
     evidence: list[dict] | None = None, logical_path: str | None = None,
     operation_id: str | None = None, role: str | None = None,
 ) -> int:
-    """Resolve the strongest unique token context to one exact byte seat."""
+    """Resolve the unique token context to one exact byte seat."""
     matches = source_overlay_tokens(data)
     tokens = [item[0] for item in matches]
-    for tier in anchor["tiers"]:
-        before_count = tier["before_token_count"]
-        after_count = tier["after_token_count"]
-        candidates = []
-        for index in range(len(tokens) + 1):
-            if index < before_count or len(tokens) - index < after_count:
-                continue
-            signature = (
-                tokens[index - before_count:index]
-                + ["<SEAT>"]
-                + tokens[index:index + after_count]
-            )
-            if source_overlay_token_sha256(signature) == tier["context_sha256"]:
-                candidates.append(index)
-        require(len(candidates) <= 1,
-                f"{context} is ambiguous at the {tier['context_tokens_each_side']}-token tier")
-        if not candidates:
+    before_count = anchor["before_token_count"]
+    after_count = anchor["after_token_count"]
+    candidates = []
+    for index in range(len(tokens) + 1):
+        if index < before_count or len(tokens) - index < after_count:
             continue
-        index = candidates[0]
-        lower = matches[index - 1][2] if index else 0
-        upper = matches[index][1] if index < len(matches) else len(data)
-        require(lower <= upper, f"{context} token boundary is invalid")
-        boundary = anchor["structural_seat"]["byte_boundary"]
-        boundary_kind = boundary["kind"]
-        if boundary_kind == "file_start":
-            require(lower == 0, f"{context} is not at file start")
-            selected_offset = 0
-        elif boundary_kind == "file_end":
-            require(upper == len(data), f"{context} is not at file end")
-            selected_offset = len(data)
-        elif boundary_kind == "after_previous_token":
-            selected_offset = lower
-        elif boundary_kind == "before_next_token":
-            selected_offset = upper
-        elif boundary_kind == "after_newline":
-            newline_offsets = [
-                position + 1
-                for position in range(lower, upper)
-                if data[position:position + 1] == b"\n"
-            ]
-            selected = [
-                offset for offset in newline_offsets
-                if source_overlay_structural_seat(data, offset, boundary)
-                == anchor["structural_seat"]
-            ]
-            require(len(selected) == 1,
-                    f"{context} has no unique after-newline structural seat")
-            selected_offset = selected[0]
-        else:
-            raise ByteIdentityError(f"{context} byte boundary is unsupported")
-        if boundary_kind != "after_newline":
-            require(
-                source_overlay_structural_seat(
-                    data, selected_offset, boundary
-                ) == anchor["structural_seat"],
-                f"{context} structural byte seat differs",
-            )
-        if evidence is not None:
-            require(all(isinstance(item, str) and item
-                        for item in (logical_path, operation_id, role)),
-                    f"{context} evidence identity is incomplete")
-            evidence.append({
-                "logical_path": logical_path,
-                "operation_id": operation_id,
-                "role": role,
-                "selected_context_tokens_each_side":
-                    tier["context_tokens_each_side"],
-                "selected_token_boundary": index,
-                "selected_byte_offset": selected_offset,
-                "context_sha256": tier["context_sha256"],
-                "structural_seat": anchor["structural_seat"],
-            })
-        return selected_offset
-    raise ByteIdentityError(f"{context} is missing at every anchor tier")
+        signature = (
+            tokens[index - before_count:index]
+            + ["<SEAT>"]
+            + tokens[index:index + after_count]
+        )
+        if source_overlay_token_sha256(signature) == anchor["context_sha256"]:
+            candidates.append(index)
+    require(len(candidates) <= 1, f"{context} is ambiguous")
+    require(candidates, f"{context} is missing from its clean input")
+    index = candidates[0]
+    lower = matches[index - 1][2] if index else 0
+    upper = matches[index][1] if index < len(matches) else len(data)
+    require(lower <= upper, f"{context} token boundary is invalid")
+    boundary = anchor["boundary"]
+    if boundary == "file_start":
+        require(lower == 0, f"{context} is not at file start")
+        selected_offset = 0
+    elif boundary == "file_end":
+        require(upper == len(data), f"{context} is not at file end")
+        selected_offset = len(data)
+    elif boundary == "after_previous_token":
+        selected_offset = lower
+    elif boundary == "before_next_token":
+        selected_offset = upper
+    elif boundary == "after_newline":
+        selected = []
+        for position in range(lower, upper):
+            if data[position:position + 1] != b"\n":
+                continue
+            before, after = source_overlay_seat_lines(data, position + 1)
+            if (sha256_bytes(before) == anchor["before_line_sha256"]
+                    and sha256_bytes(after) == anchor["after_line_sha256"]):
+                selected.append(position + 1)
+        require(len(selected) == 1,
+                f"{context} has no unique after-newline structural seat")
+        selected_offset = selected[0]
+    else:
+        raise ByteIdentityError(f"{context} byte boundary is unsupported")
+    if evidence is not None:
+        require(all(isinstance(item, str) and item
+                    for item in (logical_path, operation_id, role)),
+                f"{context} evidence identity is incomplete")
+        evidence.append({
+            "logical_path": logical_path,
+            "operation_id": operation_id,
+            "role": role,
+            "selected_token_boundary": index,
+            "selected_byte_offset": selected_offset,
+            "context_sha256": anchor["context_sha256"],
+        })
+    return selected_offset
 
 
 def _source_overlay_identifier(value: object, context: str) -> str:
@@ -1035,62 +906,6 @@ def _source_overlay_census_identifier(value: object, context: str) -> str:
         return source_overlay_relative_path(value, context)
     except ByteIdentityError as error:
         raise ByteIdentityError(f"{context} is not one closed census identity") from error
-
-
-def validate_source_overlay_fragment(
-    value: object, context: str, *, emission_class: str,
-    structural_effect: str,
-) -> dict:
-    require(isinstance(value, dict), f"{context} must be an object")
-    exact_audit_keys(value, {
-        "baseline_sha256", "baseline_size", "baseline_line_count",
-        "baseline_significant_token_sha256", "declared_identifiers",
-        "referenced_identifiers", "emitted_identifiers",
-        "structural_effect",
-    }, context)
-    census = {}
-    for key in (
-        "declared_identifiers", "referenced_identifiers",
-        "emitted_identifiers",
-    ):
-        raw = value.get(key)
-        require(isinstance(raw, list), f"{context}.{key} must be an array")
-        normalized = [
-            _source_overlay_census_identifier(
-                item, f"{context}.{key}[{index}]"
-            )
-            for index, item in enumerate(raw)
-        ]
-        require(normalized == sorted(set(normalized)),
-                f"{context}.{key} must be sorted/unique")
-        census[key] = normalized
-    require(value.get("structural_effect") == structural_effect,
-            f"{context}.structural_effect differs")
-    if emission_class in {
-        "source_layout_only", "include_dependency", "compiler_state_only",
-        "non_emitting_declaration",
-    }:
-        require(not census["emitted_identifiers"],
-                f"{context} non-emitting generator claims an emitted identity")
-    return {
-        "baseline_sha256": require_sha(
-            value.get("baseline_sha256"), context + ".baseline_sha256"
-        ),
-        "baseline_size": require_exact_int(
-            value.get("baseline_size"), context + ".baseline_size",
-            minimum=0, maximum=64 * 1024 * 1024,
-        ),
-        "baseline_line_count": require_exact_int(
-            value.get("baseline_line_count"), context + ".baseline_line_count",
-            minimum=0, maximum=2_000_000,
-        ),
-        "baseline_significant_token_sha256": require_sha(
-            value.get("baseline_significant_token_sha256"),
-            context + ".baseline_significant_token_sha256",
-        ),
-        **census,
-        "structural_effect": structural_effect,
-    }
 
 
 def validate_source_overlay_range_pin(value: object, context: str) -> dict:
@@ -1212,11 +1027,107 @@ def render_source_overlay_expression(value: dict) -> str:
     raise ByteIdentityError(f"typed source expression is unsupported: {kind}")
 
 
+SOURCE_OVERLAY_BUILTIN_SPECIFIERS = frozenset({
+    "void", "bool", "char", "short", "int", "long",
+    "signed", "unsigned", "float", "double",
+})
+
+
+SOURCE_OVERLAY_TYPE_NAME_RE = re.compile(
+    r"[A-Za-z_][A-Za-z0-9_]*(?:::[A-Za-z_][A-Za-z0-9_]*)*"
+)
+
+
+def _parse_source_overlay_cpp_type(
+    text: str, position: int, context: str, depth: int,
+) -> tuple[dict, int]:
+    require(depth <= 8, f"{context} exceeds the type recursion bound")
+    base_const = False
+    if text.startswith("const ", position):
+        base_const = True
+        position += 6
+    match = SOURCE_OVERLAY_TYPE_NAME_RE.match(text, position)
+    require(match is not None, f"{context} is not a closed type spelling")
+    first = match.group(0)
+    position = match.end()
+    if first in SOURCE_OVERLAY_BUILTIN_SPECIFIERS:
+        specifiers = [first]
+        while len(specifiers) < 3 and text.startswith(" ", position):
+            follow = SOURCE_OVERLAY_TYPE_NAME_RE.match(text, position + 1)
+            if (follow is None
+                    or follow.group(0) not in SOURCE_OVERLAY_BUILTIN_SPECIFIERS):
+                break
+            specifiers.append(follow.group(0))
+            position = follow.end()
+        base = {"kind": "builtin", "specifier_sequence": specifiers}
+    elif text.startswith("<", position):
+        position += 1
+        arguments = []
+        while True:
+            argument, position = _parse_source_overlay_cpp_type(
+                text, position, context, depth + 1
+            )
+            arguments.append(argument)
+            if text.startswith(", ", position):
+                position += 2
+                continue
+            require(text.startswith(">", position),
+                    f"{context} template argument list is unterminated")
+            position += 1
+            break
+        base = {
+            "kind": "template_id",
+            "qualified_identifier": first.split("::"),
+            "arguments": arguments,
+        }
+    else:
+        base = {"kind": "named", "qualified_identifier": first.split("::")}
+    indirection = []
+    trailing_const = False
+    while position < len(text):
+        if text.startswith("*", position):
+            indirection.append("pointer")
+            position += 1
+        elif text.startswith("&", position):
+            indirection.append("lvalue_reference")
+            position += 1
+        elif text.startswith(" const", position):
+            trailing_const = True
+            position += 6
+        else:
+            break
+    return {
+        "kind": "cpp_type", "base": base, "base_const": base_const,
+        "indirection": indirection, "trailing_const": trailing_const,
+    }, position
+
+
+def parse_source_overlay_cpp_type(value: str, context: str) -> dict:
+    """Parse one canonical type spelling through the closed type grammar.
+
+    The spelling must round-trip exactly through
+    :func:`render_source_overlay_cpp_type`, so no free-form text and no
+    alternative formatting of the same type can enter the manifest.
+    """
+    parsed, position = _parse_source_overlay_cpp_type(value, 0, context, 0)
+    require(position == len(value),
+            f"{context} has trailing type text: {value!r}")
+    require(render_source_overlay_cpp_type(parsed) == value,
+            f"{context} is not the canonical type spelling: {value!r}")
+    return parsed
+
+
 def validate_source_overlay_cpp_type(
     value: object, context: str, *, depth: int = 0,
 ) -> dict:
-    """Validate the closed C++ type AST shared by generator kinds."""
+    """Validate the closed C++ type grammar shared by generator kinds.
+
+    The manifest stores canonical type strings; they are parsed through the
+    closed grammar (round-trip enforced) and then validated structurally.
+    """
     require(depth <= 8, f"{context} exceeds the type recursion bound")
+    if isinstance(value, str):
+        value = parse_source_overlay_cpp_type(value, context)
     require(isinstance(value, dict), f"{context} must be an object")
     exact_audit_keys(value, {
         "kind", "base", "base_const", "indirection", "trailing_const",
@@ -1636,7 +1547,9 @@ def source_overlay_expected_identifier_roles(
         emitted.update(functions)
     elif kind == "composed_typed_sequence_v1":
         for item in params["items"]:
-            child = item["generator"]["baseline_fragment"]
+            child = source_overlay_expected_identifier_roles(
+                item["generator"]["kind"], item["generator"]["params"]
+            )
             declared.update(child["declared_identifiers"])
             referenced.update(child["referenced_identifiers"])
             emitted.update(child["emitted_identifiers"])
@@ -1673,152 +1586,130 @@ def source_overlay_generator_identity_scope(generator: dict) -> str:
     return "output_scope"
 
 
-def validate_source_overlay_renderer_layout(
-    value: object, context: str,
-) -> dict:
-    """Validate one complete, renderer-owned physical line canvas.
+def validate_source_overlay_indentation_units(
+    raw: object, item_context: str,
+) -> list[dict]:
+    """Validate one canonical alternating tab/space indentation run list."""
+    require(isinstance(raw, list) and len(raw) <= 32,
+            f"{item_context} must be a bounded array")
+    result = []
+    previous = None
+    for index, item in enumerate(raw):
+        unit_context = f"{item_context}[{index}]"
+        require(isinstance(item, dict), f"{unit_context} must be an object")
+        exact_audit_keys(item, {"unit", "count"}, unit_context)
+        unit = item.get("unit")
+        require(unit in {"tab", "space"} and unit != previous,
+                f"{unit_context}.unit differs or is noncanonical")
+        previous = unit
+        result.append({
+            "unit": unit,
+            "count": require_exact_int(
+                item.get("count"), unit_context + ".count",
+                minimum=1, maximum=4096,
+            ),
+        })
+    return result
 
-    Semantic generators produce only ordered nonblank lines.  This envelope
-    is the sole authority for physical placement, indentation, transparent
-    whitespace lines and the terminal LF.  Expected fragment hashes are
-    therefore checks on rendering, never inputs which can choose formatting.
+
+def validate_source_overlay_layout(value: dict, context: str) -> dict:
+    """Validate the residual layout overrides of one lean generator.
+
+    A generator's semantic renderer owns its canonical bytes: consecutive
+    physical lines with the renderer's own indentation, LF endings and a
+    terminal newline.  Only deviations from that default are stored:
+
+    - ``lines``/``at``: an explicit canvas -- ``lines`` physical lines with
+      the semantic content lines seated at the 1-based ``at`` positions and
+      every other physical line blank;
+    - ``indent``: replacement indentation for named semantic content lines;
+    - ``nl``: ``False`` for a single unterminated physical line, ``"open"``
+      for LF-joined lines without the terminal newline;
+    - ``blank_indent``: visible whitespace on otherwise blank canvas lines.
     """
-    require(isinstance(value, dict), f"{context} must be an object")
-    exact_audit_keys(value, {
-        "kind", "physical_line_count", "content_lines",
-        "transparent_line_runs", "line_ending", "terminal_newline",
-    }, context)
-    require(value.get("kind") == "typed_line_canvas_v1",
-            f"{context}.kind differs")
-    physical_count = require_exact_int(
-        value.get("physical_line_count"), context + ".physical_line_count",
-        minimum=0, maximum=2_000_000,
-    )
-    line_ending = value.get("line_ending")
-    terminal_newline = value.get("terminal_newline")
-    require(line_ending in {"lf", "none"}
-            and type(terminal_newline) is bool,
-            f"{context} newline policy differs")
-    require(
-        (physical_count == 0 and line_ending == "none"
-         and terminal_newline is False)
-        or (physical_count == 1 and line_ending == "none"
-            and terminal_newline is False)
-        or (physical_count >= 1 and line_ending == "lf"),
-        f"{context} physical/newline policy is inconsistent",
-    )
-
-    def indentation_units(raw: object, item_context: str) -> list[dict]:
-        require(isinstance(raw, list) and len(raw) <= 32,
-                f"{item_context} must be a bounded array")
-        result = []
-        previous = None
-        for index, item in enumerate(raw):
-            unit_context = f"{item_context}[{index}]"
-            require(isinstance(item, dict),
-                    f"{unit_context} must be an object")
-            exact_audit_keys(item, {"unit", "count"}, unit_context)
-            unit = item.get("unit")
-            require(unit in {"tab", "space"} and unit != previous,
-                    f"{unit_context}.unit differs or is noncanonical")
-            previous = unit
-            result.append({
-                "unit": unit,
-                "count": require_exact_int(
-                    item.get("count"), unit_context + ".count",
-                    minimum=1, maximum=4096,
-                ),
-            })
-        return result
-
-    raw_content = value.get("content_lines")
-    require(isinstance(raw_content, list),
-            f"{context}.content_lines must be an array")
-    content = []
-    content_physical = set()
-    for index, item in enumerate(raw_content):
-        item_context = f"{context}.content_lines[{index}]"
-        require(isinstance(item, dict), f"{item_context} must be an object")
-        exact_audit_keys(
-            item, {"semantic_line", "relative_line", "indentation_units"},
-            item_context,
-        )
-        semantic = require_exact_int(
-            item.get("semantic_line"), item_context + ".semantic_line",
-            minimum=index + 1, maximum=index + 1,
-        )
-        relative = require_exact_int(
-            item.get("relative_line"), item_context + ".relative_line",
-            minimum=1, maximum=max(1, physical_count),
-        )
-        require(physical_count > 0 and relative not in content_physical,
-                f"{item_context}.relative_line is duplicated or out of range")
-        content_physical.add(relative)
-        content.append({
-            "semantic_line": semantic,
-            "relative_line": relative,
-            "indentation_units": indentation_units(
-                item.get("indentation_units"),
-                item_context + ".indentation_units",
-            ),
-        })
-
-    raw_runs = value.get("transparent_line_runs")
-    require(isinstance(raw_runs, list),
-            f"{context}.transparent_line_runs must be an array")
-    runs = []
-    transparent_physical = set()
-    previous_end = 0
-    for index, item in enumerate(raw_runs):
-        item_context = f"{context}.transparent_line_runs[{index}]"
-        require(isinstance(item, dict), f"{item_context} must be an object")
-        exact_audit_keys(
-            item, {"first", "count", "indentation_units"}, item_context
-        )
-        first = require_exact_int(
-            item.get("first"), item_context + ".first",
-            minimum=1, maximum=max(1, physical_count),
-        )
+    normalized: dict = {}
+    if "lines" in value or "at" in value:
         count = require_exact_int(
-            item.get("count"), item_context + ".count",
-            minimum=1, maximum=max(1, physical_count),
+            value.get("lines"), context + ".lines",
+            minimum=1, maximum=2_000_000,
         )
-        last = first + count - 1
-        require(physical_count > 0 and first > previous_end
-                and last <= physical_count,
-                f"{item_context} is unsorted, overlapping, or out of range")
-        previous_end = last
-        lines = set(range(first, last + 1))
-        require(not lines.intersection(content_physical),
-                f"{item_context} overlaps a semantic content line")
-        transparent_physical.update(lines)
-        runs.append({
-            "first": first, "count": count,
-            "indentation_units": indentation_units(
-                item.get("indentation_units"),
-                item_context + ".indentation_units",
-            ),
-        })
-    require(
-        content_physical.union(transparent_physical)
-        == set(range(1, physical_count + 1)),
-        f"{context} does not classify every physical line exactly once",
-    )
-    return {
-        "kind": "typed_line_canvas_v1",
-        "physical_line_count": physical_count,
-        "content_lines": content,
-        "transparent_line_runs": runs,
-        "line_ending": line_ending,
-        "terminal_newline": terminal_newline,
-    }
-
-
-def source_overlay_layout_line_count(layout: dict) -> int:
-    count = layout["physical_line_count"]
-    if layout["line_ending"] == "none":
-        return 0
-    return count if layout["terminal_newline"] else max(0, count - 1)
+        raw_at = value.get("at", None)
+        if raw_at is None:
+            positions = None
+        else:
+            require(isinstance(raw_at, list) and len(raw_at) <= count,
+                    f"{context}.at differs")
+            positions = [
+                require_exact_int(
+                    item, f"{context}.at[{index}]", minimum=1, maximum=count,
+                )
+                for index, item in enumerate(raw_at)
+            ]
+            require(len(set(positions)) == len(positions),
+                    f"{context}.at positions are duplicated")
+        normalized["lines"] = count
+        if positions is not None:
+            normalized["at"] = positions
+    else:
+        require("blank_indent" not in value,
+                f"{context}.blank_indent requires an explicit canvas")
+    if "indent" in value:
+        raw_indent = value.get("indent")
+        require(isinstance(raw_indent, list) and raw_indent
+                and len(raw_indent) <= 4096,
+                f"{context}.indent differs")
+        indent = []
+        seen = set()
+        for index, item in enumerate(raw_indent):
+            item_context = f"{context}.indent[{index}]"
+            require(isinstance(item, list) and len(item) == 2,
+                    f"{item_context} must be a [line, units] pair")
+            line = require_exact_int(
+                item[0], item_context + ".line", minimum=1, maximum=2_000_000,
+            )
+            require(line not in seen, f"{item_context}.line is duplicated")
+            seen.add(line)
+            indent.append([
+                line,
+                validate_source_overlay_indentation_units(
+                    item[1], item_context + ".units"
+                ),
+            ])
+        normalized["indent"] = indent
+    if "nl" in value:
+        nl = value.get("nl")
+        require(nl is False or nl == "open", f"{context}.nl differs")
+        normalized["nl"] = nl
+    if "blank_indent" in value:
+        raw_blank = value.get("blank_indent")
+        require(isinstance(raw_blank, list) and raw_blank
+                and len(raw_blank) <= 4096,
+                f"{context}.blank_indent differs")
+        blank = []
+        previous_end = 0
+        for index, item in enumerate(raw_blank):
+            item_context = f"{context}.blank_indent[{index}]"
+            require(isinstance(item, list) and len(item) == 3,
+                    f"{item_context} must be a [first, count, units] triple")
+            first = require_exact_int(
+                item[0], item_context + ".first",
+                minimum=1, maximum=normalized["lines"],
+            )
+            count = require_exact_int(
+                item[1], item_context + ".count",
+                minimum=1, maximum=normalized["lines"],
+            )
+            require(first > previous_end
+                    and first + count - 1 <= normalized["lines"],
+                    f"{item_context} is unsorted, overlapping, or out of range")
+            previous_end = first + count - 1
+            units = validate_source_overlay_indentation_units(
+                item[2], item_context + ".units"
+            )
+            require(units, f"{item_context}.units must be visible whitespace")
+            blank.append([first, count, units])
+        normalized["blank_indent"] = blank
+    return normalized
 
 
 def source_overlay_generator_policy(kind: str, params: dict) -> tuple[str, str]:
@@ -1832,38 +1723,204 @@ def source_overlay_generator_policy(kind: str, params: dict) -> tuple[str, str]:
     return "source_relocation", "authenticated_source_range_owner_transfer"
 
 
+def _expand_source_overlay_name_runs(
+    value: object, context: str, *, maximum: int = 4096,
+) -> list[str]:
+    """Expand one lean run-compressed name list (strings and run records)."""
+    require(isinstance(value, list) and 1 <= len(value) <= maximum,
+            f"{context} has an invalid length")
+    names = []
+    for index, item in enumerate(value):
+        item_context = f"{context}[{index}]"
+        if isinstance(item, str):
+            names.append(_source_overlay_identifier(item, item_context))
+            continue
+        require(isinstance(item, dict), f"{item_context} must be a name or run")
+        exact_audit_keys(item, {"stem", "first", "count", "width"},
+                         item_context, optional={"width"})
+        stem = _source_overlay_identifier(item.get("stem"), item_context + ".stem")
+        first = require_exact_int(
+            item.get("first"), item_context + ".first",
+            minimum=0, maximum=1_000_000,
+        )
+        count = require_exact_int(
+            item.get("count"), item_context + ".count",
+            minimum=1, maximum=4096,
+        )
+        width = require_exact_int(
+            item.get("width", len(str(first))), item_context + ".width",
+            minimum=1, maximum=8,
+        )
+        names.extend(
+            stem + str(number).zfill(width)
+            for number in range(first, first + count)
+        )
+    require(len(names) <= maximum, f"{context} exceeds its maximum")
+    return names
+
+
+def _expand_source_overlay_lean_declaration(
+    short: str, semantic: dict, context: str,
+) -> dict:
+    """Expand one lean declaration-shape record into rich typed params."""
+    shape = SOURCE_OVERLAY_LEAN_SHAPES[short]
+    params: dict = {"shape": shape}
+    if shape in {
+        "forward", "forward_sequence", "empty_class",
+        "unused_class_void_member_sequence",
+    }:
+        params["tag"] = semantic.pop("tag", "class")
+    if "id" in semantic:
+        params["identifier"] = semantic.pop("id")
+    if shape == "forward_sequence":
+        params["identifiers"] = semantic.pop("identifiers", None)
+    elif shape == "enum":
+        params["enumerators"] = [
+            {"identifier": name}
+            for name in _expand_source_overlay_name_runs(
+                semantic.pop("members", None), context + ".members"
+            )
+        ]
+        params["trailing_comma"] = semantic.pop("trailing_comma", False)
+    elif shape == "typedef_builtin":
+        params["aliased_type"] = semantic.pop("aliased_type", None)
+    elif shape == "function_prototype":
+        params["return_type"] = semantic.pop("return_type", None)
+        params["parameters"] = semantic.pop("parameters", None)
+    elif shape == "unused_class_void_member_sequence":
+        raw_members = semantic.pop("members", None)
+        transitions = semantic.pop("access", [])
+        inline_default = semantic.pop("inline", False)
+        require(inline_default is True or inline_default is False,
+                f"{context}.inline differs")
+        require(isinstance(raw_members, list) and raw_members,
+                f"{context}.members must be a non-empty array")
+        members = []
+        for index, item in enumerate(raw_members):
+            item_context = f"{context}.members[{index}]"
+            if isinstance(item, str) or (
+                isinstance(item, dict) and "stem" in item
+            ):
+                members.extend(
+                    {
+                        "kind": "empty_void_method_definition",
+                        "identifier": name,
+                        "inline_specifier": inline_default,
+                    }
+                    for name in _expand_source_overlay_name_runs(
+                        [item], item_context
+                    )
+                )
+            elif isinstance(item, dict) and set(item) == {"decl"}:
+                members.append({
+                    "kind": "void_method_declaration",
+                    "identifier": item["decl"],
+                    "inline_specifier": False,
+                })
+            elif isinstance(item, dict) and set(item) == {"id", "inline"}:
+                require(item["inline"] is True, f"{item_context}.inline differs")
+                members.append({
+                    "kind": "empty_void_method_definition",
+                    "identifier": item["id"],
+                    "inline_specifier": True,
+                })
+            else:
+                raise ByteIdentityError(f"{item_context} member form differs")
+        active = "implicit_default"
+        transition_by_index = {}
+        if isinstance(transitions, list):
+            transition_by_index = {
+                item.get("before_member_index"): item.get("access")
+                for item in transitions if isinstance(item, dict)
+            }
+        for index, member in enumerate(members):
+            if index in transition_by_index:
+                active = transition_by_index[index]
+            member["access"] = active
+        params["members"] = members
+        params["access_transitions"] = transitions
+    require(not semantic,
+            f"{context} has unexpected fields: {sorted(semantic)}")
+    return params
+
+
+def _expand_source_overlay_lean_generator(
+    value: object, context: str,
+) -> tuple[str, dict, dict]:
+    """Split one lean generator record into (kind, params, layout residual)."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    short = value.get("k")
+    require(isinstance(short, str), f"{context}.k must be a generator kind")
+    semantic = {
+        key: item for key, item in value.items()
+        if key != "k" and key not in SOURCE_OVERLAY_LEAN_LAYOUT_KEYS
+    }
+    layout_raw = {
+        key: item for key, item in value.items()
+        if key in SOURCE_OVERLAY_LEAN_LAYOUT_KEYS
+    }
+    if short in SOURCE_OVERLAY_LEAN_SHAPES:
+        return (
+            "declaration_sequence_v1",
+            _expand_source_overlay_lean_declaration(short, semantic, context),
+            layout_raw,
+        )
+    kind = SOURCE_OVERLAY_LEAN_KINDS.get(short)
+    require(kind is not None, f"{context}.k is unsupported: {short}")
+    if kind == "line_reservation_v1":
+        exact_audit_keys(semantic, {"n"}, context)
+        return kind, {"physical_line_count": semantic["n"]}, layout_raw
+    if kind == "composed_typed_sequence_v1":
+        exact_audit_keys(semantic, {"items"}, context)
+        count = layout_raw.pop("lines", None)
+        require(not layout_raw,
+                f"{context} composite layout overrides are unsupported")
+        raw_items = semantic["items"]
+        require(isinstance(raw_items, list) and raw_items,
+                f"{context}.items must be a non-empty array")
+        items = []
+        for index, item in enumerate(raw_items):
+            item_context = f"{context}.items[{index}]"
+            require(isinstance(item, dict) and "line" in item,
+                    f"{item_context} must seat a generator at a line")
+            item = dict(item)
+            line = item.pop("line")
+            if item.get("k") == "fwd_run":
+                exact_audit_keys(
+                    item, {"k", "stem", "first", "count", "width", "tag"},
+                    item_context, optional={"width", "tag"},
+                )
+                run = {
+                    key: item[key] for key in ("stem", "first", "count", "width")
+                    if key in item
+                }
+                names = _expand_source_overlay_name_runs([run], item_context)
+                require(isinstance(line, int), f"{item_context}.line differs")
+                for offset, name in enumerate(names):
+                    child = {"k": "fwd", "id": name}
+                    if "tag" in item:
+                        child["tag"] = item["tag"]
+                    items.append({"line": line + offset, "lean": child})
+            else:
+                items.append({"line": line, "lean": item})
+        return kind, {"physical_line_count": count, "items": items}, {}
+    return kind, semantic, layout_raw
+
+
 def validate_source_overlay_generator(value: object, context: str) -> dict:
-    """Validate the closed initial typed-generator registry.
+    """Validate the closed typed-generator registry in its lean surface form.
 
     Production kinds are added here with exact recursive schemas.  There is no
     generic text/template/command escape hatch, and descriptive metadata never
     reaches a renderer.
     """
-    require(isinstance(value, dict), f"{context} must be an object")
-    kind = value.get("kind")
-    raw_params = value.get("params")
-    require(isinstance(kind, str) and isinstance(raw_params, dict),
-            f"{context} kind/params are invalid")
-    exact_audit_keys(
-        value,
-        {"kind", "emission_class", "params", "baseline_fragment"},
-        context,
+    kind, params, layout_raw = _expand_source_overlay_lean_generator(
+        value, context
     )
     param_context = context + ".params"
-    layout = validate_source_overlay_renderer_layout(
-        raw_params.get("renderer_layout"),
-        param_context + ".renderer_layout",
-    )
-    params = {
-        key: item for key, item in raw_params.items()
-        if key != "renderer_layout"
-    }
+    layout = validate_source_overlay_layout(layout_raw, context + ".layout")
     if kind == "line_reservation_v1":
-        exact_audit_keys(params, {"content_role", "physical_line_count"}, param_context)
-        require(params.get("content_role") == "renderer_owned_layout_comment",
-                f"{param_context}.content_role differs")
         normalized = {
-            "content_role": params["content_role"],
             "physical_line_count": require_exact_int(
                 params.get("physical_line_count"),
                 param_context + ".physical_line_count", minimum=1, maximum=4096,
@@ -1902,36 +1959,18 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
             minimum=1, maximum=256,
         )}
     elif kind == "inline_budget_noop_statements_v1":
-        exact_audit_keys(params, {"assignment_target", "operator", "repeat"}, param_context)
-        require(params.get("operator") == "self_plus_zero",
-                f"{param_context}.operator differs")
+        exact_audit_keys(params, {"assignment_target", "repeat"}, param_context)
         normalized = {
             "assignment_target": _source_overlay_identifier(
                 params.get("assignment_target"), param_context + ".assignment_target"
             ),
-            "operator": "self_plus_zero",
             "repeat": require_exact_int(
                 params.get("repeat"), param_context + ".repeat",
                 minimum=1, maximum=64,
             ),
         }
     elif kind == "compile_time_layout_assert_seat_v1":
-        exact_audit_keys(
-            params, {"assertions", "integer_literal_format"}, param_context
-        )
-        integer_format = params.get("integer_literal_format")
-        require(isinstance(integer_format, dict),
-                f"{param_context}.integer_literal_format must be an object")
-        exact_audit_keys(integer_format, {
-            "base", "prefix", "digit_case", "minimum_digits",
-        }, param_context + ".integer_literal_format")
-        require(
-            integer_format == {
-                "base": "hexadecimal", "prefix": "0x",
-                "digit_case": "lower", "minimum_digits": 1,
-            },
-            f"{param_context}.integer_literal_format differs",
-        )
+        exact_audit_keys(params, {"assertions"}, param_context)
         assertions = params.get("assertions")
         require(isinstance(assertions, list) and assertions,
                 f"{param_context}.assertions must be non-empty")
@@ -1949,10 +1988,7 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
                     minimum=1, maximum=1 << 24,
                 ),
             })
-        normalized = {
-            "assertions": normalized_assertions,
-            "integer_literal_format": dict(integer_format),
-        }
+        normalized = {"assertions": normalized_assertions}
     elif kind == "declaration_sequence_v1":
         shape = params.get("shape")
         if shape in {"forward", "empty_class"}:
@@ -2199,68 +2235,29 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
         normalized["branch_topology"] = topology
         normalized["directive_sequence"] = directives
     elif kind == "composed_typed_sequence_v1":
-        exact_audit_keys(params, {
-            "physical_line_count", "comment_policy", "composition_policy",
-            "items",
-        }, param_context)
-        require(params.get("comment_policy")
-                == "strip_prose_preserve_physical_lines_v1"
-                and params.get("composition_policy")
-                == "line_overlay_disjoint_nonblank_conflict_reject_v2",
-                f"{param_context} composition policy differs")
         physical_line_count = require_exact_int(
             params.get("physical_line_count"),
-            param_context + ".physical_line_count",
+            context + ".lines",
             minimum=1, maximum=2_000_000,
         )
         raw_items = params.get("items")
         require(isinstance(raw_items, list) and 1 <= len(raw_items) <= 8192,
-                f"{param_context}.items has an invalid length")
+                f"{context}.items has an invalid length")
         normalized_items = []
         for index, item in enumerate(raw_items):
-            item_context = f"{param_context}.items[{index}]"
-            require(isinstance(item, dict), f"{item_context} must be an object")
-            exact_audit_keys(item, {
-                "index", "relative_lines", "transparent_relative_lines",
-                "generator",
-            }, item_context)
-            require(require_exact_int(
-                item.get("index"), item_context + ".index",
-                minimum=index, maximum=index,
-            ) == index, f"{item_context}.index differs")
-            relative_lines = item.get("relative_lines")
-            require(isinstance(relative_lines, list) and len(relative_lines) == 2,
-                    f"{item_context}.relative_lines differs")
+            item_context = f"{context}.items[{index}]"
             first = require_exact_int(
-                relative_lines[0], item_context + ".relative_lines[0]",
+                item.get("line"), item_context + ".line",
                 minimum=1, maximum=physical_line_count,
             )
-            last = require_exact_int(
-                relative_lines[1], item_context + ".relative_lines[1]",
-                minimum=first, maximum=physical_line_count,
-            )
-            transparent = item.get("transparent_relative_lines")
-            require(isinstance(transparent, list)
-                    and transparent == sorted(set(transparent)),
-                    f"{item_context}.transparent_relative_lines must be sorted/unique")
-            normalized_transparent = [
-                require_exact_int(
-                    line, f"{item_context}.transparent_relative_lines[{line_index}]",
-                    minimum=first, maximum=last,
-                ) for line_index, line in enumerate(transparent)
-            ]
             normalized_items.append({
-                "index": index, "relative_lines": [first, last],
-                "transparent_relative_lines": normalized_transparent,
+                "first_line": first,
                 "generator": validate_source_overlay_generator(
-                    item.get("generator"), item_context + ".generator"
+                    item.get("lean"), item_context
                 ),
             })
         normalized = {
             "physical_line_count": physical_line_count,
-            "comment_policy": "strip_prose_preserve_physical_lines_v1",
-            "composition_policy":
-                "line_overlay_disjoint_nonblank_conflict_reject_v2",
             "items": normalized_items,
         }
     elif kind == "local_symbol_id_carrier_v1":
@@ -3391,58 +3388,17 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
     else:
         raise ByteIdentityError(f"{context} has unsupported generator kind: {kind}")
     normalized["renderer_layout"] = layout
-    emission_class, structural_effect = source_overlay_generator_policy(
+    emission_class, _structural_effect = source_overlay_generator_policy(
         kind, normalized
     )
-    require(value.get("emission_class") == emission_class,
-            f"{context}.emission_class differs")
-    fragment = validate_source_overlay_fragment(
-        value.get("baseline_fragment"), context + ".baseline_fragment",
-        emission_class=emission_class,
-        structural_effect=structural_effect,
-    )
-    require(
-        fragment["baseline_line_count"]
-        == source_overlay_layout_line_count(layout),
-        f"{context} fragment line count differs from renderer_layout",
-    )
-    if kind == "literal_first_use_alias_v1":
-        local_identifier = normalized["local_identifier"]
-        if "type" in normalized:
-            expected_census = {
-                "declared_identifiers": [local_identifier],
-                "referenced_identifiers": [], "emitted_identifiers": [],
-            }
-        else:
-            expected_census = {
-                "declared_identifiers": [],
-                "referenced_identifiers": [local_identifier],
-                "emitted_identifiers": [],
-            }
-        require(all(fragment[key] == expected
-                    for key, expected in expected_census.items()),
-                f"{context} literal alias census differs")
-    if kind == "discarded_import_library_probe_v1":
-        require(
-            fragment["declared_identifiers"] == ["Detect3DSound"]
-            and fragment["emitted_identifiers"] == ["Detect3DSound"]
-            and fragment["referenced_identifiers"] == [
-                "DSCAPS", "DSCAPS_PRIMARY16BIT", "DirectSoundCreate",
-            ],
-            f"{context} import probe census differs",
-        )
     expected_roles = source_overlay_expected_identifier_roles(kind, normalized)
-    require(
-        all(fragment[role] == identities
-            for role, identities in expected_roles.items()),
-        f"{context} identifier role census differs",
-    )
-    return {
-        "kind": kind,
-        "emission_class": emission_class,
-        "params": normalized,
-        "baseline_fragment": fragment,
-    }
+    if emission_class in {
+        "source_layout_only", "include_dependency", "compiler_state_only",
+        "non_emitting_declaration",
+    }:
+        require(not expected_roles["emitted_identifiers"],
+                f"{context} non-emitting generator derives an emitted identity")
+    return {"kind": kind, "params": normalized}
 
 
 def _source_overlay_indentation_bytes(units: list[dict]) -> bytes:
@@ -3453,65 +3409,76 @@ def _source_overlay_indentation_bytes(units: list[dict]) -> bytes:
 
 
 def _seat_source_overlay_fragment(generator: dict, semantic: bytes) -> bytes:
-    """Seat semantic lines using only typed renderer inputs.
+    """Seat the canonical semantic rendering, applying residual overrides.
 
-    This deliberately does not inspect ``baseline_fragment``.  Canonical
-    hashes are assertions on the resulting bytes, never formatting inputs.
+    The semantic renderer owns the default bytes: its lines land on
+    consecutive physical lines exactly as emitted, LF-terminated.  The
+    validated residual layout overrides deviate from that default only where
+    the manifest recorded a deviation (explicit canvas placement, replacement
+    indentation, missing terminal newline, visible whitespace on blank
+    lines).
     """
+    kind = generator["kind"]
+    overrides = generator["params"].get("renderer_layout") or {}
     require(b"\r" not in semantic and semantic.isascii(),
-            f"typed source overlay fragment is not ASCII/LF: {generator['kind']}")
-    semantic_lines = []
-    for line in semantic.splitlines():
-        if not line.strip(b" \t"):
-            continue
-        normalized = line.lstrip(b" \t")
-        require(normalized == normalized.rstrip(b" \t"),
-                f"typed source overlay semantic line has trailing whitespace: {generator['kind']}")
-        semantic_lines.append(normalized)
-    layout = generator["params"]["renderer_layout"]
-    content = layout["content_lines"]
-    require(len(semantic_lines) == len(content),
-            f"typed source overlay semantic line count differs: {generator['kind']}")
-    physical = [None] * layout["physical_line_count"]
-    for item, line in zip(content, semantic_lines):
-        index = item["relative_line"] - 1
-        require(physical[index] is None and line.strip(),
-                f"typed source overlay content seat is duplicated: {generator['kind']}")
-        physical[index] = (
-            _source_overlay_indentation_bytes(item["indentation_units"]) + line
-        )
-    for run in layout["transparent_line_runs"]:
-        indentation = _source_overlay_indentation_bytes(
-            run["indentation_units"]
-        )
-        for relative in range(run["first"], run["first"] + run["count"]):
-            index = relative - 1
-            require(physical[index] is None,
-                    f"typed source overlay transparent seat overlaps: {generator['kind']}")
-            physical[index] = indentation
-    require(all(line is not None for line in physical),
-            f"typed source overlay physical canvas is incomplete: {generator['kind']}")
-    if layout["line_ending"] == "none":
-        body = b"" if not physical else physical[0]
+            f"typed source overlay fragment is not ASCII/LF: {kind}")
+    raw_lines = semantic.split(b"\n")
+    if raw_lines and raw_lines[-1] == b"":
+        raw_lines.pop()
+    indent_by_line = {
+        line: _source_overlay_indentation_bytes(units)
+        for line, units in overrides.get("indent", [])
+    }
+
+    def seated(content_index: int, line: bytes) -> bytes:
+        stripped = line.lstrip(b" \t")
+        require(stripped == stripped.rstrip(b" \t"),
+                f"typed source overlay semantic line has trailing whitespace: {kind}")
+        replacement = indent_by_line.get(content_index + 1)
+        if replacement is None:
+            return line
+        return replacement + stripped
+
+    if "lines" in overrides:
+        content = [line for line in raw_lines if line.strip(b" \t")]
+        count = overrides["lines"]
+        positions = overrides.get("at", list(range(1, len(content) + 1)))
+        require(len(positions) == len(content)
+                and all(1 <= item <= count for item in positions),
+                f"typed source overlay canvas placement differs: {kind}")
+        physical: list[bytes | None] = [None] * count
+        for index, line in enumerate(content):
+            seat = positions[index] - 1
+            require(physical[seat] is None,
+                    f"typed source overlay content seat is duplicated: {kind}")
+            physical[seat] = seated(index, line)
+        for first, run_count, units in overrides.get("blank_indent", []):
+            indentation = _source_overlay_indentation_bytes(units)
+            for relative in range(first, first + run_count):
+                require(physical[relative - 1] is None,
+                        f"typed source overlay transparent seat overlaps: {kind}")
+                physical[relative - 1] = indentation
+        physical = [b"" if line is None else line for line in physical]
+        content_count = len(content)
     else:
-        body = b"\n".join(physical)
-        if layout["terminal_newline"]:
-            body += b"\n"
-    return body
-
-
-def _finish_source_overlay_fragment(generator: dict, semantic: bytes) -> bytes:
-    """Seat semantic lines through the canvas and verify all fragment pins."""
-    body = _seat_source_overlay_fragment(generator, semantic)
-    expected = generator["baseline_fragment"]
-    require(
-        len(body) == expected["baseline_size"]
-        and body.count(b"\n") == expected["baseline_line_count"]
-        and sha256_bytes(body) == expected["baseline_sha256"]
-        and source_overlay_significant_sha256(body)
-        == expected["baseline_significant_token_sha256"],
-        f"typed source overlay fragment differs from its canonical pins: {generator['kind']}",
-    )
+        physical = []
+        content_count = 0
+        for line in raw_lines:
+            if line.strip(b" \t"):
+                physical.append(seated(content_count, line))
+                content_count += 1
+            else:
+                physical.append(line)
+    require(all(1 <= line <= content_count for line in indent_by_line),
+            f"typed source overlay indent override is unseated: {kind}")
+    newline = overrides.get("nl", True)
+    if newline is False:
+        require(len(physical) <= 1,
+                f"typed source overlay unterminated fragment differs: {kind}")
+        return physical[0] if physical else b""
+    body = b"\n".join(physical)
+    if newline is True and physical:
+        body += b"\n"
     return body
 
 
@@ -3529,7 +3496,7 @@ def render_source_overlay_template_supplier(params: dict) -> bytes:
     for item in prefix["enum_declarations"]:
         lines.extend([
             f'enum {item["identifier"]} {{',
-            f'{item["enumerator"]} = {item["value"]["lhs"]} << '
+            f'\t{item["enumerator"]} = {item["value"]["lhs"]} << '
             f'{item["value"]["rhs"]}',
             "};",
         ])
@@ -3538,17 +3505,17 @@ def render_source_overlay_template_supplier(params: dict) -> bytes:
     ):
         lines.extend([
             f"class {identifier} {{", "public:",
-            "int GetValue() { return m_value; }", "private:",
-            "int m_value;", "};",
+            "\tint GetValue() { return m_value; }", "private:",
+            "\tint m_value;", "};",
         ])
     for identifier in source_overlay_expand_identifier_collection(
         prefix["range_class_identifiers"]
     ):
         lines.extend([
             f"class {identifier} {{", "public:",
-            "int GetFirst() { return m_first; }",
-            "int GetLast() { return m_last; }", "private:",
-            "int m_first;", "int m_last;", "};",
+            "\tint GetFirst() { return m_first; }",
+            "\tint GetLast() { return m_last; }", "private:",
+            "\tint m_first;", "\tint m_last;", "};",
         ])
     lines.append(f'#include "{params["include_identity"]}"')
     alias = params["container_alias"]
@@ -3561,7 +3528,7 @@ def render_source_overlay_template_supplier(params: dict) -> bytes:
             and not alias_type["trailing_const"]):
         lines.append(f'typedef {"::".join(base["qualified_identifier"])}<')
         for argument in base["arguments"]:
-            lines.append(render_source_overlay_cpp_type(argument) + ",")
+            lines.append("\t" + render_source_overlay_cpp_type(argument) + ",")
         lines[-1] = lines[-1][:-1]
         lines.append(f'> {alias["identifier"]};')
     else:
@@ -3583,14 +3550,14 @@ def render_source_overlay_template_supplier(params: dict) -> bytes:
         alias_identifier = pointer["alias_identifier"]
         lines.extend([
             f"struct {probe_identifier} : public {base_type} {{",
-            f"typedef {return_type} ({owner_type}::*{alias_identifier})"
+            f"\ttypedef {return_type} ({owner_type}::*{alias_identifier})"
             f"({parameters}){method_const};",
-            f"static {alias_identifier} Get();",
+            f"\tstatic {alias_identifier} Get();",
             "};",
             f"{probe_identifier}::{alias_identifier} "
             f"{probe_identifier}::Get()",
             "{",
-            f'return &{"::".join(probe["target_qualified_identifier"])};',
+            f'\treturn &{"::".join(probe["target_qualified_identifier"])};',
             "}",
         ])
     return ("\n".join(lines) + "\n").encode("ascii")
@@ -3635,7 +3602,7 @@ def render_source_overlay_seed_sequence(params: dict) -> bytes:
                 )
                 method_const = " const" if member["method_const"] else ""
                 lines.append(
-                    f'{storage}{return_type}{member["identifier"]}'
+                    f'\t{storage}{return_type}{member["identifier"]}'
                     f'({parameters}){method_const};'
                 )
             lines.append("};")
@@ -3682,7 +3649,7 @@ def render_source_overlay_seed_sequence(params: dict) -> bytes:
             raise ByteIdentityError(
                 f"typed seed statement is unsupported: {kind}"
             )
-        lines.append(statement + ";")
+        lines.append("\t" + statement + ";")
     lines.append("}")
     return ("\n".join(lines) + "\n").encode("ascii")
 
@@ -3693,7 +3660,7 @@ def render_source_overlay_generator(
     kind = generator["kind"]
     params = generator["params"]
     if kind == "line_reservation_v1":
-        result = b""
+        result = b"\n" * params["physical_line_count"]
     elif kind == "include_dependency_v1":
         if params["style"] == "angle":
             result = f'#include <{params["header"]}>\n'.encode("ascii")
@@ -3743,7 +3710,7 @@ def render_source_overlay_generator(
             result = "".join(lines).encode("ascii")
         elif shape == "typedef_builtin":
             result = (
-                f'typedef {params["aliased_type"]} {params["identifier"]};\n'
+                f'\ttypedef {params["aliased_type"]} {params["identifier"]};\n'
             ).encode("ascii")
         elif shape == "function_prototype":
             result = (
@@ -3765,11 +3732,11 @@ def render_source_overlay_generator(
                     lines.append(f'{transitions[index]}:\n')
                 if member["kind"] == "empty_void_method_definition":
                     lines.append(
-                        f'{"inline " if member["inline_specifier"] else ""}'
+                        f'\t{"inline " if member["inline_specifier"] else ""}'
                         f'void {member["identifier"]}() {{}}\n'
                     )
                 else:
-                    lines.append(f'void {member["identifier"]}();\n')
+                    lines.append(f'\tvoid {member["identifier"]}();\n')
             lines.append("};\n")
             result = "".join(lines).encode("ascii")
         else:
@@ -3777,15 +3744,16 @@ def render_source_overlay_generator(
                 f'typed declaration shape is unsupported: {shape}'
             )
     elif kind == "conditional_declarations_v1":
-        directives = []
+        canvas = [b""] * params["physical_line_count"]
         for item in params["directive_sequence"]:
             if item["directive"] == "ifdef":
-                directives.append(f'#ifdef {item["macro_identifier"]}')
+                text = f'#ifdef {item["macro_identifier"]}'.encode("ascii")
             elif item["directive"] == "else":
-                directives.append("#else")
+                text = b"#else"
             else:
-                directives.append("#endif")
-        result = ("\n".join(directives) + "\n").encode("ascii")
+                text = b"#endif"
+            canvas[item["relative_line"] - 1] = text
+        result = b"\n".join(canvas) + b"\n"
     elif kind == "composed_typed_sequence_v1":
         grid = [b"\n"] * params["physical_line_count"]
         for item in params["items"]:
@@ -3793,14 +3761,10 @@ def render_source_overlay_generator(
                 item["generator"], relocation_ranges=relocation_ranges
             )
             child_lines = child.splitlines(keepends=True)
-            first, last = item["relative_lines"]
-            require(len(child_lines) == last - first + 1
+            first = item["first_line"]
+            require(first - 1 + len(child_lines) <= len(grid)
                     and all(line.endswith(b"\n") for line in child_lines),
                     "typed source overlay composite child span differs")
-            transparent = set(item["transparent_relative_lines"])
-            require(all(
-                not child_lines[line - first].strip() for line in transparent
-            ), "typed source overlay delegated line is not transparent")
             for offset, line in enumerate(child_lines, start=first - 1):
                 if not line.strip():
                     continue
@@ -3808,10 +3772,9 @@ def render_source_overlay_generator(
                         "typed source overlay composite has a nonblank conflict")
                 grid[offset] = line
         result = b"".join(grid)
-        return _finish_source_overlay_fragment(generator, result)
     elif kind == "local_symbol_id_carrier_v1":
         result = (
-            f'{params["type"]} {", ".join(params["identifiers"])};\n'
+            f'\t{params["type"]} {", ".join(params["identifiers"])};\n'
         ).encode("ascii")
     elif kind == "qualified_member_comdat_emission_probe_v1":
         receiver = render_source_overlay_cpp_type(params["receiver_type"])
@@ -3821,7 +3784,7 @@ def render_source_overlay_generator(
             f'#pragma inline_depth({params["inline_depth"]})\n'
             f'MxS32 {params["function_identifier"]}({receiver}* p_bitmap)\n'
             '{\n'
-            f'return p_bitmap->{member}({argument});\n'
+            f'\treturn p_bitmap->{member}({argument});\n'
             '}\n'
             '#pragma inline_depth()\n'
         ).encode("ascii")
@@ -3834,7 +3797,7 @@ def render_source_overlay_generator(
         result = (
             f'void {params["function_identifier"]}()\n'
             '{\n'
-            f'(({receiver_type}*) 0)->{member}();\n'
+            f'\t(({receiver_type}*) 0)->{member}();\n'
             '}\n'
         ).encode("ascii")
     elif kind == "archive_pull_seed_sequence_v1":
@@ -3888,7 +3851,7 @@ def render_source_overlay_generator(
         result += (
             f'void {wrapper["function_identifier"]}({parameter})\n'
             '{\n'
-            f'{wrapper["parameter"]["identifier"]}.erase('
+            f'\t{wrapper["parameter"]["identifier"]}.erase('
             f'{wrapper["parameter"]["identifier"]}.begin());\n'
             '}\n'
         ).encode("ascii")
@@ -3905,7 +3868,7 @@ def render_source_overlay_generator(
         ]
         lines.extend(f"void {identifier}();" for identifier in identifiers)
         lines.extend([
-            f"void {stem}Sink({stem}Fn p_fn)", "{", "(void) p_fn;", "}",
+            f"void {stem}Sink({stem}Fn p_fn)", "{", "\t(void) p_fn;", "}",
         ])
         for index, identifier in enumerate(identifiers):
             reference_count = (
@@ -3916,7 +3879,7 @@ def render_source_overlay_generator(
             lines.extend([f"void {identifier}()", "{"])
             for distance in range(1, reference_count + 1):
                 successor = identifiers[(index + distance) % count]
-                lines.append(f"{stem}Sink({successor});")
+                lines.append(f"\t{stem}Sink({successor});")
             lines.append("}")
         result = ("\n".join(lines) + "\n").encode("ascii")
     elif kind == "list_cursor_delete_emission_probe_v1":
@@ -3924,11 +3887,11 @@ def render_source_overlay_generator(
             f'void {params["function_identifier"]}('
             f'{params["container_type"]}* p_partlist)\n'
             '{\n'
-            f'{params["cursor_type"]} cursor(p_partlist);\n'
-            f'{params["element_type"]}* part;\n'
-            'while (cursor.Next(part)) {\n'
-            'delete part;\n'
-            '}\n'
+            f'\t{params["cursor_type"]} cursor(p_partlist);\n'
+            f'\t{params["element_type"]}* part;\n'
+            '\twhile (cursor.Next(part)) {\n'
+            '\t\tdelete part;\n'
+            '\t}\n'
             '}\n'
         ).encode("ascii")
     elif kind == "recursive_frame_texture_refresh_probe_v1":
@@ -4031,7 +3994,7 @@ def render_source_overlay_generator(
             f'void {params["function_identifier"]}('
             f'{render_source_overlay_parameter(params["parameter"])})\n'
             "{\n"
-            f'delete[] {params["parameter"]["identifier"]};\n'
+            f'\tdelete[] {params["parameter"]["identifier"]};\n'
             "}\n"
         ).encode("ascii")
     elif kind == "record_header_v1":
@@ -4040,7 +4003,7 @@ def render_source_overlay_generator(
         if recipe["kind"] == "enum_one_enumerator":
             for item in recipe["items"]:
                 lines.extend([
-                    f'enum {item["name"]} {{', item["enumerator"], "};",
+                    f'enum {item["name"]} {{', "\t" + item["enumerator"], "};",
                 ])
         else:
             for identifier in recipe["items"]:
@@ -4052,7 +4015,7 @@ def render_source_overlay_generator(
                         == "single_unindexed_record"
                         else f"Record{index}"
                     )
-                    lines.append(f'inline void {method}() {{}}')
+                    lines.append(f'\tinline void {method}() {{}}')
                 lines.append("};")
         lines.append("#endif")
         result = ("\n".join(lines) + "\n").encode("ascii")
@@ -4097,110 +4060,80 @@ def render_source_overlay_generator(
                 ).encode("ascii")
     else:
         raise ByteIdentityError(f"source overlay renderer is absent: {kind}")
-    return _finish_source_overlay_fragment(generator, result)
+    return _seat_source_overlay_fragment(generator, result)
 
 
 def validate_source_overlay_operation(
-    value: object, context: str, *, logical_path: str,
+    value: object, context: str, *, logical_path: str, index: int,
 ) -> dict:
     require(isinstance(value, dict), f"{context} must be an object")
-    action = value.get("action")
-    require(action in SOURCE_OVERLAY_ACTIONS,
-            f"{context}.action is unsupported")
-    operation_id = value.get("id")
-    require(isinstance(operation_id, str)
-            and re.fullmatch(r"op_[a-z0-9_]{1,120}", operation_id) is not None,
-            f"{context}.id is invalid")
+    action = SOURCE_OVERLAY_LEAN_ACTIONS.get(value.get("op"))
+    require(action is not None, f"{context}.op is unsupported")
+    operation_id = value.get("id", f"{logical_path}#{index}")
+    if "id" in value:
+        require(isinstance(operation_id, str)
+                and re.fullmatch(r"op_[a-z0-9_]{1,120}", operation_id)
+                is not None,
+                f"{context}.id is invalid")
     if action == "insert":
-        allowed = {"id", "action", "start_anchor", "generator"}
-        if "required_graph_admission_ids" in value:
-            allowed.add("required_graph_admission_ids")
-        exact_audit_keys(value, allowed, context)
+        exact_audit_keys(value, {"op", "anchor", "gen", "id", "needs"},
+                         context, optional={"id", "needs"})
         result = {
             "id": operation_id, "action": action,
             "start_anchor": validate_source_overlay_anchor(
-                value.get("start_anchor"), context + ".start_anchor",
-                logical_path=logical_path, operation_id=operation_id,
+                value.get("anchor"), context + ".anchor"
             ),
             "generator": validate_source_overlay_generator(
-                value.get("generator"), context + ".generator"
+                value.get("gen"), context + ".gen"
             ),
         }
-        if "required_graph_admission_ids" in value:
-            require(
-                value["required_graph_admission_ids"]
-                == ["config_private_dsound_probe_v1"],
-                f"{context}.required_graph_admission_ids differs",
-            )
-            result["required_graph_admission_ids"] = list(
-                value["required_graph_admission_ids"]
-            )
+        if "needs" in value:
+            require("id" in value
+                    and value["needs"] == ["config_private_dsound_probe_v1"],
+                    f"{context}.needs differs")
+            result["required_graph_admission_ids"] = list(value["needs"])
         return result
-    if action == "replace":
+    if action in {"replace", "delete"}:
         exact_audit_keys(value, {
-            "id", "action", "start_anchor", "end_anchor", "generator",
-            "baseline_input_range",
-        }, context)
+            "op", "from", "to", "removed", "gen", "id",
+        }, context, optional={"id"})
+        removed = value.get("removed")
+        require(isinstance(removed, dict), f"{context}.removed must be an object")
+        exact_audit_keys(removed, {"sha256", "size"}, context + ".removed")
         return {
             "id": operation_id, "action": action,
             "start_anchor": validate_source_overlay_anchor(
-                value.get("start_anchor"), context + ".start_anchor",
-                logical_path=logical_path, operation_id=operation_id,
+                value.get("from"), context + ".from"
             ),
             "end_anchor": validate_source_overlay_anchor(
-                value.get("end_anchor"), context + ".end_anchor",
-                logical_path=logical_path, operation_id=operation_id,
+                value.get("to"), context + ".to"
             ),
             "generator": validate_source_overlay_generator(
-                value.get("generator"), context + ".generator"
+                value.get("gen"), context + ".gen"
             ),
-            "baseline_input_range": validate_source_overlay_range_pin(
-                value.get("baseline_input_range"),
-                context + ".baseline_input_range",
-            ),
+            "baseline_input_range": {
+                "baseline_sha256": require_sha(
+                    removed.get("sha256"), context + ".removed.sha256"
+                ),
+                "baseline_size": require_exact_int(
+                    removed.get("size"), context + ".removed.size",
+                    minimum=0, maximum=64 * 1024 * 1024,
+                ),
+            },
         }
-    if action == "delete":
-        exact_audit_keys(value, {
-            "id", "action", "start_anchor", "end_anchor", "generator",
-            "baseline_input_range",
-        }, context)
-        return {
-            "id": operation_id, "action": action,
-            "start_anchor": validate_source_overlay_anchor(
-                value.get("start_anchor"), context + ".start_anchor",
-                logical_path=logical_path, operation_id=operation_id,
-            ),
-            "end_anchor": validate_source_overlay_anchor(
-                value.get("end_anchor"), context + ".end_anchor",
-                logical_path=logical_path, operation_id=operation_id,
-            ),
-            "generator": validate_source_overlay_generator(
-                value.get("generator"), context + ".generator"
-            ),
-            "baseline_input_range": validate_source_overlay_range_pin(
-                value.get("baseline_input_range"),
-                context + ".baseline_input_range",
-            ),
-        }
-    if action == "whole_file_append":
-        exact_audit_keys(value, {"id", "action", "generator"}, context)
-        generator = validate_source_overlay_generator(
-            value.get("generator"), context + ".generator"
-        )
-        return {
-            "id": operation_id, "action": action,
-            "generator": generator,
-        }
-    raise ByteIdentityError(f"{context}.action is unsupported")
+    exact_audit_keys(value, {"op", "gen", "id"}, context, optional={"id"})
+    return {
+        "id": operation_id, "action": action,
+        "generator": validate_source_overlay_generator(
+            value.get("gen"), context + ".gen"
+        ),
+    }
 
 
 def validate_source_overlay_graph(value: object, outputs: list[dict]) -> dict:
     context = "manifest.source_overlay.graph"
     require(isinstance(value, dict), f"{context} must be an object")
-    exact_audit_keys(value, {
-        "generated_translation_units", "link_admissions",
-        "forbidden_legacy_interfaces", "prebuilt_source_artifacts",
-    }, context)
+    exact_audit_keys(value, {"generated_tus", "link_admissions"}, context)
     output_by_path = {item["logical_path"]: item for item in outputs}
     operation_owner = {}
     for output in outputs:
@@ -4208,36 +4141,27 @@ def validate_source_overlay_graph(value: object, outputs: list[dict]) -> dict:
             require(operation["id"] not in operation_owner,
                     f"source overlay operation is duplicated: {operation['id']}")
             operation_owner[operation["id"]] = (output, operation)
-    raw_units = value.get("generated_translation_units")
+    raw_units = value.get("generated_tus")
     require(isinstance(raw_units, list),
-            f"{context}.generated_translation_units must be an array")
+            f"{context}.generated_tus must be an array")
     units = []
     owners = set()
     for index, item in enumerate(raw_units):
-        item_context = f"{context}.generated_translation_units[{index}]"
+        item_context = f"{context}.generated_tus[{index}]"
         require(isinstance(item, dict), f"{item_context} must be an object")
-        exact_audit_keys(item, {
-            "logical_path", "language", "target_family", "source_ordinal",
-            "insert_after", "insert_before", "targets",
-            "generation_operation_ids", "generated_output",
-        }, item_context)
+        exact_audit_keys(item, {"path", "ordinal", "after", "before"},
+                         item_context, optional={"before"})
         logical = source_overlay_relative_path(
-            item.get("logical_path"), item_context + ".logical_path"
+            item.get("path"), item_context + ".path"
         )
         after = source_overlay_relative_path(
-            item.get("insert_after"), item_context + ".insert_after"
+            item.get("after"), item_context + ".after"
         )
-        before_value = item.get("insert_before")
         before = (
-            None if before_value is None else source_overlay_relative_path(
-                before_value, item_context + ".insert_before"
+            None if "before" not in item else source_overlay_relative_path(
+                item.get("before"), item_context + ".before"
             )
         )
-        require(item.get("language") == "CXX"
-                and item.get("target_family")
-                == "list_targets_from_add_lego_libraries"
-                and item.get("targets") == ["lego1", "beta10"],
-                f"{item_context} language/target family differs")
         require(logical != after and logical != before and after != before,
                 f"{item_context} neighbor anchors are invalid")
         output = output_by_path.get(logical)
@@ -4246,66 +4170,24 @@ def validate_source_overlay_graph(value: object, outputs: list[dict]) -> dict:
                 f"{item_context} is not one generated-only C++ output")
         require(logical not in owners,
                 f"{item_context} duplicates a generated source")
-        generation_operation_ids = item.get("generation_operation_ids")
-        expected_operation_ids = [
-            operation["id"] for operation in output["operations"]
-        ]
-        require(generation_operation_ids == expected_operation_ids
-                and all(
-                    operation_owner[operation_id][0] is output
-                    for operation_id in generation_operation_ids
-                ), f"{item_context} operation dependency closure differs")
-        generated_output = item.get("generated_output")
-        require(isinstance(generated_output, dict),
-                f"{item_context}.generated_output must be an object")
-        exact_audit_keys(generated_output, {
-            "baseline_sha256", "baseline_size", "baseline_line_count",
-            "baseline_significant_token_sha256", "materialization",
-        }, item_context + ".generated_output")
-        require(generated_output.get("materialization")
-                == "build_tree_overlay_at_logical_path",
-                f"{item_context}.generated_output.materialization differs")
-        normalized_generated_output = {
-            "baseline_sha256": require_sha(
-                generated_output.get("baseline_sha256"),
-                item_context + ".generated_output.baseline_sha256",
-            ),
-            "baseline_size": require_exact_int(
-                generated_output.get("baseline_size"),
-                item_context + ".generated_output.baseline_size",
-                minimum=0, maximum=64 * 1024 * 1024,
-            ),
-            "baseline_line_count": require_exact_int(
-                generated_output.get("baseline_line_count"),
-                item_context + ".generated_output.baseline_line_count",
-                minimum=0, maximum=2_000_000,
-            ),
-            "baseline_significant_token_sha256": require_sha(
-                generated_output.get("baseline_significant_token_sha256"),
-                item_context
-                + ".generated_output.baseline_significant_token_sha256",
-            ),
-            "materialization": "build_tree_overlay_at_logical_path",
-        }
-        require(all(
-            normalized_generated_output[key] == output["effective"][key]
-            for key in (
-                "baseline_sha256", "baseline_size", "baseline_line_count",
-                "baseline_significant_token_sha256",
-            )
-        ), f"{item_context} output pins differ from the owned recipe")
         owners.add(logical)
         units.append({
             "logical_path": logical, "language": "CXX",
             "target_family": "list_targets_from_add_lego_libraries",
             "targets": ["lego1", "beta10"],
             "source_ordinal": require_exact_int(
-                item.get("source_ordinal"), item_context + ".source_ordinal",
+                item.get("ordinal"), item_context + ".ordinal",
                 minimum=1, maximum=100000,
             ),
             "insert_after": after, "insert_before": before,
-            "generation_operation_ids": list(generation_operation_ids),
-            "generated_output": normalized_generated_output,
+            "generation_operation_ids": [
+                operation["id"] for operation in output["operations"]
+            ],
+            "generated_output": {
+                "baseline_sha256": output["effective"]["baseline_sha256"],
+                "baseline_size": output["effective"]["baseline_size"],
+                "materialization": "build_tree_overlay_at_logical_path",
+            },
         })
     units.sort(key=lambda item: item["source_ordinal"])
     require(
@@ -4376,18 +4258,9 @@ def validate_source_overlay_graph(value: object, outputs: list[dict]) -> dict:
             "insert_before": "dxguid", "source_output": source_output,
             "required_operation_ids": list(required_operation_ids),
         })
-    forbidden = value.get("forbidden_legacy_interfaces")
-    require(forbidden == [
-        "ISLE_INCLUDE_ENTROPY", "ISLE_ENTROPY_FILENAME",
-        "ISLE_TU_ENTROPY_MANIFEST",
-    ], f"{context}.forbidden_legacy_interfaces differs")
-    require(value.get("prebuilt_source_artifacts") == "forbidden",
-            f"{context}.prebuilt_source_artifacts differs")
     return {
         "generated_translation_units": units,
         "link_admissions": links,
-        "forbidden_legacy_interfaces": list(forbidden),
-        "prebuilt_source_artifacts": "forbidden",
     }
 
 
@@ -4518,9 +4391,18 @@ def render_source_overlay_outputs(
                 require(start < end,
                         f"source overlay operation has an empty/reversed range: {operation_id}")
                 removed = base[start:end]
-                removed_evidence = require_source_overlay_range_pin(
-                    removed, operation["baseline_input_range"],
-                    f"source overlay operation {operation_id}",
+                expected_range = operation["baseline_input_range"]
+                removed_evidence = {
+                    "actual_removed_range_sha256": sha256_bytes(removed),
+                    "actual_removed_range_size": len(removed),
+                }
+                require(
+                    removed_evidence["actual_removed_range_sha256"]
+                    == expected_range["baseline_sha256"]
+                    and removed_evidence["actual_removed_range_size"]
+                    == expected_range["baseline_size"],
+                    "source overlay operation differs from its authenticated "
+                    f"input-range pins: {operation_id}",
                 )
                 generator = operation["generator"]
                 params = generator["params"]
@@ -4528,21 +4410,12 @@ def render_source_overlay_outputs(
                         and generator["kind"] == "source_range_relocation_v1"):
                     require(
                         params.get("source_operation_id") == operation_id
-                        and params.get("ordinary_owner") == relative
-                        and params.get("source_range_token_pin")
-                        == operation["baseline_input_range"]
-                        and all(
-                            generator["baseline_fragment"][fragment_key]
-                            == operation["baseline_input_range"][range_key]
-                            for fragment_key, range_key in (
-                                ("baseline_sha256", "baseline_sha256"),
-                                ("baseline_size", "baseline_size"),
-                                ("baseline_line_count", "baseline_line_count"),
-                                ("baseline_significant_token_sha256",
-                                 "baseline_significant_token_sha256"),
-                            )
-                        ),
+                        and params.get("ordinary_owner") == relative,
                         f"source relocation producer differs: {operation_id}",
+                    )
+                    require_source_overlay_range_pin(
+                        removed, params["source_range_token_pin"],
+                        f"source relocation producer range {operation_id}",
                     )
                     dependency_key = (
                         operation_id, params["range_dependency_id"]
@@ -4637,7 +4510,6 @@ def render_source_overlay_outputs(
         if action == "delete":
             if generator["kind"] == "source_range_relocation_v1":
                 fragment = record["removed"]
-                _finish_source_overlay_fragment(generator, fragment)
             else:
                 fragment = render_source_overlay_generator(
                     generator, relocation_ranges=relocation_ranges
@@ -4669,10 +4541,6 @@ def render_source_overlay_outputs(
             "actual_clean_size": (
                 None if record["output"]["clean"]["state"] == "absent"
                 else len(clean_inputs[relative])
-            ),
-            "chosen_anchor_tier": (
-                None if anchor is None else
-                anchor["selected_context_tokens_each_side"]
             ),
             "resolved_token_offset": (
                 None if anchor is None else anchor["selected_token_boundary"]
@@ -4733,24 +4601,11 @@ def render_source_overlay_outputs(
         relative = output["logical_path"]
         data = rendered[relative]
         expected = output["effective"]
-        clean = output["clean"]
-        clean_data = clean_inputs[relative]
-        baseline_clean = (
-            clean["state"] == "absent"
-            or (
-                len(clean_data) == clean["baseline_size"]
-                and sha256_bytes(clean_data) == clean["baseline_sha256"]
-            )
+        require(
+            len(data) == expected["baseline_size"]
+            and sha256_bytes(data) == expected["baseline_sha256"],
+            f"source overlay output differs from its effective pin: {relative}",
         )
-        if baseline_clean:
-            require(
-                len(data) == expected["baseline_size"]
-                and data.count(b"\n") == expected["baseline_line_count"]
-                and sha256_bytes(data) == expected["baseline_sha256"]
-                and source_overlay_significant_sha256(data)
-                == expected["baseline_significant_token_sha256"],
-                f"baseline source overlay output differs: {relative}",
-            )
         for receipt in operation_evidence:
             if receipt["logical_path"] == relative:
                 receipt.update({
@@ -4763,55 +4618,36 @@ def render_source_overlay_outputs(
 
 
 def validate_source_overlay(value: object, source_root: Path) -> dict:
-    """Validate and execute the manifest's closed clean-to-byte overlay."""
+    """Validate and execute the manifest's closed clean-to-byte overlay.
+
+    The lean contract is fully fail-closed: every present clean input must
+    match its pinned sha exactly, and every rendered effective output must
+    match its pinned sha exactly.  There is no tolerated-drift path; editing
+    a clean source requires re-pinning the manifest.
+    """
     if value is None:
         disabled = {
             "enabled": False, "schema": SOURCE_OVERLAY_SCHEMA,
-            "status": "DISABLED", "renderer": SOURCE_OVERLAY_RENDERER,
-            "closed_universe": {
-                "physical_output_count": 0,
-                "sorted_logical_paths_sha256": sha256_bytes(b""),
-            },
             "outputs": [],
             "graph": {
                 "generated_translation_units": [], "link_admissions": [],
-                "forbidden_legacy_interfaces": [],
-                "prebuilt_source_artifacts": "forbidden",
             },
         }
         disabled["policy_sha256"] = sha256_bytes(canonical_json_bytes(disabled))
         disabled["actual_records"] = []
-        disabled["actual_records_sha256"] = sha256_bytes(canonical_json_bytes([]))
         disabled["anchor_evidence"] = []
-        disabled["anchor_evidence_sha256"] = sha256_bytes(canonical_json_bytes([]))
         disabled["effective_by_path"] = {}
         return disabled
     context = "manifest.source_overlay"
     require(isinstance(value, dict), f"{context} must be an object")
-    exact_audit_keys(value, {
-        "schema", "status", "renderer", "generator_registry_sha256",
-        "closed_universe", "drift_contract", "runtime_trust", "outputs",
-        "graph",
-    }, context)
+    exact_audit_keys(value, {"schema", "outputs", "graph"}, context)
     require(require_exact_int(
         value.get("schema"), context + ".schema",
         minimum=SOURCE_OVERLAY_SCHEMA, maximum=SOURCE_OVERLAY_SCHEMA,
     ) == SOURCE_OVERLAY_SCHEMA, f"{context}.schema differs")
-    require(value.get("status") == SOURCE_OVERLAY_STATUS
-            and value.get("renderer") == SOURCE_OVERLAY_RENDERER
-            and require_sha(
-                value.get("generator_registry_sha256"),
-                context + ".generator_registry_sha256",
-            ) == SOURCE_OVERLAY_GENERATOR_REGISTRY_SHA256
-            and exact_json_equal(
-                value.get("drift_contract"), SOURCE_OVERLAY_DRIFT_CONTRACT
-            )
-            and exact_json_equal(
-                value.get("runtime_trust"), SOURCE_OVERLAY_RUNTIME_TRUST
-            ),
-            f"{context} status/renderer differs")
     raw_outputs = value.get("outputs")
-    require(isinstance(raw_outputs, list) and raw_outputs,
+    require(isinstance(raw_outputs, list) and raw_outputs
+            and len(raw_outputs) <= 2000,
             f"{context}.outputs must be non-empty")
     outputs = []
     paths = set()
@@ -4819,11 +4655,10 @@ def validate_source_overlay(value: object, source_root: Path) -> dict:
     for index, item in enumerate(raw_outputs):
         item_context = f"{context}.outputs[{index}]"
         require(isinstance(item, dict), f"{item_context} must be an object")
-        exact_audit_keys(item, {
-            "logical_path", "clean", "effective", "operations",
-        }, item_context)
+        exact_audit_keys(item, {"path", "clean", "effective", "size", "ops"},
+                         item_context, optional={"clean"})
         logical = source_overlay_relative_path(
-            item.get("logical_path"), item_context + ".logical_path"
+            item.get("path"), item_context + ".path"
         )
         require(logical not in paths, f"source overlay path is duplicated: {logical}")
         prior = folded.get(logical.casefold())
@@ -4831,110 +4666,55 @@ def validate_source_overlay(value: object, source_root: Path) -> dict:
                 f"source overlay has a casefold collision: {prior} / {logical}")
         paths.add(logical)
         folded[logical.casefold()] = logical
-        clean = item.get("clean")
-        require(isinstance(clean, dict), f"{item_context}.clean must be an object")
-        state = clean.get("state")
-        require(state in {"present", "absent"},
-                f"{item_context}.clean.state differs")
-        if state == "present":
-            exact_audit_keys(clean, {
-                "state", "baseline_sha256", "baseline_size",
-            }, item_context + ".clean")
+        if "clean" in item:
             normalized_clean = {
-                "state": state,
+                "state": "present",
                 "baseline_sha256": require_sha(
-                    clean.get("baseline_sha256"),
-                    item_context + ".clean.baseline_sha256",
-                ),
-                "baseline_size": require_exact_int(
-                    clean.get("baseline_size"),
-                    item_context + ".clean.baseline_size",
-                    minimum=0, maximum=64 * 1024 * 1024,
+                    item.get("clean"), item_context + ".clean"
                 ),
             }
         else:
-            exact_audit_keys(clean, {"state"}, item_context + ".clean")
-            normalized_clean = {"state": state}
-        effective = item.get("effective")
-        require(isinstance(effective, dict),
-                f"{item_context}.effective must be an object")
-        exact_audit_keys(effective, {
-            "mode", "baseline_sha256", "baseline_size",
-            "baseline_line_count", "baseline_significant_token_sha256",
-        }, item_context + ".effective")
-        require(effective.get("mode") == SOURCE_OVERLAY_EFFECTIVE_MODE,
-                f"{item_context}.effective.mode differs")
-        operations = item.get("operations")
+            normalized_clean = {"state": "absent"}
+        operations = item.get("ops")
         require(isinstance(operations, list) and operations,
-                f"{item_context}.operations must be non-empty")
+                f"{item_context}.ops must be non-empty")
         outputs.append({
             "logical_path": logical,
             "clean": normalized_clean,
             "effective": {
-                "mode": SOURCE_OVERLAY_EFFECTIVE_MODE,
                 "baseline_sha256": require_sha(
-                    effective.get("baseline_sha256"),
-                    item_context + ".effective.baseline_sha256"
+                    item.get("effective"), item_context + ".effective"
                 ),
                 "baseline_size": require_exact_int(
-                    effective.get("baseline_size"),
-                    item_context + ".effective.baseline_size",
+                    item.get("size"), item_context + ".size",
                     minimum=0, maximum=64 * 1024 * 1024,
-                ),
-                "baseline_line_count": require_exact_int(
-                    effective.get("baseline_line_count"),
-                    item_context + ".effective.baseline_line_count",
-                    minimum=0, maximum=2000000,
-                ),
-                "baseline_significant_token_sha256": require_sha(
-                    effective.get("baseline_significant_token_sha256"),
-                    item_context + ".effective.baseline_significant_token_sha256",
                 ),
             },
             "operations": [
                 validate_source_overlay_operation(
                     operation,
-                    f"{item_context}.operations[{operation_index}]",
-                    logical_path=logical,
+                    f"{item_context}.ops[{operation_index}]",
+                    logical_path=logical, index=operation_index,
                 )
                 for operation_index, operation in enumerate(operations)
             ],
         })
     require([item["logical_path"] for item in outputs] == sorted(paths),
-            f"{context}.outputs must be sorted by logical_path")
-    universe = value.get("closed_universe")
-    require(isinstance(universe, dict),
-            f"{context}.closed_universe must be an object")
-    exact_audit_keys(universe, {
-        "physical_output_count", "sorted_logical_paths_sha256",
-    }, context + ".closed_universe")
-    sorted_path_sha = sha256_bytes(
-        "".join(path + "\n" for path in sorted(paths)).encode("utf-8")
-    )
-    require(require_exact_int(
-        universe.get("physical_output_count"),
-        context + ".closed_universe.physical_output_count",
-        minimum=1, maximum=2000,
-    ) == len(outputs), f"{context} output count differs")
-    require(require_sha(
-        universe.get("sorted_logical_paths_sha256"),
-        context + ".closed_universe.sorted_logical_paths_sha256",
-    ) == sorted_path_sha, f"{context} logical path universe differs")
+            f"{context}.outputs must be sorted by path")
     graph = validate_source_overlay_graph(value.get("graph"), outputs)
     normalized = {
         "enabled": True, "schema": SOURCE_OVERLAY_SCHEMA,
-        "status": SOURCE_OVERLAY_STATUS, "renderer": SOURCE_OVERLAY_RENDERER,
-        "generator_registry_sha256": SOURCE_OVERLAY_GENERATOR_REGISTRY_SHA256,
-        "drift_contract": SOURCE_OVERLAY_DRIFT_CONTRACT,
-        "runtime_trust": SOURCE_OVERLAY_RUNTIME_TRUST,
-        "closed_universe": {
-            "physical_output_count": len(outputs),
-            "sorted_logical_paths_sha256": sorted_path_sha,
-        },
         "outputs": outputs, "graph": graph,
     }
     clean_inputs = _read_source_overlay_clean_inputs(source_root, outputs)
-    normalized["policy_sha256"] = sha256_bytes(canonical_json_bytes(normalized))
+    for output in outputs:
+        relative = output["logical_path"]
+        clean = output["clean"]
+        require(
+            clean["state"] == "absent"
+            or sha256_bytes(clean_inputs[relative]) == clean["baseline_sha256"],
+            f"clean source overlay input differs from its pin: {relative}",
+        )
     for output in outputs:
         relative = output["logical_path"]
         clean_tokens = {
@@ -4954,8 +4734,10 @@ def validate_source_overlay(value: object, source_root: Path) -> dict:
             # two distinct functions is valid C++.
             for leaf in iter_source_overlay_leaf_generators(generator):
                 scope = source_overlay_generator_identity_scope(leaf)
-                fragment = leaf["baseline_fragment"]
-                for identifier in fragment["declared_identifiers"]:
+                roles = source_overlay_expected_identifier_roles(
+                    leaf["kind"], leaf["params"]
+                )
+                for identifier in roles["declared_identifiers"]:
                     terminal_identifier = identifier.rsplit("::", 1)[-1]
                     if ("::" not in identifier
                             and SOURCE_OVERLAY_IDENTIFIER_RE.fullmatch(
@@ -4972,7 +4754,7 @@ def validate_source_overlay(value: object, source_root: Path) -> dict:
                     )
                 references.extend(
                     (scope, identifier, operation_index, operation["id"])
-                    for identifier in fragment["referenced_identifiers"]
+                    for identifier in roles["referenced_identifiers"]
                 )
         duplicates = {
             key: occurrences for key, occurrences in introductions.items()
@@ -5008,6 +4790,12 @@ def validate_source_overlay(value: object, source_root: Path) -> dict:
         clean_data = clean_inputs[relative]
         effective_data = rendered[relative]
         clean = output["clean"]
+        # Derived effective identities: the sha pin plus the render authority
+        # make these deterministic; the build plan consumes them.
+        output["effective"]["baseline_line_count"] = effective_data.count(b"\n")
+        output["effective"]["baseline_significant_token_sha256"] = (
+            source_overlay_significant_sha256(effective_data)
+        )
         actual_records.append({
             "logical_path": relative,
             "clean_state": clean["state"],
@@ -5018,19 +4806,32 @@ def validate_source_overlay(value: object, source_root: Path) -> dict:
             "clean_size": (
                 None if clean["state"] == "absent" else len(clean_data)
             ),
-            "clean_baseline_match": (
-                clean["state"] == "absent"
-                or (
-                    len(clean_data) == clean["baseline_size"]
-                    and sha256_bytes(clean_data) == clean["baseline_sha256"]
-                )
-            ),
             "effective_sha256": sha256_bytes(effective_data),
             "effective_size": len(effective_data),
             "effective_line_count": effective_data.count(b"\n"),
             "effective_significant_token_sha256":
                 source_overlay_significant_sha256(effective_data),
         })
+    output_by_path = {item["logical_path"]: item for item in outputs}
+    for unit in graph["generated_translation_units"]:
+        effective = output_by_path[unit["logical_path"]]["effective"]
+        unit["generated_output"]["baseline_line_count"] = (
+            effective["baseline_line_count"]
+        )
+        unit["generated_output"]["baseline_significant_token_sha256"] = (
+            effective["baseline_significant_token_sha256"]
+        )
+    normalized["policy_sha256"] = sha256_bytes(canonical_json_bytes({
+        "schema": SOURCE_OVERLAY_SCHEMA,
+        "outputs": [
+            {
+                "logical_path": item["logical_path"],
+                "clean": item["clean"],
+                "effective": item["effective"],
+            }
+            for item in outputs
+        ],
+    }))
     normalized["actual_records"] = actual_records
     normalized["actual_records_sha256"] = sha256_bytes(
         canonical_json_bytes(actual_records)
