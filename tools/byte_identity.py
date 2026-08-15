@@ -7968,14 +7968,24 @@ def validate_manifest(
     for unit_index, unit in enumerate(translation_units):
         context = f"translation_units[{unit_index}]"
         require(isinstance(unit, dict), f"{context} must be an object")
-        exact_audit_keys(
-            unit,
-            {
-                "target", "source", "source_sha256", "mode", "command_policy",
-                "donors", "functions", "completion",
-            },
-            context,
-        )
+        if unit.get("mode") == "swap_comdat_group_order":
+            exact_audit_keys(
+                unit,
+                {
+                    "target", "source", "source_sha256", "mode",
+                    "command_policy", "group_order", "completion",
+                },
+                context,
+            )
+        else:
+            exact_audit_keys(
+                unit,
+                {
+                    "target", "source", "source_sha256", "mode",
+                    "command_policy", "donors", "functions", "completion",
+                },
+                context,
+            )
         target = unit.get("target")
         require(isinstance(target, str) and TARGET_RE.fullmatch(target) is not None,
                 f"{context}.target is invalid")
@@ -8003,7 +8013,8 @@ def validate_manifest(
         mode = unit.get("mode")
         require(
             mode in ("compose_equal_linked_span_fpo",
-                     "compose_equal_body_comdat")
+                     "compose_equal_body_comdat",
+                     "swap_comdat_group_order")
             or (
                 mode == "pass_through"
                 and diagnostic_policy == NATIVE_DIAGNOSTIC_MANIFEST_POLICY
@@ -8033,6 +8044,40 @@ def validate_manifest(
         folded_forbidden = {item.casefold() for item in forbidden_prefixes}
         require({"/gl", "-gl", "/z7", "-z7"}.issubset(folded_forbidden),
                 f"{context} must forbid alternate code/debug modes")
+        if mode == "swap_comdat_group_order":
+            group_order = unit.get("group_order")
+            require(isinstance(group_order, dict)
+                    and set(group_order) == {"first", "second"},
+                    f"{context}.group_order must name first/second")
+            for role in ("first", "second"):
+                value = group_order.get(role)
+                require(isinstance(value, str) and value.startswith("?")
+                        and len(value) >= 8,
+                        f"{context}.group_order.{role} is invalid")
+            require(group_order["first"] != group_order["second"],
+                    f"{context}.group_order names must differ")
+            completion = unit.get("completion")
+            require(isinstance(completion, dict),
+                    f"{context}.completion must be an object")
+            exact_keys(completion,
+                       {"state", "reason", "may_replace_compiler_output"},
+                       f"{context}.completion")
+            require(
+                completion.get("state")
+                == "object_composition_enabled_final_gates_incomplete"
+                and completion.get("may_replace_compiler_output") is True
+                and isinstance(completion.get("reason"), str)
+                and len(completion["reason"]) >= 24,
+                f"{context}.completion policy is invalid",
+            )
+            normalized_units.append({
+                **unit,
+                "source": source_relative,
+                "source_path": str(source_path),
+                "source_sha256": effective_source_sha,
+            })
+            continue
+
         donors = unit.get("donors")
         require(isinstance(donors, list) and donors,
                 f"{context}.donors must be a non-empty array")
@@ -10822,6 +10867,151 @@ def compose_same_slot_resize(
         "linked_span": function["expected_linked_span"],
         "mapped_locals": len(mapping),
         "changed_local_values": local_value_updates,
+    }
+
+
+def compose_swap_comdat_group_order(
+    seed_bytes: bytes,
+    specification: dict,
+) -> tuple[bytes, dict]:
+    """Swap the link-visible order of two complete compiler-produced COMDAT
+    groups (primary + associated children) inside one object, renumbering
+    section ordinals and associations only.
+
+    No raw code, relocation, xdata, data, line, or debug payload byte moves;
+    every symbol keeps its exact raw contribution.  The permutation makes
+    the `first` function's group precede the `second` function's group; the
+    intervening contributions keep their relative order.
+    """
+    seed = CoffObject(seed_bytes)
+    first = seed.function_section(specification["first"])
+    second = seed.function_section(specification["second"])
+    definitions = section_definitions(seed)
+
+    def group(primary: dict) -> list[int]:
+        children = [
+            section["number"]
+            for section in seed.sections
+            if definitions.get(section["number"], {}).get("selection") == 5
+            and definitions[section["number"]]["associated"]
+            == primary["number"]
+        ]
+        return [primary["number"], *children]
+
+    first_group = group(first)
+    second_group = group(second)
+    require(not set(first_group) & set(second_group),
+            "COMDAT groups overlap")
+    require(second["number"] < first["number"],
+            "the requested group order already holds")
+    window = sorted(set(first_group) | set(second_group))
+    low, high = min(window), max(
+        max(first_group), max(second_group))
+    window_numbers = list(range(low, high + 1))
+    rest = [number for number in window_numbers
+            if number not in first_group and number not in second_group]
+    new_order = first_group + second_group + rest
+    require(sorted(new_order) == window_numbers,
+            "group window is not a permutation")
+    old_to_new = {
+        old: window_numbers[index] for index, old in enumerate(new_order)
+    }
+
+    def mapped(number: int) -> int:
+        return old_to_new.get(number, number)
+
+    work = bytearray(seed_bytes)
+    original_headers = {
+        number: seed_bytes[20 + (number - 1) * 40:20 + number * 40]
+        for number in window_numbers
+    }
+    for old, new in old_to_new.items():
+        start = 20 + (new - 1) * 40
+        work[start:start + 40] = original_headers[old]
+
+    symbol_writes = 0
+    association_writes = 0
+    for index, symbol in seed.symbols.items():
+        if symbol["section"] > 0 and mapped(symbol["section"]) != symbol["section"]:
+            offset = seed.symbol_offset + index * 18 + 12
+            work[offset:offset + 2] = mapped(symbol["section"]).to_bytes(
+                2, "little", signed=True)
+            symbol_writes += 1
+        definition = definitions.get(symbol["section"])
+        if (definition is not None
+                and symbol["storage"] == 3
+                and symbol["aux_count"]
+                and symbol["name"]
+                == seed.sections[symbol["section"] - 1]["name"]
+                and definition["selection"] == 5
+                and mapped(definition["associated"])
+                != definition["associated"]):
+            aux = seed.symbol_offset + (index + 1) * 18
+            parent = mapped(definition["associated"])
+            work[aux + 12:aux + 14] = (parent & 0xFFFF).to_bytes(2, "little")
+            work[aux + 16:aux + 18] = (parent >> 16).to_bytes(2, "little")
+            association_writes += 1
+
+    composed = bytes(work)
+    require(len(composed) == len(seed_bytes), "object size changed")
+    checked = CoffObject(composed)
+    checked_definitions = section_definitions(checked)
+    section_fields = (
+        "name", "raw_size", "raw_offset", "relocation_offset",
+        "relocation_count", "line_offset", "line_count", "characteristics",
+    )
+    for section in seed.sections:
+        peer = checked.sections[mapped(section["number"]) - 1]
+        require(all(section[field] == peer[field]
+                    for field in section_fields),
+                f"semantic section changed: old {section['number']}")
+    require(seed.symbols.keys() == checked.symbols.keys(),
+            "symbol index set changed")
+    for index, symbol in seed.symbols.items():
+        peer = checked.symbols[index]
+        require(
+            all(symbol[field] == peer[field]
+                for field in ("name", "value", "type", "storage",
+                              "aux_count"))
+            and peer["section"] == mapped(symbol["section"]),
+            f"symbol identity changed at {index}",
+        )
+    for old_number, definition in definitions.items():
+        peer = checked_definitions.get(mapped(old_number))
+        require(peer is not None
+                and peer["selection"] == definition["selection"]
+                and peer["associated"] == mapped(definition["associated"]),
+                f"section definition mapping changed: {old_number}")
+    checked_first = checked.function_section(specification["first"])
+    checked_second = checked.function_section(specification["second"])
+    require(checked_first["number"] < checked_second["number"],
+            "target group order was not swapped")
+    for name in sorted({
+        section["name"] for section in seed.sections
+        if not section["name"].startswith(".debug$")
+    }):
+        before = [section["raw_offset"] for section in seed.sections
+                  if section["name"] == name]
+        after = [section["raw_offset"] for section in checked.sections
+                 if section["name"] == name]
+        if name == first["name"]:
+            expected = list(before)
+            left = expected.index(first["raw_offset"])
+            right = expected.index(second["raw_offset"])
+            require(left > right,
+                    "target contributions were already ordered")
+            expected[left], expected[right] = expected[right], expected[left]
+            require(after == expected,
+                    "more than the target contribution pair moved")
+        else:
+            require(after == before,
+                    f"link-visible {name} contribution order changed")
+    return composed, {
+        "first": specification["first"],
+        "second": specification["second"],
+        "window": [low, high],
+        "symbol_section_writes": symbol_writes,
+        "association_writes": association_writes,
     }
 
 

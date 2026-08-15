@@ -1227,6 +1227,33 @@
     "reason": "Closes Act3Brickster::FUN_10042300 0x10042300 with a same-slot resize splice from a generated declaration-shape carrier state.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "config",
+   "source": "CONFIG/config.cpp",
+   "source_sha256": "266d94cf3e3c26e7d0c9f21588fdf0b32bdf9a5f3c27e671aba7dd6f3e87ebba",
+   "mode": "swap_comdat_group_order",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "group_order": {
+    "first": "?IsLegoNotRunning@CConfigApp@@AAEHXZ",
+    "second": "??1CMainDialog@@UAE@XZ"
+   },
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "The retail link presents IsLegoNotRunning before the CMainDialog destructor; the compiler-emitted group order is swapped without touching any payload byte (owns 174 of the CONFIG no-debug residue).",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [

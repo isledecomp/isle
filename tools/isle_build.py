@@ -590,6 +590,22 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
         seed_sha = hashlib.sha256(seed_bytes).hexdigest()
 
         donor_objects = {}
+        if unit["mode"] == "swap_comdat_group_order":
+            composed, detail = byte_identity.compose_swap_comdat_group_order(
+                seed_bytes, unit["group_order"]
+            )
+            byte_identity.validate_first_party_object_directive(
+                composed, "composed object"
+            )
+            seed_object.write_bytes(composed)
+            marker.write_text(json.dumps({
+                "seed_sha": seed_sha,
+                "composed_sha": hashlib.sha256(composed).hexdigest(),
+            }, indent=1) + "\n")
+            print(f"[isle_build] swapped COMDAT group order in "
+                  f"{unit['target']}:{unit['source']}")
+            relink_targets.add(unit["target"])
+            continue
         if unit["mode"] == "compose_equal_linked_span_fpo":
             donor = unit["donors"][0]
             recipe = donor["recipe"]
