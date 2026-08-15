@@ -10790,8 +10790,8 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp",
-    "clean": "afffc8400b4f12226699e99f66e0a6bf2b7edce83aea7e4f0ac37db337fc4351",
-    "effective": "8a3dc5159e6b2a985d95ddc50f56fe590da3997f698206770c370996bb152e52",
+    "clean": "dee9583871f2e8c2591b23d944b1f5a3c9a8be15b15e894313b0a22d156f0a34",
+    "effective": "396a748df7f88d8cc297b0a1a3f95357b792f81e8ead4b5cbea644b597ca44ee",
     "size": 42154,
     "ops": [
      {
