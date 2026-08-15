@@ -8234,8 +8234,38 @@ def validate_manifest(
                 splice_class = function.get("splice_class")
                 require(splice_class in ("equal_body_strict",
                                          "equal_body_eh_structural_local",
-                                         "equal_body_eh_reloc_layout"),
+                                         "equal_body_eh_reloc_layout",
+                                         "same_slot_resize"),
                         f"{function_context}: unsupported splice class")
+                if splice_class == "same_slot_resize":
+                    exact_keys(
+                        function,
+                        {"mangled", "donor", "splice_class",
+                         "expected_seed_length", "expected_donor_length",
+                         "expected_linked_span", "expected_body_sha256"},
+                        function_context,
+                    )
+                    for name in ("expected_seed_length",
+                                 "expected_donor_length",
+                                 "expected_linked_span"):
+                        value = function.get(name)
+                        require(isinstance(value, int)
+                                and not isinstance(value, bool) and value > 0,
+                                f"{function_context}.{name} is invalid")
+                    require(
+                        function["expected_linked_span"] % 16 == 0
+                        and ((function["expected_seed_length"] + 15) // 16)
+                        * 16 == function["expected_linked_span"]
+                        == ((function["expected_donor_length"] + 15) // 16)
+                        * 16
+                        and function["expected_seed_length"]
+                        != function["expected_donor_length"],
+                        f"{function_context}: resize spans are inconsistent",
+                    )
+                    require_sha(function.get("expected_body_sha256"),
+                                f"{function_context}.expected_body_sha256")
+                    normalized_functions.append(dict(function))
+                    continue
                 required_keys = set(equal_body_function_keys)
                 if splice_class == "equal_body_strict":
                     required_keys -= {"expected_code_renames",
@@ -9738,9 +9768,14 @@ class CoffObject:
                 relocation_count, line_count, characteristics,
             ) = coff_unpack("<IIIIIIHHI", data, header_offset + 8,
                             f"section {index + 1} header")
-            if raw_size:
+            if raw_size and not (characteristics & 0x00000080):
                 require(raw_offset >= table_end and raw_offset <= len(data) - raw_size,
                         f"section {index + 1} raw data is invalid")
+            elif raw_size:
+                # IMAGE_SCN_CNT_UNINITIALIZED_DATA (.bss): sized but with no
+                # raw bytes on disk.
+                require(raw_offset == 0,
+                        f"section {index + 1} uninitialized raw pointer is invalid")
             else:
                 require(raw_offset == 0 or raw_offset >= table_end,
                         f"section {index + 1} empty raw pointer is invalid")
@@ -9834,6 +9869,9 @@ class CoffObject:
 
 def coff_body(coff: CoffObject, section: dict) -> bytes:
     if not section["raw_size"]:
+        return b""
+    if section["characteristics"] & 0x00000080:
+        # IMAGE_SCN_CNT_UNINITIALIZED_DATA (.bss): sized, no raw payload.
         return b""
     start = section["raw_offset"]
     return coff.data[start : start + section["raw_size"]]
@@ -10395,6 +10433,396 @@ def _normalized_relocation_renames(
         )
         renames.append((a["offset"], kind))
     return renames
+
+
+def _coff_table_bytes(coff: CoffObject, section: dict, kind: str) -> bytes:
+    if kind == "relocations":
+        start = section["relocation_offset"]
+        size = section["relocation_count"] * 10
+    else:
+        start = section["line_offset"]
+        size = section["line_count"] * 6
+    return coff.data[start:start + size] if size else b""
+
+
+def _coff_marker(coff: CoffObject, name: str, section_number: int):
+    matches = [
+        (index, symbol) for index, symbol in coff.symbols.items()
+        if symbol["name"] == name and symbol["section"] == section_number
+        and symbol["storage"] == 101 and symbol["aux_count"] >= 1
+    ]
+    require(len(matches) == 1,
+            f"expected one {name} marker in section {section_number}")
+    return matches[0]
+
+
+def _coff_section_symbol(coff: CoffObject, section: dict):
+    matches = [
+        (index, symbol) for index, symbol in coff.symbols.items()
+        if symbol["name"] == section["name"]
+        and symbol["section"] == section["number"]
+        and symbol["storage"] == 3 and symbol["aux_count"] >= 1
+    ]
+    require(len(matches) == 1, "expected one section definition symbol")
+    return matches[0]
+
+
+def _pair_same_slot_relocations(seed_rows, donor_rows, seed_primary,
+                                donor_primary, seed_xdata, donor_xdata,
+                                mapping, context):
+    """Pair ordinal relocation semantics allowing offset movement and
+    consistently mapped object-local symbols inside the target closure."""
+    require(len(seed_rows) == len(donor_rows),
+            f"{context}: relocation counts differ")
+    reverse = {right: left for left, right in mapping.items()}
+
+    def role(section_number, primary, xdata):
+        if section_number == primary:
+            return "primary"
+        if section_number == xdata:
+            return "xdata"
+        return "external"
+
+    pairs = []
+    for left, right in zip(seed_rows, donor_rows):
+        require(left["type"] == right["type"]
+                and left["addend"] == right["addend"],
+                f"{context}: relocation type/addend differs")
+        require(
+            role(left["target_section"], seed_primary, seed_xdata)
+            == role(right["target_section"], donor_primary, donor_xdata),
+            f"{context}: relocation target role differs",
+        )
+        left_local = local_symbol_kind(left["target"]) is not None
+        right_local = local_symbol_kind(right["target"]) is not None
+        if left_local or right_local:
+            require(
+                left_local and right_local
+                and left["target"][1] == right["target"][1]
+                and left["target_type"] == right["target_type"]
+                and left["target_storage"] == right["target_storage"],
+                f"{context}: local relocation target class differs",
+            )
+            if role(left["target_section"], seed_primary,
+                    seed_xdata) in ("primary", "xdata"):
+                require(
+                    mapping.setdefault(left["symbol_index"],
+                                       right["symbol_index"])
+                    == right["symbol_index"]
+                    and reverse.setdefault(right["symbol_index"],
+                                           left["symbol_index"])
+                    == left["symbol_index"],
+                    f"{context}: local symbol mapping is inconsistent",
+                )
+            else:
+                # An equal-valued local in a shared external section needs
+                # no remapping: the seed's own symbol already denotes the
+                # same location.
+                require(
+                    left["target_section"] == right["target_section"]
+                    and left["target_value"] == right["target_value"],
+                    f"{context}: external local relocation target differs",
+                )
+        else:
+            require(
+                left["target"] == right["target"]
+                and left["target_type"] == right["target_type"]
+                and left["target_storage"] == right["target_storage"],
+                f"{context}: relocation target differs",
+            )
+        pairs.append((left, right))
+    return pairs
+
+
+def compose_same_slot_resize(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+) -> tuple[bytes, dict]:
+    """Install a donor code body of a different size that occupies the same
+    16-byte linked contribution slot, repairing every dependent COFF record.
+
+    The seed supplies the object, symbol table, CodeView types/names, xdata
+    raw bytes/relocations, and every non-target section.  The donor supplies
+    the compiler-generated target code, COFF line offsets, and procedure
+    debug range.  Mapped object-local symbol values move to the donor's.
+    """
+    seed = CoffObject(seed_bytes)
+    donor = CoffObject(donor_bytes)
+    mangled = function["mangled"]
+    sp = seed.function_section(mangled)
+    dp = donor.function_section(mangled)
+    require(sp["raw_size"] == function["expected_seed_length"]
+            and dp["raw_size"] == function["expected_donor_length"],
+            "target body lengths changed")
+    require(
+        ((sp["raw_size"] + 15) // 16) * 16
+        == ((dp["raw_size"] + 15) // 16) * 16
+        == function["expected_linked_span"],
+        "target 16-byte linked contribution span changed",
+    )
+    require(sp["number"] == dp["number"],
+            "target section seat changed")
+    # A carrier-state donor owns its own global tail layout; the target
+    # closure seats, function multiset, and per-relocation role/target
+    # checks carry the equivalence proof.
+    require(len(seed.sections) == len(donor.sections),
+            "global section count differs")
+    require(function_multiset(seed) == function_multiset(donor),
+            "donor function set differs")
+    require(
+        all(sp[key] == dp[key] for key in
+            ("name", "relocation_count", "line_count", "characteristics")),
+        "target header shape changed",
+    )
+    seed_defs = section_definitions(seed)
+    donor_defs = section_definitions(donor)
+    require(
+        seed_defs[sp["number"]]["selection"]
+        == donor_defs[dp["number"]]["selection"],
+        "target COMDAT selection changed",
+    )
+    closure = _comdat_child_closure(seed, seed_primary := sp)
+    require(closure == _comdat_child_closure(donor, dp)
+            and closure == (2, (".debug$S", ".xdata$x")),
+            "target closure is not the EH (.debug$S/.xdata$x) pair")
+    sx = _comdat_child(seed, sp, ".xdata$x")
+    dx = _comdat_child(donor, dp, ".xdata$x")
+    sd = _comdat_child(seed, sp, ".debug$S")
+    dd = _comdat_child(donor, dp, ".debug$S")
+    require(sx["number"] == dx["number"] and sd["number"] == dd["number"],
+            "closure section seats changed")
+    for left, right, name in ((sx, dx, "xdata"), (sd, dd, "debug$S")):
+        require(
+            all(left[key] == right[key] for key in
+                ("name", "raw_size", "relocation_count", "line_count",
+                 "characteristics")),
+            f"{name} section shape changed",
+        )
+    require(coff_body(seed, sx) == coff_body(donor, dx),
+            "runtime xdata bytes differ")
+
+    donor_code = coff_body(donor, dp)
+    require(sha256_bytes(donor_code) == function["expected_body_sha256"],
+            "donor body differs from its pinned compiler output")
+
+    spr = detailed_relocations(seed, sp)
+    dpr = detailed_relocations(donor, dp)
+    sxr = detailed_relocations(seed, sx)
+    dxr = detailed_relocations(donor, dx)
+    sdr = detailed_relocations(seed, sd)
+    ddr = detailed_relocations(donor, dd)
+    mapping: dict[int, int] = {}
+    _pair_same_slot_relocations(spr, dpr, sp["number"], dp["number"],
+                                sx["number"], dx["number"], mapping,
+                                "primary")
+    xdata_pairs = _pair_same_slot_relocations(
+        sxr, dxr, sp["number"], dp["number"], sx["number"], dx["number"],
+        mapping, "xdata")
+    debug_pairs = _pair_same_slot_relocations(
+        sdr, ddr, sp["number"], dp["number"], sx["number"], dx["number"],
+        mapping, "debug$S")
+    require(all(a["offset"] == b["offset"] for a, b in xdata_pairs),
+            "xdata relocation offsets moved")
+    require(all(a["offset"] == b["offset"] for a, b in debug_pairs),
+            "debug$S relocation offsets moved")
+    allowed_sections = {sp["number"], sx["number"], sd["number"]}
+    for section in seed.sections:
+        for record in (detailed_relocations(seed, section)
+                       if section["relocation_count"]
+                       and section["number"] not in allowed_sections else []):
+            require(record["symbol_index"] not in mapping,
+                    "mapped local is consumed outside the target closure")
+    for seed_index, donor_index in mapping.items():
+        left = seed.symbols[seed_index]
+        right = donor.symbols[donor_index]
+        require(
+            (left["section"], left["type"], left["storage"])
+            == (right["section"], right["type"], right["storage"]),
+            "mapped local symbol class changed",
+        )
+
+    seed_function_index, seed_function = function_symbol(
+        seed, mangled, sp["number"])
+    donor_function_index, donor_function = function_symbol(
+        donor, mangled, dp["number"])
+    require(sp["line_count"] > 0
+            and sp["line_count"] == dp["line_count"],
+            "target COFF line count changed")
+    seed_lines = _coff_table_bytes(seed, sp, "lines")
+    donor_lines = bytearray(_coff_table_bytes(donor, dp, "lines"))
+    require(
+        coff_unpack("<IH", seed_lines, 0, "seed line sentinel")
+        == (seed_function_index, 0)
+        and coff_unpack("<IH", donor_lines, 0, "donor line sentinel")
+        == (donor_function_index, 0),
+        "COFF line sentinel is invalid",
+    )
+    donor_lines[0:4] = seed_function_index.to_bytes(4, "little")
+    previous = -1
+    for index in range(1, dp["line_count"]):
+        offset, line = coff_unpack("<IH", bytes(donor_lines), index * 6,
+                                   "donor line row")
+        require(line != 0 and previous <= offset < dp["raw_size"],
+                "donor COFF line row is outside/nonmonotonic")
+        previous = offset
+    donor_lines = bytes(donor_lines)
+
+    seed_debug_raw = coff_body(seed, sd)
+    donor_debug_raw = coff_body(donor, dd)
+    require(len(seed_debug_raw) >= 28 and seed_debug_raw[2:4] == b"\x05\x02"
+            and donor_debug_raw[2:4] == b"\x05\x02",
+            "debug$S is not an S_*PROC32 record")
+    donor_cbproc, donor_dbgstart, donor_dbgend = coff_unpack(
+        "<III", donor_debug_raw, 16, "donor debug range")
+    require(donor_cbproc == dp["raw_size"]
+            and 0 <= donor_dbgstart <= donor_dbgend < donor_cbproc,
+            "donor debug procedure range is stale")
+    expected_debug_raw = bytearray(seed_debug_raw)
+    expected_debug_raw[16:28] = donor_debug_raw[16:28]
+
+    old_end = sp["raw_offset"] + sp["raw_size"]
+    delta = dp["raw_size"] - sp["raw_size"]
+
+    def shifted(pointer: int) -> int:
+        return pointer + delta if pointer and pointer >= old_end else pointer
+
+    output = bytearray(
+        seed_bytes[:sp["raw_offset"]] + donor_code + seed_bytes[old_end:]
+    )
+    new_symbol_offset = seed.symbol_offset + delta
+    output[8:12] = new_symbol_offset.to_bytes(4, "little")
+
+    for section in seed.sections:
+        header = 20 + (section["number"] - 1) * 40
+        if section["number"] == sp["number"]:
+            output[header + 16:header + 20] = dp["raw_size"].to_bytes(
+                4, "little")
+        for field, relative in (("raw_offset", 20),
+                                ("relocation_offset", 24),
+                                ("line_offset", 28)):
+            pointer = shifted(section[field])
+            if pointer != section[field]:
+                output[header + relative:header + relative + 4] = (
+                    pointer.to_bytes(4, "little"))
+
+    primary_relocation_output = shifted(sp["relocation_offset"])
+    for index, (left, right) in enumerate(zip(spr, dpr)):
+        at = primary_relocation_output + index * 10
+        output[at:at + 4] = right["offset"].to_bytes(4, "little")
+        output[at + 4:at + 8] = left["symbol_index"].to_bytes(4, "little")
+        output[at + 8:at + 10] = right["type"].to_bytes(2, "little")
+
+    line_output = shifted(sp["line_offset"])
+    output[line_output:line_output + len(donor_lines)] = donor_lines
+
+    for symbol_index, item in seed.symbols.items():
+        if item["type"] != 0x20 or item["aux_count"] < 1:
+            continue
+        auxiliary = coff_auxiliary(seed, symbol_index, item)
+        line_pointer = int.from_bytes(auxiliary[8:12], "little")
+        if line_pointer and line_pointer >= old_end:
+            at = new_symbol_offset + (symbol_index + 1) * 18
+            output[at + 8:at + 12] = (line_pointer + delta).to_bytes(
+                4, "little")
+
+    local_value_updates = 0
+    for seed_index, donor_index in sorted(mapping.items()):
+        value = donor.symbols[donor_index]["value"]
+        if value != seed.symbols[seed_index]["value"]:
+            local_value_updates += 1
+        at = new_symbol_offset + seed_index * 18
+        output[at + 8:at + 12] = value.to_bytes(4, "little")
+
+    donor_function_aux = coff_auxiliary(donor, donor_function_index,
+                                        donor_function)
+    require(int.from_bytes(donor_function_aux[4:8], "little")
+            == dp["raw_size"],
+            "donor Function Definition TotalSize is stale")
+    at = new_symbol_offset + (seed_function_index + 1) * 18
+    output[at + 4:at + 8] = dp["raw_size"].to_bytes(4, "little")
+
+    seed_begin_index, seed_begin = _coff_marker(seed, ".bf", sp["number"])
+    donor_begin_index, donor_begin = _coff_marker(donor, ".bf", dp["number"])
+    seed_begin_aux = coff_auxiliary(seed, seed_begin_index, seed_begin)
+    donor_begin_aux = coff_auxiliary(donor, donor_begin_index, donor_begin)
+    # Adopt only the donor's line field; the tail of the aux record holds
+    # the seed's own next-.bf chain, which a cross-layout donor cannot
+    # supply.
+    require(seed_begin_aux[:4] == donor_begin_aux[:4]
+            and seed_begin_aux[6:12] == donor_begin_aux[6:12]
+            and seed_begin_aux[16:] == donor_begin_aux[16:],
+            ".bf non-line metadata changed")
+    at = new_symbol_offset + (seed_begin_index + 1) * 18
+    output[at + 4:at + 6] = donor_begin_aux[4:6]
+
+    seed_end_index, seed_end = _coff_marker(seed, ".ef", sp["number"])
+    donor_end_index, donor_end = _coff_marker(donor, ".ef", dp["number"])
+    require(donor_end["value"] == dp["raw_size"], "donor .ef value is stale")
+    seed_end_aux = coff_auxiliary(seed, seed_end_index, seed_end)
+    donor_end_aux = coff_auxiliary(donor, donor_end_index, donor_end)
+    require(seed_end_aux[:4] == donor_end_aux[:4]
+            and seed_end_aux[6:] == donor_end_aux[6:],
+            ".ef non-line metadata changed")
+    at = new_symbol_offset + seed_end_index * 18
+    output[at + 8:at + 12] = donor_end["value"].to_bytes(4, "little")
+    output[at + 18 + 4:at + 18 + 6] = donor_end_aux[4:6]
+
+    seed_section_index, seed_section_sym = _coff_section_symbol(seed, sp)
+    donor_section_index, donor_section_sym = _coff_section_symbol(donor, dp)
+    at = new_symbol_offset + (seed_section_index + 1) * 18
+    output[at:at + 18] = coff_auxiliary(donor, donor_section_index,
+                                        donor_section_sym)
+
+    debug_output = shifted(sd["raw_offset"])
+    output[debug_output:debug_output + len(expected_debug_raw)] = (
+        expected_debug_raw)
+    composed = bytes(output)
+
+    checked = CoffObject(composed)
+    cp = checked.function_section(mangled)
+    require(len(composed) == len(seed_bytes) + delta,
+            "output file-size delta is wrong")
+    require(coff_body(checked, cp) == donor_code,
+            "output target body differs from donor")
+    cx = _comdat_child(checked, cp, ".xdata$x")
+    cd = _comdat_child(checked, cp, ".debug$S")
+    require(coff_body(checked, cx) == coff_body(seed, sx),
+            "output xdata differs from the seed")
+    require(coff_body(checked, cd) == bytes(expected_debug_raw),
+            "output debug$S policy differs")
+    require(function_multiset(checked) == function_multiset(seed),
+            "output function set changed")
+    require(_coff_table_bytes(checked, cp, "lines") == donor_lines,
+            "output line table differs from the normalized donor")
+    require(_coff_table_bytes(checked, cx, "relocations")
+            == _coff_table_bytes(seed, sx, "relocations"),
+            "output xdata relocation records changed")
+    require(_coff_table_bytes(checked, cd, "relocations")
+            == _coff_table_bytes(seed, sd, "relocations"),
+            "output debug$S relocation records changed")
+    for before, after in zip(seed.sections, checked.sections):
+        if before["number"] in allowed_sections:
+            continue
+        require(coff_body(seed, before) == coff_body(checked, after),
+                f"non-target raw section changed: {before['number']}")
+        require(_coff_table_bytes(seed, before, "relocations")
+                == _coff_table_bytes(checked, after, "relocations"),
+                f"non-target relocation table changed: {before['number']}")
+        require(_coff_table_bytes(seed, before, "lines")
+                == _coff_table_bytes(checked, after, "lines"),
+                f"non-target line table changed: {before['number']}")
+    return composed, {
+        "mangled": mangled,
+        "splice_class": "same_slot_resize",
+        "section_number": cp["number"],
+        "seed_length": sp["raw_size"],
+        "donor_length": dp["raw_size"],
+        "file_size_delta": delta,
+        "linked_span": function["expected_linked_span"],
+        "mapped_locals": len(mapping),
+        "changed_local_values": local_value_updates,
+    }
 
 
 def compose_equal_body_comdat(

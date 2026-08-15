@@ -1175,6 +1175,58 @@
     "reason": "Closes the LegoPathActor-set _Tree::insert row 0x10046310 from a generated declaration-shape carrier state over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/actors/act3actors.cpp",
+   "source_sha256": "630187aa5185a4457950b90d0c3be8aca962967a47b2d20d94fa8ae0bedef4ba",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_0dacb1141cf1",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 2,
+      "functions": 5,
+      "generated_header_sha256": "0dacb1141cf12d9e39861109e2822b10e5645f3c4645ce7ef1bbe6b5469384e8",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?FUN_10042300@Act3Brickster@@AAEHXZ",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1670,
+     "expected_donor_length": 1673,
+     "expected_linked_span": 1680,
+     "expected_body_sha256": "e4c69259d60ae1577bf9d0a8e7662b54659f03f433f623c202cb449bc4e49b84",
+     "donor": "d_0dacb1141cf1"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes Act3Brickster::FUN_10042300 0x10042300 with a same-slot resize splice from a generated declaration-shape carrier state.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -1249,8 +1301,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4775,
-    "accepted_row_identity_sha256": "e30e1599786b9d4a15c1c35a4a28e643a73e3bd205ba7d7f52b8bdc121a75f74",
+    "exact_raw_1_0_count": 4776,
+    "accepted_row_identity_sha256": "fede6adf6c325a022bf5156c05b82cdc0ccc39e62b13a86546db650528732c57",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",

@@ -683,9 +683,16 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                 donor_objects[donor["id"]] = (probe / "o.obj").read_bytes()
             composed = seed_bytes
             for function in unit["functions"]:
-                composed, detail = byte_identity.compose_equal_body_comdat(
-                    composed, donor_objects[function["donor"]], function
-                )
+                if function["splice_class"] == "same_slot_resize":
+                    composed, detail = byte_identity.compose_same_slot_resize(
+                        composed, donor_objects[function["donor"]], function
+                    )
+                else:
+                    composed, detail = (
+                        byte_identity.compose_equal_body_comdat(
+                            composed, donor_objects[function["donor"]],
+                            function,
+                        ))
         byte_identity.validate_first_party_object_directive(
             composed, "composed object"
         )
