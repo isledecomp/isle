@@ -152,6 +152,9 @@ def sync_shadow(shadow: Path, rendered: dict[str, bytes]) -> int:
                     source.stat().st_mode & 0o755)
     for relative, data in sorted(rendered.items()):
         install(relative, data, 0o644)
+    # The scorer's project files live beside the sources and are rewritten
+    # after each sync; keep them out of the prune.
+    wanted.add(shadow / "reccmp-user.yml")
     # prune anything that fell out of the wanted view
     for existing in sorted(shadow.rglob("*"), reverse=True):
         if existing.is_file() and existing not in wanted:
