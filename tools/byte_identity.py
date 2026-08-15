@@ -8136,7 +8136,8 @@ def validate_manifest(
                     )
                     require(
                         recipe.get("placement") in ("prefix",
-                                                    "force_include"),
+                                                    "force_include",
+                                                    "suffix"),
                         f"{donor_context}.placement is invalid")
                     run_prefix = recipe.get("prefix")
                     run_count = recipe.get("count")
@@ -10636,10 +10637,16 @@ def compose_same_slot_resize(
     )
     closure = _comdat_child_closure(seed, seed_primary := sp)
     require(closure == _comdat_child_closure(donor, dp)
-            and closure == (2, (".debug$S", ".xdata$x")),
-            "target closure is not the EH (.debug$S/.xdata$x) pair")
-    sx = _comdat_child(seed, sp, ".xdata$x")
-    dx = _comdat_child(donor, dp, ".xdata$x")
+            and closure in ((2, (".debug$S", ".xdata$x")),
+                            (2, (".debug$F", ".debug$S"))),
+            "target closure is not an EH or FPO debug pair")
+    fpo_closure = closure == (2, (".debug$F", ".debug$S"))
+    if fpo_closure:
+        sx = _comdat_child(seed, sp, ".debug$F")
+        dx = _comdat_child(donor, dp, ".debug$F")
+    else:
+        sx = _comdat_child(seed, sp, ".xdata$x")
+        dx = _comdat_child(donor, dp, ".xdata$x")
     sd = _comdat_child(seed, sp, ".debug$S")
     dd = _comdat_child(donor, dp, ".debug$S")
     require(sx["number"] == dx["number"] and sd["number"] == dd["number"],
@@ -10651,8 +10658,16 @@ def compose_same_slot_resize(
                  "characteristics")),
             f"{name} section shape changed",
         )
-    require(coff_body(seed, sx) == coff_body(donor, dx),
-            "runtime xdata bytes differ")
+    if fpo_closure:
+        # The donor's FPO record describes the donor body; adopt it whole
+        # after proving both records parse with their own body sizes.
+        parse_fpo_data(coff_body(seed, sx),
+                       expected_proc_size=sp["raw_size"])
+        donor_fpo = coff_body(donor, dx)
+        parse_fpo_data(donor_fpo, expected_proc_size=dp["raw_size"])
+    else:
+        require(coff_body(seed, sx) == coff_body(donor, dx),
+                "runtime xdata bytes differ")
 
     donor_code = coff_body(donor, dp)
     require(sha256_bytes(donor_code) == function["expected_body_sha256"],
@@ -10829,6 +10844,9 @@ def compose_same_slot_resize(
     debug_output = shifted(sd["raw_offset"])
     output[debug_output:debug_output + len(expected_debug_raw)] = (
         expected_debug_raw)
+    if fpo_closure:
+        fpo_output = shifted(sx["raw_offset"])
+        output[fpo_output:fpo_output + len(donor_fpo)] = donor_fpo
     composed = bytes(output)
 
     checked = CoffObject(composed)
@@ -10837,10 +10855,12 @@ def compose_same_slot_resize(
             "output file-size delta is wrong")
     require(coff_body(checked, cp) == donor_code,
             "output target body differs from donor")
-    cx = _comdat_child(checked, cp, ".xdata$x")
+    cx = _comdat_child(checked, cp,
+                       ".debug$F" if fpo_closure else ".xdata$x")
     cd = _comdat_child(checked, cp, ".debug$S")
-    require(coff_body(checked, cx) == coff_body(seed, sx),
-            "output xdata differs from the seed")
+    require(coff_body(checked, cx)
+            == (donor_fpo if fpo_closure else coff_body(seed, sx)),
+            "output xdata/FPO record differs from its policy source")
     require(coff_body(checked, cd) == bytes(expected_debug_raw),
             "output debug$S policy differs")
     require(function_multiset(checked) == function_multiset(seed),

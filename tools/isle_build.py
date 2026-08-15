@@ -685,6 +685,11 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                 if placement == "prefix":
                     (probe / "s.cpp").write_bytes(run_bytes + shadow_bytes)
                     force_include = []
+                elif placement == "suffix":
+                    decls = run_bytes.rstrip(b"\n").split(b"\n")
+                    lines = shadow_bytes.split(b"\n")
+                    (probe / "s.cpp").write_bytes(b"\n".join(lines + decls))
+                    force_include = []
                 else:
                     (probe / "s.cpp").write_bytes(shadow_bytes)
                     (probe / "run.h").write_bytes(run_bytes)
