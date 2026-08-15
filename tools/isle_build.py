@@ -1,0 +1,488 @@
+#!/usr/bin/env python3
+"""Minimal byte-identity build runner.
+
+Renders the typed entropy manifest into an effective source view, builds it
+with the pinned MSVC 4.2 toolchain through the ordinary CMake graph, scores
+the result with the pinned reccmp, and enforces the manifest row/MD5 gates.
+
+Authenticity model: inputs (manifest + rendered sources), tools (compiler,
+linker, reccmp) and outputs (objects, image, report) are hash-pinned; the
+host environment is not modeled.  A misbehaving environment can only fail
+the gates - acceptance is byte-equality against the retail oracle.
+
+The runner is deliberately incremental: the effective source shadow is
+synchronized (not rebuilt), CMake configure is reused, and make recompiles
+only what changed, so an iterate loop runs in seconds.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import shutil
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+TOOLS = Path(__file__).resolve().parent
+ROOT = TOOLS.parent
+sys.path.insert(0, str(TOOLS))
+import byte_identity  # noqa: E402
+
+SHADOW_SUBSET = (
+    "CMakeLists.txt",
+    "reccmp-project.yml",
+    "cmake",
+    "LEGO1",
+    "ISLE",
+    "CONFIG",
+    "3rdparty",
+    "util",
+)
+POSIX_PROFILE = "posix_wine_virtual_z_v1"
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for block in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def fail(message: str) -> "NoReturn":  # noqa: F821
+    print(f"isle_build: refusing: {message}", file=sys.stderr)
+    raise SystemExit(2)
+
+
+def verify_pins(manifest: dict, compiler: Path) -> dict:
+    """Hash-verify the tools that carry authenticity."""
+    toolchain = manifest["toolchain"]
+    if sha256_file(compiler) != toolchain["compiler_sha256"]:
+        fail(f"compiler wrapper hash differs: {compiler}")
+    profile = toolchain["backend_profiles"][POSIX_PROFILE]
+    compiler_root = compiler.parents[profile["compiler_root_parent_levels"]]
+    for item in profile["compiler_support_files"] + profile[
+            "producer_support_files"]:
+        target = compiler_root.joinpath(*item["path"].split("/"))
+        if not target.is_file():
+            fail(f"pinned toolchain file is absent: {target}")
+        if sha256_file(target) != item["sha256"]:
+            fail(f"pinned toolchain file differs: {target}")
+    for item in profile.get("required_absent_toolchain_files", []):
+        target = compiler_root.joinpath(*item.split("/"))
+        if target.exists():
+            fail(f"required-absent toolchain file exists: {target}")
+    for archive in manifest["archives"]:
+        source = ROOT / archive["source"]
+        if sha256_file(source) != archive["source_sha256"]:
+            fail(f"pinned third-party archive differs: {archive['identity']}")
+    image = manifest["images"]["LEGO1"]
+    original = ROOT / image["original"]
+    if sha256_file(original) != image["original_sha256"]:
+        fail("retail oracle differs from its pin")
+    return {"compiler_root": compiler_root, "image_gate": image}
+
+
+def resolve_reccmp(manifest: dict) -> Path:
+    reccmp = manifest["terminal_producers"]["reccmp"]
+    profile = reccmp["backend_profiles"][POSIX_PROFILE]
+    roots = byte_identity.manifest_host_roots()
+    executable = byte_identity.manifest_host_path(
+        profile["executable"], "reccmp executable", roots
+    )
+    if sha256_file(executable) != profile["executable_sha256"]:
+        fail(f"pinned reccmp executable differs: {executable}")
+    return executable
+
+
+def render_overlay(manifest: dict) -> tuple[dict, dict[str, bytes]]:
+    overlay = byte_identity.validate_source_overlay(
+        manifest["source_overlay"], ROOT
+    )
+    clean_inputs = {}
+    for output in overlay["outputs"]:
+        path = output["logical_path"]
+        clean_inputs[path] = (
+            (ROOT / path).read_bytes()
+            if output["clean"]["state"] == "present" else b""
+        )
+    rendered = byte_identity.render_source_overlay_outputs(
+        overlay, clean_inputs
+    )
+    return overlay, rendered
+
+
+def sync_shadow(shadow: Path, rendered: dict[str, bytes]) -> int:
+    """Mirror the repo subset + effective outputs into the shadow tree.
+
+    Only changed files are rewritten so make dependency tracking stays warm.
+    """
+    changed = 0
+    wanted: set[Path] = set()
+
+    def install(relative: str, data: bytes, mode: int) -> None:
+        nonlocal changed
+        destination = shadow / relative
+        wanted.add(destination)
+        if destination.exists() and destination.read_bytes() == data:
+            return
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(data)
+        destination.chmod(mode)
+        changed += 1
+
+    overlay_owned = set(rendered)
+    for entry in SHADOW_SUBSET:
+        source_root = ROOT / entry
+        if source_root.is_file():
+            install(entry, source_root.read_bytes(), 0o644)
+            continue
+        for source in sorted(source_root.rglob("*")):
+            if not source.is_file() or source.is_symlink():
+                continue
+            relative = source.relative_to(ROOT).as_posix()
+            if relative in overlay_owned:
+                continue
+            install(relative, source.read_bytes(),
+                    source.stat().st_mode & 0o755)
+    for relative, data in sorted(rendered.items()):
+        install(relative, data, 0o644)
+    # prune anything that fell out of the wanted view
+    for existing in sorted(shadow.rglob("*"), reverse=True):
+        if existing.is_file() and existing not in wanted:
+            existing.unlink()
+            changed += 1
+        elif existing.is_dir():
+            try:
+                existing.rmdir()
+            except OSError:
+                pass
+    return changed
+
+
+def write_plan(plan_path: Path, overlay: dict) -> None:
+    lines = [
+        "# Generated by tools/isle_build.py - do not edit.",
+        'set(ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_ENABLED TRUE)',
+        'set(ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_MATERIALIZED TRUE)',
+        'set(ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_PREBUILT_SOURCE_ARTIFACTS'
+        ' "forbidden")',
+    ]
+    outputs = ";".join(item["logical_path"] for item in overlay["outputs"])
+    lines.append(
+        f'set(ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_OUTPUTS "{outputs}")'
+    )
+    generated = overlay["graph"]["generated_translation_units"]
+    lines.append(
+        'set(ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_TU_INDICES "'
+        + ";".join(str(index) for index in range(len(generated))) + '")'
+    )
+    for index, unit in enumerate(generated):
+        prefix = f"ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_TU_{index}"
+        pins = unit["generated_output"]
+        values = {
+            "PATH": unit["logical_path"],
+            "LANGUAGE": unit["language"],
+            "TARGET_FAMILY": unit["target_family"],
+            "TARGETS": ";".join(unit["targets"]),
+            "SOURCE_ORDINAL": str(unit["source_ordinal"]),
+            "INSERT_AFTER": unit["insert_after"],
+            "INSERT_BEFORE": unit.get("insert_before") or "",
+            "GENERATION_OPERATION_IDS": ";".join(
+                unit["generation_operation_ids"]
+            ),
+            "OUTPUT_SHA256": pins["baseline_sha256"],
+            "OUTPUT_TOKEN_SHA256": pins[
+                "baseline_significant_token_sha256"
+            ],
+            "OUTPUT_SIZE": str(pins["baseline_size"]),
+            "OUTPUT_LINE_COUNT": str(pins["baseline_line_count"]),
+        }
+        for key, value in values.items():
+            lines.append(f'set({prefix}_{key} "{value}")')
+    admissions = overlay["graph"]["link_admissions"]
+    lines.append(
+        'set(ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_LINK_INDICES "'
+        + ";".join(str(index) for index in range(len(admissions))) + '")'
+    )
+    lines.append(
+        'set(ISLE_BYTE_IDENTITY_SOURCE_OVERLAY_FORBIDDEN_INTERFACES '
+        '"ISLE_INCLUDE_ENTROPY;ISLE_ENTROPY_FILENAME;'
+        'ISLE_TU_ENTROPY_MANIFEST")'
+    )
+    plan_path.parent.mkdir(parents=True, exist_ok=True)
+    plan_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def run(command: list[str], *, cwd: Path | None = None,
+        env: dict | None = None, log: Path | None = None) -> None:
+    started = time.monotonic()
+    result = subprocess.run(
+        command, cwd=cwd, env=env, stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    if log is not None:
+        log.parent.mkdir(parents=True, exist_ok=True)
+        log.write_bytes(result.stdout)
+    if result.returncode != 0:
+        tail = result.stdout[-4000:].decode("utf-8", "replace")
+        fail(
+            f"command failed ({result.returncode}, "
+            f"{time.monotonic() - started:.1f}s): {' '.join(command)}\n{tail}"
+        )
+
+
+def build_environment(compiler: Path) -> dict:
+    environment = dict(os.environ)
+    environment["PATH"] = (
+        str(compiler.parent) + os.pathsep + environment.get("PATH", "")
+    )
+    return environment
+
+
+def configure(build: Path, shadow: Path, plan: Path, compiler: Path,
+              jobs: int) -> None:
+    cache = build / "CMakeCache.txt"
+    if cache.exists() and (build / "Makefile").exists():
+        return
+    if cache.exists():
+        cache.unlink()
+    run([
+        "cmake", "-S", str(shadow), "-B", str(build),
+        "-G", "Unix Makefiles",
+        "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+        "-DCMAKE_SYSTEM_NAME=Windows",
+        "-DCMAKE_CXX_COMPILER=cl",
+        "-DCMAKE_RC_COMPILER=rc",
+        f"-DISLE_BYTE_IDENTITY_PLAN={plan}",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+    ], env=build_environment(compiler), log=build / "configure.log")
+
+
+def gains_losses(report: dict, baseline_path: Path | None) -> str:
+    if baseline_path is None or not baseline_path.exists():
+        return ""
+    try:
+        baseline = json.loads(baseline_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return ""
+    accepted_now = {
+        row["address"]: row["name"] for row in report["data"]
+        if row.get("matching") == 1.0
+    }
+    accepted_before = {
+        row["address"]: row["name"] for row in baseline["data"]
+        if row.get("matching") == 1.0
+    }
+    gained = sorted(set(accepted_now) - set(accepted_before))
+    lost = sorted(set(accepted_before) - set(accepted_now))
+    lines = []
+    for address in lost:
+        lines.append(f"  LOST  {address} {accepted_before[address]}")
+    for address in gained:
+        lines.append(f"  GAIN  {address} {accepted_now[address]}")
+    return "\n".join(lines)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--build-dir", type=Path, required=True)
+    parser.add_argument("--compiler", type=Path, required=True)
+    parser.add_argument("--manifest", type=Path,
+                        default=ROOT / "tools/byte_identity_manifest.json")
+    parser.add_argument("--jobs", type=int, default=4)
+    parser.add_argument("--terminal", action="store_true",
+                        help="require 4933/4933 and the retail MD5")
+    parser.add_argument("--baseline-report", type=Path,
+                        default=Path("/tmp/lego1-4816-full.json"))
+    arguments = parser.parse_args()
+
+    manifest = byte_identity.strict_json_loads(
+        arguments.manifest.read_bytes()
+    )
+    compiler = arguments.compiler.resolve()
+    pins = verify_pins(manifest, compiler)
+    reccmp = resolve_reccmp(manifest)
+
+    build_root = arguments.build_dir.resolve()
+    shadow = build_root / "src"
+    build = build_root / "build"
+    plan = build_root / "plan.cmake"
+    build_root.mkdir(parents=True, exist_ok=True)
+
+    started = time.monotonic()
+    overlay, rendered = render_overlay(manifest)
+    changed = sync_shadow(shadow, rendered)
+    write_plan(plan, overlay)
+    print(f"[isle_build] shadow synced ({changed} files changed, "
+          f"{time.monotonic() - started:.1f}s)")
+
+    configure(build, shadow, plan, compiler, arguments.jobs)
+    run(
+        ["cmake", "--build", str(build), "--target", "lego1",
+         "-j", str(arguments.jobs)],
+        env=build_environment(compiler), log=build_root / "build.log",
+    )
+    print(f"[isle_build] build complete ({time.monotonic() - started:.1f}s)")
+
+    compose_translation_units(manifest, build, shadow, compiler,
+                              arguments.jobs)
+
+    image = build / "LEGO1.DLL"
+    pdb = build / "LEGO1.pdb"
+    if not image.is_file():
+        fail("LEGO1.DLL was not produced")
+    if not pdb.is_file():
+        fail("LEGO1.pdb was not produced (diagnostic /debug link expected)")
+
+    report_path = build_root / "LEGO1-report.json"
+    run([
+        str(reccmp), "--paths", str(ROOT / pins["image_gate"]["original"]),
+        str(image), str(pdb), str(shadow),
+        "--json", str(report_path), "--json-diet", "--print-rec-addr",
+        "--silent",
+    ], log=build_root / "reccmp.log")
+
+    report_bytes = report_path.read_bytes()
+    gate = pins["image_gate"]
+    try:
+        if arguments.terminal:
+            result = byte_identity.validate_complete_reccmp_report(
+                report_bytes, gate
+            )
+        else:
+            result = byte_identity.validate_iteration_reccmp_report(
+                report_bytes, gate
+            )
+    except byte_identity.ByteIdentityError as error:
+        snapshot = byte_identity.validate_reccmp_report_snapshot(
+            report_bytes, gate
+        )
+        delta = gains_losses(json.loads(report_bytes),
+                             arguments.baseline_report)
+        print(f"[isle_build] rows {snapshot['raw_1_0_count']}"
+              f"/{snapshot['row_count']} at 1.0, "
+              f"{snapshot['address_aligned_row_count']} address-aligned")
+        if delta:
+            print(delta)
+        fail(str(error))
+
+    verdict = {
+        "status": ("BYTE_IDENTITY_COMPLETE" if arguments.terminal
+                   else "ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE"),
+        "raw_1_0_count": result["raw_1_0_count"],
+        "row_count": result["row_count"],
+        "address_aligned_row_count": result["address_aligned_row_count"],
+        "image_sha256": sha256_file(image),
+        "pdb_sha256": sha256_file(pdb),
+        "report_sha256": hashlib.sha256(report_bytes).hexdigest(),
+        "manifest_sha256": sha256_file(arguments.manifest),
+        "compiler_sha256": sha256_file(compiler),
+        "elapsed_seconds": round(time.monotonic() - started, 1),
+    }
+    if arguments.terminal:
+        verdict["image_md5"] = hashlib.md5(image.read_bytes()).hexdigest()
+    verdict_path = build_root / "verdict.json"
+    verdict_path.write_text(json.dumps(verdict, indent=1) + "\n")
+    print(f"[isle_build] {verdict['status']}: "
+          f"{result['raw_1_0_count']}/{result['row_count']} rows at 1.0 "
+          f"in {verdict['elapsed_seconds']}s -> {verdict_path}")
+    return 0
+
+
+def compose_translation_units(manifest: dict, build: Path, shadow: Path,
+                              compiler: Path, jobs: int) -> None:
+    """Apply manifest-listed COMDAT compositions, then relink.
+
+    Each listed TU is compiled once more with its non-emitting declaration
+    donor force-included; the donor's byte-pinned COMDAT (body, lines, FPO,
+    CodeView range) is composed into the seed object by the pure composer.
+    """
+    import shlex
+    units = manifest.get("translation_units", [])
+    if not units:
+        return
+    commands = {}
+    for entry in json.loads((build / "compile_commands.json").read_text()):
+        commands[Path(entry["file"]).resolve()] = entry
+    relink = False
+    for unit in units:
+        source = (shadow / unit["source"]).resolve()
+        entry = commands.get(source)
+        if entry is None:
+            fail(f"no compile command for listed TU: {unit['source']}")
+        child = shlex.split(entry["command"])
+        cwd = Path(entry["directory"])
+        parsed = byte_identity.validate_compile_arguments(child)
+        seed_object = (cwd / parsed["Fo"][1]).resolve()
+        seed_pdb = (cwd / parsed["Fd"][1]).resolve()
+        if not seed_object.is_file():
+            fail(f"listed TU object is absent: {seed_object}")
+        donor = unit["donors"][0]
+        recipe = donor["recipe"]
+        import entropy
+        header_bytes = entropy.generate_shape(
+            recipe["classes"], recipe["functions"]
+        ).encode("utf-8")
+        header_sha = hashlib.sha256(header_bytes).hexdigest()
+        if header_sha != recipe["generated_header_sha256"]:
+            fail(f"donor header rendering differs: {unit['source']}")
+        header = (build.parent / "generated"
+                  / f"declaration_{header_sha}.h")
+        header.parent.mkdir(parents=True, exist_ok=True)
+        if not header.exists() or header.read_bytes() != header_bytes:
+            header.write_bytes(header_bytes)
+        marker = build.parent / (
+            "composed-" + unit["source"].replace("/", "_") + ".json"
+        )
+        seed_bytes = seed_object.read_bytes()
+        seed_sha = hashlib.sha256(seed_bytes).hexdigest()
+        if marker.exists():
+            state = json.loads(marker.read_text())
+            if state.get("composed_sha") == seed_sha:
+                continue
+        donor_command = list(child)
+        donor_command.insert(parsed["Fo"][0], f"/FI{header}")
+        # Compile the donor with identical /Fo /Fd: hold the seed aside.
+        seed_pdb_bytes = seed_pdb.read_bytes() if seed_pdb.is_file() else None
+        try:
+            run(donor_command, cwd=cwd, env=build_environment(compiler),
+                log=build.parent / "donor-compile.log")
+            donor_bytes = seed_object.read_bytes()
+        finally:
+            seed_object.write_bytes(seed_bytes)
+            if seed_pdb_bytes is not None:
+                seed_pdb.write_bytes(seed_pdb_bytes)
+        identifiers = byte_identity.declaration_identifiers(header_bytes)
+        composed = seed_bytes
+        for function in unit["functions"]:
+            composed, detail = byte_identity.compose_equal_linked_span_fpo(
+                composed, donor_bytes, function, identifiers
+            )
+        byte_identity.validate_first_party_object_directive(
+            composed, "composed object"
+        )
+        seed_object.write_bytes(composed)
+        marker.write_text(json.dumps({
+            "seed_sha": seed_sha,
+            "composed_sha": hashlib.sha256(composed).hexdigest(),
+        }, indent=1) + "\n")
+        print(f"[isle_build] composed {len(unit['functions'])} function(s) "
+              f"into {unit['source']}")
+        relink = True
+    if relink:
+        image = build / "LEGO1.DLL"
+        if image.exists():
+            image.unlink()
+        run(["cmake", "--build", str(build), "--target", "lego1",
+             "-j", str(jobs)],
+            env=build_environment(compiler),
+            log=build.parent / "relink.log")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
