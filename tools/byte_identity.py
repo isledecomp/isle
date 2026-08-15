@@ -8134,10 +8134,8 @@ def validate_manifest(
                                 f"{function_context}.{name} is invalid")
                     require(
                         function["expected_linked_span"] % 16 == 0
-                        and ((function["expected_seed_length"] + 15) // 16)
+                        and ((function["expected_donor_length"] + 15) // 16)
                         * 16 == function["expected_linked_span"]
-                        == ((function["expected_donor_length"] + 15) // 16)
-                        * 16
                         and function["expected_seed_length"]
                         != function["expected_donor_length"],
                         f"{function_context}: resize spans are inconsistent",
@@ -10457,10 +10455,9 @@ def compose_same_slot_resize(
             and dp["raw_size"] == function["expected_donor_length"],
             "target body lengths changed")
     require(
-        ((sp["raw_size"] + 15) // 16) * 16
-        == ((dp["raw_size"] + 15) // 16) * 16
+        ((dp["raw_size"] + 15) // 16) * 16
         == function["expected_linked_span"],
-        "target 16-byte linked contribution span changed",
+        "donor 16-byte linked contribution span changed",
     )
     require(sp["number"] == dp["number"],
             "target section seat changed")
@@ -10661,15 +10658,13 @@ def compose_same_slot_resize(
     donor_begin_index, donor_begin = _coff_marker(donor, ".bf", dp["number"])
     seed_begin_aux = coff_auxiliary(seed, seed_begin_index, seed_begin)
     donor_begin_aux = coff_auxiliary(donor, donor_begin_index, donor_begin)
-    # Adopt only the donor's line field; the tail of the aux record holds
-    # the seed's own next-.bf chain, which a cross-layout donor cannot
-    # supply.
+    # The seed's .bf aux keeps BOTH its absolute line base (the donor's is
+    # shifted by any prefix carrier) and its next-.bf chain tail; only the
+    # non-line metadata must agree.
     require(seed_begin_aux[:4] == donor_begin_aux[:4]
             and seed_begin_aux[6:12] == donor_begin_aux[6:12]
             and seed_begin_aux[16:] == donor_begin_aux[16:],
             ".bf non-line metadata changed")
-    at = new_symbol_offset + (seed_begin_index + 1) * 18
-    output[at + 4:at + 6] = donor_begin_aux[4:6]
 
     seed_end_index, seed_end = _coff_marker(seed, ".ef", sp["number"])
     donor_end_index, donor_end = _coff_marker(donor, ".ef", dp["number"])
@@ -10681,7 +10676,6 @@ def compose_same_slot_resize(
             ".ef non-line metadata changed")
     at = new_symbol_offset + seed_end_index * 18
     output[at + 8:at + 12] = donor_end["value"].to_bytes(4, "little")
-    output[at + 18 + 4:at + 18 + 6] = donor_end_aux[4:6]
 
     seed_section_index, seed_section_sym = _coff_section_symbol(seed, sp)
     donor_section_index, donor_section_sym = _coff_section_symbol(donor, dp)
