@@ -10495,29 +10495,45 @@ def compose_equal_body_comdat(
         require(splice_class in ("equal_body_eh_structural_local",
                                  "equal_body_eh_reloc_layout"),
                 "unsupported equal-body splice class")
-        require(closure == (2, (".debug$S", ".xdata$x")),
-                "structural-local splice requires the EH closure")
+        fpo_closure = closure == (2, (".debug$F", ".debug$S"))
         require(
-            len(seed.sections) == len(donor.sections)
-            and all(
-                (a["number"], a["name"], a["characteristics"])
-                == (b["number"], b["name"], b["characteristics"])
-                for a, b in zip(seed.sections, donor.sections)
-            ),
-            "global section order/name/characteristics differ",
+            closure == (2, (".debug$S", ".xdata$x"))
+            or (fpo_closure
+                and splice_class == "equal_body_eh_reloc_layout"),
+            "splice closure kind is unsupported for this class",
         )
-        seed_xdata = _comdat_child(seed, seed_primary, ".xdata$x")
-        donor_xdata = _comdat_child(donor, donor_primary, ".xdata$x")
-        require(coff_body(seed, seed_xdata) == coff_body(donor, donor_xdata),
+        # The xdata association model depends on a shared global section
+        # layout; an FPO-closure donor from a different carrier state has
+        # its own layout, and the per-relocation target checks carry the
+        # equivalence proof instead.
+        if not fpo_closure:
+            require(
+                len(seed.sections) == len(donor.sections)
+                and all(
+                    (a["number"], a["name"], a["characteristics"])
+                    == (b["number"], b["name"], b["characteristics"])
+                    for a, b in zip(seed.sections, donor.sections)
+                ),
+                "global section order/name/characteristics differ",
+            )
+        if fpo_closure:
+            require(function["expected_xdata_rename_offsets"] == [],
+                    "FPO-closure splice cannot declare xdata renames")
+            xdata_renames = []
+        else:
+            seed_xdata = _comdat_child(seed, seed_primary, ".xdata$x")
+            donor_xdata = _comdat_child(donor, donor_primary, ".xdata$x")
+            require(
+                coff_body(seed, seed_xdata) == coff_body(donor, donor_xdata),
                 "EH xdata raw bytes differ")
-        xdata_renames = _normalized_relocation_renames(
-            seed, seed_xdata, donor, donor_xdata, "xdata"
-        )
-        require(
-            [offset for offset, _ in xdata_renames]
-            == function["expected_xdata_rename_offsets"],
-            "xdata local-relocation rename set changed",
-        )
+            xdata_renames = _normalized_relocation_renames(
+                seed, seed_xdata, donor, donor_xdata, "xdata"
+            )
+            require(
+                [offset for offset, _ in xdata_renames]
+                == function["expected_xdata_rename_offsets"],
+                "xdata local-relocation rename set changed",
+            )
         if splice_class == "equal_body_eh_structural_local":
             code_renames = _normalized_relocation_renames(
                 seed, seed_primary, donor, donor_primary, "code"

@@ -1020,6 +1020,161 @@
     "reason": "Closes MxAtomId::GetAtom 0x100ad210 from a generated declaration-shape carrier state over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
+   "source_sha256": "e1b7d01cfcb0c1fa0d795d141b4b239825508af91cb588f0b6a7b19cd81c089c",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_de101fd249b6",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 3,
+      "functions": 13,
+      "generated_header_sha256": "de101fd249b6f9bfcc8f1951172b1225e25ef9fc2a672b445132c3253ff528e8",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?insert@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@QAE?AU?$pair@Viterator@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@H@@ABQAVLegoPathActor@@@Z",
+     "splice_class": "equal_body_eh_reloc_layout",
+     "expected_body_length": 613,
+     "expected_body_sha256": "2ee1e0fea3e4d41d02a7dcabcaacd604f5490a8d1c9791aec5915d7deec56eab",
+     "expected_changed_offsets": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      11,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      61,
+      70,
+      75,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      86,
+      87,
+      88,
+      89,
+      90,
+      96,
+      139,
+      142,
+      143,
+      144,
+      145,
+      146,
+      147,
+      150,
+      151,
+      152,
+      153,
+      154,
+      160,
+      222,
+      238,
+      239,
+      240,
+      241,
+      242,
+      243,
+      244,
+      245,
+      246,
+      247,
+      248,
+      249,
+      250,
+      251,
+      252,
+      253,
+      254,
+      255,
+      256,
+      257,
+      258,
+      259,
+      260,
+      261,
+      262,
+      272,
+      275,
+      279,
+      299,
+      302,
+      312,
+      316,
+      319,
+      330,
+      334,
+      337,
+      340,
+      343,
+      345,
+      348,
+      404,
+      441,
+      463,
+      500,
+      539,
+      551,
+      568
+     ],
+     "expected_relocation_moves": [
+      [
+       240,
+       244
+      ],
+      [
+       250,
+       255
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_de101fd249b6"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes the LegoPathActor-set _Tree::insert row 0x10046310 from a generated declaration-shape carrier state over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -1094,8 +1249,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4774,
-    "accepted_row_identity_sha256": "c108cbd769c2ca583bfe9518a68d61198347bca15cf257ab643f893c740fcd9c",
+    "exact_raw_1_0_count": 4775,
+    "accepted_row_identity_sha256": "e30e1599786b9d4a15c1c35a4a28e643a73e3bd205ba7d7f52b8bdc121a75f74",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
