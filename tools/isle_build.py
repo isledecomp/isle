@@ -80,11 +80,12 @@ def verify_pins(manifest: dict, compiler: Path) -> dict:
         source = ROOT / archive["source"]
         if sha256_file(source) != archive["source_sha256"]:
             fail(f"pinned third-party archive differs: {archive['identity']}")
-    image = manifest["images"]["LEGO1"]
-    original = ROOT / image["original"]
-    if sha256_file(original) != image["original_sha256"]:
-        fail("retail oracle differs from its pin")
-    return {"compiler_root": compiler_root, "image_gate": image}
+    for identity, image in manifest["images"].items():
+        original = ROOT / image["original"]
+        if sha256_file(original) != image["original_sha256"]:
+            fail(f"retail oracle differs from its pin: {identity}")
+    return {"compiler_root": compiler_root,
+            "image_gates": manifest["images"]}
 
 
 def resolve_reccmp(manifest: dict) -> Path:
@@ -322,8 +323,10 @@ def main() -> int:
           f"{time.monotonic() - started:.1f}s)")
 
     configure(build, shadow, plan, compiler, arguments.jobs)
+    gates = pins["image_gates"]
+    targets = [gates[identity]["target"] for identity in gates]
     run(
-        ["cmake", "--build", str(build), "--target", "lego1",
+        ["cmake", "--build", str(build), "--target", *targets,
          "-j", str(arguments.jobs)],
         env=build_environment(compiler), log=build_root / "build.log",
     )
@@ -332,65 +335,78 @@ def main() -> int:
     compose_translation_units(manifest, build, shadow, compiler,
                               arguments.jobs)
 
-    image = build / "LEGO1.DLL"
-    pdb = build / "LEGO1.pdb"
-    if not image.is_file():
-        fail("LEGO1.DLL was not produced")
-    if not pdb.is_file():
-        fail("LEGO1.pdb was not produced (diagnostic /debug link expected)")
-
-    report_path = build_root / "LEGO1-report.json"
-    run([
-        str(reccmp), "--paths", str(ROOT / pins["image_gate"]["original"]),
-        str(image), str(pdb), str(shadow),
-        "--json", str(report_path), "--json-diet", "--print-rec-addr",
-        "--silent",
-    ], log=build_root / "reccmp.log")
-
-    report_bytes = report_path.read_bytes()
-    gate = pins["image_gate"]
-    try:
-        if arguments.terminal:
-            result = byte_identity.validate_complete_reccmp_report(
-                report_bytes, gate
-            )
-        else:
-            result = byte_identity.validate_iteration_reccmp_report(
-                report_bytes, gate
-            )
-    except byte_identity.ByteIdentityError as error:
-        snapshot = byte_identity.validate_reccmp_report_snapshot(
-            report_bytes, gate
-        )
-        delta = gains_losses(json.loads(report_bytes),
-                             arguments.baseline_report)
-        print(f"[isle_build] rows {snapshot['raw_1_0_count']}"
-              f"/{snapshot['row_count']} at 1.0, "
-              f"{snapshot['address_aligned_row_count']} address-aligned")
-        if delta:
-            print(delta)
-        fail(str(error))
-
     verdict = {
         "status": ("BYTE_IDENTITY_COMPLETE" if arguments.terminal
                    else "ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE"),
-        "raw_1_0_count": result["raw_1_0_count"],
-        "row_count": result["row_count"],
-        "address_aligned_row_count": result["address_aligned_row_count"],
-        "image_sha256": sha256_file(image),
-        "pdb_sha256": sha256_file(pdb),
-        "report_sha256": hashlib.sha256(report_bytes).hexdigest(),
+        "images": {},
         "manifest_sha256": sha256_file(arguments.manifest),
         "compiler_sha256": sha256_file(compiler),
-        "elapsed_seconds": round(time.monotonic() - started, 1),
     }
-    if arguments.terminal:
-        verdict["image_md5"] = hashlib.md5(image.read_bytes()).hexdigest()
+    summary = []
+    for identity, gate in gates.items():
+        image = build / gate["recompiled"]
+        pdb = image.with_suffix(".pdb")
+        if not image.is_file():
+            fail(f"{gate['recompiled']} was not produced")
+        if not pdb.is_file():
+            fail(f"{pdb.name} was not produced "
+                 "(diagnostic /debug link expected)")
+
+        report_path = build_root / f"{identity}-report.json"
+        run([
+            str(reccmp), "--paths", str(ROOT / gate["original"]),
+            str(image), str(pdb), str(shadow),
+            "--json", str(report_path), "--json-diet", "--print-rec-addr",
+            "--silent",
+        ], log=build_root / f"reccmp-{identity}.log")
+
+        report_bytes = report_path.read_bytes()
+        try:
+            if arguments.terminal:
+                result = byte_identity.validate_complete_reccmp_report(
+                    report_bytes, gate
+                )
+                image_md5 = hashlib.md5(image.read_bytes()).hexdigest()
+                if image_md5 != gate["original_md5"]:
+                    fail(f"{identity} MD5 differs from retail: {image_md5}")
+            else:
+                result = byte_identity.validate_iteration_reccmp_report(
+                    report_bytes, gate
+                )
+        except byte_identity.ByteIdentityError as error:
+            snapshot = byte_identity.validate_reccmp_report_snapshot(
+                report_bytes, gate
+            )
+            delta = gains_losses(
+                json.loads(report_bytes),
+                arguments.baseline_report if identity == "LEGO1" else None,
+            )
+            print(f"[isle_build] {identity} rows "
+                  f"{snapshot['raw_1_0_count']}"
+                  f"/{snapshot['row_count']} at 1.0, "
+                  f"{snapshot['address_aligned_row_count']} address-aligned")
+            if delta:
+                print(delta)
+            fail(f"{identity}: {error}")
+
+        verdict["images"][identity] = {
+            "raw_1_0_count": result["raw_1_0_count"],
+            "row_count": result["row_count"],
+            "address_aligned_row_count": result["address_aligned_row_count"],
+            "image_sha256": sha256_file(image),
+            "pdb_sha256": sha256_file(pdb),
+            "report_sha256": hashlib.sha256(report_bytes).hexdigest(),
+        }
+        if arguments.terminal:
+            verdict["images"][identity]["image_md5"] = image_md5
+        summary.append(f"{identity} {result['raw_1_0_count']}"
+                       f"/{result['row_count']}")
+
+    verdict["elapsed_seconds"] = round(time.monotonic() - started, 1)
     verdict_path = build_root / "verdict.json"
     verdict_path.write_text(json.dumps(verdict, indent=1) + "\n")
-    print(f"[isle_build] {verdict['status']}: "
-          f"{result['raw_1_0_count']}/{result['row_count']} rows at 1.0 "
-          f"in {verdict['elapsed_seconds']}s -> {verdict_path}")
+    print(f"[isle_build] {verdict['status']}: {', '.join(summary)} "
+          f"rows at 1.0 in {verdict['elapsed_seconds']}s -> {verdict_path}")
     return 0
 
 

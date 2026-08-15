@@ -141,7 +141,7 @@ MD5_RE = re.compile(r"^[0-9a-f]{32}$")
 RECIPE_ID_RE = re.compile(r"^[de]_[0-9a-f]{12}$")
 
 
-ADDRESS_RE = re.compile(r"^0x[0-9a-f]{8}$")
+ADDRESS_RE = re.compile(r"^0x[0-9a-f]{6,8}$")
 
 
 TARGET_RE = re.compile(r"^[A-Za-z0-9_][A-Za-z0-9_.+-]*$")
@@ -8396,12 +8396,28 @@ def validate_manifest(
         })
     images = manifest.get("images")
     require(isinstance(images, dict), "images must be an object")
-    require(set(images) <= {"LEGO1"}, "images contains an unsupported identity")
+    image_contracts = {
+        "LEGO1": {
+            "target": "lego1", "original": "legobin/LEGO1.DLL",
+            "recompiled": "LEGO1.DLL", "required_row_count": 4933,
+        },
+        "ISLE": {
+            "target": "isle", "original": "legobin/ISLE.EXE",
+            "recompiled": "ISLE.EXE", "required_row_count": 172,
+        },
+        "CONFIG": {
+            "target": "config", "original": "legobin/CONFIG.EXE",
+            "recompiled": "CONFIG.EXE", "required_row_count": 111,
+        },
+    }
+    require(set(images) <= set(image_contracts),
+            "images contains an unsupported identity")
     normalized_images = []
     for identity, image in images.items():
         context = f"images.{identity}"
-        require(identity == "LEGO1" and isinstance(image, dict),
-                f"{context} must be the supported LEGO1 image gate")
+        contract = image_contracts[identity]
+        require(isinstance(image, dict),
+                f"{context} must be an image gate object")
         exact_audit_keys(
             image,
             {
@@ -8414,13 +8430,13 @@ def validate_manifest(
         )
         require(
             image.get("kind") == "final_image_identity_gate"
-            and image.get("target") == "lego1",
+            and image.get("target") == contract["target"],
             f"{context} target/kind differs",
         )
         original_relative, original_path = resolve_relative(
             source_root, image.get("original"), f"{context}.original"
         )
-        require(original_relative == "legobin/LEGO1.DLL",
+        require(original_relative == contract["original"],
                 f"{context}.original must use the fixed retail oracle seat")
         original_data = (
             active_build_authority().read_external_bytes(original_path)
@@ -8443,9 +8459,9 @@ def validate_manifest(
             f"{context} retail oracle image differs from its pins",
         )
         require(
-            image.get("recompiled") == "LEGO1.DLL"
+            image.get("recompiled") == contract["recompiled"]
             and image.get("reccmp_report")
-            == "byte-identity/final/LEGO1.json"
+            == f"byte-identity/final/{identity}.json"
             and image.get("reccmp_schema")
             == "reccmp_json_diet_exact_rows_v1",
             f"{context} build output/report contract differs",
@@ -8453,8 +8469,8 @@ def validate_manifest(
         required_rows = require_exact_int(
             image.get("required_row_count"),
             f"{context}.required_row_count",
-            minimum=4933,
-            maximum=4933,
+            minimum=contract["required_row_count"],
+            maximum=contract["required_row_count"],
         )
         row_identity_sha256 = require_sha(
             image.get("row_identity_sha256"),
@@ -10602,7 +10618,7 @@ def compose_equal_linked_span_fpo(
 
 
 def validate_reccmp_report_snapshot(data: bytes, image_gate: dict) -> dict:
-    """Validate the fixed LEGO1 row universe and report exact score-set facts."""
+    """Validate the image's fixed row universe and report exact score-set facts."""
     try:
         document = strict_json_loads(data)
     except (UnicodeError, json.JSONDecodeError) as error:
@@ -10611,7 +10627,7 @@ def validate_reccmp_report_snapshot(data: bytes, image_gate: dict) -> dict:
     exact_audit_keys(document, {"file", "format", "timestamp", "data"},
                      "final reccmp report")
     require(
-        document.get("file") == "LEGO1.DLL"
+        document.get("file") == image_gate["recompiled"]
         and type(document.get("format")) is int
         and document.get("format") == 1,
         "final reccmp report identity/schema differs",
