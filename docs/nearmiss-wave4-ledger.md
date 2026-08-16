@@ -544,3 +544,39 @@ search for a `GetRefCount` cover; three candidate directions, in order:
    `nm/chm-h12j-ins.log`;
 3. the anchor-17 / anchor-18 variants of the Exists op (`nm/texts/chm-h12i.cpp`
    is the anchor-17 text; its 653-state sweep is `nm/probes/chm-h12i`).
+
+---
+
+## 13. Residue anatomy of the remaining lane rows (read-offs, for the text lane)
+
+Every residue below was disassembled with `nm/disx.py` against the retail span
+and the best candidate object, so the *class* of each defect is now recorded
+rather than guessed.
+
+* **0x10057180 `_Tree<LegoAnimPresenter*>::_Erase` (.6522, 57 bytes, nd=7)** —
+  a clean **two-register role swap over the whole body**: retail keeps `this`
+  in `esi` and the node walker in `ebx`; ours does the opposite
+  (`mov ebx,ecx` / `mov esi,edi` vs retail `mov esi,ecx` / `mov ebx,edi`), and
+  every subsequent use follows. Not a scheduling or CMPDIR defect — a single
+  allocation decision at function entry. 653 carrier + 216 interior states all
+  keep our assignment.
+* **0x10082ca0 charmgr `erase` (nd=1 @145)** — CMPDIR: ours
+  `3b 4c 24 10` (`cmp ecx,[esp+0x10]`), retail `39 4c 24 10`
+  (`cmp [esp+0x10],ecx`), in the node-unlink path of the inlined rebalance.
+* **0x1002bff0 extraactor `erase` (nd=1 @434)** — register-role tie:
+  ours `3b fa` (`cmp edi,edx`), retail `3b d7` (`cmp edx,edi`).
+* **0x100574a0 `RemoveActor` (nd=1 @240)** — CMPDIR: ours `3b 5c 24 10`,
+  retail `39 5c 24 10`, at the `set::erase(key)` loop bottom.
+* **0x10083bc0 `GetRefCount` on h12j (nd=1 @84)** — register-role tie:
+  ours `3b f2` (`cmp esi,edx`), retail `3b d6` (`cmp edx,esi`).
+* **0x10083b20 `Exists` on h12 (nd=6 @118-123)** — two-instruction schedule
+  swap: retail spills `eax` to `[esp+0x10]` before reloading `ecx` from
+  `[esi]`; ours reloads first.
+* **0x10083500 `GetActorROI` on current text (nd=4 @501,504,506,508)** and
+  **0x10083890 `_Insert` (nd=4 @457,459,462,463)** — both invariant over all
+  653 carrier states; text channel (h12 closes GetActorROI, §12).
+
+**Landability caveat for `RemovePresenter` 0x100586e0**: its nd=3 states are
+`fwdP-15`, `fwdP-51` and `pad-7-9` — all three are **non-landable donor kinds**
+(§9). The best state in a landable kind is nd=4 (`fwdL-52`). Anyone quoting
+"RemovePresenter is 3 bytes away" should quote 4.
