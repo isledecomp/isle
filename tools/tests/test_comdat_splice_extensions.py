@@ -258,8 +258,8 @@ def function_record(donor_bytes, **overrides):
         "expected_linked_span": LINKED_SPAN,
         "expected_body_sha256": hashlib.sha256(
             byte_identity.coff_body(coff, section)).hexdigest(),
-        "retail_va": 0x1003CF20,
-        "retail_length": DONOR_SIZE,
+        "retail_oracle": {"image": "LEGO1.DLL", "address": "0x1003cf20",
+                          "verdict": "MATCH", "length": DONOR_SIZE},
     }
     record.update(overrides)
     return record
@@ -410,6 +410,136 @@ class DonorSourceOverlayTests(unittest.TestCase):
         with self.assertRaisesRegex(byte_identity.ByteIdentityError,
                                     "donor object"):
             byte_identity.validate_donor_object_excluded(donor, [donor])
+
+
+class MemberSignatureGeneratorTests(unittest.TestCase):
+    """Spec A7 — the one authorised signature emitter, and its limits.
+
+    A7e is the point of this class: prove it cannot emit an arbitrary
+    function.  A7c is structural — the parameter set has no return type, no
+    parameter list and no body, so none can be rendered.
+    """
+
+    HEADER = "LEGO1/lego/legoomni/include/legocachesoundmanager.h"
+
+    def _gen(self, **overrides):
+        params = {"class_identifier": "LegoCacheSoundEntry",
+                  "member_identifier": "LegoCacheSoundEntry",
+                  "kind": "destructor",
+                  "form": "in_class_declaration"}
+        params.update(overrides)
+        return {"k": "member_sig", **params}
+
+    def _render(self, **overrides):
+        return byte_identity.render_source_overlay_generator(
+            byte_identity.validate_source_overlay_generator(
+                self._gen(**overrides), "gen"))
+
+    def test_a7f_renders_exactly_the_two_authorised_forms(self):
+        # The generator emits exactly the specification's texts and carries
+        # no indentation of its own; the framework's default seating adds the
+        # LF, and the standard `nl` layout override suppresses it where the
+        # seat's own clean source already supplies one.
+        self.assertEqual(self._render(form="in_class_declaration"),
+                         b"~LegoCacheSoundEntry();\n")
+        self.assertEqual(self._render(form="qualified_definition_header"),
+                         b"LegoCacheSoundEntry::~LegoCacheSoundEntry()\n")
+        self.assertEqual(self._render(form="in_class_declaration", nl=False),
+                         b"~LegoCacheSoundEntry();")
+        self.assertEqual(
+            self._render(form="qualified_definition_header", nl=False),
+            b"LegoCacheSoundEntry::~LegoCacheSoundEntry()")
+
+    def test_a7c_emits_signature_text_only_in_both_forms(self):
+        for form in ("in_class_declaration", "qualified_definition_header"):
+            with self.subTest(form=form):
+                rendered = self._render(form=form)
+                # no body, no return type, no parameter list
+                self.assertNotIn(b"{", rendered)
+                self.assertNotIn(b"void", rendered)
+                self.assertEqual(rendered.count(b"("), 1)
+                self.assertEqual(rendered[rendered.index(b"(") + 1],
+                                 ord(")"))
+        # only the in-class form terminates; the definition header must not,
+        # or the relocated body could never follow it.
+        self.assertTrue(self._render(
+            form="in_class_declaration").rstrip().endswith(b";"))
+        self.assertFalse(self._render(
+            form="qualified_definition_header").rstrip().endswith(b";"))
+
+    def test_a7f_rejects_a_form_outside_the_closed_enum(self):
+        for form in ("definition", "body", "prototype", "inline", ""):
+            with self.subTest(form=form):
+                with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                            "form is outside the closed enum"):
+                    byte_identity.validate_source_overlay_generator(
+                        self._gen(form=form), "gen")
+
+    def test_a7f_rejects_a_missing_form(self):
+        generator = self._gen()
+        del generator["form"]
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            byte_identity.validate_source_overlay_generator(generator, "gen")
+
+    def test_a7b_rejects_a_kind_outside_the_closed_enum(self):
+        for kind in ("constructor", "method", "operator", "function"):
+            with self.subTest(kind=kind):
+                with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                            "closed enum"):
+                    byte_identity.validate_source_overlay_generator(
+                        self._gen(kind=kind), "gen")
+
+    def test_a7c_rejects_any_attempt_to_carry_a_body_or_signature_parts(self):
+        for extra in ("body", "return_type", "parameters", "statements"):
+            with self.subTest(extra=extra):
+                generator = self._gen()
+                generator[extra] = "void"
+                with self.assertRaises(byte_identity.ByteIdentityError):
+                    byte_identity.validate_source_overlay_generator(
+                        generator, "gen")
+
+    def test_a7a_rejects_an_identifier_absent_from_checked_in_source(self):
+        data = (ROOT / self.HEADER).read_bytes()
+        self.assertTrue(byte_identity.source_overlay_member_is_declared(
+            data, "LegoCacheSoundEntry", "LegoCacheSoundEntry", "destructor"))
+        for klass, member in (
+            ("LegoCacheSoundEntry", "NotAMember"),
+            ("NoSuchClass", "NoSuchClass"),
+            ("LegoCacheSoundManager", "LegoCacheSoundEntry"),
+        ):
+            with self.subTest(klass=klass, member=member):
+                self.assertFalse(
+                    byte_identity.source_overlay_member_is_declared(
+                        data, klass, member, "destructor"))
+
+    def test_a7a_recipe_refuses_a_signature_with_no_declaration(self):
+        clean = hashlib.sha256((ROOT / self.HEADER).read_bytes()).hexdigest()
+        recipe = {
+            "kind": "donor_source_overlay",
+            "compile_lane": {"required_define": "BYTE_IDENTITY_DONOR_FIXTURE"},
+            "renderings": [{
+                "path": self.HEADER,
+                "clean_sha256": clean,
+                "rendered_sha256": "1" * 64,
+                "operations": [{
+                    "op": "append",
+                    "gen": self._gen(class_identifier="NoSuchClass",
+                                     member_identifier="NoSuchClass"),
+                }],
+            }],
+        }
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "not declared in any checked-in source"):
+            byte_identity.validate_donor_source_overlay_recipe(
+                recipe, ROOT, seed_outputs_touched=False)
+
+    def test_a7d_refuses_the_generator_in_the_shipped_rendering(self):
+        overlay = {"outputs": [{"path": "x.cpp", "operations": [
+            {"op": "append", "generator": byte_identity
+             .validate_source_overlay_generator(self._gen(), "gen")},
+        ]}]}
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError, "A7d"):
+            byte_identity.assert_member_signature_is_donor_only(overlay)
 
 
 if __name__ == "__main__":

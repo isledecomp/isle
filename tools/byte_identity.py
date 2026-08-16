@@ -226,7 +226,21 @@ SOURCE_OVERLAY_LEAN_KINDS = {
     "assert_reseat": "debug_assert_reseat_v1",
     "const_pool": "synthetic_constant_pool_tu_v1",
     "literal_alias": "literal_first_use_alias_v1",
+    "member_sig": "member_signature_v1",
 }
+
+
+# A7b: a CLOSED enum.  Adding a kind here is a specification amendment, never
+# an implementation detail.
+MEMBER_SIGNATURE_KINDS = frozenset({"destructor"})
+
+# A7f: also CLOSED, with exactly two members.  The donor needs two texts from
+# the same three identifiers -- the in-class declaration for the header seat
+# and the qualified definition header for the .cpp seat.  A third form is a
+# specification amendment, never an implementation detail.
+MEMBER_SIGNATURE_FORMS = frozenset({
+    "in_class_declaration", "qualified_definition_header",
+})
 
 
 SOURCE_OVERLAY_LEAN_SHAPES = {
@@ -282,6 +296,9 @@ SOURCE_OVERLAY_KIND_POLICIES = {
         "compiler_state_only", "function_body_noop_sequence"
     ),
     "line_reservation_v1": ("source_layout_only", "physical_line_reservation"),
+    "member_signature_v1": (
+        "non_emitting_declaration", "member_signature_only"
+    ),
     "list_cursor_delete_emission_probe_v1": (
         "discarded_emission_probe", "list_cursor_delete_emission"
     ),
@@ -726,6 +743,40 @@ def _source_overlay_anchor_seat_index(
             source_overlay_token_sha256(signature), []
         ).append(index)
     return {sha: tuple(indices) for sha, indices in seats.items()}
+
+
+def source_overlay_member_is_declared(
+    data: bytes, class_identifier: str, member_identifier: str, kind: str,
+) -> bool:
+    """A7a: is `member_identifier` present on `class_identifier` in this source?
+
+    Comments are stripped first so a mention inside prose cannot authorise a
+    signature.  Only the class's own brace-balanced body is searched, so a
+    member of some *other* class never satisfies the check.
+    """
+    require(kind in MEMBER_SIGNATURE_KINDS,
+            f"member signature kind {kind!r} is outside the closed enum")
+    clean = source_overlay_strip_comments_preserve_lines(data).decode("latin1")
+    opening = re.compile(
+        r"\b(?:struct|class)\s+" + re.escape(class_identifier)
+        + r"\b[^{;]*\{"
+    )
+    wanted = "~" + member_identifier          # destructor is the only kind
+    for match in opening.finditer(clean):
+        depth, index = 0, match.end() - 1
+        while index < len(clean):
+            character = clean[index]
+            if character == "{":
+                depth += 1
+            elif character == "}":
+                depth -= 1
+                if depth == 0:
+                    break
+            index += 1
+        body = clean[match.end():index]
+        if re.search(r"(?<![\w~])" + re.escape(wanted) + r"\s*\(", body):
+            return True
+    return False
 
 
 def source_overlay_strip_comments_preserve_lines(data: bytes) -> bytes:
@@ -1397,6 +1448,9 @@ def source_overlay_expected_identifier_roles(
         "empty_compound_statements_v1", "synthetic_constant_pool_tu_v1",
     }:
         pass
+    elif kind == "member_signature_v1":
+        referenced.add(params["class_identifier"])
+        referenced.add(params["member_identifier"])
     elif kind == "inline_budget_noop_statements_v1":
         referenced.add(params["assignment_target"])
     elif kind == "local_symbol_id_carrier_v1":
@@ -1976,6 +2030,31 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
         normalized = {
             "basename": basename, "logical_header": logical,
             "style": params["style"],
+        }
+    elif kind == "member_signature_v1":
+        # A7: {class_identifier, member_identifier, kind} and nothing else.
+        # A7c is structural -- there is no return type, parameter list or body
+        # in the parameter set, so none can be emitted.
+        exact_audit_keys(params, {
+            "class_identifier", "member_identifier", "kind", "form",
+        }, param_context)
+        require(params.get("kind") in MEMBER_SIGNATURE_KINDS,
+                f"{param_context}.kind is outside the closed enum "
+                f"{sorted(MEMBER_SIGNATURE_KINDS)}")
+        require(params.get("form") in MEMBER_SIGNATURE_FORMS,
+                f"{param_context}.form is outside the closed enum "
+                f"{sorted(MEMBER_SIGNATURE_FORMS)}")
+        normalized = {
+            "class_identifier": _source_overlay_identifier(
+                params.get("class_identifier"),
+                param_context + ".class_identifier",
+            ),
+            "member_identifier": _source_overlay_identifier(
+                params.get("member_identifier"),
+                param_context + ".member_identifier",
+            ),
+            "kind": params["kind"],
+            "form": params["form"],
         }
     elif kind == "empty_compound_statements_v1":
         exact_audit_keys(params, {"scope_count"}, param_context)
@@ -3698,6 +3777,26 @@ def render_source_overlay_generator(
         result = (
             f'#include {quote_open}{params["basename"]}{quote_close}\n'
         ).encode("ascii")
+    elif kind == "member_signature_v1":
+        # A7c: signature text ONLY.  A destructor has no return type and no
+        # parameters, and the body is supplied by the authenticated
+        # relocated-range mechanism -- never by this generator.
+        require(params["kind"] in MEMBER_SIGNATURE_KINDS,
+                f"member signature kind {params['kind']!r} is outside the "
+                f"closed enum")
+        require(params["form"] in MEMBER_SIGNATURE_FORMS,
+                f"member signature form {params['form']!r} is outside the "
+                f"closed enum")
+        # Neither form carries indentation or a line break: the seat's own
+        # clean source supplies those, so the generator emits exactly the
+        # signature the specification names and nothing else.
+        if params["form"] == "in_class_declaration":
+            result = f'~{params["member_identifier"]}();'.encode("ascii")
+        else:
+            # qualified_definition_header: no terminator -- the body follows
+            # from the authenticated relocated range, never from here.
+            result = (f'{params["class_identifier"]}::'
+                      f'~{params["member_identifier"]}()').encode("ascii")
     elif kind == "empty_compound_statements_v1":
         result = b"\t{\n\t}\n" * params["scope_count"]
     elif kind == "inline_budget_noop_statements_v1":
@@ -4884,6 +4983,10 @@ def validate_source_overlay(value: object, source_root: Path, *, repin_paths: se
     # effective pin, so consumers can install these bytes directly instead of
     # rendering the overlay a second time.
     normalized["rendered_by_path"] = rendered
+    # A7d: the member-signature generator is a DONOR-ONLY facility.  The
+    # shipped tree's overlay is asserted free of it here rather than relying
+    # on nobody adding one.
+    assert_member_signature_is_donor_only(normalized)
     return normalized
 
 
@@ -8016,7 +8119,8 @@ def validate_manifest(
                              "extern_run_pair", "forward_run_with_shape",
                              "extern_pair_with_shape",
                              "extern_pair_with_pad", "pad_shape",
-                             "declaration_run_triple"),
+                             "declaration_run_triple",
+                             "donor_source_overlay"),
                     f"{donor_context}: equal-body donors require a "
                     "generated declaration recipe",
                 )
@@ -8028,6 +8132,67 @@ def validate_manifest(
                     and lane["required_define"],
                     f"{donor_context}.compile_lane must select by a define",
                 )
+                if kind == "donor_source_overlay":
+                    # Extension A: the donor's own private rendering of one or
+                    # more checked-in paths, by typed ops.  It carries no
+                    # generated carrier header, so its identity is the sha of
+                    # its rendering pins instead.
+                    exact_keys(
+                        recipe,
+                        {
+                            "kind", "renderings", "compile_lane",
+                            "emission_policy", "authenticity_rationale",
+                            "rendering_identity_sha256",
+                        },
+                        f"{donor_context}.recipe",
+                    )
+                    validate_donor_source_overlay_recipe(
+                        {
+                            "kind": kind, "compile_lane": lane,
+                            "renderings": recipe["renderings"],
+                        },
+                        source_dir,
+                    )
+                    identity = sha256_bytes(
+                        canonical_json_bytes(recipe["renderings"]))
+                    require(
+                        recipe.get("rendering_identity_sha256") == identity,
+                        f"{donor_context}.rendering_identity_sha256 differs "
+                        f"from its renderings",
+                    )
+                    require(recipe_id == f"d_{identity[:12]}",
+                            f"{donor_context}.id is not the rendering "
+                            f"content ID")
+                    require(
+                        recipe.get("emission_policy")
+                        == "donor_private_rendering_only",
+                        f"{donor_context}: a donor source overlay must be "
+                        f"donor-private",
+                    )
+                    rationale = recipe.get("authenticity_rationale")
+                    require(isinstance(rationale, str) and len(rationale) >= 32,
+                            f"{donor_context}: authenticity rationale is "
+                            f"too weak")
+                    serialized = json.dumps(recipe, sort_keys=True).casefold()
+                    require(
+                        not any(word in serialized
+                                for word in FORBIDDEN_RECIPE_WORDS),
+                        f"{donor_context} contains forbidden provenance",
+                    )
+                    existing_recipe = recipe_registry.get(recipe_id)
+                    if existing_recipe is None:
+                        recipe_registry[recipe_id] = {
+                            "id": recipe_id, "recipe": recipe,
+                            "header_output": None, "users": [],
+                        }
+                        recipe_order.append(recipe_id)
+                    else:
+                        require(existing_recipe["recipe"] == recipe,
+                                f"duplicate recipe definition differs: "
+                                f"{recipe_id}")
+                    normalized_donors.append(
+                        {**donor, "header_output": None})
+                    continue
                 if kind == "forward_declaration_run":
                     exact_keys(
                         recipe,
@@ -8485,8 +8650,63 @@ def validate_manifest(
                 require(splice_class in ("equal_body_strict",
                                          "equal_body_eh_structural_local",
                                          "equal_body_eh_reloc_layout",
-                                         "same_slot_resize"),
+                                         "same_slot_resize",
+                                         "retail_exact_reloc_divergent"),
                         f"{function_context}: unsupported splice class")
+                if splice_class == "retail_exact_reloc_divergent":
+                    # Extension B.  Same shape as same_slot_resize plus the
+                    # pinned retail oracle window that B1 compares against --
+                    # this class may only ever install retail's own code.
+                    exact_keys(
+                        function,
+                        {
+                            "mangled", "donor", "splice_class",
+                            "expected_seed_length", "expected_donor_length",
+                            "expected_linked_span", "expected_body_sha256",
+                            "retail_oracle",
+                        },
+                        function_context,
+                    )
+                    for name in ("expected_seed_length",
+                                 "expected_donor_length",
+                                 "expected_linked_span"):
+                        value = function.get(name)
+                        require(isinstance(value, int)
+                                and not isinstance(value, bool) and value > 0,
+                                f"{function_context}.{name} is invalid")
+                    require(
+                        function["expected_linked_span"] % 16 == 0
+                        and ((function["expected_donor_length"] + 15) // 16)
+                        * 16 == function["expected_linked_span"],
+                        f"{function_context}: resize spans are inconsistent",
+                    )
+                    require_sha(function.get("expected_body_sha256"),
+                                f"{function_context}.expected_body_sha256")
+                    retail = function.get("retail_oracle")
+                    require(isinstance(retail, dict),
+                            f"{function_context}.retail_oracle must be an "
+                            f"object")
+                    exact_keys(retail, {"image", "address", "verdict",
+                                        "length"},
+                               f"{function_context}.retail_oracle")
+                    require(retail.get("image") == "LEGO1.DLL",
+                            f"{function_context}.retail_oracle.image is "
+                            f"invalid")
+                    require(isinstance(retail.get("address"), str)
+                            and ADDRESS_RE.fullmatch(retail["address"])
+                            is not None,
+                            f"{function_context}.retail_oracle.address is "
+                            f"invalid")
+                    require(
+                        retail.get("verdict") == "MATCH"
+                        and type(retail.get("length")) is int
+                        and retail["length"]
+                        == function["expected_donor_length"],
+                        f"{function_context}: retail oracle is not a pinned "
+                        f"exact-length match",
+                    )
+                    normalized_functions.append(dict(function))
+                    continue
                 if splice_class == "same_slot_resize":
                     resize_keys = {
                         "mangled", "donor", "splice_class",
@@ -11022,9 +11242,10 @@ def compose_same_slot_resize(
         # retail's own code, so the body is compared against retail before any
         # of it is written anywhere.  The build performs the pinned extraction
         # from the sha256-pinned image; here we enforce length and mask.
-        require(len(retail_body) == function["retail_length"],
+        pinned_length = function["retail_oracle"]["length"]
+        require(len(retail_body) == pinned_length,
                 f"retail oracle body length {len(retail_body)} differs from "
-                f"its pinned retail_length {function['retail_length']}")
+                f"its pinned length {pinned_length}")
         require(len(donor_code) == len(retail_body),
                 f"composed body length {len(donor_code)} differs from the "
                 f"retail oracle length {len(retail_body)}")
@@ -11288,6 +11509,31 @@ def compose_same_slot_resize(
     }
 
 
+def _source_overlay_generators(node: object):
+    """Yield every validated generator in an operation, sequences included."""
+    if isinstance(node, dict):
+        if "kind" in node and "params" in node:
+            yield node
+            yield from _source_overlay_generators(node["params"])
+            return
+        for value in node.values():
+            yield from _source_overlay_generators(value)
+    elif isinstance(node, list):
+        for value in node:
+            yield from _source_overlay_generators(value)
+
+
+def assert_member_signature_is_donor_only(overlay: object) -> None:
+    """A7d: the member-signature generator may never appear in the SHIPPED
+    tree's rendering -- only in a donor rendering.  Asserted, not assumed."""
+    for generator in _source_overlay_generators(overlay):
+        require(
+            generator.get("kind") != "member_signature_v1",
+            "member_signature_v1 appears in the shipped tree's source "
+            "overlay; A7d restricts it to donor renderings",
+        )
+
+
 def validate_donor_object_excluded(
     composed_object: bytes, donor_objects,
 ) -> None:
@@ -11339,6 +11585,8 @@ def validate_donor_source_overlay_recipe(
     root = Path(root)
     seen: set[str] = set()
     normalized = []
+    clean_inputs: list[bytes] = []
+    pending_signatures: list[tuple[str, dict]] = []
     for index, item in enumerate(renderings):
         context = f"donor rendering[{index}]"
         require(isinstance(item, dict), f"{context} must be an object")
@@ -11371,24 +11619,199 @@ def validate_donor_source_overlay_recipe(
             validated = validate_source_overlay_operation(
                 operation, op_context, logical_path=path, index=op_index,
             )
-            anchor = validated.get("anchor")
-            if anchor is not None:
-                # A5: refuses on both ambiguity and absence, exactly as
-                # repin_overlay.py already refuses.
-                resolve_source_overlay_anchor(
-                    data, anchor, f"{op_context} anchor",
-                    logical_path=path,
-                )
+            # A5: every anchor must seat uniquely against the clean input.
+            # resolve_source_overlay_anchor refuses on BOTH ambiguity and
+            # absence, exactly as repin_overlay.py already refuses.
+            for role in ("start_anchor", "end_anchor"):
+                anchor = validated.get(role)
+                if anchor is not None:
+                    resolve_source_overlay_anchor(
+                        data, anchor, f"{op_context}.{role}",
+                        logical_path=path,
+                    )
+            for generator in _source_overlay_generators(validated):
+                if generator.get("kind") == "member_signature_v1":
+                    pending_signatures.append((op_context, generator))
             validated_ops.append(validated)
+        clean_inputs.append(data)
         normalized.append({
             "path": path, "clean_sha256": clean,
             "rendered_sha256": rendered, "operations": validated_ops,
         })
+    # A7a: every emitted signature names a class and member that exist in the
+    # checked-in source this recipe renders from.  Deferred to here so a
+    # signature seated in the .cpp can be authorised by the header that
+    # actually declares the class.
+    for op_context, generator in pending_signatures:
+        params = generator["params"]
+        class_identifier = params["class_identifier"]
+        member_identifier = params["member_identifier"]
+        require(
+            any(source_overlay_member_is_declared(
+                data, class_identifier, member_identifier, params["kind"])
+                for data in clean_inputs),
+            f"{op_context}: member signature "
+            f"{class_identifier}::~{member_identifier} is not declared in any "
+            f"checked-in source this recipe renders from",
+        )
     return {
         "kind": "donor_source_overlay",
         "compile_lane": {"required_define": lane["required_define"]},
         "renderings": normalized,
     }
+
+
+def render_donor_source_overlay(
+    recipe: object, root, *, repin: bool = False,
+) -> dict[str, bytes]:
+    """Render each donor-private path from checked-in source plus typed ops.
+
+    Extension A's renderer.  It reuses the existing op machinery wholesale --
+    the same verbs, the same typed generators, the same content-hash anchors,
+    and the same `source_range_relocation_v1` producer/consumer pairing that
+    the shipped overlay uses.  Nothing here is literal: every emitted byte is
+    either a typed generator's render or an authenticated range copied out of
+    checked-in source.
+
+    Returns {path: rendered bytes}.  The caller stages these for the donor
+    compile ONLY; A2/A6b keep the shipped tree's renderings untouched.
+    """
+    validated = validate_donor_source_overlay_recipe(
+        recipe, root, seed_outputs_touched=False)
+    root = Path(root)
+    clean: dict[str, bytes] = {}
+    edits: dict[str, list] = {}
+    relocation_ranges: dict[tuple[str, str], bytes] = {}
+    consumers: list[tuple[str, dict, list]] = []
+
+    # Pass 1 -- resolve every seat and capture the ranges producers remove.
+    for item in validated["renderings"]:
+        path = item["path"]
+        data = (root / path).read_bytes()
+        clean[path] = data
+        edits[path] = []
+        for operation in item["operations"]:
+            action = operation["action"]
+            generator = operation["generator"]
+            if action in {"replace", "delete"}:
+                start = resolve_source_overlay_anchor(
+                    data, operation["start_anchor"],
+                    f"{path} {operation['id']}.from", logical_path=path)
+                end = resolve_source_overlay_anchor(
+                    data, operation["end_anchor"],
+                    f"{path} {operation['id']}.to", logical_path=path)
+                require(start <= end,
+                        f"{path} {operation['id']}: range is inverted")
+                removed = data[start:end]
+                pins = operation["baseline_input_range"]
+                require(
+                    sha256_bytes(removed) == pins["baseline_sha256"]
+                    and len(removed) == pins["baseline_size"],
+                    f"{path} {operation['id']}: removed range differs from "
+                    f"its authenticated pins",
+                )
+                params = generator["params"]
+                if (generator["kind"] == "source_range_relocation_v1"
+                        and "byte_destination" in params):
+                    require(params["source_operation_id"] == operation["id"]
+                            and params["ordinary_owner"] == path,
+                            f"{path} {operation['id']}: relocation producer "
+                            f"identity differs")
+                    require_source_overlay_range_pin(
+                        removed, params["source_range_token_pin"],
+                        f"{path} {operation['id']} producer range")
+                    key = (operation["id"], params["range_dependency_id"])
+                    require(key not in relocation_ranges,
+                            f"relocation dependency is duplicated: {key}")
+                    relocation_ranges[key] = removed
+                if action == "delete":
+                    # A delete removes; its generator exists only to declare
+                    # the relocation producer identity, exactly as the
+                    # shipped overlay uses it (vector3d.inl.h keeps none of
+                    # the moved range).
+                    require(
+                        generator["kind"] == "source_range_relocation_v1"
+                        and "byte_destination" in generator["params"],
+                        f"{path} {operation['id']}: a donor delete must "
+                        f"declare a relocation producer",
+                    )
+                    edits[path].append([start, end, b""])
+                    continue
+                slot = [start, end, None]
+            elif action == "insert":
+                at = resolve_source_overlay_anchor(
+                    data, operation["start_anchor"],
+                    f"{path} {operation['id']}.anchor", logical_path=path)
+                slot = [at, at, None]
+            else:
+                slot = [len(data), len(data), None]
+            edits[path].append(slot)
+            consumers.append((path, generator, slot))
+
+    # Pass 2 -- render, now that every producer's range is held.
+    for path, generator, slot in consumers:
+        slot[2] = render_source_overlay_generator(
+            generator, relocation_ranges=relocation_ranges)
+
+    rendered: dict[str, bytes] = {}
+    for item in validated["renderings"]:
+        path = item["path"]
+        output = apply_replacements(
+            clean[path],
+            [(start, end, payload) for start, end, payload in edits[path]])
+        require(
+            repin or sha256_bytes(output) == item["rendered_sha256"],
+            f"{path}: donor rendering differs from its pinned sha256 -- "
+            f"re-pin deliberately rather than letting the donor drift",
+        )
+        rendered[path] = output
+    return rendered
+
+
+def checked_source_root() -> Path:
+    """The checked-in tree this tool ships inside, as repin_overlay.py uses."""
+    return Path(__file__).resolve().parent.parent
+
+
+def retail_image_body(
+    manifest: dict, image_name: str, address: int, length: int,
+) -> bytes:
+    """B1's extraction: retail's own bytes at a pinned VA and length.
+
+    The image is re-hashed against `images.<t>.original_sha256` before a byte
+    is read, so this can never quote something that is not the pinned retail
+    image.  Kept in the build's half of the split because the build already
+    owns image identity; the composer only masks and compares.
+    """
+    entries = [item for item in manifest["images"].values()
+               if PurePosixPath(item["original"]).name == image_name]
+    require(len(entries) == 1,
+            f"retail oracle image {image_name!r} is not pinned exactly once")
+    image = entries[0]
+    data = (checked_source_root() / image["original"]).read_bytes()
+    require(sha256_bytes(data) == image["original_sha256"],
+            f"retail oracle image {image_name!r} differs from its pin")
+    require(len(data) == image["original_size"],
+            f"retail oracle image {image_name!r} size differs from its pin")
+
+    pe = coff_unpack("<I", data, 0x3C, "retail image PE offset")[0]
+    section_count = coff_unpack("<H", data, pe + 6, "retail image sections")[0]
+    optional_size = coff_unpack("<H", data, pe + 20, "retail image optional")[0]
+    image_base = coff_unpack("<I", data, pe + 24 + 28, "retail image base")[0]
+    table = pe + 24 + optional_size
+    for index in range(section_count):
+        header = table + index * 40
+        virtual_size, virtual_address, raw_size, raw_offset = coff_unpack(
+            "<IIII", data, header + 8, f"retail image section {index}")
+        start = image_base + virtual_address
+        if not start <= address < start + max(virtual_size, raw_size):
+            continue
+        offset = raw_offset + (address - start)
+        require(offset + length <= raw_offset + raw_size,
+                f"retail oracle window at 0x{address:08x} leaves its section")
+        return data[offset:offset + length]
+    raise ByteIdentityError(
+        f"retail oracle address 0x{address:08x} is not mapped by {image_name}")
 
 
 def compose_retail_exact_reloc_divergent(

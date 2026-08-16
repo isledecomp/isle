@@ -1932,6 +1932,147 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_f25718287df2",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "donor_source_overlay",
+      "renderings": [
+       {
+        "path": "LEGO1/lego/legoomni/include/legocachesoundmanager.h",
+        "clean_sha256": "0c5840f7e7f9535a7dadc5433faf5a56fc8dc8cedf05969e430337521942078b",
+        "rendered_sha256": "e4b1ce0c18315a644ab4ecd91c2c34601cd3fd5837a115af40e0daea78f30bd1",
+        "operations": [
+         {
+          "op": "replace",
+          "id": "op_lcs_declare",
+          "from": {
+           "ctx": "eb75007928d9884911ce2d0105e1fbd510ad2a27869c79528c4a65b901a8b116",
+           "at": "before_token"
+          },
+          "to": {
+           "ctx": "3dae297b606606d6dcea49a5f5e2b280240e166e090cd2d7d09f1193f0876e2c",
+           "at": "after_token"
+          },
+          "removed": {
+           "sha256": "652b06da297b066ac308f72e406f81125bb3fa45855e1b5827a3ff8950f1eb4d",
+           "size": 22
+          },
+          "gen": {
+           "k": "member_sig",
+           "class_identifier": "LegoCacheSoundEntry",
+           "member_identifier": "LegoCacheSoundEntry",
+           "kind": "destructor",
+           "form": "in_class_declaration",
+           "nl": false
+          }
+         },
+         {
+          "op": "delete",
+          "id": "op_lcs_lift_body",
+          "from": {
+           "ctx": "3dae297b606606d6dcea49a5f5e2b280240e166e090cd2d7d09f1193f0876e2c",
+           "at": "after_token"
+          },
+          "to": {
+           "ctx": "358e5f27e5db4ea8e68ca0fa0ac39718a573ddc076fd760e8909ded355ace53d",
+           "at": "after_token"
+          },
+          "removed": {
+           "sha256": "39f7e1caaf3231be3054693cef766dfb7376c605400d1ce2ba288810325a168a",
+           "size": 92
+          },
+          "gen": {
+           "k": "reloc",
+           "range_identity": "LegoCacheSoundEntry::~LegoCacheSoundEntry",
+           "ordinary_owner": "LEGO1/lego/legoomni/include/legocachesoundmanager.h",
+           "byte_destination": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
+           "source_range_token_pin": {
+            "baseline_sha256": "39f7e1caaf3231be3054693cef766dfb7376c605400d1ce2ba288810325a168a",
+            "baseline_size": 92,
+            "baseline_line_count": 5,
+            "baseline_significant_token_sha256": "18471962cb581ad8909423289c9700cbca719eaf81a17bfd1c3261e107cddbe3"
+           },
+           "source_operation_id": "op_lcs_lift_body",
+           "range_dependency_id": "lcs_entry_dtor_body",
+           "range_render_policy": "strip_prose_preserve_physical_lines_v1",
+           "transfer": "copy_authenticated_clean_source_range"
+          }
+         }
+        ]
+       },
+       {
+        "path": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
+        "clean_sha256": "35488e2d5e531223235582721a54cde31b4d5775268bf76a1054f2be1df10c50",
+        "rendered_sha256": "334b3fcc05e7ccda61cc801776e2dbf655bab8aac217c700c767a2e16b47ecf6",
+        "operations": [
+         {
+          "op": "insert",
+          "id": "op_lcs_define",
+          "anchor": {
+           "ctx": "ff17da015866150bfaf6481b5d51bc019c0846195d492afb479aeefe8f85425e",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "fd448abe7483c3a4b65e513dd41cca80014c75f1a746240e0b5bb0519c95c7b6"
+          },
+          "gen": {
+           "k": "member_sig",
+           "class_identifier": "LegoCacheSoundEntry",
+           "member_identifier": "LegoCacheSoundEntry",
+           "kind": "destructor",
+           "form": "qualified_definition_header",
+           "nl": false
+          }
+         },
+         {
+          "op": "insert",
+          "id": "op_lcs_body_seat",
+          "anchor": {
+           "ctx": "ff17da015866150bfaf6481b5d51bc019c0846195d492afb479aeefe8f85425e",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "fd448abe7483c3a4b65e513dd41cca80014c75f1a746240e0b5bb0519c95c7b6"
+          },
+          "gen": {
+           "k": "reloc",
+           "range_identity": "LegoCacheSoundEntry::~LegoCacheSoundEntry",
+           "ordinary_owner": "LEGO1/lego/legoomni/include/legocachesoundmanager.h",
+           "byte_destination": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
+           "source_range_token_pin": {
+            "baseline_sha256": "39f7e1caaf3231be3054693cef766dfb7376c605400d1ce2ba288810325a168a",
+            "baseline_size": 92,
+            "baseline_line_count": 5,
+            "baseline_significant_token_sha256": "18471962cb581ad8909423289c9700cbca719eaf81a17bfd1c3261e107cddbe3"
+           },
+           "source_operation_id": "op_lcs_lift_body",
+           "range_dependency_id": "lcs_entry_dtor_body",
+           "range_render_policy": "strip_prose_preserve_physical_lines_v1",
+           "transfer": "copy_authenticated_clean_source_range"
+          }
+         },
+         {
+          "op": "insert",
+          "id": "op_lcs_body_tail",
+          "anchor": {
+           "ctx": "ff17da015866150bfaf6481b5d51bc019c0846195d492afb479aeefe8f85425e",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "fd448abe7483c3a4b65e513dd41cca80014c75f1a746240e0b5bb0519c95c7b6"
+          },
+          "gen": {
+           "k": "lines",
+           "n": 2
+          }
+         }
+        ]
+       }
+      ],
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "donor_private_rendering_only",
+      "rendering_identity_sha256": "f25718287df2d3162b6d7d1832672bfeb6ed5fd2716a639b58e581b4c94d3e0b",
+      "authenticity_rationale": "Donor-private rendering of the checked-in header and translation unit by typed operations only: the member signature generator emits the declaration and the qualified definition header from identifiers that exist in the checked-in source, and the body is an authenticated relocated range of that same source. The donor object is a byte source only and never enters the link; the shipped tree keeps the inline definition untouched, which is why no includer is perturbed."
+     }
     }
    ],
    "functions": [
@@ -1943,6 +2084,21 @@
      "expected_donor_length": 181,
      "expected_linked_span": 192,
      "donor": "d_a9a90ebc7b08"
+    },
+    {
+     "mangled": "??1LegoCacheSoundManager@@QAE@XZ",
+     "donor": "d_f25718287df2",
+     "splice_class": "retail_exact_reloc_divergent",
+     "expected_seed_length": 274,
+     "expected_donor_length": 258,
+     "expected_linked_span": 272,
+     "expected_body_sha256": "6d806ab46cc6baf4574874aace548d5d3ede13b908caaa4de406f2a6756eb53b",
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x1003cf20",
+      "verdict": "MATCH",
+      "length": 258
+     }
     }
    ],
    "completion": {
@@ -6457,8 +6613,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4858,
-    "accepted_row_identity_sha256": "2fa67453bb348ce8c28b826e1ed3f4bbac17579214f396e7a56a4c23cf375e41",
+    "exact_raw_1_0_count": 4859,
+    "accepted_row_identity_sha256": "4a298224aa4de71a8bc29e80704ad094292b1d7e7181308c17d8080ab33c9016",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
