@@ -907,7 +907,309 @@ across a branch, it is telling you about the source.** The wave-2 win was
 the second kind; three of this wave's four rows are the first kind, which
 is why they did not move.
 
+# 12. Wave 4 — re-scoring the campaign's recorded negatives under SHAPE
 
+Base `3804e1b5`, verified before any change: `LEGO1 4851/4934, ISLE 172/172,
+CONFIG 111/111`.
+
+## 12.1 Neither metric dominates — and my first statement of this was wrong
+
+**Correction, recorded because it was published.** My first reading of this
+wave was "`nd` and SHAPE agree on permutations and diverge only when the
+operation set changes, so only operation-set changes are worth
+re-checking". §12.6 refutes that: on `MxDisplaySurface::Create` two *pure
+statement reorderings* are SHAPE-identical to base (99.53) while `nd` puts
+them at 22 and 18 against base's 9. Permutations are exactly where the two
+metrics diverge most.
+
+The correct statement is that **they measure different failure modes and
+neither dominates**:
+
+* **`nd` is positional.** One instruction displaced by four slots inflates
+  `nd` in proportion to the displacement. It therefore over-penalises a
+  permutation of the right operations, and that is how a form that emits
+  retail's exact program can read as "much worse".
+* **SHAPE is alignment-based, and it saturates.** One misplaced
+  instruction costs one misalignment whether it moved by one slot or by
+  forty, so SHAPE cannot rank two forms that differ only in *how far* a
+  single operation sits from its retail position.
+
+So the two are complementary: **SHAPE answers "does our source emit
+retail's operations at all", `nd` answers "given the operations match,
+how close is the placement".** Scoring with only one is how the campaign
+was misled; scoring with only the other would mislead in the opposite
+direction. Rows whose residue is a placement distance (`Create`) need
+`nd`; rows whose residue is a missing or extra operation
+(`FUN_10061010`, `ManageVisibility`) need SHAPE.
+
+That is a narrower and more useful result than the one the wave was
+commissioned on, and it means the re-score's yield is inherently limited:
+most recorded negatives were rejected on the metric that was right for
+their residue class.
+
+## 12.2 `OrientableROI::UpdateTransformationRelativeToParent` — the vec.h debt row
+
+The highest-value target: `docs/residue-runs.md` rejects **seven** levers on
+this row purely by `nd` against a baseline of 99, and MEMORY flags the
+`3rdparty/vec/vec.h` edit as must-resolve-before-completion.
+
+Re-measured at the same carrier state the recorded numbers used
+(`declaration_shape(5,27)`, body 2515 = retail's length):
+
+| lever | len | SHAPE | STRUCT | EXACT | nd | recorded nd |
+|---|---|---|---|---|---|---|
+| base | 2515 | **90.13** | **90.13** | **88.83** | **99** | 99 |
+| `parent2world` hoisted | 2515 | 90.13 | 90.13 | 88.83 | 99 | — |
+| `MXM4d` | 2515 | 89.76 | 89.76 | 87.52 | 115 | 115 |
+| copy-loop order | 2515 | 89.39 | 89.39 | 88.08 | 131 | 131 |
+| `j` outer | 2490 | 88.06 | 88.06 | 87.31 | — | 2190 |
+| decl order C | 2513 | 78.84 | 78.84 | 76.79 | — | ≥107 |
+| decl order A | 2506 | 78.17 | 78.17 | 76.87 | — | ≥107 |
+| `MXM4` operands swapped | 2515 | 70.76 | 70.76 | 69.46 | 156 | 156 |
+| `MXM4d` + swapped | 2515 | 70.39 | 70.39 | 68.16 | 172 | 172 |
+| `unsigned int i, j` | 2549 | 52.95 | 52.95 | 52.03 | — | 2281 |
+| decl order B | 2516 | 46.33 | 46.33 | 44.47 | — | ≥107 |
+
+**Every recorded `nd` reproduces exactly** (99, 115, 131, 156, 172), which
+validates the reconstruction, and **SHAPE ranks the levers in the same
+order as `nd`**. No verdict flips; the base source is closest on all three
+metrics. This is the expected outcome under §12.1 — every lever here is a
+reorder, retype or operand swap, the category where the metrics cannot
+disagree. `docs/residue-runs.md`'s conclusion now stands on a second
+independent metric.
+
+## 12.3 `CopyTransform` — not re-scorable by construction
+
+`docs/stl-family-ledger.md` §13.1's five declaration-order variants all
+produced body 941 and the ledger states "not one byte moves". Identical
+objects cannot differ under SHAPE. Excluded, correctly.
+
+## 12.4 A real flip — and why it still does not close the row
+
+`MxDSBuffer::FUN_100c6fa0` (§11.4). `docs/residue-runs.md` rejected the
+hoisting variants because they "cost 4 bytes". Under SHAPE:
+
+| variant | len | SHAPE | verdict |
+|---|---|---|---|
+| base | 234 | 98.82 | — |
+| `c5_hdrptr` (`MxU32* header = (MxU32*) current`) | 238 | **99.42** | **better than base** |
+
+The recorded verdict does flip: the form the length metric rejected emits
+more of retail's program. **But a SHAPE improvement that costs length is
+not automatically a win** — it has to reach retail's length too. A full
+carrier sweep over `c5_hdrptr` (713 states: shape, padgrid, extern,
+fwdL/fwdP/fwdE, inc; 0 failed) holds at **238 bytes in every state**; 234
+is never reached. The flip is real and the row is still closed.
+
+## 12.5 `LegoTextureContainer::GetCached` — the remaining slot is allocator, not source
+
+The coordinator's live row, after the named-surface landing (987 B =
+retail's length, nd 61). adiff: **SHAPE 98.52**, STRUCT 90.24, EXACT 86.69.
+The residue is three things, only one of them source-shaped:
+
+* `sub esp, 0xfc` vs retail `0xf8` — the one extra dword slot;
+* one `mov [F], r` store one instruction late, twice;
+* two `cmp r,[F]` vs `cmp [F],r` — cmpdir, canonicalised, **not** source
+  addressable (§11.7).
+
+Five source variants aimed at the slot:
+
+| variant | len | SHAPE | STRUCT | EXACT | `sub esp` |
+|---|---|---|---|---|---|
+| base | 987 | 98.52 | 90.24 | 86.69 | 0xfc |
+| `f1_nowh` — drop `width`/`height`, compare `desc.dwWidth` directly | 975 | **98.81** | **91.96** | **90.18** | 0xfc |
+| `f2_nound` | 982 | 97.63 | 89.02 | 83.98 | 0xfc |
+| `f3_mxbool` | 988 | 97.48 | 85.33 | 81.48 | 0xfc |
+| `f4` | 976 | 97.47 | 85.54 | 83.46 | 0xfc |
+| `f5_noshadow` | 987 | 98.52 | 90.24 | 86.69 | 0xfc |
+
+**`sub esp` is 0xfc in all six.** Removing two named locals does not remove
+a slot — the standing law now confirmed in the *subtractive* direction as
+well as the additive one: naming a value does not create a slot, and
+un-naming it does not free one. GetCached's extra dword is an allocator
+decision and the text channel has no handle on it.
+
+`f1_nowh` is still a genuine improvement on all three metrics
+(EXACT 86.69 → 90.18) because it removes two redundant *operations* — the
+`width`/`height` cache stores — not because it removes a slot. It is 12
+bytes short of retail, so it is recorded, not landed.
+
+## 12.6 `MxDisplaySurface::Create` — the measurement that corrected §12.1
+
+`docs/residue-runs.md`: "all four statement orderings of the
+`dwFlags`/`dwWidth`/`dwHeight`/`dwCaps` block are **worse** (nd 15, 18, 22,
+23 against the baseline 9), so the current source order is already the
+closest one."
+
+Re-scored (retail 660 B, 212 insn):
+
+| variant | len | SHAPE/STRUCT/EXACT | nd | recorded nd |
+|---|---|---|---|---|
+| base | 660 | 99.53 | 9 | 9 |
+| `h1_capsfirst` | 660 | **99.53** | 22 | 22 |
+| `h3_capsbeforewh` | 660 | **99.53** | 18 | 18 |
+| `h2_whfirst` | 660 | 99.06 | 23 | 23 |
+| `h4_hwswap` | 660 | 97.17 | 15 | 15 |
+
+All four recorded `nd` values reproduce exactly. But **`h1` and `h3` are
+SHAPE-identical to base**, and the `-v` diff shows why: base, `h1` and `h3`
+each have exactly *one* divergence from retail — the
+`mov [esp+0x84], 0x6040` store in the wrong slot — and SHAPE counts that
+as one misalignment regardless of distance. `nd` sees base's store 1 slot
+away and `h1`'s 4 slots away, hence 9 vs 22.
+
+And the ranking inverts: `nd` puts `h4` (15) ahead of `h3` (18) and `h1`
+(22), while SHAPE puts `h4` *last* (97.17) — because `h4` really does move
+six operations (it swaps the two `GetRect()` calls), whereas `h1`/`h3`
+move none. `nd` rewarded the structurally worst variant.
+
+**Verdict: `docs/residue-runs.md`'s conclusion stands but its reasoning
+needs a footnote.** Base is still the best form — `nd` is the right metric
+for this row because the residue *is* a placement distance. What is wrong
+is the implication that `h1`/`h3` are meaningfully worse source: they emit
+retail's program exactly as base does. The row's lever is the scheduler,
+and no statement ordering reaches it.
+
+## 12.7 `MxDSBuffer::FUN_100c6fa0` function-scope hoists
+
+| variant | len | SHAPE | nd | recorded |
+|---|---|---|---|---|
+| base | 234 | 98.82 | 4 | 4 |
+| `g2_size_fn` — `MxU32 size;` at function scope, read still inside the `if` | 234 | 98.82 | **4** | (18) |
+| `g1_chunk_fn` — `MxU8* chunk;` at function scope | 236 | 98.25 | — | 13 |
+| `g3_folded` — the two `+=` folded | 232 | 97.65 | — | 59 |
+
+`g1` and `g3` reproduce as worse, matching the record. `g2` does **not**
+reproduce the recorded nd=18: mine is 234 bytes and nd=4, the ledger's was
+238 bytes. The ledger's variant also moved the read (`assigned before the
+if`), so it is a different form — mine hoists only the declaration. Noted
+rather than treated as a contradiction: **a function-scope declaration
+alone costs nothing here**, which is a small addition to the standing
+named-local law, and the recorded nd=18 belongs to the read-hoisting
+variant I re-measured separately as `c2_sizevalue` (§11.4, 238 B).
+
+## 12.8 A SHAPE census of the whole open set
+
+The re-score's most useful product is not a list of flipped verdicts — it
+is the classifier that falls out of §12.1. `shapecensus.py` scores **all
+83 open rows** by reading both bodies out of the *linked images* (ours at
+the report's `recomp` address, retail at its `address`), so it needs no
+symbol lookup and covers rows this lane has never touched.
+
+**Result: 11 open rows are at SHAPE 100.00, 72 are below.**
+
+> **Correction, recorded because the first numbers were published.** The
+> first run of this census reported 12/71 and put
+> `UpdateTransformationRelativeToParent` at 100.00. That was an artefact of
+> over-coarse masking: the instrument blanked *every* numeric operand of any
+> instruction carrying a relocation, so `cmp dword ptr [g_x], 0` lost its
+> real immediate too and matched things it should not. It now attributes the
+> relocation to the exact field using capstone's `disp_offset`/`imm_offset`,
+> and masks segment-prefixed absolutes (`fs:[0]` is a relocation against
+> `__except_list` in our object and a literal 0 in the image) on both sides.
+> Under the corrected instrument that row is **90.13**, which matches the
+> object-level measurement in §12.2 exactly.
+>
+> **Cross-validation after the fix**: the census (read from linked images,
+> sliced by adjacent row addresses) reproduces the independent object-level
+> `adiff` measurements to two decimals — `0x100a46b0` 90.13/90.13,
+> `0x100a66f0` 94.27/94.27, `0x100bb1d0` 96.43/96.43, `0x100998e0`
+> 98.52/98.52, `0x100c6fa0` 98.82/98.82, `0x100ba7f0` 99.53/99.53. Six of
+> six agree; `0x10061010` differs (93.08 vs 92.12) only because the linked
+> body is the composed one and §11.2 measured the seed.
+
+The **SHAPE == 100 direction is sound**: we emit retail's exact operation
+sequence, so whatever is left is placement or colouring and **the text
+channel is provably closed for these rows**. They should never receive
+another source variant:
+
+| SHAPE | EXACT | m | addr | ours/ret | row |
+|---|---|---|---|---|---|
+| 100.00 | 70.59 | .7059 | 0x1002a1b0 | 82/82 | `_Tree<LegoCacheSoundEntry>::_Erase` |
+| 100.00 | 79.71 | .7971 | 0x100a3b40 | 197/197 | `TglImpl::MeshBuilderImpl::Clone` |
+| 100.00 | 93.15 | .9315 | 0x1002f770 | 188/188 | `LegoPathActor::UpdatePlane` |
+| 100.00 | 94.17 | .9417 | 0x100720d0 | 323/323 | `Act3List::RemoveByObjectIdOrFirst` |
+| 100.00 | 94.65 | .9251 | 0x100ba2c0 | 577/576 | `MxStillPresenter::Clone` |
+| 100.00 | 95.41 | .9538 | 0x10038b10 | 1232/1232 | `Pizza::HandleEndAction` |
+| 100.00 | 95.87 | .9545 | 0x10080be0 | 779/778 | `LegoCarRaceActor::CalculateSpline` |
+| 100.00 | 96.08 | .9608 | 0x1004bd10 | 438/438 | `MxTransitionManager::DissolveTransition` |
+| 100.00 | 96.12 | .9612 | 0x100b24f0 | 346/346 | `MxVideoPresenter::AlphaMask::AlphaMask` |
+| 100.00 | 97.39 | .9739 | 0x100c3750 | 1157/1157 | `MxRegion::AddRect` |
+| 100.00 | 99.06 | .9907 | 0x100035e0 | 1148/1148 | `Helicopter::HandleControl` |
+
+Two independent confirmations that the classifier is right:
+`AddRect` is the row §11.6 found six source variants
+bit-identical on; and `Helicopter::HandleControl` is recorded in
+`docs/beta10-wave2-ledger.md` as *"Base is June-true"* with BETA10
+confirming our declaration order. `MxStillPresenter::Clone` and
+`CalculateSpline` are SHAPE 100 with a **one-byte** length delta — the
+encoding cost of a slot tie, exactly the confusion §13.1 flagged.
+
+**The SHAPE < 100 direction is NOT sound and must not be over-read.** A
+differing operation sequence is *consistent with* a source defect, but an
+allocator that spills where retail keeps a register also adds a `mov` —
+§12.5's `GetCached` is precisely that case (its SHAPE gap is a spill store,
+not a missing statement). So SHAPE < 100 means "worth reading", not
+"source defect confirmed".
+
+`UpdateTransformationRelativeToParent` is the sharpest illustration and a
+useful calibration point: it sits at **90.13**, comfortably inside the
+"worth reading" band, and §12.2 has just shown that **no source lever moves
+it** — because its differing operations are six permuted FP addend spans
+produced inside `3rdparty/vec/vec.h`'s `_DOTcol4`, i.e. vendor code and
+scheduler state, not first-party text. A row can be far from SHAPE 100 and
+still have an empty text channel.
+
+Ranked worst-first, the largest operation-sequence gaps in the open set
+are:
+
+| SHAPE | m | addr | ours/ret | row |
+|---|---|---|---|---|
+| 88.44 | .9482 | 0x10055a60 | 4120/4112 | `LegoNavController::Notify` |
+| 90.13 | .8696 | 0x100a46b0 | 2515/2515 | `OrientableROI::UpdateTransformationRelativeToParent` |
+| 91.30 | .6522 | 0x10057180 | 57/57 | `_Tree<LegoAnimPresenter*>::_Erase` |
+| 92.31 | .8227 | 0x1004c580 | 413/412 | `MxTransitionManager::SetupCopyRect` |
+| 93.08 | .5411 | 0x10061010 | 717/731 | `LegoAnimationManager::FUN_10061010` |
+| 94.23 | .8896 | 0x1009f490 | 1074/1121 | `LegoAnimScene::CalculateCameraTransform` |
+| 94.27 | .8848 | 0x100a66f0 | 557/561 | `ViewManager::ManageVisibilityAndDetailRecursively` |
+| 94.69 | .9552 | 0x10046050 | 693/703 | `LegoPathController::PlaceActor` |
+| 95.04 | .9504 | 0x100a4420 | 520/514 | `OrientableROI::OrientableROI` |
+| 94.87 | .6667 | 0x100a12a0 | 83/83 | `TglImpl::TextureImpl::SetImage` |
+
+`LegoNavController::Notify` is the largest operation-sequence gap in the
+whole open set and has never been read at this level (there is a stale
+`salvage/islK-navcontroller-notify-shape` branch). It is the single
+best-evidenced next target for the text channel.
+
+## 12.9 The inventory, and why the re-score's yield is small
+
+The campaign's recorded text-cell negatives were inventoried across
+`docs/nearmiss-wave4-ledger.md`, `docs/beta10-wave2..5-ledger.md` and
+`docs/stl-family-ledger.md` §13. The result explains the low yield
+directly:
+
+* a large fraction are recorded as **bit-inert** — byte-identical objects,
+  which cannot differ under any metric (`GetRefCount`'s five cells,
+  `FindPath` family A, `LinkEdgesAndFaces`' three cells, `HitActor`'s four,
+  `AddRect`'s five per-site hoists, `LegoPartPresenter::Read`'s loop
+  mirrors, `~LegoROI` v2/v6, `TowTrack` t3, `JetskiRace` at 0 of 58
+  bodies…);
+* many of the rest were rejected on **victim counts in other bodies**, not
+  on the target's own distance (`~LegoROI` v1's 11 changed bodies,
+  `RemoveActor`'s five 1.0 victims, the `varab`/`varb` hunks' two deleted
+  COMDATs) — a collateral test that SHAPE does not overturn and that
+  §9.4c independently vindicated;
+* `beta10-wave5-ledger.md` contains **no** source-text variants at all;
+* and several were killed on evidence stronger than any distance metric —
+  the `LenSquared` reassociation was refuted by a retail disassembly census
+  showing **retail itself uses both term orders**, which no single source
+  spelling can produce.
+
+That leaves a genuinely small re-scorable set, and §12.2/§12.6/§12.7 found
+the recorded verdicts standing in every case that this lane owns and could
+reconstruct. The one flip (§12.4) did not close its row.
+
+## 10. Reproducing this lane
 
 Everything is in the session scratchpad `.../3233884b-.../scratchpad/inl/`.
 Nothing in the shared corpus was mutated. Exactly one checked-source change
@@ -929,6 +1231,8 @@ compose pin); every other variant in this ledger was compiled out of tree.
 | `vgen.py` | generic source-variant runner (TU + symbol + retail VA) scored by adiff |
 | `ndsweep.py` | generic carrier sweep scored by masked nd taken **straight from `legobin`**, so it cannot inherit an oracle-length defect |
 | `v_vm.py` / `v_vm2.py` / `v_buf.py` / `v_mds.py` | the wave-3 row batches |
+| `v_ori.py` / `v_gc.py` / `v_rerun.py` | the wave-4 re-score batches (vec.h debt row; GetCached; buffer + Create) |
+| `shapecensus.py` | **SHAPE census of every open row**, read from the linked images so it needs no symbol lookup |
 | `beta2.py` | BETA10 read-off with export naming + frame-slot census |
 | `fsaudit.py` | build-wide function-set audit (COMDATs absent from retail) |
 | `fsimage.py` | promotes an object-level audit miss to the image level (drops linker-discarded COMDATs) |

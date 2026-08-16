@@ -1336,3 +1336,479 @@ this lane produced no third landing.
 * my own body-size sweep-ordering heuristic (§12);
 * my own `pizza.cpp` carrier-inertness verdict (§20) — which is what produced
   the second landing.
+
+---
+
+# Wave 2 — re-scoring what wave 1's own findings invalidated
+
+Reset onto the merged tip `7ca647ff` (ancestry verified: my wave-1 HEAD
+`f2674945` is an ancestor). Baseline re-verified from this build dir before any
+work: `ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE: LEGO1 4853/4934,
+ISLE 172/172, CONFIG 111/111`.
+
+## 26. `adiff.py` had seven normalisation defects, and they were worth up to 30 SHAPE points
+
+The coordinator adopted Lane INL's SHAPE/STRUCT/EXACT metric as the instrument
+this wave. Applying it to my lane produced two impossible readings, and running
+them down found seven asymmetries in the masking. **All seven inflate the
+apparent difference**, so every score in `docs/inliner-ledger.md` §11 is a
+lower bound.
+
+The two impossibilities that exposed them:
+
+* `Infocenter::HandleKeyPress` scored **SHAPE 68.24** — by far the worst in the
+  lane — for a row whose entire residue I had already read by hand in §6 as one
+  reload plus one alignment NOP;
+* `TglImpl::TextureImpl::SetImage` scored **SHAPE 76.92 < STRUCT 94.87**, which
+  cannot happen: SHAPE erases strictly more than STRUCT, so its alignment can
+  never be worse.
+
+| # | defect | why it manufactures a difference | worth |
+|---|---|---|---|
+| 1 | a `.text` COMDAT that carries **switch jump tables** has them disassembled as code | our entries are relocated zeros, retail's are resolved addresses, so the "instructions" decoded from them are unrelated garbage | HandleKeyPress 68.24 → 91.07 |
+| 2 | `[reg + <relocated address>]` classified as a frame displacement and left unmasked | `mask_immediates` only masked brackets with **no** register; a jump-table base or indexed global has both | every switch dispatch and indexed global read as a diff |
+| 3 | capstone prints a **zero displacement as nothing** | our relocated displacement is 0 → `[eax]`; retail's is resolved → `[eax + 0x1006fe84]`. Masking cannot equalise a token that is absent on one side | 2 insn per switch |
+| 4 | indirect `jmp`/`call` **through memory** masked as a direct branch target | `jmp [eax*4 + table]` got `NUM → T` on retail and `→ R` on ours: two different markers for the same thing | 2 insn per switch |
+| 5 | `fs:[0]` (the SEH `__except_list` access) | a relocation in our COFF, a literal `0` in retail's image — masked on one side only | 2 insn in every function with EH |
+| 6 | `[ebp ± X]` erased as a frame slot in **frameless** functions | MSVC uses `ebp` as a general register when there is no frame; if retail holds a pointer in `ebp` where we hold it in `ebx`, retail's operand becomes `[F]` and ours stays `[r + 0x1c]` — **asymmetric, and the cause of the SHAPE < STRUCT inversion** | SetImage 76.92 → 94.87 |
+| 7 | a **real large immediate** in a relocation-covered instruction masked on our side only | `and [g_isleFlags], 0xffffffbf` — our side masked every number in the instruction, retail's masked only image addresses | Isle::Enable 2 insn |
+
+Fixes, all in this lane's copy (`<scratchpad>/fin/adiff.py`), each narrow:
+
+1. `code_len()` — find the trailing run of DIR32 relocations to `$L` labels at
+   4-byte stride (bridging one gap for the byte index table, requiring ≥ 3
+   entries so a lone `push offset $L…` in EH setup is never mistaken for a
+   table), and score only the code region. Retail is trimmed by the **same
+   number of trailing bytes**, which is right because the table has one entry
+   per case on both sides.
+2/3. Detect a relocated displacement **exactly**, via capstone operand detail
+   (`op.mem.disp == 0` with a base or index, on a relocation-covered
+   instruction), and re-insert it textually as the mask marker **before** any
+   other masking. Doing it after is order-dependent and is what produced
+   the inversion in my first attempt.
+4. Only apply the branch-target substitution when the operand has no bracket.
+5. Canonicalise `fs:[…]` to `fs:[S]` on both sides.
+6. `has_ebp_frame()` — only erase `[ebp ± X]` when the prologue actually
+   contains `push ebp; mov ebp, esp`.
+7. On our side mask only plausible relocation placeholders
+   (`v < 0x10000` or an image address), never a large real constant. Also
+   never mask a **scale factor** (`[eax*4]`) — it is part of the addressing
+   mode, not a value.
+
+### Net effect on this lane
+
+| row | SHAPE before | SHAPE after |
+|---|---|---|
+| `0x1006fda0 Infocenter::HandleKeyPress` | 68.24 | **98.21** |
+| `0x100035e0 Helicopter::HandleControl` | 96.30 | **100.00** |
+| `0x10031820 Isle::Enable` (default build) | 92.31 | **98.20** |
+| `0x100293c0 UpdateEnabledChild` | 90.68 | **95.65** |
+| `0x100a12a0 TextureImpl::SetImage` | 76.92 (invalid) | **94.87** |
+| `0x10017af0 PizzeriaState` | 92.96 | **94.37** |
+
+**Recommendation: re-run every score in `docs/inliner-ledger.md` §11 before
+acting on it.** `FUN_10061010` is an EH function (defect 5), and
+`ManageVisibilityAndDetailRecursively`, `MxDSBuffer::FUN_100c6fa0` and
+`MxDisplaySurface::VTable0x30` all index globals or use `ebp` as a general
+register. In particular §11.2's conclusion that `h01`+`v04` "anti-compose"
+rests on differences of 2–5 points, which is inside the error bar these defects
+introduce.
+
+### 26.1 Two more defects, found by the rows themselves
+
+Running the corrected instrument over the lane surfaced two more, both from the
+same root cause — **an instruction carries at most one relocation, and which
+field holds it decides what may be masked.** Getting it wrong manufactures
+differences in *both* directions:
+
+| # | case | wrong reading |
+|---|---|---|
+| 8 | `cmp [g_partPresenterConfig1], 0` — relocation is the absolute address, the `0` is a **real** immediate | ours `cmp [R], R` vs retail `cmp [R], 0` |
+| 9 | `mov [edi], offset $T123` — relocation is the **immediate**, the memory operand has no displacement | ours `mov [r + R], R` vs retail `mov [r], R` (defect 3's fix misfiring) |
+
+`reloc_site()` now decides: an **absolute** memory operand is always a
+relocation in a COFF (compiled code contains no literal absolute addresses), so
+it wins even when a real immediate is present; otherwise an immediate operand
+takes it; otherwise the memory operand. Only that field is masked.
+
+**Nine defects total, every one inflating the gap.** Corrected scores, each row
+at its best known state (§26.2 classifies them):
+
+| row | addr | SHAPE | STRUCT | EXACT |
+|---|---|---|---|---|
+| `Isle::Enable` @ `extern-1-8` | `0x10031820` | **100.00** | **100.00** | 99.21 |
+| `Helicopter::HandleControl` | `0x100035e0` | **100.00** | 99.05 | 99.05 |
+| `MeshBuilderImpl::Clone` | `0x100a3b40` | **100.00** | **100.00** | 79.71 |
+| `MxStillPresenter::Clone` | `0x100ba2c0` | **100.00** | **100.00** | 94.65 |
+| `LegoVideoManager::Tickle` | `0x1007b770` | 99.70 | 99.70 | 96.36 |
+| `LegoPartPresenter::Read` | `0x1007ca30` | 99.53 | 99.53 | 99.53 |
+| `Act1State::Act1State` | `0x100334b0` | 98.91 | 98.91 | 98.91 |
+| `Infocenter::Create` | `0x1006ed90` | 98.71 | 98.71 | 90.99 |
+| `MeshBuilderImpl::CreateMesh` | `0x100a3840` | 98.46 | **98.02** | 82.20 |
+| `Infocenter::HandleKeyPress` | `0x1006fda0` | 98.21 | 98.21 | 87.50 |
+| `Pizza::StopActions` @ `shape-1-1` | `0x10038380` | 97.67 | 97.67 | 88.37 |
+| `ReadData` | `0x100d0d80` | 97.22 | 97.22 | 97.22 |
+| `PizzeriaState::PizzeriaState` | `0x10017af0` | 97.18 | 97.18 | 88.73 |
+| `LegoAct2::SpawnBricks` | `0x10051ac0` | 97.12 | 97.12 | 90.65 |
+| `UpdateEnabledChild` | `0x100293c0` | 96.89 | **95.65** | 93.17 |
+| `MxBitmap::BitBltTransparent` | `0x100bd020` | 96.39 | 96.39 | 78.92 |
+| `TextureImpl::SetImage` | `0x100a12a0` | 94.87 | 94.87 | 66.67 |
+
+## 26.2 Re-classification of the whole lane, and two more blind spots
+
+The wave-3 rule is "SHAPE gap ⇒ the source is producing a different program".
+Applied literally to this table it is wrong in both directions, and both
+failures are visible here:
+
+* **A pure permutation can score SHAPE 100.** `Helicopter::HandleControl` is
+  SHAPE 100.00 / STRUCT 99.05: its three permuted stores differ only in their
+  frame slots, and SHAPE erases those. The scheduling defect is invisible at
+  the level that is supposed to detect source problems.
+* **A pure permutation can also score a SHAPE gap** — `PizzeriaState` (97.18,
+  a `lea`/`mov word` pair exchanged), `ReadData` (97.22, the epilogue
+  interleave), `Act1State` (98.91). Here the permuted instructions differ in
+  something SHAPE keeps, so the same class reads differently depending on
+  *what* got permuted.
+
+So SHAPE separates "different operations" from "same operations" only when the
+divergence is not a reordering. The reliable discriminators, applied to every
+row in my lane:
+
+| class | test | rows |
+|---|---|---|
+| **pure colour** — allocator only, no source lever exists | SHAPE 100 **and** STRUCT 100, EXACT < 100 | `Isle::Enable` (99.21), `MeshBuilderImpl::Clone` (79.71), `MxStillPresenter::Clone` (94.65) |
+| **scheduling** — same instruction multiset, reordered | divergence pairs are the same instructions in a different order | `Helicopter::HandleControl`, `PizzeriaState`, `ReadData`, `Act1State` |
+| **cmpdir** — same mnemonic, exchanged operands | not source-addressable (§28) | `LegoPartPresenter::Read` |
+| **frame** — declaration-set defect, the strongest text signal | **STRUCT < SHAPE** | `UpdateEnabledChild` (96.89 → 95.65), `MeshBuilderImpl::CreateMesh` (98.46 → 98.02) |
+| **shape + colour** — genuine text candidates | SHAPE < 100 with real operation differences | `TextureImpl::SetImage`, `MxBitmap::BitBltTransparent`, `Pizza::StopActions`, `LegoAct2::SpawnBricks`, `Infocenter::Create`, `Infocenter::HandleKeyPress` |
+
+**`STRUCT < SHAPE` is the sharpest signal in the metric and nobody has named
+it.** It means the two sides agree on every operation but disagree on where a
+value lives in the frame — which is exactly the "declaration-set defect" the
+frame census in `docs/open-set-triage.md` was built to detect, now available
+per-instruction instead of per-`sub esp`. Two of my rows have it, and neither
+appears in that document's four-row TEXT list.
+
+### Verdicts that flip
+
+| row | wave-1 / prior verdict | wave-2 verdict |
+|---|---|---|
+| `0x100a3b40 MeshBuilderImpl::Clone` | "regrole, 14 bytes, carrier floor 14" | **pure colour, proven**: SHAPE 100 / STRUCT 100. No text lever exists. |
+| `0x100ba2c0 MxStillPresenter::Clone` | `length:encoding`, filed TEXT/INLINE | **pure colour, proven**: SHAPE 100 / STRUCT 100 *with* a −1 length defect — the strongest possible confirmation of §6's rule |
+| `0x10031820 Isle::Enable` | "nd=11, biggest unlanded movement" | **pure colour, proven**: 889/889 at SHAPE and STRUCT |
+| `0x100293c0 UpdateEnabledChild` | wave 1: "COLOUR — one enregistered param" | **frame defect** (STRUCT < SHAPE) — a text row after all, but not for the reason the triage gave |
+| `0x100a3840 CreateMesh` | "text channel, −3 never reached" | **frame defect** (STRUCT < SHAPE), and the −3 is downstream of it |
+| `0x10017af0 PizzeriaState` | wave 1: "carrier-inert regrole" | **scheduling** — a 2-instruction permutation, not colour |
+| `0x1007ca30 LegoPartPresenter::Read` | "cmpdir, text lever unknown" | **cmpdir, text channel closed** (§28) |
+
+---
+
+## 27. `0x10031820 Isle::Enable` — SHAPE **100.00**, STRUCT **100.00**. The verdict is final.
+
+At `extern-1-8`, scored against retail with the corrected instrument:
+
+```
+SHAPE  ours 889 insn, retail 889 insn, aligned 889 (100.00%), first divergence none
+STRUCT ours 889 insn, retail 889 insn, aligned 889 (100.00%), first divergence none
+EXACT  ours 889 insn, retail 889 insn, aligned 882 (99.21%), first divergence ours+2205
+```
+
+**Our source produces retail's program, instruction for instruction, and
+retail's frame layout, slot for slot.** The only thing left in a 3,580-byte
+function is which register seven instructions use — the `eax`↔`ecx`
+transposition in the *first* of the two inlined `Vector3::LenSquared` copies
+(§14), where the *second* copy is already byte-identical (§14's control).
+
+This closes the question the coordinator raised. There is nothing for a text
+cell to do here: a source change can only make SHAPE or STRUCT worse, both of
+which are already perfect. The row is **purely an allocator tie**, it is the
+best-instrumented one in the tree, and it ships its own control.
+
+## 28. `0x1007ca30 LegoPartPresenter::Read` — the wave-1 diagnosis survives, and the one live text lever is now closed
+
+**SHAPE = STRUCT = EXACT = 99.53**, and the complete residue is three groups:
+
+```
++1143  ours cmp r, [R]         retail cmp [R], r       (inlined _Tree::find #3)
++1216  ours cmp r, [R]         retail cmp [R], r       (same loop's back edge)
++2397  ours cmp [F], r / ja    retail cmp r, [F] / jb  (i < numROIs bottom test)
+```
+
+Nothing else in 2,633 bytes. The wave-1 hand diagnosis was made on the "blind"
+metric and it is **exactly right**; the corrected instrument adds that there is
+**no colour and no frame component at all** (all three levels identical).
+
+### The `!=` cell — documented as live, never tried here, and it settles the source
+
+`docs/residue-taxonomy.md` records that rewriting `i < n` as `n > i` is
+completely code-inert while **`i != n` moves the body**. That is a live lever
+and it had never been applied to this row. Five line-neutral cells, each
+compiled and scored:
+
+| cell | loops changed to `!=` | nd | new defects | SHAPE |
+|---|---|---|---|---|
+| base | — | **4** | — | **99.53** |
+| `r1_roi_ne` | `i < numROIs` | 5 | **+1717**, and 2397/2401 still wrong | 99.42 |
+| `r2_tex_ne` | `i < numTextures` | 6 | **+155, +1452** | 99.30 |
+| `r3_both_ne` | both `i` loops | 7 | +155, +1452, +1717 | 99.18 |
+| `r4_lod_ne` | `j < numLODs` | 6 | **+2008, +2212** | 99.30 |
+| `r5_all_ne` | all three | 9 | all of the above | 98.95 |
+
+Every cell is **strictly worse**, and the *way* it is worse is the finding:
+
+* `!=` on the `numROIs` loop does **not** flip the +2397 compare — it leaves it
+  wrong and adds a new defect at +1717;
+* `!=` on the `numTextures` loop and on the `numLODs` loop each **break sites
+  that currently match retail** (151/1448 and 1849/2208).
+
+So this is a negative that carries positive information: **retail's source
+spells all three loops `<`**, confirmed independently three times inside one
+function, and the +2397 compare direction is therefore not a loop-condition
+question at all.
+
+### A blind spot in the wave-3 metric, exactly where the closest row lives
+
+`adiff` reports a `cmpdir` **identically at all three levels** — SHAPE erases
+registers and frame slots but not operand *order*, so `cmp r, [R]` and
+`cmp [R], r` differ at SHAPE. A reader following the wave-3 rule ("SHAPE gap ⇒
+the source is producing a different program ⇒ go read the source") would spend
+text cells on this row. The project's own canonicalisation law says the
+opposite: comparison direction is **not** source-addressable, and the five
+cells above confirm it here.
+
+**`cmpdir` needs a level below SHAPE** — or at minimum a note that a divergence
+whose two sides are the same mnemonic with exchanged operands is an allocator
+artifact regardless of which level reports it. `docs/inliner-ledger.md` §11.3
+reports `ManageVisibilityAndDetailRecursively` at SHAPE 97.92 without flagging
+that its residual byte is of exactly this class.
+
+**Verdict for `0x1007ca30`:** carrier-exhausted (2,944 states), text channel now
+closed with the one lever that was live, no colour component, no frame
+component. It is an allocator row in the same class as `Isle::Enable` — and the
+two of them are the project's cleanest specimens for the C2 instrument.
+
+## 26.3 CORRECTION to §26.2: `STRUCT < SHAPE` is weaker than I stated
+
+I wrote that `STRUCT < SHAPE` means a declaration-set defect. Reading both rows
+that have it shows that is too strong. The signal is real but ambiguous:
+
+> `STRUCT < SHAPE` means the two sides reference **different frame slots at
+> instructions that otherwise align**. That is *either* a different frame
+> layout *or* the same layout with a different choice of which value to keep in
+> a register. One disassembly separates them.
+
+Both of my rows are the second kind, and — worth more than the correction —
+**they are the same mechanism in two different TUs**:
+
+```
+0x100293c0 UpdateEnabledChild   retail +72  mov bx, word [ebp+0x10]   <- enregisters the 3rd param
+                                ours        (never)  ... and reloads later
+0x100a3840 CreateMesh           retail +406 mov ebx, [ebp+0xc]        <- enregisters vertexCount
+                                ours  +458  mov r, [F]                <- an extra reload we pay
+```
+
+In both, retail spends a callee-saved register on a **parameter** and holds it
+across a region; we leave it in memory and reload. In both, that one decision
+is the row's entire length delta (`+4` and `−3`, §6 and §11). Neither frame
+*layout* differs.
+
+So the honest channel verdict for both is **colour with a length shadow**, not
+a declaration-set defect — which puts them back with `MxStillPresenter::Clone`
+rather than with `GetCached` and `FUN_10061010` in the frame-census TEXT list.
+
+`CreateMesh`'s enregistered value is `vertexCount`, a parameter of
+`MeshBuilderImpl::CreateMeshImpl`, which is inlined from `tgl/d3drm/tglimpl.h`
+— a header shared by every `tgl` consumer, so a source cell there is a
+cross-TU change and outside this lane. **Recorded, not attempted.**
+
+---
+
+## 29. The shape family on `tglrl40.cpp` — negative, and it bounds §20's correction
+
+§20's finding ("carrier-inert is a property of a (row, generator) pair") pays
+sometimes, not always. `tglrl40.cpp` holds a row now **proven** pure colour
+(`MeshBuilderImpl::Clone`, SHAPE 100 / STRUCT 100, EXACT 79.71), so its whole
+remaining search is compiler state and the declaration-shape family had never
+been run on the TU. Full 505-cell grid:
+
+```
+0x100a12a0 SetImage    retail=83   nd=16 @shape-1-5   lens: 83 x 489, 84 x 16
+0x100a3840 CreateMesh  retail=664  correct length NEVER reached   (667 x 505)
+0x100a3b40 Clone       retail=197  nd=14 @shape-1-1   lens: 197 x 505
+```
+
+**Identical floors to the extern family** (16 and 14), on the same offsets.
+So the second generator reaches nothing here, and `0x100a3b40` is now:
+
+* proven pure colour at the program level (SHAPE 100 / STRUCT 100), so **no
+  source form can help it**;
+* floored at nd=14 across **2,944 states in both carrier families**.
+
+That is the same terminal position as `Isle::Enable` and
+`LegoPartPresenter::Read`, reached by a different route, and it means my lane
+now has **four** rows that are provably out of reach of every channel the
+project currently has:
+
+| row | m | proof it is colour-only | carrier extent |
+|---|---|---|---|
+| `0x10031820 Isle::Enable` | .9725 | SHAPE 100 / STRUCT 100 @ `extern-1-8` | 2,418 states, floor nd=11 |
+| `0x100a3b40 MeshBuilderImpl::Clone` | .7971 | SHAPE 100 / STRUCT 100 | 2,944 states, floor nd=14 |
+| `0x100ba2c0 MxStillPresenter::Clone` | .9251 | SHAPE 100 / STRUCT 100 | shape grid in flight |
+| `0x1007ca30 LegoPartPresenter::Read` | .9953 | SHAPE=STRUCT=EXACT, residue is 3 `cmpdir` sites; the one live text lever tested and negative (§28) | 2,944 states, floor nd=4 |
+
+**This is the wave's most useful output.** Before it, "we have not found the
+lever yet" and "no lever of this kind exists" were indistinguishable. SHAPE 100
+/ STRUCT 100 separates them: it is a *proof* that the source text and the
+declaration set are already retail's, so every future text cell on such a row
+is known-wasted before it is compiled. Four rows in one lane can now be taken
+off the text queue permanently and handed to the allocator instrument with a
+one-line justification each.
+
+---
+
+## 30. Wave-2 answer to the assignment
+
+The brief was: for every row whose ledger entry says inert / exhausted /
+text-channel, check **(a)** which generators it was actually swept on,
+**(b)** whether its length delta is work or encoding, and **(c)** whether any
+rejected text cell moves SHAPE — and report which verdicts flip.
+
+### (a) Generator coverage — the audit
+
+| row | extern | shape | pad | inc | triple | verdict on coverage |
+|---|---|---|---|---|---|---|
+| `0x1007ca30 Read` | 2,439 | 1,010 (2 seat pins) | — | — | 122 | shape **only ever stacked on seats**, never plain — now run, floor unchanged |
+| `0x10031820 Isle::Enable` | 1,841 | 505 (on seats) + plain in flight | resumed | 72 | 122 | complete but for the pad grid |
+| `0x100a3b40 Clone` | 2,439 | **505 (new)** | — | — | — | both families, same floor |
+| `0x100a12a0 SetImage` | 2,439 | **505 (new)** | — | — | — | both families, same floor |
+| `0x10038380 StopActions` | 1,681 | **505 (new)** | — | — | — | shape moved it 15 → 11 after extern gave **one body** |
+| `0x10038b10 HandleEndAction` | 1,681 | **505 (new)** | — | — | — | shape **closed it** (wave 1 §21) |
+| `0x10017af0 PizzeriaState` | 1,681 | in flight | — | — | — | extern only |
+| `0x100d0d80 ReadData` | 1,681 | — | — | — | — | extern only |
+| `0x100035e0 HandleControl` | 1,681 | — | — | — | — | extern only |
+
+**The audit's own finding**: of the nine rows I had called "exhausted", **six
+had only ever seen one generator**. Two of the three that then got a second one
+moved (`StopActions` 15 → 11, `HandleEndAction` 12 → **0, landed**); the third
+(`tglrl40`) did not. So "exhausted" meant "exhausted on the extern family" in
+two thirds of my lane's records, exactly as the coordinator's policy point (1)
+predicts — and the follow-up is 505 compiles.
+
+### (b) Length delta — work or encoding
+
+Answered in wave 1 §6 and now **confirmed at the program level**:
+
+| row | Δlen | verdict | proof |
+|---|---|---|---|
+| `0x100ba2c0 MxStillPresenter::Clone` | −1 | encoding | **SHAPE 100 / STRUCT 100** — the strongest form of the proof: a length defect on a body that emits retail's exact program and frame |
+| `0x1006fda0 HandleKeyPress` | +8 | encoding (reload + alignment) | SHAPE 98.21, the whole gap is one `mov eax,1` and one `lea ecx,[ecx]` |
+| `0x1006ed90 Create` | +1 | encoding (`0x66` prefix) | SHAPE 98.71 |
+| `0x100293c0 UpdateEnabledChild` | +4 | encoding (enregistered param) | §26.3 |
+| `0x100a3840 CreateMesh` | −3 | encoding (enregistered param) | §26.3 — this one **flips**, wave 1 left it unsettled and called it the lane's "one genuine text row" |
+
+**All five are encoding.** My lane has *no* row whose length delta is real work.
+
+### (c) Do rejected text cells move SHAPE?
+
+The one text lever that `docs/residue-taxonomy.md` records as **live** for a
+`cmpdir` — `i != n` in place of `i < n` — had never been applied to the
+project's closest open row. Five line-neutral cells, §28: every one is
+strictly worse, and two of them break loops that currently *match* retail,
+which independently establishes that retail spells all three loops `<`.
+
+So the answer for my lane is **no** — and the reason is now provable rather
+than empirical: four of my rows are SHAPE 100 / STRUCT 100 or all-levels-equal
+`cmpdir`, i.e. the source text is already retail's.
+
+### Verdicts that flipped
+
+| row | before | after |
+|---|---|---|
+| `0x100a3840 CreateMesh` | "the one genuine text row in this lane" | **encoding** — an enregistered parameter, cross-TU header, recorded not attempted |
+| `0x100293c0 UpdateEnabledChild` | TEXT/INLINE (triage) → COLOUR (wave 1) | **colour, confirmed**, and the mechanism is shared with `CreateMesh` |
+| `0x100ba2c0 MxStillPresenter::Clone` | TEXT/INLINE (triage) | **proven colour** (SHAPE/STRUCT 100) |
+| `0x100a3b40 MeshBuilderImpl::Clone` | "regrole, floor 14" | **proven colour**, and now floored in *both* carrier families |
+| `0x10017af0 PizzeriaState` | "carrier-inert regrole" | **scheduling** (a 2-instruction permutation) |
+| `0x1007ca30 Read` | "cmpdir, text lever unknown" | **cmpdir, text channel closed** |
+| `0x1006fda0 HandleKeyPress` | SHAPE 68.24 under the shipped metric | **98.21** — the metric was wrong, not the row |
+
+### What the coordinator should propagate
+
+1. **Re-run every `adiff` score** taken with the shipped instrument (§26, §26.1).
+   Nine asymmetries, all inflating the gap; `inliner-ledger.md` §11's
+   2–5 point comparisons are inside the error bar.
+2. **`SHAPE 100 && STRUCT 100` is a proof, not a score** — publish it as the
+   stopping rule for the text channel. It is what four of my rows needed and
+   what the campaign has never had.
+3. **`cmpdir` is invisible to the three levels** (§28). Add a level, or a note.
+4. **A permutation reads as SHAPE 100 *or* as a SHAPE gap** depending on whether
+   the permuted instructions differ in something SHAPE keeps (§26.2). SHAPE is
+   not a source/not-source discriminator on its own.
+
+---
+
+## 31. Closing measurements
+
+### `Isle::Enable` — the fourth and last carrier family, negative
+
+`sw-all2-islexpp18`: `extern_pair_with_pad`, seats pinned at the rectangle
+argmin `extern-1-8`, full 30×30 pad grid, **900 states, 0 failed**.
+
+```
+0x10031820  nd=11 @pad-4-19  offsets [2206, 2209, 2212, 2215, 2218, 2220, 2222, 2224, 2226, 2231, 2233]
+            lens: 3580 x 900
+```
+
+Same floor, same eleven offsets, in every state. **Every carrier family the
+project has is now exhausted on this row**:
+
+| family | states | floor |
+|---|---|---|
+| `extern_run_pair` (rectangle 0..40² + both strata to k=120) | 1,841 | 11 |
+| `declaration_shape` over the argmin seats | 505 | 11 |
+| `pad_shape` over the argmin seats | 900 | 11 |
+| include-order permutation over the argmin seats | 72 | 11 |
+| `declaration_run_triple` (pre- and post-include seats) | 122 | 13 |
+| **total** | **3,440** | **11** |
+
+Combined with SHAPE 100 / STRUCT 100 (§27), the position is complete: the
+source is retail's, the frame is retail's, and no compiler-state carrier the
+framework can express moves the seven-instruction register transposition.
+**This row is finished as anything but a C2 allocator problem**, and it remains
+the best-instrumented specimen in the tree because its second `LenSquared`
+inline is already byte-exact.
+
+### `Act1State::Act1State` — 3,208 states, one body
+
+Adding the pad grid: 1,681 extern + 505 shape + 900 pad + 122 triple =
+**3,208 states, one 843-byte body, every time.** Its residue is a permutation
+of nine member stores whose four Playlist stores are non-contiguous on both
+sides (§7), so it is neither carrier-reachable nor statement-order-reachable.
+
+### `MxStillPresenter::Clone` — the combination that names its own problem
+
+The shape grid: 505 states, **577 bytes in all of them**; the k-strip: 401
+states, 577 in all. Retail's 576 is unreachable in either family. Yet the row
+is **SHAPE 100 / STRUCT 100**.
+
+Those two facts together are the whole diagnosis and they are only visible
+because both instruments were run: the program and the frame are exactly
+retail's, the single byte is `and al, 1` (2 bytes, the accumulator short form)
+against our `and cl, 1` (3), and **no carrier state flips which register holds
+that flag**. A row cannot be more precisely characterised than this, and there
+is nothing left to try on it that this project can express.
+
+### Stopped mid-flight at hand-off (resumable at zero cost — state objects retained)
+
+| sweep | command |
+|---|---|
+| `all2-isle` plain shape grid | `sw.py all2-isle --axes shapefull --tag shape` |
+| `all-mxbitmap` shape grid | `sw.py all-mxbitmap --axes shapefull --tag shape` |
+| `all-legocontrolmanager` shape grid | `sw.py all-legocontrolmanager --axes shapefull --tag shape` |
+| `all-legoact2` rectangle (from wave 1) | `sw.py all-legoact2 --axes base,externR --tag rect` |
+| `all-infocenter` rectangle (from wave 1) | `sw.py all-infocenter --axes base,externR --tag rect` |
+
+The corrected `adiff.py` lives at `<session scratchpad>/fin/adiff.py`, with
+`ad.py` as the by-(stem, address) wrapper and `ad.py --all` scoring the whole
+lane in one pass. **No source or manifest change was made in wave 2** — the
+tree is exactly the merged tip plus this ledger.
