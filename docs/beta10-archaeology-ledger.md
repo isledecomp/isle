@@ -1436,3 +1436,43 @@ swept** — the landed `0x1006dec0` from a new *family* on an old TU, and
 after 7,200 cells. Dense-region headers also grow to ~240 KB, so those cells
 cost several times what a coarse cell costs. **Prefer breadth over depth**:
 sweep an unswept TU or family before densifying one already swept.
+
+### A sweep that compiled 1,225 cells and scored nothing — and why
+
+A sweep of `omni/src/main/mxmain.cpp`, aimed at `0x10057180` because the screen
+named that object, reported **`0/1225 cells compiled`**. Nothing had failed to
+compile: the sweeper builds its target set by looking the oracle's mangled name
+up in the seed object, found none, and cheerfully compiled the whole grid
+against an empty target set. It now exits with an explanation instead.
+
+The attribution was wrong, and the reason is worth keeping:
+
+**Object bodies carry unresolved relocations; the image carries resolved
+addresses.** Byte equality between an object COMDAT and the linked body
+therefore almost never holds — only for the 2 of 80 open rows whose bodies have
+no relocations at all. Masked comparison is the only workable one, and masking
+**erases exactly the field that distinguishes two instantiations that differ
+only in what they call**. `_Tree<LegoAnimStruct>::_Insert` and
+`_Tree<LegoHideAnimStruct>::_Insert` are masked-equal, and both "match" at
+`0x1006a7a0` *and* `0x1006e720`.
+
+So masked equality cannot attribute a row on its own. reccmp's annotation can:
+the distinctive type tokens of the row's demangled name appear in the right
+symbol's mangled name. One catch — a mangled name encodes the type as
+`PAVLegoAnimPresenter`, so the row's `LegoAnimPresenter` token is never *equal*
+to a mangled token, only *contained* in one. Containment scoring is what makes
+the tie-break work.
+
+Corrected attributions (2 of 80 open rows):
+
+| row | was | is |
+| --- | --- | --- |
+| `0x10057180` | mxmain.cpp.obj | **legopathboundary.cpp.obj** |
+| `0x1004f9b0` | viewlodlist.cpp.obj | **legotexturepresenter.cpp.obj** |
+
+`legopathboundary.cpp` is already in the running queue; `legotexturepresenter.cpp`
+has never been swept and now owns an open row.
+
+**No true /OPT:ICF folding was found** once masked-only agreement was separated
+from exact agreement. The earlier reading of `0x10057180` as a five-way fold was
+this same artifact and is withdrawn.
