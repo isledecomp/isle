@@ -1046,3 +1046,47 @@ not establish one, and on inspection none of these rows has one.**
 The two threads left are both narrow: `CreateMesh`'s reload-versus-
 rematerialised-constant, and `CreateActorROI`'s single asymmetric pair.
 **Nothing landed.**
+
+## WAVE 11 — the scheduling screen, and a correction to wave 10
+
+`tools/schedmap.py` + `docs/scheduling-residue.{md,json}` are the third screen.
+Full result there; the two things worth carrying here:
+
+**Zero rows in the open set are CROSS-BLOCK.** Of the 12 SLOT-CLEAN + IDENTITY
+rows, 3 are INTRA-BLOCK (single-digit reorderings inside one block, i.e. the
+scheduler) and 9 are DIFFERENT — and the nine are not scheduling at all but
+classes already owned elsewhere: `cmpdir` (LegoPartPresenter::Read,
+GetActorROI), induction-variable strength reduction
+(LegoWEGEdge::LinkEdgesAndFaces), the already-routed inline bit
+(OrientableROI::OrientableROI), and addressing-mode / regional register
+choices.
+
+**The one row with cross-block moves is compiler block layout, not source
+order.** `0x1002de10 SetTransformAndDestinationFromPoints` shows retail
+inverting the guard and placing the failure tail at the end of the function
+where we emit it inline — which reads exactly like an if/else ordering. Tested:
+the positive-if forms lose 50 bytes because MSVC merges the tails (masked nd
+617 against baseline 154), and `== FAILURE` is a wash (153). Baseline is the
+best form, so **cold-tail placement is MSVC's own decision** and the
+CROSS-BLOCK class is retired on the only row that exhibited it.
+
+### Correction to the wave-10 table
+
+Wave 10 recorded `0x100a3840 CreateMesh` as "asymmetric: ours `mov r,[F]`
+where retail has `mov r,1` — a reload against a rematerialised constant". That
+was read at SHAPE level, where the pairing is unreliable. At EXACT level the
+row is a **four-register rotation** of four consecutive frame loads
+(ours `edi/edx/ecx/ebx` against retail `edx/ecx/ebx/edi` at +242..+254), plus
+retail keeping the constant `1` live in the callee-saved `ebx` where we
+rematerialise it into `edi`. Both are register-assignment decisions with no
+source name, so `CreateMesh` joins the other eight: **compiler artifact, no
+source idiom.** That leaves `CreateActorROI` (routed elsewhere) as the only
+cell of the wave-9 register queue not settled.
+
+### Three screens, one conclusion
+
+Slots (wave 8), registers (wave 9) and now scheduling all return the same
+verdict on the open set: the residue is allocator and layout decisions with no
+source correlate. Goal 1's remaining headroom is the splice machinery and
+carrier sweeps, and that is now the conclusion of three independent screens
+rather than an inference from failed levers.
