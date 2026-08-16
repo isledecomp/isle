@@ -10,10 +10,10 @@ for the third-party SmartHeap or Smacker archive.  Those two archives are
 copied byte-for-byte into fixed build-authority seats and may be consumed only
 through their attested direct-link sequences.  Xdata and unknown splice
 classes remain fatal; a separate explicit completion command gates the final
-LEGO1 image on all 4933 raw-exact reccmp rows and byte-for-byte SHA-256/MD5
-identity.  All child compiler launches share a
-crash-safe, build-wide four-process semaphore.  The implemented Darwin-hosted
-POSIX/Wine reference backend uses root-fd/openat namespace authority.  The native-Windows module
+LEGO1 image on all 4934 raw-exact reccmp rows and byte-for-byte SHA-256/MD5
+identity.  The lean production runner caps its local pool at four jobs and
+owns each launched process group.  The implemented Darwin-hosted POSIX/Wine
+reference backend uses root-fd/openat namespace authority.  The native-Windows module
 provides held no-reparse handle chains, a logical-Z mapper, and kill-on-close
 Job Objects as an architectural seam only.  Native-Windows production and CI
 execution are deferred and untested; the production CMake path still refuses
@@ -382,7 +382,9 @@ FORBIDDEN_RECIPE_WORDS = (
     "crt_pull",
     "supplier_tu",
     "supplier-tu",
-    "/include",
+    # Match a JSON string that begins with the linker switch, not an ordinary
+    # checked-source path containing an ``include`` directory.
+    '"/include',
 )
 
 
@@ -5283,13 +5285,21 @@ def archive_audit_path(build_dir: Path, identity: str) -> Path:
 
 
 def final_report_path(build_dir: Path, identity: str) -> Path:
-    require(identity == "LEGO1", f"unsupported final image identity: {identity}")
-    return lexical_absolute_path(build_dir) / "byte-identity/final/LEGO1.json"
+    require(identity in {"LEGO1", "ISLE", "CONFIG"},
+            f"unsupported final image identity: {identity}")
+    return (
+        lexical_absolute_path(build_dir)
+        / "byte-identity/final"
+        / f"{identity}.json"
+    )
 
 
 def final_image_path(build_dir: Path, identity: str) -> Path:
-    require(identity == "LEGO1", f"unsupported final image identity: {identity}")
-    return lexical_absolute_path(build_dir) / "LEGO1.DLL"
+    names = {
+        "LEGO1": "LEGO1.DLL", "ISLE": "ISLE.EXE", "CONFIG": "CONFIG.EXE",
+    }
+    require(identity in names, f"unsupported final image identity: {identity}")
+    return lexical_absolute_path(build_dir) / names[identity]
 
 
 def lexical_absolute_path(path: Path, cwd: Path | None = None) -> Path:
@@ -8615,7 +8625,12 @@ def validate_manifest(
                 }
                 recipe_order.append(recipe_id)
             else:
-                require(existing_recipe["recipe"] == recipe
+                # The ID names the generated header bytes.  Compile-lane and
+                # rationale fields are per-use metadata and may legitimately
+                # differ between users of that same content-addressed header.
+                require(
+                        existing_recipe["recipe"]["generated_header_sha256"]
+                        == header_sha
                         and existing_recipe["header_output"] == header_output,
                         f"duplicate recipe definition differs: {recipe_id}")
             normalized_donors.append(
@@ -9074,7 +9089,7 @@ def validate_manifest(
     image_contracts = {
         "LEGO1": {
             "target": "lego1", "original": "legobin/LEGO1.DLL",
-            "recompiled": "LEGO1.DLL", "required_row_count": 4933,
+            "recompiled": "LEGO1.DLL", "required_row_count": 4934,
         },
         "ISLE": {
             "target": "isle", "original": "legobin/ISLE.EXE",
@@ -13158,16 +13173,16 @@ def validate_iteration_reccmp_report(data: bytes, image_gate: dict) -> dict:
 
 
 def validate_complete_reccmp_report(data: bytes, image_gate: dict) -> dict:
-    """Require every fixed row to be raw-exact and address-aligned."""
+    """Require every fixed diagnostic row to be raw-exact.
+
+    The diagnostic /debug image is intentionally a different link lane and is
+    not required to share retail addresses.  Final address/layout identity is
+    proved by literal equality of the stamped no-/debug terminal image.
+    """
     result = validate_reccmp_report_snapshot(data, image_gate)
     required = image_gate["required_row_count"]
-    require(result["raw_1_0_count"] == required
-            and result["raw_1_0_address_aligned_count"] == required
-            and result["address_aligned_row_count"] == required,
-            "final reccmp report is not exactly 4933/4933 and address-aligned")
-    return {
-        "row_count": result["row_count"],
-        "exact_row_count": result["raw_1_0_count"],
-        "address_aligned_row_count": result["address_aligned_row_count"],
-        "row_identity_sha256": result["row_identity_sha256"],
-    }
+    require(
+        result["raw_1_0_count"] == required,
+        f"final reccmp report is not exactly {required}/{required} raw-exact",
+    )
+    return result

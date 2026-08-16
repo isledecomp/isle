@@ -18,9 +18,11 @@ only what changed, so an iterate loop runs in seconds.
 from __future__ import annotations
 
 import argparse
+import atexit
 import hashlib
 import json
 import os
+import signal
 import shutil
 import subprocess
 import sys
@@ -47,6 +49,65 @@ SHADOW_SUBSET = (
 POSIX_PROFILE = "posix_wine_virtual_z_v1"
 
 
+# Every child is placed in its own POSIX process group and registered before
+# the caller can wait on it.  This is intentionally process-wide: the terminal
+# lane and the reccmp lanes overlap in threads, and a failure in any one lane
+# must not leave compiler, linker, or Wine wrapper descendants behind.
+_ACTIVE_CHILDREN: set[subprocess.Popen] = set()
+_ACTIVE_CHILDREN_LOCK = threading.RLock()
+
+
+def _terminate_process_tree(process: subprocess.Popen,
+                            grace_seconds: float = 2.0) -> bytes:
+    """Terminate one runner-owned child tree and drain its combined output."""
+    if process.poll() is None:
+        try:
+            if os.name == "posix":
+                os.killpg(process.pid, signal.SIGTERM)
+            else:
+                process.terminate()
+        except (OSError, ProcessLookupError):
+            pass
+    try:
+        output = process.communicate(timeout=grace_seconds)[0]
+    except subprocess.TimeoutExpired:
+        try:
+            if os.name == "posix":
+                os.killpg(process.pid, signal.SIGKILL)
+            else:
+                process.kill()
+        except (OSError, ProcessLookupError):
+            pass
+        output = process.communicate()[0]
+    finally:
+        with _ACTIVE_CHILDREN_LOCK:
+            _ACTIVE_CHILDREN.discard(process)
+    return output or b""
+
+
+def cancel_owned_children(kill: bool = False) -> None:
+    """Signal active groups without racing their owner threads for wait()."""
+    with _ACTIVE_CHILDREN_LOCK:
+        children = list(_ACTIVE_CHILDREN)
+    for process in children:
+        if process.poll() is not None:
+            continue
+        try:
+            if os.name == "posix":
+                os.killpg(
+                    process.pid, signal.SIGKILL if kill else signal.SIGTERM
+                )
+            elif kill:
+                process.kill()
+            else:
+                process.terminate()
+        except (OSError, ProcessLookupError):
+            pass
+
+
+atexit.register(cancel_owned_children, True)
+
+
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
     with open(path, "rb") as handle:
@@ -56,6 +117,9 @@ def sha256_file(path: Path) -> str:
 
 
 def fail(message: str) -> "NoReturn":  # noqa: F821
+    # Owner threads remain solely responsible for communicate()/wait().
+    # Cancellation only signals here, preventing concurrent pipe consumption.
+    cancel_owned_children()
     print(f"isle_build: refusing: {message}", file=sys.stderr)
     raise SystemExit(2)
 
@@ -244,22 +308,61 @@ def write_reccmp_project_files(build: Path, shadow: Path,
             path.write_text(data)
 
 
-def run(command: list[str], *, cwd: Path | None = None,
-        env: dict | None = None, log: Path | None = None) -> None:
-    started = time.monotonic()
-    result = subprocess.run(
+def start_owned(command: list[str], *, cwd: Path | None = None,
+                env: dict | None = None) -> subprocess.Popen:
+    """Launch one command under process-tree ownership."""
+    process = subprocess.Popen(
         command, cwd=cwd, env=env, stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
+        start_new_session=(os.name == "posix"),
     )
+    with _ACTIVE_CHILDREN_LOCK:
+        _ACTIVE_CHILDREN.add(process)
+    return process
+
+
+def finish_owned(process: subprocess.Popen, command: list[str], *,
+                 timeout_seconds: float, log: Path | None = None,
+                 timeout_label: float | None = None) -> bytes:
+    """Wait for an owned child, enforcing its absolute lane deadline."""
+    started = time.monotonic()
+    try:
+        output = process.communicate(timeout=max(0.001, timeout_seconds))[0]
+        with _ACTIVE_CHILDREN_LOCK:
+            _ACTIVE_CHILDREN.discard(process)
+    except subprocess.TimeoutExpired:
+        output = _terminate_process_tree(process)
+        if log is not None:
+            log.parent.mkdir(parents=True, exist_ok=True)
+            log.write_bytes(output)
+        declared = timeout_seconds if timeout_label is None else timeout_label
+        tail = output[-4000:].decode("utf-8", "replace")
+        fail(
+            f"command timed out after {declared:g}s: "
+            f"{' '.join(command)}\n{tail}"
+        )
+    except BaseException:
+        _terminate_process_tree(process)
+        raise
     if log is not None:
         log.parent.mkdir(parents=True, exist_ok=True)
-        log.write_bytes(result.stdout)
-    if result.returncode != 0:
-        tail = result.stdout[-4000:].decode("utf-8", "replace")
+        log.write_bytes(output)
+    if process.returncode != 0:
+        tail = output[-4000:].decode("utf-8", "replace")
         fail(
-            f"command failed ({result.returncode}, "
+            f"command failed ({process.returncode}, "
             f"{time.monotonic() - started:.1f}s): {' '.join(command)}\n{tail}"
         )
+    return output
+
+
+def run(command: list[str], *, timeout_seconds: float,
+        cwd: Path | None = None, env: dict | None = None,
+        log: Path | None = None) -> None:
+    process = start_owned(command, cwd=cwd, env=env)
+    finish_owned(
+        process, command, timeout_seconds=timeout_seconds, log=log,
+    )
 
 
 def build_environment(compiler: Path) -> dict:
@@ -271,7 +374,8 @@ def build_environment(compiler: Path) -> dict:
 
 
 def configure(build: Path, shadow: Path, plan: Path, compiler: Path,
-              jobs: int, extra: list[str] | None = None) -> None:
+              jobs: int, timeout_seconds: float,
+              extra: list[str] | None = None) -> None:
     cache = build / "CMakeCache.txt"
     if cache.exists() and (build / "Makefile").exists():
         return
@@ -287,7 +391,8 @@ def configure(build: Path, shadow: Path, plan: Path, compiler: Path,
         f"-DISLE_BYTE_IDENTITY_PLAN={plan}",
         "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
         *(extra or []),
-    ], env=build_environment(compiler), log=build / "configure.log")
+    ], timeout_seconds=timeout_seconds, env=build_environment(compiler),
+        log=build / "configure.log")
 
 
 def stamp_link_time(data: bytes, link_time: int,
@@ -324,20 +429,25 @@ def stamp_link_time(data: bytes, link_time: int,
 
 def terminal_lane(manifest: dict, gates: dict, build_root: Path,
                   shadow: Path, plan: Path, compiler: Path, jobs: int,
-                  require_md5: bool) -> dict:
+                  require_identity: bool, compile_timeout: float,
+                  link_timeout: float) -> dict:
     """Configure and link the no-/debug terminal images, stamp the pinned
     retail link times, and report per-image MD5 and byte distance."""
     terminal_build = build_root / "terminal"
     terminal_build.mkdir(parents=True, exist_ok=True)
-    configure(terminal_build, shadow, plan, compiler, jobs,
+    configure(terminal_build, shadow, plan, compiler, jobs, compile_timeout,
               extra=["-DISLE_BYTE_IDENTITY_TERMINAL=TRUE"])
     targets = [gates[identity]["target"] for identity in gates]
     run(["cmake", "--build", str(terminal_build), "--target", *targets,
          "-j", str(jobs)],
+        # One CMake driver serially launches many manifest-bounded children.
+        # Keep an outer anti-wedge ceiling without treating the per-child
+        # producer limit as a cold whole-build deadline.
+        timeout_seconds=max(compile_timeout, link_timeout) * 4,
         env=build_environment(compiler),
         log=build_root / "terminal-build.log")
     compose_translation_units(manifest, terminal_build, shadow, compiler,
-                              jobs)
+                              jobs, compile_timeout, link_timeout)
     results = {}
     states = []
     for identity, gate in gates.items():
@@ -354,6 +464,7 @@ def terminal_lane(manifest: dict, gates: dict, build_root: Path,
             # the built image's own thunk, and the transform is fail-closed.
             run([sys.executable, str(ROOT / "tools/pe_iatorder.py"),
                  str(stamped_path), str(ROOT / gate["original"])],
+                timeout_seconds=link_timeout,
                 log=build_root / f"iatorder-{identity}.log")
             stamped = stamped_path.read_bytes()
         if gate.get("thunk_order") == "retail_adjacent_pair_swap_v1":
@@ -363,7 +474,15 @@ def terminal_lane(manifest: dict, gates: dict, build_root: Path,
             stamped_path.write_bytes(stamped)
         original = (ROOT / gate["original"]).read_bytes()
         md5 = hashlib.md5(stamped).hexdigest()
-        identical = md5 == gate["original_md5"]
+        sha256 = hashlib.sha256(stamped).hexdigest()
+        # Literal equality is the final address/layout proof.  MD5 and SHA-256
+        # are reported and checked against their independent manifest pins,
+        # but neither digest substitutes for comparing the actual bytes.
+        identical = (
+            stamped == original
+            and md5 == gate["original_md5"]
+            and sha256 == gate["original_sha256"]
+        )
         if len(stamped) == len(original):
             distance = sum(1 for a, b in zip(stamped, original) if a != b)
             size_note = ""
@@ -373,6 +492,8 @@ def terminal_lane(manifest: dict, gates: dict, build_root: Path,
         results[identity] = {
             "md5": md5,
             "retail_md5": gate["original_md5"],
+            "sha256": sha256,
+            "retail_sha256": gate["original_sha256"],
             "identical": identical,
             "byte_distance": distance,
             "size": len(stamped),
@@ -381,9 +502,12 @@ def terminal_lane(manifest: dict, gates: dict, build_root: Path,
         state = ("IDENTICAL" if identical
                  else f"distance {distance}{size_note}")
         states.append(f"[isle_build] terminal {identity}: {state}")
-        if require_md5 and not identical:
+        if require_identity and not identical:
             print("\n".join(states))
-            fail(f"terminal {identity} MD5 differs from retail: {md5}")
+            fail(
+                f"terminal {identity} bytes differ from retail: "
+                f"MD5 {md5}, SHA-256 {sha256}"
+            )
     # One print per lane: the terminal lane may overlap the image scoring,
     # so its report lines are emitted together.
     print("\n".join(states))
@@ -422,32 +546,54 @@ def main() -> int:
     parser.add_argument("--manifest", type=Path,
                         default=ROOT / "tools/byte_identity_manifest.json")
     # Per-object compiler PDBs (ISLE_PER_OBJECT_PDB) make parallel VC4.2
-    # compiles safe; 8 wine children measured fastest on an 8+-core host and
-    # the fail-closed row/MD5 gates hold at every parallelism level.
+    # compiles safe.  Four children are the measured current ceiling: Wine's
+    # server serializes most of this workload, so wider pools add contention.
     parser.add_argument("--jobs", type=int,
-                        default=min(8, os.cpu_count() or 4))
+                        default=min(4, os.cpu_count() or 4))
     parser.add_argument("--terminal", action="store_true",
-                        help="require complete rows and the retail MD5s")
+                        help="require complete rows and literal retail bytes")
     parser.add_argument("--md5-distance", action="store_true",
                         help="also link the no-/debug terminal images and "
                              "report byte distance to retail (no MD5 gate)")
-    parser.add_argument("--baseline-report", type=Path,
-                        default=Path("/tmp/lego1-4816-full.json"))
-    arguments = parser.parse_args()
-
-    manifest = byte_identity.strict_json_loads(
-        arguments.manifest.read_bytes()
+    parser.add_argument(
+        "--baseline-report", type=Path, required=True,
+        help="last accepted current-HEAD LEGO1 report used to name gains/losses",
     )
+    arguments = parser.parse_args()
+    if not 1 <= arguments.jobs <= 4:
+        parser.error("--jobs must be between 1 and 4")
+
     compiler = arguments.compiler.resolve()
+    build_root = arguments.build_dir.resolve()
+    build_root.mkdir(parents=True, exist_ok=True)
+    try:
+        validated = byte_identity.validate_manifest(
+            arguments.manifest, ROOT, build_root,
+            configured_compiler=str(compiler),
+        )
+    except byte_identity.ByteIdentityError as error:
+        fail(f"manifest validation failed: {error}")
+    manifest = validated["manifest"]
     pins = verify_pins(manifest, compiler)
     reccmp = resolve_reccmp(manifest)
+    try:
+        baseline_bytes = arguments.baseline_report.read_bytes()
+        byte_identity.validate_iteration_reccmp_report(
+            baseline_bytes, manifest["images"]["LEGO1"]
+        )
+    except (OSError, byte_identity.ByteIdentityError) as error:
+        fail(f"baseline report is not the current accepted LEGO1 set: {error}")
+    compile_timeout = validated["max_child_seconds"]
+    link_timeout = validated["terminal_producers"]["link"][
+        "max_child_seconds"
+    ]
+    reccmp_timeout = validated["terminal_producers"]["reccmp"][
+        "max_child_seconds"
+    ]
 
-    build_root = arguments.build_dir.resolve()
     shadow = build_root / "src"
     build = build_root / "build"
     plan = build_root / "plan.cmake"
-    build_root.mkdir(parents=True, exist_ok=True)
-
     started = time.monotonic()
     overlay, rendered = render_overlay(manifest)
     changed = sync_shadow(shadow, rendered)
@@ -455,18 +601,19 @@ def main() -> int:
     print(f"[isle_build] shadow synced ({changed} files changed, "
           f"{time.monotonic() - started:.1f}s)")
 
-    configure(build, shadow, plan, compiler, arguments.jobs)
+    configure(build, shadow, plan, compiler, arguments.jobs, compile_timeout)
     gates = pins["image_gates"]
     targets = [gates[identity]["target"] for identity in gates]
     run(
         ["cmake", "--build", str(build), "--target", *targets,
          "-j", str(arguments.jobs)],
+        timeout_seconds=max(compile_timeout, link_timeout) * 4,
         env=build_environment(compiler), log=build_root / "build.log",
     )
     print(f"[isle_build] build complete ({time.monotonic() - started:.1f}s)")
 
     compose_translation_units(manifest, build, shadow, compiler,
-                              arguments.jobs)
+                              arguments.jobs, compile_timeout, link_timeout)
 
     verdict = {
         "status": ("BYTE_IDENTITY_COMPLETE" if arguments.terminal
@@ -490,6 +637,7 @@ def main() -> int:
         terminal_future = terminal_pool.submit(
             terminal_lane, manifest, gates, build_root, shadow, plan,
             compiler, arguments.jobs, arguments.terminal,
+            compile_timeout, link_timeout,
         )
 
     # The three image comparisons are independent processes; launch them
@@ -504,23 +652,27 @@ def main() -> int:
             fail(f"{pdb.name} was not produced "
                  "(diagnostic /debug link expected)")
         report_path = build_root / f"{identity}-report.json"
-        scorers[identity] = (subprocess.Popen([
+        if report_path.exists():
+            report_path.unlink()
+        command = [
             str(reccmp), "--target", identity,
             "--json", str(report_path), "--json-diet", "--print-rec-addr",
             "--silent",
-        ], cwd=build, stdout=subprocess.PIPE, stderr=subprocess.STDOUT),
-            report_path, image, pdb)
-    outputs = {
-        identity: scorer.communicate()[0]
-        for identity, (scorer, _, _, _) in scorers.items()
-    }
-    for identity, (scorer, report_path, image, pdb) in scorers.items():
+        ]
+        scorers[identity] = (
+            start_owned(command, cwd=build), time.monotonic(), command,
+            report_path, image, pdb,
+        )
+    outputs = {}
+    for identity, (scorer, launched, command, _, _, _) in scorers.items():
+        remaining = reccmp_timeout - (time.monotonic() - launched)
+        outputs[identity] = finish_owned(
+            scorer, command, timeout_seconds=max(0.001, remaining),
+            timeout_label=reccmp_timeout,
+            log=build_root / f"reccmp-{identity}.log",
+        )
+    for identity, (scorer, _, _, report_path, image, pdb) in scorers.items():
         gate = gates[identity]
-        (build_root / f"reccmp-{identity}.log").write_bytes(outputs[identity])
-        if scorer.returncode != 0:
-            tail = outputs[identity][-4000:].decode("utf-8", "replace")
-            fail(f"command failed ({scorer.returncode}): "
-                 f"{reccmp} --target {identity}\n{tail}")
 
         report_bytes = report_path.read_bytes()
         try:
@@ -572,7 +724,9 @@ def main() -> int:
 
 
 def compose_translation_units(manifest: dict, build: Path, shadow: Path,
-                              compiler: Path, jobs: int) -> None:
+                              compiler: Path, jobs: int,
+                              compile_timeout: float,
+                              link_timeout: float) -> None:
     """Apply manifest-listed COMDAT compositions, then relink.
 
     Each listed TU is compiled once more with its non-emitting declaration
@@ -637,7 +791,8 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                 return None, None
         # The object on disk is not attested as this unit's fresh seed (it
         # may hold a previous composition), so recompile it in place first.
-        run(child, cwd=cwd, env=build_environment(compiler),
+        run(child, timeout_seconds=compile_timeout, cwd=cwd,
+            env=build_environment(compiler),
             log=build.parent / f"{marker.stem}-seed.log")
         seed_bytes = seed_object.read_bytes()
         seed_sha = hashlib.sha256(seed_bytes).hexdigest()
@@ -686,7 +841,8 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
             seed_pdb_bytes = (seed_pdb.read_bytes()
                               if seed_pdb.is_file() else None)
             try:
-                run(donor_command, cwd=cwd, env=build_environment(compiler),
+                run(donor_command, timeout_seconds=compile_timeout, cwd=cwd,
+                    env=build_environment(compiler),
                     log=build.parent / f"{marker.stem}-donor.log")
                 donor_objects[donor["id"]] = seed_object.read_bytes()
             finally:
@@ -746,7 +902,8 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                             donor_command.append("s.cpp")
                             continue
                         donor_command.append(token)
-                    run(donor_command, cwd=probe,
+                    run(donor_command, timeout_seconds=compile_timeout,
+                        cwd=probe,
                         env=build_environment(compiler),
                         log=build.parent / f"{marker.stem}-{donor['id']}.log")
                     donor_objects[donor["id"]] = (probe / "o.obj").read_bytes()
@@ -1007,7 +1164,7 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                         donor_command.append("s.cpp")
                         continue
                     donor_command.append(token)
-                run(donor_command, cwd=probe,
+                run(donor_command, timeout_seconds=compile_timeout, cwd=probe,
                     env=build_environment(compiler),
                     log=build.parent / f"{marker.stem}-{donor['id']}.log")
                 donor_objects[donor["id"]] = (probe / "o.obj").read_bytes()
@@ -1099,6 +1256,7 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
             image.unlink()
         run(["cmake", "--build", str(build), "--target", target,
              "-j", str(jobs)],
+            timeout_seconds=link_timeout,
             env=build_environment(compiler),
             log=build.parent / "relink.log")
 

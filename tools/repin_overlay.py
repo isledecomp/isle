@@ -9,6 +9,7 @@ translation-unit source pin when the path owns one.
 """
 import hashlib
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -25,7 +26,7 @@ def main() -> int:
               file=sys.stderr)
         return 2
     manifest_path = ROOT / "tools/byte_identity_manifest.json"
-    manifest = json.loads(manifest_path.read_text())
+    manifest = byte_identity.strict_json_loads(manifest_path.read_bytes())
     outputs = manifest["source_overlay"]["outputs"]
     by_path = {o["path"]: o for o in outputs}
     for path in paths:
@@ -54,11 +55,15 @@ def main() -> int:
         by_path[path]["size"] = len(data)
         for unit in manifest.get("translation_units", []):
             if unit["source"] == path:
-                unit["source_sha256"] = by_path[path]["clean"]
+                unit["source_sha256"] = by_path[path]["effective"]
         print(f"repinned {path}: clean {by_path[path]['clean'][:12]} "
               f"effective {by_path[path]['effective'][:12]} "
               f"size {len(data)}")
-    manifest_path.write_text(json.dumps(manifest, indent=1) + "\n")
+    staging = manifest_path.with_name(
+        f".{manifest_path.name}.{os.getpid()}.tmp"
+    )
+    staging.write_text(json.dumps(manifest, indent=1) + "\n")
+    staging.replace(manifest_path)
     return 0
 
 

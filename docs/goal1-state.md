@@ -1,7 +1,20 @@
 # State of goal 1 — every open row, with its disposition
 
 Generated in the main loop by joining the four screens plus the coverage
-matrix against the live reccmp report. **LEGO1 4857/4934 — 77 open rows.**
+matrix against the live reccmp report. **LEGO1 4859/4934 — 75 open rows.**
+ISLE is 172/172 and CONFIG is 111/111. Current terminal measurement keeps
+ISLE and CONFIG byte-identical; LEGO1 is equal-sized with 593,419 differing
+bytes (MD5 `e781797c16fa5acb9907e32840b4ae14`).
+
+The diagnostic reccmp summary also counts known-but-unmatched runtime entries:
+LEGO1 has three CRT initializers (`0x10092350`, `0x10092360`, `0x10096450`);
+ISLE has `_write_multi_char`, `_write_string`, and three CRT initializers
+(`0x40b370`, `0x40b380`, `0x40c400`). These are not missing game-source rows:
+ISLE is already literally byte-identical while its diagnostic PDB leaves those
+five unmatched. Completion therefore means every comparable function/vtable row
+is raw 1.0, reccmp prints Accuracy 100.00%, and all three no-/debug images are
+literal-byte, SHA-256, and MD5 identical. The terminal equality covers the
+runtime entries without inventing annotations or changing a denominator.
 
 This exists because the evidence is spread across `slot-reachability`,
 `register-colour`, `scheduling-residue`, `cmpdir-census` and
@@ -11,32 +24,32 @@ This exists because the evidence is spread across `slot-reachability`,
 
 | rows | disposition | what it means |
 |---:|---|---|
-| 31 | **ALLOCATOR (no idiom)** | Frame already matches retail; registers re-decided in many places. Nine of ten such rows were read by hand and **none had a differing live range** — the apparent spill differences are the same instruction on both sides, moved. Carrier sweep is the only lever that has ever moved this class. |
+| 30 | **ALLOCATOR (no idiom)** | Frame already matches retail; registers re-decided in many places. Nine of ten such rows were read by hand and **none had a differing live range** — the apparent spill differences are the same instruction on both sides, moved. Carrier sweep is the only lever that has ever moved this class. |
 | 12 | **AMBIGUOUS** | A screen refused to answer — bodies too divergent to trust an alignment, or slots contested after majority resolution. **Not a verdict of unreachability.** Cheapest unmined population: re-screen with better alignment. |
 | 12 | **LENGTH-UNREACHABLE** | Never reaches retail's length in any state measured. Structural, not colour. |
 | 10 | **SCHEDULE/ENCODING** | Frame **and** registers already match retail. Scheduling screen says intra-block reordering or a class owned elsewhere; **zero rows in the whole set are cross-block**, and the one that was got tested and refuted. |
-| 7 | **ROUTED** | Named, understood, and assigned — see the notes column. |
+| 6 | **ROUTED** | Named, understood, and assigned — see the notes column. |
 | 4 | **SEALED tie** | Pure register bijection: the same live ranges given different physical registers. No source correlate exists. |
 | 1 | **OTHER** | Unclassified by the join; inspect individually. |
 
 ## What is actually fundable
 
-1. **The splice machinery** — `0x1003cf20` (in flight) and `0x1009f490`
-   (needs extension A plus B7's reindexing path). Both are *already measured*
-   at masked nd 0, so these are bookkeeping toward a known result.
+1. **The splice machinery** — `0x1003cf20` is landed. `0x1009f490` reproduces
+   the target body at masked nd 0 but remains correctly blocked by B4 because
+   its donor loses `Interpolate` and a knock-on `Matrix4::Scale`; do not relax
+   the function-multiset gate.
 2. **Carrier sweeps on rows with genuinely untried families** — rank the
    families **from the objects**, never from the matrix's `L` column; a
    missing result file proves nothing about what was compiled.
 3. ~~**The AMBIGUOUS rows** — sharpen the alignment.~~ **RETRACTED, measured in
-   the main loop 2026-08-16.** Of the 11 rows refused by *both* the slot and
-   register screens, **11 of 11 have a different length from retail** and zero
+   the main loop 2026-08-16.** Of the ten still-open rows refused by *both* the slot and
+   register screens, **10 of 10 have a different length from retail** and zero
    are same-length:
 
    | row | ours | retail | delta |
    |---|---:|---:|---:|
    | `0x100293c0` UpdateEnabledChild | 282 | 286 | −4 |
    | `0x1002bff0` `_Tree<LegoPathActor*>` | 1104 | 1096 | +8 |
-   | `0x1003cf20` ~LegoCacheSoundManager | 274 | 258 | +16 |
    | `0x1003d170` FindSoundByKey | 282 | 281 | +1 |
    | `0x1004ebd0` LegoTexturePresenter::Read | 745 | 739 | +6 |
    | `0x10058c30` LegoOmni::Destroy | 568 | 571 | −3 |
@@ -71,7 +84,7 @@ inline-budget lever only.
 | ALLOCATOR (no idiom) | 0.9608 | `0x1004bd10` | MxTransitionManager::DissolveTransition | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9536 | `0x1004d330` | TowTrack::HandlePathStruct | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9417 | `0x100720d0` | Act3List::RemoveByObjectIdOrFirst | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
-| ALLOCATOR (no idiom) | 0.9365 | `0x10084030` | LegoCharacterManager::CreateActorROI | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
+| ALLOCATOR (no idiom) | 0.9365 | `0x10084030` | LegoCharacterManager::CreateActorROI | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE | masked object nd 0 is not a row win: gated score .9969, wrong relocation targets/address; reverted |
 | ALLOCATOR (no idiom) | 0.9348 | `0x100b26f0` | MxVideoPresenter::AlphaMask::IsHit | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9315 | `0x1002f770` | LegoPathActor::UpdatePlane | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9302 | `0x10072ad0` | Act3::TriggerHitSound | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
@@ -88,7 +101,6 @@ inline-budget lever only.
 | ALLOCATOR (no idiom) | 0.8780 | `0x100a7960` | _Tree<char const *,pair<char const * const | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.8675 | `0x100166a0` | JetskiRace::HandlePathStruct | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.8475 | `0x1006e720` | _Tree<char const *,pair<char const * const | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
-| ALLOCATOR (no idiom) | 0.8205 | `0x1006dec0` | _Tree<char const *,pair<char const * const | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.8051 | `0x1004f9b0` | _Tree<char const *,pair<char const * const | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.7983 | `0x1006a7a0` | _Tree<char const *,pair<char const * const | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.7828 | `0x1006c200` | _Tree<char const *,pair<char const * const | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
@@ -121,7 +133,6 @@ inline-budget lever only.
 | LENGTH-UNREACHABLE | 0.7268 | `0x100aa510` | LegoLOD::Read | UNREACHABLE | SCATTERED | AMBIGUOUS | LENGTH |  |
 | OTHER | 0.7442 | `0x10038380` | Pizza::StopActions | NO-SLOTS | REGIONAL | AMBIGUOUS | NONE |  |
 | ROUTED | 0.9504 | `0x100a4420` | OrientableROI::OrientableROI | SLOT-CLEAN | IDENTITY | DIFFERENT | LENGTH | inline bit PLUS one EH-store schedule; B1 refuses (not retail-exact) |
-| ROUTED | 0.8950 | `0x1003cf20` | LegoCacheSoundManager::~LegoCacheSoundMana | AMBIGUOUS | AMBIGUOUS | DIFFERENT | NONE | inline bit; splice route in flight (extension B landed, A7/A7f) |
 | ROUTED | 0.8896 | `0x1009f490` | LegoAnimScene::CalculateCameraTransform | AMBIGUOUS | IDENTITY | DIFFERENT | LENGTH | inline bit; needs extension A + B7 reindexing (12->13 relocs) |
 | ROUTED | 0.8848 | `0x100a66f0` | ViewManager::ManageVisibilityAndDetailRecu | SLOT-CLEAN | REGIONAL | DIFFERENT | PURE | PURE cmpdir, sealed: ~8,500 cells, floor never leaves nd=1 |
 | ROUTED | 0.8611 | `0x100bb1d0` | MxDisplaySurface::VTable0x30 | UNREACHABLE | SCATTERED | AMBIGUOUS | PURE | PURE cmpdir, sealed: nd=4 in every family (6,439 obj + 2,058 cells) |

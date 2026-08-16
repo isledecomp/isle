@@ -1,18 +1,28 @@
 # Specification: two COMDAT-splicing extensions
 
-Status: **specified, not implemented.** User-authorised 2026-08-16.
-Author: main loop. Implementer: next free lane. Red-first — every test in §4
-must be written and observed to FAIL before any implementation lands.
+Status: **implemented and tested.** Extensions A, B, A7/A7f and B7 are in the
+production path. `0x1003cf20` landed at `be00d783`; the remaining
+`0x1009f490` experiment is correctly blocked by B4's function-multiset gate.
 
 ## 0. Why
 
-Two open rows are already proven byte-exact in some compile state and cannot be
-landed:
+### Authenticity boundary
+
+Entropy additions may change compiler state, declaration order, or flags, but
+must be proven unable to emit or alter program logic. A transplanted function or
+COMDAT may cross translation-unit or target-module boundaries only when it is
+compiler-produced from authenticated source and the composer proves the
+identity/seat, complete relocation and closure mapping, unwind/debug structure,
+and linked retail result required by its splice class. Masked-byte equality is
+only a discovery signal; it is never sufficient proof by itself. No literal or
+invented behavior is admissible.
+
+The work began from two rows proven byte-exact in a donor compile state:
 
 | row | proven state | blocked by |
 |---|---|---|
-| `0x1009f490 CalculateCameraTransform` | 1121 B, masked nd 0, SHAPE/STRUCT/EXACT 100.00 | both extensions |
-| `0x1003cf20 ~LegoCacheSoundManager` | 258/258, masked nd 0, 100.00/100.00/100.00 | extension B (and A unless its callee-cost route lands) |
+| `0x1009f490 CalculateCameraTransform` | 1121 B, masked nd 0, SHAPE/STRUCT/EXACT 100.00 | B4 refuses: donor drops `Interpolate` and `Matrix4::Scale`; do not relax it |
+| `0x1003cf20 ~LegoCacheSoundManager` | 258/258, masked nd 0, 100.00/100.00/100.00 | **landed** through extensions A+B |
 
 `0x100a4420 OrientableROI::OrientableROI` sits one EH-store scheduling
 instruction behind and becomes reachable if the bit ever is.

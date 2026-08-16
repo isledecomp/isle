@@ -19,24 +19,42 @@ The byte-identity build is driven by `tools/isle_build.py`. It renders the
 typed entropy manifest into an effective source view, builds it with the
 pinned MSVC 4.2 toolchain through the ordinary CMake graph, applies the
 manifest's COMDAT compositions, scores the result with the pinned reccmp,
-and enforces the row/MD5 gates:
+and enforces the row/literal-byte gates:
 
 ```bash
+export ISLE_BYTE_IDENTITY_WINE_BUNDLE="/Applications/Wine Stable.app"
+export ISLE_BYTE_IDENTITY_WINE_PREFIX_TEMPLATE=/absolute/path/to/prefix-template
 export ISLE_BYTE_IDENTITY_RECCMP_EXECUTABLE=/absolute/path/to/reccmp-reccmp
+export ISLE_BYTE_IDENTITY_PYTHON_RUNTIME_ROOT=/absolute/path/to/python-3.12-runtime
+export ISLE_BYTE_IDENTITY_HOMEBREW_PREFIX=/absolute/path/to/homebrew
+export ISLE_BYTE_IDENTITY_HOMEBREW_CELLAR=/absolute/path/to/homebrew/Cellar
+export ISLE_BYTE_IDENTITY_RECCMP_PACKAGE_ROOT=/absolute/path/to/reccmp/package
+export ISLE_BYTE_IDENTITY_RECCMP_SITE_PACKAGES=/absolute/path/to/site-packages
 python3 tools/isle_build.py \
   --build-dir /absolute/path/outside/the/tree \
-  --compiler /absolute/path/to/msvc420/wine/x86/cl        # or a native CL wrapper
+  --compiler /absolute/path/to/msvc420/wine/x86/cl \
+  --baseline-report /absolute/path/to/current-accepted-LEGO1-report.json
 ```
 
-Authenticity is carried by pins and outputs, not by environment modeling:
-the compiler/linker binaries, the manifest and rendered sources, the reccmp
-verifier, and the produced objects/image/report are all hash-checked; a
-misbehaving host can only fail the gates, never fake a pass. Iteration runs
-are incremental (an unchanged cycle takes ~10 seconds; a full build a few
-minutes) and print named row gains/losses against the pinned accepted set.
-`--terminal` additionally requires 4933/4933 and the retail LEGO1.DLL MD5.
+The runner fully validates the manifest and its pinned compiler/linker,
+runtime, source-overlay, archive, original-image, and reccmp inputs before it
+builds. Iteration runs are incremental (an unchanged cycle takes seconds; a
+full build a few minutes) and print named row gains/losses against the required
+explicit baseline report. Manifest-declared compiler/link and reccmp deadlines
+bound direct producer/reccmp work; the aggregate CMake driver has a separate
+bounded anti-wedge ceiling. All launched jobs use runner-owned POSIX process
+groups so a timed-out wrapper tree is cancelled as one unit.
 
-The current pinned source-true baseline is 4769/4933. The historical 4816
-accepted set additionally contained retained-corpus donor objects whose
-source recipes are not yet in the manifest; that 47-row delta plus the
-remaining open rows form the queue toward 4933/4933.
+The current pinned source-true baseline is 4859/4934. `--terminal` requires all
+4934 LEGO1 rows, all 172 ISLE rows, and all 111 CONFIG rows to be raw-exact,
+then requires each stamped no-/debug image to be literally byte-identical to
+its retail oracle (with both SHA-256 and MD5 pins checked). Diagnostic-build
+addresses are reported but terminal address/layout identity comes from the
+byte-identical no-/debug image.
+
+Reccmp's separate `Implemented` denominator includes known-but-unmatched CRT and
+library entries (three in LEGO1 and five in ISLE). ISLE is already terminal-byte
+identical despite those five diagnostic-PDB misses. They are recorded rather
+than hidden or papered over: the function gate is raw 1.0 for every comparable
+row and Accuracy 100.00%; literal terminal identity proves the remaining runtime
+bytes and is the stronger final condition.

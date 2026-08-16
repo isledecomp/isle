@@ -551,7 +551,7 @@
   {
    "target": "config",
    "source": "LEGO1/mxdirectx/mxdirectxinfo.cpp",
-   "source_sha256": "95cd2160a7b2e15ebb3c3c62c6c7e3fa731468ed0d79e4397f48b64db97db4c9",
+   "source_sha256": "4c2ca989265269c72ee8661164953ce46f9770f2c1d9dff3e7859f550aa9dd66",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -724,7 +724,7 @@
   {
    "target": "roi",
    "source": "LEGO1/lego/sources/roi/legoroi.cpp",
-   "source_sha256": "e9de3c1f550e8bcd43e48ac3c06345405025338495144cab3ee8a658648cb097",
+   "source_sha256": "c958ea968f69bbf9a7bcb6d2bbafeaa2ae35d7dd8d3c8106791c431e9b82d27d",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -806,7 +806,7 @@
   {
    "target": "viewmanager",
    "source": "LEGO1/viewmanager/viewlodlist.cpp",
-   "source_sha256": "cdab47fe40f0dd50ddfa92784a06e9d76ff8afbf7a828feeaa36485bd44b348c",
+   "source_sha256": "81db6c0c32353794a44d84448752bfa41fcab7dec053c86a560ff0b7c1f5b962",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -905,7 +905,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legopathactor.cpp",
-   "source_sha256": "6cc4cac87deb7186c914a26daa142fd43dc7a375aa723af8015807dad336c2ea",
+   "source_sha256": "e75f88b82a234875246651a58f547276a0b9b032cfd2b8708e68ac1be04cc24d",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -1048,7 +1048,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/common/mxatom.cpp",
-   "source_sha256": "80b06530a1ec2e1c01ebbaee4bcfa7a3547efbd505379c3a5e1c3eabc3524ecb",
+   "source_sha256": "c096f297ca6af0074a3ce624d9e85d5dd06b1e28287ec894d4a43d9f47945559",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -1119,7 +1119,7 @@
   {
    "target": "config",
    "source": "CONFIG/config.cpp",
-   "source_sha256": "266d94cf3e3c26e7d0c9f21588fdf0b32bdf9a5f3c27e671aba7dd6f3e87ebba",
+   "source_sha256": "afb09566f3dcb0f1d98223b3ae70d90d6abc60f4e235bddbfef13c27151f7453",
    "mode": "swap_comdat_group_order",
    "command_policy": {
     "required_flags": [
@@ -1146,7 +1146,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/actors/buildings.cpp",
-   "source_sha256": "1c42815f3308426253610910ba10bbef89581f7639511b04b242573ac38b9c98",
+   "source_sha256": "348a78e6c2d3d8ceef20c414c9a8bbbbe52d74b09ad8a7cdeb35cf9e2fc2ef93",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -1204,7 +1204,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legoanimactor.cpp",
-   "source_sha256": "63830cb1ecd869f65a49a971056cc41b89cbf8d5d412a724c56d84b545da3e75",
+   "source_sha256": "8ff112deda997c79879c7ce9e15ff77e3d42b63e1d045ea26f31721c8d0040f5",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -1264,7 +1264,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/worlds/isle.cpp",
-   "source_sha256": "1aec33c74ea73688783f63020e802f377c7c07dc12edf1d53b21cedcd2f7fae1",
+   "source_sha256": "fcfe9ce78755b64c7b3d2298951d463e023aaa24846c47068793b95342b95223",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -1324,7 +1324,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/actors/ambulance.cpp",
-   "source_sha256": "1fcd5aedd6030ed5a0d0609d659239049cff14833a7fed821f12c05caac8398b",
+   "source_sha256": "9b71f0f526f9505b295838a8322fd64f4ab835369a1b3c7d7876a5c777e38de0",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -1416,7 +1416,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legogamestate.cpp",
-   "source_sha256": "5dbcf3f6da0421778e0814637636c6a17368ea89e55bc0544e39c736509a7379",
+   "source_sha256": "9a24da979d82c63fe7fecb547abcf97d691a6903dc5ab806d8af9335bf4af983",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -1488,7 +1488,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/main/legomain.cpp",
-   "source_sha256": "7eef0d07b176b1eb3757800b01105e9b753185e06315a95626b6ce373c41ea59",
+   "source_sha256": "6aa2be8d518f02e58f0daa1f9382276ef335e180e5ac218d0593e1c4cf54ae74",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -1569,7 +1569,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/entity/legoworld.cpp",
-   "source_sha256": "a915648c94d189904a3d3d24fb7ce98fca76f339b4ee99f2d314f876375d270a",
+   "source_sha256": "31cba4785a3a9775cc169ad98cedd2b848065784de194da786518a359816d3f3",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -1703,7 +1703,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-   "source_sha256": "e5d9e961d7cf62f7e05f33637d558d13f52bdbc0773be0bd9db6443b66c46730",
+   "source_sha256": "c25a4583c9dce438461498a39316b6f98b3260e59a22781ddfa061407b8a4af4",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -1902,7 +1902,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
-   "source_sha256": "35488e2d5e531223235582721a54cde31b4d5775268bf76a1054f2be1df10c50",
+   "source_sha256": "28d0a0987183d1a6f15e89693819e2bb168a0b7bf54e6072c9b3065abf93a040",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -2110,7 +2110,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/video/mxdisplaysurface.cpp",
-   "source_sha256": "01951cdf289a4110ac626c149f7cb6dbd579496c4c0cbba560f6a5d5bab894c2",
+   "source_sha256": "b77d628e984c4939f011d4e0d56c5581694268dc6ea4c14a6bad53b0ed942f22",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -2470,7 +2470,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/video/mxregion.cpp",
-   "source_sha256": "7a83c3f04a2cfbe9f6994d226587dcfaae3f21c4b95b8fa658602a024a6d9d93",
+   "source_sha256": "5ffed36a4b6c4d4300ae60913ee60b5b6dfb463def109de661d9af2f9401cddb",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -2595,7 +2595,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/race/legoracespecial.cpp",
-   "source_sha256": "7308d4147160bb6a5260954b30568342155bf95c0555ed5b5148de7440f8f114",
+   "source_sha256": "70e033ae64c91e6e0352c2da0d89bb8027918bcaf6580ff482ffec1d6f54b4ac",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -2699,7 +2699,7 @@
   {
    "target": "tglrl",
    "source": "LEGO1/tgl/d3drm/tglrl40.cpp",
-   "source_sha256": "f444f40e78684219169f75974b7c1b6a281a56f7a4c5597c9cab6a5def09d28d",
+   "source_sha256": "4ef467e63b50761956fb6fda426a1b0088fa40c43ae9c468d543c0b3b2cb5c71",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -2884,7 +2884,7 @@
   {
    "target": "mxdirectx",
    "source": "LEGO1/mxdirectx/mxdirectxinfo.cpp",
-   "source_sha256": "95cd2160a7b2e15ebb3c3c62c6c7e3fa731468ed0d79e4397f48b64db97db4c9",
+   "source_sha256": "4c2ca989265269c72ee8661164953ce46f9770f2c1d9dff3e7859f550aa9dd66",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -3016,7 +3016,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
-   "source_sha256": "e1b7d01cfcb0c1fa0d795d141b4b239825508af91cb588f0b6a7b19cd81c089c",
+   "source_sha256": "ddc652931d993512e0ad9d40c68f884c9960717e648c2e162040e829302c9671",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4071,7 +4071,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legocharactermanager.cpp",
-   "source_sha256": "0acb7af321c2bbcec086a2d3394bcf2d0f79989030fa29acfd16c2302f62ccf6",
+   "source_sha256": "3ef8f161d9b10ab7f8d26a5d283c36875d169610de8526ddf80081bc17e4012b",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4214,7 +4214,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/mxcontrolpresenter.cpp",
-   "source_sha256": "dbc96ced606d72e6da6a87b6d5044debdc03275adb2e8098de216513e82b6d54",
+   "source_sha256": "fbf2779038e3c9f34f69cf250409657f6eab665cff63fbdb061f6dd7a122bf1c",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4270,7 +4270,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/action/mxdsselectaction.cpp",
-   "source_sha256": "f26a12b8b332a89dbf989b2f9f061e62633878d18717998dcb9c8c5424434e4b",
+   "source_sha256": "851f0c089d1940c6e1a93039af0aadd4cd6486778d06474612ffb0982808d742",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4357,7 +4357,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/notify/mxnotificationmanager.cpp",
-   "source_sha256": "4a58b5014a99bdb1a217970a6a6af480534462ffbe00d543a07a2ce060cf512a",
+   "source_sha256": "b27af50c7ede09aa40f85e2de95890e6478d32b9633ffcaeb3a7cb6b65dd88ad",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4473,7 +4473,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/stream/mxstreamcontroller.cpp",
-   "source_sha256": "a17e68713d732c041d35de5b2b59da717017f5d414823202538769f6f5ffa6a8",
+   "source_sha256": "800da41b7a43d3a9eed91ffa63f8ad0f5558d8e5706c0c7dbe1a76fb0c21bff8",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4544,7 +4544,7 @@
   {
    "target": "viewmanager",
    "source": "LEGO1/viewmanager/viewmanager.cpp",
-   "source_sha256": "61d70c384293c2b302f9708c62681201c9133b47a86d685750da66cbad3ec2d5",
+   "source_sha256": "fc31fc1941e365f33716912a128a3e14cd5ff618de52ad3f16018ba11aedd773",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4616,7 +4616,7 @@
   {
    "target": "realtime",
    "source": "LEGO1/realtime/orientableroi.cpp",
-   "source_sha256": "089c646ca25359ad456b75207d5fdd13cce58338411d5a8346ac0882e270f3eb",
+   "source_sha256": "82bb7442d040bfc482c3b47a156eb85f90d6499314eb1c6ae8e37f643afcd7d5",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4693,7 +4693,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/worlds/gasstation.cpp",
-   "source_sha256": "8f80b7aa8af39f08137dd3aff522fb53423e30caf4f97edd225eb167aa73e705",
+   "source_sha256": "37991fcc613d0863191cf1a1a60aba18c885c482c8b854d9bdb270b5276e8f55",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4785,7 +4785,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/actors/act3actors.cpp",
-   "source_sha256": "d36f594e2e7a9cf59d31f0607e14989bc6a2b3f9cd3333257c8f790710ca5f96",
+   "source_sha256": "124e76b7db51db23ec9a896554d19644fef83db4e1ace912be8b76212c83df6d",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4931,7 +4931,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp",
-   "source_sha256": "c672620e487fc35c7e305b94e13d3594ffc8b5f1909fb54064a31c30f74c7259",
+   "source_sha256": "19f495a42cad4c1b0fe3d6ff2001c18eef6c45d1273d2e44a5aec6f2e58f3c75",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -5303,7 +5303,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legopathboundary.cpp",
-   "source_sha256": "c2caa8a5a37b680b50400350c1b328f7d1c3eeb8afb1ab84a327ec26ac332487",
+   "source_sha256": "08fbe68c492e4b9f0ad804cfa0fa8b87a9612df07fed748ad3c77e94e7d00c95",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -5666,7 +5666,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legoextraactor.cpp",
-   "source_sha256": "49e409f406a7d8a1d1c78fdccdb033f68ef16583a3c3097a8f761adefbe610ff",
+   "source_sha256": "1cb7f952695d6cbe032c38da7c42be5b9eed60a810e18c40216202793c544baa",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -6040,7 +6040,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/entity/legoentity.cpp",
-   "source_sha256": "02ae488fe12f3a08a8cac1ea66f3ae53fb8c7c32a026422dfda9fd0996cefdaa",
+   "source_sha256": "2dfa12b5bb946f1a972cfae8782df70a53045b296ae53f80570d6b13517add00",
    "mode": "swap_comdat_group_order",
    "command_policy": {
     "required_flags": [
@@ -6067,7 +6067,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/modeldb/modeldb.cpp",
-   "source_sha256": "e3d4630c2f5badd11098d91b8fe73be038c0b84919ff0764c805f99dcee89ea5",
+   "source_sha256": "fb4b09a3528b2427d2c09710813b1571bb2979d5573576bb6e0325a044b972f9",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -6213,7 +6213,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/video/mxvideomanager.cpp",
-   "source_sha256": "57a2633f9144196dcc4df572c6ab5cc1a880cfa7dfa8740808284107189d5db6",
+   "source_sha256": "fe354e00c514511debd097bccc8b114b64f7f248efff2e9eac8659e5e6dba26e",
    "mode": "swap_comdat_group_order",
    "command_policy": {
     "required_flags": [
@@ -6240,7 +6240,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/stream/mxdiskstreamcontroller.cpp",
-   "source_sha256": "e66bd0f66c7006d8396e1ec816fe239472b8fe1554bb18ac9f084f6f65313172",
+   "source_sha256": "6218a76292933173916df79738adc9f6aa7284afde238e355310e5a7b23947ac",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -6350,7 +6350,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/build/legocarbuildpresenter.cpp",
-   "source_sha256": "1f7fd25c16c2f4f5b02aefed61aeeadf74583557655d9f69ea8ee459a93f8c8c",
+   "source_sha256": "0fcc1eb0e85e8cff3ad1c63d1661811fbda3710b10958a5f9c34a85d18f45646",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -6421,7 +6421,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/actors/pizza.cpp",
-   "source_sha256": "dfc7d4e3a08febbdefd8c416b2349cb6c6a1173a12a6032b28e0cb833b64eb8a",
+   "source_sha256": "d0b1d4b64411d98d04faaab216be523f46e58e4949c2e934e48d763e8c4731de",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -6617,7 +6617,7 @@
     "accepted_row_identity_sha256": "4a298224aa4de71a8bc29e80704ad094292b1d7e7181308c17d8080ab33c9016",
     "require_zero_losses": true,
     "reference_target": {
-     "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
+     "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
      "historical_accepted_count": 4816,
      "historical_accepted_row_identity_sha256": "277692551cb25a4dd1729bb3a6bfdd3cef938a049c9b2cca25cc322768bd3aec"
     }
