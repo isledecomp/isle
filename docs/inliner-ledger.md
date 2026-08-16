@@ -672,7 +672,242 @@ in this landing changes that bound — but it does show that a
 "same-mechanism" classification is not a reason to stop looking for a text
 answer, which is worth weighing against §8's recommendation.
 
-## 10. Reproducing this lane
+# 11. Wave 3 — the allocation lens applied, and the instrument that was missing
+
+Base `e880d515`, verified before any change:
+`ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE: LEGO1 4851/4934,
+ISLE 172/172, CONFIG 111/111`.
+
+## 11.1 `adiff.py` — the metric these rows were never scored with
+
+Every prior wave on `FUN_10061010` scored source variants by **body length**
+and **`sub esp`**. The ledgers say repeatedly that length is not the metric,
+and §7.2 showed `sub esp` was pinned across 19 forms — so both signals were
+flat and every variant read as "no change". They were not no-change.
+
+`adiff.py` aligns our COMDAT against the retail row with `difflib` (so it
+works across a length mismatch) and reports three levels:
+
+| level | erases | answers |
+|---|---|---|
+| SHAPE | registers, frame displacements, relocated/absolute operands | is our source producing retail's *program*? |
+| STRUCT | registers only | …and retail's frame layout? |
+| EXACT | nothing but relocation/branch operands | …and retail's colouring? |
+
+Masking has to be symmetric or the alignment is noise: a relocated operand
+is a zero placeholder in our COFF and a resolved address in retail. Three
+normalisation bugs were found and fixed while building it (bare-zero
+relocations unmasked; `[ecx+0x4c]` mistaken for a frame slot; `0xfffffffd`
+mistaken for an image address; absolute memory operands unmasked). **No
+number in this section predates those fixes.**
+
+## 11.2 `FUN_10061010` — two improvements that anti-compose, and the frame moves
+
+Scored against retail (731 B, 211 insn). Base: SHAPE 92.12, STRUCT 67.30,
+EXACT 62.53.
+
+| variant | SHAPE | STRUCT | EXACT | `sub esp` |
+|---|---|---|---|---|
+| base | 92.12 | 67.30 | 62.53 | 0x2c |
+| `h01_flagsvalue` — `MxU32 flags = tranInfo->m_flags;` hoisted above the branch | **94.74** | 72.73 | 62.20 | 0x2c |
+| `h03_testonce` — `MxBool raise = … & c_bit2;` hoisted | 93.56 | 71.60 | 64.92 | 0x2c |
+| `v04_flagfirst` — `animRunning = TRUE;` first in the else arm | 91.65 | **73.03** | **67.78** | **0x30** |
+| `h01` + `v04` | 94.26 | 69.38 | 60.29 | 0x30 |
+| `h03` + `v04` | 93.08 | 68.26 | 62.53 | 0x30 |
+
+Three results, none of which the length/`sub esp` metric could see:
+
+1. **The upstream hoist is a real improvement** — `h01` moves SHAPE by 2.6
+   points, i.e. it makes us emit more of retail's actual operations. Lane
+   STL §18.3 tested this exact form and recorded "neither moves the frame
+   by a single byte", which was true and beside the point.
+2. **`sub esp` is NOT pinned at 0x2c.** `v04_flagfirst` — moving
+   `animRunning = TRUE;` to the top of the else arm — takes the frame to
+   **0x30**. Retail is 0x38. This is the first movement of that frame in
+   the campaign; §7.2's "0x2c across 19 forms" is superseded.
+3. **The two improvements anti-compose.** `h01`+`v04` is EXACT 60.29,
+   *worse than either alone and worse than base*. They are not independent
+   corrections that can be stacked, which contradicts the campaign's
+   "text corrections compound" doctrine for this row.
+
+The remaining SHAPE gap for `h01` is entirely the held addresses: retail
+spills `&m_unk0x14`, keeps `m_flags`' value in `ebx`, and reloads the
+spill twice. Retail also computes `mov eax,ebx; and al,2` and **never uses
+the result** — dead code at /O2, which is the signature of a named boolean
+whose uses were folded into flag re-tests, i.e. `h03`'s form.
+
+**Nothing landed on this row.** `v04` buys EXACT at the cost of SHAPE —
+that is fitting to the metric, not source truth — and the row needs ~38
+more points of EXACT to close. Recorded as characterisation.
+
+## 11.3 `ViewManager::ManageVisibilityAndDetailRecursively` (0x100a66f0, .8848)
+
+`docs/residue-runs.md` records this as one `cmpdir` byte at +517 surviving
+~7,800 carrier states. adiff on the seed says the seed's own divergence
+starts at **+309**, inside the inlined `CalculateLODLevel`:
+
+```
+ours    cmp [g_maxLODLevels], esi ; jle …  fld [esp+0x10]; fld [esp+0x18]
+        fld st(1); fcomp st(1); fnstsw ax; test ah,1;    je
+retail  cmp esi, [g_maxLODLevels] ; jge …  fld [esp+0x18]; jmp INTO the loop
+        fstp [esp+0x10]; fcom [esp+0x10];  test ah,0x41; jne
+```
+
+Reading the allocation: retail keeps `p_maximumScale` in `st0` across the
+loop and `i` in memory, and enters the loop with a `jmp` past the first
+store — the shape of a loop whose exit test is the **loop condition**, not
+a `break` inside the body. Ours loads both operands every iteration, the
+shape of a `break`.
+
+**Result — the break folded into the loop condition reaches retail's exact
+length and jumps 4 points:**
+
+| variant | len | SHAPE | STRUCT | EXACT |
+|---|---|---|---|---|
+| base (`if (i >= p_maximumScale) break;`) | 557 | 94.27 | 94.27 | 92.71 |
+| `a1_swapcmp` `p_maximumScale <= i` | 557 | 94.27 | 94.27 | 92.71 |
+| `a2_ioutside`, `a3`, `a5_mulswap`, `a6_muleq`, `a7_intswap` | 557 | 94.27 | 94.27 | 92.71 |
+| **`a4_whilecond`** — `lodLevel < g_maxLODLevels && p_maximumScale > i` | **561** | **97.92** | **97.92** | **96.35** |
+
+Every comparison-*spelling* variant is bit-identical to base, which
+independently re-confirms the standing canonicalisation law. Only the
+structural change moves anything.
+
+At retail's length the masked residue is **nd=7** at
+`[204, 239, 309, 319, 353, 359, 396]` — three iterator-loop compares
+(`cmp it, end` where retail has `cmp end, it`) and two LOD-loop
+compare+branch pairs. Crossing `a4` with the end-first and int-swapped
+spellings (8 combinations) is **completely inert**: all eight are
+97.92/97.92/96.35. So the residue is allocator, not source.
+
+### 11.3a …and it lands on exactly the same floor — NOT LANDED
+
+A full carrier sweep over the `a4` text (659 states: shape, padgrid,
+extern, fwdL/fwdP/fwdE, inc; 0 failed) floors at
+
+```
+best: nd=1 @ pad-1-4, offsets [517]
+```
+
+**The same nd and the same byte** as the base text's ~7,800-state search.
+Two structurally different source forms, ~8,500 carrier states between
+them, one shared floor on one byte. That is a considerably stronger bound
+than the row had before, and it is the *right* kind of evidence for the
+"one shared allocator decision" reading: it is now text-invariant as well
+as carrier-invariant.
+
+**Not landed, for a reason worth recording.** `a4` also changes
+`ViewManager::UpdateViewTransformations` (442 B, body sha
+`b583423bfc` → `942a0daedc`), and that row is at **1.0**. So the trade is
+"risk an exact row, gain nothing" — the floor does not move. This is the
+collateral test from §9.4c applied to body *content* rather than symbol
+presence, and it is the second time this wave that a variant which looked
+like an improvement failed it.
+
+## 11.4 `MxDSBuffer::FUN_100c6fa0` (0x100c6fa0, .9882) — read, tested, negative
+
+adiff: **84 of 85 instructions align**. The entire residue is one load
+moved by one slot:
+
+```
+ours    cmp [esp+0xc], edx   mov eax, [esp+0xc]
+retail  mov eax, [esp+0xc]   cmp [esp+0xc], edx
+```
+
+`current` is `MxU8* volatile`, so those two reads cannot be reordered by
+the optimiser — their order **is** the source order. Retail evaluates the
+address expression for the size read before the comparison; we evaluate the
+comparison first. `docs/residue-runs.md` had tested `p_data == current` and
+inverting the `if` (both inert — consistent, since neither moves a read)
+and hoisting to *function* scope (worse, +4 bytes for a slot). The
+untested move was hoisting into the case's own **block**, which costs no
+slot:
+
+| variant | len | SHAPE/STRUCT/EXACT | note |
+|---|---|---|---|
+| base | 234 | 98.82 | — |
+| `c4_blockonly` | 234 | 98.82 | the block itself is free — byte-identical to base |
+| `c5_hdrptr` `MxU32* header = (MxU32*) current` | 238 | **99.42** | best shape, +4 bytes |
+| `c2_sizevalue` value hoisted into the block | 238 | 98.25 | fixes +161, breaks later |
+| `c3_chunk` | 236 | 98.25 | |
+| `c1_sizeptr` | 240 | 97.67 | |
+
+So the read order **is** reachable from the source, and every form that
+reaches it costs at least 4 bytes — a slot for the hoisted name. Same law
+as §9.4b's refutation and `docs/residue-runs.md`'s: naming a value creates
+a slot, not a lifetime. Nothing landed.
+
+## 11.5 `MxDisplaySurface::Create` (0x100ba7f0, .9953) — one instruction
+
+adiff: **211 of 212 aligned (99.53%)**. A single `inc eax` sits one slot
+later in ours:
+
+```
+ours    mov eax,[esi+0x10]; sub eax,[esi+8]; mov [esp+0x84],0x6040; inc eax
+retail  mov eax,[esi+0x10]; sub eax,[esi+8]; inc eax; mov [esp+0x84],0x6040
+```
+
+The independent `ddsCaps.dwCaps = 0x6040` store is scheduled into the slot
+after `sub` in ours and after `inc` in retail. `docs/residue-runs.md`
+already tested all four statement orderings of that block (nd 15/18/22/23
+against baseline 9). Confirmed as one scheduler placement, not a
+statement-order question; no new lever found.
+
+## 11.6 `MxDisplaySurface::VTable0x30` (0x100bb1d0, .8611)
+
+adiff separates this row's two problems, which the byte metric had merged:
+**SHAPE 96.43 but EXACT 73.81** — a small shape gap sitting on top of a
+large colour gap (the taxonomy's 27 regrole sites).
+
+The shape gap appears twice and looked source-addressable:
+
+```
+ours    mov r,[esp+0x98]; imul r,[esp+0x28]; …; add r,[esp+0x3c]
+retail  mov r,[esp+0x28]; imul r,[esp+0x98];    add r,[esp+0x3c]
+```
+
+— the two factors of `p_bottom * ddsd.lPitch` loaded in the opposite
+order. Six variants (swap either site, swap both, reorder the addends,
+both) at lines 547/573 — the only two occurrences inside this function —
+are **all bit-identical to base**: 811 B, 96.43/96.43/73.81.
+
+**So integer `imul` operand order canonicalises, exactly as comparison
+direction does.** That corrects my own hypothesis for this row and is the
+generalisation in §11.7.
+
+## 11.7 What the lens can and cannot name — refined by this wave
+
+Wave 2 established "read retail's allocation to name the idiom". This
+wave bounds it. Across four rows and ~40 source forms:
+
+**Canonicalised — operand order of a reversible operation is NOT source
+addressable.** Every one of these was bit-inert:
+
+* integer comparison direction (`lodLevel < max` vs `max > lodLevel`);
+* FP comparison direction (`i >= pmax` vs `pmax <= i`);
+* iterator comparison direction (`it != end` vs `end != it`) — re-confirmed
+  on a second, structurally different text;
+* integer multiplication operand order (`a * b` vs `b * a`);
+* addend order in an address expression.
+
+**Addressable — the shape of the program is.** These moved things:
+
+* folding a `break` into the loop condition (`a4`: +4 bytes to retail's
+  exact length, EXACT 92.71 → 96.35);
+* replacing a wrapper call with the operations it performs (wave 2's
+  `PopFront` → raw list loop, which closed a row);
+* hoisting an expression across a branch (`h01`: SHAPE 92.12 → 94.74);
+* moving a statement between arms (`v04`: the first movement of
+  `FUN_10061010`'s frame in the campaign, 0x2c → 0x30).
+
+The rule that follows: **when the allocation names a difference in operand
+order, it is telling you about the scheduler, not the source. When it
+names a difference in which operations exist, or where a value lives
+across a branch, it is telling you about the source.** The wave-2 win was
+the second kind; three of this wave's four rows are the first kind, which
+is why they did not move.
+
+
 
 Everything is in the session scratchpad `.../3233884b-.../scratchpad/inl/`.
 Nothing in the shared corpus was mutated. Exactly one checked-source change
@@ -689,6 +924,11 @@ compose pin); every other variant in this ledger was compiled out of tree.
 | `rdis.py` | disassemble a retail row, naming call targets from the report |
 | `odis.py` | disassemble one COMDAT of a probe object, naming relocations |
 | `scprobe.py` / `v_sc.py` / `v_sc2.py` | the `~MxStreamController` loop-signature probe and its variants (`v_sc2` holds the landed form) |
+| `adiff.py` | **the wave-3 instrument** — SHAPE/STRUCT/EXACT aligned instruction diff of a COMDAT against a retail row, across a length mismatch |
+| `scoreall.py` | score every compiled variant of a function with adiff |
+| `vgen.py` | generic source-variant runner (TU + symbol + retail VA) scored by adiff |
+| `ndsweep.py` | generic carrier sweep scored by masked nd taken **straight from `legobin`**, so it cannot inherit an oracle-length defect |
+| `v_vm.py` / `v_vm2.py` / `v_buf.py` / `v_mds.py` | the wave-3 row batches |
 | `beta2.py` | BETA10 read-off with export naming + frame-slot census |
 | `fsaudit.py` | build-wide function-set audit (COMDATs absent from retail) |
 | `fsimage.py` | promotes an object-level audit miss to the image level (drops linker-discarded COMDATs) |
