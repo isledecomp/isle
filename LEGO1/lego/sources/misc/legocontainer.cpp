@@ -22,10 +22,12 @@ LegoTextureInfo* LegoTextureContainer::GetCached(LegoTextureInfo* p_textureInfo)
 	memset(&desc, 0, sizeof(desc));
 	desc.dwSize = sizeof(desc);
 
-	if (p_textureInfo->m_surface->Lock(NULL, &desc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
+	LPDIRECTDRAWSURFACE surface = p_textureInfo->m_surface;
+
+	if (surface->Lock(NULL, &desc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
 		width = desc.dwWidth;
 		height = desc.dwHeight;
-		p_textureInfo->m_surface->Unlock(desc.lpSurface);
+		surface->Unlock(desc.lpSurface);
 	}
 
 	for (LegoCachedTextureList::iterator it = m_cached.begin(); it != m_cached.end(); it++) {
