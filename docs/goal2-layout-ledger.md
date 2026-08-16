@@ -425,3 +425,225 @@ fully specified — the required bodies are exactly retail's at
 `0x10048f10`/`0x10049290`/`0x100492f0`/`0x10049370`/`0x10049890`/`0x10049d10`,
 and the compile that must produce them is `legopathcontroller.cpp`'s own. When
 they close, experiment 2 becomes a clean +28 KB with zero row loss.
+
+---
+
+# Wave 8 — closing the six borrowed rows
+
+Base `e1288e1a`. The coordinator's decision was: the gate stays, the six close
+first. The mechanical point that makes it ordinary work: **the COMDATs already
+exist in `legopathcontroller.cpp.obj`; the linker just discards them in favour
+of the suppliers' copies.** So they can be scored and fixed without touching
+the link order, and the gate will neither reward nor punish it.
+
+## 9. The real accounting was −6, not smaller
+
+`layout/six.py` scores the object's own copies against retail's bodies at the
+six addresses. None was exact:
+
+| address | function | ours/retail | residue |
+|---|---|---|---|
+| `0x10048f10` | `list<LegoBoundaryEdge>::insert` | 84/84 | nd=6 |
+| `0x10049290` | `_Tree<LegoPathCtrlEdge*>::find` | 92/92 | nd=23 |
+| `0x100492f0` | `_Tree<LegoPathCtrlEdge*>::_Copy` | 126/126 | nd=29 |
+| `0x10049370` | `_Tree<LegoPathCtrlEdge*>::_Ubound` | 45/45 | nd=2 |
+| `0x10049890` | `_Tree<LegoBEWithMidpoint*>::erase` | 1102/**1110** | length −8 |
+| `0x10049d10` | `_Tree<LegoBEWithMidpoint*>::_Erase` | 57/57 | nd=16 |
+
+So the score of 4853 is inflated by exactly six, as the coordinator recorded.
+
+## 10. Five closed. The accounting is now **−1**
+
+`layout/mkoracle6.py` adds a `fin-lpc6` stem to this lane's `oracles-v2.json`
+(the shared bench corpus is never mutated; `sw.py` was repointed at the lane's
+own copy), which lets the ordinary carrier sweep and the ordinary lander work
+on these COMDATs like any other row.
+
+A `m,k = 0..40` extern sweep of `legopathcontroller.cpp` produced exact donors
+for five of the six, and `layout/cover6.py` reduces them to **two** states:
+
+| donor state | functions it makes exact |
+|---|---|
+| `extern-18-34` | `find`, `_Copy`, `_Erase` |
+| `extern-15-20` | `insert`, `erase` (1110 B, `same_slot_resize`) |
+
+Landed onto the TU's existing unit (7 functions → **12**, 5 donors → 7).
+
+```
+[isle_build] composed 12 function(s) into lego1:…/legopathcontroller.cpp
+[isle_build] ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE:
+             LEGO1 4853/4934, ISLE 172/172, CONFIG 111/111
+```
+
+**Zero row change, exactly as predicted** — the composed COMDATs are discarded
+in the current link order, so the image is unchanged. The proof is out-of-band:
+
+```
+layout/six.py  ->  5 of 6 EXACT  ->  the real accounting is -1
+```
+
+This is a landing whose value the row score cannot see, and it is the whole
+point of the wave: it converts experiment 2 from **−28 KB / −6 rows** into
+**−28 KB / −1 row**.
+
+## 11. The one that is left is a `cmpdir`, and it is the session's most familiar shape
+
+`0x10049370 _Tree<LegoPathCtrlEdge*>::_Ubound`, 45 bytes, nd=2 at offsets
+[6, 34] across **1,167 extern states**:
+
+```
+ours    +6/+34   39 15 …   cmp dword ptr [_Nil], edx
+retail  +6/+34   3b 15 …   cmp edx, dword ptr [_Nil]
+```
+
+Two sites, both the `cmp reg,[_Nil]` ⟷ `cmp [_Nil],reg` inversion in the
+inlined `_Tree` walk — the same defect as `LegoPartPresenter::Read` (§28 of the
+finish-line ledger), `_Tree<LegoAnimPresenter*>::_Erase`, and the other five
+`cmpdir` rows in the census. Not source-addressable (canonicalisation law; five
+negative text cells on `Read`).
+
+Worth noting the direction: here **retail** emits `3b` and we emit `39`; on
+`Read`'s `_Nil` sites it was the other way round. The same template's compare
+direction differs on both sides between two TUs, which is what an allocator tie
+looks like rather than a property of the template.
+
+The `declaration_shape` and `pad_shape` grids on this TU are queued and
+unfinished (`layout/queue9.sh`, idempotent, resumable). §20/§21 of the
+finish-line ledger established that a second generator sometimes reaches where
+the first cannot — that is the remaining shot for this row, and it is the last
+byte-pair between experiment 2 and a clean layout landing.
+
+## 12. Closed by the second generator. The accounting is **−0**
+
+The `cmpdir` reading in §11 was correct about the shape and wrong about the
+consequence. `cmpdir` is not source-addressable, but it *is* carrier-reachable:
+the `declaration_shape` grid reaches `_Ubound` at **`shape-2-4`, nd=0**, where
+all 1,681 states of the extern rectangle sat at nd=2 with the residue frozen at
+offsets [6, 34] and the length frozen at 45.
+
+That is §20/§21 of the finish-line ledger paying out for the sixth time, and it
+is now the strongest instance of it in the session: an entire generator family,
+swept exhaustively, showed a completely invariant residue — the exact signature
+this lane has repeatedly (and correctly) read as "the channel is closed" — and a
+different generator closed it on the 124th state.
+
+The refinement to carry forward: **residue invariance across an exhausted family
+is evidence about that family, not about the row.** The extern rectangle never
+perturbed the allocator tie that picks the compare direction; the shape family
+does. `cmpdir` sites should be re-read as *allocator-tie* residue rather than
+*canonicalisation* residue whenever a second generator is still unswept.
+
+Landed state (13 fns / 8 donors on `paths/legopathcontroller.cpp`):
+
+| donor | functions |
+|---|---|
+| `extern-18-34` | `_Tree<LegoPathCtrlEdge*>::find`, `::_Copy`, `_Tree<LegoBEWithMidpoint*>::_Erase` |
+| `extern-15-20` | `list<LegoBoundaryEdge>::insert`, `_Tree<LegoBEWithMidpoint*>::erase` |
+| `shape-2-4` | `_Tree<LegoPathCtrlEdge*>::_Ubound` |
+
+Gate: `LEGO1 4853/4934, ISLE 172/172, CONFIG 111/111`, zero row change — as
+predicted, since these COMDATs are still discarded in the current link order.
+`layout/six.py`, which scores the object's own copies against retail directly,
+reads **6 of 6 EXACT**.
+
+**Experiment 2 is therefore unblocked at zero row cost**: −28,146 distance and
++158 address-aligned rows, with the gate left exactly as it is.
+
+## 13. Experiment 2 re-measured after the six closed — and it does **not** pay
+
+Landed the window and measured it properly against today's tree. The row cost is
+exactly what §12 predicted, and the benefit is not:
+
+| | rows | aligned | distance |
+|---|---|---|---|
+| baseline | 4853 | 1516 | 661,705 |
+| exp2 **today** | 4853 | **1516** | 660,971 |
+| exp2 as recorded in §8 (pre-landing) | 4847 | 1674 | 633,559 |
+
+**The +158 aligned rows and −28 KB in §8 do not reproduce.** Today the reorder
+changes 92 rows' displacement, and **not one of them lands on zero** — no row is
+newly aligned and none is de-aligned. The images genuinely differ (21,979 bytes),
+the link order genuinely changed (`ordinals.py`: model reproduces image = True),
+and out-of-order lego1-own objects drop 4 → 2, carried span 37.9 KB → 19.5 KB.
+So the reorder does what it was supposed to do structurally; it just does not
+buy alignment.
+
+The §8 number was measured with the six rows **broken**, and its gain was a
+property of that state, not of the ordering. Recording it as "+158 aligned rows"
+was wrong: it was +158 aligned rows *and* six wrong-sized bodies, and the two
+were not separable. This is the layout analogue of the nd trap, and it caught
+this lane.
+
+Landed regardless: retail's order is the correct order, it costs zero rows, and
+it is a precondition for alignment rather than a payer of it.
+
+### The right ruler for goal 2 is the plateau histogram, not the distance
+
+`layout/delta.py` groups every matched row by displacement (our VA − retail VA).
+Alignment is cumulative, so the question is never "how many rows are aligned"
+but "how many plateaus are there, and what single upstream size correction
+collapses each":
+
+| delta | rows | dominant owners |
+|---|---|---|
+| **0** | 1516 | (aligned) |
+| **−16** | 617 | legoanimpresenter, legoanimationmanager, legocharactermanager, act3 |
+| **+16** | 452 | legoutils, legoanimmmpresenter, legoact2, act3actors |
+| −192 | 319 | `omni:` mxsmkpresenter, mxnotificationmanager, mxwavepresenter |
+| −144 | 241 | `omni:` mxregion, mxstreamcontroller, mxdiskstreamcontroller |
+| −176 | 153 | `omni:` mxdsmultiaction, mxdsmediaaction, mxdssound, mxio |
+
+**1,069 rows — 22% of the image — sit at ±16 bytes.** That is one 16-byte size
+defect on each side, not a thousand problems, and it dwarfs anything the paths
+window could ever have returned. The −192/−144/−176 plateaus are all inside
+`omni:`, i.e. one library's internal accumulation, and they are adjacent
+(−144/−176/−192 differ by 32 and 16), which reads as the same few defects seen
+from different points in the accumulation.
+
+Next pass should bisect the ±16 plateaus by address: find the last aligned row
+before each plateau starts and read the size difference of the slot between it
+and the first displaced row. That is a bounded, purely measured search, and it
+is where goal 2 actually lives.
+
+## 14. Goal 2 is a queue of **364 boundaries**, and its biggest item is one object
+
+`layout/queue.py` (landed as `tools/layout_boundaries.py`) sorts every matched
+row by retail VA and reports each point where the displacement changes. Each
+boundary is one concrete statement: *between these two rows, our cumulative size
+differs from retail's by N bytes*.
+
+There are **364** of them over 4,934 rows:
+
+| class | count |
+|---|---|
+| b/c cross-object step | 212 |
+| **a intra-object COMDAT transposition** | **148** |
+| d open row at the boundary | 4 |
+
+Ranked by rows carried before the displacement next changes:
+
+| rows | step | class | where |
+|---|---|---|---|
+| **741** | **+32** | **a** | `helicopter.cpp.obj`: `Mx3DPointFloat::operator=(Vector3 const&)` → `Helicopter::HandleEndAnim` |
+| 253 | −16 | a | `legoanimpresenter.cpp.obj`: `_Tree<char const*,…>` → `LegoHideAnimPresenter::EndAction` |
+| 241 | +37104 | b/c | `omni:mxutilities.cpp.obj` → `omni:mxdsobject.cpp.obj` |
+| 235 | +192 | a | `legopathcontroller.cpp.obj`: `_Tree<LegoPathCtrlEdge*>` → `list<LegoBEWithMidpoint>` |
+| 212 | +320 | a | `legopathactor.cpp.obj`: `List<LegoPathBoundary*>::~List` → `LegoPathActor::ParseAction` |
+| 173 | +32 | a | `legoworld.cpp.obj`: `MxList<MxPresenter*>::InsertEntry` → `MxList<LegoEntity*>::InsertEntry` |
+
+**One 32-byte intra-object transposition in `helicopter.cpp.obj` is inherited by
+741 rows** — 15% of the image, from a single class-(a) defect, in the class the
+manifest already has a unit type for (`swap_comdat_group_order`). Five of the
+top six are class (a), i.e. COMDAT emission order inside one object, which is
+source-order-determined and therefore in the channel this project already knows
+how to work.
+
+The first boundary in the image reads the same way and shows the shape exactly
+(`layout/gap.py 0x10002ff0 0x10003070`): retail's gap is 128 bytes, ours is 144,
+and the extra 16 is `Mx4DPointFloat::operator=(Vector4 const&)`, which we emit
+*before* `Helicopter::ClassName` and retail emits 400 bytes *after* it. Both
+copies are byte-identical (`matching` 1.0) — only the position differs.
+
+That is the correction this pass owes the project: goal 2 was being worked as a
+link-input-order problem (class b), and the measurement says its mass is
+**intra-object COMDAT order** (class a), concentrated in a handful of objects.
