@@ -931,3 +931,55 @@ Conversely the triage corrects **me**: `0x10048310 FindPath` is
 nd=491" verdict — and the older "nd 1741, permanently out of carrier queues"
 seal — are both wrong. It is a colour row with a large colouring delta and it
 deserves a stacked pass.
+
+
+## 24. Wave-4b/4c session summary
+
+**Rows gained this phase: 3** (total for Lane NM across wave 4: **4**), each
+proved by a gated `isle_build.py` run from this worktree with zero LOST rows.
+
+| row | before | after | how | commit |
+|---|---|---|---|---|
+| `0x10045c20 LegoPathController::PlaceActor(…, const char*, …)` | .9442 | **1.0** | stacked carrier `stkE-6-1-3` (`forward_run_with_shape`) | `81784c3a` |
+| `0x1002aba0 LegoExtraActor::HitActor` | .9791 | **1.0** | `extern-5-28` — seat count past the old k<=17 ceiling | `8e69f7a8` |
+| `0x10057fe0 LegoPathBoundary::AddPresenterIfInRange` | .8571 | **1.0** | `extern-7-26` — same strip | `8e69f7a8` |
+
+Gate at hand-off: **LEGO1 4841/4933, ISLE 172/172, CONFIG 111/111.**
+
+**Still-open lane rows, best measured distance (all landable kinds unless
+noted):**
+
+| addr | row | best nd | state | channel verdict |
+|---|---|---|---|---|
+| 0x10083500 `GetActorROI` | **0** | h12 + `fwdE-4`/`shape-7-52` | landing is +1/−1 on `GetRefCount`; not taken |
+| 0x1002bff0 `_Tree<LegoPathActor*>::erase` | 1 @434 | `extern-0-9`, `fwdE-9`, `extern-9-0` | regrole; flat + stacked + long-count exhausted |
+| 0x10082ca0 charmgr `erase` | 1 @145 | `fwdL-69`, `fwdP-69`, `pad-2-9` | cmpdir; flat + include-perm + stacked exhausted |
+| 0x100574a0 `RemoveActor` | 1 @240 / @129 / @137 | many | **three-way colour tie**, any two fixable, never all three |
+| 0x100586e0 `RemovePresenter` | 3 | `extern-15-0`, `fwdP-15`, `pad-7-9` | regrole |
+| 0x10083890 charmgr `_Insert` | 4 | `fwdL-35` | invariant over every axis tried |
+| 0x1002f770 `UpdatePlane` | 5 | `extern-0-1` | regrole; stacked pass negative |
+| 0x1002a720 `StepState` | 6 | `extern-1-12`, `fwdE-30` | regrole |
+| 0x10057180 `_Erase` | 7 | `fwdL-46` | whole-body esi/ebx role swap |
+| 0x10085500 charmgr `insert` | 12 | `fwdL-66` | regrole |
+| 0x10084030 `CreateActorROI` | 0 masked / **false positive** | — | C2 inline-budget ladder; all three ctor rungs already 1.0 (§20) |
+| 0x10048310 `FindPath` | 491 | `extern-0-12` | **COLOUR** per triage, not text — needs a stacked pass |
+| 0x10046050 `PlaceActor` (4-arg) | no length match | — | text channel (Δinsn −2) |
+| 0x1002de10 `SetTransformAndDestinationFromPoints` | no length match | — | text channel |
+
+**What I would do next, in order:**
+
+1. **Sweep the long-count strip tree-wide** (§21). `extern k=18..60`,
+   `extern m=9..16`, `fwd k=97..200`. Two rows fell out of it in this lane in
+   one pass, one of them from nd=44. This is the highest expected yield in the
+   project right now and it needs no new grammar.
+2. **`FindPath 0x10048310`** — the triage says colour, the old seal says text;
+   the seal is wrong. Give it the long-count strip and a stacked pass.
+3. **`GetRefCount 0x10083bc0`** — 2,942 states and still nd=1 @84. It now
+   blocks a fully-specified +1. If the C2 pool instrument ever gets built, this
+   is its first customer.
+4. **`RemoveActor 0x100574a0`** — the three-way tie needs a third dimension;
+   the only one found so far is the `~LegoPathBoundary` dtor-loop spelling
+   (§8), which contradicts BETA10 and costs five re-covers. Worth a
+   coordinator-level decision only after (1) has been tried on it.
+5. **Fix `triage2.py` to classify against the best carrier state** (§23);
+   three of my rows are in the wrong bucket today.
