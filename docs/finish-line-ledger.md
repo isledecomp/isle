@@ -565,3 +565,38 @@ Three of my four rectangles so far land in row 2 or 1 of that table
 `StopActions` 1 body), which is why queue 2 leads with the `xps` construction
 (seats pinned at the rectangle argmin × the full 505-cell shape grid) rather
 than with a wider rectangle.
+
+---
+
+## 9. Best-known state for every row in this lane (the table nobody had)
+
+Scanned every `results.json` in both session scratchpads (218 sweep records,
+this lane's and the coordinator's). This is the complete prior art for my
+fourteen TUs, and it did not exist in any document before now:
+
+| row | m | best nd anywhere | state | source of the record |
+|---|---|---|---|---|
+| `0x100796b0 FindNodeDataByName` | .8125 | **0** | `extern-2-0` | coordinator's `sw-all-legocarbuildpresenterrect` — **LANDED, §1** |
+| `0x1007ca30 LegoPartPresenter::Read` | .9953 | 4 | `extern-18-0` | `sw-all-legopartpresenterlong` |
+| `0x10038b10 Pizza::HandleEndAction` | .9538 | 12 | `extern-0-23` | this lane |
+| `0x100a3b40 MeshBuilderImpl::Clone` | .7971 | 14 | `extern-9-0` | `sw-all-tglrl40long` |
+| `0x10038380 Pizza::StopActions` | .7442 | 15 | **`base`** | this lane |
+| `0x100a12a0 TextureImpl::SetImage` | .6667 | 16 | `extern-22-0` | `sw-all-tglrl40long` |
+| `0x100d0d80 ReadData` | .9722 | 18 | **`base`** | this lane |
+| `0x10017af0 PizzeriaState::PizzeriaState` | .8873 | 18 | **`base`** | this lane |
+| `0x1007b770 LegoVideoManager::Tickle` | .9636 | 19 | `extern-0-1` | `sw-all-legovideomanagerrect` |
+| `0x100bd020 MxBitmap::BitBltTransparent` | .7470 | 60 | `extern-0-24` | `sw-all-mxbitmaprect` |
+| `0x100035e0 Helicopter::HandleControl` | .9907 | — | — | **never swept anywhere** (rectangle running) |
+| `0x100334b0 Act1State::Act1State` | .9891 | — | — | **never swept anywhere** (rectangle running) |
+| `0x10031820 Isle::Enable` | .9725 | — | — | **never swept anywhere** (rectangle running) |
+| `0x1006ed90 Infocenter::Create` | .8966 | — | — | never swept (k-strip queued) |
+| `0x1006fda0 Infocenter::HandleKeyPress` | .7933 | — | — | never swept (k-strip queued) |
+| `0x100293c0 UpdateEnabledChild` | .8625 | — | — | never swept (k-strip queued) |
+| `0x100ba2c0 MxStillPresenter::Clone` | .9251 | — | — | never swept (k-strip queued) |
+| `0x100a3840 MeshBuilderImpl::CreateMesh` | .8176 | — | — | 2,439 states, retail's 664 bytes **never reached** (667 in all) |
+| `0x10051ac0 LegoAct2::SpawnBricks` | .9101 | — | — | rectangle stopped at 200/1,681 (§5) |
+
+Method note for the coordinator: the recursive `**/results.json` glob over a
+scratchpad that holds sweep state directories walks hundreds of thousands of
+directories and does not terminate in useful time. Globbing three explicit
+depths (`/*/`, `/*/*/`, `/*/*/*/`) finds all 218 records in under a second.
