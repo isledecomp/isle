@@ -306,8 +306,12 @@ without a link and without reccmp. Positive control: pointed at
 | `0x10061010` FUN_10061010 | `pad_shape` full range, step 7 | 124 | **0** | {717, 725} |
 | `0x10061010` | `declaration_shape` (full domain) | 286 | **0** | {717, 725} |
 
-**8,963 carrier states, zero flips in either direction.** And the shape of the
-negative matters more than the count:
+**8,963 carrier states, zero flips in either direction.** (The `legoanim` grid
+row above is one pass at 7,613 of 9,801 cells; the 2,188 misses were transient
+wine-contention failures scattered across the grid, not a region. A second,
+uncontended pass over the same grid reached 6,400 cells before it was stopped,
+also with zero flips.) And the shape of the negative matters more than the
+count:
 
 - On `CalculateCameraTransform` the carrier **does** reach codegen — the body
   takes two distinct forms across the grid (nd 308 for 6,716 cells, nd 314 for
