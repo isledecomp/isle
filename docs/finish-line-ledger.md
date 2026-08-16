@@ -1107,6 +1107,11 @@ has never seen and are in flight.
 
 ## 19. Session summary
 
+*(This section was written before §20/§21; the counts below are superseded by
+the closing section at the end of the file. Kept as written, because the
+ordering is the point: the second landing came from correcting a claim made in
+this very ledger.)*
+
 **Rows gained: 1**, proved end to end by a gated `isle_build.py` run from this
 worktree with zero LOST rows.
 
@@ -1203,3 +1208,29 @@ extern rectangle (`pizza.cpp`, `pizzeria.cpp`, `mxramstreamprovider.cpp`,
 it out of retail's length family entirely (1252 rather than 1232) — so the two
 rows in one TU respond to the same generator in opposite ways, which is the
 same lesson again one level down.
+
+---
+
+## 22. The three-seat generator on `Isle::Enable` — negative
+
+`declaration_run_triple` is the recipe kind added at `bbe7cbb4` for exactly this
+purpose, and no row in this lane had ever seen it. `sw-all2-isletri0`, 122
+states (`triM_0_0-k` = post-include seat alone, `triP_0_0-k` = pre-include seat
+alone, both `k = 0..60`):
+
+```
+0x10031820 nd=13 @triM_0_0-37   (against the extern family's 11)
+0x100334b0 nd=24 @triM_0_0-0    (unchanged, all 122 states, one length)
+```
+
+The forward-run seats on their own are **worse** than the extern pair for
+`Isle::Enable`. Note what this measures and what it does not: it isolates the
+pre-include and post-include seats one at a time, so it is a test of those
+*seats*, not of a genuinely three-seat state — filling all three at once with
+independent counts is still unswept for this row, and remains the last carrier
+coordinate it has never seen.
+
+**`Act1State::Act1State` extent is now 2,308 states** — 1,681 extern rectangle,
+505 declaration-shape, 122 forward-run seats — **one 843-byte body in every
+single one.** Whatever else is true, that row's codegen is not a function of the
+declaration-record stream at all.
