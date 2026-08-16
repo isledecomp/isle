@@ -875,14 +875,14 @@
    "matching": 1.0,
    "mangled": "?Notify@Score@@UAEJAAVMxParam@@@Z",
    "length": 244,
-   "retail_length": 196,
+   "retail_length": 244,
    "winner": "score.cpp.obj",
    "definers": [
     {
      "object": "score.cpp.obj",
      "length": 244,
-     "length_delta_vs_retail": 48,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -932,14 +932,14 @@
    "matching": 1.0,
    "mangled": "?HandleControl@Score@@QAEJAAVLegoControlManagerNotificationParam@@@Z",
    "length": 688,
-   "retail_length": 672,
+   "retail_length": 688,
    "winner": "score.cpp.obj",
    "definers": [
     {
      "object": "score.cpp.obj",
      "length": 688,
-     "length_delta_vs_retail": 16,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -970,14 +970,14 @@
    "matching": 1.0,
    "mangled": "?Paint@Score@@QAEXXZ",
    "length": 744,
-   "retail_length": 704,
+   "retail_length": 744,
    "winner": "score.cpp.obj",
    "definers": [
     {
      "object": "score.cpp.obj",
      "length": 744,
-     "length_delta_vs_retail": 40,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -19487,14 +19487,14 @@
    "matching": 0.9907120743034056,
    "mangled": "?HandleControl@Helicopter@@UAEJAAVLegoControlManagerNotificationParam@@@Z",
    "length": 1148,
-   "retail_length": 1120,
+   "retail_length": 1148,
    "winner": "helicopter.cpp.obj",
    "definers": [
     {
      "object": "helicopter.cpp.obj",
      "length": 1148,
-     "length_delta_vs_retail": 28,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 19,
      "is_winner": true
     }
    ],
@@ -24685,14 +24685,14 @@
    "matching": 1.0,
    "mangled": "?Notify@GasStation@@UAEJAAVMxParam@@@Z",
    "length": 203,
-   "retail_length": 156,
+   "retail_length": 203,
    "winner": "gasstation.cpp.obj",
    "definers": [
     {
      "object": "gasstation.cpp.obj",
      "length": 203,
-     "length_delta_vs_retail": 47,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -24704,14 +24704,14 @@
    "matching": 1.0,
    "mangled": "?ReadyWorld@GasStation@@UAEXXZ",
    "length": 2552,
-   "retail_length": 2532,
+   "retail_length": 2552,
    "winner": "gasstation.cpp.obj",
    "definers": [
     {
      "object": "gasstation.cpp.obj",
      "length": 2552,
-     "length_delta_vs_retail": 20,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -24791,13 +24791,6 @@
     },
     {
      "object": "gasstation.cpp.obj",
-     "length": 88,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
-    },
-    {
-     "object": "isleapp.cpp.obj",
      "length": 88,
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
@@ -24888,14 +24881,14 @@
    "matching": 1.0,
    "mangled": "?HandleControl@GasStation@@UAEJAAVLegoControlManagerNotificationParam@@@Z",
    "length": 288,
-   "retail_length": 272,
+   "retail_length": 288,
    "winner": "gasstation.cpp.obj",
    "definers": [
     {
      "object": "gasstation.cpp.obj",
      "length": 288,
-     "length_delta_vs_retail": 16,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -47968,14 +47961,14 @@
    "matching": 1.0,
    "mangled": "?Notify@LegoEntity@@UAEJAAVMxParam@@@Z",
    "length": 316,
-   "retail_length": 292,
+   "retail_length": 316,
    "winner": "legoentity.cpp.obj",
    "definers": [
     {
      "object": "legoentity.cpp.obj",
      "length": 316,
-     "length_delta_vs_retail": 24,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -53619,14 +53612,14 @@
    "matching": 1.0,
    "mangled": "?StepState@LegoRaceActor@@UAEIMAAVMatrix4@@@Z",
    "length": 520,
-   "retail_length": 504,
+   "retail_length": 520,
    "winner": "legoraceactor.cpp.obj",
    "definers": [
     {
      "object": "legoraceactor.cpp.obj",
      "length": 520,
-     "length_delta_vs_retail": 16,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -54710,14 +54703,14 @@
    "matching": 1.0,
    "mangled": "?Next@Playlist@LegoState@@QAEIXZ",
    "length": 212,
-   "retail_length": 196,
+   "retail_length": 212,
    "winner": "legostate.cpp.obj",
    "definers": [
     {
      "object": "legostate.cpp.obj",
      "length": 212,
-     "length_delta_vs_retail": 16,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -55394,14 +55387,14 @@
    "matching": 1.0,
    "mangled": "?HandleClick@CaveEntity@@EAEJAAVLegoEventNotificationParam@@@Z",
    "length": 472,
-   "retail_length": 452,
+   "retail_length": 472,
    "winner": "buildings.cpp.obj",
    "definers": [
     {
      "object": "buildings.cpp.obj",
      "length": 472,
-     "length_delta_vs_retail": 20,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -56472,14 +56465,14 @@
    "matching": 1.0,
    "mangled": "?Notify@LegoRace@@UAEJAAVMxParam@@@Z",
    "length": 197,
-   "retail_length": 148,
+   "retail_length": 197,
    "winner": "legorace.cpp.obj",
    "definers": [
     {
      "object": "legorace.cpp.obj",
      "length": 197,
-     "length_delta_vs_retail": 49,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -59523,16 +59516,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 100,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 2,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x10018c30",
@@ -59680,14 +59666,14 @@
    "matching": 1.0,
    "mangled": "?NextTargetLocation@Act2Actor@@UAEHXZ",
    "length": 348,
-   "retail_length": 312,
+   "retail_length": 348,
    "winner": "act2actor.cpp.obj",
    "definers": [
     {
      "object": "act2actor.cpp.obj",
      "length": 348,
-     "length_delta_vs_retail": 36,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -59737,14 +59723,14 @@
    "matching": 1.0,
    "mangled": "?GetNextEntity@Act2Actor@@QAEPAVLegoEntity@@PAE@Z",
    "length": 1276,
-   "retail_length": 1240,
+   "retail_length": 1276,
    "winner": "act2actor.cpp.obj",
    "definers": [
     {
      "object": "act2actor.cpp.obj",
      "length": 1276,
-     "length_delta_vs_retail": 36,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -60639,14 +60625,14 @@
    "matching": 1.0,
    "mangled": "?Notify@IslePathActor@@UAEJAAVMxParam@@@Z",
    "length": 144,
-   "retail_length": 100,
+   "retail_length": 144,
    "winner": "islepathactor.cpp.obj",
    "definers": [
     {
      "object": "islepathactor.cpp.obj",
      "length": 144,
-     "length_delta_vs_retail": 44,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -60816,14 +60802,14 @@
    "matching": 1.0,
    "mangled": "?SpawnPlayer@IslePathActor@@UAEXW4Area@LegoGameState@@EE@Z",
    "length": 777,
-   "retail_length": 680,
+   "retail_length": 777,
    "winner": "islepathactor.cpp.obj",
    "definers": [
     {
      "object": "islepathactor.cpp.obj",
      "length": 777,
-     "length_delta_vs_retail": 97,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -60892,14 +60878,14 @@
    "matching": 1.0,
    "mangled": "?HandleTrigger@LegoPathStruct@@AAEEPAVLegoPathActor@@EIE@Z",
    "length": 889,
-   "retail_length": 836,
+   "retail_length": 889,
    "winner": "legopathstruct.cpp.obj",
    "definers": [
     {
      "object": "legopathstruct.cpp.obj",
      "length": 889,
-     "length_delta_vs_retail": 53,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -62504,16 +62490,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 100,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 2,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1001de60",
@@ -65028,14 +65007,14 @@
    "matching": 1.0,
    "mangled": "?AddSelectedPartToBuild@LegoCarBuild@@QAEXXZ",
    "length": 476,
-   "retail_length": 460,
+   "retail_length": 476,
    "winner": "legocarbuild.cpp.obj",
    "definers": [
     {
      "object": "legocarbuild.cpp.obj",
      "length": 476,
-     "length_delta_vs_retail": 16,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -65047,14 +65026,14 @@
    "matching": 1.0,
    "mangled": "?Tickle@LegoCarBuild@@UAEJXZ",
    "length": 1940,
-   "retail_length": 1916,
+   "retail_length": 1940,
    "winner": "legocarbuild.cpp.obj",
    "definers": [
     {
      "object": "legocarbuild.cpp.obj",
      "length": 1940,
-     "length_delta_vs_retail": 24,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -65066,14 +65045,14 @@
    "matching": 1.0,
    "mangled": "?Notify@LegoCarBuild@@UAEJAAVMxParam@@@Z",
    "length": 501,
-   "retail_length": 436,
+   "retail_length": 501,
    "winner": "legocarbuild.cpp.obj",
    "definers": [
     {
      "object": "legocarbuild.cpp.obj",
      "length": 501,
-     "length_delta_vs_retail": 65,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -65123,14 +65102,14 @@
    "matching": 1.0,
    "mangled": "?InitExiting@LegoCarBuild@@QAEXXZ",
    "length": 216,
-   "retail_length": 200,
+   "retail_length": 216,
    "winner": "legocarbuild.cpp.obj",
    "definers": [
     {
      "object": "legocarbuild.cpp.obj",
      "length": 216,
-     "length_delta_vs_retail": 16,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -65218,14 +65197,14 @@
    "matching": 1.0,
    "mangled": "?HandleControl@LegoCarBuild@@QAEJPAVMxParam@@@Z",
    "length": 900,
-   "retail_length": 884,
+   "retail_length": 900,
    "winner": "legocarbuild.cpp.obj",
    "definers": [
     {
      "object": "legocarbuild.cpp.obj",
      "length": 900,
-     "length_delta_vs_retail": 16,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -65237,14 +65216,14 @@
    "matching": 1.0,
    "mangled": "?HandleType0Notification@LegoCarBuild@@QAEJPAVMxNotificationParam@@@Z",
    "length": 712,
-   "retail_length": 680,
+   "retail_length": 712,
    "winner": "legocarbuild.cpp.obj",
    "definers": [
     {
      "object": "legocarbuild.cpp.obj",
      "length": 712,
-     "length_delta_vs_retail": 32,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -65446,14 +65425,14 @@
    "matching": 1.0,
    "mangled": "?StartActorScriptByType@LegoCarBuild@@QAEXH@Z",
    "length": 1512,
-   "retail_length": 1296,
+   "retail_length": 1512,
    "winner": "legocarbuild.cpp.obj",
    "definers": [
     {
      "object": "legocarbuild.cpp.obj",
      "length": 1512,
-     "length_delta_vs_retail": 216,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -65560,14 +65539,14 @@
    "matching": 1.0,
    "mangled": "?GetBuildMovieId@LegoCarBuild@@QAEHH@Z",
    "length": 76,
-   "retail_length": 60,
+   "retail_length": 76,
    "winner": "legocarbuild.cpp.obj",
    "definers": [
     {
      "object": "legocarbuild.cpp.obj",
      "length": 76,
-     "length_delta_vs_retail": 16,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -70073,14 +70052,14 @@
    "matching": 1.0,
    "mangled": "?StepState@LegoExtraActor@@UAEIMAAVMatrix4@@@Z",
    "length": 876,
-   "retail_length": 844,
+   "retail_length": 876,
    "winner": "legoextraactor.cpp.obj",
    "definers": [
     {
      "object": "legoextraactor.cpp.obj",
      "length": 876,
-     "length_delta_vs_retail": 32,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -72271,14 +72250,14 @@
    "matching": 1.0,
    "mangled": "?Notify@IsleActor@@UAEJAAVMxParam@@@Z",
    "length": 160,
-   "retail_length": 108,
+   "retail_length": 160,
    "winner": "isleactor.cpp.obj",
    "definers": [
     {
      "object": "isleactor.cpp.obj",
      "length": 160,
-     "length_delta_vs_retail": 52,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -74228,16 +74207,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 100,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 2,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1002ef80",
@@ -74321,14 +74293,14 @@
    "matching": 1.0,
    "mangled": "?GetWalkingBehavior@LegoPathActor@@UAEXAAEAAH@Z",
    "length": 172,
-   "retail_length": 148,
+   "retail_length": 172,
    "winner": "legopathactor.cpp.obj",
    "definers": [
     {
      "object": "legopathactor.cpp.obj",
      "length": 172,
-     "length_delta_vs_retail": 24,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -75787,14 +75759,14 @@
    "matching": 1.0,
    "mangled": "?Notify@Isle@@UAEJAAVMxParam@@@Z",
    "length": 375,
-   "retail_length": 320,
+   "retail_length": 375,
    "winner": "isle.cpp.obj",
    "definers": [
     {
      "object": "isle.cpp.obj",
      "length": 375,
-     "length_delta_vs_retail": 55,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -75806,14 +75778,14 @@
    "matching": 1.0,
    "mangled": "?HandleEndAction@Isle@@IAEJAAVMxEndActionNotificationParam@@@Z",
    "length": 349,
-   "retail_length": 320,
+   "retail_length": 349,
    "winner": "isle.cpp.obj",
    "definers": [
     {
      "object": "isle.cpp.obj",
      "length": 349,
-     "length_delta_vs_retail": 29,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -75863,14 +75835,14 @@
    "matching": 1.0,
    "mangled": "?HandleControl@Isle@@IAEJAAVLegoControlManagerNotificationParam@@@Z",
    "length": 1361,
-   "retail_length": 1144,
+   "retail_length": 1361,
    "winner": "isle.cpp.obj",
    "definers": [
     {
      "object": "isle.cpp.obj",
      "length": 1361,
-     "length_delta_vs_retail": 217,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -75901,14 +75873,14 @@
    "matching": 1.0,
    "mangled": "?HandlePathStruct@Isle@@IAEJAAVLegoPathStructNotificationParam@@@Z",
    "length": 555,
-   "retail_length": 520,
+   "retail_length": 555,
    "winner": "isle.cpp.obj",
    "definers": [
     {
      "object": "isle.cpp.obj",
      "length": 555,
-     "length_delta_vs_retail": 35,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -75920,14 +75892,14 @@
    "matching": 0.9725330620549338,
    "mangled": "?Enable@Isle@@UAEXE@Z",
    "length": 3580,
-   "retail_length": 3436,
+   "retail_length": 3580,
    "winner": "isle.cpp.obj",
    "definers": [
     {
      "object": "isle.cpp.obj",
      "length": 3580,
-     "length_delta_vs_retail": 144,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 214,
      "is_winner": true
     }
    ],
@@ -75939,14 +75911,14 @@
    "matching": 1.0,
    "mangled": "?CheckAreaExiting@Isle@@IAEXXZ",
    "length": 323,
-   "retail_length": 224,
+   "retail_length": 323,
    "winner": "isle.cpp.obj",
    "definers": [
     {
      "object": "isle.cpp.obj",
      "length": 323,
-     "length_delta_vs_retail": 99,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -75984,14 +75956,14 @@
    "matching": 1.0,
    "mangled": "?HandleTransitionEnd@Isle@@IAEJXZ",
    "length": 1419,
-   "retail_length": 1276,
+   "retail_length": 1419,
    "winner": "isle.cpp.obj",
    "definers": [
     {
      "object": "isle.cpp.obj",
      "length": 1419,
-     "length_delta_vs_retail": 143,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -77880,14 +77852,14 @@
    "matching": 1.0,
    "mangled": "?Notify@Ambulance@@UAEJAAVMxParam@@@Z",
    "length": 164,
-   "retail_length": 116,
+   "retail_length": 164,
    "winner": "ambulance.cpp.obj",
    "definers": [
     {
      "object": "ambulance.cpp.obj",
      "length": 164,
-     "length_delta_vs_retail": 48,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -77937,14 +77909,14 @@
    "matching": 1.0,
    "mangled": "?HandlePathStruct@Ambulance@@UAEJAAVLegoPathStructNotificationParam@@@Z",
    "length": 1148,
-   "retail_length": 1068,
+   "retail_length": 1148,
    "winner": "ambulance.cpp.obj",
    "definers": [
     {
      "object": "ambulance.cpp.obj",
      "length": 1148,
-     "length_delta_vs_retail": 80,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -78070,14 +78042,14 @@
    "matching": 1.0,
    "mangled": "?Tickle@Ambulance@@UAEJXZ",
    "length": 220,
-   "retail_length": 172,
+   "retail_length": 220,
    "winner": "ambulance.cpp.obj",
    "definers": [
     {
      "object": "ambulance.cpp.obj",
      "length": 220,
-     "length_delta_vs_retail": 48,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -79156,14 +79128,14 @@
    "matching": 1.0,
    "mangled": "?HandleControl@InfocenterDoor@@AAEJAAVLegoControlManagerNotificationParam@@@Z",
    "length": 496,
-   "retail_length": 480,
+   "retail_length": 496,
    "winner": "infocenterdoor.cpp.obj",
    "definers": [
     {
      "object": "infocenterdoor.cpp.obj",
      "length": 496,
-     "length_delta_vs_retail": 16,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -79842,14 +79814,14 @@
    "matching": 1.0,
    "mangled": "?HandlePathStruct@Pizza@@UAEJAAVLegoPathStructNotificationParam@@@Z",
    "length": 937,
-   "retail_length": 884,
+   "retail_length": 937,
    "winner": "pizza.cpp.obj",
    "definers": [
     {
      "object": "pizza.cpp.obj",
      "length": 937,
-     "length_delta_vs_retail": 53,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -79861,14 +79833,14 @@
    "matching": 1.0,
    "mangled": "?Tickle@Pizza@@UAEJXZ",
    "length": 612,
-   "retail_length": 592,
+   "retail_length": 612,
    "winner": "pizza.cpp.obj",
    "definers": [
     {
      "object": "pizza.cpp.obj",
      "length": 612,
-     "length_delta_vs_retail": 20,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -79880,14 +79852,14 @@
    "matching": 1.0,
    "mangled": "?HandleEndAction@Pizza@@UAEJAAVMxEndActionNotificationParam@@@Z",
    "length": 1232,
-   "retail_length": 1196,
+   "retail_length": 1232,
    "winner": "pizza.cpp.obj",
    "definers": [
     {
      "object": "pizza.cpp.obj",
      "length": 1232,
-     "length_delta_vs_retail": 36,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -80742,14 +80714,14 @@
    "matching": 1.0,
    "mangled": "?StopArea@LegoGameState@@QAEXW4Area@1@@Z",
    "length": 2364,
-   "retail_length": 2200,
+   "retail_length": 2364,
    "winner": "legogamestate.cpp.obj",
    "definers": [
     {
      "object": "legogamestate.cpp.obj",
      "length": 2364,
-     "length_delta_vs_retail": 164,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -80761,14 +80733,14 @@
    "matching": 1.0,
    "mangled": "?SwitchArea@LegoGameState@@QAEXW4Area@1@@Z",
    "length": 2594,
-   "retail_length": 2372,
+   "retail_length": 2594,
    "winner": "legogamestate.cpp.obj",
    "definers": [
     {
      "object": "legogamestate.cpp.obj",
      "length": 2594,
-     "length_delta_vs_retail": 222,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -81298,14 +81270,14 @@
    "matching": 1.0,
    "mangled": "?WriteScoreHistory@History@LegoGameState@@QAEXXZ",
    "length": 1048,
-   "retail_length": 1008,
+   "retail_length": 1048,
    "winner": "legogamestate.cpp.obj",
    "definers": [
     {
      "object": "legogamestate.cpp.obj",
      "length": 1048,
-     "length_delta_vs_retail": 40,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -81974,14 +81946,14 @@
    "matching": 1.0,
    "mangled": "?InvokeAction@@YAXW4ActionType@Extra@@ABVMxAtomId@@HPAVLegoEntity@@@Z",
    "length": 564,
-   "retail_length": 524,
+   "retail_length": 564,
    "winner": "legoutils.cpp.obj",
    "definers": [
     {
      "object": "legoutils.cpp.obj",
      "length": 564,
-     "length_delta_vs_retail": 40,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -82164,14 +82136,14 @@
    "matching": 1.0,
    "mangled": "?ConvertHSVToRGB@@YAXMMMPAM00@Z",
    "length": 468,
-   "retail_length": 440,
+   "retail_length": 468,
    "winner": "legoutils.cpp.obj",
    "definers": [
     {
      "object": "legoutils.cpp.obj",
      "length": 468,
-     "length_delta_vs_retail": 28,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -82493,14 +82465,14 @@
    "matching": 1.0,
    "mangled": "?StepState@Act3Actor@@UAEIMAAVMatrix4@@@Z",
    "length": 540,
-   "retail_length": 524,
+   "retail_length": 540,
    "winner": "act3actors.cpp.obj",
    "definers": [
     {
      "object": "act3actors.cpp.obj",
      "length": 540,
-     "length_delta_vs_retail": 16,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -82759,14 +82731,14 @@
    "matching": 1.0,
    "mangled": "?Animate@Act3Brickster@@UAEXM@Z",
    "length": 1632,
-   "retail_length": 1596,
+   "retail_length": 1632,
    "winner": "act3actors.cpp.obj",
    "definers": [
     {
      "object": "act3actors.cpp.obj",
      "length": 1632,
-     "length_delta_vs_retail": 36,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -87983,16 +87955,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 82,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x10044eb0",
@@ -90130,16 +90095,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 100,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 2,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x10049410",
@@ -91515,14 +91473,14 @@
    "matching": 1.0,
    "mangled": "?FUN_1004b450@LegoAnimMMPresenter@@AAEEXZ",
    "length": 224,
-   "retail_length": 192,
+   "retail_length": 224,
    "winner": "legoanimmmpresenter.cpp.obj",
    "definers": [
     {
      "object": "legoanimmmpresenter.cpp.obj",
      "length": 224,
-     "length_delta_vs_retail": 32,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -92200,14 +92158,14 @@
    "matching": 1.0,
    "mangled": "?Tickle@MxTransitionManager@@UAEJXZ",
    "length": 164,
-   "retail_length": 140,
+   "retail_length": 164,
    "winner": "mxtransitionmanager.cpp.obj",
    "definers": [
     {
      "object": "mxtransitionmanager.cpp.obj",
      "length": 164,
-     "length_delta_vs_retail": 24,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -92923,14 +92881,14 @@
    "matching": 1.0,
    "mangled": "?Notify@TowTrack@@UAEJAAVMxParam@@@Z",
    "length": 164,
-   "retail_length": 116,
+   "retail_length": 164,
    "winner": "towtrack.cpp.obj",
    "definers": [
     {
      "object": "towtrack.cpp.obj",
      "length": 164,
-     "length_delta_vs_retail": 48,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -92961,14 +92919,14 @@
    "matching": 1.0,
    "mangled": "?HandleEndAction@TowTrack@@UAEJAAVMxEndActionNotificationParam@@@Z",
    "length": 1512,
-   "retail_length": 1376,
+   "retail_length": 1512,
    "winner": "towtrack.cpp.obj",
    "definers": [
     {
      "object": "towtrack.cpp.obj",
      "length": 1512,
-     "length_delta_vs_retail": 136,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -92980,14 +92938,14 @@
    "matching": 0.9535864978902954,
    "mangled": "?HandlePathStruct@TowTrack@@UAEJAAVLegoPathStructNotificationParam@@@Z",
    "length": 856,
-   "retail_length": 836,
+   "retail_length": 856,
    "winner": "towtrack.cpp.obj",
    "definers": [
     {
      "object": "towtrack.cpp.obj",
      "length": 856,
-     "length_delta_vs_retail": 20,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 11,
      "is_winner": true
     }
    ],
@@ -94878,14 +94836,14 @@
    "matching": 1.0,
    "mangled": "?Create@LegoAct2@@UAEJAAVMxDSAction@@@Z",
    "length": 280,
-   "retail_length": 264,
+   "retail_length": 280,
    "winner": "legoact2.cpp.obj",
    "definers": [
     {
      "object": "legoact2.cpp.obj",
      "length": 280,
-     "length_delta_vs_retail": 16,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -94897,14 +94855,14 @@
    "matching": 1.0,
    "mangled": "?Tickle@LegoAct2@@UAEJXZ",
    "length": 824,
-   "retail_length": 772,
+   "retail_length": 824,
    "winner": "legoact2.cpp.obj",
    "definers": [
     {
      "object": "legoact2.cpp.obj",
      "length": 824,
-     "length_delta_vs_retail": 52,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -94916,14 +94874,14 @@
    "matching": 1.0,
    "mangled": "?Notify@LegoAct2@@UAEJAAVMxParam@@@Z",
    "length": 867,
-   "retail_length": 824,
+   "retail_length": 867,
    "winner": "legoact2.cpp.obj",
    "definers": [
     {
      "object": "legoact2.cpp.obj",
      "length": 867,
-     "length_delta_vs_retail": 43,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -94935,14 +94893,14 @@
    "matching": 1.0,
    "mangled": "?HandleEndAction@LegoAct2@@AAEJAAVMxEndActionNotificationParam@@@Z",
    "length": 849,
-   "retail_length": 808,
+   "retail_length": 849,
    "winner": "legoact2.cpp.obj",
    "definers": [
     {
      "object": "legoact2.cpp.obj",
      "length": 849,
-     "length_delta_vs_retail": 41,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -95494,14 +95452,14 @@
    "matching": 1.0,
    "mangled": "?CheckBricksterDestroying@LegoAct2@@AAEXH@Z",
    "length": 581,
-   "retail_length": 492,
+   "retail_length": 581,
    "winner": "legoact2.cpp.obj",
    "definers": [
     {
      "object": "legoact2.cpp.obj",
      "length": 581,
-     "length_delta_vs_retail": 89,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -95513,14 +95471,14 @@
    "matching": 1.0,
    "mangled": "?CheckBricksterIsLoose@LegoAct2@@AAEXH@Z",
    "length": 880,
-   "retail_length": 856,
+   "retail_length": 880,
    "winner": "legoact2.cpp.obj",
    "definers": [
     {
      "object": "legoact2.cpp.obj",
      "length": 880,
-     "length_delta_vs_retail": 24,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -97605,14 +97563,14 @@
    "matching": 0.9818037974683544,
    "mangled": "?Notify@LegoNavController@@UAEJAAVMxParam@@@Z",
    "length": 4112,
-   "retail_length": 3668,
+   "retail_length": 4112,
    "winner": "legonavcontroller.cpp.obj",
    "definers": [
     {
      "object": "legonavcontroller.cpp.obj",
      "length": 4112,
-     "length_delta_vs_retail": 444,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 80,
      "is_winner": true
     }
    ],
@@ -100405,14 +100363,14 @@
    "matching": 1.0,
    "mangled": "?FUN_1005cdf0@LegoInputManager@@QAEEAAVLegoEventNotificationParam@@@Z",
    "length": 436,
-   "retail_length": 408,
+   "retail_length": 436,
    "winner": "legoinputmanager.cpp.obj",
    "definers": [
     {
      "object": "legoinputmanager.cpp.obj",
      "length": 436,
-     "length_delta_vs_retail": 28,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -101476,14 +101434,14 @@
    "matching": 1.0,
    "mangled": "?ReadyWorld@JukeBox@@UAEXXZ",
    "length": 116,
-   "retail_length": 96,
+   "retail_length": 116,
    "winner": "jukebox.cpp.obj",
    "definers": [
     {
      "object": "jukebox.cpp.obj",
      "length": 116,
-     "length_delta_vs_retail": 20,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -101495,14 +101453,14 @@
    "matching": 1.0,
    "mangled": "?HandleControl@JukeBox@@AAEEAAVLegoControlManagerNotificationParam@@@Z",
    "length": 880,
-   "retail_length": 832,
+   "retail_length": 880,
    "winner": "jukebox.cpp.obj",
    "definers": [
     {
      "object": "jukebox.cpp.obj",
      "length": 880,
-     "length_delta_vs_retail": 48,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -102517,14 +102475,14 @@
    "matching": 1.0,
    "mangled": "?Notify@Police@@UAEJAAVMxParam@@@Z",
    "length": 175,
-   "retail_length": 132,
+   "retail_length": 175,
    "winner": "police.cpp.obj",
    "definers": [
     {
      "object": "police.cpp.obj",
      "length": 175,
-     "length_delta_vs_retail": 43,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -102555,14 +102513,14 @@
    "matching": 1.0,
    "mangled": "?HandleControl@Police@@AAEJAAVLegoControlManagerNotificationParam@@@Z",
    "length": 336,
-   "retail_length": 316,
+   "retail_length": 336,
    "winner": "police.cpp.obj",
    "definers": [
     {
      "object": "police.cpp.obj",
      "length": 336,
-     "length_delta_vs_retail": 20,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -111340,14 +111298,14 @@
    "matching": 1.0,
    "mangled": "?Notify@Infocenter@@UAEJAAVMxParam@@@Z",
    "length": 361,
-   "retail_length": 304,
+   "retail_length": 361,
    "winner": "infocenter.cpp.obj",
    "definers": [
     {
      "object": "infocenter.cpp.obj",
      "length": 361,
-     "length_delta_vs_retail": 57,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -111359,14 +111317,14 @@
    "matching": 1.0,
    "mangled": "?HandleEndAction@Infocenter@@AAEJAAVMxEndActionNotificationParam@@@Z",
    "length": 1108,
-   "retail_length": 1016,
+   "retail_length": 1108,
    "winner": "infocenter.cpp.obj",
    "definers": [
     {
      "object": "infocenter.cpp.obj",
      "length": 1108,
-     "length_delta_vs_retail": 92,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -111378,14 +111336,14 @@
    "matching": 1.0,
    "mangled": "?ReadyWorld@Infocenter@@UAEXXZ",
    "length": 1205,
-   "retail_length": 1172,
+   "retail_length": 1205,
    "winner": "infocenter.cpp.obj",
    "definers": [
     {
      "object": "infocenter.cpp.obj",
      "length": 1205,
-     "length_delta_vs_retail": 33,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -111435,13 +111393,13 @@
    "matching": 0.7932960893854749,
    "mangled": "?HandleKeyPress@Infocenter@@AAEJC@Z",
    "length": 264,
-   "retail_length": 208,
+   "retail_length": 272,
    "winner": "infocenter.cpp.obj",
    "definers": [
     {
      "object": "infocenter.cpp.obj",
      "length": 264,
-     "length_delta_vs_retail": 56,
+     "length_delta_vs_retail": -8,
      "masked_distance_to_retail": null,
      "is_winner": true
     }
@@ -111454,14 +111412,14 @@
    "matching": 1.0,
    "mangled": "?HandleButtonUp@Infocenter@@AAEEHH@Z",
    "length": 1208,
-   "retail_length": 1080,
+   "retail_length": 1208,
    "winner": "infocenter.cpp.obj",
    "definers": [
     {
      "object": "infocenter.cpp.obj",
      "length": 1208,
-     "length_delta_vs_retail": 128,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -111473,14 +111431,14 @@
    "matching": 1.0,
    "mangled": "?HandleControl@Infocenter@@AAEEAAVLegoControlManagerNotificationParam@@@Z",
    "length": 1267,
-   "retail_length": 1140,
+   "retail_length": 1267,
    "winner": "infocenter.cpp.obj",
    "definers": [
     {
      "object": "infocenter.cpp.obj",
      "length": 1267,
-     "length_delta_vs_retail": 127,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -111612,14 +111570,14 @@
    "matching": 1.0,
    "mangled": "?UpdateFrameHot@Infocenter@@AAEXE@Z",
    "length": 204,
-   "retail_length": 184,
+   "retail_length": 204,
    "winner": "infocenter.cpp.obj",
    "definers": [
     {
      "object": "infocenter.cpp.obj",
      "length": 204,
-     "length_delta_vs_retail": 20,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -112618,16 +112576,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 90,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 11,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x10071f70",
@@ -113373,14 +113324,14 @@
    "matching": 0.9302325581395349,
    "mangled": "?TriggerHitSound@Act3@@QAEXI@Z",
    "length": 348,
-   "retail_length": 324,
+   "retail_length": 348,
    "winner": "act3.cpp.obj",
    "definers": [
     {
      "object": "act3.cpp.obj",
      "length": 348,
-     "length_delta_vs_retail": 24,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 11,
      "is_winner": true
     }
    ],
@@ -113392,14 +113343,14 @@
    "matching": 1.0,
    "mangled": "?Create@Act3@@UAEJAAVMxDSAction@@@Z",
    "length": 284,
-   "retail_length": 268,
+   "retail_length": 284,
    "winner": "act3.cpp.obj",
    "definers": [
     {
      "object": "act3.cpp.obj",
      "length": 284,
-     "length_delta_vs_retail": 16,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -113430,14 +113381,14 @@
    "matching": 1.0,
    "mangled": "?Notify@Act3@@UAEJAAVMxParam@@@Z",
    "length": 1107,
-   "retail_length": 1060,
+   "retail_length": 1107,
    "winner": "act3.cpp.obj",
    "definers": [
     {
      "object": "act3.cpp.obj",
      "length": 1107,
-     "length_delta_vs_retail": 47,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -114278,14 +114229,14 @@
    "matching": 1.0,
    "mangled": "?Tickle@MxCompositeMediaPresenter@@UAEJXZ",
    "length": 200,
-   "retail_length": 176,
+   "retail_length": 200,
    "winner": "mxcompositemediapresenter.cpp.obj",
    "definers": [
     {
      "object": "mxcompositemediapresenter.cpp.obj",
      "length": 200,
-     "length_delta_vs_retail": 24,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -114793,14 +114744,14 @@
    "matching": 1.0,
    "mangled": "?Notify@Hospital@@UAEJAAVMxParam@@@Z",
    "length": 207,
-   "retail_length": 160,
+   "retail_length": 207,
    "winner": "hospital.cpp.obj",
    "definers": [
     {
      "object": "hospital.cpp.obj",
      "length": 207,
-     "length_delta_vs_retail": 47,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -114812,14 +114763,14 @@
    "matching": 1.0,
    "mangled": "?ReadyWorld@Hospital@@UAEXXZ",
    "length": 872,
-   "retail_length": 852,
+   "retail_length": 872,
    "winner": "hospital.cpp.obj",
    "definers": [
     {
      "object": "hospital.cpp.obj",
      "length": 872,
-     "length_delta_vs_retail": 20,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -114850,14 +114801,14 @@
    "matching": 1.0,
    "mangled": "?HandleEndAction@Hospital@@AAEJAAVMxEndActionNotificationParam@@@Z",
    "length": 2312,
-   "retail_length": 2248,
+   "retail_length": 2312,
    "winner": "hospital.cpp.obj",
    "definers": [
     {
      "object": "hospital.cpp.obj",
      "length": 2312,
-     "length_delta_vs_retail": 64,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -114869,14 +114820,14 @@
    "matching": 1.0,
    "mangled": "?HandleButtonDown@Hospital@@AAEJAAVLegoControlManagerNotificationParam@@@Z",
    "length": 2172,
-   "retail_length": 2152,
+   "retail_length": 2172,
    "winner": "hospital.cpp.obj",
    "definers": [
     {
      "object": "hospital.cpp.obj",
      "length": 2172,
-     "length_delta_vs_retail": 20,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -116437,14 +116388,14 @@
    "matching": 1.0,
    "mangled": "?Notify@RegistrationBook@@UAEJAAVMxParam@@@Z",
    "length": 303,
-   "retail_length": 252,
+   "retail_length": 303,
    "winner": "registrationbook.cpp.obj",
    "definers": [
     {
      "object": "registrationbook.cpp.obj",
      "length": 303,
-     "length_delta_vs_retail": 51,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -116627,14 +116578,14 @@
    "matching": 1.0,
    "mangled": "?HandlePathStruct@RegistrationBook@@AAEJAAVLegoPathStructNotificationParam@@@Z",
    "length": 384,
-   "retail_length": 368,
+   "retail_length": 384,
    "winner": "registrationbook.cpp.obj",
    "definers": [
     {
      "object": "registrationbook.cpp.obj",
      "length": 384,
-     "length_delta_vs_retail": 16,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -126001,14 +125952,14 @@
    "matching": 1.0,
    "mangled": "?StartAction@JukeBoxEntity@@QAEXXZ",
    "length": 540,
-   "retail_length": 516,
+   "retail_length": 540,
    "winner": "jukeboxentity.cpp.obj",
    "definers": [
     {
      "object": "jukeboxentity.cpp.obj",
      "length": 540,
-     "length_delta_vs_retail": 24,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -126020,14 +125971,14 @@
    "matching": 1.0,
    "mangled": "?StopAction@JukeBoxEntity@@QAEXW4Script@JukeboxScript@@@Z",
    "length": 212,
-   "retail_length": 188,
+   "retail_length": 212,
    "winner": "jukeboxentity.cpp.obj",
    "definers": [
     {
      "object": "jukeboxentity.cpp.obj",
      "length": 212,
-     "length_delta_vs_retail": 24,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -129551,16 +129502,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 112,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 1,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009b970",
@@ -129577,16 +129521,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 100,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 2,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009b9e0",
@@ -129641,16 +129578,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 254,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009bb80",
@@ -129667,16 +129597,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 162,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009bc30",
@@ -129693,16 +129616,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 235,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009bd20",
@@ -129719,16 +129635,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 54,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009bd60",
@@ -129745,16 +129654,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 52,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009bda0",
@@ -129771,16 +129673,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 274,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009bec0",
@@ -129797,16 +129692,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 141,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009bf50",
@@ -129823,16 +129711,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 112,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 1,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009bfc0",
@@ -129868,16 +129749,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 82,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009c070",
@@ -129894,16 +129768,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 536,
-     "length_delta_vs_retail": -5,
-     "masked_distance_to_retail": null,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009c290",
@@ -129920,16 +129787,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 367,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 2,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009c400",
@@ -129946,16 +129806,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 84,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 11,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009c460",
@@ -129972,16 +129825,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 90,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 11,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009c4c0",
@@ -129998,16 +129844,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 48,
-     "length_delta_vs_retail": 1,
-     "masked_distance_to_retail": null,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009c4f0",
@@ -130024,16 +129863,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 17,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009c510",
@@ -130050,16 +129882,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 37,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009c540",
@@ -130076,16 +129901,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 138,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009c5d0",
@@ -130102,16 +129920,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 233,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 9,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009c6c0",
@@ -130128,16 +129939,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 68,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009c710",
@@ -130154,16 +129958,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 27,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009c730",
@@ -130171,25 +129968,18 @@
    "matching": 1.0,
    "mangled": "?EnumerateErrorToString@MxDeviceEnumerate@@QAEPBDJ@Z",
    "length": 1840,
-   "retail_length": 1696,
+   "retail_length": 1840,
    "winner": "mxdirectxinfo.cpp.obj",
    "definers": [
     {
      "object": "mxdirectxinfo.cpp.obj",
      "length": 1840,
-     "length_delta_vs_retail": 144,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 1840,
-     "length_delta_vs_retail": 144,
-     "masked_distance_to_retail": null,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009ce60",
@@ -130206,16 +129996,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "legodxinfo.cpp.obj",
-     "length": 180,
-     "length_delta_vs_retail": 1,
-     "masked_distance_to_retail": null,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009cf20",
@@ -130232,16 +130015,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "legodxinfo.cpp.obj",
-     "length": 259,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 5,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009d030",
@@ -130258,16 +130034,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "legodxinfo.cpp.obj",
-     "length": 150,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 17,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009d0d0",
@@ -130284,16 +130053,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "legodxinfo.cpp.obj",
-     "length": 197,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 3,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009d1a0",
@@ -130310,16 +130072,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "legodxinfo.cpp.obj",
-     "length": 54,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009d1e0",
@@ -130336,16 +130091,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "legodxinfo.cpp.obj",
-     "length": 36,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009d210",
@@ -130362,16 +130110,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "legodxinfo.cpp.obj",
-     "length": 345,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 1,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009d370",
@@ -130388,16 +130129,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "legodxinfo.cpp.obj",
-     "length": 93,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009d3d0",
@@ -130414,16 +130148,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "legodxinfo.cpp.obj",
-     "length": 123,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009d450",
@@ -131060,25 +130787,18 @@
    "matching": 1.0,
    "mangled": "?EnumerateErrorToString@MxDeviceEnumerate@@QAEPBDJ@Z",
    "length": 1840,
-   "retail_length": 1696,
+   "retail_length": 1840,
    "winner": "mxdirectxinfo.cpp.obj",
    "definers": [
     {
      "object": "mxdirectxinfo.cpp.obj",
      "length": 1840,
-     "length_delta_vs_retail": 144,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 1840,
-     "length_delta_vs_retail": 144,
-     "masked_distance_to_retail": null,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009efb0",
@@ -131095,16 +130815,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 18,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009efd0",
@@ -131121,16 +130834,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 36,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 0,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x1009f000",
@@ -132374,14 +132080,14 @@
    "matching": 1.0,
    "mangled": "?CreateLight@RendererImpl@TglImpl@@UAEPAVLight@Tgl@@W4LightType@4@MMM@Z",
    "length": 416,
-   "retail_length": 396,
+   "retail_length": 416,
    "winner": "tglrl40.cpp.obj",
    "definers": [
     {
      "object": "tglrl40.cpp.obj",
      "length": 416,
-     "length_delta_vs_retail": 20,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -132994,14 +132700,14 @@
    "matching": 1.0,
    "mangled": "?SetShadingModel@DeviceImpl@TglImpl@@UAE?AW4Result@Tgl@@W4ShadingModel@4@@Z",
    "length": 100,
-   "retail_length": 80,
+   "retail_length": 100,
    "winner": "tglrl40.cpp.obj",
    "definers": [
     {
      "object": "tglrl40.cpp.obj",
      "length": 100,
-     "length_delta_vs_retail": 20,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -133929,14 +133635,14 @@
    "matching": 1.0,
    "mangled": "?SetShadingModel@MeshImpl@TglImpl@@UAE?AW4Result@Tgl@@W4ShadingModel@4@@Z",
    "length": 108,
-   "retail_length": 88,
+   "retail_length": 108,
    "winner": "tglrl40.cpp.obj",
    "definers": [
     {
      "object": "tglrl40.cpp.obj",
      "length": 108,
-     "length_delta_vs_retail": 20,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -145740,14 +145446,14 @@
    "matching": 1.0,
    "mangled": "?Tickle@MxPresenter@@UAEJXZ",
    "length": 208,
-   "retail_length": 184,
+   "retail_length": 208,
    "winner": "mxpresenter.cpp.obj",
    "definers": [
     {
      "object": "mxpresenter.cpp.obj",
      "length": 208,
-     "length_delta_vs_retail": 24,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -145778,14 +145484,14 @@
    "matching": 1.0,
    "mangled": "?PresenterNameDispatch@@YAPBDABVMxDSAction@@@Z",
    "length": 244,
-   "retail_length": 212,
+   "retail_length": 244,
    "winner": "mxpresenter.cpp.obj",
    "definers": [
     {
      "object": "mxpresenter.cpp.obj",
      "length": 244,
-     "length_delta_vs_retail": 32,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -150717,14 +150423,14 @@
    "matching": 1.0,
    "mangled": "?DecodeChunks@@YAFPAUtagBITMAPINFOHEADER@@PAEPAUFLIC_HEADER@@PAUFLIC_FRAME@@11@Z",
    "length": 285,
-   "retail_length": 240,
+   "retail_length": 285,
    "winner": "flic.cpp.obj",
    "definers": [
     {
      "object": "flic.cpp.obj",
      "length": 285,
-     "length_delta_vs_retail": 45,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -153629,14 +153335,14 @@
    "matching": 1.0,
    "mangled": "?DeserializeDSObjectDispatch@@YAPAVMxDSObject@@AAPAEF@Z",
    "length": 928,
-   "retail_length": 880,
+   "retail_length": 928,
    "winner": "mxdsobject.cpp.obj",
    "definers": [
     {
      "object": "mxdsobject.cpp.obj",
      "length": 928,
-     "length_delta_vs_retail": 48,
-     "masked_distance_to_retail": null,
+     "length_delta_vs_retail": 0,
+     "masked_distance_to_retail": 0,
      "is_winner": true
     }
    ],
@@ -155161,16 +154867,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 100,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 2,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x100c0dd0",
@@ -155187,16 +154886,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 100,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 2,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x100c0e40",
@@ -155232,16 +154924,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 100,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 2,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x100c0ee0",
@@ -161144,16 +160829,9 @@
      "length_delta_vs_retail": 0,
      "masked_distance_to_retail": 0,
      "is_winner": true
-    },
-    {
-     "object": "mxdirectxinfo.cpp.obj",
-     "length": 100,
-     "length_delta_vs_retail": 0,
-     "masked_distance_to_retail": 2,
-     "is_winner": false
     }
    ],
-   "verdict": "CONTESTED"
+   "verdict": "SOLE"
   },
   {
    "address": "0x100c7490",
@@ -173479,8 +173157,8 @@
   }
  ],
  "summary": {
-  "SOLE": 3179,
-  "CONTESTED": 830,
+  "SOLE": 3224,
+  "CONTESTED": 785,
   "UNMATCHED": 925
  }
 }

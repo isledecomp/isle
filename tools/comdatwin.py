@@ -75,18 +75,39 @@ def mask(buf: bytes, offsets) -> bytes:
     return bytes(out)
 
 
+# compile_commands covers all three images.  Objects built for CONFIG and ISLE
+# are never linked into LEGO1, so counting them as definers invents contested
+# rows -- mxdirectxinfo.cpp is compiled by both lego1 and config, and appeared
+# twice under one basename until this filter existed.
+FOREIGN_TARGETS = ("CMakeFiles/config.dir/", "CMakeFiles/isle.dir/")
+
+
 def objects() -> list[Path]:
     entries = json.loads(COMPILE_COMMANDS.read_text())
     found = []
     for entry in entries:
         argv = shlex.split(entry["command"])
         rel = next((a[3:] for a in argv if a.startswith("/Fo")), None)
-        if not rel:
+        if not rel or any(t in rel.replace("\\", "/") for t in FOREIGN_TARGETS):
             continue
         path = Path(entry["directory"]) / rel
         if path.is_file():
             found.append(path)
     return found
+
+
+def trim_fill(blob: bytes) -> bytes:
+    """Strip only the aligner's trailing fill.
+
+    Deliberately not slotmap.body_of, which also truncates at a trailing jump
+    table.  That truncation is right for disassembly and wrong here: a COMDAT
+    body carries its jump table, so a table-truncated retail body reads as
+    ~144 bytes shorter than the object that produced it.
+    """
+    out = bytearray(blob)
+    while out and out[-1] in (0xCC, 0x90):
+        out.pop()
+    return bytes(out)
 
 
 def build_index(paths):
@@ -197,8 +218,8 @@ def main() -> int:
         # annotated retail symbol -- a window sized from the definers runs
         # straight into the following function, and body_of only strips
         # trailing fill, so it would report every definer as ~32 B short.
-        gold = SL.body_of(retail[0], retail[1], int(row["address"], 16),
-                          extents[row["address"]])
+        gold = trim_fill(raw_slice(retail, int(row["address"], 16),
+                                   extents[row["address"]]))
         entry["mangled"] = rec["name"]
         entry["length"] = len(rec["body"])
         entry["retail_length"] = len(gold) if gold else None

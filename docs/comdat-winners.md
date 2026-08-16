@@ -11,13 +11,13 @@ because `entity/legoworld.cpp` wins that COMDAT.
 
 | verdict | rows |
 | --- | --- |
-| CONTESTED | 830 |
-| SOLE | 3179 |
+| CONTESTED | 785 |
+| SOLE | 3224 |
 | UNMATCHED | 925 |
 
 ## Link-order fragility of the rows we already hold
 
-825 rows at 1.0 are contested. Of those, **70 have exactly one definer that reproduces retail**, so they are held by the
+780 rows at 1.0 are contested. Of those, **47 have exactly one definer that reproduces retail**, so they are held by the
 linker's current choice and a reordering that changes the winner takes
 them away. The rest have several exact copies and survive either way.
 
@@ -33,11 +33,9 @@ exposed -- but it is the list to check a reordering against.
 | `0x10002bf0` | Vector4::EqualsHamiltonProduct | 9 | helicopter.cpp.obj |
 | `0x100040a0` | MxQuaternionTransformer::Interpolate | 2 | helicopter.cpp.obj |
 | `0x1000da20` | vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *>>:: | 11 | legoobjectfactory.cpp.obj |
-| `0x10018bc0` | list<LegoBoundaryEdge,allocator<LegoBoundaryEdge>>::~list<LegoBo | 2 | mxdirectxinfo.cpp.obj |
 | `0x1001c010` | vector<unsigned char *,allocator<unsigned char *>>::~vector<unsi | 2 | legoanimactor.cpp.obj |
 | `0x1001cd00` | MxPresenterList::Compare | 2 | mxdssubscriber.cpp.obj |
 | `0x1001d210` | LegoPathControllerList::Compare | 2 | mxdssubscriber.cpp.obj |
-| `0x1001ddf0` | list<LegoROI *,allocator<LegoROI *>>::~list<LegoROI *,allocator< | 2 | mxdirectxinfo.cpp.obj |
 | `0x1001e2d0` | LegoEntityList::Compare | 2 | mxdssubscriber.cpp.obj |
 | `0x1001e650` | LegoCacheSoundList::Compare | 2 | mxdssubscriber.cpp.obj |
 | `0x10028830` | LegoNotifyList::Compare | 2 | mxdssubscriber.cpp.obj |
@@ -46,7 +44,6 @@ exposed -- but it is the list to check a reordering against.
 | `0x1002c440` | _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPa | 5 | legoextraactor.cpp.obj |
 | `0x1002c4c0` | _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPa | 5 | legoextraactor.cpp.obj |
 | `0x1002c5b0` | _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPa | 5 | legoextraactor.cpp.obj |
-| `0x1002ef10` | list<LegoPathBoundary *,allocator<LegoPathBoundary *>>::~list<Le | 2 | mxdirectxinfo.cpp.obj |
 | `0x1003d450` | _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSound | 2 | legocachesoundlist.cpp.obj |
 | `0x10042c20` | list<Act3Ammo *,allocator<Act3Ammo *>>::~list<Act3Ammo *,allocat | 3 | viewmanager.cpp.obj |
 | `0x100451a0` | _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge | 6 | legoextraactor.cpp.obj |
@@ -57,7 +54,6 @@ exposed -- but it is the list to check a reordering against.
 | `0x100474e0` | _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge | 3 | legopathactorset.cpp.obj |
 | `0x10047550` | _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge | 3 | legopathcontroller.cpp.obj |
 | `0x10047830` | _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge | 2 | legopathcontroller.cpp.obj |
-| `0x100493a0` | list<LegoBEWithMidpoint,allocator<LegoBEWithMidpoint>>::~list<Le | 2 | mxdirectxinfo.cpp.obj |
 | `0x100494e0` | _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEW | 6 | legoextraactor.cpp.obj |
 | `0x10058330` | _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresen | 3 | legopathactorset.cpp.obj |
 | `0x100583a0` | _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresen | 3 | legopathcontroller.cpp.obj |
@@ -71,31 +67,12 @@ exposed -- but it is the list to check a reordering against.
 | `0x1005f360` | LegoROIList::Compare | 2 | mxdssubscriber.cpp.obj |
 | `0x1006c4b0` | list<char *,allocator<char *>>::~list<char *,allocator<char *>> | 3 | viewmanager.cpp.obj |
 | `0x1006ddb0` | _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,m | 6 | legoextraactor.cpp.obj |
-| `0x10071f10` | list<Act3ListElement,allocator<Act3ListElement>>::insert | 2 | mxdirectxinfo.cpp.obj |
 | `0x10072440` | list<Act3ListElement,allocator<Act3ListElement>>::~list<Act3List | 3 | viewmanager.cpp.obj |
 | `0x10084930` | list<ROI *,allocator<ROI *>>::~list<ROI *,allocator<ROI *>> | 2 | legomain.cpp.obj |
-| `0x1009b900` | list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo>>::~list<Di | 2 | mxdirectxinfo.cpp.obj |
-| `0x1009b970` | list<MxDisplayMode,allocator<MxDisplayMode>>::~list<MxDisplayMod | 2 | mxdirectxinfo.cpp.obj |
-| `0x1009bf50` | list<MxDriver,allocator<MxDriver>>::~list<MxDriver,allocator<MxD | 2 | mxdirectxinfo.cpp.obj |
-| `0x1009c070` | MxDeviceEnumerate::EnumDirectDrawCallback | 2 | mxdirectxinfo.cpp.obj |
-| `0x1009c290` | MxDriver::MxDriver(struct MxDriver const &) | 2 | mxdirectxinfo.cpp.obj |
-| `0x1009c400` | list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo>>::insert | 2 | mxdirectxinfo.cpp.obj |
-| `0x1009c460` | list<MxDisplayMode,allocator<MxDisplayMode>>::insert | 2 | mxdirectxinfo.cpp.obj |
-| `0x1009c4c0` | MxDeviceEnumerate::BuildErrorString | 2 | mxdirectxinfo.cpp.obj |
-| `0x1009c5d0` | MxDeviceEnumerate::EnumDevicesCallback | 2 | mxdirectxinfo.cpp.obj |
-| `0x1009ce60` | LegoDeviceEnumerate::ParseDeviceName | 2 | legodxinfo.cpp.obj |
-| `0x1009cf20` | LegoDeviceEnumerate::ProcessDeviceBytes | 2 | legodxinfo.cpp.obj |
-| `0x1009d030` | LegoDeviceEnumerate::GetDevice | 2 | legodxinfo.cpp.obj |
-| `0x1009d0d0` | LegoDeviceEnumerate::GetBestDevice | 2 | legodxinfo.cpp.obj |
-| `0x1009d210` | LegoDeviceEnumerate::FUN_1009d210 | 2 | legodxinfo.cpp.obj |
 | `0x100ac320` | list<unsigned int,allocator<unsigned int>>::~list<unsigned int,a | 3 | viewmanager.cpp.obj |
 | `0x100ac590` | list<MxNotification *,allocator<MxNotification *>>::~list<MxNoti | 3 | viewmanager.cpp.obj |
 | `0x100b5900` | MxStreamChunkList::Compare | 2 | mxmediapresenter.cpp.obj |
 | `0x100b61a0` | list<MxPresenter *,allocator<MxPresenter *>>::~list<MxPresenter  | 3 | viewmanager.cpp.obj |
-| `0x100c0d60` | list<MxDSObject *,allocator<MxDSObject *>>::~list<MxDSObject *,a | 2 | mxdirectxinfo.cpp.obj |
-| `0x100c0dd0` | list<MxDSSubscriber *,allocator<MxDSSubscriber *>>::~list<MxDSSu | 2 | mxdirectxinfo.cpp.obj |
-| `0x100c0e70` | list<MxNextActionDataStart *,allocator<MxNextActionDataStart *>> | 2 | mxdirectxinfo.cpp.obj |
-| `0x100c7420` | list<MxDSBuffer *,allocator<MxDSBuffer *>>::~list<MxDSBuffer *,a | 2 | mxdirectxinfo.cpp.obj |
 | `0x100c9c90` | MxDSActionList::Compare | 2 | mxdssubscriber.cpp.obj |
 
 ## Contested open rows (5)

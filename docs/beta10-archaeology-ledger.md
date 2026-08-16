@@ -1188,7 +1188,7 @@ reason. Either way the lesson is the same and it is now mechanised:
 > A carrier sweep only reaches the image through the winning object.
 
 `tools/comdatwin.py` answers it. It indexes every COMDAT text symbol in the
-build (4,411 distinct symbols, 563 of them defined more than once), then
+build (4,319 distinct symbols, 517 of them defined more than once), then
 identifies, for each row, which definer's masked bytes *are* the linked bytes.
 Artifacts: `docs/comdat-winners.{md,json}`.
 
@@ -1248,3 +1248,54 @@ a 1,225-cell coarse grid (`pad_shape` 15x15 + `declaration_shape` 10x100):
 
 The two `tglrl40` rows are the strongest remaining candidates: both are already
 at retail's exact length with only 14 and 16 masked bytes outstanding.
+
+### Two more traps, caught by auditing the screen's own anomalies
+
+The screen reported three rows at 1.0 that were contested with *no* exact
+definer, which should be impossible. Reading them found two more defects, both
+of which had been inflating the fragility list:
+
+3. **`compile_commands.json` covers all three images.** Objects built for CONFIG
+   and ISLE are never linked into LEGO1, and counting them as definers invents
+   contested rows -- `mxdirectxinfo.cpp` is compiled by both `lego1` and
+   `config`, so it appeared twice as its own competitor. Excluding
+   `CMakeFiles/{config,isle}.dir/` took contested rows 830 -> 785 and the
+   fragility list **70 -> 47**.
+4. **Retail's body must not be truncated at its jump table.** `body_of` cuts
+   there, which is right for disassembly and wrong for a whole-COMDAT
+   comparison: `MxDirectDraw::ErrorToString` and
+   `MxDeviceEnumerate::EnumerateErrorToString` are switch-heavy, and their
+   retail bodies read as 144 bytes shorter than the object that produced them.
+   Trim trailing `0xCC`/`0x90` fill only.
+
+One anomaly survives and is genuine: `_SmackGetSizeTables` is a 6-byte thunk in
+our build against a 102-byte retail function, because Smacker is a vendor
+archive. Not a defect.
+
+### Link-order fragility, corrected
+
+**785 rows we hold at 1.0 are contested; 47 have exactly one definer that
+reproduces retail.** Those 47 are the rows a link-order change can take away.
+This is an upper bound on the exposure -- only rows whose definer set spans the
+objects being reordered are actually at risk -- but it is the list a reordering
+should be checked against, and it is larger than the six the goal-2 note
+assumes. The table is in `docs/comdat-winners.md`.
+
+### Reading the two contested rows whose winner is in reach
+
+Both were read instruction-by-instruction from the **linked** images:
+
+- **`0x1002a1b0` `_Tree<LegoCacheSoundEntry,...>::_Erase`** (82 B, winner
+  `legosoundmanager.cpp`, masked distance 10). Every divergent instruction is
+  one thing: retail colours the node pointer `ebx` and the cursor `edi`, we do
+  the reverse. Same operations, same order, same frame -- a **two-register
+  colour swap**, so a carrier is the right instrument, not a source edit.
+- **`0x100a12a0` `TglImpl::TextureImpl::SetImage`** (83 B, sole definer,
+  masked distance 16). Same colour story (`ebx`/`ebp` exchanged) *plus* a real
+  schedule difference: retail hoists the `p_texture` argument load and the
+  vtable load above the first `push`, we sink both past it. Operation multiset
+  is identical, so this is schedule + colour.
+
+Note when reading such a pair: a differing branch *target* is not a divergence.
+The two functions sit at different virtual addresses, so every relative jump
+prints a different absolute operand. Trust masked nd, not the eyeball count.
