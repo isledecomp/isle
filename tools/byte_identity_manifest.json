@@ -4475,6 +4475,24 @@
       },
       "emission_policy": "non_emitting_declarations_only"
      }
+    },
+    {
+     "id": "d_ebfd2c50b395",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 211,
+      "width": 3,
+      "generated_header_sha256": "ebfd2c50b395c764c6c83b90b72bdeba4d1694d4e4b17ae6de5cefe943e06a43",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives.",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only"
+     }
     }
    ],
    "functions": [
@@ -4661,6 +4679,15 @@
      "expected_donor_length": 1096,
      "expected_linked_span": 1104,
      "donor": "d_9a465d80603b"
+    },
+    {
+     "mangled": "?erase@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@QAE?AViterator@1@V21@@Z",
+     "expected_body_sha256": "82fca1722ff25f17ae77c567feb42c33a53796818b5302949bcfe2b150320ef4",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1104,
+     "expected_donor_length": 1096,
+     "expected_linked_span": 1104,
+     "donor": "d_ebfd2c50b395"
     }
    ],
    "completion": {
@@ -5957,8 +5984,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4854,
-    "accepted_row_identity_sha256": "5eb7ee7d5162cfd283d38bdd9683eb660d280b464e79082d99f3fb71c8351e7f",
+    "exact_raw_1_0_count": 4855,
+    "accepted_row_identity_sha256": "a0e9d6e4b5dcbbce9149ccc342b45eede4c99881bd7872c7870f18cd85343bdd",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
