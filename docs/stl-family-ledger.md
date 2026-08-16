@@ -1466,9 +1466,6 @@ construction we do not perform. That is the same conclusion the standing TODO
 reached, now with the ctor-spelling explanation eliminated and the row's type
 defect fixed underneath it.
 
-<<<<<<< HEAD
-## 15. Reproducing this lane
-=======
 ## 15. Wave 9 — the rectangle, partially swept
 
 `sw.py --axes externR --kmax 40` sweeps the full `m,k = 0..40` extern
@@ -1503,7 +1500,6 @@ where this left off (existing cells are skipped, `if not obj.exists()`), so
 the remaining ~1,400 cells cost nothing already spent.
 
 ## 16. Reproducing this lane
->>>>>>> worktree-agent-a30c03b93e670e7be
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
 `fresh2/` repointed at `isle-build-tr03`). Nothing in the shared corpus was
