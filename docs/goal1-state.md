@@ -1,7 +1,7 @@
 # State of goal 1 — every open row, with its disposition
 
 Generated in the main loop by joining the four screens plus the coverage
-matrix against the live reccmp report. **LEGO1 4862/4934 — 72 open rows.**
+matrix against the live reccmp report. **LEGO1 4863/4934 — 71 open rows.**
 ISLE is 172/172 and CONFIG is 111/111. Current terminal measurement keeps
 ISLE and CONFIG byte-identical; LEGO1 is equal-sized with 595,723 differing
 bytes (MD5 `1b828d1b68ed19650728d1d43a1048b2`). Byte distance is a layout-sensitive
@@ -25,7 +25,7 @@ This exists because the evidence is spread across `slot-reachability`,
 
 | rows | disposition | what it means |
 |---:|---|---|
-| 30 | **ALLOCATOR (no idiom)** | Frame already matches retail; registers re-decided in many places. Nine of ten such rows were read by hand and **none had a differing live range** — the apparent spill differences are the same instruction on both sides, moved. Carrier sweep is the only lever that has ever moved this class. |
+| 29 | **ALLOCATOR (no idiom)** | Frame already matches retail; registers re-decided in many places. Nine of ten such rows were read by hand and **none had a differing live range** — the apparent spill differences are the same instruction on both sides, moved. Carrier sweep is the only lever that has ever moved this class. |
 | 12 | **AMBIGUOUS** | A screen refused to answer — bodies too divergent to trust an alignment, or slots contested after majority resolution. **Not a verdict of unreachability.** Cheapest unmined population: re-screen with better alignment. |
 | 11 | **LENGTH-UNREACHABLE** | Never reaches retail's length in any state measured. Structural, not colour. |
 | 9 | **SCHEDULE/ENCODING** | Frame **and** registers already match retail. Scheduling screen says intra-block reordering or a class owned elsewhere; **zero rows in the whole set are cross-block**, and the one that was got tested and refuted. |
@@ -42,6 +42,10 @@ This exists because the evidence is spread across `slot-reachability`,
    relocation oracle; retail-exact target bytes; and conservation of the seed's
    complete function set and every non-target section. This is the pattern for
    future visibility-driven authentic donors.
+   `0x1001d890` is also landed through the narrower Class-C path: a freshly
+   source-generated copy of the same multiply-defined COMDAT installs 36
+   retail-exact non-relocation code bytes while retaining the seed object and
+   relocation topology. A frozen A/B/A2 link proved +1/-0 before admission.
 2. **Carrier sweeps on rows with genuinely untried families** — rank the
    families **from the objects**, never from the matrix's `L` column; a
    missing result file proves nothing about what was compiled.
@@ -98,7 +102,6 @@ eligible when they carry a fail-closed proof and a concrete target.
 | ALLOCATOR (no idiom) | 0.9212 | `0x10029d50` | _Tree<LegoCacheSoundEntry,LegoCacheSoundEn | SLOT-CLEAN | REGIONAL | DIFFERENT | MIXED |  |
 | ALLOCATOR (no idiom) | 0.9101 | `0x10051ac0` | LegoAct2::SpawnBricks | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9048 | `0x100b2a70` | MxVideoPresenter::PutFrame | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
-| ALLOCATOR (no idiom) | 0.9027 | `0x1001d890` | _Tree<MxCore *,MxCore *,set<MxCore *,CoreS | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.8893 | `0x10073a90` | Act3::Enable | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.8873 | `0x10017af0` | PizzeriaState::PizzeriaState | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.8842 | `0x10069b10` | LegoAnimPresenter::BuildROIMap | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |

@@ -9315,6 +9315,8 @@ def validate_manifest(
                             f"{function_context}.retail_oracle must be an object")
                     exact_keys(oracle, {"image", "address", "verdict", "length"},
                                function_context + ".retail_oracle")
+                    normalized_functions.append(dict(function))
+                    continue
                 elif splice_class in ("retail_exact_reloc_divergent",
                                       "retail_exact_target_closure"):
                     # Extension B.  Same shape as same_slot_resize plus the

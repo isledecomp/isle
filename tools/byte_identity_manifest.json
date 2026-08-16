@@ -1617,6 +1617,23 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_3f83dc851e61",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "pad_shape",
+      "classes": 8,
+      "functions_per_class": 36,
+      "generated_header_sha256": "3f83dc851e6132c6524cc28eb9699dec397d5857047ac153af41ca0a91687123",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of another translation unit that authentically emits the same multiply-defined COMDAT; it contributes no code, data, strings, vtables, or linker directives.",
+      "donor_source": "LEGO1/lego/legoomni/src/worlds/infocenter.cpp"
+     }
     }
    ],
    "functions": [
@@ -1692,11 +1709,25 @@
      ],
      "splice_class": "equal_body_strict",
      "donor": "d_ba68e8998543"
+    },
+    {
+     "mangled": "?erase@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@QAE?AViterator@1@V21@@Z",
+     "donor": "d_3f83dc851e61",
+     "splice_class": "comdat_selection_override",
+     "expected_seed_length": 1106,
+     "expected_donor_length": 1106,
+     "expected_body_sha256": "6b439654429deae7700f052d87dba696e1ab1bed77804c414ee26cc4efa8e341",
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x1001d890",
+      "verdict": "MATCH",
+      "length": 1106
+     }
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/entity/legoworld.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes 3 row(s) in LEGO1/lego/legoomni/src/entity/legoworld.cpp from generated carrier states over rendered current source translation units.",
     "may_replace_compiler_output": true
    }
   },
@@ -8037,8 +8068,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4862,
-    "accepted_row_identity_sha256": "583c01641d39131da6051158212a5a6e871b95b13ee1fe20e5ecdac1c363b324",
+    "exact_raw_1_0_count": 4863,
+    "accepted_row_identity_sha256": "b11fbe05655ffdeaa85c11ecd2b0be7d0394fde93c4dbbdb353f1a5d4c3f2290",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

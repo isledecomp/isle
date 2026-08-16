@@ -18,10 +18,18 @@ Use this order:
    be pinned, the donor must be freshly generated from source, and the complete
    retail-body/semantic-relocation/conservation gates must pass.
 
+The objective is literal raw `matching == 1.0` on every row. Non-exact score
+improvements are diagnostic only unless they isolate a concrete mechanism that
+leads directly to an exact source/dial state. Do not spend broad compiler time
+polishing non-1.0 aggregates. It is valid to compile one TU under several
+independently declared entropy states and compose different retail-exact COMDATs
+into the seed: every donor must be freshly generated from source and excluded
+from the link, with the target closure and relocation semantics fully proved.
+
 `GetActorROI` is the measured exception: its direct two-temporary refactor moves
 nine COMDATs and loses the already-exact `Exists` row; the isolated manifest
 permutation gives +1/-0. `UpdateEnabledChild` is the normal case: the clean
-source alias changes only its own code COMDAT and is being landed directly in
+source alias changes only its own code COMDAT and is committed directly in
 `legocontrolmanager.cpp`.
 
 Scratch source/object files are evidence and search results only. They may never
@@ -37,9 +45,13 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-16)
 
-- Accepted gate after the direct-source gain: LEGO1 4862/4934, ISLE 172/172,
-  CONFIG 111/111. Removing only `0x100293c0` from the accepted set reproduces
-  the prior 4861-set SHA-256 exactly, proving +1/-0.
+- Accepted canonical gate: LEGO1 4863/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is the source-generated Class-C substitution for
+  `0x1001d890`; its frozen A/B/A2 link proof measured 4862/4863/4862, changed
+  exactly that row from `0.9027027027` to raw 1.0, and changed no other row.
+  The canonical source-regeneration gate then reproduced 4863/4934 with
+  LEGO1 report SHA-256
+  `28cd5559609261a2ff2462c4f2e670816192701717246d69354b8e81d7cedb2e`.
 - Manifest-declared single-evaluation source permutations are structurally
   limited to evaluated array extents and member-assignment receivers; no
   product-specific source text appears in `tools/byte_identity.py`.
@@ -56,7 +68,8 @@ after every bounded panel or full gate.
   refactor. It changes only the target code COMDAT, preserves all 18 relocation
   semantics and 12 direct calls, reduces the object residue from 61 to 57
   bytes, and raises canonical raw matching from about 0.86965 to
-  `0.878698224852071`. The complete 4862 accepted-row gate passed with no loss.
+  `0.878698224852071`. The complete 4862 accepted-row gate passed with no loss;
+  it is committed in `14e2ff22`.
 
 ## Upstream entropy-aggregation oracle (2026-08-16)
 
@@ -65,9 +78,12 @@ entropy builds, not one binary. At upstream commit
 `31bd20de79df0a2d2d26b63f734e155ddd17e8ae`, workflow run `31911463768`
 generates 16 jobs x 16 headers with `tools/entropy.py`. The seed is
 `(int(commit[:8], 16) & 0xffff0000) + (matrix << 8) + build_index`; each header
-contains only unused classes and unused inline empty methods. `reccmp-aggregate`
-selects the best raw row independently across those samples, so `recomp:
-"various"` is expected.
+contains only unused classes and unused inline empty methods. The aggregate
+constructs rows independently across those samples, so `recomp: "various"` is
+expected. Its published choice is not always the literal raw maximum: the
+historical sort key ties all `effective:true` rows, allowing stable input order
+to hide a higher raw non-effective sample. Always scan all 256 raw reports and
+maximize the numeric `matching` field directly.
 
 The GitHub sample JSONs and their binaries/objects are evidence only. Reproduce
 every candidate by running the checked-in deterministic generator contract from
@@ -80,8 +96,12 @@ the aggregate have raw `0.9882352941176471` with the same adjacent `cmp`/`mov`
 schedule transposition. The page displays `100.00%*` only because the row is
 marked effective.
 
-Thirty aggregate rows have a strictly higher raw score than our 4862 report.
-The most important measured targets are:
+Thirty-seven latest-run sample maxima have a strictly higher raw score than our
+4862 report. Only `0x100586e0 RemovePresenter` reaches literal raw 1.0. The only
+older still-downloadable 256-sample run (`30217987205`, commit `bb7130c2`) adds
+no exact row that the latest run lacks and no additional cross-run improvement
+above the latest envelope. Use the other 36 rows only as mechanism/reachability
+evidence, not as destinations. The most important measured targets are:
 
 | Address | Ours | Aggregate | Smallest useful winning seed/shape |
 |---|---:|---:|---|
@@ -96,10 +116,23 @@ The most important measured targets are:
 | `0x1006e720` hide-anim `_Insert` | 0.847458 | 0.983122 | `834471695`, 3/8 (`3,2,3`) |
 | `0x10038380` Pizza::StopActions | 0.744186 | 0.860465 | `834473485`, 1/1 |
 
-The other strict improvements are `0x10062e20`, `0x1004ebd0`, `0x100a3840`,
+The other strict improvements include `0x10062e20`, `0x1004ebd0`, `0x100a3840`,
 `0x100a7960`, `0x100bb1d0`, `0x10069b10`, `0x10084030`, `0x10048310`,
 `0x10073a90`, `0x100a66f0`, `0x1006b140`, `0x10029d50`, `0x10072ad0`,
 `0x1003d170`, `0x10085500`, `0x100417c0`, `0x100a46b0`, `0x10054050`,
-`0x1009a8c0`, and `0x100aa510`. Re-score them against current effective TUs;
-upstream reachability is strong evidence but not proof after our source/entropy
-changes.
+`0x1009a8c0`, `0x100aa510`, `0x100bd020`, `0x1002a1b0`, `0x100b26f0`,
+`0x10057180`, `0x100166a0`, `0x100c3750`, and `0x1007ca30`. They are not
+landing candidates until a source/dial path reaches raw 1.0.
+
+Fresh reconstruction from the pinned historical source tree and deterministic
+seed `834470658` now proves the exact `RemovePresenter` state without consuming
+any CI object: the compiler produced a 314-byte target with masked distance 0,
+body SHA-256
+`acd459bf93abf8277d6a95a40a1ec055c80b0f33348027c4eb1e3a64ced7b9e8`,
+and exact six-record relocation/call semantics. Its complete function source
+range is byte-identical to current checked-in source after restoring the
+authentic iterator declaration to the `for` initializer. The current full-TU
+carrier state cannot transplant that result directly, so integrate it as a
+freshly source-generated, manifest-declared target-only COMDAT substitution;
+the historical source/header and every target-source identity pin belong in the
+manifest, never as function-specific Python or as scratch inputs.

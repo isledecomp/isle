@@ -1870,6 +1870,61 @@ class ByteIdentityTests(unittest.TestCase):
         self.document.pop("diagnostic_policy", None)
         self.write_manifest()
         return result
+    def enable_comdat_selection_override_fixture(self):
+        donor_source = self.source.with_name("donor.cpp")
+        donor_source.write_text("int donor() { return 11; }\n")
+        header = entropy.generate_pad_shape(1, 1).encode("utf-8")
+        header_sha = digest(header)
+        self.recipe_id = f"d_{header_sha[:12]}"
+        unit = self.document["translation_units"][0]
+        unit["mode"] = "compose_equal_body_comdat"
+        unit["donors"] = [
+            {
+                "id": self.recipe_id,
+                "status": "compiler_generated_current_source",
+                "authenticity": "synthetic_baseline_only",
+                "recipe": {
+                    "kind": "pad_shape",
+                    "classes": 1,
+                    "functions_per_class": 1,
+                    "generated_header_sha256": header_sha,
+                    "compile_lane": {"required_define": "DIRECTX5_SDK"},
+                    "emission_policy": "non_emitting_declarations_only",
+                    "authenticity_rationale": (
+                        "A source-generated declaration-only carrier selects "
+                        "another translation unit's matching COMDAT copy."
+                    ),
+                    "donor_source": donor_source.relative_to(
+                        self.source_dir
+                    ).as_posix(),
+                },
+            }
+        ]
+        unit["functions"] = [
+            {
+                "mangled": TARGET_SYMBOL,
+                "donor": self.recipe_id,
+                "splice_class": "comdat_selection_override",
+                "expected_seed_length": 30,
+                "expected_donor_length": 30,
+                "expected_body_sha256": "01" * 32,
+                "retail_oracle": {
+                    "image": "LEGO1.DLL",
+                    "address": "0x10001000",
+                    "verdict": "MATCH",
+                    "length": 30,
+                },
+            }
+        ]
+        unit["completion"] = {
+            "state": "object_composition_enabled_final_gates_incomplete",
+            "reason": (
+                "The fixture selects one source-generated COMDAT while final "
+                "archive, image, and comparison gates remain incomplete."
+            ),
+            "may_replace_compiler_output": True,
+        }
+        self.write_manifest()
     def enable_two_composer_fixture(self):
         seed_bytes = make_two_fpo_coff()
         first_donor_bytes = make_two_fpo_coff(first_variant=True)
@@ -2097,6 +2152,27 @@ class ByteIdentityTests(unittest.TestCase):
             digest(entropy.generate_shape(2, 3).encode("utf-8")),
             "fcac8dfe7db78fdfbe3d9f1942feb51de8fc0f14885b8e4c23b695da2b4dff27",
         )
+    def test_comdat_selection_override_manifest_schema_is_closed(self):
+        self.enable_comdat_selection_override_fixture()
+        normalized = byte_identity.validate_manifest(
+            self.manifest, self.source_dir, self.build_dir,
+            configured_compiler=str(self.compiler),
+        )
+        function = normalized["translation_units"][0]["functions"][0]
+        self.assertEqual(function["splice_class"],
+                         "comdat_selection_override")
+
+        self.document["translation_units"][0]["functions"][0][
+            "unexpected_key"
+        ] = True
+        self.write_manifest()
+        with self.assertRaisesRegex(
+            byte_identity.ByteIdentityError, "unknown keys.*unexpected_key"
+        ):
+            byte_identity.validate_manifest(
+                self.manifest, self.source_dir, self.build_dir,
+                configured_compiler=str(self.compiler),
+            )
     def test_native_fpo_composer_reconstructs_complete_closure(self):
         seed = make_fpo_coff()
         donor = make_fpo_coff(donor=True)
