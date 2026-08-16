@@ -593,3 +593,73 @@ scheduling instruction behind. The other three are allocator rows that happen to
 carry an inline difference, and on two of them the difference costs literally
 zero bytes. Do not fund `0x10084030`, `0x100417c0` or `0x10061010` on this
 channel — their residue is unchanged by the bit.
+
+## WAVE 4 — THE INCLUDE AXIS: 82 real-source states, zero flips
+
+The carrier sweeps perturbed C2's declaration state with *synthetic* classes.
+This wave perturbed it with **real headers** — the TU's own include order and
+set — which carry real inline bodies and real symbol-table volume. Judged on
+**whole-body identity** of the target COMDAT, not merely on whether the bit
+flipped: "inert" below means byte-identical output.
+
+Target: `0x1009f490`, baseline body `b0a0bc0f4e46`, len 1074, 0 relocations
+naming `Interpolate@LegoAnimNodeData`.
+
+**1. Include ORDER — 40 legal permutations, all byte-identical.**
+`legoanim.cpp` has five includes, so 120 orders. **80 are not legal source**:
+`mxgeometry/mxquaternion.h` needs `MxU32`, which arrives via `legoanim.h`, so
+every order that puts the quaternion header first fails with
+`C2501: 'MxU32' : missing decl-specifiers`. Of the 40 that compile, **all 40
+produce the identical body** — same sha, same length, same relocation profile.
+
+**2. Include SET — 37 legal states, all byte-identical.**
+- *Removal*: 15 drop-one/drop-two cases, of which exactly **one** is legal —
+  `<limits.h>` is unused — and it is byte-identical.
+- *Direct naming*: six headers that arrive transitively today (`decomp.h`,
+  `misc/legostorage.h`, `misc/legotree.h`, `realtime/vector.h`,
+  `realtime/matrix.h`, `mxgeometry/mxgeometry3d.h`) x six insertion positions =
+  **36 cells, all byte-identical**. Naming one *after* the header that already
+  pulls it in is a preprocessor no-op, so the cells that could matter are the
+  early ones — and those are inert too.
+
+**3. Definition placement — 5 positions, and the one that moves is worse.**
+Moving `inline LegoFloat LegoAnimNodeData::Interpolate` to sit before
+`LegoAnimKey::LegoAnimKey`, `CreateLocalTransform`, `GetTranslation` or
+`FindKeys` is **byte-identical**. Moving it *before its own first call site*
+(ahead of `CalculateCameraTransform`) is the only cell in this wave that
+changes anything — and it still inlines: same length 1074, still 0 callee
+relocations, and measurably **worse**, masked nd 268 -> 287, SHAPE 97.12 ->
+96.47. So the coordinator's prediction holds with a refinement: definition
+position does not gate the *decision*, though it is not codegen-inert.
+
+**Total: 40 + 1 + 36 + 5 = 82 real-source states, zero flips.**
+
+### Verdict: seal the channel at two rows
+
+Across four waves the inline accept/decline bit has been attacked with
+**8,963 synthetic carrier cells** (two generator families, three TUs, both
+directions), **82 real-source include/placement states**, **six source forms on
+the target row**, **five forms on `mxlist.h`**, and the compiler's own
+`inline_depth` knob. It moved exactly twice, and both movers are disqualified:
+`inline_depth` is out of mandate, and the one source form that flips it
+(`InsertEntry` by assignment) takes an exact row from 688 to 611 bytes.
+
+The bit is **C2-internal and unreachable by any permitted lever**. Per the
+wave-3 pricing, the channel is worth **two rows** — `0x1003cf20` (banked by
+Lane B10) and `0x1009f490` (residue measured at nd 0) — with `0x100a4420` one
+scheduling instrument behind. Stop funding it.
+
+### Two harness lessons from this wave
+
+- **A permuting harness must permute contents in place.** My first include
+  sweep rewrote the include block and silently dropped the blank lines between
+  the groups, so its own baseline was already a perturbed file.
+- **Parallel MSVC workers must each get their own `/Fd`.** Dropping `/Fd`
+  defaults every worker to `vc40.pdb` in the shared cwd, and 22 of the first
+  run's "failures" were `C1033: cannot open program database`, not source
+  errors.
+- **Source path length is NOT a confound here** — compiling the same tree from
+  a 45-character path and a 111-character path gives a byte-identical body, so
+  the scratch-copy method used in waves 2-4 is sound. (Worth recording because
+  the standing rule warns the compiler arena is path-length sensitive; it is
+  not sensitive for this TU.)
