@@ -1,8 +1,9 @@
 # The corrected SHAPE/STRUCT census — every open LEGO1 row
 
 Measured 2026-08-16 at **LEGO1 4853/4934, 81 open**, base `cd8692bb`.
-**Revision 2** — two further instrument fixes applied (§ *Eleven fixes* below);
-two rows moved, no verdict changed.
+**Revision 4** — a twelfth fix (stack displacements are placement) and a
+thirteenth (a moved instruction spans three diff blocks and was read as two
+different operations). **The text-target list drops from 51 to 30.**
 Regenerate with `<session scratchpad>/fin/census.py --json census.json --md
 census.md`; machine-readable copy alongside it as `census.json`. **Before
 trusting a regenerated census, run `<session scratchpad>/fin/regress.py`** — six
@@ -29,10 +30,10 @@ scores it at three levels of erasure:
 
 `docs/inliner-ledger.md` §12.8 published the first SHAPE census. This one:
 
-* runs on the **corrected** instrument — **eleven** normalisation asymmetries
+* runs on the **corrected** instrument — **thirteen** normalisation asymmetries
   have now been found and fixed, every one inflating the gap
   (`docs/finish-line-ledger.md` §26, §26.1 for one to nine, §34–§35 for ten
-  and eleven);
+  and eleven, §38–§39 for twelve and thirteen);
 * reads our side from the compiled **object** and retail's body from
   `oracles-v2.json` (the true body, padding stripped) rather than a slice to
   the next annotated address, so neither side inherits a length guess;
@@ -86,9 +87,10 @@ automatically:
 |---|---|---|---|
 | **TEXT-CLOSED (proof)** | **10** | SHAPE 100 **and** STRUCT 100 | Never send another source variant. Our source emits retail's program *and* retail's frame layout; the residue is register colour by construction. |
 | **FRAME (decl-set)** | **3** | STRUCT < SHAPE **and** `sub esp` differs | A genuine declaration-set defect. `(ours − retail)/4` is the slot budget. The strongest text signal in the set. |
-| **ENREG (same frame)** | **10** | STRUCT < SHAPE **and** `sub esp` equal | The two sides agree on every operation and on the frame *size*, but reference different slots — a different choice of which value to keep in a register. A new class; see below. |
+| **SLOT (same frame size)** | **15** | STRUCT < SHAPE **and** `sub esp` equal | The two sides agree on every operation and on the frame *size*, but aligned instructions reference different slots. Two mechanisms live here: a different choice of what to **enregister**, and the same computation reading differently-**placed** stack temporaries. |
 | **cmpdir (allocator)** | **7** | every divergence is a compare with exchanged operands | Not a text target. Allocator/scheduler. |
-| **SHAPE gap (text target)** | **51** | real operation differences remain | Worth reading — with the caveat that a spill also adds a `mov`, so this means "read it", not "source defect confirmed". |
+| **schedule (reordered)** | **16** | the union of all divergent blocks has the **same instruction multiset** on both sides | Not a text target. The same program, emitted in a different order. |
+| **SHAPE gap (text target)** | **30** | real operation differences remain | Worth reading — with the caveat that a spill also adds a `mov`, so this means "read it", not "source defect confirmed". |
 
 ### TEXT-CLOSED — the ten rows that are provably done with the text channel
 
@@ -133,7 +135,7 @@ rediscovers the other three from a completely different measurement — an
 aligned instruction diff, not a prologue read — and assigns them the same slot
 budgets. Two instruments, one answer.
 
-### ENREG (same frame) — a class nobody had
+### SLOT (same frame size) — a class nobody had
 
 Ten rows where **every operation agrees and the frame size agrees**, but
 aligned instructions reference different slots:
@@ -249,6 +251,121 @@ targets actually table noise?" — is answered: none of them are.** Only six ope
 rows carry a table, all six were already being trimmed, and no row moved into
 or out of the `SHAPE gap` bucket.
 
+## Revision 3 — fix 12: a stack displacement is placement, so SHAPE erases it
+
+SHAPE already erased `[ebp ± X]`. It did **not** erase `[esp ± X]`, and that is
+inconsistent for two reasons:
+
+* in a **frameless** function `[esp + X]` *is* the frame — there is nowhere else
+  for a local to live;
+* a stack displacement **shifts with every `push`**, so a purely scheduling move
+  of a stack load changes its own displacement and stops looking like a
+  permutation. `TglImpl::TextureImpl::SetImage` is the specimen: retail loads
+  `pImage` at `[esp+0x14]` before `push ebp`, we load it at `[esp+0x18]` after
+  the first virtual call — one instruction moved three positions, reading as
+  two "different operations".
+
+`STRUCT` still keeps every displacement, so nothing is lost — the information
+moves to the level whose job it is.
+
+**Independent corroboration**: with the fix, `LegoNavController::Notify` scores
+**99.46**, which is exactly the number the parallel lane measured for it with
+its own implementation. Two instruments, one number.
+
+### Effect: seven rows moved, five changed bucket
+
+| addr | SHAPE rev2 → rev3 | verdict | row |
+|---|---|---|---|
+| `0x100a46b0` | 90.13 → **100.00** | SHAPE gap → **SLOT** | `OrientableROI::UpdateTransformationRelativeToParent` |
+| `0x1009f490` | 94.23 → 97.12 | SHAPE gap → **SLOT** | `LegoAnimScene::CalculateCameraTransform` |
+| `0x1004c580` | 92.31 → 95.65 | SHAPE gap | `MxTransitionManager::SetupCopyRect` |
+| `0x100bb1d0` | 96.43 → 98.41 | SHAPE gap → **SLOT** | `MxDisplaySurface::VTable0x30` |
+| `0x100586e0` | 96.26 → 97.20 | SHAPE gap → **SLOT** | `LegoPathBoundary::RemovePresenter` |
+| `0x10051ac0` | 97.12 → 97.48 | SHAPE gap → **SLOT** | `LegoAct2::SpawnBricks` |
+| `0x10055a60` | 99.09 → 99.46 | SLOT | `LegoNavController::Notify` |
+
+**The `TEXT-CLOSED` bucket is unchanged at ten rows**, because its test requires
+STRUCT 100 as well and STRUCT keeps every displacement. The proof is unaffected
+by this fix.
+
+### A limitation this exposes, and it must be stated
+
+`0x100a46b0 UpdateTransformationRelativeToParent` — the `vec.h`-debt row — now
+scores **SHAPE 100.00 / STRUCT 90.13**. Read carefully: it means all 537
+operations align once stack displacements are erased, and 53 instructions
+reference different slots.
+
+It does **not** mean the FP addend *order* matches. In code where every operand
+is a stack temporary, `fld [esp+0xc8]; fmul [esp+0x198]` and
+`fld [esp+0xb8]; fmul [esp+0x158]` normalise to the same thing, so SHAPE cannot
+distinguish two orderings of the same products. For stack-heavy FP code the
+discriminating information lives in **STRUCT**, not SHAPE.
+
+So: `SHAPE 100` is a statement about the operation *sequence*. It is only a
+statement about operand *identity* when the operands are registers, members or
+globals. `docs/inliner-ledger.md` §12.2's conclusion for this row — that no
+source lever moves it — is unaffected and, if anything, corroborated: whatever
+differs is placement, and §12.2 showed every source form is worse.
+
+## Revision 4 — fix 13: a moved instruction is not two different operations
+
+`difflib` reports an instruction that moved past several others as **three**
+blocks — `replace`, `insert`, `delete`. Classifying each block on its own, that
+reads as "ours has an operation retail doesn't, and vice versa", i.e. a text
+defect. It is a reordering.
+
+The fix is one line of principle: **take the union of all divergent blocks and
+compare the two multisets.** If they are equal, the entire residue is a
+reordering, whatever difflib's block structure looks like.
+
+### Effect: the text-target list drops from 46 to 30
+
+Sixteen rows move to `schedule (reordered)`:
+
+| SHAPE | addr | row |
+|---|---|---|
+| 94.87 | `0x100a12a0` | `TglImpl::TextureImpl::SetImage` |
+| 96.39 | `0x100bd020` | `MxBitmap::BitBltTransparent` |
+| 97.18 | `0x10017af0` | `PizzeriaState::PizzeriaState` |
+| 97.22 | `0x100d0d80` | `ReadData` |
+| 97.67 | `0x10038380` | `Pizza::StopActions` |
+| 97.80 | `0x100b27b0` | `MxVideoPresenter::Destroy(unsigned char)` |
+| 98.20 | `0x10031820` | `Isle::Enable` |
+| 98.73 | `0x10072ad0` | `Act3::TriggerHitSound` |
+| 98.81 | `0x10073a90` | `Act3::Enable` |
+| 98.82 | `0x100c6fa0` | `MxDSBuffer::FUN_100c6fa0` |
+| 98.91 | `0x100334b0` | `Act1State::Act1State` |
+| 98.94 | `0x10084030` | `LegoCharacterManager::CreateActorROI` |
+| 99.10 | `0x100495b0` | `_Tree<LegoBEWithMidpoint*>::…` |
+| 99.53 | `0x100ba7f0` | `MxDisplaySurface::Create` |
+| 99.61 | `0x1009a8c0` | `LegoWEGEdge::LinkEdgesAndFaces` |
+| 99.70 | `0x1007b770` | `LegoVideoManager::Tickle` |
+
+**Eight of the sixteen were already independently established as reorderings**
+by hand, before this test existed:
+
+* `MxDSBuffer::FUN_100c6fa0` and `MxDisplaySurface::Create` are the **only two
+  rows `docs/residue-runs.md` classifies `PERMUTED`** — and they are both here,
+  and nothing else in the census is;
+* `ReadData` (epilogue interleave), `PizzeriaState` (a `lea`/`mov` pair),
+  `Act1State` (nine member stores), `Pizza::StopActions` (the `xor` position),
+  `Isle::Enable` (the LenSquared prelude) and `SetImage` (one load moved) were
+  each read instruction-by-instruction in `docs/finish-line-ledger.md`.
+
+Two independent classifiers and eight hand reads agreeing is the strongest
+validation any bucket in this census has.
+
+### Caveat that does not get a classifier
+
+An extra `mov reg, reg` on one side is a **register copy the allocator
+inserted**, and an extra `lea reg,[reg]` or `nop` is alignment. Neither is a
+source statement, but both leave the multisets unequal, so such a row still
+reads as a `SHAPE gap`. `0x1006ed90 Infocenter::Create` is the worked example:
+its entire SHAPE residue is one extra `mov r, r` in retail plus one load moved
+two positions. It is **not** a text target. This is deliberately left to the
+reader rather than automated — `mov r, N` can be either a rematerialisation or
+a real assignment, and no cheap test separates them.
+
 ## Caveats
 
 * **A `cmpdir` is invisible to the three levels** — it scores identically at
@@ -329,74 +446,74 @@ scanning method.
 | 100.00 | 100.00 | 96.12 | 0.9612 | `0x100b24f0` | 346/346 | TEXT-CLOSED (proof) | `MxVideoPresenter::AlphaMask::AlphaMask(class MxBitmap ` |
 | 100.00 | 100.00 | 94.65 | 0.9251 | `0x100ba2c0` | 577/576 | TEXT-CLOSED (proof) | `MxStillPresenter::Clone` |
 | 100.00 | 100.00 | 97.39 | 0.9739 | `0x100c3750` | 1157/1157 | TEXT-CLOSED (proof) | `MxRegion::AddRect` |
-| 100.00 | 99.05 | 99.05 | 0.9907 | `0x100035e0` | 1148/1148 | ENREG (same frame) | `Helicopter::HandleControl` |
+| 100.00 | 99.05 | 99.05 | 0.9907 | `0x100035e0` | 1148/1148 | SLOT (same frame size) | `Helicopter::HandleControl` |
+| 100.00 | 90.13 | 88.83 | 0.8696 | `0x100a46b0` | 2515/2515 | SLOT (same frame size) | `OrientableROI::UpdateTransformationRelativeToParent` |
 | 99.73 | 99.73 | 94.40 | 0.9212 | `0x10029d50` | 1117/1119 | cmpdir (allocator) | `_Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<Lego` |
 | 99.73 | 99.73 | 90.27 | 0.9027 | `0x1001d890` | 1106/1106 | cmpdir (allocator) | `_Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,al` |
 | 99.73 | 99.73 | 96.48 | 0.9498 | `0x10081840` | 1163/1168 | SHAPE gap (text target) | `LegoCarRaceActor::CheckPresenterAndActorIntersections` |
-| 99.70 | 99.70 | 96.36 | 0.9636 | `0x1007b770` | 1089/1089 | SHAPE gap (text target) | `LegoVideoManager::Tickle` |
-| 99.61 | 99.61 | 99.21 | 0.9921 | `0x1009a8c0` | 1494/1494 | SHAPE gap (text target) | `LegoWEGEdge::LinkEdgesAndFaces` |
+| 99.70 | 99.70 | 96.36 | 0.9636 | `0x1007b770` | 1089/1089 | schedule (reordered) | `LegoVideoManager::Tickle` |
+| 99.61 | 99.61 | 99.21 | 0.9921 | `0x1009a8c0` | 1494/1494 | schedule (reordered) | `LegoWEGEdge::LinkEdgesAndFaces` |
 | 99.60 | 99.60 | 85.02 | 0.8205 | `0x1006dec0` | 1113/1104 | SHAPE gap (text target) | `_Tree<char const *,pair<char const * const,LegoHideAni` |
 | 99.53 | 99.53 | 99.53 | 0.9953 | `0x1007ca30` | 2633/2633 | cmpdir (allocator) | `LegoPartPresenter::Read` |
-| 99.53 | 99.53 | 99.53 | 0.9953 | `0x100ba7f0` | 660/660 | SHAPE gap (text target) | `MxDisplaySurface::Create` |
-| 99.47 | 98.42 | 90.53 | 0.8842 | `0x10069b10` | 622/617 | ENREG (same frame) | `LegoAnimPresenter::BuildROIMap` |
+| 99.53 | 99.53 | 99.53 | 0.9953 | `0x100ba7f0` | 660/660 | schedule (reordered) | `MxDisplaySurface::Create` |
+| 99.47 | 98.42 | 90.53 | 0.8842 | `0x10069b10` | 622/617 | SLOT (same frame size) | `LegoAnimPresenter::BuildROIMap` |
+| 99.46 | 99.03 | 97.52 | 0.9818 | `0x10055a60` | 4112/4112 | SLOT (same frame size) | `LegoNavController::Notify` |
 | 99.37 | 99.37 | 84.99 | 0.7983 | `0x1006a7a0` | 686/690 | SHAPE gap (text target) | `_Tree<char const *,pair<char const * const,LegoAnimStr` |
 | 99.36 | 99.36 | 85.22 | 0.8051 | `0x1004f9b0` | 681/679 | SHAPE gap (text target) | `_Tree<char const *,pair<char const * const,LegoTexture` |
 | 99.36 | 99.36 | 83.51 | 0.7828 | `0x1006c200` | 678/682 | SHAPE gap (text target) | `_Tree<char const *,pair<char const * const,char const ` |
 | 99.32 | 99.32 | 85.21 | 0.7680 | `0x10068b20` | 1104/1096 | SHAPE gap (text target) | `_Tree<char const *,pair<char const * const,char const ` |
 | 99.17 | 99.17 | 98.90 | 0.9752 | `0x100170e0` | 1391/1391 | SHAPE gap (text target) | `CarRace::HandlePathStruct` |
 | 99.14 | 99.14 | 99.14 | 0.9827 | `0x10058c30` | 568/571 | SHAPE gap (text target) | `LegoOmni::Destroy` |
-| 99.10 | 99.10 | 69.37 | 0.6532 | `0x100495b0` | 648/648 | SHAPE gap (text target) | `_Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multis` |
+| 99.10 | 99.10 | 69.37 | 0.6532 | `0x100495b0` | 648/648 | schedule (reordered) | `_Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multis` |
 | 99.10 | 99.10 | 74.21 | 0.7075 | `0x10083890` | 652/653 | cmpdir (allocator) | `_Tree<char *,pair<char * const,LegoCharacter *>,map<ch` |
-| 99.09 | 98.66 | 97.37 | 0.9482 | `0x10055a60` | 4120/4112 | ENREG (same frame) | `LegoNavController::Notify` |
 | 98.94 | 98.94 | 88.37 | 0.8475 | `0x1006e720` | 686/689 | SHAPE gap (text target) | `_Tree<char const *,pair<char const * const,LegoHideAni` |
-| 98.94 | 98.94 | 93.95 | 0.9365 | `0x10084030` | 2294/2294 | SHAPE gap (text target) | `LegoCharacterManager::CreateActorROI` |
+| 98.94 | 98.94 | 93.95 | 0.9365 | `0x10084030` | 2294/2294 | schedule (reordered) | `LegoCharacterManager::CreateActorROI` |
 | 98.92 | 98.92 | 92.14 | 0.8780 | `0x100a7960` | 1101/1100 | SHAPE gap (text target) | `_Tree<char const *,pair<char const * const,ViewLODList` |
-| 98.91 | 98.91 | 98.91 | 0.9891 | `0x100334b0` | 843/843 | SHAPE gap (text target) | `Act1State::Act1State` |
+| 98.91 | 98.91 | 98.91 | 0.9891 | `0x100334b0` | 843/843 | schedule (reordered) | `Act1State::Act1State` |
 | 98.91 | 98.91 | 92.73 | 0.9273 | `0x1003f540` | 854/854 | SHAPE gap (text target) | `WriteDefaultTexture` |
-| 98.82 | 98.82 | 98.82 | 0.9882 | `0x100c6fa0` | 234/234 | SHAPE gap (text target) | `MxDSBuffer::FUN_100c6fa0` |
-| 98.81 | 98.81 | 90.91 | 0.8893 | `0x10073a90` | 930/929 | SHAPE gap (text target) | `Act3::Enable` |
+| 98.82 | 98.82 | 98.82 | 0.9882 | `0x100c6fa0` | 234/234 | schedule (reordered) | `MxDSBuffer::FUN_100c6fa0` |
+| 98.81 | 98.81 | 90.91 | 0.8893 | `0x10073a90` | 930/929 | schedule (reordered) | `Act3::Enable` |
 | 98.80 | 98.80 | 86.75 | 0.8675 | `0x100166a0` | 645/645 | cmpdir (allocator) | `JetskiRace::HandlePathStruct` |
-| 98.73 | 98.73 | 92.41 | 0.9302 | `0x10072ad0` | 348/348 | SHAPE gap (text target) | `Act3::TriggerHitSound` |
+| 98.73 | 98.73 | 92.41 | 0.9302 | `0x10072ad0` | 348/348 | schedule (reordered) | `Act3::TriggerHitSound` |
 | 98.71 | 98.71 | 90.99 | 0.8966 | `0x1006ed90` | 380/381 | SHAPE gap (text target) | `Infocenter::Create` |
 | 98.64 | 98.64 | 84.51 | 0.7745 | `0x10069e90` | 1104/1096 | SHAPE gap (text target) | `_Tree<char const *,pair<char const * const,LegoAnimStr` |
 | 98.56 | 98.56 | 98.56 | 0.9426 | `0x1002de10` | 746/743 | SHAPE gap (text target) | `LegoPathActor::SetTransformAndDestinationFromPoints` |
 | 98.52 | 90.24 | 86.69 | 0.8698 | `0x100998e0` | 987/987 | FRAME (decl-set) | `LegoTextureContainer::GetCached` |
 | 98.46 | 98.60 | 95.53 | 0.9476 | `0x10054050` | 2665/2666 | SHAPE gap (text target) | `Act3Ammo::Animate` |
-| 98.46 | 98.02 | 82.20 | 0.8176 | `0x100a3840` | 667/664 | ENREG (same frame) | `TglImpl::MeshBuilderImpl::CreateMesh` |
-| 98.31 | 87.84 | 86.15 | 0.8149 | `0x1006b140` | 941/948 | ENREG (same frame) | `LegoAnimPresenter::CopyTransform` |
+| 98.46 | 98.02 | 82.20 | 0.8176 | `0x100a3840` | 667/664 | SLOT (same frame size) | `TglImpl::MeshBuilderImpl::CreateMesh` |
+| 98.41 | 96.43 | 73.81 | 0.8611 | `0x100bb1d0` | 811/811 | SLOT (same frame size) | `MxDisplaySurface::VTable0x30` |
+| 98.31 | 87.84 | 86.15 | 0.8149 | `0x1006b140` | 941/948 | SLOT (same frame size) | `LegoAnimPresenter::CopyTransform` |
 | 98.25 | 98.25 | 96.84 | 0.9684 | `0x10083500` | 822/822 | cmpdir (allocator) | `LegoCharacterManager::GetActorROI` |
 | 98.22 | 98.22 | 92.44 | 0.9244 | `0x10085500` | 653/653 | SHAPE gap (text target) | `_Tree<char *,pair<char * const,LegoCharacter *>,map<ch` |
 | 98.21 | 98.21 | 87.50 | 0.7933 | `0x1006fda0` | 264/272 | SHAPE gap (text target) | `Infocenter::HandleKeyPress` |
-| 98.20 | 98.20 | 97.08 | 0.9725 | `0x10031820` | 3580/3580 | SHAPE gap (text target) | `Isle::Enable` |
-| 98.14 | 96.64 | 93.51 | 0.9277 | `0x100a84a0` | 2061/2058 | ENREG (same frame) | `LegoROI::Read` |
+| 98.20 | 98.20 | 97.08 | 0.9725 | `0x10031820` | 3580/3580 | schedule (reordered) | `Isle::Enable` |
+| 98.14 | 96.64 | 93.51 | 0.9277 | `0x100a84a0` | 2061/2058 | SLOT (same frame size) | `LegoROI::Read` |
 | 98.10 | 98.10 | 82.38 | 0.7913 | `0x10059dc0` | 1103/1102 | SHAPE gap (text target) | `_Tree<char const *,pair<char const * const,LegoTexture` |
-| 98.08 | 97.96 | 94.96 | 0.9496 | `0x100417c0` | 2875/2875 | ENREG (same frame) | `Act3Brickster::FUN_100417c0` |
-| 97.97 | 97.16 | 96.89 | 0.9730 | `0x10040360` | 2496/2496 | ENREG (same frame) | `Act3Cop::FUN_10040360` |
+| 98.08 | 97.96 | 94.96 | 0.9496 | `0x100417c0` | 2875/2875 | SLOT (same frame size) | `Act3Brickster::FUN_100417c0` |
+| 97.97 | 97.16 | 96.89 | 0.9730 | `0x10040360` | 2496/2496 | SLOT (same frame size) | `Act3Cop::FUN_10040360` |
 | 97.90 | 76.88 | 73.38 | 0.7268 | `0x100aa510` | 1694/1693 | FRAME (decl-set) | `LegoLOD::Read` |
 | 97.83 | 97.83 | 75.27 | 0.7092 | `0x1002bff0` | 1104/1096 | SHAPE gap (text target) | `_Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActo` |
-| 97.80 | 97.80 | 87.91 | 0.8791 | `0x100b27b0` | 247/247 | SHAPE gap (text target) | `MxVideoPresenter::Destroy(unsigned char)` |
+| 97.80 | 97.80 | 87.91 | 0.8791 | `0x100b27b0` | 247/247 | schedule (reordered) | `MxVideoPresenter::Destroy(unsigned char)` |
 | 97.77 | 97.77 | 93.32 | 0.9048 | `0x100b2a70` | 1254/1260 | SHAPE gap (text target) | `MxVideoPresenter::PutFrame` |
-| 97.67 | 97.67 | 76.74 | 0.7442 | `0x10038380` | 110/110 | SHAPE gap (text target) | `Pizza::StopActions` |
-| 97.22 | 97.22 | 97.22 | 0.9722 | `0x100d0d80` | 424/424 | SHAPE gap (text target) | `ReadData` |
-| 97.18 | 97.18 | 88.73 | 0.8873 | `0x10017af0` | 264/264 | SHAPE gap (text target) | `PizzeriaState::PizzeriaState` |
-| 97.12 | 97.12 | 90.65 | 0.9101 | `0x10051ac0` | 1115/1115 | SHAPE gap (text target) | `LegoAct2::SpawnBricks` |
-| 96.89 | 95.65 | 93.17 | 0.8625 | `0x100293c0` | 282/286 | ENREG (same frame) | `LegoControlManager::UpdateEnabledChild` |
+| 97.67 | 97.67 | 76.74 | 0.7442 | `0x10038380` | 110/110 | schedule (reordered) | `Pizza::StopActions` |
+| 97.48 | 97.12 | 90.65 | 0.9101 | `0x10051ac0` | 1115/1115 | SLOT (same frame size) | `LegoAct2::SpawnBricks` |
+| 97.22 | 97.22 | 97.22 | 0.9722 | `0x100d0d80` | 424/424 | schedule (reordered) | `ReadData` |
+| 97.20 | 96.26 | 79.44 | 0.7757 | `0x100586e0` | 314/314 | SLOT (same frame size) | `LegoPathBoundary::RemovePresenter` |
+| 97.18 | 97.18 | 88.73 | 0.8873 | `0x10017af0` | 264/264 | schedule (reordered) | `PizzeriaState::PizzeriaState` |
+| 97.12 | 94.23 | 93.59 | 0.8896 | `0x1009f490` | 1074/1121 | SLOT (same frame size) | `LegoAnimScene::CalculateCameraTransform` |
+| 96.89 | 95.65 | 93.17 | 0.8625 | `0x100293c0` | 282/286 | SLOT (same frame size) | `LegoControlManager::UpdateEnabledChild` |
 | 96.81 | 96.81 | 81.91 | 0.7527 | `0x100574a0` | 253/258 | SHAPE gap (text target) | `LegoPathBoundary::RemoveActor` |
-| 96.75 | 91.33 | 88.08 | 0.8629 | `0x10048310` | 2337/2338 | ENREG (same frame) | `LegoPathController::FindPath` |
+| 96.75 | 91.33 | 88.08 | 0.8629 | `0x10048310` | 2337/2338 | SLOT (same frame size) | `LegoPathController::FindPath` |
 | 96.72 | 96.72 | 87.09 | 0.8446 | `0x1004ebd0` | 745/739 | SHAPE gap (text target) | `LegoTexturePresenter::Read` |
-| 96.43 | 96.43 | 73.81 | 0.8611 | `0x100bb1d0` | 811/811 | SHAPE gap (text target) | `MxDisplaySurface::VTable0x30` |
-| 96.39 | 96.39 | 78.92 | 0.7470 | `0x100bd020` | 415/415 | SHAPE gap (text target) | `MxBitmap::BitBltTransparent` |
-| 96.26 | 96.26 | 79.44 | 0.7757 | `0x100586e0` | 314/314 | SHAPE gap (text target) | `LegoPathBoundary::RemovePresenter` |
+| 96.39 | 96.39 | 78.92 | 0.7470 | `0x100bd020` | 415/415 | schedule (reordered) | `MxBitmap::BitBltTransparent` |
 | 96.13 | 96.13 | 93.92 | 0.8950 | `0x1003cf20` | 274/258 | SHAPE gap (text target) | `LegoCacheSoundManager::~LegoCacheSoundManager` |
+| 95.65 | 95.65 | 88.29 | 0.8495 | `0x1004c580` | 413/412 | SHAPE gap (text target) | `MxTransitionManager::SetupCopyRect` |
 | 95.65 | 95.65 | 93.48 | 0.9348 | `0x100b26f0` | 101/101 | SHAPE gap (text target) | `MxVideoPresenter::AlphaMask::IsHit` |
 | 95.52 | 95.52 | 95.52 | 0.9552 | `0x1003d170` | 282/281 | SHAPE gap (text target) | `LegoCacheSoundManager::FindSoundByKey` |
 | 95.04 | 95.04 | 95.04 | 0.9504 | `0x100a4420` | 520/514 | SHAPE gap (text target) | `OrientableROI::OrientableROI` |
-| 94.87 | 94.87 | 66.67 | 0.6667 | `0x100a12a0` | 83/83 | SHAPE gap (text target) | `TglImpl::TextureImpl::SetImage` |
+| 94.87 | 94.87 | 66.67 | 0.6667 | `0x100a12a0` | 83/83 | schedule (reordered) | `TglImpl::TextureImpl::SetImage` |
 | 94.69 | 94.69 | 94.69 | 0.9552 | `0x10046050` | 693/703 | SHAPE gap (text target) | `LegoPathController::PlaceActor(class LegoPathActor *, ` |
 | 94.27 | 94.27 | 92.71 | 0.8848 | `0x100a66f0` | 557/561 | SHAPE gap (text target) | `ViewManager::ManageVisibilityAndDetailRecursively` |
-| 94.23 | 94.23 | 93.59 | 0.8896 | `0x1009f490` | 1074/1121 | SHAPE gap (text target) | `LegoAnimScene::CalculateCameraTransform` |
 | 94.13 | 94.13 | 88.56 | 0.8856 | `0x10062e20` | 1098/1098 | SHAPE gap (text target) | `LegoAnimationManager::FUN_10062e20` |
 | 93.08 | 68.26 | 63.48 | 0.5411 | `0x10061010` | 717/731 | FRAME (decl-set) | `LegoAnimationManager::FUN_10061010` |
-| 92.31 | 92.31 | 84.95 | 0.8227 | `0x1004c580` | 413/412 | SHAPE gap (text target) | `MxTransitionManager::SetupCopyRect` |
 | 91.30 | 91.30 | 65.22 | 0.6522 | `0x10057180` | 57/57 | cmpdir (allocator) | `_Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<Lego` |
-| 90.13 | 90.13 | 88.83 | 0.8696 | `0x100a46b0` | 2515/2515 | SHAPE gap (text target) | `OrientableROI::UpdateTransformationRelativeToParent` |
