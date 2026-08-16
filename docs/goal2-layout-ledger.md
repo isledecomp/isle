@@ -604,3 +604,46 @@ Next pass should bisect the ±16 plateaus by address: find the last aligned row
 before each plateau starts and read the size difference of the slot between it
 and the first displaced row. That is a bounded, purely measured search, and it
 is where goal 2 actually lives.
+
+## 14. Goal 2 is a queue of **364 boundaries**, and its biggest item is one object
+
+`layout/queue.py` (landed as `tools/layout_boundaries.py`) sorts every matched
+row by retail VA and reports each point where the displacement changes. Each
+boundary is one concrete statement: *between these two rows, our cumulative size
+differs from retail's by N bytes*.
+
+There are **364** of them over 4,934 rows:
+
+| class | count |
+|---|---|
+| b/c cross-object step | 212 |
+| **a intra-object COMDAT transposition** | **148** |
+| d open row at the boundary | 4 |
+
+Ranked by rows carried before the displacement next changes:
+
+| rows | step | class | where |
+|---|---|---|---|
+| **741** | **+32** | **a** | `helicopter.cpp.obj`: `Mx3DPointFloat::operator=(Vector3 const&)` → `Helicopter::HandleEndAnim` |
+| 253 | −16 | a | `legoanimpresenter.cpp.obj`: `_Tree<char const*,…>` → `LegoHideAnimPresenter::EndAction` |
+| 241 | +37104 | b/c | `omni:mxutilities.cpp.obj` → `omni:mxdsobject.cpp.obj` |
+| 235 | +192 | a | `legopathcontroller.cpp.obj`: `_Tree<LegoPathCtrlEdge*>` → `list<LegoBEWithMidpoint>` |
+| 212 | +320 | a | `legopathactor.cpp.obj`: `List<LegoPathBoundary*>::~List` → `LegoPathActor::ParseAction` |
+| 173 | +32 | a | `legoworld.cpp.obj`: `MxList<MxPresenter*>::InsertEntry` → `MxList<LegoEntity*>::InsertEntry` |
+
+**One 32-byte intra-object transposition in `helicopter.cpp.obj` is inherited by
+741 rows** — 15% of the image, from a single class-(a) defect, in the class the
+manifest already has a unit type for (`swap_comdat_group_order`). Five of the
+top six are class (a), i.e. COMDAT emission order inside one object, which is
+source-order-determined and therefore in the channel this project already knows
+how to work.
+
+The first boundary in the image reads the same way and shows the shape exactly
+(`layout/gap.py 0x10002ff0 0x10003070`): retail's gap is 128 bytes, ours is 144,
+and the extra 16 is `Mx4DPointFloat::operator=(Vector4 const&)`, which we emit
+*before* `Helicopter::ClassName` and retail emits 400 bytes *after* it. Both
+copies are byte-identical (`matching` 1.0) — only the position differs.
+
+That is the correction this pass owes the project: goal 2 was being worked as a
+link-input-order problem (class b), and the measurement says its mass is
+**intra-object COMDAT order** (class a), concentrated in a handful of objects.
