@@ -147,8 +147,179 @@ Per compiled object, per state, one bit:
 No body distance, no `nd`, no oracle — so a state costs one compile and
 one COFF parse.
 
+## 4.1 The site region is instruction-identical to retail
+
+Ours (`ip-anmgr/base-0/o.obj`) against retail `0x10061010`, from the inner
+cursor's construction to the `operator new`, every instruction pairs up
+with a uniform +11 byte / −4 frame-offset shift. The *only* divergence in
+the whole region is the construction itself:
+
+```
+OURS   500 push 0            502 mov eax,[ebp-0x10]  505 push esi
+       506 mov ecx,edi       508 push eax            509 call ??0MxListEntry…   (14 B)
+RETAIL 511 mov eax,[ebp-0x14] 514 mov [edi],eax      516 mov eax,edi
+       518 mov [edi+4],esi   521 mov [edi+8],0                                   (17 B)
+```
+
+Retail's inlined Find loop (`+429..+466`) is instruction-for-instruction
+ours (`+418..+455`), including the virtual `call [esi+0x14]`. So our
+source text at this site is right, retail expands exactly the same set of
+inlines except this one, and the entire remaining +14 bytes / +3 slots of
+the row is downstream of that single decision.
+
 ---
 
-## 5. Sweeps
+# THE ANSWER
 
-*(filled in as they complete — see §5.x)*
+**YES — the decision at `FUN_10061010` can be flipped, and I flipped it
+four times.** It is not a fixed property of the callee, the TU, or the
+compile state. What I could NOT do is flip it with any *legitimate*
+change: every semantics-preserving form and every compiler-state carrier
+leaves it declined. Both halves are measured, and both are below.
+
+## 5. The flip is real — four caller-side forms take the inline
+
+Same TU, same instantiation, same build; only the text of the enclosing
+`else` arm differs. Verdict read off the ctor COMDAT + call relocations.
+
+| variant | what changed | verdict | caller B |
+|---|---|---|---|
+| `v00_base` | — | DECLINED | 717 |
+| `v09_PROBE_nocursor` | inner cursor + `Find` deleted | **INLINED** | 556 |
+| `v10_PROBE_bare` | site reduced to a bare `Append` | **INLINED** | 552 |
+| `t_orig__e_cursor_nofind` | cursor **constructed and EH-live**, `Find` not called | **INLINED** | 662 |
+| `p05_hasmatch` | `if (!cursor.HasMatch())` in place of `Find` | **INLINED** | 668 |
+
+All four change behaviour and none is landable. Their value is that they
+prove the capability and localise the mechanism.
+
+### 5.1 The margin is one live pointer — measured to the byte
+
+The sharpest pair in the whole lane. Both are one-line inline accessors on
+the same cursor object, neither has a loop, neither makes a call:
+
+```cpp
+MxBool HasMatch() { return m_match != NULL; }                 -> INLINED (668 B)
+MxBool Head() { m_match = m_list->m_first; return m_match != NULL; }
+                                                              -> DECLINED (672 B)
+```
+
+The only difference is that `Head()` dereferences `m_list`. One extra live
+pointer at the site is the entire margin between taking and refusing the
+25-byte inline. That is why `Find` — which loads `m_list`, loads its
+vtable and calls through it — refuses so decisively.
+
+## 6. Four models refuted, each by measurement
+
+**(a) "An EH-tracked object in scope forbids the inline."** Refuted:
+`e_cursor_nofind` keeps `LegoTranInfoListCursor cursor(m_tranInfoList2)`
+constructed, in scope and EH-registered at the site, and the ctor is
+INLINED.
+
+**(b) "Budget consumed in source order before the site."** Refuted twice:
+
+| probe | site position | verdict |
+|---|---|---|
+| `p02_find_after` | `Append` written **before** `Find` | DECLINED |
+| `p07_append_before_cursor` | `Append` written before the cursor is even **constructed** | DECLINED |
+
+The decision is made with knowledge of the whole enclosing region, not of
+what precedes the site.
+
+**(c) "Upstream expansion in the same function consumes the budget."**
+Refuted: gutting the accessor chain (`t_PROBE_shortchain`, −21 B) and
+deleting both `BackgroundAudioManager()->RaiseVolume()` blocks
+(`t_PROBE_noraise`, −75 B) both leave it DECLINED.
+
+**(d) "It is TU-global — the two sites that DO inline (lines 1019, 1086)
+precede the declining one."** Refuted, and cleanly: the whole
+`#ifdef BETA10 … #endif` block for `FUN_10061010` was moved to four
+positions in the TU — first definition, before `FUN_100609f0`, base, and
+last — and the emitted body is **byte-identical at 717 in all four**. The
+decision is strictly function-local; function position is inert.
+
+## 7. Bounded negatives — the legitimate channels are closed
+
+Every state below was compiled; none is an inference. Each sweep ran to
+completion (`0 failed`), so these are uniform samples, not partial passes
+of an ordered axis.
+
+### 7.1 Carrier lattice — 1,284 states, zero flips
+
+| TU | axes | states | result |
+|---|---|---|---|
+| `legoanimationmanager.cpp` | shape 60, padgrid 144, extern 161, fwdL 96, fwdP 96, fwdE 96, **inc 60** | **713** | 713 DECLINED |
+| `mxregion.cpp` | same | **654** | 654 DECLINED |
+
+Include-order permutation is inside the `inc` axis, so the brief's second
+channel is covered here and is negative on both TUs.
+
+Two by-products worth recording:
+
+* the carrier is not inert on `legoanimationmanager` — it moves
+  `FUN_10061010`'s body (717 in 684 states, 725 in 29) — it just never
+  moves the bit;
+* the carrier **is** inert on `MxRegion::AddRect`: 1157 bytes in all 654
+  states. `AddRect` (`0x100c3750`, .9739) is listed in
+  `docs/open-set-triage.md` as `0 — UNSWEPT`; it is now swept on 654
+  states with zero body movement, which retires the carrier channel for
+  that row.
+
+### 7.2 Semantics-preserving caller-side forms — 19 forms, zero flips
+
+All at `sub esp = 0x2c` (retail 0x38), bodies 709–774.
+
+| batch | forms | result |
+|---|---|---|
+| 1 | `findbool`, `cursor2` (rename, no shadowing), `localptr`, `flagfirst`, `eqfalse`, `guard` (early-continue), `objlocal`, `appendafter` | 8 DECLINED |
+| 2 | `scopedfind` (cursor destroyed before the site, `found` bool carried out) | 1 DECLINED |
+| 4 | `flagsvalue` (§18.3 h1), `refs` (§18.3 h2), `testonce`, `flagsptr`, `presenterlocal`, `testonce_presenter` | 6 DECLINED |
+| 6 | `declswap`, `forloop`, `outerdecl`, `earlyout` | 4 DECLINED |
+
+Batch 4 re-reads Lane STL §18.3's hoist forms against the *inline* bit
+rather than `sub esp`, and adds four closer reconstructions of retail's
+§18.2 shape (the `c_bit2` test evaluated once above the branch, `&m_flags`
+and `&m_unk0x14` held). **None of them moves either the frame or the bit.**
+§18.3's "naming a value does not create a lifetime" now has a second,
+independent confirmation: it does not create an inline decision either.
+
+### 7.3 Text × carrier product — the last untested region
+
+The carrier sweep ran on base text; the text forms ran on the base
+carrier. The product is a genuinely different region because each text
+form is a different compile state (bodies 709–717).
+
+| base text | axes | states | result |
+|---|---|---|---|
+| `h02_refs` (711 B) | shape 60, extern 161, fwdE 96 | **317** | 317 DECLINED |
+| `h06_testonce_presenter` (709 B) | shape 60, extern 161, fwdE 96 | **317** | 317 DECLINED |
+
+**634 product states, zero flips.** Both products moved the body in three
+states each (711→719, 709→717) and the bit in none.
+
+## 8. What this means for the project
+
+1. **`FUN_10061010` (0x10061010, .5481) is not reachable from any channel
+   this project currently has.** Carrier (713 states), include order (in
+   the 60 `inc` states), caller-side source form (19 semantics-preserving
+   forms), function position (4), and the text × carrier product (634)
+   are all negative, and the row's entire residue is downstream of the one
+   decision. Lane STL §18.4's "stop spending source variants on this row"
+   is confirmed with a much larger bound, and §19.4's "build the C2 stub
+   first" is the right next step — but §5.1 now gives that stub a much
+   sharper validation target than five sites: it must reproduce
+   `HasMatch` → inline and `Head` → decline, a one-pointer margin.
+
+2. **The register/stack colouring class does not inherit a lever from
+   here.** The inline decision responds only to changes in the live-value
+   set at the site — i.e. to the same register pressure that the colouring
+   class is made of. It is a symptom of the allocator state, not an
+   independent dial on it.
+
+3. **`MxRegion::AddRect` should be moved out of the `0 — UNSWEPT` column**
+   of `docs/open-set-triage.md`: 654 carrier states, body invariant.
+
+4. **Do not re-derive the census.** Nine sites, four already inlined by us,
+   eight of nine agreeing with retail; `census.py` reproduces it from any
+   build directory in one pass.
+
