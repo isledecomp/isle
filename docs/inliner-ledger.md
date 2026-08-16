@@ -361,3 +361,137 @@ row.
    eight of nine agreeing with retail; `census.py` reproduces it from any
    build directory in one pass.
 
+---
+
+# 9. `0x100c1290 MxStreamController::~MxStreamController`
+
+The wave's second target. The same instrument applies, and it turns the
+"566-byte call-first/inline-last form" that has been sought for several
+sessions from a description into a **measured signature**.
+
+## 9.1 What the row actually is
+
+`MxUtilityList<T>::PopFront` calls `pop_front()` → `erase(begin())`, and
+MSVC 4.2's `erase(iterator _P)` opens with `(_P++)._Mynode()` — so every
+`PopFront` loop carries a *nested* pair of inline candidates:
+`list<T>::erase`, and `iterator::operator++(int)` inside it.
+
+The destructor has three such loops:
+
+| loop | member | size field | our build | retail |
+|---|---|---|---|---|
+| 1 | `m_subscribers` (`list<MxDSSubscriber*>`) | `+0x38` | erase inlined, `++` inlined | same |
+| 2 | `m_unk0x3c` (`list<MxDSObject*>`) | `+0x44` | erase **inlined**, `++` **CALLED** | erase **CALLED** |
+| 3 | `m_unk0x54` (`list<MxDSObject*>`) | `+0x5c` | erase **CALLED** | erase inlined, `++` inlined |
+
+Read off the objects: our destructor's relocation signature is
+`op++@173, erase@371`; retail calls `list<MxDSObject*>::erase`
+(`0x100c14d0`) once, at `+172`, and inlines the unlink + `operator delete`
++ `dec [ecx+0x5c]` in loop 3 at `+320..+357`.
+
+So "call-first / inline-last" is exact and now has a byte-level
+definition: **one `erase` call in loop 2, none in loop 3, no
+`operator++` call anywhere.** Target signature `'erase'`, body 566.
+
+Frame: retail `sub esp, 0xa4`, ours `0xa8`. The extra 4-byte slot is
+accounted for: our out-of-line `operator++(int)` needs a returned-iterator
+temporary at `[ebp-0x24]` *in addition to* the iterator at `[ebp-0x18]`,
+where retail's out-of-line `erase` needs only its return slot
+(`[ebp-0x20]`). The +1 slot budget is a consequence of the loop-2
+decision, not an independent defect — the same "frame is downstream"
+relation established for `FUN_10061010`.
+
+## 9.2 The `mxutilitylist.h` / STL channel is closed by construction
+
+`MxDiskStreamController::~MxDiskStreamController` (`0x100c7530`) is at
+**1.0** and contains three `PopFront` loops on the *same*
+`list<MxDSObject*>` instantiation. Read off our object: it calls
+`list<MxDSObject*>::erase` out of line at **all three** loops (offsets
+150, 258, 308) and never inlines it.
+
+That is a byte-exact retail row exercising the identical construct, so:
+
+* `MxUtilityList<T>::PopFront`'s source shape is pinned — any respelling
+  that changed its expansion would break `0x100c7530`;
+* `MSVC420/include/LIST` is vendor code and out of bounds anyway;
+* and it independently confirms the model: retail's C2 declines `erase` in
+  a plain three-loop destructor and only inlines it where the surrounding
+  pressure is low enough.
+
+## 9.3 Bounded negatives for this row
+
+| channel | states | result |
+|---|---|---|
+| carrier lattice (shape 60, padgrid 144, extern 161, fwdL/fwdP/fwdE 288, inc 60) | **713** | 713 × `'op++,erase'`; body 586 (588), 589 (115), 592 (10) — **566 never reached** |
+| caller-side source forms (§9.4) | 10 | 10 × `'op++,erase'`, `sub esp` 0xa8 in all |
+| text × carrier product (`s01_sepvar`, shape/extern/fwdE) | 317 | see §9.5 |
+
+## 9.4 The source forms tried
+
+All rewrite the destructor body only; all are period-plausible and
+behaviour-identical unless marked PROBE.
+
+| form | len | signature | note |
+|---|---|---|---|
+| `s00_base` | 586 | `op++,erase` | control |
+| `s01_sepvar` | 592 | `op++,erase` | separate `MxDSObject* object` for loop 3 |
+| `s02_topdecl` | 586 | `op++,erase` | all locals declared at function top |
+| `s03_topdecl_sep` | 592 | `op++,erase` | both of the above |
+| `s04_forloops` | 586 | `op++,erase` | `for (; PopFront(x);)` spelling |
+| `s05_compat` | 592 | `op++,erase` | the `COMPAT_MODE` named-`MxDSAction` provider block |
+| `s06_compat_sep` | 591 | `op++,erase` | s05 + s01 |
+| `s07_blockscoped` | 592 | `op++,erase` | each loop's local in its own block |
+| `s08_PROBE_notrace` | 586 | `op++,erase` | `MxTrace` removed — byte-identical, so `MxTrace` is already inert under NDEBUG |
+| `s09_PROBE_loopsadjacent` | 586 | `op++,erase` | the two `MxDSObject` loops made adjacent |
+
+The `+1` slot hypothesis (retail declares a second `MxDSObject*`, costing
+exactly the one extra slot) is **refuted**: `s01`/`s03`/`s07` all declare
+the second local and all keep `sub esp` at 0xa8 while growing the body by
+6 bytes. This is the named-local rule again (`project-named-local-rule.md`,
+STL §13.2a/§18.3) — naming a value does not create a slot.
+
+## 9.5 Handover for this row
+
+The row is now characterised the way `FUN_10061010` was:
+
+* the residue is **two inline decisions**, in loops 2 and 3, on the same
+  instantiation, in one function;
+* the `+1` frame slot is downstream of loop 2's decision, not a target;
+* the source text is right (retail's loop order and member offsets match
+  ours exactly: 0x38 → 0x44 → provider 0x28 → 0x5c);
+* the header that would change the expansion is pinned by a byte-exact row
+  using the identical construct;
+* and the carrier lattice does not reach retail's length in 713 states.
+
+Anyone continuing should treat it as the *same* problem as
+`FUN_10061010`, not a separate one, and validate the C2 stub against both:
+a model must reproduce "decline `erase` in loop 2, take it in loop 3" here
+and "decline the ctor at `FUN_10061010`, take it at `FUN_100609f0`" there.
+
+## 10. Reproducing this lane
+
+Everything is in the session scratchpad `.../3233884b-.../scratchpad/inl/`.
+Nothing in the shared corpus was mutated and **no checked source was
+changed** — every variant in this ledger was compiled out of tree.
+
+| tool | what it does |
+|---|---|
+| `census.py` | whole-build `MxListEntry<T>` inline-decision census (§2) |
+| `inlprobe.py` | the one-bit probe under carrier / include / `--src` text states; carrier rendering copied from `stl/sw.py` |
+| `vartest.py` | compile a list of text variants, report verdict + body + `sub esp` |
+| `v_anmgr.py` … `v_anmgr6.py` | batches 1–6 for `FUN_10061010` |
+| `mksrc.py` | materialise the semantics-preserving variants for `--src` products |
+| `rdis.py` | disassemble a retail row, naming call targets from the report |
+| `odis.py` | disassemble one COMDAT of a probe object, naming relocations |
+| `scprobe.py` / `v_sc.py` | the `~MxStreamController` loop-signature probe and its variants |
+
+Build command for the baseline gate:
+
+```sh
+python3 tools/isle_build.py --build-dir /Users/foxtacles/Projects/isle-build-inl1 \
+  --compiler /Users/foxtacles/Projects/MSVC420/wine/x86/cl --jobs 6
+```
+
+Note: the worktree needs `legobin` symlinked to the main checkout's
+`legobin/` before `isle_build.py` will run; it is left untracked.
+
