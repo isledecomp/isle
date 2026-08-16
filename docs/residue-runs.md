@@ -138,3 +138,35 @@ source-addressable at this granularity.
 
 So for both rows the channel verdict stands and the lever is still missing.
 What this rules out is spending more carrier cells on them.
+
+## `UpdateTransformationRelativeToParent` — the vec.h-debt row, bounded
+
+The near-miss lane found this row's residue is six permuted spans of the same
+shape — same FP products, summed starting from a different term — and pointed
+at it as the first direct evidence of what the `3rdparty/vec/vec.h` vendor-edit
+debt actually is. Everything below is measured against the composed carrier
+state (`declaration_shape(5,27)`, body 2515 = retail's length), because the
+bare seed is 2473 and its distances are not comparable.
+
+Baseline **nd=99**. Every source-level lever tested is worse:
+
+| lever | cells | best nd |
+|---|---|---|
+| local declaration order (all 6 array orders × 4 positions for `int i, j`, plus 6 with `parent2world` hoisted into the block) | 29 | 107 |
+| `MXM4` operand order swapped | 1 | 156 |
+| `MXM4d` — the `double`-typed variant, consistent with the `INVERTMAT4d` already used | 1 | 115 |
+| `MXM4d` + operands swapped | 1 | 172 |
+| copy-loop statement order (`local2parent` assigned first) | 1 | 131 |
+| copy loop with `j` outer | 1 | 2190 |
+| `unsigned int i, j` | 1 | 2281 |
+
+So the current source is the closest form on every axis available, and the
+addend order lives inside `_DOTcol4` — vendor code, which the mandates forbid
+editing and which the discharged entropy edit used to reach.
+
+That leaves exactly one honest reading: **if retail's term order is different,
+1997's source did not go through `MXM4`.** Writing the product explicitly in
+first-party source would reach it, but only as a hypothesis about what the
+original wrote, and it should not be attempted without an oracle for the
+original's shape. The row remains a *layout* restoration in the manifest, which
+its unit already says.
