@@ -544,13 +544,13 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 	if (m_waitIndicator->GetCurrentTickleState() >= MxPresenter::e_streaming) {
 		// Setup the copy rect
 		MxU32 bytesPerPixel = p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
+		MxS32 copyPitch = (p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8) *
+						  (m_copyRect.right - m_copyRect.left + 1); // This uses m_copyRect, seemingly erroneously
+
 		MxPoint32 loc;
 		loc = m_waitIndicator->GetLocation();
 		y = loc.GetY();
 		MxU32 x = loc.GetX();
-
-		MxS32 copyPitch = (p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8) *
-						  (m_copyRect.right - m_copyRect.left + 1); // This uses m_copyRect, seemingly erroneously
 
 		MxS32 i;
 
