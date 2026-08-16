@@ -780,6 +780,35 @@ donut loop at act3actors.cpp:375-387 (`proi`, `locald0`, `local88`,
 `localec`, `r2`, `locald8`, and the four unused
 `local138/local134/local140/local13c`), plus the outer
 `local74`/`local2c`/`local20`/`local7c`/`local18` block at 335-340. The third
-cluster (one byte at +607, a `jne` displacement差 of 10) says something else in
+cluster (one byte at +607, a `jne` displacement difference of 10) says something else in
 the function is 10 bytes displaced, so expect the slot fix to move it too.
 **Recommended first move for the next wave in this lane.**
+
+### `Act3Cop::FUN_10040360` — text×carrier product, nd 8 → 6 (best state in the lane after the two landings)
+
+Six declaration-position variants probed in the seed lane (179 bodies; in
+every case the ONLY body that changed was the target):
+
+| variant | nd on the base carrier |
+|---|---|
+| base | 68 |
+| **c1** — the two `Vector3` declarations at act3actors.cpp:418-419 swapped (`local108` before `localf8`) | **66** |
+| c2 — `boundary` declared between them | 1179 (len 2494) |
+| c3 — `grec = new …` moved before them | 1192 (len 2494) |
+| c4 / c6 — `local108` first, `localf8` moved into the `boundary != NULL` scope | 231 (c4 and c6 produce the *same* body — position inside the inner scope is inert) |
+| c5 — `localf8` first, `local108` moved into the inner scope | 231 |
+
+**Product: `c1` text × `fwdE-20` carrier = nd 6** (a 64-state fwdE sweep on the
+c1 text; `Animate` stays 7 and `FUN_100417c0` stays 96, so no collateral). The
+c1 edit fixes the FIRST `Vector3`'s slot exactly (both now `[ebp-0x30]`). What
+is left is:
+
+* the SECOND `Vector3` at `[ebp-0x28]` where retail has `[ebp-0x4c]` (4 bytes),
+  i.e. retail separates the two objects by 0x1c of other locals — scoping it
+  into the inner block is measured WRONG, so the separating locals must be
+  something else in the same scope;
+* one `jne` displacement byte at +607 (a 10-byte layout difference elsewhere).
+
+This is the lane's best unfinished state and the most concrete recipe to hand
+on: **land `c1` as text, re-sweep act3actors, and hunt the second Vector3's
+0x1c separation.**
