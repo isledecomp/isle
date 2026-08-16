@@ -185,3 +185,243 @@ not completed.
 (order dumps), `addunit.py`/`batch1.py` (manifest editing),
 `swapreplay.py` (offline unit replay), `listcompose.py` (extension
 prototype), `whichfail.py` (compose-failure isolation).
+
+---
+
+# Second pass (Lane FIN, 2026-08-16) — re-derived at 4853, and class (b) measured
+
+Bench: worktree `agent-af3e1ee806b530baf` at `d00493ae`, build dir
+`/Users/foxtacles/Projects/isle-build-fin1` (15 chars — harness trap 1).
+Every number below is from a real `tools/isle_build.py --md5-distance` run or a
+`/MAP` relink of that build's objects.
+
+## Baseline on today's tree
+
+| | first pass (4829) | today (4853) |
+|---|---|---|
+| terminal LEGO1 byte distance | 637,971 | **661,705** |
+| `.text` rows / constant-delta runs | 4487 / 252 | 4488 / **234** |
+| displaced span | 459.4 KB | **506.9 KB** |
+| (b) cross-object / link order | 212.3 KB (67) | **272.5 KB (69)** |
+| (d) open row with size delta | 128.5 KB (18) | 110.2 KB (8) |
+| (a) intra-object transposition | 97.0 KB (142) | 82.0 KB (131) |
+| (c) gap at object boundary | 21.7 KB (13) | 42.3 KB (14) |
+
+ISLE and CONFIG remain **IDENTICAL**.
+
+## 1. Goal 1 is currently making goal 2 worse, and it is quantified
+
+Twenty-four rows closed between the two passes. Over the same interval the
+**displaced span grew by 47.5 KB** and class (b) grew by **60.2 KB**. Closing a
+row that changes a function's size shifts every function after it, and the
+run-boundary attribution charges that shift to the next object boundary.
+
+This is the whole-image version of the local effect already on record (removing
+48 bytes of `.text` cost 15 address-aligned rows because those rows had been
+propped up by 48 bytes retail does not have). The two goals are **not
+independent**, and goal-2 work done before the size-delta rows close will be
+partly undone by closing them.
+
+## 2. The headline number is a positional Hamming distance — do not optimise against it
+
+`tools/isle_build.py:368`:
+
+```python
+distance = sum(1 for a, b in zip(stamped, original) if a != b)
+```
+
+Every byte after a single inserted or removed byte counts as different. So the
+metric saturates on displacement and is **not comparable across tree states or
+lanes**. The three numbers in circulation — 545,273, 637,971 and 661,705 — were
+measured on different trees and none of them measures "how much of the image is
+right".
+
+Use the displacement ledger (`ledger1.py`/`ledger2.py`: runs, displaced span,
+class attribution) as the objective. It is already built, it is monotone in the
+thing we actually want, and it is what the table above reports.
+
+## 3. Class (b) is mostly shadow, not ordering — the measurement that was missing
+
+The first pass attributed 212.3 KB (now 272.5 KB) to "cross-object / link-input
+order" and never tested it. Tested now (`objorder.py`, no compiles: join the
+`/MAP` publics with the reccmp report, order objects by minimum **our** VA and
+by median **retail** VA, then take the longest common subsequence):
+
+```
+4488 .text rows, 0 without a map public, 338 objects
+longest already-ordered run: 308 of 338  ->  30 objects would have to move
+total span carried by out-of-order objects: 37.9 KB
+by input: libcmt 21, lego1-own 4, roi 1, omni 1, misc 1, viewmanager 1, smackw32 1
+```
+
+**Only 37.9 KB of the 272.5 KB is carried by objects that are actually in the
+wrong order.** The rest is inherited displacement — a size defect upstream
+shifts everything downstream, and the attribution charges it to the next object
+boundary. Class (b) is therefore **not** the largest actionable bucket; it is
+the largest *shadow*.
+
+And 21 of the 30 misordered objects are `libcmt` CRT members, pulled by the
+linker's reference graph and not ours to order; together they carry ~1 KB.
+
+## 4. Only four of lego1's 114 own objects are misordered
+
+`ownorder.py` restricts to the objects lego1 links explicitly:
+
+| object | our # | retail # | span |
+|---|---|---|---|
+| `legopathcontroller.cpp` (real source) | 66 | 59 | **18.5 KB** |
+| `legocachesoundlist.cpp` (generated) | 44 | 45 | 1.5 KB |
+| `legoanimpresenterset.cpp` (generated) | 53 | 58 | 0.0 KB |
+| `legoanimpresentercontainer.cpp` (generated) | 79 | 80 | 0.1 KB |
+
+Everything else in lego1's own order is already retail's.
+
+## 5. The control surface, corrected
+
+`source_overlay.graph.generated_tus[]` carries `ordinal`, `after`, `before`.
+Reading `cmake/byte_identity.cmake`:
+
+* **`ordinal` is the control** — `list(INSERT _sources ${ordinal-1} …)`;
+* **`after`/`before` are assertions** verified against the resulting
+  neighbours.
+
+Editing only the anchors fails configure with *"Source overlay TU graph seat
+differs"*. Both must move together. (Recorded because the ledger's first pass
+described these as neighbour anchors without saying which one moves the TU.)
+
+## 6. Experiment 1 — NEGATIVE, fail-closed, and it found the real constraint
+
+Moved the two generated supplier TUs whose defect looked like a simple pair
+inversion: `legocachesoundlist` after `legocachesoundmanager` (ordinal 46→47)
+and `legoanimpresentercontainer` after `legopathboundary` (81→82).
+
+```
+isle_build: refusing: LEGO1: iteration reccmp accepted raw-1.0 row set differs from its exact pin
+[isle_build] terminal LEGO1: distance 662860        (baseline 661,705  -> +1,155 WORSE)
+[isle_build] LEGO1 rows 4850/4934 at 1.0            (pin 4853          -> -3 rows)
+[isle_build] terminal ISLE: IDENTICAL   terminal CONFIG: IDENTICAL
+```
+
+Reverted; nothing landed. The gate did its job.
+
+**The three lost rows name the mechanism:**
+
+```
+LOST 0x1003d450 _Tree<LegoCacheSoundEntry,…>::insert
+LOST 0x100583a0 _Tree<LegoAnimPresenter*,…>::_Insert
+LOST 0x100588e0 _Tree<LegoAnimPresenter*,…>::equal_range
+```
+
+Those are exactly the template instantiations the two moved supplier TUs exist
+to provide. **Moving a supplier TU does not just move addresses — it changes
+which object wins COMDAT selection for the templates it supplies, and therefore
+changes those bodies.** A supplier TU's position is a *codegen* input, not a
+layout input.
+
+That constrains all future class-(b) work on generated TUs: their ordinals
+cannot be tuned for layout independently of the rows they supply. The four
+misordered lego1-own objects split accordingly — three are supplier TUs and are
+coupled to rows; the fourth, `legopathcontroller.cpp`, is a **real source** and
+is the only one whose position is a pure link-order change. It also carries by
+far the most span (18.5 KB), and it is the one experiment worth running next.
+
+## 7. What the next pass should do first
+
+1. **`legopathcontroller.cpp` alone** — move it in `CMakeLists.txt` from after
+   `legobewithmidpointcomparator` to before `legoboundaryedge` (retail #59).
+   It is a real source, so no COMDAT-selection coupling; 18.5 KB of span.
+   Note the generated chain 56–67 anchors around it, so their `after`/`before`
+   assertions must be updated in the same edit.
+2. **Stop quoting the Hamming distance** and re-baseline the objective on
+   displaced span (§2).
+3. **Do not spend the class-(b) budget on the 272.5 KB figure** — 37.9 KB of it
+   is real ordering and 21 of the 30 misordered objects are CRT (§3).
+
+## 8. Experiment 2 — the window in RETAIL's order: **−28 KB distance, +158 aligned rows, −6 rows**
+
+Experiment 1 moved two supplier TUs to positions inferred from very few rows and
+made everything worse. Experiment 2 corrects the **whole** `paths/` window to
+retail's order instead of guessing at individual TUs.
+
+Method (`ordinals.py`, `solve.py`), and the model is validated before it is
+used:
+
+1. Model the lego1 source list exactly as `cmake/byte_identity.cmake` builds it
+   — real sources from `add_library(${NAME} SHARED …)`, then each generated TU
+   inserted at `list(INSERT _sources ordinal-1 …)` in ascending ordinal.
+2. **Verify the model reproduces the linked image's object order.** It does,
+   exactly (`model reproduces the image object order: True`). Nothing below
+   rests on a guess about the build system.
+3. Rewrite `final[54:68]` into retail's measured order, solve for the ordinals
+   that realise it (the index at insertion time *is* the desired final index),
+   and **round-trip the solution back through the model** before writing.
+
+The window, ours → retail:
+
+```
+ours    aps  pce pces pas pasc pasi  be pcei pcec pcl pec bwm bwmc  PATHCTRL
+retail  pce pces pas pasc pasi  aps  PATHCTRL  be pcei pcec pcl pec bwm bwmc
+```
+
+— 12 inversions, all fixed by the rewrite. 13 ordinals changed; the CMakeLists
+edit turned out to be a no-op because `legopathcontroller.cpp`'s position
+*among the real sources* is unchanged.
+
+### Result
+
+```
+[isle_build] terminal LEGO1: distance 633559     (baseline 661,705 -> -28,146)
+[isle_build] LEGO1 rows 4847/4934, 1674 address-aligned
+                                                (baseline 4853 / 1516 -> -6 rows, +158 aligned)
+[isle_build] terminal ISLE: IDENTICAL   terminal CONFIG: IDENTICAL
+isle_build: refusing: ... accepted raw-1.0 row set differs from its exact pin
+```
+
+Fail-closed; reverted. **This is the first measured proof that the class-(b)
+channel is real and large**: one window of fourteen objects is worth **28 KB of
+byte distance and 158 address-aligned rows**.
+
+### The six lost rows are the finding
+
+```
+0x10048f10 list<LegoBoundaryEdge>::insert
+0x10049290 _Tree<LegoPathCtrlEdge*>::…            (3 rows)
+0x10049890 _Tree<LegoBEWithMidpoint*>::…          (2 rows)
+```
+
+Every one is a template instantiation living **inside `legopathcontroller`'s own
+retail address range** (`0x10048f10`–`0x10049d10`). COMDAT selection takes the
+first definition in link order. Before the move, `legopathcontroller.cpp` came
+*after* the supplier TUs, so the **suppliers'** copies won. After the move it
+comes before them — as it does in retail — so **its own** copies win, and they
+do not match retail.
+
+So those six rows were at 1.0 only because the wrong object was supplying them.
+This is the "propped-up" phenomenon one level deeper than the 48-byte case: not
+alignment propped up by extra bytes, but **row scores propped up by the wrong
+link order**. Correcting the layout does not break them; it *exposes* six
+codegen defects in `legopathcontroller.cpp`'s own template instantiations that
+the supplier TUs were masking.
+
+### What this means for sequencing the two goals
+
+Goal 2 and goal 1 are coupled through **COMDAT selection**, not just through
+addresses:
+
+* a layout fix can change which object supplies a template, and therefore
+  change row bodies;
+* conversely, some current rows are only at 1.0 because the layout is wrong.
+
+The honest consequence is that **class (b) cannot be landed incrementally under
+a zero-row-loss gate wherever a supplier TU is involved** — the correct link
+order and the current row set are inconsistent. Either the six
+`legopathcontroller.cpp` instantiations are fixed first (goal-1 work, now with a
+precise target list), or the gate needs a mode that accepts a net-negative row
+step in exchange for a measured layout gain, which is a policy question for the
+coordinator and not something a lane should decide.
+
+**Recommended next step**: treat those six rows as a goal-1 work item. They are
+fully specified — the required bodies are exactly retail's at
+`0x10048f10`/`0x10049290`/`0x100492f0`/`0x10049370`/`0x10049890`/`0x10049d10`,
+and the compile that must produce them is `legopathcontroller.cpp`'s own. When
+they close, experiment 2 becomes a clean +28 KB with zero row loss.
