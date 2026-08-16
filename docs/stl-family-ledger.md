@@ -1179,7 +1179,85 @@ first ~20 cells past the ceiling. The remaining seven TUs' long lines are
 still worth running, but they should be run *with* the yield curve, stopping
 each row as soon as its distinct-body count stalls.
 
-## 13. Reproducing this lane
+## 13. Wave 6 — the text channel, and a length defect that is not one
+
+Tooling: `beta.py` (BETA10/ALPHA read-off — disassembly and an `[ebp-XX]`
+frame-slot census; at /Od every named local has its own slot, so the frame
+*is* the declaration set).
+
+### 13.1 `0x1006b140 LegoAnimPresenter::CopyTransform` — NOT a text defect
+
+The wave-6 brief lists this as "+7 bytes; never reaches 948 in 1,138 states,
+so it is a real length defect". **Measured: it is a stack-slot colouring
+tie, and the +7 is the encoding cost.**
+
+**Step 1 — BETA10 confirms our declaration set is already right.**
+`beta.py BETA10 frame 0x100507e0` gives the June frame: four 0x48-byte matrix
+objects (slots −0x13c, −0xf4, −0xac, −0x64, exactly 0x48 apart) plus four
+scalar slots (−0x60, −0x5c, −0x58, −0x54). Our source declares four matrices
+— `inverse`, `originalTransform`, `newTransform`, and the `#ifdef BETA10
+unused_matrix` — and four scalars (`mn`, `local2world`, `roiTransforms`,
+`i`). The set matches. There is nothing to transcribe.
+
+**Step 2 — the divergence is a slot assignment, not a statement.** Aimed diff
+at the first difference (offset 96–120):
+
+```
+OURS    96 mov [edi], REL          RETAIL  96 mov [edi], REL
+       105 mov [ebp-0x14], edi            105 mov [edi], REL
+       108 mov [edi], REL                 111 mov [ebp-0x90], edi
+       114 jmp +7                         117 jmp +10
+       116 mov [ebp-0x14], 0              119 mov [ebp-0x90], 0
+```
+
+Both sides emit the same two vtable stores of the inlined
+`MxMatrix::MxMatrix() : Matrix4(m_elements)`. The difference is that **`mn`
+lives at `[ebp-0x14]` for us and `[ebp-0x90]` for retail** — disp8 versus
+disp32, so every reference to it costs retail 3 bytes more
+(`89 7d ec` vs `89 bd 70ffffff`; `c7 45 ec ...` vs `c7 85 70ffffff ...`).
+Two or three references account for the whole +7.
+
+**Step 3 — the frames are identical.** Both prologues are byte-for-byte
+equal through offset 60, including `sub esp, 0x150`. Same frame size, same
+layout, one variable placed differently inside it. So this is not "retail has
+an extra object"; it is the allocator choosing a different spill slot for the
+same value — the stack-slot analogue of the register-role ties in §1.3.
+
+**Step 4 — declaration order is not the lever (measured).** Four variants,
+all compiled:
+
+| variant | body |
+|---|---|
+| base (`mn` declared first) | 941 |
+| `mn` after `MxMatrix inverse` | 941 |
+| `mn` last of the group | 941 |
+| `Matrix4* mn;` early, assigned after the matrices | 941 |
+| `MxMatrix*` static type instead of `Matrix4*` | 941 |
+
+Not one byte moves. At /O2 the slot for this value is assigned by the
+allocator, not by declaration position, so the text channel has no handle on
+it.
+
+**Verdict: reclassify.** `CopyTransform` is a COLOUR row, not a TEXT row. Its
+length delta is an encoding consequence of a slot tie, exactly the confusion
+`docs/open-set-triage.md` was extended to catch — and it slipped through
+because the triage's encoding test compares *instruction multisets*
+(ours 297 vs retail 295 here, so it failed the test) rather than asking
+whether the length difference is carried by displacement widths. A sharper
+test for the next pass: if the two bodies' prologues and frame sizes are
+identical, a length delta cannot be a declaration-set defect.
+
+### 13.2 Scope note: CoreSet `erase` is not a text row
+
+`0x1001d890` is on the wave-6 list, but it is a `_Tree` vendor-template
+instantiation: its text is MSVC's `<xtree>`, which the mandates forbid
+editing and which is identical for the eleven instantiations we already match
+byte-for-byte. `docs/beta10-foundry-ledger.md` classifies exactly this shape
+as **OUT-OF-SCOPE** for the transcription channel, and §10.1 here shows its
+colouring is a property of the emitting TU. There is no first-party text to
+read off. It belongs in the colour channel with the rest of the family.
+
+## 14. Reproducing this lane
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
 `fresh2/` repointed at `isle-build-tr03`). Nothing in the shared corpus was
