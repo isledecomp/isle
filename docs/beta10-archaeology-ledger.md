@@ -1170,3 +1170,81 @@ count went *up* by one — the two "losses" were rows already lost long before.
 corpus against the retail image: **120 of 120 identical**. The corpus's retail
 side is sound, so a corpus verdict that fails to re-derive is a *tree-state*
 difference, not a corrupt oracle.
+
+## Wave 12b: the COMDAT-winner screen (`tools/comdatwin.py`)
+
+### A byte-exact body that buys nothing
+
+Sweeping `worlds/infocenter.cpp` drove `_Tree<MxCore*,...>::erase`
+(**`0x1001d890`**) to **masked nd 0 at 1106 bytes = retail's 1106**. The row did
+not move. `entity/legoworld.cpp` also emits that COMDAT, **the linker keeps
+legoworld's copy**, and infocenter's exact one is discarded.
+
+This is the mirror image of the goal-2 note about six borrowed 1.0 rows: there
+we *gain* rows because a supplier's copy wins, here we *lose* one for the same
+reason. Either way the lesson is the same and it is now mechanised:
+
+> **Before funding a row, ask which object the linker actually keeps.**
+> A carrier sweep only reaches the image through the winning object.
+
+`tools/comdatwin.py` answers it. It indexes every COMDAT text symbol in the
+build (4,411 distinct symbols, 563 of them defined more than once), then
+identifies, for each row, which definer's masked bytes *are* the linked bytes.
+Artifacts: `docs/comdat-winners.{md,json}`.
+
+Over the open set: **75 SOLE, 5 CONTESTED**. Only the five need care.
+
+### `0x1002bff0` is not (only) an allocator wall
+
+The row is one of the seven written off as "one shared allocator/scheduler
+decision, instrument-gated". The screen says it has **six definers**:
+
+| object | length | delta vs retail | masked distance | winner |
+| --- | ---: | ---: | ---: | :---: |
+| legoextraactor.cpp.obj | 1104 | +8 | - | yes |
+| legopathcontroller.cpp.obj | 1104 | +8 | - | |
+| legopathboundary.cpp.obj | 1105 | +9 | - | |
+| legoracespecial.cpp.obj | 1103 | +7 | - | |
+| legopathactor.cpp.obj | 1097 | +1 | - | |
+| **act3ammo.cpp.obj** | **1096** | **+0** | **47** | |
+
+Retail is **1096** bytes. The linker keeps a copy that is **eight bytes too
+long**, while a copy at *exactly* retail's length, 47 masked bytes out, sits in
+`act3ammo.cpp.obj` and is discarded. The row's difficulty is substantially a
+**link-winner** problem, and its cheapest route is the object the linker throws
+away — not another carrier state on the winner.
+
+### Two measurement traps this tool had to be taught
+
+Both produced confident, wrong tables before they were caught; both are easy to
+repeat in any tool that compares an object body to an image.
+
+1. **Object COMDAT bodies must be compared against *untrimmed* image bytes.**
+   `slotmap.body_of` strips trailing `0xCC`/`0x90` fill, which is right for
+   disassembly and wrong here — six rows read as UNMATCHED until the comparison
+   used a raw slice.
+2. **Retail's true length comes from the gap to the next annotated symbol, not
+   from a window sized off the definers.** A generous window runs into the
+   following function, and since `body_of` only strips *trailing* fill, every
+   definer read as ~32 bytes short — a uniform -32/-33 column that looked like a
+   finding and was an artifact. With report-derived extents the screen
+   re-derives 1106 for `0x1001d890`, matching the authoritative oracle.
+
+### Carrier sweeps over the five never-swept TUs
+
+Every row scored is a sole-definer link winner unless noted. Best masked nd over
+a 1,225-cell coarse grid (`pad_shape` 15x15 + `declaration_shape` 10x100):
+
+| row | TU | seed nd | best nd | cell | note |
+| --- | --- | ---: | ---: | --- | --- |
+| `0x1006dec0` | legoanimpresenter | - | **0** | pad-92-22 | **landed** |
+| `0x1001d890` | infocenter | 976 | **0** | pad-8-36 | discarded object |
+| `0x100a3b40` | tglrl40 | 14 | 14 | pad-1-8 | retail length already |
+| `0x100a12a0` | tglrl40 | 25 | 16 | pad-1-29 | retail length already |
+| `0x100a84a0` | legoroi | 1362 | 58 | pad-15-29 | reaches retail's 2058 B |
+| `0x100bd020` | mxbitmap | - | 60 | pad-57-1 | |
+| `0x100aa510` | legolod | 313 | 289 | pad-8-15 | |
+| `0x100a46b0` | orientableroi | - | 99 | decl-5-27 | |
+
+The two `tglrl40` rows are the strongest remaining candidates: both are already
+at retail's exact length with only 14 and 16 masked bytes outstanding.
