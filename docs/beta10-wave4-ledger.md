@@ -812,3 +812,12 @@ is left is:
 This is the lane's best unfinished state and the most concrete recipe to hand
 on: **land `c1` as text, re-sweep act3actors, and hunt the second Vector3's
 0x1c separation.**
+
+Two further sealed negatives on the same row/TU:
+* **c7** — the two unused `LegoPathEdgeContainer*` declarations moved between
+  the two `Vector3`s produces a body **byte-identical to c1**: truly unused
+  pointers get no frame slot at all, so they cannot be used as spacers.
+* `Act3Brickster::Animate`: the b1 text (`MxS32 i;` hoisted above `root`/`time`
+  at both sites) crossed with fwdE 40..70 gives **nd=16 at fwdE-59**, worse
+  than the base text's 7 at the same carrier. The base text is the right text
+  for that row.
