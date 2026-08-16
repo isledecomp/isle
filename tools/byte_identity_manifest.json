@@ -756,6 +756,24 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated forward-declaration run prepended to the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_3d572fd742b2",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 159,
+      "width": 3,
+      "generated_header_sha256": "3d572fd742b28bc8677da221b319463cba73750748a21c926d71fd8215138d59",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated forward-declaration run appended after the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -768,11 +786,20 @@
      "expected_changed_offsets": [
       79
      ]
+    },
+    {
+     "mangled": "??1LegoROI@@UAE@XZ",
+     "expected_body_sha256": "49d1589a8bf434bb26700af4274236802a07a6e8a81810333604e290121fee6d",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 206,
+     "expected_donor_length": 210,
+     "expected_linked_span": 224,
+     "donor": "d_3d572fd742b2"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes LegoROI::FindChildROI 0x100a8ce0 from a generated forward-run carrier state over the rendered current source.",
+    "reason": "Closes LegoROI::FindChildROI 0x100a8ce0 and LegoROI::~LegoROI 0x100a83c0 from generated forward-run carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -1491,6 +1518,24 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_aa8cbbfdb45d",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 7,
+      "width": 3,
+      "generated_header_sha256": "aa8cbbfdb45ddb848b44334040ef71cc44d6c2b982525bc5c08858d0d032242f",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated forward-declaration run appended after the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -1504,11 +1549,20 @@
      ],
      "splice_class": "equal_body_strict",
      "donor": "d_8ac6b4ca0987"
+    },
+    {
+     "mangled": "?Create@LegoOmni@@UAEJAAVMxOmniCreateParam@@@Z",
+     "expected_body_sha256": "87770c6e3e5401e62c6049749a6a92f3809c43a10bae847a9ccb87fd069b44c5",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 2616,
+     "expected_donor_length": 2648,
+     "expected_linked_span": 2656,
+     "donor": "d_aa8cbbfdb45d"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/main/legomain.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/main/legomain.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -3986,6 +4040,25 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_6344595f29cb",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 12,
+      "seat_prefix": "g_p",
+      "seat_count": 59,
+      "width": 2,
+      "generated_header_sha256": "6344595f29cb9da562df2b6471b0f4915286fe93cda23863b6d462b66adeb1b9",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -4043,6 +4116,17 @@
      ],
      "expected_xdata_rename_offsets": [],
      "donor": "d_0bedea41e1e7"
+    },
+    {
+     "mangled": "?Animate@Act3Brickster@@UAEXM@Z",
+     "expected_body_sha256": "01cb6c7f3bc646a4f56696311136dda6fb95ce8fca68bbf19ac17d62e52a044b",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1628,
+     "expected_donor_length": 1632,
+     "expected_linked_span": 1632,
+     "expected_seed_line_count": 98,
+     "expected_donor_line_count": 99,
+     "donor": "d_6344595f29cb"
     }
    ],
    "completion": {
@@ -5210,8 +5294,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4842,
-    "accepted_row_identity_sha256": "eaa95d0170f1d3ed999936558ce5900b2a3ec08d1798fcf921f246836f9dca1a",
+    "exact_raw_1_0_count": 4845,
+    "accepted_row_identity_sha256": "0f9bca0d8afb6b1b029f5032bcd2678a9702ecd73667eb027baac626a0defd78",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
