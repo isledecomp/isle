@@ -877,3 +877,36 @@ construction supplies.
 
 **8,767 donor-lane compiles.** One landing, one row moved by 203 bytes, four
 rows proved carrier-inert or carrier-negative with their extent recorded.
+
+---
+
+## 16. The `xps` construction on `LegoPartPresenter::Read` — negative, and it *loses* ground
+
+Seats pinned at the long-axis argmin `extern-18-0` × the full 505-cell
+declaration-shape grid (`sw-all-legopartpresenterxps180`):
+
+```
+505 states, 0 failed
+0x1007ca30 retail=2633  best nd=6 @shape-1-2  offs=[1143, 1216, 1448, 1452, 2208, 2212]
+           lens: 2633 x 505
+```
+
+**nd=6 against the flat axis's 4** — every shape over those seats makes it
+worse, and the residue shape confirms why: at the flat floor exactly one tree
+pair and *one* loop pair are wrong; over the stacked seats one tree pair and
+**two** loop pairs are wrong. Adding the force-included shape destroys the loop
+compare the seats had already fixed.
+
+This is the same behaviour Lane NM recorded for `0x1002bff0`
+(`extraactor erase`): its nd=1 state was *destroyed* by any shape at all, while
+`0x10082ca0` (`charmgr erase`) — same template family — was *closed* by adding
+one. Two more data points on the same split:
+
+| row | flat/rect floor | + shape over the argmin seats |
+|---|---|---|
+| `0x10082ca0` charmgr erase (NM) | 1 | **0** |
+| `0x1002bff0` extraactor erase (NM) | 1 | 17 |
+| `0x1007ca30 LegoPartPresenter::Read` (here) | 4 | **6** |
+
+There is still no way to tell in advance which side a row falls on; the seat
+argmin is a good starting point and nothing more.
