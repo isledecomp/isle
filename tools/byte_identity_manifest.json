@@ -4316,6 +4316,535 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: two extern-declaration runs at the translation unit's two record seats plus a declaration shape force-included. None of the three halves contributes code, data, strings, vtables or linker directives; the count lattice is 2-D, so the seats and the shape can each fix a different byte."
      }
+    },
+    {
+     "id": "d_d29d40478a00",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "donor_source_overlay",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "renderings": [
+       {
+        "path": "LEGO1/lego/legoomni/src/common/legocharactermanager.cpp",
+        "clean_sha256": "0acb7af321c2bbcec086a2d3394bcf2d0f79989030fa29acfd16c2302f62ccf6",
+        "rendered_sha256": "168b3e2098e2bcc12ac0c3ece497e781a995862c351ca7cf70e0e2f079668691",
+        "operations": [
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "536ea2361a935df2439ee4e7d24b0aa1c4c7e2b8664a6fa175b24ba03c2277eb",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "c372e527cd6b1f39a2377f92922e7463d9cb5103fb55d9576c89c86f996ec800"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 15,
+           "items": [
+            {
+             "k": "lines",
+             "n": 3,
+             "line": 1
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC0100",
+             "line": 4
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC0101",
+             "line": 5
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC0102",
+             "line": 6
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC0103",
+             "line": 7
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC0104",
+             "line": 8
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC0105",
+             "line": 9
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC0106",
+             "line": 10
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC0107",
+             "line": 11
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC0108",
+             "line": 12
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC0109",
+             "line": 13
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecZ0100",
+             "line": 14
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "0e82678b88ba81c5d85750ca90b123ad5f7b6e31e2e96c551088fa416a691873",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "ec5fe9ff61b22bc3ebb5f9e12e159554b618781748bb3fff4b2cd0c325262baa"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 6,
+           "items": [
+            {
+             "k": "lines",
+             "n": 3,
+             "line": 1
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecZ0600",
+             "line": 4
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecZ0601",
+             "line": 5
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "0f08683af946fe6d88d6b6f603ec9a53b4e053f5567fa7c7eed0b266629f8559",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "0c0880af7c96927bce1cfad4ea4317dc1f99ba055d8706c20965bbe85e7def0f"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 7,
+           "items": [
+            {
+             "k": "lines",
+             "n": 3,
+             "line": 1
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC1100",
+             "line": 4
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC1101",
+             "line": 5
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecZ1100",
+             "line": 6
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "11087b8a9909ac8977bb9372995611cdac8279ab3af2f99d246df0fa3e61e316",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "2399bde16b62c7e70d4bcf4f838fc7dd8e6451627bc4490361fe653fcb4baef6"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 8,
+           "items": [
+            {
+             "k": "lines",
+             "n": 3,
+             "line": 1
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC1200",
+             "line": 4
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecC1201",
+             "line": 5
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecZ1200",
+             "line": 6
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecZ1201",
+             "line": 7
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "3ccbbf05c2334dbde4b9cca7c7a165bffdff0412a9ca4aed46b122350efd83f0",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "db9bba328834c275206b3595db36c24ff180c7d0d2becbe85881e7003ac0cda3"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 10,
+           "items": [
+            {
+             "k": "lines",
+             "n": 3,
+             "line": 1
+            },
+            {
+             "k": "fwd_run",
+             "stem": "MxUnkRecZ",
+             "first": 2000,
+             "count": 6,
+             "line": 4
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "603343b1c165def247a0ea291ed4a1e557b6b9ace3412dc2bebc0fc948f81d0e",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "9d256f16bfc34a7cee5f6e66ce096ad668f31b8c36361f8d9c5962fd493a18f7"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 7,
+           "items": [
+            {
+             "k": "lines",
+             "n": 3,
+             "line": 1
+            },
+            {
+             "k": "fwd_run",
+             "stem": "MxUnkRecZ",
+             "first": 2200,
+             "count": 3,
+             "line": 4
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "33971dc43774d2d5a4d2772c2166d922dd5fcd13ae0d471fda5d5042178ce4a8",
+           "a": 0,
+           "at": "end"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 72,
+           "items": [
+            {
+             "k": "lines",
+             "n": 3,
+             "line": 2
+            },
+            {
+             "k": "class",
+             "id": "MxUnkRecordAV",
+             "inline": true,
+             "members": [
+              "Record"
+             ],
+             "line": 5
+            },
+            {
+             "k": "lines",
+             "n": 2,
+             "line": 9
+            },
+            {
+             "k": "fwd_run",
+             "stem": "AvT",
+             "first": 0,
+             "count": 62,
+             "line": 11,
+             "width": 3
+            }
+           ]
+          }
+         },
+         {
+          "op": "replace",
+          "id": "op_getactor_strlen_extent",
+          "from": {
+           "ctx": "ed7e5e18de7450bfe88f131f4a134155a2018c8d9825b1de63b530e186749813",
+           "line_before": "1dedd3ce35a4514369d586e293b52e52fb9a6865f768e835ca1a1ba4a46ec298",
+           "line_after": "c92cd8f04a4d013ebe4a3e3f839f25980feab97cd4f7b55f3ed59dcf3f2c0d21"
+          },
+          "to": {
+           "ctx": "b46e5b5eb9b063935ad24728db02af6c32cc027b57d708767c7f76b903597731",
+           "line_before": "c92cd8f04a4d013ebe4a3e3f839f25980feab97cd4f7b55f3ed59dcf3f2c0d21",
+           "line_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "removed": {
+           "sha256": "2b1b675415a2ed7c34e195e5fbd24e61ef49a646e93666efd364917507ca281c",
+           "size": 46
+          },
+          "gen": {
+           "k": "bind_once",
+           "type": "MxU32",
+           "id": "length",
+           "expression": "strlen(p_name) + 1",
+           "use": {
+            "kind": "new_array_extent_binding",
+            "element_type": "char",
+            "result_identifier": "name"
+           },
+           "declaration_indent": "\t\t\t"
+          }
+         },
+         {
+          "op": "replace",
+          "id": "op_getactor_actor_info",
+          "from": {
+           "ctx": "06002d3b06dd7a20e60daf2162570a8e4940e6105f01d912f7fb4810ded18771",
+           "line_before": "b7090c8f89aa3651f68d4cc1247281c8081cf42db806ffe64a1cd3db8fe62d6f",
+           "line_after": "35344a135c79ecb373bb4eeeeeb5814528fadf60a85d755bb19e37cbe0a5192f"
+          },
+          "to": {
+           "ctx": "88030c72a91842450d3253d7d990f7f4ee9d200b221026e79c5ebda436c8c3e8",
+           "line_before": "35344a135c79ecb373bb4eeeeeb5814528fadf60a85d755bb19e37cbe0a5192f",
+           "line_after": "3713bbfd76dcaac1a6d8316dc5b8e2bccaf4b47f2c767f953af2ed65363ec925"
+          },
+          "removed": {
+           "sha256": "48e70b15c849039c90ef198055e5fe2b597e137ee9785b9a445695a556efe401",
+           "size": 42
+          },
+          "gen": {
+           "k": "bind_once",
+           "type": "LegoActorInfo*",
+           "id": "info",
+           "expression": "GetActorInfo(p_name)",
+           "use": {
+            "kind": "member_assignment_receiver_binding",
+            "member_identifier": "m_actor",
+            "value_identifier": "actor"
+           },
+           "declaration_indent": "\t\t\t"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_blank",
+          "gen": {
+           "k": "lines",
+           "n": 1
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_000",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC000"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_001",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC001"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_002",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC002"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_003",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC003"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_004",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC004"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_005",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC005"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_006",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC006"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_007",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC007"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_008",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC008"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_009",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC009"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_010",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC010"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_011",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC011"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_012",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC012"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_013",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC013"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_014",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC014"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_015",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC015"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_016",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC016"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_017",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC017"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_018",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC018"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_019",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC019"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_getactor_fwd_020",
+          "gen": {
+           "k": "fwd",
+           "id": "MxUnkRecVC020",
+           "nl": false
+          }
+         }
+        ]
+       }
+      ],
+      "rendering_identity_sha256": "d29d40478a00ffd8729cf9e67770838d85ae37e5f526a7693d2bed2e60f067c0",
+      "emission_policy": "donor_private_rendering_only",
+      "authenticity_rationale": "Two manifest-declared single-evaluation source permutations preserve behavior inside GetActorROI; fresh declaration-only compiler-state entropy selects the retail-exact compiler output, while only the authenticated target closure is composed into the seed."
+     }
     }
    ],
    "functions": [
@@ -4359,11 +4888,403 @@
      "expected_donor_length": 1096,
      "expected_linked_span": 1104,
      "donor": "d_25f1c91cdff5"
+    },
+    {
+     "mangled": "?GetActorROI@LegoCharacterManager@@QAEPAVLegoROI@@PBDE@Z",
+     "donor": "d_d29d40478a00",
+     "splice_class": "retail_exact_reloc_divergent",
+     "expected_seed_length": 822,
+     "expected_donor_length": 822,
+     "expected_linked_span": 832,
+     "expected_seed_line_count": 27,
+     "expected_donor_line_count": 29,
+     "expected_body_sha256": "a574d9690310e6f37896d160f1e68625f56e297ffbb21012f033ef2d8339e5d5",
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10083500",
+      "verdict": "MATCH",
+      "length": 822
+     },
+     "retail_relocations": [
+      {
+       "offset": 2,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 12,
+       "type": 6,
+       "addend": 0,
+       "target": "$L67172",
+       "target_section": 51,
+       "target_value": 778,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x1008380a"
+      },
+      {
+       "offset": 20,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 54,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@1PAU_Node@1@A",
+       "target_section": 9,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100fc508"
+      },
+      {
+       "offset": 69,
+       "type": 20,
+       "addend": 0,
+       "target": "_strcmpi",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008c110"
+      },
+      {
+       "offset": 91,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@1PAU_Node@1@A",
+       "target_section": 9,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100fc508"
+      },
+      {
+       "offset": 117,
+       "type": 20,
+       "addend": 0,
+       "target": "_strcmpi",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008c110"
+      },
+      {
+       "offset": 189,
+       "type": 20,
+       "addend": 0,
+       "target": "?CreateActorROI@LegoCharacterManager@@AAEPAVLegoROI@@PBD@Z",
+       "target_section": 78,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10084030"
+      },
+      {
+       "offset": 211,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 276,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 364,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@1PAU_Node@1@A",
+       "target_section": 9,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100fc508"
+      },
+      {
+       "offset": 381,
+       "type": 20,
+       "addend": 0,
+       "target": "_strcmpi",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008c110"
+      },
+      {
+       "offset": 410,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@1PAU_Node@1@A",
+       "target_section": 9,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100fc508"
+      },
+      {
+       "offset": 439,
+       "type": 20,
+       "addend": 0,
+       "target": "?_Insert@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QADPAULegoCharacter@@@@@Z",
+       "target_section": 57,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10083890"
+      },
+      {
+       "offset": 481,
+       "type": 20,
+       "addend": 0,
+       "target": "?_Insert@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QADPAULegoCharacter@@@@@Z",
+       "target_section": 57,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10083890"
+      },
+      {
+       "offset": 496,
+       "type": 20,
+       "addend": 0,
+       "target": "?_Dec@iterator@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@QAEXXZ",
+       "target_section": 54,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10083840"
+      },
+      {
+       "offset": 512,
+       "type": 20,
+       "addend": 0,
+       "target": "_strcmpi",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008c110"
+      },
+      {
+       "offset": 537,
+       "type": 20,
+       "addend": 0,
+       "target": "?_Insert@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QADPAULegoCharacter@@@@@Z",
+       "target_section": 57,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10083890"
+      },
+      {
+       "offset": 561,
+       "type": 20,
+       "addend": 0,
+       "target": "?VideoManager@@YAPAVLegoVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015720"
+      },
+      {
+       "offset": 582,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 591,
+       "type": 20,
+       "addend": 0,
+       "target": "?VideoManager@@YAPAVLegoVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015720"
+      },
+      {
+       "offset": 605,
+       "type": 20,
+       "addend": 0,
+       "target": "?Remove@Lego3DView@@QAEHAAVViewROI@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100ab170"
+      },
+      {
+       "offset": 610,
+       "type": 20,
+       "addend": 0,
+       "target": "?VideoManager@@YAPAVLegoVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015720"
+      },
+      {
+       "offset": 624,
+       "type": 20,
+       "addend": 0,
+       "target": "?Add@Lego3DView@@QAEHAAVViewROI@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100ab100"
+      },
+      {
+       "offset": 663,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 696,
+       "type": 20,
+       "addend": 0,
+       "target": "??0LegoExtraActor@@QAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1002a500"
+      },
+      {
+       "offset": 744,
+       "type": 20,
+       "addend": 0,
+       "target": "?SetType@LegoEntity@@QAEXE@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100114e0"
+      },
+      {
+       "offset": 767,
+       "type": 20,
+       "addend": 0,
+       "target": "?GetActorInfo@LegoCharacterManager@@QAEPAULegoActorInfo@@PBD@Z",
+       "target_section": 306,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10084c60"
+      },
+      {
+       "offset": 779,
+       "type": 6,
+       "addend": 0,
+       "target": "$T67595",
+       "target_section": 52,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100e7b30"
+      },
+      {
+       "offset": 784,
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "offset": 793,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 810,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      }
+     ],
+     "target_source_refactor": {
+      "kind": "single_evaluation_bindings_v1",
+      "start_marker": "// FUNCTION: LEGO1 0x10083500",
+      "end_marker": "// FUNCTION: LEGO1 0x10083b20",
+      "seed_range_pin": {
+       "baseline_sha256": "1b712ce2a2c4cb1d46e06810436d156e7e7e39dee16b3ac4e437cb656590ca16",
+       "baseline_size": 1230,
+       "baseline_line_count": 50,
+       "baseline_significant_token_sha256": "d8b793a66cd1cad9691b18709b327a9dbb2473eafab2b3305d8f3bf49839cc34"
+      },
+      "donor_range_pin": {
+       "baseline_sha256": "23916e7f2c9d52cbeb482a8c0d3195739ed2b3ab424ced7f54f9a9f85f30b00e",
+       "baseline_size": 1287,
+       "baseline_line_count": 52,
+       "baseline_significant_token_sha256": "08ebc3b7821112d649bba56494525023a36c5f7951a9990910fa8d0ffad178c9"
+      },
+      "operation_ids": [
+       "op_getactor_strlen_extent",
+       "op_getactor_actor_info"
+      ]
+     }
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 3 row(s) in LEGO1/lego/legoomni/src/common/legocharactermanager.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes four retail rows plus GetActorROI from compiler-generated, authenticated source variants and declaration-only compiler-state carriers.",
     "may_replace_compiler_output": true
    }
   },
@@ -7116,8 +8037,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4860,
-    "accepted_row_identity_sha256": "4cc93897026934e044bc6f4f30b25e3d2f6e02f804a0ad6797d9ba2d24f1588e",
+    "exact_raw_1_0_count": 4862,
+    "accepted_row_identity_sha256": "583c01641d39131da6051158212a5a6e871b95b13ee1fe20e5ecdac1c363b324",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -14058,9 +14979,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp",
-    "clean": "4d68c7a43a93e0d3e642fc0beed998beb5da12203150b0482033524c7c041182",
-    "effective": "f32d9edb381736551f91a5363787773d4bda1e5333ca811fd85439b1fac7f4ff",
-    "size": 5969,
+    "clean": "67eb42f5bf5047ac2e3da79b0e05e2e75bbbfd9c174387dde638070731cdf2a0",
+    "effective": "7afe1fe6a4c0cd8d120a294e794b8820fa6cfc35357a6fea921249bdfea30cc1",
+    "size": 6002,
     "ops": [
      {
       "op": "insert",

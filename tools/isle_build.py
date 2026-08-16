@@ -1198,15 +1198,34 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                     # against images.LEGO1.original_sha256.  The composer is
                     # handed the bytes and enforces length and masked nd 0.
                     retail = function["retail_oracle"]
-                    composed, detail = (
-                        byte_identity.compose_retail_exact_reloc_divergent(
+                    if "target_source_refactor" in function:
+                        donor_source = donor_sources.get(function["donor"])
+                        if donor_source is None:
+                            fail("retail-exact source-refactor donor omits "
+                                 f"its translation unit: {unit['source']}")
+                        composed, detail = (
+                            byte_identity.compose_retail_exact_source_refactor(
+                                composed, donor_objects[function["donor"]],
+                                function,
+                                byte_identity.retail_image_body(
+                                    manifest, retail["image"],
+                                    int(retail["address"], 16),
+                                    retail["length"],
+                                ),
+                                source.read_bytes(), donor_source,
+                            )
+                        )
+                    else:
+                        composed, detail = (
+                            byte_identity.compose_retail_exact_reloc_divergent(
                             composed, donor_objects[function["donor"]],
                             function,
                             byte_identity.retail_image_body(
                                 manifest, retail["image"],
                                 int(retail["address"], 16), retail["length"],
                             ),
-                        ))
+                            )
+                        )
                     byte_identity.validate_donor_object_excluded(
                         composed, [donor_objects[function["donor"]]])
                 elif function["splice_class"] == "comdat_selection_override":

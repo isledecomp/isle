@@ -208,15 +208,40 @@ comparison against retail. That is a different basis, and arguably a stronger on
 since retail is the actual oracle — but it is different, and B1 is the reason it
 is sound. Do not implement B without B1.
 
-## 3. Scope limit
+## 3. Manifest-declared single-evaluation source permutations
 
-These extensions buy **at most three rows** (`0x1009f490`, `0x1003cf20`,
+The compiler-facing source permutations belong in the entropy manifest, not in
+`byte_identity.py`.  The engine contains only a reusable structural grammar:
+bind one existing expression to one fresh, explicitly typed local, then use the
+local exactly once as either an evaluated array extent or an evaluated member-
+assignment receiver.  It cannot accept a free-form use template, unevaluated
+`sizeof`, string/comment substitution, identifier fragments, conditional use,
+or short-circuit use.
+
+For each customer the manifest owns the type, local name, expression, closed
+use record, exact clean-source anchors, removed-range hash, and complete seed
+and donor function-window pins.  The validator reconstructs the original
+statement from that same record and requires byte equality with checked-in
+source.  All other donor operations remain fresh non-emitting entropy outside
+the target window.  The donor is compiled afresh from the rendered source and
+excluded from the link; composition still requires the retail-exact body and
+the complete ordered semantic relocation oracle.
+
+The first admitted customer has an 822-byte body in an 832-byte linked span and
+changes the COFF line table from 27 to 29 rows.  Its accepted source rendering is
+29,815 bytes with SHA-256
+`168b3e2098e2bcc12ac0c3ece497e781a995862c351ca7cf70e0e2f079668691`.
+Scratch source/object hashes are evidence only and are never manifest inputs.
+
+## 4. Scope limit
+
+Extensions A and B buy **at most three rows** (`0x1009f490`, `0x1003cf20`,
 `0x100a4420`). The first two are landed. They do nothing for the allocator bulk
 and nothing for goal 2.
 Any further use requires a distinct fail-closed proof and a measured customer;
 no premise may be weakened merely to admit another donor.
 
-## 4. Tests — write these first and watch them fail
+## 5. Tests — write these first and watch them fail
 
 Each must reject, with a distinct error:
 

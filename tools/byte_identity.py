@@ -227,6 +227,7 @@ SOURCE_OVERLAY_LEAN_KINDS = {
     "const_pool": "synthetic_constant_pool_tu_v1",
     "literal_alias": "literal_first_use_alias_v1",
     "member_sig": "member_signature_v1",
+    "bind_once": "single_evaluation_binding_source_permutation_v1",
 }
 
 
@@ -298,6 +299,9 @@ SOURCE_OVERLAY_KIND_POLICIES = {
     "line_reservation_v1": ("source_layout_only", "physical_line_reservation"),
     "member_signature_v1": (
         "non_emitting_declaration", "member_signature_only"
+    ),
+    "single_evaluation_binding_source_permutation_v1": (
+        "logic_equivalent_source_refactor", "single_evaluation_binding"
     ),
     "list_cursor_delete_emission_probe_v1": (
         "discarded_emission_probe", "list_cursor_delete_emission"
@@ -1099,6 +1103,251 @@ def require_target_source_range_identity(
     }
 
 
+def validate_target_source_refactor_proof(value: object, context: str) -> dict:
+    """Validate a manifest-declared source-permutation target window."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "start_marker", "end_marker", "seed_range_pin",
+        "donor_range_pin", "operation_ids",
+    }, context)
+    require(
+        value.get("kind") == "single_evaluation_bindings_v1",
+        f"{context}.kind differs",
+    )
+    markers = {}
+    for name in ("start_marker", "end_marker"):
+        marker = value.get(name)
+        require(isinstance(marker, str) and marker.isascii()
+                and 8 <= len(marker) <= 256
+                and not any(character in marker for character in "\0\r\n"),
+                f"{context}.{name} is invalid")
+        markers[name] = marker
+    require(markers["start_marker"] != markers["end_marker"],
+            f"{context} markers must differ")
+    operation_ids = value.get("operation_ids")
+    require(
+        isinstance(operation_ids, list)
+        and 1 <= len(operation_ids) <= 32
+        and all(isinstance(item, str)
+                and re.fullmatch(r"op_[a-z0-9_]{1,120}", item)
+                for item in operation_ids)
+        and len(set(operation_ids)) == len(operation_ids),
+        f"{context}.operation_ids is invalid",
+    )
+    return {
+        "kind": "single_evaluation_bindings_v1",
+        **markers,
+        "seed_range_pin": validate_source_overlay_range_pin(
+            value.get("seed_range_pin"), context + ".seed_range_pin"
+        ),
+        "donor_range_pin": validate_source_overlay_range_pin(
+            value.get("donor_range_pin"), context + ".donor_range_pin"
+        ),
+        "operation_ids": list(operation_ids),
+    }
+
+
+def require_target_source_refactor_identity(
+    seed_source: bytes, donor_source: bytes, proof: dict, context: str,
+) -> dict:
+    """Pin both complete target ranges before a refactor donor is composed."""
+    require(isinstance(seed_source, bytes) and isinstance(donor_source, bytes),
+            f"{context} source renderings are missing")
+
+    def selected(data: bytes, role: str) -> bytes:
+        start_marker = proof["start_marker"].encode("ascii")
+        end_marker = proof["end_marker"].encode("ascii")
+        require(data.count(start_marker) == 1,
+                f"{context} {role} start marker is not unique")
+        require(data.count(end_marker) == 1,
+                f"{context} {role} end marker is not unique")
+        start = data.index(start_marker)
+        end = data.index(end_marker)
+        require(start < end, f"{context} {role} source markers are reversed")
+        return data[start:end]
+
+    seed_range = selected(seed_source, "seed")
+    donor_range = selected(donor_source, "donor")
+    require_source_overlay_range_pin(
+        seed_range, proof["seed_range_pin"], context + " seed target range"
+    )
+    require_source_overlay_range_pin(
+        donor_range, proof["donor_range_pin"], context + " donor target range"
+    )
+    require(seed_range != donor_range,
+            f"{context} donor does not contain its declared source refactor")
+    return {
+        "seed_target_source_size": len(seed_range),
+        "seed_target_source_sha256": sha256_bytes(seed_range),
+        "donor_target_source_size": len(donor_range),
+        "donor_target_source_sha256": sha256_bytes(donor_range),
+    }
+
+
+TARGET_REFACTOR_ENTROPY_GENERATOR_KINDS = frozenset({
+    "composed_typed_sequence_v1",
+    "declaration_sequence_v1",
+    "line_reservation_v1",
+})
+
+
+def render_single_evaluation_binding_use(params: dict, value: str) -> str:
+    """Render one closed evaluated-use form from manifest fields."""
+    use = params["use"]
+    indent = params["declaration_indent"]
+    if use["kind"] == "new_array_extent_binding":
+        element = render_source_overlay_cpp_type(use["element_type"])
+        return (f"{indent}{element}* {use['result_identifier']} = "
+                f"new {element}[{value}];\n")
+    if use["kind"] == "member_assignment_receiver_binding":
+        return (f"{indent}{value}->{use['member_identifier']} = "
+                f"{use['value_identifier']};\n")
+    raise ByteIdentityError(
+        f"single-evaluation use kind is unsupported: {use['kind']!r}"
+    )
+
+
+def render_single_evaluation_binding_input(params: dict) -> bytes:
+    """Reconstruct the checked-in statement before a bind-once permutation."""
+    return render_single_evaluation_binding_use(
+        params, params["expression"]
+    ).encode("ascii")
+
+
+def render_single_evaluation_binding_output(params: dict) -> bytes:
+    """Render the manifest's declaration plus its one substituted use."""
+    declaration = (
+        params["declaration_indent"]
+        + render_source_overlay_cpp_type(params["declaration_type"])
+        + " " + params["identifier"] + " = " + params["expression"] + ";\n"
+    )
+    use = render_single_evaluation_binding_use(params, params["identifier"])
+    return (declaration + use).encode("ascii")
+
+
+def require_target_source_refactor_recipe_policy(
+    recipe: dict, function: dict, root, unit_source: str, context: str,
+) -> dict:
+    """Confine manifest-declared bind-once permutations to one target.
+
+    Each replacement must be a syntactic extraction of one existing
+    expression into one fresh local: the original statement is reconstructed
+    from the same manifest record and compared byte-for-byte with the checked-
+    in source.  Everything outside the pinned target window remains limited
+    to fresh, non-emitting compiler-state entropy.
+    """
+    proof = function["target_source_refactor"]
+    validated = validate_donor_source_overlay_recipe(
+        recipe, root, seed_outputs_touched=False
+    )
+    require(len(validated["renderings"]) == 1
+            and validated["renderings"][0]["path"] == unit_source,
+            f"{context}: refactor donor may render only its own TU")
+    source = Path(root) / unit_source
+    clean = source.read_bytes()
+    start_marker = proof["start_marker"].encode("ascii")
+    end_marker = proof["end_marker"].encode("ascii")
+    require(clean.count(start_marker) == clean.count(end_marker) == 1,
+            f"{context}: refactor target markers are not unique")
+    target_start = clean.index(start_marker)
+    target_end = clean.index(end_marker)
+    require(target_start < target_end,
+            f"{context}: refactor target markers are reversed")
+
+    clean_tokens = {token for token, _, _ in source_overlay_tokens(clean)}
+    target_tokens = {
+        token for token, _, _ in
+        source_overlay_tokens(clean[target_start:target_end])
+    }
+    introduced_identifiers = set()
+    refactor_identifiers = set()
+    expected = set(proof["operation_ids"])
+    seen = set()
+    rendering = validated["renderings"][0]
+    for operation in rendering["operations"]:
+        operation_id = operation["id"]
+        generators = list(_source_overlay_generators(operation["generator"]))
+        require(generators, f"{context}: empty generator tree")
+        if operation_id in expected:
+            require(
+                operation["action"] == "replace"
+                and len(generators) == 1
+                and generators[0]["kind"]
+                == "single_evaluation_binding_source_permutation_v1"
+                and operation_id not in seen,
+                f"{context}: refactor operation {operation_id} differs",
+            )
+            params = generators[0]["params"]
+            identifier = params["identifier"]
+            require(identifier not in target_tokens
+                    and identifier not in refactor_identifiers,
+                    f"{context}: refactor local is not fresh: {identifier}")
+            start = resolve_source_overlay_anchor(
+                clean, operation["start_anchor"], context + " refactor.from",
+                logical_path=unit_source,
+            )
+            end = resolve_source_overlay_anchor(
+                clean, operation["end_anchor"], context + " refactor.to",
+                logical_path=unit_source,
+            )
+            require(target_start <= start < end <= target_end,
+                    f"{context}: refactor operation leaves its target")
+            removed = clean[start:end]
+            require(removed == render_single_evaluation_binding_input(params),
+                    f"{context}: refactor input statement differs")
+            pin = operation["baseline_input_range"]
+            require(sha256_bytes(removed) == pin["baseline_sha256"]
+                    and len(removed) == pin["baseline_size"],
+                    f"{context}: refactor input pin differs")
+            seen.add(operation_id)
+            refactor_identifiers.add(identifier)
+            continue
+
+        require(operation["action"] in {"insert", "whole_file_append"},
+                f"{context}: unbound destructive donor operation")
+        require(all(generator["kind"] in
+                    TARGET_REFACTOR_ENTROPY_GENERATOR_KINDS
+                    for generator in generators),
+                f"{context}: refactor donor uses unsupported entropy")
+        for generator in generators:
+            if generator["kind"] == "declaration_sequence_v1":
+                require(generator["params"].get("shape") in (
+                    "forward", "empty_class",
+                    "unused_class_void_member_sequence",
+                ), f"{context}: refactor donor declaration may emit")
+        if operation["action"] == "insert":
+            seat = resolve_source_overlay_anchor(
+                clean, operation["start_anchor"], context + " entropy seat",
+                logical_path=unit_source,
+            )
+            require(seat < target_start or seat >= target_end,
+                    f"{context}: extra entropy overlaps the refactor target")
+        for leaf in iter_source_overlay_leaf_generators(
+                operation["generator"]):
+            roles = source_overlay_expected_identifier_roles(
+                leaf["kind"], leaf["params"]
+            )
+            require(not roles["emitted_identifiers"],
+                    f"{context}: donor entropy emits a linked identity")
+            for identifier in roles["declared_identifiers"]:
+                if "::" in identifier:
+                    continue
+                require(identifier not in clean_tokens,
+                        f"{context}: donor declaration collides with clean "
+                        f"source: {identifier}")
+                require(identifier not in introduced_identifiers,
+                        f"{context}: donor declaration is repeated: "
+                        f"{identifier}")
+                introduced_identifiers.add(identifier)
+    require(seen == expected,
+            f"{context}: source-permutation set is incomplete")
+    return {
+        "refactor_operation_ids": sorted(seen),
+        "refactor_local_identifiers": sorted(refactor_identifiers),
+        "entropy_identifier_count": len(introduced_identifiers),
+    }
+
+
 TARGET_CLOSURE_GENERATOR_KINDS = frozenset({
     "composed_typed_sequence_v1",
     "declaration_sequence_v1",
@@ -1695,6 +1944,15 @@ def source_overlay_expected_identifier_roles(
         "empty_compound_statements_v1", "synthetic_constant_pool_tu_v1",
     }:
         pass
+    elif kind == "single_evaluation_binding_source_permutation_v1":
+        declared.add(params["identifier"])
+        referenced.update(
+            token for token, _, _ in source_overlay_tokens(
+                render_single_evaluation_binding_output(params)
+            )
+            if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", token)
+            and token != params["identifier"]
+        )
     elif kind == "member_signature_v1":
         referenced.add(params["class_identifier"])
         referenced.add(params["member_identifier"])
@@ -2302,6 +2560,85 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
             ),
             "kind": params["kind"],
             "form": params["form"],
+        }
+    elif kind == "single_evaluation_binding_source_permutation_v1":
+        require(not layout,
+                f"{context}: a bind-once source permutation cannot carry "
+                "layout overrides")
+        exact_audit_keys(params, {
+            "type", "id", "expression", "use", "declaration_indent",
+        }, param_context)
+        identifier = _source_overlay_identifier(
+            params.get("id"), param_context + ".id"
+        )
+        expression = params.get("expression")
+        require(
+            isinstance(expression, str) and expression.isascii()
+            and 1 <= len(expression) <= 256
+            and expression == expression.strip()
+            and not any(character in expression for character in "\0\r\n;{}#\\\"'")
+            and "++" not in expression and "--" not in expression
+            and re.search(rf"\b{re.escape(identifier)}\b", expression) is None,
+            f"{param_context}.expression is not a single safe expression",
+        )
+        use = params.get("use")
+        declaration_indent = params.get("declaration_indent")
+        require(
+            isinstance(declaration_indent, str)
+            and declaration_indent.isascii()
+            and len(declaration_indent) <= 32
+            and set(declaration_indent) <= {" ", "\t"},
+            f"{param_context}.declaration_indent differs",
+        )
+        require(isinstance(use, dict), f"{param_context}.use must be an object")
+        use_kind = use.get("kind")
+        if use_kind == "new_array_extent_binding":
+            exact_audit_keys(
+                use, {"kind", "element_type", "result_identifier"},
+                param_context + ".use",
+            )
+            element_type = validate_source_overlay_cpp_type(
+                use.get("element_type"), param_context + ".use.element_type"
+            )
+            require(not element_type["indirection"]
+                    and not element_type["trailing_const"],
+                    f"{param_context}.use.element_type is not an array element")
+            normalized_use = {
+                "kind": use_kind,
+                "element_type": element_type,
+                "result_identifier": _source_overlay_identifier(
+                    use.get("result_identifier"),
+                    param_context + ".use.result_identifier",
+                ),
+            }
+        elif use_kind == "member_assignment_receiver_binding":
+            exact_audit_keys(
+                use, {"kind", "member_identifier", "value_identifier"},
+                param_context + ".use",
+            )
+            normalized_use = {
+                "kind": use_kind,
+                "member_identifier": _source_overlay_identifier(
+                    use.get("member_identifier"),
+                    param_context + ".use.member_identifier",
+                ),
+                "value_identifier": _source_overlay_identifier(
+                    use.get("value_identifier"),
+                    param_context + ".use.value_identifier",
+                ),
+            }
+        else:
+            raise ByteIdentityError(
+                f"{param_context}.use.kind is unsupported: {use_kind!r}"
+            )
+        normalized = {
+            "declaration_type": validate_source_overlay_cpp_type(
+                params.get("type"), param_context + ".type"
+            ),
+            "identifier": identifier,
+            "expression": expression,
+            "use": normalized_use,
+            "declaration_indent": declaration_indent,
         }
     elif kind == "empty_compound_statements_v1":
         exact_audit_keys(params, {"scope_count"}, param_context)
@@ -4044,6 +4381,8 @@ def render_source_overlay_generator(
             # from the authenticated relocated range, never from here.
             result = (f'{params["class_identifier"]}::'
                       f'~{params["member_identifier"]}()').encode("ascii")
+    elif kind == "single_evaluation_binding_source_permutation_v1":
+        result = render_single_evaluation_binding_output(params)
     elif kind == "empty_compound_statements_v1":
         result = b"\t{\n\t}\n" * params["scope_count"]
     elif kind == "inline_budget_noop_statements_v1":
@@ -5234,6 +5573,7 @@ def validate_source_overlay(value: object, source_root: Path, *, repin_paths: se
     # shipped tree's overlay is asserted free of it here rather than relying
     # on nobody adding one.
     assert_member_signature_is_donor_only(normalized)
+    assert_source_permutations_are_donor_only(normalized)
     return normalized
 
 
@@ -8341,6 +8681,7 @@ def validate_manifest(
         local_recipe_ids = set()
         local_recipe_kinds = {}
         local_recipes = {}
+        refactor_recipe_ids = set()
         for donor_index, donor in enumerate(donors):
             donor_context = f"{context}.donors[{donor_index}]"
             require(isinstance(donor, dict), f"{donor_context} must be an object")
@@ -8403,13 +8744,21 @@ def validate_manifest(
                         },
                         f"{donor_context}.recipe",
                     )
-                    validate_donor_source_overlay_recipe(
+                    validated_recipe = validate_donor_source_overlay_recipe(
                         {
                             "kind": kind, "compile_lane": lane,
                             "renderings": recipe["renderings"],
                         },
                         source_dir,
                     )
+                    if any(
+                        generator["kind"]
+                        == "single_evaluation_binding_source_permutation_v1"
+                        for generator in _source_overlay_generators(
+                            validated_recipe
+                        )
+                    ):
+                        refactor_recipe_ids.add(recipe_id)
                     identity = sha256_bytes(
                         canonical_json_bytes(recipe["renderings"]))
                     require(
@@ -8893,6 +9242,7 @@ def validate_manifest(
         seen_functions = set()
         seen_section_numbers = set()
         function_recipe_ids = set()
+        bound_refactor_recipe_ids = []
         allowed_function_keys = {
             "mangled", "donor", "splice_class", "expected_section_number",
             "expected_seed_length", "expected_donor_length", "expected_linked_span",
@@ -8984,6 +9334,22 @@ def validate_manifest(
                             "target_source_range",
                             "destructive_source_bindings",
                         }
+                    if "target_source_refactor" in function:
+                        require(
+                            splice_class == "retail_exact_reloc_divergent",
+                            f"{function_context}: source refactors belong to "
+                            "the retail-exact divergent class",
+                        )
+                        divergent_keys.add("target_source_refactor")
+                    split_lines = (
+                        "expected_seed_line_count" in function
+                        or "expected_donor_line_count" in function
+                    )
+                    if split_lines:
+                        divergent_keys |= {
+                            "expected_seed_line_count",
+                            "expected_donor_line_count",
+                        }
                     exact_keys(
                         function, divergent_keys,
                         function_context,
@@ -8995,6 +9361,18 @@ def validate_manifest(
                         require(isinstance(value, int)
                                 and not isinstance(value, bool) and value > 0,
                                 f"{function_context}.{name} is invalid")
+                    if split_lines:
+                        for name in ("expected_seed_line_count",
+                                     "expected_donor_line_count"):
+                            value = function.get(name)
+                            require(type(value) is int and value > 0,
+                                    f"{function_context}.{name} is invalid")
+                        require(
+                            function["expected_seed_line_count"]
+                            != function["expected_donor_line_count"],
+                            f"{function_context}: split line counts must "
+                            "differ",
+                        )
                     require(
                         function["expected_linked_span"] % 16 == 0
                         and ((function["expected_donor_length"] + 15) // 16)
@@ -9031,6 +9409,22 @@ def validate_manifest(
                         f"{function_context}.retail_relocations",
                         function["expected_donor_length"],
                     )
+                    normalized_function = dict(function)
+                    if "target_source_refactor" in function:
+                        proof = validate_target_source_refactor_proof(
+                            function.get("target_source_refactor"),
+                            f"{function_context}.target_source_refactor",
+                        )
+                        normalized_function["target_source_refactor"] = proof
+                        bound_refactor_recipe_ids.append(donor_id)
+                        require(local_recipe_kinds[donor_id]
+                                == "donor_source_overlay",
+                                f"{function_context}: source refactor requires "
+                                "a donor-private source rendering")
+                        require_target_source_refactor_recipe_policy(
+                            local_recipes[donor_id], normalized_function,
+                            source_dir, source_relative, function_context,
+                        )
                     if splice_class == "retail_exact_target_closure":
                         require(local_recipe_kinds[donor_id]
                                 == "donor_source_overlay",
@@ -9061,7 +9455,7 @@ def validate_manifest(
                             local_recipes[donor_id], function, source_dir,
                             source_relative, function_context,
                         )
-                    normalized_functions.append(dict(function))
+                    normalized_functions.append(normalized_function)
                     continue
                 if splice_class == "same_slot_resize":
                     resize_keys = {
@@ -9199,6 +9593,12 @@ def validate_manifest(
             require(functions, f"{context}: composer mode requires functions")
             require(function_recipe_ids == local_recipe_ids,
                     f"{context}: every compiler donor must own at least one function")
+        require(
+            set(bound_refactor_recipe_ids) == refactor_recipe_ids
+            and len(bound_refactor_recipe_ids) == len(refactor_recipe_ids),
+            f"{context}: every source-permutation donor must be bound exactly "
+            "once to its authenticated retail-exact source refactor",
+        )
 
         completion = unit.get("completion")
         require(isinstance(completion, dict), f"{context}.completion must be an object")
@@ -12182,6 +12582,21 @@ def assert_member_signature_is_donor_only(overlay: object) -> None:
         )
 
 
+def assert_source_permutations_are_donor_only(overlay: object) -> None:
+    """Bind-once source permutations describe donor alternatives.
+
+    They may feed a target-only retail-exact composition, but may never alter
+    the source rendering compiled directly into the shipped object graph.
+    """
+    for generator in _source_overlay_generators(overlay):
+        require(
+            generator.get("kind")
+            != "single_evaluation_binding_source_permutation_v1",
+            "single_evaluation_binding_source_permutation_v1 appears in the "
+            "shipped tree's source overlay; it is donor-only",
+        )
+
+
 def validate_donor_object_excluded(
     composed_object: bytes, donor_objects,
 ) -> None:
@@ -12481,10 +12896,41 @@ def compose_retail_exact_reloc_divergent(
     """
     require(function.get("splice_class") == "retail_exact_reloc_divergent",
             "splice class is not retail_exact_reloc_divergent")
+    require("target_source_refactor" not in function,
+            "source-refactor function requires its source-proof composer")
     require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
             "retail oracle body is missing")
     return compose_same_slot_resize(seed_bytes, donor_bytes, function,
                                     retail_body=bytes(retail_body))
+
+
+def compose_retail_exact_source_refactor(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+    seed_source: bytes,
+    donor_source: bytes,
+) -> tuple[bytes, dict]:
+    """Compose a retail-exact body from one closed source refactor donor.
+
+    Keeping the source proof in this public wrapper makes it impossible for a
+    caller to honor ``target_source_refactor`` while accidentally invoking
+    only the object-level divergent composer.
+    """
+    require(function.get("splice_class") == "retail_exact_reloc_divergent"
+            and "target_source_refactor" in function,
+            "retail-exact source-refactor contract is missing")
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+    source_detail = require_target_source_refactor_identity(
+        seed_source, donor_source, function["target_source_refactor"],
+        "retail-exact source-refactor proof",
+    )
+    composed, detail = compose_same_slot_resize(
+        seed_bytes, donor_bytes, function, retail_body=bytes(retail_body),
+    )
+    return composed, {**detail, **source_detail}
 
 
 def compose_retail_exact_target_closure(

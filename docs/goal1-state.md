@@ -1,7 +1,7 @@
 # State of goal 1 — every open row, with its disposition
 
 Generated in the main loop by joining the four screens plus the coverage
-matrix against the live reccmp report. **LEGO1 4860/4934 — 74 open rows.**
+matrix against the live reccmp report. **LEGO1 4862/4934 — 72 open rows.**
 ISLE is 172/172 and CONFIG is 111/111. Current terminal measurement keeps
 ISLE and CONFIG byte-identical; LEGO1 is equal-sized with 595,723 differing
 bytes (MD5 `1b828d1b68ed19650728d1d43a1048b2`). Byte distance is a layout-sensitive
@@ -27,8 +27,8 @@ This exists because the evidence is spread across `slot-reachability`,
 |---:|---|---|
 | 30 | **ALLOCATOR (no idiom)** | Frame already matches retail; registers re-decided in many places. Nine of ten such rows were read by hand and **none had a differing live range** — the apparent spill differences are the same instruction on both sides, moved. Carrier sweep is the only lever that has ever moved this class. |
 | 12 | **AMBIGUOUS** | A screen refused to answer — bodies too divergent to trust an alignment, or slots contested after majority resolution. **Not a verdict of unreachability.** Cheapest unmined population: re-screen with better alignment. |
-| 12 | **LENGTH-UNREACHABLE** | Never reaches retail's length in any state measured. Structural, not colour. |
-| 10 | **SCHEDULE/ENCODING** | Frame **and** registers already match retail. Scheduling screen says intra-block reordering or a class owned elsewhere; **zero rows in the whole set are cross-block**, and the one that was got tested and refuted. |
+| 11 | **LENGTH-UNREACHABLE** | Never reaches retail's length in any state measured. Structural, not colour. |
+| 9 | **SCHEDULE/ENCODING** | Frame **and** registers already match retail. Scheduling screen says intra-block reordering or a class owned elsewhere; **zero rows in the whole set are cross-block**, and the one that was got tested and refuted. |
 | 5 | **ROUTED** | Named, understood, and assigned — see the notes column. |
 | 4 | **PERMUTATION (measured families exhausted)** | Pure register bijection: the same live ranges received different physical registers. No source correlate was found in the measured families; this is not proof that no authentic compiler-state route exists. |
 | 1 | **OTHER** | Unclassified by the join; inspect individually. |
@@ -130,7 +130,6 @@ eligible when they carry a fail-closed proof and a concrete target.
 | LENGTH-UNREACHABLE | 0.9426 | `0x1002de10` | LegoPathActor::SetTransformAndDestinationF | SLOT-CLEAN | IDENTITY | DIFFERENT | LENGTH |  |
 | LENGTH-UNREACHABLE | 0.9251 | `0x100ba2c0` | MxStillPresenter::Clone | AMBIGUOUS | AMBIGUOUS | DIFFERENT | LENGTH |  |
 | LENGTH-UNREACHABLE | 0.8966 | `0x1006ed90` | Infocenter::Create | AMBIGUOUS | AMBIGUOUS | DIFFERENT | LENGTH |  |
-| LENGTH-UNREACHABLE | 0.8625 | `0x100293c0` | LegoControlManager::UpdateEnabledChild | AMBIGUOUS | AMBIGUOUS | DIFFERENT | LENGTH |  |
 | LENGTH-UNREACHABLE | 0.8495 | `0x1004c580` | MxTransitionManager::SetupCopyRect | SLOT-CLEAN | SCATTERED | DIFFERENT | LENGTH |  |
 | LENGTH-UNREACHABLE | 0.8176 | `0x100a3840` | TglImpl::MeshBuilderImpl::CreateMesh | SLOT-CLEAN | SCATTERED | DIFFERENT | LENGTH |  |
 | LENGTH-UNREACHABLE | 0.8149 | `0x1006b140` | LegoAnimPresenter::CopyTransform | REACHABLE | SCATTERED | DIFFERENT | LENGTH |  |
@@ -141,7 +140,7 @@ eligible when they carry a fail-closed proof and a concrete target.
 | ROUTED | 0.8848 | `0x100a66f0` | ViewManager::ManageVisibilityAndDetailRecu | SLOT-CLEAN | REGIONAL | DIFFERENT | PURE | PURE cmpdir, sealed: ~8,500 cells, floor never leaves nd=1 |
 | ROUTED | 0.8611 | `0x100bb1d0` | MxDisplaySurface::VTable0x30 | UNREACHABLE | SCATTERED | AMBIGUOUS | PURE | PURE cmpdir, sealed: nd=4 in every family (6,439 obj + 2,058 cells) |
 | ROUTED | 0.7913 | `0x10059dc0` | _Tree<char const *,pair<char const * const | SLOT-CLEAN | SCATTERED | DIFFERENT | PURE | PURE cmpdir, sealed: nd=1 floor, only fwdE/extern reach it |
-| ROUTED | 0.5411 | `0x10061010` | LegoAnimationManager::FUN_10061010 | AMBIGUOUS | AMBIGUOUS | AMBIGUOUS | LENGTH | inline bit is a rounding error on a -3-slot frame defect |
+| ROUTED | 0.5411 | `0x10061010` | LegoAnimationManager::FUN_10061010 | AMBIGUOUS | AMBIGUOUS | AMBIGUOUS | LENGTH | retail inlines the MxListEntry ctor; an 8-state C1 planner-cost panel flips that bit but every accepted state is the same wrong 720 B (retail 731), so frame/allocation state remains |
 | SCHEDULE/ENCODING | 0.9953 | `0x1007ca30` | LegoPartPresenter::Read | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
 | SCHEDULE/ENCODING | 0.9953 | `0x100ba7f0` | MxDisplaySurface::Create | SLOT-CLEAN | IDENTITY | INTRA-BLOCK | NONE |  |
 | SCHEDULE/ENCODING | 0.9921 | `0x1009a8c0` | LegoWEGEdge::LinkEdgesAndFaces | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
@@ -151,7 +150,6 @@ eligible when they carry a fail-closed proof and a concrete target.
 | SCHEDULE/ENCODING | 0.9752 | `0x100170e0` | CarRace::HandlePathStruct | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
 | SCHEDULE/ENCODING | 0.9730 | `0x10040360` | Act3Cop::FUN_10040360 | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
 | SCHEDULE/ENCODING | 0.9725 | `0x10031820` | Isle::Enable | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
-| SCHEDULE/ENCODING | 0.9684 | `0x10083500` | LegoCharacterManager::GetActorROI | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
 | PERMUTATION (measured families exhausted) | 0.7971 | `0x100a3b40` | TglImpl::MeshBuilderImpl::Clone | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |
 | PERMUTATION (measured families exhausted) | 0.7059 | `0x1002a1b0` | _Tree<LegoCacheSoundEntry,LegoCacheSoundEn | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |
 | PERMUTATION (measured families exhausted) | 0.6667 | `0x100a12a0` | TglImpl::TextureImpl::SetImage | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |

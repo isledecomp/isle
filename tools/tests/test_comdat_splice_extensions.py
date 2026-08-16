@@ -426,6 +426,15 @@ class RetailExactRelocDivergentTests(unittest.TestCase):
                 target_closure_extract=True,
             )
 
+    def test_base_composer_refuses_a_source_proof_bypass(self):
+        seed = make_divergent_coff()
+        donor = make_divergent_coff(donor=True)
+        function = function_record(donor)
+        function["target_source_refactor"] = {"present": True}
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "source-proof composer"):
+            self.compose(seed, donor, function, retail_body_for(donor))
+
 
 class RetailExactTargetClosureTests(unittest.TestCase):
     def _live_anim_case(self):
@@ -664,6 +673,141 @@ class DonorSourceOverlayTests(unittest.TestCase):
         with self.assertRaisesRegex(byte_identity.ByteIdentityError,
                                     "donor object"):
             byte_identity.validate_donor_object_excluded(donor, [donor])
+
+
+class SourcePermutationTests(unittest.TestCase):
+    SOURCE = "LEGO1/lego/legoomni/src/common/legocharactermanager.cpp"
+
+    def _generator(self, **extra):
+        generator = {
+            "k": "bind_once", "type": "int", "id": "saved",
+            "expression": "f(x)",
+            "use": {
+                "kind": "member_assignment_receiver_binding",
+                "member_identifier": "field",
+                "value_identifier": "rhs",
+            },
+            "declaration_indent": "\t",
+        }
+        generator.update(extra)
+        return byte_identity.validate_source_overlay_generator(generator, "gen")
+
+    def _live_case(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text()
+        )
+        unit = next(item for item in manifest["translation_units"]
+                    if item["source"] == self.SOURCE)
+        function = next(item for item in unit["functions"]
+                        if item["mangled"].startswith("?GetActorROI@"))
+        donor = next(item for item in unit["donors"]
+                     if item["id"] == function["donor"])
+        function = copy.deepcopy(function)
+        function["target_source_refactor"] = (
+            byte_identity.validate_target_source_refactor_proof(
+                function["target_source_refactor"], "proof"
+            )
+        )
+        return copy.deepcopy(donor["recipe"]), function
+
+    def test_manifest_fields_render_one_binding_and_one_use(self):
+        self.assertEqual(
+            byte_identity.render_source_overlay_generator(self._generator()),
+            b"\tint saved = f(x);\n\tsaved->field = rhs;\n",
+        )
+        self.assertEqual(
+            byte_identity.render_single_evaluation_binding_input(
+                self._generator()["params"]
+            ),
+            b"\tf(x)->field = rhs;\n",
+        )
+
+    def test_permutation_rejects_multiple_statements_and_layout_overrides(self):
+        for unsafe in (
+            "consume({value})", "sizeof({value})", '"{value}"',
+            "prefix_{value}", "condition ? {value} : fallback",
+        ):
+            with self.subTest(unsafe=unsafe), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, "use must be an object"):
+                self._generator(use=unsafe)
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "unsupported"):
+            self._generator(use={"kind": "short_circuit_context"})
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "layout overrides"):
+            self._generator(nl=False)
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "single safe expression"):
+            self._generator(expression="f(x); return 7")
+
+    def test_generator_is_donor_only(self):
+        generator = self._generator()
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "donor-only"):
+            byte_identity.assert_source_permutations_are_donor_only(
+                {"generator": generator}
+            )
+
+    def test_live_recipe_is_source_derived_and_policy_bound(self):
+        recipe, function = self._live_case()
+        detail = byte_identity.require_target_source_refactor_recipe_policy(
+            recipe, function, ROOT, self.SOURCE, "fixture"
+        )
+        self.assertEqual(detail["refactor_operation_ids"], [
+            "op_getactor_actor_info", "op_getactor_strlen_extent",
+        ])
+        rendered = byte_identity.render_donor_source_overlay(recipe, ROOT)
+        self.assertEqual(
+            hashlib.sha256(rendered[self.SOURCE]).hexdigest(),
+            recipe["renderings"][0]["rendered_sha256"],
+        )
+
+    def test_live_policy_refuses_manifest_permutation_drift(self):
+        recipe, function = self._live_case()
+        operations = recipe["renderings"][0]["operations"]
+        target = next(item for item in operations
+                      if item.get("id") == "op_getactor_actor_info")
+        target["gen"]["use"]["member_identifier"] = "drifted_member"
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                recipe, function, ROOT, self.SOURCE, "fixture"
+            )
+
+    def test_source_window_pins_both_complete_forms(self):
+        recipe, function = self._live_case()
+        proof = function["target_source_refactor"]
+        donor = byte_identity.render_donor_source_overlay(recipe, ROOT)[
+            self.SOURCE
+        ]
+        # Reconstruct the shipped range only from the two manifest-declared
+        # permutations.  Product source text is intentionally absent here and
+        # from the framework engine.
+        seed = donor
+        operation_ids = set(proof["operation_ids"])
+        for operation in recipe["renderings"][0]["operations"]:
+            if operation.get("id") not in operation_ids:
+                continue
+            generator = byte_identity.validate_source_overlay_generator(
+                operation["gen"], "fixture.generator"
+            )
+            output = byte_identity.render_source_overlay_generator(generator)
+            original = byte_identity.render_single_evaluation_binding_input(
+                generator["params"]
+            )
+            self.assertEqual(seed.count(output), 1)
+            seed = seed.replace(output, original, 1)
+        detail = byte_identity.require_target_source_refactor_identity(
+            seed, donor, proof, "fixture"
+        )
+        self.assertEqual(detail["seed_target_source_size"], 1230)
+        bad = bytearray(donor)
+        mutation = bad.index(proof["start_marker"].encode("ascii")) + 80
+        bad[mutation] = ord("X") if bad[mutation] != ord("X") else ord("Y")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "target range"):
+            byte_identity.require_target_source_refactor_identity(
+                seed, bytes(bad), proof, "fixture"
+            )
 
 
 class MemberSignatureGeneratorTests(unittest.TestCase):

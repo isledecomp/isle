@@ -133,6 +133,7 @@ void LegoControlManager::Notify()
 // FUNCTION: BETA10 0x1007c81b
 void LegoControlManager::UpdateEnabledChild(MxU32 p_objectId, const char* p_atom, MxS16 p_enabledChild)
 {
+	const char* const& atom = p_atom;
 	if (m_presenterList) {
 		MxPresenterListCursor cursor(m_presenterList);
 		MxPresenter* control;
@@ -140,7 +141,7 @@ void LegoControlManager::UpdateEnabledChild(MxU32 p_objectId, const char* p_atom
 		while (cursor.Next(control)) {
 			MxDSAction* action = control->GetAction();
 
-			if (action->GetObjectId() == p_objectId && action->GetAtomId().GetInternal() == p_atom) {
+			if (action->GetObjectId() == p_objectId && action->GetAtomId().GetInternal() == atom) {
 				((MxControlPresenter*) control)->UpdateEnabledChild(p_enabledChild);
 
 				if (((MxControlPresenter*) control)->GetEnabledChild() == 0) {
