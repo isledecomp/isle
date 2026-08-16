@@ -935,3 +935,67 @@ finds both strata but cannot see where either ends.
 Extending both strata to `k = 120` (`externF:1:41:120`, `externF:35:41:120`,
 160 states) — recorded here as the run that was in flight, with its result
 below.
+
+---
+
+## 17. Hand-off: the state of every row in this lane, and what to do with it
+
+### Landed
+
+| row | before | after | how | commit |
+|---|---|---|---|---|
+| `0x100796b0 LegoCarBuildAnimPresenter::FindNodeDataByName` | .8125 | **1.0** | `extern_run_pair(g_h=2, g_p=0, width 2)`, found by re-scoring the coordinator's retained corpus | `2b1ccba7` |
+
+Gate at hand-off: **LEGO1 4851/4934, ISLE 172/172, CONFIG 111/111**, zero LOST.
+
+### The one row worth a session on its own
+
+**`0x10031820 Isle::Enable`, nd 214 → 11.** Everything about it is now known:
+
+* the residue is eleven bytes, all in the *first* of two inlined
+  `Vector3::LenSquared` copies, at body +2205…+2236;
+* it is a pure `eax`↔`ecx` transposition with identical instructions in
+  identical order — no scheduling and no reassociation left;
+* the **second** copy of the same inline, from textually symmetric source, is
+  already byte-identical to retail, which rules out both `vector3d.inl.h` and
+  the call-site text as levers and proves retail alternates its own register
+  assignment between the two sites;
+* the nd=11 states form two m-strata (`m=1`, `m=35`) that both run into the
+  `k=40` edge of the region swept, i.e. the curve is truncated.
+
+Next moves, in order: finish the `k=41..120` extension of both strata; the
+`xps` grid at whichever seat pair survives; then `extern_pair_with_pad` (the
+second shape family) at the same seats. If those exhaust, this row is the best
+customer in the project for a C2 allocator-rank instrument, because the
+control — a second copy of the same inline in the same body that is *already
+correct* — is unusually clean.
+
+### Carrier-inert or carrier-negative, with extent (do not re-sweep these)
+
+| row | extent | result |
+|---|---|---|
+| `0x10038380 Pizza::StopActions` | 1,681 rectangle | **one body**, nd=15 |
+| `0x100334b0 Act1State::Act1State` | 1,681 rectangle | **one body**, nd=24 |
+| `0x10017af0 PizzeriaState::PizzeriaState` | 1,681 rectangle | 2 bodies, argmin **base**, nd=18 |
+| `0x100035e0 Helicopter::HandleControl` | 1,681 rectangle | 4 bodies, argmin **base**, nd=19 |
+| `0x100d0d80 ReadData` | 1,681 rectangle | 11 bodies, argmin **base**, nd=18 |
+| `0x10038b10 Pizza::HandleEndAction` | 1,681 rectangle | 3 bodies, nd=12 @ `extern-0-23` |
+| `0x1007ca30 LegoPartPresenter::Read` | 2,439 prior + 505 `xps` | 4 flat, **6** stacked (worse) |
+
+### Diagnosed, channel corrected, not yet attacked
+
+| row | correction |
+|---|---|
+| `0x1006fda0 Infocenter::HandleKeyPress` | filed TEXT; is **colour** (reload + alignment) |
+| `0x1006ed90 Infocenter::Create` | filed TEXT; is **colour** (one `0x66` prefix) |
+| `0x100293c0 UpdateEnabledChild` | filed TEXT; is **colour** (one enregistered param) |
+| `0x100ba2c0 MxStillPresenter::Clone` | confirmed `length:encoding` (`and al,imm8`) |
+| `0x100a3840 CreateMesh` | genuinely never reaches 664, but the `−3` is still an allocation difference, not a missing statement |
+
+### Untouched
+
+`0x10051ac0 LegoAct2::SpawnBricks` (rectangle stopped at 200/1,681 on a
+heuristic I have since retracted — **resume it**, the state objects are
+retained), `0x1007b770 LegoVideoManager::Tickle` (long strips queued),
+`0x100bd020 MxBitmap::BitBltTransparent`, `0x100a12a0 TextureImpl::SetImage`,
+`0x100a3b40 MeshBuilderImpl::Clone`.
