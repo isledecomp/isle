@@ -326,3 +326,12 @@ opposite order at the same instruction count.
 The two `Create` cells raise SHAPE while lowering STRUCT and leaving EXACT
 flat, which is the pattern a parallel lane flagged as metric-fitting rather
 than source truth. Recorded, not landed.
+
+**Caveat on my implementation**, found while extending it across rows: erasing
+every immediate and frame displacement makes many instructions textually
+identical, and difflib's ratio degrades when a sequence has many repeats. On a
+long body it can read *lower* than EXACT — `LegoPartPresenter::Read` scores
+SHAPE 66.43 against EXACT 84.68, which is an artifact, not a finding. **Use
+these numbers to compare variants of one row, never to compare rows.** The
+`FUN_100c6fa0` result above is safe on that test because all three levels moved
+together and in the same direction.
