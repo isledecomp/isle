@@ -1536,6 +1536,25 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_f8ae8200acb5",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 6,
+      "seat_prefix": "g_p",
+      "seat_count": 6,
+      "width": 2,
+      "generated_header_sha256": "f8ae8200acb56cbb6089659bca108dffe8a10a3ee12fbbfbf1978ea2da9c01d4",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -1579,6 +1598,102 @@
       116
      ],
      "donor": "d_0c040894bbd5"
+    },
+    {
+     "mangled": "?FUN_10064b50@LegoAnimationManager@@AAEXJ@Z",
+     "expected_body_length": 912,
+     "expected_body_sha256": "bc020d8dbf54db1aebec21a9d5bf907479f7042d0d42709cc13b9dd72ebddfff",
+     "expected_changed_offsets": [
+      21,
+      27,
+      66,
+      72,
+      80,
+      86,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      500,
+      506,
+      527,
+      535,
+      815
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       182,
+       "T"
+      ],
+      [
+       229,
+       "T"
+      ],
+      [
+       239,
+       "T"
+      ],
+      [
+       311,
+       "T"
+      ],
+      [
+       375,
+       "T"
+      ],
+      [
+       381,
+       "T"
+      ],
+      [
+       398,
+       "T"
+      ],
+      [
+       408,
+       "T"
+      ],
+      [
+       438,
+       "T"
+      ],
+      [
+       476,
+       "T"
+      ],
+      [
+       607,
+       "T"
+      ],
+      [
+       625,
+       "T"
+      ],
+      [
+       645,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_f8ae8200acb5"
     }
    ],
    "completion": {
@@ -4138,8 +4253,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4828,
-    "accepted_row_identity_sha256": "6b641ee8f0f96adb15289fab9d52db8fe770ee2b2e409bbb8665fef201ab1834",
+    "exact_raw_1_0_count": 4829,
+    "accepted_row_identity_sha256": "f27d8457f457123c75a81c29fb400bfd02ee8f201a589ea5fa7358c9ec3255b3",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",

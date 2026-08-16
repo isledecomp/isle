@@ -8012,7 +8012,8 @@ def validate_manifest(
             local_recipe_kinds[recipe_id] = kind
             if mode == "compose_equal_body_comdat":
                 require(
-                    kind in ("forward_declaration_run", "declaration_shape"),
+                    kind in ("forward_declaration_run", "declaration_shape",
+                             "extern_run_pair"),
                     f"{donor_context}: equal-body donors require a "
                     "generated declaration recipe",
                 )
@@ -8056,6 +8057,47 @@ def validate_manifest(
                     except ValueError as error:
                         raise ByteIdentityError(
                             f"{donor_context} forward-run parameters: {error}"
+                        ) from error
+                elif kind == "extern_run_pair":
+                    exact_keys(
+                        recipe,
+                        {
+                            "kind", "header_prefix", "header_count",
+                            "seat_prefix", "seat_count", "width",
+                            "generated_header_sha256", "compile_lane",
+                            "emission_policy", "authenticity_rationale",
+                        },
+                        f"{donor_context}.recipe",
+                    )
+                    header_count = recipe.get("header_count")
+                    seat_count = recipe.get("seat_count")
+                    run_width = recipe.get("width")
+                    require(isinstance(recipe.get("header_prefix"), str)
+                            and isinstance(recipe.get("seat_prefix"), str)
+                            and isinstance(header_count, int)
+                            and not isinstance(header_count, bool)
+                            and isinstance(seat_count, int)
+                            and not isinstance(seat_count, bool)
+                            and isinstance(run_width, int)
+                            and not isinstance(run_width, bool)
+                            and header_count >= 0 and seat_count >= 0
+                            and header_count + seat_count >= 1,
+                            f"{donor_context} extern-run parameters "
+                            "are invalid")
+                    try:
+                        generated = b"".join(
+                            entropy_generator.generate_extern_run(
+                                prefix, count, run_width
+                            ).encode("utf-8")
+                            for prefix, count in (
+                                (recipe["header_prefix"], header_count),
+                                (recipe["seat_prefix"], seat_count),
+                            )
+                            if count
+                        )
+                    except ValueError as error:
+                        raise ByteIdentityError(
+                            f"{donor_context} extern-run parameters: {error}"
                         ) from error
                 else:
                     exact_keys(

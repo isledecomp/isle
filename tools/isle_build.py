@@ -708,6 +708,19 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                         recipe["classes"], recipe["functions"]
                     ).encode("utf-8")
                     placement = "force_include"
+                elif recipe["kind"] == "extern_run_pair":
+                    run_bytes = b"".join(
+                        entropy.generate_extern_run(
+                            prefix, count, recipe["width"]
+                        ).encode("utf-8")
+                        for prefix, count in (
+                            (recipe["header_prefix"],
+                             recipe["header_count"]),
+                            (recipe["seat_prefix"], recipe["seat_count"]),
+                        )
+                        if count
+                    )
+                    placement = "extern_pair"
                 else:
                     run_bytes = entropy.generate_forward_run(
                         recipe["prefix"], recipe["count"], recipe["width"]
@@ -739,6 +752,31 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                     decls = run_bytes.rstrip(b"\n").split(b"\n")
                     lines = shadow_bytes.split(b"\n")
                     (probe / "s.cpp").write_bytes(b"\n".join(lines + decls))
+                    force_include = []
+                elif placement == "extern_pair":
+                    # Header run seats after the last #include, seat run
+                    # appends at EOF (the sweep bench's exact construction).
+                    header_run = entropy.generate_extern_run(
+                        recipe["header_prefix"], recipe["header_count"],
+                        recipe["width"],
+                    ).encode("utf-8") if recipe["header_count"] else b""
+                    seat_run = entropy.generate_extern_run(
+                        recipe["seat_prefix"], recipe["seat_count"],
+                        recipe["width"],
+                    ).encode("utf-8") if recipe["seat_count"] else b""
+                    lines = shadow_bytes.split(b"\n")
+                    insert_at = 0
+                    for line_index, line in enumerate(lines):
+                        if line.startswith(b"#include"):
+                            insert_at = line_index + 1
+                    header_lines = (header_run.rstrip(b"\n").split(b"\n")
+                                    if header_run else [])
+                    seat_lines = (seat_run.rstrip(b"\n").split(b"\n")
+                                  if seat_run else [])
+                    (probe / "s.cpp").write_bytes(b"\n".join(
+                        lines[:insert_at] + header_lines
+                        + lines[insert_at:] + seat_lines
+                    ))
                     force_include = []
                 else:
                     (probe / "s.cpp").write_bytes(shadow_bytes)
