@@ -728,3 +728,19 @@ wider grid. Everything else in that paragraph — and the sweep ordering I
 derived from it, including stopping the `legoact2` rectangle — was a guess
 dressed as a measurement, and the `legoact2` rectangle should be resumed
 (its 200 retained state objects make that free).
+
+---
+
+## 13. Bench note: `sw2.py` buffers, so "no HIT line yet" is the only safe live signal
+
+`sw2.py` prints `HIT nd=0 …` with `flush=True` but writes its summary through
+the normal buffered path, so a redirected log stays **0 bytes** until the run
+ends. That is actually the right property for this project's standing rule —
+*never read a floor off a running sweep* — because the only thing visible
+mid-run is the presence or absence of a `HIT` line, which is exactly the one
+signal that is order-independent.
+
+Do not be tempted to substitute `ls <sweepdir> | wc -l` progress for a result:
+`externR` enumerates `m` then `k` ascending and `shapefull` enumerates `c`
+ascending, so any prefix of either is a biased sample. Both of this lane's
+predecessors published and retracted a floor read off a partial pass.
