@@ -535,3 +535,33 @@ statement order and no reordering of the constructor body can address it.
 **What all three have in common**: the frames match, the instruction multisets
 match, and the source cannot express the difference. They are the carrier
 channel's problem, which is why they got the rectangles rather than text cells.
+
+---
+
+## 8. `mxramstreamprovider.cpp` rectangle — 11 bodies, and the base is still the argmin
+
+`sw-all-mxramstreamproviderrect`, `m,k = 0..40`, 1,681 states + base:
+
+| row | retail len | lengths | distinct bodies | nd histogram | argmin |
+|---|---|---|---|---|---|
+| `0x100d0d80 ReadData` | 424 | 424 × 1,681 | **11** | 18×205, 20×656, 22×369, 24×41, 26×205, 28×164, 44×41 | **`base-0`, nd=18** |
+
+This is a more useful negative than `StopActions`' single body. The carrier is
+**live** here — eleven distinct bodies, six distinct distances — and **every
+single movement is away from retail.** So it is not "the carrier cannot reach
+this function"; it is "the carrier reaches it and the uncarried state is
+already the closest point in the reachable set."
+
+Recording the distinction matters for how the next lane reads a floor:
+
+| shape of the result | what it means | what to do next |
+|---|---|---|
+| 1 body over N states | the carrier does not reach the function | different channel |
+| k bodies, argmin = base | the carrier reaches it, base is the local optimum | **stack** a second family (shape/pad) on the seats — a one-family sweep cannot express the state |
+| k bodies, argmin ≠ base | ordinary colour search | extend the region |
+
+Three of my four rectangles so far land in row 2 or 1 of that table
+(`PizzeriaState` 2 bodies/argmin base, `ReadData` 11 bodies/argmin base,
+`StopActions` 1 body), which is why queue 2 leads with the `xps` construction
+(seats pinned at the rectangle argmin × the full 505-cell shape grid) rather
+than with a wider rectangle.
