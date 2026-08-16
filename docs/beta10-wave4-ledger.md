@@ -694,3 +694,32 @@ matches, so a read-off has nothing to arbitrate).
 EAX census on both: identical short/long counts in ours and retail, so their
 +5 and +4 are structural (the `_Tree` `operator++` tail-merge for the former,
 see above) rather than encoding.
+
+## METHOD FINDING: the forward-run response is quasi-periodic in the count
+
+`t/period.py` groups a sweep's states by (body length, nd) and prints the k-set
+for each. The forward-run axis turns out to have a **TU-specific period**:
+
+* `legoroi` `~LegoROI` (fwdE): the interesting family is
+  **k ≡ 31 (mod 64)** — k = 31, 95, 159, 223, 287 all reach retail's 210-byte
+  length. Four of them are nd=1; **k=159 is the deviation that is nd=0** (the
+  landing). A second family (len 209, nd 142) sits at k = 109, 173, 237 —
+  again stride 64.
+* `act3actors` `Act3Brickster::Animate` (fwdE): the 1632-byte family is
+  **k ≡ 59,60 (mod 64)** — 59/60, 123/124, 187/188, 251/252, 315, 379/380 —
+  and a `--klist` probe of the same class out to **k=956** (18 further states)
+  gives nd=7 at every one. The period is *exact* for this row, so the
+  forward-run axis is now **exhausted** for it at a cost of 18 compiles instead
+  of 600.
+* `act3` `RemoveByObjectIdOrFirst`: no structure — nd=7 is simply the floor at
+  163 of 304 counts. `TriggerHitSound`: nd=11 at *every* k from 97 to 400.
+* `legowegedge` `LinkEdgesAndFaces`: local strides of 17/34/68 (nd=2 at
+  fwdL-156 and fwdL-224), but the class does **not** persist — a `--klist`
+  probe of 156+68n for n=4..12 (27 states, k up to 973) gives nd≥15. So the
+  period is local here, not global.
+
+**Operational rule:** run one dense window (say 1..128) to find the residue
+classes, then (a) if the class is exactly periodic, a dozen `--klist` probes
+across many periods either find the deviation or *prove exhaustion cheaply*;
+(b) if it is not periodic, only a dense sweep is trustworthy. Either way, do
+not assume k≤96 is the whole axis — `~LegoROI` proves it is not.
