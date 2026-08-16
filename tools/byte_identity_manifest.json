@@ -3669,15 +3669,6 @@
      "donor": "d_8bb91a6844e6"
     },
     {
-     "mangled": "?UpdateStructMapAndROIIndex@LegoAnimPresenter@@IAEXAAV?$Map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@@@PAVLegoTreeNode@@PAVLegoROI@@@Z",
-     "donor": "d_31e36d131642",
-     "splice_class": "same_slot_resize",
-     "expected_seed_length": 291,
-     "expected_donor_length": 290,
-     "expected_linked_span": 304,
-     "expected_body_sha256": "fa63e966986dde3776a5f0766b9b03fdfe1c3de5a24ed1447ea6a1c47ea7ef67"
-    },
-    {
      "mangled": "?VerifyAnimationNode@LegoAnimPresenter@@IAEEPAVLegoTreeNode@@PAVLegoROI@@@Z",
      "donor": "d_31e36d131642",
      "splice_class": "equal_body_strict",

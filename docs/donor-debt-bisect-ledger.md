@@ -1,35 +1,51 @@
-# Donor-debt git-bisect foundry — ledger
+# Donor-debt git-bisect foundry — ledger (FINAL)
 
 Session: donor-debt bisect agent, 2026-08-15/16.
-Lane: out-of-tree probe compiles against /Users/foxtacles/Projects/isle-build-beta
-(reconfigured and gate-verified from this worktree: LEGO1 4820/4933, ISLE 172/172,
-CONFIG 111/111 — identical to the main session's state). Probe lane proven
-bit-identical to the build lane (null-probe of legoanimpresenter reproduced the
-build objects' bodies byte-for-byte). All pins verified masked-exact against
-`legobin/LEGO1.DLL` before use.
+Lane: out-of-tree probe compiles against /Users/foxtacles/Projects/isle-build-beta,
+reconfigured and gate-verified from this worktree (baseline run: LEGO1 4820/4933,
+ISLE 172/172, CONFIG 111/111 — identical to the main session's state). The probe
+lane is proven bit-identical to the build lane (null-probe reproduced the build
+objects' bodies byte-for-byte). Every pin used below was verified masked-exact
+against `legobin/LEGO1.DLL` before use. ~7,000 probe compiles total.
 
-Body sha256 convention: sha256 of the COMDAT `.text` raw section bytes
+Conventions: body sha256 = sha256 of the COMDAT `.text` raw section bytes
 (`tools/byte_identity.py` CoffObject + coff_body). "retail masked-exact" =
 non-relocation bytes equal to the retail span at the row VA.
+"shape(c,f)" = `entropy.generate_shape(c,f)` force-included (/FI);
+"fwd(P,k)" = `entropy.generate_forward_run(P,k,3)` at the stated placement.
+Evidence objects for every claim are kept under the session scratchpad
+(`sweep-*/work/*/probe.obj`, `probes/*/probe.obj`).
+
+## Scoreboard
+
+| Row | Address | Verdict |
+|---|---|---|
+| 1 | 0x1006a3c0 UpdateStructMapAndROIIndex | RECIPE-FOUND (obj-proven; one composer-grammar gap for landing) |
+| 2 | 0x1006abb0 VerifyAnimationNode | RECIPE-FOUND + **landed end-to-end in this worktree: linked-image GAIN 4820→4821** |
+| 3 | 0x1002c440 _Tree<LegoPathActor*>::find | RECIPE-FOUND (no source edit) |
+| 4 | 0x1002c5b0 _Tree<LegoPathActor*>::_Copy | RECIPE-FOUND (same donor as row 3) |
+| 5 | 0x10083500 GetActorROI | RECIPE-FOUND (source edit + donor; one victim [Exists] needs a positional retune) |
+| 6 | 0x1009c070 EnumDirectDrawCallback | RECIPE-FOUND (alive today — lane was wrong, not text) with a CONFIG-side landing blocker |
+| 7 | 0x1002bff0 _Tree<LegoPathActor*>::erase | ERA-FOUND-BUT-CONFLICTED (exact states exist; mutually exclusive with row 3's) |
 
 ---
 
-## Row 1 — 0x1006a3c0 LegoAnimPresenter::UpdateStructMapAndROIIndex — RECIPE-FOUND
-## Row 2 — 0x1006abb0 LegoAnimPresenter::VerifyAnimationNode — RECIPE-FOUND
+## Rows 1+2 — LegoAnimPresenter::UpdateStructMapAndROIIndex / VerifyAnimationNode
 
-Pins: row1 `fa63e966986dde3776a5f0766b9b03fdfe1c3de5a24ed1447ea6a1c47ea7ef67` (290 B,
-12 relocs), row2 `c542bd5460d257dced76cd6b4910d3ab94352b8755ea1f2cd030891bc8c264eb`
-(213 B, 7 relocs). Both masked-exact vs retail (verified).
+Pins (verified masked-exact vs retail):
+row1 `fa63e966986dde3776a5f0766b9b03fdfe1c3de5a24ed1447ea6a1c47ea7ef67` (290 B, 12 relocs),
+row2 `c542bd5460d257dced76cd6b4910d3ab94352b8755ea1f2cd030891bc8c264eb` (213 B, 7 relocs).
 
-**Flip commit**: 1ce6d832e185958af812575ea13f2b60a3a9743d is the last commit whose
-blob (sha256 163783f0…) carries the era spelling; the drift entered with the later
-declaration-position retunes (4e7b5620 "Declare the result variable last",
-f4318559). s113's SOURCE-RECIPE already pointed at this blob + ClassPad carriers,
-but that recipe is dead against today's headers (measured: era blob + recorded
-carrier gives 291 B body b98154f7…, not the pin — header-closure drift, not text).
+**Flip commit / era**: the last blob with the pin-producing spelling is
+1ce6d832 ("Make LegoAnimPresenter::AppendROIToScene reachable", blob sha256
+163783f0…); the drift entered with the later declaration-position retunes
+(4e7b5620, f4318559). Replaying the recorded s113 recipe (era blob + ClassPad
+carrier) is DEAD against today's headers (gives 291 B b98154f7…, measured) —
+the historical carriers no longer bite; the TEXT is what transfers.
 
-**Minimal edit (verified on CURRENT effective text)** — restore the era (and
-retail-producing, hence plausibly 1997) local-declaration order in both functions:
+**Minimal source edit ("e12"), verified on current text** — restore the era
+declaration order (it produces the retail bytes, so it is the plausible 1997
+spelling):
 
 ```diff
 --- a/LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp
@@ -52,121 +68,129 @@ retail-producing, hence plausibly 1997) local-declaration order in both function
 -	MxBool result = FALSE;
 ```
 
-(referred to as "e12" below; e1 = first hunk only, e2 = second hunk only.)
+**Carrier**: with e12, ONE `/FI shape(c,f)` donor state produces BOTH pins in one
+object. Verified joint states: (2,16), (3,24), (4,32), (5,40), (6,6), (7,14),
+(10,50). The hunks are separable (e1 alone flips only row 1, e2 alone only
+row 2, each under the same carriers).
 
-**Carrier state**: with the e12 text, a single `/FI` declaration-shape donor
-produces BOTH pinned bodies at once. Verified joint hits (pins measured, retail
-masked-exact): `entropy.generate_shape(c,f)` at (2,16), (3,24), (4,32), (5,40),
-(6,6), (7,14), (10,50). e1 alone + those carriers flips only row 1; e2 alone only
-row 2 (clean separability). Bare e12 (no carrier) gives 291 B/213 B non-pin bodies.
+**Recolour victims / compensation (measured)**:
+- e12 seed (existing overlay untouched, no /FI): exactly the two targets change
+  (row1 290→291 b98154f7…/27 lines; row2 213 f97e26c5…); all other ~100 bodies
+  byte-identical.
+- All 7 existing composed pins of this TU reproduce EXACTLY on e12 under their
+  existing donor recipes (replayed suffix VC15 / suffix VC1 / prefix VA40:
+  7/7 PIN-OK).
+- One overlay op (#6, the empty-class insert before UpdateStructMapAndROIIndex)
+  needs re-anchoring (token-context hash); mechanical — done in this worktree
+  (`scratchpad fix_anchors.py` recipe: same physical line seat, recomputed
+  ctx/line shas).
 
-**Landing shape** (grammar-expressible today):
-- land the e12 source edit (readable; matches the pre-drift repo spelling and
-  produces the retail bytes);
-- keep the TU's existing overlay ops unchanged;
-- add donor `declaration_shape` classes=2 functions=16 (or any of the seven
-  verified states) to the TU's `compose_equal_body_comdat` entry;
-- compose row 2 as equal-body (213=213) and row 1 as same_slot_resize
-  (seed 291 → donor 290; retail linked span 304);
-- update the TU seed source_sha256 and the source_overlay clean/effective pins.
+**END-TO-END PROOF (this worktree, commit trail)**: e12 landed in the checked
+source; manifest TU entry updated (source_sha256
+c672620e487fc35c7e305b94e13d3594ffc8b5f1909fb54064a31c30f74c7259, overlay
+clean/effective pins updated, effective
+19f495a42cad4c1b0fe3d6ff2001c18eef6c45d1273d2e44a5aec6f2e58f3c75 size 43027);
+donor `declaration_shape` classes=2 functions=16 (header sha
+31e36d131642decc78958672d6c6b512ff487efd79b9aa76b97f0b0e497957db, id
+d_31e36d131642); row2 composed as `equal_body_strict` (len 213, pin sha,
+changed offsets [10,11,13,15,16,18,33,36,40,50,54,64,75,89,91,96,98,99,113,
+145,147,150,156,171]). Full isle_build gate run: **0x1006abb0 GAIN, LEGO1
+4821/4933 in the linked image**; the only refusal is the iteration
+accepted-raw-row-set pin, which any legitimate gain requires re-pinning.
 
-**Recolour victims / compensation — measured**:
-- Seed compile with e12 (existing overlay, no extra carrier): exactly TWO bodies
-  change vs today's seed — the two targets themselves (row1 290→291 b98154f7…,
-  row2 213→213 f97e26c5…). Zero collateral in the other ~100 text bodies.
-- All 7 currently-composed function pins of this TU reproduce EXACTLY on the e12
-  text under their existing manifest donor recipes (replayed: suffix VC15,
-  suffix VC1, prefix VA40 → 7/7 pins, including AssignIndiciesWithMap-adjacent
-  set: e7dd1b8d…, 53c49db8…, 6d237e25…, c6081a91…, fd0c8773…, 81544adb…,
-  7dba54f1…). No donor retune needed.
-
----
-
-## Row 3 — 0x1002c440 _Tree<LegoPathActor*…>::find — RECIPE-FOUND (carrier-only, no source edit)
-## Row 4 — 0x1002c5b0 _Tree<LegoPathActor*…>::_Copy(node,node) — RECIPE-FOUND (same donor)
-
-Link winner (verified against the lean objects1.rsp scan): first definer =
-`CMakeFiles/lego1.dir/LEGO1/lego/legoomni/src/paths/legoextraactor.cpp.obj`
-(rsp#32; other definers legopathactor#36, legopathcontroller#67, act3ammo#78,
-legoracespecial#112).
-
-Pins recovered from s68-comdat-hybrid/direct-batch/manifest.json and re-measured
-from the recorded donor objects:
-- find `8e107d4a821eb26c06e8e59fd63ec9ce5f411b66403e1c25124e71d8596d0050`
-  (92 B, 2 relocs) — masked-exact vs retail (verified);
-- _Copy(node) `0d94b68698c1b8ddba753a982fe3cc82a9d66036f4003cd7663718287ec72205`
-  (126 B, 5 relocs) — masked-exact vs retail (verified).
-Historical donors were from two DIFFERENT TUs (a legopathcontroller probe and a
-July-26 legopathactor obj snapshot) — neither ever satisfied both pins at once.
-
-**Recipe (verified)**: NO source edit. On the current effective legoextraactor
-text, donor `declaration_shape(5,21)` via /FI produces BOTH pins simultaneously
-(also (10,32); measured from the kept probe objects). Compose find + _Copy(node)
-into the legoextraactor seat as equal-body splices (seed find f084c2bb… same
-92/2, seed _Copy af6d89af… same 126/5; s68 measured 10 and 3 changed bytes).
-
-Single-pin fallback states also measured: find at shape(4,12) and
-forward_run(*,12); copy at shape(6,30), shape(7,56), forward_run(*,28), VC_11,
-VC_63.
-
-**Recolour victims**: none — donor-only landing; the seed object is unchanged.
+**Row 1 landing gap (the one open item)**: seed 291 B/27 COFF line rows vs
+donor 290 B/28 rows. `same_slot_resize` requires equal line_count, so it
+refuses ("target header shape changed" — reproduced). All seven donor states
+carry 28 rows, so the pair is (27,28) everywhere. Two clean resolutions, both
+main-session-sized: (a) extend same_slot_resize with explicit
+expected_seed_line_count/expected_donor_line_count (the FPO class
+`compose_equal_linked_span_fpo` ALREADY has exactly these split keys and
+handles the line-table resize); or (b) admit an FPO-span function inside a
+compose_equal_body_comdat TU. Everything else about row 1 is verified: donor
+body = pin, span 304 = (290+15)//16*16, relocs 12=12, characteristics equal,
+closure (.debug$F,.debug$S).
 
 ---
 
-## Row 7 (scope addition) — 0x1002bff0 _Tree<LegoPathActor*…>::erase(iterator) — ERA-FOUND-BUT-UNMINIMIZED
+## Rows 3+4 — _Tree<LegoPathActor*>::find / ::_Copy(node,node) — no source edit
 
-Retail truth: 1096 B body inside an 1104 B span (roadmap size 0x458 includes
-padding). Current winner body: 1104 B, structurally different.
+Link winner verified from the lean objects1.rsp scan: first definer =
+`lego1.dir/.../paths/legoextraactor.cpp.obj` (rsp#32; other definers:
+legopathactor#36, legopathcontroller#67, act3ammo#78, legoracespecial#112).
 
-**Era**: commit 971fe939 ("Clear unknowns in LegoPathActor", 2026-01-31, blob
-91d07cb8…) compiled bare against CURRENT headers gives erase 1096 B at 42 masked
-diffs, _Copy = PIN (masked-exact), find 20 diffs. The flip into today's
-behaviour is commit 45d6dfe2 ("Reshape LegoExtraActor::HitActor to the
-original's inline depth", 2026-07-26) — exactly two code hunks in
-legoextraactor.cpp (StepState `static const float g_hitAnimationDelay = 2000.0f;`
-+ `g_hitAnimationDelay + p_time` instead of `p_time + 2000.0f`, and
-`Vector3 positionRef((const float*) local[3])` instead of
-`Vector3 positionRef(local[3])` in HitActor).
+Pins (recovered from s68-comdat-hybrid/direct-batch/manifest.json, re-measured
+from the recorded donor objects, and verified masked-exact vs retail):
+find `8e107d4a821eb26c06e8e59fd63ec9ce5f411b66403e1c25124e71d8596d0050` (92 B, 2
+relocs); _Copy(node) `0d94b68698c1b8ddba753a982fe3cc82a9d66036f4003cd7663718287ec72205`
+(126 B, 5 relocs). The historical donors came from two DIFFERENT TUs (an
+lpc_C2 legopathcontroller probe; a July-26 legopathactor obj snapshot); neither
+ever satisfied both pins at once — the splices were independent.
 
-**Best measured states** ("varab" = both hunks reverted on current effective
-text): erase retail masked-EXACT (1096/0) at declaration_shape (8,64), (6,58),
-(9,51), (10,70). On the UNEDITED current text erase was never exact in ~700
-carrier states (full shape grid c1..10 × f=c..10c, forward runs, positions fi) —
-consistent with the main session's failed sweeps.
-
-**Conflict to resolve**: find's pin appears ONLY on the un-reverted text
-(0 find-pin states in ~800 varab states incl. the full shape grid); erase appears
-ONLY on the reverted text. A varab seed also recolours 13 bodies in the winner
-obj including currently-exact rows (Restart 199, CalculateSpline 223,
-HitActor 1617→1563, StepState 876, CheckPresenterAndActorIntersections
-1375→1370, two vector COMDATs dropped, tree dtor + both _Copy overloads + find +
-erase). StepState (.931) and HitActor (.979) are OPEN today, so the 45d6dfe2
-reshape closes no row that the revert would lose, but the seed swap needs a full
-re-cover pass.
-Single-hunk splits were also measured: hunk-a alone is byte-inert bare
-(= current seed); hunk-b alone changes the family but had no erase-exact state
-in the sparse sweep; full grids for vara/varb were queued (see addendum below).
-
-Verdict: era and minimal text delta identified and verified; a single TU state
-serving find+copy+erase together is NOT yet found. Recommended interim landing:
-rows 3/4 via the cur-text donor above (no conflict), row 7 held pending either a
-varb-grid hit or a two-seed strategy decided by the main session.
+**Recipe (verified, donor object kept)**: on the UNEDITED current effective
+text, donor `declaration_shape(5,21)` (also (10,32)) produces BOTH pins in one
+object. Compose both into the legoextraactor seat as equal-length splices
+(seed find f084c2bb… 92/2 → 10 changed bytes; seed _Copy af6d89af… 126/5 → 3
+changed bytes at offsets 23/52/97 per the s68 record). Zero victims (donor-only).
+Single-pin fallbacks: find at shape(4,12)/fwd(*,12); copy at shape(6,30),
+shape(7,56), fwd(*,28), fwd(VC,11), fwd(VC,63) and 30+ more.
 
 ---
 
-## Row 5 — 0x10083500 LegoCharacterManager::GetActorROI — RECIPE-CANDIDATE (2 bytes from exact)
+## Row 7 — _Tree<LegoPathActor*>::erase(iterator) 0x1002bff0 — CONFLICTED
 
-Retail truth: 822 B of code (roadmap 0x339=825 includes 3 bytes of int3
-padding). Current seed body 725b3369… = 9 masked diffs: three `cmp` operand-order
-bytes (0x34/0x59/0xA2 want 3b) in the inlined map-find, two (0x16a/0x198 want 39)
-in the insert path, and an eax/ecx pairing swap at 0x1f5-0x1fc near the
-iterator::_Dec call.
+Retail: 1096 B body in an 1104 B span; the retail layout places the whole
+_Tree<LegoPathActor*> family inside the legoextraactor contribution region
+(0x1002bee0–0x1002c6c0), i.e. ONE 1997 compile produced erase+find+_Copy
+together.
 
-**Evidence**: retail-EXACT bodies (sha a574d969…, 822/0 masked) exist in ~20
-recorded agentBR probe objects (oobj_agentBR_R*/R3* legocharactermanager) across
-MANY carriers — carrier-insensitive, text-driven. Their source
-(isle-tools/probes/agentBR/z_ra3.cpp) differs from current GetActorROI in exactly
-two named-temporary hoists:
+**Era**: 971fe939 ("Clear unknowns in LegoPathActor", 2026-01-31) compiled bare
+against CURRENT headers gives erase 1096/42-diff, _Copy = PIN, find 20-diff.
+The flip is 45d6dfe2 ("Reshape LegoExtraActor::HitActor to the original's
+inline depth") — two hunks: (a) StepState
+`static const float g_hitAnimationDelay = 2000.0f;` + operand order
+`g_hitAnimationDelay + p_time` (era: `p_time + 2000.0f`); (b) HitActor
+`Vector3 positionRef((const float*) local[3])` (era: no cast).
+
+**Full-grid results (~4,300 states across 4 texts: shape c=1..10 × f=c..10c
+@fi, fwd k=1..96 ×3 prefixes @fi, plus @append/@after_includes)**:
+- erase retail-EXACT states exist ONLY with hunk (b) reverted:
+  varb (cast-revert only): shape(7,34), shape(8,53), shape(10,27);
+  varab (both): shape(8,64), (6,58), (9,51), (10,70). Measured body
+  89ac1595e9a3ac4c0e1bbb9c9a076857a77f6bf1c090e63e2b9a1ae6c3363dfd (1096/16,
+  masked-exact; obj kept).
+- find's pin exists ONLY with the cast present (cur: 14 states, vara: 10);
+  ZERO find-pin states on varb/varab.
+- copy's pin exists on all four texts.
+The `(const float*)` cast in HitActor is a hard switch between the two rows.
+StepState (.931) and HitActor (.979) are OPEN today, so the 45d6dfe2 reshape
+closes no row the revert would lose; but a varab/varb SEED recolours 13 bodies
+in the winner obj including currently-exact Restart and CalculateSpline.
+
+**Verdict**: land rows 3/4 now (cur-text donor, no conflict). erase's true fix
+is most likely the authentic 1997 HitActor/StepState source form (the same
+root as those two open rows — when HitActor's real text is found, re-run the
+erase grid on it). Alternative if erase is wanted before that: land the
+cast-revert + shape(7,34) donor and re-cover find… is NOT possible (find-pin
+unreachable on that text at full-grid depth) — the two cannot ship together
+from one seed today.
+
+---
+
+## Row 5 — LegoCharacterManager::GetActorROI 0x10083500
+
+Retail body: 822 B of code (the roadmap's 0x339=825 includes 3 int3 pad bytes).
+Current seed 725b3369… = 9 masked diffs (three cmp-direction bytes in the
+inlined map-find, two opposite-direction in the insert path, and an eax/ecx
+pairing swap at the iterator::_Dec call site).
+
+**Recovered retail-exact body**:
+`a574d9690310e6f37896d160f1e68625f56e297ffbb21012f033ef2d8339e5d5` (822/32) —
+found in ~20 recorded agentBR probe objects across many carriers
+(carrier-insensitive → text-driven), source `isle-tools/probes/agentBR/z_ra3.cpp`.
+
+**Minimal source edit ("h12"), verified on current effective text** — two
+named-temporary hoists in GetActorROI (idiomatic 1997 style; they produce the
+retail bytes):
 
 ```diff
 --- a/LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
@@ -181,70 +205,88 @@ two named-temporary hoists:
 +			info->m_actor = actor;
 ```
 
-**Measured on current effective text**: both hoists together ("h12") = 822 B,
-maskdiff 9 → **2** (only the two insert-path cmp bytes 0x16a/0x198 remain,
-3b→39). Each hoist alone regresses to 825/630. Spelling variants matching the
-exact sibling `Exists` (iterator + `it != end()`) are structurally wrong
-(810-813 B; `const_iterator != iterator` does not even compile in mxstl).
-Carrier sweeps on the UNEDITED text (bare + shape multiples + forward runs +
-decl-swap variant, 242 states) produced no state below 8 diffs, no exact.
+Bare h12 = 822 B, miss shrinks 9 → 2 bytes; each hoist alone regresses (825/630).
+**With a carrier the row closes**: h12 + shape(7,52) → body = a574d969… (retail
+masked-EXACT; also shape(8,50), shape(10,45), and fwd(VA/VB/VC, k∈{4,5,6,56})
+@suffix — 15 donor states, objects kept). On the UNEDITED text every carrier
+axis missed (confirming the S96 record; 242+ states, plus a full grid).
 
-Note: the agentBR probes also used modified header packages
-(probes/agentBO/i_view + m_r_pkg realtime variants) — the last 2 bytes may be
-theirs; the full shape grid over h12 was queued (addendum below).
+**Victims / cover (measured, h12 seed vs current seed: 9 changed bodies)**:
+- Only THREE victims are currently-exact rows: ~_Tree<char*…> dtor 0x10082b90
+  (cover: 65 shape states), Exists 0x10083b20 (**no cover found in ~2,000
+  swept states** — 4 distinct h12 Exists forms, none retail-masked; needs the
+  positional-record lever, i.e. an in-file overlay op near Exists), and the
+  composed pair below. erase/insert/_Insert<LegoCharacter…> victims are all
+  currently OPEN rows (0.68–0.92) — no obligation.
+- Existing composed pins replayed on h12: SwitchSound PIN-OK (VA10 prefix),
+  ReleaseAutoROI PIN-OK (VC2 suffix); ~list<ROI*> donor (VC27 suffix) drifts
+  but has 216 covering shape states → retune its donor.
 
----
-
-## Row 6 — 0x1009c070 MxDeviceEnumerate::EnumDirectDrawCallback — RECIPE-FOUND (alive today; lane was wrong, not the text) — WITH A CONFIG-SIDE BLOCKER
-
-Pin `1ddfbc889bff6bc99c22049eb8808a17eb13442b611ab05d3706234a066d5ec8` (541 B,
-28 relocs) — masked-exact vs retail (verified).
-
-**Root cause of the "DEAD" verdict**: the recipe never ran in its lane. The pin
-reproduces TODAY, on the CURRENT effective text, with the s113 guard transform
-applied, compiled in the CONFIG lane (config.dir flags: -DMXDIRECTX_FOR_CONFIG
--D_AFXDLL -DDIRECT3D_VERSION=0x500, -MD, no SMRTHEAP /FI) plus
-`/FI entropy.generate_shape(1,1)`:
-
-- exact transform (s113 verify_native.py wording, anchors verified on current
-  text — line-count neutral, blank lines become the guard lines):
-  wrap MxAssignedDevice ctor+dtor in `#if !defined(MXDIRECTX_FOR_CONFIG)` /
-  `#endif`;
-- measured: guarded + shape(1,1), CONFIG lane → body sha = PIN, 541 B, retail
-  masked-exact (probe dx-curguard-shape11-cfg);
-- minimality: guarded bare → b3baa955… (miss); unguarded + shape(1,1) → 536 B
-  c008a4f9… (miss); both components required;
-- the same replay in the mxdirectx lane misses (9b4b7402…), and 2×139-state
-  sweeps of both lanes on the unguarded text found nothing — the guard is
-  load-bearing, the LANE selection was the lost ingredient.
-
-**Landing cost (measured)**: the guard is preprocessing-inert for the LEGO1 lane
-(objdiff: 0 of 30 bodies change in mxdirectx.dir), but in the CONFIG lane it
-removes MxAssignedDevice ctor/dtor and recolours 4 bodies (~list<MxDriver>,
-EnumDirectDrawCallback-CONFIG 536→541, MxDriver copy-ctor, EnumDevicesCallback).
-CONFIG.EXE is currently 111/111 + MD5. s73's 505-shape grid on the guarded
-source recovered CONFIG 0x401070/0x401650/0x401990/0x401cd0 but NEVER CONFIG
-0x401770 (EnumDirectDrawCallback's own CONFIG row wants the 536-form, which only
-the unguarded text produces in that lane). **Landing the guard as-is would break
-CONFIG 401770 with no known recover** — this recipe is verified but its source
-edit is CONFIG-hostile.
-
-**Structural alternative (partial evidence)**: the lane-dependence data says
-1997's CONFIG compile had MxAssignedDevice ctor/dtor present (536-form exact
-today) while 1997's LEGO1 EnumDirectDrawCallback carries absent-form entropy
-(541 pin from the guarded CONFIG lane). An inverted guard
-(`#if defined(MXDIRECTX_FOR_CONFIG)`) keeps CONFIG untouched and puts the
-mxdirectx lane in the absent state: measured mxdirectx-lane victims = ctor/dtor
-removed + 3 recolours; EnumDirectDrawCallback stays 541-form (bare 9eb73dbf…,
-shape(1,1) 7ec746d3… — pin not yet hit in this lane; full shape grid queued,
-addendum below). This route requires re-homing MxAssignedDevice ctor/dtor for
-the LEGO1 link (0x1009b8b0/0x1009b8d0 currently exact from this TU) — the
-7881f47f TU-partition precedent applies, but placement inside the retail
-contribution span must be checked before committing.
+**Landing shape**: h12 edit + new donor shape(7,52) composing GetActorROI
+(equal_body, 822=822) + retuned ~list<ROI*> donor + a positional record op for
+Exists (main-session lever) + accepted-set re-pin.
 
 ---
 
-## Addendum — queued grids (results to be appended)
-- varb/vara full shape grids (erase/find/copy joint hunt on single-hunk texts).
-- h12 full shape grid + forward runs (row 5 last-2-bytes hunt).
-- mxdirectx-lane full shape grid on cur + inverted-guard texts (row 6 own-lane pin hunt).
+## Row 6 — MxDeviceEnumerate::EnumDirectDrawCallback 0x1009c070
+
+Pin `1ddfbc889bff6bc99c22049eb8808a17eb13442b611ab05d3706234a066d5ec8`
+(541 B/28 relocs, masked-exact vs retail, re-verified).
+
+**The recipe was never dead — it was replayed in the wrong lane.** Verified
+TODAY on the CURRENT effective text:
+- transform (exact s113 substitutions; line-count-neutral): wrap the
+  MxAssignedDevice ctor+dtor definitions in `#if !defined(MXDIRECTX_FOR_CONFIG)`
+  / `#endif`;
+- compile the TU in the CONFIG lane (config.dir flags: -DMXDIRECTX_FOR_CONFIG
+  -D_AFXDLL -DDIRECT3D_VERSION=0x500 -MD, no SMRTHEAP /FI) with
+  `/FI shape(1,1)` → body sha = PIN, retail masked-exact (probe kept:
+  dx-curguard-shape11-cfg).
+- Minimality: guarded bare → miss (b3baa955…); unguarded + shape(1,1) → miss
+  (536-form c008a4f9…); the same replay in the mxdirectx lane → miss
+  (9b4b7402…). Both ingredients (guard, carrier) and the LANE are load-bearing.
+- Own-lane alternative exhausted: full shape grids in the mxdirectx lane on
+  the current AND inverted-guard texts (2,200 states) + 2×139-state sweeps of
+  both lanes on unguarded text: ZERO pin hits. The pin lives only in the
+  CONFIG-lane compile state.
+
+**Landing blocker (measured)**: the guard is byte-inert for the LEGO1/mxdirectx
+lane (0/30 bodies change) but flips the CONFIG lane's own seed: removes
+MxAssignedDevice ctor/dtor and recolours 4 bodies including CONFIG's own
+EnumDirectDrawCallback 0x00401770 (536-form → 541-form). CONFIG.EXE is
+111/111+MD5 today; s73's 505-shape grid on the guarded source recovered
+0x401070/0x401650/0x401990/0x401cd0 but NEVER 0x401770 — the CONFIG row needs
+the presence-entropy 536-form that the guarded text cannot produce.
+**Landing the guard would break CONFIG 401770 with no known recover.**
+
+Recommended path: donor grammar allows compile_lane selection by define — the
+composer donor can be `declaration_shape(1,1)` with
+compile_lane required_define=MXDIRECTX_FOR_CONFIG — but the guard must live in
+the checked text, and that text is shared with CONFIG's own build. Options for
+the main session: (i) a wider CONFIG-side sweep on the guarded text (fwd runs,
+positions — s73 tried shapes only) hunting a 401770 re-cover; (ii) the
+TU-partition route (MxAssignedDevice ctor/dtor genuinely belong to a
+CONFIG-only TU per the 7881f47f doctrine), which requires re-homing LEGO1's
+0x1009b8b0/0x1009b8d0 (their retail seats sit INSIDE this TU's contribution
+span, so a naive move breaks placement — check the map first); (iii) hold row 6
+until CONFIG's 401770 has an independent cover. The recipe itself is verified
+and pinned.
+
+---
+
+## Cross-cutting notes for the main session
+
+- The historically-recorded carriers (ClassPad/ZzM headers, s70 random-seed
+  entropy.h) are NOT reproducible by the current typed generator and are no
+  longer effective anyway (header-closure drift killed them, measured for
+  rows 1/2). The s73-era c/f grid IS the current `entropy.generate_shape`
+  (byte-identical output — verified).
+- The retail truth for a COMDAT family (rows 3/4/7) comes from ONE winner-TU
+  compile; per-function splices hid that historically. Two of the family's
+  three bodies are jointly reachable today; the third is text-locked behind
+  the HitActor cast.
+- Off-multiple shape f values matter: the deciding states here were (5,21),
+  (7,52), (8,64) — none on the f∈{c,2c,3c,5c,8c,10c} lattice. Full f=c..10c
+  grids are ~550 compiles/TU (~25 min at -j3) and worth it.
+- All sweep result maps (every state × every text body sha) are in the session
+  scratchpad `sweep-*/results.jsonl` for further cover mining.
