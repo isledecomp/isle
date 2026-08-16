@@ -232,3 +232,50 @@ composer, which enforces length and masked nd 0.
 
 The existing 53 tests must stay green throughout, and all three image gates must
 be unchanged except for the intended row gain.
+
+## 5. B7 implemented, and A8 — the blocker it exposed (2026-08-16, main loop)
+
+**B7 is implemented and tested.** The donor may now carry MORE relocations than
+the seed. Seed rows pair with a **prefix** of the donor's; each extra donor row
+must be an ORDINARY target the seed can already name (B5/B6) and is appended.
+The primary relocation table is rebuilt as a third `replacements` region rather
+than overwritten in place, and the section header adopts the donor's count.
+Refusals, both tested: a donor with FEWER relocations, and an appended
+compiler-local target (which would need a symbol this class does not invent).
+
+`0x1009f490`'s donor was verified against the real objects: **1121 bytes = retail's
+1121, masked nd 0, 13 relocations against the seed's 12**, and the divergence is a
+single trailing extra — `?Interpolate@LegoAnimNodeData@@SAMMAAVLegoAnimKey@@M0M@Z`
+at offset 905. Indices 0-11 pair exactly, with the usual `$T4562`→`$T4554` rename.
+
+**The row is still not landable, and the reason is a LATENT DEFECT in extension A.**
+
+`render_donor_source_overlay` reads its base with `data = (root / path).read_bytes()`
+— i.e. **checked-in clean source**. But `legoanim.cpp` is overlay-owned (two shipped
+ops, a `seq` inserting carrier classes), so a clean-base donor compiles a *different
+TU than the seed*. Measured:
+
+    donor rendered from the SHIPPED rendering + delete : len 1121, masked nd 0
+    donor rendered from CLEAN source        + delete : len 1121, masked nd 41
+
+**This is not specific to this row.** Any donor for an overlay-owned TU currently
+compiles against a base the seed never sees, which can silently produce a wrong
+donor. It did not bite `0x1003cf20` only because that header carries no shipped ops.
+
+### A8 (specified, NOT implemented — needs authorisation)
+
+Let a donor rendering declare its base explicitly:
+
+- A8a. `base` is a **closed enum**, `clean` (default, preserving every existing
+  entry byte-for-byte) and `rendered`.
+- A8b. Under `rendered`, the base is the shipped overlay's rendered output for
+  that path, so the donor differs from the seed by its own ops **alone**.
+- A8c. The per-rendering input pin must name what it pins — keep `clean_sha256`
+  for `clean` and add `rendered_sha256` for `rendered`; a recipe carrying the
+  wrong one for its base is refused.
+- A8d. A2/A6b are unchanged: the shipped tree's renderings stay untouched and
+  the build must still assert it.
+
+Until A8 exists, extension A should **refuse** a donor whose path is overlay-owned
+rather than silently render from a base the seed does not use — that refusal is
+worth adding even if A8 is never funded.

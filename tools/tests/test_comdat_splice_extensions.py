@@ -542,5 +542,38 @@ class MemberSignatureGeneratorTests(unittest.TestCase):
             byte_identity.assert_member_signature_is_donor_only(overlay)
 
 
+
+class B7CountDivergentPath(unittest.TestCase):
+    """B7: the donor may carry MORE relocations than the seed."""
+
+    def test_shrinking_donor_table_is_refused(self):
+        """A donor with FEWER relocations is refused, not silently padded."""
+        seed_rows = [{"target": "?a@@YAXXZ", "offset": 0, "type": 0x14,
+                      "addend": 0, "symbol_index": 1, "target_section": 1,
+                      "target_type": 0x20, "target_storage": 2,
+                      "target_value": 0},
+                     {"target": "?b@@YAXXZ", "offset": 8, "type": 0x14,
+                      "addend": 0, "symbol_index": 2, "target_section": 1,
+                      "target_type": 0x20, "target_storage": 2,
+                      "target_value": 0}]
+        donor_rows = seed_rows[:1]
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity._pair_reloc_divergent(
+                None, None, seed_rows, donor_rows, 1, 1, 2, 2, {}, "primary")
+        self.assertIn("FEWER relocations", str(caught.exception))
+
+    def test_appended_compiler_local_target_is_refused(self):
+        """An appended $L/$T target has no seed symbol and must refuse."""
+        seed_rows = []
+        donor_rows = [{"target": "$T4554", "offset": 4, "type": 0x06,
+                       "addend": 0, "symbol_index": 7, "target_section": 1,
+                       "target_type": 0x00, "target_storage": 3,
+                       "target_value": 0}]
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity._pair_reloc_divergent(
+                None, None, seed_rows, donor_rows, 1, 1, 2, 2, {}, "primary")
+        self.assertIn("no seed symbol", str(caught.exception))
+
+
 if __name__ == "__main__":
     unittest.main()

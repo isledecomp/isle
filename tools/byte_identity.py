@@ -11053,9 +11053,17 @@ def _pair_reloc_divergent(seed, donor, seed_rows, donor_rows, seed_primary,
     seed's symbol table under B5/B6.  Returns (pairs, substitutions) where
     substitutions maps the ordinal index to the seed symbol index to write.
     """
-    require(len(seed_rows) == len(donor_rows),
-            f"{context}: relocation counts differ -- the count-divergent "
-            f"path (spec B7 reindexing) is not implemented")
+    # B7 -- the count-divergent path.  The donor may carry MORE relocations
+    # than the seed (retail calls where we inline), in which case the seed's
+    # rows must pair with a PREFIX of the donor's and every extra donor row is
+    # appended.  A non-trailing divergence would mean the two tables describe
+    # different code at the same ordinals, so it is refused loudly rather than
+    # paired by position.
+    require(len(donor_rows) >= len(seed_rows),
+            f"{context}: the donor carries FEWER relocations than the seed; "
+            f"the shrinking path is not implemented")
+    appended_rows = donor_rows[len(seed_rows):]
+    donor_rows = donor_rows[:len(seed_rows)]
     reverse = {right: left for left, right in mapping.items()}
 
     def role(section_number, primary, xdata):
@@ -11120,7 +11128,19 @@ def _pair_reloc_divergent(seed, donor, seed_rows, donor_rows, seed_primary,
             substitutions[ordinal] = _resolve_substituted_seed_symbol(
                 seed, right, context)
         pairs.append((left, right))
-    return pairs, substitutions
+    # Each appended donor row must be an ORDINARY target the seed can already
+    # name (B5/B6).  A compiler-local extra would need a symbol the seed does
+    # not have, which this class does not invent.
+    appended: list[tuple[dict, int]] = []
+    for extra_index, record in enumerate(appended_rows):
+        where = f"{context} appended relocation {extra_index}"
+        require(local_symbol_kind(record["target"]) is None,
+                f"{where}: appended compiler-local target "
+                f"{record['target']!r} has no seed symbol to name it")
+        appended.append(
+            (record, _resolve_substituted_seed_symbol(seed, record, where))
+        )
+    return pairs, substitutions, appended
 
 
 def compose_same_slot_resize(
@@ -11237,6 +11257,7 @@ def compose_same_slot_resize(
     ddr = detailed_relocations(donor, dd)
     mapping: dict[int, int] = {}
     substitutions: dict[int, int] = {}
+    appended_relocations: list[tuple[dict, int]] = []
     if divergent:
         # B1 -- THE LOAD-BEARING OBLIGATION.  This class may only ever install
         # retail's own code, so the body is compared against retail before any
@@ -11260,7 +11281,7 @@ def compose_same_slot_resize(
         require(differing == 0,
                 f"composed body is not retail-exact: {differing} byte(s) "
                 f"differ from the retail oracle under the relocation mask")
-        _, substitutions = _pair_reloc_divergent(
+        _, substitutions, appended_relocations = _pair_reloc_divergent(
             seed, donor, spr, dpr, sp["number"], dp["number"],
             sx["number"], dx["number"], mapping, "primary")
     else:
@@ -11340,6 +11361,28 @@ def compose_same_slot_resize(
             donor_lines,
         ),
     ]
+    if appended_relocations:
+        # B7: the donor carries relocations the seed's table has no room for,
+        # so the table is rebuilt rather than overwritten in place.  Paired
+        # ordinals keep the seed's symbol index (or its substitution); each
+        # appended row names the seed symbol resolved for the donor's target.
+        grown = bytearray()
+        for index, (left, right) in enumerate(zip(spr, dpr)):
+            grown += right["offset"].to_bytes(4, "little")
+            grown += substitutions.get(
+                index, left["symbol_index"]).to_bytes(4, "little")
+            grown += right["type"].to_bytes(2, "little")
+        for record, seed_symbol_index in appended_relocations:
+            grown += record["offset"].to_bytes(4, "little")
+            grown += seed_symbol_index.to_bytes(4, "little")
+            grown += record["type"].to_bytes(2, "little")
+        require(len(grown) == dp["relocation_count"] * 10,
+                "rebuilt relocation table size does not match the donor count")
+        replacements.append((
+            sp["relocation_offset"],
+            sp["relocation_offset"] + sp["relocation_count"] * 10,
+            bytes(grown),
+        ))
     total_delta = sum(len(replacement) - (end - start)
                       for start, end, replacement in replacements)
 
@@ -11357,6 +11400,9 @@ def compose_same_slot_resize(
                 4, "little")
             output[header + 34:header + 36] = dp["line_count"].to_bytes(
                 2, "little")
+            if appended_relocations:
+                output[header + 32:header + 34] = (
+                    dp["relocation_count"].to_bytes(2, "little"))
         for field, relative in (("raw_offset", 20),
                                 ("relocation_offset", 24),
                                 ("line_offset", 28)):
@@ -11366,7 +11412,8 @@ def compose_same_slot_resize(
                     pointer.to_bytes(4, "little"))
 
     primary_relocation_output = shifted(sp["relocation_offset"])
-    for index, (left, right) in enumerate(zip(spr, dpr)):
+    for index, (left, right) in enumerate(
+            [] if appended_relocations else zip(spr, dpr)):
         at = primary_relocation_output + index * 10
         # A substituted ordinal must name the SEED's symbol for the DONOR's
         # target, not the seed's own former target -- that is the whole point
