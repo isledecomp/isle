@@ -1,6 +1,9 @@
 # The `_Tree` / container-instantiation family — ledger
 
-> ⚠ **READ §10.5, §10.5a AND §11 BEFORE ACTING ON §10.2.** The wave-2 conclusion
+> ⚠ **READ §10.5, §10.5a AND §11 BEFORE ACTING ON §10.2**, and the
+> **RETRACTION above §11.2** before acting on anything that cites the
+> count-only law: a carrier run is count-only in `mxmain.cpp` but NOT in
+> general, so the extern `(m,k)` split is a real 2-D lattice. The wave-2 conclusion
 > "the carrier axis does not move register colour" — which reached the merge
 > commit title `c52a89d8` — is **wrong as stated**. It was drawn from a
 > partial sample of a sweep that later completed and contradicted it. Two
@@ -1010,6 +1013,45 @@ ISLE 172/172, CONFIG 111/111`; GAIN 0x100af7e0, zero LOST. Commit
 **It was not found by more cells.** Three 505-cell shape grids over this row
 had floored at nd=1. It was found by measuring the grammar first.
 
+> ## ⚠ RETRACTION (wave 9): "the carrier grammar collapses to a count" is FALSE
+>
+> §11.2 below concluded that a carrier run is COUNT-ONLY and that the whole
+> grammar therefore reduces to one integer. **The measurement is sound; the
+> generalisation is wrong**, and I propagated it into a merge title.
+>
+> What I actually measured: on **`mxmain.cpp`**, 65 of 68 bodies are identical
+> across every stem, width, declaration kind and seat **at equal count** —
+> including different `(m,k)` splits of the same extern total. That still
+> holds. What does not hold is that it is a property of the *grammar* rather
+> than of that one TU.
+>
+> **My own corpus already contained the refutation.** Slicing
+> `sw-all2-legoanimpresenter`'s extern cells by total and counting distinct
+> bodies at a fixed total:
+>
+> | extern total | `(m,k)` pairs | distinct `erase<AnimSubst>` bodies | distinct `CopyTransform` |
+> |---|---|---|---|
+> | 7 | 8 | 6 | 5 |
+> | 8 | 9 | **7** | 6 |
+> | 9 | 9 | 6 | 5 |
+> | 15 | 9 | 6 | 7 |
+>
+> Seven distinct bodies at a fixed count is not a count-only axis. Lane NM
+> reached the same conclusion independently on the `m+k=33` diagonal
+> (`HitActor` nine bodies, `AddPresenterIfInRange` eight with its retail-exact
+> body at one of 34 states).
+>
+> **Corrected statement.** Inert: declaration kind, stem identity, identifier
+> width, and the file-start/EOF seats (which collapse into each other). Live:
+> the **after-includes seat**, so the `(m,k)` split of an extern pair is a real
+> 2-D lattice. The search space is that lattice × the 2-D shape, and the right
+> move is to sweep **rectangles, not lines**. §12's long-line strip and its
+> yield curve remain valid as measurements of *one line* through that lattice;
+> they simply are not a search of the space.
+>
+> The `mxmain` landing in §11.1 is unaffected — it was found in that TU, where
+> the insensitivity does hold.
+
 ### 11.2 The carrier grammar collapses to a count
 
 Two measurements, both on `mxmain.cpp`:
@@ -1424,7 +1466,44 @@ construction we do not perform. That is the same conclusion the standing TODO
 reached, now with the ctor-spelling explanation eliminated and the row's type
 defect fixed underneath it.
 
+<<<<<<< HEAD
 ## 15. Reproducing this lane
+=======
+## 15. Wave 9 — the rectangle, partially swept
+
+`sw.py --axes externR --kmax 40` sweeps the full `m,k = 0..40` extern
+rectangle (1,681 cells). Launched on `legoanimpresenter.cpp` — the TU that
+refutes the count-only law and holds the erase family's `+145`/`+434` ties.
+
+**Covered: `m = 0..6` complete (0..40 in k), plus `m = 7` partial — 288 of
+1,681 cells.** The machine was shared with two other lanes and throughput fell
+from ~2.4 cells/s to roughly one every four seconds, so I stopped it rather
+than let a partial masquerade as a result (§10.5's lesson: a partial sweep of
+an ordered axis is not a uniform sample of it; `externR` enumerates `m`
+ascending, so what exists on disk is the sub-rectangle `m ≤ 6`, complete in
+`k`).
+
+Best in that sub-rectangle:
+
+| row | best nd | state | residue |
+|---|---|---|---|
+| 0x10068b20 erase AnimSubst | **1** | `extern-0-19` | `[145]` |
+| 0x10069b10 BuildROIMap | 10 | `extern-5-11` | `[345, 356, 368, …]` |
+
+`erase<AnimSubst>` reaches its known nd=1 floor at a *new* state
+(`extern-0-19`, where the previous floor was `fwdE-19`), and byte `+145` is
+wrong in all 8 length-correct cells of the sub-rectangle. Nothing better than
+the pre-existing floor was found in `m ≤ 6`; the region the wave-9 brief
+points at (`m,k ≈ up to 40`, where the `ReadModelDbWorlds` transposition fell
+at 72×72 and Lane NM's landings sit off the `m=0` line) is **mostly
+unswept** — `m ≥ 7` is 1,393 of the 1,681 cells and none of it is compiled.
+
+Handover: `stl/sw.py --axes externR --kmax 40 --tag=_R40` resumes exactly
+where this left off (existing cells are skipped, `if not obj.exists()`), so
+the remaining ~1,400 cells cost nothing already spent.
+
+## 16. Reproducing this lane
+>>>>>>> worktree-agent-a30c03b93e670e7be
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
 `fresh2/` repointed at `isle-build-tr03`). Nothing in the shared corpus was
