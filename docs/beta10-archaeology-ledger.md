@@ -150,6 +150,13 @@ source expression; retail's own body is, and it already matches ours.
 
 ## BETA10 annotations are not all correct — verify before spending a read
 
+> **Status:** `legoanim.cpp:1026` was corrected to `BETA10 0x10180e00` on the
+> lane branch, independently confirmed. This worktree predates that fix and
+> deliberately does not repeat it — the finding below is the record of how it
+> was found and of the method it implies. `legoanim.cpp:1046` is still wrong and
+> is deliberately left alone: **do not change a BETA10 annotation you have not
+> independently confirmed.**
+
 `legoanim.cpp:1026` annotates `LegoAnimNodeData::Interpolate` as
 `BETA10 0x1017f7c3`. That address is **`LegoAnim::~LegoAnim`** (vtable store,
 `delete[]` loop over 8-byte entries, EH unwind funclet). The real beta
