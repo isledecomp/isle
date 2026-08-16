@@ -1703,7 +1703,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-   "source_sha256": "04ca6caaed203db3d4f97d186569522adf79170d0adc645226ac60088eb85dad",
+   "source_sha256": "e5d9e961d7cf62f7e05f33637d558d13f52bdbc0773be0bd9db6443b66c46730",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -8371,9 +8371,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-    "clean": "04ca6caaed203db3d4f97d186569522adf79170d0adc645226ac60088eb85dad",
-    "effective": "d5993891fc8f7098b9e6db0dc54dbe929350177b20241907cd3b1d8cda0e9847",
-    "size": 75259,
+    "clean": "e5d9e961d7cf62f7e05f33637d558d13f52bdbc0773be0bd9db6443b66c46730",
+    "effective": "c25a4583c9dce438461498a39316b6f98b3260e59a22781ddfa061407b8a4af4",
+    "size": 75260,
     "ops": [
      {
       "op": "insert",
