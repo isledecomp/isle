@@ -1,10 +1,11 @@
 # State of goal 1 — every open row, with its disposition
 
 Generated in the main loop by joining the four screens plus the coverage
-matrix against the live reccmp report. **LEGO1 4859/4934 — 75 open rows.**
+matrix against the live reccmp report. **LEGO1 4860/4934 — 74 open rows.**
 ISLE is 172/172 and CONFIG is 111/111. Current terminal measurement keeps
-ISLE and CONFIG byte-identical; LEGO1 is equal-sized with 593,419 differing
-bytes (MD5 `e781797c16fa5acb9907e32840b4ae14`).
+ISLE and CONFIG byte-identical; LEGO1 is equal-sized with 595,723 differing
+bytes (MD5 `1b828d1b68ed19650728d1d43a1048b2`). Byte distance is a layout-sensitive
+diagnostic, not a monotonic goal-1 metric.
 
 The diagnostic reccmp summary also counts known-but-unmatched runtime entries:
 LEGO1 has three CRT initializers (`0x10092350`, `0x10092360`, `0x10096450`);
@@ -28,16 +29,19 @@ This exists because the evidence is spread across `slot-reachability`,
 | 12 | **AMBIGUOUS** | A screen refused to answer — bodies too divergent to trust an alignment, or slots contested after majority resolution. **Not a verdict of unreachability.** Cheapest unmined population: re-screen with better alignment. |
 | 12 | **LENGTH-UNREACHABLE** | Never reaches retail's length in any state measured. Structural, not colour. |
 | 10 | **SCHEDULE/ENCODING** | Frame **and** registers already match retail. Scheduling screen says intra-block reordering or a class owned elsewhere; **zero rows in the whole set are cross-block**, and the one that was got tested and refuted. |
-| 6 | **ROUTED** | Named, understood, and assigned — see the notes column. |
-| 4 | **SEALED tie** | Pure register bijection: the same live ranges given different physical registers. No source correlate exists. |
+| 5 | **ROUTED** | Named, understood, and assigned — see the notes column. |
+| 4 | **PERMUTATION (measured families exhausted)** | Pure register bijection: the same live ranges received different physical registers. No source correlate was found in the measured families; this is not proof that no authentic compiler-state route exists. |
 | 1 | **OTHER** | Unclassified by the join; inspect individually. |
 
 ## What is actually fundable
 
-1. **The splice machinery** — `0x1003cf20` is landed. `0x1009f490` reproduces
-   the target body at masked nd 0 but remains correctly blocked by B4 because
-   its donor loses `Interpolate` and a knock-on `Matrix4::Scale`; do not relax
-   the function-multiset gate.
+1. **Authenticated target-closure extraction** — `0x1003cf20` and
+   `0x1009f490` are landed. The latter uses a distinct fail-closed class rather
+   than weakening B4: identical pinned target source; exact seed/donor section,
+   function and COMDAT-primary subset proofs; a complete 13-record semantic
+   relocation oracle; retail-exact target bytes; and conservation of the seed's
+   complete function set and every non-target section. This is the pattern for
+   future visibility-driven authentic donors.
 2. **Carrier sweeps on rows with genuinely untried families** — rank the
    families **from the objects**, never from the matrix's `L` column; a
    missing result file proves nothing about what was compiled.
@@ -68,10 +72,11 @@ This exists because the evidence is spread across `slot-reachability`,
    (The register screen does add real information where the slot screen alone
    refuses — 9 such rows, 5 of them same-length. That part stands.)
 
-Everything else is measured-dead: source archaeology as a general strategy is
-closed by three independent screens, `cmpdir` is retired as a channel, the
-retained corpus is exhausted at the object level, and the body axis is an
-inline-budget lever only.
+The measured broad families are exhausted: source archaeology without a
+specific byte-level hypothesis has not paid, `cmpdir` alone is not a general
+channel, and the retained corpus contains no further semantically valid exact
+body. Novel, bounded compiler-state and authentic visibility mechanisms remain
+eligible when they carry a fail-closed proof and a concrete target.
 
 ## Per-row table
 
@@ -133,7 +138,6 @@ inline-budget lever only.
 | LENGTH-UNREACHABLE | 0.7268 | `0x100aa510` | LegoLOD::Read | UNREACHABLE | SCATTERED | AMBIGUOUS | LENGTH |  |
 | OTHER | 0.7442 | `0x10038380` | Pizza::StopActions | NO-SLOTS | REGIONAL | AMBIGUOUS | NONE |  |
 | ROUTED | 0.9504 | `0x100a4420` | OrientableROI::OrientableROI | SLOT-CLEAN | IDENTITY | DIFFERENT | LENGTH | inline bit PLUS one EH-store schedule; B1 refuses (not retail-exact) |
-| ROUTED | 0.8896 | `0x1009f490` | LegoAnimScene::CalculateCameraTransform | AMBIGUOUS | IDENTITY | DIFFERENT | LENGTH | inline bit; needs extension A + B7 reindexing (12->13 relocs) |
 | ROUTED | 0.8848 | `0x100a66f0` | ViewManager::ManageVisibilityAndDetailRecu | SLOT-CLEAN | REGIONAL | DIFFERENT | PURE | PURE cmpdir, sealed: ~8,500 cells, floor never leaves nd=1 |
 | ROUTED | 0.8611 | `0x100bb1d0` | MxDisplaySurface::VTable0x30 | UNREACHABLE | SCATTERED | AMBIGUOUS | PURE | PURE cmpdir, sealed: nd=4 in every family (6,439 obj + 2,058 cells) |
 | ROUTED | 0.7913 | `0x10059dc0` | _Tree<char const *,pair<char const * const | SLOT-CLEAN | SCATTERED | DIFFERENT | PURE | PURE cmpdir, sealed: nd=1 floor, only fwdE/extern reach it |
@@ -148,7 +152,7 @@ inline-budget lever only.
 | SCHEDULE/ENCODING | 0.9730 | `0x10040360` | Act3Cop::FUN_10040360 | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
 | SCHEDULE/ENCODING | 0.9725 | `0x10031820` | Isle::Enable | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
 | SCHEDULE/ENCODING | 0.9684 | `0x10083500` | LegoCharacterManager::GetActorROI | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
-| SEALED tie | 0.7971 | `0x100a3b40` | TglImpl::MeshBuilderImpl::Clone | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |
-| SEALED tie | 0.7059 | `0x1002a1b0` | _Tree<LegoCacheSoundEntry,LegoCacheSoundEn | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |
-| SEALED tie | 0.6667 | `0x100a12a0` | TglImpl::TextureImpl::SetImage | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |
-| SEALED tie | 0.6522 | `0x10057180` | _Tree<LegoAnimPresenter *,LegoAnimPresente | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |
+| PERMUTATION (measured families exhausted) | 0.7971 | `0x100a3b40` | TglImpl::MeshBuilderImpl::Clone | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |
+| PERMUTATION (measured families exhausted) | 0.7059 | `0x1002a1b0` | _Tree<LegoCacheSoundEntry,LegoCacheSoundEn | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |
+| PERMUTATION (measured families exhausted) | 0.6667 | `0x100a12a0` | TglImpl::TextureImpl::SetImage | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |
+| PERMUTATION (measured families exhausted) | 0.6522 | `0x10057180` | _Tree<LegoAnimPresenter *,LegoAnimPresente | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |

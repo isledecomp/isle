@@ -21,11 +21,16 @@ the relocation *count*.  That is true of `0x1009f490` (12 -> 13) but NOT of
 """
 from __future__ import annotations
 
+import copy
 import hashlib
+import json
 import struct
 import sys
 import unittest
+from collections import Counter
 from pathlib import Path
+from types import SimpleNamespace
+from unittest import mock
 
 TOOLS = Path(__file__).resolve().parents[1]
 ROOT = TOOLS.parent
@@ -42,6 +47,7 @@ DIRECTIVE = b"-defaultlib:LIBCMT -defaultlib:OLDNAMES "
 SEED_SIZE = 30
 DONOR_SIZE = 26
 LINKED_SPAN = 32          # both round up to the same 16-byte bucket
+RETAIL_ADDRESS = 0x1003CF20
 
 
 def _section_aux(length, relocations, lines, selection, associated=0,
@@ -178,7 +184,9 @@ def make_divergent_coff(
         (COMMON, 0, 0, 0x20, 2, None),
         (SEED_CALLEE, 0, 0, 0x20, 2, None),
         (RETAIL_CALLEE, 0, 0, 0x20, retail_callee_storage, None)
-        if declare_retail_callee else (COMMON, 0, 0, 0x20, 2, None),
+        if declare_retail_callee else (
+            "?MissingPlaceholder@@YAXXZ", 0, 0, 0x20, 2, None
+        ),
         (".xdata$x", 0, 2, 0, 3,
          _section_aux(16, 1, 0, 5, associated=target_seat)),
         (".debug$S", 0, 3, 0, 3,
@@ -246,6 +254,31 @@ def retail_body_for(donor_bytes):
     return bytes(body)
 
 
+def relocation_oracle_for(donor_bytes, retail_body):
+    coff = byte_identity.CoffObject(donor_bytes)
+    section = coff.function_section(TARGET_SYMBOL)
+    result = []
+    for record in byte_identity.detailed_relocations(coff, section):
+        offset = record["offset"]
+        operand = retail_body[offset:offset + 4]
+        if record["type"] == 0x0006:
+            resolved = int.from_bytes(operand, "little")
+        else:
+            resolved = (
+                RETAIL_ADDRESS + offset + 4
+                + int.from_bytes(operand, "little", signed=True)
+            ) & 0xFFFFFFFF
+        result.append({
+            **{key: record[key] for key in (
+                "offset", "type", "addend", "target", "target_section",
+                "target_value", "target_type", "target_storage",
+            )},
+            "retail_target":
+                f"0x{(resolved - record['addend']) & 0xFFFFFFFF:08x}",
+        })
+    return result
+
+
 def function_record(donor_bytes, **overrides):
     coff = byte_identity.CoffObject(donor_bytes)
     section = coff.function_section(TARGET_SYMBOL)
@@ -260,6 +293,9 @@ def function_record(donor_bytes, **overrides):
             byte_identity.coff_body(coff, section)).hexdigest(),
         "retail_oracle": {"image": "LEGO1.DLL", "address": "0x1003cf20",
                           "verdict": "MATCH", "length": DONOR_SIZE},
+        "retail_relocations": relocation_oracle_for(
+            donor_bytes, retail_body_for(donor_bytes)
+        ),
     }
     record.update(overrides)
     return record
@@ -355,6 +391,224 @@ class RetailExactRelocDivergentTests(unittest.TestCase):
                                     "function set"):
             self.compose(seed, donor, function_record(donor),
                          retail_body_for(donor))
+
+    def test_rejects_changed_retail_relocation_operand_before_masking(self):
+        seed = make_divergent_coff()
+        donor = make_divergent_coff(donor=True)
+        retail = bytearray(retail_body_for(donor))
+        first = byte_identity.detailed_relocations(
+            byte_identity.CoffObject(donor),
+            byte_identity.CoffObject(donor).function_section(TARGET_SYMBOL),
+        )[0]
+        retail[first["offset"]] ^= 1
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "resolves"):
+            self.compose(seed, donor, function_record(donor), bytes(retail))
+
+    def test_relocation_oracle_refuses_overlapping_masks(self):
+        donor = make_divergent_coff(donor=True)
+        oracle = function_record(donor)["retail_relocations"]
+        oracle[1]["offset"] = oracle[0]["offset"] + 1
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "overlap"):
+            byte_identity.validate_retail_relocation_oracle(
+                oracle, "fixture", DONOR_SIZE
+            )
+
+    def test_core_refuses_caller_selected_closure_mode(self):
+        seed = make_divergent_coff()
+        donor = make_divergent_coff(donor=True)
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "topology mode"):
+            byte_identity.compose_same_slot_resize(
+                seed, donor, function_record(donor),
+                retail_body=retail_body_for(donor),
+                target_closure_extract=True,
+            )
+
+
+class RetailExactTargetClosureTests(unittest.TestCase):
+    def _live_anim_case(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text()
+        )
+        unit = next(
+            item for item in manifest["translation_units"]
+            if item["source"] == "LEGO1/lego/sources/anim/legoanim.cpp"
+        )
+        return unit, copy.deepcopy(unit["donors"][0]["recipe"]), \
+            copy.deepcopy(unit["functions"][0])
+
+    def _source_fixture(self):
+        target = b"// FUNCTION: LEGO1 0x10000010\nint f() { return 1; }\n"
+        seed = b"seed entropy\n" + target + b"// FUNCTION: LEGO1 0x10000020\n"
+        donor = b"donor entropy\n" + target + b"// FUNCTION: LEGO1 0x10000020\n"
+        return seed, donor, {
+            "start_marker": "// FUNCTION: LEGO1 0x10000010",
+            "end_marker": "// FUNCTION: LEGO1 0x10000020",
+            "range_pin": {
+                "baseline_sha256": hashlib.sha256(target).hexdigest(),
+                "baseline_size": len(target),
+                "baseline_line_count": target.count(b"\n"),
+                "baseline_significant_token_sha256":
+                    byte_identity.source_overlay_significant_sha256(target),
+            },
+        }
+
+    def test_target_source_window_is_identical_while_entropy_differs(self):
+        seed, donor, proof = self._source_fixture()
+        detail = byte_identity.require_target_source_range_identity(
+            seed, donor, proof, "fixture"
+        )
+        self.assertEqual(detail["target_source_size"],
+                         proof["range_pin"]["baseline_size"])
+
+    def test_target_source_change_is_refused(self):
+        seed, donor, proof = self._source_fixture()
+        donor = donor.replace(b"return 1", b"return 2")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "target source range"):
+            byte_identity.require_target_source_range_identity(
+                seed, donor, proof, "fixture"
+            )
+
+    def test_ambiguous_target_marker_is_refused(self):
+        seed, donor, proof = self._source_fixture()
+        donor += proof["start_marker"].encode("ascii")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "not unique"):
+            byte_identity.require_target_source_range_identity(
+                seed, donor, proof, "fixture"
+            )
+
+    def test_topology_allows_only_the_declared_seed_subset(self):
+        seed = SimpleNamespace(sections=[None] * 5)
+        donor = SimpleNamespace(sections=[None] * 3)
+        seed_functions = Counter({TARGET_SYMBOL: 1, COMMON: 1, OTHER: 1})
+        donor_functions = Counter({TARGET_SYMBOL: 1})
+        seed_comdats = Counter({
+            (TARGET_SYMBOL, 0x20, 2, ".text", 2, (".debug$S",)): 1,
+            (COMMON, 0x20, 2, ".text", 2, (".debug$S",)): 1,
+            (OTHER, 0x20, 2, ".text", 2, (".debug$S",)): 1,
+        })
+        donor_comdats = Counter({
+            (TARGET_SYMBOL, 0x20, 2, ".text", 2, (".debug$S",)): 1,
+        })
+        function = {
+            "expected_seed_section_count": 5,
+            "expected_donor_section_count": 3,
+            "expected_seed_only_functions": sorted([COMMON, OTHER]),
+        }
+        with mock.patch.object(
+                byte_identity, "function_multiset",
+                side_effect=lambda obj: (seed_functions if obj is seed
+                                         else donor_functions)), \
+             mock.patch.object(
+                byte_identity, "comdat_primary_identity_multiset",
+                side_effect=lambda obj: (seed_comdats if obj is seed
+                                         else donor_comdats)):
+            detail = byte_identity.require_target_closure_extraction_topology(
+                seed, donor, function, "fixture"
+            )
+        self.assertEqual(detail["seed_only_functions"],
+                         sorted([COMMON, OTHER]))
+
+    def test_topology_refuses_a_donor_added_function(self):
+        seed = SimpleNamespace(sections=[None] * 5)
+        donor = SimpleNamespace(sections=[None] * 3)
+        function = {
+            "expected_seed_section_count": 5,
+            "expected_donor_section_count": 3,
+            "expected_seed_only_functions": [OTHER],
+        }
+        with mock.patch.object(
+                byte_identity, "function_multiset",
+                side_effect=lambda obj: (
+                    Counter({TARGET_SYMBOL: 1, OTHER: 1}) if obj is seed
+                    else Counter({TARGET_SYMBOL: 1, "?Added@@YAXXZ": 1})
+                )), mock.patch.object(
+                byte_identity, "comdat_primary_identity_multiset",
+                return_value=Counter()):
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "adds functions"):
+                byte_identity.require_target_closure_extraction_topology(
+                    seed, donor, function, "fixture"
+                )
+
+    def test_topology_refuses_an_added_data_comdat(self):
+        seed = SimpleNamespace(sections=[None] * 5)
+        donor = SimpleNamespace(sections=[None] * 3)
+        seed_functions = Counter({TARGET_SYMBOL: 1, OTHER: 1})
+        donor_functions = Counter({TARGET_SYMBOL: 1})
+        target = (TARGET_SYMBOL, 0x20, 2, ".text", 2, (".debug$S",))
+        other = (OTHER, 0x20, 2, ".text", 2, (".debug$S",))
+        added_data = ("?Data@@3HA", 0, 2, ".data", 2, ())
+        function = {
+            "expected_seed_section_count": 5,
+            "expected_donor_section_count": 3,
+            "expected_seed_only_functions": [OTHER],
+        }
+        with mock.patch.object(
+                byte_identity, "function_multiset",
+                side_effect=lambda obj: (seed_functions if obj is seed
+                                         else donor_functions)), \
+             mock.patch.object(
+                byte_identity, "comdat_primary_identity_multiset",
+                side_effect=lambda obj: (
+                    Counter({target: 1, other: 1}) if obj is seed
+                    else Counter({target: 1, added_data: 1})
+                )):
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "adds or exchanges"):
+                byte_identity.require_target_closure_extraction_topology(
+                    seed, donor, function, "fixture"
+                )
+
+    def test_recipe_policy_refuses_a_live_body_generator(self):
+        unit, recipe, function = self._live_anim_case()
+        recipe["renderings"][0]["operations"][0]["gen"] = {
+            "k": "noop_assign", "assignment_target": "p_time", "repeat": 1,
+        }
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "emitting or unsupported generator"):
+            byte_identity.require_target_closure_recipe_policy(
+                recipe, function, ROOT, unit["source"], "fixture"
+            )
+
+    def test_live_target_closure_recipe_satisfies_the_narrow_policy(self):
+        unit, recipe, function = self._live_anim_case()
+        detail = byte_identity.require_target_closure_recipe_policy(
+            recipe, function, ROOT, unit["source"], "fixture"
+        )
+        self.assertEqual(detail["destructive_source_binding_count"], 1)
+        self.assertEqual(detail["fresh_declaration_identifier_count"], 10)
+        self.assertEqual(
+            detail["target_closure_generator_kinds"],
+            ["composed_typed_sequence_v1", "declaration_sequence_v1",
+             "line_reservation_v1"],
+        )
+
+    def test_recipe_policy_refuses_an_unretained_destructive_binding(self):
+        unit, recipe, function = self._live_anim_case()
+        function["destructive_source_bindings"][0]["retained_function"] = (
+            TARGET_SYMBOL
+        )
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "seed-retained definition"):
+            byte_identity.require_target_closure_recipe_policy(
+                recipe, function, ROOT, unit["source"], "fixture"
+            )
+
+    def test_recipe_policy_refuses_a_clean_identifier_collision(self):
+        unit, recipe, function = self._live_anim_case()
+        recipe["renderings"][0]["operations"][0]["gen"]["items"][1][
+            "id"
+        ] = "LegoAnimScene"
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "collides with clean source"):
+            byte_identity.require_target_closure_recipe_policy(
+                recipe, function, ROOT, unit["source"], "fixture"
+            )
 
 
 class DonorSourceOverlayTests(unittest.TestCase):

@@ -1,8 +1,9 @@
 # Specification: two COMDAT-splicing extensions
 
-Status: **implemented and tested.** Extensions A, B, A7/A7f and B7 are in the
-production path. `0x1003cf20` landed at `be00d783`; the remaining
-`0x1009f490` experiment is correctly blocked by B4's function-multiset gate.
+Status: **implemented, tested, and gated.** Extensions A, B, A7/A7f and B7 are
+in the production path. `0x1003cf20` is landed. The distinct
+`retail_exact_target_closure` class described in §7 landed `0x1009f490` with a
+full-build gain of one and zero losses; ordinary B4 remains unchanged.
 
 ## 0. Why
 
@@ -21,7 +22,7 @@ The work began from two rows proven byte-exact in a donor compile state:
 
 | row | proven state | blocked by |
 |---|---|---|
-| `0x1009f490 CalculateCameraTransform` | 1121 B, masked nd 0, SHAPE/STRUCT/EXACT 100.00 | B4 refuses: donor drops `Interpolate` and `Matrix4::Scale`; do not relax it |
+| `0x1009f490 CalculateCameraTransform` | 1121 B, masked nd 0, all 13 relocation targets retail-authenticated | **landed** through the distinct target-closure extraction class (§7) |
 | `0x1003cf20 ~LegoCacheSoundManager` | 258/258, masked nd 0, 100.00/100.00/100.00 | **landed** through extensions A+B |
 
 `0x100a4420 OrientableROI::OrientableROI` sits one EH-store scheduling
@@ -210,8 +211,10 @@ is sound. Do not implement B without B1.
 ## 3. Scope limit
 
 These extensions buy **at most three rows** (`0x1009f490`, `0x1003cf20`,
-`0x100a4420`). They do nothing for the ~75 allocator rows and nothing for goal 2.
-Any design pressure to generalise them further should be refused.
+`0x100a4420`). The first two are landed. They do nothing for the allocator bulk
+and nothing for goal 2.
+Any further use requires a distinct fail-closed proof and a measured customer;
+no premise may be weakened merely to admit another donor.
 
 ## 4. Tests — write these first and watch them fail
 
@@ -243,7 +246,12 @@ composer, which enforces length and masked nd 0.
 The existing 53 tests must stay green throughout, and all three image gates must
 be unchanged except for the intended row gain.
 
-## 5. B7 implemented, and A8 — the blocker it exposed (2026-08-16, main loop)
+## 5. B7 implemented, and A8 — historical blocker analysis (2026-08-16)
+
+This section records the evidence that motivated §7. Its conclusion that the
+row was not landable is superseded: the user explicitly permitted authentic
+cross-module/target-closure extraction, and §7 resolves the issue without
+relaxing ordinary B4 or linking the donor object.
 
 **B7 is implemented and tested.** The donor may now carry MORE relocations than
 the seed. Seed rows pair with a **prefix** of the donor's; each extra donor row
@@ -314,7 +322,7 @@ not landable by splicing at all and should be sealed.
 **B7 remains implemented and tested** — it is required by any future attempt and
 is independent of this blocker.
 
-## 6. Class C — `comdat_selection_override`: built, and measured as a net loss
+## 6. Class C — `comdat_selection_override`: built; old link result needs reproof
 
 **Built and tested** (`compose_comdat_selection_override`, validator + build
 dispatch, `donor_source` on the pad_shape recipe). Rationale: some template
@@ -328,28 +336,82 @@ copy composes into legoworld's object at **masked nd 0, 1106 = retail's 1106**,
 with relocation offsets, types and target names all identical and the line table
 identical apart from its symbol sentinel.
 
-**But the landing is a net −2 and must not be taken.** Gated build:
+One earlier gated experiment reported a net −2 and therefore must not be taken:
 
     GAIN  0x1001d890 erase                       (0.9027 -> 1.0000)
     LOST  0x10020e50 _Tree<MxCore*>::_Lrotate    (1.0 -> 0.3636)
     LOST  0x10021340 _Tree<MxCore*>::find        (1.0 -> 0.5588)
     LOST  0x10021a70 LegoWorld::Enable           (1.0 -> 0.9905)
 
-All three casualties are **SOLE definers in the same object** and were byte-exact.
-They stay **address-aligned**, so this is not displacement — the bytes changed:
+All three reported casualties are **SOLE definers in the same object** and were
+byte-exact. They stayed **address-aligned**, so the recorded bytes were:
 
     _Lrotate  ours 3b 05 9c 11 ...   retail 3b 05 a0 11 ...
 
-i.e. `cmp eax,[0x100f119c]` against retail's `[0x100f11a0]`. **The
-`_Tree<MxCore*>::_Nil` sentinel moved 4 bytes in the data layout**, so every
-function referencing it by absolute address broke.
+i.e. `cmp eax,[0x100f119c]` against retail's `[0x100f11a0]`.
 
-**The lesson generalises past this row: splicing a function's CODE can move
-DATA.** Class C swaps in another TU's copy, and the two copies need not pull the
-same data COMDATs through elimination, so `.data` can shift underneath rows that
-were never touched. Any future use of this class must be priced by the gated
-LOST list — the composer's own checks cannot see it, because the perturbation is
-at link time and in a different section.
+Fresh inspection shows the composed object differs from the seed only in 36
+non-relocated target-code bytes; object size, symbols, relocations, liveness and
+ordering are unchanged, and the exact donor object is excluded from the link.
+The claimed `_Nil` causal chain is therefore **not established** and the old run
+may have had a confounded input. Before changing Class C or pruning COMDATs,
+perform a frozen-input link-only A/B/A2: hash every input, link the seed, alter
+only those 36 bytes, link the candidate, restore, and link the seed again.
 
-The class stays in the tree, unused: it is sound, tested, and gated by C2, and
-the finding above is why no row uses it.
+The class stays in the tree, unused. Every future use still requires the full
+GAIN/LOST gate; `0x1001d890` remains open pending the controlled experiment.
+
+## 7. Class D — `retail_exact_target_closure`
+
+The user authorised a narrower proof basis for authentic cross-module or
+cross-rendering extraction: the donor need not be a whole-object recompile when
+only one compiler-produced target closure is copied and the seed keeps every
+other definition. This does **not** weaken ordinary B4. A separate class replaces
+only B4's two global-equality premises with stronger target-extraction premises:
+
+1. The complete seed and donor source renderings remain SHA-pinned. Unique
+   function-boundary markers select a complete target range, and byte, size,
+   line-count and significant-token pins prove that range identical in both.
+2. Seed and donor section counts are pinned. The donor function multiset must be
+   a strict subset: it may add none and may omit exactly the sorted manifest list.
+3. The broader primary-COMDAT identity multiset—owner name/type/storage, section
+   kind, selection and associative-child names—must also be a strict subset.
+   This prevents a hidden added or exchanged data COMDAT from balancing an
+   omitted function.
+4. Every donor relocation is represented by one ordered, non-overlapping oracle
+   record. The record pins offset, type, addend, COFF target identity and symbol
+   metadata. Its operand is decoded directly from the SHA-pinned retail window;
+   DIR32 and REL32 must resolve to the declared retail symbol base before any
+   relocation mask is applied.
+5. Compiler-local targets outside the copied closure require exact shared-section
+   header, definition-auxiliary, raw-byte, relocation-table and line-table
+   identity. Ordinary targets resolve unambiguously into the seed symbol table.
+6. All existing seat, span, COMDAT selection, FPO/debug closure, line-table,
+   relocation rewrite and output-conservation checks remain. The output must
+   retain the seed's complete function set and every non-target seed section;
+   the donor object is explicitly excluded from the link.
+7. The donor recipe has a class-specific recursive leaf policy. It permits only
+   non-emitting declaration/layout generators plus line reservation. Every
+   introduced top-level declaration identity must be fresh and unique in the
+   clean translation unit, preventing an entropy declaration from changing
+   lookup of an existing name. Every
+   destructive replacement must be outside the target, remove exactly one
+   authenticated complete definition, preserve its physical line count, and be
+   bound by symbol and qualified source identity to a definition retained in
+   the seed/output. Archive pulls, probes, suppliers, constants and live body
+   statements are refused even if the resulting target happens to match retail.
+
+`0x1009f490 CalculateCameraTransform` is the first customer. Its target source
+window is 2,283 bytes/97 lines and is identical in seed and donor. The donor
+hides only the later `Interpolate` definition from this compile, making VC4.2
+preserve the source's apparently unused call just as retail did. It has 400
+sections/129 functions versus the seed's 406/131, omitting exactly
+`Interpolate` and `Matrix4::Scale`; the composed output retains all 406/131.
+The 1,121-byte body is retail-exact under 13 semantically authenticated
+relocations, including the trailing `Interpolate` call at offset 905.
+
+A tempting source rewrite, `RotateZ(z)`, was tested in a shadow compile and
+rejected: it produced 1,105 bytes and 12 relocations, not retail's 1,121/13.
+The landed route changes no target source logic. Full gates measured
+4860/4934 from 4859/4934, exactly one gain at `0x1009f490`, zero losses, with
+ISLE and CONFIG still literal-byte identical.

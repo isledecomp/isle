@@ -1035,6 +1035,251 @@ def require_source_overlay_range_pin(
     return actual
 
 
+def validate_target_source_range_proof(value: object, context: str) -> dict:
+    """Validate the closed source window used by a target-only donor.
+
+    Both complete source renderings are already content-pinned.  The two
+    unique markers select the function text, while the ordinary range pin
+    prevents a marker edit from silently widening or narrowing that proof.
+    """
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {"start_marker", "end_marker", "range_pin"},
+                     context)
+    markers = {}
+    for name in ("start_marker", "end_marker"):
+        marker = value.get(name)
+        require(isinstance(marker, str) and marker.isascii()
+                and 8 <= len(marker) <= 256
+                and not any(character in marker for character in "\0\r\n"),
+                f"{context}.{name} is invalid")
+        markers[name] = marker
+    require(markers["start_marker"] != markers["end_marker"],
+            f"{context} markers must differ")
+    return {
+        **markers,
+        "range_pin": validate_source_overlay_range_pin(
+            value.get("range_pin"), context + ".range_pin"
+        ),
+    }
+
+
+def require_target_source_range_identity(
+    seed_source: bytes, donor_source: bytes, proof: dict, context: str,
+) -> dict:
+    """Prove a donor changed compiler state outside, not inside, the target."""
+    require(isinstance(seed_source, bytes) and isinstance(donor_source, bytes),
+            f"{context} source renderings are missing")
+
+    def selected(data: bytes, role: str) -> bytes:
+        start_marker = proof["start_marker"].encode("ascii")
+        end_marker = proof["end_marker"].encode("ascii")
+        require(data.count(start_marker) == 1,
+                f"{context} {role} start marker is not unique")
+        require(data.count(end_marker) == 1,
+                f"{context} {role} end marker is not unique")
+        start = data.index(start_marker)
+        end = data.index(end_marker)
+        require(start < end,
+                f"{context} {role} source markers are reversed")
+        return data[start:end]
+
+    seed_range = selected(seed_source, "seed")
+    donor_range = selected(donor_source, "donor")
+    require_source_overlay_range_pin(
+        seed_range, proof["range_pin"], context + " seed target range"
+    )
+    require(donor_range == seed_range,
+            f"{context} donor changes the target source range")
+    require_source_overlay_range_pin(
+        donor_range, proof["range_pin"], context + " donor target range"
+    )
+    return {
+        "target_source_size": len(seed_range),
+        "target_source_sha256": sha256_bytes(seed_range),
+    }
+
+
+TARGET_CLOSURE_GENERATOR_KINDS = frozenset({
+    "composed_typed_sequence_v1",
+    "declaration_sequence_v1",
+    "line_reservation_v1",
+})
+
+
+def require_target_closure_recipe_policy(
+    recipe: dict, function: dict, root, unit_source: str, context: str,
+) -> dict:
+    """Confine target-closure donors to non-emitting entropy plus a bound
+    removal of a complete seed-retained definition outside the target.
+
+    The general source-overlay grammar intentionally supports much broader
+    project reconstruction.  This splice class does not: a future manifest
+    cannot smuggle probes, suppliers, archive pulls, constants, or live body
+    statements into a retail-exact donor merely because its target bytes match.
+    """
+    validated = validate_donor_source_overlay_recipe(
+        recipe, root, seed_outputs_touched=False
+    )
+    require(len(validated["renderings"]) == 1
+            and validated["renderings"][0]["path"] == unit_source,
+            f"{context}: target-closure donor may render only its own TU")
+    proof = function["target_source_range"]
+    source = Path(root) / unit_source
+    clean = source.read_bytes()
+    start_marker = proof["start_marker"].encode("ascii")
+    end_marker = proof["end_marker"].encode("ascii")
+    require(clean.count(start_marker) == clean.count(end_marker) == 1,
+            f"{context}: target markers are not unique in clean source")
+    target_start = clean.index(start_marker)
+    target_end = clean.index(end_marker)
+    require(target_start < target_end,
+            f"{context}: target markers are reversed in clean source")
+    clean_tokens = {
+        token for token, _, _ in source_overlay_tokens(clean)
+    }
+    introduced_identifiers = set()
+
+    raw_bindings = function["destructive_source_bindings"]
+    require(isinstance(raw_bindings, list) and raw_bindings,
+            f"{context}: destructive source bindings are absent")
+    bindings = {}
+    for index, item in enumerate(raw_bindings):
+        item_context = f"{context}.destructive_source_bindings[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "path", "operation_id", "retained_function",
+            "source_qualified_identifier",
+        }, item_context)
+        path = source_overlay_relative_path(
+            item.get("path"), item_context + ".path"
+        )
+        operation_id = item.get("operation_id")
+        retained = item.get("retained_function")
+        qualified = _source_overlay_qualified_identifier(
+            item.get("source_qualified_identifier"),
+            item_context + ".source_qualified_identifier",
+        )
+        require(path == unit_source
+                and isinstance(operation_id, str)
+                and re.fullmatch(r"op_[a-z0-9_]{1,120}", operation_id)
+                and retained in function["expected_seed_only_functions"],
+                f"{item_context} does not bind a seed-retained definition")
+        require(all(part in retained for part in qualified.split("::")),
+                f"{item_context} source identity differs from its symbol")
+        key = (path, operation_id)
+        require(key not in bindings,
+                f"{item_context} duplicates a destructive operation")
+        bindings[key] = (retained, qualified)
+
+    used = set()
+    rendering = validated["renderings"][0]
+    for operation in rendering["operations"]:
+        generators = list(_source_overlay_generators(operation["generator"]))
+        require(generators and all(
+            generator["kind"] in TARGET_CLOSURE_GENERATOR_KINDS
+            for generator in generators
+        ), f"{context}: target-closure recipe uses an emitting or "
+           "unsupported generator")
+        for generator in generators:
+            if generator["kind"] == "declaration_sequence_v1":
+                require(generator["params"].get("shape") in (
+                    "forward", "unused_class_void_member_sequence",
+                ), f"{context}: target-closure declaration shape may emit")
+        for leaf in iter_source_overlay_leaf_generators(
+                operation["generator"]):
+            roles = source_overlay_expected_identifier_roles(
+                leaf["kind"], leaf["params"]
+            )
+            for identifier in roles["declared_identifiers"]:
+                if "::" in identifier:
+                    continue
+                require(identifier not in clean_tokens,
+                        f"{context}: target-closure declaration collides "
+                        f"with clean source: {identifier}")
+                require(identifier not in introduced_identifiers,
+                        f"{context}: target-closure declaration is repeated: "
+                        f"{identifier}")
+                introduced_identifiers.add(identifier)
+        if operation["action"] == "insert":
+            continue
+        require(operation["action"] == "replace",
+                f"{context}: target-closure donor permits inserts and one "
+                "bound replacement class only")
+        key = (rendering["path"], operation["id"])
+        require(key in bindings and key not in used,
+                f"{context}: destructive operation is not uniquely bound")
+        used.add(key)
+        require(len(generators) == 1
+                and generators[0]["kind"] == "line_reservation_v1",
+                f"{context}: destructive replacement must reserve lines only")
+        start = resolve_source_overlay_anchor(
+            clean, operation["start_anchor"], context + " replacement.from",
+            logical_path=unit_source,
+        )
+        end = resolve_source_overlay_anchor(
+            clean, operation["end_anchor"], context + " replacement.to",
+            logical_path=unit_source,
+        )
+        require(start < end
+                and (end <= target_start or start >= target_end),
+                f"{context}: destructive replacement overlaps the target")
+        removed = clean[start:end]
+        range_pin = operation["baseline_input_range"]
+        require(sha256_bytes(removed) == range_pin["baseline_sha256"]
+                and len(removed) == range_pin["baseline_size"],
+                f"{context}: destructive range differs from its pin")
+        replacement = render_source_overlay_generator(operation["generator"])
+        require(set(replacement) <= {9, 10, 13, 32}
+                and replacement.count(b"\n") == removed.count(b"\n"),
+                f"{context}: destructive replacement is not line-neutral")
+
+        _, qualified = bindings[key]
+        parts = qualified.split("::")
+        needle = []
+        for part in parts:
+            if needle:
+                needle.append("::")
+            needle.append(part)
+        tokens = [token for token, _, _ in source_overlay_tokens(removed)]
+        matches = [
+            index for index in range(len(tokens) - len(needle) + 1)
+            if tokens[index:index + len(needle)] == needle
+        ]
+        require(len(matches) == 1,
+                f"{context}: removed definition identity is absent/ambiguous")
+        try:
+            open_brace = tokens.index("{", matches[0] + len(needle))
+        except ValueError as error:
+            raise ByteIdentityError(
+                f"{context}: removed definition has no body"
+            ) from error
+        depth = 0
+        close_brace = None
+        for index in range(open_brace, len(tokens)):
+            if tokens[index] == "{":
+                depth += 1
+            elif tokens[index] == "}":
+                depth -= 1
+                require(depth >= 0,
+                        f"{context}: removed definition braces are invalid")
+                if depth == 0:
+                    close_brace = index
+                    break
+        require(close_brace == len(tokens) - 1,
+                f"{context}: destructive range is not one complete definition")
+    require(used == set(bindings),
+            f"{context}: destructive source binding has no operation")
+    return {
+        "destructive_source_binding_count": len(used),
+        "fresh_declaration_identifier_count": len(introduced_identifiers),
+        "target_closure_generator_kinds": sorted(
+            {generator["kind"] for operation in rendering["operations"]
+             for generator in _source_overlay_generators(
+                 operation["generator"])}
+        ),
+    }
+
+
 def _source_overlay_identifier_list(
     value: object, context: str, *, minimum: int = 0, maximum: int = 4096,
 ) -> list[str]:
@@ -8095,6 +8340,7 @@ def validate_manifest(
         normalized_donors = []
         local_recipe_ids = set()
         local_recipe_kinds = {}
+        local_recipes = {}
         for donor_index, donor in enumerate(donors):
             donor_context = f"{context}.donors[{donor_index}]"
             require(isinstance(donor, dict), f"{donor_context} must be an object")
@@ -8123,6 +8369,7 @@ def validate_manifest(
             require(isinstance(recipe, dict), f"{donor_context}.recipe must be an object")
             kind = recipe.get("kind")
             local_recipe_kinds[recipe_id] = kind
+            local_recipes[recipe_id] = recipe
             if mode == "compose_equal_body_comdat":
                 require(
                     kind in ("forward_declaration_run", "declaration_shape",
@@ -8681,6 +8928,7 @@ def validate_manifest(
                                          "equal_body_eh_reloc_layout",
                                          "same_slot_resize",
                                          "retail_exact_reloc_divergent",
+                                         "retail_exact_target_closure",
                                          "comdat_selection_override"),
                         f"{function_context}: unsupported splice class")
                 if splice_class == "comdat_selection_override":
@@ -8717,18 +8965,27 @@ def validate_manifest(
                             f"{function_context}.retail_oracle must be an object")
                     exact_keys(oracle, {"image", "address", "verdict", "length"},
                                function_context + ".retail_oracle")
-                elif splice_class == "retail_exact_reloc_divergent":
+                elif splice_class in ("retail_exact_reloc_divergent",
+                                      "retail_exact_target_closure"):
                     # Extension B.  Same shape as same_slot_resize plus the
                     # pinned retail oracle window that B1 compares against --
                     # this class may only ever install retail's own code.
+                    divergent_keys = {
+                        "mangled", "donor", "splice_class",
+                        "expected_seed_length", "expected_donor_length",
+                        "expected_linked_span", "expected_body_sha256",
+                        "retail_oracle", "retail_relocations",
+                    }
+                    if splice_class == "retail_exact_target_closure":
+                        divergent_keys |= {
+                            "expected_seed_section_count",
+                            "expected_donor_section_count",
+                            "expected_seed_only_functions",
+                            "target_source_range",
+                            "destructive_source_bindings",
+                        }
                     exact_keys(
-                        function,
-                        {
-                            "mangled", "donor", "splice_class",
-                            "expected_seed_length", "expected_donor_length",
-                            "expected_linked_span", "expected_body_sha256",
-                            "retail_oracle",
-                        },
+                        function, divergent_keys,
                         function_context,
                     )
                     for name in ("expected_seed_length",
@@ -8769,6 +9026,41 @@ def validate_manifest(
                         f"{function_context}: retail oracle is not a pinned "
                         f"exact-length match",
                     )
+                    validate_retail_relocation_oracle(
+                        function.get("retail_relocations"),
+                        f"{function_context}.retail_relocations",
+                        function["expected_donor_length"],
+                    )
+                    if splice_class == "retail_exact_target_closure":
+                        require(local_recipe_kinds[donor_id]
+                                == "donor_source_overlay",
+                                f"{function_context}: target-closure extraction "
+                                "requires a donor-private source rendering")
+                        for name in ("expected_seed_section_count",
+                                     "expected_donor_section_count"):
+                            value = function.get(name)
+                            require(type(value) is int and value > 0,
+                                    f"{function_context}.{name} is invalid")
+                        require(function["expected_seed_section_count"]
+                                > function["expected_donor_section_count"],
+                                f"{function_context}: donor section count is "
+                                "not a strict subset")
+                        omitted = function.get("expected_seed_only_functions")
+                        require(isinstance(omitted, list) and omitted
+                                and omitted == sorted(set(omitted))
+                                and all(isinstance(item, str)
+                                        and item.startswith("?")
+                                        and len(item) >= 8 for item in omitted),
+                                f"{function_context}.expected_seed_only_functions "
+                                "is invalid")
+                        validate_target_source_range_proof(
+                            function.get("target_source_range"),
+                            f"{function_context}.target_source_range",
+                        )
+                        require_target_closure_recipe_policy(
+                            local_recipes[donor_id], function, source_dir,
+                            source_relative, function_context,
+                        )
                     normalized_functions.append(dict(function))
                     continue
                 if splice_class == "same_slot_resize":
@@ -10554,6 +10846,85 @@ def function_multiset(coff: CoffObject) -> Counter:
     )
 
 
+def comdat_primary_identity_multiset(coff: CoffObject) -> Counter:
+    """Name every non-associative COMDAT group by its defining symbol.
+
+    Raw sizes are intentionally absent: the target function is allowed to
+    resize.  Symbol identity, selection policy, section kind, and complete
+    associative-child shape still prevent a donor from adding or exchanging
+    a code/data group under cover of an omitted function.
+    """
+    definitions = section_definitions(coff)
+    identities = []
+    for section in coff.sections:
+        definition = definitions.get(section["number"])
+        if definition is None or definition["selection"] in (0, 5):
+            continue
+        owners = [
+            symbol for symbol in coff.symbols.values()
+            if symbol["section"] == section["number"]
+            and symbol["value"] == 0
+            and symbol["name"] != section["name"]
+            and symbol["storage"] in (2, 3)
+        ]
+        external = [symbol for symbol in owners if symbol["storage"] == 2]
+        owners = external or owners
+        require(len(owners) == 1,
+                f"COMDAT section {section['number']} has no unique owner")
+        owner = owners[0]
+        identities.append((
+            owner["name"], owner["type"], owner["storage"],
+            section["name"], definition["selection"],
+            tuple(sorted(name for _, name in associated_sections(
+                coff, definitions, section["number"]
+            ))),
+        ))
+    return Counter(identities)
+
+
+def require_target_closure_extraction_topology(
+    seed: CoffObject, donor: CoffObject, function: dict, context: str,
+) -> dict:
+    """Replace whole-object equality with a pinned strict-subset proof.
+
+    The donor is allowed to omit only the explicitly named definitions that
+    the seed object continues to carry.  It may add none.  The final composer
+    still proves that every non-target seed section and the seed function set
+    survive unchanged.
+    """
+    require(len(seed.sections) == function["expected_seed_section_count"],
+            f"{context} seed section count changed")
+    require(len(donor.sections) == function["expected_donor_section_count"],
+            f"{context} donor section count changed")
+    require(len(seed.sections) > len(donor.sections),
+            f"{context} donor is not a strict section subset")
+    seed_functions = function_multiset(seed)
+    donor_functions = function_multiset(donor)
+    donor_only = donor_functions - seed_functions
+    require(not donor_only,
+            f"{context} donor adds functions absent from the seed")
+    seed_only = sorted((seed_functions - donor_functions).elements())
+    require(seed_only == function["expected_seed_only_functions"],
+            f"{context} seed-only function set differs")
+    require(seed_only,
+            f"{context} target-closure extraction declares no omitted function")
+    seed_comdats = comdat_primary_identity_multiset(seed)
+    donor_comdats = comdat_primary_identity_multiset(donor)
+    require(not donor_comdats - seed_comdats,
+            f"{context} donor adds or exchanges a COMDAT group")
+    omitted_comdats = list((seed_comdats - donor_comdats).elements())
+    require(sorted(identity[0] for identity in omitted_comdats) == seed_only,
+            f"{context} omitted COMDAT groups differ from the declared "
+            "seed-only functions")
+    return {
+        "seed_section_count": len(seed.sections),
+        "donor_section_count": len(donor.sections),
+        "seed_only_functions": seed_only,
+        "seed_comdat_count": sum(seed_comdats.values()),
+        "donor_comdat_count": sum(donor_comdats.values()),
+    }
+
+
 RELOCATION_WIDTHS = {
     0x0006: 4,  # IMAGE_REL_I386_DIR32
     0x0007: 4,  # IMAGE_REL_I386_DIR32NB
@@ -10601,6 +10972,110 @@ def detailed_relocations(coff: CoffObject, section: dict) -> list[dict]:
             }
         )
     return result
+
+
+RETAIL_RELOCATION_ORACLE_KEYS = {
+    "offset", "type", "addend", "target", "target_section",
+    "target_value", "target_type", "target_storage", "retail_target",
+}
+
+
+def validate_retail_relocation_oracle(
+    value: object, context: str, body_length: int,
+) -> list[dict]:
+    """Validate an ordered COFF-to-retail semantic relocation oracle."""
+    require(isinstance(value, list) and value,
+            f"{context} must be a non-empty array")
+    normalized = []
+    previous_end = 0
+    for index, item in enumerate(value):
+        item_context = f"{context}[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, RETAIL_RELOCATION_ORACLE_KEYS, item_context)
+        offset = require_exact_int(
+            item.get("offset"), item_context + ".offset",
+            minimum=0, maximum=body_length - 4,
+        )
+        require(offset >= previous_end,
+                f"{context} relocation operands overlap or are unordered")
+        previous_end = offset + 4
+        relocation_type = require_exact_int(
+            item.get("type"), item_context + ".type",
+            minimum=0, maximum=0xFFFF,
+        )
+        require(relocation_type in (0x0006, 0x0014),
+                f"{item_context}.type is not DIR32 or REL32")
+        target = item.get("target")
+        require(isinstance(target, str) and target and target.isascii()
+                and len(target) <= 4096 and "\0" not in target,
+                f"{item_context}.target is invalid")
+        retail_target = item.get("retail_target")
+        require(isinstance(retail_target, str)
+                and ADDRESS_RE.fullmatch(retail_target) is not None,
+                f"{item_context}.retail_target is invalid")
+        normalized.append({
+            "offset": offset,
+            "type": relocation_type,
+            "addend": require_exact_int(
+                item.get("addend"), item_context + ".addend",
+                minimum=0, maximum=0xFFFFFFFF,
+            ),
+            "target": target,
+            "target_section": require_exact_int(
+                item.get("target_section"), item_context + ".target_section",
+                minimum=0, maximum=0x7FFF,
+            ),
+            "target_value": require_exact_int(
+                item.get("target_value"), item_context + ".target_value",
+                minimum=0, maximum=0xFFFFFFFF,
+            ),
+            "target_type": require_exact_int(
+                item.get("target_type"), item_context + ".target_type",
+                minimum=0, maximum=0xFFFF,
+            ),
+            "target_storage": require_exact_int(
+                item.get("target_storage"),
+                item_context + ".target_storage",
+                minimum=0, maximum=0xFF,
+            ),
+            "retail_target": retail_target,
+        })
+    return normalized
+
+
+def require_retail_relocation_oracle(
+    donor_rows: list[dict], retail_body: bytes, retail_address: int,
+    oracle: list[dict], context: str,
+) -> dict:
+    """Bind every masked operand to the symbol it resolves to in retail.
+
+    Masked body equality alone is insufficient: two COFF objects can carry
+    identical instruction bytes while naming different callees.  This check
+    decodes each pinned retail operand before the mask is applied.
+    """
+    require(len(donor_rows) == len(oracle),
+            f"{context} relocation count differs from its semantic oracle")
+    fields = (
+        "offset", "type", "addend", "target", "target_section",
+        "target_value", "target_type", "target_storage",
+    )
+    for index, (record, expected) in enumerate(zip(donor_rows, oracle)):
+        require(all(record[field] == expected[field] for field in fields),
+                f"{context} relocation {index} differs from its COFF oracle")
+        offset = record["offset"]
+        raw = retail_body[offset:offset + 4]
+        require(len(raw) == 4,
+                f"{context} relocation {index} leaves the retail body")
+        if record["type"] == 0x0006:  # IMAGE_REL_I386_DIR32
+            resolved = int.from_bytes(raw, "little")
+        else:  # IMAGE_REL_I386_REL32
+            displacement = int.from_bytes(raw, "little", signed=True)
+            resolved = (retail_address + offset + 4 + displacement) & 0xFFFFFFFF
+        symbol_base = (resolved - record["addend"]) & 0xFFFFFFFF
+        require(symbol_base == int(expected["retail_target"], 16),
+                f"{context} relocation {index} resolves to 0x{symbol_base:08x}, "
+                f"not {expected['retail_target']}")
+    return {"semantic_relocation_count": len(donor_rows)}
 
 
 def local_symbol_kind(name: str) -> str | None:
@@ -11171,10 +11646,40 @@ def _pair_reloc_divergent(seed, donor, seed_rows, donor_rows, seed_primary,
                     f"{context}: local symbol mapping is inconsistent",
                 )
             else:
+                left_section_number = left["target_section"]
+                right_section_number = right["target_section"]
                 require(
-                    left["target_section"] == right["target_section"]
+                    0 < left_section_number <= len(seed.sections)
+                    and right_section_number <= len(donor.sections)
+                    and left_section_number == right_section_number
                     and left["target_value"] == right["target_value"],
                     f"{context}: external local relocation target differs",
+                )
+                # A same-seat/value compiler local is only interchangeable
+                # when the shared section it names is itself identical.  The
+                # relocation mask must never turn a merely coincident seat
+                # into a semantic-equivalence claim.
+                left_section = seed.sections[left_section_number - 1]
+                right_section = donor.sections[right_section_number - 1]
+                left_definition = section_definitions(seed).get(
+                    left_section_number)
+                right_definition = section_definitions(donor).get(
+                    right_section_number)
+                require(
+                    all(left_section[key] == right_section[key] for key in (
+                        "name", "raw_size", "relocation_count", "line_count",
+                        "characteristics",
+                    ))
+                    and coff_body(seed, left_section)
+                    == coff_body(donor, right_section)
+                    and _coff_table_bytes(seed, left_section, "relocations")
+                    == _coff_table_bytes(donor, right_section, "relocations")
+                    and _coff_table_bytes(seed, left_section, "lines")
+                    == _coff_table_bytes(donor, right_section, "lines")
+                    and left_definition is not None
+                    and right_definition is not None
+                    and left_definition["raw"] == right_definition["raw"],
+                    f"{context}: external local target section differs",
                 )
         elif left["target"] == right["target"]:
             require(left["addend"] == right["addend"],
@@ -11183,6 +11688,12 @@ def _pair_reloc_divergent(seed, donor, seed_rows, donor_rows, seed_primary,
                 left["target_type"] == right["target_type"]
                 and left["target_storage"] == right["target_storage"],
                 f"{context}: relocation target class differs",
+            )
+            require(
+                _resolve_substituted_seed_symbol(seed, right, context)
+                == left["symbol_index"],
+                f"{context}: same-name relocation target is ambiguous or "
+                "does not name the paired seed symbol",
             )
         else:
             # The divergence this class exists for: retail calls a function
@@ -11213,6 +11724,7 @@ def compose_same_slot_resize(
     function: dict,
     *,
     retail_body: bytes | None = None,
+    target_closure_extract: bool = False,
 ) -> tuple[bytes, dict]:
     """Install a donor code body of a different size that occupies the same
     16-byte linked contribution slot, repairing every dependent COFF record.
@@ -11222,13 +11734,25 @@ def compose_same_slot_resize(
     the compiler-generated target code, COFF line offsets, and procedure
     debug range.  Mapped object-local symbol values move to the donor's.
 
-    ``retail_body`` selects the `retail_exact_reloc_divergent` class: the
-    donor's EXTERNAL relocation target set may then differ from the seed's,
-    and the composed body is required to be byte-identical to retail's own
-    code under the relocation mask (B1).  Passing None keeps the historical
-    `same_slot_resize` behaviour exactly, relocation equivalence included.
+    ``retail_body`` selects a retail-exact class: the donor's EXTERNAL
+    relocation target set may then differ from the seed's, and the composed
+    body is required to be byte-identical to retail's own code under the
+    relocation mask (B1).  ``target_closure_extract`` replaces only the two
+    whole-donor topology guards with a pinned strict-subset proof; every
+    target-closure and output-conservation guard remains shared.
     """
-    divergent = retail_body is not None
+    splice_class = function.get("splice_class")
+    require(splice_class in (
+        "same_slot_resize", "retail_exact_reloc_divergent",
+        "retail_exact_target_closure",
+    ), "same-slot composer received an unsupported splice class")
+    expected_divergent = splice_class != "same_slot_resize"
+    expected_extract = splice_class == "retail_exact_target_closure"
+    require((retail_body is not None) == expected_divergent,
+            "retail oracle presence differs from the splice class")
+    require(target_closure_extract == expected_extract,
+            "target-closure topology mode differs from the splice class")
+    divergent = expected_divergent
     seed = CoffObject(seed_bytes)
     donor = CoffObject(donor_bytes)
     mangled = function["mangled"]
@@ -11244,13 +11768,19 @@ def compose_same_slot_resize(
     )
     require(sp["number"] == dp["number"],
             "target section seat changed")
-    # A carrier-state donor owns its own global tail layout; the target
-    # closure seats, function multiset, and per-relocation role/target
-    # checks carry the equivalence proof.
-    require(len(seed.sections) == len(donor.sections),
-            "global section count differs")
-    require(function_multiset(seed) == function_multiset(donor),
-            "donor function set differs")
+    # Ordinary carrier donors must be whole-object-equivalent.  A target-only
+    # donor may omit a pinned strict subset because the composed output keeps
+    # every original seed definition and copies only this target closure.
+    topology_detail = {}
+    if target_closure_extract:
+        topology_detail = require_target_closure_extraction_topology(
+            seed, donor, function, "target-closure extraction"
+        )
+    else:
+        require(len(seed.sections) == len(donor.sections),
+                "global section count differs")
+        require(function_multiset(seed) == function_multiset(donor),
+                "donor function set differs")
     require(
         all(sp[key] == dp[key] for key in ("name", "characteristics")),
         "target header shape changed",
@@ -11334,6 +11864,10 @@ def compose_same_slot_resize(
         require(len(donor_code) == len(retail_body),
                 f"composed body length {len(donor_code)} differs from the "
                 f"retail oracle length {len(retail_body)}")
+        semantic_detail = require_retail_relocation_oracle(
+            dpr, retail_body, int(function["retail_oracle"]["address"], 16),
+            function["retail_relocations"], "retail relocation oracle",
+        )
         masked_donor = bytearray(donor_code)
         masked_retail = bytearray(retail_body)
         for record in dpr:
@@ -11349,6 +11883,7 @@ def compose_same_slot_resize(
             seed, donor, spr, dpr, sp["number"], dp["number"],
             sx["number"], dx["number"], mapping, "primary")
     else:
+        semantic_detail = {}
         _pair_same_slot_relocations(spr, dpr, sp["number"], dp["number"],
                                     sx["number"], dx["number"], mapping,
                                     "primary")
@@ -11606,7 +12141,7 @@ def compose_same_slot_resize(
                     f"the donor's {right['target']!r}")
     return composed, {
         "mangled": mangled,
-        "splice_class": ("retail_exact_reloc_divergent" if divergent
+        "splice_class": (function["splice_class"] if divergent
                          else "same_slot_resize"),
         "section_number": cp["number"],
         "seed_length": sp["raw_size"],
@@ -11617,6 +12152,8 @@ def compose_same_slot_resize(
         "changed_local_values": local_value_updates,
         "substituted_relocations": len(substitutions),
         "retail_exact": bool(divergent),
+        **topology_detail,
+        **semantic_detail,
     }
 
 
@@ -11948,6 +12485,36 @@ def compose_retail_exact_reloc_divergent(
             "retail oracle body is missing")
     return compose_same_slot_resize(seed_bytes, donor_bytes, function,
                                     retail_body=bytes(retail_body))
+
+
+def compose_retail_exact_target_closure(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+    seed_source: bytes,
+    donor_source: bytes,
+) -> tuple[bytes, dict]:
+    """Extract one retail-exact target closure from an authenticated donor.
+
+    The donor may omit only a pinned set of unrelated definitions.  Those
+    omissions never enter the output: the seed remains the object shell and
+    retains its full function multiset, while the target source range is
+    proven byte-identical between the two complete pinned renderings.
+    """
+    require(function.get("splice_class") == "retail_exact_target_closure",
+            "splice class is not retail_exact_target_closure")
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+    source_detail = require_target_source_range_identity(
+        seed_source, donor_source, function["target_source_range"],
+        "target-closure source proof",
+    )
+    composed, detail = compose_same_slot_resize(
+        seed_bytes, donor_bytes, function,
+        retail_body=bytes(retail_body), target_closure_extract=True,
+    )
+    return composed, {**detail, **source_detail}
 
 
 def compose_swap_comdat_group_order(

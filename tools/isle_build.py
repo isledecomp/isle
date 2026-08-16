@@ -798,6 +798,7 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
         seed_sha = hashlib.sha256(seed_bytes).hexdigest()
 
         donor_objects = {}
+        donor_sources = {}
         if unit["mode"] == "swap_comdat_group_order":
             composed, detail = byte_identity.compose_swap_comdat_group_order(
                 seed_bytes, unit["group_order"]
@@ -872,6 +873,9 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                     (probe / "inc").mkdir(parents=True, exist_ok=True)
                     rendered_donor = byte_identity.render_donor_source_overlay(
                         recipe, byte_identity.checked_source_root())
+                    donor_sources[donor["id"]] = rendered_donor.get(
+                        unit["source"]
+                    )
                     for path, payload in rendered_donor.items():
                         if path == unit["source"]:
                             (probe / "s.cpp").write_bytes(payload)
@@ -1170,7 +1174,25 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                 donor_objects[donor["id"]] = (probe / "o.obj").read_bytes()
             composed = seed_bytes
             for function in unit["functions"]:
-                if function["splice_class"] == "retail_exact_reloc_divergent":
+                if function["splice_class"] == "retail_exact_target_closure":
+                    retail = function["retail_oracle"]
+                    donor_source = donor_sources.get(function["donor"])
+                    if donor_source is None:
+                        fail(f"target-closure donor omits its translation unit: "
+                             f"{unit['source']}")
+                    composed, detail = (
+                        byte_identity.compose_retail_exact_target_closure(
+                            composed, donor_objects[function["donor"]],
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16), retail["length"],
+                            ),
+                            source.read_bytes(), donor_source,
+                        ))
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [donor_objects[function["donor"]]])
+                elif function["splice_class"] == "retail_exact_reloc_divergent":
                     # B1's extraction lives here, in the build, because it is
                     # the build that already validates the retail image
                     # against images.LEGO1.original_sha256.  The composer is
