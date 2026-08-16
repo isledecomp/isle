@@ -613,3 +613,26 @@ carries only three `// FUNCTION: ALPHA` annotations, none in Act3 sources. The
 ALPHA bracket is therefore unavailable for every row in `act3.cpp`,
 `act3actors.cpp` and `act3ammo.cpp` — take it off the queue. It remains a
 legitimate bracket for the older subsystems (viewlodlist, legoroi, realtime).
+
+## NEW DIAGNOSTIC: the EAX short-form census explains half the −1 rows
+
+x86 has a 5-byte `add eax, imm32` (opcode `05`) where every other register
+needs the 6-byte `81 /0` form. So a row that is **exactly one byte short of
+retail** is very often just a register-role tie in which retail happened to
+put the value in EAX. `t/eaxform.py` counts both forms in ours vs retail in
+one second, with no compiles:
+
+| row | ours (short/long) | retail (short/long) | verdict |
+|---|---|---|---|
+| `CalculateSpline` (−1) | 0 / 1 | **1 / 0** | **explained** — body+64 `81 c2 c0…` vs `05 c0…` |
+| `Act3::Enable` (−1) | 2 / 2 | **3 / 1** | **explained** — body+659 `add ecx,0x1a0` vs `add eax,0x1a0` |
+| `LegoLOD::Read` (−1) | 8 / 2 | 8 / 2 | not this; the −1 is elsewhere |
+| `_Tree<…LegoTextureInfo>::erase` (−1) | 0 / 0 | 0 / 0 | not this |
+| `LegoROI::Read` (−3) | 0 / 1 | 0 / 1 | not this |
+| `TowTrack::HandlePathStruct` (control, size-clean) | 0 / 3 | 0 / 3 | control behaves |
+
+Consequence for triage: **`CalculateSpline` and `Act3::Enable` are not missing
+any statement** — both are pure register-role rows whose length defect is an
+encoding side effect. Do not spend read-off time reconstructing text for them;
+they need the carrier channel (or nothing). Run this census first on every
+±1 row in the project.
