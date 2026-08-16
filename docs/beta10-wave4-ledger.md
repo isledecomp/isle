@@ -580,3 +580,17 @@ lane is active.
    legomain source"** stands as a *text* verdict (confirmed at byte level here)
    but must not be read as a state verdict: the row is +3 short and no carrier
    has yet been searched past fwdE-12 on today's text.
+
+### Final sweep additions
+
+* `all2-legomain` full grid (653 states): `Create` **0** at fwdL-7 as well as
+  fwdE-7 and four extern states (extern-4-3/5-2/6-1/7-0) — the landed state is
+  not a knife-edge. `_Tree<const char*, LegoTextureInfo*>::erase` 0x10059dc0
+  dropped from nd=651 to **66 @ fwdL-34** (len 1101 vs retail 1102);
+  `LegoOmni::Destroy` stays at 251.
+* `all-legorace` fwdE/fwdL 97..400 (608 states): JetskiRace 18, CarRace 111 —
+  both unmoved from the 1..96 grid.
+* `all-legowegedge` `shapefull` (505 further declaration-shape cells):
+  LinkEdgesAndFaces still **2**. Together with fwd 1..400 on both placements
+  and the pad/extern grids, that is ~1770 distinct carrier states holding the
+  same 2-byte residue.
