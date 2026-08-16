@@ -970,3 +970,19 @@ placements** (1,998 states): `erase` floor is nd=1 at `fwdE-311`,
 fwdL-7. A `shapefull` pass on legomain (the last untried landable family for
 that TU) was launched at the end of the session; its result lands in
 `…/scratchpad/b10w4/legomain-sf.log` and `sweeps/all2-legomain-sf/best.json`.
+
+Final state of the legomain `erase` row — **all four landable generators plus
+the include axis are now exhausted at nd=1**:
+
+| family | states | best |
+|---|---|---|
+| forward runs, both placements, k = 1..999 dense | 1,998 | **1** @ `fwdE-311` |
+| `extern_run_pair`, 0..24 × 0..24 and 0..12 × 0..60 | 931 + 161 | 597 |
+| `declaration_shape`, all 550 cells | 505 + 60 | 24 @ `shape-7-45` |
+| `pad_shape` 12×12 | 144 | 66 |
+| include-order adjacent swaps × `fwdE-311` | 31 | 1 (identity is the minimum — the axis is inert here, as in act3.cpp) |
+
+The single residual byte is the vendor `_Tree::erase` CMPDIR at body+151. What
+is left to try: a `pad_declaration_shape` donor kind (method finding 3 above)
+so the 9,801-cell pad family becomes landable, and full include *permutations*
+(not just adjacent swaps) crossed with `fwdE-311`.
