@@ -551,15 +551,29 @@ the donor-debt bisect ledger's state exactly**: on plain h12 text
 ledger named. So the grid is doing its job; `GetRefCount`'s `3b f2` -> `3b d6`
 tie simply does not live in the declaration-record state space.
 
-Untried directions for the next wave, in order of promise:
-1. the donor grammar's **`prefix` and `width`** parameters (`class A00;` vs
-   `class MxUnkRecVA000;`) — a completely unswept dimension (§9);
-2. `force_include` placement (`probe.py --carriers fwdF:k`, added here,
-   never swept);
-3. a text cell inside `GetRefCount` itself (its loop is
-   `for (it = m_characters->begin(); it != m_characters->end(); it++)` with a
-   `character`/`roi` pair — the wave-2 declaration-position axis applies);
-4. accept the trade only if `GetRefCount` is closed independently first.
+Three more directions were then run, all negative, bringing the total to
+**2,197 states with `GetRefCount` nd=1 @84 in every one**:
+
+| search | states | result |
+|---|---|---|
+| new donor prefix `MxUnkRecVD` x placements `force_include`/`prefix`/`suffix` x counts 1..96, width 3 (`nm/probes/chm-h12j-fw`) | 288 | 1 @84 |
+| five text cells **inside `GetRefCount` itself** x 10 carriers (`nm/probes/grc-chm-h12jG{1..5}`) | 50 | 1 @84 |
+
+The five cells were: swap the `character`/`it` declarations; hoist `roi` out of
+the loop; `!(it == end())` loop condition; mirror the hit test to
+`p_roi == roi`; and delete the named `roi` temporary entirely. **All five give
+byte-identical 108-byte bodies with the same single wrong byte** — the
+`character`/`roi`/`it` register assignment in this function is completely
+insensitive to its own source text. That is a strong, transferable result: for
+a tie of this class, do not spend text cells on the row itself.
+
+(Both new axes are nonetheless live and worth keeping: `force_include`
+placement produced `Exists` nd=0 at `fw-fi-MxUnkRecVD-14-3` and `GetActorROI`
+nd=0 at `fw-suffix-MxUnkRecVD-20-3`, i.e. it reaches states the three historical
+fwd placements do not.)
+
+Remaining direction: the C2 pool/allocator instrument (fresh-eyes C4), or
+accept the trade only once `GetRefCount` is closed independently.
 
 ---
 
