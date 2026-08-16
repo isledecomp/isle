@@ -61,3 +61,23 @@ Ours 1074, retail 1121 (−47), 304 vs 320 instructions.
   **register-assignment** difference, i.e. allocator class — not text.
 - **`MxU8* volatile current` is load-bearing** in FUN_100c6fa0. Removing the
   `volatile` collapses the body 234 → 162 bytes. It is not a cleanup target.
+
+## Zero-compile row readings, 2026-08-16 (main loop)
+
+Six open rows read instruction-by-instruction with relocations normalised
+(`bench/fulldiff.py`). Recorded so no future wave re-reads them. None of these
+is a text target; the class is given with the evidence that fixes it.
+
+| row | len | class | evidence |
+|---|---|---|---|
+| 0x100ba7f0 MxDisplaySurface::Create | 660=660 | **schedule(reordered)** | Exactly one instruction moves. Ours `sub eax,[esi+8]; mov [esp+0x84],0x6040; inc eax`; retail `sub; inc eax; mov [esp+0x84],0x6040`. Both builds hoist the constant `ddsCaps.dwCaps` store up into the width arithmetic; they differ by one slot. Source order is already dwFlags→dwWidth→dwHeight→ddsCaps, so source order is not what places it. |
+| 0x1009a8c0 LegoWEGEdge::LinkEdgesAndFaces | 1494=1494 | **colour** | Whole residue is `add ecx,4; add eax,8` vs `add ecx,8; add eax,4`, twice. Two induction variables, opposite register assignment. No operation differs. |
+| 0x100b26f0 AlphaMask::IsHit | 101=101 | **colour** | `cmp eax,esi; jae` vs `cmp esi,eax; jbe` — same condition, operands reversed. Rewriting the source as `m_width <= p_x` is byte-identical (measured): MSVC canonicalises, so this is register assignment. |
+| 0x1006ed90 Infocenter::Create | 380 vs 381 | **colour** | Retail inserts `mov ecx,eax` and tests `ecx` where we test `eax`; later `mov ecx,[eax+0x74]` vs `mov eax,[ecx+0x74]`. Register roles swapped around the `GetState` result. |
+| 0x1003d170 FindSoundByKey | 282 vs 281 | **cmpdir → shape grid** | `cmp ebx,[_Nil]` vs `cmp [_Nil],ebx` inside the inlined `_Tree` sentinel test, plus a spill-vs-register choice for the `find` result. Same family as `_Tree<LegoPathCtrlEdge*>::_Ubound`, which closed on `declaration_shape` state 124 after 1,681 extern states. **Sweep the shape grid, do not read the text.** |
+| 0x100c6fa0 MxDSBuffer::FUN_100c6fa0 | 234=234 | **PERMUTED, live** | Two-instruction transposition; full mechanism, six tested forms and the remaining blocker are in the section above. |
+
+Method note: `fulldiff.py` originally showed dozens of false differences on
+every row because our object stores `0` where retail stores the linked address.
+**Normalise call/jmp targets and any immediate >= 0x100000 on both sides before
+diffing**, or the relocation noise buries the real residue.
