@@ -986,3 +986,12 @@ The single residual byte is the vendor `_Tree::erase` CMPDIR at body+151. What
 is left to try: a `pad_declaration_shape` donor kind (method finding 3 above)
 so the 9,801-cell pad family becomes landable, and full include *permutations*
 (not just adjacent swaps) crossed with `fwdE-311`.
+
+Follow-up: **80 random full include permutations** of legomain.cpp's 30-entry
+quoted-include block, each crossed with `fwdE-311`, also leave `erase` at
+nd=1 (the identity permutation is the minimum). The include-order axis is now
+measured inert in **three** of this lane's TUs (act3.cpp adjacent swaps,
+legomain.cpp adjacent swaps and full permutations); it exists but has no reach
+here. It did move `Create` (three permutations reproduce its nd=0), which
+confirms the axis is live in the TU — it simply does not touch the `_Tree`
+bodies.
