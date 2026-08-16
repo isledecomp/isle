@@ -996,3 +996,26 @@ so it needs a real grid rather than a guess.
 link. This is the second time a corpus hit has landed in a discarded object —
 `0x1002bff0` was the first, where all six suppliers were measured and every nd=0
 sat in a loser.
+
+### §0.5 — legoworld.cpp swept for `0x1001d890`: the bare seed is the best state
+
+576 cells across **five families** on the **link-winning** object, scoring every
+open-row COMDAT in it:
+
+| family | cells | best nd |
+|---|---:|---:|
+| `pad_shape` 13x14 | 182 | 50 |
+| `declaration_shape` 10x24 | 240 | 339 |
+| `fwdE` 40x2 | 80 | 102 |
+| `fwdL` 36x2 | 72 | 102 |
+| `fwdP` 36x2 | 72 | 102 |
+| `extern` 21x2 | 42 | 102 |
+
+**The bare seed is nd 36 at retail's exact length 1106 — better than every cell.**
+`fwdE-1-2`, `fwdL-1-2`, `fwdP-1-2` and `extern-1-2` all land on the same nd 102,
+so the smallest carrier of any family costs the same 66 bytes; the carrier axis
+does not merely fail here, it is actively harmful on this row.
+
+So the nd=0 that exists in `infocenter.cpp` cannot be reproduced in the object
+that wins the link. Landing it would require choosing the **other** copy — see
+the COMDAT-selection question in `docs/comdat-splice-extensions-spec.md`.
