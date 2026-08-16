@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shlex
 import sys
 from pathlib import Path
@@ -142,6 +143,35 @@ def build_index(paths):
     return by_symbol, by_key, early
 
 
+GENERIC_TOKENS = frozenset("""class struct const unsigned char int long short void
+pair map set multiset vector list allocator basic_string first second""".split())
+
+
+def name_tokens(text: str) -> set:
+    return {t for t in re.findall(r"[A-Za-z_][A-Za-z0-9_]*", text)
+            if t not in GENERIC_TOKENS and len(t) > 2}
+
+
+def rank_by_name(candidates, row_name):
+    """Order masked-equal candidates by agreement with reccmp's annotation.
+
+    Two instantiations that differ only in relocation targets are masked-equal,
+    so the bytes cannot choose between them.  The row's demangled name can:
+    the distinctive type tokens in it appear in the right symbol's mangled
+    name.  Without this, 0x10057180 attributes to `_Tree<MxAtom*>::_Erase` in
+    mxmain.cpp when reccmp is tracking `_Tree<LegoAnimPresenter*>::_Erase` --
+    and a sweep of the named TU then scores nothing at all.
+    """
+    if len(candidates) < 2:
+        return candidates
+    # Substring containment, not token equality: a mangled name encodes the
+    # type as `PAVLegoAnimPresenter`, so the row's `LegoAnimPresenter` token
+    # is never equal to any mangled token, only contained in one.
+    want = name_tokens(row_name)
+    return sorted(candidates,
+                  key=lambda r: -sum(1 for t in want if t in r["name"]))
+
+
 def raw_slice(image, va, length) -> bytes:
     """Untrimmed image bytes.
 
@@ -157,19 +187,36 @@ def raw_slice(image, va, length) -> bytes:
 
 
 def identify(image, row, by_key, early):
-    """Find the object COMDAT whose masked bytes are the linked body."""
+    """Object COMDATs that reproduce the linked body: (exact, masked-only).
+
+    Returns lists, not one record, because the linker folds identical COMDATs
+    (/OPT:ICF).  Structurally unrelated instantiations can compile to the same
+    bytes and share one address, and returning the first match would name one
+    arbitrary symbol as "the" winner and hide the rest.
+
+    Masked equality alone is NOT evidence of folding: two instantiations can
+    differ only in their relocation TARGETS (a different comparator, a
+    different allocator), which masking erases.  Those twins are distinct
+    bodies at distinct addresses -- `_Tree<LegoAnimStruct>::_Insert` and
+    `_Tree<LegoHideAnimStruct>::_Insert` are masked-equal and live at both
+    0x1006a7a0 and 0x1006e720.  So take unmasked matches when there are any,
+    and fall back to masked only to attribute a body we cannot place exactly.
+    """
     va = int(row["recomp"], 16)
     head = raw_slice(image, va, KEY)
     if len(head) < KEY:
-        return None
+        return [], []
+    exact, loose = [], []
     for rec in by_key.get(head, []) + early:
         body = rec["body"]
         linked = raw_slice(image, va, len(body))
         if len(linked) != len(body):
             continue
-        if mask(body, rec["relocs"]) == mask(linked, rec["relocs"]):
-            return rec
-    return None
+        if body == linked:
+            exact.append(rec)
+        elif mask(body, rec["relocs"]) == mask(linked, rec["relocs"]):
+            loose.append(rec)
+    return exact, loose
 
 
 def main() -> int:
@@ -206,20 +253,38 @@ def main() -> int:
 
     out = []
     for row in rows:
-        rec = identify(ours, row, by_key, early)
+        exact, loose = identify(ours, row, by_key, early)
+        # Object bodies carry UNRESOLVED relocations while the image carries
+        # resolved addresses, so byte equality only ever holds for bodies with
+        # no relocations at all (2 of 80 rows).  Masked equality is therefore
+        # the working comparison, and it cannot by itself tell two
+        # relocation-distinct twins apart.  reccmp's annotation can: prefer the
+        # candidate whose mangled name agrees with the row's demangled name.
+        matches = rank_by_name(exact or loose, row["name"])
         entry = {"address": row["address"], "name": row["name"],
                  "matching": row["matching"]}
-        if rec is None:
+        if not matches:
             entry["verdict"] = "UNMATCHED"
             out.append(entry)
             continue
-        definers = by_symbol[rec["name"]]
+        # A fold set is only real when several DISTINCT symbols reproduce the
+        # linked bytes exactly (/OPT:ICF).  Masked-only agreement means we
+        # could not place the body exactly, which is a different situation.
+        fold = sorted({m["name"] for m in exact})
+        rec = matches[0]
+        entry["folded_symbols"] = fold if len(fold) > 1 else []
+        entry["attribution"] = "exact" if exact else "masked-only"
+        # Objects that could supply these bytes: every definer of every
+        # symbol in the fold set, not just of the one we happened to match.
+        names = fold or [rec["name"]]
+        definers = [d for name in names for d in by_symbol[name]]
         # Retail's TRUE body length.  The extent must come from the next
         # annotated retail symbol -- a window sized from the definers runs
         # straight into the following function, and body_of only strips
         # trailing fill, so it would report every definer as ~32 B short.
         gold = trim_fill(raw_slice(retail, int(row["address"], 16),
                                    extents[row["address"]]))
+        supplies = {(m["obj"], m["name"]) for m in matches}
         entry["mangled"] = rec["name"]
         entry["length"] = len(rec["body"])
         entry["retail_length"] = len(gold) if gold else None
@@ -236,10 +301,13 @@ def main() -> int:
                     price = sum(x != y for x, y in zip(a, b))
             entry["definers"].append({
                 "object": other["obj"].name,
+                "symbol": other["name"],
                 "length": len(other["body"]),
                 "length_delta_vs_retail": delta,
                 "masked_distance_to_retail": price,
-                "is_winner": other["obj"] == rec["obj"],
+                # Any copy that reproduces the linked bytes is a supplier.
+                # With folding there can be more than one.
+                "is_winner": (other["obj"], other["name"]) in supplies,
             })
         entry["verdict"] = "SOLE" if len(definers) == 1 else "CONTESTED"
         out.append(entry)

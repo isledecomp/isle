@@ -11,13 +11,13 @@ because `entity/legoworld.cpp` wins that COMDAT.
 
 | verdict | rows |
 | --- | --- |
-| CONTESTED | 785 |
-| SOLE | 3224 |
+| CONTESTED | 536 |
+| SOLE | 3473 |
 | UNMATCHED | 925 |
 
 ## Open rows by the object that must move
 
-80 open rows across 47 objects. To move a row you must change the codegen of the object named here -- for a template body that is often not the TU that looks like it owns the symbol.
+80 open rows across 46 objects. To move a row you must change the codegen of the object named here -- for a template body that is often not the TU that looks like it owns the symbol.
 
 | object | open rows | rows |
 | --- | ---: | --- |
@@ -25,6 +25,7 @@ because `entity/legoworld.cpp` wins that COMDAT.
 | legocharactermanager.cpp.obj | 4 | `0x10083890` `0x10085500` `0x10084030` `0x10083500` |
 | mxvideopresenter.cpp.obj | 4 | `0x100b27b0` `0x100b2a70` `0x100b26f0` `0x100b24f0` |
 | act3.cpp.obj | 3 | `0x10073a90` `0x10072ad0` `0x100720d0` |
+| legopathboundary.cpp.obj | 3 | `0x10057180` `0x100574a0` `0x100586e0` |
 | legopathcontroller.cpp.obj | 3 | `0x100495b0` `0x10048310` `0x10046050` |
 | tglrl40.cpp.obj | 3 | `0x100a12a0` `0x100a3b40` `0x100a3840` |
 | act3actors.cpp.obj | 2 | `0x100417c0` `0x10040360` |
@@ -34,14 +35,13 @@ because `entity/legoworld.cpp` wins that COMDAT.
 | legocachesoundmanager.cpp.obj | 2 | `0x1003cf20` `0x1003d170` |
 | legomain.cpp.obj | 2 | `0x10059dc0` `0x10058c30` |
 | legopathactor.cpp.obj | 2 | `0x1002f770` `0x1002de10` |
-| legopathboundary.cpp.obj | 2 | `0x100574a0` `0x100586e0` |
 | legorace.cpp.obj | 2 | `0x100166a0` `0x100170e0` |
 | legoracespecial.cpp.obj | 2 | `0x10081840` `0x10080be0` |
 | legosoundmanager.cpp.obj | 2 | `0x1002a1b0` `0x10029d50` |
+| legotexturepresenter.cpp.obj | 2 | `0x1004f9b0` `0x1004ebd0` |
 | mxdisplaysurface.cpp.obj | 2 | `0x100bb1d0` `0x100ba7f0` |
 | mxtransitionmanager.cpp.obj | 2 | `0x1004c580` `0x1004bd10` |
 | orientableroi.cpp.obj | 2 | `0x100a46b0` `0x100a4420` |
-| viewlodlist.cpp.obj | 2 | `0x1004f9b0` `0x100a7960` |
 | act3ammo.cpp.obj | 1 | `0x10054050` |
 | helicopter.cpp.obj | 1 | `0x100035e0` |
 | legoact2.cpp.obj | 1 | `0x10051ac0` |
@@ -53,25 +53,24 @@ because `entity/legoworld.cpp` wins that COMDAT.
 | legonavcontroller.cpp.obj | 1 | `0x10055a60` |
 | legopartpresenter.cpp.obj | 1 | `0x1007ca30` |
 | legoroi.cpp.obj | 1 | `0x100a84a0` |
-| legotexturepresenter.cpp.obj | 1 | `0x1004ebd0` |
 | legoutils.cpp.obj | 1 | `0x1003f540` |
 | legovideomanager.cpp.obj | 1 | `0x1007b770` |
 | legowegedge.cpp.obj | 1 | `0x1009a8c0` |
 | legoworld.cpp.obj | 1 | `0x1001d890` |
 | mxbitmap.cpp.obj | 1 | `0x100bd020` |
 | mxdsbuffer.cpp.obj | 1 | `0x100c6fa0` |
-| mxmain.cpp.obj | 1 | `0x10057180` |
 | mxramstreamprovider.cpp.obj | 1 | `0x100d0d80` |
 | mxregion.cpp.obj | 1 | `0x100c3750` |
 | mxstillpresenter.cpp.obj | 1 | `0x100ba2c0` |
 | pizza.cpp.obj | 1 | `0x10038380` |
 | pizzeria.cpp.obj | 1 | `0x10017af0` |
 | towtrack.cpp.obj | 1 | `0x1004d330` |
+| viewlodlist.cpp.obj | 1 | `0x100a7960` |
 | viewmanager.cpp.obj | 1 | `0x100a66f0` |
 
 ## Link-order fragility of the rows we already hold
 
-780 rows at 1.0 are contested. Of those, **47 have exactly one definer that reproduces retail**, so they are held by the
+530 rows at 1.0 are contested. Of those, **34 have exactly one definer that reproduces retail**, so they are held by the
 linker's current choice and a reordering that changes the winner takes
 them away. The rest have several exact copies and survive either way.
 
@@ -87,49 +86,36 @@ exposed -- but it is the list to check a reordering against.
 | `0x10002bf0` | Vector4::EqualsHamiltonProduct | 9 | helicopter.cpp.obj |
 | `0x100040a0` | MxQuaternionTransformer::Interpolate | 2 | helicopter.cpp.obj |
 | `0x1000da20` | vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *>>:: | 11 | legoobjectfactory.cpp.obj |
+| `0x10018bc0` | list<LegoBoundaryEdge,allocator<LegoBoundaryEdge>>::~list<LegoBo | 3 | act2actor.cpp.obj |
 | `0x1001c010` | vector<unsigned char *,allocator<unsigned char *>>::~vector<unsi | 2 | legoanimactor.cpp.obj |
-| `0x1001cd00` | MxPresenterList::Compare | 2 | mxdssubscriber.cpp.obj |
-| `0x1001d210` | LegoPathControllerList::Compare | 2 | mxdssubscriber.cpp.obj |
-| `0x1001e2d0` | LegoEntityList::Compare | 2 | mxdssubscriber.cpp.obj |
-| `0x1001e650` | LegoCacheSoundList::Compare | 2 | mxdssubscriber.cpp.obj |
-| `0x10028830` | LegoNotifyList::Compare | 2 | mxdssubscriber.cpp.obj |
 | `0x10029c30` | _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSound | 2 | legosoundmanager.cpp.obj |
+| `0x10029d10` | _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSound | 2 | legosoundmanager.cpp.obj |
 | `0x1002bee0` | _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPa | 6 | legoextraactor.cpp.obj |
 | `0x1002c440` | _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPa | 5 | legoextraactor.cpp.obj |
 | `0x1002c4c0` | _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPa | 5 | legoextraactor.cpp.obj |
 | `0x1002c5b0` | _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPa | 5 | legoextraactor.cpp.obj |
+| `0x1002c630` | _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPa | 6 | legoextraactor.cpp.obj |
 | `0x1003d450` | _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSound | 2 | legocachesoundlist.cpp.obj |
-| `0x10042c20` | list<Act3Ammo *,allocator<Act3Ammo *>>::~list<Act3Ammo *,allocat | 3 | viewmanager.cpp.obj |
-| `0x100451a0` | _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge | 6 | legoextraactor.cpp.obj |
 | `0x100452b0` | _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge | 2 | legopathctrledge.cpp.obj |
+| `0x10045700` | _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge | 2 | legopathctrledgeset.cpp.obj |
 | `0x10045d80` | _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPa | 3 | legopathactorset.cpp.obj |
 | `0x10045dd0` | _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPa | 3 | legopathactorsetcompare.cpp.obj |
+| `0x100465e0` | _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPa | 2 | legopathactorsetiterator.cpp.obj |
 | `0x10046640` | _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresen | 2 | legoanimpresenterset.cpp.obj |
-| `0x100474e0` | _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge | 3 | legopathactorset.cpp.obj |
-| `0x10047550` | _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge | 3 | legopathcontroller.cpp.obj |
-| `0x10047830` | _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge | 2 | legopathcontroller.cpp.obj |
-| `0x100494e0` | _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEW | 6 | legoextraactor.cpp.obj |
-| `0x10058330` | _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresen | 3 | legopathactorset.cpp.obj |
-| `0x100583a0` | _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresen | 3 | legopathcontroller.cpp.obj |
+| `0x100583a0` | _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresen | 2 | legoanimpresentercontainer.cpp.obj |
 | `0x100588e0` | _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresen | 2 | legoanimpresentercontainer.cpp.obj |
-| `0x10058950` | _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresen | 3 | legopathboundary.cpp.obj |
-| `0x100598d0` | LegoWorldList::Compare | 2 | mxdssubscriber.cpp.obj |
+| `0x10059cb0` | _Tree<char const *,pair<char const * const,LegoTextureInfo *>,ma | 2 | legomain.cpp.obj |
+| `0x10059d80` | _Tree<char const *,pair<char const * const,LegoTextureInfo *>,ma | 2 | legomain.cpp.obj |
+| `0x1005a210` | _Tree<char const *,pair<char const * const,LegoTextureInfo *>,ma | 2 | legomain.cpp.obj |
 | `0x1005a250` | list<pair<LegoTextureInfo *,int>,allocator<pair<LegoTextureInfo  | 2 | legomain.cpp.obj |
 | `0x1005a310` | LegoContainer<LegoTextureInfo>::`scalar deleting destructor' | 2 | legomain.cpp.obj |
-| `0x1005a4a0` | list<MxTickleClient *,allocator<MxTickleClient *>>::~list<MxTick | 3 | viewmanager.cpp.obj |
+| `0x1005a4a0` | list<MxTickleClient *,allocator<MxTickleClient *>>::~list<MxTick | 3 | legomain.cpp.obj |
 | `0x1005b660` | LegoContainer<LegoTextureInfo>::~LegoContainer<LegoTextureInfo> | 2 | legomain.cpp.obj |
-| `0x1005f360` | LegoROIList::Compare | 2 | mxdssubscriber.cpp.obj |
 | `0x1006c4b0` | list<char *,allocator<char *>>::~list<char *,allocator<char *>> | 3 | viewmanager.cpp.obj |
-| `0x1006ddb0` | _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,m | 6 | legoextraactor.cpp.obj |
-| `0x10072440` | list<Act3ListElement,allocator<Act3ListElement>>::~list<Act3List | 3 | viewmanager.cpp.obj |
-| `0x10084930` | list<ROI *,allocator<ROI *>>::~list<ROI *,allocator<ROI *>> | 2 | legomain.cpp.obj |
+| `0x10084930` | list<ROI *,allocator<ROI *>>::~list<ROI *,allocator<ROI *>> | 3 | legocharactermanager.cpp.obj |
 | `0x100ac320` | list<unsigned int,allocator<unsigned int>>::~list<unsigned int,a | 3 | viewmanager.cpp.obj |
-| `0x100ac590` | list<MxNotification *,allocator<MxNotification *>>::~list<MxNoti | 3 | viewmanager.cpp.obj |
-| `0x100b5900` | MxStreamChunkList::Compare | 2 | mxmediapresenter.cpp.obj |
-| `0x100b61a0` | list<MxPresenter *,allocator<MxPresenter *>>::~list<MxPresenter  | 3 | viewmanager.cpp.obj |
-| `0x100c9c90` | MxDSActionList::Compare | 2 | mxdssubscriber.cpp.obj |
 
-## Contested open rows (5)
+## Contested open rows (6)
 
 ### `0x1001d890` _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *>>::_Kfn,CoreSetCompare,allocator<MxCore *>>::erase
 
@@ -178,6 +164,18 @@ A definer whose length delta is non-zero cannot be exact whatever its colouring;
 | act3ammo.cpp.obj | 1096 | +0 | 47 |  |
 | legopathboundary.cpp.obj | 1105 | +9 | - |  |
 | legoracespecial.cpp.obj | 1103 | +7 | - |  |
+
+### `0x1004f9b0` _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::_Insert
+
+score 0.8051, linked 681 B, retail 679 B
+
+A definer whose length delta is non-zero cannot be exact whatever its colouring; one at delta 0 is priced.
+
+| object | length | delta | masked distance to retail | winner |
+| --- | ---: | ---: | ---: | :---: |
+| legotexturepresenter.cpp.obj | 681 | +2 | - | yes |
+| legopartpresenter.cpp.obj | 678 | -1 | - |  |
+| legomodelpresenter.cpp.obj | 681 | +2 | - |  |
 
 ### `0x10059dc0` _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::erase
 
