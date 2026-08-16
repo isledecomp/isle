@@ -757,3 +757,29 @@ Fix the key before reusing the per-state maps.
   the carrier channel is where its rows live.
 * **Zero unverified claims:** every number in this ledger is a measurement
   taken this session in this worktree.
+
+### `Act3Cop::FUN_10040360` at `fwdE-20` — nd=8 is FRAME-SLOT assignment (live text lever)
+
+At the best carrier state the whole residue is three clusters, and two of them
+are pure stack-slot differences for two 8-byte `Vector3` stack objects
+(vtable + data pointer):
+
+```
++1175 OURS   mov [ebp-0x24], eax ; mov [ebp-0x28], <Vector3 vftable>
+      RETAIL mov [ebp-0x2c], eax ; mov [ebp-0x30], <Vector3 vftable>
++1190 OURS   mov [ebp-0x2c], ecx ; mov [ebp-0x30], <Vector3 vftable>
+      RETAIL mov [ebp-0x48], ecx ; mov [ebp-0x4c], <Vector3 vftable>
+```
+
+Ours packs the two objects adjacently at −0x28 / −0x30; retail separates them
+(−0x30 and −0x4c) with 0x1c of other locals in between. Under the /Od slot law
+(wave-2 method finding 3) frame-slot assignment is exactly what declaration
+POSITION controls, so this is a **live, unprobed text lever** — and at nd=8 it
+is the second-closest row in the lane. The candidate declaration block is the
+donut loop at act3actors.cpp:375-387 (`proi`, `locald0`, `local88`,
+`localec`, `r2`, `locald8`, and the four unused
+`local138/local134/local140/local13c`), plus the outer
+`local74`/`local2c`/`local20`/`local7c`/`local18` block at 335-340. The third
+cluster (one byte at +607, a `jne` displacement差 of 10) says something else in
+the function is 10 bytes displaced, so expect the slot fix to move it too.
+**Recommended first move for the next wave in this lane.**
