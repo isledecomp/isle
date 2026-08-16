@@ -1048,3 +1048,35 @@ states = **1,841 states, floor 11, offsets invariant**; plus 505 declaration
 the two channels this row has never seen: `extern_pair_with_pad` over the same
 seats, and include-order permutation — the axis that produced Lane NM's
 complementary residue on `0x1002bff0` when neither shape family could.
+
+---
+
+## 18. The k-strips on the length-defect rows — the EOF seat alone never moves the length
+
+`externK` = `extern-0-k`, `k = 1..400`, i.e. the complete long EOF strip at
+`m = 0` that the seat law says should "tell you which counts reach retail's
+length at all".
+
+`sw-all-infocenterkstrip`, 401 states:
+
+```
+0x1006ed90 Infocenter::Create        retail=381  correct length NEVER reached   lens: 380 x 401
+0x1006fda0 Infocenter::HandleKeyPress retail=272  correct length NEVER reached  lens: 264 x 401
+```
+
+**One length in all 401 states, for both rows.** So for these two the EOF seat
+is not merely unhelpful, it is *inert on the length axis* — which is exactly
+what §6 predicts: their length deltas are a register reload, an operand-size
+prefix and an alignment NOP, none of which the EOF count reaches on its own.
+
+That makes the `m` coordinate the whole question for them, and the rectangle
+the right instrument — queued (`queue4.sh`) for `infocenter.cpp`,
+`legocontrolmanager.cpp` and `mxstillpresenter.cpp`, plus the resumption of the
+`legoact2.cpp` rectangle I stopped in §5 and retracted in §12.
+
+Also completed: `xps` on `LegoPartPresenter::Read` at the *other* rectangle
+argmin, `extern-0-4` × 505 shapes — **nd=4 @ `shape-1-2`**, offsets
+`[1143, 1216, 2208, 2212]`. That ties the flat floor rather than beating it,
+and together with the `extern-18-0` run (nd=6, §16) it says the shape family
+neither helps nor is uniformly harmful here — it depends which seat pair it is
+stacked on.
