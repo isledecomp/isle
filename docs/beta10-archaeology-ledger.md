@@ -573,3 +573,90 @@ annotation you have not independently confirmed.
   refuted by retail's own layout.
 - **Length is not score, again**: `depth(2)` on `OrientableROI::OrientableROI`
   reproduces retail's 514 bytes exactly at nd=246 and 147 vs 142 instructions.
+
+## WAVE 3 — PRICING THE CHANNEL: what remains once the bit is fixed
+
+Two wave-2 claims of mine were wrong and are corrected first.
+
+1. **"`0x10084030 CreateActorROI`'s entire codegen residue is two `call rel32`
+   target fields" is WRONG.** I read 30 lines of a 198-line `fulldiff.py`
+   output and generalised from the head of it. Measured properly against retail
+   with our relocation fields masked: **`len 2294 = 2294, masked nd = 80`**,
+   SHAPE 98.94 / STRUCT 98.94 / EXACT 93.95, first divergence at offset **793**
+   — nowhere near the ctor sites at 100 and 1219 — running in clusters to 1797.
+   It is an allocator-colour row that also carries a call-target difference.
+2. **"Retail declines `Vector3::Vector3` at all 28 sites, so its rule is
+   uniform" is WRONG.** 28 is the count of *observable* declines; acceptances
+   are invisible because they emit no call. `OrientableROI::OrientableROI` has
+   five `Vector3` sub-object sites and retail calls at exactly one, so retail
+   **accepts at four of five there**. The rule is not uniform, and the
+   "make it non-inlinable everywhere" repair was never available on those
+   grounds either.
+
+### Method
+
+`<scratchpad>/arch/forced.py` compiles the TU from a private copy of the
+rendered `src` tree with an edit that forces retail's decision at the target
+site, then scores the COMDAT with `<scratchpad>/arch/residue.py` — masked nd
+(our relocation byte ranges blanked on both sides, length delta charged) plus
+Lane FIN's SHAPE/STRUCT/EXACT. Nothing is written to the repo.
+
+**A caveat that decides three of the six cells.** `adiff` normalises a direct
+call's target to `T`, and a `call rel32` field is a relocation, so it is masked
+in nd too. Wherever our expansion costs **zero instructions** — because the
+expansion's derived-vtable store is dead and DCE removes it — the inline bit is
+*invisible to every metric*, and "residue after the bit is fixed" is simply the
+row's current residue. That is exactly the case for `0x10084030` and
+`0x100417c0`.
+
+### The table
+
+| row | now: len / masked nd / SHAPE·STRUCT·EXACT | residue once the bit is fixed | verdict |
+|---|---|---|---|
+| `0x1003cf20` ~LegoCacheSoundManager | (Lane B10) | **nd 0** — 258/258, 100.00·100.00·100.00 | **channel wins the row** |
+| `0x1009f490` CalculateCameraTransform | 1074/1121 · 268 · 97.12·94.23·93.59 | **nd 0** — 1121/1121, 100.00·100.00·100.00, *measured on a forced build* | **channel wins the row** |
+| `0x100a4420` OrientableROI::OrientableROI | 520/514 · 222 · 95.04·95.04·95.04 | the bit **plus one instruction** — see below | near; worth a look |
+| `0x100417c0` Act3Brickster::FUN_100417c0 | 2875/2875 · **132** · 98.08·97.96·94.96 | **nd 132, unchanged** — bit is instruction-free and masked | allocator pile |
+| `0x10084030` CreateActorROI | 2294/2294 · **80** · 98.94·98.94·93.95 | **nd 80, unchanged** | allocator pile |
+| `0x10061010` FUN_10061010 | 717/731 · **435** · 93.08·**68.26**·63.48 | nd 432 on the assignment proxy; STRUCT still 67.46 | allocator pile, deep |
+
+### `0x1009f490` is the result of this wave
+
+Dropping `Interpolate`'s definition from the TU (declaration kept, so every site
+becomes a real call — retail's decision at this site, without touching global
+inline depth) produces **1121 bytes against retail's 1121, masked nd 0, and
+SHAPE = STRUCT = EXACT = 100.00.** The inline accept/decline bit is the row's
+*only* defect; the three re-ordered prologue stores and the `i`/`old_index`
+slot exchange recorded in wave 1 were **downstream of it** and resolve when it
+resolves.
+
+> **The forcing edit is a diagnostic, not a candidate.** Deleting the definition
+> makes all seven sites in the TU call, and retail inlines five of them, so
+> `GetTranslation`/`GetScale`/`CreateLocalTransform` would break. What the
+> measurement establishes is the *price*: this row is worth one C2 bit and
+> nothing else.
+
+### `0x100a4420` decomposes into the bit plus one instruction
+
+Its aligned SHAPE diff has exactly **two** divergent regions:
+- **offsets 168–208** — the bit: retail's `mov [r],R / lea r,[r+0xa8] / push r /
+  mov r,r / call T` against our two-instruction expansion, plus the neighbouring
+  vtable and `+0xc4` stores reordered around it;
+- **offsets ~448–461** — one `mov dword ptr [ebp-4], 0xffffffff` (the EH state
+  store) scheduled ~13 bytes earlier in retail.
+No surgical force exists for this row — dropping `Vector3`'s in-class body
+forces all five sibling sites to call and lands at 508 B / nd 196, and
+`inline_depth(2)` produces a different profile again (`Vector3=5`) — so the
+"after" cell is a **decomposition of the aligned diff, not a forced
+measurement**. Correcting wave 2: the `depth(2)` nd=246 I quoted said nothing
+about the bit, because nd is meaningless across a length change and that
+variant had the wrong inline profile anyway.
+
+### Verdict
+
+**The channel is worth two rows, not six.** `0x1003cf20` is already closed on
+it by Lane B10 and `0x1009f490` is measured at nd 0; `0x100a4420` is one
+scheduling instruction behind. The other three are allocator rows that happen to
+carry an inline difference, and on two of them the difference costs literally
+zero bytes. Do not fund `0x10084030`, `0x100417c0` or `0x10061010` on this
+channel — their residue is unchanged by the bit.
