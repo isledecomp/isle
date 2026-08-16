@@ -75,7 +75,7 @@ def _body(size, salt):
 def make_divergent_coff(
     *,
     donor=False,
-    target_section=1,
+    swap_text_sections=False,
     substituted=None,
     retail_callee_storage=2,
     duplicate_retail_callee=False,
@@ -113,14 +113,25 @@ def make_divergent_coff(
                                     21 if donor else 11))
     other_lines = (struct.pack("<IH", 18, 0) + struct.pack("<IH", 1, 77))
 
+    target_input = {
+        "name": ".text", "raw": bytes(body),
+        "relocations": [(reloc_offsets[0], common_index, 0x14),
+                        (reloc_offsets[1],
+                         retail_callee_index if donor else seed_callee_index,
+                         0x14),
+                        (reloc_offsets[2], local_index, 0x06)],
+        "lines": bytes(target_lines), "characteristics": 0x60501020}
+    other_input = {
+        "name": ".text", "raw": b"OTHER-FN",
+        "relocations": [], "lines": other_lines,
+        "characteristics": 0x60501020}
+    # swap_text_sections moves the target to section 4 with its size intact,
+    # so the earlier length/span guards pass and the SEAT check is what fires.
+    target_seat, other_seat = (4, 1) if swap_text_sections else (1, 4)
+    first, fourth = ((other_input, target_input) if swap_text_sections
+                     else (target_input, other_input))
     section_inputs = [
-        {"name": ".text", "raw": bytes(body),
-         "relocations": [(reloc_offsets[0], common_index, 0x14),
-                         (reloc_offsets[1],
-                          retail_callee_index if donor else seed_callee_index,
-                          0x14),
-                         (reloc_offsets[2], local_index, 0x06)],
-         "lines": bytes(target_lines), "characteristics": 0x60501020},
+        first,
         {"name": ".xdata$x", "raw": xdata,
          "relocations": [(0, target_index, 0x0007)],
          "lines": b"", "characteristics": 0x40301040},
@@ -128,12 +139,12 @@ def make_divergent_coff(
          "relocations": [(28, target_index, 0x000B),
                          (32, target_index, 0x000A)],
          "lines": b"", "characteristics": 0x42101048},
-        {"name": ".text", "raw": b"OTHER-FN",
-         "relocations": [], "lines": other_lines,
-         "characteristics": 0x60501020},
+        fourth,
         {"name": ".drectve", "raw": DIRECTIVE,
          "relocations": [], "lines": b"", "characteristics": 0x00100A00},
     ]
+    target_slot = 3 if swap_text_sections else 0
+    other_slot = 0 if swap_text_sections else 3
 
     cursor = 20 + len(section_inputs) * 40
     payload = bytearray()
@@ -157,25 +168,28 @@ def make_divergent_coff(
     checksum = int.from_bytes(hashlib.sha256(bytes(body)).digest()[:4],
                               "little")
     symbols = [
-        (".text", 0, target_section, 0, 3,
+        (".text", 0, target_seat, 0, 3,
          _section_aux(size, 3, 2, 2, checksum=checksum)),
-        (TARGET_SYMBOL, 0, target_section, 0x20, 2,
-         _function_aux(size, sections[0]["line_offset"])),
-        (".bf", 0, target_section, 0, 101, _marker_aux(20 if donor else 10)),
-        (".ef", size, target_section, 0, 101,
+        (TARGET_SYMBOL, 0, target_seat, 0x20, 2,
+         _function_aux(size, sections[target_slot]["line_offset"])),
+        (".bf", 0, target_seat, 0, 101, _marker_aux(20 if donor else 10)),
+        (".ef", size, target_seat, 0, 101,
          _marker_aux(41 if donor else 31)),
         (COMMON, 0, 0, 0x20, 2, None),
         (SEED_CALLEE, 0, 0, 0x20, 2, None),
         (RETAIL_CALLEE, 0, 0, 0x20, retail_callee_storage, None)
         if declare_retail_callee else (COMMON, 0, 0, 0x20, 2, None),
-        (".xdata$x", 0, 2, 0, 3, _section_aux(16, 1, 0, 5, associated=1)),
-        (".debug$S", 0, 3, 0, 3, _section_aux(40, 2, 0, 5, associated=1)),
+        (".xdata$x", 0, 2, 0, 3,
+         _section_aux(16, 1, 0, 5, associated=target_seat)),
+        (".debug$S", 0, 3, 0, 3,
+         _section_aux(40, 2, 0, 5, associated=target_seat)),
         (local_name, 4, 2, 0, 3, None),
-        (".text", 0, 4, 0, 3, _section_aux(8, 0, 2, 2, checksum=0x12345678)),
-        (other_symbol, 0, 4, 0x20, 2,
-         _function_aux(8, sections[3]["line_offset"])),
-        (".bf", 0, 4, 0, 101, _marker_aux(70)),
-        (".ef", 8, 4, 0, 101, _marker_aux(71)),
+        (".text", 0, other_seat, 0, 3,
+         _section_aux(8, 0, 2, 2, checksum=0x12345678)),
+        (other_symbol, 0, other_seat, 0x20, 2,
+         _function_aux(8, sections[other_slot]["line_offset"])),
+        (".bf", 0, other_seat, 0, 101, _marker_aux(70)),
+        (".ef", 8, other_seat, 0, 101, _marker_aux(71)),
         (".drectve", 0, 5, 0, 3, _section_aux(len(DIRECTIVE), 0, 0, 0)),
     ]
     if duplicate_retail_callee:
@@ -319,7 +333,7 @@ class RetailExactRelocDivergentTests(unittest.TestCase):
 
     def test_06_rejects_section_seat_mismatch(self):
         seed = make_divergent_coff()
-        donor = make_divergent_coff(donor=True, target_section=4)
+        donor = make_divergent_coff(donor=True, swap_text_sections=True)
         with self.assertRaisesRegex(byte_identity.ByteIdentityError,
                                     "seat"):
             self.compose(seed, donor, function_record(donor),
@@ -346,15 +360,19 @@ class RetailExactRelocDivergentTests(unittest.TestCase):
 class DonorSourceOverlayTests(unittest.TestCase):
     """Spec §4 tests 9-11 — extension A."""
 
+    HEADER = "LEGO1/lego/legoomni/include/legocachesoundmanager.h"
+
     def _recipe(self, **overrides):
+        # The clean pin must be the real one, otherwise the drift guard fires
+        # first and the anchor obligation never gets exercised.
+        clean = hashlib.sha256((ROOT / self.HEADER).read_bytes()).hexdigest()
         recipe = {
             "kind": "donor_source_overlay",
             "compile_lane": {"required_define": "BYTE_IDENTITY_DONOR_FIXTURE"},
             "renderings": [
                 {
-                    "path": "LEGO1/lego/legoomni/include/"
-                            "legocachesoundmanager.h",
-                    "clean_sha256": "0" * 64,
+                    "path": self.HEADER,
+                    "clean_sha256": clean,
                     "rendered_sha256": "1" * 64,
                     "operations": [],
                 },
