@@ -1166,3 +1166,40 @@ useful output is the *shape* of the negative space:
    step at the start of every wave, not an idea somebody has once.
 4. **Fix the `width` mismatch** (§10) before anybody sweeps the mixed
    high/low corner of the extern plane.
+
+---
+
+## 20. CORRECTION to §4: `Pizza::StopActions` is inert on the *extern* family, not on the carrier
+
+`sw-all-pizzaxps023` — seats `extern-0-23` × the full 505-cell
+declaration-shape grid:
+
+```
+0x10038380 StopActions      retail=110   nd=11 @shape-1-1  offs=[61..67, 80, 82, 85, …]   lens: 110 x 505
+0x10038b10 HandleEndAction  retail=1232  nd=12 @shape-1-4                                  lens: 1232 x 285, 1252 x 220
+```
+
+**`StopActions` goes 15 → 11.** The row that produced *one single body* across
+1,681 extern-rectangle states moves the moment a force-included declaration
+shape is added. Three of its fifteen residue bytes (52, 58, 71) are fixed.
+
+That is a real correction to §4 and it generalises. I wrote there that "the
+carrier does not reach this function at all". The truthful statement is
+narrower and more useful:
+
+> **The extern family and the declaration-shape family are not
+> interchangeable.** A row can be *completely* inert on one — one body, 1,681
+> states — and live on the other. "Carrier-inert" is never a property of a row;
+> it is a property of a (row, generator) pair, and it has to be said that way.
+
+The practical consequence is that every "N states, one body, carrier-inert"
+verdict in this ledger — and in the wave-4/wave-5 ledgers — is only a verdict
+about the generator that produced it. `queue5.sh` therefore re-runs the
+declaration-shape grid on **all** four rows this lane called inert on the
+extern rectangle (`pizza.cpp`, `pizzeria.cpp`, `mxramstreamprovider.cpp`,
+`helicopter.cpp`), plus the pad family on `pizza.cpp`.
+
+`HandleEndAction` in the same sweep stays at 12, and 220 of the 505 shapes push
+it out of retail's length family entirely (1252 rather than 1232) — so the two
+rows in one TU respond to the same generator in opposite ways, which is the
+same lesson again one level down.
