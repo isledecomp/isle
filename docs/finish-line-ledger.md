@@ -841,3 +841,39 @@ What is left is what makes retail's *first* site pick the other order — i.e.
 whatever else is live across it. That is an allocator-rank question, which is
 exactly what the carrier axis perturbs, and the row has moved 214 → 11 on that
 axis already.
+
+---
+
+## 15. `helicopter.cpp` rectangle — 4 bodies, argmin is the base
+
+`sw-all-helicopterrect`, `m,k = 0..40`, 1,681 states. Never swept before.
+
+| row | retail len | distinct bodies | nd histogram | argmin |
+|---|---|---|---|---|
+| `0x100035e0 Helicopter::HandleControl` | 1148 | **4** | 19×1,237, 21×38, 39×403, 41×3 | **`base-0`, nd=19** |
+
+The 19-byte permuted span documented in §7 survives the whole rectangle
+unchanged, and every state that moves the body moves it further away. Third row
+in this lane to land in the "k bodies, argmin = base" cell of §8's table
+(`ReadData` 11 bodies, `PizzeriaState` 2, `HandleControl` 4).
+
+Note this also settles §7's open question in the negative for the extern
+family: a single permuted span with matching frame displacements is not
+reachable from the seat lattice. The remaining untried families for it are the
+force-included shape/pad grids stacked on those seats, which is what the `xps`
+construction supplies.
+
+### Running total of rectangles in this lane
+
+| TU | states | rows | outcome |
+|---|---|---|---|
+| `legocarbuildpresenter.cpp` | 162 | 1 | **nd=0 → LANDED** |
+| `pizza.cpp` | 1,681 | 2 | 15 (1 body) / 12 |
+| `pizzeria.cpp` | 1,681 | 1 | 18, argmin base (2 bodies) |
+| `mxramstreamprovider.cpp` | 1,681 | 1 | 18, argmin base (11 bodies) |
+| `helicopter.cpp` | 1,681 | 1 | 19, argmin base (4 bodies) |
+| `isle.cpp` | 1,681 | 2 | **214 → 11** / 24 (1 body) |
+| `legoact2.cpp` | 200 (stopped, resumable) | 1 | — |
+
+**8,767 donor-lane compiles.** One landing, one row moved by 203 bytes, four
+rows proved carrier-inert or carrier-negative with their extent recorded.
