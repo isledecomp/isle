@@ -600,3 +600,41 @@ Method note for the coordinator: the recursive `**/results.json` glob over a
 scratchpad that holds sweep state directories walks hundreds of thousands of
 directories and does not terminate in useful time. Globbing three explicit
 depths (`/*/`, `/*/*/`, `/*/*/*/`) finds all 218 records in under a second.
+
+---
+
+## 10. HARNESS TRAP (new): the sweeper and the landable recipe disagree on `width`
+
+`bench/sw2.py` renders each extern run at `width = max(2, len(str(count - 1)))`
+— **per run**. The `extern_run_pair` recipe in
+`tools/byte_identity_manifest.json` carries **one** `width` for both runs.
+The two agree for every state anybody has swept so far only because the
+historical grids stop at `m,k ≤ 40`, where both widths are 2.
+
+The moment a sweep crosses 100 on one seat and not the other — which is
+exactly what the long-strip and `externXL` axes do — the swept state stops
+being expressible:
+
+```
+extern-0-101   widths {3}      landable
+extern-0-300   widths {3}      landable
+extern-15-22   widths {2}      landable
+extern-150-5   widths {2, 3}   NOT landable — the recipe has one width field
+```
+
+Landing such a state through `land_into.py`, whose extern branch hardcodes
+`width: 2`, would render **different text** from the state that was measured
+and produce a body that is not the one the sweep scored. Nothing checks this:
+the `generated_header_sha256` is computed from the recipe, so it agrees with
+itself.
+
+`landfin.py` now derives the width the same way the sweeper does and **refuses**
+when the two seats disagree. Single-seat states (`m=0` or `k=0`) are always
+expressible at any count, so the long 1-D strips are safe; the exposure is the
+mixed high/low rectangle corner, which the `externXL` axis (stride 4 to 200 on
+both) walks straight through.
+
+Recommendation for the bench: either give `extern_run_pair` a per-seat width,
+or make `sw2.py` render both runs at a single width derived from
+`max(m, k)`. Until then, treat any `extern-m-k` hit with
+`max(2,len(str(m-1))) != max(2,len(str(k-1)))` as unlandable.
