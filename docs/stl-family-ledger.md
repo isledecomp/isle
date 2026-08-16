@@ -1,6 +1,6 @@
 # The `_Tree` / container-instantiation family — ledger
 
-> ⚠ **READ §10.5 AND §10.5a BEFORE ACTING ON §10.2.** The wave-2 conclusion
+> ⚠ **READ §10.5, §10.5a AND §11 BEFORE ACTING ON §10.2.** The wave-2 conclusion
 > "the carrier axis does not move register colour" — which reached the merge
 > commit title `c52a89d8` — is **wrong as stated**. It was drawn from a
 > partial sample of a sweep that later completed and contradicted it. Two
@@ -992,7 +992,89 @@ regrole is the class the carrier axis does not move.
    erase family this row is not predicted dead. Sweep pre-carriers other than
    `fwdE:19`, and re-floor each product per step 2.
 
-## 11. Reproducing this lane
+## 11. Wave 4 — the carrier grammar is one integer, and it closed the row
+
+### 11.1 LANDED: 0x100af7e0 `_Tree<MxAtom*>::erase` (.7273 → exact)
+
+**Gated:** `ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE: LEGO1 4839/4933,
+ISLE 172/172, CONFIG 111/111`; GAIN 0x100af7e0, zero LOST. Commit
+`7808678e`; re-pinned 4838 → 4839. New translation unit for
+`omni:LEGO1/omni/src/main/mxmain.cpp`.
+
+* donor: `forward_run_with_shape` — `MxUnkRecVC` × **24** at suffix +
+  `declaration_shape(8, 45)` force-included. Body 1107/1107 masked-exact.
+* splice `same_slot_resize` 1103 → 1107.
+* S72: donor relocation symbol sequence identical to a fresh pipeline seed
+  (16/16).
+
+**It was not found by more cells.** Three 505-cell shape grids over this row
+had floored at nd=1. It was found by measuring the grammar first.
+
+### 11.2 The carrier grammar collapses to a count
+
+Two measurements, both on `mxmain.cpp`:
+
+**(a) A forward/extern run is COUNT-ONLY.** For each count k, I compared every
+carrier variant that declares k things — `fAS`/`fBS`/`fCS` (three different
+stems at width 3), `fr:Q:1`/`fr:Q:2` (a one-character stem at widths 1 and 2),
+`fr:MxUnkRecordLongStemAAAA:3` (a 24-character stem), and
+`extern-0-k`/`extern-k-0`/`extern-a-b` with a+b=k (extern *object*
+declarations rather than class declarations, at two different seats) — over
+**every** `.text` COMDAT in the object:
+
+```
+bodies in the object: 68
+  COUNT-ONLY (identical across every variant at every count): 65
+  identity-sensitive:                                          3
+     80/96 counts disagree  MxOmni::HandleEndAction
+     24/96 counts disagree  MxOmni::CreatePresenter
+     21/96 counts disagree  MxOmni::Create
+```
+
+So for 65 of 68 bodies — including `erase<MxAtom*>` — the stem text, the
+identifier width, the declaration *kind* and the seat are all **inert**.
+Only the count matters. That is a direct answer to "the free `prefix`/`width`
+parameters were never swept": they were never swept because they do nothing,
+and now that is measured rather than assumed.
+
+**(b) `declaration_shape(c,f)` does NOT collapse.** Over the 505 shape cells
+of one product, grouping by candidate scalars:
+
+| scalar | groups | pure |
+|---|---|---|
+| c+f | 109 | 12% |
+| f | 100 | 11% |
+| c | 10 | 0% |
+| c\*f | 348 | 69% (only because it is nearly injective) |
+
+No scalar explains it; the shape carrier is genuinely 2-D. That asymmetry is
+the whole method: **a stacked carrier is (2-D shape) × (1-D count)**.
+
+### 11.3 The method that follows
+
+Pin the shape at a cell that reached a good region, then sweep the run count.
+Because the run half is one integer, sweeping it 1..300 is a **complete
+search of that line**, not a sample — the first time in this campaign that a
+sweep has been exhaustive over a dimension rather than a sample of it.
+
+For 0x100af7e0: pin `shape(8,45)` (the cell that had fixed the `regrole` tie
+at +434 and left only the `cmpdir` at +145), sweep the count. **nd=0 at
+count 24**, in 156 cells.
+
+Implemented as `sw.py --axes stack:<c>:<f>:<P|S>`; landed by `landin.py`,
+which now parses the `stack_c_f_S-k` label straight into a
+`forward_run_with_shape` recipe and creates the TU unit if one does not exist.
+
+### 11.4 Not every row yields to it — BuildROIMap
+
+`0x10069b10` with `shape(4,22)` pinned: **122 of 124** length-correct cells
+give the identical nd=2 residue `[471, 481]`, and those two bytes are correct
+in **0** of them. With that shape the count axis is inert. The shapes that do
+fix `[471, 481]` are the ones that break the other group (`[304, 534, 540]`),
+which is where the remaining sweeps are pointed. Recorded so nobody re-runs
+the (4,22) line.
+
+## 12. Reproducing this lane
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
 `fresh2/` repointed at `isle-build-tr03`). Nothing in the shared corpus was
