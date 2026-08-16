@@ -98,3 +98,57 @@ meaningless across a length change** — every number above is an `adiff`
 alignment, never a masked byte count. (My own wave-4 `LegoOmni::Create`
 landing is the positive case of the same phenomenon: nd said 1386 while the
 row was one carrier state from exact.)
+
+## `0x1002bff0` `_Tree<LegoPathActor*>::erase` — verdict delivered
+
+The block's other live thread. It reproduces on today's text at
+**`extern-0-9`, 1096 bytes = retail's true length, nd=1** (so the varab
+disproof holds and the row is genuinely unblocked). Everything thrown at it
+this wave:
+
+| pass | states | best |
+|---|---|---|
+| extern grid (the historical 9×18) | 161 | 1 @ `extern-0-9` |
+| m-strips at k = 8, 9, 10 × m = 0..99 | 300 | 1 @ `extern-0-9` |
+| pre-include seat P = 0..99 at (Q=0, R=9) — the coordinate wave 6 opened | 100 | 1 @ `tri-0-0-9` |
+| dense extern lattice m 0..24 × k 0..99 | 2,499 | 1 @ `extern-0-9` |
+
+**The residual byte, named:**
+
+```
++433  OURS   3b fa   cmp edi, edx
+      RETAIL 3b d7   cmp edx, edi
+```
+
+A **register-register CMPDIR inside the inlined `_Tree::erase`**. Two
+independent results make this terminal:
+
+* wave 5 measured integer reg-reg comparison mirrors to be fully canonicalised
+  (three refutations with live 0-victim controls), so no source spelling
+  reaches it; and
+* the code is vendor `<xtree>`, which the mandates put out of reach — the
+  **third census verdict** this lane proposed in wave 7 and the coordinator
+  adopted.
+
+**`0x1002bff0` is closed on both channels at nd=1.** Take it out of the queue.
+
+Incidental confirmation from the same lattice: `StepState` (0x1002a720),
+`HitActor` (0x1002aba0) and `CheckPresenterAndActorIntersections`
+(0x1002b980) all reach nd=0 at extern cells (18-12, 5-28, 6-21) — all three
+are already at 1.0, so this is the seed reproducing closed rows, not new
+ground. It does show the dense lattice is finding real cells in this TU, which
+is what makes the `erase` floor meaningful rather than a search artefact.
+
+## HARNESS NOTE — a wedged compile, detected and cleaned
+
+One `cl` invocation in the dense lattice hung and hit the 900 s timeout,
+killing the sweep at 2,105 of 2,499 states. Checked for orphans immediately
+(`ps aux | grep wine` → 0) and re-ran; the cached objects meant it resumed and
+completed. Worth knowing that the bench's per-probe timeout is what turns a
+wedged wine into a recoverable stall rather than a lost night.
+
+## STATE
+
+No source or manifest change this wave — the `h1` edit is recorded, not
+landed, because it does not close its row and recolours one sibling. Tree
+verified at **LEGO1 4853/4934, ISLE 172/172, CONFIG 111/111**.
