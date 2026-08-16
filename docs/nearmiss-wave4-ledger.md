@@ -408,3 +408,35 @@ tension.
 can be flipped by a comparison spelling in an unrelated function *B* of the
 same TU. Text cells for a state-class row should therefore be searched over the
 **whole TU**, not just the row's own statements.
+
+---
+
+## 9. Which swept states are actually LANDABLE as donors (read this before celebrating an nd=0)
+
+`byte_identity.py:8015` restricts `compose_equal_body_comdat` donors to three
+recipe kinds, and `forward_declaration_run.placement` to
+`prefix | force_include | suffix`. Mapping that onto the sweep axes:
+
+| sweep axis | generator | landable donor? |
+|---|---|---|
+| `shape-c-f` | `entropy.generate_shape` | **yes** — `declaration_shape` |
+| `fwdL-k` | `generate_forward_run` prepended | **yes** — placement `prefix` |
+| `fwdE-k` | appended | **yes** — placement `suffix` |
+| `fwdF-k` | rendered as the `/FI` header | **yes** — placement `force_include` (added to `probe.py` this session; never swept before) |
+| `extern-m-k` | `generate_extern_run` x2 | **yes** — `extern_run_pair` (wave-3 addition) |
+| `fwdP-k` | forward run after the include block | **NO** — no such placement in the grammar |
+| `pad-c-f` | `generate_pad_shape` | **NO** — not a donor recipe kind at all |
+| `insf/insc-a-k` | interior record run | **NO** — landable only as a `source_overlay` insert op, i.e. as *effective text*, not as a donor |
+
+Three consequences that change how earlier records should be read:
+
+1. Any historical "nd=0 at `pad-…`" or "nd=0 at `fwdP-…`" is **not a landing**
+   as it stands — it needs an equivalent state in a supported kind. That
+   includes the coordinator's `0x100574a0 @ pad-10-12` hit (§8).
+2. The sweep axis set is *narrower* than the donor grammar in one place and
+   *wider* in two others. `force_include` placement of a forward run was
+   never swept by anybody; `probe.py --carriers fwdF:k` now does it.
+3. The donor grammar's free `prefix` and `width` parameters are an entirely
+   unswept dimension: `class A000;` and `class MxUnkRecVA000;` are different
+   compile states. Every sweep to date fixed `width=3` and three specific
+   stems.
