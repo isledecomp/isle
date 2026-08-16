@@ -1,6 +1,8 @@
 # The corrected SHAPE/STRUCT census — every open LEGO1 row
 
 Measured 2026-08-16 at **LEGO1 4853/4934, 81 open**, base `cd8692bb`.
+**Revision 2** — two further instrument fixes applied (§ *Eleven fixes* below);
+two rows moved, no verdict changed.
 Regenerate with `<session scratchpad>/fin/census.py --json census.json --md
 census.md`; machine-readable copy alongside it as `census.json`.
 
@@ -40,15 +42,17 @@ moves:
 
 | addr | published | corrected | Δ | row |
 |---|---|---|---|---|
-| `0x10055a60` | 88.44 | **94.42** | **+5.98** | `LegoNavController::Notify` |
+| `0x10055a60` | 88.44 | **99.09** | **+10.65** | `LegoNavController::Notify` |
 
 That is the whole numeric disagreement. The reason the rest agree is
 structural: the first census reads **linked images**, where relocations are
 resolved on both sides, so five of my nine defects (all relocation-side) cannot
 reach it, and it had already fixed `fs:[0]` and the disp/imm attribution. What
-it could not avoid is defect 1 — **a `.text` COMDAT that carries switch jump
-tables has them disassembled as code** — and `Notify` is the open set's
-biggest switch.
+it could not avoid is the switch-table defects — **a `.text` COMDAT that
+carries switch tables has them disassembled as code** — and `Notify` is the
+open set's biggest switch, carrying **444 bytes** of table in a 4,112-byte
+body. Revision 1 trimmed only its dword table (20 bytes) and reached 94.42;
+revision 2 trims the byte index table as well and reaches **99.09**.
 
 So the value added here is *not* a wholesale re-rating. It is one corrected
 row, the STRUCT column, and the divergence classification.
@@ -187,16 +191,58 @@ a lane at `_Erase` for a text answer.**
 | 94.87 | .6667 | `0x100a12a0` | 83/83 | `TglImpl::TextureImpl::SetImage` |
 | 95.04 | .9504 | `0x100a4420` | 520/514 | `OrientableROI::OrientableROI` |
 
-**`LegoNavController::Notify` is no longer the largest gap in the open set.**
-At 94.42 it ranks behind at least six rows. It is still a legitimate text
-target — its divergences classify as `real` and we emit 1,183 instructions
-against retail's 1,147 — but the ranking that made it "the single
-best-evidenced next target" was an artefact of its switch tables being
-disassembled as code. The top of the list is
-`UpdateTransformationRelativeToParent`, which `docs/inliner-ledger.md` §12.2
-has already shown has **no source lever** (its differing operations are
-permuted FP addend spans produced inside `3rdparty/vec/vec.h`), so the honest
-top of the *actionable* list is `SetupCopyRect` at 92.31.
+**`LegoNavController::Notify` is no longer the largest gap in the open set** —
+and revision 2 moves it much further. With the byte index table trimmed as well
+as the dword table it scores **99.09** (from 94.42), near the *top* of the
+census rather than the bottom. Its residue is the three-instruction sequence
+
+```
+ours    xor r,r ; mov r, byte ptr [r+0x18] ; sub r,9
+retail  lea r,[r-9]
+```
+
+at two sites — a real operation difference, correctly classified, and the
+reason the lane that took this row was right to. (That lane's source edit is
+not in this base; measured here at `cd8692bb` our body still carries the three
+extra instructions.)
+
+The actionable top of the list is therefore `SetupCopyRect` at 92.31 —
+`UpdateTransformationRelativeToParent` at 90.13 is lower still but
+`docs/inliner-ledger.md` §12.2 has already shown it has **no source lever**
+(its differing operations are permuted FP addend spans produced inside
+`3rdparty/vec/vec.h`).
+
+## Eleven fixes, and what revision 2 actually changed
+
+Two further asymmetries were fixed after revision 1, both inflating the gap:
+
+**10 — an instruction can carry more than one relocation.** The single-site
+rule masked one field only, so `mov dword ptr [g_currentInput], offset
+g_debugPassword` — a DIR32 in the displacement *and* a DIR32 in the immediate —
+had its immediate left unmasked. Each relocation is now attributed to its field
+by byte range using capstone's exact `disp_offset` / `imm_offset`. Scanning the
+whole open set, this class has **exactly one member**: `Notify` at +120. The
+class is real and the fix is right; its present blast radius is one
+instruction.
+
+**11 — the byte index table.** Above.
+
+**Effect on the map: two rows moved, no verdict changed.**
+
+| addr | SHAPE rev 1 → rev 2 | STRUCT rev 1 → rev 2 | row |
+|---|---|---|---|
+| `0x10055a60` | 94.42 → **99.09** | 94.08 → 98.66 | `LegoNavController::Notify` |
+| `0x100a84a0` | 97.99 → **98.14** | 96.50 → 96.64 | `LegoROI::Read` |
+
+The other five table-bearing rows were already trimmed correctly in revision 1,
+because their byte table sits *between* two dword-relocation runs and the
+stride rule bridged it; only `Notify` has a 400-byte byte-table outside that
+window.
+
+**The question this was run to answer — "are several of the 51 SHAPE-gap text
+targets actually table noise?" — is answered: none of them are.** Only six open
+rows carry a table, all six were already being trimmed, and no row moved into
+or out of the `SHAPE gap` bucket.
 
 ## Caveats
 
@@ -211,30 +257,58 @@ top of the *actionable* list is `SetupCopyRect` at 92.31.
 * The `TEXT-CLOSED` direction is the only one that is a *proof*, and it is the
   one worth acting on hardest: ten rows can leave every text queue permanently.
 
-### Auditable: the six rows whose COMDAT carries a switch jump table
+### Auditable: the six rows whose COMDAT carries an embedded switch table
 
-Defect 1 is the only one that reaches an image-level census, so these are
-exactly the rows whose first-census score was wrong. `code_len()` finds the
-trailing run of DIR32 relocations to `$L` labels at 4-byte stride (>= 3
-entries, one gap bridged for the byte index table) and scores only the code;
-retail is trimmed by the same number of trailing bytes, which is correct
-because the table has one entry per case on both sides.
+MSVC 4.2's dense-switch lowering emits **two** tables into the function's own
+`.text` COMDAT:
+
+```
+movzx ecx, byte ptr [eax + <BYTE TABLE>]     ; case index  -> target index
+jmp   dword ptr [ecx*4 + <DWORD TABLE>]      ; target index -> address
+```
+
+The dword table is dense DIR32 relocations. **The byte table carries no
+relocations at all**, so a relocation-scanning detector misses it, and a
+detector that scans for the last `ret` has false positives.
+
+The detector used here needs no scanning and no heuristics: each table's start
+is the **value of the local `$L` symbol** that the indexing instruction's
+relocated displacement points at, read from the COFF symbol table. Retail is
+trimmed by the same number of trailing bytes, which is right because the switch
+has the same case count on both sides.
 
 | addr | body | code | table | row |
 |---|---|---|---|---|
 | `0x100035e0` | 1148 | 1120 | 28 | `Helicopter::HandleControl` |
 | `0x10031820` | 3580 | 3436 | 144 | `Isle::Enable` |
 | `0x1004d330` | 856 | 836 | 20 | `TowTrack::HandlePathStruct` |
-| `0x10055a60` | 4120 | 4100 | 20 | `LegoNavController::Notify` |
+| `0x10055a60` | 4120 | **3676** | **444** | `LegoNavController::Notify` |
 | `0x1006fda0` | 264 | 200 | 64 | `Infocenter::HandleKeyPress` |
 | `0x10072ad0` | 348 | 324 | 24 | `Act3::TriggerHitSound` |
 
-`TowTrack::HandlePathStruct` is the one this promoted into `TEXT-CLOSED`, and
-it is worth stating how that was checked: a naive spot-check of the row scores
-**95.65**, and chasing that disagreement is what confirmed the trimming rather
-than the census. The 20 trailing bytes are five jump-table entries at 836–855;
-the two other `$L` relocations in the body (offsets 12 and 598) are ordinary
-label references in code and are correctly excluded by the stride rule.
+**Validation of both the offset and the equal-tail assumption**: every one of
+the twelve cuts (six rows × two sides) lands exactly on alignment filler or a
+terminator — `mov edi,edi`, `lea ecx,[ecx]`, `nop`, `ret`. None lands
+mid-instruction.
+
+**It is six rows, not sixteen.** A scanning detector reports far more because
+**34 `push offset $L…` instructions across 30 open rows** reference an
+in-section local label — those are SEH scope-table setups, not tables.
+Enumerating every in-section `$L` reference in the open set by instruction form
+gives exactly three:
+
+| form | count | is it a table read? |
+|---|---|---|
+| `push offset $L…` (immediate) | 34 | **no** — SEH prologue |
+| `jmp dword ptr [reg*4 + $L…]` | 10 | yes — dword table |
+| `mov r8, byte ptr [reg + $L…]` | 6 | yes — byte table |
+
+`TowTrack::HandlePathStruct` and `MxVideoPresenter::PutFrame` were both flagged
+as suspect by a scanning detector. Under the symbol-based method they separate
+cleanly: **TowTrack has a genuine `jmp dword ptr [reg*4 + $L66390]`** and a real
+20-byte table, so its `TEXT-CLOSED` verdict stands; **PutFrame has only a
+`push offset $L`** and no table at all, so it is a true false positive of the
+scanning method.
 
 ## The full census
 
@@ -268,6 +342,7 @@ label references in code and are correctly excluded by the stride rule.
 | 99.14 | 99.14 | 99.14 | 0.9827 | `0x10058c30` | 568/571 | SHAPE gap (text target) | `LegoOmni::Destroy` |
 | 99.10 | 99.10 | 69.37 | 0.6532 | `0x100495b0` | 648/648 | SHAPE gap (text target) | `_Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multis` |
 | 99.10 | 99.10 | 74.21 | 0.7075 | `0x10083890` | 652/653 | cmpdir (allocator) | `_Tree<char *,pair<char * const,LegoCharacter *>,map<ch` |
+| 99.09 | 98.66 | 97.37 | 0.9482 | `0x10055a60` | 4120/4112 | ENREG (same frame) | `LegoNavController::Notify` |
 | 98.94 | 98.94 | 88.37 | 0.8475 | `0x1006e720` | 686/689 | SHAPE gap (text target) | `_Tree<char const *,pair<char const * const,LegoHideAni` |
 | 98.94 | 98.94 | 93.95 | 0.9365 | `0x10084030` | 2294/2294 | SHAPE gap (text target) | `LegoCharacterManager::CreateActorROI` |
 | 98.92 | 98.92 | 92.14 | 0.8780 | `0x100a7960` | 1101/1100 | SHAPE gap (text target) | `_Tree<char const *,pair<char const * const,ViewLODList` |
@@ -288,9 +363,9 @@ label references in code and are correctly excluded by the stride rule.
 | 98.22 | 98.22 | 92.44 | 0.9244 | `0x10085500` | 653/653 | SHAPE gap (text target) | `_Tree<char *,pair<char * const,LegoCharacter *>,map<ch` |
 | 98.21 | 98.21 | 87.50 | 0.7933 | `0x1006fda0` | 264/272 | SHAPE gap (text target) | `Infocenter::HandleKeyPress` |
 | 98.20 | 98.20 | 97.08 | 0.9725 | `0x10031820` | 3580/3580 | SHAPE gap (text target) | `Isle::Enable` |
+| 98.14 | 96.64 | 93.51 | 0.9277 | `0x100a84a0` | 2061/2058 | ENREG (same frame) | `LegoROI::Read` |
 | 98.10 | 98.10 | 82.38 | 0.7913 | `0x10059dc0` | 1103/1102 | SHAPE gap (text target) | `_Tree<char const *,pair<char const * const,LegoTexture` |
 | 98.08 | 97.96 | 94.96 | 0.9496 | `0x100417c0` | 2875/2875 | ENREG (same frame) | `Act3Brickster::FUN_100417c0` |
-| 97.99 | 96.50 | 93.51 | 0.9277 | `0x100a84a0` | 2061/2058 | ENREG (same frame) | `LegoROI::Read` |
 | 97.97 | 97.16 | 96.89 | 0.9730 | `0x10040360` | 2496/2496 | ENREG (same frame) | `Act3Cop::FUN_10040360` |
 | 97.90 | 76.88 | 73.38 | 0.7268 | `0x100aa510` | 1694/1693 | FRAME (decl-set) | `LegoLOD::Read` |
 | 97.83 | 97.83 | 75.27 | 0.7092 | `0x1002bff0` | 1104/1096 | SHAPE gap (text target) | `_Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActo` |
@@ -313,7 +388,6 @@ label references in code and are correctly excluded by the stride rule.
 | 95.04 | 95.04 | 95.04 | 0.9504 | `0x100a4420` | 520/514 | SHAPE gap (text target) | `OrientableROI::OrientableROI` |
 | 94.87 | 94.87 | 66.67 | 0.6667 | `0x100a12a0` | 83/83 | SHAPE gap (text target) | `TglImpl::TextureImpl::SetImage` |
 | 94.69 | 94.69 | 94.69 | 0.9552 | `0x10046050` | 693/703 | SHAPE gap (text target) | `LegoPathController::PlaceActor(class LegoPathActor *, ` |
-| 94.42 | 94.08 | 92.96 | 0.9482 | `0x10055a60` | 4120/4112 | ENREG (same frame) | `LegoNavController::Notify` |
 | 94.27 | 94.27 | 92.71 | 0.8848 | `0x100a66f0` | 557/561 | SHAPE gap (text target) | `ViewManager::ManageVisibilityAndDetailRecursively` |
 | 94.23 | 94.23 | 93.59 | 0.8896 | `0x1009f490` | 1074/1121 | SHAPE gap (text target) | `LegoAnimScene::CalculateCameraTransform` |
 | 94.13 | 94.13 | 88.56 | 0.8856 | `0x10062e20` | 1098/1098 | SHAPE gap (text target) | `LegoAnimationManager::FUN_10062e20` |
