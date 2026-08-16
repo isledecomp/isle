@@ -10787,10 +10787,128 @@ def _pair_same_slot_relocations(seed_rows, donor_rows, seed_primary,
     return pairs
 
 
+def _resolve_substituted_seed_symbol(
+    seed: CoffObject, donor_record: dict, context: str,
+) -> int:
+    """B5/B6: map a donor relocation's EXTERNAL target onto the seed's own
+    symbol table, by name, unambiguously, with matching class.
+
+    Compiler-local `$L`/`$T`/`$S` serials are deliberately NOT routed here --
+    they are assigned per compile, are never present in the seed, and stay
+    with the existing rename machinery (spec amendment 2).
+    """
+    name = donor_record["target"]
+    require(local_symbol_kind(name) is None,
+            f"{context}: compiler-local target {name!r} must not be remapped")
+    matches = [
+        (index, symbol) for index, symbol in seed.symbols.items()
+        if symbol["name"] == name
+    ]
+    require(matches,
+            f"{context}: donor relocation target {name!r} is not declared "
+            f"or defined by the seed object")
+    require(len(matches) == 1,
+            f"{context}: ambiguous symbol remap for {name!r} -- "
+            f"{len(matches)} seed symbols share the name")
+    index, symbol = matches[0]
+    require(
+        symbol["type"] == donor_record["target_type"]
+        and symbol["storage"] == donor_record["target_storage"],
+        f"{context}: seed symbol {name!r} differs in type or storage class "
+        f"(seed type=0x{symbol['type']:02x} storage={symbol['storage']}, "
+        f"donor type=0x{donor_record['target_type']:02x} "
+        f"storage={donor_record['target_storage']})",
+    )
+    return index
+
+
+def _pair_reloc_divergent(seed, donor, seed_rows, donor_rows, seed_primary,
+                          donor_primary, seed_xdata, donor_xdata, mapping,
+                          context):
+    """Pair the primary table allowing a divergent EXTERNAL target set.
+
+    Identical to `_pair_same_slot_relocations` except that where both sides
+    name ordinary (non-local) symbols and those names DIFFER, the ordinal is
+    recorded as a substitution and the donor's target is resolved into the
+    seed's symbol table under B5/B6.  Returns (pairs, substitutions) where
+    substitutions maps the ordinal index to the seed symbol index to write.
+    """
+    require(len(seed_rows) == len(donor_rows),
+            f"{context}: relocation counts differ -- the count-divergent "
+            f"path (spec B7 reindexing) is not implemented")
+    reverse = {right: left for left, right in mapping.items()}
+
+    def role(section_number, primary, xdata):
+        if section_number == primary:
+            return "primary"
+        if section_number == xdata:
+            return "xdata"
+        return "external"
+
+    pairs = []
+    substitutions: dict[int, int] = {}
+    for ordinal, (left, right) in enumerate(zip(seed_rows, donor_rows)):
+        require(left["type"] == right["type"],
+                f"{context}: relocation type differs")
+        left_local = local_symbol_kind(left["target"]) is not None
+        right_local = local_symbol_kind(right["target"]) is not None
+        if left_local or right_local:
+            require(left["addend"] == right["addend"],
+                    f"{context}: relocation addend differs")
+            require(
+                role(left["target_section"], seed_primary, seed_xdata)
+                == role(right["target_section"], donor_primary, donor_xdata),
+                f"{context}: relocation target role differs",
+            )
+            require(
+                left_local and right_local
+                and left["target"][1] == right["target"][1]
+                and left["target_type"] == right["target_type"]
+                and left["target_storage"] == right["target_storage"],
+                f"{context}: local relocation target class differs",
+            )
+            if role(left["target_section"], seed_primary,
+                    seed_xdata) in ("primary", "xdata"):
+                require(
+                    mapping.setdefault(left["symbol_index"],
+                                       right["symbol_index"])
+                    == right["symbol_index"]
+                    and reverse.setdefault(right["symbol_index"],
+                                           left["symbol_index"])
+                    == left["symbol_index"],
+                    f"{context}: local symbol mapping is inconsistent",
+                )
+            else:
+                require(
+                    left["target_section"] == right["target_section"]
+                    and left["target_value"] == right["target_value"],
+                    f"{context}: external local relocation target differs",
+                )
+        elif left["target"] == right["target"]:
+            require(left["addend"] == right["addend"],
+                    f"{context}: relocation addend differs")
+            require(
+                left["target_type"] == right["target_type"]
+                and left["target_storage"] == right["target_storage"],
+                f"{context}: relocation target class differs",
+            )
+        else:
+            # The divergence this class exists for: retail calls a function
+            # where we inline it (or the reverse).  B1 is what proves the
+            # substitution is retail's own, so nothing is inferred here --
+            # only that the seed can name the donor's target.
+            substitutions[ordinal] = _resolve_substituted_seed_symbol(
+                seed, right, context)
+        pairs.append((left, right))
+    return pairs, substitutions
+
+
 def compose_same_slot_resize(
     seed_bytes: bytes,
     donor_bytes: bytes,
     function: dict,
+    *,
+    retail_body: bytes | None = None,
 ) -> tuple[bytes, dict]:
     """Install a donor code body of a different size that occupies the same
     16-byte linked contribution slot, repairing every dependent COFF record.
@@ -10799,7 +10917,14 @@ def compose_same_slot_resize(
     raw bytes/relocations, and every non-target section.  The donor supplies
     the compiler-generated target code, COFF line offsets, and procedure
     debug range.  Mapped object-local symbol values move to the donor's.
+
+    ``retail_body`` selects the `retail_exact_reloc_divergent` class: the
+    donor's EXTERNAL relocation target set may then differ from the seed's,
+    and the composed body is required to be byte-identical to retail's own
+    code under the relocation mask (B1).  Passing None keeps the historical
+    `same_slot_resize` behaviour exactly, relocation equivalence included.
     """
+    divergent = retail_body is not None
     seed = CoffObject(seed_bytes)
     donor = CoffObject(donor_bytes)
     mangled = function["mangled"]
@@ -10823,10 +10948,14 @@ def compose_same_slot_resize(
     require(function_multiset(seed) == function_multiset(donor),
             "donor function set differs")
     require(
-        all(sp[key] == dp[key] for key in
-            ("name", "relocation_count", "characteristics")),
+        all(sp[key] == dp[key] for key in ("name", "characteristics")),
         "target header shape changed",
     )
+    # Under the divergent class the primary relocation COUNT may in principle
+    # move; the substitution path this implements requires it to hold, and
+    # `_pair_reloc_divergent` refuses with a message naming B7 if it does not.
+    require(divergent or sp["relocation_count"] == dp["relocation_count"],
+            "target header shape changed")
     if ("expected_seed_line_count" in function
             or "expected_donor_line_count" in function):
         require(sp["line_count"] == function["expected_seed_line_count"]
@@ -10887,9 +11016,36 @@ def compose_same_slot_resize(
     sdr = detailed_relocations(seed, sd)
     ddr = detailed_relocations(donor, dd)
     mapping: dict[int, int] = {}
-    _pair_same_slot_relocations(spr, dpr, sp["number"], dp["number"],
-                                sx["number"], dx["number"], mapping,
-                                "primary")
+    substitutions: dict[int, int] = {}
+    if divergent:
+        # B1 -- THE LOAD-BEARING OBLIGATION.  This class may only ever install
+        # retail's own code, so the body is compared against retail before any
+        # of it is written anywhere.  The build performs the pinned extraction
+        # from the sha256-pinned image; here we enforce length and mask.
+        require(len(retail_body) == function["retail_length"],
+                f"retail oracle body length {len(retail_body)} differs from "
+                f"its pinned retail_length {function['retail_length']}")
+        require(len(donor_code) == len(retail_body),
+                f"composed body length {len(donor_code)} differs from the "
+                f"retail oracle length {len(retail_body)}")
+        masked_donor = bytearray(donor_code)
+        masked_retail = bytearray(retail_body)
+        for record in dpr:
+            start, width = record["offset"], record["width"]
+            masked_donor[start:start + width] = b"\0" * width
+            masked_retail[start:start + width] = b"\0" * width
+        differing = sum(1 for a, b in zip(masked_donor, masked_retail)
+                        if a != b)
+        require(differing == 0,
+                f"composed body is not retail-exact: {differing} byte(s) "
+                f"differ from the retail oracle under the relocation mask")
+        _, substitutions = _pair_reloc_divergent(
+            seed, donor, spr, dpr, sp["number"], dp["number"],
+            sx["number"], dx["number"], mapping, "primary")
+    else:
+        _pair_same_slot_relocations(spr, dpr, sp["number"], dp["number"],
+                                    sx["number"], dx["number"], mapping,
+                                    "primary")
     xdata_pairs = _pair_same_slot_relocations(
         sxr, dxr, sp["number"], dp["number"], sx["number"], dx["number"],
         mapping, "xdata")
@@ -10991,8 +11147,12 @@ def compose_same_slot_resize(
     primary_relocation_output = shifted(sp["relocation_offset"])
     for index, (left, right) in enumerate(zip(spr, dpr)):
         at = primary_relocation_output + index * 10
+        # A substituted ordinal must name the SEED's symbol for the DONOR's
+        # target, not the seed's own former target -- that is the whole point
+        # of the class.  Every other ordinal keeps the seed's index.
+        symbol_index = substitutions.get(index, left["symbol_index"])
         output[at:at + 4] = right["offset"].to_bytes(4, "little")
-        output[at + 4:at + 8] = left["symbol_index"].to_bytes(4, "little")
+        output[at + 4:at + 8] = symbol_index.to_bytes(4, "little")
         output[at + 8:at + 10] = right["type"].to_bytes(2, "little")
 
     for symbol_index, item in seed.symbols.items():
@@ -11093,9 +11253,29 @@ def compose_same_slot_resize(
         require(_coff_table_bytes(seed, before, "lines")
                 == _coff_table_bytes(checked, after, "lines"),
                 f"non-target line table changed: {before['number']}")
+    if divergent:
+        # Prove the substitution actually landed: the composed table must now
+        # name the donor's targets, resolved into the seed's symbol table.
+        composed_rows = detailed_relocations(checked, cp)
+        require(len(composed_rows) == len(dpr),
+                "composed relocation count differs from the donor's")
+        for left, right in zip(composed_rows, dpr):
+            # Compiler-local targets legitimately keep the SEED's symbol: the
+            # mapping moves its VALUE, not its name.  Only ordinary symbols
+            # must now read as the donor's.
+            if local_symbol_kind(right["target"]) is not None:
+                require(local_symbol_kind(left["target"])
+                        == local_symbol_kind(right["target"]),
+                        f"composed local relocation class changed at "
+                        f"offset {left['offset']}")
+                continue
+            require(left["target"] == right["target"],
+                    f"composed relocation target {left['target']!r} is not "
+                    f"the donor's {right['target']!r}")
     return composed, {
         "mangled": mangled,
-        "splice_class": "same_slot_resize",
+        "splice_class": ("retail_exact_reloc_divergent" if divergent
+                         else "same_slot_resize"),
         "section_number": cp["number"],
         "seed_length": sp["raw_size"],
         "donor_length": dp["raw_size"],
@@ -11103,7 +11283,137 @@ def compose_same_slot_resize(
         "linked_span": function["expected_linked_span"],
         "mapped_locals": len(mapping),
         "changed_local_values": local_value_updates,
+        "substituted_relocations": len(substitutions),
+        "retail_exact": bool(divergent),
     }
+
+
+def validate_donor_object_excluded(
+    composed_object: bytes, donor_objects,
+) -> None:
+    """A4: a donor object is a BYTE SOURCE only and must never enter the link.
+
+    Asserted rather than left to convention: the object handed to the linker
+    must not be any donor object.  A donor is compiled from a rendering that
+    deliberately differs from the shipped tree, so linking one would ship code
+    that no checked-in source produces.
+    """
+    composed_sha = sha256_bytes(composed_object)
+    for index, donor in enumerate(donor_objects):
+        require(
+            sha256_bytes(donor) != composed_sha,
+            f"donor object {index} reached the link: the object being linked "
+            f"is byte-identical to a donor, which is a byte source only",
+        )
+
+
+def validate_donor_source_overlay_recipe(
+    recipe: object, root, *, seed_outputs_touched: bool = False,
+) -> dict:
+    """Extension A: a donor recipe carrying typed per-path renderings.
+
+    Obligations enforced here: A1/A6a (typed ops over checked-in source, no
+    literal payloads -- the op grammar itself admits no literals), A2/A6b (the
+    shipped tree's renderings are untouched), A3 (clean and rendered shas are
+    pinned), and A5 (every anchor seats uniquely against the clean input, and
+    drift refuses).  A6c -- scoping the private include to the donor compile
+    -- belongs to the build and is asserted there.
+    """
+    require(isinstance(recipe, dict),
+            "donor source overlay recipe must be an object")
+    require(recipe.get("kind") == "donor_source_overlay",
+            "donor source overlay recipe kind differs")
+    require(
+        not seed_outputs_touched,
+        "donor source overlay op-list perturbs the seed rendering: the "
+        "shipped tree's rendered outputs must stay bit-identical (A2/A6b)",
+    )
+    lane = recipe.get("compile_lane")
+    require(isinstance(lane, dict)
+            and isinstance(lane.get("required_define"), str)
+            and lane["required_define"],
+            "donor source overlay compile lane differs")
+    renderings = recipe.get("renderings")
+    require(isinstance(renderings, list) and renderings,
+            "donor source overlay renderings must be a non-empty array")
+    root = Path(root)
+    seen: set[str] = set()
+    normalized = []
+    for index, item in enumerate(renderings):
+        context = f"donor rendering[{index}]"
+        require(isinstance(item, dict), f"{context} must be an object")
+        exact_audit_keys(item, {
+            "path", "clean_sha256", "rendered_sha256", "operations",
+        }, context)
+        path = source_overlay_relative_path(item.get("path"),
+                                            context + ".path")
+        require(path not in seen, f"{context}: duplicate rendering path")
+        seen.add(path)
+        clean = require_sha(item.get("clean_sha256"),
+                            context + ".clean_sha256")
+        rendered = require_sha(item.get("rendered_sha256"),
+                               context + ".rendered_sha256")
+        target = root / path
+        require(target.is_file(),
+                f"{context}: {path} is not a checked-in source file")
+        data = target.read_bytes()
+        require(
+            sha256_bytes(data) == clean,
+            f"{context}: clean input drifted from its pin -- re-pin "
+            f"deliberately rather than letting the donor follow the tree",
+        )
+        operations = item.get("operations")
+        require(isinstance(operations, list),
+                f"{context}.operations must be an array")
+        validated_ops = []
+        for op_index, operation in enumerate(operations):
+            op_context = f"{context}.operations[{op_index}]"
+            validated = validate_source_overlay_operation(
+                operation, op_context, logical_path=path, index=op_index,
+            )
+            anchor = validated.get("anchor")
+            if anchor is not None:
+                # A5: refuses on both ambiguity and absence, exactly as
+                # repin_overlay.py already refuses.
+                resolve_source_overlay_anchor(
+                    data, anchor, f"{op_context} anchor",
+                    logical_path=path,
+                )
+            validated_ops.append(validated)
+        normalized.append({
+            "path": path, "clean_sha256": clean,
+            "rendered_sha256": rendered, "operations": validated_ops,
+        })
+    return {
+        "kind": "donor_source_overlay",
+        "compile_lane": {"required_define": lane["required_define"]},
+        "renderings": normalized,
+    }
+
+
+def compose_retail_exact_reloc_divergent(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Splice a donor body whose EXTERNAL relocation target set diverges.
+
+    Every `same_slot_resize` check applies except relocation-target equality.
+    In its place stands B1: the composed body must be byte-identical to
+    retail's own code under the relocation mask, so this class can only ever
+    install retail's code and can never become a general escape hatch from
+    relocation-equivalence discipline.
+
+    `retail_body` is extracted by the build from the sha256-pinned retail
+    image at the function's pinned `retail_va`/`retail_length`.
+    """
+    require(function.get("splice_class") == "retail_exact_reloc_divergent",
+            "splice class is not retail_exact_reloc_divergent")
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+    return compose_same_slot_resize(seed_bytes, donor_bytes, function,
+                                    retail_body=bytes(retail_body))
 
 
 def compose_swap_comdat_group_order(
