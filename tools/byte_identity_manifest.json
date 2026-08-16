@@ -3549,6 +3549,22 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_fb130bb22785",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 5,
+      "functions": 27,
+      "generated_header_sha256": "fb130bb227858523e9a663fe9534a38721758a0299915d7aae4cd08f95f86c08",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -3560,11 +3576,20 @@
      "expected_donor_length": 2122,
      "expected_linked_span": 2128,
      "donor": "d_544f676052d9"
+    },
+    {
+     "mangled": "?UpdateTransformationRelativeToParent@OrientableROI@@QAEXABVMatrix4@@@Z",
+     "expected_body_sha256": "bb72cdd5c7052c3e8362dbc9021986445217478a5a00073be9a3f38a71276b29",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 2473,
+     "expected_donor_length": 2515,
+     "expected_linked_span": 2528,
+     "donor": "d_fb130bb22785"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 1 row(s) in LEGO1/realtime/orientableroi.cpp from a generated carrier state over the rendered current source with the pristine third-party vec.h; retail's body is 2122 bytes where the seed emits 2092.",
+    "reason": "Closes 1 row in LEGO1/realtime/orientableroi.cpp (GetLocalTransform) from a generated carrier state over the rendered current source with the pristine third-party vec.h, and restores UpdateTransformationRelativeToParent's retail 2528-byte linked contribution span (seed emits 2473 where retail has 2515); that row's body is still open at nd=99, so this entry is a layout restoration, not a row closure, and must be replaced when its source form is recovered.",
     "may_replace_compiler_output": true
    }
   },
