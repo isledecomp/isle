@@ -3459,7 +3459,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp",
-   "source_sha256": "66ed8dfb2de8331e8f9d7683103f166ba36b123740c6b091f9e0ee9fc556a554",
+   "source_sha256": "c672620e487fc35c7e305b94e13d3594ffc8b5f1909fb54064a31c30f74c7259",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -3521,6 +3521,22 @@
       "count": 40,
       "width": 3,
       "generated_header_sha256": "8bb91a6844e646af50a9e313dd130da676d38c4cae84f43fd16cdfc1b7bd9aa3",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_31e36d131642",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 2,
+      "functions": 16,
+      "generated_header_sha256": "31e36d131642decc78958672d6c6b512ff487efd79b9aa76b97f0b0e497957db",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -3651,6 +3667,48 @@
      ],
      "splice_class": "equal_body_strict",
      "donor": "d_8bb91a6844e6"
+    },
+    {
+     "mangled": "?UpdateStructMapAndROIIndex@LegoAnimPresenter@@IAEXAAV?$Map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@@@PAVLegoTreeNode@@PAVLegoROI@@@Z",
+     "donor": "d_31e36d131642",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 291,
+     "expected_donor_length": 290,
+     "expected_linked_span": 304,
+     "expected_body_sha256": "fa63e966986dde3776a5f0766b9b03fdfe1c3de5a24ed1447ea6a1c47ea7ef67"
+    },
+    {
+     "mangled": "?VerifyAnimationNode@LegoAnimPresenter@@IAEEPAVLegoTreeNode@@PAVLegoROI@@@Z",
+     "donor": "d_31e36d131642",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 213,
+     "expected_body_sha256": "c542bd5460d257dced76cd6b4910d3ab94352b8755ea1f2cd030891bc8c264eb",
+     "expected_changed_offsets": [
+      10,
+      11,
+      13,
+      15,
+      16,
+      18,
+      33,
+      36,
+      40,
+      50,
+      54,
+      64,
+      75,
+      89,
+      91,
+      96,
+      98,
+      99,
+      113,
+      145,
+      147,
+      150,
+      156,
+      171
+     ]
     }
    ],
    "completion": {
@@ -17415,8 +17473,8 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp",
-    "clean": "66ed8dfb2de8331e8f9d7683103f166ba36b123740c6b091f9e0ee9fc556a554",
-    "effective": "2ade6ff2579b1cccec3f92fc61082612c61b21b6b4326d1a169db1d6d371284b",
+    "clean": "c672620e487fc35c7e305b94e13d3594ffc8b5f1909fb54064a31c30f74c7259",
+    "effective": "19f495a42cad4c1b0fe3d6ff2001c18eef6c45d1273d2e44a5aec6f2e58f3c75",
     "size": 43027,
     "ops": [
      {
@@ -17934,7 +17992,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "f03c0725a77bd8bde0ffe88613570de15b6073a27d93cb0e63063f56754eada4",
+       "ctx": "e5fa9f1ece327368e264eb4bc5ba5265b8b450bc9a60ded7d3f4360e779cfbd5",
        "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
        "line_after": "9cb30effc38a97f60a75855e0354fee514641d38d0ad2c17fe73e8625f80d41d"
       },
