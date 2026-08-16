@@ -219,3 +219,32 @@ generator in the seat-law section above: pre-include + post-include + EOF in
 one typed recipe. Every landing this lane has ever made came from *adding a
 seat*, and there is exactly one seat combination left that no recipe can
 express.
+
+### Late additions from the act3actors dense lattice (2,499 cells)
+
+* `Act3Brickster::FUN_100417c0` 0x100417c0: **96 → 73** at `extern-13-43`.
+  Another row the post-include seat moves, and again at an m the old box could
+  not reach.
+* `Act3Brickster::Animate` reproduces nd=0 at **`extern-13-60`** as well as
+  `extern-12-59` / `extern-12-60`, so the landed cell is a small diagonal
+  region, not a knife edge. (My earlier reading that "m ≥ 13 falls out of the
+  length family" was drawn from the k ≤ 24 sub-block only — at k = 60, m = 13
+  is fine. Corrected here.)
+* `Act3Cop::FUN_10040360`: 8 on base text, and the `c1` text × `externm{19,20,21}`
+  strips (300 states) leave it at **6**, still at m = 0. The post-include seat
+  is inert for this row.
+
+### Net wave-5 movement in this lane
+
+| row | wave-4 best | wave-5 best | mover |
+|---|---|---|---|
+| `Act3Brickster::FUN_100417c0` | 96 | **73** | `extern-13-43` |
+| `Act3Ammo::Animate` | 105 | **95** | `extern-15-48` |
+| `LegoCarRaceActor::CPI` | 102 | **100** | `extern-66-228` |
+| `_Tree<…LegoTextureInfo>::erase` | 1 | 1 | — |
+| `LinkEdgesAndFaces` / `RemoveByObjectIdOrFirst` / `TriggerHitSound` / `TowTrack::HandlePathStruct` / `Act3::Enable` | 2 / 7 / 11 / 11 / 105 | unchanged | — |
+
+Roughly **17,000 further carrier states** were compiled this wave; all objects
+are retained under `scratchpad/b10w4/sweeps/`. No source or manifest change was
+made in wave 5, so the tree is exactly the merged tip: **LEGO1 4848/4934,
+ISLE 172/172, CONFIG 111/111**, re-verified by a gated run at the start and end.
