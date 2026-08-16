@@ -303,3 +303,43 @@ not landable by splicing at all and should be sealed.
 
 **B7 remains implemented and tested** — it is required by any future attempt and
 is independent of this blocker.
+
+## 6. Class C — `comdat_selection_override`: built, and measured as a net loss
+
+**Built and tested** (`compose_comdat_selection_override`, validator + build
+dispatch, `donor_source` on the pad_shape recipe). Rationale: some template
+instantiations are emitted by several objects in one link, the linker keeps
+whichever comes first, so the copies are interchangeable *to it* — installing
+another copy selects among genuine compiler outputs and invents nothing. C2
+(retail-exactness) is the load-bearing obligation, exactly as B1.
+
+Verified on the real objects for `0x1001d890 _Tree<MxCore*>::erase`: infocenter's
+copy composes into legoworld's object at **masked nd 0, 1106 = retail's 1106**,
+with relocation offsets, types and target names all identical and the line table
+identical apart from its symbol sentinel.
+
+**But the landing is a net −2 and must not be taken.** Gated build:
+
+    GAIN  0x1001d890 erase                       (0.9027 -> 1.0000)
+    LOST  0x10020e50 _Tree<MxCore*>::_Lrotate    (1.0 -> 0.3636)
+    LOST  0x10021340 _Tree<MxCore*>::find        (1.0 -> 0.5588)
+    LOST  0x10021a70 LegoWorld::Enable           (1.0 -> 0.9905)
+
+All three casualties are **SOLE definers in the same object** and were byte-exact.
+They stay **address-aligned**, so this is not displacement — the bytes changed:
+
+    _Lrotate  ours 3b 05 9c 11 ...   retail 3b 05 a0 11 ...
+
+i.e. `cmp eax,[0x100f119c]` against retail's `[0x100f11a0]`. **The
+`_Tree<MxCore*>::_Nil` sentinel moved 4 bytes in the data layout**, so every
+function referencing it by absolute address broke.
+
+**The lesson generalises past this row: splicing a function's CODE can move
+DATA.** Class C swaps in another TU's copy, and the two copies need not pull the
+same data COMDATs through elimination, so `.data` can shift underneath rows that
+were never touched. Any future use of this class must be priced by the gated
+LOST list — the composer's own checks cannot see it, because the perturbation is
+at link time and in a different section.
+
+The class stays in the tree, unused: it is sound, tested, and gated by C2, and
+the finding above is why no row uses it.

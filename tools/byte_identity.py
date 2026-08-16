@@ -8504,15 +8504,29 @@ def validate_manifest(
                     # declaration_shape -- it contributes no code or data --
                     # but a different generator, and it reaches compiler
                     # states the ragged declaration_shape grid does not.
-                    exact_keys(
+                    exact_audit_keys(
                         recipe,
                         {
                             "kind", "classes", "functions_per_class",
                             "generated_header_sha256", "compile_lane",
                             "emission_policy", "authenticity_rationale",
+                            "donor_source",
                         },
                         f"{donor_context}.recipe",
+                        optional={"donor_source"},
                     )
+                    if "donor_source" in recipe:
+                        # Class C: the donor is ANOTHER TU's copy of a
+                        # multiply-defined COMDAT, so it names the source it
+                        # compiles.  It must not be the unit's own source --
+                        # that would be an ordinary carrier donor.
+                        require(
+                            isinstance(recipe["donor_source"], str)
+                            and recipe["donor_source"]
+                            and recipe["donor_source"] != unit.get("source"),
+                            f"{donor_context}.recipe.donor_source is invalid "
+                            f"or is the unit's own source",
+                        )
                     pad_classes = recipe.get("classes")
                     pad_functions = recipe.get("functions_per_class")
                     require(isinstance(pad_classes, int)
@@ -8651,9 +8665,44 @@ def validate_manifest(
                                          "equal_body_eh_structural_local",
                                          "equal_body_eh_reloc_layout",
                                          "same_slot_resize",
-                                         "retail_exact_reloc_divergent"),
+                                         "retail_exact_reloc_divergent",
+                                         "comdat_selection_override"),
                         f"{function_context}: unsupported splice class")
-                if splice_class == "retail_exact_reloc_divergent":
+                if splice_class == "comdat_selection_override":
+                    # Class C.  The donor is a DIFFERENT translation unit's
+                    # copy of a multiply-defined COMDAT, so there is no linked
+                    # span to pin -- the body is the same size as the seed's
+                    # and occupies its slot exactly.  C2 (retail-exactness) is
+                    # what makes the selection safe, so the oracle is required.
+                    exact_keys(
+                        function,
+                        {
+                            "mangled", "donor", "splice_class",
+                            "expected_seed_length", "expected_donor_length",
+                            "expected_body_sha256", "retail_oracle",
+                        },
+                        function_context,
+                    )
+                    for name in ("expected_seed_length",
+                                 "expected_donor_length"):
+                        value = function.get(name)
+                        require(isinstance(value, int)
+                                and not isinstance(value, bool) and value > 0,
+                                f"{function_context}.{name} is invalid")
+                    require(
+                        function["expected_seed_length"]
+                        == function["expected_donor_length"],
+                        f"{function_context}: a selection override installs a "
+                        f"same-size copy; lengths differ",
+                    )
+                    require_sha(function.get("expected_body_sha256"),
+                                function_context + ".expected_body_sha256")
+                    oracle = function.get("retail_oracle")
+                    require(isinstance(oracle, dict),
+                            f"{function_context}.retail_oracle must be an object")
+                    exact_keys(oracle, {"image", "address", "verdict", "length"},
+                               function_context + ".retail_oracle")
+                elif splice_class == "retail_exact_reloc_divergent":
                     # Extension B.  Same shape as same_slot_resize plus the
                     # pinned retail oracle window that B1 compares against --
                     # this class may only ever install retail's own code.
@@ -12028,6 +12077,146 @@ def compose_swap_comdat_group_order(
         "window": [low, high],
         "symbol_section_writes": symbol_writes,
         "association_writes": association_writes,
+    }
+
+
+def compose_comdat_selection_override(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Class C: install another object's copy of a multiply-defined COMDAT.
+
+    Some template instantiations are emitted by several objects in one link.
+    The linker keeps whichever comes first and discards the rest, so the
+    copies are interchangeable *to the linker* and the choice is pure link
+    order.  This installs a copy the linker itself could have chosen -- it
+    selects among genuine compiler outputs and invents nothing.
+
+    The donor is a DIFFERENT translation unit, so the whole-object
+    equivalences every other class relies on (section count, function
+    multiset, section seat) do not apply and are deliberately not required.
+    What replaces them is C2 -- the installed body must be byte-identical to
+    retail -- plus an exact structural match of the COMDAT and its closure.
+    Every assumption below is a hard require, so any deviation refuses rather
+    than composing something unproven.
+    """
+    seed = CoffObject(seed_bytes)
+    donor = CoffObject(donor_bytes)
+    mangled = function["mangled"]
+    sp = seed.function_section(mangled)
+    dp = donor.function_section(mangled)
+
+    # C1: the seed defines this COMDAT too -- this is an override of a copy we
+    # already emit, never an insertion of a function the seed lacks.
+    require(
+        section_definitions(seed)[sp["number"]]["selection"]
+        == section_definitions(donor)[dp["number"]]["selection"],
+        "COMDAT selection differs between the two copies",
+    )
+    require(
+        all(sp[key] == dp[key] for key in
+            ("name", "raw_size", "relocation_count", "line_count",
+             "characteristics")),
+        "the two COMDAT copies differ in shape",
+    )
+    require(sp["raw_size"] == function["expected_seed_length"]
+            and dp["raw_size"] == function["expected_donor_length"],
+            "target body lengths changed")
+
+    # C2 -- THE LOAD-BEARING OBLIGATION.  Only retail's own bytes may be
+    # installed, so the body is compared before anything is written.
+    donor_code = coff_body(donor, dp)
+    require(sha256_bytes(donor_code) == function["expected_body_sha256"],
+            "donor body differs from its pinned compiler output")
+    pinned_length = function["retail_oracle"]["length"]
+    require(len(retail_body) == pinned_length
+            and len(donor_code) == len(retail_body),
+            "retail oracle length differs from the composed body")
+    masked_donor = bytearray(donor_code)
+    masked_retail = bytearray(retail_body)
+    for record in detailed_relocations(donor, dp):
+        start, width = record["offset"], record["width"]
+        masked_donor[start:start + width] = b"\0" * width
+        masked_retail[start:start + width] = b"\0" * width
+    differing = sum(1 for a, b in zip(masked_donor, masked_retail) if a != b)
+    require(differing == 0,
+            f"composed body is not retail-exact: {differing} byte(s) differ "
+            f"from the retail oracle under the relocation mask")
+
+    # C3: the relocations must be the SAME work against the SAME names, so
+    # the seed's own table already describes the donor's body.  Anything else
+    # would need a remap this class does not perform.
+    spr = detailed_relocations(seed, sp)
+    dpr = detailed_relocations(donor, dp)
+    require(len(spr) == len(dpr), "relocation counts differ")
+    for index, (left, right) in enumerate(zip(spr, dpr)):
+        require(
+            (left["offset"], left["type"], left["addend"])
+            == (right["offset"], right["type"], right["addend"]),
+            f"relocation {index}: offset/type/addend differs",
+        )
+        require(local_symbol_kind(right["target"]) is None,
+                f"relocation {index}: compiler-local target "
+                f"{right['target']!r} cannot cross objects")
+        require(left["target"] == right["target"],
+                f"relocation {index}: target name differs "
+                f"({left['target']!r} vs {right['target']!r})")
+
+    # C4: the COFF line table must be identical apart from its leading symbol
+    # sentinel, which names the enclosing object's function symbol.
+    seed_lines = _coff_table_bytes(seed, sp, "lines")
+    donor_lines = _coff_table_bytes(donor, dp, "lines")
+    require(len(seed_lines) == len(donor_lines)
+            and seed_lines[4:] == donor_lines[4:],
+            "COFF line rows differ between the two copies")
+
+    # C5: the debug closure must match in kind, and its records must agree
+    # apart from the procedure range, which describes the body.
+    closure = _comdat_child_closure(seed, sp)
+    require(closure == _comdat_child_closure(donor, dp)
+            and closure in ((2, (".debug$S", ".xdata$x")),
+                            (2, (".debug$F", ".debug$S"))),
+            "target closure is not an EH or FPO debug pair")
+    fpo = closure == (2, (".debug$F", ".debug$S"))
+    child = ".debug$F" if fpo else ".xdata$x"
+    sx = _comdat_child(seed, sp, child)
+    dx = _comdat_child(donor, dp, child)
+    require(coff_body(seed, sx) == coff_body(donor, dx),
+            f"{child} bytes differ between the two copies")
+    sd = _comdat_child(seed, sp, ".debug$S")
+    dd = _comdat_child(donor, dp, ".debug$S")
+    seed_debug = coff_body(seed, sd)
+    donor_debug = coff_body(donor, dd)
+    require(len(seed_debug) >= 28 and seed_debug[2:4] == b"\x05\x02"
+            and donor_debug[2:4] == b"\x05\x02",
+            "debug$S is not an S_*PROC32 record")
+    require(seed_debug[16:28] == donor_debug[16:28],
+            "debug$S procedure range differs between the two copies")
+
+    # Everything is proven identical except the code itself, so the splice is
+    # exactly one raw-byte replacement; no table is rewritten.
+    old_end = sp["raw_offset"] + sp["raw_size"]
+    output = apply_replacements(
+        seed_bytes, [(sp["raw_offset"], old_end, donor_code)])
+    checked = CoffObject(output)
+    cp = checked.function_section(mangled)
+    require(coff_body(checked, cp) == donor_code,
+            "composed body is not the donor body")
+    require(_coff_table_bytes(checked, cp, "relocations")
+            == _coff_table_bytes(seed, sp, "relocations"),
+            "composed relocation table changed")
+    require(len(output) == len(seed_bytes),
+            "composed object size changed")
+    return output, {
+        "splice_class": "comdat_selection_override",
+        "mangled": mangled,
+        "seed_section": sp["number"],
+        "donor_section": dp["number"],
+        "body_length": len(donor_code),
+        "relocations": len(dpr),
+        "retail_exact": True,
     }
 
 

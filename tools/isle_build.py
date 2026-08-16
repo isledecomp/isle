@@ -604,8 +604,8 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
         if not entries:
             fail(f"no compile command for listed TU: {unit['source']}")
 
-        def lane(predicate, description):
-            matches = [entry for entry in entries
+        def lane(predicate, description, pool=None):
+            matches = [entry for entry in (entries if pool is None else pool)
                        if predicate(entry["command"])]
             if len(matches) != 1:
                 fail(f"expected one {description} compile lane for "
@@ -836,9 +836,21 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                     fail(f"donor carrier rendering differs: "
                          f"{unit['source']}")
                 define = recipe["compile_lane"]["required_define"]
+                # Class C donors name the TU they compile: another object's
+                # copy of a multiply-defined COMDAT.  Everything else compiles
+                # the unit's own source.
+                donor_relative = recipe.get("donor_source")
+                if donor_relative:
+                    donor_source_path = (shadow / donor_relative).resolve()
+                    donor_entries = commands.get(donor_source_path)
+                    if not donor_entries:
+                        fail(f"no compile command for donor source: "
+                             f"{donor_relative}")
+                else:
+                    donor_source_path, donor_entries = source, entries
                 lane_entry = lane(
                     lambda command: f"-D{define}" in shlex.split(command),
-                    define,
+                    define, donor_entries,
                 )
                 lane_child = shlex.split(lane_entry["command"])
                 lane_parsed = byte_identity.validate_compile_arguments(
@@ -849,7 +861,7 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                 probe = (build.parent / "donors"
                          / f"{marker.stem}-{donor['id']}")
                 probe.mkdir(parents=True, exist_ok=True)
-                shadow_bytes = source.read_bytes()
+                shadow_bytes = donor_source_path.read_bytes()
                 if placement == "prefix":
                     (probe / "s.cpp").write_bytes(run_bytes + shadow_bytes)
                     force_include = []
@@ -1009,6 +1021,22 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                     retail = function["retail_oracle"]
                     composed, detail = (
                         byte_identity.compose_retail_exact_reloc_divergent(
+                            composed, donor_objects[function["donor"]],
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16), retail["length"],
+                            ),
+                        ))
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [donor_objects[function["donor"]]])
+                elif function["splice_class"] == "comdat_selection_override":
+                    # Class C.  As with B1, the retail extraction lives in the
+                    # build because the build already validates the retail
+                    # image against images.LEGO1.original_sha256.
+                    retail = function["retail_oracle"]
+                    composed, detail = (
+                        byte_identity.compose_comdat_selection_override(
                             composed, donor_objects[function["donor"]],
                             function,
                             byte_identity.retail_image_body(
