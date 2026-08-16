@@ -871,3 +871,16 @@ today's text) takes this row from **2665/nd=935** to **2666/nd=105 at
 "+N length defect" was carrier-fixable, not a missing statement. Next step:
 fwdE/fwdL 97..400 and `shapefull` on act3ammo (only the 60-cell shape subset
 has been run), then the residue read-off from the `fwdE-48` object.
+
+### `LegoCarRaceActor::CheckPresenterAndActorIntersections` at `shape-8-25` (1168/102)
+
+With the length fixed by the carrier, the residue is the inlined
+`_Tree<LegoPathActor*>` walk: a CMPDIR pair (`cmp [_Nil], ecx` vs retail
+`cmp ecx, [_Nil]` at body+99 and +109) plus the `operator++` tail shape
+described above. The obvious text lever is already applied — legoracespecial.cpp:436
+carries `plpas.end() != plpas.find(*itpa)`, the same wave-2/3 spelling that
+landed the LegoPathActor and LegoExtraActor siblings — so what is left is
+vendor-inline state, exactly like the `_Tree` rows in legoextraactor. Next
+step: `shapefull` neighbourhood of shape-8-25 plus `externdeep`, and if it
+plateaus, the include-order axis (legoracespecial has a large quoted-include
+block and the axis has never been run on it).
