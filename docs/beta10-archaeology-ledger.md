@@ -254,6 +254,19 @@ removes it and the expansion costs exactly as much as the call it replaced.
 (The row still scores .9365 rather than ~.997 because reccmp also sees our
 data-address divergence, which `fulldiff.py` masks — displacement, not codegen.)
 
+**The one uniform-rule opportunity, and why it is closed.** Unlike the
+`MxListEntry` case, retail's answer for `Vector3::Vector3` *is* uniform —
+decline at 28/28 — so a source form that stopped MSVC expanding it anywhere
+would match retail at every site and could close three rows with no collateral.
+The obvious form is "1997 did not define it in the class at all", i.e. an
+ordinary out-of-line member. **Retail's own layout refutes that**: both
+`Vector3::Vector3` (`0x1001d150`) and `Vector2::Vector2` (`0x1000c0f0`) sit in
+the middle of runs of `scalar deleting destructor` / `ClassName` / `IsA`
+bodies — the COMDAT region — not inside any TU's ordinary function run. They
+were in-class inlines in 1997 exactly as they are here, and retail's compiler
+simply declined all 28 while ours declines 24. (Retail also calls
+`Vector2::Vector2` at 50 sites to our 47, the same defect seen from the base.)
+
 A useful negative for source-shaping: **all three `Vector3::Vector3` sites we
 can name are implicitly generated ctor chains** — the sub-objects of
 `m_world_bounding_box`/`m_world_bounding_sphere`/`m_world_velocity` in
