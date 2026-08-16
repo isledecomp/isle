@@ -721,6 +721,17 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                         if count
                     )
                     placement = "extern_pair"
+                elif recipe["kind"] == "forward_run_with_shape":
+                    run_bytes = (
+                        entropy.generate_forward_run(
+                            recipe["prefix"], recipe["count"],
+                            recipe["width"],
+                        ).encode("utf-8")
+                        + entropy.generate_shape(
+                            recipe["classes"], recipe["functions"]
+                        ).encode("utf-8")
+                    )
+                    placement = "run_with_shape"
                 else:
                     run_bytes = entropy.generate_forward_run(
                         recipe["prefix"], recipe["count"], recipe["width"]
@@ -753,6 +764,25 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                     lines = shadow_bytes.split(b"\n")
                     (probe / "s.cpp").write_bytes(b"\n".join(lines + decls))
                     force_include = []
+                elif placement == "run_with_shape":
+                    # Stacked carrier: the forward-declaration run seats at
+                    # its placement, the declaration shape is force-included.
+                    forward_run = entropy.generate_forward_run(
+                        recipe["prefix"], recipe["count"], recipe["width"],
+                    ).encode("utf-8")
+                    shape_run = entropy.generate_shape(
+                        recipe["classes"], recipe["functions"]
+                    ).encode("utf-8")
+                    if recipe["placement"] == "prefix":
+                        (probe / "s.cpp").write_bytes(
+                            forward_run + shadow_bytes)
+                    else:
+                        decls = forward_run.rstrip(b"\n").split(b"\n")
+                        lines = shadow_bytes.split(b"\n")
+                        (probe / "s.cpp").write_bytes(
+                            b"\n".join(lines + decls))
+                    (probe / "run.h").write_bytes(shape_run)
+                    force_include = ["/FIrun.h"]
                 elif placement == "extern_pair":
                     # Header run seats after the last #include, seat run
                     # appends at EOF (the sweep bench's exact construction).

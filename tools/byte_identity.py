@@ -8013,7 +8013,7 @@ def validate_manifest(
             if mode == "compose_equal_body_comdat":
                 require(
                     kind in ("forward_declaration_run", "declaration_shape",
-                             "extern_run_pair"),
+                             "extern_run_pair", "forward_run_with_shape"),
                     f"{donor_context}: equal-body donors require a "
                     "generated declaration recipe",
                 )
@@ -8098,6 +8098,60 @@ def validate_manifest(
                     except ValueError as error:
                         raise ByteIdentityError(
                             f"{donor_context} extern-run parameters: {error}"
+                        ) from error
+                elif kind == "forward_run_with_shape":
+                    # A stacked carrier: a forward-declaration run seated at
+                    # `placement`, PLUS a declaration shape force-included.
+                    # Both halves are the existing typed generators; the
+                    # recipe only stacks them, exactly as extern_run_pair
+                    # stacks two extern runs at two seats.
+                    exact_keys(
+                        recipe,
+                        {
+                            "kind", "placement", "prefix", "count", "width",
+                            "classes", "functions",
+                            "generated_header_sha256", "compile_lane",
+                            "emission_policy", "authenticity_rationale",
+                        },
+                        f"{donor_context}.recipe",
+                    )
+                    require(
+                        recipe.get("placement") in ("prefix", "suffix"),
+                        f"{donor_context}.placement is invalid")
+                    run_prefix = recipe.get("prefix")
+                    run_count = recipe.get("count")
+                    run_width = recipe.get("width")
+                    shape_classes = recipe.get("classes")
+                    shape_functions = recipe.get("functions")
+                    require(isinstance(run_prefix, str)
+                            and isinstance(run_count, int)
+                            and not isinstance(run_count, bool)
+                            and isinstance(run_width, int)
+                            and not isinstance(run_width, bool),
+                            f"{donor_context} forward-run parameters "
+                            "are invalid")
+                    require(isinstance(shape_classes, int)
+                            and not isinstance(shape_classes, bool)
+                            and 1 <= shape_classes <= 10,
+                            f"{donor_context}.classes is invalid")
+                    require(isinstance(shape_functions, int)
+                            and not isinstance(shape_functions, bool)
+                            and shape_classes <= shape_functions
+                            <= 10 * shape_classes,
+                            f"{donor_context}.functions is invalid")
+                    try:
+                        generated = (
+                            entropy_generator.generate_forward_run(
+                                run_prefix, run_count, run_width
+                            ).encode("utf-8")
+                            + entropy_generator.generate_shape(
+                                shape_classes, shape_functions
+                            ).encode("utf-8")
+                        )
+                    except ValueError as error:
+                        raise ByteIdentityError(
+                            f"{donor_context} stacked-carrier parameters: "
+                            f"{error}"
                         ) from error
                 else:
                     exact_keys(
