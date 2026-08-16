@@ -840,8 +840,67 @@ And that cell is not merely a colour match — it is a **complete donor**:
 
 `pad_shape` became a renderable recipe kind only at `16620ba9`, which is why
 this sat unclaimed in a corpus from an earlier wave. **legopathboundary.cpp
-is not my TU — handed to its owner, not landed here.** It needs a
-re-derivation on today's shadow first (the corpus predates `3526a9ab`).
+is not my TU — handed to its owner, not landed here.**
+
+**Re-derivation on today's shadow: the donor is STALE.** I swept the full
+144-cell `padgrid` on the current shadow (`sw-all2-legopathboundary_v3`):
+`pad-10-12` no longer produces the retail body, and the floor is now
+**nd=2 at `pad-12-11`, residue `[129, 240]`**. legopathboundary.cpp has had
+landings since that corpus was built, and "landings re-dial their TU" applies.
+So the handoff is *not* a ready donor — it is: the row is one carrier axis
+away, the axis is now renderable, and the padgrid floor on today's shadow is
+nd=2 with two named bytes. (The `HIT nd=0 0x10057260` in that same log is
+`~LegoPathBoundary`, which is **already at matching 1.0** — the sweep oracle
+includes closed rows, and I checked before reporting it as a find.)
+
+### 10.5b The template/authored split — TESTED AND FALSIFIED
+
+The proposed split: for a *template instantiation* colour is TU state (proved
+in §10.1), but for an *authored function* the IL is not shared, so if our text
+were retail's, C2 would rank the same candidates the same way — therefore a
+`regrole` residue in an authored function is evidence that **our text is
+wrong**.
+
+**The split does not hold.** A carrier adds declarations around a function; it
+does not change that function's source. So if an authored function's colour
+moves under carrier states, its text is being held fixed while the colour
+changes, and colour cannot be evidence about the text.
+
+`colourlaw.py` over every oracled row, restricted to states whose instruction
+shape equals retail's (so only the colouring can differ):
+
+| row | kind | shape-equal states | distinct colourings | retail's reached |
+|---|---|---|---|---|
+| `LegoPathBoundary::RemoveActor` 0x100574a0 | **authored** | 209 | **14** | **1** |
+| `MxControlPresenter::CheckButtonDown` 0x10044270 | **authored** | 3 | 3 | **1** |
+| `Act3List::RemoveByObjectIdOrFirst` 0x100720d0 | **authored** | 568 | 10 | 0 |
+| `LegoPathController::PlaceActor` 0x10045c20 | authored | 17 | 1 | 0 |
+| every open `_Tree` row (12 of them) | template | 1–783 | 1–8 | **0** |
+
+Two open authored functions reach **retail's exact colouring** under a pure
+compile-state change, with their text untouched. `RemoveActor` takes
+**fourteen** distinct colourings across 209 states. That is a direct
+counterexample to "authored + regrole ⇒ text is wrong".
+
+**What the data does show**, which is a weaker and more useful statement:
+authored functions are *more* carrier-mobile in colour than template bodies
+(14, 10, 3 distinct colourings versus 1–8, and 2 of 4 open authored rows
+reach retail versus 0 of 12 template rows). That is the opposite of the
+proposed split's direction, and it has a plausible mechanism: an authored
+function has more live values and therefore more ties for the surrounding
+declaration state to break, whereas a small template body like the 23-
+instruction `_Erase` has almost no slack.
+
+**So the reclassification the split was meant to produce cannot be made on
+colour evidence.** `docs/open-set-triage.md` classifies the open set by
+*residue class* instead, which is measurable and does not require knowing
+whether the text is right.
+
+Caveat recorded: `RemoveActor`'s retail-colour cell is in a pre-`3526a9ab`
+corpus, and on today's shadow my 144-cell padgrid re-run does not reach it
+(38 shape-equal cells — a much smaller sample, not a contradiction). The
+mechanism claim does not depend on which shadow: the text was identical
+across all 209 cells either way.
 
 ### 10.6 Two structural facts about the carrier axis itself
 
