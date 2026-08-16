@@ -4,7 +4,11 @@ Measured 2026-08-16 at **LEGO1 4853/4934, 81 open**, base `cd8692bb`.
 **Revision 2** — two further instrument fixes applied (§ *Eleven fixes* below);
 two rows moved, no verdict changed.
 Regenerate with `<session scratchpad>/fin/census.py --json census.json --md
-census.md`; machine-readable copy alongside it as `census.json`.
+census.md`; machine-readable copy alongside it as `census.json`. **Before
+trusting a regenerated census, run `<session scratchpad>/fin/regress.py`** — six
+hand-verified rows covering every masking path. A metric that loses masking
+degrades gracefully rather than raising, so the suite is the only thing that
+catches it.
 
 This is the map every lane should plan from. It replaces "which rows look
 close" (a byte count that is blind to program shape) with **which channel each
@@ -25,9 +29,10 @@ scores it at three levels of erasure:
 
 `docs/inliner-ledger.md` §12.8 published the first SHAPE census. This one:
 
-* runs on the **corrected** instrument — Lane FIN wave 2 found nine
-  normalisation asymmetries, every one inflating the gap
-  (`docs/finish-line-ledger.md` §26, §26.1);
+* runs on the **corrected** instrument — **eleven** normalisation asymmetries
+  have now been found and fixed, every one inflating the gap
+  (`docs/finish-line-ledger.md` §26, §26.1 for one to nine, §34–§35 for ten
+  and eleven);
 * reads our side from the compiled **object** and retail's body from
   `oracles-v2.json` (the true body, padding stripped) rather than a slice to
   the next annotated address, so neither side inherits a length guess;

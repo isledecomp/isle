@@ -1995,8 +1995,12 @@ What caught it was **keeping four rows with hand-verified expected values**
 100/100/94.65, `LegoPartPresenter::Read` 99.53×3, `HandleKeyPress`
 98.21/98.21/87.50) and re-running them after every change. A metric that
 silently loses masking degrades *gracefully*, which is the worst failure mode
-for an instrument the whole project plans from. Those four rows should be a
-regression suite for `adiff`, not an ad-hoc check.
+for an instrument the whole project plans from. Those rows are now an actual
+regression suite — `<scratchpad>/fin/regress.py`, six cases covering every
+masking path (relocated absolute, relocated displacement, dual relocation,
+`fs:[0]`, `push offset $L`, both switch-table kinds, frameless `ebp`, `cmpdir`,
+and the SHAPE 100 / STRUCT 100 proof), exit 0 = all pass. **Run it after any
+change to `adiff.py`.** Currently 6/6.
 
 The superseded stride detector has been **removed** from `adiff.py` rather than
 deprecated, so nobody calls it by accident.
