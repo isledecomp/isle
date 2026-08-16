@@ -536,10 +536,10 @@ is `prefix` or `suffix` — `fwdP` is *not* renderable).
 |---|---|---|---|---|---|---|
 | 0x1006bac0 | ParseExtra | .9613 | 1746/1763 | `extern-8-17` | **0** | **LANDED** |
 | 0x100a7130 | ~ViewLODListManager | .9281 | 395/398 | `fwdE:96 × shape-6-60` | **0** | **LANDED** |
-| 0x10068b20 | erase AnimSubst | .7680 | 1104/1096 | `fwdE-19` (=51, =83) | 1 | one CMPDIR at +145; §4.3 |
+| 0x10068b20 | erase AnimSubst | .7680 | 1104/1096 | `fwdE-19` (=51, =83) and `fwdE:19 × shape-5-20/7-58/10-51` | 1 | one CMPDIR at +145; §4.3. A second, disjoint nd=1 at `fwdE:19 × shape-6-39` (residue at +431 only). `fwdE:19 × shapefull` is **exhausted (505 states, 0 failed)** with no nd=0 |
 | 0x1006c200 | `_Insert` AnimSubst | .7828 | 678/682 | `shape-5-25` | 4 | the shared `_Insert` window; §4.2 |
 | 0x1006e720 | `_Insert` HideAnim | .8475 | 686/689 | `pad-12-11` | 4 | same window (pad is not landable) |
-| 0x1004f9b0 | `_Insert` TextureInfo | .8051 | 681/679 | `fwdL-35` (=36, =68) | 4 | same window; landable carrier |
+| 0x1004f9b0 | `_Insert` TextureInfo | .8051 | 681/679 | `fwdL-35` (=36, =68); `fwdL:35 × shape-*` | 4 | same window; **469 stacked states measured, nd=4 with the identical 4 offsets in every one** |
 | 0x1006a7a0 | `_Insert` AnimStruct | .7983 | 686/690 | `fwdE-37` | 5 | same window + one byte at +178 |
 | 0x10069b10 | BuildROIMap | .8842 | 622/617 | `fwdE:19 × shape-6-60` | 3 | offsets 304, 534, 540 |
 | 0x1001d890 | erase CoreSet | .9027 | 1106/1106 | `fwdE-31` (=`fwdP-31`) | 35 | all residue in the two inlined rotations (ebx↔edi) |
