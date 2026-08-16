@@ -660,3 +660,144 @@ scheduling instruction behind. The other three are allocator rows that happen to
 carry an inline difference, and on two of them the difference costs literally
 zero bytes. Do not fund `0x10084030`, `0x100417c0` or `0x10061010` on this
 channel — their residue is unchanged by the bit.
+
+## WAVE 4 — THE INCLUDE AXIS: 82 real-source states, zero flips
+
+The carrier sweeps perturbed C2's declaration state with *synthetic* classes.
+This wave perturbed it with **real headers** — the TU's own include order and
+set — which carry real inline bodies and real symbol-table volume. Judged on
+**whole-body identity** of the target COMDAT, not merely on whether the bit
+flipped: "inert" below means byte-identical output.
+
+Target: `0x1009f490`, baseline body `b0a0bc0f4e46`, len 1074, 0 relocations
+naming `Interpolate@LegoAnimNodeData`.
+
+**1. Include ORDER — 40 legal permutations, all byte-identical.**
+`legoanim.cpp` has five includes, so 120 orders. **80 are not legal source**:
+`mxgeometry/mxquaternion.h` needs `MxU32`, which arrives via `legoanim.h`, so
+every order that puts the quaternion header first fails with
+`C2501: 'MxU32' : missing decl-specifiers`. Of the 40 that compile, **all 40
+produce the identical body** — same sha, same length, same relocation profile.
+
+**2. Include SET — 37 legal states, all byte-identical.**
+- *Removal*: 15 drop-one/drop-two cases, of which exactly **one** is legal —
+  `<limits.h>` is unused — and it is byte-identical.
+- *Direct naming*: six headers that arrive transitively today (`decomp.h`,
+  `misc/legostorage.h`, `misc/legotree.h`, `realtime/vector.h`,
+  `realtime/matrix.h`, `mxgeometry/mxgeometry3d.h`) x six insertion positions =
+  **36 cells, all byte-identical**. Naming one *after* the header that already
+  pulls it in is a preprocessor no-op, so the cells that could matter are the
+  early ones — and those are inert too.
+
+**3. Definition placement — 5 positions, and the one that moves is worse.**
+Moving `inline LegoFloat LegoAnimNodeData::Interpolate` to sit before
+`LegoAnimKey::LegoAnimKey`, `CreateLocalTransform`, `GetTranslation` or
+`FindKeys` is **byte-identical**. Moving it *before its own first call site*
+(ahead of `CalculateCameraTransform`) is the only cell in this wave that
+changes anything — and it still inlines: same length 1074, still 0 callee
+relocations, and measurably **worse**, masked nd 268 -> 287, SHAPE 97.12 ->
+96.47. So the coordinator's prediction holds with a refinement: definition
+position does not gate the *decision*, though it is not codegen-inert.
+
+**Total: 40 + 1 + 36 + 5 = 82 real-source states, zero flips.**
+
+### Verdict: seal the channel at two rows
+
+Across four waves the inline accept/decline bit has been attacked with
+**8,963 synthetic carrier cells** (two generator families, three TUs, both
+directions), **82 real-source include/placement states**, **six source forms on
+the target row**, **five forms on `mxlist.h`**, and the compiler's own
+`inline_depth` knob. It moved exactly twice, and both movers are disqualified:
+`inline_depth` is out of mandate, and the one source form that flips it
+(`InsertEntry` by assignment) takes an exact row from 688 to 611 bytes.
+
+The bit is **C2-internal and unreachable by any permitted lever**. Per the
+wave-3 pricing, the channel is worth **two rows** — `0x1003cf20` (banked by
+Lane B10) and `0x1009f490` (residue measured at nd 0) — with `0x100a4420` one
+scheduling instrument behind. Stop funding it.
+
+### Two harness lessons from this wave
+
+- **A permuting harness must permute contents in place.** My first include
+  sweep rewrote the include block and silently dropped the blank lines between
+  the groups, so its own baseline was already a perturbed file.
+- **Parallel MSVC workers must each get their own `/Fd`.** Dropping `/Fd`
+  defaults every worker to `vc40.pdb` in the shared cwd, and 22 of the first
+  run's "failures" were `C1033: cannot open program database`, not source
+  errors.
+- **Source path length is NOT a confound here** — compiling the same tree from
+  a 45-character path and a 111-character path gives a byte-identical body, so
+  the scratch-copy method used in waves 2-4 is sound. (Worth recording because
+  the standing rule warns the compiler arena is path-length sensitive; it is
+  not sensitive for this TU.)
+
+## WAVE 4 CLOSE — the two new working rules, applied to this lane's own sweeps
+
+### Rule 1: harvest `results.json`, do not trust a ledger
+
+248 retained result files in the scratchpad. Scanned for every row this lane
+owns: **zero records carry an nd-like score <= 2.** No unharvested near-miss
+exists for `0x1009f490`, `0x100a4420`, `0x100a46b0`, `0x10061010`,
+`0x10062e20`, `0x100a84a0`, `0x100aa510`, `0x1006fda0`, `0x100bd020`,
+`0x100a12a0`.
+
+The files did contain something a ledger would never have told me: **94 verdict
+records from earlier lanes probing my own `FUN_10061010` inline bit.** Four of
+them flip it to INLINED, at caller lengths **668, 662, 556, 552** against
+retail's 731. My wave-2 `InsertEntry`-by-assignment form (722) is the closest of
+the five, and still nine bytes out with STRUCT 67.46. So the bit on that row has
+now been flipped by **five independent source variants across three lanes**, and
+not one brings the body near retail — independent corroboration of the wave-3
+verdict that `0x10061010`'s problem is not the inline bit.
+
+### Rule 2: score every open-row symbol in the object
+
+My wave-2 sweeps scored only the stem's target and discarded the objects. Two of
+the three TUs I swept carry a **second** open row I never looked at:
+
+| TU | swept for | never scored |
+|---|---|---|
+| `legoanim.cpp` | `0x1009f490` | — (only open row in the object) |
+| `orientableroi.cpp` | `0x100a4420` | **`0x100a46b0` UpdateTransformationRelativeToParent** |
+| `legoanimationmanager.cpp` | `0x10061010` | **`0x10062e20` FUN_10062e20** |
+
+Re-swept both TUs over the same carrier families, scoring every open row
+(`<scratchpad>/arch/sweepall.py`, results written to
+`<scratchpad>/arch/sweep-{oroi,anmgr,anmgrdense}/results.json` for future
+harvest):
+
+    0x100a4420  seed nd=222  best nd=222  (730 cells, flat)
+    0x100a46b0  seed nd= 99  best nd= 99 @ decl(5,27)  (730 cells)
+    0x10061010  seed nd=435  best nd=435  (1,918 cells, flat)
+    0x10062e20  seed nd= 72  best nd= 30 @ pad(1,4)    (1,918 cells)
+
+Two results worth keeping:
+
+- **`0x100a46b0` is already at its optimum on this axis.** The best cell in 730
+  states *is* `declaration_shape(5,27)` — the donor the tree already carries. The
+  standing MUST-RESOLVE entry's "best nd=99" is now independently reproduced
+  rather than inherited.
+- **`0x10062e20` moves, and the way it moves reclassifies the row.** At
+  `pad(1,4)` (and `pad(1,15)`) the body is retail's exact length 1098 with
+  masked nd 72 -> 30, and the metrics say what happened:
+
+        seed       len 1098  nd 72   SHAPE 94.13  STRUCT 94.13  EXACT 88.56
+        pad(1,4)   len 1098  nd 30   SHAPE 94.13  STRUCT 94.13  EXACT 94.13
+
+  **The carrier removes the entire register-colour gap** — EXACT rises to meet
+  SHAPE — and leaves a pure operation-sequence difference. A dense 1,188-cell
+  pad sweep confirms 30 is the floor. So `0x10062e20` is **not** an allocator
+  row: its remaining defect is a real SHAPE gap of ~6%, which belongs to the
+  text channel, not the colour pile.
+
+**Nothing landed.** No cell reaches nd 0, the gate is row-based, and byte
+distance is not progress. The states are recorded so the next wave can start
+from them instead of re-deriving them.
+
+### One confirmation for the false-positive class
+
+`0x10084030 CreateActorROI` reads nd=0 in a scan that masks call-target fields
+on both sides (the S72 relocation-target class). The masked nd used here blanks
+only **our** relocation byte ranges and compares everything else, which is why it
+returns **80** and agrees with the coordinator's independent measurement — and
+why my wave-2 nomination of that row was wrong.
