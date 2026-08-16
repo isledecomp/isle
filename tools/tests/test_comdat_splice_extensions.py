@@ -258,8 +258,8 @@ def function_record(donor_bytes, **overrides):
         "expected_linked_span": LINKED_SPAN,
         "expected_body_sha256": hashlib.sha256(
             byte_identity.coff_body(coff, section)).hexdigest(),
-        "retail_va": 0x1003CF20,
-        "retail_length": DONOR_SIZE,
+        "retail_oracle": {"image": "LEGO1.DLL", "address": "0x1003cf20",
+                          "verdict": "MATCH", "length": DONOR_SIZE},
     }
     record.update(overrides)
     return record
@@ -425,20 +425,61 @@ class MemberSignatureGeneratorTests(unittest.TestCase):
     def _gen(self, **overrides):
         params = {"class_identifier": "LegoCacheSoundEntry",
                   "member_identifier": "LegoCacheSoundEntry",
-                  "kind": "destructor"}
+                  "kind": "destructor",
+                  "form": "in_class_declaration"}
         params.update(overrides)
         return {"k": "member_sig", **params}
 
-    def test_a7_emits_signature_text_only(self):
-        validated = byte_identity.validate_source_overlay_generator(
-            self._gen(), "gen")
-        rendered = byte_identity.render_source_overlay_generator(validated)
-        self.assertEqual(rendered, b"\t~LegoCacheSoundEntry();\n")
-        # A7c: no body, no return type, no parameters, in the output itself.
-        self.assertNotIn(b"{", rendered)
-        self.assertNotIn(b"void", rendered)
-        self.assertEqual(rendered.count(b"("), 1)
-        self.assertEqual(rendered[rendered.index(b"(") + 1], ord(")"))
+    def _render(self, **overrides):
+        return byte_identity.render_source_overlay_generator(
+            byte_identity.validate_source_overlay_generator(
+                self._gen(**overrides), "gen"))
+
+    def test_a7f_renders_exactly_the_two_authorised_forms(self):
+        # The generator emits exactly the specification's texts and carries
+        # no indentation of its own; the framework's default seating adds the
+        # LF, and the standard `nl` layout override suppresses it where the
+        # seat's own clean source already supplies one.
+        self.assertEqual(self._render(form="in_class_declaration"),
+                         b"~LegoCacheSoundEntry();\n")
+        self.assertEqual(self._render(form="qualified_definition_header"),
+                         b"LegoCacheSoundEntry::~LegoCacheSoundEntry()\n")
+        self.assertEqual(self._render(form="in_class_declaration", nl=False),
+                         b"~LegoCacheSoundEntry();")
+        self.assertEqual(
+            self._render(form="qualified_definition_header", nl=False),
+            b"LegoCacheSoundEntry::~LegoCacheSoundEntry()")
+
+    def test_a7c_emits_signature_text_only_in_both_forms(self):
+        for form in ("in_class_declaration", "qualified_definition_header"):
+            with self.subTest(form=form):
+                rendered = self._render(form=form)
+                # no body, no return type, no parameter list
+                self.assertNotIn(b"{", rendered)
+                self.assertNotIn(b"void", rendered)
+                self.assertEqual(rendered.count(b"("), 1)
+                self.assertEqual(rendered[rendered.index(b"(") + 1],
+                                 ord(")"))
+        # only the in-class form terminates; the definition header must not,
+        # or the relocated body could never follow it.
+        self.assertTrue(self._render(
+            form="in_class_declaration").rstrip().endswith(b";"))
+        self.assertFalse(self._render(
+            form="qualified_definition_header").rstrip().endswith(b";"))
+
+    def test_a7f_rejects_a_form_outside_the_closed_enum(self):
+        for form in ("definition", "body", "prototype", "inline", ""):
+            with self.subTest(form=form):
+                with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                            "form is outside the closed enum"):
+                    byte_identity.validate_source_overlay_generator(
+                        self._gen(form=form), "gen")
+
+    def test_a7f_rejects_a_missing_form(self):
+        generator = self._gen()
+        del generator["form"]
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            byte_identity.validate_source_overlay_generator(generator, "gen")
 
     def test_a7b_rejects_a_kind_outside_the_closed_enum(self):
         for kind in ("constructor", "method", "operator", "function"):

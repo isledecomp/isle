@@ -703,6 +703,54 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
         else:
             for donor in unit["donors"]:
                 recipe = donor["recipe"]
+                if recipe["kind"] == "donor_source_overlay":
+                    # Extension A.  Render the donor's private copies of the
+                    # checked-in paths, stage them where ONLY this compile can
+                    # see them, and compile.  A6c: the private include dir is
+                    # seated on this command alone, so no other compile in the
+                    # build can reach it.  A6b is carried by the shipped
+                    # overlay's own pins, which this never touches.
+                    probe = (build.parent / "donors"
+                             / f"{marker.stem}-{donor['id']}")
+                    shutil.rmtree(probe, ignore_errors=True)
+                    (probe / "inc").mkdir(parents=True, exist_ok=True)
+                    rendered_donor = byte_identity.render_donor_source_overlay(
+                        recipe, byte_identity.checked_source_root())
+                    for path, payload in rendered_donor.items():
+                        if path == unit["source"]:
+                            (probe / "s.cpp").write_bytes(payload)
+                        else:
+                            (probe / "inc" / Path(path).name).write_bytes(
+                                payload)
+                    define = recipe["compile_lane"]["required_define"]
+                    lane_entry = lane(
+                        lambda command: f"-D{define}" in shlex.split(command),
+                        define,
+                    )
+                    lane_child = shlex.split(lane_entry["command"])
+                    byte_identity.validate_compile_arguments(lane_child)
+                    donor_command = []
+                    include_seated = False
+                    for index, token in enumerate(lane_child):
+                        if not include_seated and token.startswith(("-I", "/I")):
+                            donor_command.append(f"/I{probe / 'inc'}")
+                            donor_command.append(f"/I{source.parent}")
+                            include_seated = True
+                        if token.startswith(("/Fo", "-Fo")):
+                            donor_command.append("/Foo.obj")
+                            continue
+                        if token.startswith(("/Fd", "-Fd")):
+                            donor_command.append("/Fdo.pdb")
+                            continue
+                        if index == len(lane_child) - 1:
+                            donor_command.append("s.cpp")
+                            continue
+                        donor_command.append(token)
+                    run(donor_command, cwd=probe,
+                        env=build_environment(compiler),
+                        log=build.parent / f"{marker.stem}-{donor['id']}.log")
+                    donor_objects[donor["id"]] = (probe / "o.obj").read_bytes()
+                    continue
                 if recipe["kind"] == "declaration_shape":
                     run_bytes = entropy.generate_shape(
                         recipe["classes"], recipe["functions"]
@@ -953,7 +1001,24 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                 donor_objects[donor["id"]] = (probe / "o.obj").read_bytes()
             composed = seed_bytes
             for function in unit["functions"]:
-                if function["splice_class"] == "same_slot_resize":
+                if function["splice_class"] == "retail_exact_reloc_divergent":
+                    # B1's extraction lives here, in the build, because it is
+                    # the build that already validates the retail image
+                    # against images.LEGO1.original_sha256.  The composer is
+                    # handed the bytes and enforces length and masked nd 0.
+                    retail = function["retail_oracle"]
+                    composed, detail = (
+                        byte_identity.compose_retail_exact_reloc_divergent(
+                            composed, donor_objects[function["donor"]],
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16), retail["length"],
+                            ),
+                        ))
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [donor_objects[function["donor"]]])
+                elif function["splice_class"] == "same_slot_resize":
                     composed, detail = byte_identity.compose_same_slot_resize(
                         composed, donor_objects[function["donor"]], function
                     )
