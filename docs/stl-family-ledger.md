@@ -324,11 +324,27 @@ Same length, same semantics — an `eax`↔`ebx` role swap plus the branch
 polarity inverted with the two successor blocks exchanged. It is the
 `_Right(_Parent(_Z)) == _Z` test at the end of `_Insert`.
 
-Census over all **714** states of the today-shadow sweep for `0x1006c200`:
-the retail form of that window occurs **0 times**. Every state, at every one
-of the four reachable body lengths (678×547, 681×124, 679×31, 682×12),
-emits our form. The flat carrier axes (shape, pad, fwdL/P/E, extern,
-include-perm) do not reach it.
+All four rows want the **identical** 9 retail bytes
+`8b 07 8d 58 08 39 0b 75 04` in that window, in three different TUs.
+
+Census (`wincensus.py`) over the **entire** retained corpus plus every state
+this session compiled — `sweep-bench/sweep2-*`, `sweep-*`, `probe-*`,
+`landinto-*` and my `sw-*` roots:
+
+```
+0x1006c200: 0 / 11303 bodies contain the retail window
+0x1006a7a0: 0 / 11303
+0x1006e720: 0 / 11303
+0x1004f9b0: 0 /  3180
+```
+
+**Zero out of 37,089 body samples.** Every state, at every reachable body
+length, emits our form. The declaration-carrier grammar — shapes (lattice
+and full grid), pad shapes, forward runs at three seats, extern pairs,
+include permutations, and the stacked products — does not reach this tie in
+any of the three emitting TUs. This is a hard negative and it is the single
+most useful thing to know about the `_Insert` block: **more states will not
+close those four rows.**
 
 ### 4.3 The `erase` byte-145 tie is coupled to the block layout
 
