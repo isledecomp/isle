@@ -3517,6 +3517,58 @@
    }
   },
   {
+   "target": "realtime",
+   "source": "LEGO1/realtime/orientableroi.cpp",
+   "source_sha256": "089c646ca25359ad456b75207d5fdd13cce58338411d5a8346ac0882e270f3eb",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_544f676052d9",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 6,
+      "functions": 30,
+      "generated_header_sha256": "544f676052d9f9fac2a660188f240f5fa74bcc7ae651ecbb22d544bb2aa669d9",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?GetLocalTransform@OrientableROI@@QAEXAAVMatrix4@@@Z",
+     "expected_body_sha256": "b02bcf03c0c0bd3075a90809867f619ea91b252c68dbe3bb56bf0aebd8756c44",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 2092,
+     "expected_donor_length": 2122,
+     "expected_linked_span": 2128,
+     "donor": "d_544f676052d9"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row(s) in LEGO1/realtime/orientableroi.cpp from a generated carrier state over the rendered current source with the pristine third-party vec.h; retail's body is 2122 bytes where the seed emits 2092.",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/worlds/gasstation.cpp",
    "source_sha256": "8f80b7aa8af39f08137dd3aff522fb53423e30caf4f97edd225eb167aa73e705",
@@ -4626,8 +4678,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4832,
-    "accepted_row_identity_sha256": "f2cee9fd323d7227eaa7c385d719e148cfc607e68e6252306260dfbec9f87d53",
+    "exact_raw_1_0_count": 4833,
+    "accepted_row_identity_sha256": "1d159218c9eaa8be78e223eaf41c95b374e71037a8d5ab18e94ff92df5d5b22d",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
