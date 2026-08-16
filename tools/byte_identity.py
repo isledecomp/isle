@@ -8013,7 +8013,8 @@ def validate_manifest(
             if mode == "compose_equal_body_comdat":
                 require(
                     kind in ("forward_declaration_run", "declaration_shape",
-                             "extern_run_pair", "forward_run_with_shape"),
+                             "extern_run_pair", "forward_run_with_shape",
+                             "pad_shape"),
                     f"{donor_context}: equal-body donors require a "
                     "generated declaration recipe",
                 )
@@ -8037,6 +8038,7 @@ def validate_manifest(
                     )
                     require(
                         recipe.get("placement") in ("prefix",
+                                                    "after_includes",
                                                     "force_include",
                                                     "suffix"),
                         f"{donor_context}.placement is invalid")
@@ -8153,6 +8155,35 @@ def validate_manifest(
                             f"{donor_context} stacked-carrier parameters: "
                             f"{error}"
                         ) from error
+                elif kind == "pad_shape":
+                    # The sweep bench's `pad-C-F` axis: a C x F grid of
+                    # classes each holding the same number of unused inline
+                    # members, force-included.  Same emission policy as
+                    # declaration_shape -- it contributes no code or data --
+                    # but a different generator, and it reaches compiler
+                    # states the ragged declaration_shape grid does not.
+                    exact_keys(
+                        recipe,
+                        {
+                            "kind", "classes", "functions_per_class",
+                            "generated_header_sha256", "compile_lane",
+                            "emission_policy", "authenticity_rationale",
+                        },
+                        f"{donor_context}.recipe",
+                    )
+                    pad_classes = recipe.get("classes")
+                    pad_functions = recipe.get("functions_per_class")
+                    require(isinstance(pad_classes, int)
+                            and not isinstance(pad_classes, bool)
+                            and 1 <= pad_classes <= 99,
+                            f"{donor_context}.classes is invalid")
+                    require(isinstance(pad_functions, int)
+                            and not isinstance(pad_functions, bool)
+                            and 1 <= pad_functions <= 99,
+                            f"{donor_context}.functions_per_class is invalid")
+                    generated = entropy_generator.generate_pad_shape(
+                        pad_classes, pad_functions
+                    ).encode("utf-8")
                 else:
                     exact_keys(
                         recipe,

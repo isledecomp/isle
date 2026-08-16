@@ -708,6 +708,11 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                         recipe["classes"], recipe["functions"]
                     ).encode("utf-8")
                     placement = "force_include"
+                elif recipe["kind"] == "pad_shape":
+                    run_bytes = entropy.generate_pad_shape(
+                        recipe["classes"], recipe["functions_per_class"]
+                    ).encode("utf-8")
+                    placement = "force_include"
                 elif recipe["kind"] == "extern_run_pair":
                     run_bytes = b"".join(
                         entropy.generate_extern_run(
@@ -763,6 +768,19 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                     decls = run_bytes.rstrip(b"\n").split(b"\n")
                     lines = shadow_bytes.split(b"\n")
                     (probe / "s.cpp").write_bytes(b"\n".join(lines + decls))
+                    force_include = []
+                elif placement == "after_includes":
+                    # The bench's fwdP axis: the run seats immediately after
+                    # the last #include, which is a different compiler state
+                    # from seating it ahead of them.
+                    decls = run_bytes.rstrip(b"\n").split(b"\n")
+                    lines = shadow_bytes.split(b"\n")
+                    insert_at = 0
+                    for line_index, line in enumerate(lines):
+                        if line.startswith(b"#include"):
+                            insert_at = line_index + 1
+                    (probe / "s.cpp").write_bytes(b"\n".join(
+                        lines[:insert_at] + decls + lines[insert_at:]))
                     force_include = []
                 elif placement == "run_with_shape":
                     # Stacked carrier: the forward-declaration run seats at

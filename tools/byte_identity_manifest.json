@@ -3513,6 +3513,25 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_2b6790021b9f",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 2,
+      "seat_prefix": "g_p",
+      "seat_count": 3,
+      "width": 2,
+      "generated_header_sha256": "2b6790021b9f4ff22bf0bac856351caf487071bdadd7ccd407598ba8f35c6f11",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -3558,11 +3577,20 @@
       44
      ],
      "donor": "d_e7a4c0df2b73"
+    },
+    {
+     "mangled": "?FlushPending@MxNotificationManager@@AAEXPAVMxCore@@@Z",
+     "expected_body_sha256": "7e17fb611522fcfcf02530a681a0b83216471513f12edd81dbaeaabd75d8fc91",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 597,
+     "expected_donor_length": 599,
+     "expected_linked_span": 608,
+     "donor": "d_2b6790021b9f"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 1 row(s) in LEGO1/omni/src/notify/mxnotificationmanager.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes 2 row(s) in LEGO1/omni/src/notify/mxnotificationmanager.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -4924,8 +4952,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4837,
-    "accepted_row_identity_sha256": "c299e30dbce0b495b94a8947c0404b7d4d1fb19b291cb2ecd9d7e043fa3edc50",
+    "exact_raw_1_0_count": 4838,
+    "accepted_row_identity_sha256": "a6b476c2c8db06c98ecfa598bbd09972ff6aa2dcce7ad35709e80be37948663f",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
