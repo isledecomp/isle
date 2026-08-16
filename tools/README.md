@@ -45,7 +45,7 @@ bound direct producer/reccmp work; the aggregate CMake driver has a separate
 bounded anti-wedge ceiling. All launched jobs use runner-owned POSIX process
 groups so a timed-out wrapper tree is cancelled as one unit.
 
-The current pinned source-true baseline is 4860/4934. `--terminal` requires all
+The current pinned source-true baseline is 4866/4934. `--terminal` requires all
 4934 LEGO1 rows, all 172 ISLE rows, and all 111 CONFIG rows to be raw-exact,
 then requires each stamped no-/debug image to be literally byte-identical to
 its retail oracle (with both SHA-256 and MD5 pins checked). Diagnostic-build

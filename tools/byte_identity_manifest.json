@@ -2771,11 +2771,542 @@
      ],
      "splice_class": "equal_body_strict",
      "donor": "d_fd5ee69dfee7"
+    },
+    {
+     "mangled": "?AddRect@MxRegion@@UAEXAAVMxRect32@@@Z",
+     "donor": "d_bb1169a82f6c",
+     "splice_class": "retail_exact_instruction_mosaic",
+     "expected_section_number": 63,
+     "expected_section_count": 233,
+     "expected_body_length": 1157,
+     "expected_relocation_count": 38,
+     "expected_line_count": 38,
+     "expected_seed_body_sha256": "ae20a674ba6da84f1034813bfb8a91c1f1cc85aa20d87da80859ed8a0b8b1749",
+     "expected_donor_body_sha256": "ceb47e593e88c589434c59dd33140529df1ed04bbb02b24381b50ba58bd19c82",
+     "expected_body_sha256": "47e2dde224a70c58bc989f2d440c6145a2c7ff2d28fd5d49f1f52fb42efa9143",
+     "instruction_ranges": [
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 639,
+       "end": 642,
+       "seed_bytes": "8b5dcc",
+       "seed_sha256": "735a43e79081306b172aca0e258931352b60562a26e37b2e374027a8195bfb3b",
+       "donor_bytes": "8b7dcc",
+       "donor_sha256": "4dd559e9e5f1c65c2aa556d15256013b2a6636ac12f2074c2a01586bddd19905"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 642,
+       "end": 645,
+       "seed_bytes": "8d7004",
+       "seed_sha256": "961e454580cedf784cdf3162f851a8d1d4d1e56e7f9d41152fb394ff83f37c8a",
+       "donor_bytes": "8d5804",
+       "donor_sha256": "7268266e599c4174a7b99360dbfe25bd3c63b0fba626783cb2bdf95fcffaec1c"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 650,
+       "end": 652,
+       "seed_bytes": "8b3e",
+       "seed_sha256": "d7a6899340437e860c51d2f010f5872d37da580668fb61cbac62631e4d3d666e",
+       "donor_bytes": "8b33",
+       "donor_sha256": "5732a38bd260409e3e1532c15d783d51ca38c2240b8379c16ae6d22a0ed3b937"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 683,
+       "end": 684,
+       "seed_bytes": "57",
+       "seed_sha256": "fcb5f40df9be6bae66c1d77a6c15968866a9e6cbd7314ca432b019d17392f6f4",
+       "donor_bytes": "56",
+       "donor_sha256": "de5a6f78116eca62d7fc5ce159d23ae6b889b365a1739ad2cf36f925a140d0cc"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 697,
+       "end": 699,
+       "seed_bytes": "85ff",
+       "seed_sha256": "b463fde2f176b10c0e80b1f97881ca31237a98500f6a80da7581395d4c0fc86d",
+       "donor_bytes": "85f6",
+       "donor_sha256": "8ab1132e0f39300a69111599262ce5db7c26e24b7eb3cc9ae866e97c67ff49bd"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 701,
+       "end": 704,
+       "seed_bytes": "894708",
+       "seed_sha256": "f5bc6631d54266c800eb3bbda9fba94f8b0df8bc41b9fb8adf98eb4460f0d28b",
+       "donor_bytes": "894608",
+       "donor_sha256": "995a716ace44c577c9fcd179dea3bf872b080863bcf849b56d4dc9d370b63bb9"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 706,
+       "end": 709,
+       "seed_bytes": "894310",
+       "seed_sha256": "7e297793a82b65b8df36367f9eac736fb877a780a5b7c4434b91dd41d86dd0d2",
+       "donor_bytes": "894710",
+       "donor_sha256": "f130bb7e3794712a29c5eebd64d22fc70e9de6f242fe35be2590c275a44c2225"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 715,
+       "end": 717,
+       "seed_bytes": "8906",
+       "seed_sha256": "525c3d7e8579cfba7bb505a61c9d78c9a9e1954e9d0b3ffb7a073c0903a9829b",
+       "donor_bytes": "8903",
+       "donor_sha256": "a53da58892b666a30b1af2dd65a1ea39829c3490ff505de5c07611f8b1380dcb"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 719,
+       "end": 722,
+       "seed_bytes": "894314",
+       "seed_sha256": "4ed5408c1c854ff7a48952d5b9347afc36fac844b2c38e840978417da5a8246f",
+       "donor_bytes": "894714",
+       "donor_sha256": "106feaf2dc56877c943822b7f37794ec8859beb2b6e2e394c9b97b84a71aa5d5"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 722,
+       "end": 725,
+       "seed_bytes": "ff4308",
+       "seed_sha256": "11fa63af711f3eba657af6d67724005ffd891a2d3452b09ac682d309d9a32ced",
+       "donor_bytes": "ff4708",
+       "donor_sha256": "d19f901538e2149014a333d3ac18d8b7c5003c3cf870d6c3a6ee393b59f42a62"
+      }
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100c3750",
+      "verdict": "MATCH",
+      "length": 1157
+     },
+     "retail_relocations": [
+      {
+       "offset": 2,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 12,
+       "type": 6,
+       "addend": 0,
+       "target": "$L5526",
+       "target_section": 63,
+       "target_value": 1139,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x100c3bc3"
+      },
+      {
+       "offset": 20,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 69,
+       "type": 20,
+       "addend": 0,
+       "target": "??0MxCore@@QAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100ae1a0"
+      },
+      {
+       "offset": 91,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7?$MxListCursor@PAVMxSpan@@@@6B@",
+       "target_section": 65,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100dcba0"
+      },
+      {
+       "offset": 112,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7?$MxPtrListCursor@VMxSpan@@@@6B@",
+       "target_section": 66,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100dcb70"
+      },
+      {
+       "offset": 126,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7MxSpanListCursor@@6B@",
+       "target_section": 67,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100dcb88"
+      },
+      {
+       "offset": 229,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 256,
+       "type": 20,
+       "addend": 0,
+       "target": "??0MxSpan@@QAE@AAVMxRect32@@@Z",
+       "target_section": 200,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c50e0"
+      },
+      {
+       "offset": 299,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 335,
+       "type": 20,
+       "addend": 0,
+       "target": "??0?$MxListEntry@PAVMxSpan@@@@QAE@PAVMxSpan@@PAV0@1@Z",
+       "target_section": 227,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c5a20"
+      },
+      {
+       "offset": 442,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 469,
+       "type": 20,
+       "addend": 0,
+       "target": "??0MxSpan@@QAE@AAVMxRect32@@@Z",
+       "target_section": 200,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c50e0"
+      },
+      {
+       "offset": 512,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 548,
+       "type": 20,
+       "addend": 0,
+       "target": "??0?$MxListEntry@PAVMxSpan@@@@QAE@PAVMxSpan@@PAV0@1@Z",
+       "target_section": 227,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c5a20"
+      },
+      {
+       "offset": 606,
+       "type": 20,
+       "addend": 0,
+       "target": "?Clone@MxSpan@@QAEPAV1@XZ",
+       "target_section": 215,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c55d0"
+      },
+      {
+       "offset": 653,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 689,
+       "type": 20,
+       "addend": 0,
+       "target": "??0?$MxListEntry@PAVMxSpan@@@@QAE@PAVMxSpan@@PAV0@1@Z",
+       "target_section": 227,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c5a20"
+      },
+      {
+       "offset": 739,
+       "type": 20,
+       "addend": 0,
+       "target": "?Clone@MxSpan@@QAEPAV1@XZ",
+       "target_section": 215,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c55d0"
+      },
+      {
+       "offset": 770,
+       "type": 20,
+       "addend": 0,
+       "target": "?AddSegment@MxSpan@@QAEXHH@Z",
+       "target_section": 203,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c5280"
+      },
+      {
+       "offset": 793,
+       "type": 20,
+       "addend": 0,
+       "target": "?InsertEntry@?$MxList@PAVMxSpan@@@@IAEPAV?$MxListEntry@PAVMxSpan@@@@PAVMxSpan@@PAV2@1@Z",
+       "target_section": 224,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c5970"
+      },
+      {
+       "offset": 817,
+       "type": 20,
+       "addend": 0,
+       "target": "?AddSegment@MxSpan@@QAEXHH@Z",
+       "target_section": 203,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c5280"
+      },
+      {
+       "offset": 864,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 891,
+       "type": 20,
+       "addend": 0,
+       "target": "??0MxSpan@@QAE@AAVMxRect32@@@Z",
+       "target_section": 200,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c50e0"
+      },
+      {
+       "offset": 902,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 915,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 928,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 941,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 954,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 982,
+       "type": 20,
+       "addend": 0,
+       "target": "?InsertEntry@?$MxList@PAVMxSpan@@@@IAEPAV?$MxListEntry@PAVMxSpan@@@@PAVMxSpan@@PAV2@1@Z",
+       "target_section": 224,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c5970"
+      },
+      {
+       "offset": 1090,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 1107,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 1119,
+       "type": 20,
+       "addend": 0,
+       "target": "??1MxCore@@UAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100ae1e0"
+      },
+      {
+       "offset": 1127,
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$MxListCursor@PAVMxSpan@@@@UAE@XZ",
+       "target_section": 81,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c3d80"
+      },
+      {
+       "offset": 1135,
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$MxPtrListCursor@VMxSpan@@@@UAE@XZ",
+       "target_section": 72,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c3c50"
+      },
+      {
+       "offset": 1140,
+       "type": 6,
+       "addend": 0,
+       "target": "$T5752",
+       "target_section": 64,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100ec280"
+      },
+      {
+       "offset": 1145,
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "offset": 1153,
+       "type": 20,
+       "addend": 0,
+       "target": "??1MxSpanListCursor@@UAE@XZ",
+       "target_section": 84,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100c3dd0"
+      }
+     ]
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 2 row(s) in LEGO1/omni/src/video/mxregion.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes 3 row(s) in LEGO1/omni/src/video/mxregion.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -7992,6 +8523,464 @@
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
     "reason": "Closes one retail-exact CalculateCameraTransform row from an authenticated target-identical compiler output while retaining every seed definition.",
+   "may_replace_compiler_output": true
+   }
+  },
+  {
+   "target": "geom",
+   "source": "LEGO1/lego/sources/geom/legowegedge.cpp",
+   "source_sha256": "9c083f7994466ddc9db88f62e4dae6ee5da39741fbc25603036c3427d7a1cf8b",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_b6db07485f83",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_run_with_shape",
+      "placement": "prefix",
+      "prefix": "MxUnkRecVA",
+      "count": 2,
+      "width": 3,
+      "classes": 6,
+      "functions": 37,
+      "generated_header_sha256": "b6db07485f83cd1f0aaf2fe4cc86cb1ab2faa4ad4944373ec5ca30ae75d2d8dd",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: two unused forward declarations precede the current effective translation unit and a declaration shape is force-included; neither emits code, data, strings, vtables, nor linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?LinkEdgesAndFaces@LegoWEGEdge@@UAEJXZ",
+     "donor": "d_b6db07485f83",
+     "splice_class": "retail_exact_instruction_mosaic",
+     "expected_section_number": 207,
+     "expected_section_count": 220,
+     "expected_body_length": 1494,
+     "expected_relocation_count": 32,
+     "expected_line_count": 87,
+     "expected_seed_body_sha256": "5b9d3273253cf498ddc1f5b2e4f66b551210e6146836d064b95fa7b485144a95",
+     "expected_donor_body_sha256": "cc7c96a8432d2fb148851bf3cbee4cd078ca9d5616a90f811554e67337d68c42",
+     "expected_body_sha256": "f682280da62601a19ed118acb354abfb3bfb15a99632a6be0e518a8a15371a2c",
+     "instruction_ranges": [
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 300,
+       "end": 303,
+       "seed_bytes": "83c104",
+       "seed_sha256": "de40bc59184915c29d06f2d83944a51da12276621488d3ec285b94502f419126",
+       "donor_bytes": "83c108",
+       "donor_sha256": "9289098f48f9c4b46306350001a7e6855ac49dacd2e27a1d6827e94affb96f12"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 303,
+       "end": 306,
+       "seed_bytes": "83c008",
+       "seed_sha256": "6a4a22e2215f4d637a7de600d5327aa2ddb3d60a38c35e4ff29f44b3351d28ae",
+       "donor_bytes": "83c004",
+       "donor_sha256": "b9d5c0a1789357775aa749a9e3e5f3b9f8f6aca27f919d3586b0625e63b42123"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 379,
+       "end": 382,
+       "seed_bytes": "83c104",
+       "seed_sha256": "de40bc59184915c29d06f2d83944a51da12276621488d3ec285b94502f419126",
+       "donor_bytes": "83c108",
+       "donor_sha256": "9289098f48f9c4b46306350001a7e6855ac49dacd2e27a1d6827e94affb96f12"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 382,
+       "end": 385,
+       "seed_bytes": "83c008",
+       "seed_sha256": "6a4a22e2215f4d637a7de600d5327aa2ddb3d60a38c35e4ff29f44b3351d28ae",
+       "donor_bytes": "83c004",
+       "donor_sha256": "b9d5c0a1789357775aa749a9e3e5f3b9f8f6aca27f919d3586b0625e63b42123"
+      }
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x1009a8c0",
+      "verdict": "MATCH",
+      "length": 1494
+     },
+     "retail_relocations": [
+      {
+       "offset": 2,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 12,
+       "type": 6,
+       "addend": 0,
+       "target": "$L2591",
+       "target_section": 207,
+       "target_value": 1471,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x1009ae7f"
+      },
+      {
+       "offset": 20,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 44,
+       "type": 20,
+       "addend": 0,
+       "target": "?LinkEdgesAndFaces@LegoWEEdge@@UAEJXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1009a5b0"
+      },
+      {
+       "offset": 54,
+       "type": 20,
+       "addend": 0,
+       "target": "?ValidateFacePlanarity@LegoWEGEdge@@IAEJXZ",
+       "target_section": 217,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1009aea0"
+      },
+      {
+       "offset": 85,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 117,
+       "type": 20,
+       "addend": 0,
+       "target": "??0Mx4DPointFloat@@QAE@XZ",
+       "target_section": 211,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10048290"
+      },
+      {
+       "offset": 261,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 7,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "offset": 277,
+       "type": 6,
+       "addend": 136,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 7,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "offset": 560,
+       "type": 6,
+       "addend": 0,
+       "target": "$T2372",
+       "target_section": 5,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100db7c8"
+      },
+      {
+       "offset": 620,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 7,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "offset": 634,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Vector3@@6B@",
+       "target_section": 209,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4518"
+      },
+      {
+       "offset": 695,
+       "type": 6,
+       "addend": 32,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 7,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "offset": 788,
+       "type": 6,
+       "addend": 0,
+       "target": "$T2372",
+       "target_section": 5,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100db7c8"
+      },
+      {
+       "offset": 876,
+       "type": 20,
+       "addend": 0,
+       "target": "?CCWVertex@LegoEdge@@QAEPAVVector3@@AAVLegoWEEdge@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1009a530"
+      },
+      {
+       "offset": 890,
+       "type": 20,
+       "addend": 0,
+       "target": "?CCWVertex@LegoEdge@@QAEPAVVector3@@AAVLegoWEEdge@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1009a530"
+      },
+      {
+       "offset": 900,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 935,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Vector2@@6B@",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4288"
+      },
+      {
+       "offset": 944,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 7,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "offset": 996,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 1034,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 7,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "offset": 1039,
+       "type": 20,
+       "addend": 0,
+       "target": "?CWVertex@LegoEdge@@QAEPAVVector3@@AAVLegoWEEdge@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1009a510"
+      },
+      {
+       "offset": 1079,
+       "type": 20,
+       "addend": 0,
+       "target": "?CCWVertex@LegoEdge@@QAEPAVVector3@@AAVLegoWEEdge@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1009a530"
+      },
+      {
+       "offset": 1230,
+       "type": 6,
+       "addend": 0,
+       "target": "$T2372",
+       "target_section": 5,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100db7c8"
+      },
+      {
+       "offset": 1317,
+       "type": 6,
+       "addend": 0,
+       "target": "$T2742",
+       "target_section": 5,
+       "target_value": 16,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100db7d0"
+      },
+      {
+       "offset": 1340,
+       "type": 6,
+       "addend": 0,
+       "target": "$T2743",
+       "target_section": 5,
+       "target_value": 24,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100db7d8"
+      },
+      {
+       "offset": 1359,
+       "type": 6,
+       "addend": 0,
+       "target": "$T2743",
+       "target_section": 5,
+       "target_value": 24,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100db7d8"
+      },
+      {
+       "offset": 1438,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 1463,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 1472,
+       "type": 6,
+       "addend": 0,
+       "target": "$T2740",
+       "target_section": 208,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100e7ed0"
+      },
+      {
+       "offset": 1477,
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "offset": 1486,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      }
+     ]
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes the retail-exact LinkEdgesAndFaces row by importing four authenticated whole compiler instructions from a declaration-only carrier state while retaining every canonical seed byte and metadata table outside those ranges.",
     "may_replace_compiler_output": true
    }
   }
@@ -8068,8 +9057,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4864,
-    "accepted_row_identity_sha256": "60f9ebfa9c16b88b53222703597aee7b544c95993ccd5c520a39ea3814841126",
+    "exact_raw_1_0_count": 4866,
+    "accepted_row_identity_sha256": "5d146945652338e56e4a3d2597475e27101f95dd5ebca563324143d930461404",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

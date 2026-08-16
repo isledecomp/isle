@@ -440,3 +440,32 @@ rejected: it produced 1,105 bytes and 12 relocations, not retail's 1,121/13.
 The landed route changes no target source logic. Full gates measured
 4860/4934 from 4859/4934, exactly one gain at `0x1009f490`, zero losses, with
 ISLE and CONFIG still literal-byte identical.
+
+## 8. Class E — `retail_exact_instruction_mosaic`
+
+This class is a narrow same-function construction, not a general binary patch:
+
+1. Seed and donor are freshly compiled from the same effective checked-in
+   translation unit. The donor may differ only by an existing manifest-declared
+   non-emitting declaration carrier, and is never linked.
+2. The exact mangled function, section seat/count, body length, COMDAT
+   selection, function multiset, relocation/line counts and debug/EH closure
+   must agree. Seed and donor relocation semantics must be identical; only
+   structurally identical compiler-local `$L`/`$T` serial renames are allowed.
+3. Every imported range is a sorted, non-overlapping, manifest-pinned complete
+   x86 instruction at the same offset and is at most 15 bytes. Both seed and
+   donor encodings and their SHA-256 values are pinned. A range may overlap no
+   relocation operand in either object.
+4. The output starts as the seed object and changes only those target-text
+   bytes. It retains the seed relocation table, line table, debug/EH children,
+   function set and every non-target byte. A complete ordered semantic
+   relocation oracle binds the result to the SHA-pinned retail image, and the
+   final body must be byte-exact under that relocation mask.
+5. Cross-function or merely similar-function instruction borrowing is
+   forbidden, regardless of apparent instruction equivalence.
+
+The first customers are `0x1009a8c0 LegoWEGEdge::LinkEdgesAndFaces` (four
+instructions/four changed bytes) and `0x100c3750 MxRegion::AddRect` (ten
+instructions/ten changed bytes). Fresh source regeneration plus the complete
+gate raised LEGO1 from 4864/4934 to 4866/4934 with exactly those two gains and
+zero losses; ISLE remains 172/172 and CONFIG 111/111.

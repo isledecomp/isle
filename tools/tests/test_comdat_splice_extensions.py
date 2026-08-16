@@ -436,6 +436,191 @@ class RetailExactRelocDivergentTests(unittest.TestCase):
             self.compose(seed, donor, function, retail_body_for(donor))
 
 
+def _patched_target_body(data, replacements):
+    coff = byte_identity.CoffObject(data)
+    section = coff.function_section(TARGET_SYMBOL)
+    output = bytearray(data)
+    for start, replacement in replacements:
+        at = section["raw_offset"] + start
+        output[at:at + len(replacement)] = replacement
+    return bytes(output)
+
+
+class RetailExactInstructionMosaicTests(unittest.TestCase):
+    """A retail-exact body assembled from whole compiler instructions."""
+
+    def fixture(self, *, donor_range=(0, 3), donor_extra=(24, 27)):
+        seed = make_divergent_coff()
+        seed_coff = byte_identity.CoffObject(seed)
+        section = seed_coff.function_section(TARGET_SYMBOL)
+        seed_body = byte_identity.coff_body(seed_coff, section)
+        start, end = donor_range
+        replacement = bytes(value ^ 0x41 for value in seed_body[start:end])
+        extra_start, extra_end = donor_extra
+        extra = bytes(value ^ 0x27
+                      for value in seed_body[extra_start:extra_end])
+        donor = _patched_target_body(
+            seed, [(start, replacement), (extra_start, extra)])
+        donor_coff = byte_identity.CoffObject(donor)
+        donor_section = donor_coff.function_section(TARGET_SYMBOL)
+        donor_body = byte_identity.coff_body(donor_coff, donor_section)
+        mosaic = bytearray(seed_body)
+        mosaic[start:end] = donor_body[start:end]
+        mosaic = bytes(mosaic)
+        retail = bytearray(mosaic)
+        for record in byte_identity.detailed_relocations(seed_coff, section):
+            offset, width = record["offset"], record["width"]
+            retail[offset:offset + width] = bytes(
+                (0xB0 + offset + index) & 0xFF for index in range(width))
+        retail = bytes(retail)
+        seed_instruction = seed_body[start:end]
+        donor_instruction = donor_body[start:end]
+        function = {
+            "mangled": TARGET_SYMBOL,
+            "donor": "d_fixture",
+            "splice_class": "retail_exact_instruction_mosaic",
+            "expected_section_number": section["number"],
+            "expected_section_count": len(seed_coff.sections),
+            "expected_body_length": len(seed_body),
+            "expected_relocation_count": section["relocation_count"],
+            "expected_line_count": section["line_count"],
+            "expected_seed_body_sha256": hashlib.sha256(seed_body).hexdigest(),
+            "expected_donor_body_sha256": hashlib.sha256(donor_body).hexdigest(),
+            "expected_body_sha256": hashlib.sha256(mosaic).hexdigest(),
+            "instruction_ranges": [{
+                "kind": "same_offset_complete_x86_instruction_v1",
+                "start": start,
+                "end": end,
+                "seed_bytes": seed_instruction.hex(),
+                "seed_sha256": hashlib.sha256(seed_instruction).hexdigest(),
+                "donor_bytes": donor_instruction.hex(),
+                "donor_sha256": hashlib.sha256(donor_instruction).hexdigest(),
+            }],
+            "retail_oracle": {
+                "image": "LEGO1.DLL", "address": "0x1003cf20",
+                "verdict": "MATCH", "length": len(seed_body),
+            },
+            "retail_relocations": relocation_oracle_for(seed, retail),
+        }
+        return seed, donor, function, retail, mosaic
+
+    def compose(self, seed, donor, function, retail):
+        return byte_identity.compose_retail_exact_instruction_mosaic(
+            seed, donor, function, retail)
+
+    def test_positive_control_imports_only_the_declared_instruction(self):
+        seed, donor, function, retail, mosaic = self.fixture()
+        composed, detail = self.compose(seed, donor, function, retail)
+        checked = byte_identity.CoffObject(composed)
+        section = checked.function_section(TARGET_SYMBOL)
+        self.assertEqual(byte_identity.coff_body(checked, section), mosaic)
+        self.assertEqual(detail["body_changed_offsets"], [0, 1, 2])
+        self.assertTrue(detail["retail_exact"])
+        seed_coff = byte_identity.CoffObject(seed)
+        seed_body = byte_identity.coff_body(
+            seed_coff, seed_coff.function_section(TARGET_SYMBOL))
+        self.assertEqual(mosaic[24:27], seed_body[24:27])
+
+    def test_rejects_overlapping_instruction_ranges(self):
+        _, _, function, _, _ = self.fixture()
+        item = copy.deepcopy(function["instruction_ranges"][0])
+        item["start"] = 2
+        item["seed_bytes"] = item["seed_bytes"][-2:]
+        item["donor_bytes"] = item["donor_bytes"][-2:]
+        item["seed_sha256"] = hashlib.sha256(
+            bytes.fromhex(item["seed_bytes"])).hexdigest()
+        item["donor_sha256"] = hashlib.sha256(
+            bytes.fromhex(item["donor_bytes"])).hexdigest()
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "overlapping"):
+            byte_identity.validate_instruction_mosaic_ranges(
+                [function["instruction_ranges"][0], item], "fixture",
+                function["expected_body_length"])
+
+    def test_rejects_out_of_bounds_instruction_range(self):
+        _, _, function, _, _ = self.fixture()
+        item = copy.deepcopy(function["instruction_ranges"][0])
+        item.update({"start": 30, "end": 31,
+                     "seed_bytes": "00", "donor_bytes": "01",
+                     "seed_sha256": hashlib.sha256(b"\0").hexdigest(),
+                     "donor_sha256": hashlib.sha256(b"\1").hexdigest()})
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            byte_identity.validate_instruction_mosaic_ranges(
+                [item], "fixture", function["expected_body_length"])
+
+    def test_rejects_instruction_range_overlapping_a_relocation(self):
+        seed, donor, function, retail, _ = self.fixture(
+            donor_range=(3, 6), donor_extra=(24, 27))
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "overlaps a seed relocation"):
+            self.compose(seed, donor, function, retail)
+
+    def test_rejects_instruction_hash_drift(self):
+        seed, donor, function, retail, _ = self.fixture()
+        function["instruction_ranges"][0]["donor_sha256"] = "0" * 64
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "encoding/hash"):
+            self.compose(seed, donor, function, retail)
+
+    def test_rejects_donor_relocation_semantic_drift(self):
+        seed, donor, function, retail, _ = self.fixture()
+        parsed = byte_identity.CoffObject(donor)
+        section = parsed.function_section(TARGET_SYMBOL)
+        replacement_index = next(
+            index for index, symbol in parsed.symbols.items()
+            if symbol["name"] == SEED_CALLEE
+        )
+        corrupted = bytearray(donor)
+        struct.pack_into("<I", corrupted, section["relocation_offset"] + 4,
+                         replacement_index)
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "non-local relocation rename"):
+            self.compose(seed, bytes(corrupted), function, retail)
+
+    def test_rejects_donor_xdata_drift(self):
+        seed, donor, function, retail, _ = self.fixture()
+        parsed = byte_identity.CoffObject(donor)
+        primary = parsed.function_section(TARGET_SYMBOL)
+        xdata = byte_identity._comdat_child(parsed, primary, ".xdata$x")
+        corrupted = bytearray(donor)
+        corrupted[xdata["raw_offset"] + 8] ^= 1
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "xdata raw bytes"):
+            self.compose(seed, bytes(corrupted), function, retail)
+
+    def test_rejects_a_source_overlay_donor_recipe(self):
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "declaration-only"):
+            byte_identity.require_instruction_mosaic_donor_recipe({
+                "kind": "donor_source_overlay",
+                "emission_policy": "donor_private_rendering_only",
+            }, "fixture")
+
+    def test_rejects_a_non_retail_final_mosaic(self):
+        seed, donor, function, retail, _ = self.fixture()
+        corrupted = bytearray(retail)
+        corrupted[8] ^= 1
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "not retail-exact"):
+            self.compose(seed, donor, function, bytes(corrupted))
+
+    def test_rejects_any_non_target_output_mutation(self):
+        seed, donor, function, retail, _ = self.fixture()
+        original = byte_identity.apply_replacements
+
+        def corrupt_non_target(data, replacements):
+            output = bytearray(original(data, replacements))
+            coff = byte_identity.CoffObject(data)
+            output[coff.sections[3]["raw_offset"]] ^= 1
+            return bytes(output)
+
+        with mock.patch.object(byte_identity, "apply_replacements",
+                               side_effect=corrupt_non_target):
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "non-target"):
+                self.compose(seed, donor, function, retail)
+
+
 class RetailExactTargetClosureTests(unittest.TestCase):
     def _live_anim_case(self):
         manifest = json.loads(

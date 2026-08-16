@@ -9277,6 +9277,7 @@ def validate_manifest(
                                          "equal_body_eh_structural_local",
                                          "equal_body_eh_reloc_layout",
                                          "same_slot_resize",
+                                         "retail_exact_instruction_mosaic",
                                          "retail_exact_reloc_divergent",
                                          "retail_exact_target_closure",
                                          "comdat_selection_override"),
@@ -9316,6 +9317,71 @@ def validate_manifest(
                     exact_keys(oracle, {"image", "address", "verdict", "length"},
                                function_context + ".retail_oracle")
                     normalized_functions.append(dict(function))
+                    continue
+                elif splice_class == "retail_exact_instruction_mosaic":
+                    # A manifest-authenticated mosaic retains the canonical
+                    # object and all of its metadata.  It imports only pinned
+                    # complete instructions, at their original offsets, from
+                    # another fresh compiler state of the same source.
+                    mosaic_keys = {
+                        "mangled", "donor", "splice_class",
+                        "expected_section_number", "expected_section_count",
+                        "expected_body_length", "expected_relocation_count",
+                        "expected_line_count", "expected_seed_body_sha256",
+                        "expected_donor_body_sha256", "expected_body_sha256",
+                        "instruction_ranges", "retail_oracle",
+                        "retail_relocations",
+                    }
+                    exact_keys(function, mosaic_keys, function_context)
+                    require_instruction_mosaic_donor_recipe(
+                        local_recipes[donor_id],
+                        f"{function_context} donor recipe",
+                    )
+                    for name in (
+                        "expected_section_number", "expected_section_count",
+                        "expected_body_length", "expected_relocation_count",
+                        "expected_line_count",
+                    ):
+                        value = function.get(name)
+                        require(type(value) is int and value > 0,
+                                f"{function_context}.{name} is invalid")
+                    for name in (
+                        "expected_seed_body_sha256",
+                        "expected_donor_body_sha256",
+                        "expected_body_sha256",
+                    ):
+                        require_sha(function.get(name),
+                                    f"{function_context}.{name}")
+                    normalized_function = dict(function)
+                    normalized_function["instruction_ranges"] = (
+                        validate_instruction_mosaic_ranges(
+                            function.get("instruction_ranges"),
+                            f"{function_context}.instruction_ranges",
+                            function["expected_body_length"],
+                        )
+                    )
+                    retail = function.get("retail_oracle")
+                    require(isinstance(retail, dict),
+                            f"{function_context}.retail_oracle must be an "
+                            "object")
+                    exact_keys(retail, {"image", "address", "verdict",
+                                        "length"},
+                               f"{function_context}.retail_oracle")
+                    require(retail.get("image") == "LEGO1.DLL"
+                            and isinstance(retail.get("address"), str)
+                            and ADDRESS_RE.fullmatch(retail["address"])
+                            is not None
+                            and retail.get("verdict") == "MATCH"
+                            and type(retail.get("length")) is int
+                            and retail["length"]
+                            == function["expected_body_length"],
+                            f"{function_context}: retail oracle differs")
+                    validate_retail_relocation_oracle(
+                        function.get("retail_relocations"),
+                        f"{function_context}.retail_relocations",
+                        function["expected_body_length"],
+                    )
+                    normalized_functions.append(normalized_function)
                     continue
                 elif splice_class in ("retail_exact_reloc_divergent",
                                       "retail_exact_target_closure"):
@@ -11445,6 +11511,92 @@ def validate_retail_relocation_oracle(
     return normalized
 
 
+INSTRUCTION_MOSAIC_RANGE_KEYS = {
+    "kind", "start", "end", "seed_bytes", "seed_sha256",
+    "donor_bytes", "donor_sha256",
+}
+
+INSTRUCTION_MOSAIC_DECLARATION_RECIPE_KINDS = frozenset({
+    "forward_declaration_run", "declaration_shape", "extern_run_pair",
+    "forward_run_with_shape", "extern_pair_with_shape",
+    "extern_pair_with_pad", "pad_shape", "declaration_run_triple",
+})
+
+
+def require_instruction_mosaic_donor_recipe(
+    recipe: object, context: str,
+) -> None:
+    """Restrict mosaics to the existing declaration-only carrier grammar."""
+    require(isinstance(recipe, dict)
+            and recipe.get("kind")
+            in INSTRUCTION_MOSAIC_DECLARATION_RECIPE_KINDS,
+            f"{context} is not an allowed declaration-only carrier recipe")
+    require(recipe.get("emission_policy")
+            == "non_emitting_declarations_only",
+            f"{context} is not non-emitting declarations only")
+
+
+def validate_instruction_mosaic_ranges(
+    value: object, context: str, body_length: int,
+) -> list[dict]:
+    """Validate manifest-attested, same-offset whole x86 instructions.
+
+    The composer deliberately has no disassembler dependency.  Instead each
+    complete instruction is a closed manifest unit whose two compiler-emitted
+    encodings are pinned both literally and by SHA-256.  Runtime composition
+    copies the bytes from the freshly compiled donor, never from the manifest.
+    The retail oracle remains the load-bearing proof of the resulting code.
+    """
+    require(isinstance(value, list) and 1 <= len(value) <= 64,
+            f"{context} must contain 1..64 instruction ranges")
+    normalized = []
+    previous_end = 0
+    for index, item in enumerate(value):
+        item_context = f"{context}[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, INSTRUCTION_MOSAIC_RANGE_KEYS, item_context)
+        require(item.get("kind") == "same_offset_complete_x86_instruction_v1",
+                f"{item_context}.kind differs")
+        start = require_exact_int(
+            item.get("start"), item_context + ".start",
+            minimum=0, maximum=body_length - 1,
+        )
+        end = require_exact_int(
+            item.get("end"), item_context + ".end",
+            minimum=1, maximum=body_length,
+        )
+        require(start < end and end - start <= 15,
+                f"{item_context} is not one bounded x86 instruction")
+        require(start >= previous_end,
+                f"{context} is unsorted or overlapping")
+        previous_end = end
+        seed_hex = item.get("seed_bytes")
+        donor_hex = item.get("donor_bytes")
+        require(isinstance(seed_hex, str) and isinstance(donor_hex, str)
+                and re.fullmatch(r"[0-9a-f]+", seed_hex) is not None
+                and re.fullmatch(r"[0-9a-f]+", donor_hex) is not None
+                and len(seed_hex) == len(donor_hex) == 2 * (end - start),
+                f"{item_context} literal encodings differ from its range")
+        seed_bytes = bytes.fromhex(seed_hex)
+        donor_bytes = bytes.fromhex(donor_hex)
+        seed_sha = require_sha(
+            item.get("seed_sha256"), item_context + ".seed_sha256")
+        donor_sha = require_sha(
+            item.get("donor_sha256"), item_context + ".donor_sha256")
+        require(sha256_bytes(seed_bytes) == seed_sha
+                and sha256_bytes(donor_bytes) == donor_sha,
+                f"{item_context} literal encoding/hash differs")
+        require(seed_bytes != donor_bytes and seed_sha != donor_sha,
+                f"{item_context} does not move compiler state")
+        normalized.append({
+            "kind": "same_offset_complete_x86_instruction_v1",
+            "start": start, "end": end,
+            "seed_bytes": seed_hex, "seed_sha256": seed_sha,
+            "donor_bytes": donor_hex, "donor_sha256": donor_sha,
+        })
+    return normalized
+
+
 def require_retail_relocation_oracle(
     donor_rows: list[dict], retail_body: bytes, retail_address: int,
     oracle: list[dict], context: str,
@@ -11846,6 +11998,42 @@ def _normalized_relocation_renames(
             f"{context}: renamed local relocation target structure differs",
         )
         renames.append((a["offset"], kind))
+    return renames
+
+
+def require_same_semantic_relocations(
+    seed: CoffObject,
+    seed_section: dict,
+    donor: CoffObject,
+    donor_section: dict,
+    context: str,
+) -> list[tuple[int, str]]:
+    """Require identical resolved relocation semantics at identical offsets.
+
+    Compiler-local ``$L``/``$T`` serials may be renamed, but only when their
+    section seat, value, type, and storage class are unchanged.  Ordinary
+    symbols must retain their literal identity and the same structural target.
+    This is deliberately stricter than the relocation pairing used by resize
+    composers: an instruction mosaic retains the seed table verbatim.
+    """
+    renames = _normalized_relocation_renames(
+        seed, seed_section, donor, donor_section, context)
+    left = detailed_relocations(seed, seed_section)
+    right = detailed_relocations(donor, donor_section)
+    target_fields = (
+        "target_section", "target_value", "target_type", "target_storage",
+    )
+    for index, (seed_row, donor_row) in enumerate(zip(left, right)):
+        require(seed_row["width"] == donor_row["width"],
+                f"{context}: relocation {index} width differs")
+        if seed_row["target"] != donor_row["target"]:
+            seed_kind = local_symbol_kind(seed_row["target"])
+            require(seed_kind is not None
+                    and seed_kind == local_symbol_kind(donor_row["target"]),
+                    f"{context}: relocation {index} changes symbol identity")
+        require(all(seed_row[field] == donor_row[field]
+                    for field in target_fields),
+                f"{context}: relocation {index} target structure differs")
     return renames
 
 
@@ -12877,6 +13065,231 @@ def retail_image_body(
         return data[offset:offset + length]
     raise ByteIdentityError(
         f"retail oracle address 0x{address:08x} is not mapped by {image_name}")
+
+
+def compose_retail_exact_instruction_mosaic(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Import pinned complete instructions into an otherwise canonical COMDAT.
+
+    Both objects are fresh compiler outputs of the same checked-in source;
+    only the manifest-declared compiler-state carrier differs.  The output is
+    the seed object byte-for-byte except for authenticated, same-offset donor
+    instructions.  In particular the seed relocation, line, debug and EH
+    tables remain authoritative.  A pinned retail body plus its complete
+    semantic relocation oracle proves that the resulting instruction mosaic
+    is retail's exact code rather than a free-form binary patch.
+    """
+    require(function.get("splice_class")
+            == "retail_exact_instruction_mosaic",
+            "splice class is not retail_exact_instruction_mosaic")
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+    expected_length = function["expected_body_length"]
+    ranges = validate_instruction_mosaic_ranges(
+        function.get("instruction_ranges"), "instruction mosaic ranges",
+        expected_length,
+    )
+    seed = CoffObject(seed_bytes)
+    donor = CoffObject(donor_bytes)
+    mangled = function["mangled"]
+    sp = seed.function_section(mangled)
+    dp = donor.function_section(mangled)
+    require(
+        sp["number"] == dp["number"]
+        == function["expected_section_number"],
+        "instruction-mosaic target section seat changed",
+    )
+    require(len(seed.sections) == len(donor.sections)
+            == function["expected_section_count"],
+            "instruction-mosaic global section count changed")
+    require(function_multiset(seed) == function_multiset(donor),
+            "instruction-mosaic donor function set differs")
+    header_fields = (
+        "name", "raw_size", "relocation_count", "line_count",
+        "characteristics",
+    )
+    require(all(sp[field] == dp[field] for field in header_fields),
+            "instruction-mosaic target section header changed")
+    require(sp["raw_size"] == expected_length
+            and sp["relocation_count"]
+            == function["expected_relocation_count"]
+            and sp["line_count"] == function["expected_line_count"],
+            "instruction-mosaic target size/table counts changed")
+    seed_defs = section_definitions(seed)
+    donor_defs = section_definitions(donor)
+    require(seed_defs[sp["number"]]["selection"]
+            == donor_defs[dp["number"]]["selection"],
+            "instruction-mosaic COMDAT selection changed")
+    closure = _comdat_child_closure(seed, sp)
+    require(closure == _comdat_child_closure(donor, dp)
+            == (2, (".debug$S", ".xdata$x")),
+            "instruction-mosaic target closure is not the same EH closure")
+    closure_pairs = []
+    closure_relocation_renames = {}
+    for child_name in closure[1]:
+        left = _comdat_child(seed, sp, child_name)
+        right = _comdat_child(donor, dp, child_name)
+        require(left["number"] == right["number"],
+                f"instruction-mosaic {child_name} seat changed")
+        require(all(left[field] == right[field] for field in header_fields),
+                f"instruction-mosaic {child_name} header changed")
+        closure_relocation_renames[child_name] = (
+            require_same_semantic_relocations(
+                seed, left, donor, right,
+                f"instruction-mosaic {child_name}",
+            )
+        )
+        require(_coff_table_bytes(seed, left, "lines")
+                == _coff_table_bytes(donor, right, "lines"),
+                f"instruction-mosaic {child_name} line table changed")
+        left_body = coff_body(seed, left)
+        right_body = coff_body(donor, right)
+        if child_name == ".xdata$x":
+            require(left_body == right_body,
+                    "instruction-mosaic EH xdata raw bytes changed")
+        else:
+            require(len(left_body) >= 28
+                    and left_body[:28] == right_body[:28]
+                    and left_body[2:4] == b"\x05\x02",
+                    "instruction-mosaic debug procedure identity changed")
+        closure_pairs.append((left, right))
+
+    seed_body = coff_body(seed, sp)
+    donor_body = coff_body(donor, dp)
+    require(sha256_bytes(seed_body)
+            == function["expected_seed_body_sha256"],
+            "instruction-mosaic seed body differs from its pin")
+    require(sha256_bytes(donor_body)
+            == function["expected_donor_body_sha256"],
+            "instruction-mosaic donor body differs from its pin")
+    seed_rows = detailed_relocations(seed, sp)
+    donor_rows = detailed_relocations(donor, dp)
+    require(len(seed_rows) == len(donor_rows)
+            == function["expected_relocation_count"],
+            "instruction-mosaic relocation count changed")
+    seed_lines = _coff_table_bytes(seed, sp, "lines")
+    donor_lines = _coff_table_bytes(donor, dp, "lines")
+    require(len(seed_lines) == len(donor_lines) >= 6
+            and seed_lines[4:] == donor_lines[4:],
+            "instruction-mosaic function line table changed")
+    for role, coff, line_bytes in (
+        ("seed", seed, seed_lines), ("donor", donor, donor_lines),
+    ):
+        symbol_index = int.from_bytes(line_bytes[:4], "little")
+        require(line_bytes[4:6] == b"\0\0"
+                and coff.symbols.get(symbol_index, {}).get("name") == mangled,
+                f"instruction-mosaic {role} line marker changed identity")
+
+    mosaic = bytearray(seed_body)
+    range_detail = []
+    for index, item in enumerate(ranges):
+        start, end = item["start"], item["end"]
+        seed_instruction = seed_body[start:end]
+        donor_instruction = donor_body[start:end]
+        require(seed_instruction.hex() == item["seed_bytes"]
+                and sha256_bytes(seed_instruction) == item["seed_sha256"],
+                f"instruction-mosaic seed instruction {index} drifted")
+        require(donor_instruction.hex() == item["donor_bytes"]
+                and sha256_bytes(donor_instruction) == item["donor_sha256"],
+                f"instruction-mosaic donor instruction {index} drifted")
+        for role, rows in (("seed", seed_rows), ("donor", donor_rows)):
+            require(all(end <= row["offset"]
+                        or start >= row["offset"] + row["width"]
+                        for row in rows),
+                    f"instruction-mosaic range {index} overlaps a {role} "
+                    "relocation operand")
+        mosaic[start:end] = donor_instruction
+        range_detail.append({
+            "start": start, "end": end,
+            "seed_sha256": item["seed_sha256"],
+            "donor_sha256": item["donor_sha256"],
+        })
+    code_relocation_renames = require_same_semantic_relocations(
+        seed, sp, donor, dp, "instruction-mosaic code")
+    mosaic = bytes(mosaic)
+    require(sha256_bytes(mosaic) == function["expected_body_sha256"],
+            "instruction-mosaic final body differs from its pin")
+
+    pinned_length = function["retail_oracle"]["length"]
+    require(len(retail_body) == pinned_length == expected_length,
+            "instruction-mosaic retail body length changed")
+    semantic_detail = require_retail_relocation_oracle(
+        seed_rows, bytes(retail_body),
+        int(function["retail_oracle"]["address"], 16),
+        function["retail_relocations"],
+        "instruction-mosaic retail relocation oracle",
+    )
+    masked_mosaic = bytearray(mosaic)
+    masked_retail = bytearray(retail_body)
+    for row in seed_rows:
+        start, width = row["offset"], row["width"]
+        masked_mosaic[start:start + width] = b"\0" * width
+        masked_retail[start:start + width] = b"\0" * width
+    differing = sum(a != b for a, b in zip(masked_mosaic, masked_retail))
+    require(differing == 0,
+            f"instruction mosaic is not retail-exact: {differing} byte(s) "
+            "differ under the relocation mask")
+
+    replacements = [
+        (sp["raw_offset"] + item["start"],
+         sp["raw_offset"] + item["end"],
+         donor_body[item["start"]:item["end"]])
+        for item in ranges
+    ]
+    output = apply_replacements(seed_bytes, replacements)
+    require(len(output) == len(seed_bytes),
+            "instruction-mosaic object size changed")
+    changed_file_offsets = {
+        index for index, (before, after) in enumerate(zip(seed_bytes, output))
+        if before != after
+    }
+    allowed_file_offsets = {
+        sp["raw_offset"] + offset
+        for item in ranges
+        for offset in range(item["start"], item["end"])
+    }
+    require(changed_file_offsets and changed_file_offsets <= allowed_file_offsets,
+            "instruction mosaic changed a non-target byte")
+
+    checked = CoffObject(output)
+    cp = checked.function_section(mangled)
+    require(coff_body(checked, cp) == mosaic,
+            "instruction-mosaic output body differs")
+    require(detailed_relocations(checked, cp) == seed_rows,
+            "instruction-mosaic seed relocations changed")
+    require(_coff_table_bytes(checked, cp, "lines")
+            == _coff_table_bytes(seed, sp, "lines"),
+            "instruction-mosaic seed line table changed")
+    require(function_multiset(checked) == function_multiset(seed),
+            "instruction-mosaic output function set changed")
+    for left, _ in closure_pairs:
+        child = _comdat_child(checked, cp, left["name"])
+        require(coff_body(checked, child) == coff_body(seed, left)
+                and _coff_table_bytes(checked, child, "relocations")
+                == _coff_table_bytes(seed, left, "relocations")
+                and _coff_table_bytes(checked, child, "lines")
+                == _coff_table_bytes(seed, left, "lines"),
+                f"instruction-mosaic seed {left['name']} changed")
+    return output, {
+        "mangled": mangled,
+        "splice_class": "retail_exact_instruction_mosaic",
+        "section_number": cp["number"],
+        "body_length": cp["raw_size"],
+        "instruction_ranges": range_detail,
+        "body_changed_offsets": sorted(
+            offset - sp["raw_offset"] for offset in changed_file_offsets),
+        "relocations": len(seed_rows),
+        "line_count": cp["line_count"],
+        "closure": list(closure[1]),
+        "code_relocation_renames": code_relocation_renames,
+        "closure_relocation_renames": closure_relocation_renames,
+        "retail_exact": True,
+        **semantic_detail,
+    }
 
 
 def compose_retail_exact_reloc_divergent(

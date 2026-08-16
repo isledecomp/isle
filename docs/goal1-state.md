@@ -1,9 +1,10 @@
 # State of goal 1 — every open row, with its disposition
 
 Generated in the main loop by joining the four screens plus the coverage
-matrix against the live reccmp report. **LEGO1 4864/4934 — 70 open rows.**
+matrix against the live reccmp report. **LEGO1 4866/4934 — 68 open rows.**
 ISLE is 172/172 and CONFIG is 111/111. Current terminal measurement keeps
-ISLE and CONFIG byte-identical; LEGO1 is equal-sized with 595,723 differing
+ISLE and CONFIG byte-identical; the last LEGO1 terminal measurement (before
+the two latest exact-function mosaics) was equal-sized with 595,723 differing
 bytes (MD5 `1b828d1b68ed19650728d1d43a1048b2`). Byte distance is a layout-sensitive
 diagnostic, not a monotonic goal-1 metric.
 
@@ -25,10 +26,10 @@ This exists because the evidence is spread across `slot-reachability`,
 
 | rows | disposition | what it means |
 |---:|---|---|
-| 28 | **ALLOCATOR (no idiom)** | Frame already matches retail; registers re-decided in many places. Nine of ten such rows were read by hand and **none had a differing live range** — the apparent spill differences are the same instruction on both sides, moved. Carrier sweep is the only lever that has ever moved this class. |
+| 27 | **ALLOCATOR (no idiom)** | Frame already matches retail; registers re-decided in many places. Nine of ten such rows were read by hand and **none had a differing live range** — the apparent spill differences are the same instruction on both sides, moved. Carrier sweep is the only lever that has ever moved this class. |
 | 12 | **AMBIGUOUS** | A screen refused to answer — bodies too divergent to trust an alignment, or slots contested after majority resolution. **Not a verdict of unreachability.** Cheapest unmined population: re-screen with better alignment. |
 | 11 | **LENGTH-UNREACHABLE** | Never reaches retail's length in any state measured. Structural, not colour. |
-| 9 | **SCHEDULE/ENCODING** | Frame **and** registers already match retail. Scheduling screen says intra-block reordering or a class owned elsewhere; **zero rows in the whole set are cross-block**, and the one that was got tested and refuted. |
+| 8 | **SCHEDULE/ENCODING** | Frame **and** registers already match retail. Scheduling screen says intra-block reordering or a class owned elsewhere; **zero rows in the whole set are cross-block**, and the one that was got tested and refuted. |
 | 5 | **ROUTED** | Named, understood, and assigned — see the notes column. |
 | 4 | **PERMUTATION (measured families exhausted)** | Pure register bijection: the same live ranges received different physical registers. No source correlate was found in the measured families; this is not proof that no authentic compiler-state route exists. |
 | 1 | **OTHER** | Unclassified by the join; inspect individually. |
@@ -49,7 +50,14 @@ This exists because the evidence is spread across `slot-reachability`,
 2. **Carrier sweeps on rows with genuinely untried families** — rank the
    families **from the objects**, never from the matrix's `L` column; a
    missing result file proves nothing about what was compiled.
-3. ~~**The AMBIGUOUS rows** — sharpen the alignment.~~ **RETRACTED, measured in
+3. **Strict exact-function instruction mosaics** — `0x1009a8c0` and
+   `0x100c3750` are landed from independently source-generated carrier states
+   of the exact same mangled function. Only manifest-pinned complete
+   instructions at identical offsets are imported; relocation operands are
+   excluded, seed/donor relocation semantics and debug/EH closure are proved,
+   every seed byte/table outside the ranges is retained, and the final body is
+   retail-exact. Cross-function instruction borrowing remains forbidden.
+4. ~~**The AMBIGUOUS rows** — sharpen the alignment.~~ **RETRACTED, measured in
    the main loop 2026-08-16.** Of the ten still-open rows refused by *both* the slot and
    register screens, **10 of 10 have a different length from retail** and zero
    are same-length:
@@ -86,7 +94,6 @@ eligible when they carry a fail-closed proof and a concrete target.
 
 | disposition | score | address | name | slot | register | schedule | cmpdir | note |
 |---|---:|---|---|---|---|---|---|---|
-| ALLOCATOR (no idiom) | 0.9739 | `0x100c3750` | MxRegion::AddRect | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9636 | `0x1007b770` | LegoVideoManager::Tickle | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9612 | `0x100b24f0` | MxVideoPresenter::AlphaMask::AlphaMask(cla | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9608 | `0x1004bd10` | MxTransitionManager::DissolveTransition | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
@@ -145,7 +152,6 @@ eligible when they carry a fail-closed proof and a concrete target.
 | ROUTED | 0.5411 | `0x10061010` | LegoAnimationManager::FUN_10061010 | AMBIGUOUS | AMBIGUOUS | AMBIGUOUS | LENGTH | retail inlines the MxListEntry ctor; an 8-state C1 planner-cost panel flips that bit but every accepted state is the same wrong 720 B (retail 731), so frame/allocation state remains |
 | SCHEDULE/ENCODING | 0.9953 | `0x1007ca30` | LegoPartPresenter::Read | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
 | SCHEDULE/ENCODING | 0.9953 | `0x100ba7f0` | MxDisplaySurface::Create | SLOT-CLEAN | IDENTITY | INTRA-BLOCK | NONE |  |
-| SCHEDULE/ENCODING | 0.9921 | `0x1009a8c0` | LegoWEGEdge::LinkEdgesAndFaces | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
 | SCHEDULE/ENCODING | 0.9891 | `0x100334b0` | Act1State::Act1State | SLOT-CLEAN | IDENTITY | INTRA-BLOCK | NONE |  |
 | SCHEDULE/ENCODING | 0.9882 | `0x100c6fa0` | MxDSBuffer::FUN_100c6fa0 | SLOT-CLEAN | IDENTITY | INTRA-BLOCK | NONE |  |
 | SCHEDULE/ENCODING | 0.9818 | `0x10055a60` | LegoNavController::Notify | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |

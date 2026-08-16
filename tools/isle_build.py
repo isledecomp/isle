@@ -514,12 +514,12 @@ def terminal_lane(manifest: dict, gates: dict, build_root: Path,
     return results
 
 
-def gains_losses(report: dict, baseline_path: Path | None) -> str:
-    if baseline_path is None or not baseline_path.exists():
+def gains_losses(report: dict, baseline_bytes: bytes | None) -> str:
+    if baseline_bytes is None:
         return ""
     try:
-        baseline = json.loads(baseline_path.read_text())
-    except (OSError, json.JSONDecodeError):
+        baseline = json.loads(baseline_bytes)
+    except (UnicodeDecodeError, json.JSONDecodeError):
         return ""
     accepted_now = {
         row["address"]: row["name"] for row in report["data"]
@@ -690,7 +690,7 @@ def main() -> int:
             )
             delta = gains_losses(
                 json.loads(report_bytes),
-                arguments.baseline_report if identity == "LEGO1" else None,
+                baseline_bytes if identity == "LEGO1" else None,
             )
             print(f"[isle_build] {identity} rows "
                   f"{snapshot['raw_1_0_count']}"
@@ -1174,7 +1174,22 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                 donor_objects[donor["id"]] = (probe / "o.obj").read_bytes()
             composed = seed_bytes
             for function in unit["functions"]:
-                if function["splice_class"] == "retail_exact_target_closure":
+                if (function["splice_class"]
+                        == "retail_exact_instruction_mosaic"):
+                    retail = function["retail_oracle"]
+                    composed, detail = (
+                        byte_identity.compose_retail_exact_instruction_mosaic(
+                            composed, donor_objects[function["donor"]],
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16), retail["length"],
+                            ),
+                        )
+                    )
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [donor_objects[function["donor"]]])
+                elif function["splice_class"] == "retail_exact_target_closure":
                     retail = function["retail_oracle"]
                     donor_source = donor_sources.get(function["donor"])
                     if donor_source is None:

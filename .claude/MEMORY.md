@@ -26,6 +26,15 @@ independently declared entropy states and compose different retail-exact COMDATs
 into the seed: every donor must be freshly generated from source and excluded
 from the link, with the target closure and relocation semantics fully proved.
 
+Partial code composition is permitted only between independently
+source-generated versions of the exact same mangled function/COMDAT. The seed
+and donor must have the same function identity, section seat, body length,
+COMDAT topology, relocation semantics, and compatible debug/EH closure; every
+copied range must be manifest-declared and provenance-pinned, and the output
+must pass full retail-body and object-conservation gates. Never copy code from
+a different or merely similar function, even if its instructions are
+equivalent.
+
 `GetActorROI` is the measured exception: its direct two-temporary refactor moves
 nine COMDATs and loses the already-exact `Exists` row; the isolated manifest
 permutation gives +1/-0. `UpdateEnabledChild` is the normal case: the clean
@@ -45,15 +54,23 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-16)
 
-- Accepted canonical gate: LEGO1 4864/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is the authentic direct-source `0x100d0d80 ReadData`
-  return spelling `MxDSChunk::End(data2) - p_buffer`. It is retail-exact at
-  424 bytes with all 12 relocation semantics preserved and changes no other
-  code COMDAT in its object. The complete zero-loss gate reproduced 4864/4934
-  with LEGO1 report SHA-256
-  `0b0b9f04b5fcbe28c6abeebae69526174221ed398e8d8a03606ccbc9d84dc227`.
-  The preceding source-generated Class-C substitution for `0x1001d890` was
-  proved independently by a frozen 4862/4863/4862 A/B/A2 link sequence.
+- Accepted canonical gate: LEGO1 4866/4934, ISLE 172/172, CONFIG 111/111.
+  The two latest gains are strict same-function instruction mosaics for
+  `0x1009a8c0 LegoWEGEdge::LinkEdgesAndFaces` and
+  `0x100c3750 MxRegion::AddRect`. Both seed and donor objects are freshly
+  generated from the current checked-in source plus declaration-only manifest
+  carriers; only pinned complete instructions at the same offsets are copied,
+  relocation operands are excluded, seed/donor relocation semantics and
+  debug/EH closure are equal, all seed metadata/non-target bytes are retained,
+  and the composed bodies are retail-exact. The zero-loss confirmation gate
+  completed in 13.6 seconds with LEGO1 report SHA-256
+  `1d6385d1b4ce58579a312c4b0915d376089959873840ece9f82615d35d43aea7`.
+  Removing exactly those two rows from the 4866 accepted set reproduces the
+  prior 4864 identity SHA-256 `60f9ebfa9c16b88b53222703597aee7b544c95993ccd5c520a39ea3814841126`.
+  The preceding authentic direct-source `0x100d0d80 ReadData` gain remains
+  retail-exact at 424 bytes, and the source-generated Class-C substitution for
+  `0x1001d890` remains independently proved by a frozen 4862/4863/4862 A/B/A2
+  link sequence.
 - Manifest-declared single-evaluation source permutations are structurally
   limited to evaluated array extents and member-assignment receivers; no
   product-specific source text appears in `tools/byte_identity.py`.
@@ -65,6 +82,17 @@ after every bounded panel or full gate.
   is committed in `093571b2c2eeb5ff5d3477e4834c87b1fee98896`.
 - The `_Mynode()` ManageVisibility comparison panel is negative and retired;
   it preserves the same non-composable three-byte collateral pattern.
+- The historical Act3Ammo `AaTail` exact claim is stale for the current tree.
+  Fresh A/A2 testing, including reversal of the earlier `radius` hoist, kept
+  the target at 2665 bytes with masked distances 934--959 rather than retail's
+  2666-byte body.  Relocation and call semantics stayed stable, but no literal
+  exact donor exists in that lane; do not repeat it without a new mechanism.
+- WriteDefaultTexture's authentic historical `surface`-before-`bits`
+  declaration order is also negative on the current tree (854 bytes, masked
+  distance 42 versus the current 33).  The reproduced `extern_run_pair`
+  h24/p90 state remains a useful same-function lead at distance 12, but the
+  tested palette-alias source forms changed length and relocation/call state
+  and are not admissible.
 - `0x100998e0 LegoTextureContainer::GetCached`: moving `newDesc` to its first
   use and comparing height before width is a direct, logic-neutral source
   refactor. It changes only the target code COMDAT, preserves all 18 relocation
@@ -137,8 +165,10 @@ body SHA-256
 `acd459bf93abf8277d6a95a40a1ec055c80b0f33348027c4eb1e3a64ced7b9e8`,
 and exact six-record relocation/call semantics. Its complete function source
 range is byte-identical to current checked-in source after restoring the
-authentic iterator declaration to the `for` initializer. The current full-TU
-carrier state cannot transplant that result directly, so integrate it as a
-freshly source-generated, manifest-declared target-only COMDAT substitution;
-the historical source/header and every target-source identity pin belong in the
-manifest, never as function-specific Python or as scratch inputs.
+authentic iterator declaration to the `for` initializer. The historical tree,
+generator, and header are oracle evidence only and may not be runtime or build
+dependencies.  Delta-reduce the exact state into explicit declaration/source
+recipes over today's checked-in tree, then use a freshly source-generated,
+manifest-declared target-only COMDAT substitution if direct source still causes
+collateral; never consume the historical source/header or encode this function
+in Python.
