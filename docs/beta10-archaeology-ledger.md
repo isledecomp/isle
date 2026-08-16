@@ -1090,3 +1090,83 @@ verdict on the open set: the residue is allocator and layout decisions with no
 source correlate. Goal 1's remaining headroom is the splice machinery and
 carrier sweeps, and that is now the conclusion of three independent screens
 rather than an inference from failed levers.
+
+## WAVE 12 — a landing, and a retraction of my own wave-10 headline
+
+### RETRACTION: there is no overlay op rewriting `it++` in BuildROIMap
+
+Wave 10 reported that `legoanimpresenter.cpp`'s clean source says `it++` while a
+source-overlay op rewrites it to `++it` before compiling, and concluded that the
+documented idiom was "already landed invisibly". **That is wrong and is
+withdrawn.**
+
+What actually happened: the `++it` I saw in `isle-build-arch/src` was **my own
+edit**, still present because the build that rendered it had failed *after*
+rendering (at donor composition), and I grepped the rendered tree after
+`git checkout` without rebuilding. I read a **stale shadow tree**.
+
+Verified on a freshly rendered tree: line 590 of the rendered
+`legoanimpresenter.cpp` reads `it++`, identical to the repo file, and a plain
+compile of it gives **622 bytes against retail's 617, masked nd 120**. The
+overlay for this TU inserts forward-declaration and class blocks at the top and
+touches nothing else.
+
+Consequences:
+- **`++it` is NOT already landed on this row.** It is an untried source change
+  worth **622 -> 617 bytes and masked nd 120 -> 15**, i.e. it reaches retail's
+  exact length. Wave 10's "baseline 617 / nd 15" was in fact the `++it`
+  variant measured under the stale tree.
+- The standing rule should read: **the rendered tree can differ from the repo
+  file, so read the rendered tree — but only after a successful build, because
+  a failed build leaves a stale shadow.** The general claim (173 TUs carry
+  overlay ops; donor blocks are real) stands; the specific `it++` claim does
+  not.
+
+### The BuildROIMap corpus floor does not re-derive on today's text
+
+The handoff's `shape-9-85` and the results file's `shape-4-22` are the **same
+state** for this row — both produce body sha `231cd52cfbe35cae` at nd 2 — so
+there was nothing to reconcile there. But neither reproduces today:
+
+    it++  (true baseline)          622 B   masked nd 120
+    ++it                           617 B   masked nd  15
+    it++ + declaration_shape(4,22) 622 B   masked nd 113
+    ++it + declaration_shape(4,22) 617 B   masked nd  13
+    it++ + pad_shape(1,57)         617 B   masked nd  10   <- best today
+    ++it + pad_shape(1,57)         617 B   masked nd  21
+
+The corpus verdict was measured against a different tree state. Nothing here
+reaches 0, so BuildROIMap is not landable on either axis today.
+
+### LANDED: `0x1006dec0` closes on an untried family (+1, zero losses)
+
+Sweeping **`pad_shape`** on `legoanimpresenter.cpp` — the corpus for this stem
+had only ever swept `declaration_shape` — while scoring *every* open row in the
+object found `_Tree<char const*, pair<char const* const, LegoHideAnimStruct>>
+::erase` at **masked nd 0, SHAPE = STRUCT = EXACT = 100.00, 1104 bytes = retail's
+1104**, under `pad_shape(92,22)`.
+
+Landable cleanly because the COMDAT is defined in **exactly one object** (no
+link-winner ambiguity), and seed/donor have **equal relocation counts** (16)
+with different lengths (1113 vs 1104) — the `same_slot_resize` case.
+`expected_linked_span` is the **donor section's raw size rounded up to 16**
+(1104), not the gap to the next function in our image (1120); getting that
+wrong is what the validator's "donor 16-byte linked contribution span changed"
+message means.
+
+**Gate: 4853 -> 4854, zero losses.**
+
+### Method note: the build's GAIN/LOST list does not price today's change
+
+`isle_build.py` computes GAIN/LOST against `--baseline-report`, which is the old
+**4831** snapshot. On this landing it printed 1 GAIN and 2 LOST while the row
+count went *up* by one — the two "losses" were rows already lost long before.
+**Price a change with an explicit before/after diff of the 1.0 row sets**
+(`<scratchpad>/arch/pricecmp.py`), never with that list.
+
+### A positive control worth keeping
+
+`<scratchpad>/arch/oraclecheck2.py` compares every `retail_hex` in the sweep
+corpus against the retail image: **120 of 120 identical**. The corpus's retail
+side is sound, so a corpus verdict that fails to re-derive is a *tree-state*
+difference, not a corrupt oracle.
