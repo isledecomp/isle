@@ -689,3 +689,148 @@ numbers against `oracles-v2.json`, exact-length rule):
    coordinator's correction) with the exact-length rule *and* with best-nd
    logging. Four of my eight "text-channel" rows turned out to be 1-4 bytes
    away on the carrier axis once the oracle was right.
+
+---
+
+# Wave 4b — after the merge (stacked carriers, `pad_shape`/`after_includes`)
+
+Worktree rebased onto `entropy-stabilization` **16620ba9**; baseline
+re-measured from a full gated run: **LEGO1 4838/4933**, ISLE 172/172,
+CONFIG 111/111. All five of my TU shadow sources are byte-identical to their
+pre-merge state, and every row in my queue kept its exact `matching` value, so
+the wave-4a distances above transferred — but they were all re-measured anyway
+(`vec.h` was restored to pristine in this window and `legocharactermanager.cpp`
+and `legopathactor.cpp` both include it).
+
+## 16. LANDED: `0x10045c20 LegoPathController::PlaceActor(LegoPathActor*, const char*, int, float, int, float)`
+
+`.9442 -> 1.0`, commit `56c4e430`, gate **LEGO1 4838 -> 4839/4933**,
+ISLE 172/172, CONFIG 111/111, **zero LOST rows**.
+
+This is the row that had no oracle anywhere in the prior corpus and had never
+been swept by anybody; wave-4a's first measurement put it at nd=2 @[195,232]
+and no single-axis state closed it. **The stacked carrier closes it.** Crossing
+the `fwdE` axis with the declaration-shape lattice produced **35
+retail-masked-exact states at 338 bytes**; the landed one is
+
+```
+stkE-6-1-3  =  forward_declaration_run(MxUnkRecVC, count 6, width 3) @ suffix
+             + declaration_shape(classes 1, functions 3) force-included
+```
+
+as a `forward_run_with_shape` donor, splice class `same_slot_resize`
+(seed 331 -> donor 338 = retail span).
+
+Semantic-relocation guard before landing: **9/9 relocation targets agree** with
+retail's callee identities (`RemoveActor`, `GetPathBoundary`, `Timer`,
+`g_lastTimeTimerStarted`, `g_lastTimeCalculated`, `_Nil` x2, `iterator::_Dec`,
+`_Insert`), and the donor's relocation sequence is identical to the seed's — no
+`$L`/`$T` renumbering even.
+
+Note for the bench: `land_into.py` now understands `stkE-K-C-F` / `stkL-K-C-F`
+labels and emits the `forward_run_with_shape` recipe (my copy in
+`nm/bench/land_into.py`).
+
+## 17. The stacked axis on the other three priority rows — measured, negative
+
+| row | best single-axis | best stacked | states | verdict |
+|---|---|---|---|---|
+| 0x1002bff0 `_Tree<LegoPathActor*>::erase` | **1** @434 (`extern-0-9`, `fwdE-9`) | **20** (`stkE-41-2-4`) | 120 | the shape half destroys the extern/fwd state; stacking is strictly worse here |
+| 0x10082ca0 charmgr `erase` | **1** @145 (`fwdL-69`) | **2** @[145,434] (`stkL-68-2-6`) | 180 | worse |
+| 0x100574a0 `RemoveActor` | **1** @240 | **1** @129 / @137 | 625 | *different byte*, see below |
+
+**The `RemoveActor` finding is the interesting one.** Pooling all 1,278 states
+measured for that row (653 flat + 120 stacked-lattice + 505 stacked-full-grid),
+the residue distribution is:
+
+| nd | offsets | states |
+|---|---|---|
+| 1 | [240] | 21 |
+| 1 | [129] | 6 |
+| 1 | [137] | 2 |
+| 2 | [104,137] / [129,137] / [129,240] / [137,240] | 13 |
+| 3 | [45,129,203] / [51,62,240] | 6 |
+
+There are **three independent single-byte defects** (129, 137, 240). Every one
+of them is individually fixable, and states exist with any *two* of the three
+fixed — but **no state in 1,278 fixes all three**. The declaration-record state
+space simply does not have a third dimension for this row.
+
+That retro-explains §8: the one-line dtor-loop spelling change is exactly that
+missing dimension — on the `d32` text `pad-10-12` gives nd=0, i.e. all three at
+once. So `0x100574a0` is a genuine **text-channel** row after all, and the
+"STATE-CLASS" verdict in `docs/beta10-foundry-ledger.md` should be revised.
+
+Also re-derived on today's shadow, per the coordinator's request: **`pad-10-12`
+does NOT give `RemoveActor` nd=0 on the current text** (it never did — the
+retained corpus object that scored 0 was compiled from the pre-`!=` text). The
+newly-landable `pad_shape` kind therefore does not hand this row over; it makes
+the §8 recipe *landable* if the text trade is ever taken.
+
+## 18. What the newly-landable kinds actually unlock in this lane (audit)
+
+I re-mined every measurement I have taken (11 rescore files, ~4,900 scored
+bodies) for hits that were unlandable before `pad_shape` / `after_includes`
+existed. **There is exactly one, and it is not a landing:**
+
+* `0x100586e0 RemovePresenter` — best nd goes from 4 (`fwdL-52`, landable) to
+  **3** (`fwdP-15`, `fwdP-51`, `pad-7-9`, now landable).
+
+No previously-discarded nd=0 exists at a `pad-*` or `fwdP-*` state anywhere in
+my lane. The grammar gap was real and worth closing, but in this lane it buys
+one byte on one row rather than a row.
+
+## 19. `0x10083500 GetActorROI` — re-measured; the trade is confirmed, not taken
+
+Re-verified on today's shadow, and the picture is now fully resolved:
+
+* On the **h12** text alone: `GetActorROI` nd=0, and **every** other mover has
+  an nd=0 donor state — `~_Tree`, `SwitchSound`, `ReleaseAutoROI`,
+  `~list<ROI*>`, **and `GetRefCount` (nd=0, it is not a victim here)**. The one
+  and only uncovered victim is `Exists` (nd=6 @118-123).
+* On the **h12 + interior-record op** text (`h12j`): `Exists` is exact in the
+  seed, and `GetRefCount` becomes the one uncovered victim (nd=1 @84).
+
+So the interior op does not *solve* the problem, it *moves* it. Both halves are
+now searched to exhaustion:
+
+| blocker | text | axes searched | states | best |
+|---|---|---|---|---|
+| `Exists` | h12 | flat carriers, full 505-shape grid, interior records (`insf` all anchors, `insc`+`insf` around `Exists`), 5 comparison/declaration text cells, **stacked `stkE`/`stkL` x lattice** | **2,271** | 6 @[118..123] |
+| `GetRefCount` | h12j | flat carriers x2 anchor variants, full 505-shape grid, second interior op, new prefixes/placements, 5 text cells inside `GetRefCount`, **stacked `stkE` x lattice** | **2,437** | 1 @84 |
+
+`GetRefCount 0x10083bc0` is **1.0 today**, so per the coordinator's rule the
+h12j landing is +1/−1 and is **not taken**. Recorded, with both donor sets
+measured, for whoever closes either blocker.
+
+## 20. `0x10084030 CreateActorROI` — the header lane, opened and closed by measurement
+
+I built a header-variant axis for this (`probe.py --include-root <mirror>`,
+null-probe verified: compiling through an unmodified mirror of the shadow tree
+reproduces the base object's distances exactly).
+
+The decisive measurement is not a sweep, it is three rows:
+
+| rung of the inline ladder | row | status today |
+|---|---|---|
+| `Mx3DPointFloat::Mx3DPointFloat()` | 0x1001d170 | **1.0** |
+| `Vector3::Vector3(float*)` | 0x1001d150 | **1.0** |
+| `Vector2::Vector2(float*)` | 0x1000c0f0 | **1.0** |
+
+**All three rungs are already byte-exact against retail.** Their cost inputs to
+C2's inline pool are therefore identical to 1997's, and our `CreateActorROI`
+body is byte-identical to retail's apart from which of the three symbols the
+third construction calls. There is consequently **no header edit that changes
+the ladder without breaking a row that is already exact** — confirmed by the
+one cell I ran: rewriting `Vector2(float* p_data) { SetData(p_data); }` as
+`{ m_data = p_data; }` (semantically identical, period-plausible) removes the
+relocations at 101 *and* 1220 entirely — both constructions become fully inline,
+which is the wrong direction — and it necessarily rewrites `Vector2::Vector2`'s
+own 1.0 body.
+
+**Verdict: `0x10084030` is not a source-channel row in any file.** It is a pure
+C2 budget-accounting difference on the caller side. It belongs to the C4
+pool-dump instrument and nothing else; I recommend removing it from every text
+and carrier queue. (Blast-radius note for the record: `realtime/vector.h` is
+included by essentially every geometry-touching TU, so even a working cell
+would have had to be measured tree-wide.)
