@@ -311,3 +311,70 @@ decision. Candidate legitimate levers, none tried: moving the `inline`
 definition of `Interpolate`/`GetKey` within legoanim.cpp (definition position
 is period-authentic entropy, like include order) so the pool's
 cost-ascending/encounter order changes.
+
+### `Act3Brickster::Animate` 0x10041050 — a TEXT lever that reaches retail's length
+
+Base 1628 vs retail 1632 (+4), nd=1149. Seed-lane probes on act3actors.cpp
+(179 bodies, victims measured against a fresh seed replica; in every case the
+ONLY body that changed was the target itself):
+
+| variant | len/nd |
+|---|---|
+| base | 1628 / 1149 (+4 short) |
+| b1 `MxS32 i;` hoisted above both `root`/`time` blocks | 1628 / 1149 (body changed, distance identical) |
+| b2 `time` before `root` at BOTH sites | 1636 / 736 (4 too long) |
+| b3 loop bound mirrored `root->GetNumChildren() > i` | bit-inert |
+| b4 `i` hoisted at the case-4 site only | 1628 / 1149 |
+| b5 **`time` before `root` at the case-3 site only** | **1632 / 395 — retail's exact length from text alone** |
+| b6 `time` before `root` at the case-4 site only | 1632 / 836 |
+
+So the declaration order of the two `case`-local variables
+
+```
+LegoTreeNode* root = m_shootAnim->GetAnimTreePtr()->GetRoot();
+float time = p_time - (m_unk0x50 - m_shootAnim->GetDuration());
+```
+
+is a live, size-changing lever, and swapping it at exactly one of the two
+identical sites lands the retail length. **But the carrier channel is better
+here:** on the BASE text, `fwdE-59` already gives 1632/1632 with **nd=7**, and
+the residue is a single `ebx`↔`ebp` role swap in the `ApplyAnimationTransformation`
+loop (`xor ebx,ebx` / `inc ebx` / `push ebx` / `[eax+ebx*4-4]` vs retail's
+`ebp`). Ranked next step for this row: carrier search around fwdE-59 on the
+base text (not the b5 text) — it is 7 tie bytes from landing.
+
+### `TowTrack::HandlePathStruct` 0x1004d330 — text axis closed
+
+856/856 nd=11 is a **three-register rotation**: retail holds `m_state` in EAX,
+`m_state->m_state` in EBX and the `GetData()` word in DX; ours holds them in
+EDX, EAX and BX respectively (map retail→ours: eax→edx, ebx→eax, edx→ebx).
+Everything before body+116 is byte-identical, so nothing upstream differs.
+
+BETA10 0x100f74c0 is a much earlier function (no `GetData()==0x168` fuel block,
+no `UserActor() != this` guard, no `c_missionFinalWaypoint`/0x169 alternative)
+so it cannot arbitrate; it does confirm the retained statement order
+(`m_state->m_state = e_none; time = Timer()->GetTime() - m_startTime; Leave();`
+then the three time thresholds).
+
+Seed-lane probes (69 bodies): t1 (state test moved to the tail of the
+condition) 860/646 — worse and 4 long; t2 (`GetData()==8 || ==9` order
+swapped) 856/13 — worse; t3 (`e_hookedUp == m_state->m_state` mirror) —
+BIT-INERT, 0 victims. Base is a sharp local optimum.
+Carrier grid (653 states + fwdE/fwdL 97..400): best nd=11, unmoved.
+
+### `LegoWEGEdge::LinkEdgesAndFaces` — text axis closed too
+
+Seed-lane probes (70 bodies): `float length;` hoisted above the loop,
+`length > m_boundingRadius` mirror at both sites, and splitting the
+`float length` declaration from its assignment are **all BIT-INERT**
+(0 victims, nd stays 4). Hoisting `Mx3DPointFloat local44` above the loop
+gives 1509/1119 — much worse. Carrier grid incl. fwdE/fwdL 1..400:
+best nd=2 (`shape-5-40`, `fwdL-2`, `fwdL-156`).
+
+### `LegoOmni::Destroy` 0x10058c30 — +3 located exactly
+
+The whole +3 is at body+244: retail emits `add edi, 8` once and then uses
+`[edi+4]`-style addressing through the inlined container walk; ours re-derives
+`[edi+0xc]` each time. This is the addressing-mode hoist the wave-1 ledger
+recorded as "callee-side, KILLED for legomain source" — confirmed at byte
+level here. Best carrier so far: nd=251 at `fwdE-12` (len 573, 2 too long).
