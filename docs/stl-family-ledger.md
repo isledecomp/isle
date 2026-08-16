@@ -1,5 +1,15 @@
 # The `_Tree` / container-instantiation family — ledger
 
+> ⚠ **READ §10.5 AND §10.5a BEFORE ACTING ON §10.2.** The wave-2 conclusion
+> "the carrier axis does not move register colour" — which reached the merge
+> commit title `c52a89d8` — is **wrong as stated**. It was drawn from a
+> partial sample of a sweep that later completed and contradicted it. Two
+> independent refutations are now measured: a `_Tree` regrole tie moves on
+> the stacked axis (`erase<MxAtom*>` +434), and an *authored* function's
+> colouring takes nine values under pure carrier states, retail's among them
+> (`LegoPathBoundary::RemoveActor`, nd=0 at `pad-10-12`). The correct
+> statement is "the **flat** axis is near-inert on colouring".
+
 Lane STL, 2026-08-15 night wave. Worktree `agent-a30c03b93e670e7be`
 (branch reset to `entropy-stabilization` 53a19e9c), build dir
 `/Users/foxtacles/Projects/isle-build-tr03`.
@@ -699,6 +709,14 @@ possible difference is which register holds what (`colourlaw.py`).
 | 0x10082ca0 `erase` LegoCharacter | 1 | 1 | 0 |
 | 0x10045c20 PlaceActor | 17 | 1 | 0 |
 
+> **SCOPE CORRECTION (see §10.5, §10.5a).** Every corpus in the table below
+> is a *flat* axis or an older product. It does **not** cover the stacked
+> `--pre X × shapefull` space, and on that space a `_Tree` regrole tie does
+> move (`erase<MxAtom*>` +434 at `fwdE:88 × shape-8-45`). Read the table as
+> **"the flat axis is near-inert on colouring"**, not as "colouring is
+> unreachable"; a `distinct colourings = 1` entry means the flat axis is
+> inert on that row, nothing more.
+
 **The strong law is false and I am recording the counterexample:**
 `LegoPathController::RemoveActor` reaches retail's colouring in 1 of 171
 shape-equal states, so the carrier axis *can* move colouring. But the rate is
@@ -746,40 +764,143 @@ that byte for `erase<LegoAnimSubst>` (`fwdE:19 × shape-6-39` → residue at
 of this row as carrier-inert (15 shape-equal states, **1** distinct
 colouring). A `cmpdir` is reachable; a `regrole` on this row is not.
 
-### 10.5 Result of the prediction — half confirmed, half wrong
+### 10.5 Result of the prediction — the operative half was WRONG, and that is the finding
 
-`sw.py all2-mxmain --pre fwdE:88 --axes shapefull`, **276 of 550 cells**
-before I cut it for load (the machine was shared with two other lanes and
-throughput had fallen to ~1 cell/min).
+> **This section replaces an earlier version of itself that reported the
+> opposite result. The earlier version was wrong because I sampled a running
+> sweep and reported the sample as the outcome; the sweep then completed and
+> contradicted it. Both the error and the correction are kept here.**
+
+`sw.py all2-mxmain --pre fwdE:88 --axes shapefull`, **505 cells, 0 failed**
+(the run completed; my kill landed after it had already exited).
 
 | claim | outcome |
 |---|---|
-| will **not** reach nd=0 | **held** — 276 cells, no nd=0 |
-| will reach nd=1 (residue at +434 only) | **wrong** — the product never even
-matched the flat floor; its best is **nd=13** at `[20, 30, 89, 102, 112, 213, 271, 476]` |
+| will reach nd=1 | **held**, at `fwdE:88 × shape-8-45` |
+| residue will be at **+434** (regrole), +145 fixed | **exactly backwards** |
+| will **not** reach nd=0 | held |
 
-What I got wrong, and why it matters: I assumed a stacked carrier would
-*refine* around the flat nd=2 state, because that is what happened for
-`~ViewLODListManager` (nd=1 → nd=0) and for `erase<LegoAnimSubst>`
-(the `fwdE:19 × shape-6-39` cell). It does not. Adding a shape on top of
-`fwdE:88` moved the row into a **different region entirely** — the residue
-offsets are not a subset of `[145, 434]`, they are the `_Nil`-compare group
-that the flat axis had already got right. So the pre-carrier is not a
-"base point" that shapes perturb locally; the product is its own state
-space with its own geometry.
+The nd=1 cell has residue **`[145]` only** — the **`regrole` tie at +434 is
+CORRECT** and the `cmpdir` at +145 is what remains.
 
-Corrected operational rule: **a stacked product must be re-floored, not
-assumed to inherit its pre-carrier's floor.** Score the product's own best
-before deciding it is an improvement — otherwise a 550-cell sweep can look
-like progress while sitting 11 bytes worse than the state it started from.
+```
+# 0x100af7e0 retail=1107   21 length-correct states in the product
+  nd=  0 x   0
+  nd=  1 x   1   []=[145]     sw-all2-mxmain_pE88sf/shape-8-45
+  nd= 13 x   9   [20, 30, 89, 102, 112, 213, 271, 476, ...]
+```
 
-The same run on `legoanimpresenter` with `--pre fwdE:51` (54 cells) shows the
-identical effect: `erase<LegoAnimSubst>` sits at nd=14, not near its flat
-nd=1, and BuildROIMap at nd=5 rather than its `fwdE:19` nd=2.
+**This refutes §10.2's conclusion, and the merge commit's title.** I claimed
+the carrier axis does not move `regrole` ties on `_Tree` bodies. The stacked
+product moves one. `colourlaw.py` had measured 15 shape-equal states and 1
+colouring for this row, but it scanned the corpora that existed *at the
+time* — flat axes and older products; `sw-all2-mxmain_pE88sf` did not exist
+yet. **The stacked axis reaches colourings the flat axis does not.**
 
-Still standing from the prediction: no `_Tree` regrole tie has been moved by
-any carrier state, now over **276 + 54 additional** cells on top of the 1,891
-shape-equal states of §10.2.
+Two process errors of mine, recorded because they nearly cost the row and
+did propagate into a merge:
+
+1. **I sampled a running sweep and treated the sample as the result.** At 276
+   of 505 cells the best was nd=13 and I wrote that down as the outcome.
+   `shapefull` enumerates `(c, f)` with `c` ascending, so the high-`c` cells
+   — including the winner `shape-8-45` — are all at the end. **A partial
+   `shapefull` sweep is not a uniform sample of it.**
+2. **I reported a floor that was never the floor**, and the coordinator
+   merged it as a lane conclusion.
+
+Corrected model: `regrole` is not immovable, it is *much harder to move than
+`cmpdir`* — 0 hits in 1,891 flat shape-equal states versus 1 hit in 21
+length-correct stacked cells — and the stacked axis is where it moves. Triage
+rule in weakened form: score `cmpdir`-floored rows first, but do **not**
+write off a `regrole`-floored row until it has seen a stacked pass.
+
+**Consequence: 0x100af7e0 is at nd=1, one `cmpdir` byte from landing.**
+
+### 10.5a A second refutation: colour moves in an AUTHORED function too
+
+`LegoPathBoundary::RemoveActor` (0x100574a0) is authored source, not a
+template instantiation. Over 1,350 retained legopathboundary states
+(`colourreach.py`), 171 have retail's exact instruction shape, and across
+them the function takes **9 distinct register colourings** — one of which is
+**exactly retail's**, at `pad-10-12`. The function's text is identical in
+every one of those cells; only the surrounding declarations differ.
+
+So a `regrole` residue in an authored function is **not** evidence that our
+text is wrong. Same text, nine colourings, retail's among them.
+
+And that cell is not merely a colour match — it is a **complete donor**:
+
+```
+# 0x100574a0 retail=258   219 length-correct states
+  nd=  0 x   1   []        sweep2-all2-legopathboundary/pad-10-12   <-- masked-EXACT
+  nd=  1 x  13   [104]     fwdE-15
+  nd=  1 x  11   [129]     pad-10-10
+  nd=  1 x  10   [240]     fwdE-16
+```
+
+`pad_shape` became a renderable recipe kind only at `16620ba9`, which is why
+this sat unclaimed in a corpus from an earlier wave. **legopathboundary.cpp
+is not my TU — handed to its owner, not landed here.**
+
+**Re-derivation on today's shadow: the donor is STALE.** I swept the full
+144-cell `padgrid` on the current shadow (`sw-all2-legopathboundary_v3`):
+`pad-10-12` no longer produces the retail body, and the floor is now
+**nd=2 at `pad-12-11`, residue `[129, 240]`**. legopathboundary.cpp has had
+landings since that corpus was built, and "landings re-dial their TU" applies.
+So the handoff is *not* a ready donor — it is: the row is one carrier axis
+away, the axis is now renderable, and the padgrid floor on today's shadow is
+nd=2 with two named bytes. (The `HIT nd=0 0x10057260` in that same log is
+`~LegoPathBoundary`, which is **already at matching 1.0** — the sweep oracle
+includes closed rows, and I checked before reporting it as a find.)
+
+### 10.5b The template/authored split — TESTED AND FALSIFIED
+
+The proposed split: for a *template instantiation* colour is TU state (proved
+in §10.1), but for an *authored function* the IL is not shared, so if our text
+were retail's, C2 would rank the same candidates the same way — therefore a
+`regrole` residue in an authored function is evidence that **our text is
+wrong**.
+
+**The split does not hold.** A carrier adds declarations around a function; it
+does not change that function's source. So if an authored function's colour
+moves under carrier states, its text is being held fixed while the colour
+changes, and colour cannot be evidence about the text.
+
+`colourlaw.py` over every oracled row, restricted to states whose instruction
+shape equals retail's (so only the colouring can differ):
+
+| row | kind | shape-equal states | distinct colourings | retail's reached |
+|---|---|---|---|---|
+| `LegoPathBoundary::RemoveActor` 0x100574a0 | **authored** | 209 | **14** | **1** |
+| `MxControlPresenter::CheckButtonDown` 0x10044270 | **authored** | 3 | 3 | **1** |
+| `Act3List::RemoveByObjectIdOrFirst` 0x100720d0 | **authored** | 568 | 10 | 0 |
+| `LegoPathController::PlaceActor` 0x10045c20 | authored | 17 | 1 | 0 |
+| every open `_Tree` row (12 of them) | template | 1–783 | 1–8 | **0** |
+
+Two open authored functions reach **retail's exact colouring** under a pure
+compile-state change, with their text untouched. `RemoveActor` takes
+**fourteen** distinct colourings across 209 states. That is a direct
+counterexample to "authored + regrole ⇒ text is wrong".
+
+**What the data does show**, which is a weaker and more useful statement:
+authored functions are *more* carrier-mobile in colour than template bodies
+(14, 10, 3 distinct colourings versus 1–8, and 2 of 4 open authored rows
+reach retail versus 0 of 12 template rows). That is the opposite of the
+proposed split's direction, and it has a plausible mechanism: an authored
+function has more live values and therefore more ties for the surrounding
+declaration state to break, whereas a small template body like the 23-
+instruction `_Erase` has almost no slack.
+
+**So the reclassification the split was meant to produce cannot be made on
+colour evidence.** `docs/open-set-triage.md` classifies the open set by
+*residue class* instead, which is measurable and does not require knowing
+whether the text is right.
+
+Caveat recorded: `RemoveActor`'s retail-colour cell is in a pre-`3526a9ab`
+corpus, and on today's shadow my 144-cell padgrid re-run does not reach it
+(38 shape-equal cells — a much smaller sample, not a contradiction). The
+mechanism claim does not depend on which shadow: the text was identical
+across all 209 cells either way.
 
 ### 10.6 Two structural facts about the carrier axis itself
 
