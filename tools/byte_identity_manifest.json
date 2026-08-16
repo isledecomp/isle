@@ -4179,6 +4179,114 @@
     "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/paths/legoextraactor.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/entity/legoentity.cpp",
+   "source_sha256": "02ae488fe12f3a08a8cac1ea66f3ae53fb8c7c32a026422dfda9fd0996cefdaa",
+   "mode": "swap_comdat_group_order",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "group_order": {
+    "first": "??4Vector3@@QAEAAV0@ABV0@@Z",
+    "second": "??4Mx3DPointFloat@@QAEAAV0@ABV0@@Z"
+   },
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Retail links Vector3::operator= before Mx3DPointFloat::operator= inside legoentity.cpp.obj; the compiler-emitted group order is swapped without touching any payload byte (collapses the +48/-32 displacement pair at 0x10010be0).",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/action/mxdsstreamingaction.cpp",
+   "source_sha256": "98e3356e748d8c9ab2cf6a3a4d1e294a035b0dddff5202a965f57dcfcd367102",
+   "mode": "swap_comdat_group_order",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "group_order": {
+    "first": "?HasId@MxDSStreamingAction@@UAEEI@Z",
+    "second": "??_GMxDSStreamingAction@@UAEPAXI@Z"
+   },
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Retail links MxDSStreamingAction::HasId ahead of the scalar deleting destructor group in mxdsstreamingaction.cpp.obj; order-only group restore.",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/video/mxsmkpresenter.cpp",
+   "source_sha256": "e245b7d6b960c3aacc68f16955501b312b546f1f04a4009edc6056d182556a16",
+   "mode": "swap_comdat_group_order",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "group_order": {
+    "first": "?Compare@?$MxCollection@PAVMxRect32@@@@UAECPAVMxRect32@@0@Z",
+    "second": "??0?$MxCollection@PAVMxRect32@@@@QAE@XZ"
+   },
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Retail links MxCollection<MxRect32*>::Compare ahead of the collection constructor wave in mxsmkpresenter.cpp.obj; order-only group restore.",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/video/mxvideomanager.cpp",
+   "source_sha256": "57a2633f9144196dcc4df572c6ab5cc1a880cfa7dfa8740808284107189d5db6",
+   "mode": "swap_comdat_group_order",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "group_order": {
+    "first": "?UpdateView@MxVideoManager@@UAEXIIII@Z",
+    "second": "??_GMxVideoManager@@UAEPAXI@Z"
+   },
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Retail links MxVideoManager::UpdateView ahead of the scalar deleting destructor group in mxvideomanager.cpp.obj; order-only group restore.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
