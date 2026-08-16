@@ -239,3 +239,172 @@ it needs no `find` re-cover and no `HitActor`/`StepState` story.
 6. **`0x10048310` `FindPath`** — corpus min-nd 1741; today's oracle says ours
    2337 vs retail 2338. Text channel, permanently out of carrier queues
    (confirms the prior seal).
+
+---
+
+## 6. NEW AXIS: interior declaration records (the manifest already supports it)
+
+The carrier grammar used by every sweep to date places records in three seats:
+file start (`fwdL`), after the include block (`fwdP` / `extern` header) and EOF
+(`fwdE` / `extern` seat). But `tools/byte_identity_manifest.json`'s
+`source_overlay` already carries `insert` ops anchored **anywhere inside a TU**
+(`{"anchor": {"ctx": …, "line_before": …, "line_after": …}}` with `empty_class`
+/ `fwd` / `fwd_run` / `class` items) — legopathboundary.cpp has four such ops,
+legocharactermanager.cpp has six. **Interior record position is therefore a
+landable, typed channel that no sweep had ever explored.**
+
+`probe.py` now implements it as two carrier kinds:
+
+* `insf:<anchor>:<count>` — `entropy.generate_forward_run("RkNm", count, 3)`
+  inserted immediately before anchor;
+* `insc:<anchor>:<count>` — a run of `class RkNm%03d {};` empty classes;
+
+where anchors are the `// FUNCTION:` / `// SYNTHETIC:` / `// GLOBAL:`
+annotation-block starts (9 in legopathboundary.cpp, 46 in
+legocharactermanager.cpp).
+
+It is a real axis — e.g. on legopathboundary it moves `??1LegoPathBoundary`
+between nd=0, 1 and 2 across anchors and counts — but see the negatives below:
+it did not reach any of the three surviving one-byte ties.
+
+---
+
+## 7. `0x10083500 GetActorROI` — COMPLETE RECIPE, blocked on one victim
+
+**The row is landable.** On the `h12` text (the bisect ledger's two named
+temporaries, re-verified here on today's shadow) `GetActorROI` is
+**retail-masked-exact at 822 bytes, body sha
+`a574d9690310e6f37896d160f1e68625f56e297ffbb21012f033ef2d8339e5d5`**, in ~30
+donor-lane states: `fwdE-{4,5,6,21,39,56,57,60,74,95}`,
+`extern-{0-4,0-5,0-6,1-3,1-4,1-5,1-6,2-3,2-4,2-5}` and more. This is the exact
+body the donor-debt bisect ledger recorded, reproduced independently.
+
+Text (both hunks required; each alone gives 825 bytes = wrong length):
+
+```diff
+--- a/LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
++++ b/LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
+@@ LegoROI* LegoCharacterManager::GetActorROI(const char* p_name, MxBool p_createEntity)
+-			char* name = new char[strlen(p_name) + 1];
++			MxU32 length = strlen(p_name) + 1;
++			char* name = new char[length];
+@@
+-			GetActorInfo(p_name)->m_actor = actor;
++			LegoActorInfo* info = GetActorInfo(p_name);
++			info->m_actor = actor;
+```
+
+**Seed-lane victim accounting** (exact-replica compile at a length-matched
+mirror root, `nm/seedlane/chm-h12/`): 123 of 132 .text COMDATs bit-identical.
+The nine that move are
+
+| body | seed len -> h12 len | status | cover on h12 |
+|---|---|---|---|
+| `GetActorROI` | 822 -> 822 | target | **nd=0** (30 states) |
+| `~_Tree<char*,LegoCharacter*>` 0x10082b90 | 196 -> 196 | **1.0 victim** | **nd=0** (`extern-0-10`, `fwdE-2`, …) |
+| `~list<ROI*>` 0x10084930 | 100 -> 100 | composed pin | **nd=0** (`extern-8-17`) |
+| `ReleaseAutoROI` 0x10083f10 | 248 -> 248 | composed pin | **nd=0** (`extern-0-1`, `none`) |
+| `SwitchSound` 0x10085090 | 47 -> 47 | composed pin | **nd=0** (`fwdL-10`) |
+| `Exists` 0x10083b20 | 148 -> 148 | **1.0 victim** | **NO COVER — nd=6, see below** |
+| `erase` 0x10082ca0 | 1104 -> 1101 | open (.68) | regresses 1 -> 19 |
+| `_Insert` 0x10083890 | 652 -> 655 | open (.71) | 4 |
+| `insert` 0x10085500 | 653 -> 653 | open (.92) | 12 |
+| `CreateActorROI` 0x10084030 | 2294 -> 2294 | open (.94) | nd=0 but §3 trap |
+
+So the landing is **one victim away**: everything else, target and pins
+included, has a retail-exact donor state on h12 text.
+
+### The `Exists` blocker, characterised precisely
+
+`Exists`'s h12 residue is a fixed **two-instruction scheduling swap** at body
+offsets 118–123 (6 bytes):
+
+```
+ours  : … 8b 00  [8b 0e]  [89 44 24 10]  8b 41 04 …   ; mov ecx,[esi] ; mov [esp+0x10],eax
+retail: … 8b 00  [89 44 24 10]  [8b 0e]  8b 41 04 …   ; mov [esp+0x10],eax ; mov ecx,[esi]
+```
+
+Swept on h12 text, all at length 148, **nd=6 with those identical offsets in
+every single state**:
+
+* 653 carrier states (fwdL/fwdP/fwdE 1..96, shape lattice, padgrid 12x12,
+  extern 9x18) — `nm/probes/chm-h12`;
+* 368 interior-record states (`insf`, anchors 0..45, counts 1..8) —
+  `nm/probes/chm-h12-ins`;
+* a focused interior run around `Exists`' own anchor (`insc`+`insf`,
+  anchors 17..21, counts 1..24) — `nm/probes/chm-h12-ins2`;
+* 5 `Exists` text cells x 5 carriers: `!(it == end())`, `end() != it`,
+  hoisted `end` local, split declaration, single-expression `return` — all
+  nd=6 (and the single-expression form additionally costs GetActorROI its
+  nd=0). Comparison-spelling mirrors are canonicalized here, confirming the
+  wave-2 finding.
+
+**Recipe for the coordinator (do not land until `Exists` is covered):**
+* text: the two hunks above, then `python3 tools/repin_overlay.py LEGO1/lego/legoomni/src/common/legocharactermanager.cpp`
+* donor for `GetActorROI`: `forward_declaration_run` placement `suffix`,
+  prefix `MxUnkRecVC`, count 4, width 3 (state `fwdE-4`) — expected body length
+  822, sha `a574d969…8339e5d5`
+* donors to re-cover: `~_Tree` (`extern-0-10`), `~list<ROI*>` (`extern-8-17`),
+  `ReleaseAutoROI` (`extern-0-1`), `SwitchSound` (`fwdL-10`)
+* still missing: any state that makes `Exists` retail-exact on h12 text.
+
+---
+
+## 8. `0x100574a0 LegoPathBoundary::RemoveActor` — nd=0 exists, on ONE line of text
+
+`RemoveActor`'s body is a single statement (`m_actors.erase(p_actor);`), so it
+has no text of its own; the beta10 foundry ledger classed it STATE-CLASS. On
+today's text the carrier axis gets it to **258 bytes / nd=1 at offset 240**
+(`3b 5c 24 10` = `cmp ebx,[esp+0x10]` vs retail `39 5c 24 10`) in 21 states,
+and that byte survives:
+
+* 653 carrier states (`nm/probes/lpb-full`),
+* 600 include-permutation product states (all 120 permutations of the five
+  quoted includes x `extern-0-11`, `extern-0-14`, `fwdE-11`, `pad-10-3`,
+  `shape-10-30`) — `nm/probes/lpb-prod`,
+* 216 interior-record states (`insf`+`insc`, anchors 0..8, counts 1..12) —
+  `nm/probes/lpb-ins`.
+
+**1469 states, offset 240 never flips.**
+
+It flips on **one line of source**. Diffing the retained corpus state that the
+coordinator's rescore flagged (`sweep2-all2-legopathboundary/pad-10-12`, nd=0)
+against today's rendered text gives exactly one differing line — the
+`~LegoPathBoundary` loop condition:
+
+```diff
+-	for (LegoPathActorSet::iterator it = m_actors.begin(); it != m_actors.end(); it++) {
++	for (LegoPathActorSet::iterator it = m_actors.begin(); !(it == m_actors.end()); it++) {
+```
+
+Re-derived on today's shadow (`nm/probes/cell-lpb-d32`): with that single line
+reverted, **`RemoveActor` is retail-masked-exact at 258/258 in state
+`pad-10-12`**, and `??1LegoPathBoundary` lands at 380 bytes / nd=1 (offset 195)
+rather than being lost outright.
+
+**Why this is not landed here.** Two reasons, both recorded rather than
+guessed:
+
+1. **It contradicts BETA10.** `docs/beta10-foundry-ledger.md` reads BETA10
+   `0x100b140d` as calling the 2-arg cdecl free `operator!=`, i.e. June spelled
+   this loop `it != m_actors.end()`; that spelling is what makes
+   `~LegoPathBoundary` (0x10057260) exact today.
+2. **Five currently-1.0 rows become victims.** Seed-lane accounting
+   (`nm/seedlane/lpb-d32/`): 63 of 74 COMDATs identical; the movers are
+   `??1LegoPathBoundary` 380->385, `erase<LegoAnimPresenter*>` 1102->1112,
+   `insert<LegoAnimPresenter*>` 613, `_Insert<LegoAnimPresenter*>` 634->637,
+   `equal_range<LegoAnimPresenter*>` 110, plus `RemoveActor` 253->258 (the
+   target), `AddPresenterIfInRange` 214 and `RemovePresenter` 314 (both open),
+   and the two `_Tree<LegoPathActor*>` bodies this TU loses at link anyway.
+
+So the landing is: revert that line + a `pad_shape(10,12)` donor for
+`RemoveActor` + re-cover donors for those five rows, each of which needs its
+own nd=0 state on the reverted text (**not measured — one 653-state sweep
+away**). Net +1 if all five cover, net negative otherwise. Flagged for the
+coordinator as a decision, not taken unilaterally, because of the BETA10
+tension.
+
+**The generalisable finding**: a vendor-template one-byte tie in function *A*
+can be flipped by a comparison spelling in an unrelated function *B* of the
+same TU. Text cells for a state-class row should therefore be searched over the
+**whole TU**, not just the row's own statements.
