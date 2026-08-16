@@ -663,3 +663,74 @@ scheduling instrument behind. Stop funding it.
   the scratch-copy method used in waves 2-4 is sound. (Worth recording because
   the standing rule warns the compiler arena is path-length sensitive; it is
   not sensitive for this TU.)
+
+## WAVE 4 CLOSE — the two new working rules, applied to this lane's own sweeps
+
+### Rule 1: harvest `results.json`, do not trust a ledger
+
+248 retained result files in the scratchpad. Scanned for every row this lane
+owns: **zero records carry an nd-like score <= 2.** No unharvested near-miss
+exists for `0x1009f490`, `0x100a4420`, `0x100a46b0`, `0x10061010`,
+`0x10062e20`, `0x100a84a0`, `0x100aa510`, `0x1006fda0`, `0x100bd020`,
+`0x100a12a0`.
+
+The files did contain something a ledger would never have told me: **94 verdict
+records from earlier lanes probing my own `FUN_10061010` inline bit.** Four of
+them flip it to INLINED, at caller lengths **668, 662, 556, 552** against
+retail's 731. My wave-2 `InsertEntry`-by-assignment form (722) is the closest of
+the five, and still nine bytes out with STRUCT 67.46. So the bit on that row has
+now been flipped by **five independent source variants across three lanes**, and
+not one brings the body near retail — independent corroboration of the wave-3
+verdict that `0x10061010`'s problem is not the inline bit.
+
+### Rule 2: score every open-row symbol in the object
+
+My wave-2 sweeps scored only the stem's target and discarded the objects. Two of
+the three TUs I swept carry a **second** open row I never looked at:
+
+| TU | swept for | never scored |
+|---|---|---|
+| `legoanim.cpp` | `0x1009f490` | — (only open row in the object) |
+| `orientableroi.cpp` | `0x100a4420` | **`0x100a46b0` UpdateTransformationRelativeToParent** |
+| `legoanimationmanager.cpp` | `0x10061010` | **`0x10062e20` FUN_10062e20** |
+
+Re-swept both TUs over the same carrier families, scoring every open row
+(`<scratchpad>/arch/sweepall.py`, results written to
+`<scratchpad>/arch/sweep-{oroi,anmgr,anmgrdense}/results.json` for future
+harvest):
+
+    0x100a4420  seed nd=222  best nd=222  (730 cells, flat)
+    0x100a46b0  seed nd= 99  best nd= 99 @ decl(5,27)  (730 cells)
+    0x10061010  seed nd=435  best nd=435  (1,918 cells, flat)
+    0x10062e20  seed nd= 72  best nd= 30 @ pad(1,4)    (1,918 cells)
+
+Two results worth keeping:
+
+- **`0x100a46b0` is already at its optimum on this axis.** The best cell in 730
+  states *is* `declaration_shape(5,27)` — the donor the tree already carries. The
+  standing MUST-RESOLVE entry's "best nd=99" is now independently reproduced
+  rather than inherited.
+- **`0x10062e20` moves, and the way it moves reclassifies the row.** At
+  `pad(1,4)` (and `pad(1,15)`) the body is retail's exact length 1098 with
+  masked nd 72 -> 30, and the metrics say what happened:
+
+        seed       len 1098  nd 72   SHAPE 94.13  STRUCT 94.13  EXACT 88.56
+        pad(1,4)   len 1098  nd 30   SHAPE 94.13  STRUCT 94.13  EXACT 94.13
+
+  **The carrier removes the entire register-colour gap** — EXACT rises to meet
+  SHAPE — and leaves a pure operation-sequence difference. A dense 1,188-cell
+  pad sweep confirms 30 is the floor. So `0x10062e20` is **not** an allocator
+  row: its remaining defect is a real SHAPE gap of ~6%, which belongs to the
+  text channel, not the colour pile.
+
+**Nothing landed.** No cell reaches nd 0, the gate is row-based, and byte
+distance is not progress. The states are recorded so the next wave can start
+from them instead of re-deriving them.
+
+### One confirmation for the false-positive class
+
+`0x10084030 CreateActorROI` reads nd=0 in a scan that masks call-target fields
+on both sides (the S72 relocation-target class). The masked nd used here blanks
+only **our** relocation byte ranges and compares everything else, which is why it
+returns **80** and agrees with the coordinator's independent measurement — and
+why my wave-2 nomination of that row was wrong.
