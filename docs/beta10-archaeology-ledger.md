@@ -370,6 +370,47 @@ have no source statement at all, being implicit member-ctor chains) nor the
 carrier axis (8,963 cells). The remaining lever would have to change what C2
 counts *at one site*, which is what the sandboxed-C2 instrument was for.
 
+## The source axis, closed on two anchors (compile-only, nothing landed)
+
+`<scratchpad>/arch/srcprobe.py` / `srcprobe2.py` copy the rendered `src` tree,
+apply a text substitution anywhere in it, rewrite the TU's real compile command
+onto the copy and read the target COMDAT back. No repo file is touched, so a
+form can be judged before it is worth a gated build.
+
+**`0x1009f490` — five further source forms, all bit-identical** (1074 bytes,
+`Interpolate` relocation count 0, i.e. still expanded):
+- `Interpolate` **defined in the class body** instead of out-of-line in the .cpp
+- `case 2` **discarding the result** (`Interpolate(...);`, no `z`)
+- `case 2` **wrapped in its own block**
+- (wave 1) the beta-shaped evaluation order, and two extra named `GetTime()`
+  temporaries — those two also cost 3 and 5 rows in a real build.
+Six source forms, one bit, no movement.
+
+**`0x10061010` — the source construct that governs the bit is identified, and
+retail's own rows prove retail did not use it.** `FUN_10061010` reaches the
+`MxListEntry` ctor through `Append -> InsertEntry -> new MxListEntry<T>(a,b,c)`,
+three inline levels deep. Probing `mxlist.h`:
+
+    baseline                                     len=717  ctor call = 1   (retail: 731, 0)
+    ctor written with a member-initializer list  len=717  ctor call = 1
+    ctor written with SetValue/SetPrev/SetNext   len=717  ctor call = 1
+    InsertEntry: declaration split from the new  len=717  ctor call = 1
+    Append: m_last read into a local first       len=717  ctor call = 1
+    InsertEntry: default-construct then assign   len=722  ctor call = 0  <-- flips it
+
+The last form **does** remove the call — the only source change found in this
+whole campaign that moves an inline accept/decline bit. It is still not
+retail's, and the proof is collateral rather than argument: the same header
+change was compiled against `LegoPhonemePresenter::StartingTickle`, an
+**exact** row, and takes it from retail's 688 bytes to 611 (its ctor call
+survives; the surrounding body collapses). `LegoAnimPresenter::AppendROIToScene`
+is exact on the same construct and `MxRegion::AddRect` carries three more sites.
+> **So retail's `InsertEntry` constructs through `new MxListEntry<T>(a,b,c)` —
+> the form the tree already has — and the `FUN_10061010` disagreement is a
+> compiler decision, not a source form.** One header text cannot both keep the
+> ctor call at five sites and drop it at the sixth; retail does exactly that,
+> so the split is C2's, not the source's.
+
 ## Operational note: overlay anchors reach into function bodies
 
 `repin_overlay.py` refuses ("operation #N is missing from its clean input")
