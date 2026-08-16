@@ -1279,3 +1279,60 @@ one of these resumes by re-running the identical command:
 nine TUs in this lane have only ever seen the extern family, and the one time
 the plain declaration-shape grid was tried on such a TU it produced a landing
 in its first 36 compiles.
+
+---
+
+## 25. Closing summary (supersedes §19)
+
+Gate at hand-off, verified by a full `isle_build.py` run from this worktree
+after deleting the composed objects so nothing came from cache:
+
+```
+ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE:
+  LEGO1 4852/4934, ISLE 172/172, CONFIG 111/111
+```
+
+**Rows gained: 2**, both with zero LOST rows.
+
+| row | before | after | how | commit |
+|---|---|---|---|---|
+| `0x100796b0 LegoCarBuildAnimPresenter::FindNodeDataByName` | .8125 | **1.0** | `extern_run_pair(g_h=2, g_p=0)` — found by re-scoring another lane's retained corpus | `2b1ccba7` |
+| `0x10038b10 Pizza::HandleEndAction` | .9538 | **1.0** | `declaration_shape(1, 3)` — found by acting on a correction to this ledger | `d4e1c5c3` |
+
+**Row moved without landing: 1.** `0x10031820 Isle::Enable`, **nd 214 → 11**,
+from a rectangle nobody had ever run on `isle.cpp`.
+
+### Both landings came from questioning a written claim, not from more compiles
+
+* The first was sitting at nd=0 in the coordinator's
+  `sw-all-legocarbuildpresenterrect` while `docs/open-set-triage.md` listed the
+  row as `0 flat cells — UNSWEPT`. The sweep belonged to a lane that did not
+  own the TU. Cost to convert: **162 compiles**.
+* The second came from disbelieving my own §4. I had written that `pizza.cpp`
+  was carrier-inert on the strength of 1,681 extern states producing one and
+  three bodies. Stacking a shape on those seats moved `StopActions`, which
+  falsified the claim; running the plain shape grid on the same TU found
+  `HandleEndAction` **masked-exact in its first 36 compiles**.
+
+Against those two, **~11,000 donor-lane compiles** of systematic grid search in
+this lane produced no third landing.
+
+### The three findings most worth carrying forward
+
+1. **"Carrier-inert" is a property of a (row, generator) pair.** A row with one
+   body across 1,681 extern states was one compile away from retail on the
+   shape grid. Every such verdict in every ledger names a generator and nothing
+   more, and the follow-up costs 505 cells.
+2. **Cross-lane corpus re-scoring is a standing step, not an idea.** 218 sweep
+   records, three globs, one second of CPU (§9), one row.
+3. **A length delta is a text defect only if the extra instructions do work the
+   other side does not do.** Reloads, spills, operand-size prefixes and
+   alignment fill are colour (§6). Four of my five length-defect rows moved
+   bucket on that test.
+
+### Retracted in this ledger, by measurement
+
+* the handed-over `Isle::Enable` +2211 "missing construct" lead (§2);
+* my own body-size sweep-ordering heuristic (§12);
+* my own `pizza.cpp` carrier-inertness verdict (§20) — which is what produced
+  the second landing.
