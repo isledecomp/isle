@@ -1102,3 +1102,67 @@ the argmin seats, 72 include-order permutations — **floor 11, offset list
 byte-identical in every one.** The `extern_pair_with_pad` grid and the
 three-seat `declaration_run_triple` are the last two carrier channels the row
 has never seen and are in flight.
+
+---
+
+## 19. Session summary
+
+**Rows gained: 1**, proved end to end by a gated `isle_build.py` run from this
+worktree with zero LOST rows.
+
+| row | before | after | proof |
+|---|---|---|---|
+| `0x100796b0 LegoCarBuildAnimPresenter::FindNodeDataByName` | .8125 | **1.0** | `ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE: LEGO1 4851/4934, ISLE 172/172, CONFIG 111/111` |
+
+**Rows moved without landing: 1**, and it is the biggest movement in the lane.
+
+| row | before | after | how |
+|---|---|---|---|
+| `0x10031820 Isle::Enable` | nd 214 | **nd 11** | `extern-1-8`, from a rectangle nobody had run on `isle.cpp` |
+
+### What this lane actually produced
+
+The landing came from **reading other lanes' retained sweep records**, not from
+compiling anything new: `0x100796b0` had been at nd=0 in the coordinator's
+`sw-all-legocarbuildpresenterrect` for a whole wave while
+`docs/open-set-triage.md` listed it as `0 flat cells — UNSWEPT`, because the
+lane that swept it did not own the TU. Cost to convert: 162 compiles and a
+two-relocation guard check.
+
+Everything else in this lane is a register-role or scheduling tie, and the
+useful output is the *shape* of the negative space:
+
+* **8,767 + 2,418 donor-lane compiles**, seven rectangles, three shape grids,
+  two long strips, one include-permutation set.
+* Four rows proved carrier-inert or carrier-negative with their full extent
+  (`StopActions`, `Act1State`, `PizzeriaState`, `HandleControl`, `ReadData`).
+* Four rows moved from the TEXT bucket to COLOUR by reading their bytes
+  (`HandleKeyPress`, `Create`, `UpdateEnabledChild`, and confirming
+  `MxStillPresenter::Clone`), with the sharper rule that produced them.
+* One handed-over structural lead **retracted with the disassembly**, and the
+  wave-5 `LenSquared` seal **independently re-confirmed** by a control nobody
+  had noticed: `Isle::Enable` inlines `LenSquared` twice from symmetric source,
+  retail uses opposite register assignments at the two sites, and we already
+  match one of them exactly.
+* One new harness trap: the sweeper's per-run `width` versus
+  `extern_run_pair`'s single `width` field.
+* One of my own heuristics measured and retracted in the same session.
+
+### What I would do next, in order
+
+1. **`0x10031820 Isle::Enable`.** Finish the `extern_pair_with_pad` grid and the
+   three-seat generator over the argmin seats. If both are negative, this row is
+   the project's best-founded customer for a C2 allocator-rank instrument,
+   because it ships its own control: a second copy of the same inline, in the
+   same body, from symmetric source, that is *already byte-exact*. Any model of
+   C2's tie-break can be validated against "why does site 1 differ from site 2".
+2. **The `queue4` rectangles** (`infocenter.cpp`, `legocontrolmanager.cpp`,
+   `mxstillpresenter.cpp`, and the resumed `legoact2.cpp`). All four target rows
+   this lane re-classified from TEXT to COLOUR, and the k-strip proved the `m`
+   coordinate is the whole question for them.
+3. **Re-score every lane's retained corpus against every lane's row list.** This
+   lane's only landing was sitting unclaimed in another lane's scratchpad. The
+   scan is three globs and a second of CPU (§9), and it should be a standing
+   step at the start of every wave, not an idea somebody has once.
+4. **Fix the `width` mismatch** (§10) before anybody sweeps the mixed
+   high/low corner of the extern plane.
