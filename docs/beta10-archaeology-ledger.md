@@ -179,6 +179,43 @@ CopyTransform.)
 **Six of the seven are allocator/scheduler colour with zero text content.** The
 one that is not is an inline decision, not a text form.
 
+## THE CALL CENSUS: only THREE of the 81 open rows have a wrong call graph
+
+Zero-build screen, run over **all 81** open LEGO1 rows (the oracle corpus in
+`<scratchpad>/bench/oracles-v2.json` covers every one of them): disassemble
+ours and retail, count direct and indirect calls. A row whose call counts match
+cannot have a function-set or inline defect — its residue is register/stack
+colour, scheduling, or code *inside* an inlined body. A row whose counts differ
+has a real structural defect and, per
+[[feedback-function-set-defects-always-land]], is worth funding.
+
+**78 of 81 rows carry retail's exact call graph.** The three that do not:
+
+| row | dcall ours/retail | len ours/retail | what differs |
+|---|---|---|---|
+| `0x1009f490` LegoAnimScene::CalculateCameraTransform | 3/4 | 1074/1121 | retail **calls** `LegoAnimNodeData::Interpolate` (`0x100a0b00`) at `legoanim.cpp:277`; we expand it and DCE the result |
+| `0x100a4420` OrientableROI::OrientableROI | 4/5 | 520/514 | retail **calls** `Vector3::Vector3` (`0x1001d150`) for the sub-object at `this+0xa8`; we expand it to `mov [ebx],vtbl` / `mov [esi+0xac],eax`. Retail calls `Vector2::Vector2` (`0x1000c0f0`) 4× in both. |
+| `0x10061010` LegoAnimationManager::FUN_10061010 | 16/15 | 717/731 | **opposite direction** — retail *inlines* the `MxListEntry` constructor (`mov [edi],eax` / `mov [edi+4],esi` / `mov [edi+8],0`, retail offset 511) where we emit `push 0; push esi; push eax; mov ecx,edi; call` (ours offset 500) |
+
+All three are **one C2 inline accept/decline bit**, and they do not agree on a
+direction: two say our budget is *larger* than 1997's, one says *smaller*.
+Together with the `act3actors` anchor this gives
+[[project-inline-budget-model]] **four** named, byte-exact anchors — and the
+`0x10061010` one lands directly on the five-site `MxListEntry` validation set
+that model already names.
+
+**Corollary for the endgame**: the function-set channel over the open set is
+exactly these three rows. Every other open row's defect lives below the call
+graph. Do not go looking for missing or extra calls anywhere else — this screen
+is exhaustive and cheap enough to re-run after any change.
+
+*Method warning*: classify a call as indirect by looking for `[` in the operand,
+not by "does the target print as `0x…`". Capstone prints an unrelocated
+`call rel32` whose target lands at offset 0 as `call 0`, and a naive
+`startswith("0x")` test miscounts those as indirect — that bug manufactured six
+phantom deltas (ViewManager::ManageVisibilityAndDetailRecursively,
+Act3::TriggerHitSound, LegoROI::Read, two `_Tree::_Erase`s) before it was found.
+
 ## Operational note: overlay anchors reach into function bodies
 
 `repin_overlay.py` refuses ("operation #N is missing from its clean input")
