@@ -596,3 +596,82 @@ rather than guessed.
 `fwdP-15`, `fwdP-51` and `pad-7-9` — all three are **non-landable donor kinds**
 (§9). The best state in a landable kind is nd=4 (`fwdL-52`). Anyone quoting
 "RemovePresenter is 3 bytes away" should quote 4.
+
+---
+
+## 14. Full `shape` grid results (505 cells, c=1..10 x f=c..10c)
+
+Run on two texts; both confirm the bisect ledger's "off-lattice f values
+matter" rule and both are negative for the target byte.
+
+* `legocharactermanager.cpp`, h12 text (`nm/probes/chm-h12-sf`):
+  `GetActorROI` **nd=0 at `shape-7-52`** — the exact off-lattice cell the
+  donor-debt ledger named, independently reproduced. `Exists` nd=6 in all 505.
+* `legocharactermanager.cpp`, h12j text (`nm/probes/chm-h12j-sf`):
+  `GetActorROI` nd=0 at `shape-4-31`, `Exists` nd=0 at `shape-1-3`,
+  `GetRefCount` nd=1 @84 in all 505.
+* `legoextraactor.cpp`, current text (`nm/probes/lea-sf`):
+  `_Tree<LegoPathActor*>::erase` best **42** — far worse than the extern
+  diagonal's nd=1. `StepState` 19, `HitActor` 29,
+  `LegoExtraActor::CheckPresenterAndActorIntersections` nd=0 at
+  `shape-{6-57,10-37,10-48}` (the landed row, reproducing).
+  **The shape family is simply not this row's axis**; `extern`/`fwdE` at
+  M+K=9 is, and the nd=1 states there (`extern-{0-9..8-1}`, `fwdE-9`) are all
+  landable donor kinds.
+
+---
+
+## 15. Session summary
+
+**Rows gained: 1** (proved end to end by a gated `isle_build.py` run from this
+worktree).
+
+| row | before | after | proof |
+|---|---|---|---|
+| 0x1002e8d0 `LegoPathActor::CheckPresenterAndActorIntersections` | .9892 | **1.0** | `ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE: LEGO1 4832/4933, ISLE 172/172, CONFIG 111/111`, zero LOST |
+
+**Rows attempted, with their best measured distance on today's shadow** (all
+numbers against `oracles-v2.json`, exact-length rule):
+
+| addr | row | best nd | landable-kind? | channel verdict |
+|---|---|---|---|---|
+| 0x10083500 `GetActorROI` | **0** on h12+op text | yes (`fwdE-20`, `shape-7-52`) | **landing blocked by one victim** (`GetRefCount`), everything else covered, §12 |
+| 0x1002bff0 `_Tree<LegoPathActor*>::erase` | **1** @434 | yes (`extern-0-9`, `fwdE-9`) | reg-role tie; carrier + include-perm + shape grid exhausted |
+| 0x10082ca0 charmgr `erase` | **1** @145 | yes (`fwdL-69`) | CMPDIR; carrier + 120 include-perms exhausted |
+| 0x100574a0 `RemoveActor` | **1** @240 (0 on the d32 text) | `pad-10-12` is **not** landable | text lever found (§8), costs 5 victims |
+| 0x10045c20 `PlaceActor(const char*)` | **2** @[195,232] | yes (`extern-1-16`) | first measurement ever; strongest untouched row |
+| 0x100586e0 `RemovePresenter` | 3 (`fwdP`/`pad`), **4** in a landable kind | — | CMPDIR family |
+| 0x10083890 charmgr `_Insert` | 4 @[457,459,462,463] | yes | invariant over 653 carriers -> text |
+| 0x1002a720 `StepState` | 6 | yes (`extern-1-12`) | — |
+| 0x1002aba0 `HitActor` | 7 | yes (`extern-5-11`) | — |
+| 0x10057180 `_Erase` | 7 | yes (`fwdL-46`) | whole-body esi/ebx role swap (§13) |
+| 0x1002f770 `UpdatePlane` | 5 | yes (`extern-0-1`) | not attacked |
+| 0x10085500 charmgr `insert` | 12 | yes (`fwdL-66`) | — |
+| 0x10057fe0 `AddPresenterIfInRange` | 44 | yes | — |
+| 0x10084030 `CreateActorROI` | 0 masked, **FALSE POSITIVE** | — | inline-budget ladder, lever is outside this lane's TUs (§3) |
+| 0x10048310 `FindPath` | 491 | — | text channel |
+| 0x10046050 `PlaceActor(LegoAnimPresenter*)` | no length match | — | text channel |
+| 0x1002de10 `SetTransformAndDestinationFromPoints` | no length match | — | text channel |
+
+**What I would do next, in order:**
+
+1. **Close `GetRefCount` 0x10083bc0** and the `GetActorROI` landing follows
+   immediately — the op and all nine other donors are measured and the op's
+   render is dry-run-proven byte-exact (§12). Search the two unswept donor
+   dimensions first: the free `prefix`/`width` parameters of
+   `forward_declaration_run`, and `force_include` placement.
+2. **Run the same treatment on `0x10045c20 PlaceActor`** (nd=2, never swept
+   before tonight): include-perm product and the interior-record axis on
+   legopathcontroller.cpp.
+3. **Decide the `0x100574a0` trade** (§8): one line of text buys the row but
+   contradicts BETA10 and needs five re-covers; it needs a coordinator-level
+   call plus one 653-state sweep on the reverted text.
+4. **Take the three surviving one-byte ties to the C2 pool instrument**
+   (fresh-eyes C4). They are all vendor-template register/CMPDIR ties, all
+   invariant across every declaration-record axis we have; that is exactly the
+   signature of a decision made inside C2's allocator, not in the record
+   stream.
+5. **Re-run every "closed" sweep whose oracle was length-wrong** (the
+   coordinator's correction) with the exact-length rule *and* with best-nd
+   logging. Four of my eight "text-channel" rows turned out to be 1-4 bytes
+   away on the carrier axis once the oracle was right.
