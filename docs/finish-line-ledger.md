@@ -638,3 +638,56 @@ Recommendation for the bench: either give `extern_run_pair` a per-seat width,
 or make `sw2.py` render both runs at a single width derived from
 `max(m, k)`. Until then, treat any `extern-m-k` hit with
 `max(2,len(str(m-1))) != max(2,len(str(k-1)))` as unlandable.
+
+---
+
+## 11. `0x100a3840 MeshBuilderImpl::CreateMesh` — the one genuine text row, located
+
+This is the only row in my lane where retail's length is **never reached** by
+any carrier state (667 in all 2,439 states of the coordinator's `tglrl40`
+sweeps; retail is 664), so `docs/row-size-ledger.md`'s rule applies honestly
+here. The `−3` is now located to one instruction pair.
+
+The tails align exactly (a constant `−3` offset from +590 to the `ret` at
++663), so the divergence is a single event. Aligning the instruction streams
+on `(mnemonic, length)`:
+
+```
+   retail +406  8b5d0c   mov ebx,[ebp+0xc]      <-- hoisted here, 3 bytes
+   retail +409  8d45dc   lea eax,[ebp-0x24]
+   retail +412  8b5508   mov edx,[ebp+8]
+   retail +415  8b31     mov esi,[ecx]
+   retail +417  50       push eax
+   …
+   retail +425  6a03     push 3
+   retail +427  52       push edx
+   retail +428  bf01…    mov edi,1
+   retail +433  53       push ebx               <-- the hoisted parameter
+   retail +434  50       push eax
+   retail +435  ff5638   call [esi+0x38]
+
+   ours   +406  8d45dc   lea eax,[ebp-0x24]
+   ours   +409  50       push eax
+   ours   +410  8b5508   mov edx,[ebp+8]
+   ours   +413  8b31     mov esi,[ecx]
+   ours   +415  8b450c   mov eax,[ebp+0xc]      <-- materialised late, into eax
+   …
+   ours   +425  8b4de0   mov ecx,[ebp-0x20]
+   ours   +428  50       push eax
+   ours   +434  51       push ecx
+   ours   +435  ff5638   call [esi+0x38]
+```
+
+Both push the same five arguments to the same virtual call. Retail enregisters
+`[ebp+0xc]` in **`ebx`** once, early, and keeps it live across the `lea`/`push`
+block; we materialise it late into `eax` and then need `ecx` for `[ebp-0x20]`
+as well. Ours ends up with **one extra instruction** (228 vs 227) and three
+extra bytes.
+
+So even the "genuine text row" is an allocation difference — retail spends a
+callee-saved register on a parameter and we do not. It is filed
+`length: never reached → TEXT/INLINE` and `Δinsn +1`, which is literally true,
+but no statement is missing: the extra instruction exists *because* of the
+register choice. Whether that is reachable from a carrier is untested — the
+`tglrl40` sweeps to date are `m,k ≤ 40` plus a 759-state long axis, and the
+long strips are queued.
