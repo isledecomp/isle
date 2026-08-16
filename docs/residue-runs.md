@@ -100,3 +100,41 @@ The two clean `PERMUTED` rows are both main-loop rows that had resisted the
 carrier axis completely — `MxDSBuffer::FUN_100c6fa0` at nd=4 across 827 states
 and `MxDisplaySurface::Create` at nd=9. Both were being swept when they should
 have been read.
+
+## Following the classifier on the two PERMUTED rows — both negative so far
+
+Recorded with extent, because "read it, don't sweep it" is a claim about the
+*channel*, not a promise that the statement is easy to find.
+
+**`MxDSBuffer::FUN_100c6fa0`** (nd=4, one permuted region). Retail reads
+`current` into `eax` *before* the comparison reads it again; we compare first.
+Both reads are real ordered accesses — `current` is `volatile` — so the source
+order should decide it. Measured, all in the seed lane:
+
+| variant | body | nd |
+|---|---|---|
+| base | 234 | 4 |
+| remove `volatile` | 162 | 225 — `volatile` is load-bearing and correct |
+| `p_data == current` | 234 | 4 — inert |
+| invert the `if` | 234 | 4 — inert |
+| fold `+= (size & 1) + size + 8` | 232 | 59 — the two separate `+=` are correct |
+| `MxU8* chunk` at function scope, assigned in the case | 238 | 13 |
+| `MxU32 size` at function scope, assigned before the `if` | 238 | 18 |
+
+A declaration at case scope needs a block (`C2361`), and hoisting either name to
+function scope costs 4 bytes — so the extra ordered read cannot be bought with a
+named local. Consistent with the standing law that naming a value does not
+create a lifetime; here it does not create a *read* either, it creates a slot.
+
+**`MxDisplaySurface::Create`** (nd=9, one permuted region among three colour
+regions). Retail emits `inc eax` before the `ddsd.ddsCaps.dwCaps = 0x6040`
+store; we emit it after. The store carries no line annotation on either side —
+the scheduler has hoisted it out of its own statement into the width
+computation, and retail hoisted it one instruction less far. All four
+statement orderings of the `dwFlags` / `dwWidth` / `dwHeight` / `dwCaps` block
+are **worse** (nd 15, 18, 22, 23 against the baseline 9), so the current source
+order is already the closest one. The position *within* a hoist is not
+source-addressable at this granularity.
+
+So for both rows the channel verdict stands and the lever is still missing.
+What this rules out is spending more carrier cells on them.
