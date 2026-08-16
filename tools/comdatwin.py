@@ -258,6 +258,38 @@ def main() -> int:
     return 0
 
 
+def by_winner(out) -> list[str]:
+    """Open rows grouped by the object a sweep would actually have to move.
+
+    This is the row->TU map, derived from the link winner rather than from
+    which TU looks like it owns the symbol.  For a template body those two
+    answers differ, and only the first one can change the image.
+    """
+    groups: dict[str, list] = {}
+    for e in out:
+        if e["matching"] < 1.0 and e.get("winner"):
+            groups.setdefault(e["winner"], []).append(e)
+    if not groups:
+        return []
+    total = sum(len(v) for v in groups.values())
+    lines = [
+        "",
+        "## Open rows by the object that must move",
+        "",
+        f"{total} open rows across {len(groups)} objects. To move a row you "
+        "must change the codegen of the object named here -- for a template "
+        "body that is often not the TU that looks like it owns the symbol.",
+        "",
+        "| object | open rows | rows |",
+        "| --- | ---: | --- |",
+    ]
+    for obj in sorted(groups, key=lambda o: (-len(groups[o]), o)):
+        rows = sorted(groups[obj], key=lambda r: r["matching"])
+        listing = " ".join(f"`{r['address']}`" for r in rows)
+        lines.append(f"| {obj} | {len(rows)} | {listing} |")
+    return lines
+
+
 def is_exact(definer) -> bool:
     return (definer["length_delta_vs_retail"] == 0
             and definer["masked_distance_to_retail"] == 0)
@@ -318,6 +350,7 @@ def render(out, tally) -> str:
     ]
     for verdict, count in sorted(tally.items()):
         lines.append(f"| {verdict} | {count} |")
+    lines += by_winner(out)
     lines += fragility(out)
 
     contested = [e for e in out if e.get("verdict") == "CONTESTED"

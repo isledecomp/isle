@@ -1299,3 +1299,34 @@ Both were read instruction-by-instruction from the **linked** images:
 Note when reading such a pair: a differing branch *target* is not a divergence.
 The two functions sit at different virtual addresses, so every relative jump
 prints a different absolute operand. Trust masked nd, not the eyeball count.
+
+### The row -> TU map is now mechanical, and it is a map of *winners*
+
+`docs/comdat-winners.md` carries "open rows by the object that must move":
+**all 80 open rows, across 47 objects, every one with an identified winner**
+(no row is left unattributed). This replaces guessing which TU owns a symbol —
+for a template body the owner and the winner are routinely different objects,
+and only the winner can change the image.
+
+It immediately shows how much never-swept space is left. Objects winning two or
+more open rows that have never had a carrier sweep: `legocharactermanager` (4),
+`mxvideopresenter` (4), `act3` (3), `mxtransitionmanager` (2), `viewlodlist`
+(2), `legopathboundary` (2), `legomain` (2), `legorace` (2), `legoracespecial`
+(2), `isle` (2) — plus the forbidden `legopathcontroller` (3), `legopathactor`
+(2), `legocachesoundmanager` (2), `act3actors` (2).
+
+### "730 of 1225 cells compiled" is not a 40% failure rate
+
+Every sweep log reports it and it looks like a defect. It is not: the coarse
+grid enumerates `declaration_shape(classes, functions)` over a full 10x100
+rectangle, but the generator's domain is `functions in [classes, 10*classes]`.
+225 pad cells + 505 valid decl cells = **exactly 730**. No coverage is being
+lost and there is nothing to fix.
+
+### `0x1002a1b0` is carrier-inert over 730 cells
+
+The two-register swap does **not** flip: seed masked nd 10, best 9 at
+`decl-4-37`. Same TU's `0x10029d50` moved 493 -> 310 (`pad-15-57`) and, notably,
+a carrier did fix its **length** (1117 -> 1119 = retail's), so the family does
+reach that row — it just does not reach it far enough. Per the standing rule,
+"carrier-inert" here names the pair (`0x1002a1b0`, pad/decl shape), not the row.

@@ -15,6 +15,60 @@ because `entity/legoworld.cpp` wins that COMDAT.
 | SOLE | 3224 |
 | UNMATCHED | 925 |
 
+## Open rows by the object that must move
+
+80 open rows across 47 objects. To move a row you must change the codegen of the object named here -- for a template body that is often not the TU that looks like it owns the symbol.
+
+| object | open rows | rows |
+| --- | ---: | --- |
+| legoanimpresenter.cpp.obj | 7 | `0x10068b20` `0x10069e90` `0x1006c200` `0x1006a7a0` `0x1006b140` `0x1006e720` `0x10069b10` |
+| legocharactermanager.cpp.obj | 4 | `0x10083890` `0x10085500` `0x10084030` `0x10083500` |
+| mxvideopresenter.cpp.obj | 4 | `0x100b27b0` `0x100b2a70` `0x100b26f0` `0x100b24f0` |
+| act3.cpp.obj | 3 | `0x10073a90` `0x10072ad0` `0x100720d0` |
+| legopathcontroller.cpp.obj | 3 | `0x100495b0` `0x10048310` `0x10046050` |
+| tglrl40.cpp.obj | 3 | `0x100a12a0` `0x100a3b40` `0x100a3840` |
+| act3actors.cpp.obj | 2 | `0x100417c0` `0x10040360` |
+| infocenter.cpp.obj | 2 | `0x1006fda0` `0x1006ed90` |
+| isle.cpp.obj | 2 | `0x10031820` `0x100334b0` |
+| legoanimationmanager.cpp.obj | 2 | `0x10061010` `0x10062e20` |
+| legocachesoundmanager.cpp.obj | 2 | `0x1003cf20` `0x1003d170` |
+| legomain.cpp.obj | 2 | `0x10059dc0` `0x10058c30` |
+| legopathactor.cpp.obj | 2 | `0x1002f770` `0x1002de10` |
+| legopathboundary.cpp.obj | 2 | `0x100574a0` `0x100586e0` |
+| legorace.cpp.obj | 2 | `0x100166a0` `0x100170e0` |
+| legoracespecial.cpp.obj | 2 | `0x10081840` `0x10080be0` |
+| legosoundmanager.cpp.obj | 2 | `0x1002a1b0` `0x10029d50` |
+| mxdisplaysurface.cpp.obj | 2 | `0x100bb1d0` `0x100ba7f0` |
+| mxtransitionmanager.cpp.obj | 2 | `0x1004c580` `0x1004bd10` |
+| orientableroi.cpp.obj | 2 | `0x100a46b0` `0x100a4420` |
+| viewlodlist.cpp.obj | 2 | `0x1004f9b0` `0x100a7960` |
+| act3ammo.cpp.obj | 1 | `0x10054050` |
+| helicopter.cpp.obj | 1 | `0x100035e0` |
+| legoact2.cpp.obj | 1 | `0x10051ac0` |
+| legoanim.cpp.obj | 1 | `0x1009f490` |
+| legocontainer.cpp.obj | 1 | `0x100998e0` |
+| legocontrolmanager.cpp.obj | 1 | `0x100293c0` |
+| legoextraactor.cpp.obj | 1 | `0x1002bff0` |
+| legolod.cpp.obj | 1 | `0x100aa510` |
+| legonavcontroller.cpp.obj | 1 | `0x10055a60` |
+| legopartpresenter.cpp.obj | 1 | `0x1007ca30` |
+| legoroi.cpp.obj | 1 | `0x100a84a0` |
+| legotexturepresenter.cpp.obj | 1 | `0x1004ebd0` |
+| legoutils.cpp.obj | 1 | `0x1003f540` |
+| legovideomanager.cpp.obj | 1 | `0x1007b770` |
+| legowegedge.cpp.obj | 1 | `0x1009a8c0` |
+| legoworld.cpp.obj | 1 | `0x1001d890` |
+| mxbitmap.cpp.obj | 1 | `0x100bd020` |
+| mxdsbuffer.cpp.obj | 1 | `0x100c6fa0` |
+| mxmain.cpp.obj | 1 | `0x10057180` |
+| mxramstreamprovider.cpp.obj | 1 | `0x100d0d80` |
+| mxregion.cpp.obj | 1 | `0x100c3750` |
+| mxstillpresenter.cpp.obj | 1 | `0x100ba2c0` |
+| pizza.cpp.obj | 1 | `0x10038380` |
+| pizzeria.cpp.obj | 1 | `0x10017af0` |
+| towtrack.cpp.obj | 1 | `0x1004d330` |
+| viewmanager.cpp.obj | 1 | `0x100a66f0` |
+
 ## Link-order fragility of the rows we already hold
 
 780 rows at 1.0 are contested. Of those, **47 have exactly one definer that reproduces retail**, so they are held by the
