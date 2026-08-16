@@ -139,3 +139,50 @@ frame), that is **twelve declaration forms that cannot buy the missing slot**.
 Whatever retail declared must earn a slot — an aggregate, or an object whose
 address escapes — and it is not any scalar at the `tempNumVertsAndNormals`
 site. The slot map above bounds where it sits; that is the handover.
+
+## `Act3Ammo::Animate` — my own wave-5 rule, fully applied, and it does not close
+
+This was the one place in the lane the rule had never been run. Both steps, in
+order:
+
+**Step 1 — the m=0 strip, far out.** `fwdE` k = 401..999 added to the existing
+1..400 (599 further states, 1,598 total). **124 distinct counts reach retail's
+2666-byte length**; the best of every one of them is nd=105.
+
+**Step 2 — dense m at those k.** `extern(m, k)` for m = 0..99 at eighteen of
+the k-family members (48, 50, 160, 177, 207, 224, 240, 242, 271, 288, 370,
+432, 434, 463, 480, 496, 498, 560) — 1,800 states.
+
+```
+best nd=95 @extern-13-224   (also extern-15-48, extern-15-50)
+```
+
+**Floor 95, unchanged.** The rule is right — the post-include seat is what
+moved this row from 105 to 95 in the first place — but there is no cell in the
+family that closes it. Its SHAPE/STRUCT reading (98.46 / 98.60, STRUCT above
+SHAPE so no frame defect, 11 instructions unaligned) matches wave 4's read-off:
+retail hoists the `mov eax, [ebp+8]` load into an FP gap. That is scheduling,
+which shows up as a SHAPE gap without being a text target — the same misfire as
+`LinkEdgesAndFaces`.
+
+## LANE VERDICT
+
+**This lane is closed on both channels.** Sixteen open rows, and after wave 7
+not one of them has a lever left that this project can pull:
+
+| verdict | rows |
+|---|---|
+| **proved closed both channels** (SHAPE 100 & STRUCT 100 + carrier floor invariant over six families) | `RemoveByObjectIdOrFirst`, `TowTrack::HandlePathStruct`, `CalculateSpline` |
+| **SHAPE gap inside inlined code the mandates put out of reach** (vendor STL, or first-party inline proven to emit both forms) | `LegoOmni::Destroy`, `LegoCarRaceActor::CPI`, `LegoWEGEdge::LinkEdgesAndFaces` |
+| **scheduling permutation wearing a SHAPE gap** | `Act3Ammo::Animate`, `Act3::TriggerHitSound`, `Act3::Enable`, `JetskiRace::HandlePathStruct`, `CarRace::HandlePathStruct` |
+| **inline budget — needs the C4 pool instrument, not a source edit** | `CalculateCameraTransform` (confirmed twice: 16 missing instructions, and retail calls `Interpolate` from exactly 2 of 7 sites) |
+| **frame defect, text target, but twelve declaration forms refuted** | `LegoLOD::Read` (STRUCT 76.88 — the one row still worth a session, with the slot map above), `LegoROI::Read`, `FUN_10040360`, `FUN_100417c0` |
+
+The four frame-defect rows are the only ones with a live text signal, and
+`LegoLOD::Read` is the only one where the signal is large. Everything else in
+this lane is allocator colour or is behind a mandate.
+
+Total for the lane across waves 4-7: **4 rows landed** (`LegoOmni::Create`,
+`LegoROI::~LegoROI`, `Act3Brickster::Animate`, plus `LegoROI::Intersect` closed
+by the annotation this lane diagnosed), ~45,000 carrier states compiled, and
+five structural results adopted as project policy.
