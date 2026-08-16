@@ -83,3 +83,88 @@ SIZE-CLEAN (a carrier/state channel can in principle close these):
 | `Act3Brickster::FUN_100417c0` | 0x100417c0 | 2875 | 132 |
 
 LENGTH-DEFECT (text must change size): see the v2 table above.
+
+## LANDED (each proven by a full gated `isle_build.py` run from this worktree)
+
+### 1. `LegoOmni::Create` 0x10058e70 (.9510 -> 1.0) — commit 89c0b621, LEGO1 4831 -> 4832
+
+Donor `fwdE-7` (`forward_declaration_run`, placement `suffix`, prefix
+`MxUnkRecVC`, count 7, width 3), id `d_aa8cbbfdb45d`, appended to the existing
+`lego1:LEGO1/lego/legoomni/src/main/legomain.cpp` unit.
+
+* Surfaced by the coordinator's corpus rescore; **re-derived on TODAY's text in
+  the pipeline-exact donor lane** (`t/sw.py all2-legomain --axes fwdE`):
+  body 2648 = retail's true length, masked nd=0.
+* Today's seed is 2616 — a **−32 length defect that a carrier state fixes**.
+  This refutes "a length defect is text-channel-only": the carrier changes an
+  inlining decision and therefore the size.
+* S72 relocation-target guard: 147 relocations, target sequence IDENTICAL to
+  the seed's.
+* splice_class `same_slot_resize` (2616 -> 2648, linked span 2656);
+  `compose_same_slot_resize` dry-run OK, first-party directive validation OK.
+* Gate: `GAIN 0x10058e70 LegoOmni::Create`, zero LOST.
+
+### 2. `LegoROI::~LegoROI` 0x100a83c0 (.9538 -> 1.0) — commit 3ed88514, LEGO1 4832 -> 4833
+
+Donor `fwdE-159` (same recipe kind, count 159), id `d_3d572fd742b2`, appended
+to the existing `roi:LEGO1/lego/sources/roi/legoroi.cpp` unit (which already
+carried the fwdL-3 donor for `FindChildROI`).
+
+* **METHOD FINDING (this is the session's biggest one).** The whole historical
+  bench caps forward-run sweeps at **k = 96** (`sweep2.py --kmax 96`). Over the
+  full 653-state grid the best state for this row was nd=1 (fwdE-31 and
+  fwdE-95, both at 210 = retail's true length, one CMPDIR byte at the
+  loop-preheader compare). Extending the axis to k = 97..300 found
+  **fwdE-159 at nd=0**. The forward-run count axis is *not* saturated at 96;
+  `generate_forward_run` accepts 1..999.
+* S72 guard: 11 relocations, target sequence IDENTICAL.
+* splice_class `same_slot_resize` (206 -> 210, linked span 208 -> 224 — a
+  16-byte image growth that cost **zero** rows).
+* Gate: `GAIN 0x100a83c0 LegoROI::~LegoROI`, zero LOST.
+
+## DIAGNOSED, NOT LANDABLE HERE: `LegoROI::Intersect` 0x100a9410 (.9981)
+
+Recipe for the coordinator — **the fix is a one-line annotation in
+`LEGO1/realtime/vector.h`, which is outside this lane's TU list.**
+
+The body is retail-true: our plain seed object is already masked-exact
+(1553/1553, nd=0), and 26 carrier states also reach nd=0. Image-level diff
+against retail shows 20 differing instructions, all of them `.rdata`
+displacement that reccmp normalises. `reccmp --verbose 0x100a9410` names the
+single instruction it cannot normalise:
+
+```
+0x100a963a : -call <OFFSET6>                        (retail)
+           : +call Vector4::operator= (FUNCTION)    (ours)
+```
+
+Resolved by hand: retail's callee is `0x100a9a30`; ours is `0x100a9a70`. The
+two are the **same 26-byte function**, byte-identical modulo the +0x40 rebase
+(only the `push 0x100a9ab0` / `push 0x100a9af0` EH-frame operand differs),
+sitting in the same slot immediately before `TimeROI::TimeROI`
+(retail 0x100a9a50 / ours 0x100a9a90).
+
+So this is **not** a link/order defect and **not** a text defect: it is a
+missing decomp annotation. `LEGO1/realtime/vector.h` carries
+
+```
+	// SYNTHETIC: LEGO1 0x10010be0
+	// SYNTHETIC: BETA10 0x100121e0
+	// Vector3::operator=
+<blank>
+	// SYNTHETIC: BETA10 0x1004af40
+	// Vector4::operator=
+```
+
+`Vector4::operator=` has a BETA10 synthetic annotation but **no LEGO1 one**, so
+reccmp cannot name retail's callee and scores the instruction as different.
+
+**Line-neutral recipe:** replace the blank line between the two blocks with
+`	// SYNTHETIC: LEGO1 0x100a9a30`. Comments are token-free and the line count
+is unchanged, so no TU that includes `vector.h` can be recoloured.
+
+**Caveat the coordinator must decide:** adding a SYNTHETIC annotation adds a
+row to LEGO1's comparison set, so the denominator moves 4933 -> 4934 (and the
+new row should itself score 1.0, since the function is byte-identical). That
+collides with the binding "exactly 4933/4933" framing and is a
+project-level call, not a lane call. Not landed.
