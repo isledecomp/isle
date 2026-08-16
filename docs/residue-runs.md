@@ -170,3 +170,36 @@ first-party source would reach it, but only as a hypothesis about what the
 original wrote, and it should not be attempted without an oracle for the
 original's shape. The row remains a *layout* restoration in the manifest, which
 its unit already says.
+
+## `ViewManager::ManageVisibilityAndDetailRecursively` — one byte, all three seats
+
+A `cmpdir` at body offset 517 (`cmp ecx, eax` where retail has `cmp eax, ecx`),
+inside one of the three identical `for (it = comp->begin(); it != comp->end();
+it++)` loops. `cmpdir` is nominally the *movable* class, which makes this a
+useful bound on how movable it actually is.
+
+Everything below reaches the correct length 561 and floors at **nd=1 on that
+same byte**:
+
+| search | cells |
+|---|---|
+| flat grammar (shapefull, extern, padgrid, fwdL/P/E) | 1,098 |
+| the 0..40 extern rectangle | 1,680 |
+| long extern strips + coarse 200×200 grid | 759 |
+| stacked: `fwdL:3 × shapefull` and `extern:3,0 × shapefull` | 1,010 |
+| stacked: `extern:37,0 × padfull` (the other shape family) | 900 |
+| descent: `pad:11,13 × externR` | 1,680 |
+| the long m-strip, m = 1..400 at k=0 | 400 |
+| **all three seats**: pre-include run 1..300 over `extern:3,0` | 300 |
+
+~7,800 states. The text channel is closed too: the end-first spelling
+(`comp->end() != it`) is **bit-inert** at all three loops individually and
+together, at four carrier states each.
+
+Note the two shape families move it in *opposite* directions — a declaration
+shape over `extern:37,0` makes it worse (nd 1 → 6), the pad grid over the same
+seats fixes byte 517 and breaks two others (nd=2 at `[204, 239]`). Each byte is
+individually reachable; they are never jointly correct. That is the same
+signature as the `+145`/`+434` pair and `GetRefCount`'s `+84`, and it is what
+one shared allocator decision looks like rather than a search that needs more
+cells.
