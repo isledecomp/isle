@@ -73,6 +73,29 @@ def load_image(path):
     return pe.OPTIONAL_HEADER.ImageBase, pe.get_memory_mapped_image()
 
 
+def table_start(blob, va):
+    """Offset where a trailing switch table begins, or len(blob).
+
+    A jump table sits inside the function's extent and disassembles as
+    nonsense instructions, which invent both slot pairs and register pairs.
+    The dispatch is `jmp dword ptr [reg*4 + BASE]`, and in a linked image BASE
+    is the table's absolute address, so the table's start is recoverable
+    exactly rather than guessed.
+    """
+    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
+    md.detail = True
+    cut = len(blob)
+    for ins in md.disasm(blob, va):
+        if ins.mnemonic != "jmp":
+            continue
+        for op in ins.operands:
+            if op.type == x86.X86_OP_MEM and op.mem.index and op.mem.scale == 4:
+                base = op.mem.disp
+                if va < base < va + len(blob):
+                    cut = min(cut, base - va)
+    return cut
+
+
 def shape_stream(blob):
     """(normalised text, frame displacement) per instruction.
 
@@ -154,6 +177,7 @@ def body_of(base, data, va, length):
     blob = bytearray(data[va - base:va - base + length])
     while blob and blob[-1] in (0xCC, 0x90):
         blob.pop()
+    blob = blob[:table_start(bytes(blob), va)]
     return bytes(blob)
 
 
