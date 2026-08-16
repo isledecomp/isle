@@ -62,8 +62,10 @@ MxStreamController::~MxStreamController()
 		m_unk0x2c = NULL;
 	}
 
-	while (m_unk0x54.PopFront(action)) {
-		delete action;
+	while (!m_unk0x54.empty()) {
+		MxDSObject* object = m_unk0x54.front();
+		m_unk0x54.pop_front();
+		delete object;
 	}
 }
 

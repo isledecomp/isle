@@ -3710,7 +3710,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/stream/mxstreamcontroller.cpp",
-   "source_sha256": "a68d44d75c62409d19ab3d398cd9524dd3c6e0548b83321016f8554e7f4e07e6",
+   "source_sha256": "a17e68713d732c041d35de5b2b59da717017f5d414823202538769f6f5ffa6a8",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -3748,11 +3748,11 @@
      "expected_body_length": 446,
      "expected_body_sha256": "a573f5af0f44525a4ab2ed0143306e5ff0f0d29bdc097ae9f72ea9b5696be25f",
      "expected_changed_offsets": [
-      62,
       66,
       69,
       72,
-      78
+      78,
+      114
      ],
      "splice_class": "equal_body_eh_structural_local",
      "expected_code_renames": [
@@ -5551,8 +5551,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4850,
-    "accepted_row_identity_sha256": "b5114a4396ed57f28ee661a5004c8ebbbff9c658a625cd3ad7a9225dc1799bd6",
+    "exact_raw_1_0_count": 4851,
+    "accepted_row_identity_sha256": "fb4c6dd47ad9a2b5d594c50d12935ccaf79a6d45bfcc9451dba267c113f13af3",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
@@ -26572,9 +26572,9 @@
    },
    {
     "path": "LEGO1/omni/src/stream/mxstreamcontroller.cpp",
-    "clean": "a68d44d75c62409d19ab3d398cd9524dd3c6e0548b83321016f8554e7f4e07e6",
-    "effective": "b19e3c5b4ea76d5573a2e584405e78a4f1fe60f85a7bed5c2ff72bb4ce9c9aa3",
-    "size": 9554,
+    "clean": "a17e68713d732c041d35de5b2b59da717017f5d414823202538769f6f5ffa6a8",
+    "effective": "800da41b7a43d3a9eed91ffa63f8ad0f5558d8e5706c0c7dbe1a76fb0c21bff8",
+    "size": 9613,
     "ops": [
      {
       "op": "insert",
