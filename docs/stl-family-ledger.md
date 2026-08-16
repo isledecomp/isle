@@ -1,6 +1,9 @@
 # The `_Tree` / container-instantiation family — ledger
 
-> ⚠ **READ §10.5, §10.5a AND §11 BEFORE ACTING ON §10.2.** The wave-2 conclusion
+> ⚠ **READ §10.5, §10.5a AND §11 BEFORE ACTING ON §10.2**, and the
+> **RETRACTION above §11.2** before acting on anything that cites the
+> count-only law: a carrier run is count-only in `mxmain.cpp` but NOT in
+> general, so the extern `(m,k)` split is a real 2-D lattice. The wave-2 conclusion
 > "the carrier axis does not move register colour" — which reached the merge
 > commit title `c52a89d8` — is **wrong as stated**. It was drawn from a
 > partial sample of a sweep that later completed and contradicted it. Two
@@ -1009,6 +1012,45 @@ ISLE 172/172, CONFIG 111/111`; GAIN 0x100af7e0, zero LOST. Commit
 
 **It was not found by more cells.** Three 505-cell shape grids over this row
 had floored at nd=1. It was found by measuring the grammar first.
+
+> ## ⚠ RETRACTION (wave 9): "the carrier grammar collapses to a count" is FALSE
+>
+> §11.2 below concluded that a carrier run is COUNT-ONLY and that the whole
+> grammar therefore reduces to one integer. **The measurement is sound; the
+> generalisation is wrong**, and I propagated it into a merge title.
+>
+> What I actually measured: on **`mxmain.cpp`**, 65 of 68 bodies are identical
+> across every stem, width, declaration kind and seat **at equal count** —
+> including different `(m,k)` splits of the same extern total. That still
+> holds. What does not hold is that it is a property of the *grammar* rather
+> than of that one TU.
+>
+> **My own corpus already contained the refutation.** Slicing
+> `sw-all2-legoanimpresenter`'s extern cells by total and counting distinct
+> bodies at a fixed total:
+>
+> | extern total | `(m,k)` pairs | distinct `erase<AnimSubst>` bodies | distinct `CopyTransform` |
+> |---|---|---|---|
+> | 7 | 8 | 6 | 5 |
+> | 8 | 9 | **7** | 6 |
+> | 9 | 9 | 6 | 5 |
+> | 15 | 9 | 6 | 7 |
+>
+> Seven distinct bodies at a fixed count is not a count-only axis. Lane NM
+> reached the same conclusion independently on the `m+k=33` diagonal
+> (`HitActor` nine bodies, `AddPresenterIfInRange` eight with its retail-exact
+> body at one of 34 states).
+>
+> **Corrected statement.** Inert: declaration kind, stem identity, identifier
+> width, and the file-start/EOF seats (which collapse into each other). Live:
+> the **after-includes seat**, so the `(m,k)` split of an extern pair is a real
+> 2-D lattice. The search space is that lattice × the 2-D shape, and the right
+> move is to sweep **rectangles, not lines**. §12's long-line strip and its
+> yield curve remain valid as measurements of *one line* through that lattice;
+> they simply are not a search of the space.
+>
+> The `mxmain` landing in §11.1 is unaffected — it was found in that TU, where
+> the insensitivity does hold.
 
 ### 11.2 The carrier grammar collapses to a count
 
