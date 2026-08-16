@@ -1499,7 +1499,52 @@ Handover: `stl/sw.py --axes externR --kmax 40 --tag=_R40` resumes exactly
 where this left off (existing cells are skipped, `if not obj.exists()`), so
 the remaining ~1,400 cells cost nothing already spent.
 
-## 16. Reproducing this lane
+## 16. Wave 10 — the rectangle is a bounded negative for legoanimpresenter
+
+Resumed `--axes externR --kmax 40` on `legoanimpresenter.cpp`.
+**Covered: `m = 0..28` complete in `k = 0..40`, 1,184 of 1,681 cells** — which
+contains the whole region the wave-10 brief cites (`StepState` at
+`extern-18-12`, `PlaceActor` at `(11,12)`, `charmgr erase` at `(15,22)`, and
+all of Lane NM's landings inside `m ≤ 18, k ≤ 28`).
+
+**Not one open row in this TU improves on its pre-existing floor:**
+
+| row | rectangle best | state | previous floor |
+|---|---|---|---|
+| 0x10068b20 erase AnimSubst | nd=1 | `extern-0-19` | nd=1 (`fwdE-19`) — same floor, new state |
+| 0x10069b10 BuildROIMap | nd=10 | `extern-10-1` | **nd=2** (`fwdE:19 × shape-4-22`) |
+| 0x1006a7a0 `_Insert` AnimStruct | nd=5 | `extern-0-37` | nd=5 |
+| 0x1006e720 `_Insert` HideAnim | nd=9 | `extern-21-25` | nd=4 |
+| 0x1006c200 `_Insert` AnimSubst | nd=10 | `extern-14-1` | nd=4 |
+| 0x10069e90 erase AnimStruct | nd=18 | `extern-20-5` | nd=18 |
+| 0x1006dec0 erase HideAnim | nd=56 | `extern-0-10` | nd=55 |
+| 0x1006b140 CopyTransform | — | length never reached | — |
+
+The only nd=0 cells are rows that are already closed (`AssignIndiciesWithMap`,
+`ParseExtra`). **Calling it: the extern rectangle is a bounded negative for
+`legoanimpresenter.cpp` over `m ≤ 28`.** The register ties that fell for other
+lanes in this region do not fall here, and the two rows with a *better* floor
+elsewhere (BuildROIMap at nd=2, `_Insert` at nd=4) both found it in the
+**shape** product, not the extern lattice — consistent with §12.3, where
+BuildROIMap's count line was inert on two different pinned shapes.
+
+`erase<AnimSubst>` reaching nd=1 at `extern-0-19` as well as `fwdE-19` is
+worth one line: two structurally different carriers land the same body, and
+byte `+145` is wrong in all 8 length-correct cells of the rectangle. That byte
+has now resisted the flat grammar, the stacked product, the long line and the
+2-D lattice.
+
+### 16.1 `extern_pair_with_shape` — set up, not concluded
+
+`landin.py` now emits the `extern_pair_with_shape` recipe (pre `extern:m,k` +
+`shape-c-f`), so a hit in that space is landable. The canonical run for the
+`+145` tie — `--pre extern:0,19 --axes shapefull`, the seat holding the
+structure while the shape flips the byte — reached **85 of 505 cells** before
+the machine saturated again. `shapefull` orders by `c` ascending, so that is
+the `c ≤ 1` sub-grid and **not** a uniform sample; I am not reporting a floor
+from it. Resume with the same tag (`_E019sf`); existing cells are skipped.
+
+## 17. Reproducing this lane
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
 `fresh2/` repointed at `isle-build-tr03`). Nothing in the shared corpus was
