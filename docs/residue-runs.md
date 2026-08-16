@@ -341,3 +341,29 @@ The `FUN_100c6fa0` result above survives, because all three levels moved
 together and in the same direction — but treat the absolute values as
 provisional and re-derive them from the corrected tool before building on
 them.
+
+## `nd` is meaningless across a length change — a measured near-miss
+
+While working `SetupCopyRect` (which had just improved .8227 → .8495 on a
+statement reorder), a further form looked like a large win on the masked byte
+distance: **`nd` 211 → 153**, its best figure ever. It also took the body from
+413 to 411 against retail's 412.
+
+Landed and gated, the row's actual score **collapsed .8495 → .5724**. Reverted.
+
+The reason is structural and worth stating once: **`nd` compares byte *i* of
+our body against byte *i* of retail's.** A length change shifts every
+subsequent byte, so `nd` is no longer measuring the same instructions — it can
+fall while the row gets much worse, exactly as here. reccmp aligns
+instructions and does not have that failure mode.
+
+So the rule is: **`nd` is only comparable between candidates of identical
+length.** For a cell that changes length, score it with an alignment (reccmp's
+own diff, or the SHAPE/STRUCT/EXACT alignment) — never with `nd`. Several
+"improvements" recorded on `nd` across a length change elsewhere in the
+campaign's ledgers deserve the same suspicion this one earned.
+
+(The rejected form was `MxU8* dst = new …; m_copyBuffer = dst; if (!dst)`, aimed
+at the extra `mov edx, eax` that makes our body one instruction longer than
+retail's. The extra `mov` is real, but this is not the source form that removes
+it.)
