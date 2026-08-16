@@ -365,12 +365,21 @@ Baseline row = no header; retail column is what we are trying to reach.
       depth(2)             664 B   MxListEntry=2
       auto_inline(off)     717 B   (inert)
 
+    CreateActorROI                 retail: 2294 B, Vector3 x2, Vector2 x2
+      default / depth>=8  2294 B   Vector3=0  Vector2=4
+      depth(0)            1788 B   Vector3=0  Vector2=0
+      depth(2)            2284 B   Vector3=6  Vector2=6
+      depth(4)            2283 B   Vector3=0  Vector2=4
+      auto_inline(off)    2294 B   (inert)
+
 **What this establishes.**
 
 1. **The bit is the inliner's depth-limited budget, and it is live** — it moves
    under `inline_depth` on all three anchors, in both directions. It is not a
    source form and not a carrier state.
-2. **No global depth value is 1997's, on any anchor.** Retail's answers are
+2. **No global depth value is 1997's, on any of the four anchors** —
+   `CreateActorROI` needs `Vector3 x2 / Vector2 x2` and no depth produces that
+   pair either (`depth(2)` gives 6/6, everything >=8 gives 0/4). Retail's answers are
    per-site *mixtures* a uniform depth cannot express: `OrientableROI` needs
    four sites expanded one level (leaving `Vector2::Vector2` calls) and a fifth
    declined outright (leaving a `Vector3::Vector3` call), and no single depth
