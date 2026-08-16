@@ -4498,6 +4498,60 @@
     "reason": "Retail links MxVideoManager::UpdateView ahead of the scalar deleting destructor group in mxvideomanager.cpp.obj; order-only group restore.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/stream/mxdiskstreamcontroller.cpp",
+   "source_sha256": "e66bd0f66c7006d8396e1ec816fe239472b8fe1554bb18ac9f084f6f65313172",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_1044c277ee35",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "prefix",
+      "prefix": "MxUnkRecVA",
+      "count": 44,
+      "width": 3,
+      "generated_header_sha256": "1044c277ee35cedd2498ea5275139c45616d61006efcebb3e548e4a695a862cb",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?FUN_100c8540@MxDiskStreamController@@AAEXXZ",
+     "expected_body_sha256": "ab4e73c673ccd8d87e4d3bc9131d7eb970bee4d0b471139bac876793f848b548",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 236,
+     "expected_donor_length": 245,
+     "expected_linked_span": 256,
+     "donor": "d_1044c277ee35"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row(s) in LEGO1/omni/src/stream/mxdiskstreamcontroller.cpp from a generated carrier state over the rendered current source; retail's body is 245 bytes where the seed emits 236, so the contribution grows into its retail 256-byte linked slot.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -4572,8 +4626,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4831,
-    "accepted_row_identity_sha256": "84b6715be180e3806a81b937d75714253d9c88e7a8ad01fd0851e988ed6ec4e5",
+    "exact_raw_1_0_count": 4832,
+    "accepted_row_identity_sha256": "f2cee9fd323d7227eaa7c385d719e148cfc607e68e6252306260dfbec9f87d53",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
