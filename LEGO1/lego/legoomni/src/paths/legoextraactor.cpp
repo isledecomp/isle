@@ -454,7 +454,7 @@ inline MxU32 LegoExtraActor::CheckPresenterAndActorIntersections(
 	LegoPathActorSet lpas(plpas);
 
 	for (LegoPathActorSet::iterator itpa = lpas.begin(); itpa != lpas.end(); itpa++) {
-		if (plpas.find(*itpa) != plpas.end()) {
+		if (plpas.end() != plpas.find(*itpa)) {
 			LegoPathActor* actor = *itpa;
 
 			if (this != actor && !(actor->GetActorState() & LegoPathActor::c_noCollide)) {

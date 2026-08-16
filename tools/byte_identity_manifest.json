@@ -4235,7 +4235,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legoextraactor.cpp",
-   "source_sha256": "213482cc7927dbb4ae60521c30750bedb8db095db59a53e6ff4c0713229467fa",
+   "source_sha256": "49e409f406a7d8a1d1c78fdccdb033f68ef16583a3c3097a8f761adefbe610ff",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4259,6 +4259,22 @@
       "classes": 5,
       "functions": 21,
       "generated_header_sha256": "945e33b4ee8049975a3fd22c4e2756839bd333baa2117e70dc088bb983645a2c",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_91cb3e339eea",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 10,
+      "functions": 48,
+      "generated_header_sha256": "91cb3e339eea53da78540d65b3fbae5a2dc9b773215896cf6b036a73e1a95b38",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -4298,11 +4314,80 @@
      ],
      "splice_class": "equal_body_strict",
      "donor": "d_945e33b4ee80"
+    },
+    {
+     "mangled": "?CheckPresenterAndActorIntersections@LegoExtraActor@@UAEIPAVLegoPathBoundary@@AAVVector3@@1MM1@Z",
+     "expected_body_length": 1375,
+     "expected_body_sha256": "90f510f99952233ae82b36e8c0af354c5ccd5f9a0391e4365cf65e8eaab16341",
+     "expected_changed_offsets": [
+      321,
+      324,
+      330,
+      332,
+      343,
+      356,
+      401
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       710,
+       "T"
+      ],
+      [
+       761,
+       "T"
+      ],
+      [
+       773,
+       "T"
+      ],
+      [
+       792,
+       "T"
+      ],
+      [
+       815,
+       "T"
+      ],
+      [
+       829,
+       "T"
+      ],
+      [
+       852,
+       "T"
+      ],
+      [
+       990,
+       "T"
+      ],
+      [
+       1006,
+       "T"
+      ],
+      [
+       1358,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60
+     ],
+     "donor": "d_91cb3e339eea"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/paths/legoextraactor.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes 3 row(s) in LEGO1/lego/legoomni/src/paths/legoextraactor.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -4487,8 +4572,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4830,
-    "accepted_row_identity_sha256": "49eb6377da33f6d37d943608f329454357710456af9b26c72955930f42e766d4",
+    "exact_raw_1_0_count": 4831,
+    "accepted_row_identity_sha256": "84b6715be180e3806a81b937d75714253d9c88e7a8ad01fd0851e988ed6ec4e5",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
@@ -13109,8 +13194,8 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/paths/legoextraactor.cpp",
-    "clean": "213482cc7927dbb4ae60521c30750bedb8db095db59a53e6ff4c0713229467fa",
-    "effective": "491ac392bfae6e594af294fb73c621d644898236c8bd7b56d89990d5f9fcf432",
+    "clean": "49e409f406a7d8a1d1c78fdccdb033f68ef16583a3c3097a8f761adefbe610ff",
+    "effective": "1cb7f952695d6cbe032c38da7c42be5b9eed60a810e18c40216202793c544baa",
     "size": 15647,
     "ops": [
      {
