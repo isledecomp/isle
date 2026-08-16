@@ -1247,7 +1247,45 @@ whether the length difference is carried by displacement widths. A sharper
 test for the next pass: if the two bodies' prologues and frame sizes are
 identical, a length delta cannot be a declaration-set defect.
 
-### 13.2 Scope note: CoreSet `erase` is not a text row
+### 13.2 `0x100998e0 LegoTextureContainer::GetCached` — a real text row, 995 → 991
+
+Unlike CopyTransform, this row's **frame size genuinely differs**
+(ours `sub esp,0xfc`, retail `sub esp,0xf8`), so retail really does reference
+one fewer distinct 4-byte local. That is a declaration-set defect and the
+text channel is the right one.
+
+§4.5 had already localised it: retail keeps `p_textureInfo->m_surface` live in
+`ESI` while we spill it, which pointed at the `cached` / `surface` pair inside
+the match branch. Four variants, all compiled in the donor lane:
+
+| variant | body | Δ to retail (987) |
+|---|---|---|
+| base | 995 | −8 |
+| **g1 — drop `surface`, go through `cached->m_surface`** | **991** | **−4** |
+| g2 — drop `cached`, keep `surface` | 992 | −5 |
+| g3 — `BOOL und = <expr>` instead of the if/assign | 995 | −8 |
+| g4 — drop both, use `(*it).first` throughout | 1000 | −13 |
+
+**g1 removes exactly one slot and gains exactly the predicted 4 bytes.** The
+prediction came from the frame census, not from guessing, and the two
+neighbouring variants (g2, g4) confirm the direction is specific rather than
+"fewer locals is better" — g4 drops two names and is 13 bytes *worse*.
+
+Remaining after g1: 4 bytes. g1's own frame is `sub esp,0x100`, still above
+retail's `0xf8`, and the next divergence is an instruction-scheduling one at
+the first inlined `memset` (`rep stosd` for 0x1b dwords = `sizeof(DDSURFACEDESC)`
+in both, but ours interleaves a `push 0` before it). So there is at least one
+more named local to remove, in the second half of the function, and the
+scheduling difference is likely downstream of it.
+
+**Not landed.** g1 is a source edit in `legocontainer.cpp` and the wave's
+harness rules apply: victim accounting has to run in the **seed** lane
+(absolute shadow path, exact-replica command) before it can go in, and the
+row is not yet exact so landing it alone would be a text change with no row
+gain and a real chance of a victim. The recipe is recorded here so the next
+pass starts at 991 instead of 995.
+
+### 13.3 Scope note: CoreSet `erase` is not a text row
 
 `0x1001d890` is on the wave-6 list, but it is a `_Tree` vendor-template
 instantiation: its text is MSVC's `<xtree>`, which the mandates forbid
