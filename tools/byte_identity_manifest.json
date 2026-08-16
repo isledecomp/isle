@@ -5477,6 +5477,77 @@
     "reason": "Closes row(s) in LEGO1/omni/src/main/mxmain.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/build/legocarbuildpresenter.cpp",
+   "source_sha256": "1f7fd25c16c2f4f5b02aefed61aeeadf74583557655d9f69ea8ee459a93f8c8c",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_d5bbb868f8f4",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 2,
+      "seat_prefix": "g_p",
+      "seat_count": 0,
+      "width": 2,
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives.",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "generated_header_sha256": "d5bbb868f8f43a3e43db9a0d87f0e19e81873733968ae175b0263b208d5b11af"
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?FindNodeDataByName@LegoCarBuildAnimPresenter@@QAEPAVLegoAnimNodeData@@PAVLegoTreeNode@@PBD@Z",
+     "expected_body_length": 106,
+     "expected_body_sha256": "362610798e9a5b83cd6d952870b5fd52573af6862d333f1b503c285c8fceb9c0",
+     "expected_changed_offsets": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      20,
+      23,
+      26,
+      60,
+      64,
+      66,
+      90
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_d5bbb868f8f4"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/build/legocarbuildpresenter.cpp from generated carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -5551,8 +5622,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4850,
-    "accepted_row_identity_sha256": "b5114a4396ed57f28ee661a5004c8ebbbff9c658a625cd3ad7a9225dc1799bd6",
+    "exact_raw_1_0_count": 4851,
+    "accepted_row_identity_sha256": "9723a7f83c14faff800f7ac4f51d885ee660ad48ee4cdaee083f6fc16ad60ebb",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
