@@ -9,6 +9,11 @@ Baseline verified in this worktree before any change:
 `ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE: LEGO1 4850/4934,
 ISLE 172/172, CONFIG 111/111 in 111.7s`.
 
+**Final: LEGO1 4851/4934** — `0x100c1290 MxStreamController::~MxStreamController`
+landed (§9.4b), zero LOST, ISLE and CONFIG still MD5-identical, 53 tests
+green. The landing also removes the image's only function-set defect
+(§9.3a), so the build-wide audit now returns zero.
+
 Tooling (session scratchpad `.../3233884b-.../scratchpad/inl/`):
 `census.py` (whole-build inline-decision census), `inlprobe.py` (the
 one-bit probe under carrier / include / text states; carrier rendering
@@ -363,11 +368,15 @@ row.
 
 ---
 
-# 9. `0x100c1290 MxStreamController::~MxStreamController`
+# 9. `0x100c1290 MxStreamController::~MxStreamController` — **CLOSED**
 
-The wave's second target. The same instrument applies, and it turns the
-"566-byte call-first/inline-last form" that has been sought for several
-sessions from a description into a **measured signature**.
+The wave's second target. The same instrument turns the "566-byte
+call-first/inline-last form" that has been sought for several sessions from
+a description into a **measured signature** — and then the row closed on the
+text channel (§9.4b), taking the image's only function-set defect with it.
+
+**Result: LEGO1 4850 → 4851, zero LOST, ISLE 172/172 and CONFIG 111/111
+still MD5-identical, 53 tests green.**
 
 ## 9.1 What the row actually is
 
@@ -426,13 +435,19 @@ That is a byte-exact retail row exercising the identical construct, so:
 | caller-side source forms (§9.4) | 10 | 10 × `'op++,erase'`, `sub esp` 0xa8 in all |
 | text × carrier product (`s01_sepvar`, shape/extern/fwdE) | **317** | 317 × `'op++,erase'`; body 586/589/592, **566 never reached** |
 
-Total for this row: **1,040 compiled states, zero signature hits, and the
-retail body length is not reachable in any of them.**
+Total for the *compiler-state* channel on this row: **1,040 compiled
+states, zero signature hits, and the retail body length is not reachable in
+any of them.** The row closed on the **text** channel instead (§9.4b) —
+which is the campaign's standing verdict about where the leverage is, and
+another case where a complete carrier negative was the signal to stop
+sweeping and go read the oracle.
 
-## 9.4 The source forms tried
+## 9.4 The source forms tried (first pass — all negative)
 
 All rewrite the destructor body only; all are period-plausible and
-behaviour-identical unless marked PROBE.
+behaviour-identical unless marked PROBE. Every one of them keeps loop 3 as
+a `PopFront` loop, which §9.4b shows is the wrong premise — they vary
+everything *except* the thing that mattered.
 
 | form | len | signature | note |
 |---|---|---|---|
@@ -453,7 +468,37 @@ the second local and all keep `sub esp` at 0xa8 while growing the body by
 6 bytes. This is the named-local rule again (`project-named-local-rule.md`,
 STL §13.2a/§18.3) — naming a value does not create a slot.
 
-## 9.4a A goal-2 consequence: we emit a function retail does not have
+## 9.3a Build-wide function-set audit — there was exactly ONE defect
+
+`fsaudit.py` walks every `.text` COMDAT of every object linked into
+LEGO1.DLL and masked-searches retail's `.text` for the body (relocation
+operands masked, so a body differing only in call/data targets still
+matches). `fsimage.py` then promotes each miss to the image level, because
+a COMDAT nobody calls is discarded by the linker and never reaches the
+image.
+
+**23 object-level misses → exactly 1 real function-set defect.** The other
+22 split cleanly:
+
+* **15 linker-discarded** — never reach LEGO1.DLL: `MxThread::SuspendThread`
+  / `ResumeThread` / `TerminateThread` / `Get`+`SetThreadPriority`,
+  `MxSemaphore::TryAcquire`, `MxPalette::SetPalette`,
+  `MxString::CharSwap`, `LegoCacheSound::CopyFrom` / `Get`+`SetFrequency`,
+  `Direct3DDeviceInfo::Direct3DDeviceInfo`, `TowTrackBitmapEmitter`,
+  `EraseFirstCtrlEdge`, `EraseBEWithMidpoint`.
+* **7 present in retail after all** — `Vector3::DotImpl`, `LenSquared`,
+  `Vector2::AddImpl` / `MulImpl` (×2) / `DotImpl`, `Matrix4::Element`.
+  These are emitted by many objects (up to 48) and *some* copies differ;
+  the copy the linker selects matches retail. That is a link-selection
+  question, not a function-set one, and it is not this lane's.
+
+The single real defect was
+`??Eiterator@?$list@PAVMxDSObject…::operator++(int)` — and §9.4b removed it.
+**As of this lane's landing the audit returns zero.**
+
+## 9.4a A goal-2 consequence: we emitted a function retail does not have
+
+*(This section describes the pre-landing state; §9.4b removes it.)*
 
 Because loop 2 inlines `erase` and then declines the nested
 `iterator::operator++(int)`, our build emits an out-of-line COMDAT for it:
@@ -467,35 +512,172 @@ A literal search finds **1 copy in our linked `LEGO1.DLL` and 0 copies
 anywhere in retail's image**. It is not an unused symbol the linker could
 drop — `~MxStreamController` calls it.
 
-So this row is not only a score defect: it puts an extra ~24 bytes of
-`.text` into the image and displaces everything after it. That makes it a
-**goal-2 (byte-identity) blocker**, not just a goal-1 row, and it should
-be tracked as one. Closing the loop-2 decision removes the function
-entirely.
+So this row was not only a score defect: it put an extra 32 bytes (23
+aligned to 32) of `.text` into the image and displaced everything after it.
+That made it a **goal-2 (byte-identity) blocker**, not just a goal-1 row.
+Closing the loop-2 decision removes the function entirely — which is what
+§9.4b does.
 
-## 9.5 Handover for this row
+## 9.4b LANDED: `0x100c1290` closes, and the defect is gone
 
-The row is now characterised the way `FUN_10061010` was:
+**Gated:** `ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE: LEGO1 4851/4934,
+ISLE 172/172, CONFIG 111/111`. `GAIN 0x100c1290`, **zero LOST**.
+`terminal ISLE: IDENTICAL`, `terminal CONFIG: IDENTICAL`. 53 tests pass.
 
-* the residue is **two inline decisions**, in loops 2 and 3, on the same
-  instantiation, in one function;
-* the `+1` frame slot is downstream of loop 2's decision, not a target;
-* the source text is right (retail's loop order and member offsets match
-  ours exactly: 0x38 → 0x44 → provider 0x28 → 0x5c);
-* the header that would change the expansion is pinned by a byte-exact row
-  using the identical construct;
-* and the carrier lattice does not reach retail's length in 713 states.
+The edit, in `mxstreamcontroller.cpp` (loop 3 only):
 
-Anyone continuing should treat it as the *same* problem as
-`FUN_10061010`, not a separate one, and validate the C2 stub against both:
-a model must reproduce "decline `erase` in loop 2, take it in loop 3" here
-and "decline the ctor at `FUN_10061010`, take it at `FUN_100609f0`" there.
+```cpp
+	while (!m_unk0x54.empty()) {
+		MxDSObject* object = m_unk0x54.front();
+		m_unk0x54.pop_front();
+		delete object;
+	}
+```
+
+### Why this is retail's form, not a fitted guess
+
+Two independent reads, neither of which is the score:
+
+1. **BETA10 `0x1014e354` has only TWO `PopFront` loops.** Its body is
+   MxTrace → AUTOLOCK → loop on `+0x1f4` → loop on `+0x200` → the
+   `m_provider` block → the `m_unk0x2c` block → epilogue. The `m_unk0x54`
+   loop **did not exist in June 1997**, so it is not bound to the idiom
+   loops 1 and 2 use. (BETA10 also confirms our statement order and shows
+   the provider block constructing a named `MxDSAction` into a frame slot.)
+2. **Retail's own register allocation says loop 3 has no reference
+   parameter.** Retail loop 1: `mov edx,[eax+8]` / `mov [ebp-0x18],edx` —
+   the popped value is *spilled*, which is what a write through
+   `PopFront`'s `T&` looks like. Retail loop 3: `mov esi,[eax+8]` — the
+   value stays in a **register**, i.e. a plain local. Same function, two
+   different idioms, and retail's bytes say which is which.
+
+Mechanically it also removes one inline-nesting level
+(`PopFront` → `pop_front` → `erase` → `operator++` becomes
+`pop_front` → `erase` → `operator++`), which is exactly what lets C2
+decline `erase` in loop 2 the way retail does.
+
+### Verification
+
+| check | result |
+|---|---|
+| body length | 586 → **566** = retail |
+| masked byte distance to retail | **nd = 0** |
+| frame | `sub esp` 0xa8 → **0xa4** = retail |
+| signature | `op++,erase` → **`erase` @ +173 (loop 2)** = retail |
+| relocation target identities (S72) | all 22 agree with retail's call sequence |
+| symbol set — removed | **only** `??Eiterator@?$list@PAVMxDSObject…` (23 B) |
+| symbol set — added | **none** |
+| `list<MxDSObject*>::erase` (retail row 0x100c14d0, 1.0) | retained |
+| `operator++` copies in linked LEGO1.DLL | 1 → **0** |
+| build-wide `??Eiterator` COMDATs | 1 → **0** |
+
+Four other loop-3 spellings also reach 566/`erase`/0xa4 or near it
+(`u2_rawreuse` 575, `u4_rawsize` 566, `u5_deletefront` 573); `u1` and `u4`
+are the two that hit 566, and `u1`'s `!empty()` test is the idiom the
+codebase already uses. `u3_rawerase` (explicit `erase(begin())`) is much
+worse at 609.
+
+### The compose unit had to be re-derived (the "landings re-dial their TU" trap)
+
+The TU carries a `compose_equal_body_comdat` unit for
+`?FUN_100c1a00@…` on a `declaration_shape(3,30)` donor. The edit moved the
+*seed*, so `expected_changed_offsets` went stale and the build refused with
+`seed/donor body delta changed`. Re-derived: the **donor body sha is
+unchanged** (`a573f5af…`), so the carrier state still holds; only the delta
+set moved, `[62,66,69,72,78]` → `[66,69,72,78,114]`.
+`expected_code_renames` (`+12 "L"`, `+424 "T"`) and the xdata rename
+offsets were re-checked and are unchanged.
+
+### Honest layout accounting — this costs alignment, and why
+
+| metric | before | after |
+|---|---|---|
+| LEGO1 rows at 1.0 | 4850 | **4851** |
+| address-aligned rows | 2089 | **2074** |
+| terminal LEGO1 byte distance | 545273 | **545819** |
+
+Removing a 23-byte COMDAT (32 B aligned) and shrinking the destructor by
+20 B (16 B aligned) takes **48 bytes** out of `.text`. Every row from
+`0x100c14d0` onward moved down by exactly 48, and the 15 rows at
+`0x100cb840`–`0x100cc3c0` (mxdsselectaction.cpp) that had been
+address-aligned are now off by 48. No row's *content* got worse — zero
+LOST.
+
+The useful part of that: those 15 rows were aligned **only because our
+image carried 48 bytes retail does not have**. The alignment was
+coincidental, propped up by the defect. The region from `0x100c14d0` was
+already misaligned before the change (our recomp ~0x40 *below* retail) and
+still is. So this landing does not create a layout problem — it *exposes*
+one that was masked, which is what the function-set doctrine predicts and
+is strictly better information for the goal-2 lane.
+
+## 9.4c The `mxutilitylist.h` channel: measured, and refuted by the symbol-set test
+
+Before finding the loop-3 form I tested changing `MxUtilityList::PopFront`
+itself (the header is outside this lane's files, so this was measurement
+only — the shadow copy in this lane's private build dir was edited and
+restored). Four spellings, each scored against the target signature **and**
+against the collateral (every other `PopFront` user must stay byte-identical):
+
+| spelling | len | signature | collateral |
+|---|---|---|---|
+| `q0_base` (`pop_front()`) | 586 | `op++,erase` | baseline |
+| `q1_erasebegin` | 610 | `op++` | 7 bodies changed in mxdiskstreamcontroller, 2 in mxdiskstreamprovider |
+| `q2_iterator` (`*begin()` + `erase(begin())`) | 575 | **`erase`** | 9 bodies changed, incl. `??1MxDiskStreamController` — **an exact row** |
+| `q3_size` | 586 | `op++,erase` | 5 bodies changed |
+| `q4_ifelse` | 629 | `op++S,op++,op++` | 6 bodies changed |
+
+`q2` reaches the target signature and is still **not landable**: it breaks
+`MxDiskStreamController::~MxDiskStreamController` (`0x100c7530`, 1.0) and
+*introduces* a fresh `??Eiterator` COMDAT into mxdiskstreamcontroller.cpp —
+it moves the function-set defect rather than removing it. `q1` does the
+same. This is the symbol-set test cutting both ways, and it is what sent
+the search back into `mxstreamcontroller.cpp`, where the answer was.
+
+Recorded so nobody re-opens the header: **no `PopFront` spelling tested
+leaves the collateral byte-identical.**
+
+## 9.5 What generalises from this row
+
+The row is **closed**, so the handover is the method, not the target.
+
+1. **A function-set defect is a source question, and it was answered by
+   reading the oracle, not by sweeping.** 1,040 carrier states and 10
+   source forms were all negative because they all preserved the wrong
+   premise (loop 3 is a `PopFront` loop). The premise broke the moment two
+   oracles were consulted: BETA10 for *when the statement was written*, and
+   retail's own register allocation for *what kind of statement it is*.
+
+2. **"Spilled vs register" is a readable source signature.** A value
+   written through a `T&` out-parameter is spilled at the call site; the
+   same value produced by a plain local stays in a register. Retail's loop
+   1 and loop 3 differ on exactly that, in one function, which is what
+   proved two different idioms were in play. This is a cheap, reusable
+   discriminator for any wrapper-vs-inline question.
+
+3. **BETA10's absences are evidence.** Lane STL §18.1 recorded "BETA10 has
+   nothing usable here" for `FUN_10061010` and stopped. For this row the
+   *absence* of loop 3 in BETA10 was the load-bearing fact: it freed loop 3
+   from the idiom its neighbours use. An unannotated or missing construct
+   in BETA10 should be recorded as a dated fact ("did not exist in June"),
+   not as a dead end.
+
+4. **The symbol-set test cuts both ways and it earned its keep here.**
+   `q2_iterator` reached the target signature and would have been landed by
+   a score-only gate; it breaks an exact row and relocates the defect into
+   a second TU (§9.4c).
+
+`FUN_10061010` remains open and remains the C2-stub problem (§8). Nothing
+in this landing changes that bound — but it does show that a
+"same-mechanism" classification is not a reason to stop looking for a text
+answer, which is worth weighing against §8's recommendation.
 
 ## 10. Reproducing this lane
 
 Everything is in the session scratchpad `.../3233884b-.../scratchpad/inl/`.
-Nothing in the shared corpus was mutated and **no checked source was
-changed** — every variant in this ledger was compiled out of tree.
+Nothing in the shared corpus was mutated. Exactly one checked-source change
+was landed (§9.4b, `mxstreamcontroller.cpp` loop 3, plus the re-derived
+compose pin); every other variant in this ledger was compiled out of tree.
 
 | tool | what it does |
 |---|---|
@@ -506,7 +688,14 @@ changed** — every variant in this ledger was compiled out of tree.
 | `mksrc.py` | materialise the semantics-preserving variants for `--src` products |
 | `rdis.py` | disassemble a retail row, naming call targets from the report |
 | `odis.py` | disassemble one COMDAT of a probe object, naming relocations |
-| `scprobe.py` / `v_sc.py` | the `~MxStreamController` loop-signature probe and its variants |
+| `scprobe.py` / `v_sc.py` / `v_sc2.py` | the `~MxStreamController` loop-signature probe and its variants (`v_sc2` holds the landed form) |
+| `beta2.py` | BETA10 read-off with export naming + frame-slot census |
+| `fsaudit.py` | build-wide function-set audit (COMDATs absent from retail) |
+| `fsimage.py` | promotes an object-level audit miss to the image level (drops linker-discarded COMDATs) |
+| `popfront.py` | `MxUtilityList::PopFront` spellings with collateral accounting |
+| `rederive.py` | re-derive a compose unit's pins after a source edit re-dials its TU |
+| `vcheck.py` | masked byte comparison of a probe COMDAT against retail + S72 relocation listing |
+| `repin_inl1.py` | accepted-row re-pin against this lane's build dir |
 
 Build command for the baseline gate:
 
