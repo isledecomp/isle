@@ -404,6 +404,28 @@ validation case alongside the five `MxListEntry` sites: any candidate budget
 model must reproduce *decreasing* inline depth across a run of identical
 constructions.
 
+## The PERMUTED verdict, independently confirmed
+
+Both rows this file classifies as `PERMUTED` — `MxDSBuffer::FUN_100c6fa0` and
+`MxDisplaySurface::Create` — were independently reclassified as
+`schedule (reordered)` by the census's own divergence classifier, once it
+learned that a stack displacement shifts with every `push` (so a moved stack
+load stops looking like a move) and that `difflib` reports one moved
+instruction as three blocks. Sixteen rows moved into that bucket, **eight of
+which had already been read by hand as reorderings** in earlier waves.
+
+Two independent classifiers and eight hand reads agreeing is the strongest
+validation any bucket in this campaign has. It also means the run classifier
+here and the census now say the same thing about the same rows by different
+routes.
+
+**And a correction to how these rows should be picked.** I selected a target on
+its SHAPE/EXACT spread — 94.87 against 66.67, read as "operations nearly right,
+colouring nearly all wrong". The spread was real and the causal reading was
+wrong: the gap was *one moved instruction*, and BETA10 confirmed the source
+down to its declaration order. **A wide SHAPE/EXACT spread is an allocator
+signature. Read the divergence before the spread.**
+
 ## Main-loop lane: closure state
 
 Per-row verdicts for the TUs the coordinator holds, from the corrected census
