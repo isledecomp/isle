@@ -3376,6 +3376,27 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_25f1c91cdff5",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_pair_with_shape",
+      "header_prefix": "g_h",
+      "header_count": 15,
+      "seat_prefix": "g_p",
+      "seat_count": 22,
+      "width": 2,
+      "classes": 8,
+      "functions": 45,
+      "generated_header_sha256": "25f1c91cdff519fa19f223b6f67c3f8975a1aa87d0dab13f0cf28431464dc037",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: two extern-declaration runs at the translation unit's two record seats plus a declaration shape force-included. None of the three halves contributes code, data, strings, vtables or linker directives; the count lattice is 2-D, so the seats and the shape can each fix a different byte."
+     }
     }
    ],
    "functions": [
@@ -3410,6 +3431,15 @@
      ],
      "splice_class": "equal_body_strict",
      "donor": "d_c15e6e4702a9"
+    },
+    {
+     "mangled": "?erase@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@QAE?AViterator@1@V21@@Z",
+     "expected_body_sha256": "a38ab886edb249227cbac1e79799db5104e2bc8dbb2c1a510fd8b944e156ea81",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1104,
+     "expected_donor_length": 1096,
+     "expected_linked_span": 1104,
+     "donor": "d_25f1c91cdff5"
     }
    ],
    "completion": {
@@ -5521,8 +5551,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4849,
-    "accepted_row_identity_sha256": "7b73ad51292408dc5f9e0ac0f2ad29aa8d26ad18a32dd143bb47bf084e9c712c",
+    "exact_raw_1_0_count": 4850,
+    "accepted_row_identity_sha256": "b5114a4396ed57f28ee661a5004c8ebbbff9c658a625cd3ad7a9225dc1799bd6",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",

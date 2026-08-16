@@ -1171,3 +1171,162 @@ stacked grid, a 150-state pinned count line).
 3. `FindPath` with (1), from `extern-10-40 x shape(5,28)`.
 4. `GetRefCount 0x10083bc0` — still nd=1 @84 after ~2,900 states; it blocks a
    fully-specified +1 on `GetActorROI`.
+
+---
+
+# Wave 4e — `extern_pair_with_shape`, and the donor-debt blocker is dissolved
+
+Reset onto `efbc157d`; baseline re-derived on the new denominator:
+**LEGO1 4849/4934**, ISLE 172/172, CONFIG 111/111. (All scores I quoted before
+this point used the 4933 denominator; `LegoROI::Intersect` was an annotation
+gap, not a row.)
+
+`probe.py` gained the matching carrier kind `xps:m:k:c:f`, rendered exactly as
+`isle_build.py:819` renders `extern_pair_with_shape`: both extern runs seated in
+the source (`g_h` after the last `#include`, `g_p` at EOF) and
+`declaration_shape(c,f)` force-included.
+
+## 32. `0x1002bff0 _Tree<LegoPathActor*>::erase` — the text blocker is FALSE, twice over
+
+The donor-debt bisect ledger's standing verdict was that this row reaches nd=0
+only on "varab" text, and is therefore locked behind two source hunks. **Both
+hunks are now disproven by retail's own object contents.**
+
+**Hunk (a), the `StepState` era form** — disproven in wave 4d: the retail-exact
+`StepState` body (landed, `3f22ed02`) *references* `g_hitAnimationDelay`, so the
+file-scope static is retail's own form and removing it is a regression.
+
+**Hunk (b), the `HitActor` cast-revert** — disproven here. Seed-lane accounting
+for `varb` (`Vector3 positionRef((const float*) local[3])` ->
+`Vector3 positionRef(local[3])`, line-neutral, `nm/seedlane/lea-varb/`) shows it
+does not merely recolour the TU, it **deletes two COMDATs from the object**:
+
+```
+?size@?$vector@PAEV?$allocator@PAE@@@@QBEIXZ        19 -> (gone)
+?uninitialized_copy@@YAPAPAEPAPAE00@Z               39 -> (gone)
+```
+
+Those two are **rows 0x1002b270 and 0x1002b720, both at 1.0 today**, and both
+sit inside legoextraactor's own retail contribution region — i.e. **retail's
+1997 compile of this TU emitted them**. A source form that does not instantiate
+them cannot be retail's. The cast is retail-correct.
+
+`varb` additionally changes `HitActor` 1617 -> 1563 and
+`CheckPresenterAndActorIntersections` 1375 -> 1370, both currently 1.0 and both
+at retail's exact length today — two more independent contradictions.
+
+**Consequence.** `0x1002bff0` is not a text-channel row and never needed a text
+trade. Its frontier is the nd=1 @434 register-role tie on the *current* text,
+and it should be attacked with the carrier grammar — which now has a kind that
+reaches both seats and the shape at once, and did not exist when the bisect
+grids were run. The donor-debt ledger's "erase stays blocked behind the HitActor
+cast" should be struck.
+
+Method note worth keeping: **the symbol set of a candidate object is an oracle,
+not just its bytes.** Two vanished COMDATs falsified a source hypothesis that
+~7,000 probe compiles of body-distance search had left standing. Cheap to check
+(`seedlane.py` already prints it as `-> None`), and it should be part of every
+text-cell verdict.
+
+## 33. LANDED: `0x10082ca0 _Tree<char*,LegoCharacter*>::erase` — the new kind's first customer
+
+`.6848 -> 1.0` at **`xps-15-22-8-45`** — `extern(g_h,15)` after the last
+`#include`, `extern(g_p,22)` at EOF, `declaration_shape(8,45)` force-included.
+Commit `c1de131c`, gate **4849 -> 4850/4934**, zero LOST. Splice class
+`same_slot_resize` (seed 1104 -> donor 1096 = retail). All 16 relocation
+targets agree with retail, zero seed differences.
+
+This row is the clean demonstration of why the kind was needed. Its two
+residues live in different halves of the space and **no earlier recipe could
+hold both at once**:
+
+| axis | best | which byte survives |
+|---|---|---|
+| `m=0` count line, swept completely | 43 | many |
+| flat one-seat carriers (`fwdL-69`) | 1 | **145** (cmpdir) |
+| two-seat rectangle (`extern-15-22`) | 1 | **434** (regrole) |
+| one-seat stack (`stkL-69 x` full grid) | 2 | both |
+| **two seats + shape (`xps-15-22-8-45`)** | **0** | — |
+
+Method that found it, and the one to reuse: **take the seats from the
+*rectangle's* argmin (not the flat axis's), then sweep the full 505-cell shape
+grid over them.** The flat argmin and the rectangle argmin fix different bytes;
+only the latter composes with a shape.
+
+## 34. The same method on the other one-byte rows — negative, with the extent
+
+| row | pinned | swept | states | best | note |
+|---|---|---|---|---|---|
+| `0x1002bff0` extraactor `erase` | seats (0,9) | full shape grid | 505 | 17 | adding any shape destroys the nd=1 state |
+| " | seats (9,0) | full shape grid | 505 | 17 | same |
+| " | shape (1,3) | seats `m=0..16 x k=0..24` | 425 | 372 | far worse |
+| `0x100574a0 RemoveActor` | seats (0,11) | full shape grid | 505 | 1 @**129** | the *other* byte again |
+| " | seats (0,14) | full shape grid | 505 | 1 @129 | |
+| " | shape (7,55) | seats `0..16 x 0..24` | 425 | 1 @129 | |
+| `0x10083bc0 GetRefCount` (h12j) | shape (1,3) | seats `0..16 x 0..24` | 425 | 1 @84 | ~3,400 states now |
+
+`0x1002bff0` is the interesting negative: unlike charmgr `erase`, its nd=1
+state is *destroyed* by any shape at all. Two rows in the same template family,
+one solved by adding the shape and one broken by it.
+
+`RemoveActor` keeps its three-way structure (§17): every state fixes two of
+{129, 137, 240} and never all three, and the new kind does not change that.
+
+One thing did improve: **`0x100586e0 RemovePresenter` now reaches its nd=3
+floor in a landable kind** (`xps-3-20-7-55`), where before nd=3 existed only at
+`fwdP`/`pad` states that had no recipe.
+
+## 35. `FindPath 0x10048310` with the new kind: 87 -> 66
+
+| search | best nd at 2338 B |
+|---|---|
+| the seal that closed the row | 1741 |
+| flat axes | 491 |
+| two-seat rectangle | 159 (`extern-10-40`) |
+| one-seat stack + full shape grid | 87 (`stkE-40-5-28`) |
+| **seats (10,40) + full shape grid** | **68** (`xps-10-40-5-28`) |
+| **shape (5,28) + seat rectangle** | **66** (`xps-7-37-5-28`) |
+
+Both coordinate-descent directions still improve it, and the residue is
+converging on a stable core (`[273, 315, 464, 587, 712..718, 724, 725]`). 66
+wrong bytes in 2,338 is a big colouring job, but the row has moved 1741 -> 66
+purely on carrier state, which is the strongest possible refutation of the seal.
+It wants more descent rounds, not a new channel.
+
+## 36. Wave-4e summary and the re-plan for `0x1002bff0`
+
+**Rows gained: 1** (`0x10082ca0`, .6848 -> 1.0). Lane total for wave 4: **6**.
+Gate at hand-off: **LEGO1 4850/4934**, ISLE 172/172, CONFIG 111/111, zero LOST.
+Sweep budget this wave: ~4,800 donor-lane compiles.
+
+**Re-plan for `0x1002bff0 _Tree<LegoPathActor*>::erase`** (the coordinator asked
+for this explicitly). The old plan was "wait for the authentic `HitActor` /
+`StepState` source form, then re-run the erase grid on it". That plan is dead:
+
+* hunk (a) is disproven — retail's `StepState` references `g_hitAnimationDelay`
+  (wave 4d);
+* hunk (b) is disproven — reverting the cast deletes rows 0x1002b270 and
+  0x1002b720 from the object, and retail emits both in this TU (§32);
+* and the row does not need either: it is at **nd=1 @434** on the *current*
+  text, a register-role tie, with `find` and `_Copy` already landed beside it.
+
+The new plan is entirely carrier-side, and the measurements say what is left:
+the nd=1 state is `extern-{0-9…9-0}` (the whole `m+k=9` diagonal), it is
+*destroyed* by adding any declaration shape (§34), and 505+505+425 states of
+the new kind did not improve it. What has **not** been tried is the interior
+record axis (§6) crossed with those seats — the one axis that is neither a seat
+count nor a shape — and a second shape family (`generate_pad_shape`, now a
+landable kind) in place of `generate_shape`. Those are the two remaining
+untried dimensions for this row.
+
+**Ranked next steps:**
+
+1. `pad_shape` in place of `declaration_shape` inside the stacked kinds. The
+   grammar now has `pad_shape` as a donor kind but there is no
+   `extern_pair_with_pad`; `0x1002bff0` is the row that would test whether the
+   second shape family reaches where the first cannot.
+2. The rectangle tree-wide (still my standing recommendation — it was worth
+   three rows in this lane).
+3. `FindPath` coordinate descent, two more rounds from `xps-7-37-5-28`.
+4. `GetRefCount 0x10083bc0`: ~3,400 states, still nd=1 @84, still blocking a
+   fully-specified +1 on `0x10083500 GetActorROI`.

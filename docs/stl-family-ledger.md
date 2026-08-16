@@ -1544,7 +1544,113 @@ the machine saturated again. `shapefull` orders by `c` ascending, so that is
 the `c ≤ 1` sub-grid and **not** a uniform sample; I am not reporting a floor
 from it. Resume with the same tag (`_E019sf`); existing cells are skipped.
 
-## 17. Reproducing this lane
+## 17. Wave 11 — FUN_10061010: the lifetime analysis
+
+Reading only, no sweeping. Two hard facts, both from the built object against
+the corrected retail body.
+
+### 17.1 We call the `MxListEntry` ctor; retail inlines it
+
+Call census of the two bodies: **ours makes 17 calls, retail 16**, and the
+extra one is ours at offset 509,
+`??0?$MxListEntry@PAULegoTranInfo@@@@QAE@PAULegoTranInfo@@PAV0@1@`. Every
+other call pairs up in order. So the standing TODO's guess is confirmed as a
+*fact* about the two objects (wave 8 only refuted the ctor-*spelling*
+explanation for it): retail inlines that construction and we emit a call.
+
+Retail's call offsets run **+11 bytes** ahead of ours from the third call
+onward and **+14** from the thirteenth (the region containing our
+`MxListEntry` call). So the 14-byte deficit is two separate regions: 11 bytes
+early, and 3 more at the construction.
+
+### 17.2 The early 11 bytes: retail materialises `&m_flags` before the branch
+
+The bodies are instruction-for-instruction identical through offset 129 (the
+cursor's four vtable stores at EH states 0..3). The first real divergence is
+at **offset 196**:
+
+```
+OURS    193 mov esi,[ebp-0x14]   196 add esi, 0x14      199 cmp byte ptr [esi], 0
+RETAIL  193 mov esi,[ebp-0x14]   196 mov edx,[ebp-0x14] 199 add esi, 0x74
+```
+
+`LegoTranInfo` layout: `m_location` 0x12, **`m_unk0x14` 0x14**, **`m_flags`
+0x74**. So at the top of the loop body:
+
+* we compute `&tranInfo->m_unk0x14` and test it — our source's condition
+  order, `if (tranInfo->m_unk0x14 && tranInfo->m_location != -1 && p_und)`;
+* retail computes **`&tranInfo->m_flags`** and *additionally* keeps a
+  **second copy of `tranInfo` in `edx`**.
+
+Two live pointers derived from `tranInfo`, materialised before the branch,
+is exactly the shape of a **+3 slot** budget — this is the lifetime the frame
+census has been pointing at since wave 7.
+
+**Why `m_flags` before the branch is the interesting part.** In our source the
+block
+
+```cpp
+if (tranInfo->m_flags & LegoTranInfo::c_bit2) {
+    BackgroundAudioManager()->RaiseVolume();
+    tranInfo->m_flags &= ~LegoTranInfo::c_bit2;
+}
+```
+
+appears **twice** — once inside the then-arm's inner `if (…GetCamAnim())` and
+once in the else-arm. Retail hoisting `&m_flags` above the branch is what you
+would expect if the 1997 source evaluated that test **once, common to both
+paths**, rather than duplicating it into the two arms.
+
+**Not attempted, and deliberately so.** A naive hoist is *not* semantics-
+preserving: in our text the then-arm's flags block sits inside the inner
+`GetCamAnim()` test, so the `MxTrace`/`FUN_1004b8c0` path does **not** run it,
+while the else-arm's copy is unconditional. Any reconstruction has to
+reproduce that asymmetry while still making `&m_flags` live across the branch.
+That is a real restructuring of the conditional, not a one-token edit, and it
+should be done with the BETA10 body for this function in hand rather than
+guessed — the function has no BETA10 annotation, so locating it is the first
+step (the foundry ledger's bracketing method).
+
+### 17.3 Handover
+
+The row is now characterised end to end:
+
+| fact | status |
+|---|---|
+| `animRunning` type (`MxS32` → `MxBool`) | fixed, landed zero-loss (wave 8) |
+| `MxListEntry` ctor spelling | refuted with evidence (wave 8) |
+| we call the ctor, retail inlines it | **confirmed by call census (17 vs 16)** |
+| −3 slot budget | **located**: retail keeps `&m_flags` + a second `tranInfo` live across the branch |
+| deficit split | 11 bytes early (the `&m_flags` hoist) + 3 at the construction |
+| remaining work | restructure the duplicated `m_flags & c_bit2` test so it is common to both paths while preserving the then-arm asymmetry; needs the BETA10 body, which is unannotated for this function |
+
+### 17.4 `extern_pair_with_shape` on `+145`: COMPLETE, and a bounded negative
+
+`--pre extern:0,19 --axes shapefull` — the canonical case the wave-10 brief
+named: one extern seat holds the structure, the shape flips the byte.
+**505 of 505 cells, complete**, 72 of them length-correct, 20 distinct
+residue sets. Floor for `erase<AnimSubst>`:
+
+| residue | cells | example |
+|---|---|---|
+| `[145]` — byte 432 correct | 6 | `shape-5-20` |
+| `[432]` — **byte 145 correct** | 2 | `shape-6-39` |
+| `[145, 432]` — both wrong | 3 | `shape-4-33` |
+
+**nd=1 both ways, nd=0 never.** Each tie byte is individually reachable in
+this product and they are never jointly correct — the same anti-correlation
+first recorded in §4.3 for the flat grammar, now reproduced over a *complete*
+extern-seat × shape grid with the newest recipe kind.
+
+So `+145`/`+432` have now resisted, each with a bounded search: the flat
+grammar (§4.3), the `forward_run_with_shape` product (§10.5, 505 cells), the
+long count line (§12), the 2-D extern rectangle (§16, 1,184 cells), and the
+`extern_pair_with_shape` product (here, 505 cells). Five bounded negatives on
+one pair of bytes is, at this point, evidence about the *mechanism* rather
+than about the search: the two ties are not independently steerable by
+declaration state, which is what a shared allocator decision would look like.
+
+## 18. Reproducing this lane
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
 `fresh2/` repointed at `isle-build-tr03`). Nothing in the shared corpus was
