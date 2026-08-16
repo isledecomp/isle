@@ -7050,6 +7050,70 @@ def select_toolchain_backend_profile(
     return dict(selected), False
 
 
+def _validate_equal_linked_span_function(
+    function: dict,
+    function_context: str,
+    seen_section_numbers: set,
+    retail_identities: set,
+) -> dict:
+    """Validate one equal_linked_span_fpo function entry and return its
+    normalized form; shared by the dedicated FPO mode and equal-body units
+    that carry a span-preserving FPO resize."""
+    for name in (
+        "expected_section_number", "expected_seed_length", "expected_donor_length",
+        "expected_linked_span", "expected_characteristics", "expected_selection",
+        "expected_relocation_count", "expected_seed_line_count",
+        "expected_donor_line_count", "expected_local_symbol_updates",
+    ):
+        value = function.get(name)
+        require(isinstance(value, int) and not isinstance(value, bool) and value >= 0,
+                f"{function_context}.{name} is invalid")
+    require(function["expected_section_number"] > 0,
+            f"{function_context}.expected_section_number is invalid")
+    require(function["expected_section_number"] not in seen_section_numbers,
+            f"{function_context}.expected_section_number is duplicated within this TU")
+    seen_section_numbers.add(function["expected_section_number"])
+    require(function["expected_seed_length"] > 0
+            and function["expected_donor_length"] > 0,
+            f"{function_context}: zero-length functions are unsupported")
+    require(function["expected_linked_span"] > 0
+            and function["expected_linked_span"] % 16 == 0,
+            f"{function_context}.expected_linked_span is invalid")
+    require(((function["expected_seed_length"] + 15) // 16) * 16
+            == function["expected_linked_span"]
+            == ((function["expected_donor_length"] + 15) // 16) * 16,
+            f"{function_context}: declared linked spans are not equal")
+    require(function["expected_selection"] == 2,
+            f"{function_context}: only select-any FPO COMDATs are supported")
+    require_sha(function.get("compiler_output_body_sha256"),
+                f"{function_context}.compiler_output_body_sha256")
+    expected_donor_fpo = validate_manifest_fpo_record(
+        function.get("expected_donor_fpo"),
+        f"{function_context}.expected_donor_fpo",
+    )
+    require(expected_donor_fpo["cbProcSize"]
+            == function["expected_donor_length"],
+            f"{function_context}.expected_donor_fpo size differs")
+    retail = function.get("retail_oracle")
+    require(isinstance(retail, dict), f"{function_context}.retail_oracle must be an object")
+    exact_keys(retail, {"image", "address", "verdict", "length"},
+               f"{function_context}.retail_oracle")
+    require(retail.get("image") in ("LEGO1.DLL", "ISLE.EXE"),
+            f"{function_context}.retail_oracle.image is invalid")
+    require(isinstance(retail.get("address"), str)
+            and ADDRESS_RE.fullmatch(retail["address"]) is not None,
+            f"{function_context}.retail_oracle.address is invalid")
+    retail_identity = (retail.get("image"), retail.get("address"))
+    require(retail_identity not in retail_identities,
+            f"{function_context}.retail_oracle identity/address is duplicated")
+    retail_identities.add(retail_identity)
+    require(retail.get("verdict") == "MATCH"
+            and type(retail.get("length")) is int
+            and retail.get("length") == function["expected_donor_length"],
+            f"{function_context}: retail oracle is not a pinned exact-length match")
+    return {**function, "expected_donor_fpo": expected_donor_fpo}
+
+
 def validate_manifest(
     manifest_path: Path,
     source_dir: Path,
@@ -7917,6 +7981,7 @@ def validate_manifest(
                 f"{context}.donors must be a non-empty array")
         normalized_donors = []
         local_recipe_ids = set()
+        local_recipe_kinds = {}
         for donor_index, donor in enumerate(donors):
             donor_context = f"{context}.donors[{donor_index}]"
             require(isinstance(donor, dict), f"{donor_context} must be an object")
@@ -7944,6 +8009,7 @@ def validate_manifest(
             recipe = donor.get("recipe")
             require(isinstance(recipe, dict), f"{donor_context}.recipe must be an object")
             kind = recipe.get("kind")
+            local_recipe_kinds[recipe_id] = kind
             if mode == "compose_equal_body_comdat":
                 require(
                     kind in ("forward_declaration_run", "declaration_shape"),
@@ -8118,20 +8184,35 @@ def validate_manifest(
                                          "same_slot_resize"),
                         f"{function_context}: unsupported splice class")
                 if splice_class == "same_slot_resize":
-                    exact_keys(
-                        function,
-                        {"mangled", "donor", "splice_class",
-                         "expected_seed_length", "expected_donor_length",
-                         "expected_linked_span", "expected_body_sha256"},
-                        function_context,
-                    )
-                    for name in ("expected_seed_length",
-                                 "expected_donor_length",
-                                 "expected_linked_span"):
+                    resize_keys = {
+                        "mangled", "donor", "splice_class",
+                        "expected_seed_length", "expected_donor_length",
+                        "expected_linked_span", "expected_body_sha256",
+                    }
+                    split_lines = ("expected_seed_line_count" in function
+                                   or "expected_donor_line_count" in function)
+                    if split_lines:
+                        # A donor whose COFF line-row count differs from the
+                        # seed's must declare both counts explicitly.
+                        resize_keys |= {"expected_seed_line_count",
+                                        "expected_donor_line_count"}
+                    exact_keys(function, resize_keys, function_context)
+                    checked_ints = ["expected_seed_length",
+                                    "expected_donor_length",
+                                    "expected_linked_span"]
+                    if split_lines:
+                        checked_ints += ["expected_seed_line_count",
+                                         "expected_donor_line_count"]
+                    for name in checked_ints:
                         value = function.get(name)
                         require(isinstance(value, int)
                                 and not isinstance(value, bool) and value > 0,
                                 f"{function_context}.{name} is invalid")
+                    if split_lines:
+                        require(function["expected_seed_line_count"]
+                                != function["expected_donor_line_count"],
+                                f"{function_context}: split line counts "
+                                "must differ (omit them when equal)")
                     require(
                         function["expected_linked_span"] % 16 == 0
                         and ((function["expected_donor_length"] + 15) // 16)
@@ -8217,61 +8298,10 @@ def validate_manifest(
             function_recipe_ids.add(donor_id)
             require(function.get("splice_class") == "equal_linked_span_fpo",
                     f"{function_context}: unsupported splice class")
-            for name in (
-                "expected_section_number", "expected_seed_length", "expected_donor_length",
-                "expected_linked_span", "expected_characteristics", "expected_selection",
-                "expected_relocation_count", "expected_seed_line_count",
-                "expected_donor_line_count", "expected_local_symbol_updates",
-            ):
-                value = function.get(name)
-                require(isinstance(value, int) and not isinstance(value, bool) and value >= 0,
-                        f"{function_context}.{name} is invalid")
-            require(function["expected_section_number"] > 0,
-                    f"{function_context}.expected_section_number is invalid")
-            require(function["expected_section_number"] not in seen_section_numbers,
-                    f"{function_context}.expected_section_number is duplicated within this TU")
-            seen_section_numbers.add(function["expected_section_number"])
-            require(function["expected_seed_length"] > 0
-                    and function["expected_donor_length"] > 0,
-                    f"{function_context}: zero-length functions are unsupported")
-            require(function["expected_linked_span"] > 0
-                    and function["expected_linked_span"] % 16 == 0,
-                    f"{function_context}.expected_linked_span is invalid")
-            require(((function["expected_seed_length"] + 15) // 16) * 16
-                    == function["expected_linked_span"]
-                    == ((function["expected_donor_length"] + 15) // 16) * 16,
-                    f"{function_context}: declared linked spans are not equal")
-            require(function["expected_selection"] == 2,
-                    f"{function_context}: only select-any FPO COMDATs are supported")
-            require_sha(function.get("compiler_output_body_sha256"),
-                        f"{function_context}.compiler_output_body_sha256")
-            expected_donor_fpo = validate_manifest_fpo_record(
-                function.get("expected_donor_fpo"),
-                f"{function_context}.expected_donor_fpo",
-            )
-            require(expected_donor_fpo["cbProcSize"]
-                    == function["expected_donor_length"],
-                    f"{function_context}.expected_donor_fpo size differs")
-            retail = function.get("retail_oracle")
-            require(isinstance(retail, dict), f"{function_context}.retail_oracle must be an object")
-            exact_keys(retail, {"image", "address", "verdict", "length"},
-                       f"{function_context}.retail_oracle")
-            require(retail.get("image") in ("LEGO1.DLL", "ISLE.EXE"),
-                    f"{function_context}.retail_oracle.image is invalid")
-            require(isinstance(retail.get("address"), str)
-                    and ADDRESS_RE.fullmatch(retail["address"]) is not None,
-                    f"{function_context}.retail_oracle.address is invalid")
-            retail_identity = (retail.get("image"), retail.get("address"))
-            require(retail_identity not in retail_identities,
-                    f"{function_context}.retail_oracle identity/address is duplicated")
-            retail_identities.add(retail_identity)
-            require(retail.get("verdict") == "MATCH"
-                    and type(retail.get("length")) is int
-                    and retail.get("length") == function["expected_donor_length"],
-                    f"{function_context}: retail oracle is not a pinned exact-length match")
-            normalized_functions.append({
-                **function, "expected_donor_fpo": expected_donor_fpo,
-            })
+            normalized_functions.append(_validate_equal_linked_span_function(
+                function, function_context, seen_section_numbers,
+                retail_identities,
+            ))
 
         if mode == "pass_through":
             require(not functions, f"{context}: pass_through cannot request functions")
@@ -10470,9 +10500,17 @@ def compose_same_slot_resize(
             "donor function set differs")
     require(
         all(sp[key] == dp[key] for key in
-            ("name", "relocation_count", "line_count", "characteristics")),
+            ("name", "relocation_count", "characteristics")),
         "target header shape changed",
     )
+    if ("expected_seed_line_count" in function
+            or "expected_donor_line_count" in function):
+        require(sp["line_count"] == function["expected_seed_line_count"]
+                and dp["line_count"] == function["expected_donor_line_count"],
+                "target COFF line counts differ from their split pins")
+    else:
+        require(sp["line_count"] == dp["line_count"],
+                "target header shape changed")
     seed_defs = section_definitions(seed)
     donor_defs = section_definitions(donor)
     require(
@@ -10558,8 +10596,7 @@ def compose_same_slot_resize(
         seed, mangled, sp["number"])
     donor_function_index, donor_function = function_symbol(
         donor, mangled, dp["number"])
-    require(sp["line_count"] > 0
-            and sp["line_count"] == dp["line_count"],
+    require(sp["line_count"] > 0 and dp["line_count"] > 0,
             "target COFF line count changed")
     seed_lines = _coff_table_bytes(seed, sp, "lines")
     donor_lines = bytearray(_coff_table_bytes(donor, dp, "lines"))
@@ -10594,15 +10631,22 @@ def compose_same_slot_resize(
     expected_debug_raw[16:28] = donor_debug_raw[16:28]
 
     old_end = sp["raw_offset"] + sp["raw_size"]
-    delta = dp["raw_size"] - sp["raw_size"]
+    replacements = [
+        (sp["raw_offset"], old_end, donor_code),
+        (
+            sp["line_offset"],
+            sp["line_offset"] + sp["line_count"] * 6,
+            donor_lines,
+        ),
+    ]
+    total_delta = sum(len(replacement) - (end - start)
+                      for start, end, replacement in replacements)
 
     def shifted(pointer: int) -> int:
-        return pointer + delta if pointer and pointer >= old_end else pointer
+        return shifted_pointer(pointer, replacements)
 
-    output = bytearray(
-        seed_bytes[:sp["raw_offset"]] + donor_code + seed_bytes[old_end:]
-    )
-    new_symbol_offset = seed.symbol_offset + delta
+    output = bytearray(apply_replacements(seed_bytes, replacements))
+    new_symbol_offset = shifted(seed.symbol_offset)
     output[8:12] = new_symbol_offset.to_bytes(4, "little")
 
     for section in seed.sections:
@@ -10610,6 +10654,8 @@ def compose_same_slot_resize(
         if section["number"] == sp["number"]:
             output[header + 16:header + 20] = dp["raw_size"].to_bytes(
                 4, "little")
+            output[header + 34:header + 36] = dp["line_count"].to_bytes(
+                2, "little")
         for field, relative in (("raw_offset", 20),
                                 ("relocation_offset", 24),
                                 ("line_offset", 28)):
@@ -10625,18 +10671,15 @@ def compose_same_slot_resize(
         output[at + 4:at + 8] = left["symbol_index"].to_bytes(4, "little")
         output[at + 8:at + 10] = right["type"].to_bytes(2, "little")
 
-    line_output = shifted(sp["line_offset"])
-    output[line_output:line_output + len(donor_lines)] = donor_lines
-
     for symbol_index, item in seed.symbols.items():
         if item["type"] != 0x20 or item["aux_count"] < 1:
             continue
         auxiliary = coff_auxiliary(seed, symbol_index, item)
         line_pointer = int.from_bytes(auxiliary[8:12], "little")
-        if line_pointer and line_pointer >= old_end:
+        mapped = shifted(line_pointer) if line_pointer else line_pointer
+        if mapped != line_pointer:
             at = new_symbol_offset + (symbol_index + 1) * 18
-            output[at + 8:at + 12] = (line_pointer + delta).to_bytes(
-                4, "little")
+            output[at + 8:at + 12] = mapped.to_bytes(4, "little")
 
     local_value_updates = 0
     for seed_index, donor_index in sorted(mapping.items()):
@@ -10693,7 +10736,7 @@ def compose_same_slot_resize(
 
     checked = CoffObject(composed)
     cp = checked.function_section(mangled)
-    require(len(composed) == len(seed_bytes) + delta,
+    require(len(composed) == len(seed_bytes) + total_delta,
             "output file-size delta is wrong")
     require(coff_body(checked, cp) == donor_code,
             "output target body differs from donor")
@@ -10732,7 +10775,7 @@ def compose_same_slot_resize(
         "section_number": cp["number"],
         "seed_length": sp["raw_size"],
         "donor_length": dp["raw_size"],
-        "file_size_delta": delta,
+        "file_size_delta": total_delta,
         "linked_span": function["expected_linked_span"],
         "mapped_locals": len(mapping),
         "changed_local_values": local_value_updates,

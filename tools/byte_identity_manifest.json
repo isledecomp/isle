@@ -3700,6 +3700,17 @@
       156,
       171
      ]
+    },
+    {
+     "mangled": "?UpdateStructMapAndROIIndex@LegoAnimPresenter@@IAEXAAV?$Map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@@@PAVLegoTreeNode@@PAVLegoROI@@@Z",
+     "donor": "d_31e36d131642",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 291,
+     "expected_donor_length": 290,
+     "expected_linked_span": 304,
+     "expected_body_sha256": "fa63e966986dde3776a5f0766b9b03fdfe1c3de5a24ed1447ea6a1c47ea7ef67",
+     "expected_seed_line_count": 27,
+     "expected_donor_line_count": 28
     }
    ],
    "completion": {
@@ -4100,8 +4111,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4826,
-    "accepted_row_identity_sha256": "c5f53c2416a3ba2e9ce6453a566ca1f3523ba17267e2d6158dd9f7e61224e641",
+    "exact_raw_1_0_count": 4827,
+    "accepted_row_identity_sha256": "c66d62d6162dc4431eadc0eb256e2364d7cd967d4b5cf630c586e4b0808d2786",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
