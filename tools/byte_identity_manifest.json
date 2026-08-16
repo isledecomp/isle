@@ -811,6 +811,26 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated forward-declaration run prepended to the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_a9709b0b6698",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_run_with_shape",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 96,
+      "width": 3,
+      "classes": 6,
+      "functions": 60,
+      "generated_header_sha256": "a9709b0b66989825f1e2cf9e7825bfe4d0a8c2d75e15052cd42271056ac467ae",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: a forward-declaration run seated at the stated placement plus a declaration shape rendered as a force-include; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -838,6 +858,15 @@
       46,
       51
      ]
+    },
+    {
+     "mangled": "??1ViewLODListManager@@UAE@XZ",
+     "expected_body_sha256": "bf7be1804db457028af0e1e1f4cf6a8431e868ef857e637444087f0224d44ac2",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 395,
+     "expected_donor_length": 398,
+     "expected_linked_span": 400,
+     "donor": "d_a9709b0b6698"
     }
    ],
    "completion": {
@@ -4009,6 +4038,25 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_1784210fd299",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 8,
+      "seat_prefix": "g_p",
+      "seat_count": 17,
+      "width": 2,
+      "generated_header_sha256": "1784210fd2995076a9185197eeee6a871756f493b5a36742086439674c7d4b1a",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -4177,6 +4225,15 @@
      "expected_body_sha256": "fa63e966986dde3776a5f0766b9b03fdfe1c3de5a24ed1447ea6a1c47ea7ef67",
      "expected_seed_line_count": 27,
      "expected_donor_line_count": 28
+    },
+    {
+     "mangled": "?ParseExtra@LegoAnimPresenter@@UAEXXZ",
+     "expected_body_sha256": "f59d95daed27138f4f3319d5fa7ddcfc8ad0e16eaa809aea997273de1ea99a9f",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1746,
+     "expected_donor_length": 1763,
+     "expected_linked_span": 1776,
+     "donor": "d_1784210fd299"
     }
    ],
    "completion": {
@@ -4824,8 +4881,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4834,
-    "accepted_row_identity_sha256": "0e4ae98a4885bbce25c7f93d77a041b250fca12da255a3be071c2fcb421b00cc",
+    "exact_raw_1_0_count": 4836,
+    "accepted_row_identity_sha256": "7f11ba3cf3bd64896620964d7464426547d08813ba49fe9c2eb63431a7a57248",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
