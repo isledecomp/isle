@@ -1818,9 +1818,17 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 		}
 		default:
 			// Check if the the key is part of the debug password
-			if (!*g_currentInput) {
+			if (*g_currentInput) {
+				if (*g_currentInput == key) {
+					g_currentInput++;
+				}
+				else {
+					g_currentInput = g_debugPassword;
+				}
+			}
+			else {
 				// password "protected" debug shortcuts
-				switch (((LegoEventNotificationParam&) p_param).GetKey()) {
+				switch (key) {
 				case VK_TAB:
 					VideoManager()->ToggleFPS(g_fpsEnabled);
 					if (g_fpsEnabled) {
@@ -2099,14 +2107,6 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 				case VK_OEM_MINUS:
 					g_unk0x100f66bc = LegoAnimationManager::e_unk1;
 					break;
-				}
-			}
-			else {
-				if (*g_currentInput == ((LegoEventNotificationParam&) p_param).GetKey()) {
-					g_currentInput++;
-				}
-				else {
-					g_currentInput = g_debugPassword;
 				}
 			}
 		}
