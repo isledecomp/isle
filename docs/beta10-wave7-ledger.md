@@ -53,3 +53,89 @@ on something SHAPE keeps. That is this row: retail's own histogram uses both
 orders ({8:7, 4:2}), so the "SHAPE gap ⇒ text target" rule misfires here.
 **Treat this row as closed on both channels too**, on the strength of the
 wave-5 census rather than the SHAPE number.
+
+## A REFINEMENT THE MAP'S BINARY RULE NEEDS: vendor-inline SHAPE gaps
+
+Three of this lane's "real SHAPE gap" rows have their gap **inside inlined
+vendor STL code**, where the source that would have to change is `<list>` or
+`<xtree>` — which the mandates forbid editing. A SHAPE gap there is just as
+unreachable as SHAPE 100, but the binary rule files it as a text target.
+
+Named precisely, with `adiff -v`:
+
+* **`LegoOmni::Destroy` 0x10058c30** — retail has exactly one extra
+  instruction, `add r, 8` at +244, and one `cmp [r+0xc]` where retail has
+  `cmp [r+4]`. That is the addressing-mode hoist inside the inlined container
+  walk (wave-1 recorded it as "callee-side, KILLED for legomain source";
+  wave 4 located it at byte level; the metric now names it as the *only*
+  divergence in the whole 173-instruction body).
+* **`LegoCarRaceActor::CPI` 0x10081840** — retail has two extra instructions
+  at +119, `jmp T` + `mov [F], r`: the `_Tree<…>::iterator::operator++`
+  tail-merge shape (wave 4's +5 finding). Everything else in 368 instructions
+  aligns.
+* **`LegoWEGEdge::LinkEdgesAndFaces`** — first-party inline
+  (`Vector3::LenSquared`) rather than vendor, but the same conclusion for a
+  different reason: wave 5's census showed retail emits **both** temp orders
+  ({8:7, 4:2}), so no source spelling produces its program.
+
+**Suggested third verdict for the census: `SHAPE gap in inlined code that the
+mandates put out of reach` — not a text target.** Otherwise three of my rows
+will be handed back to me as text work that cannot be done.
+
+## `CalculateCameraTransform` — inline budget, confirmed a second way
+
+The largest SHAPE gap in the lane (94.23; ours 304 instructions vs retail's
+**320**) is the un-inlined `LegoAnimNodeData::Interpolate` call that wave 4
+identified. The obvious text hypothesis was that 1997 did not mark
+`Interpolate` `inline` at all — which would make every use site a real call.
+
+Killed by counting retail's call sites (`t2/callers.py`):
+
+```
+direct calls to 0x100a0b00 in LEGO1.DLL: 2
+  from 0x1009f818   (inside CalculateCameraTransform)
+  from 0x100a04a4
+```
+
+Our source has **seven** uses of `Interpolate`. Retail calls it twice and
+inlines the other five, so the keyword *was* present and C2's budget simply
+ran out at two sites. The row is inline-budget class (fresh-eyes C4) and needs
+the pool instrument, not a source edit. Sealed.
+
+## `LegoLOD::Read` — the lane's best text target, and nine more negatives
+
+SHAPE 97.90 / **STRUCT 76.88** is the sharpest frame signal in the lane: the
+operation sequence is nearly retail's while **103 aligned instructions carry a
+different frame displacement**. `t2/slotmap.py` publishes the map:
+
+```
+   ours  retail  delta  count
+   -20 … -36  →  -24 … -40    -4    (37 instructions)
+   -40 … -56  →  -48 … -64    -8    (33)
+   -64        →  -68          -4    (7)
+  -116…-124   → -120…-128     -4    (5)
+   -380       →  -384         -4    (1)
+   -67, -65   →  -20, -18    +47    (the packed-word byte accesses)
+```
+
+Two insertion points, not one: a 4-byte slot below −20 **and** a second between
+−36 and −40, with 4 bytes recovered again below −56. And retail keeps
+`tempNumVertsAndNormals` at **−0x14** where ours has it at −0x44.
+
+Nine declaration variants probed against the metric (five position moves of
+`tempNumVertsAndNormals` within the block; four uninitialised-across-initialised
+moves, the axis that produced wave-2's `MXIOINFO::Advance` hit):
+
+| variant | SHAPE | STRUCT |
+|---|---|---|
+| base | 97.90 | 76.88 |
+| p1 temp declared last · p2 temp first in its line · p3 with `numPolys` · p4 with `numTextureIndices` | 97.90 | 76.88 (all four identical) |
+| p5 temp first in the whole block | 97.90 | 76.71 |
+| q1 temp first + `index` moved · q2 `numPolys` hoisted above the initialisers · q3 `numVertices` hoisted · q4 `paletteEntries` hoisted | 97.90 | 76.71 / 76.88 / 76.88 / 76.88 |
+
+**Every one inert.** The frame stays 0x170 against retail's 0x174. Combined
+with wave 4's three scalar-temp variants (all folded away without growing the
+frame), that is **twelve declaration forms that cannot buy the missing slot**.
+Whatever retail declared must earn a slot — an aggregate, or an object whose
+address escapes — and it is not any scalar at the `tempNumVertsAndNormals`
+site. The slot map above bounds where it sits; that is the handover.
