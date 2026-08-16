@@ -1650,7 +1650,91 @@ one pair of bytes is, at this point, evidence about the *mechanism* rather
 than about the search: the two ties are not independently steerable by
 declaration state, which is what a shared allocator decision would look like.
 
-## 18. Reproducing this lane
+## 18. Wave 12 — FUN_10061010: BETA10 is empty here, and the slots are a symptom
+
+### 18.1 BETA10 has nothing usable for this function — definitively
+
+Not "I could not locate it": the body **is** annotated and **already
+transcribed**. `legoanimationmanager.cpp` carries two source forms —
+`#ifdef BETA10` (`// FUNCTION: BETA10 0x100422cc`) and `#else` (the retail
+form). The June body is a much earlier function:
+
+* no `m_flags` anywhere — so no `c_bit2` test, no `RaiseVolume` block;
+* no `p_und` in the condition;
+* no `m_tranInfoList2`, no `Append`, hence no `MxListEntry` construction;
+* no `GetCamAnim()` chain, no `animRunning` accumulator;
+* `m_presenter != NULL` tested *inside* each arm rather than as the outer test.
+
+The construct I need to reconstruct did not exist in June. **BETA10 cannot
+confirm or refute the `m_flags` hoist**, and no amount of bracketing will
+change that. Recorded so nobody re-opens it.
+
+### 18.2 Retail's structure, read from the binary instead
+
+```
+193 esi = tranInfo            196 edx = tranInfo
+199 esi = tranInfo + 0x74     -> &m_flags,   live across the branch
+202 edx = tranInfo + 0x14     -> &m_unk0x14
+205 [ebp-0x44] = edx          -> SPILLED to a stack slot
+208 ebx = [esi]               -> m_flags loaded once
+212 al  = ebx & 2             -> the c_bit2 test computed BEFORE any branch
+...
+257 test bl, 2                -> re-tested inside the arm
+274 and dword [esi], ~2       -> m_flags &= ~c_bit2 through the held address
+284 edx = [ebp-0x44]          -> &m_unk0x14 reloaded
+287 mov byte [edx], 0         -> m_unk0x14 = FALSE
+```
+
+So retail computes `m_flags & c_bit2` **once above the branch** and keeps two
+derived addresses live — one of them spilled, which is one of the three extra
+slots.
+
+### 18.3 Two source forms tested; neither moves the frame
+
+| variant | body | `sub esp` |
+|---|---|---|
+| base | 717 | 0x2c |
+| h1 — `MxU32 flags = tranInfo->m_flags;` hoisted above the branch, both arms gate on it | 713 | 0x2c |
+| h2 — `MxU32& flags` **and** `MxBool& unk14` reference locals | 711 | 0x2c |
+| retail | 731 | **0x38** |
+
+Both are semantics-preserving (each arm keeps its own gate, so the
+`MxTrace`/`FUN_1004b8c0` path still does not run the raise block). Both move
+the body and **neither moves the frame by a single byte**. This is §13.2a's
+law again, now confirmed on a second row: **naming a value — even taking its
+address — does not create a lifetime.** The allocator folds it.
+
+### 18.4 The synthesis: the slot budget is a symptom, not a target
+
+Retail *spills* `&m_unk0x14`. A spill happens because the allocator ran out
+of registers — i.e. retail has **more register pressure** than we do. The one
+structural difference we have already proven between the two objects is that
+**retail inlines `MxListEntry<LegoTranInfo*>::MxListEntry` and we call it**
+(17 calls vs 16, §17.1). An inlined construction adds live values, which adds
+pressure, which produces exactly the spills that show up as +3 slots.
+
+That unifies every measurement on this row into one cause:
+
+| observation | explained by |
+|---|---|
+| 17 calls vs 16 | retail inlines the ctor |
+| +3 bytes at the construction region | the inline itself |
+| +3 stack slots | spills forced by the added pressure |
+| +11 bytes early (addresses materialised and spilled) | the same pressure, upstream |
+
+**So the frame budget is downstream of the inline decision, not an
+independent lever** — which is why two reasonable source forms move the body
+and leave `sub esp` at 0x2c. Wave 8 already showed the ctor *spelling* is not
+the lever (the initialiser-list form breaks a currently-exact row and so is
+refuted as retail's source). What remains is the C2 inline decision itself:
+the inline-budget class, fresh-eyes-2 §C4.
+
+**Recommendation: stop spending source variants on this row.** It is now
+fully characterised and its remaining lever is the inliner instrument, which
+is the same instrument the 484-site regrole class needs. No checked-source
+edit was made this wave; all variants were out-of-tree.
+
+## 19. Reproducing this lane
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
 `fresh2/` repointed at `isle-build-tr03`). Nothing in the shared corpus was
