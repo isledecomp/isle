@@ -744,6 +744,40 @@ colouring). A `cmpdir` is reachable; a `regrole` on this row is not.
 
 Result: see §10.5.
 
+### 10.6 Two structural facts about the carrier axis itself
+
+**(a) The fwd axis is partially periodic with period 32, and heavily
+redundant on some rows.** Distinct body count over a 96-cell forward-run axis
+(`period.py`):
+
+| row / axis | distinct bodies out of 96 | strongest period |
+|---|---|---|
+| 0x1006e720 `_Insert` HideAnim / fwdE | **3** | p=32 (94% agreement) |
+| 0x1006c200 `_Insert` AnimSubst / fwdE | **4** | p=32 (91%) |
+| 0x1006a7a0 `_Insert` AnimStruct / fwdE | 6 | p=32 (86%) |
+| 0x10068b20 erase AnimSubst / fwdE | 32 | p=32 (73%) |
+| 0x100af7e0 erase MxAtom / fwdL | 61 | p=32 (53%) |
+| 0x100a7960 erase ViewLODList / fwdL | 73 | p=32 (27%) |
+
+p=32 is the strongest period for essentially every row and axis measured,
+which points at a 32-entry table in the front end rather than a
+count-proportional effect. The redundancy is row-specific: a 96-cell fwdE
+sweep buys 3 distinct states for one row and 73 for another, so a flat
+per-axis budget is the wrong shape. **Dedupe by body sha before scoring** and
+the same information costs a fraction of the compiles.
+
+**(b) `fwdL` and `fwdP` are the same state for most bodies.** Over all 96 k
+on `legoanimpresenter.cpp`, comparing every `.text` COMDAT
+(`fwdlp2.py`): only **19** bodies ever differ between "declarations at the
+top of the file" and "declarations after the last `#include`" — 18 of them
+header-defined inlines (`Vector2`/`Vector3`/`Matrix4`/`LegoROIList`) plus
+`ParseExtra`. **None of the six `_Tree` rows, BuildROIMap or CopyTransform
+ever differ**: for those, `fwdL-k` and `fwdP-k` are byte-identical for all
+96 k. The equivalence is not universal — on `viewlodlist.cpp` the `_Tree`
+erase and the destructor *do* differ — but where it holds it halves the fwd
+search space, and it means a `fwdP` hit on those rows was always landable as
+`placement: prefix`.
+
 ## 11. Reproducing this lane
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
