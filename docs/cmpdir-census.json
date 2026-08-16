@@ -818,7 +818,8 @@
   "path": "/private/tmp/claude-501/-Users-foxtacles-Projects-isle/3233884b-d405-46dd-ab8c-ee0c06400055/scratchpad/b10w4/sweeps/all2-legomain-k600/fwdE-311/o.obj",
   "notes": [
    "+151 CMPDIR  cmp ecx, dword ptr [esp + 0x10]   |   cmp dword ptr [esp + 0x10], ecx"
-  ]
+  ],
+  "carrier_channel": "sealed 2026-08-16 wave 4: floor nd=1 reached only by fwdE and extern; shape/pad/fwdL/fwdP/triple/forward_run_with_shape all far worse. 13,313 corpus objects + 2,975 tip-text cells."
  },
  {
   "address": "0x10061010",
@@ -1441,7 +1442,8 @@
   "path": "/private/tmp/claude-501/-Users-foxtacles-Projects-isle/3233884b-d405-46dd-ab8c-ee0c06400055/scratchpad/inl/nd-vm_a4/extern-3-1/o.obj",
   "notes": [
    "+516 CMPDIR  cmp ecx, eax   |   cmp eax, ecx"
-  ]
+  ],
+  "carrier_channel": "sealed 2026-08-16 wave 3: extern/shape reach nd=1, fwd/pad worse; ~8,500 cells across waves 1-2. No cells spent in wave 4."
  },
  {
   "address": "0x100a7960",
@@ -1697,7 +1699,8 @@
    "+488 (mirrored jcc, same cmpdir site)",
    "+711 CMPDIR  cmp dword ptr [esp + 0x9c], eax   |   cmp eax, dword ptr [esp + 0x9c]",
    "+718 (mirrored jcc, same cmpdir site)"
-  ]
+  ],
+  "carrier_channel": "sealed 2026-08-16 wave 4: floor nd=4 in EVERY measured family (shape, extern, pad, fwdP, fwdL, fAP, triple). 6,439 corpus objects + 2,058 tip-text cells."
  },
  {
   "address": "0x100bd020",

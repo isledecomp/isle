@@ -481,6 +481,114 @@ Join key: `address`. The machine-readable form, including every decoded
 divergent instruction pair, is `harv/cmpdir-census.json`; the decoder is
 `harv/cmpdir_census.py` and runs in seconds with no toolchain.
 
+## 0.3 · 2026-08-16 wave 4 — the PURE `cmpdir` class is sealed
+
+Ranks 1 and 2 of the wave-3 queue swept at breadth on tip text. **No hit. Both
+floors held in every family, and the seal is far stronger than the wave was
+scoped to produce** — because the ranking that scoped it was wrong, and
+correcting it produced the real result.
+
+### The correction: I ranked on ledger markers, against my own doctrine
+
+Wave 3 ranked these two rows first because the matrix marks `declaration_shape`
+and `pad_shape` as `L` for both — *a family a ledger claims but no result file
+backs* — and I read that as "never measured". **It is not.** A check of the
+objects themselves (`harv/family_census.py`, zero compiles) finds:
+
+| row | objects in a `shape-`/`pad-` cell | at retail's length | floor |
+|---|---:|---:|---:|
+| `0x100bb1d0` | 1,189 | 1,189 | **4** |
+| `0x10059dc0` | 2,944 | 240 | **24** |
+
+Both families were swept long ago; only the *result file* was missing. Wave 1
+established that a missing result file proves nothing about the objects — I
+applied that to **finding hits** and then failed to apply it to **ranking
+families**. The `_Ubound` analogy that justified the ranking ("a `cmpdir` site
+dead across extern, closed by `declaration_shape`") therefore never held for
+these rows: `declaration_shape` was already dead here before the wave started.
+
+**Doctrine: rank families from the objects, not from the matrix's `L` column.**
+`harv/family_census.py` does it for any row in one pass and costs nothing.
+
+### What the wave measured anyway — and it is the stronger result
+
+Family coverage per row, corpus objects **plus** this wave's tip-text cells.
+Every number is a masked nd at retail's exact length.
+
+**`0x100bb1d0` MxDisplaySurface::VTable0x30 — PURE, 2 sites, floor nd=4**
+
+| family | corpus objects | wave-4 cells | floor |
+|---|---:|---:|---:|
+| `shape` | 1,045 | 505 | 4 |
+| `extern` | 2,730 | — | 4 |
+| `pad` | 144 | 625 | 4 |
+| `fwdP` | 960 | 200 | 4 |
+| `fwdL` | 960 | — | 4 |
+| `fAP` | 600 | — | 4 |
+| `declaration_run_triple` | — | 728 | 4 |
+
+**Six corpus families and four tip-text families, 6,439 objects and 2,058
+fresh cells, and the floor is nd=4 in every one of them.** Not "usually 4" —
+4 everywhere, including the best cell of each family. The row's two `cmp`
+directions and their two mirrored branches do not move for any
+declaration-only carrier that exists.
+
+**`0x10059dc0` `_Tree<…LegoTextureInfo*>::erase` — PURE, 1 site, floor nd=1**
+
+| family | corpus objects | wave-4 cells | floor |
+|---|---:|---:|---:|
+| `fwdE` (suffix) | 2,574 | 500 (wave 2) | **1** |
+| `extern` | 3,280 | 440 (wave 2) | **1** |
+| `fwdL` (prefix) | 2,574 | 200 | 20 (corpus) / 24 (tip) |
+| `shape` | 2,800 | 505 | 24 |
+| `pad` | 144 | 625 | 24 |
+| `fwdP` (after-includes) | 1,536 | 200 | 597 |
+| `forward_run_with_shape` | 505 | 505 (wave 2) | 269 |
+| `declaration_run_triple` | — | 728 | 278 |
+
+Only two families reach the floor at all; the rest are one to three orders of
+magnitude worse. The single `cmp` direction byte at +151 survives all of them.
+
+### A wave-2 statement I have to withdraw
+
+Wave 2 recorded that the `extern` family **cannot reach retail's length** for
+`0x10059dc0`. That was true of the grid I swept — 21×21 at width 2 — and false
+as stated: the corpus holds **349 extern objects at retail's exact length**,
+floor nd=1, the best at `extern-157-154`
+(`b10w4/sweeps/all2-legomain-xs311`). The length is reachable at counts far
+above my range. The row's floor is unchanged either way, but the claim was
+over-generalised from one grid to a family and should not be relied on.
+
+### Verdict: the PURE `cmpdir` class is sealed
+
+All three PURE rows are now closed to the carrier channel:
+
+| row | sites | families at the floor | total evidence | verdict |
+|---|---:|---|---|---|
+| `0x100bb1d0` | 2 | all 7 measured | 6,439 objects + 2,058 cells | **sealed** |
+| `0x10059dc0` | 1 | `fwdE`, `extern` only | 13,313 objects + 2,975 cells | **sealed** |
+| `0x100a66f0` | 1 | `extern`, `shape` | ~8,500 cells (waves 1–2) | **sealed** (wave 3; no cells spent) |
+
+`cmpdir` is retired as a channel. It remains valuable as a **classifier** —
+the wave-3 census reprices six MIXED rows, and knowing FindPath's 66-byte
+residue is 3 direction bytes plus 19 genuinely divergent instructions changes
+how that row should be read — but no PURE `cmpdir` row is reachable from
+source text or from any declaration-only generator the composer can express.
+The direction follows from which operand is already in a register; the lever
+is the allocator, and these three rows now sit with the other "one shared
+allocator decision" rows, distinguished only by having their defect localised
+to a single named byte.
+
+### Throughput, measured again
+
+With the other lanes quiet, `wineserver` runs at **~85% of one core and is the
+ceiling**: ~25 cells/min combined across two concurrent 9-worker pools,
+independent of worker count. The wave-2 figures (~12 vs ~170 cells/min) were
+per-TU compile cost against a contended server; the steady-state ceiling is
+the single-threaded `wineserver`, not the lanes. Raising worker counts does
+not move it. A second `WINEPREFIX` would, but it puts an unvalidated
+environment into the measurement path and was not attempted.
+
 ## Where this comes from, and why that matters
 
 Source precedence, in order:
