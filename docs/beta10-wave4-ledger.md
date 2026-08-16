@@ -535,3 +535,25 @@ distance across 1200+ states on four different generators — these are hard
 one-or-two-tie rows, not "not searched enough" rows. The untried landable
 cells left for them are `declaration_shape`'s full 550-cell grid and large
 `extern_run_pair` counts (both queued as `sweep5`).
+
+### Late sweep results (legoracespecial, legoroi, act3actors)
+
+* `LegoCarRaceActor::CheckPresenterAndActorIntersections` 0x10081840:
+  base 1163 (5 short) / nd=930; **`shape-3-15` reaches 1168 = retail's true
+  length with nd=103.** Another length defect the carrier channel fixes.
+  Promote this row: it went from "not read off, +5 unexplained" to a
+  103-byte near-miss in one sweep. Next: fwdE/fwdL 97..400 and `shapefull`
+  on legoracespecial (only the 60-cell shape subset has been run).
+* `LegoCarRaceActor::CalculateSpline`: 646 across the whole 653-state grid —
+  the eax/edx cascade does not respond to any carrier tried.
+* `Act3Cop::FUN_10040360`: **8** at `fwdE-20` (better than the corpus
+  rescore's 14) and unchanged at k up to 400.
+
+**Harness note (silent sweep deaths):** with three concurrent 3-4 worker
+sweeps plus another lane's build on the same machine (load average 21), two
+sweep processes (`all-towtrack` k400 and `all-act3ammo`) died mid-run with no
+traceback and no `done` line — almost certainly OS-killed under memory
+pressure. Detect this by the missing `best.json`; the state objects are cached
+so simply re-running resumes where it stopped (the towtrack re-run completed
+608/608 and confirmed nd=11). Keep total workers at or below 4 when another
+lane is active.
