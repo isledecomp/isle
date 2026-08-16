@@ -1330,3 +1330,179 @@ untried dimensions for this row.
 3. `FindPath` coordinate descent, two more rounds from `xps-7-37-5-28`.
 4. `GetRefCount 0x10083bc0`: ~3,400 states, still nd=1 @84, still blocking a
    fully-specified +1 on `0x10083500 GetActorROI`.
+
+---
+
+# Wave 5 — the pad stack, and the joint-reachability instrument
+
+Reset onto `6efa287c`; baseline **LEGO1 4850/4934**, ISLE 172/172,
+CONFIG 111/111. `probe.py` gained `xpp:m:k:c:f` for `extern_pair_with_pad`,
+rendered as `isle_build.py:834` renders it (both extern seats in the source,
+`generate_pad_shape(c,f)` force-included).
+
+## 37. `0x1002bff0` on the pad stack — negative, and it made the row's structure legible
+
+Pad stack at the rectangle argmin seats `(0,9)`, grid `c,f = 1..16`
+(256 states, `nm/probes/lea-xpp1`): **best nd=42**. The second shape family is
+*worse* than the first here (which gave 17), and both are far worse than the
+bare seats (nd=1). For this row **any force-included grid, of either family,
+destroys the state that produces the nd=1 body.**
+
+That is a real answer to the question the kind was built to test: the pad family
+does not reach where the declaration shape cannot — at least not for this row.
+
+### The instrument that came out of it: per-offset joint reachability
+
+Rather than report another floor, I re-scored **every** state I have ever
+compiled for this row keeping the *complete* diff list (`rescore.py` had been
+truncating to 12 offsets), and cross-tabulated its two residues, 145 and 434,
+over all 678 scored states (flat, rectangle, long-count, diagonals, one-seat
+stack, `xps`, `xpp`, include-permutations, shape and pad grids):
+
+| cell | states | min nd | best example |
+|---|---|---|---|
+| 145 fixed, 434 wrong | 107 | **1** | `extern-9-0` |
+| 145 wrong, 434 fixed | 42 | **1** | `extern-0-9` **× include-perm p009** |
+| **both fixed** | 67 | **17** | `stkE-9-8-13` |
+| both wrong | 462 | 2 | `extern-0-41` |
+
+So this is **not** "never jointly reachable". Both bytes *are* fixable at once —
+67 states do it — but only in a region where seventeen other bytes break. The
+two residues are anti-correlated with each other at the good end of the space
+and co-satisfiable only at the bad end. That is a sharper statement than a floor
+and it is the right shape to hand to an allocator model: it says the two bytes
+are coupled to a third thing, not to each other.
+
+**And it produced a lead the floors hid.** The best `434`-fixing state is an
+**include-permutation** of `extern-0-9` — a channel that neither stacked recipe
+contains. Two states that differ *only* in the order of the quoted includes sit
+one byte from retail with **complementary** residues. The product
+(include-perm × two-seat lattice × shape) is therefore the live search for this
+row, and it is running.
+
+**Recommendation for the bench, tree-wide:** stop truncating the offset list,
+and report the joint cell for any row with two surviving residues. It costs
+nothing (no compiles — it is a re-score of objects already on disk) and it
+distinguishes "needs more cells" from "needs another channel" without guessing.
+
+## 38. `0x1002bff0` — the include-perm product, and the row's final structure
+
+360 states of include-permutation x {`extern-{0-9,9-0,1-8,5-4}`,
+`xps-0-9-1-3`, `xps-0-9-5-21`} (`nm/probes/lea-permx`): floor still **nd=1**.
+Joint cell re-measured over the full 709-state corpus — unchanged:
+
+| cell | states | min nd |
+|---|---|---|
+| 145 fixed, 434 wrong | 111 | 1 |
+| 145 wrong, 434 fixed | 65 | 1 |
+| both fixed | 70 | **17** |
+| both wrong | 463 | 2 |
+
+Everything the carrier grammar can express has now been applied to this row —
+flat seats, the 2-D rectangle, long counts, both shape families, one-seat and
+two-seat stacks, include-permutations, and their products — and the joint cell
+does not move off 17. This is the signature Lane STL described, measured rather
+than inferred: **not "never jointly", but "jointly only at a cost the rest of
+the body pays"**.
+
+## 39. `0x10048310 FindPath` — the descent converged, and the residue is NOT colour
+
+Coordinate descent reached a fixed point at **nd=66**: pinning shape (5,28) and
+sweeping the seat rectangle gives `xps-7-37-5-28`, and pinning those seats and
+re-sweeping the **full** 505-cell shape grid returns the same cell and the same
+66. Both directions are stationary.
+
+Then I read the residue instead of counting it, and it is not a colouring
+problem at all. Of the 72 residue offsets in the near band, **62 are never
+fixed in any state** and they occur in **contiguous runs** (712-718, 1674-1689,
+1831-1839). Disassembling two of them against the best candidate:
+
+```
++712  retail: mov [ebp-0x8c],eax ; lea eax,[ebp-0x8c] ; push eax
+      ours:   mov edx,[ecx+4] ; lea ecx,[ebp-0x70] ; mov [ebp-0x8c],eax ; …
+                (two instructions hoisted ~6 bytes earlier, re-converging at +724)
+
++1674 retail: lea ecx,[ebp-0x6c] ; mov esi,[ebp-0x144] ; mov [ebp-0x6c],3f000000h
+      ours:   mov [ebp-0x6c],3f000000h ; lea ecx,[ebp-0x6c] ; mov esi,[ebp-0x144]
+                (same three instructions permuted, re-converging exactly at +1690)
+```
+
+**Identical instructions, locally permuted, re-converging within ~16 bytes.**
+The triage's "identical instruction multiset" is confirmed, but the class is
+*instruction scheduling*, not register colouring — and MSVC 4.2's local
+scheduling follows statement/expression order in the source. So `FindPath`'s
+real distance is **a handful of statement-level hoists, not 66 bytes**, the
+carrier grammar cannot reach it (62/72 offsets immovable across 378 states),
+and the row belongs in the text channel after all — but as a small, locatable
+edit, not the rewrite that "nd 1741" implied. The offsets give the statements.
+
+**General point worth keeping: nd is the wrong ruler for a scheduling residue.**
+A three-instruction permutation reads as ~16 wrong bytes and a whole-body one
+reads as hundreds; both are one source edit. Any row whose residue is a set of
+contiguous runs that re-converge should be read, not swept.
+
+## 40. `0x10083bc0 GetRefCount` on the pad stack — negative
+
+256 pad-stack states on the h12j text (`nm/probes/grc-xpp`): still **nd=1 @84**.
+Running total for this row ≈ **3,700 states** across every carrier kind that
+exists. `GetActorROI` and `Exists` are both nd=0 in the same sweep, so the
++1/−1 trade on `0x10083500` stands exactly where it did.
+
+## 41. Wave-5 summary
+
+**Rows gained: 0** — this wave was the four searches my own ranking asked for,
+and all four are negative with their extent recorded. The lane total for the
+campaign stands at **6** (`0x1002e8d0`, `0x10045c20`, `0x1002aba0`,
+`0x10057fe0`, `0x1002a720`, `0x10082ca0`). Gate unchanged and green:
+**LEGO1 4850/4934**, ISLE 172/172, CONFIG 111/111.
+
+Sweep budget: ~1,900 donor-lane compiles, plus a full re-score of every object
+ever compiled for `0x1002bff0` and `0x10048310` (no compiles).
+
+| search | states | result |
+|---|---|---|
+| `0x1002bff0` pad stack at (0,9), 16x16 | 256 | 42 (worse than shape's 17, far worse than bare seats' 1) |
+| `0x1002bff0` include-perm x seats/stacks | 360 | 1 (unchanged); joint cell still 17 |
+| `FindPath` descent round 2, (7,37) x 505 shapes | 505 | 66 — fixed point |
+| `0x10083bc0` pad stack, 16x16 | 256 | 1 @84 (~3,700 states total) |
+| `legopathactor` rectangle (the last TU without one) | 1,024 | `UpdatePlane` 5, unchanged; `SetTransformAndDestination…` never reaches retail's length |
+
+**What I would do next, in order:**
+
+1. **`FindPath` as a text row** — read the three scheduling permutations back to
+   their statements and try the hoists. This is the first row in my lane in
+   several waves with a *specific*, small, locatable source hypothesis.
+2. **Apply the residue-run test tree-wide.** Any open row whose diff offsets
+   form contiguous runs that re-converge is a scheduling row, not a colour row,
+   and every carrier sweep spent on it is wasted. It is a re-score, not a
+   compile — `nm/byteseen.py` does it.
+3. `0x1002bff0` and `0x10083bc0` are now both fully characterised and both
+   immovable in the carrier grammar; they want the C2 pool instrument or
+   nothing.
+
+## 42. Turning `FindPath`'s residue into source lines (new instrument, first cells negative)
+
+`nm/lines.py` reads the COMDAT's **COFF line-number table** (`coff_table(...,
+"lines")`, 6 bytes per row) and maps a body offset to its source line. Applied
+to the three never-fixed residue runs, with the probe's own `s.cpp` resolving
+function-relative lines to statements:
+
+| body offset | fn line | statement |
+|---|---|---|
+| +712 | 75 | `p_grec->push_back(LegoBoundaryEdge(edge, p_oldBoundary));` (the temporary's construction, inside the `p_newBoundary == otherFace` branch) |
+| +1674 | 157-158 | the `else { for (MxS32 i = 0; i < bOther->GetNumEdges(); i++)` region |
+| +1831 | 146/167 | `minDistance = dist;` / `float dist;` |
+
+Two cells tried at the clearest site (+712), both **negative**:
+
+* `LegoBoundaryEdge boundaryEdge(edge, p_oldBoundary); p_grec->push_back(boundaryEdge);`
+  -> body length 2331/2340, never retail's 2338;
+* the `= LegoBoundaryEdge(...)` copy-init spelling -> 2331/2340/2341/2344.
+
+So the object really is a temporary in retail, not a named local. The
+instrument works and the site is now pinned to one statement; the cell space
+there is small (argument-evaluation order, the `dist` assignment's placement)
+and is the natural next text pass for this row.
+
+`nm/lines.py` is reusable for any residue: it is the missing step between "byte
+N is wrong" and "this statement is wrong".

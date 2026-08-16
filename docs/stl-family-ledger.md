@@ -1734,7 +1734,95 @@ fully characterised and its remaining lever is the inliner instrument, which
 is the same instrument the 484-site regrole class needs. No checked-source
 edit was made this wave; all variants were out-of-tree.
 
-## 19. Reproducing this lane
+## 19. Wave 13 — the C2 inliner instrument: observability, and a controlled dataset
+
+Tooling: `inlinecensus.py` (whole-build), `inlinecensus2.py` (per-callee,
+per-site).
+
+### 19.1 The observable, and the flaw in my first version of it
+
+Sound direction: **a call relocation to a COMDAT-defined callee is a
+DECLINE** — the inliner saw an inline-eligible body at that site and did not
+take it. The converse is not sound, and my first pass got it wrong: I scored
+"defined but never called" as INLINED, which is false for **virtual**
+members. They are reached through the vtable (a *data* relocation), so
+nothing calls them directly. That put `Matrix4::ToQuaternion` (444 bytes,
+`@@UAE` = virtual) at the top of an "always inlined" list, and produced a
+decline-vs-size curve that was non-monotonic nonsense (P = 0.075, 0.018,
+0.086, 0.035, 0.088, 0.277, **0.754**, 0.154 …). The 0.754 spike was an
+artefact of what fell in that bucket, not a cost threshold.
+
+Corrected: "no call" is ambiguous (inlined, unused, or vtable-only), so it is
+only usable where the callee is **known** to be used at a **known** site.
+That means the useful dataset is a template member with one known caller,
+instantiated across many TUs — exactly the controlled shape the wave asked
+for.
+
+Whole-build numbers from the sound direction alone (226 objects, 1,776
+inline-eligible callees, 517 defined in ≥2 objects): **159 are called in
+every object that defines them**, and only **8 vary between objects**. The
+decline is overwhelmingly stable per callee — but see §19.3, because retail
+shows that stability is not the whole story.
+
+### 19.2 The controlled case: `MxListEntry<T>::MxListEntry(T, prev, next)`
+
+`MxList<T>::Append` → `InsertEntry` → `new MxListEntry<T>(obj, prev, next)`,
+so every instantiation has exactly one caller and it is known. **Our build
+declines it at 5 of 5 sites:**
+
+| instantiation | size | TU | declining caller |
+|---|---|---|---|
+| `LegoTranInfo*` | 25B | legoanimationmanager | `FUN_10061010` |
+| `LegoPhoneme*` | 25B | legophonemepresenter | `StartingTickle` |
+| `LegoROI*` | 25B | legoanimpresenter | `AppendROIToScene` |
+| `MxSpan*` | 25B | mxregion | `AddRect` |
+| `MxString` | 130B | mxdsselectaction | `InsertEntry` |
+
+### 19.3 What retail did — and it is a PER-SITE decision, not a per-callee one
+
+Retail's row set contains out-of-line `MxListEntry` ctors, **all at 1.0**, for
+`LegoPhoneme*` (0x1004eb20), `LegoROI*` (0x1006ea00), `MxSpan*` (0x100c5a20)
+and `MxString` (0x100cc3c0). **The only instantiation retail has no row for is
+`LegoTranInfo*`.**
+
+So retail **declines this ctor at four sites and inlines it at exactly one** —
+and that one site is `FUN_10061010`. We decline at all five. We therefore
+agree with retail at 4 of 5 sites and differ at precisely the row that has
+been open for six waves.
+
+This corrects the natural reading of §18.4. The inline is **not** a property
+of the callee (retail proves it by deciding both ways on the same template
+body), and it is not a property of the callee's size (25 bytes, identical in
+four of the five). It is a genuine per-call-site decision — which is what a
+budget/pressure model predicts and what a pure cost model cannot.
+
+It also disposes of the obvious source hypotheses. Retail *has* the
+out-of-line ctor, so retail's `MxListEntry` really does have this 3-argument
+constructor and really does construct through it — the decomp's source shape
+is right (wave 8 had already shown the initialiser-list form breaks
+`MxListEntry<MxString>`, an exact row; now we know that row is exact in
+retail *because retail also declined to inline it there*).
+
+### 19.4 Status of the instrument
+
+Built: a sound one-directional observable and a controlled five-site dataset
+in which retail and our build are known to differ at exactly one site.
+
+Not built: the fitted budget rule. What §19.3 establishes is that the rule
+must be **site-local** — the same 25-byte body, the same one-line caller
+shape, decided both ways by retail. Fitting it needs the two counters at
+`[esp+0x38]`/`[esp+0x40]` observed at the decision point, i.e. the sandboxed
+C2 stub that fresh-eyes-2 §C4 specifies and that still does not exist. The
+census cannot substitute for it: with one differing site the dataset has
+exactly one bit of signal.
+
+**The honest bound**: I can now say *which* site differs and that the decision
+is site-local, but not *why*. Anyone continuing should build the C2 stub
+first and use §19.2's five sites as its validation set — a model that does not
+reproduce "decline at four, inline at `FUN_10061010`" is wrong, and that is a
+sharper test than any single row.
+
+## 20. Reproducing this lane
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
 `fresh2/` repointed at `isle-build-tr03`). Nothing in the shared corpus was
