@@ -834,3 +834,30 @@ repeat them):
   CalculateSpline 646 — unmoved from the shape grid.
 * `all-legowegedge` `externwide`+`externdeep` (931 further extern states):
   LinkEdgesAndFaces still 2.
+
+## CROSS-TU PATTERN: the inlined `Vector3::LenSquared` address-temp order
+
+The same 2-byte defect appears in at least three sites in two different TUs:
+
+| site | ours | retail |
+|---|---|---|
+| `LinkEdgesAndFaces` body+300 (legowegedge.cpp:110) | `add ecx,4 / add eax,8` | `add ecx,8 / add eax,4` |
+| `LinkEdgesAndFaces` body+379 (legowegedge.cpp:118) | `add ecx,4 / add eax,8` | `add ecx,8 / add eax,4` |
+| `Act3Brickster::FUN_100417c0` body+411 (at its best carrier `fwdE-28`) | `add edx,4 / add ecx,8` | `add edx,8 / add ecx,4` |
+
+`Vector3::LenSquared` (`LEGO1/realtime/vector3d.inl.h`) expands to two address
+temporaries for `m_data[1]` and `m_data[2]` (`m_data[0]` is reached through the
+base register), and retail consistently gives the FIRST temp `base+8` and the
+second `base+4`. **But this is not a blanket header defect:** the third
+`LenSquared` inline in the very same `LinkEdgesAndFaces` body
+(legowegedge.cpp:184, feeding `fsqrt` rather than `fcom`) already matches
+retail exactly with today's header text. So a reordering of the header
+expression would fix some sites and break others.
+
+`vector3d.inl.h` is outside this lane's TU list, so this is recorded rather
+than probed. The experiment for whoever owns `LEGO1/realtime/`: compile the
+tree with `LenSquared` written `m_data[2]*m_data[2] + m_data[1]*m_data[1] +
+m_data[0]*m_data[0]` (and the two other associations) and count, across all
+`LenSquared` inline sites in the tree, how many flip toward retail and how
+many away. If a spelling exists that fixes strictly more than it breaks it is
+worth several rows at once — `LinkEdgesAndFaces` (nd 2) would go to 0.
