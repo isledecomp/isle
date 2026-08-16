@@ -583,6 +583,10 @@ in §6 and the bench is in `scratchpad/stl/`.
 
 ## 9. Ranked next steps
 
+> **Superseded in part by §10.** Step 2 below ("more stacked cells on the
+> nd≤5 rows") is now measured as low-yield for any row whose floor residue is
+> `regrole`; see §10.2 and §10.7. The revised order is in §10.8.
+
 1. **Re-run the whole project's sweep queue against `oracles-v2.json` with
    the stacked-carrier axis.** Two rows landed this session from states that
    the old bench could not even *report*, and one of them needed a carrier
@@ -742,7 +746,40 @@ that byte for `erase<LegoAnimSubst>` (`fwdE:19 × shape-6-39` → residue at
 of this row as carrier-inert (15 shape-equal states, **1** distinct
 colouring). A `cmpdir` is reachable; a `regrole` on this row is not.
 
-Result: see §10.5.
+### 10.5 Result of the prediction — half confirmed, half wrong
+
+`sw.py all2-mxmain --pre fwdE:88 --axes shapefull`, **276 of 550 cells**
+before I cut it for load (the machine was shared with two other lanes and
+throughput had fallen to ~1 cell/min).
+
+| claim | outcome |
+|---|---|
+| will **not** reach nd=0 | **held** — 276 cells, no nd=0 |
+| will reach nd=1 (residue at +434 only) | **wrong** — the product never even
+matched the flat floor; its best is **nd=13** at `[20, 30, 89, 102, 112, 213, 271, 476]` |
+
+What I got wrong, and why it matters: I assumed a stacked carrier would
+*refine* around the flat nd=2 state, because that is what happened for
+`~ViewLODListManager` (nd=1 → nd=0) and for `erase<LegoAnimSubst>`
+(the `fwdE:19 × shape-6-39` cell). It does not. Adding a shape on top of
+`fwdE:88` moved the row into a **different region entirely** — the residue
+offsets are not a subset of `[145, 434]`, they are the `_Nil`-compare group
+that the flat axis had already got right. So the pre-carrier is not a
+"base point" that shapes perturb locally; the product is its own state
+space with its own geometry.
+
+Corrected operational rule: **a stacked product must be re-floored, not
+assumed to inherit its pre-carrier's floor.** Score the product's own best
+before deciding it is an improvement — otherwise a 550-cell sweep can look
+like progress while sitting 11 bytes worse than the state it started from.
+
+The same run on `legoanimpresenter` with `--pre fwdE:51` (54 cells) shows the
+identical effect: `erase<LegoAnimSubst>` sits at nd=14, not near its flat
+nd=1, and BuildROIMap at nd=5 rather than its `fwdE:19` nd=2.
+
+Still standing from the prediction: no `_Tree` regrole tie has been moved by
+any carrier state, now over **276 + 54 additional** cells on top of the 1,891
+shape-equal states of §10.2.
 
 ### 10.6 Two structural facts about the carrier axis itself
 
@@ -778,6 +815,62 @@ erase and the destructor *do* differ — but where it holds it halves the fwd
 search space, and it means a `fwdP` hit on those rows was always landable as
 `placement: prefix`.
 
+### 10.7 Wave-2 sweep results (new TUs and new axes)
+
+New axes added to `sw.py` this wave: `fr:<prefix>:<width>:<placement>` (the
+never-used free parameters of `forward_declaration_run` — everyone had only
+ever used `MxUnkRecVA/VB/VC` at width 3), `f<A|B|C><P|S|I>` (all nine
+prefix × placement combinations, including force-include of a forward run),
+`externL`/`externG` (extern runs beyond the historical 8×17 box).
+
+| row | TU | states swept | floor | residue class |
+|---|---|---|---|---|
+| 0x100af7e0 erase MxAtom | mxmain.cpp | **3,391** | nd=2 | `[145, 434]` — cmpdir + regrole |
+| 0x10029d50 erase CacheSound | legosoundmanager.cpp | 1,620 (corpus) | nd=316 | structural |
+| 0x1002a1b0 `_Erase` CacheSound | legosoundmanager.cpp | 1,620 (corpus) | nd=9 | **pure regrole — carrier-inert, 783 shape-equal states, 2 colourings, 0 retail** |
+
+I cancelled the planned fresh `legosoundmanager` sweep on the strength of
+that last line: 783 shape-equal states already prove the axis reaches only
+two colourings for `_Erase`, neither of them retail's, so more cells on that
+row are predicted waste. That is the model being used to *not* spend compute,
+which is most of its value.
+
+**No new landings this wave.** The two nd≤2 rows I was sent at
+(0x100af7e0 nd=2, 0x10068b20 nd=1) are both blocked on a regrole tie, and
+regrole is the class the carrier axis does not move.
+
+### 10.8 Revised ranked next steps
+
+1. **Triage every open row by residue class before spending a single compile.**
+   `permcensus.py` + `residuesets.py` give the floor residue and its class in
+   seconds from objects that already exist. Rows whose floor is `regrole` are
+   carrier-dead (0 hits in 1,891 shape-equal states); rows whose floor is
+   `cmpdir` or structural are carrier-live. The project's largest defect class
+   (484 `regrole` sites) is therefore *not* addressable by the campaign's main
+   instrument, and every hour spent sweeping such a row is an hour lost.
+2. **Re-floor every stacked product** (§10.5). A product does not inherit its
+   pre-carrier's floor; several of mine landed 11 bytes worse than the flat
+   state they were built on.
+3. **Dedupe carrier cells by body sha** (§10.6a). A 96-cell fwdE axis yields
+   as few as 3 distinct bodies. Period 32 is the dominant structure across
+   every row measured — worth one afternoon of RE against C1's name table,
+   because it would let the whole campaign sample a 32-cell space instead of
+   a 96- or 400-cell one.
+4. **For the regrole class, the lever must change the function's own IL.**
+   The evidence says the colouring is fixed by the emitting TU's state at the
+   point the function is compiled, is identical across both definers of a
+   symbol, and is untouched by ~2,000 declaration states. What remains
+   upstream of the allocator is the **inliner**: what got inlined into the
+   body determines its register pressure. That makes fresh-eyes-2 §C4's C2
+   pool-dump instrument the critical path for 484 sites, not a nice-to-have.
+5. **The one concrete open lead in this lane** is 0x10069b10 BuildROIMap: its
+   floor residue splits into two *independent* groups — `{471, 481}` (a
+   `_Nil` cmpdir pair) and `{304, 534, 540}` — each individually reachable
+   (664/1,946 length-correct states fix the first; the nd=2 cells fix the
+   second), never yet jointly. Both are carrier-live classes, so unlike the
+   erase family this row is not predicted dead. Sweep pre-carriers other than
+   `fwdE:19`, and re-floor each product per step 2.
+
 ## 11. Reproducing this lane
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
@@ -798,6 +891,13 @@ mutated.
 | `bytecensus.py` / `wincensus.py` | census of one byte / one byte-window across a state space or the whole corpus |
 | `zoom.py` | side-by-side disassembly of a donor and retail over an offset window |
 | `sw.py` | the corrected sweeper (oracle v2, best-nd logging, `--pre` products, `--src` text variants, `inc`/`externL`/`externG`/`f<A|B|C><P|S|I>` axes) |
+| `permcensus.py` / `permdbg.py` | which open rows are pure register permutations of retail, and what the permutation is |
+| `erasegroups2.py` | the twelve-instantiation controlled experiment (retail colouring vs ours) |
+| `colourreach.py` / `colourlaw.py` | does any state reach retail's colouring — per row, and project-wide |
+| `residuesets.py` | distinct residue-offset sets: are the residual bytes individually or jointly locked |
+| `defcensus.py` | same symbol, every defining TU: does the colouring differ between definers |
+| `period.py` / `fwdlp2.py` | carrier-axis redundancy (period 32) and the fwdL/fwdP equivalence |
+| `staleness.py` | did an upstream change move this TU's bodies (used for the `vec.h` discharge) |
 | `landin.py` | `land_into.py` for this worktree, with the S72 relocation-symbol guard and the stacked-recipe writer |
 | `repin_tr03.py` | accepted-row re-pin against `isle-build-tr03` |
 
