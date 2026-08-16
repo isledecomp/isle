@@ -3713,6 +3713,25 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_6344595f29cb",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 12,
+      "seat_prefix": "g_p",
+      "seat_count": 59,
+      "width": 2,
+      "generated_header_sha256": "6344595f29cb9da562df2b6471b0f4915286fe93cda23863b6d462b66adeb1b9",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -3770,6 +3789,17 @@
      ],
      "expected_xdata_rename_offsets": [],
      "donor": "d_0bedea41e1e7"
+    },
+    {
+     "mangled": "?Animate@Act3Brickster@@UAEXM@Z",
+     "expected_body_sha256": "01cb6c7f3bc646a4f56696311136dda6fb95ce8fca68bbf19ac17d62e52a044b",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1628,
+     "expected_donor_length": 1632,
+     "expected_linked_span": 1632,
+     "expected_seed_line_count": 98,
+     "expected_donor_line_count": 99,
+     "donor": "d_6344595f29cb"
     }
    ],
    "completion": {
@@ -4626,8 +4656,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4833,
-    "accepted_row_identity_sha256": "09defe58a4a58d0d9a94018504de20f5581b996f99a37e9452054eb09534781a",
+    "exact_raw_1_0_count": 4834,
+    "accepted_row_identity_sha256": "54048784194b9758fdaea9fae0e8b94ff9e305f20a86556a44223e7261fc77ea",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
