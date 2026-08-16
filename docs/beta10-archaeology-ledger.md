@@ -479,3 +479,26 @@ the same physical newline is still selected.
   **register-assignment** difference, i.e. allocator class — not text.
 - **`MxU8* volatile current` is load-bearing** in FUN_100c6fa0. Removing the
   `volatile` collapses the body 234 → 162 bytes. It is not a cleanup target.
+
+### Added by lane ARCH wave 2 (do not re-run)
+
+- **The inline accept/decline bit is not carrier-reachable.** 8,963 cells over
+  `pad_shape` (including the full 99x99 grid on `legoanim.cpp`) and the full
+  `declaration_shape` domain, three TUs, both directions. Zero flips.
+- **No global `#pragma inline_depth` is 1997's**, on any of the four anchors.
+  (Diagnostic only — pragma-forced codegen is out of mandate for landing.)
+- **`#pragma auto_inline(off)` is inert** on all four anchors: `/Ob1` is in
+  force and every disputed expansion is of an explicitly `inline` callee.
+- **Six source forms on `0x1009f490`** leave the bit set (callee in the class
+  body, result discarded, `case 2` braced, plus wave 1's two callee rewrites).
+- **`mxlist.h`: four forms inert, one flips the bit and is refuted.** Writing
+  `InsertEntry` as default-construct-then-assign drops the `MxListEntry` ctor
+  call, but the same header takes the **exact** row
+  `LegoPhonemePresenter::StartingTickle` from 688 to 611 bytes. Retail's
+  `InsertEntry` uses the three-argument ctor, as the tree already does.
+- **`Vector3::Vector3` was an in-class inline in 1997 too** — it and
+  `Vector2::Vector2` sit inside retail's COMDAT run, not in any TU's function
+  run. The "define it out-of-line so MSVC can never expand it" repair is
+  refuted by retail's own layout.
+- **Length is not score, again**: `depth(2)` on `OrientableROI::OrientableROI`
+  reproduces retail's 514 bytes exactly at nd=246 and 147 vs 142 instructions.
