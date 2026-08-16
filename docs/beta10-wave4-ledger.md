@@ -557,3 +557,26 @@ pressure. Detect this by the missing `best.json`; the state objects are cached
 so simply re-running resumes where it stopped (the towtrack re-run completed
 608/608 and confirmed nd=11). Keep total workers at or below 4 when another
 lane is active.
+
+## PRIOR VERDICTS THE ORACLE CORRECTION INVALIDATES (lane-relevant)
+
+1. **`docs/fresh-eyes-2-plan.md` C1.4 doctrine — partially REFUTED.** It ruled
+   rows out of every carrier queue "permanently" on the strength of a large
+   corpus min-nd, naming `LegoOmni::Create 1386` among them. Create's true
+   corpus min-nd was **0**; the 1386 was an artefact of comparing a 2648-byte
+   retail body against a 2616-byte window. The triage rule ("large min-nd ⇒
+   text-channel only") is only sound when the oracle length is right — and it
+   was wrong for 92 of 184 bodies. Re-run the triage before trusting any
+   "permanently out of the carrier queue" verdict. (`FindPath`,
+   `~MxStreamController`, `FUN_10061010`, `ParseExtra` are not this lane's, but
+   they were ruled out by the same broken measurement.)
+2. **`docs/beta10-wave3-ledger.md` "Lane B queue" baseline table — superseded.**
+   Eleven of its fourteen `today len/nd` figures were measured against the
+   truncated oracle. The corrected table is at the top of this ledger.
+3. **`docs/beta10-wave2-ledger.md` NOT-REACHED list** quotes the same numbers
+   (`2665/935`, `2616/1386`, `1074/221`, `779/646`, `1391/111`) — only the
+   size-clean ones (1391/111) survive unchanged.
+4. **`docs/beta10-foundry-ledger.md` "LegoOmni::Destroy … recorded KILLED for
+   legomain source"** stands as a *text* verdict (confirmed at byte level here)
+   but must not be read as a state verdict: the row is +3 short and no carrier
+   has yet been searched past fwdE-12 on today's text.
