@@ -299,6 +299,188 @@ defect localised to a single named byte, which none of the other seven have.
 membership in the 15-row length-unreachable set. Its length deficit is not
 carrier-reachable in this family.
 
+## 0.2 · 2026-08-16 wave 3 — the `cmpdir` census, all 77 open rows, zero compiles
+
+Wave 2 found two rows carried for months as "nd=1, floor held" that were in
+fact **one `cmp` direction bit each**. `cmpdir` is invisible to SHAPE, STRUCT
+and EXACT, so it hides inside rows that read as ordinary colour rows. This
+wave decodes the residue of **every** open row and says how many others there
+are. No builds, no wine — the wineserver stayed with the lanes that needed it.
+
+### Method, and the check that it is right
+
+For each open row, take the corpus object holding that row's minimum masked nd
+at retail's exact length (`harv/rescore.json`), disassemble our body with
+capstone, and **decode retail at our own instruction boundaries** rather than
+walking it independently. A site is `cmpdir` when both sides emit the same
+`cmp` of the same operand pair in the opposite direction — opcode `39`↔`3B`
+with an identical ModRM, or the same opcode with the ModRM reg and rm fields
+exchanged. On an **equality** test the following jcc is unchanged, so the site
+costs one byte; on an **ordering** test the jcc mirrors (`jg`↔`jl`,
+`ja`↔`jb`, …) and the site costs two — **both bytes belong to the one site**,
+and the decoder folds them together.
+
+Two correctness checks. First, the census independently recovers wave 2's two
+hand-decoded rows, byte for byte. Second, the first cut of the decoder walked
+retail independently and reported **RESYNC on 28 of 62 rows** — a truncated
+capstone walk over an embedded jump table silently loses everything after it.
+Decoding at our own boundaries, plus a resyncing walk, takes that to **zero**:
+every row that reaches retail's length is now classified. *A census that
+cannot decode 45% of its population is not a census; the first number this
+wave produced was wrong and the fix is the reason the second one is not.*
+
+### The distribution
+
+| verdict | rows | meaning |
+|---|---:|---|
+| **PURE** | **3** | every divergent instruction is a `cmpdir` site — one allocation decision from exact |
+| **MIXED** | **6** | `cmpdir` sites plus genuine residue |
+| **NONE** | 53 | no `cmpdir` site — route elsewhere |
+| **LENGTH** | 15 | never reaches retail's length in any retained object; no residue to decode |
+
+**`cmpdir` touches 9 of the 62 decodable rows, and fully explains 3.**
+
+### The three PURE rows, with their bytes
+
+| row | TU | nd | sites | evidence |
+|---|---|---:|---:|---|
+| `0x10059dc0` `_Tree<…LegoTextureInfo*>::erase` | `legomain.cpp` | 1 | 1 | **+151** `3b 4c 24 10` `cmp ecx,[esp+0x10]` \| retail `39 4c 24 10` `cmp [esp+0x10],ecx` — equality test, jcc unchanged |
+| `0x100a66f0` ManageVisibilityAndDetailRecursively | `viewmanager.cpp` | 1 | 1 | **+516** `3b c8` `cmp ecx,eax` \| retail `3b c1` `cmp eax,ecx` — equality test, jcc unchanged |
+| `0x100bb1d0` MxDisplaySurface::VTable0x30 | `mxdisplaysurface.cpp` | 4 | 2 | **+481** `39` \| `3b` with **+488** `7f`(`jg`) \| `7c`(`jl`); **+711/+718** the same pair again. Two **ordering** sites, two bytes each |
+
+`0x100bb1d0` is the find of this wave. At nd=4 with a matching call graph it
+read as an ordinary four-byte colour row in every previous ledger; it is
+**two `cmp` directions and their two mirrored branches, and nothing else.**
+It is also the row that justifies folding the mirrored jcc into its site —
+scored naively it would have read MIXED (2 `cmpdir` + 2 "other" branches) and
+been routed away.
+
+### The six MIXED rows — `cmpdir` present, but a minority
+
+| row | nd | cmpdir sites | other insn | sites |
+|---|---:|---:|---:|---|
+| `0x10048310` FindPath | 66 | 3 | 19 | +272 `cmp edi,esi`; +314 `cmp eax,edi`; +1163 `cmp edi,[ebp+0x20]` |
+| `0x100a84a0` LegoROI::Read | 41 | 2 | 28 | +688, +1079 — both ordering (mirrored jcc) |
+| `0x1004ebd0` LegoTexturePresenter::Read | 40 | 1 | 23 | +566 — ordering |
+| `0x100417c0` Act3Brickster::FUN\_100417c0 | 73 | 1 | 29 | +751 |
+| `0x100998e0` GetCached | 59 | 1 | 43 | +313 |
+| `0x10029d50` `_Tree<LegoCacheSoundEntry…>::erase` | 268 | 1 | 96 | +145 |
+
+Closing the `cmp` sites on any of these leaves the row open, so none is a
+queue candidate. The count is still worth having: it means e.g. FindPath's
+66-byte residue is 3 direction bytes plus 19 genuinely divergent instructions,
+not 22 equally-weighted defects.
+
+### The follow-up queue — ranked by the `_Ubound` precedent
+
+`_Tree<LegoPathCtrlEdge*>::_Ubound` was a `cmpdir` site that sat at nd=2
+across all **1,681** states of the extern rectangle and then closed on the
+`declaration_shape` grid's **124th** cell. So the question for a PURE row is
+not "is `cmpdir` dead" but **"which family has not been tried"** — and the
+family that paid last time is `declaration_shape`.
+
+| rank | row | sites | families with measured cells | **untried** | why this rank |
+|---:|---|---:|---|---|---|
+| **1** | `0x10059dc0` | 1 | `fwdE` 24 (ledger); wave 2: `fwd` suffix 500, `extern` 440 (**cannot reach retail's length**), `forward_run_with_shape` 505 | **`declaration_shape`, `pad_shape`**, `fwdL`, `fwdP`, `triple` | one byte, one decision, and it is the **exact `_Ubound` shape**: a `cmpdir` site dead across the extern family with `declaration_shape` never measured |
+| **2** | `0x100bb1d0` | 2 | `extern` 2,539; `fwdP` (its floor state `fwdP-46` is an object, no ledger) | **`declaration_shape`, `pad_shape`**, `triple`, composites | same precedent, four bytes over two sites; both sites are the same shape so one decision may move both |
+| **3** | `0x100a66f0` | 1 | `shape` 1,515 + **505 (wave 2)**, `pad` 900 + **225**, `extern` 4,219 + **960**, `fwd` **200** | composites, `triple` only | **the cleanest seal in the open set** — four families, ~8,500 cells, floor never leaves nd=1; and the stacking law predicts the composites blow out |
+
+Ranks 1 and 2 are `declaration_shape` + `pad_shape` on two TUs: **1,130 cells
+each, 2,260 total.** That is the whole ask. `viewmanager.cpp` runs at ~170
+cells/min uncontended; `mxdisplaysurface.cpp` and `legomain.cpp` are heavier,
+and `legomain.cpp` measured ~12 cells/min while three lanes shared the
+wineserver — so this is a ~20-minute job quiesced and a multi-hour one
+contended.
+
+Rank 3 needs no cells. It is already sealed on every family a declaration-only
+carrier can express.
+
+### The full census — every open row
+
+| row | m | verdict | cmpdir sites | other insn | nd |
+|---|---:|---|---:|---:|---:|
+| `0x100bb1d0` MxDisplaySurface::VTable0x30 | 0.8611 | **PURE** | 2 | 0 | 4 |
+| `0x10059dc0` \_Tree\<char const \*,pair\<char const \* con | 0.7913 | **PURE** | 1 | 0 | 1 |
+| `0x100a66f0` ViewManager::ManageVisibilityAndDetailRe | 0.8848 | **PURE** | 1 | 0 | 1 |
+| `0x10048310` LegoPathController::FindPath | 0.8629 | **MIXED** | 3 | 19 | 66 |
+| `0x100a84a0` LegoROI::Read | 0.9277 | **MIXED** | 2 | 28 | 41 |
+| `0x1004ebd0` LegoTexturePresenter::Read | 0.8446 | **MIXED** | 1 | 23 | 40 |
+| `0x100998e0` LegoTextureContainer::GetCached | 0.8698 | **MIXED** | 1 | 43 | 59 |
+| `0x100417c0` Act3Brickster::FUN\_100417c0 | 0.9496 | **MIXED** | 1 | 29 | 73 |
+| `0x10029d50` \_Tree\<LegoCacheSoundEntry,LegoCacheSound | 0.9212 | **MIXED** | 1 | 96 | 268 |
+| `0x1002bff0` \_Tree\<LegoPathActor \*,LegoPathActor \*,se | 0.7092 | **NONE** | 0 | 0 | 0 |
+| `0x1003cf20` LegoCacheSoundManager::~LegoCacheSoundMa | 0.8950 | **NONE** | 0 | 0 | 0 |
+| `0x10083500` LegoCharacterManager::GetActorROI | 0.9684 | **NONE** | 0 | 0 | 0 |
+| `0x10084030` LegoCharacterManager::CreateActorROI | 0.9365 | **NONE** | 0 | 0 | 0 |
+| `0x10069b10` LegoAnimPresenter::BuildROIMap | 0.8842 | **NONE** | 0 | 2 | 2 |
+| `0x1007ca30` LegoPartPresenter::Read | 0.9953 | **NONE** | 0 | 2 | 2 |
+| `0x1009a8c0` LegoWEGEdge::LinkEdgesAndFaces | 0.9921 | **NONE** | 0 | 2 | 2 |
+| `0x100586e0` LegoPathBoundary::RemovePresenter | 0.7757 | **NONE** | 0 | 3 | 3 |
+| `0x1004f9b0` \_Tree\<char const \*,pair\<char const \* con | 0.8051 | **NONE** | 0 | 4 | 4 |
+| `0x1006a7a0` \_Tree\<char const \*,pair\<char const \* con | 0.7983 | **NONE** | 0 | 4 | 4 |
+| `0x1006c200` \_Tree\<char const \*,pair\<char const \* con | 0.7828 | **NONE** | 0 | 4 | 4 |
+| `0x1006e720` \_Tree\<char const \*,pair\<char const \* con | 0.8475 | **NONE** | 0 | 4 | 4 |
+| `0x10083890` \_Tree\<char \*,pair\<char \* const,LegoChara | 0.7075 | **NONE** | 0 | 4 | 4 |
+| `0x100c6fa0` MxDSBuffer::FUN\_100c6fa0 | 0.9882 | **NONE** | 0 | 2 | 4 |
+| `0x1001d890` \_Tree\<MxCore \*,MxCore \*,set\<MxCore \*,Cor | 0.9027 | **NONE** | 0 | 5 | 5 |
+| `0x1002f770` LegoPathActor::UpdatePlane | 0.9315 | **NONE** | 0 | 5 | 5 |
+| `0x100b24f0` MxVideoPresenter::AlphaMask::AlphaMask(c | 0.9612 | **NONE** | 0 | 5 | 5 |
+| `0x10040360` Act3Cop::FUN\_10040360 | 0.9730 | **NONE** | 0 | 6 | 6 |
+| `0x1004bd10` MxTransitionManager::DissolveTransition | 0.9608 | **NONE** | 0 | 6 | 6 |
+| `0x100b26f0` MxVideoPresenter::AlphaMask::IsHit | 0.9348 | **NONE** | 0 | 2 | 6 |
+| `0x100c3750` MxRegion::AddRect | 0.9739 | **NONE** | 0 | 6 | 6 |
+| `0x10057180` \_Tree\<LegoAnimPresenter \*,LegoAnimPresen | 0.6522 | **NONE** | 0 | 7 | 7 |
+| `0x100720d0` Act3List::RemoveByObjectIdOrFirst | 0.9417 | **NONE** | 0 | 7 | 7 |
+| `0x1002a1b0` \_Tree\<LegoCacheSoundEntry,LegoCacheSound | 0.7059 | **NONE** | 0 | 9 | 9 |
+| `0x100ba7f0` MxDisplaySurface::Create | 0.9953 | **NONE** | 0 | 2 | 9 |
+| `0x10031820` Isle::Enable | 0.9725 | **NONE** | 0 | 11 | 11 |
+| `0x10038380` Pizza::StopActions | 0.7442 | **NONE** | 0 | 7 | 11 |
+| `0x1004d330` TowTrack::HandlePathStruct | 0.9536 | **NONE** | 0 | 11 | 11 |
+| `0x10072ad0` Act3::TriggerHitSound | 0.9302 | **NONE** | 0 | 7 | 11 |
+| `0x1003f540` WriteDefaultTexture | 0.9273 | **NONE** | 0 | 12 | 12 |
+| `0x10085500` \_Tree\<char \*,pair\<char \* const,LegoChara | 0.9244 | **NONE** | 0 | 12 | 12 |
+| `0x100a3b40` TglImpl::MeshBuilderImpl::Clone | 0.7971 | **NONE** | 0 | 14 | 14 |
+| `0x100a12a0` TglImpl::TextureImpl::SetImage | 0.6667 | **NONE** | 0 | 6 | 16 |
+| `0x100035e0` Helicopter::HandleControl | 0.9907 | **NONE** | 0 | 5 | 17 |
+| `0x100166a0` JetskiRace::HandlePathStruct | 0.8675 | **NONE** | 0 | 18 | 18 |
+| `0x10017af0` PizzeriaState::PizzeriaState | 0.8873 | **NONE** | 0 | 9 | 18 |
+| `0x1006dec0` \_Tree\<char const \*,pair\<char const \* con | 0.8205 | **NONE** | 0 | 18 | 18 |
+| `0x100d0d80` ReadData | 0.9722 | **NONE** | 0 | 8 | 18 |
+| `0x1007b770` LegoVideoManager::Tickle | 0.9636 | **NONE** | 0 | 15 | 19 |
+| `0x100334b0` Act1State::Act1State | 0.9891 | **NONE** | 0 | 6 | 24 |
+| `0x100b27b0` MxVideoPresenter::Destroy(unsigned char) | 0.8791 | **NONE** | 0 | 13 | 25 |
+| `0x10062e20` LegoAnimationManager::FUN\_10062e20 | 0.8856 | **NONE** | 0 | 11 | 30 |
+| `0x10051ac0` LegoAct2::SpawnBricks | 0.9101 | **NONE** | 0 | 30 | 58 |
+| `0x100bd020` MxBitmap::BitBltTransparent | 0.7470 | **NONE** | 0 | 36 | 60 |
+| `0x10054050` Act3Ammo::Animate | 0.9476 | **NONE** | 0 | 43 | 95 |
+| `0x100a46b0` OrientableROI::UpdateTransformationRelat | 0.8696 | **NONE** | 0 | 93 | 99 |
+| `0x10081840` LegoCarRaceActor::CheckPresenterAndActor | 0.9498 | **NONE** | 0 | 48 | 100 |
+| `0x100b2a70` MxVideoPresenter::PutFrame | 0.9048 | **NONE** | 0 | 54 | 101 |
+| `0x10073a90` Act3::Enable | 0.8893 | **NONE** | 0 | 43 | 105 |
+| `0x100170e0` CarRace::HandlePathStruct | 0.9752 | **NONE** | 0 | 45 | 111 |
+| `0x1003d170` LegoCacheSoundManager::FindSoundByKey | 0.9552 | **NONE** | 0 | 64 | 153 |
+| `0x100a7960` \_Tree\<char const \*,pair\<char const \* con | 0.8780 | **NONE** | 0 | 138 | 259 |
+| `0x10055a60` LegoNavController::Notify | 0.9818 | **NONE** | 0 | 915 | 2382 |
+| `0x100293c0` LegoControlManager::UpdateEnabledChild | 0.8625 | **LENGTH** | 0 | 0 | — |
+| `0x1002de10` LegoPathActor::SetTransformAndDestinatio | 0.9426 | **LENGTH** | 0 | 0 | — |
+| `0x10046050` LegoPathController::PlaceActor(class Leg | 0.9552 | **LENGTH** | 0 | 0 | — |
+| `0x1004c580` MxTransitionManager::SetupCopyRect | 0.8495 | **LENGTH** | 0 | 0 | — |
+| `0x10058c30` LegoOmni::Destroy | 0.9827 | **LENGTH** | 0 | 0 | — |
+| `0x10061010` LegoAnimationManager::FUN\_10061010 | 0.5411 | **LENGTH** | 0 | 0 | — |
+| `0x1006b140` LegoAnimPresenter::CopyTransform | 0.8149 | **LENGTH** | 0 | 0 | — |
+| `0x1006ed90` Infocenter::Create | 0.8966 | **LENGTH** | 0 | 0 | — |
+| `0x1006fda0` Infocenter::HandleKeyPress | 0.7933 | **LENGTH** | 0 | 0 | — |
+| `0x10080be0` LegoCarRaceActor::CalculateSpline | 0.9545 | **LENGTH** | 0 | 0 | — |
+| `0x1009f490` LegoAnimScene::CalculateCameraTransform | 0.8896 | **LENGTH** | 0 | 0 | — |
+| `0x100a3840` TglImpl::MeshBuilderImpl::CreateMesh | 0.8176 | **LENGTH** | 0 | 0 | — |
+| `0x100a4420` OrientableROI::OrientableROI | 0.9504 | **LENGTH** | 0 | 0 | — |
+| `0x100aa510` LegoLOD::Read | 0.7268 | **LENGTH** | 0 | 0 | — |
+| `0x100ba2c0` MxStillPresenter::Clone | 0.9251 | **LENGTH** | 0 | 0 | — |
+
+Join key: `address`. The machine-readable form, including every decoded
+divergent instruction pair, is `harv/cmpdir-census.json`; the decoder is
+`harv/cmpdir_census.py` and runs in seconds with no toolchain.
+
 ## Where this comes from, and why that matters
 
 Source precedence, in order:
