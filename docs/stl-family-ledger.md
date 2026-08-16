@@ -603,3 +603,34 @@ in §6 and the bench is in `scratchpad/stl/`.
    `~LegoCacheSoundManager` (274 vs 258 — and the obvious named-iterator fix
    is bit-inert, §4.4), `GetCached` (995 vs 987 — one extra 4-byte frame
    slot, §4.5), `FindSoundByKey` (282 vs 281), `FUN_10061010` (726 vs 731).
+
+## 10. Reproducing this lane
+
+Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
+`fresh2/` repointed at `isle-build-tr03`). Nothing in the shared corpus was
+mutated.
+
+| tool | what it does |
+|---|---|
+| `famextract.py` | retail body + span for every `_Tree` row, straight from `legobin/LEGO1.DLL` |
+| `laneoracle.py` | the same for an arbitrary row list (independent check on `oracles-v2.json`) |
+| `symmap.py` | every `_Tree` COMDAT in the build with its link-winning object |
+| `ourdiff.py` / `gdiff.py` | ours-vs-retail structural diff, relocation-masked, branch targets normalised (`gdiff` works for any oracles-v2 row) |
+| `treedis.py` | retail-vs-retail diff of two instantiations |
+| `summary.py` | the §1.2 family-map table |
+| `lendelta.py` | instruction counts + `[ebp]` ModRM census (the §1.4 argument) |
+| `nm2.py` | corpus near-miss against the corrected oracle, with the **length histogram** (answers "does any state reach retail's length at all?") |
+| `pertarget.py` / `statereport.py` | top-N states per target / per-state view across targets |
+| `bytecensus.py` / `wincensus.py` | census of one byte / one byte-window across a state space or the whole corpus |
+| `zoom.py` | side-by-side disassembly of a donor and retail over an offset window |
+| `sw.py` | the corrected sweeper (oracle v2, best-nd logging, `--pre` products, `--src` text variants, `inc`/`externL`/`externG`/`f<A|B|C><P|S|I>` axes) |
+| `landin.py` | `land_into.py` for this worktree, with the S72 relocation-symbol guard and the stacked-recipe writer |
+| `repin_tr03.py` | accepted-row re-pin against `isle-build-tr03` |
+
+Build command used for every gate in this ledger:
+
+```sh
+python3 tools/isle_build.py --build-dir /Users/foxtacles/Projects/isle-build-tr03 \
+  --compiler /Users/foxtacles/Projects/MSVC420/wine/x86/cl --jobs 4 \
+  --baseline-report /tmp/lego1-tr03-base.json
+```
