@@ -2089,3 +2089,78 @@ That is a negative result for my lane's row count and a positive one for the
 project's planning: the expensive mistake this census exists to prevent is
 sending a lane at a reordering, and sixteen such rows were on the list this
 morning.
+
+## 42. `tglrl40.cpp` — the third carrier family, and a terminal position
+
+The census says every row in this TU is non-text, so the whole remaining search
+is compiler state. The `pad_shape` family had never been run on it:
+
+```
+sw.py all-tglrl40 --axes padfull      877 states
+  0x100a12a0 SetImage     nd=16 @pad-1-5   (extern floor 16, shape floor 16)
+  0x100a3b40 Clone        nd=14 @pad-1-1   (extern floor 14, shape floor 14)
+  0x100a3840 CreateMesh   retail's 664 bytes never reached (667 in all 877)
+```
+
+**Identical floors on identical offsets in all three families.** Cumulative for
+this TU: **3,821 states** across `extern_run_pair`, `declaration_shape` and
+`pad_shape`.
+
+`0x100a3b40 MeshBuilderImpl::Clone` is now the sharpest terminal position in
+the lane, and it is established two independent ways:
+
+* **SHAPE 100 / STRUCT 100** — our source emits retail's exact operation
+  sequence *and* retail's frame layout, so no source form can help (proof, not
+  estimate);
+* **nd=14 across 3,821 carrier states in three generators** — and its residue
+  is `EXACT 79.71`, i.e. pure register colour.
+
+A row cannot be more completely bounded than that with the channels this
+project has. It belongs to the allocator instrument and to nothing else.
+
+## 43. Wave-5 carrier campaign — state at hand-off
+
+Every open row in this lane is now `TEXT-CLOSED`, `SLOT`, `schedule`, `cmpdir`,
+or a SHAPE gap whose residue is an allocator artifact (§40). So the entire
+remaining search here is compiler state, and the campaign below is the part of
+it that had never been run. All sweeps resume at zero cost — `sw2.py`-derived
+sweeps skip any state whose `o.obj` already exists.
+
+| sweep | states | result |
+|---|---|---|
+| `all-tglrl40 --axes padfull` | **877, complete** | floors identical to the other two families (§42) |
+| `all-pizza --axes padfull` | complete | `0x10038b10` reproduces nd=0 at `pad-1-3` — a **second landable donor state** for the row landed in §21, in a different generator |
+| `all-mxstillpresenter --axes base,externR` | ~920 / 1,682 | in flight |
+| `all-mxstillpresenter --axes padfull` | queued | — |
+| `all-infocenter --axes base,externR` | queued | — |
+| `all-helicopter --axes shapefull` | queued | — |
+| `all-mxramstreamprovider --axes shapefull` | queued | — |
+| `all-pizzeria --axes shapefull` | queued | — |
+| `all-mxbitmap --axes shapefull` | queued | — |
+| `all-legoact2 --axes base,externR` | 200 / 1,682 | in flight |
+| `all-legocontrolmanager --axes base,externR` | queued | — |
+
+Driver: `<scratchpad>/fin/queue8.sh`, which re-runs all of them idempotently.
+
+**Rows gained this wave: 0.** The wave's output is the map, not a row: 21 rows
+left the text-target list (16 reordered, 5 to `SLOT`), the eight rows I was
+pointed at were all shown non-text with the evidence for each, and `tglrl40`
+reached a terminal position across three carrier families.
+
+## 44. What I would hand the next lane
+
+1. **The 30 remaining text targets are all in other lanes' TUs.** Not one open
+   row in my fourteen is a text target. If this lane is worth continuing at
+   all, it is as a carrier campaign (§43) or as the allocator instrument's
+   first customers.
+2. **Four rows are terminal**, bounded two independent ways each —
+   `0x100a3b40 Clone` (SHAPE/STRUCT 100 + 3,821 carrier states),
+   `0x10031820 Isle::Enable` (SHAPE/STRUCT 100 at `extern-1-8` + 3,440 states),
+   `0x100ba2c0 MxStillPresenter::Clone` (SHAPE/STRUCT 100), and
+   `0x1007ca30 Read` (all-levels-equal `cmpdir` + text channel closed).
+3. **`SetImage` is the cautionary specimen.** It was selected as the top text
+   target on a SHAPE 94.87 / EXACT 66.67 spread, and BETA10 `0x10169113`
+   confirms our source is June-true down to the declaration order. A wide
+   SHAPE/EXACT spread means "mostly right operations, mostly wrong colouring" —
+   which is an *allocator* signature, not a text one. Read the divergence
+   before reading the spread.
