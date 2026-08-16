@@ -126,3 +126,49 @@ it.)
 `Isle::Enable` (`all2-isle`) at +2211, where retail has a LenSquared prelude
 leading with +8 and our build has no matching prelude at that offset at all
 (a structural, not colour, difference). Whoever owns `isle.cpp` may want it.
+
+## WAVE-5 GRID RESULTS
+
+Everything below is on the merged tip, donor lane, scored against
+`bench/oracles-v2.json` with the length defect added to nd.
+
+### Priority 1 — `_Tree<…LegoTextureInfo>::erase` 0x10059dc0 (nd=1)
+
+| pass | states | best |
+|---|---|---|
+| `externgrid` 99×99 stride 4 + diagonal band ±2 | 1,117 | 567 |
+| `externsum311` — every split of the total 311 between the two seats | 312 | **1**, and only at `extern-0-311` |
+| `externm311/310/312` — post-include seat 0..99 at the good EOF counts | 300 | **1**, and only at m=0 |
+
+`extern-0-311` reproduces `fwdE-311` exactly (1102/nd=1), which is the seat law
+working as advertised: the two generators are the same state on one seat. But
+neither splitting the count nor adding a post-include run moves the row. The
+27 EOF counts that reach retail's 1102 length are known (311, 818, 819, 914,
+915, 317, 349, …) and only 311 gives the good colour; the next best at the
+right length is nd=373.
+
+**Verdict: the extern family is the wrong family for this row** (best 567 vs
+the forward run's 1), and the post-include coordinate is inert at its good `k`.
+The single residual CMPDIR byte in the vendor `_Tree::erase` inline is now
+resistant to: forward runs 1..999 on both placements (1,998 states), the extern
+plane out to 99×99 (2,590 states), `declaration_shape` all 550 cells,
+`pad_shape` 144, and 111 include-order states. **Next lever must be a new
+coordinate, not more of these** — the three-seat generator proposed above is
+the concrete candidate.
+
+### Priority 2 — the size-clean near-miss rows
+
+Because these rows are already at retail's length, every `k` is in the right
+length family and the whole 2-D plane is colour. Passes run:
+
+| row | `externm{0,4,18,59}` m=0..99 (399) | `externdense` m 0..24 × k 0..99 (2,499) | best |
+|---|---|---|---|
+| `LinkEdgesAndFaces` 0x1009a8c0 | nd 2 | nd 2 | **2** (`extern-2-0`, `shape-5-40`, `fwdL-2`, …) |
+| `Act3List::RemoveByObjectIdOrFirst` 0x100720d0 | nd 7 | (running) | **7** |
+| `Act3::TriggerHitSound` 0x10072ad0 | nd 11 | (running) | **11** |
+| `TowTrack::HandlePathStruct` 0x1004d330 | nd 11 | (running) | **11** |
+
+`LinkEdgesAndFaces` has now held nd=2 across roughly **7,600 distinct carrier
+states** spanning all four generators and the full extern plane. Together with
+the four bit-inert text probes from wave 4 and the LenSquared census above,
+this row is not under-searched — it needs a coordinate nobody has.
