@@ -534,16 +534,32 @@ compares. Result: **`RENDER MATCHES the measured probe text EXACTLY`**
 `RkNm%03d` is what was measured; any other stem is a different compile state.)
 
 **Status: NOT LANDED, one row short of zero-loss.** Landing it today would
-close 0x10083500 (+1) and lose 0x10083bc0 (-1). The remaining work is one
-search for a `GetRefCount` cover; three candidate directions, in order:
-1. the full `shape` grid (505 states) on the h12j text — the bisect ledger's
-   winning states were all off-lattice, and only the 60-state lattice has been
-   tried here;
-2. a **second** interior op immediately before `GetRefCount` (anchor 20) —
-   running when this ledger entry was written, results in
-   `nm/chm-h12j-ins.log`;
-3. the anchor-17 / anchor-18 variants of the Exists op (`nm/texts/chm-h12i.cpp`
-   is the anchor-17 text; its 653-state sweep is `nm/probes/chm-h12i`).
+close 0x10083500 (+1) and lose 0x10083bc0 (-1). All three follow-up directions
+were run tonight and all three are negative — `GetRefCount` is nd=1 at offset
+84 in **1,859 states**:
+
+| search | states | GetRefCount best |
+|---|---|---|
+| 653 standard carriers on h12j (anchor-19 op) | 653 | 1 @84 |
+| 653 standard carriers on h12i (anchor-17 op) | 653 | 1 @84 |
+| a **second** interior op before `GetRefCount` (anchor 20, `insf`+`insc`, counts 1..24) on h12j | 48 | 1 @84 |
+| the **full 505-cell `shape` grid** (c=1..10, f=c..10c) on h12j | 505 | 1 @84 |
+
+The full shape grid is worth recording separately because it also **reproduces
+the donor-debt bisect ledger's state exactly**: on plain h12 text
+`GetActorROI` is retail-exact at `shape-7-52`, the off-lattice cell that
+ledger named. So the grid is doing its job; `GetRefCount`'s `3b f2` -> `3b d6`
+tie simply does not live in the declaration-record state space.
+
+Untried directions for the next wave, in order of promise:
+1. the donor grammar's **`prefix` and `width`** parameters (`class A00;` vs
+   `class MxUnkRecVA000;`) — a completely unswept dimension (§9);
+2. `force_include` placement (`probe.py --carriers fwdF:k`, added here,
+   never swept);
+3. a text cell inside `GetRefCount` itself (its loop is
+   `for (it = m_characters->begin(); it != m_characters->end(); it++)` with a
+   `character`/`roi` pair — the wave-2 declaration-position axis applies);
+4. accept the trade only if `GetRefCount` is closed independently first.
 
 ---
 
