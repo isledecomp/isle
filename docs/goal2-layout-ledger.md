@@ -425,3 +425,126 @@ fully specified — the required bodies are exactly retail's at
 `0x10048f10`/`0x10049290`/`0x100492f0`/`0x10049370`/`0x10049890`/`0x10049d10`,
 and the compile that must produce them is `legopathcontroller.cpp`'s own. When
 they close, experiment 2 becomes a clean +28 KB with zero row loss.
+
+---
+
+# Wave 8 — closing the six borrowed rows
+
+Base `e1288e1a`. The coordinator's decision was: the gate stays, the six close
+first. The mechanical point that makes it ordinary work: **the COMDATs already
+exist in `legopathcontroller.cpp.obj`; the linker just discards them in favour
+of the suppliers' copies.** So they can be scored and fixed without touching
+the link order, and the gate will neither reward nor punish it.
+
+## 9. The real accounting was −6, not smaller
+
+`layout/six.py` scores the object's own copies against retail's bodies at the
+six addresses. None was exact:
+
+| address | function | ours/retail | residue |
+|---|---|---|---|
+| `0x10048f10` | `list<LegoBoundaryEdge>::insert` | 84/84 | nd=6 |
+| `0x10049290` | `_Tree<LegoPathCtrlEdge*>::find` | 92/92 | nd=23 |
+| `0x100492f0` | `_Tree<LegoPathCtrlEdge*>::_Copy` | 126/126 | nd=29 |
+| `0x10049370` | `_Tree<LegoPathCtrlEdge*>::_Ubound` | 45/45 | nd=2 |
+| `0x10049890` | `_Tree<LegoBEWithMidpoint*>::erase` | 1102/**1110** | length −8 |
+| `0x10049d10` | `_Tree<LegoBEWithMidpoint*>::_Erase` | 57/57 | nd=16 |
+
+So the score of 4853 is inflated by exactly six, as the coordinator recorded.
+
+## 10. Five closed. The accounting is now **−1**
+
+`layout/mkoracle6.py` adds a `fin-lpc6` stem to this lane's `oracles-v2.json`
+(the shared bench corpus is never mutated; `sw.py` was repointed at the lane's
+own copy), which lets the ordinary carrier sweep and the ordinary lander work
+on these COMDATs like any other row.
+
+A `m,k = 0..40` extern sweep of `legopathcontroller.cpp` produced exact donors
+for five of the six, and `layout/cover6.py` reduces them to **two** states:
+
+| donor state | functions it makes exact |
+|---|---|
+| `extern-18-34` | `find`, `_Copy`, `_Erase` |
+| `extern-15-20` | `insert`, `erase` (1110 B, `same_slot_resize`) |
+
+Landed onto the TU's existing unit (7 functions → **12**, 5 donors → 7).
+
+```
+[isle_build] composed 12 function(s) into lego1:…/legopathcontroller.cpp
+[isle_build] ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE:
+             LEGO1 4853/4934, ISLE 172/172, CONFIG 111/111
+```
+
+**Zero row change, exactly as predicted** — the composed COMDATs are discarded
+in the current link order, so the image is unchanged. The proof is out-of-band:
+
+```
+layout/six.py  ->  5 of 6 EXACT  ->  the real accounting is -1
+```
+
+This is a landing whose value the row score cannot see, and it is the whole
+point of the wave: it converts experiment 2 from **−28 KB / −6 rows** into
+**−28 KB / −1 row**.
+
+## 11. The one that is left is a `cmpdir`, and it is the session's most familiar shape
+
+`0x10049370 _Tree<LegoPathCtrlEdge*>::_Ubound`, 45 bytes, nd=2 at offsets
+[6, 34] across **1,167 extern states**:
+
+```
+ours    +6/+34   39 15 …   cmp dword ptr [_Nil], edx
+retail  +6/+34   3b 15 …   cmp edx, dword ptr [_Nil]
+```
+
+Two sites, both the `cmp reg,[_Nil]` ⟷ `cmp [_Nil],reg` inversion in the
+inlined `_Tree` walk — the same defect as `LegoPartPresenter::Read` (§28 of the
+finish-line ledger), `_Tree<LegoAnimPresenter*>::_Erase`, and the other five
+`cmpdir` rows in the census. Not source-addressable (canonicalisation law; five
+negative text cells on `Read`).
+
+Worth noting the direction: here **retail** emits `3b` and we emit `39`; on
+`Read`'s `_Nil` sites it was the other way round. The same template's compare
+direction differs on both sides between two TUs, which is what an allocator tie
+looks like rather than a property of the template.
+
+The `declaration_shape` and `pad_shape` grids on this TU are queued and
+unfinished (`layout/queue9.sh`, idempotent, resumable). §20/§21 of the
+finish-line ledger established that a second generator sometimes reaches where
+the first cannot — that is the remaining shot for this row, and it is the last
+byte-pair between experiment 2 and a clean layout landing.
+
+## 12. Closed by the second generator. The accounting is **−0**
+
+The `cmpdir` reading in §11 was correct about the shape and wrong about the
+consequence. `cmpdir` is not source-addressable, but it *is* carrier-reachable:
+the `declaration_shape` grid reaches `_Ubound` at **`shape-2-4`, nd=0**, where
+all 1,681 states of the extern rectangle sat at nd=2 with the residue frozen at
+offsets [6, 34] and the length frozen at 45.
+
+That is §20/§21 of the finish-line ledger paying out for the sixth time, and it
+is now the strongest instance of it in the session: an entire generator family,
+swept exhaustively, showed a completely invariant residue — the exact signature
+this lane has repeatedly (and correctly) read as "the channel is closed" — and a
+different generator closed it on the 124th state.
+
+The refinement to carry forward: **residue invariance across an exhausted family
+is evidence about that family, not about the row.** The extern rectangle never
+perturbed the allocator tie that picks the compare direction; the shape family
+does. `cmpdir` sites should be re-read as *allocator-tie* residue rather than
+*canonicalisation* residue whenever a second generator is still unswept.
+
+Landed state (13 fns / 8 donors on `paths/legopathcontroller.cpp`):
+
+| donor | functions |
+|---|---|
+| `extern-18-34` | `_Tree<LegoPathCtrlEdge*>::find`, `::_Copy`, `_Tree<LegoBEWithMidpoint*>::_Erase` |
+| `extern-15-20` | `list<LegoBoundaryEdge>::insert`, `_Tree<LegoBEWithMidpoint*>::erase` |
+| `shape-2-4` | `_Tree<LegoPathCtrlEdge*>::_Ubound` |
+
+Gate: `LEGO1 4853/4934, ISLE 172/172, CONFIG 111/111`, zero row change — as
+predicted, since these COMDATs are still discarded in the current link order.
+`layout/six.py`, which scores the object's own copies against retail directly,
+reads **6 of 6 EXACT**.
+
+**Experiment 2 is therefore unblocked at zero row cost**: −28,146 distance and
++158 address-aligned rows, with the gate left exactly as it is.

@@ -2998,6 +2998,22 @@
       "emission_policy": "non_emitting_declarations_only",
       "generated_header_sha256": "6e0faa201883cfd882e861184a39edae64b9f3fd325ba8ed571e1e5bd0f390d0"
      }
+    },
+    {
+     "id": "d_eec6c33322bc",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 2,
+      "functions": 4,
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives.",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "generated_header_sha256": "eec6c33322bcb2cd4aacff89c604bd9a73df547bb00867341ba8a77c3aa43370"
+     }
     }
    ],
    "functions": [
@@ -3454,6 +3470,17 @@
      "expected_donor_length": 1110,
      "expected_linked_span": 1120,
      "donor": "d_6e0faa201883"
+    },
+    {
+     "mangled": "?_Ubound@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@IBEPAU_Node@1@ABQAULegoPathCtrlEdge@@@Z",
+     "expected_body_length": 45,
+     "expected_body_sha256": "e9ead13e30ba79064afe7e2d0337cda39a0847bcd2e413453d288a399a8ceb66",
+     "expected_changed_offsets": [
+      6,
+      34
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_eec6c33322bc"
     }
    ],
    "completion": {
