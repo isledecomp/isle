@@ -2250,3 +2250,89 @@ From 81 open rows:
 The campaign began this wave believing 51 of 81 open rows were text targets.
 Reading them says **five**. That is the number worth acting on, and the 25 rows
 in the second-to-last line are the ones a lane would have burned a session on.
+
+---
+
+## 49. The two transferred rows — one concession, one correction
+
+Both were on my revision-5 five-row list; both are now off it, for opposite
+reasons. Census revision 6: **the open set has three genuine first-party text
+candidates, and all three belong to the transcription lane.**
+
+### `0x100a4420 OrientableROI::OrientableROI` — the main-loop lane was right, I was shallow
+
+My reading was "retail builds a sub-object through a computed pointer where we
+store the member directly". That is literally true and it misses what it means.
+The bytes:
+
+```
+  +0x94   BOTH:   lea ebx,[esi+0x94] ; push eax ; mov ecx,ebx ; call Vector2::Vector2
+  +0xa8   retail: lea ebx,[esi+0xa8] ; push eax ; mov ecx,ebx ; call Vector3::Vector3
+          ours:   (no call)  mov [esi+0xac],eax ; mov [esi+0xa8],<vftable>   <- inlined body
+```
+
+**The `lea`/`push`/`mov ecx` I called "a computed pointer" is the calling
+sequence.** One member earlier both sides call; at this member retail calls and
+we inline. That is decreasing inline depth across a run of identical
+sub-objects — the ladder `docs/residue-runs.md` records, and the same mechanism
+the near-miss lane found in `CreateActorROI`.
+
+The row moves to **INLINE-DECISION**. Recorded as my error: I described a
+calling sequence without recognising it as a call-versus-inline decision, which
+is precisely the distinction the ladder writeup exists to make.
+
+`read30.py` now detects it generally — **a `call` in the multiset difference,
+with the other side carrying the equivalent stores, is a C2 budget decision,
+not a source difference.**
+
+### `0x100b2a70 MxVideoPresenter::PutFrame` — the site was misattributed, and answering the question closes the row
+
+The hand-off placed the divergence at
+`src.right = src.left + regionRect->GetWidth();` (line 286) and flagged the
+`dec` as suspicious, since `GetWidth()` is `right - left + 1` and the expression
+as written should not produce one.
+
+The surrounding `cmp eax,-1` / `mov eax,1` return-code shape places the site
+inside **inlined `PrepareRects`**, at lines 228–229:
+
+```c
+p_rectSrc.right  = (p_rectSrc.left + width) - 1;
+p_rectSrc.bottom = (p_rectSrc.top + height) - 1;
+```
+
+So **the `dec` is written in the source**, and both sides emit it. The instinct
+was good and the answer is that there is nothing to pull: our arithmetic is
+retail's.
+
+What remains is one computation in two register strategies:
+
+```
+retail  mov eax,[ebp-0x3c] ; add eax,edx ; dec eax ; mov [ebp-0x34],eax
+ours    add ecx,[ebp-0x3c] ;              dec ecx ; mov [ebp-0x34],ecx
+```
+
+Retail copies the left operand into a scratch so `edx` (the width) survives for
+the next line; we accumulate destructively into the register already holding it
+and reload. `read30.py` cancels that as a **triple** — `{mov r,[F], add r,r}`
+against `{add r,[F]}` — and the residue is a single `mov r, r`, an allocator
+copy. The row moves to **ALLOCATOR ARTIFACT**.
+
+### Final state of the reading
+
+| category | rows |
+|---|---|
+| **TEXT CANDIDATE** | **3** |
+| `ALLOCATOR ARTIFACT` | 12 |
+| `VENDOR TEMPLATE` (one `<map>` inline, six instantiations) | 6 |
+| `INERT-EQUIVALENCE` | 4 |
+| `FP-STACK` | 2 |
+| `ADDRESSING` | 2 |
+| `INLINE-DECISION` | 1 |
+
+The three: `0x1003cf20 ~LegoCacheSoundManager` (we emit seven instructions
+retail does not), `0x10062e20 FUN_10062e20` and `0x10054050 Act3Ammo::Animate`
+(both: retail reads a global where we read a member). All three are the
+transcription lane's.
+
+**This lane now owns no open row with a live source channel.** Its remaining
+value is the instrument, the map, and the carrier campaign in §43.

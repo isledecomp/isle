@@ -1,8 +1,8 @@
 # The corrected SHAPE/STRUCT census — every open LEGO1 row
 
 Measured 2026-08-16 at **LEGO1 4853/4934, 81 open**, base `cd8692bb`.
-**Revision 5** — the 30 remaining text targets have now been *read*, not just
-scored. **Five survive.** See § *Reading the 30*.
+**Revision 6** — the 30 remaining text targets have been *read*, not just
+scored. **Three survive.** See § *Reading the 30*.
 Regenerate with `<session scratchpad>/fin/census.py --json census.json --md
 census.md`; machine-readable copy alongside it as `census.json`. **Before
 trusting a regenerated census, run `<session scratchpad>/fin/regress.py`** — six
@@ -365,7 +365,7 @@ two positions. It is **not** a text target. This is deliberately left to the
 reader rather than automated — `mov r, N` can be either a rematerialisation or
 a real assignment, and no cheap test separates them.
 
-## Reading the 30 — five survive
+## Reading the 30 — three survive
 
 Revision 4 left 30 rows in `SHAPE gap (text target)`. Scoring cannot tell a
 lane *what* to write, so each was read: take the multiset difference of the
@@ -375,12 +375,13 @@ proved inert, and look at what is left. Tool:
 
 | category | rows | why it is not a text target |
 |---|---|---|
-| **TEXT CANDIDATE** | **5** | — |
-| `ALLOCATOR ARTIFACT` | 11 | residue is only spills, reloads, register copies, zero idioms, rematerialised constants, alignment filler or block layout |
+| **TEXT CANDIDATE** | **3** | — |
+| `ALLOCATOR ARTIFACT` | 12 | residue is only spills, reloads, register copies, zero idioms, rematerialised constants, alignment filler, block layout, or accumulate-vs-copy |
 | `VENDOR TEMPLATE` | 6 | one inline difference inside MSVC's `<map>`, repeated across six instantiations |
 | `INERT-EQUIVALENCE` | 4 | the whole divergence cancels to `cmpdir`, an inverted branch, or `add r,N` ↔ `lea r,[r+N]` |
 | `FP-STACK` | 2 | SHAPE cannot separate two orderings of the same products; judge on STRUCT |
 | `ADDRESSING` | 2 | strength reduction on an address, e.g. retail's `add r,8` then `cmp [r+4]` against our `cmp [r+0xc]` |
+| `INLINE-DECISION` | 1 | a constructor `call` on one side and its inlined body on the other — C2 budget, not source |
 
 ### The cancellation rules, and why each is sound
 
@@ -397,19 +398,62 @@ proved inert, and look at what is left. Tool:
   reload, a copy, a zero idiom, a rematerialised constant, padding, or a branch
   that only changes which tail a block falls into.
 
-### The five that survive, with what each says
+### The three that survive, with what each says
 
 | SHAPE | addr | row | what the divergence says |
 |---|---|---|---|
 | 96.13 | `0x1003cf20` | `LegoCacheSoundManager::~LegoCacheSoundManager` | **we emit seven instructions retail does not** — `cmp [r],0; jne; mov r,[r+0xc]; test r,r; je; push r; add r,4`. A whole guarded block exists in our source and not in retail's. Matches its `−16` length defect and `Δinsn +7` exactly. **The strongest text target in the open set.** |
-| 94.13 | `0x10062e20` | `LegoAnimationManager::FUN_10062e20` | at four sites retail addresses an **indexed global** (`byte ptr [r + <reloc>]`) where we address a **struct member** (`byte ptr [r + 4]`, `[r + 7]`, `[r + 0xc]`). Retail's source reads a global array where ours reads through an object. |
-| 95.04 | `0x100a4420` | `OrientableROI::OrientableROI` | retail builds a sub-object through a computed pointer — `mov [r], R` (vtable), `lea r,[r+0xa8]`, `push r` — where we store the member directly. An inlining/construction difference. |
-| 97.77 | `0x100b2a70` | `MxVideoPresenter::PutFrame` | ours `add r, [F]` where retail `mov r, [F]`, repeatedly: **accumulation against assignment**. |
-| 98.46 | `0x10054050` | `Act3Ammo::Animate` | ours loads FP from a **member** (`fld [r+8]`), retail from a **global** (`fld [R]`) — the same shape as `FUN_10062e20`. |
+| 94.13 | `0x10062e20` | `LegoAnimationManager::FUN_10062e20` | at four sites retail addresses an **indexed global** (`byte ptr [r + <reloc>]`) where we address a **struct member** (`[r + 4]`, `[r + 7]`, `[r + 0xc]`) |
+| 98.46 | `0x10054050` | `Act3Ammo::Animate` | ours loads FP from a **member** (`fld [r+8]`), retail from a **global** (`fld [R]`) — the same shape as `FUN_10062e20` |
 
-Two of the five (`FUN_10062e20`, `Act3Ammo::Animate`) are the *same* finding:
-**retail reads a global where we read a member.** That is a source question with
-a definite answer, and it is the cheapest of the five to test.
+The last two are the *same* finding: **retail reads a global where we read a
+member.** That is a source question with a definite answer and the cheapest of
+the three to test.
+
+### The two that were transferred in, and how they resolved
+
+Both were on the five-row list of revision 5 and both are now off it.
+
+**`0x100a4420 OrientableROI::OrientableROI` → INLINE-DECISION.** My revision-5
+reading — "retail builds a sub-object through a computed pointer" — was the
+shallow one, and the main-loop lane's inline-budget reading is correct. The
+bytes settle it:
+
+```
+       +0x94   BOTH:   lea ebx,[esi+0x94] ; push eax ; mov ecx,ebx ; call Vector2::Vector2
+       +0xa8   retail: lea ebx,[esi+0xa8] ; push eax ; mov ecx,ebx ; call Vector3::Vector3
+               ours:   (no call) mov [esi+0xac],eax ; mov [esi+0xa8],<vftable>  -- the INLINED body
+```
+
+The `lea`/`push`/`mov ecx` I described as "a computed pointer" *is* the calling
+sequence. One member earlier both sides call; at this member retail calls and we
+inline — decreasing inline depth across a run of identical sub-objects, exactly
+the ladder recorded in `docs/residue-runs.md`. The members are built by the
+implicit member-init list, so there is no source expression to respell.
+
+**`0x100b2a70 MxVideoPresenter::PutFrame` → ALLOCATOR ARTIFACT.** Here the
+site attribution needed correcting. The divergence is **not** at
+`src.right = src.left + regionRect->GetWidth();` (line 286) — the surrounding
+`cmp eax,-1` / `mov eax,1` return-code shape places it inside **inlined
+`PrepareRects`**, at line 228:
+
+```c
+p_rectSrc.right  = (p_rectSrc.left + width) - 1;
+p_rectSrc.bottom = (p_rectSrc.top + height) - 1;
+```
+
+So the `dec` that looked suspicious **is written in the source**, and it is
+present on *both* sides — there is nothing to pull on. What is left is one
+computation in two register strategies:
+
+```
+retail  mov eax,[ebp-0x3c] ; add eax,edx ; dec eax ; mov [ebp-0x34],eax
+ours    add ecx,[ebp-0x3c] ;              dec ecx ; mov [ebp-0x34],ecx
+```
+
+Retail copies the left operand into a scratch so `edx` (the width) survives for
+the next line; we accumulate destructively and reload. After cancelling that
+triple the residue is a single `mov r, r` — an allocator copy.
 
 ### The six vendor-template rows
 
