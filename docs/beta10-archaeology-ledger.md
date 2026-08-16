@@ -974,3 +974,75 @@ directly (wave 1). The BETA10 oracle was used for what it can settle — the
 local SET, which matches our text on both rows — and not for order.
 
 **Nothing landed.** Neither row moved toward retail in any cell.
+
+## WAVE 10 — the SLOT-CLEAN + SCATTERED queue: nine rows settled, no idiom found
+
+The wave-9 queue was worked with the `~MxStreamController` method. The wave's
+contribution is a sharper form of the question, because "registers differ" is
+not what that method turns on:
+
+> **The `~MxStreamController` signature is a difference in MEMORY TRAFFIC, not
+> a rename.** That row fell because its allocation showed a value *spilled*
+> where a plain local would have stayed in a register -- a live-range
+> difference with a source meaning. A pure rename has identical memory
+> traffic. So the screening question is: does one side touch the frame where
+> the other does not?
+
+`<scratchpad>/arch/spill.py` asks exactly that, on adiff's SHAPE alignment (so
+a differing call target or vtable address is never mistaken for a structural
+hunk). Result over the ten first-party rows:
+
+| row | frame-mem delta | reading |
+|---|---|---|
+| `0x1007b770` Tickle | ours+1 / retail+1 | the SAME `lea r,[F]`, moved 7 bytes; plus an `ebx`<->`ecx` swap of two compiler temporaries (a member load and a sub-object address) |
+| `0x1003f540` WriteDefaultTexture | ours+1 / retail+1 | the SAME `mov r,[F]`, hoisted above a `cmp`; the final register assignment is identical on both sides |
+| `0x10051ac0` SpawnBricks | ours+2 / retail+2 | balanced; `eax`<->`ecx` on two temporaries |
+| `0x100b2a70` PutFrame | ours+2 / retail+2 | balanced; the same `sub r,[F]` moved, twice |
+| `0x1004c580` SetupCopyRect | 0 / 0 | no frame-traffic difference at all |
+| `0x100bd020` BitBltTransparent | 0 / 0 | no frame-traffic difference at all |
+| `0x100586e0` RemovePresenter | ours+2 / retail+2 | balanced |
+| `0x100a3840` CreateMesh | ours+2 / retail+1 | **asymmetric**: ours `mov r,[F]` where retail has `mov r,1` -- a reload against a rematerialised constant |
+| `0x10069b10` BuildROIMap | ours+1 / retail+0 | **asymmetric** -- pursued below |
+| `0x10084030` CreateActorROI | ours+3 / retail+3 | one asymmetric pair at +1615; deferred, Lane HARVEST may route it |
+
+> **Eight of ten have BALANCED frame traffic** -- every apparent spill
+> difference is the same instruction present on both sides at a different
+> position. That is scheduling and register naming, not the signature. For
+> those eight the verdict is **"compiler artifact, no source idiom"**, reached
+> by direct measurement rather than by exhausting levers.
+
+### `0x10069b10 BuildROIMap` -- the idiom was already spent, and the overlay is why
+
+This row *does* carry the documented `it++`/`++it` shape (`ours + [mov to
+frame, jmp]`, `retail + []`). Reading it turned up something not recorded
+anywhere:
+
+- **The clean source says `it++`; a source-overlay op rewrites it to `++it`
+  before compiling.** The idiom is therefore already landed, and the row's
+  current state -- **617 bytes against retail's 617, masked nd 15**, SHAPE
+  97.88 / STRUCT 96.83 / EXACT 95.24 -- *is* the post-`++it` state that the
+  historical record attributes to it. The record's "len 622 -> 617" is stale.
+- Editing the clean source to `++it` (making it agree with the overlay's
+  output) **breaks all ten pinned donor bodies in that TU**
+  (`donor body differs from its pinned compiler output`), so the op is
+  load-bearing and the clean/effective split there is deliberate.
+- The one remaining hunk shows retail running the inlined iterator increment
+  at the offset where we run `operator delete[]`, which reads as a statement
+  order. **Three statement orders tested, all worse**: advance-before-delete
+  with a named key (nd 123), the same with `m_roiMapSize++` hoisted (122), and
+  `m_roiMapSize++` before the delete (74), against baseline **15**. The
+  current form is the family maximum.
+
+### Verdict
+
+**Nine of the ten rows are settled as "no source idiom exists"**, one
+(`CreateActorROI`) deferred for routing. The queue that wave 9 built was worth
+building -- it is what let this be a measurement rather than a sweep -- but its
+`SLOT-CLEAN + SCATTERED` cell does not contain the class the
+`~MxStreamController` method needs. Wave 9's own caveat is now confirmed from
+the other side: **SCATTERED is consistent with a differing live range but does
+not establish one, and on inspection none of these rows has one.**
+
+The two threads left are both narrow: `CreateMesh`'s reload-versus-
+rematerialised-constant, and `CreateActorROI`'s single asymmetric pair.
+**Nothing landed.**
