@@ -5290,12 +5290,12 @@
    "recompiled": "LEGO1.DLL",
    "reccmp_report": "byte-identity/final/LEGO1.json",
    "reccmp_schema": "reccmp_json_diet_exact_rows_v1",
-   "required_row_count": 4933,
-   "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
+   "required_row_count": 4934,
+   "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4845,
-    "accepted_row_identity_sha256": "0f9bca0d8afb6b1b029f5032bcd2678a9702ecd73667eb027baac626a0defd78",
+    "exact_raw_1_0_count": 4847,
+    "accepted_row_identity_sha256": "d02ad55255ec4bdc8b5e8668a267e50d1962236c6fd9f0db2f09b98c62cd824a",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
