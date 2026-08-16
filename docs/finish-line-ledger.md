@@ -1080,3 +1080,25 @@ argmin, `extern-0-4` × 505 shapes — **nd=4 @ `shape-1-2`**, offsets
 and together with the `extern-18-0` run (nd=6, §16) it says the shape family
 neither helps nor is uniformly harmful here — it depends which seat pair it is
 stacked on.
+
+### Include-order permutation on `Isle::Enable` — negative
+
+`sw-all2-isleinc18`: 72 include-order permutations of `isle.cpp`'s quoted
+include block (adjacent swaps, rotations, random shuffles) over the argmin
+seats `extern-1-8`.
+
+```
+0x10031820 nd=11, offsets identical, in all 72 states
+0x100334b0 nd=24, offsets identical, in all 72 states
+```
+
+This is the axis that gave Lane NM the complementary residue on `0x1002bff0`
+when neither shape family could reach it (wave-5 §37), so it was worth the 72
+compiles. It does not reach this row.
+
+**Running extent for `0x10031820 Isle::Enable`: 2,418 states** — 1,841 extern
+(rectangle to 40 × 40 plus both strata to k = 120), 505 declaration-shape over
+the argmin seats, 72 include-order permutations — **floor 11, offset list
+byte-identical in every one.** The `extern_pair_with_pad` grid and the
+three-seat `declaration_run_triple` are the last two carrier channels the row
+has never seen and are in flight.
