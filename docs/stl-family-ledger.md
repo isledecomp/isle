@@ -1278,12 +1278,54 @@ in both, but ours interleaves a `push 0` before it). So there is at least one
 more named local to remove, in the second half of the function, and the
 scheduling difference is likely downstream of it.
 
-**Not landed.** g1 is a source edit in `legocontainer.cpp` and the wave's
-harness rules apply: victim accounting has to run in the **seed** lane
-(absolute shadow path, exact-replica command) before it can go in, and the
-row is not yet exact so landing it alone would be a text change with no row
-gain and a real chance of a victim. The recipe is recorded here so the next
-pass starts at 991 instead of 995.
+> **CORRECTION (wave 7).** The sentence above — "g1 removes exactly one slot
+> and gains exactly the predicted 4 bytes" — is **wrong**, and the frame
+> census I wrote in the same wave is what caught it. g1's frame is
+> `sub esp,0x100`, i.e. it grew by 4 from base's `0xfc`, *away* from retail's
+> `0xf8`. Dropping the `surface` **name** did not drop a **slot**: the value
+> still has to live across the Lock/Unlock calls, so it just became an
+> unnamed spill. The 4-byte body gain came from encoding, not from the
+> declaration set. See §13.2a for the corrected picture.
+
+### 13.2a GetCached, round 2: the slot is not any of the obvious names
+
+Aimed by the frame this time rather than by body length. Every variant
+compiled in the donor lane; retail is **987 / `sub esp,0xf8`**:
+
+| variant | body | Δlen | `sub esp` | Δframe |
+|---|---|---|---|---|
+| base | 995 | +8 | 0xfc | +4 |
+| g1 — drop `surface` | 991 | +4 | **0x100** | **+8** |
+| g5 — drop `und` (Unlock first, test `newDesc` directly) | 982 | −5 | 0xfc | +4 |
+| g7 — drop `height` | 989 | +2 | 0xfc | +4 |
+| g8 — drop `width` and `height` | 983 | −4 | 0xfc | +4 |
+
+**Not one variant moves the frame off `0xfc`**, and the three round-1
+variants move it the wrong way. So the extra 4 bytes of frame are *not*
+`surface`, `und`, `width` or `height`.
+
+The reason is visible once the frame is decomposed: `0xfc` = 252 =
+two `DDSURFACEDESC` (2 × 0x6c = 216) + a `RECT` (16) + **five** dword slots,
+for seven named scalars (`it`, `cached`, `surface`, `und`, `width`,
+`height`, `textureInfo`). The compiler is already overlapping them by
+lifetime. **Slot count is decided by lifetime overlap, not by name count**,
+which is why removing names moves the body length around freely (982 … 995)
+while the frame stays pinned. Retail gets one more overlap than we do.
+
+That is a real limit on the frame census as a *lever*: it is a reliable
+**classifier** (a different `sub esp` proves a declaration-set difference)
+but the budget it reports is not a shopping list of names to delete. To spend
+it you have to change a **lifetime** — shorten the live range of one of those
+seven values so it can share a slot — not merely rename or inline it.
+
+**Not landed.** No variant closes the row and none matches retail's frame.
+Best body lengths are g7 at 989 (+2) and g1 at 991 (+4), neither exact. The
+row stays open with the table above as its map.
+
+Harness rule that still applies whenever one of these is landed: victim
+accounting has to run in the **seed** lane (absolute shadow path,
+exact-replica command), and a text edit that closes one row while opening
+another is not a gain — the gate enforces the exact accepted set.
 
 ### 13.3 Scope note: CoreSet `erase` is not a text row
 
