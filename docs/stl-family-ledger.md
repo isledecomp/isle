@@ -1074,7 +1074,79 @@ fix `[471, 481]` are the ones that break the other group (`[304, 534, 540]`),
 which is where the remaining sweeps are pointed. Recorded so nobody re-runs
 the (4,22) line.
 
-## 12. Reproducing this lane
+## 12. Wave 5 — the long-count line
+
+### 12.1 The ceiling is 999, and the project has swept the first ~10%
+
+`entropy.generate_forward_run` and `generate_extern_run` both accept
+`1 <= count <= 999` (bounded by `count <= 10**width`, so width 3 reaches 999).
+`generate_shape` is capped at `classes <= 10`, `functions <= 10*classes`, so
+the shape grid really is 505 cells and I have swept it exhaustively — but the
+count line is **999 long and the campaign has only ever compiled k <= 96**.
+That is the first 9.6% of the line, not the first sixth.
+
+### 12.2 The count-only law holds at long counts (re-verified)
+
+The strip design rests on one axis standing in for all of them. Re-checked at
+long counts on `viewlodlist.cpp`, k = 200..204, comparing `fAS` (stem
+`MxUnkRecVA`), `fCS` (`MxUnkRecVC`), `fr:Q:3` (a one-character stem) and
+`fr:MxUnkRecordLongStemAAAA:3` (a 24-character stem) over every `.text`
+COMDAT:
+
+```
+counts with >=2 carrier variants: 5
+bodies in the object: 20
+  COUNT-ONLY: 20      identity-sensitive: 0
+```
+
+So identifier length does not start to matter as the run grows, and a single
+`fCS` sweep covers the whole long line. (Recorded because the obvious worry —
+longer runs mean longer identifiers mean more name-table pressure — is
+measurably false.)
+
+### 12.3 BuildROIMap: the count line is INERT, on two different shapes
+
+`0x10069b10`'s two residue groups are `[471, 481]` (a `_Nil` cmpdir pair) and
+`[304, 534, 540]`. The plan was to pin a shape that fixes one and sweep the
+count for the other. Measured:
+
+| pinned shape | length-correct cells | distinct residue sets | verdict |
+|---|---|---|---|
+| `shape(4,22)` (fixes `[304,534,540]`) | 124 | **1** — always `[471,481]` | count inert |
+| `shape(6,60)` (fixes `[471,481]`) | 90 | **1** — always `[304,534,540]` | count inert |
+
+214 length-correct cells across two shapes and **not one byte of variation**.
+For this row the shape alone decides which group is correct and the count
+does nothing, so the (shape × count) product cannot decouple the two groups.
+Since the shape grid is exhaustively swept (505 cells) and the count adds
+nothing, **the stacked carrier space is closed for BuildROIMap**. It needs a
+different channel — the row's own text, or the inliner.
+
+This is worth contrasting with `erase<MxAtom*>`, where the count line was the
+whole answer (nd=0 at count 24). The count is not a universal lever; it is a
+lever for some rows and a no-op for others, and which one you are in is
+cheap to determine — pin a shape, sweep ~100 counts, count the distinct
+residue sets. If it is 1, stop.
+
+### 12.4 Where I stopped, and why
+
+Item 1's strip (`fCS`, k = 97..999, eight TUs) was launched after the
+BuildROIMap lines were shown inert, and was still running when this wave
+closed; per-TU results are in `scratchpad/stl/sw5-long-*.log`. I reordered
+deliberately: BuildROIMap first (a concrete lead), then, once 214 cells had
+shown its count line flat, I killed those sweeps and moved the compute to the
+untested strip rather than finish a measured-dead line.
+
+**Cost note for whoever continues.** A full long line is ~900 compiles per TU
+and the machine is shared; eight TUs is ~7,200. The yield question the wave
+asked — *where does the long line stop paying* — needs the completed logs to
+answer, and the honest state is that I have not answered it. What I can say
+is the method for answering it cheaply: the count line's information content
+per TU is the number of **distinct** bodies it produces, and §10.6a already
+showed a 96-cell fwdE axis can yield as few as 3. Dedupe by body sha as the
+sweep runs and the answer arrives long before k=999.
+
+## 13. Reproducing this lane
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
 `fresh2/` repointed at `isle-build-tr03`). Nothing in the shared corpus was
