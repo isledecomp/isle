@@ -1,0 +1,1360 @@
+[
+ {
+  "verdict": "REACHABLE",
+  "reason": "5 of 6 divergent slot(s) aligned, non-overlapping, >=3 accesses",
+  "aligned": 0.8451,
+  "divergent": [
+   {
+    "ours": "ebp-0x0014",
+    "retail": "ebp-0x0090",
+    "width": 4,
+    "accesses": 6,
+    "delta": -124
+   },
+   {
+    "ours": "ebp-0x0024",
+    "retail": "ebp-0x0020",
+    "width": 4,
+    "accesses": 5,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0020",
+    "retail": "ebp-0x001c",
+    "width": 4,
+    "accesses": 3,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0090",
+    "retail": "ebp-0x0024",
+    "width": 4,
+    "accesses": 2,
+    "delta": 108
+   },
+   {
+    "ours": "ebp-0x001c",
+    "retail": "ebp-0x0018",
+    "width": 4,
+    "accesses": 8,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0018",
+    "retail": "ebp-0x0014",
+    "width": 4,
+    "accesses": 7,
+    "delta": 4
+   }
+  ],
+  "address": "0x1006b140",
+  "name": "LegoAnimPresenter::CopyTransform",
+  "score": 0.8149
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "1 slot(s) contested; 1 noise pair(s) dropped",
+  "aligned": 0.9592,
+  "slots": 30,
+  "divergent": [],
+  "address": "0x100035e0",
+  "name": "Helicopter::HandleControl",
+  "score": 0.9907
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "only 79% of instructions aligned",
+  "aligned": 0.7931,
+  "slots": 4,
+  "divergent": [],
+  "address": "0x10058c30",
+  "name": "LegoOmni::Destroy",
+  "score": 0.9827
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "only 79% of instructions aligned",
+  "aligned": 0.7921,
+  "slots": 7,
+  "divergent": [],
+  "address": "0x1003d170",
+  "name": "LegoCacheSoundManager::FindSoundByKey",
+  "score": 0.9552
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "1 slot(s) contested; 3 retail slot(s) claimed twice; 1 noise pair(s) dropped",
+  "aligned": 0.8238,
+  "slots": 32,
+  "divergent": [
+   {
+    "ours": "esp+0x0094",
+    "retail": "esp+0x0048",
+    "width": 4,
+    "accesses": 1,
+    "delta": -76
+   },
+   {
+    "ours": "esp+0x0048",
+    "retail": "esp-0x0004",
+    "width": 4,
+    "accesses": 3,
+    "delta": -76
+   },
+   {
+    "ours": "esp+0x0068",
+    "retail": "esp+0x001c",
+    "width": 4,
+    "accesses": 1,
+    "delta": -76
+   },
+   {
+    "ours": "esp+0x0058",
+    "retail": "esp+0x000c",
+    "width": 4,
+    "accesses": 1,
+    "delta": -76
+   },
+   {
+    "ours": "esp+0x0054",
+    "retail": "esp+0x0008",
+    "width": 4,
+    "accesses": 1,
+    "delta": -76
+   },
+   {
+    "ours": "esp+0x0050",
+    "retail": "esp+0x0004",
+    "width": 4,
+    "accesses": 3,
+    "delta": -76
+   },
+   {
+    "ours": "esp+0x004c",
+    "retail": "esp+0x0000",
+    "width": 4,
+    "accesses": 3,
+    "delta": -76
+   },
+   {
+    "ours": "esp+0x0038",
+    "retail": "esp-0x0014",
+    "width": 4,
+    "accesses": 2,
+    "delta": -76
+   },
+   {
+    "ours": "esp+0x0060",
+    "retail": "esp+0x0014",
+    "width": 4,
+    "accesses": 1,
+    "delta": -76
+   },
+   {
+    "ours": "esp+0x0030",
+    "retail": "esp-0x001c",
+    "width": 4,
+    "accesses": 1,
+    "delta": -76
+   },
+   {
+    "ours": "esp+0x0070",
+    "retail": "esp+0x0024",
+    "width": 4,
+    "accesses": 1,
+    "delta": -76
+   },
+   {
+    "ours": "esp+0x00f0",
+    "retail": "esp+0x00a4",
+    "width": 4,
+    "accesses": 2,
+    "delta": -76
+   },
+   {
+    "ours": "esp+0x00b4",
+    "retail": "esp+0x0068",
+    "width": 4,
+    "accesses": 1,
+    "delta": -76
+   },
+   {
+    "ours": "esp+0x00d0",
+    "retail": "esp+0x0084",
+    "width": 4,
+    "accesses": 1,
+    "delta": -76
+   }
+  ],
+  "address": "0x10046050",
+  "name": "LegoPathController::PlaceActor(class LegoPathActor *, class LegoAnimPresenter *, class Vector3 &, class Vector3 &)",
+  "score": 0.9552
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "only 80% of instructions aligned",
+  "aligned": 0.7973,
+  "slots": 14,
+  "divergent": [],
+  "address": "0x10081840",
+  "name": "LegoCarRaceActor::CheckPresenterAndActorIntersections",
+  "score": 0.9498
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "1 slot(s) contested",
+  "aligned": 0.9185,
+  "slots": 47,
+  "divergent": [],
+  "address": "0x100417c0",
+  "name": "Act3Brickster::FUN_100417c0",
+  "score": 0.9496
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "1 retail slot(s) claimed twice",
+  "aligned": 0.8715,
+  "slots": 53,
+  "divergent": [
+   {
+    "ours": "ebp-0x0084",
+    "retail": "ebp-0x0134",
+    "width": 4,
+    "accesses": 1,
+    "delta": -176
+   }
+  ],
+  "address": "0x10054050",
+  "name": "Act3Ammo::Animate",
+  "score": 0.9476
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "only 78% of instructions aligned",
+  "aligned": 0.7839,
+  "slots": 27,
+  "divergent": [],
+  "address": "0x100a84a0",
+  "name": "LegoROI::Read",
+  "score": 0.9277
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "only 79% of instructions aligned",
+  "aligned": 0.7861,
+  "slots": 5,
+  "divergent": [],
+  "address": "0x100ba2c0",
+  "name": "MxStillPresenter::Clone",
+  "score": 0.9251
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "only 74% of instructions aligned",
+  "aligned": 0.735,
+  "slots": 3,
+  "divergent": [],
+  "address": "0x1006ed90",
+  "name": "Infocenter::Create",
+  "score": 0.8966
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "only 78% of instructions aligned",
+  "aligned": 0.7766,
+  "slots": 6,
+  "divergent": [],
+  "address": "0x1003cf20",
+  "name": "LegoCacheSoundManager::~LegoCacheSoundManager",
+  "score": 0.895
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "1 slot(s) contested",
+  "aligned": 0.8969,
+  "slots": 41,
+  "divergent": [
+   {
+    "ours": "esp-0x0108",
+    "retail": "esp-0x00d4",
+    "width": 4,
+    "accesses": 1,
+    "delta": 52
+   },
+   {
+    "ours": "esp-0x00d4",
+    "retail": "esp-0x00d8",
+    "width": 4,
+    "accesses": 1,
+    "delta": -4
+   },
+   {
+    "ours": "esp-0x00d8",
+    "retail": "esp-0x0108",
+    "width": 4,
+    "accesses": 1,
+    "delta": -48
+   }
+  ],
+  "address": "0x1009f490",
+  "name": "LegoAnimScene::CalculateCameraTransform",
+  "score": 0.8896
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "1 slot(s) contested",
+  "aligned": 0.9443,
+  "slots": 37,
+  "divergent": [],
+  "address": "0x10062e20",
+  "name": "LegoAnimationManager::FUN_10062e20",
+  "score": 0.8856
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "1 retail slot(s) claimed twice",
+  "aligned": 0.9408,
+  "slots": 24,
+  "divergent": [
+   {
+    "ours": "ebp-0x0108",
+    "retail": "ebp-0x0104",
+    "width": 4,
+    "accesses": 3,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x00fc",
+    "retail": "ebp-0x00f8",
+    "width": 4,
+    "accesses": 2,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0100",
+    "retail": "ebp-0x00fc",
+    "width": 4,
+    "accesses": 2,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x00e4",
+    "retail": "ebp-0x00e0",
+    "width": 4,
+    "accesses": 1,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0020",
+    "retail": "ebp-0x0018",
+    "width": 4,
+    "accesses": 2,
+    "delta": 8
+   },
+   {
+    "ours": "ebp-0x009c",
+    "retail": "ebp-0x0098",
+    "width": 4,
+    "accesses": 6,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0078",
+    "retail": "ebp-0x0074",
+    "width": 4,
+    "accesses": 1,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0090",
+    "retail": "ebp-0x008c",
+    "width": 4,
+    "accesses": 2,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0094",
+    "retail": "ebp-0x0090",
+    "width": 4,
+    "accesses": 2,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0098",
+    "retail": "ebp-0x0094",
+    "width": 4,
+    "accesses": 1,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0034",
+    "retail": "ebp-0x0030",
+    "width": 4,
+    "accesses": 1,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0054",
+    "retail": "ebp-0x0050",
+    "width": 4,
+    "accesses": 1,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0050",
+    "retail": "ebp-0x004c",
+    "width": 4,
+    "accesses": 1,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0048",
+    "retail": "ebp-0x0044",
+    "width": 4,
+    "accesses": 1,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x002c",
+    "retail": "ebp-0x0028",
+    "width": 4,
+    "accesses": 1,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0028",
+    "retail": "ebp-0x0024",
+    "width": 4,
+    "accesses": 1,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0024",
+    "retail": "ebp-0x0020",
+    "width": 4,
+    "accesses": 1,
+    "delta": 4
+   },
+   {
+    "ours": "ebp-0x0030",
+    "retail": "ebp-0x002c",
+    "width": 4,
+    "accesses": 1,
+    "delta": 4
+   }
+  ],
+  "address": "0x100998e0",
+  "name": "LegoTextureContainer::GetCached",
+  "score": 0.8698
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "11 slot(s) contested",
+  "aligned": 0.9981,
+  "slots": 66,
+  "divergent": [
+   {
+    "ours": "esp-0x0170",
+    "retail": "esp-0x0178",
+    "width": 8,
+    "accesses": 5,
+    "delta": -8
+   },
+   {
+    "ours": "esp-0x0140",
+    "retail": "esp-0x0148",
+    "width": 8,
+    "accesses": 5,
+    "delta": -8
+   },
+   {
+    "ours": "esp-0x0130",
+    "retail": "esp-0x0138",
+    "width": 8,
+    "accesses": 5,
+    "delta": -8
+   },
+   {
+    "ours": "esp-0x00e0",
+    "retail": "esp-0x00a0",
+    "width": 8,
+    "accesses": 4,
+    "delta": 64
+   },
+   {
+    "ours": "esp-0x00c0",
+    "retail": "esp-0x00e0",
+    "width": 8,
+    "accesses": 4,
+    "delta": -32
+   },
+   {
+    "ours": "esp-0x00a0",
+    "retail": "esp-0x00c0",
+    "width": 8,
+    "accesses": 4,
+    "delta": -32
+   },
+   {
+    "ours": "esp-0x0098",
+    "retail": "esp-0x00b8",
+    "width": 8,
+    "accesses": 4,
+    "delta": -32
+   },
+   {
+    "ours": "esp-0x00d8",
+    "retail": "esp-0x00f8",
+    "width": 8,
+    "accesses": 4,
+    "delta": -32
+   },
+   {
+    "ours": "esp-0x00b8",
+    "retail": "esp-0x0098",
+    "width": 8,
+    "accesses": 4,
+    "delta": 32
+   },
+   {
+    "ours": "esp-0x00b0",
+    "retail": "esp-0x00d0",
+    "width": 8,
+    "accesses": 4,
+    "delta": -32
+   },
+   {
+    "ours": "esp-0x00c8",
+    "retail": "esp-0x00e8",
+    "width": 8,
+    "accesses": 4,
+    "delta": -32
+   },
+   {
+    "ours": "esp-0x00a8",
+    "retail": "esp-0x0088",
+    "width": 8,
+    "accesses": 4,
+    "delta": 32
+   },
+   {
+    "ours": "esp-0x00e8",
+    "retail": "esp-0x00c8",
+    "width": 8,
+    "accesses": 4,
+    "delta": 32
+   }
+  ],
+  "address": "0x100a46b0",
+  "name": "OrientableROI::UpdateTransformationRelativeToParent",
+  "score": 0.8696
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "1 retail slot(s) claimed twice; 1 noise pair(s) dropped",
+  "aligned": 0.8204,
+  "slots": 65,
+  "divergent": [
+   {
+    "ours": "ebp-0x0098",
+    "retail": "ebp-0x00ac",
+    "width": 4,
+    "accesses": 1,
+    "delta": -20
+   },
+   {
+    "ours": "ebp-0x00a0",
+    "retail": "ebp-0x00b4",
+    "width": 4,
+    "accesses": 8,
+    "delta": -20
+   },
+   {
+    "ours": "ebp-0x009c",
+    "retail": "ebp-0x00b0",
+    "width": 4,
+    "accesses": 1,
+    "delta": -20
+   },
+   {
+    "ours": "ebp-0x00ac",
+    "retail": "ebp-0x0098",
+    "width": 4,
+    "accesses": 1,
+    "delta": 20
+   },
+   {
+    "ours": "ebp-0x00b4",
+    "retail": "ebp-0x00a0",
+    "width": 4,
+    "accesses": 8,
+    "delta": 20
+   },
+   {
+    "ours": "ebp-0x00b0",
+    "retail": "ebp-0x009c",
+    "width": 4,
+    "accesses": 1,
+    "delta": 20
+   },
+   {
+    "ours": "ebp-0x012c",
+    "retail": "ebp-0x0130",
+    "width": 4,
+    "accesses": 1,
+    "delta": -4
+   }
+  ],
+  "address": "0x10048310",
+  "name": "LegoPathController::FindPath",
+  "score": 0.8629
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "only 69% of instructions aligned",
+  "aligned": 0.6914,
+  "slots": 6,
+  "divergent": [],
+  "address": "0x100293c0",
+  "name": "LegoControlManager::UpdateEnabledChild",
+  "score": 0.8625
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "only 76% of instructions aligned",
+  "aligned": 0.7642,
+  "slots": 13,
+  "divergent": [],
+  "address": "0x1004ebd0",
+  "name": "LegoTexturePresenter::Read",
+  "score": 0.8446
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "only 79% of instructions aligned",
+  "aligned": 0.7913,
+  "slots": 3,
+  "divergent": [],
+  "address": "0x10069e90",
+  "name": "_Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct>>::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct>>::erase",
+  "score": 0.7745
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "only 75% of instructions aligned",
+  "aligned": 0.7474,
+  "slots": 5,
+  "divergent": [],
+  "address": "0x100574a0",
+  "name": "LegoPathBoundary::RemoveActor",
+  "score": 0.7527
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "only 78% of instructions aligned",
+  "aligned": 0.7832,
+  "slots": 3,
+  "divergent": [],
+  "address": "0x1002bff0",
+  "name": "_Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *>>::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *>>::erase",
+  "score": 0.7092
+ },
+ {
+  "verdict": "AMBIGUOUS",
+  "reason": "only 68% of instructions aligned",
+  "aligned": 0.6777,
+  "slots": 13,
+  "divergent": [],
+  "address": "0x10061010",
+  "name": "LegoAnimationManager::FUN_10061010",
+  "score": 0.5411
+ },
+ {
+  "verdict": "UNREACHABLE",
+  "reason": "all 2 divergent slot(s) touched < 3x -- spill-shaped",
+  "aligned": 0.9802,
+  "slots": 27,
+  "divergent": [
+   {
+    "ours": "esp-0x001c",
+    "retail": "esp-0x0074",
+    "width": 4,
+    "accesses": 1,
+    "delta": -88
+   },
+   {
+    "ours": "esp-0x0074",
+    "retail": "esp-0x001c",
+    "width": 4,
+    "accesses": 1,
+    "delta": 88
+   }
+  ],
+  "address": "0x100bb1d0",
+  "name": "MxDisplaySurface::VTable0x30",
+  "score": 0.8611
+ },
+ {
+  "verdict": "UNREACHABLE",
+  "reason": "ours ebp-0x43 is 4B, not 4-aligned; ours ebp-0x43(+4) partially overlaps ebp-0x40(+4); ours ebp-0x44(+4) partially overlaps ebp-0x43(+4)",
+  "aligned": 0.9159,
+  "slots": 36,
+  "divergent": [
+   {
+    "ours": "ebp-0x0034",
+    "retail": "ebp-0x003c",
+    "width": 4,
+    "accesses": 7,
+    "delta": -8
+   },
+   {
+    "ours": "ebp-0x0030",
+    "retail": "ebp-0x0038",
+    "width": 4,
+    "accesses": 7,
+    "delta": -8
+   },
+   {
+    "ours": "ebp-0x002c",
+    "retail": "ebp-0x0034",
+    "width": 4,
+    "accesses": 9,
+    "delta": -8
+   },
+   {
+    "ours": "ebp-0x0028",
+    "retail": "ebp-0x0030",
+    "width": 4,
+    "accesses": 10,
+    "delta": -8
+   },
+   {
+    "ours": "ebp-0x0020",
+    "retail": "ebp-0x0024",
+    "width": 4,
+    "accesses": 12,
+    "delta": -4
+   },
+   {
+    "ours": "ebp-0x0044",
+    "retail": "ebp-0x002c",
+    "width": 4,
+    "accesses": 3,
+    "delta": 24
+   },
+   {
+    "ours": "ebp-0x0038",
+    "retail": "ebp-0x0040",
+    "width": 4,
+    "accesses": 7,
+    "delta": -8
+   },
+   {
+    "ours": "ebp-0x003c",
+    "retail": "ebp-0x002a",
+    "width": 4,
+    "accesses": 7,
+    "delta": 18
+   },
+   {
+    "ours": "ebp-0x007c",
+    "retail": "ebp-0x0080",
+    "width": 4,
+    "accesses": 2,
+    "delta": -4
+   },
+   {
+    "ours": "ebp-0x0024",
+    "retail": "ebp-0x0028",
+    "width": 4,
+    "accesses": 10,
+    "delta": -4
+   },
+   {
+    "ours": "ebp-0x001c",
+    "retail": "ebp-0x0020",
+    "width": 4,
+    "accesses": 12,
+    "delta": -4
+   },
+   {
+    "ours": "ebp-0x0040",
+    "retail": "ebp-0x0044",
+    "width": 4,
+    "accesses": 7,
+    "delta": -4
+   },
+   {
+    "ours": "ebp-0x0018",
+    "retail": "ebp-0x001c",
+    "width": 4,
+    "accesses": 1,
+    "delta": -4
+   },
+   {
+    "ours": "ebp-0x0018",
+    "retail": "ebp-0x001c",
+    "width": 1,
+    "accesses": 1,
+    "delta": -4
+   },
+   {
+    "ours": "ebp-0x0014",
+    "retail": "ebp-0x0018",
+    "width": 4,
+    "accesses": 1,
+    "delta": -4
+   },
+   {
+    "ours": "ebp-0x0013",
+    "retail": "ebp-0x0017",
+    "width": 1,
+    "accesses": 1,
+    "delta": -4
+   },
+   {
+    "ours": "ebp-0x0043",
+    "retail": "ebp-0x0014",
+    "width": 4,
+    "accesses": 1,
+    "delta": 47
+   },
+   {
+    "ours": "ebp-0x0041",
+    "retail": "ebp-0x0012",
+    "width": 1,
+    "accesses": 1,
+    "delta": 47
+   },
+   {
+    "ours": "ebp-0x017c",
+    "retail": "ebp-0x0180",
+    "width": 4,
+    "accesses": 1,
+    "delta": -4
+   },
+   {
+    "ours": "ebp-0x0078",
+    "retail": "ebp-0x007c",
+    "width": 4,
+    "accesses": 2,
+    "delta": -4
+   },
+   {
+    "ours": "ebp-0x0074",
+    "retail": "ebp-0x0078",
+    "width": 4,
+    "accesses": 1,
+    "delta": -4
+   }
+  ],
+  "address": "0x100aa510",
+  "name": "LegoLOD::Read",
+  "score": 0.7268
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9193,
+  "divergent": [],
+  "address": "0x1007ca30",
+  "name": "LegoPartPresenter::Read",
+  "score": 0.9953
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9858,
+  "divergent": [],
+  "address": "0x100ba7f0",
+  "name": "MxDisplaySurface::Create",
+  "score": 0.9953
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9665,
+  "divergent": [],
+  "address": "0x1009a8c0",
+  "name": "LegoWEGEdge::LinkEdgesAndFaces",
+  "score": 0.9921
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8587,
+  "divergent": [],
+  "address": "0x100334b0",
+  "name": "Act1State::Act1State",
+  "score": 0.9891
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9882,
+  "divergent": [],
+  "address": "0x100c6fa0",
+  "name": "MxDSBuffer::FUN_100c6fa0",
+  "score": 0.9882
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.856,
+  "divergent": [],
+  "address": "0x10055a60",
+  "name": "LegoNavController::Notify",
+  "score": 0.9818
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9339,
+  "divergent": [],
+  "address": "0x100170e0",
+  "name": "CarRace::HandlePathStruct",
+  "score": 0.9752
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9478,
+  "divergent": [],
+  "address": "0x100c3750",
+  "name": "MxRegion::AddRect",
+  "score": 0.9739
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9108,
+  "divergent": [],
+  "address": "0x10040360",
+  "name": "Act3Cop::FUN_10040360",
+  "score": 0.973
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9169,
+  "divergent": [],
+  "address": "0x10031820",
+  "name": "Isle::Enable",
+  "score": 0.9725
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8889,
+  "divergent": [],
+  "address": "0x100d0d80",
+  "name": "ReadData",
+  "score": 0.9722
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9368,
+  "divergent": [],
+  "address": "0x10083500",
+  "name": "LegoCharacterManager::GetActorROI",
+  "score": 0.9684
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9333,
+  "divergent": [],
+  "address": "0x1007b770",
+  "name": "LegoVideoManager::Tickle",
+  "score": 0.9636
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9845,
+  "divergent": [],
+  "address": "0x100b24f0",
+  "name": "MxVideoPresenter::AlphaMask::AlphaMask(class MxBitmap const &)",
+  "score": 0.9612
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9673,
+  "divergent": [],
+  "address": "0x1004bd10",
+  "name": "MxTransitionManager::DissolveTransition",
+  "score": 0.9608
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9298,
+  "divergent": [],
+  "address": "0x10080be0",
+  "name": "LegoCarRaceActor::CalculateSpline",
+  "score": 0.9545
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9298,
+  "divergent": [],
+  "address": "0x1004d330",
+  "name": "TowTrack::HandlePathStruct",
+  "score": 0.9536
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8169,
+  "divergent": [],
+  "address": "0x100a4420",
+  "name": "OrientableROI::OrientableROI",
+  "score": 0.9504
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9187,
+  "divergent": [],
+  "address": "0x1002de10",
+  "name": "LegoPathActor::SetTransformAndDestinationFromPoints",
+  "score": 0.9426
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9917,
+  "divergent": [],
+  "address": "0x100720d0",
+  "name": "Act3List::RemoveByObjectIdOrFirst",
+  "score": 0.9417
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9092,
+  "divergent": [],
+  "address": "0x10084030",
+  "name": "LegoCharacterManager::CreateActorROI",
+  "score": 0.9365
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9565,
+  "divergent": [],
+  "address": "0x100b26f0",
+  "name": "MxVideoPresenter::AlphaMask::IsHit",
+  "score": 0.9348
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9863,
+  "divergent": [],
+  "address": "0x1002f770",
+  "name": "LegoPathActor::UpdatePlane",
+  "score": 0.9315
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8652,
+  "divergent": [],
+  "address": "0x10072ad0",
+  "name": "Act3::TriggerHitSound",
+  "score": 0.9302
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9236,
+  "divergent": [],
+  "address": "0x1003f540",
+  "name": "WriteDefaultTexture",
+  "score": 0.9273
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9689,
+  "divergent": [],
+  "address": "0x10085500",
+  "name": "_Tree<char *,pair<char * const,LegoCharacter *>,map<char *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *>>::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *>>::insert",
+  "score": 0.9244
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8987,
+  "divergent": [],
+  "address": "0x10029d50",
+  "name": "_Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry>>::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry>>::erase",
+  "score": 0.9212
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9137,
+  "divergent": [],
+  "address": "0x10051ac0",
+  "name": "LegoAct2::SpawnBricks",
+  "score": 0.9101
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8009,
+  "divergent": [],
+  "address": "0x100b2a70",
+  "name": "MxVideoPresenter::PutFrame",
+  "score": 0.9048
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9946,
+  "divergent": [],
+  "address": "0x1001d890",
+  "name": "_Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *>>::_Kfn,CoreSetCompare,allocator<MxCore *>>::erase",
+  "score": 0.9027
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8735,
+  "divergent": [],
+  "address": "0x10073a90",
+  "name": "Act3::Enable",
+  "score": 0.8893
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8873,
+  "divergent": [],
+  "address": "0x10017af0",
+  "name": "PizzeriaState::PizzeriaState",
+  "score": 0.8873
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8646,
+  "divergent": [],
+  "address": "0x100a66f0",
+  "name": "ViewManager::ManageVisibilityAndDetailRecursively",
+  "score": 0.8848
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8953,
+  "divergent": [],
+  "address": "0x10069b10",
+  "name": "LegoAnimPresenter::BuildROIMap",
+  "score": 0.8842
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.967,
+  "divergent": [],
+  "address": "0x100b27b0",
+  "name": "MxVideoPresenter::Destroy(unsigned char)",
+  "score": 0.8791
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.897,
+  "divergent": [],
+  "address": "0x100a7960",
+  "name": "_Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *>>::_Kfn,ROINameComparator,allocator<ViewLODList *>>::erase",
+  "score": 0.878
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9337,
+  "divergent": [],
+  "address": "0x100166a0",
+  "name": "JetskiRace::HandlePathStruct",
+  "score": 0.8675
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8867,
+  "divergent": [],
+  "address": "0x1004c580",
+  "name": "MxTransitionManager::SetupCopyRect",
+  "score": 0.8495
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9072,
+  "divergent": [],
+  "address": "0x1006e720",
+  "name": "_Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct>>::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct>>::_Insert",
+  "score": 0.8475
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9382,
+  "divergent": [],
+  "address": "0x1006dec0",
+  "name": "_Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct>>::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct>>::erase",
+  "score": 0.8205
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8684,
+  "divergent": [],
+  "address": "0x100a3840",
+  "name": "TglImpl::MeshBuilderImpl::CreateMesh",
+  "score": 0.8176
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9103,
+  "divergent": [],
+  "address": "0x1004f9b0",
+  "name": "_Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::_Insert",
+  "score": 0.8051
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9114,
+  "divergent": [],
+  "address": "0x1006a7a0",
+  "name": "_Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct>>::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct>>::_Insert",
+  "score": 0.7983
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8406,
+  "divergent": [],
+  "address": "0x100a3b40",
+  "name": "TglImpl::MeshBuilderImpl::Clone",
+  "score": 0.7971
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.907,
+  "divergent": [],
+  "address": "0x1006fda0",
+  "name": "Infocenter::HandleKeyPress",
+  "score": 0.7933
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8699,
+  "divergent": [],
+  "address": "0x10059dc0",
+  "name": "_Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::erase",
+  "score": 0.7913
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9145,
+  "divergent": [],
+  "address": "0x1006c200",
+  "name": "_Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *>>::_Kfn,LegoAnimSubstComparator,allocator<char const *>>::_Insert",
+  "score": 0.7828
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9439,
+  "divergent": [],
+  "address": "0x100586e0",
+  "name": "LegoPathBoundary::RemovePresenter",
+  "score": 0.7757
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8811,
+  "divergent": [],
+  "address": "0x10068b20",
+  "name": "_Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *>>::_Kfn,LegoAnimSubstComparator,allocator<char const *>>::erase",
+  "score": 0.768
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9398,
+  "divergent": [],
+  "address": "0x100bd020",
+  "name": "MxBitmap::BitBltTransparent",
+  "score": 0.747
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9548,
+  "divergent": [],
+  "address": "0x10083890",
+  "name": "_Tree<char *,pair<char * const,LegoCharacter *>,map<char *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *>>::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *>>::_Insert",
+  "score": 0.7075
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9412,
+  "divergent": [],
+  "address": "0x1002a1b0",
+  "name": "_Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry>>::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry>>::_Erase",
+  "score": 0.7059
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9231,
+  "divergent": [],
+  "address": "0x100a12a0",
+  "name": "TglImpl::TextureImpl::SetImage",
+  "score": 0.6667
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.9459,
+  "divergent": [],
+  "address": "0x100495b0",
+  "name": "_Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *>>::_Kfn,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *>>::insert",
+  "score": 0.6532
+ },
+ {
+  "verdict": "SLOT-CLEAN",
+  "reason": "identity mapping",
+  "aligned": 0.8696,
+  "divergent": [],
+  "address": "0x10057180",
+  "name": "_Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresenter *,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *>>::_Kfn,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *>>::_Erase",
+  "score": 0.6522
+ },
+ {
+  "verdict": "NO-SLOTS",
+  "reason": "no frame-slot operand in any aligned instruction",
+  "aligned": 0.907,
+  "slots": 0,
+  "divergent": [],
+  "address": "0x10038380",
+  "name": "Pizza::StopActions",
+  "score": 0.7442
+ }
+]
