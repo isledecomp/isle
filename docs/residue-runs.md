@@ -226,3 +226,41 @@ not respond to declaration state. That is one shared allocator or scheduler
 decision per row, and the instrument for it — a way to observe what C2 actually
 decided — does not exist yet. Until it does, these rows should be left alone
 rather than re-swept.
+
+## Reading the allocation as evidence about the source idiom
+
+`~MxStreamController` closed on the text channel after ~1,040 carrier states
+had failed, and the method that found it generalises — it is the strongest
+reading technique this project has produced, so it belongs here rather than
+buried in one lane's ledger.
+
+**Retail's register allocation names the idiom.** In retail's three PopFront
+loops:
+
+```
+loop 1:  mov edx,[eax+8] ; mov [ebp-0x18],edx     — the popped value is SPILLED
+loop 3:  mov esi,[eax+8]                          — it stays in a REGISTER
+```
+
+A spill at the pop is the signature of a write through a `T&` out-parameter
+(`PopFront(T& out)`); keeping it in a register is a plain local. **Same
+function, two different source idioms, and the bytes say which is which.** The
+third loop is therefore a raw `front()` / `pop_front()` loop — which also drops
+one inline-nesting level and is what lets C2 decline `erase` in the second loop
+exactly as retail does.
+
+Corroborated independently: BETA10 `0x1014e354` has only *two* PopFront loops,
+so the third did not exist in June 1997 and was never bound to the idiom its
+neighbours use.
+
+Two lessons attached to it, both from the lane that found it:
+
+* **The channel classification is a prior, not a verdict.** That row had been
+  classified — by me and by the lane — as the same shared-allocator-decision
+  problem as `FUN_10061010`, on the strength of ~1,040 states finding nothing.
+  It then closed on the text channel. A same-mechanism classification is not a
+  reason to stop hunting for a text answer.
+* **The symbol-set test cuts both ways.** The neighbouring `mxutilitylist.h`
+  channel produced a spelling that *reached the target signature* and would
+  have passed a score-only gate — while breaking a currently-exact row and
+  relocating the retail-absent `operator++` into a second TU.
