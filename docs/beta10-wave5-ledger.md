@@ -172,3 +172,50 @@ length family and the whole 2-D plane is colour. Passes run:
 states** spanning all four generators and the full extern plane. Together with
 the four bit-inert text probes from wave 4 and the LenSquared census above,
 this row is not under-searched — it needs a coordinate nobody has.
+
+### Priority 3 — the rows already at retail's length
+
+Applying the seat rule (sweep `m` at each row's known good `k`):
+
+| row | before | after | state |
+|---|---|---|---|
+| `Act3Ammo::Animate` 0x10054050 | 105 | **95** | `extern-15-48` (also 15-50); m=15, 600 states over k ∈ {48,50,160,177,207,240} |
+| `LegoCarRaceActor::CheckPresenterAndActorIntersections` 0x10081840 | 102 | **100** | `extern-66-228` — **m = 66**, far outside both the historical 8×17 box and my own dense m ≤ 24 region |
+| `LegoROI::Read` 0x100a84a0 | 41 | 41 | `extern-0-288` (m = 0 is best; the post-include seat is inert for this row) |
+
+The CPI result is the clearest independent confirmation of the seat rule: the
+row's good *length* family lives on the pre-include seat (`fwdL-228`,
+`shape-8-25`), and adding a **66**-declaration post-include run on top of the
+EOF count is what moved the colour. Nothing in the campaign had ever compiled
+that cell.
+
+### Rows where the whole extern plane is now exhausted
+
+`externdense` = stride-1 lattice, m ∈ 0..24 × k ∈ 0..99 (2,499 cells each),
+on top of the m-strips (399 each) and everything from wave 4:
+
+| row | best | unchanged across |
+|---|---|---|
+| `LinkEdgesAndFaces` | **2** | ~7,600 states, all four generators |
+| `RemoveByObjectIdOrFirst` | **7** | ~5,800 states |
+| `TriggerHitSound` | **11** | ~5,800 states |
+| `TowTrack::HandlePathStruct` | **11** | ~4,400 states |
+| `Act3::Enable` | **105** (929 = retail length) | ~5,800 states |
+
+## WAVE-5 VERDICT
+
+The long extern grid was run across the TU list as ordered. **It produced no
+new landing in this lane**, but it produced the measurement that explains why,
+and it moved two rows.
+
+The order paid in Lane NM because `ReadModelDbWorlds` had a live coordinate
+left. In this lane the five closest rows have now been held at the same
+distance across the *entire* landable state space — four generators, both
+forward-run placements to k=999, the extern plane densely to m=24×k=99 and in
+strips to m=99, all 550 declaration-shape cells, and the include-order axis.
+That is not "unsearched"; it is a lane whose remaining rows need a coordinate
+the framework does not yet expose. The concrete proposal is the three-seat
+generator in the seat-law section above: pre-include + post-include + EOF in
+one typed recipe. Every landing this lane has ever made came from *adding a
+seat*, and there is exactly one seat combination left that no recipe can
+express.
