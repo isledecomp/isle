@@ -336,3 +336,92 @@ far the most span (18.5 KB), and it is the one experiment worth running next.
    displaced span (§2).
 3. **Do not spend the class-(b) budget on the 272.5 KB figure** — 37.9 KB of it
    is real ordering and 21 of the 30 misordered objects are CRT (§3).
+
+## 8. Experiment 2 — the window in RETAIL's order: **−28 KB distance, +158 aligned rows, −6 rows**
+
+Experiment 1 moved two supplier TUs to positions inferred from very few rows and
+made everything worse. Experiment 2 corrects the **whole** `paths/` window to
+retail's order instead of guessing at individual TUs.
+
+Method (`ordinals.py`, `solve.py`), and the model is validated before it is
+used:
+
+1. Model the lego1 source list exactly as `cmake/byte_identity.cmake` builds it
+   — real sources from `add_library(${NAME} SHARED …)`, then each generated TU
+   inserted at `list(INSERT _sources ordinal-1 …)` in ascending ordinal.
+2. **Verify the model reproduces the linked image's object order.** It does,
+   exactly (`model reproduces the image object order: True`). Nothing below
+   rests on a guess about the build system.
+3. Rewrite `final[54:68]` into retail's measured order, solve for the ordinals
+   that realise it (the index at insertion time *is* the desired final index),
+   and **round-trip the solution back through the model** before writing.
+
+The window, ours → retail:
+
+```
+ours    aps  pce pces pas pasc pasi  be pcei pcec pcl pec bwm bwmc  PATHCTRL
+retail  pce pces pas pasc pasi  aps  PATHCTRL  be pcei pcec pcl pec bwm bwmc
+```
+
+— 12 inversions, all fixed by the rewrite. 13 ordinals changed; the CMakeLists
+edit turned out to be a no-op because `legopathcontroller.cpp`'s position
+*among the real sources* is unchanged.
+
+### Result
+
+```
+[isle_build] terminal LEGO1: distance 633559     (baseline 661,705 -> -28,146)
+[isle_build] LEGO1 rows 4847/4934, 1674 address-aligned
+                                                (baseline 4853 / 1516 -> -6 rows, +158 aligned)
+[isle_build] terminal ISLE: IDENTICAL   terminal CONFIG: IDENTICAL
+isle_build: refusing: ... accepted raw-1.0 row set differs from its exact pin
+```
+
+Fail-closed; reverted. **This is the first measured proof that the class-(b)
+channel is real and large**: one window of fourteen objects is worth **28 KB of
+byte distance and 158 address-aligned rows**.
+
+### The six lost rows are the finding
+
+```
+0x10048f10 list<LegoBoundaryEdge>::insert
+0x10049290 _Tree<LegoPathCtrlEdge*>::…            (3 rows)
+0x10049890 _Tree<LegoBEWithMidpoint*>::…          (2 rows)
+```
+
+Every one is a template instantiation living **inside `legopathcontroller`'s own
+retail address range** (`0x10048f10`–`0x10049d10`). COMDAT selection takes the
+first definition in link order. Before the move, `legopathcontroller.cpp` came
+*after* the supplier TUs, so the **suppliers'** copies won. After the move it
+comes before them — as it does in retail — so **its own** copies win, and they
+do not match retail.
+
+So those six rows were at 1.0 only because the wrong object was supplying them.
+This is the "propped-up" phenomenon one level deeper than the 48-byte case: not
+alignment propped up by extra bytes, but **row scores propped up by the wrong
+link order**. Correcting the layout does not break them; it *exposes* six
+codegen defects in `legopathcontroller.cpp`'s own template instantiations that
+the supplier TUs were masking.
+
+### What this means for sequencing the two goals
+
+Goal 2 and goal 1 are coupled through **COMDAT selection**, not just through
+addresses:
+
+* a layout fix can change which object supplies a template, and therefore
+  change row bodies;
+* conversely, some current rows are only at 1.0 because the layout is wrong.
+
+The honest consequence is that **class (b) cannot be landed incrementally under
+a zero-row-loss gate wherever a supplier TU is involved** — the correct link
+order and the current row set are inconsistent. Either the six
+`legopathcontroller.cpp` instantiations are fixed first (goal-1 work, now with a
+precise target list), or the gate needs a mode that accepts a net-negative row
+step in exchange for a measured layout gain, which is a policy question for the
+coordinator and not something a lane should decide.
+
+**Recommended next step**: treat those six rows as a goal-1 work item. They are
+fully specified — the required bodies are exactly retail's at
+`0x10048f10`/`0x10049290`/`0x100492f0`/`0x10049370`/`0x10049890`/`0x10049d10`,
+and the compile that must produce them is `legopathcontroller.cpp`'s own. When
+they close, experiment 2 becomes a clean +28 KB with zero row loss.
