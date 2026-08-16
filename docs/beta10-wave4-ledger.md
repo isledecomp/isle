@@ -636,3 +636,28 @@ any statement** — both are pure register-role rows whose length defect is an
 encoding side effect. Do not spend read-off time reconstructing text for them;
 they need the carrier channel (or nothing). Run this census first on every
 ±1 row in the project.
+
+### `LegoLOD::Read` 0x100aa510 — the wave-1 frame lead confirmed at byte level
+
+Prologue, ours vs retail:
+
+```
++24  OURS   81 ec 70 01 00 00   sub esp, 0x170
++24  RETAIL 81 ec 74 01 00 00   sub esp, 0x174        <- 4 bytes more frame
+```
+
+and the zero-init run differs in both slot numbers and order:
+ours `[-0x34] [-0x30] [-0x38] [-0x48] … [-0x2c] [-0x28]`,
+retail `[-0x3c] [-0x38] [-0x40] [-0x48] …`. So retail really does carry **one
+extra 4-byte named local** that our text does not declare, and the whole slot
+map is shifted by it — which is why nd is 312 despite the body being only one
+byte short.
+
+The `// TODO: Can't get this one right` site (legolod.cpp:190-192) remains the
+likeliest home for it: retail almost certainly named an intermediate for the
+packed `tempNumVertsAndNormals` word extraction, e.g. a `LegoU16*` cursor or a
+`LegoU16 packed` temp, instead of our two casts of `&tempNumVertsAndNormals`.
+That is a *bounded* search (the extra local's slot is between −0x3c and −0x48)
+and is the single best text-channel target left in this lane. The EAX census
+above rules the −1 out as the encoding artefact, so the −1 and the extra local
+are two separate defects.
