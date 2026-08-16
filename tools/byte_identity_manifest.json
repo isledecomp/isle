@@ -4455,6 +4455,22 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_487274c631a2",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "pad_shape",
+      "classes": 92,
+      "functions_per_class": 22,
+      "generated_header_sha256": "487274c631a2377e58fbbe49e564695aa7b0df4cd20e76a121eab2e2e81d890c",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -4632,6 +4648,15 @@
      "expected_donor_length": 1763,
      "expected_linked_span": 1776,
      "donor": "d_1784210fd299"
+    },
+    {
+     "mangled": "?erase@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@QAE?AViterator@1@V21@@Z",
+     "expected_body_sha256": "dbe6fcb2f5ed34ed60b95e8c0fc56c053c00a72a3b5f1c946e229fc9f82720e6",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1113,
+     "expected_donor_length": 1104,
+     "expected_linked_span": 1104,
+     "donor": "d_487274c631a2"
     }
    ],
    "completion": {
@@ -5928,8 +5953,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4853,
-    "accepted_row_identity_sha256": "4884e2bb65af3eb2be8cbf5daf792d3cdd1f0b7b5f26ffd184cda17616a3e224",
+    "exact_raw_1_0_count": 4854,
+    "accepted_row_identity_sha256": "8b4e006188786534658e902fb490ab7d7116fc6c0ea379b1311fdbba8fa1de7b",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
