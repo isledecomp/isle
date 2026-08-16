@@ -811,6 +811,26 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated forward-declaration run prepended to the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_a9709b0b6698",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_run_with_shape",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 96,
+      "width": 3,
+      "classes": 6,
+      "functions": 60,
+      "generated_header_sha256": "a9709b0b66989825f1e2cf9e7825bfe4d0a8c2d75e15052cd42271056ac467ae",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: a forward-declaration run seated at the stated placement plus a declaration shape rendered as a force-include; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -838,6 +858,15 @@
       46,
       51
      ]
+    },
+    {
+     "mangled": "??1ViewLODListManager@@UAE@XZ",
+     "expected_body_sha256": "bf7be1804db457028af0e1e1f4cf6a8431e868ef857e637444087f0224d44ac2",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 395,
+     "expected_donor_length": 398,
+     "expected_linked_span": 400,
+     "donor": "d_a9709b0b6698"
     }
    ],
    "completion": {
@@ -4600,8 +4629,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4832,
-    "accepted_row_identity_sha256": "51b6d880e9069f6ac04ed2a51b40ae7d55d6a4bf8f6251da5d41bfb430d848e6",
+    "exact_raw_1_0_count": 4833,
+    "accepted_row_identity_sha256": "0b87ad7e8c0b341473372fca34478f35e4b51220543178fccb7a94e686c1f7e6",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
