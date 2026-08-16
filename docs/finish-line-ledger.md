@@ -401,3 +401,52 @@ reload) and a length shift can *create* alignment padding. The sharper rule:
 > A length delta is a text defect only if the extra instructions do work that
 > the other side does not do. A reload, a spill, an operand-size prefix and
 > alignment fill are all colour.
+
+### Two more, same treatment
+
+**`0x100293c0 LegoControlManager::UpdateEnabledChild` — ours 282, retail 286,
+`+4` is one enregistered parameter.** First divergence at +72:
+
+```
+  ours   +72  8b7508      mov esi,[ebp+8]
+  retail +72  668b5d10    mov bx, word [ebp+0x10]     <-- 4 bytes we never emit
+  retail +76  8b7508      mov esi,[ebp+8]
+```
+
+Retail caches the third parameter (a 16-bit value) in `bx` at the top of the
+function; we leave it in memory and spend `ebx` on the *second* parameter
+instead (`ours +75 mov ebx,[ebp+0xc]`). The whole `+4` is that one
+`mov bx, word [ebp+0x10]`. Filed `length: never reached → TEXT/INLINE`; it is
+an allocation decision.
+
+**`0x100ba2c0 MxStillPresenter::Clone` — ours 577, retail 576, `−1` is the
+accumulator short form.** A clean `al`↔`cl` transposition through the whole
+flag-merge block, and the byte falls out of the encoding table:
+
+```
+  ours   +272  80e101   and cl, 1      (3 bytes)
+  retail +272  2401     and al, 1      (2 bytes — the AL,imm8 short form)
+```
+
+`docs/open-set-triage.md` already has this row in its `length:encoding` bucket,
+so this one is a **confirmation** rather than a correction — and it is the
+clean specimen for the class: the length delta is not extra work, it is the
+x86 accumulator special-case being available to retail's register choice and
+not to ours.
+
+### The corrected channel table for my lane's five length-defect rows
+
+| row | Δlen | filed as | measured |
+|---|---|---|---|
+| `0x1006fda0 HandleKeyPress` | +8 | TEXT/INLINE | **COLOUR** — reload + alignment NOP |
+| `0x1006ed90 Create` | +1 | TEXT/INLINE | **COLOUR** — `0x66` operand-size prefix |
+| `0x100293c0 UpdateEnabledChild` | +4 | TEXT/INLINE | **COLOUR** — one enregistered param |
+| `0x100ba2c0 MxStillPresenter::Clone` | −1 | length:encoding | **COLOUR** — `and al,imm8` short form (confirmed) |
+| `0x100a3840 CreateMesh` | −3 | TEXT/INLINE | first divergence at +406 is a **permutation** that re-converges at +418; the −3 is further in — not settled here |
+
+Four of the five are colour, so the carrier axis is the right channel for them
+and a text reconstruction would be wasted effort. That is a different verdict
+from the one the triage hands the next lane, and it is why the k-strips
+(`externK`, m=0, k=1..400) were run on `infocenter.cpp`,
+`legocontrolmanager.cpp`, `mxstillpresenter.cpp` and `tglrl40.cpp` rather than
+text cells.
