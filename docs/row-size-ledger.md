@@ -49,6 +49,28 @@ padding), then stripped of trailing padding. The three-`0xCC` cut matters —
 **Validation: for the 26 oracled rows that are already exact, our body length
 equals the recomputed retail length in 26/26 cases, byte-for-byte.**
 
+## There is no hidden class of exact-but-short rows
+
+The obvious fear this defect raises is that some of the 4,387 rows already at
+1.0 are short of retail and nobody could tell. Measuring every one of them
+(`bench/sizeledger.py --all`) says no: **exactly two disagree, and both are
+artifacts of the measurement, not defects.** `__read_lk` is a CRT member, and
+`LegoColor::Read` is the last function in `.text`, where the trailing-zero fill
+swallows the final `00` of its `ret 4`. So the row score is trustworthy on the
+length axis, and the whole `.text` shortfall lives in the open rows.
+
+That shortfall is **+107 bytes across the 52 length-defect rows** (net; the
+positive and negative deltas largely cancel). It is the reason the terminal
+LEGO1 image currently lands one 512-byte file-alignment block below retail's
+1,135,616. Closing those rows is therefore the same work as closing the image
+size — goal 1 and goal 2 coincide on exactly this set.
+
+Note the measurement's own edge cases, since the next reader will hit them: a
+row's window can run past the end of its section (the next row may live in
+`.rdata`), the tail of `.text` is zero-filled rather than `0xCC`-filled, and a
+short trailing zero run is real code (a zero displacement, `mov reg, 0`, a
+`rel32` with zero high bytes) — only a run of eight or more is alignment fill.
+
 ## What it says about the 102 open rows
 
 52 rows carry a length defect; 50 are already the right size.
