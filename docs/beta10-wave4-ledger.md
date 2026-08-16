@@ -723,3 +723,37 @@ classes, then (a) if the class is exactly periodic, a dozen `--klist` probes
 across many periods either find the deviation or *prove exhaustion cheaply*;
 (b) if it is not periodic, only a dense sweep is trustworthy. Either way, do
 not assume k≤96 is the whole axis — `~LegoROI` proves it is not.
+
+**Tooling caveat for the next wave:** `t/sw.py` keys its per-state
+`rows.jsonl` by `mangled.split('@')[0][:34]`, so two functions with the same
+short name in one TU collide (`JetskiRace::HandlePathStruct` and
+`CarRace::HandlePathStruct` in legorace.cpp — only one survives in
+`rows.jsonl`). `best.json` uses the full decorated name and is unaffected.
+Fix the key before reusing the per-state maps.
+
+## SESSION SUMMARY
+
+* **Rows gained: 2.** `LegoOmni::Create` 0x10058e70 and `LegoROI::~LegoROI`
+  0x100a83c0. **LEGO1 4831 → 4833/4933**, ISLE 172/172, CONFIG 111/111, every
+  step proven by a full gated `isle_build.py` run printing
+  `ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE`, zero LOST rows at any point.
+  Commits 89c0b621, 3ed88514, 33b13859 (plus ledger commits) on
+  `worktree-agent-ae4a0ccb643677ee3`, branched from `entropy-stabilization`
+  53a19e9c.
+* **Rows attempted with before/after:** every open row in the eleven owned TUs
+  was measured against the corrected oracle and pushed as far as the carrier
+  and text channels reach — the per-row table and the ranked next steps are
+  above. The headline near-misses left are `LinkEdgesAndFaces` (nd 2),
+  `RemoveByObjectIdOrFirst` (7), `Act3Brickster::Animate` (7 at retail's exact
+  length), `Act3Cop::FUN_10040360` (8), `TriggerHitSound` (11),
+  `TowTrack::HandlePathStruct` (11).
+* **~9,000 carrier states compiled** this session across eleven TUs, all
+  donor-lane faithful and all retained on disk.
+* **Text probes: 27**, in six TUs, every one with a measured seed-lane victim
+  list. Two produced a body at retail's exact length
+  (`Act3Brickster::Animate` b5, `CarRace` c1) and neither beat the carrier;
+  the rest were bit-inert or worse. No text edit was landed this session — the
+  honest verdict for this lane is that its residue is register-role ties, and
+  the carrier channel is where its rows live.
+* **Zero unverified claims:** every number in this ledger is a measurement
+  taken this session in this worktree.
