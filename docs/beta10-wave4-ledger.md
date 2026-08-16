@@ -884,3 +884,25 @@ vendor-inline state, exactly like the `_Tree` rows in legoextraactor. Next
 step: `shapefull` neighbourhood of shape-8-25 plus `externdeep`, and if it
 plateaus, the include-order axis (legoracespecial has a large quoted-include
 block and the axis has never been run on it).
+
+### `_Tree<const char*, LegoTextureInfo*>::erase` 0x10059dc0 (legomain) — PROMOTED 651 → 24
+
+The legomain fwdE/fwdL 1..300 sweep (600 states) takes this row from
+1103/nd=651 to **1102/nd=24 at `fwdL-185`** — retail's true length. That is now
+the third-closest row in the lane. `LegoOmni::Destroy` stays at 251 and
+`Create` reproduces nd=0 at fwdE-7, fwdE-283 and fwdL-7 (so the landed state
+is robust).
+
+Periodicity for this row is **32** (families at 183/215, 194/226, 98/130/162),
+but `fwdL-185` is again a lone deviation: a `--klist` probe of 185+32n for
+n≥4 (39 states, k up to 698) gives nd≥486. Same lesson as `~LegoROI` — the
+deviations are where the wins are and they are not predictable from the
+period, so a dense sweep is the only reliable method. A dense fwdL/fwdE
+301..600 pass is running as this ledger is written; its result is in
+`…/scratchpad/b10w4/legomain-k600.log` and `sweeps/all2-legomain-k600/best.json`.
+
+### act3actors `shapefull` (505 further declaration-shape cells)
+
+`FUN_10040360` 67, `FUN_100417c0` 117, `Animate` 1153 — all worse than their
+fwdE bests (8 / 96 / 7). The declaration-shape axis is the wrong family for
+this TU; fwdE is the right one.
