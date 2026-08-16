@@ -258,24 +258,48 @@ TU than the seed*. Measured:
     donor rendered from the SHIPPED rendering + delete : len 1121, masked nd 0
     donor rendered from CLEAN source        + delete : len 1121, masked nd 41
 
-**This is not specific to this row.** Any donor for an overlay-owned TU currently
-compiles against a base the seed never sees, which can silently produce a wrong
-donor. It did not bite `0x1003cf20` only because that header carries no shipped ops.
+**A8 IS RETRACTED — the clean base is not a blocker.** A donor recipe carries the
+same typed op machinery as the shipped overlay, so it can simply **reproduce the
+shipped ops itself** and then apply its own. Verified end to end: a recipe whose
+`operations` are `[shipped op#1, shipped op#2, replace-with-reserved-lines]`
+renders through `render_donor_source_overlay` from clean source and compiles to
+**1121 bytes = retail's 1121, masked nd 0, 13 relocations**. No extension-A change
+is required. (The duplication of the shipped ops is a real maintenance cost — if
+they change, the donor's copies must too — but it is expressible today.)
 
-### A8 (specified, NOT implemented — needs authorisation)
+### THE ACTUAL BLOCKER: B4's function multiset (measured)
 
-Let a donor rendering declare its base explicitly:
+Lifting `Interpolate`'s definition removes the function from the donor object
+entirely, so the donor is no longer "the same TU compiled differently":
 
-- A8a. `base` is a **closed enum**, `clean` (default, preserving every existing
-  entry byte-for-byte) and `rendered`.
-- A8b. Under `rendered`, the base is the shipped overlay's rendered output for
-  that path, so the donor differs from the seed by its own ops **alone**.
-- A8c. The per-rendering input pin must name what it pins — keep `clean_sha256`
-  for `clean` and add `rendered_sha256` for `rendered`; a recipe carrying the
-  wrong one for its base is refused.
-- A8d. A2/A6b are unchanged: the shipped tree's renderings stay untouched and
-  the build must still assert it.
+    seed  406 sections, 131 functions
+    donor 400 sections, 129 functions
+    in SEED not DONOR: ?Interpolate@LegoAnimNodeData@@SAMMAAVLegoAnimKey@@M0M@Z
+                       ?Scale@Matrix4@@QAEXABM00@Z          (knock-on)
 
-Until A8 exists, extension A should **refuse** a donor whose path is overlay-owned
-rather than silently render from a base the seed does not use — that refusal is
-worth adding even if A8 is never funded.
+`compose_*` refuses with **"global section count differs"**, and B4's
+`function_multiset(seed) == function_multiset(donor)` would refuse next. Both
+refusals are correct: a donor missing two functions is not a recompile of the
+seed's TU.
+
+Two routes exist and **neither should be taken without authorisation**:
+
+- **(a) Widen A7 to emit a signature WITH a return type**, so the donor can
+  define `Interpolate` **out-of-line** (dropping only the `inline` keyword)
+  instead of deleting it. The function then still exists, so the multiset holds.
+  But A7c forbids return types *by design*, precisely to stop the generator
+  becoming a general code emitter — and a non-inline definition is emitted as a
+  regular function rather than a COMDAT, so the section-shape checks may refuse
+  anyway. Unverified.
+- **(b) Parameterise B4** to allow a declared, pinned set of dropped functions.
+  This is a validator relaxation of exactly the kind refused three times this
+  session, and it would remove the check that proves a donor is a recompile of
+  the seed. **Not recommended.**
+
+Route (a) is the principled one and should be measured before being funded: first
+confirm that a non-inline `Interpolate` still yields masked nd 0 at
+`0x1009f490` **and** leaves the section shape intact. If it does not, this row is
+not landable by splicing at all and should be sealed.
+
+**B7 remains implemented and tested** — it is required by any future attempt and
+is independent of this blocker.
