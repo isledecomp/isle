@@ -668,6 +668,7 @@ LegoU32 LegoROI::Intersect(
 
 		p_intersectionPoint = m_local2world[3];
 
+		float intersectionDistance;
 		LegoS32 i;
 		for (i = 0; i < 6; i++) {
 			boxFacePlanes[i] = m_local2world[i % 3];
@@ -684,7 +685,6 @@ LegoU32 LegoROI::Intersect(
 			}
 		}
 
-		float intersectionDistance;
 		for (i = 0; i < 6; i++) {
 			intersectionDistance = p_rayDirection.Dot(p_rayDirection, boxFacePlanes[i]);
 

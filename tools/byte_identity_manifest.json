@@ -653,7 +653,7 @@
   {
    "target": "roi",
    "source": "LEGO1/lego/sources/roi/legoroi.cpp",
-   "source_sha256": "12135578db06a0029c0c55bc4ba3830b91cd1a642cfc197f716eaadded94dc83",
+   "source_sha256": "e9de3c1f550e8bcd43e48ac3c06345405025338495144cab3ee8a658648cb097",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -778,7 +778,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legopathactor.cpp",
-   "source_sha256": "692b1eba7ba74c81c553e68862f29b4620a5afedaae65c1489a2193be60bf3f2",
+   "source_sha256": "6cc4cac87deb7186c914a26daa142fd43dc7a375aa723af8015807dad336c2ea",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -2006,7 +2006,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/race/legoracespecial.cpp",
-   "source_sha256": "e553d3d7a79f8ae9b5b462ad93cb9e641f622d98a8360fc2388a7f5c134ff4b5",
+   "source_sha256": "7308d4147160bb6a5260954b30568342155bf95c0555ed5b5148de7440f8f114",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -12998,8 +12998,8 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/paths/legopathactor.cpp",
-    "clean": "692b1eba7ba74c81c553e68862f29b4620a5afedaae65c1489a2193be60bf3f2",
-    "effective": "527ca70beccfff9afcd765c9ee02bfa3761120df9bb74fc57b256f8f5a0fceb1",
+    "clean": "6cc4cac87deb7186c914a26daa142fd43dc7a375aa723af8015807dad336c2ea",
+    "effective": "e75f88b82a234875246651a58f547276a0b9b032cfd2b8708e68ac1be04cc24d",
     "size": 20465,
     "ops": [
      {
@@ -17119,9 +17119,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/race/legoracespecial.cpp",
-    "clean": "e553d3d7a79f8ae9b5b462ad93cb9e641f622d98a8360fc2388a7f5c134ff4b5",
-    "effective": "dd32f7f6a74699966eaf28639dae48eabafdcceda5db9dfdcfcb9a648910de72",
-    "size": 14621,
+    "clean": "7308d4147160bb6a5260954b30568342155bf95c0555ed5b5148de7440f8f114",
+    "effective": "70e033ae64c91e6e0352c2da0d89bb8027918bcaf6580ff482ffec1d6f54b4ac",
+    "size": 14636,
     "ops": [
      {
       "op": "insert",
@@ -20851,8 +20851,8 @@
    },
    {
     "path": "LEGO1/lego/sources/roi/legoroi.cpp",
-    "clean": "12135578db06a0029c0c55bc4ba3830b91cd1a642cfc197f716eaadded94dc83",
-    "effective": "063c0b4e915ac3094363adbaf780a7f1c8fd93b50afa7a491ab068c89f0d6cd5",
+    "clean": "e9de3c1f550e8bcd43e48ac3c06345405025338495144cab3ee8a658648cb097",
+    "effective": "c958ea968f69bbf9a7bcb6d2bbafeaa2ae35d7dd8d3c8106791c431e9b82d27d",
     "size": 22499,
     "ops": [
      {
@@ -24860,9 +24860,9 @@
    },
    {
     "path": "LEGO1/omni/src/stream/mxio.cpp",
-    "clean": "6ffc1b603835e26e3cd783df8d0cf9db880bc11a5e2304c1177164f34cb6539b",
-    "effective": "9182debf19afd665b733b0c6687c1031b9d4f4d8233c138cd17f76c5b261861d",
-    "size": 15051,
+    "clean": "f74614cf4aa85f4bc391749d418f6769370e74c4e64fa7d3030be64055279631",
+    "effective": "bdb4b2b1fd85dedd3a2c0fbbcd50d347f3339da9ee1e84af78dba5308292b774",
+    "size": 15210,
     "ops": [
      {
       "op": "insert",

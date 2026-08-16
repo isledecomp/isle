@@ -81,8 +81,9 @@ void LegoCarRaceActor::UpdateWorldSpeed(float p_time)
 	}
 
 	MxFloat deltaSpeed = maxSpeed - m_worldSpeed;
-	MxFloat changeInSpeed = (p_time - m_lastAcceleration) * m_acceleration;
+	MxFloat changeInSpeed = p_time - m_lastAcceleration;
 	m_lastAcceleration = p_time;
+	changeInSpeed *= m_acceleration;
 
 	if (deltaSpeed < 0.0f) {
 		changeInSpeed = -changeInSpeed;

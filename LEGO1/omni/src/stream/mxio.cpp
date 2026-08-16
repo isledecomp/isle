@@ -392,8 +392,10 @@ MxU16 MXIOINFO::Advance(MxU16 p_option)
 	MxULong rwmode = dwFlags & MMIO_RWMODE;
 
 	if (pchBuffer) {
-		MxLong cch = cchBuffer;
+		// DECOMP: BETA10 slot order + retail CMP operand order prove bytesCounter
+		// was declared before cch (June 1997 /Od frame: bytesCounter -0xc, cch -0x10).
 		MxLong bytesCounter;
+		MxLong cch = cchBuffer;
 
 		// If we can and should write to the file,
 		// if we are being asked to write to the file,
