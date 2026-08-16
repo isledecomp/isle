@@ -297,10 +297,10 @@ Two lessons attached to it, both from the lane that found it:
 
 ## Re-scoring my own rejections under SHAPE — one verdict flips
 
-Applying the corrected metric (`bench/shape.py`, a local three-level difflib
-alignment: SHAPE erases registers, frame displacements and relocated operands;
-STRUCT erases registers only; EXACT is full text) to the variants recorded
-above as "worse", which were all rejected on body length or `nd`:
+Applying a three-level difflib alignment (SHAPE erases registers, frame
+displacements and relocated operands; STRUCT erases registers only; EXACT is
+full text) to the variants recorded above as "worse", which were all rejected
+on body length or `nd`:
 
 | row / variant | len | insn | SHAPE | STRUCT | EXACT |
 |---|---|---|---|---|---|
@@ -327,11 +327,17 @@ The two `Create` cells raise SHAPE while lowering STRUCT and leaving EXACT
 flat, which is the pattern a parallel lane flagged as metric-fitting rather
 than source truth. Recorded, not landed.
 
-**Caveat on my implementation**, found while extending it across rows: erasing
-every immediate and frame displacement makes many instructions textually
-identical, and difflib's ratio degrades when a sequence has many repeats. On a
-long body it can read *lower* than EXACT — `LegoPartPresenter::Read` scores
-SHAPE 66.43 against EXACT 84.68, which is an artifact, not a finding. **Use
-these numbers to compare variants of one row, never to compare rows.** The
-`FUN_100c6fa0` result above is safe on that test because all three levels moved
-together and in the same direction.
+**My implementation of this was buggy and has been withdrawn.** Extending it
+across rows exposed one flaw of my own (erasing every immediate and frame
+displacement makes many instructions textually identical, and difflib's ratio
+degrades on sequences with many repeats — `LegoPartPresenter::Read` read SHAPE
+66.43 against EXACT 84.68, an artifact). A parallel lane then found **nine**
+normalisation asymmetries of the same class in the shared tool, every one
+inflating the gap, including `[ebp+X]` erased as a frame slot in *frameless*
+functions where `ebp` is a general register. **Use the corrected `adiff.py`;
+every SHAPE number recorded anywhere before that fix is a lower bound.**
+
+The `FUN_100c6fa0` result above survives, because all three levels moved
+together and in the same direction — but treat the absolute values as
+provisional and re-derive them from the corrected tool before building on
+them.
