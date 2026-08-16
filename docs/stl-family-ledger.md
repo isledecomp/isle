@@ -522,3 +522,37 @@ single register-pair exchange** are the two best unclaimed rows in the whole
 family. Whoever owns `mxmain.cpp` / `legosoundmanager.cpp` should run
 `sw.py <stem> --pre <best carrier> --axes shapefull` on them; the recipe is
 in §6 and the bench is in `scratchpad/stl/`.
+
+## 9. Ranked next steps
+
+1. **Re-run the whole project's sweep queue against `oracles-v2.json` with
+   the stacked-carrier axis.** Two rows landed this session from states that
+   the old bench could not even *report*, and one of them needed a carrier
+   the composer could not render. Both defects were in the bench, not in the
+   search. Every "carrier-closed" verdict older than this wave should be
+   treated as untested.
+2. **`sw.py <stem> --pre <best landable carrier> --axes shapefull`** for
+   every row now sitting at nd ≤ 5. That is exactly the move that closed
+   0x100a7130 (nd=1 → nd=0). Queue in priority order:
+   `0x100af7e0` (nd=2, mxmain), `0x10068b20` (nd=1, legoanimpresenter),
+   `0x1004f9b0` (nd=4, legotexturepresenter), `0x1006c200` / `0x1006e720` /
+   `0x1006a7a0` (nd=4–5, legoanimpresenter), `0x1002a1b0` (nd=9,
+   legosoundmanager), `0x10069b10` (nd=2 at `fwdE:19 × shape-4-22`).
+3. **Sweep the six never-tried (prefix × placement) combinations** and the
+   force-included forward run (§5), plus `externL`/`externG` (extern runs
+   are currently swept only to 8×17 out of a landable range of 96×96).
+4. **The C2 inliner / register-allocator model (fresh-eyes-2 §C4) is now the
+   critical path, not a nice-to-have.** Two specific ties are the whole
+   remaining `_Tree` family:
+   * the `_Insert` window (`mov eax,[edi]; lea ebx,[eax+8]; cmp [ebx],ecx;
+     jne` vs our `eax`↔`ebx` + inverted polarity) — shared by four rows in
+     three TUs, retail form observed **0 times** in the corpus;
+   * `erase` +145 (`if (_Y != _Z)` operand direction) — anti-correlated with
+     the correct block layout across 1138 states.
+   Both are `<XTREE>` vendor code, so there is no text lever; a computed
+   condition from the C2 model is the only remaining directed approach.
+5. **Text-channel rows** (no carrier state reaches retail's length, so do not
+   spend states on them): `CopyTransform` (941 vs 948, 1138 states),
+   `~LegoCacheSoundManager` (274 vs 258 — and the obvious named-iterator fix
+   is bit-inert, §4.4), `GetCached` (995 vs 987 — one extra 4-byte frame
+   slot, §4.5), `FindSoundByKey` (282 vs 281), `FUN_10061010` (726 vs 731).
