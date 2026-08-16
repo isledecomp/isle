@@ -1594,3 +1594,63 @@ carrier state, and where none is known, say so in the row rather than emitting a
 verdict from the default body. Of the five MIXED rows, this is the one I can
 check from my own corpus; the same re-check is one `rescore` away for the other
 four and should happen before anyone spends text cells on them.
+
+## 45. Independent re-check of the five MIXED rows — and one of them is the vec.h-debt row
+
+`nm/permspan.py` re-derives the permuted/colour verdict from first principles:
+widen each residue span to instruction boundaries, disassemble both sides, and
+call it PERMUTED when the **multiset of instructions is equal but the order is
+not**. It also prints the fn-line from the COFF line table, so a permuted span
+names its statement in one step. Validated against `0x10085500`, where it
+independently reproduces `runs.py`'s single permuted span at 592..606.
+
+Run over all five MIXED rows against the **default build objects**:
+
+| row | my verdict | note |
+|---|---|---|
+| `0x10085500` charmgr `insert` | 1 permuted span (592..606) | **vanishes at the best carrier state** (§44) |
+| `0x100035e0 Helicopter::HandleControl` | no permuted span (1 span, colour) | disagrees with `runs.py`'s `permuted=1` |
+| `0x10062e20 FUN_10062e20` | no permuted span (25 spans, all colour/other) | disagrees |
+| `0x100417c0 Act3Brickster::FUN_100417c0` | no permuted span (16 spans) | disagrees |
+| `0x100a46b0 UpdateTransformationRelativeToParent` | **6 permuted spans** | see below |
+
+The three disagreements are a span-definition difference (my widening is ±8
+bytes to instruction boundaries), not a contradiction — worth reconciling in
+`bench/runs.py` rather than trusting either blindly. I flag them; I did not
+chase them, they are other lanes' TUs.
+
+### `0x100a46b0` is the interesting one, and it is a source lever
+
+Its six permuted spans are all x87, and they are all the **same shape** — the
+addends of a floating-point sum computed in a different order:
+
+```
+retail: fld [esp+0xc8] ; fmul [esp+0x198] ; fld [esp+0xb8] ; fmul [esp+0x158] ; faddp
+ours:   fld [esp+0xb8] ; fmul [esp+0x158] ; fld [esp+0xc0] ; fmul [esp+0x178] ; faddp
+```
+
+Same products, summed starting from a different term. Per this project's own
+**FP reassociation law** (`project-fp-reassociation-barrier`: parens are
+barriers and re-parenthesising is a lever, unlike integer chains which are fully
+canonicalised), **term order in an FP sum is a source-level lever** — so this
+row's residue is reachable from source, and the operand slots say which terms.
+
+That matters beyond the row: the memory index names
+`OrientableROI::UpdateTransformationRelativeToParent` + `GetLocalTransform` as
+*the likely true fix for the `3rdparty/vec/vec.h` vendor-edit debt* — the one
+outstanding mandate violation in the tree. This is the first direct evidence
+about what that row's residue actually is: not colouring, not scheduling, but
+**the order of the addends in the matrix-product sums**, at six sites with the
+frame slots enumerated.
+
+**Recipe for whoever owns `realtime/orientableroi.cpp`** (outside my TU list, so
+recorded not landed):
+* the six permuted spans are at body offsets 1382, 1514, 1580, 1646, 2240, 2378
+  (`nm/permspan.py <realtime.dir obj> '?UpdateTransformationRelativeToParent@OrientableROI@@' 0x100a46b0`);
+* each is `fld a; fmul b; fld c; fmul d; faddp` with retail and ours disagreeing
+  on which product is loaded first;
+* the lever is the written order of the terms (or the parenthesisation) in the
+  matrix-multiply expressions — the `_DET3`/`_DET4`-style macro expansions in
+  `vec.h` and their call sites;
+* and because the residue is FP term order rather than register colour, the
+  carrier axis is the wrong channel for it.
