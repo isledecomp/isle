@@ -203,3 +203,26 @@ individually reachable; they are never jointly correct. That is the same
 signature as the `+145`/`+434` pair and `GetRefCount`'s `+84`, and it is what
 one shared allocator decision looks like rather than a search that needs more
 cells.
+
+## `MxDisplaySurface::VTable0x30` — the third seat does not move it either
+
+nd=4 at `[481, 488, 711, 718]` — two pairs, seven bytes apart, at the correct
+length 811. Floors at 4 across the flat grammar (1,098), the 0..40 rectangle
+(1,680), a 400-cell m-strip at k=0, and — now that the pre-include seat is
+expressible — 300 cells of a **three-seat** state over its best two-seat one.
+~3,500 states.
+
+That makes four main-loop rows with the same shape: a handful of bytes that
+every seat, every count and both shape families leave exactly where they are
+(`ManageVisibilityAndDetailRecursively` +517, `MxDSBuffer::FUN_100c6fa0`'s
+four, `MxDisplaySurface::Create`'s nine, and these). The carrier grammar is
+complete now — three seats and two shape families — so "more cells" is no
+longer an available explanation for them.
+
+**What that leaves.** These rows share the signature the other lanes reached
+independently on `+145`/`+434`, `GetRefCount +84` and `0x1002bff0`: each byte
+is individually reachable, they are never jointly correct, and the residue does
+not respond to declaration state. That is one shared allocator or scheduler
+decision per row, and the instrument for it — a way to observe what C2 actually
+decided — does not exist yet. Until it does, these rows should be left alone
+rather than re-swept.
