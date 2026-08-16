@@ -72,6 +72,35 @@ required: `0x1009f490`'s donor is a `delete` of `Interpolate`'s definition.
   source only, and B1 still requires the spliced body to be byte-identical to
   retail.
 
+- **A7 (amendment 4 — authorised). ONE new typed generator: a member
+  signature emitter.** Verified necessary, not assumed: the donor rendering needs
+  a destructor declaration `~LegoCacheSoundEntry();` and a qualified definition
+  header `LegoCacheSoundEntry::~LegoCacheSoundEntry()`, and no existing generator
+  can emit either — `source_range_relocation_v1` with `byte_destination` returns
+  the range without a signature wrapper, and `declaration_sequence_v1`'s
+  `function_prototype` always emits a return type and its identifier validator
+  admits neither `~` nor `::`. The donor cannot route around it either:
+  adding/deleting functions is barred by B4's multiset check, declarations are
+  the sealed carrier axis (~15,100 cells) and statements the refuted body axis
+  (441 cells).
+
+  Parameters: `{class_identifier, member_identifier, kind}`. Obligations:
+  - A7a. Both identifiers must be **validated to exist in the checked-in
+    source** — the class declared, the member present on it. Nothing literal.
+  - A7b. `kind` is a **closed enum**, `destructor` only. Adding a kind is a spec
+    amendment, never an implementation detail.
+  - A7c. It emits **signature text only** — never a body, never a return type,
+    never parameters. The body comes from the existing authenticated
+    relocated-range mechanism.
+  - A7d. Usable **only in a donor rendering**. It must never appear in the
+    shipped tree's rendering, and the build must assert that.
+  - A7e. Tests must prove it **cannot emit an arbitrary function**: reject a kind
+    outside the enum, and reject an identifier absent from the checked-in source.
+
+  Rationale for authorising: it renders from checked-in identifiers via a typed
+  generator, which is squarely inside the standing mandate, and the outcome is
+  measured rather than estimated — GAIN 1, LOST 0, aligned rows +334.
+
 ## 2. Extension B — splice class `retail_exact_reloc_divergent`
 
 **The gap (amended).** Every existing class requires donor and seed bodies to
