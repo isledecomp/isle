@@ -821,3 +821,16 @@ Two further sealed negatives on the same row/TU:
   at both sites) crossed with fwdE 40..70 gives **nd=16 at fwdE-59**, worse
   than the base text's 7 at the same carrier. The base text is the right text
   for that row.
+
+Closing sweep numbers (all negative, all recorded so the next wave does not
+repeat them):
+
+* `all-act3` `shapefull` (505 further cells): RemoveByObjectIdOrFirst 7,
+  TriggerHitSound 11, Enable 105 — unmoved.
+* `all-act3` with the **a5 text** (`while (!(it == end()))` in
+  `RemoveByObjectIdOrFirst`) × 124 shape/fwdE states: identical floors
+  (7 / 11 / 105). The a5 lead for `Enable` does not compound with carriers.
+* `all-legoracespecial` fwdE/fwdL 97..400 (608 states): CPI 102,
+  CalculateSpline 646 — unmoved from the shape grid.
+* `all-legowegedge` `externwide`+`externdeep` (931 further extern states):
+  LinkEdgesAndFaces still 2.
