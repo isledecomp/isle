@@ -350,4 +350,175 @@ not converted. The live lever is the product axis (a second carrier on top of
 `fwdE-19`), which is running; if that fails, the tie needs the C2 inliner /
 register-allocator model rather than more blind states.
 
-## 5. Per-row status
+### 4.4 `~LegoCacheSoundManager` (0x1003cf20): the named-iterator hypothesis is dead
+
+Our body is 274, retail 258 (+16), 94 insns vs 87. The structural diff shows
+one extra inlined block at ours+146:
+`cmp [ecx],0 ; jne ; mov eax,[eax+0xc] ; test eax,eax ; je ; push eax ;
+call ; add esp,4` — an inline that retail does not have (retail simply does
+`mov ecx,[ebp-0x14] ; push ecx`). The source already carries a TODO on that
+exact line ("LegoCacheSoundEntry::~LegoCacheSoundEntry should not be inlined
+here"), so this is the documented defect.
+
+Four text variants compiled and measured (donor lane, today's headers):
+
+| variant | body |
+|---|---|
+| base (`m_list.erase(m_list.begin())`, two `begin()` calls) | 274 |
+| v1 named iterator `it`, mirroring the `m_set` loop above (line-neutral) | 274 |
+| v2 named iterator `it2` | 274 |
+| v3 base minus the TODO comment line (line-count control) | 274 |
+| v4 `LegoCacheSoundEntry entry = *m_list.begin();` | **330** (worse) |
+
+The obvious symmetry fix (make the `m_list` loop look like the `m_set` loop)
+is **bit-inert**. The extra inline is not driven by the iterator spelling.
+Next hypothesis for this row: the inline is inside `list<>::erase` /
+`~LegoCacheSoundEntry`, so it belongs to the C2 inline-budget class, not the
+statement-spelling class.
+
+### 4.5 `LegoTextureContainer::GetCached` (0x100998e0): one extra frame slot
+
+Ours 995 / retail 987, 341 insns vs 338. The whole divergence is anchored on
+a **4-byte frame-size difference**: ours `sub esp,0xfc` with `desc` at
+`[ebp-0x108]`, retail `sub esp,0xf8` with `desc` at `[ebp-0x104]`. Retail
+therefore references **one fewer distinct 4-byte local slot** than we do, and
+uses the freed register to keep `p_textureInfo->m_surface` live in `ESI`
+(retail +66 `mov esi,[eax+4]`, then `push esi` at the Lock call; ours
+reloads through `EAX` and spills). Per the named-local rule this is a real
+source constraint (distinct slots referenced), so the lever is to eliminate
+one named local in `GetCached` — most likely the `cached` / `surface` pair
+inside the match branch. Not attempted this session; the carrier axis cannot
+change frame size.
+
+## 5. A second bench defect: the carrier grammar was never fully swept
+
+`sweep2.py`'s three forward-run axes conflate the **declaration prefix** with
+the **placement**:
+
+| bench axis | identifier prefix | placement | composer can render it? |
+|---|---|---|---|
+| `fwdL` | `MxUnkRecVA` | top of file | yes (`placement: prefix`) |
+| `fwdP` | `MxUnkRecVB` | after the last `#include` | **NO** |
+| `fwdE` | `MxUnkRecVC` | end of file | yes (`placement: suffix`) |
+
+Two consequences, both measured:
+
+1. **`fwdP` states are not landable.** `isle_build.py`
+   `compose_translation_units` renders `forward_declaration_run` only at
+   `prefix` (very top), `suffix` (EOF) or `force_include`; "after the last
+   include" exists only in the bench. Any recorded `fwdP` hit has to be
+   re-derived at a renderable placement before it can be landed. (`fwdP-95`
+   is exactly the state `fresh-eyes-2` §C1.3 records for BuildROIMap.)
+2. **Six of the nine (prefix × placement) combinations were never swept**,
+   and one whole placement — `force_include` of a *forward run*, which the
+   manifest validator explicitly permits
+   (`placement in ("prefix","force_include","suffix")`) — has never been
+   tried at all. I added generic axes `f<A|B|C><P|S|I>` to `sw.py` for this,
+   plus `externL` (single-sided `extern_run_pair` runs with counts 9..96,
+   where the historical `extern` axis stopped at 8×17).
+
+Also: the historical `shape` axis only samples the lattice
+f ∈ {c, 2c, 3c, 5c, 8c, 10c}. The donor-debt ledger already noted that the
+deciding states are usually *off* that lattice ((5,21), (7,52), (8,64)); the
+full grid is 550 states per TU and is now the `shapefull` axis.
+
+## 6. Framework growth: the `forward_run_with_shape` stacked carrier
+
+**The composer could render exactly one carrier per donor.** `isle_build.py`
+`compose_translation_units` renders `declaration_shape` at `force_include`,
+`forward_declaration_run` at `prefix`/`suffix`/`force_include`, and
+`extern_run_pair` at its two seats — but never a *shape and a run together*.
+The bench, however, can stack them (`sw.py --pre`), and the stacked space is
+where the remaining near-misses actually close.
+
+Measured on `ViewLODListManager::~ViewLODListManager` (0x100a7130):
+
+| state space | states | best |
+|---|---|---|
+| single carrier (shape lattice, fwdL/P/E, extern, padgrid, inc) | 457 | nd=1 (`fwdE-96`, offset 222); the 398-byte retail length is reached in only 6 states |
+| `shapefull` alone (full c×f grid) | 83 | length 395 in **every** state — /FI shapes never reach 398 |
+| `fAI`/`fBI`/`fCI` (forward runs force-included) | 68 | length 395 in every state |
+| **`fwdE:96` × `shapefull`** | 221 | **nd=0 at `shape-6-60`** |
+
+So I added a typed recipe kind (commit `4ba1ac13`):
+
+```
+kind: forward_run_with_shape
+placement: prefix | suffix        # the forward run's seat
+prefix / count / width            # entropy.generate_forward_run
+classes / functions               # entropy.generate_shape, force-included
+generated_header_sha256 = sha256(forward_run_bytes + shape_bytes)
+```
+
+It stacks the two **existing** typed generators exactly the way
+`extern_run_pair` already stacks two extern runs at two seats. No literal
+text, no new generator, no gate relaxed. Validation mirrors the
+`extern_run_pair` branch in `byte_identity.py`; rendering adds one
+`placement == "run_with_shape"` branch in `isle_build.py`.
+
+**This roughly squares the reachable donor space for every open row in the
+project**, and it is the reason the second landing below exists.
+
+## 7. LANDED: 0x100a7130 ViewLODListManager::~ViewLODListManager (.9281 → exact)
+
+**Gated:** `ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE: LEGO1 4833/4933,
+ISLE 172/172, CONFIG 111/111`; GAIN 0x1006bac0 + 0x100a7130, zero LOST.
+Commit `c1582751`; accepted-row set re-pinned 4832 → 4833.
+
+* donor: `forward_run_with_shape`, `MxUnkRecVC` × 96 at **suffix** plus
+  `declaration_shape(6, 60)` force-included, on the current rendered source
+  (no text edit). Body 398/398 masked-exact.
+* splice `same_slot_resize` 395 → 398.
+* S72 check: donor relocation symbol sequence identical to a fresh pipeline
+  seed (17/17).
+
+Why it had never been seen: `wave2-oracles.json` scored this row against
+`retail[0x100a7130 : +395]` (our seed's length) while retail's body is
+**398**, so nothing of the correct length could be reported. Four text
+variants of the destructor were also measured and all regress (§8.3).
+
+## 8. Per-row status
+
+All `nd` values below are **against the corrected oracle** and were measured
+in this session, in the donor lane, on today's shadow unless stated.
+"state" = the sweep label; `pre X × Y` = a stacked carrier (landable only
+through the new `forward_run_with_shape` recipe, and only when the pre half
+is `prefix` or `suffix` — `fwdP` is *not* renderable).
+
+| addr | row | m | ours/retail | best state | nd | verdict |
+|---|---|---|---|---|---|---|
+| 0x1006bac0 | ParseExtra | .9613 | 1746/1763 | `extern-8-17` | **0** | **LANDED** |
+| 0x100a7130 | ~ViewLODListManager | .9281 | 395/398 | `fwdE:96 × shape-6-60` | **0** | **LANDED** |
+| 0x10068b20 | erase AnimSubst | .7680 | 1104/1096 | `fwdE-19` (=51, =83) | 1 | one CMPDIR at +145; §4.3 |
+| 0x1006c200 | `_Insert` AnimSubst | .7828 | 678/682 | `shape-5-25` | 4 | the shared `_Insert` window; §4.2 |
+| 0x1006e720 | `_Insert` HideAnim | .8475 | 686/689 | `pad-12-11` | 4 | same window (pad is not landable) |
+| 0x1004f9b0 | `_Insert` TextureInfo | .8051 | 681/679 | `fwdL-35` (=36, =68) | 4 | same window; landable carrier |
+| 0x1006a7a0 | `_Insert` AnimStruct | .7983 | 686/690 | `fwdE-37` | 5 | same window + one byte at +178 |
+| 0x10069b10 | BuildROIMap | .8842 | 622/617 | `fwdE:19 × shape-6-60` | 3 | offsets 304, 534, 540 |
+| 0x1001d890 | erase CoreSet | .9027 | 1106/1106 | `fwdE-31` (=`fwdP-31`) | 35 | all residue in the two inlined rotations (ebx↔edi) |
+| 0x1004ebd0 | LegoTexturePresenter::Read | .8446 | 745/739 | `fwdE-2..5` | 47 | |
+| 0x1006dec0 | erase HideAnim | .8205 | 1113/1104 | `fwdE-70` | 55 | |
+| 0x10069e90 | erase AnimStruct | .7745 | 1104/1096 | `fwdE-75` | 348 | |
+| 0x100a7960 | erase ViewLODList | .8780 | 1101/1100 | `fwdL-4` | 260 | |
+| 0x1006b140 | CopyTransform | .8149 | 941/948 | — | — | length 941 in **1138** states: TEXT channel |
+| 0x1003cf20 | ~LegoCacheSoundManager | .8950 | 274/258 | — | — | length never reached; 4 text variants measured (§4.4) |
+| 0x1003d170 | FindSoundByKey | .9552 | 282/281 | — | — | length never reached in the corpus |
+| 0x100998e0 | GetCached | .8571 | 995/987 | — | — | one extra 4-byte frame slot (§4.5): TEXT |
+| 0x10061010 | FUN_10061010 | .5481 | 726/731 | — | — | length never reached; TEXT (corpus min-nd 546) |
+| 0x10062e20 | FUN_10062e20 | .8856 | 1098/1098 | `shape-2-2` (corpus) | 30 | size-clean, carrier axis live |
+
+Rows in my queue whose **link winner is outside my TU list** (the row is
+annotated in a header I own, but the emitting TU belongs to another lane):
+
+| addr | row | winner object | best nd |
+|---|---|---|---|
+| 0x10029d50 | erase CacheSound | `legosoundmanager.cpp` | 316 |
+| 0x1002a1b0 | `_Erase` CacheSound | `legosoundmanager.cpp` | 9 (pure ebx↔edi swap, §1.3) |
+| 0x10059dc0 | erase TextureInfo | `legomain.cpp` | 20 |
+| 0x100af7e0 | erase MxAtom | `mxmain.cpp` | 2 (offsets 145, 434) |
+
+`0x100af7e0` at **nd=2** and `0x1002a1b0` at **nd=9 with a residue that is a
+single register-pair exchange** are the two best unclaimed rows in the whole
+family. Whoever owns `mxmain.cpp` / `legosoundmanager.cpp` should run
+`sw.py <stem> --pre <best carrier> --axes shapefull` on them; the recipe is
+in §6 and the bench is in `scratchpad/stl/`.
