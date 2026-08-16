@@ -5548,6 +5548,128 @@
     "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/build/legocarbuildpresenter.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/actors/pizza.cpp",
+   "source_sha256": "dfc7d4e3a08febbdefd8c416b2349cb6c6a1173a12a6032b28e0cb833b64eb8a",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_ba68e8998543",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 3,
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives.",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "generated_header_sha256": "ba68e899854373abf86fd4f93e9c17cda6d6b11e14c19eed055a3c4a74870ca5"
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?HandleEndAction@Pizza@@UAEJAAVMxEndActionNotificationParam@@@Z",
+     "expected_body_length": 1232,
+     "expected_body_sha256": "827b04de993fb2db1c1e5f90c95d578df6fcdc0cda48cdb2f094239dbe88581c",
+     "expected_changed_offsets": [
+      43,
+      46,
+      49,
+      79,
+      82,
+      102,
+      114,
+      189,
+      513,
+      924,
+      936,
+      1012,
+      1071,
+      1159
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       97,
+       "L"
+      ],
+      [
+       495,
+       "T"
+      ],
+      [
+       1196,
+       "L"
+      ],
+      [
+       1200,
+       "L"
+      ],
+      [
+       1204,
+       "L"
+      ],
+      [
+       1208,
+       "L"
+      ],
+      [
+       1212,
+       "L"
+      ],
+      [
+       1216,
+       "L"
+      ],
+      [
+       1220,
+       "L"
+      ],
+      [
+       1224,
+       "L"
+      ],
+      [
+       1228,
+       "L"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52
+     ],
+     "donor": "d_ba68e8998543"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/actors/pizza.cpp from generated carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -5622,8 +5744,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4851,
-    "accepted_row_identity_sha256": "9723a7f83c14faff800f7ac4f51d885ee660ad48ee4cdaee083f6fc16ad60ebb",
+    "exact_raw_1_0_count": 4852,
+    "accepted_row_identity_sha256": "6578109dbd5fab38b4ff4d75d2e9df86d76dd452c892d365d3d2b5ca7e4ae86a",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
