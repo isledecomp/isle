@@ -17,7 +17,7 @@ LegoTextureContainer::~LegoTextureContainer()
 // FUNCTION: LEGO1 0x100998e0
 LegoTextureInfo* LegoTextureContainer::GetCached(LegoTextureInfo* p_textureInfo)
 {
-	DDSURFACEDESC desc, newDesc;
+	DDSURFACEDESC desc;
 	DWORD width, height;
 	memset(&desc, 0, sizeof(desc));
 	desc.dwSize = sizeof(desc);
@@ -30,6 +30,7 @@ LegoTextureInfo* LegoTextureContainer::GetCached(LegoTextureInfo* p_textureInfo)
 		surface->Unlock(desc.lpSurface);
 	}
 
+	DDSURFACEDESC newDesc;
 	for (LegoCachedTextureList::iterator it = m_cached.begin(); it != m_cached.end(); it++) {
 		if ((*it).second == FALSE && (*it).first->m_texture->AddRef() != 0 && (*it).first->m_texture->Release() == 1) {
 			if (!strcmp((*it).first->m_name, p_textureInfo->m_name)) {
@@ -40,7 +41,7 @@ LegoTextureInfo* LegoTextureContainer::GetCached(LegoTextureInfo* p_textureInfo)
 
 				if (surface->Lock(NULL, &newDesc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
 					BOOL und = FALSE;
-					if (newDesc.dwWidth == width && newDesc.dwHeight == height) {
+					if (newDesc.dwHeight == height && newDesc.dwWidth == width) {
 						und = TRUE;
 					}
 
