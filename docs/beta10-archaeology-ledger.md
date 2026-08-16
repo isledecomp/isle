@@ -1503,3 +1503,30 @@ swept** — the landed `0x1006dec0` from a new *family* on an old TU, and
 after 7,200 cells. Dense-region headers also grow to ~240 KB, so those cells
 cost several times what a coarse cell costs. **Prefer breadth over depth**:
 sweep an unswept TU or family before densifying one already swept.
+
+## CreateActorROI: object-level nd 0 is NOT a closed row (main loop, 2026-08-16)
+
+`0x10084030` was reported solved at masked distance 0 via `pad_shape(1,78)` on
+`legocharactermanager.cpp`. The recipe reproduces exactly — I re-derived it
+independently: donor 2294 = retail 2294, **masked nd 0**, 83 relocations, 84
+lines, SOLE definer, header sha `78b48e5643bb…`, body sha `dbf9956f…`.
+
+**It was landed and it does not close the row.** Composed and gated:
+
+    composed object body : len 2294 = retail 2294, masked nd 0
+    row after landing    : 0.9365 -> **0.9969**, NOT 1.0
+    recomp address       : 0x10084010 against retail's 0x10084030 (misaligned by 32)
+    gate                 : 4859 -> 4859, no gain, no loss
+
+Reverted: it buys no row and misaligns one that was aligned.
+
+**The lesson, and it applies to every future "nd 0" claim:** the object-level
+masked distance erases relocated fields, so it cannot see whether those fields
+will *resolve* to retail's values. reccmp scores them. A row closes only when the
+body is right **and** its relocation targets land where retail put them. Quote an
+object-level nd 0 as "the body is reproducible", never as "the row closes" —
+confirm with a gated build before recording a row as solved.
+
+Splice-class note: the equal-body classes reject this donor with "code:
+relocation offset/type/addend differs" because the bodies genuinely differ in
+content; with equal lengths the correct class is `same_slot_resize` at delta 0.
