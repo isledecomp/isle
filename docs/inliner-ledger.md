@@ -297,6 +297,44 @@ form is a different compile state (bodies 709–717).
 **634 product states, zero flips.** Both products moved the body in three
 states each (711→719, 709→717) and the bit in none.
 
+### 7.4 The `mxlist.h` channel is closed by construction
+
+§5.1 says the live-value set at the site is what decides, and the only
+remaining source location that could change it is
+`MxListCursor<T>::Find` itself. It cannot be touched:
+
+* `MxListCursor<LegoCacheSound*>::Find` (`0x10022590`) is an **out-of-line
+  row at 1.0** — retail's `Find` body is pinned exactly;
+* `LegoAnimationManager::FUN_10061530` (`0x10061530`) is at **1.0** and
+  uses `Find` *inlined*, on `m_tranInfoList2`, in the same TU — retail's
+  inlined expansion of `Find` is pinned exactly too.
+
+Any respelling of `Find` that changed its expansion would break one or
+both. So the last source location with leverage over the site's live-value
+set is unavailable, and that closes the argument rather than leaving it
+open.
+
+### 7.5 The model checks out against every enclosing function's score
+
+| enclosing function | site verdict (ours) | row |
+|---|---|---|
+| `MxList<MxPresenter*>::InsertEntry` 0x10022380 | INLINED | **1.0** |
+| `MxList<LegoEntity*>::InsertEntry` 0x10022430 | INLINED | **1.0** |
+| `MxList<LegoCacheSound*>::InsertEntry` 0x100224e0 | INLINED | **1.0** |
+| `MxList<MxSegment*>::InsertEntry` 0x100c58c0 | INLINED | **1.0** |
+| `MxList<MxSpan*>::InsertEntry` 0x100c5970 | INLINED | **1.0** |
+| `MxList<MxString>::InsertEntry` 0x100cc2d0 | DECLINED | **1.0** |
+| `LegoPhonemePresenter::StartingTickle` 0x1004e3d0 | DECLINED | **1.0** |
+| `LegoAnimPresenter::AppendROIToScene` 0x100698b0 | DECLINED | **1.0** |
+| `LegoAnimationManager::FUN_100609f0` 0x100609f0 | INLINED | **1.0** |
+| `MxRegion::AddRect` 0x100c3750 | DECLINED ×3 | 0.9739, pure regrole, same length + frame |
+| `LegoAnimationManager::FUN_10061010` 0x10061010 | DECLINED | **0.5411** |
+
+Every function that contains a site is byte-exact except `AddRect` (whose
+residue is register colour, so its inline decisions match retail) and
+`FUN_10061010`. The dataset really is one differing bit, and it is this
+row.
+
 ## 8. What this means for the project
 
 1. **`FUN_10061010` (0x10061010, .5481) is not reachable from any channel
