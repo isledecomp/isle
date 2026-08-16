@@ -1234,3 +1234,48 @@ coordinate it has never seen.
 505 declaration-shape, 122 forward-run seats — **one 843-byte body in every
 single one.** Whatever else is true, that row's codegen is not a function of the
 declaration-record stream at all.
+
+---
+
+## 23. The `pizza.cpp` shape grid, complete
+
+`sw-all-pizzashape`, all 505 declaration-shape cells, no seats:
+
+```
+0x10038380 StopActions      retail=110   nd=11 @shape-1-1   lens: 110 x 505
+0x10038b10 HandleEndAction  retail=1232  nd=0  @shape-1-3   lens: 1232 x 298, 1252 x 207
+```
+
+Side by side with the extern rectangle on the same two rows:
+
+| row | extern rectangle (1,681) | declaration-shape grid (505) |
+|---|---|---|
+| `0x10038380 StopActions` | **15**, one body | **11** |
+| `0x10038b10 HandleEndAction` | 12, three bodies | **0 — LANDED** |
+
+`StopActions` also improves, 15 → 11, on the generator that could not move it at
+all in its other form. Its residue is now `[61..67, 80, 82, 85, …]` — the
+`xor`/`lea` ordering block documented in §4 — and 207 of the 505 shapes push
+`HandleEndAction` out of retail's length family, so the two rows in this TU
+respond to the same grid in opposite directions.
+
+---
+
+## 24. In flight at hand-off (resumable at zero cost — the state objects are retained)
+
+`sw2.py`-derived sweeps skip any state whose `o.obj` already exists, so every
+one of these resumes by re-running the identical command:
+
+| sweep | states done | command |
+|---|---|---|
+| `all-legovideomanager` shape grid | ~270 / 505 | `sw.py all-legovideomanager --axes shapefull --tag shape` |
+| `all-infocenter` rectangle | ~120 / 1,682 | `sw.py all-infocenter --axes base,externR --tag rect` |
+| `all2-isle` pad grid over `extern-1-8` | 296 / 900 | `sw.py all2-isle --pre extern:1,8 --axes padfull --tag xpp18` |
+| `all-legoact2` rectangle | 200 / 1,682 | `sw.py all-legoact2 --axes base,externR --tag rect` |
+| `queue4.sh` | not started | `infocenter` / `legocontrolmanager` / `mxstillpresenter` / `legoact2` rectangles |
+| `queue6.sh` | partial | plain shape grids on `legocontrolmanager`, `mxstillpresenter`, `infocenter`, `tglrl40`, `mxbitmap`, `isle`, `legoact2`, `legopartpresenter` |
+
+`queue6.sh` is the one to run first. It is the direct consequence of §20/§21:
+nine TUs in this lane have only ever seen the extern family, and the one time
+the plain declaration-shape grid was tried on such a TU it produced a landing
+in its first 36 compiles.
