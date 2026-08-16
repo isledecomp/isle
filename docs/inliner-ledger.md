@@ -424,7 +424,10 @@ That is a byte-exact retail row exercising the identical construct, so:
 |---|---|---|
 | carrier lattice (shape 60, padgrid 144, extern 161, fwdL/fwdP/fwdE 288, inc 60) | **713** | 713 × `'op++,erase'`; body 586 (588), 589 (115), 592 (10) — **566 never reached** |
 | caller-side source forms (§9.4) | 10 | 10 × `'op++,erase'`, `sub esp` 0xa8 in all |
-| text × carrier product (`s01_sepvar`, shape/extern/fwdE) | 317 | see §9.5 |
+| text × carrier product (`s01_sepvar`, shape/extern/fwdE) | **317** | 317 × `'op++,erase'`; body 586/589/592, **566 never reached** |
+
+Total for this row: **1,040 compiled states, zero signature hits, and the
+retail body length is not reachable in any of them.**
 
 ## 9.4 The source forms tried
 
@@ -449,6 +452,26 @@ exactly the one extra slot) is **refuted**: `s01`/`s03`/`s07` all declare
 the second local and all keep `sub esp` at 0xa8 while growing the body by
 6 bytes. This is the named-local rule again (`project-named-local-rule.md`,
 STL §13.2a/§18.3) — naming a value does not create a slot.
+
+## 9.4a A goal-2 consequence: we emit a function retail does not have
+
+Because loop 2 inlines `erase` and then declines the nested
+`iterator::operator++(int)`, our build emits an out-of-line COMDAT for it:
+
+```
+??Eiterator@?$list@PAVMxDSObject@@V?$allocator@PAVMxDSObject@@@@@@QAE?AV01@H@Z
+23 bytes:  83ec04 8b01 8b10 8911 8bc8 8b442408 8908 83c404 c20800
+```
+
+A literal search finds **1 copy in our linked `LEGO1.DLL` and 0 copies
+anywhere in retail's image**. It is not an unused symbol the linker could
+drop — `~MxStreamController` calls it.
+
+So this row is not only a score defect: it puts an extra ~24 bytes of
+`.text` into the image and displaces everything after it. That makes it a
+**goal-2 (byte-identity) blocker**, not just a goal-1 row, and it should
+be tracked as one. Closing the loop-2 decision removes the function
+entirely.
 
 ## 9.5 Handover for this row
 
