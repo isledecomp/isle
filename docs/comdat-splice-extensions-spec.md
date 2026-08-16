@@ -33,8 +33,8 @@ by `compile_lane: {required_define: ...}`, validated
 defined in the `.cpp`, so the donor lane cannot produce either state that yields
 the correct body (inject cost into `Interpolate`, or drop its definition).
 
-**Design.** A new donor recipe kind that carries a **typed `source_overlay`
-op-list applied to the donor's rendered copy of the TU only**. Reuse the existing
+**Design (amended — see A6).** A new donor recipe kind that carries a **typed
+`source_overlay` op-list applied to the donor's rendered copy of the TU only**. Reuse the existing
 op machinery wholesale — same verbs (`insert`/`replace`/`delete`/`append`), same
 typed generator taxonomy, same content-hash anchors. No new generator kinds are
 required: `0x1009f490`'s donor is a `delete` of `Interpolate`'s definition.
@@ -51,11 +51,55 @@ required: `0x1009f490`'s donor is a `delete` of `Interpolate`'s definition.
   The build must assert this rather than rely on convention.
 - A5. Anchors must seat uniquely against the donor's clean input, and drift
   refuses exactly as `repin_overlay.py` already refuses.
+- **A6 (amendment 3 — authorised). The op-list may render a donor-private
+  HEADER as well as the `.cpp`.** A `.cpp`-only rendering does not compile for
+  the `0x1003cf20` case — verified, not assumed:
+  `s.cpp(72) : error C2084: 'LegoCacheSoundEntry::~LegoCacheSoundEntry(void)'
+  already has a body` — because the fix spans the header (which declares the
+  inline body) and the `.cpp` (which would define it). The donor already
+  compiles in its own probe directory with `/I{source.parent}` seated first, so a
+  private header shadows the real one **for that one compile only**.
+  This is what keeps all 16 includers on clean source, which is precisely why the
+  −48 never arises. Additional obligations that come with it:
+  - A6a. The donor-private header must itself be rendered by **typed ops from the
+    checked-in header**. No literal payloads, no invented declarations.
+  - A6b. The **shipped tree's** header rendering must be bit-identical to today's.
+    The build must assert this, not assume it.
+  - A6c. The include-path shadowing must be scoped to the donor compile. No other
+    compile in the build may see the private header.
+  Trust note: this means a donor compiles against a header differing from the
+  shipped tree. The correctness anchor is unchanged — the donor object is a byte
+  source only, and B1 still requires the spliced body to be byte-identical to
+  retail.
 
 ## 2. Extension B — splice class `retail_exact_reloc_divergent`
 
-**The gap.** Every existing class requires donor and seed bodies to carry the
-same relocations. `compose_same_slot_resize` requires `relocation_count` equality
+**The gap (amended).** Every existing class requires donor and seed bodies to
+carry the same relocation *targets*. The trigger is **not** simply a count
+change — measured on the two customer rows:
+
+| row | seed relocs | donor relocs | how they differ |
+|---|---|---|---|
+| `0x1003cf20` | 14 | **14** | one **global target SUBSTITUTION**: `??3@YAXPAX@Z` (`operator delete`) → `??1LegoCacheSoundEntry@@QAE@XZ`, plus one `$T` local rename |
+| `0x1009f490` | 12 | **13** | one **added** target (`call Interpolate`) |
+
+Inlining the entry destructor drags its own `operator delete` along, so
+*declining* it substitutes a global target rather than adding one. **A class that
+only relaxed count-equality would not land `0x1003cf20` at all.** The class must
+be defined over the relocation *target set*, admitting substitution and/or count
+change.
+
+Corollary, measured: for `0x1003cf20` every other `same_slot_resize` precondition
+already passes — seat, section count, function multiset, header shape, line
+counts, COMDAT selection, closure and closure seats, xdata raw bytes, and both
+the xdata and `debug$S` relocation pairings. Exactly one ordinal blocks it. So
+**B7's relocation-table rebuild is not exercised by that row**: with equal counts
+the existing in-place loop suffices, and the only change is that a substituted
+ordinal must write the seed index *of the donor's target name* rather than
+reusing the seed's. The reindexing path is required only by `0x1009f490`.
+
+**Original framing retained for reference.** Every existing class requires donor
+and seed bodies to carry the same relocations. `compose_same_slot_resize` requires `relocation_count` equality
 in its header-shape check; `_normalized_relocation_renames` requires literal
 relocation equality except compiler-local `$L`/`$T`/`$S` serial renumbering, never
 a global symbol change. **A call is a relocation**, so an inline accept/decline
@@ -76,8 +120,12 @@ equality, plus:
 - B2. Same mangled name; same section seat (`sp["number"] == dp["number"]`).
 - B3. Correct 16-byte linked contribution span.
 - B4. Existing COMDAT child-closure and function-multiset checks, unchanged.
-- B5. **Every relocation in the donor body names a symbol the seed object already
-  defines or declares**, with matching target type and storage class.
+- B5. **Every EXTERNAL relocation target in the donor body names a symbol the
+  seed object already defines or declares**, with matching target type and
+  storage class. **Compiler-local targets (`$L`/`$T`/`$S` serials) are excluded**
+  and stay paired by the existing rename machinery — they are per-compile and
+  are *never* present in the seed. (Amendment 2: B5 as first written rejected the
+  very row it exists to land, on the donor's `$T65428`.)
 - B6. The symbol remap into the seed's symbol table must be **unambiguous** — a
   duplicate name is a hard failure, never a first-match.
 - B7. The seed's relocation table for the target section is rebuilt from the
@@ -112,6 +160,17 @@ Each must reject, with a distinct error:
 9. extension A: donor op-list that perturbs the **seed** rendering
 10. extension A: anchor that does not seat uniquely
 11. extension A: donor object reaching the link
+
+A **twelfth test is required: a positive control.** A class that rejects
+everything would satisfy the eleven rejection tests vacuously. The fixture must
+model a real customer row — equal relocation counts with one global substitution
+plus one `$T` rename — and must fail today with the same error string the real
+objects produce (`primary: relocation target differs`).
+
+B1 note: the pinned retail extraction needs a PE reader and the pinned image,
+which unit tests cannot ship. Split it — the **build** performs the pinned
+extraction (it already validates `original_sha256`) and passes the body to the
+composer, which enforces length and masked nd 0.
 
 The existing 53 tests must stay green throughout, and all three image gates must
 be unchanged except for the intended row gain.
