@@ -1237,3 +1237,269 @@ count went *up* by one — the two "losses" were rows already lost long before.
 corpus against the retail image: **120 of 120 identical**. The corpus's retail
 side is sound, so a corpus verdict that fails to re-derive is a *tree-state*
 difference, not a corrupt oracle.
+
+## Wave 12b: the COMDAT-winner screen (`tools/comdatwin.py`)
+
+### A byte-exact body that buys nothing
+
+Sweeping `worlds/infocenter.cpp` drove `_Tree<MxCore*,...>::erase`
+(**`0x1001d890`**) to **masked nd 0 at 1106 bytes = retail's 1106**. The row did
+not move. `entity/legoworld.cpp` also emits that COMDAT, **the linker keeps
+legoworld's copy**, and infocenter's exact one is discarded.
+
+This is the mirror image of the goal-2 note about six borrowed 1.0 rows: there
+we *gain* rows because a supplier's copy wins, here we *lose* one for the same
+reason. Either way the lesson is the same and it is now mechanised:
+
+> **Before funding a row, ask which object the linker actually keeps.**
+> A carrier sweep only reaches the image through the winning object.
+
+`tools/comdatwin.py` answers it. It indexes every COMDAT text symbol in the
+build (4,319 distinct symbols, 517 of them defined more than once), then
+identifies, for each row, which definer's masked bytes *are* the linked bytes.
+Artifacts: `docs/comdat-winners.{md,json}`.
+
+Over the open set: **75 SOLE, 5 CONTESTED**. Only the five need care.
+
+### `0x1002bff0` is not (only) an allocator wall
+
+The row is one of the seven written off as "one shared allocator/scheduler
+decision, instrument-gated". The screen says it has **six definers**:
+
+| object | length | delta vs retail | masked distance | winner |
+| --- | ---: | ---: | ---: | :---: |
+| legoextraactor.cpp.obj | 1104 | +8 | - | yes |
+| legopathcontroller.cpp.obj | 1104 | +8 | - | |
+| legopathboundary.cpp.obj | 1105 | +9 | - | |
+| legoracespecial.cpp.obj | 1103 | +7 | - | |
+| legopathactor.cpp.obj | 1097 | +1 | - | |
+| **act3ammo.cpp.obj** | **1096** | **+0** | **47** | |
+
+Retail is **1096** bytes. The linker keeps a copy that is **eight bytes too
+long**, while a copy at *exactly* retail's length, 47 masked bytes out, sits in
+`act3ammo.cpp.obj` and is discarded. The row's difficulty is substantially a
+**link-winner** problem, and its cheapest route is the object the linker throws
+away — not another carrier state on the winner.
+
+### Two measurement traps this tool had to be taught
+
+Both produced confident, wrong tables before they were caught; both are easy to
+repeat in any tool that compares an object body to an image.
+
+1. **Object COMDAT bodies must be compared against *untrimmed* image bytes.**
+   `slotmap.body_of` strips trailing `0xCC`/`0x90` fill, which is right for
+   disassembly and wrong here — six rows read as UNMATCHED until the comparison
+   used a raw slice.
+2. **Retail's true length comes from the gap to the next annotated symbol, not
+   from a window sized off the definers.** A generous window runs into the
+   following function, and since `body_of` only strips *trailing* fill, every
+   definer read as ~32 bytes short — a uniform -32/-33 column that looked like a
+   finding and was an artifact. With report-derived extents the screen
+   re-derives 1106 for `0x1001d890`, matching the authoritative oracle.
+
+### Carrier sweeps over the five never-swept TUs
+
+Every row scored is a sole-definer link winner unless noted. Best masked nd over
+a 1,225-cell coarse grid (`pad_shape` 15x15 + `declaration_shape` 10x100):
+
+| row | TU | seed nd | best nd | cell | note |
+| --- | --- | ---: | ---: | --- | --- |
+| `0x1006dec0` | legoanimpresenter | - | **0** | pad-92-22 | **landed** |
+| `0x1001d890` | infocenter | 976 | **0** | pad-8-36 | discarded object |
+| `0x100a3b40` | tglrl40 | 14 | 14 | pad-1-8 | retail length already |
+| `0x100a12a0` | tglrl40 | 25 | 16 | pad-1-29 | retail length already |
+| `0x100a84a0` | legoroi | 1362 | 58 | pad-15-29 | reaches retail's 2058 B |
+| `0x100bd020` | mxbitmap | - | 60 | pad-57-1 | |
+| `0x100aa510` | legolod | 313 | 289 | pad-8-15 | |
+| `0x100a46b0` | orientableroi | - | 99 | decl-5-27 | |
+
+The two `tglrl40` rows are the strongest remaining candidates: both are already
+at retail's exact length with only 14 and 16 masked bytes outstanding.
+
+### Two more traps, caught by auditing the screen's own anomalies
+
+The screen reported three rows at 1.0 that were contested with *no* exact
+definer, which should be impossible. Reading them found two more defects, both
+of which had been inflating the fragility list:
+
+3. **`compile_commands.json` covers all three images.** Objects built for CONFIG
+   and ISLE are never linked into LEGO1, and counting them as definers invents
+   contested rows -- `mxdirectxinfo.cpp` is compiled by both `lego1` and
+   `config`, so it appeared twice as its own competitor. Excluding
+   `CMakeFiles/{config,isle}.dir/` took contested rows 830 -> 785 and the
+   fragility list **70 -> 47**.
+4. **Retail's body must not be truncated at its jump table.** `body_of` cuts
+   there, which is right for disassembly and wrong for a whole-COMDAT
+   comparison: `MxDirectDraw::ErrorToString` and
+   `MxDeviceEnumerate::EnumerateErrorToString` are switch-heavy, and their
+   retail bodies read as 144 bytes shorter than the object that produced them.
+   Trim trailing `0xCC`/`0x90` fill only.
+
+One anomaly survives and is genuine: `_SmackGetSizeTables` is a 6-byte thunk in
+our build against a 102-byte retail function, because Smacker is a vendor
+archive. Not a defect.
+
+### Link-order fragility, corrected
+
+**785 rows we hold at 1.0 are contested; 47 have exactly one definer that
+reproduces retail.** Those 47 are the rows a link-order change can take away.
+This is an upper bound on the exposure -- only rows whose definer set spans the
+objects being reordered are actually at risk -- but it is the list a reordering
+should be checked against, and it is larger than the six the goal-2 note
+assumes. The table is in `docs/comdat-winners.md`.
+
+### Reading the two contested rows whose winner is in reach
+
+Both were read instruction-by-instruction from the **linked** images:
+
+- **`0x1002a1b0` `_Tree<LegoCacheSoundEntry,...>::_Erase`** (82 B, winner
+  `legosoundmanager.cpp`, masked distance 10). Every divergent instruction is
+  one thing: retail colours the node pointer `ebx` and the cursor `edi`, we do
+  the reverse. Same operations, same order, same frame -- a **two-register
+  colour swap**, so a carrier is the right instrument, not a source edit.
+- **`0x100a12a0` `TglImpl::TextureImpl::SetImage`** (83 B, sole definer,
+  masked distance 16). Same colour story (`ebx`/`ebp` exchanged) *plus* a real
+  schedule difference: retail hoists the `p_texture` argument load and the
+  vtable load above the first `push`, we sink both past it. Operation multiset
+  is identical, so this is schedule + colour.
+
+Note when reading such a pair: a differing branch *target* is not a divergence.
+The two functions sit at different virtual addresses, so every relative jump
+prints a different absolute operand. Trust masked nd, not the eyeball count.
+
+### The row -> TU map is now mechanical, and it is a map of *winners*
+
+`docs/comdat-winners.md` carries "open rows by the object that must move":
+**all 80 open rows, across 47 objects, every one with an identified winner**
+(no row is left unattributed). This replaces guessing which TU owns a symbol —
+for a template body the owner and the winner are routinely different objects,
+and only the winner can change the image.
+
+It immediately shows how much never-swept space is left. Objects winning two or
+more open rows that have never had a carrier sweep: `legocharactermanager` (4),
+`mxvideopresenter` (4), `act3` (3), `mxtransitionmanager` (2), `viewlodlist`
+(2), `legopathboundary` (2), `legomain` (2), `legorace` (2), `legoracespecial`
+(2), `isle` (2) — plus the forbidden `legopathcontroller` (3), `legopathactor`
+(2), `legocachesoundmanager` (2), `act3actors` (2).
+
+### "730 of 1225 cells compiled" is not a 40% failure rate
+
+Every sweep log reports it and it looks like a defect. It is not: the coarse
+grid enumerates `declaration_shape(classes, functions)` over a full 10x100
+rectangle, but the generator's domain is `functions in [classes, 10*classes]`.
+225 pad cells + 505 valid decl cells = **exactly 730**. No coverage is being
+lost and there is nothing to fix.
+
+### `0x1002a1b0` is carrier-inert over 730 cells
+
+The two-register swap does **not** flip: seed masked nd 10, best 9 at
+`decl-4-37`. Same TU's `0x10029d50` moved 493 -> 310 (`pad-15-57`) and, notably,
+a carrier did fix its **length** (1117 -> 1119 = retail's), so the family does
+reach that row — it just does not reach it far enough. Per the standing rule,
+"carrier-inert" here names the pair (`0x1002a1b0`, pad/decl shape), not the row.
+
+## `0x10084030 LegoCharacterManager::CreateActorROI` is solved (NOT landed — routed elsewhere)
+
+A coarse carrier sweep of the never-swept `common/legocharactermanager.cpp`
+drives **`CreateActorROI` (2294 B, currently 0.9365) to masked distance 0**, and
+it is not a fluke: **21 of the 730 valid cells** reach it —
+
+    pad(1,78) pad(8,92) pad(50,36) pad(57,85) pad(85,15)
+    decl(3,20) decl(4,30) decl(4,39) decl(5,17) decl(5,26) decl(6,13)
+    decl(7,23) decl(7,32) decl(7,64) decl(8,10) decl(8,19)
+    decl(10,16) decl(10,25) decl(10,57) decl(10,74) decl(10,80)
+
+Re-derived independently from a clean tree with the scratchpad's
+`arch/verify_cell.py` at `pad_shape(1,78)` (header sha256 `78b48e5643bb...`):
+
+    symbol  ?CreateActorROI@LegoCharacterManager@@AAEPAVLegoROI@@PBD@Z
+    retail  2294 B    ours 2294 B    delta +0
+    relocations 83    masked bytes 332    masked distance 0
+    PROOF: byte-identical to retail outside relocated fields.
+
+Landing conditions are the favourable ones:
+
+- **SOLE definer** (`legocharactermanager.cpp.obj`), so no link-winner hazard.
+- Seed and donor agree on **length (2294 both)** and **relocation count (83
+  both)**; only the bodies differ. No resize is needed.
+- Seed body sha256 `f714d3f9...`, donor body sha256 `dbf9956f...`,
+  16-byte linked contribution span 2304 for both.
+
+**I have not landed it.** The row was explicitly routed away from this lane
+("Leave `CreateActorROI` alone; I am routing it"), and it is still open two
+waves later, so the recipe is recorded here rather than committed. It is ready
+to land as-is.
+
+The same TU's other three rows are also close on the coarse grid and are all
+SOLE: `0x10083890` nd 4 (`pad-78-64`), `0x10083500` nd 4 (`pad-43-1`),
+`0x10085500` nd 12 (`pad-15-1`). Because a donor is spliced per function, each
+row can take a different cell.
+
+### `SetImage`'s `appData` form is bit-inert
+
+Reading `0x100a12a0` suggested the residue was live-range *creation order*:
+retail materialises `pImage` before the first call, we sink it past. Three
+source forms were compiled and all three are **byte-identical to the current
+source** — `void* appData = pImage;` at the declaration, swapping the
+`result`/`appData` declarations, and both together. Do not re-test this axis.
+
+Method note for anyone probing source variants: MSVC resolves `#include "..."`
+relative to the *including file's* directory, so a variant compiled from a
+scratch directory fails on every quoted include. Write the variant beside the
+original under a distinct name (the scratchpad's `arch/probe_src.py` does this,
+and compiles a copy so a carrier sweep over the same TU is not disturbed).
+
+### The whole PERMUTATION class is register transpositions
+
+`docs/register-colour.json` has exactly four PERMUTATION rows and every one is a
+2-cycle of callee-saved registers: `0x100a3b40` esi/edi, `0x1002a1b0` edi/ebx,
+`0x100a12a0` ebx/ebp, `0x10057180` ebx/edi. Three were re-read by hand this wave
+and agree with the screen. A transposition means two live ranges of equal
+allocation priority whose tie retail broke the other way — and `0x1002a1b0`
+shows the tie does not respond to 730 carrier cells.
+
+### Carrier sweeps still in flight at the end of this wave
+
+Results land in the scratchpad as `arch/sweep-<tag>/results.json` (and, after
+the checkpointing fix, `partial.json` every 200 cells). Consolidate with
+`arch/bytu.py` / the small readers beside it.
+
+| tag | TU | grid | state |
+| --- | --- | --- | --- |
+| `untried2` queue | act3, mxtransitionmanager, viewlodlist, legopathboundary, legomain, legorace, legoracespecial, isle | coarse 1225 | running, `/tmp/untried2.log` |
+| `charmgrdense` | legocharactermanager | dense 9801 | running |
+| `animpdense2` | legoanimpresenter | dense 9801 | running |
+| `mxmain` | mxmain | coarse 1225 | running |
+
+Already consolidated this wave: `legolod`, `legoroi`, `infocenter`, `mxbitmap`,
+`tglrl40`, `legoanimpresenter`, `legoanimationmanager`, `orientableroi`,
+`legosoundmanager`, `legocharactermanager`, `mxvideopresenter`.
+
+`mxvideopresenter` (never swept before) came back close on all four of its rows:
+`0x100b24f0` nd 5 (`pad-1-8`), `0x100b26f0` nd 6 (`pad-22-8`), `0x100b27b0`
+nd 25 (`pad-1-8`), `0x100b2a70` PutFrame nd 59 (`pad-36-43`, and the carrier
+takes it to 1262 B against retail's 1260). Read at instruction level,
+`0x100b26f0 IsHit` is **cmpdir plus a one-instruction schedule move** and
+`0x100b24f0` is a small colour difference — both carrier-class, not text.
+
+### Two instrument fixes, both paid for by a real loss
+
+1. **A per-cell compile timeout.** CL under wine can wedge indefinitely on the
+   largest generated headers. A sweep of `entity/legoworld.cpp` parked at
+   1200/1225 for half an hour with two workers stuck and no file activity.
+   Without a timeout one bad cell stalls an entire queue.
+2. **Checkpointing.** Results were written only after the last cell, so killing
+   a slow dense sweep discarded everything: **7,200 compiled cells of the
+   `tglrl40` dense grid were lost** when it was stopped. It now dumps
+   `partial.json` every 200 cells.
+
+### Where the yield actually came from
+
+Both of this wave's wins came from **coarse grids on space that had never been
+swept** — the landed `0x1006dec0` from a new *family* on an old TU, and
+`CreateActorROI` from a new *TU*. The dense grids returned nothing new:
+`legoanimationmanager` dense (1188 cells) did not beat its own coarse best
+(nd 30 either way), and the `tglrl40` dense grid was still at its coarse best
+after 7,200 cells. Dense-region headers also grow to ~240 KB, so those cells
+cost several times what a coarse cell costs. **Prefer breadth over depth**:
+sweep an unswept TU or family before densifying one already swept.
