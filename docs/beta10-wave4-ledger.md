@@ -906,3 +906,43 @@ period, so a dense sweep is the only reliable method. A dense fwdL/fwdE
 `FUN_10040360` 67, `FUN_100417c0` 117, `Animate` 1153 — all worse than their
 fwdE bests (8 / 96 / 7). The declaration-shape axis is the wrong family for
 this TU; fwdE is the right one.
+
+### 3. `Act3Brickster::Animate` 0x10041050 (.9610 -> 1.0) — commit 2ccd0e56, LEGO1 4833 -> 4834
+
+Donor `extern-12-59` (`extern_run_pair`, `g_h` header run of 12 seated after
+the last `#include`, `g_p` seat run of 59 appended at EOF, width 2), id
+`d_6344595f29cb`, appended to the existing
+`lego1:LEGO1/lego/legoomni/src/actors/act3actors.cpp` unit.
+
+* **The forward-run axis was the wrong family for this row.** fwdE/fwdL held
+  it at nd=7 across ~1400 states (1..400 dense plus the periodic class out to
+  k=956), and `shapefull` was worse (1153). The **`externdeep` axis** —
+  header_count 0..12 × seat_count 0..60, well beyond the historical 8×17
+  extern grid — produced masked-nd=0 at 1632 bytes, retail's true length,
+  at *two* adjacent states (extern-12-59 and extern-12-60).
+* S72 guard: 73 relocations, target sequence IDENTICAL.
+* splice_class `same_slot_resize` with **split line counts** (seed 98 COFF line
+  rows, donor 99) — the `expected_seed_line_count` /
+  `expected_donor_line_count` escape in `byte_identity.py:8233`. Without them
+  the composer refuses with "target header shape changed"; a plain resize
+  requires equal line-row counts. **This is the second landable-recipe detail
+  a lane must know** (the first being the split placement of fwdL vs fwdE).
+* Gate: `GAIN 0x10041050 Act3Brickster::Animate`, zero LOST.
+
+**Method finding:** the three landings came from three *different* carrier
+families (fwdE-7 suffix run, fwdE-159 suffix run, extern-12-59 pair). A row
+that plateaus on one generator is not state-closed — it is closed on that
+generator. Run all three families to their real limits (fwd counts to ~1000,
+extern to at least 12×60, declaration shape's full 550 cells) before calling a
+row carrier-dead.
+
+### `_Tree<const char*, LegoTextureInfo*>::erase` 0x10059dc0 — now **nd=1**
+
+The dense legomain fwdL/fwdE 301..600 pass (600 states) takes it to
+**1102/nd=1 at `fwdE-311`** (retail's length). The single byte is a CMPDIR in
+the vendor `_Tree::erase` inline: ours `3b 4c 24 10` (`cmp ecx,[esp+0x10]`) at
+body+151, retail `39 4c 24 10` (`cmp [esp+0x10],ecx`). No first-party text
+reaches it. An `externwide`+`externdeep` pass on legomain is running as this is
+written — that is the family that flipped exactly this class for
+`Act3Brickster::Animate`. **This is the single most likely next landing in the
+lane.**
