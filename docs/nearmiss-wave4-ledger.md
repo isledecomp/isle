@@ -1506,3 +1506,91 @@ and is the natural next text pass for this row.
 
 `nm/lines.py` is reusable for any residue: it is the missing step between "byte
 N is wrong" and "this statement is wrong".
+
+---
+
+# Wave 6 — `FindPath` as a text row, and a correction to `residue-runs.md`
+
+Reset onto `7467fc53`; gate green at **LEGO1 4850/4934**, ISLE 172/172,
+CONFIG 111/111.
+
+## 43. `FindPath` text cells — the assignment-in-condition axis is INERT; statement order is live but retail's order is ours
+
+Two cell families at the sites `nm/lines.py` pinned, each tested against the
+best carrier state `xps-7-37-5-28` plus three others.
+
+**Family A — the `(dist = A + B) < limit` idiom.** All three occurrences
+rewritten as `dist = A + B;` / `if (dist < limit) {`, individually and together
+(`nm/texts/lpc-FD{1,2,3,123}.cpp`, line-neutral), 16 compiles:
+
+> **every cell is bit-inert** — nd=66 and the *identical* offset list in all
+> four, at every carrier.
+
+This extends the canonicalisation law (comparison spellings, int chains,
+mirrors) to **assignment-inside-a-condition**: MSVC 4.2 emits the same code for
+`if ((x = e) < k)` and `x = e; if (x < k)`. Worth adding to the standing rules —
+it is a cell family that looks promising in every row that uses the idiom and
+can never pay.
+
+**Family B — statement order in the 4-statement block at the +712 site**
+(`minDistance = dist;` / `erase(begin,end);` / `SetPath(TRUE);` /
+`push_back(LegoBoundaryEdge(edge, p_oldBoundary));`). All four non-trivial
+permutations, 12 compiles:
+
+| cell | order | nd |
+|---|---|---|
+| base | as checked in | **66** |
+| S1 | SetPath before erase | 108 |
+| S2 | minDistance after erase | 122 |
+| S3 | minDistance third | 121 |
+| S4 | SetPath first, minDistance third | 128 |
+
+Statement order **is** a live lever here — it moves the residue by 40-60 bytes —
+and **the checked-in order is the closest of the five**, i.e. retail's statement
+order at this block is already ours. Combined with wave 5's negative on the
+named-local hoist and the copy-init spelling (both changed the body length,
+so retail really keeps a temporary), the +712 permutation is **intra-statement
+scheduling**: which of the temporary's construction and the receiver's setup
+C2 emits first, inside one statement. No source text expresses that.
+
+**Verdict for `0x10048310`:** the text channel is now searched at the site the
+line table pinned, and it is closed there. The row's three permuted regions are
+compiler-internal scheduling; it joins `0x1002bff0` and `0x10083bc0` as a
+C2-instrument row. That is a much better-founded verdict than either the old
+"nd 1741, sealed" or my own "text channel" of two waves ago, and it cost 28
+compiles because the line table said exactly where to look.
+
+## 44. `docs/residue-runs.md` correction: `0x10085500` is not MIXED, it is pure regrole
+
+The caveat recorded with that document — *the classifier sees the default
+build's body* — bites on the one MIXED row in my lane, and I can show the
+before/after.
+
+**Default build object** (what the classifier saw): nd=29, and the permuted
+region is real — offsets 592..606, three instructions re-converging at +607:
+
+```
+retail: mov eax,[esp+0x20] ; mov [ecx+0x14],1 ; mov edx,[esp+0x10]
+ours:   mov [ecx+0x14],1   ; mov edx,[esp+0x10] ; mov eax,[esp+0x20]
+```
+
+**Best carrier state** (`chm-rect/extern-15-1`, nd=12): that run is **gone
+entirely**. What remains is 12 bytes in 7 tiny runs, and disassembling them
+shows a single **two-register role swap** — retail holds the node in `edi`
+where we hold it in `edx`, throughout, with identical instructions, identical
+order and identical encodings:
+
+```
+retail: mov edi,[ecx] ; lea edx,[edi+0x14] ; … ; cmp eax,edi ; … ; push edi
+ours:   mov edx,[ecx] ; lea edi,[edx+0x14] ; … ; cmp eax,edx ; … ; push edx
+```
+
+So the permuted region of this row is **carrier-reachable and already fixed**;
+at the state that matters the row is 100% `regrole`. Its classification should
+be `OTHER/regrole`, not `MIXED`, and no text search is warranted.
+
+**Generalisation for `bench/runs.py`:** classify against the row's best-known
+carrier state, and where none is known, say so in the row rather than emitting a
+verdict from the default body. Of the five MIXED rows, this is the one I can
+check from my own corpus; the same re-check is one `rescore` away for the other
+four and should happen before anyone spends text cells on them.
