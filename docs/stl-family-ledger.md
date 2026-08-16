@@ -615,7 +615,136 @@ in §6 and the bench is in `scratchpad/stl/`.
    is bit-inert, §4.4), `GetCached` (995 vs 987 — one extra 4-byte frame
    slot, §4.5), `FindSoundByKey` (282 vs 281), `FUN_10061010` (726 vs 731).
 
-## 10. Reproducing this lane
+## 10. The register-allocator model (wave 2)
+
+Measured post-`16620ba9`. Tooling: `permcensus.py`, `erasegroups2.py`,
+`colourreach.py`, `colourlaw.py`, `residuesets.py`, `defcensus.py`,
+`period.py`, `staleness.py` in `scratchpad/stl/`.
+
+### 10.0 Staleness check — my corpus survived the `vec.h` discharge
+
+The coordinator warned that seed bodies moved at `3526a9ab`. **Measured: they
+did not, for any TU in this lane.** Recompiled cells on the post-discharge
+shadow and compared *every* `.text` COMDAT against the pre-discharge object:
+
+| TU | cells compared | byte-identical | bodies moved |
+|---|---|---|---|
+| legoanimpresenter.cpp | 25 | 25 | 0 |
+| viewlodlist.cpp | 12 | 12 | 0 |
+| legoworld.cpp | 12 | 12 | 0 |
+| legotexturepresenter.cpp | 12 | 12 | 0 |
+
+So the 1,138-state legoanimpresenter corpus and the viewlodlist/legoworld
+corpora are reusable, not stale. (`vec.h`'s `_DET3/_DET4` only reach TUs that
+instantiate the determinant inlines; none of mine do.)
+
+### 10.1 The controlled experiment: one body, twelve instantiations
+
+`_Tree<...>::_Erase` compiles to an identical 57-byte, 23-instruction body for
+twelve different instantiations. It is the perfect specimen: same IL, twelve
+independent compilations, in nine different TUs.
+
+**Retail colours that one body three different ways.** Grouping the twelve
+retail bodies by their register sequence:
+
+| colouring | instances | TUs |
+|---|---|---|
+| C0 | 6 | legoworld, legoextraactor, legopathctrledgeset, legomain, legocharactermanager, viewlodlist |
+| C1 | 5 | legobewithmidpoint, legoanimpresenter (×3), mxmain |
+| C2 | **1** | legopathboundary — **the only open row of the twelve** (0x10057180) |
+
+Our build reproduces retail's colouring in **11 of 12**, and the one miss is
+the singleton C2. Two facts follow immediately:
+
+1. **The colouring is not a property of the instantiation.** C2's
+   `set<LegoAnimPresenter*>` is the same set-of-pointers IL as C0's
+   `set<MxCore*>` and C1's `set<MxAtom*>`. Node layout, key type and
+   comparator do not separate the groups — C0 and C1 each contain both sets
+   and maps.
+2. **The colouring is a property of the emitting TU**, and three
+   instantiations inside `legoanimpresenter.cpp` all land in C1, as that
+   predicts.
+
+Cross-check: both objects that define `_Erase<LegoCacheSoundEntry>`
+(legosoundmanager.cpp and legocachesoundmanager.cpp) emit the *same* wrong
+colouring `(ebx edi)`, so the link winner is not the lever either.
+
+### 10.2 The reachability law (and its counterexample)
+
+If the colouring is TU state, does the declaration carrier move it? I scored
+**every oracled open row against every retained corpus state for its TU**,
+keeping only states whose instruction *shape* equals retail's — so the only
+possible difference is which register holds what (`colourlaw.py`).
+
+| row | shape-equal states | distinct colourings | retail's colouring reached |
+|---|---|---|---|
+| 0x10006460 StopAction (closed) | 751 | 2 | **57** |
+| 0x10020e50 `_Lrotate` (closed) | 29 | 1 | **29** |
+| 0x100574a0 RemoveActor | 171 | 9 | **1** |
+| 0x1002a1b0 `_Erase` CacheSound | 783 | 2 | 0 |
+| 0x10057180 `_Erase` AnimPresenter | 375 | 2 | 0 |
+| 0x100495b0 `insert` BEWithMidpoint | 353 | 6 | 0 |
+| 0x10085500 `insert` LegoCharacter | 334 | 4 | 0 |
+| 0x100a7960 `erase` ViewLODList | 96 | 5 | 0 |
+| 0x1006dec0 `erase` HideAnim | 92 | 6 | 0 |
+| 0x10068b20 `erase` AnimSubst | 44 | 6 | 0 |
+| 0x1001d890 `erase` CoreSet | 16 | 2 | 0 |
+| 0x100af7e0 `erase` MxAtom | 15 | **1** | 0 |
+| 0x10069e90 `erase` AnimStruct | 7 | 1 | 0 |
+| 0x10029d50 `erase` CacheSound | 5 | 2 | 0 |
+| 0x10082ca0 `erase` LegoCharacter | 1 | 1 | 0 |
+| 0x10045c20 PlaceActor | 17 | 1 | 0 |
+
+**The strong law is false and I am recording the counterexample:**
+`LegoPathController::RemoveActor` reaches retail's colouring in 1 of 171
+shape-equal states, so the carrier axis *can* move colouring. But the rate is
+~0.6%, and for the `_Tree` family it is **0 in 1,891 shape-equal states across
+12 rows and 9 TUs**. Several rows show `distinct colourings = 1`: the axis is
+completely inert on their allocation.
+
+**Operational consequence.** Sweeping a `_Tree` regrole row for colouring is
+predicted waste. I acted on this immediately: I cancelled the planned
+`legosoundmanager` sweep for 0x1002a1b0 (783 shape-equal states already prove
+the axis reaches only 2 colourings, neither retail's) and moved the compute to
+a row whose residue is not purely regrole.
+
+### 10.3 The erase family reduces to two tie bytes, project-wide
+
+`residuesets.py` over 133 length-correct states of `erase<MxAtom*>`
+(0x100af7e0, `mxmain.cpp`, 3,391 states swept this wave):
+
+```
+nd=  2 x  47   [145, 434]      <-- the floor
+nd= 37 x  15   [145, 434, 811, 814, 817, 819, 822, 832, 835, 838]
+nd= 56+       [13, 14, 15, ...]  the block-swapped family
+byte 145: correct in 19/133 length-correct states
+byte 434: correct in  8/133
+```
+
+Those are the **same two bytes** this ledger identified for
+`erase<LegoAnimSubst>` (+145 `if (_Y != _Z)` operand direction, +431/434
+`cmp edx,edi` register-role tie), and the same +434 the wave-3 ledger recorded
+for `erase<LegoPathActor*>`. **Three TUs, three instantiations, one pair of
+tie bytes.** Each is individually reachable; in the flat grammar they are
+never jointly correct, because every state that fixes 434 is inside the
+structurally-wrong block-swapped region.
+
+### 10.4 A forward prediction, stated before the result
+
+Running now: `sw.py all2-mxmain --pre fwdE:88 --axes shapefull` (550 stacked
+cells; `fwdE:88` is the suffix carrier that gives the nd=2 floor).
+
+**Prediction.** The stacked product will reach **nd=1 with the residue at
+offset 434 only, and will not reach nd=0.**
+Reasoning: +145 is a `cmpdir` tie and the stacked product converted exactly
+that byte for `erase<LegoAnimSubst>` (`fwdE:19 × shape-6-39` → residue at
++431 only); +434 is a `regrole` tie, and `colourlaw` measures the colouring
+of this row as carrier-inert (15 shape-equal states, **1** distinct
+colouring). A `cmpdir` is reachable; a `regrole` on this row is not.
+
+Result: see §10.5.
+
+## 11. Reproducing this lane
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
 `fresh2/` repointed at `isle-build-tr03`). Nothing in the shared corpus was
