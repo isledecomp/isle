@@ -479,3 +479,24 @@ Recorded so the next wave does not re-derive it.
 | `Act3Ammo::Animate` 0x10054050 | 2665 vs 2666 (+1); nd=935 | Not read off this session (BETA10 0x1001e362). |
 | `Act3::CreateROIAndBuildMap`, `Act3::TriggerHitSound` ALPHA bracket | not run | Still queued from wave 3. |
 | `LegoROI::Intersect` 0x100a9410 | body exact | See the annotation recipe above — coordinator decision. |
+
+### `LegoCarRaceActor::CheckPresenterAndActorIntersections` 0x10081840 — the +5 is vendor-inline
+
+1163 vs 1168. The whole delta is at body+121 inside the inlined
+`_Tree<...>::iterator::operator++`: retail emits
+`mov [ebp-0x10], eax` + `jmp <join>` (5 bytes) on the "right subtree is not
+_Nil" path, ours falls through and reloads the slot at the join. Retail also
+holds the walk pointer in EAX where we hold it in ECX. Same class as
+`LegoOmni::Destroy`'s `add edi,8`: a tail-merge/register interaction inside
+vendor xtree inline code, with no first-party text lever. Carrier-only row.
+
+### Sealed negative: the forward-run `width` parameter is codegen-inert
+
+`generate_forward_run(prefix, count, width)` renders `class MxUnkRecVC000;`
+at width 3 and `class MxUnkRecVC00;` at width 2. A full fwdE 1..99 sweep at
+width 2 on act3actors produced **exactly the same best states and distances**
+as width 3 (`Animate` 7 @ fwdE-59, `FUN_10040360` 8 @ fwdE-20,
+`FUN_100417c0` 96 @ fwdE-28), even though the objects themselves differ
+(200561 vs 200565 bytes — the symbol names change). Width is not a useful
+axis; spend the compiles on `count` instead. (`prefix` length remains
+untested.)
