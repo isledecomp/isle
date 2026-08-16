@@ -801,3 +801,96 @@ on both sides (the S72 relocation-target class). The masked nd used here blanks
 only **our** relocation byte ranges and compares everything else, which is why it
 returns **80** and agrees with the coordinator's independent measurement — and
 why my wave-2 nomination of that row was wrong.
+
+## WAVE 5 — the cost-threshold hypothesis: CONFIRMED as a mechanism, REFUTED as a route
+
+The C4710 oracle (`#pragma warning(1 : 4710)`) was adapted to this worktree and
+the scratch-copy method (`<scratchpad>/arch/c4710.py`). **Control first: the
+pragma is codegen-inert here** — the target COMDAT is byte-identical with and
+without it, so it is a diagnostic, not a forcer.
+
+**Caveat that cost me an hour: C4710's line numbers shift under an injected
+body, and un-shifting them is unreliable.** My first vector reading said the
+depth-1 sites never declined when in fact they had. Read the decline vector
+from the **object** instead — the count of `Interpolate` relocations in a
+function *is* the number of declined sites in it. That is authoritative and
+just as cheap.
+
+### The mechanism is real, and the predicted ordering is exactly right
+
+Ladder: N live statements injected into `Interpolate` (`p_key1.SetTime(...)`,
+a write through a reference, so it cannot be discarded — the dead-code ladders
+I tried first are free and move nothing). Vector read from the object as
+(CalculateCameraTransform, GetTranslation, CreateLocalTransform):
+
+    n     CCT  GetTr  CrLoc   CCT len   masked nd
+    0      0     0      1      1074       268     <- today
+    1      0     0      2      1109       274
+    2..11  0     0      3      1134..1359 272..420
+    12     1     0      3      1121         5     <- the bit flips
+    14     1     1      3      1121         5
+    22     1     2      3      1121         0     <- byte-identical to retail
+    23+    1     2      3      1121       9..54
+
+Two things fall out:
+
+1. **`0x1009f490` is genuinely reachable.** At n=22 it is **1121 bytes against
+   retail's 1121, masked nd 0, SHAPE = STRUCT = EXACT = 100.00.** That is the
+   second independent confirmation of the wave-3 price, by a different route.
+2. **Among depth-1 sites the largest caller declines first**, exactly as the
+   hypothesis predicted: `CalculateCameraTransform` (1121 B) at n=12, then
+   `GetTranslation` (230 B) at n=14 and again at n=23. There *is* a window —
+   n = 12..13 — where CCT is declined and all three GetTranslation sites still
+   expand.
+
+### But retail's vector is unreachable on this axis, and the reason is arithmetic
+
+Retail's vector is **(1, 0, 1)**: two `Interpolate` calls image-wide, at
+`0x1009f818` and `0x100a04a4`. Our `CreateLocalTransform` count leaves retail's
+value of 1 at **n=1** and saturates at 3 by **n=2** — the three depth-2
+`GetScale` sites cross their threshold ten cost units *before*
+`CalculateCameraTransform` crosses its at n=12.
+
+> **`CrLoc = 1` requires cost < 1. `CCT = 1` requires cost >= 12. The two
+> conditions are disjoint, so no callee form — authentic or contrived —
+> produces retail's vector.** Step 3 is therefore moot: this is a refutation
+> that does not depend on authenticity at all.
+
+Priced on the best cell (n=22), the trade is **+1 / −3**:
+
+    row                                    baseline        at n=22
+    0x1009f490 CalculateCameraTransform    nd 268          nd 0      (gain)
+    0x100a0600 GetTranslation              nd 0, 1.0       nd 1341   (lost)
+    0x100a03c0 CreateLocalTransform        nd 0, 1.0       nd 473    (lost)
+    0x100a0b00 Interpolate                 nd 0, 1.0       nd 579    (lost)
+
+### The body axis is inert — and this time with a positive control
+
+The newly authorised body-level generators were swept into
+`CalculateCameraTransform` over **10 insertion positions** spanning the whole
+function, including immediately before and immediately after the call site:
+
+    empty_scopes   scope_count 1..24 x 10 positions = 192 cells   0 flips
+    noop_assign    repeat      1..24 x 10 positions = 240 cells   0 flips
+    live_caller    (diagnostic) 1..16 x 10 positions = 160 cells  0 flips
+
+The first two never changed the emitted body at all (length 1074, nd 268
+everywhere), so on their own they would only show that *those two generators*
+are neutral. The third settles it: `tempMatrix.SetIdentity();` repeated in the
+caller is real inlined work and demonstrably moved the caller's codegen
+(length 1074 -> 1124, nd 268 -> 968) — **and the site still did not decline, at
+any count, at any position, including directly above the call.**
+
+> **The decision at this site is a function of the CALLEE's cost and not of the
+> caller's accumulated body state.** 592 body-level cells with a positive
+> control on both sides: the callee axis moves the bit at n=12, the caller axis
+> never moves it.
+
+### Verdict
+
+The seal stands and is now properly evidenced. The channel is worth the two
+rows priced in wave 3 — `0x1003cf20` (banked) and `0x1009f490` (nd 0 by two
+independent routes) — and `0x1009f490` cannot be taken on the callee axis
+without losing `GetTranslation`, `CreateLocalTransform` and `Interpolate`.
+What it needs is a way to move **one site's** decision, which neither the
+callee axis (moves all seven) nor the caller-body axis (moves none) provides.
