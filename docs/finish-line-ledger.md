@@ -334,3 +334,70 @@ reason — `0x10051ac0 SpawnBricks` is `regrole=16 desync=10` at nd=58, the wors
 prior in my queue — and moved the budget to the two rows whose residue is a
 *single small permuted span* (`helicopter.cpp`, `mxramstreamprovider.cpp`,
 below). The retained objects make that sweep resumable at zero cost.
+
+---
+
+## 6. Three "length defect ⇒ TEXT channel" verdicts overturned by reading the bytes
+
+`docs/row-size-ledger.md`'s rule — *"a length defect can only be fixed by
+changing what the source says"* — has a documented exception (the
+`length:encoding` bucket in `docs/open-set-triage.md`). Two rows in my lane are
+filed on the wrong side of it, and one is filed correctly but for the wrong
+reason. All three were settled by disassembling, not by sweeping.
+
+### `0x1006fda0 Infocenter::HandleKeyPress` — ours 264, retail 272, **+8 is one register**
+
+Filed `length: never reached → TEXT/INLINE`, `Δinsn −2` (retail has two more
+instructions). Both are true and both are downstream of a single allocation:
+
+```
+       RETAIL                                OURS
++145   mov eax,[esi+0x100]                   mov ecx,[esi+0x100]
++151   mov ecx,1                             mov eax,1
++156   mov [eax+0x74],ecx                    mov [ecx+0x74],eax
++159   mov eax,[esi+0x100]                   mov ecx,[esi+0x100]
++165   cmp [eax+0x78],0                      cmp [ecx+0x78],0
++169   jne                                   jne
++171   mov word [esi+0x1d2],cx               mov word [esi+0x1d2],ax
++178   mov eax,1          <-- RELOAD         (nothing: the 1 is already in eax)
++183   pop edi ; pop esi ; ret 4             pop edi ; pop esi ; ret 4
+```
+
+Retail keeps the constant `1` in **`ecx`**, so the `return 1` has to
+re-materialise it into `eax` — five extra bytes. We keep it in `eax` and the
+return value is already there. The five-byte shift then pushes the end of the
+code region past a 4-byte boundary, so LINK inserts a **3-byte `lea ecx,[ecx]`
+NOP** before the switch jump tables that the COMDAT body carries. 5 + 3 = the
+whole **+8**.
+
+So it is a `regrole` row wearing a length defect's clothes, and *our* codegen is
+the better of the two. `Δinsn −2` counts the reload and the NOP.
+
+### `0x1006ed90 Infocenter::Create` — ours 380, retail 381, **+1 is an operand-size prefix**
+
+```
++142   RETAIL  33ff     xor edi, edi     (2 bytes, full 32-bit)
++140   OURS    6633ff   xor di, di       (3 bytes, 16-bit with the 0x66 prefix)
+```
+
+The loop counter is `MxS16` and is read back through `movsx edx, di` on both
+sides, so both forms are correct. Note the control: the *other* 16-bit counter
+in the same function is `6633db` = `xor bx, bx` on **both** sides at +169/+168.
+Retail therefore uses a full-width zero for one counter and a prefixed
+half-width zero for the other — it is a per-value liveness decision inside C2,
+not a spelling.
+
+**One byte, and it is a colour decision.** This row should not be in the
+TEXT/INLINE bucket either.
+
+### Consequence for `docs/open-set-triage.md`
+
+Its own Extension 1 has the right test (identical instruction multiset ⇒
+ENCODING) but it is applied to the *whole* body. Both rows above fail that test
+— they genuinely have different instruction counts — while still being pure
+colour defects, because a register choice can *create* an instruction (a
+reload) and a length shift can *create* alignment padding. The sharper rule:
+
+> A length delta is a text defect only if the extra instructions do work that
+> the other side does not do. A reload, a spill, an operand-size prefix and
+> alignment fill are all colour.
