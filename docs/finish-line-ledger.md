@@ -450,3 +450,88 @@ from the one the triage hands the next lane, and it is why the k-strips
 (`externK`, m=0, k=1..400) were run on `infocenter.cpp`,
 `legocontrolmanager.cpp`, `mxstillpresenter.cpp` and `tglrl40.cpp` rather than
 text cells.
+
+---
+
+## 7. Three rows whose residue is a single permuted span (read, don't sweep — but sweep anyway, and here is why)
+
+`docs/residue-runs.md` classifies by span; run over my lane it put
+`Helicopter::HandleControl` in MIXED (`colour=35 other=4 permuted=1`) and
+`ReadData` in OTHER (`mnemonic`). Disassembled against the v2 bodies, both are
+**single clean permutations** and the classifier's span widening is what hid
+it — the same reconciliation Lane NM flagged in wave 6 §45.
+
+### `0x100035e0 Helicopter::HandleControl` (.9907) — 19 bytes, one span, re-converges at +767
+
+```
+       RETAIL                            OURS
++744   mov [ebp-0x64],ecx                mov [ebp-0x64],ecx
++747   mov [ebp-0x74],edx                mov [ebp-0x9c],eax
++750   mov [ebp-0x9c],eax                mov [ebp-0xa0],ecx
++756   mov [ebp-0x78],ecx                mov [ebp-0x74],edx
++759   xor eax,eax                       xor eax,eax
++761   mov [ebp-0xa0],ecx                mov [ebp-0x78],ecx
++767   mov [ebp-0x88],ebx                mov [ebp-0x88],ebx      <- re-converge
+```
+
+Identical five instructions, and the **frame displacements are identical on
+both sides**, so the declaration set and slot assignment are already retail's.
+Two `Mx3DPointFloat` sub-objects — the one at `[ebp-0x78]/[ebp-0x74]` and the
+one at `[ebp-0xa0]/[ebp-0x9c]` — swap the order in which their vftable and
+`m_data` stores are emitted. The source block is
+
+```c
+Mx3DPointFloat location, direction, lookat;
+…
+Mx3DPointFloat v68, va4, up;
+Mx3DPointFloat v90(0, 1, 0);
+```
+
+**The "read it" rule does not hand you an edit here**, and the reason is worth
+recording: matching displacements *prove* the declaration order is already
+correct, so the one source lever the rule points at (reordering the
+declarations) is guaranteed to break the frame. This is the boundary of the
+rule — a permuted span is a source problem only when the frame does not
+already match.
+
+### `0x100d0d80 ReadData` (.9722) — 18 bytes, all in the last 24, one span
+
+```
+       RETAIL                              OURS
++401   mov ecx,eax                         sub ebx,[esp+0x20]
++403   and ecx,1                           mov ecx,eax
++406   sub ecx,[esp+0x20]                  pop ebp
++410   pop ebp                             and ecx,1
++411   add ecx,ebx                         pop edi
++413   pop edi ; pop esi ; pop ebx         add ebx,ecx
++416   lea eax,[ecx+eax+8]                 pop esi ; lea eax,[ebx+eax+8] ; pop ebx
++420   add esp,0xc ; ret                   add esp,0xc ; ret
+```
+
+The source is one statement:
+
+```c
+return MxDSChunk::Size(data2) + (MxU32) (data2 - p_buffer);
+```
+
+`Size()` inlines to `len + (len & 1) + 8`. Retail starts the accumulation from
+the `(len & 1)` term and folds the pointer difference into it; we start from
+the pointer difference. Same value, different association — and per this
+project's standing rule **integer chains are fully canonicalised** (only FP
+sums keep their parentheses as barriers), so writing the addends the other way
+round is expected to be bit-inert. The difference is the epilogue scheduler
+interleaving the `pop`s with the arithmetic, which is compile state.
+
+### `0x100334b0 Act1State::Act1State` (.9891) — 24 bytes, one span
+
+Retail and ours emit the same nine member stores at 474–520 in different
+orders. The decisive observation is that a *single* source statement's stores
+are **not contiguous on either side**: `m_cptClickDialogue = Playlist(...)`
+lands its four stores at retail offsets 490 (`[esi+0x10]`), 497
+(`[esi+0x0e]`), 504 (`[esi+0x08]`) and **561** (`[esi+0x0c]`), interleaved
+with five other statements. So the emission order does not encode the
+statement order and no reordering of the constructor body can address it.
+
+**What all three have in common**: the frames match, the instruction multisets
+match, and the source cannot express the difference. They are the carrier
+channel's problem, which is why they got the rectangles rather than text cells.
