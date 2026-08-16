@@ -802,3 +802,42 @@ Carrier-inert in the strongest sense — the same 843 bytes everywhere. Combined
 with §7's finding that a single source statement's stores are scattered
 non-contiguously across the residue, this row has **no channel currently
 known**: not the extern carrier, and not statement order.
+
+### The decisive control: the *second* LenSquared inline in the same function is already exact
+
+`Isle::Enable` inlines `Vector3::LenSquared` twice, from two symmetric source
+blocks:
+
+```c
+Mx3DPointFloat sub(-21.375f, 0.0f, -41.75f);
+sub -= position;
+if (sub.LenSquared() < 1024.0f)  { AnimationManager()->FUN_10064740(NULL); }
+
+Mx3DPointFloat sub2(98.874992f, 0.0f, -46.156292f);
+sub2 -= position;
+if (sub2.LenSquared() < 1024.0f) { AnimationManager()->FUN_10064670(NULL); }
+```
+
+At `extern-1-8` the **second** inline (+2310…+2340) is **byte-identical to
+retail**, register for register. Only the first is transposed. Laying the two
+sites side by side:
+
+| site | retail | ours |
+|---|---|---|
+| #1 (+2205) | `ecx ← base+8`, `eax ← base+4` | `eax ← base+8`, `ecx ← base+4` |
+| #2 (+2310) | `ecx ← base+4`, `eax ← base+8` | `ecx ← base+4`, `eax ← base+8` ✓ |
+
+**Retail alternates between its own two sites; we use the same assignment at
+both.** That is the sharpest possible confirmation of
+`docs/beta10-wave5-ledger.md`'s sealed negative — its census found retail's
+first-temp displacement histogram is `{8:7, 4:2}`, i.e. retail uses both orders,
+and here are both orders **inside one function, from one inline, on two
+adjacent copies of the same three-line source pattern**. No spelling of
+`Vector3::LenSquared` can emit both, so `vector3d.inl.h` is provably not the
+lever, and neither is the call site's text: the two call sites are already
+textually symmetric and we already match one of them.
+
+What is left is what makes retail's *first* site pick the other order — i.e.
+whatever else is live across it. That is an allocator-rank question, which is
+exactly what the carrier axis perturbs, and the row has moved 214 → 11 on that
+axis already.
