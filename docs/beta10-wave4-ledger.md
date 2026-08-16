@@ -861,3 +861,13 @@ m_data[0]*m_data[0]` (and the two other associations) and count, across all
 `LenSquared` inline sites in the tree, how many flip toward retail and how
 many away. If a spelling exists that fixes strictly more than it breaks it is
 worth several rows at once — `LinkEdgesAndFaces` (nd 2) would go to 0.
+
+### `Act3Ammo::Animate` 0x10054050 — PROMOTED by the carrier sweep
+
+The full 653-state grid on act3ammo (a stem that had never been swept on
+today's text) takes this row from **2665/nd=935** to **2666/nd=105 at
+`fwdE-48`** — retail's true length, and a nine-fold distance cut. Like
+`LegoOmni::Create`, `Act3Brickster::Animate` and `LegoCarRaceActor::CPI`, its
+"+N length defect" was carrier-fixable, not a missing statement. Next step:
+fwdE/fwdL 97..400 and `shapefull` on act3ammo (only the 60-cell shape subset
+has been run), then the residue read-off from the `fwdE-48` object.
