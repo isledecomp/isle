@@ -223,11 +223,28 @@ validated by me against an independent extraction from `legobin/LEGO1.DLL`
 
 `legoanimpresenter.cpp` alone emits **six** open `_Tree` rows
 (0x10068b20, 0x10069e90, 0x1006dec0, 0x1006c200, 0x1006a7a0, 0x1006e720)
-and all six carry the same residue shape. All three of its `erase`
-instantiations show *the same* signed deviation (+3, +2, +3 `mov`s), and
-all three of its `_Insert` instantiations show *the same* signed deviation
-(−1 `mov`, `je`/`jne` swapped). That is one TU state, six rows. It is the
-highest-value single state in the lane.
+and, in the *default* state, all six carry the same residue shape: all three
+`erase` instantiations show the same signed deviation (+3, +2, +3 `mov`s)
+and all three `_Insert` instantiations the same one (−1 `mov`, `je`/`jne`
+swapped).
+
+**But that does not make them one state — MEASURED, and it corrects the
+obvious hypothesis.** The three instantiations dial *independently* under
+the carrier:
+
+| state | 0x10068b20 erase | 0x10069e90 erase | 0x1006dec0 erase | 0x1006c200 `_Insert` |
+|---|---|---|---|---|
+| base | +8 len | +8 len | +9 len | −4 len |
+| `fwdE-19` | **nd=1** | +11 len | +1 len | −4 len |
+| `extern-8-17` | nd=372 | +1 len | −8 len | −4 len |
+
+So "one fix closes several rows" is **false** for this family: each
+instantiation needs its own donor state. That is fine mechanically (a
+`compose_equal_body_comdat` unit takes many donors and many functions — the
+legoanimpresenter unit already carries 5 donors / 10 functions), but it
+means the lane's cost is per-row, not per-TU, and it rules out the
+"comparator or key-type spelling" explanation a second time: a shared source
+cause would move the three together.
 
 ---
 
