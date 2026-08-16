@@ -3977,8 +3977,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4821,
-    "accepted_row_identity_sha256": "0753fc1d098d885060434ae61d7484e47be7fa7445ca5f7c7eef94cf2c44f04f",
+    "exact_raw_1_0_count": 4823,
+    "accepted_row_identity_sha256": "f52cffc1280c09af54dc90d0c3d1319840ded73269570866bf2504723a62ea92",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
