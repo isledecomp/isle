@@ -373,15 +373,29 @@ across instantiations (`39` for CoreSet / AnimSubst / AnimStruct /
 LegoCharacter / LegoTextureInfo / CacheSound, `3b` for BEWithMidpoint /
 HideAnim / MxAtom / ViewLODList / LegoPathActor), so it is a pure per-TU tie.
 
-Census over the 714 states: 11 states reach length 1096 **with** byte 145 =
+Census over the 714 flat states: 11 reach length 1096 **with** byte 145 =
 `0x39`, but every one of them is in the *block-swapped* family
 (nd 286–349, first residue at offset 210 or 252). The 3 states that get the
 block layout right (`fwdE-19/51/83`, period 32) all carry `3b`.
-**The two properties are anti-correlated across the whole flat grammar** —
-that is the precise obstacle for this row, and it is why "one byte away" has
-not converted. The live lever is the product axis (a second carrier on top of
-`fwdE-19`), which is running; if that fails, the tie needs the C2 inliner /
-register-allocator model rather than more blind states.
+Across the flat grammar the two properties are **anti-correlated**.
+
+**The stacked product breaks the anti-correlation** (`fwdE:19 × shapefull`,
+324 of 550 cells at the time of writing): 22 cells reach length 1096 with
+byte 145 = `0x39`, and one of them — `shape-6-39` — is **nd=1 with the
+residue at a completely different offset**:
+
+| state | nd | residue |
+|---|---|---|
+| `fwdE-19` (flat) | 1 | +145 `3b 4c 24 10` vs retail `39 4c 24 10` |
+| `fwdE:19 × shape-6-39` | 1 | +431 `3b fa` (`cmp edi,edx`) vs retail `3b d7` (`cmp edx,edi`) |
+
+So the erase family has exactly **two** residual tie bytes and each is
+individually reachable; no cell yet has both. Note the second one is the
+*same instruction, same defect* that the wave-3 ledger recorded for
+`_Tree<LegoPathActor*>::erase` at body+434 ("ours `3b fa` vs retail `3b d7`,
+a REGISTER-ROLE tie, not a CMPDIR") — two different instantiations in two
+different TUs stuck on the identical byte. That is the family's true signature,
+and it is what a C2 register-allocator model would have to predict.
 
 ### 4.4 `~LegoCacheSoundManager` (0x1003cf20): the named-iterator hypothesis is dead
 
