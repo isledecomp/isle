@@ -895,3 +895,82 @@ tree would buy zero rows.
 - Stacking the flip with the carrier grid is available and *not* recommended:
   wave 4 already found this row flat at nd 435 over 1,918 carrier cells, and at
   STRUCT ~70 it is not a near-miss by any reading.
+
+## WAVE 7 — GROUP (b): both best specimens read, no source form found
+
+Method: read the allocation, name the idiom, check it against BETA10. New
+instrument: `<scratchpad>/arch/slotmap.py` aligns our body against retail's at
+SHAPE level (frame displacements erased, so alignment survives a permutation)
+and then reads the ebp displacement off **both** sides of every aligned pair.
+For an opcode-identical row that yields the allocator's permutation exactly,
+with an AMBIGUOUS flag if any slot maps two ways. Frames are read from the
+**linked** images (`framemap.py`) with capstone operand sizes, so a 2-byte
+local can never be mistaken for a 4-byte one.
+
+### `0x100aa510 LegoLOD::Read` — retail COALESCES two locals; we do not
+
+The permutation is clean. Eleven slots (`-0x48`..`-0x70`) map identically,
+most of the rest shift by −4 or −8, and exactly three move sharply:
+
+    ours -0x44  ->  retail -0x2c    numNormals   (used only BEFORE the loop)
+    ours -0x3c  ->  retail -0x2a    numPolys     (used only INSIDE the loop)
+    ours -0x43/-0x41 -> retail -0x14/-0x12   a 3-byte compiler temp
+
+`-0x2c` (4 bytes) and `-0x2a` (4 bytes) **overlap by two bytes**. That is
+live-range coalescing: the two are never live together, so retail's packer
+gave them overlapping space, which is where both the 2-misalignment and the
++4 frame come from. The third item is the `LegoColor` temporary returned by
+`legoMesh->GetColor()` — retail puts it at `-0x14`, we put it at an *unaligned*
+`-0x43`.
+
+**Block-scope hypothesis: refuted.** Every loop-only local (`numPolys`,
+`numVertices`, `numTextureIndices`, `meshIndex`, `red/green/blue/alpha`,
+`d3dmesh`, `index`, `paletteEntries`) was moved into the loop body in nine
+combinations. Moving `numPolys` alone is **bit-identical** to baseline; every
+larger combination is worse (masked nd 313 -> 855..890) and **not one changes
+the frame size**, which stays 0x170 against retail's 0x174.
+
+**Frame dial: refuted, and it does not even engage.** An unused POD array at
+three declaration positions in five sizes (15 cells) leaves `sub esp, 0x170`
+untouched in every cell — up to `int[8]`, i.e. 32 bytes. The unused local is
+eliminated and never takes a slot here, so the dial cannot reach retail's
+0x174 on this row at all. Best cell is nd 313 -> 311 (SHAPE 97.90 -> 98.25),
+which is noise against a 313-byte residue.
+
+### `0x1006b140 CopyTransform` — a clean rotation between a local and a temp
+
+Frames are the **same size** (0x150 both) and the slot map is almost the
+identity. The entire difference:
+
+    ours -0x14  ->  retail -0x90     `mn`   (6 accesses; this IS the -7 bytes,
+                                             disp8 for us, disp32 for retail)
+    ours -0x90  ->  retail -0x24     a compiler temp holding `edi + 1`
+    ours -0x18/-0x1c/-0x20/-0x24 -> retail -0x14/-0x18/-0x1c/-0x20  (shift by
+                                     exactly one slot, a consequence of the above)
+
+So retail places the **named local `mn` deep** and a **compiler temporary
+shallow**; we do the reverse, and four slots shift by one as a consequence.
+
+**Declaration order: refuted.** Six orders — `mn` last, `mn` split from its
+`new`, `inverse` first, `mn` after `roiTransforms`, `i` first — all keep the
+body at 941 bytes (retail 948, so `mn` never leaves the shallow slot) and all
+score **worse** than baseline. Our current order is the maximum of the family
+(SHAPE 98.31).
+
+### What group (b) actually says
+
+Both specimens reduce to the same statement, and it is not a declaration-order
+statement:
+
+> **The divergence is the placement of a compiler TEMPORARY relative to the
+> named locals** — the 3-byte `GetColor()` return in `LegoLOD::Read`, the
+> `edi + 1` spill in `CopyTransform`. A temporary has no source identity, so no
+> declaration-level lever can name it, which is why declaration order, block
+> scope and the frame dial are all inert on these rows.
+
+This is the fourth and fifth independent /O2 confirmation that declaration
+order does not drive slot assignment, on top of the /Od probe that refuted it
+directly (wave 1). The BETA10 oracle was used for what it can settle — the
+local SET, which matches our text on both rows — and not for order.
+
+**Nothing landed.** Neither row moved toward retail in any cell.
