@@ -953,3 +953,46 @@ Thousands of cells, but not across the whole grammar.
   per-family coverage.
 * Cells from different waves ran on different shadows. A state label does
   not transfer across shadows — re-derive before landing.
+
+## §0.4 — Harvest of lane ARCH's orphaned sweeps (main loop, 2026-08-16)
+
+ARCH spawned coarse `pad`/`decl` sweeps on TUs that had **never** had a carrier
+sweep, then closed before they finished. Harvested here from
+`<scratchpad>/arch/sweep-*/results.json`. Best cell per row:
+
+| nd | row | cell | TU | score |
+|---:|---|---|---|---|
+| **0** | `0x1001d890` `_Tree<MxCore*>::erase` | `pad-8-36` | infocenter.cpp | .9027 |
+| 4 | `0x1006c200` | `pad-50-8` | legoanimpresenter.cpp | .7828 |
+| 4 | `0x1006e720` | `pad-15-78` | legoanimpresenter.cpp | .8475 |
+| 5 | `0x1006a7a0` | `pad-29-78` | legoanimpresenter.cpp | .7983 |
+| 10 | `0x10069b10` BuildROIMap | `pad-1-57` | legoanimpresenter.cpp | .8842 |
+| 14 | `0x100a3b40` | `pad-1-8` | tglrl40.cpp | .7971 |
+| 16 | `0x100a12a0` SetImage | `pad-1-29` | tglrl40.cpp | .6667 |
+| 53 | `0x1006fda0` HandleKeyPress | `pad-1-1` | infocenter.cpp | .7933 |
+| 58 | `0x100a84a0` LegoROI::Read | `pad-15-29` | legoroi.cpp | .9277 |
+| 60 | `0x100bd020` BitBltTransparent | `pad-57-1` | mxbitmap.cpp | .7470 |
+
+### The nd=0 is SUPPLIER-BLOCKED — and the sweep was aimed at the wrong TU
+
+`0x1001d890` re-derives at **nd 0, 1106 = retail's 1106** from `infocenter.cpp`
+with `pad_shape(8,36)` (verified on today's text: 16/16 relocations, 80/80 line
+counts, a clean `same_slot_resize`). **But the linker discards that copy.** Two
+objects define the COMDAT:
+
+    legoworld.cpp.obj    len 1106   lego1 rsp #25   <- WINS
+    infocenter.cpp.obj   len 1105   lego1 rsp #97
+
+COMDAT selection takes the first in link order, and the linked body at
+`0x1001d890` measures 1106 — legoworld's copy. So the hit is real and unusable.
+
+**The correct target is a sweep on `legoworld.cpp`, not `infocenter.cpp`.** Its
+seed copy is **already at retail's exact length 1106 with masked nd 36**, which
+is the closest starting point of any cell measured. Four probes there
+(`pad-8-36`, `pad-1-1`, `pad-1-8`, `pad-4-16`) all made it worse (671/960/939/568),
+so it needs a real grid rather than a guess.
+
+**Doctrine:** before sweeping a template COMDAT, check which object *wins* the
+link. This is the second time a corpus hit has landed in a discarded object —
+`0x1002bff0` was the first, where all six suppliers were measured and every nd=0
+sat in a loser.
