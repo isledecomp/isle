@@ -15,7 +15,17 @@ and it only reports `nd` at exact retail length (flex = CC-tail separately).
 Oracle bytes for the three nominations below were re-verified byte-for-byte
 against `legobin/LEGO1.DLL` before anything else was done.
 
-## Three verified, hand-off-ready nd=0 donors (would take 4853 → 4856)
+## Three verified nd=0 donors — ALL THREE LANDED (4853 → 4856)
+
+Landed one at a time by this lane under the coordinator's exclusion lift,
+gating between each; every landing showed its GAIN with an **empty LOST
+list**, ISLE/CONFIG stayed MD5-identical, the accepted set was repinned after
+each, and the suite is 53 passed / 3 skipped:
+
+* `5699f646` — 0x10069e90 (same_slot_resize 1104→1096, span unchanged) → 4854
+* `81b641f9` — 0x10068b20 (same_slot_resize 1104→1096, span unchanged) → 4855
+* `bbc99b77` — 0x100495b0 (equal_body_eh_reloc_layout 648/648; link winner
+  re-verified at the tip: lpc is the only rsp object defining the COMDAT) → 4856
 
 All three were **re-derived on today's HEAD shadow** (isle-build-nova, fresh
 cold build of `entropy-stabilization` @ `25902aae`) and reproduce exactly;
@@ -58,12 +68,55 @@ Both failure modes are systematic, not accidents; see "doctrine" below.
 
 `<scratchpad>/fresh3/rescore.json` records, for every open row, the minimum
 masked nd over the whole retained corpus at exact retail length, with state
-provenance. Fifteen rows never reach retail's length in any retained state —
-they coincide almost exactly with the triage's TEXT/INLINE channel
-(CalculateCameraTransform, OrientableROI ctor, FUN_10061010, LegoLOD::Read,
-MxStillPresenter::Clone, SetupCopyRect, PlaceActor(3-arg), LegoOmni::Destroy,
-Infocenter::Create/HandleKeyPress, CalculateSpline, CreateMesh, CopyTransform,
-UpdateEnabledChild, SetTransformAndDestinationFromPoints).
+provenance.
+
+## The hard core: 15 rows that never reach retail's length in ANY retained state
+
+"Never" is corpus-relative (389,288 objects), but for most of these the TU
+has thousands of retained states. Classifications from the triage +
+archaeology ledgers:
+
+**(a) The three inline-bit rows** — the only wrong call graphs in the open set
+(census-exact), all sealed against the carrier axis (~24k cells across three
+TUs this session) and against per-TU de-inline by the framework ruling:
+
+| row | Δ | direction |
+|---|---|---|
+| `0x1009f490` CalculateCameraTransform | −47 | retail CALLS `Interpolate`, we expand+DCE |
+| `0x100a4420` OrientableROI ctor | +6 | retail calls `Vector3::Vector3` (this+0xa8), we expand |
+| `0x10061010` FUN_10061010 | −5, −3 frame slots | **opposite**: retail INLINES the `MxListEntry` ctor; flip alone leaves −11 unexplained |
+
+**(b) Proven colour/encoding rows whose length delta is the ModRM/remat cost
+of a register tie that has never flipped** in any swept state — the "one
+shared allocator decision" signature, now archaeology targets per the adopted
+doctrine (read the allocation → name the idiom → BETA10-check):
+
+| row | Δlen | reading |
+|---|---|---|
+| `0x100aa510` LegoLOD::Read | +1 | retail's packer overlaps `numNormals`/`numPolys` by 2 bytes — allocator artifact in its purest form |
+| `0x1006b140` CopyTransform | −7 | `mn` at `ebp-0x14` vs retail `ebp-0x90`; disp8-vs-disp32; declaration set beta-confirmed |
+| `0x1006fda0` Infocenter::HandleKeyPress | −8 | eax↔ecx remat + jump-table pad; retail longer by register choice |
+| `0x1006ed90` Infocenter::Create | −1 | register-role swap around the `GetState` result |
+| `0x10080be0` CalculateSpline | +1 | identical instruction multiset — pure encoding |
+| `0x100ba2c0` MxStillPresenter::Clone | +1 | identical multiset — pure encoding |
+
+**(c) Small instruction-count deltas, not yet deep-read** — the cheapest next
+reads (±1–2 instructions at a matching call graph is nearly always remat/
+spill colour or one statement spelling):
+
+| row | Δlen / Δinsn |
+|---|---|
+| `0x10046050` PlaceActor(actor, presenter) | −10 / −2 |
+| `0x10058c30` LegoOmni::Destroy | −3 / −1 |
+| `0x100293c0` UpdateEnabledChild | −4 / −1 |
+| `0x1002de10` SetTransformAndDestinationFromPoints | +3 / +0 |
+| `0x100a3840` MeshBuilderImpl::CreateMesh | +3 / +1 |
+| `0x1004c580` SetupCopyRect | +1 / +1 (the nd-collapse cautionary row) |
+
+Notable absentee: `0x100998e0` GetCached (a TEXT slot-budget row) DID reach
+retail's length in 14 states (best nd=59) — its extra slot is reachable from
+compile state alone, which slightly weakens the "must remove a named local"
+reading.
 
 ## Doctrine (the transferable part)
 
