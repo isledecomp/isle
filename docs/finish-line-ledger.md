@@ -999,3 +999,25 @@ heuristic I have since retracted — **resume it**, the state objects are
 retained), `0x1007b770 LegoVideoManager::Tickle` (long strips queued),
 `0x100bd020 MxBitmap::BitBltTransparent`, `0x100a12a0 TextureImpl::SetImage`,
 `0x100a3b40 MeshBuilderImpl::Clone`.
+
+### `xps` on `Isle::Enable` — negative, and `Act1State` is inert on **both** shape families
+
+`sw-all2-islexps18` — seats pinned at `extern-1-8` × the full 505-cell
+declaration-shape grid:
+
+| row | distinct bodies | best nd | offsets |
+|---|---|---|---|
+| `0x10031820 Isle::Enable` | 22 | **11** @ `shape-7-46` | identical list — `[2206, 2209, 2212, 2215, 2218, 2220, 2222, 2224, 2226, 2231, 2233]` |
+| `0x100334b0 Act1State::Act1State` | **1** | 24 | unchanged |
+
+The shape family produces 22 distinct bodies for `Isle::Enable` and **none of
+them touches the eleven bytes** — the floor and the offset list are exactly the
+rectangle's. So the `eax`↔`ecx` transposition in the first `LenSquared` inline
+is not reachable by adding a force-included declaration shape over those seats.
+
+`Act1State::Act1State` is now inert across **both** carrier families:
+one body in 1,681 extern-rectangle states and one body in 505 declaration-shape
+states, **2,186 states, one 843-byte body**. Together with §7 (its permuted
+stores do not encode statement order) that row has no known channel at all, and
+it should be taken off carrier queues until somebody has an allocator
+instrument.
