@@ -1128,7 +1128,42 @@ lever for some rows and a no-op for others, and which one you are in is
 cheap to determine — pin a shape, sweep ~100 counts, count the distinct
 residue sets. If it is 1, stop.
 
-### 12.4 Where I stopped, and why
+### 12.4 The yield curve — the answer is per-row, not global
+
+`yieldcurve.py` answers "where does the long line stop paying" from a
+*partially completed* sweep, which is the only kind I had. The information a
+count line carries is not its cell count but how many **distinct bodies** it
+produces; walking k in order and recording when a new body last appeared gives
+the axis's real ceiling per row.
+
+`legoanimpresenter.cpp`, `fCS` k = 97..160 (64 cells past the old ceiling):
+
+| row | distinct bodies | last new at k | best nd (k) |
+|---|---|---|---|
+| 0x10068b20 erase AnimSubst | **36** | 160 | 1 (k=115) |
+| 0x10069e90 erase AnimStruct | **31** | 156 | 348 |
+| 0x1006dec0 erase HideAnim | 21 | 146 | 55 |
+| 0x1006bac0 ParseExtra (closed) | 20 | 149 | 5 |
+| 0x1006b140 CopyTransform | 15 | 156 | — (length never reached) |
+| 0x1006a7a0 `_Insert` AnimStruct | 6 | **117** | 5 |
+| 0x10069b10 BuildROIMap | 4 | **117** | 11 |
+| 0x1006c200 `_Insert` AnimSubst | 4 | **103** | — |
+| 0x1006e720 `_Insert` HideAnim | 3 | **102** | 47 |
+| 0x1006dc10 AssignIndicies (closed) | 3 | 144 | 0 |
+
+**The yield does not flatten globally — it flattens per row, and by residue
+class.** The three `_Insert` rows saturate within 6 cells of the old ceiling
+(3–6 distinct bodies, nothing new after k≈102–117), which is exactly the
+family whose residue window is unreachable in 37,089 states (§4.2). The
+`erase` rows are still producing new bodies at k=160 (31–36 distinct in 64
+cells) — but their best nd does not improve, so new states are not
+*better* states.
+
+Operationally: **run ~20 cells past the ceiling and count distinct bodies. If
+it is single digits, the line is done for that row.** That costs 20 compiles
+instead of 900 and it is the measurement I would want handed to me.
+
+### 12.5 Where I stopped, and why
 
 Item 1's strip (`fCS`, k = 97..999, eight TUs) was launched after the
 BuildROIMap lines were shown inert, and was still running when this wave
@@ -1138,13 +1173,11 @@ shown its count line flat, I killed those sweeps and moved the compute to the
 untested strip rather than finish a measured-dead line.
 
 **Cost note for whoever continues.** A full long line is ~900 compiles per TU
-and the machine is shared; eight TUs is ~7,200. The yield question the wave
-asked — *where does the long line stop paying* — needs the completed logs to
-answer, and the honest state is that I have not answered it. What I can say
-is the method for answering it cheaply: the count line's information content
-per TU is the number of **distinct** bodies it produces, and §10.6a already
-showed a 96-cell fwdE axis can yield as few as 3. Dedupe by body sha as the
-sweep runs and the answer arrives long before k=999.
+and the machine is shared; eight TUs is ~7,200. I did not run that, and
+§12.4 is why I did not need to: the yield curve answers the question from the
+first ~20 cells past the ceiling. The remaining seven TUs' long lines are
+still worth running, but they should be run *with* the yield curve, stopping
+each row as soon as its distinct-body count stalls.
 
 ## 13. Reproducing this lane
 
