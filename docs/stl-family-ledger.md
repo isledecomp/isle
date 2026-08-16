@@ -231,6 +231,123 @@ highest-value single state in the lane.
 
 ---
 
-## 2. Per-row work
+## 2. The corrected bench
 
-(sections appended as work proceeds)
+`scratchpad/stl/sw.py` is sweep2 with three fixes:
+* oracle = `oracles-v2.json`, trimmed to the TRUE retail body length;
+* **best-nd and body length recorded for every (state, target)**, never a bare
+  hit/miss (the doctrine change fresh-eyes-2 §C1.4 asked for);
+* a `--pre <axis>:<k>` product mode (base carrier applied first, then the
+  swept axis on top) and an `inc` axis (quoted-include permutations).
+
+`scratchpad/stl/landin.py` is `land_into.py` repointed at this worktree, with
+an added **S72 guard**: it prints the seed-vs-donor relocation *symbol*
+sequence and flags any target-identity change before writing the manifest.
+
+Re-sweep of `legoanimpresenter.cpp` on today's shadow: **713 states**
+(shape 60, fwdL 96, fwdP 96, fwdE 96, extern 161, padgrid 144, inc 60),
+0 failed. Best nd per target, against the corrected oracle:
+
+| addr | row | retail | best nd | state | residue offsets |
+|---|---|---|---|---|---|
+| 0x1006bac0 | ParseExtra | 1763 | **0** | `extern-8-17` | — |
+| 0x1006dc10 | AssignIndiciesWithMap | 412 | 0 | base (already exact) | — |
+| 0x10068b20 | erase AnimSubst | 1096 | **1** | `fwdE-19` | [145] |
+| 0x1006c200 | `_Insert` AnimSubst | 682 | 4 | `shape-5-25` | [486,488,491,492] |
+| 0x1006e720 | `_Insert` HideAnim | 689 | 4 | `pad-12-11` | [494,496,499,500] |
+| 0x1006a7a0 | `_Insert` AnimStruct | 690 | 5 | `fwdE-37` | [178,494,496,499,500] |
+| 0x10069b10 | BuildROIMap | 617 | 10 | `shape-1-5` | [345,356,368,380,…] |
+| 0x1006dec0 | erase HideAnim | 1104 | 55 | `fwdE-70` | [273,275,278,286,…] |
+| 0x10069e90 | erase AnimStruct | 1096 | 348 | `fwdE-75` | [252,267,269,272,…] |
+| 0x1006b140 | CopyTransform | 948 | — | **length 941 in all 713 states** | text channel |
+
+## 3. LANDED: 0x1006bac0 LegoAnimPresenter::ParseExtra (.9613 → exact)
+
+**Gated:** `ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE: LEGO1 4832/4933,
+ISLE 172/172, CONFIG 111/111`. GAIN 0x1006bac0, zero LOST. Commit
+`2619970f`; accepted-row set re-pinned 4831 → 4832
+(sha 84b6715b… → 51b6d880…).
+
+Recipe (reproducible from scratch):
+* donor state `extern-8-17` = `extern_run_pair` header `g_h` count 8 /
+  seat `g_p` count 17, width 2, on the **current rendered source** — no text
+  edit. Body 1763/1763, masked nd 0.
+* splice class `same_slot_resize`, seed 1746 → donor 1763,
+  linked span 1760 → 1776.
+* S72 check: the donor's relocation **symbol sequence is identical** to a
+  fresh pipeline seed compile's (63/63), so no callee-identity substitution.
+
+Why it was previously "closed": the memory records ParseExtra as a sealed
+negative (corrected-source 2-D dial plane, baseline 4764, plane max 4764) and
+`fresh-eyes-2` §C1.4 puts it in the permanent text-only triage at corpus
+min-nd 1229. Both numbers were computed against
+`retail[0x1006bac0 : +1746]` — our seed's length. Retail's body is **1763**.
+At the true length the corpus already contained three nd=0 states
+(`sweep2-animdebt/extern-8-17`, `sweep2-open-legoanimpresenter/extern-8-16`,
+`sweep2-substerase/extern-8-17`) and one at nd=1 (`extern-7-17`).
+The `animdebt` stem is a text variant (its base is the pre-`e12`
+legoanimpresenter text), so I re-derived on today's shadow rather than trust
+it — `extern-8-17` is nd=0 on today's text too, which is the stronger result
+and the one that was landed.
+
+## 4. Measured negatives (record these; do not re-run)
+
+### 4.1 Include-order permutation is inert on `legoanimpresenter.cpp`
+60 permutations of the 26-header quoted `#include` block (all adjacent swaps,
+all rotations, plus seeded shuffles), compiled on today's shadow. Body-sha
+comparison against the base compile:
+
+* **9 of the 10 targets are byte-identical in all 60 permutations** —
+  including all six open `_Tree` rows and BuildROIMap and CopyTransform.
+* Only `ParseExtra` responds, and only in 13 of 60 permutations.
+
+So fresh-eyes-2 §C2's "include order permutes the whole record/id stream" is
+**TU-specific, not general**. The likely reason here: `legoanimpresenter.h` is
+included first and transitively pulls in most of the rest, so permuting the
+remaining directives cannot change the order in which declarations are
+actually processed. Corollary for the next wave: before spending a
+permutation budget on a TU, check how much of its include list is already
+inside the first header's transitive closure.
+
+### 4.2 The `_Insert` cluster's 4-byte residue is one tie, and the flat
+### carrier grammar cannot flip it in this TU
+
+All four open `_Insert` rows have the same residue, a 7-byte window
+(`0x1006c200`+485, `0x1006a7a0`/`0x1006e720`+494, `0x1004f9b0`+483):
+
+```
+ours  : mov ebx,[edi] ; lea eax,[ebx+8] ; cmp [eax],ecx ; je  +4
+retail: mov eax,[edi] ; lea ebx,[eax+8] ; cmp [ebx],ecx ; jne +4
+```
+
+Same length, same semantics — an `eax`↔`ebx` role swap plus the branch
+polarity inverted with the two successor blocks exchanged. It is the
+`_Right(_Parent(_Z)) == _Z` test at the end of `_Insert`.
+
+Census over all **714** states of the today-shadow sweep for `0x1006c200`:
+the retail form of that window occurs **0 times**. Every state, at every one
+of the four reachable body lengths (678×547, 681×124, 679×31, 682×12),
+emits our form. The flat carrier axes (shape, pad, fwdL/P/E, extern,
+include-perm) do not reach it.
+
+### 4.3 The `erase` byte-145 tie is coupled to the block layout
+
+`0x10068b20`'s best state is nd=1 at offset 145: ours `3b 4c 24 10`
+(`cmp ecx,[esp+0x10]`), retail `39 4c 24 10` (`cmp [esp+0x10],ecx`) — the
+`if (_Y != _Z)` test in `XTREE`'s `erase(iterator)` (line 256), which is
+vendor source we may not touch. Retail itself emits **both** directions
+across instantiations (`39` for CoreSet / AnimSubst / AnimStruct /
+LegoCharacter / LegoTextureInfo / CacheSound, `3b` for BEWithMidpoint /
+HideAnim / MxAtom / ViewLODList / LegoPathActor), so it is a pure per-TU tie.
+
+Census over the 714 states: 11 states reach length 1096 **with** byte 145 =
+`0x39`, but every one of them is in the *block-swapped* family
+(nd 286–349, first residue at offset 210 or 252). The 3 states that get the
+block layout right (`fwdE-19/51/83`, period 32) all carry `3b`.
+**The two properties are anti-correlated across the whole flat grammar** —
+that is the precise obstacle for this row, and it is why "one byte away" has
+not converted. The live lever is the product axis (a second carrier on top of
+`fwdE-19`), which is running; if that fails, the tie needs the C2 inliner /
+register-allocator model rather than more blind states.
+
+## 5. Per-row status
