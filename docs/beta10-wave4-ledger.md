@@ -946,3 +946,18 @@ reaches it. An `externwide`+`externdeep` pass on legomain is running as this is
 written — that is the family that flipped exactly this class for
 `Act3Brickster::Animate`. **This is the single most likely next landing in the
 lane.**
+
+Extern-family results for the other near-miss TUs (the family that cracked
+`Act3Brickster::Animate`), so nobody repeats them:
+
+* `all-act3` `externwide`+`externdeep` (931 states): RemoveByObjectIdOrFirst 7,
+  TriggerHitSound 11, Enable 105 — **unchanged**. With `shapefull` (505) and
+  fwd 1..400 (912) also flat, act3's three rows have now held the same
+  distances across **~2,400 carrier states on all four generators**. They are
+  genuinely hard ties, not under-searched.
+* `all-legowegedge` `externwide`+`externdeep` (931 states): LinkEdgesAndFaces
+  still 2 — likewise flat on all four generators (~2,700 states).
+* `all2-legomain` `externwide`+`externdeep` (931 states): `erase` best 597,
+  far worse than `fwdE-311`'s 1 — so for that row the forward-run family is
+  the right one and the extern family is not. (`Create` reproduces nd=0 at
+  extern-4-18 and extern-24-17 too.)
