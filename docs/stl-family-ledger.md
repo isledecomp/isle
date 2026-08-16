@@ -1074,7 +1074,112 @@ fix `[471, 481]` are the ones that break the other group (`[304, 534, 540]`),
 which is where the remaining sweeps are pointed. Recorded so nobody re-runs
 the (4,22) line.
 
-## 12. Reproducing this lane
+## 12. Wave 5 — the long-count line
+
+### 12.1 The ceiling is 999, and the project has swept the first ~10%
+
+`entropy.generate_forward_run` and `generate_extern_run` both accept
+`1 <= count <= 999` (bounded by `count <= 10**width`, so width 3 reaches 999).
+`generate_shape` is capped at `classes <= 10`, `functions <= 10*classes`, so
+the shape grid really is 505 cells and I have swept it exhaustively — but the
+count line is **999 long and the campaign has only ever compiled k <= 96**.
+That is the first 9.6% of the line, not the first sixth.
+
+### 12.2 The count-only law holds at long counts (re-verified)
+
+The strip design rests on one axis standing in for all of them. Re-checked at
+long counts on `viewlodlist.cpp`, k = 200..204, comparing `fAS` (stem
+`MxUnkRecVA`), `fCS` (`MxUnkRecVC`), `fr:Q:3` (a one-character stem) and
+`fr:MxUnkRecordLongStemAAAA:3` (a 24-character stem) over every `.text`
+COMDAT:
+
+```
+counts with >=2 carrier variants: 5
+bodies in the object: 20
+  COUNT-ONLY: 20      identity-sensitive: 0
+```
+
+So identifier length does not start to matter as the run grows, and a single
+`fCS` sweep covers the whole long line. (Recorded because the obvious worry —
+longer runs mean longer identifiers mean more name-table pressure — is
+measurably false.)
+
+### 12.3 BuildROIMap: the count line is INERT, on two different shapes
+
+`0x10069b10`'s two residue groups are `[471, 481]` (a `_Nil` cmpdir pair) and
+`[304, 534, 540]`. The plan was to pin a shape that fixes one and sweep the
+count for the other. Measured:
+
+| pinned shape | length-correct cells | distinct residue sets | verdict |
+|---|---|---|---|
+| `shape(4,22)` (fixes `[304,534,540]`) | 124 | **1** — always `[471,481]` | count inert |
+| `shape(6,60)` (fixes `[471,481]`) | 90 | **1** — always `[304,534,540]` | count inert |
+
+214 length-correct cells across two shapes and **not one byte of variation**.
+For this row the shape alone decides which group is correct and the count
+does nothing, so the (shape × count) product cannot decouple the two groups.
+Since the shape grid is exhaustively swept (505 cells) and the count adds
+nothing, **the stacked carrier space is closed for BuildROIMap**. It needs a
+different channel — the row's own text, or the inliner.
+
+This is worth contrasting with `erase<MxAtom*>`, where the count line was the
+whole answer (nd=0 at count 24). The count is not a universal lever; it is a
+lever for some rows and a no-op for others, and which one you are in is
+cheap to determine — pin a shape, sweep ~100 counts, count the distinct
+residue sets. If it is 1, stop.
+
+### 12.4 The yield curve — the answer is per-row, not global
+
+`yieldcurve.py` answers "where does the long line stop paying" from a
+*partially completed* sweep, which is the only kind I had. The information a
+count line carries is not its cell count but how many **distinct bodies** it
+produces; walking k in order and recording when a new body last appeared gives
+the axis's real ceiling per row.
+
+`legoanimpresenter.cpp`, `fCS` k = 97..160 (64 cells past the old ceiling):
+
+| row | distinct bodies | last new at k | best nd (k) |
+|---|---|---|---|
+| 0x10068b20 erase AnimSubst | **36** | 160 | 1 (k=115) |
+| 0x10069e90 erase AnimStruct | **31** | 156 | 348 |
+| 0x1006dec0 erase HideAnim | 21 | 146 | 55 |
+| 0x1006bac0 ParseExtra (closed) | 20 | 149 | 5 |
+| 0x1006b140 CopyTransform | 15 | 156 | — (length never reached) |
+| 0x1006a7a0 `_Insert` AnimStruct | 6 | **117** | 5 |
+| 0x10069b10 BuildROIMap | 4 | **117** | 11 |
+| 0x1006c200 `_Insert` AnimSubst | 4 | **103** | — |
+| 0x1006e720 `_Insert` HideAnim | 3 | **102** | 47 |
+| 0x1006dc10 AssignIndicies (closed) | 3 | 144 | 0 |
+
+**The yield does not flatten globally — it flattens per row, and by residue
+class.** The three `_Insert` rows saturate within 6 cells of the old ceiling
+(3–6 distinct bodies, nothing new after k≈102–117), which is exactly the
+family whose residue window is unreachable in 37,089 states (§4.2). The
+`erase` rows are still producing new bodies at k=160 (31–36 distinct in 64
+cells) — but their best nd does not improve, so new states are not
+*better* states.
+
+Operationally: **run ~20 cells past the ceiling and count distinct bodies. If
+it is single digits, the line is done for that row.** That costs 20 compiles
+instead of 900 and it is the measurement I would want handed to me.
+
+### 12.5 Where I stopped, and why
+
+Item 1's strip (`fCS`, k = 97..999, eight TUs) was launched after the
+BuildROIMap lines were shown inert, and was still running when this wave
+closed; per-TU results are in `scratchpad/stl/sw5-long-*.log`. I reordered
+deliberately: BuildROIMap first (a concrete lead), then, once 214 cells had
+shown its count line flat, I killed those sweeps and moved the compute to the
+untested strip rather than finish a measured-dead line.
+
+**Cost note for whoever continues.** A full long line is ~900 compiles per TU
+and the machine is shared; eight TUs is ~7,200. I did not run that, and
+§12.4 is why I did not need to: the yield curve answers the question from the
+first ~20 cells past the ceiling. The remaining seven TUs' long lines are
+still worth running, but they should be run *with* the yield curve, stopping
+each row as soon as its distinct-body count stalls.
+
+## 13. Reproducing this lane
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
 `fresh2/` repointed at `isle-build-tr03`). Nothing in the shared corpus was

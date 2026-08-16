@@ -49,7 +49,7 @@ computed against the truncated oracle.
 | COLOUR (regrole / cmpdir / encoding-only or carrier-movable length) | **58** |
 | TEXT/INLINE (retail length never reached, mnemonic, memoff, other) | **36** |
 
-by dominant class: {'cmpdir': 1, 'length: never reached': 21, 'length@base, best nd=316': 1, 'length@base, best nd=105': 1, 'length@base, best nd=491': 1, 'regrole': 31, 'desync': 1, 'immdiff': 1, 'length@base, best nd=7': 1, 'length@base, best nd=1': 5, 'length@base, best nd=0': 2, 'length@base, best nd=103': 1, 'length@base, best nd=2': 2, 'length@base, best nd=66': 1, 'length@base, best nd=101': 1, 'length@base, best nd=259': 1, 'length@base, best nd=4': 4, 'length@base, best nd=40': 1, 'length@base, best nd=55': 1, 'length@base, best nd=5': 1, 'length@base, best nd=24': 1, 'length@base, best nd=60': 1, 'memoff': 2, 'mnemonic': 4, 'other': 7}
+by dominant class: {'cmpdir': 1, 'length@seed, best nd=0': 2, 'length@seed, best nd=1': 5, 'length@seed, best nd=101': 1, 'length@seed, best nd=103': 1, 'length@seed, best nd=105': 1, 'length@seed, best nd=2': 2, 'length@seed, best nd=24': 1, 'length@seed, best nd=259': 1, 'length@seed, best nd=316': 1, 'length@seed, best nd=4': 4, 'length@seed, best nd=40': 1, 'length@seed, best nd=491': 1, 'length@seed, best nd=5': 1, 'length@seed, best nd=55': 1, 'length@seed, best nd=60': 1, 'length@seed, best nd=66': 1, 'length@seed, best nd=7': 1, 'regrole': 31, 'desync': 1, 'immdiff': 1, 'length: never reached': 21, 'memoff': 2, 'mnemonic': 4, 'other': 7}
 
 ## The 7 length-defect rows that are encoding-only
 
@@ -58,12 +58,12 @@ same count, different register choice.
 
 | addr | m | len | Δlen | Δinsn | same mnemonics | dominant | row |
 |---|---|---:|---:|---:|:-:|---|---|
+| `0x10073a90` | 0.8893 | 930 | +1 | +0 | Y | length@seed, best nd=105 | Act3::Enable |
+| `0x10029d50` | 0.9212 | 1117 | -2 | +0 | Y | length@seed, best nd=316 | _Tree<LegoCacheSoundEntry,LegoCacheSoundEntr |
+| `0x10048310` | 0.8629 | 2337 | -1 | +0 | Y | length@seed, best nd=491 | LegoPathController::FindPath |
 | `0x10080be0` | 0.9545 | 779 | +1 | +0 | Y | length: never reached | LegoCarRaceActor::CalculateSpline |
 | `0x10054050` | 0.9476 | 2665 | -1 | +0 | Y | length: never reached | Act3Ammo::Animate |
 | `0x100ba2c0` | 0.9251 | 577 | +1 | +0 | Y | length: never reached | MxStillPresenter::Clone |
-| `0x10029d50` | 0.9212 | 1117 | -2 | +0 | Y | length@base, best nd=316 | _Tree<LegoCacheSoundEntry,LegoCacheSoundEntr |
-| `0x10073a90` | 0.8893 | 930 | +1 | +0 | Y | length@base, best nd=105 | Act3::Enable |
-| `0x10048310` | 0.8629 | 2337 | -1 | +0 | Y | length@base, best nd=491 | LegoPathController::FindPath |
 | `0x100aa510` | 0.7268 | 1694 | +1 | +0 | Y | length: never reached | LegoLOD::Read |
 
 ## COLOUR channel (58 rows)
@@ -90,9 +90,32 @@ as 0.
 | addr | m | len | Δlen | Δinsn | same mnemonics | dominant | flat cells | **stacked** | best nd | row |
 |---|---|---:|---:|---:|:-:|---|---:|---:|---:|---|
 | `0x100b26f0` | 0.9348 | 101 | +0 | +0 | n | cmpdir | 696 | **0 — UNSWEPT** | 6 | MxVideoPresenter::AlphaMask::IsHit |
-| `0x10029d50` | 0.9212 | 1117 | -2 | +0 | Y | length@base, best nd=316 | 1620 | **0 — UNSWEPT** | 316 | _Tree<LegoCacheSoundEntry,LegoCacheSoundEntr |
-| `0x10073a90` | 0.8893 | 930 | +1 | +0 | Y | length@base, best nd=105 | 954 | **0 — UNSWEPT** | 105 | Act3::Enable |
-| `0x10048310` | 0.8629 | 2337 | -1 | +0 | Y | length@base, best nd=491 | 2155 | **0 — UNSWEPT** | 491 | LegoPathController::FindPath |
+| `0x10058e70` | 0.9510 | 2616 | -32 | -10 | n | length@seed, best nd=0 | 1998 | **0 — UNSWEPT** | 0 | LegoOmni::Create |
+| `0x100574a0` | 0.7527 | 253 | -5 | -2 | n | length@seed, best nd=0 | 1494 | **0 — UNSWEPT** | 0 | LegoPathBoundary::RemoveActor |
+| `0x100a83c0` | 0.9538 | 206 | -4 | -1 | n | length@seed, best nd=1 | 1332 | **0 — UNSWEPT** | 1 | LegoROI::~LegoROI |
+| `0x100a66f0` | 0.8848 | 557 | -4 | +0 | n | length@seed, best nd=1 | 696 | **0 — UNSWEPT** | 1 | ViewManager::ManageVisibilityAndDetailRecurs |
+| `0x10068b20` | 0.7680 | 1104 | +8 | +3 | n | length@seed, best nd=1 | 3133 | **1475** | 1 | _Tree<char const *,pair<char const * const,c |
+| `0x1002bff0` | 0.7092 | 1104 | +8 | +2 | n | length@seed, best nd=1 | 1302 | **0 — UNSWEPT** | 1 | _Tree<LegoPathActor *,LegoPathActor *,set<Le |
+| `0x10082ca0` | 0.6848 | 1104 | +8 | +2 | n | length@seed, best nd=1 | 3096 | **0 — UNSWEPT** | 1 | _Tree<char *,pair<char * const,LegoCharacter |
+| `0x100b2a70` | 0.9048 | 1254 | -6 | -1 | n | length@seed, best nd=101 | 696 | **0 — UNSWEPT** | 101 | MxVideoPresenter::PutFrame |
+| `0x10081840` | 0.9498 | 1163 | -5 | -2 | n | length@seed, best nd=103 | 697 | **0 — UNSWEPT** | 103 | LegoCarRaceActor::CheckPresenterAndActorInte |
+| `0x10073a90` | 0.8893 | 930 | +1 | +0 | Y | length@seed, best nd=105 | 954 | **0 — UNSWEPT** | 105 | Act3::Enable |
+| `0x10045c20` | 0.9442 | 331 | -7 | -2 | n | length@seed, best nd=2 | 2155 | **0 — UNSWEPT** | 2 | LegoPathController::PlaceActor(class LegoPat |
+| `0x10069b10` | 0.8842 | 622 | +5 | +2 | n | length@seed, best nd=2 | 3133 | **1475** | 2 | LegoAnimPresenter::BuildROIMap |
+| `0x10059dc0` | 0.7913 | 1103 | +1 | +0 | n | length@seed, best nd=24 | 1998 | **0 — UNSWEPT** | 24 | _Tree<char const *,pair<char const * const,L |
+| `0x100a7960` | 0.8780 | 1101 | +1 | +0 | n | length@seed, best nd=259 | 2195 | **475** | 259 | _Tree<char const *,pair<char const * const,V |
+| `0x10029d50` | 0.9212 | 1117 | -2 | +0 | Y | length@seed, best nd=316 | 1620 | **0 — UNSWEPT** | 316 | _Tree<LegoCacheSoundEntry,LegoCacheSoundEntr |
+| `0x1006e720` | 0.8475 | 686 | -3 | -1 | n | length@seed, best nd=4 | 3133 | **1475** | 4 | _Tree<char const *,pair<char const * const,L |
+| `0x1004f9b0` | 0.8051 | 681 | +2 | +1 | n | length@seed, best nd=4 | 986 | **469** | 4 | _Tree<char const *,pair<char const * const,L |
+| `0x1006c200` | 0.7828 | 678 | -4 | -1 | n | length@seed, best nd=4 | 3133 | **1475** | 4 | _Tree<char const *,pair<char const * const,c |
+| `0x10083890` | 0.7075 | 652 | -1 | +0 | n | length@seed, best nd=4 | 3096 | **0 — UNSWEPT** | 4 | _Tree<char *,pair<char * const,LegoCharacter |
+| `0x1004ebd0` | 0.8446 | 745 | +6 | +1 | n | length@seed, best nd=40 | 986 | **469** | 40 | LegoTexturePresenter::Read |
+| `0x10048310` | 0.8629 | 2337 | -1 | +0 | Y | length@seed, best nd=491 | 2155 | **0 — UNSWEPT** | 491 | LegoPathController::FindPath |
+| `0x1006a7a0` | 0.7983 | 686 | -4 | -1 | n | length@seed, best nd=5 | 3133 | **1475** | 5 | _Tree<char const *,pair<char const * const,L |
+| `0x1006dec0` | 0.8205 | 1113 | +9 | +3 | n | length@seed, best nd=55 | 3133 | **1475** | 55 | _Tree<char const *,pair<char const * const,L |
+| `0x10069e90` | 0.7745 | 1104 | +8 | +2 | n | length@seed, best nd=60 | 3133 | **1475** | 60 | _Tree<char const *,pair<char const * const,L |
+| `0x100a84a0` | 0.9277 | 2061 | +3 | +1 | n | length@seed, best nd=66 | 1332 | **0 — UNSWEPT** | 66 | LegoROI::Read |
+| `0x10041050` | 0.9610 | 1628 | -4 | +1 | n | length@seed, best nd=7 | 348 | **0 — UNSWEPT** | 7 | Act3Brickster::Animate |
 | `0x1002aba0` | 0.9791 | 1617 | +0 | +0 | Y | regrole | 1302 | **0 — UNSWEPT** | 7 | LegoExtraActor::HitActor |
 | `0x100c3750` | 0.9739 | 1157 | +0 | +0 | Y | regrole | 1998 | **0 — UNSWEPT** | 6 | MxRegion::AddRect |
 | `0x1007b770` | 0.9636 | 1089 | +0 | +0 | Y | regrole | 348 | **0 — UNSWEPT** | 19 | LegoVideoManager::Tickle |
@@ -124,29 +147,6 @@ as 0.
 | `0x100a12a0` | 0.6667 | 83 | +0 | +0 | Y | regrole | 1392 | **0 — UNSWEPT** | 16 | TglImpl::TextureImpl::SetImage |
 | `0x100495b0` | 0.6532 | 648 | +0 | +0 | Y | regrole | 2155 | **0 — UNSWEPT** | 49 | _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoin |
 | `0x10057180` | 0.6522 | 57 | +0 | +0 | Y | regrole | 1494 | **0 — UNSWEPT** | 7 | _Tree<LegoAnimPresenter *,LegoAnimPresenter  |
-| `0x10041050` | 0.9610 | 1628 | -4 | +1 | n | length@base, best nd=7 | 348 | **0 — UNSWEPT** | 7 | Act3Brickster::Animate |
-| `0x100a83c0` | 0.9538 | 206 | -4 | -1 | n | length@base, best nd=1 | 1332 | **0 — UNSWEPT** | 1 | LegoROI::~LegoROI |
-| `0x10058e70` | 0.9510 | 2616 | -32 | -10 | n | length@base, best nd=0 | 1998 | **0 — UNSWEPT** | 0 | LegoOmni::Create |
-| `0x10081840` | 0.9498 | 1163 | -5 | -2 | n | length@base, best nd=103 | 697 | **0 — UNSWEPT** | 103 | LegoCarRaceActor::CheckPresenterAndActorInte |
-| `0x10045c20` | 0.9442 | 331 | -7 | -2 | n | length@base, best nd=2 | 2155 | **0 — UNSWEPT** | 2 | LegoPathController::PlaceActor(class LegoPat |
-| `0x100a84a0` | 0.9277 | 2061 | +3 | +1 | n | length@base, best nd=66 | 1332 | **0 — UNSWEPT** | 66 | LegoROI::Read |
-| `0x100b2a70` | 0.9048 | 1254 | -6 | -1 | n | length@base, best nd=101 | 696 | **0 — UNSWEPT** | 101 | MxVideoPresenter::PutFrame |
-| `0x100a66f0` | 0.8848 | 557 | -4 | +0 | n | length@base, best nd=1 | 696 | **0 — UNSWEPT** | 1 | ViewManager::ManageVisibilityAndDetailRecurs |
-| `0x10069b10` | 0.8842 | 622 | +5 | +2 | n | length@base, best nd=2 | 3133 | **1475** | 2 | LegoAnimPresenter::BuildROIMap |
-| `0x100a7960` | 0.8780 | 1101 | +1 | +0 | n | length@base, best nd=259 | 2195 | **475** | 259 | _Tree<char const *,pair<char const * const,V |
-| `0x1006e720` | 0.8475 | 686 | -3 | -1 | n | length@base, best nd=4 | 3133 | **1475** | 4 | _Tree<char const *,pair<char const * const,L |
-| `0x1004ebd0` | 0.8446 | 745 | +6 | +1 | n | length@base, best nd=40 | 986 | **469** | 40 | LegoTexturePresenter::Read |
-| `0x1006dec0` | 0.8205 | 1113 | +9 | +3 | n | length@base, best nd=55 | 3133 | **1475** | 55 | _Tree<char const *,pair<char const * const,L |
-| `0x1004f9b0` | 0.8051 | 681 | +2 | +1 | n | length@base, best nd=4 | 986 | **469** | 4 | _Tree<char const *,pair<char const * const,L |
-| `0x1006a7a0` | 0.7983 | 686 | -4 | -1 | n | length@base, best nd=5 | 3133 | **1475** | 5 | _Tree<char const *,pair<char const * const,L |
-| `0x10059dc0` | 0.7913 | 1103 | +1 | +0 | n | length@base, best nd=24 | 1998 | **0 — UNSWEPT** | 24 | _Tree<char const *,pair<char const * const,L |
-| `0x1006c200` | 0.7828 | 678 | -4 | -1 | n | length@base, best nd=4 | 3133 | **1475** | 4 | _Tree<char const *,pair<char const * const,c |
-| `0x10069e90` | 0.7745 | 1104 | +8 | +2 | n | length@base, best nd=60 | 3133 | **1475** | 60 | _Tree<char const *,pair<char const * const,L |
-| `0x10068b20` | 0.7680 | 1104 | +8 | +3 | n | length@base, best nd=1 | 3133 | **1475** | 1 | _Tree<char const *,pair<char const * const,c |
-| `0x100574a0` | 0.7527 | 253 | -5 | -2 | n | length@base, best nd=0 | 1494 | **0 — UNSWEPT** | 0 | LegoPathBoundary::RemoveActor |
-| `0x1002bff0` | 0.7092 | 1104 | +8 | +2 | n | length@base, best nd=1 | 1302 | **0 — UNSWEPT** | 1 | _Tree<LegoPathActor *,LegoPathActor *,set<Le |
-| `0x10083890` | 0.7075 | 652 | -1 | +0 | n | length@base, best nd=4 | 3096 | **0 — UNSWEPT** | 4 | _Tree<char *,pair<char * const,LegoCharacter |
-| `0x10082ca0` | 0.6848 | 1104 | +8 | +2 | n | length@base, best nd=1 | 3096 | **0 — UNSWEPT** | 1 | _Tree<char *,pair<char * const,LegoCharacter |
 
 ## TEXT/INLINE channel (36 rows)
 
@@ -156,18 +156,17 @@ inlining decision.
 
 | addr | m | len | Δlen | Δinsn | same mnemonics | dominant | row |
 |---|---|---:|---:|---:|:-:|---|---|
-| `0x10080be0` | 0.9545 | 779 | +1 | +0 | Y | length: never reached | LegoCarRaceActor::CalculateSpline |
-| `0x10054050` | 0.9476 | 2665 | -1 | +0 | Y | length: never reached | Act3Ammo::Animate |
-| `0x100ba2c0` | 0.9251 | 577 | +1 | +0 | Y | length: never reached | MxStillPresenter::Clone |
-| `0x100aa510` | 0.7268 | 1694 | +1 | +0 | Y | length: never reached | LegoLOD::Read |
 | `0x100a9410` | 0.9981 | 1553 | +0 | +0 | Y | desync | LegoROI::Intersect |
 | `0x1009a8c0` | 0.9921 | 1494 | +0 | +0 | Y | immdiff | LegoWEGEdge::LinkEdgesAndFaces |
 | `0x10058c30` | 0.9827 | 568 | -3 | -1 | n | length: never reached | LegoOmni::Destroy |
 | `0x10046050` | 0.9552 | 693 | -10 | -2 | n | length: never reached | LegoPathController::PlaceActor(class LegoPat |
 | `0x1003d170` | 0.9552 | 282 | +1 | +1 | n | length: never reached | LegoCacheSoundManager::FindSoundByKey |
+| `0x10080be0` | 0.9545 | 779 | +1 | +0 | Y | length: never reached | LegoCarRaceActor::CalculateSpline |
 | `0x100a4420` | 0.9504 | 520 | +6 | -2 | n | length: never reached | OrientableROI::OrientableROI |
 | `0x10055a60` | 0.9482 | 4120 | +8 | +40 | n | length: never reached | LegoNavController::Notify |
+| `0x10054050` | 0.9476 | 2665 | -1 | +0 | Y | length: never reached | Act3Ammo::Animate |
 | `0x1002de10` | 0.9426 | 746 | +3 | +0 | n | length: never reached | LegoPathActor::SetTransformAndDestinationFro |
+| `0x100ba2c0` | 0.9251 | 577 | +1 | +0 | Y | length: never reached | MxStillPresenter::Clone |
 | `0x1006ed90` | 0.8966 | 380 | -1 | -1 | n | length: never reached | Infocenter::Create |
 | `0x1003cf20` | 0.8950 | 274 | +16 | +7 | n | length: never reached | LegoCacheSoundManager::~LegoCacheSoundManage |
 | `0x1009f490` | 0.8896 | 1074 | -47 | -16 | n | length: never reached | LegoAnimScene::CalculateCameraTransform |
@@ -177,6 +176,7 @@ inlining decision.
 | `0x100a3840` | 0.8176 | 667 | +3 | +1 | n | length: never reached | TglImpl::MeshBuilderImpl::CreateMesh |
 | `0x1006b140` | 0.8149 | 941 | -7 | +2 | n | length: never reached | LegoAnimPresenter::CopyTransform |
 | `0x1006fda0` | 0.7933 | 264 | -8 | -2 | n | length: never reached | Infocenter::HandleKeyPress |
+| `0x100aa510` | 0.7268 | 1694 | +1 | +0 | Y | length: never reached | LegoLOD::Read |
 | `0x100c1290` | 0.6082 | 586 | +20 | +7 | n | length: never reached | MxStreamController::~MxStreamController |
 | `0x10061010` | 0.5481 | 726 | -5 | -3 | n | length: never reached | LegoAnimationManager::FUN_10061010 |
 | `0x10040360` | 0.9730 | 2496 | +0 | +0 | Y | memoff | Act3Cop::FUN_10040360 |
