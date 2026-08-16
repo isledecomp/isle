@@ -661,3 +661,18 @@ That is a *bounded* search (the extra local's slot is between −0x3c and −0x4
 and is the single best text-channel target left in this lane. The EAX census
 above rules the −1 out as the encoding artefact, so the −1 and the extra local
 are two separate defects.
+
+Three seed-lane probes for the missing local (19 bodies in the TU, all
+line-neutral, the new declaration placed on the blank line at shadow 170):
+
+| variant | len/nd | frame | victims |
+|---|---|---|---|
+| base | 1694/312 | 0x170 | — |
+| l1 `LegoU16* packed = &tempNumVertsAndNormals` cursor, `packed[0]`/`packed[1]` | 1694/312 | 0x170 | **0 — bit-inert** (the pointer is fully optimised away, no slot) |
+| l2 `LegoU16 packedVerts` value temp for the low half | 1694/**310** | 0x170 | 3 (target + two others) — best so far but still no extra slot |
+| l3 `LegoU32 packedVertsAndNormals` shadow copy | 1699/1353 | — | 3 — much worse |
+
+So the extra retail local is **not** a scalar temp at this site: MSVC folds all
+three away without growing the frame. Whatever retail declared, it must be
+address-taken or aggregate (array/struct) to earn a slot. Confirmed
+`LegoLOD::Read` needs its own session, as wave 1 said.
