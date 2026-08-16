@@ -211,6 +211,31 @@ top of the *actionable* list is `SetupCopyRect` at 92.31.
 * The `TEXT-CLOSED` direction is the only one that is a *proof*, and it is the
   one worth acting on hardest: ten rows can leave every text queue permanently.
 
+### Auditable: the six rows whose COMDAT carries a switch jump table
+
+Defect 1 is the only one that reaches an image-level census, so these are
+exactly the rows whose first-census score was wrong. `code_len()` finds the
+trailing run of DIR32 relocations to `$L` labels at 4-byte stride (>= 3
+entries, one gap bridged for the byte index table) and scores only the code;
+retail is trimmed by the same number of trailing bytes, which is correct
+because the table has one entry per case on both sides.
+
+| addr | body | code | table | row |
+|---|---|---|---|---|
+| `0x100035e0` | 1148 | 1120 | 28 | `Helicopter::HandleControl` |
+| `0x10031820` | 3580 | 3436 | 144 | `Isle::Enable` |
+| `0x1004d330` | 856 | 836 | 20 | `TowTrack::HandlePathStruct` |
+| `0x10055a60` | 4120 | 4100 | 20 | `LegoNavController::Notify` |
+| `0x1006fda0` | 264 | 200 | 64 | `Infocenter::HandleKeyPress` |
+| `0x10072ad0` | 348 | 324 | 24 | `Act3::TriggerHitSound` |
+
+`TowTrack::HandlePathStruct` is the one this promoted into `TEXT-CLOSED`, and
+it is worth stating how that was checked: a naive spot-check of the row scores
+**95.65**, and chasing that disagreement is what confirmed the trimming rather
+than the census. The 20 trailing bytes are five jump-table entries at 836–855;
+the two other `$L` relocations in the body (offsets 12 and 598) are ordinary
+label references in code and are correctly excluded by the stride rule.
+
 ## The full census
 
 | SHAPE | STRUCT | EXACT | m | addr | ours/ret | verdict | row |
