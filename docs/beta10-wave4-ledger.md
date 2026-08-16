@@ -378,3 +378,104 @@ The whole +3 is at body+244: retail emits `add edi, 8` once and then uses
 `[edi+0xc]` each time. This is the addressing-mode hoist the wave-1 ledger
 recorded as "callee-side, KILLED for legomain source" — confirmed at byte
 level here. Best carrier so far: nd=251 at `fwdE-12` (len 573, 2 too long).
+
+### `CarRace::HandlePathStruct` 0x100170e0 — structural read-off, edit REFUTED
+
+1391/1391 nd=111. The divergence starts at body+580 in the score block
+(legorace.cpp:686-710). Retail:
+
+```
++580  mov eax, [edx*4 + g_rhodaLoosesAnimation]
++587  jmp <join>                       ; the m_secondFinishAnimation store is
+                                       ; NOT in this branch
+```
+
+ours:
+
+```
++580  mov edx, [edx*4 + g_rhodaLoosesAnimation]
++587  mov [esi+0x14c], edx             ; store in-branch
++593  jmp <join>
+```
+
+The decomp already carries a `secondAnim` temp used only in the middle branch
+(`m_secondFinishAnimation = secondAnim;` at the end of that branch), so the
+obvious hypothesis was that 1997 used `secondAnim` in **all three** branches
+with one store after the whole if-chain.
+
+**Probed (line-neutral: the two direct stores rewritten to `secondAnim`, the
+in-branch store blanked, the hoisted store placed on the blank line after the
+chain): 1385/1391 — 6 bytes SHORT, nd 111 -> 510.** Refuted: retail is not the
+fully hoisted form. Retail's shape is consistent with MSVC cross-jumping two of
+the three branch tails, which only happens when both tails use the same
+register — i.e. this is once again a register-role interaction (branch 1 lands
+its value in EDX for us and EAX for retail), not a statement-structure defect.
+Recorded so the next wave does not re-derive it.
+
+## METHOD FINDINGS (measured this session, all new)
+
+1. **The forward-run count axis was never saturated.** Every historical sweep
+   used `sweep2.py --kmax 96`; `entropy.generate_forward_run` accepts counts
+   1..999 and the manifest validator accepts them too. `~LegoROI`'s nd=0 sits
+   at **fwdE-159**, invisible to the entire prior corpus. Re-run the tail
+   (97..400 and beyond) on every open near-miss row before declaring a row
+   state-closed. Cost: ~600 compiles/TU, 3-8 minutes at 4 workers.
+   *Also still unexplored on the same generator:* `width` 1 and 2 (the sweep
+   hardcodes 3 — a probe at width 2 on legoroi reproduced the nd=1 plateau, so
+   width is a real but weak axis), and the `prefix` string, whose LENGTH
+   changes every name record's size and which no sweep has ever varied.
+2. **Length defects are not text-channel-only** (correcting the mid-session
+   framing): `LegoOmni::Create` needed +32 bytes and a *carrier* supplied them
+   by changing an inlining decision. `Act3Brickster::Animate` needs +4 and
+   `fwdE-59` supplies them. Never triage a size-wrong row out of the carrier
+   queue.
+3. **`pad_shape` states are unlandable today.** `tools/entropy.py` ships
+   `generate_pad_shape` and the sweep bench uses it (`pad-C-F`), but
+   `byte_identity.py`'s donor validator only accepts
+   `forward_declaration_run` / `declaration_shape` / `extern_run_pair`. Two of
+   this lane's best states are pad states (`LegoROI::Read` 2058/65 at
+   `pad-11-8`), so a typed `pad_declaration_shape` donor kind — a small,
+   generator-backed extension, no new literal text — would immediately open
+   them. Recommended framework growth.
+4. **Include-order permutation has no reach in act3.cpp** (21 adjacent swaps,
+   every object byte-identical) and does not exist in legowegedge.cpp (one
+   quoted include). The axis is TU-specific; do not assume the
+   legopathactor/legoextraactor result generalises.
+5. **Integer register-register comparison mirrors are canonicalised.** Three
+   independent refutations this session (JetskiRace `m_playerLaps >
+   m_opponent1Laps`, TowTrack `e_hookedUp == m_state->m_state`, legowegedge
+   `length > m_boundingRadius`), each with a live 0-victim control. Combined
+   with wave 2's finding, the comparison-spelling axis should be considered
+   closed for scalar operands; it only moves at an inlined-call boundary.
+6. **This lane's residue is overwhelmingly register-role ties.** Of the nine
+   size-clean rows, seven are pure physical-register permutations
+   (TowTrack 3-cycle eax/ebx/edx, RemoveByObjectIdOrFirst eax↔edx,
+   JetskiRace ebx↔ebp, Animate ebx↔ebp, LinkEdgesAndFaces ecx↔eax twice,
+   CalculateSpline eax↔edx cascading, FUN_10040360 scheduling+CMPDIR). Text
+   probes on four of them (16 variants total) produced no improvement and
+   mostly bit-inert results; carrier state produced both landings. Fund the
+   carrier axis first for this lane, text second.
+
+## RANKED NEXT STEP PER UNFINISHED ROW
+
+| row | state today | ranked next step |
+|---|---|---|
+| `Act3Brickster::Animate` 0x10041050 | **1632/1632 nd=7** at `fwdE-59` (base text) | Closest row in the lane. Sweep fwdE/fwdL 97..999 and `shapefull`/`externdeep` on act3actors; the residue is ONE ebx↔ebp tie. |
+| `Act3List::RemoveByObjectIdOrFirst` 0x100720d0 | 323/323 nd=7 | fwdE/fwdL 97..999 + shapefull + externdeep on act3.cpp (fwdE-72 and shape-1-2 both plateau at 7). Text axis measured closed. |
+| `LegoWEGEdge::LinkEdgesAndFaces` 0x1009a8c0 | 1494/1494 nd=2 | Only the two `LenSquared` address temporaries remain. fwd 1..400 both placements and the 653-grid plateau at 2; try `shapefull` (550 cells, never run for this TU), `externdeep`, and fwd `width` 1/2. |
+| `Act3::TriggerHitSound` 0x10072ad0 | 348/348 nd=11 | Same TU as the above; ride the same extended sweep. Wave-1 already closed the text channel (5× table-load register). |
+| `TowTrack::HandlePathStruct` 0x1004d330 | 856/856 nd=11 | Text closed (3 probes). Extended carrier only; the 3-cycle is a hard tie. |
+| `Act3Cop::FUN_10040360` 0x10040360 | 2496/2496 nd=14 at `fwdE-19` | Extended carrier; residue is prologue scheduling + one CMPDIR. |
+| `JetskiRace::HandlePathStruct` 0x100166a0 | 645/645 nd=18 at `shape-1-10` | Extended carrier. The 4 CMPDIR bytes are proven source-inert, so text can only ever fix the ebx↔ebp half — carrier must do the rest. |
+| `Act3::Enable` 0x10073a90 | 930 vs 929; best **929/105** at `shape-1-3`/`extern-3-12` | Two live levers: (a) the `a5` loop-spelling change *inside* `RemoveByObjectIdOrFirst` moves it to 928/144 — i.e. it is record-stream sensitive, so run a text×carrier product; (b) extended carrier. |
+| `Act3Brickster::FUN_100417c0` 0x100417c0 | 2875/2875 nd=83 at `fwdE-28` | Extended carrier on act3actors (rides the Animate sweep). |
+| `CarRace::HandlePathStruct` 0x100170e0 | 1391/1391 nd=111 | Hoisted-store hypothesis refuted (see above). Extended carrier; then re-read the branch-tail merge with a fresh eye. |
+| `LegoROI::Read` 0x100a84a0 | 2061 vs 2058; best **2058/41** at `fwdE-288`, **2058/65** at `pad-11-8` | Extended fwdE past 300 (it was still improving monotonically at 288), and/or add the `pad_declaration_shape` donor kind and land a pad state. |
+| `LegoLOD::Read` 0x100aa510 | 1694 vs 1693; best 1694/283 at `fwdE-63` | Extended carrier first; the wave-1 parked lead (one extra retail named local at the numVerts/numNormals extraction) is still the text hypothesis. |
+| `LegoAnimScene::CalculateCameraTransform` 0x1009f490 | 1074 vs 1121 (+47); best 1074/263 | Inline-budget row (proven: retail keeps the `Interpolate` call, we inline+DCE it). Try moving the `inline` definitions of `Interpolate`/`GetKey` within legoanim.cpp; otherwise it waits on the C4 pool-dump instrument. |
+| `LegoOmni::Destroy` 0x10058c30 | 568 vs 571 (+3); best 573/251 | The +3 is one `add edi,8` addressing hoist in the inlined container walk. Extended carrier on legomain (the TU has just been re-dialed by the Create landing — all its old sweep records are stale). |
+| `LegoCarRaceActor::CalculateSpline` 0x10080be0 | 779 vs 778; best 778/646 | Whole-function eax↔edx cascade rooted at one `add reg,imm32` encoding choice. Extended carrier on legoracespecial (also re-dialed if anything lands there). |
+| `LegoCarRaceActor::CheckPresenterAndActorIntersections` 0x10081840 | 1163 vs 1168 (+5) | Not read off this session. Read BETA10 0x100cf680 first — a +5 size defect usually means a missing statement or an inline decision. |
+| `Act3Ammo::Animate` 0x10054050 | 2665 vs 2666 (+1); nd=935 | Not read off this session (BETA10 0x1001e362). |
+| `Act3::CreateROIAndBuildMap`, `Act3::TriggerHitSound` ALPHA bracket | not run | Still queued from wave 3. |
+| `LegoROI::Intersect` 0x100a9410 | body exact | See the annotation recipe above — coordinator decision. |
