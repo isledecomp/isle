@@ -83,3 +83,46 @@ post-include (extern pair's header run), EOF (both the forward run's
 now measured inert, a single typed `declaration_run_triple(pre, post, eof)`
 generator would subsume `forward_declaration_run` and `extern_run_pair` and
 open a coordinate the campaign has never reached. Recommended framework growth.
+
+## THE `Vector3::LenSquared` CROSS-TU LEAD — CLOSED, SEALED NEGATIVE
+
+The coordinator handed me this lead as unowned. It is dead, and the kill test
+is one second of disassembly with no compiles (`scratchpad/b10w4/t/lensq2.py`).
+
+The inlined `Vector3::LenSquared` builds two address temporaries for
+`m_data[1]` and `m_data[2]` (`m_data[0]` is reached through the base register),
+and the question was whether retail always leads with `base+8` — in which case
+a different association in `LEGO1/realtime/vector3d.inl.h` might fix several
+rows at once.
+
+Census over every oracled row in the image, matching the
+`add rA,<4|8> / add rB,<8|4>` prelude in front of each `fld/fmul` square pair:
+
+```
+retail first-temp displacement histogram: {8: 7, 4: 2}
+sites agreeing with ours: 3    differing: 6
+```
+
+**Retail itself uses both orders.** Seven sites lead with `base+8`, two lead
+with `base+4`, and the two orders appear in *different directions* relative to
+ours:
+
+| site | retail leads | ours leads |
+|---|---|---|
+| `LinkEdgesAndFaces` +300 | +8 | +4 |
+| `LinkEdgesAndFaces` +379 | +8 | +4 |
+| **`Act3Brickster::FUN_100417c0` +1098** | **+4** | **+8** |
+| `LinkEdgesAndFaces` +1164 (third site) | +8 | +8 (agrees) |
+
+No single spelling of a three-term sum can emit both orders, so **the order is
+compiler scheduling state, not source text**. A header reassociation would fix
+`LinkEdgesAndFaces` and simultaneously break `FUN_100417c0`, on top of
+recolouring every TU that includes `vector3d.inl.h`. The lead is closed; do not
+spend a session on it. (The earlier wave-4 note that "one site in the same body
+already matches" was the right instinct — this is the measurement that settles
+it.)
+
+**Hand-off:** the census also flags one site outside this lane —
+`Isle::Enable` (`all2-isle`) at +2211, where retail has a LenSquared prelude
+leading with +8 and our build has no matching prelude at that offset at all
+(a structural, not colour, difference). Whoever owns `isle.cpp` may want it.
