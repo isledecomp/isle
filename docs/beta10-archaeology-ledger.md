@@ -155,6 +155,13 @@ source expression; retail's own body is, and it already matches ours.
 
 ## BETA10 annotations are not all correct — verify before spending a read
 
+> **Status:** `legoanim.cpp:1026` was corrected to `BETA10 0x10180e00` on the
+> lane branch, independently confirmed. This worktree predates that fix and
+> deliberately does not repeat it — the finding below is the record of how it
+> was found and of the method it implies. `legoanim.cpp:1046` is still wrong and
+> is deliberately left alone: **do not change a BETA10 annotation you have not
+> independently confirmed.**
+
 `legoanim.cpp:1026` annotates `LegoAnimNodeData::Interpolate` as
 `BETA10 0x1017f7c3`. That address is **`LegoAnim::~LegoAnim`** (vtable store,
 `delete[]` loop over 8-byte entries, EH unwind funclet). The real beta
@@ -184,42 +191,275 @@ CopyTransform.)
 **Six of the seven are allocator/scheduler colour with zero text content.** The
 one that is not is an inline decision, not a text form.
 
-## THE CALL CENSUS: only THREE of the 81 open rows have a wrong call graph
+## THE CALL CENSUS: six of the 81 open rows have a wrong call graph
 
-Zero-build screen, run over **all 81** open LEGO1 rows (the oracle corpus in
-`<scratchpad>/bench/oracles-v2.json` covers every one of them): disassemble
-ours and retail, count direct and indirect calls. A row whose call counts match
-cannot have a function-set or inline defect — its residue is register/stack
-colour, scheduling, or code *inside* an inlined body. A row whose counts differ
-has a real structural defect and, per
-[[feedback-function-set-defects-always-land]], is worth funding.
+Zero-build screen over **all 81** open LEGO1 rows. **Compare call TARGETS, not
+call counts** — an inline accept/decline hides behind equal counts whenever the
+inlined body itself contains a call. Run it on the two *linked* images (ours at
+the report's `recomp` address, retail at its `address`) so relocations and
+mangling never enter, translate every direct target into one namespace through
+the report's own `recomp -> address` map, collapse intra-body targets (MSVC
+unwind funclets) to `<self>`, and compare the multisets.
 
-**78 of 81 rows carry retail's exact call graph.** The three that do not:
+**75 of 81 rows carry retail's exact call graph** — their residue is
+register/stack colour, scheduling, or code *inside* an inlined body. The six
+that do not, every one a single C2 inline accept/decline bit:
 
-| row | dcall ours/retail | len ours/retail | what differs |
-|---|---|---|---|
-| `0x1009f490` LegoAnimScene::CalculateCameraTransform | 3/4 | 1074/1121 | retail **calls** `LegoAnimNodeData::Interpolate` (`0x100a0b00`) at `legoanim.cpp:277`; we expand it and DCE the result |
-| `0x100a4420` OrientableROI::OrientableROI | 4/5 | 520/514 | retail **calls** `Vector3::Vector3` (`0x1001d150`) for the sub-object at `this+0xa8`; we expand it to `mov [ebx],vtbl` / `mov [esi+0xac],eax`. Retail calls `Vector2::Vector2` (`0x1000c0f0`) 4× in both. |
-| `0x10061010` LegoAnimationManager::FUN_10061010 | 16/15 | 717/731 | **opposite direction** — retail *inlines* the `MxListEntry` constructor (`mov [edi],eax` / `mov [edi+4],esi` / `mov [edi+8],0`, retail offset 511) where we emit `push 0; push esi; push eax; mov ecx,edi; call` (ours offset 500) |
-
-All three are **one C2 inline accept/decline bit**, and they do not agree on a
-direction: two say our budget is *larger* than 1997's, one says *smaller*.
-Together with the `act3actors` anchor this gives
-[[project-inline-budget-model]] **four** named, byte-exact anchors — and the
-`0x10061010` one lands directly on the five-site `MxListEntry` validation set
-that model already names.
-
-**Corollary for the endgame**: the function-set channel over the open set is
-exactly these three rows. Every other open row's defect lives below the call
-graph. Do not go looking for missing or extra calls anywhere else — this screen
-is exhaustive and cheap enough to re-run after any change.
+| row | what differs |
+|---|---|
+| `0x1009f490` CalculateCameraTransform | retail **calls** `LegoAnimNodeData::Interpolate` at `legoanim.cpp:277`; we expand it and DCE the result (−47 B) |
+| `0x100a4420` OrientableROI::OrientableROI | retail **calls** `Vector3::Vector3` for the sub-object at `this+0xa8`; we expand it (+6 B) |
+| `0x10084030` LegoCharacterManager::CreateActorROI | retail **calls** `Vector3::Vector3` ×2; we expand both — visible only as `Vector2::Vector2` ×2 on our side, because our expansion leaves the nested base-ctor call behind |
+| `0x100417c0` Act3Brickster::FUN_100417c0 | same, ×1 of its 3 sites (act3actors.cpp — another lane's TU) |
+| `0x1003cf20` ~LegoCacheSoundManager | retail **calls** `~LegoCacheSoundEntry`; we expand it, and the expansion's own `operator delete` keeps the count equal — the counterexample that forced this screen to compare targets (+16 B) |
+| `0x10061010` FUN_10061010 | **opposite direction** — retail *inlines* the `MxListEntry<LegoTranInfo*>` ctor; we call it (−14 B) |
 
 *Method warning*: classify a call as indirect by looking for `[` in the operand,
 not by "does the target print as `0x…`". Capstone prints an unrelocated
 `call rel32` whose target lands at offset 0 as `call 0`, and a naive
 `startswith("0x")` test miscounts those as indirect — that bug manufactured six
-phantom deltas (ViewManager::ManageVisibilityAndDetailRecursively,
-Act3::TriggerHitSound, LegoROI::Read, two `_Tree::_Erase`s) before it was found.
+phantom deltas before it was found.
+
+## THE PER-CALLEE SITE CENSUS — what the bit actually is
+
+Counting rows understates the evidence. Take one callee and enumerate **every**
+call site in both linked images, naming each caller by its annotated row
+(`<scratchpad>/arch/sitecensus.py`). Two callees, fully enumerated:
+
+**`Vector3::Vector3(float*)` (`0x1001d150`) — retail 28 call sites, ours 24.**
+We reproduce retail's decision at **24 of 28** sites (LegoWorld::LegoWorld,
+LegoCarBuild ×2, Act1State ×6, FindPath ×3, LegoAct2::Notify, LegoAct2::
+CheckBricksterIsLoose ×7, FUN_100648f0 ×2, FUN_100417c0 ×2) and expand at 4.
+Retail **declines at all 28** — its rule for this callee is uniform, ours is
+not.
+
+**`MxListEntry<T>::MxListEntry` (one body, four template instantiations) — 6
+call sites.** Both images call at LegoPhonemePresenter::StartingTickle,
+LegoAnimPresenter::AppendROIToScene and MxRegion::AddRect ×3. Retail *expands*
+the sixth (FUN_10061010) and therefore emits **three** out-of-line copies of the
+body; we decline there and emit **four**. (Correction to
+[[project-inline-budget-model]]: this is not "retail declines four and inlines
+one" of a single callee — the five declines are spread over four distinct
+instantiations, and the site retail expands is the only site of *its*
+instantiation.)
+
+**Three facts follow, and together they fix the model's shape:**
+1. **The bit is per SITE, not per callee.** `Act3Brickster::FUN_100417c0`
+   contains three `Vector3::Vector3` sites; we expand the first and decline the
+   second and third, inside one function, in one compile.
+2. **It is not a global aggressiveness scalar.** Over the four callees we
+   over-accept at 6 sites and under-accept at 1. A single scalar cannot produce
+   both signs.
+3. **Retail is the *uniform* side and we are the ragged one.** For
+   `Vector3::Vector3` retail's answer is "decline" at 28/28; our 4 acceptances
+   are the anomaly, not a different threshold consistently applied.
+
+**`0x10084030 CreateActorROI` is the tightest specimen in the whole class and
+the best target if the bit is ever solved.** It is **2294 vs 2294 bytes and 661
+vs 661 instructions**, and its entire codegen residue is *two `call rel32`
+target fields* — at body offsets 100 and 1219 ours reaches `Vector2::Vector2`
+where retail reaches `Vector3::Vector3`, with byte-identical code on both sides
+of each call. The lengths match by luck: our expansion of `Vector3::Vector3`
+emits `call Vector2::Vector2` plus the derived vtable store, and that store is
+immediately overwritten by the enclosing code (`mov [ebp-0xd4], edi`), so DCE
+removes it and the expansion costs exactly as much as the call it replaced.
+(The row still scores .9365 rather than ~.997 because reccmp also sees our
+data-address divergence, which `fulldiff.py` masks — displacement, not codegen.)
+
+**The one uniform-rule opportunity, and why it is closed.** Unlike the
+`MxListEntry` case, retail's answer for `Vector3::Vector3` *is* uniform —
+decline at 28/28 — so a source form that stopped MSVC expanding it anywhere
+would match retail at every site and could close three rows with no collateral.
+The obvious form is "1997 did not define it in the class at all", i.e. an
+ordinary out-of-line member. **Retail's own layout refutes that**: both
+`Vector3::Vector3` (`0x1001d150`) and `Vector2::Vector2` (`0x1000c0f0`) sit in
+the middle of runs of `scalar deleting destructor` / `ClassName` / `IsA`
+bodies — the COMDAT region — not inside any TU's ordinary function run. They
+were in-class inlines in 1997 exactly as they are here, and retail's compiler
+simply declined all 28 while ours declines 24. (Retail also calls
+`Vector2::Vector2` at 50 sites to our 47, the same defect seen from the base.)
+
+A useful negative for source-shaping: **all three `Vector3::Vector3` sites we
+can name are implicitly generated ctor chains** — the sub-objects of
+`m_world_bounding_box`/`m_world_bounding_sphere`/`m_world_velocity` in
+`OrientableROI`, and of the local `BoundingSphere`/`BoundingBox` in
+`CreateActorROI`. There is no source statement at those sites to reshape, which
+is why the row reads as "the inline ladder".
+
+## THE CARRIER AXIS DOES NOT REACH THE INLINE BIT — 8,963 cells, zero flips
+
+The campaign ledger names accumulated declaration/IL state on the containing TU
+as the live axis for inline-order rows, and `pad_shape`'s 99x99 grid had never
+been swept as a carrier. It is now, on three of the four anchors, in two
+generator families.
+
+Instrument: `<scratchpad>/arch/sweep.py` — compile-only, ~0.2 s/cell. It renders
+the carrier header exactly as `isle_build.py` does (`entropy.generate_pad_shape`
+/ `entropy.generate_shape`), force-includes it into the TU's real compile
+command from `compile_commands.json` with `/FI`, compiles to a private `/Fo`,
+pulls the target COMDAT out of the object and counts the **REL32 relocations
+naming the callee**. That relocation count *is* the accept/decline bit, read
+without a link and without reccmp. Positive control: pointed at
+`Vector2::Vector2` in the same body it reports 4, the known truth.
+
+| row | family | cells | bit flipped | distinct body lengths |
+|---|---|---|---|---|
+| `0x1009f490` CalculateCameraTransform | `pad_shape` 1..99 x 1..99 | 7,613 | **0** | {1074} — retail is 1121 |
+| `0x1009f490` | `declaration_shape` (full domain) | 411 | **0** | {1074} |
+| `0x100a4420` OrientableROI::OrientableROI | `pad_shape` full range, step 7 | 165 | **0** | {520} — retail is 514 |
+| `0x100a4420` | `declaration_shape` (full domain) | 364 | **0** | {520} |
+| `0x10061010` FUN_10061010 | `pad_shape` full range, step 7 | 124 | **0** | {717, 725} |
+| `0x10061010` | `declaration_shape` (full domain) | 286 | **0** | {717, 725} |
+
+**8,963 carrier states, zero flips in either direction.** (The `legoanim` grid
+row above is one pass at 7,613 of 9,801 cells; the 2,188 misses were transient
+wine-contention failures scattered across the grid, not a region. A second,
+uncontended pass over the same grid reached 6,400 cells before it was stopped,
+also with zero flips.) And the shape of the negative matters more than the
+count:
+
+- On `CalculateCameraTransform` the carrier **does** reach codegen — the body
+  takes two distinct forms across the grid (nd 308 for 6,716 cells, nd 314 for
+  897) — but its **length is 1074 in every single cell**. Flipping the bit
+  would add ~47 bytes. The axis moves the colouring and cannot touch the
+  inliner.
+- On `OrientableROI::OrientableROI` the carrier does not reach the function at
+  all: **all 529 cells across both families produce the byte-identical body**
+  (len 520, nd 290). Nothing to search there.
+- On `FUN_10061010` the carrier moves the body by 8 bytes (717 -> 725, and 725
+  is *closer* to retail's 731) in 28 of 410 cells, yet the `MxListEntry`
+  relocation is present in **all 410**.
+
+**Sealed: the inline accept/decline bit is not carrier-reachable.** Two
+generator families, three TUs, both directions of the defect. Combined with the
+per-site census above — the bit varies *within a single caller*, at three sites
+of one callee in one compile — the mechanism is downstream of anything a
+force-included declaration-only header can perturb. Fund an instrument that
+observes C2's decision (fresh-eyes-2 §C4), not more carrier cells.
+
+Also sealed on the callee-source axis, from wave 1: two rewrites of
+`Interpolate`'s body (see above) leave the bit untouched and cost 3 and 5 rows.
+And `OrientableROI`'s and `CreateActorROI`'s sites have **no source statement at
+all** — they are implicit member-ctor chains — so the source axis is empty there
+by construction.
+
+## THE MODEL — measured with the compiler's own knob (DIAGNOSTIC ONLY)
+
+Nothing in this section is landable: `#pragma inline_depth` is exactly the
+"#undef/#define-style manipulation to force codegen" the mandate forbids. It was
+injected through `/FI` in a scratch harness (`<scratchpad>/arch/depth.py`), never
+into the tree, and no probe here was committed. Its value is that it is a
+**direct read of the variable C2 is deciding on**, which is the instrument
+[[project-inline-budget-model]] says is missing.
+
+Baseline row = no header; retail column is what we are trying to reach.
+
+    OrientableROI::OrientableROI            retail: 514 B, Vector3 x1, Vector2 x4
+      default / depth>=4   520 B   Vector3=0  Vector2=4
+      depth(0)             757 B   Vector3=0  Vector2=0
+      depth(1)             439 B   Vector3=1  Vector2=0
+      depth(2)             514 B   Vector3=5  Vector2=1      <- length trap
+      auto_inline(off)     520 B   (inert)
+
+    CalculateCameraTransform                retail: 1121 B, Interpolate x1
+      default / depth>=4  1074 B   Interpolate=0
+      depth(0)             926 B   Interpolate=1
+      depth(1)            1214 B   Interpolate=0
+      depth(2)            1212 B   Interpolate=0
+      auto_inline(off)    1074 B   (inert)
+
+    FUN_10061010                            retail: 731 B, MxListEntry x0
+      default / depth>=4   717 B   MxListEntry=1
+      depth(0)             482 B   MxListEntry=0
+      depth(2)             664 B   MxListEntry=2
+      auto_inline(off)     717 B   (inert)
+
+    CreateActorROI                 retail: 2294 B, Vector3 x2, Vector2 x2
+      default / depth>=8  2294 B   Vector3=0  Vector2=4
+      depth(0)            1788 B   Vector3=0  Vector2=0
+      depth(2)            2284 B   Vector3=6  Vector2=6
+      depth(4)            2283 B   Vector3=0  Vector2=4
+      auto_inline(off)    2294 B   (inert)
+
+**What this establishes.**
+
+1. **The bit is the inliner's depth-limited budget, and it is live** — it moves
+   under `inline_depth` on all three anchors, in both directions. It is not a
+   source form and not a carrier state.
+2. **No global depth value is 1997's, on any of the four anchors** —
+   `CreateActorROI` needs `Vector3 x2 / Vector2 x2` and no depth produces that
+   pair either (`depth(2)` gives 6/6, everything >=8 gives 0/4). Retail's answers are
+   per-site *mixtures* a uniform depth cannot express: `OrientableROI` needs
+   four sites expanded one level (leaving `Vector2::Vector2` calls) and a fifth
+   declined outright (leaving a `Vector3::Vector3` call), and no single depth
+   produces that pair. This is the same conclusion the per-site census reached
+   from the other side, now proved with the compiler's own control.
+3. **The three anchors are three different depths of disagreement**, which is
+   why no one scalar covers them:
+   - `OrientableROI` — a **depth-0** decline. Retail declines the callee
+     outright at one of five sibling sites; we expand it, and at that site we go
+     a level *further* than at the other four (full expansion, no `Vector2`
+     call left).
+   - `CalculateCameraTransform` — a **depth-1** decline. Restricting to
+     `inline_depth(1)` or `(2)` does **not** stop us expanding `Interpolate`;
+     only `depth(0)` does. Retail declines a depth-1 leaf expansion we accept.
+   - `FUN_10061010` — a **depth-2** accept. The `MxListEntry` ctor site is
+     itself inside an inlined body (at `depth(0)` the call vanishes because its
+     enclosing callee stops being expanded). Retail expands it there; we decline.
+4. **`/Ob1` is in force.** `#pragma auto_inline(off)` is inert on all three, so
+   every expansion in dispute is of an explicitly `inline`-marked callee. There
+   is no "automatic inlining" component to tune.
+5. **A length trap, freshly caught:** `depth(2)` on `OrientableROI` hits retail's
+   514 bytes exactly — and is nd=246 with 147 instructions against retail's 142.
+   Length is not score, again.
+
+**Consequence for the campaign.** The accept/decline bit is per-site, lives in
+C2's depth accounting, and is reachable by neither the source axis (wave 1: two
+`Interpolate` rewrites, −3 and −5 rows; and two of the three `Vector3` sites
+have no source statement at all, being implicit member-ctor chains) nor the
+carrier axis (8,963 cells). The remaining lever would have to change what C2
+counts *at one site*, which is what the sandboxed-C2 instrument was for.
+
+## The source axis, closed on two anchors (compile-only, nothing landed)
+
+`<scratchpad>/arch/srcprobe.py` / `srcprobe2.py` copy the rendered `src` tree,
+apply a text substitution anywhere in it, rewrite the TU's real compile command
+onto the copy and read the target COMDAT back. No repo file is touched, so a
+form can be judged before it is worth a gated build.
+
+**`0x1009f490` — five further source forms, all bit-identical** (1074 bytes,
+`Interpolate` relocation count 0, i.e. still expanded):
+- `Interpolate` **defined in the class body** instead of out-of-line in the .cpp
+- `case 2` **discarding the result** (`Interpolate(...);`, no `z`)
+- `case 2` **wrapped in its own block**
+- (wave 1) the beta-shaped evaluation order, and two extra named `GetTime()`
+  temporaries — those two also cost 3 and 5 rows in a real build.
+Six source forms, one bit, no movement.
+
+**`0x10061010` — the source construct that governs the bit is identified, and
+retail's own rows prove retail did not use it.** `FUN_10061010` reaches the
+`MxListEntry` ctor through `Append -> InsertEntry -> new MxListEntry<T>(a,b,c)`,
+three inline levels deep. Probing `mxlist.h`:
+
+    baseline                                     len=717  ctor call = 1   (retail: 731, 0)
+    ctor written with a member-initializer list  len=717  ctor call = 1
+    ctor written with SetValue/SetPrev/SetNext   len=717  ctor call = 1
+    InsertEntry: declaration split from the new  len=717  ctor call = 1
+    Append: m_last read into a local first       len=717  ctor call = 1
+    InsertEntry: default-construct then assign   len=722  ctor call = 0  <-- flips it
+
+The last form **does** remove the call — the only source change found in this
+whole campaign that moves an inline accept/decline bit. It is still not
+retail's, and the proof is collateral rather than argument: the same header
+change was compiled against `LegoPhonemePresenter::StartingTickle`, an
+**exact** row, and takes it from retail's 688 bytes to 611 (its ctor call
+survives; the surrounding body collapses). `LegoAnimPresenter::AppendROIToScene`
+is exact on the same construct and `MxRegion::AddRect` carries three more sites.
+> **So retail's `InsertEntry` constructs through `new MxListEntry<T>(a,b,c)` —
+> the form the tree already has — and the `FUN_10061010` disagreement is a
+> compiler decision, not a source form.** One header text cannot both keep the
+> ctor call at five sites and drop it at the sixth; retail does exactly that,
+> so the split is C2's, not the source's.
 
 ## Operational note: overlay anchors reach into function bodies
 
@@ -311,3 +551,25 @@ Method for trusting a beta address: confirm it structurally, or reach the callee
 by following a call from a body you already trust. A second suspect annotation
 at `legoanim.cpp:1046` is left alone pending that check — do not change a BETA10
 annotation you have not independently confirmed.
+### Added by lane ARCH wave 2 (do not re-run)
+
+- **The inline accept/decline bit is not carrier-reachable.** 8,963 cells over
+  `pad_shape` (including the full 99x99 grid on `legoanim.cpp`) and the full
+  `declaration_shape` domain, three TUs, both directions. Zero flips.
+- **No global `#pragma inline_depth` is 1997's**, on any of the four anchors.
+  (Diagnostic only — pragma-forced codegen is out of mandate for landing.)
+- **`#pragma auto_inline(off)` is inert** on all four anchors: `/Ob1` is in
+  force and every disputed expansion is of an explicitly `inline` callee.
+- **Six source forms on `0x1009f490`** leave the bit set (callee in the class
+  body, result discarded, `case 2` braced, plus wave 1's two callee rewrites).
+- **`mxlist.h`: four forms inert, one flips the bit and is refuted.** Writing
+  `InsertEntry` as default-construct-then-assign drops the `MxListEntry` ctor
+  call, but the same header takes the **exact** row
+  `LegoPhonemePresenter::StartingTickle` from 688 to 611 bytes. Retail's
+  `InsertEntry` uses the three-argument ctor, as the tree already does.
+- **`Vector3::Vector3` was an in-class inline in 1997 too** — it and
+  `Vector2::Vector2` sit inside retail's COMDAT run, not in any TU's function
+  run. The "define it out-of-line so MSVC can never expand it" repair is
+  refuted by retail's own layout.
+- **Length is not score, again**: `depth(2)` on `OrientableROI::OrientableROI`
+  reproduces retail's 514 bytes exactly at nd=246 and 147 vs 142 instructions.
