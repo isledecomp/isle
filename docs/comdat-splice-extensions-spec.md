@@ -84,7 +84,8 @@ required: `0x1009f490`'s donor is a `delete` of `Interpolate`'s definition.
   the sealed carrier axis (~15,100 cells) and statements the refuted body axis
   (441 cells).
 
-  Parameters: `{class_identifier, member_identifier, kind}`. Obligations:
+  Parameters: `{class_identifier, member_identifier, kind, form}` (amendment 5).
+  Obligations:
   - A7a. Both identifiers must be **validated to exist in the checked-in
     source** — the class declared, the member present on it. Nothing literal.
   - A7b. `kind` is a **closed enum**, `destructor` only. Adding a kind is a spec
@@ -95,7 +96,35 @@ required: `0x1009f490`'s donor is a `delete` of `Interpolate`'s definition.
   - A7d. Usable **only in a donor rendering**. It must never appear in the
     shipped tree's rendering, and the build must assert that.
   - A7e. Tests must prove it **cannot emit an arbitrary function**: reject a kind
-    outside the enum, and reject an identifier absent from the checked-in source.
+    outside the enum, reject a **form** outside the enum, reject smuggled
+    `body`/`return_type`/`parameters` keys, reject an identifier absent from the
+    checked-in source, and reject a recipe naming an undeclared class.
+  - **A7f (amendment 5 — authorised). `form` is a CLOSED ENUM with exactly two
+    members**: `in_class_declaration` (renders `~X();`) and
+    `qualified_definition_header` (renders `X::~X()`, no terminator). Two texts
+    are required from the same three identifiers — the donor **header** seat and
+    the donor **`.cpp`** seat — and one generator with no discriminator can only
+    reach the first. Adding a third form is a spec amendment, never an
+    implementation detail.
+
+    The second seat cannot be avoided, and this was **measured, not assumed** —
+    deleting the declaration from the donor header instead compiles, but:
+
+        v1 pure delete    len 242 (retail 258)  entry_dtor_calls 0  masked nd 106
+        v2 declaration    len 258 (retail 258)  entry_dtor_calls 1  masked nd 0
+
+    With no declaration the destructor is implicitly trivial, nothing is called
+    at the `erase` site, and the body comes out *shorter than today's* (242 vs
+    our 274) while the out-of-line definition compiles and is simply never
+    called. That failure is silent, not loud — it would have shipped as a
+    regression. The relocated-range mechanism cannot supply the qualified form
+    either: the header contains `LegoCacheSoundEntry` and `~LegoCacheSoundEntry()`
+    but never adjacently, and assembling one from scavenged fragments would be
+    neither typed nor honest.
+
+    Every other obligation survives untouched: A7a still validates both
+    identifiers, A7b's `kind` enum is unchanged, A7c still holds because both
+    forms are signature-only, and A7d/A7e are unaffected.
 
   Rationale for authorising: it renders from checked-in identifiers via a typed
   generator, which is squarely inside the standing mandate, and the outcome is
