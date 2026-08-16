@@ -27,9 +27,33 @@ This exists because the evidence is spread across `slot-reachability`,
 2. **Carrier sweeps on rows with genuinely untried families** — rank the
    families **from the objects**, never from the matrix's `L` column; a
    missing result file proves nothing about what was compiled.
-3. **The 12 AMBIGUOUS rows** — the only population no screen has an answer
-   for. Sharpening the alignment is cheap and might move rows into a
-   fundable class or seal them.
+3. ~~**The AMBIGUOUS rows** — sharpen the alignment.~~ **RETRACTED, measured in
+   the main loop 2026-08-16.** Of the 11 rows refused by *both* the slot and
+   register screens, **11 of 11 have a different length from retail** and zero
+   are same-length:
+
+   | row | ours | retail | delta |
+   |---|---:|---:|---:|
+   | `0x100293c0` UpdateEnabledChild | 282 | 286 | −4 |
+   | `0x1002bff0` `_Tree<LegoPathActor*>` | 1104 | 1096 | +8 |
+   | `0x1003cf20` ~LegoCacheSoundManager | 274 | 258 | +16 |
+   | `0x1003d170` FindSoundByKey | 282 | 281 | +1 |
+   | `0x1004ebd0` LegoTexturePresenter::Read | 745 | 739 | +6 |
+   | `0x10058c30` LegoOmni::Destroy | 568 | 571 | −3 |
+   | `0x10061010` FUN_10061010 | 717 | 731 | −14 |
+   | `0x1006ed90` Infocenter::Create | 380 | 381 | −1 |
+   | `0x10081840` CheckPresenterAndActorIntersections | 1163 | 1168 | −5 |
+   | `0x100a84a0` LegoROI::Read | 2061 | 2058 | +3 |
+   | `0x100ba2c0` MxStillPresenter::Clone | 577 | 576 | +1 |
+
+   The screens refuse with "only 68–80% of instructions aligned" **because the
+   bodies genuinely differ in structure**, not because the aligner is weak. A
+   sharper aligner cannot manufacture information that isn't in the pair. These
+   rows belong with the length-unreachable population and are already routed or
+   sealed individually. **Do not fund an alignment-sharpening pass.**
+
+   (The register screen does add real information where the slot screen alone
+   refuses — 9 such rows, 5 of them same-length. That part stands.)
 
 Everything else is measured-dead: source archaeology as a general strategy is
 closed by three independent screens, `cmpdir` is retired as a channel, the
