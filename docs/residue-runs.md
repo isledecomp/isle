@@ -367,3 +367,39 @@ campaign's ledgers deserve the same suspicion this one earned.
 at the extra `mov edx, eax` that makes our body one instruction longer than
 retail's. The extra `mov` is real, but this is not the source form that removes
 it.)
+
+## The inline-budget ladder appears in a second row
+
+`OrientableROI::OrientableROI` (`0x100a4420`, .9504, 520 against retail's 514)
+is filed by the census as a SHAPE gap, i.e. a text target. It is not one. Its
+entire residue is that **retail calls `Vector3::Vector3` for the member at
+`+0xa8` where we inline it**:
+
+```
+retail: lea ebx,[esi+0xa8] ; push eax ; mov ecx,ebx ; call Vector3::Vector3
+        …                  ; mov [ebx], Mx3DPointFloat::vftable
+ours:   lea ecx,[esi+0xc8] ; mov [esi+0xac],eax ; mov [esi+0xc4],ecx
+        mov [esi+0xa8], Vector2::vftable ; mov [esi+0xa8], Mx3DPointFloat::vftable
+```
+
+The two members constructed *before* it — at `+0x94` and the one before that —
+are `call Vector2::Vector2` on **both** sides. So within one constructor retail
+builds a run of identical sub-objects at **decreasing inline depth**, and we
+keep one expansion more of budget at the last one.
+
+That is the same mechanism, described in the same words, that the near-miss
+lane independently diagnosed in `LegoCharacterManager::CreateActorROI`: three
+identical `Mx3DPointFloat` sub-objects built at three decreasing depths, fully
+inline → `call Vector2::Vector2` → `call Vector3::Vector3`. Two unrelated rows,
+two lanes, one ladder.
+
+**Consequences.** Both rows belong in the inline-budget class, not the text
+channel — which is the third verdict the transcription lane asked for ("SHAPE
+gap in inlined code out of mandate reach"). The members here are constructed by
+the *implicit* member-init list, so there is no source expression to respell;
+reaching them would need the class layout or an explicit initialiser list, and
+the inline decision itself has already been shown to be steerable only by
+illegitimate means. And the ladder gives the C2 instrument a second, independent
+validation case alongside the five `MxListEntry` sites: any candidate budget
+model must reproduce *decreasing* inline depth across a run of identical
+constructions.
