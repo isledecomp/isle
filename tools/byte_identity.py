@@ -8014,7 +8014,8 @@ def validate_manifest(
                 require(
                     kind in ("forward_declaration_run", "declaration_shape",
                              "extern_run_pair", "forward_run_with_shape",
-                             "extern_pair_with_shape", "pad_shape"),
+                             "extern_pair_with_shape",
+                             "extern_pair_with_pad", "pad_shape"),
                     f"{donor_context}: equal-body donors require a "
                     "generated declaration recipe",
                 )
@@ -8212,6 +8213,67 @@ def validate_manifest(
                             if count
                         ) + entropy_generator.generate_shape(
                             shape_classes, shape_functions
+                        ).encode("utf-8")
+                    except ValueError as error:
+                        raise ByteIdentityError(
+                            f"{donor_context} stacked-carrier parameters: "
+                            f"{error}"
+                        ) from error
+                elif kind == "extern_pair_with_pad":
+                    # Same stack as extern_pair_with_shape but with the pad
+                    # generator's regular C x F grid instead of the ragged
+                    # declaration shape.  They are different shape families
+                    # and reach different states: a row exists whose nd=1
+                    # extern state survives every declaration_shape cell and
+                    # is destroyed by all of them.
+                    exact_keys(
+                        recipe,
+                        {
+                            "kind", "header_prefix", "header_count",
+                            "seat_prefix", "seat_count", "width",
+                            "classes", "functions_per_class",
+                            "generated_header_sha256", "compile_lane",
+                            "emission_policy", "authenticity_rationale",
+                        },
+                        f"{donor_context}.recipe",
+                    )
+                    header_count = recipe.get("header_count")
+                    seat_count = recipe.get("seat_count")
+                    run_width = recipe.get("width")
+                    pad_classes = recipe.get("classes")
+                    pad_functions = recipe.get("functions_per_class")
+                    require(isinstance(recipe.get("header_prefix"), str)
+                            and isinstance(recipe.get("seat_prefix"), str)
+                            and isinstance(header_count, int)
+                            and not isinstance(header_count, bool)
+                            and isinstance(seat_count, int)
+                            and not isinstance(seat_count, bool)
+                            and isinstance(run_width, int)
+                            and not isinstance(run_width, bool)
+                            and header_count >= 0 and seat_count >= 0
+                            and header_count + seat_count >= 1,
+                            f"{donor_context} extern-run parameters "
+                            "are invalid")
+                    require(isinstance(pad_classes, int)
+                            and not isinstance(pad_classes, bool)
+                            and 1 <= pad_classes <= 99,
+                            f"{donor_context}.classes is invalid")
+                    require(isinstance(pad_functions, int)
+                            and not isinstance(pad_functions, bool)
+                            and 1 <= pad_functions <= 99,
+                            f"{donor_context}.functions_per_class is invalid")
+                    try:
+                        generated = b"".join(
+                            entropy_generator.generate_extern_run(
+                                prefix, count, run_width
+                            ).encode("utf-8")
+                            for prefix, count in (
+                                (recipe["header_prefix"], header_count),
+                                (recipe["seat_prefix"], seat_count),
+                            )
+                            if count
+                        ) + entropy_generator.generate_pad_shape(
+                            pad_classes, pad_functions
                         ).encode("utf-8")
                     except ValueError as error:
                         raise ByteIdentityError(

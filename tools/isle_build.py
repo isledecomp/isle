@@ -726,6 +726,21 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                         if count
                     )
                     placement = "extern_pair"
+                elif recipe["kind"] == "extern_pair_with_pad":
+                    run_bytes = b"".join(
+                        entropy.generate_extern_run(
+                            prefix, count, recipe["width"]
+                        ).encode("utf-8")
+                        for prefix, count in (
+                            (recipe["header_prefix"],
+                             recipe["header_count"]),
+                            (recipe["seat_prefix"], recipe["seat_count"]),
+                        )
+                        if count
+                    ) + entropy.generate_pad_shape(
+                        recipe["classes"], recipe["functions_per_class"]
+                    ).encode("utf-8")
+                    placement = "extern_pair_with_pad"
                 elif recipe["kind"] == "extern_pair_with_shape":
                     run_bytes = b"".join(
                         entropy.generate_extern_run(
@@ -816,7 +831,8 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                             b"\n".join(lines + decls))
                     (probe / "run.h").write_bytes(shape_run)
                     force_include = ["/FIrun.h"]
-                elif placement == "extern_pair_with_shape":
+                elif placement in ("extern_pair_with_shape",
+                                   "extern_pair_with_pad"):
                     # Both extern seats AND the force-included shape: the
                     # count lattice is 2-D, so the two seats and the shape
                     # can each be fixing a different byte.
@@ -841,9 +857,14 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                         lines[:insert_at] + header_lines
                         + lines[insert_at:] + seat_lines
                     ))
-                    (probe / "run.h").write_bytes(entropy.generate_shape(
-                        recipe["classes"], recipe["functions"]
-                    ).encode("utf-8"))
+                    (probe / "run.h").write_bytes(
+                        entropy.generate_pad_shape(
+                            recipe["classes"], recipe["functions_per_class"]
+                        ).encode("utf-8")
+                        if placement == "extern_pair_with_pad"
+                        else entropy.generate_shape(
+                            recipe["classes"], recipe["functions"]
+                        ).encode("utf-8"))
                     force_include = ["/FIrun.h"]
                 elif placement == "extern_pair":
                     # Header run seats after the last #include, seat run
