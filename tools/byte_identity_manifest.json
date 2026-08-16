@@ -799,7 +799,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes LegoROI::FindChildROI 0x100a8ce0 from a generated forward-run carrier state over the rendered current source.",
+    "reason": "Closes LegoROI::FindChildROI 0x100a8ce0 and LegoROI::~LegoROI 0x100a83c0 from generated forward-run carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -1490,7 +1490,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/main/legomain.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/main/legomain.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
