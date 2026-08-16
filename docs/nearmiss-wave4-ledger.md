@@ -440,3 +440,38 @@ Three consequences that change how earlier records should be read:
    unswept dimension: `class A000;` and `class MxUnkRecVA000;` are different
    compile states. Every sweep to date fixed `width=3` and three specific
    stems.
+
+---
+
+## 10. legopathcontroller.cpp (`nm/probes/lpc-full`, 653 states, v2 oracles)
+
+Two of its rows had **no oracle anywhere in the prior corpus** — they had never
+been swept. `oracles-v2.json` supplies them, and this is their first measurement:
+
+| addr | row | retail len | seed len | best nd | offsets | state |
+|---|---|---|---|---|---|---|
+| 0x10045c20 | `PlaceActor(LegoPathActor*, const char*, int, float, int, float)` | 338 | 331 | **2** | [195, 232] | `extern-1-16` (also `extern-{2-15,3-14,4-13,5-12,6-11,7-10}`) |
+| 0x10046050 | `PlaceActor(LegoPathActor*, LegoAnimPresenter*, Vector3&, Vector3&)` | 703 | 693 | — | — | **no state reaches 703; only 693 and 700 occur** -> text channel |
+| 0x10048310 | `FindPath` | 2338 | 2337 | 491 | [135,136,142,150,…] | `extern-0-12` |
+| 0x10046770 | `RemoveActor` | 328 | 329 | 0 | — | `fwdE-94`/`fwdP-94` (already landed, reproduces) |
+
+`0x10045c20` at nd=2 is the strongest untouched row in this lane and the
+beta10-foundry ledger had classed it STATE-CLASS with no text lever — correct,
+and now quantified: **two bytes**. `FindPath`'s corpus min-nd of 1741 is
+superseded: at the correct 2338 length the best carrier state is 491, still
+text-channel but not the hopeless number the seal recorded.
+
+---
+
+## 11. Interior-record axis results on the other TUs (negatives)
+
+* `legocharactermanager.cpp`, current text, `insf` anchors 0..45 x counts 1..6
+  (276 states, `nm/probes/chm-ins`): `erase` 0x10082ca0 best **nd=43** — far
+  worse than the fwdL/pad carriers' nd=1. `_Insert` best 8, `insert` 15,
+  `GetActorROI` 4, `Exists` 0 (it is already exact on this text).
+  The interior axis is not a refinement of the flat carriers; it is a
+  *different* region of the state space.
+* `legopathboundary.cpp`, current text, `insf`+`insc` anchors 0..8 x counts
+  1..12 (216 states, `nm/probes/lpb-ins`): `RemoveActor` still nd=1 @240;
+  `??1LegoPathBoundary` moves between nd 0/1/2 (proving the axis is live in
+  this TU); `RemovePresenter` best 4, `_Erase` best 10.
