@@ -1390,3 +1390,49 @@ and compiles a copy so a carrier sweep over the same TU is not disturbed).
 and agree with the screen. A transposition means two live ranges of equal
 allocation priority whose tie retail broke the other way — and `0x1002a1b0`
 shows the tie does not respond to 730 carrier cells.
+
+### Carrier sweeps still in flight at the end of this wave
+
+Results land in the scratchpad as `arch/sweep-<tag>/results.json` (and, after
+the checkpointing fix, `partial.json` every 200 cells). Consolidate with
+`arch/bytu.py` / the small readers beside it.
+
+| tag | TU | grid | state |
+| --- | --- | --- | --- |
+| `untried2` queue | act3, mxtransitionmanager, viewlodlist, legopathboundary, legomain, legorace, legoracespecial, isle | coarse 1225 | running, `/tmp/untried2.log` |
+| `charmgrdense` | legocharactermanager | dense 9801 | running |
+| `animpdense2` | legoanimpresenter | dense 9801 | running |
+| `mxmain` | mxmain | coarse 1225 | running |
+
+Already consolidated this wave: `legolod`, `legoroi`, `infocenter`, `mxbitmap`,
+`tglrl40`, `legoanimpresenter`, `legoanimationmanager`, `orientableroi`,
+`legosoundmanager`, `legocharactermanager`, `mxvideopresenter`.
+
+`mxvideopresenter` (never swept before) came back close on all four of its rows:
+`0x100b24f0` nd 5 (`pad-1-8`), `0x100b26f0` nd 6 (`pad-22-8`), `0x100b27b0`
+nd 25 (`pad-1-8`), `0x100b2a70` PutFrame nd 59 (`pad-36-43`, and the carrier
+takes it to 1262 B against retail's 1260). Read at instruction level,
+`0x100b26f0 IsHit` is **cmpdir plus a one-instruction schedule move** and
+`0x100b24f0` is a small colour difference — both carrier-class, not text.
+
+### Two instrument fixes, both paid for by a real loss
+
+1. **A per-cell compile timeout.** CL under wine can wedge indefinitely on the
+   largest generated headers. A sweep of `entity/legoworld.cpp` parked at
+   1200/1225 for half an hour with two workers stuck and no file activity.
+   Without a timeout one bad cell stalls an entire queue.
+2. **Checkpointing.** Results were written only after the last cell, so killing
+   a slow dense sweep discarded everything: **7,200 compiled cells of the
+   `tglrl40` dense grid were lost** when it was stopped. It now dumps
+   `partial.json` every 200 cells.
+
+### Where the yield actually came from
+
+Both of this wave's wins came from **coarse grids on space that had never been
+swept** — the landed `0x1006dec0` from a new *family* on an old TU, and
+`CreateActorROI` from a new *TU*. The dense grids returned nothing new:
+`legoanimationmanager` dense (1188 cells) did not beat its own coarse best
+(nd 30 either way), and the `tglrl40` dense grid was still at its coarse best
+after 7,200 cells. Dense-region headers also grow to ~240 KB, so those cells
+cost several times what a coarse cell costs. **Prefer breadth over depth**:
+sweep an unswept TU or family before densifying one already swept.
