@@ -412,5 +412,94 @@ class DonorSourceOverlayTests(unittest.TestCase):
             byte_identity.validate_donor_object_excluded(donor, [donor])
 
 
+class MemberSignatureGeneratorTests(unittest.TestCase):
+    """Spec A7 — the one authorised signature emitter, and its limits.
+
+    A7e is the point of this class: prove it cannot emit an arbitrary
+    function.  A7c is structural — the parameter set has no return type, no
+    parameter list and no body, so none can be rendered.
+    """
+
+    HEADER = "LEGO1/lego/legoomni/include/legocachesoundmanager.h"
+
+    def _gen(self, **overrides):
+        params = {"class_identifier": "LegoCacheSoundEntry",
+                  "member_identifier": "LegoCacheSoundEntry",
+                  "kind": "destructor"}
+        params.update(overrides)
+        return {"k": "member_sig", **params}
+
+    def test_a7_emits_signature_text_only(self):
+        validated = byte_identity.validate_source_overlay_generator(
+            self._gen(), "gen")
+        rendered = byte_identity.render_source_overlay_generator(validated)
+        self.assertEqual(rendered, b"\t~LegoCacheSoundEntry();\n")
+        # A7c: no body, no return type, no parameters, in the output itself.
+        self.assertNotIn(b"{", rendered)
+        self.assertNotIn(b"void", rendered)
+        self.assertEqual(rendered.count(b"("), 1)
+        self.assertEqual(rendered[rendered.index(b"(") + 1], ord(")"))
+
+    def test_a7b_rejects_a_kind_outside_the_closed_enum(self):
+        for kind in ("constructor", "method", "operator", "function"):
+            with self.subTest(kind=kind):
+                with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                            "closed enum"):
+                    byte_identity.validate_source_overlay_generator(
+                        self._gen(kind=kind), "gen")
+
+    def test_a7c_rejects_any_attempt_to_carry_a_body_or_signature_parts(self):
+        for extra in ("body", "return_type", "parameters", "statements"):
+            with self.subTest(extra=extra):
+                generator = self._gen()
+                generator[extra] = "void"
+                with self.assertRaises(byte_identity.ByteIdentityError):
+                    byte_identity.validate_source_overlay_generator(
+                        generator, "gen")
+
+    def test_a7a_rejects_an_identifier_absent_from_checked_in_source(self):
+        data = (ROOT / self.HEADER).read_bytes()
+        self.assertTrue(byte_identity.source_overlay_member_is_declared(
+            data, "LegoCacheSoundEntry", "LegoCacheSoundEntry", "destructor"))
+        for klass, member in (
+            ("LegoCacheSoundEntry", "NotAMember"),
+            ("NoSuchClass", "NoSuchClass"),
+            ("LegoCacheSoundManager", "LegoCacheSoundEntry"),
+        ):
+            with self.subTest(klass=klass, member=member):
+                self.assertFalse(
+                    byte_identity.source_overlay_member_is_declared(
+                        data, klass, member, "destructor"))
+
+    def test_a7a_recipe_refuses_a_signature_with_no_declaration(self):
+        clean = hashlib.sha256((ROOT / self.HEADER).read_bytes()).hexdigest()
+        recipe = {
+            "kind": "donor_source_overlay",
+            "compile_lane": {"required_define": "BYTE_IDENTITY_DONOR_FIXTURE"},
+            "renderings": [{
+                "path": self.HEADER,
+                "clean_sha256": clean,
+                "rendered_sha256": "1" * 64,
+                "operations": [{
+                    "op": "append",
+                    "gen": self._gen(class_identifier="NoSuchClass",
+                                     member_identifier="NoSuchClass"),
+                }],
+            }],
+        }
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "not declared in any checked-in source"):
+            byte_identity.validate_donor_source_overlay_recipe(
+                recipe, ROOT, seed_outputs_touched=False)
+
+    def test_a7d_refuses_the_generator_in_the_shipped_rendering(self):
+        overlay = {"outputs": [{"path": "x.cpp", "operations": [
+            {"op": "append", "generator": byte_identity
+             .validate_source_overlay_generator(self._gen(), "gen")},
+        ]}]}
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError, "A7d"):
+            byte_identity.assert_member_signature_is_donor_only(overlay)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -226,7 +226,13 @@ SOURCE_OVERLAY_LEAN_KINDS = {
     "assert_reseat": "debug_assert_reseat_v1",
     "const_pool": "synthetic_constant_pool_tu_v1",
     "literal_alias": "literal_first_use_alias_v1",
+    "member_sig": "member_signature_v1",
 }
+
+
+# A7b: a CLOSED enum.  Adding a kind here is a specification amendment, never
+# an implementation detail.
+MEMBER_SIGNATURE_KINDS = frozenset({"destructor"})
 
 
 SOURCE_OVERLAY_LEAN_SHAPES = {
@@ -282,6 +288,9 @@ SOURCE_OVERLAY_KIND_POLICIES = {
         "compiler_state_only", "function_body_noop_sequence"
     ),
     "line_reservation_v1": ("source_layout_only", "physical_line_reservation"),
+    "member_signature_v1": (
+        "non_emitting_declaration", "member_signature_only"
+    ),
     "list_cursor_delete_emission_probe_v1": (
         "discarded_emission_probe", "list_cursor_delete_emission"
     ),
@@ -726,6 +735,40 @@ def _source_overlay_anchor_seat_index(
             source_overlay_token_sha256(signature), []
         ).append(index)
     return {sha: tuple(indices) for sha, indices in seats.items()}
+
+
+def source_overlay_member_is_declared(
+    data: bytes, class_identifier: str, member_identifier: str, kind: str,
+) -> bool:
+    """A7a: is `member_identifier` present on `class_identifier` in this source?
+
+    Comments are stripped first so a mention inside prose cannot authorise a
+    signature.  Only the class's own brace-balanced body is searched, so a
+    member of some *other* class never satisfies the check.
+    """
+    require(kind in MEMBER_SIGNATURE_KINDS,
+            f"member signature kind {kind!r} is outside the closed enum")
+    clean = source_overlay_strip_comments_preserve_lines(data).decode("latin1")
+    opening = re.compile(
+        r"\b(?:struct|class)\s+" + re.escape(class_identifier)
+        + r"\b[^{;]*\{"
+    )
+    wanted = "~" + member_identifier          # destructor is the only kind
+    for match in opening.finditer(clean):
+        depth, index = 0, match.end() - 1
+        while index < len(clean):
+            character = clean[index]
+            if character == "{":
+                depth += 1
+            elif character == "}":
+                depth -= 1
+                if depth == 0:
+                    break
+            index += 1
+        body = clean[match.end():index]
+        if re.search(r"(?<![\w~])" + re.escape(wanted) + r"\s*\(", body):
+            return True
+    return False
 
 
 def source_overlay_strip_comments_preserve_lines(data: bytes) -> bytes:
@@ -1397,6 +1440,9 @@ def source_overlay_expected_identifier_roles(
         "empty_compound_statements_v1", "synthetic_constant_pool_tu_v1",
     }:
         pass
+    elif kind == "member_signature_v1":
+        referenced.add(params["class_identifier"])
+        referenced.add(params["member_identifier"])
     elif kind == "inline_budget_noop_statements_v1":
         referenced.add(params["assignment_target"])
     elif kind == "local_symbol_id_carrier_v1":
@@ -1976,6 +2022,27 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
         normalized = {
             "basename": basename, "logical_header": logical,
             "style": params["style"],
+        }
+    elif kind == "member_signature_v1":
+        # A7: {class_identifier, member_identifier, kind} and nothing else.
+        # A7c is structural -- there is no return type, parameter list or body
+        # in the parameter set, so none can be emitted.
+        exact_audit_keys(params, {
+            "class_identifier", "member_identifier", "kind",
+        }, param_context)
+        require(params.get("kind") in MEMBER_SIGNATURE_KINDS,
+                f"{param_context}.kind is outside the closed enum "
+                f"{sorted(MEMBER_SIGNATURE_KINDS)}")
+        normalized = {
+            "class_identifier": _source_overlay_identifier(
+                params.get("class_identifier"),
+                param_context + ".class_identifier",
+            ),
+            "member_identifier": _source_overlay_identifier(
+                params.get("member_identifier"),
+                param_context + ".member_identifier",
+            ),
+            "kind": params["kind"],
         }
     elif kind == "empty_compound_statements_v1":
         exact_audit_keys(params, {"scope_count"}, param_context)
@@ -3698,6 +3765,14 @@ def render_source_overlay_generator(
         result = (
             f'#include {quote_open}{params["basename"]}{quote_close}\n'
         ).encode("ascii")
+    elif kind == "member_signature_v1":
+        # A7c: signature text ONLY.  A destructor has no return type and no
+        # parameters, and the body is supplied by the authenticated
+        # relocated-range mechanism -- never by this generator.
+        require(params["kind"] in MEMBER_SIGNATURE_KINDS,
+                f"member signature kind {params['kind']!r} is outside the "
+                f"closed enum")
+        result = f'\t~{params["member_identifier"]}();\n'.encode("ascii")
     elif kind == "empty_compound_statements_v1":
         result = b"\t{\n\t}\n" * params["scope_count"]
     elif kind == "inline_budget_noop_statements_v1":
@@ -4884,6 +4959,10 @@ def validate_source_overlay(value: object, source_root: Path, *, repin_paths: se
     # effective pin, so consumers can install these bytes directly instead of
     # rendering the overlay a second time.
     normalized["rendered_by_path"] = rendered
+    # A7d: the member-signature generator is a DONOR-ONLY facility.  The
+    # shipped tree's overlay is asserted free of it here rather than relying
+    # on nobody adding one.
+    assert_member_signature_is_donor_only(normalized)
     return normalized
 
 
@@ -11288,6 +11367,31 @@ def compose_same_slot_resize(
     }
 
 
+def _source_overlay_generators(node: object):
+    """Yield every validated generator in an operation, sequences included."""
+    if isinstance(node, dict):
+        if "kind" in node and "params" in node:
+            yield node
+            yield from _source_overlay_generators(node["params"])
+            return
+        for value in node.values():
+            yield from _source_overlay_generators(value)
+    elif isinstance(node, list):
+        for value in node:
+            yield from _source_overlay_generators(value)
+
+
+def assert_member_signature_is_donor_only(overlay: object) -> None:
+    """A7d: the member-signature generator may never appear in the SHIPPED
+    tree's rendering -- only in a donor rendering.  Asserted, not assumed."""
+    for generator in _source_overlay_generators(overlay):
+        require(
+            generator.get("kind") != "member_signature_v1",
+            "member_signature_v1 appears in the shipped tree's source "
+            "overlay; A7d restricts it to donor renderings",
+        )
+
+
 def validate_donor_object_excluded(
     composed_object: bytes, donor_objects,
 ) -> None:
@@ -11339,6 +11443,8 @@ def validate_donor_source_overlay_recipe(
     root = Path(root)
     seen: set[str] = set()
     normalized = []
+    clean_inputs: list[bytes] = []
+    pending_signatures: list[tuple[str, dict]] = []
     for index, item in enumerate(renderings):
         context = f"donor rendering[{index}]"
         require(isinstance(item, dict), f"{context} must be an object")
@@ -11379,11 +11485,31 @@ def validate_donor_source_overlay_recipe(
                     data, anchor, f"{op_context} anchor",
                     logical_path=path,
                 )
+            for generator in _source_overlay_generators(validated):
+                if generator.get("kind") == "member_signature_v1":
+                    pending_signatures.append((op_context, generator))
             validated_ops.append(validated)
+        clean_inputs.append(data)
         normalized.append({
             "path": path, "clean_sha256": clean,
             "rendered_sha256": rendered, "operations": validated_ops,
         })
+    # A7a: every emitted signature names a class and member that exist in the
+    # checked-in source this recipe renders from.  Deferred to here so a
+    # signature seated in the .cpp can be authorised by the header that
+    # actually declares the class.
+    for op_context, generator in pending_signatures:
+        params = generator["params"]
+        class_identifier = params["class_identifier"]
+        member_identifier = params["member_identifier"]
+        require(
+            any(source_overlay_member_is_declared(
+                data, class_identifier, member_identifier, params["kind"])
+                for data in clean_inputs),
+            f"{op_context}: member signature "
+            f"{class_identifier}::~{member_identifier} is not declared in any "
+            f"checked-in source this recipe renders from",
+        )
     return {
         "kind": "donor_source_overlay",
         "compile_lane": {"required_define": lane["required_define"]},
