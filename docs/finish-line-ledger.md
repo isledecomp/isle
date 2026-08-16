@@ -1881,3 +1881,122 @@ census: the three surviving rows with a differing `sub esp` are exactly the
 three my `FRAME (decl-set)` bucket finds, with the same slot budgets, from an
 aligned instruction diff rather than a prologue read. Two instruments, one
 answer.
+
+---
+
+# Wave 4 — the tenth and eleventh fixes, and the census republished
+
+Base `c6c15516` (my wave-3 work verified present by diffing the ledger file,
+not by assuming the branch was an ancestor — it was applied, not merged).
+Gate re-verified: `LEGO1 4853/4934, ISLE 172/172, CONFIG 111/111`.
+
+Revision 2 of [`docs/shape-census.md`](shape-census.md).
+
+## 34. Fix 10 — an instruction can carry more than one relocation
+
+My wave-2 `reloc_site()` documented "at most one" and returned a single field.
+That is false: `mov dword ptr [g_currentInput], offset g_debugPassword` carries
+a DIR32 in the **displacement** and another in the **immediate**, and the
+single-site rule masked only one of them.
+
+Fixed by attributing each relocation to its field by **byte range**, using
+capstone's exact `disp_offset` / `disp_size` / `imm_offset` / `imm_size`. That
+also retires the "absolute memory operand wins" hack I needed in wave 2 —
+with per-field attribution, `and [g_flags], 0xffffffbf` masks the displacement
+and keeps the real immediate *by construction* rather than by a value
+heuristic.
+
+**Blast radius, measured rather than assumed:** scanning every instruction of
+all 81 open rows, this class has **exactly one member** — `LegoNavController::
+Notify` at +120. The class is real and the fix is right; the map moves by one
+instruction in one row.
+
+## 35. Fix 11 — the byte index table, and a sound detector
+
+MSVC 4.2's dense-switch lowering emits **two** tables into the function's own
+COMDAT: a dword target table (dense DIR32 relocations) and a **byte index table
+with no relocations at all**. My wave-3 detector found the dword table by
+relocation stride and bridged one gap of ≤ 64 bytes, which happened to cover
+the byte table in five of six rows — but not in `Notify`, whose byte table is
+~400 bytes.
+
+The replacement needs no scanning, no stride rule and no gap bridging: **each
+table's start is the value of the local `$L` symbol that the indexing
+instruction's relocated displacement points at**, read from the COFF symbol
+table.
+
+```
+movzx ecx, byte ptr [eax + $L…]     -> byte table start  = symbol value
+jmp   dword ptr [ecx*4 + $L…]       -> dword table start = symbol value
+code_len = min(all table starts)
+```
+
+### It is six rows, not sixteen
+
+A scanning detector over-counts badly, and the audit says exactly why.
+Enumerating **every** in-section `$L` reference in the open set by instruction
+form:
+
+| form | count | table read? |
+|---|---|---|
+| `push offset $L…` (immediate) | 34, across 30 rows | **no** — SEH scope-table setup |
+| `jmp dword ptr [reg*4 + $L…]` | 10 | yes |
+| `mov r8, byte ptr [reg + $L…]` | 6 | yes |
+
+Thirty of the thirty-six rows that reference a local label carry **no table at
+all**. That separates the two rows flagged as unusable:
+
+* **`TowTrack::HandlePathStruct` is not a false positive** — it has a genuine
+  `jmp dword ptr [reg*4 + $L66390]` and a real 20-byte table. My wave-3
+  `TEXT-CLOSED` promotion of it stands, now with a symbol-level proof rather
+  than an argument.
+* **`MxVideoPresenter::PutFrame` is** — it has only a `push offset $L` and no
+  table.
+
+### Validation
+
+All **twelve** cuts (six rows × two sides) land exactly on alignment filler or
+a terminator — `mov edi,edi`, `lea ecx,[ecx]`, `nop`, `ret`. None lands
+mid-instruction. That validates both the offset *and* the equal-tail
+assumption for retail.
+
+## 36. What actually changed: two rows, no verdicts
+
+| addr | SHAPE rev1 → rev2 | STRUCT rev1 → rev2 | row |
+|---|---|---|---|
+| `0x10055a60` | 94.42 → **99.09** | 94.08 → 98.66 | `LegoNavController::Notify` |
+| `0x100a84a0` | 97.99 → **98.14** | 96.50 → 96.64 | `LegoROI::Read` |
+
+**No row changed bucket.** The five other table-bearing rows were already
+trimmed correctly in revision 1.
+
+**The question the wave was run to answer — "are several of the 51 SHAPE-gap
+text targets actually table noise?" — is answered: none of them are.** Only six
+open rows carry a table, all six were already being trimmed, and nothing moved
+into or out of the `SHAPE gap` bucket. No lane has been sent at a table
+artefact.
+
+`Notify` at 99.09 is now near the *top* of the census. Its residue is the
+three-instruction `xor r,r ; mov r,byte [r+0x18] ; sub r,9` against retail's
+`lea r,[r-9]`, at two sites — a real operation difference, correctly
+classified, which is why the lane that took the row was right to. (That lane's
+source edit is not in this base; measured here our body still carries the three
+extra instructions, 932 against retail's 929.)
+
+## 37. Process note — the regression I caught in myself
+
+Rewiring the masking broke `report()` silently: the score call inside its level
+loop still passed the old signature, so our side lost `capstone` detail and
+every relocated operand went unmasked. It did not raise — it just made four
+known-good rows regress to 94–97 with "first divergence +11".
+
+What caught it was **keeping four rows with hand-verified expected values**
+(`Isle::Enable` @ `extern-1-8` 100/100/99.21, `MxStillPresenter::Clone`
+100/100/94.65, `LegoPartPresenter::Read` 99.53×3, `HandleKeyPress`
+98.21/98.21/87.50) and re-running them after every change. A metric that
+silently loses masking degrades *gracefully*, which is the worst failure mode
+for an instrument the whole project plans from. Those four rows should be a
+regression suite for `adiff`, not an ad-hoc check.
+
+The superseded stride detector has been **removed** from `adiff.py` rather than
+deprecated, so nobody calls it by accident.
