@@ -403,3 +403,36 @@ illegitimate means. And the ladder gives the C2 instrument a second, independent
 validation case alongside the five `MxListEntry` sites: any candidate budget
 model must reproduce *decreasing* inline depth across a run of identical
 constructions.
+
+## Main-loop lane: closure state
+
+Per-row verdicts for the TUs the coordinator holds, from the corrected census
+plus this file's own bounded searches.
+
+**Proved closed to source** — `SHAPE 100 && STRUCT 100`, so our source emits
+retail's program instruction-for-instruction and uses retail's frame slots:
+`MxTransitionManager::DissolveTransition`, `MxVideoPresenter::AlphaMask::AlphaMask`,
+`MxRegion::AddRect`. All three had already been bounded here by exhaustive
+carrier search; the census reaches the same verdict from an independent
+direction, which is the useful part.
+
+**Inline-budget, not text**: `OrientableROI::OrientableROI` (the ladder, above)
+and `UpdateTransformationRelativeToParent` (34 source cells all worse; the
+addend order lives in vendor `_DOTcol4`).
+
+**Colour / scheduling, carrier-exhausted**: `MxDSBuffer::FUN_100c6fa0` (4 bytes,
+one `volatile` read order), `MxDisplaySurface::Create` (9 bytes, one scheduler
+placement), `MxDisplaySurface::VTable0x30` (SHAPE 96.43 against EXACT 73.81 —
+operations nearly right, colouring badly wrong), `ViewManager::ManageVisibility…`
+(one `cmpdir` byte across ~8,500 states and three seats),
+`MxVideoPresenter::Destroy` (the same operations with `ecx`/`eax` exchanged and
+the vtable load moved).
+
+**Improved this session, still open**: `MxTransitionManager::SetupCopyRect`
+.8227 → .8495 on a statement reorder retail's own instruction order named;
+`LegoTextureContainer::GetCached` .8571 → .8698, body to retail's exact 987,
+residue down to one dword slot and one `esi`/`edi` swap.
+
+So this lane is in the same position the transcription lane reported: the rows
+that remain are allocator and inline-budget decisions, and the instrument that
+would read them does not exist. What is left here is coordination, not search.
