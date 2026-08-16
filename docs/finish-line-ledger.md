@@ -691,3 +691,40 @@ but no statement is missing: the extra instruction exists *because* of the
 register choice. Whether that is reachable from a carrier is untested — the
 `tglrl40` sweeps to date are `m,k ≤ 40` plus a 759-state long axis, and the
 long strips are queued.
+
+---
+
+## 12. RETRACTION of my own §5 heuristic — reachable-set size does not predict success
+
+In §5 I proposed ordering sweeps by body size, on the grounds that carrier
+response tracks register pressure. I then measured the reachable set of the row
+I had already landed, and it kills the heuristic.
+
+Distinct `.text` bodies produced per row, over that row's own sweep:
+
+| row | body | states | distinct bodies | is retail's body in the reachable set? |
+|---|---|---|---|---|
+| `0x10038380 StopActions` | 110 | 1,681 | **1** | no |
+| `0x100796b0 FindNodeDataByName` | 106 | 162 | **2** | **YES — 18 of the 162 states** |
+| `0x10017af0 PizzeriaState` | 264 | 1,681 | 2 | no |
+| `0x10038b10 HandleEndAction` | 1232 | 1,681 | 3 | no |
+| `0x100d0d80 ReadData` | 424 | 1,681 | 11 | no |
+
+The row that **won** is the second-smallest, has the second-smallest reachable
+set, and reached retail in **eleven percent of the states swept**. The row with
+eleven distinct bodies and 1,681 states never came close.
+
+So the correct statement is the uncomfortable one:
+
+> The number of distinct bodies a carrier can reach says nothing about whether
+> retail's body is among them. A two-point reachable set can contain the
+> answer; an eleven-point one can miss it entirely. There is no cheap
+> predictor — the sweep *is* the measurement.
+
+What survives from §5 is only the weaker, still-useful part: a single body over
+N states is a *proof* that the carrier family does not reach the function, and
+that is worth knowing because it redirects to another family rather than a
+wider grid. Everything else in that paragraph — and the sweep ordering I
+derived from it, including stopping the `legoact2` rectangle — was a guess
+dressed as a measurement, and the `legoact2` rectangle should be resumed
+(its 200 retained state objects make that free).
