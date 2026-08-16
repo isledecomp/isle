@@ -207,6 +207,98 @@ cells) give the **same nd at the same count** for every scored row — the
 objects differ, the scores do not. A re-dial never needs a new prefix; sweep
 the count and reuse the project's established stems.
 
+## 0.1 · 2026-08-16 wave 2 — tip-text re-sweeps on the near-misses
+
+Both **nd=1** rows were re-swept on the current text in the family their corpus
+floor lives in, counts swept and stems held fixed (the prefix-inert finding
+below). **Neither floor moved — and both residues are now named, which is what
+retires them.**
+
+### The two nd=1 rows have the SAME single-byte mechanism: `cmp` operand direction
+
+| row | TU | tip-text floor | cells | residue byte |
+|---|---|---|---:|---|
+| `0x10059dc0` `_Tree<…LegoTextureInfo*>::erase` | `legomain.cpp` | nd=1 @ `fwd MxUnkRecVC 311 suffix` | 500 | **+151**: ours `3b 4c 24 10` = `cmp ecx,[esp+0x10]`; retail `39 4c 24 10` = `cmp [esp+0x10],ecx` |
+| `0x100a66f0` ManageVisibilityAndDetailRecursively | `viewmanager.cpp` | nd=1 @ `extern g_h=3 g_p=0` | 960 | **+517**: ours `3b c8` = `cmp ecx,eax`; retail `3b c1` = `cmp eax,ecx` |
+
+Same operands, same semantics, one direction bit — opcode `39` vs `3B` in one
+case, ModRM reg/rm swap in the other. This is the **`cmpdir` class**, which
+`docs/shape-census.md` already records as invisible to SHAPE/STRUCT/EXACT, and
+which the standing rules already record as **bit-inert from the source side**:
+no spelling of a comparison changes which operand the selector puts in the
+register. The direction is a *consequence* of where the two values happen to
+live at that point, i.e. of register allocation — the "one shared allocator
+decision" signature, not a text target.
+
+**Both rows are retired from the carrier queue.** The remaining defect in each
+is one byte, that byte is a comparison direction, and comparison direction is
+not addressable from source or from any declaration-only carrier.
+
+### A text dependency retired for free
+
+The corpus reading of `0x100a66f0` had its nd=1 only at `a4 × extern-3-1` —
+the `a4` **text** variant, which the inliner ledger notes *perturbs a 1.0 row*.
+On plain tip text the same nd=1 is reached at `extern-3-0`. **The a4 text is
+not needed for the floor**, so the row carries no text debt; only the `cmp`
+byte remains.
+
+### "Stacking is a new state" reproduced on today's text
+
+The standing law — *a row at nd=1 on `fwdE-311` floors at 269 when any shape
+cell is added; a force-included shape re-colours the whole compile* — was
+re-measured, on this row, on this text: `forward_run_with_shape` pinned at the
+floor seat (`MxUnkRecVC 311 suffix`) × all **505** legal shapes gives a best of
+**nd=269** (`fsS-311-5-45`). Not "worse in places" — worse in every cell, by
+two orders of magnitude. The `fwdpad` variant of the same seat was not run:
+`pad_shape` is force-included by the same mechanism, so the law predicts it and
+the cells are better spent elsewhere.
+
+### Sealed negatives from this wave
+
+| row | family swept on tip text | cells | floor | verdict |
+|---|---|---:|---:|---|
+| `0x10059dc0` | `fwd` suffix, counts 1–500 | 500 | **1** | held at the corpus cell; residue is `cmpdir` |
+| `0x10059dc0` | `forward_run_with_shape` @ 311 × 505 shapes | 505 | 269 | stacking law |
+| `0x10059dc0` | `extern` 21×21 lattice | 440 | — | **never reaches retail's length (1102)** in any cell; the family cannot even be scored for this row |
+| `0x100a66f0` | `extern` 31×31 lattice | 960 | **1** | held; residue is `cmpdir`; a4 text retired |
+| `0x100a66f0` | `declaration_shape`, all legal (c,f) | 505 | **1** | held — second independent family at the same floor |
+| `0x100a66f0` | `fwd` suffix, counts 1–200 | 200 | 7 | family is unproductive for this row |
+| `0x100a66f0` | `pad_shape` 15×15 | 225 | 6 | family is unproductive for this row |
+| `0x1009a8c0` LinkEdgesAndFaces | `pad` 25×25, `shape` | 1,130 | 2 | held (wave 1) |
+| `0x1007ca30` LegoPartPresenter::Read | `pad` 25×25 | 625 | 2 | held (wave 1) |
+
+**Totals on tip text this wave: `0x10059dc0` 1,445 cells, `0x100a66f0` 1,890
+cells — 3,335 in all, floor nd=1 in both, and in both the single residue byte
+is a `cmp` operand direction.** Two families reach the floor for `0x100a66f0`
+(`extern` and `shape`) and two do not (`fwd`, `pad`), so the floor is not an
+artifact of one generator — and the two that reach it reach exactly the same
+byte. For `0x10059dc0` the split is sharper still: `fwd` suffix reaches the
+floor, `extern` cannot reach retail's **length** at all, and stacking a shape
+on the floor seat costs two orders of magnitude.
+
+`0x10069b10 BuildROIMap` is **screened, not swept** — `legoanimpresenter.cpp`
+belongs to Lane ARCH. Its corpus floor is **nd=2 at `shape-9-85`**
+(`stl/sw-all2-legoanimpresenter_E019sf`, 13,810 states); that is the state to
+re-derive on today's text if ARCH wants it.
+
+### What would move a `cmpdir` byte, if anything does
+
+Not the source and not a declaration-only carrier — 1,005 and 1,890 cells say
+so, on top of the standing bit-inert ruling for comparison spelling. The
+direction is chosen at instruction selection from *which side is already in a
+register*, so the only lever that could flip it is one that changes the
+allocation at that program point. That is the same missing instrument the
+seven-row "one shared allocator decision" set is waiting on; these two rows
+join that set rather than the carrier queue, and they join it with their
+defect localised to a single named byte, which none of the other seven have.
+
+### Incidental: `0x10058c30 LegoOmni::Destroy` stays length-unreachable
+
+`legomain.cpp` also defines this open row. Across all 500 `fwd`-suffix cells it
+**never reached retail's length** (seed 568 vs retail 571), consistent with its
+membership in the 15-row length-unreachable set. Its length deficit is not
+carrier-reachable in this family.
+
 ## Where this comes from, and why that matters
 
 Source precedence, in order:
