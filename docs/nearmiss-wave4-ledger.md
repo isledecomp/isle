@@ -834,3 +834,100 @@ pool-dump instrument and nothing else; I recommend removing it from every text
 and carrier queue. (Blast-radius note for the record: `realtime/vector.h` is
 included by essentially every geometry-touching TU, so even a working cell
 would have had to be measured tree-wide.)
+
+---
+
+# Wave 4c — the long-count region, and the stacked pass on the regrole rows
+
+Rebased onto `entropy-stabilization` `0b33f5df`; gate re-verified after the
+rebase: **LEGO1 4841/4933** (trunk 4838 + this lane's three), ISLE 172/172,
+CONFIG 111/111, zero LOST.
+
+## 21. LANDED x2: the carrier axis was being swept with an arbitrary ceiling
+
+`0x1002aba0 LegoExtraActor::HitActor` `.9791 -> 1.0` and
+`0x10057fe0 LegoPathBoundary::AddPresenterIfInRange` `.8571 -> 1.0`,
+commit `1182945b`, gate **4839 -> 4841/4933**, zero LOST.
+
+Every sweep in this project — mine included — capped the carrier counts at
+`extern m<=8, k<=17` and `forward run k<=96`. Those ceilings are convention,
+not grammar: `entropy.generate_extern_run` and `generate_forward_run` both
+accept counts up to 999. Sweeping `extern m=0..8 x k=18..30` (a 13-column
+strip nobody had ever compiled) produced two immediate retail-masked-exact
+donors:
+
+| row | best over the ENTIRE old grid | in the new strip |
+|---|---|---|
+| `0x1002aba0 HitActor` (1617 B) | nd=7 (`extern-5-11`) | **nd=0 at `extern-5-28`** |
+| `0x10057fe0 AddPresenterIfInRange` (214 B) | nd=44 (`extern-6-0`) | **nd=0 at `extern-7-26`** |
+
+`AddPresenterIfInRange` is the sharper lesson: it sat at **nd=44** across 653
+flat states, 216 interior-record states and 600 include-permutation states —
+by every heuristic a hopeless text-channel row — and it was **zero** eleven
+columns past where everyone stopped looking. The beta10-foundry ledger's
+"STATE-CLASS (sweep candidate)" verdict for it was right; the sweep was just
+too small.
+
+Relocation guard on both (§2): every callee identity agrees with retail —
+HitActor across 59 relocations, AddPresenterIfInRange across 4, including the
+`+0x20` addend into the `Mx3DPointFloat` vftable, which I checked explicitly
+because an addend lives in the *masked* bytes and is exactly where an S72-class
+error would hide. Only `$L`/`$T` local ids differ from the seed.
+
+**Recommendation: re-sweep the strip `extern k=18..60` and `fwd k=97..200` for
+every open row in the tree, not just mine.** It is cheap, it is a landable
+donor kind, and in this lane it was worth two rows in one pass.
+
+Extended further here (`extern m=0..8 x k=31..60`, `extern m=9..16 x k=0..20`,
+`fwd k=97..200`, ~2,700 states over all five TUs): no further nd=0 on an open
+row, but the region keeps producing *new* residue minima — e.g. `HitActor`
+also reaches nd=1 @495 at `extern-4-60`, `RemovePresenter` reaches its nd=3
+floor at `extern-15-0` (a landable kind, where before it was only reachable at
+`fwdP`/`pad`), and `CreateActorROI` reaches nd=8 @[1052..1060] at
+`extern-6-27`, its first non-trap near-miss.
+
+## 22. The stacked pass on the regrole rows (coordinator's retraction applied)
+
+Lane STL's retraction — regrole ties *do* move on the stacked axis, and a
+partial `shapefull` pass is not a uniform sample because `c` ascends — was
+applied to all three of my regrole blockers. Each got a **full 505-cell shape
+grid crossed with its best forward-run count**, which is the construction that
+found Lane STL's `erase<MxAtom*>` winner:
+
+| row | text | stacked pass | states | best | vs flat best |
+|---|---|---|---|---|---|
+| `0x10083bc0 GetRefCount` (blocks the `GetActorROI` landing) | h12j | `stkE:88 x full` | 505 | **1 @84** | 1 @84 |
+| `0x10082ca0` charmgr `erase` | current | `stkL:69 x full` | 505 | **2** @[145,434] | 1 @145 (worse) |
+| `0x1002bff0` extraactor `erase` | current | `stkE:9 x full` | 505 | **17** | 1 @434 (much worse) |
+
+Plus the earlier lattice passes (§17). Cumulative for `GetRefCount`: **2,942
+states**. The retraction is correct as a general law — it just does not rescue
+these three. For the two `erase` rows the stacked carrier is actively harmful:
+the force-included shape destroys the extern/forward state that produced the
+nd=1 body in the first place.
+
+## 23. Two corrections to `docs/open-set-triage.md` (the classifier scores the SEED)
+
+The triage classifier runs against the built object, i.e. the seed's carrier
+state, so for any row whose carrier state is wrong it measures the wrong body:
+
+* `0x1002bff0` and `0x10082ca0` are listed **`length:real` (+8, Δinsn +2)** and
+  therefore land in the TEXT/INLINE bucket. Both reach **retail's exact 1096
+  bytes with nd=1** under a carrier (93 of 653 states and 26 of 653
+  respectively). They are COLOUR rows.
+* `0x100574a0 RemoveActor` is listed **`length:real` (-5, Δinsn -2)**. It
+  reaches retail's exact 258 bytes in 151 of 653 states, nd=1. Also COLOUR —
+  and §17 shows it is a *three-way* colour tie (129/137/240), any two of which
+  are simultaneously fixable.
+
+Suggested fix for `triage2.py`: classify against the **best carrier state's**
+body rather than the seed's, or at least emit both. As it stands the
+length-defect bucket is inflated by rows whose only defect is that the seed's
+carrier state is wrong — which was wave-4a's §0 finding, now confirmed on three
+more rows.
+
+Conversely the triage corrects **me**: `0x10048310 FindPath` is
+`length:encoding` with an identical instruction multiset, so my "text channel,
+nd=491" verdict — and the older "nd 1741, permanently out of carrier queues"
+seal — are both wrong. It is a colour row with a large colouring delta and it
+deserves a stacked pass.
