@@ -676,3 +676,21 @@ So the extra retail local is **not** a scalar temp at this site: MSVC folds all
 three away without growing the frame. Whatever retail declared, it must be
 address-taken or aggregate (array/struct) to earn a slot. Confirmed
 `LegoLOD::Read` needs its own session, as wave 1 said.
+
+### `Act3Ammo::Animate` 0x10054050 (+1) — read off, register-role again
+
+EAX census: ours 1 short / 1 long, retail 1 short / 1 long — the +1 is not an
+encoding artefact. First real divergence is at body+967 and it is the familiar
+shape: ours `lea ecx,[ebp+esi-0xc0]` / `lea eax,[ebp+esi-0xbc]`, retail
+`lea eax,[ebp+esi-0xc0]` / `lea ecx,[ebp+esi-0xbc]` — an eax↔ecx swap of the
+two matrix-row address temporaries in the rotation loop, cascading through the
+following ~900 bytes. Everything before body+51 is byte-identical, and the
+first three diff bytes (49, 58, 68) are just branch displacements absorbing the
++1. BETA10 0x1001e362 was not read (the structure before the divergence already
+matches, so a read-off has nothing to arbitrate).
+
+### `LegoCarRaceActor::CheckPresenterAndActorIntersections` and `Act3Brickster::Animate`
+
+EAX census on both: identical short/long counts in ours and retail, so their
++5 and +4 are structural (the `_Tree` `operator++` tail-merge for the former,
+see above) rather than encoding.
