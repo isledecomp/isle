@@ -500,3 +500,38 @@ as width 3 (`Animate` 7 @ fwdE-59, `FUN_10040360` 8 @ fwdE-20,
 (200561 vs 200565 bytes — the symbol names change). Width is not a useful
 axis; spend the compiles on `count` instead. (`prefix` length remains
 untested.)
+
+## SWEEP LEDGER (every carrier state compiled this session; best nd per row)
+
+All donor-lane (`s.cpp` relative, cwd = probe dir, `/I<source dir>`), scored
+against `oracles-v2.json` with the length defect added to nd. Objects retained
+under `…/scratchpad/b10w4/sweeps/<stem>[-tag]/<state>/o.obj`; per-state maps in
+each directory's `rows.jsonl`.
+
+| stem | axes run | states | best per row |
+|---|---|---|---|
+| all-legowegedge | shape,fwdL,fwdP,fwdE(1-96),extern,padgrid | 653 | LinkEdgesAndFaces **2** @ shape-5-40 (also fwdL-2) |
+| all-legowegedge | fwdE,fwdL 97..400 | 608 | LinkEdgesAndFaces **2** @ fwdL-156 |
+| all-act3 | shape,fwdL,fwdP,fwdE(1-96),extern,padgrid | 653 | RemoveByObjectIdOrFirst **7** @ shape-1-2 · TriggerHitSound **11** @ shape-1-1 · Enable **105** @ shape-1-3 (len 929 = retail) |
+| all-act3 | fwdE,fwdL 97..400 | 608 | 7 @ fwdE-99 · 11 @ fwdE-97 · 105 @ fwdL-99 |
+| all-towtrack | full grid + fwd 97..400 | 1261 | HandlePathStruct **11**, unmoved (@shape-1-5, @fwdE-103) |
+| all-legorace | full grid | 653 | JetskiRace **18** @ shape-1-10 · CarRace **111** @ shape-1-1 |
+| all2-legoroi | full grid | 653 | Intersect **0** (26 states) · ~LegoROI **1** @ fwdE-31/95 · Read **65** @ pad-11-8 |
+| all2-legoroi | fwdE 97..300 | 204 | **~LegoROI 0 @ fwdE-159 (LANDED)** · Read **41** @ fwdE-288 (still improving with k) |
+| all2-legoroi | fwdL 97..300 | 204 | Read 62 @ fwdL-271 |
+| all2-legoroi | fwdE/fwdL 1..99 width 2 | 198 | ~LegoROI 1 @ fwdE-31 (width inert) |
+| all2-legolod | full grid | 653 | LegoLOD::Read **283** @ fwdE-63 |
+| all-legoanim | full grid | 653 | CalculateCameraTransform **263** @ fwdE-15 (len 1074, still 47 short) |
+| all2-act3actors | full grid | 653 | Animate **7** @ fwdE-59 (len 1632 = retail) · FUN_10040360 **8** @ fwdE-20 · FUN_100417c0 **96** @ fwdE-28 |
+| all2-act3actors | fwdE,fwdL 97..400 | 608 | Animate 7 @ fwdE-123 · FUN_10040360 8 @ fwdE-212 · FUN_100417c0 96 @ fwdE-112 |
+| all2-act3actors | fwdE 1..99 width 2 | 99 | identical to width 3 (sealed negative) |
+| all2-legomain | fwdE 1..12 | 12 | **Create 0 @ fwdE-7 (LANDED)** · Destroy 251 @ fwdE-12 · erase 675 |
+| all2-legoroi (mirror text) | fwdE 1..96 | 96 | ~LegoROI 1 @ fwdE-31 — the `end() == it` mirror is inert under the carrier too |
+
+Plateau reading: `RemoveByObjectIdOrFirst` (7), `TriggerHitSound` (11),
+`TowTrack::HandlePathStruct` (11), `LinkEdgesAndFaces` (2),
+`Act3Cop::FUN_10040360` (8) and `Act3Brickster::Animate` (7) each hold the SAME
+distance across 1200+ states on four different generators — these are hard
+one-or-two-tie rows, not "not searched enough" rows. The untried landable
+cells left for them are `declaration_shape`'s full 550-cell grid and large
+`extern_run_pair` counts (both queued as `sweep5`).
