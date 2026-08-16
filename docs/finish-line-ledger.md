@@ -1021,3 +1021,30 @@ states, **2,186 states, one 843-byte body**. Together with §7 (its permuted
 stores do not encode statement order) that row has no known channel at all, and
 it should be taken off carrier queues until somebody has an allocator
 instrument.
+
+### The edge extension — the truncation was real, the floor is not
+
+`sw-all2-isleedge`: `externF:1:41:120` and `externF:35:41:120`, 160 states, both
+strata carried out to `k = 120`.
+
+```
+0x10031820 retail=3580  nd=11 @extern-1-41  offs=[2206, 2209, 2212, 2215, 2218, 2220, 2222, 2224, 2226, 2231, 2233]
+           lens: 3580 x 120,  3588 x 40
+nd histogram: 11 x 24,  28 x 71,  34 x 12,  193 x 5,  210 x 8
+floor states: extern-1-{41,72,73,99,100,101,102,103,104,105}
+              extern-35-{65..71,97..103}
+```
+
+Both strata **do** continue past `k = 40` — the floor states run out to
+`k = 105` at `m = 1` — so the "boundary-argmin means keep going" rule was right
+that the region was truncated. But the floor itself never moves off **11**, and
+the offset list is byte-for-byte identical in all 24 of them. (The 40 states at
+length 3588 are the ones that fall out of retail's length family entirely; they
+are the `nd = 193/210` tail.)
+
+**Extern family, final extent for `0x10031820`:** 1,681 rectangle + 160 edge
+states = **1,841 states, floor 11, offsets invariant**; plus 505 declaration
+-shape states over the argmin seats, same floor and same offsets. Now running
+the two channels this row has never seen: `extern_pair_with_pad` over the same
+seats, and include-order permutation — the axis that produced Lane NM's
+complementary residue on `0x1002bff0` when neither shape family could.
