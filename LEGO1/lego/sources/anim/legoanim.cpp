@@ -1023,7 +1023,7 @@ LegoU32 LegoAnimNodeData::FindKeys(
 }
 
 // FUNCTION: LEGO1 0x100a0b00
-// FUNCTION: BETA10 0x1017f7c3
+// FUNCTION: BETA10 0x10180e00
 inline LegoFloat LegoAnimNodeData::Interpolate(
 	LegoFloat p_time,
 	LegoAnimKey& p_key1,

@@ -1,8 +1,8 @@
 # BETA10 archaeology ledger
 
 The debug images in `legobin/` (BETA10.DLL, ALPHA.DLL) are unoptimised builds:
-statement order, named locals, un-inlined calls and frame-slot order all
-survive. That makes them a **source oracle** for rows the carrier/generator
+statement order, named locals and un-inlined calls all survive (frame-slot
+order does NOT decode declaration order -- see the correction below). That makes them a **source oracle** for rows the carrier/generator
 sweeps have sealed — the channel the sweep campaign ledger calls
 "text archaeology".
 
@@ -13,10 +13,15 @@ annotation.** Those are the rows this channel can speak to.
 
 ## What the oracle can and cannot say
 
-- It **can** settle: how many locals a function had, their declaration order
-  (debug allocates frame slots in declaration order), statement order, whether
-  a value was a named local or a repeated expression, and which call arguments
-  were used.
+- It **can** settle: how many locals a function had (the local *set*), the
+  order of emitted initialisers and hence **statement order**, whether a value
+  was a named local or a repeated expression, and which call arguments were used.
+- It **cannot** settle local **declaration order**. My original claim here --
+  "debug allocates frame slots in declaration order, so the beta frame decodes
+  the 1997 declaration list" -- is WRONG and was refuted with the real compiler
+  at /Od; see "The /Od slot rule is NOT declaration order" below. Plain scalars
+  do descend in declaration order, but class-typed locals do not: reversing all
+  six locals of a mixed probe changed the layout by one swap out of six.
 - It **cannot** speak to residue that lives inside an *inlined* template body:
   the beta does not inline. `LegoPathBoundary::RemoveActor` (0x100574a0) is the
   worked example — the beta is a bare `call erase`, so the −5 byte residue in
@@ -263,3 +268,46 @@ Method note: `fulldiff.py` originally showed dozens of false differences on
 every row because our object stores `0` where retail stores the linked address.
 **Normalise call/jmp targets and any immediate >= 0x100000 on both sides before
 diffing**, or the relocation noise buries the real residue.
+
+## Correction to the call census bound (2026-08-16, main loop)
+
+The census over the 81 open rows compares **call counts**, not call targets, so
+"78 of 81 carry retail's exact call graph" should read "…matching call counts".
+The distinction is not academic — `0x1003cf20 ~LegoCacheSoundManager` is a
+counterexample the count test cannot see:
+
+    ours    direct=7 indirect=2  len=274
+    retail  direct=7 indirect=2  len=258
+
+Counts agree, graphs do not. Our seven extra instructions at offsets 146-163
+are the inlined body of `~LegoCacheSoundEntry`
+(`cmp [ecx],0 / jne / mov eax,[eax+0xc] / test / je / push / call / add esp,4`),
+i.e. `if (m_sound == NULL && m_name != NULL) delete[] m_name;`. Retail instead
+emits one `call ~LegoCacheSoundEntry`. Both bodies therefore contain the same
+*number* of calls — ours to `operator delete[]`, retail's to the destructor.
+
+So the bound "don't hunt missing calls anywhere else in the open set" is not
+safe as stated: **an inline accept/decline can hide behind equal call counts
+whenever the inlined body itself contains a call.** The census still bounds the
+cheap cases; to close it, compare call *targets* by symbol, not counts.
+
+Anchors for the inline accept/decline channel, now four and byte-exact:
+- `0x1009f490` retail calls `Interpolate`, we expand and DCE it (−47)
+- `0x100a4420` retail calls `Vector3::Vector3` for the sub-object at `this+0xa8`,
+  we expand it (+6) — previously misfiled as "the inline ladder"
+- `0x10061010` **opposite direction**: retail inlines the `MxListEntry` ctor,
+  we call it (−14)
+- `0x1003cf20` retail calls `~LegoCacheSoundEntry`, we inline it (+16)
+
+## BETA10 annotations are not all correct
+
+`legoanim.cpp` annotated `LegoAnimNodeData::Interpolate` as `BETA10 0x1017f7c3`.
+That address opens an SEH frame (`push -1; push handler; mov eax,fs:[0]`) and is
+not a float helper. The real beta `Interpolate` is **0x10180e00**, reached from
+the beta's own `CalculateCameraTransform` at 0x10181eb2 with five arguments and
+`add esp,0x14`. Corrected in-tree; gate re-verified green at 4853.
+
+Method for trusting a beta address: confirm it structurally, or reach the callee
+by following a call from a body you already trust. A second suspect annotation
+at `legoanim.cpp:1046` is left alone pending that check — do not change a BETA10
+annotation you have not independently confirmed.
