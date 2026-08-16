@@ -5031,6 +5031,98 @@
    }
   },
   {
+   "target": "lego1",
+   "source": "LEGO1/modeldb/modeldb.cpp",
+   "source_sha256": "e3d4630c2f5badd11098d91b8fe73be038c0b84919ff0764c805f99dcee89ea5",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_72176ada34d8",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 72,
+      "seat_prefix": "g_p",
+      "seat_count": 72,
+      "width": 2,
+      "generated_header_sha256": "72176ada34d8526d48b826dd8605723d0e468b70e2ab045267f0227ca9acf2ae",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?ReadModelDbWorlds@@YAJPAU_iobuf@@AAPAUModelDbWorld@@AAH@Z",
+     "expected_body_length": 802,
+     "expected_body_sha256": "73b818cab851c21e3de0bdab156e6d40e465735e4828e94639200562cfe5dc06",
+     "expected_changed_offsets": [
+      444,
+      449,
+      489,
+      506,
+      510,
+      515,
+      518,
+      527,
+      572,
+      591,
+      595,
+      604,
+      619,
+      621,
+      623,
+      635,
+      639
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       780,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60,
+      68,
+      76,
+      84
+     ],
+     "donor": "d_72176ada34d8"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row(s) in LEGO1/modeldb/modeldb.cpp from a generated carrier state over the rendered current source; a pure register-colouring residue that only the long extern grid (72x72, far outside the historical 8x17 box) reaches.",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
    "target": "omni",
    "source": "LEGO1/omni/src/action/mxdsstreamingaction.cpp",
    "source_sha256": "98e3356e748d8c9ab2cf6a3a4d1e294a035b0dddff5202a965f57dcfcd367102",
@@ -5294,8 +5386,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4847,
-    "accepted_row_identity_sha256": "d02ad55255ec4bdc8b5e8668a267e50d1962236c6fd9f0db2f09b98c62cd824a",
+    "exact_raw_1_0_count": 4848,
+    "accepted_row_identity_sha256": "a2983a570707bf0e381270d6374a63cd3bb7cb49690836a31f0ba8e105f6c705",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
