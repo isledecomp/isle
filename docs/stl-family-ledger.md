@@ -8,6 +8,14 @@ Baseline verified in this worktree before any change:
 `ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE: LEGO1 4831/4933,
 ISLE 172/172, CONFIG 111/111 in 80.8s`.
 
+**Result: LEGO1 4831 → 4833, zero LOST, ISLE 172/172 and CONFIG 111/111
+intact.** Two rows landed (`ParseExtra` 0x1006bac0, `~ViewLODListManager`
+0x100a7130); both had been unreachable by construction because the bench
+scored them at the wrong length, and one of them additionally needed a
+carrier the composer could not render until this session. The durable
+products are the family map (§1), the two bench defects (§1.5, §5), the
+`forward_run_with_shape` recipe (§6), and the hard negatives (§4).
+
 Measurement tooling for everything below lives in the session scratchpad
 `.../3233884b-.../scratchpad/stl/`:
 `famextract.py` (retail bodies of every `_Tree` row), `symmap.py` (our
