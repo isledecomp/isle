@@ -1337,7 +1337,94 @@ as **OUT-OF-SCOPE** for the transcription channel, and §10.1 here shows its
 colouring is a property of the emitting TU. There is no first-party text to
 read off. It belongs in the colour channel with the rest of the family.
 
-## 14. Reproducing this lane
+## 14. Wave 8 — FUN_10061010, the worst row
+
+Baseline re-derived rather than compared: my merge base `251a6d56` builds
+**4845/4933**. The 4934 denominator (the `LegoROI::Intersect` annotation fix)
+is not in it, so nothing here is comparable to a 4934-based score.
+
+**Correction to the wave-8 brief:** `0x100af7e0` is **already at 1.0** — this
+lane landed it in wave 4 (`7808678e`). It is not an extern-grid target.
+
+### 14.1 A real source defect, found by the aimed diff: `animRunning`
+
+The first structural divergence is at offset 27 and it is a **type** defect,
+not a layout one:
+
+```
+OURS   c745e800000000  mov dword ptr [ebp-0x18], 0    <- 4-byte store
+RETAIL c645e700        mov byte  ptr [ebp-0x19], 0    <- 1-byte store
+```
+
+Our source declares `MxS32 animRunning = FALSE;`. Retail stores a **byte**,
+and the member it is assigned to is `MxBool m_animRunning; // 0x39`
+(`MxBool` = `MxU8`). So the local's type is wrong.
+
+`MxBool animRunning = FALSE;` (line-neutral) produces
+`mov byte ptr [ebp-0x15], 0` — retail's instruction form — and removes a
+**3-byte skew** that had been misaligning everything downstream: with the
+edit, offsets 32 / 44 / 52 / 58 coincide on both sides, where before they ran
+35 / 47 / 55 / 61 against retail's 32 / 44 / 52 / 58.
+
+**LANDED in the checked source, zero-loss** (4845 → 4845, no LOST, no GAIN;
+`tools/repin_overlay.py` re-pinned). It does not close the row on its own —
+body 726 → 717 against retail's 731 — but it is a correct source form backed
+by two independent facts (the member's type, and retail's store width), and
+the campaign's own history says text corrections compound rather than pay off
+individually. Note the body got *shorter* while getting structurally closer:
+**length is not the metric**, the same lesson as GetCached in §13.2a.
+
+### 14.2 The `MxListEntry` half: hypothesis tested and REFUTED
+
+Our object emits an out-of-line COMDAT
+`??0?$MxListEntry@PAULegoTranInfo@@@@QAE@PAULegoTranInfo@@PAV0@1@Z` — the
+**3-argument** ctor — and calls it. The retail report has no row for it. The
+source carries a standing TODO on exactly this ("the embedded `MxListEntry`
+constructor is not inlined; this may be the key"). Retail inlining it would
+explain both the longer body (+5) and the bigger frame (+3 slots).
+
+The ctor is already defined in-class, so MSVC's inliner simply declined it.
+The obvious lever is the body's statement count: an initialiser list has zero
+body statements where the assignment form has three, and MSVC 4.2's inline
+heuristic is statement-count based.
+
+**Measured, then reverted:**
+
+```
+MxListEntry(T p_obj, MxListEntry* p_prev, MxListEntry* p_next)
+    : m_obj(p_obj), m_prev(p_prev), m_next(p_next) {}
+```
+
+→ **LOST `0x100cc3c0 MxListEntry<MxString>::MxListEntry`**, a currently-exact
+row, and no gain anywhere: 4845 → 4844.
+
+That is a **decisive negative with a positive corollary**: a
+currently-byte-exact retail row is reproduced by the *assignment* form and
+broken by the initialiser list, so **retail's `MxListEntry` ctor body uses
+assignments** and our source is already right. The inline/out-of-line
+difference for the `LegoTranInfo*` instantiation is therefore not a ctor
+spelling at all — it is the C2 inliner declining at that one call site, i.e.
+the inline-budget class (fresh-eyes-2 §C4), not the text channel.
+
+`LEGO1/omni/include/mxlist.h` is outside this lane's TU list in any case; the
+experiment was run only to settle the hypothesis and was reverted immediately
+(`git checkout`, rebuild confirms 4845 restored).
+
+### 14.3 Where FUN_10061010 stands
+
+* frame budget **−3 slots** (ours `sub esp,0x2c`, retail `0x38`) — unspent,
+  and §13.2a's lesson applies: three *lifetimes*, not three names.
+* `animRunning` type corrected and landed; 3-byte skew removed.
+* the `MxListEntry` route is closed as a text lever and reclassified to the
+  inline-budget class.
+* body 717 vs retail 731; instruction counts 208 vs 211.
+
+The remaining +14 bytes and +3 slots are consistent with one inlined
+construction we do not perform. That is the same conclusion the standing TODO
+reached, now with the ctor-spelling explanation eliminated and the row's type
+defect fixed underneath it.
+
+## 15. Reproducing this lane
 
 Everything lives in `scratchpad/stl/` (a private copy of `sweep-bench/` +
 `fresh2/` repointed at `isle-build-tr03`). Nothing in the shared corpus was

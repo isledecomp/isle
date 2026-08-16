@@ -1277,7 +1277,7 @@ void LegoAnimationManager::FUN_10061010(MxBool p_und)
 // FUNCTION: LEGO1 0x10061010
 void LegoAnimationManager::FUN_10061010(MxBool p_und)
 {
-	MxS32 animRunning = FALSE;
+	MxBool animRunning = FALSE;
 	FUN_10064b50(-1);
 
 	if (m_tranInfoList != NULL) {

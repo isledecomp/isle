@@ -1703,7 +1703,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-   "source_sha256": "04ca6caaed203db3d4f97d186569522adf79170d0adc645226ac60088eb85dad",
+   "source_sha256": "e5d9e961d7cf62f7e05f33637d558d13f52bdbc0773be0bd9db6443b66c46730",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4832,6 +4832,25 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_5c8f94e9502d",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 18,
+      "seat_prefix": "g_p",
+      "seat_count": 12,
+      "width": 2,
+      "generated_header_sha256": "5c8f94e9502dc8e2acb62c9326aab845cf70396a910117ab5b1dffb35bffb0c4",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -4995,6 +5014,122 @@
       76
      ],
      "donor": "d_e277a8695ed2"
+    },
+    {
+     "mangled": "?StepState@LegoExtraActor@@UAEIMAAVMatrix4@@@Z",
+     "expected_body_length": 876,
+     "expected_body_sha256": "f12c9a0f337aec6af3d5f82f2d565683e69cc058d493b0b388e045e9101aeacc",
+     "expected_changed_offsets": [
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      396,
+      408,
+      438,
+      444,
+      455,
+      461,
+      505,
+      517,
+      547,
+      553,
+      564,
+      570,
+      635,
+      639,
+      649,
+      655,
+      670,
+      676
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       35,
+       "L"
+      ],
+      [
+       260,
+       "L"
+      ],
+      [
+       266,
+       "T"
+      ],
+      [
+       290,
+       "T"
+      ],
+      [
+       375,
+       "T"
+      ],
+      [
+       399,
+       "T"
+      ],
+      [
+       484,
+       "T"
+      ],
+      [
+       508,
+       "T"
+      ],
+      [
+       590,
+       "T"
+      ],
+      [
+       614,
+       "T"
+      ],
+      [
+       844,
+       "L"
+      ],
+      [
+       848,
+       "L"
+      ],
+      [
+       852,
+       "L"
+      ],
+      [
+       856,
+       "L"
+      ],
+      [
+       860,
+       "L"
+      ],
+      [
+       864,
+       "L"
+      ],
+      [
+       868,
+       "L"
+      ],
+      [
+       872,
+       "L"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_5c8f94e9502d"
     }
    ],
    "completion": {
@@ -5386,8 +5521,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4848,
-    "accepted_row_identity_sha256": "a2983a570707bf0e381270d6374a63cd3bb7cb49690836a31f0ba8e105f6c705",
+    "exact_raw_1_0_count": 4849,
+    "accepted_row_identity_sha256": "7b73ad51292408dc5f9e0ac0f2ad29aa8d26ad18a32dd143bb47bf084e9c712c",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
@@ -8463,9 +8598,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-    "clean": "04ca6caaed203db3d4f97d186569522adf79170d0adc645226ac60088eb85dad",
-    "effective": "d5993891fc8f7098b9e6db0dc54dbe929350177b20241907cd3b1d8cda0e9847",
-    "size": 75259,
+    "clean": "e5d9e961d7cf62f7e05f33637d558d13f52bdbc0773be0bd9db6443b66c46730",
+    "effective": "c25a4583c9dce438461498a39316b6f98b3260e59a22781ddfa061407b8a4af4",
+    "size": 75260,
     "ops": [
      {
       "op": "insert",

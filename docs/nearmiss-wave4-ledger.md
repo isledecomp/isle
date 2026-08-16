@@ -983,3 +983,191 @@ noted):**
    coordinator-level decision only after (1) has been tried on it.
 5. **Fix `triage2.py` to classify against the best carrier state** (§23);
    three of my rows are in the wrong bucket today.
+
+---
+
+# Wave 4d — the ceiling assignment, and a falsification of the count-only law
+
+Rebased onto `44929962`; gate re-verified: **LEGO1 4842/4933**, ISLE 172/172,
+CONFIG 111/111.
+
+## 25. FALSIFIED IN THIS LANE: a carrier run is **not** count-only
+
+Before sweeping the count line I tested the law that would have made the line a
+complete search. **It does not hold for my TUs, and the failure is not
+marginal.**
+
+**Test 1 — hold the total count fixed, vary the split.** `extern:m:k` seats `m`
+declarations after the last `#include` and `k` at EOF, so `m+k` is the count.
+Sweeping the entire `m+k=33` diagonal (34 states, one compile each):
+
+| row | TU | distinct `.text` bodies on the diagonal | nd range |
+|---|---|---|---|
+| `0x1002aba0 HitActor` | legoextraactor | **9** | 0, 7, 10, 17, 23, 29, 33, 55 |
+| `0x10057fe0 AddPresenterIfInRange` | legopathboundary | **8** | 0, and 7 other bodies |
+| `0x100574a0 RemoveActor` | legopathboundary | 2 | — |
+
+If a run were count-only, every one of those 34 states would be byte-identical.
+`HitActor` takes nine different bodies at constant count.
+
+**Test 2 — and the winner is usually a singleton.** `AddPresenterIfInRange`'s
+retail-exact body occurs at **exactly one** of the 34 states (`extern-7-26`);
+`HitActor`'s occurs at four (`extern-{5-28,9-24,10-23,11-22}`). **Both of my
+wave-4c landings would have been missed by a pure count-line sweep** —
+neither sits at `m=0`.
+
+**What *is* inert, measured here (agreeing with Lane STL):**
+
+* declaration **kind** — `extern-0-33` (33 `extern int`) and `fwdE-33`
+  (33 `class X;`) give byte-identical bodies, and they differ in kind, stem and
+  width simultaneously;
+* the **file-start** and **EOF** seats collapse — `fwdL-33` (prefix) gives the
+  same body as `fwdE-33` / `extern-0-33` (suffix);
+* the **after-includes** seat does NOT collapse into them — `fwdP-33` gives the
+  same body as `extern-33-0` (both put all 33 after the includes) and a
+  *different* body from `fwdE-33`.
+
+So the carrier grammar in this lane is:
+
+```
+state = ( |declarations after the last #include| ,
+          |declarations at file-start or EOF| ,
+          declaration_shape(c, f) )
+```
+
+— a **2-D count lattice** (not a 1-D line) crossed with the 2-D shape. Stem,
+width and declaration kind are free; prefix and suffix are one seat.
+
+The equivalence classes on the diagonal are also *not* a simple function of
+`(m,k)`: e.g. for `HitActor`, `extern-{0-33,1-32,2-31,16-17,17-16,20-13,21-12}`
+all give one body while `extern-5-28` gives another. Whatever C1XX is counting,
+it is coarser than the pair and finer than the sum.
+
+**Consequence for the assignment:** "sweep the count line completely" is not a
+complete search of the carrier space — it is a complete search of one line
+through a plane. I am sweeping the **rectangle** `m=0..24 × k=0..40` (1,024
+states per TU) instead, and reporting the floor-vs-count curve *within* it, so
+the number the next wave wants is still produced but is not mistaken for the
+whole story.
+
+## 26. LANDED: `0x1002a720 LegoExtraActor::StepState` — from the rectangle, not the line
+
+`.9314 -> 1.0` at `extern-18-12`, commit `3f22ed02`, gate **4842 -> 4843/4933**,
+zero LOST. `StepState` had floored at nd=6 across every previous axis (653 flat,
+505-cell shape grid, 240 stacked, ~700 long-count states).
+
+The relocation guard also settles a standing question from
+`docs/donor-debt-bisect-ledger.md`: the retail-exact body **references
+`g_hitAnimationDelay`**, so the current source form (the file-scope static) is
+retail-correct for this row and the "varab era" revert
+(`m_scheduledTime = p_time + 2000.0f` without the static) is definitively wrong
+for it. One of the two hunks blocking `0x1002bff0` is now known to be a
+regression, not a restoration.
+
+## 27. The floor-vs-count curves (the number the next wave asked for)
+
+Rectangle `m=0..24 x k=0..40` (1,024 states per TU), scored per row. For each
+total count `c` I take the minimum over the whole `m+k=c` diagonal, then the
+running best. Two numbers per row: where the floor stopped improving, and what
+the floor would have been on the **`m=0` count line alone, swept completely to
+count 64** — i.e. exactly the search the "count-only" model prescribes.
+
+| row | rectangle floor | last improvement at count | argmin (m,k) | **floor on the count LINE alone** |
+|---|---|---|---|---|
+| `0x1002a720 StepState` | **0** | 30 | (18,12) | **6** |
+| `0x10045c20 PlaceActor` | **0** | 23 | (11,12) | **9** |
+| `0x1002bff0` extraactor `erase` | 1 | 9 | (0,9) | 1 |
+| `0x10082ca0` charmgr `erase` | 1 | 37 | (15,22) | **43** |
+| `0x10083500 GetActorROI` | 4 | 6 | (0,6) | 4 |
+| `0x10083890` charmgr `_Insert` | 7 | 21 | (17,4) | no length match at all |
+| `0x10085500` charmgr `insert` | 12 | 16 | (15,1) | 16 |
+| `0x10048310 FindPath` | 159 | **50 (at the rectangle EDGE)** | (10,40) | **491** |
+
+Read the last column against the third: **the two rows I landed this wave are
+both unreachable from the count line.** A complete sweep of the line floors
+`StepState` at 6 and `PlaceActor` at 9; the rectangle puts both at 0. For
+charmgr `erase` the line floors at 43 and the rectangle at 1 — a 42-byte gap
+that is entirely the second seat.
+
+**Where the yield dies, and why.** For every row whose floor is reached inside
+the rectangle, the last improvement lands between counts 6 and 37 and nothing
+below improves it out to count 64 — so for those rows the answer to "where do I
+stop" is **count ≈ 40 in both coordinates**, and the reason is that the
+improvement is exhausted, not truncated. `FindPath` is the exception and the
+important one: its argmin sits **on the boundary** `k=40` with the floor still
+falling steeply (491 -> 159), so its curve is truncated, not flat. I am
+extending it (`m=0..24 x k=41..80`) and the next wave should treat a
+boundary-argmin as "keep going" wherever it appears.
+
+## 28. `0x10048310 FindPath` — the seal and my own verdict were both wrong
+
+Triage said `length:encoding`, identical instruction multiset. Confirmed and
+then some: on the rectangle `FindPath` reaches retail's exact 2338 bytes with
+**nd=159**, against the historical corpus minimum of **1741** that sealed it out
+of every carrier queue, and against the 491 I reported one wave ago from the
+flat axes. It is a colour row with a large but shrinking colouring delta, its
+floor is still falling at the edge of the region swept so far, and it has never
+had a stacked pass.
+
+## 29. Where the yield dies — measured in both directions
+
+The assignment was to push until the yield curve flattens and record where and
+why. It flattens, and I found the edges by walking past them:
+
+| extension | states | result |
+|---|---|---|
+| `m=0..24 x k=41..80` (legopathcontroller) | 1,000 | `FindPath` **worse**: 515 vs the 159 found at `(10,40)`. `(10,40)` is a genuine local minimum, not a truncation edge. `PlaceActor` still 0 (also at `extern-1-79/80`). |
+| `m=25..48 x k=0..40` (legocharactermanager) | 984 | `erase` **worse**: 13 vs 1. `_Insert` 4 (ties the flat `fwdL-35`), `GetActorROI` 4 (ties). No improvement anywhere. |
+| `m=0..24 x k=0..40` (legopathboundary) | 1,024 | no improvement on any of its three rows: `RemoveActor` 1 @240, `RemovePresenter` 3, `_Erase` 10. |
+
+**Conclusion: the productive region is `m,k <= ~40` and the yield is genuinely
+exhausted beyond it** — not truncated. Every landing in this lane came from
+inside `m<=18, k<=28`. The honest statement of where to stop is therefore
+**count ~40 per seat, both seats swept**, and the reason is measured
+degradation past that, in two directions, on three TUs.
+
+The `m=0` column of that same region is the "complete count line" of the
+count-only model, and §27 shows what it costs: it misses both of this wave's
+landings.
+
+## 30. `FindPath 0x10048310` — 1741 -> 491 -> 159 -> 87
+
+Given the strip and the stacked pass it had never had:
+
+| search | best nd at retail's 2338 bytes |
+|---|---|
+| historical corpus minimum (the number that sealed the row) | 1741 |
+| flat axes, wave-4a | 491 |
+| carrier **rectangle** `m=0..24 x k=0..40` | **159** at `extern-10-40` |
+| **stacked** `stkE:40 x` full 505-cell shape grid | **87** at `stkE-40-5-28` |
+| shape pinned at (5,28), count line swept **completely** 1..150 | 87 at `stkE-37-5-28` |
+
+Two orders of magnitude off the sealed number, and still not a floor anyone has
+justified — the shape grid and the count line have each been swept completely
+but only *around one another*, never jointly with the second seat (the stacked
+recipe has one seat; the winning rectangle state needs `m=10`). **A carrier kind
+that stacks BOTH seats with a shape would close the gap**, and it is the same
+one-line composition as `forward_run_with_shape`. That is my top framework ask.
+
+## 31. Wave-4d summary
+
+**Rows gained: 1** (`0x1002a720 StepState`); lane total for wave 4: **5**.
+Gate at hand-off: **LEGO1 4843/4933**, ISLE 172/172, CONFIG 111/111, zero LOST.
+
+Sweep budget spent this wave: ~6,900 donor-lane compiles (three 1,024-state
+rectangles, two ~1,000-state extensions, two 34-state diagonals, a 505-cell
+stacked grid, a 150-state pinned count line).
+
+**What I would do next, in order:**
+
+1. **A two-seat stacked carrier kind** (`extern_pair_with_shape`): the evidence
+   for it is `FindPath` (needs `m=10` + a shape) and `charmgr erase` (needs
+   `m=15,k=22` for one byte and `fwdL-69` for the other). Every row still open
+   in this lane wants the two seats and the shape at once, and no current
+   recipe expresses that.
+2. **Re-sweep the rectangle tree-wide** — `m=0..24 x k=0..40` per TU, ~1,000
+   compiles each. In this lane it was worth two rows, and §27's line-vs-rectangle
+   column says the count line alone would have found neither.
+3. `FindPath` with (1), from `extern-10-40 x shape(5,28)`.
+4. `GetRefCount 0x10083bc0` — still nd=1 @84 after ~2,900 states; it blocks a
+   fully-specified +1 on `GetActorROI`.
