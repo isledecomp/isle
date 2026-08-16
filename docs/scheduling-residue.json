@@ -1,0 +1,5050 @@
+[
+ {
+  "aligned": 0.9953,
+  "ours_insn": 212,
+  "retail_insn": 212,
+  "cross_moves": 0,
+  "moves_total": 1,
+  "verdict": "INTRA-BLOCK",
+  "reason": "1 instruction(s) reordered inside their own block",
+  "moves": [
+   {
+    "text": "inc eax",
+    "ours_at": 147,
+    "retail_at": 146,
+    "distance": -1,
+    "ours_block": 21,
+    "retail_block": 21,
+    "cross": false
+   }
+  ],
+  "address": "0x100ba7f0",
+  "name": "MxDisplaySurface::Create",
+  "score": 0.9953
+ },
+ {
+  "aligned": 0.9905,
+  "ours_insn": 315,
+  "retail_insn": 315,
+  "cross_moves": 0,
+  "moves_total": 3,
+  "verdict": "INTRA-BLOCK",
+  "reason": "3 instruction(s) reordered inside their own block",
+  "moves": [
+   {
+    "text": "mov dword ptr [ebp - 0x74], edx",
+    "ours_at": 208,
+    "retail_at": 206,
+    "distance": -2,
+    "ours_block": 29,
+    "retail_block": 29,
+    "cross": false
+   },
+   {
+    "text": "xor eax, eax",
+    "ours_at": 209,
+    "retail_at": 209,
+    "distance": 0,
+    "ours_block": 29,
+    "retail_block": 29,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x78], ecx",
+    "ours_at": 210,
+    "retail_at": 208,
+    "distance": -2,
+    "ours_block": 29,
+    "retail_block": 29,
+    "cross": false
+   }
+  ],
+  "address": "0x100035e0",
+  "name": "Helicopter::HandleControl",
+  "score": 0.9907
+ },
+ {
+  "aligned": 0.9891,
+  "ours_insn": 184,
+  "retail_insn": 184,
+  "cross_moves": 0,
+  "moves_total": 2,
+  "verdict": "INTRA-BLOCK",
+  "reason": "2 instruction(s) reordered inside their own block",
+  "moves": [
+   {
+    "text": "mov dword ptr [esi + 8], <a>",
+    "ours_at": 105,
+    "retail_at": 109,
+    "distance": 4,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [esi + 0x14], 0xffffffff",
+    "ours_at": 106,
+    "retail_at": 110,
+    "distance": 4,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   }
+  ],
+  "address": "0x100334b0",
+  "name": "Act1State::Act1State",
+  "score": 0.9891
+ },
+ {
+  "aligned": 0.9882,
+  "ours_insn": 85,
+  "retail_insn": 85,
+  "cross_moves": 0,
+  "moves_total": 1,
+  "verdict": "INTRA-BLOCK",
+  "reason": "1 instruction(s) reordered inside their own block",
+  "moves": [
+   {
+    "text": "mov eax, dword ptr [esp + 0xc]",
+    "ours_at": 59,
+    "retail_at": 58,
+    "distance": -1,
+    "ours_block": 19,
+    "retail_block": 19,
+    "cross": false
+   }
+  ],
+  "address": "0x100c6fa0",
+  "name": "MxDSBuffer::FUN_100c6fa0",
+  "score": 0.9882
+ },
+ {
+  "aligned": 0.9953,
+  "ours_insn": 855,
+  "retail_insn": 855,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 3,
+  "reason": "4 ours-only and 4 retail-only instruction(s) with no counterpart, 3 of them cmpdir",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "cmp esi, dword ptr [<a>]",
+    "cmp esi, dword ptr [<a>]",
+    "cmp dword ptr [ebp - 0x60], eax",
+    "ja <t>"
+   ],
+   "retail": [
+    "cmp dword ptr [<a>], esi",
+    "cmp dword ptr [<a>], esi",
+    "cmp eax, dword ptr [ebp - 0x60]",
+    "jb <t>"
+   ]
+  },
+  "address": "0x1007ca30",
+  "name": "LegoPartPresenter::Read",
+  "score": 0.9953
+ },
+ {
+  "aligned": 0.9921,
+  "ours_insn": 508,
+  "retail_insn": 508,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "4 ours-only and 4 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "add ecx, 4",
+    "add eax, 8",
+    "add ecx, 4",
+    "add eax, 8"
+   ],
+   "retail": [
+    "add ecx, 8",
+    "add eax, 4",
+    "add ecx, 8",
+    "add eax, 4"
+   ]
+  },
+  "address": "0x1009a8c0",
+  "name": "LegoWEGEdge::LinkEdgesAndFaces",
+  "score": 0.9921
+ },
+ {
+  "aligned": 0.9885,
+  "ours_insn": 173,
+  "retail_insn": 174,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "1 ours-only and 2 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "cmp dword ptr [edi + 0xc], eax"
+   ],
+   "retail": [
+    "add edi, 8",
+    "cmp dword ptr [edi + 4], eax"
+   ]
+  },
+  "address": "0x10058c30",
+  "name": "LegoOmni::Destroy",
+  "score": 0.9827
+ },
+ {
+  "aligned": 0.9752,
+  "ours_insn": 929,
+  "retail_insn": 929,
+  "cross_moves": 0,
+  "moves_total": 19,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "4 ours-only and 4 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "mov dword ptr [<a>], 2",
+    "ours_at": 82,
+    "retail_at": 85,
+    "distance": 3,
+    "ours_block": 18,
+    "retail_block": 18,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [<a>], 0",
+    "ours_at": 87,
+    "retail_at": 89,
+    "distance": 2,
+    "ours_block": 19,
+    "retail_block": 19,
+    "cross": false
+   },
+   {
+    "text": "add dword ptr [<a>], eax",
+    "ours_at": 115,
+    "retail_at": 117,
+    "distance": 2,
+    "ours_block": 25,
+    "retail_block": 25,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [<a>], 0",
+    "ours_at": 116,
+    "retail_at": 120,
+    "distance": 4,
+    "ours_block": 25,
+    "retail_block": 25,
+    "cross": false
+   },
+   {
+    "text": "push 1",
+    "ours_at": 117,
+    "retail_at": 118,
+    "distance": 1,
+    "ours_block": 25,
+    "retail_block": 25,
+    "cross": false
+   },
+   {
+    "text": "fmul dword ptr [ebp - 0xe8]",
+    "ours_at": 396,
+    "retail_at": 396,
+    "distance": 0,
+    "ours_block": 80,
+    "retail_block": 80,
+    "cross": false
+   },
+   {
+    "text": "fld dword ptr [ecx]",
+    "ours_at": 397,
+    "retail_at": 395,
+    "distance": -2,
+    "ours_block": 80,
+    "retail_block": 80,
+    "cross": false
+   },
+   {
+    "text": "fmul dword ptr [ebp - 0xe8]",
+    "ours_at": 403,
+    "retail_at": 403,
+    "distance": 0,
+    "ours_block": 80,
+    "retail_block": 80,
+    "cross": false
+   },
+   {
+    "text": "fld dword ptr [eax]",
+    "ours_at": 404,
+    "retail_at": 402,
+    "distance": -2,
+    "ours_block": 80,
+    "retail_block": 80,
+    "cross": false
+   },
+   {
+    "text": "fstp dword ptr [ebp - 0x58]",
+    "ours_at": 435,
+    "retail_at": 438,
+    "distance": 3,
+    "ours_block": 82,
+    "retail_block": 82,
+    "cross": false
+   },
+   {
+    "text": "fstp dword ptr [ebp - 0xe8]",
+    "ours_at": 438,
+    "retail_at": 435,
+    "distance": -3,
+    "ours_block": 82,
+    "retail_block": 82,
+    "cross": false
+   },
+   {
+    "text": "fld dword ptr [ecx]",
+    "ours_at": 450,
+    "retail_at": 450,
+    "distance": 0,
+    "ours_block": 84,
+    "retail_block": 84,
+    "cross": false
+   },
+   {
+    "text": "fmul dword ptr [ebp - 0x58]",
+    "ours_at": 451,
+    "retail_at": 449,
+    "distance": -2,
+    "ours_block": 84,
+    "retail_block": 84,
+    "cross": false
+   },
+   {
+    "text": "fmul dword ptr [ebp - 0xe8]",
+    "ours_at": 456,
+    "retail_at": 456,
+    "distance": 0,
+    "ours_block": 84,
+    "retail_block": 84,
+    "cross": false
+   },
+   {
+    "text": "fld dword ptr [eax]",
+    "ours_at": 457,
+    "retail_at": 455,
+    "distance": -2,
+    "ours_block": 84,
+    "retail_block": 84,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ebp - 0xac]",
+    "ours_at": 784,
+    "retail_at": 783,
+    "distance": -1,
+    "ours_block": 135,
+    "retail_block": 135,
+    "cross": false
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 792,
+    "retail_at": 792,
+    "distance": 0,
+    "ours_block": 135,
+    "retail_block": 135,
+    "cross": false
+   },
+   {
+    "text": "fld dword ptr [ecx]",
+    "ours_at": 793,
+    "retail_at": 790,
+    "distance": -3,
+    "ours_block": 135,
+    "retail_block": 135,
+    "cross": false
+   },
+   {
+    "text": "fmul dword ptr [ecx]",
+    "ours_at": 794,
+    "retail_at": 791,
+    "distance": -3,
+    "ours_block": 135,
+    "retail_block": 135,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "lea eax, [ebp + esi - 0xd8]",
+    "lea ecx, [ebp + esi - 0xd4]",
+    "add eax, 4",
+    "add ecx, 8"
+   ],
+   "retail": [
+    "lea ecx, [ebp + esi - 0xd8]",
+    "lea eax, [ebp + esi - 0xd4]",
+    "add ecx, 4",
+    "add eax, 8"
+   ]
+  },
+  "address": "0x10055a60",
+  "name": "LegoNavController::Notify",
+  "score": 0.9818
+ },
+ {
+  "aligned": 0.989,
+  "ours_insn": 363,
+  "retail_insn": 363,
+  "cross_moves": 1,
+  "moves_total": 2,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "2 ours-only and 2 retail-only instruction(s) with no counterpart; 1 cross-block move(s)",
+  "moves": [
+   {
+    "text": "xor eax, edx",
+    "ours_at": 160,
+    "retail_at": 158,
+    "distance": -2,
+    "ours_block": 18,
+    "retail_block": 18,
+    "cross": false
+   },
+   {
+    "text": "lea ebx, [esi + 0x148]",
+    "ours_at": 174,
+    "retail_at": 178,
+    "distance": 4,
+    "ours_block": 19,
+    "retail_block": 20,
+    "cross": true
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov edx, dword ptr [edx*4 + <a>]",
+    "mov dword ptr [esi + 0x14c], edx"
+   ],
+   "retail": [
+    "mov eax, dword ptr [edx*4 + <a>]",
+    "lea ebx, [esi + 0x148]"
+   ]
+  },
+  "address": "0x100170e0",
+  "name": "CarRace::HandlePathStruct",
+  "score": 0.9752
+ },
+ {
+  "aligned": 0.9739,
+  "ours_insn": 383,
+  "retail_insn": 383,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "10 ours-only and 10 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "mov ebx, dword ptr [ebp - 0x34]",
+    "lea esi, [eax + 4]",
+    "mov edi, dword ptr [esi]",
+    "push edi",
+    "test edi, edi",
+    "mov dword ptr [edi + 8], eax"
+   ],
+   "retail": [
+    "mov edi, dword ptr [ebp - 0x34]",
+    "lea ebx, [eax + 4]",
+    "mov esi, dword ptr [ebx]",
+    "push esi",
+    "test esi, esi",
+    "mov dword ptr [esi + 8], eax"
+   ]
+  },
+  "address": "0x100c3750",
+  "name": "MxRegion::AddRect",
+  "score": 0.9739
+ },
+ {
+  "aligned": 0.9716,
+  "ours_insn": 740,
+  "retail_insn": 740,
+  "cross_moves": 0,
+  "moves_total": 14,
+  "verdict": "DIFFERENT",
+  "cmpdir": 1,
+  "reason": "7 ours-only and 7 retail-only instruction(s) with no counterpart, 1 of them cmpdir",
+  "moves": [
+   {
+    "text": "push ebx",
+    "ours_at": 10,
+    "retail_at": 9,
+    "distance": -1,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x34], 0",
+    "ours_at": 12,
+    "retail_at": 8,
+    "distance": -4,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "push esi",
+    "ours_at": 13,
+    "retail_at": 11,
+    "distance": -2,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x1c], eax",
+    "ours_at": 14,
+    "retail_at": 14,
+    "distance": 0,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "push edi",
+    "ours_at": 15,
+    "retail_at": 13,
+    "distance": -2,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "lea eax, [ebp - 0xe4]",
+    "ours_at": 18,
+    "retail_at": 16,
+    "distance": -2,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "mov edi, eax",
+    "ours_at": 19,
+    "retail_at": 17,
+    "distance": -2,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [ebp - 0x14]",
+    "ours_at": 143,
+    "retail_at": 142,
+    "distance": -1,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "mov edx, dword ptr [ecx + 4]",
+    "ours_at": 144,
+    "retail_at": 144,
+    "distance": 0,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x34], eax",
+    "ours_at": 145,
+    "retail_at": 143,
+    "distance": -2,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "lea eax, [ebp - 0x58]",
+    "ours_at": 146,
+    "retail_at": 145,
+    "distance": -1,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x30], <a>",
+    "ours_at": 334,
+    "retail_at": 331,
+    "distance": -3,
+    "ours_block": 30,
+    "retail_block": 30,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x34], eax",
+    "ours_at": 384,
+    "retail_at": 383,
+    "distance": -1,
+    "ours_block": 40,
+    "retail_block": 40,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x58], <a>",
+    "ours_at": 443,
+    "retail_at": 442,
+    "distance": -1,
+    "ours_block": 48,
+    "retail_block": 48,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "cmp eax, dword ptr [ebp - 0x34]",
+    "mov dword ptr [ebp - 0x24], eax",
+    "mov dword ptr [ebp - 0x28], <a>",
+    "mov dword ptr [ebp - 0x2c], ecx",
+    "lea esi, [ebp - 0x1c]",
+    "lea eax, [ebp - 0x30]"
+   ],
+   "retail": [
+    "cmp dword ptr [ebp - 0x34], eax",
+    "mov dword ptr [ebp - 0x2c], eax",
+    "mov dword ptr [ebp - 0x48], ecx",
+    "mov dword ptr [ebp - 0x4c], <a>",
+    "lea esi, [ebp - 0x24]",
+    "lea eax, [ebp - 0x4c]"
+   ]
+  },
+  "address": "0x10040360",
+  "name": "Act3Cop::FUN_10040360",
+  "score": 0.973
+ },
+ {
+  "aligned": 0.9708,
+  "ours_insn": 889,
+  "retail_insn": 889,
+  "cross_moves": 0,
+  "moves_total": 15,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "11 ours-only and 11 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "mov dword ptr [ebp - 4], 4",
+    "ours_at": 215,
+    "retail_at": 222,
+    "distance": 7,
+    "ours_block": 27,
+    "retail_block": 27,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ecx + 0x128]",
+    "ours_at": 217,
+    "retail_at": 220,
+    "distance": 3,
+    "ours_block": 27,
+    "retail_block": 27,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ecx + 0x114]",
+    "ours_at": 309,
+    "retail_at": 312,
+    "distance": 3,
+    "ours_block": 37,
+    "retail_block": 37,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 4], 0xe",
+    "ours_at": 344,
+    "retail_at": 351,
+    "distance": 7,
+    "ours_block": 41,
+    "retail_block": 41,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ecx + 0x118]",
+    "ours_at": 346,
+    "retail_at": 349,
+    "distance": 3,
+    "ours_block": 41,
+    "retail_block": 41,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 4], 0x11",
+    "ours_at": 382,
+    "retail_at": 389,
+    "distance": 7,
+    "ours_block": 45,
+    "retail_block": 45,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ecx + 0x11c]",
+    "ours_at": 384,
+    "retail_at": 387,
+    "distance": 3,
+    "ours_block": 45,
+    "retail_block": 45,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 4], 0x14",
+    "ours_at": 420,
+    "retail_at": 427,
+    "distance": 7,
+    "ours_block": 49,
+    "retail_block": 49,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ecx + 0x110]",
+    "ours_at": 422,
+    "retail_at": 425,
+    "distance": 3,
+    "ours_block": 49,
+    "retail_block": 49,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 4], 0x17",
+    "ours_at": 458,
+    "retail_at": 465,
+    "distance": 7,
+    "ours_block": 53,
+    "retail_block": 53,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ecx + 0x120]",
+    "ours_at": 460,
+    "retail_at": 463,
+    "distance": 3,
+    "ours_block": 53,
+    "retail_block": 53,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 4], 0x1a",
+    "ours_at": 496,
+    "retail_at": 503,
+    "distance": 7,
+    "ours_block": 57,
+    "retail_block": 57,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ecx + 0x128]",
+    "ours_at": 498,
+    "retail_at": 501,
+    "distance": 3,
+    "ours_block": 57,
+    "retail_block": 57,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [ebp - 0x48]",
+    "ours_at": 558,
+    "retail_at": 555,
+    "distance": -3,
+    "ours_block": 63,
+    "retail_block": 63,
+    "cross": false
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 563,
+    "retail_at": 563,
+    "distance": 0,
+    "ours_block": 63,
+    "retail_block": 63,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "lea edi, [ebp - 0x38]",
+    "xor ecx, ecx",
+    "cmp dword ptr [edi], 0",
+    "add edi, 4",
+    "inc ecx",
+    "cmp edi, eax"
+   ],
+   "retail": [
+    "xor edi, edi",
+    "lea ecx, [ebp - 0x38]",
+    "cmp dword ptr [ecx], 0",
+    "add ecx, 4",
+    "inc edi",
+    "cmp ecx, eax"
+   ]
+  },
+  "address": "0x10031820",
+  "name": "Isle::Enable",
+  "score": 0.9725
+ },
+ {
+  "aligned": 0.9722,
+  "ours_insn": 144,
+  "retail_insn": 144,
+  "cross_moves": 0,
+  "moves_total": 1,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "3 ours-only and 3 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "and ecx, 1",
+    "ours_at": 136,
+    "retail_at": 134,
+    "distance": -2,
+    "ours_block": 21,
+    "retail_block": 21,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "sub ebx, dword ptr [esp + 0x20]",
+    "add ebx, ecx",
+    "lea eax, [ebx + eax + 8]"
+   ],
+   "retail": [
+    "sub ecx, dword ptr [esp + 0x20]",
+    "add ecx, ebx",
+    "lea eax, [ecx + eax + 8]"
+   ]
+  },
+  "address": "0x100d0d80",
+  "name": "ReadData",
+  "score": 0.9722
+ },
+ {
+  "aligned": 0.9684,
+  "ours_insn": 285,
+  "retail_insn": 285,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 5,
+  "reason": "9 ours-only and 9 retail-only instruction(s) with no counterpart, 5 of them cmpdir",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "cmp dword ptr [<a>], edi",
+    "cmp dword ptr [<a>], edi",
+    "cmp dword ptr [ebp - 0x10], eax",
+    "cmp esi, dword ptr [<a>]",
+    "cmp esi, dword ptr [<a>]",
+    "mov ecx, dword ptr [ebp - 0x1c]"
+   ],
+   "retail": [
+    "cmp edi, dword ptr [<a>]",
+    "cmp edi, dword ptr [<a>]",
+    "cmp eax, dword ptr [ebp - 0x10]",
+    "cmp dword ptr [<a>], esi",
+    "cmp dword ptr [<a>], esi",
+    "mov eax, dword ptr [ebp - 0x1c]"
+   ]
+  },
+  "address": "0x10083500",
+  "name": "LegoCharacterManager::GetActorROI",
+  "score": 0.9684
+ },
+ {
+  "aligned": 0.9636,
+  "ours_insn": 330,
+  "retail_insn": 330,
+  "cross_moves": 0,
+  "moves_total": 2,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "10 ours-only and 10 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "mov dword ptr [ecx], esi",
+    "ours_at": 56,
+    "retail_at": 54,
+    "distance": -2,
+    "ours_block": 7,
+    "retail_block": 7,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ecx + 4], esi",
+    "ours_at": 57,
+    "retail_at": 55,
+    "distance": -2,
+    "ours_block": 7,
+    "retail_block": 7,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov ebx, dword ptr [edx + 0x4f4]",
+    "mov eax, dword ptr [ebx + 0xc]",
+    "lea ecx, [ebx + 8]",
+    "mov esi, dword ptr [ecx]",
+    "mov ebx, dword ptr [edx + 0x4f4]",
+    "push ebx"
+   ],
+   "retail": [
+    "mov ecx, dword ptr [edx + 0x4f4]",
+    "mov eax, dword ptr [ecx + 0xc]",
+    "lea ebx, [ecx + 8]",
+    "mov esi, dword ptr [ebx]",
+    "mov ecx, dword ptr [edx + 0x4f4]",
+    "push ecx"
+   ]
+  },
+  "address": "0x1007b770",
+  "name": "LegoVideoManager::Tickle",
+  "score": 0.9636
+ },
+ {
+  "aligned": 0.9612,
+  "ours_insn": 129,
+  "retail_insn": 129,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "5 ours-only and 5 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "mov ax, word ptr [eax + 4]",
+    "mov word ptr [esi + 8], ax",
+    "mov ecx, dword ptr [ebx + 0xc]",
+    "mov ecx, dword ptr [ecx + 8]",
+    "movzx eax, ax"
+   ],
+   "retail": [
+    "mov dx, word ptr [eax + 4]",
+    "mov word ptr [esi + 8], dx",
+    "mov eax, dword ptr [ebx + 0xc]",
+    "mov ecx, dword ptr [eax + 8]",
+    "movzx eax, dx"
+   ]
+  },
+  "address": "0x100b24f0",
+  "name": "MxVideoPresenter::AlphaMask::AlphaMask(class MxBitmap const &)",
+  "score": 0.9612
+ },
+ {
+  "aligned": 0.9608,
+  "ours_insn": 153,
+  "retail_insn": 153,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "6 ours-only and 6 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "lea edi, [esi + 0x36]",
+    "mov ebx, 0x280",
+    "add edi, 2",
+    "mov bp, word ptr [edi - 2]",
+    "dec ebx",
+    "mov word ptr [edi - 2], cx"
+   ],
+   "retail": [
+    "lea ebx, [esi + 0x36]",
+    "mov edi, 0x280",
+    "add ebx, 2",
+    "mov bp, word ptr [ebx - 2]",
+    "dec edi",
+    "mov word ptr [ebx - 2], cx"
+   ]
+  },
+  "address": "0x1004bd10",
+  "name": "MxTransitionManager::DissolveTransition",
+  "score": 0.9608
+ },
+ {
+  "aligned": 0.9505,
+  "ours_insn": 101,
+  "retail_insn": 100,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 2,
+  "reason": "5 ours-only and 4 retail-only instruction(s) with no counterpart, 2 of them cmpdir",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "mov edx, eax",
+    "mov edi, edx",
+    "mov dword ptr [ebp - 0x18], edx",
+    "cmp ebx, dword ptr [<a>]",
+    "cmp ebx, dword ptr [<a>]"
+   ],
+   "retail": [
+    "mov dword ptr [ebp - 0x18], eax",
+    "mov edi, dword ptr [ebp - 0x18]",
+    "cmp dword ptr [<a>], ebx",
+    "cmp dword ptr [<a>], ebx"
+   ]
+  },
+  "address": "0x1003d170",
+  "name": "LegoCacheSoundManager::FindSoundByKey",
+  "score": 0.9552
+ },
+ {
+  "aligned": 0.9427,
+  "ours_insn": 225,
+  "retail_insn": 227,
+  "cross_moves": 1,
+  "moves_total": 1,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "10 ours-only and 12 retail-only instruction(s) with no counterpart; 1 cross-block move(s)",
+  "moves": [
+   {
+    "text": "mov dword ptr [esp + 0x30], edi",
+    "ours_at": 117,
+    "retail_at": 111,
+    "distance": -6,
+    "ours_block": 21,
+    "retail_block": 20,
+    "cross": true
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "fild dword ptr [<a>]",
+    "cmp dword ptr [esp + 0x10], 0",
+    "jne <t>",
+    "mov eax, 0xffffffff",
+    "pop ebp",
+    "pop edi"
+   ],
+   "retail": [
+    "mov eax, dword ptr [<a>]",
+    "mov dword ptr [esp + 0x18], eax",
+    "fild dword ptr [esp + 0x18]",
+    "cmp dword ptr [esp + 0x10], edi",
+    "je <t>",
+    "mov eax, 0xffffffff"
+   ]
+  },
+  "address": "0x10046050",
+  "name": "LegoPathController::PlaceActor(class LegoPathActor *, class LegoAnimPresenter *, class Vector3 &, class Vector3 &)",
+  "score": 0.9552
+ },
+ {
+  "aligned": 0.9587,
+  "ours_insn": 242,
+  "retail_insn": 242,
+  "cross_moves": 0,
+  "moves_total": 1,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "9 ours-only and 9 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "push eax",
+    "ours_at": 28,
+    "retail_at": 27,
+    "distance": -1,
+    "ours_block": 1,
+    "retail_block": 1,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov edx, dword ptr [eax + 4]",
+    "add edx, esi",
+    "lea eax, [edx + 0x68]",
+    "lea ecx, [edx - 0x20]",
+    "lea ebp, [edx + 0xc4]",
+    "add edx, 0xc0"
+   ],
+   "retail": [
+    "mov eax, dword ptr [eax + 4]",
+    "add eax, esi",
+    "lea edx, [eax + 0x68]",
+    "lea ecx, [eax - 0x20]",
+    "lea ebp, [eax + 0xc4]",
+    "add eax, 0xc0"
+   ]
+  },
+  "address": "0x10080be0",
+  "name": "LegoCarRaceActor::CalculateSpline",
+  "score": 0.9545
+ },
+ {
+  "aligned": 0.9524,
+  "ours_insn": 231,
+  "retail_insn": 231,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "11 ours-only and 11 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "mov edx, dword ptr [esi + 0x164]",
+    "mov eax, dword ptr [edx + 8]",
+    "add edx, 8",
+    "cmp eax, 2",
+    "mov bx, word ptr [edi + 0xc]",
+    "cmp bx, 9"
+   ],
+   "retail": [
+    "mov eax, dword ptr [esi + 0x164]",
+    "mov ebx, dword ptr [eax + 8]",
+    "add eax, 8",
+    "cmp ebx, 2",
+    "mov dx, word ptr [edi + 0xc]",
+    "cmp dx, 9"
+   ]
+  },
+  "address": "0x1004d330",
+  "name": "TowTrack::HandlePathStruct",
+  "score": 0.9536
+ },
+ {
+  "aligned": 0.9437,
+  "ours_insn": 140,
+  "retail_insn": 142,
+  "cross_moves": 0,
+  "moves_total": 1,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "5 ours-only and 7 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "mov dword ptr [ebp - 4], 0xffffffff",
+    "ours_at": 123,
+    "retail_at": 123,
+    "distance": 0,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "lea ecx, [esi + 0xc8]",
+    "mov dword ptr [esi + 0xac], eax",
+    "mov dword ptr [esi + 0xc4], ecx",
+    "mov dword ptr [esi + 0xa8], <a>",
+    "mov dword ptr [esi + 0xa8], <a>"
+   ],
+   "retail": [
+    "lea ebx, [esi + 0xa8]",
+    "push eax",
+    "mov ecx, ebx",
+    "call <t>",
+    "lea eax, [esi + 0xc8]",
+    "mov dword ptr [ebx], <a>"
+   ]
+  },
+  "address": "0x100a4420",
+  "name": "OrientableROI::OrientableROI",
+  "score": 0.9504
+ },
+ {
+  "aligned": 0.9622,
+  "ours_insn": 368,
+  "retail_insn": 370,
+  "cross_moves": 2,
+  "moves_total": 2,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "10 ours-only and 12 retail-only instruction(s) with no counterpart; 2 cross-block move(s)",
+  "moves": [
+   {
+    "text": "cmp eax, dword ptr [<a>]",
+    "ours_at": 40,
+    "retail_at": 37,
+    "distance": -3,
+    "ours_block": 3,
+    "retail_block": 2,
+    "cross": true
+   },
+   {
+    "text": "je <t>",
+    "ours_at": 41,
+    "retail_at": 38,
+    "distance": -3,
+    "ours_block": 3,
+    "retail_block": 2,
+    "cross": true
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov ecx, dword ptr [eax + 8]",
+    "mov eax, dword ptr [ecx]",
+    "mov ecx, eax",
+    "mov esi, dword ptr [ebp - 0x10]",
+    "add esi, 0xc",
+    "mov edi, dword ptr [eax + 4]"
+   ],
+   "retail": [
+    "mov eax, dword ptr [eax + 8]",
+    "mov ecx, dword ptr [eax]",
+    "mov eax, ecx",
+    "jmp <t>",
+    "mov dword ptr [ebp - 0x10], eax",
+    "mov edi, dword ptr [ebp - 0x10]"
+   ]
+  },
+  "address": "0x10081840",
+  "name": "LegoCarRaceActor::CheckPresenterAndActorIntersections",
+  "score": 0.9498
+ },
+ {
+  "aligned": 0.9496,
+  "ours_insn": 834,
+  "retail_insn": 834,
+  "cross_moves": 0,
+  "moves_total": 10,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "32 ours-only and 32 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "mov dword ptr [ebp - 0xc8], <a>",
+    "ours_at": 28,
+    "retail_at": 36,
+    "distance": 8,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x18], eax",
+    "ours_at": 250,
+    "retail_at": 250,
+    "distance": 0,
+    "ours_block": 30,
+    "retail_block": 30,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0xa0], eax",
+    "ours_at": 257,
+    "retail_at": 257,
+    "distance": 0,
+    "ours_block": 30,
+    "retail_block": 30,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [ebp - 0x18]",
+    "ours_at": 258,
+    "retail_at": 256,
+    "distance": -2,
+    "ours_block": 30,
+    "retail_block": 30,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ebp - 0x64]",
+    "ours_at": 276,
+    "retail_at": 275,
+    "distance": -1,
+    "ours_block": 30,
+    "retail_block": 30,
+    "cross": false
+   },
+   {
+    "text": "add ecx, 4",
+    "ours_at": 278,
+    "retail_at": 277,
+    "distance": -1,
+    "ours_block": 30,
+    "retail_block": 30,
+    "cross": false
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 285,
+    "retail_at": 285,
+    "distance": 0,
+    "ours_block": 30,
+    "retail_block": 30,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [ebp - 0x18]",
+    "ours_at": 298,
+    "retail_at": 296,
+    "distance": -2,
+    "ours_block": 32,
+    "retail_block": 32,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x6c], eax",
+    "ours_at": 299,
+    "retail_at": 298,
+    "distance": -1,
+    "ours_block": 32,
+    "retail_block": 32,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x40], <a>",
+    "ours_at": 323,
+    "retail_at": 322,
+    "distance": -1,
+    "ours_block": 36,
+    "retail_block": 36,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "add edx, 4",
+    "add ecx, 8",
+    "xor edi, edi",
+    "cmp dword ptr [ebp - 0x28], edi",
+    "lea ebx, [eax + 0x11]",
+    "cmp byte ptr [ebx], 0"
+   ],
+   "retail": [
+    "add edx, 8",
+    "add ecx, 4",
+    "xor ebx, ebx",
+    "cmp dword ptr [ebp - 0x28], ebx",
+    "lea edi, [eax + 0x11]",
+    "cmp byte ptr [edi], 0"
+   ]
+  },
+  "address": "0x100417c0",
+  "name": "Act3Brickster::FUN_100417c0",
+  "score": 0.9496
+ },
+ {
+  "aligned": 0.9553,
+  "ours_insn": 716,
+  "retail_insn": 716,
+  "cross_moves": 0,
+  "moves_total": 23,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "9 ours-only and 9 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "fmul dword ptr [ebp - 0x14]",
+    "ours_at": 269,
+    "retail_at": 269,
+    "distance": 0,
+    "ours_block": 32,
+    "retail_block": 32,
+    "cross": false
+   },
+   {
+    "text": "fld dword ptr [eax]",
+    "ours_at": 270,
+    "retail_at": 268,
+    "distance": -2,
+    "ours_block": 32,
+    "retail_block": 32,
+    "cross": false
+   },
+   {
+    "text": "fmul dword ptr [ebp - 0x14]",
+    "ours_at": 276,
+    "retail_at": 276,
+    "distance": 0,
+    "ours_block": 32,
+    "retail_block": 32,
+    "cross": false
+   },
+   {
+    "text": "fld dword ptr [ecx]",
+    "ours_at": 277,
+    "retail_at": 275,
+    "distance": -2,
+    "ours_block": 32,
+    "retail_block": 32,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x20c], <a>",
+    "ours_at": 322,
+    "retail_at": 321,
+    "distance": -1,
+    "ours_block": 37,
+    "retail_block": 37,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x134], <a>",
+    "ours_at": 412,
+    "retail_at": 410,
+    "distance": -2,
+    "ours_block": 48,
+    "retail_block": 48,
+    "cross": false
+   },
+   {
+    "text": "lea ecx, [ebp - 0x84]",
+    "ours_at": 415,
+    "retail_at": 413,
+    "distance": -2,
+    "ours_block": 48,
+    "retail_block": 48,
+    "cross": false
+   },
+   {
+    "text": "push ecx",
+    "ours_at": 417,
+    "retail_at": 416,
+    "distance": -1,
+    "ours_block": 48,
+    "retail_block": 48,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x84], <a>",
+    "ours_at": 420,
+    "retail_at": 419,
+    "distance": -1,
+    "ours_block": 48,
+    "retail_block": 48,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [ebp - 0x6c]",
+    "ours_at": 430,
+    "retail_at": 429,
+    "distance": -1,
+    "ours_block": 48,
+    "retail_block": 48,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ebp - 0x68]",
+    "ours_at": 442,
+    "retail_at": 441,
+    "distance": -1,
+    "ours_block": 48,
+    "retail_block": 48,
+    "cross": false
+   },
+   {
+    "text": "add ecx, 4",
+    "ours_at": 444,
+    "retail_at": 443,
+    "distance": -1,
+    "ours_block": 48,
+    "retail_block": 48,
+    "cross": false
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 450,
+    "retail_at": 450,
+    "distance": 0,
+    "ours_block": 48,
+    "retail_block": 48,
+    "cross": false
+   },
+   {
+    "text": "fld dword ptr [ecx]",
+    "ours_at": 451,
+    "retail_at": 448,
+    "distance": -3,
+    "ours_block": 48,
+    "retail_block": 48,
+    "cross": false
+   },
+   {
+    "text": "fmul dword ptr [ecx]",
+    "ours_at": 452,
+    "retail_at": 449,
+    "distance": -3,
+    "ours_block": 48,
+    "retail_block": 48,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ebp - 0x54]",
+    "ours_at": 538,
+    "retail_at": 537,
+    "distance": -1,
+    "ours_block": 55,
+    "retail_block": 55,
+    "cross": false
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 546,
+    "retail_at": 546,
+    "distance": 0,
+    "ours_block": 55,
+    "retail_block": 55,
+    "cross": false
+   },
+   {
+    "text": "fld dword ptr [ecx]",
+    "ours_at": 547,
+    "retail_at": 544,
+    "distance": -3,
+    "ours_block": 55,
+    "retail_block": 55,
+    "cross": false
+   },
+   {
+    "text": "fmul dword ptr [ecx]",
+    "ours_at": 548,
+    "retail_at": 545,
+    "distance": -3,
+    "ours_block": 55,
+    "retail_block": 55,
+    "cross": false
+   },
+   {
+    "text": "fmul dword ptr [ebp - 0x20]",
+    "ours_at": 673,
+    "retail_at": 673,
+    "distance": 0,
+    "ours_block": 78,
+    "retail_block": 78,
+    "cross": false
+   },
+   {
+    "text": "fld dword ptr [ecx]",
+    "ours_at": 674,
+    "retail_at": 672,
+    "distance": -2,
+    "ours_block": 78,
+    "retail_block": 78,
+    "cross": false
+   },
+   {
+    "text": "fmul dword ptr [ebp - 0x20]",
+    "ours_at": 680,
+    "retail_at": 680,
+    "distance": 0,
+    "ours_block": 78,
+    "retail_block": 78,
+    "cross": false
+   },
+   {
+    "text": "fld dword ptr [eax]",
+    "ours_at": 681,
+    "retail_at": 679,
+    "distance": -2,
+    "ours_block": 78,
+    "retail_block": 78,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "lea ecx, [ebp + esi - 0xc0]",
+    "lea eax, [ebp + esi - 0xbc]",
+    "cmp ecx, eax",
+    "add eax, 4",
+    "add ecx, 8",
+    "fld dword ptr [ebp + 8]"
+   ],
+   "retail": [
+    "lea eax, [ebp + esi - 0xc0]",
+    "lea ecx, [ebp + esi - 0xbc]",
+    "cmp ecx, dword ptr [ebp - 0x40]",
+    "add ecx, 4",
+    "add eax, 8",
+    "fld dword ptr [<a>]"
+   ]
+  },
+  "address": "0x10054050",
+  "name": "Act3Ammo::Animate",
+  "score": 0.9476
+ },
+ {
+  "aligned": 0.9856,
+  "ours_insn": 209,
+  "retail_insn": 209,
+  "cross_moves": 2,
+  "moves_total": 2,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "1 ours-only and 1 retail-only instruction(s) with no counterpart; 2 cross-block move(s)",
+  "moves": [
+   {
+    "text": "mov eax, 0xffffffff",
+    "ours_at": 191,
+    "retail_at": 202,
+    "distance": 11,
+    "ours_block": 13,
+    "retail_block": 15,
+    "cross": true
+   },
+   {
+    "text": "jmp <t>",
+    "ours_at": 192,
+    "retail_at": 201,
+    "distance": 9,
+    "ours_block": 13,
+    "retail_block": 14,
+    "cross": true
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "je <t>"
+   ],
+   "retail": [
+    "jne <t>"
+   ]
+  },
+  "address": "0x1002de10",
+  "name": "LegoPathActor::SetTransformAndDestinationFromPoints",
+  "score": 0.9426
+ },
+ {
+  "aligned": 0.9417,
+  "ours_insn": 120,
+  "retail_insn": 120,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "7 ours-only and 7 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "mov edx, dword ptr [ecx]",
+    "mov dword ptr [esp + 0x14], edx",
+    "mov dword ptr [esp + 0x10], edx",
+    "add edx, 8",
+    "mov eax, dword ptr [esp + 0x14]",
+    "mov dword ptr [esp + 0x18], edx"
+   ],
+   "retail": [
+    "mov eax, dword ptr [ecx]",
+    "mov dword ptr [esp + 0x14], eax",
+    "mov dword ptr [esp + 0x10], eax",
+    "add eax, 8",
+    "mov edx, dword ptr [esp + 0x14]",
+    "mov dword ptr [esp + 0x18], eax"
+   ]
+  },
+  "address": "0x100720d0",
+  "name": "Act3List::RemoveByObjectIdOrFirst",
+  "score": 0.9417
+ },
+ {
+  "aligned": 0.9395,
+  "ours_insn": 661,
+  "retail_insn": 661,
+  "cross_moves": 1,
+  "moves_total": 5,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "35 ours-only and 35 retail-only instruction(s) with no counterpart; 1 cross-block move(s)",
+  "moves": [
+   {
+    "text": "push edx",
+    "ours_at": 212,
+    "retail_at": 211,
+    "distance": -1,
+    "ours_block": 18,
+    "retail_block": 18,
+    "cross": false
+   },
+   {
+    "text": "push <a>",
+    "ours_at": 217,
+    "retail_at": 215,
+    "distance": -2,
+    "ours_block": 18,
+    "retail_block": 18,
+    "cross": false
+   },
+   {
+    "text": "push ecx",
+    "ours_at": 218,
+    "retail_at": 214,
+    "distance": -4,
+    "ours_block": 18,
+    "retail_block": 18,
+    "cross": false
+   },
+   {
+    "text": "push eax",
+    "ours_at": 255,
+    "retail_at": 237,
+    "distance": -18,
+    "ours_block": 22,
+    "retail_block": 20,
+    "cross": true
+   },
+   {
+    "text": "mov dword ptr [ebp - 0xfc], eax",
+    "ours_at": 290,
+    "retail_at": 289,
+    "distance": -1,
+    "ours_block": 28,
+    "retail_block": 28,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov ecx, dword ptr [eax + 0xc]",
+    "mov eax, dword ptr [ebp + 8]",
+    "mov dword ptr [ebp - 0x10], ecx",
+    "lea ecx, [ebp - 0x29c]",
+    "mov eax, dword ptr [ebp - 0x24]",
+    "mov edx, dword ptr [ebp - 0x38]"
+   ],
+   "retail": [
+    "mov ecx, dword ptr [ebp + 8]",
+    "mov eax, dword ptr [eax + 0xc]",
+    "mov dword ptr [ebp - 0x10], eax",
+    "lea eax, [ebp - 0x29c]",
+    "mov ecx, dword ptr [ebp - 0x24]",
+    "mov eax, dword ptr [ebp - 0x38]"
+   ]
+  },
+  "address": "0x10084030",
+  "name": "LegoCharacterManager::CreateActorROI",
+  "score": 0.9365
+ },
+ {
+  "aligned": 0.9348,
+  "ours_insn": 46,
+  "retail_insn": 46,
+  "cross_moves": 0,
+  "moves_total": 1,
+  "verdict": "DIFFERENT",
+  "cmpdir": 1,
+  "reason": "2 ours-only and 2 retail-only instruction(s) with no counterpart, 1 of them cmpdir",
+  "moves": [
+   {
+    "text": "mov edx, dword ptr [esp + 0x14]",
+    "ours_at": 9,
+    "retail_at": 8,
+    "distance": -1,
+    "ours_block": 1,
+    "retail_block": 1,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "cmp eax, esi",
+    "jae <t>"
+   ],
+   "retail": [
+    "cmp esi, eax",
+    "jbe <t>"
+   ]
+  },
+  "address": "0x100b26f0",
+  "name": "MxVideoPresenter::AlphaMask::IsHit",
+  "score": 0.9348
+ },
+ {
+  "aligned": 0.9315,
+  "ours_insn": 73,
+  "retail_insn": 73,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "5 ours-only and 5 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "lea eax, [edi + 0x18]",
+    "mov ecx, 3",
+    "mov dword ptr [eax], edx",
+    "add eax, 4",
+    "dec ecx"
+   ],
+   "retail": [
+    "lea ecx, [edi + 0x18]",
+    "mov eax, 3",
+    "mov dword ptr [ecx], edx",
+    "add ecx, 4",
+    "dec eax"
+   ]
+  },
+  "address": "0x1002f770",
+  "name": "LegoPathActor::UpdatePlane",
+  "score": 0.9315
+ },
+ {
+  "aligned": 0.9241,
+  "ours_insn": 79,
+  "retail_insn": 79,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "6 ours-only and 6 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "mov eax, dword ptr [ecx*4 + <a>]",
+    "mov eax, dword ptr [ecx*4 + <a>]",
+    "mov eax, dword ptr [ecx*4 + <a>]",
+    "mov eax, dword ptr [ecx*4 + <a>]",
+    "mov eax, dword ptr [ecx*4 + <a>]",
+    "push eax"
+   ],
+   "retail": [
+    "mov ecx, dword ptr [ecx*4 + <a>]",
+    "mov ecx, dword ptr [ecx*4 + <a>]",
+    "mov ecx, dword ptr [ecx*4 + <a>]",
+    "mov ecx, dword ptr [ecx*4 + <a>]",
+    "mov ecx, dword ptr [ecx*4 + <a>]",
+    "push ecx"
+   ]
+  },
+  "address": "0x10072ad0",
+  "name": "Act3::TriggerHitSound",
+  "score": 0.9302
+ },
+ {
+  "aligned": 0.9344,
+  "ours_insn": 671,
+  "retail_insn": 670,
+  "cross_moves": 0,
+  "moves_total": 19,
+  "verdict": "DIFFERENT",
+  "cmpdir": 4,
+  "reason": "25 ours-only and 24 retail-only instruction(s) with no counterpart, 4 of them cmpdir",
+  "moves": [
+   {
+    "text": "push eax",
+    "ours_at": 127,
+    "retail_at": 125,
+    "distance": -2,
+    "ours_block": 8,
+    "retail_block": 8,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ebp + 0x10]",
+    "ours_at": 178,
+    "retail_at": 176,
+    "distance": -2,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x24], eax",
+    "ours_at": 215,
+    "retail_at": 213,
+    "distance": -2,
+    "ours_block": 24,
+    "retail_block": 24,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ebp + 0x14]",
+    "ours_at": 318,
+    "retail_at": 320,
+    "distance": 2,
+    "ours_block": 53,
+    "retail_block": 53,
+    "cross": false
+   },
+   {
+    "text": "mov edx, dword ptr [ebp + 0xc]",
+    "ours_at": 321,
+    "retail_at": 317,
+    "distance": -4,
+    "ours_block": 53,
+    "retail_block": 53,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x14], 0",
+    "ours_at": 382,
+    "retail_at": 383,
+    "distance": 1,
+    "ours_block": 69,
+    "retail_block": 69,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ebp + 0x14]",
+    "ours_at": 426,
+    "retail_at": 428,
+    "distance": 2,
+    "ours_block": 80,
+    "retail_block": 80,
+    "cross": false
+   },
+   {
+    "text": "mov edx, dword ptr [ebp + 0xc]",
+    "ours_at": 429,
+    "retail_at": 425,
+    "distance": -4,
+    "ours_block": 80,
+    "retail_block": 80,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x2c], edx",
+    "ours_at": 478,
+    "retail_at": 476,
+    "distance": -2,
+    "ours_block": 95,
+    "retail_block": 95,
+    "cross": false
+   },
+   {
+    "text": "lea edx, [ebp - 0x18]",
+    "ours_at": 526,
+    "retail_at": 525,
+    "distance": -1,
+    "ours_block": 109,
+    "retail_block": 109,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x30], ecx",
+    "ours_at": 529,
+    "retail_at": 524,
+    "distance": -5,
+    "ours_block": 109,
+    "retail_block": 109,
+    "cross": false
+   },
+   {
+    "text": "lea ecx, [ebp - 0x30]",
+    "ours_at": 530,
+    "retail_at": 527,
+    "distance": -3,
+    "ours_block": 109,
+    "retail_block": 109,
+    "cross": false
+   },
+   {
+    "text": "push eax",
+    "ours_at": 532,
+    "retail_at": 531,
+    "distance": -1,
+    "ours_block": 109,
+    "retail_block": 109,
+    "cross": false
+   },
+   {
+    "text": "push edx",
+    "ours_at": 533,
+    "retail_at": 533,
+    "distance": 0,
+    "ours_block": 109,
+    "retail_block": 109,
+    "cross": false
+   },
+   {
+    "text": "lea ecx, [ebp - 0x1c]",
+    "ours_at": 534,
+    "retail_at": 532,
+    "distance": -2,
+    "ours_block": 109,
+    "retail_block": 109,
+    "cross": false
+   },
+   {
+    "text": "push ecx",
+    "ours_at": 535,
+    "retail_at": 529,
+    "distance": -6,
+    "ours_block": 109,
+    "retail_block": 109,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [ebp - 0x14]",
+    "ours_at": 536,
+    "retail_at": 534,
+    "distance": -2,
+    "ours_block": 109,
+    "retail_block": 109,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ebp + 0x14]",
+    "ours_at": 610,
+    "retail_at": 612,
+    "distance": 2,
+    "ours_block": 123,
+    "retail_block": 123,
+    "cross": false
+   },
+   {
+    "text": "mov edx, dword ptr [ebp + 0x10]",
+    "ours_at": 613,
+    "retail_at": 609,
+    "distance": -4,
+    "ours_block": 123,
+    "retail_block": 123,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov eax, dword ptr [ebp - 0x14]",
+    "cmp dword ptr [ebp - 0x24], eax",
+    "jbe <t>",
+    "xor ebx, ebx",
+    "cmp dword ptr [<a>], ebx",
+    "mov esi, <a>"
+   ],
+   "retail": [
+    "cmp eax, dword ptr [ebp - 0x24]",
+    "jae <t>",
+    "xor esi, esi",
+    "cmp dword ptr [<a>], esi",
+    "mov ebx, <a>",
+    "mov ecx, dword ptr [ebx]"
+   ]
+  },
+  "address": "0x100a84a0",
+  "name": "LegoROI::Read",
+  "score": 0.9277
+ },
+ {
+  "aligned": 0.9273,
+  "ours_insn": 275,
+  "retail_insn": 275,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 2,
+  "reason": "20 ours-only and 20 retail-only instruction(s) with no counterpart, 2 of them cmpdir",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "cmp dword ptr [<a>], ecx",
+    "cmp dword ptr [<a>], ecx",
+    "mov ebx, dword ptr [eax + 0x30c]",
+    "mov eax, dword ptr [ebp - 0x78]",
+    "mov edi, eax",
+    "mov esi, ebx"
+   ],
+   "retail": [
+    "cmp ecx, dword ptr [<a>]",
+    "cmp ecx, dword ptr [<a>]",
+    "mov ebx, dword ptr [ebp - 0x78]",
+    "mov eax, dword ptr [eax + 0x30c]",
+    "mov edi, ebx",
+    "mov esi, eax"
+   ]
+  },
+  "address": "0x1003f540",
+  "name": "WriteDefaultTexture",
+  "score": 0.9273
+ },
+ {
+  "aligned": 0.9465,
+  "ours_insn": 187,
+  "retail_insn": 187,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "10 ours-only and 10 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "mov al, byte ptr [ebx + 0x5e]",
+    "and cl, 1",
+    "and al, 2",
+    "and cl, 4",
+    "and al, 8",
+    "mov cl, byte ptr [esi + 0x5e]"
+   ],
+   "retail": [
+    "mov cl, byte ptr [ebx + 0x5e]",
+    "mov al, byte ptr [esi + 0x5e]",
+    "xor al, cl",
+    "and al, 1",
+    "xor al, cl",
+    "mov byte ptr [ebx + 0x5e], al"
+   ]
+  },
+  "address": "0x100ba2c0",
+  "name": "MxStillPresenter::Clone",
+  "score": 0.9251
+ },
+ {
+  "aligned": 0.9244,
+  "ours_insn": 225,
+  "retail_insn": 225,
+  "cross_moves": 1,
+  "moves_total": 2,
+  "verdict": "DIFFERENT",
+  "cmpdir": 3,
+  "reason": "15 ours-only and 15 retail-only instruction(s) with no counterpart, 3 of them cmpdir; 1 cross-block move(s)",
+  "moves": [
+   {
+    "text": "cmp eax, edi",
+    "ours_at": 129,
+    "retail_at": 150,
+    "distance": 21,
+    "ours_block": 19,
+    "retail_block": 25,
+    "cross": true
+   },
+   {
+    "text": "mov eax, dword ptr [esp + 0x20]",
+    "ours_at": 205,
+    "retail_at": 203,
+    "distance": -2,
+    "ours_block": 36,
+    "retail_block": 36,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "cmp dword ptr [<a>], esi",
+    "cmp dword ptr [<a>], esi",
+    "cmp dword ptr [<a>], esi",
+    "mov edx, dword ptr [ecx]",
+    "lea edi, [edx + 0x14]",
+    "cmp dword ptr [edi], 0"
+   ],
+   "retail": [
+    "cmp esi, dword ptr [<a>]",
+    "cmp esi, dword ptr [<a>]",
+    "cmp esi, dword ptr [<a>]",
+    "cmp edi, eax",
+    "mov edi, dword ptr [ecx]",
+    "lea edx, [edi + 0x14]"
+   ]
+  },
+  "address": "0x10085500",
+  "name": "_Tree<char *,pair<char * const,LegoCharacter *>,map<char *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *>>::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *>>::insert",
+  "score": 0.9244
+ },
+ {
+  "aligned": 0.944,
+  "ours_insn": 375,
+  "retail_insn": 375,
+  "cross_moves": 2,
+  "moves_total": 5,
+  "verdict": "DIFFERENT",
+  "cmpdir": 1,
+  "reason": "16 ours-only and 16 retail-only instruction(s) with no counterpart, 1 of them cmpdir; 2 cross-block move(s)",
+  "moves": [
+   {
+    "text": "je <t>",
+    "ours_at": 199,
+    "retail_at": 199,
+    "distance": 0,
+    "ours_block": 57,
+    "retail_block": 57,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [edx + 4], eax",
+    "ours_at": 200,
+    "retail_at": 202,
+    "distance": 2,
+    "ours_block": 58,
+    "retail_block": 59,
+    "cross": true
+   },
+   {
+    "text": "je <t>",
+    "ours_at": 206,
+    "retail_at": 206,
+    "distance": 0,
+    "ours_block": 59,
+    "retail_block": 59,
+    "cross": false
+   },
+   {
+    "text": "je <t>",
+    "ours_at": 210,
+    "retail_at": 210,
+    "distance": 0,
+    "ours_block": 60,
+    "retail_block": 60,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [eax + 4], ebp",
+    "ours_at": 214,
+    "retail_at": 200,
+    "distance": -14,
+    "ours_block": 62,
+    "retail_block": 58,
+    "cross": true
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "cmp edi, dword ptr [esp + 0x10]",
+    "mov eax, dword ptr [ebx]",
+    "mov ebp, dword ptr [eax]",
+    "mov edx, dword ptr [ebp + 8]",
+    "mov edx, dword ptr [ebp + 8]",
+    "cmp edx, dword ptr [<a>]"
+   ],
+   "retail": [
+    "cmp dword ptr [esp + 0x10], edi",
+    "mov ebp, dword ptr [ebx]",
+    "mov edx, dword ptr [ebp]",
+    "mov eax, dword ptr [edx + 8]",
+    "mov dword ptr [ebp], eax",
+    "mov eax, dword ptr [edx + 8]"
+   ]
+  },
+  "address": "0x10029d50",
+  "name": "_Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry>>::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry>>::erase",
+  "score": 0.9212
+ },
+ {
+  "aligned": 0.9065,
+  "ours_insn": 278,
+  "retail_insn": 278,
+  "cross_moves": 0,
+  "moves_total": 5,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "21 ours-only and 21 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "mov esi, dword ptr [edx + 4]",
+    "ours_at": 76,
+    "retail_at": 76,
+    "distance": 0,
+    "ours_block": 3,
+    "retail_block": 3,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [edx + 8]",
+    "ours_at": 79,
+    "retail_at": 78,
+    "distance": -1,
+    "ours_block": 3,
+    "retail_block": 3,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [esp + 0x18]",
+    "ours_at": 183,
+    "retail_at": 179,
+    "distance": -4,
+    "ours_block": 9,
+    "retail_block": 9,
+    "cross": false
+   },
+   {
+    "text": "push edx",
+    "ours_at": 185,
+    "retail_at": 182,
+    "distance": -3,
+    "ours_block": 9,
+    "retail_block": 9,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [eax + 0x34], ebp",
+    "ours_at": 259,
+    "retail_at": 257,
+    "distance": -2,
+    "ours_block": 16,
+    "retail_block": 16,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov eax, dword ptr [edx]",
+    "mov dword ptr [ecx + 0x30], eax",
+    "mov ecx, dword ptr [esp + 0x18]",
+    "mov dword ptr [ecx + 0x34], esi",
+    "mov ecx, dword ptr [esp + 0x18]",
+    "mov edx, dword ptr [esp + 0x18]"
+   ],
+   "retail": [
+    "mov eax, dword ptr [esp + 0x18]",
+    "mov ecx, dword ptr [edx]",
+    "mov dword ptr [eax + 0x30], ecx",
+    "mov eax, dword ptr [esp + 0x18]",
+    "mov dword ptr [eax + 0x34], esi",
+    "mov eax, dword ptr [esp + 0x18]"
+   ]
+  },
+  "address": "0x10051ac0",
+  "name": "LegoAct2::SpawnBricks",
+  "score": 0.9101
+ },
+ {
+  "aligned": 0.9321,
+  "ours_insn": 426,
+  "retail_insn": 427,
+  "cross_moves": 5,
+  "moves_total": 9,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "19 ours-only and 20 retail-only instruction(s) with no counterpart; 5 cross-block move(s)",
+  "moves": [
+   {
+    "text": "inc ecx",
+    "ours_at": 100,
+    "retail_at": 95,
+    "distance": -5,
+    "ours_block": 15,
+    "retail_block": 14,
+    "cross": true
+   },
+   {
+    "text": "cmp ecx, 1",
+    "ours_at": 101,
+    "retail_at": 96,
+    "distance": -5,
+    "ours_block": 15,
+    "retail_block": 14,
+    "cross": true
+   },
+   {
+    "text": "jle <t>",
+    "ours_at": 102,
+    "retail_at": 97,
+    "distance": -5,
+    "ours_block": 15,
+    "retail_block": 14,
+    "cross": true
+   },
+   {
+    "text": "sub eax, ecx",
+    "ours_at": 105,
+    "retail_at": 109,
+    "distance": 4,
+    "ours_block": 16,
+    "retail_block": 17,
+    "cross": true
+   },
+   {
+    "text": "sub eax, edx",
+    "ours_at": 110,
+    "retail_at": 104,
+    "distance": -6,
+    "ours_block": 17,
+    "retail_block": 16,
+    "cross": true
+   },
+   {
+    "text": "sub edi, dword ptr [ebp - 0x1c]",
+    "ours_at": 362,
+    "retail_at": 363,
+    "distance": 1,
+    "ours_block": 74,
+    "retail_block": 74,
+    "cross": false
+   },
+   {
+    "text": "sub edi, dword ptr [ebp - 0x18]",
+    "ours_at": 367,
+    "retail_at": 368,
+    "distance": 1,
+    "ours_block": 75,
+    "retail_block": 75,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [esi + 0x50]",
+    "ours_at": 407,
+    "retail_at": 409,
+    "distance": 2,
+    "ours_block": 81,
+    "retail_block": 81,
+    "cross": false
+   },
+   {
+    "text": "push ecx",
+    "ours_at": 412,
+    "retail_at": 408,
+    "distance": -4,
+    "ours_block": 81,
+    "retail_block": 81,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov edx, dword ptr [ebp - 0x40]",
+    "sub edx, dword ptr [ebp - 0x48]",
+    "mov ecx, dword ptr [ebp - 0x44]",
+    "sub ecx, dword ptr [ebp - 0x4c]",
+    "add ecx, dword ptr [ebp - 0x3c]",
+    "dec ecx"
+   ],
+   "retail": [
+    "mov ecx, dword ptr [ebp - 0x40]",
+    "sub ecx, dword ptr [ebp - 0x48]",
+    "mov edx, dword ptr [ebp - 0x44]",
+    "sub edx, dword ptr [ebp - 0x4c]",
+    "mov eax, dword ptr [ebp - 0x3c]",
+    "add eax, edx"
+   ]
+  },
+  "address": "0x100b2a70",
+  "name": "MxVideoPresenter::PutFrame",
+  "score": 0.9048
+ },
+ {
+  "aligned": 0.9027,
+  "ours_insn": 370,
+  "retail_insn": 370,
+  "cross_moves": 2,
+  "moves_total": 2,
+  "verdict": "DIFFERENT",
+  "cmpdir": 1,
+  "reason": "34 ours-only and 34 retail-only instruction(s) with no counterpart, 1 of them cmpdir; 2 cross-block move(s)",
+  "moves": [
+   {
+    "text": "mov eax, dword ptr [ebx + 4]",
+    "ours_at": 281,
+    "retail_at": 341,
+    "distance": 60,
+    "ours_block": 78,
+    "retail_block": 92,
+    "cross": true
+   },
+   {
+    "text": "mov eax, dword ptr [edi + 4]",
+    "ours_at": 341,
+    "retail_at": 281,
+    "distance": -60,
+    "ours_block": 92,
+    "retail_block": 78,
+    "cross": true
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "cmp ecx, dword ptr [esp + 0x10]",
+    "mov ebx, dword ptr [edx + 4]",
+    "mov edi, dword ptr [ebx + 8]",
+    "mov eax, dword ptr [edi]",
+    "mov dword ptr [ebx + 8], eax",
+    "mov eax, dword ptr [edi]"
+   ],
+   "retail": [
+    "cmp dword ptr [esp + 0x10], ecx",
+    "mov edi, dword ptr [edx + 4]",
+    "mov ebx, dword ptr [edi + 8]",
+    "mov eax, dword ptr [ebx]",
+    "mov dword ptr [edi + 8], eax",
+    "mov eax, dword ptr [ebx]"
+   ]
+  },
+  "address": "0x1001d890",
+  "name": "_Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *>>::_Kfn,CoreSetCompare,allocator<MxCore *>>::erase",
+  "score": 0.9027
+ },
+ {
+  "aligned": 0.906,
+  "ours_insn": 116,
+  "retail_insn": 117,
+  "cross_moves": 0,
+  "moves_total": 1,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "9 ours-only and 10 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "mov eax, dword ptr [esi + 0x100]",
+    "ours_at": 44,
+    "retail_at": 44,
+    "distance": 0,
+    "ours_block": 8,
+    "retail_block": 8,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "test eax, eax",
+    "mov ecx, dword ptr [eax + 0x74]",
+    "cmp ecx, 8",
+    "cmp ecx, 4",
+    "cmp ecx, 0xf",
+    "mov dword ptr [eax + 0x74], 2"
+   ],
+   "retail": [
+    "mov ecx, eax",
+    "test ecx, ecx",
+    "mov eax, dword ptr [ecx + 0x74]",
+    "cmp eax, 8",
+    "cmp eax, 4",
+    "cmp eax, 0xf"
+   ]
+  },
+  "address": "0x1006ed90",
+  "name": "Infocenter::Create",
+  "score": 0.8966
+ },
+ {
+  "aligned": 0.9043,
+  "ours_insn": 94,
+  "retail_insn": 87,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "9 ours-only and 2 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "cmp dword ptr [ecx], 0",
+    "jne <t>",
+    "mov eax, dword ptr [eax + 0xc]",
+    "test eax, eax",
+    "je <t>",
+    "push eax"
+   ],
+   "retail": [
+    "mov ecx, dword ptr [ebp - 0x14]",
+    "push ecx"
+   ]
+  },
+  "address": "0x1003cf20",
+  "name": "LegoCacheSoundManager::~LegoCacheSoundManager",
+  "score": 0.895
+ },
+ {
+  "aligned": 0.9125,
+  "ours_insn": 304,
+  "retail_insn": 320,
+  "cross_moves": 0,
+  "moves_total": 3,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "9 ours-only and 25 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "mov dword ptr [esp + 0x20], ecx",
+    "ours_at": 14,
+    "retail_at": 20,
+    "distance": 6,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [esp + 0x54], edx",
+    "ours_at": 16,
+    "retail_at": 14,
+    "distance": -2,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [esp + 0x50], ecx",
+    "ours_at": 20,
+    "retail_at": 16,
+    "distance": -4,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "lea edx, [esp + 0x30]",
+    "mov dword ptr [esp + 0x2c], eax",
+    "lea eax, [esp + 0x2c]",
+    "mov ecx, dword ptr [esp + 0x44]",
+    "mov ecx, dword ptr [esp + 0x30]",
+    "mov ecx, dword ptr [esp + 0x30]"
+   ],
+   "retail": [
+    "lea edx, [esp + 0x2c]",
+    "mov dword ptr [esp + 0x30], eax",
+    "lea eax, [esp + 0x30]",
+    "mov ecx, dword ptr [esp + 0x48]",
+    "mov ecx, dword ptr [esp + 0x2c]",
+    "mov ecx, dword ptr [esp + 0x2c]"
+   ]
+  },
+  "address": "0x1009f490",
+  "name": "LegoAnimScene::CalculateCameraTransform",
+  "score": 0.8896
+ },
+ {
+  "aligned": 0.9091,
+  "ours_insn": 253,
+  "retail_insn": 253,
+  "cross_moves": 0,
+  "moves_total": 1,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "22 ours-only and 22 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "mov edx, 4",
+    "ours_at": 154,
+    "retail_at": 153,
+    "distance": -1,
+    "ours_block": 8,
+    "retail_block": 8,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "lea ecx, [esi + 0x180]",
+    "xor eax, eax",
+    "cmp eax, 0x14",
+    "test word ptr [ecx + 0xd0], dx",
+    "fld dword ptr [ecx]",
+    "fstp dword ptr [ecx]"
+   ],
+   "retail": [
+    "xor ecx, ecx",
+    "lea eax, [esi + 0x180]",
+    "cmp ecx, 0x14",
+    "test word ptr [eax + 0xd0], dx",
+    "fld dword ptr [eax]",
+    "fstp dword ptr [eax]"
+   ]
+  },
+  "address": "0x10073a90",
+  "name": "Act3::Enable",
+  "score": 0.8893
+ },
+ {
+  "aligned": 0.8873,
+  "ours_insn": 71,
+  "retail_insn": 71,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "8 ours-only and 8 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "mov eax, 0xffffffff",
+    "lea ecx, [esi + 0x44]",
+    "mov dword ptr [ebp - 4], eax",
+    "mov dword ptr [ecx], eax",
+    "mov dword ptr [ecx + 4], eax",
+    "mov dword ptr [ecx + 8], eax"
+   ],
+   "retail": [
+    "lea eax, [esi + 0x44]",
+    "mov ecx, 0xffffffff",
+    "mov dword ptr [ebp - 4], ecx",
+    "mov dword ptr [eax], ecx",
+    "mov dword ptr [eax + 4], ecx",
+    "mov dword ptr [eax + 8], ecx"
+   ]
+  },
+  "address": "0x10017af0",
+  "name": "PizzeriaState::PizzeriaState",
+  "score": 0.8873
+ },
+ {
+  "aligned": 0.8856,
+  "ours_insn": 341,
+  "retail_insn": 341,
+  "cross_moves": 0,
+  "moves_total": 3,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "36 ours-only and 36 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "mov dword ptr [esp + 0x2c], ecx",
+    "ours_at": 198,
+    "retail_at": 201,
+    "distance": 3,
+    "ours_block": 55,
+    "retail_block": 55,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [esp + 0x3c], eax",
+    "ours_at": 202,
+    "retail_at": 200,
+    "distance": -2,
+    "ours_block": 55,
+    "retail_block": 55,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [esp + 0x28]",
+    "ours_at": 216,
+    "retail_at": 218,
+    "distance": 2,
+    "ours_block": 55,
+    "retail_block": 55,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "lea ebx, [ecx*8]",
+    "cmp byte ptr [ebx + <a>], 0",
+    "xor esi, esi",
+    "inc esi",
+    "cmp esi, 0x28",
+    "lea edx, [esi + esi*2]"
+   ],
+   "retail": [
+    "lea esi, [ecx*8]",
+    "cmp byte ptr [esi + <a>], 0",
+    "xor ebx, ebx",
+    "inc ebx",
+    "cmp ebx, 0x28",
+    "lea edx, [ebx + ebx*2]"
+   ]
+  },
+  "address": "0x10062e20",
+  "name": "LegoAnimationManager::FUN_10062e20",
+  "score": 0.8856
+ },
+ {
+  "aligned": 0.9271,
+  "ours_insn": 192,
+  "retail_insn": 192,
+  "cross_moves": 1,
+  "moves_total": 1,
+  "verdict": "DIFFERENT",
+  "cmpdir": 5,
+  "reason": "13 ours-only and 13 retail-only instruction(s) with no counterpart, 5 of them cmpdir; 1 cross-block move(s)",
+  "moves": [
+   {
+    "text": "fstp dword ptr [esp + 0x10]",
+    "ours_at": 119,
+    "retail_at": 118,
+    "distance": -1,
+    "ours_block": 31,
+    "retail_block": 32,
+    "cross": true
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "cmp eax, ecx",
+    "cmp esi, ecx",
+    "cmp dword ptr [<a>], esi",
+    "jle <t>",
+    "fld dword ptr [esp + 0x10]",
+    "fld st(1)"
+   ],
+   "retail": [
+    "cmp ecx, eax",
+    "cmp ecx, esi",
+    "cmp esi, dword ptr [<a>]",
+    "jge <t>",
+    "jmp <t>",
+    "fstp dword ptr [esp + 0x10]"
+   ]
+  },
+  "address": "0x100a66f0",
+  "name": "ViewManager::ManageVisibilityAndDetailRecursively",
+  "score": 0.8848
+ },
+ {
+  "aligned": 0.9005,
+  "ours_insn": 191,
+  "retail_insn": 189,
+  "cross_moves": 4,
+  "moves_total": 4,
+  "verdict": "DIFFERENT",
+  "cmpdir": 1,
+  "reason": "15 ours-only and 13 retail-only instruction(s) with no counterpart, 1 of them cmpdir; 4 cross-block move(s)",
+  "moves": [
+   {
+    "text": "xor edi, edi",
+    "ours_at": 103,
+    "retail_at": 106,
+    "distance": 3,
+    "ours_block": 8,
+    "retail_block": 9,
+    "cross": true
+   },
+   {
+    "text": "xor esi, esi",
+    "ours_at": 106,
+    "retail_at": 103,
+    "distance": -3,
+    "ours_block": 9,
+    "retail_block": 8,
+    "cross": true
+   },
+   {
+    "text": "cmp ecx, dword ptr [<a>]",
+    "ours_at": 147,
+    "retail_at": 144,
+    "distance": -3,
+    "ours_block": 17,
+    "retail_block": 16,
+    "cross": true
+   },
+   {
+    "text": "je <t>",
+    "ours_at": 148,
+    "retail_at": 145,
+    "distance": -3,
+    "ours_block": 17,
+    "retail_block": 16,
+    "cross": true
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "cmp ecx, eax",
+    "cmp dword ptr [eax + esi], 0",
+    "mov ecx, dword ptr [eax + esi]",
+    "add esi, 4",
+    "inc edi",
+    "cmp eax, edi"
+   ],
+   "retail": [
+    "cmp eax, ecx",
+    "cmp dword ptr [eax + edi], 0",
+    "mov ecx, dword ptr [eax + edi]",
+    "add edi, 4",
+    "inc esi",
+    "cmp eax, esi"
+   ]
+  },
+  "address": "0x10069b10",
+  "name": "LegoAnimPresenter::BuildROIMap",
+  "score": 0.8842
+ },
+ {
+  "aligned": 0.8791,
+  "ours_insn": 91,
+  "retail_insn": 91,
+  "cross_moves": 0,
+  "moves_total": 1,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "10 ours-only and 10 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "mov ecx, eax",
+    "ours_at": 52,
+    "retail_at": 65,
+    "distance": 13,
+    "ours_block": 7,
+    "retail_block": 7,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov eax, dword ptr [esp + 0x18]",
+    "sub eax, dword ptr [esp + 0x10]",
+    "inc eax",
+    "push eax",
+    "mov eax, dword ptr [esp + 0x18]",
+    "sub eax, dword ptr [esp + 0x10]"
+   ],
+   "retail": [
+    "mov ecx, dword ptr [esp + 0x18]",
+    "sub ecx, dword ptr [esp + 0x10]",
+    "inc ecx",
+    "push ecx",
+    "mov edi, dword ptr [eax]",
+    "mov ecx, dword ptr [esp + 0x18]"
+   ]
+  },
+  "address": "0x100b27b0",
+  "name": "MxVideoPresenter::Destroy(unsigned char)",
+  "score": 0.8791
+ },
+ {
+  "aligned": 0.9214,
+  "ours_insn": 369,
+  "retail_insn": 369,
+  "cross_moves": 1,
+  "moves_total": 1,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "28 ours-only and 28 retail-only instruction(s) with no counterpart; 1 cross-block move(s)",
+  "moves": [
+   {
+    "text": "cmp dword ptr [eax], edi",
+    "ours_at": 207,
+    "retail_at": 252,
+    "distance": 45,
+    "ours_block": 60,
+    "retail_block": 72,
+    "cross": true
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov edi, edx",
+    "mov eax, dword ptr [edi]",
+    "cmp dword ptr [<a>], eax",
+    "mov edi, eax",
+    "mov dword ptr [ebx], edi",
+    "add eax, 0x14"
+   ],
+   "retail": [
+    "mov eax, edx",
+    "mov edi, dword ptr [eax]",
+    "cmp dword ptr [<a>], edi",
+    "mov eax, edi",
+    "mov dword ptr [ebx], eax",
+    "lea edi, [eax + 0x14]"
+   ]
+  },
+  "address": "0x100a7960",
+  "name": "_Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *>>::_Kfn,ROINameComparator,allocator<ViewLODList *>>::erase",
+  "score": 0.878
+ },
+ {
+  "aligned": 0.8669,
+  "ours_insn": 338,
+  "retail_insn": 338,
+  "cross_moves": 1,
+  "moves_total": 5,
+  "verdict": "DIFFERENT",
+  "cmpdir": 1,
+  "reason": "40 ours-only and 40 retail-only instruction(s) with no counterpart, 1 of them cmpdir; 1 cross-block move(s)",
+  "moves": [
+   {
+    "text": "jne <t>",
+    "ours_at": 103,
+    "retail_at": 103,
+    "distance": 0,
+    "ours_block": 15,
+    "retail_block": 15,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [ebp - 0x20]",
+    "ours_at": 104,
+    "retail_at": 101,
+    "distance": -3,
+    "ours_block": 16,
+    "retail_block": 15,
+    "cross": true
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x2c], edi",
+    "ours_at": 187,
+    "retail_at": 184,
+    "distance": -3,
+    "ours_block": 26,
+    "retail_block": 26,
+    "cross": false
+   },
+   {
+    "text": "dec eax",
+    "ours_at": 190,
+    "retail_at": 186,
+    "distance": -4,
+    "ours_block": 26,
+    "retail_block": 26,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x24], eax",
+    "ours_at": 191,
+    "retail_at": 188,
+    "distance": -3,
+    "ours_block": 26,
+    "retail_block": 26,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "sub esp, 0xfc",
+    "lea edi, [ebp - 0x108]",
+    "mov dword ptr [ebp - 0x108], 0x6c",
+    "mov edi, dword ptr [eax + 4]",
+    "lea eax, [ebp - 0x108]",
+    "mov esi, dword ptr [edi]"
+   ],
+   "retail": [
+    "sub esp, 0xf8",
+    "lea edi, [ebp - 0x104]",
+    "mov dword ptr [ebp - 0x104], 0x6c",
+    "mov esi, dword ptr [eax + 4]",
+    "lea eax, [ebp - 0x104]",
+    "mov edi, dword ptr [esi]"
+   ]
+  },
+  "address": "0x100998e0",
+  "name": "LegoTextureContainer::GetCached",
+  "score": 0.8698
+ },
+ {
+  "aligned": 0.8883,
+  "ours_insn": 537,
+  "retail_insn": 537,
+  "cross_moves": 2,
+  "moves_total": 55,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "5 ours-only and 5 retail-only instruction(s) with no counterpart; 2 cross-block move(s)",
+  "moves": [
+   {
+    "text": "xor ebx, ebx",
+    "ours_at": 4,
+    "retail_at": 11,
+    "distance": 7,
+    "ours_block": 0,
+    "retail_block": 1,
+    "cross": true
+   },
+   {
+    "text": "xor edx, edx",
+    "ours_at": 11,
+    "retail_at": 4,
+    "distance": -7,
+    "ours_block": 1,
+    "retail_block": 0,
+    "cross": true
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 324,
+    "retail_at": 324,
+    "distance": 0,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xc8]",
+    "ours_at": 325,
+    "retail_at": 320,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x198]",
+    "ours_at": 326,
+    "retail_at": 321,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xc8]",
+    "ours_at": 332,
+    "retail_at": 337,
+    "distance": 5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x1a0]",
+    "ours_at": 333,
+    "retail_at": 338,
+    "distance": 5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xc0]",
+    "ours_at": 337,
+    "retail_at": 332,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x180]",
+    "ours_at": 338,
+    "retail_at": 333,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 348,
+    "retail_at": 348,
+    "distance": 0,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xc8]",
+    "ours_at": 349,
+    "retail_at": 344,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x1a8]",
+    "ours_at": 350,
+    "retail_at": 345,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 360,
+    "retail_at": 360,
+    "distance": 0,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xc0]",
+    "ours_at": 361,
+    "retail_at": 356,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x190]",
+    "ours_at": 362,
+    "retail_at": 357,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xd8]",
+    "ours_at": 370,
+    "retail_at": 368,
+    "distance": -2,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x158]",
+    "ours_at": 371,
+    "retail_at": 369,
+    "distance": -2,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xe8]",
+    "ours_at": 380,
+    "retail_at": 388,
+    "distance": 8,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x1a0]",
+    "ours_at": 381,
+    "retail_at": 389,
+    "distance": 8,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xd8]",
+    "ours_at": 385,
+    "retail_at": 382,
+    "distance": -3,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x160]",
+    "ours_at": 386,
+    "retail_at": 383,
+    "distance": -3,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 387,
+    "retail_at": 384,
+    "distance": -3,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xe0]",
+    "ours_at": 388,
+    "retail_at": 380,
+    "distance": -8,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x180]",
+    "ours_at": 389,
+    "retail_at": 381,
+    "distance": -8,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xe0]",
+    "ours_at": 392,
+    "retail_at": 397,
+    "distance": 5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x188]",
+    "ours_at": 393,
+    "retail_at": 398,
+    "distance": 5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xd8]",
+    "ours_at": 397,
+    "retail_at": 392,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x168]",
+    "ours_at": 398,
+    "retail_at": 393,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xe0]",
+    "ours_at": 412,
+    "retail_at": 406,
+    "distance": -6,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x190]",
+    "ours_at": 413,
+    "retail_at": 407,
+    "distance": -6,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 414,
+    "retail_at": 408,
+    "distance": -6,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 420,
+    "retail_at": 420,
+    "distance": 0,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xf8]",
+    "ours_at": 421,
+    "retail_at": 416,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x158]",
+    "ours_at": 422,
+    "retail_at": 417,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0x108]",
+    "ours_at": 430,
+    "retail_at": 436,
+    "distance": 6,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x1a0]",
+    "ours_at": 431,
+    "retail_at": 437,
+    "distance": 6,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xf0]",
+    "ours_at": 436,
+    "retail_at": 428,
+    "distance": -8,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x140]",
+    "ours_at": 437,
+    "retail_at": 429,
+    "distance": -8,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0x108]",
+    "ours_at": 442,
+    "retail_at": 448,
+    "distance": 6,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x1a8]",
+    "ours_at": 443,
+    "retail_at": 449,
+    "distance": 6,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 444,
+    "retail_at": 450,
+    "distance": 6,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xf8]",
+    "ours_at": 445,
+    "retail_at": 440,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x168]",
+    "ours_at": 446,
+    "retail_at": 441,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0xf0]",
+    "ours_at": 454,
+    "retail_at": 452,
+    "distance": -2,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x150]",
+    "ours_at": 455,
+    "retail_at": 453,
+    "distance": -2,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0x100]",
+    "ours_at": 460,
+    "retail_at": 457,
+    "distance": -3,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x190]",
+    "ours_at": 461,
+    "retail_at": 458,
+    "distance": -3,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 462,
+    "retail_at": 456,
+    "distance": -6,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0x118]",
+    "ours_at": 466,
+    "retail_at": 464,
+    "distance": -2,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x158]",
+    "ours_at": 467,
+    "retail_at": 465,
+    "distance": -2,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "faddp st(1)",
+    "ours_at": 480,
+    "retail_at": 480,
+    "distance": 0,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0x110]",
+    "ours_at": 481,
+    "retail_at": 476,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x140]",
+    "ours_at": 482,
+    "retail_at": 477,
+    "distance": -5,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fld qword ptr [esp + 0x110]",
+    "ours_at": 502,
+    "retail_at": 500,
+    "distance": -2,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "fmul qword ptr [esp + 0x150]",
+    "ours_at": 503,
+    "retail_at": 501,
+    "distance": -2,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov dword ptr [esp + 0xb0], ebx",
+    "cmp edx, 4",
+    "lea eax, [ebx + edx]",
+    "inc edx",
+    "add ebx, 4"
+   ],
+   "retail": [
+    "mov dword ptr [esp + 0xb0], edx",
+    "cmp ebx, 4",
+    "lea eax, [edx + ebx]",
+    "inc ebx",
+    "add edx, 4"
+   ]
+  },
+  "address": "0x100a46b0",
+  "name": "OrientableROI::UpdateTransformationRelativeToParent",
+  "score": 0.8696
+ },
+ {
+  "aligned": 0.8675,
+  "ours_insn": 166,
+  "retail_insn": 166,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 2,
+  "reason": "22 ours-only and 22 retail-only instruction(s) with no counterpart, 2 of them cmpdir",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "mov ebx, dword ptr [esp + 0x28]",
+    "cmp byte ptr [ebx + 0xe], 0x44",
+    "mov eax, dword ptr [ebx + 8]",
+    "movsx ebp, word ptr [ebx + 0xc]",
+    "cmp ebp, eax",
+    "cmp eax, ebp"
+   ],
+   "retail": [
+    "mov ebp, dword ptr [esp + 0x28]",
+    "cmp byte ptr [ebp + 0xe], 0x44",
+    "mov eax, dword ptr [ebp + 8]",
+    "movsx ebx, word ptr [ebp + 0xc]",
+    "cmp ebx, eax",
+    "cmp eax, ebx"
+   ]
+  },
+  "address": "0x100166a0",
+  "name": "JetskiRace::HandlePathStruct",
+  "score": 0.8675
+ },
+ {
+  "aligned": 0.8808,
+  "ours_insn": 646,
+  "retail_insn": 646,
+  "cross_moves": 0,
+  "moves_total": 49,
+  "verdict": "DIFFERENT",
+  "cmpdir": 2,
+  "reason": "28 ours-only and 28 retail-only instruction(s) with no counterpart, 2 of them cmpdir",
+  "moves": [
+   {
+    "text": "mov dword ptr [ebp - 0x60], 1",
+    "ours_at": 48,
+    "retail_at": 55,
+    "distance": 7,
+    "ours_block": 4,
+    "retail_block": 4,
+    "cross": false
+   },
+   {
+    "text": "mov byte ptr [ebp - 0x68], al",
+    "ours_at": 52,
+    "retail_at": 50,
+    "distance": -2,
+    "ours_block": 4,
+    "retail_block": 4,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x58], 0x3f000000",
+    "ours_at": 126,
+    "retail_at": 126,
+    "distance": 0,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "lea ecx, [ebp - 0x58]",
+    "ours_at": 127,
+    "retail_at": 127,
+    "distance": 0,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "call dword ptr [ebx + 0x54]",
+    "ours_at": 136,
+    "retail_at": 136,
+    "distance": 0,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov edi, dword ptr [ebp - 0x10]",
+    "ours_at": 137,
+    "retail_at": 137,
+    "distance": 0,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "lea ecx, [ebp - 0xac]",
+    "ours_at": 138,
+    "retail_at": 108,
+    "distance": -30,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "push ecx",
+    "ours_at": 139,
+    "retail_at": 134,
+    "distance": -5,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov ebx, dword ptr [edi + 0x1c]",
+    "ours_at": 140,
+    "retail_at": 140,
+    "distance": 0,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "lea ecx, [ebp - 0xb4]",
+    "ours_at": 141,
+    "retail_at": 135,
+    "distance": -6,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "call <t>",
+    "ours_at": 142,
+    "retail_at": 111,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0xb4], <a>",
+    "ours_at": 143,
+    "retail_at": 112,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov edx, dword ptr [ebx + 4]",
+    "ours_at": 144,
+    "retail_at": 113,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ebp - 0xb0]",
+    "ours_at": 145,
+    "retail_at": 114,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [edx]",
+    "ours_at": 146,
+    "retail_at": 115,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ecx], eax",
+    "ours_at": 147,
+    "retail_at": 116,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov ebx, dword ptr [edx + 4]",
+    "ours_at": 148,
+    "retail_at": 117,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ecx + 4], ebx",
+    "ours_at": 149,
+    "retail_at": 118,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov edx, dword ptr [edx + 8]",
+    "ours_at": 150,
+    "retail_at": 119,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ecx + 8], edx",
+    "ours_at": 151,
+    "retail_at": 120,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "lea ecx, [ebp - 0xb4]",
+    "ours_at": 152,
+    "retail_at": 130,
+    "distance": -22,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [edi + 0x20]",
+    "ours_at": 153,
+    "retail_at": 122,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov ebx, dword ptr [ebp - 0xb4]",
+    "ours_at": 154,
+    "retail_at": 133,
+    "distance": -21,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "push eax",
+    "ours_at": 155,
+    "retail_at": 124,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "call dword ptr [ebx + 0x48]",
+    "ours_at": 156,
+    "retail_at": 125,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x54], 0x3f000000",
+    "ours_at": 157,
+    "retail_at": 157,
+    "distance": 0,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "lea ecx, [ebp - 0x54]",
+    "ours_at": 158,
+    "retail_at": 158,
+    "distance": 0,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov ebx, dword ptr [ebp - 0xb4]",
+    "ours_at": 159,
+    "retail_at": 128,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "push ecx",
+    "ours_at": 160,
+    "retail_at": 129,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "lea ecx, [ebp - 0xb4]",
+    "ours_at": 161,
+    "retail_at": 121,
+    "distance": -40,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "call dword ptr [ebx + 0x5c]",
+    "ours_at": 162,
+    "retail_at": 131,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov ecx, dword ptr [ebp + 0x18]",
+    "ours_at": 163,
+    "retail_at": 132,
+    "distance": -31,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov ebx, dword ptr [ebp - 0xb4]",
+    "ours_at": 164,
+    "retail_at": 123,
+    "distance": -41,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "push ecx",
+    "ours_at": 165,
+    "retail_at": 109,
+    "distance": -56,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "lea ecx, [ebp - 0xb4]",
+    "ours_at": 166,
+    "retail_at": 110,
+    "distance": -56,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x8c], eax",
+    "ours_at": 206,
+    "retail_at": 203,
+    "distance": -3,
+    "ours_block": 20,
+    "retail_block": 20,
+    "cross": false
+   },
+   {
+    "text": "lea eax, [ebp - 0x8c]",
+    "ours_at": 207,
+    "retail_at": 204,
+    "distance": -3,
+    "ours_block": 20,
+    "retail_block": 20,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x88], esi",
+    "ours_at": 208,
+    "retail_at": 206,
+    "distance": -2,
+    "ours_block": 20,
+    "retail_block": 20,
+    "cross": false
+   },
+   {
+    "text": "push eax",
+    "ours_at": 209,
+    "retail_at": 205,
+    "distance": -4,
+    "ours_block": 20,
+    "retail_block": 20,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x24], 1",
+    "ours_at": 291,
+    "retail_at": 295,
+    "distance": 4,
+    "ours_block": 28,
+    "retail_block": 28,
+    "cross": false
+   },
+   {
+    "text": "push eax",
+    "ours_at": 326,
+    "retail_at": 324,
+    "distance": -2,
+    "ours_block": 37,
+    "retail_block": 37,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x24], 0",
+    "ours_at": 429,
+    "retail_at": 431,
+    "distance": 2,
+    "ours_block": 48,
+    "retail_block": 48,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x70], 0x3f000000",
+    "ours_at": 446,
+    "retail_at": 444,
+    "distance": -2,
+    "ours_block": 48,
+    "retail_block": 48,
+    "cross": false
+   },
+   {
+    "text": "mov edx, dword ptr [ebp - 0x18]",
+    "ours_at": 483,
+    "retail_at": 481,
+    "distance": -2,
+    "ours_block": 49,
+    "retail_block": 49,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [edx]",
+    "ours_at": 484,
+    "retail_at": 483,
+    "distance": -1,
+    "ours_block": 49,
+    "retail_block": 49,
+    "cross": false
+   },
+   {
+    "text": "mov esi, dword ptr [edx + 4]",
+    "ours_at": 491,
+    "retail_at": 490,
+    "distance": -1,
+    "ours_block": 49,
+    "retail_block": 49,
+    "cross": false
+   },
+   {
+    "text": "mov eax, dword ptr [edx + 8]",
+    "ours_at": 493,
+    "retail_at": 492,
+    "distance": -1,
+    "ours_block": 49,
+    "retail_block": 49,
+    "cross": false
+   },
+   {
+    "text": "mov edx, dword ptr [edx + 0xc]",
+    "ours_at": 495,
+    "retail_at": 494,
+    "distance": -1,
+    "ours_block": 49,
+    "retail_block": 49,
+    "cross": false
+   },
+   {
+    "text": "add dword ptr [ebp - 0x3c], 4",
+    "ours_at": 497,
+    "retail_at": 499,
+    "distance": 2,
+    "ours_block": 50,
+    "retail_block": 50,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "cmp edx, esi",
+    "cmp eax, edi",
+    "mov eax, dword ptr [ebp - 0x24]",
+    "mov edi, dword ptr [esi]",
+    "mov ecx, dword ptr [edi + 4]",
+    "mov ebx, ecx"
+   ],
+   "retail": [
+    "cmp dword ptr [ebp + 0x20], esi",
+    "cmp edi, eax",
+    "mov eax, dword ptr [ebp - 0x64]",
+    "mov ebx, dword ptr [esi]",
+    "mov ecx, dword ptr [ebx + 4]",
+    "mov edi, ecx"
+   ]
+  },
+  "address": "0x10048310",
+  "name": "LegoPathController::FindPath",
+  "score": 0.8629
+ },
+ {
+  "aligned": 0.9259,
+  "ours_insn": 80,
+  "retail_insn": 81,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "5 ours-only and 6 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "mov ebx, dword ptr [ebp + 0xc]",
+    "cmp dword ptr [eax + 0x20], ebx",
+    "mov eax, dword ptr [ebp + 0x10]",
+    "push eax",
+    "mov eax, dword ptr [ecx]"
+   ],
+   "retail": [
+    "mov bx, word ptr [ebp + 0x10]",
+    "mov ecx, dword ptr [ebp + 0xc]",
+    "cmp dword ptr [eax + 0x20], ecx",
+    "push ebx",
+    "mov eax, dword ptr [ebp - 0x10]",
+    "mov eax, dword ptr [eax]"
+   ]
+  },
+  "address": "0x100293c0",
+  "name": "LegoControlManager::UpdateEnabledChild",
+  "score": 0.8625
+ },
+ {
+  "aligned": 0.88,
+  "ours_insn": 150,
+  "retail_insn": 149,
+  "cross_moves": 0,
+  "moves_total": 2,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "16 ours-only and 15 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "mov ebx, dword ptr [esi]",
+    "ours_at": 125,
+    "retail_at": 123,
+    "distance": -2,
+    "ours_block": 8,
+    "retail_block": 8,
+    "cross": false
+   },
+   {
+    "text": "push 0",
+    "ours_at": 140,
+    "retail_at": 137,
+    "distance": -3,
+    "ours_block": 8,
+    "retail_block": 8,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov eax, dword ptr [ecx]",
+    "call dword ptr [eax + 0x80]",
+    "lea edx, [edx + esi - 1]",
+    "mov edx, eax",
+    "test edx, edx",
+    "xor eax, eax"
+   ],
+   "retail": [
+    "mov esi, dword ptr [ecx]",
+    "call dword ptr [esi + 0x80]",
+    "lea edx, [esi + edx - 1]",
+    "test eax, eax",
+    "xor edx, edx",
+    "mov edi, eax"
+   ]
+  },
+  "address": "0x1004c580",
+  "name": "MxTransitionManager::SetupCopyRect",
+  "score": 0.8495
+ },
+ {
+  "aligned": 0.8819,
+  "ours_insn": 236,
+  "retail_insn": 237,
+  "cross_moves": 1,
+  "moves_total": 1,
+  "verdict": "DIFFERENT",
+  "cmpdir": 3,
+  "reason": "26 ours-only and 27 retail-only instruction(s) with no counterpart, 3 of them cmpdir; 1 cross-block move(s)",
+  "moves": [
+   {
+    "text": "mov dword ptr [edi + 4], edx",
+    "ours_at": 204,
+    "retail_at": 151,
+    "distance": -53,
+    "ours_block": 50,
+    "retail_block": 36,
+    "cross": true
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "cmp eax, dword ptr [<a>]",
+    "cmp ecx, edx",
+    "cmp ecx, edx",
+    "mov ebx, dword ptr [edi]",
+    "lea eax, [ebx + 8]",
+    "cmp dword ptr [eax], ecx"
+   ],
+   "retail": [
+    "cmp dword ptr [<a>], eax",
+    "cmp edx, ecx",
+    "cmp edx, ecx",
+    "mov eax, dword ptr [edi]",
+    "lea ebx, [eax + 8]",
+    "cmp dword ptr [ebx], ecx"
+   ]
+  },
+  "address": "0x1006e720",
+  "name": "_Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct>>::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct>>::_Insert",
+  "score": 0.8475
+ },
+ {
+  "aligned": 0.869,
+  "ours_insn": 229,
+  "retail_insn": 228,
+  "cross_moves": 0,
+  "moves_total": 3,
+  "verdict": "DIFFERENT",
+  "cmpdir": 1,
+  "reason": "27 ours-only and 26 retail-only instruction(s) with no counterpart, 1 of them cmpdir",
+  "moves": [
+   {
+    "text": "sub esp, 0x34",
+    "ours_at": 8,
+    "retail_at": 7,
+    "distance": -1,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "push ebx",
+    "ours_at": 11,
+    "retail_at": 11,
+    "distance": 0,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [ebp - 0x1c], 0xffffffff",
+    "ours_at": 18,
+    "retail_at": 10,
+    "distance": -8,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov eax, edi",
+    "xor eax, eax",
+    "mov ecx, dword ptr [ebp - 0x18]",
+    "mov dword ptr [ecx + 0x50], eax",
+    "lea eax, [ebp - 0x24]",
+    "push eax"
+   ],
+   "retail": [
+    "mov ecx, edi",
+    "xor ecx, ecx",
+    "mov eax, dword ptr [ebp - 0x18]",
+    "mov dword ptr [eax + 0x50], ecx",
+    "lea ecx, [ebp - 0x24]",
+    "push ecx"
+   ]
+  },
+  "address": "0x1004ebd0",
+  "name": "LegoTexturePresenter::Read",
+  "score": 0.8446
+ },
+ {
+  "aligned": 0.8468,
+  "ours_insn": 372,
+  "retail_insn": 369,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "57 ours-only and 54 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "mov eax, dword ptr [ebx]",
+    "mov ebp, dword ptr [eax + 8]",
+    "mov edi, dword ptr [ebp]",
+    "mov dword ptr [eax + 8], edi",
+    "mov edi, dword ptr [ebp]",
+    "cmp edi, dword ptr [<a>]"
+   ],
+   "retail": [
+    "mov edi, dword ptr [ebx]",
+    "mov ebp, dword ptr [edi + 8]",
+    "mov eax, dword ptr [ebp]",
+    "mov dword ptr [edi + 8], eax",
+    "mov eax, dword ptr [ebp]",
+    "cmp eax, dword ptr [<a>]"
+   ]
+  },
+  "address": "0x1006dec0",
+  "name": "_Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct>>::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct>>::erase",
+  "score": 0.8205
+ },
+ {
+  "aligned": 0.8202,
+  "ours_insn": 228,
+  "retail_insn": 227,
+  "cross_moves": 1,
+  "moves_total": 6,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "35 ours-only and 34 retail-only instruction(s) with no counterpart; 1 cross-block move(s)",
+  "moves": [
+   {
+    "text": "add ebx, 4",
+    "ours_at": 125,
+    "retail_at": 124,
+    "distance": -1,
+    "ours_block": 13,
+    "retail_block": 13,
+    "cross": false
+   },
+   {
+    "text": "push eax",
+    "ours_at": 130,
+    "retail_at": 133,
+    "distance": 3,
+    "ours_block": 14,
+    "retail_block": 14,
+    "cross": false
+   },
+   {
+    "text": "mov edi, 1",
+    "ours_at": 140,
+    "retail_at": 139,
+    "distance": -1,
+    "ours_block": 14,
+    "retail_block": 14,
+    "cross": false
+   },
+   {
+    "text": "push ecx",
+    "ours_at": 141,
+    "retail_at": 159,
+    "distance": 18,
+    "ours_block": 14,
+    "retail_block": 17,
+    "cross": true
+   },
+   {
+    "text": "mov edx, dword ptr [ebp - 0x24]",
+    "ours_at": 155,
+    "retail_at": 148,
+    "distance": -7,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   },
+   {
+    "text": "push edx",
+    "ours_at": 160,
+    "retail_at": 153,
+    "distance": -7,
+    "ours_block": 17,
+    "retail_block": 17,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov edi, dword ptr [ebp - 0x1c]",
+    "mov edx, dword ptr [ebp - 0x18]",
+    "mov ecx, dword ptr [ebp + 0x20]",
+    "mov ebx, dword ptr [ebp + 0x1c]",
+    "add ebx, 2",
+    "test byte ptr [ebx + 1], 0x80"
+   ],
+   "retail": [
+    "mov edx, dword ptr [ebp - 0x1c]",
+    "mov ecx, dword ptr [ebp - 0x18]",
+    "mov ebx, dword ptr [ebp + 0x20]",
+    "mov edi, dword ptr [ebp + 0x1c]",
+    "add edi, 2",
+    "test byte ptr [edi + 1], 0x80"
+   ]
+  },
+  "address": "0x100a3840",
+  "name": "TglImpl::MeshBuilderImpl::CreateMesh",
+  "score": 0.8176
+ },
+ {
+  "aligned": 0.8586,
+  "ours_insn": 297,
+  "retail_insn": 295,
+  "cross_moves": 4,
+  "moves_total": 4,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "38 ours-only and 36 retail-only instruction(s) with no counterpart; 4 cross-block move(s)",
+  "moves": [
+   {
+    "text": "cmp eax, edx",
+    "ours_at": 55,
+    "retail_at": 63,
+    "distance": 8,
+    "ours_block": 7,
+    "retail_block": 10,
+    "cross": true
+   },
+   {
+    "text": "cmp edx, eax",
+    "ours_at": 63,
+    "retail_at": 55,
+    "distance": -8,
+    "ours_block": 10,
+    "retail_block": 7,
+    "cross": true
+   },
+   {
+    "text": "mov eax, dword ptr [ebp - 0x20]",
+    "ours_at": 119,
+    "retail_at": 75,
+    "distance": -44,
+    "ours_block": 12,
+    "retail_block": 11,
+    "cross": true
+   },
+   {
+    "text": "add eax, dword ptr [ebp - 0x18]",
+    "ours_at": 214,
+    "retail_at": 166,
+    "distance": -48,
+    "ours_block": 30,
+    "retail_block": 20,
+    "cross": true
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov dword ptr [ebp - 0x14], edi",
+    "mov dword ptr [ebp - 0x14], 0",
+    "lea ecx, [ebp - 0x24]",
+    "mov edx, 1",
+    "mov eax, dword ptr [ecx + 0x6c]",
+    "inc edx"
+   ],
+   "retail": [
+    "mov dword ptr [ebp - 0x90], edi",
+    "mov dword ptr [ebp - 0x90], 0",
+    "lea ecx, [ebp - 0x20]",
+    "mov eax, 1",
+    "mov edx, dword ptr [ecx + 0x6c]",
+    "inc eax"
+   ]
+  },
+  "address": "0x1006b140",
+  "name": "LegoAnimPresenter::CopyTransform",
+  "score": 0.8149
+ },
+ {
+  "aligned": 0.8504,
+  "ours_insn": 234,
+  "retail_insn": 233,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "35 ours-only and 34 retail-only instruction(s) with no counterpart",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "lea ebx, [eax + 0x14]",
+    "cmp dword ptr [ebx], 0",
+    "mov ebp, dword ptr [edi]",
+    "mov ebp, dword ptr [ebp]",
+    "cmp ebp, eax",
+    "mov ebp, dword ptr [edi]"
+   ],
+   "retail": [
+    "lea ebp, [eax + 0x14]",
+    "cmp dword ptr [ebp], 0",
+    "mov ebx, dword ptr [edi]",
+    "mov ebx, dword ptr [ebx]",
+    "cmp ebx, eax",
+    "mov ebx, dword ptr [edi]"
+   ]
+  },
+  "address": "0x1004f9b0",
+  "name": "_Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::_Insert",
+  "score": 0.8051
+ },
+ {
+  "aligned": 0.8481,
+  "ours_insn": 236,
+  "retail_insn": 237,
+  "cross_moves": 0,
+  "moves_total": 0,
+  "verdict": "DIFFERENT",
+  "cmpdir": 1,
+  "reason": "35 ours-only and 36 retail-only instruction(s) with no counterpart, 1 of them cmpdir",
+  "moves": [],
+  "orphans": {
+   "ours": [
+    "cmp eax, ecx",
+    "lea ebx, [eax + 0x18]",
+    "cmp dword ptr [ebx], 0",
+    "mov ebp, dword ptr [edi]",
+    "mov ebp, dword ptr [ebp]",
+    "cmp ebp, eax"
+   ],
+   "retail": [
+    "cmp ecx, eax",
+    "lea ebp, [eax + 0x18]",
+    "cmp dword ptr [ebp], 0",
+    "mov ebx, dword ptr [edi]",
+    "mov ebx, dword ptr [ebx]",
+    "cmp ebx, eax"
+   ]
+  },
+  "address": "0x1006a7a0",
+  "name": "_Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct>>::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct>>::_Insert",
+  "score": 0.7983
+ },
+ {
+  "aligned": 0.8596,
+  "ours_insn": 55,
+  "retail_insn": 57,
+  "cross_moves": 0,
+  "moves_total": 1,
+  "verdict": "DIFFERENT",
+  "cmpdir": 0,
+  "reason": "5 ours-only and 7 retail-only instruction(s) with no counterpart",
+  "moves": [
+   {
+    "text": "jne <t>",
+    "ours_at": 44,
+    "retail_at": 44,
+    "distance": 0,
+    "ours_block": 8,
+    "retail_block": 8,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov ecx, dword ptr [esi + 0x100]",
+    "mov dword ptr [ecx + 0x74], eax",
+    "mov ecx, dword ptr [esi + 0x100]",
+    "cmp dword ptr [ecx + 0x78], 0",
+    "mov word ptr [esi + 0x1d2], ax"
+   ],
+   "retail": [
+    "mov eax, dword ptr [esi + 0x100]",
+    "mov ecx, 1",
+    "mov dword ptr [eax + 0x74], ecx",
+    "mov eax, dword ptr [esi + 0x100]",
+    "cmp dword ptr [eax + 0x78], 0",
+    "mov word ptr [esi + 0x1d2], cx"
+   ]
+  },
+  "address": "0x1006fda0",
+  "name": "Infocenter::HandleKeyPress",
+  "score": 0.7933
+ },
+ {
+  "aligned": 0.8238,
+  "ours_insn": 369,
+  "retail_insn": 369,
+  "cross_moves": 22,
+  "moves_total": 26,
+  "verdict": "DIFFERENT",
+  "cmpdir": 1,
+  "reason": "39 ours-only and 39 retail-only instruction(s) with no counterpart, 1 of them cmpdir; 22 cross-block move(s)",
+  "moves": [
+   {
+    "text": "push ebp",
+    "ours_at": 8,
+    "retail_at": 6,
+    "distance": -2,
+    "ours_block": 0,
+    "retail_block": 0,
+    "cross": false
+   },
+   {
+    "text": "cmp ecx, dword ptr [<a>]",
+    "ours_at": 12,
+    "retail_at": 9,
+    "distance": -3,
+    "ours_block": 1,
+    "retail_block": 0,
+    "cross": true
+   },
+   {
+    "text": "jmp <t>",
+    "ours_at": 15,
+    "retail_at": 15,
+    "distance": 0,
+    "ours_block": 2,
+    "retail_block": 2,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [esp + 0x1c], eax",
+    "ours_at": 16,
+    "retail_at": 22,
+    "distance": 6,
+    "ours_block": 3,
+    "retail_block": 5,
+    "cross": true
+   },
+   {
+    "text": "jmp <t>",
+    "ours_at": 17,
+    "retail_at": 17,
+    "distance": 0,
+    "ours_block": 3,
+    "retail_block": 3,
+    "cross": false
+   },
+   {
+    "text": "jne <t>",
+    "ours_at": 21,
+    "retail_at": 21,
+    "distance": 0,
+    "ours_block": 4,
+    "retail_block": 4,
+    "cross": false
+   },
+   {
+    "text": "mov dword ptr [esp + 0x1c], ecx",
+    "ours_at": 22,
+    "retail_at": 16,
+    "distance": -6,
+    "ours_block": 5,
+    "retail_block": 3,
+    "cross": true
+   },
+   {
+    "text": "cmp dword ptr [eax + 8], ecx",
+    "ours_at": 28,
+    "retail_at": 25,
+    "distance": -3,
+    "ours_block": 6,
+    "retail_block": 5,
+    "cross": true
+   },
+   {
+    "text": "je <t>",
+    "ours_at": 29,
+    "retail_at": 10,
+    "distance": -19,
+    "ours_block": 6,
+    "retail_block": 0,
+    "cross": true
+   },
+   {
+    "text": "mov ebp, dword ptr [edi]",
+    "ours_at": 161,
+    "retail_at": 196,
+    "distance": 35,
+    "ours_block": 47,
+    "retail_block": 58,
+    "cross": true
+   },
+   {
+    "text": "mov dword ptr [ebp + 4], eax",
+    "ours_at": 166,
+    "retail_at": 204,
+    "distance": 38,
+    "ours_block": 48,
+    "retail_block": 60,
+    "cross": true
+   },
+   {
+    "text": "mov dword ptr [edi + 4], ebp",
+    "ours_at": 168,
+    "retail_at": 216,
+    "distance": 48,
+    "ours_block": 49,
+    "retail_block": 63,
+    "cross": true
+   },
+   {
+    "text": "mov dword ptr [ebp + 8], edi",
+    "ours_at": 176,
+    "retail_at": 215,
+    "distance": 39,
+    "ours_block": 51,
+    "retail_block": 63,
+    "cross": true
+   },
+   {
+    "text": "mov dword ptr [edi], eax",
+    "ours_at": 179,
+    "retail_at": 198,
+    "distance": 19,
+    "ours_block": 53,
+    "retail_block": 58,
+    "cross": true
+   },
+   {
+    "text": "mov dword ptr [eax + 4], edi",
+    "ours_at": 180,
+    "retail_at": 202,
+    "distance": 22,
+    "ours_block": 53,
+    "retail_block": 59,
+    "cross": true
+   },
+   {
+    "text": "cmp edi, dword ptr [<a>]",
+    "ours_at": 200,
+    "retail_at": 164,
+    "distance": -36,
+    "ours_block": 58,
+    "retail_block": 47,
+    "cross": true
+   },
+   {
+    "text": "mov dword ptr [edi + 4], eax",
+    "ours_at": 202,
+    "retail_at": 166,
+    "distance": -36,
+    "ours_block": 59,
+    "retail_block": 48,
+    "cross": true
+   },
+   {
+    "text": "mov edi, dword ptr [eax + 4]",
+    "ours_at": 203,
+    "retail_at": 173,
+    "distance": -30,
+    "ours_block": 60,
+    "retail_block": 50,
+    "cross": true
+   },
+   {
+    "text": "mov dword ptr [ebp + 4], edi",
+    "ours_at": 204,
+    "retail_at": 168,
+    "distance": -36,
+    "ours_block": 60,
+    "retail_block": 49,
+    "cross": true
+   },
+   {
+    "text": "mov edi, dword ptr [esi + 4]",
+    "ours_at": 205,
+    "retail_at": 169,
+    "distance": -36,
+    "ours_block": 60,
+    "retail_block": 49,
+    "cross": true
+   },
+   {
+    "text": "add edi, 4",
+    "ours_at": 206,
+    "retail_at": 170,
+    "distance": -36,
+    "ours_block": 60,
+    "retail_block": 49,
+    "cross": true
+   },
+   {
+    "text": "cmp dword ptr [edi], eax",
+    "ours_at": 207,
+    "retail_at": 174,
+    "distance": -33,
+    "ours_block": 60,
+    "retail_block": 50,
+    "cross": true
+   },
+   {
+    "text": "mov edi, dword ptr [eax + 4]",
+    "ours_at": 209,
+    "retail_at": 167,
+    "distance": -42,
+    "ours_block": 61,
+    "retail_block": 49,
+    "cross": true
+   },
+   {
+    "text": "cmp dword ptr [edi], eax",
+    "ours_at": 211,
+    "retail_at": 171,
+    "distance": -40,
+    "ours_block": 61,
+    "retail_block": 49,
+    "cross": true
+   },
+   {
+    "text": "mov dword ptr [edi], ebp",
+    "ours_at": 214,
+    "retail_at": 178,
+    "distance": -36,
+    "ours_block": 63,
+    "retail_block": 52,
+    "cross": true
+   },
+   {
+    "text": "mov dword ptr [eax + 4], ebp",
+    "ours_at": 216,
+    "retail_at": 180,
+    "distance": -36,
+    "ours_block": 63,
+    "retail_block": 53,
+    "cross": true
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov eax, dword ptr [eax + 8]",
+    "mov ecx, dword ptr [eax]",
+    "mov eax, ecx",
+    "mov eax, dword ptr [esp + 0x1c]",
+    "mov ecx, dword ptr [eax + 4]",
+    "cmp dword ptr [ecx + 8], eax"
+   ],
+   "retail": [
+    "mov ecx, dword ptr [eax + 8]",
+    "mov eax, dword ptr [ecx]",
+    "mov ecx, eax",
+    "mov ecx, dword ptr [esp + 0x1c]",
+    "mov eax, dword ptr [ecx + 4]",
+    "cmp dword ptr [eax + 8], ecx"
+   ]
+  },
+  "address": "0x10059dc0",
+  "name": "_Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::erase",
+  "score": 0.7913
+ },
+ {
+  "aligned": 0.8333,
+  "ours_insn": 233,
+  "retail_insn": 234,
+  "cross_moves": 1,
+  "moves_total": 1,
+  "verdict": "DIFFERENT",
+  "cmpdir": 3,
+  "reason": "37 ours-only and 38 retail-only instruction(s) with no counterpart, 3 of them cmpdir; 1 cross-block move(s)",
+  "moves": [
+   {
+    "text": "mov dword ptr [edi + 4], edx",
+    "ours_at": 201,
+    "retail_at": 148,
+    "distance": -53,
+    "ours_block": 50,
+    "retail_block": 36,
+    "cross": true
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "cmp eax, ecx",
+    "lea ebx, [eax + 0x14]",
+    "cmp dword ptr [ebx], 0",
+    "mov ebp, dword ptr [edi]",
+    "mov ebp, dword ptr [ebp]",
+    "cmp ebp, eax"
+   ],
+   "retail": [
+    "cmp ecx, eax",
+    "lea ebp, [eax + 0x14]",
+    "cmp dword ptr [ebp], 0",
+    "mov ebx, dword ptr [edi]",
+    "mov ebx, dword ptr [ebx]",
+    "cmp ebx, eax"
+   ]
+  },
+  "address": "0x1006c200",
+  "name": "_Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *>>::_Kfn,LegoAnimSubstComparator,allocator<char const *>>::_Insert",
+  "score": 0.7828
+ },
+ {
+  "aligned": 0.8105,
+  "ours_insn": 93,
+  "retail_insn": 95,
+  "cross_moves": 1,
+  "moves_total": 4,
+  "verdict": "DIFFERENT",
+  "cmpdir": 2,
+  "reason": "12 ours-only and 14 retail-only instruction(s) with no counterpart, 2 of them cmpdir; 1 cross-block move(s)",
+  "moves": [
+   {
+    "text": "jmp <t>",
+    "ours_at": 27,
+    "retail_at": 27,
+    "distance": 0,
+    "ours_block": 3,
+    "retail_block": 3,
+    "cross": false
+   },
+   {
+    "text": "jne <t>",
+    "ours_at": 30,
+    "retail_at": 32,
+    "distance": 2,
+    "ours_block": 4,
+    "retail_block": 5,
+    "cross": true
+   },
+   {
+    "text": "cmp dword ptr [ecx + 8], edx",
+    "ours_at": 35,
+    "retail_at": 35,
+    "distance": 0,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   },
+   {
+    "text": "je <t>",
+    "ours_at": 36,
+    "retail_at": 36,
+    "distance": 0,
+    "ours_block": 6,
+    "retail_block": 6,
+    "cross": false
+   }
+  ],
+  "orphans": {
+   "ours": [
+    "mov ecx, eax",
+    "mov edx, dword ptr [ecx + 8]",
+    "cmp dword ptr [<a>], edx",
+    "mov ecx, dword ptr [edx]",
+    "mov edx, dword ptr [ecx + 4]",
+    "cmp dword ptr [edx + 8], ecx"
+   ],
+   "retail": [
+    "mov edx, eax",
+    "mov ebp, dword ptr [edx + 8]",
+    "cmp dword ptr [<a>], ebp",
+    "mov ecx, dword ptr [ebp]",
+    "mov ebp, ecx",
+    "mov edx, ebp"
+   ]
+  },
+  "address": "0x100574a0",
+  "name": "LegoPathBoundary::RemoveActor",
+  "score": 0.7527
+ },
+ {
+  "aligned": 0.7381,
+  "ours_insn": 252,
+  "retail_insn": 252,
+  "verdict": "AMBIGUOUS",
+  "reason": "only 74% of instructions aligned",
+  "moves": [],
+  "cross_moves": 0,
+  "moves_total": 0,
+  "address": "0x100bb1d0",
+  "name": "MxDisplaySurface::VTable0x30",
+  "score": 0.8611
+ },
+ {
+  "aligned": 0.7971,
+  "ours_insn": 69,
+  "retail_insn": 69,
+  "verdict": "AMBIGUOUS",
+  "reason": "only 80% of instructions aligned",
+  "moves": [],
+  "cross_moves": 0,
+  "moves_total": 0,
+  "address": "0x100a3b40",
+  "name": "TglImpl::MeshBuilderImpl::Clone",
+  "score": 0.7971
+ },
+ {
+  "aligned": 0.7944,
+  "ours_insn": 107,
+  "retail_insn": 107,
+  "verdict": "AMBIGUOUS",
+  "reason": "only 79% of instructions aligned",
+  "moves": [],
+  "cross_moves": 0,
+  "moves_total": 0,
+  "address": "0x100586e0",
+  "name": "LegoPathBoundary::RemovePresenter",
+  "score": 0.7757
+ },
+ {
+  "aligned": 0.7892,
+  "ours_insn": 166,
+  "retail_insn": 166,
+  "verdict": "AMBIGUOUS",
+  "reason": "only 79% of instructions aligned",
+  "moves": [],
+  "cross_moves": 0,
+  "moves_total": 0,
+  "address": "0x100bd020",
+  "name": "MxBitmap::BitBltTransparent",
+  "score": 0.747
+ },
+ {
+  "aligned": 0.7674,
+  "ours_insn": 43,
+  "retail_insn": 43,
+  "verdict": "AMBIGUOUS",
+  "reason": "only 77% of instructions aligned",
+  "moves": [],
+  "cross_moves": 0,
+  "moves_total": 0,
+  "address": "0x10038380",
+  "name": "Pizza::StopActions",
+  "score": 0.7442
+ },
+ {
+  "aligned": 0.7338,
+  "ours_insn": 571,
+  "retail_insn": 571,
+  "verdict": "AMBIGUOUS",
+  "reason": "only 73% of instructions aligned",
+  "moves": [],
+  "cross_moves": 0,
+  "moves_total": 0,
+  "address": "0x100aa510",
+  "name": "LegoLOD::Read",
+  "score": 0.7268
+ },
+ {
+  "aligned": 0.7507,
+  "ours_insn": 369,
+  "retail_insn": 367,
+  "verdict": "AMBIGUOUS",
+  "reason": "only 75% of instructions aligned",
+  "moves": [],
+  "cross_moves": 0,
+  "moves_total": 0,
+  "address": "0x1002bff0",
+  "name": "_Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *>>::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *>>::erase",
+  "score": 0.7092
+ },
+ {
+  "aligned": 0.7421,
+  "ours_insn": 221,
+  "retail_insn": 221,
+  "verdict": "AMBIGUOUS",
+  "reason": "only 74% of instructions aligned",
+  "moves": [],
+  "cross_moves": 0,
+  "moves_total": 0,
+  "address": "0x10083890",
+  "name": "_Tree<char *,pair<char * const,LegoCharacter *>,map<char *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *>>::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *>>::_Insert",
+  "score": 0.7075
+ },
+ {
+  "aligned": 0.7059,
+  "ours_insn": 34,
+  "retail_insn": 34,
+  "verdict": "AMBIGUOUS",
+  "reason": "only 71% of instructions aligned",
+  "moves": [],
+  "cross_moves": 0,
+  "moves_total": 0,
+  "address": "0x1002a1b0",
+  "name": "_Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry>>::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry>>::_Erase",
+  "score": 0.7059
+ },
+ {
+  "aligned": 0.6667,
+  "ours_insn": 39,
+  "retail_insn": 39,
+  "verdict": "AMBIGUOUS",
+  "reason": "only 67% of instructions aligned",
+  "moves": [],
+  "cross_moves": 0,
+  "moves_total": 0,
+  "address": "0x100a12a0",
+  "name": "TglImpl::TextureImpl::SetImage",
+  "score": 0.6667
+ },
+ {
+  "aligned": 0.6522,
+  "ours_insn": 23,
+  "retail_insn": 23,
+  "verdict": "AMBIGUOUS",
+  "reason": "only 65% of instructions aligned",
+  "moves": [],
+  "cross_moves": 0,
+  "moves_total": 0,
+  "address": "0x10057180",
+  "name": "_Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresenter *,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *>>::_Kfn,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *>>::_Erase",
+  "score": 0.6522
+ },
+ {
+  "aligned": 0.6303,
+  "ours_insn": 208,
+  "retail_insn": 211,
+  "verdict": "AMBIGUOUS",
+  "reason": "only 63% of instructions aligned",
+  "moves": [],
+  "cross_moves": 0,
+  "moves_total": 0,
+  "address": "0x10061010",
+  "name": "LegoAnimationManager::FUN_10061010",
+  "score": 0.5411
+ }
+]
