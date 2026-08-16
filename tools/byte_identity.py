@@ -8014,7 +8014,7 @@ def validate_manifest(
                 require(
                     kind in ("forward_declaration_run", "declaration_shape",
                              "extern_run_pair", "forward_run_with_shape",
-                             "pad_shape"),
+                             "extern_pair_with_shape", "pad_shape"),
                     f"{donor_context}: equal-body donors require a "
                     "generated declaration recipe",
                 )
@@ -8150,6 +8150,69 @@ def validate_manifest(
                                 shape_classes, shape_functions
                             ).encode("utf-8")
                         )
+                    except ValueError as error:
+                        raise ByteIdentityError(
+                            f"{donor_context} stacked-carrier parameters: "
+                            f"{error}"
+                        ) from error
+                elif kind == "extern_pair_with_shape":
+                    # The full stacked carrier: an extern run after the last
+                    # #include, a second at file end, PLUS a declaration
+                    # shape force-included.  The count lattice is genuinely
+                    # 2-D -- holding the total count fixed and sweeping the
+                    # m+k diagonal produces up to nine distinct bodies -- so
+                    # a one-seat stack cannot reach the states where the two
+                    # seats and the shape each fix a different byte.
+                    exact_keys(
+                        recipe,
+                        {
+                            "kind", "header_prefix", "header_count",
+                            "seat_prefix", "seat_count", "width",
+                            "classes", "functions",
+                            "generated_header_sha256", "compile_lane",
+                            "emission_policy", "authenticity_rationale",
+                        },
+                        f"{donor_context}.recipe",
+                    )
+                    header_count = recipe.get("header_count")
+                    seat_count = recipe.get("seat_count")
+                    run_width = recipe.get("width")
+                    shape_classes = recipe.get("classes")
+                    shape_functions = recipe.get("functions")
+                    require(isinstance(recipe.get("header_prefix"), str)
+                            and isinstance(recipe.get("seat_prefix"), str)
+                            and isinstance(header_count, int)
+                            and not isinstance(header_count, bool)
+                            and isinstance(seat_count, int)
+                            and not isinstance(seat_count, bool)
+                            and isinstance(run_width, int)
+                            and not isinstance(run_width, bool)
+                            and header_count >= 0 and seat_count >= 0
+                            and header_count + seat_count >= 1,
+                            f"{donor_context} extern-run parameters "
+                            "are invalid")
+                    require(isinstance(shape_classes, int)
+                            and not isinstance(shape_classes, bool)
+                            and 1 <= shape_classes <= 10,
+                            f"{donor_context}.classes is invalid")
+                    require(isinstance(shape_functions, int)
+                            and not isinstance(shape_functions, bool)
+                            and shape_classes <= shape_functions
+                            <= 10 * shape_classes,
+                            f"{donor_context}.functions is invalid")
+                    try:
+                        generated = b"".join(
+                            entropy_generator.generate_extern_run(
+                                prefix, count, run_width
+                            ).encode("utf-8")
+                            for prefix, count in (
+                                (recipe["header_prefix"], header_count),
+                                (recipe["seat_prefix"], seat_count),
+                            )
+                            if count
+                        ) + entropy_generator.generate_shape(
+                            shape_classes, shape_functions
+                        ).encode("utf-8")
                     except ValueError as error:
                         raise ByteIdentityError(
                             f"{donor_context} stacked-carrier parameters: "
