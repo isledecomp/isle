@@ -594,3 +594,22 @@ lane is active.
   LinkEdgesAndFaces still **2**. Together with fwd 1..400 on both placements
   and the pad/extern grids, that is ~1770 distinct carrier states holding the
   same 2-byte residue.
+
+## ALPHA.DLL bracket (wave-3 queued item) — CLOSED NEGATIVE for the Act3 rows
+
+Wave 3 queued an ALPHA bracket read for `Act3::TriggerHitSound` and
+`Act3::CreateROIAndBuildMap`. **ALPHA does not contain Act 3 at all.** Measured
+by substring presence in the three images:
+
+| token | ALPHA | BETA10 | LEGO1 |
+|---|---|---|---|
+| `Act3` / `act3` | absent | present | present |
+| `Brickster` | absent | present | present |
+| `eatpz`, `thpt` (Act3Brickster sound names) | absent | present | present |
+| `Act3Ammo` | absent | present | absent (retail strips class names) |
+
+ALPHA is the Oct-29-1996 build and predates the act structure; the whole tree
+carries only three `// FUNCTION: ALPHA` annotations, none in Act3 sources. The
+ALPHA bracket is therefore unavailable for every row in `act3.cpp`,
+`act3actors.cpp` and `act3ammo.cpp` — take it off the queue. It remains a
+legitimate bracket for the older subsystems (viewlodlist, legoroi, realtime).
