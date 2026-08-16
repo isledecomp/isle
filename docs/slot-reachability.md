@@ -18,13 +18,13 @@ identity. This screens every open row on that question.
 
 | verdict | rows | meaning |
 |---|---:|---|
-| SLOT-CLEAN | 55 | every slot maps to itself: the frame layout ALREADY matches retail, so the residue is register colour or scheduling, not slot assignment |
-| AMBIGUOUS | 22 | the permutation cannot be read with confidence; reported, never forced |
+| SLOT-CLEAN | 53 | every slot maps to itself: the frame layout ALREADY matches retail, so the residue is register colour or scheduling, not slot assignment |
+| AMBIGUOUS | 21 | the permutation cannot be read with confidence; reported, never forced |
 | UNREACHABLE | 2 | the divergence is a packer artefact (unaligned slot, partial overlap, or a spill-shaped slot touched once) |
 | REACHABLE | 1 | divergent slots are aligned, non-overlapping and variable-shaped: worth a human read |
 | NO-SLOTS | 1 | the row touches no frame slot at all (register-only code) |
 
-**55 of 81 open rows already have retail's exact
+**53 of 78 open rows already have retail's exact
 frame layout.** The slot-assignment question -- the one the
 `~MxStreamController` method answers -- barely arises across the pile.
 
@@ -65,7 +65,7 @@ inside it) into partially overlapping slots, and places the 3-byte
 
 | cause | rows |
 |---|---:|
-| bodies too different to trust a permutation (<80% aligned) | 13 |
+| bodies too different to trust a permutation (<80% aligned) | 12 |
 | slots contested or claimed twice after majority resolution | 9 |
 
 These are **not** verdicts of unreachability. They are rows where the
@@ -125,7 +125,6 @@ read-only, not routed:
 | `0x10048310` | 0.8629 | AMBIGUOUS | LegoPathController::FindPath |
 | `0x100293c0` | 0.8625 | AMBIGUOUS | LegoControlManager::UpdateEnabledChild |
 | `0x1004ebd0` | 0.8446 | AMBIGUOUS | LegoTexturePresenter::Read |
-| `0x10069e90` | 0.7745 | AMBIGUOUS | _Tree<char const *,pair<char const * const,LegoAnimStruct>,m |
 | `0x100574a0` | 0.7527 | AMBIGUOUS | LegoPathBoundary::RemoveActor |
 | `0x1002bff0` | 0.7092 | AMBIGUOUS | _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,Le |
 | `0x10061010` | 0.5411 | AMBIGUOUS | LegoAnimationManager::FUN_10061010 |
@@ -180,10 +179,8 @@ read-only, not routed:
 | `0x10059dc0` | 0.7913 | SLOT-CLEAN | _Tree<char const *,pair<char const * const,LegoTextureInfo * |
 | `0x1006c200` | 0.7828 | SLOT-CLEAN | _Tree<char const *,pair<char const * const,char const *>,map |
 | `0x100586e0` | 0.7757 | SLOT-CLEAN | LegoPathBoundary::RemovePresenter |
-| `0x10068b20` | 0.7680 | SLOT-CLEAN | _Tree<char const *,pair<char const * const,char const *>,map |
 | `0x100bd020` | 0.7470 | SLOT-CLEAN | MxBitmap::BitBltTransparent |
 | `0x10083890` | 0.7075 | SLOT-CLEAN | _Tree<char *,pair<char * const,LegoCharacter *>,map<char *,L |
 | `0x1002a1b0` | 0.7059 | SLOT-CLEAN | _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheS |
 | `0x100a12a0` | 0.6667 | SLOT-CLEAN | TglImpl::TextureImpl::SetImage |
-| `0x100495b0` | 0.6532 | SLOT-CLEAN | _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<Leg |
 | `0x10057180` | 0.6522 | SLOT-CLEAN | _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPr |

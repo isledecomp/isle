@@ -54,7 +54,7 @@
  {
   "verdict": "AMBIGUOUS",
   "reason": "1 slot(s) contested; 1 noise pair(s) dropped",
-  "aligned": 0.9592,
+  "aligned": 0.9587,
   "slots": 30,
   "divergent": [],
   "address": "0x100035e0",
@@ -631,16 +631,6 @@
  },
  {
   "verdict": "AMBIGUOUS",
-  "reason": "only 79% of instructions aligned",
-  "aligned": 0.7913,
-  "slots": 3,
-  "divergent": [],
-  "address": "0x10069e90",
-  "name": "_Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct>>::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct>>::erase",
-  "score": 0.7745
- },
- {
-  "verdict": "AMBIGUOUS",
   "reason": "only 75% of instructions aligned",
   "aligned": 0.7474,
   "slots": 5,
@@ -900,7 +890,7 @@
  {
   "verdict": "SLOT-CLEAN",
   "reason": "identity mapping",
-  "aligned": 0.856,
+  "aligned": 0.8407,
   "divergent": [],
   "address": "0x10055a60",
   "name": "LegoNavController::Notify",
@@ -936,7 +926,7 @@
  {
   "verdict": "SLOT-CLEAN",
   "reason": "identity mapping",
-  "aligned": 0.9169,
+  "aligned": 0.9111,
   "divergent": [],
   "address": "0x10031820",
   "name": "Isle::Enable",
@@ -999,7 +989,7 @@
  {
   "verdict": "SLOT-CLEAN",
   "reason": "identity mapping",
-  "aligned": 0.9298,
+  "aligned": 0.9524,
   "divergent": [],
   "address": "0x1004d330",
   "name": "TowTrack::HandlePathStruct",
@@ -1062,7 +1052,7 @@
  {
   "verdict": "SLOT-CLEAN",
   "reason": "identity mapping",
-  "aligned": 0.8652,
+  "aligned": 0.9747,
   "divergent": [],
   "address": "0x10072ad0",
   "name": "Act3::TriggerHitSound",
@@ -1251,7 +1241,7 @@
  {
   "verdict": "SLOT-CLEAN",
   "reason": "identity mapping",
-  "aligned": 0.907,
+  "aligned": 0.9123,
   "divergent": [],
   "address": "0x1006fda0",
   "name": "Infocenter::HandleKeyPress",
@@ -1283,15 +1273,6 @@
   "address": "0x100586e0",
   "name": "LegoPathBoundary::RemovePresenter",
   "score": 0.7757
- },
- {
-  "verdict": "SLOT-CLEAN",
-  "reason": "identity mapping",
-  "aligned": 0.8811,
-  "divergent": [],
-  "address": "0x10068b20",
-  "name": "_Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *>>::_Kfn,LegoAnimSubstComparator,allocator<char const *>>::erase",
-  "score": 0.768
  },
  {
   "verdict": "SLOT-CLEAN",
@@ -1328,15 +1309,6 @@
   "address": "0x100a12a0",
   "name": "TglImpl::TextureImpl::SetImage",
   "score": 0.6667
- },
- {
-  "verdict": "SLOT-CLEAN",
-  "reason": "identity mapping",
-  "aligned": 0.9459,
-  "divergent": [],
-  "address": "0x100495b0",
-  "name": "_Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *>>::_Kfn,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *>>::insert",
-  "score": 0.6532
  },
  {
   "verdict": "SLOT-CLEAN",
