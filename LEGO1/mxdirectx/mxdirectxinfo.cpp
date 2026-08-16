@@ -10,6 +10,7 @@ DECOMP_SIZE_ASSERT(MxDeviceEnumerate, 0x14)
 DECOMP_SIZE_ASSERT(DeviceModesInfo, 0x17c)
 DECOMP_SIZE_ASSERT(DeviceModesInfo::Mode, 0x0c)
 
+#if !defined(MXDIRECTX_FOR_CONFIG)
 // FUNCTION: LEGO1 0x1009b8b0
 // FUNCTION: BETA10 0x1011c05e
 MxAssignedDevice::MxAssignedDevice()
@@ -26,6 +27,7 @@ MxAssignedDevice::~MxAssignedDevice()
 		m_deviceInfo = NULL;
 	}
 }
+#endif
 
 // FUNCTION: BETA10 0x1011d7f0
 MxDriver::MxDriver()

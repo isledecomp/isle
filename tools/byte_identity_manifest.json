@@ -551,7 +551,7 @@
   {
    "target": "config",
    "source": "LEGO1/mxdirectx/mxdirectxinfo.cpp",
-   "source_sha256": "4ef09cc8b48a7188567c4fafa9eb8b2b32d5c7c6939811913d6924a18cf9f57f",
+   "source_sha256": "95cd2160a7b2e15ebb3c3c62c6c7e3fa731468ed0d79e4397f48b64db97db4c9",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -567,64 +567,83 @@
    },
    "donors": [
     {
-     "id": "d_c081b11da0c6",
+     "id": "d_01659b9c53a5",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "forward_declaration_run",
-      "placement": "prefix",
-      "prefix": "MxUnkRecVA",
-      "count": 57,
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 37,
       "width": 3,
-      "generated_header_sha256": "c081b11da0c6102c839a9ae7c34b4b342ab634b2f9aed182e9b18ceab539f759",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated forward-declaration run prepended to the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_51fbda28b802",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "forward_declaration_run",
-      "placement": "force_include",
-      "prefix": "Zq",
-      "count": 13,
-      "width": 2,
-      "generated_header_sha256": "51fbda28b802be9f2b7ca3ea2d04830811034a677df18eba799443c021d2d394",
+      "generated_header_sha256": "01659b9c53a55f9df4b94a8109804977d1950af29649d5567cd9e4c3ef87b804",
       "compile_lane": {
        "required_define": "MXDIRECTX_FOR_CONFIG"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated forward-declaration run force-included ahead of the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_b67472020ac0",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 0,
+      "seat_prefix": "g_p",
+      "seat_count": 4,
+      "width": 2,
+      "generated_header_sha256": "b67472020ac0b3ab47787f6bf7609331fa850a29aae9297eeac27d33d88cf891",
+      "compile_lane": {
+       "required_define": "MXDIRECTX_FOR_CONFIG"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_857e1b946b0e",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 7,
+      "seat_prefix": "g_p",
+      "seat_count": 17,
+      "width": 2,
+      "generated_header_sha256": "857e1b946b0eae8f606d0282805ad62ccdc552815193c1753cfc01e798182287",
+      "compile_lane": {
+       "required_define": "MXDIRECTX_FOR_CONFIG"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
    "functions": [
     {
      "mangled": "??1?$list@UMxDisplayMode@@V?$allocator@UMxDisplayMode@@@@@@QAE@XZ",
-     "donor": "d_c081b11da0c6",
-     "splice_class": "equal_body_strict",
      "expected_body_length": 100,
      "expected_body_sha256": "45bffeeadec21960d9d08aef7202a98d05cf9fdc61c76f5a93f9e8315d3f6d28",
      "expected_changed_offsets": [
       19,
       62
-     ]
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_01659b9c53a5"
     },
     {
      "mangled": "??0MxDriver@@QAE@ABU0@@Z",
-     "donor": "d_51fbda28b802",
-     "splice_class": "equal_body_eh_structural_local",
      "expected_body_length": 367,
      "expected_body_sha256": "d595fd639e515f1da74aae2657c228c4101993d02015c7226f58f8da75436fd0",
      "expected_changed_offsets": [
       138,
-      166
+      268
      ],
+     "splice_class": "equal_body_eh_structural_local",
      "expected_code_renames": [
       [
        12,
@@ -641,12 +660,64 @@
       44,
       52,
       60
-     ]
+     ],
+     "donor": "d_b67472020ac0"
+    },
+    {
+     "mangled": "?EnumDevicesCallback@MxDeviceEnumerate@@QAEJPAU_GUID@@PBD1PAU_D3DDeviceDesc@@2@Z",
+     "expected_body_length": 233,
+     "expected_body_sha256": "e0be35086855718f08d593099af4f3f2e9c6564ea0cf2efbf60aca036264942f",
+     "expected_changed_offsets": [
+      97,
+      103,
+      113,
+      122,
+      131,
+      132,
+      133,
+      134,
+      135
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       213,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36
+     ],
+     "donor": "d_857e1b946b0e"
+    },
+    {
+     "mangled": "?EnumDirectDrawCallback@MxDeviceEnumerate@@QAEHPAU_GUID@@PAD1@Z",
+     "expected_body_sha256": "c008a4f98b34e12cda58557d5fdb94bd38bc84cb0f37c4bc60dc84504777813f",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 541,
+     "expected_donor_length": 536,
+     "expected_linked_span": 544,
+     "donor": "d_857e1b946b0e"
+    },
+    {
+     "mangled": "??1?$list@UMxDriver@@V?$allocator@UMxDriver@@@@@@QAE@XZ",
+     "expected_body_length": 112,
+     "expected_body_sha256": "a4897c1af448df78617b615bb927aeaa1fddfd46b33000da4601d35db471474e",
+     "expected_changed_offsets": [
+      74
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_857e1b946b0e"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes the CONFIG final-two cmp-orientation rows 0x401070 and 0x401990 from generated carrier states over the rendered current source.",
+    "reason": "Closes 5 row(s)/bodies in the CONFIG lane of LEGO1/mxdirectx/mxdirectxinfo.cpp on the guarded text from generated carrier states (the MXDIRECTX_FOR_CONFIG guard removes the MxAssignedDevice ctor/dtor from the CONFIG compile).",
     "may_replace_compiler_output": true
    }
   },
@@ -2410,7 +2481,7 @@
   {
    "target": "mxdirectx",
    "source": "LEGO1/mxdirectx/mxdirectxinfo.cpp",
-   "source_sha256": "4ef09cc8b48a7188567c4fafa9eb8b2b32d5c7c6939811913d6924a18cf9f57f",
+   "source_sha256": "95cd2160a7b2e15ebb3c3c62c6c7e3fa731468ed0d79e4397f48b64db97db4c9",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -2441,6 +2512,22 @@
       },
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_a9a90ebc7b08",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 1,
+      "generated_header_sha256": "a9a90ebc7b083a7a2f186f0bbb62530f885755a70199720658d60b430833949a",
+      "compile_lane": {
+       "required_define": "MXDIRECTX_FOR_CONFIG"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier force-included ahead of the translation unit, compiled in the CONFIG lane of the same TU text (a declared cross-lane donor); it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
@@ -2476,6 +2563,45 @@
       36
      ],
      "donor": "d_79cee655282a"
+    },
+    {
+     "mangled": "?EnumDirectDrawCallback@MxDeviceEnumerate@@QAEHPAU_GUID@@PAD1@Z",
+     "donor": "d_a9a90ebc7b08",
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_body_length": 541,
+     "expected_body_sha256": "1ddfbc889bff6bc99c22049eb8808a17eb13442b611ab05d3706234a066d5ec8",
+     "expected_changed_offsets": [
+      144,
+      145,
+      146,
+      147,
+      148,
+      149,
+      150,
+      151,
+      172,
+      173,
+      174,
+      175,
+      176,
+      177,
+      181
+     ],
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       521,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36
+     ],
+     "expected_donor_section_number": 52
     }
    ],
    "completion": {
@@ -4253,8 +4379,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4829,
-    "accepted_row_identity_sha256": "f27d8457f457123c75a81c29fb400bfd02ee8f201a589ea5fa7358c9ec3255b3",
+    "exact_raw_1_0_count": 4830,
+    "accepted_row_identity_sha256": "49eb6377da33f6d37d943608f329454357710456af9b26c72955930f42e766d4",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
@@ -4335,8 +4461,7 @@
    },
    "link_time": 873747873,
    "resource_time": 873747871,
-   "iat_order": "retail_slot_order_v1",
-   "thunk_order": "retail_adjacent_pair_swap_v1"
+   "iat_order": "retail_slot_order_v1"
   }
  },
  "terminal_producers": {
@@ -22027,9 +22152,9 @@
    },
    {
     "path": "LEGO1/mxdirectx/mxdirectxinfo.cpp",
-    "clean": "4ef09cc8b48a7188567c4fafa9eb8b2b32d5c7c6939811913d6924a18cf9f57f",
-    "effective": "927d9c0e5288e2c6e8337d03c6864530e4b0ab417375324dff2366e3140427ac",
-    "size": 21271,
+    "clean": "95cd2160a7b2e15ebb3c3c62c6c7e3fa731468ed0d79e4397f48b64db97db4c9",
+    "effective": "4c2ca989265269c72ee8661164953ce46f9770f2c1d9dff3e7859f550aa9dd66",
+    "size": 21313,
     "ops": [
      {
       "op": "insert",

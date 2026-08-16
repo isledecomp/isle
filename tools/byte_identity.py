@@ -8276,6 +8276,16 @@ def validate_manifest(
                     required_keys -= {"expected_relocation_moves"}
                 else:
                     required_keys -= {"expected_code_renames"}
+                if "expected_donor_section_number" in function:
+                    # Declared cross-lane donor: the donor compiles in
+                    # another real lane of the same TU, so its seat is
+                    # pinned explicitly instead of matching the seed's.
+                    required_keys |= {"expected_donor_section_number"}
+                    seat = function.get("expected_donor_section_number")
+                    require(isinstance(seat, int)
+                            and not isinstance(seat, bool) and seat > 0,
+                            f"{function_context}"
+                            ".expected_donor_section_number is invalid")
                 exact_keys(function, required_keys, function_context)
                 length = function.get("expected_body_length")
                 require(isinstance(length, int) and not isinstance(length, bool)
@@ -10362,9 +10372,13 @@ def _normalized_relocation_renames(
     seed: CoffObject, seed_section: dict,
     donor: CoffObject, donor_section: dict,
     context: str,
+    seat_map: dict | None = None,
 ) -> list[tuple[int, str]]:
     """Require literal relocation equality except paired object-local $L/$T
-    serial renames whose targets are structurally identical."""
+    serial renames whose targets are structurally identical.
+
+    seat_map maps a declared cross-lane donor's spliced-group section
+    numbers onto the seed's, so in-group targets compare structurally."""
     left = detailed_relocations(seed, seed_section)
     right = detailed_relocations(donor, donor_section)
     require(len(left) == len(right), f"{context}: relocation counts differ")
@@ -10397,9 +10411,15 @@ def _normalized_relocation_renames(
             f"{context}: non-local relocation rename "
             f"{a['target']!r} -> {b['target']!r}",
         )
+        donor_target_section = b["target_section"]
+        if seat_map:
+            donor_target_section = seat_map.get(
+                donor_target_section, donor_target_section
+            )
         require(
-            all(a["target_" + field] == b["target_" + field]
-                for field in ("section", "value", "type", "storage")),
+            a["target_section"] == donor_target_section
+            and all(a["target_" + field] == b["target_" + field]
+                    for field in ("value", "type", "storage")),
             f"{context}: renamed local relocation target structure differs",
         )
         renames.append((a["offset"], kind))
@@ -11076,11 +11096,26 @@ def compose_equal_body_comdat(
         # A carrier-state donor owns its own global tail layout; the target
         # closure seats, the xdata byte-equality, and the per-relocation
         # target checks carry the equivalence proof.  The primary and its
-        # closure children must keep identical seats in both objects.
-        require(
-            seed_primary["number"] == donor_primary["number"],
-            "target closure seats differ",
-        )
+        # closure children must keep identical seats in both objects —
+        # except for a declared cross-lane donor (another real compile lane
+        # of the same TU text), whose seat is pinned explicitly instead.
+        if "expected_donor_section_number" in function:
+            require(
+                donor_primary["number"]
+                == function["expected_donor_section_number"],
+                "declared cross-lane donor seat changed",
+            )
+            seat_map = {donor_primary["number"]: seed_primary["number"]}
+            for child_name in (".debug$S", ".xdata$x"):
+                seat_map[
+                    _comdat_child(donor, donor_primary, child_name)["number"]
+                ] = _comdat_child(seed, seed_primary, child_name)["number"]
+        else:
+            require(
+                seed_primary["number"] == donor_primary["number"],
+                "target closure seats differ",
+            )
+            seat_map = None
         if fpo_closure:
             require(function["expected_xdata_rename_offsets"] == [],
                     "FPO-closure splice cannot declare xdata renames")
@@ -11092,7 +11127,8 @@ def compose_equal_body_comdat(
                 coff_body(seed, seed_xdata) == coff_body(donor, donor_xdata),
                 "EH xdata raw bytes differ")
             xdata_renames = _normalized_relocation_renames(
-                seed, seed_xdata, donor, donor_xdata, "xdata"
+                seed, seed_xdata, donor, donor_xdata, "xdata",
+                seat_map=seat_map,
             )
             require(
                 [offset for offset, _ in xdata_renames]
@@ -11101,7 +11137,8 @@ def compose_equal_body_comdat(
             )
         if splice_class == "equal_body_eh_structural_local":
             code_renames = _normalized_relocation_renames(
-                seed, seed_primary, donor, donor_primary, "code"
+                seed, seed_primary, donor, donor_primary, "code",
+                seat_map=seat_map,
             )
             require(
                 [[offset, kind] for offset, kind in code_renames]
