@@ -1,9 +1,8 @@
 # The corrected SHAPE/STRUCT census — every open LEGO1 row
 
 Measured 2026-08-16 at **LEGO1 4853/4934, 81 open**, base `cd8692bb`.
-**Revision 4** — a twelfth fix (stack displacements are placement) and a
-thirteenth (a moved instruction spans three diff blocks and was read as two
-different operations). **The text-target list drops from 51 to 30.**
+**Revision 5** — the 30 remaining text targets have now been *read*, not just
+scored. **Five survive.** See § *Reading the 30*.
 Regenerate with `<session scratchpad>/fin/census.py --json census.json --md
 census.md`; machine-readable copy alongside it as `census.json`. **Before
 trusting a regenerated census, run `<session scratchpad>/fin/regress.py`** — six
@@ -365,6 +364,62 @@ its entire SHAPE residue is one extra `mov r, r` in retail plus one load moved
 two positions. It is **not** a text target. This is deliberately left to the
 reader rather than automated — `mov r, N` can be either a rematerialisation or
 a real assignment, and no cheap test separates them.
+
+## Reading the 30 — five survive
+
+Revision 4 left 30 rows in `SHAPE gap (text target)`. Scoring cannot tell a
+lane *what* to write, so each was read: take the multiset difference of the
+divergent instructions, cancel the equivalences this campaign has already
+proved inert, and look at what is left. Tool:
+`<scratchpad>/fin/read30.py`, machine output `read30.md`.
+
+| category | rows | why it is not a text target |
+|---|---|---|
+| **TEXT CANDIDATE** | **5** | — |
+| `ALLOCATOR ARTIFACT` | 11 | residue is only spills, reloads, register copies, zero idioms, rematerialised constants, alignment filler or block layout |
+| `VENDOR TEMPLATE` | 6 | one inline difference inside MSVC's `<map>`, repeated across six instantiations |
+| `INERT-EQUIVALENCE` | 4 | the whole divergence cancels to `cmpdir`, an inverted branch, or `add r,N` ↔ `lea r,[r+N]` |
+| `FP-STACK` | 2 | SHAPE cannot separate two orderings of the same products; judge on STRUCT |
+| `ADDRESSING` | 2 | strength reduction on an address, e.g. retail's `add r,8` then `cmp [r+4]` against our `cmp [r+0xc]` |
+
+### The cancellation rules, and why each is sound
+
+* **`cmpdir`** — `cmp A,B` against `cmp B,A`. Not source-addressable
+  (canonicalisation law; five negative cells on `LegoPartPresenter::Read`).
+* **inverted branch** — exchanging a compare's operands inverts its `jcc`, so
+  the branch half of a `cmpdir` shows up separately in the multiset.
+* **`add r,N` ↔ `lea r,[r+N]`** — one operation, two encodings the peephole
+  picks between.
+* **allocator class** — the coordinator's rule was "skip anything whose residue
+  is one rematerialised constant, one alignment `lea`, or one
+  allocator-inserted register copy". Read as a *class* that is every
+  instruction which moves a value without computing anything: a spill, a
+  reload, a copy, a zero idiom, a rematerialised constant, padding, or a branch
+  that only changes which tail a block falls into.
+
+### The five that survive, with what each says
+
+| SHAPE | addr | row | what the divergence says |
+|---|---|---|---|
+| 96.13 | `0x1003cf20` | `LegoCacheSoundManager::~LegoCacheSoundManager` | **we emit seven instructions retail does not** — `cmp [r],0; jne; mov r,[r+0xc]; test r,r; je; push r; add r,4`. A whole guarded block exists in our source and not in retail's. Matches its `−16` length defect and `Δinsn +7` exactly. **The strongest text target in the open set.** |
+| 94.13 | `0x10062e20` | `LegoAnimationManager::FUN_10062e20` | at four sites retail addresses an **indexed global** (`byte ptr [r + <reloc>]`) where we address a **struct member** (`byte ptr [r + 4]`, `[r + 7]`, `[r + 0xc]`). Retail's source reads a global array where ours reads through an object. |
+| 95.04 | `0x100a4420` | `OrientableROI::OrientableROI` | retail builds a sub-object through a computed pointer — `mov [r], R` (vtable), `lea r,[r+0xa8]`, `push r` — where we store the member directly. An inlining/construction difference. |
+| 97.77 | `0x100b2a70` | `MxVideoPresenter::PutFrame` | ours `add r, [F]` where retail `mov r, [F]`, repeatedly: **accumulation against assignment**. |
+| 98.46 | `0x10054050` | `Act3Ammo::Animate` | ours loads FP from a **member** (`fld [r+8]`), retail from a **global** (`fld [R]`) — the same shape as `FUN_10062e20`. |
+
+Two of the five (`FUN_10062e20`, `Act3Ammo::Animate`) are the *same* finding:
+**retail reads a global where we read a member.** That is a source question with
+a definite answer, and it is the cheapest of the five to test.
+
+### The six vendor-template rows
+
+`0x1006e720`, `0x1006c200`, `0x1006a7a0`, `0x1004f9b0` (`_Tree::_Insert`) and
+`0x10068b20`, `0x1006dec0` (`_Tree::erase`) all differ by a single
+`mov dword ptr [r + 4], r` present on one side only — the same inlined
+node-link store in MSVC 4.2's `<map>`. The direction is not even consistent
+(retail carries it in three, we carry it in three), which is the signature of
+an inline/allocator decision rather than a source one. It is **one cause, not
+six targets**, and the header is toolchain code.
 
 ## Caveats
 

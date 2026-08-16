@@ -2164,3 +2164,89 @@ reached a terminal position across three carrier families.
    SHAPE/EXACT spread means "mostly right operations, mostly wrong colouring" —
    which is an *allocator* signature, not a text one. Read the divergence
    before reading the spread.
+
+---
+
+# Wave 6 — reading the 30, and the honest number is five
+
+Base `5a0f02eb`; gate `LEGO1 4853/4934`; regression suite 7/7.
+
+Published as revision 5 of [`docs/shape-census.md`](shape-census.md).
+
+## 45. The method, and why scoring could not have got here
+
+The 30 were selected by a *score*: SHAPE < 100 with real operation
+differences. A score cannot tell a lane what to write, so each row was read —
+take the multiset difference of the divergent instructions, cancel the
+equivalences the campaign has already proved inert, and look at the remainder.
+
+`<scratchpad>/fin/read30.py` encodes the coordinator's ordering rule directly
+and prints the residue for every row, so the classification is auditable rather
+than asserted.
+
+**30 → 5.**
+
+| category | rows |
+|---|---|
+| **TEXT CANDIDATE** | **5** |
+| `ALLOCATOR ARTIFACT` | 11 |
+| `VENDOR TEMPLATE` (one `<map>` inline, six instantiations) | 6 |
+| `INERT-EQUIVALENCE` (`cmpdir` / inverted branch / `add`↔`lea`) | 4 |
+| `FP-STACK` (judge on STRUCT) | 2 |
+| `ADDRESSING` (strength reduction) | 2 |
+
+## 46. Two things the reading found that the score could not
+
+**The allocator class is much wider than three forms.** The brief said to skip
+"one rematerialised constant, one alignment `lea`, or one allocator-inserted
+register copy". Read as a *class*, that is every instruction which moves a
+value without computing anything — spill, reload, copy, zero idiom
+(`mov r,0` ↔ `xor r,r`), rematerialisation, padding, and a branch that only
+changes which tail a block falls into. Eleven of the thirty are nothing but
+that.
+
+**Six rows are one cause.** `0x1006e720`, `0x1006c200`, `0x1006a7a0`,
+`0x1004f9b0` (`_Tree::_Insert`) and `0x10068b20`, `0x1006dec0`
+(`_Tree::erase`) all differ by a single `mov dword ptr [r + 4], r` present on
+one side only — the same inlined node-link store in MSVC 4.2's `<map>`. **The
+direction is not consistent** (retail carries it in three, we carry it in
+three), which is an inline/allocator signature, not a source one. Counting them
+as six text targets would have sent six lanes at one toolchain header.
+
+## 47. The five, and what each says
+
+| SHAPE | addr | row | reading |
+|---|---|---|---|
+| 96.13 | `0x1003cf20` | `~LegoCacheSoundManager` | **we emit seven instructions retail does not** — a null test, a load, a second null test, a push and an `add`. A guarded block exists in our source and not retail's. Matches its `−16` length and `Δinsn +7` exactly. |
+| 94.13 | `0x10062e20` | `LegoAnimationManager::FUN_10062e20` | at four sites retail addresses an **indexed global**, we address a **struct member** |
+| 95.04 | `0x100a4420` | `OrientableROI::OrientableROI` | retail builds a sub-object through a computed pointer (`mov [r],R; lea r,[r+0xa8]; push r`); we store the member directly |
+| 97.77 | `0x100b2a70` | `MxVideoPresenter::PutFrame` | ours `add r,[F]` where retail `mov r,[F]` — **accumulation against assignment** |
+| 98.46 | `0x10054050` | `Act3Ammo::Animate` | ours `fld [r+8]` (member) where retail `fld [R]` (global) |
+
+**Two of the five are the same finding** — `FUN_10062e20` and
+`Act3Ammo::Animate` both say *retail reads a global where we read a member*.
+That is a source question with a definite answer and the cheapest of the five
+to test.
+
+None of the five is in my fourteen TUs: `legocachesoundmanager`,
+`legoanimationmanager` and `act3ammo` are in the block another lane took, and
+`orientableroi` and `mxvideopresenter` are the coordinator's. The reading is
+the deliverable; the landings belong to their owners.
+
+## 48. Where the census has ended up
+
+From 81 open rows:
+
+| | rows |
+|---|---|
+| text channel **proved** closed (SHAPE 100 & STRUCT 100) | 10 |
+| `SLOT` — same operations, same frame size, different slots | 15 |
+| `schedule (reordered)` | 16 |
+| `cmpdir` | 7 |
+| `FRAME (decl-set)` | 3 |
+| allocator artifact / vendor template / inert equivalence / addressing / FP-stack | 25 |
+| **genuine first-party text candidates** | **5** |
+
+The campaign began this wave believing 51 of 81 open rows were text targets.
+Reading them says **five**. That is the number worth acting on, and the 25 rows
+in the second-to-last line are the ones a lane would have burned a session on.
