@@ -242,6 +242,18 @@ instantiation.)
    `Vector3::Vector3` retail's answer is "decline" at 28/28; our 4 acceptances
    are the anomaly, not a different threshold consistently applied.
 
+**`0x10084030 CreateActorROI` is the tightest specimen in the whole class and
+the best target if the bit is ever solved.** It is **2294 vs 2294 bytes and 661
+vs 661 instructions**, and its entire codegen residue is *two `call rel32`
+target fields* — at body offsets 100 and 1219 ours reaches `Vector2::Vector2`
+where retail reaches `Vector3::Vector3`, with byte-identical code on both sides
+of each call. The lengths match by luck: our expansion of `Vector3::Vector3`
+emits `call Vector2::Vector2` plus the derived vtable store, and that store is
+immediately overwritten by the enclosing code (`mov [ebp-0xd4], edi`), so DCE
+removes it and the expansion costs exactly as much as the call it replaced.
+(The row still scores .9365 rather than ~.997 because reccmp also sees our
+data-address divergence, which `fulldiff.py` masks — displacement, not codegen.)
+
 A useful negative for source-shaping: **all three `Vector3::Vector3` sites we
 can name are implicitly generated ctor chains** — the sub-objects of
 `m_world_bounding_box`/`m_world_bounding_sphere`/`m_world_velocity` in
