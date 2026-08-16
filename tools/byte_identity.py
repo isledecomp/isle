@@ -8015,7 +8015,8 @@ def validate_manifest(
                     kind in ("forward_declaration_run", "declaration_shape",
                              "extern_run_pair", "forward_run_with_shape",
                              "extern_pair_with_shape",
-                             "extern_pair_with_pad", "pad_shape"),
+                             "extern_pair_with_pad", "pad_shape",
+                             "declaration_run_triple"),
                     f"{donor_context}: equal-body donors require a "
                     "generated declaration recipe",
                 )
@@ -8155,6 +8156,57 @@ def validate_manifest(
                         raise ByteIdentityError(
                             f"{donor_context} stacked-carrier parameters: "
                             f"{error}"
+                        ) from error
+                elif kind == "declaration_run_triple":
+                    # Three seats at once.  The seats are independent
+                    # coordinates that do NOT sum: the same total count
+                    # split differently produces different bodies, because
+                    # the EOF count selects the body-length family and the
+                    # post-include count selects the colour inside it.
+                    # Existing recipes fill at most two of the three, so the
+                    # pre-include + EOF combination was unreachable.  Kind,
+                    # stem and width are measured inert WITHIN a seat, so one
+                    # generator with three distinct stems spans the space.
+                    exact_keys(
+                        recipe,
+                        {
+                            "kind", "width",
+                            "pre_prefix", "pre_count",
+                            "post_prefix", "post_count",
+                            "eof_prefix", "eof_count",
+                            "generated_header_sha256", "compile_lane",
+                            "emission_policy", "authenticity_rationale",
+                        },
+                        f"{donor_context}.recipe",
+                    )
+                    run_width = recipe.get("width")
+                    seats = [(recipe.get(f"{seat}_prefix"),
+                              recipe.get(f"{seat}_count"))
+                             for seat in ("pre", "post", "eof")]
+                    require(isinstance(run_width, int)
+                            and not isinstance(run_width, bool)
+                            and all(isinstance(prefix, str) and prefix
+                                    and isinstance(count, int)
+                                    and not isinstance(count, bool)
+                                    and count >= 0
+                                    for prefix, count in seats)
+                            and sum(count for _, count in seats) >= 1,
+                            f"{donor_context} triple-run parameters "
+                            "are invalid")
+                    require(len({prefix for prefix, count in seats if count})
+                            == len([1 for _, count in seats if count]),
+                            f"{donor_context}: seated runs must use distinct "
+                            "stems so no declaration is repeated")
+                    try:
+                        generated = b"".join(
+                            entropy_generator.generate_forward_run(
+                                prefix, count, run_width
+                            ).encode("utf-8")
+                            for prefix, count in seats if count
+                        )
+                    except ValueError as error:
+                        raise ByteIdentityError(
+                            f"{donor_context} triple-run parameters: {error}"
                         ) from error
                 elif kind == "extern_pair_with_shape":
                     # The full stacked carrier: an extern run after the last

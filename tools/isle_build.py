@@ -726,6 +726,17 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                         if count
                     )
                     placement = "extern_pair"
+                elif recipe["kind"] == "declaration_run_triple":
+                    run_bytes = b"".join(
+                        entropy.generate_forward_run(
+                            recipe[f"{seat}_prefix"],
+                            recipe[f"{seat}_count"],
+                            recipe["width"],
+                        ).encode("utf-8")
+                        for seat in ("pre", "post", "eof")
+                        if recipe[f"{seat}_count"]
+                    )
+                    placement = "run_triple"
                 elif recipe["kind"] == "extern_pair_with_pad":
                     run_bytes = b"".join(
                         entropy.generate_extern_run(
@@ -798,6 +809,30 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                     decls = run_bytes.rstrip(b"\n").split(b"\n")
                     lines = shadow_bytes.split(b"\n")
                     (probe / "s.cpp").write_bytes(b"\n".join(lines + decls))
+                    force_include = []
+                elif placement == "run_triple":
+                    # pre-include at file start, post-include after the last
+                    # #include, eof at end of file -- the three seats filled
+                    # independently.
+                    lines = shadow_bytes.split(b"\n")
+                    insert_at = 0
+                    for line_index, line in enumerate(lines):
+                        if line.startswith(b"#include"):
+                            insert_at = line_index + 1
+
+                    def seat_lines(seat):
+                        count = recipe[f"{seat}_count"]
+                        if not count:
+                            return []
+                        return entropy.generate_forward_run(
+                            recipe[f"{seat}_prefix"], count, recipe["width"],
+                        ).encode("utf-8").rstrip(b"\n").split(b"\n")
+
+                    (probe / "s.cpp").write_bytes(b"\n".join(
+                        seat_lines("pre") + lines[:insert_at]
+                        + seat_lines("post") + lines[insert_at:]
+                        + seat_lines("eof")
+                    ))
                     force_include = []
                 elif placement == "after_includes":
                     # The bench's fwdP axis: the run seats immediately after
