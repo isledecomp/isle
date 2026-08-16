@@ -1,7 +1,7 @@
 # State of goal 1 — every open row, with its disposition
 
 Generated in the main loop by joining the four screens plus the coverage
-matrix against the live reccmp report. **LEGO1 4863/4934 — 71 open rows.**
+matrix against the live reccmp report. **LEGO1 4864/4934 — 70 open rows.**
 ISLE is 172/172 and CONFIG is 111/111. Current terminal measurement keeps
 ISLE and CONFIG byte-identical; LEGO1 is equal-sized with 595,723 differing
 bytes (MD5 `1b828d1b68ed19650728d1d43a1048b2`). Byte distance is a layout-sensitive
@@ -25,7 +25,7 @@ This exists because the evidence is spread across `slot-reachability`,
 
 | rows | disposition | what it means |
 |---:|---|---|
-| 29 | **ALLOCATOR (no idiom)** | Frame already matches retail; registers re-decided in many places. Nine of ten such rows were read by hand and **none had a differing live range** — the apparent spill differences are the same instruction on both sides, moved. Carrier sweep is the only lever that has ever moved this class. |
+| 28 | **ALLOCATOR (no idiom)** | Frame already matches retail; registers re-decided in many places. Nine of ten such rows were read by hand and **none had a differing live range** — the apparent spill differences are the same instruction on both sides, moved. Carrier sweep is the only lever that has ever moved this class. |
 | 12 | **AMBIGUOUS** | A screen refused to answer — bodies too divergent to trust an alignment, or slots contested after majority resolution. **Not a verdict of unreachability.** Cheapest unmined population: re-screen with better alignment. |
 | 11 | **LENGTH-UNREACHABLE** | Never reaches retail's length in any state measured. Structural, not colour. |
 | 9 | **SCHEDULE/ENCODING** | Frame **and** registers already match retail. Scheduling screen says intra-block reordering or a class owned elsewhere; **zero rows in the whole set are cross-block**, and the one that was got tested and refuted. |
@@ -87,7 +87,6 @@ eligible when they carry a fail-closed proof and a concrete target.
 | disposition | score | address | name | slot | register | schedule | cmpdir | note |
 |---|---:|---|---|---|---|---|---|---|
 | ALLOCATOR (no idiom) | 0.9739 | `0x100c3750` | MxRegion::AddRect | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
-| ALLOCATOR (no idiom) | 0.9722 | `0x100d0d80` | ReadData | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9636 | `0x1007b770` | LegoVideoManager::Tickle | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9612 | `0x100b24f0` | MxVideoPresenter::AlphaMask::AlphaMask(cla | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9608 | `0x1004bd10` | MxTransitionManager::DissolveTransition | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |

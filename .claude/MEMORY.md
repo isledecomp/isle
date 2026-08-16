@@ -45,13 +45,15 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-16)
 
-- Accepted canonical gate: LEGO1 4863/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is the source-generated Class-C substitution for
-  `0x1001d890`; its frozen A/B/A2 link proof measured 4862/4863/4862, changed
-  exactly that row from `0.9027027027` to raw 1.0, and changed no other row.
-  The canonical source-regeneration gate then reproduced 4863/4934 with
-  LEGO1 report SHA-256
-  `28cd5559609261a2ff2462c4f2e670816192701717246d69354b8e81d7cedb2e`.
+- Accepted canonical gate: LEGO1 4864/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is the authentic direct-source `0x100d0d80 ReadData`
+  return spelling `MxDSChunk::End(data2) - p_buffer`. It is retail-exact at
+  424 bytes with all 12 relocation semantics preserved and changes no other
+  code COMDAT in its object. The complete zero-loss gate reproduced 4864/4934
+  with LEGO1 report SHA-256
+  `0b0b9f04b5fcbe28c6abeebae69526174221ed398e8d8a03606ccbc9d84dc227`.
+  The preceding source-generated Class-C substitution for `0x1001d890` was
+  proved independently by a frozen 4862/4863/4862 A/B/A2 link sequence.
 - Manifest-declared single-evaluation source permutations are structurally
   limited to evaluated array extents and member-assignment receivers; no
   product-specific source text appears in `tools/byte_identity.py`.
@@ -85,11 +87,15 @@ historical sort key ties all `effective:true` rows, allowing stable input order
 to hide a higher raw non-effective sample. Always scan all 256 raw reports and
 maximize the numeric `matching` field directly.
 
-The GitHub sample JSONs and their binaries/objects are evidence only. Reproduce
-every candidate by running the checked-in deterministic generator contract from
-its integer seed, compiling the current effective source, and then applying the
-normal full-body, semantic-relocation, object-conservation, and zero-loss link
-gates. Never admit or consume the downloaded artifacts themselves.
+The GitHub sample JSONs, old source tree, old `entropy.py`, and their
+binaries/objects are evidence and search oracles only. They must not become
+build dependencies: do not check out a historical commit from the identity
+runner, execute or pin the historical entropy script, or admit downloaded
+artifacts. Delta-reduce an exact historical state into a self-contained recipe
+over today's checked-in source. The final compiler-state declaration shape and
+every alternate source spelling belong explicitly in the entropy manifest,
+then pass the normal full-body, semantic-relocation, object-conservation, and
+zero-loss link gates.
 
 `0x100c6fa0 MxDSBuffer::FUN_100c6fa0` is not a better state: both our report and
 the aggregate have raw `0.9882352941176471` with the same adjacent `cmp`/`mov`
