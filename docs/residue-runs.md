@@ -227,6 +227,36 @@ decision per row, and the instrument for it — a way to observe what C2 actuall
 decided — does not exist yet. Until it does, these rows should be left alone
 rather than re-swept.
 
+## NARROWING: what the allocation lens can and cannot say
+
+Stated more precisely after ~40 further forms across four rows measured with a
+better instrument (`adiff.py`, which scores SHAPE / STRUCT / EXACT instead of
+body length and `sub esp`):
+
+> **When the allocation names a difference in operand order, it is describing
+> the scheduler. When it names which operations exist, or where a value lives
+> across a branch, it is describing the source.**
+
+Bit-inert every time, so do not re-test: integer comparison direction, FP
+comparison direction, iterator comparison direction, integer `imul` operand
+order, addend order. **Operand order of a reversible operation is not
+source-addressable.**
+
+Addressable: folding a `break` into a loop condition, replacing a wrapper with
+the operations it performs, hoisting a value across a branch, moving a
+statement between arms.
+
+This also splits the `PERMUTED` verdict below into two kinds that the run
+classifier cannot tell apart — a permutation of *operands* (scheduler, dead
+end) and a permutation of *operations* (source, live). Check which before
+spending a wave on one.
+
+**And the metric matters as much as the channel.** Nineteen source forms on
+`FUN_10061010` read as "no change" for several waves because they were scored
+by body length and `sub esp`, both of which were flat. Under SHAPE alignment
+one of them was an improvement all along, and `sub esp` turned out not to be
+pinned at all.
+
 ## Reading the allocation as evidence about the source idiom
 
 `~MxStreamController` closed on the text channel after ~1,040 carrier states
