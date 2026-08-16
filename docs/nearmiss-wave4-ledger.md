@@ -475,3 +475,72 @@ text-channel but not the hopeless number the seal recorded.
   1..12 (216 states, `nm/probes/lpb-ins`): `RemoveActor` still nd=1 @240;
   `??1LegoPathBoundary` moves between nd 0/1/2 (proving the axis is live in
   this TU); `RemovePresenter` best 4, `_Erase` best 10.
+
+---
+
+## 12. `0x10083500 GetActorROI` — the interior-record op closes `Exists`; one victim left
+
+Following §6/§7: the `Exists` blocker **is** solvable, by the interior-record
+channel, and the op is authored and dry-run-validated below.
+
+**Measured.** On the h12 text, `insc` (empty-class runs) at anchors 17, 18 or
+19 with **count exactly 18** makes `Exists` retail-masked-exact
+(`nm/probes/chm-h12-ins2`; counts 1..24 x anchors 17..21 x {insf,insc} = 240
+states, only the three count-18 cells hit).
+
+Rendering that state as effective text (`nm/texts/chm-h12j.cpp` = h12 + 18
+`class RkNm0xx {};` immediately before `// FUNCTION: LEGO1 0x10083b20`) and
+sweeping the standard 653 carrier states over it (`nm/probes/chm-h12j`) gives:
+
+| body | addr | seed nd | best donor nd | donor state |
+|---|---|---|---|---|
+| `GetActorROI` | 0x10083500 | 2 | **0** | `fwdE-20` |
+| `Exists` | 0x10083b20 | **0 (seed)** | 0 | — no donor needed |
+| `~LegoCharacterManager` | 0x10083180 | 1 | **0** | `fwdL-1` |
+| `~_Tree<char*,LegoCharacter*>` | 0x10082b90 | 5 | **0** | `fwdL-4` |
+| `SwitchSound` | 0x10085090 | 2 | **0** | `fwdL-4` |
+| `ReleaseAutoROI` | 0x10083f10 | 1 | **0** | `fwdE-12` |
+| `~list<ROI*>` | 0x10084930 | 2 | **0** | `fwdL-2` |
+| `ReleaseActor(const char*)` | 0x10083c30 | 2 | **0** | `fwdE-1` |
+| `ReleaseActor(LegoROI*)` | 0x10083db0 | 1 | **0** | `fwdL-66` |
+| **`GetRefCount`** | **0x10083bc0** | **1** | **1 @84 — NO COVER in 653 states** | — |
+
+`GetRefCount`'s residue is a register-role tie: ours `3b f2` (`cmp esi,edx`),
+retail `3b d6` (`cmp edx,esi`), at body offset 84, invariant across all 653
+states.
+
+### The overlay op, authored and dry-run-proven
+
+`nm/mkop.py` computes the 32/32 token-context sha and the surrounding physical
+line shas for a seat; `nm/tryop.py` applies the h12 clean edit plus the op to a
+sandbox copy of the tree, runs the real
+`byte_identity.validate_source_overlay` + `render_source_overlay_outputs`, and
+compares. Result: **`RENDER MATCHES the measured probe text EXACTLY`**
+(29699 bytes both sides). The op to append to
+`source_overlay.outputs[LEGO1/lego/legoomni/src/common/legocharactermanager.cpp].ops`
+(after the h12 clean edit, then `tools/repin_overlay.py <that path>`):
+
+```json
+{"op": "insert",
+ "anchor": {"ctx": "69774eccf3b2ba346e09cfb40dfe66482291ebfff4f2a1dc07a29780ff3373da",
+            "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "line_after": "f8d34f6d5a677937388a47db04466f7a40dddc9132a70347c3820c0329c861df"},
+ "gen": {"k": "seq", "lines": 19,
+         "items": [{"k": "empty_class", "id": "RkNm000", "line": 1},
+                   ... "RkNm001".."RkNm017" at lines 2..18 ...]}}
+```
+
+(The full JSON is `nm/op-exists.json`. The identifiers are load-bearing —
+`RkNm%03d` is what was measured; any other stem is a different compile state.)
+
+**Status: NOT LANDED, one row short of zero-loss.** Landing it today would
+close 0x10083500 (+1) and lose 0x10083bc0 (-1). The remaining work is one
+search for a `GetRefCount` cover; three candidate directions, in order:
+1. the full `shape` grid (505 states) on the h12j text — the bisect ledger's
+   winning states were all off-lattice, and only the 60-state lattice has been
+   tried here;
+2. a **second** interior op immediately before `GetRefCount` (anchor 20) —
+   running when this ledger entry was written, results in
+   `nm/chm-h12j-ins.log`;
+3. the anchor-17 / anchor-18 variants of the Exists op (`nm/texts/chm-h12i.cpp`
+   is the anchor-17 text; its 653-state sweep is `nm/probes/chm-h12i`).
