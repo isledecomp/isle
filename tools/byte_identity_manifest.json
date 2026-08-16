@@ -3952,6 +3952,80 @@
     "reason": "Closes 6 row(s) in LEGO1/lego/legoomni/src/paths/legopathboundary.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/paths/legoextraactor.cpp",
+   "source_sha256": "213482cc7927dbb4ae60521c30750bedb8db095db59a53e6ff4c0713229467fa",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_945e33b4ee80",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 5,
+      "functions": 21,
+      "generated_header_sha256": "945e33b4ee8049975a3fd22c4e2756839bd333baa2117e70dc088bb983645a2c",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?find@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@QBE?AVconst_iterator@1@ABQAVLegoPathActor@@@Z",
+     "expected_body_length": 92,
+     "expected_body_sha256": "8e107d4a821eb26c06e8e59fd63ec9ce5f411b66403e1c25124e71d8596d0050",
+     "expected_changed_offsets": [
+      15,
+      17,
+      18,
+      26,
+      28,
+      33,
+      35,
+      39,
+      41,
+      42
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_945e33b4ee80"
+    },
+    {
+     "mangled": "?_Copy@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@IAEPAU_Node@1@PAU21@0@Z",
+     "expected_body_length": 126,
+     "expected_body_sha256": "0d94b68698c1b8ddba753a982fe3cc82a9d66036f4003cd7663718287ec72205",
+     "expected_changed_offsets": [
+      23,
+      52,
+      97
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_945e33b4ee80"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/paths/legoextraactor.cpp from generated carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -4026,8 +4100,8 @@
    "row_identity_sha256": "c51314c41fe1a72e4235e2f6ac4c8e5f14a4cd1e895abb3efe2a91f2a5ee846a",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4824,
-    "accepted_row_identity_sha256": "fd252187d10ff437017a4e42bdf97f4ac4aadb916525685a5c724daa2d8ad83c",
+    "exact_raw_1_0_count": 4826,
+    "accepted_row_identity_sha256": "c5f53c2416a3ba2e9ce6453a566ca1f3523ba17267e2d6158dd9f7e61224e641",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes; the 47-row delta is the open donor-recipe work queue toward 4933.",
