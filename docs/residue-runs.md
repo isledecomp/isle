@@ -294,3 +294,35 @@ Two lessons attached to it, both from the lane that found it:
   channel produced a spelling that *reached the target signature* and would
   have passed a score-only gate — while breaking a currently-exact row and
   relocating the retail-absent `operator++` into a second TU.
+
+## Re-scoring my own rejections under SHAPE — one verdict flips
+
+Applying the corrected metric (`bench/shape.py`, a local three-level difflib
+alignment: SHAPE erases registers, frame displacements and relocated operands;
+STRUCT erases registers only; EXACT is full text) to the variants recorded
+above as "worse", which were all rejected on body length or `nd`:
+
+| row / variant | len | insn | SHAPE | STRUCT | EXACT |
+|---|---|---|---|---|---|
+| `Create` — built | 660 | 212 | 97.17 | 98.11 | 98.11 |
+| `Create` — caps before width/height | 660 | 212 | **97.64** | 97.17 | 98.11 |
+| `Create` — caps first | 660 | 212 | **97.64** | 96.70 | 98.11 |
+| `FUN_100c6fa0` — built | 234 | 85 | 98.82 | 98.82 | 98.82 |
+| `FUN_100c6fa0` — `chunk` at function scope | 238 | 86 | **99.42** | **99.42** | **99.42** |
+
+**The `FUN_100c6fa0` variant is better on all three levels and I rejected it
+for being four bytes long.** That is the blind-metric failure, reproduced on my
+own data an hour after it was pointed out.
+
+It also sharpens the row. Retail has 85 instructions; the built source has 85
+and this variant has 86 — so by the work-versus-encoding test the extra length
+*is* real work (the store into the named slot), and the variant buys retail's
+ordering at the cost of one instruction. The remaining question is therefore
+narrow and well posed: **what produces that ordering without materialising a
+slot?** Under `volatile`, retail's two reads of `current` — body-read first,
+compare-read second — must both happen; the built source emits them in the
+opposite order at the same instruction count.
+
+The two `Create` cells raise SHAPE while lowering STRUCT and leaving EXACT
+flat, which is the pattern a parallel lane flagged as metric-fitting rather
+than source truth. Recorded, not landed.
