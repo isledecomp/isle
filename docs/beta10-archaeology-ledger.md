@@ -1330,3 +1330,63 @@ The two-register swap does **not** flip: seed masked nd 10, best 9 at
 a carrier did fix its **length** (1117 -> 1119 = retail's), so the family does
 reach that row — it just does not reach it far enough. Per the standing rule,
 "carrier-inert" here names the pair (`0x1002a1b0`, pad/decl shape), not the row.
+
+## `0x10084030 LegoCharacterManager::CreateActorROI` is solved (NOT landed — routed elsewhere)
+
+A coarse carrier sweep of the never-swept `common/legocharactermanager.cpp`
+drives **`CreateActorROI` (2294 B, currently 0.9365) to masked distance 0**, and
+it is not a fluke: **21 of the 730 valid cells** reach it —
+
+    pad(1,78) pad(8,92) pad(50,36) pad(57,85) pad(85,15)
+    decl(3,20) decl(4,30) decl(4,39) decl(5,17) decl(5,26) decl(6,13)
+    decl(7,23) decl(7,32) decl(7,64) decl(8,10) decl(8,19)
+    decl(10,16) decl(10,25) decl(10,57) decl(10,74) decl(10,80)
+
+Re-derived independently from a clean tree with the scratchpad's
+`arch/verify_cell.py` at `pad_shape(1,78)` (header sha256 `78b48e5643bb...`):
+
+    symbol  ?CreateActorROI@LegoCharacterManager@@AAEPAVLegoROI@@PBD@Z
+    retail  2294 B    ours 2294 B    delta +0
+    relocations 83    masked bytes 332    masked distance 0
+    PROOF: byte-identical to retail outside relocated fields.
+
+Landing conditions are the favourable ones:
+
+- **SOLE definer** (`legocharactermanager.cpp.obj`), so no link-winner hazard.
+- Seed and donor agree on **length (2294 both)** and **relocation count (83
+  both)**; only the bodies differ. No resize is needed.
+- Seed body sha256 `f714d3f9...`, donor body sha256 `dbf9956f...`,
+  16-byte linked contribution span 2304 for both.
+
+**I have not landed it.** The row was explicitly routed away from this lane
+("Leave `CreateActorROI` alone; I am routing it"), and it is still open two
+waves later, so the recipe is recorded here rather than committed. It is ready
+to land as-is.
+
+The same TU's other three rows are also close on the coarse grid and are all
+SOLE: `0x10083890` nd 4 (`pad-78-64`), `0x10083500` nd 4 (`pad-43-1`),
+`0x10085500` nd 12 (`pad-15-1`). Because a donor is spliced per function, each
+row can take a different cell.
+
+### `SetImage`'s `appData` form is bit-inert
+
+Reading `0x100a12a0` suggested the residue was live-range *creation order*:
+retail materialises `pImage` before the first call, we sink it past. Three
+source forms were compiled and all three are **byte-identical to the current
+source** — `void* appData = pImage;` at the declaration, swapping the
+`result`/`appData` declarations, and both together. Do not re-test this axis.
+
+Method note for anyone probing source variants: MSVC resolves `#include "..."`
+relative to the *including file's* directory, so a variant compiled from a
+scratch directory fails on every quoted include. Write the variant beside the
+original under a distinct name (the scratchpad's `arch/probe_src.py` does this,
+and compiles a copy so a carrier sweep over the same TU is not disturbed).
+
+### The whole PERMUTATION class is register transpositions
+
+`docs/register-colour.json` has exactly four PERMUTATION rows and every one is a
+2-cycle of callee-saved registers: `0x100a3b40` esi/edi, `0x1002a1b0` edi/ebx,
+`0x100a12a0` ebx/ebp, `0x10057180` ebx/edi. Three were re-read by hand this wave
+and agree with the screen. A transposition means two live ranges of equal
+allocation priority whose tie retail broke the other way — and `0x1002a1b0`
+shows the tie does not respond to 730 carrier cells.
