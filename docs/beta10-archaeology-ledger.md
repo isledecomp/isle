@@ -894,3 +894,71 @@ independent routes) — and `0x1009f490` cannot be taken on the callee axis
 without losing `GetTranslation`, `CreateLocalTransform` and `Interpolate`.
 What it needs is a way to move **one site's** decision, which neither the
 callee axis (moves all seven) nor the caller-body axis (moves none) provides.
+
+## WAVE 6 — the ACCEPT direction: bit flipped, row not closed
+
+`0x10061010 FUN_10061010` is the one anchor running in the ACCEPT direction
+(retail inlines the `MxListEntry` ctor, we call it), so R must rise and
+`empty_scopes` is the carrier that raises it.
+
+**Harness control first, because the first sweep was a null.** 240 cells of
+`empty_scopes` (1..40 x 7 positions) left the body **byte-identical at 717**
+and never flipped the bit. Two controls established that this was the row and
+not the instrument:
+
+- *Positive control on the same harness*: substituting a real emitting call
+  (`FUN_10064b50(-1);`) moved the body immediately (717 -> 727/731/737/…), so
+  the insertion reaches the compiled function.
+- *Reproduction of the other lane's datum*: compiling `legopathcontroller.cpp`
+  with and without its 13 landed scopes gives **2337 vs 2329** bytes, with
+  `_Tree::_Init` surfacing only in the former (1 vs 0 relocations) and the
+  `_Tree` ctor going 1 -> 2. The mechanism and my harness are both confirmed.
+
+### The flip, and the number that matters
+
+Pushing to the validator ceiling found it. The transition is a **sharp step**:
+
+    n <= 85 scopes   ctor called   len 717   nd 435   (body byte-identical
+                                                       across every count)
+    n >= 86 scopes   ctor INLINED  len 720   nd 436
+
+**Threshold: 86 empty scopes.** Two things worth recording about it:
+
+1. **It is position-independent.** All five insertion positions tested —
+   function top, before the cursor, immediately before the `Append` call,
+   immediately after it, and at the function tail — flip at the same counts.
+   That is direct support for "empty scopes are caller-IL units": a global
+   quantity for the function, not a local effect at the site.
+2. **86, not ~11.** The planner estimate of a 21-unit deficit on the E3 shape
+   predicts a flip an order of magnitude sooner. Either the unit conversion or
+   the deficit is off for this row; the measured step is the calibration point.
+
+### The honest part: it is a mechanism win and a row loss
+
+    row              variant     len   retail   masked nd   SHAPE   STRUCT   EXACT
+    FUN_10061010     baseline    717     731        435     93.08   68.26   63.48
+    FUN_10061010     n=86        720     731        436     94.74   69.86   65.55
+    FUN_10062e20     either     1098    1098         72     94.13   94.13   88.56
+
+Flipping the bit moves SHAPE by 1.7 points and **makes masked nd very slightly
+worse**. `STRUCT ~70` says what wave 3 already priced at nd 432: this row's
+frame layout is wrong (the -3 slot frame in the frame census), and the inline
+bit is a rounding error on top of it. `FUN_10062e20`, the TU's other open row,
+is untouched — no collateral, and none to gain.
+
+**Nothing landed.** The row does not reach 1.0, so 86 generated scopes in the
+tree would buy zero rows.
+
+### What this adds
+
+- The `empty_scopes` ACCEPT mechanism is now confirmed on a **second,
+  independent row**, in a different TU, by a different lane — and reproduced
+  from the landed FindPath op as a control.
+- The carrier is **position-independent** and behaves as a **step function**:
+  invisible below threshold (byte-identical body across 240+ cells), a 3-byte
+  change above it.
+- The threshold for this row is **86**, which is the first hard calibration
+  point for the planner algebra outside FindPath.
+- Stacking the flip with the carrier grid is available and *not* recommended:
+  wave 4 already found this row flat at nd 435 over 1,918 carrier cells, and at
+  STRUCT ~70 it is not a near-miss by any reading.
