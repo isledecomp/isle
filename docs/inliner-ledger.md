@@ -1209,6 +1209,148 @@ That leaves a genuinely small re-scorable set, and §12.2/§12.6/§12.7 found
 the recorded verdicts standing in every case that this lane owns and could
 reconstruct. The one flip (§12.4) did not close its row.
 
+# 13. Wave 5 — `LegoNavController::Notify`, and two more metric asymmetries
+
+Base `cd8692bb`, verified before any change: `LEGO1 4853/4934, ISLE 172/172,
+CONFIG 111/111`. Instrument: the corrected `adiff.py` taken from the `fin`
+lane's scratchpad rather than re-derived, repointed at this worktree.
+
+## 13.1 LANDED: `0x10055a60` .9482 → .9818 from the salvage branch
+
+The coordinator flagged a stale `salvage/islK-navcontroller-notify-shape`
+branch. It was worth a pass: commit `d65a2947` had already derived **three**
+beta-attested shapes for this row.
+
+Hunk 1 — the `MxU8 key = GetKey();` / `m_keyPressed = TRUE;` statement
+order, attested by BETA10 `0x1009c74d..0x1009c75b` at /Od — **has landed
+since** (that is the .9438 → .9482 the tree already had). Hunks 2 and 3 had
+not:
+
+2. the password sites read the **cached local `key`**, not a second
+   `GetKey()`. With the member store after the load, a re-read can no
+   longer CSE through the possible alias, yet retail uses the cached key in
+   `ebx` at those sites — so 1997 read the local.
+3. the check is `if (*g_currentInput) { advance-or-reset } else { switch }`,
+   not the negated spelling. The two canonicalise identically only while
+   the else-block carries the re-read, and the block layout flips once it
+   uses `key`.
+
+Applied to the current tree, **all four metrics move together**:
+
+| metric | before | after |
+|---|---|---|
+| reccmp | .9482 | **.9818** |
+| body length | 4120 | **4112 = retail's exact length** |
+| SHAPE | 94.42 | 94.71 |
+| EXACT | 92.96 | 93.08 |
+
+**Gated:** `ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE: LEGO1 4853/4934,
+ISLE 172/172, CONFIG 111/111`; terminal ISLE and CONFIG **IDENTICAL**;
+53 tests pass. **Zero collateral — exactly one row's score changed in the
+whole tree.** The row does not reach 1.0; the residue is the `calcStep`
+constant-store scheduling seesaw, which `d65a2947` had already classed as
+compile-state and which §13.3 confirms is five instructions.
+
+## 13.2 A tenth asymmetry: an instruction can carry MORE than one relocation
+
+`adiff.py`'s `reloc_site()` documents "An instruction carries at most one
+relocation" and returns a single field. That is false for the ordinary
+`pointer_global = &other_global`:
+
+```
+mov dword ptr [g_currentInput], offset g_debugPassword
+c7 05 <DIR32 g_currentInput> <DIR32 g_debugPassword>
+```
+
+Two DIR32s — one in the displacement, one in the immediate (verified in
+`Notify`'s relocation table at offsets 117 and 121). The single-site rule
+lets the absolute memory operand win, masks the displacement only, and
+leaves our placeholder `0` against retail's resolved address, so **every
+`ptr = &global` store scores as a difference**.
+
+Fixed by attributing each relocation to its field by byte range
+(capstone `disp_offset`/`imm_offset`), falling back to the old heuristic
+when no encoding is available. `Notify`'s first divergence moves
+**+115 → +337** and SHAPE 94.71 → 94.80. The fix is in
+`scratchpad/inl/adiff_fin.py` (`reloc_sites`).
+
+## 13.3 An eleventh: the switch-table detector only sees the TRAILING table
+
+MSVC's dense-switch lowering emits **two** tables:
+
+```
+movzx eax, byte ptr [eax + <byte-index table>]
+jmp   dword ptr [eax*4 + <dword target table>]
+```
+
+The relocation-based detector finds the dword table (a dense run of DIR32s
+to `$L` labels). The **byte-index table has no relocations at all** — its
+entries are small case indices — and it sits *before* the dword table, so
+it is disassembled as code.
+
+Measured on `Notify` (verified by hand, not by heuristic): code ends at
+3666 with `c2 04 00` (`ret 4`) followed by `8b ff` padding; 3668–4090 is the
+byte-index table (values 0x00–0x18) and 4092–4112 the dword table. That is
+**444 of 4112 bytes**. Scoring code only:
+
+| | full row | code only |
+|---|---|---|
+| ours / retail instructions | 1190 / 1153 | **929 / 929** |
+| SHAPE | 94.15 | **99.46** |
+
+The instruction counts become *identical*, and the row's real residue is
+**5 instructions out of 929** — the scheduling seesaw, exactly as
+`d65a2947` said.
+
+**This inverts the row's classification.** §12.8 named
+`LegoNavController::Notify` "the largest operation-sequence gap in the open
+set" at SHAPE 88.44. Almost all of that was table noise; its true code-only
+gap is ~0.5%.
+
+### 13.3a Extent, and what is NOT claimed
+
+A scan of the open set finds **16 rows carrying an embedded table**. Three
+movers were verified by hand — each ends in a real `ret` + padding followed
+by a tail of dword addresses inside the image:
+
+| row | full | code only | tail |
+|---|---|---|---|
+| `Infocenter::HandleKeyPress` 0x1006fda0 | 91.86 | **99.10** | 67 B, `2afe0610 63fe0610 …` |
+| `Act3::TriggerHitSound` 0x10072ad0 | 92.86 | **98.73** | 24 B, `ed2a0710 1b2b0710 …` |
+| `LegoNavController::Notify` 0x10055a60 | 97.35 | **99.46** | 444 B |
+
+**Not claimed**: the naive "cut at the last `ret`" detector I used to scan
+has false positives — `TowTrack::HandlePathStruct` (740-byte tail, only 33
+instructions left) and `MxVideoPresenter::PutFrame` (865 B) are certainly
+mis-cut, and their numbers must not be used. A sound detector needs the
+relocation evidence for the dword table plus the `movzx …, byte ptr [reg +
+X]` reference that locates the byte table. Handed to the lane publishing
+the corrected map rather than republished here.
+
+## 13.4 Re-verifying §11.2's anti-compose claim under the corrected instrument
+
+The coordinator flagged that §11.2 rested on 2–5 point gaps inside the
+instrument's error bar. Re-scored with the corrected `adiff`:
+
+| variant | SHAPE | STRUCT | EXACT |
+|---|---|---|---|
+| base | 93.08 | 68.26 | 63.48 |
+| `h01_flagsvalue` | **95.69** | 73.68 | 63.16 |
+| `v04_flagfirst` | 92.60 | **73.99** | **68.74** |
+| `h01` + `v04` | 95.22 | 70.33 | **61.24** |
+
+**The claim holds.** The combination is 2.24 EXACT points *below base* and
+7.50 below `v04` alone, and below either on STRUCT — gaps larger than the
+~1–2 point absolute shift the correction introduced. All orderings are
+preserved. §11.2's conclusion stands; only its absolute values were low.
+
+Corollary for the rest of this ledger: **every SHAPE number in §11 and
+§12 is a lower bound.** The conclusions drawn from them were comparisons
+between variants measured with the same instrument, and the corrections
+shift rows without reordering them, so the verdicts stand — but the
+absolute figures should be re-read from the corrected instrument before
+being quoted anywhere else.
+
 ## 10. Reproducing this lane
 
 Everything is in the session scratchpad `.../3233884b-.../scratchpad/inl/`.
@@ -1233,6 +1375,8 @@ compose pin); every other variant in this ledger was compiled out of tree.
 | `v_vm.py` / `v_vm2.py` / `v_buf.py` / `v_mds.py` | the wave-3 row batches |
 | `v_ori.py` / `v_gc.py` / `v_rerun.py` | the wave-4 re-score batches (vec.h debt row; GetCached; buffer + Create) |
 | `shapecensus.py` | **SHAPE census of every open row**, read from the linked images so it needs no symbol lookup |
+| `adiff_fin.py` | the `fin` lane's corrected adiff, repointed here, **plus the wave-5 multi-relocation fix** (`reloc_sites`) |
+| `codeend.py` / `tablescan.py` | embedded-switch-table detection and its extent over the open set (§13.3 — detector is NOT sound, see §13.3a) |
 | `beta2.py` | BETA10 read-off with export naming + frame-slot census |
 | `fsaudit.py` | build-wide function-set audit (COMDATs absent from retail) |
 | `fsimage.py` | promotes an object-level audit miss to the image level (drops linker-discarded COMDATs) |
