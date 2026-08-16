@@ -910,3 +910,28 @@ one. Two more data points on the same split:
 
 There is still no way to tell in advance which side a row falls on; the seat
 argmin is a good starting point and nothing more.
+
+### The nd=11 states sit on the rectangle's edge — two m-strata, and both are truncated
+
+The 22 states are not scattered. They form two clean strata:
+
+```
+m = 1  :  k = 8, 9, 35, 36, 37, 38, 39, 40
+m = 35 :  k = 1..7, 33..39
+```
+
+Both strata run **into the k = 40 boundary of the swept region**, which by Lane
+NM's wave-4d rule ("treat a boundary-argmin as *keep going*") means the curve is
+truncated, not flat. The `m = 1` stratum in particular has its floor still
+present at the very last column.
+
+That the good `m` values are exactly 1 and 35 — with everything between them
+worse — is also the seat law behaving as `docs/beta10-wave5-ledger.md`
+describes: `k` chooses the family, `m` chooses the colour inside it, and the
+good `m` values are isolated points rather than a range. The historical `8 × 17`
+box would have found `extern-1-8` and nothing else; the `m,k ≤ 40` rectangle
+finds both strata but cannot see where either ends.
+
+Extending both strata to `k = 120` (`externF:1:41:120`, `externF:35:41:120`,
+160 states) — recorded here as the run that was in flight, with its result
+below.
