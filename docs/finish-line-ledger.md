@@ -744,3 +744,61 @@ Do not be tempted to substitute `ls <sweepdir> | wc -l` progress for a result:
 `externR` enumerates `m` then `k` ascending and `shapefull` enumerates `c`
 ascending, so any prefix of either is a biased sample. Both of this lane's
 predecessors published and retracted a floor read off a partial pass.
+
+---
+
+## 14. `isle.cpp` rectangle — `Isle::Enable` goes 214 → **11**, and the residue is the LenSquared site
+
+`sw-all2-islerect`, `m,k = 0..40`, 1,681 states. `isle.cpp` had **never been
+swept by anybody**.
+
+| row | retail len | distinct bodies | best nd | argmin |
+|---|---|---|---|---|
+| `0x10031820 Isle::Enable` | 3580 | **37** | **11** (22 states) | `extern-1-8` |
+| `0x100334b0 Act1State::Act1State` | 843 | **1** | 24 | anything — carrier-inert |
+
+`Isle::Enable` is the largest movement measured in this lane: **nd 214 → 11**
+on a 3,580-byte body, from a sweep nobody had run. Its `desync=92` in
+`docs/residue-taxonomy.md` was the shadow of a single early divergence, exactly
+as that document warns.
+
+### And the surviving 11 bytes are the site the retracted lead pointed at
+
+All eleven are `[2206, 2209, 2212, 2215, 2218, 2220, 2222, 2224, 2226, 2231,
+2233]` — the inlined `Vector3::LenSquared` from `sub.LenSquared() < 1024.0f`.
+At `extern-1-8` the *scheduling* difference documented in §2 is **gone** (the
+carrier fixed it); what remains is a pure two-register transposition with
+identical instructions in identical order:
+
+```
+       RETAIL                          OURS (extern-1-8)
++2205  mov ecx,[ebp-0x48]              mov eax,[ebp-0x48]
++2208  mov eax,[ebp-0x48]              mov ecx,[ebp-0x48]
++2211  add ecx,8                       add eax,8
++2214  add eax,4                       add ecx,4
++2217  fld [ecx] ; fmul [ecx]          fld [eax] ; fmul [eax]
++2221  fld [eax] ; fmul [eax]          fld [ecx] ; fmul [ecx]
++2225  mov ecx,[ebp-0x48]              mov eax,[ebp-0x48]
++2228  faddp st(1)                     faddp st(1)
++2230  fld [ecx] ; fmul [ecx]          fld [eax] ; fmul [eax]
++2234  faddp st(1)                     faddp st(1)
+```
+
+Retail holds `base+8` in `ecx` and `base+4` in `eax`; we hold them the other way
+round, and the reloaded `base+0` follows whichever register was freed. The
+summation order is therefore **identical** on both sides once the registers are
+renamed — which retires the last piece of §2's reading as well: there is no
+reassociation at this site at all, only `eax`↔`ecx`.
+
+This is the cleanest regrole tie in my lane and it is on a row at `.9725`.
+Running the `xps` construction on it (seats pinned at the rectangle argmin
+`(1,8)` × the full 505-cell declaration-shape grid) — the same construction
+that closed Lane NM's `charmgr erase` after the flat and rectangle axes had
+each floored at 1.
+
+### `Act1State::Act1State`: one body in 1,681 states
+
+Carrier-inert in the strongest sense — the same 843 bytes everywhere. Combined
+with §7's finding that a single source statement's stores are scattered
+non-contiguously across the residue, this row has **no channel currently
+known**: not the extern carrier, and not statement order.
