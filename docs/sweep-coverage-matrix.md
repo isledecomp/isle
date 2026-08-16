@@ -1,6 +1,211 @@
 # Sweep-coverage matrix — every open LEGO1 row
 
-**81 open rows · 46 TUs · 141,114 measured carrier cells · 114 result files.**
+**Built at 81 open rows · 46 TUs · 141,114 measured carrier cells · 114 result
+files.** Section 0 (added 2026-08-16 by lane HARVEST) re-measures the whole
+corpus at the object level against the 78 open rows of the current tip and
+supersedes §1's floor table; §§1–7 are kept as written for their provenance
+argument.
+
+## 0. 2026-08-16 · the corpus re-scored at the OBJECT level, all 78 open rows
+
+### The premise this table was built on was already satisfied — and it is empty
+
+§6 asks a later wave to "re-score the retained objects against a stem listing
+*every* open row". **That had already been done**, four hours before this
+matrix was written: `fresh3/rescore.py`'s own log opens with
+`open rows: 81; covered by oracle: 81; target symbols: 81`. Class B is
+therefore not 32 rows of unmeasured exposure; it is 32 rows whose *ledgers*
+are silent, over objects that were scored.
+
+Re-running that scan against the tip's 78 rows over **395,874 objects — 6,586
+more than the 06:48 pass, including `fresh3/`'s own `bodysweep-*` tree, which
+that pass skipped by an explicit `if "fresh3" in dirpath: continue`** —
+produces **no nd≤2 state anywhere that the 06:48 pass had not already seen**.
+Two further scratchpads exist under this project (`fa2e035c…`, `8df0bb80…`);
+neither holds a single `.obj`. **The retained corpus is exhausted at the
+object level.** Do not spend another wave re-reading it.
+
+### What replaces it: the corpus is stale, not incomplete
+
+Every retained object was compiled against a source text that has since moved,
+and `nd` is not portable across that. Measured, on the row that proves it:
+
+* `0x100574a0 RemoveActor`'s corpus nd=0 (`sweep2-all2-legopathboundary/
+  pad-10-12`) **does re-derive at nd=0 on today's cold shadow** — so the
+  open-set triage's "STALE — floor nd=2 on later shadows" verdict is wrong —
+  but its base source carries a text variant in `~LegoPathBoundary`
+  (`!(it == m_actors.end())` for `it != m_actors.end()`), so it is not a
+  landable carrier donor on its own.
+* Re-running **one generator family on the unmodified tip text** (900
+  `pad_shape` cells) lands the row instead: `pad-10-29` reaches nd=0 with no
+  source change at all. Landed; LEGO1 4856 → 4857.
+
+**Doctrine: open a wave by re-sweeping the cheapest generator family on
+today's text for the rows the corpus floors near zero, not by re-reading the
+corpus.** The corpus tells you which rows are close; it no longer tells you
+which cell.
+
+### The five corpus nd=0 rows, re-verified today
+
+Each was re-checked against `legobin/LEGO1.DLL` (oracle bytes) **and** through
+the S72 semantic-relocation guard (decode retail's own bytes at every
+relocation site, name the target from the tip report, compare with the
+candidate's relocation symbol and with today's seed object).
+
+| row | state | verdict |
+|---|---|---|
+| `0x100574a0` RemoveActor | `pad-10-12` → **`pad-10-29`** on tip text | **LANDED** — oracle 258/258 identical, masked nd=0, 10/10 relocation targets agree, 0 seed mismatches |
+| `0x10083500` GetActorROI | `insf-20-21` | genuine nd=0 (822/822, 32/32 relocations agree, 0 seed mismatches) but it needs a **source text edit**; see the arithmetic below |
+| `0x10084030` CreateActorROI | `shape-5-26`, `pad-5-17`, … | **S72 FALSE POSITIVE, re-confirmed today**: at body offsets **101** and **1220** retail calls `Vector3::Vector3` (`0x1001d150`) where every one of our objects calls `Vector2::Vector2` (`0x1000c0f0`). Offsets 77/1192 agree. A masked nd=0 is meaningless here |
+| `0x1003cf20` ~LegoCacheSoundManager | `b10w4/hprobes/lcsm-ool` | Lane B10's TU; the out-of-line text state, −12 pinned donors |
+| `0x1002bff0` `_Tree<LegoPathActor*>::erase` | `lpb-stk2/stkE-11-1-3` | **supplier-blocked, now measured**: six objects in the build define this COMDAT — `act3ammo` (1096 = retail's length, nd=47), `legopathactor` (1097), `legoracespecial` (1103), `legoextraactor` and `legopathcontroller` (1104), `legopathboundary` (1105). The link winner is `legoextraactor`; **every corpus nd=0 for this row sits in an object the linker discards.** The only landable route is a `legoextraactor.cpp` donor (Lane B10) |
+
+### Every open row's corpus floor, measured on objects
+
+63 of the 78 open rows appear in at least one retained object at retail's exact
+length. `nd` is masked over relocation operands and computed only at exact
+length. **This supersedes §1's table, which covered 36 rows from result files.**
+
+| row | m | best nd | state | sweep dir | states |
+|---|---:|---:|---|---|---:|
+| `0x1002bff0` \_Tree\<LegoPathActor \*,LegoPathActor \*,set\< | 0.7092 | 0 | `stkE-11-1-3` | `nm/probes/lpb-stk2` | 4761 |
+| `0x1003cf20` LegoCacheSoundManager::~LegoCacheSoundMana | 0.8950 | 0 | `lcsm-ool` | `b10w4/hprobes` | 1740 |
+| `0x100574a0` LegoPathBoundary::RemoveActor | 0.7527 | 0 | `pad-10-12` | `stl/sweep-bench/sweep2-all2-legopathboundary` | 3735 |
+| `0x10083500` LegoCharacterManager::GetActorROI | 0.9684 | 0 | `insf-20-21` | `nm/probes/chm-h12-ins2` | 15106 |
+| `0x10084030` LegoCharacterManager::CreateActorROI | 0.9365 | 0 | `shape-5-26` | `stl/sweep-bench/sweep2-legocharactermanager` | 20894 |
+| `0x10059dc0` \_Tree\<char const \*,pair\<char const \* const | 0.7913 | 1 | `fwdE-311` | `b10w4/sweeps/all2-legomain-k600` | 897 |
+| `0x100a66f0` ViewManager::ManageVisibilityAndDetailRecu | 0.8848 | 1 | `extern-3-1` | `inl/nd-vm_a4` | 1094 |
+| `0x10069b10` LegoAnimPresenter::BuildROIMap | 0.8842 | 2 | `shape-9-85` | `stl/sw-all2-legoanimpresenter_E019sf` | 13810 |
+| `0x1007ca30` LegoPartPresenter::Read | 0.9953 | 2 | `fwdP-38` | `stl/sweep-bench/sweep2-all-legopartpresenter-file-legopartpresenter` | 6521 |
+| `0x1009a8c0` LegoWEGEdge::LinkEdgesAndFaces | 0.9921 | 2 | `extern-2-15` | `stl/sweep-bench/sweep2-open-legowegedge` | 9418 |
+| `0x100586e0` LegoPathBoundary::RemovePresenter | 0.7757 | 3 | `shape-4-8` | `stl/sweep-bench/sweep2-open-legopathboundary` | 13417 |
+| `0x1004f9b0` \_Tree\<char const \*,pair\<char const \* const | 0.8051 | 4 | `fwdL-25` | `bench/sweep2-all-legopartpresenter` | 202 |
+| `0x1006a7a0` \_Tree\<char const \*,pair\<char const \* const | 0.7983 | 4 | `extern-32-5` | `stl/sw-all2-legoanimpresenter_R40` | 580 |
+| `0x1006c200` \_Tree\<char const \*,pair\<char const \* const | 0.7828 | 4 | `pad-6-2` | `stl/sw-all2-legoanimpresenter_pE19` | 621 |
+| `0x1006e720` \_Tree\<char const \*,pair\<char const \* const | 0.8475 | 4 | `shape-5-40` | `stl/sweep-bench/sweep2-buildroi-file-hyp` | 3779 |
+| `0x10083890` \_Tree\<char \*,pair\<char \* const,LegoCharact | 0.7075 | 4 | `shape-9-13` | `stl/sweep-bench/sweep2-legocharactermanager` | 2797 |
+| `0x100bb1d0` MxDisplaySurface::VTable0x30 | 0.8611 | 4 | `fwdP-46` | `bench/sweep2-all2-mxdisplaysurface` | 7745 |
+| `0x100c6fa0` MxDSBuffer::FUN\_100c6fa0 | 0.9882 | 4 | `c4_blockonly` | `inl/g-buf1` | 5959 |
+| `0x1001d890` \_Tree\<MxCore \*,MxCore \*,set\<MxCore \*,CoreS | 0.9027 | 5 | `fwdE-187` | `b10w4/redial/…legoworld.cpp` | 868 |
+| `0x1002f770` LegoPathActor::UpdatePlane | 0.9315 | 5 | `rederive-all2-legopathactor-fwdL-6` | `stl/fresh2` | 10300 |
+| `0x100b24f0` MxVideoPresenter::AlphaMask::AlphaMask(cla | 0.9612 | 5 | `shape-9-14` | `bench/sw-all2-mxvideopresentervp1` | 9764 |
+| `0x10040360` Act3Cop::FUN\_10040360 | 0.9730 | 6 | `extern-62-20` | `b10w4/sweeps/all2-act3actors-c1ms` | 9865 |
+| `0x1004bd10` MxTransitionManager::DissolveTransition | 0.9608 | 6 | `extern-0-35` | `bench/sw-all-mxtransitionmanagerlong` | 5546 |
+| `0x100b26f0` MxVideoPresenter::AlphaMask::IsHit | 0.9348 | 6 | `shape-9-12` | `bench/sw-all2-mxvideopresentervp1` | 9757 |
+| `0x100c3750` MxRegion::AddRect | 0.9739 | 6 | `fwdL-82` | `inl/ip-mxreg_w1` | 13807 |
+| `0x10057180` \_Tree\<LegoAnimPresenter \*,LegoAnimPresente | 0.6522 | 7 | `fwdL-78` | `stl/sweep-bench/sweep2-open-legopathboundary` | 17912 |
+| `0x100720d0` Act3List::RemoveByObjectIdOrFirst | 0.9417 | 7 | `fwdE-72` | `stl/sweep-bench/sweep2-all-act3` | 8225 |
+| `0x1002a1b0` \_Tree\<LegoCacheSoundEntry,LegoCacheSoundEn | 0.7059 | 9 | `shape-7-30` | `stl/sweep-bench/sweep2-all-legosoundmanager` | 25614 |
+| `0x100ba7f0` MxDisplaySurface::Create | 0.9953 | 9 | `d3_swap16` | `inl/g-mds1` | 7725 |
+| `0x10031820` Isle::Enable | 0.9725 | 11 | `shape-10-62` | `fin/sw-all2-islexps18` | 6586 |
+| `0x10038380` Pizza::StopActions | 0.7442 | 11 | `pad-3-30` | `fin/sw-all-pizzapad` | 2791 |
+| `0x1004d330` TowTrack::HandlePathStruct | 0.9536 | 11 | `tt-base` | `b10w4/seedprobes` | 4154 |
+| `0x10072ad0` Act3::TriggerHitSound | 0.9302 | 11 | `fwdE-72` | `stl/sweep-bench/sweep2-all-act3` | 11617 |
+| `0x1003f540` WriteDefaultTexture | 0.9273 | 12 | `extern-24-90` | `bench/sw-all-legoutilslong` | 1743 |
+| `0x10085500` \_Tree\<char \*,pair\<char \* const,LegoCharact | 0.9244 | 12 | `pad-12-9` | `stl/sweep-bench/sweep2-legocharactermanager` | 21429 |
+| `0x100a3b40` TglImpl::MeshBuilderImpl::Clone | 0.7971 | 14 | `fwdE-72` | `bench/sweep2-all-tglrl40` | 9521 |
+| `0x100a12a0` TglImpl::TextureImpl::SetImage | 0.6667 | 16 | `shape-4-9` | `bench/sweep2-all-tglrl40` | 9272 |
+| `0x100035e0` Helicopter::HandleControl | 0.9907 | 17 | `heli_P_v68_up_va4` | `wave2/probes` | 1781 |
+| `0x100166a0` JetskiRace::HandlePathStruct | 0.8675 | 18 | `shape-1-10` | `stl/sweep-bench/sweep2-all-legorace` | 2297 |
+| `0x10017af0` PizzeriaState::PizzeriaState | 0.8873 | 18 | `extern-7-22` | `fin/sw-all-pizzeriarect` | 1681 |
+| `0x1006dec0` \_Tree\<char const \*,pair\<char const \* const | 0.8205 | 18 | `stack_6_60_S-416` | `stl/sw-all2-legoanimpresenter_L660` | 1913 |
+| `0x100d0d80` ReadData | 0.9722 | 18 | `extern-34-30` | `fin/sw-all-mxramstreamproviderrect` | 3778 |
+| `0x1007b770` LegoVideoManager::Tickle | 0.9636 | 19 | `extern-7-22` | `bench/sw-all-legovideomanagerrect` | 4740 |
+| `0x100334b0` Act1State::Act1State | 0.9891 | 24 | `shape-9-14` | `fin/sw-all2-islexps18` | 6716 |
+| `0x100b27b0` MxVideoPresenter::Destroy(unsigned char) | 0.8791 | 25 | `shape-9-14` | `bench/sw-all2-mxvideopresentervp1` | 9764 |
+| `0x10062e20` LegoAnimationManager::FUN\_10062e20 | 0.8856 | 30 | `shape-2-2` | `inl/ip-anmgr_ph02` | 8746 |
+| `0x1004ebd0` LegoTexturePresenter::Read | 0.8446 | 40 | `fwdE-11` | `stl/sw-all-legotexturepresenter_v2` | 287 |
+| `0x100a84a0` LegoROI::Read | 0.9277 | 41 | `extern-0-288` | `b10w4/sweeps/all2-legoroi-ms` | 532 |
+| `0x10051ac0` LegoAct2::SpawnBricks | 0.9101 | 58 | `extern-0-35` | `fin/sw-all-legoact2rect` | 1264 |
+| `0x100998e0` LegoTextureContainer::GetCached | 0.8698 | 59 | `gc-h2` | `b10w4/seedprobes` | 14 |
+| `0x100bd020` MxBitmap::BitBltTransparent | 0.7470 | 60 | `extern-3-23` | `bench/sw-all-mxbitmaprect` | 4866 |
+| `0x10048310` LegoPathController::FindPath | 0.8629 | 66 | `xps-7-37-5-28` | `nm/probes/fpd-lpc-FD1` | 667 |
+| `0x100417c0` Act3Brickster::FUN\_100417c0 | 0.9496 | 73 | `extern-18-44` | `b10w4/redial/…act3actors.cpp` | 6007 |
+| `0x10054050` Act3Ammo::Animate | 0.9476 | 95 | `extern-49-50` | `b10w4/sweeps/all-act3ammo-ms2` | 1930 |
+| `0x100a46b0` OrientableROI::UpdateTransformationRelativ | 0.8696 | 99 | `e0_base` | `inl/g-ori1` | 424 |
+| `0x10081840` LegoCarRaceActor::CheckPresenterAndActorIn | 0.9498 | 100 | `extern-69-228` | `b10w4/sweeps/all-legoracespecial-ms` | 2000 |
+| `0x100b2a70` MxVideoPresenter::PutFrame | 0.9048 | 101 | `shape-9-74` | `bench/sw-all2-mxvideopresentervp1` | 777 |
+| `0x10073a90` Act3::Enable | 0.8893 | 105 | `extern-3-12` | `stl/sweep-bench/sweep2-all-act3` | 3035 |
+| `0x100170e0` CarRace::HandlePathStruct | 0.9752 | 111 | `fwdE-72` | `stl/sweep-bench/sweep2-all-legorace` | 2222 |
+| `0x1003d170` LegoCacheSoundManager::FindSoundByKey | 0.9552 | 153 | `fsk_f4_it_first` | `wave2/probes` | 1 |
+| `0x100a7960` \_Tree\<char const \*,pair\<char const \* const | 0.8780 | 259 | `shape-2-7` | `stl/sw-all2-viewlodlist_pE96sf` | 461 |
+| `0x10029d50` \_Tree\<LegoCacheSoundEntry,LegoCacheSoundEn | 0.9212 | 268 | `pad-18-12` | `b10w4/sweeps/all2-legocachesoundmanager-w12pad` | 3507 |
+| `0x10055a60` LegoNavController::Notify | 0.9818 | 2382 | `nav_variants_objs` | (aa9d0cc1 root) | 1 |
+
+**15 rows never reach retail's length in ANY retained object** — unchanged from
+the fresh3 reading: `0x100293c0`, `0x1002de10`, `0x10046050`, `0x1004c580`,
+`0x10058c30`, `0x10061010`, `0x1006b140`, `0x1006ed90`, `0x1006fda0`,
+`0x10080be0`, `0x1009f490`, `0x100a3840`, `0x100a4420`, `0x100aa510`,
+`0x100ba2c0`.
+
+### `0x10083500 GetActorROI` — verified, and priced
+
+The corpus state is two named-local introductions inside `GetActorROI` plus a
+`forward_declaration_run` suffix. Both text forms are the file's own idiom
+(`LegoActorInfo* info = GetActorInfo(...)` appears at **ten** other sites in
+`legocharactermanager.cpp`, including the next function; `MxU32 length =
+strlen(x) + 1` is the codebase's standard shape). On today's shadow the row
+reaches **nd=0** in three separate generator families
+(`fwd count=4 suffix`, `pad-8-17`, `shape-7-52`) — but only with the text.
+
+The text edit re-seeds the whole TU. **Every pinned donor in the unit had to be
+re-dialled or re-pinned, and all four were** — which is exactly why this row is
+a useful negative:
+
+| function | donor | after the text edit |
+|---|---|---|
+| `?SwitchSound@LegoCharacterManager@@` | `d_93806ad84a84` | body reproduces; **seed/donor delta re-pinned** |
+| `?ReleaseAutoROI@LegoCharacterManager@@` | `d_c15e6e4702a9` | body reproduces; **seed/donor delta re-pinned** |
+| `??1?$list@PAVROI@@…` (`0x10084930`) | `d_55a88a58284c` | **body breaks** — re-dialled: nd=0 at `fwd MxUnkRecVC count 25 suffix` (also `pad-1-6`, `shape-1-6`, `fwd prefix 26`) |
+| `?erase@?$_Tree@PAD…` (`0x10082ca0`) | `d_25f1c91cdff5` | **body breaks** — re-dialled: nd=0 at `extern_pair_with_shape g_h=15 g_p=20 shape(8,45)` (also `g_h=13 g_p=22`). Invisible to 3,510 cells of pad/shape/fwd/extern; **only the composite family reaches it** |
+
+With all four re-dialled the gated build ran, and the **LOST list is still not
+empty**:
+
+```
+LEGO1 rows 4856/4934 at 1.0, 1970 address-aligned
+  LOST  0x10082b90  _Tree<char *,…LegoCharacter *>::~_Tree
+  LOST  0x10083b20  LegoCharacterManager::Exists
+  GAIN  0x10083500  LegoCharacterManager::GetActorROI
+```
+
+**Arithmetic: +1 −2 = net −1. Reverted.** The two casualties are rows that were
+closed by the *plain seed compile*, with no donor and therefore no entry in the
+unit's function list — **nothing in the manifest names them, so no amount of
+donor bookkeeping predicts them.** The unit's function list is not the blast
+radius of a source edit; the whole TU is.
+
+**Doctrine: price a source edit by the gated build's LOST list, never by the
+donor-pin audit.** The pin audit here said "two donors break"; it was right and
+still incomplete, because donorless closed rows outnumbered the donored ones.
+Get the LOST list first — one ~90 s build — then decide whether to re-dial.
+
+The row is worth another wave: `0x10083500` is genuinely reachable, and the
+remaining debt is two donorless rows in the same TU.
+
+### Two rows the tip-text re-sweep did NOT move
+
+`pad-10-29` is not a general rule. The other two nd=2 rows that sit in TUs no
+lane owns were re-swept on the tip text over the same families, and both held
+their corpus floor exactly:
+
+| row | TU | corpus floor | tip-text floor | cells |
+|---|---|---:|---|---:|
+| `0x1009a8c0` LinkEdgesAndFaces | `legowegedge.cpp` | 2 (`extern-2-15`) | 2 (`pad-5-8`, `shape-5-40`) | 1,130 |
+| `0x1007ca30` LegoPartPresenter::Read | `legopartpresenter.cpp` | 2 (`fwdP-38`) | 2 (`pad-13-15`) | 625 |
+
+Re-sweeping today's text is cheap and sometimes decisive, but **a corpus floor
+of 2 is not evidence that a cell exists**. These two carry the "one shared
+allocator decision" signature, not a stale cell.
+
+### One measured mechanism worth carrying forward
+
+**The carrier prefix is inert; only the count is the lever.** On
+`legocharactermanager.cpp`, `forward_declaration_run` sweeps with prefix
+`RkNm` and with prefix `MxUnkRecVC` (same width, same placement, 300 and 200
+cells) give the **same nd at the same count** for every scored row — the
+objects differ, the scores do not. A re-dial never needs a new prefix; sweep
+the count and reuse the project's established stems.
 
 ## Where this comes from, and why that matters
 
@@ -345,6 +550,12 @@ Thousands of cells, but not across the whole grammar.
 4. **Four rows have no coverage from any source**: `0x10055a60`,
    `0x10046050`, `0x100998e0`, `0x100a46b0`. Two are in reassigned or ARCH
    TUs; `0x100998e0 GetCached` and `0x10055a60 Notify` are not.
+
+> **§0 supersedes items 1 and 3 of this list.** (1) was already done before
+> this table was written and the corpus is now exhausted at the object level;
+> the productive move is a tip-text re-sweep, not another corpus read.
+> (3) is no longer true: `pad_shape` has landed a row —
+> `0x100574a0 RemoveActor` at `pad-10-29`, 2026-08-16.
 
 ## 7. Known limits of this artifact
 
