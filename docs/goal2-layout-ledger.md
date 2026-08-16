@@ -548,3 +548,59 @@ reads **6 of 6 EXACT**.
 
 **Experiment 2 is therefore unblocked at zero row cost**: −28,146 distance and
 +158 address-aligned rows, with the gate left exactly as it is.
+
+## 13. Experiment 2 re-measured after the six closed — and it does **not** pay
+
+Landed the window and measured it properly against today's tree. The row cost is
+exactly what §12 predicted, and the benefit is not:
+
+| | rows | aligned | distance |
+|---|---|---|---|
+| baseline | 4853 | 1516 | 661,705 |
+| exp2 **today** | 4853 | **1516** | 660,971 |
+| exp2 as recorded in §8 (pre-landing) | 4847 | 1674 | 633,559 |
+
+**The +158 aligned rows and −28 KB in §8 do not reproduce.** Today the reorder
+changes 92 rows' displacement, and **not one of them lands on zero** — no row is
+newly aligned and none is de-aligned. The images genuinely differ (21,979 bytes),
+the link order genuinely changed (`ordinals.py`: model reproduces image = True),
+and out-of-order lego1-own objects drop 4 → 2, carried span 37.9 KB → 19.5 KB.
+So the reorder does what it was supposed to do structurally; it just does not
+buy alignment.
+
+The §8 number was measured with the six rows **broken**, and its gain was a
+property of that state, not of the ordering. Recording it as "+158 aligned rows"
+was wrong: it was +158 aligned rows *and* six wrong-sized bodies, and the two
+were not separable. This is the layout analogue of the nd trap, and it caught
+this lane.
+
+Landed regardless: retail's order is the correct order, it costs zero rows, and
+it is a precondition for alignment rather than a payer of it.
+
+### The right ruler for goal 2 is the plateau histogram, not the distance
+
+`layout/delta.py` groups every matched row by displacement (our VA − retail VA).
+Alignment is cumulative, so the question is never "how many rows are aligned"
+but "how many plateaus are there, and what single upstream size correction
+collapses each":
+
+| delta | rows | dominant owners |
+|---|---|---|
+| **0** | 1516 | (aligned) |
+| **−16** | 617 | legoanimpresenter, legoanimationmanager, legocharactermanager, act3 |
+| **+16** | 452 | legoutils, legoanimmmpresenter, legoact2, act3actors |
+| −192 | 319 | `omni:` mxsmkpresenter, mxnotificationmanager, mxwavepresenter |
+| −144 | 241 | `omni:` mxregion, mxstreamcontroller, mxdiskstreamcontroller |
+| −176 | 153 | `omni:` mxdsmultiaction, mxdsmediaaction, mxdssound, mxio |
+
+**1,069 rows — 22% of the image — sit at ±16 bytes.** That is one 16-byte size
+defect on each side, not a thousand problems, and it dwarfs anything the paths
+window could ever have returned. The −192/−144/−176 plateaus are all inside
+`omni:`, i.e. one library's internal accumulation, and they are adjacent
+(−144/−176/−192 differ by 32 and 16), which reads as the same few defects seen
+from different points in the accumulation.
+
+Next pass should bisect the ±16 plateaus by address: find the last aligned row
+before each plateau starts and read the size difference of the slot between it
+and the first displaced row. That is a bounded, purely measured search, and it
+is where goal 2 actually lives.
