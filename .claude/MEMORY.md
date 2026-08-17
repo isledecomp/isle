@@ -641,6 +641,28 @@ after every bounded panel or full gate.
   `a92cddd12b974dffa9dcc6565e72903fa17664aa9f3a122e081107049b1b8f3e`.
   Repeating this exact seed/current-source cross is closed.
 
+- Exact-name upstream entropy replay is negative and sealed for
+  `0x10059dc0` (texture-info map `erase`). Seed `834469889` used the authentic
+  583-byte LF declaration header
+  `30bd40ed01079264f32b4d0f237d70a3b14e61dfecaf473de66ea0b33bd4ad99`
+  (3 classes/14 methods, distributed `3,10,1`) at the historical pre-SmartHeap
+  `/FI` seat on current effective `legomain.cpp` source `6aa2be8d...`. The
+  upstream owning source was materially different (`88e295cf...`). A fresh
+  control emitted the canonical 1,103-byte body `23ccda7e...`; the sole seed
+  cell entered the already-known 1,114-byte orbit `36dc427f...`, not the
+  required natural 1,102-byte retail body `851f0e9a...`. Its relocation tail
+  moved to `599,737,832,938,1027,1084`, and coherent FPO/CV closure retained a
+  26-byte prolog and 1,114-byte procedure size. Function/primary-COMDAT
+  identities stayed 81/120, but ten non-target runtime COMDAT bodies changed,
+  15 rdata COMDATs changed seats, and global/associative debug metadata moved.
+  No third cell, link or reccmp ran. Evidence is
+  `/private/tmp/texerase834469889v1xxxxxxxxxxxxx/result.json`, SHA-256
+  `1ba4511b55850b86a4ee7274627d8fd1c4bbbeb435f6a43ee59112ff59fa08ef`.
+  Repeating this exact seed/current-source cross is closed. The existing exact
+  cross-TU instruction hybrid remains necessary unless a materially different
+  authenticated current-source state naturally emits the entire retail COMDAT
+  and same-TU closure without accepted-row loss.
+
 - Accepted canonical gate: LEGO1 4880/4934, ISLE 172/172, CONFIG 111/111.
   The latest gain is `0x10040360 Act3Cop::FUN_10040360`. The checked-in
   source now expresses the fallback as a second `grec == NULL` guard and
