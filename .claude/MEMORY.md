@@ -1519,3 +1519,56 @@ Do not restore range-level composition or donor line/CodeView normalization
 for this row; any future replacement must preserve the seed's authoritative
 metadata and the complete row universe while satisfying the same whole-body
 source, closure, relocation, and retail gates.
+
+## `0x1003d170 LegoCacheSoundManager::FindSoundByKey` scoped-entry control-context seal (2026-08-17)
+
+The novel, logic-neutral scoped-entry spelling remains **untested**. It moves
+construction of `LegoCacheSoundEntry(NULL, key)` before `strcpy`, keeps
+`m_set.find(entry)` after the copy, and ends the inner scope immediately after
+`find`, preserving the anonymous temporary's destruction point. Its pinned
+effective-source SHA-256 is
+`606d4c151ed4982473a75973d80b058cbadc481a20d71509c72eaccf6769359a`;
+the 413-byte target-source segment is
+`7a108e7e953bdfeffdbbcf8972fc465fb6d8e3c5b7e352f5410814c48bb0b0bd`.
+Static census found no occurrence in retained source, reachable Git, or 193
+unreachable commits. This candidate is not sealed negative by the run below.
+
+The private two-cell transport failed closed after its fresh control and did
+not launch the variant. Runner SHA-256 is
+`6c99817bf42b567622a8bd3acf800d8ea4df4d4a6ce9929e3ff5290f869c8a75`;
+the retained root is
+`/var/folders/dj/92kkv_bs0lbgz_8cfzr3w09h0000gn/T/codex-findsound-scoped-entry.2r67bxxj`.
+The control launched as PID/PGID `17999/17999`, drained cleanly, and emitted
+object SHA-256
+`358ff16ba6b43e51d27a24cff0673a899911a219858075a55520eeb45e950f7d`.
+Its target is an exact reproduction of current C0: 282 bytes/body
+`1ea542d85bfc6ffc9bc2595839886cf36367f477bd4a2b41972da95ae47418f2`,
+masked `nd=182`, all 12 semantic relocations exact, and associated
+`.xdata$x` exact. Nevertheless, compiling the private basename `s.cpp`
+meaningfully changed two non-target runtime bodies: the manager destructor
+grew from 258 bytes/body
+`6d806ab46cc6baf4574874aace548d5d3ede13b908caaa4de406f2a6756eb53b`
+to 274 bytes/body
+`6f2a3eb67cd01f523bda19231b1c717ff4188fd94789b5ccffacbb07de7d2dfe`,
+and `Stop` grew from 181 bytes/body
+`840f405749077cb4b11cd1d551291c0e90f494c2822eef6da96ca72f5acff082`
+to 187 bytes/body
+`24e84375a6a6dab0ef5e793ccebe79e26f895c51f9bd14a9aebb1fec58499b40`.
+The destructor xdata local offsets consequently moved from `247/226` to
+`263/242`. This is not ignorable COFF/debug bookkeeping, so the control is
+inadmissible. `setup.json`, `failure.json`, and control `analysis.json` are
+pinned respectively by SHA-256
+`123c350c5513d507250b12e358851eae6d7808009400279e2b0494db2a6179b6`,
+`3e7b855bdb43a945e061eac0eed8060596cc4da9936578c41897b1f5f05eda0e`,
+and `212ade9d45195902760fe90b7a246770aaab496cc37081365f6c8b2c0b6fb67c`;
+the failure receipt records `compile_count=1` and an empty final process
+census. No source, manifest, link, reccmp, or production state changed.
+
+**Seal:** classify this attempt as `CONTROL_INVALID`, not a candidate result;
+do not infer either success or failure for the scoped-entry spelling. Reopen
+only with an authenticated fresh control context (including the effective
+basename/path carrier) that reproduces all 24 canonical runtime function
+bodies and semantic relocations, the complete function/COMDAT identity
+universe, target closure, and non-target linker payload. Only after that
+control passes may one sole scoped-entry variant be compiled against it; do
+not reuse or count the invalid control as candidate evidence.
