@@ -413,6 +413,100 @@ after every bounded panel or full gate.
   `/private/tmp/codex-getcached-lifetime-run1/result.json`, SHA-256
   `8916eed69cdbca9ac222702283650882f96468f27b8f6e215da27e25ddab8f70`.
 
+- Reconciled retained panels seal
+  `0x100b27b0 MxVideoPresenter::Destroy(MxBool)`. The canonical function is
+  247 bytes/8 relocations with a 25-byte register/schedule residue. Both the
+  commented historical compact spelling
+  `MxRect32(m_location, MxSize32(GetWidth(), GetHeight()))` and its named-size
+  variant were already compiled; each regressed to the same 250-byte body at
+  `nd=114`. A later exact fresh control plus the only uncensused manager-local
+  alias (`MxVideoManager* videoManager = MVideoManager()`) left all 247 target
+  bytes, 8 relocations and `nd=25` unchanged, altering only target line data.
+  Together with at least 6,149 current-source carrier states and the global
+  no-exact retained-object refresh, this closes the natural source/state lane.
+  Evidence is `/tmp/codex-highva-direct-source-run1/result.json`, SHA-256
+  `3050559b24853f14e22dae3053c23a5d3d8f5f375fef1eb283b5c8fd3d15504f`,
+  and `/private/tmp/mxvideo-destroy2.PGdJar/result.json`, SHA-256
+  `3e94a22192a58dd2364be3606f4ea7acc90044b79ded5f6ffadd0dd871157fe8`.
+
+- Fresh static seal: `0x10031820 Isle::Enable` is an isolated C2 allocator
+  colour tie, not an open source/body-state lane. The best natural emitter is
+  still `extern_run_pair(1,8,width2)`: 3,580 bytes/223 relocations with exactly
+  11 non-relocated differences at offsets 2206..2233, all an EAX/ECX
+  transposition in the first of two adjacent `LenSquared` inlines; the second
+  inline is already exact. All 3,440 measured carrier states stop at that
+  floor. A fresh census found 6,813 retained definitions/52 unique exact-shape
+  bodies and no `nd=0` emitter; 142 objects tie at `nd=11`. Git and retained
+  source history cover every plausible spelling, including explicit-base
+  qualification and local-scope variants, with no target movement. Reopen only
+  for authentic final-release source/PDB evidence or a newly identified
+  allocator-provenance state that flips only the first inline while preserving
+  the exact 3,580-byte/223-relocation body and zero collateral.
+
+- Fresh static seal: `0x100b2a70 MxVideoPresenter::PutFrame` has no remaining
+  authentic source-form lead. Current is 1,254 bytes/426 instructions; retail
+  is 1,260/427. The complete residue is repeated ECX/EDX/EAX scratch-liveness
+  selection in three inlined `PrepareRects` tails and the final argument tail;
+  arithmetic, frame slots, 11 semantic relocations and the ordinary
+  `.xdata$x`/`.debug$S` closure already agree. History contributes no unseen
+  mechanism, and the prior 13-form source sweep covered declaration type/order,
+  expression/operand/statement order, split conditions and comparisons.
+  A new census found 9,829 retained definitions/1,102 bodies; all 777
+  retail-length bodies remain nonexact with floor `nd=101`. Together with the
+  6,149-state carrier ledger, this closes natural source/state search. Reopen
+  only for authentic final-release source/PDB or a natural 1,260-byte,
+  427-instruction same-symbol witness that changes all repeated clusters while
+  preserving closure and zero collateral.
+
+- Parked authenticated-control blocker for
+  `0x100170e0 CarRace::HandlePathStruct`: the sole fresh source-first lead is
+  to reuse existing `secondAnim` in the first score arm before assigning
+  `m_secondFinishAnimation`. It is semantics-preserving and statically explains
+  the complete EAX/common-tail scheduling residue, but it was deliberately not
+  compiled because no fresh control could reproduce the authoritative
+  1,391-byte body `b2102e3c...`. Plain source emitted `235eb3e2...` under both
+  scratch and exact canonical paths; byte-exact retained `fwdE-72` source
+  emitted `c449f18a...` under the canonical invocation. All controls retained
+  62 relocations/86 lines and ordinary `.debug$F`/`.debug$S` closure. The
+  retained `b210...` object is therefore bound to its complete historical
+  sweep invocation (`s.cpp` cwd/path, prepended real-TU include and scratch
+  Fo/Fd/PDB state), not its declaration recipe alone. Reopen only by replaying
+  that invocation byte-for-byte and first obtaining a fresh exact `b210...`
+  control; then test this one source change, with no broader rewrite.
+
+- Fresh exhaustive seal: `0x10061010 LegoAnimationManager::FUN_10061010`
+  has no intact source/build-state route. Current is 717 bytes/208
+  instructions/frame `0x2c`, with an out-of-line `MxListEntry<LegoTranInfo*>`
+  ctor; retail is 731/211/frame `0x38` and inlines the 12-byte node link while
+  caching three additional lifetimes. Git/all-refs and 8,877 retained source
+  copies add no uncensused authentic form. A 44,290-object scan found 8,831
+  definitions/49 bodies and no frame `0x38`; the sole 731-byte body is the
+  already-sealed manual-node/MxS32 probe at `nd=462`, wrong topology and 25
+  non-target changes. Extensive inline, source, carrier and text×carrier grids
+  can remove the ctor or move the frame separately, but never compose retail's
+  731-byte/211-insn/16-call/35-reloc/frame-`0x38` state without collateral.
+  Reopen only for authentic final-release source/PDB/object or a natural intact
+  state demonstrating that complete combination; ctor disappearance or length
+  alone is insufficient.
+
+- Parked fresh-control blocker for
+  `0x100a3840 TglImpl::MeshBuilderImpl::CreateMesh`. A genuinely novel source
+  hypothesis remains: copy parameter `vertexCount` to one local and pass that
+  identity through the existing inline call, which could induce retail's
+  early EBX lifetime and remove exactly the current extra three-byte reload.
+  It was not compiled because no exact fresh control could reproduce the
+  authoritative 667-byte body `83a97d4c...`. Path-short and exact logical
+  source/cwd/Fo/Fd controls both emitted `0a59467e...` with 49 non-relocation
+  differences at +268..+362; even seeding the exact canonical object-local PDB
+  (SHA `772e40d1...`) produced the same alternate state. All controls retained
+  667 bytes/19 relocations/6 lines, 113 functions, 133 primary COMDAT
+  identities and exact xdata, but differed in semantic relocation seating and
+  CodeView. History/source census found no prior alias, while 9,602 retained
+  definitions contain zero retail-length 664-byte emitters. Reopen only after
+  a fresh invocation naturally reproduces `83a97d4c...`; then test this sole
+  lifetime alias under the identical state and require zero collateral in all
+  six header consumers.
+
 - Accepted canonical gate: LEGO1 4880/4934, ISLE 172/172, CONFIG 111/111.
   The latest gain is `0x10040360 Act3Cop::FUN_10040360`. The checked-in
   source now expresses the fallback as a second `grec == NULL` guard and
