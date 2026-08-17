@@ -54,8 +54,18 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-16)
 
-- Accepted canonical gate: LEGO1 4866/4934, ISLE 172/172, CONFIG 111/111.
-  The two latest gains are strict same-function instruction mosaics for
+- Accepted canonical gate: LEGO1 4867/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is `0x100a4420 OrientableROI::OrientableROI`, extracted
+  from a freshly generated, donor-private source permutation of the exact
+  same mangled COMDAT. The checked-in target source is unchanged; the donor
+  renders two typed header permutations, through an explicitly declared
+  path-preserving private source projection, and emits the retail-exact
+  514-byte body with all 23 retail relocation targets. The composed object
+  retains every seed non-target section/function, appends only the strict
+  undefined `Vector3(float*)` symbol required by the retail call, and excludes
+  the donor object. The zero-loss confirmation report SHA-256 is
+  `abf77b69e313375a56f8ce914d36f0acc989e2661488dcaf469938a11b91ac82`.
+  The preceding two gains are strict same-function instruction mosaics for
   `0x1009a8c0 LegoWEGEdge::LinkEdgesAndFaces` and
   `0x100c3750 MxRegion::AddRect`. Both seed and donor objects are freshly
   generated from the current checked-in source plus declaration-only manifest

@@ -206,6 +206,10 @@ SOURCE_OVERLAY_LEAN_KINDS = {
     "include_seat": "include_seat_v1",
     "empty_scopes": "empty_compound_statements_v1",
     "noop_assign": "inline_budget_noop_statements_v1",
+    "dead_updates": "dead_local_linear_updates_v1",
+    "default_ctor_dead_updates": (
+        "inline_default_constructor_dead_updates_v1"
+    ),
     "size_asserts": "compile_time_layout_assert_seat_v1",
     "cond": "conditional_declarations_v1",
     "seq": "composed_typed_sequence_v1",
@@ -279,6 +283,9 @@ SOURCE_OVERLAY_KIND_POLICIES = {
     "debug_assert_reseat_v1": (
         "compiler_state_only", "debug_assert_removal_and_carrier_reseat"
     ),
+    "dead_local_linear_updates_v1": (
+        "compiler_state_only", "function_body_dead_local_updates"
+    ),
     "declaration_sequence_v1": (
         "non_emitting_declaration", "declaration_only"
     ),
@@ -295,6 +302,10 @@ SOURCE_OVERLAY_KIND_POLICIES = {
     "include_seat_v1": ("include_dependency", "preprocessor_include"),
     "inline_budget_noop_statements_v1": (
         "compiler_state_only", "function_body_noop_sequence"
+    ),
+    "inline_default_constructor_dead_updates_v1": (
+        "donor_private_authenticated_definition_permutation",
+        "inline_default_constructor_dead_local_updates",
     ),
     "line_reservation_v1": ("source_layout_only", "physical_line_reservation"),
     "member_signature_v1": (
@@ -1529,6 +1540,88 @@ def require_target_closure_recipe_policy(
     }
 
 
+SOURCE_TARGET_PERMUTATION_KINDS = frozenset({
+    "dead_local_linear_updates_v1",
+    "inline_default_constructor_dead_updates_v1",
+})
+
+
+def require_source_target_closure_recipe_policy(
+    recipe: dict, root, unit_source: str, context: str,
+) -> dict:
+    """Confine a target donor to two bounded dead-local header changes."""
+    validated = validate_donor_source_overlay_recipe(recipe, root)
+    require(
+        validated["compile_lane"].get("include_projection")
+        == "source_root_mirror_v1",
+        f"{context}: header source permutations require the private "
+        "source-root projection",
+    )
+    renderings = validated["renderings"]
+    require(len(renderings) == 3
+            and sum(item["path"] == unit_source for item in renderings) == 1,
+            f"{context}: donor must render its TU and exactly two headers")
+    unit = next(item for item in renderings if item["path"] == unit_source)
+    require(not unit["operations"],
+            f"{context}: donor translation unit text must remain checked-in")
+    root = Path(root)
+    fresh_locals = set()
+    kinds = set()
+    for rendering in renderings:
+        path = rendering["path"]
+        if path == unit_source:
+            continue
+        require(PurePosixPath(path).suffix in {".h", ".hpp"},
+                f"{context}: source permutation owner is not a header")
+        clean = (root / path).read_bytes()
+        tokens = [token for token, _, _ in source_overlay_tokens(clean)]
+        require(len(rendering["operations"]) == 1,
+                f"{context}: each permutation header must carry one operation")
+        operation = rendering["operations"][0]
+        generator = operation["generator"]
+        kind = generator["kind"]
+        require(kind in SOURCE_TARGET_PERMUTATION_KINDS and kind not in kinds,
+                f"{context}: source permutation kind differs or repeats")
+        kinds.add(kind)
+        params = generator["params"]
+        local = params["identifier"]
+        require(local not in tokens and local not in fresh_locals,
+                f"{context}: dead local is not fresh: {local}")
+        fresh_locals.add(local)
+
+        if kind == "dead_local_linear_updates_v1":
+            require(operation["action"] == "replace",
+                    f"{context}: dead-local block must replace an empty body")
+            start = resolve_source_overlay_anchor(
+                clean, operation["start_anchor"], context + " dead block start",
+                logical_path=path,
+            )
+            end = resolve_source_overlay_anchor(
+                clean, operation["end_anchor"], context + " dead block end",
+                logical_path=path,
+            )
+            require(clean[start:end] == b"{}"
+                    and generator["params"].get("renderer_layout", {}).get("nl")
+                    is False,
+                    f"{context}: dead-local replacement is not one empty body")
+        else:
+            require(operation["action"] == "insert",
+                    f"{context}: default constructor must be inserted")
+            identifier = params["class_identifier"]
+            require(sum(
+                tokens[index] in {"class", "struct"}
+                and tokens[index + 1] == identifier
+                for index in range(len(tokens) - 1)
+            ) == 1, f"{context}: constructor class is absent or ambiguous")
+    require(kinds == SOURCE_TARGET_PERMUTATION_KINDS,
+            f"{context}: both closed source permutations are required")
+    return {
+        "source_permutation_count": len(kinds),
+        "fresh_dead_local_count": len(fresh_locals),
+        "source_permutation_kinds": sorted(kinds),
+    }
+
+
 def _source_overlay_identifier_list(
     value: object, context: str, *, minimum: int = 0, maximum: int = 4096,
 ) -> list[str]:
@@ -1958,6 +2051,15 @@ def source_overlay_expected_identifier_roles(
         referenced.add(params["member_identifier"])
     elif kind == "inline_budget_noop_statements_v1":
         referenced.add(params["assignment_target"])
+    elif kind == "dead_local_linear_updates_v1":
+        declared.add(params["identifier"])
+        referenced.add(params["identifier"])
+    elif kind == "inline_default_constructor_dead_updates_v1":
+        definition(
+            f'{params["class_identifier"]}::{params["class_identifier"]}'
+        )
+        declared.add(params["identifier"])
+        referenced.update((params["class_identifier"], params["identifier"]))
     elif kind == "local_symbol_id_carrier_v1":
         declared.update(params["identifiers"])
         referenced.add(params["type"])
@@ -2491,6 +2593,45 @@ def _expand_source_overlay_lean_generator(
     return kind, semantic, layout_raw
 
 
+def _validate_dead_local_update_params(
+    params: object, context: str, *, constructor: bool,
+) -> dict:
+    """Validate one closed, observable-effect-free integer state carrier."""
+    require(isinstance(params, dict), f"{context} must be an object")
+    keys = {"id", "initial", "increment", "repeat"}
+    if constructor:
+        keys.add("class")
+    exact_audit_keys(params, keys, context)
+    initial = require_exact_int(
+        params.get("initial"), context + ".initial",
+        minimum=-(1 << 31), maximum=(1 << 31) - 1,
+    )
+    increment = require_exact_int(
+        params.get("increment"), context + ".increment",
+        minimum=-(1 << 31), maximum=(1 << 31) - 1,
+    )
+    repeat = require_exact_int(
+        params.get("repeat"), context + ".repeat", minimum=1, maximum=64,
+    )
+    require(increment != 0, f"{context}.increment must move compiler state")
+    final = initial + increment * repeat
+    require(-(1 << 31) <= final <= (1 << 31) - 1,
+            f"{context} signed int update sequence can overflow")
+    normalized = {
+        "identifier": _source_overlay_identifier(
+            params.get("id"), context + ".id"
+        ),
+        "initial_value": initial,
+        "increment": increment,
+        "repeat": repeat,
+    }
+    if constructor:
+        normalized["class_identifier"] = _source_overlay_identifier(
+            params.get("class"), context + ".class"
+        )
+    return normalized
+
+
 def validate_source_overlay_generator(value: object, context: str) -> dict:
     """Validate the closed typed-generator registry in its lean surface form.
 
@@ -2657,6 +2798,17 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
                 minimum=1, maximum=64,
             ),
         }
+    elif kind == "dead_local_linear_updates_v1":
+        normalized = _validate_dead_local_update_params(
+            params, param_context, constructor=False,
+        )
+    elif kind == "inline_default_constructor_dead_updates_v1":
+        require(not layout,
+                f"{context}: an inline default constructor cannot carry "
+                "layout overrides")
+        normalized = _validate_dead_local_update_params(
+            params, param_context, constructor=True,
+        )
     elif kind == "compile_time_layout_assert_seat_v1":
         exact_audit_keys(params, {"assertions"}, param_context)
         assertions = params.get("assertions")
@@ -4170,6 +4322,18 @@ def _seat_source_overlay_fragment(generator: dict, semantic: bytes) -> bytes:
     return body
 
 
+def render_dead_local_update_body(params: dict) -> bytes:
+    """Render a fixed-type, non-escaping local whose arithmetic cannot overflow."""
+    identifier = params["identifier"]
+    updates = (
+        f"{identifier} = {identifier} + {params['increment']}; "
+        * params["repeat"]
+    )
+    return (
+        f"{{ int {identifier} = {params['initial_value']}; {updates}}}"
+    ).encode("ascii")
+
+
 def render_source_overlay_template_supplier(params: dict) -> bytes:
     lines: list[str] = []
     prefix = params["prefix_declarations"]
@@ -4388,6 +4552,13 @@ def render_source_overlay_generator(
     elif kind == "inline_budget_noop_statements_v1":
         target = params["assignment_target"]
         result = (f"\t{target} = {target} + 0;\n" * params["repeat"]).encode("ascii")
+    elif kind == "dead_local_linear_updates_v1":
+        result = render_dead_local_update_body(params)
+    elif kind == "inline_default_constructor_dead_updates_v1":
+        result = (
+            b"\t" + params["class_identifier"].encode("ascii") + b"() "
+            + render_dead_local_update_body(params) + b"\n"
+        )
     elif kind == "compile_time_layout_assert_seat_v1":
         result = b"".join(
             f'DECOMP_SIZE_ASSERT({item["type"]}, 0x{item["size"]:x})\n'.encode("ascii")
@@ -8723,12 +8894,22 @@ def validate_manifest(
                     "generated declaration recipe",
                 )
                 lane = recipe.get("compile_lane")
+                lane_keys = {"required_define"}
+                if kind == "donor_source_overlay":
+                    lane_keys.add("include_projection")
                 require(
                     isinstance(lane, dict)
-                    and set(lane) == {"required_define"}
+                    and set(lane) <= lane_keys
+                    and "required_define" in lane
                     and isinstance(lane.get("required_define"), str)
-                    and lane["required_define"],
-                    f"{donor_context}.compile_lane must select by a define",
+                    and lane["required_define"]
+                    and (
+                        "include_projection" not in lane
+                        or lane["include_projection"]
+                        == "source_root_mirror_v1"
+                    ),
+                    f"{donor_context}.compile_lane must select by a define "
+                    "and an optional closed include projection",
                 )
                 if kind == "donor_source_overlay":
                     # Extension A: the donor's own private rendering of one or
@@ -9280,6 +9461,7 @@ def validate_manifest(
                                          "retail_exact_instruction_mosaic",
                                          "retail_exact_reloc_divergent",
                                          "retail_exact_target_closure",
+                                         "retail_exact_source_target_closure",
                                          "comdat_selection_override"),
                         f"{function_context}: unsupported splice class")
                 if splice_class == "comdat_selection_override":
@@ -9383,8 +9565,11 @@ def validate_manifest(
                     )
                     normalized_functions.append(normalized_function)
                     continue
-                elif splice_class in ("retail_exact_reloc_divergent",
-                                      "retail_exact_target_closure"):
+                elif splice_class in (
+                    "retail_exact_reloc_divergent",
+                    "retail_exact_target_closure",
+                    "retail_exact_source_target_closure",
+                ):
                     # Extension B.  Same shape as same_slot_resize plus the
                     # pinned retail oracle window that B1 compares against --
                     # this class may only ever install retail's own code.
@@ -9401,6 +9586,23 @@ def validate_manifest(
                             "expected_seed_only_functions",
                             "target_source_range",
                             "destructive_source_bindings",
+                        }
+                    if splice_class == "retail_exact_source_target_closure":
+                        divergent_keys |= {
+                            "expected_seed_section_count",
+                            "expected_donor_section_count",
+                            "expected_section_number",
+                            "expected_xdata_section_number",
+                            "expected_debug_section_number",
+                            "expected_seed_body_sha256",
+                            "expected_seed_xdata_sha256",
+                            "expected_donor_xdata_sha256",
+                            "expected_seed_debug_sha256",
+                            "expected_donor_debug_sha256",
+                            "expected_relocation_count",
+                            "expected_line_count",
+                            "expected_imported_undefined_symbols",
+                            "target_source_range",
                         }
                     if "target_source_refactor" in function:
                         require(
@@ -9521,6 +9723,56 @@ def validate_manifest(
                         )
                         require_target_closure_recipe_policy(
                             local_recipes[donor_id], function, source_dir,
+                            source_relative, function_context,
+                        )
+                    if splice_class == "retail_exact_source_target_closure":
+                        require(local_recipe_kinds[donor_id]
+                                == "donor_source_overlay",
+                                f"{function_context}: source-target extraction "
+                                "requires a donor-private source rendering")
+                        for name in (
+                            "expected_seed_section_count",
+                            "expected_donor_section_count",
+                            "expected_section_number",
+                            "expected_xdata_section_number",
+                            "expected_debug_section_number",
+                            "expected_relocation_count",
+                            "expected_line_count",
+                        ):
+                            require(type(function.get(name)) is int
+                                    and function[name] > 0,
+                                    f"{function_context}.{name} is invalid")
+                        require(function["expected_seed_section_count"]
+                                != function["expected_donor_section_count"],
+                                f"{function_context}: source-target donor must "
+                                "have a distinct section census")
+                        imports = function.get(
+                            "expected_imported_undefined_symbols"
+                        )
+                        require(isinstance(imports, list) and imports
+                                and imports == sorted(set(imports))
+                                and len(imports) <= 8
+                                and all(isinstance(item, str)
+                                        and item.startswith("?")
+                                        and len(item) <= 4096
+                                        for item in imports),
+                                f"{function_context}: imported undefined "
+                                "symbol set is invalid")
+                        for name in (
+                            "expected_seed_body_sha256",
+                            "expected_seed_xdata_sha256",
+                            "expected_donor_xdata_sha256",
+                            "expected_seed_debug_sha256",
+                            "expected_donor_debug_sha256",
+                        ):
+                            require_sha(function.get(name),
+                                        f"{function_context}.{name}")
+                        validate_target_source_range_proof(
+                            function.get("target_source_range"),
+                            f"{function_context}.target_source_range",
+                        )
+                        require_source_target_closure_recipe_policy(
+                            local_recipes[donor_id], source_dir,
                             source_relative, function_context,
                         )
                     normalized_functions.append(normalized_function)
@@ -11393,6 +11645,54 @@ def require_target_closure_extraction_topology(
     }
 
 
+def require_source_target_closure_topology(
+    seed: CoffObject, donor: CoffObject, function: dict, context: str,
+) -> dict:
+    """Pin one same-name target closure while ignoring donor-only COMDATs."""
+    require(len(seed.sections) == function["expected_seed_section_count"]
+            and len(donor.sections) == function["expected_donor_section_count"],
+            f"{context} section census changed")
+    mangled = function["mangled"]
+    sp, dp = seed.function_section(mangled), donor.function_section(mangled)
+    require(sp["number"] == dp["number"] == function["expected_section_number"],
+            f"{context} target section seat changed")
+    seed_id = [item for item in comdat_primary_identity_multiset(seed).elements()
+               if item[0] == mangled]
+    donor_id = [item for item in comdat_primary_identity_multiset(donor).elements()
+                if item[0] == mangled]
+    require(len(seed_id) == len(donor_id) == 1 and seed_id == donor_id,
+            f"{context} target is not the same mangled COMDAT")
+    require(sha256_bytes(coff_body(seed, sp))
+            == function["expected_seed_body_sha256"],
+            f"{context} seed target body changed")
+    expected = {
+        ".xdata$x": ("expected_xdata_section_number",
+                     "expected_seed_xdata_sha256",
+                     "expected_donor_xdata_sha256"),
+        ".debug$S": ("expected_debug_section_number",
+                     "expected_seed_debug_sha256",
+                     "expected_donor_debug_sha256"),
+    }
+    for name, (seat_key, seed_sha_key, donor_sha_key) in expected.items():
+        left, right = _comdat_child(seed, sp, name), _comdat_child(donor, dp, name)
+        require(left["number"] == right["number"] == function[seat_key]
+                and sha256_bytes(coff_body(seed, left)) == function[seed_sha_key]
+                and sha256_bytes(coff_body(donor, right)) == function[donor_sha_key],
+                f"{context} pinned {name} closure changed")
+    require(sp["relocation_count"] == dp["relocation_count"]
+            == function["expected_relocation_count"]
+            and sp["line_count"] == dp["line_count"]
+            == function["expected_line_count"],
+            f"{context} target relocation/line census changed")
+    return {
+        "seed_section_count": len(seed.sections),
+        "donor_section_count": len(donor.sections),
+        "donor_only_function_count": sum(
+            (function_multiset(donor) - function_multiset(seed)).values()
+        ),
+    }
+
+
 RELOCATION_WIDTHS = {
     0x0006: 4,  # IMAGE_REL_I386_DIR32
     0x0007: 4,  # IMAGE_REL_I386_DIR32NB
@@ -12171,6 +12471,79 @@ def _resolve_substituted_seed_symbol(
     return index
 
 
+def _source_target_relocation_substitutions(
+    seed: CoffObject, donor_rows: list[dict], mapping: dict[int, int],
+    expected_imports: list[str], section_map: dict[int, int], context: str,
+) -> tuple[dict[int, int], list[tuple[str, int, int]]]:
+    """Resolve a whole donor target table into seed locals/externals."""
+    reverse = {donor_index: seed_index
+               for seed_index, donor_index in mapping.items()}
+    imports = {}
+    substitutions = {}
+    for ordinal, record in enumerate(donor_rows):
+        if local_symbol_kind(record["target"]) is not None:
+            if record["symbol_index"] not in reverse:
+                candidates = [
+                    index for index, symbol in seed.symbols.items()
+                    if local_symbol_kind(symbol["name"])
+                    == local_symbol_kind(record["target"])
+                    and symbol["section"]
+                    == section_map.get(record["target_section"])
+                    and symbol["value"] == record["target_value"]
+                    and symbol["type"] == record["target_type"]
+                    and symbol["storage"] == record["target_storage"]
+                ]
+                require(len(candidates) == 1,
+                        f"{context}: target local has no unique seed structure")
+                mapping[candidates[0]] = record["symbol_index"]
+                reverse[record["symbol_index"]] = candidates[0]
+            substitutions[ordinal] = reverse[record["symbol_index"]]
+            continue
+        matches = [index for index, symbol in seed.symbols.items()
+                   if symbol["name"] == record["target"]]
+        if matches:
+            substitutions[ordinal] = _resolve_substituted_seed_symbol(
+                seed, record, context
+            )
+            continue
+        name = record["target"]
+        require(name in expected_imports
+                and record["target_value"] == 0
+                and record["target_type"] == 0x20
+                and record["target_storage"] == 2,
+                f"{context}: donor target {name!r} is absent from the seed")
+        imports.setdefault(
+            name, (name, record["target_type"], record["target_storage"])
+        )
+        substitutions[ordinal] = seed.symbol_count + expected_imports.index(name)
+    require(sorted(imports) == expected_imports,
+            f"{context}: imported undefined symbol set differs")
+    return substitutions, [imports[name] for name in expected_imports]
+
+
+def _append_undefined_external_symbols(
+    data: bytes, symbols: list[tuple[str, int, int]],
+) -> bytes:
+    if not symbols:
+        return data
+    coff = CoffObject(data)
+    strings = bytearray(data[coff.string_offset:coff.string_end])
+    records = bytearray()
+    for name, symbol_type, storage in symbols:
+        encoded = name.encode("ascii")
+        if len(encoded) <= 8:
+            name_field = encoded.ljust(8, b"\0")
+        else:
+            name_field = b"\0\0\0\0" + len(strings).to_bytes(4, "little")
+            strings.extend(encoded + b"\0")
+        records.extend(name_field + struct.pack("<IhHBB", 0, 0, symbol_type,
+                                                storage, 0))
+    strings[:4] = len(strings).to_bytes(4, "little")
+    output = bytearray(data[:coff.string_offset] + records + strings)
+    output[12:16] = (coff.symbol_count + len(symbols)).to_bytes(4, "little")
+    return bytes(output)
+
+
 def _pair_reloc_divergent(seed, donor, seed_rows, donor_rows, seed_primary,
                           donor_primary, seed_xdata, donor_xdata, mapping,
                           context):
@@ -12315,6 +12688,7 @@ def compose_same_slot_resize(
     *,
     retail_body: bytes | None = None,
     target_closure_extract: bool = False,
+    source_target_extract: bool = False,
 ) -> tuple[bytes, dict]:
     """Install a donor code body of a different size that occupies the same
     16-byte linked contribution slot, repairing every dependent COFF record.
@@ -12334,14 +12708,19 @@ def compose_same_slot_resize(
     splice_class = function.get("splice_class")
     require(splice_class in (
         "same_slot_resize", "retail_exact_reloc_divergent",
-        "retail_exact_target_closure",
+        "retail_exact_target_closure", "retail_exact_source_target_closure",
     ), "same-slot composer received an unsupported splice class")
     expected_divergent = splice_class != "same_slot_resize"
     expected_extract = splice_class == "retail_exact_target_closure"
+    expected_source_extract = (
+        splice_class == "retail_exact_source_target_closure"
+    )
     require((retail_body is not None) == expected_divergent,
             "retail oracle presence differs from the splice class")
     require(target_closure_extract == expected_extract,
             "target-closure topology mode differs from the splice class")
+    require(source_target_extract == expected_source_extract,
+            "source-target topology mode differs from the splice class")
     divergent = expected_divergent
     seed = CoffObject(seed_bytes)
     donor = CoffObject(donor_bytes)
@@ -12362,7 +12741,11 @@ def compose_same_slot_resize(
     # donor may omit a pinned strict subset because the composed output keeps
     # every original seed definition and copies only this target closure.
     topology_detail = {}
-    if target_closure_extract:
+    if source_target_extract:
+        topology_detail = require_source_target_closure_topology(
+            seed, donor, function, "source-target closure extraction"
+        )
+    elif target_closure_extract:
         topology_detail = require_target_closure_extraction_topology(
             seed, donor, function, "target-closure extraction"
         )
@@ -12442,6 +12825,13 @@ def compose_same_slot_resize(
     mapping: dict[int, int] = {}
     substitutions: dict[int, int] = {}
     appended_relocations: list[tuple[dict, int]] = []
+    imported_symbols: list[tuple[str, int, int]] = []
+    xdata_pairs = _pair_same_slot_relocations(
+        sxr, dxr, sp["number"], dp["number"], sx["number"], dx["number"],
+        mapping, "xdata")
+    debug_pairs = _pair_same_slot_relocations(
+        sdr, ddr, sp["number"], dp["number"], sx["number"], dx["number"],
+        mapping, "debug$S")
     if divergent:
         # B1 -- THE LOAD-BEARING OBLIGATION.  This class may only ever install
         # retail's own code, so the body is compared against retail before any
@@ -12469,20 +12859,26 @@ def compose_same_slot_resize(
         require(differing == 0,
                 f"composed body is not retail-exact: {differing} byte(s) "
                 f"differ from the retail oracle under the relocation mask")
-        _, substitutions, appended_relocations = _pair_reloc_divergent(
-            seed, donor, spr, dpr, sp["number"], dp["number"],
-            sx["number"], dx["number"], mapping, "primary")
+        if source_target_extract:
+            require(len(spr) == len(dpr),
+                    "source-target relocation table count changed")
+            substitutions, imported_symbols = (
+                _source_target_relocation_substitutions(
+                    seed, dpr, mapping,
+                    function["expected_imported_undefined_symbols"],
+                    {dp["number"]: sp["number"], dx["number"]: sx["number"]},
+                    "source-target primary",
+                )
+            )
+        else:
+            _, substitutions, appended_relocations = _pair_reloc_divergent(
+                seed, donor, spr, dpr, sp["number"], dp["number"],
+                sx["number"], dx["number"], mapping, "primary")
     else:
         semantic_detail = {}
         _pair_same_slot_relocations(spr, dpr, sp["number"], dp["number"],
                                     sx["number"], dx["number"], mapping,
                                     "primary")
-    xdata_pairs = _pair_same_slot_relocations(
-        sxr, dxr, sp["number"], dp["number"], sx["number"], dx["number"],
-        mapping, "xdata")
-    debug_pairs = _pair_same_slot_relocations(
-        sdr, ddr, sp["number"], dp["number"], sx["number"], dx["number"],
-        mapping, "debug$S")
     require(all(a["offset"] == b["offset"] for a, b in xdata_pairs),
             "xdata relocation offsets moved")
     require(all(a["offset"] == b["offset"] for a, b in debug_pairs),
@@ -12673,7 +13069,9 @@ def compose_same_slot_resize(
     if fpo_closure:
         fpo_output = shifted(sx["raw_offset"])
         output[fpo_output:fpo_output + len(donor_fpo)] = donor_fpo
-    composed = bytes(output)
+    composed = _append_undefined_external_symbols(bytes(output),
+                                                  imported_symbols)
+    total_delta += len(composed) - len(output)
 
     checked = CoffObject(composed)
     cp = checked.function_section(mangled)
@@ -12691,6 +13089,17 @@ def compose_same_slot_resize(
             "output debug$S policy differs")
     require(function_multiset(checked) == function_multiset(seed),
             "output function set changed")
+    require(checked.symbol_count == seed.symbol_count + len(imported_symbols)
+            and all(
+                checked.symbols[seed.symbol_count + index]["name"] == item[0]
+                and checked.symbols[seed.symbol_count + index]["section"] == 0
+                and checked.symbols[seed.symbol_count + index]["value"] == 0
+                and checked.symbols[seed.symbol_count + index]["type"]
+                == item[1]
+                and checked.symbols[seed.symbol_count + index]["storage"]
+                == item[2]
+                for index, item in enumerate(imported_symbols)
+            ), "output imported undefined symbol set changed")
     require(_coff_table_bytes(checked, cp, "lines") == donor_lines,
             "output line table differs from the normalized donor")
     require(_coff_table_bytes(checked, cx, "relocations")
@@ -12741,6 +13150,7 @@ def compose_same_slot_resize(
         "mapped_locals": len(mapping),
         "changed_local_values": local_value_updates,
         "substituted_relocations": len(substitutions),
+        "imported_undefined_symbols": [item[0] for item in imported_symbols],
         "retail_exact": bool(divergent),
         **topology_detail,
         **semantic_detail,
@@ -12780,10 +13190,13 @@ def assert_source_permutations_are_donor_only(overlay: object) -> None:
     """
     for generator in _source_overlay_generators(overlay):
         require(
-            generator.get("kind")
-            != "single_evaluation_binding_source_permutation_v1",
-            "single_evaluation_binding_source_permutation_v1 appears in the "
-            "shipped tree's source overlay; it is donor-only",
+            generator.get("kind") not in {
+                "single_evaluation_binding_source_permutation_v1",
+                "dead_local_linear_updates_v1",
+                "inline_default_constructor_dead_updates_v1",
+            },
+            f"{generator.get('kind')} appears in the shipped tree's source "
+            "overlay; it is donor-only",
         )
 
 
@@ -12829,8 +13242,14 @@ def validate_donor_source_overlay_recipe(
     )
     lane = recipe.get("compile_lane")
     require(isinstance(lane, dict)
+            and set(lane) <= {"required_define", "include_projection"}
+            and "required_define" in lane
             and isinstance(lane.get("required_define"), str)
-            and lane["required_define"],
+            and lane["required_define"]
+            and (
+                "include_projection" not in lane
+                or lane["include_projection"] == "source_root_mirror_v1"
+            ),
             "donor source overlay compile lane differs")
     renderings = recipe.get("renderings")
     require(isinstance(renderings, list) and renderings,
@@ -12907,9 +13326,12 @@ def validate_donor_source_overlay_recipe(
             f"{class_identifier}::~{member_identifier} is not declared in any "
             f"checked-in source this recipe renders from",
         )
+    normalized_lane = {"required_define": lane["required_define"]}
+    if "include_projection" in lane:
+        normalized_lane["include_projection"] = lane["include_projection"]
     return {
         "kind": "donor_source_overlay",
-        "compile_lane": {"required_define": lane["required_define"]},
+        "compile_lane": normalized_lane,
         "renderings": normalized,
     }
 
@@ -13374,6 +13796,29 @@ def compose_retail_exact_target_closure(
     composed, detail = compose_same_slot_resize(
         seed_bytes, donor_bytes, function,
         retail_body=bytes(retail_body), target_closure_extract=True,
+    )
+    return composed, {**detail, **source_detail}
+
+
+def compose_retail_exact_source_target_closure(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+    seed_source: bytes,
+    donor_source: bytes,
+) -> tuple[bytes, dict]:
+    """Extract one pinned retail target from a closed source permutation."""
+    require(function.get("splice_class")
+            == "retail_exact_source_target_closure",
+            "splice class is not retail_exact_source_target_closure")
+    source_detail = require_target_source_range_identity(
+        seed_source, donor_source, function["target_source_range"],
+        "source-target closure source proof",
+    )
+    composed, detail = compose_same_slot_resize(
+        seed_bytes, donor_bytes, function, retail_body=bytes(retail_body),
+        source_target_extract=True,
     )
     return composed, {**detail, **source_detail}
 

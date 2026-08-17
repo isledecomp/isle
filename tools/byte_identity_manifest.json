@@ -6301,6 +6301,84 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_4c77c6181155",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "donor_source_overlay",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK",
+       "include_projection": "source_root_mirror_v1"
+      },
+      "renderings": [
+       {
+        "path": "LEGO1/realtime/orientableroi.cpp",
+        "clean_sha256": "089c646ca25359ad456b75207d5fdd13cce58338411d5a8346ac0882e270f3eb",
+        "rendered_sha256": "089c646ca25359ad456b75207d5fdd13cce58338411d5a8346ac0882e270f3eb",
+        "operations": []
+       },
+       {
+        "path": "LEGO1/realtime/vector.h",
+        "clean_sha256": "8dd2e497e8327d7486d3f3f3755aea67374c11fc64e2ad5cfef9945e21d9565b",
+        "rendered_sha256": "7b371a0064a0f5ebac2bd2b0c4eedc65982960f5db37b0411c9f20cf955f02f4",
+        "operations": [
+         {
+          "op": "replace",
+          "id": "op_vector3_dead_updates",
+          "from": {
+           "ctx": "717d3890fd4ce90df9f8dd094fae8d176d349698a8484acc91e65e39a65a4cb5",
+           "at": "before_token"
+          },
+          "to": {
+           "ctx": "e22e7b7660dbf27e80c82bc582ffe6d5c56638dedcc55a66b49a08d593266675",
+           "at": "after_token"
+          },
+          "removed": {
+           "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+           "size": 2
+          },
+          "gen": {
+           "k": "dead_updates",
+           "id": "_n",
+           "initial": 0,
+           "increment": 1,
+           "repeat": 16,
+           "nl": false
+          }
+         }
+        ]
+       },
+       {
+        "path": "LEGO1/realtime/realtime.h",
+        "clean_sha256": "32e1c4664cae19ea81a62d38178e888fdc48460bfe171cd7768b2dd9d924844c",
+        "rendered_sha256": "d63ddbdaac651991a5fa313390ee932ab3e2e5fa62942fd3593e2fdaeaa603c4",
+        "operations": [
+         {
+          "op": "insert",
+          "id": "op_bounding_box_default_ctor",
+          "anchor": {
+           "ctx": "f376511b92a5131da64d1ddad8fcd62bd0623341700248a7266d6c969ab56301",
+           "line_before": "14cdb3d1d32867a688d1c3a88abc220313edac319798b81da505205105403552",
+           "line_after": "5e58477cf4d966e4a358862c3dc366555394e04f6f6b5cd18a904cbcc65d0a66"
+          },
+          "gen": {
+           "k": "default_ctor_dead_updates",
+           "class": "BoundingBox",
+           "id": "_b",
+           "initial": 0,
+           "increment": 1,
+           "repeat": 1
+          }
+         }
+        ]
+       }
+      ],
+      "rendering_identity_sha256": "4c77c6181155c917f47b0e760dcd22dfdc2226e861a87762841303a7bc7d06da",
+      "emission_policy": "donor_private_rendering_only",
+      "authenticity_rationale": "The donor-private rendering leaves the target translation unit unchanged and applies two bounded, typed compiler-state source permutations in checked-in headers. The explicit default-constructor form is treated as an authenticated donor-only permutation, not a generally logic-neutral shipped-source change. Target-only extraction retains the seed object shell and admits only the retail-exact same-name target closure."
+     }
     }
    ],
    "functions": [
@@ -6321,11 +6399,306 @@
      "expected_donor_length": 2515,
      "expected_linked_span": 2528,
      "donor": "d_fb130bb22785"
+    },
+    {
+     "mangled": "??0OrientableROI@@QAE@XZ",
+     "donor": "d_4c77c6181155",
+     "splice_class": "retail_exact_source_target_closure",
+     "expected_seed_length": 520,
+     "expected_donor_length": 514,
+     "expected_linked_span": 528,
+     "expected_body_sha256": "4de05177c405095ef147bf122c4e931d23d6887a423c9b43734cbee9b825f5b8",
+     "expected_seed_section_count": 271,
+     "expected_donor_section_count": 275,
+     "expected_section_number": 4,
+     "expected_xdata_section_number": 5,
+     "expected_debug_section_number": 12,
+     "expected_seed_body_sha256": "9fb292afd5e458c037e00fbd6d08fe28a55297a9d7ef587c5b069ccb4c0aa3e4",
+     "expected_seed_xdata_sha256": "2d1be37fbfa859d8d31be303c41b476f80b7c6145b767ab164f6f6751fb67dd3",
+     "expected_donor_xdata_sha256": "2d1be37fbfa859d8d31be303c41b476f80b7c6145b767ab164f6f6751fb67dd3",
+     "expected_seed_debug_sha256": "2d1d4e02322a326f5a7ac9094bb05dde580d50e3c8e551d11462deffd0eb6808",
+     "expected_donor_debug_sha256": "809308ce14c45afb89c056c03f8e8f48f6714711b3a218711ef9d9c8dff03d07",
+     "expected_relocation_count": 23,
+     "expected_line_count": 10,
+     "expected_imported_undefined_symbols": [
+      "??0Vector3@@QAE@PAM@Z"
+     ],
+     "target_source_range": {
+      "start_marker": "// FUNCTION: LEGO1 0x100a4420",
+      "end_marker": "// FUNCTION: LEGO1 0x100a46a0",
+      "range_pin": {
+       "baseline_sha256": "7afc651683954371a13781a5952e91735cd25201826de7fca2db55d086f51e64",
+       "baseline_size": 405,
+       "baseline_line_count": 15,
+       "baseline_significant_token_sha256": "ae8a6808f1c6b0165d44fbe872c6ff8cb747c7a3e2e3a33c5fcb96b745bcb9d9"
+      }
+     },
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100a4420",
+      "verdict": "MATCH",
+      "length": 514
+     },
+     "retail_relocations": [
+      {
+       "offset": 2,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 12,
+       "type": 6,
+       "addend": 0,
+       "target": "$L41266",
+       "target_section": 4,
+       "target_value": 496,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x100a4610"
+      },
+      {
+       "offset": 20,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 34,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7ROI@@6B@",
+       "target_section": 11,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100dbc38"
+      },
+      {
+       "offset": 74,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Matrix4@@6B@",
+       "target_section": 9,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4350"
+      },
+      {
+       "offset": 81,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7MxMatrix@@6B@",
+       "target_section": 7,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4300"
+      },
+      {
+       "offset": 86,
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector2@@QAE@PAM@Z",
+       "target_section": 13,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1000c0f0"
+      },
+      {
+       "offset": 95,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 6,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "offset": 106,
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector2@@QAE@PAM@Z",
+       "target_section": 13,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1000c0f0"
+      },
+      {
+       "offset": 118,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 6,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "offset": 132,
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector2@@QAE@PAM@Z",
+       "target_section": 13,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1000c0f0"
+      },
+      {
+       "offset": 144,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 6,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "offset": 158,
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector2@@QAE@PAM@Z",
+       "target_section": 13,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1000c0f0"
+      },
+      {
+       "offset": 170,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 6,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "offset": 184,
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector3@@QAE@PAM@Z",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1001d150"
+      },
+      {
+       "offset": 204,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 6,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "offset": 216,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7OrientableROI@@6B@",
+       "target_section": 10,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100dbc08"
+      },
+      {
+       "offset": 226,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Vector2@@6B@",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4288"
+      },
+      {
+       "offset": 236,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 6,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "offset": 485,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 497,
+       "type": 6,
+       "addend": 0,
+       "target": "$T41374",
+       "target_section": 5,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100e8aa8"
+      },
+      {
+       "offset": 502,
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "offset": 510,
+       "type": 20,
+       "addend": 0,
+       "target": "??1ROI@@UAE@XZ",
+       "target_section": 215,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a5d50"
+      }
+     ]
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 1 row in LEGO1/realtime/orientableroi.cpp (GetLocalTransform) from a generated carrier state over the rendered current source with the pristine third-party vec.h, and restores UpdateTransformationRelativeToParent's retail 2528-byte linked contribution span (seed emits 2473 where retail has 2515); that row's body is still open at nd=99, so this entry is a layout restoration, not a row closure, and must be replaced when its source form is recovered.",
+    "reason": "Closes 2 rows in LEGO1/realtime/orientableroi.cpp: GetLocalTransform from a generated declaration carrier, and OrientableROI's constructor from a donor-private authenticated two-header source permutation with seed-authoritative target-only extraction. It also restores UpdateTransformationRelativeToParent's retail linked span; that function remains open and the restoration must be replaced when its source form is recovered.",
     "may_replace_compiler_output": true
    }
   },
@@ -9057,8 +9430,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4866,
-    "accepted_row_identity_sha256": "5d146945652338e56e4a3d2597475e27101f95dd5ebca563324143d930461404",
+    "exact_raw_1_0_count": 4867,
+    "accepted_row_identity_sha256": "addb434fc712944290ab04e1faeeb875010b6f93838cd1fa4806310ca578daf8",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

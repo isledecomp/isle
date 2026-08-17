@@ -871,6 +871,19 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                              / f"{marker.stem}-{donor['id']}")
                     shutil.rmtree(probe, ignore_errors=True)
                     (probe / "inc").mkdir(parents=True, exist_ok=True)
+                    projection = recipe["compile_lane"].get(
+                        "include_projection"
+                    )
+                    private_shadow = None
+                    if projection == "source_root_mirror_v1":
+                        # A flat -I override cannot shadow nested quoted
+                        # includes: once a clean parent header is opened,
+                        # its siblings win before -I is searched.  Mirror the
+                        # already-rendered effective source tree privately so
+                        # every include keeps its logical path and can see a
+                        # rendered header override.  This copy is donor-only.
+                        private_shadow = probe / "inc" / "source"
+                        shutil.copytree(shadow, private_shadow)
                     rendered_donor = byte_identity.render_donor_source_overlay(
                         recipe, byte_identity.checked_source_root())
                     donor_sources[donor["id"]] = rendered_donor.get(
@@ -882,6 +895,12 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                         else:
                             (probe / "inc" / Path(path).name).write_bytes(
                                 payload)
+                            if private_shadow is not None:
+                                projected = private_shadow / path
+                                projected.parent.mkdir(
+                                    parents=True, exist_ok=True
+                                )
+                                projected.write_bytes(payload)
                     define = recipe["compile_lane"]["required_define"]
                     lane_entry = lane(
                         lambda command: f"-D{define}" in shlex.split(command),
@@ -894,8 +913,23 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                     for index, token in enumerate(lane_child):
                         if not include_seated and token.startswith(("-I", "/I")):
                             donor_command.append(f"/I{probe / 'inc'}")
+                            if private_shadow is not None:
+                                donor_command.append(
+                                    f"/I{private_shadow / source.parent.relative_to(shadow)}"
+                                )
                             donor_command.append(f"/I{source.parent}")
                             include_seated = True
+                        if (private_shadow is not None
+                                and token.startswith(("-I", "/I"))):
+                            include_path = Path(token[2:]).resolve()
+                            try:
+                                relative = include_path.relative_to(shadow)
+                            except ValueError:
+                                pass
+                            else:
+                                donor_command.append(
+                                    f"{token[:2]}{private_shadow / relative}"
+                                )
                         if token.startswith(("/Fo", "-Fo")):
                             donor_command.append("/Foo.obj")
                             continue
@@ -1189,14 +1223,24 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                     )
                     byte_identity.validate_donor_object_excluded(
                         composed, [donor_objects[function["donor"]]])
-                elif function["splice_class"] == "retail_exact_target_closure":
+                elif function["splice_class"] in {
+                    "retail_exact_target_closure",
+                    "retail_exact_source_target_closure",
+                }:
                     retail = function["retail_oracle"]
                     donor_source = donor_sources.get(function["donor"])
                     if donor_source is None:
                         fail(f"target-closure donor omits its translation unit: "
                              f"{unit['source']}")
+                    composer = (
+                        byte_identity.compose_retail_exact_target_closure
+                        if function["splice_class"]
+                        == "retail_exact_target_closure"
+                        else byte_identity
+                        .compose_retail_exact_source_target_closure
+                    )
                     composed, detail = (
-                        byte_identity.compose_retail_exact_target_closure(
+                        composer(
                             composed, donor_objects[function["donor"]],
                             function,
                             byte_identity.retail_image_body(

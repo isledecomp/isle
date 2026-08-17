@@ -347,7 +347,7 @@ not landable by splicing at all and should be sealed.
 **B7 remains implemented and tested** — it is required by any future attempt and
 is independent of this blocker.
 
-## 6. Class C — `comdat_selection_override`: built; old link result needs reproof
+## 6. Class C — `comdat_selection_override`: landed with frozen-input reproof
 
 **Built and tested** (`compose_comdat_selection_override`, validator + build
 dispatch, `donor_source` on the pad_shape recipe). Rationale: some template
@@ -361,30 +361,13 @@ copy composes into legoworld's object at **masked nd 0, 1106 = retail's 1106**,
 with relocation offsets, types and target names all identical and the line table
 identical apart from its symbol sentinel.
 
-One earlier gated experiment reported a net −2 and therefore must not be taken:
-
-    GAIN  0x1001d890 erase                       (0.9027 -> 1.0000)
-    LOST  0x10020e50 _Tree<MxCore*>::_Lrotate    (1.0 -> 0.3636)
-    LOST  0x10021340 _Tree<MxCore*>::find        (1.0 -> 0.5588)
-    LOST  0x10021a70 LegoWorld::Enable           (1.0 -> 0.9905)
-
-All three reported casualties are **SOLE definers in the same object** and were
-byte-exact. They stayed **address-aligned**, so the recorded bytes were:
-
-    _Lrotate  ours 3b 05 9c 11 ...   retail 3b 05 a0 11 ...
-
-i.e. `cmp eax,[0x100f119c]` against retail's `[0x100f11a0]`.
-
-Fresh inspection shows the composed object differs from the seed only in 36
-non-relocated target-code bytes; object size, symbols, relocations, liveness and
-ordering are unchanged, and the exact donor object is excluded from the link.
-The claimed `_Nil` causal chain is therefore **not established** and the old run
-may have had a confounded input. Before changing Class C or pruning COMDATs,
-perform a frozen-input link-only A/B/A2: hash every input, link the seed, alter
-only those 36 bytes, link the candidate, restore, and link the seed again.
-
-The class stays in the tree, unused. Every future use still requires the full
-GAIN/LOST gate; `0x1001d890` remains open pending the controlled experiment.
+The earlier apparent losses were confounded. A frozen-input A/B/A2 proof hashed
+all 122 response-file objects plus every resolved library/DEF input, linked the
+seed, changed only the 36 non-relocated target-code bytes, linked the candidate,
+then restored and relinked the seed. The two seed reports were identical; the
+candidate changed exactly `0x1001d890` from nonexact to raw 1.0 and lost no row.
+The source-generated donor is excluded from the link. Class C is therefore
+landed, while any future use still requires its own full zero-loss gate.
 
 ## 7. Class D — `retail_exact_target_closure`
 
@@ -469,3 +452,30 @@ instructions/four changed bytes) and `0x100c3750 MxRegion::AddRect` (ten
 instructions/ten changed bytes). Fresh source regeneration plus the complete
 gate raised LEGO1 from 4864/4934 to 4866/4934 with exactly those two gains and
 zero losses; ISLE remains 172/172 and CONFIG 111/111.
+
+## 9. Class F — `retail_exact_source_target_closure`
+
+This class covers a donor-private, manifest-declared source permutation whose
+retail-exact target has a different length/relocation closure and whose donor
+object may emit unrelated extra COMDATs. It remains seed-authoritative:
+
+1. The target translation-unit text and complete target source window are
+   identical in seed and donor. Header permutations use closed typed generators
+   and an explicitly selected path-preserving private source-root projection;
+   flattened basename overrides are forbidden for this class.
+2. The same mangled target COMDAT, section/closure seats, section counts, seed
+   body, donor body, debug/xdata hashes, relocation/line counts and complete
+   retail semantic-relocation oracle are pinned.
+3. A donor target absent from the seed may become one appended undefined
+   external only when its exact name is declared in the manifest and the donor
+   symbol has value zero, function type and external storage. The output checks
+   its name/value/type/storage and the retail oracle proves its linked target.
+4. Composition reuses the same-slot resize machinery. The donor target body and
+   normalized closure are installed, but every non-target seed section/function
+   is retained byte-for-byte and the donor object is excluded from the link.
+
+The first customer is `0x100a4420 OrientableROI::OrientableROI`. Its donor-only
+header permutations make VC4.2 emit the retail 514-byte constructor and the
+otherwise-inlined `Vector3(float*)` call. All 23 relocation targets are retail
+authenticated. The confirmation gate raised LEGO1 from 4866/4934 to 4867/4934
+with exactly that gain and zero losses; ISLE remains 172/172 and CONFIG 111/111.

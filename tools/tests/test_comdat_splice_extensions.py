@@ -1158,5 +1158,190 @@ class B7CountDivergentPath(unittest.TestCase):
         self.assertIn("no seed symbol", str(caught.exception))
 
 
+class SourceTargetClosureTests(unittest.TestCase):
+    SOURCE = "LEGO1/realtime/orientableroi.cpp"
+
+    def live_recipe(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        unit = next(item for item in manifest["translation_units"]
+                    if item["source"] == self.SOURCE)
+        function = next(item for item in unit["functions"]
+                        if item["splice_class"]
+                        == "retail_exact_source_target_closure")
+        donor = next(item for item in unit["donors"]
+                     if item["id"] == function["donor"])
+        return copy.deepcopy(donor["recipe"])
+
+    def fixture(self, *, import_missing=False):
+        seed = make_divergent_coff(
+            declare_retail_callee=not import_missing
+        )
+        donor = make_divergent_coff(
+            donor=True, other_symbol="?DonorOnly@@YAXXZ")
+        left, right = byte_identity.CoffObject(seed), byte_identity.CoffObject(donor)
+        sp, dp = left.function_section(TARGET_SYMBOL), right.function_section(TARGET_SYMBOL)
+        sx, dx = (byte_identity._comdat_child(coff, primary, ".xdata$x")
+                  for coff, primary in ((left, sp), (right, dp)))
+        sd, dd = (byte_identity._comdat_child(coff, primary, ".debug$S")
+                  for coff, primary in ((left, sp), (right, dp)))
+        source = b"prefix\n// START_TARGET\nint x;\n// END_TARGET\nsuffix\n"
+        selected = source[source.index(b"// START_TARGET"):
+                          source.index(b"// END_TARGET")]
+        function = function_record(donor, **{
+            "splice_class": "retail_exact_source_target_closure",
+            "expected_seed_section_count": len(left.sections),
+            "expected_donor_section_count": len(right.sections),
+            "expected_section_number": sp["number"],
+            "expected_xdata_section_number": sx["number"],
+            "expected_debug_section_number": sd["number"],
+            "expected_seed_body_sha256": hashlib.sha256(
+                byte_identity.coff_body(left, sp)).hexdigest(),
+            "expected_seed_xdata_sha256": hashlib.sha256(
+                byte_identity.coff_body(left, sx)).hexdigest(),
+            "expected_donor_xdata_sha256": hashlib.sha256(
+                byte_identity.coff_body(right, dx)).hexdigest(),
+            "expected_seed_debug_sha256": hashlib.sha256(
+                byte_identity.coff_body(left, sd)).hexdigest(),
+            "expected_donor_debug_sha256": hashlib.sha256(
+                byte_identity.coff_body(right, dd)).hexdigest(),
+            "expected_relocation_count": sp["relocation_count"],
+            "expected_line_count": sp["line_count"],
+            "expected_imported_undefined_symbols": (
+                [RETAIL_CALLEE] if import_missing else []
+            ),
+            "target_source_range": {
+                "start_marker": "// START_TARGET",
+                "end_marker": "// END_TARGET",
+                "range_pin": {
+                    "baseline_sha256": hashlib.sha256(selected).hexdigest(),
+                    "baseline_size": len(selected),
+                    "baseline_line_count": selected.count(b"\n"),
+                    "baseline_significant_token_sha256":
+                        byte_identity.source_overlay_significant_sha256(selected),
+                },
+            },
+        })
+        return seed, donor, function, source
+
+    def test_closed_generators_and_live_recipe(self):
+        dead = byte_identity.validate_source_overlay_generator({
+            "k": "dead_updates", "id": "state", "initial": 0,
+            "increment": 1, "repeat": 2, "nl": False,
+        }, "dead")
+        ctor = byte_identity.validate_source_overlay_generator({
+            "k": "default_ctor_dead_updates", "class": "Box", "id": "seat",
+            "initial": 0, "increment": 1, "repeat": 1,
+        }, "ctor")
+        self.assertEqual(byte_identity.render_source_overlay_generator(dead),
+                         b"{ int state = 0; state = state + 1; state = state + 1; }")
+        self.assertEqual(byte_identity.render_source_overlay_generator(ctor),
+                         b"\tBox() { int seat = 0; seat = seat + 1; }\n")
+        recipe = self.live_recipe()
+        detail = byte_identity.require_source_target_closure_recipe_policy(
+            recipe, ROOT, self.SOURCE, "fixture")
+        self.assertEqual(detail["source_permutation_count"], 2)
+        rendered = byte_identity.render_donor_source_overlay(recipe, ROOT)
+        for item in recipe["renderings"]:
+            self.assertEqual(hashlib.sha256(rendered[item["path"]]).hexdigest(),
+                             item["rendered_sha256"])
+
+    def test_policy_rejects_arbitrary_or_overflowing_text(self):
+        for generator in (
+            {"k": "dead_updates", "id": "x", "initial": 0,
+             "increment": 1, "repeat": 1, "body": "return 7"},
+            {"k": "dead_updates", "id": "x", "initial": (1 << 31) - 1,
+             "increment": 1, "repeat": 1},
+        ):
+            with self.subTest(generator=generator), self.assertRaises(
+                    byte_identity.ByteIdentityError):
+                byte_identity.validate_source_overlay_generator(generator, "bad")
+
+    def test_target_only_composition_keeps_seed_functions_and_non_targets(self):
+        seed, donor, function, source = self.fixture()
+        composed, detail = byte_identity.compose_retail_exact_source_target_closure(
+            seed, donor, function, retail_body_for(donor), source, source)
+        before, after = byte_identity.CoffObject(seed), byte_identity.CoffObject(composed)
+        target = after.function_section(TARGET_SYMBOL)
+        donor_coff = byte_identity.CoffObject(donor)
+        self.assertEqual(byte_identity.coff_body(after, target),
+                         byte_identity.coff_body(
+                             donor_coff, donor_coff.function_section(TARGET_SYMBOL)))
+        self.assertEqual(byte_identity.function_multiset(after),
+                         byte_identity.function_multiset(before))
+        self.assertEqual(byte_identity.coff_body(after, after.sections[3]),
+                         byte_identity.coff_body(before, before.sections[3]))
+        self.assertEqual(detail["donor_only_function_count"], 1)
+        byte_identity.validate_donor_object_excluded(composed, [donor])
+
+    def test_missing_external_is_appended_as_one_strict_undefined_symbol(self):
+        seed, donor, function, source = self.fixture(import_missing=True)
+        before = byte_identity.CoffObject(seed)
+        composed, detail = (
+            byte_identity.compose_retail_exact_source_target_closure(
+                seed, donor, function, retail_body_for(donor), source, source
+            )
+        )
+        after = byte_identity.CoffObject(composed)
+        self.assertEqual(after.symbol_count, before.symbol_count + 1)
+        imported = after.symbols[before.symbol_count]
+        self.assertEqual(
+            (imported["name"], imported["section"], imported["value"],
+             imported["type"], imported["storage"]),
+            (RETAIL_CALLEE, 0, 0, 0x20, 2),
+        )
+        self.assertEqual(detail["imported_undefined_symbols"], [RETAIL_CALLEE])
+        self.assertEqual(
+            [before.symbols[index]["name"] for index in before.symbols],
+            [after.symbols[index]["name"] for index in before.symbols],
+        )
+
+    def test_missing_external_with_nonzero_value_is_refused(self):
+        seed, donor, function, source = self.fixture(import_missing=True)
+        parsed = byte_identity.CoffObject(donor)
+        symbol_index = next(
+            index for index, symbol in parsed.symbols.items()
+            if symbol["name"] == RETAIL_CALLEE
+        )
+        corrupted = bytearray(donor)
+        struct.pack_into(
+            "<I", corrupted, parsed.symbol_offset + symbol_index * 18 + 8, 1
+        )
+        oracle = next(
+            item for item in function["retail_relocations"]
+            if item["target"] == RETAIL_CALLEE
+        )
+        oracle["target_value"] = 1
+        with self.assertRaisesRegex(
+                byte_identity.ByteIdentityError, "absent from the seed"):
+            byte_identity.compose_retail_exact_source_target_closure(
+                seed, bytes(corrupted), function, retail_body_for(donor),
+                source, source,
+            )
+
+    def test_source_target_policy_requires_private_source_projection(self):
+        recipe = self.live_recipe()
+        recipe["compile_lane"].pop("include_projection")
+        with self.assertRaisesRegex(
+                byte_identity.ByteIdentityError, "source-root projection"):
+            byte_identity.require_source_target_closure_recipe_policy(
+                recipe, ROOT, self.SOURCE, "fixture"
+            )
+
+    def test_target_only_composition_rejects_closure_or_source_drift(self):
+        seed, donor, function, source = self.fixture()
+        bad = copy.deepcopy(function)
+        bad["expected_donor_debug_sha256"] = "0" * 64
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "debug"):
+            byte_identity.compose_retail_exact_source_target_closure(
+                seed, donor, bad, retail_body_for(donor), source, source)
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "target source range"):
+            byte_identity.compose_retail_exact_source_target_closure(
+                seed, donor, function, retail_body_for(donor), source,
+                source.replace(b"int x", b"int y"))
+
+
 if __name__ == "__main__":
     unittest.main()
