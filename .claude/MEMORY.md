@@ -586,6 +586,26 @@ after every bounded panel or full gate.
   `872d871d8e9fc1e4e3a951971e08338bf272ab4a46ce13cb7539bbc64573c55a`.
   Repeating this named header on the same source is closed.
 
+- Exact-name upstream entropy replay is negative and sealed for
+  `0x10083890` (character-map `_Insert`). Seed `834471431` was independently
+  reconstructed as the authentic 841-byte LF declaration header
+  `ff85bb75c3d6ba274e27445d9b1431df6b3c394664fb6b916bb9972dcea5c354`
+  and replayed at the historical pre-SmartHeap `/FI` seat on current effective
+  source `3ef8f161...`. A fresh paired control reproduced the canonical
+  652-byte target/body `d33e9bee...`, its nine semantic relocations, 40 lines,
+  ordinary debugF/debugS closure and the 132-function/152-COMDAT/36-linker
+  identity universes. The control had five unrelated runtime-body changes
+  versus the retained canonical object, so the sole seed cell was evaluated
+  only as complete-target-donor evidence against that fresh control. It stayed
+  652 bytes/body `5d71138b...` rather than retail's 653-byte body: one comparison
+  byte moved toward retail, five new comparison mismatches appeared, and the
+  terminal four-byte tie remained. Twenty-eight non-target bodies changed;
+  no natural exact donor exists. No third cell, link or reccmp ran. Evidence is
+  `/private/tmp/codex-character-insert-seed834471431.43q_lhru/paired-result.json`,
+  SHA-256
+  `dfafbceacadb9d311d73dbeb0fac5df8afa2022937b17dfadd742c57cb47ac0b`.
+  Repeating this exact seed/current-source cross is closed.
+
 - Accepted canonical gate: LEGO1 4880/4934, ISLE 172/172, CONFIG 111/111.
   The latest gain is `0x10040360 Act3Cop::FUN_10040360`. The checked-in
   source now expresses the fallback as a second `grec == NULL` guard and
