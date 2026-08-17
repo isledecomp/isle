@@ -1988,3 +1988,79 @@ same-symbol current-source object with the exact 17-relocation reflow,
 original C2/PCH/environment evidence that naturally selects the retail
 register tie. No compiler, Wine, link, reccmp, source edit, or shared-state
 mutation was used for this audit.
+
+## `0x100a3b40 TglImpl::MeshBuilderImpl::Clone` decisive static seal (2026-08-17)
+
+There is no novel authentic, logic-neutral source mechanism capable of this
+residual. The checked-in `tglimpl.h` is SHA-256
+`1fc47f9550a9f073ab328a122a8dac131b9ac4e5e5c57c93b3b6db648bcf06d8`;
+the exact inline function text is
+`112f3054bd8b1c2e3adab258c278e42229b03a061dde2a84bd720789b5b7143e`
+and normalizes, ignoring only `inline`/whitespace, to
+`f6030b1f8aff06bf433373ca5eb6760c1e5cf2f9520dec0a3cfc8d03d6a5516c`.
+The canonical object is 120,873 bytes/SHA-256
+`9f29eea2d9fcc785d37c597f8683d46b414a51c5544476390667f7f63f61a4d5`.
+Its section 319 is exactly 197 bytes/body
+`7b3577bfd12bed441622bf9d7af2f5b2ce12788679d8c0f45814c73a5093a63f`,
+69 instructions, 14 relocations, seven line records, and selection 2 with the
+exact `.debug$S + .xdata$x` closure. The 56-byte/four-relocation xdata body is
+`6c4b604ea30a58a61eec2a1fbc9eedff8922616715b7b87a913e84408ec96885`.
+
+Retail is also exactly 197 bytes and 69 instructions: raw body
+`f2fc5fccbfc3b7cbce5606cf3a2294c53a6c106eb9b1b4d8fbe41cd8ee5bfb54`,
+relocation-masked body
+`b3fbc98aca8ed671fdbea65bb40d09e1d4cd36319b828e5a8421431c24db264e`.
+SHAPE and STRUCT are both 100. Every one of the 14 masked differing bytes at
+`+46,+53,+61,+63,+73,+82,+85,+109,+121,+142,+148,+150,+154,+156` is the
+encoding consequence of one global ESI<->EDI allocation swap. Instruction
+sizes/order, branches, calls, frame, EH, and semantic relocation universe are
+otherwise identical. This is a compiler register-colour tie, not a missing
+statement, lifetime, or declaration.
+
+The exhaustive retained-object scan used ignored/hidden builds as well as
+normal paths. Of 9,607 symbol-bearing object paths, 9,604 are definitions of
+the one 197-byte body above with 14 relocations, seven lines, and the same
+closure; one is an undefined reference. The remaining two BETA reconstruction
+definitions share one structurally different 236-byte/71-instruction body
+`e382f8cc89521458b9e7d95563637e0103fc2aeaae0b768a8d3aa89ab5cca473`,
+ten relocations and a `0x1c` frame: one is an ordinary `.text` definition at
+offset 409 and one an inline COMDAT. Ten retained libraries add nine duplicate
+197-byte members and one duplicate 236-byte member. Thus neither inline versus
+out-of-line placement nor archive/container seat changes either body, and no
+retained object emits retail colouring.
+
+At audited pre-seal HEAD `35299f95508f92bc149d9ab60bec4013340bd082`, the
+reachable Git corpus comprised 2,744 commits, 15,459 trees and 15,691 blobs,
+including 14,029 source-extension blobs. Exactly 12 source blobs define this
+function: five inline current-IID states (raw hash above), six out-of-line
+current-IID states (raw
+`b4cca414bf361bf1be9d361146137c5c79515adf545faf25f279f8d83890f0c8`)
+that normalize to the same function, and one obsolete
+`IID_IDirect3DRMMeshBuilder` state (normalized
+`b87e11c3e55da08a12ee3042e4c296d9d79d27a14ce4a1c38b34fb1a1cb92599`).
+The 193 unreachable commits, 386 trees and 1,155 blobs add only one current
+inline definition blob and no new source state. A separate retained-source
+census found 77 paths: 75 current-IID and two obsolete-IID copies, with no
+register-qualified or alternate-lifetime spelling.
+
+The historical out-of-line seat is not an authenticity route. Commit
+`dd90c61636fb893dab5a8d581451db41198b49ca` reconstructs the 1997 one-TU
+`tglRL40.cpp` layout from 223 BETA10 assert sites and places all Impl method
+bodies inline in `tglImpl.h`. Original BETA10 DLL
+`d91435a40fa31f405fba33b03bd3bd40dcd4ca36ccf8ef6162c6c5ca0d7190e7`
+also has only four entries in the `MeshBuilderImpl` vtable at `0x101c31e0`;
+the next word is the `DeviceImpl` vtable at `0x101c31f0`. The local BETA build
+object instead emits a five-entry reconstruction vtable and the wrong 236-byte
+`/Od` body, so it cannot authenticate a retail Clone body or allocator state.
+Prior closure already floors this row at nd=14 over 3,821 cells across
+`extern_run_pair`, `declaration_shape`, and `pad_shape`.
+
+**Seal:** do not repeat source spelling, inline/out-of-line, declaration,
+register-keyword, include, extern, shape, pad, or generic carrier panels.
+Reopen only for authenticated final-release source/PDB/preprocessed-header
+evidence of a genuinely different Clone lifetime/topology, or authenticated
+original vendor C2/PCH/TU state that naturally selects the retail ESI/EDI tie
+while preserving the exact 197-byte/69-instruction body, 14 semantic
+relocations, seven line records, and `.debug$S + .xdata$x`/56-byte-xdata
+closure. No compiler, Wine, link, reccmp, source edit, or shared-state mutation
+was used for this audit.
