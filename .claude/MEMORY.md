@@ -75,8 +75,56 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-17)
 
-- Accepted canonical gate: LEGO1 4877/4934, ISLE 172/172, CONFIG 111/111.
+- Accepted canonical gate: LEGO1 4878/4934, ISLE 172/172, CONFIG 111/111.
   The latest gain is
+  `0x100b26f0 MxVideoPresenter::AlphaMask::IsHit`. A fresh, declaration-only
+  `extern_run_pair(100,8,width2)` carrier supplies the exact same 101-byte,
+  relocation-free COMDAT through a closed ordinary-FPO self-permutation role.
+  Raw, per-TU and manifest-wide checks require its sole primary use to be this
+  composer and forbid ordinary, resize, source, instruction, variant,
+  secondary or legacy reuse. The exact carrier descriptor is embedded in the
+  same-function source identity, equals the donor recipe byte-for-byte and
+  derives the same 108 generated identifiers for raw and normalized dispatch;
+  every identifier must remain absent from effective source.
+
+  Seed and donor bodies are
+  `ec6893ea59a4fc048fb1970eed084894946845988b6aa42a61e6abbffabf80fb`
+  and
+  `4f5244c45248b468a140fad7af68adc877f09f6136f47eeca4640d72bcefc7d4`.
+  A line-certified two-instruction sequence changes `[13,17)` from
+  `3bc6734c` to `3bf0764c`. A typed bijection then commutes `xor edi,edi` and
+  `mov edx,[esp+0x14]` across `[17,23)`, with a closed register/flag/memory
+  effect proof. Exactly offsets 14, 15 and 17--22 change, producing literal
+  retail body SHA-256
+  `396edefeaa6433477d701b4f0ad053572ddffb7739f54dc4f8ffeb5444a06864`.
+  The seed's FPO/CodeView closure, line table, empty relocation table,
+  function/COMDAT/section/linker universe and every non-target byte remain
+  authoritative. A same-body forward-declaration alternative is rejected by
+  its changed local `.xdata$x` relocation, and the private donor is excluded.
+
+  The first production dispatch stopped fail closed because it passed the raw
+  function record to a composer initially proven with the normalized record.
+  The product-neutral descriptor binding now derives identical carrier facts
+  in both paths; mismatch, identifier leakage and role-reuse regressions cover
+  the fix without changing any body or metadata pin.
+
+  Discovery produced this sole gain with no loss; report SHA-256 is
+  `6c50f613db341abb83d2df777e752c55d9d87e9c35fff70923d1ffa14e4c9fb8`
+  and accepted-row identity is
+  `4e99e0bdb2dda1aeb7003dc14d0db2b4c0517071583dfc13462a2432de263bcc`.
+  Marker-removed forced-fresh confirmation held the same 4878 accepted set
+  with zero delta and left ISLE and CONFIG complete. Discovery marker SHA-256
+  is `6ad5c79528adf4d05166ff9660fa480ff87753a4048ef5d357210cde52cce39a`;
+  confirmation marker SHA-256 is
+  `6741e751373c2febdcbf064630a83481a955862a670e4d6708dd9d6c004c6e47`,
+  LEGO1 report SHA-256 is
+  `a1bd8943d36f2b9eb13f6aaf7328cb995e462ca9768d78989846ca206315a458`,
+  verdict SHA-256 is
+  `18d02e4256cff281e94765d1eb04e55c4e5a8e39daa7ebaf5ea5d610c1a07b9d`,
+  and manifest SHA-256 is
+  `6b64d791b57df930b95ec64c5e412d06f2a295ce2ccda7d62613a30289c65185`.
+
+  The preceding gain is
   `0x1004bd10 MxTransitionManager::DissolveTransition`. A closed
   `fixed_array_shuffle_countdown` source generator replaces one exact indexed
   640-element shuffle with its equivalent typed pointer/countdown form. The

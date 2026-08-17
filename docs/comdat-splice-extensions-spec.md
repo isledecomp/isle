@@ -1001,3 +1001,87 @@ verdict SHA-256 is
 `edac7b87b1b8a53c9c9aaf9b5a12dc2bb02d05c5e510e58a1985c263579524de`,
 and final manifest SHA-256 is
 `a2d7eef5bbae0976eca2ea7c7fb973094c0d3e2fdbf9f08e4cb9cc52ed8a92f9`.
+
+## 17. Class E ordinary-FPO self-permutation branch
+
+An ordinary declaration carrier may supply a complete-instruction sequence and
+a typed, bijective permutation of adjacent instructions only through a third,
+mutually exclusive FPO policy:
+
+1. The function identity binds the exact checked and effective translation
+   unit, owning declaration, brace-balanced source window and typed carrier
+   descriptor. The descriptor must equal the donor recipe byte-for-byte. Raw
+   preflight and normalized validation derive the same closed generated-
+   identifier set from it, reject any identifier leakage into effective source,
+   and require the exact rendered donor. No retained object or projected source
+   is a production input.
+2. Raw, per-unit and manifest-wide role closure require exactly one primary use
+   of the donor and exactly one binding to the self-permutation composer. The
+   donor may not appear as an ordinary mosaic, resize, source-refactor,
+   instruction, variant, secondary or legacy input. It is freshly compiled in
+   a private lane, then excluded from every archive, link and final-object input.
+3. The same-offset donor sequence and both sides of the permutation are decoded
+   from the nearest exact-function COFF line row. Source and target intervals
+   must be ordered, gapless, non-overlapping equal-width partitions; every
+   interval is consumed exactly once, and the manifest instruction vectors must
+   match the decoded boundaries. The permutation is not arbitrary: its exact
+   opcode/effect witness must prove that the reordered instructions have
+   independent register, flag and memory effects. The live decoder adds only
+   short branch `73` for this route.
+4. This class requires the ordinary two-child `.debug$F`/`.debug$S` closure and
+   rejects the source-FPO and EH classes. Seed and donor pin their target bodies,
+   metadata, line tables, parsed FPO and CodeView records, function and primary-
+   COMDAT universes, ordered section shape and complete linker payload. Exact
+   linker closure is required even from a carrier with the same target body.
+5. Composition changes only the declared target instruction bytes. The output
+   retains the seed's complete metadata, lines, relocations, debug children,
+   symbol and linker payloads and every non-target byte. The literal retail body
+   and ordered relocation oracle remain the final authority.
+
+The first customer is `0x100b26f0 MxVideoPresenter::AlphaMask::IsHit`. The
+fresh `extern_run_pair(100,8,width2)` donor and canonical seed both place the
+101-byte, relocation-free target at section 16 of 61 with six line rows and the
+same 19-function, 20-primary-COMDAT universe. Their body SHA-256 values are
+`ec6893ea59a4fc048fb1970eed084894946845988b6aa42a61e6abbffabf80fb`
+and
+`4f5244c45248b468a140fad7af68adc877f09f6136f47eeca4640d72bcefc7d4`.
+The donor sequence at `[13,17)` changes `3bc6734c` to `3bf0764c`. A typed
+bijection then reorders the `[17,23)` donor instructions from
+`33ff 8b542414` to `8b542414 33ff`: zeroing EDI and loading EDX from the
+stack commute because neither instruction consumes the other's register,
+flag or memory effects. Exactly body offsets 14, 15 and 17--22 change, yielding
+the literal retail body SHA-256
+`396edefeaa6433477d701b4f0ad053572ddffb7739f54dc4f8ffeb5444a06864`.
+The seed FPO/CodeView children, empty relocation table, section and linker
+payloads and all non-target bytes remain authoritative. A discarded forward-
+declaration carrier with the same donor body is rejected because one local
+`.xdata$x` relocation value changes, demonstrating that target-body equality
+cannot bypass object-wide closure.
+
+The first production dispatch stopped fail closed because the composer received
+the raw manifest function while the static proof had exercised its normalized
+form. The generic fix places the exact typed carrier descriptor inside the
+same-function source identity, binds it to the donor recipe and derives the
+same 108 generated identifiers in raw and normalized paths. Descriptor drift,
+identifier leakage, unbound/repeated roles and class crossing all reject before
+composition; no object, body or metadata pin was relaxed.
+
+Discovery raised LEGO1 from 4877/4934 to 4878/4934 with this sole gain and no
+loss. Its report SHA-256 is
+`6c50f613db341abb83d2df777e752c55d9d87e9c35fff70923d1ffa14e4c9fb8`,
+accepted-row identity is
+`4e99e0bdb2dda1aeb7003dc14d0db2b4c0517071583dfc13462a2432de263bcc`,
+discovery verdict SHA-256 is
+`edac7b87b1b8a53c9c9aaf9b5a12dc2bb02d05c5e510e58a1985c263579524de`,
+and discovery marker SHA-256 is
+`6ad5c79528adf4d05166ff9660fa480ff87753a4048ef5d357210cde52cce39a`.
+A marker-removed forced-fresh confirmation regenerated the donor and
+composition, held the identical 4878 accepted set with zero delta, and left
+ISLE at 172/172 and CONFIG at 111/111. Its LEGO1 report SHA-256 is
+`a1bd8943d36f2b9eb13f6aaf7328cb995e462ca9768d78989846ca206315a458`,
+verdict SHA-256 is
+`18d02e4256cff281e94765d1eb04e55c4e5a8e39daa7ebaf5ea5d610c1a07b9d`,
+regenerated marker SHA-256 is
+`6741e751373c2febdcbf064630a83481a955862a670e4d6708dd9d6c004c6e47`,
+and final manifest SHA-256 is
+`6b64d791b57df930b95ec64c5e412d06f2a295ce2ccda7d62613a30289c65185`.

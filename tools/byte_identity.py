@@ -2076,6 +2076,22 @@ def decorated_member_owner_identifier(mangled: str, context: str) -> str:
     return match.group(1)
 
 
+def decorated_immediate_member_owner_identifier(
+    mangled: str, context: str,
+) -> str:
+    """Extract the immediate owner component of a possibly nested member."""
+    require(isinstance(mangled, str) and mangled.isascii(),
+            f"{context}: decorated member identity is invalid")
+    match = re.match(
+        r"^\?[A-Za-z_][A-Za-z0-9_]*@"
+        r"([A-Za-z_][A-Za-z0-9_]*)@",
+        mangled,
+    )
+    require(match is not None and "@@" in mangled[match.end():],
+            f"{context}: decorated immediate owner is outside the closed form")
+    return match.group(1)
+
+
 def require_direct_array_header_include(
     source_root: Path,
     unit_source: str,
@@ -11757,6 +11773,8 @@ def validate_manifest(
     all_bound_same_tu_instruction_donor_ids = []
     all_ordinary_fpo_mosaic_recipe_ids = set()
     all_bound_ordinary_fpo_mosaic_donor_ids = []
+    all_ordinary_fpo_self_permutation_recipe_ids = set()
+    all_bound_ordinary_fpo_self_permutation_donor_ids = []
     for unit_index, unit in enumerate(translation_units):
         context = f"translation_units[{unit_index}]"
         require(isinstance(unit, dict), f"{context} must be an object")
@@ -11885,6 +11903,7 @@ def validate_manifest(
         refactor_recipe_ids = set()
         same_tu_carrier_recipe_ids = set()
         ordinary_fpo_mosaic_recipe_ids = set()
+        ordinary_fpo_self_permutation_recipe_ids = set()
         for donor_index, donor in enumerate(donors):
             donor_context = f"{context}.donors[{donor_index}]"
             require(isinstance(donor, dict), f"{donor_context} must be an object")
@@ -11924,6 +11943,10 @@ def validate_manifest(
                     == ORDINARY_FPO_MOSAIC_ROLE_POLICY):
                 ordinary_fpo_mosaic_recipe_ids.add(recipe_id)
                 all_ordinary_fpo_mosaic_recipe_ids.add(recipe_id)
+            if (recipe.get("role_policy")
+                    == ORDINARY_FPO_SELF_PERMUTATION_ROLE_POLICY):
+                ordinary_fpo_self_permutation_recipe_ids.add(recipe_id)
+                all_ordinary_fpo_self_permutation_recipe_ids.add(recipe_id)
             if mode == "compose_equal_body_comdat":
                 require(
                     kind in ("forward_declaration_run", "declaration_shape",
@@ -12124,15 +12147,17 @@ def validate_manifest(
                             f"{donor_context} forward-run parameters: {error}"
                         ) from error
                 elif kind == "extern_run_pair":
-                    exact_keys(
+                    exact_audit_keys(
                         recipe,
                         {
                             "kind", "header_prefix", "header_count",
                             "seat_prefix", "seat_count", "width",
                             "generated_header_sha256", "compile_lane",
                             "emission_policy", "authenticity_rationale",
+                            "role_policy",
                         },
                         f"{donor_context}.recipe",
+                        optional={"role_policy"},
                     )
                     header_count = recipe.get("header_count")
                     seat_count = recipe.get("seat_count")
@@ -12149,6 +12174,12 @@ def validate_manifest(
                             and header_count + seat_count >= 1,
                             f"{donor_context} extern-run parameters "
                             "are invalid")
+                    if "role_policy" in recipe:
+                        require(
+                            recipe["role_policy"]
+                            == ORDINARY_FPO_SELF_PERMUTATION_ROLE_POLICY,
+                            f"{donor_context}.role_policy differs",
+                        )
                     try:
                         generated = b"".join(
                             entropy_generator.generate_extern_run(
@@ -12546,6 +12577,7 @@ def validate_manifest(
         bound_same_tu_target_donor_ids = []
         bound_same_tu_instruction_donor_ids = []
         bound_ordinary_fpo_mosaic_donor_ids = []
+        bound_ordinary_fpo_self_permutation_donor_ids = []
         primary_donor_ids = []
         clean_cross_tu_instruction_donor_ids = []
         non_primary_donor_ids = []
@@ -12990,6 +13022,11 @@ def validate_manifest(
                             "expected_seed_metadata_sha256",
                             "expected_donor_metadata_sha256",
                         }
+                    if "instruction_self_permutation" in function:
+                        mosaic_keys |= {
+                            "instruction_self_permutation",
+                            "same_function_source_identity",
+                        }
                     if "donor_variants" in function:
                         mosaic_keys |= {
                             "donor_variants",
@@ -13002,13 +13039,19 @@ def validate_manifest(
                             f"{function_context} donor recipe",
                         )
                     if "ordinary_fpo_identity" in function:
+                        permutation_only = (
+                            "instruction_self_permutation" in function)
                         require(
                             "target_source_refactor" not in function
                             and "donor_variants" not in function
                             and local_recipes[donor_id].get("role_policy")
-                            == ORDINARY_FPO_MOSAIC_ROLE_POLICY,
+                            == (
+                                ORDINARY_FPO_SELF_PERMUTATION_ROLE_POLICY
+                                if permutation_only else
+                                ORDINARY_FPO_MOSAIC_ROLE_POLICY
+                            ),
                             f"{function_context}: ordinary FPO mosaic must "
-                            "use one FPO-only declaration carrier",
+                            "use its exact FPO-only declaration carrier",
                         )
                         for name in ("expected_seed_metadata_sha256",
                                      "expected_donor_metadata_sha256"):
@@ -13021,6 +13064,16 @@ def validate_manifest(
                             and "donor_variants" not in function,
                             f"{function_context}: source FPO mosaic must use "
                             "one source-permutation donor only",
+                        )
+                    if "instruction_self_permutation" in function:
+                        require(
+                            "ordinary_fpo_identity" in function
+                            and "source_fpo_identity" not in function
+                            and "target_source_refactor" not in function
+                            and "donor_variants" not in function,
+                            f"{function_context}: instruction "
+                            "self-permutation must remain in the isolated "
+                            "ordinary FPO class",
                         )
                     for name in (
                         "expected_section_number", "expected_section_count",
@@ -13110,7 +13163,11 @@ def validate_manifest(
                                 function["expected_body_length"],
                             )
                         )
-                        bound_ordinary_fpo_mosaic_donor_ids.append(donor_id)
+                        if "instruction_self_permutation" in function:
+                            bound_ordinary_fpo_self_permutation_donor_ids.append(
+                                donor_id)
+                        else:
+                            bound_ordinary_fpo_mosaic_donor_ids.append(donor_id)
                     if "source_fpo_identity" in function:
                         normalized_function["source_fpo_identity"] = (
                             validate_source_fpo_mosaic_identity(
@@ -13120,6 +13177,43 @@ def validate_manifest(
                                 function["expected_body_length"],
                             )
                         )
+                    if "instruction_self_permutation" in function:
+                        permutation = validate_instruction_self_permutation(
+                            function["instruction_self_permutation"],
+                            f"{function_context}.instruction_self_permutation",
+                            function["expected_body_length"],
+                        )
+                        source_identity = (
+                            validate_same_function_carrier_source_identity(
+                                function.get("same_function_source_identity"),
+                                f"{function_context}"
+                                ".same_function_source_identity",
+                            )
+                        )
+                        require(
+                            source_identity["source_owner_mangled"]
+                            == function["mangled"],
+                            f"{function_context}: source identity names a "
+                            "different function",
+                        )
+                        try:
+                            clean_source_bytes = source_path.read_bytes()
+                        except OSError as error:
+                            raise ByteIdentityError(
+                                f"{function_context}: cannot read clean "
+                                f"translation-unit source: {error}"
+                            ) from error
+                        normalized_function[
+                            "same_function_source_identity"
+                        ] = require_same_function_carrier_source_identity(
+                            source_root, source_relative, clean_source_bytes,
+                            effective_source_bytes, local_recipes[donor_id],
+                            source_identity, set(source_overlay_by_path),
+                            f"{function_context} declaration carrier source",
+                        )
+                        normalized_function[
+                            "instruction_self_permutation"
+                        ] = permutation
                     if variant_ids:
                         normalized_function["donor_variants"] = (
                             normalized_variants)
@@ -13162,6 +13256,21 @@ def validate_manifest(
                             function["expected_body_length"],
                         )
                     )
+                    if "instruction_self_permutation" in normalized_function:
+                        permutation = normalized_function[
+                            "instruction_self_permutation"]
+                        require(
+                            all(
+                                item["end"]
+                                <= permutation["target_start"]
+                                or item["start"]
+                                >= permutation["target_end"]
+                                for item in normalized_function[
+                                    "instruction_ranges"]
+                            ),
+                            f"{function_context}: same-offset ranges overlap "
+                            "the self-permutation window",
+                        )
                     if ("ordinary_fpo_identity" in function
                             or "source_fpo_identity" in function):
                         require(
@@ -13583,6 +13692,13 @@ def validate_manifest(
             bound_ordinary_fpo_mosaic_donor_ids,
             context,
         )
+        require_ordinary_fpo_self_permutation_donor_bindings(
+            ordinary_fpo_self_permutation_recipe_ids,
+            primary_donor_ids,
+            non_primary_donor_ids,
+            bound_ordinary_fpo_self_permutation_donor_ids,
+            context,
+        )
         all_primary_donor_ids.extend(primary_donor_ids)
         all_bound_refactor_recipe_ids.extend(bound_refactor_recipe_ids)
         all_bound_instruction_refactor_recipe_ids.extend(
@@ -13594,6 +13710,8 @@ def validate_manifest(
             bound_same_tu_instruction_donor_ids)
         all_bound_ordinary_fpo_mosaic_donor_ids.extend(
             bound_ordinary_fpo_mosaic_donor_ids)
+        all_bound_ordinary_fpo_self_permutation_donor_ids.extend(
+            bound_ordinary_fpo_self_permutation_donor_ids)
 
         completion = unit.get("completion")
         require(isinstance(completion, dict), f"{context}.completion must be an object")
@@ -13659,6 +13777,13 @@ def validate_manifest(
         all_primary_donor_ids,
         all_non_primary_donor_ids,
         all_bound_ordinary_fpo_mosaic_donor_ids,
+        "manifest",
+    )
+    require_ordinary_fpo_self_permutation_donor_bindings(
+        all_ordinary_fpo_self_permutation_recipe_ids,
+        all_primary_donor_ids,
+        all_non_primary_donor_ids,
+        all_bound_ordinary_fpo_self_permutation_donor_ids,
         "manifest",
     )
 
@@ -15326,6 +15451,35 @@ def comdat_primary_identity_multiset(coff: CoffObject) -> Counter:
     return Counter(identities)
 
 
+def canonical_identity_receipt_sha256(value: object) -> str:
+    """Hash a structural identity using the manifest's canonical JSON form."""
+    def json_value(item):
+        if isinstance(item, (tuple, list)):
+            return [json_value(child) for child in item]
+        if isinstance(item, dict):
+            return {key: json_value(child) for key, child in item.items()}
+        return item
+
+    return sha256_bytes(canonical_json_bytes(json_value(value)))
+
+
+def canonical_counter_receipt_sha256(value: Counter) -> str:
+    """Hash every repeated Counter identity in deterministic repr order."""
+    require(isinstance(value, Counter),
+            "canonical identity receipt requires a Counter")
+    return canonical_identity_receipt_sha256(
+        sorted(value.elements(), key=repr)
+    )
+
+
+def section_shape_receipt_sha256(coff: CoffObject) -> str:
+    """Hash the ordered section name/characteristics sequence."""
+    return canonical_identity_receipt_sha256([
+        (section["name"], section["characteristics"])
+        for section in coff.sections
+    ])
+
+
 def require_target_closure_extraction_topology(
     seed: CoffObject, donor: CoffObject, function: dict, context: str,
 ) -> dict:
@@ -15557,6 +15711,21 @@ ORDINARY_FPO_MOSAIC_ROLE_POLICY = (
 )
 
 
+ORDINARY_FPO_SELF_PERMUTATION_ROLE_POLICY = (
+    "retail_exact_instruction_permutation_fpo_only_v1"
+)
+
+
+ORDINARY_FPO_SELF_PERMUTATION_KIND = (
+    "commuting_xor_zero_stack_load_v1"
+)
+
+
+SAME_FUNCTION_CARRIER_SOURCE_IDENTITY_KIND = (
+    "same_function_declaration_carrier_source_v1"
+)
+
+
 ORDINARY_FPO_MOSAIC_IDENTITY_KIND = (
     "seed_authoritative_fpo_codeview_v1"
 )
@@ -15700,6 +15869,36 @@ def require_ordinary_fpo_mosaic_donor_bindings(
         all(non_primary_counts[recipe_id] == 0 for recipe_id in protected_ids),
         f"{context}: ordinary FPO mosaic donors may not have an instruction, "
         "variant, or other non-primary use",
+    )
+
+
+def require_ordinary_fpo_self_permutation_donor_bindings(
+    recipe_ids: set[str],
+    primary_donor_ids: list[str],
+    non_primary_donor_ids: list[str],
+    bound_donor_ids: list[str],
+    context: str,
+) -> None:
+    """Confine each self-permutation carrier to one exact FPO composer."""
+    protected_ids = set(recipe_ids)
+    primary_counts = Counter(primary_donor_ids)
+    non_primary_counts = Counter(non_primary_donor_ids)
+    bound_counts = Counter(bound_donor_ids)
+    require(
+        set(bound_counts) == protected_ids
+        and all(count == 1 for count in bound_counts.values()),
+        f"{context}: every FPO self-permutation donor must be bound exactly "
+        "once to its authenticated composer",
+    )
+    require(
+        all(primary_counts[recipe_id] == 1 for recipe_id in protected_ids),
+        f"{context}: FPO self-permutation donors may not have an ordinary "
+        "or repeated primary use",
+    )
+    require(
+        all(non_primary_counts[recipe_id] == 0 for recipe_id in protected_ids),
+        f"{context}: FPO self-permutation donors may not have an instruction, "
+        "variant, source, or other non-primary use",
     )
 
 
@@ -15875,6 +16074,34 @@ def raw_manifest_ordinary_fpo_mosaic_recipe_ids(manifest: dict) -> set[str]:
     return result
 
 
+def raw_manifest_ordinary_fpo_self_permutation_recipe_ids(
+    manifest: dict,
+) -> set[str]:
+    """Inventory permutation-only FPO carriers before host-dependent gates."""
+    result = set()
+    units = manifest.get("translation_units")
+    if not isinstance(units, list):
+        return result
+    for unit in units:
+        if not isinstance(unit, dict):
+            continue
+        donors = unit.get("donors")
+        if not isinstance(donors, list):
+            continue
+        for donor in donors:
+            if not isinstance(donor, dict):
+                continue
+            recipe = donor.get("recipe")
+            if (isinstance(recipe, dict)
+                    and recipe.get("role_policy")
+                    == ORDINARY_FPO_SELF_PERMUTATION_ROLE_POLICY):
+                recipe_id = donor.get("id")
+                require(isinstance(recipe_id, str),
+                        "FPO self-permutation donor id is invalid")
+                result.add(recipe_id)
+    return result
+
+
 def require_manifest_source_refactor_role_preflight(
     manifest: dict, context: str, root=None,
 ) -> None:
@@ -15886,6 +16113,7 @@ def require_manifest_source_refactor_role_preflight(
     bound_same_tu_target_donor_ids = []
     bound_same_tu_instruction_donor_ids = []
     bound_ordinary_fpo_mosaic_donor_ids = []
+    bound_ordinary_fpo_self_permutation_donor_ids = []
     overlay = manifest.get("source_overlay")
     overlay_outputs = (
         overlay.get("outputs") if isinstance(overlay, dict) else None
@@ -15903,6 +16131,9 @@ def require_manifest_source_refactor_role_preflight(
         manifest)
     ordinary_fpo_mosaic_recipe_ids = (
         raw_manifest_ordinary_fpo_mosaic_recipe_ids(manifest)
+    )
+    ordinary_fpo_self_permutation_recipe_ids = (
+        raw_manifest_ordinary_fpo_self_permutation_recipe_ids(manifest)
     )
     units = manifest.get("translation_units")
     if not isinstance(units, list):
@@ -15997,8 +16228,22 @@ def require_manifest_source_refactor_role_preflight(
                 if (function.get("splice_class")
                         == SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
                     bound_same_tu_target_donor_ids.append(donor_id)
-                if "ordinary_fpo_identity" in function:
+                if ("ordinary_fpo_identity" in function
+                        and "instruction_self_permutation" not in function):
                     bound_ordinary_fpo_mosaic_donor_ids.append(donor_id)
+                if "instruction_self_permutation" in function:
+                    require(
+                        function.get("splice_class")
+                        == "retail_exact_instruction_mosaic"
+                        and isinstance(
+                            function.get("ordinary_fpo_identity"), dict)
+                        and "source_fpo_identity" not in function
+                        and "target_source_refactor" not in function,
+                        f"{context}: instruction self-permutation is "
+                        "restricted to its ordinary FPO mosaic",
+                    )
+                    bound_ordinary_fpo_self_permutation_donor_ids.append(
+                        donor_id)
             instruction_donor = function.get("instruction_donor")
             if isinstance(instruction_donor, str):
                 non_primary_donor_ids.append(instruction_donor)
@@ -16037,6 +16282,13 @@ def require_manifest_source_refactor_role_preflight(
         primary_donor_ids,
         non_primary_donor_ids,
         bound_ordinary_fpo_mosaic_donor_ids,
+        context,
+    )
+    require_ordinary_fpo_self_permutation_donor_bindings(
+        ordinary_fpo_self_permutation_recipe_ids,
+        primary_donor_ids,
+        non_primary_donor_ids,
+        bound_ordinary_fpo_self_permutation_donor_ids,
         context,
     )
 
@@ -16089,7 +16341,7 @@ def supported_ia32_instruction_length(
         require(prefix_size == 0,
                 f"{context}: unsupported prefixed register operation")
         return 1
-    if opcode in {0x74, 0x75, 0x76, 0x7C, 0x7D, 0x7F, 0xEB}:
+    if opcode in {0x73, 0x74, 0x75, 0x76, 0x7C, 0x7D, 0x7F, 0xEB}:
         require(prefix_size == 0 and len(encoded) >= 2,
                 f"{context}: short branch is truncated")
         return 2
@@ -16515,6 +16767,477 @@ def require_instruction_mosaic_donor_recipe(
     require(recipe.get("emission_policy")
             == "non_emitting_declarations_only",
             f"{context} is not non-emitting declarations only")
+
+
+def validate_same_function_carrier_source_identity(
+    value: object, context: str,
+) -> dict:
+    """Validate exact source/header pins for an ordinary declaration carrier."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "selector", "start_marker", "source_owner_mangled",
+        "clean_source_sha256", "effective_source_sha256",
+        "rendered_source_sha256", "rendered_source_size",
+        "function_range_sha256", "function_range_size",
+        "function_range_line_count", "owner_header", "carrier",
+    }, context)
+    require(
+        value.get("kind") == SAME_FUNCTION_CARRIER_SOURCE_IDENTITY_KIND
+        and value.get("selector")
+        == "brace_balanced_function_with_trailing_blank_line_v1",
+        f"{context} kind or selector differs",
+    )
+    marker = value.get("start_marker")
+    owner = value.get("source_owner_mangled")
+    require(
+        isinstance(marker, str) and marker.isascii()
+        and 8 <= len(marker) <= 256
+        and not any(character in marker for character in "\0\r\n")
+        and isinstance(owner, str) and owner.startswith("?")
+        and len(owner) >= 8,
+        f"{context} source owner identity differs",
+    )
+    normalized = {
+        "kind": value["kind"], "selector": value["selector"],
+        "start_marker": marker, "source_owner_mangled": owner,
+    }
+    for name in (
+        "clean_source_sha256", "effective_source_sha256",
+        "rendered_source_sha256", "function_range_sha256",
+    ):
+        normalized[name] = require_sha(value.get(name), f"{context}.{name}")
+    normalized["rendered_source_size"] = require_exact_int(
+        value.get("rendered_source_size"),
+        f"{context}.rendered_source_size", minimum=1,
+    )
+    normalized["function_range_size"] = require_exact_int(
+        value.get("function_range_size"),
+        f"{context}.function_range_size", minimum=1,
+    )
+    normalized["function_range_line_count"] = require_exact_int(
+        value.get("function_range_line_count"),
+        f"{context}.function_range_line_count", minimum=1,
+    )
+    normalized["carrier"] = validate_donor_source_compiler_state_carrier(
+        value.get("carrier"), f"{context}.carrier")
+
+    header = value.get("owner_header")
+    header_context = f"{context}.owner_header"
+    require(isinstance(header, dict), f"{header_context} must be an object")
+    exact_audit_keys(header, {
+        "path", "source_sha256", "source_size", "owner_marker",
+        "owner_range_sha256", "owner_range_size",
+        "declaration_sha256", "declaration_size", "declaration_prefix_trim",
+        "declaration_significant_token_sha256",
+    }, header_context)
+    header_marker = header.get("owner_marker")
+    require(
+        isinstance(header_marker, str) and header_marker.isascii()
+        and 8 <= len(header_marker) <= 256
+        and not any(character in header_marker for character in "\0\r\n"),
+        f"{header_context}.owner_marker is invalid",
+    )
+    normalized["owner_header"] = {
+        "path": source_overlay_relative_path(
+            header.get("path"), f"{header_context}.path"),
+        "source_sha256": require_sha(
+            header.get("source_sha256"), f"{header_context}.source_sha256"),
+        "source_size": require_exact_int(
+            header.get("source_size"), f"{header_context}.source_size",
+            minimum=1,
+        ),
+        "owner_marker": header_marker,
+        "owner_range_sha256": require_sha(
+            header.get("owner_range_sha256"),
+            f"{header_context}.owner_range_sha256"),
+        "owner_range_size": require_exact_int(
+            header.get("owner_range_size"),
+            f"{header_context}.owner_range_size", minimum=1,
+        ),
+        "declaration_sha256": require_sha(
+            header.get("declaration_sha256"),
+            f"{header_context}.declaration_sha256"),
+        "declaration_size": require_exact_int(
+            header.get("declaration_size"),
+            f"{header_context}.declaration_size", minimum=1,
+        ),
+        "declaration_prefix_trim": require_exact_int(
+            header.get("declaration_prefix_trim"),
+            f"{header_context}.declaration_prefix_trim",
+            minimum=0, maximum=16,
+        ),
+        "declaration_significant_token_sha256": require_sha(
+            header.get("declaration_significant_token_sha256"),
+            f"{header_context}.declaration_significant_token_sha256"),
+    }
+    return normalized
+
+
+def select_same_function_carrier_source_window(
+    data: bytes, identity: dict, context: str,
+) -> bytes:
+    """Select one brace-balanced function including its following blank LF."""
+    marker = identity["start_marker"].encode("ascii")
+    require(data.count(marker) == 1,
+            f"{context}: function marker is absent or ambiguous")
+    start = data.index(marker)
+    tokens = [item for item in source_overlay_tokens(data)
+              if item[1] >= start]
+    opening = next((index for index, item in enumerate(tokens)
+                    if item[0] == "{"), None)
+    require(opening is not None, f"{context}: function body is missing")
+    depth = 0
+    close = None
+    for token, _, token_end in tokens[opening:]:
+        if token == "{":
+            depth += 1
+        elif token == "}":
+            depth -= 1
+            require(depth >= 0, f"{context}: function braces are unbalanced")
+            if depth == 0:
+                close = token_end
+                break
+    require(close is not None and data[close:close + 2] == b"\n\n",
+            f"{context}: function lacks one trailing blank physical line")
+    return data[start:close + 2]
+
+
+def render_extern_run_pair_recipe_source(data: bytes, recipe: dict) -> bytes:
+    """Render the typed two-seat extern carrier used by ordinary donors."""
+    require(recipe.get("kind") == "extern_run_pair",
+            "extern-pair source rendering requires its exact recipe")
+    return render_donor_source_compiler_state_carrier(data, {
+        "kind": "extern_run_pair_v1",
+        "placement": "after_includes_and_eof_v1",
+        "header_prefix": recipe["header_prefix"],
+        "header_count": recipe["header_count"],
+        "seat_prefix": recipe["seat_prefix"],
+        "seat_count": recipe["seat_count"],
+        "width": recipe["width"],
+        "generated_declarations_sha256": recipe[
+            "generated_header_sha256"],
+    })
+
+
+def require_same_function_carrier_source_identity(
+    source_root: Path, source_relative: str, clean_source: bytes,
+    effective_source: bytes, recipe: dict, identity: dict,
+    overlaid_paths: set[str], context: str,
+) -> dict:
+    """Bind a carrier render to one unchanged function and owner declaration."""
+    require(
+        sha256_bytes(clean_source) == identity["clean_source_sha256"]
+        and sha256_bytes(effective_source)
+        == identity["effective_source_sha256"],
+        f"{context}: clean/effective translation-unit source differs",
+    )
+    recipe_carrier = validate_donor_source_compiler_state_carrier({
+        "kind": "extern_run_pair_v1",
+        "placement": "after_includes_and_eof_v1",
+        "header_prefix": recipe.get("header_prefix"),
+        "header_count": recipe.get("header_count"),
+        "seat_prefix": recipe.get("seat_prefix"),
+        "seat_count": recipe.get("seat_count"),
+        "width": recipe.get("width"),
+        "generated_declarations_sha256": recipe.get(
+            "generated_header_sha256"),
+    }, f"{context} donor recipe carrier")
+    require(identity["carrier"] == recipe_carrier,
+            f"{context}: carrier descriptor differs from the donor recipe")
+    rendered_source = render_donor_source_compiler_state_carrier(
+        effective_source, identity["carrier"])
+    require(
+        len(rendered_source) == identity["rendered_source_size"]
+        and sha256_bytes(rendered_source)
+        == identity["rendered_source_sha256"],
+        f"{context}: carrier-rendered source differs from its pins",
+    )
+    selected = [
+        select_same_function_carrier_source_window(
+            data, identity, f"{context} {role}")
+        for role, data in (
+            ("clean", clean_source),
+            ("effective", effective_source),
+            ("donor", rendered_source),
+        )
+    ]
+    require(selected[0] == selected[1] == selected[2],
+            f"{context}: declaration carrier changes the target function")
+    target = selected[0]
+    require(
+        len(target) == identity["function_range_size"]
+        and target.count(b"\n") == identity["function_range_line_count"]
+        and sha256_bytes(target) == identity["function_range_sha256"],
+        f"{context}: target function source range differs from its pins",
+    )
+
+    header_spec = identity["owner_header"]
+    require(header_spec["path"] not in overlaid_paths,
+            f"{context}: owner header has an effective source overlay")
+    header_path, header = _read_pinned_semantic_source(
+        source_root, header_spec, f"{context} owner header")
+    require(len(header) == header_spec["source_size"],
+            f"{context}: owner header size differs")
+    include_tokens = ["#", "include", f'"{header_path.name}"']
+    include_lines = [
+        line for line in effective_source.splitlines(keepends=True)
+        if [token for token, _, _ in source_overlay_tokens(line)]
+        == include_tokens
+    ]
+    require(len(include_lines) == 1,
+            f"{context}: owner header is not a unique direct quoted include")
+
+    owner_marker = header_spec["owner_marker"].encode("ascii")
+    require(header.count(owner_marker) == 1,
+            f"{context}: owner header marker is absent or ambiguous")
+    marker_offset = header.index(owner_marker)
+    owner_start = header.rfind(b"\n", 0, marker_offset) + 1
+    owner_end = owner_start + header_spec["owner_range_size"]
+    require(
+        owner_end <= len(header)
+        and sha256_bytes(header[owner_start:owner_end])
+        == header_spec["owner_range_sha256"],
+        f"{context}: owner header range differs from its pin",
+    )
+
+    owner_identifier = decorated_immediate_member_owner_identifier(
+        identity["source_owner_mangled"], context)
+    function_match = re.match(
+        r"^\?([A-Za-z_][A-Za-z0-9_]*)@", identity["source_owner_mangled"])
+    require(function_match is not None,
+            f"{context}: decorated function component differs")
+    function_identifier = function_match.group(1)
+    tokens = _semantic_significant_tokens(header)
+    _, opening, closing = _unique_class_body(
+        tokens, owner_identifier, f"{context} owner class")
+    class_start = tokens[opening][1]
+    class_end = tokens[closing][2]
+    require(owner_start <= class_start < class_end <= owner_end,
+            f"{context}: owner class escapes the pinned header range")
+    declaration_lines = []
+    line_start = 0
+    for line in header.splitlines(keepends=True):
+        line_end = line_start + len(line)
+        if class_start <= line_start and line_end <= class_end:
+            line_tokens = [
+                token for token, _, _ in source_overlay_tokens(line)
+            ]
+            if function_identifier in line_tokens and ";" in line_tokens:
+                declaration_lines.append(line)
+        line_start = line_end
+    require(len(declaration_lines) == 1,
+            f"{context}: owner member declaration is absent or ambiguous")
+    declaration = declaration_lines[0]
+    trim = header_spec["declaration_prefix_trim"]
+    require(declaration[:trim] == b"\t" * trim,
+            f"{context}: owner declaration prefix differs")
+    declaration = declaration[trim:]
+    require(
+        len(declaration) == header_spec["declaration_size"]
+        and sha256_bytes(declaration) == header_spec["declaration_sha256"]
+        and source_overlay_significant_sha256(declaration)
+        == header_spec["declaration_significant_token_sha256"],
+        f"{context}: owner member declaration differs from its pins",
+    )
+
+    identifiers = []
+    for role in ("header", "seat"):
+        prefix = identity["carrier"][f"{role}_prefix"]
+        count = identity["carrier"][f"{role}_count"]
+        width = identity["carrier"]["width"]
+        identifiers.extend(
+            f"{prefix}{index:0{width}d}" for index in range(count)
+        )
+    source_identifiers = {
+        token for token, _, _ in _semantic_significant_tokens(effective_source)
+    }
+    require(not source_identifiers.intersection(identifiers),
+            f"{context}: generated declaration identity collides with source")
+    return {
+        **identity,
+        "carrier_identifiers": identifiers,
+        "target_source_sha256": sha256_bytes(target),
+    }
+
+
+def validate_instruction_self_permutation(
+    value: object, context: str, body_length: int,
+) -> dict:
+    """Validate a bijective commute of one closed independent IA-32 pair."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "source_start", "source_end", "target_start", "target_end",
+        "source_instruction_lengths", "target_instruction_lengths",
+        "moves", "expected_changed_offsets",
+        "expected_function_multiset_sha256",
+        "expected_comdat_multiset_sha256", "expected_section_shape_sha256",
+        "expected_linker_payload_count", "expected_linker_payload_sha256",
+    }, context)
+    require(value.get("kind") == ORDINARY_FPO_SELF_PERMUTATION_KIND,
+            f"{context}.kind differs")
+    bounds = {}
+    for role in ("source", "target"):
+        start = require_exact_int(
+            value.get(f"{role}_start"), f"{context}.{role}_start",
+            minimum=0, maximum=body_length - 1)
+        end = require_exact_int(
+            value.get(f"{role}_end"), f"{context}.{role}_end",
+            minimum=1, maximum=body_length)
+        require(start < end, f"{context}.{role} range is empty")
+        bounds[role] = (start, end)
+    require(bounds["source"] == bounds["target"],
+            f"{context}: self-permutation windows differ")
+    width = bounds["source"][1] - bounds["source"][0]
+
+    declared_lengths = {}
+    for role in ("source", "target"):
+        lengths = value.get(f"{role}_instruction_lengths")
+        require(
+            isinstance(lengths, list) and len(lengths) == 2
+            and all(type(length) is int and 1 <= length <= 15
+                    for length in lengths)
+            and sum(lengths) == width,
+            f"{context}.{role}_instruction_lengths differs",
+        )
+        declared_lengths[role] = list(lengths)
+
+    moves = value.get("moves")
+    require(isinstance(moves, list) and len(moves) == 2,
+            f"{context}.moves must contain exactly two instructions")
+    normalized_moves = []
+    for index, move in enumerate(moves):
+        move_context = f"{context}.moves[{index}]"
+        require(isinstance(move, dict), f"{move_context} must be an object")
+        exact_audit_keys(move, {
+            "target_start", "target_end", "target_bytes", "target_sha256",
+            "donor_start", "donor_end", "donor_bytes", "donor_sha256",
+        }, move_context)
+        intervals = {}
+        for role, prefix in (("target", "target"), ("source", "donor")):
+            outer_start, outer_end = bounds[role]
+            start = require_exact_int(
+                move.get(f"{prefix}_start"),
+                f"{move_context}.{prefix}_start",
+                minimum=outer_start, maximum=outer_end - 1)
+            end = require_exact_int(
+                move.get(f"{prefix}_end"),
+                f"{move_context}.{prefix}_end",
+                minimum=outer_start + 1, maximum=outer_end)
+            require(start < end,
+                    f"{move_context}.{prefix} interval is empty")
+            intervals[role] = (start, end)
+        require(
+            intervals["target"][1] - intervals["target"][0]
+            == intervals["source"][1] - intervals["source"][0],
+            f"{move_context} source/target widths differ",
+        )
+        encoded = {}
+        for role, prefix in (("target", "target"), ("source", "donor")):
+            literal = move.get(f"{prefix}_bytes")
+            expected_width = intervals[role][1] - intervals[role][0]
+            require(
+                isinstance(literal, str)
+                and re.fullmatch(r"[0-9a-f]+", literal) is not None
+                and len(literal) == expected_width * 2,
+                f"{move_context}.{prefix}_bytes differs from its interval",
+            )
+            raw = bytes.fromhex(literal)
+            digest = require_sha(
+                move.get(f"{prefix}_sha256"),
+                f"{move_context}.{prefix}_sha256")
+            require(sha256_bytes(raw) == digest,
+                    f"{move_context}.{prefix} encoding/hash differs")
+            require_supported_complete_ia32_instruction(
+                raw, f"{move_context}.{prefix}")
+            encoded[role] = (literal, digest, raw)
+        require(encoded["target"] == encoded["source"],
+                f"{move_context} does not copy one exact donor instruction")
+        normalized_moves.append({
+            "target_start": intervals["target"][0],
+            "target_end": intervals["target"][1],
+            "target_bytes": encoded["target"][0],
+            "target_sha256": encoded["target"][1],
+            "donor_start": intervals["source"][0],
+            "donor_end": intervals["source"][1],
+            "donor_bytes": encoded["source"][0],
+            "donor_sha256": encoded["source"][1],
+        })
+
+    for role, start_key, end_key in (
+        ("target", "target_start", "target_end"),
+        ("source", "donor_start", "donor_end"),
+    ):
+        ordered = sorted(normalized_moves, key=lambda item: item[start_key])
+        cursor = bounds[role][0]
+        lengths = []
+        for move in ordered:
+            require(move[start_key] == cursor,
+                    f"{context}: {role} partition is overlapping or gapped")
+            cursor = move[end_key]
+            lengths.append(move[end_key] - move[start_key])
+        require(cursor == bounds[role][1]
+                and lengths == declared_lengths[role],
+                f"{context}: {role} partition differs from its declaration")
+    require(
+        [(item["donor_start"], item["donor_end"])
+         for item in normalized_moves]
+        == list(reversed([
+            (item["donor_start"], item["donor_end"])
+            for item in sorted(
+                normalized_moves, key=lambda item: item["donor_start"])
+        ])),
+        f"{context}: target order is not the exact two-instruction reversal",
+    )
+
+    source_order = sorted(
+        normalized_moves, key=lambda item: item["donor_start"])
+    zero = bytes.fromhex(source_order[0]["donor_bytes"])
+    load = bytes.fromhex(source_order[1]["donor_bytes"])
+    require(zero == b"\x33\xff",
+            f"{context}: first source instruction is not the closed "
+            "XOR-zero encoding")
+    zero_modrm = zero[1]
+    zero_reg = (zero_modrm >> 3) & 7
+    require(zero_modrm >> 6 == 3 and (zero_modrm & 7) == zero_reg,
+            f"{context}: XOR does not zero exactly one register")
+    require(load == b"\x8b\x54\x24\x14",
+            f"{context}: second source instruction is not the closed "
+            "stack-load encoding")
+    load_reg = (load[1] >> 3) & 7
+    require(load_reg != zero_reg,
+            f"{context}: commuting instructions write the same register")
+
+    normalized = {
+        "kind": value["kind"],
+        "source_start": bounds["source"][0],
+        "source_end": bounds["source"][1],
+        "target_start": bounds["target"][0],
+        "target_end": bounds["target"][1],
+        "source_instruction_lengths": declared_lengths["source"],
+        "target_instruction_lengths": declared_lengths["target"],
+        "moves": normalized_moves,
+        "expected_changed_offsets": [],
+        "expected_linker_payload_count": require_exact_int(
+            value.get("expected_linker_payload_count"),
+            f"{context}.expected_linker_payload_count", minimum=0),
+    }
+    changed_offsets = value.get("expected_changed_offsets")
+    require(
+        isinstance(changed_offsets, list) and changed_offsets
+        and changed_offsets == sorted(set(changed_offsets))
+        and all(type(offset) is int and 0 <= offset < body_length
+                for offset in changed_offsets),
+        f"{context}.expected_changed_offsets differs",
+    )
+    normalized["expected_changed_offsets"] = list(changed_offsets)
+    for name in (
+        "expected_function_multiset_sha256",
+        "expected_comdat_multiset_sha256",
+        "expected_section_shape_sha256",
+        "expected_linker_payload_sha256",
+    ):
+        normalized[name] = require_sha(value.get(name), f"{context}.{name}")
+    return normalized
 
 
 def validate_instruction_mosaic_ranges(
@@ -17490,6 +18213,93 @@ def require_ordinary_fpo_mosaic_identity(
             f"{context}: {role} CodeView procedure range differs",
         )
     return pairs
+
+
+def require_ordinary_fpo_self_permutation_receipts(
+    seed: CoffObject, donor: CoffObject, function: dict, context: str,
+) -> dict:
+    """Pin all object-wide identities for the isolated FPO permutation."""
+    permutation = function["instruction_self_permutation"]
+    seed_functions = function_multiset(seed)
+    donor_functions = function_multiset(donor)
+    seed_comdats = comdat_primary_identity_multiset(seed)
+    donor_comdats = comdat_primary_identity_multiset(donor)
+    seed_linker = linker_payload_multiset(seed)
+    donor_linker = linker_payload_multiset(donor)
+    require(
+        seed_functions == donor_functions
+        and canonical_counter_receipt_sha256(seed_functions)
+        == canonical_counter_receipt_sha256(donor_functions)
+        == permutation["expected_function_multiset_sha256"],
+        f"{context}: function multiset receipt differs",
+    )
+    require(
+        seed_comdats == donor_comdats
+        and canonical_counter_receipt_sha256(seed_comdats)
+        == canonical_counter_receipt_sha256(donor_comdats)
+        == permutation["expected_comdat_multiset_sha256"],
+        f"{context}: COMDAT multiset receipt differs",
+    )
+    require(
+        len(seed.sections) == len(donor.sections)
+        and section_shape_receipt_sha256(seed)
+        == section_shape_receipt_sha256(donor)
+        == permutation["expected_section_shape_sha256"],
+        f"{context}: section shape receipt differs",
+    )
+    require(
+        seed_linker == donor_linker
+        and sum(seed_linker.values()) == sum(donor_linker.values())
+        == permutation["expected_linker_payload_count"]
+        and canonical_counter_receipt_sha256(seed_linker)
+        == canonical_counter_receipt_sha256(donor_linker)
+        == permutation["expected_linker_payload_sha256"],
+        f"{context}: linker payload receipt differs",
+    )
+    seed_primary = seed.function_section(function["mangled"])
+    donor_primary = donor.function_section(function["mangled"])
+    for child_name in (".debug$F", ".debug$S"):
+        seed_child = _comdat_child(seed, seed_primary, child_name)
+        donor_child = _comdat_child(donor, donor_primary, child_name)
+        require(
+            coff_body(seed, seed_child) == coff_body(donor, donor_child),
+            f"{context}: {child_name} body differs between compiler states",
+        )
+    source_identity = function["same_function_source_identity"]
+    carrier = validate_donor_source_compiler_state_carrier(
+        source_identity.get("carrier"), f"{context} carrier descriptor")
+    identifiers = [
+        f"{carrier[f'{role}_prefix']}{index:0{carrier['width']}d}"
+        for role in ("header", "seat")
+        for index in range(carrier[f"{role}_count"])
+    ]
+    normalized_identifiers = source_identity.get("carrier_identifiers")
+    require(
+        normalized_identifiers is None
+        or normalized_identifiers == identifiers,
+        f"{context}: normalized carrier identifier set differs",
+    )
+    leaked_symbols = [
+        symbol["name"] for symbol in donor.symbols.values()
+        if any(identifier in symbol["name"] for identifier in identifiers)
+    ]
+    leaked_bytes = [
+        identifier for identifier in identifiers
+        if identifier.encode("ascii") in donor.data
+    ]
+    require(not leaked_symbols and not leaked_bytes,
+            f"{context}: generated declarations leaked into donor output")
+    return {
+        "function_multiset_sha256": permutation[
+            "expected_function_multiset_sha256"],
+        "comdat_multiset_sha256": permutation[
+            "expected_comdat_multiset_sha256"],
+        "section_shape_sha256": permutation[
+            "expected_section_shape_sha256"],
+        "linker_payload_sha256": permutation[
+            "expected_linker_payload_sha256"],
+        "carrier_identifiers_absent": True,
+    }
 
 
 def require_source_fpo_mosaic_identity(
@@ -19239,12 +20049,18 @@ def _compose_retail_exact_instruction_mosaic_core(
             "retail oracle body is missing")
     ordinary_fpo = "ordinary_fpo_identity" in function
     source_fpo = "source_fpo_identity" in function
+    self_permutation = "instruction_self_permutation" in function
     require(not (ordinary_fpo and source_fpo),
             "instruction mosaic FPO identity classes are mutually exclusive")
     require(not (source_permutation and ordinary_fpo),
             "ordinary FPO mosaic cannot cross the source-permutation branch")
     require(not source_fpo or source_permutation,
             "source FPO mosaic requires the source-permutation branch")
+    require(not self_permutation or (
+                ordinary_fpo and not source_fpo and not source_permutation
+                and "same_function_source_identity" in function),
+            "instruction self-permutation requires its isolated ordinary "
+            "FPO source-authentic class")
     expected_length = function["expected_body_length"]
     donor_expected_length = function.get(
         "expected_donor_body_length", expected_length)
@@ -19252,6 +20068,22 @@ def _compose_retail_exact_instruction_mosaic_core(
         function.get("instruction_ranges"), "instruction mosaic ranges",
         expected_length,
     )
+    permutation = (
+        validate_instruction_self_permutation(
+            function["instruction_self_permutation"],
+            "instruction self-permutation", expected_length)
+        if self_permutation else None
+    )
+    if permutation is not None:
+        require(
+            all(
+                item["end"] <= permutation["target_start"]
+                or item["start"] >= permutation["target_end"]
+                for item in ranges
+            ),
+            "instruction mosaic same-offset ranges overlap the "
+            "self-permutation window",
+        )
     if ordinary_fpo or source_fpo:
         require(
             all(item["kind"]
@@ -19310,6 +20142,11 @@ def _compose_retail_exact_instruction_mosaic_core(
             function["ordinary_fpo_identity"],
             "ordinary FPO instruction mosaic",
         )
+        if self_permutation:
+            require_ordinary_fpo_self_permutation_receipts(
+                seed, donor, function,
+                "ordinary FPO instruction self-permutation",
+            )
     elif source_fpo:
         require(closure == (2, (".debug$F", ".debug$S")),
                 "source FPO instruction-mosaic closure class differs")
@@ -19471,7 +20308,71 @@ def _compose_retail_exact_instruction_mosaic_core(
             "seed_sha256": item["seed_sha256"],
             "donor_sha256": item["donor_sha256"],
         })
+    permutation_detail = []
+    if self_permutation:
+        source_start = permutation["source_start"]
+        source_end = permutation["source_end"]
+        target_start = permutation["target_start"]
+        target_end = permutation["target_end"]
+        for role, rows, start, end in (
+            ("seed target", seed_rows, target_start, target_end),
+            ("donor source", donor_rows, source_start, source_end),
+        ):
+            require(
+                all(end <= row["offset"]
+                    or start >= row["offset"] + row["width"]
+                    for row in rows),
+                f"instruction self-permutation intersects a {role} "
+                "relocation operand",
+            )
+        for index, move in enumerate(permutation["moves"]):
+            donor_instruction = donor_body[
+                move["donor_start"]:move["donor_end"]]
+            require(
+                donor_instruction.hex() == move["donor_bytes"]
+                and sha256_bytes(donor_instruction)
+                == move["donor_sha256"],
+                f"instruction self-permutation donor instruction {index} "
+                "drifted",
+            )
+            require(
+                donor_instruction.hex() == move["target_bytes"]
+                and sha256_bytes(donor_instruction)
+                == move["target_sha256"],
+                f"instruction self-permutation target instruction {index} "
+                "differs from its donor",
+            )
+            mosaic[move["target_start"]:move["target_end"]] = (
+                donor_instruction)
+            permutation_detail.append({
+                "target_start": move["target_start"],
+                "target_end": move["target_end"],
+                "donor_start": move["donor_start"],
+                "donor_end": move["donor_end"],
+                "sha256": move["donor_sha256"],
+            })
     mosaic = bytes(mosaic)
+    if self_permutation:
+        source_certificate = [{
+            "start": permutation["source_start"],
+            "end": permutation["source_end"],
+            "donor_instruction_lengths": permutation[
+                "source_instruction_lengths"],
+        }]
+        target_certificate = [{
+            "start": permutation["target_start"],
+            "end": permutation["target_end"],
+            "seed_instruction_lengths": permutation[
+                "target_instruction_lengths"],
+        }]
+        require_coff_line_certified_ia32_boundaries(
+            donor, dp, donor_body, source_certificate, "donor", mangled,
+            "FPO self-permutation donor source",
+        )
+        require_coff_line_certified_ia32_boundaries(
+            seed, sp, mosaic, target_certificate, "seed", mangled,
+            "FPO self-permutation target output",
+        )
     require(sha256_bytes(mosaic) == function["expected_body_sha256"],
             "instruction-mosaic final body differs from its pin")
 
@@ -19501,6 +20402,14 @@ def _compose_retail_exact_instruction_mosaic_core(
          donor_body[item["start"]:item["end"]])
         for item in ranges
     ]
+    if self_permutation:
+        replacements.extend(
+            (sp["raw_offset"] + item["target_start"],
+             sp["raw_offset"] + item["target_end"],
+             donor_body[item["donor_start"]:item["donor_end"]])
+            for item in permutation["moves"]
+        )
+        replacements.sort(key=lambda item: item[0])
     output = apply_replacements(seed_bytes, replacements)
     require(len(output) == len(seed_bytes),
             "instruction-mosaic object size changed")
@@ -19513,8 +20422,21 @@ def _compose_retail_exact_instruction_mosaic_core(
         for item in ranges
         for offset in range(item["start"], item["end"])
     }
+    if self_permutation:
+        allowed_file_offsets.update(
+            sp["raw_offset"] + offset
+            for item in permutation["moves"]
+            for offset in range(item["target_start"], item["target_end"])
+        )
     require(changed_file_offsets and changed_file_offsets <= allowed_file_offsets,
             "instruction mosaic changed a non-target byte")
+    if self_permutation:
+        changed_body_offsets = sorted(
+            offset - sp["raw_offset"] for offset in changed_file_offsets)
+        require(
+            changed_body_offsets == permutation["expected_changed_offsets"],
+            "instruction self-permutation changed-offset set differs",
+        )
 
     checked = CoffObject(output)
     cp = checked.function_section(mangled)
@@ -19547,6 +20469,7 @@ def _compose_retail_exact_instruction_mosaic_core(
         "section_number": cp["number"],
         "body_length": cp["raw_size"],
         "instruction_ranges": range_detail,
+        "instruction_self_permutation": permutation_detail,
         "body_changed_offsets": sorted(
             offset - sp["raw_offset"] for offset in changed_file_offsets),
         "relocations": len(seed_rows),
