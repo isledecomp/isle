@@ -1905,3 +1905,86 @@ to the exact 1,693-byte/571-instruction retail body while preserving the
 37-relocation semantic sequence and 40-byte/two-relocation xdata closure. No
 compiler, Wine, link, reccmp, source edit, or shared-state mutation was used
 for this audit.
+
+## `0x1006fda0 Infocenter::HandleKeyPress` decisive static seal (2026-08-17)
+
+There is no remaining authentic, logic-neutral source mechanism capable of
+the complete residual. The checked-in source
+`LEGO1/lego/legoomni/src/worlds/infocenter.cpp` is 47,939 bytes, SHA-256
+`d77c2fb9cf8465da1952ae1a11484d4e5c184bb736d6e56f7a87ecc846e46a5f`
+(Git blob `f458433d82a143d39f4a821f5dae7ff7a77cccec`). The effective build-tree
+source is 49,652 bytes, SHA-256
+`32fc208e57c233077bc0e5d920168f5a335f4467999740d4b4490ebfb4fc6ed1`.
+Their exact 1,026-byte `HandleKeyPress` text is identical, SHA-256
+`7fd299d5303344fac174c9ca7e7930fa1bb233b74332cd89f48ca8fd30ebd340`.
+
+The current object is 162,228 bytes, SHA-256
+`89c368730332f4b07ecbe06286831484269663426e98c18e765d77a4322e7550`.
+Target section 76 is 264 bytes/body
+`de334d6cbf207c0e7b3545a2ab27b4d1b6eef677cf933b92adab2ddc16d1aec3`,
+with 17 relocations, 18 line records, characteristics `0x60501020`, and
+selection 1. Its raw relocation-table SHA-256 is
+`a739018550cc3774caae7e860e175544a83283277cf901660f0c6a9334d88a7e`;
+the relocation offsets are
+`47,54,67,95,102,141,186,200,204,208,212,216,236,240,244,248,252`.
+The raw line-table SHA-256 is
+`ab851a2532dc5d87919542633aea137ba41d96b55f1542bb31880a45df57a2f`;
+after normalizing its function-symbol index it is
+`4a2017ebb0e69b53a47cbd1fb1cf17e4887f7e1ea65621683c16a190ea9ae1b0`.
+
+The target closure is exactly `.debug$S + .debug$F`. `.debug$S` section 77
+is 153 bytes/body
+`91a25c0bc3ac4d54bf58c04fca403d49f6eaa1393640af56ded4a6187f85ddaa`
+with six relocations; `.debug$F` section 78 is 16 bytes/body
+`9cb23169e76d286fd514b57e6623dc17cb50acc7c9968c9879a056e3632ca27f`
+with one relocation. There is no `.xdata$x` or other EH associate. The
+retail linked target is 272 bytes/body
+`4c45acbe4a200d0c457e42da3dbe34c313763276542c27840dadbc805f1f866d`.
+
+The complete eight-byte size difference is downstream of one regional
+register allocation in the `e_playCutscene` case. At offsets
+`+145,+151,+156,+159,+165,+171`, retail uses EAX for the state pointer and
+ECX for constant one; current exchanges those roles. Retail consequently
+must rematerialize `mov eax,1` at `+178` before the early return, adding five
+bytes. That shift then requires the three-byte `lea ecx,[ecx]` table-alignment
+instruction at `+205`. The work, branches, calls, and both jump tables are
+otherwise identical. The natural retail reflow retains 17 semantic
+relocations, moving the `StopCredits` relocation to `+191` and the two
+five-entry jump-table runs to `+208..+224` and `+244..+260`.
+
+The retained same-symbol census searched `/private/tmp` and all of
+`/Users/foxtacles`: 1,963 object paths, 1,963 parsed definitions, and zero
+errors. Every object has the single same 264-byte target body, one identical
+semantic 17-relocation state, one identical normalized 18-record line-table
+state, the same `.debug$S + .debug$F`-only closure shape, and no EH. There are
+zero 272-byte carriers. This subsumes three retained 348-cell
+forward/shape panels, the 400-cell Infocenter extern panel, the 30-cell
+free-declaration panel, and later controls.
+
+The retained source census found 2,007 functions and seven normalized states:
+1,996 current copies, five sampled reconstruction-history spellings, and one
+unrelated SDL port. All Git history covers 111 path-touching commits, 105
+unique reachable file blobs, 11 normalized function states, and nine
+no-function blobs across three historical path seats. The deltas are field or
+enum names, `' '` versus `VK_SPACE`, inline reconstruction getters explicitly
+removed as likely nonexistent, or the pre-`1146b026` missing outer `break`.
+That fall-through changes behavior and contradicts retail's control flow;
+none of these states supplies an authentic release lifetime.
+
+BETA10 `0x1002f907..0x1002f999` is a materially earlier 146-byte `/Od`
+function/body
+`49a9828bd64ba5dd24cb36ddfb9e80d27f4f123d6cb7252afd9a5071b7de03c6`.
+It updates a timer and implements only the earlier step behavior, so it
+cannot authenticate a final-release topology. It does support the current
+top-level `result = 0` placement, not a novel result lifetime.
+
+**Seal:** do not repeat carrier, include, free-declaration, forward, shape,
+or pad sweeps; member/getter/enum spellings; fall-through restoration; or
+arbitrary `result`/`script` lifetime edits. Reopen only for (1) authenticated
+final-release source/PDB evidence of a different `e_playCutscene` lifetime or
+topology that preserves the observed control graph, (2) a natural 272-byte
+same-symbol current-source object with the exact 17-relocation reflow,
+18-record `.debug$S + .debug$F`-only closure and no EH, or (3) authenticated
+original C2/PCH/environment evidence that naturally selects the retail
+register tie. No compiler, Wine, link, reccmp, source edit, or shared-state
+mutation was used for this audit.
