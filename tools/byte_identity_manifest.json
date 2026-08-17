@@ -8778,6 +8778,245 @@
       },
       "emission_policy": "non_emitting_declarations_only"
      }
+    },
+    {
+     "id": "d_220110f729c6",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "after_includes",
+      "prefix": "MxUnkRecVB",
+      "count": 15,
+      "width": 3,
+      "generated_header_sha256": "220110f729c65ca4ce40705dff1d246cdb9803c9392fe835fd0a9ce194b87a2a",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier seated after the include block; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_4409c00cd5e6",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "donor_source_overlay",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "renderings": [
+       {
+        "path": "LEGO1/lego/legoomni/src/paths/legopathboundary.cpp",
+        "clean_sha256": "c2caa8a5a37b680b50400350c1b328f7d1c3eeb8afb1ab84a327ec26ac332487",
+        "rendered_sha256": "8346cc85104bf00ce9d30d5c701e9a92c5870d4cd27e5e755c93fb13242ff207",
+        "operations": [
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "25f18abfbc9d046849d20c2e4bd95fbb218cea52a3bee671874e1c9835c010d9",
+           "b": 0,
+           "at": "start"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 11,
+           "items": [
+            {
+             "k": "lines",
+             "n": 2,
+             "line": 1
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC0",
+             "line": 3
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC1",
+             "line": 4
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC2",
+             "line": 5
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC3",
+             "line": 6
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC4",
+             "line": 7
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC5",
+             "line": 8
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC6",
+             "line": 9
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC7",
+             "line": 10
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "0bb33dffc00463932775c29e948ee8800e3b2b76dd2bf7bb0372c334af3928f5",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "115faeeabc01f449adb968fcdd127af35dae20191f9be8db2d2c2ecae932a754"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 24,
+           "items": [
+            {
+             "k": "lines",
+             "n": 5,
+             "line": 1
+            },
+            {
+             "k": "empty_class",
+             "id": "RkD0",
+             "line": 6
+            },
+            {
+             "k": "fwd_run",
+             "stem": "RkD",
+             "first": 1,
+             "count": 9,
+             "line": 7
+            },
+            {
+             "k": "fwd_run",
+             "stem": "RkD",
+             "first": 10,
+             "count": 8,
+             "line": 16
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "acb127f252df8abfcbb8ce398c51f46a14607a5e75c77f9ca98335151f4d6e6f",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "29cce8b25f0e950f4251b142712ddc14089c11424ab3fcb2fb2670c316221004"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 33,
+           "items": [
+            {
+             "k": "lines",
+             "n": 4,
+             "line": 1
+            },
+            {
+             "k": "class",
+             "id": "MxUnkRecordFH",
+             "inline": true,
+             "members": [
+              {
+               "stem": "Record",
+               "first": 0,
+               "count": 8
+              }
+             ],
+             "line": 5
+            },
+            {
+             "k": "lines",
+             "n": 2,
+             "line": 16
+            },
+            {
+             "k": "fwd_run",
+             "stem": "RkPbG",
+             "first": 0,
+             "count": 15,
+             "line": 18,
+             "width": 2
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "5a5ce7956ea890d779098153df19a5bd1c8097626550a307ccedc177646d639a",
+           "a": 0,
+           "at": "end"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 38,
+           "items": [
+            {
+             "k": "lines",
+             "n": 2,
+             "line": 2
+            },
+            {
+             "k": "fwd_run",
+             "stem": "ZbP",
+             "first": 0,
+             "count": 35,
+             "line": 4,
+             "width": 3
+            }
+           ]
+          }
+         },
+         {
+          "op": "replace",
+          "id": "op_remove_for_init_declaration",
+          "from": {
+           "ctx": "5fb17cd1481c4527a532050c0528675a83387a1f13525b02557eb37e37a5e506",
+           "line_before": "5e49d94e9b9cb8f087a44a37a3e54f5260dccf329fee8899309c37cf5e9520cf",
+           "line_after": "7a958b1e4db28d50f2699bf5e0eda061dc7cda1f6a0d9ebfb360fcddf4743e1c"
+          },
+          "to": {
+           "ctx": "e345aacae6118438d3847ec9f9773c5689e850facdbf8a41e1aa414eab83399d",
+           "a": 16,
+           "line_before": "f46830b14b4be6d8c29904b23ee427f3823cd47b46737f96c37202b9d3bde057",
+           "line_after": "7d99e8b8e1c74862acdfc665f301fd8301504270eff3de428921a3d86ac19624"
+          },
+          "removed": {
+           "sha256": "b8f9f218b856391a0b8c22112b4909750aea42d1699527af614f39760c61206f",
+           "size": 106
+          },
+          "gen": {
+           "k": "for_init_decl",
+           "form": "declaration_in_initializer_v1",
+           "type": "LegoAnimPresenterSet::iterator",
+           "id": "it",
+           "container": "m_presenters",
+           "begin": "begin",
+           "end": "end",
+           "declaration_indent": "\t\t"
+          }
+         }
+        ]
+       }
+      ],
+      "emission_policy": "donor_private_rendering_only",
+      "authenticity_rationale": "A manifest-declared for-initializer declaration reseat compiles the authentic logic-equivalent source form privately; the checked-in source and every unrelated COMDAT remain seed-authoritative.",
+      "rendering_identity_sha256": "4409c00cd5e61d16ada5956e0fdfac4bbf155451c501c3f366d77ceff9878347"
+     }
     }
    ],
    "functions": [
@@ -8993,11 +9232,293 @@
      "expected_donor_length": 258,
      "expected_linked_span": 272,
      "donor": "d_16a66880622c"
+    },
+    {
+     "mangled": "?RemovePresenter@LegoPathBoundary@@QAEIPAVLegoAnimPresenter@@@Z",
+     "donor": "d_4409c00cd5e6",
+     "splice_class": "retail_exact_instruction_mosaic",
+     "expected_section_number": 212,
+     "expected_section_count": 230,
+     "expected_body_length": 314,
+     "expected_donor_body_length": 314,
+     "expected_relocation_count": 6,
+     "expected_line_count": 10,
+     "expected_donor_line_count": 10,
+     "expected_seed_body_sha256": "c594b9347dcc5150779edf0344aa3b25767f9b2cf4f399ff9aa66fb2d27b4039",
+     "expected_donor_body_sha256": "605f6c90e322c69dfb257198ce7aea3ede01c5d593071a978604b4fdfbfb409f",
+     "expected_seed_metadata_sha256": "1bfc4c3e96c6fdf7930a12d25e96eee0fcd001b70da0995aac834a2a1408eaf4",
+     "expected_donor_metadata_sha256": "02dfe11e6767a8c8ec6e199113b27cf0d3dce218581f93f59e2d599a58af08a2",
+     "donor_variants": [
+      {
+       "donor": "d_220110f729c6",
+       "expected_body_length": 314,
+       "expected_line_count": 10,
+       "expected_body_sha256": "a86536d09123912e5df255a7151821a76ea25199f4c1af8655f8994c2038208b",
+       "expected_metadata_sha256": "e0481f5f6231f3581f671287540c577daa608e786d316837c9fafcfd27db6142"
+      }
+     ],
+     "expected_mosaic_donor_body_sha256": "acd459bf93ab369ef7e9e28b9d19ece17981614a7e3f472f9755172f1577d8c0",
+     "expected_body_sha256": "acd459bf93ab369ef7e9e28b9d19ece17981614a7e3f472f9755172f1577d8c0",
+     "instruction_ranges": [
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 5,
+       "end": 15,
+       "seed_bytes": "57558bf98b6c243085ed",
+       "seed_sha256": "f6e767816e6c5afa6787aeb438e4b57aeee0771094acbe59a9da5dc8253ca166",
+       "donor_bytes": "8b5c242857558bf985db",
+       "donor_sha256": "9389b6261d14a58e666addbcde36abb6b2394258449bef956b2071f162cc169e",
+       "seed_instruction_lengths": [
+        1,
+        1,
+        2,
+        4,
+        2
+       ],
+       "donor_instruction_lengths": [
+        4,
+        1,
+        1,
+        2,
+        2
+       ],
+       "donor": "d_220110f729c6"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 31,
+       "end": 38,
+       "seed_bytes": "896c24248b5f68",
+       "seed_sha256": "23e9d940f66c0bc04e0e7aa4a90f91c7e7e586f42f096a038781d91884f89a72",
+       "donor_bytes": "895c24248b6f68",
+       "donor_sha256": "89be1e3bd125974e1003d201a8fc7511f7898fb7c5129cdd5bf0d5364c485fba",
+       "seed_instruction_lengths": [
+        4,
+        3
+       ],
+       "donor_instruction_lengths": [
+        4,
+        3
+       ],
+       "donor": "d_220110f729c6"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 75,
+       "end": 77,
+       "seed_bytes": "3b18",
+       "seed_sha256": "c33063d760b4960720bc333735fe1d913da61677a39998cc65ac24c2b69da145",
+       "donor_bytes": "3b28",
+       "donor_sha256": "48a2761eae28a1a148d4a598a80a55320a0b956934daed19a553c4a7680572b1",
+       "seed_instruction_lengths": [
+        2
+       ],
+       "donor_instruction_lengths": [
+        2
+       ],
+       "donor": "d_220110f729c6"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 83,
+       "end": 99,
+       "seed_bytes": "8d4424208d4c2414896c242050518bce",
+       "seed_sha256": "23d0cc244c5e5758ed160a25f07dc042b3eae155b6f80ff0f0737de138eedbf1",
+       "donor_bytes": "8d4424148bce895c24208d5c24205350",
+       "donor_sha256": "05bb930f514cc01b29d85ca11ef4682d4383368c59e4da107a2a33f6dbd1ad70",
+       "seed_instruction_lengths": [
+        4,
+        4,
+        4,
+        1,
+        1,
+        2
+       ],
+       "donor_instruction_lengths": [
+        4,
+        2,
+        4,
+        4,
+        1,
+        1
+       ],
+       "donor": "d_220110f729c6"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 112,
+       "end": 148,
+       "seed_bytes": "8b4c24188b442413894c241c508b5424188d4c24288954242c518b5424248b4424305250",
+       "seed_sha256": "be0a517a466d6670b751c96921d816af779bad26cafc75a72c486c76943f03af",
+       "donor_bytes": "8b4424188b5424138944241c528b4c24188d442428894c242c508b4c24248b5424305152",
+       "donor_sha256": "658fd91e33991d1322953b11d905d1b08e9821546d94f24938c506919e3338a3",
+       "seed_instruction_lengths": [
+        4,
+        4,
+        4,
+        1,
+        4,
+        4,
+        4,
+        1,
+        4,
+        4,
+        1,
+        1
+       ],
+       "donor_instruction_lengths": [
+        4,
+        4,
+        4,
+        1,
+        4,
+        4,
+        4,
+        1,
+        4,
+        4,
+        1,
+        1
+       ],
+       "donor": "d_220110f729c6"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 193,
+       "end": 202,
+       "seed_bytes": "8b4f688b0189442414",
+       "seed_sha256": "03a596aea8a8950e94e89eb4cf9934d747be8e9a485916ec280fb0a151c96b71",
+       "donor_bytes": "8b47688b08894c2414",
+       "donor_sha256": "d01c43499e68ba04012cb05fe17484a3e9c34860e3e19931fec428618bc9fa09",
+       "seed_instruction_lengths": [
+        3,
+        2,
+        4
+       ],
+       "donor_instruction_lengths": [
+        3,
+        2,
+        4
+       ],
+       "donor": "d_4409c00cd5e6"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 202,
+       "end": 204,
+       "seed_bytes": "3bc1",
+       "seed_sha256": "70f85b85192c68f24fa3bd821065345d7a8b2c754d9568987f179b40874f3baf",
+       "donor_bytes": "3bc8",
+       "donor_sha256": "656489db5162c68c01e330bcd0d40e22deaebf16a8c369fb63229a200aee42c3",
+       "seed_instruction_lengths": [
+        2
+       ],
+       "donor_instruction_lengths": [
+        2
+       ],
+       "donor": "d_220110f729c6"
+      }
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100586e0",
+      "verdict": "MATCH",
+      "length": 314
+     },
+     "retail_relocations": [
+      {
+       "offset": 39,
+       "type": 20,
+       "addend": 0,
+       "target": "?_Lbound@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@IBEPAU_Node@1@ABQAVLegoAnimPresenter@@@Z",
+       "target_section": 221,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10058950"
+      },
+      {
+       "offset": 100,
+       "type": 20,
+       "addend": 0,
+       "target": "?equal_range@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@QAE?AU?$pair@Viterator@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@V12@@@ABQAVLegoAnimPresenter@@@Z",
+       "target_section": 218,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100588e0"
+      },
+      {
+       "offset": 149,
+       "type": 20,
+       "addend": 0,
+       "target": "?_Distance@@YAXViterator@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@0AAIUbidirectional_iterator_tag@@@Z",
+       "target_section": 227,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100589a0"
+      },
+      {
+       "offset": 174,
+       "type": 20,
+       "addend": 0,
+       "target": "?erase@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@QAE?AViterator@1@V21@0@Z",
+       "target_section": 215,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10058820"
+      },
+      {
+       "offset": 226,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@1PAU_Node@1@A",
+       "target_section": 7,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f3200"
+      },
+      {
+       "offset": 236,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@1PAU_Node@1@A",
+       "target_section": 7,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f3200"
+      }
+     ],
+     "target_source_refactor": {
+      "kind": "for_initializer_declaration_reseat_v1",
+      "selector": "brace_balanced_function_after_marker_v1",
+      "start_marker": "// FUNCTION: LEGO1 0x100586e0",
+      "source_owner_mangled": "?RemovePresenter@LegoPathBoundary@@QAEIPAVLegoAnimPresenter@@@Z",
+      "seed_range_pin": {
+       "baseline_sha256": "a099d6bb0724acf5a1ca5dfc449c1f730b21ac3bea66d9ab078bbaad8d700dff",
+       "baseline_size": 769,
+       "baseline_line_count": 23,
+       "baseline_significant_token_sha256": "921ff84a73f99a2de826d8179d67bcd9dfa8c64e5a434c05f0313c450ed9c978"
+      },
+      "donor_range_pin": {
+       "baseline_sha256": "43d071dda88b0871eb1af13c67947d5f2a2857baa20bcef1ed0335e2dd8eaf72",
+       "baseline_size": 762,
+       "baseline_line_count": 21,
+       "baseline_significant_token_sha256": "7b6c720cb70cc1a6eef5c3bbdf7b554192f650bba77cd7de1694279078e7e499"
+      },
+      "operation_ids": [
+       "op_remove_for_init_declaration"
+      ]
+     }
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 6 row(s) in LEGO1/lego/legoomni/src/paths/legopathboundary.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes 7 row(s) in LEGO1/lego/legoomni/src/paths/legopathboundary.cpp from generated carrier and source-permutation states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -10756,8 +11277,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4868,
-    "accepted_row_identity_sha256": "d2a04c8dd701eb192bc168146b25f5662831031a61d58fbbd70628d46185e6e5",
+    "exact_raw_1_0_count": 4869,
+    "accepted_row_identity_sha256": "9d21f928eb9411ad152e54205d4e4d4b7131ed936d6aa146864fd5b8d249d557",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

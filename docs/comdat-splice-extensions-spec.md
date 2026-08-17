@@ -428,9 +428,10 @@ ISLE and CONFIG still literal-byte identical.
 
 This class is a narrow same-function construction, not a general binary patch:
 
-1. Seed and donor are freshly compiled from the same effective checked-in
-   translation unit. The donor may differ only by an existing manifest-declared
-   non-emitting declaration carrier, and is never linked.
+1. Seed and every donor are freshly compiled from the current checked-in
+   translation unit. A donor may differ only by a manifest-declared
+   non-emitting declaration carrier or a closed, source-window-pinned source
+   permutation, and is never linked.
 2. The exact mangled function, section seat/count, body length, COMDAT
    selection, function multiset, primary-COMDAT identity multiset,
    relocation/line counts and debug/EH closure must agree. Seed and donor
@@ -441,8 +442,11 @@ This class is a narrow same-function construction, not a general binary patch:
    remains strict; this reseating rule is mosaic-specific because the output
    retains the seed relocation table.
 3. Every imported range is a sorted, non-overlapping, manifest-pinned complete
-   x86 instruction at the same offset and is at most 15 bytes. Both seed and
-   donor encodings and their SHA-256 values are pinned. A range may contain a
+   x86 instruction, or a bounded sequence of complete instructions, at the
+   same offset. Both seed and donor encodings, instruction partitions and
+   SHA-256 values are pinned. Multi-donor rows name the supplying donor on
+   every range and must use every declared donor through that closed set. A
+   range may contain a
    relocation operand only when the complete operand lies inside the same
    instruction in both objects, its ordered relocation record and semantic
    target are identical, and its raw bytes are identical. Partial overlap,
@@ -464,6 +468,17 @@ containing customer: four complete instructions change four non-relocation
 bytes in its 2,633-byte body, while two unchanged `_Nil` DIR32 operands are
 fully contained and verified by the 111-row oracle. Its fresh confirmation
 raised LEGO1 from 4867/4934 to 4868/4934 with exactly one gain and zero losses;
+ISLE remains 172/172 and CONFIG 111/111.
+
+`0x100586e0 LegoPathBoundary::RemovePresenter` is the first two-donor source-
+permutation customer. The checked-in standalone-iterator form remains the
+canonical seed because landing the authentic for-initializer form directly
+perturbs an existing exact row. One fresh declaration-carrier donor supplies
+six complete instruction sequences; one fresh, closed old-to-for-initializer
+source donor supplies the seventh. Both define the exact same mangled 314-byte
+COMDAT. The output retains all seed relocations, line/FPO/debug data and every
+non-target byte, and both donor objects are excluded. Its confirmation gate
+raised LEGO1 from 4868/4934 to 4869/4934 with exactly that gain and zero losses;
 ISLE remains 172/172 and CONFIG 111/111.
 
 ## 9. Class F — `retail_exact_source_target_closure`

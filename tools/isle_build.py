@@ -1211,18 +1211,43 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                 if (function["splice_class"]
                         == "retail_exact_instruction_mosaic"):
                     retail = function["retail_oracle"]
-                    composed, detail = (
-                        byte_identity.compose_retail_exact_instruction_mosaic(
-                            composed, donor_objects[function["donor"]],
-                            function,
-                            byte_identity.retail_image_body(
-                                manifest, retail["image"],
-                                int(retail["address"], 16), retail["length"],
-                            ),
-                        )
+                    retail_body = byte_identity.retail_image_body(
+                        manifest, retail["image"],
+                        int(retail["address"], 16), retail["length"],
                     )
+                    if "target_source_refactor" in function:
+                        donor_source = donor_sources.get(function["donor"])
+                        if donor_source is None:
+                            fail("source-mosaic donor omits its translation "
+                                 f"unit: {unit['source']}")
+                        composed, detail = (
+                            byte_identity
+                            .compose_retail_exact_source_instruction_mosaic(
+                                composed, donor_objects[function["donor"]],
+                                function, retail_body,
+                                source.read_bytes(), donor_source,
+                                {
+                                    item["donor"]:
+                                        donor_objects[item["donor"]]
+                                    for item in
+                                    function.get("donor_variants", [])
+                                },
+                            )
+                        )
+                    else:
+                        composed, detail = (
+                            byte_identity.compose_retail_exact_instruction_mosaic(
+                                composed, donor_objects[function["donor"]],
+                                function, retail_body,
+                            )
+                        )
                     byte_identity.validate_donor_object_excluded(
-                        composed, [donor_objects[function["donor"]]])
+                        composed,
+                        [donor_objects[function["donor"]]] + [
+                            donor_objects[item["donor"]]
+                            for item in function.get("donor_variants", [])
+                        ],
+                    )
                 elif function["splice_class"] in {
                     "retail_exact_target_closure",
                     "retail_exact_source_target_closure",

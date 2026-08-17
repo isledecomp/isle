@@ -232,6 +232,7 @@ SOURCE_OVERLAY_LEAN_KINDS = {
     "literal_alias": "literal_first_use_alias_v1",
     "member_sig": "member_signature_v1",
     "bind_once": "single_evaluation_binding_source_permutation_v1",
+    "for_init_decl": "for_initializer_declaration_reseat_v1",
 }
 
 
@@ -313,6 +314,10 @@ SOURCE_OVERLAY_KIND_POLICIES = {
     ),
     "single_evaluation_binding_source_permutation_v1": (
         "logic_equivalent_source_refactor", "single_evaluation_binding"
+    ),
+    "for_initializer_declaration_reseat_v1": (
+        "logic_equivalent_source_refactor",
+        "for_initializer_declaration_reseat",
     ),
     "list_cursor_delete_emission_probe_v1": (
         "discarded_emission_probe", "list_cursor_delete_emission"
@@ -1115,26 +1120,41 @@ def require_target_source_range_identity(
 
 
 def validate_target_source_refactor_proof(value: object, context: str) -> dict:
-    """Validate a manifest-declared source-permutation target window."""
+    """Validate one closed manifest-declared source-permutation window."""
     require(isinstance(value, dict), f"{context} must be an object")
-    exact_audit_keys(value, {
-        "kind", "start_marker", "end_marker", "seed_range_pin",
-        "donor_range_pin", "operation_ids",
-    }, context)
-    require(
-        value.get("kind") == "single_evaluation_bindings_v1",
-        f"{context}.kind differs",
-    )
+    kind = value.get("kind")
+    if kind == "single_evaluation_bindings_v1":
+        exact_audit_keys(value, {
+            "kind", "start_marker", "end_marker", "seed_range_pin",
+            "donor_range_pin", "operation_ids",
+        }, context)
+        marker_names = ("start_marker", "end_marker")
+    elif kind == "for_initializer_declaration_reseat_v1":
+        exact_audit_keys(value, {
+            "kind", "selector", "start_marker", "source_owner_mangled",
+            "seed_range_pin", "donor_range_pin", "operation_ids",
+        }, context)
+        require(value.get("selector")
+                == "brace_balanced_function_after_marker_v1",
+                f"{context}.selector differs")
+        owner = value.get("source_owner_mangled")
+        require(isinstance(owner, str) and owner.startswith("?")
+                and len(owner) >= 8,
+                f"{context}.source_owner_mangled is invalid")
+        marker_names = ("start_marker",)
+    else:
+        raise ByteIdentityError(f"{context}.kind is unsupported: {kind!r}")
     markers = {}
-    for name in ("start_marker", "end_marker"):
+    for name in marker_names:
         marker = value.get(name)
         require(isinstance(marker, str) and marker.isascii()
                 and 8 <= len(marker) <= 256
                 and not any(character in marker for character in "\0\r\n"),
                 f"{context}.{name} is invalid")
         markers[name] = marker
-    require(markers["start_marker"] != markers["end_marker"],
-            f"{context} markers must differ")
+    if len(markers) == 2:
+        require(markers["start_marker"] != markers["end_marker"],
+                f"{context} markers must differ")
     operation_ids = value.get("operation_ids")
     require(
         isinstance(operation_ids, list)
@@ -1145,8 +1165,8 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         and len(set(operation_ids)) == len(operation_ids),
         f"{context}.operation_ids is invalid",
     )
-    return {
-        "kind": "single_evaluation_bindings_v1",
+    normalized = {
+        "kind": kind,
         **markers,
         "seed_range_pin": validate_source_overlay_range_pin(
             value.get("seed_range_pin"), context + ".seed_range_pin"
@@ -1156,6 +1176,53 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         ),
         "operation_ids": list(operation_ids),
     }
+    if kind == "for_initializer_declaration_reseat_v1":
+        normalized.update({
+            "selector": value["selector"],
+            "source_owner_mangled": value["source_owner_mangled"],
+        })
+    return normalized
+
+
+def select_source_permutation_window(
+    data: bytes, proof: dict, context: str,
+) -> bytes:
+    """Select the complete source window authenticated by a proof."""
+    start_marker = proof["start_marker"].encode("ascii")
+    require(data.count(start_marker) == 1,
+            f"{context} start marker is not unique")
+    start = data.index(start_marker)
+    if proof["kind"] == "single_evaluation_bindings_v1":
+        end_marker = proof["end_marker"].encode("ascii")
+        require(data.count(end_marker) == 1,
+                f"{context} end marker is not unique")
+        end = data.index(end_marker)
+        require(start < end, f"{context} source markers are reversed")
+        return data[start:end]
+
+    require(proof["kind"] == "for_initializer_declaration_reseat_v1"
+            and proof["selector"]
+            == "brace_balanced_function_after_marker_v1",
+            f"{context} source selector differs")
+    tokens = [item for item in source_overlay_tokens(data)
+              if item[1] >= start]
+    opening = next((index for index, item in enumerate(tokens)
+                    if item[0] == "{"), None)
+    require(opening is not None, f"{context} function body is missing")
+    depth = 0
+    end = None
+    for token, _, token_end in tokens[opening:]:
+        if token == "{":
+            depth += 1
+        elif token == "}":
+            depth -= 1
+            if depth == 0:
+                end = token_end
+                break
+    require(end is not None, f"{context} function body is unbalanced")
+    if data[end:end + 1] == b"\n":
+        end += 1
+    return data[start:end]
 
 
 def require_target_source_refactor_identity(
@@ -1165,20 +1232,10 @@ def require_target_source_refactor_identity(
     require(isinstance(seed_source, bytes) and isinstance(donor_source, bytes),
             f"{context} source renderings are missing")
 
-    def selected(data: bytes, role: str) -> bytes:
-        start_marker = proof["start_marker"].encode("ascii")
-        end_marker = proof["end_marker"].encode("ascii")
-        require(data.count(start_marker) == 1,
-                f"{context} {role} start marker is not unique")
-        require(data.count(end_marker) == 1,
-                f"{context} {role} end marker is not unique")
-        start = data.index(start_marker)
-        end = data.index(end_marker)
-        require(start < end, f"{context} {role} source markers are reversed")
-        return data[start:end]
-
-    seed_range = selected(seed_source, "seed")
-    donor_range = selected(donor_source, "donor")
+    seed_range = select_source_permutation_window(
+        seed_source, proof, context + " seed")
+    donor_range = select_source_permutation_window(
+        donor_source, proof, context + " donor")
     require_source_overlay_range_pin(
         seed_range, proof["seed_range_pin"], context + " seed target range"
     )
@@ -1236,16 +1293,51 @@ def render_single_evaluation_binding_output(params: dict) -> bytes:
     return (declaration + use).encode("ascii")
 
 
+def render_for_initializer_declaration_reseat_input(params: dict) -> bytes:
+    """Reconstruct the checked-in side of a closed declaration reseat."""
+    indent = params["indentation"]
+    iterator_type = render_source_overlay_cpp_type(params["iterator_type"])
+    identifier = params["identifier"]
+    container = params["container_identifier"]
+    begin = params["begin_member"]
+    end = params["end_member"]
+    declaration_in_initializer = (
+        f"{indent}for ({iterator_type} {identifier} = "
+        f"{container}.{begin}(); {identifier} != {container}.{end}(); "
+        f"{identifier}++) {{\n"
+    ).encode("ascii")
+    standalone = (
+        f"{indent}{iterator_type} {identifier};\n\n"
+        f"{indent}for ({identifier} = {container}.{begin}(); "
+        f"{identifier} != {container}.{end}(); {identifier}++) {{\n"
+    ).encode("ascii")
+    if params["form"] == "standalone_then_assignment_v1":
+        return declaration_in_initializer
+    require(params["form"] == "declaration_in_initializer_v1",
+            "for-initializer reseat form differs")
+    return standalone
+
+
+def render_for_initializer_declaration_reseat_output(params: dict) -> bytes:
+    """Render the opposite, manifest-selected declaration seat."""
+    inverse = dict(params)
+    inverse["form"] = (
+        "declaration_in_initializer_v1"
+        if params["form"] == "standalone_then_assignment_v1"
+        else "standalone_then_assignment_v1"
+    )
+    return render_for_initializer_declaration_reseat_input(inverse)
+
+
 def require_target_source_refactor_recipe_policy(
     recipe: dict, function: dict, root, unit_source: str, context: str,
 ) -> dict:
-    """Confine manifest-declared bind-once permutations to one target.
+    """Confine manifest-declared source permutations to one source owner.
 
-    Each replacement must be a syntactic extraction of one existing
-    expression into one fresh local: the original statement is reconstructed
-    from the same manifest record and compared byte-for-byte with the checked-
-    in source.  Everything outside the pinned target window remains limited
-    to fresh, non-emitting compiler-state entropy.
+    Each replacement is rendered from one closed typed form, and its inverse
+    reconstructs the checked-in statement byte-for-byte.  Everything outside
+    the pinned source-owner window remains limited to fresh, non-emitting
+    compiler-state entropy.
     """
     proof = function["target_source_refactor"]
     validated = validate_donor_source_overlay_recipe(
@@ -1257,13 +1349,10 @@ def require_target_source_refactor_recipe_policy(
     source = Path(root) / unit_source
     clean = source.read_bytes()
     start_marker = proof["start_marker"].encode("ascii")
-    end_marker = proof["end_marker"].encode("ascii")
-    require(clean.count(start_marker) == clean.count(end_marker) == 1,
-            f"{context}: refactor target markers are not unique")
+    target_range = select_source_permutation_window(
+        clean, proof, context + " clean source owner")
     target_start = clean.index(start_marker)
-    target_end = clean.index(end_marker)
-    require(target_start < target_end,
-            f"{context}: refactor target markers are reversed")
+    target_end = target_start + len(target_range)
 
     clean_tokens = {token for token, _, _ in source_overlay_tokens(clean)}
     target_tokens = {
@@ -1280,19 +1369,32 @@ def require_target_source_refactor_recipe_policy(
         generators = list(_source_overlay_generators(operation["generator"]))
         require(generators, f"{context}: empty generator tree")
         if operation_id in expected:
-            require(
-                operation["action"] == "replace"
-                and len(generators) == 1
-                and generators[0]["kind"]
-                == "single_evaluation_binding_source_permutation_v1"
-                and operation_id not in seen,
-                f"{context}: refactor operation {operation_id} differs",
-            )
+            expected_kind = {
+                "single_evaluation_bindings_v1":
+                    "single_evaluation_binding_source_permutation_v1",
+                "for_initializer_declaration_reseat_v1":
+                    "for_initializer_declaration_reseat_v1",
+            }[proof["kind"]]
+            require(operation["action"] == "replace"
+                    and len(generators) == 1
+                    and generators[0]["kind"] == expected_kind
+                    and operation_id not in seen,
+                    f"{context}: refactor operation {operation_id} differs")
             params = generators[0]["params"]
             identifier = params["identifier"]
-            require(identifier not in target_tokens
-                    and identifier not in refactor_identifiers,
-                    f"{context}: refactor local is not fresh: {identifier}")
+            if proof["kind"] == "single_evaluation_bindings_v1":
+                require(identifier not in target_tokens
+                        and identifier not in refactor_identifiers,
+                        f"{context}: refactor local is not fresh: "
+                        f"{identifier}")
+                expected_input = render_single_evaluation_binding_input(params)
+            else:
+                require(identifier not in refactor_identifiers,
+                        f"{context}: reseated iterator is repeated: "
+                        f"{identifier}")
+                expected_input = (
+                    render_for_initializer_declaration_reseat_input(params)
+                )
             start = resolve_source_overlay_anchor(
                 clean, operation["start_anchor"], context + " refactor.from",
                 logical_path=unit_source,
@@ -1304,12 +1406,42 @@ def require_target_source_refactor_recipe_policy(
             require(target_start <= start < end <= target_end,
                     f"{context}: refactor operation leaves its target")
             removed = clean[start:end]
-            require(removed == render_single_evaluation_binding_input(params),
+            require(removed == expected_input,
                     f"{context}: refactor input statement differs")
             pin = operation["baseline_input_range"]
             require(sha256_bytes(removed) == pin["baseline_sha256"]
                     and len(removed) == pin["baseline_size"],
                     f"{context}: refactor input pin differs")
+            if proof["kind"] == "for_initializer_declaration_reseat_v1":
+                relative_start = start - target_start
+                relative_end = end - target_start
+                owner_tokens = source_overlay_tokens(target_range)
+                openings = [
+                    index for index, (token, token_start, token_end)
+                    in enumerate(owner_tokens)
+                    if token == "{" and relative_start <= token_start
+                    and token_end <= relative_end
+                ]
+                require(len(openings) == 1,
+                        f"{context}: reseated for-loop opening differs")
+                depth = 0
+                loop_end = None
+                for token, _, token_end in owner_tokens[openings[0]:]:
+                    if token == "{":
+                        depth += 1
+                    elif token == "}":
+                        depth -= 1
+                        if depth == 0:
+                            loop_end = token_end
+                            break
+                require(loop_end is not None,
+                        f"{context}: reseated for-loop is unbalanced")
+                uses = [token_start for token, token_start, _ in owner_tokens
+                        if token == identifier]
+                require(len(uses) >= 4
+                        and all(relative_start <= item < loop_end
+                                for item in uses),
+                        f"{context}: iterator use escapes its declared loop")
             seen.add(operation_id)
             refactor_identifiers.add(identifier)
             continue
@@ -2046,6 +2178,20 @@ def source_overlay_expected_identifier_roles(
             if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", token)
             and token != params["identifier"]
         )
+    elif kind == "for_initializer_declaration_reseat_v1":
+        declared.add(params["identifier"])
+        referenced.update({
+            params["identifier"], params["container_identifier"],
+            params["begin_member"], params["end_member"],
+        })
+        referenced.update(
+            token for token, _, _ in source_overlay_tokens(
+                render_source_overlay_cpp_type(
+                    params["iterator_type"]
+                ).encode("ascii")
+            )
+            if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", token)
+        )
     elif kind == "member_signature_v1":
         referenced.add(params["class_identifier"])
         referenced.add(params["member_identifier"])
@@ -2780,6 +2926,42 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
             "expression": expression,
             "use": normalized_use,
             "declaration_indent": declaration_indent,
+        }
+    elif kind == "for_initializer_declaration_reseat_v1":
+        require(not layout,
+                f"{context}: a for-initializer reseat cannot carry layout "
+                "overrides")
+        exact_audit_keys(params, {
+            "form", "type", "id", "container", "begin", "end",
+            "declaration_indent",
+        }, param_context)
+        require(params.get("form") in {
+                    "standalone_then_assignment_v1",
+                    "declaration_in_initializer_v1",
+                },
+                f"{param_context}.form differs")
+        indentation = params.get("declaration_indent")
+        require(isinstance(indentation, str) and indentation.isascii()
+                and 1 <= len(indentation) <= 32
+                and set(indentation) <= {" ", "\t"},
+                f"{param_context}.declaration_indent differs")
+        iterator_type = validate_source_overlay_cpp_type(
+            params.get("type"), param_context + ".type")
+        require(not iterator_type["indirection"]
+                and not iterator_type["trailing_const"],
+                f"{param_context}.type is not a value iterator type")
+        normalized = {
+            "form": params["form"],
+            "iterator_type": iterator_type,
+            "identifier": _source_overlay_identifier(
+                params.get("id"), param_context + ".id"),
+            "container_identifier": _source_overlay_identifier(
+                params.get("container"), param_context + ".container"),
+            "begin_member": _source_overlay_identifier(
+                params.get("begin"), param_context + ".begin"),
+            "end_member": _source_overlay_identifier(
+                params.get("end"), param_context + ".end"),
+            "indentation": indentation,
         }
     elif kind == "empty_compound_statements_v1":
         exact_audit_keys(params, {"scope_count"}, param_context)
@@ -4547,6 +4729,8 @@ def render_source_overlay_generator(
                       f'~{params["member_identifier"]}()').encode("ascii")
     elif kind == "single_evaluation_binding_source_permutation_v1":
         result = render_single_evaluation_binding_output(params)
+    elif kind == "for_initializer_declaration_reseat_v1":
+        result = render_for_initializer_declaration_reseat_output(params)
     elif kind == "empty_compound_statements_v1":
         result = b"\t{\n\t}\n" * params["scope_count"]
     elif kind == "inline_budget_noop_statements_v1":
@@ -8933,8 +9117,10 @@ def validate_manifest(
                         source_dir,
                     )
                     if any(
-                        generator["kind"]
-                        == "single_evaluation_binding_source_permutation_v1"
+                        generator["kind"] in {
+                            "single_evaluation_binding_source_permutation_v1",
+                            "for_initializer_declaration_reseat_v1",
+                        }
                         for generator in _source_overlay_generators(
                             validated_recipe
                         )
@@ -9514,11 +9700,25 @@ def validate_manifest(
                         "instruction_ranges", "retail_oracle",
                         "retail_relocations",
                     }
+                    if "target_source_refactor" in function:
+                        mosaic_keys |= {
+                            "target_source_refactor",
+                            "expected_donor_body_length",
+                            "expected_donor_line_count",
+                            "expected_seed_metadata_sha256",
+                            "expected_donor_metadata_sha256",
+                        }
+                    if "donor_variants" in function:
+                        mosaic_keys |= {
+                            "donor_variants",
+                            "expected_mosaic_donor_body_sha256",
+                        }
                     exact_keys(function, mosaic_keys, function_context)
-                    require_instruction_mosaic_donor_recipe(
-                        local_recipes[donor_id],
-                        f"{function_context} donor recipe",
-                    )
+                    if "target_source_refactor" not in function:
+                        require_instruction_mosaic_donor_recipe(
+                            local_recipes[donor_id],
+                            f"{function_context} donor recipe",
+                        )
                     for name in (
                         "expected_section_number", "expected_section_count",
                         "expected_body_length", "expected_relocation_count",
@@ -9527,6 +9727,64 @@ def validate_manifest(
                         value = function.get(name)
                         require(type(value) is int and value > 0,
                                 f"{function_context}.{name} is invalid")
+                    if "target_source_refactor" in function:
+                        for name in ("expected_donor_body_length",
+                                     "expected_donor_line_count"):
+                            value = function.get(name)
+                            require(type(value) is int and value > 0,
+                                    f"{function_context}.{name} is invalid")
+                        for name in ("expected_seed_metadata_sha256",
+                                     "expected_donor_metadata_sha256"):
+                            require_sha(function.get(name),
+                                        f"{function_context}.{name}")
+                    variant_ids = set()
+                    if "donor_variants" in function:
+                        require("target_source_refactor" in function,
+                                f"{function_context}: donor variants require "
+                                "a source-permutation mosaic")
+                        variants = function.get("donor_variants")
+                        require(isinstance(variants, list)
+                                and 1 <= len(variants) <= 8,
+                                f"{function_context}.donor_variants differs")
+                        normalized_variants = []
+                        for variant_index, variant in enumerate(variants):
+                            variant_context = (
+                                f"{function_context}.donor_variants"
+                                f"[{variant_index}]")
+                            require(isinstance(variant, dict),
+                                    f"{variant_context} must be an object")
+                            exact_keys(variant, {
+                                "donor", "expected_body_length",
+                                "expected_line_count",
+                                "expected_body_sha256",
+                                "expected_metadata_sha256",
+                            }, variant_context)
+                            variant_id = variant.get("donor")
+                            require(variant_id in local_recipe_ids
+                                    and variant_id != donor_id
+                                    and variant_id not in variant_ids,
+                                    f"{variant_context}.donor differs")
+                            variant_ids.add(variant_id)
+                            function_recipe_ids.add(variant_id)
+                            require_instruction_mosaic_donor_recipe(
+                                local_recipes[variant_id],
+                                f"{variant_context} recipe",
+                            )
+                            for name in ("expected_body_length",
+                                         "expected_line_count"):
+                                require(type(variant.get(name)) is int
+                                        and variant[name] > 0,
+                                        f"{variant_context}.{name} is invalid")
+                            for name in ("expected_body_sha256",
+                                         "expected_metadata_sha256"):
+                                require_sha(variant.get(name),
+                                            f"{variant_context}.{name}")
+                            normalized_variants.append(dict(variant))
+                        require_sha(
+                            function.get("expected_mosaic_donor_body_sha256"),
+                            f"{function_context}"
+                            ".expected_mosaic_donor_body_sha256",
+                        )
                     for name in (
                         "expected_seed_body_sha256",
                         "expected_donor_body_sha256",
@@ -9535,12 +9793,34 @@ def validate_manifest(
                         require_sha(function.get(name),
                                     f"{function_context}.{name}")
                     normalized_function = dict(function)
+                    if variant_ids:
+                        normalized_function["donor_variants"] = (
+                            normalized_variants)
+                    if "target_source_refactor" in function:
+                        proof = validate_target_source_refactor_proof(
+                            function["target_source_refactor"],
+                            f"{function_context}.target_source_refactor",
+                        )
+                        normalized_function["target_source_refactor"] = proof
+                        bound_refactor_recipe_ids.append(donor_id)
+                        require(local_recipe_kinds[donor_id]
+                                == "donor_source_overlay",
+                                f"{function_context}: source mosaic requires "
+                                "a donor-private source rendering")
+                        require_target_source_refactor_recipe_policy(
+                            local_recipes[donor_id], normalized_function,
+                            source_dir, source_relative, function_context,
+                        )
                     normalized_function["instruction_ranges"] = (
                         validate_instruction_mosaic_ranges(
                             function.get("instruction_ranges"),
                             f"{function_context}.instruction_ranges",
                             function["expected_body_length"],
                         )
+                    )
+                    require_instruction_mosaic_range_donor_bindings(
+                        normalized_function["instruction_ranges"], donor_id,
+                        variant_ids, function_context,
                     )
                     retail = function.get("retail_oracle")
                     require(isinstance(retail, dict),
@@ -11822,7 +12102,10 @@ def validate_retail_relocation_oracle(
 
 INSTRUCTION_MOSAIC_RANGE_KEYS = {
     "kind", "start", "end", "seed_bytes", "seed_sha256",
-    "donor_bytes", "donor_sha256",
+    "donor_bytes", "donor_sha256", "donor",
+}
+INSTRUCTION_MOSAIC_SEQUENCE_RANGE_KEYS = INSTRUCTION_MOSAIC_RANGE_KEYS | {
+    "seed_instruction_lengths", "donor_instruction_lengths",
 }
 
 INSTRUCTION_MOSAIC_DECLARATION_RECIPE_KINDS = frozenset({
@@ -11863,9 +12146,15 @@ def validate_instruction_mosaic_ranges(
     for index, item in enumerate(value):
         item_context = f"{context}[{index}]"
         require(isinstance(item, dict), f"{item_context} must be an object")
-        exact_audit_keys(item, INSTRUCTION_MOSAIC_RANGE_KEYS, item_context)
-        require(item.get("kind") == "same_offset_complete_x86_instruction_v1",
-                f"{item_context}.kind differs")
+        kind = item.get("kind")
+        if kind == "same_offset_complete_x86_instruction_v1":
+            exact_audit_keys(item, INSTRUCTION_MOSAIC_RANGE_KEYS,
+                             item_context, optional={"donor"})
+        elif kind == "same_offset_complete_x86_instruction_sequence_v1":
+            exact_audit_keys(item, INSTRUCTION_MOSAIC_SEQUENCE_RANGE_KEYS,
+                             item_context, optional={"donor"})
+        else:
+            raise ByteIdentityError(f"{item_context}.kind differs")
         start = require_exact_int(
             item.get("start"), item_context + ".start",
             minimum=0, maximum=body_length - 1,
@@ -11874,8 +12163,9 @@ def validate_instruction_mosaic_ranges(
             item.get("end"), item_context + ".end",
             minimum=1, maximum=body_length,
         )
-        require(start < end and end - start <= 15,
-                f"{item_context} is not one bounded x86 instruction")
+        maximum = 15 if kind == "same_offset_complete_x86_instruction_v1" else 64
+        require(start < end and end - start <= maximum,
+                f"{item_context} is not a bounded x86 instruction range")
         require(start >= previous_end,
                 f"{context} is unsorted or overlapping")
         previous_end = end
@@ -11897,13 +12187,47 @@ def validate_instruction_mosaic_ranges(
                 f"{item_context} literal encoding/hash differs")
         require(seed_bytes != donor_bytes and seed_sha != donor_sha,
                 f"{item_context} does not move compiler state")
-        normalized.append({
-            "kind": "same_offset_complete_x86_instruction_v1",
+        normalized_item = {
+            "kind": kind,
             "start": start, "end": end,
             "seed_bytes": seed_hex, "seed_sha256": seed_sha,
             "donor_bytes": donor_hex, "donor_sha256": donor_sha,
-        })
+        }
+        if "donor" in item:
+            donor_id = item.get("donor")
+            require(isinstance(donor_id, str)
+                    and re.fullmatch(r"d_[0-9a-f]{12}", donor_id),
+                    f"{item_context}.donor is invalid")
+            normalized_item["donor"] = donor_id
+        if kind == "same_offset_complete_x86_instruction_sequence_v1":
+            for role in ("seed", "donor"):
+                lengths = item.get(f"{role}_instruction_lengths")
+                require(isinstance(lengths, list) and lengths
+                        and len(lengths) <= 64
+                        and all(type(length) is int and 1 <= length <= 15
+                                for length in lengths)
+                        and sum(lengths) == end - start,
+                        f"{item_context}.{role}_instruction_lengths differ")
+                normalized_item[f"{role}_instruction_lengths"] = list(lengths)
+        normalized.append(normalized_item)
     return normalized
+
+
+def require_instruction_mosaic_range_donor_bindings(
+    ranges: list[dict], main_donor: str, variant_donors: set[str],
+    context: str,
+) -> None:
+    """Make per-range donor provenance explicit only for multi-donor rows."""
+    if variant_donors:
+        range_donors = {item.get("donor") for item in ranges}
+        require(None not in range_donors
+                and range_donors == variant_donors | {main_donor},
+                f"{context}: instruction ranges do not use every declared "
+                "donor variant")
+        return
+    require(all("donor" not in item for item in ranges),
+            f"{context}: a single-donor instruction mosaic may not label "
+            "ranges")
 
 
 def require_retail_relocation_oracle(
@@ -13249,6 +13573,7 @@ def assert_source_permutations_are_donor_only(overlay: object) -> None:
         require(
             generator.get("kind") not in {
                 "single_evaluation_binding_source_permutation_v1",
+                "for_initializer_declaration_reseat_v1",
                 "dead_local_linear_updates_v1",
                 "inline_default_constructor_dead_updates_v1",
             },
@@ -13546,11 +13871,188 @@ def retail_image_body(
         f"retail oracle address 0x{address:08x} is not mapped by {image_name}")
 
 
-def compose_retail_exact_instruction_mosaic(
+def instruction_mosaic_metadata_sha256(
+    coff: CoffObject, primary: dict,
+) -> str:
+    """Hash the target's seed-authoritative line/debug/EH metadata closure."""
+    definitions = section_definitions(coff)
+    closure = _comdat_child_closure(coff, primary)
+    children = []
+    for name in closure[1]:
+        child = _comdat_child(coff, primary, name)
+        definition = definitions[child["number"]]
+        children.append({
+            "name": name,
+            "section_number": child["number"],
+            "raw_size": child["raw_size"],
+            "relocation_count": child["relocation_count"],
+            "line_count": child["line_count"],
+            "characteristics": child["characteristics"],
+            "selection": definition["selection"],
+            "associated": definition["associated"],
+            "body_sha256": sha256_bytes(coff_body(coff, child)),
+            "relocations_sha256": sha256_bytes(
+                _coff_table_bytes(coff, child, "relocations")),
+            "lines_sha256": sha256_bytes(
+                _coff_table_bytes(coff, child, "lines")),
+        })
+    return sha256_bytes(canonical_json_bytes({
+        "target_line_table_sha256": sha256_bytes(
+            _coff_table_bytes(coff, primary, "lines")),
+        "target_relocation_table_sha256": sha256_bytes(
+            _coff_table_bytes(coff, primary, "relocations")),
+        "closure": children,
+    }))
+
+
+def _validate_instruction_mosaic_source_variant(
+    seed: CoffObject,
+    seed_primary: dict,
+    donor_bytes: bytes,
+    function: dict,
+    variant: dict,
+    context: str,
+) -> tuple[CoffObject, dict, bytes]:
+    """Authenticate one independently compiled same-COMDAT donor variant."""
+    donor = CoffObject(donor_bytes)
+    primary = donor.function_section(function["mangled"])
+    require(primary["number"] == seed_primary["number"]
+            == function["expected_section_number"],
+            f"{context} target section seat changed")
+    require(len(donor.sections) == len(seed.sections)
+            == function["expected_section_count"],
+            f"{context} global section count changed")
+    require(function_multiset(seed) == function_multiset(donor),
+            f"{context} function set differs")
+    require(comdat_primary_identity_multiset(seed)
+            == comdat_primary_identity_multiset(donor),
+            f"{context} COMDAT identity set differs")
+    require(all(seed_primary[field] == primary[field]
+                for field in ("name", "relocation_count", "characteristics")),
+            f"{context} target section header changed")
+    require(primary["raw_size"] == variant["expected_body_length"]
+            and primary["line_count"] == variant["expected_line_count"]
+            and primary["relocation_count"]
+            == function["expected_relocation_count"],
+            f"{context} target size/table counts changed")
+    seed_defs = section_definitions(seed)
+    donor_defs = section_definitions(donor)
+    require(seed_defs[seed_primary["number"]]["selection"]
+            == donor_defs[primary["number"]]["selection"],
+            f"{context} COMDAT selection changed")
+    closure = _comdat_child_closure(seed, seed_primary)
+    require(closure == _comdat_child_closure(donor, primary)
+            and closure in {
+                (2, (".debug$F", ".debug$S")),
+                (2, (".debug$S", ".xdata$x")),
+            }, f"{context} target closure changed")
+    for child_name in closure[1]:
+        left = _comdat_child(seed, seed_primary, child_name)
+        right = _comdat_child(donor, primary, child_name)
+        require(left["number"] == right["number"]
+                and all(left[field] == right[field]
+                        for field in ("name", "characteristics")),
+                f"{context} {child_name} seat/header changed")
+        require_same_semantic_relocations(
+            seed, left, donor, right, f"{context} {child_name}")
+    require_instruction_mosaic_semantic_relocations(
+        seed, seed_primary, donor, primary, f"{context} code")
+    body = coff_body(donor, primary)
+    require(sha256_bytes(body) == variant["expected_body_sha256"],
+            f"{context} body differs from its pin")
+    require(instruction_mosaic_metadata_sha256(donor, primary)
+            == variant["expected_metadata_sha256"],
+            f"{context} metadata differs from its pin")
+    lines = _coff_table_bytes(donor, primary, "lines")
+    require(len(lines) >= 6 and lines[4:6] == b"\0\0"
+            and donor.symbols.get(
+                int.from_bytes(lines[:4], "little"), {}).get("name")
+            == function["mangled"],
+            f"{context} line marker changed identity")
+    return donor, primary, body
+
+
+def _compose_instruction_mosaic_variant_object(
+    seed_bytes: bytes,
+    main_donor_bytes: bytes,
+    additional_donor_bytes: dict[str, bytes],
+    function: dict,
+) -> tuple[bytes, dict]:
+    """Build one provenance-checked donor view from same-COMDAT variants.
+
+    The returned object is an internal view only.  Every copied instruction
+    still comes from its named fresh compiler output; no synthesized bytes or
+    manifest literals enter the result.
+    """
+    variants = function.get("donor_variants", [])
+    require(variants, "instruction mosaic has no additional donor variants")
+    expected_ids = {item["donor"] for item in variants}
+    require(set(additional_donor_bytes) == expected_ids,
+            "instruction-mosaic additional donor set differs")
+    seed = CoffObject(seed_bytes)
+    seed_primary = seed.function_section(function["mangled"])
+    records = {
+        function["donor"]: {
+            "expected_body_length": function["expected_donor_body_length"],
+            "expected_line_count": function["expected_donor_line_count"],
+            "expected_body_sha256": function["expected_donor_body_sha256"],
+            "expected_metadata_sha256":
+                function["expected_donor_metadata_sha256"],
+        },
+        **{item["donor"]: item for item in variants},
+    }
+    objects = {function["donor"]: main_donor_bytes,
+               **additional_donor_bytes}
+    parsed = {}
+    for donor_id, record in records.items():
+        parsed[donor_id] = _validate_instruction_mosaic_source_variant(
+            seed, seed_primary, objects[donor_id], function, record,
+            f"instruction-mosaic variant {donor_id}",
+        )
+
+    main = parsed[function["donor"]]
+    hybrid = bytearray(main_donor_bytes)
+    ranges = validate_instruction_mosaic_ranges(
+        function["instruction_ranges"], "instruction mosaic ranges",
+        function["expected_body_length"],
+    )
+    used = set()
+    for index, item in enumerate(ranges):
+        donor_id = item.get("donor")
+        require(donor_id in parsed,
+                f"instruction-mosaic range {index} donor is not declared")
+        used.add(donor_id)
+        _, primary, body = parsed[donor_id]
+        start, end = item["start"], item["end"]
+        require(end <= len(body),
+                f"instruction-mosaic range {index} leaves its donor")
+        require(body[start:end].hex() == item["donor_bytes"]
+                and sha256_bytes(body[start:end]) == item["donor_sha256"],
+                f"instruction-mosaic range {index} donor provenance differs")
+        at = main[1]["raw_offset"] + start
+        hybrid[at:at + end - start] = body[start:end]
+    require(used == set(records),
+            "instruction-mosaic donor variant is unused")
+    hybrid = bytes(hybrid)
+    hybrid_coff = CoffObject(hybrid)
+    hybrid_primary = hybrid_coff.function_section(function["mangled"])
+    hybrid_body = coff_body(hybrid_coff, hybrid_primary)
+    require(sha256_bytes(hybrid_body)
+            == function["expected_mosaic_donor_body_sha256"],
+            "instruction-mosaic combined donor view differs from its pin")
+    return hybrid, {
+        "variant_donors": sorted(records),
+        "combined_donor_body_sha256": sha256_bytes(hybrid_body),
+    }
+
+
+def _compose_retail_exact_instruction_mosaic_core(
     seed_bytes: bytes,
     donor_bytes: bytes,
     function: dict,
     retail_body: bytes,
+    *,
+    source_permutation: bool,
 ) -> tuple[bytes, dict]:
     """Import pinned complete instructions into an otherwise canonical COMDAT.
 
@@ -13568,6 +14070,8 @@ def compose_retail_exact_instruction_mosaic(
     require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
             "retail oracle body is missing")
     expected_length = function["expected_body_length"]
+    donor_expected_length = function.get(
+        "expected_donor_body_length", expected_length)
     ranges = validate_instruction_mosaic_ranges(
         function.get("instruction_ranges"), "instruction mosaic ranges",
         expected_length,
@@ -13590,26 +14094,35 @@ def compose_retail_exact_instruction_mosaic(
     require(comdat_primary_identity_multiset(seed)
             == comdat_primary_identity_multiset(donor),
             "instruction-mosaic donor COMDAT identity set differs")
-    header_fields = (
-        "name", "raw_size", "relocation_count", "line_count",
-        "characteristics",
-    )
-    require(all(sp[field] == dp[field] for field in header_fields),
+    common_header_fields = ("name", "relocation_count", "characteristics")
+    require(all(sp[field] == dp[field] for field in common_header_fields),
             "instruction-mosaic target section header changed")
+    if not source_permutation:
+        require(all(sp[field] == dp[field]
+                    for field in ("raw_size", "line_count")),
+                "instruction-mosaic target size/line header changed")
     require(sp["raw_size"] == expected_length
+            and dp["raw_size"] == donor_expected_length
             and sp["relocation_count"]
             == function["expected_relocation_count"]
             and sp["line_count"] == function["expected_line_count"],
             "instruction-mosaic target size/table counts changed")
+    if source_permutation:
+        require(dp["line_count"] == function["expected_donor_line_count"],
+                "instruction-mosaic donor line count changed")
     seed_defs = section_definitions(seed)
     donor_defs = section_definitions(donor)
     require(seed_defs[sp["number"]]["selection"]
             == donor_defs[dp["number"]]["selection"],
             "instruction-mosaic COMDAT selection changed")
     closure = _comdat_child_closure(seed, sp)
-    require(closure == _comdat_child_closure(donor, dp)
-            == (2, (".debug$S", ".xdata$x")),
-            "instruction-mosaic target closure is not the same EH closure")
+    require(closure == _comdat_child_closure(donor, dp),
+            "instruction-mosaic target closure changed")
+    allowed_closures = {(2, (".debug$S", ".xdata$x"))}
+    if source_permutation:
+        allowed_closures.add((2, (".debug$F", ".debug$S")))
+    require(closure in allowed_closures,
+            "instruction-mosaic target closure class differs")
     closure_pairs = []
     closure_relocation_renames = {}
     for child_name in closure[1]:
@@ -13617,7 +14130,8 @@ def compose_retail_exact_instruction_mosaic(
         right = _comdat_child(donor, dp, child_name)
         require(left["number"] == right["number"],
                 f"instruction-mosaic {child_name} seat changed")
-        require(all(left[field] == right[field] for field in header_fields),
+        require(all(left[field] == right[field]
+                    for field in ("name", "characteristics")),
                 f"instruction-mosaic {child_name} header changed")
         closure_relocation_renames[child_name] = (
             require_same_semantic_relocations(
@@ -13625,12 +14139,11 @@ def compose_retail_exact_instruction_mosaic(
                 f"instruction-mosaic {child_name}",
             )
         )
-        require(_coff_table_bytes(seed, left, "lines")
-                == _coff_table_bytes(donor, right, "lines"),
-                f"instruction-mosaic {child_name} line table changed")
         left_body = coff_body(seed, left)
         right_body = coff_body(donor, right)
-        if child_name == ".xdata$x":
+        if source_permutation:
+            pass
+        elif child_name == ".xdata$x":
             require(left_body == right_body,
                     "instruction-mosaic EH xdata raw bytes changed")
         else:
@@ -13639,6 +14152,14 @@ def compose_retail_exact_instruction_mosaic(
                     and left_body[2:4] == b"\x05\x02",
                     "instruction-mosaic debug procedure identity changed")
         closure_pairs.append((left, right))
+
+    if source_permutation:
+        require(instruction_mosaic_metadata_sha256(seed, sp)
+                == function["expected_seed_metadata_sha256"],
+                "instruction-mosaic seed metadata differs from its pin")
+        require(instruction_mosaic_metadata_sha256(donor, dp)
+                == function["expected_donor_metadata_sha256"],
+                "instruction-mosaic donor metadata differs from its pin")
 
     seed_body = coff_body(seed, sp)
     donor_body = coff_body(donor, dp)
@@ -13655,9 +14176,12 @@ def compose_retail_exact_instruction_mosaic(
             "instruction-mosaic relocation count changed")
     seed_lines = _coff_table_bytes(seed, sp, "lines")
     donor_lines = _coff_table_bytes(donor, dp, "lines")
-    require(len(seed_lines) == len(donor_lines) >= 6
-            and seed_lines[4:] == donor_lines[4:],
-            "instruction-mosaic function line table changed")
+    require(len(seed_lines) >= 6 and len(donor_lines) >= 6,
+            "instruction-mosaic function line table is missing")
+    if not source_permutation:
+        require(len(seed_lines) == len(donor_lines)
+                and seed_lines[4:] == donor_lines[4:],
+                "instruction-mosaic function line table changed")
     for role, coff, line_bytes in (
         ("seed", seed, seed_lines), ("donor", donor, donor_lines),
     ):
@@ -13676,6 +14200,8 @@ def compose_retail_exact_instruction_mosaic(
     range_detail = []
     for index, item in enumerate(ranges):
         start, end = item["start"], item["end"]
+        require(end <= len(donor_body),
+                f"instruction-mosaic donor instruction {index} is absent")
         seed_instruction = seed_body[start:end]
         donor_instruction = donor_body[start:end]
         require(seed_instruction.hex() == item["seed_bytes"]
@@ -13722,6 +14248,7 @@ def compose_retail_exact_instruction_mosaic(
         mosaic[start:end] = donor_instruction
         range_detail.append({
             "start": start, "end": end,
+            "donor": item.get("donor", function["donor"]),
             "seed_sha256": item["seed_sha256"],
             "donor_sha256": item["donor_sha256"],
         })
@@ -13805,6 +14332,67 @@ def compose_retail_exact_instruction_mosaic(
         "retail_exact": True,
         **semantic_detail,
     }
+
+
+def compose_retail_exact_instruction_mosaic(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Compose a declaration-carrier instruction mosaic."""
+    require("target_source_refactor" not in function,
+            "source-permutation mosaic requires its source-proof composer")
+    return _compose_retail_exact_instruction_mosaic_core(
+        seed_bytes, donor_bytes, function, retail_body,
+        source_permutation=False,
+    )
+
+
+def compose_retail_exact_source_instruction_mosaic(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+    seed_source: bytes,
+    donor_source: bytes,
+    additional_donor_bytes: dict[str, bytes] | None = None,
+) -> tuple[bytes, dict]:
+    """Compose a mosaic from one authenticated source permutation."""
+    require(function.get("splice_class")
+            == "retail_exact_instruction_mosaic"
+            and "target_source_refactor" in function,
+            "source-permutation mosaic contract is missing")
+    owner = function["target_source_refactor"].get(
+        "source_owner_mangled")
+    if owner is not None:
+        # The source proof names the function whose checked-in spelling is
+        # permuted.  Bind that claim to both compiled objects even when a
+        # future consumer imports a different same-TU COMDAT.
+        CoffObject(seed_bytes).function_section(owner)
+        CoffObject(donor_bytes).function_section(owner)
+    source_detail = require_target_source_refactor_identity(
+        seed_source, donor_source, function["target_source_refactor"],
+        "retail-exact instruction-mosaic source proof",
+    )
+    variant_detail = {}
+    effective_donor = donor_bytes
+    effective_function = function
+    if function.get("donor_variants"):
+        effective_donor, variant_detail = (
+            _compose_instruction_mosaic_variant_object(
+                seed_bytes, donor_bytes, additional_donor_bytes or {},
+                function,
+            )
+        )
+        effective_function = dict(function)
+        effective_function["expected_donor_body_sha256"] = (
+            function["expected_mosaic_donor_body_sha256"])
+    composed, detail = _compose_retail_exact_instruction_mosaic_core(
+        seed_bytes, effective_donor, effective_function, retail_body,
+        source_permutation=True,
+    )
+    return composed, {**detail, **source_detail, **variant_detail}
 
 
 def compose_retail_exact_reloc_divergent(
@@ -14217,6 +14805,8 @@ def compose_equal_body_comdat(
       byte-identical xdata and paired object-local $L/$T relocation renames
       resolving to structurally identical targets.
     """
+    require("target_source_refactor" not in function,
+            "equal-body source permutations are unsupported")
     seed = CoffObject(seed_bytes)
     donor = CoffObject(donor_bytes)
     mangled = function["mangled"]

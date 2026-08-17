@@ -25,6 +25,9 @@ polishing non-1.0 aggregates. It is valid to compile one TU under several
 independently declared entropy states and compose different retail-exact COMDATs
 into the seed: every donor must be freshly generated from source and excluded
 from the link, with the target closure and relocation semantics fully proved.
+Multiple source versions may contribute disjoint complete-instruction ranges
+to one exact same-mangled COMDAT, but every range must name its donor and the
+declared donor set must be used exactly—never borrow from another function.
 
 Partial code composition is permitted only between independently
 source-generated versions of the exact same mangled function/COMDAT. The seed
@@ -54,8 +57,21 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-16)
 
-- Accepted canonical gate: LEGO1 4868/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is `0x1007ca30 LegoPartPresenter::Read`. A freshly generated
+- Accepted canonical gate: LEGO1 4869/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is `0x100586e0 LegoPathBoundary::RemovePresenter`. The
+  authentic for-initializer spelling perturbs another already-exact COMDAT
+  when landed directly, so checked-in source retains the standalone iterator.
+  Two manifest-declared current-source variants of the exact same 314-byte
+  mangled COMDAT supply seven disjoint complete-instruction sequences. The
+  composed body SHA-256 is
+  `acd459bf93ab369ef7e9e28b9d19ece17981614a7e3f472f9755172f1577d8c0`;
+  all six seed relocations, line/FPO/debug metadata and non-target bytes remain
+  authoritative, and both donors are excluded from the link. The zero-loss
+  confirmation report SHA-256 is
+  `ce43e5279fbf69279c109f178172838b9941ef2012c739bc629e5307656b493b`;
+  verdict SHA-256 is
+  `34c8aae9fae7498ae967865d643a4946abf00f4df1ae6aad4a1bd5912e21a68d`.
+  The preceding gain is `0x1007ca30 LegoPartPresenter::Read`. A freshly generated
   declaration-only donor of the exact same 2,633-byte mangled COMDAT supplies
   four complete instructions; the composed body is retail-exact under all 111
   authenticated relocations. Two imported instructions fully contain their
@@ -179,17 +195,7 @@ The other strict improvements include `0x10062e20`, `0x1004ebd0`, `0x100a3840`,
 `0x10057180`, `0x100166a0`, `0x100c3750`, and `0x1007ca30`. They are not
 landing candidates until a source/dial path reaches raw 1.0.
 
-Fresh reconstruction from the pinned historical source tree and deterministic
-seed `834470658` now proves the exact `RemovePresenter` state without consuming
-any CI object: the compiler produced a 314-byte target with masked distance 0,
-body SHA-256
-`acd459bf93abf8277d6a95a40a1ec055c80b0f33348027c4eb1e3a64ced7b9e8`,
-and exact six-record relocation/call semantics. Its complete function source
-range is byte-identical to current checked-in source after restoring the
-authentic iterator declaration to the `for` initializer. The historical tree,
-generator, and header are oracle evidence only and may not be runtime or build
-dependencies.  Delta-reduce the exact state into explicit declaration/source
-recipes over today's checked-in tree, then use a freshly source-generated,
-manifest-declared target-only COMDAT substitution if direct source still causes
-collateral; never consume the historical source/header or encode this function
-in Python.
+The historical exact `RemovePresenter` sample was used only as an oracle. Its
+state has now been delta-reduced into two explicit current-source manifest
+recipes and accepted through the generic same-COMDAT multi-donor mosaic above;
+no historical source, generator, header, report or object is a build input.

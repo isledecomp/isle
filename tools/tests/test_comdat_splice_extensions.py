@@ -553,6 +553,28 @@ class RetailExactInstructionMosaicTests(unittest.TestCase):
                 [function["instruction_ranges"][0], item], "fixture",
                 function["expected_body_length"])
 
+    def test_sequence_range_pins_both_complete_instruction_partitions(self):
+        _, _, function, _, _ = self.fixture()
+        item = copy.deepcopy(function["instruction_ranges"][0])
+        item.update({
+            "kind": "same_offset_complete_x86_instruction_sequence_v1",
+            "seed_instruction_lengths": [1, 2],
+            "donor_instruction_lengths": [2, 1],
+        })
+        normalized = byte_identity.validate_instruction_mosaic_ranges(
+            [item], "fixture", function["expected_body_length"])
+        self.assertEqual(normalized[0]["seed_instruction_lengths"], [1, 2])
+        self.assertEqual(normalized[0]["donor_instruction_lengths"], [2, 1])
+
+        for bad_lengths in ([0, 3], [16], [1, 1], []):
+            with self.subTest(lengths=bad_lengths), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError,
+                    "instruction_lengths"):
+                bad = copy.deepcopy(item)
+                bad["donor_instruction_lengths"] = bad_lengths
+                byte_identity.validate_instruction_mosaic_ranges(
+                    [bad], "fixture", function["expected_body_length"])
+
     def test_rejects_out_of_bounds_instruction_range(self):
         _, _, function, _, _ = self.fixture()
         item = copy.deepcopy(function["instruction_ranges"][0])
@@ -655,6 +677,274 @@ class RetailExactInstructionMosaicTests(unittest.TestCase):
             with self.assertRaisesRegex(byte_identity.ByteIdentityError,
                                         "non-target"):
                 self.compose(seed, donor, function, retail)
+
+    def test_source_permutation_wrapper_keeps_seed_metadata(self):
+        seed, donor, function, retail, mosaic = self.fixture()
+        parsed_donor = byte_identity.CoffObject(donor)
+        primary = parsed_donor.function_section(TARGET_SYMBOL)
+        debug = byte_identity._comdat_child(parsed_donor, primary, ".debug$S")
+        donor_with_debug_drift = bytearray(donor)
+        donor_with_debug_drift[debug["raw_offset"] + debug["raw_size"] - 1] ^= 1
+        donor_with_debug_drift = bytes(donor_with_debug_drift)
+
+        seed_source = (
+            b"// SOURCE-PERMUTATION-START\nseed_form();\n"
+            b"// SOURCE-PERMUTATION-END\n"
+        )
+        donor_source = (
+            b"// SOURCE-PERMUTATION-START\ndonor_form();\n"
+            b"// SOURCE-PERMUTATION-END\n"
+        )
+        start_marker = "// SOURCE-PERMUTATION-START"
+        end_marker = "// SOURCE-PERMUTATION-END"
+
+        def pin(data):
+            start = data.index(start_marker.encode("ascii"))
+            end = data.index(end_marker.encode("ascii"))
+            selected = data[start:end]
+            return {
+                "baseline_sha256": hashlib.sha256(selected).hexdigest(),
+                "baseline_size": len(selected),
+                "baseline_line_count": selected.count(b"\n"),
+                "baseline_significant_token_sha256":
+                    byte_identity.source_overlay_significant_sha256(selected),
+            }
+
+        function["target_source_refactor"] = (
+            byte_identity.validate_target_source_refactor_proof({
+                "kind": "single_evaluation_bindings_v1",
+                "start_marker": start_marker,
+                "end_marker": end_marker,
+                "seed_range_pin": pin(seed_source),
+                "donor_range_pin": pin(donor_source),
+                "operation_ids": ["op_fixture_binding"],
+            }, "fixture.proof")
+        )
+        function["expected_donor_body_length"] = (
+            function["expected_body_length"])
+        function["expected_donor_line_count"] = function["expected_line_count"]
+        seed_coff = byte_identity.CoffObject(seed)
+        seed_primary = seed_coff.function_section(TARGET_SYMBOL)
+        drifted_coff = byte_identity.CoffObject(donor_with_debug_drift)
+        drifted_primary = drifted_coff.function_section(TARGET_SYMBOL)
+        function["expected_seed_metadata_sha256"] = (
+            byte_identity.instruction_mosaic_metadata_sha256(
+                seed_coff, seed_primary))
+        function["expected_donor_metadata_sha256"] = (
+            byte_identity.instruction_mosaic_metadata_sha256(
+                drifted_coff, drifted_primary))
+
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "source-permutation"):
+            self.compose(seed, donor_with_debug_drift, function, retail)
+        composed, detail = (
+            byte_identity.compose_retail_exact_source_instruction_mosaic(
+                seed, donor_with_debug_drift, function, retail,
+                seed_source, donor_source))
+        checked = byte_identity.CoffObject(composed)
+        checked_primary = checked.function_section(TARGET_SYMBOL)
+        checked_debug = byte_identity._comdat_child(
+            checked, checked_primary, ".debug$S")
+        seed_debug = byte_identity._comdat_child(
+            seed_coff, seed_primary, ".debug$S")
+        self.assertEqual(byte_identity.coff_body(checked, checked_primary), mosaic)
+        self.assertEqual(
+            byte_identity.coff_body(checked, checked_debug),
+            byte_identity.coff_body(seed_coff, seed_debug),
+        )
+        self.assertTrue(detail["retail_exact"])
+
+    def _multi_donor_fixture(self):
+        seed, main, function, retail, _ = self.fixture(
+            donor_range=(0, 3), donor_extra=(24, 27))
+        seed_coff = byte_identity.CoffObject(seed)
+        seed_primary = seed_coff.function_section(TARGET_SYMBOL)
+        seed_body = byte_identity.coff_body(seed_coff, seed_primary)
+        main_coff = byte_identity.CoffObject(main)
+        main_primary = main_coff.function_section(TARGET_SYMBOL)
+        main_body = byte_identity.coff_body(main_coff, main_primary)
+
+        variant_bytes = bytes(value ^ 0x53 for value in seed_body[24:27])
+        variant = _patched_target_body(seed, [(24, variant_bytes)])
+        variant_coff = byte_identity.CoffObject(variant)
+        variant_primary = variant_coff.function_section(TARGET_SYMBOL)
+        variant_body = byte_identity.coff_body(variant_coff, variant_primary)
+
+        mosaic = bytearray(seed_body)
+        mosaic[0:3] = main_body[0:3]
+        mosaic[24:27] = variant_body[24:27]
+        mosaic = bytes(mosaic)
+        retail = bytearray(retail)
+        retail[24:27] = mosaic[24:27]
+        retail = bytes(retail)
+
+        def pin(data):
+            start = data.index(b"// SOURCE-PERMUTATION-START")
+            end = data.index(b"// SOURCE-PERMUTATION-END")
+            selected = data[start:end]
+            return {
+                "baseline_sha256": hashlib.sha256(selected).hexdigest(),
+                "baseline_size": len(selected),
+                "baseline_line_count": selected.count(b"\n"),
+                "baseline_significant_token_sha256":
+                    byte_identity.source_overlay_significant_sha256(selected),
+            }
+
+        seed_source = (
+            b"// SOURCE-PERMUTATION-START\nseed_form();\n"
+            b"// SOURCE-PERMUTATION-END\n"
+        )
+        donor_source = (
+            b"// SOURCE-PERMUTATION-START\ndonor_form();\n"
+            b"// SOURCE-PERMUTATION-END\n"
+        )
+        function.update({
+            "donor": "d_aaaaaaaaaaaa",
+            "target_source_refactor":
+                byte_identity.validate_target_source_refactor_proof({
+                    "kind": "single_evaluation_bindings_v1",
+                    "start_marker": "// SOURCE-PERMUTATION-START",
+                    "end_marker": "// SOURCE-PERMUTATION-END",
+                    "seed_range_pin": pin(seed_source),
+                    "donor_range_pin": pin(donor_source),
+                    "operation_ids": ["op_fixture_binding"],
+                }, "fixture.proof"),
+            "expected_donor_body_length": len(main_body),
+            "expected_donor_line_count": main_primary["line_count"],
+            "expected_seed_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    seed_coff, seed_primary),
+            "expected_donor_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    main_coff, main_primary),
+            "donor_variants": [{
+                "donor": "d_bbbbbbbbbbbb",
+                "expected_body_length": len(variant_body),
+                "expected_line_count": variant_primary["line_count"],
+                "expected_body_sha256":
+                    hashlib.sha256(variant_body).hexdigest(),
+                "expected_metadata_sha256":
+                    byte_identity.instruction_mosaic_metadata_sha256(
+                        variant_coff, variant_primary),
+            }],
+            "expected_mosaic_donor_body_sha256":
+                hashlib.sha256(mosaic).hexdigest(),
+            "expected_body_sha256": hashlib.sha256(mosaic).hexdigest(),
+            "retail_relocations": relocation_oracle_for(seed, retail),
+        })
+        function["instruction_ranges"][0]["donor"] = "d_aaaaaaaaaaaa"
+        variant_range = {
+            "kind": "same_offset_complete_x86_instruction_v1",
+            "start": 24, "end": 27,
+            "seed_bytes": seed_body[24:27].hex(),
+            "seed_sha256": hashlib.sha256(seed_body[24:27]).hexdigest(),
+            "donor_bytes": variant_body[24:27].hex(),
+            "donor_sha256": hashlib.sha256(variant_body[24:27]).hexdigest(),
+            "donor": "d_bbbbbbbbbbbb",
+        }
+        function["instruction_ranges"].append(variant_range)
+        return (seed, main, variant, function, retail, mosaic,
+                seed_source, donor_source)
+
+    def test_two_donor_source_mosaic_records_provenance_and_keeps_seed_tables(self):
+        (seed, main, variant, function, retail, mosaic,
+         seed_source, donor_source) = self._multi_donor_fixture()
+        composed, detail = (
+            byte_identity.compose_retail_exact_source_instruction_mosaic(
+                seed, main, function, retail, seed_source, donor_source,
+                {"d_bbbbbbbbbbbb": variant},
+            )
+        )
+        checked = byte_identity.CoffObject(composed)
+        seed_coff = byte_identity.CoffObject(seed)
+        checked_primary = checked.function_section(TARGET_SYMBOL)
+        seed_primary = seed_coff.function_section(TARGET_SYMBOL)
+        self.assertEqual(byte_identity.coff_body(checked, checked_primary),
+                         mosaic)
+        self.assertEqual(
+            [item["donor"] for item in detail["instruction_ranges"]],
+            ["d_aaaaaaaaaaaa", "d_bbbbbbbbbbbb"],
+        )
+        self.assertEqual(
+            byte_identity._coff_table_bytes(checked, checked_primary, "lines"),
+            byte_identity._coff_table_bytes(seed_coff, seed_primary, "lines"),
+        )
+        self.assertEqual(
+            byte_identity.detailed_relocations(checked, checked_primary),
+            byte_identity.detailed_relocations(seed_coff, seed_primary),
+        )
+        for child_name in (".debug$S", ".xdata$x"):
+            left = byte_identity._comdat_child(
+                checked, checked_primary, child_name)
+            right = byte_identity._comdat_child(
+                seed_coff, seed_primary, child_name)
+            self.assertEqual(byte_identity.coff_body(checked, left),
+                             byte_identity.coff_body(seed_coff, right))
+
+    def test_multi_donor_mapping_is_closed_and_every_variant_is_used(self):
+        (_, _, _, function, _, _, _, _) = self._multi_donor_fixture()
+        ranges = byte_identity.validate_instruction_mosaic_ranges(
+            function["instruction_ranges"], "fixture",
+            function["expected_body_length"])
+        byte_identity.require_instruction_mosaic_range_donor_bindings(
+            ranges, "d_aaaaaaaaaaaa", {"d_bbbbbbbbbbbb"}, "fixture")
+        cases = []
+        missing = copy.deepcopy(ranges)
+        del missing[1]["donor"]
+        cases.append(missing)
+        undeclared = copy.deepcopy(ranges)
+        undeclared[1]["donor"] = "d_cccccccccccc"
+        cases.append(undeclared)
+        unused = copy.deepcopy(ranges[:1])
+        cases.append(unused)
+        for bad in cases:
+            with self.subTest(ranges=bad), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, "donor variant"):
+                byte_identity.require_instruction_mosaic_range_donor_bindings(
+                    bad, "d_aaaaaaaaaaaa", {"d_bbbbbbbbbbbb"}, "fixture")
+        single = copy.deepcopy(ranges[:1])
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "single-donor"):
+            byte_identity.require_instruction_mosaic_range_donor_bindings(
+                single, "d_aaaaaaaaaaaa", set(), "fixture")
+
+    def test_multi_donor_objects_and_pins_are_fail_closed(self):
+        (seed, main, variant, function, retail, _,
+         seed_source, donor_source) = self._multi_donor_fixture()
+        compose = byte_identity.compose_retail_exact_source_instruction_mosaic
+        for mapping in ({}, {
+                "d_bbbbbbbbbbbb": variant,
+                "d_cccccccccccc": variant,
+        }):
+            with self.subTest(mapping=mapping), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, "donor set"):
+                compose(seed, main, function, retail, seed_source,
+                        donor_source, mapping)
+        drifted = copy.deepcopy(function)
+        drifted["donor_variants"][0]["expected_body_sha256"] = "0" * 64
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "body differs from its pin"):
+            compose(seed, main, drifted, retail, seed_source, donor_source,
+                    {"d_bbbbbbbbbbbb": variant})
+        topology = bytearray(variant)
+        parsed = byte_identity.CoffObject(variant)
+        primary = parsed.function_section(TARGET_SYMBOL)
+        struct.pack_into("<I", topology, primary["header_offset"] + 36,
+                         primary["characteristics"] ^ 0x20)
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "header changed"):
+            compose(seed, main, function, retail, seed_source, donor_source,
+                    {"d_bbbbbbbbbbbb": bytes(topology)})
+
+    def test_source_owner_mangled_must_exist_in_both_objects(self):
+        seed, donor, function, retail, _ = self.fixture()
+        function["target_source_refactor"] = {
+            "source_owner_mangled": "?MissingOwner@@YAXXZ",
+        }
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "expected one definition"):
+            byte_identity.compose_retail_exact_source_instruction_mosaic(
+                seed, donor, function, retail, b"seed", b"donor")
 
 
 class RetailExactTargetClosureTests(unittest.TestCase):
@@ -931,6 +1221,25 @@ class SourcePermutationTests(unittest.TestCase):
         )
         return copy.deepcopy(donor["recipe"]), function
 
+    def _live_for_initializer_case(self):
+        source = "LEGO1/lego/legoomni/src/paths/legopathboundary.cpp"
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text()
+        )
+        unit = next(item for item in manifest["translation_units"]
+                    if item["source"] == source)
+        function = next(item for item in unit["functions"]
+                        if item["mangled"].startswith("?RemovePresenter@"))
+        donor = next(item for item in unit["donors"]
+                     if item["id"] == function["donor"])
+        function = copy.deepcopy(function)
+        function["target_source_refactor"] = (
+            byte_identity.validate_target_source_refactor_proof(
+                function["target_source_refactor"], "proof"
+            )
+        )
+        return source, copy.deepcopy(donor["recipe"]), function
+
     def test_manifest_fields_render_one_binding_and_one_use(self):
         self.assertEqual(
             byte_identity.render_source_overlay_generator(self._generator()),
@@ -967,6 +1276,97 @@ class SourcePermutationTests(unittest.TestCase):
                                     "donor-only"):
             byte_identity.assert_source_permutations_are_donor_only(
                 {"generator": generator}
+            )
+
+    def test_equal_body_composer_has_no_source_proof_bypass(self):
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "unsupported"):
+            byte_identity.compose_equal_body_comdat(
+                b"", b"", {"target_source_refactor": {}})
+
+    def test_for_initializer_reseat_is_closed_and_source_derived(self):
+        generator = byte_identity.validate_source_overlay_generator({
+            "k": "for_init_decl",
+            "form": "standalone_then_assignment_v1",
+            "type": "LegoAnimPresenterSet::iterator",
+            "id": "it",
+            "container": "m_presenters",
+            "begin": "begin",
+            "end": "end",
+            "declaration_indent": "\t\t",
+        }, "fixture.generator")
+        self.assertEqual(
+            byte_identity.render_for_initializer_declaration_reseat_input(
+                generator["params"]),
+            b"\t\tfor (LegoAnimPresenterSet::iterator it = "
+            b"m_presenters.begin(); it != m_presenters.end(); it++) {\n",
+        )
+        self.assertEqual(
+            byte_identity.render_source_overlay_generator(generator),
+            b"\t\tLegoAnimPresenterSet::iterator it;\n\n"
+            b"\t\tfor (it = m_presenters.begin(); it != "
+            b"m_presenters.end(); it++) {\n",
+        )
+        inverse = byte_identity.validate_source_overlay_generator({
+            "k": "for_init_decl",
+            "form": "declaration_in_initializer_v1",
+            "type": "LegoAnimPresenterSet::iterator",
+            "id": "it",
+            "container": "m_presenters",
+            "begin": "begin",
+            "end": "end",
+            "declaration_indent": "\t\t",
+        }, "fixture.inverse_generator")
+        self.assertEqual(
+            byte_identity.render_for_initializer_declaration_reseat_input(
+                inverse["params"]),
+            b"\t\tLegoAnimPresenterSet::iterator it;\n\n"
+            b"\t\tfor (it = m_presenters.begin(); it != "
+            b"m_presenters.end(); it++) {\n",
+        )
+        self.assertEqual(
+            byte_identity.render_source_overlay_generator(inverse),
+            b"\t\tfor (LegoAnimPresenterSet::iterator it = "
+            b"m_presenters.begin(); it != m_presenters.end(); it++) {\n",
+        )
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "layout overrides"):
+            byte_identity.validate_source_overlay_generator({
+                "k": "for_init_decl",
+                "form": "standalone_then_assignment_v1",
+                "type": "LegoAnimPresenterSet::iterator",
+                "id": "it", "container": "m_presenters",
+                "begin": "begin", "end": "end",
+                "declaration_indent": "\t\t", "nl": False,
+            }, "fixture.generator")
+
+    def test_live_for_initializer_recipe_is_confined_to_its_owner(self):
+        source, recipe, function = self._live_for_initializer_case()
+        detail = byte_identity.require_target_source_refactor_recipe_policy(
+            recipe, function, ROOT, source, "fixture"
+        )
+        self.assertEqual(
+            detail["refactor_operation_ids"],
+            ["op_remove_for_init_declaration"],
+        )
+        rendered = byte_identity.render_donor_source_overlay(recipe, ROOT)[
+            source]
+        proof_detail = byte_identity.require_target_source_refactor_identity(
+            (ROOT / source).read_bytes(), rendered,
+            function["target_source_refactor"], "fixture",
+        )
+        self.assertEqual(proof_detail["seed_target_source_size"], 769)
+        self.assertEqual(proof_detail["donor_target_source_size"], 762)
+
+        escaped = copy.deepcopy(recipe)
+        operation = next(
+            item for item in escaped["renderings"][0]["operations"]
+            if item.get("id") == "op_remove_for_init_declaration"
+        )
+        operation["gen"]["id"] = "m_presenters"
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                escaped, function, ROOT, source, "fixture"
             )
 
     def test_live_recipe_is_source_derived_and_policy_bound(self):
