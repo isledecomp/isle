@@ -280,8 +280,91 @@ after every bounded panel or full gate.
   current source; other historical maxima require independent novelty and
   all-or-nothing replay rather than assuming entropy states compose.
 
-- Accepted canonical gate: LEGO1 4879/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is
+- Fresh-eyes direct-source panel negative: for
+  `0x10051ac0 LegoAct2::SpawnBricks`, replacing only SET3 occurrences zero,
+  two and three with their three typed component assignments on the same
+  physical line, while leaving occurrence one unchanged, was completely
+  codegen-inert. A 2,613-source novelty census found no prior raw or
+  significant function-state hit, so this was a genuine new experiment. The
+  fresh control and sole variant both emitted the same 1,115-byte body
+  `bbf0c73d1ba5db5fb7fdd0fa315cb79815c407b2a666708b629e98a88aba66bb`,
+  the same 20 relocation seats, 81 line rows, FPO/CodeView closure and exact
+  58-byte retail residual. Non-target runtime collateral was zero; the only
+  whole-object changes were compiler timestamps. Evidence is
+  `/private/tmp/codex-spawnbricks-set3.bosn5c15/seal.json`, SHA-256
+  `391bfb6ad5e87421d07592146d99433c367ea9f470a3dbce37dfcbcf686e5a88`.
+  Seal this three-site component spelling; do not broaden it to the already
+  exact second SET3 or instruction-level manipulation.
+
+- Fresh-eyes static seal: `0x100334b0 Act1State::Act1State` remains an
+  843-byte/184-instruction/57-relocation pure schedule permutation with a
+  strict masked distance of 20. An exhaustive filesystem census found 6,869
+  symbol-bearing COFFs, 6,843 definitions and 19 unique bodies; none is exact,
+  and 6,793 definitions sit at the same nd20 floor. All 122 checked-in
+  `isle.cpp` revisions reduce to ten constructor texts: the eight Playlist-era
+  forms are already covered by the sealed 720-permutation S44 space and the
+  other two use an obsolete raw-field representation. Do not try direct member
+  initialization: BETA10 `/Od` explicitly performs the early stores followed
+  by a Playlist assignment call, and initializer construction changes that
+  authenticated operation order. Reopen only for final-release source/PDB or
+  compiler/PCH provenance that first demonstrates a new complete body, not
+  another statement order, declaration carrier, temp/alias or expression
+  trick.
+
+- Fresh-eyes compiler-state negative: for
+  `0x10055a60 LegoNavController::Notify`, the previously untested mixed
+  declaration state `extern_run_pair(P=17,T=39,width=2)` was compiled once
+  after an exact fresh control. It kept the natural target at 4,112 bytes,
+  261 relocations and 229 line rows and reduced relocation-normalized retail
+  distance from 80 to 51, but it was not exact; its relocation semantics also
+  diverged and it changed non-target `UpdateLocation(char const*)` by nine
+  normalized bytes. No third cell ran. Evidence is
+  `/private/tmp/isle-legonav-notify-p17t39.VYg8dU/SEAL.json`, SHA-256
+  `70ea94c94c9b2dc93f5e6947a2af5f42df0255e844f987477a94cc12bd064e84`.
+  Seal this mixed coordinate rather than widening it into more carrier or
+  instruction-level searches.
+
+- Fresh-eyes duplicate seal: the historically attested two-step height local
+  proposed for `0x100b24f0 MxVideoPresenter::AlphaMask::AlphaMask` was already
+  compiled as `height_local.obj` in the retained six-cell panel
+  `/private/tmp/codex-dissolve-alpha.xvVWH1/alphamask`. It is codegen-identical
+  to the 346-byte control body `f8ee08e5...`, retains both semantic relocations
+  and all five residual offsets `[24,28,31,34,44]`; therefore spend no new
+  compiler cell on this source spelling.
+
+- Fresh-eyes static seal: `0x1007b770 LegoVideoManager::Tickle` has a
+  19-byte residue split across three independent register/scheduling windows
+  (stopwatch roles, cursor-constructor evaluation, and the inlined DrawCursor
+  receiver). The prior declaration swap is a literal code no-op. All 1,680
+  retained extern objects reduce to four bodies at distances 19/21/35/37,
+  and every body leaves all three retail-residual windows byte-identical to
+  baseline; 52 implemented git snapshots across seven source texts preserve
+  the same lifetime/evaluation topology. Do not spend a cell on another
+  declaration carrier or local one-window rewrite. Reopen only for authentic
+  final source/PDB evidence or a naturally compiled 1,089-byte/28-relocation
+  whole-function state that changes all three windows together.
+
+- Accepted canonical gate: LEGO1 4880/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is `0x10040360 Act3Cop::FUN_10040360`. The checked-in
+  source now expresses the fallback as a second `grec == NULL` guard and
+  seats the existing `local100` declaration between the two fallback vectors.
+  A fresh suffix-only 20-forward-declaration state emits the complete
+  2,496-byte retail-exact function and its ordinary EH closure naturally;
+  `equal_body_eh_reloc_layout` imports that intact compiler output. The same
+  authenticated donor preserves the previously exact 100-byte
+  `list<Act3Ammo*>::~list` COMDAT through `equal_body_strict`, and the
+  current-source `extern_run_pair(13,60,width2)` redial restores the existing
+  exact `Act3Brickster::Animate` donor. No inline assembly, opcode patch,
+  instruction mosaic or manual instruction reordering is involved. The
+  forced-fresh zero-loss gate held all prior rows and produced accepted-row
+  identity
+  `39d995fd0e635c7d26dec43b2f6c41202488e14c16585d6696859b9d34c257f2`;
+  verification report SHA-256 is
+  `bbdc9a4ce555f79c82bedeb7687cea28a756c48d3781f1770356ab86ae6d8476`
+  and manifest SHA-256 is
+  `4272f308d3f7ec4d8a4b288af82029e2d4ce19eb588a5c87d58a1336d8e3475d`.
+
+  The preceding gain is
   `0x10046050 LegoPathController::PlaceActor`. The checked-in source now uses
   a `boundary != NULL` wrapper with separate loop-exhaustion and null-boundary
   `FAILURE` returns; this is distinct from the previously sealed one-return

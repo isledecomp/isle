@@ -9289,7 +9289,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/actors/act3actors.cpp",
-   "source_sha256": "124e76b7db51db23ec9a896554d19644fef83db4e1ace912be8b76212c83df6d",
+   "source_sha256": "9ce5dfa37804370706d0c4455714c2b784fb8e60f59603a7b72a3a9530547900",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -9339,22 +9339,40 @@
      }
     },
     {
-     "id": "d_6344595f29cb",
+     "id": "d_7cedf7b21654",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "extern_run_pair",
       "header_prefix": "g_h",
-      "header_count": 12,
+      "header_count": 13,
       "seat_prefix": "g_p",
-      "seat_count": 59,
+      "seat_count": 60,
       "width": 2,
-      "generated_header_sha256": "6344595f29cb9da562df2b6471b0f4915286fe93cda23863b6d462b66adeb1b9",
+      "generated_header_sha256": "7cedf7b216546a7748fec99bf74f10781f0d8cd2ce9aa75e28f494d509644f8f",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_2b406d5b3fc1",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 20,
+      "width": 3,
+      "generated_header_sha256": "2b406d5b3fc14b0f0c68cbe074d1be14b24cba11bebaea3b22ad1d6021d8d55d",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated forward-declaration run appended after the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
      }
     }
    ],
@@ -9421,14 +9439,133 @@
      "expected_seed_length": 1628,
      "expected_donor_length": 1632,
      "expected_linked_span": 1632,
-     "expected_seed_line_count": 98,
-     "expected_donor_line_count": 99,
-     "donor": "d_6344595f29cb"
+     "donor": "d_7cedf7b21654"
+    },
+    {
+     "mangled": "?FUN_10040360@Act3Cop@@QAEJXZ",
+     "expected_body_length": 2496,
+     "expected_body_sha256": "7063ee82703a6a64d5961ca51e90e92a9a422b8aaf3a5614ef09d2f8590093fd",
+     "expected_changed_offsets": [
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      69,
+      70,
+      71,
+      72,
+      501,
+      502,
+      503,
+      504,
+      506,
+      510,
+      512,
+      513,
+      514,
+      515,
+      1078,
+      1378,
+      1379,
+      1380,
+      1381,
+      1382,
+      1383,
+      1384,
+      1385,
+      1386,
+      1566,
+      1567,
+      1568,
+      1569,
+      1570,
+      1571,
+      1573,
+      1574,
+      1575
+     ],
+     "splice_class": "equal_body_eh_reloc_layout",
+     "expected_relocation_moves": [
+      [
+       61,
+       69
+      ],
+      [
+       1380,
+       1383
+      ],
+      [
+       1572,
+       1569
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60,
+      68,
+      76,
+      84,
+      92,
+      100,
+      108,
+      116,
+      124,
+      132,
+      140
+     ],
+     "donor": "d_2b406d5b3fc1"
+    },
+    {
+     "mangled": "??1?$list@PAVAct3Ammo@@V?$allocator@PAVAct3Ammo@@@@@@QAE@XZ",
+     "expected_body_length": 100,
+     "expected_body_sha256": "dacb85a51576a1b77b1ae54358970d45277444820dafab63d2e39a56d75874a9",
+     "expected_changed_offsets": [
+      62
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_2b406d5b3fc1"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/actors/act3actors.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/actors/act3actors.cpp from generated carrier states over the rendered current source while preserving an existing exact dependent COMDAT.",
     "may_replace_compiler_output": true
    }
   },
@@ -14471,8 +14608,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4879,
-    "accepted_row_identity_sha256": "e636e71d5505ed20e54d2841225e45369b07de145cb4ae802507c302245efb5e",
+    "exact_raw_1_0_count": 4880,
+    "accepted_row_identity_sha256": "39d995fd0e635c7d26dec43b2f6c41202488e14c16585d6696859b9d34c257f2",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -15418,9 +15555,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/actors/act3actors.cpp",
-    "clean": "d36f594e2e7a9cf59d31f0607e14989bc6a2b3f9cd3333257c8f790710ca5f96",
-    "effective": "124e76b7db51db23ec9a896554d19644fef83db4e1ace912be8b76212c83df6d",
-    "size": 28106,
+    "clean": "2ee3e3de86026a41e5b793fb04f7fe510dbe71aef52ad45a46ec9a83f5f2676e",
+    "effective": "9ce5dfa37804370706d0c4455714c2b784fb8e60f59603a7b72a3a9530547900",
+    "size": 28079,
     "ops": [
      {
       "op": "insert",

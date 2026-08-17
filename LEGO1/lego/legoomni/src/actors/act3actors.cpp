@@ -412,34 +412,34 @@ MxResult Act3Cop::FUN_10040360()
 				}
 			}
 		}
+	}
 
-		if (grec == NULL) {
-			MxS32 random = rand() % (MxS32) sizeOfArray(g_copDest);
-			Vector3 localf8(g_copDest[random].m_unk0x08);
-			Vector3 local108(g_copDest[random].m_unk0x14);
+	if (grec == NULL) {
+		MxS32 random = rand() % (MxS32) sizeOfArray(g_copDest);
+		Vector3 localf8(g_copDest[random].m_unk0x08);
+		MxFloat local100;
+		Vector3 local108(g_copDest[random].m_unk0x14);
 
-			grec = new LegoPathEdgeContainer();
-			LegoPathBoundary* boundary = g_copDest[random].m_boundary;
+		grec = new LegoPathEdgeContainer();
+		LegoPathBoundary* boundary = g_copDest[random].m_boundary;
 
-			if (boundary != NULL) {
-				MxFloat local100;
-				LegoPathEdgeContainer *local150, *local14c; // unused
+		if (boundary != NULL) {
+			LegoPathEdgeContainer *local150, *local14c; // unused
 
-				if (m_pathController->FindPath(
-						grec,
-						local2c,
-						local20,
-						m_boundary,
-						localf8,
-						local108,
-						boundary,
-						LegoOrientedEdge::c_bit1,
-						&local100
-					) != SUCCESS) {
-					local14c = local150 = grec;
-					delete grec;
-					grec = NULL;
-				}
+			if (m_pathController->FindPath(
+					grec,
+					local2c,
+					local20,
+					m_boundary,
+					localf8,
+					local108,
+					boundary,
+					LegoOrientedEdge::c_bit1,
+					&local100
+				) != SUCCESS) {
+				local14c = local150 = grec;
+				delete grec;
+				grec = NULL;
 			}
 		}
 	}
