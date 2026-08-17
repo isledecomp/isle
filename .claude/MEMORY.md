@@ -569,6 +569,23 @@ after every bounded panel or full gate.
   current-source object proving the exact 689-byte body, relocation/closure
   topology and zero runtime collateral; repeating this seed is closed.
 
+- Exact-name upstream entropy replay is also negative and sealed for
+  `0x1004f9b0` (texture-info map `_Insert`). Seed `834471173` was independently
+  reconstructed as the authentic 255-byte LF declaration header
+  `b0e35f3c658f88f43305e121db4427dd9bcac76b1a130b0fa81f8f16a03b7af9`
+  and replayed at the historical pre-SmartHeap `/FI` seat on current effective
+  source `85cf2b74...`. The fresh control was fully canonical and had zero
+  normalized runtime/linker drift: 681 bytes/body `6bb3fb8e...`, eight semantic
+  relocations, 40 lines, 60 functions and 76 primary COMDATs. The sole seed
+  cell remained 681 bytes/body `565d04e7...` rather than retail's 679-byte
+  body, kept the current relocation seats, changed 26 non-target runtime
+  functions and changed linker payload. Identity universes remained 60/76,
+  but both target and collateral gates fail. No third cell, link or reccmp
+  ran. Evidence is
+  `/private/tmp/codex-legotex-insert-seed.FemstV/v1/result.json`, SHA-256
+  `872d871d8e9fc1e4e3a951971e08338bf272ab4a46ce13cb7539bbc64573c55a`.
+  Repeating this named header on the same source is closed.
+
 - Accepted canonical gate: LEGO1 4880/4934, ISLE 172/172, CONFIG 111/111.
   The latest gain is `0x10040360 Act3Cop::FUN_10040360`. The checked-in
   source now expresses the fallback as a second `grec == NULL` guard and
