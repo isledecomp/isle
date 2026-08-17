@@ -458,21 +458,31 @@ after every bounded panel or full gate.
   427-instruction same-symbol witness that changes all repeated clusters while
   preserving closure and zero collateral.
 
-- Parked authenticated-control blocker for
+- Decisive authenticated-control seal for
   `0x100170e0 CarRace::HandlePathStruct`: the sole fresh source-first lead is
   to reuse existing `secondAnim` in the first score arm before assigning
   `m_secondFinishAnimation`. It is semantics-preserving and statically explains
-  the complete EAX/common-tail scheduling residue, but it was deliberately not
-  compiled because no fresh control could reproduce the authoritative
-  1,391-byte body `b2102e3c...`. Plain source emitted `235eb3e2...` under both
-  scratch and exact canonical paths; byte-exact retained `fwdE-72` source
-  emitted `c449f18a...` under the canonical invocation. All controls retained
-  62 relocations/86 lines and ordinary `.debug$F`/`.debug$S` closure. The
-  retained `b210...` object is therefore bound to its complete historical
-  sweep invocation (`s.cpp` cwd/path, prepended real-TU include and scratch
-  Fo/Fd/PDB state), not its declaration recipe alone. Reopen only by replaying
-  that invocation byte-for-byte and first obtaining a fresh exact `b210...`
-  control; then test this one source change, with no broader rewrite.
+  the complete EAX/common-tail scheduling residue, but must not be compiled or
+  landed without a fresh exact control. A complete census of the retained
+  348-cell `sweep2-all-legorace` lane found 12 CarRace bodies: the 1,391-byte
+  `b2102e3c...` body occurs in **148/348** cells (54 `fwdE`, 32 `fwdL`, 39
+  `fwdP`, and 23 `shape`), always with 62 relocations/86 lines. It is therefore
+  not unique to `fwdE-72`, its declaration tail, or its cwd/Fo/Fd/PDB strings.
+  The deterministic `fwdE-72` packet is recoverable (`s.cpp`
+  `0c1c3c...`, object `17c10d4a...`, scratch operand `s.cpp`, prepended real-TU
+  include, ordered original includes, `/Foo.obj`, `/Fdo.pdb`); directory birth
+  proves the cell-local PDB was fresh rather than hydrated. The essential
+  runtime context is not recoverable: queue7 ran four compiler cells at once
+  after 15 earlier TUs, while the launch environment, effective `WINEPREFIX`,
+  shared wineserver/prefix history, HOME/TMP/locale, and a prefix snapshot were
+  never recorded. Later plain controls emitted `235eb3e2...`, the byte-exact
+  retained source emitted `c449f18a...`, and a separate mirror-source
+  `lr-base` probe emitted exact `b210...` under different source/cwd/PDB paths;
+  all retained the ordinary 62-relocation/86-line debug closure. Thus no
+  authenticated reproducible `b210...` control recipe survives. Reopen only
+  when a fresh, serial, fully receipted control naturally reproduces full
+  `b2102e3c9adde7fb6e1ab064f59cc29e785295fcbed21978420d789db6087550`;
+  then test this one source change with no broader rewrite.
 
 - Fresh exhaustive seal: `0x10061010 LegoAnimationManager::FUN_10061010`
   has no intact source/build-state route. Current is 717 bytes/208
