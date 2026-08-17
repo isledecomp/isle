@@ -1203,20 +1203,40 @@ landing candidates until a source/dial path reaches raw 1.0.
   (`92cc86caec233ddea9bef1516fb6dc433a74c40a2abca5d9d2757b717ed7d575`),
   not the expected intact 617-byte body
   (`43e4ef651a4d79561d766737b64ff6597055163640bd6bd3484f2df8979d0373`).
-  Provenance correction: that V1 force-included
-  `.codex-seed834472202.h`, whereas the historical matrix-9/build-10 sweep used
-  the path-sensitive basename `entropy10.h`. Do not treat the 619-byte replay as
-  an exact recreation of the historical carrier. The authentic upstream
-  `Win32-Entropy-9/LEGO1PROGRESS10.json` (SHA-256
+  The corrective provenance-exact replay reused that authenticated C0 without
+  compiling another control and force-included the same 290-byte LF header
+  (`b977c9f5e5748e3bfd9962422178d9f8a93e19af7c642522716a9c3c445c0770`)
+  at the historical logical seat
+  `/Users/foxtacles/Projects/isle-build-lean/src/entropy10.h`, immediately before
+  SmartHeap. The effective source remained
+  `19f495a42cad4c1b0fe3d6ff2001c18eef6c45d1273d2e44a5aec6f2e58f3c75`;
+  canonical cwd, source, `/Fo` and `/Fd` tokens produced argv receipt
+  `a59aa20b4e3da96be71196d6f228cc1497343e6d2e0805fa87e854fe97354cc2`.
+  The sole exact-path compiler cell started as PID/PGID `7909` and compiled
+  cleanly to object
+  `aac6e59fe5bada7b6d68175759c6755bedff01a9da52012aa52384de3d1bfdcf`,
+  but section 399 was again 619 bytes with the identical
+  `92cc86caec233ddea9bef1516fb6dc433a74c40a2abca5d9d2757b717ed7d575`
+  body, not the required 617-byte `43e4ef65...` body, and its relocation-masked
+  retail distance was 202. It retained 23 relocations, 25 lines, `.debug$S`
+  plus `.xdata$x`, and the 260-function / 302-COMDAT universe, while its linker
+  receipt was
+  `5450ceae0b1427e80369e972091538fef9dec4a0e15a8697b390a14343a77430`,
+  not C0's
+  `6b5c62a4eaf6e673e7b37c740c97743cbde3f58eaf6c2ff3155dee06bfb809c7`.
+  The sealed result is
+  `/private/tmp/codex-buildroimap-exactpath-seed834472202.sbnmgc7n/result.json`
+  (SHA-256
+  `f44868f6b8f71fc47b9ec42f698dd227cf363f0316e734a0bf3678becae51ff7`):
+  compiler launch budget and count were both one, the prefix was drained to an
+  empty lane, and there was no retry, link, reccmp or shared edit. The basename
+  was therefore not causal on today's source; the exact-path current-source
+  replay is closed and the existing 11-instruction hybrid remains necessary.
+  The authentic upstream `Win32-Entropy-9/LEGO1PROGRESS10.json` (SHA-256
   `e1e7e69adf34b5ed56bf68abe5f97708407a78deeb9a901cda4e1c9dbd781f66`)
-  confirms only that the old-source 617-byte state scored
+  still authenticates only the old-source 617-byte state at
   `0.9841269841269841`, with three wrong instruction groups (`cmp` operand order
-  and two `[ebp-0x18]`/`[ebp-0x24]` swaps); it does not authenticate the result
-  on today's different source. Seal only the wrong-basename V1 as negative.
-  A current-source replay using the exact logical path
-  `/Users/foxtacles/Projects/isle-build-lean/src/entropy10.h` remains untested
-  and may be reopened under a new authorized compiler panel. Until then, retain
-  the existing 11-instruction hybrid.
+  and two `[ebp-0x18]`/`[ebp-0x24]` swaps).
 
 The historical exact `RemovePresenter` sample was used only as an oracle. Its
 state has now been delta-reduced into two explicit current-source manifest
