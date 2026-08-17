@@ -12703,6 +12703,8 @@ def validate_manifest(
                     }
                     if "source_fpo_identity" in function:
                         source_equal_keys.add("source_fpo_identity")
+                    if "retail_image_target" in function:
+                        source_equal_keys.add("retail_image_target")
                     exact_keys(function, source_equal_keys, function_context)
                     for name in (
                         "expected_section_number", "expected_section_count",
@@ -12795,10 +12797,12 @@ def validate_manifest(
                     }
                     if source_fpo:
                         require(
-                            proof["kind"]
-                            == "fixed_array_shuffle_pointer_countdown_v1",
+                            proof["kind"] in {
+                                "fixed_array_shuffle_pointer_countdown_v1",
+                                "inclusive_extent_assignment_v1",
+                            },
                             f"{function_context}: source FPO identity is "
-                            "restricted to the closed shuffle proof",
+                            "restricted to a closed FPO source proof",
                         )
                         identity = validate_source_fpo_mosaic_identity(
                             function["source_fpo_identity"],
@@ -12848,8 +12852,17 @@ def validate_manifest(
                     exact_keys(retail, {
                         "image", "address", "verdict", "length",
                     }, f"{function_context}.retail_oracle")
+                    retail_image_target = function.get(
+                        "retail_image_target", target)
+                    if "retail_image_target" in function:
+                        require(
+                            target == "omni"
+                            and retail_image_target == "lego1",
+                            f"{function_context}.retail_image_target "
+                            "differs",
+                        )
                     require_target_bound_retail_image(
-                        manifest.get("images"), target,
+                        manifest.get("images"), retail_image_target,
                         retail.get("image"),
                         f"{function_context}.retail_oracle",
                     )
@@ -18398,6 +18411,12 @@ SOURCE_FPO_CHILD_IDENTITY_KEYS = {
 }
 
 
+SOURCE_FPO_EXTRA_RELOCATION_KEYS = {
+    "offset", "width", "type", "addend", "target", "target_section",
+    "target_value", "target_type", "target_storage",
+}
+
+
 def validate_source_fpo_mosaic_identity(
     value: object, context: str, primary_section: int, body_length: int,
 ) -> dict:
@@ -18435,8 +18454,12 @@ def validate_source_fpo_mosaic_identity(
             "expected_cb_proc", "expected_dbg_start", "expected_dbg_end",
             "expected_seed_tail_sha256", "expected_donor_tail_sha256",
         })
+        optional = (
+            {"expected_extra_relocations"} if key == "debug_s" else set()
+        )
         exact_audit_keys(
-            child, SOURCE_FPO_CHILD_IDENTITY_KEYS | extras, child_context)
+            child, SOURCE_FPO_CHILD_IDENTITY_KEYS | extras | optional,
+            child_context, optional=optional)
         normalized_child = {}
         for name, minimum, maximum in (
             ("section_number", 1, 0x7FFF),
@@ -18474,10 +18497,74 @@ def validate_source_fpo_mosaic_identity(
                     f"{child_context} FPO size differs from the function")
             normalized_child["expected_record"] = record
         else:
+            extra_relocations = child.get("expected_extra_relocations", [])
+            require(isinstance(extra_relocations, list),
+                    f"{child_context}.expected_extra_relocations must be "
+                    "an array")
+            normalized_extra_relocations = []
+            for index, relocation in enumerate(extra_relocations):
+                relocation_context = (
+                    f"{child_context}.expected_extra_relocations[{index}]"
+                )
+                require(isinstance(relocation, dict),
+                        f"{relocation_context} must be an object")
+                exact_audit_keys(
+                    relocation, SOURCE_FPO_EXTRA_RELOCATION_KEYS,
+                    relocation_context)
+                normalized_relocation = {}
+                for name, minimum, maximum in (
+                    ("offset", 34, 0xFFFFFFFF),
+                    ("width", 1, 4),
+                    ("type", 0, 0xFFFF),
+                    ("addend", 0, 0xFFFFFFFF),
+                    ("target_section", 1, 0x7FFF),
+                    ("target_value", 0, body_length - 1),
+                    ("target_type", 0, 0xFFFF),
+                    ("target_storage", 0, 0xFF),
+                ):
+                    normalized_relocation[name] = require_exact_int(
+                        relocation.get(name),
+                        f"{relocation_context}.{name}",
+                        minimum=minimum, maximum=maximum)
+                target = relocation.get("target")
+                require(isinstance(target, str) and target,
+                        f"{relocation_context}.target is invalid")
+                normalized_relocation["target"] = target
+                require(
+                    RELOCATION_WIDTHS.get(normalized_relocation["type"])
+                    == normalized_relocation["width"]
+                    and normalized_relocation["target_section"]
+                    == primary_section
+                    and normalized_relocation["offset"]
+                    + normalized_relocation["width"]
+                    <= min(
+                        normalized_child["expected_seed_raw_size"],
+                        normalized_child["expected_donor_raw_size"],
+                    ),
+                    f"{relocation_context} shape or target seat differs",
+                )
+                normalized_extra_relocations.append(normalized_relocation)
+            require(
+                all(
+                    left["offset"] + left["width"] <= right["offset"]
+                    for left, right in zip(
+                        normalized_extra_relocations,
+                        normalized_extra_relocations[1:])
+                ),
+                f"{child_context}.expected_extra_relocations overlap or "
+                "are not ordered",
+            )
             require(normalized_child["expected_seed_raw_size"] >= 28
                     and normalized_child["expected_donor_raw_size"] >= 28
-                    and normalized_child["relocation_count"] == 2,
+                    and normalized_child["relocation_count"]
+                    == 2 + len(normalized_extra_relocations),
                     f"{child_context} is not a CodeView procedure record")
+            if "expected_extra_relocations" in child:
+                require(normalized_extra_relocations,
+                        f"{child_context}.expected_extra_relocations is "
+                        "empty")
+                normalized_child["expected_extra_relocations"] = (
+                    normalized_extra_relocations)
             for name in (
                 "expected_common_prefix_sha256", "expected_seed_tail_sha256",
                 "expected_donor_tail_sha256",
@@ -19011,13 +19098,17 @@ def require_source_fpo_mosaic_identity(
             [(0, 4, 7)] if name == ".debug$F"
             else [(28, 4, 11), (32, 2, 10)]
         )
+        expected_extra = (
+            [] if name == ".debug$F" else
+            pin.get("expected_extra_relocations", [])
+        )
         for role, coff, section, primary in (
             ("seed", seed, left, seed_primary),
             ("donor", donor, right, donor_primary),
         ):
             rows = detailed_relocations(coff, section)
             require(
-                len(rows) == len(expected_rows)
+                len(rows) == len(expected_rows) + len(expected_extra)
                 and all(
                     (row["offset"], row["width"], row["type"])
                     == expected
@@ -19030,6 +19121,19 @@ def require_source_fpo_mosaic_identity(
                     for row, expected in zip(rows, expected_rows)
                 ),
                 f"{context}: {role} {name} semantic relocations differ",
+            )
+            require(
+                all(
+                    all(row[field] == expected[field] for field in (
+                        "offset", "width", "type", "addend", "target",
+                        "target_section", "target_value", "target_type",
+                        "target_storage",
+                    ))
+                    for row, expected in zip(
+                        rows[len(expected_rows):], expected_extra)
+                ),
+                f"{context}: {role} {name} extra semantic relocations "
+                "differ",
             )
         pairs.append((left, right))
 

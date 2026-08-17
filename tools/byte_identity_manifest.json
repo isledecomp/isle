@@ -2725,7 +2725,7 @@
        }
       ],
       "emission_policy": "donor_private_rendering_only",
-      "authenticity_rationale": "A typed inclusive-extent source permutation is privately compiled only after its member, accessor semantics, include closure, source window, and inert compiler barrier are authenticated; the seed object remains authoritative outside complete same-function instructions.",
+      "authenticity_rationale": "A typed inclusive-extent source permutation is privately compiled only after its member, accessor semantics, include closure, source window, and inert compiler barrier are authenticated; its complete target body is retail-exact while the seed remains authoritative for metadata and every non-target byte.",
       "rendering_identity_sha256": "76eab62d78a308eb1427ae23a82d99a1483e2487c535f11c6d0a3446a2783372"
      }
     }
@@ -2995,38 +2995,109 @@
     {
      "mangled": "?Create@MxDisplaySurface@@UAEJAAVMxVideoParam@@@Z",
      "donor": "d_76eab62d78a3",
-     "splice_class": "retail_exact_instruction_mosaic",
+     "splice_class": "retail_exact_source_equal_body",
+     "retail_image_target": "lego1",
      "expected_section_number": 39,
      "expected_section_count": 88,
      "expected_body_length": 660,
-     "expected_donor_body_length": 660,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
      "expected_relocation_count": 3,
-     "expected_line_count": 57,
+     "expected_seed_line_count": 57,
      "expected_donor_line_count": 58,
+     "expected_function_count": 27,
+     "expected_comdat_count": 30,
      "expected_seed_body_sha256": "b815b5e92770ccd98ac3096a25a9ad43746e170b98ae212993861761cfcc78e5",
      "expected_donor_body_sha256": "966cdf3a4b96d872beb6b04c4b9568ba19767cc7975e17bcb77fa3bbf687b11b",
      "expected_seed_metadata_sha256": "866951b24ddc237bcdab03d5c617e74a29f55f15e897b7ec4e124d3ed448bc62",
      "expected_donor_metadata_sha256": "c4aabe0ac54e69218af74182d5eb95f1007f14a8aa3acf51123020bcb4086da5",
      "expected_body_sha256": "966cdf3a4b96d872beb6b04c4b9568ba19767cc7975e17bcb77fa3bbf687b11b",
-     "instruction_ranges": [
-      {
-       "kind": "same_offset_complete_x86_instruction_sequence_v1",
-       "start": 489,
-       "end": 501,
-       "seed_bytes": "c78424840000004060000040",
-       "seed_sha256": "7141a4887caf686b8d936c6fe9ecddee4566811153ce9cca80578ea7688ed7e5",
-       "donor_bytes": "40c784248400000040600000",
-       "donor_sha256": "920639d7b066e6db6083396d6b5e080be24b31d3a1d982489f262f4646699c47",
-       "seed_instruction_lengths": [
-        11,
-        1
-       ],
-       "donor_instruction_lengths": [
-        1,
-        11
+     "expected_changed_offsets": [489, 490, 491, 492, 493, 496, 497, 498, 500],
+     "expected_code_renames": [],
+     "expected_xdata_rename_offsets": [],
+     "expected_debug_s_renames": [],
+     "expected_closure": [".debug$F", ".debug$S"],
+     "source_fpo_identity": {
+      "kind": "seed_authoritative_source_refactor_fpo_codeview_v1",
+      "expected_primary_characteristics": 1615859744,
+      "expected_primary_selection": 1,
+      "expected_function_count": 27,
+      "expected_comdat_count": 30,
+      "expected_seed_line_sha256": "363173e07c32604124d75204f76bc48769cedcdbe8b8101bae257efc87ae3653",
+      "expected_donor_line_sha256": "a7f51273ca8206d7a327da3c9a803c286820b734b8e421f7b3310222ed33d8d1",
+      "debug_f": {
+       "section_number": 41,
+       "expected_seed_raw_size": 16,
+       "expected_donor_raw_size": 16,
+       "relocation_count": 1,
+       "line_count": 0,
+       "characteristics": 1108349000,
+       "selection": 5,
+       "associated": 39,
+       "expected_seed_body_sha256": "af22609793ca13ec3a83d5b6db0ae5adc59ba4e97bc675ae2d9aa1aacf556987",
+       "expected_donor_body_sha256": "af22609793ca13ec3a83d5b6db0ae5adc59ba4e97bc675ae2d9aa1aacf556987",
+       "expected_seed_relocation_sha256": "61e912f0c6ce1bf6f54f963c29be4d70e44e00da327701b4f49f7e09d8e50f49",
+       "expected_donor_relocation_sha256": "3d74a6b6f1a83f0a3b940e24e350ccad93342bbdb4361b78e018a515209f0e6c",
+       "expected_record": {
+        "ulOffStart": 0,
+        "cbProcSize": 660,
+        "cdwLocals": 30,
+        "cdwParams": 1,
+        "cbProlog": 17,
+        "cbRegs": 4,
+        "fHasSEH": 0,
+        "fUseBP": 1,
+        "reserved": 0,
+        "cbFrame": 0,
+        "raw_sha256": "af22609793ca13ec3a83d5b6db0ae5adc59ba4e97bc675ae2d9aa1aacf556987"
+       }
+      },
+      "debug_s": {
+       "section_number": 40,
+       "expected_seed_raw_size": 254,
+       "expected_donor_raw_size": 268,
+       "relocation_count": 4,
+       "line_count": 0,
+       "characteristics": 1108349000,
+       "selection": 5,
+       "associated": 39,
+       "expected_seed_body_sha256": "18a2c09f6f4943248095ceaf1002d0f40a92b0ca7f2fa542cffb9738df875fd1",
+       "expected_donor_body_sha256": "00e9b645877092e61d9ff9e04f8c4c9304fe0bdb8531d62b1d64224d467cd03f",
+       "expected_seed_relocation_sha256": "613eafef3a7a1e85ef0cc5f5f0ec71583cb77704159159eb6e37dfab4230e342",
+       "expected_donor_relocation_sha256": "8b0c22d7028fa6de2ffb9e1be079fa3735a717fb68d54b3e6ba855575454e186",
+       "expected_common_prefix_sha256": "0725bc0f892c64fbfeaa113715648353510c12eff6edf0f16c22a43fe0b85c90",
+       "expected_record_kind": "0502",
+       "expected_cb_proc": 660,
+       "expected_dbg_start": 17,
+       "expected_dbg_end": 650,
+       "expected_seed_tail_sha256": "0789b82d41ccce2c389a08301c0ef27270b7763f8552f6f32e897765b8c77f04",
+       "expected_donor_tail_sha256": "9c1fb20a8955cba63d11d15dea0f9e92ef22a3f95e46f0a909fbb51faf12b371",
+       "expected_extra_relocations": [
+        {
+         "offset": 66,
+         "width": 4,
+         "type": 11,
+         "addend": 0,
+         "target": "$done$35563",
+         "target_section": 39,
+         "target_value": 646,
+         "target_type": 0,
+         "target_storage": 6
+        },
+        {
+         "offset": 70,
+         "width": 2,
+         "type": 10,
+         "addend": 0,
+         "target": "$done$35563",
+         "target_section": 39,
+         "target_value": 646,
+         "target_type": 0,
+         "target_storage": 6
+        }
        ]
       }
-     ],
+     },
      "retail_oracle": {
       "image": "LEGO1.DLL",
       "address": "0x100ba7f0",
@@ -3526,7 +3597,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 8 row(s) in LEGO1/omni/src/video/mxdisplaysurface.cpp from authenticated compiler-generated carrier and source-permutation states while retaining canonical non-target bytes.",
+    "reason": "Closes 8 row(s) in LEGO1/omni/src/video/mxdisplaysurface.cpp from authenticated compiler-generated carrier and source-permutation states; Create uses the complete retail-exact donor body with seed-authoritative FPO/CodeView/line metadata and all rows retain canonical non-target bytes.",
     "may_replace_compiler_output": true
    }
   },

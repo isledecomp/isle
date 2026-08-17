@@ -89,6 +89,7 @@ def make_divergent_coff(
     declare_retail_callee=True,
     other_symbol=OTHER,
     debug_tail_extra=0,
+    debug_label_relocations=False,
 ):
     """One classic-i386 COFF with a complete EH COMDAT closure.
 
@@ -138,14 +139,21 @@ def make_divergent_coff(
     target_seat, other_seat = (4, 1) if swap_text_sections else (1, 4)
     first, fourth = ((other_input, target_input) if swap_text_sections
                      else (target_input, other_input))
+    debug_relocations = [(28, target_index, 0x000B),
+                         (32, target_index, 0x000A)]
+    debug_label_index = 28
+    if debug_label_relocations:
+        debug_relocations.extend([
+            (34, debug_label_index, 0x000B),
+            (38, debug_label_index, 0x000A),
+        ])
     section_inputs = [
         first,
         {"name": ".xdata$x", "raw": xdata,
          "relocations": [(0, target_index, 0x0007)],
          "lines": b"", "characteristics": 0x40301040},
         {"name": ".debug$S", "raw": bytes(debug_s),
-         "relocations": [(28, target_index, 0x000B),
-                         (32, target_index, 0x000A)],
+         "relocations": debug_relocations,
          "lines": b"", "characteristics": 0x42101048},
         fourth,
         {"name": ".drectve", "raw": DIRECTIVE,
@@ -193,7 +201,8 @@ def make_divergent_coff(
         (".xdata$x", 0, 2, 0, 3,
          _section_aux(16, 1, 0, 5, associated=target_seat)),
         (".debug$S", 0, 3, 0, 3,
-         _section_aux(len(debug_s), 2, 0, 5, associated=target_seat)),
+         _section_aux(len(debug_s), len(debug_relocations), 0, 5,
+                      associated=target_seat)),
         (local_name, 4, 2, 0, 3, None),
         (".text", 0, other_seat, 0, 3,
          _section_aux(8, 0, 2, 2, checksum=0x12345678)),
@@ -203,6 +212,8 @@ def make_divergent_coff(
         (".ef", 8, other_seat, 0, 101, _marker_aux(71)),
         (".drectve", 0, 5, 0, 3, _section_aux(len(DIRECTIVE), 0, 0, 0)),
     ]
+    if debug_label_relocations:
+        symbols.append(("$done$123", 24, target_seat, 0, 6, None))
     if duplicate_retail_callee:
         symbols.append((RETAIL_CALLEE, 0, 0, 0x20, 2, None))
 
@@ -2898,6 +2909,23 @@ class SourcePermutationTests(unittest.TestCase):
     def test_live_inclusive_extent_witness_and_canonical_overlay_are_exact(self):
         source, recipe, function, canonical, overlaid_paths = (
             self._live_inclusive_extent_case())
+        self.assertEqual(
+            function["splice_class"],
+            byte_identity.RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS)
+        self.assertEqual(function["retail_image_target"], "lego1")
+        self.assertNotIn("instruction_ranges", function)
+        self.assertEqual(function["expected_changed_offsets"],
+                         [489, 490, 491, 492, 493, 496, 497, 498, 500])
+        self.assertEqual(
+            [(item["offset"], item["width"], item["type"],
+              item["target"], item["target_section"],
+              item["target_value"], item["target_type"],
+              item["target_storage"])
+             for item in function["source_fpo_identity"]["debug_s"]
+             ["expected_extra_relocations"]],
+            [(66, 4, 11, "$done$35563", 39, 646, 0, 6),
+             (70, 2, 10, "$done$35563", 39, 646, 0, 6)],
+        )
         detail = byte_identity.require_target_source_refactor_recipe_policy(
             recipe, function, ROOT, source, "fixture", canonical,
             overlaid_paths)
@@ -4217,10 +4245,13 @@ class SourceTargetClosureTests(unittest.TestCase):
                 source.replace(b"int x", b"int y"))
 
 
-def make_fpo_instruction_mosaic_coff(*, donor=False, source_refactor=False):
+def make_fpo_instruction_mosaic_coff(
+    *, donor=False, source_refactor=False, debug_label_relocations=False,
+):
     """Turn the small EH fixture into an equal-size FPO mosaic fixture."""
     data = make_divergent_coff(
-        debug_tail_extra=15 if donor and source_refactor else 0)
+        debug_tail_extra=15 if donor and source_refactor else 0,
+        debug_label_relocations=debug_label_relocations)
     parsed = byte_identity.CoffObject(data)
     primary = parsed.function_section(TARGET_SYMBOL)
     fpo_section = parsed.sections[1]
@@ -5633,10 +5664,13 @@ class SourceFpoInstructionMosaicTests(unittest.TestCase):
                         if item["donor"] == self.DONOR_ID)
         return manifest, unit, donor, function
 
-    def fixture(self):
-        seed = make_fpo_instruction_mosaic_coff(source_refactor=True)
+    def fixture(self, *, debug_label_relocations=False):
+        seed = make_fpo_instruction_mosaic_coff(
+            source_refactor=True,
+            debug_label_relocations=debug_label_relocations)
         donor = make_fpo_instruction_mosaic_coff(
-            donor=True, source_refactor=True)
+            donor=True, source_refactor=True,
+            debug_label_relocations=debug_label_relocations)
         seed_coff = byte_identity.CoffObject(seed)
         donor_coff = byte_identity.CoffObject(donor)
         sp = seed_coff.function_section(TARGET_SYMBOL)
@@ -5696,6 +5730,17 @@ class SourceFpoInstructionMosaicTests(unittest.TestCase):
             "expected_donor_tail_sha256": hashlib.sha256(
                 donor_s[28:]).hexdigest(),
         })
+        extra_rows = byte_identity.detailed_relocations(
+            seed_coff, ss)[2:]
+        if extra_rows:
+            debug_s["expected_extra_relocations"] = [
+                {key: row[key] for key in (
+                    "offset", "width", "type", "addend", "target",
+                    "target_section", "target_value", "target_type",
+                    "target_storage",
+                )}
+                for row in extra_rows
+            ]
         identity = byte_identity.validate_source_fpo_mosaic_identity({
             "kind": byte_identity.SOURCE_FPO_MOSAIC_IDENTITY_KIND,
             "expected_primary_characteristics": sp["characteristics"],
@@ -5772,8 +5817,9 @@ class SourceFpoInstructionMosaicTests(unittest.TestCase):
             source_permutation=source_permutation,
         )
 
-    def equal_body_fixture(self):
-        seed, donor, function, _, _ = self.fixture()
+    def equal_body_fixture(self, *, debug_label_relocations=False):
+        seed, donor, function, _, _ = self.fixture(
+            debug_label_relocations=debug_label_relocations)
         seed_coff = byte_identity.CoffObject(seed)
         donor_coff = byte_identity.CoffObject(donor)
         sp = seed_coff.function_section(TARGET_SYMBOL)
@@ -5825,7 +5871,7 @@ class SourceFpoInstructionMosaicTests(unittest.TestCase):
                 retail, b"seed source", b"donor source")
 
     def test_equal_body_fpo_branch_keeps_seed_metadata_shell(self):
-        fixture = self.equal_body_fixture()
+        fixture = self.equal_body_fixture(debug_label_relocations=True)
         seed, donor, function, _ = fixture
         composed, detail = self.compose_equal_body(fixture)
         seed_coff = byte_identity.CoffObject(seed)
@@ -5868,6 +5914,55 @@ class SourceFpoInstructionMosaicTests(unittest.TestCase):
         with self.assertRaisesRegex(byte_identity.ByteIdentityError,
                                     "line-table pin"):
             self.compose_equal_body(fixture, bad)
+
+    def test_equal_body_extra_fpo_relocations_are_exactly_pinned(self):
+        fixture = self.equal_body_fixture(debug_label_relocations=True)
+        identity = fixture[2]["source_fpo_identity"]
+        extras = identity["debug_s"]["expected_extra_relocations"]
+        self.assertEqual(len(extras), 2)
+        self.assertEqual(
+            [(item["offset"], item["width"], item["type"],
+              item["target"], item["target_section"],
+              item["target_value"], item["target_type"],
+              item["target_storage"])
+             for item in extras],
+            [(34, 4, 11, "$done$123", 1, 24, 0, 6),
+             (38, 2, 10, "$done$123", 1, 24, 0, 6)],
+        )
+        mutations = {
+            "offset": extras[0]["offset"] + 1,
+            "width": 2,
+            "type": 20,
+            "addend": 1,
+            "target": "$other$123",
+            "target_section": extras[0]["target_section"] + 1,
+            "target_value": extras[0]["target_value"] + 1,
+            "target_type": 1,
+            "target_storage": 3,
+        }
+        for field, value in mutations.items():
+            bad = copy.deepcopy(fixture[2])
+            bad["source_fpo_identity"]["debug_s"][
+                "expected_extra_relocations"][0][field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError,
+                    "extra semantic relocations"):
+                self.compose_equal_body(fixture, bad)
+
+        missing = copy.deepcopy(identity)
+        missing["debug_s"].pop("expected_extra_relocations")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "CodeView procedure record"):
+            byte_identity.validate_source_fpo_mosaic_identity(
+                missing, "fixture", 1, SEED_SIZE)
+
+        empty = copy.deepcopy(identity)
+        empty["debug_s"]["expected_extra_relocations"] = []
+        empty["debug_s"]["relocation_count"] = 2
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "is empty"):
+            byte_identity.validate_source_fpo_mosaic_identity(
+                empty, "fixture", 1, SEED_SIZE)
 
     def test_positive_allows_pinned_codeview_growth_but_keeps_seed_shell(self):
         fixture = self.fixture()

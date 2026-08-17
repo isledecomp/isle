@@ -1760,3 +1760,50 @@ or reaches exact, or (3) C2 scheduler/pool instrumentation identifies one
 source-expressible global cause. Otherwise retain the C2-instrument seal. No
 compiler, Wine, link, reccmp, source edit, or shared-state mutation was used
 for this audit.
+
+## `0x100ba7f0 MxDisplaySurface::Create` whole-body FPO dehybridization (2026-08-17)
+
+`Create` is no longer an instruction mosaic. Its sole former `489..501`
+range was removed, and the existing authenticated inclusive-extent recipe
+`d_76eab62d78a3` now supplies the complete 660-byte retail-exact compiler
+body through `retail_exact_source_equal_body`. The seed body is
+`b815b5e92770ccd98ac3096a25a9ad43746e170b98ae212993861761cfcc78e5`;
+the donor/output body is
+`966cdf3a4b96d872beb6b04c4b9568ba19767cc7975e17bcb77fa3bbf687b11b`;
+the exact changed offsets are `489,490,491,492,493,496,497,498,500`.
+The authenticated empty inline-assembly barrier and source recipe were not
+broadened or changed.
+
+The source-FPO closure keeps the seed's 57-row line table, FPO, CodeView,
+symbols, three primary semantic relocations, and every non-target byte. The
+`.debug$S` proof was extended only by an optional exact extra-relocation list:
+the mandatory procedure relocations at offsets 28/32 remain required, while
+the two additional relocations at 66/70 are pinned field-for-field to
+`$done$35563` in section 39 at value 646, including width, type, addend,
+target type, and storage class. Missing, empty, reordered, overlapping, or
+field-mutated lists fail closed; there is no generic relocation-count
+relaxation. Section/selection, 27-function/30-COMDAT universe, closure,
+metadata, line-table, and linker-payload gates remain exact.
+
+The inverse target-seed object is
+`ff44d673eb8db00e07f0f2abbe2148097d3099fd59a92e8c9bc28baf374e9fb8`;
+the intact donor object is
+`a1bed0f59e200f4d4c4459e40c70ac11b8d0e0e36eab40bd590bd6ef115fb2aa`.
+Dry whole-body composition produced
+`6d4fa8a1bbc00a3a2342c14299affb433cd1feb6c69db5c4c1df034f6f301a8e`,
+byte-for-byte identical to the accepted mosaic object. Canonical manifest
+validation accepted all 49 TUs; focused tests passed 55/55 and the full
+Python suite passed 219 tests with three expected skips, including
+field-by-field adversarial extra-relocation tests.
+
+The production gate retained LEGO1 at 4,881/4,934 with the `0x100ba7f0` row
+at raw 1.0, ISLE at 172/172, and CONFIG at 111/111. Receipt SHA-256 values
+are LEGO1 report
+`5cd823b96aca98017209708d218591c4cfc42d1e4913a512587c6320caa8820e`,
+verdict
+`e0fc9071afccdbc511ad84939b9cbfa8d18f16ab2f2512a8fb166781157f647b`,
+and manifest
+`d09db9ec87b87e4a305bcd5c88a3a0a27de9b463cac321b4eaae9145c10e4cbf`.
+Do not restore range-level composition or broaden the inline-assembly/FPO
+exceptions for this row; any successor must preserve the complete natural
+body and the same seed-authoritative metadata and universe gates.
