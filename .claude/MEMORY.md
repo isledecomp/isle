@@ -75,8 +75,47 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-17)
 
-- Accepted canonical gate: LEGO1 4875/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is
+- Accepted canonical gate: LEGO1 4876/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is `0x100bb1d0 MxDisplaySurface::VTable0x30`. Its ordinary
+  `declaration_shape(4,27)` donor is protected by an exact FPO-only role:
+  raw, per-TU and manifest-wide gates require its sole use to be this one
+  primary FPO-aware instruction mosaic and forbid secondary, source, variant
+  or repeated use. The donor is freshly rebuilt from the current effective
+  source and excluded from the archive/link.
+
+  Seed and donor are both 811 bytes at section 51/88 with two relocations and
+  44 line rows. Their bodies are
+  `0e6db537fdd488dac53f74ca9d45e2060a52c637b7236305593aaa644b521630`
+  and
+  `86be2090dc2f9e3604436b8a7d343d6f598fef2decc878eb75114b85aef193c4`.
+  Thirteen corrected half-open, same-offset instruction sequences produce
+  retail-exact body SHA-256
+  `9fba51eb1777b626f4ff595f7789292b9d2dfe17772f535a6acbaf6882b0594d`.
+  The exact-function line sentinel and nearest compiler rows certify both
+  endpoints and the declared instruction-length partitions in both fresh
+  objects. The fail-closed decoder adds only the live `01`, `03`, `2b`,
+  `0f af`, `41`, `43`, `45`, `74`, `7c`, `7d`, `7f`, `eb` and `f7 /3`
+  forms. The complete seed-authoritative `.debug$F`/`.debug$S` closure is
+  independently pinned and parsed: classic FPO `procSize` is 811, the
+  CodeView procedure marker/ranges and child semantic relocations are exact,
+  and the existing EH and new FPO branches cannot cross. Both retail code
+  relocations, seed metadata and every non-target byte remain unchanged;
+  donor-only collateral at 499, 506, 729 and 736 is excluded.
+
+  Discovery produced the sole gain and no loss with report SHA-256
+  `d57c52a00d76ec86de9b6fca065be39c9e25d60a1fdd00eb223775ead3996dce`.
+  Marker-removed forced-fresh confirmation regenerated the eight-function
+  composition and marker, held the identical 4876 set, and left ISLE and
+  CONFIG complete. Its marker SHA-256 is
+  `6fca23e5f3864bb247477997e6fb33019d9546d514413476d6c353c42522a963`,
+  LEGO1 report SHA-256 is
+  `4826fca34cc7d0529e189e714a0a66330a32ae7e7339ea51bc80f25ef95e7ead`,
+  verdict SHA-256 is
+  `62e74837bf86d0430cd1047af4b044db6aacd2532fb46c4d5d90e25ad09755c0`,
+  and manifest SHA-256 is
+  `ba5dca4ab7df9f4331fd973a28661f828f0ff2c95c9e820fec62b826ac2359ae`.
+
+  The preceding gain is
   `0x100a66f0 ViewManager::ManageVisibilityAndDetailRecursively`. The checked-in
   and effective target function source is identical in both fresh donor
   states. A closed `prefix_forward_after_includes_extern` carrier renders a

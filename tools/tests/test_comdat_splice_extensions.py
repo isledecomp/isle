@@ -4088,5 +4088,473 @@ class SourceTargetClosureTests(unittest.TestCase):
                 source.replace(b"int x", b"int y"))
 
 
+def make_fpo_instruction_mosaic_coff(*, donor=False):
+    """Turn the small EH fixture into an equal-size FPO mosaic fixture."""
+    data = make_divergent_coff()
+    parsed = byte_identity.CoffObject(data)
+    primary = parsed.function_section(TARGET_SYMBOL)
+    fpo_section = parsed.sections[1]
+    fpo_symbol_index, _ = byte_identity.section_symbol(parsed, fpo_section)
+    output = bytearray(data)
+    output[fpo_section["header_offset"]:
+           fpo_section["header_offset"] + 8] = b".debug$F"
+    output[parsed.symbol_offset + fpo_symbol_index * 18:
+           parsed.symbol_offset + fpo_symbol_index * 18 + 8] = b".debug$F"
+    fpo = struct.pack("<IIIHBB", 0, SEED_SIZE, 2, 1, 2, 0x10)
+    output[fpo_section["raw_offset"]:
+           fpo_section["raw_offset"] + 16] = fpo
+    struct.pack_into("<I", output, primary["line_offset"] + 6, 24)
+    encoding = bytes.fromhex("8b590441" if donor else "8b410443")
+    output[primary["raw_offset"] + 24:
+           primary["raw_offset"] + 28] = encoding
+    if donor:
+        output[primary["raw_offset"] + 29] ^= 0x5A
+        debug_s = parsed.sections[2]
+        output[debug_s["raw_offset"] + debug_s["raw_size"] - 1] ^= 1
+    return bytes(output)
+
+
+class OrdinaryFpoInstructionMosaicTests(unittest.TestCase):
+    """The ordinary carrier path admits one exact FPO/CodeView closure."""
+
+    ROLE = byte_identity.ORDINARY_FPO_MOSAIC_ROLE_POLICY
+
+    def fixture(self):
+        seed = make_fpo_instruction_mosaic_coff()
+        donor = make_fpo_instruction_mosaic_coff(donor=True)
+        seed_coff = byte_identity.CoffObject(seed)
+        donor_coff = byte_identity.CoffObject(donor)
+        sp = seed_coff.function_section(TARGET_SYMBOL)
+        dp = donor_coff.function_section(TARGET_SYMBOL)
+        seed_body = byte_identity.coff_body(seed_coff, sp)
+        donor_body = byte_identity.coff_body(donor_coff, dp)
+        hybrid = bytearray(seed)
+        hybrid[sp["raw_offset"] + 24:sp["raw_offset"] + 28] = (
+            donor_body[24:28])
+        hybrid = bytes(hybrid)
+        hybrid_coff = byte_identity.CoffObject(hybrid)
+        hybrid_body = byte_identity.coff_body(
+            hybrid_coff, hybrid_coff.function_section(TARGET_SYMBOL))
+
+        def child_pin(name):
+            left = byte_identity._comdat_child(seed_coff, sp, name)
+            right = byte_identity._comdat_child(donor_coff, dp, name)
+            definitions = byte_identity.section_definitions(seed_coff)
+            result = {
+                "section_number": left["number"],
+                "raw_size": left["raw_size"],
+                "relocation_count": left["relocation_count"],
+                "line_count": left["line_count"],
+                "characteristics": left["characteristics"],
+                "selection": definitions[left["number"]]["selection"],
+                "associated": definitions[left["number"]]["associated"],
+                "expected_seed_body_sha256": hashlib.sha256(
+                    byte_identity.coff_body(seed_coff, left)).hexdigest(),
+                "expected_donor_body_sha256": hashlib.sha256(
+                    byte_identity.coff_body(donor_coff, right)).hexdigest(),
+                "expected_seed_relocation_sha256": hashlib.sha256(
+                    byte_identity._coff_table_bytes(
+                        seed_coff, left, "relocations")).hexdigest(),
+                "expected_donor_relocation_sha256": hashlib.sha256(
+                    byte_identity._coff_table_bytes(
+                        donor_coff, right, "relocations")).hexdigest(),
+            }
+            return result, left, right
+
+        debug_f, sf, df = child_pin(".debug$F")
+        debug_f["expected_record"] = byte_identity.parse_fpo_data(
+            byte_identity.coff_body(seed_coff, sf),
+            expected_proc_size=len(seed_body))
+        debug_s, ss, ds = child_pin(".debug$S")
+        common = byte_identity.coff_body(seed_coff, ss)[:28]
+        cb_proc, dbg_start, dbg_end = struct.unpack_from("<III", common, 16)
+        debug_s.update({
+            "expected_common_prefix_sha256": hashlib.sha256(common).hexdigest(),
+            "expected_record_kind": common[2:4].hex(),
+            "expected_cb_proc": cb_proc,
+            "expected_dbg_start": dbg_start,
+            "expected_dbg_end": dbg_end,
+        })
+        identity = {
+            "kind": byte_identity.ORDINARY_FPO_MOSAIC_IDENTITY_KIND,
+            "expected_primary_characteristics": sp["characteristics"],
+            "expected_primary_selection":
+                byte_identity.section_definitions(seed_coff)[sp["number"]]
+                ["selection"],
+            "expected_function_count": sum(
+                byte_identity.function_multiset(seed_coff).values()),
+            "expected_comdat_count": sum(
+                byte_identity.comdat_primary_identity_multiset(
+                    seed_coff).values()),
+            "expected_seed_line_sha256": hashlib.sha256(
+                byte_identity._coff_table_bytes(
+                    seed_coff, sp, "lines")).hexdigest(),
+            "expected_donor_line_sha256": hashlib.sha256(
+                byte_identity._coff_table_bytes(
+                    donor_coff, dp, "lines")).hexdigest(),
+            "debug_f": debug_f,
+            "debug_s": debug_s,
+        }
+        identity = byte_identity.validate_ordinary_fpo_mosaic_identity(
+            identity, "fixture", sp["number"], len(seed_body))
+        function = {
+            "mangled": TARGET_SYMBOL,
+            "donor": "d_fpo",
+            "splice_class": "retail_exact_instruction_mosaic",
+            "expected_section_number": sp["number"],
+            "expected_section_count": len(seed_coff.sections),
+            "expected_body_length": len(seed_body),
+            "expected_relocation_count": sp["relocation_count"],
+            "expected_line_count": sp["line_count"],
+            "expected_seed_body_sha256": hashlib.sha256(
+                seed_body).hexdigest(),
+            "expected_donor_body_sha256": hashlib.sha256(
+                donor_body).hexdigest(),
+            "expected_seed_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    seed_coff, sp),
+            "expected_donor_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    donor_coff, dp),
+            "expected_body_sha256": hashlib.sha256(hybrid_body).hexdigest(),
+            "ordinary_fpo_identity": identity,
+            "instruction_ranges": [{
+                "kind": "same_offset_complete_x86_instruction_sequence_v1",
+                "start": 24, "end": 28,
+                "seed_bytes": seed_body[24:28].hex(),
+                "seed_sha256": hashlib.sha256(seed_body[24:28]).hexdigest(),
+                "donor_bytes": donor_body[24:28].hex(),
+                "donor_sha256": hashlib.sha256(donor_body[24:28]).hexdigest(),
+                "seed_instruction_lengths": [3, 1],
+                "donor_instruction_lengths": [3, 1],
+            }],
+            "retail_oracle": {
+                "image": "LEGO1.DLL", "address": "0x1003cf20",
+                "verdict": "MATCH", "length": len(hybrid_body),
+            },
+            "retail_relocations": relocation_oracle_for(
+                hybrid, retail_body_for(hybrid)),
+        }
+        return seed, donor, function, retail_body_for(hybrid), hybrid
+
+    def compose(self, fixture, function=None, seed=None, donor=None,
+                retail=None):
+        base_seed, base_donor, expected, oracle, _ = fixture
+        return byte_identity.compose_retail_exact_instruction_mosaic(
+            base_seed if seed is None else seed,
+            base_donor if donor is None else donor,
+            expected if function is None else function,
+            oracle if retail is None else retail,
+        )
+
+    def test_positive_conserves_seed_metadata_and_omits_donor_collateral(self):
+        fixture = self.fixture()
+        composed, detail = self.compose(fixture)
+        seed, donor, function, _, hybrid = fixture
+        checked = byte_identity.CoffObject(composed)
+        primary = checked.function_section(TARGET_SYMBOL)
+        expected = byte_identity.CoffObject(hybrid)
+        expected_primary = expected.function_section(TARGET_SYMBOL)
+        self.assertEqual(
+            byte_identity.coff_body(checked, primary),
+            byte_identity.coff_body(expected, expected_primary))
+        self.assertEqual(
+            byte_identity.instruction_mosaic_metadata_sha256(checked, primary),
+            function["expected_seed_metadata_sha256"])
+        donor_coff = byte_identity.CoffObject(donor)
+        donor_body = byte_identity.coff_body(
+            donor_coff, donor_coff.function_section(TARGET_SYMBOL))
+        self.assertNotEqual(
+            byte_identity.coff_body(checked, primary)[29], donor_body[29])
+        byte_identity.validate_donor_object_excluded(composed, [donor])
+        self.assertTrue(detail["ordinary_fpo_identity"])
+
+    def test_role_policy_is_exactly_once_primary_and_never_other_role(self):
+        byte_identity.require_ordinary_fpo_mosaic_donor_bindings(
+            {"d_fpo"}, ["d_fpo"], [], ["d_fpo"], "fixture")
+        cases = (
+            ({"d_fpo"}, [], [], [], "bound exactly once"),
+            ({"d_fpo"}, ["d_fpo", "d_fpo"], [], ["d_fpo"],
+             "ordinary or repeated"),
+            ({"d_fpo"}, ["d_fpo"], ["d_fpo"], ["d_fpo"],
+             "non-primary"),
+        )
+        for recipes, primary, other, bound, message in cases:
+            with self.subTest(message=message), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                byte_identity.require_ordinary_fpo_mosaic_donor_bindings(
+                    recipes, primary, other, bound, "fixture")
+
+    def test_live_manifest_role_preflight_rejects_unbound_and_reused_carrier(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        byte_identity.require_manifest_source_refactor_role_preflight(
+            manifest, "fixture", ROOT)
+        unit = next(
+            unit for unit in manifest["translation_units"]
+            if any(donor.get("id") == "d_ca1ae06a8585"
+                   for donor in unit.get("donors", [])))
+        function = next(
+            item for item in unit["functions"]
+            if "ordinary_fpo_identity" in item)
+        unit["functions"].remove(function)
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "bound exactly once"):
+            byte_identity.require_manifest_source_refactor_role_preflight(
+                manifest, "fixture", ROOT)
+        unit["functions"].append(function)
+        reused = copy.deepcopy(function)
+        reused.pop("ordinary_fpo_identity")
+        reused["mangled"] = "?AnotherFixture@@YAXXZ"
+        unit["functions"].append(reused)
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "ordinary or repeated"):
+            byte_identity.require_manifest_source_refactor_role_preflight(
+                manifest, "fixture", ROOT)
+
+    def test_decoder_accepts_only_the_closed_live_extensions(self):
+        accepted = {
+            "41": 1, "43": 1, "45": 1,
+            "7400": 2, "7c00": 2, "7d00": 2, "7f00": 2,
+            "eb00": 2, "01c8": 2, "03c8": 2, "2bc8": 2,
+            "f7d8": 2, "0fafc1": 3,
+        }
+        for encoded, length in accepted.items():
+            with self.subTest(encoded=encoded):
+                self.assertEqual(
+                    byte_identity.supported_ia32_instruction_length(
+                        bytes.fromhex(encoded), "fixture"), length)
+        for encoded in ("90", "f7d0", "0fae", "0f"):
+            with self.subTest(encoded=encoded), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError,
+                    "unsupported|truncated"):
+                byte_identity.supported_ia32_instruction_length(
+                    bytes.fromhex(encoded), "fixture")
+
+    def test_line_certificate_rejects_partial_endpoints_and_wrong_partition(self):
+        seed, _, function, _, _ = self.fixture()
+        coff = byte_identity.CoffObject(seed)
+        primary = coff.function_section(TARGET_SYMBOL)
+        body = byte_identity.coff_body(coff, primary)
+        base = function["instruction_ranges"][0]
+        mutations = (
+            ({**base, "start": 25, "seed_instruction_lengths": [2, 1]},
+             "containing-stream"),
+            ({**base, "end": 26, "seed_instruction_lengths": [2]},
+             "containing-stream"),
+            ({**base, "seed_instruction_lengths": [2, 2]},
+             "partition"),
+        )
+        for item, message in mutations:
+            with self.subTest(message=message), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                byte_identity.require_coff_line_certified_ia32_boundaries(
+                    coff, primary, body, [item], "seed", TARGET_SYMBOL,
+                    "fixture")
+
+    def test_line_certificate_rejects_bad_sentinel_and_rows(self):
+        seed, _, function, _, _ = self.fixture()
+        for kind in ("sentinel", "sentinel_line", "unsorted", "outside"):
+            parsed = byte_identity.CoffObject(seed)
+            primary = parsed.function_section(TARGET_SYMBOL)
+            changed = bytearray(seed)
+            if kind == "sentinel":
+                struct.pack_into("<I", changed, primary["line_offset"], 0)
+            elif kind == "sentinel_line":
+                struct.pack_into("<H", changed, primary["line_offset"] + 4, 1)
+            elif kind == "unsorted":
+                struct.pack_into("<H", changed, primary["header_offset"] + 34,
+                                 3)
+                struct.pack_into("<IH", changed, primary["line_offset"] + 6,
+                                 24, 10)
+                struct.pack_into("<IH", changed, primary["line_offset"] + 12,
+                                 23, 11)
+            else:
+                struct.pack_into("<I", changed, primary["line_offset"] + 6,
+                                 primary["raw_size"] + 1)
+            changed = bytes(changed)
+            coff = byte_identity.CoffObject(changed)
+            changed_primary = coff.function_section(TARGET_SYMBOL)
+            with self.subTest(kind=kind), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError,
+                    "sentinel|boundary"):
+                byte_identity.require_coff_line_certified_ia32_boundaries(
+                    coff, changed_primary,
+                    byte_identity.coff_body(coff, changed_primary),
+                    function["instruction_ranges"], "seed", TARGET_SYMBOL,
+                    "fixture")
+
+    def test_fpo_identity_rejects_every_pinned_geometry_or_body_family(self):
+        fixture = self.fixture()
+        checks = (
+            (("expected_primary_characteristics",), "characteristics"),
+            (("expected_function_count",), "function census"),
+            (("debug_f", "section_number"), "geometry"),
+            (("debug_f", "associated"), "geometry"),
+            (("debug_f", "expected_seed_body_sha256"), "body pin"),
+            (("debug_f", "expected_seed_relocation_sha256"),
+             "relocation-table pin"),
+            (("debug_f", "expected_record", "cbProcSize"), "parsed FPO"),
+            (("debug_s", "expected_donor_body_sha256"), "body pin"),
+            (("debug_s", "expected_common_prefix_sha256"),
+             "CodeView procedure"),
+            (("debug_s", "expected_dbg_end"), "CodeView procedure range"),
+        )
+        for path, message in checks:
+            bad = copy.deepcopy(fixture[2])
+            target = bad["ordinary_fpo_identity"]
+            for key in path[:-1]:
+                target = target[key]
+            key = path[-1]
+            value = target[key]
+            target[key] = ("0" * 64 if isinstance(value, str)
+                           else value + 1)
+            with self.subTest(path=path), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                self.compose(fixture, bad)
+
+    def test_fpo_and_eh_branches_cannot_cross(self):
+        fixture = self.fixture()
+        eh_seed = make_divergent_coff()
+        eh_donor = _patched_target_body(eh_seed, [(24, b"\x41\x41\x41")])
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "FPO.*closure"):
+            self.compose(fixture, seed=eh_seed, donor=eh_donor)
+        ordinary = copy.deepcopy(fixture[2])
+        ordinary.pop("ordinary_fpo_identity")
+        ordinary.pop("expected_seed_metadata_sha256")
+        ordinary.pop("expected_donor_metadata_sha256")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "closure class"):
+            self.compose(fixture, ordinary)
+
+    def test_child_relocation_semantics_reject_offset_type_and_target_drift(self):
+        fixture = self.fixture()
+        for mutation in ("offset", "type", "target"):
+            changed = bytearray(fixture[1])
+            parsed = byte_identity.CoffObject(fixture[1])
+            primary = parsed.function_section(TARGET_SYMBOL)
+            child = byte_identity._comdat_child(parsed, primary, ".debug$F")
+            if mutation == "offset":
+                struct.pack_into("<I", changed, child["relocation_offset"], 1)
+            elif mutation == "type":
+                struct.pack_into("<H", changed,
+                                 child["relocation_offset"] + 8, 6)
+            else:
+                common_index, _ = byte_identity.unique_symbol(
+                    parsed, lambda symbol: symbol["name"] == COMMON,
+                    "fixture common symbol")
+                struct.pack_into("<I", changed,
+                                 child["relocation_offset"] + 4,
+                                 common_index)
+            changed = bytes(changed)
+            changed_coff = byte_identity.CoffObject(changed)
+            changed_primary = changed_coff.function_section(TARGET_SYMBOL)
+            changed_child = byte_identity._comdat_child(
+                changed_coff, changed_primary, ".debug$F")
+            bad = copy.deepcopy(fixture[2])
+            bad["ordinary_fpo_identity"]["debug_f"][
+                "expected_donor_relocation_sha256"] = hashlib.sha256(
+                    byte_identity._coff_table_bytes(
+                        changed_coff, changed_child,
+                        "relocations")).hexdigest()
+            with self.subTest(mutation=mutation), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError,
+                    "relocation|semantic"):
+                self.compose(fixture, bad, donor=changed)
+
+    def test_fpo_and_codeview_object_bytes_are_structurally_checked(self):
+        fixture = self.fixture()
+        raw = bytearray(struct.pack("<IIIHBB", 0, SEED_SIZE - 1,
+                                    2, 1, 2, 0x10))
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "cbProcSize"):
+            byte_identity.parse_fpo_data(
+                bytes(raw), expected_proc_size=SEED_SIZE)
+        raw = bytearray(struct.pack("<IIIHBB", 0, SEED_SIZE,
+                                    2, 1, 2, 0x30))
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "reserved"):
+            byte_identity.parse_fpo_data(bytes(raw))
+
+        changed = bytearray(fixture[1])
+        parsed = byte_identity.CoffObject(fixture[1])
+        primary = parsed.function_section(TARGET_SYMBOL)
+        debug_s = byte_identity._comdat_child(parsed, primary, ".debug$S")
+        changed[debug_s["raw_offset"] + 2] ^= 1
+        changed = bytes(changed)
+        changed_coff = byte_identity.CoffObject(changed)
+        changed_primary = changed_coff.function_section(TARGET_SYMBOL)
+        changed_debug = byte_identity._comdat_child(
+            changed_coff, changed_primary, ".debug$S")
+        bad = copy.deepcopy(fixture[2])
+        bad["ordinary_fpo_identity"]["debug_s"][
+            "expected_donor_body_sha256"] = hashlib.sha256(
+                byte_identity.coff_body(
+                    changed_coff, changed_debug)).hexdigest()
+        bad["expected_donor_metadata_sha256"] = (
+            byte_identity.instruction_mosaic_metadata_sha256(
+                changed_coff, changed_primary))
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "CodeView procedure"):
+            self.compose(fixture, bad, donor=changed)
+
+    def test_rejects_retail_oracle_drift_and_non_target_output_mutation(self):
+        fixture = self.fixture()
+        retail = bytearray(fixture[3])
+        retail[8] ^= 1
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "retail-exact"):
+            self.compose(fixture, retail=bytes(retail))
+        original = byte_identity.apply_replacements
+
+        def corrupt(data, replacements):
+            output = bytearray(original(data, replacements))
+            output[byte_identity.CoffObject(data).sections[3]["raw_offset"]] ^= 1
+            return bytes(output)
+
+        with mock.patch.object(byte_identity, "apply_replacements",
+                               side_effect=corrupt):
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "non-target"):
+                self.compose(fixture)
+
+        def corrupt_child(data, replacements):
+            output = bytearray(original(data, replacements))
+            parsed = byte_identity.CoffObject(data)
+            primary = parsed.function_section(TARGET_SYMBOL)
+            child = byte_identity._comdat_child(parsed, primary, ".debug$S")
+            output[child["raw_offset"] + child["raw_size"] - 1] ^= 1
+            return bytes(output)
+
+        with mock.patch.object(byte_identity, "apply_replacements",
+                               side_effect=corrupt_child):
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "non-target"):
+                self.compose(fixture)
+
+    def test_live_manifest_has_exact_half_open_ranges_and_omits_collateral(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        function = next(
+            function
+            for unit in manifest["translation_units"]
+            for function in unit.get("functions", [])
+            if "ordinary_fpo_identity" in function)
+        expected = [
+            (337, 360), (389, 398), (400, 429), (444, 453),
+            (472, 473), (481, 490), (491, 499), (549, 568),
+            (604, 613), (615, 637), (648, 650), (711, 720),
+            (721, 729),
+        ]
+        actual = [(item["start"], item["end"])
+                  for item in function["instruction_ranges"]]
+        self.assertEqual(actual, expected)
+        for offset in (499, 506, 729, 736):
+            self.assertFalse(any(start <= offset < end
+                                 for start, end in actual))
+        self.assertEqual(len(function["retail_relocations"]), 2)
+
+
 if __name__ == "__main__":
     unittest.main()

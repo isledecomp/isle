@@ -11275,6 +11275,8 @@ def validate_manifest(
     all_same_tu_carrier_recipe_ids = set()
     all_bound_same_tu_target_donor_ids = []
     all_bound_same_tu_instruction_donor_ids = []
+    all_ordinary_fpo_mosaic_recipe_ids = set()
+    all_bound_ordinary_fpo_mosaic_donor_ids = []
     for unit_index, unit in enumerate(translation_units):
         context = f"translation_units[{unit_index}]"
         require(isinstance(unit, dict), f"{context} must be an object")
@@ -11402,6 +11404,7 @@ def validate_manifest(
         local_recipe_rendered_sources = {}
         refactor_recipe_ids = set()
         same_tu_carrier_recipe_ids = set()
+        ordinary_fpo_mosaic_recipe_ids = set()
         for donor_index, donor in enumerate(donors):
             donor_context = f"{context}.donors[{donor_index}]"
             require(isinstance(donor, dict), f"{donor_context} must be an object")
@@ -11437,6 +11440,10 @@ def validate_manifest(
             )
             local_recipe_kinds[recipe_id] = kind
             local_recipes[recipe_id] = recipe
+            if (recipe.get("role_policy")
+                    == ORDINARY_FPO_MOSAIC_ROLE_POLICY):
+                ordinary_fpo_mosaic_recipe_ids.add(recipe_id)
+                all_ordinary_fpo_mosaic_recipe_ids.add(recipe_id)
             if mode == "compose_equal_body_comdat":
                 require(
                     kind in ("forward_declaration_run", "declaration_shape",
@@ -11950,14 +11957,16 @@ def validate_manifest(
                         pad_classes, pad_functions
                     ).encode("utf-8")
                 else:
-                    exact_keys(
+                    exact_audit_keys(
                         recipe,
                         {
                             "kind", "classes", "functions",
                             "generated_header_sha256", "compile_lane",
                             "emission_policy", "authenticity_rationale",
+                            "role_policy",
                         },
                         f"{donor_context}.recipe",
+                        optional={"role_policy"},
                     )
                     classes = recipe.get("classes")
                     functions_count = recipe.get("functions")
@@ -11969,6 +11978,13 @@ def validate_manifest(
                             and not isinstance(functions_count, bool)
                             and classes <= functions_count <= 10 * classes,
                             f"{donor_context}.functions is invalid")
+                    if "role_policy" in recipe:
+                        require(
+                            kind == "declaration_shape"
+                            and recipe["role_policy"]
+                            == ORDINARY_FPO_MOSAIC_ROLE_POLICY,
+                            f"{donor_context}.role_policy differs",
+                        )
                     generated = entropy_generator.generate_shape(
                         classes, functions_count
                     ).encode("utf-8")
@@ -12049,6 +12065,7 @@ def validate_manifest(
         bound_instruction_refactor_recipe_ids = []
         bound_same_tu_target_donor_ids = []
         bound_same_tu_instruction_donor_ids = []
+        bound_ordinary_fpo_mosaic_donor_ids = []
         primary_donor_ids = []
         clean_cross_tu_instruction_donor_ids = []
         non_primary_donor_ids = []
@@ -12481,6 +12498,12 @@ def validate_manifest(
                             "expected_seed_metadata_sha256",
                             "expected_donor_metadata_sha256",
                         }
+                    if "ordinary_fpo_identity" in function:
+                        mosaic_keys |= {
+                            "ordinary_fpo_identity",
+                            "expected_seed_metadata_sha256",
+                            "expected_donor_metadata_sha256",
+                        }
                     if "donor_variants" in function:
                         mosaic_keys |= {
                             "donor_variants",
@@ -12492,6 +12515,19 @@ def validate_manifest(
                             local_recipes[donor_id],
                             f"{function_context} donor recipe",
                         )
+                    if "ordinary_fpo_identity" in function:
+                        require(
+                            "target_source_refactor" not in function
+                            and "donor_variants" not in function
+                            and local_recipes[donor_id].get("role_policy")
+                            == ORDINARY_FPO_MOSAIC_ROLE_POLICY,
+                            f"{function_context}: ordinary FPO mosaic must "
+                            "use one FPO-only declaration carrier",
+                        )
+                        for name in ("expected_seed_metadata_sha256",
+                                     "expected_donor_metadata_sha256"):
+                            require_sha(function.get(name),
+                                        f"{function_context}.{name}")
                     for name in (
                         "expected_section_number", "expected_section_count",
                         "expected_body_length", "expected_line_count",
@@ -12571,6 +12607,16 @@ def validate_manifest(
                         require_sha(function.get(name),
                                     f"{function_context}.{name}")
                     normalized_function = dict(function)
+                    if "ordinary_fpo_identity" in function:
+                        normalized_function["ordinary_fpo_identity"] = (
+                            validate_ordinary_fpo_mosaic_identity(
+                                function["ordinary_fpo_identity"],
+                                f"{function_context}.ordinary_fpo_identity",
+                                function["expected_section_number"],
+                                function["expected_body_length"],
+                            )
+                        )
+                        bound_ordinary_fpo_mosaic_donor_ids.append(donor_id)
                     if variant_ids:
                         normalized_function["donor_variants"] = (
                             normalized_variants)
@@ -12599,6 +12645,15 @@ def validate_manifest(
                             function["expected_body_length"],
                         )
                     )
+                    if "ordinary_fpo_identity" in function:
+                        require(
+                            all(item["kind"]
+                                == "same_offset_complete_x86_instruction_sequence_v1"
+                                for item in normalized_function[
+                                    "instruction_ranges"]),
+                            f"{function_context}: ordinary FPO mosaics "
+                            "require exact instruction-sequence partitions",
+                        )
                     require_instruction_mosaic_range_donor_bindings(
                         normalized_function["instruction_ranges"], donor_id,
                         variant_ids, function_context,
@@ -13003,6 +13058,13 @@ def validate_manifest(
             bound_same_tu_instruction_donor_ids,
             context,
         )
+        require_ordinary_fpo_mosaic_donor_bindings(
+            ordinary_fpo_mosaic_recipe_ids,
+            primary_donor_ids,
+            non_primary_donor_ids,
+            bound_ordinary_fpo_mosaic_donor_ids,
+            context,
+        )
         all_primary_donor_ids.extend(primary_donor_ids)
         all_bound_refactor_recipe_ids.extend(bound_refactor_recipe_ids)
         all_bound_instruction_refactor_recipe_ids.extend(
@@ -13012,6 +13074,8 @@ def validate_manifest(
             bound_same_tu_target_donor_ids)
         all_bound_same_tu_instruction_donor_ids.extend(
             bound_same_tu_instruction_donor_ids)
+        all_bound_ordinary_fpo_mosaic_donor_ids.extend(
+            bound_ordinary_fpo_mosaic_donor_ids)
 
         completion = unit.get("completion")
         require(isinstance(completion, dict), f"{context}.completion must be an object")
@@ -13070,6 +13134,13 @@ def validate_manifest(
         all_non_primary_donor_ids,
         all_bound_same_tu_target_donor_ids,
         all_bound_same_tu_instruction_donor_ids,
+        "manifest",
+    )
+    require_ordinary_fpo_mosaic_donor_bindings(
+        all_ordinary_fpo_mosaic_recipe_ids,
+        all_primary_donor_ids,
+        all_non_primary_donor_ids,
+        all_bound_ordinary_fpo_mosaic_donor_ids,
         "manifest",
     )
 
@@ -14963,6 +15034,16 @@ INSTRUCTION_MOSAIC_DECLARATION_RECIPE_KINDS = frozenset({
 })
 
 
+ORDINARY_FPO_MOSAIC_ROLE_POLICY = (
+    "retail_exact_instruction_mosaic_fpo_only_v1"
+)
+
+
+ORDINARY_FPO_MOSAIC_IDENTITY_KIND = (
+    "seed_authoritative_fpo_codeview_v1"
+)
+
+
 CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS = (
     "retail_exact_cross_tu_instruction_hybrid_resize"
 )
@@ -15065,6 +15146,36 @@ def require_same_tu_hybrid_carrier_bindings(
             for recipe_id in carrier_ids),
         f"{context}: same-TU instruction carriers may not have a variant, "
         "repeated, or other non-primary use",
+    )
+
+
+def require_ordinary_fpo_mosaic_donor_bindings(
+    recipe_ids: set[str],
+    primary_donor_ids: list[str],
+    non_primary_donor_ids: list[str],
+    bound_donor_ids: list[str],
+    context: str,
+) -> None:
+    """Confine each ordinary FPO carrier to one authenticated mosaic use."""
+    protected_ids = set(recipe_ids)
+    primary_counts = Counter(primary_donor_ids)
+    non_primary_counts = Counter(non_primary_donor_ids)
+    bound_counts = Counter(bound_donor_ids)
+    require(
+        set(bound_counts) == protected_ids
+        and all(count == 1 for count in bound_counts.values()),
+        f"{context}: every ordinary FPO mosaic donor must be bound exactly "
+        "once to its authenticated FPO composer",
+    )
+    require(
+        all(primary_counts[recipe_id] == 1 for recipe_id in protected_ids),
+        f"{context}: ordinary FPO mosaic donors may not have an ordinary or "
+        "repeated primary use",
+    )
+    require(
+        all(non_primary_counts[recipe_id] == 0 for recipe_id in protected_ids),
+        f"{context}: ordinary FPO mosaic donors may not have an instruction, "
+        "variant, or other non-primary use",
     )
 
 
@@ -15214,6 +15325,32 @@ def raw_manifest_same_tu_carrier_recipe_ids(manifest: dict) -> set[str]:
     return result
 
 
+def raw_manifest_ordinary_fpo_mosaic_recipe_ids(manifest: dict) -> set[str]:
+    """Inventory FPO-only declaration carriers before host-dependent gates."""
+    result = set()
+    units = manifest.get("translation_units")
+    if not isinstance(units, list):
+        return result
+    for unit in units:
+        if not isinstance(unit, dict):
+            continue
+        donors = unit.get("donors")
+        if not isinstance(donors, list):
+            continue
+        for donor in donors:
+            if not isinstance(donor, dict):
+                continue
+            recipe = donor.get("recipe")
+            if (isinstance(recipe, dict)
+                    and recipe.get("role_policy")
+                    == ORDINARY_FPO_MOSAIC_ROLE_POLICY):
+                recipe_id = donor.get("id")
+                require(isinstance(recipe_id, str),
+                        "ordinary FPO mosaic donor id is invalid")
+                result.add(recipe_id)
+    return result
+
+
 def require_manifest_source_refactor_role_preflight(
     manifest: dict, context: str, root=None,
 ) -> None:
@@ -15224,6 +15361,7 @@ def require_manifest_source_refactor_role_preflight(
     non_primary_donor_ids = []
     bound_same_tu_target_donor_ids = []
     bound_same_tu_instruction_donor_ids = []
+    bound_ordinary_fpo_mosaic_donor_ids = []
     overlay = manifest.get("source_overlay")
     overlay_outputs = (
         overlay.get("outputs") if isinstance(overlay, dict) else None
@@ -15239,6 +15377,9 @@ def require_manifest_source_refactor_role_preflight(
         manifest, context)
     same_tu_carrier_recipe_ids = raw_manifest_same_tu_carrier_recipe_ids(
         manifest)
+    ordinary_fpo_mosaic_recipe_ids = (
+        raw_manifest_ordinary_fpo_mosaic_recipe_ids(manifest)
+    )
     units = manifest.get("translation_units")
     if not isinstance(units, list):
         return
@@ -15310,6 +15451,8 @@ def require_manifest_source_refactor_role_preflight(
                 if (function.get("splice_class")
                         == SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
                     bound_same_tu_target_donor_ids.append(donor_id)
+                if "ordinary_fpo_identity" in function:
+                    bound_ordinary_fpo_mosaic_donor_ids.append(donor_id)
             instruction_donor = function.get("instruction_donor")
             if isinstance(instruction_donor, str):
                 non_primary_donor_ids.append(instruction_donor)
@@ -15343,6 +15486,13 @@ def require_manifest_source_refactor_role_preflight(
         bound_same_tu_instruction_donor_ids,
         context,
     )
+    require_ordinary_fpo_mosaic_donor_bindings(
+        ordinary_fpo_mosaic_recipe_ids,
+        primary_donor_ids,
+        non_primary_donor_ids,
+        bound_ordinary_fpo_mosaic_donor_ids,
+        context,
+    )
 
 
 def require_target_bound_retail_image(
@@ -15371,37 +15521,45 @@ def require_target_bound_retail_image(
 def supported_ia32_instruction_length(
     encoded: bytes, context: str,
 ) -> int:
-    """Decode one closed IA-32 instruction family used by Class G.
+    """Decode one closed IA-32 instruction family used by instruction mosaics.
 
     This is intentionally a fail-closed length decoder, not a disassembler.
-    It accepts only the register/memory binary operations, group-1 imm8, and
-    one-byte INC/DEC forms needed by current same-mangled instruction donors
-    and their closed boundary-regression tests.
+    It accepts only the register/memory binary operations, group-1 imm8,
+    signed multiply, one-byte register increments, and short branches needed
+    by current instruction donors and their closed boundary-regression tests.
     ModRM, SIB, displacement, and immediate widths are derived from the bytes;
     unsupported prefixes/opcodes and truncated or concatenated encodings fail.
     """
     require(isinstance(encoded, bytes) and encoded,
             f"{context}: instruction encoding is missing")
     opcode = encoded[0]
-    if opcode in {0x46, 0x47}:
+    if opcode in {0x41, 0x43, 0x45, 0x46, 0x47}:
         return 1
-    if opcode in {0x75, 0x76}:
+    if opcode in {0x74, 0x75, 0x76, 0x7C, 0x7D, 0x7F, 0xEB}:
         require(len(encoded) >= 2,
-                f"{context}: short conditional branch is truncated")
+                f"{context}: short branch is truncated")
         return 2
     if 0xB8 <= opcode <= 0xBF:
         require(len(encoded) >= 5,
                 f"{context}: register immediate move is truncated")
         return 5
+    opcode_size = 1
+    if opcode == 0x0F:
+        require(len(encoded) >= 2 and encoded[1] == 0xAF,
+                f"{context}: unsupported or truncated two-byte IA-32 opcode")
+        opcode_size = 2
     require(opcode in {
-                0x33, 0x39, 0x3B, 0x80, 0x83, 0x89, 0x8A, 0x8B,
-                0xFF,
+                0x01, 0x03, 0x0F, 0x2B, 0x33, 0x39, 0x3B,
+                0x80, 0x83, 0x89, 0x8A, 0x8B, 0xF7, 0xFF,
             },
             f"{context}: unsupported IA-32 instruction opcode")
-    require(len(encoded) >= 2,
+    require(len(encoded) >= opcode_size + 1,
             f"{context}: IA-32 instruction lacks ModRM")
-    cursor = 2
-    modrm = encoded[1]
+    cursor = opcode_size + 1
+    modrm = encoded[opcode_size]
+    if opcode == 0xF7:
+        require((modrm >> 3) & 7 == 3,
+                f"{context}: unsupported F7 group operation")
     mode = modrm >> 6
     rm = modrm & 7
     if mode != 3 and rm == 4:
@@ -15440,7 +15598,7 @@ def require_coff_line_certified_ia32_boundaries(
     mangled: str, context: str,
 ) -> int:
     """Decode from the nearest compiler COFF line boundary through each span."""
-    require(role in {"target", "instruction_donor"},
+    require(role in {"target", "instruction_donor", "seed", "donor"},
             f"{context}: IA-32 range role differs")
     line_bytes = _coff_table_bytes(coff, section, "lines")
     require(len(line_bytes) == section["line_count"] * 6
@@ -15463,28 +15621,40 @@ def require_coff_line_certified_ia32_boundaries(
         previous = offset
         line_offsets.append(offset)
     require(line_offsets, f"{context}: compiler line boundaries are absent")
-    prefix = "target" if role == "target" else "instruction_donor"
+    prefixed = role in {"target", "instruction_donor"}
+    prefix = role if prefixed else ""
     decoded_count = 0
     for index, item in enumerate(ranges):
-        start = item[f"{prefix}_start"]
-        end = item[f"{prefix}_end"]
+        start = item[f"{prefix}_start"] if prefixed else item["start"]
+        end = item[f"{prefix}_end"] if prefixed else item["end"]
         anchors = [offset for offset in line_offsets if offset <= start]
         require(anchors,
                 f"{context}: range {index} has no preceding compiler line "
                 "boundary")
         cursor = max(anchors)
         boundaries = {cursor}
+        in_range_lengths = []
         while cursor < end:
+            instruction_start = cursor
             length = supported_ia32_instruction_length(
                 body[cursor:], f"{context} range {index} at {cursor}")
             cursor += length
             require(cursor <= len(body),
                     f"{context}: decoded instruction escapes the COMDAT")
             boundaries.add(cursor)
+            if start <= instruction_start and cursor <= end:
+                in_range_lengths.append(length)
             decoded_count += 1
         require(start in boundaries and end in boundaries,
                 f"{context}: range {index} is not one containing-stream "
                 "IA-32 instruction boundary")
+        lengths_key = f"{role}_instruction_lengths"
+        if lengths_key in item:
+            require(
+                in_range_lengths == item[lengths_key],
+                f"{context}: range {index} decoded instruction partition "
+                f"differs from {lengths_key}",
+            )
     return decoded_count
 
 
@@ -16206,6 +16376,123 @@ def validate_manifest_fpo_record(value: object, context: str) -> dict:
     return normalized
 
 
+ORDINARY_FPO_CHILD_IDENTITY_KEYS = {
+    "section_number", "raw_size", "relocation_count", "line_count",
+    "characteristics", "selection", "associated",
+    "expected_seed_body_sha256", "expected_donor_body_sha256",
+    "expected_seed_relocation_sha256", "expected_donor_relocation_sha256",
+}
+
+
+def validate_ordinary_fpo_mosaic_identity(
+    value: object, context: str, primary_section: int, body_length: int,
+) -> dict:
+    """Validate the narrow seed-authoritative FPO mosaic identity schema."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "expected_primary_characteristics",
+        "expected_primary_selection", "expected_function_count",
+        "expected_comdat_count", "expected_seed_line_sha256",
+        "expected_donor_line_sha256", "debug_f", "debug_s",
+    }, context)
+    require(value.get("kind") == ORDINARY_FPO_MOSAIC_IDENTITY_KIND,
+            f"{context}.kind differs")
+    normalized = {"kind": value["kind"]}
+    for name, minimum, maximum in (
+        ("expected_primary_characteristics", 1, 0xFFFFFFFF),
+        ("expected_primary_selection", 1, 7),
+        ("expected_function_count", 1, 0x7FFFFFFF),
+        ("expected_comdat_count", 1, 0x7FFFFFFF),
+    ):
+        normalized[name] = require_exact_int(
+            value.get(name), f"{context}.{name}",
+            minimum=minimum, maximum=maximum,
+        )
+    for name in ("expected_seed_line_sha256",
+                 "expected_donor_line_sha256"):
+        normalized[name] = require_sha(value.get(name), f"{context}.{name}")
+
+    children = {}
+    for key, section_name in (("debug_f", ".debug$F"),
+                              ("debug_s", ".debug$S")):
+        child_context = f"{context}.{key}"
+        child = value.get(key)
+        require(isinstance(child, dict), f"{child_context} must be an object")
+        extra_keys = ({"expected_record"} if key == "debug_f" else {
+            "expected_common_prefix_sha256", "expected_record_kind",
+            "expected_cb_proc", "expected_dbg_start", "expected_dbg_end",
+        })
+        exact_audit_keys(
+            child, ORDINARY_FPO_CHILD_IDENTITY_KEYS | extra_keys,
+            child_context,
+        )
+        normalized_child = {}
+        for name, minimum, maximum in (
+            ("section_number", 1, 0x7FFF),
+            ("raw_size", 1, 0xFFFFFFFF),
+            ("relocation_count", 0, 0xFFFF),
+            ("line_count", 0, 0xFFFF),
+            ("characteristics", 1, 0xFFFFFFFF),
+            ("selection", 1, 7),
+            ("associated", 1, 0x7FFF),
+        ):
+            normalized_child[name] = require_exact_int(
+                child.get(name), f"{child_context}.{name}",
+                minimum=minimum, maximum=maximum,
+            )
+        require(normalized_child["associated"] == primary_section
+                and normalized_child["selection"] == 5
+                and normalized_child["line_count"] == 0,
+                f"{child_context} is not an associative debug child")
+        for name in (
+            "expected_seed_body_sha256", "expected_donor_body_sha256",
+            "expected_seed_relocation_sha256",
+            "expected_donor_relocation_sha256",
+        ):
+            normalized_child[name] = require_sha(
+                child.get(name), f"{child_context}.{name}")
+        if key == "debug_f":
+            require(normalized_child["raw_size"] == 16
+                    and normalized_child["relocation_count"] == 1,
+                    f"{child_context} is not one classic FPO record")
+            record = validate_manifest_fpo_record(
+                child.get("expected_record"),
+                f"{child_context}.expected_record",
+            )
+            require(record["cbProcSize"] == body_length,
+                    f"{child_context} FPO size differs from the function")
+            normalized_child["expected_record"] = record
+        else:
+            require(normalized_child["raw_size"] >= 28
+                    and normalized_child["relocation_count"] == 2,
+                    f"{child_context} is not one CodeView procedure record")
+            normalized_child["expected_common_prefix_sha256"] = require_sha(
+                child.get("expected_common_prefix_sha256"),
+                f"{child_context}.expected_common_prefix_sha256",
+            )
+            require(child.get("expected_record_kind") == "0502",
+                    f"{child_context}.expected_record_kind differs")
+            normalized_child["expected_record_kind"] = "0502"
+            for name in ("expected_cb_proc", "expected_dbg_start",
+                         "expected_dbg_end"):
+                normalized_child[name] = require_exact_int(
+                    child.get(name), f"{child_context}.{name}",
+                    minimum=0, maximum=body_length,
+                )
+            require(
+                normalized_child["expected_cb_proc"] == body_length
+                and 0 <= normalized_child["expected_dbg_start"]
+                <= normalized_child["expected_dbg_end"] < body_length,
+                f"{child_context} CodeView procedure range differs",
+            )
+        children[key] = normalized_child
+    normalized.update(children)
+    require(children["debug_f"]["section_number"]
+            != children["debug_s"]["section_number"],
+            f"{context} child seats are not distinct")
+    return normalized
+
+
 def _comdat_child_closure(coff: CoffObject, primary: dict) -> tuple:
     """Return (count, sorted child section names) of a COMDAT's selection-5
     associates."""
@@ -16372,6 +16659,158 @@ def require_instruction_mosaic_semantic_relocations(
             f"{context}: relocation {index} reseats a different COMDAT",
         )
     return renames
+
+
+def require_ordinary_fpo_mosaic_identity(
+    seed: CoffObject,
+    seed_primary: dict,
+    donor: CoffObject,
+    donor_primary: dict,
+    function: dict,
+    identity: dict,
+    context: str,
+) -> list[tuple[dict, dict]]:
+    """Authenticate one ordinary mosaic's exact FPO/CodeView closure."""
+    mangled = function["mangled"]
+    seed_definitions = section_definitions(seed)
+    donor_definitions = section_definitions(donor)
+    require(
+        seed_primary["characteristics"]
+        == donor_primary["characteristics"]
+        == identity["expected_primary_characteristics"],
+        f"{context}: primary characteristics differ",
+    )
+    require(
+        seed_definitions[seed_primary["number"]]["selection"]
+        == donor_definitions[donor_primary["number"]]["selection"]
+        == identity["expected_primary_selection"],
+        f"{context}: primary COMDAT selection differs",
+    )
+    for role, coff in (("seed", seed), ("donor", donor)):
+        require(
+            sum(function_multiset(coff).values())
+            == identity["expected_function_count"],
+            f"{context}: {role} function census differs",
+        )
+        require(
+            sum(comdat_primary_identity_multiset(coff).values())
+            == identity["expected_comdat_count"],
+            f"{context}: {role} COMDAT census differs",
+        )
+    require(linker_payload_multiset(seed) == linker_payload_multiset(donor),
+            f"{context}: declaration carrier changed linker payload")
+    require(
+        sha256_bytes(_coff_table_bytes(seed, seed_primary, "lines"))
+        == identity["expected_seed_line_sha256"]
+        and sha256_bytes(_coff_table_bytes(donor, donor_primary, "lines"))
+        == identity["expected_donor_line_sha256"],
+        f"{context}: target line-table pin differs",
+    )
+    require(
+        _comdat_child_closure(seed, seed_primary)
+        == _comdat_child_closure(donor, donor_primary)
+        == (2, (".debug$F", ".debug$S")),
+        f"{context}: closure is not the exact FPO pair",
+    )
+
+    pairs = []
+    for key, name in (("debug_f", ".debug$F"),
+                      ("debug_s", ".debug$S")):
+        pin = identity[key]
+        left = _comdat_child(seed, seed_primary, name)
+        right = _comdat_child(donor, donor_primary, name)
+        for role, coff, section, definitions in (
+            ("seed", seed, left, seed_definitions),
+            ("donor", donor, right, donor_definitions),
+        ):
+            definition = definitions[section["number"]]
+            require(
+                section["number"] == pin["section_number"]
+                and section["raw_size"] == pin["raw_size"]
+                and section["relocation_count"]
+                == pin["relocation_count"]
+                and section["line_count"] == pin["line_count"]
+                and section["characteristics"] == pin["characteristics"]
+                and definition["selection"] == pin["selection"]
+                and definition["associated"] == pin["associated"],
+                f"{context}: {role} {name} geometry differs",
+            )
+            require(
+                sha256_bytes(coff_body(coff, section))
+                == pin[f"expected_{role}_body_sha256"],
+                f"{context}: {role} {name} body pin differs",
+            )
+            require(
+                sha256_bytes(_coff_table_bytes(
+                    coff, section, "relocations"))
+                == pin[f"expected_{role}_relocation_sha256"],
+                f"{context}: {role} {name} relocation-table pin differs",
+            )
+        require_same_semantic_relocations(
+            seed, left, donor, right, f"{context} {name}")
+        left_rows = detailed_relocations(seed, left)
+        right_rows = detailed_relocations(donor, right)
+        expected_rows = (
+            [(0, 4, 7)] if name == ".debug$F"
+            else [(28, 4, 11), (32, 2, 10)]
+        )
+        for role, rows in (("seed", left_rows), ("donor", right_rows)):
+            require(
+                len(rows) == len(expected_rows)
+                and all(
+                    (row["offset"], row["width"], row["type"])
+                    == expected
+                    and row["addend"] == 0
+                    and row["target"] == mangled
+                    and row["target_section"] == seed_primary["number"]
+                    and row["target_value"] == 0
+                    and row["target_type"] == 32
+                    and row["target_storage"] == 2
+                    for row, expected in zip(rows, expected_rows)
+                ),
+                f"{context}: {role} {name} semantic relocations differ",
+            )
+        pairs.append((left, right))
+
+    seed_f = coff_body(seed, pairs[0][0])
+    donor_f = coff_body(donor, pairs[0][1])
+    require(seed_f == donor_f,
+            f"{context}: FPO raw bytes differ between compiler states")
+    require(
+        exact_json_equal(
+            parse_fpo_data(seed_f, expected_proc_size=seed_primary["raw_size"]),
+            identity["debug_f"]["expected_record"],
+        )
+        and exact_json_equal(
+            parse_fpo_data(
+                donor_f, expected_proc_size=donor_primary["raw_size"]),
+            identity["debug_f"]["expected_record"],
+        ),
+        f"{context}: parsed FPO record differs",
+    )
+    seed_s = coff_body(seed, pairs[1][0])
+    donor_s = coff_body(donor, pairs[1][1])
+    debug_pin = identity["debug_s"]
+    require(
+        len(seed_s) == len(donor_s) == debug_pin["raw_size"]
+        and seed_s[:28] == donor_s[:28]
+        and sha256_bytes(seed_s[:28])
+        == debug_pin["expected_common_prefix_sha256"]
+        and seed_s[2:4].hex() == debug_pin["expected_record_kind"],
+        f"{context}: CodeView procedure identity differs",
+    )
+    for role, raw in (("seed", seed_s), ("donor", donor_s)):
+        cb_proc, dbg_start, dbg_end = struct.unpack_from("<III", raw, 16)
+        require(
+            (cb_proc, dbg_start, dbg_end) == (
+                debug_pin["expected_cb_proc"],
+                debug_pin["expected_dbg_start"],
+                debug_pin["expected_dbg_end"],
+            )
+            and 0 <= dbg_start <= dbg_end < cb_proc,
+            f"{context}: {role} CodeView procedure range differs",
+        )
+    return pairs
 
 
 def _coff_table_bytes(coff: CoffObject, section: dict, kind: str) -> bytes:
@@ -17946,6 +18385,9 @@ def _compose_retail_exact_instruction_mosaic_core(
             "splice class is not retail_exact_instruction_mosaic")
     require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
             "retail oracle body is missing")
+    ordinary_fpo = "ordinary_fpo_identity" in function
+    require(not (source_permutation and ordinary_fpo),
+            "ordinary FPO mosaic cannot cross the source-permutation branch")
     expected_length = function["expected_body_length"]
     donor_expected_length = function.get(
         "expected_donor_body_length", expected_length)
@@ -17953,6 +18395,14 @@ def _compose_retail_exact_instruction_mosaic_core(
         function.get("instruction_ranges"), "instruction mosaic ranges",
         expected_length,
     )
+    if ordinary_fpo:
+        require(
+            all(item["kind"]
+                == "same_offset_complete_x86_instruction_sequence_v1"
+                for item in ranges),
+            "ordinary FPO instruction mosaic requires exact sequence "
+            "partitions",
+        )
     seed = CoffObject(seed_bytes)
     donor = CoffObject(donor_bytes)
     mangled = function["mangled"]
@@ -17995,11 +18445,20 @@ def _compose_retail_exact_instruction_mosaic_core(
     closure = _comdat_child_closure(seed, sp)
     require(closure == _comdat_child_closure(donor, dp),
             "instruction-mosaic target closure changed")
-    allowed_closures = {(2, (".debug$S", ".xdata$x"))}
-    if source_permutation:
-        allowed_closures.add((2, (".debug$F", ".debug$S")))
-    require(closure in allowed_closures,
-            "instruction-mosaic target closure class differs")
+    if ordinary_fpo:
+        require(closure == (2, (".debug$F", ".debug$S")),
+                "ordinary FPO instruction-mosaic closure class differs")
+        require_ordinary_fpo_mosaic_identity(
+            seed, sp, donor, dp, function,
+            function["ordinary_fpo_identity"],
+            "ordinary FPO instruction mosaic",
+        )
+    else:
+        allowed_closures = {(2, (".debug$S", ".xdata$x"))}
+        if source_permutation:
+            allowed_closures.add((2, (".debug$F", ".debug$S")))
+        require(closure in allowed_closures,
+                "instruction-mosaic target closure class differs")
     closure_pairs = []
     closure_relocation_renames = {}
     for child_name in closure[1]:
@@ -18018,7 +18477,7 @@ def _compose_retail_exact_instruction_mosaic_core(
         )
         left_body = coff_body(seed, left)
         right_body = coff_body(donor, right)
-        if source_permutation:
+        if source_permutation or ordinary_fpo:
             pass
         elif child_name == ".xdata$x":
             require(left_body == right_body,
@@ -18030,7 +18489,7 @@ def _compose_retail_exact_instruction_mosaic_core(
                     "instruction-mosaic debug procedure identity changed")
         closure_pairs.append((left, right))
 
-    if source_permutation:
+    if source_permutation or ordinary_fpo:
         require(instruction_mosaic_metadata_sha256(seed, sp)
                 == function["expected_seed_metadata_sha256"],
                 "instruction-mosaic seed metadata differs from its pin")
@@ -18063,9 +18522,23 @@ def _compose_retail_exact_instruction_mosaic_core(
         ("seed", seed, seed_lines), ("donor", donor, donor_lines),
     ):
         symbol_index = int.from_bytes(line_bytes[:4], "little")
+        function_index, _ = function_symbol(
+            coff, mangled,
+            sp["number"] if role == "seed" else dp["number"],
+        )
         require(line_bytes[4:6] == b"\0\0"
-                and coff.symbols.get(symbol_index, {}).get("name") == mangled,
+                and symbol_index == function_index,
                 f"instruction-mosaic {role} line marker changed identity")
+
+    if ordinary_fpo:
+        require_coff_line_certified_ia32_boundaries(
+            seed, sp, seed_body, ranges, "seed", mangled,
+            "ordinary FPO instruction-mosaic seed",
+        )
+        require_coff_line_certified_ia32_boundaries(
+            donor, dp, donor_body, ranges, "donor", mangled,
+            "ordinary FPO instruction-mosaic donor",
+        )
 
     code_relocation_renames = (
         require_instruction_mosaic_semantic_relocations(
@@ -18183,6 +18656,12 @@ def _compose_retail_exact_instruction_mosaic_core(
     require(_coff_table_bytes(checked, cp, "lines")
             == _coff_table_bytes(seed, sp, "lines"),
             "instruction-mosaic seed line table changed")
+    if ordinary_fpo:
+        require(
+            instruction_mosaic_metadata_sha256(checked, cp)
+            == function["expected_seed_metadata_sha256"],
+            "ordinary FPO instruction-mosaic output metadata changed",
+        )
     require(function_multiset(checked) == function_multiset(seed),
             "instruction-mosaic output function set changed")
     for left, _ in closure_pairs:
@@ -18204,6 +18683,7 @@ def _compose_retail_exact_instruction_mosaic_core(
         "relocations": len(seed_rows),
         "line_count": cp["line_count"],
         "closure": list(closure[1]),
+        "ordinary_fpo_identity": ordinary_fpo,
         "code_relocation_renames": code_relocation_renames,
         "closure_relocation_renames": closure_relocation_renames,
         "retail_exact": True,

@@ -2617,8 +2617,8 @@
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
     },
-    {
-     "id": "d_1044c277ee35",
+            {
+              "id": "d_1044c277ee35",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -2632,11 +2632,28 @@
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_76eab62d78a3",
+                "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+              }
+            },
+            {
+              "id": "d_ca1ae06a8585",
+              "status": "compiler_generated_current_source",
+              "authenticity": "synthetic_baseline_only",
+              "recipe": {
+                "kind": "declaration_shape",
+                "classes": 4,
+                "functions": 27,
+                "generated_header_sha256": "ca1ae06a8585fe5df7e80e84e4ccbacbd690074717bbfee22dddfb6d4b971955",
+                "compile_lane": {
+                  "required_define": "DIRECTX5_SDK"
+                },
+                "emission_policy": "non_emitting_declarations_only",
+                "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered as a private force-include; it contributes no code, data, strings, vtables, or linker directives and is confined to one FPO instruction mosaic.",
+                "role_policy": "retail_exact_instruction_mosaic_fpo_only_v1"
+              }
+            },
+            {
+              "id": "d_76eab62d78a3",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -3160,11 +3177,356 @@
        }
       }
      }
-    }
+    },
+   {
+    "mangled": "?VTable0x30@MxDisplaySurface@@UAEXPAVMxBitmap@@HHHHHHE@Z",
+    "donor": "d_ca1ae06a8585",
+    "splice_class": "retail_exact_instruction_mosaic",
+    "expected_section_number": 51,
+    "expected_section_count": 88,
+    "expected_body_length": 811,
+    "expected_relocation_count": 2,
+    "expected_line_count": 44,
+    "expected_seed_body_sha256": "0e6db537fdd488dac53f74ca9d45e2060a52c637b7236305593aaa644b521630",
+    "expected_donor_body_sha256": "86be2090dc2f9e3604436b8a7d343d6f598fef2decc878eb75114b85aef193c4",
+    "expected_seed_metadata_sha256": "53262ef7c4ccc08c022ba8173dd20b759281086dcf2e3d37241f453ee76d194f",
+    "expected_donor_metadata_sha256": "467ffbd6e7dc1d7ac9523b01c962f8fc209d04e82aad6fd75ee020e1afb3bfdf",
+    "expected_body_sha256": "9fba51eb1777b626f4ff595f7789292b9d2dfe17772f535a6acbaf6882b0594d",
+    "ordinary_fpo_identity": {
+     "kind": "seed_authoritative_fpo_codeview_v1",
+     "expected_primary_characteristics": 1615859744,
+     "expected_primary_selection": 1,
+     "expected_function_count": 27,
+     "expected_comdat_count": 30,
+     "expected_seed_line_sha256": "237cbf214dde14160aecf4e549e06a97b1a7b884b2323da61691633c04ae1c8c",
+     "expected_donor_line_sha256": "553b8477df176736252734ecfb6ab74a2e9f9bcf38f9578c9512fcdb2bff25a5",
+     "debug_f": {
+      "section_number": 53,
+      "raw_size": 16,
+      "relocation_count": 1,
+      "line_count": 0,
+      "characteristics": 1108349000,
+      "selection": 5,
+      "associated": 51,
+      "expected_seed_body_sha256": "ac519da2ac097d8263482d88f413f3cd3b400381d984079aade644bd44932266",
+      "expected_donor_body_sha256": "ac519da2ac097d8263482d88f413f3cd3b400381d984079aade644bd44932266",
+      "expected_seed_relocation_sha256": "d9d71190e5c28b9ac4a65f84051733f4a51bf22e8a3ca4ce7e198009a6cc7a4f",
+      "expected_donor_relocation_sha256": "3de200884a6ba969377fc9dbe12fdefbedd0e7ff7a90988d49f6cacf5dc33c4b",
+      "expected_record": {
+       "ulOffStart": 0,
+       "cbProcSize": 811,
+       "cdwLocals": 29,
+       "cdwParams": 8,
+       "cbProlog": 16,
+       "cbRegs": 4,
+       "fHasSEH": 0,
+       "fUseBP": 1,
+       "reserved": 0,
+       "cbFrame": 0,
+       "raw_sha256": "ac519da2ac097d8263482d88f413f3cd3b400381d984079aade644bd44932266"
+      }
+     },
+     "debug_s": {
+      "section_number": 52,
+      "raw_size": 402,
+      "relocation_count": 2,
+      "line_count": 0,
+      "characteristics": 1108349000,
+      "selection": 5,
+      "associated": 51,
+      "expected_seed_body_sha256": "e862c097c66d0cef5ccf3d266a404d2f82e9705af1fd9fd11588dbbf5e95127d",
+      "expected_donor_body_sha256": "13a6cb109f3c33731afe5cd342f11cf215b59c9948dd826ee6962048ff124db4",
+      "expected_seed_relocation_sha256": "39cfd11ec1fc0301d5d192b050d01dbfdcdcb30a381f9f82c3722570dd415cfa",
+      "expected_donor_relocation_sha256": "e931b1f15d235e4223815559171d1dd4dcaaa36141431e942bb2eec311a08f19",
+      "expected_common_prefix_sha256": "cd152160d699ee81492fcbd5d1d37d3c7498ecac1a0562fdb532e336a25389d7",
+      "expected_record_kind": "0502",
+      "expected_cb_proc": 811,
+      "expected_dbg_start": 16,
+      "expected_dbg_end": 801
+     }
+    },
+    "instruction_ranges": [
+     {
+      "kind": "same_offset_complete_x86_instruction_sequence_v1",
+      "start": 337,
+      "end": 360,
+      "seed_bytes": "8b8424980000000faf442428038424940000000344243c",
+      "seed_sha256": "72e869045a30f47fff1049b7fb8eaba7af78b6708152c1603beac7289cfc9188",
+      "donor_bytes": "8b4424280faf8424980000000344243c03842494000000",
+      "donor_sha256": "cf7898b1e02f294e3fa58d47c0e12707912c42773e7a6832f33dabd769ddc9e7",
+      "seed_instruction_lengths": [
+       7,
+       5,
+       7,
+       4
+      ],
+      "donor_instruction_lengths": [
+       4,
+       8,
+       4,
+       7
+      ]
+     },
+     {
+      "kind": "same_offset_complete_x86_instruction_sequence_v1",
+      "start": 389,
+      "end": 398,
+      "seed_bytes": "8b410483c00383e0fc",
+      "seed_sha256": "c2100bb80d67a65b5e7617e0a89b367179232d48d687d079eae92184d0dd447b",
+      "donor_bytes": "8b590483c30383e3fc",
+      "donor_sha256": "3ccd5f822c6d6dfc743afada8988d58270abc258d7333eb20071b5b37c24c024",
+      "seed_instruction_lengths": [
+       3,
+       3,
+       3
+      ],
+      "donor_instruction_lengths": [
+       3,
+       3,
+       3
+      ]
+     },
+     {
+      "kind": "same_offset_complete_x86_instruction_sequence_v1",
+      "start": 400,
+      "end": 429,
+      "seed_bytes": "8b410483c00383e0fcf7d82b84249c0000008b4c24282b8c249c000000",
+      "seed_sha256": "f5ac47027807f3e2d5b3cac4a748408e3b033a55f8c70f41bb70626c6954fbbc",
+      "donor_bytes": "8b590483c30383e3fcf7db2b9c249c0000008b4424282b84249c000000",
+      "donor_sha256": "2e12e40768e7c93863036221b689fd16ec60db36539e0ec3b5f2097b2a35262b",
+      "seed_instruction_lengths": [
+       3,
+       3,
+       3,
+       2,
+       7,
+       4,
+       7
+      ],
+      "donor_instruction_lengths": [
+       3,
+       3,
+       3,
+       2,
+       7,
+       4,
+       7
+      ]
+     },
+     {
+      "kind": "same_offset_complete_x86_instruction_sequence_v1",
+      "start": 444,
+      "end": 453,
+      "seed_bytes": "33db399c249c000000",
+      "seed_sha256": "94ee6e1620f7011c3538405f750eeff6ba4a715c248a71436266e76b3be8fd1b",
+      "donor_bytes": "33c9398c249c000000",
+      "donor_sha256": "ef573fbbabe57052a607938f1cf9d24ef39632c352d96b76e81130080a175376",
+      "seed_instruction_lengths": [
+       2,
+       7
+      ],
+      "donor_instruction_lengths": [
+       2,
+       7
+      ]
+     },
+     {
+      "kind": "same_offset_complete_x86_instruction_sequence_v1",
+      "start": 472,
+      "end": 473,
+      "seed_bytes": "43",
+      "seed_sha256": "6b23c0d5f35d1b11f9b683f0b0a617355deb11277d91ae091d399c655b87940d",
+      "donor_bytes": "41",
+      "donor_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+      "seed_instruction_lengths": [
+       1
+      ],
+      "donor_instruction_lengths": [
+       1
+      ]
+     },
+     {
+      "kind": "same_offset_complete_x86_instruction_sequence_v1",
+      "start": 481,
+      "end": 490,
+      "seed_bytes": "399c249c0000007fdd",
+      "seed_sha256": "4a0892739b2b45532c3351ef269f1839db762fb8053c3bce6295d26560f13233",
+      "donor_bytes": "3b8c249c0000007cdd",
+      "donor_sha256": "275d614dbfad337d25169b7c40dae1794d5f0c9fc6333a06784cbda54733c187",
+      "seed_instruction_lengths": [
+       7,
+       2
+      ],
+      "donor_instruction_lengths": [
+       7,
+       2
+      ]
+     },
+     {
+      "kind": "same_offset_complete_x86_instruction_sequence_v1",
+      "start": 491,
+      "end": 499,
+      "seed_bytes": "01442414014c2410",
+      "seed_sha256": "75f6a7f0dc84a6d3684c4ee21115e12e3c6813489c8b781e460010c0743bb3ee",
+      "donor_bytes": "015c241401442410",
+      "donor_sha256": "4b1448dff1a341e0b8a21d73a28e9a8a325308a62b442609e0b7019425d3ccce",
+      "seed_instruction_lengths": [
+       4,
+       4
+      ],
+      "donor_instruction_lengths": [
+       4,
+       4
+      ]
+     },
+     {
+      "kind": "same_offset_complete_x86_instruction_sequence_v1",
+      "start": 549,
+      "end": 568,
+      "seed_bytes": "8b8424980000008bbc24940000000faf442428",
+      "seed_sha256": "2745c54df2046454ae4f8122df1c29096f05a55f085a0e4d5289fa4b833fa988",
+      "donor_bytes": "8b4424288bbc24940000000faf842498000000",
+      "donor_sha256": "3063ae8832cbd0419cf0e99dec1a4daecff1251866ce74b1d54064570749fd0c",
+      "seed_instruction_lengths": [
+       7,
+       7,
+       5
+      ],
+      "donor_instruction_lengths": [
+       4,
+       7,
+       8
+      ]
+     },
+     {
+      "kind": "same_offset_complete_x86_instruction_sequence_v1",
+      "start": 604,
+      "end": 613,
+      "seed_bytes": "8b590483c30383e3fc",
+      "seed_sha256": "3ccd5f822c6d6dfc743afada8988d58270abc258d7333eb20071b5b37c24c024",
+      "donor_bytes": "8b790483c70383e7fc",
+      "donor_sha256": "4e7964d17f8f776d7d515ae121b9b6482c9b43dbadf56545e745da70ee588da2",
+      "seed_instruction_lengths": [
+       3,
+       3,
+       3
+      ],
+      "donor_instruction_lengths": [
+       3,
+       3,
+       3
+      ]
+     },
+     {
+      "kind": "same_offset_complete_x86_instruction_sequence_v1",
+      "start": 615,
+      "end": 637,
+      "seed_bytes": "8b590483c30383e3fcf7db2b9c249c0000008b7c2428",
+      "seed_sha256": "1dcff19b7d61a654dac3f5c1c614d892ef82fa4348f82555657022872b41a47e",
+      "donor_bytes": "8b790483c70383e7fcf7df2bbc249c0000008b5c2428",
+      "donor_sha256": "d34e91172a275e6705ac9e28fabf68fe9acf98b1485eaabe9944b199708b3a4d",
+      "seed_instruction_lengths": [
+       3,
+       3,
+       3,
+       2,
+       7,
+       4
+      ],
+      "donor_instruction_lengths": [
+       3,
+       3,
+       3,
+       2,
+       7,
+       4
+      ]
+     },
+     {
+      "kind": "same_offset_complete_x86_instruction_sequence_v1",
+      "start": 648,
+      "end": 650,
+      "seed_bytes": "2bf8",
+      "seed_sha256": "72c87aae3d16af6c4659d3e4c002ce50fcde07369dd250740c950df310def6e3",
+      "donor_bytes": "2bd8",
+      "donor_sha256": "e2be51bd30c968b6a89d0e2f303bbc00aa0b85dca2087c43eb4a4e2fee7b1216",
+      "seed_instruction_lengths": [
+       2
+      ],
+      "donor_instruction_lengths": [
+       2
+      ]
+     },
+     {
+      "kind": "same_offset_complete_x86_instruction_sequence_v1",
+      "start": 711,
+      "end": 720,
+      "seed_bytes": "3984249c0000007fce",
+      "seed_sha256": "2e7a230d60454dde22f9130064906149a2d9c89fddb621d21a7c903d8cbbcd17",
+      "donor_bytes": "3b84249c0000007cce",
+      "donor_sha256": "a58c514498ab5df628e68e5e2ba9e601b16a014b4cbb925a05f55ada599ed6b8",
+      "seed_instruction_lengths": [
+       7,
+       2
+      ],
+      "donor_instruction_lengths": [
+       7,
+       2
+      ]
+     },
+     {
+      "kind": "same_offset_complete_x86_instruction_sequence_v1",
+      "start": 721,
+      "end": 729,
+      "seed_bytes": "015c2414017c2410",
+      "seed_sha256": "59c545bc806d1ab23895140eae07b608c1342f8b3e7ef86394d45b193901527c",
+      "donor_bytes": "017c2414015c2410",
+      "donor_sha256": "0a324bba5a91011a73efbf2f2ae9b6e6aaf98971c1b53e41b1ea64eb9eede0f4",
+      "seed_instruction_lengths": [
+       4,
+       4
+      ],
+      "donor_instruction_lengths": [
+       4,
+       4
+      ]
+     }
+    ],
+    "retail_oracle": {
+     "image": "LEGO1.DLL",
+     "address": "0x100bb1d0",
+     "verdict": "MATCH",
+     "length": 811
+    },
+    "retail_relocations": [
+     {
+      "offset": 98,
+      "type": 20,
+      "addend": 0,
+      "target": "?GetRectIntersection@@YAEHHHHPAH00000@Z",
+      "target_section": 0,
+      "target_value": 0,
+      "target_type": 32,
+      "target_storage": 2,
+      "retail_target": "0x100b6e10"
+     },
+     {
+      "offset": 780,
+      "type": 20,
+      "addend": 0,
+      "target": "?DrawTransparentRLE@MxDisplaySurface@@QAEXAAPAE0IHHJE@Z",
+      "target_section": 54,
+      "target_value": 0,
+      "target_type": 32,
+      "target_storage": 2,
+      "retail_target": "0x100bb500"
+     }
+    ]
+   }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 7 row(s) in LEGO1/omni/src/video/mxdisplaysurface.cpp from authenticated compiler-generated carrier and source-permutation states while retaining canonical non-target bytes.",
+    "reason": "Closes 8 row(s) in LEGO1/omni/src/video/mxdisplaysurface.cpp from authenticated compiler-generated carrier and source-permutation states while retaining canonical non-target bytes.",
     "may_replace_compiler_output": true
    }
   },
@@ -13463,8 +13825,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-   "exact_raw_1_0_count": 4875,
-   "accepted_row_identity_sha256": "3d17e90b32ef3a056d17c5b2bd8dfbb2e6d40972e55d4c67568da6383eb7aaba",
+   "exact_raw_1_0_count": 4876,
+   "accepted_row_identity_sha256": "c37f17f9432a2dace40825e34eb4fd2fdab85db0ff90c20a786d5ad2630a5eb9",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

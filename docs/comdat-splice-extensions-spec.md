@@ -847,3 +847,71 @@ and verdict SHA-256 is
 `32b792741c0bb1b7fe021b29c53e65aff7361d89992170ebfdb6a0b36765b9ea`.
 The final manifest SHA-256 is
 `ca98ce3721d3cfd7e54787e47c1843ec69ab771a30ed16cf01f23fb7c4a80176`.
+
+## 15. Class E ordinary-FPO branch
+
+The ordinary same-TU instruction mosaic has one additional, deliberately
+narrow closure profile for classic FPO CodeView output. It does not weaken or
+cross the existing EH profile:
+
+1. A declaration-only donor recipe must declare the exact
+   `retail_exact_instruction_mosaic_fpo_only_v1` role policy. Raw preflight,
+   per-unit validation and manifest-wide validation require exactly one
+   primary use, exactly one FPO-aware binding and no instruction, variant,
+   source-refactor or other secondary role. The private donor is freshly
+   compiled from the owning effective source, then excluded from the archive
+   and link.
+2. Seed and donor independently pin the primary body and metadata, section
+   seat/count, code relocation and line tables, complete function/primary-
+   COMDAT censuses, and the exact two-child `.debug$F`/`.debug$S` closure.
+   Child order, seat, size, characteristics, selection, association, body and
+   semantic relocations are exact. `.debug$F` must be the identical parsed
+   classic FPO record with `procSize` equal to the primary length. Each full
+   `.debug$S` body is independently pinned; its common `S_*PROC32` prefix must
+   use marker `0x0205` and valid equal `cbProc`, `DbgStart` and `DbgEnd` fields.
+   The ordinary EH identity and this FPO identity reject one another.
+3. Every range is a same-offset sequence of whole instructions. The exact
+   target-definition line sentinel and ordered in-body line rows are validated
+   in both objects. Decoding starts at the nearest preceding compiler line row,
+   must reach both endpoints, and must reproduce the manifest's exact
+   instruction-length vector. The fail-closed live extension admits only
+   `01`, `03`, `2b`, `0f af`, `41`, `43`, `45`, `74`, `7c`, `7d`, `7f`,
+   `eb`, and `f7 /3` beyond the already accepted decoder families. Mid-start,
+   mid-end, same-sum repartition, unsupported opcode, malformed `0f`, and
+   non-`/3` `f7` cases are fatal.
+4. The result changes only the declared primary code bytes. It retains the
+   seed's complete code relocations, line table, `.debug$F` and `.debug$S`
+   children, raw metadata, FPO/CodeView facts and every non-target byte. The
+   full ordered retail relocation oracle and literal retail body remain the
+   final authority.
+
+The first customer is `0x100bb1d0 MxDisplaySurface::VTable0x30`. Its canonical
+seed and fresh `declaration_shape(4,27)` donor are both 811 bytes at section 51
+of 88, with two relocations and 44 line rows. Their bodies are
+`0e6db537fdd488dac53f74ca9d45e2060a52c637b7236305593aaa644b521630`
+and
+`86be2090dc2f9e3604436b8a7d343d6f598fef2decc878eb75114b85aef193c4`;
+the seed-authoritative output body is
+`9fba51eb1777b626f4ff595f7789292b9d2dfe17772f535a6acbaf6882b0594d`.
+The exact half-open imported ranges are `[337,360)`, `[389,398)`,
+`[400,429)`, `[444,453)`, `[472,473)`, `[481,490)`, `[491,499)`,
+`[549,568)`, `[604,613)`, `[615,637)`, `[648,650)`, `[711,720)` and
+`[721,729)`. Donor-only changes beginning at 499, 506, 729 and 736 are not
+imported. The two retail relocations resolve to the pinned rectangle-
+intersection and transparent-RLE targets, while the seed metadata SHA-256
+`53262ef7c4ccc08c022ba8173dd20b759281086dcf2e3d37241f453ee76d194f`
+and exact `.debug$F`/`.debug$S` closure remain authoritative.
+
+Discovery raised LEGO1 from 4875/4934 to 4876/4934 with this sole gain and no
+loss; report SHA-256 is
+`d57c52a00d76ec86de9b6fca065be39c9e25d60a1fdd00eb223775ead3996dce`.
+A marker-removed forced-fresh confirmation regenerated the eight-function TU
+composition and marker, held the identical 4876 accepted set with zero delta,
+and left ISLE at 172/172 and CONFIG at 111/111. The regenerated marker SHA-256
+is `6fca23e5f3864bb247477997e6fb33019d9546d514413476d6c353c42522a963`;
+the confirmation LEGO1 report SHA-256 is
+`4826fca34cc7d0529e189e714a0a66330a32ae7e7339ea51bc80f25ef95e7ead`
+and verdict SHA-256 is
+`62e74837bf86d0430cd1047af4b044db6aacd2532fb46c4d5d90e25ad09755c0`.
+The final manifest SHA-256 is
+`ba5dca4ab7df9f4331fd973a28661f828f0ff2c95c9e820fec62b826ac2359ae`.
