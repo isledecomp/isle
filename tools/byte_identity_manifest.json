@@ -11553,6 +11553,32 @@
      }
     },
     {
+     "id": "d_5931aaed5bad",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_run_with_shape",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 11,
+      "width": 3,
+      "classes": 1,
+      "functions": 3,
+      "generated_header_sha256": "5931aaed5badce252c14286f2d982c855ab713bb8fd912ad7ee6d0b2320d2bcc",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier over the pinned current effective source of another ordinary translation unit that emits the same multiply-defined COMDAT; it contributes no code, data, strings, vtables, or linker directives, and its object is a byte source excluded from the link.",
+      "donor_source": "LEGO1/lego/legoomni/src/paths/legopathboundary.cpp",
+      "donor_effective_source_sha256": "08fbe68c492e4b9f0ad804cfa0fa8b87a9612df07fed748ad3c77e94e7d00c95",
+      "rendered_source_sha256": "b34a90e324fb506b1ddb98510eca6ae27f23c447e19bb248e47923dd6c67f815",
+      "rendered_source_size": 11719,
+      "rendered_source_line_count": 503,
+      "role_policy": "cross_tu_complete_target_only_v1"
+     }
+    },
+    {
      "id": "d_91cb3e339eea",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
@@ -11608,6 +11634,262 @@
     }
    ],
    "functions": [
+    {
+     "mangled": "?erase@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@QAE?AViterator@1@V21@@Z",
+     "donor": "d_945e33b4ee80",
+     "complete_donor": "d_5931aaed5bad",
+     "splice_class": "retail_exact_cross_tu_complete_target_resize",
+     "expected_seed_length": 1104,
+     "expected_donor_length": 1096,
+     "expected_linked_span": 1104,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 2,
+     "expected_seed_section_number": 434,
+     "expected_seed_section_count": 479,
+     "expected_seed_relocation_count": 16,
+     "expected_seed_line_count": 80,
+     "expected_seed_body_sha256": "d8791ec5c16d4c8a73e30549c7e6132dd73e48a16d564b160c04e0dc277e169b",
+     "expected_seed_metadata_sha256": "aa4b8afba76c4b47ac0cb5a23deb047a63c8eccf595a169838f3fed49b499421",
+     "expected_seed_function_count": 149,
+     "expected_seed_comdat_count": 174,
+     "expected_target_donor_section_number": 434,
+     "expected_target_donor_section_count": 479,
+     "expected_target_donor_relocation_count": 16,
+     "expected_target_donor_line_count": 80,
+     "expected_target_donor_body_sha256": "e9df0512ad5b38096092f6f9f6f05ad43efdde8706fd3b0dca3e7a8f4c585c47",
+     "expected_target_donor_metadata_sha256": "2fd282792027291b924fc6f1cf9b222106ecacdd300205becc2459d82fb07653",
+     "expected_target_donor_function_count": 149,
+     "expected_target_donor_comdat_count": 174,
+     "expected_complete_donor_length": 1096,
+     "expected_complete_donor_section_number": 19,
+     "expected_complete_donor_section_count": 230,
+     "expected_complete_donor_relocation_count": 16,
+     "expected_complete_donor_line_count": 80,
+     "expected_complete_donor_body_sha256": "89ac1595e9a3ac4c0e1bbb9c9a076857a77f6bf1c090e63e2b9a1ae6c3363dfd",
+     "expected_complete_donor_metadata_sha256": "cf2594b7049e9fcd0405b7b6a078b53531ceb89e426faf13eda25b37a9322263",
+     "expected_complete_donor_function_count": 74,
+     "expected_complete_donor_comdat_count": 78,
+     "expected_preceding_file_aux_sha256": "dba04521598acc0405aec47f3dfde3b43e8c6ccc6d4e513491cb72c51648604e",
+     "expected_donor_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "expected_debug_s_diff_offsets": [
+      20,
+      34,
+      35,
+      216,
+      217,
+      256,
+      257,
+      265,
+      266,
+      276,
+      277,
+      287,
+      288,
+      298,
+      299
+     ],
+     "expected_codeview_type_index_offsets": [
+      34,
+      216,
+      256,
+      265,
+      276,
+      287,
+      298
+     ],
+     "expected_normalized_body_sha256": "89ac1595e9a3ac4c0e1bbb9c9a076857a77f6bf1c090e63e2b9a1ae6c3363dfd",
+     "expected_normalized_line_sha256": "17a410b0889623bf57a36d89c69c4431dbbc19e8e63bc3313d8cd40b0c992cc0",
+     "expected_normalized_fpo_sha256": "0c2808ae9846569081d09c6698d9de6a05e4b4e55ef1f9792580cf56c51a9df7",
+     "expected_normalized_debug_s_sha256": "e422af9ec5ae8944829577f8529ba27e542a8dcc4cc0c2c765bef69186369f3a",
+     "expected_normalized_metadata_sha256": "fb5d31f7eb2722856fecfc4f589b66eeccf40ec4c04a939d15afaec88f3a109f",
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x1002bff0",
+      "verdict": "MATCH",
+      "length": 1096
+     },
+     "retail_relocations": [
+      {
+       "offset": 22,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 32,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 91,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 104,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 114,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 201,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 215,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 258,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 273,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 476,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 590,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 728,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 823,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 920,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 1009,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
+       "target_section": 423,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f11a4"
+      },
+      {
+       "offset": 1066,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      }
+     ]
+    },
     {
      "mangled": "?find@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@QBE?AVconst_iterator@1@ABQAVLegoPathActor@@@Z",
      "expected_body_length": 92,
@@ -11888,7 +12170,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 3 row(s) in LEGO1/lego/legoomni/src/paths/legoextraactor.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes 4 row(s) in LEGO1/lego/legoomni/src/paths/legoextraactor.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -14608,8 +14890,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4880,
-    "accepted_row_identity_sha256": "39d995fd0e635c7d26dec43b2f6c41202488e14c16585d6696859b9d34c257f2",
+    "exact_raw_1_0_count": 4881,
+    "accepted_row_identity_sha256": "2b045dd22223479267d89a8858bd96b0f37125aa3cdefd67d0052f38d446d1d2",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

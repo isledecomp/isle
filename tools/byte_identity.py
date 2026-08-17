@@ -11775,6 +11775,8 @@ def validate_manifest(
     all_bound_ordinary_fpo_mosaic_donor_ids = []
     all_ordinary_fpo_self_permutation_recipe_ids = set()
     all_bound_ordinary_fpo_self_permutation_donor_ids = []
+    all_cross_tu_complete_target_recipe_ids = set()
+    all_bound_cross_tu_complete_target_donor_ids = []
     for unit_index, unit in enumerate(translation_units):
         context = f"translation_units[{unit_index}]"
         require(isinstance(unit, dict), f"{context} must be an object")
@@ -11904,6 +11906,7 @@ def validate_manifest(
         same_tu_carrier_recipe_ids = set()
         ordinary_fpo_mosaic_recipe_ids = set()
         ordinary_fpo_self_permutation_recipe_ids = set()
+        cross_tu_complete_target_recipe_ids = set()
         for donor_index, donor in enumerate(donors):
             donor_context = f"{context}.donors[{donor_index}]"
             require(isinstance(donor, dict), f"{donor_context} must be an object")
@@ -11947,6 +11950,10 @@ def validate_manifest(
                     == ORDINARY_FPO_SELF_PERMUTATION_ROLE_POLICY):
                 ordinary_fpo_self_permutation_recipe_ids.add(recipe_id)
                 all_ordinary_fpo_self_permutation_recipe_ids.add(recipe_id)
+            if (recipe.get("role_policy")
+                    == CROSS_TU_COMPLETE_TARGET_RECIPE_POLICY):
+                cross_tu_complete_target_recipe_ids.add(recipe_id)
+                all_cross_tu_complete_target_recipe_ids.add(recipe_id)
             if mode == "compose_equal_body_comdat":
                 require(
                     kind in ("forward_declaration_run", "declaration_shape",
@@ -12201,15 +12208,27 @@ def validate_manifest(
                     # Both halves are the existing typed generators; the
                     # recipe only stacks them, exactly as extern_run_pair
                     # stacks two extern runs at two seats.
-                    exact_keys(
+                    cross_tu_keys = {
+                        "donor_source", "donor_effective_source_sha256",
+                        "rendered_source_sha256", "rendered_source_size",
+                        "rendered_source_line_count", "role_policy",
+                    }
+                    exact_audit_keys(
                         recipe,
                         {
                             "kind", "placement", "prefix", "count", "width",
                             "classes", "functions",
                             "generated_header_sha256", "compile_lane",
                             "emission_policy", "authenticity_rationale",
-                        },
+                        } | cross_tu_keys,
                         f"{donor_context}.recipe",
+                        optional=cross_tu_keys,
+                    )
+                    present_cross_tu_keys = cross_tu_keys.intersection(recipe)
+                    require(
+                        present_cross_tu_keys in (set(), cross_tu_keys),
+                        f"{donor_context}: cross-TU stacked-carrier fields "
+                        "must be all present or all absent",
                     )
                     require(
                         recipe.get("placement") in ("prefix", "suffix"),
@@ -12236,19 +12255,41 @@ def validate_manifest(
                             <= 10 * shape_classes,
                             f"{donor_context}.functions is invalid")
                     try:
-                        generated = (
+                        forward_generated = (
                             entropy_generator.generate_forward_run(
                                 run_prefix, run_count, run_width
                             ).encode("utf-8")
-                            + entropy_generator.generate_shape(
-                                shape_classes, shape_functions
-                            ).encode("utf-8")
                         )
+                        shape_generated = entropy_generator.generate_shape(
+                            shape_classes, shape_functions
+                        ).encode("utf-8")
+                        generated = forward_generated + shape_generated
                     except ValueError as error:
                         raise ByteIdentityError(
                             f"{donor_context} stacked-carrier parameters: "
                             f"{error}"
                         ) from error
+                    if present_cross_tu_keys:
+                        donor_relative = source_overlay_relative_path(
+                            recipe.get("donor_source"),
+                            f"{donor_context}.recipe.donor_source",
+                        )
+                        donor_overlay = source_overlay_by_path.get(
+                            donor_relative)
+                        donor_path = source_overlay_logical_path(
+                            source_dir, donor_relative)
+                        if donor_overlay is None:
+                            require(donor_path.is_file(),
+                                    f"{donor_context}: donor source absent")
+                            donor_effective = donor_path.read_bytes()
+                        else:
+                            donor_effective = source_overlay[
+                                "rendered_by_path"][donor_relative]
+                        render_cross_tu_complete_target_source(
+                            recipe, source_relative, donor_relative,
+                            donor_effective, forward_generated,
+                            f"{donor_context}.recipe",
+                        )
                 elif kind == "declaration_run_triple":
                     # Three seats at once.  The seats are independent
                     # coordinates that do NOT sum: the same total count
@@ -12559,6 +12600,15 @@ def validate_manifest(
                         == header_sha
                         and existing_recipe["header_output"] == header_output,
                         f"duplicate recipe definition differs: {recipe_id}")
+                if (recipe.get("role_policy")
+                        == CROSS_TU_COMPLETE_TARGET_RECIPE_POLICY
+                        or existing_recipe["recipe"].get("role_policy")
+                        == CROSS_TU_COMPLETE_TARGET_RECIPE_POLICY):
+                    require(
+                        existing_recipe["recipe"] == recipe,
+                        f"cross-TU complete-target recipe identity differs: "
+                        f"{recipe_id}",
+                    )
             normalized_donors.append(
                 {
                     **donor,
@@ -12578,6 +12628,7 @@ def validate_manifest(
         bound_same_tu_instruction_donor_ids = []
         bound_ordinary_fpo_mosaic_donor_ids = []
         bound_ordinary_fpo_self_permutation_donor_ids = []
+        bound_cross_tu_complete_target_donor_ids = []
         primary_donor_ids = []
         clean_cross_tu_instruction_donor_ids = []
         non_primary_donor_ids = []
@@ -12623,8 +12674,191 @@ def validate_manifest(
                                          "comdat_selection_override",
                                          CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
                                          SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS,
-                                         SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS),
+                                         SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
+                                         CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS),
                         f"{function_context}: unsupported splice class")
+                if (splice_class
+                        == CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS):
+                    complete_keys = {
+                        "mangled", "donor", "complete_donor",
+                        "splice_class", "expected_seed_length",
+                        "expected_donor_length", "expected_linked_span",
+                        "expected_characteristics", "expected_selection",
+                        "expected_seed_section_number",
+                        "expected_seed_section_count",
+                        "expected_seed_relocation_count",
+                        "expected_seed_line_count",
+                        "expected_seed_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_seed_function_count",
+                        "expected_seed_comdat_count",
+                        "expected_target_donor_section_number",
+                        "expected_target_donor_section_count",
+                        "expected_target_donor_relocation_count",
+                        "expected_target_donor_line_count",
+                        "expected_target_donor_body_sha256",
+                        "expected_target_donor_metadata_sha256",
+                        "expected_target_donor_function_count",
+                        "expected_target_donor_comdat_count",
+                        "expected_complete_donor_length",
+                        "expected_complete_donor_section_number",
+                        "expected_complete_donor_section_count",
+                        "expected_complete_donor_relocation_count",
+                        "expected_complete_donor_line_count",
+                        "expected_complete_donor_body_sha256",
+                        "expected_complete_donor_metadata_sha256",
+                        "expected_complete_donor_function_count",
+                        "expected_complete_donor_comdat_count",
+                        "expected_preceding_file_aux_sha256",
+                        "expected_donor_closure",
+                        "expected_debug_s_diff_offsets",
+                        "expected_codeview_type_index_offsets",
+                        "expected_normalized_body_sha256",
+                        "expected_normalized_line_sha256",
+                        "expected_normalized_fpo_sha256",
+                        "expected_normalized_debug_s_sha256",
+                        "expected_normalized_metadata_sha256",
+                        "retail_oracle", "retail_relocations",
+                    }
+                    exact_keys(function, complete_keys, function_context)
+                    complete_donor_id = function.get("complete_donor")
+                    require(
+                        complete_donor_id in local_recipe_ids
+                        and complete_donor_id != donor_id
+                        and local_recipes[complete_donor_id].get(
+                            "role_policy")
+                        == CROSS_TU_COMPLETE_TARGET_RECIPE_POLICY,
+                        f"{function_context}.complete_donor differs",
+                    )
+                    require_instruction_mosaic_donor_recipe(
+                        local_recipes[donor_id],
+                        f"{function_context} target donor recipe",
+                    )
+                    function_recipe_ids.add(complete_donor_id)
+                    non_primary_donor_ids.append(complete_donor_id)
+                    bound_cross_tu_complete_target_donor_ids.append(
+                        complete_donor_id)
+                    positive_ints = (
+                        "expected_seed_length", "expected_donor_length",
+                        "expected_linked_span", "expected_characteristics",
+                        "expected_selection", "expected_seed_section_number",
+                        "expected_seed_section_count",
+                        "expected_seed_relocation_count",
+                        "expected_seed_line_count",
+                        "expected_seed_function_count",
+                        "expected_seed_comdat_count",
+                        "expected_target_donor_section_number",
+                        "expected_target_donor_section_count",
+                        "expected_target_donor_relocation_count",
+                        "expected_target_donor_line_count",
+                        "expected_target_donor_function_count",
+                        "expected_target_donor_comdat_count",
+                        "expected_complete_donor_length",
+                        "expected_complete_donor_section_number",
+                        "expected_complete_donor_section_count",
+                        "expected_complete_donor_relocation_count",
+                        "expected_complete_donor_line_count",
+                        "expected_complete_donor_function_count",
+                        "expected_complete_donor_comdat_count",
+                    )
+                    for name in positive_ints:
+                        require(type(function.get(name)) is int
+                                and function[name] > 0,
+                                f"{function_context}.{name} is invalid")
+                    require(
+                        function["expected_donor_length"]
+                        == function["expected_complete_donor_length"]
+                        and function["expected_seed_length"]
+                        != function["expected_donor_length"]
+                        and function["expected_linked_span"] % 16 == 0
+                        and ((function["expected_seed_length"] + 15) // 16)
+                        * 16 == function["expected_linked_span"]
+                        and ((function["expected_donor_length"] + 15) // 16)
+                        * 16 == function["expected_linked_span"],
+                        f"{function_context}: complete-target resize spans "
+                        "differ",
+                    )
+                    require(
+                        function["expected_seed_section_number"]
+                        == function["expected_target_donor_section_number"]
+                        and function["expected_seed_section_count"]
+                        == function["expected_target_donor_section_count"]
+                        and function["expected_complete_donor_section_number"]
+                        != function["expected_target_donor_section_number"]
+                        and function["expected_complete_donor_section_count"]
+                        != function["expected_target_donor_section_count"],
+                        f"{function_context}: complete-target topology roles "
+                        "differ",
+                    )
+                    for name in (
+                        "expected_seed_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_target_donor_body_sha256",
+                        "expected_target_donor_metadata_sha256",
+                        "expected_complete_donor_body_sha256",
+                        "expected_complete_donor_metadata_sha256",
+                        "expected_preceding_file_aux_sha256",
+                        "expected_normalized_body_sha256",
+                        "expected_normalized_line_sha256",
+                        "expected_normalized_fpo_sha256",
+                        "expected_normalized_debug_s_sha256",
+                        "expected_normalized_metadata_sha256",
+                    ):
+                        require_sha(function.get(name),
+                                    f"{function_context}.{name}")
+                    require(
+                        function.get("expected_donor_closure")
+                        == [".debug$F", ".debug$S"],
+                        f"{function_context}.expected_donor_closure differs",
+                    )
+                    debug_differences = function.get(
+                        "expected_debug_s_diff_offsets")
+                    type_offsets = function.get(
+                        "expected_codeview_type_index_offsets")
+                    require(
+                        isinstance(debug_differences, list)
+                        and debug_differences
+                        == sorted(set(debug_differences))
+                        and all(type(value) is int and value >= 0
+                                for value in debug_differences)
+                        and isinstance(type_offsets, list)
+                        and type_offsets == sorted(set(type_offsets))
+                        and all(type(value) is int and value >= 28
+                                for value in type_offsets)
+                        and (set(debug_differences) - set(range(16, 28)))
+                        == {byte for offset in type_offsets
+                            for byte in (offset, offset + 1)},
+                        f"{function_context}: CodeView normalization offsets "
+                        "differ",
+                    )
+                    retail = function.get("retail_oracle")
+                    require(isinstance(retail, dict),
+                            f"{function_context}.retail_oracle must be an "
+                            "object")
+                    exact_keys(retail, {
+                        "image", "address", "verdict", "length",
+                    }, f"{function_context}.retail_oracle")
+                    require_target_bound_retail_image(
+                        manifest.get("images"), target,
+                        retail.get("image"),
+                        f"{function_context}.retail_oracle",
+                    )
+                    require(
+                        isinstance(retail.get("address"), str)
+                        and ADDRESS_RE.fullmatch(retail["address"])
+                        is not None
+                        and retail.get("verdict") == "MATCH"
+                        and retail.get("length")
+                        == function["expected_donor_length"],
+                        f"{function_context}.retail_oracle differs",
+                    )
+                    validate_retail_relocation_oracle(
+                        function.get("retail_relocations"),
+                        f"{function_context}.retail_relocations",
+                        function["expected_donor_length"],
+                    )
+                    normalized_functions.append(dict(function))
+                    continue
                 if splice_class in {
                     CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
                     SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS,
@@ -13699,6 +13933,13 @@ def validate_manifest(
             bound_ordinary_fpo_self_permutation_donor_ids,
             context,
         )
+        require_cross_tu_complete_target_bindings(
+            cross_tu_complete_target_recipe_ids,
+            primary_donor_ids,
+            non_primary_donor_ids,
+            bound_cross_tu_complete_target_donor_ids,
+            context,
+        )
         all_primary_donor_ids.extend(primary_donor_ids)
         all_bound_refactor_recipe_ids.extend(bound_refactor_recipe_ids)
         all_bound_instruction_refactor_recipe_ids.extend(
@@ -13712,6 +13953,8 @@ def validate_manifest(
             bound_ordinary_fpo_mosaic_donor_ids)
         all_bound_ordinary_fpo_self_permutation_donor_ids.extend(
             bound_ordinary_fpo_self_permutation_donor_ids)
+        all_bound_cross_tu_complete_target_donor_ids.extend(
+            bound_cross_tu_complete_target_donor_ids)
 
         completion = unit.get("completion")
         require(isinstance(completion, dict), f"{context}.completion must be an object")
@@ -13786,6 +14029,13 @@ def validate_manifest(
         all_bound_ordinary_fpo_self_permutation_donor_ids,
         "manifest",
     )
+    require_cross_tu_complete_target_bindings(
+        all_cross_tu_complete_target_recipe_ids,
+        all_primary_donor_ids,
+        all_non_primary_donor_ids,
+        all_bound_cross_tu_complete_target_donor_ids,
+        "manifest",
+    )
 
     for recipe_id, registered in recipe_registry.items():
         if (registered["recipe"].get("kind")
@@ -13800,6 +14050,13 @@ def validate_manifest(
             require(
                 len(registered["users"]) == 1,
                 f"same-TU hybrid carrier recipe {recipe_id} must be "
+                "declared and consumed by exactly one translation unit",
+            )
+        if (registered["recipe"].get("role_policy")
+                == CROSS_TU_COMPLETE_TARGET_RECIPE_POLICY):
+            require(
+                len(registered["users"]) == 1,
+                f"cross-TU complete-target recipe {recipe_id} must be "
                 "declared and consumed by exactly one translation unit",
             )
 
@@ -15751,6 +16008,16 @@ SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS = (
 )
 
 
+CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS = (
+    "retail_exact_cross_tu_complete_target_resize"
+)
+
+
+CROSS_TU_COMPLETE_TARGET_RECIPE_POLICY = (
+    "cross_tu_complete_target_only_v1"
+)
+
+
 SAME_TU_DECLARATION_CARRIER_RECIPE = (
     "prefix_forward_after_includes_extern"
 )
@@ -15778,6 +16045,65 @@ SOURCE_REFACTOR_GENERATOR_KINDS = frozenset({
 })
 
 
+def render_cross_tu_complete_target_source(
+    recipe: dict,
+    owner_source: str,
+    donor_source: str,
+    donor_effective: bytes,
+    forward_generated: bytes,
+    context: str,
+) -> bytes:
+    """Render and pin the only source form admitted by the whole-target role."""
+    require(
+        recipe.get("role_policy")
+        == CROSS_TU_COMPLETE_TARGET_RECIPE_POLICY,
+        f"{context}: cross-TU complete-target role policy differs",
+    )
+    require(
+        isinstance(owner_source, str) and isinstance(donor_source, str)
+        and donor_source != owner_source
+        and PurePosixPath(donor_source).suffix.casefold()
+        in {".c", ".cc", ".cpp", ".cxx"},
+        f"{context}: donor source is not a different translation unit",
+    )
+    require(isinstance(donor_effective, bytes) and donor_effective,
+            f"{context}: effective donor source is empty")
+    require(isinstance(forward_generated, bytes) and forward_generated,
+            f"{context}: generated forward run is empty")
+    require(
+        sha256_bytes(donor_effective)
+        == require_sha(
+            recipe.get("donor_effective_source_sha256"),
+            f"{context}.donor_effective_source_sha256",
+        ),
+        f"{context}: effective donor source differs from its pin",
+    )
+    if recipe.get("placement") == "prefix":
+        rendered = forward_generated + donor_effective
+    else:
+        require(recipe.get("placement") == "suffix",
+                f"{context}: cross-TU complete-target placement differs")
+        rendered = b"\n".join(
+            donor_effective.split(b"\n")
+            + forward_generated.rstrip(b"\n").split(b"\n")
+        )
+    require(
+        sha256_bytes(rendered)
+        == require_sha(recipe.get("rendered_source_sha256"),
+                       f"{context}.rendered_source_sha256")
+        and require_exact_int(
+            recipe.get("rendered_source_size"),
+            f"{context}.rendered_source_size", minimum=1,
+        ) == len(rendered)
+        and require_exact_int(
+            recipe.get("rendered_source_line_count"),
+            f"{context}.rendered_source_line_count", minimum=1,
+        ) == rendered.count(b"\n"),
+        f"{context}: rendered cross-TU donor source differs from its pins",
+    )
+    return rendered
+
+
 def require_clean_current_source_cross_tu_bindings(
     recipe_kinds: dict[str, object],
     primary_donor_ids: list[str],
@@ -15802,6 +16128,42 @@ def require_clean_current_source_cross_tu_bindings(
         and all(count == 1 for count in instruction_counts.values()),
         f"{context}: every clean current-source cross-TU recipe must be "
         "consumed exactly once as a hybrid instruction donor",
+    )
+
+
+def require_cross_tu_complete_target_bindings(
+    recipe_ids: set[str],
+    primary_donor_ids: list[str],
+    non_primary_donor_ids: list[str],
+    bound_complete_donor_ids: list[str],
+    context: str,
+) -> None:
+    """Confine each cross-TU carrier to one whole-target consumer.
+
+    These donors are never primary/link candidates and may not feed any
+    instruction, variant, or source-mosaic role.  Their sole admissible use
+    is as the complete body/ordinary-closure source for the narrow cross-TU
+    resize class.
+    """
+    protected = set(recipe_ids)
+    primary_counts = Counter(primary_donor_ids)
+    non_primary_counts = Counter(non_primary_donor_ids)
+    bound_counts = Counter(bound_complete_donor_ids)
+    require(
+        set(bound_counts) == protected
+        and all(count == 1 for count in bound_counts.values()),
+        f"{context}: every cross-TU complete-target donor must be bound "
+        "exactly once",
+    )
+    require(
+        all(primary_counts[recipe_id] == 0 for recipe_id in protected),
+        f"{context}: cross-TU complete-target donors may not be primary",
+    )
+    require(
+        all(non_primary_counts[recipe_id] == bound_counts[recipe_id]
+            for recipe_id in protected),
+        f"{context}: cross-TU complete-target donors may not have another "
+        "non-primary role",
     )
 
 
@@ -16102,6 +16464,34 @@ def raw_manifest_ordinary_fpo_self_permutation_recipe_ids(
     return result
 
 
+def raw_manifest_cross_tu_complete_target_recipe_ids(
+    manifest: dict,
+) -> set[str]:
+    """Inventory whole-target cross-TU carriers before host-dependent gates."""
+    result = set()
+    units = manifest.get("translation_units")
+    if not isinstance(units, list):
+        return result
+    for unit in units:
+        if not isinstance(unit, dict):
+            continue
+        donors = unit.get("donors")
+        if not isinstance(donors, list):
+            continue
+        for donor in donors:
+            if not isinstance(donor, dict):
+                continue
+            recipe = donor.get("recipe")
+            if (isinstance(recipe, dict)
+                    and recipe.get("role_policy")
+                    == CROSS_TU_COMPLETE_TARGET_RECIPE_POLICY):
+                recipe_id = donor.get("id")
+                require(isinstance(recipe_id, str),
+                        "cross-TU complete-target donor id is invalid")
+                result.add(recipe_id)
+    return result
+
+
 def require_manifest_source_refactor_role_preflight(
     manifest: dict, context: str, root=None,
 ) -> None:
@@ -16114,6 +16504,7 @@ def require_manifest_source_refactor_role_preflight(
     bound_same_tu_instruction_donor_ids = []
     bound_ordinary_fpo_mosaic_donor_ids = []
     bound_ordinary_fpo_self_permutation_donor_ids = []
+    bound_cross_tu_complete_target_donor_ids = []
     overlay = manifest.get("source_overlay")
     overlay_outputs = (
         overlay.get("outputs") if isinstance(overlay, dict) else None
@@ -16134,6 +16525,9 @@ def require_manifest_source_refactor_role_preflight(
     )
     ordinary_fpo_self_permutation_recipe_ids = (
         raw_manifest_ordinary_fpo_self_permutation_recipe_ids(manifest)
+    )
+    cross_tu_complete_target_recipe_ids = (
+        raw_manifest_cross_tu_complete_target_recipe_ids(manifest)
     )
     units = manifest.get("translation_units")
     if not isinstance(units, list):
@@ -16254,6 +16648,13 @@ def require_manifest_source_refactor_role_preflight(
                         == SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
                     bound_same_tu_instruction_donor_ids.append(
                         instruction_donor)
+            complete_donor = function.get("complete_donor")
+            if isinstance(complete_donor, str):
+                non_primary_donor_ids.append(complete_donor)
+                if (function.get("splice_class")
+                        == CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS):
+                    bound_cross_tu_complete_target_donor_ids.append(
+                        complete_donor)
             variants = function.get("donor_variants")
             if isinstance(variants, list):
                 non_primary_donor_ids.extend(
@@ -16289,6 +16690,13 @@ def require_manifest_source_refactor_role_preflight(
         primary_donor_ids,
         non_primary_donor_ids,
         bound_ordinary_fpo_self_permutation_donor_ids,
+        context,
+    )
+    require_cross_tu_complete_target_bindings(
+        cross_tu_complete_target_recipe_ids,
+        primary_donor_ids,
+        non_primary_donor_ids,
+        bound_cross_tu_complete_target_donor_ids,
         context,
     )
 
@@ -19881,6 +20289,374 @@ def instruction_mosaic_metadata_sha256(
             _coff_table_bytes(coff, primary, "relocations")),
         "closure": children,
     }))
+
+
+def compose_retail_exact_cross_tu_complete_target_resize(
+    seed_bytes: bytes,
+    target_donor_bytes: bytes,
+    complete_donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Normalize one complete cross-TU COMDAT into an owner-TU carrier.
+
+    The complete donor supplies the entire code body, COFF line rows, FPO
+    record, and CodeView procedure range.  The equal-sized owner-TU carrier
+    supplies only object-local seats, symbol indices, and CodeView type-index
+    namespace.  No instruction ranges or partial code transfers exist in
+    this class.  The normalized whole target is then passed to the unchanged
+    retail-exact same-slot resize composer.
+    """
+    require(
+        function.get("splice_class")
+        == CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS,
+        "splice class is not the cross-TU complete-target resize",
+    )
+    forbidden = {
+        "instruction_ranges", "instruction_donor", "target_bytes",
+        "instruction_donor_bytes", "donor_variants",
+    }
+    require(not forbidden.intersection(function),
+            "complete-target resize may not carry instruction ranges")
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+
+    seed = CoffObject(seed_bytes)
+    target = CoffObject(target_donor_bytes)
+    complete = CoffObject(complete_donor_bytes)
+    mangled = function["mangled"]
+    seed_primary = seed.function_section(mangled)
+    target_primary = target.function_section(mangled)
+    complete_primary = complete.function_section(mangled)
+
+    def require_object_pins(role, coff, primary, prefix, length_name):
+        require(
+            len(coff.sections) == function[f"expected_{prefix}_section_count"]
+            and primary["number"]
+            == function[f"expected_{prefix}_section_number"],
+            f"{role} section census or seat changed",
+        )
+        require(
+            primary["raw_size"] == function[length_name]
+            and primary["relocation_count"]
+            == function[f"expected_{prefix}_relocation_count"]
+            and primary["line_count"]
+            == function[f"expected_{prefix}_line_count"],
+            f"{role} body/table census changed",
+        )
+        require(
+            sha256_bytes(coff_body(coff, primary))
+            == function[f"expected_{prefix}_body_sha256"],
+            f"{role} body differs from its pin",
+        )
+        require(
+            instruction_mosaic_metadata_sha256(coff, primary)
+            == function[f"expected_{prefix}_metadata_sha256"],
+            f"{role} metadata differs from its pin",
+        )
+        require(
+            sum(function_multiset(coff).values())
+            == function[f"expected_{prefix}_function_count"]
+            and sum(comdat_primary_identity_multiset(coff).values())
+            == function[f"expected_{prefix}_comdat_count"],
+            f"{role} function/COMDAT census changed",
+        )
+
+    require_object_pins(
+        "seed", seed, seed_primary, "seed", "expected_seed_length")
+    require_object_pins(
+        "target donor", target, target_primary, "target_donor",
+        "expected_donor_length")
+    require_object_pins(
+        "complete donor", complete, complete_primary, "complete_donor",
+        "expected_complete_donor_length")
+    require(
+        function_multiset(seed) == function_multiset(target)
+        and comdat_primary_identity_multiset(seed)
+        == comdat_primary_identity_multiset(target),
+        "target donor is not an owner-TU topology carrier",
+    )
+    require(
+        comdat_primary_identity(seed, seed_primary)
+        == comdat_primary_identity(target, target_primary)
+        == comdat_primary_identity(complete, complete_primary),
+        "complete donor is not the exact same mangled COMDAT",
+    )
+    for role, coff, primary in (
+        ("seed", seed, seed_primary),
+        ("target donor", target, target_primary),
+        ("complete donor", complete, complete_primary),
+    ):
+        require(
+            primary["characteristics"]
+            == function["expected_characteristics"]
+            and section_definitions(coff)[primary["number"]]["selection"]
+            == function["expected_selection"],
+            f"{role} COMDAT characteristics or selection changed",
+        )
+        require(
+            _comdat_child_closure(coff, primary)
+            == (2, tuple(function["expected_donor_closure"])),
+            f"{role} complete-target closure changed",
+        )
+    require(
+        target_primary["raw_size"] == complete_primary["raw_size"]
+        and target_primary["relocation_count"]
+        == complete_primary["relocation_count"]
+        and target_primary["line_count"]
+        == complete_primary["line_count"],
+        "complete donor and owner carrier target shapes differ",
+    )
+
+    def preceding_file_aux(coff, primary):
+        function_index, _ = function_symbol(
+            coff, mangled, primary["number"])
+        candidates = [
+            (index, symbol) for index, symbol in coff.symbols.items()
+            if index < function_index and symbol["name"] == ".file"
+            and symbol["storage"] == 103 and symbol["section"] == -2
+            and symbol["aux_count"] >= 1
+        ]
+        require(candidates,
+                "complete-target function has no preceding .file record")
+        index, symbol = max(candidates, key=lambda item: item[0])
+        start = coff.symbol_offset + (index + 1) * 18
+        end = start + symbol["aux_count"] * 18
+        require(end <= len(coff.data),
+                "complete-target preceding .file record is truncated")
+        return coff.data[start:end]
+
+    file_aux = preceding_file_aux(seed, seed_primary)
+    require(
+        file_aux == preceding_file_aux(target, target_primary)
+        == preceding_file_aux(complete, complete_primary)
+        and sha256_bytes(file_aux)
+        == function["expected_preceding_file_aux_sha256"],
+        "complete-target preceding .file bytes differ",
+    )
+
+    def relocation_semantics(coff, section, primary_number):
+        return [
+            (
+                row["offset"], row["type"], row["addend"], row["target"],
+                "primary" if row["target_section"] == primary_number
+                else "external",
+                row["target_value"], row["target_type"],
+                row["target_storage"],
+            )
+            for row in detailed_relocations(coff, section)
+        ]
+
+    require(
+        relocation_semantics(target, target_primary,
+                             target_primary["number"])
+        == relocation_semantics(complete, complete_primary,
+                                complete_primary["number"]),
+        "complete donor primary relocation semantics differ",
+    )
+    target_children = {}
+    complete_children = {}
+    for child_name in function["expected_donor_closure"]:
+        target_child = _comdat_child(target, target_primary, child_name)
+        complete_child = _comdat_child(
+            complete, complete_primary, child_name)
+        target_children[child_name] = target_child
+        complete_children[child_name] = complete_child
+        require(
+            all(target_child[field] == complete_child[field] for field in (
+                "name", "raw_size", "relocation_count", "line_count",
+                "characteristics",
+            )),
+            f"complete donor {child_name} geometry differs",
+        )
+        require(
+            relocation_semantics(target, target_child,
+                                 target_primary["number"])
+            == relocation_semantics(complete, complete_child,
+                                    complete_primary["number"]),
+            f"complete donor {child_name} relocation semantics differ",
+        )
+
+    # Both copies come from the same compiler header definition.  Absolute
+    # line bases must agree; only the object-local next-function chain may
+    # differ between translation units.
+    for marker_name in (".bf", ".ef"):
+        target_index, target_marker = _coff_marker(
+            target, marker_name, target_primary["number"])
+        complete_index, complete_marker = _coff_marker(
+            complete, marker_name, complete_primary["number"])
+        target_aux = coff_auxiliary(target, target_index, target_marker)
+        complete_aux = coff_auxiliary(
+            complete, complete_index, complete_marker)
+        require(
+            target_aux[4:6] == complete_aux[4:6]
+            and target_aux[:4] == complete_aux[:4]
+            and target_aux[6:12] == complete_aux[6:12]
+            and target_aux[16:] == complete_aux[16:],
+            f"complete donor {marker_name} source-line identity differs",
+        )
+
+    target_lines = _coff_table_bytes(target, target_primary, "lines")
+    complete_lines = bytearray(_coff_table_bytes(
+        complete, complete_primary, "lines"))
+    target_function_index, _ = function_symbol(
+        target, mangled, target_primary["number"])
+    complete_function_index, _ = function_symbol(
+        complete, mangled, complete_primary["number"])
+    require(
+        coff_unpack("<IH", target_lines, 0, "target line sentinel")
+        == (target_function_index, 0)
+        and coff_unpack("<IH", bytes(complete_lines), 0,
+                        "complete line sentinel")
+        == (complete_function_index, 0),
+        "complete-target COFF line sentinel is invalid",
+    )
+    complete_lines[0:4] = target_function_index.to_bytes(4, "little")
+    previous = -1
+    for index in range(1, complete_primary["line_count"]):
+        offset, line = coff_unpack(
+            "<IH", bytes(complete_lines), index * 6,
+            "complete-target line row")
+        require(line != 0 and previous <= offset < complete_primary["raw_size"],
+                "complete-target COFF line row is outside/nonmonotonic")
+        previous = offset
+    normalized_lines = bytes(complete_lines)
+
+    target_fpo_section = target_children[".debug$F"]
+    complete_fpo_section = complete_children[".debug$F"]
+    complete_fpo = coff_body(complete, complete_fpo_section)
+    parse_fpo_data(complete_fpo,
+                   expected_proc_size=complete_primary["raw_size"])
+
+    target_debug_section = target_children[".debug$S"]
+    complete_debug_section = complete_children[".debug$S"]
+    target_debug = coff_body(target, target_debug_section)
+    complete_debug = coff_body(complete, complete_debug_section)
+    require(
+        len(target_debug) == len(complete_debug) >= 28
+        and target_debug[2:4] == complete_debug[2:4] == b"\x05\x02",
+        "complete-target debug$S is not one S_*PROC32 record",
+    )
+    complete_cbproc, complete_dbgstart, complete_dbgend = coff_unpack(
+        "<III", complete_debug, 16, "complete-target debug range")
+    require(
+        complete_cbproc == complete_primary["raw_size"]
+        and 0 <= complete_dbgstart <= complete_dbgend < complete_cbproc,
+        "complete-target debug procedure range is stale",
+    )
+    debug_differences = [
+        index for index, (left, right) in enumerate(
+            zip(target_debug, complete_debug)) if left != right
+    ]
+    require(
+        debug_differences == function["expected_debug_s_diff_offsets"],
+        "complete-target debug$S difference set changed",
+    )
+    type_bytes = {
+        byte for offset in function["expected_codeview_type_index_offsets"]
+        for byte in (offset, offset + 1)
+    }
+    require(
+        set(debug_differences) - set(range(16, 28)) == type_bytes,
+        "complete-target CodeView differences are not type-index words",
+    )
+    normalized_debug = bytearray(target_debug)
+    normalized_debug[16:28] = complete_debug[16:28]
+    normalized_debug = bytes(normalized_debug)
+
+    normalized = bytearray(target_donor_bytes)
+    normalized[
+        target_primary["raw_offset"]:
+        target_primary["raw_offset"] + target_primary["raw_size"]
+    ] = coff_body(complete, complete_primary)
+    normalized[
+        target_primary["line_offset"]:
+        target_primary["line_offset"] + len(normalized_lines)
+    ] = normalized_lines
+    normalized[
+        target_fpo_section["raw_offset"]:
+        target_fpo_section["raw_offset"] + len(complete_fpo)
+    ] = complete_fpo
+    normalized[
+        target_debug_section["raw_offset"]:
+        target_debug_section["raw_offset"] + len(normalized_debug)
+    ] = normalized_debug
+    normalized = bytes(normalized)
+
+    allowed_offsets = set(range(
+        target_primary["raw_offset"],
+        target_primary["raw_offset"] + target_primary["raw_size"],
+    )) | set(range(
+        target_primary["line_offset"],
+        target_primary["line_offset"] + len(normalized_lines),
+    )) | set(range(
+        target_fpo_section["raw_offset"],
+        target_fpo_section["raw_offset"] + target_fpo_section["raw_size"],
+    )) | set(range(
+        target_debug_section["raw_offset"] + 16,
+        target_debug_section["raw_offset"] + 28,
+    ))
+    changed_offsets = {
+        index for index, (left, right) in enumerate(
+            zip(target_donor_bytes, normalized)) if left != right
+    }
+    require(changed_offsets and changed_offsets <= allowed_offsets,
+            "complete-target normalizer changed a non-target byte")
+
+    normalized_coff = CoffObject(normalized)
+    normalized_primary = normalized_coff.function_section(mangled)
+    normalized_fpo_section = _comdat_child(
+        normalized_coff, normalized_primary, ".debug$F")
+    normalized_debug_section = _comdat_child(
+        normalized_coff, normalized_primary, ".debug$S")
+    require(
+        sha256_bytes(coff_body(normalized_coff, normalized_primary))
+        == function["expected_normalized_body_sha256"]
+        and sha256_bytes(_coff_table_bytes(
+            normalized_coff, normalized_primary, "lines"))
+        == function["expected_normalized_line_sha256"]
+        and sha256_bytes(coff_body(
+            normalized_coff, normalized_fpo_section))
+        == function["expected_normalized_fpo_sha256"]
+        and sha256_bytes(coff_body(
+            normalized_coff, normalized_debug_section))
+        == function["expected_normalized_debug_s_sha256"]
+        and instruction_mosaic_metadata_sha256(
+            normalized_coff, normalized_primary)
+        == function["expected_normalized_metadata_sha256"],
+        "complete-target normalized closure differs from its pins",
+    )
+    require(
+        function_multiset(normalized_coff) == function_multiset(target)
+        and comdat_primary_identity_multiset(normalized_coff)
+        == comdat_primary_identity_multiset(target)
+        and detailed_relocations(normalized_coff, normalized_primary)
+        == detailed_relocations(target, target_primary),
+        "complete-target normalization changed owner topology/relocations",
+    )
+
+    effective = {
+        "mangled": mangled,
+        "splice_class": "retail_exact_reloc_divergent",
+        "expected_seed_length": function["expected_seed_length"],
+        "expected_donor_length": function["expected_donor_length"],
+        "expected_linked_span": function["expected_linked_span"],
+        "expected_body_sha256": function[
+            "expected_normalized_body_sha256"],
+        "retail_oracle": function["retail_oracle"],
+        "retail_relocations": function["retail_relocations"],
+    }
+    composed, detail = compose_same_slot_resize(
+        seed_bytes, normalized, effective, retail_body=bytes(retail_body))
+    return composed, {
+        **detail,
+        "splice_class": CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS,
+        "complete_donor_body_sha256": sha256_bytes(
+            coff_body(complete, complete_primary)),
+        "normalized_metadata_sha256": instruction_mosaic_metadata_sha256(
+            normalized_coff, normalized_primary),
+        "normalized_changed_byte_count": len(changed_offsets),
+    }
 
 
 def _validate_instruction_mosaic_source_variant(

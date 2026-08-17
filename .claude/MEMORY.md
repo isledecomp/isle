@@ -66,6 +66,16 @@ must pass full retail-body and object-conservation gates. Never copy code from
 a different or merely similar function, even if its instructions are
 equivalent.
 
+Whole-target cross-TU composition is a separate, narrower route: a different
+current-source translation unit may supply the entire naturally emitted body,
+COFF line table, FPO record and CodeView procedure range for the exact same
+mangled COMDAT. The owning TU must first provide an equal-sized topology
+carrier; source, rendering, compile lane, COMDAT identity, semantic
+relocations, ordinary closure, preceding `.file`, `.bf`/`.ef`, and normalized
+metadata are all pinned. Instruction/opcode/range fields are forbidden, both
+donors are excluded from the link, and every non-target owner byte remains
+authoritative.
+
 `GetActorROI` is the measured exception: its direct two-temporary refactor moves
 nine COMDATs and loses the already-exact `Exists` row; the isolated manifest
 permutation gives +1/-0. `UpdateEnabledChild` is the normal case: the clean
@@ -673,8 +683,28 @@ after every bounded panel or full gate.
   authenticated current-source state naturally emits the entire retail COMDAT
   and same-TU closure without accepted-row loss.
 
-- Accepted canonical gate: LEGO1 4880/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is `0x10040360 Act3Cop::FUN_10040360`. The checked-in
+- Accepted canonical gate: LEGO1 4881/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is `0x1002bff0` path-actor tree `erase`. The canonical
+  `legoextraactor.cpp` winner is 1,104 bytes; its existing same-TU
+  declaration-shape carrier supplies the 1,096-byte owner topology. A freshly
+  compiled `legopathboundary.cpp` current-effective-source donor, rendered
+  only from `forward_run_with_shape(MxUnkRecVC,11,3,1,3)`, emits the complete
+  retail-exact 1,096-byte COMDAT body
+  `89ac1595e9a3ac4c0e1bbb9c9a076857a77f6bf1c090e63e2b9a1ae6c3363dfd`
+  with all 16 semantic relocations and its ordinary `.debug$F`/`.debug$S`
+  closure. The closed whole-target normalizer imports that complete body,
+  line table, FPO record and procedure range into the owner carrier, then the
+  unchanged same-slot resize composer preserves every other owner byte.
+  There are no instruction ranges or opcode edits; both donors are regenerated
+  from pinned current source and excluded from the link. The forced-fresh
+  zero-loss gate gained only this row and produced accepted-row identity
+  `2b045dd22223479267d89a8858bd96b0f37125aa3cdefd67d0052f38d446d1d2`;
+  report SHA-256 is
+  `bc8f97a7474de6c4469e2ae28f36f79727c54899f4ea3661bde5d3f3af872562`
+  and manifest SHA-256 is
+  `76281ee3cffff0cee3616ab818aba2d835f691605480412d7cd6f73723077191`.
+
+  The preceding gain is `0x10040360 Act3Cop::FUN_10040360`. The checked-in
   source now expresses the fallback as a second `grec == NULL` guard and
   seats the existing `local100` declaration between the two fallback vectors.
   A fresh suffix-only 20-forward-declaration state emits the complete
@@ -685,7 +715,7 @@ after every bounded panel or full gate.
   current-source `extern_run_pair(13,60,width2)` redial restores the existing
   exact `Act3Brickster::Animate` donor. No inline assembly, opcode patch,
   instruction mosaic or manual instruction reordering is involved. The
-  forced-fresh zero-loss gate held all prior rows and produced accepted-row
+  forced-fresh zero-loss gate held all rows that preceded it and produced accepted-row
   identity
   `39d995fd0e635c7d26dec43b2f6c41202488e14c16585d6696859b9d34c257f2`;
   verification report SHA-256 is

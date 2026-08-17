@@ -110,16 +110,16 @@ def make_divergent_coff(
                      size - 2)
 
     # symbol indices, counting auxiliary records
-    target_index = 2
-    common_index = 8
-    seed_callee_index = 9
-    retail_callee_index = 10
-    local_index = 15
+    target_index = 4
+    common_index = 10
+    seed_callee_index = 11
+    retail_callee_index = 12
+    local_index = 17
 
     target_lines = bytearray(struct.pack("<IH", target_index, 0))
     target_lines.extend(struct.pack("<IH", 3 if donor else 4,
                                     21 if donor else 11))
-    other_lines = (struct.pack("<IH", 18, 0) + struct.pack("<IH", 1, 77))
+    other_lines = (struct.pack("<IH", 20, 0) + struct.pack("<IH", 1, 77))
 
     target_input = {
         "name": ".text", "raw": bytes(body),
@@ -178,6 +178,7 @@ def make_divergent_coff(
     symbols = [
         (".text", 0, target_seat, 0, 3,
          _section_aux(size, 3, 2, 2, checksum=checksum)),
+        (".file", 0, -2, 0, 103, b"fixture.cpp\0".ljust(18, b"\0")),
         (TARGET_SYMBOL, 0, target_seat, 0x20, 2,
          _function_aux(size, sections[target_slot]["line_offset"])),
         (".bf", 0, target_seat, 0, 101, _marker_aux(20 if donor else 10)),
@@ -4114,6 +4115,291 @@ def make_fpo_instruction_mosaic_coff(*, donor=False, source_refactor=False):
         debug_s = parsed.sections[2]
         output[debug_s["raw_offset"] + debug_s["raw_size"] - 1] ^= 1
     return bytes(output)
+
+
+def make_cross_tu_complete_target_coff(role):
+    """Build a resize fixture with one complete ordinary FPO closure."""
+    if role not in {"seed", "target", "complete"}:
+        raise ValueError(role)
+    data = make_divergent_coff(
+        donor=role != "seed", swap_text_sections=role == "complete")
+    parsed = byte_identity.CoffObject(data)
+    primary = parsed.function_section(TARGET_SYMBOL)
+    fpo_section = parsed.sections[1]
+    fpo_symbol_index, _ = byte_identity.section_symbol(parsed, fpo_section)
+    output = bytearray(data)
+    output[fpo_section["header_offset"]:
+           fpo_section["header_offset"] + 8] = b".debug$F"
+    output[parsed.symbol_offset + fpo_symbol_index * 18:
+           parsed.symbol_offset + fpo_symbol_index * 18 + 8] = b".debug$F"
+    locals_count = 1 if role == "target" else 2
+    fpo = struct.pack(
+        "<IIIHBB", 0, primary["raw_size"], locals_count, 1, 2, 0x10)
+    output[fpo_section["raw_offset"]:
+           fpo_section["raw_offset"] + 16] = fpo
+    if role == "target":
+        output[primary["raw_offset"] + 24] ^= 0x5A
+        struct.pack_into("<I", output, primary["line_offset"] + 6, 2)
+        debug_s = parsed.sections[2]
+        struct.pack_into("<I", output, debug_s["raw_offset"] + 20, 1)
+    elif role == "complete":
+        debug_s = parsed.sections[2]
+        output[debug_s["raw_offset"] + 36:
+               debug_s["raw_offset"] + 38] = b"\x34\x12"
+    return bytes(output)
+
+
+class CrossTuCompleteTargetResizeTests(unittest.TestCase):
+    """A different TU may supply one whole target, never code ranges."""
+
+    @staticmethod
+    def _file_aux(coff, primary):
+        function_index, _ = byte_identity.function_symbol(
+            coff, TARGET_SYMBOL, primary["number"])
+        index, symbol = max(
+            (index, symbol) for index, symbol in coff.symbols.items()
+            if index < function_index and symbol["name"] == ".file"
+            and symbol["storage"] == 103)
+        start = coff.symbol_offset + (index + 1) * 18
+        return coff.data[start:start + symbol["aux_count"] * 18]
+
+    def fixture(self):
+        seed = make_cross_tu_complete_target_coff("seed")
+        target = make_cross_tu_complete_target_coff("target")
+        complete = make_cross_tu_complete_target_coff("complete")
+        seed_coff = byte_identity.CoffObject(seed)
+        target_coff = byte_identity.CoffObject(target)
+        complete_coff = byte_identity.CoffObject(complete)
+        seed_primary = seed_coff.function_section(TARGET_SYMBOL)
+        target_primary = target_coff.function_section(TARGET_SYMBOL)
+        complete_primary = complete_coff.function_section(TARGET_SYMBOL)
+
+        normalized = bytearray(target)
+        normalized[target_primary["raw_offset"]:
+                   target_primary["raw_offset"]
+                   + target_primary["raw_size"]] = byte_identity.coff_body(
+                       complete_coff, complete_primary)
+        complete_lines = bytearray(byte_identity._coff_table_bytes(
+            complete_coff, complete_primary, "lines"))
+        target_index, _ = byte_identity.function_symbol(
+            target_coff, TARGET_SYMBOL, target_primary["number"])
+        complete_lines[:4] = target_index.to_bytes(4, "little")
+        normalized[target_primary["line_offset"]:
+                   target_primary["line_offset"]
+                   + len(complete_lines)] = complete_lines
+        target_fpo = byte_identity._comdat_child(
+            target_coff, target_primary, ".debug$F")
+        complete_fpo = byte_identity._comdat_child(
+            complete_coff, complete_primary, ".debug$F")
+        normalized[target_fpo["raw_offset"]:
+                   target_fpo["raw_offset"]
+                   + target_fpo["raw_size"]] = byte_identity.coff_body(
+                       complete_coff, complete_fpo)
+        target_debug = byte_identity._comdat_child(
+            target_coff, target_primary, ".debug$S")
+        complete_debug = byte_identity._comdat_child(
+            complete_coff, complete_primary, ".debug$S")
+        normalized_debug = bytearray(byte_identity.coff_body(
+            target_coff, target_debug))
+        normalized_debug[16:28] = byte_identity.coff_body(
+            complete_coff, complete_debug)[16:28]
+        normalized[target_debug["raw_offset"]:
+                   target_debug["raw_offset"]
+                   + target_debug["raw_size"]] = normalized_debug
+        normalized = bytes(normalized)
+        normalized_coff = byte_identity.CoffObject(normalized)
+        normalized_primary = normalized_coff.function_section(TARGET_SYMBOL)
+        normalized_fpo = byte_identity._comdat_child(
+            normalized_coff, normalized_primary, ".debug$F")
+        normalized_debug_section = byte_identity._comdat_child(
+            normalized_coff, normalized_primary, ".debug$S")
+        retail = retail_body_for(normalized)
+
+        def count_functions(coff):
+            return sum(byte_identity.function_multiset(coff).values())
+
+        def count_comdats(coff):
+            return sum(
+                byte_identity.comdat_primary_identity_multiset(coff).values())
+
+        function = {
+            "mangled": TARGET_SYMBOL,
+            "donor": "d_aaaaaaaaaaaa",
+            "complete_donor": "d_bbbbbbbbbbbb",
+            "splice_class":
+                byte_identity.CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS,
+            "expected_seed_length": seed_primary["raw_size"],
+            "expected_donor_length": target_primary["raw_size"],
+            "expected_linked_span": LINKED_SPAN,
+            "expected_characteristics": target_primary["characteristics"],
+            "expected_selection": byte_identity.section_definitions(
+                target_coff)[target_primary["number"]]["selection"],
+            "expected_seed_section_number": seed_primary["number"],
+            "expected_seed_section_count": len(seed_coff.sections),
+            "expected_seed_relocation_count":
+                seed_primary["relocation_count"],
+            "expected_seed_line_count": seed_primary["line_count"],
+            "expected_seed_body_sha256": hashlib.sha256(
+                byte_identity.coff_body(seed_coff, seed_primary)).hexdigest(),
+            "expected_seed_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    seed_coff, seed_primary),
+            "expected_seed_function_count": count_functions(seed_coff),
+            "expected_seed_comdat_count": count_comdats(seed_coff),
+            "expected_target_donor_section_number":
+                target_primary["number"],
+            "expected_target_donor_section_count": len(target_coff.sections),
+            "expected_target_donor_relocation_count":
+                target_primary["relocation_count"],
+            "expected_target_donor_line_count": target_primary["line_count"],
+            "expected_target_donor_body_sha256": hashlib.sha256(
+                byte_identity.coff_body(
+                    target_coff, target_primary)).hexdigest(),
+            "expected_target_donor_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    target_coff, target_primary),
+            "expected_target_donor_function_count":
+                count_functions(target_coff),
+            "expected_target_donor_comdat_count": count_comdats(target_coff),
+            "expected_complete_donor_length": complete_primary["raw_size"],
+            "expected_complete_donor_section_number":
+                complete_primary["number"],
+            "expected_complete_donor_section_count":
+                len(complete_coff.sections),
+            "expected_complete_donor_relocation_count":
+                complete_primary["relocation_count"],
+            "expected_complete_donor_line_count":
+                complete_primary["line_count"],
+            "expected_complete_donor_body_sha256": hashlib.sha256(
+                byte_identity.coff_body(
+                    complete_coff, complete_primary)).hexdigest(),
+            "expected_complete_donor_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    complete_coff, complete_primary),
+            "expected_complete_donor_function_count":
+                count_functions(complete_coff),
+            "expected_complete_donor_comdat_count":
+                count_comdats(complete_coff),
+            "expected_preceding_file_aux_sha256": hashlib.sha256(
+                self._file_aux(target_coff, target_primary)).hexdigest(),
+            "expected_donor_closure": [".debug$F", ".debug$S"],
+            "expected_debug_s_diff_offsets": [20, 36, 37],
+            "expected_codeview_type_index_offsets": [36],
+            "expected_normalized_body_sha256": hashlib.sha256(
+                byte_identity.coff_body(
+                    normalized_coff, normalized_primary)).hexdigest(),
+            "expected_normalized_line_sha256": hashlib.sha256(
+                byte_identity._coff_table_bytes(
+                    normalized_coff, normalized_primary, "lines")).hexdigest(),
+            "expected_normalized_fpo_sha256": hashlib.sha256(
+                byte_identity.coff_body(
+                    normalized_coff, normalized_fpo)).hexdigest(),
+            "expected_normalized_debug_s_sha256": hashlib.sha256(
+                byte_identity.coff_body(
+                    normalized_coff, normalized_debug_section)).hexdigest(),
+            "expected_normalized_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    normalized_coff, normalized_primary),
+            "retail_oracle": {
+                "image": "LEGO1.DLL", "address": "0x1003cf20",
+                "verdict": "MATCH", "length": target_primary["raw_size"],
+            },
+            "retail_relocations": relocation_oracle_for(normalized, retail),
+        }
+        return seed, target, complete, function, retail, normalized
+
+    def compose(self, seed, target, complete, function, retail):
+        return (
+            byte_identity
+            .compose_retail_exact_cross_tu_complete_target_resize(
+                seed, target, complete, function, retail)
+        )
+
+    def test_positive_control_transfers_one_whole_target_and_closure(self):
+        seed, target, complete, function, retail, normalized = self.fixture()
+        composed, detail = self.compose(
+            seed, target, complete, function, retail)
+        checked = byte_identity.CoffObject(composed)
+        normalized_coff = byte_identity.CoffObject(normalized)
+        checked_primary = checked.function_section(TARGET_SYMBOL)
+        normalized_primary = normalized_coff.function_section(TARGET_SYMBOL)
+        self.assertEqual(
+            byte_identity.coff_body(checked, checked_primary),
+            byte_identity.coff_body(normalized_coff, normalized_primary))
+        self.assertEqual(
+            detail["splice_class"],
+            byte_identity.CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS)
+        self.assertTrue(detail["retail_exact"])
+        byte_identity.validate_donor_object_excluded(
+            composed, [target, complete])
+
+    def test_rejects_any_instruction_range_contract(self):
+        seed, target, complete, function, retail, _ = self.fixture()
+        function["instruction_ranges"] = []
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "may not carry instruction ranges"):
+            self.compose(seed, target, complete, function, retail)
+
+    def test_rejects_complete_body_drift(self):
+        seed, target, complete, function, retail, _ = self.fixture()
+        complete_coff = byte_identity.CoffObject(complete)
+        primary = complete_coff.function_section(TARGET_SYMBOL)
+        changed = bytearray(complete)
+        changed[primary["raw_offset"] + 24] ^= 1
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "complete donor body differs"):
+            self.compose(seed, target, bytes(changed), function, retail)
+
+    def test_rejects_preceding_file_byte_drift(self):
+        seed, target, complete, function, retail, _ = self.fixture()
+        complete_coff = byte_identity.CoffObject(complete)
+        primary = complete_coff.function_section(TARGET_SYMBOL)
+        function_index, _ = byte_identity.function_symbol(
+            complete_coff, TARGET_SYMBOL, primary["number"])
+        file_index, _ = max(
+            (index, symbol) for index, symbol in complete_coff.symbols.items()
+            if index < function_index and symbol["name"] == ".file")
+        changed = bytearray(complete)
+        changed[complete_coff.symbol_offset + (file_index + 1) * 18] ^= 1
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "preceding .file bytes"):
+            self.compose(seed, target, bytes(changed), function, retail)
+
+    def test_source_renderer_rejects_path_source_and_render_drift(self):
+        source = b"#include <set>\nint fixture;\n"
+        forward = b"class FixtureCarrier;\n"
+        rendered = b"\n".join(
+            source.split(b"\n") + forward.rstrip(b"\n").split(b"\n"))
+        recipe = {
+            "role_policy":
+                byte_identity.CROSS_TU_COMPLETE_TARGET_RECIPE_POLICY,
+            "placement": "suffix",
+            "donor_effective_source_sha256": hashlib.sha256(
+                source).hexdigest(),
+            "rendered_source_sha256": hashlib.sha256(rendered).hexdigest(),
+            "rendered_source_size": len(rendered),
+            "rendered_source_line_count": rendered.count(b"\n"),
+        }
+        self.assertEqual(
+            byte_identity.render_cross_tu_complete_target_source(
+                recipe, "owner.cpp", "donor.cpp", source, forward,
+                "fixture"),
+            rendered,
+        )
+        cases = [
+            ("owner.cpp", "owner.cpp", source, recipe,
+             "different translation unit"),
+            ("owner.cpp", "donor.cpp", source + b" ", recipe,
+             "effective donor source differs"),
+            ("owner.cpp", "donor.cpp", source,
+             {**recipe, "rendered_source_sha256": "0" * 64},
+             "rendered cross-TU donor source differs"),
+        ]
+        for owner, donor, payload, candidate, message in cases:
+            with self.subTest(message=message), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                byte_identity.render_cross_tu_complete_target_source(
+                    candidate, owner, donor, payload, forward, "fixture")
 
 
 class OrdinaryFpoInstructionMosaicTests(unittest.TestCase):

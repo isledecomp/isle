@@ -1113,6 +1113,10 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                 # Class C donors name the TU they compile: another object's
                 # copy of a multiply-defined COMDAT.  Everything else compiles
                 # the unit's own source.
+                cross_tu_complete = (
+                    recipe.get("role_policy")
+                    == byte_identity.CROSS_TU_COMPLETE_TARGET_RECIPE_POLICY
+                )
                 donor_relative = recipe.get("donor_source")
                 if donor_relative:
                     donor_source_path = (shadow / donor_relative).resolve()
@@ -1130,6 +1134,15 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                 lane_parsed = byte_identity.validate_compile_arguments(
                     lane_child
                 )
+                if cross_tu_complete:
+                    lane_source = Path(lane_parsed["source_token"])
+                    if not lane_source.is_absolute():
+                        lane_source = (
+                            Path(lane_entry["directory"]) / lane_source
+                        )
+                    if lane_source.resolve() != donor_source_path:
+                        fail(f"cross-TU complete-target command source "
+                             f"differs: {donor_relative}")
                 # Donor ids repeat across units, so the probe directory is
                 # namespaced by unit to keep concurrent units independent.
                 probe = (build.parent / "donors"
@@ -1208,14 +1221,22 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                     shape_run = entropy.generate_shape(
                         recipe["classes"], recipe["functions"]
                     ).encode("utf-8")
-                    if recipe["placement"] == "prefix":
-                        (probe / "s.cpp").write_bytes(
-                            forward_run + shadow_bytes)
+                    if cross_tu_complete:
+                        rendered_source = (
+                            byte_identity
+                            .render_cross_tu_complete_target_source(
+                                recipe, unit["source"], donor_relative,
+                                shadow_bytes, forward_run,
+                                f"cross-TU complete-target {donor['id']}",
+                            )
+                        )
+                    elif recipe["placement"] == "prefix":
+                        rendered_source = forward_run + shadow_bytes
                     else:
                         decls = forward_run.rstrip(b"\n").split(b"\n")
                         lines = shadow_bytes.split(b"\n")
-                        (probe / "s.cpp").write_bytes(
-                            b"\n".join(lines + decls))
+                        rendered_source = b"\n".join(lines + decls)
+                    (probe / "s.cpp").write_bytes(rendered_source)
                     (probe / "run.h").write_bytes(shape_run)
                     force_include = ["/FIrun.h"]
                 elif placement in ("extern_pair_with_shape",
@@ -1286,7 +1307,7 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                 include_seated = False
                 for index, token in enumerate(lane_child):
                     if not include_seated and token.startswith(("-I", "/I")):
-                        donor_command.append(f"/I{source.parent}")
+                        donor_command.append(f"/I{donor_source_path.parent}")
                         include_seated = True
                     if token.startswith(("/Fo", "-Fo")):
                         donor_command.extend(force_include)
@@ -1306,6 +1327,25 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
             composed = seed_bytes
             for function in unit["functions"]:
                 if (function["splice_class"]
+                        == byte_identity
+                        .CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS):
+                    retail = function["retail_oracle"]
+                    target_donor = donor_objects[function["donor"]]
+                    complete_donor = donor_objects[
+                        function["complete_donor"]]
+                    composed, detail = (
+                        byte_identity
+                        .compose_retail_exact_cross_tu_complete_target_resize(
+                            composed, target_donor, complete_donor, function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16), retail["length"],
+                            ),
+                        )
+                    )
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [target_donor, complete_donor])
+                elif (function["splice_class"]
                         == byte_identity
                         .SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
                     retail = function["retail_oracle"]
