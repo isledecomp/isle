@@ -625,6 +625,22 @@ after every bounded panel or full gate.
   `efc6b30ebac680e5bfad72496f3625b288f19804d3b083fc8683fde010ea07d5`.
   Repeating this exact seed/current-source cross is closed.
 
+- Exact-name upstream entropy replay is negative and sealed for
+  `0x1006a7a0` (animation-structure map `_Insert`). Seed `834471941` used the
+  independently reconstructed authentic 629-byte LF declaration header
+  `1fed02faf90172f471a67866d2e7c8f7acdc2744ff1d652382d622743c4d239d`
+  at the historical pre-SmartHeap `/FI` seat on the same current effective
+  `legoanimpresenter.cpp`. The sole seed cell stayed 686 bytes/body
+  `5d991bc9...`, with current relocation seats and coherent 686-byte CV/FPO
+  closure, rather than retail's 690-byte body. It changed only six target
+  bytes from the fresh control—the already-known six-byte hide-seed orbit—but
+  changed 41 non-target runtime bodies and two linker payloads. Function,
+  COMDAT and section identities remained 260/302/826. No third cell, link or
+  reccmp ran. Evidence is
+  `/private/tmp/codex-animstruct-seed834471941.p9jmefuv/result.json`, SHA-256
+  `a92cddd12b974dffa9dcc6565e72903fa17664aa9f3a122e081107049b1b8f3e`.
+  Repeating this exact seed/current-source cross is closed.
+
 - Accepted canonical gate: LEGO1 4880/4934, ISLE 172/172, CONFIG 111/111.
   The latest gain is `0x10040360 Act3Cop::FUN_10040360`. The checked-in
   source now expresses the fallback as a second `grec == NULL` guard and
