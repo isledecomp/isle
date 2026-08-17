@@ -37,8 +37,13 @@ instructions stay at the same offsets. The separate cross-TU hybrid-resize
 route is admissible only from a different SHA-pinned, unmodified checked-in
 translation unit compiled through its own command. The source-aware
 hybrid-resize route may instead use a closed typed donor-private permutation
-of the owning TU. Both require equal primary COMDAT
-identity/selection/associated-child names, equal-width complete instructions,
+of the owning TU. The source-identical same-TU sibling may use two closed
+declaration-only carrier states only when both complete renderings and the
+target source window are exact, all generated identifiers are fresh, each
+carrier has exactly one manifest-wide role, and the donor's rounded span is
+allowed to cross the seed's former link bucket. All three require equal
+primary COMDAT identity/selection/associated-child names, equal-width complete
+instructions,
 no relocation overlap in either object, exact-once role confinement,
 target-donor metadata authority, an exact hybrid against the owning target's
 retail image and exclusion of both donors. For each object, the line-table
@@ -68,10 +73,46 @@ only the process group/private Wine prefix that the run itself started. Never
 kill an unrelated or another agent's Wine process. Verify a clean global census
 after every bounded panel or full gate.
 
-## Live checkpoint (2026-08-16)
+## Live checkpoint (2026-08-17)
 
-- Accepted canonical gate: LEGO1 4874/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is `0x10069b10 LegoAnimPresenter::BuildROIMap`. Its checked-in
+- Accepted canonical gate: LEGO1 4875/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is
+  `0x100a66f0 ViewManager::ManageVisibilityAndDetailRecursively`. The checked-in
+  and effective target function source is identical in both fresh donor
+  states. A closed `prefix_forward_after_includes_extern` carrier renders a
+  typed forward run at an authenticated byte-zero seat and a typed extern run
+  at the authenticated after-includes seat. Both full renderings are pinned,
+  every generated identifier is absent from the effective source, and the
+  1,732-byte brace-balanced target window is byte/token identical in the seed
+  and donors. Raw and normalized manifest gates bind the 34-forward target
+  carrier exactly once as a primary donor and the 64-forward instruction
+  carrier exactly once as the sole secondary donor; reuse in any ordinary,
+  variant, repeated or unbound role is forbidden.
+
+  The canonical pre-row target is 557 bytes. Both carriers produce a 561-byte
+  target at section 116/250 with 11 relocations, 28 line rows, 80 functions,
+  85 primary COMDATs and the same `.debug$F`/`.debug$S` closure. The target
+  and instruction bodies are
+  `b1271a13524dc400bf0305b25b45d49fc8b9cff06bf5f4376cbf5c4b7bb97f2b`
+  and
+  `a3e8fd96e27f02f4ede351f764216c2361969b3552d423b2a2fc3362f529321e`.
+  One line-certified complete instruction at offsets 516--517 changes
+  `3bc8` to `3bc1` and creates retail-exact hybrid body SHA-256
+  `01949ffd3e0c851db40055f6a1c5978091144dea8b2de977502762fe061c76e8`.
+  The donor's 576-byte linked span governs even though the old seed rounded to
+  560. All 11 retail relocations, target-carrier metadata and every canonical
+  non-target byte remain authoritative; both private donors are excluded.
+  Scratch objects were evidence only and the canonical fresh objects matched
+  every packet pin. Discovery produced the sole gain with report SHA-256
+  `e9e6f5413e72eceeec406ce46eab04dafa2ab50223a217ea7d9562fec384c5b9`.
+  Marker-removed confirmation regenerated the composition and held the same
+  4875 set with report SHA-256
+  `fda4683e20e1d7f4a03e8a080130f2d062720daeb905dd855cd590c7317042d1`
+  and verdict SHA-256
+  `32b792741c0bb1b7fe021b29c53e65aff7361d89992170ebfdb6a0b36765b9ea`.
+  The manifest SHA-256 is
+  `ca98ce3721d3cfd7e54787e47c1843ec69ab771a30ed16cf01f23fb7c4a80176`.
+  The preceding gain is `0x10069b10 LegoAnimPresenter::BuildROIMap`. Its checked-in
   discarded postfix increment remains canonical because the direct prefix
   form changes 40 shared bodies and adds a COMDAT. A donor-private typed
   `discarded_postfix_increment_v1` rendering changes only `it++;` to `++it;`

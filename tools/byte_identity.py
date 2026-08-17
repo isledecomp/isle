@@ -1462,6 +1462,105 @@ def require_target_source_range_identity(
     }
 
 
+def validate_same_tu_source_identity_proof(
+    value: object, context: str,
+) -> dict:
+    """Validate a complete brace-balanced same-TU function source pin."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "selector", "start_marker", "source_owner_mangled",
+        "range_pin",
+    }, context)
+    require(
+        value.get("kind") == "same_tu_function_source_identity_v1"
+        and value.get("selector")
+        == "brace_balanced_function_physical_line_v1",
+        f"{context} kind or selector differs",
+    )
+    marker = value.get("start_marker")
+    owner = value.get("source_owner_mangled")
+    require(
+        isinstance(marker, str) and marker.isascii()
+        and 8 <= len(marker) <= 256
+        and not any(character in marker for character in "\0\r\n"),
+        f"{context}.start_marker is invalid",
+    )
+    require(
+        isinstance(owner, str) and owner.startswith("?") and len(owner) >= 8,
+        f"{context}.source_owner_mangled is invalid",
+    )
+    return {
+        "kind": "same_tu_function_source_identity_v1",
+        "selector": "brace_balanced_function_physical_line_v1",
+        "start_marker": marker,
+        "source_owner_mangled": owner,
+        "range_pin": validate_source_overlay_range_pin(
+            value.get("range_pin"), context + ".range_pin"),
+    }
+
+
+def select_same_tu_source_identity_window(
+    data: bytes, proof: dict, context: str,
+) -> bytes:
+    """Select one function through the LF terminating its closing-brace line."""
+    marker = proof["start_marker"].encode("ascii")
+    require(data.count(marker) == 1,
+            f"{context} start marker is not unique")
+    start = data.index(marker)
+    tokens = [item for item in source_overlay_tokens(data)
+              if item[1] >= start]
+    opening = next((index for index, item in enumerate(tokens)
+                    if item[0] == "{"), None)
+    require(opening is not None, f"{context} function body is missing")
+    depth = 0
+    close = None
+    for token, _, token_end in tokens[opening:]:
+        if token == "{":
+            depth += 1
+        elif token == "}":
+            depth -= 1
+            require(depth >= 0, f"{context} braces are unbalanced")
+            if depth == 0:
+                close = token_end
+                break
+    require(close is not None and close < len(data) and data[close] == 0x0A,
+            f"{context} closing brace lacks one physical LF")
+    return data[start:close + 1]
+
+
+def require_same_tu_source_identity(
+    seed_source: bytes,
+    target_donor_source: bytes,
+    instruction_donor_source: bytes,
+    proof: dict,
+    context: str,
+) -> dict:
+    """Prove both declaration-carrier donors retain the target source."""
+    require(
+        all(isinstance(item, bytes) for item in (
+            seed_source, target_donor_source, instruction_donor_source)),
+        f"{context} source renderings are missing",
+    )
+    selected = [
+        select_same_tu_source_identity_window(data, proof, context + role)
+        for data, role in (
+            (seed_source, " seed"),
+            (target_donor_source, " target donor"),
+            (instruction_donor_source, " instruction donor"),
+        )
+    ]
+    for role, data in zip(("seed", "target donor", "instruction donor"),
+                          selected):
+        require_source_overlay_range_pin(
+            data, proof["range_pin"], f"{context} {role} target range")
+    require(selected[0] == selected[1] == selected[2],
+            f"{context} target source differs between same-TU donors")
+    return {
+        "target_source_size": len(selected[0]),
+        "target_source_sha256": sha256_bytes(selected[0]),
+    }
+
+
 def validate_target_source_refactor_proof(value: object, context: str) -> dict:
     """Validate one closed manifest-declared source-permutation window."""
     require(isinstance(value, dict), f"{context} must be an object")
@@ -11173,6 +11272,9 @@ def validate_manifest(
     all_bound_refactor_recipe_ids = []
     all_bound_instruction_refactor_recipe_ids = []
     all_non_primary_donor_ids = []
+    all_same_tu_carrier_recipe_ids = set()
+    all_bound_same_tu_target_donor_ids = []
+    all_bound_same_tu_instruction_donor_ids = []
     for unit_index, unit in enumerate(translation_units):
         context = f"translation_units[{unit_index}]"
         require(isinstance(unit, dict), f"{context} must be an object")
@@ -11209,12 +11311,16 @@ def validate_manifest(
         if overlay_output is None:
             require(source_path.is_file() and sha256_file(source_path) == source_sha,
                     f"source hash differs: {source_relative}")
+            effective_source_bytes = source_path.read_bytes()
         else:
             require(overlay_output["effective"]["baseline_sha256"] == source_sha,
                     f"overlay source baseline hash differs: {source_relative}")
             effective_source_sha = source_overlay[
                 "effective_by_path"
             ][source_relative]["sha256"]
+            effective_source_bytes = source_overlay[
+                "rendered_by_path"
+            ][source_relative]
         owner = (target, source_relative)
         require(owner not in owners, f"duplicate translation-unit owner: {owner}")
         owners.add(owner)
@@ -11293,7 +11399,9 @@ def validate_manifest(
         local_recipe_ids = set()
         local_recipe_kinds = {}
         local_recipes = {}
+        local_recipe_rendered_sources = {}
         refactor_recipe_ids = set()
+        same_tu_carrier_recipe_ids = set()
         for donor_index, donor in enumerate(donors):
             donor_context = f"{context}.donors[{donor_index}]"
             require(isinstance(donor, dict), f"{donor_context} must be an object")
@@ -11336,6 +11444,7 @@ def validate_manifest(
                              "extern_pair_with_shape",
                              "extern_pair_with_pad", "pad_shape",
                              "declaration_run_triple",
+                             SAME_TU_DECLARATION_CARRIER_RECIPE,
                              "donor_source_overlay",
                              CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE),
                     f"{donor_context}: equal-body donors require a "
@@ -11482,7 +11591,18 @@ def validate_manifest(
                     normalized_donors.append(
                         {**donor, "header_output": None})
                     continue
-                if kind == "forward_declaration_run":
+                if kind == SAME_TU_DECLARATION_CARRIER_RECIPE:
+                    validated_recipe, generated, rendered_source = (
+                        validate_same_tu_declaration_carrier_recipe(
+                            recipe, effective_source_bytes,
+                            f"{donor_context}.recipe",
+                        )
+                    )
+                    local_recipes[recipe_id] = validated_recipe
+                    local_recipe_rendered_sources[recipe_id] = rendered_source
+                    same_tu_carrier_recipe_ids.add(recipe_id)
+                    all_same_tu_carrier_recipe_ids.add(recipe_id)
+                elif kind == "forward_declaration_run":
                     exact_keys(
                         recipe,
                         {
@@ -11927,6 +12047,8 @@ def validate_manifest(
         function_recipe_ids = set()
         bound_refactor_recipe_ids = []
         bound_instruction_refactor_recipe_ids = []
+        bound_same_tu_target_donor_ids = []
+        bound_same_tu_instruction_donor_ids = []
         primary_donor_ids = []
         clean_cross_tu_instruction_donor_ids = []
         non_primary_donor_ids = []
@@ -11971,11 +12093,13 @@ def validate_manifest(
                                          "retail_exact_source_target_closure",
                                          "comdat_selection_override",
                                          CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
-                                         SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS),
+                                         SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS,
+                                         SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS),
                         f"{function_context}: unsupported splice class")
                 if splice_class in {
                     CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
                     SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS,
+                    SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
                 }:
                     hybrid_keys = {
                         "mangled", "donor", "instruction_donor",
@@ -11999,9 +12123,12 @@ def validate_manifest(
                     source_hybrid = (
                         splice_class == SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS
                     )
-                    if source_hybrid:
+                    same_tu_hybrid = (
+                        splice_class == SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
+                    )
+                    fully_pinned_hybrid = source_hybrid or same_tu_hybrid
+                    if fully_pinned_hybrid:
                         hybrid_keys |= {
-                            "instruction_donor_source_refactor",
                             "expected_seed_section_number",
                             "expected_seed_section_count",
                             "expected_seed_relocation_count",
@@ -12017,6 +12144,12 @@ def validate_manifest(
                             "expected_target_donor_comdat_count",
                             "expected_instruction_donor_comdat_count",
                             "expected_donor_closure",
+                        }
+                    if source_hybrid:
+                        hybrid_keys.add("instruction_donor_source_refactor")
+                    if same_tu_hybrid:
+                        hybrid_keys |= {
+                            "same_tu_source_identity", "retail_image_target",
                         }
                     exact_keys(function, hybrid_keys, function_context)
                     instruction_donor_id = function.get(
@@ -12038,6 +12171,41 @@ def validate_manifest(
                             f"{function_context}: source instruction donor "
                             "is not a donor-private source rendering",
                         )
+                    elif same_tu_hybrid:
+                        require(
+                            local_recipe_kinds[donor_id]
+                            == SAME_TU_DECLARATION_CARRIER_RECIPE
+                            and local_recipe_kinds[instruction_donor_id]
+                            == SAME_TU_DECLARATION_CARRIER_RECIPE,
+                            f"{function_context}: same-TU hybrid donors are "
+                            "not the closed mixed declaration carrier",
+                        )
+                        target_recipe = local_recipes[donor_id]
+                        instruction_recipe = local_recipes[
+                            instruction_donor_id]
+                        require_instruction_mosaic_donor_recipe(
+                            instruction_recipe,
+                            f"{function_context} instruction donor recipe",
+                        )
+                        require(
+                            all(
+                                target_recipe[name]
+                                == instruction_recipe[name]
+                                for name in (
+                                    "forward_prefix", "forward_width",
+                                    "extern_prefix", "extern_count",
+                                    "extern_width", "seat_proof",
+                                    "compile_lane", "emission_policy",
+                                )
+                            )
+                            and target_recipe["forward_count"]
+                            != instruction_recipe["forward_count"],
+                            f"{function_context}: same-TU hybrid carrier "
+                            "axes differ outside the forward count",
+                        )
+                        bound_same_tu_target_donor_ids.append(donor_id)
+                        bound_same_tu_instruction_donor_ids.append(
+                            instruction_donor_id)
                     else:
                         require(
                             local_recipe_kinds[instruction_donor_id]
@@ -12070,15 +12238,12 @@ def validate_manifest(
                         require(type(function.get(name)) is int
                                 and function[name] >= 0,
                                 f"{function_context}.{name} is invalid")
-                    require(
-                        function["expected_linked_span"] % 16 == 0
-                        and ((function["expected_seed_length"] + 15) // 16)
-                        * 16 == function["expected_linked_span"]
-                        and ((function["expected_donor_length"] + 15) // 16)
-                        * 16 == function["expected_linked_span"]
-                        and function["expected_seed_length"]
-                        != function["expected_donor_length"],
-                        f"{function_context}: hybrid resize spans differ",
+                    require_instruction_hybrid_resize_span(
+                        function["expected_seed_length"],
+                        function["expected_donor_length"],
+                        function["expected_linked_span"],
+                        donor_governed=same_tu_hybrid,
+                        context=function_context,
                     )
                     for name in (
                         "expected_target_donor_body_sha256",
@@ -12088,7 +12253,7 @@ def validate_manifest(
                         require_sha(function.get(name),
                                     f"{function_context}.{name}")
                     normalized_function = dict(function)
-                    if source_hybrid:
+                    if fully_pinned_hybrid:
                         for name in (
                             "expected_seed_body_sha256",
                             "expected_seed_metadata_sha256",
@@ -12120,9 +12285,48 @@ def validate_manifest(
                             "is invalid",
                         )
                         require(function.get("expected_donor_closure")
-                                == [".debug$S", ".xdata$x"],
+                                == ([".debug$F", ".debug$S"]
+                                    if same_tu_hybrid else
+                                    [".debug$S", ".xdata$x"]),
                                 f"{function_context}.expected_donor_closure "
                                 "differs")
+                        if same_tu_hybrid:
+                            require(
+                                function["expected_donor_length"]
+                                == function[
+                                    "expected_instruction_donor_length"]
+                                and function[
+                                    "expected_target_donor_section_number"]
+                                == function[
+                                    "expected_instruction_donor_section_number"]
+                                and function[
+                                    "expected_target_donor_section_count"]
+                                == function[
+                                    "expected_instruction_donor_section_count"]
+                                and function[
+                                    "expected_target_donor_relocation_count"]
+                                == function[
+                                    "expected_instruction_donor_relocation_count"]
+                                and function[
+                                    "expected_target_donor_line_count"]
+                                == function[
+                                    "expected_instruction_donor_line_count"]
+                                and function[
+                                    "expected_target_donor_metadata_sha256"]
+                                == function[
+                                    "expected_instruction_donor_metadata_sha256"]
+                                and function[
+                                    "expected_target_donor_function_count"]
+                                == function[
+                                    "expected_instruction_donor_function_count"]
+                                and function[
+                                    "expected_target_donor_comdat_count"]
+                                == function[
+                                    "expected_instruction_donor_comdat_count"],
+                                f"{function_context}: same-TU donor topology "
+                                "pins differ",
+                            )
+                    if source_hybrid:
                         proof = validate_target_source_refactor_proof(
                             function.get(
                                 "instruction_donor_source_refactor"),
@@ -12151,6 +12355,22 @@ def validate_manifest(
                             compiler_root=compiler_root,
                             sealed_include_trees=normalized_include_trees,
                         )
+                    elif same_tu_hybrid:
+                        proof = validate_same_tu_source_identity_proof(
+                            function.get("same_tu_source_identity"),
+                            f"{function_context}.same_tu_source_identity",
+                        )
+                        require(proof["source_owner_mangled"] == mangled,
+                                f"{function_context}: same-TU source owner "
+                                "differs")
+                        normalized_function["same_tu_source_identity"] = proof
+                        require_same_tu_source_identity(
+                            effective_source_bytes,
+                            local_recipe_rendered_sources[donor_id],
+                            local_recipe_rendered_sources[
+                                instruction_donor_id],
+                            proof, function_context + " source identity",
+                        )
                     normalized_function["instruction_ranges"] = (
                         validate_cross_tu_instruction_hybrid_ranges(
                             function.get("instruction_ranges"),
@@ -12158,11 +12378,13 @@ def validate_manifest(
                             function["expected_donor_length"],
                             function["expected_instruction_donor_length"],
                             range_kind=(
+                                "same_tu_source_identical_complete_x86_instruction_v1"
+                                if same_tu_hybrid else
                                 "source_same_mangled_complete_x86_instruction_v1"
                                 if source_hybrid else
                                 "cross_tu_same_mangled_complete_x86_instruction_v1"
                             ),
-                            require_same_offsets=source_hybrid,
+                            require_same_offsets=fully_pinned_hybrid,
                         )
                     )
                     retail = function.get("retail_oracle")
@@ -12173,7 +12395,9 @@ def validate_manifest(
                         "image", "address", "verdict", "length",
                     }, f"{function_context}.retail_oracle")
                     require_target_bound_retail_image(
-                        manifest.get("images"), target,
+                        manifest.get("images"),
+                        (function.get("retail_image_target")
+                         if same_tu_hybrid else target),
                         retail.get("image"),
                         f"{function_context}.retail_oracle",
                     )
@@ -12771,11 +12995,23 @@ def validate_manifest(
             context,
             bound_instruction_refactor_recipe_ids,
         )
+        require_same_tu_hybrid_carrier_bindings(
+            same_tu_carrier_recipe_ids,
+            primary_donor_ids,
+            non_primary_donor_ids,
+            bound_same_tu_target_donor_ids,
+            bound_same_tu_instruction_donor_ids,
+            context,
+        )
         all_primary_donor_ids.extend(primary_donor_ids)
         all_bound_refactor_recipe_ids.extend(bound_refactor_recipe_ids)
         all_bound_instruction_refactor_recipe_ids.extend(
             bound_instruction_refactor_recipe_ids)
         all_non_primary_donor_ids.extend(non_primary_donor_ids)
+        all_bound_same_tu_target_donor_ids.extend(
+            bound_same_tu_target_donor_ids)
+        all_bound_same_tu_instruction_donor_ids.extend(
+            bound_same_tu_instruction_donor_ids)
 
         completion = unit.get("completion")
         require(isinstance(completion, dict), f"{context}.completion must be an object")
@@ -12828,6 +13064,14 @@ def validate_manifest(
         "manifest",
         all_bound_instruction_refactor_recipe_ids,
     )
+    require_same_tu_hybrid_carrier_bindings(
+        all_same_tu_carrier_recipe_ids,
+        all_primary_donor_ids,
+        all_non_primary_donor_ids,
+        all_bound_same_tu_target_donor_ids,
+        all_bound_same_tu_instruction_donor_ids,
+        "manifest",
+    )
 
     for recipe_id, registered in recipe_registry.items():
         if (registered["recipe"].get("kind")
@@ -12835,6 +13079,13 @@ def validate_manifest(
             require(
                 len(registered["users"]) == 1,
                 f"clean current-source cross-TU recipe {recipe_id} must be "
+                "declared and consumed by exactly one translation unit",
+            )
+        if (registered["recipe"].get("kind")
+                == SAME_TU_DECLARATION_CARRIER_RECIPE):
+            require(
+                len(registered["users"]) == 1,
+                f"same-TU hybrid carrier recipe {recipe_id} must be "
                 "declared and consumed by exactly one translation unit",
             )
 
@@ -14708,6 +14959,7 @@ INSTRUCTION_MOSAIC_DECLARATION_RECIPE_KINDS = frozenset({
     "forward_declaration_run", "declaration_shape", "extern_run_pair",
     "forward_run_with_shape", "extern_pair_with_shape",
     "extern_pair_with_pad", "pad_shape", "declaration_run_triple",
+    "prefix_forward_after_includes_extern",
 })
 
 
@@ -14718,6 +14970,16 @@ CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS = (
 
 SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS = (
     "retail_exact_source_instruction_hybrid_resize"
+)
+
+
+SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS = (
+    "retail_exact_same_tu_instruction_hybrid_resize"
+)
+
+
+SAME_TU_DECLARATION_CARRIER_RECIPE = (
+    "prefix_forward_after_includes_extern"
 )
 
 
@@ -14766,6 +15028,69 @@ def require_clean_current_source_cross_tu_bindings(
         and all(count == 1 for count in instruction_counts.values()),
         f"{context}: every clean current-source cross-TU recipe must be "
         "consumed exactly once as a hybrid instruction donor",
+    )
+
+
+def require_same_tu_hybrid_carrier_bindings(
+    carrier_recipe_ids: set[str],
+    primary_donor_ids: list[str],
+    non_primary_donor_ids: list[str],
+    bound_target_donor_ids: list[str],
+    bound_instruction_donor_ids: list[str],
+    context: str,
+) -> None:
+    """Confine each mixed carrier to one role in one same-TU hybrid."""
+    carrier_ids = set(carrier_recipe_ids)
+    primary_counts = Counter(primary_donor_ids)
+    non_primary_counts = Counter(non_primary_donor_ids)
+    target_counts = Counter(bound_target_donor_ids)
+    instruction_counts = Counter(bound_instruction_donor_ids)
+    require(
+        set(target_counts) | set(instruction_counts) == carrier_ids
+        and all(
+            target_counts[recipe_id] + instruction_counts[recipe_id] == 1
+            for recipe_id in carrier_ids
+        ),
+        f"{context}: every same-TU hybrid carrier must be bound exactly "
+        "once as either its target or instruction donor",
+    )
+    require(
+        all(primary_counts[recipe_id] == target_counts[recipe_id]
+            for recipe_id in carrier_ids),
+        f"{context}: same-TU target carriers may not have an ordinary, "
+        "repeated, or instruction-only primary use",
+    )
+    require(
+        all(non_primary_counts[recipe_id] == instruction_counts[recipe_id]
+            for recipe_id in carrier_ids),
+        f"{context}: same-TU instruction carriers may not have a variant, "
+        "repeated, or other non-primary use",
+    )
+
+
+def require_instruction_hybrid_resize_span(
+    seed_length: int,
+    donor_length: int,
+    linked_span: int,
+    *, donor_governed: bool,
+    context: str,
+) -> None:
+    """Prove the declared linked contribution span for one hybrid resize."""
+    require(
+        all(type(value) is int and value > 0 for value in (
+            seed_length, donor_length, linked_span))
+        and type(donor_governed) is bool,
+        f"{context}: hybrid resize lengths are invalid",
+    )
+    require(
+        linked_span % 16 == 0
+        and ((donor_length + 15) // 16) * 16 == linked_span
+        and (
+            seed_length <= linked_span if donor_governed else
+            ((seed_length + 15) // 16) * 16 == linked_span
+        )
+        and seed_length != donor_length,
+        f"{context}: hybrid resize spans differ",
     )
 
 
@@ -14863,6 +15188,32 @@ def raw_manifest_source_refactor_recipe_ids(
     return result
 
 
+def raw_manifest_same_tu_carrier_recipe_ids(manifest: dict) -> set[str]:
+    """Inventory mixed same-TU carriers before host-dependent validation."""
+    result = set()
+    units = manifest.get("translation_units")
+    if not isinstance(units, list):
+        return result
+    for unit in units:
+        if not isinstance(unit, dict):
+            continue
+        donors = unit.get("donors")
+        if not isinstance(donors, list):
+            continue
+        for donor in donors:
+            if not isinstance(donor, dict):
+                continue
+            recipe = donor.get("recipe")
+            if (isinstance(recipe, dict)
+                    and recipe.get("kind")
+                    == SAME_TU_DECLARATION_CARRIER_RECIPE):
+                recipe_id = donor.get("id")
+                require(isinstance(recipe_id, str),
+                        "same-TU carrier donor id is invalid")
+                result.add(recipe_id)
+    return result
+
+
 def require_manifest_source_refactor_role_preflight(
     manifest: dict, context: str, root=None,
 ) -> None:
@@ -14871,6 +15222,8 @@ def require_manifest_source_refactor_role_preflight(
     bound_refactor_recipe_ids = []
     bound_instruction_refactor_recipe_ids = []
     non_primary_donor_ids = []
+    bound_same_tu_target_donor_ids = []
+    bound_same_tu_instruction_donor_ids = []
     overlay = manifest.get("source_overlay")
     overlay_outputs = (
         overlay.get("outputs") if isinstance(overlay, dict) else None
@@ -14884,6 +15237,8 @@ def require_manifest_source_refactor_role_preflight(
     source_root = Path(root).resolve(strict=True) if root is not None else None
     refactor_recipe_ids = raw_manifest_source_refactor_recipe_ids(
         manifest, context)
+    same_tu_carrier_recipe_ids = raw_manifest_same_tu_carrier_recipe_ids(
+        manifest)
     units = manifest.get("translation_units")
     if not isinstance(units, list):
         return
@@ -14952,11 +15307,18 @@ def require_manifest_source_refactor_role_preflight(
                 primary_donor_ids.append(donor_id)
                 if "target_source_refactor" in function:
                     bound_refactor_recipe_ids.append(donor_id)
+                if (function.get("splice_class")
+                        == SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
+                    bound_same_tu_target_donor_ids.append(donor_id)
             instruction_donor = function.get("instruction_donor")
             if isinstance(instruction_donor, str):
                 non_primary_donor_ids.append(instruction_donor)
                 if "instruction_donor_source_refactor" in function:
                     bound_instruction_refactor_recipe_ids.append(
+                        instruction_donor)
+                if (function.get("splice_class")
+                        == SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
+                    bound_same_tu_instruction_donor_ids.append(
                         instruction_donor)
             variants = function.get("donor_variants")
             if isinstance(variants, list):
@@ -14972,6 +15334,14 @@ def require_manifest_source_refactor_role_preflight(
         non_primary_donor_ids,
         context,
         bound_instruction_refactor_recipe_ids,
+    )
+    require_same_tu_hybrid_carrier_bindings(
+        same_tu_carrier_recipe_ids,
+        primary_donor_ids,
+        non_primary_donor_ids,
+        bound_same_tu_target_donor_ids,
+        bound_same_tu_instruction_donor_ids,
+        context,
     )
 
 
@@ -15209,6 +15579,196 @@ def validate_cross_tu_instruction_hybrid_ranges(
                 "instruction_donor"][1],
         })
     return normalized
+
+
+def validate_same_tu_declaration_carrier_seats(
+    value: object, source: bytes, context: str,
+) -> dict:
+    """Authenticate the two fixed insertion seats of a mixed carrier."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "prefix_offset", "prefix_input_sha256",
+        "prefix_following_line_sha256", "prefix_context_sha256",
+        "after_includes_offset", "preceding_line_sha256",
+        "following_line_sha256", "centered_context_sha256",
+    }, context)
+    require(
+        value.get("kind")
+        == "prefix_and_after_last_include_seats_v1",
+        f"{context}.kind differs",
+    )
+    prefix_offset = require_exact_int(
+        value.get("prefix_offset"), context + ".prefix_offset",
+        minimum=0, maximum=0,
+    )
+    require(
+        require_sha(value.get("prefix_input_sha256"),
+                    context + ".prefix_input_sha256")
+        == sha256_bytes(source[:prefix_offset]),
+        f"{context} prefix input differs",
+    )
+    first_end = source.find(b"\n")
+    require(first_end >= 0 and len(source) >= 64,
+            f"{context} source lacks the prefix witness")
+    require(
+        require_sha(value.get("prefix_following_line_sha256"),
+                    context + ".prefix_following_line_sha256")
+        == sha256_bytes(source[:first_end + 1])
+        and require_sha(value.get("prefix_context_sha256"),
+                        context + ".prefix_context_sha256")
+        == sha256_bytes(source[:64]),
+        f"{context} prefix witness differs",
+    )
+
+    physical_lines = source.splitlines(keepends=True)
+    include_rows = [
+        index for index, line in enumerate(physical_lines)
+        if line.startswith(b"#include")
+    ]
+    require(include_rows and include_rows[-1] + 1 < len(physical_lines),
+            f"{context} source lacks an after-includes seat")
+    include_index = include_rows[-1]
+    seat = sum(len(line) for line in physical_lines[:include_index + 1])
+    require(
+        require_exact_int(
+            value.get("after_includes_offset"),
+            context + ".after_includes_offset", minimum=32,
+            maximum=len(source) - 32,
+        ) == seat,
+        f"{context} after-includes offset differs",
+    )
+    require(
+        require_sha(value.get("preceding_line_sha256"),
+                    context + ".preceding_line_sha256")
+        == sha256_bytes(physical_lines[include_index])
+        and require_sha(value.get("following_line_sha256"),
+                        context + ".following_line_sha256")
+        == sha256_bytes(physical_lines[include_index + 1])
+        and require_sha(value.get("centered_context_sha256"),
+                        context + ".centered_context_sha256")
+        == sha256_bytes(source[seat - 32:seat + 32]),
+        f"{context} after-includes witness differs",
+    )
+    return dict(value)
+
+
+def render_same_tu_declaration_carrier(
+    source: bytes, recipe: dict, context: str,
+) -> bytes:
+    """Render a typed prefix-forward plus after-includes extern carrier."""
+    require(recipe.get("kind") == SAME_TU_DECLARATION_CARRIER_RECIPE,
+            f"{context}.kind differs")
+    validate_same_tu_declaration_carrier_seats(
+        recipe.get("seat_proof"), source, context + ".seat_proof")
+    try:
+        forward = entropy_generator.generate_forward_run(
+            recipe["forward_prefix"], recipe["forward_count"],
+            recipe["forward_width"],
+        ).encode("ascii")
+        extern = entropy_generator.generate_extern_run(
+            recipe["extern_prefix"], recipe["extern_count"],
+            recipe["extern_width"],
+        ).encode("ascii").rstrip(b"\n").split(b"\n")
+    except (KeyError, ValueError) as error:
+        raise ByteIdentityError(
+            f"{context} declaration carrier is invalid: {error}") from error
+    lines = source.split(b"\n")
+    include_rows = [
+        index for index, line in enumerate(lines)
+        if line.startswith(b"#include")
+    ]
+    require(include_rows, f"{context} source lacks an include seat")
+    insert_at = include_rows[-1] + 1
+    return forward + b"\n".join(
+        lines[:insert_at] + extern + lines[insert_at:])
+
+
+def validate_same_tu_declaration_carrier_recipe(
+    recipe: object, source: bytes, context: str,
+) -> tuple[dict, bytes, bytes]:
+    """Validate one closed non-emitting mixed declaration carrier."""
+    require(isinstance(recipe, dict), f"{context} must be an object")
+    exact_audit_keys(recipe, {
+        "kind", "forward_prefix", "forward_count", "forward_width",
+        "extern_prefix", "extern_count", "extern_width", "seat_proof",
+        "generated_header_sha256", "rendered_source_sha256",
+        "rendered_source_size", "rendered_source_line_count",
+        "compile_lane", "emission_policy", "authenticity_rationale",
+    }, context)
+    require(recipe.get("kind") == SAME_TU_DECLARATION_CARRIER_RECIPE,
+            f"{context}.kind differs")
+    lane = recipe.get("compile_lane")
+    require(
+        isinstance(lane, dict) and set(lane) == {"required_define"}
+        and isinstance(lane.get("required_define"), str)
+        and lane["required_define"],
+        f"{context}.compile_lane differs",
+    )
+    require(recipe.get("emission_policy")
+            == "non_emitting_declarations_only",
+            f"{context}.emission_policy differs")
+    rationale = recipe.get("authenticity_rationale")
+    require(isinstance(rationale, str) and len(rationale) >= 32,
+            f"{context}.authenticity_rationale is too weak")
+    try:
+        forward = entropy_generator.generate_forward_run(
+            recipe.get("forward_prefix"), recipe.get("forward_count"),
+            recipe.get("forward_width"),
+        ).encode("ascii")
+        extern = entropy_generator.generate_extern_run(
+            recipe.get("extern_prefix"), recipe.get("extern_count"),
+            recipe.get("extern_width"),
+        ).encode("ascii")
+    except ValueError as error:
+        raise ByteIdentityError(
+            f"{context} declaration carrier parameters: {error}") from error
+    require(recipe.get("forward_width") == 3
+            and recipe.get("extern_width") == 2,
+            f"{context} declaration carrier widths differ")
+    forward_identifiers = {
+        f"{recipe['forward_prefix']}{index:0{recipe['forward_width']}d}"
+        for index in range(recipe["forward_count"])
+    }
+    extern_identifiers = {
+        f"{recipe['extern_prefix']}{index:0{recipe['extern_width']}d}"
+        for index in range(recipe["extern_count"])
+    }
+    source_identifiers = {
+        token for token, _, _ in _semantic_significant_tokens(source)
+        if SOURCE_OVERLAY_IDENTIFIER_RE.fullmatch(token) is not None
+    }
+    require(
+        forward_identifiers.isdisjoint(extern_identifiers)
+        and (forward_identifiers | extern_identifiers)
+        .isdisjoint(source_identifiers),
+        f"{context} declaration carrier identifier collides with source",
+    )
+    generated = forward + extern
+    require(
+        require_sha(recipe.get("generated_header_sha256"),
+                    context + ".generated_header_sha256")
+        == sha256_bytes(generated),
+        f"{context} generated declaration bytes differ",
+    )
+    rendered = render_same_tu_declaration_carrier(source, recipe, context)
+    require(
+        require_sha(recipe.get("rendered_source_sha256"),
+                    context + ".rendered_source_sha256")
+        == sha256_bytes(rendered)
+        and require_exact_int(
+            recipe.get("rendered_source_size"),
+            context + ".rendered_source_size", minimum=1,
+        ) == len(rendered)
+        and require_exact_int(
+            recipe.get("rendered_source_line_count"),
+            context + ".rendered_source_line_count", minimum=1,
+        ) == rendered.count(b"\n"),
+        f"{context} rendered source differs from its pins",
+    )
+    serialized = json.dumps(recipe, sort_keys=True).casefold()
+    require(not any(word in serialized for word in FORBIDDEN_RECIPE_WORDS),
+            f"{context} contains forbidden provenance")
+    return dict(recipe), generated, rendered
 
 
 def require_instruction_mosaic_donor_recipe(
@@ -17718,21 +18278,26 @@ def _compose_retail_exact_instruction_hybrid_resize_core(
     instruction_donor_bytes: bytes,
     function: dict,
     retail_body: bytes,
-    *, source_aware: bool,
+    *, source_aware: bool, same_tu_source_identical: bool = False,
 ) -> tuple[bytes, dict]:
     """Import complete same-mangled instructions, then resize normally.
 
-    The target donor supplies the complete resize closure.  A second current-
-    source translation unit may supply only manifest-pinned instruction bytes
-    from its definition of that exact mangled COMDAT.  The temporary hybrid is
-    never a link input: after proving that it differs from the target donor
+    The target donor supplies the complete resize closure.  A second freshly
+    compiled donor state may supply only manifest-pinned instruction bytes
+    from its definition of that exact mangled COMDAT.  The temporary hybrid
+    is never a link input: after proving that it differs from the target donor
     only inside the declared text ranges, it is handed to the unchanged
     retail-exact same-slot composer.
     """
+    require(not (source_aware and same_tu_source_identical),
+            "instruction hybrid source modes overlap")
     expected_class = (
+        SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
+        if same_tu_source_identical else
         SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS
         if source_aware else CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
     )
+    fully_pinned = source_aware or same_tu_source_identical
     require(function.get("splice_class") == expected_class,
             "splice class is not the selected instruction hybrid resize")
     require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
@@ -17785,7 +18350,7 @@ def _compose_retail_exact_instruction_hybrid_resize_core(
             for field in ("name", "characteristics")),
         "same-mangled donor COMDAT header class changed",
     )
-    if source_aware:
+    if fully_pinned:
         require(
             len(seed.sections) == function["expected_seed_section_count"]
             and seed_primary["number"]
@@ -17853,6 +18418,22 @@ def _compose_retail_exact_instruction_hybrid_resize_core(
             == function["expected_instruction_donor_metadata_sha256"],
             "source hybrid instruction-donor metadata differs from its pin",
         )
+    if same_tu_source_identical:
+        require(
+            function_multiset(seed) == function_multiset(target)
+            == function_multiset(instruction_donor),
+            "same-TU hybrid function universe changed",
+        )
+        require(
+            comdat_primary_identity_multiset(seed)
+            == comdat_primary_identity_multiset(target)
+            == comdat_primary_identity_multiset(instruction_donor),
+            "same-TU hybrid COMDAT universe changed",
+        )
+        require_instruction_mosaic_semantic_relocations(
+            target, target_primary, instruction_donor,
+            instruction_primary, "same-TU hybrid code",
+        )
 
     target_body = coff_body(target, target_primary)
     instruction_body = coff_body(instruction_donor, instruction_primary)
@@ -17867,11 +18448,13 @@ def _compose_retail_exact_instruction_hybrid_resize_core(
         "instruction hybrid ranges",
         len(target_body), len(instruction_body),
         range_kind=(
+            "same_tu_source_identical_complete_x86_instruction_v1"
+            if same_tu_source_identical else
             "source_same_mangled_complete_x86_instruction_v1"
             if source_aware else
             "cross_tu_same_mangled_complete_x86_instruction_v1"
         ),
-        require_same_offsets=source_aware,
+        require_same_offsets=fully_pinned,
     )
     require_coff_line_certified_ia32_boundaries(
         target, target_primary, target_body, ranges, "target", mangled,
@@ -17956,7 +18539,7 @@ def _compose_retail_exact_instruction_hybrid_resize_core(
     require(_comdat_child_closure(hybrid_coff, hybrid_primary)
             == _comdat_child_closure(target, target_primary),
             "cross-TU hybrid changed the target-donor closure")
-    if source_aware:
+    if fully_pinned:
         require(
             instruction_mosaic_metadata_sha256(
                 hybrid_coff, hybrid_primary)
@@ -17968,7 +18551,7 @@ def _compose_retail_exact_instruction_hybrid_resize_core(
     effective_function["splice_class"] = "retail_exact_reloc_divergent"
     effective_function["expected_body_sha256"] = function[
         "expected_hybrid_body_sha256"]
-    if source_aware:
+    if fully_pinned:
         effective_function["expected_donor_line_count"] = function[
             "expected_target_donor_line_count"]
     composed, detail = compose_same_slot_resize(
@@ -18030,6 +18613,42 @@ def compose_retail_exact_source_instruction_hybrid_resize(
     composed, detail = _compose_retail_exact_instruction_hybrid_resize_core(
         seed_bytes, target_donor_bytes, instruction_donor_bytes,
         function, retail_body, source_aware=True,
+    )
+    return composed, {**detail, **source_detail}
+
+
+def compose_retail_exact_same_tu_instruction_hybrid_resize(
+    seed_bytes: bytes,
+    target_donor_bytes: bytes,
+    instruction_donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+    seed_source: bytes,
+    target_donor_source: bytes,
+    instruction_donor_source: bytes,
+) -> tuple[bytes, dict]:
+    """Compose two source-identical, declaration-carrier same-TU donors."""
+    require(
+        function.get("splice_class")
+        == SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
+        and "same_tu_source_identity" in function
+        and "instruction_donor_source_refactor" not in function,
+        "same-TU instruction-hybrid contract is missing",
+    )
+    proof = function["same_tu_source_identity"]
+    require(proof.get("source_owner_mangled") == function.get("mangled"),
+            "same-TU instruction-hybrid owner differs")
+    owner = proof["source_owner_mangled"]
+    for data in (seed_bytes, target_donor_bytes, instruction_donor_bytes):
+        CoffObject(data).function_section(owner)
+    source_detail = require_same_tu_source_identity(
+        seed_source, target_donor_source, instruction_donor_source,
+        proof, "same-TU instruction-hybrid source proof",
+    )
+    composed, detail = _compose_retail_exact_instruction_hybrid_resize_core(
+        seed_bytes, target_donor_bytes, instruction_donor_bytes,
+        function, retail_body, source_aware=False,
+        same_tu_source_identical=True,
     )
     return composed, {**detail, **source_detail}
 

@@ -1728,6 +1728,462 @@ class SourceInstructionHybridResizeTests(unittest.TestCase):
                 ["d_instruction"])
 
 
+class SameTuInstructionHybridResizeTests(unittest.TestCase):
+    """Two source-identical carrier states may supply one hybrid resize."""
+
+    def fixture(self):
+        seed = make_divergent_coff()
+        start, end = 22, 26
+        target_encoding = bytes.fromhex("3b4c2410")
+        instruction_encoding = bytes.fromhex("394c2410")
+        target_donor = make_decodable_instruction_hybrid_donor(
+            target_encoding)
+        instruction_donor = _patched_target_body(
+            target_donor, [(start, instruction_encoding)])
+        target = byte_identity.CoffObject(target_donor)
+        target_primary = target.function_section(TARGET_SYMBOL)
+        target_body = byte_identity.coff_body(target, target_primary)
+        instruction = byte_identity.CoffObject(instruction_donor)
+        instruction_primary = instruction.function_section(TARGET_SYMBOL)
+        instruction_body = byte_identity.coff_body(
+            instruction, instruction_primary)
+        seed_coff = byte_identity.CoffObject(seed)
+        seed_primary = seed_coff.function_section(TARGET_SYMBOL)
+        seed_body = byte_identity.coff_body(seed_coff, seed_primary)
+        hybrid = _patched_target_body(
+            target_donor, [(start, instruction_encoding)])
+        hybrid_coff = byte_identity.CoffObject(hybrid)
+        hybrid_primary = hybrid_coff.function_section(TARGET_SYMBOL)
+        hybrid_body = byte_identity.coff_body(hybrid_coff, hybrid_primary)
+        retail = retail_body_for(hybrid)
+
+        def counts(coff):
+            return (
+                sum(byte_identity.function_multiset(coff).values()),
+                sum(byte_identity.comdat_primary_identity_multiset(
+                    coff).values()),
+            )
+
+        source = (
+            b"// fixture target\n"
+            b"void fixture() {\n\tcursor++;\n}\n"
+        )
+        source_pin = {
+            "baseline_sha256": hashlib.sha256(source).hexdigest(),
+            "baseline_size": len(source),
+            "baseline_line_count": source.count(b"\n"),
+            "baseline_significant_token_sha256":
+                byte_identity.source_overlay_significant_sha256(source),
+        }
+        function = {
+            "mangled": TARGET_SYMBOL,
+            "donor": "d_target",
+            "instruction_donor": "d_instruction",
+            "splice_class":
+                byte_identity.SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
+            "expected_seed_length": len(seed_body),
+            "expected_donor_length": len(target_body),
+            "expected_linked_span": LINKED_SPAN,
+            "expected_seed_section_number": seed_primary["number"],
+            "expected_seed_section_count": len(seed_coff.sections),
+            "expected_seed_relocation_count":
+                seed_primary["relocation_count"],
+            "expected_seed_line_count": seed_primary["line_count"],
+            "expected_seed_body_sha256":
+                hashlib.sha256(seed_body).hexdigest(),
+            "expected_seed_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    seed_coff, seed_primary),
+            "expected_seed_function_count": counts(seed_coff)[0],
+            "expected_seed_comdat_count": counts(seed_coff)[1],
+            "expected_target_donor_section_number": target_primary["number"],
+            "expected_target_donor_section_count": len(target.sections),
+            "expected_target_donor_relocation_count":
+                target_primary["relocation_count"],
+            "expected_target_donor_line_count": target_primary["line_count"],
+            "expected_target_donor_body_sha256":
+                hashlib.sha256(target_body).hexdigest(),
+            "expected_target_donor_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    target, target_primary),
+            "expected_target_donor_function_count": counts(target)[0],
+            "expected_target_donor_comdat_count": counts(target)[1],
+            "expected_instruction_donor_length": len(instruction_body),
+            "expected_instruction_donor_section_number":
+                instruction_primary["number"],
+            "expected_instruction_donor_section_count":
+                len(instruction.sections),
+            "expected_instruction_donor_relocation_count":
+                instruction_primary["relocation_count"],
+            "expected_instruction_donor_line_count":
+                instruction_primary["line_count"],
+            "expected_instruction_donor_body_sha256":
+                hashlib.sha256(instruction_body).hexdigest(),
+            "expected_instruction_donor_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    instruction, instruction_primary),
+            "expected_instruction_donor_function_count":
+                counts(instruction)[0],
+            "expected_instruction_donor_comdat_count":
+                counts(instruction)[1],
+            "expected_donor_closure": list(
+                byte_identity._comdat_child_closure(
+                    target, target_primary)[1]),
+            "expected_hybrid_body_sha256":
+                hashlib.sha256(hybrid_body).hexdigest(),
+            "same_tu_source_identity": {
+                "kind": "same_tu_function_source_identity_v1",
+                "selector": "brace_balanced_function_physical_line_v1",
+                "start_marker": "// fixture target",
+                "source_owner_mangled": TARGET_SYMBOL,
+                "range_pin": source_pin,
+            },
+            "instruction_ranges": [{
+                "kind":
+                    "same_tu_source_identical_complete_x86_instruction_v1",
+                "target_start": start,
+                "target_end": end,
+                "target_bytes": target_body[start:end].hex(),
+                "target_sha256":
+                    hashlib.sha256(target_body[start:end]).hexdigest(),
+                "instruction_donor_start": start,
+                "instruction_donor_end": end,
+                "instruction_donor_bytes":
+                    instruction_body[start:end].hex(),
+                "instruction_donor_sha256": hashlib.sha256(
+                    instruction_body[start:end]).hexdigest(),
+            }],
+            "retail_oracle": {
+                "image": "LEGO1.DLL", "address": "0x1003cf20",
+                "verdict": "MATCH", "length": len(hybrid_body),
+            },
+            "retail_image_target": "lego1",
+            "retail_relocations": relocation_oracle_for(hybrid, retail),
+        }
+        return (seed, target_donor, instruction_donor, function, retail,
+                source, hybrid)
+
+    def compose(self, fixture, function=None, retail=None,
+                sources=None, instruction=None):
+        (seed, target, default_instruction, expected, oracle, source,
+         _) = fixture
+        source_rows = sources or (source, source, source)
+        return byte_identity.compose_retail_exact_same_tu_instruction_hybrid_resize(
+            seed, target,
+            default_instruction if instruction is None else instruction,
+            function or expected, oracle if retail is None else retail,
+            *source_rows)
+
+    def test_positive_conserves_target_metadata_and_seed_non_targets(self):
+        fixture = self.fixture()
+        composed, detail = self.compose(fixture)
+        seed, target, instruction, _, _, _, hybrid = fixture
+        checked = byte_identity.CoffObject(composed)
+        checked_primary = checked.function_section(TARGET_SYMBOL)
+        target_coff = byte_identity.CoffObject(target)
+        target_primary = target_coff.function_section(TARGET_SYMBOL)
+        hybrid_coff = byte_identity.CoffObject(hybrid)
+        hybrid_primary = hybrid_coff.function_section(TARGET_SYMBOL)
+        self.assertEqual(
+            byte_identity.coff_body(checked, checked_primary),
+            byte_identity.coff_body(hybrid_coff, hybrid_primary))
+        self.assertEqual(
+            byte_identity.instruction_mosaic_metadata_sha256(
+                checked, checked_primary),
+            byte_identity.instruction_mosaic_metadata_sha256(
+                target_coff, target_primary))
+        seed_coff = byte_identity.CoffObject(seed)
+        for before in seed_coff.sections:
+            if before["number"] in {1, 2, 3}:
+                continue
+            after = checked.sections[before["number"] - 1]
+            self.assertEqual(byte_identity.coff_body(seed_coff, before),
+                             byte_identity.coff_body(checked, after))
+        byte_identity.validate_donor_object_excluded(
+            composed, [target, instruction])
+        self.assertEqual(
+            detail["splice_class"],
+            byte_identity.SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS)
+        self.assertEqual(detail["target_source_size"], len(fixture[5]))
+        self.assertTrue(detail["retail_exact"])
+
+    def test_rejects_source_identity_and_object_pin_drift(self):
+        fixture = self.fixture()
+        changed_source = fixture[5].replace(b"cursor", b"other_")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "authenticated input-range"):
+            self.compose(
+                fixture,
+                sources=(fixture[5], changed_source, fixture[5]))
+
+        for key, value, message in (
+            ("expected_seed_metadata_sha256", "0" * 64,
+             "seed metadata"),
+            ("expected_target_donor_metadata_sha256", "0" * 64,
+             "target-donor metadata"),
+            ("expected_instruction_donor_body_sha256", "0" * 64,
+             "instruction donor body"),
+            ("expected_instruction_donor_comdat_count",
+             fixture[3]["expected_instruction_donor_comdat_count"] + 1,
+             "COMDAT census"),
+        ):
+            bad = copy.deepcopy(fixture[3])
+            bad[key] = value
+            with self.subTest(key=key), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                self.compose(fixture, bad)
+
+    def test_rejects_donor_universe_and_semantic_relocation_drift(self):
+        fixture = self.fixture()
+        renamed = fixture[2].replace(
+            OTHER.encode("ascii"), b"?Extra@@YAXXZ")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "function universe"):
+            self.compose(fixture, instruction=renamed)
+
+        changed = bytearray(fixture[2])
+        changed_coff = byte_identity.CoffObject(bytes(changed))
+        changed_primary = changed_coff.function_section(TARGET_SYMBOL)
+        common_index, _ = byte_identity.unique_symbol(
+            changed_coff, lambda symbol: symbol["name"] == COMMON,
+            "fixture common symbol")
+        struct.pack_into(
+            "<I", changed, changed_primary["relocation_offset"] + 14,
+            common_index)
+        changed = bytes(changed)
+        changed_coff = byte_identity.CoffObject(changed)
+        changed_primary = changed_coff.function_section(TARGET_SYMBOL)
+        bad = copy.deepcopy(fixture[3])
+        bad["expected_instruction_donor_body_sha256"] = hashlib.sha256(
+            byte_identity.coff_body(changed_coff, changed_primary)).hexdigest()
+        bad["expected_instruction_donor_metadata_sha256"] = (
+            byte_identity.instruction_mosaic_metadata_sha256(
+                changed_coff, changed_primary)
+        )
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "relocation"):
+            self.compose(fixture, bad, instruction=changed)
+
+    def test_rejects_relocation_overlap_and_retail_oracle_drift(self):
+        fixture = self.fixture()
+        bad = copy.deepcopy(fixture[3])
+        target = _patched_target_body(
+            fixture[1], [(18, b"\x3b\xc8\x40\x40")])
+        target = _patched_target_line_boundary(target, 18)
+        instruction = _patched_target_body(
+            fixture[2], [(18, b"\x3b\xc1\x40\x40")])
+        instruction = _patched_target_line_boundary(instruction, 18)
+        target_coff = byte_identity.CoffObject(target)
+        target_primary = target_coff.function_section(TARGET_SYMBOL)
+        target_body = byte_identity.coff_body(target_coff, target_primary)
+        instruction_coff = byte_identity.CoffObject(instruction)
+        instruction_primary = instruction_coff.function_section(
+            TARGET_SYMBOL)
+        instruction_body = byte_identity.coff_body(
+            instruction_coff, instruction_primary)
+        bad.update({
+            "expected_target_donor_body_sha256":
+                hashlib.sha256(target_body).hexdigest(),
+            "expected_target_donor_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    target_coff, target_primary),
+            "expected_instruction_donor_body_sha256":
+                hashlib.sha256(instruction_body).hexdigest(),
+            "expected_instruction_donor_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    instruction_coff, instruction_primary),
+        })
+        item = bad["instruction_ranges"][0]
+        item.update({
+            "target_start": 18, "target_end": 20,
+            "target_bytes": target_body[18:20].hex(),
+            "target_sha256": hashlib.sha256(target_body[18:20]).hexdigest(),
+            "instruction_donor_start": 18,
+            "instruction_donor_end": 20,
+            "instruction_donor_bytes": instruction_body[18:20].hex(),
+            "instruction_donor_sha256": hashlib.sha256(
+                instruction_body[18:20]).hexdigest(),
+        })
+        changed_fixture = list(fixture)
+        changed_fixture[1] = target
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "relocation"):
+            self.compose(tuple(changed_fixture), bad,
+                         instruction=instruction)
+
+        bad = copy.deepcopy(fixture[3])
+        bad["retail_relocations"][0]["retail_target"] = "0x00000001"
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "retail"):
+            self.compose(fixture, bad)
+
+    def test_carrier_rendering_and_live_source_identity_match_all_pins(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        unit = next(
+            item for item in manifest["translation_units"]
+            if any(function.get("splice_class")
+                   == byte_identity.SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
+                   for function in item.get("functions", [])))
+        overlay = byte_identity.validate_source_overlay(
+            manifest["source_overlay"], ROOT)
+        source = overlay["rendered_by_path"][unit["source"]]
+        generated = {}
+        rendered = {}
+        for donor in unit["donors"]:
+            if (donor["recipe"].get("kind")
+                    != byte_identity.SAME_TU_DECLARATION_CARRIER_RECIPE):
+                continue
+            _, generated[donor["id"]], rendered[donor["id"]] = (
+                byte_identity.validate_same_tu_declaration_carrier_recipe(
+                    donor["recipe"], source, "fixture")
+            )
+        self.assertEqual(set(generated), {
+            "d_48d777a4dafa", "d_cfe57010c383"})
+        function = next(
+            item for item in unit["functions"]
+            if item.get("splice_class")
+            == byte_identity.SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS)
+        detail = byte_identity.require_same_tu_source_identity(
+            source, rendered[function["donor"]],
+            rendered[function["instruction_donor"]],
+            byte_identity.validate_same_tu_source_identity_proof(
+                function["same_tu_source_identity"], "fixture"),
+            "fixture")
+        self.assertEqual(detail["target_source_size"], 1732)
+
+    def test_carrier_recipe_rejects_seat_width_and_render_pin_drift(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        unit = next(
+            item for item in manifest["translation_units"]
+            if item["source"] == "LEGO1/viewmanager/viewmanager.cpp")
+        recipe = next(
+            copy.deepcopy(item["recipe"]) for item in unit["donors"]
+            if item["recipe"].get("kind")
+            == byte_identity.SAME_TU_DECLARATION_CARRIER_RECIPE)
+        overlay = byte_identity.validate_source_overlay(
+            manifest["source_overlay"], ROOT)
+        source = overlay["rendered_by_path"][unit["source"]]
+        mutations = (
+            (lambda value: value["seat_proof"].update(
+                {"following_line_sha256": "0" * 64}), "witness"),
+            (lambda value: value.update({"extern_width": 3}), "widths"),
+            (lambda value: value.update({"forward_prefix": "VmL"}),
+             "collides"),
+            (lambda value: value.update(
+                {"rendered_source_sha256": "0" * 64}), "rendered source"),
+        )
+        for mutate, message in mutations:
+            bad = copy.deepcopy(recipe)
+            mutate(bad)
+            with self.subTest(message=message), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                byte_identity.validate_same_tu_declaration_carrier_recipe(
+                    bad, source, "fixture")
+
+    def test_donor_governed_span_allows_the_live_boundary_crossing_only(self):
+        byte_identity.require_instruction_hybrid_resize_span(
+            557, 561, 576, donor_governed=True, context="fixture")
+        self.assertEqual(((557 + 15) // 16) * 16, 560)
+        for span, seed in ((560, 557), (576, 577)):
+            with self.subTest(span=span, seed=seed), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, "spans differ"):
+                byte_identity.require_instruction_hybrid_resize_span(
+                    seed, 561, span, donor_governed=True,
+                    context="fixture")
+
+    def test_role_binding_accepts_only_one_target_and_instruction_use(self):
+        byte_identity.require_same_tu_hybrid_carrier_bindings(
+            {"d_target", "d_instruction"},
+            ["d_target"], ["d_instruction"],
+            ["d_target"], ["d_instruction"], "fixture")
+        cases = (
+            ({"d_target", "d_instruction", "d_unbound"},
+             ["d_target"], ["d_instruction"],
+             ["d_target"], ["d_instruction"], "bound exactly once"),
+            ({"d_target", "d_instruction"},
+             ["d_target", "d_target"], ["d_instruction"],
+             ["d_target"], ["d_instruction"], "ordinary"),
+            ({"d_target", "d_instruction"},
+             ["d_target"], ["d_instruction", "d_instruction"],
+             ["d_target"], ["d_instruction"], "non-primary"),
+        )
+        for carriers, primary, nonprimary, target, instruction, message \
+                in cases:
+            with self.subTest(message=message), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                byte_identity.require_same_tu_hybrid_carrier_bindings(
+                    carriers, primary, nonprimary, target, instruction,
+                    "fixture")
+
+    def test_live_manifest_preflight_rejects_unbound_and_ordinary_reuse(self):
+        original = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        unit_index = next(
+            index for index, unit in enumerate(original["translation_units"])
+            if any(function.get("splice_class")
+                   == byte_identity.SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
+                   for function in unit.get("functions", [])))
+        function = next(
+            item for item in original["translation_units"][unit_index][
+                "functions"]
+            if item.get("splice_class")
+            == byte_identity.SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS)
+        mutations = []
+        unbound = copy.deepcopy(original)
+        unbound["translation_units"][unit_index]["functions"] = [
+            item for item in unbound["translation_units"][unit_index][
+                "functions"] if item.get("mangled") != function["mangled"]
+        ]
+        mutations.append((unbound, "bound exactly once"))
+        reused = copy.deepcopy(original)
+        reused["translation_units"][unit_index]["functions"].append({
+            "mangled": "?OrdinarySameTuReuseFixture@@YAXXZ",
+            "donor": function["donor"],
+            "splice_class": "equal_body_strict",
+        })
+        mutations.append((reused, "ordinary"))
+        for manifest, message in mutations:
+            with self.subTest(message=message), tempfile.TemporaryDirectory() \
+                    as temporary:
+                temporary = Path(temporary).resolve()
+                manifest_path = temporary / "manifest.json"
+                build_dir = temporary / "build"
+                build_dir.mkdir()
+                manifest_path.write_text(json.dumps(manifest))
+                with self.assertRaisesRegex(
+                        byte_identity.ByteIdentityError, message):
+                    byte_identity.validate_manifest(
+                        manifest_path, ROOT, build_dir)
+
+    def test_live_manifest_pins_one_range_eleven_relocs_and_right_image(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        function = next(
+            function for unit in manifest["translation_units"]
+            for function in unit.get("functions", [])
+            if function.get("splice_class")
+            == byte_identity.SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS)
+        self.assertEqual(len(function["instruction_ranges"]), 1)
+        self.assertEqual((function["instruction_ranges"][0]["target_start"],
+                          function["instruction_ranges"][0]["target_end"]),
+                         (516, 518))
+        self.assertEqual(len(function["retail_relocations"]), 11)
+        self.assertEqual(function["expected_hybrid_body_sha256"],
+                         "01949ffd3e0c851db40055f6a1c5978091144dea8b2de977502762fe061c76e8")
+        self.assertEqual(
+            byte_identity.require_target_bound_retail_image(
+                manifest["images"], function["retail_image_target"],
+                function["retail_oracle"]["image"], "fixture"),
+            "LEGO1.DLL")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "differs from the TU target"):
+            byte_identity.require_target_bound_retail_image(
+                manifest["images"], "isle",
+                function["retail_oracle"]["image"], "fixture")
+
+
 class RetailExactTargetClosureTests(unittest.TestCase):
     def _live_anim_case(self):
         manifest = json.loads(

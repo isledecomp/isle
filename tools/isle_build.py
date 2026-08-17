@@ -1010,7 +1010,22 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                         log=build.parent / f"{marker.stem}-{donor['id']}.log")
                     donor_objects[donor["id"]] = (probe / "o.obj").read_bytes()
                     continue
-                if recipe["kind"] == "declaration_shape":
+                if (recipe["kind"] == byte_identity
+                        .SAME_TU_DECLARATION_CARRIER_RECIPE):
+                    run_bytes = (
+                        entropy.generate_forward_run(
+                            recipe["forward_prefix"],
+                            recipe["forward_count"],
+                            recipe["forward_width"],
+                        ).encode("utf-8")
+                        + entropy.generate_extern_run(
+                            recipe["extern_prefix"],
+                            recipe["extern_count"],
+                            recipe["extern_width"],
+                        ).encode("utf-8")
+                    )
+                    placement = "prefix_forward_after_includes_extern"
+                elif recipe["kind"] == "declaration_shape":
                     run_bytes = entropy.generate_shape(
                         recipe["classes"], recipe["functions"]
                     ).encode("utf-8")
@@ -1121,7 +1136,25 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                          / f"{marker.stem}-{donor['id']}")
                 probe.mkdir(parents=True, exist_ok=True)
                 shadow_bytes = donor_source_path.read_bytes()
-                if placement == "prefix":
+                if placement == "prefix_forward_after_includes_extern":
+                    rendered_source = (
+                        byte_identity.render_same_tu_declaration_carrier(
+                            shadow_bytes, recipe,
+                            f"same-TU carrier {donor['id']}",
+                        )
+                    )
+                    if (hashlib.sha256(rendered_source).hexdigest()
+                            != recipe["rendered_source_sha256"]
+                            or len(rendered_source)
+                            != recipe["rendered_source_size"]
+                            or rendered_source.count(b"\n")
+                            != recipe["rendered_source_line_count"]):
+                        fail(f"same-TU donor rendering differs: "
+                             f"{unit['source']}")
+                    (probe / "s.cpp").write_bytes(rendered_source)
+                    donor_sources[donor["id"]] = rendered_source
+                    force_include = []
+                elif placement == "prefix":
                     (probe / "s.cpp").write_bytes(run_bytes + shadow_bytes)
                     force_include = []
                 elif placement == "suffix":
@@ -1273,6 +1306,37 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
             composed = seed_bytes
             for function in unit["functions"]:
                 if (function["splice_class"]
+                        == byte_identity
+                        .SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
+                    retail = function["retail_oracle"]
+                    target_donor_id = function["donor"]
+                    instruction_donor_id = function["instruction_donor"]
+                    target_donor = donor_objects[target_donor_id]
+                    instruction_donor = donor_objects[
+                        instruction_donor_id]
+                    target_source = donor_sources.get(target_donor_id)
+                    instruction_source = donor_sources.get(
+                        instruction_donor_id)
+                    if target_source is None or instruction_source is None:
+                        fail("same-TU instruction-hybrid donor omits its "
+                             f"translation unit: {unit['source']}")
+                    composed, detail = (
+                        byte_identity
+                        .compose_retail_exact_same_tu_instruction_hybrid_resize(
+                            composed, target_donor, instruction_donor,
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16),
+                                retail["length"],
+                            ),
+                            source.read_bytes(), target_source,
+                            instruction_source,
+                        )
+                    )
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [target_donor, instruction_donor])
+                elif (function["splice_class"]
                         == byte_identity
                         .SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS):
                     retail = function["retail_oracle"]

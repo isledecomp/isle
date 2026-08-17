@@ -771,3 +771,79 @@ ISLE remained 172/172 and CONFIG 111/111. Its report SHA-256 is
 `616b87401af356edb31b9d320f17482480a2eb0b10017169d5aa7df87ed972fe`
 and verdict SHA-256 is
 `407a0dfcdb5e99a8915e50566d216960b5f8c95f2277c712cb9b528cfcd3b623`.
+
+## 14. Class I — `retail_exact_same_tu_instruction_hybrid_resize`
+
+This class is the source-identical same-translation-unit sibling of Classes G
+and H. Two closed declaration-only carrier states compile the same effective
+target source. One supplies the resize closure, the other supplies only
+complete instructions, and the resulting hybrid enters the unchanged
+retail-exact same-slot composer:
+
+1. `prefix_forward_after_includes_extern` is the only admitted donor recipe.
+   It renders one typed forward-declaration run at byte zero and one typed
+   extern-object run immediately after the last include. The widths are fixed
+   at three and two digits. Exact prefix, adjacent-line and centered-context
+   witnesses authenticate both seats; the combined declaration bytes and full
+   rendered source are SHA/size/line pinned. Every introduced identifier must
+   be unique between the runs and absent from the effective source, so the
+   carrier cannot redeclare or make visible a name used by the program.
+2. A unique exact function marker selects the complete brace-balanced target
+   source through the physical LF after its closing brace. The range's bytes,
+   line count and significant tokens are pinned and must be identical in the
+   effective seed and both freshly rendered donor sources. The proof's exact
+   decorated owner is the composed same-mangled definition in all three
+   objects; no alternate source or retained object is admissible.
+3. Raw-manifest preflight inventories the carrier recipes themselves. Each is
+   bound exactly once in one translation unit: the target carrier has exactly
+   one primary use and the instruction carrier exactly one secondary use.
+   Ordinary, variant, repeated, swapped-role and unbound uses fail before
+   host-dependent validation. Both private donor objects are excluded from
+   the linked output.
+4. Seed and donors pin body and metadata hashes, section seat/count,
+   relocation/line counts, function/primary-COMDAT censuses and the complete
+   associative closure. The two donors must have identical topology and
+   semantic relocations. Each transfer is the same-offset whole instruction
+   in both bodies, certified by the exact-function COFF line sentinel and the
+   nearest-line-row containing-stream decoder, and may not overlap a
+   relocation operand. The hybrid changes only declared code bytes and keeps
+   the target carrier's entire metadata closure.
+5. The donor's rounded contribution span is authoritative. The canonical seed
+   may have occupied a smaller prior bucket, provided its byte length does not
+   exceed the declared donor span; requiring its old rounded span to match
+   would wrongly reject a genuine boundary-crossing resize. The unchanged
+   composer retains every canonical non-target byte while installing the
+   hybrid target closure. A target-bound retail image and complete ordered
+   relocation oracle prove the final body.
+
+The first customer is
+`0x100a66f0 ViewManager::ManageVisibilityAndDetailRecursively`. Its canonical
+pre-row seed is 557 bytes. The two source-identical declaration carriers use
+34 and 64 prefix declarations plus the same three after-include externs; they
+produce 561-byte target bodies
+`b1271a13524dc400bf0305b25b45d49fc8b9cff06bf5f4376cbf5c4b7bb97f2b`
+and
+`a3e8fd96e27f02f4ede351f764216c2361969b3552d423b2a2fc3362f529321e`.
+Their target topology is identical at section 116 of 250, with 11 relocations,
+28 line rows, 80 functions, 85 primary COMDATs and the complete
+`.debug$F`/`.debug$S` closure. One line-certified two-byte instruction at
+offsets 516--517 changes `3bc8` to `3bc1`, producing hybrid body SHA-256
+`01949ffd3e0c851db40055f6a1c5978091144dea8b2de977502762fe061c76e8`.
+The 561-byte donor rounds to the authoritative 576-byte linked span even
+though the 557-byte seed rounded to 560. All 11 relocations resolve to the
+pinned LEGO1 retail targets, and every non-target output byte remains the
+canonical seed's.
+
+The scratch packet objects were evidence only; the canonical runner freshly
+regenerated both donors from the checked-in effective source and the two
+manifest recipes without a pin drift. Discovery raised LEGO1 from 4874/4934
+to 4875/4934 with this sole gain and no loss; report SHA-256 is
+`e9e6f5413e72eceeec406ce46eab04dafa2ab50223a217ea7d9562fec384c5b9`.
+A marker-removed forced-fresh confirmation regenerated the seed, both donors
+and composition, held the identical 4875 accepted set, and left ISLE at
+172/172 and CONFIG at 111/111. Its LEGO1 report SHA-256 is
+`fda4683e20e1d7f4a03e8a080130f2d062720daeb905dd855cd590c7317042d1`
+and verdict SHA-256 is
+`32b792741c0bb1b7fe021b29c53e65aff7361d89992170ebfdb6a0b36765b9ea`.
+The final manifest SHA-256 is
+`ca98ce3721d3cfd7e54787e47c1843ec69ab771a30ed16cf01f23fb7c4a80176`.
