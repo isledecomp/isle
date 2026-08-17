@@ -606,6 +606,25 @@ after every bounded panel or full gate.
   `dfafbceacadb9d311d73dbeb0fac5df8afa2022937b17dfadd742c57cb47ac0b`.
   Repeating this exact seed/current-source cross is closed.
 
+- Exact-name upstream entropy replay is negative and sealed for
+  `0x1006c200` (animation-substitution map `_Insert`). Seed `834471940` used
+  the independently reconstructed authentic 1,401-byte LF declaration header
+  `d9d75147c09e3eab1a32dc7a741e814f97f30926b0b12c7897e87ee514c064bc`
+  at the historical pre-SmartHeap `/FI` seat on current effective source
+  `19f495a4...`. The sole successful compiler cell stayed at 678 bytes/body
+  `8b7106bd...`, with current relocation seats and coherent 678-byte
+  CodeView/FPO closure, rather than entering retail's 682-byte body orbit.
+  Function/COMDAT identities stayed 260/302, but 43 non-target runtime bodies,
+  three linker payloads and 21 section-shape entries changed. The seed did
+  move `BuildROIMap` naturally from 622 to retail length 617 at `nd=10`, and
+  moved anim-structure `_Insert` from 686 to 689/690, so those effects remain
+  useful state evidence but are not target donors. No third cell, link or
+  reccmp ran. Evidence is
+  `/private/tmp/codex-animsubst-seed834471940-fullruntime.n0d9c6fa/result.json`,
+  SHA-256
+  `efc6b30ebac680e5bfad72496f3625b288f19804d3b083fc8683fde010ea07d5`.
+  Repeating this exact seed/current-source cross is closed.
+
 - Accepted canonical gate: LEGO1 4880/4934, ISLE 172/172, CONFIG 111/111.
   The latest gain is `0x10040360 Act3Cop::FUN_10040360`. The checked-in
   source now expresses the fallback as a second `grec == NULL` guard and
