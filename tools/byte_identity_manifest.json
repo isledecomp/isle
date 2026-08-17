@@ -11758,6 +11758,419 @@
     "reason": "Closes FUN_100c6fa0 by importing one authenticated same-function instruction sequence from a typed current-source refactor while retaining seed metadata and every non-target byte.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/actors/pizzeria.cpp",
+   "source_sha256": "bc043bf23c91cce3f7ac10c34b1b4c5be7fda0f33ebbca3c7e55e40942ca8dc4",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_7ad610320a5d",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "donor_source_overlay",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "renderings": [
+       {
+        "path": "LEGO1/lego/legoomni/src/actors/pizzeria.cpp",
+        "clean_sha256": "4caa28d617dbc26d5827029c6a5b815d441b874c596cae888cb2eaa2a74bd71b",
+        "rendered_sha256": "78e39345a66fc3c2c348b9f3eb5febe9d99e2a64cb8cd0245dabe3d757aabc7d",
+        "operations": [
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "472beaf614c5bce938e1f34ce9c0ff313e777188cfd874a3c7860ab643348bf1",
+           "b": 0,
+           "at": "start"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 4,
+           "items": [
+            {
+             "k": "lines",
+             "n": 2,
+             "line": 1
+            },
+            {
+             "k": "fwd",
+             "id": "RkReF0",
+             "line": 3
+            }
+           ]
+          }
+         },
+         {
+          "op": "replace",
+          "id": "op_fixed_array_fill_loop",
+          "from": {
+           "ctx": "0b5273210b2ed7fedd31516d96ae596f522c13d7cfdeeda3412e9b93644d4d3e",
+           "line_before": "1bd6654c67117124337e0b9234d0eaad61314308686107632194bcc8df3b2b7e",
+           "line_after": "a12d2c3f57fc65989a7cd3a868db1e4014e7d2b27b86fbde112b2143b1aac7f2"
+          },
+          "to": {
+           "ctx": "b71ab1086acb8d301b2971d71f199803e1eaba88fdeb5cda0b401dc67c3d2171",
+           "line_before": "a12d2c3f57fc65989a7cd3a868db1e4014e7d2b27b86fbde112b2143b1aac7f2",
+           "line_after": "d10b36aa74a59bcf4a88185837f658afaf3646eff2bb16c3928d0e9335e945d2"
+          },
+          "removed": {
+           "sha256": "d1225c8579458534e7e997c574ed4f61897a7056785db394ca0bff01087a9e9b",
+           "size": 41
+          },
+          "gen": {
+           "k": "fixed_array_fill",
+           "array": "m_states",
+           "index": "i",
+           "index_type": "MxS32",
+           "count": 5,
+           "value": -1,
+           "declaration_indent": "\t"
+          }
+         }
+        ]
+       }
+      ],
+      "emission_policy": "donor_private_rendering_only",
+      "authenticity_rationale": "A typed fixed-array fill loop privately renders a logic-equivalent source form whose literal bound is tied to the pinned integral member-array declaration; only authenticated complete instructions from the same target function may supplement the seed object.",
+      "rendering_identity_sha256": "7ad610320a5d6381cc660d09095ebbc08186dd0e477f6a0a66005eeb9be0e3ba"
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "??0PizzeriaState@@QAE@XZ",
+     "donor": "d_7ad610320a5d",
+     "splice_class": "retail_exact_instruction_mosaic",
+     "expected_section_number": 17,
+     "expected_section_count": 75,
+     "expected_body_length": 264,
+     "expected_donor_body_length": 264,
+     "expected_relocation_count": 17,
+     "expected_line_count": 9,
+     "expected_donor_line_count": 8,
+     "expected_seed_body_sha256": "c287647b0b45f86c84b0888e4a7fc37385f9dfbe5e395a63eca8644fb0eda9d9",
+     "expected_donor_body_sha256": "12d517ae112fa47477a5f6e35e0361641ad502c057ef64df08aeef8160da48d6",
+     "expected_seed_metadata_sha256": "3553e5a63b4a10f0efc62c05767c0e4cfb7bfd63c26d2611decf3894a5aaecc3",
+     "expected_donor_metadata_sha256": "f018d60a4e9c36393ac8966f8b6aaf6c1185d8546343cd7cf53c97ef1117f332",
+     "expected_body_sha256": "12d517ae112fa47477a5f6e35e0361641ad502c057ef64df08aeef8160da48d6",
+     "instruction_ranges": [
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 186,
+       "end": 198,
+       "seed_bytes": "b8ffffffff66894e408d4e44",
+       "seed_sha256": "cd5920aa44dd6b49b34164b33532d7c58f8b885821e0dd47c96b28d67a8b758a",
+       "donor_bytes": "8d464466894e40b9ffffffff",
+       "donor_sha256": "501c541e69d8f1100572fe5e38f95d9f699cc66ae4e2926008dc588206e3347b",
+       "seed_instruction_lengths": [
+        5,
+        4,
+        3
+       ],
+       "donor_instruction_lengths": [
+        3,
+        4,
+        5
+       ]
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 202,
+       "end": 210,
+       "seed_bytes": "8945fc8901894104",
+       "seed_sha256": "8899e03e19b84a67d4ff85449530faba3090028f2d3de4e71b0f516c4dc20bfd",
+       "donor_bytes": "894dfc8908894804",
+       "donor_sha256": "ba52b1461f8bd6f47572ccd8f2d17b2abb319fae9da449f31c029e774c65cd3b",
+       "seed_instruction_lengths": [
+        3,
+        2,
+        3
+       ],
+       "donor_instruction_lengths": [
+        3,
+        2,
+        3
+       ]
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 211,
+       "end": 220,
+       "seed_bytes": "89410889410c894110",
+       "seed_sha256": "5461168f7d107857f739ce7365e547ee33f4876a5d002ae431058bd9e0b5df22",
+       "donor_bytes": "89480889480c894810",
+       "donor_sha256": "fecd9529215dc5495c8a23b8a0f144befb3b3055f2b2dd048cd29904d97c537b",
+       "seed_instruction_lengths": [
+        3,
+        3,
+        3
+       ],
+       "donor_instruction_lengths": [
+        3,
+        3,
+        3
+       ]
+      }
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10017af0",
+      "verdict": "MATCH",
+      "length": 264
+     },
+     "retail_relocations": [
+      {
+       "offset": 2,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 12,
+       "type": 6,
+       "addend": 0,
+       "target": "$L68335",
+       "target_section": 17,
+       "target_value": 246,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x10017be6"
+      },
+      {
+       "offset": 20,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 44,
+       "type": 20,
+       "addend": 0,
+       "target": "??0MxCore@@QAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100ae1a0"
+      },
+      {
+       "offset": 64,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7LegoState@@6B@",
+       "target_section": 20,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d46c0"
+      },
+      {
+       "offset": 74,
+       "type": 20,
+       "addend": 0,
+       "target": "??0Playlist@LegoState@@QAE@XZ",
+       "target_section": 25,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10017c00"
+      },
+      {
+       "offset": 103,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7PizzeriaState@@6B@",
+       "target_section": 19,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d5ee8"
+      },
+      {
+       "offset": 110,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_pepperActions@PizzeriaState@@2PAW4Script@IsleScript@@A",
+       "target_section": 3,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0ce8"
+      },
+      {
+       "offset": 117,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_mamaActions@PizzeriaState@@2PAW4Script@IsleScript@@A",
+       "target_section": 3,
+       "target_value": 16,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0cf8"
+      },
+      {
+       "offset": 124,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_papaActions@PizzeriaState@@2PAW4Script@IsleScript@@A",
+       "target_section": 3,
+       "target_value": 32,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0d08"
+      },
+      {
+       "offset": 143,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_nickActions@PizzeriaState@@2PAW4Script@IsleScript@@A",
+       "target_section": 3,
+       "target_value": 48,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0d18"
+      },
+      {
+       "offset": 162,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_lauraActions@PizzeriaState@@2PAW4Script@IsleScript@@A",
+       "target_section": 3,
+       "target_value": 64,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0d28"
+      },
+      {
+       "offset": 229,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 242,
+       "type": 20,
+       "addend": 0,
+       "target": "??1MxCore@@UAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100ae1e0"
+      },
+      {
+       "offset": 247,
+       "type": 6,
+       "addend": 0,
+       "target": "$T68361",
+       "target_section": 18,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100df570"
+      },
+      {
+       "offset": 252,
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "offset": 260,
+       "type": 20,
+       "addend": 0,
+       "target": "??1LegoState@@UAE@XZ",
+       "target_section": 28,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10005f40"
+      }
+     ],
+     "target_source_refactor": {
+      "kind": "fixed_array_fill_loop_v1",
+      "selector": "brace_balanced_function_after_marker_v1",
+      "start_marker": "// FUNCTION: LEGO1 0x10017af0",
+      "source_owner_mangled": "??0PizzeriaState@@QAE@XZ",
+      "seed_range_pin": {
+       "baseline_sha256": "c3eb4c04318a086bdf9110e6b09d43e6dde14a13ef2707aa79a1c97356fabb0a",
+       "baseline_size": 663,
+       "baseline_line_count": 11,
+       "baseline_significant_token_sha256": "15656c0c9ab7372117139af553f6ebbd90c6a62eccce2a30812d8cda49836f5a"
+      },
+      "donor_range_pin": {
+       "baseline_sha256": "94777c2e2a4dd236eaab698d233ad256cbbe1de66b9247678aa2d2cd9fd39432",
+       "baseline_size": 671,
+       "baseline_line_count": 11,
+       "baseline_significant_token_sha256": "826baa6264b050a1f3a7b7a7f8dafc1d23d4f1c8fd931877537ca6227efa49db"
+      },
+      "array_declaration": {
+       "path": "LEGO1/lego/legoomni/include/pizzeria.h",
+       "source_sha256": "c78ff339ff7a822fff143449d0c8cf055a862d67a96471064c9c66db022414a1",
+       "owner": "PizzeriaState",
+       "array": "m_states",
+       "element_type": "MxS32",
+       "extent": 5,
+       "direct_include_range_pin": {
+        "baseline_sha256": "02fa774acc52ce3ce8edf16d4f872cf51f559d5f694b870c7b9ad7bbebe88813",
+        "baseline_size": 22,
+        "baseline_line_count": 1,
+        "baseline_significant_token_sha256": "126fee173639080c90815b36f771fead7d1f23c744837d5d7820ac91bd3f19c1"
+       },
+       "declaration_range_pin": {
+        "baseline_sha256": "195a1609a3fa9993b486197b8f0c9fd747b1f6409b1504c5d8e7a69bfcff8264",
+        "baseline_size": 40,
+        "baseline_line_count": 1,
+        "baseline_significant_token_sha256": "1a7e5d846aa4a961ba644c613b3cd8b0f215421b30fbe95e9b6ddefc37df7f00"
+       }
+      },
+      "operation_ids": [
+       "op_fixed_array_fill_loop"
+      ]
+     }
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes PizzeriaState's constructor by importing three authenticated complete instruction sequences from a donor-only typed fixed-array fill loop while retaining the canonical translation unit, target metadata, and every non-target function byte.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -11832,8 +12245,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4871,
-    "accepted_row_identity_sha256": "4b9e710a061254fbe1b393fe1264482352e01792c5ae18854106e7cdc09c5a7e",
+   "exact_raw_1_0_count": 4872,
+   "accepted_row_identity_sha256": "03445110eaf07e0f5acf2302ff2ff16fe5ca53441c12591ae12877808d4c7aa7",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

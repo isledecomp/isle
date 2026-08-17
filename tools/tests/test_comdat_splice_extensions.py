@@ -755,6 +755,78 @@ class RetailExactInstructionMosaicTests(unittest.TestCase):
         )
         self.assertTrue(detail["retail_exact"])
 
+    def test_source_permutation_mosaic_keeps_a_changed_non_target_function(self):
+        seed, donor, function, retail, mosaic = self.fixture()
+        donor_coff = byte_identity.CoffObject(donor)
+        other = donor_coff.function_section(OTHER)
+        collateral_donor = bytearray(donor)
+        collateral_donor[other["raw_offset"]] ^= 0x5A
+        collateral_donor = bytes(collateral_donor)
+
+        seed_source = (
+            b"// SOURCE-PERMUTATION-START\nseed_form();\n"
+            b"// SOURCE-PERMUTATION-END\n"
+        )
+        donor_source = (
+            b"// SOURCE-PERMUTATION-START\ndonor_form();\n"
+            b"// SOURCE-PERMUTATION-END\n"
+        )
+
+        def pin(data):
+            start = data.index(b"// SOURCE-PERMUTATION-START")
+            end = data.index(b"// SOURCE-PERMUTATION-END")
+            selected = data[start:end]
+            return {
+                "baseline_sha256": hashlib.sha256(selected).hexdigest(),
+                "baseline_size": len(selected),
+                "baseline_line_count": selected.count(b"\n"),
+                "baseline_significant_token_sha256":
+                    byte_identity.source_overlay_significant_sha256(selected),
+            }
+
+        function["target_source_refactor"] = (
+            byte_identity.validate_target_source_refactor_proof({
+                "kind": "single_evaluation_bindings_v1",
+                "start_marker": "// SOURCE-PERMUTATION-START",
+                "end_marker": "// SOURCE-PERMUTATION-END",
+                "seed_range_pin": pin(seed_source),
+                "donor_range_pin": pin(donor_source),
+                "operation_ids": ["op_fixture_binding"],
+            }, "fixture.proof")
+        )
+        seed_coff = byte_identity.CoffObject(seed)
+        seed_primary = seed_coff.function_section(TARGET_SYMBOL)
+        donor_primary = donor_coff.function_section(TARGET_SYMBOL)
+        function.update({
+            "expected_donor_body_length": donor_primary["raw_size"],
+            "expected_donor_line_count": donor_primary["line_count"],
+            "expected_seed_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    seed_coff, seed_primary),
+            "expected_donor_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    donor_coff, donor_primary),
+        })
+        composed, _ = (
+            byte_identity.compose_retail_exact_source_instruction_mosaic(
+                seed, collateral_donor, function, retail,
+                seed_source, donor_source)
+        )
+        checked = byte_identity.CoffObject(composed)
+        checked_target = checked.function_section(TARGET_SYMBOL)
+        checked_other = checked.function_section(OTHER)
+        seed_other = seed_coff.function_section(OTHER)
+        collateral_coff = byte_identity.CoffObject(collateral_donor)
+        collateral_other = collateral_coff.function_section(OTHER)
+        self.assertEqual(byte_identity.coff_body(checked, checked_target),
+                         mosaic)
+        self.assertEqual(byte_identity.coff_body(checked, checked_other),
+                         byte_identity.coff_body(seed_coff, seed_other))
+        self.assertNotEqual(
+            byte_identity.coff_body(checked, checked_other),
+            byte_identity.coff_body(collateral_coff, collateral_other),
+        )
+
     def _multi_donor_fixture(self):
         seed, main, function, retail, _ = self.fixture(
             donor_range=(0, 3), donor_extra=(24, 27))
@@ -1534,6 +1606,20 @@ class SourcePermutationTests(unittest.TestCase):
         generator.update(extra)
         return byte_identity.validate_source_overlay_generator(generator, "gen")
 
+    def _fixed_array_generator(self, **overrides):
+        generator = {
+            "k": "fixed_array_fill",
+            "array": "slots",
+            "index": "cursor",
+            "index_type": "unsigned int",
+            "count": 7,
+            "value": -1,
+            "declaration_indent": "  ",
+        }
+        generator.update(overrides)
+        return byte_identity.validate_source_overlay_generator(
+            generator, "fixture.fixed_array")
+
     def _live_case(self):
         manifest = json.loads(
             (TOOLS / "byte_identity_manifest.json").read_text()
@@ -1590,6 +1676,29 @@ class SourcePermutationTests(unittest.TestCase):
         )
         return source, copy.deepcopy(donor["recipe"]), function
 
+    def _live_fixed_array_case(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text()
+        )
+        matches = [
+            (unit, function)
+            for unit in manifest["translation_units"]
+            for function in unit.get("functions", [])
+            if function.get("target_source_refactor", {}).get("kind")
+            == "fixed_array_fill_loop_v1"
+        ]
+        self.assertEqual(len(matches), 1)
+        unit, function = matches[0]
+        donor = next(item for item in unit["donors"]
+                     if item["id"] == function["donor"])
+        function = copy.deepcopy(function)
+        function["target_source_refactor"] = (
+            byte_identity.validate_target_source_refactor_proof(
+                function["target_source_refactor"], "proof"
+            )
+        )
+        return unit["source"], copy.deepcopy(donor["recipe"]), function
+
     def test_manifest_fields_render_one_binding_and_one_use(self):
         self.assertEqual(
             byte_identity.render_source_overlay_generator(self._generator()),
@@ -1627,6 +1736,261 @@ class SourcePermutationTests(unittest.TestCase):
             byte_identity.assert_source_permutations_are_donor_only(
                 {"generator": generator}
             )
+
+    def test_fixed_array_fill_is_closed_source_derived_and_donor_only(self):
+        generator = self._fixed_array_generator()
+        self.assertEqual(
+            byte_identity.render_fixed_array_fill_loop_input(
+                generator["params"]),
+            b"  memset(slots, -1, sizeof(slots));\n",
+        )
+        self.assertEqual(
+            byte_identity.render_source_overlay_generator(generator),
+            b"  for (unsigned int cursor = 0; cursor < 7; cursor++) "
+            b"slots[cursor] = -1;\n",
+        )
+        roles = byte_identity.source_overlay_expected_identifier_roles(
+            generator["kind"], generator["params"])
+        self.assertEqual(roles["emitted_identifiers"], [])
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "donor-only"):
+            byte_identity.assert_source_permutations_are_donor_only(
+                {"generator": generator})
+
+    def test_fixed_array_fill_refuses_schema_type_value_and_layout_escape(self):
+        mutations = (
+            {"value": 0},
+            {"count": 0},
+            {"count": 4097},
+            {"index_type": "const int"},
+            {"index_type": "int*"},
+            {"index_type": "ArbitraryCounter"},
+            {"nl": False},
+            {"text": "open source text"},
+            {"index": "slots"},
+        )
+        for mutation in mutations:
+            with self.subTest(mutation=mutation), self.assertRaises(
+                    byte_identity.ByteIdentityError):
+                self._fixed_array_generator(**mutation)
+
+    def test_source_refactor_donor_has_one_source_aware_primary_use(self):
+        byte_identity.require_source_refactor_donor_bindings(
+            {"d_refactor"}, ["d_refactor"], ["d_refactor"], [],
+            "fixture")
+
+        # A second ordinary function using the same donor would dispatch a
+        # composer with no source-refactor proof and could import collateral.
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "exactly one total primary"):
+            byte_identity.require_source_refactor_donor_bindings(
+                {"d_refactor"}, ["d_refactor", "d_refactor"],
+                ["d_refactor"], [], "fixture")
+
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "non-primary roles"):
+            byte_identity.require_source_refactor_donor_bindings(
+                {"d_refactor"}, ["d_refactor"], ["d_refactor"],
+                ["d_refactor"], "fixture")
+
+    def test_manifest_rejects_second_ordinary_use_of_live_refactor_donor(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        matches = [
+            (unit, function)
+            for unit in manifest["translation_units"]
+            for function in unit.get("functions", [])
+            if function.get("target_source_refactor", {}).get("kind")
+            == "fixed_array_fill_loop_v1"
+        ]
+        self.assertEqual(len(matches), 1)
+        unit, function = matches[0]
+        unit["functions"].append({
+            "mangled": "?OrdinaryReuseFixture@@YAXXZ",
+            "donor": function["donor"],
+            "splice_class": "equal_body_strict",
+        })
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary = Path(temporary).resolve()
+            manifest_path = temporary / "manifest.json"
+            build_dir = temporary / "build"
+            build_dir.mkdir()
+            manifest_path.write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "exactly one total primary"):
+                byte_identity.validate_manifest(
+                    manifest_path, ROOT, build_dir)
+
+    def test_fixed_array_declaration_requires_unique_direct_header_include(self):
+        include_line = b'#include "array_owner.h"\n'
+        include_pin = byte_identity.validate_source_overlay_range_pin({
+            "baseline_sha256": hashlib.sha256(include_line).hexdigest(),
+            "baseline_size": len(include_line),
+            "baseline_line_count": 1,
+            "baseline_significant_token_sha256":
+                byte_identity.source_overlay_significant_sha256(
+                    include_line),
+        }, "fixture.include_pin")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            (root / "include").mkdir()
+            (root / "source").mkdir()
+            header = root / "include" / "array_owner.h"
+            header.write_bytes(b"struct ArrayOwner {};\n")
+            declaration = {
+                "path": "include/array_owner.h",
+                "direct_include_range_pin": include_pin,
+            }
+            detail = byte_identity.require_direct_array_header_include(
+                root, "source/unit.cpp", include_line, declaration, header,
+                "fixture")
+            self.assertEqual(detail["array_declaration_include"],
+                             "array_owner.h")
+
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "does not directly include"):
+                byte_identity.require_direct_array_header_include(
+                    root, "source/unit.cpp", b'#include "other.h"\n',
+                    declaration, header, "fixture")
+
+            (root / "other").mkdir()
+            (root / "other" / "array_owner.h").write_bytes(
+                b"struct WrongOwner {};\n")
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "unique checked-in"):
+                byte_identity.require_direct_array_header_include(
+                    root, "source/unit.cpp", include_line, declaration,
+                    header, "fixture")
+
+    def test_fixed_array_owner_and_unshadowed_member_are_exact(self):
+        self.assertEqual(
+            byte_identity.decorated_member_owner_identifier(
+                "??0ArrayOwner@@QAE@XZ", "fixture"),
+            "ArrayOwner",
+        )
+        self.assertEqual(
+            byte_identity.decorated_member_owner_identifier(
+                "?Fill@ArrayOwner@@QAEXXZ", "fixture"),
+            "ArrayOwner",
+        )
+        self.assertEqual(
+            byte_identity.decorated_member_owner_identifier(
+                "?Fill@ArrayOwnerExtra@@QAEXXZ", "fixture"),
+            "ArrayOwnerExtra",
+        )
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "closed form"):
+            byte_identity.decorated_member_owner_identifier(
+                "?Fill@ArrayOwnerExtra@QAEXXZ", "fixture")
+
+        statement = b"  memset(slots, -1, sizeof(slots));\n"
+        byte_identity.require_fixed_array_member_use_is_unshadowed(
+            b"ArrayOwner::ArrayOwner() {\n" + statement + b"}\n",
+            statement, "slots", "fixture")
+        shadowed_sources = (
+            b"ArrayOwner::ArrayOwner(int slots) {\n" + statement + b"}\n",
+            b"ArrayOwner::ArrayOwner() {\n  int slots[7];\n"
+            + statement + b"}\n",
+        )
+        for source in shadowed_sources:
+            with self.subTest(source=source), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, "shadowed"):
+                byte_identity.require_fixed_array_member_use_is_unshadowed(
+                    source, statement, "slots", "fixture")
+
+    def test_live_fixed_array_fill_binds_extent_owner_and_fresh_index(self):
+        source, recipe, function = self._live_fixed_array_case()
+        detail = byte_identity.require_target_source_refactor_recipe_policy(
+            recipe, function, ROOT, source, "fixture")
+        self.assertEqual(detail["array_extent"], 5)
+        self.assertEqual(detail["array_declaration_include_owner"], source)
+        self.assertEqual(detail["array_member_source_occurrences"], 2)
+        self.assertEqual(detail["refactor_operation_ids"],
+                         ["op_fixed_array_fill_loop"])
+
+        rendered = byte_identity.render_donor_source_overlay(
+            recipe, ROOT)[source]
+        operation = next(
+            item for item in recipe["renderings"][0]["operations"]
+            if item.get("id") in
+            function["target_source_refactor"]["operation_ids"]
+        )
+        generator = byte_identity.validate_source_overlay_generator(
+            operation["gen"], "fixture.generator")
+        output = byte_identity.render_source_overlay_generator(generator)
+        original = byte_identity.render_fixed_array_fill_loop_input(
+            generator["params"])
+        self.assertEqual(hashlib.sha256(output).hexdigest(),
+                         "5e74cd70d4accadd59ab40111c51afdcb1b684979ab7345e232a10af2c4892fb")
+        self.assertEqual(rendered.count(output), 1)
+        seed = rendered.replace(output, original, 1)
+        source_detail = byte_identity.require_target_source_refactor_identity(
+            seed, rendered, function["target_source_refactor"], "fixture")
+        self.assertEqual(source_detail["seed_target_source_size"], 663)
+        self.assertEqual(source_detail["donor_target_source_size"], 671)
+
+        mismatched = copy.deepcopy(recipe)
+        mismatch_operation = next(
+            item for item in mismatched["renderings"][0]["operations"]
+            if item.get("id") in
+            function["target_source_refactor"]["operation_ids"]
+        )
+        mismatch_operation["gen"]["count"] -= 1
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "bound differs"):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                mismatched, function, ROOT, source, "fixture")
+
+        structurally_wrong_extent = copy.deepcopy(recipe)
+        extent_operation = next(
+            item for item in
+            structurally_wrong_extent["renderings"][0]["operations"]
+            if item.get("id") in
+            function["target_source_refactor"]["operation_ids"]
+        )
+        extent_operation["gen"]["count"] -= 1
+        extent_function = copy.deepcopy(function)
+        extent_function["target_source_refactor"][
+            "array_declaration"]["extent"] -= 1
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "declaration is absent"):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                structurally_wrong_extent, extent_function, ROOT, source,
+                "fixture")
+
+        wrong_element_type = copy.deepcopy(function)
+        wrong_element_type["target_source_refactor"]["array_declaration"][
+            "element_type"] = byte_identity.validate_source_overlay_cpp_type(
+                "unsigned int", "fixture.element_type")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "declaration is absent"):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                recipe, wrong_element_type, ROOT, source, "fixture")
+
+        stale_index = copy.deepcopy(recipe)
+        stale_operation = next(
+            item for item in stale_index["renderings"][0]["operations"]
+            if item.get("id") in
+            function["target_source_refactor"]["operation_ids"]
+        )
+        proof = function["target_source_refactor"]
+        clean = (ROOT / source).read_bytes()
+        target = byte_identity.select_source_permutation_window(
+            clean, proof, "fixture")
+        reserved = {
+            stale_operation["gen"]["array"],
+            stale_operation["gen"]["index"],
+        }
+        existing = next(
+            token for token, _, _ in byte_identity.source_overlay_tokens(target)
+            if byte_identity.SOURCE_OVERLAY_IDENTIFIER_RE.fullmatch(token)
+            and token not in reserved
+        )
+        stale_operation["gen"]["index"] = existing
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "not fresh"):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                stale_index, function, ROOT, source, "fixture")
 
     def test_equal_body_composer_has_no_source_proof_bypass(self):
         with self.assertRaisesRegex(byte_identity.ByteIdentityError,

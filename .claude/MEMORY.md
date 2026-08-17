@@ -65,8 +65,31 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-16)
 
-- Accepted canonical gate: LEGO1 4871/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is `0x10059dc0 _Tree<LegoTextureInfo*>::erase`. The canonical
+- Accepted canonical gate: LEGO1 4872/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is `0x10017af0 PizzeriaState::PizzeriaState`. The checked-in
+  whole-array `memset` remains the canonical source because landing its
+  logic-equivalent typed loop directly perturbs the already-exact `Serialize`
+  row. A donor-private `fixed_array_fill_loop_v1` rendering emits exactly
+  `for (MxS32 i = 0; i < 5; i++) m_states[i] = -1;`; its literal bound is
+  structurally tied to the SHA-pinned `MxS32 m_states[5]` member declaration
+  in the uniquely identified header that the target translation unit directly
+  includes. Exact decorated-owner binding, an unshadowed-member census, a
+  fresh index and a closed integral index-type set prevent the generic recipe
+  from weakening that equivalence proof. The donor also has exactly one
+  manifest-wide primary use, which is its source-aware binding; all secondary
+  roles are forbidden. The canonical seed and fresh donor
+  bodies are both 264 bytes with 17 equivalent semantic relocations; three
+  complete instruction sequences at offsets 186--197, 202--209 and 211--219
+  produce the retail-exact body SHA-256
+  `12d517ae112fa47477a5f6e35e0361641ad502c057ef64df08aeef8160da48d6`.
+  The final object retains the seed's nine-row line table, complete metadata
+  closure and every non-target byte; the eight-row donor is excluded from the
+  link. The forced-fresh confirmation produced exactly this gain with zero
+  losses; its report SHA-256 is
+  `38755b55e8f7ce764653e59ac74a2c7a1bf01f9305a730ab64708fe527ba7c9d`
+  and verdict SHA-256 is
+  `9ef9117b4bcbcf637d9163255f09e0dc2cbf9760f53d3c101d9a034cd3cdb43c`.
+  The preceding gain is `0x10059dc0 _Tree<LegoTextureInfo*>::erase`. The canonical
   1,103-byte `legomain.cpp` seed is resized through a fresh 1,102-byte
   declaration-only target donor with body SHA-256
   `c600bf89a868f041db33c3ca1c2b1ee9718c8a1a1be0c1bf1ac893e85ddd46ca`.

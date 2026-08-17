@@ -234,6 +234,7 @@ SOURCE_OVERLAY_LEAN_KINDS = {
     "bind_once": "single_evaluation_binding_source_permutation_v1",
     "for_init_decl": "for_initializer_declaration_reseat_v1",
     "capture_tail": "captured_pointer_tail_return_fragment_v1",
+    "fixed_array_fill": "fixed_array_fill_loop_v1",
 }
 
 
@@ -323,6 +324,9 @@ SOURCE_OVERLAY_KIND_POLICIES = {
     "captured_pointer_tail_return_fragment_v1": (
         "logic_equivalent_source_refactor",
         "captured_pointer_tail_return_fragment",
+    ),
+    "fixed_array_fill_loop_v1": (
+        "logic_equivalent_source_refactor", "fixed_array_fill_loop",
     ),
     "list_cursor_delete_emission_probe_v1": (
         "discarded_emission_probe", "list_cursor_delete_emission"
@@ -1088,6 +1092,63 @@ def validate_target_source_range_proof(value: object, context: str) -> dict:
     }
 
 
+FIXED_ARRAY_FILL_ELEMENT_TYPE_SPELLINGS = frozenset({
+    "char", "signed char", "unsigned char",
+    "short", "short int", "signed short", "signed short int",
+    "unsigned short", "unsigned short int",
+    "int", "signed", "signed int", "unsigned", "unsigned int",
+    "long", "long int", "signed long", "signed long int",
+    "unsigned long", "unsigned long int",
+    "MxS8", "MxU8", "MxS16", "MxU16", "MxS32", "MxU32",
+    "MxLong", "MxULong",
+})
+
+
+FIXED_ARRAY_FILL_INDEX_TYPE_SPELLINGS = (
+    FIXED_ARRAY_FILL_ELEMENT_TYPE_SPELLINGS
+    - {"char", "signed char", "unsigned char", "MxS8", "MxU8"}
+)
+
+
+def validate_fixed_array_declaration_proof(
+    value: object, context: str,
+) -> dict:
+    """Pin the actual integral array declaration that owns a loop bound."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "path", "source_sha256", "owner", "array", "element_type",
+        "extent", "direct_include_range_pin", "declaration_range_pin",
+    }, context)
+    element_type = validate_source_overlay_cpp_type(
+        value.get("element_type"), context + ".element_type")
+    require(render_source_overlay_cpp_type(element_type)
+            in FIXED_ARRAY_FILL_ELEMENT_TYPE_SPELLINGS,
+            f"{context}.element_type is not a closed integral type")
+    return {
+        "path": source_overlay_relative_path(
+            value.get("path"), context + ".path"),
+        "source_sha256": require_sha(
+            value.get("source_sha256"), context + ".source_sha256"),
+        "owner_identifier": _source_overlay_identifier(
+            value.get("owner"), context + ".owner"),
+        "array_identifier": _source_overlay_identifier(
+            value.get("array"), context + ".array"),
+        "element_type": element_type,
+        "extent": require_exact_int(
+            value.get("extent"), context + ".extent",
+            minimum=1, maximum=4096,
+        ),
+        "direct_include_range_pin": validate_source_overlay_range_pin(
+            value.get("direct_include_range_pin"),
+            context + ".direct_include_range_pin",
+        ),
+        "declaration_range_pin": validate_source_overlay_range_pin(
+            value.get("declaration_range_pin"),
+            context + ".declaration_range_pin",
+        ),
+    }
+
+
 def require_target_source_range_identity(
     seed_source: bytes, donor_source: bytes, proof: dict, context: str,
 ) -> dict:
@@ -1137,11 +1198,15 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
     elif kind in {
         "for_initializer_declaration_reseat_v1",
         "captured_pointer_tail_return_v1",
+        "fixed_array_fill_loop_v1",
     }:
-        exact_audit_keys(value, {
+        required_keys = {
             "kind", "selector", "start_marker", "source_owner_mangled",
             "seed_range_pin", "donor_range_pin", "operation_ids",
-        }, context)
+        }
+        if kind == "fixed_array_fill_loop_v1":
+            required_keys.add("array_declaration")
+        exact_audit_keys(value, required_keys, context)
         require(value.get("selector")
                 == "brace_balanced_function_after_marker_v1",
                 f"{context}.selector differs")
@@ -1177,6 +1242,10 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         require(len(operation_ids) == 5,
                 f"{context}.operation_ids must name the five tail-return "
                 "fragments")
+    if kind == "fixed_array_fill_loop_v1":
+        require(len(operation_ids) == 1,
+                f"{context}.operation_ids must name one array-fill "
+                "replacement")
     normalized = {
         "kind": kind,
         **markers,
@@ -1191,11 +1260,19 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
     if kind in {
         "for_initializer_declaration_reseat_v1",
         "captured_pointer_tail_return_v1",
+        "fixed_array_fill_loop_v1",
     }:
         normalized.update({
             "selector": value["selector"],
             "source_owner_mangled": value["source_owner_mangled"],
         })
+    if kind == "fixed_array_fill_loop_v1":
+        normalized["array_declaration"] = (
+            validate_fixed_array_declaration_proof(
+                value.get("array_declaration"),
+                context + ".array_declaration",
+            )
+        )
     return normalized
 
 
@@ -1218,6 +1295,7 @@ def select_source_permutation_window(
     require(proof["kind"] in {
                 "for_initializer_declaration_reseat_v1",
                 "captured_pointer_tail_return_v1",
+                "fixed_array_fill_loop_v1",
             }
             and proof["selector"]
             == "brace_balanced_function_after_marker_v1",
@@ -1347,6 +1425,261 @@ def render_for_initializer_declaration_reseat_output(params: dict) -> bytes:
     return render_for_initializer_declaration_reseat_input(inverse)
 
 
+def render_fixed_array_fill_loop_input(params: dict) -> bytes:
+    """Reconstruct the checked-in whole-array fill statement."""
+    indent = params["declaration_indent"]
+    array = params["array_identifier"]
+    return (
+        f"{indent}memset({array}, -1, sizeof({array}));\n"
+    ).encode("ascii")
+
+
+def render_fixed_array_fill_loop_output(params: dict) -> bytes:
+    """Render one bounded index loop equivalent to the whole-array fill."""
+    indent = params["declaration_indent"]
+    array = params["array_identifier"]
+    index = params["index_identifier"]
+    index_type = render_source_overlay_cpp_type(params["index_type"])
+    count = params["count"]
+    return (
+        f"{indent}for ({index_type} {index} = 0; {index} < {count}; "
+        f"{index}++) {array}[{index}] = -1;\n"
+    ).encode("ascii")
+
+
+def decorated_member_owner_identifier(mangled: str, context: str) -> str:
+    """Extract one exact class component from a closed MSVC member name."""
+    require(isinstance(mangled, str) and mangled.isascii(),
+            f"{context}: decorated member identity is invalid")
+    constructor = re.match(
+        r"^\?\?[01]([A-Za-z_][A-Za-z0-9_]*)@@", mangled)
+    ordinary = re.match(
+        r"^\?[A-Za-z_][A-Za-z0-9_]*@"
+        r"([A-Za-z_][A-Za-z0-9_]*)@@",
+        mangled,
+    )
+    match = constructor or ordinary
+    require(match is not None and match.end() < len(mangled),
+            f"{context}: decorated member owner is outside the closed form")
+    return match.group(1)
+
+
+def require_direct_array_header_include(
+    source_root: Path,
+    unit_source: str,
+    unit_data: bytes,
+    declaration: dict,
+    declaration_path: Path,
+    context: str,
+) -> dict:
+    """Bind a declaration proof to a unique direct quoted TU include."""
+    basename = PurePosixPath(declaration["path"]).name
+    require(basename and basename.isascii(),
+            f"{context}: declaration header basename is invalid")
+
+    # A basename-only quoted include is accepted only when it names exactly
+    # one ordinary, non-hidden source-tree file.  This prevents a recipe from
+    # pointing the declaration proof at an unrelated same-named header while
+    # preserving the source spelling the compiler actually consumes.
+    candidates = []
+    for candidate in source_root.rglob(basename):
+        relative = candidate.relative_to(source_root)
+        if any(part.startswith(".") for part in relative.parts):
+            continue
+        try:
+            metadata = candidate.lstat()
+            resolved = candidate.resolve(strict=True)
+        except OSError as error:
+            raise ByteIdentityError(
+                f"{context}: declaration include candidate is redirected: "
+                f"{error}"
+            ) from error
+        require(stat.S_ISREG(metadata.st_mode) and not candidate.is_symlink()
+                and resolved == candidate,
+                f"{context}: declaration include candidate is redirected or "
+                "non-regular")
+        candidates.append(candidate)
+    require(candidates == [declaration_path],
+            f"{context}: declaration header is not the unique checked-in "
+            "include identity")
+
+    wanted = ["#", "include", f'"{basename}"']
+    include_lines = [
+        line for line in unit_data.splitlines(keepends=True)
+        if [token for token, _, _ in source_overlay_tokens(line)] == wanted
+    ]
+    require(len(include_lines) == 1,
+            f"{context}: target translation unit does not directly include "
+            "its declaration header exactly once")
+    include_line = include_lines[0]
+    include_detail = require_source_overlay_range_pin(
+        include_line, declaration["direct_include_range_pin"],
+        context + " direct declaration include",
+    )
+    return {
+        "array_declaration_include": basename,
+        "array_declaration_include_owner": unit_source,
+        **include_detail,
+    }
+
+
+def require_fixed_array_member_use_is_unshadowed(
+    target_source: bytes, expected_input: bytes, array_identifier: str,
+    context: str,
+) -> dict:
+    """Confine the member name to the authenticated statement being replaced."""
+    expected_count = sum(
+        token == array_identifier
+        for token, _, _ in source_overlay_tokens(expected_input)
+    )
+    target_count = sum(
+        token == array_identifier
+        for token, _, _ in source_overlay_tokens(target_source)
+    )
+    require(expected_count == 2 and target_count == expected_count,
+            f"{context}: array member is shadowed or referenced outside its "
+            "authenticated fill statement")
+    return {"array_member_source_occurrences": target_count}
+
+
+def require_fixed_array_declaration_identity(
+    root, unit_source: str, unit_data: bytes, target_source: bytes,
+    expected_input: bytes, proof: dict, params: dict, context: str,
+) -> dict:
+    """Prove a literal loop bound equals one pinned integral array extent."""
+    declaration = proof["array_declaration"]
+    require(
+        declaration["array_identifier"] == params["array_identifier"]
+        and declaration["extent"] == params["count"],
+        f"{context}: array-fill bound differs from its declaration",
+    )
+
+    source_root = Path(root).resolve(strict=True)
+    path = source_overlay_logical_path(source_root, declaration["path"])
+    try:
+        metadata = path.lstat()
+        resolved = path.resolve(strict=True)
+    except OSError as error:
+        raise ByteIdentityError(
+            f"{context}: array declaration source is absent or redirected: "
+            f"{error}"
+        ) from error
+    require(stat.S_ISREG(metadata.st_mode) and not path.is_symlink()
+            and resolved == path and resolved.is_relative_to(source_root),
+            f"{context}: array declaration source is redirected or "
+            "non-regular")
+    data = path.read_bytes()
+    require(sha256_bytes(data) == declaration["source_sha256"],
+            f"{context}: array declaration source differs from its pin")
+
+    include_detail = require_direct_array_header_include(
+        source_root, unit_source, unit_data, declaration, path, context)
+    shadow_detail = require_fixed_array_member_use_is_unshadowed(
+        target_source, expected_input, declaration["array_identifier"],
+        context,
+    )
+
+    def significant(data: bytes) -> list[tuple[str, int, int]]:
+        return [
+            item for item in source_overlay_tokens(data)
+            if not item[0].startswith(("//", "/*"))
+        ]
+
+    target_tokens = significant(target_source)
+    opening = next((index for index, item in enumerate(target_tokens)
+                    if item[0] == "{"), None)
+    require(opening is not None,
+            f"{context}: array-fill source owner has no body")
+    qualifiers = [
+        index for index, item in enumerate(target_tokens[:opening])
+        if item[0] == "::" and index > 0
+    ]
+    require(qualifiers,
+            f"{context}: array-fill source owner is not qualified")
+    source_owner = target_tokens[qualifiers[-1] - 1][0]
+    require(
+        source_owner == declaration["owner_identifier"]
+        and source_owner == decorated_member_owner_identifier(
+            proof["source_owner_mangled"], context),
+        f"{context}: array declaration owner differs from the source owner",
+    )
+
+    tokens = significant(data)
+    owner_candidates = []
+    for index in range(len(tokens) - 2):
+        if (tokens[index][0] not in {"class", "struct"}
+                or tokens[index + 1][0] != declaration["owner_identifier"]):
+            continue
+        delimiter = next(
+            (cursor for cursor in range(index + 2, len(tokens))
+             if tokens[cursor][0] in {"{", ";"}),
+            None,
+        )
+        if delimiter is not None and tokens[delimiter][0] == "{":
+            depth = 1
+            close = None
+            for cursor in range(delimiter + 1, len(tokens)):
+                if tokens[cursor][0] == "{":
+                    depth += 1
+                elif tokens[cursor][0] == "}":
+                    depth -= 1
+                    if depth == 0:
+                        close = cursor
+                        break
+            require(close is not None,
+                    f"{context}: array declaration owner is unbalanced")
+            owner_candidates.append((delimiter, close))
+    require(len(owner_candidates) == 1,
+            f"{context}: array declaration owner is absent or ambiguous")
+
+    element_tokens = [
+        item[0] for item in significant(
+            render_source_overlay_cpp_type(
+                declaration["element_type"]).encode("ascii")
+        )
+    ]
+    wanted = element_tokens + [
+        declaration["array_identifier"], "[", str(declaration["extent"]),
+        "]", ";",
+    ]
+    owner_open, owner_close = owner_candidates[0]
+    matches = []
+    depth = 1
+    for index in range(owner_open + 1, owner_close):
+        token = tokens[index][0]
+        if token == "{":
+            depth += 1
+            continue
+        if token == "}":
+            depth -= 1
+            continue
+        if depth == 1 and [item[0] for item in
+                           tokens[index:index + len(wanted)]] == wanted:
+            matches.append((tokens[index][1],
+                            tokens[index + len(wanted) - 1][2]))
+    require(len(matches) == 1,
+            f"{context}: integral fixed-array declaration is absent or "
+            "ambiguous")
+    token_start, token_end = matches[0]
+    line_start = data.rfind(b"\n", 0, token_start) + 1
+    newline = data.find(b"\n", token_end)
+    line_end = len(data) if newline < 0 else newline + 1
+    declaration_line = data[line_start:line_end]
+    range_detail = require_source_overlay_range_pin(
+        declaration_line, declaration["declaration_range_pin"],
+        context + " array declaration",
+    )
+    return {
+        "array_declaration_path": declaration["path"],
+        "array_element_type": render_source_overlay_cpp_type(
+            declaration["element_type"]),
+        "array_extent": declaration["extent"],
+        **include_detail,
+        **shadow_detail,
+        **range_detail,
+    }
+
+
 CAPTURED_POINTER_TAIL_RETURN_ROLES = frozenset({
     "capture_declaration", "capture_assignment", "read_reseat",
     "return_to_goto", "tail_return",
@@ -1401,6 +1734,10 @@ def require_target_source_refactor_recipe_policy(
     compiler-state entropy.
     """
     proof = function["target_source_refactor"]
+    if proof["kind"] == "fixed_array_fill_loop_v1":
+        require(proof["source_owner_mangled"] == function["mangled"],
+                f"{context}: fixed-array fill owner must be the mosaic "
+                "target")
     validated = validate_donor_source_overlay_recipe(
         recipe, root, seed_outputs_touched=False
     )
@@ -1425,6 +1762,7 @@ def require_target_source_refactor_recipe_policy(
     expected = set(proof["operation_ids"])
     seen = set()
     tail_fragments = {}
+    fixed_array_detail = {}
     rendering = validated["renderings"][0]
     for operation in rendering["operations"]:
         operation_id = operation["id"]
@@ -1488,6 +1826,8 @@ def require_target_source_refactor_recipe_policy(
                     "single_evaluation_binding_source_permutation_v1",
                 "for_initializer_declaration_reseat_v1":
                     "for_initializer_declaration_reseat_v1",
+                "fixed_array_fill_loop_v1":
+                    "fixed_array_fill_loop_v1",
             }[proof["kind"]]
             require(operation["action"] == "replace"
                     and len(generators) == 1
@@ -1495,13 +1835,31 @@ def require_target_source_refactor_recipe_policy(
                     and operation_id not in seen,
                     f"{context}: refactor operation {operation_id} differs")
             params = generators[0]["params"]
-            identifier = params["identifier"]
+            identifier = (
+                params["index_identifier"]
+                if proof["kind"] == "fixed_array_fill_loop_v1"
+                else params["identifier"]
+            )
             if proof["kind"] == "single_evaluation_bindings_v1":
                 require(identifier not in target_tokens
                         and identifier not in refactor_identifiers,
                         f"{context}: refactor local is not fresh: "
                         f"{identifier}")
                 expected_input = render_single_evaluation_binding_input(params)
+            elif proof["kind"] == "fixed_array_fill_loop_v1":
+                require(identifier not in target_tokens
+                        and identifier not in refactor_identifiers,
+                        f"{context}: array-fill index is not fresh: "
+                        f"{identifier}")
+                require(params["array_identifier"] in target_tokens,
+                        f"{context}: array-fill target is outside its source "
+                        "owner")
+                expected_input = render_fixed_array_fill_loop_input(params)
+                fixed_array_detail = require_fixed_array_declaration_identity(
+                    root, unit_source, clean, target_range, expected_input,
+                    proof, params,
+                    context + " fixed-array declaration",
+                )
             else:
                 require(identifier not in refactor_identifiers,
                         f"{context}: reseated iterator is repeated: "
@@ -1634,6 +1992,7 @@ def require_target_source_refactor_recipe_policy(
         "refactor_operation_ids": sorted(seen),
         "refactor_local_identifiers": sorted(refactor_identifiers),
         "entropy_identifier_count": len(introduced_identifiers),
+        **fixed_array_detail,
     }
 
 
@@ -2337,6 +2696,14 @@ def source_overlay_expected_identifier_roles(
                 ).encode("ascii")
             )
             if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", token)
+        )
+    elif kind == "fixed_array_fill_loop_v1":
+        declared.add(params["index_identifier"])
+        referenced.update({
+            params["array_identifier"], params["index_identifier"],
+        })
+        referenced.update(
+            source_overlay_named_type_identities(params["index_type"])
         )
     elif kind == "captured_pointer_tail_return_fragment_v1":
         role = params["role"]
@@ -3125,6 +3492,48 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
             "end_member": _source_overlay_identifier(
                 params.get("end"), param_context + ".end"),
             "indentation": indentation,
+        }
+    elif kind == "fixed_array_fill_loop_v1":
+        require(not layout,
+                f"{context}: a fixed-array fill loop cannot carry layout "
+                "overrides")
+        exact_audit_keys(params, {
+            "array", "index", "index_type", "count", "value",
+            "declaration_indent",
+        }, param_context)
+        array = _source_overlay_identifier(
+            params.get("array"), param_context + ".array")
+        index = _source_overlay_identifier(
+            params.get("index"), param_context + ".index")
+        require(array != index,
+                f"{param_context}.index must differ from the array")
+        index_type = validate_source_overlay_cpp_type(
+            params.get("index_type"), param_context + ".index_type")
+        require(not index_type["base_const"]
+                and not index_type["indirection"]
+                and not index_type["trailing_const"]
+                and render_source_overlay_cpp_type(index_type)
+                in FIXED_ARRAY_FILL_INDEX_TYPE_SPELLINGS,
+                f"{param_context}.index_type is not a closed, bounded "
+                "integral type")
+        require(type(params.get("value")) is int
+                and params["value"] == -1,
+                f"{param_context}.value must be exactly -1")
+        indentation = params.get("declaration_indent")
+        require(isinstance(indentation, str) and indentation.isascii()
+                and 1 <= len(indentation) <= 32
+                and set(indentation) <= {" ", "\t"},
+                f"{param_context}.declaration_indent differs")
+        normalized = {
+            "array_identifier": array,
+            "index_identifier": index,
+            "index_type": index_type,
+            "count": require_exact_int(
+                params.get("count"), param_context + ".count",
+                minimum=1, maximum=4096,
+            ),
+            "value": -1,
+            "declaration_indent": indentation,
         }
     elif kind == "captured_pointer_tail_return_fragment_v1":
         role = params.get("role")
@@ -4941,6 +5350,8 @@ def render_source_overlay_generator(
         result = render_single_evaluation_binding_output(params)
     elif kind == "for_initializer_declaration_reseat_v1":
         result = render_for_initializer_declaration_reseat_output(params)
+    elif kind == "fixed_array_fill_loop_v1":
+        result = render_fixed_array_fill_loop_output(params)
     elif kind == "captured_pointer_tail_return_fragment_v1":
         result = render_captured_pointer_tail_return_output(params)
     elif kind == "empty_compound_statements_v1":
@@ -8423,6 +8834,8 @@ def validate_manifest(
     require(type(manifest.get("schema")) is int
             and manifest.get("schema") == SCHEMA_VERSION,
             "unsupported byte-identity schema")
+    require_manifest_source_refactor_role_preflight(
+        manifest, "manifest source-refactor role preflight")
     require(manifest.get("phase") == PHASE, f"manifest phase must be {PHASE}")
     diagnostic_policy = manifest.get("diagnostic_policy")
     require(
@@ -9128,6 +9541,10 @@ def validate_manifest(
     recipe_registry = {}
     recipe_order = []
     retail_identities = set()
+    all_refactor_recipe_ids = set()
+    all_primary_donor_ids = []
+    all_bound_refactor_recipe_ids = []
+    all_non_primary_donor_ids = []
     for unit_index, unit in enumerate(translation_units):
         context = f"translation_units[{unit_index}]"
         require(isinstance(unit, dict), f"{context} must be an object")
@@ -9370,12 +9787,14 @@ def validate_manifest(
                             "single_evaluation_binding_source_permutation_v1",
                             "for_initializer_declaration_reseat_v1",
                             "captured_pointer_tail_return_fragment_v1",
+                            "fixed_array_fill_loop_v1",
                         }
                         for generator in _source_overlay_generators(
                             validated_recipe
                         )
                     ):
                         refactor_recipe_ids.add(recipe_id)
+                        all_refactor_recipe_ids.add(recipe_id)
                     identity = sha256_bytes(
                         canonical_json_bytes(recipe["renderings"]))
                     require(
@@ -9862,6 +10281,7 @@ def validate_manifest(
         bound_refactor_recipe_ids = []
         primary_donor_ids = []
         clean_cross_tu_instruction_donor_ids = []
+        non_primary_donor_ids = []
         allowed_function_keys = {
             "mangled", "donor", "splice_class", "expected_section_number",
             "expected_seed_length", "expected_donor_length", "expected_linked_span",
@@ -9946,6 +10366,7 @@ def validate_manifest(
                     )
                     clean_cross_tu_instruction_donor_ids.append(
                         instruction_donor_id)
+                    non_primary_donor_ids.append(instruction_donor_id)
                     positive_ints = (
                         "expected_seed_length", "expected_donor_length",
                         "expected_linked_span",
@@ -10147,6 +10568,7 @@ def validate_manifest(
                                     and variant_id not in variant_ids,
                                     f"{variant_context}.donor differs")
                             variant_ids.add(variant_id)
+                            non_primary_donor_ids.append(variant_id)
                             function_recipe_ids.add(variant_id)
                             require_instruction_mosaic_donor_recipe(
                                 local_recipes[variant_id],
@@ -10585,12 +11007,16 @@ def validate_manifest(
             )
             require(function_recipe_ids == local_recipe_ids,
                     f"{context}: every compiler donor must own at least one function")
-        require(
-            set(bound_refactor_recipe_ids) == refactor_recipe_ids
-            and len(bound_refactor_recipe_ids) == len(refactor_recipe_ids),
-            f"{context}: every source-permutation donor must be bound exactly "
-            "once to its authenticated retail-exact source refactor",
+        require_source_refactor_donor_bindings(
+            refactor_recipe_ids,
+            primary_donor_ids,
+            bound_refactor_recipe_ids,
+            non_primary_donor_ids,
+            context,
         )
+        all_primary_donor_ids.extend(primary_donor_ids)
+        all_bound_refactor_recipe_ids.extend(bound_refactor_recipe_ids)
+        all_non_primary_donor_ids.extend(non_primary_donor_ids)
 
         completion = unit.get("completion")
         require(isinstance(completion, dict), f"{context}.completion must be an object")
@@ -10634,6 +11060,14 @@ def validate_manifest(
                     "completion": completion["state"],
                 }
             )
+
+    require_source_refactor_donor_bindings(
+        all_refactor_recipe_ids,
+        all_primary_donor_ids,
+        all_bound_refactor_recipe_ids,
+        all_non_primary_donor_ids,
+        "manifest",
+    )
 
     for recipe_id, registered in recipe_registry.items():
         if (registered["recipe"].get("kind")
@@ -12560,6 +12994,83 @@ def require_clean_current_source_cross_tu_bindings(
     )
 
 
+def require_source_refactor_donor_bindings(
+    refactor_recipe_ids: set[str],
+    primary_donor_ids: list[str],
+    bound_refactor_recipe_ids: list[str],
+    non_primary_donor_ids: list[str],
+    context: str,
+) -> None:
+    """Confine each source-refactor rendering to its one proved primary use."""
+    refactor_ids = set(refactor_recipe_ids)
+    primary_counts = Counter(primary_donor_ids)
+    bound_counts = Counter(bound_refactor_recipe_ids)
+    non_primary_counts = Counter(non_primary_donor_ids)
+    require(
+        set(bound_counts) == refactor_ids
+        and all(count == 1 for count in bound_counts.values()),
+        f"{context}: every source-permutation donor must be bound exactly "
+        "once to its authenticated source-aware composer",
+    )
+    require(
+        all(primary_counts[recipe_id] == 1 for recipe_id in refactor_ids),
+        f"{context}: every source-permutation donor must have exactly one "
+        "total primary donor use",
+    )
+    forbidden = sorted(
+        recipe_id for recipe_id in refactor_ids
+        if non_primary_counts[recipe_id]
+    )
+    require(
+        not forbidden,
+        f"{context}: source-permutation donors may not be reused in variant, "
+        f"instruction, or other non-primary roles: {forbidden}",
+    )
+
+
+def require_manifest_source_refactor_role_preflight(
+    manifest: dict, context: str,
+) -> None:
+    """Reject source-aware donor reuse before any external manifest checks."""
+    primary_donor_ids = []
+    bound_refactor_recipe_ids = []
+    non_primary_donor_ids = []
+    units = manifest.get("translation_units")
+    if not isinstance(units, list):
+        return
+    for unit in units:
+        if not isinstance(unit, dict):
+            continue
+        functions = unit.get("functions")
+        if not isinstance(functions, list):
+            continue
+        for function in functions:
+            if not isinstance(function, dict):
+                continue
+            donor_id = function.get("donor")
+            if isinstance(donor_id, str):
+                primary_donor_ids.append(donor_id)
+                if "target_source_refactor" in function:
+                    bound_refactor_recipe_ids.append(donor_id)
+            instruction_donor = function.get("instruction_donor")
+            if isinstance(instruction_donor, str):
+                non_primary_donor_ids.append(instruction_donor)
+            variants = function.get("donor_variants")
+            if isinstance(variants, list):
+                non_primary_donor_ids.extend(
+                    item["donor"] for item in variants
+                    if isinstance(item, dict)
+                    and isinstance(item.get("donor"), str)
+                )
+    require_source_refactor_donor_bindings(
+        set(bound_refactor_recipe_ids),
+        primary_donor_ids,
+        bound_refactor_recipe_ids,
+        non_primary_donor_ids,
+        context,
+    )
+
+
 def require_target_bound_retail_image(
     images: object,
     target: str,
@@ -14132,6 +14643,7 @@ def assert_source_permutations_are_donor_only(overlay: object) -> None:
                 "single_evaluation_binding_source_permutation_v1",
                 "for_initializer_declaration_reseat_v1",
                 "captured_pointer_tail_return_fragment_v1",
+                "fixed_array_fill_loop_v1",
                 "dead_local_linear_updates_v1",
                 "inline_default_constructor_dead_updates_v1",
             },

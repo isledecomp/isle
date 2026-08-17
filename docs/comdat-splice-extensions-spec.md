@@ -563,3 +563,54 @@ the target donor's relocation/line/debug/FPO metadata and the canonical seed's
 non-target contents. A forced-fresh confirmation raised LEGO1 from 4870/4934
 to 4871/4934 with exactly that gain and zero losses; ISLE remains 172/172 and
 CONFIG 111/111.
+
+## 11. Typed fixed-array-fill source-permutation profile
+
+`fixed_array_fill_loop_v1` is a closed source-derived profile of Class E. It
+does not admit arbitrary statement text:
+
+1. Its six manifest parameters name one array, one fresh local index, one
+   closed integral index type, a literal bound, the exact value `-1`, and
+   indentation. The inverse renderer must reproduce the complete checked-in
+   `memset(array, -1, sizeof(array));` line byte-for-byte; the forward renderer
+   emits exactly one `for` line. Layout overrides and extra fields are refused.
+2. The literal bound is not trusted independently. A whole-file-SHA-pinned
+   header proof must identify one unique depth-one integral member-array
+   declaration with the same array name and extent. The declaration line is
+   byte/token pinned, its header must be the unique ordinary checked-in file
+   of that basename, and the target translation unit must directly include it
+   through one exact pinned quoted-include line.
+3. The source class named by the selected brace-balanced function window must
+   equal the declaration owner and the exact owner component extracted from a
+   closed MSVC constructor/destructor/ordinary-member decoration. Substring
+   owner matches are forbidden. The array identifier may occur in that window
+   only in the two positions of the authenticated `memset`; a same-named
+   parameter, local, or other reference refuses, preventing declaration
+   shadowing from invalidating the extent proof.
+4. The index type is selected from a closed integral spelling set wide enough
+   for the admitted 1--4096 extent, and the index identifier must be absent
+   from the complete target window. The value is exactly `-1`; pointer,
+   const-qualified, class, arbitrary named and eight-bit index types are
+   rejected.
+5. The permutation is donor-only and manifest-wide role confined: its recipe
+   has exactly one total primary donor use, that use is the one source-aware
+   binding, and variant, instruction-donor or other non-primary reuse is
+   forbidden. The checked-in/effective seed translation unit remains
+   unchanged, the donor object is excluded from the link, and the instruction
+   mosaic retains every seed byte outside authenticated complete target
+   instructions, including all non-target functions and seed
+   relocation/line/debug/EH metadata.
+
+The first customer is `0x10017af0 PizzeriaState::PizzeriaState`. Landing the
+typed loop directly perturbs the already-exact `Serialize`, so the canonical
+source retains its whole-array `memset`. A fresh private rendering emits
+`for (MxS32 i = 0; i < 5; i++) m_states[i] = -1;`, with `5` structurally bound
+to the pinned `MxS32 m_states[5]` declaration in the directly included header.
+The seed and donor are both 264 bytes with 17 equivalent semantic
+relocations. Three complete instruction sequences at offsets 186--197,
+202--209 and 211--219 produce body SHA-256
+`12d517ae112fa47477a5f6e35e0361641ad502c057ef64df08aeef8160da48d6`.
+The final object keeps the canonical seed's nine-row line table and metadata
+closure; the fresh eight-row donor is only an instruction source. The
+forced-fresh confirmation raised LEGO1 from 4871/4934 to 4872/4934 with
+exactly this gain and zero losses; ISLE remains 172/172 and CONFIG 111/111.
