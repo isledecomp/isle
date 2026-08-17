@@ -1572,3 +1572,82 @@ bodies and semantic relocations, the complete function/COMDAT identity
 universe, target closure, and non-target linker payload. Only after that
 control passes may one sole scoped-entry variant be compiled against it; do
 not reuse or count the invalid control as candidate evidence.
+
+## `0x100166a0 JetskiRace::HandlePathStruct` static source seal (2026-08-17)
+
+The final 645-byte retail body is not reachable through any remaining
+authentic, logic-neutral first-party source spelling in the available corpus.
+Current and retail each contain 166 instructions. After relocation
+normalization, their complete semantic residual is exactly 22 bytes: 18 bytes
+are a whole-function register-role exchange in which current keeps `p_param`
+in EBX and `paramData` in EBP while retail keeps `p_param` in EBP and
+`paramData` in EBX; the other four bytes are two equivalent comparison
+directions in the repeated opponent-1 score test (`cmp ecx,eax; jle/jg` in
+current versus `cmp eax,ecx; jge/jl` in retail). The register-role byte offsets
+are `0x0c, 0x10, 0x14, 0x1e, 0x46, 0x51, 0x5f, 0x1dc, 0x1e7, 0x1ee,
+0x1f9, 0x1ff, 0x22b, 0x232, 0x235, 0x240, 0x246, 0x26a`; the comparison
+bytes are `0xf2, 0xf3, 0x105, 0x106`. Size, instruction count, frame/slots,
+operation order, branches, calls, relocation semantics, and metadata otherwise
+agree.
+
+The canonical source is pinned by SHA-256
+`5ec10c162fd6da9dda7712a6b4904440232d69e3c24b11c99ba78078bfc2c1fd`
+(Git blob `7c3b7b684e0a47da4ded8fc27ea3c3f84e45ff8d`); the 2,840-character
+function text is
+`4ee218f761f18e578ebea6561ccc32a68e3c90bcfad5b332fdd48b6725b24c56`.
+The current object target is 645 bytes/body
+`3cfc39b082a369ab922f469ec5af4595b5f9d9aa2c418364c13be44a6b7bffa3`
+with 29 relocations, 52 line records, and `.debug$S + .debug$F` closure. The
+retail raw body is
+`3350a05345ad7706f5f289c2d4c8dcc608af5dfd2b2d332b4bf99eaad3e14ac1`;
+its relocation-objectized form is
+`a9c421e059b6af0ce01a94d06b3b690287a0359a0f2ee2191227450362745227`.
+
+BETA10 is an earlier 611-byte `/Od` structure, with nested trigger/data
+switches, no `sender` local, and an extra `scriptId` local, so it is not a
+structural oracle for the final build. It does authenticate player-first score
+comparison spelling. That exact retained spelling was already tested and was
+bit-inert across all 58 translation-unit bodies; the Jetski target remained at
+masked distance 22. The best canonical-source retained compiler carrier fixes
+only the four comparison bytes and leaves all 18 EBX/EBP bytes (645-byte body
+`d0ac0f7065bed01825664b79c5faa8b3267290c54c4c76afd4b67cb682bf999a`,
+masked distance 18), proving that carrier state closes only one component and
+is not a source mechanism for the residual.
+
+The complete Git census covered 39 path-touching commits and 65 unique
+reachable blobs across all four historical path seats. Thirty-three blobs
+contain the address seat: 26 implemented states and seven stubs. Of the 26
+implemented states, 24 preserve the relevant final inline-score lifetime,
+declaration order, opponent-first comparisons, and control structure. The
+remaining two briefly reconstruct an inferred `PossiblyGetPlaceOfPlayer`
+helper between commits `fe8e56ba470b74fc84ac4738ecdce676ac8c3bb8` and
+`0aa5e010ae42b9e14dd41e10ba062a1428c75759`; this is repository
+reconstruction history, not authenticated 1997 source, and BETA directly
+contains the comparisons rather than such a helper. A further 193 unreachable
+commits and 1,155 blobs contain no additional source text; their sole old
+same-symbol object has the wrong 1,074-byte body.
+
+The retained source census searched the repository, build tree,
+`/private/tmp`, and `isle-tools`: 2,392 paths contain the current signature,
+with zero extraction errors and five token states. Those are 2,386 canonical
+copies, one exact BETA comparison flip, two older inline-score states, and
+three stubs. No declaration-order, lifetime, sender-inline, `paramData`-type,
+condition-order, or other target variant exists. The corresponding object
+census found 2,332 symbol-bearing `.obj` paths: 2,330 definitions, two
+references, and zero parse errors. The definitions collapse to seven raw or
+masked bodies and contain zero retail-objectized exact matches; 2,315 are 645
+bytes and 15 are wrong-length 655-byte bodies. Every definition has exactly 29
+relocations, 52 line records, and `.debug$S + .debug$F` closure. Among the
+645-byte definitions the complete masked-distance histogram is `nd18=108`,
+`nd22=1426`, `nd25=781`. The 655-byte objects are same-TU collateral, not a
+Jetski source lead and not evidence for the separately sealed CarRace
+compiler-context route.
+
+**Seal:** do not retry comparison flips, helper restoration,
+declaration/lifetime/order/type changes, sender inlining, carrier grids, or
+CarRace-context variants. Reopen only for authenticated final-release
+source/PDB/preprocessed-TU evidence proving a different Jetski lifetime or
+helper topology, or authenticated original compiler/PCH/environment state
+that naturally emits the complete 645-byte retail body with exact
+29-relocation/52-line `.debug$S + .debug$F` closure. No compile, Wine, link,
+reccmp, source, or shared-state mutation was used for this static seal.
