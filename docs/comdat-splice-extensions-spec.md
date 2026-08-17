@@ -915,3 +915,89 @@ and verdict SHA-256 is
 `62e74837bf86d0430cd1047af4b044db6aacd2532fb46c4d5d90e25ad09755c0`.
 The final manifest SHA-256 is
 `ba5dca4ab7df9f4331fd973a28661f828f0ff2c95c9e820fec62b826ac2359ae`.
+
+## 16. Class E source-refactor FPO branch
+
+A source permutation may feed an instruction mosaic with classic FPO metadata
+only through a second closure profile that is mutually exclusive with the
+ordinary declaration-carrier FPO profile:
+
+1. The generator and its inverse have closed typed schemas and no free source
+   text. For the fixed-array shuffle profile, authenticated include edges bind
+   the owning class, integral typedefs, array element type and literal extent
+   to the compiled TU. The selected brace-balanced owner must contain the
+   unique exact indexed loop, a fresh generated pointer, unshadowed locals and
+   an authenticated next overwrite of the changed loop index. These facts
+   prove the indexed and pointer/countdown traversals visit the same 0-based
+   element sequence, make one identical random call per element, preserve the
+   swap-equals-index alias case and leave no observable changed exit state.
+2. Raw preflight, normalized per-TU checks and manifest-wide role closure
+   require exactly one primary use, exactly one source-aware FPO binding and
+   no ordinary, variant, instruction, secondary, repeated, unbound or
+   alternate-composer use. All witness headers reject effective overlays. The
+   fresh donor is compiled only from the owning checked-in source plus its
+   canonical overlay replay and private typed operation, then excluded from
+   every archive and link input.
+3. Seed and donor pin their primary bodies, metadata and complete line tables,
+   equal function/COMDAT censuses and the exact `.debug$F`/`.debug$S` closure.
+   The FPO body and parsed record must be identical, with `cbProcSize` equal to
+   the primary length. CodeView bodies and sizes are pinned separately so an
+   authenticated source rewrite may change only its debug tail; their common
+   `S_*PROC32` prefix, procedure tuple and semantic child relocations remain
+   identical. Output metadata and both children are the seed's byte-for-byte.
+4. Each imported range is independently decoded in seed and donor from the
+   nearest exact-function COFF line row, and the decoded partitions must equal
+   the manifest vectors. The source-shuffle extension admits only `8d` with a
+   valid ModRM, `e8 rel32`, `99`, one-byte `4b`/`4f`, and a single `66` prefix
+   restricted to `8b`/`89`, in addition to the already accepted live forms.
+   Unsupported or repeated prefixes, truncated operands, mid-instruction
+   endpoints, wrong partitions and any relocation overlap fail closed.
+5. Composition copies only the authenticated donor instructions into the
+   canonical seed. The complete ordered retail relocation oracle and masked
+   retail body prove exact code. The output must retain the seed's size,
+   metadata, line and relocation tables, closure, symbol/function/COMDAT
+   universe and every non-target byte; the donor is explicitly excluded.
+
+The first customer is
+`0x1004bd10 MxTransitionManager::DissolveTransition`. The 438-byte seed and
+donor occupy section 55 of 79 with eight relocations, 42 and 44 line rows, 23
+functions and 28 primary COMDATs. Their body SHA-256 values are
+`9850d0b4a91610ecea9aacf0e0822b7fcd26e98f8ed7ceebf9a0ad031efc65b6`
+and
+`d8dcb9786d75ee60e3a18e12920ebc47cf8835c9fa9e9faf3572c8eec4bc61ac`.
+The exact imported half-open ranges are `[60,63)`, `[63,68)`, `[68,71)`,
+`[77,81)`, `[88,89)` and `[96,100)`; changed offsets are 61, 63, 69, 79,
+88 and 98. The relocation operand at `[72,76)` remains deliberately outside
+the ranges. The resulting body is the donor body exactly, while seed metadata,
+the 16-byte FPO record and 206-byte CodeView child remain authoritative; the
+pinned donor CodeView child is 221 bytes and is evidence only.
+
+The retained packet donor compiled through a long projected source path, but
+the production runner compiles relative `s.cpp`. The shorter `.file` record
+changes only raw symbol indices (402 to 387 symbol records and target index 297
+to 282). Replacing current raw symbol references with their packet indices
+exactly reconstructs all four packet hashes. Accordingly the authenticated
+runner pins are donor line SHA-256
+`a6c20283483e9ea8cdee4ada86d2af06f14fd31b998e544557b151c416c3056e`,
+debug-F relocation SHA-256
+`f8769d95e97f98c86873b82af3fa0cd591fd445342d641bb79a3b83161cbeb98`,
+debug-S relocation SHA-256
+`07ef049c6ddc18fe99b689f9490bba24729e321f4173bd3cc59512cc27fbeaf1`
+and donor metadata SHA-256
+`427ca9c51f423b36608cd1a0cc97fe2ea57afa70b3f1fc3c0f307fdda4780de7`.
+All bodies, post-sentinel line rows, semantic code/child relocations,
+FPO/CodeView facts and function/COMDAT identities are unchanged.
+
+Discovery raised LEGO1 from 4876/4934 to 4877/4934 with this sole gain and no
+loss; report SHA-256 is
+`94f2d6dd913a3ef7b26b2d88e4dd8abbc6c96f6db028826cf228d9da787d63de`.
+A marker-removed forced-fresh confirmation regenerated the source donor and
+composition, held the identical 4877 accepted set with zero delta, and left
+ISLE at 172/172 and CONFIG at 111/111. The regenerated marker SHA-256 is
+`d71343772e8432cbb113fc6bb416770027894e7bffb61412ba32059b0db077fd`;
+the confirmation LEGO1 report SHA-256 is
+`496a060d0b3445c5e4961c45367590748485e64ea6ec5d2e6241332cc05fa15b`,
+verdict SHA-256 is
+`edac7b87b1b8a53c9c9aaf9b5a12dc2bb02d05c5e510e58a1985c263579524de`,
+and final manifest SHA-256 is
+`a2d7eef5bbae0976eca2ea7c7fb973094c0d3e2fdbf9f08e4cb9cc52ed8a92f9`.

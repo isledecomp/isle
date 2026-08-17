@@ -88,6 +88,7 @@ def make_divergent_coff(
     duplicate_retail_callee=False,
     declare_retail_callee=True,
     other_symbol=OTHER,
+    debug_tail_extra=0,
 ):
     """One classic-i386 COFF with a complete EH COMDAT closure.
 
@@ -103,7 +104,7 @@ def make_divergent_coff(
     local_name = "$T200" if donor else "$T100"
 
     xdata = bytes(bytearray(16))
-    debug_s = bytearray(40)
+    debug_s = bytearray(40 + debug_tail_extra)
     struct.pack_into("<H", debug_s, 2, 0x0205)
     struct.pack_into("<III", debug_s, 16, size, 2 if donor else 1,
                      size - 2)
@@ -191,7 +192,7 @@ def make_divergent_coff(
         (".xdata$x", 0, 2, 0, 3,
          _section_aux(16, 1, 0, 5, associated=target_seat)),
         (".debug$S", 0, 3, 0, 3,
-         _section_aux(40, 2, 0, 5, associated=target_seat)),
+         _section_aux(len(debug_s), 2, 0, 5, associated=target_seat)),
         (local_name, 4, 2, 0, 3, None),
         (".text", 0, other_seat, 0, 3,
          _section_aux(8, 0, 2, 2, checksum=0x12345678)),
@@ -4088,9 +4089,10 @@ class SourceTargetClosureTests(unittest.TestCase):
                 source.replace(b"int x", b"int y"))
 
 
-def make_fpo_instruction_mosaic_coff(*, donor=False):
+def make_fpo_instruction_mosaic_coff(*, donor=False, source_refactor=False):
     """Turn the small EH fixture into an equal-size FPO mosaic fixture."""
-    data = make_divergent_coff()
+    data = make_divergent_coff(
+        debug_tail_extra=15 if donor and source_refactor else 0)
     parsed = byte_identity.CoffObject(data)
     primary = parsed.function_section(TARGET_SYMBOL)
     fpo_section = parsed.sections[1]
@@ -4554,6 +4556,543 @@ class OrdinaryFpoInstructionMosaicTests(unittest.TestCase):
             self.assertFalse(any(start <= offset < end
                                  for start, end in actual))
         self.assertEqual(len(function["retail_relocations"]), 2)
+
+
+class SourceFpoInstructionMosaicTests(unittest.TestCase):
+    """A typed source refactor may feed only its isolated FPO composer."""
+
+    DONOR_ID = "d_34f9d09eb563"
+
+    def live_records(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        unit = next(
+            unit for unit in manifest["translation_units"]
+            if any(donor.get("id") == self.DONOR_ID
+                   for donor in unit.get("donors", [])))
+        donor = next(item for item in unit["donors"]
+                     if item["id"] == self.DONOR_ID)
+        function = next(item for item in unit["functions"]
+                        if item["donor"] == self.DONOR_ID)
+        return manifest, unit, donor, function
+
+    def fixture(self):
+        seed = make_fpo_instruction_mosaic_coff(source_refactor=True)
+        donor = make_fpo_instruction_mosaic_coff(
+            donor=True, source_refactor=True)
+        seed_coff = byte_identity.CoffObject(seed)
+        donor_coff = byte_identity.CoffObject(donor)
+        sp = seed_coff.function_section(TARGET_SYMBOL)
+        dp = donor_coff.function_section(TARGET_SYMBOL)
+        seed_body = byte_identity.coff_body(seed_coff, sp)
+        donor_body = byte_identity.coff_body(donor_coff, dp)
+        hybrid = bytearray(seed)
+        hybrid[sp["raw_offset"] + 24:sp["raw_offset"] + 28] = (
+            donor_body[24:28])
+        hybrid = bytes(hybrid)
+        hybrid_coff = byte_identity.CoffObject(hybrid)
+        hybrid_body = byte_identity.coff_body(
+            hybrid_coff, hybrid_coff.function_section(TARGET_SYMBOL))
+
+        def child_pin(name):
+            left = byte_identity._comdat_child(seed_coff, sp, name)
+            right = byte_identity._comdat_child(donor_coff, dp, name)
+            definitions = byte_identity.section_definitions(seed_coff)
+            return ({
+                "section_number": left["number"],
+                "expected_seed_raw_size": left["raw_size"],
+                "expected_donor_raw_size": right["raw_size"],
+                "relocation_count": left["relocation_count"],
+                "line_count": left["line_count"],
+                "characteristics": left["characteristics"],
+                "selection": definitions[left["number"]]["selection"],
+                "associated": definitions[left["number"]]["associated"],
+                "expected_seed_body_sha256": hashlib.sha256(
+                    byte_identity.coff_body(seed_coff, left)).hexdigest(),
+                "expected_donor_body_sha256": hashlib.sha256(
+                    byte_identity.coff_body(donor_coff, right)).hexdigest(),
+                "expected_seed_relocation_sha256": hashlib.sha256(
+                    byte_identity._coff_table_bytes(
+                        seed_coff, left, "relocations")).hexdigest(),
+                "expected_donor_relocation_sha256": hashlib.sha256(
+                    byte_identity._coff_table_bytes(
+                        donor_coff, right, "relocations")).hexdigest(),
+            }, left, right)
+
+        debug_f, sf, df = child_pin(".debug$F")
+        debug_f["expected_record"] = byte_identity.parse_fpo_data(
+            byte_identity.coff_body(seed_coff, sf),
+            expected_proc_size=len(seed_body))
+        debug_s, ss, ds = child_pin(".debug$S")
+        seed_s = byte_identity.coff_body(seed_coff, ss)
+        donor_s = byte_identity.coff_body(donor_coff, ds)
+        cb_proc, dbg_start, dbg_end = struct.unpack_from("<III", seed_s, 16)
+        debug_s.update({
+            "expected_common_prefix_sha256": hashlib.sha256(
+                seed_s[:28]).hexdigest(),
+            "expected_record_kind": seed_s[2:4].hex(),
+            "expected_cb_proc": cb_proc,
+            "expected_dbg_start": dbg_start,
+            "expected_dbg_end": dbg_end,
+            "expected_seed_tail_sha256": hashlib.sha256(
+                seed_s[28:]).hexdigest(),
+            "expected_donor_tail_sha256": hashlib.sha256(
+                donor_s[28:]).hexdigest(),
+        })
+        identity = byte_identity.validate_source_fpo_mosaic_identity({
+            "kind": byte_identity.SOURCE_FPO_MOSAIC_IDENTITY_KIND,
+            "expected_primary_characteristics": sp["characteristics"],
+            "expected_primary_selection":
+                byte_identity.section_definitions(seed_coff)[sp["number"]]
+                ["selection"],
+            "expected_function_count": sum(
+                byte_identity.function_multiset(seed_coff).values()),
+            "expected_comdat_count": sum(
+                byte_identity.comdat_primary_identity_multiset(
+                    seed_coff).values()),
+            "expected_seed_line_sha256": hashlib.sha256(
+                byte_identity._coff_table_bytes(
+                    seed_coff, sp, "lines")).hexdigest(),
+            "expected_donor_line_sha256": hashlib.sha256(
+                byte_identity._coff_table_bytes(
+                    donor_coff, dp, "lines")).hexdigest(),
+            "debug_f": debug_f,
+            "debug_s": debug_s,
+        }, "fixture", sp["number"], len(seed_body))
+        function = {
+            "mangled": TARGET_SYMBOL,
+            "donor": "d_source_fpo",
+            "splice_class": "retail_exact_instruction_mosaic",
+            "expected_section_number": sp["number"],
+            "expected_section_count": len(seed_coff.sections),
+            "expected_body_length": len(seed_body),
+            "expected_donor_body_length": len(donor_body),
+            "expected_relocation_count": sp["relocation_count"],
+            "expected_line_count": sp["line_count"],
+            "expected_donor_line_count": dp["line_count"],
+            "expected_seed_body_sha256": hashlib.sha256(
+                seed_body).hexdigest(),
+            "expected_donor_body_sha256": hashlib.sha256(
+                donor_body).hexdigest(),
+            "expected_seed_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    seed_coff, sp),
+            "expected_donor_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    donor_coff, dp),
+            "expected_body_sha256": hashlib.sha256(hybrid_body).hexdigest(),
+            "source_fpo_identity": identity,
+            "instruction_ranges": [{
+                "kind":
+                    "same_offset_complete_x86_instruction_sequence_v1",
+                "start": 24, "end": 28,
+                "seed_bytes": seed_body[24:28].hex(),
+                "seed_sha256": hashlib.sha256(
+                    seed_body[24:28]).hexdigest(),
+                "donor_bytes": donor_body[24:28].hex(),
+                "donor_sha256": hashlib.sha256(
+                    donor_body[24:28]).hexdigest(),
+                "seed_instruction_lengths": [3, 1],
+                "donor_instruction_lengths": [3, 1],
+            }],
+            "retail_oracle": {
+                "image": "LEGO1.DLL", "address": "0x1003cf20",
+                "verdict": "MATCH", "length": len(hybrid_body),
+            },
+            "retail_relocations": relocation_oracle_for(
+                hybrid, retail_body_for(hybrid)),
+        }
+        return seed, donor, function, retail_body_for(hybrid), hybrid
+
+    def compose(self, fixture, function=None, seed=None, donor=None,
+                retail=None, source_permutation=True):
+        base_seed, base_donor, expected, oracle, _ = fixture
+        return byte_identity._compose_retail_exact_instruction_mosaic_core(
+            base_seed if seed is None else seed,
+            base_donor if donor is None else donor,
+            expected if function is None else function,
+            oracle if retail is None else retail,
+            source_permutation=source_permutation,
+        )
+
+    def test_positive_allows_pinned_codeview_growth_but_keeps_seed_shell(self):
+        fixture = self.fixture()
+        composed, detail = self.compose(fixture)
+        seed, donor, function, _, hybrid = fixture
+        checked = byte_identity.CoffObject(composed)
+        primary = checked.function_section(TARGET_SYMBOL)
+        seed_coff = byte_identity.CoffObject(seed)
+        seed_primary = seed_coff.function_section(TARGET_SYMBOL)
+        donor_coff = byte_identity.CoffObject(donor)
+        donor_primary = donor_coff.function_section(TARGET_SYMBOL)
+        self.assertEqual(
+            byte_identity.coff_body(checked, primary),
+            byte_identity.coff_body(
+                byte_identity.CoffObject(hybrid),
+                byte_identity.CoffObject(hybrid).function_section(
+                    TARGET_SYMBOL)))
+        self.assertNotEqual(
+            byte_identity._comdat_child(
+                seed_coff, seed_primary, ".debug$S")["raw_size"],
+            byte_identity._comdat_child(
+                donor_coff, donor_primary, ".debug$S")["raw_size"])
+        for name in (".debug$F", ".debug$S"):
+            before = byte_identity._comdat_child(
+                seed_coff, seed_primary, name)
+            after = byte_identity._comdat_child(checked, primary, name)
+            self.assertEqual(
+                byte_identity.coff_body(checked, after),
+                byte_identity.coff_body(seed_coff, before))
+        self.assertEqual(
+            byte_identity.instruction_mosaic_metadata_sha256(
+                checked, primary),
+            function["expected_seed_metadata_sha256"])
+        self.assertTrue(detail["source_fpo_identity"])
+        byte_identity.validate_donor_object_excluded(composed, [donor])
+
+    def test_live_generator_inverse_recipe_and_semantic_witness(self):
+        manifest, unit, donor, function = self.live_records()
+        overlay = byte_identity.validate_source_overlay(
+            manifest["source_overlay"], ROOT)
+        output = next(
+            item for item in overlay["outputs"]
+            if item["logical_path"] == unit["source"])
+        proof = byte_identity.validate_target_source_refactor_proof(
+            function["target_source_refactor"], "fixture.proof")
+        normalized_function = {**function, "target_source_refactor": proof}
+        detail = byte_identity.require_target_source_refactor_recipe_policy(
+            donor["recipe"], normalized_function, ROOT, unit["source"],
+            "fixture", output["operations"],
+            {item["logical_path"] for item in overlay["outputs"]},
+        )
+        rendered = byte_identity.render_donor_source_overlay(
+            donor["recipe"], ROOT,
+            canonical_operations=output["operations"])
+        self.assertEqual(
+            hashlib.sha256(rendered[unit["source"]]).hexdigest(),
+            donor["recipe"]["renderings"][0]["rendered_sha256"])
+        generator = byte_identity.validate_source_overlay_generator(
+            donor["recipe"]["renderings"][0]["operations"][0]["gen"],
+            "fixture.generator")
+        self.assertEqual(
+            hashlib.sha256(
+                byte_identity.render_fixed_array_shuffle_countdown_input(
+                    generator["params"])).hexdigest(),
+            "10f00454b3c20b09846d2f00cf0da59fba9502dc8d5444a1478fb3d9036f5654")
+        self.assertEqual(
+            hashlib.sha256(
+                byte_identity.render_source_overlay_generator(
+                    generator)).hexdigest(),
+            "1b32636fbc36bd7df1628b9e036e2d47fd7837f4f70fb265cf83c1fb84468198")
+        self.assertEqual(detail["shuffle_extent"], 640)
+
+    def test_semantic_witness_rejects_extent_pin_and_header_overlay_drift(self):
+        manifest, unit, donor, function = self.live_records()
+        overlay = byte_identity.validate_source_overlay(
+            manifest["source_overlay"], ROOT)
+        output = next(
+            item for item in overlay["outputs"]
+            if item["logical_path"] == unit["source"])
+        overlaid_paths = {
+            item["logical_path"] for item in overlay["outputs"]
+        }
+        proof = byte_identity.validate_target_source_refactor_proof(
+            function["target_source_refactor"], "fixture.proof")
+
+        bad = copy.deepcopy(proof)
+        bad["semantic_witness"]["extent"] -= 1
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "roles, types, or extent"):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                donor["recipe"], {**function, "target_source_refactor": bad},
+                ROOT, unit["source"], "fixture", output["operations"],
+                overlaid_paths)
+
+        bad = copy.deepcopy(proof)
+        bad["semantic_witness"]["owner_header"]["source_sha256"] = "0" * 64
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "differs from its pin"):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                donor["recipe"], {**function, "target_source_refactor": bad},
+                ROOT, unit["source"], "fixture", output["operations"],
+                overlaid_paths)
+
+        witness_path = proof["semantic_witness"]["owner_header"]["path"]
+        manifest["source_overlay"]["outputs"].append({"path": witness_path})
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "witness header.*source overlay"):
+            byte_identity.require_manifest_source_refactor_role_preflight(
+                manifest, "fixture", ROOT)
+
+    def test_generator_rejects_free_keys_role_collisions_and_type_drift(self):
+        _, _, donor, _ = self.live_records()
+        raw = donor["recipe"]["renderings"][0]["operations"][0]["gen"]
+        mutations = (
+            ({**raw, "body": "arbitrary"}, "schema"),
+            ({**raw, "pointer": raw["index"]}, "distinct"),
+            ({**raw, "element_type": "Widget"}, "integral"),
+            ({**raw, "count": 0}, "count"),
+        )
+        for bad, message in mutations:
+            with self.subTest(message=message), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                byte_identity.validate_source_overlay_generator(
+                    bad, "fixture")
+        normalized = byte_identity.validate_source_overlay_generator(
+            raw, "fixture")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "donor-only"):
+            byte_identity.assert_source_permutations_are_donor_only(
+                normalized)
+
+    def test_live_role_preflight_rejects_unbound_and_ordinary_reuse(self):
+        manifest, unit, _, function = self.live_records()
+        byte_identity.require_manifest_source_refactor_role_preflight(
+            manifest, "fixture", ROOT)
+        unit["functions"].remove(function)
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "bound exactly once"):
+            byte_identity.require_manifest_source_refactor_role_preflight(
+                manifest, "fixture", ROOT)
+        unit["functions"].append(function)
+        reused = copy.deepcopy(function)
+        reused.pop("target_source_refactor")
+        reused.pop("source_fpo_identity")
+        reused["mangled"] = "?AnotherSourceFpoFixture@@YAXXZ"
+        unit["functions"].append(reused)
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "primary donor use"):
+            byte_identity.require_manifest_source_refactor_role_preflight(
+                manifest, "fixture", ROOT)
+
+    def test_live_role_preflight_rejects_alternate_composer_class(self):
+        manifest, _, _, function = self.live_records()
+        function["splice_class"] = "retail_exact_reloc_divergent"
+        function.pop("source_fpo_identity")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "isolated source FPO"):
+            byte_identity.require_manifest_source_refactor_role_preflight(
+                manifest, "fixture", ROOT)
+
+    def test_decoder_accepts_only_closed_shuffle_extensions(self):
+        accepted = {
+            "8d7e36": 3, "668b6ffe": 4, "66894ffe": 4,
+            "e800000000": 5, "99": 1, "4b": 1, "4f": 1,
+        }
+        for encoded, length in accepted.items():
+            with self.subTest(encoded=encoded):
+                self.assertEqual(
+                    byte_identity.supported_ia32_instruction_length(
+                        bytes.fromhex(encoded), "fixture"), length)
+        for encoded in (
+            "66", "66668b00", "668d00", "e80000", "8d", "90",
+        ):
+            with self.subTest(encoded=encoded), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError,
+                    "unsupported|truncated|prefix|ModRM"):
+                byte_identity.require_supported_complete_ia32_instruction(
+                    bytes.fromhex(encoded), "fixture")
+
+    def test_source_fpo_identity_rejects_geometry_body_and_record_drift(self):
+        fixture = self.fixture()
+        checks = (
+            (("expected_function_count",), "function census"),
+            (("debug_f", "associated"), "geometry"),
+            (("debug_f", "expected_donor_body_sha256"), "body pin"),
+            (("debug_f", "expected_record", "cbProcSize"), "parsed FPO"),
+            (("debug_s", "expected_donor_raw_size"), "geometry"),
+            (("debug_s", "expected_donor_tail_sha256"),
+             "CodeView procedure"),
+            (("debug_s", "expected_dbg_end"),
+             "CodeView procedure range"),
+        )
+        for path, message in checks:
+            bad = copy.deepcopy(fixture[2])
+            target = bad["source_fpo_identity"]
+            for key in path[:-1]:
+                target = target[key]
+            key = path[-1]
+            value = target[key]
+            target[key] = "0" * 64 if isinstance(value, str) else value + 1
+            with self.subTest(path=path), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                self.compose(fixture, bad)
+
+    def test_source_fpo_rejects_child_semantic_relocation_drift(self):
+        fixture = self.fixture()
+        donor = bytearray(fixture[1])
+        parsed = byte_identity.CoffObject(bytes(donor))
+        primary = parsed.function_section(TARGET_SYMBOL)
+        child = byte_identity._comdat_child(parsed, primary, ".debug$F")
+        other_index = next(
+            index for index, symbol in parsed.symbols.items()
+            if symbol["name"] == OTHER)
+        struct.pack_into(
+            "<I", donor, child["relocation_offset"] + 4, other_index)
+        donor = bytes(donor)
+        changed = byte_identity.CoffObject(donor)
+        changed_primary = changed.function_section(TARGET_SYMBOL)
+        changed_child = byte_identity._comdat_child(
+            changed, changed_primary, ".debug$F")
+        bad = copy.deepcopy(fixture[2])
+        bad["source_fpo_identity"]["debug_f"][
+            "expected_donor_relocation_sha256"] = hashlib.sha256(
+                byte_identity._coff_table_bytes(
+                    changed, changed_child, "relocations")).hexdigest()
+        bad["expected_donor_metadata_sha256"] = (
+            byte_identity.instruction_mosaic_metadata_sha256(
+                changed, changed_primary))
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "relocation"):
+            self.compose(fixture, bad, donor=donor)
+
+    def test_source_fpo_rejects_relocation_overlap_even_when_bytes_match(self):
+        fixture = self.fixture()
+        seed_coff = byte_identity.CoffObject(fixture[0])
+        donor_coff = byte_identity.CoffObject(fixture[1])
+        seed_primary = seed_coff.function_section(TARGET_SYMBOL)
+        donor_primary = donor_coff.function_section(TARGET_SYMBOL)
+        seed_body = byte_identity.coff_body(seed_coff, seed_primary)
+        donor_body = byte_identity.coff_body(donor_coff, donor_primary)
+        bad = copy.deepcopy(fixture[2])
+        bad["instruction_ranges"] = [{
+            "kind": "same_offset_complete_x86_instruction_sequence_v1",
+            "start": 20, "end": 28,
+            "seed_bytes": seed_body[20:28].hex(),
+            "seed_sha256": hashlib.sha256(seed_body[20:28]).hexdigest(),
+            "donor_bytes": donor_body[20:28].hex(),
+            "donor_sha256": hashlib.sha256(donor_body[20:28]).hexdigest(),
+            "seed_instruction_lengths": [4, 3, 1],
+            "donor_instruction_lengths": [4, 3, 1],
+        }]
+        with mock.patch.object(
+                byte_identity,
+                "require_coff_line_certified_ia32_boundaries",
+                return_value={}), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError,
+                    "source FPO.*overlaps a relocation operand"):
+            self.compose(fixture, bad)
+
+    def test_source_fpo_rejects_wrong_line_sentinel_identity(self):
+        fixture = self.fixture()
+        donor = bytearray(fixture[1])
+        parsed = byte_identity.CoffObject(bytes(donor))
+        primary = parsed.function_section(TARGET_SYMBOL)
+        other_index = next(
+            index for index, symbol in parsed.symbols.items()
+            if symbol["name"] == OTHER)
+        struct.pack_into("<I", donor, primary["line_offset"], other_index)
+        donor = bytes(donor)
+        changed = byte_identity.CoffObject(donor)
+        changed_primary = changed.function_section(TARGET_SYMBOL)
+        bad = copy.deepcopy(fixture[2])
+        bad["source_fpo_identity"]["expected_donor_line_sha256"] = (
+            hashlib.sha256(byte_identity._coff_table_bytes(
+                changed, changed_primary, "lines")).hexdigest())
+        bad["expected_donor_metadata_sha256"] = (
+            byte_identity.instruction_mosaic_metadata_sha256(
+                changed, changed_primary))
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "line marker changed identity"):
+            self.compose(fixture, bad, donor=donor)
+
+    def test_source_and_ordinary_fpo_classes_cannot_cross(self):
+        fixture = self.fixture()
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "requires the source-permutation"):
+            self.compose(fixture, source_permutation=False)
+        bad = copy.deepcopy(fixture[2])
+        bad["ordinary_fpo_identity"] = {}
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "mutually exclusive"):
+            self.compose(fixture, bad)
+        eh_seed = make_divergent_coff()
+        eh_donor = _patched_target_body(
+            eh_seed, [(24, bytes.fromhex("8b590441"))])
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "source FPO.*closure"):
+            self.compose(fixture, seed=eh_seed, donor=eh_donor)
+
+    def test_line_certificate_rejects_partial_range_and_bad_partition(self):
+        seed, _, function, _, _ = self.fixture()
+        coff = byte_identity.CoffObject(seed)
+        primary = coff.function_section(TARGET_SYMBOL)
+        body = byte_identity.coff_body(coff, primary)
+        base = function["instruction_ranges"][0]
+        cases = (
+            ({**base, "start": 25,
+              "seed_instruction_lengths": [2, 1]}, "containing-stream"),
+            ({**base, "end": 26,
+              "seed_instruction_lengths": [3]}, "containing-stream"),
+            ({**base, "seed_instruction_lengths": [2, 2]}, "partition"),
+        )
+        for item, message in cases:
+            with self.subTest(message=message), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                byte_identity.require_coff_line_certified_ia32_boundaries(
+                    coff, primary, body, [item], "seed", TARGET_SYMBOL,
+                    "fixture")
+
+    def test_retail_and_output_conservation_gates_reject_drift(self):
+        fixture = self.fixture()
+        retail = bytearray(fixture[3])
+        retail[8] ^= 1
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "retail-exact"):
+            self.compose(fixture, retail=bytes(retail))
+        original = byte_identity.apply_replacements
+
+        def corrupt(data, replacements):
+            output = bytearray(original(data, replacements))
+            output[byte_identity.CoffObject(data).sections[3][
+                "raw_offset"]] ^= 1
+            return bytes(output)
+
+        with mock.patch.object(byte_identity, "apply_replacements",
+                               side_effect=corrupt):
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "non-target"):
+                self.compose(fixture)
+
+        bad = copy.deepcopy(fixture[2])
+        bad["retail_relocations"][0]["retail_target"] = "0x10000000"
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "resolves to"):
+            self.compose(fixture, bad)
+
+        seed_coff = byte_identity.CoffObject(fixture[0])
+        primary = seed_coff.function_section(TARGET_SYMBOL)
+        debug_s = byte_identity._comdat_child(
+            seed_coff, primary, ".debug$S")
+
+        def corrupt_debug_child(data, replacements):
+            output = bytearray(original(data, replacements))
+            output[debug_s["raw_offset"] + debug_s["raw_size"] - 1] ^= 1
+            return bytes(output)
+
+        with mock.patch.object(byte_identity, "apply_replacements",
+                               side_effect=corrupt_debug_child):
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "non-target"):
+                self.compose(fixture)
+
+    def test_live_manifest_pins_exact_ranges_oracle_and_fpo_class(self):
+        _, _, donor, function = self.live_records()
+        self.assertEqual(
+            donor["recipe"]["rendering_identity_sha256"],
+            "34f9d09eb5634ca58d8e1b63193708cd18a59139a3b846b6a9a933a69707c49c")
+        self.assertEqual(
+            [(item["start"], item["end"])
+             for item in function["instruction_ranges"]],
+            [(60, 63), (63, 68), (68, 71),
+             (77, 81), (88, 89), (96, 100)])
+        self.assertFalse(any(
+            item["start"] < 76 and item["end"] > 72
+            for item in function["instruction_ranges"]))
+        self.assertEqual(len(function["retail_relocations"]), 8)
+        self.assertEqual(
+            function["source_fpo_identity"]["kind"],
+            byte_identity.SOURCE_FPO_MOSAIC_IDENTITY_KIND)
 
 
 if __name__ == "__main__":

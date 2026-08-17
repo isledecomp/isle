@@ -235,6 +235,9 @@ SOURCE_OVERLAY_LEAN_KINDS = {
     "for_init_decl": "for_initializer_declaration_reseat_v1",
     "capture_tail": "captured_pointer_tail_return_fragment_v1",
     "fixed_array_fill": "fixed_array_fill_loop_v1",
+    "fixed_array_shuffle_countdown": (
+        "fixed_array_shuffle_pointer_countdown_v1"
+    ),
     "inclusive_extent": "inclusive_extent_assignment_v1",
     "discarded_increment": "discarded_postfix_increment_v1",
     "extern_run": "extern_declaration_run_v1",
@@ -330,6 +333,10 @@ SOURCE_OVERLAY_KIND_POLICIES = {
     ),
     "fixed_array_fill_loop_v1": (
         "logic_equivalent_source_refactor", "fixed_array_fill_loop",
+    ),
+    "fixed_array_shuffle_pointer_countdown_v1": (
+        "logic_equivalent_source_refactor",
+        "fixed_array_shuffle_pointer_countdown",
     ),
     "inclusive_extent_assignment_v1": (
         "logic_equivalent_source_refactor", "inclusive_extent_assignment",
@@ -1161,6 +1168,80 @@ def validate_fixed_array_declaration_proof(
     }
 
 
+def validate_fixed_array_shuffle_semantic_witness(
+    value: object, context: str,
+) -> dict:
+    """Validate the closed declarations behind an in-place array shuffle."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "source_owner", "array_member", "element_type", "extent",
+        "index_identifier", "index_type", "owner_header", "base_header",
+        "types_header", "next_index_overwrite_range_pin",
+    }, context)
+
+    def value_type(name: str) -> dict:
+        result = validate_source_overlay_cpp_type(
+            value.get(name), f"{context}.{name}")
+        require(not result["base_const"]
+                and not result["indirection"]
+                and not result["trailing_const"]
+                and render_source_overlay_cpp_type(result)
+                in FIXED_ARRAY_FILL_ELEMENT_TYPE_SPELLINGS,
+                f"{context}.{name} is not a closed integral value type")
+        return result
+
+    normalized = {
+        "source_owner": _source_overlay_identifier(
+            value.get("source_owner"), context + ".source_owner"),
+        "array_member": _source_overlay_identifier(
+            value.get("array_member"), context + ".array_member"),
+        "element_type": value_type("element_type"),
+        "extent": require_exact_int(
+            value.get("extent"), context + ".extent",
+            minimum=2, maximum=4096,
+        ),
+        "index_identifier": _source_overlay_identifier(
+            value.get("index_identifier"), context + ".index_identifier"),
+        "index_type": value_type("index_type"),
+        "next_index_overwrite_range_pin": validate_source_overlay_range_pin(
+            value.get("next_index_overwrite_range_pin"),
+            context + ".next_index_overwrite_range_pin",
+        ),
+    }
+    header_keys = {
+        "owner_header": {
+            "path", "source_sha256", "unit_include_range_pin",
+            "base_include_range_pin", "array_declaration_range_pin",
+            "member_block_range_pin",
+        },
+        "base_header": {
+            "path", "source_sha256", "types_include_range_pin",
+        },
+        "types_header": {
+            "path", "source_sha256", "element_typedef_range_pin",
+            "index_typedef_range_pin",
+        },
+    }
+    for name, keys in header_keys.items():
+        item_context = f"{context}.{name}"
+        item = value.get(name)
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, keys, item_context)
+        normalized_item = {
+            "path": source_overlay_relative_path(
+                item.get("path"), item_context + ".path"),
+            "source_sha256": require_sha(
+                item.get("source_sha256"), item_context + ".source_sha256"),
+        }
+        for key in keys - {"path", "source_sha256"}:
+            normalized_item[key] = validate_source_overlay_range_pin(
+                item.get(key), f"{item_context}.{key}")
+        normalized[name] = normalized_item
+    require(len({normalized[name]["path"] for name in header_keys}) == 3,
+            f"{context}: shuffle semantic witness headers must be distinct")
+    return normalized
+
+
 INCLUSIVE_EXTENT_BARRIER = "msvc_i386_empty_inline_assembly_v1"
 
 
@@ -1575,6 +1656,7 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         "for_initializer_declaration_reseat_v1",
         "captured_pointer_tail_return_v1",
         "fixed_array_fill_loop_v1",
+        "fixed_array_shuffle_pointer_countdown_v1",
         "inclusive_extent_assignment_v1",
         "discarded_postfix_increment_v1",
     }:
@@ -1584,6 +1666,8 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         }
         if kind == "fixed_array_fill_loop_v1":
             required_keys.add("array_declaration")
+        if kind == "fixed_array_shuffle_pointer_countdown_v1":
+            required_keys.add("semantic_witness")
         if kind == "inclusive_extent_assignment_v1":
             required_keys.add("semantic_witness")
         if kind == "discarded_postfix_increment_v1":
@@ -1628,6 +1712,10 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         require(len(operation_ids) == 1,
                 f"{context}.operation_ids must name one array-fill "
                 "replacement")
+    if kind == "fixed_array_shuffle_pointer_countdown_v1":
+        require(len(operation_ids) == 1,
+                f"{context}.operation_ids must name one array-shuffle "
+                "replacement")
     if kind == "inclusive_extent_assignment_v1":
         require(len(operation_ids) == 1,
                 f"{context}.operation_ids must name one inclusive-extent "
@@ -1651,6 +1739,7 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         "for_initializer_declaration_reseat_v1",
         "captured_pointer_tail_return_v1",
         "fixed_array_fill_loop_v1",
+        "fixed_array_shuffle_pointer_countdown_v1",
         "inclusive_extent_assignment_v1",
         "discarded_postfix_increment_v1",
     }:
@@ -1663,6 +1752,13 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
             validate_fixed_array_declaration_proof(
                 value.get("array_declaration"),
                 context + ".array_declaration",
+            )
+        )
+    if kind == "fixed_array_shuffle_pointer_countdown_v1":
+        normalized["semantic_witness"] = (
+            validate_fixed_array_shuffle_semantic_witness(
+                value.get("semantic_witness"),
+                context + ".semantic_witness",
             )
         )
     if kind == "inclusive_extent_assignment_v1":
@@ -1702,6 +1798,7 @@ def select_source_permutation_window(
                 "for_initializer_declaration_reseat_v1",
                 "captured_pointer_tail_return_v1",
                 "fixed_array_fill_loop_v1",
+                "fixed_array_shuffle_pointer_countdown_v1",
                 "inclusive_extent_assignment_v1",
                 "discarded_postfix_increment_v1",
             }
@@ -1853,6 +1950,56 @@ def render_fixed_array_fill_loop_output(params: dict) -> bytes:
     return (
         f"{indent}for ({index_type} {index} = 0; {index} < {count}; "
         f"{index}++) {array}[{index}] = -1;\n"
+    ).encode("ascii")
+
+
+def render_fixed_array_shuffle_countdown_input(params: dict) -> bytes:
+    """Reconstruct one canonical indexed in-place array shuffle."""
+    indent = params["declaration_indent"]
+    inner = indent + "\t"
+    array = params["array_identifier"]
+    index = params["index_identifier"]
+    swap_type = render_source_overlay_cpp_type(params["swap_type"])
+    swap = params["swap_identifier"]
+    temporary = params["temporary_identifier"]
+    temporary_type = render_source_overlay_cpp_type(
+        params["temporary_type"])
+    random_function = params["random_function"]
+    count = params["count"]
+    return (
+        f"{indent}for ({index} = 0; {index} < {count}; {index}++) {{\n"
+        f"{inner}{swap_type} {swap} = {random_function}() % {count};\n"
+        f"{inner}{temporary_type} {temporary} = {array}[{index}];\n"
+        f"{inner}{array}[{index}] = {array}[{swap}];\n"
+        f"{inner}{array}[{swap}] = {temporary};\n"
+        f"{indent}}}\n"
+    ).encode("ascii")
+
+
+def render_fixed_array_shuffle_countdown_output(params: dict) -> bytes:
+    """Render the equivalent pointer walk with a countdown loop."""
+    indent = params["declaration_indent"]
+    inner = indent + "\t"
+    array = params["array_identifier"]
+    index = params["index_identifier"]
+    pointer = params["pointer_identifier"]
+    element_type = render_source_overlay_cpp_type(params["element_type"])
+    swap = params["swap_identifier"]
+    swap_type = render_source_overlay_cpp_type(params["swap_type"])
+    temporary = params["temporary_identifier"]
+    temporary_type = render_source_overlay_cpp_type(
+        params["temporary_type"])
+    random_function = params["random_function"]
+    count = params["count"]
+    return (
+        f"{indent}{element_type}* {pointer} = {array};\n"
+        f"{indent}for ({index} = {count}; {index} != 0; {index}--) {{\n"
+        f"{inner}{pointer}++;\n"
+        f"{inner}{swap_type} {swap} = {random_function}() % {count};\n"
+        f"{inner}{temporary_type} {temporary} = {pointer}[-1];\n"
+        f"{inner}{pointer}[-1] = {array}[{swap}];\n"
+        f"{inner}{array}[{swap}] = {temporary};\n"
+        f"{indent}}}\n"
     ).encode("ascii")
 
 
@@ -2347,6 +2494,224 @@ def _require_unique_quoted_include_edge(
         "including_path": including_path,
         "included_basename": basename,
         **detail,
+    }
+
+
+def require_fixed_array_shuffle_semantic_identity(
+    root, unit_source: str, unit_data: bytes, target_source: bytes,
+    expected_input: bytes, proof: dict, params: dict, context: str,
+) -> dict:
+    """Prove one indexed shuffle equals its pointer-countdown rendering."""
+    witness = proof["semantic_witness"]
+    require(
+        witness["array_member"] == params["array_identifier"]
+        and witness["index_identifier"] == params["index_identifier"]
+        and witness["element_type"] == params["element_type"]
+        == params["temporary_type"]
+        and witness["index_type"] == params["index_type"]
+        == params["swap_type"]
+        and witness["extent"] == params["count"],
+        f"{context}: shuffle roles, types, or extent differ",
+    )
+    require(
+        decorated_member_owner_identifier(
+            proof["source_owner_mangled"], context)
+        == witness["source_owner"],
+        f"{context}: shuffle source owner differs",
+    )
+    require(target_source.count(expected_input) == 1,
+            f"{context}: canonical shuffle input is absent or ambiguous")
+    input_start = target_source.index(expected_input)
+    input_end = input_start + len(expected_input)
+
+    tokens = _semantic_significant_tokens(target_source)
+    opening = next((index for index, item in enumerate(tokens)
+                    if item[0] == "{"), None)
+    require(opening is not None,
+            f"{context}: shuffle source owner has no body")
+    qualifiers = [
+        index for index, item in enumerate(tokens[:opening])
+        if item[0] == "::" and index > 0
+    ]
+    require(qualifiers
+            and tokens[qualifiers[-1] - 1][0] == witness["source_owner"],
+            f"{context}: shuffle source owner is not exact")
+
+    pointer = params["pointer_identifier"]
+    require(not any(token == pointer for token, _, _ in tokens),
+            f"{context}: generated shuffle pointer is not fresh")
+    for identifier in (params["swap_identifier"],
+                       params["temporary_identifier"]):
+        expected_count = sum(
+            token == identifier
+            for token, _, _ in _semantic_significant_tokens(expected_input)
+        )
+        occurrences = [
+            start for token, start, _ in tokens if token == identifier
+        ]
+        require(expected_count > 0 and len(occurrences) == expected_count
+                and all(input_start <= start < input_end
+                        for start in occurrences),
+                f"{context}: shuffle local {identifier} is shadowed or "
+                "escapes its authenticated loop")
+    array_uses = [
+        index for index, item in enumerate(tokens)
+        if item[0] == params["array_identifier"]
+    ]
+    require(array_uses and all(
+                index + 1 < len(tokens) and tokens[index + 1][0] == "["
+                and (index == 0 or tokens[index - 1][0] not in {
+                    "class", "struct", "typedef", "const", "volatile", "*",
+                    "&", render_source_overlay_cpp_type(
+                        params["element_type"]),
+                })
+                for index in array_uses),
+            f"{context}: shuffle array member is shadowed or escapes indexed "
+            "use")
+
+    index_type = render_source_overlay_cpp_type(params["index_type"])
+    index_identifier = params["index_identifier"]
+    declaration_pattern = [index_type, index_identifier, ";"]
+    declaration_matches = [
+        index for index in range(len(tokens) - len(declaration_pattern) + 1)
+        if [item[0] for item in
+            tokens[index:index + len(declaration_pattern)]]
+        == declaration_pattern
+    ]
+    require(len(declaration_matches) == 1,
+            f"{context}: shuffle index declaration is absent or ambiguous")
+    declaration_offset = tokens[declaration_matches[0]][1]
+    require(declaration_offset < input_start,
+            f"{context}: shuffle index is declared after its use")
+
+    next_lines = [
+        line for line in target_source[input_end:].splitlines(keepends=True)
+        if any(not token.startswith(("//", "/*"))
+               for token, _, _ in source_overlay_tokens(line))
+    ]
+    require(next_lines,
+            f"{context}: shuffle index has no authenticated overwrite")
+    next_detail = require_source_overlay_range_pin(
+        next_lines[0], witness["next_index_overwrite_range_pin"],
+        context + " next index overwrite",
+    )
+    next_tokens = [
+        token for token, _, _ in _semantic_significant_tokens(next_lines[0])
+    ]
+    require(next_tokens[:6] == [
+                "for", "(", index_identifier, "=", "0", ";",
+            ],
+            f"{context}: shuffle index is not overwritten before its next "
+            "read")
+
+    # The declaration, replaced shuffle, and next overwrite must share the
+    # same immediate lexical block. This closes a shadow in a nested scope.
+    def lexical_stack(position: int) -> tuple[int, ...]:
+        stack = []
+        serial = 0
+        for token, start, _ in tokens:
+            if start >= position:
+                break
+            if token == "{":
+                serial += 1
+                stack.append(serial)
+            elif token == "}":
+                require(stack, f"{context}: source braces are unbalanced")
+                stack.pop()
+        return tuple(stack)
+
+    next_offset = target_source.index(next_lines[0], input_end)
+    require(lexical_stack(declaration_offset)
+            == lexical_stack(input_start)
+            == lexical_stack(next_offset),
+            f"{context}: shuffle index declaration/overwrite scopes differ")
+
+    source_root = Path(root).resolve(strict=True)
+    owner_path, owner_data = _read_pinned_semantic_source(
+        source_root, witness["owner_header"], context + " owner header")
+    base_path, base_data = _read_pinned_semantic_source(
+        source_root, witness["base_header"], context + " base header")
+    types_path, types_data = _read_pinned_semantic_source(
+        source_root, witness["types_header"], context + " types header")
+    include_details = [
+        _require_unique_quoted_include_edge(
+            source_root, unit_source, unit_data, owner_path,
+            witness["owner_header"]["unit_include_range_pin"],
+            context + " unit-to-owner"),
+        _require_unique_quoted_include_edge(
+            source_root, witness["owner_header"]["path"], owner_data,
+            base_path, witness["owner_header"]["base_include_range_pin"],
+            context + " owner-to-base"),
+        _require_unique_quoted_include_edge(
+            source_root, witness["base_header"]["path"], base_data,
+            types_path, witness["base_header"]["types_include_range_pin"],
+            context + " base-to-types"),
+    ]
+
+    owner_tokens = _semantic_significant_tokens(owner_data)
+    _, owner_open, owner_close = _unique_class_body(
+        owner_tokens, witness["source_owner"], context)
+    element_type = render_source_overlay_cpp_type(witness["element_type"])
+    declaration_range = _unique_class_level_token_range(
+        owner_tokens, owner_open, owner_close,
+        [element_type, witness["array_member"], "[",
+         str(witness["extent"]), "]", ";"],
+        context + " array member")
+    declaration_detail = _pinned_source_line(
+        owner_data, declaration_range,
+        witness["owner_header"]["array_declaration_range_pin"],
+        context + " array declaration")
+    declaration_line_start = owner_data.rfind(
+        b"\n", 0, declaration_range[0]) + 1
+    block_start = owner_data.rfind(b"\n", 0, max(0, declaration_line_start - 1)) + 1
+    declaration_line_end = owner_data.find(b"\n", declaration_range[1])
+    require(declaration_line_end >= 0,
+            f"{context}: array declaration line is unterminated")
+    block_end_newline = owner_data.find(b"\n", declaration_line_end + 1)
+    require(block_end_newline >= 0,
+            f"{context}: array member block is unterminated")
+    member_block_detail = require_source_overlay_range_pin(
+        owner_data[block_start:block_end_newline + 1],
+        witness["owner_header"]["member_block_range_pin"],
+        context + " array member block")
+
+    type_tokens = _semantic_significant_tokens(types_data)
+
+    def typedef_line(type_name: str, underlying: list[str], pin: dict,
+                     label: str) -> dict:
+        wanted = ["typedef", *underlying, type_name, ";"]
+        matches = [
+            (type_tokens[index][1],
+             type_tokens[index + len(wanted) - 1][2])
+            for index in range(len(type_tokens) - len(wanted) + 1)
+            if [item[0] for item in
+                type_tokens[index:index + len(wanted)]] == wanted
+        ]
+        require(len(matches) == 1,
+                f"{context}: {label} typedef is absent or ambiguous")
+        return _pinned_source_line(
+            types_data, matches[0], pin, context + " " + label + " typedef")
+
+    element_detail = typedef_line(
+        element_type, ["unsigned", "short"],
+        witness["types_header"]["element_typedef_range_pin"], "element")
+    index_detail = typedef_line(
+        index_type, ["signed", "int"],
+        witness["types_header"]["index_typedef_range_pin"], "index")
+    return {
+        "shuffle_source_owner": witness["source_owner"],
+        "shuffle_array_member": witness["array_member"],
+        "shuffle_extent": witness["extent"],
+        "shuffle_include_edges": len(include_details),
+        "shuffle_array_use_count": len(array_uses),
+        "shuffle_witness_sha256": sha256_bytes(canonical_json_bytes({
+            "includes": include_details,
+            "declaration": declaration_detail,
+            "member_block": member_block_detail,
+            "element": element_detail,
+            "index": index_detail,
+            "next_overwrite": next_detail,
+        })),
     }
 
 
@@ -3211,12 +3576,32 @@ def require_target_source_refactor_recipe_policy(
             }, f"{context}: source-refactor proof role differs")
     proof = function[proof_key]
     if proof["kind"] in {
-        "fixed_array_fill_loop_v1", "inclusive_extent_assignment_v1",
+        "fixed_array_fill_loop_v1",
+        "fixed_array_shuffle_pointer_countdown_v1",
+        "inclusive_extent_assignment_v1",
         "discarded_postfix_increment_v1",
     }:
         require(proof["source_owner_mangled"] == function["mangled"],
                 f"{context}: source permutation owner must be the mosaic "
                 "target")
+    if proof["kind"] == "fixed_array_shuffle_pointer_countdown_v1":
+        require(
+            function.get("splice_class")
+            == "retail_exact_instruction_mosaic"
+            and isinstance(function.get("source_fpo_identity"), dict)
+            and "ordinary_fpo_identity" not in function,
+            f"{context}: fixed-array shuffle is restricted to its isolated "
+            "source FPO instruction mosaic",
+        )
+        require(isinstance(overlaid_paths, set),
+                f"{context}: fixed-array shuffle overlay census is missing")
+        witness_paths = {
+            proof["semantic_witness"][name]["path"]
+            for name in ("owner_header", "base_header", "types_header")
+        }
+        require(not witness_paths.intersection(overlaid_paths),
+                f"{context}: fixed-array shuffle witness header has an "
+                "effective source overlay")
     if proof["kind"] == "inclusive_extent_assignment_v1":
         require(isinstance(overlaid_paths, set),
                 f"{context}: inclusive-extent overlay census is missing")
@@ -3340,6 +3725,8 @@ def require_target_source_refactor_recipe_policy(
                     "for_initializer_declaration_reseat_v1",
                 "fixed_array_fill_loop_v1":
                     "fixed_array_fill_loop_v1",
+                "fixed_array_shuffle_pointer_countdown_v1":
+                    "fixed_array_shuffle_pointer_countdown_v1",
                 "inclusive_extent_assignment_v1":
                     "inclusive_extent_assignment_v1",
                 "discarded_postfix_increment_v1":
@@ -3352,7 +3739,10 @@ def require_target_source_refactor_recipe_policy(
                     f"{context}: refactor operation {operation_id} differs")
             params = generators[0]["params"]
             identifier = (
-                params["index_identifier"]
+                params["pointer_identifier"]
+                if proof["kind"]
+                == "fixed_array_shuffle_pointer_countdown_v1"
+                else params["index_identifier"]
                 if proof["kind"] == "fixed_array_fill_loop_v1"
                 else params["identifier"]
             )
@@ -3375,6 +3765,21 @@ def require_target_source_refactor_recipe_policy(
                     root, unit_source, clean, target_range, expected_input,
                     proof, params,
                     context + " fixed-array declaration",
+                )
+            elif (proof["kind"]
+                  == "fixed_array_shuffle_pointer_countdown_v1"):
+                require(params["array_identifier"] in target_tokens,
+                        f"{context}: array-shuffle target is outside its "
+                        "source owner")
+                expected_input = (
+                    render_fixed_array_shuffle_countdown_input(params)
+                )
+                semantic_detail = (
+                    require_fixed_array_shuffle_semantic_identity(
+                        root, unit_source, clean, target_range,
+                        expected_input, proof, params,
+                        context + " fixed-array shuffle witness",
+                    )
                 )
             elif proof["kind"] == "inclusive_extent_assignment_v1":
                 require(identifier not in refactor_identifiers,
@@ -4290,6 +4695,18 @@ def source_overlay_expected_identifier_roles(
         referenced.update(
             source_overlay_named_type_identities(params["index_type"])
         )
+    elif kind == "fixed_array_shuffle_pointer_countdown_v1":
+        declared.add(params["pointer_identifier"])
+        referenced.update({
+            params["array_identifier"], params["index_identifier"],
+            params["pointer_identifier"], params["swap_identifier"],
+            params["temporary_identifier"], params["random_function"],
+        })
+        for name in (
+            "index_type", "element_type", "swap_type", "temporary_type",
+        ):
+            referenced.update(
+                source_overlay_named_type_identities(params[name]))
     elif kind == "inclusive_extent_assignment_v1":
         declared.add(params["identifier"])
         referenced.update({
@@ -5137,6 +5554,67 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
                 minimum=1, maximum=4096,
             ),
             "value": -1,
+            "declaration_indent": indentation,
+        }
+    elif kind == "fixed_array_shuffle_pointer_countdown_v1":
+        require(not layout,
+                f"{context}: a fixed-array shuffle countdown cannot carry "
+                "layout overrides")
+        exact_audit_keys(params, {
+            "array", "index", "index_type", "pointer", "element_type",
+            "swap", "swap_type", "temporary", "temporary_type",
+            "random_function", "count", "declaration_indent",
+        }, param_context)
+        identifiers = {
+            name: _source_overlay_identifier(
+                params.get(raw), f"{param_context}.{raw}")
+            for name, raw in (
+                ("array_identifier", "array"),
+                ("index_identifier", "index"),
+                ("pointer_identifier", "pointer"),
+                ("swap_identifier", "swap"),
+                ("temporary_identifier", "temporary"),
+                ("random_function", "random_function"),
+            )
+        }
+        require(len(set(identifiers.values())) == len(identifiers),
+                f"{param_context}: shuffle roles must be distinct")
+
+        def integral_type(raw_name: str) -> dict:
+            result = validate_source_overlay_cpp_type(
+                params.get(raw_name), f"{param_context}.{raw_name}")
+            require(not result["base_const"]
+                    and not result["indirection"]
+                    and not result["trailing_const"]
+                    and render_source_overlay_cpp_type(result)
+                    in FIXED_ARRAY_FILL_ELEMENT_TYPE_SPELLINGS,
+                    f"{param_context}.{raw_name} is not a closed integral "
+                    "value type")
+            return result
+
+        index_type = integral_type("index_type")
+        element_type = integral_type("element_type")
+        swap_type = integral_type("swap_type")
+        temporary_type = integral_type("temporary_type")
+        require(index_type == swap_type,
+                f"{param_context}: index and swap types must match")
+        require(element_type == temporary_type,
+                f"{param_context}: element and temporary types must match")
+        indentation = params.get("declaration_indent")
+        require(isinstance(indentation, str) and indentation.isascii()
+                and 1 <= len(indentation) <= 32
+                and set(indentation) <= {" ", "\t"},
+                f"{param_context}.declaration_indent differs")
+        normalized = {
+            **identifiers,
+            "index_type": index_type,
+            "element_type": element_type,
+            "swap_type": swap_type,
+            "temporary_type": temporary_type,
+            "count": require_exact_int(
+                params.get("count"), param_context + ".count",
+                minimum=2, maximum=4096,
+            ),
             "declaration_indent": indentation,
         }
     elif kind == "inclusive_extent_assignment_v1":
@@ -7070,6 +7548,8 @@ def render_source_overlay_generator(
         result = render_for_initializer_declaration_reseat_output(params)
     elif kind == "fixed_array_fill_loop_v1":
         result = render_fixed_array_fill_loop_output(params)
+    elif kind == "fixed_array_shuffle_pointer_countdown_v1":
+        result = render_fixed_array_shuffle_countdown_output(params)
     elif kind == "inclusive_extent_assignment_v1":
         result = render_inclusive_extent_assignment_output(params)
     elif kind == "discarded_postfix_increment_v1":
@@ -12504,6 +12984,12 @@ def validate_manifest(
                             "expected_seed_metadata_sha256",
                             "expected_donor_metadata_sha256",
                         }
+                    if "source_fpo_identity" in function:
+                        mosaic_keys |= {
+                            "source_fpo_identity",
+                            "expected_seed_metadata_sha256",
+                            "expected_donor_metadata_sha256",
+                        }
                     if "donor_variants" in function:
                         mosaic_keys |= {
                             "donor_variants",
@@ -12528,6 +13014,14 @@ def validate_manifest(
                                      "expected_donor_metadata_sha256"):
                             require_sha(function.get(name),
                                         f"{function_context}.{name}")
+                    if "source_fpo_identity" in function:
+                        require(
+                            "target_source_refactor" in function
+                            and "ordinary_fpo_identity" not in function
+                            and "donor_variants" not in function,
+                            f"{function_context}: source FPO mosaic must use "
+                            "one source-permutation donor only",
+                        )
                     for name in (
                         "expected_section_number", "expected_section_count",
                         "expected_body_length", "expected_line_count",
@@ -12617,6 +13111,15 @@ def validate_manifest(
                             )
                         )
                         bound_ordinary_fpo_mosaic_donor_ids.append(donor_id)
+                    if "source_fpo_identity" in function:
+                        normalized_function["source_fpo_identity"] = (
+                            validate_source_fpo_mosaic_identity(
+                                function["source_fpo_identity"],
+                                f"{function_context}.source_fpo_identity",
+                                function["expected_section_number"],
+                                function["expected_body_length"],
+                            )
+                        )
                     if variant_ids:
                         normalized_function["donor_variants"] = (
                             normalized_variants)
@@ -12626,6 +13129,20 @@ def validate_manifest(
                             f"{function_context}.target_source_refactor",
                         )
                         normalized_function["target_source_refactor"] = proof
+                        if "source_fpo_identity" in function:
+                            require(
+                                proof["kind"]
+                                == "fixed_array_shuffle_pointer_countdown_v1",
+                                f"{function_context}: source FPO identity is "
+                                "restricted to the closed shuffle proof",
+                            )
+                        if (proof["kind"]
+                                == "fixed_array_shuffle_pointer_countdown_v1"):
+                            require(
+                                "source_fpo_identity" in function,
+                                f"{function_context}: fixed-array shuffle "
+                                "requires its isolated source FPO identity",
+                            )
                         bound_refactor_recipe_ids.append(donor_id)
                         require(local_recipe_kinds[donor_id]
                                 == "donor_source_overlay",
@@ -12645,13 +13162,14 @@ def validate_manifest(
                             function["expected_body_length"],
                         )
                     )
-                    if "ordinary_fpo_identity" in function:
+                    if ("ordinary_fpo_identity" in function
+                            or "source_fpo_identity" in function):
                         require(
                             all(item["kind"]
                                 == "same_offset_complete_x86_instruction_sequence_v1"
                                 for item in normalized_function[
                                     "instruction_ranges"]),
-                            f"{function_context}: ordinary FPO mosaics "
+                            f"{function_context}: FPO mosaics "
                             "require exact instruction-sequence partitions",
                         )
                     require_instruction_mosaic_range_donor_bindings(
@@ -15044,6 +15562,11 @@ ORDINARY_FPO_MOSAIC_IDENTITY_KIND = (
 )
 
 
+SOURCE_FPO_MOSAIC_IDENTITY_KIND = (
+    "seed_authoritative_source_refactor_fpo_codeview_v1"
+)
+
+
 CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS = (
     "retail_exact_cross_tu_instruction_hybrid_resize"
 )
@@ -15080,6 +15603,7 @@ SOURCE_REFACTOR_GENERATOR_KINDS = frozenset({
     "for_initializer_declaration_reseat_v1",
     "captured_pointer_tail_return_fragment_v1",
     "fixed_array_fill_loop_v1",
+    "fixed_array_shuffle_pointer_countdown_v1",
     "inclusive_extent_assignment_v1",
     "discarded_postfix_increment_v1",
 })
@@ -15395,6 +15919,28 @@ def require_manifest_source_refactor_role_preflight(
             proof = function.get("target_source_refactor")
             if (isinstance(proof, dict)
                     and proof.get("kind")
+                    == "fixed_array_shuffle_pointer_countdown_v1"):
+                require(
+                    function.get("splice_class")
+                    == "retail_exact_instruction_mosaic"
+                    and isinstance(function.get("source_fpo_identity"), dict)
+                    and "ordinary_fpo_identity" not in function,
+                    f"{context}: fixed-array shuffle is restricted to its "
+                    "isolated source FPO instruction mosaic",
+                )
+                witness = validate_fixed_array_shuffle_semantic_witness(
+                    proof.get("semantic_witness"),
+                    context + " fixed-array shuffle semantic witness",
+                )
+                witness_paths = {
+                    witness[name]["path"]
+                    for name in ("owner_header", "base_header", "types_header")
+                }
+                require(not witness_paths.intersection(overlaid_paths),
+                        f"{context}: fixed-array shuffle semantic witness "
+                        "header has an effective source overlay")
+            if (isinstance(proof, dict)
+                    and proof.get("kind")
                     == "inclusive_extent_assignment_v1"):
                 witness = validate_inclusive_extent_semantic_witness(
                     proof.get("semantic_witness"),
@@ -15524,33 +16070,50 @@ def supported_ia32_instruction_length(
     """Decode one closed IA-32 instruction family used by instruction mosaics.
 
     This is intentionally a fail-closed length decoder, not a disassembler.
-    It accepts only the register/memory binary operations, group-1 imm8,
-    signed multiply, one-byte register increments, and short branches needed
-    by current instruction donors and their closed boundary-regression tests.
-    ModRM, SIB, displacement, and immediate widths are derived from the bytes;
-    unsupported prefixes/opcodes and truncated or concatenated encodings fail.
+    It accepts only the register/memory operations, immediates, branches, and
+    one-byte register operations traversed by current instruction donors and
+    their closed boundary-regression tests. ModRM, SIB, displacement, prefix,
+    and immediate widths are derived from the bytes; unsupported prefixes,
+    opcodes, and truncated or concatenated encodings fail.
     """
     require(isinstance(encoded, bytes) and encoded,
             f"{context}: instruction encoding is missing")
+    prefix_size = 0
     opcode = encoded[0]
-    if opcode in {0x41, 0x43, 0x45, 0x46, 0x47}:
+    if opcode == 0x66:
+        require(len(encoded) >= 2 and encoded[1] in {0x8B, 0x89},
+                f"{context}: unsupported or truncated operand-size prefix")
+        prefix_size = 1
+        opcode = encoded[1]
+    if opcode in {0x41, 0x43, 0x45, 0x46, 0x47, 0x4B, 0x4F}:
+        require(prefix_size == 0,
+                f"{context}: unsupported prefixed register operation")
         return 1
     if opcode in {0x74, 0x75, 0x76, 0x7C, 0x7D, 0x7F, 0xEB}:
-        require(len(encoded) >= 2,
+        require(prefix_size == 0 and len(encoded) >= 2,
                 f"{context}: short branch is truncated")
         return 2
     if 0xB8 <= opcode <= 0xBF:
-        require(len(encoded) >= 5,
+        require(prefix_size == 0 and len(encoded) >= 5,
                 f"{context}: register immediate move is truncated")
         return 5
-    opcode_size = 1
+    if opcode == 0xE8:
+        require(prefix_size == 0 and len(encoded) >= 5,
+                f"{context}: relative call is truncated")
+        return 5
+    if opcode == 0x99:
+        require(prefix_size == 0,
+                f"{context}: unsupported prefixed sign extension")
+        return 1
+    opcode_size = prefix_size + 1
     if opcode == 0x0F:
-        require(len(encoded) >= 2 and encoded[1] == 0xAF,
+        require(prefix_size == 0 and len(encoded) >= 2
+                and encoded[1] == 0xAF,
                 f"{context}: unsupported or truncated two-byte IA-32 opcode")
         opcode_size = 2
     require(opcode in {
                 0x01, 0x03, 0x0F, 0x2B, 0x33, 0x39, 0x3B,
-                0x80, 0x83, 0x89, 0x8A, 0x8B, 0xF7, 0xFF,
+                0x80, 0x83, 0x89, 0x8A, 0x8B, 0x8D, 0xF7, 0xFF,
             },
             f"{context}: unsupported IA-32 instruction opcode")
     require(len(encoded) >= opcode_size + 1,
@@ -15957,13 +16520,13 @@ def require_instruction_mosaic_donor_recipe(
 def validate_instruction_mosaic_ranges(
     value: object, context: str, body_length: int,
 ) -> list[dict]:
-    """Validate manifest-attested, same-offset whole x86 instructions.
+    """Validate literal same-offset instruction range declarations.
 
-    The composer deliberately has no disassembler dependency.  Instead each
-    complete instruction is a closed manifest unit whose two compiler-emitted
-    encodings are pinned both literally and by SHA-256.  Runtime composition
-    copies the bytes from the freshly compiled donor, never from the manifest.
-    The retail oracle remains the load-bearing proof of the resulting code.
+    This schema gate closes order, width, bytes, digests, and declared
+    partitions.  Routes that require complete-instruction evidence separately
+    prove both endpoints and every partition with the line-row-anchored,
+    fail-closed IA-32 decoder before any bytes cross.  Runtime composition
+    copies bytes from the freshly compiled donor, never from the manifest.
     """
     require(isinstance(value, list) and 1 <= len(value) <= 64,
             f"{context} must contain 1..64 instruction ranges")
@@ -16493,6 +17056,122 @@ def validate_ordinary_fpo_mosaic_identity(
     return normalized
 
 
+SOURCE_FPO_CHILD_IDENTITY_KEYS = {
+    "section_number", "expected_seed_raw_size", "expected_donor_raw_size",
+    "relocation_count", "line_count", "characteristics", "selection",
+    "associated", "expected_seed_body_sha256",
+    "expected_donor_body_sha256", "expected_seed_relocation_sha256",
+    "expected_donor_relocation_sha256",
+}
+
+
+def validate_source_fpo_mosaic_identity(
+    value: object, context: str, primary_section: int, body_length: int,
+) -> dict:
+    """Validate the isolated source-refactor FPO/CodeView identity."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "expected_primary_characteristics",
+        "expected_primary_selection", "expected_function_count",
+        "expected_comdat_count", "expected_seed_line_sha256",
+        "expected_donor_line_sha256", "debug_f", "debug_s",
+    }, context)
+    require(value.get("kind") == SOURCE_FPO_MOSAIC_IDENTITY_KIND,
+            f"{context}.kind differs")
+    normalized = {"kind": value["kind"]}
+    for name, minimum, maximum in (
+        ("expected_primary_characteristics", 1, 0xFFFFFFFF),
+        ("expected_primary_selection", 1, 7),
+        ("expected_function_count", 1, 0x7FFFFFFF),
+        ("expected_comdat_count", 1, 0x7FFFFFFF),
+    ):
+        normalized[name] = require_exact_int(
+            value.get(name), f"{context}.{name}",
+            minimum=minimum, maximum=maximum)
+    for name in ("expected_seed_line_sha256",
+                 "expected_donor_line_sha256"):
+        normalized[name] = require_sha(value.get(name), f"{context}.{name}")
+
+    children = {}
+    for key in ("debug_f", "debug_s"):
+        child_context = f"{context}.{key}"
+        child = value.get(key)
+        require(isinstance(child, dict), f"{child_context} must be an object")
+        extras = ({"expected_record"} if key == "debug_f" else {
+            "expected_common_prefix_sha256", "expected_record_kind",
+            "expected_cb_proc", "expected_dbg_start", "expected_dbg_end",
+            "expected_seed_tail_sha256", "expected_donor_tail_sha256",
+        })
+        exact_audit_keys(
+            child, SOURCE_FPO_CHILD_IDENTITY_KEYS | extras, child_context)
+        normalized_child = {}
+        for name, minimum, maximum in (
+            ("section_number", 1, 0x7FFF),
+            ("expected_seed_raw_size", 1, 0xFFFFFFFF),
+            ("expected_donor_raw_size", 1, 0xFFFFFFFF),
+            ("relocation_count", 0, 0xFFFF),
+            ("line_count", 0, 0xFFFF),
+            ("characteristics", 1, 0xFFFFFFFF),
+            ("selection", 1, 7),
+            ("associated", 1, 0x7FFF),
+        ):
+            normalized_child[name] = require_exact_int(
+                child.get(name), f"{child_context}.{name}",
+                minimum=minimum, maximum=maximum)
+        require(normalized_child["associated"] == primary_section
+                and normalized_child["selection"] == 5
+                and normalized_child["line_count"] == 0,
+                f"{child_context} is not an associative debug child")
+        for name in (
+            "expected_seed_body_sha256", "expected_donor_body_sha256",
+            "expected_seed_relocation_sha256",
+            "expected_donor_relocation_sha256",
+        ):
+            normalized_child[name] = require_sha(
+                child.get(name), f"{child_context}.{name}")
+        if key == "debug_f":
+            require(normalized_child["expected_seed_raw_size"] == 16
+                    and normalized_child["expected_donor_raw_size"] == 16
+                    and normalized_child["relocation_count"] == 1,
+                    f"{child_context} is not one classic FPO record")
+            record = validate_manifest_fpo_record(
+                child.get("expected_record"),
+                f"{child_context}.expected_record")
+            require(record["cbProcSize"] == body_length,
+                    f"{child_context} FPO size differs from the function")
+            normalized_child["expected_record"] = record
+        else:
+            require(normalized_child["expected_seed_raw_size"] >= 28
+                    and normalized_child["expected_donor_raw_size"] >= 28
+                    and normalized_child["relocation_count"] == 2,
+                    f"{child_context} is not a CodeView procedure record")
+            for name in (
+                "expected_common_prefix_sha256", "expected_seed_tail_sha256",
+                "expected_donor_tail_sha256",
+            ):
+                normalized_child[name] = require_sha(
+                    child.get(name), f"{child_context}.{name}")
+            require(child.get("expected_record_kind") == "0502",
+                    f"{child_context}.expected_record_kind differs")
+            normalized_child["expected_record_kind"] = "0502"
+            for name in ("expected_cb_proc", "expected_dbg_start",
+                         "expected_dbg_end"):
+                normalized_child[name] = require_exact_int(
+                    child.get(name), f"{child_context}.{name}",
+                    minimum=0, maximum=body_length)
+            require(
+                normalized_child["expected_cb_proc"] == body_length
+                and 0 <= normalized_child["expected_dbg_start"]
+                <= normalized_child["expected_dbg_end"] < body_length,
+                f"{child_context} CodeView procedure range differs")
+        children[key] = normalized_child
+    normalized.update(children)
+    require(children["debug_f"]["section_number"]
+            != children["debug_s"]["section_number"],
+            f"{context} child seats are not distinct")
+    return normalized
+
+
 def _comdat_child_closure(coff: CoffObject, primary: dict) -> tuple:
     """Return (count, sorted child section names) of a COMDAT's selection-5
     associates."""
@@ -16797,6 +17476,178 @@ def require_ordinary_fpo_mosaic_identity(
         and sha256_bytes(seed_s[:28])
         == debug_pin["expected_common_prefix_sha256"]
         and seed_s[2:4].hex() == debug_pin["expected_record_kind"],
+        f"{context}: CodeView procedure identity differs",
+    )
+    for role, raw in (("seed", seed_s), ("donor", donor_s)):
+        cb_proc, dbg_start, dbg_end = struct.unpack_from("<III", raw, 16)
+        require(
+            (cb_proc, dbg_start, dbg_end) == (
+                debug_pin["expected_cb_proc"],
+                debug_pin["expected_dbg_start"],
+                debug_pin["expected_dbg_end"],
+            )
+            and 0 <= dbg_start <= dbg_end < cb_proc,
+            f"{context}: {role} CodeView procedure range differs",
+        )
+    return pairs
+
+
+def require_source_fpo_mosaic_identity(
+    seed: CoffObject,
+    seed_primary: dict,
+    donor: CoffObject,
+    donor_primary: dict,
+    function: dict,
+    identity: dict,
+    context: str,
+) -> list[tuple[dict, dict]]:
+    """Authenticate one source-refactor mosaic's exact FPO closure.
+
+    The seed and donor may have separately pinned CodeView payload sizes and
+    bodies, but they must describe the same procedure and retain identical
+    FPO data and semantic child relocations. The composed output remains
+    seed-authoritative for both children.
+    """
+    mangled = function["mangled"]
+    seed_definitions = section_definitions(seed)
+    donor_definitions = section_definitions(donor)
+    require(
+        seed_primary["characteristics"]
+        == donor_primary["characteristics"]
+        == identity["expected_primary_characteristics"],
+        f"{context}: primary characteristics differ",
+    )
+    require(
+        seed_definitions[seed_primary["number"]]["selection"]
+        == donor_definitions[donor_primary["number"]]["selection"]
+        == identity["expected_primary_selection"],
+        f"{context}: primary COMDAT selection differs",
+    )
+    for role, coff in (("seed", seed), ("donor", donor)):
+        require(
+            sum(function_multiset(coff).values())
+            == identity["expected_function_count"],
+            f"{context}: {role} function census differs",
+        )
+        require(
+            sum(comdat_primary_identity_multiset(coff).values())
+            == identity["expected_comdat_count"],
+            f"{context}: {role} COMDAT census differs",
+        )
+    require(linker_payload_multiset(seed) == linker_payload_multiset(donor),
+            f"{context}: source refactor changed linker payload")
+    require(
+        sha256_bytes(_coff_table_bytes(seed, seed_primary, "lines"))
+        == identity["expected_seed_line_sha256"]
+        and sha256_bytes(_coff_table_bytes(donor, donor_primary, "lines"))
+        == identity["expected_donor_line_sha256"],
+        f"{context}: target line-table pin differs",
+    )
+    require(
+        _comdat_child_closure(seed, seed_primary)
+        == _comdat_child_closure(donor, donor_primary)
+        == (2, (".debug$F", ".debug$S")),
+        f"{context}: closure is not the exact FPO pair",
+    )
+
+    pairs = []
+    for key, name in (("debug_f", ".debug$F"),
+                      ("debug_s", ".debug$S")):
+        pin = identity[key]
+        left = _comdat_child(seed, seed_primary, name)
+        right = _comdat_child(donor, donor_primary, name)
+        for role, coff, section, definitions, primary in (
+            ("seed", seed, left, seed_definitions, seed_primary),
+            ("donor", donor, right, donor_definitions, donor_primary),
+        ):
+            definition = definitions[section["number"]]
+            require(
+                section["number"] == pin["section_number"]
+                and section["raw_size"]
+                == pin[f"expected_{role}_raw_size"]
+                and section["relocation_count"]
+                == pin["relocation_count"]
+                and section["line_count"] == pin["line_count"]
+                and section["characteristics"] == pin["characteristics"]
+                and definition["selection"] == pin["selection"]
+                and definition["associated"] == primary["number"]
+                == pin["associated"],
+                f"{context}: {role} {name} geometry differs",
+            )
+            require(
+                sha256_bytes(coff_body(coff, section))
+                == pin[f"expected_{role}_body_sha256"],
+                f"{context}: {role} {name} body pin differs",
+            )
+            require(
+                sha256_bytes(_coff_table_bytes(
+                    coff, section, "relocations"))
+                == pin[f"expected_{role}_relocation_sha256"],
+                f"{context}: {role} {name} relocation-table pin differs",
+            )
+        require_same_semantic_relocations(
+            seed, left, donor, right, f"{context} {name}")
+        expected_rows = (
+            [(0, 4, 7)] if name == ".debug$F"
+            else [(28, 4, 11), (32, 2, 10)]
+        )
+        for role, coff, section, primary in (
+            ("seed", seed, left, seed_primary),
+            ("donor", donor, right, donor_primary),
+        ):
+            rows = detailed_relocations(coff, section)
+            require(
+                len(rows) == len(expected_rows)
+                and all(
+                    (row["offset"], row["width"], row["type"])
+                    == expected
+                    and row["addend"] == 0
+                    and row["target"] == mangled
+                    and row["target_section"] == primary["number"]
+                    and row["target_value"] == 0
+                    and row["target_type"] == 32
+                    and row["target_storage"] == 2
+                    for row, expected in zip(rows, expected_rows)
+                ),
+                f"{context}: {role} {name} semantic relocations differ",
+            )
+        pairs.append((left, right))
+
+    seed_f = coff_body(seed, pairs[0][0])
+    donor_f = coff_body(donor, pairs[0][1])
+    fpo_pin = identity["debug_f"]["expected_record"]
+    require(
+        seed_f == donor_f
+        and sha256_bytes(seed_f) == fpo_pin["raw_sha256"],
+        f"{context}: FPO raw bytes differ",
+    )
+    require(
+        exact_json_equal(
+            parse_fpo_data(seed_f, expected_proc_size=seed_primary["raw_size"]),
+            fpo_pin,
+        )
+        and exact_json_equal(
+            parse_fpo_data(
+                donor_f, expected_proc_size=donor_primary["raw_size"]),
+            fpo_pin,
+        ),
+        f"{context}: parsed FPO record differs",
+    )
+
+    seed_s = coff_body(seed, pairs[1][0])
+    donor_s = coff_body(donor, pairs[1][1])
+    debug_pin = identity["debug_s"]
+    require(
+        len(seed_s) == debug_pin["expected_seed_raw_size"]
+        and len(donor_s) == debug_pin["expected_donor_raw_size"]
+        and seed_s[:28] == donor_s[:28]
+        and sha256_bytes(seed_s[:28])
+        == debug_pin["expected_common_prefix_sha256"]
+        and seed_s[2:4].hex() == debug_pin["expected_record_kind"]
+        and sha256_bytes(seed_s[28:])
+        == debug_pin["expected_seed_tail_sha256"]
+        and sha256_bytes(donor_s[28:])
+        == debug_pin["expected_donor_tail_sha256"],
         f"{context}: CodeView procedure identity differs",
     )
     for role, raw in (("seed", seed_s), ("donor", donor_s)):
@@ -17671,6 +18522,7 @@ def assert_source_permutations_are_donor_only(overlay: object) -> None:
                 "for_initializer_declaration_reseat_v1",
                 "captured_pointer_tail_return_fragment_v1",
                 "fixed_array_fill_loop_v1",
+                "fixed_array_shuffle_pointer_countdown_v1",
                 "inclusive_extent_assignment_v1",
                 "discarded_postfix_increment_v1",
                 "dead_local_linear_updates_v1",
@@ -18386,8 +19238,13 @@ def _compose_retail_exact_instruction_mosaic_core(
     require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
             "retail oracle body is missing")
     ordinary_fpo = "ordinary_fpo_identity" in function
+    source_fpo = "source_fpo_identity" in function
+    require(not (ordinary_fpo and source_fpo),
+            "instruction mosaic FPO identity classes are mutually exclusive")
     require(not (source_permutation and ordinary_fpo),
             "ordinary FPO mosaic cannot cross the source-permutation branch")
+    require(not source_fpo or source_permutation,
+            "source FPO mosaic requires the source-permutation branch")
     expected_length = function["expected_body_length"]
     donor_expected_length = function.get(
         "expected_donor_body_length", expected_length)
@@ -18395,7 +19252,7 @@ def _compose_retail_exact_instruction_mosaic_core(
         function.get("instruction_ranges"), "instruction mosaic ranges",
         expected_length,
     )
-    if ordinary_fpo:
+    if ordinary_fpo or source_fpo:
         require(
             all(item["kind"]
                 == "same_offset_complete_x86_instruction_sequence_v1"
@@ -18452,6 +19309,14 @@ def _compose_retail_exact_instruction_mosaic_core(
             seed, sp, donor, dp, function,
             function["ordinary_fpo_identity"],
             "ordinary FPO instruction mosaic",
+        )
+    elif source_fpo:
+        require(closure == (2, (".debug$F", ".debug$S")),
+                "source FPO instruction-mosaic closure class differs")
+        require_source_fpo_mosaic_identity(
+            seed, sp, donor, dp, function,
+            function["source_fpo_identity"],
+            "source FPO instruction mosaic",
         )
     else:
         allowed_closures = {(2, (".debug$S", ".xdata$x"))}
@@ -18530,14 +19395,14 @@ def _compose_retail_exact_instruction_mosaic_core(
                 and symbol_index == function_index,
                 f"instruction-mosaic {role} line marker changed identity")
 
-    if ordinary_fpo:
+    if ordinary_fpo or source_fpo:
         require_coff_line_certified_ia32_boundaries(
             seed, sp, seed_body, ranges, "seed", mangled,
-            "ordinary FPO instruction-mosaic seed",
+            "FPO instruction-mosaic seed",
         )
         require_coff_line_certified_ia32_boundaries(
             donor, dp, donor_body, ranges, "donor", mangled,
-            "ordinary FPO instruction-mosaic donor",
+            "FPO instruction-mosaic donor",
         )
 
     code_relocation_renames = (
@@ -18579,6 +19444,10 @@ def _compose_retail_exact_instruction_mosaic_core(
         require(contained[0] == contained[1],
                 f"instruction-mosaic range {index} contains unpaired "
                 "relocation operands")
+        if source_fpo:
+            require(not contained[0],
+                    f"source FPO instruction-mosaic range {index} overlaps "
+                    "a relocation operand")
         for ordinal in contained[0]:
             left, right = seed_rows[ordinal], donor_rows[ordinal]
             strict_fields = (
@@ -18656,11 +19525,11 @@ def _compose_retail_exact_instruction_mosaic_core(
     require(_coff_table_bytes(checked, cp, "lines")
             == _coff_table_bytes(seed, sp, "lines"),
             "instruction-mosaic seed line table changed")
-    if ordinary_fpo:
+    if ordinary_fpo or source_fpo:
         require(
             instruction_mosaic_metadata_sha256(checked, cp)
             == function["expected_seed_metadata_sha256"],
-            "ordinary FPO instruction-mosaic output metadata changed",
+            "FPO instruction-mosaic output metadata changed",
         )
     require(function_multiset(checked) == function_multiset(seed),
             "instruction-mosaic output function set changed")
@@ -18684,6 +19553,7 @@ def _compose_retail_exact_instruction_mosaic_core(
         "line_count": cp["line_count"],
         "closure": list(closure[1]),
         "ordinary_fpo_identity": ordinary_fpo,
+        "source_fpo_identity": source_fpo,
         "code_relocation_renames": code_relocation_renames,
         "closure_relocation_renames": closure_relocation_renames,
         "retail_exact": True,

@@ -75,8 +75,58 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-17)
 
-- Accepted canonical gate: LEGO1 4876/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is `0x100bb1d0 MxDisplaySurface::VTable0x30`. Its ordinary
+- Accepted canonical gate: LEGO1 4877/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is
+  `0x1004bd10 MxTransitionManager::DissolveTransition`. A closed
+  `fixed_array_shuffle_countdown` source generator replaces one exact indexed
+  640-element shuffle with its equivalent typed pointer/countdown form. The
+  inverse rendering reconstructs the checked-in loop byte-for-byte. Pinned
+  include edges and declarations prove the array is `MxU16[640]`, the index
+  and swap are `MxS32`, the pointer is fresh, every random draw and aliasing
+  case retains its order, and the index is overwritten before its changed exit
+  value can be read. Raw, per-TU and manifest-wide role gates restrict this
+  source recipe to one primary source-FPO instruction mosaic and forbid every
+  ordinary, variant, secondary, repeated or alternate-composer use.
+
+  Seed and fresh donor are both 438 bytes at section 55/79 with eight semantic
+  relocations and the exact two-child `.debug$F`/`.debug$S` closure. Their
+  bodies are
+  `9850d0b4a91610ecea9aacf0e0822b7fcd26e98f8ed7ceebf9a0ad031efc65b6`
+  and
+  `d8dcb9786d75ee60e3a18e12920ebc47cf8835c9fa9e9faf3572c8eec4bc61ac`.
+  Six line-certified complete instructions at `[60,63)`, `[63,68)`,
+  `[68,71)`, `[77,81)`, `[88,89)` and `[96,100)` make the target body
+  retail-exact. The fail-closed decoder adds only the live `8d`, `e8`, `99`,
+  `4b`, `4f`, and single `66`-prefixed `8b`/`89` forms. The source-FPO branch
+  is mutually exclusive with the ordinary-FPO branch; it permits the pinned
+  donor CodeView size change 206 to 221 while requiring identical procedure
+  identity, parsed FPO, semantic child relocations and seed-authoritative
+  output metadata. The donor and its three runtime collateral changes are
+  excluded, and every non-target output byte remains the canonical seed's.
+
+  The evidence donor used a long projected source path, while the canonical
+  runner compiles production-relative `s.cpp`. That changes only `.file`
+  auxiliary symbol bookkeeping (402 to 387 raw symbol records; target index
+  297 to 282). Independent reconstruction proved the four runner-authentic
+  changes are raw-index-only: donor line `0bec99cf...` to `a6c20283...`,
+  debug-F relocation `b158bbd0...` to `f8769d95...`, debug-S relocation
+  `d8e74b20...` to `07ef049c...`, and metadata `9f18ce0b...` to `427ca9c5...`.
+  Bodies, post-sentinel line rows, semantic relocations, closure, FPO,
+  CodeView and every function/COMDAT body stayed exact.
+
+  Discovery produced this sole gain with no loss; its report SHA-256 is
+  `94f2d6dd913a3ef7b26b2d88e4dd8abbc6c96f6db028826cf228d9da787d63de`.
+  Marker-removed forced-fresh confirmation held the same 4877 accepted set
+  with zero delta and left ISLE and CONFIG complete. Its marker SHA-256 is
+  `d71343772e8432cbb113fc6bb416770027894e7bffb61412ba32059b0db077fd`,
+  LEGO1 report SHA-256 is
+  `496a060d0b3445c5e4961c45367590748485e64ea6ec5d2e6241332cc05fa15b`,
+  verdict SHA-256 is
+  `edac7b87b1b8a53c9c9aaf9b5a12dc2bb02d05c5e510e58a1985c263579524de`,
+  and manifest SHA-256 is
+  `a2d7eef5bbae0976eca2ea7c7fb973094c0d3e2fdbf9f08e4cb9cc52ed8a92f9`.
+
+  The preceding gain is `0x100bb1d0 MxDisplaySurface::VTable0x30`. Its ordinary
   `declaration_shape(4,27)` donor is protected by an exact FPO-only role:
   raw, per-TU and manifest-wide gates require its sole use to be this one
   primary FPO-aware instruction mosaic and forbid secondary, source, variant

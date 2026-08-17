@@ -13751,6 +13751,417 @@
     "reason": "Closes PizzeriaState's constructor by importing three authenticated complete instruction sequences from a donor-only typed fixed-array fill loop while retaining the canonical translation unit, target metadata, and every non-target function byte.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/common/mxtransitionmanager.cpp",
+   "source_sha256": "5b013a0d9969e22aeaef48488105250630c8e790b4572ba32a78d68cf86c3814",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_34f9d09eb563",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "donor_source_overlay",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "renderings": [
+       {
+        "path": "LEGO1/lego/legoomni/src/common/mxtransitionmanager.cpp",
+        "clean_sha256": "2cdda8ecd8e30f15345719b90a8a8d0610b3e482e6bc8a18aa5970d762ac8a50",
+        "rendered_sha256": "8656ec16f3f0943cda97e6521beb22acb2157045fa22a9c054ea1a15af5d206e",
+        "operations": [
+         {
+          "op": "replace",
+          "id": "op_dissolve_fixed_array_shuffle_countdown",
+          "from": {
+           "ctx": "ef4bbe05e29c3a4ac682b18854e8cf932b7805f3123418699079009222ee9f4d",
+           "line_before": "ea5e996f2042882ceb7adeb46d6a23789ce510bec4f598c79c0e971d8c51f105",
+           "line_after": "3f02a98084afbc12d91f2440b4285e3c476958f63318499252181d124b20ce53"
+          },
+          "to": {
+           "ctx": "f4c1b3bfe67ed1788b1709e92d22fc39d8e828bf34d5f88645dada611be0b0f3",
+           "line_before": "3713bbfd76dcaac1a6d8316dc5b8e2bccaf4b47f2c767f953af2ed65363ec925",
+           "line_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "removed": {
+           "sha256": "10f00454b3c20b09846d2f00cf0da59fba9502dc8d5444a1478fb3d9036f5654",
+           "size": 166
+          },
+          "gen": {
+           "k": "fixed_array_shuffle_countdown",
+           "array": "m_columnOrder",
+           "index": "i",
+           "index_type": "MxS32",
+           "pointer": "column",
+           "element_type": "MxU16",
+           "swap": "swap",
+           "swap_type": "MxS32",
+           "temporary": "t",
+           "temporary_type": "MxU16",
+           "random_function": "rand",
+           "count": 640,
+           "declaration_indent": "\t\t"
+          }
+         }
+        ]
+       }
+      ],
+      "canonical_overlay_replay": "owning_translation_unit_v1",
+      "emission_policy": "donor_private_rendering_only",
+      "authenticity_rationale": "A typed fixed-array shuffle compiles a pointer countdown over the same pinned array extent; only authenticated complete target instructions may supplement the seed object, whose metadata and all non-target bytes remain authoritative.",
+      "rendering_identity_sha256": "34f9d09eb5634ca58d8e1b63193708cd18a59139a3b846b6a9a933a69707c49c"
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?DissolveTransition@MxTransitionManager@@AAEXXZ",
+     "donor": "d_34f9d09eb563",
+     "splice_class": "retail_exact_instruction_mosaic",
+     "expected_section_number": 55,
+     "expected_section_count": 79,
+     "expected_body_length": 438,
+     "expected_donor_body_length": 438,
+     "expected_relocation_count": 8,
+     "expected_line_count": 42,
+     "expected_donor_line_count": 44,
+     "expected_seed_body_sha256": "9850d0b4a91610ecea9aacf0e0822b7fcd26e98f8ed7ceebf9a0ad031efc65b6",
+     "expected_donor_body_sha256": "d8dcb9786d75ee60e3a18e12920ebc47cf8835c9fa9e9faf3572c8eec4bc61ac",
+     "expected_seed_metadata_sha256": "50dde037ef93311085caf36fc80f7da9db67deaa447ce6c5fd7f7ae47225beae",
+          "expected_donor_metadata_sha256": "427ca9c51f423b36608cd1a0cc97fe2ea57afa70b3f1fc3c0f307fdda4780de7",
+     "expected_body_sha256": "d8dcb9786d75ee60e3a18e12920ebc47cf8835c9fa9e9faf3572c8eec4bc61ac",
+     "source_fpo_identity": {
+      "kind": "seed_authoritative_source_refactor_fpo_codeview_v1",
+      "expected_primary_characteristics": 1615859744,
+      "expected_primary_selection": 1,
+      "expected_function_count": 23,
+      "expected_comdat_count": 28,
+      "expected_seed_line_sha256": "9046676931c9ff7dd83b54cf33e00861508db556bc6fbedfd54cad55057eca2a",
+            "expected_donor_line_sha256": "a6c20283483e9ea8cdee4ada86d2af06f14fd31b998e544557b151c416c3056e",
+      "debug_f": {
+       "section_number": 57,
+       "expected_seed_raw_size": 16,
+       "expected_donor_raw_size": 16,
+       "relocation_count": 1,
+       "line_count": 0,
+       "characteristics": 1108349000,
+       "selection": 5,
+       "associated": 55,
+       "expected_seed_body_sha256": "ba1684a5eef581e54f46c41c1a84695b52bad468a83f2b461f9fd4f79a6e7f1d",
+       "expected_donor_body_sha256": "ba1684a5eef581e54f46c41c1a84695b52bad468a83f2b461f9fd4f79a6e7f1d",
+       "expected_seed_relocation_sha256": "b158bbd00c628542ab032a3041970e1e1357e7c8b633a4a49d0ab03fd0097437",
+              "expected_donor_relocation_sha256": "f8769d95e97f98c86873b82af3fa0cd591fd445342d641bb79a3b83161cbeb98",
+       "expected_record": {
+        "ulOffStart": 0,
+        "cbProcSize": 438,
+        "cdwLocals": 27,
+        "cdwParams": 0,
+        "cbProlog": 15,
+        "cbRegs": 4,
+        "fHasSEH": 0,
+        "fUseBP": 1,
+        "reserved": 0,
+        "cbFrame": 0,
+        "raw_sha256": "ba1684a5eef581e54f46c41c1a84695b52bad468a83f2b461f9fd4f79a6e7f1d"
+       }
+      },
+      "debug_s": {
+       "section_number": 56,
+       "expected_seed_raw_size": 206,
+       "expected_donor_raw_size": 221,
+       "relocation_count": 2,
+       "line_count": 0,
+       "characteristics": 1108349000,
+       "selection": 5,
+       "associated": 55,
+       "expected_seed_body_sha256": "bf1ad5e24a165698b4331c9a5933f267fb208d77dc2cfe8778a3ea3bbb117f3c",
+       "expected_donor_body_sha256": "d1698ca625e650283391f357e21d0951ce3674308c6a7929e72c155d8d90abd2",
+       "expected_seed_relocation_sha256": "d8e74b20e9a894c57724aaae3fa300b890bf1dabc63775e042540dd252dacaa6",
+              "expected_donor_relocation_sha256": "07ef049c6ddc18fe99b689f9490bba24729e321f4173bd3cc59512cc27fbeaf1",
+       "expected_common_prefix_sha256": "f695facd0abc6ea90ebefd9958eda462415d16da771c2fd94687a2b47e144228",
+       "expected_record_kind": "0502",
+       "expected_cb_proc": 438,
+       "expected_dbg_start": 15,
+       "expected_dbg_end": 430,
+       "expected_seed_tail_sha256": "9f226463a6d31c1993c4eac23f02f0098f6b51eb3ae503eb5b073ecdd657a27d",
+       "expected_donor_tail_sha256": "3a386cd4d4b318231cc9af331ad63a57a9339a3fe8dd80c001dbb7fcf59fa86d"
+      }
+     },
+     "instruction_ranges": [
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 60,
+       "end": 63,
+       "seed_bytes": "8d7e36",
+       "seed_sha256": "17b1437658a636b3b3195ccd9d1107cc65f781aa3e380cf5872750433c8cad31",
+       "donor_bytes": "8d5e36",
+       "donor_sha256": "1340794f53cd651f680b93bae15520f7a7ce23843403de0a388df6d052c35d55",
+       "seed_instruction_lengths": [3],
+       "donor_instruction_lengths": [3]
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 63,
+       "end": 68,
+       "seed_bytes": "bb80020000",
+       "seed_sha256": "45c718dcd3f7c787fd1aeb569a32ef61f71642a657ef9e72831c7eea571b3c6a",
+       "donor_bytes": "bf80020000",
+       "donor_sha256": "1aa548e7190a179d95a104ac591be2b21507c6ea63c09fc0f922dd3c31e7fd8a",
+       "seed_instruction_lengths": [5],
+       "donor_instruction_lengths": [5]
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 68,
+       "end": 71,
+       "seed_bytes": "83c702",
+       "seed_sha256": "6b047ad9c8a69e1656229be37a3b40d80eb54d454b4c19feb284bd81777bca48",
+       "donor_bytes": "83c302",
+       "donor_sha256": "9b4141d9282f2a101c39b979be807859d4a2443e50dcba9cbfaf8344f8631600",
+       "seed_instruction_lengths": [3],
+       "donor_instruction_lengths": [3]
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 77,
+       "end": 81,
+       "seed_bytes": "668b6ffe",
+       "seed_sha256": "d191c3c95b5b6cd660f292bb2b19d9f6d065aeb7794867656a63cd6a752e7db2",
+       "donor_bytes": "668b6bfe",
+       "donor_sha256": "22918c858575945f4cd546cef9515ccf0801fc822b5098de37703a419dd6dd48",
+       "seed_instruction_lengths": [4],
+       "donor_instruction_lengths": [4]
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 88,
+       "end": 89,
+       "seed_bytes": "4b",
+       "seed_sha256": "86be9a55762d316a3026c2836d044f5fc76e34da10e1b45feee5f18be7edb177",
+       "donor_bytes": "4f",
+       "donor_sha256": "c4694f2e93d5c4e7d51f9c5deb75e6cc8be5e1114178c6a45b6fc2c566a0aa8c",
+       "seed_instruction_lengths": [1],
+       "donor_instruction_lengths": [1]
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 96,
+       "end": 100,
+       "seed_bytes": "66894ffe",
+       "seed_sha256": "08794fbf76f40a576178ca61d566d30130fad2de3476b270150c879e9559fcd7",
+       "donor_bytes": "66894bfe",
+       "donor_sha256": "d487caffde6dffd735bb86bb85ff530baa2e8323b851f5153e19b24fc6344fea",
+       "seed_instruction_lengths": [4],
+       "donor_instruction_lengths": [4]
+      }
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x1004bd10",
+      "verdict": "MATCH",
+      "length": 438
+     },
+     "retail_relocations": [
+      {
+       "offset": 28,
+       "type": 20,
+       "addend": 0,
+       "target": "?EndTransition@MxTransitionManager@@AAEXE@Z",
+       "target_section": 32,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1004bc30"
+      },
+      {
+       "offset": 72,
+       "type": 20,
+       "addend": 0,
+       "target": "_rand",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b640"
+      },
+      {
+       "offset": 120,
+       "type": 20,
+       "addend": 0,
+       "target": "_rand",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b640"
+      },
+      {
+       "offset": 234,
+       "type": 20,
+       "addend": 0,
+       "target": "?SubmitCopyRect@MxTransitionManager@@AAEXPAU_DDSURFACEDESC@@@Z",
+       "target_section": 73,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1004c4d0"
+      },
+      {
+       "offset": 362,
+       "type": 20,
+       "addend": 0,
+       "target": "?SetupCopyRect@MxTransitionManager@@AAEXPAU_DDSURFACEDESC@@@Z",
+       "target_section": 76,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1004c580"
+      },
+      {
+       "offset": 384,
+       "type": 20,
+       "addend": 0,
+       "target": "?VideoManager@@YAPAVLegoVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015720"
+      },
+      {
+       "offset": 395,
+       "type": 20,
+       "addend": 0,
+       "target": "?VideoManager@@YAPAVLegoVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015720"
+      },
+      {
+       "offset": 405,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_fullScreenRect@@3UtagRECT@@A",
+       "target_section": 3,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f4378"
+      }
+     ],
+     "target_source_refactor": {
+      "kind": "fixed_array_shuffle_pointer_countdown_v1",
+      "selector": "brace_balanced_function_after_marker_v1",
+      "start_marker": "// FUNCTION: LEGO1 0x1004bd10",
+      "source_owner_mangled": "?DissolveTransition@MxTransitionManager@@AAEXXZ",
+      "seed_range_pin": {
+       "baseline_sha256": "dfc16f97abe6f5505f38e0fa8193a7710bfafc96f1270e5cc5038216356a5a8e",
+       "baseline_size": 2235,
+       "baseline_line_count": 86,
+       "baseline_significant_token_sha256": "1e8b8bd99ec378eed9d63db689f7834446ef8d73a03f08645e08b16c379aaf50"
+      },
+      "donor_range_pin": {
+       "baseline_sha256": "b9070d025386c299ec6534d9442ea104ae1f5e409fb9954b3b25ba5449c254cc",
+       "baseline_size": 2270,
+       "baseline_line_count": 88,
+       "baseline_significant_token_sha256": "c47fdf118acb4e9b5b308f7ab4f2a0062a89a6e76b3ac679ab2d20a5d7eeeef9"
+      },
+      "semantic_witness": {
+       "source_owner": "MxTransitionManager",
+       "array_member": "m_columnOrder",
+       "element_type": "MxU16",
+       "extent": 640,
+       "index_identifier": "i",
+       "index_type": "MxS32",
+       "owner_header": {
+        "path": "LEGO1/lego/legoomni/include/mxtransitionmanager.h",
+        "source_sha256": "a389c5faae32fc1115fc51b87f3ff43afb82469ac6fb76b79b0f03bc8dc0a9c1",
+        "unit_include_range_pin": {
+         "baseline_sha256": "6fc07810a54376f9e525a3be7cdb848c35f2f9abc889ad9ba3c56efbd6ba3b16",
+         "baseline_size": 33,
+         "baseline_line_count": 1,
+         "baseline_significant_token_sha256": "afa9ec215b6163e0e5161445d6a50cdb4efc44ff2d35fc7f2575fe1e6f68cd64"
+        },
+        "base_include_range_pin": {
+         "baseline_sha256": "4bda591bda035aefd6cf278c2db006c30ba23cfe3e00178ffae2125697c0d90d",
+         "baseline_size": 20,
+         "baseline_line_count": 1,
+         "baseline_significant_token_sha256": "0169b01853c1b4db2e3918599a676edc07a0ab22f34b84f595b06b19f8077a73"
+        },
+        "array_declaration_range_pin": {
+         "baseline_sha256": "f2e3120999ce0f1ddb70a0a6ffa3d91024b9876253036b6db5bf51cd7b7a2739",
+         "baseline_size": 42,
+         "baseline_line_count": 1,
+         "baseline_significant_token_sha256": "220880908c965e97ea1ef49d61598e12c42883595bc065c7e1468d377e3cdf93"
+        },
+        "member_block_range_pin": {
+         "baseline_sha256": "831308f48bd523249a58cbcba51976ace0f679bf07e730c04868322f1c7bb74b",
+         "baseline_size": 127,
+         "baseline_line_count": 3,
+         "baseline_significant_token_sha256": "4f07b13946746e2ee33e7d690602244136a04c0d569031a5f33a2915e94cbb95"
+        }
+       },
+       "base_header": {
+        "path": "LEGO1/omni/include/mxcore.h",
+        "source_sha256": "dc13613e26001a8f3317c7bf1ae8a2b09e688844395277de520fdb1c5bc2fc56",
+        "types_include_range_pin": {
+         "baseline_sha256": "9d096aa03ea84f90730d6fa5be137092ca1c6cdb1192e1bafe3d94f79bb92362",
+         "baseline_size": 21,
+         "baseline_line_count": 1,
+         "baseline_significant_token_sha256": "25302e40dcd453fa1eb66f491443872c2c756610c3c07703b42ab348be0b0198"
+        }
+       },
+       "types_header": {
+        "path": "LEGO1/omni/include/mxtypes.h",
+        "source_sha256": "7dfde00dc223bb41851c92b6103065cd7e1a1e7223914d03f73bfc4d6d156661",
+        "element_typedef_range_pin": {
+         "baseline_sha256": "11e129f01ba470d7eac7dfe21bb559a556a09330d851743e5c17abf8249daa83",
+         "baseline_size": 30,
+         "baseline_line_count": 1,
+         "baseline_significant_token_sha256": "b7b2f1ca54b27b436e5ee80f3787d1dafd514a9e24078ad716875c00d93f2f41"
+        },
+        "index_typedef_range_pin": {
+         "baseline_sha256": "79a9aaab501847166f11ec29344296bcd5ab648620c0a70d6c310b3bfd8b0131",
+         "baseline_size": 26,
+         "baseline_line_count": 1,
+         "baseline_significant_token_sha256": "5135ef2a6ec09cecce55a1bce4df0ec324fbde1d22b4c14c493238607bee0fb1"
+        }
+       },
+       "next_index_overwrite_range_pin": {
+        "baseline_sha256": "a4d322e1100619576d9b35e42ffbce6cdac67ed4a30f76cd60f9d25708bbebf2",
+        "baseline_size": 30,
+        "baseline_line_count": 1,
+        "baseline_significant_token_sha256": "3ba982e17f2b45d1714573ab0f8825f0bd99a53f907685ac3b3eb81d0b540b80"
+       }
+      },
+      "operation_ids": [
+       "op_dissolve_fixed_array_shuffle_countdown"
+      ]
+     }
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes DissolveTransition by importing six authenticated complete instruction ranges from a donor-only typed fixed-array shuffle while retaining seed metadata, debug children, and every non-target byte.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -13825,8 +14236,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-   "exact_raw_1_0_count": 4876,
-   "accepted_row_identity_sha256": "c37f17f9432a2dace40825e34eb4fd2fdab85db0ff90c20a786d5ad2630a5eb9",
+     "exact_raw_1_0_count": 4877,
+     "accepted_row_identity_sha256": "aece5cef1f53b791338045c190ca8aff983547f87d504d7c61517ac1876bb945",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
