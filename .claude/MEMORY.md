@@ -1807,3 +1807,101 @@ and manifest
 Do not restore range-level composition or broaden the inline-assembly/FPO
 exceptions for this row; any successor must preserve the complete natural
 body and the same seed-authoritative metadata and universe gates.
+
+## `0x100aa510 LegoLOD::Read` decisive static seal (2026-08-17)
+
+There is no remaining authentic, logic-neutral source mechanism capable of
+the complete residual. The checked-in source is SHA-256
+`4e2c0fd88bd7f3f3a5ce1391e2811bcd549131036e94f26cc626e56bd67098ab`
+(Git blob `db9f32f3a3e43c488046a1befaf5e947be7af898`); the effective build-tree
+source, whose only differences are synthetic file-scope carriers outside the
+target, is
+`e54865d98010a7fac1a53b957bfb56fc80d0103c540964e05030b8f6a56f4408`.
+The target function text is 7,375 characters, raw SHA-256
+`ef5a5cbaec4ffb19139cd525e0a43eece97f4464c4151b57c35eb9b05647cb2b`
+and comment/whitespace-normalized SHA-256
+`916e4249f6a52bf361273f70b071aab179755938c57b1b67a9aaa8a617451910`.
+
+The current object is SHA-256
+`9da5941ec643b8337acbd2126580786123cf58b24d72cf03b9b280e085a6e75a`.
+Its target is 1,694 bytes/body
+`2a9e38ee661bda17ec1dd12166eb9f06b3e13d5887eaa2fc270c39f020bb48df`,
+with 37 relocations and 110 COFF line records. Its closure is exactly
+`.debug$S + .xdata$x`; `.debug$S` is 753 bytes/body
+`f5e2eb41039113597cdb9ddc333f100307b0b638ec6257adad9888bd3b0ac756`
+with eight relocations, and `.xdata$x` is 40 bytes/body
+`2d1be37fbfa859d8d31be303c41b476f80b7c6145b767ab164f6f6751fb67dd3`
+with two relocations. Retail DLL SHA-256 is
+`14645225bbe81212e9bc1919cd8a692b81b8622abb6561280d99b0fc4151ce17`;
+the retail target is 1,693 bytes/body
+`f9c115d5d7d5e2d276f4f5ced0ad54ceafaf3f1b9ac276775853ee6a35d34d6a`.
+Both bodies contain 571 instructions. Relocation-masked positional distance
+is 313 (312 different shared-position bytes plus the one-byte length gap),
+with SHAPE 559/571 = 97.90%, STRUCT 439/571 = 76.88%, and EXACT 419/571 =
+73.38%.
+
+The complete semantic residual is stack-packer and scheduler state. Current
+uses a `0x170` frame while retail uses `0x174`. Retail maps current
+`numNormals` at `ebp-0x44` to `ebp-0x2c` and current `numPolys` at
+`ebp-0x3c` to `ebp-0x2a`; these are two four-byte slots that overlap by two
+bytes because their live ranges are disjoint. Retail also moves the
+compiler-generated three-byte `LegoColor` return temporary from `GetColor()`
+at current `ebp-0x43..-0x41` to `ebp-0x14..-0x12`. A source declaration
+cannot name that temporary. The other differences are consequent local
+schedules: the initial zeroing order, a three-instruction schedule near
+`+154`, an EH-state write near `+753`, two equivalent comparison directions
+near `+1232` and `+1297`, an LEA move near `+1375`, and cleanup load/push
+schedules near `+1489` and `+1504`. There is no missing branch, call, or
+source behavior.
+
+The retained source census searched the repository, build tree,
+`/private/tmp`, and related workspaces: 2,893 source paths, zero extraction
+errors, and 34 normalized target states. Of those, 2,847 are canonical; the
+other 46 exhaust all historical donors and every prior or recent panel. Git
+history has 37 path-touching commits, one historical path seat, 35 unique
+reachable file blobs, and 16 normalized implemented function states. The
+unreachable census covered 193 commits, 386 trees, and 1,155 blobs. Seventeen
+unreachable blobs mention the symbol/address/signature, but the only source
+blob duplicates a reachable older state; three COFF objects only reference
+the symbol. No additional source or defining object survives there.
+
+The corresponding retained-object census inspected 15,448 symbol-bearing
+objects: 2,799 definitions, 12,649 references, and zero parse errors. The
+definitions collapse to 31 unique bodies. Their lengths are 1,694 x 530,
+1,699 x 1, 1,701 x 2,267, and one unrelated 5,792-byte outlier; none reaches
+retail's 1,693 bytes. The best distance is 229 in nine objects. Of the 2,799
+definitions, 2,798 have 37 relocations and the exact `.debug$S + .xdata$x`
+closure; the unrelated outlier has 172 relocations and no such closure. Line
+counts are 109 x 23, 110 x 2,753, 111 x 22, and 251 for the outlier. Thus no
+retained object supplies either the retail length or the complete residual.
+
+Earlier closure already covered 12 declaration forms, nine loop-scope
+combinations, 15 unused-POD frame dials, and three packed-word scalar/cursor
+forms. The retained carrier panel contains 730 cells: 122 at 1,694 bytes and
+608 at 1,701 bytes, with best distance 289 and no 1,693-byte result. The one
+new authentic-looking form, loop-scoped 16-bit `numPolys` with logic-neutral
+unmasked uses, improves distance 313 to 229 but remains 1,694 bytes with 37
+relocations, 110 lines, the same `0x170` frame, and identical EH closure.
+Moving the remaining loop locals jumps to 1,701 bytes/distance 843; empty-
+scope perturbations remain at distance 229. This partial improvement cannot
+cause the whole retail placement and is not a READY candidate.
+
+BETA10 DLL SHA-256 is
+`d91435a40fa31f405fba33b03bd3bd40dcd4ca36ccf8ef6162c6c5ca0d7190e7`.
+Its linked `Read` extent at `0x1018d15d..0x1018dfc4` is 3,687 bytes/body
+`0103d3a89bbf9ef09b754a433b09e1331175c82eab7d37ab7ef96550bcc6b2d3`,
+919 instructions, with a `0x208` frame. This `/Od` body has BETA-only paths,
+types, and out-of-line debug/EH structure. It authenticates the local set
+already transcribed, but it cannot authenticate retail `/O2` stack-packer
+placement or declaration order.
+
+**Seal:** do not repeat declaration-order, scalar, packed-word, scope,
+unused-frame, loop-local, empty-scope, or carrier panels. Reopen only for an
+authenticated final-release source artifact or authenticated original
+vendor-compiler/PCH/build-context state that causally predicts all three
+placement facts--the `numNormals`/`numPolys` overlap, the `GetColor()`
+temporary at `ebp-0x14`, and the `0x174` frame--and provides a natural path
+to the exact 1,693-byte/571-instruction retail body while preserving the
+37-relocation semantic sequence and 40-byte/two-relocation xdata closure. No
+compiler, Wine, link, reccmp, source edit, or shared-state mutation was used
+for this audit.
