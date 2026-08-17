@@ -1243,6 +1243,53 @@ state has now been delta-reduced into two explicit current-source manifest
 recipes and accepted through the generic same-COMDAT multi-donor mosaic above;
 no historical source, generator, header, report or object is a build input.
 
+- `0x100586e0 LegoPathBoundary::RemovePresenter`, upstream seed `834470658`:
+  the provenance-exact current-source `entropy2.h` replay is negative and
+  sealed. An exhaustive retained filename/text/binary-command and git-history
+  audit found no prior use of the exact logical header path
+  `/Users/foxtacles/Projects/isle-build-lean/src/entropy2.h`; the one prior
+  current-source seed replay used scratch basename `run.h` and a scratch source
+  path. The sole authorized exact-path cell therefore used the canonical build
+  cwd/source/`/Fo`/`/Fd` seats and force-included `entropy2.h` immediately before
+  SmartHeap. Its 1,565-byte/61-LF header SHA-256 was
+  `2546741b609fc003325cb7ab60c5227cf78b88f04ff1e91c76f02ba6229504bb`;
+  the effective source remained
+  `08fbe68c492e4b9f0ad804cfa0fa8b87a9612df07fed748ad3c77e94e7d00c95`;
+  the control and V1 argv-NUL receipts were respectively
+  `522806a4abad94b4a304b1e7480625f451403004ab32ac946e88f66078e6c76b`
+  and
+  `653c24d8b7599cb860fdec256e6e25ebfdaba88469d4ab94dd5db05d86cdd20b`.
+  A retained current-source C0 was reauthenticated without compiling: command
+  receipt
+  `ea8f90ceee81321c2ea8e1cff0e741a302c3f6feb0835dffa89d537af7951fcf`,
+  object
+  `614aebafc44415fde96dd97146ba63f53e22a25a19b7dd519bbd95f520b07c75`,
+  section 212/314 bytes, body
+  `c594b9347dcc5150779edf0344aa3b25767f9b2cf4f399ff9aa66fb2d27b4039`,
+  relocation-masked distance 41, six relocations, 10 lines, and `.debug$F`
+  plus `.debug$S`.
+- The sole V1 started as PID/PGID `12056` and compiled cleanly to object
+  `9ac519ba11f65d7dba3dfeabcc8253bc410f948094a195caed0000831f209e13`.
+  Section 212 remained 314 bytes but emitted the already-known current-header
+  state
+  `fb80943d86ccb619bfadb043c89f3ec3f17de09e0e86d175de4f2bfee6ad6ec7`
+  at relocation-masked distance 56, not the natural exact historical body
+  `acd459bf93ab369ef7e9e28b9d19ece17981614a7e3f472f9755172f1577d8c0`.
+  It preserved the six relocation offsets
+  `39,100,149,174,226,236`, their semantic targets, 10 lines, section seat,
+  and `.debug$F` plus `.debug$S`; its target-body state was unchanged despite
+  path-sensitive object/debug metadata. The sealed result is
+  `/private/tmp/codex-remove-exactpath-seed834470658.qvbbvpsw/result.json`
+  (SHA-256
+  `5d2f6e0a3024ddc43e0c0e22e1daecc095a43bab54777e2192a096c1327121cd`),
+  with compile receipt SHA-256
+  `4e994cafef8287d3951fbb55b584ecaebf42b041f0315be7b74ee7b27466600c`.
+  Compiler launch budget/count were both one, the private prefix drained to an
+  empty lane, the shared `entropy2.h` path remained absent, and there was no
+  retry, link, reccmp or shared edit. The authentic basename is therefore not
+  causal on today's effective source. Do not replay this cell: the existing
+  seven-range same-function `RemovePresenter` mosaic remains necessary.
+
 - Fresh-eyes cross-TU whole-COMDAT census: EMPTY beyond the separately owned
   `0x1002bff0` path-tree `erase` landing. Intersecting the 54 current misses
   with the all-symbol retained-object screens leaves one other masked `nd=0`
