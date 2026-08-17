@@ -1240,6 +1240,25 @@ class SourcePermutationTests(unittest.TestCase):
         )
         return source, copy.deepcopy(donor["recipe"]), function
 
+    def _live_captured_tail_case(self):
+        source = "LEGO1/omni/src/stream/mxdsbuffer.cpp"
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text()
+        )
+        unit = next(item for item in manifest["translation_units"]
+                    if item["source"] == source)
+        function = next(item for item in unit["functions"]
+                        if item["mangled"].startswith("?FUN_100c6fa0@"))
+        donor = next(item for item in unit["donors"]
+                     if item["id"] == function["donor"])
+        function = copy.deepcopy(function)
+        function["target_source_refactor"] = (
+            byte_identity.validate_target_source_refactor_proof(
+                function["target_source_refactor"], "proof"
+            )
+        )
+        return source, copy.deepcopy(donor["recipe"]), function
+
     def test_manifest_fields_render_one_binding_and_one_use(self):
         self.assertEqual(
             byte_identity.render_source_overlay_generator(self._generator()),
@@ -1367,6 +1386,87 @@ class SourcePermutationTests(unittest.TestCase):
         with self.assertRaises(byte_identity.ByteIdentityError):
             byte_identity.require_target_source_refactor_recipe_policy(
                 escaped, function, ROOT, source, "fixture"
+            )
+
+    def test_live_captured_tail_recipe_is_exact_and_owner_confined(self):
+        source, recipe, function = self._live_captured_tail_case()
+        detail = byte_identity.require_target_source_refactor_recipe_policy(
+            recipe, function, ROOT, source, "fixture"
+        )
+        self.assertEqual(detail["refactor_operation_ids"], [
+            "op_mxds_capture_assignment",
+            "op_mxds_capture_declaration",
+            "op_mxds_capture_goto",
+            "op_mxds_capture_read",
+            "op_mxds_capture_tail",
+        ])
+        self.assertEqual(detail["refactor_local_identifiers"],
+                         ["found", "found_current"])
+        rendered = byte_identity.render_donor_source_overlay(
+            recipe, ROOT)[source]
+        self.assertEqual(hashlib.sha256(rendered).hexdigest(),
+                         recipe["renderings"][0]["rendered_sha256"])
+        proof_detail = byte_identity.require_target_source_refactor_identity(
+            (ROOT / source).read_bytes(), rendered,
+            function["target_source_refactor"], "fixture",
+        )
+        self.assertEqual(proof_detail["seed_target_source_size"], 823)
+        self.assertEqual(proof_detail["donor_target_source_size"], 890)
+        self.assertEqual(
+            byte_identity.validate_retail_relocation_oracle(
+                [], "fixture.oracle", function["expected_body_length"],
+                allow_empty=True,
+            ),
+            [],
+        )
+
+    def test_captured_tail_contract_refuses_open_text_and_wrong_layout(self):
+        base = {
+            "k": "capture_tail", "role": "read_reseat",
+            "capture": "found", "source": "current", "nl": False,
+        }
+        generator = byte_identity.validate_source_overlay_generator(
+            base, "fixture.generator")
+        self.assertEqual(
+            byte_identity.render_captured_pointer_tail_return_input(
+                generator["params"]),
+            b"current",
+        )
+        self.assertEqual(
+            byte_identity.render_source_overlay_generator(generator),
+            b"found",
+        )
+        for mutation in (
+            {key: value for key, value in base.items() if key != "nl"},
+            {**base, "text": "arbitrary source"},
+        ):
+            with self.subTest(mutation=mutation), self.assertRaises(
+                    byte_identity.ByteIdentityError):
+                byte_identity.validate_source_overlay_generator(
+                    mutation, "fixture.generator")
+
+    def test_captured_tail_policy_refuses_missing_role_and_identity_drift(self):
+        source, recipe, function = self._live_captured_tail_case()
+        missing = copy.deepcopy(recipe)
+        missing["renderings"][0]["operations"] = [
+            item for item in missing["renderings"][0]["operations"]
+            if item.get("id") != "op_mxds_capture_tail"
+        ]
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "role set is incomplete"):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                missing, function, ROOT, source, "fixture"
+            )
+        divergent = copy.deepcopy(recipe)
+        operation = next(
+            item for item in divergent["renderings"][0]["operations"]
+            if item.get("id") == "op_mxds_capture_tail"
+        )
+        operation["gen"]["label"] = "different_tail"
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "identities diverge"):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                divergent, function, ROOT, source, "fixture"
             )
 
     def test_live_recipe_is_source_derived_and_policy_bound(self):

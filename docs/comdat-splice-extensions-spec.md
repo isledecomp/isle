@@ -481,6 +481,20 @@ non-target byte, and both donor objects are excluded. Its confirmation gate
 raised LEGO1 from 4868/4934 to 4869/4934 with exactly that gain and zero losses;
 ISLE remains 172/172 and CONFIG 111/111.
 
+`0x100c6fa0 MxDSBuffer::FUN_100c6fa0` is the first source-permutation mosaic
+whose supplying COMDAT has a different body length. A closed five-fragment
+manifest contract declares a cursor snapshot and tail-return spelling; no
+function-specific source text appears in the framework. The fresh donor is
+225 bytes and the canonical seed is 234 bytes, but the imported range is an
+equal-width sequence of two complete four-byte instructions at seed offsets
+161--168. The donor's short-body branch and all donor metadata remain unused.
+The output keeps the complete seed body outside that range, all seed
+line/FPO/debug data, the seed function/COMDAT sets and every non-target byte.
+Its 234-byte body is literally retail-exact (there are no target relocations),
+and the donor object is excluded from the link. The confirmation gate raised
+LEGO1 from 4869/4934 to 4870/4934 with exactly this gain and zero losses; ISLE
+remains 172/172 and CONFIG 111/111.
+
 ## 9. Class F — `retail_exact_source_target_closure`
 
 This class covers a donor-private, manifest-declared source permutation whose

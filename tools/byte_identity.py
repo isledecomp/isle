@@ -233,6 +233,7 @@ SOURCE_OVERLAY_LEAN_KINDS = {
     "member_sig": "member_signature_v1",
     "bind_once": "single_evaluation_binding_source_permutation_v1",
     "for_init_decl": "for_initializer_declaration_reseat_v1",
+    "capture_tail": "captured_pointer_tail_return_fragment_v1",
 }
 
 
@@ -318,6 +319,10 @@ SOURCE_OVERLAY_KIND_POLICIES = {
     "for_initializer_declaration_reseat_v1": (
         "logic_equivalent_source_refactor",
         "for_initializer_declaration_reseat",
+    ),
+    "captured_pointer_tail_return_fragment_v1": (
+        "logic_equivalent_source_refactor",
+        "captured_pointer_tail_return_fragment",
     ),
     "list_cursor_delete_emission_probe_v1": (
         "discarded_emission_probe", "list_cursor_delete_emission"
@@ -1129,7 +1134,10 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
             "donor_range_pin", "operation_ids",
         }, context)
         marker_names = ("start_marker", "end_marker")
-    elif kind == "for_initializer_declaration_reseat_v1":
+    elif kind in {
+        "for_initializer_declaration_reseat_v1",
+        "captured_pointer_tail_return_v1",
+    }:
         exact_audit_keys(value, {
             "kind", "selector", "start_marker", "source_owner_mangled",
             "seed_range_pin", "donor_range_pin", "operation_ids",
@@ -1165,6 +1173,10 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         and len(set(operation_ids)) == len(operation_ids),
         f"{context}.operation_ids is invalid",
     )
+    if kind == "captured_pointer_tail_return_v1":
+        require(len(operation_ids) == 5,
+                f"{context}.operation_ids must name the five tail-return "
+                "fragments")
     normalized = {
         "kind": kind,
         **markers,
@@ -1176,7 +1188,10 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         ),
         "operation_ids": list(operation_ids),
     }
-    if kind == "for_initializer_declaration_reseat_v1":
+    if kind in {
+        "for_initializer_declaration_reseat_v1",
+        "captured_pointer_tail_return_v1",
+    }:
         normalized.update({
             "selector": value["selector"],
             "source_owner_mangled": value["source_owner_mangled"],
@@ -1200,7 +1215,10 @@ def select_source_permutation_window(
         require(start < end, f"{context} source markers are reversed")
         return data[start:end]
 
-    require(proof["kind"] == "for_initializer_declaration_reseat_v1"
+    require(proof["kind"] in {
+                "for_initializer_declaration_reseat_v1",
+                "captured_pointer_tail_return_v1",
+            }
             and proof["selector"]
             == "brace_balanced_function_after_marker_v1",
             f"{context} source selector differs")
@@ -1329,6 +1347,49 @@ def render_for_initializer_declaration_reseat_output(params: dict) -> bytes:
     return render_for_initializer_declaration_reseat_input(inverse)
 
 
+CAPTURED_POINTER_TAIL_RETURN_ROLES = frozenset({
+    "capture_declaration", "capture_assignment", "read_reseat",
+    "return_to_goto", "tail_return",
+})
+
+
+def render_captured_pointer_tail_return_input(params: dict) -> bytes:
+    """Reconstruct one seed-side fragment of a captured tail return."""
+    role = params["role"]
+    if role in {"capture_declaration", "capture_assignment", "tail_return"}:
+        return b""
+    if role == "read_reseat":
+        return params["source_identifier"].encode("ascii")
+    require(role == "return_to_goto", "captured tail-return role differs")
+    return f'return {params["source_identifier"]};'.encode("ascii")
+
+
+def render_captured_pointer_tail_return_output(params: dict) -> bytes:
+    """Render one donor-side fragment without accepting arbitrary text."""
+    role = params["role"]
+    if role == "capture_declaration":
+        return (
+            params["indentation"]
+            + render_source_overlay_cpp_type(params["pointer_type"])
+            + " " + params["capture_identifier"] + ";\n"
+        ).encode("ascii")
+    if role == "capture_assignment":
+        return (
+            params["indentation"] + params["capture_identifier"] + " = "
+            + params["source_identifier"] + ";\n"
+        ).encode("ascii")
+    if role == "read_reseat":
+        return params["capture_identifier"].encode("ascii")
+    if role == "return_to_goto":
+        return f'goto {params["label_identifier"]};'.encode("ascii")
+    require(role == "tail_return", "captured tail-return role differs")
+    return (
+        "\n" + params["label_identifier"] + ":\n"
+        + params["indentation"] + "return "
+        + params["capture_identifier"] + ";\n"
+    ).encode("ascii")
+
+
 def require_target_source_refactor_recipe_policy(
     recipe: dict, function: dict, root, unit_source: str, context: str,
 ) -> dict:
@@ -1363,12 +1424,65 @@ def require_target_source_refactor_recipe_policy(
     refactor_identifiers = set()
     expected = set(proof["operation_ids"])
     seen = set()
+    tail_fragments = {}
     rendering = validated["renderings"][0]
     for operation in rendering["operations"]:
         operation_id = operation["id"]
         generators = list(_source_overlay_generators(operation["generator"]))
         require(generators, f"{context}: empty generator tree")
         if operation_id in expected:
+            if proof["kind"] == "captured_pointer_tail_return_v1":
+                require(len(generators) == 1
+                        and generators[0]["kind"]
+                        == "captured_pointer_tail_return_fragment_v1"
+                        and operation_id not in seen,
+                        f"{context}: tail-return operation {operation_id} "
+                        "differs")
+                params = generators[0]["params"]
+                role = params["role"]
+                expected_action = (
+                    "replace" if role in {"read_reseat", "return_to_goto"}
+                    else "insert"
+                )
+                require(operation["action"] == expected_action
+                        and role not in tail_fragments,
+                        f"{context}: tail-return role {role} differs")
+                start = resolve_source_overlay_anchor(
+                    clean, operation["start_anchor"],
+                    context + f" tail-return {role}",
+                    logical_path=unit_source,
+                )
+                require(target_start <= start <= target_end,
+                        f"{context}: tail-return operation leaves its target")
+                end = start
+                expected_input = (
+                    render_captured_pointer_tail_return_input(params)
+                )
+                if expected_action == "replace":
+                    end = resolve_source_overlay_anchor(
+                        clean, operation["end_anchor"],
+                        context + f" tail-return {role} end",
+                        logical_path=unit_source,
+                    )
+                    require(start < end <= target_end
+                            and clean[start:end] == expected_input,
+                            f"{context}: tail-return input {role} differs")
+                    pin = operation["baseline_input_range"]
+                    require(sha256_bytes(expected_input)
+                            == pin["baseline_sha256"]
+                            and len(expected_input) == pin["baseline_size"],
+                            f"{context}: tail-return input pin {role} differs")
+                else:
+                    require(expected_input == b"",
+                            f"{context}: inserted tail-return input differs")
+                tail_fragments[role] = {
+                    "operation_id": operation_id,
+                    "start": start,
+                    "end": end,
+                    "params": params,
+                }
+                seen.add(operation_id)
+                continue
             expected_kind = {
                 "single_evaluation_bindings_v1":
                     "single_evaluation_binding_source_permutation_v1",
@@ -1482,6 +1596,38 @@ def require_target_source_refactor_recipe_policy(
                         f"{context}: donor declaration is repeated: "
                         f"{identifier}")
                 introduced_identifiers.add(identifier)
+    if proof["kind"] == "captured_pointer_tail_return_v1":
+        require(set(tail_fragments) == CAPTURED_POINTER_TAIL_RETURN_ROLES,
+                f"{context}: captured tail-return role set is incomplete")
+        ordered_roles = [
+            "capture_declaration", "capture_assignment", "read_reseat",
+            "return_to_goto", "tail_return",
+        ]
+        require([tail_fragments[role]["start"] for role in ordered_roles]
+                == sorted(tail_fragments[role]["start"]
+                          for role in ordered_roles),
+                f"{context}: captured tail-return fragments are reordered")
+        declaration = tail_fragments["capture_declaration"]["params"]
+        assignment = tail_fragments["capture_assignment"]["params"]
+        read = tail_fragments["read_reseat"]["params"]
+        branch = tail_fragments["return_to_goto"]["params"]
+        tail = tail_fragments["tail_return"]["params"]
+        capture = declaration["capture_identifier"]
+        source = assignment["source_identifier"]
+        label = branch["label_identifier"]
+        require(
+            assignment["capture_identifier"] == capture
+            and read["capture_identifier"] == capture
+            and tail["capture_identifier"] == capture
+            and read["source_identifier"] == source
+            and branch["source_identifier"] == source
+            and tail["label_identifier"] == label,
+            f"{context}: captured tail-return identities diverge",
+        )
+        require(capture not in target_tokens and label not in target_tokens
+                and capture not in clean_tokens,
+                f"{context}: captured tail-return identity is not fresh")
+        refactor_identifiers.update({capture, label})
     require(seen == expected,
             f"{context}: source-permutation set is incomplete")
     return {
@@ -2192,6 +2338,23 @@ def source_overlay_expected_identifier_roles(
             )
             if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", token)
         )
+    elif kind == "captured_pointer_tail_return_fragment_v1":
+        role = params["role"]
+        if role == "capture_declaration":
+            declared.add(params["capture_identifier"])
+            referenced.update(
+                source_overlay_named_type_identities(params["pointer_type"])
+            )
+        elif role in {"capture_assignment", "read_reseat"}:
+            referenced.update({
+                params["capture_identifier"], params["source_identifier"],
+            })
+        elif role == "return_to_goto":
+            referenced.add(params["source_identifier"])
+        else:
+            require(role == "tail_return",
+                    "captured tail-return role differs")
+            referenced.add(params["capture_identifier"])
     elif kind == "member_signature_v1":
         referenced.add(params["class_identifier"])
         referenced.add(params["member_identifier"])
@@ -2963,6 +3126,53 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
                 params.get("end"), param_context + ".end"),
             "indentation": indentation,
         }
+    elif kind == "captured_pointer_tail_return_fragment_v1":
+        role = params.get("role")
+        require(role in CAPTURED_POINTER_TAIL_RETURN_ROLES,
+                f"{param_context}.role differs")
+        expected_layout = (
+            {"nl": False}
+            if role in {"read_reseat", "return_to_goto"} else {}
+        )
+        require(layout == expected_layout,
+                f"{context}: captured tail-return fragment layout differs")
+        role_keys = {
+            "capture_declaration": {
+                "role", "type", "capture", "declaration_indent",
+            },
+            "capture_assignment": {
+                "role", "capture", "source", "declaration_indent",
+            },
+            "read_reseat": {"role", "capture", "source"},
+            "return_to_goto": {"role", "source", "label"},
+            "tail_return": {
+                "role", "capture", "label", "declaration_indent",
+            },
+        }[role]
+        exact_audit_keys(params, role_keys, param_context)
+        normalized = {"role": role}
+        for raw, name in (
+            ("capture", "capture_identifier"),
+            ("source", "source_identifier"),
+            ("label", "label_identifier"),
+        ):
+            if raw in params:
+                normalized[name] = _source_overlay_identifier(
+                    params.get(raw), f"{param_context}.{raw}")
+        if "declaration_indent" in params:
+            indentation = params.get("declaration_indent")
+            require(isinstance(indentation, str) and indentation.isascii()
+                    and 1 <= len(indentation) <= 32
+                    and set(indentation) <= {" ", "\t"},
+                    f"{param_context}.declaration_indent differs")
+            normalized["indentation"] = indentation
+        if "type" in params:
+            pointer_type = validate_source_overlay_cpp_type(
+                params.get("type"), param_context + ".type")
+            require(pointer_type["indirection"] == ["pointer"]
+                    and not pointer_type["trailing_const"],
+                    f"{param_context}.type is not one writable pointer")
+            normalized["pointer_type"] = pointer_type
     elif kind == "empty_compound_statements_v1":
         exact_audit_keys(params, {"scope_count"}, param_context)
         normalized = {"scope_count": require_exact_int(
@@ -4731,6 +4941,8 @@ def render_source_overlay_generator(
         result = render_single_evaluation_binding_output(params)
     elif kind == "for_initializer_declaration_reseat_v1":
         result = render_for_initializer_declaration_reseat_output(params)
+    elif kind == "captured_pointer_tail_return_fragment_v1":
+        result = render_captured_pointer_tail_return_output(params)
     elif kind == "empty_compound_statements_v1":
         result = b"\t{\n\t}\n" * params["scope_count"]
     elif kind == "inline_budget_noop_statements_v1":
@@ -9120,6 +9332,7 @@ def validate_manifest(
                         generator["kind"] in {
                             "single_evaluation_binding_source_permutation_v1",
                             "for_initializer_declaration_reseat_v1",
+                            "captured_pointer_tail_return_fragment_v1",
                         }
                         for generator in _source_overlay_generators(
                             validated_recipe
@@ -9721,12 +9934,16 @@ def validate_manifest(
                         )
                     for name in (
                         "expected_section_number", "expected_section_count",
-                        "expected_body_length", "expected_relocation_count",
-                        "expected_line_count",
+                        "expected_body_length", "expected_line_count",
                     ):
                         value = function.get(name)
                         require(type(value) is int and value > 0,
                                 f"{function_context}.{name} is invalid")
+                    require(type(function.get("expected_relocation_count"))
+                            is int
+                            and function["expected_relocation_count"] >= 0,
+                            f"{function_context}.expected_relocation_count "
+                            "is invalid")
                     if "target_source_refactor" in function:
                         for name in ("expected_donor_body_length",
                                      "expected_donor_line_count"):
@@ -9842,6 +10059,9 @@ def validate_manifest(
                         function.get("retail_relocations"),
                         f"{function_context}.retail_relocations",
                         function["expected_body_length"],
+                        allow_empty=(
+                            function["expected_relocation_count"] == 0
+                        ),
                     )
                     normalized_functions.append(normalized_function)
                     continue
@@ -12038,11 +12258,12 @@ RETAIL_RELOCATION_ORACLE_KEYS = {
 
 
 def validate_retail_relocation_oracle(
-    value: object, context: str, body_length: int,
+    value: object, context: str, body_length: int, *, allow_empty: bool = False,
 ) -> list[dict]:
     """Validate an ordered COFF-to-retail semantic relocation oracle."""
-    require(isinstance(value, list) and value,
-            f"{context} must be a non-empty array")
+    require(isinstance(value, list) and (value or allow_empty),
+            f"{context} must be "
+            f"{'an array' if allow_empty else 'a non-empty array'}")
     normalized = []
     previous_end = 0
     for index, item in enumerate(value):
@@ -13574,6 +13795,7 @@ def assert_source_permutations_are_donor_only(overlay: object) -> None:
             generator.get("kind") not in {
                 "single_evaluation_binding_source_permutation_v1",
                 "for_initializer_declaration_reseat_v1",
+                "captured_pointer_tail_return_fragment_v1",
                 "dead_local_linear_updates_v1",
                 "inline_default_constructor_dead_updates_v1",
             },

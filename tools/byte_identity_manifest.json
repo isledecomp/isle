@@ -11203,6 +11203,310 @@
     "reason": "Closes the retail-exact LinkEdgesAndFaces row by importing four authenticated whole compiler instructions from a declaration-only carrier state while retaining every canonical seed byte and metadata table outside those ranges.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/stream/mxdsbuffer.cpp",
+   "source_sha256": "06199991151200e8907af46396418b245ce2e7442102fae34f9d0d56ef3e2fec",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_d7e9aacdf068",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "donor_source_overlay",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "renderings": [
+       {
+        "path": "LEGO1/omni/src/stream/mxdsbuffer.cpp",
+        "clean_sha256": "a8b32a03f348cc3023337b38bd541ae6d6424beaf10bc66a1b543d181eff1cfa",
+        "rendered_sha256": "9535f9e21f9dee42f1f962bcd01d952db00316820fe8d54464ce5a476cd4c140",
+        "operations": [
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "5557a01e577a070a2ca5197e94d6b0e2c8f1918443ac45906bc3a9775eaded9e",
+           "b": 0,
+           "at": "start"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 8,
+           "items": [
+            {
+             "k": "lines",
+             "n": 4,
+             "line": 1
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecordQQ",
+             "line": 5
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecordQR",
+             "line": 6
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecordQS",
+             "line": 7
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "62d54797ceb25a9ea33a22257aeebd88cf7f7906adac45fd694bf5ee6db2d629",
+           "b": 30,
+           "at": "before_token"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 11,
+           "items": [
+            {
+             "k": "lines",
+             "n": 2,
+             "line": 1
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC0",
+             "line": 3
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC1",
+             "line": 4
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC2",
+             "line": 5
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC3",
+             "line": 6
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC4",
+             "line": 7
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC5",
+             "line": 8
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC6",
+             "line": 9
+            },
+            {
+             "k": "empty_class",
+             "id": "RkC7",
+             "line": 10
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "id": "op_mxds_capture_declaration",
+          "anchor": {
+           "ctx": "2c49c824ea5e1bf9d2c543400e78099950207264553f4c76b037027ea1b9d20e",
+           "line_before": "021fb596db81e6d02bf3d2586ee3981fe519f275c0ac9ca76bbcf2ebb4097d96",
+           "line_after": "1124edb42efc35441b6756f8641cd12da1a5f78600515ad6cd9355771c4cd70a"
+          },
+          "gen": {
+           "k": "capture_tail",
+           "role": "capture_declaration",
+           "type": "MxU8*",
+           "capture": "found",
+           "declaration_indent": "\t"
+          }
+         },
+         {
+          "op": "insert",
+          "id": "op_mxds_capture_assignment",
+          "anchor": {
+           "ctx": "920fc58af0e7145943e9dd484dbee7cbec227c92d20f0e212aad9566723ddd03",
+           "line_before": "7d07a12c92b62d6cae77ced413e74e9cca4f113f4d2651bb7df422b09132ef2e",
+           "line_after": "63e452a814bbc072bbe2e42a3af1b00bb4917eb98930bbd94e871c1457e00fa4"
+          },
+          "gen": {
+           "k": "capture_tail",
+           "role": "capture_assignment",
+           "capture": "found",
+           "source": "current",
+           "declaration_indent": "\t\t\t"
+          }
+         },
+         {
+          "op": "replace",
+          "id": "op_mxds_capture_read",
+          "from": {
+           "ctx": "359d5deef45489650f707cf71ce037caeeedb146aec794e2961aaf2d5d3250b9",
+           "at": "before_token"
+          },
+          "to": {
+           "ctx": "7ced21828a3821fe0adf9bafbf750df2957a6ac6f64f434372890257e4a3c8c3",
+           "at": "after_token"
+          },
+          "removed": {
+           "sha256": "97b0560280ed60a5a1eaa1bc45492543c8a986ad5a25b468c427eb83c3e88191",
+           "size": 7
+          },
+          "gen": {
+           "k": "capture_tail",
+           "role": "read_reseat",
+           "capture": "found",
+           "source": "current",
+           "nl": false
+          }
+         },
+         {
+          "op": "replace",
+          "id": "op_mxds_capture_goto",
+          "from": {
+           "ctx": "135fd324e5a0d982dd37b3da1663655f7c6641b4721d42020cec38ff600c1216",
+           "at": "before_token"
+          },
+          "to": {
+           "ctx": "778365d92f104d08b609c673e8195a615eaa38e816bac5fc563f0b676f3d1d8d",
+           "at": "after_token"
+          },
+          "removed": {
+           "sha256": "31c0090c11388051e5a73f4683c38a96b57c6be2bf464635fe059291640bf088",
+           "size": 15
+          },
+          "gen": {
+           "k": "capture_tail",
+           "role": "return_to_goto",
+           "source": "current",
+           "label": "found_current",
+           "nl": false
+          }
+         },
+         {
+          "op": "insert",
+          "id": "op_mxds_capture_tail",
+          "anchor": {
+           "ctx": "43b01b955c93061bccd00e0fbf5b2b1ac154b56fb760d56acd35f5eceb81b21a",
+           "at": "before_token"
+          },
+          "gen": {
+           "k": "capture_tail",
+           "role": "tail_return",
+           "capture": "found",
+           "label": "found_current",
+           "declaration_indent": "\t"
+          }
+         }
+        ]
+       }
+      ],
+      "emission_policy": "donor_private_rendering_only",
+      "authenticity_rationale": "A typed captured-pointer tail-return refactor compiles the same logic privately; only its authenticated same-function instruction sequence may supplement the seed object.",
+      "rendering_identity_sha256": "d7e9aacdf068359399be28bc35f0165d5b51f16874624cbc1d18e1ee0975685c"
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?FUN_100c6fa0@MxDSBuffer@@QAEPAEPAE@Z",
+     "donor": "d_d7e9aacdf068",
+     "splice_class": "retail_exact_instruction_mosaic",
+     "expected_section_number": 72,
+     "expected_section_count": 81,
+     "expected_body_length": 234,
+     "expected_donor_body_length": 225,
+     "expected_relocation_count": 0,
+     "expected_line_count": 19,
+     "expected_donor_line_count": 19,
+     "expected_seed_body_sha256": "1c1cdb906a714349ef642cf5637504de39e7b2915834598f697f81ae1d58af99",
+     "expected_donor_body_sha256": "9284be4f680820270195ba2adefe67ca7ebecae38f978fdb40ac18acccaeb288",
+     "expected_seed_metadata_sha256": "b1117573a98ab22881c84a058bdfb3002c0d955ae979f7bf8011831945991f47",
+     "expected_donor_metadata_sha256": "e3ed6929d7d9dcfb9d87920206b13ea3922fcd8945919060f96b074b686f024a",
+     "expected_body_sha256": "689e0a7113d9d96a3b3c3fd7c00b35ea0800efb5d0fa363f8b12e62f10ed647c",
+     "instruction_ranges": [
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 161,
+       "end": 169,
+       "seed_bytes": "3954240c8b44240c",
+       "seed_sha256": "9d89c1690788e7a6c8ef59c7da9d08caf2c1a7b3efc509f59b39c95d824afb9d",
+       "donor_bytes": "8b44240c3954240c",
+       "donor_sha256": "630af70c9cccc8371e4f65785f7babecb74d226f2f00b91fd4f2b0e8eaf0cc53",
+       "seed_instruction_lengths": [
+        4,
+        4
+       ],
+       "donor_instruction_lengths": [
+        4,
+        4
+       ]
+      }
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100c6fa0",
+      "verdict": "MATCH",
+      "length": 234
+     },
+     "retail_relocations": [],
+     "target_source_refactor": {
+      "kind": "captured_pointer_tail_return_v1",
+      "selector": "brace_balanced_function_after_marker_v1",
+      "start_marker": "// FUNCTION: LEGO1 0x100c6fa0",
+      "source_owner_mangled": "?FUN_100c6fa0@MxDSBuffer@@QAEPAEPAE@Z",
+      "seed_range_pin": {
+       "baseline_sha256": "a1480ac65bcf089dcf25139fa973cd458c2f1ed0d8ed7f5d57fe2c78bf103355",
+       "baseline_size": 823,
+       "baseline_line_count": 37,
+       "baseline_significant_token_sha256": "b50c738982a322f37a18683ef670810792abc23a631e72f5eacba9fd03c4d895"
+      },
+      "donor_range_pin": {
+       "baseline_sha256": "41a80ac38019059b46ac459619f43efbf7205eea8a5ce75005515ad0a42f28f0",
+       "baseline_size": 890,
+       "baseline_line_count": 42,
+       "baseline_significant_token_sha256": "94f702298b4d5dbd2c6949de4ea03ccdb6ce687d3d1156c86e971bbf003108b0"
+      },
+      "operation_ids": [
+       "op_mxds_capture_declaration",
+       "op_mxds_capture_assignment",
+       "op_mxds_capture_read",
+       "op_mxds_capture_goto",
+       "op_mxds_capture_tail"
+      ]
+     }
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes FUN_100c6fa0 by importing one authenticated same-function instruction sequence from a typed current-source refactor while retaining seed metadata and every non-target byte.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -11277,8 +11581,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4869,
-    "accepted_row_identity_sha256": "9d21f928eb9411ad152e54205d4e4d4b7131ed936d6aa146864fd5b8d249d557",
+    "exact_raw_1_0_count": 4870,
+    "accepted_row_identity_sha256": "ac9648756203900e077bfb57081061611205f40376ce1ddc7b63b49cd15ef7d4",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

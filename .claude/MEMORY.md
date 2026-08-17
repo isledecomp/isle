@@ -57,8 +57,22 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-16)
 
-- Accepted canonical gate: LEGO1 4869/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is `0x100586e0 LegoPathBoundary::RemovePresenter`. The
+- Accepted canonical gate: LEGO1 4870/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is `0x100c6fa0 MxDSBuffer::FUN_100c6fa0`. A closed,
+  manifest-declared five-fragment source permutation of the exact same
+  mangled function snapshots the volatile cursor and routes its unequal-case
+  return through a tail label. The freshly compiled donor is 225 bytes while
+  the canonical seed remains 234 bytes; only the donor's two complete
+  four-byte instructions at seed offsets 161--168 are imported. The final
+  seed-length body SHA-256 is
+  `689e0a7113d9d96a3b3c3fd7c00b35ea0800efb5d0fa363f8b12e62f10ed647c`
+  and is literally equal to retail. The target has no relocations, and the
+  seed line/FPO/debug tables, function set and every non-target byte remain
+  authoritative. The zero-loss confirmation report SHA-256 is
+  `fbadb68a85514633a7adc42735e822496a39eeb455fcf0133bd695c37fa03942`;
+  verdict SHA-256 is
+  `236589b7232cf3d25bf0a8fc8dc363ec177e7bfd053b7bb60312381c6e644752`.
+  The preceding gain is `0x100586e0 LegoPathBoundary::RemovePresenter`. The
   authentic for-initializer spelling perturbs another already-exact COMDAT
   when landed directly, so checked-in source retains the standalone iterator.
   Two manifest-declared current-source variants of the exact same 314-byte
@@ -162,10 +176,12 @@ every alternate source spelling belong explicitly in the entropy manifest,
 then pass the normal full-body, semantic-relocation, object-conservation, and
 zero-loss link gates.
 
-`0x100c6fa0 MxDSBuffer::FUN_100c6fa0` is not a better state: both our report and
-the aggregate have raw `0.9882352941176471` with the same adjacent `cmp`/`mov`
-schedule transposition. The page displays `100.00%*` only because the row is
-marked effective.
+The aggregate's `0x100c6fa0 MxDSBuffer::FUN_100c6fa0` row was only an effective
+match: both it and the then-current local build had raw
+`0.9882352941176471`, with the same adjacent `cmp`/`mov` schedule
+transposition. That residue is now solved literally through the closed
+same-function source-permutation mosaic recorded in the live checkpoint; the
+aggregate artifact itself was never an input.
 
 Thirty-seven latest-run sample maxima have a strictly higher raw score than our
 4862 report. Only `0x100586e0 RemovePresenter` reaches literal raw 1.0. The only
