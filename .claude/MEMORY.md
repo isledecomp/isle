@@ -1475,3 +1475,47 @@ original preprocessed TU plus exact vendor headers/compiler binary and options,
 or an authentic original-build same-symbol object that proves a different
 `_Inc` inlining state. Synthetic header edits, first-party spelling guesses,
 and new unauthenticated carrier objects are not reopen evidence.
+
+## `0x10017af0 PizzeriaState::PizzeriaState` whole-body dehybridization (2026-08-17)
+
+The constructor is no longer an instruction mosaic. Its three former
+`instruction_ranges` were replaced by the closed
+`retail_exact_source_equal_body` class, which imports the donor's complete
+264-byte compiler body (SHA-256
+`12d517ae112fa47477a5f6e35e0361641ad502c057ef64df08aeef8160da48d6`)
+from the existing typed `fixed_array_fill_loop_v1` source-refactor recipe and
+retains every seed relocation, COFF line, EH, CodeView, symbol, and non-target
+byte. The ordinary equal-body composer still rejects source proofs; the new
+wrapper requires the exact target-source proof, section 17/75-section seat,
+21-function/28-COMDAT universe, characteristics/selection, 17 semantic
+relocations, complete `.debug$S`/`.xdata$x` closure, both metadata hashes, all
+18 changed body offsets, local-rename sets, and the retail oracle.
+
+The first attempted whole-body route was invalid: the existing resize composer
+adopted the donor's eight-row line table in place of the seed's nine-row table.
+Although its linked code was exact, the Pizzeria constructor disappeared from
+the PDB/reccmp universe (4,933 rows instead of 4,934). That donor-metadata
+policy is sealed as rejected for this row. The corrected policy is explicitly
+seed-authoritative for all metadata. A read-only inverse replay recovered raw
+seed object SHA-256
+`0f3670b16b7074cce5287580fc291486c05c9630974290579894ac00fa40dba9`;
+the corrected whole-body compose produced SHA-256
+`e30c1203e99e9e2fff94c7b44c32c9d2f924a29c0ef4dd3c86d6e876c88e3170`,
+byte-for-byte identical to the retained accepted mosaic object, with the full
+nine-row line table and seed metadata SHA-256
+`3553e5a63b4a10f0efc62c05767c0e4cfb7bfd63c26d2611decf3894a5aaecc3`.
+
+Validation is closed: canonical manifest validation accepted all 49 TUs, and
+the focused plus regression suites passed 216 tests with three expected skips.
+Two successive production A/B confirmations reproduced the same receipts:
+LEGO1 4,881/4,934 with the Pizzeria row restored at raw 1.0, ISLE 172/172,
+CONFIG 111/111, report SHA-256
+`cb8718213296fa82dd1165ae58e17ad8e9f8d15d69a156d6ed6451157aa6022c`,
+verdict SHA-256
+`5a0e04ca1b5fd39bc8df52aa0eaf9c52e480aab1d2ffa88a4a94803effcc8df0`,
+and manifest SHA-256
+`3605af4de6e6daca6cc87e040c2ecde6066790b1e239b84e964d6d21566eaf01`.
+Do not restore range-level composition or donor line/CodeView normalization
+for this row; any future replacement must preserve the seed's authoritative
+metadata and the complete row universe while satisfying the same whole-body
+source, closure, relocation, and retail gates.

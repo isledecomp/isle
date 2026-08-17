@@ -1037,6 +1037,133 @@ class RetailExactInstructionMosaicTests(unittest.TestCase):
                 seed, donor, function, retail, b"seed", b"donor")
 
 
+class RetailExactSourceEqualBodyTests(unittest.TestCase):
+    """One whole compiler body with seed-authoritative debug metadata."""
+
+    def fixture(self):
+        seed = make_divergent_coff()
+        seed_coff = byte_identity.CoffObject(seed)
+        seed_primary = seed_coff.function_section(TARGET_SYMBOL)
+        seed_body = byte_identity.coff_body(seed_coff, seed_primary)
+        donor = _patched_target_body(seed, [
+            (0, bytes(value ^ 0x31 for value in seed_body[0:3])),
+            (24, bytes(value ^ 0x27 for value in seed_body[24:27])),
+        ])
+        donor_coff = byte_identity.CoffObject(donor)
+        donor_primary = donor_coff.function_section(TARGET_SYMBOL)
+        donor_body = byte_identity.coff_body(donor_coff, donor_primary)
+        changed = [
+            index for index, pair in enumerate(zip(seed_body, donor_body))
+            if pair[0] != pair[1]
+        ]
+        retail = retail_body_for(donor)
+        definitions = byte_identity.section_definitions(seed_coff)
+        function = {
+            "mangled": TARGET_SYMBOL,
+            "donor": "d_fixture",
+            "splice_class":
+                byte_identity.RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS,
+            "expected_section_number": seed_primary["number"],
+            "expected_section_count": len(seed_coff.sections),
+            "expected_body_length": len(seed_body),
+            "expected_characteristics": seed_primary["characteristics"],
+            "expected_selection":
+                definitions[seed_primary["number"]]["selection"],
+            "expected_relocation_count": seed_primary["relocation_count"],
+            "expected_seed_line_count": seed_primary["line_count"],
+            "expected_donor_line_count": donor_primary["line_count"],
+            "expected_function_count":
+                sum(byte_identity.function_multiset(seed_coff).values()),
+            "expected_comdat_count": sum(
+                byte_identity.comdat_primary_identity_multiset(
+                    seed_coff).values()),
+            "expected_seed_body_sha256":
+                hashlib.sha256(seed_body).hexdigest(),
+            "expected_donor_body_sha256":
+                hashlib.sha256(donor_body).hexdigest(),
+            "expected_body_sha256": hashlib.sha256(donor_body).hexdigest(),
+            "expected_seed_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    seed_coff, seed_primary),
+            "expected_donor_metadata_sha256":
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    donor_coff, donor_primary),
+            "expected_changed_offsets": changed,
+            "expected_code_renames": [],
+            "expected_xdata_rename_offsets": [],
+            "expected_debug_s_renames": [],
+            "expected_closure": [".debug$S", ".xdata$x"],
+            "retail_oracle": {
+                "image": "LEGO1.DLL", "address": "0x1003cf20",
+                "verdict": "MATCH", "length": len(donor_body),
+            },
+            "retail_relocations": relocation_oracle_for(seed, retail),
+            "target_source_refactor": {"fixture": True},
+        }
+        return seed, donor, function, retail
+
+    def compose(self, seed, donor, function, retail):
+        with mock.patch.object(
+            byte_identity, "require_target_source_refactor_identity",
+            return_value={"source_refactor_identity": True},
+        ):
+            return byte_identity.compose_retail_exact_source_equal_body(
+                seed, donor, function, retail, b"seed source",
+                b"donor source")
+
+    def test_whole_body_copy_retains_every_seed_metadata_byte(self):
+        seed, donor, function, retail = self.fixture()
+        composed, detail = self.compose(seed, donor, function, retail)
+        seed_coff = byte_identity.CoffObject(seed)
+        primary = seed_coff.function_section(TARGET_SYMBOL)
+        start = primary["raw_offset"]
+        end = start + primary["raw_size"]
+        self.assertEqual(composed[:start], seed[:start])
+        self.assertEqual(composed[end:], seed[end:])
+        self.assertEqual(composed[start:end], donor[start:end])
+        self.assertEqual(
+            detail["splice_class"],
+            byte_identity.RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS)
+        self.assertTrue(detail["retail_exact"])
+
+    def test_rejects_non_retail_whole_body(self):
+        seed, donor, function, retail = self.fixture()
+        retail = bytearray(retail)
+        retail[1] ^= 1
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "retail-exact"):
+            self.compose(seed, donor, function, bytes(retail))
+
+    def test_rejects_stale_metadata_and_closure_pins(self):
+        seed, donor, function, retail = self.fixture()
+        stale = copy.deepcopy(function)
+        stale["expected_donor_metadata_sha256"] = "0" * 64
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "metadata"):
+            self.compose(seed, donor, stale, retail)
+        stale = copy.deepcopy(function)
+        stale["expected_debug_s_renames"] = [[28, "L"]]
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    r"debug\$S rename"):
+            self.compose(seed, donor, stale, retail)
+
+    def test_live_pizzeria_is_whole_body_and_has_no_ranges(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        unit = next(
+            item for item in manifest["translation_units"]
+            if item["source"]
+            == "LEGO1/lego/legoomni/src/actors/pizzeria.cpp")
+        function = unit["functions"][0]
+        self.assertEqual(
+            function["splice_class"],
+            byte_identity.RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS)
+        self.assertNotIn("instruction_ranges", function)
+        self.assertEqual(function["expected_seed_line_count"], 9)
+        self.assertEqual(function["expected_donor_line_count"], 8)
+        self.assertEqual(len(function["expected_changed_offsets"]), 18)
+
+
 class CrossTuInstructionHybridResizeTests(unittest.TestCase):
     """A different-TU same-COMDAT instruction feeds an ordinary resize."""
 

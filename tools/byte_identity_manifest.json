@@ -13874,7 +13874,7 @@
        }
       ],
       "emission_policy": "donor_private_rendering_only",
-      "authenticity_rationale": "A typed fixed-array fill loop privately renders a logic-equivalent source form whose literal bound is tied to the pinned integral member-array declaration; only authenticated complete instructions from the same target function may supplement the seed object.",
+      "authenticity_rationale": "A typed fixed-array fill loop privately renders a logic-equivalent source form whose literal bound is tied to the pinned integral member-array declaration; its complete retail-exact target body is imported as one compiler output while every seed relocation, line, EH, CodeView, symbol, and non-target byte remains authoritative.",
       "rendering_identity_sha256": "7ad610320a5d6381cc660d09095ebbc08186dd0e477f6a0a66005eeb9be0e3ba"
      }
     }
@@ -13883,77 +13883,86 @@
     {
      "mangled": "??0PizzeriaState@@QAE@XZ",
      "donor": "d_7ad610320a5d",
-     "splice_class": "retail_exact_instruction_mosaic",
+     "splice_class": "retail_exact_source_equal_body",
      "expected_section_number": 17,
      "expected_section_count": 75,
      "expected_body_length": 264,
-     "expected_donor_body_length": 264,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
      "expected_relocation_count": 17,
-     "expected_line_count": 9,
+     "expected_seed_line_count": 9,
      "expected_donor_line_count": 8,
+     "expected_function_count": 21,
+     "expected_comdat_count": 28,
      "expected_seed_body_sha256": "c287647b0b45f86c84b0888e4a7fc37385f9dfbe5e395a63eca8644fb0eda9d9",
      "expected_donor_body_sha256": "12d517ae112fa47477a5f6e35e0361641ad502c057ef64df08aeef8160da48d6",
+     "expected_body_sha256": "12d517ae112fa47477a5f6e35e0361641ad502c057ef64df08aeef8160da48d6",
      "expected_seed_metadata_sha256": "3553e5a63b4a10f0efc62c05767c0e4cfb7bfd63c26d2611decf3894a5aaecc3",
      "expected_donor_metadata_sha256": "f018d60a4e9c36393ac8966f8b6aaf6c1185d8546343cd7cf53c97ef1117f332",
-     "expected_body_sha256": "12d517ae112fa47477a5f6e35e0361641ad502c057ef64df08aeef8160da48d6",
-     "instruction_ranges": [
-      {
-       "kind": "same_offset_complete_x86_instruction_sequence_v1",
-       "start": 186,
-       "end": 198,
-       "seed_bytes": "b8ffffffff66894e408d4e44",
-       "seed_sha256": "cd5920aa44dd6b49b34164b33532d7c58f8b885821e0dd47c96b28d67a8b758a",
-       "donor_bytes": "8d464466894e40b9ffffffff",
-       "donor_sha256": "501c541e69d8f1100572fe5e38f95d9f699cc66ae4e2926008dc588206e3347b",
-       "seed_instruction_lengths": [
-        5,
-        4,
-        3
-       ],
-       "donor_instruction_lengths": [
-        3,
-        4,
-        5
-       ]
-      },
-      {
-       "kind": "same_offset_complete_x86_instruction_sequence_v1",
-       "start": 202,
-       "end": 210,
-       "seed_bytes": "8945fc8901894104",
-       "seed_sha256": "8899e03e19b84a67d4ff85449530faba3090028f2d3de4e71b0f516c4dc20bfd",
-       "donor_bytes": "894dfc8908894804",
-       "donor_sha256": "ba52b1461f8bd6f47572ccd8f2d17b2abb319fae9da449f31c029e774c65cd3b",
-       "seed_instruction_lengths": [
-        3,
-        2,
-        3
-       ],
-       "donor_instruction_lengths": [
-        3,
-        2,
-        3
-       ]
-      },
-      {
-       "kind": "same_offset_complete_x86_instruction_sequence_v1",
-       "start": 211,
-       "end": 220,
-       "seed_bytes": "89410889410c894110",
-       "seed_sha256": "5461168f7d107857f739ce7365e547ee33f4876a5d002ae431058bd9e0b5df22",
-       "donor_bytes": "89480889480c894810",
-       "donor_sha256": "fecd9529215dc5495c8a23b8a0f144befb3b3055f2b2dd048cd29904d97c537b",
-       "seed_instruction_lengths": [
-        3,
-        3,
-        3
-       ],
-       "donor_instruction_lengths": [
-        3,
-        3,
-        3
-       ]
-      }
+     "expected_changed_offsets": [
+      186,
+      187,
+      188,
+      189,
+      190,
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      203,
+      206,
+      208,
+      212,
+      215,
+      218
+     ],
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       247,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44
+     ],
+     "expected_debug_s_renames": [
+      [
+       70,
+       "L"
+      ],
+      [
+       74,
+       "L"
+      ],
+      [
+       89,
+       "L"
+      ],
+      [
+       93,
+       "L"
+      ],
+      [
+       108,
+       "L"
+      ],
+      [
+       112,
+       "L"
+      ]
+     ],
+     "expected_closure": [
+      ".debug$S",
+      ".xdata$x"
      ],
      "retail_oracle": {
       "image": "LEGO1.DLL",
@@ -14195,7 +14204,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes PizzeriaState's constructor by importing three authenticated complete instruction sequences from a donor-only typed fixed-array fill loop while retaining the canonical translation unit, target metadata, and every non-target function byte.",
+    "reason": "Closes PizzeriaState's constructor by importing one complete retail-exact compiler body from a donor-only typed fixed-array fill loop while retaining the seed's authoritative relocation, line, EH, CodeView, symbol, and non-target bytes.",
     "may_replace_compiler_output": true
    }
   },

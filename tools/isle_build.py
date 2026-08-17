@@ -1545,6 +1545,25 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                         ))
                     byte_identity.validate_donor_object_excluded(
                         composed, [donor_objects[function["donor"]]])
+                elif (function["splice_class"]
+                        == byte_identity.RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS):
+                    retail = function["retail_oracle"]
+                    donor_source = donor_sources.get(function["donor"])
+                    if donor_source is None:
+                        fail("source equal-body donor omits its translation "
+                             f"unit: {unit['source']}")
+                    composed, detail = (
+                        byte_identity.compose_retail_exact_source_equal_body(
+                            composed, donor_objects[function["donor"]],
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16), retail["length"],
+                            ),
+                            source.read_bytes(), donor_source,
+                        ))
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [donor_objects[function["donor"]]])
                 elif function["splice_class"] == "same_slot_resize":
                     composed, detail = byte_identity.compose_same_slot_resize(
                         composed, donor_objects[function["donor"]], function

@@ -12667,6 +12667,7 @@ def validate_manifest(
                                          "equal_body_eh_structural_local",
                                          "equal_body_eh_reloc_layout",
                                          "same_slot_resize",
+                                         RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS,
                                          "retail_exact_instruction_mosaic",
                                          "retail_exact_reloc_divergent",
                                          "retail_exact_target_closure",
@@ -12677,6 +12678,155 @@ def validate_manifest(
                                          SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
                                          CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS),
                         f"{function_context}: unsupported splice class")
+                if splice_class == RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS:
+                    source_equal_keys = {
+                        "mangled", "donor", "splice_class",
+                        "expected_section_number", "expected_section_count",
+                        "expected_body_length", "expected_characteristics",
+                        "expected_selection", "expected_relocation_count",
+                        "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                        "expected_seed_body_sha256",
+                        "expected_donor_body_sha256",
+                        "expected_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_donor_metadata_sha256",
+                        "expected_changed_offsets",
+                        "expected_code_renames",
+                        "expected_xdata_rename_offsets",
+                        "expected_debug_s_renames", "expected_closure",
+                        "retail_oracle", "retail_relocations",
+                        "target_source_refactor",
+                    }
+                    exact_keys(function, source_equal_keys, function_context)
+                    for name in (
+                        "expected_section_number", "expected_section_count",
+                        "expected_body_length", "expected_characteristics",
+                        "expected_selection", "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                    ):
+                        require(type(function.get(name)) is int
+                                and function[name] > 0,
+                                f"{function_context}.{name} is invalid")
+                    require(type(function.get("expected_relocation_count"))
+                            is int
+                            and function["expected_relocation_count"] >= 0,
+                            f"{function_context}.expected_relocation_count "
+                            "is invalid")
+                    for name in (
+                        "expected_seed_body_sha256",
+                        "expected_donor_body_sha256",
+                        "expected_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_donor_metadata_sha256",
+                    ):
+                        require_sha(function.get(name),
+                                    f"{function_context}.{name}")
+                    require(
+                        function["expected_body_sha256"]
+                        == function["expected_donor_body_sha256"],
+                        f"{function_context}: final and donor body pins differ",
+                    )
+                    changed = function.get("expected_changed_offsets")
+                    require(
+                        isinstance(changed, list) and changed
+                        and changed == sorted(set(changed))
+                        and all(type(offset) is int
+                                and 0 <= offset
+                                < function["expected_body_length"]
+                                for offset in changed),
+                        f"{function_context}.expected_changed_offsets "
+                        "is invalid",
+                    )
+                    code_renames = function.get("expected_code_renames")
+                    debug_renames = function.get("expected_debug_s_renames")
+                    for name, renames in (
+                        ("expected_code_renames", code_renames),
+                        ("expected_debug_s_renames", debug_renames),
+                    ):
+                        require(
+                            isinstance(renames, list)
+                            and all(isinstance(item, list)
+                                    and len(item) == 2
+                                    and type(item[0]) is int
+                                    and item[0] >= 0
+                                    and item[1] in ("L", "T", "S")
+                                    for item in renames)
+                            and renames == sorted(renames),
+                            f"{function_context}.{name} is invalid",
+                        )
+                    xdata_renames = function.get(
+                        "expected_xdata_rename_offsets")
+                    require(
+                        isinstance(xdata_renames, list)
+                        and xdata_renames == sorted(set(xdata_renames))
+                        and all(type(offset) is int and offset >= 0
+                                for offset in xdata_renames),
+                        f"{function_context}.expected_xdata_rename_offsets "
+                        "is invalid",
+                    )
+                    require(
+                        function.get("expected_closure")
+                        == [".debug$S", ".xdata$x"],
+                        f"{function_context}.expected_closure differs",
+                    )
+                    proof = validate_target_source_refactor_proof(
+                        function.get("target_source_refactor"),
+                        f"{function_context}.target_source_refactor",
+                    )
+                    require(proof["source_owner_mangled"] == mangled,
+                            f"{function_context}: source refactor owner "
+                            "differs")
+                    require(local_recipe_kinds[donor_id]
+                            == "donor_source_overlay",
+                            f"{function_context}: source equal-body donor "
+                            "is not a donor-private source rendering")
+                    normalized_function = {
+                        **function, "target_source_refactor": proof,
+                    }
+                    bound_refactor_recipe_ids.append(donor_id)
+                    require_target_source_refactor_recipe_policy(
+                        local_recipes[donor_id], normalized_function,
+                        source_dir, source_relative, function_context,
+                        (overlay_output["operations"]
+                         if overlay_output is not None else []),
+                        set(source_overlay_by_path),
+                        compiler_root=compiler_root,
+                        sealed_include_trees=normalized_include_trees,
+                    )
+                    retail = function.get("retail_oracle")
+                    require(isinstance(retail, dict),
+                            f"{function_context}.retail_oracle must be an "
+                            "object")
+                    exact_keys(retail, {
+                        "image", "address", "verdict", "length",
+                    }, f"{function_context}.retail_oracle")
+                    require_target_bound_retail_image(
+                        manifest.get("images"), target,
+                        retail.get("image"),
+                        f"{function_context}.retail_oracle",
+                    )
+                    require(
+                        isinstance(retail.get("address"), str)
+                        and ADDRESS_RE.fullmatch(retail["address"])
+                        is not None
+                        and retail.get("verdict") == "MATCH"
+                        and retail.get("length")
+                        == function["expected_body_length"],
+                        f"{function_context}.retail_oracle differs",
+                    )
+                    validate_retail_relocation_oracle(
+                        function.get("retail_relocations"),
+                        f"{function_context}.retail_relocations",
+                        function["expected_body_length"],
+                        allow_empty=(
+                            function["expected_relocation_count"] == 0
+                        ),
+                    )
+                    normalized_functions.append(normalized_function)
+                    continue
                 if (splice_class
                         == CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS):
                     complete_keys = {
@@ -16010,6 +16160,11 @@ SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS = (
 
 CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS = (
     "retail_exact_cross_tu_complete_target_resize"
+)
+
+
+RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS = (
+    "retail_exact_source_equal_body"
 )
 
 
@@ -22322,6 +22477,222 @@ def compose_equal_body_comdat(
         "body_length": seed_primary["raw_size"],
         "body_changed_offsets": changed,
         **detail,
+    }
+
+
+def compose_retail_exact_source_equal_body(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+    seed_source: bytes,
+    donor_source: bytes,
+) -> tuple[bytes, dict]:
+    """Install one complete equal-size body from a closed source refactor.
+
+    This is deliberately a separate wrapper around the ordinary equal-body
+    composer.  The ordinary entry point continues to reject source proofs;
+    this class adds the source identity, complete target/closure pins,
+    semantic-relocation equivalence, and retail oracle before delegating the
+    one allowed mutation: replacing the target's raw body while retaining all
+    seed line, debug, EH, relocation, and symbol bytes.
+    """
+    require(
+        function.get("splice_class")
+        == RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS
+        and "target_source_refactor" in function,
+        "retail-exact source equal-body contract is missing",
+    )
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+    source_detail = require_target_source_refactor_identity(
+        seed_source, donor_source, function["target_source_refactor"],
+        "retail-exact source equal-body proof",
+    )
+
+    seed = CoffObject(seed_bytes)
+    donor = CoffObject(donor_bytes)
+    mangled = function["mangled"]
+    sp = seed.function_section(mangled)
+    dp = donor.function_section(mangled)
+    require(
+        sp["number"] == dp["number"]
+        == function["expected_section_number"],
+        "source equal-body target section seat changed",
+    )
+    require(
+        len(seed.sections) == len(donor.sections)
+        == function["expected_section_count"],
+        "source equal-body global section count changed",
+    )
+    seed_functions = function_multiset(seed)
+    donor_functions = function_multiset(donor)
+    require(
+        seed_functions == donor_functions
+        and sum(seed_functions.values()) == function["expected_function_count"],
+        "source equal-body donor function set differs",
+    )
+    seed_comdats = comdat_primary_identity_multiset(seed)
+    donor_comdats = comdat_primary_identity_multiset(donor)
+    require(
+        seed_comdats == donor_comdats
+        and sum(seed_comdats.values()) == function["expected_comdat_count"],
+        "source equal-body donor COMDAT identity set differs",
+    )
+    require(
+        sp["raw_size"] == dp["raw_size"]
+        == function["expected_body_length"]
+        and sp["relocation_count"] == dp["relocation_count"]
+        == function["expected_relocation_count"]
+        and sp["line_count"] == function["expected_seed_line_count"]
+        and dp["line_count"] == function["expected_donor_line_count"]
+        and sp["name"] == dp["name"]
+        and sp["characteristics"] == dp["characteristics"]
+        == function["expected_characteristics"],
+        "source equal-body target header/count pins changed",
+    )
+    seed_defs = section_definitions(seed)
+    donor_defs = section_definitions(donor)
+    require(
+        seed_defs[sp["number"]]["selection"]
+        == donor_defs[dp["number"]]["selection"]
+        == function["expected_selection"],
+        "source equal-body COMDAT selection changed",
+    )
+
+    expected_closure = tuple(function["expected_closure"])
+    closure = _comdat_child_closure(seed, sp)
+    require(
+        closure == _comdat_child_closure(donor, dp)
+        == (len(expected_closure), expected_closure)
+        == (2, (".debug$S", ".xdata$x")),
+        "source equal-body target closure changed",
+    )
+    closure_renames = {}
+    for child_name in expected_closure:
+        left = _comdat_child(seed, sp, child_name)
+        right = _comdat_child(donor, dp, child_name)
+        require(
+            left["number"] == right["number"]
+            and all(left[field] == right[field]
+                    for field in (
+                        "name", "raw_size", "relocation_count",
+                        "line_count", "characteristics",
+                    )),
+            f"source equal-body {child_name} closure geometry changed",
+        )
+        closure_renames[child_name] = require_same_semantic_relocations(
+            seed, left, donor, right,
+            f"source equal-body {child_name}",
+        )
+    require(
+        [offset for offset, _ in closure_renames[".xdata$x"]]
+        == function["expected_xdata_rename_offsets"],
+        "source equal-body xdata rename set changed",
+    )
+    require(
+        [[offset, kind]
+         for offset, kind in closure_renames[".debug$S"]]
+        == function["expected_debug_s_renames"],
+        "source equal-body debug$S rename set changed",
+    )
+    seed_xdata = _comdat_child(seed, sp, ".xdata$x")
+    donor_xdata = _comdat_child(donor, dp, ".xdata$x")
+    require(coff_body(seed, seed_xdata) == coff_body(donor, donor_xdata),
+            "source equal-body runtime xdata bytes changed")
+    seed_debug = coff_body(seed, _comdat_child(seed, sp, ".debug$S"))
+    donor_debug = coff_body(donor, _comdat_child(donor, dp, ".debug$S"))
+    require(
+        len(seed_debug) >= 28 and len(seed_debug) == len(donor_debug)
+        and seed_debug[:28] == donor_debug[:28]
+        and seed_debug[2:4] == b"\x05\x02",
+        "source equal-body CodeView procedure identity changed",
+    )
+    require(
+        instruction_mosaic_metadata_sha256(seed, sp)
+        == function["expected_seed_metadata_sha256"]
+        and instruction_mosaic_metadata_sha256(donor, dp)
+        == function["expected_donor_metadata_sha256"],
+        "source equal-body metadata differs from its pin",
+    )
+
+    seed_body = coff_body(seed, sp)
+    donor_body = coff_body(donor, dp)
+    require(
+        sha256_bytes(seed_body) == function["expected_seed_body_sha256"]
+        and sha256_bytes(donor_body)
+        == function["expected_donor_body_sha256"]
+        == function["expected_body_sha256"],
+        "source equal-body target body differs from its pin",
+    )
+    code_renames = require_instruction_mosaic_semantic_relocations(
+        seed, sp, donor, dp, "source equal-body code",
+    )
+    require(
+        [[offset, kind] for offset, kind in code_renames]
+        == function["expected_code_renames"],
+        "source equal-body code rename set changed",
+    )
+    seed_rows = detailed_relocations(seed, sp)
+    require(len(seed_rows) == function["expected_relocation_count"],
+            "source equal-body relocation count changed")
+    pinned_length = function["retail_oracle"]["length"]
+    require(
+        len(retail_body) == pinned_length == len(donor_body),
+        "source equal-body retail length changed",
+    )
+    semantic_detail = require_retail_relocation_oracle(
+        seed_rows, bytes(retail_body),
+        int(function["retail_oracle"]["address"], 16),
+        function["retail_relocations"],
+        "source equal-body retail relocation oracle",
+    )
+    masked_donor = bytearray(donor_body)
+    masked_retail = bytearray(retail_body)
+    for row in seed_rows:
+        start, width = row["offset"], row["width"]
+        masked_donor[start:start + width] = b"\0" * width
+        masked_retail[start:start + width] = b"\0" * width
+    differing = sum(left != right
+                    for left, right in zip(masked_donor, masked_retail))
+    require(differing == 0,
+            f"source equal-body output is not retail-exact: {differing} "
+            "byte(s) differ under the relocation mask")
+
+    # Delegate only the body replacement to the existing closed primitive.
+    # The proof is intentionally omitted from this private effective record,
+    # so the public ordinary equal-body entry point retains its source-proof
+    # rejection contract.
+    effective = {
+        "mangled": mangled,
+        "splice_class": "equal_body_eh_structural_local",
+        "expected_body_length": function["expected_body_length"],
+        "expected_body_sha256": function["expected_body_sha256"],
+        "expected_changed_offsets": function["expected_changed_offsets"],
+        "expected_code_renames": function["expected_code_renames"],
+        "expected_xdata_rename_offsets":
+            function["expected_xdata_rename_offsets"],
+    }
+    composed, detail = compose_equal_body_comdat(
+        seed_bytes, donor_bytes, effective)
+    checked = CoffObject(composed)
+    cp = checked.function_section(mangled)
+    require(
+        _coff_table_bytes(checked, cp, "lines")
+        == _coff_table_bytes(seed, sp, "lines")
+        and detailed_relocations(checked, cp) == seed_rows
+        and instruction_mosaic_metadata_sha256(checked, cp)
+        == function["expected_seed_metadata_sha256"],
+        "source equal-body output changed seed-authoritative metadata",
+    )
+    return composed, {
+        **detail,
+        "splice_class": RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS,
+        "closure": list(expected_closure),
+        "closure_relocation_renames": closure_renames,
+        "retail_exact": True,
+        **semantic_detail,
+        **source_detail,
     }
 
 
