@@ -14288,19 +14288,27 @@
     {
      "mangled": "?DissolveTransition@MxTransitionManager@@AAEXXZ",
      "donor": "d_34f9d09eb563",
-     "splice_class": "retail_exact_instruction_mosaic",
+     "splice_class": "retail_exact_source_equal_body",
      "expected_section_number": 55,
      "expected_section_count": 79,
      "expected_body_length": 438,
-     "expected_donor_body_length": 438,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
      "expected_relocation_count": 8,
-     "expected_line_count": 42,
+     "expected_seed_line_count": 42,
      "expected_donor_line_count": 44,
+     "expected_function_count": 23,
+     "expected_comdat_count": 28,
      "expected_seed_body_sha256": "9850d0b4a91610ecea9aacf0e0822b7fcd26e98f8ed7ceebf9a0ad031efc65b6",
      "expected_donor_body_sha256": "d8dcb9786d75ee60e3a18e12920ebc47cf8835c9fa9e9faf3572c8eec4bc61ac",
      "expected_seed_metadata_sha256": "50dde037ef93311085caf36fc80f7da9db67deaa447ce6c5fd7f7ae47225beae",
-          "expected_donor_metadata_sha256": "427ca9c51f423b36608cd1a0cc97fe2ea57afa70b3f1fc3c0f307fdda4780de7",
+     "expected_donor_metadata_sha256": "427ca9c51f423b36608cd1a0cc97fe2ea57afa70b3f1fc3c0f307fdda4780de7",
      "expected_body_sha256": "d8dcb9786d75ee60e3a18e12920ebc47cf8835c9fa9e9faf3572c8eec4bc61ac",
+     "expected_changed_offsets": [61, 63, 69, 79, 88, 98],
+     "expected_code_renames": [],
+     "expected_xdata_rename_offsets": [],
+     "expected_debug_s_renames": [],
+     "expected_closure": [".debug$F", ".debug$S"],
      "source_fpo_identity": {
       "kind": "seed_authoritative_source_refactor_fpo_codeview_v1",
       "expected_primary_characteristics": 1615859744,
@@ -14308,7 +14316,7 @@
       "expected_function_count": 23,
       "expected_comdat_count": 28,
       "expected_seed_line_sha256": "9046676931c9ff7dd83b54cf33e00861508db556bc6fbedfd54cad55057eca2a",
-            "expected_donor_line_sha256": "a6c20283483e9ea8cdee4ada86d2af06f14fd31b998e544557b151c416c3056e",
+      "expected_donor_line_sha256": "a6c20283483e9ea8cdee4ada86d2af06f14fd31b998e544557b151c416c3056e",
       "debug_f": {
        "section_number": 57,
        "expected_seed_raw_size": 16,
@@ -14321,7 +14329,7 @@
        "expected_seed_body_sha256": "ba1684a5eef581e54f46c41c1a84695b52bad468a83f2b461f9fd4f79a6e7f1d",
        "expected_donor_body_sha256": "ba1684a5eef581e54f46c41c1a84695b52bad468a83f2b461f9fd4f79a6e7f1d",
        "expected_seed_relocation_sha256": "b158bbd00c628542ab032a3041970e1e1357e7c8b633a4a49d0ab03fd0097437",
-              "expected_donor_relocation_sha256": "f8769d95e97f98c86873b82af3fa0cd591fd445342d641bb79a3b83161cbeb98",
+       "expected_donor_relocation_sha256": "f8769d95e97f98c86873b82af3fa0cd591fd445342d641bb79a3b83161cbeb98",
        "expected_record": {
         "ulOffStart": 0,
         "cbProcSize": 438,
@@ -14348,7 +14356,7 @@
        "expected_seed_body_sha256": "bf1ad5e24a165698b4331c9a5933f267fb208d77dc2cfe8778a3ea3bbb117f3c",
        "expected_donor_body_sha256": "d1698ca625e650283391f357e21d0951ce3674308c6a7929e72c155d8d90abd2",
        "expected_seed_relocation_sha256": "d8e74b20e9a894c57724aaae3fa300b890bf1dabc63775e042540dd252dacaa6",
-              "expected_donor_relocation_sha256": "07ef049c6ddc18fe99b689f9490bba24729e321f4173bd3cc59512cc27fbeaf1",
+       "expected_donor_relocation_sha256": "07ef049c6ddc18fe99b689f9490bba24729e321f4173bd3cc59512cc27fbeaf1",
        "expected_common_prefix_sha256": "f695facd0abc6ea90ebefd9958eda462415d16da771c2fd94687a2b47e144228",
        "expected_record_kind": "0502",
        "expected_cb_proc": 438,
@@ -14358,74 +14366,6 @@
        "expected_donor_tail_sha256": "3a386cd4d4b318231cc9af331ad63a57a9339a3fe8dd80c001dbb7fcf59fa86d"
       }
      },
-     "instruction_ranges": [
-      {
-       "kind": "same_offset_complete_x86_instruction_sequence_v1",
-       "start": 60,
-       "end": 63,
-       "seed_bytes": "8d7e36",
-       "seed_sha256": "17b1437658a636b3b3195ccd9d1107cc65f781aa3e380cf5872750433c8cad31",
-       "donor_bytes": "8d5e36",
-       "donor_sha256": "1340794f53cd651f680b93bae15520f7a7ce23843403de0a388df6d052c35d55",
-       "seed_instruction_lengths": [3],
-       "donor_instruction_lengths": [3]
-      },
-      {
-       "kind": "same_offset_complete_x86_instruction_sequence_v1",
-       "start": 63,
-       "end": 68,
-       "seed_bytes": "bb80020000",
-       "seed_sha256": "45c718dcd3f7c787fd1aeb569a32ef61f71642a657ef9e72831c7eea571b3c6a",
-       "donor_bytes": "bf80020000",
-       "donor_sha256": "1aa548e7190a179d95a104ac591be2b21507c6ea63c09fc0f922dd3c31e7fd8a",
-       "seed_instruction_lengths": [5],
-       "donor_instruction_lengths": [5]
-      },
-      {
-       "kind": "same_offset_complete_x86_instruction_sequence_v1",
-       "start": 68,
-       "end": 71,
-       "seed_bytes": "83c702",
-       "seed_sha256": "6b047ad9c8a69e1656229be37a3b40d80eb54d454b4c19feb284bd81777bca48",
-       "donor_bytes": "83c302",
-       "donor_sha256": "9b4141d9282f2a101c39b979be807859d4a2443e50dcba9cbfaf8344f8631600",
-       "seed_instruction_lengths": [3],
-       "donor_instruction_lengths": [3]
-      },
-      {
-       "kind": "same_offset_complete_x86_instruction_sequence_v1",
-       "start": 77,
-       "end": 81,
-       "seed_bytes": "668b6ffe",
-       "seed_sha256": "d191c3c95b5b6cd660f292bb2b19d9f6d065aeb7794867656a63cd6a752e7db2",
-       "donor_bytes": "668b6bfe",
-       "donor_sha256": "22918c858575945f4cd546cef9515ccf0801fc822b5098de37703a419dd6dd48",
-       "seed_instruction_lengths": [4],
-       "donor_instruction_lengths": [4]
-      },
-      {
-       "kind": "same_offset_complete_x86_instruction_sequence_v1",
-       "start": 88,
-       "end": 89,
-       "seed_bytes": "4b",
-       "seed_sha256": "86be9a55762d316a3026c2836d044f5fc76e34da10e1b45feee5f18be7edb177",
-       "donor_bytes": "4f",
-       "donor_sha256": "c4694f2e93d5c4e7d51f9c5deb75e6cc8be5e1114178c6a45b6fc2c566a0aa8c",
-       "seed_instruction_lengths": [1],
-       "donor_instruction_lengths": [1]
-      },
-      {
-       "kind": "same_offset_complete_x86_instruction_sequence_v1",
-       "start": 96,
-       "end": 100,
-       "seed_bytes": "66894ffe",
-       "seed_sha256": "08794fbf76f40a576178ca61d566d30130fad2de3476b270150c879e9559fcd7",
-       "donor_bytes": "66894bfe",
-       "donor_sha256": "d487caffde6dffd735bb86bb85ff530baa2e8323b851f5153e19b24fc6344fea",
-       "seed_instruction_lengths": [4],
-       "donor_instruction_lengths": [4]
-      }
-     ],
      "retail_oracle": {
       "image": "LEGO1.DLL",
       "address": "0x1004bd10",
@@ -14615,7 +14555,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes DissolveTransition by importing six authenticated complete instruction ranges from a donor-only typed fixed-array shuffle while retaining seed metadata, debug children, and every non-target byte.",
+    "reason": "Closes DissolveTransition with the complete compiler-emitted body from a donor-only typed fixed-array shuffle while retaining the seed line table, FPO/CodeView children, relocation table, symbols, and every non-target byte.",
    "may_replace_compiler_output": true
    }
   },

@@ -3602,12 +3602,14 @@ def require_target_source_refactor_recipe_policy(
                 "target")
     if proof["kind"] == "fixed_array_shuffle_pointer_countdown_v1":
         require(
-            function.get("splice_class")
-            == "retail_exact_instruction_mosaic"
+            function.get("splice_class") in {
+                "retail_exact_instruction_mosaic",
+                RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS,
+            }
             and isinstance(function.get("source_fpo_identity"), dict)
             and "ordinary_fpo_identity" not in function,
             f"{context}: fixed-array shuffle is restricted to its isolated "
-            "source FPO instruction mosaic",
+            "source FPO body composer",
         )
         require(isinstance(overlaid_paths, set),
                 f"{context}: fixed-array shuffle overlay census is missing")
@@ -12699,6 +12701,8 @@ def validate_manifest(
                         "retail_oracle", "retail_relocations",
                         "target_source_refactor",
                     }
+                    if "source_fpo_identity" in function:
+                        source_equal_keys.add("source_fpo_identity")
                     exact_keys(function, source_equal_keys, function_context)
                     for name in (
                         "expected_section_number", "expected_section_count",
@@ -12767,9 +12771,12 @@ def validate_manifest(
                         f"{function_context}.expected_xdata_rename_offsets "
                         "is invalid",
                     )
+                    source_fpo = "source_fpo_identity" in function
                     require(
-                        function.get("expected_closure")
-                        == [".debug$S", ".xdata$x"],
+                        function.get("expected_closure") == (
+                            [".debug$F", ".debug$S"] if source_fpo else
+                            [".debug$S", ".xdata$x"]
+                        ),
                         f"{function_context}.expected_closure differs",
                     )
                     proof = validate_target_source_refactor_proof(
@@ -12786,6 +12793,44 @@ def validate_manifest(
                     normalized_function = {
                         **function, "target_source_refactor": proof,
                     }
+                    if source_fpo:
+                        require(
+                            proof["kind"]
+                            == "fixed_array_shuffle_pointer_countdown_v1",
+                            f"{function_context}: source FPO identity is "
+                            "restricted to the closed shuffle proof",
+                        )
+                        identity = validate_source_fpo_mosaic_identity(
+                            function["source_fpo_identity"],
+                            f"{function_context}.source_fpo_identity",
+                            function["expected_section_number"],
+                            function["expected_body_length"],
+                        )
+                        require(
+                            identity["expected_primary_characteristics"]
+                            == function["expected_characteristics"]
+                            and identity["expected_primary_selection"]
+                            == function["expected_selection"]
+                            and identity["expected_function_count"]
+                            == function["expected_function_count"]
+                            and identity["expected_comdat_count"]
+                            == function["expected_comdat_count"],
+                            f"{function_context}: source FPO outer identity "
+                            "pins differ",
+                        )
+                        require(
+                            function["expected_xdata_rename_offsets"] == [],
+                            f"{function_context}: source FPO body cannot "
+                            "declare xdata renames",
+                        )
+                        normalized_function["source_fpo_identity"] = identity
+                    else:
+                        require(
+                            proof["kind"]
+                            != "fixed_array_shuffle_pointer_countdown_v1",
+                            f"{function_context}: fixed-array shuffle "
+                            "requires its isolated source FPO identity",
+                        )
                     bound_refactor_recipe_ids.append(donor_id)
                     require_target_source_refactor_recipe_policy(
                         local_recipes[donor_id], normalized_function,
@@ -16701,12 +16746,14 @@ def require_manifest_source_refactor_role_preflight(
                     and proof.get("kind")
                     == "fixed_array_shuffle_pointer_countdown_v1"):
                 require(
-                    function.get("splice_class")
-                    == "retail_exact_instruction_mosaic"
+                    function.get("splice_class") in {
+                        "retail_exact_instruction_mosaic",
+                        RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS,
+                    }
                     and isinstance(function.get("source_fpo_identity"), dict)
                     and "ordinary_fpo_identity" not in function,
                     f"{context}: fixed-array shuffle is restricted to its "
-                    "isolated source FPO instruction mosaic",
+                    "isolated source FPO body composer",
                 )
                 witness = validate_fixed_array_shuffle_semantic_witness(
                     proof.get("semantic_witness"),
@@ -22495,7 +22542,7 @@ def compose_retail_exact_source_equal_body(
     this class adds the source identity, complete target/closure pins,
     semantic-relocation equivalence, and retail oracle before delegating the
     one allowed mutation: replacing the target's raw body while retaining all
-    seed line, debug, EH, relocation, and symbol bytes.
+    seed line, debug, unwind/FPO, relocation, and symbol bytes.
     """
     require(
         function.get("splice_class")
@@ -22562,52 +22609,77 @@ def compose_retail_exact_source_equal_body(
 
     expected_closure = tuple(function["expected_closure"])
     closure = _comdat_child_closure(seed, sp)
+    source_fpo = "source_fpo_identity" in function
+    required_closure = (
+        (2, (".debug$F", ".debug$S")) if source_fpo else
+        (2, (".debug$S", ".xdata$x"))
+    )
     require(
         closure == _comdat_child_closure(donor, dp)
         == (len(expected_closure), expected_closure)
-        == (2, (".debug$S", ".xdata$x")),
+        == required_closure,
         "source equal-body target closure changed",
     )
-    closure_renames = {}
-    for child_name in expected_closure:
-        left = _comdat_child(seed, sp, child_name)
-        right = _comdat_child(donor, dp, child_name)
-        require(
-            left["number"] == right["number"]
-            and all(left[field] == right[field]
-                    for field in (
-                        "name", "raw_size", "relocation_count",
-                        "line_count", "characteristics",
-                    )),
-            f"source equal-body {child_name} closure geometry changed",
+    if source_fpo:
+        closure_pairs = require_source_fpo_mosaic_identity(
+            seed, sp, donor, dp, function,
+            function["source_fpo_identity"],
+            "source equal-body FPO identity",
         )
+    else:
+        closure_pairs = [
+            (_comdat_child(seed, sp, child_name),
+             _comdat_child(donor, dp, child_name))
+            for child_name in expected_closure
+        ]
+
+    closure_renames = {}
+    for child_name, (left, right) in zip(
+            expected_closure, closure_pairs, strict=True):
+        if not source_fpo:
+            require(
+                left["number"] == right["number"]
+                and all(left[field] == right[field]
+                        for field in (
+                            "name", "raw_size", "relocation_count",
+                            "line_count", "characteristics",
+                        )),
+                f"source equal-body {child_name} closure geometry changed",
+            )
         closure_renames[child_name] = require_same_semantic_relocations(
             seed, left, donor, right,
             f"source equal-body {child_name}",
         )
-    require(
-        [offset for offset, _ in closure_renames[".xdata$x"]]
-        == function["expected_xdata_rename_offsets"],
-        "source equal-body xdata rename set changed",
-    )
+    if source_fpo:
+        require(
+            function["expected_xdata_rename_offsets"] == [],
+            "source equal-body FPO closure cannot declare xdata renames",
+        )
+    else:
+        require(
+            [offset for offset, _ in closure_renames[".xdata$x"]]
+            == function["expected_xdata_rename_offsets"],
+            "source equal-body xdata rename set changed",
+        )
     require(
         [[offset, kind]
          for offset, kind in closure_renames[".debug$S"]]
         == function["expected_debug_s_renames"],
         "source equal-body debug$S rename set changed",
     )
-    seed_xdata = _comdat_child(seed, sp, ".xdata$x")
-    donor_xdata = _comdat_child(donor, dp, ".xdata$x")
-    require(coff_body(seed, seed_xdata) == coff_body(donor, donor_xdata),
-            "source equal-body runtime xdata bytes changed")
-    seed_debug = coff_body(seed, _comdat_child(seed, sp, ".debug$S"))
-    donor_debug = coff_body(donor, _comdat_child(donor, dp, ".debug$S"))
-    require(
-        len(seed_debug) >= 28 and len(seed_debug) == len(donor_debug)
-        and seed_debug[:28] == donor_debug[:28]
-        and seed_debug[2:4] == b"\x05\x02",
-        "source equal-body CodeView procedure identity changed",
-    )
+    if not source_fpo:
+        seed_xdata = _comdat_child(seed, sp, ".xdata$x")
+        donor_xdata = _comdat_child(donor, dp, ".xdata$x")
+        require(coff_body(seed, seed_xdata) == coff_body(donor, donor_xdata),
+                "source equal-body runtime xdata bytes changed")
+        seed_debug = coff_body(seed, _comdat_child(seed, sp, ".debug$S"))
+        donor_debug = coff_body(donor, _comdat_child(donor, dp, ".debug$S"))
+        require(
+            len(seed_debug) >= 28 and len(seed_debug) == len(donor_debug)
+            and seed_debug[:28] == donor_debug[:28]
+            and seed_debug[2:4] == b"\x05\x02",
+            "source equal-body CodeView procedure identity changed",
+        )
     require(
         instruction_mosaic_metadata_sha256(seed, sp)
         == function["expected_seed_metadata_sha256"]
@@ -22690,6 +22762,7 @@ def compose_retail_exact_source_equal_body(
         "splice_class": RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS,
         "closure": list(expected_closure),
         "closure_relocation_renames": closure_renames,
+        "source_fpo_identity": source_fpo,
         "retail_exact": True,
         **semantic_detail,
         **source_detail,

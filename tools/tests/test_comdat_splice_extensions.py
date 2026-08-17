@@ -5772,6 +5772,103 @@ class SourceFpoInstructionMosaicTests(unittest.TestCase):
             source_permutation=source_permutation,
         )
 
+    def equal_body_fixture(self):
+        seed, donor, function, _, _ = self.fixture()
+        seed_coff = byte_identity.CoffObject(seed)
+        donor_coff = byte_identity.CoffObject(donor)
+        sp = seed_coff.function_section(TARGET_SYMBOL)
+        dp = donor_coff.function_section(TARGET_SYMBOL)
+        seed_body = byte_identity.coff_body(seed_coff, sp)
+        donor_body = byte_identity.coff_body(donor_coff, dp)
+        whole = copy.deepcopy(function)
+        for name in (
+            "expected_donor_body_length", "expected_line_count",
+            "instruction_ranges",
+        ):
+            whole.pop(name)
+        whole.update({
+            "splice_class":
+                byte_identity.RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS,
+            "expected_characteristics": sp["characteristics"],
+            "expected_selection":
+                byte_identity.section_definitions(seed_coff)[sp["number"]]
+                ["selection"],
+            "expected_seed_line_count": sp["line_count"],
+            "expected_function_count": sum(
+                byte_identity.function_multiset(seed_coff).values()),
+            "expected_comdat_count": sum(
+                byte_identity.comdat_primary_identity_multiset(
+                    seed_coff).values()),
+            "expected_body_sha256": hashlib.sha256(donor_body).hexdigest(),
+            "expected_changed_offsets": [
+                index for index, pair in enumerate(
+                    zip(seed_body, donor_body)) if pair[0] != pair[1]
+            ],
+            "expected_code_renames": [],
+            "expected_xdata_rename_offsets": [],
+            "expected_debug_s_renames": [],
+            "expected_closure": [".debug$F", ".debug$S"],
+            "target_source_refactor": {"fixture": True},
+        })
+        retail = retail_body_for(donor)
+        whole["retail_relocations"] = relocation_oracle_for(seed, retail)
+        return seed, donor, whole, retail
+
+    def compose_equal_body(self, fixture, function=None):
+        seed, donor, expected, retail = fixture
+        with mock.patch.object(
+            byte_identity, "require_target_source_refactor_identity",
+            return_value={"source_refactor_identity": True},
+        ):
+            return byte_identity.compose_retail_exact_source_equal_body(
+                seed, donor, expected if function is None else function,
+                retail, b"seed source", b"donor source")
+
+    def test_equal_body_fpo_branch_keeps_seed_metadata_shell(self):
+        fixture = self.equal_body_fixture()
+        seed, donor, function, _ = fixture
+        composed, detail = self.compose_equal_body(fixture)
+        seed_coff = byte_identity.CoffObject(seed)
+        donor_coff = byte_identity.CoffObject(donor)
+        checked = byte_identity.CoffObject(composed)
+        sp = seed_coff.function_section(TARGET_SYMBOL)
+        dp = donor_coff.function_section(TARGET_SYMBOL)
+        cp = checked.function_section(TARGET_SYMBOL)
+        start, end = sp["raw_offset"], sp["raw_offset"] + sp["raw_size"]
+        self.assertEqual(composed[:start], seed[:start])
+        self.assertEqual(composed[end:], seed[end:])
+        self.assertEqual(
+            byte_identity.coff_body(checked, cp),
+            byte_identity.coff_body(donor_coff, dp))
+        self.assertEqual(
+            byte_identity._coff_table_bytes(checked, cp, "lines"),
+            byte_identity._coff_table_bytes(seed_coff, sp, "lines"))
+        for child_name in (".debug$F", ".debug$S"):
+            before = byte_identity._comdat_child(
+                seed_coff, sp, child_name)
+            after = byte_identity._comdat_child(
+                checked, cp, child_name)
+            self.assertEqual(
+                byte_identity.coff_body(checked, after),
+                byte_identity.coff_body(seed_coff, before))
+        self.assertTrue(detail["source_fpo_identity"])
+        self.assertEqual(detail["body_changed_offsets"],
+                         function["expected_changed_offsets"])
+
+    def test_equal_body_fpo_branch_requires_complete_identity(self):
+        fixture = self.equal_body_fixture()
+        bad = copy.deepcopy(fixture[2])
+        bad.pop("source_fpo_identity")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "target closure"):
+            self.compose_equal_body(fixture, bad)
+
+        bad = copy.deepcopy(fixture[2])
+        bad["source_fpo_identity"]["expected_donor_line_sha256"] = "0" * 64
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "line-table pin"):
+            self.compose_equal_body(fixture, bad)
+
     def test_positive_allows_pinned_codeview_growth_but_keeps_seed_shell(self):
         fixture = self.fixture()
         composed, detail = self.compose(fixture)
@@ -6133,19 +6230,21 @@ class SourceFpoInstructionMosaicTests(unittest.TestCase):
                                         "non-target"):
                 self.compose(fixture)
 
-    def test_live_manifest_pins_exact_ranges_oracle_and_fpo_class(self):
+    def test_live_manifest_uses_complete_fpo_body_without_ranges(self):
         _, _, donor, function = self.live_records()
         self.assertEqual(
             donor["recipe"]["rendering_identity_sha256"],
             "34f9d09eb5634ca58d8e1b63193708cd18a59139a3b846b6a9a933a69707c49c")
         self.assertEqual(
-            [(item["start"], item["end"])
-             for item in function["instruction_ranges"]],
-            [(60, 63), (63, 68), (68, 71),
-             (77, 81), (88, 89), (96, 100)])
-        self.assertFalse(any(
-            item["start"] < 76 and item["end"] > 72
-            for item in function["instruction_ranges"]))
+            function["splice_class"],
+            byte_identity.RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS)
+        self.assertNotIn("instruction_ranges", function)
+        self.assertEqual(function["expected_changed_offsets"],
+                         [61, 63, 69, 79, 88, 98])
+        self.assertEqual(function["expected_closure"],
+                         [".debug$F", ".debug$S"])
+        self.assertEqual(function["expected_seed_line_count"], 42)
+        self.assertEqual(function["expected_donor_line_count"], 44)
         self.assertEqual(len(function["retail_relocations"]), 8)
         self.assertEqual(
             function["source_fpo_identity"]["kind"],

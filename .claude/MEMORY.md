@@ -1651,3 +1651,44 @@ helper topology, or authenticated original compiler/PCH/environment state
 that naturally emits the complete 645-byte retail body with exact
 29-relocation/52-line `.debug$S + .debug$F` closure. No compile, Wine, link,
 reccmp, source, or shared-state mutation was used for this static seal.
+
+## `0x1004bd10 MxTransitionManager::DissolveTransition` whole-body FPO dehybridization (2026-08-17)
+
+`DissolveTransition` is no longer an instruction mosaic. All six former
+`instruction_ranges` were removed and the existing natural
+`d_34f9d09eb563` typed fixed-array-shuffle source donor now supplies its
+complete 438-byte compiler body (SHA-256
+`d8dcb9786d75ee60e3a18e12920ebc47cf8835c9fa9e9faf3572c8eec4bc61ac`)
+through `retail_exact_source_equal_body`. The class admits this FPO branch
+only when the closed `fixed_array_shuffle_pointer_countdown_v1` proof and
+existing `source_fpo_identity` are both present. That identity still proves
+the exact `.debug$F`/`.debug$S` closure, FPO record, separately pinned
+206/221-byte CodeView payloads, 42/44-row line tables, child relocation
+tables and semantics, 23-function/28-COMDAT universe, section seat,
+selection, and linker payload. The output keeps every seed line, FPO,
+CodeView, relocation, symbol, and non-target byte.
+
+The read-only inverse replay recovered raw seed object SHA-256
+`83baf07b52cb4e8ad9da22b731ab4f1761a2dc7d35918f09e8051372159e5ae8`;
+the intact donor object is
+`ba5d2d3a1d5d64603afb2758fc90a87bda99a78dac17492262c09733ccf2eb6b`.
+Whole-body composition changed exactly target offsets
+`61,63,69,79,88,98`, preserved seed metadata SHA-256
+`50dde037ef93311085caf36fc80f7da9db67deaa447ce6c5fd7f7ae47225beae`,
+and produced object SHA-256
+`8987bb138d0e758e435a5a2434112cef6a49f812d9df976bc3ffa6c620d8c276`,
+byte-for-byte identical to the accepted mosaic object. Canonical manifest
+validation accepted all 49 TUs; the focused and full Python suites passed
+218 tests with three expected skips.
+
+The production gate retained LEGO1 at 4,881/4,934 with the
+`0x1004bd10` row at raw 1.0, ISLE at 172/172, and CONFIG at 111/111. Receipt
+SHA-256 values are LEGO1 report
+`05168d78fc6d393f5602187362f465f41f7a6b2d992bc5a2d1f651022ad6d4f2`,
+verdict
+`db48785e37c9cec087cc7ae78b567eedbf07d75b0b1806602813013f961f0583`,
+and manifest
+`5a615d6a187f35dde952d084e389803c0f13ddc2529c2d885a0409ee3d908471`.
+Do not restore range-level composition for this row: any replacement must
+remain a complete source-authentic compiler body and preserve the same
+seed-authoritative FPO/CodeView/line/relocation universe and full gate set.
