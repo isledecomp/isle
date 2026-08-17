@@ -1133,3 +1133,20 @@ The historical exact `RemovePresenter` sample was used only as an oracle. Its
 state has now been delta-reduced into two explicit current-source manifest
 recipes and accepted through the generic same-COMDAT multi-donor mosaic above;
 no historical source, generator, header, report or object is a build input.
+
+- Fresh-eyes cross-TU whole-COMDAT census: EMPTY beyond the separately owned
+  `0x1002bff0` path-tree `erase` landing. Intersecting the 54 current misses
+  with the all-symbol retained-object screens leaves one other masked `nd=0`
+  body, `0x10084030 LegoCharacterManager::CreateActorROI`, but it is a proven
+  relocation false positive: object offsets 101 and 1220 call
+  `Vector2::Vector2` while retail calls `Vector3::Vector3` (the other 79 of 81
+  relocations agree). The only unused strict-retail whole-COMDAT state is
+  `0x1006b140 LegoAnimPresenter::CopyTransform` (948 bytes, 20 relocations,
+  `.debug$S` plus `.xdata$x`, body `2d69ac14...`), whose 944-to-960-byte linked
+  span adds an uncompensated 16 bytes; no unused exact -16 state remains, so it
+  cannot land without address losses. Current-build alternate definers and the
+  389,288-object corpus plus 10,708-object refresh expose no further natural
+  exact emitter. Static evidence: `/private/tmp/codex-mosaic-cover-results.json`
+  SHA-256 `c18947ce...`, S109 nonzero-span census `690a30e0...`, and S110
+  semantic near-donor census `7fc32983...`. Do not repeat this cross-TU census
+  without genuinely new artifacts.
