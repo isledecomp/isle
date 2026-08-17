@@ -1536,6 +1536,39 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated forward-declaration run appended after the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_5ac567aa39eb",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 311,
+      "width": 3,
+      "generated_header_sha256": "5ac567aa39eb2d817519cb6667d02d9c9b8ea8f08f4ebc06c77233605bdd4ccd",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated forward-declaration run appended after the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_b06a38d253e5",
+     "status": "compiler_generated_current_source",
+     "authenticity": "checked_in_source_only",
+     "recipe": {
+      "kind": "clean_current_source_cross_tu",
+      "donor_source": "LEGO1/lego/sources/misc/legocontainer.cpp",
+      "source_sha256": "b06a38d253e51a1e7c3e08037a02d374b424b7b833e1c0e600dbac112bc750ce",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "unmodified_checked_in_translation_unit_only",
+      "authenticity_rationale": "Checked-in translation unit compiled without a private rendering or declaration carrier through its own manifest-selected command lane; only a pinned instruction from the exact same mangled COMDAT may be consumed."
+     }
     }
    ],
    "functions": [
@@ -1558,11 +1591,229 @@
      "expected_donor_length": 2648,
      "expected_linked_span": 2656,
      "donor": "d_aa8cbbfdb45d"
+    },
+    {
+     "mangled": "?erase@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAE?AViterator@1@V21@@Z",
+     "donor": "d_5ac567aa39eb",
+     "instruction_donor": "d_b06a38d253e5",
+     "splice_class": "retail_exact_cross_tu_instruction_hybrid_resize",
+     "expected_seed_length": 1103,
+     "expected_donor_length": 1102,
+     "expected_linked_span": 1104,
+     "expected_target_donor_section_number": 130,
+     "expected_target_donor_section_count": 287,
+     "expected_target_donor_relocation_count": 16,
+     "expected_target_donor_line_count": 80,
+     "expected_target_donor_body_sha256": "c600bf89a868f041db33c3ca1c2b1ee9718c8a1a1be0c1bf1ac893e85ddd46ca",
+     "expected_instruction_donor_length": 1104,
+     "expected_instruction_donor_section_number": 31,
+     "expected_instruction_donor_section_count": 52,
+     "expected_instruction_donor_relocation_count": 16,
+     "expected_instruction_donor_line_count": 80,
+     "expected_instruction_donor_body_sha256": "18aa8de3a8bd6ef6fdfa9e7393066ea40d0c2e01cd53522aa4c4b77b751ccd14",
+     "expected_hybrid_body_sha256": "851f0e9a57984afaf02ecf6d1e52c5ad0daae945e12b8cd820e58759e2c6787a",
+     "instruction_ranges": [
+      {
+       "kind": "cross_tu_same_mangled_complete_x86_instruction_v1",
+       "target_start": 151,
+       "target_end": 155,
+       "target_bytes": "3b4c2410",
+       "target_sha256": "8a64c6665b692fc845511d9a0970094d9126a2643b73e17929e2cc0fb53d2ee8",
+       "instruction_donor_start": 145,
+       "instruction_donor_end": 149,
+       "instruction_donor_bytes": "394c2410",
+       "instruction_donor_sha256": "93ec95ce15ae7d64dc6682d844a672c9add8fe01439c4383a5720c83f1f46f18"
+      }
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10059dc0",
+      "verdict": "MATCH",
+      "length": 1102
+     },
+     "retail_relocations": [
+      {
+       "offset": 22,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 32,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 97,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 110,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 120,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 207,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 221,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 264,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 279,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 482,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 595,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 733,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 828,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 925,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 1014,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 35,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 1072,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      }
+     ]
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/main/legomain.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes 3 rows in LEGO1/lego/legoomni/src/main/legomain.cpp: two from generated carrier states, and one from a fresh target-TU resize donor whose sole non-retail instruction is replaced by the pinned complete instruction from a clean current-source same-mangled COMDAT in legocontainer.cpp.",
     "may_replace_compiler_output": true
    }
   },
@@ -11581,8 +11832,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4870,
-    "accepted_row_identity_sha256": "ac9648756203900e077bfb57081061611205f40376ce1ddc7b63b49cd15ef7d4",
+    "exact_raw_1_0_count": 4871,
+    "accepted_row_identity_sha256": "4b9e710a061254fbe1b393fe1264482352e01792c5ae18854106e7cdc09c5a7e",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

@@ -9269,13 +9269,19 @@ def validate_manifest(
             )
             require(donor.get("status") == expected_status,
                     f"{donor_context}.status must be {expected_status}")
-            require(
-                donor.get("authenticity") == "synthetic_baseline_only",
-                f"{donor_context}.authenticity must be synthetic_baseline_only",
-            )
             recipe = donor.get("recipe")
             require(isinstance(recipe, dict), f"{donor_context}.recipe must be an object")
             kind = recipe.get("kind")
+            expected_authenticity = (
+                "checked_in_source_only"
+                if kind == CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE
+                else "synthetic_baseline_only"
+            )
+            require(
+                donor.get("authenticity") == expected_authenticity,
+                f"{donor_context}.authenticity must be "
+                f"{expected_authenticity}",
+            )
             local_recipe_kinds[recipe_id] = kind
             local_recipes[recipe_id] = recipe
             if mode == "compose_equal_body_comdat":
@@ -9285,7 +9291,8 @@ def validate_manifest(
                              "extern_pair_with_shape",
                              "extern_pair_with_pad", "pad_shape",
                              "declaration_run_triple",
-                             "donor_source_overlay"),
+                             "donor_source_overlay",
+                             CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE),
                     f"{donor_context}: equal-body donors require a "
                     "generated declaration recipe",
                 )
@@ -9307,6 +9314,36 @@ def validate_manifest(
                     f"{donor_context}.compile_lane must select by a define "
                     "and an optional closed include projection",
                 )
+                if kind == CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE:
+                    validated_recipe = (
+                        validate_clean_current_source_cross_tu_recipe(
+                            recipe, source_dir, source_relative,
+                            set(source_overlay_by_path),
+                            f"{donor_context}.recipe",
+                        )
+                    )
+                    source_identity = validated_recipe["source_sha256"]
+                    require(recipe_id == f"d_{source_identity[:12]}",
+                            f"{donor_context}.id is not the checked-in "
+                            "source content ID")
+                    existing_recipe = recipe_registry.get(recipe_id)
+                    if existing_recipe is None:
+                        recipe_registry[recipe_id] = {
+                            "id": recipe_id, "recipe": validated_recipe,
+                            "header_output": None, "users": [],
+                        }
+                        recipe_order.append(recipe_id)
+                    else:
+                        require(existing_recipe["recipe"] == validated_recipe,
+                                f"duplicate recipe definition differs: "
+                                f"{recipe_id}")
+                    local_recipes[recipe_id] = validated_recipe
+                    normalized_donors.append({
+                        **donor,
+                        "recipe": validated_recipe,
+                        "header_output": None,
+                    })
+                    continue
                 if kind == "donor_source_overlay":
                     # Extension A: the donor's own private rendering of one or
                     # more checked-in paths, by typed ops.  It carries no
@@ -9823,6 +9860,8 @@ def validate_manifest(
         seen_section_numbers = set()
         function_recipe_ids = set()
         bound_refactor_recipe_ids = []
+        primary_donor_ids = []
+        clean_cross_tu_instruction_donor_ids = []
         allowed_function_keys = {
             "mangled", "donor", "splice_class", "expected_section_number",
             "expected_seed_length", "expected_donor_length", "expected_linked_span",
@@ -9852,6 +9891,7 @@ def validate_manifest(
                 require(donor_id in local_recipe_ids,
                         f"{function_context}.donor is not declared by this TU")
                 function_recipe_ids.add(donor_id)
+                primary_donor_ids.append(donor_id)
                 splice_class = function.get("splice_class")
                 require(splice_class in ("equal_body_strict",
                                          "equal_body_eh_structural_local",
@@ -9861,8 +9901,133 @@ def validate_manifest(
                                          "retail_exact_reloc_divergent",
                                          "retail_exact_target_closure",
                                          "retail_exact_source_target_closure",
-                                         "comdat_selection_override"),
+                                         "comdat_selection_override",
+                                         CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS),
                         f"{function_context}: unsupported splice class")
+                if (splice_class
+                        == CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
+                    hybrid_keys = {
+                        "mangled", "donor", "instruction_donor",
+                        "splice_class", "expected_seed_length",
+                        "expected_donor_length", "expected_linked_span",
+                        "expected_target_donor_section_number",
+                        "expected_target_donor_section_count",
+                        "expected_target_donor_relocation_count",
+                        "expected_target_donor_line_count",
+                        "expected_target_donor_body_sha256",
+                        "expected_instruction_donor_length",
+                        "expected_instruction_donor_section_number",
+                        "expected_instruction_donor_section_count",
+                        "expected_instruction_donor_relocation_count",
+                        "expected_instruction_donor_line_count",
+                        "expected_instruction_donor_body_sha256",
+                        "expected_hybrid_body_sha256",
+                        "instruction_ranges", "retail_oracle",
+                        "retail_relocations",
+                    }
+                    exact_keys(function, hybrid_keys, function_context)
+                    instruction_donor_id = function.get(
+                        "instruction_donor")
+                    require(
+                        instruction_donor_id in local_recipe_ids
+                        and instruction_donor_id != donor_id,
+                        f"{function_context}.instruction_donor differs",
+                    )
+                    function_recipe_ids.add(instruction_donor_id)
+                    require_instruction_mosaic_donor_recipe(
+                        local_recipes[donor_id],
+                        f"{function_context} target donor recipe",
+                    )
+                    require(
+                        local_recipe_kinds[instruction_donor_id]
+                        == CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE,
+                        f"{function_context}: instruction donor is not a "
+                        "clean current-source cross-TU recipe",
+                    )
+                    clean_cross_tu_instruction_donor_ids.append(
+                        instruction_donor_id)
+                    positive_ints = (
+                        "expected_seed_length", "expected_donor_length",
+                        "expected_linked_span",
+                        "expected_target_donor_section_number",
+                        "expected_target_donor_section_count",
+                        "expected_target_donor_line_count",
+                        "expected_instruction_donor_length",
+                        "expected_instruction_donor_section_number",
+                        "expected_instruction_donor_section_count",
+                        "expected_instruction_donor_line_count",
+                    )
+                    for name in positive_ints:
+                        require(type(function.get(name)) is int
+                                and function[name] > 0,
+                                f"{function_context}.{name} is invalid")
+                    for name in (
+                        "expected_target_donor_relocation_count",
+                        "expected_instruction_donor_relocation_count",
+                    ):
+                        require(type(function.get(name)) is int
+                                and function[name] >= 0,
+                                f"{function_context}.{name} is invalid")
+                    require(
+                        function["expected_linked_span"] % 16 == 0
+                        and ((function["expected_seed_length"] + 15) // 16)
+                        * 16 == function["expected_linked_span"]
+                        and ((function["expected_donor_length"] + 15) // 16)
+                        * 16 == function["expected_linked_span"]
+                        and function["expected_seed_length"]
+                        != function["expected_donor_length"],
+                        f"{function_context}: hybrid resize spans differ",
+                    )
+                    for name in (
+                        "expected_target_donor_body_sha256",
+                        "expected_instruction_donor_body_sha256",
+                        "expected_hybrid_body_sha256",
+                    ):
+                        require_sha(function.get(name),
+                                    f"{function_context}.{name}")
+                    normalized_function = dict(function)
+                    normalized_function["instruction_ranges"] = (
+                        validate_cross_tu_instruction_hybrid_ranges(
+                            function.get("instruction_ranges"),
+                            f"{function_context}.instruction_ranges",
+                            function["expected_donor_length"],
+                            function["expected_instruction_donor_length"],
+                        )
+                    )
+                    retail = function.get("retail_oracle")
+                    require(isinstance(retail, dict),
+                            f"{function_context}.retail_oracle must be an "
+                            "object")
+                    exact_keys(retail, {
+                        "image", "address", "verdict", "length",
+                    }, f"{function_context}.retail_oracle")
+                    require_target_bound_retail_image(
+                        manifest.get("images"), target,
+                        retail.get("image"),
+                        f"{function_context}.retail_oracle",
+                    )
+                    require(
+                        isinstance(retail.get("address"), str)
+                        and ADDRESS_RE.fullmatch(retail["address"])
+                        is not None
+                        and retail.get("verdict") == "MATCH"
+                        and type(retail.get("length")) is int
+                        and retail["length"]
+                        == function["expected_donor_length"],
+                        f"{function_context}.retail_oracle differs",
+                    )
+                    validate_retail_relocation_oracle(
+                        function.get("retail_relocations"),
+                        f"{function_context}.retail_relocations",
+                        function["expected_donor_length"],
+                        allow_empty=(
+                            function[
+                                "expected_target_donor_relocation_count"]
+                            == 0
+                        ),
+                    )
+                    normalized_functions.append(normalized_function)
+                    continue
                 if splice_class == "comdat_selection_override":
                     # Class C.  The donor is a DIFFERENT translation unit's
                     # copy of a multiply-defined COMDAT, so there is no linked
@@ -10400,6 +10565,7 @@ def validate_manifest(
             require(donor_id in local_recipe_ids,
                     f"{function_context}.donor is not declared by this TU")
             function_recipe_ids.add(donor_id)
+            primary_donor_ids.append(donor_id)
             require(function.get("splice_class") == "equal_linked_span_fpo",
                     f"{function_context}: unsupported splice class")
             normalized_functions.append(_validate_equal_linked_span_function(
@@ -10411,6 +10577,12 @@ def validate_manifest(
             require(not functions, f"{context}: pass_through cannot request functions")
         else:
             require(functions, f"{context}: composer mode requires functions")
+            require_clean_current_source_cross_tu_bindings(
+                local_recipe_kinds,
+                primary_donor_ids,
+                clean_cross_tu_instruction_donor_ids,
+                context,
+            )
             require(function_recipe_ids == local_recipe_ids,
                     f"{context}: every compiler donor must own at least one function")
         require(
@@ -10461,6 +10633,15 @@ def validate_manifest(
                     "mode": mode,
                     "completion": completion["state"],
                 }
+            )
+
+    for recipe_id, registered in recipe_registry.items():
+        if (registered["recipe"].get("kind")
+                == CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE):
+            require(
+                len(registered["users"]) == 1,
+                f"clean current-source cross-TU recipe {recipe_id} must be "
+                "declared and consumed by exactly one translation unit",
             )
 
     archives = manifest.get("archives")
@@ -12336,6 +12517,161 @@ INSTRUCTION_MOSAIC_DECLARATION_RECIPE_KINDS = frozenset({
 })
 
 
+CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS = (
+    "retail_exact_cross_tu_instruction_hybrid_resize"
+)
+
+
+CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE = "clean_current_source_cross_tu"
+
+
+CROSS_TU_INSTRUCTION_HYBRID_RANGE_KEYS = {
+    "kind",
+    "target_start", "target_end", "target_bytes", "target_sha256",
+    "instruction_donor_start", "instruction_donor_end",
+    "instruction_donor_bytes", "instruction_donor_sha256",
+}
+
+
+def require_clean_current_source_cross_tu_bindings(
+    recipe_kinds: dict[str, object],
+    primary_donor_ids: list[str],
+    instruction_donor_ids: list[str],
+    context: str,
+) -> None:
+    """Confine clean cross-TU donors to one instruction-only consumer."""
+    clean_ids = {
+        recipe_id for recipe_id, kind in recipe_kinds.items()
+        if kind == CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE
+    }
+    primary_uses = clean_ids.intersection(primary_donor_ids)
+    require(
+        not primary_uses,
+        f"{context}: clean current-source cross-TU recipes may be used only "
+        f"as hybrid instruction donors, not primary donors: "
+        f"{sorted(primary_uses)}",
+    )
+    instruction_counts = Counter(instruction_donor_ids)
+    require(
+        set(instruction_counts) == clean_ids
+        and all(count == 1 for count in instruction_counts.values()),
+        f"{context}: every clean current-source cross-TU recipe must be "
+        "consumed exactly once as a hybrid instruction donor",
+    )
+
+
+def require_target_bound_retail_image(
+    images: object,
+    target: str,
+    retail_image: object,
+    context: str,
+) -> str:
+    """Bind an oracle filename to the unique image for its TU target."""
+    require(isinstance(images, dict), f"{context}: images must be an object")
+    matches = [
+        image for image in images.values()
+        if isinstance(image, dict) and image.get("target") == target
+    ]
+    require(len(matches) == 1,
+            f"{context}: target must select exactly one retail image")
+    original = matches[0].get("original")
+    require(isinstance(original, str) and original,
+            f"{context}: target retail image original is invalid")
+    expected = PurePosixPath(original).name
+    require(retail_image == expected,
+            f"{context}: retail oracle image differs from the TU target")
+    return expected
+
+
+def validate_cross_tu_instruction_hybrid_ranges(
+    value: object,
+    context: str,
+    target_body_length: int,
+    instruction_donor_body_length: int,
+) -> list[dict]:
+    """Pin equal-width complete instructions at independent COMDAT offsets.
+
+    The instruction-boundary claim is deliberately manifest-owned, as it is
+    for same-offset mosaics.  Literal bytes and hashes bind both compiler
+    outputs, while the composer later proves that neither range intersects a
+    relocation operand before copying fresh object bytes.
+    """
+    require(isinstance(value, list) and 1 <= len(value) <= 64,
+            f"{context} must contain 1..64 instruction ranges")
+    normalized = []
+    previous_target_end = 0
+    previous_source_end = 0
+    for index, item in enumerate(value):
+        item_context = f"{context}[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, CROSS_TU_INSTRUCTION_HYBRID_RANGE_KEYS,
+                         item_context)
+        require(
+            item.get("kind")
+            == "cross_tu_same_mangled_complete_x86_instruction_v1",
+            f"{item_context}.kind differs",
+        )
+        target_start = require_exact_int(
+            item.get("target_start"), item_context + ".target_start",
+            minimum=0, maximum=target_body_length - 1,
+        )
+        target_end = require_exact_int(
+            item.get("target_end"), item_context + ".target_end",
+            minimum=1, maximum=target_body_length,
+        )
+        source_start = require_exact_int(
+            item.get("instruction_donor_start"),
+            item_context + ".instruction_donor_start",
+            minimum=0, maximum=instruction_donor_body_length - 1,
+        )
+        source_end = require_exact_int(
+            item.get("instruction_donor_end"),
+            item_context + ".instruction_donor_end",
+            minimum=1, maximum=instruction_donor_body_length,
+        )
+        target_width = target_end - target_start
+        source_width = source_end - source_start
+        require(1 <= target_width == source_width <= 15,
+                f"{item_context} is not one equal-width x86 instruction")
+        require(target_start >= previous_target_end
+                and source_start >= previous_source_end,
+                f"{context} is unsorted or overlapping")
+        previous_target_end = target_end
+        previous_source_end = source_end
+
+        role_values = {}
+        for role in ("target", "instruction_donor"):
+            encoded = item.get(f"{role}_bytes")
+            require(isinstance(encoded, str)
+                    and re.fullmatch(r"[0-9a-f]+", encoded) is not None
+                    and len(encoded) == target_width * 2,
+                    f"{item_context}.{role}_bytes differs from its range")
+            raw = bytes.fromhex(encoded)
+            digest = require_sha(
+                item.get(f"{role}_sha256"),
+                f"{item_context}.{role}_sha256",
+            )
+            require(sha256_bytes(raw) == digest,
+                    f"{item_context} {role} encoding/hash differs")
+            role_values[role] = (encoded, digest)
+        require(role_values["target"] != role_values["instruction_donor"],
+                f"{item_context} does not change compiler output")
+        normalized.append({
+            "kind": item["kind"],
+            "target_start": target_start,
+            "target_end": target_end,
+            "target_bytes": role_values["target"][0],
+            "target_sha256": role_values["target"][1],
+            "instruction_donor_start": source_start,
+            "instruction_donor_end": source_end,
+            "instruction_donor_bytes": role_values[
+                "instruction_donor"][0],
+            "instruction_donor_sha256": role_values[
+                "instruction_donor"][1],
+        })
+    return normalized
+
+
 def require_instruction_mosaic_donor_recipe(
     recipe: object, context: str,
 ) -> None:
@@ -13823,6 +14159,79 @@ def validate_donor_object_excluded(
         )
 
 
+def validate_clean_current_source_cross_tu_recipe(
+    recipe: object,
+    root,
+    owner_source: str,
+    overlaid_paths: set[str],
+    context: str,
+) -> dict:
+    """Validate an unmodified checked-in translation-unit donor.
+
+    This recipe has no payload generator at all.  Its content identity is the
+    pinned checked-in source, and the build must compile it through the one
+    ordinary command lane selected here.  An effective source overlay would
+    make the "clean" claim false, so even a typed overlay is rejected.
+    """
+    require(isinstance(recipe, dict), f"{context} must be an object")
+    exact_audit_keys(recipe, {
+        "kind", "donor_source", "source_sha256", "compile_lane",
+        "emission_policy", "authenticity_rationale",
+    }, context)
+    require(recipe.get("kind") == CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE,
+            f"{context}.kind differs")
+    source = source_overlay_relative_path(
+        recipe.get("donor_source"), context + ".donor_source")
+    require(PurePosixPath(source).suffix.casefold()
+            in {".c", ".cc", ".cpp", ".cxx"},
+            f"{context}.donor_source is not a translation unit")
+    require(source != owner_source,
+            f"{context}.donor_source is not cross-translation-unit")
+    require(source not in overlaid_paths,
+            f"{context}.donor_source has an effective source overlay")
+    source_sha = require_sha(recipe.get("source_sha256"),
+                             context + ".source_sha256")
+    canonical_root = Path(root).resolve(strict=True)
+    source_path = source_overlay_logical_path(canonical_root, source)
+    try:
+        metadata = source_path.lstat()
+        resolved_source = source_path.resolve(strict=True)
+    except OSError as error:
+        raise ByteIdentityError(
+            f"{context}.donor_source is absent or redirected: {error}"
+        ) from error
+    require(
+        stat.S_ISREG(metadata.st_mode)
+        and not source_path.is_symlink()
+        and resolved_source == source_path
+        and resolved_source.is_relative_to(canonical_root),
+        f"{context}.donor_source is redirected or non-regular",
+    )
+    require(sha256_file(source_path) == source_sha,
+            f"{context}.donor_source differs from its checked-in pin")
+    lane = recipe.get("compile_lane")
+    require(isinstance(lane, dict)
+            and set(lane) == {"required_define"}
+            and isinstance(lane.get("required_define"), str)
+            and lane["required_define"],
+            f"{context}.compile_lane differs")
+    require(recipe.get("emission_policy")
+            == "unmodified_checked_in_translation_unit_only",
+            f"{context}.emission_policy differs")
+    rationale = recipe.get("authenticity_rationale")
+    require(isinstance(rationale, str) and len(rationale) >= 32,
+            f"{context}.authenticity_rationale is too weak")
+    serialized = json.dumps(recipe, sort_keys=True).casefold()
+    require(not any(word in serialized for word in FORBIDDEN_RECIPE_WORDS),
+            f"{context} contains forbidden provenance")
+    return {
+        **recipe,
+        "donor_source": source,
+        "source_sha256": source_sha,
+        "compile_lane": {"required_define": lane["required_define"]},
+    }
+
+
 def validate_donor_source_overlay_recipe(
     recipe: object, root, *, seed_outputs_touched: bool = False,
 ) -> dict:
@@ -14615,6 +15024,182 @@ def compose_retail_exact_source_instruction_mosaic(
         source_permutation=True,
     )
     return composed, {**detail, **source_detail, **variant_detail}
+
+
+def compose_retail_exact_cross_tu_instruction_hybrid_resize(
+    seed_bytes: bytes,
+    target_donor_bytes: bytes,
+    instruction_donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Import complete same-mangled instructions, then resize normally.
+
+    The target donor supplies the complete resize closure.  A second current-
+    source translation unit may supply only manifest-pinned instruction bytes
+    from its definition of that exact mangled COMDAT.  The temporary hybrid is
+    never a link input: after proving that it differs from the target donor
+    only inside the declared text ranges, it is handed to the unchanged
+    retail-exact same-slot composer.
+    """
+    require(function.get("splice_class")
+            == CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
+            "splice class is not a cross-TU instruction hybrid resize")
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+    target = CoffObject(target_donor_bytes)
+    instruction_donor = CoffObject(instruction_donor_bytes)
+    mangled = function["mangled"]
+    target_primary = target.function_section(mangled)
+    instruction_primary = instruction_donor.function_section(mangled)
+
+    require(
+        len(target.sections) == function["expected_target_donor_section_count"]
+        and target_primary["number"]
+        == function["expected_target_donor_section_number"],
+        "target donor section census or seat changed",
+    )
+    require(
+        len(instruction_donor.sections)
+        == function["expected_instruction_donor_section_count"]
+        and instruction_primary["number"]
+        == function["expected_instruction_donor_section_number"],
+        "instruction donor section census or seat changed",
+    )
+    require(
+        target_primary["raw_size"] == function["expected_donor_length"]
+        and target_primary["relocation_count"]
+        == function["expected_target_donor_relocation_count"]
+        and target_primary["line_count"]
+        == function["expected_target_donor_line_count"],
+        "target donor body/table census changed",
+    )
+    require(
+        instruction_primary["raw_size"]
+        == function["expected_instruction_donor_length"]
+        and instruction_primary["relocation_count"]
+        == function["expected_instruction_donor_relocation_count"]
+        and instruction_primary["line_count"]
+        == function["expected_instruction_donor_line_count"],
+        "instruction donor body/table census changed",
+    )
+    require(
+        comdat_primary_identity(target, target_primary)
+        == comdat_primary_identity(instruction_donor, instruction_primary),
+        "instruction donor is not the exact same mangled COMDAT",
+    )
+    require(
+        all(target_primary[field] == instruction_primary[field]
+            for field in ("name", "characteristics")),
+        "same-mangled donor COMDAT header class changed",
+    )
+
+    target_body = coff_body(target, target_primary)
+    instruction_body = coff_body(instruction_donor, instruction_primary)
+    require(sha256_bytes(target_body)
+            == function["expected_target_donor_body_sha256"],
+            "target donor body differs from its pin")
+    require(sha256_bytes(instruction_body)
+            == function["expected_instruction_donor_body_sha256"],
+            "instruction donor body differs from its pin")
+    ranges = validate_cross_tu_instruction_hybrid_ranges(
+        function.get("instruction_ranges"),
+        "cross-TU instruction hybrid ranges",
+        len(target_body), len(instruction_body),
+    )
+    target_relocations = detailed_relocations(target, target_primary)
+    instruction_relocations = detailed_relocations(
+        instruction_donor, instruction_primary)
+
+    hybrid = bytearray(target_donor_bytes)
+    range_detail = []
+    for index, item in enumerate(ranges):
+        target_start, target_end = (
+            item["target_start"], item["target_end"])
+        source_start, source_end = (
+            item["instruction_donor_start"],
+            item["instruction_donor_end"],
+        )
+        target_instruction = target_body[target_start:target_end]
+        source_instruction = instruction_body[source_start:source_end]
+        require(
+            target_instruction.hex() == item["target_bytes"]
+            and sha256_bytes(target_instruction) == item["target_sha256"],
+            f"cross-TU target instruction {index} drifted",
+        )
+        require(
+            source_instruction.hex() == item["instruction_donor_bytes"]
+            and sha256_bytes(source_instruction)
+            == item["instruction_donor_sha256"],
+            f"cross-TU instruction donor instruction {index} drifted",
+        )
+        for role, rows, start, end in (
+            ("target donor", target_relocations, target_start, target_end),
+            ("instruction donor", instruction_relocations,
+             source_start, source_end),
+        ):
+            require(all(
+                end <= row["offset"]
+                or start >= row["offset"] + row["width"]
+                for row in rows
+            ), f"cross-TU range {index} overlaps a {role} relocation operand")
+        at = target_primary["raw_offset"] + target_start
+        hybrid[at:at + target_end - target_start] = source_instruction
+        range_detail.append({
+            "target_start": target_start,
+            "target_end": target_end,
+            "instruction_donor_start": source_start,
+            "instruction_donor_end": source_end,
+            "target_sha256": item["target_sha256"],
+            "instruction_donor_sha256": item[
+                "instruction_donor_sha256"],
+        })
+
+    hybrid = bytes(hybrid)
+    changed_file_offsets = {
+        offset for offset, (before, after) in enumerate(
+            zip(target_donor_bytes, hybrid)) if before != after
+    }
+    allowed_file_offsets = {
+        target_primary["raw_offset"] + offset
+        for item in ranges
+        for offset in range(item["target_start"], item["target_end"])
+    }
+    require(changed_file_offsets
+            and changed_file_offsets <= allowed_file_offsets,
+            "cross-TU hybrid changed a non-target-donor byte")
+    hybrid_coff = CoffObject(hybrid)
+    hybrid_primary = hybrid_coff.function_section(mangled)
+    hybrid_body = coff_body(hybrid_coff, hybrid_primary)
+    require(sha256_bytes(hybrid_body)
+            == function["expected_hybrid_body_sha256"],
+            "cross-TU hybrid body differs from its pin")
+    require(detailed_relocations(hybrid_coff, hybrid_primary)
+            == target_relocations,
+            "cross-TU hybrid changed target-donor relocations")
+    require(_coff_table_bytes(hybrid_coff, hybrid_primary, "lines")
+            == _coff_table_bytes(target, target_primary, "lines"),
+            "cross-TU hybrid changed the target-donor line table")
+    require(_comdat_child_closure(hybrid_coff, hybrid_primary)
+            == _comdat_child_closure(target, target_primary),
+            "cross-TU hybrid changed the target-donor closure")
+
+    effective_function = dict(function)
+    effective_function["splice_class"] = "retail_exact_reloc_divergent"
+    effective_function["expected_body_sha256"] = function[
+        "expected_hybrid_body_sha256"]
+    composed, detail = compose_same_slot_resize(
+        seed_bytes, hybrid, effective_function,
+        retail_body=bytes(retail_body),
+    )
+    return composed, {
+        **detail,
+        "splice_class": CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
+        "target_donor_body_sha256": sha256_bytes(target_body),
+        "instruction_donor_body_sha256": sha256_bytes(instruction_body),
+        "hybrid_body_sha256": sha256_bytes(hybrid_body),
+        "instruction_ranges": range_detail,
+    }
 
 
 def compose_retail_exact_reloc_divergent(

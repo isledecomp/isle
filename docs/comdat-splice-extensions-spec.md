@@ -521,3 +521,45 @@ header permutations make VC4.2 emit the retail 514-byte constructor and the
 otherwise-inlined `Vector3(float*)` call. All 23 relocation targets are retail
 authenticated. The confirmation gate raised LEGO1 from 4866/4934 to 4867/4934
 with exactly that gain and zero losses; ISLE remains 172/172 and CONFIG 111/111.
+
+## 10. Class G — `retail_exact_cross_tu_instruction_hybrid_resize`
+
+This class covers the narrow case where a clean current-source translation
+unit emits the one retail instruction needed by a differently sized target
+donor for the exact same mangled COMDAT. It composes an internal hybrid first,
+then delegates the finished hybrid to the unchanged same-slot resize path:
+
+1. The target donor is a fresh declaration-only carrier over the current
+   effective target translation unit. The instruction donor is a different,
+   SHA-pinned checked-in translation unit compiled unmodified through its own
+   pinned compile command. It is declared and consumed exactly once, solely in
+   this instruction-donor role. Both donor objects are excluded from the link.
+2. Both objects must define the exact same mangled primary COMDAT with equal
+   COMDAT selection and associated-child names. Their independent body,
+   section-count, section-seat, relocation-count and line-count facts are
+   pinned; section seats and body lengths need not be equal.
+3. Every transfer is a sorted, non-overlapping, equal-width complete x86
+   instruction at independently declared source and target offsets. Both byte
+   strings and their SHA-256 values are pinned. Any overlap with a relocation
+   operand in either object is refused.
+4. The internal hybrid changes only the declared target-donor instruction
+   bytes. It retains the target donor's relocations, line/debug/FPO data,
+   closure and non-target bytes. Same-slot resize then installs that hybrid
+   while retaining the canonical seed's non-target sections and functions.
+5. A complete semantic relocation oracle binds the result to the unique pinned
+   retail image for the owning translation unit's target, and the final target
+   body must be byte-exact under that mask. Similar functions, different
+   mangled names and non-current artifact provenance are never admissible.
+
+The first customer is `0x10059dc0 _Tree<LegoTextureInfo*>::erase`. Its fresh
+1,102-byte target donor differs from the 1,104-byte clean cross-translation-
+unit donor, but both define the same mangled COMDAT and compatible child
+closure. One complete four-byte instruction, `394c2410`, moves from donor
+offset 145 to target offset 151 and replaces `3b4c2410`; neither range overlaps
+a relocation. The resulting body SHA-256 is
+`851f0e9a57984afaf02ecf6d1e52c5ad0daae945e12b8cd820e58759e2c6787a` and
+is retail-exact under all 16 authenticated relocations. The final object keeps
+the target donor's relocation/line/debug/FPO metadata and the canonical seed's
+non-target contents. A forced-fresh confirmation raised LEGO1 from 4870/4934
+to 4871/4934 with exactly that gain and zero losses; ISLE remains 172/172 and
+CONFIG 111/111.

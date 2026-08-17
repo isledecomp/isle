@@ -860,6 +860,55 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
         else:
             for donor in unit["donors"]:
                 recipe = donor["recipe"]
+                if (recipe["kind"]
+                        == byte_identity.CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE):
+                    # Compile an unmodified, explicitly pinned different TU
+                    # through that TU's own ordinary command.  Only /Fo and
+                    # /Fd are redirected into the private donor directory;
+                    # no source overlay or generated carrier is admitted.
+                    donor_relative = recipe["donor_source"]
+                    donor_source_path = (shadow / donor_relative).resolve()
+                    if (hashlib.sha256(donor_source_path.read_bytes())
+                            .hexdigest() != recipe["source_sha256"]):
+                        fail(f"clean cross-TU donor source differs: "
+                             f"{donor_relative}")
+                    donor_entries = commands.get(donor_source_path)
+                    if not donor_entries:
+                        fail(f"no compile command for donor source: "
+                             f"{donor_relative}")
+                    define = recipe["compile_lane"]["required_define"]
+                    lane_entry = lane(
+                        lambda command: f"-D{define}" in shlex.split(command),
+                        define, donor_entries,
+                    )
+                    lane_child = shlex.split(lane_entry["command"])
+                    lane_parsed = byte_identity.validate_compile_arguments(
+                        lane_child)
+                    lane_source = Path(lane_parsed["source_token"])
+                    if not lane_source.is_absolute():
+                        lane_source = Path(lane_entry["directory"]) / lane_source
+                    if lane_source.resolve() != donor_source_path:
+                        fail(f"cross-TU donor command source differs: "
+                             f"{donor_relative}")
+                    probe = (build.parent / "donors"
+                             / f"{marker.stem}-{donor['id']}")
+                    shutil.rmtree(probe, ignore_errors=True)
+                    probe.mkdir(parents=True)
+                    donor_command = []
+                    for token in lane_child:
+                        if token.startswith(("/Fo", "-Fo")):
+                            donor_command.append("/Foo.obj")
+                        elif token.startswith(("/Fd", "-Fd")):
+                            donor_command.append("/Fdo.pdb")
+                        else:
+                            donor_command.append(token)
+                    run(donor_command, timeout_seconds=compile_timeout,
+                        cwd=probe, env=build_environment(compiler),
+                        log=build.parent
+                        / f"{marker.stem}-{donor['id']}.log")
+                    donor_objects[donor["id"]] = (
+                        probe / "o.obj").read_bytes()
+                    continue
                 if recipe["kind"] == "donor_source_overlay":
                     # Extension A.  Render the donor's private copies of the
                     # checked-in paths, stage them where ONLY this compile can
@@ -1209,6 +1258,27 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
             composed = seed_bytes
             for function in unit["functions"]:
                 if (function["splice_class"]
+                        == byte_identity
+                        .CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
+                    retail = function["retail_oracle"]
+                    target_donor = donor_objects[function["donor"]]
+                    instruction_donor = donor_objects[
+                        function["instruction_donor"]]
+                    composed, detail = (
+                        byte_identity
+                        .compose_retail_exact_cross_tu_instruction_hybrid_resize(
+                            composed, target_donor, instruction_donor,
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16),
+                                retail["length"],
+                            ),
+                        )
+                    )
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [target_donor, instruction_donor])
+                elif (function["splice_class"]
                         == "retail_exact_instruction_mosaic"):
                     retail = function["retail_oracle"]
                     retail_body = byte_identity.retail_image_body(

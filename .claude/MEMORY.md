@@ -30,13 +30,21 @@ to one exact same-mangled COMDAT, but every range must name its donor and the
 declared donor set must be used exactly—never borrow from another function.
 
 Partial code composition is permitted only between independently
-source-generated versions of the exact same mangled function/COMDAT. The seed
-and donor must have the same function identity, section seat, body length,
-COMDAT topology, relocation semantics, and compatible debug/EH closure; every
-copied range must be manifest-declared and provenance-pinned, and the output
-must pass full retail-body and object-conservation gates. Never copy code from
-a different or merely similar function, even if its instructions are
-equivalent.
+source-generated versions of the exact same mangled function/COMDAT. Ordinary
+same-TU mosaics require equal function identity, section seat, body length,
+COMDAT topology, relocation semantics and compatible debug/EH closure; copied
+instructions stay at the same offsets. The separate cross-TU hybrid-resize
+route is admissible only from a different SHA-pinned, unmodified checked-in
+translation unit compiled through its own command. It requires equal primary
+COMDAT identity/selection/associated-child names, equal-width complete
+instructions at independently pinned offsets, no relocation overlap in either
+object, exactly one instruction-only consumer for the cross-TU donor,
+target-donor metadata authority, an exact hybrid against the owning target's
+retail image and exclusion of both donors. Every copied range must be
+manifest-declared and
+provenance-pinned, and the output must pass full retail-body and
+object-conservation gates. Never copy code from a different or merely similar
+function, even if its instructions are equivalent.
 
 `GetActorROI` is the measured exception: its direct two-temporary refactor moves
 nine COMDATs and loses the already-exact `Exists` row; the isolated manifest
@@ -57,8 +65,28 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-16)
 
-- Accepted canonical gate: LEGO1 4870/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is `0x100c6fa0 MxDSBuffer::FUN_100c6fa0`. A closed,
+- Accepted canonical gate: LEGO1 4871/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is `0x10059dc0 _Tree<LegoTextureInfo*>::erase`. The canonical
+  1,103-byte `legomain.cpp` seed is resized through a fresh 1,102-byte
+  declaration-only target donor with body SHA-256
+  `c600bf89a868f041db33c3ca1c2b1ee9718c8a1a1be0c1bf1ac893e85ddd46ca`.
+  A different, unmodified current-source translation unit, compiled through
+  its own pinned command, emits the exact same mangled COMDAT with a 1,104-byte
+  body SHA-256 of
+  `18aa8de3a8bd6ef6fdfa9e7393066ea40d0c2e01cd53522aa4c4b77b751ccd14`.
+  Its complete instruction `394c2410` at offset 145 replaces `3b4c2410` at
+  target offset 151; neither range overlaps a relocation. The 1,102-byte
+  hybrid body SHA-256 is
+  `851f0e9a57984afaf02ecf6d1e52c5ad0daae945e12b8cd820e58759e2c6787a`
+  and is retail-exact under all 16 authenticated relocations. The final object
+  retains the target donor's relocation/line/FPO/debug metadata and the
+  canonical seed's non-target contents, and both donors are excluded. A
+  forced-fresh confirmation produced exactly this gain with zero losses; its
+  report SHA-256 is
+  `49092e6cb77ee1a515f741d908f161ae36562e39f9f8f58c3125c418b100b2aa`
+  and verdict SHA-256 is
+  `cb4bbefaa46f9b1130dc789fcacc8dca54e288bea07d76f57e8690b4f7cdacfd`.
+  The preceding gain is `0x100c6fa0 MxDSBuffer::FUN_100c6fa0`. A closed,
   manifest-declared five-fragment source permutation of the exact same
   mangled function snapshots the volatile cursor and routes its unequal-case
   return through a tail label. The freshly compiled donor is 225 bytes while

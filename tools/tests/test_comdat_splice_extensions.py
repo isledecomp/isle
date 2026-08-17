@@ -26,6 +26,7 @@ import hashlib
 import json
 import struct
 import sys
+import tempfile
 import unittest
 from collections import Counter
 from pathlib import Path
@@ -945,6 +946,336 @@ class RetailExactInstructionMosaicTests(unittest.TestCase):
                                     "expected one definition"):
             byte_identity.compose_retail_exact_source_instruction_mosaic(
                 seed, donor, function, retail, b"seed", b"donor")
+
+
+class CrossTuInstructionHybridResizeTests(unittest.TestCase):
+    """A different-TU same-COMDAT instruction feeds an ordinary resize."""
+
+    def fixture(self):
+        seed = make_divergent_coff()
+        target_donor = make_divergent_coff(donor=True)
+        target_coff = byte_identity.CoffObject(target_donor)
+        target_primary = target_coff.function_section(TARGET_SYMBOL)
+        target_body = byte_identity.coff_body(target_coff, target_primary)
+
+        instruction_donor = make_divergent_coff()
+        instruction_coff = byte_identity.CoffObject(instruction_donor)
+        instruction_primary = instruction_coff.function_section(TARGET_SYMBOL)
+        instruction_body = byte_identity.coff_body(
+            instruction_coff, instruction_primary)
+        target_start, target_end = 0, 3
+        source_start, source_end = 24, 27
+        imported = bytes(value ^ 0x5A
+                         for value in target_body[target_start:target_end])
+        instruction_donor = _patched_target_body(
+            instruction_donor, [(source_start, imported)])
+        instruction_coff = byte_identity.CoffObject(instruction_donor)
+        instruction_primary = instruction_coff.function_section(TARGET_SYMBOL)
+        instruction_body = byte_identity.coff_body(
+            instruction_coff, instruction_primary)
+
+        hybrid = _patched_target_body(
+            target_donor, [(target_start, imported)])
+        hybrid_coff = byte_identity.CoffObject(hybrid)
+        hybrid_primary = hybrid_coff.function_section(TARGET_SYMBOL)
+        hybrid_body = byte_identity.coff_body(hybrid_coff, hybrid_primary)
+        retail = retail_body_for(hybrid)
+
+        target_instruction = target_body[target_start:target_end]
+        source_instruction = instruction_body[source_start:source_end]
+        function = {
+            "mangled": TARGET_SYMBOL,
+            "donor": "d_aaaaaaaaaaaa",
+            "instruction_donor": "d_bbbbbbbbbbbb",
+            "splice_class":
+                "retail_exact_cross_tu_instruction_hybrid_resize",
+            "expected_seed_length": SEED_SIZE,
+            "expected_donor_length": DONOR_SIZE,
+            "expected_linked_span": LINKED_SPAN,
+            "expected_target_donor_section_number":
+                target_primary["number"],
+            "expected_target_donor_section_count": len(target_coff.sections),
+            "expected_target_donor_relocation_count":
+                target_primary["relocation_count"],
+            "expected_target_donor_line_count": target_primary["line_count"],
+            "expected_target_donor_body_sha256":
+                hashlib.sha256(target_body).hexdigest(),
+            "expected_instruction_donor_length": len(instruction_body),
+            "expected_instruction_donor_section_number":
+                instruction_primary["number"],
+            "expected_instruction_donor_section_count":
+                len(instruction_coff.sections),
+            "expected_instruction_donor_relocation_count":
+                instruction_primary["relocation_count"],
+            "expected_instruction_donor_line_count":
+                instruction_primary["line_count"],
+            "expected_instruction_donor_body_sha256":
+                hashlib.sha256(instruction_body).hexdigest(),
+            "expected_hybrid_body_sha256":
+                hashlib.sha256(hybrid_body).hexdigest(),
+            "instruction_ranges": [{
+                "kind":
+                    "cross_tu_same_mangled_complete_x86_instruction_v1",
+                "target_start": target_start,
+                "target_end": target_end,
+                "target_bytes": target_instruction.hex(),
+                "target_sha256":
+                    hashlib.sha256(target_instruction).hexdigest(),
+                "instruction_donor_start": source_start,
+                "instruction_donor_end": source_end,
+                "instruction_donor_bytes": source_instruction.hex(),
+                "instruction_donor_sha256":
+                    hashlib.sha256(source_instruction).hexdigest(),
+            }],
+            "retail_oracle": {
+                "image": "LEGO1.DLL", "address": "0x1003cf20",
+                "verdict": "MATCH", "length": len(hybrid_body),
+            },
+            "retail_relocations": relocation_oracle_for(hybrid, retail),
+        }
+        return (seed, target_donor, instruction_donor, function, retail,
+                hybrid)
+
+    def compose(self, seed, target_donor, instruction_donor, function,
+                retail):
+        return byte_identity.compose_retail_exact_cross_tu_instruction_hybrid_resize(
+            seed, target_donor, instruction_donor, function, retail)
+
+    def test_positive_control_uses_only_the_cross_tu_instruction(self):
+        (seed, target_donor, instruction_donor, function, retail,
+         hybrid) = self.fixture()
+        composed, detail = self.compose(
+            seed, target_donor, instruction_donor, function, retail)
+        checked = byte_identity.CoffObject(composed)
+        primary = checked.function_section(TARGET_SYMBOL)
+        hybrid_coff = byte_identity.CoffObject(hybrid)
+        hybrid_primary = hybrid_coff.function_section(TARGET_SYMBOL)
+        self.assertEqual(byte_identity.coff_body(checked, primary),
+                         byte_identity.coff_body(hybrid_coff, hybrid_primary))
+        self.assertEqual(
+            detail["splice_class"],
+            "retail_exact_cross_tu_instruction_hybrid_resize")
+        self.assertEqual(detail["instruction_ranges"][0]["target_start"], 0)
+        self.assertTrue(detail["retail_exact"])
+
+    def test_output_keeps_target_donor_metadata_and_seed_non_targets(self):
+        (seed, target_donor, instruction_donor, function, retail,
+         _) = self.fixture()
+        composed, _ = self.compose(
+            seed, target_donor, instruction_donor, function, retail)
+        seed_coff = byte_identity.CoffObject(seed)
+        donor_coff = byte_identity.CoffObject(target_donor)
+        checked = byte_identity.CoffObject(composed)
+        seed_primary = seed_coff.function_section(TARGET_SYMBOL)
+        donor_primary = donor_coff.function_section(TARGET_SYMBOL)
+        checked_primary = checked.function_section(TARGET_SYMBOL)
+        def relocation_shape(coff, primary):
+            return [
+                (row["offset"], row["type"],
+                 byte_identity.local_symbol_kind(row["target"])
+                 or row["target"])
+                for row in byte_identity.detailed_relocations(coff, primary)
+            ]
+        self.assertEqual(
+            relocation_shape(checked, checked_primary),
+            relocation_shape(donor_coff, donor_primary),
+        )
+        self.assertEqual(
+            byte_identity._coff_table_bytes(checked, checked_primary, "lines"),
+            byte_identity._coff_table_bytes(donor_coff, donor_primary, "lines"),
+        )
+        for before in seed_coff.sections:
+            if before["number"] in {1, 2, 3}:
+                continue
+            after = checked.sections[before["number"] - 1]
+            self.assertEqual(byte_identity.coff_body(seed_coff, before),
+                             byte_identity.coff_body(checked, after))
+
+    def test_rejects_instruction_donor_with_a_different_mangled_comdat(self):
+        (seed, target_donor, instruction_donor, function, retail,
+         _) = self.fixture()
+        renamed = instruction_donor.replace(
+            TARGET_SYMBOL.encode("ascii"),
+            TARGET_SYMBOL.replace("Target", "Borrow").encode("ascii"),
+        )
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "definition"):
+            self.compose(seed, target_donor, renamed, function, retail)
+
+    def test_rejects_cross_tu_body_or_instruction_pin_drift(self):
+        (seed, target_donor, instruction_donor, function, retail,
+         _) = self.fixture()
+        for key in ("expected_instruction_donor_body_sha256",):
+            with self.subTest(key=key):
+                bad = copy.deepcopy(function)
+                bad[key] = "0" * 64
+                with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                            "body"):
+                    self.compose(seed, target_donor, instruction_donor,
+                                 bad, retail)
+        bad = copy.deepcopy(function)
+        bad["instruction_ranges"][0]["instruction_donor_sha256"] = "0" * 64
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "encoding/hash"):
+            self.compose(seed, target_donor, instruction_donor, bad, retail)
+
+    def test_rejects_a_range_overlapping_either_relocation_table(self):
+        (seed, target_donor, instruction_donor, function, retail,
+         _) = self.fixture()
+        bad = copy.deepcopy(function)
+        target_coff = byte_identity.CoffObject(target_donor)
+        target_primary = target_coff.function_section(TARGET_SYMBOL)
+        target_body = byte_identity.coff_body(target_coff, target_primary)
+        instruction_coff = byte_identity.CoffObject(instruction_donor)
+        instruction_primary = instruction_coff.function_section(TARGET_SYMBOL)
+        instruction_body = byte_identity.coff_body(
+            instruction_coff, instruction_primary)
+        item = bad["instruction_ranges"][0]
+        item.update({
+            "target_start": 3, "target_end": 7,
+            "target_bytes": target_body[3:7].hex(),
+            "target_sha256": hashlib.sha256(target_body[3:7]).hexdigest(),
+            "instruction_donor_start": 20,
+            "instruction_donor_end": 24,
+            "instruction_donor_bytes": instruction_body[20:24].hex(),
+            "instruction_donor_sha256":
+                hashlib.sha256(instruction_body[20:24]).hexdigest(),
+        })
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "relocation"):
+            self.compose(seed, target_donor, instruction_donor, bad, retail)
+
+    def test_rejects_a_hybrid_that_is_not_retail_exact(self):
+        (seed, target_donor, instruction_donor, function, retail,
+         _) = self.fixture()
+        wrong = bytearray(retail)
+        wrong[8] ^= 1
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "retail-exact"):
+            self.compose(seed, target_donor, instruction_donor, function,
+                         bytes(wrong))
+
+    def test_live_manifest_cross_tu_recipe_is_clean_and_source_pinned(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        matches = [
+            (unit, function)
+            for unit in manifest["translation_units"]
+            for function in unit.get("functions", [])
+            if function.get("splice_class")
+            == byte_identity.CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
+        ]
+        self.assertEqual(len(matches), 1)
+        unit, function = matches[0]
+        donor = next(
+            item for item in unit["donors"]
+            if item["id"] == function["instruction_donor"])
+        overlaid = {
+            item["path"] for item in manifest["source_overlay"]["outputs"]
+        }
+        normalized = (
+            byte_identity.validate_clean_current_source_cross_tu_recipe(
+                donor["recipe"], ROOT, unit["source"], overlaid, "fixture")
+        )
+        self.assertNotEqual(normalized["donor_source"], unit["source"])
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "effective source overlay"):
+            byte_identity.validate_clean_current_source_cross_tu_recipe(
+                donor["recipe"], ROOT, unit["source"],
+                overlaid | {normalized["donor_source"]}, "fixture")
+
+    def test_clean_cross_tu_role_binding_accepts_one_instruction_use(self):
+        byte_identity.require_clean_current_source_cross_tu_bindings(
+            {
+                "d_target": "forward_declaration_run",
+                "d_clean":
+                    byte_identity.CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE,
+            },
+            ["d_target"], ["d_clean"], "fixture",
+        )
+
+    def test_clean_cross_tu_role_binding_rejects_an_unbound_recipe(self):
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "consumed exactly once"):
+            byte_identity.require_clean_current_source_cross_tu_bindings(
+                {"d_clean":
+                    byte_identity.CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE},
+                [], [], "fixture",
+            )
+
+    def test_clean_cross_tu_role_binding_rejects_primary_use(self):
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "not primary donors"):
+            byte_identity.require_clean_current_source_cross_tu_bindings(
+                {"d_clean":
+                    byte_identity.CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE},
+                ["d_clean"], ["d_clean"], "fixture",
+            )
+
+    def test_clean_cross_tu_role_binding_rejects_multiple_uses(self):
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "consumed exactly once"):
+            byte_identity.require_clean_current_source_cross_tu_bindings(
+                {"d_clean":
+                    byte_identity.CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE},
+                [], ["d_clean", "d_clean"], "fixture",
+            )
+
+    def test_clean_cross_tu_recipe_rejects_a_final_component_symlink(self):
+        payload = b"int donor_source_fixture;\n"
+        recipe = {
+            "kind": byte_identity.CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE,
+            "donor_source": "donor.cpp",
+            "source_sha256": hashlib.sha256(payload).hexdigest(),
+            "compile_lane": {"required_define": "FIXTURE_DEFINE"},
+            "emission_policy":
+                "unmodified_checked_in_translation_unit_only",
+            "authenticity_rationale":
+                "Fixture checked-in source provenance declaration only.",
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            real = root / "real.cpp"
+            real.write_bytes(payload)
+            (root / "donor.cpp").symlink_to(real.name)
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "redirected or non-regular"):
+                byte_identity.validate_clean_current_source_cross_tu_recipe(
+                    recipe, root, "owner.cpp", set(), "fixture")
+
+    def test_retail_oracle_image_is_bound_to_the_tu_target(self):
+        images = {
+            "PRIMARY": {
+                "target": "primary", "original": "bin/PRIMARY.DLL",
+            },
+            "OTHER": {
+                "target": "other", "original": "bin/OTHER.EXE",
+            },
+        }
+        self.assertEqual(
+            byte_identity.require_target_bound_retail_image(
+                images, "primary", "PRIMARY.DLL", "fixture"),
+            "PRIMARY.DLL",
+        )
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "differs from the TU target"):
+            byte_identity.require_target_bound_retail_image(
+                images, "primary", "OTHER.EXE", "fixture")
+
+    def test_range_schema_refuses_width_and_order_escape_hatches(self):
+        (_, _, _, function, _, _) = self.fixture()
+        item = function["instruction_ranges"][0]
+        for mutate in (
+            lambda value: value.update({"instruction_donor_end":
+                                        value["instruction_donor_end"] + 1}),
+            lambda value: value.update({"unexpected": True}),
+        ):
+            bad = copy.deepcopy(item)
+            mutate(bad)
+            with self.assertRaises(byte_identity.ByteIdentityError):
+                byte_identity.validate_cross_tu_instruction_hybrid_ranges(
+                    [bad], "fixture", function["expected_donor_length"],
+                    function["expected_instruction_donor_length"])
 
 
 class RetailExactTargetClosureTests(unittest.TestCase):
