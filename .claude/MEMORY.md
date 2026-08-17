@@ -1388,3 +1388,90 @@ non-target sections and function multiset; unchanged winner/seat/span; target
 report 1.0; `LOST=[]`; and invariance of every previously accepted row plus
 the ISLE/LEGO1 image-policy, CONFIG, archive, and proxy gates. A success must
 replace the present layout restoration rather than compose over it.
+
+## `0x10081840 LegoCarRaceActor::CheckPresenterAndActorIntersections` static seal (2026-08-17)
+
+This supersedes the earlier first-prefix-only negative. The completed audit was
+static and read-only: it did not compile, edit source, link, run Wine/reccmp, or
+change the accepted baseline.
+
+- Exact pins: checked-in `legoracespecial.cpp` SHA-256
+  `7308d4147160bb6a5260954b30568342155bf95c0555ed5b5148de7440f8f114`
+  (Git blob `84278e27f54c05e7366ea5279fc8b6ce1d2f9448`); current effective
+  build-lean source SHA-256
+  `70e033ae64c91e6e0352c2da0d89bb8027918bcaf6580ff482ffec1d6f54b4ac`;
+  target function-text SHA-256
+  `3ac55eca80f7d5bbbeca47a696099d129018c9a25747b6b65aa1d3431e260637`.
+  The current section-382 body is 1,163 bytes/SHA-256
+  `d67f403848416e363e73bdc22641cf55ae15813b142ed0c523c70a310e74c720`,
+  with 27 semantic relocations, 40 line records, and only associated
+  `.xdata$x` plus `.debug$S`. Retail at `0x10081840` is 1,168 bytes/raw
+  SHA-256
+  `68d374b11a75cd4e744e4ad6b4074dbdf3ef7045255944069c3ebb56dc659099`;
+  its relocation-objectized SHA-256 is
+  `f8807eae26e83bcac73faf75b3f42001ae923e4a39bd0f70eec6df2ced0f424e`.
+- The entire five-byte residue is localized inside the first
+  `LegoAnimPresenterSet::iterator` increment. Retail alone retains
+  `mov [ebp-0x10],eax` (`89 45 f0`) followed by a two-byte `jmp` (`eb 24`)
+  at target offset `+0x79`; current reaches the same continuation through the
+  vendor-inlined `XTREE::_Tree::iterator::_Inc` tail merge. The two `_Nil`
+  relocations at offsets 101 and 111 identify this as the presenter loop, not
+  the later PathActor loop. `XTREE` is pinned at SHA-256
+  `5e63d22dccbf7999d33a938466f9e7da3384269d468f8a278b0b4c132f5f99e4`.
+  Wave-4 lines 483--491 and wave-7 lines 72--75 had already classified these
+  exact two instructions as a vendor-inline register/tail-merge carrier gap.
+- Authenticity is closed. BETA10 independently spells both discarded
+  increments postfix: its non-inlined calls are at `0x100cf6cc` for `itap++`
+  and `0x100cf776` for `itpa++`. The complete reachable Git seat history,
+  including the old `VTable0x6c` name, contains 28 implemented blobs/states
+  beginning at `34047c0cb69602ca868dbb6bea61bd768f03bf12`; every one preserves both
+  postfix increments, `plpas.end() != plpas.find(*itpa)`, `actor != this`, and
+  the same `rcdor`/return logic. BETA10 therefore corroborates the spelling but
+  cannot supply the retail inlining carrier, and Git has no authentic alternate
+  source mechanism at this seat.
+- The retained exclusive A/B/A2 prefix panel fully closes both loops, not just
+  the earlier first-loop trial. In
+  `/private/tmp/codex-cpi-projected-run6/result.json` (SHA-256
+  `b4df3f733ac5dca4e4832d999e7e32b7293903b97d5f87b5ab7cfec74f59946c`),
+  A and A2 reproduce the same 1,163-byte body, call oracle, 27-relocation
+  topology, and complete function census; their object SHA-256 values are
+  respectively
+  `54e5c96af3df8f8c9a695b9c5fd580e80aadc125fa95879a2fb32a498f490061`
+  and
+  `b7cc8f929bdaa93dca0b9f77dad18d11f2f574e3fa7a3bfb8c282264a48778fc`.
+  The three B states all fail retail exactness, calls, relocations, and
+  collateral gates: first-only is 1,288 bytes/30 relocations/`nd=945`, body
+  `8194cc30ae19578c2cfe7c965fa0f310968377fa1f8bd8891ba7b49aca861649`;
+  second-only is 1,283/30/`nd=923`, body
+  `a0d298b0c19bec52938466fca5cd9e60845311e06c7dfba61ffb1b999bf1ed7d`;
+  both-prefix is 1,377/33/`nd=1029`, body
+  `b51a0066a922f1e150005e2aa0562b9e69788e6e57c375a665c1aca7871de169`.
+  The panel began and ended with an empty process census. The independent
+  first-only panel remains at
+  `/private/tmp/codex-carrace-prefix.99Lb8c/result.json` (SHA-256
+  `4ab720e1a2559dc9bca9499ab661cf4b07d2d42c853996cbec45fc14415a5050`).
+- Retained-source exhaustion found 5,759 same-function paths with no extraction
+  errors. They collapse to only four target texts: 5,755 canonical, two
+  first-prefix, one second-prefix, and one both-prefix. No retained condition,
+  actor-order, loop-form, or other function variant exists. The retained-object
+  pass found 5,712 symbol-bearing objects: 5,710 define this target, two only
+  reference it, none fail parsing, and the definitions collapse to 369 unique
+  bodies with zero retail-objectized exact. Length counts are 1,236 at 1,163;
+  19 at 1,167; 2,016 at 1,168; 40 at 1,172; 2,232 at 1,173; 15 at 1,177;
+  147 at 1,178; one at 1,283; three at 1,288; and one at 1,377. Of those
+  definitions, 5,705 have 27 relocations, four have 30, and one has 33;
+  5,708 have 40 line records and two have 39. Every closure is exactly
+  `.xdata$x` plus `.debug$S`. The 3,265 official retained sweep rows contain no
+  `nd=0`; the best is only `nd=100` (`extern-66-228`, despite retail length).
+
+**Seal:** no genuinely novel authentic, logic-neutral first-party source
+mechanism remains. Downstream condition/order spellings cannot causally create
+the earlier presenter `_Inc` block, prefix increment is historically
+unauthentic and experimentally refuted for first, second, and both loops, and
+editing `XTREE` would be a vendor-source mutation. Do not run another source,
+prefix, carrier, or length-only panel for this row. Reopen only upon
+authenticated original vendor/compiler-state evidence: for example the
+original preprocessed TU plus exact vendor headers/compiler binary and options,
+or an authentic original-build same-symbol object that proves a different
+`_Inc` inlining state. Synthetic header edits, first-party spelling guesses,
+and new unauthenticated carrier objects are not reopen evidence.
