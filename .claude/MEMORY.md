@@ -344,6 +344,75 @@ after every bounded panel or full gate.
   final source/PDB evidence or a naturally compiled 1,089-byte/28-relocation
   whole-function state that changes all three windows together.
 
+- Fresh-eyes direct-source negative: for
+  `0x1004ebd0 LegoTexturePresenter::Read`, deleting the loop-local
+  `LegoNamedTexture*` temporary and spelling the operation directly as
+  `m_textures->Append(new LegoNamedTexture(textureName, texture))` is a
+  compiler-significant no-op on the target. An exact fresh control and the
+  sole variant both emit the same 745-byte/40-relocation body
+  `393c0af2e1eee180ad4f2d36e6f3555baba8d1c421a92cccc62cecf8ab8ed356`;
+  only two target line rows disappear. The variant also changes the previously
+  exact 347-byte map `insert` COMDAT and changes `_Tree::_Insert` from 681 to
+  678 bytes, while retail is 679. Do not land, splice, or broaden this source
+  form. Evidence is
+  `/private/tmp/codex-legotex-direct-append.9fQr7w/SEAL.json`, SHA-256
+  `680c37b9a7915fa8ae6c32b7432a51f8c9c1ce9e947db30fcf7338cf5a6fe00d`.
+
+- Post-`85861d11` retained-oracle refresh: a fresh pass rescored the existing
+  389,288-object corpus plus 10,708 newer objects against all 54 remaining
+  LEGO1 misses. No admissible natural `nd=0` emitter remains after excluding
+  already-owned rows, documented negatives, wrong-supplier matches and the
+  synthetic Act3Brickster object. The closest apparently new leads were the
+  already-sealed `LegoOmni::Destroy` map-alias body at `nd=1` and the
+  non-historical character-tree comparator body at `nd=3`. Do not repeat the
+  broad retained-object scan without genuinely new artifacts; future work
+  needs new source/PDB evidence or a newly demonstrated compiler-state axis.
+
+- Fresh-eyes static seal: `0x1004c580 MxTransitionManager::SetupCopyRect`
+  has no credible untested source-first cell. Its remaining one-byte/one-
+  instruction shape residue is the allocator's `mov edx,eax` copy after
+  `new`, not a missing source operation. Coverage includes 33 file revisions
+  collapsing to eight function texts, all 5,040 local-order permutations, ten
+  targeted source shapes, 86 dead-local/type states, 2,139 current-source
+  carrier states and the full retained-object corpus. No state emits retail
+  length/body; the prior `dst = new; m_copyBuffer = dst; if (!dst)` spelling
+  emitted 411 bytes and regressed sharply. Reopen only for authentic source or
+  PDB evidence, or a natural whole-function 412-byte emitter.
+
+- Fresh-eyes direct-source/compiler-state negative: for
+  `0x1003f540 WriteDefaultTexture`, the authenticated
+  `extern_run_pair(h=24,p=90)` control reproduced the best 854-byte body
+  `3cd3c0182328c788010538e7df701fa8859e78ca9cb40940b0c653d7c596d2c7`
+  and its exact 12-byte palette-loop EAX/ECX residue. The sole novel variant
+  declared destination-first block references for `paletteEntries[i]` and
+  `entries[i]`; it emitted 851 bytes/body
+  `00a22af1252cec791937775a10f0fe08d12f5196c0cc02fc92157cb0e7986581`,
+  changed relocation/call semantics and linker payload, and changed
+  non-target `LegoPathStructNotificationParam::Clone` and
+  `LoadFromNamedTexture`. Seal this reference form and the h24/p90 source lane;
+  no third cell ran. Evidence is
+  `/private/tmp/codex-wdt-blockref-run2/result.json`, SHA-256
+  `990546fe0141b09494c805e4698d2c89d4e7f91c3c939b64bf0d734d21cd7ea8`.
+
+- Fresh-eyes direct-source negative: for
+  `0x100998e0 LegoTextureContainer::GetCached`, ending the lexical lifetime of
+  `DWORD width,height` after the cache-search loop was the only uncensused
+  source mechanism for retail's four-byte smaller frame and reuse of the old
+  width slot as `RECT.bottom`. The exact fresh control emitted 987 bytes/body
+  `b68bb972f59874e51ccfcb9c80fe243889704719f69e15492b58860521f97c53`
+  at `nd=57`; the sole variant stayed 987 bytes with the same `sub esp,0xfc`
+  frame and regressed to `nd=59`, body
+  `1c9e4a50c66e17586117cf813ceb23d5f91e0d5b29d9d7f97656b2de582ad608`.
+  That output is byte-identical to the retained `cache_height_first` /
+  `split_desc_newdesc` negative. Relocations, calls, EH/CodeView topology and
+  all non-target runtime sections remained exact. Coverage now includes 13
+  Git commits/five function texts, 1,138 retained source definitions/33 texts,
+  1,079 retained object definitions/44 bodies and the prior seven-cell panel.
+  Reopen only for authentic final source/PDB evidence or a natural object that
+  first demonstrates retail's `0xf8` frame. Evidence is
+  `/private/tmp/codex-getcached-lifetime-run1/result.json`, SHA-256
+  `8916eed69cdbca9ac222702283650882f96468f27b8f6e215da27e25ddab8f70`.
+
 - Accepted canonical gate: LEGO1 4880/4934, ISLE 172/172, CONFIG 111/111.
   The latest gain is `0x10040360 Act3Cop::FUN_10040360`. The checked-in
   source now expresses the fallback as a second `grec == NULL` guard and
