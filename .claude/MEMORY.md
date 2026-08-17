@@ -105,6 +105,31 @@ after every bounded panel or full gate.
   and their associated adversarial tests. Do not apply, build, gate or commit
   that stash unless the row is explicitly returned to last-resort status.
 
+- Fresh-eyes static seal: `0x100035e0 Helicopter::HandleControl` has no
+  authentic direct-source or intact natural whole-function donor. Its only
+  residue is one compiler-schedule slice `[+747,+767)` containing five
+  existing constructor/zeroing instructions; exactly 19 byte positions
+  `+748..+766` differ and both sides reconverge at `+767` with identical frame
+  displacements. Current/BETA10 order is `v68,va4,up` then `v90`. Reachable Git
+  history is 100 commits/97 source blobs; 44 commits/42 blobs contain the
+  function and collapse to 18 texts but only two lifetime topologies (30
+  current/BETA forms and 12 materially older incompatible forms). Relevant
+  type history is closed too: all 46 `mxgeometry3d.h` blobs retain the same
+  default constructor, and no alternate Vector2/Vector3/SetData form appears.
+  The retained source census is 1,950 definitions/32 normalized functions
+  (1,910 canonical). The 1,681-state rectangle contains four bodies
+  (`nd19`:1237, `nd21`:38, `nd39`:403, `nd41`:3), with the base as argmin; the
+  1,781-definition corpus floor and every later direct/path/barrier panel
+  remain `nd17` or worse. The lone unpaired storage-plus-reference scratch form
+  preserves the same storage/lifetime order and is neither historically
+  attested nor causal. The only exact object remains the parked `stash@{0}`
+  manual instruction permutation, which is not a source-first result. Reopen
+  source-first only for authenticated final source/PDB/preprocessed evidence
+  changing this lifetime provenance, or a new natural intact 1,148-byte,
+  51-semantic-relocation `nd=0` COMDAT; restore the stash only under explicit
+  last-resort authorization and after its four unfinished authenticity
+  categories.
+
 - Direct-codegen panel negative: for
   `0x10081840 LegoCarRaceActor::CheckPresenterAndActorIntersections`, changing
   only the first owning-loop increment from discarded postfix `itap++` to
