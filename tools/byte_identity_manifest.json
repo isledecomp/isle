@@ -5936,7 +5936,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
-   "source_sha256": "ddc652931d993512e0ad9d40c68f884c9960717e648c2e162040e829302c9671",
+   "source_sha256": "df97c2774e27e46cb45d04aad29204f030a87483650d943b0876abaca955636a",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -6103,6 +6103,25 @@
       "seat_count": 20,
       "width": 2,
       "generated_header_sha256": "dfc77ce164451df1d3081d090c1d00b81d0ac488ede1afb1151ee30d46ea856f",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives.",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only"
+     }
+    },
+    {
+     "id": "d_f4c63b53325d",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 1,
+      "seat_prefix": "g_p",
+      "seat_count": 16,
+      "width": 2,
+      "generated_header_sha256": "f4c63b53325d1e7e7c5b320014ef69ee6c938f64085e37b2b804fb9af60b5c3d",
       "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives.",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
@@ -6446,6 +6465,15 @@
      "expected_donor_length": 338,
      "expected_linked_span": 352,
      "donor": "d_67b3007db651"
+    },
+    {
+     "mangled": "?PlaceActor@LegoPathController@@QAEJPAVLegoPathActor@@PAVLegoAnimPresenter@@AAVVector3@@2@Z",
+     "expected_body_sha256": "46d3ef30674c79bef277f86a09155ee24dd89a7bb39235ae2865629fa1df6a65",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 696,
+     "expected_donor_length": 703,
+     "expected_linked_span": 704,
+     "donor": "d_f4c63b53325d"
     },
     {
      "mangled": "?find@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QBE?AVconst_iterator@1@ABQAULegoPathCtrlEdge@@@Z",
@@ -6984,7 +7012,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 4 row(s) in LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes 5 row(s) in LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -14443,8 +14471,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-     "exact_raw_1_0_count": 4878,
-     "accepted_row_identity_sha256": "4e99e0bdb2dda1aeb7003dc14d0db2b4c0517071583dfc13462a2432de263bcc",
+    "exact_raw_1_0_count": 4879,
+    "accepted_row_identity_sha256": "e636e71d5505ed20e54d2841225e45369b07de145cb4ae802507c302245efb5e",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -24052,9 +24080,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
-    "clean": "e1b7d01cfcb0c1fa0d795d141b4b239825508af91cb588f0b6a7b19cd81c089c",
-    "effective": "ddc652931d993512e0ad9d40c68f884c9960717e648c2e162040e829302c9671",
-    "size": 28379,
+    "clean": "c3b3f6cb684128bb845bafb6f6eb55075f4c7ac70e74da37e30ef3a8f414b494",
+    "effective": "df97c2774e27e46cb45d04aad29204f030a87483650d943b0876abaca955636a",
+    "size": 28398,
     "ops": [
      {
       "op": "insert",

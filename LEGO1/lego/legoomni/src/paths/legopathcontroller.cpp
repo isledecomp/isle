@@ -284,32 +284,32 @@ MxResult LegoPathController::PlaceActor(
 		}
 	}
 
-	if (boundary == NULL) {
-		return FAILURE;
-	}
+	if (boundary != NULL) {
+		for (MxS32 j = 0; j < boundary->GetNumEdges(); j++) {
+			LegoOrientedEdge* edge = (LegoOrientedEdge*) boundary->GetEdges()[j];
 
-	for (MxS32 j = 0; j < boundary->GetNumEdges(); j++) {
-		LegoOrientedEdge* edge = (LegoOrientedEdge*) boundary->GetEdges()[j];
+			if (edge->GetMask0x03()) {
+				Mx3DPointFloat vec;
 
-		if (edge->GetMask0x03()) {
-			Mx3DPointFloat vec;
+				if (((LegoOrientedEdge*) edge->GetClockwiseEdge(*boundary))->GetFaceNormal(*boundary, vec) == SUCCESS &&
+					vec.Dot(vec, p_direction) < 0.0f) {
+					edge = (LegoOrientedEdge*) edge->GetCounterclockwiseEdge(*boundary)->GetCounterclockwiseEdge(*boundary);
+				}
 
-			if (((LegoOrientedEdge*) edge->GetClockwiseEdge(*boundary))->GetFaceNormal(*boundary, vec) == SUCCESS &&
-				vec.Dot(vec, p_direction) < 0.0f) {
-				edge = (LegoOrientedEdge*) edge->GetCounterclockwiseEdge(*boundary)->GetCounterclockwiseEdge(*boundary);
-			}
+				if (!edge->GetMask0x03()) {
+					return FAILURE;
+				}
 
-			if (!edge->GetMask0x03()) {
-				return FAILURE;
-			}
-
-			if (p_actor->SetTransformAndDestinationFromPoints(boundary, time, p_position, p_direction, edge, 0.5f) ==
-				SUCCESS) {
-				p_actor->SetController(this);
-				m_actors.insert(p_actor);
-				return SUCCESS;
+				if (p_actor->SetTransformAndDestinationFromPoints(boundary, time, p_position, p_direction, edge, 0.5f) ==
+					SUCCESS) {
+					p_actor->SetController(this);
+					m_actors.insert(p_actor);
+					return SUCCESS;
+				}
 			}
 		}
+
+		return FAILURE;
 	}
 
 	return FAILURE;

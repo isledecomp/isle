@@ -9,14 +9,24 @@ Use this order:
 
 1. Put the authentic correction/refactor directly in source and run the full
    zero-loss gate.
-2. Use ordinary entropy-manifest carriers only to move compiler state without
-   changing program logic.
-3. Use an alternate source permutation plus target-only COMDAT composition only
-   as a last resort: the direct source form must have been measured to cause
-   unavoidable collateral, the permutation must be declared in the entropy
-   manifest (never hard-coded in `byte_identity.py`), both source windows must
-   be pinned, the donor must be freshly generated from source, and the complete
-   retail-body/semantic-relocation/conservation gates must pass.
+2. Search authenticated compiler/build states and ordinary entropy-manifest
+   carriers that make the compiler emit the complete expected function without
+   post-compile instruction manipulation.
+3. Splice an intact compiler-emitted target COMDAT/closure when a direct source
+   landing has measured unavoidable collateral.
+4. Keep instruction mosaics, manual instruction reordering and synthesized
+   hybrids only as explicitly documented last resorts after the direct-source,
+   compiler-state and intact-COMDAT searches are exhausted. Do not expand these
+   mechanisms as the routine path. Any last-resort source permutation must be
+   declared in the entropy manifest (never hard-coded in `byte_identity.py`),
+   both source windows must be pinned, every donor must be freshly generated
+   from source, and the complete retail-body/semantic-relocation/conservation
+   gates must pass.
+
+Do not add opcode-bearing inline assembly to spell retail instructions. The one
+existing empty `__asm {}` compiler-scheduling barrier emits no instructions and
+is retained only with the other last-resort mechanisms; do not use it as the
+default model for new rows.
 
 The objective is literal raw `matching == 1.0` on every row. Non-exact score
 improvements are diagnostic only unless they isolate a concrete mechanism that
@@ -75,8 +85,225 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-17)
 
-- Accepted canonical gate: LEGO1 4878/4934, ISLE 172/172, CONFIG 111/111.
+- The uncommitted Helicopter seed-only instruction-permutation route is parked
+  under the direct-codegen-first policy in the recoverable stash named
+  `WIP last-resort Helicopter source-authenticated permutation (frozen)`.
+  Its object/composition proof was exact, and the completed predecessor-bound
+  Vector2/3/4 type closure was green, but four source-authenticity categories
+  remain deliberately unfinished: live recursive include/preprocessor state,
+  strict child environment construction, complete compiler invocation binding,
+  and their associated adversarial tests. Do not apply, build, gate or commit
+  that stash unless the row is explicitly returned to last-resort status.
+
+- Direct-codegen panel negative: for
+  `0x10081840 LegoCarRaceActor::CheckPresenterAndActorIntersections`, changing
+  only the first owning-loop increment from discarded postfix `itap++` to
+  prefix `++itap` did not reproduce retail. The fresh authenticated control was
+  exact at 1,163 bytes/27 relocations; the sole variant grew to 1,288 bytes/30
+  relocations with body
+  `8194cc30ae19578c2cfe7c965fa0f310968377fa1f8bd8891ba7b49aca861649`
+  and changed three non-target runtime COMDATs (`UpdateWorldSpeed`, the Jetski
+  intersection function, and a tree `erase`). The bounded lane is sealed; do
+  not repeat this spelling. Evidence is in
+  `/tmp/codex-carrace-prefix.99Lb8c/result.json` (SHA-256
+  `4ab720e1...`).
+
+- Direct-codegen panel negative: for
+  `0x10046050 LegoPathController::PlaceActor`, the authenticated
+  `extern_run_pair(1,16)` control reproduced the exact 700-byte target and
+  closure. The sole positive-nesting source variant compiled successfully but
+  remained 700 bytes (retail is 703), emitted body
+  `a86bc4a6d77102c36353790b53e550ff7f9ca5cbb27665e007252009eac790fc`,
+  reduced the line count to 34, and produced the wrong 13-relocation seat
+  sequence. Its union-masked diagnostic distance was 287 bytes. This spelling
+  is sealed; no third cell ran and the compiler/Wine census drained cleanly.
+
+- Direct-codegen panel negative: for
+  `0x1003d170 LegoCacheSoundManager::FindSoundByKey`, fusing allocation and
+  `strcpy` directly into the `LegoCacheSoundEntry` temporary compiled cleanly
+  but was codegen-inert. The target stayed at the canonical 282-byte body
+  `1ea542d85bfc6ffc9bc2595839886cf36367f477bd4a2b41972da95ae47418f2`
+  with the original 12 relocation seats; retail distance remained 181. Only
+  target line/CodeView metadata changed and every non-target runtime/data
+  section stayed exact. Evidence is under
+  `/tmp/codex-findsound-fused.6bVzHg`; do not repeat this fused spelling.
+
+- Direct-codegen panel negative: for
+  `0x1002f770 LegoPathActor::UpdatePlane`, replacing the exact inline
+  `SetPosition(GetWorldPosition())` call with its public-member equivalent
+  `m_position = GetWorldPosition()` was codegen-inert on the target. Both
+  control and variant stayed at the same 188-byte body
+  `6a97acb19f8a66ada8547c1bcc9dfd369d8575257763d23792106ba606e18473`
+  with the same four relocations and five retail-different bytes. The variant
+  also changed three non-target runtime functions (a tree destructor,
+  `CalculateTransform`, and tree `erase`). Evidence is under
+  `/tmp/codex-updateplane-direct.a_1ru157`; seal this spelling.
+
+- Direct-codegen panel negative: for
+  `0x10080be0 LegoCarRaceActor::CalculateSpline`, naming `&m_boundary` as a
+  pointer-to-pointer and passing `*boundary` to `SwitchBoundary` did not
+  produce the predicted one-byte shrink. The target stayed 779 bytes with body
+  `bec627a70bbe7656fc91cb19ab94457f115b2d69d42b9d4543ddcbe0c91f77be`,
+  retained the old 13 relocation seats and FPO/CodeView procedure extent, and
+  grew from 23 to 24 line rows. It also changed four non-target runtime
+  functions. Evidence is under `/tmp/codex-calcspline-pp.AlgZpD`; seal this
+  pointer-to-pointer spelling.
+
+- Direct-codegen panel negative: for
+  `0x1004d330 TowTrack::HandlePathStruct`, caching `m_state->m_state` once and
+  using that scalar in the two later `else if` conditions compiled cleanly and
+  reduced the target residual from 11 bytes to 7, but did not reach retail.
+  The target stayed 856 bytes/36 relocations with body
+  `2a225a3c0bc97c4c7944dfd39069fb932f90c7866193802ab2ac9a13fe6ad6ec`
+  and residual offsets `[123,129,147,151,157,305,400]`. A raw comparison
+  initially flagged 15 other functions, but all were compiler-local `$L/$T`
+  ordinal spelling changes: normalized bodies and semantic relocations prove
+  zero meaningful non-target runtime collateral. Evidence is under
+  `/tmp/codex-towtrack-cached.0qr5gva9`; seal this exact cached-state form.
+
+- Direct-codegen panel negative: for
+  `0x100ba2c0 MxStillPresenter::Clone`, caching `LoadedFirstFrame()` in a
+  same-line `register BYTE` local did not flip the five packed-flag merges to
+  retail's AL-first lowering. The target remained 577 bytes with body
+  `c2ae44ab86c27e2c16a020906e265a76332360f17fd635640a8e8f3ba0c9be2d`
+  instead of retail's 576 bytes; the long-lived ESI/EDI allocation changed but
+  the CL-first flag chain and all 29 relocation seats remained. Normalized
+  non-target runtime collateral was zero. Evidence is under
+  `/tmp/codex-clone-register.TMZDji6S`; seal this exact register-BYTE form.
+
+- Direct-codegen panel negative: for
+  `0x10072ad0 Act3::TriggerHitSound`, adding a separate `MxS32 index` and using
+  it in all five table loads while retaining `MxS32 objectId` was target-code
+  inert. The authoritative build-lean control and variant both emitted the
+  348-byte body
+  `1e79a9f0f9883a7824c7d9723d187a0981607f50be1279edfb70285f82c9546a`
+  with the same 11-byte retail residual and 16 semantic relocations. Two
+  meaningful non-target runtime functions changed (`Act3List` removal and a
+  list destructor). The initial stale-tree controls were setup/provenance
+  stops; the conclusive current-tree evidence is under
+  `/private/tmp/codex-ths-buildlean-run1`. Seal `ths_same_type_split_v1`.
+
+- Direct-codegen panel negative: for
+  `0x10084030 LegoCharacterManager::CreateActorROI`, the authenticated
+  declaration-shape control plus two dead updates inside `Vector3(float*)`
+  produced the desired constructor-relocation pattern V2,V3,V2,V3, but did not
+  preserve the retail target. The target grew from 2,294 to 2,295 bytes with
+  body
+  `5f2e89471da8219c5a9bee10a2b9fb36850e85f258b672d7c96f5709a56c8064`,
+  shifted later relocation seats, added COMDATs, and changed 13 non-target
+  runtime bodies. Evidence is under
+  `/private/tmp/codex-createactor-repeat2.lCLeWh`; seal this repeat-two header
+  state and do not pursue an instruction-splice fallback under the current
+  direct-codegen-first policy.
+
+- Direct-state search sealed without a compiler panel for
+  `0x100417c0 Act3Brickster::FUN_100417c0`. A 10,357-definition current-source
+  carrier census (695 bodies), dense declaration/forward/extern grids, and a
+  14-point split C1XX/C2 Vector3 inline-size sweep all leave independent stable
+  clusters in the prologue, two LenSquared sites, selection stores, and loop
+  scheduling. The best semantically admissible compiler state remains 66 bytes
+  from retail; no single new clean source/compiler-state lever covers all
+  clusters. Reopen only for authenticated historical owner source or a newly
+  demonstrated whole-function compiler-state mechanism, not a bundle of
+  instruction-tailoring edits.
+
+- Direct-state search sealed without a compiler panel for
+  `0x100720d0 Act3List::RemoveByObjectIdOrFirst`. Current and retail are both
+  323 bytes with the same six relocations and 120 instructions; the sole seven
+  differing bytes are an EAX/EDX caller-saved role exchange in one iterator
+  setup block. Roughly 28,000 carrier states plus declaration swaps, statement
+  orders, prefix increment, dereference spelling, initializer folding, loop
+  spelling, include ordering and register probes never improve the nd7 floor.
+  Reopen only for authenticated historical source/compiler provenance exposing
+  a genuinely new scheduler state, not another local spelling or carrier.
+
+- Fresh-eyes duplicate caught before compilation for
+  `0x1002de10 LegoPathActor::SetTransformAndDestinationFromPoints`. Rewriting
+  its failure-first `SetSpline(...) != SUCCESS` tail into the neighboring
+  function's success-first idiom initially looked like a complete three-byte
+  direct-codegen mechanism, but the exact spelling had already been compiled
+  in `/tmp/codex-two-source-panels-run1/path/positive_direct` and is recorded
+  in `docs/scheduling-residue.md`. Its rendered raw source SHA-256 is
+  `9f97d748...`; it emitted a 696-byte target body `4dab3aa8...`, 16 rather than
+  17 relocations, line count 36 rather than 35, masked distance 617, and 13
+  non-target raw body changes. The new private control at
+  `/tmp/codex-settd-success.Pzzgne` reproduced the current 746-byte target
+  exactly; the duplicate variant was staged but stopped before CL. Seal this
+  success-first spelling and include both the old panel and scheduling-residue
+  ledger in future novelty checks.
+
+- Direct-codegen panel negative: for `0x1006ed90 Infocenter::Create`, naming
+  the exact `GameState()->GetState("InfocenterState")` result as an
+  `InfocenterState*`, assigning it to `m_state`, and using the local only for
+  the initial null/step tests and step store did not produce retail's
+  381-byte lifetime/color schedule. The authenticated control was exact at
+  380 bytes with body
+  `8e421e5b0ff2d4eb840ab0f93640bb49412f1d3766ac69f1aeeaac417bf03fd6`;
+  the sole variant remained 380 bytes with the known second-color body
+  `f92579edc1ec29bcf3d00d11aff0d3a66db88f9aaab4470e00a656b1a4e0c616`
+  and retained all current relocation seats. The optimizer erased the alias
+  and never emitted retail's `mov ecx,eax`; it also changed four meaningful
+  non-target code bodies (`Escape`, `PlayAction`, `ReadyWorld`, and a tree
+  `erase`). Evidence is under `/tmp/codex-towtrack-cached.cdt48vn2`; seal this
+  typed-local route and do not try a naming-only third cell.
+
+- Direct-codegen/compiler-state cross negative: for
+  `0x10054050 Act3Ammo::Animate`, an exhaustive 3,679-definition retained
+  census (871 bodies, including 1,930 correct-length 2,666-byte bodies) has no
+  retail-exact natural emitter; the closest correct-length state is still 95
+  non-relocation bytes away across 33 runs. The sole genuinely new cross used
+  a production-authentic declaration shape `(7,14)` plus the semantics-neutral
+  `Mx3DPointFloat position = positionRef;` initializer fusion. Its control was
+  exact for that state at 2,665 bytes/78 relocations/body `e1d3351b...`; the
+  variant emitted 2,673 bytes/77 relocations/body `80e5e4ec...`, changed two
+  non-target path-actor tree COMDATs, and therefore failed before any retail
+  distance could be admitted. Historical `AaTail`/radius-hoist claims remain
+  stale negatives. Evidence is
+  `/tmp/act3ammo-shape-position.7si7ti/analysis.json`, SHA-256
+  `090b47f7275ee220be5e200e07bb0328094c963eefb25cff60ba5f68b31088f8`.
+  Reopen only for a genuinely new source mechanism, not another retained
+  carrier or this initializer fusion.
+
+- Fresh-eyes compiler-state replay negative: for
+  `0x1004ebd0 LegoTexturePresenter::Read`, upstream entropy seed `834472970`
+  was re-derived into an exact self-contained declaration-only `/FI` header
+  (3 unused classes/6 unused methods, SHA-256 `f644ac85272e819cba6f188b8d574767b41b206e25a86d0dc59ef0afce27c96f`)
+  and replayed for the first time against today's improved effective source.
+  The fresh control reproduced the canonical 745-byte/40-relocation target,
+  EH closure and all universes exactly. The sole state variant emitted 748
+  bytes with body `e67e6e8c...`, not retail's 739-byte objectized body
+  `7e3aaffc...`; it also changed five non-target map/tree functions (`find`,
+  `_Lbound`, `insert`, `_Dec`, `_Insert`). No historical script/object was an
+  input, no third cell ran, and no splice or generated-instruction work was
+  attempted. Evidence is under
+  `/private/tmp/codex-legotex-read-seed.o4ZSZC`. Seal this exact named seed on
+  current source; other historical maxima require independent novelty and
+  all-or-nothing replay rather than assuming entropy states compose.
+
+- Accepted canonical gate: LEGO1 4879/4934, ISLE 172/172, CONFIG 111/111.
   The latest gain is
+  `0x10046050 LegoPathController::PlaceActor`. The checked-in source now uses
+  a `boundary != NULL` wrapper with separate loop-exhaustion and null-boundary
+  `FAILURE` returns; this is distinct from the previously sealed one-return
+  positive-nesting form. The ordinary source emits the 696-byte seed, while
+  the freshly generated, declaration-only `extern_run_pair(1,16,width2)`
+  state emits the complete retail-exact 703-byte function with all 13 retail
+  relocation seats, ordinary FPO/CodeView closure, and body SHA-256
+  `46d3ef30674c79bef277f86a09155ee24dd89a7bb39235ae2865629fa1df6a65`.
+  Existing `same_slot_resize` imports that intact compiler-emitted COMDAT and
+  closure into the seed; there is no inline assembly, instruction mosaic,
+  manual instruction reordering, or synthesized opcode patch. The forced-fresh
+  zero-loss gate held LEGO1 4879/4934, ISLE 172/172 and CONFIG 111/111. Its
+  LEGO1 report SHA-256 is
+  `6059bb9de588c24ffb9963facaea3c6143d7d357d179f1b8981d6814fbaddfdc`,
+  accepted-row identity is
+  `e636e71d5505ed20e54d2841225e45369b07de145cb4ae802507c302245efb5e`,
+  verdict SHA-256 is
+  `9acf2c57e60e3e0ac473d34a812002dfce37e1437ecc9e51bb7fcba368c41e84`,
+  and manifest SHA-256 is
+  `2d480d0485ba21158f64236ff026305dfdb51ca60f0e6ca0e5caddb6835ecf73`.
+
+  The preceding gain is
   `0x100b26f0 MxVideoPresenter::AlphaMask::IsHit`. A fresh, declaration-only
   `extern_run_pair(100,8,width2)` carrier supplies the exact same 101-byte,
   relocation-free COMDAT through a closed ordinary-FPO self-permutation role.
