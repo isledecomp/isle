@@ -614,3 +614,71 @@ The final object keeps the canonical seed's nine-row line table and metadata
 closure; the fresh eight-row donor is only an instruction source. The
 forced-fresh confirmation raised LEGO1 from 4871/4934 to 4872/4934 with
 exactly this gain and zero losses; ISLE remains 172/172 and CONFIG 111/111.
+
+## 12. Typed inclusive-extent source-permutation profile
+
+`inclusive_extent_assignment_v1` is a closed source-derived profile of Class
+E for an inclusive-coordinate extent. It is not a general expression or inline
+assembly generator:
+
+1. Its manifest parameters name one closed integral coordinate type, one local,
+   one source object plus aggregate accessor, three distinct extent/endpoint
+   accessors, one destination object/member, indentation and the single barrier
+   enum `msvc_i386_empty_inline_assembly_v1`. The inverse renderer must
+   reproduce the complete checked-in
+   `destination = source.aggregate().extent();` line byte-for-byte. The forward
+   renderer emits only a typed `upper - lower` declaration, prefix increment,
+   the exactly guarded empty MSVC/i386 assembly block, and the same destination
+   assignment. Extra fields, layout overrides, arbitrary types, repeated roles
+   and any other barrier are refused.
+2. The algebraic equivalence is source-proved rather than asserted. Three
+   whole-file-SHA-pinned headers must be connected to the target translation
+   unit by an exact three-edge chain of uniquely resolved quoted includes. The
+   selected source owner has one pinned member declaration of the source type;
+   that type has one pinned side-effect-free aggregate accessor; and the
+   aggregate template has pinned lower, upper and inclusive-extent accessors.
+   Their token forms must be exactly `return lower`, `return upper` and
+   `return (upper - lower + 1)`. A pinned concrete public inheritance binds the
+   aggregate to the same integral coordinate type used by the generated local.
+   The complete concrete class body is also byte/token pinned, and it must
+   contain no class-scope occurrence of any witnessed accessor name; a derived
+   declaration or overload that could hide an inherited accessor refuses.
+   All three witness headers are globally forbidden from the effective source
+   overlay, so the bytes certified here are exactly the bytes seen by the
+   compiler.
+3. The selected brace-balanced source window must have the exact class owner
+   extracted from the closed MSVC decorated member name, and that decorated
+   name must be the mosaic target. The authenticated source member may not be
+   a parameter or local redeclaration. The generated local must be absent from
+   its destination block and every visible ancestor scope; a same spelling in
+   a lexically disjoint sibling scope is admissible because it cannot be
+   observed at the insertion seat.
+4. A donor based on a translation unit with an existing shipped source overlay
+   must replay every canonical operation byte-for-byte. Those operations are
+   matched by normalized operation identity, may only be non-destructive
+   insert/append operations outside the selected target, and may neither be
+   omitted nor modified. This lets the private donor begin from checked-in
+   source and reproduce the current effective source without weakening the
+   clean-input rule.
+5. The permutation is donor-only and manifest-wide role confined: exactly one
+   total primary use, exactly one source-aware binding and no variant,
+   instruction-donor or other secondary use. Composition imports only pinned
+   complete same-offset instructions from the exact same mangled COMDAT. The
+   output retains every seed non-target byte and all seed relocation, line,
+   debug and FPO metadata; the donor object is excluded from the link.
+
+The first customer is `0x100ba7f0 MxDisplaySurface::Create`. Its canonical
+660-byte seed remains authoritative because the direct source donor perturbs
+six other function bodies, including a length change in an already composed
+non-target. The private rendering replaces one authenticated width assignment
+with an `MxS32` right-minus-left value, increment and the closed empty barrier.
+The same-mangled donor is also 660 bytes with the same three semantic
+relocations. One complete 12-byte instruction sequence at offsets 489--500
+changes the `[11, 1]` seed partition to the donor's `[1, 11]` partition and
+produces body SHA-256
+`966cdf3a4b96d872beb6b04c4b9568ba19767cc7975e17bcb77fa3bbf687b11b`.
+The composed object retains the seed's 57-row line table, complete
+`.debug$F`/`.debug$S` closure and every non-target byte; the 58-row donor is
+only an instruction source. A marker-removed forced-fresh confirmation raised
+LEGO1 from 4872/4934 to 4873/4934 with exactly this gain and zero losses; ISLE
+remains 172/172 and CONFIG 111/111.

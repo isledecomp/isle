@@ -235,6 +235,7 @@ SOURCE_OVERLAY_LEAN_KINDS = {
     "for_init_decl": "for_initializer_declaration_reseat_v1",
     "capture_tail": "captured_pointer_tail_return_fragment_v1",
     "fixed_array_fill": "fixed_array_fill_loop_v1",
+    "inclusive_extent": "inclusive_extent_assignment_v1",
 }
 
 
@@ -327,6 +328,9 @@ SOURCE_OVERLAY_KIND_POLICIES = {
     ),
     "fixed_array_fill_loop_v1": (
         "logic_equivalent_source_refactor", "fixed_array_fill_loop",
+    ),
+    "inclusive_extent_assignment_v1": (
+        "logic_equivalent_source_refactor", "inclusive_extent_assignment",
     ),
     "list_cursor_delete_emission_probe_v1": (
         "discarded_emission_probe", "list_cursor_delete_emission"
@@ -1149,6 +1153,89 @@ def validate_fixed_array_declaration_proof(
     }
 
 
+INCLUSIVE_EXTENT_BARRIER = "msvc_i386_empty_inline_assembly_v1"
+
+
+def validate_inclusive_extent_semantic_witness(
+    value: object, context: str,
+) -> dict:
+    """Validate the closed declarations behind an inclusive extent rewrite.
+
+    The witness is deliberately source-shaped rather than prose-shaped.  It
+    pins the member that supplies the rectangle, its side-effect-free access
+    path, the two endpoint readers, and the original inclusive-width reader.
+    The include edges bind those declarations to the compiled translation
+    unit instead of allowing an unrelated repository header to certify them.
+    """
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "source_owner", "source_member", "source_member_type",
+        "aggregate_accessor", "aggregate_member", "aggregate_type",
+        "extent_template", "template_parameter", "coordinate_type",
+        "lower_accessor",
+        "lower_member", "upper_accessor", "upper_member",
+        "extent_accessor", "source_owner_header",
+        "source_accessor_header", "extent_header",
+    }, context)
+
+    coordinate_type = validate_source_overlay_cpp_type(
+        value.get("coordinate_type"), context + ".coordinate_type")
+    require(not coordinate_type["base_const"]
+            and not coordinate_type["indirection"]
+            and not coordinate_type["trailing_const"]
+            and render_source_overlay_cpp_type(coordinate_type)
+            in FIXED_ARRAY_FILL_ELEMENT_TYPE_SPELLINGS,
+            f"{context}.coordinate_type is not a closed integral type")
+
+    normalized = {
+        name: _source_overlay_identifier(value.get(name),
+                                         f"{context}.{name}")
+        for name in (
+            "source_owner", "source_member", "source_member_type",
+            "aggregate_accessor", "aggregate_member", "aggregate_type",
+            "extent_template", "template_parameter", "lower_accessor",
+            "lower_member",
+            "upper_accessor", "upper_member", "extent_accessor",
+        )
+    }
+    normalized["coordinate_type"] = coordinate_type
+
+    header_keys = {
+        "source_owner_header": {
+            "path", "source_sha256", "unit_include_range_pin",
+            "member_declaration_range_pin",
+        },
+        "source_accessor_header": {
+            "path", "source_sha256", "owner_include_range_pin",
+            "accessor_range_pin",
+        },
+        "extent_header": {
+            "path", "source_sha256", "accessor_include_range_pin",
+            "concrete_inheritance_range_pin", "concrete_class_range_pin",
+            "lower_accessor_range_pin", "upper_accessor_range_pin",
+            "extent_accessor_range_pin",
+        },
+    }
+    for name, keys in header_keys.items():
+        item_context = f"{context}.{name}"
+        item = value.get(name)
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, keys, item_context)
+        normalized_item = {
+            "path": source_overlay_relative_path(
+                item.get("path"), item_context + ".path"),
+            "source_sha256": require_sha(
+                item.get("source_sha256"), item_context + ".source_sha256"),
+        }
+        for key in keys - {"path", "source_sha256"}:
+            normalized_item[key] = validate_source_overlay_range_pin(
+                item.get(key), f"{item_context}.{key}")
+        normalized[name] = normalized_item
+    require(len({normalized[name]["path"] for name in header_keys}) == 3,
+            f"{context}: semantic witness headers must be distinct")
+    return normalized
+
+
 def require_target_source_range_identity(
     seed_source: bytes, donor_source: bytes, proof: dict, context: str,
 ) -> dict:
@@ -1199,6 +1286,7 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         "for_initializer_declaration_reseat_v1",
         "captured_pointer_tail_return_v1",
         "fixed_array_fill_loop_v1",
+        "inclusive_extent_assignment_v1",
     }:
         required_keys = {
             "kind", "selector", "start_marker", "source_owner_mangled",
@@ -1206,6 +1294,8 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         }
         if kind == "fixed_array_fill_loop_v1":
             required_keys.add("array_declaration")
+        if kind == "inclusive_extent_assignment_v1":
+            required_keys.add("semantic_witness")
         exact_audit_keys(value, required_keys, context)
         require(value.get("selector")
                 == "brace_balanced_function_after_marker_v1",
@@ -1246,6 +1336,10 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         require(len(operation_ids) == 1,
                 f"{context}.operation_ids must name one array-fill "
                 "replacement")
+    if kind == "inclusive_extent_assignment_v1":
+        require(len(operation_ids) == 1,
+                f"{context}.operation_ids must name one inclusive-extent "
+                "replacement")
     normalized = {
         "kind": kind,
         **markers,
@@ -1261,6 +1355,7 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         "for_initializer_declaration_reseat_v1",
         "captured_pointer_tail_return_v1",
         "fixed_array_fill_loop_v1",
+        "inclusive_extent_assignment_v1",
     }:
         normalized.update({
             "selector": value["selector"],
@@ -1271,6 +1366,13 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
             validate_fixed_array_declaration_proof(
                 value.get("array_declaration"),
                 context + ".array_declaration",
+            )
+        )
+    if kind == "inclusive_extent_assignment_v1":
+        normalized["semantic_witness"] = (
+            validate_inclusive_extent_semantic_witness(
+                value.get("semantic_witness"),
+                context + ".semantic_witness",
             )
         )
     return normalized
@@ -1296,6 +1398,7 @@ def select_source_permutation_window(
                 "for_initializer_declaration_reseat_v1",
                 "captured_pointer_tail_return_v1",
                 "fixed_array_fill_loop_v1",
+                "inclusive_extent_assignment_v1",
             }
             and proof["selector"]
             == "brace_balanced_function_after_marker_v1",
@@ -1444,6 +1547,48 @@ def render_fixed_array_fill_loop_output(params: dict) -> bytes:
     return (
         f"{indent}for ({index_type} {index} = 0; {index} < {count}; "
         f"{index}++) {array}[{index}] = -1;\n"
+    ).encode("ascii")
+
+
+def render_inclusive_extent_assignment_input(params: dict) -> bytes:
+    """Reconstruct the checked-in inclusive extent assignment."""
+    indent = params["declaration_indent"]
+    source = (
+        f'{params["source_object"]}.{params["aggregate_accessor"]}()'
+    )
+    destination = (
+        f'{params["destination_object"]}.{params["destination_member"]}'
+    )
+    return (
+        f'{indent}{destination} = '
+        f'{source}.{params["seed_extent_accessor"]}();\n'
+    ).encode("ascii")
+
+
+def render_inclusive_extent_assignment_output(params: dict) -> bytes:
+    """Render one typed endpoint subtraction with an inert compiler barrier."""
+    require(params["barrier"] == INCLUSIVE_EXTENT_BARRIER,
+            "inclusive-extent barrier differs")
+    indent = params["declaration_indent"]
+    coordinate_type = render_source_overlay_cpp_type(
+        params["coordinate_type"])
+    identifier = params["identifier"]
+    source = (
+        f'{params["source_object"]}.{params["aggregate_accessor"]}()'
+    )
+    destination = (
+        f'{params["destination_object"]}.{params["destination_member"]}'
+    )
+    return (
+        f'{indent}{coordinate_type} {identifier} = '
+        f'{source}.{params["upper_endpoint_accessor"]}() - '
+        f'{source}.{params["lower_endpoint_accessor"]}();\n'
+        f'{indent}++{identifier};\n'
+        '#if defined(_MSC_VER) && defined(_M_IX86)\n'
+        f'{indent}__asm {{\n'
+        f'{indent}}}\n'
+        '#endif\n'
+        f'{indent}{destination} = {identifier};\n'
     ).encode("ascii")
 
 
@@ -1680,6 +1825,456 @@ def require_fixed_array_declaration_identity(
     }
 
 
+def _semantic_significant_tokens(data: bytes) -> list[tuple[str, int, int]]:
+    """Return source tokens excluding comments for structural witnesses."""
+    return [
+        item for item in source_overlay_tokens(data)
+        if not item[0].startswith(("//", "/*"))
+    ]
+
+
+def _unique_class_body(
+    tokens: list[tuple[str, int, int]], identifier: str, context: str,
+) -> tuple[int, int, int]:
+    """Select one complete ordinary class/struct definition by exact name."""
+    candidates = []
+    for index in range(len(tokens) - 2):
+        if (tokens[index][0] not in {"class", "struct"}
+                or tokens[index + 1][0] != identifier):
+            continue
+        opening = next(
+            (cursor for cursor in range(index + 2, len(tokens))
+             if tokens[cursor][0] in {"{", ";"}),
+            None,
+        )
+        if opening is None or tokens[opening][0] != "{":
+            continue
+        depth = 1
+        closing = None
+        for cursor in range(opening + 1, len(tokens)):
+            if tokens[cursor][0] == "{":
+                depth += 1
+            elif tokens[cursor][0] == "}":
+                depth -= 1
+                if depth == 0:
+                    closing = cursor
+                    break
+        require(closing is not None,
+                f"{context}: class {identifier} is unbalanced")
+        candidates.append((index, opening, closing))
+    require(len(candidates) == 1,
+            f"{context}: class {identifier} is absent or ambiguous")
+    return candidates[0]
+
+
+def _unique_class_level_token_range(
+    tokens: list[tuple[str, int, int]], opening: int, closing: int,
+    wanted: list[str], context: str,
+) -> tuple[int, int]:
+    """Find one exact token sequence beginning at class scope depth one."""
+    matches = []
+    depth = 1
+    for index in range(opening + 1, closing):
+        token = tokens[index][0]
+        if depth == 1 and [item[0] for item in
+                           tokens[index:index + len(wanted)]] == wanted:
+            matches.append((tokens[index][1],
+                            tokens[index + len(wanted) - 1][2]))
+        if token == "{":
+            depth += 1
+        elif token == "}":
+            depth -= 1
+    require(len(matches) == 1,
+            f"{context}: semantic declaration is absent or ambiguous")
+    return matches[0]
+
+
+def require_no_class_scope_identifiers(
+    tokens: list[tuple[str, int, int]], opening: int, closing: int,
+    identifiers: set[str], context: str,
+) -> dict:
+    """Reject declarations/uses that can hide inherited member accessors."""
+    found = []
+    depth = 1
+    for index in range(opening + 1, closing):
+        token = tokens[index][0]
+        if depth == 1 and token in identifiers:
+            found.append(token)
+        if token == "{":
+            depth += 1
+        elif token == "}":
+            depth -= 1
+    require(not found,
+            f"{context}: concrete class shadows an inherited accessor: "
+            f"{sorted(set(found))}")
+    return {"concrete_accessor_shadow_count": 0}
+
+
+def require_inclusive_extent_concrete_class_identity(
+    extent_data: bytes, witness: dict, context: str,
+) -> dict:
+    """Authenticate the concrete extent class and inherited-name closure."""
+    extent_tokens = _semantic_significant_tokens(extent_data)
+    concrete_index, concrete_open, concrete_close = _unique_class_body(
+        extent_tokens, witness["aggregate_type"], context)
+    require(concrete_close + 1 < len(extent_tokens)
+            and extent_tokens[concrete_close + 1][0] == ";",
+            f"{context}: concrete extent class terminator differs")
+    concrete_start = extent_data.rfind(
+        b"\n", 0, extent_tokens[concrete_index][1]) + 1
+    concrete_token_end = extent_tokens[concrete_close + 1][2]
+    concrete_newline = extent_data.find(b"\n", concrete_token_end)
+    concrete_end = (
+        len(extent_data) if concrete_newline < 0 else concrete_newline + 1
+    )
+    concrete_detail = require_source_overlay_range_pin(
+        extent_data[concrete_start:concrete_end],
+        witness["extent_header"]["concrete_class_range_pin"],
+        context + " body",
+    )
+    shadow_detail = require_no_class_scope_identifiers(
+        extent_tokens, concrete_open, concrete_close,
+        {
+            witness["lower_accessor"], witness["upper_accessor"],
+            witness["extent_accessor"],
+        },
+        context,
+    )
+    return {"concrete_class": concrete_detail, **shadow_detail}
+
+
+def _pinned_source_line(
+    data: bytes, token_range: tuple[int, int], pin: dict, context: str,
+) -> dict:
+    """Authenticate the complete physical line containing a token range."""
+    start, end = token_range
+    line_start = data.rfind(b"\n", 0, start) + 1
+    newline = data.find(b"\n", end)
+    line_end = len(data) if newline < 0 else newline + 1
+    return require_source_overlay_range_pin(
+        data[line_start:line_end], pin, context)
+
+
+def _read_pinned_semantic_source(
+    source_root: Path, spec: dict, context: str,
+) -> tuple[Path, bytes]:
+    """Read one ordinary, canonical, content-pinned witness source."""
+    path = source_overlay_logical_path(source_root, spec["path"])
+    try:
+        metadata = path.lstat()
+        resolved = path.resolve(strict=True)
+    except OSError as error:
+        raise ByteIdentityError(
+            f"{context}: semantic witness source is absent or redirected: "
+            f"{error}"
+        ) from error
+    require(stat.S_ISREG(metadata.st_mode) and not path.is_symlink()
+            and resolved == path and resolved.is_relative_to(source_root),
+            f"{context}: semantic witness source is redirected or "
+            "non-regular")
+    data = path.read_bytes()
+    require(sha256_bytes(data) == spec["source_sha256"],
+            f"{context}: semantic witness source differs from its pin")
+    return path, data
+
+
+def _require_unique_quoted_include_edge(
+    source_root: Path, including_path: str, including_data: bytes,
+    included_path: Path, pin: dict, context: str,
+) -> dict:
+    """Bind one exact quoted include to a unique source-tree basename."""
+    basename = included_path.name
+    require(basename and basename.isascii(),
+            f"{context}: include basename is invalid")
+    candidates = []
+    for candidate in source_root.rglob(basename):
+        relative = candidate.relative_to(source_root)
+        if any(part.startswith(".") for part in relative.parts):
+            continue
+        try:
+            metadata = candidate.lstat()
+            resolved = candidate.resolve(strict=True)
+        except OSError as error:
+            raise ByteIdentityError(
+                f"{context}: include candidate is redirected: {error}"
+            ) from error
+        require(stat.S_ISREG(metadata.st_mode) and not candidate.is_symlink()
+                and resolved == candidate,
+                f"{context}: include candidate is redirected or non-regular")
+        candidates.append(candidate)
+    require(candidates == [included_path],
+            f"{context}: included header is not the unique checked-in "
+            "basename")
+    wanted = ["#", "include", f'"{basename}"']
+    lines = [
+        line for line in including_data.splitlines(keepends=True)
+        if [token for token, _, _ in source_overlay_tokens(line)] == wanted
+    ]
+    require(len(lines) == 1,
+            f"{context}: include edge is absent or ambiguous")
+    detail = require_source_overlay_range_pin(
+        lines[0], pin, context + " include line")
+    return {
+        "including_path": including_path,
+        "included_basename": basename,
+        **detail,
+    }
+
+
+def require_identifier_fresh_at_source_seat(
+    target_source: bytes, seat: int, identifier: str, context: str,
+) -> dict:
+    """Prove a new local is fresh in its block and every visible ancestor."""
+    require(0 <= seat <= len(target_source),
+            f"{context}: source seat is outside its target")
+    tokens = _semantic_significant_tokens(target_source)
+    scopes = []
+    stack = []
+    for token, start, end in tokens:
+        if token == "{":
+            scope = {"open": end, "close": None}
+            scopes.append(scope)
+            stack.append(scope)
+        elif token == "}":
+            require(stack, f"{context}: source braces are unbalanced")
+            stack.pop()["close"] = start
+    require(not stack and scopes
+            and all(scope["close"] is not None for scope in scopes),
+            f"{context}: source braces are unbalanced")
+    ancestors = [
+        scope for scope in scopes
+        if scope["open"] <= seat <= scope["close"]
+    ]
+    require(ancestors, f"{context}: source seat has no lexical scope")
+    target_scope = min(
+        ancestors, key=lambda item: item["close"] - item["open"])
+    ancestor_ids = {id(scope) for scope in ancestors}
+    occurrences = [
+        start for token, start, _ in tokens if token == identifier
+    ]
+    for occurrence in occurrences:
+        if target_scope["open"] <= occurrence <= target_scope["close"]:
+            raise ByteIdentityError(
+                f"{context}: local is not fresh in its destination block: "
+                f"{identifier}"
+            )
+        containing = [
+            scope for scope in scopes
+            if scope["open"] <= occurrence <= scope["close"]
+        ]
+        if not containing:
+            raise ByteIdentityError(
+                f"{context}: local collides with a function declaration: "
+                f"{identifier}"
+            )
+        occurrence_scope = min(
+            containing, key=lambda item: item["close"] - item["open"])
+        if id(occurrence_scope) in ancestor_ids:
+            raise ByteIdentityError(
+                f"{context}: local collides with a visible ancestor: "
+                f"{identifier}"
+            )
+    return {
+        "fresh_local_identifier": identifier,
+        "fresh_local_disjoint_occurrences": len(occurrences),
+    }
+
+
+def require_inclusive_extent_semantic_identity(
+    root, unit_source: str, unit_data: bytes, target_source: bytes,
+    proof: dict, params: dict, context: str,
+) -> dict:
+    """Prove endpoint subtraction plus increment equals one extent reader."""
+    witness = proof["semantic_witness"]
+    role_pairs = (
+        ("source_object", "source_member"),
+        ("aggregate_accessor", "aggregate_accessor"),
+        ("seed_extent_accessor", "extent_accessor"),
+        ("upper_endpoint_accessor", "upper_accessor"),
+        ("lower_endpoint_accessor", "lower_accessor"),
+    )
+    require(all(params[param_name] == witness[witness_name]
+                for param_name, witness_name in role_pairs)
+            and params["coordinate_type"] == witness["coordinate_type"],
+            f"{context}: inclusive-extent roles differ from their witness")
+    require(decorated_member_owner_identifier(
+                proof["source_owner_mangled"], context)
+            == witness["source_owner"],
+            f"{context}: inclusive-extent source owner differs")
+
+    target_tokens = _semantic_significant_tokens(target_source)
+    opening = next((index for index, item in enumerate(target_tokens)
+                    if item[0] == "{"), None)
+    require(opening is not None,
+            f"{context}: inclusive-extent source owner has no body")
+    qualifiers = [
+        index for index, item in enumerate(target_tokens[:opening])
+        if item[0] == "::" and index > 0
+    ]
+    require(qualifiers
+            and target_tokens[qualifiers[-1] - 1][0]
+            == witness["source_owner"],
+            f"{context}: inclusive-extent source owner is not exact")
+    source_uses = [
+        index for index, item in enumerate(target_tokens)
+        if item[0] == witness["source_member"]
+    ]
+    require(source_uses and all(index > opening for index in source_uses)
+            and all(
+                index + 1 < len(target_tokens)
+                and (
+                    target_tokens[index + 1][0] == "."
+                    or (
+                        target_tokens[index + 1][0] == "="
+                        and target_tokens[index - 1][0] in {"{", "}", ";"}
+                    )
+                )
+                for index in source_uses
+            ),
+            f"{context}: extent source member is shadowed or redeclared")
+
+    source_root = Path(root).resolve(strict=True)
+    owner_spec = witness["source_owner_header"]
+    accessor_spec = witness["source_accessor_header"]
+    extent_spec = witness["extent_header"]
+    owner_path, owner_data = _read_pinned_semantic_source(
+        source_root, owner_spec, context + " source owner header")
+    accessor_path, accessor_data = _read_pinned_semantic_source(
+        source_root, accessor_spec, context + " source accessor header")
+    extent_path, extent_data = _read_pinned_semantic_source(
+        source_root, extent_spec, context + " extent header")
+
+    include_details = [
+        _require_unique_quoted_include_edge(
+            source_root, unit_source, unit_data, owner_path,
+            owner_spec["unit_include_range_pin"],
+            context + " unit-to-owner"),
+        _require_unique_quoted_include_edge(
+            source_root, owner_spec["path"], owner_data, accessor_path,
+            accessor_spec["owner_include_range_pin"],
+            context + " owner-to-accessor"),
+        _require_unique_quoted_include_edge(
+            source_root, accessor_spec["path"], accessor_data, extent_path,
+            extent_spec["accessor_include_range_pin"],
+            context + " accessor-to-extent"),
+    ]
+
+    owner_tokens = _semantic_significant_tokens(owner_data)
+    _, owner_open, owner_close = _unique_class_body(
+        owner_tokens, witness["source_owner"], context)
+    member_range = _unique_class_level_token_range(
+        owner_tokens, owner_open, owner_close,
+        [witness["source_member_type"], witness["source_member"], ";"],
+        context + " source member")
+    member_detail = _pinned_source_line(
+        owner_data, member_range,
+        owner_spec["member_declaration_range_pin"],
+        context + " source member line")
+
+    accessor_tokens = _semantic_significant_tokens(accessor_data)
+    _, accessor_open, accessor_close = _unique_class_body(
+        accessor_tokens, witness["source_member_type"], context)
+    accessor_range = _unique_class_level_token_range(
+        accessor_tokens, accessor_open, accessor_close,
+        [witness["aggregate_type"], "&", witness["aggregate_accessor"],
+         "(", ")", "{", "return", witness["aggregate_member"], ";", "}"],
+        context + " aggregate accessor")
+    accessor_detail = _pinned_source_line(
+        accessor_data, accessor_range, accessor_spec["accessor_range_pin"],
+        context + " aggregate accessor line")
+
+    extent_tokens = _semantic_significant_tokens(extent_data)
+    template_index, extent_open, extent_close = _unique_class_body(
+        extent_tokens, witness["extent_template"], context)
+    template_prefix = [
+        "template", "<", "class", witness["template_parameter"], ">",
+        "class", witness["extent_template"],
+    ]
+    require(template_index >= 5
+            and [item[0] for item in
+                 extent_tokens[template_index - 5:template_index + 2]]
+            == template_prefix,
+            f"{context}: extent template declaration differs")
+    parameter = witness["template_parameter"]
+    lower_range = _unique_class_level_token_range(
+        extent_tokens, extent_open, extent_close,
+        [parameter, witness["lower_accessor"], "(", ")", "const", "{",
+         "return", witness["lower_member"], ";", "}"],
+        context + " lower endpoint accessor")
+    upper_range = _unique_class_level_token_range(
+        extent_tokens, extent_open, extent_close,
+        [parameter, witness["upper_accessor"], "(", ")", "const", "{",
+         "return", witness["upper_member"], ";", "}"],
+        context + " upper endpoint accessor")
+    extent_range = _unique_class_level_token_range(
+        extent_tokens, extent_open, extent_close,
+        [parameter, witness["extent_accessor"], "(", ")", "const", "{",
+         "return", "(", witness["upper_member"], "-",
+         witness["lower_member"], "+", "1", ")", ";", "}"],
+        context + " inclusive extent accessor")
+
+    coordinate_tokens = [
+        item[0] for item in _semantic_significant_tokens(
+            render_source_overlay_cpp_type(
+                witness["coordinate_type"]).encode("ascii"))
+    ]
+    inheritance_wanted = [
+        "class", witness["aggregate_type"], ":", "public",
+        witness["extent_template"], "<", *coordinate_tokens, ">", "{",
+    ]
+    inheritance_matches = []
+    for index in range(len(extent_tokens) - len(inheritance_wanted) + 1):
+        if [item[0] for item in
+                extent_tokens[index:index + len(inheritance_wanted)]] \
+                == inheritance_wanted:
+            inheritance_matches.append((
+                extent_tokens[index][1],
+                extent_tokens[index + len(inheritance_wanted) - 1][2],
+            ))
+    require(len(inheritance_matches) == 1,
+            f"{context}: concrete extent inheritance is absent or ambiguous")
+    concrete_identity = require_inclusive_extent_concrete_class_identity(
+        extent_data, witness, context + " concrete extent class")
+
+    line_details = [
+        _pinned_source_line(
+            extent_data, inheritance_matches[0],
+            extent_spec["concrete_inheritance_range_pin"],
+            context + " concrete inheritance line"),
+        _pinned_source_line(
+            extent_data, lower_range,
+            extent_spec["lower_accessor_range_pin"],
+            context + " lower accessor line"),
+        _pinned_source_line(
+            extent_data, upper_range,
+            extent_spec["upper_accessor_range_pin"],
+            context + " upper accessor line"),
+        _pinned_source_line(
+            extent_data, extent_range,
+            extent_spec["extent_accessor_range_pin"],
+            context + " extent accessor line"),
+    ]
+    return {
+        "inclusive_extent_source_owner": witness["source_owner"],
+        "inclusive_extent_source_member": witness["source_member"],
+        "inclusive_extent_coordinate_type": render_source_overlay_cpp_type(
+            witness["coordinate_type"]),
+        "inclusive_extent_source_use_count": len(source_uses),
+        "inclusive_extent_include_edges": len(include_details),
+        "inclusive_extent_semantic_lines": 6,
+        "inclusive_extent_witness_sha256": sha256_bytes(
+            canonical_json_bytes({
+                "includes": include_details,
+                "member": member_detail,
+                "accessor": accessor_detail,
+                "extent": line_details,
+                "concrete": concrete_identity["concrete_class"],
+            })),
+        "concrete_accessor_shadow_count":
+            concrete_identity["concrete_accessor_shadow_count"],
+    }
+
+
 CAPTURED_POINTER_TAIL_RETURN_ROLES = frozenset({
     "capture_declaration", "capture_assignment", "read_reseat",
     "return_to_goto", "tail_return",
@@ -1725,6 +2320,8 @@ def render_captured_pointer_tail_return_output(params: dict) -> bytes:
 
 def require_target_source_refactor_recipe_policy(
     recipe: dict, function: dict, root, unit_source: str, context: str,
+    canonical_operations: list[dict] | None = None,
+    overlaid_paths: set[str] | None = None,
 ) -> dict:
     """Confine manifest-declared source permutations to one source owner.
 
@@ -1734,10 +2331,25 @@ def require_target_source_refactor_recipe_policy(
     compiler-state entropy.
     """
     proof = function["target_source_refactor"]
-    if proof["kind"] == "fixed_array_fill_loop_v1":
+    if proof["kind"] in {
+        "fixed_array_fill_loop_v1", "inclusive_extent_assignment_v1",
+    }:
         require(proof["source_owner_mangled"] == function["mangled"],
-                f"{context}: fixed-array fill owner must be the mosaic "
+                f"{context}: source permutation owner must be the mosaic "
                 "target")
+    if proof["kind"] == "inclusive_extent_assignment_v1":
+        require(isinstance(overlaid_paths, set),
+                f"{context}: inclusive-extent overlay census is missing")
+        witness_paths = {
+            proof["semantic_witness"][name]["path"]
+            for name in (
+                "source_owner_header", "source_accessor_header",
+                "extent_header",
+            )
+        }
+        require(not witness_paths.intersection(overlaid_paths),
+                f"{context}: inclusive-extent semantic witness header has "
+                "an effective source overlay")
     validated = validate_donor_source_overlay_recipe(
         recipe, root, seed_outputs_touched=False
     )
@@ -1762,7 +2374,14 @@ def require_target_source_refactor_recipe_policy(
     expected = set(proof["operation_ids"])
     seen = set()
     tail_fragments = {}
-    fixed_array_detail = {}
+    semantic_detail = {}
+    canonical_by_id = {
+        operation["id"]: operation
+        for operation in (canonical_operations or [])
+    }
+    require(len(canonical_by_id) == len(canonical_operations or []),
+            f"{context}: canonical source operations are duplicated")
+    canonical_seen = set()
     rendering = validated["renderings"][0]
     for operation in rendering["operations"]:
         operation_id = operation["id"]
@@ -1828,6 +2447,8 @@ def require_target_source_refactor_recipe_policy(
                     "for_initializer_declaration_reseat_v1",
                 "fixed_array_fill_loop_v1":
                     "fixed_array_fill_loop_v1",
+                "inclusive_extent_assignment_v1":
+                    "inclusive_extent_assignment_v1",
             }[proof["kind"]]
             require(operation["action"] == "replace"
                     and len(generators) == 1
@@ -1855,10 +2476,20 @@ def require_target_source_refactor_recipe_policy(
                         f"{context}: array-fill target is outside its source "
                         "owner")
                 expected_input = render_fixed_array_fill_loop_input(params)
-                fixed_array_detail = require_fixed_array_declaration_identity(
+                semantic_detail = require_fixed_array_declaration_identity(
                     root, unit_source, clean, target_range, expected_input,
                     proof, params,
                     context + " fixed-array declaration",
+                )
+            elif proof["kind"] == "inclusive_extent_assignment_v1":
+                require(identifier not in refactor_identifiers,
+                        f"{context}: inclusive-extent local is repeated: "
+                        f"{identifier}")
+                expected_input = render_inclusive_extent_assignment_input(
+                    params)
+                semantic_detail = require_inclusive_extent_semantic_identity(
+                    root, unit_source, clean, target_range, proof, params,
+                    context + " inclusive-extent witness",
                 )
             else:
                 require(identifier not in refactor_identifiers,
@@ -1884,6 +2515,13 @@ def require_target_source_refactor_recipe_policy(
             require(sha256_bytes(removed) == pin["baseline_sha256"]
                     and len(removed) == pin["baseline_size"],
                     f"{context}: refactor input pin differs")
+            if proof["kind"] == "inclusive_extent_assignment_v1":
+                semantic_detail.update(
+                    require_identifier_fresh_at_source_seat(
+                        target_range, start - target_start, identifier,
+                        context + " inclusive-extent local",
+                    )
+                )
             if proof["kind"] == "for_initializer_declaration_reseat_v1":
                 relative_start = start - target_start
                 relative_end = end - target_start
@@ -1916,6 +2554,24 @@ def require_target_source_refactor_recipe_policy(
                         f"{context}: iterator use escapes its declared loop")
             seen.add(operation_id)
             refactor_identifiers.add(identifier)
+            continue
+
+        if operation["id"] in canonical_by_id:
+            require(operation == canonical_by_id[operation["id"]]
+                    and operation["id"] not in canonical_seen,
+                    f"{context}: canonical source operation differs")
+            require(operation["action"] in {"insert", "whole_file_append"},
+                    f"{context}: canonical source operation is destructive")
+            if operation["action"] == "insert":
+                seat = resolve_source_overlay_anchor(
+                    clean, operation["start_anchor"],
+                    context + " canonical source seat",
+                    logical_path=unit_source,
+                )
+                require(seat < target_start or seat >= target_end,
+                        f"{context}: canonical source operation overlaps the "
+                        "refactor target")
+            canonical_seen.add(operation["id"])
             continue
 
         require(operation["action"] in {"insert", "whole_file_append"},
@@ -1988,11 +2644,13 @@ def require_target_source_refactor_recipe_policy(
         refactor_identifiers.update({capture, label})
     require(seen == expected,
             f"{context}: source-permutation set is incomplete")
+    require(canonical_seen == set(canonical_by_id),
+            f"{context}: donor rendering omits a canonical source operation")
     return {
         "refactor_operation_ids": sorted(seen),
         "refactor_local_identifiers": sorted(refactor_identifiers),
         "entropy_identifier_count": len(introduced_identifiers),
-        **fixed_array_detail,
+        **semantic_detail,
     }
 
 
@@ -2704,6 +3362,18 @@ def source_overlay_expected_identifier_roles(
         })
         referenced.update(
             source_overlay_named_type_identities(params["index_type"])
+        )
+    elif kind == "inclusive_extent_assignment_v1":
+        declared.add(params["identifier"])
+        referenced.update({
+            params["identifier"], params["source_object"],
+            params["aggregate_accessor"], params["seed_extent_accessor"],
+            params["upper_endpoint_accessor"],
+            params["lower_endpoint_accessor"],
+            params["destination_object"], params["destination_member"],
+        })
+        referenced.update(
+            source_overlay_named_type_identities(params["coordinate_type"])
         )
     elif kind == "captured_pointer_tail_return_fragment_v1":
         role = params["role"]
@@ -3534,6 +4204,85 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
             ),
             "value": -1,
             "declaration_indent": indentation,
+        }
+    elif kind == "inclusive_extent_assignment_v1":
+        require(not layout,
+                f"{context}: an inclusive-extent assignment cannot carry "
+                "layout overrides")
+        exact_audit_keys(params, {
+            "type", "id", "source", "seed_extent_accessor",
+            "upper_endpoint_accessor", "lower_endpoint_accessor",
+            "destination", "declaration_indent", "barrier",
+        }, param_context)
+        source = params.get("source")
+        require(isinstance(source, dict),
+                f"{param_context}.source must be an object")
+        exact_audit_keys(source, {"object", "aggregate_accessor"},
+                         param_context + ".source")
+        destination = params.get("destination")
+        require(isinstance(destination, dict),
+                f"{param_context}.destination must be an object")
+        exact_audit_keys(destination, {"object", "member"},
+                         param_context + ".destination")
+        coordinate_type = validate_source_overlay_cpp_type(
+            params.get("type"), param_context + ".type")
+        require(not coordinate_type["base_const"]
+                and not coordinate_type["indirection"]
+                and not coordinate_type["trailing_const"]
+                and render_source_overlay_cpp_type(coordinate_type)
+                in FIXED_ARRAY_FILL_ELEMENT_TYPE_SPELLINGS,
+                f"{param_context}.type is not a closed integral type")
+        identifier = _source_overlay_identifier(
+            params.get("id"), param_context + ".id")
+        source_object = _source_overlay_identifier(
+            source.get("object"), param_context + ".source.object")
+        aggregate_accessor = _source_overlay_identifier(
+            source.get("aggregate_accessor"),
+            param_context + ".source.aggregate_accessor")
+        destination_object = _source_overlay_identifier(
+            destination.get("object"),
+            param_context + ".destination.object")
+        destination_member = _source_overlay_identifier(
+            destination.get("member"),
+            param_context + ".destination.member")
+        accessors = {
+            "seed_extent_accessor": _source_overlay_identifier(
+                params.get("seed_extent_accessor"),
+                param_context + ".seed_extent_accessor"),
+            "upper_endpoint_accessor": _source_overlay_identifier(
+                params.get("upper_endpoint_accessor"),
+                param_context + ".upper_endpoint_accessor"),
+            "lower_endpoint_accessor": _source_overlay_identifier(
+                params.get("lower_endpoint_accessor"),
+                param_context + ".lower_endpoint_accessor"),
+        }
+        require(len(set(accessors.values())) == 3,
+                f"{param_context}: extent accessors must be distinct")
+        require(aggregate_accessor not in accessors.values(),
+                f"{param_context}: aggregate and extent accessors must "
+                "differ")
+        require(identifier not in {
+                    source_object, aggregate_accessor, destination_object,
+                    *accessors.values(),
+                },
+                f"{param_context}.id collides with an authenticated role")
+        indentation = params.get("declaration_indent")
+        require(isinstance(indentation, str) and indentation.isascii()
+                and 1 <= len(indentation) <= 32
+                and set(indentation) <= {" ", "\t"},
+                f"{param_context}.declaration_indent differs")
+        require(params.get("barrier") == INCLUSIVE_EXTENT_BARRIER,
+                f"{param_context}.barrier differs")
+        normalized = {
+            "coordinate_type": coordinate_type,
+            "identifier": identifier,
+            "source_object": source_object,
+            "aggregate_accessor": aggregate_accessor,
+            **accessors,
+            "destination_object": destination_object,
+            "destination_member": destination_member,
+            "declaration_indent": indentation,
+            "barrier": INCLUSIVE_EXTENT_BARRIER,
         }
     elif kind == "captured_pointer_tail_return_fragment_v1":
         role = params.get("role")
@@ -5352,6 +6101,8 @@ def render_source_overlay_generator(
         result = render_for_initializer_declaration_reseat_output(params)
     elif kind == "fixed_array_fill_loop_v1":
         result = render_fixed_array_fill_loop_output(params)
+    elif kind == "inclusive_extent_assignment_v1":
+        result = render_inclusive_extent_assignment_output(params)
     elif kind == "captured_pointer_tail_return_fragment_v1":
         result = render_captured_pointer_tail_return_output(params)
     elif kind == "empty_compound_statements_v1":
@@ -8835,7 +9586,7 @@ def validate_manifest(
             and manifest.get("schema") == SCHEMA_VERSION,
             "unsupported byte-identity schema")
     require_manifest_source_refactor_role_preflight(
-        manifest, "manifest source-refactor role preflight")
+        manifest, "manifest source-refactor role preflight", source_root)
     require(manifest.get("phase") == PHASE, f"manifest phase must be {PHASE}")
     diagnostic_policy = manifest.get("diagnostic_policy")
     require(
@@ -9788,6 +10539,7 @@ def validate_manifest(
                             "for_initializer_declaration_reseat_v1",
                             "captured_pointer_tail_return_fragment_v1",
                             "fixed_array_fill_loop_v1",
+                            "inclusive_extent_assignment_v1",
                         }
                         for generator in _source_overlay_generators(
                             validated_recipe
@@ -10614,6 +11366,9 @@ def validate_manifest(
                         require_target_source_refactor_recipe_policy(
                             local_recipes[donor_id], normalized_function,
                             source_dir, source_relative, function_context,
+                            (overlay_output["operations"]
+                             if overlay_output is not None else []),
+                            set(source_overlay_by_path),
                         )
                     normalized_function["instruction_ranges"] = (
                         validate_instruction_mosaic_ranges(
@@ -10781,6 +11536,9 @@ def validate_manifest(
                         require_target_source_refactor_recipe_policy(
                             local_recipes[donor_id], normalized_function,
                             source_dir, source_relative, function_context,
+                            (overlay_output["operations"]
+                             if overlay_output is not None else []),
+                            set(source_overlay_by_path),
                         )
                     if splice_class == "retail_exact_target_closure":
                         require(local_recipe_kinds[donor_id]
@@ -13029,12 +13787,23 @@ def require_source_refactor_donor_bindings(
 
 
 def require_manifest_source_refactor_role_preflight(
-    manifest: dict, context: str,
+    manifest: dict, context: str, root=None,
 ) -> None:
-    """Reject source-aware donor reuse before any external manifest checks."""
+    """Reject source-aware role and semantic escapes before host checks."""
     primary_donor_ids = []
     bound_refactor_recipe_ids = []
     non_primary_donor_ids = []
+    overlay = manifest.get("source_overlay")
+    overlay_outputs = (
+        overlay.get("outputs") if isinstance(overlay, dict) else None
+    )
+    if not isinstance(overlay_outputs, list):
+        overlay_outputs = []
+    overlaid_paths = {
+        item["path"] for item in overlay_outputs
+        if isinstance(item, dict) and isinstance(item.get("path"), str)
+    }
+    source_root = Path(root).resolve(strict=True) if root is not None else None
     units = manifest.get("translation_units")
     if not isinstance(units, list):
         return
@@ -13047,6 +13816,33 @@ def require_manifest_source_refactor_role_preflight(
         for function in functions:
             if not isinstance(function, dict):
                 continue
+            proof = function.get("target_source_refactor")
+            if (isinstance(proof, dict)
+                    and proof.get("kind")
+                    == "inclusive_extent_assignment_v1"):
+                witness = validate_inclusive_extent_semantic_witness(
+                    proof.get("semantic_witness"),
+                    context + " inclusive-extent semantic witness",
+                )
+                witness_paths = {
+                    witness[name]["path"]
+                    for name in (
+                        "source_owner_header", "source_accessor_header",
+                        "extent_header",
+                    )
+                }
+                require(not witness_paths.intersection(overlaid_paths),
+                        f"{context}: inclusive-extent semantic witness "
+                        "header has an effective source overlay")
+                if source_root is not None:
+                    _, extent_data = _read_pinned_semantic_source(
+                        source_root, witness["extent_header"],
+                        context + " inclusive-extent extent header",
+                    )
+                    require_inclusive_extent_concrete_class_identity(
+                        extent_data, witness,
+                        context + " inclusive-extent concrete class",
+                    )
             donor_id = function.get("donor")
             if isinstance(donor_id, str):
                 primary_donor_ids.append(donor_id)
@@ -14644,6 +15440,7 @@ def assert_source_permutations_are_donor_only(overlay: object) -> None:
                 "for_initializer_declaration_reseat_v1",
                 "captured_pointer_tail_return_fragment_v1",
                 "fixed_array_fill_loop_v1",
+                "inclusive_extent_assignment_v1",
                 "dead_local_linear_updates_v1",
                 "inline_default_constructor_dead_updates_v1",
             },

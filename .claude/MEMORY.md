@@ -65,8 +65,30 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-16)
 
-- Accepted canonical gate: LEGO1 4872/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is `0x10017af0 PizzeriaState::PizzeriaState`. The checked-in
+- Accepted canonical gate: LEGO1 4873/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is `0x100ba7f0 MxDisplaySurface::Create`. Its checked-in
+  inclusive-width accessor assignment remains canonical because the direct
+  logic-equivalent source form perturbs six other function bodies. A
+  donor-private `inclusive_extent_assignment_v1` rendering computes a typed
+  right-minus-left value, increments it, crosses the one closed guarded empty
+  MSVC/i386 assembly barrier and assigns it. The algebraic identity is tied to
+  a unique three-header include chain, whole-file and declaration pins, and a
+  full 530-byte concrete-class pin; all three witness headers are forbidden
+  from the effective overlay and the concrete class may not shadow any of the
+  three inherited accessors. The canonical seed and fresh donor are both 660
+  bytes with three equivalent semantic relocations. Replacing only the
+  complete 12-byte sequence at offsets 489--500 changes the seed's `[11, 1]`
+  instruction partition to the donor's `[1, 11]` partition and produces the
+  retail-exact body SHA-256
+  `966cdf3a4b96d872beb6b04c4b9568ba19767cc7975e17bcb77fa3bbf687b11b`.
+  The composed object retains the seed's 57-row line table, complete
+  `.debug$F`/`.debug$S` closure and every non-target byte; the 58-row donor is
+  excluded from the link. A marker-removed forced-fresh confirmation produced
+  exactly this gain with zero losses; its report SHA-256 is
+  `ddd69d4874d8eb6e1fdfd86fa9cff69d32a639adab338bb795ea4c8ea0a4fc94`
+  and verdict SHA-256 is
+  `4ec52e11080e022e4332459ea5d32434cb5b04be586a21e3101032b032120016`.
+  The preceding gain is `0x10017af0 PizzeriaState::PizzeriaState`. The checked-in
   whole-array `memset` remains the canonical source because landing its
   logic-equivalent typed loop directly perturbs the already-exact `Serialize`
   row. A donor-private `fixed_array_fill_loop_v1` rendering emits exactly

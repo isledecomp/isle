@@ -1620,6 +1620,26 @@ class SourcePermutationTests(unittest.TestCase):
         return byte_identity.validate_source_overlay_generator(
             generator, "fixture.fixed_array")
 
+    def _inclusive_extent_generator(self, **overrides):
+        generator = {
+            "k": "inclusive_extent",
+            "type": "MxS32",
+            "id": "width",
+            "source": {
+                "object": "video_param",
+                "aggregate_accessor": "GetRect",
+            },
+            "seed_extent_accessor": "GetWidth",
+            "upper_endpoint_accessor": "GetRight",
+            "lower_endpoint_accessor": "GetLeft",
+            "destination": {"object": "desc", "member": "width"},
+            "declaration_indent": "\t\t",
+            "barrier": "msvc_i386_empty_inline_assembly_v1",
+        }
+        generator.update(overrides)
+        return byte_identity.validate_source_overlay_generator(
+            generator, "fixture.inclusive_extent")
+
     def _live_case(self):
         manifest = json.loads(
             (TOOLS / "byte_identity_manifest.json").read_text()
@@ -1699,6 +1719,39 @@ class SourcePermutationTests(unittest.TestCase):
         )
         return unit["source"], copy.deepcopy(donor["recipe"]), function
 
+    def _live_inclusive_extent_case(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text()
+        )
+        matches = [
+            (unit, function)
+            for unit in manifest["translation_units"]
+            for function in unit.get("functions", [])
+            if function.get("target_source_refactor", {}).get("kind")
+            == "inclusive_extent_assignment_v1"
+        ]
+        self.assertEqual(len(matches), 1)
+        unit, function = matches[0]
+        donor = next(item for item in unit["donors"]
+                     if item["id"] == function["donor"])
+        function = copy.deepcopy(function)
+        function["target_source_refactor"] = (
+            byte_identity.validate_target_source_refactor_proof(
+                function["target_source_refactor"], "proof"
+            )
+        )
+        overlay = byte_identity.validate_source_overlay(
+            manifest["source_overlay"], ROOT)
+        canonical = next(
+            item["operations"] for item in overlay["outputs"]
+            if item["logical_path"] == unit["source"]
+        )
+        overlaid_paths = {
+            item["logical_path"] for item in overlay["outputs"]
+        }
+        return (unit["source"], copy.deepcopy(donor["recipe"]),
+                function, canonical, overlaid_paths)
+
     def test_manifest_fields_render_one_binding_and_one_use(self):
         self.assertEqual(
             byte_identity.render_source_overlay_generator(self._generator()),
@@ -1773,6 +1826,263 @@ class SourcePermutationTests(unittest.TestCase):
             with self.subTest(mutation=mutation), self.assertRaises(
                     byte_identity.ByteIdentityError):
                 self._fixed_array_generator(**mutation)
+
+    def test_inclusive_extent_is_closed_source_derived_and_donor_only(self):
+        generator = self._inclusive_extent_generator()
+        self.assertEqual(
+            byte_identity.render_inclusive_extent_assignment_input(
+                generator["params"]),
+            b"\t\tdesc.width = video_param.GetRect().GetWidth();\n",
+        )
+        self.assertEqual(
+            byte_identity.render_source_overlay_generator(generator),
+            b"\t\tMxS32 width = video_param.GetRect().GetRight() - "
+            b"video_param.GetRect().GetLeft();\n"
+            b"\t\t++width;\n"
+            b"#if defined(_MSC_VER) && defined(_M_IX86)\n"
+            b"\t\t__asm {\n\t\t}\n#endif\n"
+            b"\t\tdesc.width = width;\n",
+        )
+        roles = byte_identity.source_overlay_expected_identifier_roles(
+            generator["kind"], generator["params"])
+        self.assertEqual(roles["emitted_identifiers"], [])
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "donor-only"):
+            byte_identity.assert_source_permutations_are_donor_only(
+                {"generator": generator})
+
+    def test_inclusive_extent_refuses_type_role_barrier_and_layout_escape(self):
+        mutations = (
+            {"type": "MxS32*"},
+            {"type": "ArbitraryCoordinate"},
+            {"id": "video_param"},
+            {"source": {"object": "video_param",
+                        "aggregate_accessor": "GetWidth"}},
+            {"upper_endpoint_accessor": "GetLeft"},
+            {"barrier": "free_form_assembly"},
+            {"nl": False},
+            {"text": "arbitrary source"},
+        )
+        for mutation in mutations:
+            with self.subTest(mutation=mutation), self.assertRaises(
+                    byte_identity.ByteIdentityError):
+                self._inclusive_extent_generator(**mutation)
+
+    def test_live_inclusive_extent_witness_and_canonical_overlay_are_exact(self):
+        source, recipe, function, canonical, overlaid_paths = (
+            self._live_inclusive_extent_case())
+        detail = byte_identity.require_target_source_refactor_recipe_policy(
+            recipe, function, ROOT, source, "fixture", canonical,
+            overlaid_paths)
+        self.assertEqual(detail["inclusive_extent_include_edges"], 3)
+        self.assertEqual(detail["inclusive_extent_semantic_lines"], 6)
+        self.assertEqual(detail["inclusive_extent_coordinate_type"], "MxS32")
+        self.assertEqual(detail["concrete_accessor_shadow_count"], 0)
+        self.assertEqual(detail["fresh_local_identifier"], "width")
+        self.assertGreater(detail["fresh_local_disjoint_occurrences"], 0)
+
+        rendered = byte_identity.render_donor_source_overlay(
+            recipe, ROOT)[source]
+        self.assertEqual(hashlib.sha256(rendered).hexdigest(),
+                         "1ee6f076b6189a719315185a494518b94aae689fc612989111f730b73e9cec0f")
+        operation = next(
+            item for item in recipe["renderings"][0]["operations"]
+            if item.get("id") == "op_mxdisplay_create_inclusive_extent")
+        generator = byte_identity.validate_source_overlay_generator(
+            operation["gen"], "fixture.generator")
+        output = byte_identity.render_source_overlay_generator(generator)
+        original = byte_identity.render_inclusive_extent_assignment_input(
+            generator["params"])
+        self.assertEqual(hashlib.sha256(output).hexdigest(),
+                         "6c80fc83cadd89378334277273cae6057a7b564436c0d861b5c832c68c8c191b")
+        seed = rendered.replace(output, original, 1)
+        source_detail = byte_identity.require_target_source_refactor_identity(
+            seed, rendered, function["target_source_refactor"], "fixture")
+        self.assertEqual(source_detail["seed_target_source_size"], 3088)
+        self.assertEqual(source_detail["donor_target_source_size"], 3220)
+
+        omitted = copy.deepcopy(recipe)
+        omitted["renderings"][0]["operations"].pop(0)
+        omitted_rendered = byte_identity.render_donor_source_overlay(
+            omitted, ROOT, repin=True)[source]
+        omitted["renderings"][0]["rendered_sha256"] = hashlib.sha256(
+            omitted_rendered).hexdigest()
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "omits a canonical"):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                omitted, function, ROOT, source, "fixture", canonical,
+                overlaid_paths)
+
+        drifted = copy.deepcopy(recipe)
+        drifted["renderings"][0]["operations"][0]["gen"]["style"] = "angle"
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "canonical source operation differs"):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                drifted, function, ROOT, source, "fixture", canonical,
+                overlaid_paths)
+
+        wrong_formula = copy.deepcopy(function)
+        wrong_formula["target_source_refactor"]["semantic_witness"][
+            "upper_member"] = "m_bottom"
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "semantic declaration"):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                recipe, wrong_formula, ROOT, source, "fixture", canonical,
+                overlaid_paths)
+
+        wrong_include = copy.deepcopy(function)
+        wrong_include["target_source_refactor"]["semantic_witness"][
+            "source_owner_header"]["unit_include_range_pin"][
+                "baseline_sha256"] = "0" * 64
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "input-range pins"):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                recipe, wrong_include, ROOT, source, "fixture", canonical,
+                overlaid_paths)
+
+        witness_path = function["target_source_refactor"][
+            "semantic_witness"]["extent_header"]["path"]
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "effective source overlay"):
+            byte_identity.require_target_source_refactor_recipe_policy(
+                recipe, function, ROOT, source, "fixture", canonical,
+                overlaid_paths | {witness_path})
+
+    def test_manifest_rejects_inclusive_extent_witness_header_overlay(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        function = next(
+            function
+            for unit in manifest["translation_units"]
+            for function in unit.get("functions", [])
+            if function.get("target_source_refactor", {}).get("kind")
+            == "inclusive_extent_assignment_v1")
+        witness_path = function["target_source_refactor"][
+            "semantic_witness"]["extent_header"]["path"]
+        manifest["source_overlay"]["outputs"].append({
+            "path": witness_path,
+        })
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary = Path(temporary).resolve()
+            manifest_path = temporary / "manifest.json"
+            build_dir = temporary / "build"
+            build_dir.mkdir()
+            manifest_path.write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "effective source overlay"):
+                byte_identity.validate_manifest(
+                    manifest_path, ROOT, build_dir)
+
+    def test_manifest_rejects_repin_of_concrete_extent_accessor_shadow(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        function = next(
+            function
+            for unit in manifest["translation_units"]
+            for function in unit.get("functions", [])
+            if function.get("target_source_refactor", {}).get("kind")
+            == "inclusive_extent_assignment_v1")
+        witness = function["target_source_refactor"]["semantic_witness"]
+        extent = witness["extent_header"]
+        original = (ROOT / extent["path"]).read_bytes()
+        class_start = original.index(
+            b"class MxRect32 : public MxRect<MxS32> {\n")
+        class_close = original.index(b"};\n", class_start)
+        shadow = b"\tMxS32 GetWidth() const { return 0; }\n"
+        changed = original[:class_close] + shadow + original[class_close:]
+        changed_close = changed.index(b"};\n", class_start) + 3
+        class_range = changed[class_start:changed_close]
+        extent["source_sha256"] = hashlib.sha256(changed).hexdigest()
+        extent["concrete_class_range_pin"] = {
+            "baseline_sha256": hashlib.sha256(class_range).hexdigest(),
+            "baseline_size": len(class_range),
+            "baseline_line_count": len(class_range.splitlines()),
+            "baseline_significant_token_sha256":
+                byte_identity.source_overlay_significant_sha256(class_range),
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary = Path(temporary).resolve()
+            source_root = temporary / "source"
+            header_path = source_root / extent["path"]
+            header_path.parent.mkdir(parents=True)
+            header_path.write_bytes(changed)
+            build_dir = temporary / "build"
+            build_dir.mkdir()
+            manifest_path = temporary / "manifest.json"
+            manifest_path.write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "shadows an inherited accessor"):
+                byte_identity.validate_manifest(
+                    manifest_path, source_root, build_dir)
+
+    def test_inclusive_extent_semantic_source_refuses_final_symlink(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            real = root / "real.h"
+            real.write_bytes(b"class Witness {};\n")
+            link = root / "witness.h"
+            link.symlink_to(real.name)
+            spec = {
+                "path": "witness.h",
+                "source_sha256": hashlib.sha256(real.read_bytes()).hexdigest(),
+            }
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "redirected or non-regular"):
+                byte_identity._read_pinned_semantic_source(
+                    root, spec, "fixture")
+
+    def test_inclusive_extent_local_may_reuse_only_a_disjoint_scope_name(self):
+        source = (
+            b"Owner::Build() {\n"
+            b"  if (flag) { int width = 1; consume(width); }\n"
+            b"  else { target(); }\n"
+            b"}\n"
+        )
+        seat = source.index(b"target")
+        detail = byte_identity.require_identifier_fresh_at_source_seat(
+            source, seat, "width", "fixture")
+        self.assertEqual(detail["fresh_local_disjoint_occurrences"], 2)
+
+        visible = source.replace(b"  if (flag) { int width = 1; "
+                                 b"consume(width); }\n", b"  int width;\n")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "visible ancestor"):
+            byte_identity.require_identifier_fresh_at_source_seat(
+                visible, visible.index(b"target"), "width", "fixture")
+        same_block = source.replace(b"  else { target(); }",
+                                    b"  else { int width; target(); }")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "destination block"):
+            byte_identity.require_identifier_fresh_at_source_seat(
+                same_block, same_block.index(b"target"), "width", "fixture")
+
+    def test_manifest_rejects_ordinary_reuse_of_inclusive_extent_donor(self):
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        unit = next(
+            item for item in manifest["translation_units"]
+            if any(function.get("target_source_refactor", {}).get("kind")
+                   == "inclusive_extent_assignment_v1"
+                   for function in item.get("functions", [])))
+        function = next(
+            item for item in unit["functions"]
+            if item.get("target_source_refactor", {}).get("kind")
+            == "inclusive_extent_assignment_v1")
+        unit["functions"].append({
+            "mangled": "?OrdinaryInclusiveExtentReuse@@YAXXZ",
+            "donor": function["donor"],
+            "splice_class": "equal_body_strict",
+        })
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary = Path(temporary).resolve()
+            manifest_path = temporary / "manifest.json"
+            build_dir = temporary / "build"
+            build_dir.mkdir()
+            manifest_path.write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "exactly one total primary"):
+                byte_identity.validate_manifest(
+                    manifest_path, ROOT, build_dir)
 
     def test_source_refactor_donor_has_one_source_aware_primary_use(self):
         byte_identity.require_source_refactor_donor_bindings(
