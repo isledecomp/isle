@@ -507,6 +507,49 @@ after every bounded panel or full gate.
   lifetime alias under the identical state and require zero collateral in all
   six header consumers.
 
+- Fresh static seal: `0x100a12a0 TglImpl::TextureImpl::SetImage` is 83
+  bytes/39 instructions on both sides. Its complete residue is an EBX/EBP role
+  swap plus retail loading parameter `pImage` into EDI six bytes earlier; the
+  sole callback relocation remains at +51. An exhaustive 9,643-definition
+  census found six bodies and no exact emitter. The best 2,309 objects reach
+  `nd=16` and already fix EBX/EBP, but every one retains the late parameter
+  load. Git/BETA10 authenticate the current two-local source and explicit
+  stack-parameter use; declaration/init variants and `register void* appData`
+  are measured byte-inert even under the best carrier. A syntactically novel
+  `register Image* pImage` lacks any authentic provenance and is not a valid
+  source-first cell. Reopen only on authenticated source/PDB evidence for a
+  different parameter lifetime or a natural exact 83-byte emitter with the
+  same relocation and closure.
+
+- Fresh exhaustive seal: `0x10073a90 Act3::Enable` has no authentic source or
+  compiler-state lead beyond its six measured scheduler bodies. A reconciled
+  corpus contains 8,745 authoritative states (8,621 ordinary carriers plus
+  124 `a5` text×carrier cells), all sharing one 26-relocation sequence and
+  only sizes 928/929/930; 2,360 states reach retail's 929-byte length, but the
+  floor is `nd=105`. A broader 10,659-definition scan adds no body. The whole
+  best-body residue is confined to +0x245..+0x2e0 and is three loop-setup
+  operations scheduled/coloured differently across the pizza and donut loops;
+  both sides have 253 instructions and no missing statement. Git and 10,658
+  source artifacts retain one reused loop index and the same control/order.
+  The known `a5` loop spelling and both 256-sample upstream entropy runs only
+  revisit the same six-body orbit and introduce collateral. Reopen only for
+  authenticated final source/PDB/object showing a different loop lifetime or
+  a deterministic C2 dimension that first emits a seventh body with exact
+  929-byte/26-relocation semantics and zero collateral.
+
+- Fresh static seal: `0x100bd020 MxBitmap::BitBltTransparent` is pure
+  allocator/scheduler colour. Current and retail are both 415 bytes/166
+  instructions with one semantic call relocation at +0x4b and identical work;
+  zero asymmetric frame traffic exists. Git/all refs yield five function texts,
+  retained sources 4,902 definitions/two texts, and retained objects 4,871
+  definitions/55 bodies, all with the same 415-byte/one-reloc/15-line shape;
+  floor is `nd=60`, exact count zero. The historically causal source steps
+  already landed the loop-body shape and stride order; wrapper/early-return,
+  guard naming, counter/stride widths, all pointer/stride declaration orders
+  and carrier/pad families were measured. Reopen only on contemporaneous
+  source/PDB lifetime evidence for a genuinely new distinction or a natural
+  normalized-exact object preserving the complete closure and zero collateral.
+
 - Accepted canonical gate: LEGO1 4880/4934, ISLE 172/172, CONFIG 111/111.
   The latest gain is `0x10040360 Act3Cop::FUN_10040360`. The checked-in
   source now expresses the fallback as a second `grec == NULL` guard and
