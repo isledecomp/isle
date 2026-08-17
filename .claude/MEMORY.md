@@ -550,6 +550,25 @@ after every bounded panel or full gate.
   source/PDB lifetime evidence for a genuinely new distinction or a natural
   normalized-exact object preserving the complete closure and zero collateral.
 
+- Exact-name upstream entropy replay is negative and sealed for
+  `0x1006e720` (hide-animation map `_Insert`). Seed `834471695` was rebuilt
+  independently as the authentic 373-byte LF-only declaration header
+  `a3ac2f6fff62451d5d36250601fd196336a2da2d2b670809ec1356f6f0763fe2`
+  and force-included at its historical seat on current effective source
+  `19f495a4...`; exhaustive current and legacy artifact scans proved that
+  exact name/header state had not previously been replayed. The fresh control
+  reproduced the canonical 686-byte target/body `929c2ea9...`. The sole seed
+  cell stayed 686 bytes/body `5d991bc9...`, retained current relocation seats
+  rather than retail's 689-byte closure, and changed 43 non-target runtime
+  functions plus four xdata/linker records. Function/COMDAT identities stayed
+  260/302, but the natural target and collateral gates both fail. No third
+  cell, link or reccmp ran. Evidence is
+  `/private/tmp/codex-hideinsert-seed.DDECKt/result.json`, SHA-256
+  `0cae18b23bfcce995c27ef14ab297b9ef431c49f208262880b77765c92eee1ee`.
+  Reopen only with materially different authenticated owner source or a
+  current-source object proving the exact 689-byte body, relocation/closure
+  topology and zero runtime collateral; repeating this seed is closed.
+
 - Accepted canonical gate: LEGO1 4880/4934, ISLE 172/172, CONFIG 111/111.
   The latest gain is `0x10040360 Act3Cop::FUN_10040360`. The checked-in
   source now expresses the fallback as a second `grec == NULL` guard and
