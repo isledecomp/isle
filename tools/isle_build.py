@@ -427,7 +427,8 @@ def stamp_link_time(data: bytes, link_time: int,
     return bytes(stamped)
 
 
-def terminal_lane(manifest: dict, gates: dict, build_root: Path,
+def terminal_lane(manifest: dict, source_overlay: dict, gates: dict,
+                  build_root: Path,
                   shadow: Path, plan: Path, compiler: Path, jobs: int,
                   require_identity: bool, compile_timeout: float,
                   link_timeout: float) -> dict:
@@ -446,8 +447,9 @@ def terminal_lane(manifest: dict, gates: dict, build_root: Path,
         timeout_seconds=max(compile_timeout, link_timeout) * 4,
         env=build_environment(compiler),
         log=build_root / "terminal-build.log")
-    compose_translation_units(manifest, terminal_build, shadow, compiler,
-                              jobs, compile_timeout, link_timeout)
+    compose_translation_units(
+        manifest, source_overlay, terminal_build, shadow, compiler,
+        jobs, compile_timeout, link_timeout)
     results = {}
     states = []
     for identity, gate in gates.items():
@@ -612,8 +614,9 @@ def main() -> int:
     )
     print(f"[isle_build] build complete ({time.monotonic() - started:.1f}s)")
 
-    compose_translation_units(manifest, build, shadow, compiler,
-                              arguments.jobs, compile_timeout, link_timeout)
+    compose_translation_units(
+        manifest, validated["source_overlay"], build, shadow, compiler,
+        arguments.jobs, compile_timeout, link_timeout)
 
     verdict = {
         "status": ("BYTE_IDENTITY_COMPLETE" if arguments.terminal
@@ -635,7 +638,8 @@ def main() -> int:
     if arguments.terminal or arguments.md5_distance:
         terminal_pool = ThreadPoolExecutor(max_workers=1)
         terminal_future = terminal_pool.submit(
-            terminal_lane, manifest, gates, build_root, shadow, plan,
+            terminal_lane, manifest, validated["source_overlay"], gates,
+            build_root, shadow, plan,
             compiler, arguments.jobs, arguments.terminal,
             compile_timeout, link_timeout,
         )
@@ -723,7 +727,8 @@ def main() -> int:
     return 0
 
 
-def compose_translation_units(manifest: dict, build: Path, shadow: Path,
+def compose_translation_units(manifest: dict, source_overlay: dict,
+                              build: Path, shadow: Path,
                               compiler: Path, jobs: int,
                               compile_timeout: float,
                               link_timeout: float) -> None:
@@ -744,6 +749,10 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
     image_by_target = {
         image["target"]: image["recompiled"]
         for image in manifest.get("images", {}).values()
+    }
+    canonical_overlay_operations = {
+        item["logical_path"]: item["operations"]
+        for item in source_overlay.get("outputs", [])
     }
 
     def compose_unit(unit: dict) -> tuple[str | None, str | None]:
@@ -934,7 +943,13 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
                         private_shadow = probe / "inc" / "source"
                         shutil.copytree(shadow, private_shadow)
                     rendered_donor = byte_identity.render_donor_source_overlay(
-                        recipe, byte_identity.checked_source_root())
+                        recipe, byte_identity.checked_source_root(),
+                        canonical_operations=(
+                            canonical_overlay_operations.get(unit["source"])
+                            if recipe.get("canonical_overlay_replay")
+                            == "owning_translation_unit_v1" else None
+                        ),
+                    )
                     donor_sources[donor["id"]] = rendered_donor.get(
                         unit["source"]
                     )
@@ -1258,6 +1273,34 @@ def compose_translation_units(manifest: dict, build: Path, shadow: Path,
             composed = seed_bytes
             for function in unit["functions"]:
                 if (function["splice_class"]
+                        == byte_identity
+                        .SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS):
+                    retail = function["retail_oracle"]
+                    target_donor = donor_objects[function["donor"]]
+                    instruction_donor_id = function["instruction_donor"]
+                    instruction_donor = donor_objects[
+                        instruction_donor_id]
+                    instruction_source = donor_sources.get(
+                        instruction_donor_id)
+                    if instruction_source is None:
+                        fail("source instruction-hybrid donor omits its "
+                             f"translation unit: {unit['source']}")
+                    composed, detail = (
+                        byte_identity
+                        .compose_retail_exact_source_instruction_hybrid_resize(
+                            composed, target_donor, instruction_donor,
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16),
+                                retail["length"],
+                            ),
+                            source.read_bytes(), instruction_source,
+                        )
+                    )
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [target_donor, instruction_donor])
+                elif (function["splice_class"]
                         == byte_identity
                         .CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
                     retail = function["retail_oracle"]

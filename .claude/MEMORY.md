@@ -35,16 +35,21 @@ same-TU mosaics require equal function identity, section seat, body length,
 COMDAT topology, relocation semantics and compatible debug/EH closure; copied
 instructions stay at the same offsets. The separate cross-TU hybrid-resize
 route is admissible only from a different SHA-pinned, unmodified checked-in
-translation unit compiled through its own command. It requires equal primary
-COMDAT identity/selection/associated-child names, equal-width complete
-instructions at independently pinned offsets, no relocation overlap in either
-object, exactly one instruction-only consumer for the cross-TU donor,
+translation unit compiled through its own command. The source-aware
+hybrid-resize route may instead use a closed typed donor-private permutation
+of the owning TU. Both require equal primary COMDAT
+identity/selection/associated-child names, equal-width complete instructions,
+no relocation overlap in either object, exact-once role confinement,
 target-donor metadata authority, an exact hybrid against the owning target's
-retail image and exclusion of both donors. Every copied range must be
-manifest-declared and
-provenance-pinned, and the output must pass full retail-body and
-object-conservation gates. Never copy code from a different or merely similar
-function, even if its instructions are equivalent.
+retail image and exclusion of both donors. For each object, the line-table
+sentinel must bind the unique exact target definition; decode starts at the
+nearest preceding compiler line row and must prove both range endpoints are
+instruction boundaries using the fail-closed accepted IA-32 subset. A valid
+isolated byte sequence inside a larger instruction is not sufficient. Every
+copied range must be manifest-declared and provenance-pinned, and the output
+must pass full retail-body and object-conservation gates. Never copy code from
+a different or merely similar function, even if its instructions are
+equivalent.
 
 `GetActorROI` is the measured exception: its direct two-temporary refactor moves
 nine COMDATs and loses the already-exact `Exists` row; the isolated manifest
@@ -65,8 +70,41 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-16)
 
-- Accepted canonical gate: LEGO1 4873/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is `0x100ba7f0 MxDisplaySurface::Create`. Its checked-in
+- Accepted canonical gate: LEGO1 4874/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is `0x10069b10 LegoAnimPresenter::BuildROIMap`. Its checked-in
+  discarded postfix increment remains canonical because the direct prefix
+  form changes 40 shared bodies and adds a COMDAT. A donor-private typed
+  `discarded_postfix_increment_v1` rendering changes only `it++;` to `++it;`
+  and replays the TU's canonical overlay. The semantic witness binds `it` to
+  the project map alias and sealed VC4.2 iterator definitions, proves prefix
+  and postfix each execute exactly one `_Inc()` transition, and excludes
+  observable temporary copy/destructor state through the exact iterator
+  inheritance, sole node-pointer member and special-member census. The source
+  recipe is rejected from the shipped overlay and is inventoried directly at
+  raw-manifest preflight; it has exactly one instruction-only binding and no
+  primary, variant, repeated or unbound use.
+
+  The 622-byte canonical seed is resized through a 617-byte declaration-only
+  carrier. The typed source donor is also 617 bytes. Eleven same-offset
+  complete instructions create hybrid body SHA-256
+  `43e4ef651a4d79561d766737b64ff6597055163640bd6bd3484f2df8979d0373`;
+  the adjacent offset-416 change is truthfully split into three-byte and
+  one-byte instructions. The line-row-anchored closed decoder proves every
+  endpoint in both fresh objects, all 23 relocations are retail authenticated,
+  carrier metadata and the canonical seed's non-target bytes remain
+  authoritative, and both donors are excluded. The scratch packet's longer
+  build root created 28 extra `.file` auxiliary records, so only raw symbol
+  indices differed; canonical metadata pins are
+  `9162966902f2e893b7eedc7fb26a7d09d2eb90d4dbe42f208a97f1d38d5305ea` and
+  `62b0b69aead015aa21df70e097ac8184af66572c85b6aa7988bf77789dcbe630`,
+  with every body and semantic metadata fact unchanged.
+  Discovery produced the sole gain and no loss with report SHA-256
+  `e7b9ca57fc3e8dbf9a2326cecf6c551bc6d58b632e00b790bb611c59dc859909`.
+  Marker-removed confirmation held the same 4874 set with report SHA-256
+  `616b87401af356edb31b9d320f17482480a2eb0b10017169d5aa7df87ed972fe`
+  and verdict SHA-256
+  `407a0dfcdb5e99a8915e50566d216960b5f8c95f2277c712cb9b528cfcd3b623`.
+  The preceding gain is `0x100ba7f0 MxDisplaySurface::Create`. Its checked-in
   inclusive-width accessor assignment remains canonical because the direct
   logic-equivalent source form perturbs six other function bodies. A
   donor-private `inclusive_extent_assignment_v1` rendering computes a typed

@@ -540,8 +540,14 @@ then delegates the finished hybrid to the unchanged same-slot resize path:
    pinned; section seats and body lengths need not be equal.
 3. Every transfer is a sorted, non-overlapping, equal-width complete x86
    instruction at independently declared source and target offsets. Both byte
-   strings and their SHA-256 values are pinned. Any overlap with a relocation
-   operand in either object is refused.
+   strings and their SHA-256 values are pinned. The live composer binds each
+   COFF line-table sentinel to the unique exact target definition, selects the
+   nearest non-sentinel compiler line row at or before the range, and decodes
+   continuously through both endpoints in both objects. The isolated range
+   must also be exactly one instruction in the closed IA-32 grammar. Thus a
+   byte string that happens to decode in isolation but starts inside another
+   instruction is refused. Any overlap with a relocation operand in either
+   object is refused.
 4. The internal hybrid changes only the declared target-donor instruction
    bytes. It retains the target donor's relocations, line/debug/FPO data,
    closure and non-target bytes. Same-slot resize then installs that hybrid
@@ -682,3 +688,86 @@ The composed object retains the seed's 57-row line table, complete
 only an instruction source. A marker-removed forced-fresh confirmation raised
 LEGO1 from 4872/4934 to 4873/4934 with exactly this gain and zero losses; ISLE
 remains 172/172 and CONFIG 111/111.
+
+## 13. Class H — `retail_exact_source_instruction_hybrid_resize`
+
+This class is the source-aware same-translation-unit counterpart to Class G.
+It admits a donor-private typed source permutation only as an instruction
+source, constructs a same-length hybrid over an ordinary carrier donor, then
+passes that hybrid to the unchanged same-slot resize composer:
+
+1. The source permutation must inverse-render the checked-in input bytes and
+   render its output from a closed typed generator. It must replay every
+   canonical operation on the owning translation unit exactly. The shipped
+   source overlay explicitly rejects the generator, so the alternate spelling
+   can never become the ordinary linked source by schema accident.
+2. Raw-manifest preflight inventories source-permutation recipe IDs from the
+   donor recipes themselves, before host-dependent checks. Each recipe must
+   have exactly one authenticated binding and exactly one use in the role that
+   binding declares. An instruction donor may not also be a primary donor,
+   variant or unbound secondary donor; an entirely unbound recipe is fatal.
+3. Seed, carrier donor and instruction donor independently pin body and
+   metadata hashes, section seat/count, relocation/line counts, full
+   function/primary-COMDAT censuses and exact associative closure. The two
+   donors define the same mangled primary COMDAT. Both donor objects are
+   excluded, and the output retains the seed's complete non-target object.
+4. Each transfer is one supported complete IA-32 instruction, not a
+   manifest-attested width. The shared decoder handles only the opcodes
+   traversed by accepted Class G/H objects—`0x33`, `0x39`, `0x3b`, `0x75`,
+   `0x76`, `0x80`, `0x83`, `0x89`, `0x8a`, `0x8b`, `0xff`, `0x46` and
+   `0x47`—with deterministic ModRM, SIB, displacement and immediate widths.
+   `0xb8`--`0xbf` exists solely to exercise the adversarial immediate-move
+   regression. In both fresh objects, decoding
+   begins at the nearest validated compiler line row and must place both range
+   endpoints on boundaries. The regression `b8 83 c0 04 00` therefore rejects
+   the apparently valid isolated `83 c0 04` subrange.
+5. The hybrid keeps the carrier donor's complete metadata/closure and changes
+   only the declared instruction bytes. The existing resize composer installs
+   that hybrid into the canonical seed while preserving every seed non-target
+   byte. A complete ordered semantic-relocation oracle binds all relocations to
+   the owning target's unique pinned retail image.
+
+The first customer is `0x10069b10 LegoAnimPresenter::BuildROIMap`. The checked-
+in discarded postfix increment remains canonical because the direct prefix
+form changes 40 shared bodies and emits an extra COMDAT. The closed
+`discarded_postfix_increment_v1` generator replaces exactly `it++;` with
+`++it;`; a compiler-state carrier is declaration-only. Its semantic witness
+binds the unique loop local to `LegoAnimStructMap::iterator`, proves the full
+project/header chain into the sealed VC4.2 `map`, `xtree`, iterator, utility and
+memory definitions, and pins both overloads. Prefix performs exactly `_Inc()`;
+postfix copies the iterator, invokes prefix once and discards the result. The
+iterator has only one raw node-pointer member, empty iterator bases and no
+user-defined copy, assignment or destructor effect, so the discarded
+temporary adds no observable state.
+
+The canonical pre-row seed is 622 bytes. The ordinary `pad_shape(92,22)`
+carrier donor and the typed source donor are both 617 bytes, with body hashes
+`1c38ac46a87c57b508c7f242095c8dd73d2a77e14accf3360844a115fc123dad`
+and
+`364432067111842fc7913ceab0a82c61f377a99f2348b4da834f87df12b50a2c`.
+Eleven complete same-offset ranges are imported at 303--304, 344--345,
+355--356, 366--369, 378--380, 416--418, 419, 426--427, 447--449, 532--534
+and 538--540. The adjacent 416--419 and 419--420 ranges remain separate
+three-byte and one-byte instructions. The hybrid body SHA-256 is
+`43e4ef651a4d79561d766737b64ff6597055163640bd6bd3484f2df8979d0373`;
+all 23 relocations are retail authenticated, while the carrier donor's
+25-row line table and `.debug$S`/`.xdata$x` closure remain authoritative.
+
+The packet objects were evidence only. Their longer scratch build-root name
+made VC4.2 allocate 28 extra `.file` auxiliary symbol records. Canonical fresh
+objects had identical bodies, source basenames, source/header renderings,
+semantic line rows, semantic primary/child relocations, closure and complete
+function bodies, but shifted raw symbol indices. Only the runner-authentic
+metadata pins changed, to `9162966902f2e893b7eedc7fb26a7d09d2eb90d4dbe42f208a97f1d38d5305ea`
+for the carrier and
+`62b0b69aead015aa21df70e097ac8184af66572c85b6aa7988bf77789dcbe630`
+for the source donor.
+
+Discovery raised LEGO1 from 4873/4934 to 4874/4934 with the sole gain at this
+address and no loss; its report SHA-256 is
+`e7b9ca57fc3e8dbf9a2326cecf6c551bc6d58b632e00b790bb611c59dc859909`.
+A marker-removed forced-fresh confirmation held 4874/4934 with zero delta;
+ISLE remained 172/172 and CONFIG 111/111. Its report SHA-256 is
+`616b87401af356edb31b9d320f17482480a2eb0b10017169d5aa7df87ed972fe`
+and verdict SHA-256 is
+`407a0dfcdb5e99a8915e50566d216960b5f8c95f2277c712cb9b528cfcd3b623`.

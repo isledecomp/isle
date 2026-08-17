@@ -236,6 +236,8 @@ SOURCE_OVERLAY_LEAN_KINDS = {
     "capture_tail": "captured_pointer_tail_return_fragment_v1",
     "fixed_array_fill": "fixed_array_fill_loop_v1",
     "inclusive_extent": "inclusive_extent_assignment_v1",
+    "discarded_increment": "discarded_postfix_increment_v1",
+    "extern_run": "extern_declaration_run_v1",
 }
 
 
@@ -331,6 +333,12 @@ SOURCE_OVERLAY_KIND_POLICIES = {
     ),
     "inclusive_extent_assignment_v1": (
         "logic_equivalent_source_refactor", "inclusive_extent_assignment",
+    ),
+    "discarded_postfix_increment_v1": (
+        "logic_equivalent_source_refactor", "discarded_iterator_increment",
+    ),
+    "extern_declaration_run_v1": (
+        "non_emitting_declaration", "extern_identifier_run",
     ),
     "list_cursor_delete_emission_probe_v1": (
         "discarded_emission_probe", "list_cursor_delete_emission"
@@ -1236,6 +1244,188 @@ def validate_inclusive_extent_semantic_witness(
     return normalized
 
 
+def validate_discarded_increment_semantic_witness(
+    value: object, context: str,
+) -> dict:
+    """Validate the complete type/include proof for a discarded increment.
+
+    This schema deliberately carries declarations and include edges, never a
+    prose assertion that two overloads are equivalent.  The corresponding
+    identity check selects the iterator typedef and the exact prefix/postfix
+    implementations from the sealed compiler include tree.
+    """
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "iterator_identifier", "source_alias", "source_alias_arguments",
+        "iterator_member", "map_template", "tree_template",
+        "increment_helper", "iterator_base", "iterator_category_base",
+        "iterator_category_tag", "node_pointer_type",
+        "node_pointer_member", "source_alias_header",
+        "source_include_chain", "map_header", "tree_header",
+        "iterator_header", "utility_header", "memory_header",
+        "xmemory_header",
+        "loop_declaration_range_pin",
+    }, context)
+    identifiers = {
+        name: _source_overlay_identifier(value.get(name), f"{context}.{name}")
+        for name in (
+            "iterator_identifier", "source_alias", "iterator_member",
+            "map_template", "tree_template", "increment_helper",
+            "iterator_base", "iterator_category_base",
+            "iterator_category_tag", "node_pointer_type",
+            "node_pointer_member",
+        )
+    }
+    require(
+        identifiers["iterator_base"] == "_Bidit"
+        and identifiers["iterator_category_base"] == "iterator"
+        and identifiers["iterator_category_tag"]
+        == "bidirectional_iterator_tag"
+        and identifiers["node_pointer_type"] == "_Nodeptr"
+        and identifiers["node_pointer_member"] == "_Ptr",
+        f"{context}: sealed iterator state identities differ",
+    )
+    raw_arguments = value.get("source_alias_arguments")
+    require(isinstance(raw_arguments, list)
+            and 1 <= len(raw_arguments) <= 8,
+            f"{context}.source_alias_arguments differs")
+    arguments = [
+        validate_source_overlay_cpp_type(
+            item, f"{context}.source_alias_arguments[{index}]"
+        ) for index, item in enumerate(raw_arguments)
+    ]
+
+    alias = value.get("source_alias_header")
+    alias_context = context + ".source_alias_header"
+    require(isinstance(alias, dict), f"{alias_context} must be an object")
+    exact_audit_keys(alias, {
+        "path", "source_sha256", "unit_include_range_pin",
+        "alias_range_pin",
+    }, alias_context)
+    normalized_alias = {
+        "path": source_overlay_relative_path(
+            alias.get("path"), alias_context + ".path"),
+        "source_sha256": require_sha(
+            alias.get("source_sha256"), alias_context + ".source_sha256"),
+        "unit_include_range_pin": validate_source_overlay_range_pin(
+            alias.get("unit_include_range_pin"),
+            alias_context + ".unit_include_range_pin"),
+        "alias_range_pin": validate_source_overlay_range_pin(
+            alias.get("alias_range_pin"),
+            alias_context + ".alias_range_pin"),
+    }
+
+    raw_chain = value.get("source_include_chain")
+    require(isinstance(raw_chain, list) and 1 <= len(raw_chain) <= 16,
+            f"{context}.source_include_chain differs")
+    chain = []
+    for index, item in enumerate(raw_chain):
+        item_context = f"{context}.source_include_chain[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "including_path", "including_sha256", "included_path",
+            "included_sha256", "include_range_pin",
+        }, item_context)
+        chain.append({
+            "including_path": source_overlay_relative_path(
+                item.get("including_path"), item_context + ".including_path"),
+            "including_sha256": require_sha(
+                item.get("including_sha256"),
+                item_context + ".including_sha256"),
+            "included_path": source_overlay_relative_path(
+                item.get("included_path"), item_context + ".included_path"),
+            "included_sha256": require_sha(
+                item.get("included_sha256"),
+                item_context + ".included_sha256"),
+            "include_range_pin": validate_source_overlay_range_pin(
+                item.get("include_range_pin"),
+                item_context + ".include_range_pin"),
+        })
+    require(chain[0]["including_path"] == normalized_alias["path"],
+            f"{context}: source include chain does not start at the alias "
+            "header")
+    require(all(
+        left["included_path"] == right["including_path"]
+        and left["included_sha256"] == right["including_sha256"]
+        for left, right in zip(chain, chain[1:])
+    ), f"{context}: source include chain is discontinuous")
+    require(len({item["including_path"] for item in chain}) == len(chain)
+            and normalized_alias["path"] not in {
+                item["included_path"] for item in chain
+            }, f"{context}: source include chain contains a cycle")
+
+    toolchain_specs = {}
+    spec_keys = {
+        "map_header": {
+            "tree_role", "path", "source_sha256",
+            "repository_include_range_pin", "tree_include_range_pin",
+            "implementation_alias_range_pin", "iterator_alias_range_pin",
+        },
+        "tree_header": {
+            "tree_role", "path", "source_sha256",
+            "iterator_include_range_pin", "memory_include_range_pin",
+            "node_pointer_alias_range_pin", "iterator_class_range_pin",
+            "increment_range_pin",
+        },
+        "iterator_header": {
+            "tree_role", "path", "source_sha256",
+            "utility_include_range_pin",
+        },
+        "utility_header": {
+            "tree_role", "path", "source_sha256",
+            "category_base_range_pin", "bidirectional_base_range_pin",
+        },
+        "memory_header": {
+            "tree_role", "path", "source_sha256",
+            "xmemory_include_range_pin",
+        },
+        "xmemory_header": {
+            "tree_role", "path", "source_sha256",
+            "pointer_macro_range_pin",
+        },
+    }
+    for name, keys in spec_keys.items():
+        item_context = f"{context}.{name}"
+        item = value.get(name)
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, keys, item_context)
+        path = canonical_source_relative_path(
+            item.get("path"), item_context + ".path")
+        normalized_item = {
+            "tree_role": item.get("tree_role"),
+            "path": path,
+            "source_sha256": require_sha(
+                item.get("source_sha256"), item_context + ".source_sha256"),
+        }
+        require(item.get("tree_role") == "msvc_include",
+                f"{item_context}.tree_role differs")
+        for key in keys - {"tree_role", "path", "source_sha256"}:
+            normalized_item[key] = validate_source_overlay_range_pin(
+                item.get(key), f"{item_context}.{key}")
+        toolchain_specs[name] = normalized_item
+    require(toolchain_specs["map_header"]["path"].casefold() == "map"
+            and toolchain_specs["tree_header"]["path"].casefold() == "xtree"
+            and toolchain_specs["iterator_header"]["path"].casefold()
+            == "iterator"
+            and toolchain_specs["utility_header"]["path"].casefold()
+            == "utility"
+            and toolchain_specs["memory_header"]["path"].casefold()
+            == "memory"
+            and toolchain_specs["xmemory_header"]["path"].casefold()
+            == "xmemory",
+            f"{context}: iterator toolchain header identities differ")
+    return {
+        **identifiers,
+        "source_alias_arguments": arguments,
+        "source_alias_header": normalized_alias,
+        "source_include_chain": chain,
+        **toolchain_specs,
+        "loop_declaration_range_pin": validate_source_overlay_range_pin(
+            value.get("loop_declaration_range_pin"),
+            context + ".loop_declaration_range_pin"),
+    }
+
+
 def require_target_source_range_identity(
     seed_source: bytes, donor_source: bytes, proof: dict, context: str,
 ) -> dict:
@@ -1287,6 +1477,7 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         "captured_pointer_tail_return_v1",
         "fixed_array_fill_loop_v1",
         "inclusive_extent_assignment_v1",
+        "discarded_postfix_increment_v1",
     }:
         required_keys = {
             "kind", "selector", "start_marker", "source_owner_mangled",
@@ -1295,6 +1486,8 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         if kind == "fixed_array_fill_loop_v1":
             required_keys.add("array_declaration")
         if kind == "inclusive_extent_assignment_v1":
+            required_keys.add("semantic_witness")
+        if kind == "discarded_postfix_increment_v1":
             required_keys.add("semantic_witness")
         exact_audit_keys(value, required_keys, context)
         require(value.get("selector")
@@ -1340,6 +1533,10 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         require(len(operation_ids) == 1,
                 f"{context}.operation_ids must name one inclusive-extent "
                 "replacement")
+    if kind == "discarded_postfix_increment_v1":
+        require(len(operation_ids) == 1,
+                f"{context}.operation_ids must name one discarded-increment "
+                "replacement")
     normalized = {
         "kind": kind,
         **markers,
@@ -1356,6 +1553,7 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         "captured_pointer_tail_return_v1",
         "fixed_array_fill_loop_v1",
         "inclusive_extent_assignment_v1",
+        "discarded_postfix_increment_v1",
     }:
         normalized.update({
             "selector": value["selector"],
@@ -1371,6 +1569,13 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
     if kind == "inclusive_extent_assignment_v1":
         normalized["semantic_witness"] = (
             validate_inclusive_extent_semantic_witness(
+                value.get("semantic_witness"),
+                context + ".semantic_witness",
+            )
+        )
+    if kind == "discarded_postfix_increment_v1":
+        normalized["semantic_witness"] = (
+            validate_discarded_increment_semantic_witness(
                 value.get("semantic_witness"),
                 context + ".semantic_witness",
             )
@@ -1399,6 +1604,7 @@ def select_source_permutation_window(
                 "captured_pointer_tail_return_v1",
                 "fixed_array_fill_loop_v1",
                 "inclusive_extent_assignment_v1",
+                "discarded_postfix_increment_v1",
             }
             and proof["selector"]
             == "brace_balanced_function_after_marker_v1",
@@ -1454,6 +1660,7 @@ def require_target_source_refactor_identity(
 TARGET_REFACTOR_ENTROPY_GENERATOR_KINDS = frozenset({
     "composed_typed_sequence_v1",
     "declaration_sequence_v1",
+    "extern_declaration_run_v1",
     "line_reservation_v1",
 })
 
@@ -1589,6 +1796,20 @@ def render_inclusive_extent_assignment_output(params: dict) -> bytes:
         f'{indent}}}\n'
         '#endif\n'
         f'{indent}{destination} = {identifier};\n'
+    ).encode("ascii")
+
+
+def render_discarded_postfix_increment_input(params: dict) -> bytes:
+    """Reconstruct one standalone postfix increment with discarded result."""
+    return (
+        f'{params["declaration_indent"]}{params["identifier"]}++;\n'
+    ).encode("ascii")
+
+
+def render_discarded_postfix_increment_output(params: dict) -> bytes:
+    """Render the same standalone state transition through prefix increment."""
+    return (
+        f'{params["declaration_indent"]}++{params["identifier"]};\n'
     ).encode("ascii")
 
 
@@ -2005,11 +2226,20 @@ def _require_unique_quoted_include_edge(
     require(candidates == [included_path],
             f"{context}: included header is not the unique checked-in "
             "basename")
-    wanted = ["#", "include", f'"{basename}"']
-    lines = [
-        line for line in including_data.splitlines(keepends=True)
-        if [token for token, _, _ in source_overlay_tokens(line)] == wanted
-    ]
+    included_relative = included_path.relative_to(source_root)
+    lines = []
+    for line in including_data.splitlines(keepends=True):
+        tokens = [token for token, _, _ in source_overlay_tokens(line)]
+        if len(tokens) != 3 or tokens[:2] != ["#", "include"]:
+            continue
+        quoted = tokens[2]
+        if not (len(quoted) >= 3 and quoted[0] == quoted[-1] == '"'):
+            continue
+        spelling = PurePosixPath(quoted[1:-1])
+        if (spelling.parts
+                and included_relative.parts[-len(spelling.parts):]
+                == spelling.parts):
+            lines.append(line)
     require(len(lines) == 1,
             f"{context}: include edge is absent or ambiguous")
     detail = require_source_overlay_range_pin(
@@ -2275,6 +2505,550 @@ def require_inclusive_extent_semantic_identity(
     }
 
 
+def _read_pinned_toolchain_semantic_source(
+    compiler_root: Path, sealed_include_trees: list[dict], spec: dict,
+    context: str,
+) -> tuple[Path, bytes]:
+    """Read one exact regular header below a sealed compiler include root."""
+    require(isinstance(sealed_include_trees, list),
+            f"{context}: sealed include-tree census is missing")
+    matches = [
+        item for item in sealed_include_trees
+        if isinstance(item, dict) and item.get("role") == spec["tree_role"]
+    ]
+    require(len(matches) == 1,
+            f"{context}: compiler include-tree role is absent or ambiguous")
+    tree = matches[0]
+    root = Path(compiler_root).resolve(strict=True) / tree["path"]
+    require(root.is_dir() and not root.is_symlink(),
+            f"{context}: compiler include root is redirected")
+    path = source_overlay_logical_path(root, spec["path"])
+    try:
+        metadata = path.lstat()
+        resolved = path.resolve(strict=True)
+    except OSError as error:
+        raise ByteIdentityError(
+            f"{context}: compiler semantic header is absent or redirected: "
+            f"{error}"
+        ) from error
+    require(stat.S_ISREG(metadata.st_mode) and not path.is_symlink()
+            and resolved == path and resolved.is_relative_to(root),
+            f"{context}: compiler semantic header is redirected or "
+            "non-regular")
+    data = path.read_bytes()
+    require(sha256_bytes(data) == spec["source_sha256"],
+            f"{context}: compiler semantic header differs from its pin")
+    return path, data
+
+
+def _require_unique_angle_include(
+    data: bytes, spelling: str, pin: dict, context: str,
+) -> dict:
+    """Authenticate one exact angle-bracket include spelling and line."""
+    require(isinstance(spelling, str) and spelling.isascii()
+            and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_.]*", spelling),
+            f"{context}: include spelling is invalid")
+    wanted = ["#", "include", "<", spelling, ">"]
+    lines = [
+        line for line in data.splitlines(keepends=True)
+        if [token for token, _, _ in source_overlay_tokens(line)] == wanted
+    ]
+    require(len(lines) == 1,
+            f"{context}: angle include edge is absent or ambiguous")
+    return require_source_overlay_range_pin(
+        lines[0], pin, context + " include line")
+
+
+def _unique_nested_class_body(
+    tokens: list[tuple[str, int, int]], outer_open: int, outer_close: int,
+    identifier: str, context: str,
+) -> tuple[int, int, int]:
+    """Select one directly nested class definition by exact identifier."""
+    candidates = []
+    depth = 1
+    for index in range(outer_open + 1, outer_close):
+        token = tokens[index][0]
+        if (depth == 1 and token == "class"
+                and index + 2 < outer_close
+                and tokens[index + 1][0] == identifier):
+            opening = next(
+                (cursor for cursor in range(index + 2, outer_close)
+                 if tokens[cursor][0] in {"{", ";"}),
+                None,
+            )
+            if opening is not None and tokens[opening][0] == "{":
+                nested_depth = 1
+                closing = None
+                for cursor in range(opening + 1, outer_close):
+                    if tokens[cursor][0] == "{":
+                        nested_depth += 1
+                    elif tokens[cursor][0] == "}":
+                        nested_depth -= 1
+                        if nested_depth == 0:
+                            closing = cursor
+                            break
+                require(closing is not None,
+                        f"{context}: nested class is unbalanced")
+                candidates.append((index, opening, closing))
+        if token == "{":
+            depth += 1
+        elif token == "}":
+            depth -= 1
+    require(len(candidates) == 1,
+            f"{context}: nested class is absent or ambiguous")
+    return candidates[0]
+
+
+def _physical_source_range_for_tokens(
+    data: bytes, tokens: list[tuple[str, int, int]], start: int, close: int,
+    context: str,
+) -> tuple[int, int]:
+    """Expand a class token span through its required `;` and full lines."""
+    require(close + 1 < len(tokens) and tokens[close + 1][0] == ";",
+            f"{context}: class definition lacks its terminator")
+    begin = data.rfind(b"\n", 0, tokens[start][1]) + 1
+    newline = data.find(b"\n", tokens[close + 1][2])
+    end = len(data) if newline < 0 else newline + 1
+    return begin, end
+
+
+def _direct_class_scope_tokens(
+    tokens: list[tuple[str, int, int]], opening: int, closing: int,
+) -> list[str]:
+    """Project tokens at direct class scope, excluding all method bodies."""
+    result = []
+    depth = 1
+    for index in range(opening + 1, closing):
+        token = tokens[index][0]
+        if depth == 1:
+            result.append(token)
+        if token == "{":
+            depth += 1
+        elif token == "}":
+            depth -= 1
+    return result
+
+
+def require_discarded_increment_semantic_identity(
+    root, unit_source: str, unit_data: bytes, target_source: bytes,
+    proof: dict, params: dict, context: str, *, compiler_root,
+    sealed_include_trees: list[dict],
+) -> dict:
+    """Prove a discarded postfix increment has the prefix state effect.
+
+    The source declaration binds the local through the project alias, the
+    repository include chain binds that alias to the sealed compiler MAP and
+    XTREE headers, and the nested iterator methods prove both forms perform
+    exactly one prefix/_Inc transition.  Absence of a user copy/destructor
+    closes observable temporary-copy effects in the discarded postfix form.
+    """
+    witness = proof["semantic_witness"]
+    require(params["identifier"] == witness["iterator_identifier"],
+            f"{context}: increment identifier differs from its witness")
+    source_root = Path(root).resolve(strict=True)
+    alias_spec = witness["source_alias_header"]
+    alias_path, alias_data = _read_pinned_semantic_source(
+        source_root, alias_spec, context + " source alias header")
+    require(alias_spec["source_sha256"]
+            == witness["source_include_chain"][0]["including_sha256"],
+            f"{context}: alias header and include-chain pins differ")
+    include_details = [_require_unique_quoted_include_edge(
+        source_root, unit_source, unit_data, alias_path,
+        alias_spec["unit_include_range_pin"], context + " unit-to-alias")]
+
+    last_path = alias_path
+    last_data = alias_data
+    for index, edge in enumerate(witness["source_include_chain"]):
+        edge_context = f"{context} source include edge[{index}]"
+        including_spec = {
+            "path": edge["including_path"],
+            "source_sha256": edge["including_sha256"],
+        }
+        included_spec = {
+            "path": edge["included_path"],
+            "source_sha256": edge["included_sha256"],
+        }
+        including_path, including_data = _read_pinned_semantic_source(
+            source_root, including_spec, edge_context + " owner")
+        included_path, included_data = _read_pinned_semantic_source(
+            source_root, included_spec, edge_context + " target")
+        include_details.append(_require_unique_quoted_include_edge(
+            source_root, edge["including_path"], including_data,
+            included_path, edge["include_range_pin"], edge_context))
+        last_path, last_data = included_path, included_data
+
+    alias_tokens = _semantic_significant_tokens(alias_data)
+    argument_tokens = []
+    for index, argument in enumerate(witness["source_alias_arguments"]):
+        if index:
+            argument_tokens.append(",")
+        argument_tokens.extend(
+            item[0] for item in _semantic_significant_tokens(
+                render_source_overlay_cpp_type(argument).encode("ascii"))
+        )
+    alias_wanted = [
+        "typedef", witness["map_template"], "<", *argument_tokens, ">",
+        witness["source_alias"], ";",
+    ]
+    alias_matches = []
+    for index in range(len(alias_tokens) - len(alias_wanted) + 1):
+        if [item[0] for item in
+                alias_tokens[index:index + len(alias_wanted)]] == alias_wanted:
+            alias_matches.append((
+                alias_tokens[index][1],
+                alias_tokens[index + len(alias_wanted) - 1][2],
+            ))
+    require(len(alias_matches) == 1,
+            f"{context}: iterator source alias is absent or ambiguous")
+    alias_detail = _pinned_source_line(
+        alias_data, alias_matches[0], alias_spec["alias_range_pin"],
+        context + " source alias")
+
+    target_tokens = _semantic_significant_tokens(target_source)
+    declaration_wanted = [
+        "for", "(", witness["source_alias"], "::",
+        witness["iterator_member"], witness["iterator_identifier"], "=",
+    ]
+    declarations = []
+    for index in range(len(target_tokens) - len(declaration_wanted) + 1):
+        if [item[0] for item in target_tokens[
+                index:index + len(declaration_wanted)]] == declaration_wanted:
+            declarations.append(index)
+    require(len(declarations) == 1,
+            f"{context}: iterator loop declaration is absent or ambiguous")
+    declaration_index = declarations[0]
+    declaration_identifier_index = (
+        declaration_index + declaration_wanted.index(
+            witness["iterator_identifier"])
+    )
+    opening = next(
+        (index for index in range(declaration_index, len(target_tokens))
+         if target_tokens[index][0] == "{"), None)
+    require(opening is not None,
+            f"{context}: iterator loop body is missing")
+    depth = 1
+    closing = None
+    for index in range(opening + 1, len(target_tokens)):
+        if target_tokens[index][0] == "{":
+            depth += 1
+        elif target_tokens[index][0] == "}":
+            depth -= 1
+            if depth == 0:
+                closing = index
+                break
+    require(closing is not None,
+            f"{context}: iterator loop body is unbalanced")
+    uses = [
+        index for index, item in enumerate(target_tokens)
+        if item[0] == witness["iterator_identifier"]
+    ]
+    require(len(uses) >= 4
+            and all(declaration_index <= index <= closing for index in uses),
+            f"{context}: iterator is shadowed or escapes its declared loop")
+    increment_input = render_discarded_postfix_increment_input(params)
+    increment_seats = [
+        index for index in range(len(target_source))
+        if target_source.startswith(increment_input, index)
+    ]
+    require(len(increment_seats) == 1,
+            f"{context}: discarded increment seat is absent or ambiguous")
+    postfix_uses = [
+        index for index in uses
+        if index + 1 < len(target_tokens)
+        and target_tokens[index + 1][0] == "++"
+    ]
+    require(
+        len(postfix_uses) == 1
+        and opening < postfix_uses[0] < closing
+        and target_tokens[postfix_uses[0]][1]
+        == increment_seats[0] + len(
+            params["declaration_indent"].encode("ascii")),
+        f"{context}: discarded increment is not the bound loop iterator",
+    )
+    for index in uses:
+        if index in {declaration_identifier_index, postfix_uses[0]}:
+            continue
+        before = target_tokens[index - 1][0] if index else None
+        after = (target_tokens[index + 1][0]
+                 if index + 1 < len(target_tokens) else None)
+        require(
+            (before == "*" and after == ")")
+            or after in {"!=", "==", "->"}
+            or before in {"!=", "=="},
+            f"{context}: iterator has an unbound use or shadow declaration",
+        )
+    declaration_detail = _pinned_source_line(
+        target_source,
+        (target_tokens[declaration_index][1],
+         target_tokens[declaration_index + len(declaration_wanted) - 1][2]),
+        witness["loop_declaration_range_pin"],
+        context + " iterator loop declaration")
+
+    map_spec = witness["map_header"]
+    tree_spec = witness["tree_header"]
+    iterator_spec = witness["iterator_header"]
+    utility_spec = witness["utility_header"]
+    memory_spec = witness["memory_header"]
+    xmemory_spec = witness["xmemory_header"]
+    require(compiler_root is not None,
+            f"{context}: compiler root is unavailable")
+    _, map_data = _read_pinned_toolchain_semantic_source(
+        Path(compiler_root), sealed_include_trees, map_spec,
+        context + " map header")
+    _, tree_data = _read_pinned_toolchain_semantic_source(
+        Path(compiler_root), sealed_include_trees, tree_spec,
+        context + " tree header")
+    _, iterator_data = _read_pinned_toolchain_semantic_source(
+        Path(compiler_root), sealed_include_trees, iterator_spec,
+        context + " iterator header")
+    _, utility_data = _read_pinned_toolchain_semantic_source(
+        Path(compiler_root), sealed_include_trees, utility_spec,
+        context + " utility header")
+    _, memory_data = _read_pinned_toolchain_semantic_source(
+        Path(compiler_root), sealed_include_trees, memory_spec,
+        context + " memory header")
+    _, xmemory_data = _read_pinned_toolchain_semantic_source(
+        Path(compiler_root), sealed_include_trees, xmemory_spec,
+        context + " xmemory header")
+    repository_map_include = _require_unique_angle_include(
+        last_data, map_spec["path"].casefold(),
+        map_spec["repository_include_range_pin"],
+        context + " repository-to-map")
+    map_tree_include = _require_unique_angle_include(
+        map_data, tree_spec["path"].casefold(),
+        map_spec["tree_include_range_pin"], context + " map-to-tree")
+    tree_iterator_include = _require_unique_angle_include(
+        tree_data, iterator_spec["path"].casefold(),
+        tree_spec["iterator_include_range_pin"],
+        context + " tree-to-iterator")
+    tree_memory_include = _require_unique_angle_include(
+        tree_data, memory_spec["path"].casefold(),
+        tree_spec["memory_include_range_pin"],
+        context + " tree-to-memory")
+    iterator_utility_include = _require_unique_angle_include(
+        iterator_data, utility_spec["path"].casefold(),
+        iterator_spec["utility_include_range_pin"],
+        context + " iterator-to-utility")
+    memory_xmemory_include = _require_unique_angle_include(
+        memory_data, xmemory_spec["path"].casefold(),
+        memory_spec["xmemory_include_range_pin"],
+        context + " memory-to-xmemory")
+
+    map_tokens = _semantic_significant_tokens(map_data)
+    _, map_open, map_close = _unique_class_body(
+        map_tokens, witness["map_template"], context + " map template")
+    implementation_range = _unique_class_level_token_range(
+        map_tokens, map_open, map_close,
+        ["typedef", witness["tree_template"], "<", "_K", ",",
+         "value_type", ",", "_Kfn", ",", "_Pr", ",", "_A", ">",
+         "_Imp", ";"],
+        context + " map implementation alias")
+    iterator_range = _unique_class_level_token_range(
+        map_tokens, map_open, map_close,
+        ["typedef", "_Imp", "::", witness["iterator_member"],
+         witness["iterator_member"], ";"],
+        context + " map iterator alias")
+    map_details = [
+        _pinned_source_line(
+            map_data, implementation_range,
+            map_spec["implementation_alias_range_pin"],
+            context + " map implementation alias"),
+        _pinned_source_line(
+            map_data, iterator_range, map_spec["iterator_alias_range_pin"],
+            context + " map iterator alias"),
+    ]
+
+    tree_tokens = _semantic_significant_tokens(tree_data)
+    _, tree_open, tree_close = _unique_class_body(
+        tree_tokens, witness["tree_template"], context + " tree template")
+    node_pointer_range = _unique_class_level_token_range(
+        tree_tokens, tree_open, tree_close,
+        ["typedef", "_POINTER_X", "(", "_Node", ",", "_A", ")",
+         witness["node_pointer_type"], ";"],
+        context + " node pointer alias")
+    node_pointer_detail = _pinned_source_line(
+        tree_data, node_pointer_range,
+        tree_spec["node_pointer_alias_range_pin"],
+        context + " node pointer alias")
+    iterator_index, iterator_open, iterator_close = _unique_nested_class_body(
+        tree_tokens, tree_open, tree_close, witness["iterator_member"],
+        context + " tree iterator")
+    expected_inheritance = [
+        "class", witness["iterator_member"], ":", "public",
+        witness["iterator_base"], "<", "_TYPE", ",",
+        "difference_type", ">", "{",
+    ]
+    require(
+        [item[0] for item in tree_tokens[
+            iterator_index:iterator_open + 1]] == expected_inheritance,
+        f"{context}: iterator inheritance differs",
+    )
+    iterator_physical_range = _physical_source_range_for_tokens(
+        tree_data, tree_tokens, iterator_index, iterator_close,
+        context + " tree iterator")
+    iterator_class_detail = require_source_overlay_range_pin(
+        tree_data[iterator_physical_range[0]:iterator_physical_range[1]],
+        tree_spec["iterator_class_range_pin"],
+        context + " iterator class range",
+    )
+    prefix_range = _unique_class_level_token_range(
+        tree_tokens, iterator_open, iterator_close,
+        [witness["iterator_member"], "&", "operator", "++", "(", ")",
+         "{", witness["increment_helper"], "(", ")", ";", "return",
+         "(", "*", "this", ")", ";", "}"],
+        context + " prefix increment")
+    postfix_range = _unique_class_level_token_range(
+        tree_tokens, iterator_open, iterator_close,
+        [witness["iterator_member"], "operator", "++", "(", "int", ")",
+         "{", witness["iterator_member"], "_Tmp", "=", "*", "this", ";",
+         "++", "*", "this", ";", "return", "(", "_Tmp", ")", ";",
+         "}"],
+        context + " postfix increment")
+    require(prefix_range[0] < postfix_range[0],
+            f"{context}: iterator increment overload order differs")
+    line_start = tree_data.rfind(b"\n", 0, prefix_range[0]) + 1
+    newline = tree_data.find(b"\n", postfix_range[1])
+    line_end = len(tree_data) if newline < 0 else newline + 1
+    increment_detail = require_source_overlay_range_pin(
+        tree_data[line_start:line_end], tree_spec["increment_range_pin"],
+        context + " increment overload range")
+
+    class_scope = _direct_class_scope_tokens(
+        tree_tokens, iterator_open, iterator_close)
+    constructor_parameters = []
+    for index in range(len(class_scope) - 1):
+        if class_scope[index:index + 2] != [
+                witness["iterator_member"], "("]:
+            continue
+        closing_parenthesis = next(
+            (cursor for cursor in range(index + 2, len(class_scope))
+             if class_scope[cursor] in {")", "{", ";"}), None)
+        require(closing_parenthesis is not None
+                and class_scope[closing_parenthesis] == ")",
+                f"{context}: iterator constructor declaration is malformed")
+        constructor_parameters.append(
+            class_scope[index + 2:closing_parenthesis])
+    state_declaration = [
+        witness["node_pointer_type"], witness["node_pointer_member"], ";",
+    ]
+    state_matches = sum(
+        class_scope[index:index + len(state_declaration)]
+        == state_declaration
+        for index in range(len(class_scope) - len(state_declaration) + 1)
+    )
+    require("~" not in class_scope
+            and not any(
+                class_scope[index:index + 2] == ["operator", "="]
+                for index in range(len(class_scope) - 1)
+            )
+            and constructor_parameters == [
+                [], [witness["node_pointer_type"], "_P"]],
+            f"{context}: iterator temporary has a user-defined copy, "
+            "assignment, or destructor effect")
+    require(state_matches == 1 and class_scope.count(";") == 1,
+            f"{context}: iterator has state beyond its sole node pointer")
+
+    utility_tokens = _semantic_significant_tokens(utility_data)
+    category_index, category_open, category_close = _unique_class_body(
+        utility_tokens, witness["iterator_category_base"],
+        context + " iterator category base")
+    category_prefix = [
+        "template", "<", "class", "_C", ",", "class", "_TYPE", ",",
+        "class", "_D", ">", "struct",
+        witness["iterator_category_base"], "{",
+    ]
+    category_prefix_start = category_index - category_prefix.index("struct")
+    require(category_prefix_start >= 0
+            and [item[0] for item in utility_tokens[
+                category_prefix_start:category_open + 1]] == category_prefix
+            and [item[0] for item in utility_tokens[
+                category_open + 1:category_close]] == [
+                    "typedef", "_C", "iterator_category", ";",
+                    "typedef", "_TYPE", "value_type", ";",
+                    "typedef", "_D", "distance_type", ";",
+                ],
+            f"{context}: iterator category base carries nontrivial state")
+    category_physical = _physical_source_range_for_tokens(
+        utility_data, utility_tokens, category_prefix_start, category_close,
+        context + " iterator category base")
+    category_detail = require_source_overlay_range_pin(
+        utility_data[category_physical[0]:category_physical[1]],
+        utility_spec["category_base_range_pin"],
+        context + " iterator category base range")
+
+    bidit_index, bidit_open, bidit_close = _unique_class_body(
+        utility_tokens, witness["iterator_base"],
+        context + " bidirectional iterator base")
+    bidit_prefix = [
+        "template", "<", "class", "_TYPE", ",", "class", "_D", ">",
+        "struct", witness["iterator_base"], ":", "public",
+        witness["iterator_category_base"], "<",
+        witness["iterator_category_tag"], ",", "_TYPE", ",", "_D", ">",
+        "{",
+    ]
+    bidit_prefix_start = bidit_index - bidit_prefix.index("struct")
+    require(bidit_prefix_start >= 0
+            and [item[0] for item in utility_tokens[
+                bidit_prefix_start:bidit_open + 1]] == bidit_prefix
+            and bidit_open + 1 == bidit_close,
+            f"{context}: bidirectional iterator base is not empty")
+    bidit_physical = _physical_source_range_for_tokens(
+        utility_data, utility_tokens, bidit_prefix_start, bidit_close,
+        context + " bidirectional iterator base")
+    bidit_detail = require_source_overlay_range_pin(
+        utility_data[bidit_physical[0]:bidit_physical[1]],
+        utility_spec["bidirectional_base_range_pin"],
+        context + " bidirectional iterator base range")
+
+    xmemory_tokens = _semantic_significant_tokens(xmemory_data)
+    pointer_macro_wanted = [
+        "#", "define", "_POINTER_X", "(", "T", ",", "A", ")",
+        "T", "_FARQ", "*",
+    ]
+    pointer_macro_matches = []
+    for index in range(
+            len(xmemory_tokens) - len(pointer_macro_wanted) + 1):
+        if [item[0] for item in xmemory_tokens[
+                index:index + len(pointer_macro_wanted)]] \
+                == pointer_macro_wanted:
+            pointer_macro_matches.append((
+                xmemory_tokens[index][1],
+                xmemory_tokens[index + len(pointer_macro_wanted) - 1][2],
+            ))
+    require(len(pointer_macro_matches) == 1,
+            f"{context}: node pointer macro is absent or ambiguous")
+    pointer_macro_detail = _pinned_source_line(
+        xmemory_data, pointer_macro_matches[0],
+        xmemory_spec["pointer_macro_range_pin"],
+        context + " node pointer macro")
+    return {
+        "discarded_increment_identifier": witness["iterator_identifier"],
+        "discarded_increment_source_alias": witness["source_alias"],
+        "discarded_increment_include_edges": len(include_details) + 6,
+        "discarded_increment_iterator_uses": len(uses),
+        "discarded_increment_witness_sha256": sha256_bytes(
+            canonical_json_bytes({
+                "includes": include_details,
+                "repository_map_include": repository_map_include,
+                "map_tree_include": map_tree_include,
+                "tree_iterator_include": tree_iterator_include,
+                "tree_memory_include": tree_memory_include,
+                "iterator_utility_include": iterator_utility_include,
+                "memory_xmemory_include": memory_xmemory_include,
+                "alias": alias_detail,
+                "declaration": declaration_detail,
+                "map": map_details,
+                "increment": increment_detail,
+                "iterator_class": iterator_class_detail,
+                "node_pointer_alias": node_pointer_detail,
+                "node_pointer_macro": pointer_macro_detail,
+                "iterator_category_base": category_detail,
+                "bidirectional_base": bidit_detail,
+            })
+        ),
+    }
+
+
 CAPTURED_POINTER_TAIL_RETURN_ROLES = frozenset({
     "capture_declaration", "capture_assignment", "read_reseat",
     "return_to_goto", "tail_return",
@@ -2322,6 +3096,8 @@ def require_target_source_refactor_recipe_policy(
     recipe: dict, function: dict, root, unit_source: str, context: str,
     canonical_operations: list[dict] | None = None,
     overlaid_paths: set[str] | None = None,
+    *, proof_key: str = "target_source_refactor", compiler_root=None,
+    sealed_include_trees: list[dict] | None = None,
 ) -> dict:
     """Confine manifest-declared source permutations to one source owner.
 
@@ -2330,9 +3106,14 @@ def require_target_source_refactor_recipe_policy(
     the pinned source-owner window remains limited to fresh, non-emitting
     compiler-state entropy.
     """
-    proof = function["target_source_refactor"]
+    require(proof_key in {
+                "target_source_refactor",
+                "instruction_donor_source_refactor",
+            }, f"{context}: source-refactor proof role differs")
+    proof = function[proof_key]
     if proof["kind"] in {
         "fixed_array_fill_loop_v1", "inclusive_extent_assignment_v1",
+        "discarded_postfix_increment_v1",
     }:
         require(proof["source_owner_mangled"] == function["mangled"],
                 f"{context}: source permutation owner must be the mosaic "
@@ -2350,8 +3131,21 @@ def require_target_source_refactor_recipe_policy(
         require(not witness_paths.intersection(overlaid_paths),
                 f"{context}: inclusive-extent semantic witness header has "
                 "an effective source overlay")
+    if proof["kind"] == "discarded_postfix_increment_v1":
+        require(isinstance(overlaid_paths, set),
+                f"{context}: discarded-increment overlay census is missing")
+        witness = proof["semantic_witness"]
+        witness_paths = {witness["source_alias_header"]["path"]}
+        for edge in witness["source_include_chain"]:
+            witness_paths.update({
+                edge["including_path"], edge["included_path"],
+            })
+        require(not witness_paths.intersection(overlaid_paths),
+                f"{context}: discarded-increment semantic witness header "
+                "has an effective source overlay")
     validated = validate_donor_source_overlay_recipe(
-        recipe, root, seed_outputs_touched=False
+        recipe, root, seed_outputs_touched=False,
+        canonical_operations=canonical_operations,
     )
     require(len(validated["renderings"]) == 1
             and validated["renderings"][0]["path"] == unit_source,
@@ -2449,6 +3243,8 @@ def require_target_source_refactor_recipe_policy(
                     "fixed_array_fill_loop_v1",
                 "inclusive_extent_assignment_v1":
                     "inclusive_extent_assignment_v1",
+                "discarded_postfix_increment_v1":
+                    "discarded_postfix_increment_v1",
             }[proof["kind"]]
             require(operation["action"] == "replace"
                     and len(generators) == 1
@@ -2490,6 +3286,18 @@ def require_target_source_refactor_recipe_policy(
                 semantic_detail = require_inclusive_extent_semantic_identity(
                     root, unit_source, clean, target_range, proof, params,
                     context + " inclusive-extent witness",
+                )
+            elif proof["kind"] == "discarded_postfix_increment_v1":
+                require(identifier in target_tokens,
+                        f"{context}: increment iterator is outside its "
+                        "source owner")
+                expected_input = render_discarded_postfix_increment_input(
+                    params)
+                semantic_detail = require_discarded_increment_semantic_identity(
+                    root, unit_source, clean, target_range, proof, params,
+                    context + " discarded-increment witness",
+                    compiler_root=compiler_root,
+                    sealed_include_trees=sealed_include_trees or [],
                 )
             else:
                 require(identifier not in refactor_identifiers,
@@ -2642,6 +3450,25 @@ def require_target_source_refactor_recipe_policy(
                 and capture not in clean_tokens,
                 f"{context}: captured tail-return identity is not fresh")
         refactor_identifiers.update({capture, label})
+    carrier = validated.get("compiler_state_carrier")
+    carrier_identifiers = set()
+    if carrier is not None:
+        require(proof["kind"] == "discarded_postfix_increment_v1",
+                f"{context}: compiler-state carrier is outside its closed "
+                "source permutation")
+        for role in ("header", "seat"):
+            prefix = carrier[f"{role}_prefix"]
+            width = carrier["width"]
+            carrier_identifiers.update(
+                f"{prefix}{index:0{width}d}"
+                for index in range(carrier[f"{role}_count"])
+            )
+        require(not carrier_identifiers.intersection(clean_tokens)
+                and not carrier_identifiers.intersection(
+                    introduced_identifiers),
+                f"{context}: compiler-state carrier declaration collides "
+                "with its source rendering")
+        introduced_identifiers.update(carrier_identifiers)
     require(seen == expected,
             f"{context}: source-permutation set is incomplete")
     require(canonical_seen == set(canonical_by_id),
@@ -2650,6 +3477,7 @@ def require_target_source_refactor_recipe_policy(
         "refactor_operation_ids": sorted(seen),
         "refactor_local_identifiers": sorted(refactor_identifiers),
         "entropy_identifier_count": len(introduced_identifiers),
+        "compiler_state_carrier_identifier_count": len(carrier_identifiers),
         **semantic_detail,
     }
 
@@ -2859,7 +3687,7 @@ def require_source_target_closure_recipe_policy(
     unit = next(item for item in renderings if item["path"] == unit_source)
     require(not unit["operations"],
             f"{context}: donor translation unit text must remain checked-in")
-    root = Path(root)
+    root = Path(root).resolve(strict=True)
     fresh_locals = set()
     kinds = set()
     for rendering in renderings:
@@ -3374,6 +4202,13 @@ def source_overlay_expected_identifier_roles(
         })
         referenced.update(
             source_overlay_named_type_identities(params["coordinate_type"])
+        )
+    elif kind == "discarded_postfix_increment_v1":
+        referenced.add(params["identifier"])
+    elif kind == "extern_declaration_run_v1":
+        declared.update(
+            params["prefix"] + str(index).zfill(params["width"])
+            for index in range(params["count"])
         )
     elif kind == "captured_pointer_tail_return_fragment_v1":
         role = params["role"]
@@ -4284,6 +5119,41 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
             "declaration_indent": indentation,
             "barrier": INCLUSIVE_EXTENT_BARRIER,
         }
+    elif kind == "discarded_postfix_increment_v1":
+        require(not layout,
+                f"{context}: a discarded increment cannot carry layout "
+                "overrides")
+        exact_audit_keys(params, {"id", "declaration_indent"}, param_context)
+        indentation = params.get("declaration_indent")
+        require(isinstance(indentation, str) and indentation.isascii()
+                and 1 <= len(indentation) <= 32
+                and set(indentation) <= {" ", "\t"},
+                f"{param_context}.declaration_indent differs")
+        normalized = {
+            "identifier": _source_overlay_identifier(
+                params.get("id"), param_context + ".id"),
+            "declaration_indent": indentation,
+        }
+    elif kind == "extern_declaration_run_v1":
+        require(not layout,
+                f"{context}: an extern declaration run cannot carry layout "
+                "overrides")
+        exact_audit_keys(params, {"prefix", "count", "width"}, param_context)
+        prefix = params.get("prefix")
+        count = require_exact_int(
+            params.get("count"), param_context + ".count",
+            minimum=1, maximum=999)
+        width = require_exact_int(
+            params.get("width"), param_context + ".width",
+            minimum=1, maximum=3)
+        require(isinstance(prefix, str), f"{param_context}.prefix differs")
+        try:
+            entropy_generator.generate_extern_run(prefix, count, width)
+        except ValueError as error:
+            raise ByteIdentityError(
+                f"{param_context}: extern declaration run differs: {error}"
+            ) from error
+        normalized = {"prefix": prefix, "count": count, "width": width}
     elif kind == "captured_pointer_tail_return_fragment_v1":
         role = params.get("role")
         require(role in CAPTURED_POINTER_TAIL_RETURN_ROLES,
@@ -6103,6 +6973,12 @@ def render_source_overlay_generator(
         result = render_fixed_array_fill_loop_output(params)
     elif kind == "inclusive_extent_assignment_v1":
         result = render_inclusive_extent_assignment_output(params)
+    elif kind == "discarded_postfix_increment_v1":
+        result = render_discarded_postfix_increment_output(params)
+    elif kind == "extern_declaration_run_v1":
+        result = entropy_generator.generate_extern_run(
+            params["prefix"], params["count"], params["width"]
+        ).encode("ascii")
     elif kind == "captured_pointer_tail_return_fragment_v1":
         result = render_captured_pointer_tail_return_output(params)
     elif kind == "empty_compound_statements_v1":
@@ -10295,6 +11171,7 @@ def validate_manifest(
     all_refactor_recipe_ids = set()
     all_primary_donor_ids = []
     all_bound_refactor_recipe_ids = []
+    all_bound_instruction_refactor_recipe_ids = []
     all_non_primary_donor_ids = []
     for unit_index, unit in enumerate(translation_units):
         context = f"translation_units[{unit_index}]"
@@ -10523,32 +11400,50 @@ def validate_manifest(
                             "kind", "renderings", "compile_lane",
                             "emission_policy", "authenticity_rationale",
                             "rendering_identity_sha256",
+                            "compiler_state_carrier",
+                            "canonical_overlay_replay",
                         },
                         f"{donor_context}.recipe",
                     )
+                    validation_recipe = {
+                        "kind": kind, "compile_lane": lane,
+                        "renderings": recipe["renderings"],
+                    }
+                    if "compiler_state_carrier" in recipe:
+                        validation_recipe["compiler_state_carrier"] = recipe[
+                            "compiler_state_carrier"]
+                    if "canonical_overlay_replay" in recipe:
+                        validation_recipe["canonical_overlay_replay"] = recipe[
+                            "canonical_overlay_replay"]
                     validated_recipe = validate_donor_source_overlay_recipe(
-                        {
-                            "kind": kind, "compile_lane": lane,
-                            "renderings": recipe["renderings"],
-                        },
-                        source_dir,
+                        validation_recipe, source_dir,
+                        canonical_operations=(
+                            overlay_output["operations"]
+                            if overlay_output is not None else None),
                     )
                     if any(
-                        generator["kind"] in {
-                            "single_evaluation_binding_source_permutation_v1",
-                            "for_initializer_declaration_reseat_v1",
-                            "captured_pointer_tail_return_fragment_v1",
-                            "fixed_array_fill_loop_v1",
-                            "inclusive_extent_assignment_v1",
-                        }
+                        generator["kind"] in
+                        SOURCE_REFACTOR_GENERATOR_KINDS
                         for generator in _source_overlay_generators(
                             validated_recipe
                         )
                     ):
                         refactor_recipe_ids.add(recipe_id)
                         all_refactor_recipe_ids.add(recipe_id)
-                    identity = sha256_bytes(
-                        canonical_json_bytes(recipe["renderings"]))
+                    identity_claim = recipe["renderings"]
+                    if ("compiler_state_carrier" in recipe
+                            or "canonical_overlay_replay" in recipe):
+                        identity_claim = {
+                            "renderings": recipe["renderings"],
+                        }
+                        for name in (
+                            "compiler_state_carrier",
+                            "canonical_overlay_replay",
+                        ):
+                            if name in recipe:
+                                identity_claim[name] = recipe[name]
+                    identity = sha256_bytes(canonical_json_bytes(
+                        identity_claim))
                     require(
                         recipe.get("rendering_identity_sha256") == identity,
                         f"{donor_context}.rendering_identity_sha256 differs "
@@ -11031,6 +11926,7 @@ def validate_manifest(
         seen_section_numbers = set()
         function_recipe_ids = set()
         bound_refactor_recipe_ids = []
+        bound_instruction_refactor_recipe_ids = []
         primary_donor_ids = []
         clean_cross_tu_instruction_donor_ids = []
         non_primary_donor_ids = []
@@ -11074,10 +11970,13 @@ def validate_manifest(
                                          "retail_exact_target_closure",
                                          "retail_exact_source_target_closure",
                                          "comdat_selection_override",
-                                         CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS),
+                                         CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
+                                         SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS),
                         f"{function_context}: unsupported splice class")
-                if (splice_class
-                        == CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
+                if splice_class in {
+                    CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
+                    SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS,
+                }:
                     hybrid_keys = {
                         "mangled", "donor", "instruction_donor",
                         "splice_class", "expected_seed_length",
@@ -11097,6 +11996,28 @@ def validate_manifest(
                         "instruction_ranges", "retail_oracle",
                         "retail_relocations",
                     }
+                    source_hybrid = (
+                        splice_class == SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS
+                    )
+                    if source_hybrid:
+                        hybrid_keys |= {
+                            "instruction_donor_source_refactor",
+                            "expected_seed_section_number",
+                            "expected_seed_section_count",
+                            "expected_seed_relocation_count",
+                            "expected_seed_line_count",
+                            "expected_seed_body_sha256",
+                            "expected_seed_metadata_sha256",
+                            "expected_seed_function_count",
+                            "expected_seed_comdat_count",
+                            "expected_target_donor_metadata_sha256",
+                            "expected_instruction_donor_metadata_sha256",
+                            "expected_target_donor_function_count",
+                            "expected_instruction_donor_function_count",
+                            "expected_target_donor_comdat_count",
+                            "expected_instruction_donor_comdat_count",
+                            "expected_donor_closure",
+                        }
                     exact_keys(function, hybrid_keys, function_context)
                     instruction_donor_id = function.get(
                         "instruction_donor")
@@ -11110,14 +12031,22 @@ def validate_manifest(
                         local_recipes[donor_id],
                         f"{function_context} target donor recipe",
                     )
-                    require(
-                        local_recipe_kinds[instruction_donor_id]
-                        == CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE,
-                        f"{function_context}: instruction donor is not a "
-                        "clean current-source cross-TU recipe",
-                    )
-                    clean_cross_tu_instruction_donor_ids.append(
-                        instruction_donor_id)
+                    if source_hybrid:
+                        require(
+                            local_recipe_kinds[instruction_donor_id]
+                            == "donor_source_overlay",
+                            f"{function_context}: source instruction donor "
+                            "is not a donor-private source rendering",
+                        )
+                    else:
+                        require(
+                            local_recipe_kinds[instruction_donor_id]
+                            == CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE,
+                            f"{function_context}: instruction donor is not a "
+                            "clean current-source cross-TU recipe",
+                        )
+                        clean_cross_tu_instruction_donor_ids.append(
+                            instruction_donor_id)
                     non_primary_donor_ids.append(instruction_donor_id)
                     positive_ints = (
                         "expected_seed_length", "expected_donor_length",
@@ -11159,12 +12088,81 @@ def validate_manifest(
                         require_sha(function.get(name),
                                     f"{function_context}.{name}")
                     normalized_function = dict(function)
+                    if source_hybrid:
+                        for name in (
+                            "expected_seed_body_sha256",
+                            "expected_seed_metadata_sha256",
+                            "expected_target_donor_metadata_sha256",
+                            "expected_instruction_donor_metadata_sha256",
+                        ):
+                            require_sha(function.get(name),
+                                        f"{function_context}.{name}")
+                        for name in (
+                            "expected_seed_section_number",
+                            "expected_seed_section_count",
+                            "expected_seed_line_count",
+                            "expected_seed_function_count",
+                            "expected_seed_comdat_count",
+                            "expected_target_donor_function_count",
+                            "expected_instruction_donor_function_count",
+                            "expected_target_donor_comdat_count",
+                            "expected_instruction_donor_comdat_count",
+                        ):
+                            require(type(function.get(name)) is int
+                                    and function[name] > 0,
+                                    f"{function_context}.{name} is invalid")
+                        require(
+                            type(function.get(
+                                "expected_seed_relocation_count")) is int
+                            and function["expected_seed_relocation_count"]
+                            >= 0,
+                            f"{function_context}.expected_seed_relocation_count "
+                            "is invalid",
+                        )
+                        require(function.get("expected_donor_closure")
+                                == [".debug$S", ".xdata$x"],
+                                f"{function_context}.expected_donor_closure "
+                                "differs")
+                        proof = validate_target_source_refactor_proof(
+                            function.get(
+                                "instruction_donor_source_refactor"),
+                            f"{function_context}"
+                            ".instruction_donor_source_refactor",
+                        )
+                        require(
+                            proof["kind"]
+                            == "discarded_postfix_increment_v1"
+                            and proof["source_owner_mangled"] == mangled,
+                            f"{function_context}: source instruction proof "
+                            "kind/owner differs",
+                        )
+                        normalized_function[
+                            "instruction_donor_source_refactor"] = proof
+                        bound_instruction_refactor_recipe_ids.append(
+                            instruction_donor_id)
+                        require_target_source_refactor_recipe_policy(
+                            local_recipes[instruction_donor_id],
+                            normalized_function, source_dir, source_relative,
+                            function_context,
+                            (overlay_output["operations"]
+                             if overlay_output is not None else []),
+                            set(source_overlay_by_path),
+                            proof_key="instruction_donor_source_refactor",
+                            compiler_root=compiler_root,
+                            sealed_include_trees=normalized_include_trees,
+                        )
                     normalized_function["instruction_ranges"] = (
                         validate_cross_tu_instruction_hybrid_ranges(
                             function.get("instruction_ranges"),
                             f"{function_context}.instruction_ranges",
                             function["expected_donor_length"],
                             function["expected_instruction_donor_length"],
+                            range_kind=(
+                                "source_same_mangled_complete_x86_instruction_v1"
+                                if source_hybrid else
+                                "cross_tu_same_mangled_complete_x86_instruction_v1"
+                            ),
+                            require_same_offsets=source_hybrid,
                         )
                     )
                     retail = function.get("retail_oracle")
@@ -11771,9 +12769,12 @@ def validate_manifest(
             bound_refactor_recipe_ids,
             non_primary_donor_ids,
             context,
+            bound_instruction_refactor_recipe_ids,
         )
         all_primary_donor_ids.extend(primary_donor_ids)
         all_bound_refactor_recipe_ids.extend(bound_refactor_recipe_ids)
+        all_bound_instruction_refactor_recipe_ids.extend(
+            bound_instruction_refactor_recipe_ids)
         all_non_primary_donor_ids.extend(non_primary_donor_ids)
 
         completion = unit.get("completion")
@@ -11825,6 +12826,7 @@ def validate_manifest(
         all_bound_refactor_recipe_ids,
         all_non_primary_donor_ids,
         "manifest",
+        all_bound_instruction_refactor_recipe_ids,
     )
 
     for recipe_id, registered in recipe_registry.items():
@@ -13714,6 +14716,11 @@ CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS = (
 )
 
 
+SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS = (
+    "retail_exact_source_instruction_hybrid_resize"
+)
+
+
 CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE = "clean_current_source_cross_tu"
 
 
@@ -13723,6 +14730,16 @@ CROSS_TU_INSTRUCTION_HYBRID_RANGE_KEYS = {
     "instruction_donor_start", "instruction_donor_end",
     "instruction_donor_bytes", "instruction_donor_sha256",
 }
+
+
+SOURCE_REFACTOR_GENERATOR_KINDS = frozenset({
+    "single_evaluation_binding_source_permutation_v1",
+    "for_initializer_declaration_reseat_v1",
+    "captured_pointer_tail_return_fragment_v1",
+    "fixed_array_fill_loop_v1",
+    "inclusive_extent_assignment_v1",
+    "discarded_postfix_increment_v1",
+})
 
 
 def require_clean_current_source_cross_tu_bindings(
@@ -13758,32 +14775,92 @@ def require_source_refactor_donor_bindings(
     bound_refactor_recipe_ids: list[str],
     non_primary_donor_ids: list[str],
     context: str,
+    bound_instruction_refactor_recipe_ids: list[str] | None = None,
 ) -> None:
-    """Confine each source-refactor rendering to its one proved primary use."""
+    """Confine each source rendering to exactly one authenticated role."""
     refactor_ids = set(refactor_recipe_ids)
     primary_counts = Counter(primary_donor_ids)
-    bound_counts = Counter(bound_refactor_recipe_ids)
+    primary_bound_counts = Counter(bound_refactor_recipe_ids)
+    instruction_bound_counts = Counter(
+        bound_instruction_refactor_recipe_ids or [])
     non_primary_counts = Counter(non_primary_donor_ids)
     require(
-        set(bound_counts) == refactor_ids
-        and all(count == 1 for count in bound_counts.values()),
+        set(primary_bound_counts) | set(instruction_bound_counts)
+        == refactor_ids
+        and all(
+            primary_bound_counts[recipe_id]
+            + instruction_bound_counts[recipe_id] == 1
+            for recipe_id in refactor_ids
+        ),
         f"{context}: every source-permutation donor must be bound exactly "
         "once to its authenticated source-aware composer",
     )
     require(
-        all(primary_counts[recipe_id] == 1 for recipe_id in refactor_ids),
-        f"{context}: every source-permutation donor must have exactly one "
-        "total primary donor use",
-    )
-    forbidden = sorted(
-        recipe_id for recipe_id in refactor_ids
-        if non_primary_counts[recipe_id]
+        all(primary_counts[recipe_id]
+            == primary_bound_counts[recipe_id]
+            for recipe_id in refactor_ids),
+        f"{context}: every primary source-permutation donor must have "
+        "exactly one total primary donor use and no unbound primary reuse",
     )
     require(
-        not forbidden,
-        f"{context}: source-permutation donors may not be reused in variant, "
-        f"instruction, or other non-primary roles: {forbidden}",
+        all(non_primary_counts[recipe_id]
+            == instruction_bound_counts[recipe_id]
+            for recipe_id in refactor_ids),
+        f"{context}: source-permutation donors may not appear in unbound "
+        "instruction, variant, or other non-primary roles",
     )
+
+
+def raw_manifest_source_refactor_recipe_ids(
+    manifest: dict, context: str,
+) -> set[str]:
+    """Inventory typed source permutations before any host-dependent gate."""
+    result = set()
+    units = manifest.get("translation_units")
+    if not isinstance(units, list):
+        return result
+    for unit_index, unit in enumerate(units):
+        if not isinstance(unit, dict):
+            continue
+        donors = unit.get("donors")
+        if not isinstance(donors, list):
+            continue
+        for donor_index, donor in enumerate(donors):
+            if not isinstance(donor, dict):
+                continue
+            recipe = donor.get("recipe")
+            if (not isinstance(recipe, dict)
+                    or recipe.get("kind") != "donor_source_overlay"):
+                continue
+            recipe_id = donor.get("id")
+            require(isinstance(recipe_id, str),
+                    f"{context}: source-permutation donor id is invalid")
+            renderings = recipe.get("renderings")
+            if not isinstance(renderings, list):
+                continue
+            for rendering_index, rendering in enumerate(renderings):
+                if not isinstance(rendering, dict):
+                    continue
+                operations = rendering.get("operations")
+                if not isinstance(operations, list):
+                    continue
+                for operation_index, operation in enumerate(operations):
+                    if not isinstance(operation, dict) \
+                            or "gen" not in operation:
+                        continue
+                    generator = validate_source_overlay_generator(
+                        operation["gen"],
+                        f"{context} translation_units[{unit_index}]"
+                        f".donors[{donor_index}].recipe.renderings"
+                        f"[{rendering_index}].operations"
+                        f"[{operation_index}].gen",
+                    )
+                    if any(
+                        item["kind"] in SOURCE_REFACTOR_GENERATOR_KINDS
+                        for item in _source_overlay_generators(generator)
+                    ):
+                        result.add(recipe_id)
+    return result
 
 
 def require_manifest_source_refactor_role_preflight(
@@ -13792,6 +14869,7 @@ def require_manifest_source_refactor_role_preflight(
     """Reject source-aware role and semantic escapes before host checks."""
     primary_donor_ids = []
     bound_refactor_recipe_ids = []
+    bound_instruction_refactor_recipe_ids = []
     non_primary_donor_ids = []
     overlay = manifest.get("source_overlay")
     overlay_outputs = (
@@ -13804,6 +14882,8 @@ def require_manifest_source_refactor_role_preflight(
         if isinstance(item, dict) and isinstance(item.get("path"), str)
     }
     source_root = Path(root).resolve(strict=True) if root is not None else None
+    refactor_recipe_ids = raw_manifest_source_refactor_recipe_ids(
+        manifest, context)
     units = manifest.get("translation_units")
     if not isinstance(units, list):
         return
@@ -13843,6 +14923,30 @@ def require_manifest_source_refactor_role_preflight(
                         extent_data, witness,
                         context + " inclusive-extent concrete class",
                     )
+            instruction_proof = function.get(
+                "instruction_donor_source_refactor")
+            if isinstance(instruction_proof, dict):
+                normalized_instruction_proof = (
+                    validate_target_source_refactor_proof(
+                        instruction_proof,
+                        context + " instruction-donor source refactor",
+                    )
+                )
+                require(
+                    normalized_instruction_proof["kind"]
+                    == "discarded_postfix_increment_v1",
+                    f"{context}: instruction-donor source-refactor kind "
+                    "differs",
+                )
+                witness = normalized_instruction_proof["semantic_witness"]
+                witness_paths = {witness["source_alias_header"]["path"]}
+                for edge in witness["source_include_chain"]:
+                    witness_paths.update({
+                        edge["including_path"], edge["included_path"],
+                    })
+                require(not witness_paths.intersection(overlaid_paths),
+                        f"{context}: discarded-increment semantic witness "
+                        "header has an effective source overlay")
             donor_id = function.get("donor")
             if isinstance(donor_id, str):
                 primary_donor_ids.append(donor_id)
@@ -13851,6 +14955,9 @@ def require_manifest_source_refactor_role_preflight(
             instruction_donor = function.get("instruction_donor")
             if isinstance(instruction_donor, str):
                 non_primary_donor_ids.append(instruction_donor)
+                if "instruction_donor_source_refactor" in function:
+                    bound_instruction_refactor_recipe_ids.append(
+                        instruction_donor)
             variants = function.get("donor_variants")
             if isinstance(variants, list):
                 non_primary_donor_ids.extend(
@@ -13859,11 +14966,12 @@ def require_manifest_source_refactor_role_preflight(
                     and isinstance(item.get("donor"), str)
                 )
     require_source_refactor_donor_bindings(
-        set(bound_refactor_recipe_ids),
+        refactor_recipe_ids,
         primary_donor_ids,
         bound_refactor_recipe_ids,
         non_primary_donor_ids,
         context,
+        bound_instruction_refactor_recipe_ids,
     )
 
 
@@ -13890,18 +14998,140 @@ def require_target_bound_retail_image(
     return expected
 
 
+def supported_ia32_instruction_length(
+    encoded: bytes, context: str,
+) -> int:
+    """Decode one closed IA-32 instruction family used by Class G.
+
+    This is intentionally a fail-closed length decoder, not a disassembler.
+    It accepts only the register/memory binary operations, group-1 imm8, and
+    one-byte INC/DEC forms needed by current same-mangled instruction donors
+    and their closed boundary-regression tests.
+    ModRM, SIB, displacement, and immediate widths are derived from the bytes;
+    unsupported prefixes/opcodes and truncated or concatenated encodings fail.
+    """
+    require(isinstance(encoded, bytes) and encoded,
+            f"{context}: instruction encoding is missing")
+    opcode = encoded[0]
+    if opcode in {0x46, 0x47}:
+        return 1
+    if opcode in {0x75, 0x76}:
+        require(len(encoded) >= 2,
+                f"{context}: short conditional branch is truncated")
+        return 2
+    if 0xB8 <= opcode <= 0xBF:
+        require(len(encoded) >= 5,
+                f"{context}: register immediate move is truncated")
+        return 5
+    require(opcode in {
+                0x33, 0x39, 0x3B, 0x80, 0x83, 0x89, 0x8A, 0x8B,
+                0xFF,
+            },
+            f"{context}: unsupported IA-32 instruction opcode")
+    require(len(encoded) >= 2,
+            f"{context}: IA-32 instruction lacks ModRM")
+    cursor = 2
+    modrm = encoded[1]
+    mode = modrm >> 6
+    rm = modrm & 7
+    if mode != 3 and rm == 4:
+        require(cursor < len(encoded),
+                f"{context}: IA-32 instruction lacks SIB")
+        sib = encoded[cursor]
+        cursor += 1
+        if mode == 0 and (sib & 7) == 5:
+            cursor += 4
+    elif mode == 0 and rm == 5:
+        cursor += 4
+    if mode == 1:
+        cursor += 1
+    elif mode == 2:
+        cursor += 4
+    if opcode in {0x80, 0x83}:
+        cursor += 1
+    require(cursor <= len(encoded),
+            f"{context}: supported IA-32 instruction is truncated")
+    return cursor
+
+
+def require_supported_complete_ia32_instruction(
+    encoded: bytes, context: str,
+) -> int:
+    """Require that an isolated range is exactly one supported instruction."""
+    length = supported_ia32_instruction_length(encoded, context)
+    require(length == len(encoded),
+            f"{context}: encoding is not one complete supported IA-32 "
+            "instruction")
+    return length
+
+
+def require_coff_line_certified_ia32_boundaries(
+    coff, section: dict, body: bytes, ranges: list[dict], role: str,
+    mangled: str, context: str,
+) -> int:
+    """Decode from the nearest compiler COFF line boundary through each span."""
+    require(role in {"target", "instruction_donor"},
+            f"{context}: IA-32 range role differs")
+    line_bytes = _coff_table_bytes(coff, section, "lines")
+    require(len(line_bytes) == section["line_count"] * 6
+            and len(line_bytes) >= 12,
+            f"{context}: compiler line-boundary certificate is missing")
+    marker_index, marker_line = coff_unpack(
+        "<IH", line_bytes, 0, context + " line sentinel")
+    function_index, _ = function_symbol(
+        coff, mangled, section["number"])
+    require(marker_line == 0 and marker_index == function_index,
+            f"{context}: compiler line sentinel differs")
+    line_offsets = []
+    previous = -1
+    for index in range(1, section["line_count"]):
+        offset, line = coff_unpack(
+            "<IH", line_bytes, index * 6,
+            f"{context} line row {index}")
+        require(line != 0 and previous <= offset < len(body),
+                f"{context}: compiler line boundary is invalid")
+        previous = offset
+        line_offsets.append(offset)
+    require(line_offsets, f"{context}: compiler line boundaries are absent")
+    prefix = "target" if role == "target" else "instruction_donor"
+    decoded_count = 0
+    for index, item in enumerate(ranges):
+        start = item[f"{prefix}_start"]
+        end = item[f"{prefix}_end"]
+        anchors = [offset for offset in line_offsets if offset <= start]
+        require(anchors,
+                f"{context}: range {index} has no preceding compiler line "
+                "boundary")
+        cursor = max(anchors)
+        boundaries = {cursor}
+        while cursor < end:
+            length = supported_ia32_instruction_length(
+                body[cursor:], f"{context} range {index} at {cursor}")
+            cursor += length
+            require(cursor <= len(body),
+                    f"{context}: decoded instruction escapes the COMDAT")
+            boundaries.add(cursor)
+            decoded_count += 1
+        require(start in boundaries and end in boundaries,
+                f"{context}: range {index} is not one containing-stream "
+                "IA-32 instruction boundary")
+    return decoded_count
+
+
 def validate_cross_tu_instruction_hybrid_ranges(
     value: object,
     context: str,
     target_body_length: int,
     instruction_donor_body_length: int,
+    *,
+    range_kind: str = "cross_tu_same_mangled_complete_x86_instruction_v1",
+    require_same_offsets: bool = False,
 ) -> list[dict]:
-    """Pin equal-width complete instructions at independent COMDAT offsets.
+    """Pin equal-width supported instructions at independent COMDAT offsets.
 
-    The instruction-boundary claim is deliberately manifest-owned, as it is
-    for same-offset mosaics.  Literal bytes and hashes bind both compiler
-    outputs, while the composer later proves that neither range intersects a
-    relocation operand before copying fresh object bytes.
+    Literal bytes and hashes bind both compiler outputs.  The live composer
+    separately decodes from compiler-emitted line-row boundaries through
+    every range endpoint, then proves no relocation operand is intersected.
     """
     require(isinstance(value, list) and 1 <= len(value) <= 64,
             f"{context} must contain 1..64 instruction ranges")
@@ -13913,11 +15143,8 @@ def validate_cross_tu_instruction_hybrid_ranges(
         require(isinstance(item, dict), f"{item_context} must be an object")
         exact_audit_keys(item, CROSS_TU_INSTRUCTION_HYBRID_RANGE_KEYS,
                          item_context)
-        require(
-            item.get("kind")
-            == "cross_tu_same_mangled_complete_x86_instruction_v1",
-            f"{item_context}.kind differs",
-        )
+        require(item.get("kind") == range_kind,
+                f"{item_context}.kind differs")
         target_start = require_exact_int(
             item.get("target_start"), item_context + ".target_start",
             minimum=0, maximum=target_body_length - 1,
@@ -13943,6 +15170,9 @@ def validate_cross_tu_instruction_hybrid_ranges(
         require(target_start >= previous_target_end
                 and source_start >= previous_source_end,
                 f"{context} is unsorted or overlapping")
+        if require_same_offsets:
+            require((target_start, target_end) == (source_start, source_end),
+                    f"{item_context}: source-aware hybrid offsets differ")
         previous_target_end = target_end
         previous_source_end = source_end
 
@@ -13960,6 +15190,8 @@ def validate_cross_tu_instruction_hybrid_ranges(
             )
             require(sha256_bytes(raw) == digest,
                     f"{item_context} {role} encoding/hash differs")
+            require_supported_complete_ia32_instruction(
+                raw, f"{item_context} {role}")
             role_values[role] = (encoded, digest)
         require(role_values["target"] != role_values["instruction_donor"],
                 f"{item_context} does not change compiler output")
@@ -15441,6 +16673,7 @@ def assert_source_permutations_are_donor_only(overlay: object) -> None:
                 "captured_pointer_tail_return_fragment_v1",
                 "fixed_array_fill_loop_v1",
                 "inclusive_extent_assignment_v1",
+                "discarded_postfix_increment_v1",
                 "dead_local_linear_updates_v1",
                 "inline_default_constructor_dead_updates_v1",
             },
@@ -15543,6 +16776,7 @@ def validate_clean_current_source_cross_tu_recipe(
 
 def validate_donor_source_overlay_recipe(
     recipe: object, root, *, seed_outputs_touched: bool = False,
+    canonical_operations: list[dict] | None = None,
 ) -> dict:
     """Extension A: a donor recipe carrying typed per-path renderings.
 
@@ -15557,6 +16791,13 @@ def validate_donor_source_overlay_recipe(
             "donor source overlay recipe must be an object")
     require(recipe.get("kind") == "donor_source_overlay",
             "donor source overlay recipe kind differs")
+    canonical_replay = recipe.get("canonical_overlay_replay")
+    require(canonical_replay in {None, "owning_translation_unit_v1"},
+            "donor source canonical-overlay replay differs")
+    if canonical_replay is not None:
+        require(isinstance(canonical_operations, list)
+                and canonical_operations,
+                "donor source canonical-overlay replay is unavailable")
     require(
         not seed_outputs_touched,
         "donor source overlay op-list perturbs the seed rendering: the "
@@ -15576,7 +16817,7 @@ def validate_donor_source_overlay_recipe(
     renderings = recipe.get("renderings")
     require(isinstance(renderings, list) and renderings,
             "donor source overlay renderings must be a non-empty array")
-    root = Path(root)
+    root = Path(root).resolve(strict=True)
     seen: set[str] = set()
     normalized = []
     clean_inputs: list[bytes] = []
@@ -15595,9 +16836,20 @@ def validate_donor_source_overlay_recipe(
                             context + ".clean_sha256")
         rendered = require_sha(item.get("rendered_sha256"),
                                context + ".rendered_sha256")
-        target = root / path
-        require(target.is_file(),
-                f"{context}: {path} is not a checked-in source file")
+        target = source_overlay_logical_path(root, path)
+        try:
+            metadata = target.lstat()
+            resolved_target = target.resolve(strict=True)
+        except OSError as error:
+            raise ByteIdentityError(
+                f"{context}: {path} is absent or redirected: {error}"
+            ) from error
+        require(
+            stat.S_ISREG(metadata.st_mode) and not target.is_symlink()
+            and resolved_target == target
+            and resolved_target.is_relative_to(root),
+            f"{context}: {path} is redirected or non-regular",
+        )
         data = target.read_bytes()
         require(
             sha256_bytes(data) == clean,
@@ -15627,6 +16879,26 @@ def validate_donor_source_overlay_recipe(
                 if generator.get("kind") == "member_signature_v1":
                     pending_signatures.append((op_context, generator))
             validated_ops.append(validated)
+        if canonical_replay is not None:
+            require(index == 0 and len(renderings) == 1,
+                    "canonical-overlay replay requires one source rendering")
+            replay_ids = [item.get("id") for item in canonical_operations]
+            require(all(isinstance(item, dict) and isinstance(item.get("id"), str)
+                        for item in canonical_operations)
+                    and len(set(replay_ids)) == len(replay_ids)
+                    and not set(replay_ids).intersection(
+                        item["id"] for item in validated_ops),
+                    "canonical-overlay replay operation census differs")
+            for operation in canonical_operations:
+                for role in ("start_anchor", "end_anchor"):
+                    anchor = operation.get(role)
+                    if anchor is not None:
+                        resolve_source_overlay_anchor(
+                            data, anchor,
+                            f"canonical replay {operation['id']}.{role}",
+                            logical_path=path,
+                        )
+            validated_ops = list(canonical_operations) + validated_ops
         clean_inputs.append(data)
         normalized.append({
             "path": path, "clean_sha256": clean,
@@ -15651,15 +16923,113 @@ def validate_donor_source_overlay_recipe(
     normalized_lane = {"required_define": lane["required_define"]}
     if "include_projection" in lane:
         normalized_lane["include_projection"] = lane["include_projection"]
-    return {
+    normalized = {
         "kind": "donor_source_overlay",
         "compile_lane": normalized_lane,
         "renderings": normalized,
     }
+    if canonical_replay is not None:
+        normalized["canonical_overlay_replay"] = canonical_replay
+    carrier = recipe.get("compiler_state_carrier")
+    if carrier is not None:
+        normalized["compiler_state_carrier"] = (
+            validate_donor_source_compiler_state_carrier(
+                carrier, "donor source overlay compiler-state carrier"
+            )
+        )
+    return normalized
+
+
+def validate_donor_source_compiler_state_carrier(
+    value: object, context: str,
+) -> dict:
+    """Validate one closed, declaration-only two-seat source carrier."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "placement", "header_prefix", "header_count",
+        "seat_prefix", "seat_count", "width",
+        "generated_declarations_sha256",
+    }, context)
+    require(value.get("kind") == "extern_run_pair_v1"
+            and value.get("placement") == "after_includes_and_eof_v1",
+            f"{context} kind or placement differs")
+    width = require_exact_int(
+        value.get("width"), context + ".width", minimum=1, maximum=3)
+    counts = {}
+    payloads = []
+    identities = set()
+    for role in ("header", "seat"):
+        prefix = value.get(f"{role}_prefix")
+        count = require_exact_int(
+            value.get(f"{role}_count"), context + f".{role}_count",
+            minimum=1, maximum=999,
+        )
+        require(isinstance(prefix, str),
+                f"{context}.{role}_prefix differs")
+        try:
+            payload = entropy_generator.generate_extern_run(
+                prefix, count, width).encode("ascii")
+        except ValueError as error:
+            raise ByteIdentityError(
+                f"{context}.{role} extern run is invalid: {error}"
+            ) from error
+        names = {
+            f"{prefix}{index:0{width}d}" for index in range(count)
+        }
+        require(len(names) == count and not identities.intersection(names),
+                f"{context} declaration identities collide")
+        identities.update(names)
+        payloads.append(payload)
+        counts[role] = (prefix, count)
+    generated = b"".join(payloads)
+    require(
+        require_sha(value.get("generated_declarations_sha256"),
+                    context + ".generated_declarations_sha256")
+        == sha256_bytes(generated),
+        f"{context} generated declarations differ from their pin",
+    )
+    return {
+        "kind": "extern_run_pair_v1",
+        "placement": "after_includes_and_eof_v1",
+        "header_prefix": counts["header"][0],
+        "header_count": counts["header"][1],
+        "seat_prefix": counts["seat"][0],
+        "seat_count": counts["seat"][1],
+        "width": width,
+        "generated_declarations_sha256": sha256_bytes(generated),
+    }
+
+
+def render_donor_source_compiler_state_carrier(
+    data: bytes, carrier: dict,
+) -> bytes:
+    """Seat a validated extern pair after includes and at physical EOF."""
+    require(carrier["kind"] == "extern_run_pair_v1"
+            and carrier["placement"] == "after_includes_and_eof_v1",
+            "donor source compiler-state carrier differs")
+    runs = {}
+    for role in ("header", "seat"):
+        runs[role] = entropy_generator.generate_extern_run(
+            carrier[f"{role}_prefix"], carrier[f"{role}_count"],
+            carrier["width"],
+        ).encode("ascii").rstrip(b"\n").split(b"\n")
+    lines = data.split(b"\n")
+    include_rows = [
+        index for index, line in enumerate(lines)
+        if line.startswith(b"#include")
+    ]
+    require(include_rows,
+            "donor source compiler-state carrier lacks an include seat")
+    insert_at = include_rows[-1] + 1
+    return b"\n".join(
+        lines[:insert_at] + runs["header"]
+        + lines[insert_at:] + runs["seat"]
+    )
 
 
 def render_donor_source_overlay(
     recipe: object, root, *, repin: bool = False,
+    canonical_operations: list[dict] | None = None,
 ) -> dict[str, bytes]:
     """Render each donor-private path from checked-in source plus typed ops.
 
@@ -15674,7 +17044,8 @@ def render_donor_source_overlay(
     compile ONLY; A2/A6b keep the shipped tree's renderings untouched.
     """
     validated = validate_donor_source_overlay_recipe(
-        recipe, root, seed_outputs_touched=False)
+        recipe, root, seed_outputs_touched=False,
+        canonical_operations=canonical_operations)
     root = Path(root)
     clean: dict[str, bytes] = {}
     edits: dict[str, list] = {}
@@ -15756,6 +17127,12 @@ def render_donor_source_overlay(
         output = apply_replacements(
             clean[path],
             [(start, end, payload) for start, end, payload in edits[path]])
+        carrier = validated.get("compiler_state_carrier")
+        if carrier is not None:
+            require(len(validated["renderings"]) == 1,
+                    "compiler-state carrier requires one source rendering")
+            output = render_donor_source_compiler_state_carrier(
+                output, carrier)
         require(
             repin or sha256_bytes(output) == item["rendered_sha256"],
             f"{path}: donor rendering differs from its pinned sha256 -- "
@@ -16335,12 +17712,13 @@ def compose_retail_exact_source_instruction_mosaic(
     return composed, {**detail, **source_detail, **variant_detail}
 
 
-def compose_retail_exact_cross_tu_instruction_hybrid_resize(
+def _compose_retail_exact_instruction_hybrid_resize_core(
     seed_bytes: bytes,
     target_donor_bytes: bytes,
     instruction_donor_bytes: bytes,
     function: dict,
     retail_body: bytes,
+    *, source_aware: bool,
 ) -> tuple[bytes, dict]:
     """Import complete same-mangled instructions, then resize normally.
 
@@ -16351,14 +17729,19 @@ def compose_retail_exact_cross_tu_instruction_hybrid_resize(
     only inside the declared text ranges, it is handed to the unchanged
     retail-exact same-slot composer.
     """
-    require(function.get("splice_class")
-            == CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
-            "splice class is not a cross-TU instruction hybrid resize")
+    expected_class = (
+        SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS
+        if source_aware else CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
+    )
+    require(function.get("splice_class") == expected_class,
+            "splice class is not the selected instruction hybrid resize")
     require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
             "retail oracle body is missing")
+    seed = CoffObject(seed_bytes)
     target = CoffObject(target_donor_bytes)
     instruction_donor = CoffObject(instruction_donor_bytes)
     mangled = function["mangled"]
+    seed_primary = seed.function_section(mangled)
     target_primary = target.function_section(mangled)
     instruction_primary = instruction_donor.function_section(mangled)
 
@@ -16402,6 +17785,74 @@ def compose_retail_exact_cross_tu_instruction_hybrid_resize(
             for field in ("name", "characteristics")),
         "same-mangled donor COMDAT header class changed",
     )
+    if source_aware:
+        require(
+            len(seed.sections) == function["expected_seed_section_count"]
+            and seed_primary["number"]
+            == function["expected_seed_section_number"],
+            "source hybrid seed section census or seat changed",
+        )
+        require(
+            seed_primary["raw_size"] == function["expected_seed_length"]
+            and seed_primary["relocation_count"]
+            == function["expected_seed_relocation_count"]
+            and seed_primary["line_count"]
+            == function["expected_seed_line_count"],
+            "source hybrid seed body/table census changed",
+        )
+        require(
+            sha256_bytes(coff_body(seed, seed_primary))
+            == function["expected_seed_body_sha256"],
+            "source hybrid seed body differs from its pin",
+        )
+        require(
+            instruction_mosaic_metadata_sha256(seed, seed_primary)
+            == function["expected_seed_metadata_sha256"],
+            "source hybrid seed metadata differs from its pin",
+        )
+        require(
+            sum(function_multiset(seed).values())
+            == function["expected_seed_function_count"]
+            and
+            sum(function_multiset(target).values())
+            == function["expected_target_donor_function_count"]
+            and sum(function_multiset(instruction_donor).values())
+            == function["expected_instruction_donor_function_count"],
+            "source hybrid donor function census changed",
+        )
+        require(
+            sum(comdat_primary_identity_multiset(seed).values())
+            == function["expected_seed_comdat_count"]
+            and
+            sum(comdat_primary_identity_multiset(target).values())
+            == function["expected_target_donor_comdat_count"]
+            and sum(comdat_primary_identity_multiset(
+                instruction_donor).values())
+            == function["expected_instruction_donor_comdat_count"],
+            "source hybrid donor COMDAT census changed",
+        )
+        closure = tuple(function["expected_donor_closure"])
+        expected_closure = (len(closure), closure)
+        require(
+            all(value == expected_closure for value in (
+                _comdat_child_closure(seed, seed_primary),
+                _comdat_child_closure(target, target_primary),
+                _comdat_child_closure(
+                    instruction_donor, instruction_primary),
+            )),
+            "source hybrid donor closure changed",
+        )
+        require(
+            instruction_mosaic_metadata_sha256(target, target_primary)
+            == function["expected_target_donor_metadata_sha256"],
+            "source hybrid target-donor metadata differs from its pin",
+        )
+        require(
+            instruction_mosaic_metadata_sha256(
+                instruction_donor, instruction_primary)
+            == function["expected_instruction_donor_metadata_sha256"],
+            "source hybrid instruction-donor metadata differs from its pin",
+        )
 
     target_body = coff_body(target, target_primary)
     instruction_body = coff_body(instruction_donor, instruction_primary)
@@ -16413,9 +17864,22 @@ def compose_retail_exact_cross_tu_instruction_hybrid_resize(
             "instruction donor body differs from its pin")
     ranges = validate_cross_tu_instruction_hybrid_ranges(
         function.get("instruction_ranges"),
-        "cross-TU instruction hybrid ranges",
+        "instruction hybrid ranges",
         len(target_body), len(instruction_body),
+        range_kind=(
+            "source_same_mangled_complete_x86_instruction_v1"
+            if source_aware else
+            "cross_tu_same_mangled_complete_x86_instruction_v1"
+        ),
+        require_same_offsets=source_aware,
     )
+    require_coff_line_certified_ia32_boundaries(
+        target, target_primary, target_body, ranges, "target", mangled,
+        "instruction hybrid target donor")
+    require_coff_line_certified_ia32_boundaries(
+        instruction_donor, instruction_primary, instruction_body, ranges,
+        "instruction_donor", mangled,
+        "instruction hybrid instruction donor")
     target_relocations = detailed_relocations(target, target_primary)
     instruction_relocations = detailed_relocations(
         instruction_donor, instruction_primary)
@@ -16492,23 +17956,82 @@ def compose_retail_exact_cross_tu_instruction_hybrid_resize(
     require(_comdat_child_closure(hybrid_coff, hybrid_primary)
             == _comdat_child_closure(target, target_primary),
             "cross-TU hybrid changed the target-donor closure")
+    if source_aware:
+        require(
+            instruction_mosaic_metadata_sha256(
+                hybrid_coff, hybrid_primary)
+            == function["expected_target_donor_metadata_sha256"],
+            "source hybrid changed target-donor metadata",
+        )
 
     effective_function = dict(function)
     effective_function["splice_class"] = "retail_exact_reloc_divergent"
     effective_function["expected_body_sha256"] = function[
         "expected_hybrid_body_sha256"]
+    if source_aware:
+        effective_function["expected_donor_line_count"] = function[
+            "expected_target_donor_line_count"]
     composed, detail = compose_same_slot_resize(
         seed_bytes, hybrid, effective_function,
         retail_body=bytes(retail_body),
     )
     return composed, {
         **detail,
-        "splice_class": CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
+        "splice_class": expected_class,
         "target_donor_body_sha256": sha256_bytes(target_body),
         "instruction_donor_body_sha256": sha256_bytes(instruction_body),
         "hybrid_body_sha256": sha256_bytes(hybrid_body),
         "instruction_ranges": range_detail,
     }
+
+
+def compose_retail_exact_cross_tu_instruction_hybrid_resize(
+    seed_bytes: bytes,
+    target_donor_bytes: bytes,
+    instruction_donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Compose the existing clean-current-source cross-TU hybrid class."""
+    require("instruction_donor_source_refactor" not in function,
+            "clean cross-TU hybrid may not carry a source-refactor proof")
+    return _compose_retail_exact_instruction_hybrid_resize_core(
+        seed_bytes, target_donor_bytes, instruction_donor_bytes,
+        function, retail_body, source_aware=False,
+    )
+
+
+def compose_retail_exact_source_instruction_hybrid_resize(
+    seed_bytes: bytes,
+    target_donor_bytes: bytes,
+    instruction_donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+    seed_source: bytes,
+    instruction_donor_source: bytes,
+) -> tuple[bytes, dict]:
+    """Authenticate one source permutation before importing instructions."""
+    require(
+        function.get("splice_class")
+        == SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS
+        and "instruction_donor_source_refactor" in function,
+        "source instruction-hybrid contract is missing",
+    )
+    proof = function["instruction_donor_source_refactor"]
+    require(proof.get("source_owner_mangled") == function.get("mangled"),
+            "source instruction-hybrid owner differs")
+    owner = proof["source_owner_mangled"]
+    CoffObject(target_donor_bytes).function_section(owner)
+    CoffObject(instruction_donor_bytes).function_section(owner)
+    source_detail = require_target_source_refactor_identity(
+        seed_source, instruction_donor_source, proof,
+        "source instruction-hybrid source proof",
+    )
+    composed, detail = _compose_retail_exact_instruction_hybrid_resize_core(
+        seed_bytes, target_donor_bytes, instruction_donor_bytes,
+        function, retail_body, source_aware=True,
+    )
+    return composed, {**detail, **source_detail}
 
 
 def compose_retail_exact_reloc_divergent(
