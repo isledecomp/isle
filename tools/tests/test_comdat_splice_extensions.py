@@ -449,13 +449,29 @@ def _patched_target_body(data, replacements):
 class RetailExactInstructionMosaicTests(unittest.TestCase):
     """A retail-exact body assembled from whole compiler instructions."""
 
-    def fixture(self, *, donor_range=(0, 3), donor_extra=(24, 27)):
+    def fixture(
+        self, *, donor_range=(0, 3), donor_extra=(24, 27),
+        preserve_relocation_operands=False,
+    ):
         seed = make_divergent_coff()
         seed_coff = byte_identity.CoffObject(seed)
         section = seed_coff.function_section(TARGET_SYMBOL)
         seed_body = byte_identity.coff_body(seed_coff, section)
         start, end = donor_range
         replacement = bytes(value ^ 0x41 for value in seed_body[start:end])
+        if preserve_relocation_operands:
+            replacement = bytearray(replacement)
+            for row in byte_identity.detailed_relocations(seed_coff, section):
+                operand_start = row["offset"]
+                operand_end = operand_start + row["width"]
+                overlap_start = max(start, operand_start)
+                overlap_end = min(end, operand_end)
+                if overlap_start < overlap_end:
+                    relative = overlap_start - start
+                    replacement[relative:relative + overlap_end - overlap_start] = (
+                        seed_body[overlap_start:overlap_end]
+                    )
+            replacement = bytes(replacement)
         extra_start, extra_end = donor_extra
         extra = bytes(value ^ 0x27
                       for value in seed_body[extra_start:extra_end])
@@ -550,9 +566,29 @@ class RetailExactInstructionMosaicTests(unittest.TestCase):
 
     def test_rejects_instruction_range_overlapping_a_relocation(self):
         seed, donor, function, retail, _ = self.fixture(
-            donor_range=(3, 6), donor_extra=(24, 27))
+            donor_range=(3, 6), donor_extra=(24, 27),
+            preserve_relocation_operands=True)
         with self.assertRaisesRegex(byte_identity.ByteIdentityError,
-                                    "overlaps a seed relocation"):
+                                    "partially overlaps a seed relocation"):
+            self.compose(seed, donor, function, retail)
+
+    def test_accepts_complete_instruction_with_identical_relocation_operand(self):
+        seed, donor, function, retail, mosaic = self.fixture(
+            donor_range=(3, 8), donor_extra=(24, 27),
+            preserve_relocation_operands=True,
+        )
+        composed, detail = self.compose(seed, donor, function, retail)
+        checked = byte_identity.CoffObject(composed)
+        section = checked.function_section(TARGET_SYMBOL)
+        self.assertEqual(byte_identity.coff_body(checked, section), mosaic)
+        self.assertEqual(detail["body_changed_offsets"], [3])
+        self.assertTrue(detail["retail_exact"])
+
+    def test_rejects_complete_instruction_with_changed_relocation_operand(self):
+        seed, donor, function, retail, _ = self.fixture(
+            donor_range=(3, 8), donor_extra=(24, 27))
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "relocation"):
             self.compose(seed, donor, function, retail)
 
     def test_rejects_instruction_hash_drift(self):

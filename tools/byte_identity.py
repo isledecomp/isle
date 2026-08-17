@@ -11566,6 +11566,33 @@ def function_multiset(coff: CoffObject) -> Counter:
     )
 
 
+def comdat_primary_identity(coff: CoffObject, section: dict) -> tuple:
+    """Return one non-associative COMDAT group's structural identity."""
+    definitions = section_definitions(coff)
+    definition = definitions.get(section["number"])
+    require(definition is not None and definition["selection"] not in (0, 5),
+            f"section {section['number']} is not a primary COMDAT")
+    owners = [
+        symbol for symbol in coff.symbols.values()
+        if symbol["section"] == section["number"]
+        and symbol["value"] == 0
+        and symbol["name"] != section["name"]
+        and symbol["storage"] in (2, 3)
+    ]
+    external = [symbol for symbol in owners if symbol["storage"] == 2]
+    owners = external or owners
+    require(len(owners) == 1,
+            f"COMDAT section {section['number']} has no unique owner")
+    owner = owners[0]
+    return (
+        owner["name"], owner["type"], owner["storage"],
+        section["name"], definition["selection"],
+        tuple(sorted(name for _, name in associated_sections(
+            coff, definitions, section["number"]
+        ))),
+    )
+
+
 def comdat_primary_identity_multiset(coff: CoffObject) -> Counter:
     """Name every non-associative COMDAT group by its defining symbol.
 
@@ -11575,30 +11602,12 @@ def comdat_primary_identity_multiset(coff: CoffObject) -> Counter:
     a code/data group under cover of an omitted function.
     """
     definitions = section_definitions(coff)
-    identities = []
-    for section in coff.sections:
-        definition = definitions.get(section["number"])
-        if definition is None or definition["selection"] in (0, 5):
-            continue
-        owners = [
-            symbol for symbol in coff.symbols.values()
-            if symbol["section"] == section["number"]
-            and symbol["value"] == 0
-            and symbol["name"] != section["name"]
-            and symbol["storage"] in (2, 3)
-        ]
-        external = [symbol for symbol in owners if symbol["storage"] == 2]
-        owners = external or owners
-        require(len(owners) == 1,
-                f"COMDAT section {section['number']} has no unique owner")
-        owner = owners[0]
-        identities.append((
-            owner["name"], owner["type"], owner["storage"],
-            section["name"], definition["selection"],
-            tuple(sorted(name for _, name in associated_sections(
-                coff, definitions, section["number"]
-            ))),
-        ))
+    identities = [
+        comdat_primary_identity(coff, section)
+        for section in coff.sections
+        if definitions.get(section["number"], {}).get("selection") not in
+        (None, 0, 5)
+    ]
     return Counter(identities)
 
 
@@ -12334,6 +12343,54 @@ def require_same_semantic_relocations(
         require(all(seed_row[field] == donor_row[field]
                     for field in target_fields),
                 f"{context}: relocation {index} target structure differs")
+    return renames
+
+
+def require_instruction_mosaic_semantic_relocations(
+    seed: CoffObject,
+    seed_section: dict,
+    donor: CoffObject,
+    donor_section: dict,
+    context: str,
+) -> list[tuple[int, str]]:
+    """Compare mosaic relocations while permitting benign COMDAT reseating.
+
+    A declaration-only carrier can reorder otherwise identical vtable/data
+    COMDATs.  The output retains the seed relocation table, so a same-named
+    ordinary target may move seats only when both seats describe the exact
+    same primary COMDAT identity.  Compiler-local symbols remain under the
+    stricter ordinary mosaic rule.
+    """
+    renames = _normalized_relocation_renames(
+        seed, seed_section, donor, donor_section, context
+    )
+    left = detailed_relocations(seed, seed_section)
+    right = detailed_relocations(donor, donor_section)
+    for index, (seed_row, donor_row) in enumerate(zip(left, right)):
+        require(seed_row["width"] == donor_row["width"],
+                f"{context}: relocation {index} width differs")
+        same_name = seed_row["target"] == donor_row["target"]
+        local = (local_symbol_kind(seed_row["target"]) is not None
+                 or local_symbol_kind(donor_row["target"]) is not None)
+        common_fields = ("target_value", "target_type", "target_storage")
+        require(same_name or local,
+                f"{context}: relocation {index} changes symbol identity")
+        require(all(seed_row[field] == donor_row[field]
+                    for field in common_fields),
+                f"{context}: relocation {index} target structure differs")
+        if seed_row["target_section"] == donor_row["target_section"]:
+            continue
+        require(same_name and not local
+                and seed_row["target_section"] > 0
+                and donor_row["target_section"] > 0,
+                f"{context}: relocation {index} changes target seat")
+        seed_target = seed.sections[seed_row["target_section"] - 1]
+        donor_target = donor.sections[donor_row["target_section"] - 1]
+        require(
+            comdat_primary_identity(seed, seed_target)
+            == comdat_primary_identity(donor, donor_target),
+            f"{context}: relocation {index} reseats a different COMDAT",
+        )
     return renames
 
 
@@ -13530,6 +13587,9 @@ def compose_retail_exact_instruction_mosaic(
             "instruction-mosaic global section count changed")
     require(function_multiset(seed) == function_multiset(donor),
             "instruction-mosaic donor function set differs")
+    require(comdat_primary_identity_multiset(seed)
+            == comdat_primary_identity_multiset(donor),
+            "instruction-mosaic donor COMDAT identity set differs")
     header_fields = (
         "name", "raw_size", "relocation_count", "line_count",
         "characteristics",
@@ -13606,6 +13666,12 @@ def compose_retail_exact_instruction_mosaic(
                 and coff.symbols.get(symbol_index, {}).get("name") == mangled,
                 f"instruction-mosaic {role} line marker changed identity")
 
+    code_relocation_renames = (
+        require_instruction_mosaic_semantic_relocations(
+            seed, sp, donor, dp, "instruction-mosaic code"
+        )
+    )
+
     mosaic = bytearray(seed_body)
     range_detail = []
     for index, item in enumerate(ranges):
@@ -13618,20 +13684,47 @@ def compose_retail_exact_instruction_mosaic(
         require(donor_instruction.hex() == item["donor_bytes"]
                 and sha256_bytes(donor_instruction) == item["donor_sha256"],
                 f"instruction-mosaic donor instruction {index} drifted")
-        for role, rows in (("seed", seed_rows), ("donor", donor_rows)):
-            require(all(end <= row["offset"]
-                        or start >= row["offset"] + row["width"]
-                        for row in rows),
-                    f"instruction-mosaic range {index} overlaps a {role} "
-                    "relocation operand")
+        contained = []
+        for role, rows, body in (
+            ("seed", seed_rows, seed_body),
+            ("donor", donor_rows, donor_body),
+        ):
+            ordinals = []
+            for ordinal, row in enumerate(rows):
+                operand_start = row["offset"]
+                operand_end = operand_start + row["width"]
+                if end <= operand_start or start >= operand_end:
+                    continue
+                require(start <= operand_start and operand_end <= end,
+                        f"instruction-mosaic range {index} partially overlaps "
+                        f"a {role} relocation operand")
+                ordinals.append(ordinal)
+            contained.append(ordinals)
+        require(contained[0] == contained[1],
+                f"instruction-mosaic range {index} contains unpaired "
+                "relocation operands")
+        for ordinal in contained[0]:
+            left, right = seed_rows[ordinal], donor_rows[ordinal]
+            strict_fields = (
+                "offset", "width", "type", "addend", "target",
+                "target_section", "target_value", "target_type",
+                "target_storage",
+            )
+            require(all(left[field] == right[field]
+                        for field in strict_fields),
+                    f"instruction-mosaic range {index} contains a changed "
+                    "relocation")
+            operand_start, width = left["offset"], left["width"]
+            require(seed_body[operand_start:operand_start + width]
+                    == donor_body[operand_start:operand_start + width],
+                    f"instruction-mosaic range {index} relocation operand "
+                    "bytes differ")
         mosaic[start:end] = donor_instruction
         range_detail.append({
             "start": start, "end": end,
             "seed_sha256": item["seed_sha256"],
             "donor_sha256": item["donor_sha256"],
         })
-    code_relocation_renames = require_same_semantic_relocations(
-        seed, sp, donor, dp, "instruction-mosaic code")
     mosaic = bytes(mosaic)
     require(sha256_bytes(mosaic) == function["expected_body_sha256"],
             "instruction-mosaic final body differs from its pin")

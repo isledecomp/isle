@@ -54,8 +54,19 @@ after every bounded panel or full gate.
 
 ## Live checkpoint (2026-08-16)
 
-- Accepted canonical gate: LEGO1 4867/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is `0x100a4420 OrientableROI::OrientableROI`, extracted
+- Accepted canonical gate: LEGO1 4868/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain is `0x1007ca30 LegoPartPresenter::Read`. A freshly generated
+  declaration-only donor of the exact same 2,633-byte mangled COMDAT supplies
+  four complete instructions; the composed body is retail-exact under all 111
+  authenticated relocations. Two imported instructions fully contain their
+  unchanged `_Nil` DIR32 operands, which is admissible only because the donor
+  and seed operands, relocation records and semantic targets are identical.
+  The seed relocation/line/debug/EH tables and every non-target byte remain
+  authoritative. The zero-loss confirmation report SHA-256 is
+  `05161395eeb7320cb0c41c519095c4e31e7116ab280575c396cb30373dc3c573`;
+  verdict SHA-256 is
+  `ce643a9564ef7701468d3ffd4429e490d1463d62a24246b31eb8d9514c9acee3`.
+  The preceding gain is `0x100a4420 OrientableROI::OrientableROI`, extracted
   from a freshly generated, donor-private source permutation of the exact
   same mangled COMDAT. The checked-in target source is unchanged; the donor
   renders two typed header permutations, through an explicitly declared

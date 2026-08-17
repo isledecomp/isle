@@ -432,13 +432,21 @@ This class is a narrow same-function construction, not a general binary patch:
    translation unit. The donor may differ only by an existing manifest-declared
    non-emitting declaration carrier, and is never linked.
 2. The exact mangled function, section seat/count, body length, COMDAT
-   selection, function multiset, relocation/line counts and debug/EH closure
-   must agree. Seed and donor relocation semantics must be identical; only
-   structurally identical compiler-local `$L`/`$T` serial renames are allowed.
+   selection, function multiset, primary-COMDAT identity multiset,
+   relocation/line counts and debug/EH closure must agree. Seed and donor
+   relocation semantics must be identical. Structurally identical
+   compiler-local `$L`/`$T` serial renames are allowed; a same-named ordinary
+   target may occupy a different section seat only when both uniquely resolve
+   to the identical primary COMDAT identity. The general relocation comparator
+   remains strict; this reseating rule is mosaic-specific because the output
+   retains the seed relocation table.
 3. Every imported range is a sorted, non-overlapping, manifest-pinned complete
    x86 instruction at the same offset and is at most 15 bytes. Both seed and
-   donor encodings and their SHA-256 values are pinned. A range may overlap no
-   relocation operand in either object.
+   donor encodings and their SHA-256 values are pinned. A range may contain a
+   relocation operand only when the complete operand lies inside the same
+   instruction in both objects, its ordered relocation record and semantic
+   target are identical, and its raw bytes are identical. Partial overlap,
+   shifted/unpaired operands or changed operand bytes are refused.
 4. The output starts as the seed object and changes only those target-text
    bytes. It retains the seed relocation table, line table, debug/EH children,
    function set and every non-target byte. A complete ordered semantic
@@ -451,7 +459,12 @@ The first customers are `0x1009a8c0 LegoWEGEdge::LinkEdgesAndFaces` (four
 instructions/four changed bytes) and `0x100c3750 MxRegion::AddRect` (ten
 instructions/ten changed bytes). Fresh source regeneration plus the complete
 gate raised LEGO1 from 4864/4934 to 4866/4934 with exactly those two gains and
-zero losses; ISLE remains 172/172 and CONFIG 111/111.
+zero losses. `0x1007ca30 LegoPartPresenter::Read` is the first relocation-
+containing customer: four complete instructions change four non-relocation
+bytes in its 2,633-byte body, while two unchanged `_Nil` DIR32 operands are
+fully contained and verified by the 111-row oracle. Its fresh confirmation
+raised LEGO1 from 4867/4934 to 4868/4934 with exactly one gain and zero losses;
+ISLE remains 172/172 and CONFIG 111/111.
 
 ## 9. Class F — `retail_exact_source_target_closure`
 
