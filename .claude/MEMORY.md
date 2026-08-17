@@ -1239,3 +1239,85 @@ no historical source, generator, header, report or object is a build input.
   SHA-256 `c18947ce...`, S109 nonzero-span census `690a30e0...`, and S110
   semantic near-donor census `7fc32983...`. Do not repeat this cross-TU census
   without genuinely new artifacts.
+
+## `0x100a46b0 OrientableROI::UpdateTransformationRelativeToParent` static seal (2026-08-17)
+
+This was a static, read-only audit. It did not compile, link, run Wine/reccmp,
+or change source, tools, the manifest, or the accepted baseline. The existing
+manifest layout restoration remains authoritative and explicitly open only for
+replacement by an authenticated source recovery; this seal does not stack a
+second patch on it.
+
+- Exact source/provenance pins: HEAD
+  `57a2490fc8fb2d7bf8992744c3e0d1dcaac4af2c`; clean
+  `LEGO1/realtime/orientableroi.cpp` SHA-256
+  `089c646ca25359ad456b75207d5fdd13cce58338411d5a8346ac0882e270f3eb`;
+  lines 33--62/function-text SHA-256
+  `e24deab975a7e09910d7db08b3b1a05f05c092b8bf62d56e6e7dbd460de2bc58`.
+  The manifest's `82bb7442d040bfc482c3b47a156eb85f90d6499314eb1c6ae8e37f643afcd7d5`
+  pin is reconciled: it is the effective source-overlay output after the
+  accepted `MxUnkRecordHW` and `RkC0`--`RkC15` declarations, while `089c...`
+  is the clean source pin. `3rdparty/vec/vec.h` is the pristine left-associated
+  `_DOTcol4` spelling at lines 757--761, file SHA-256
+  `92a1a47846c1e56722f57161e2a03cf8fa1d6f1c8bcb6dcac4add143d4414234`.
+- The accepted composed object is pinned by whole-object SHA-256
+  `5f43230cc165c32435ca2a231baa7c27a7d9c376c754e5cce8030c392a57476b`.
+  Its target is section 226, 2,515 bytes, body SHA-256
+  `bb72cdd5c7052c3e8362dbc9021986445217478a5a00073be9a3f38a71276b29`,
+  with 13 line records and exactly two DIR32 relocations: offset 40 to
+  `??_7MxMatrix@@6B@`, and offset 453 to the same-function local EH record
+  `$T41556`. The associated `.debug$S` is 274 bytes/SHA-256
+  `63921370da73cd6675741674c83ace5d233657cdffeaddba0eaab6dae3eabc71`;
+  `.debug$F` is 16 bytes/SHA-256
+  `c18c68f1ed078a13c0d3013886a854558e2cd2dfcac994b12eb20c2d554494f4`.
+- The retail body at `0x100a46b0` is 2,515 bytes, raw SHA-256
+  `ba173973818f669a957450463281a25f0f9adca7954c8b488bff528026992d77`;
+  after zeroing the two four-byte relocation operands its SHA-256 is
+  `447b52a765e9f0ab7677f35787764298daebcf4abdaf8eaa217190a39b924927`.
+  The accepted object is still masked `nd=99`. The latest pinned report
+  (`bc8f97a7474de6c4469e2ae28f36f79727c54899f4ea3661bde5d3f3af872562`)
+  places it at recomp `0x100a46d0` with score `0.8696461824953445`; the linked
+  2,515-byte body SHA-256 is
+  `b131a2e2c97a81a683b8c6fed2d873a7f0904ea583dc5576be6dd53922782ceb`.
+  Object and linked body differ only in the eight relocation bytes.
+- The corrected residual classification is SHAPE 100.00 / STRUCT 90.13 /
+  EXACT 88.83: all 537 operations align after ESP-displacement erasure, while
+  53 instructions name different stack slots. This is an x87 depth/slot
+  placement residue, not evidence of a different expression tree. It
+  supersedes the older wave-4 "source lever" wording. The independent source
+  panel reproduces base `nd=99`; `MXM4d` is 115, reversed copy assignment 131,
+  swapped `MXM4` 156, and `MXM4d` plus swap 172, while loop-index and local
+  declaration variants are wrong-length or worse. The foundry ledger likewise
+  closes the old `vec.h` debt.
+- Exhaustion is complete on the known channels. S73 covered all 505
+  declaration shapes for its pinned source snapshot: every target body was
+  2,515 bytes, 95 distinct bodies were emitted, every verdict was `BYTE_DIFF`,
+  and none was masked-exact. Independent 730-cell and 1,098-cell carrier
+  sweeps floor at declaration shape `(5,27)`, `nd=99`. The superseding
+  object-level corpus pass scored 395,874 retained objects; 424 target objects
+  reached retail length and the floor remained 99. Do not use the older
+  sweep-matrix sections that called this row uncovered.
+- Git archaeology is also closed: 2,731 reachable commits produce 26 full-TU
+  blobs but only three target function texts; 193 unreachable commits add no
+  text. All 1,155 unreachable blobs were classified. The only orphan binary
+  definition is an old non-function-level COFF object (and an archive copy)
+  whose target is 4,114 bytes, so it is neither a retail-length nor a natural
+  COMDAT candidate. Retained source copies add only the already-tested local,
+  loop, `MXM4`, and inverse/adjoint spellings. No authenticated explicit
+  first-party product spelling was found.
+
+**Seal:** do not run another declaration/pad/carrier wave, local-order or loop
+order panel, `MXM4d`/operand-swap panel, or `vec.h` parenthesis edit for this
+row. Reopen only if either (a) authenticated original/historical source proves
+that this site did not use `MXM4`, or (b) a genuinely new, source-authentic
+exact-symbol object outside the exhausted corpus has length 2,515,
+relocation-zeroed body SHA-256 `447b52a7...`, and the exact two-relocation
+semantic topology above.
+
+Any reopened candidate must pass pinned A/B/A2 reproducibility; exact target
+body and semantic relocations; a natural complete COMDAT closure including
+`.text`, `.debug$S`, `.debug$F`, line/FPO/EH metadata; byte-identical seed
+non-target sections and function multiset; unchanged winner/seat/span; target
+report 1.0; `LOST=[]`; and invariance of every previously accepted row plus
+the ISLE/LEGO1 image-policy, CONFIG, archive, and proxy gates. A success must
+replace the present layout restoration rather than compose over it.
