@@ -1692,3 +1692,71 @@ and manifest
 Do not restore range-level composition for this row: any replacement must
 remain a complete source-authentic compiler body and preserve the same
 seed-authoritative FPO/CodeView/line/relocation universe and full gate set.
+
+## `0x10048310 LegoPathController::FindPath` decisive static seal (2026-08-17)
+
+No untested authentic, logic-neutral source spelling in the retained corpus
+can plausibly account for the complete residual. The effective source is
+`/Users/foxtacles/Projects/isle-build-lean/src/LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp`,
+28,398 bytes, SHA-256
+`df97c2774e27e46cb45d04aad29204f030a87483650d943b0876abaca955636a`;
+its 5,053-byte `FindPath` segment is
+`099a34ebcafeca3df39196888daa61cc93516dd204111ceda2dc8fdabe5214b4`.
+The current object is 222,391 bytes, SHA-256
+`0cd05b1e75b57f08fca21a7a8bb1280493f0b0d3c34657d4c29fd92851469f`.
+Its target section 452 is 2,337 bytes/body
+`fbf5fc785b6d23cef164eff564e3233ea498d44ffd216dc62a38666851b27b60`,
+with 50 relocations, 88 line records, characteristics `0x60501020`, and
+selection 1. The associated `.xdata$x` section 453 is 96 bytes/body
+`ba1cef6df1b12bbad33310be534dd6f0491d0ed9f2793ad0953645bdeb9f57a2`
+with nine relocations; `.debug$S` section 454 is 846 bytes/body
+`ca556561a55fdbd50a272e61e23a6dd08d5a0e9599d5d290f0b0503039b71a43`
+with 20 relocations. Retail is 2,338 bytes/raw body
+`daeb17083ff5da26ec27061cb1fec800124e70366a19a8136384d256a0e546c5`.
+
+The best natural retained carrier remains
+`/private/tmp/claude-501/-Users-foxtacles-Projects-isle/3233884b-d405-46dd-ab8c-ee0c06400055/scratchpad/nm/probes/fpd-lpc-FD1/xps-7-37-5-28/o.obj`,
+221,425 bytes, SHA-256
+`dcff4c5e5d8f5cd956b956dfb1a44b5b62769b2cbc77962529f322e9f07abdcf`.
+Its target section is 2,338 bytes/body
+`da5846f2ba56736bbf5fad150982ec9764107fe1599b102f0e886e47bd7d32b4`,
+with 50 relocations, 89 line records, and masked distance 66. Its 96-byte
+`.xdata$x` body and nine relocations are identical to current. The carrier's
+source differs from today's effective target only by the previously tested
+FD1 split assignment (`dist = ...; if (dist < minDistance)` instead of the
+assignment in the condition); that change was byte-inert. The existing nd66
+seal therefore applies directly to today's logical source.
+
+The expanded retained same-symbol census contains 203 distinct retail-length
+bodies: the prior indexed 199 plus four newly found, disjoint states. None is
+a relocation-masked exact match. The global minimum remains nd66; the best of
+the four newly found states is only nd1000. A scan of 16,433 retained source
+functions reduced to 137 whitespace/comment-normalized states. Of those, 120
+are obsolete pre-BETA permutations of five early STL declarations; every
+remaining state is current/all-Git history or an already sealed F, FD, S, or
+body-axis panel. The 92 path-touching commits reduce to six known `FindPath`
+function states. No retained source contains a new authentic lifetime or
+topology.
+
+The nd66 residual is locally reconvergent scheduler/comparison-direction
+output, not missing logic: comparison sites begin at function offsets
+`+272`, `+314`, and `+1163`; the principal schedule regions are
+`+712..+718`, `+1674..+1689`, and `+1831..+1839`. The complete relocation-
+masked differing-offset set is
+`273,315,464,587,712,713,714,715,716,717,718,724,725,726,727,730,731,732,733,734,735,736,1163,1254,1255,1260,1261,1262,1263,1264,1265,1266,1267,1268,1270,1271,1272,1273,1274,1275,1560,1563,1674,1675,1677,1678,1679,1680,1681,1682,1683,1684,1685,1686,1687,1688,1689,1831,1832,1833,1834,1835,1836,1837,1838,1839`.
+Widening or hoisting the named iterator is not a valid remaining lead: BETA
+`/Od` evidence pins `it` at stack slot `-0x90`, between inner `edge` at
+`-0x8c` and `dist` at `-0x94`, and a wider inner lifetime begins too late to
+cause the early `+272`, `+314`, and `+712` residue. It cannot cover the full
+early-and-late pattern while preserving the authenticated source order.
+
+**Seal:** do not repeat named-iterator, temporary, assignment-split,
+statement-order, declaration-permutation, scope-count, or body-axis panels.
+Reopen only if (1) authenticated final-1997/BETA source or debug-lifetime
+evidence establishes a different construct/order that causally spans every
+early and late residual site, (2) a natural current-source object preserves
+the 2,338-byte/50-relocation/identical-closure shape and improves below nd66
+or reaches exact, or (3) C2 scheduler/pool instrumentation identifies one
+source-expressible global cause. Otherwise retain the C2-instrument seal. No
+compiler, Wine, link, reccmp, source edit, or shared-state mutation was used
+for this audit.
