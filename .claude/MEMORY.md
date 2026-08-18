@@ -3149,3 +3149,95 @@ compiler-emitted natural 234-byte body `689e0a71...`, or for a genuinely new,
 independently predicted deterministic source axis whose first result emits
 that whole body and passes the exact line/FPO/CodeView, function/COMDAT/section/
 linker, and zero-non-target-collateral gates above.
+
+## `0x10059dc0` texture-info map `_Tree::erase` whole-natural-body seal (2026-08-17)
+
+The remaining
+`retail_exact_cross_tu_instruction_hybrid_resize` row was re-audited from
+scratch without compiling. A live scan of `/Users/foxtacles/Projects` and
+`/private/tmp` parsed 13,723 COFF objects defining the exact decorated
+`_Tree<char const*, ... LegoTextureInfo*>::erase` symbol, totaling
+2,085,237,183 object bytes. It found 834 distinct `(body length, body SHA-256)`
+states and no parse errors. At retail length 1,102 there are 905 instances:
+902 non-exact compiler bodies and exactly three retail-exact bodies. The 902
+non-exact instances collapse to 59 body hashes globally (62 section/body
+pairs): 829 definitions in owning-TU section 130, 72 in cross-TU section 31,
+and one remote section-97 state. The only body
+`851f0e9a57984afaf02ecf6d1e52c5ad0daae945e12b8cd820e58759e2c6787a`
+instances are the already-composed `legomain.cpp.obj` files in
+`isle-build-byte-identity-baseline/build`, `isle-build-lean/build`, and
+`isle-build-lean/terminal`. They are outputs of the present hybrid, not
+compiler-emitted natural donors; consuming one would be circular and would
+not remove the manipulation.
+
+The natural floor is still the existing section-130 target donor. Body
+`c600bf89a868f041db33c3ca1c2b1ee9718c8a1a1be0c1bf1ac893e85ddd46ca`
+occurs 349 times, has the required 1,102-byte size, and differs from retail at
+exactly byte `+151`. Its complete instruction is `3b4c2410`; retail requires
+`394c2410`. The surrounding 20 bytes are otherwise identical. Its closure is
+already internally coherent and retail-compatible: section 130 has 16
+semantic relocations at
+`22,32,97,110,120,207,221,264,279,482,595,733,828,925,1014,1072`,
+comprising fifteen DIR32 references to the exact `_Nil` symbol followed by the
+REL32 `operator delete` reference; it has 80 line rows. Associated `.debug$S`
+section 131 is 360 bytes/two relocations/body
+`983468593760ed92417388dd4407c543d73a83ed8a81f2a9debc73cd46009cd3`.
+Associated `.debug$F` section 132 is 16 bytes/one relocation/body
+`2526cab12379dfa32d959db772562546ab34389ced06b745f4f45d34448429ed`;
+its FPO record fixes procedure size 1,102, one local, two parameters, prolog
+17, four saved registers and frame-pointer use. The composed final object
+retains both associated payloads exactly. Its relocation-table differences
+from the donor are only the 16 rewritten symbol indices, and its line table
+differs only in the leading function-symbol index; every semantic relocation
+and all 79 non-sentinel line rows are unchanged. Closure metadata therefore
+supplies no independent natural-body lead: the sole debt is the one opcode
+byte.
+
+The clean checked-in cross-TU emitter cannot replace that donor wholesale.
+`LEGO1/lego/sources/misc/legocontainer.cpp`, source SHA-256
+`b06a38d253e51a1e7c3e08037a02d374b424b7b833e1c0e600dbac112bc750ce`,
+naturally emits section-31 body
+`18aa8de3a8bd6ef6fdfa9e7393066ea40d0c2e01cd53522aa4c4b77b751ccd14`.
+It contains retail's complete `394c2410` instruction at `+145`, but is 1,104
+bytes and has relocation seats
+`22,32,91,104,114,201,215,258,273,474,588,726,822,928,1017,1074`.
+Its `.debug$F` describes a 1,104-byte procedure, and its distinct line and
+CodeView closure follow that layout. Among the 72 retained natural 1,102-byte
+section-31 bodies, the best is `2fde5f29...`, still 20 raw bytes from retail.
+Thus neither the clean donor nor any same-size cross-TU state is a complete
+same-slot body/closure candidate. The present four-byte transfer is the only
+retail material it supplies; proposing another transfer would merely replace
+one instruction mosaic with another.
+
+The exact historical-name lane remains negative. Upstream seed `834469889`
+used the authentic 583-byte LF header
+`30bd40ed01079264f32b4d0f237d70a3b14e61dfecaf473de66ea0b33bd4ad99`,
+with three classes/fourteen methods distributed `3,10,1`. On historical
+owning source
+`88e295cfa582b7178ed7108c13e083caceea69b510cc0e427d4f3c16e636c309`
+its best report reached only `0.986449864498645`: one EAX/EDI register-color
+region remained over retail offsets `+0xbc..+0xe9`, although the sample was
+already correct at today's hybrid instruction site `+0x97`. Replaying the
+same header at the historical pre-SmartHeap `/FI` seat on current effective
+source
+`6aa2be8d518f02e58f0daa1f9382276ef335e180e5ac218d0593e1c4cf54ae74`
+emitted the already-known 1,114-byte body `36dc427f...`, with shifted tail
+relocations and a coherent 1,114-byte FPO/CodeView closure. It changed ten
+non-target runtime COMDAT bodies and fifteen rdata COMDAT seats without
+entering retail's whole-body orbit. The sealed replay receipt remains
+`/private/tmp/texerase834469889v1xxxxxxxxxxxxx/result.json`, SHA-256
+`1ba4511b55850b86a4ee7274627d8fd1c4bbbeb435f6a43ee59112ff59fa08ef`;
+the historical report-entry receipt is
+`b0d29f659011064fa4b0be1e9cdef36e2856ed24e6d8c128ae2fb445e2b0d57c`.
+
+**Seal:** preserve the current exact one-instruction cross-TU hybrid. Do not
+reuse any of the three composed exact outputs, repeat seed `834469889` on the
+current effective source, accept a masked/body-only hit, or propose a new
+instruction transfer. Reopen only for a non-composed fresh compiler output
+from a materially different SHA-pinned authenticated owning- or same-mangled-
+TU source/compiler-state distinction that naturally emits the complete
+1,102-byte body `851f0e9a...`, all 16 retail semantic relocations, the 80-row
+line table, and a coherent same-output CodeView/FPO closure with procedure
+size 1,102. It must also pass the ordinary whole-body same-slot topology,
+source provenance, exclusion and zero-loss gates. No compiler, Wine, link,
+reccmp, source/manifest edit or object mutation was used in this static audit.
