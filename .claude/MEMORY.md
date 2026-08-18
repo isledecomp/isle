@@ -194,7 +194,48 @@ after every bounded panel or full gate.
   initially flagged 15 other functions, but all were compiler-local `$L/$T`
   ordinal spelling changes: normalized bodies and semantic relocations prove
   zero meaningful non-target runtime collateral. Evidence is under
-  `/tmp/codex-towtrack-cached.0qr5gva9`; seal this exact cached-state form.
+  `/tmp/codex-towtrack-cached.0qr5gva9`.
+
+  The cached-state carrier-product lane is now also decisively sealed. A
+  fresh static census covered all 7,163 retained TowTrack carrier objects in
+  the six `all-towtrack`, `-k400`, `-ms`, `-xd`, `-tPR`, and `-epws01`
+  families, plus 52 Git file revisions/seven distinct function definitions.
+  None had ever crossed the exact cached function with a retained carrier.
+  The sole causally plausible untested cross used retained
+  `epws-0-1-1-3`: control source SHA-256
+  `437b56b2602e1edf405795b889f8d522f7226380b78fe6501b3ea12f4b6a2f4c`,
+  declaration-only `run.h` SHA-256
+  `ba68e899854373abf86fd4f93e9c17cda6d6b11e14c19eed055a3c4a74870ca5`,
+  and reconstructed 33-argument command receipt
+  `e4f8e36230cd341d8a11b5052f461114b6b4d57e17385473ccdc68566d9993e1`.
+  Its retained authenticated control object is SHA-256
+  `3029c447f22d86a58b64bdc92f2acc3e83339f94714a90d4da4c0b47a625ae8a`
+  (233 sections/1,237 symbols), with the canonical 856-byte/36-relocation/
+  60-line target body `6e542096f7e561d4def7af5570cdfd6955c36a3b02a7c6d6604140b55d4c463b`,
+  69-function receipt
+  `9b1f1591d128c058cc58268a5115aab74a504e59e2f76621aae72d220d43c688`,
+  90-COMDAT receipt
+  `3d53103772fc4ffe4b21a8dc29053f86eb927886f23edc7b8d59f83d8673b227`,
+  and 37-linker-payload receipt
+  `1749ff31f2a4bc470408689b5c6711665599a0497b9cd7c752861b3ea11a9a96`.
+
+  The rendered cached cross was SHA-256
+  `53831bec67df0ae1cde6b9ebd46c19a0a8c3ae226d411c1bdccbf37332c4472c`.
+  The one authorized compile emitted object SHA-256
+  `54a44f921b79b69ce94ab30e438afdee76d813a6ce4d667487b4890eadc8ad4d`
+  and reproduced the identical cached target body
+  `2a225a3c0bc97c4c7944dfd39069fb932f90c7866193802ab2ac9a13fe6ad6ec`,
+  still nd=7 at `[123,129,147,151,157,305,400]`. Target topology, semantic
+  relocations, line table and xdata were exact; all three identity universes
+  above stayed exact; normalized meaningful runtime collateral was zero; and
+  the final compiler census was empty. Evidence is
+  `/private/tmp/codex-towtrack-epws-cross.oga27u4q/result.json`, SHA-256
+  `64f0ca4f69c6ff730438c4be6708a2e545158498e3e34414e1ff41d7853eb349`.
+  No third cell, link, or reccmp ran. Do not repeat the cached spelling or
+  cross it with any retained carrier family. Reopen only for an authenticated
+  new source lifetime/topology or a genuinely new original compiler/runtime/
+  PCH state that causally selects retail's remaining EBX/EDX allocation while
+  preserving the exact 856-byte/36-relocation/60-line body and closure.
 
 - Direct-codegen panel negative: for
   `0x100ba2c0 MxStillPresenter::Clone`, caching `LoadedFirstFrame()` in a
