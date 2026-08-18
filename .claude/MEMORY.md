@@ -2105,3 +2105,80 @@ while preserving the exact 197-byte/69-instruction body, 14 semantic
 relocations, seven line records, and `.debug$S + .xdata$x`/56-byte-xdata
 closure. No compiler, Wine, link, reccmp, source edit, or shared-state mutation
 was used for this audit.
+
+## `0x100a66f0 ViewManager::ManageVisibilityAndDetailRecursively` exact-path seal (2026-08-17)
+
+The final authentic upstream-name crossover is negative. The sole tested cell
+was latest upstream run `31911463768`, commit
+`31bd20de79df0a2d2d26b63f734e155ddd17e8ae`, matrix 0/build 12, seed
+`834469900`, at the historical logical include seat
+`${PROJECT_SOURCE_DIR}/entropy12.h`. Its 1,239-byte/54-LF generated header is
+SHA-256
+`eafe46ee67a2704fef1f74a6066b9bfb12470675c19825af63edaf1ab9e6dfb5`
+and begins with `ClassKijwnx::FunctionMxzfsftt`; the authentic report is
+SHA-256
+`4c2aea06d995f0dfa258882725de922efb9345d7955417d33c6da89c8b2b110b`.
+The effective current source remained 21,080 bytes/SHA-256
+`fc31fc1941e365f33716912a128a3e14cd5ff618de52ad3f16018ba11aedd773`,
+and its brace-balanced 1,732-byte target window remained
+`3f8d821b0aaa7867b8249d2da0b8e66fa359bd41d857bb70d182338f76150f40`.
+The canonical C0 argv receipt is
+`7d03b2cd7a9172f4d24f50c825990e7b489c12f8bada3b9e97bc8dceb1141735`;
+V1 differs only by the exact `/FI.../entropy12.h` token immediately before
+SmartHeap and has argv receipt
+`d7ef6753ea5e20481fbae614e2f2bab68ac7bb1bbc15971700622383ae1613b6`.
+
+A first static preflight used the wrong marker-to-next-marker selector and
+failed closed with launch count zero. The corrected runner used the manifest's
+authenticated brace-balanced selector; this was not a compiler cell or retry.
+Fresh C0 then started as PID/PGID `32236/32236`, returned cleanly with no
+stderr, and emitted object
+`a0efd15ca2012188c8db3c85d0d9b7e48a2e13c384d22717ea2c533b1f4057ce`.
+It authenticated the canonical section 116/250 target: 557 bytes/body
+`16300543c75a31d452e84dc234d07ac490195a5a4f0519e2dd077dd70f7d373c`,
+metadata
+`493eabda5fd960b6f42343f590244f063897489f79dadcf95bc26ea342d5f69c`,
+11 relocations, 28 line rows, and exactly the `.debug$F + .debug$S` closure.
+The object retained 80 functions and 85 primary COMDATs, with function,
+COMDAT, linker and non-target-code receipts respectively
+`e4a9716ead2486ecc765e5babfe529221a02e326d756c5cd57c334efe046097b`,
+`6eee7253967241cb1134e04648cb3e7e98d5dae23182ccc7933c759e87a306cd`,
+`b0fa5877c3f7656076d3f2c7ceb9feff499c166b43392b7a73801ce6bf91c9b0`
+and
+`03c3c891258f07aab6e5cafb24a268a3ccfccb480c28f15d558d1ce6cdbed35e`.
+
+The sole V1 started as PID/PGID `32410/32410`, also returned cleanly with no
+stderr, and emitted object
+`47da4d17112cf00b6c63afeebf938c9ece50e15318839046e86b295e56ea8060`.
+It made the target worse: section 116 was 555 bytes/body
+`f2a9e7e6a97f0f3cf7e8cd45bf4bd99c53a828aa53fb4f559a4587685ef9904b`,
+metadata
+`a7fa9b74bf0db1188bf999ff9d66b7f743232ccf932444714c0f58c0f1758990`,
+and relocation-masked retail distance 236, versus C0's 214. It therefore did
+not emit the required natural complete 561-byte body
+`01949ffd3e0c851db40055f6a1c5978091144dea8b2de977502762fe061c76e8`.
+Although section count/shape, target seat, 11-relocation/28-line closure,
+80-function/85-COMDAT identity universes and linker receipt stayed present,
+the zero-collateral gate independently failed: 16 non-target function bodies
+changed and the non-target-code receipt became
+`b0cb32e2911310e689fc6f2843838850cbb9f7f3970246ce2c553fb94eeda0be`.
+
+The final receipt is
+`/private/tmp/codex-managevisibility-exactpath-seed834469900.agelw07m/result.json`
+(SHA-256
+`3fada024725f85c7f8a07d06381a46030a7bcdcb2d969e290a2ecd202714fc87`);
+the corrected runner is SHA-256
+`849026f6a91616e8e877c8e348777b59e71b7c1849d310d3361d8ee86ed3edd1`.
+Exactly two of two compiler launches were consumed, both isolated prefixes
+were drained, and the final process census was empty. There was no retry,
+third cell, link, reccmp, build, or shared source/manifest edit.
+
+**Seal:** the exact upstream header name/path on today's effective source is
+not causal and must not be replayed. The prior 512-row numeric upstream scan,
+retained-source/object census, and this sole exact-name current-source cell
+close the remaining authentic declaration/header crossover. Keep the existing
+one-instruction hybrid. Reopen only for a genuinely new authenticated
+same-mangled natural 561-byte current-source carrier that emits body
+`01949ffd...`, preserves all 11 semantic relocations, 28 line rows and the
+complete `.debug$F + .debug$S` closure, and passes exact zero-collateral
+function/COMDAT/linker/code universes.
