@@ -2791,3 +2791,119 @@ independently predicted deterministic axis that specifically moves the stack
 load before the XOR while retaining every other body byte and passes the full
 line/FPO/CodeView, function/COMDAT/section/linker, and zero-collateral gates.
 Do not replace the hybrid with another instruction mosaic.
+
+## `0x100bb1d0 MxDisplaySurface::VTable0x30` exact-path seal (2026-08-17)
+
+The final exact-name/current-source crossover is negative. The sole variant
+was latest upstream run `31911463768`, commit
+`31bd20de79df0a2d2d26b63f734e155ddd17e8ae`, matrix 0/build 3, seed
+`834469891`, at the historical logical seat
+`${PROJECT_SOURCE_DIR}/entropy3.h`. Its 419-byte/19-LF, two-class/ten-method
+header (`ClassCbkxnn`, `ClassXoaird`, method distribution `[7,3]`) is SHA-256
+`e7f26567212a98285f572856e4d8bca54fe507200cd5cf18198ba0c99ca550dc`.
+The authenticated upstream report and target-row receipts are respectively
+`f4fdac7b1290f75d9e1ed8b73dad2d02cb73c546b353436f367727915d0d49a6`
+and
+`db358db47b764a1749863f8588b607d7cc96075c00f3e707ca0ceaab711524bd`;
+the row scores `0.9563492063492064` at recomp `0x100b8fc0`. Numeric scans of
+both retained 256-cell upstream runs contain zero exact rows. The generated
+identifiers are absent from retained source/history, so this was the sole
+genuinely untested exact-name cell.
+
+The paired panel root is
+`/private/tmp/codex-vtable0x30-exactpath-seed834469891.i96hrrtx`. Current
+effective source was pinned at 33,789 bytes/SHA-256
+`b77d628e984c4939f011d4e0d56c5581694268dc6ea4c14a6bad53b0ed942f22`;
+the authenticated marker-through-brace window is 2,196 bytes/SHA-256
+`7ff082da5539ed875db6a43a4f840bed5c4b4ee4a3c376fddb29906714bdb74b`.
+Compile database, row and raw-command receipts are
+`3fdddd396124fe1b4ca04cb1616ac97205ee6c652a44e539a36a60f4149bedfa`,
+`7cccfbb3108e4a9c7303bf5e21a6fcf6f77e80c424ad8208cb82006848c62deb`
+and
+`1963b97cb6d278d468f8ecd5f832d5a57cb2e054fcd53a02e10fe78cf2652e99`.
+The sole V1 differed from C0 only by the exact entropy force-include token
+immediately before SmartHeap; its canonical NUL-argv receipt is
+`2d93f9352d5fd4d0efe89a38d4bcf3f41bf2fd0db8f263d8fd440e1cb78366cf`.
+
+Fresh C0 started as PID/PGID `84849/84849` and compiled cleanly to object
+`27a060d3f3916b8c27791387b8cb84aa0f821a7f5e417fef231ed94e7e56b2e0`.
+An initial whole-object SHA comparison against the production marker failed
+closed before V1 because private fresh-PDB bookkeeping differs from the
+composition-era object. Root then authorized a bounded paired-control audit,
+not a retry. That audit proved the runtime control exact: section 51/88 is
+811 bytes/body
+`0e6db537fdd488dac53f74ca9d45e2060a52c637b7236305593aaa644b521630`,
+metadata
+`53262ef7c4ccc08c022ba8173dd20b759281086dcf2e3d37241f453ee76d194f`,
+two exact semantic relocations, 44 line rows, and the complete
+`.debug$F + .debug$S` closure. Function, primary-COMDAT and linker receipts
+are exactly
+`49277bbde72a0ba4acd99aa1e364e2662700ac6259f53412e27159df51af8e95`,
+`0fc4ddee79d003a2d3ad3b49268efbc435ba11e566af97ef5ca6afd31fc17bac`
+and
+`80b6225c5254faad96c66a964de9e90070ad3f4179882f79f5f51277e1ea9c92`
+(27/30/7). All 26 unaffected runtime code/data sections and every semantic
+relocation match the accepted canonical object. Structured differences are
+confined to the eight manifest-owned composed code sections, the established
+one-byte resize and line-table change in section 79 with its associated
+CodeView/FPO sections 80/81, and `.debug$T` section 88; there is zero
+unexplained runtime, data, linker or relocation-semantic drift. This is the
+reason the already-emitted C0 was admitted as the paired control without a
+second control launch.
+
+The sole V1 then started as PID/PGID `85432/85432` and compiled cleanly to
+object
+`16abc84e7d1b2835c444bf1fd84092e269591915e70cdf970c4686a7ee17fe87`.
+It did not emit the retail-exact body
+`9fba51eb1777b626f4ff595f7789292b9d2dfe17772f535a6acbaf6882b0594d`.
+Instead it reproduced the already-retained deterministic
+`declaration_shape(2,10)` body exactly:
+`4132eefaebeafc8de5692196796c98901b6b90f3fddc5627951d3ac689702e2e`,
+811 bytes with relocation-masked distance 24. The complete residual offsets
+are
+`390,393,396,401,404,407,410,412,419,423,430,432,445,447,472,481,482,488,490,492,496,499,500,506`.
+Thus the historical exact names add no state beyond the already-tested
+two-class/ten-method structural carrier. Target relocation semantics, the
+line-table receipt
+`237cbf214dde14160aecf4e549e06a97b1a7b884b2323da61691633c04ae1c8c`,
+and classic FPO body
+`ac519da2ac097d8263482d88f413f3cd3b400381d984079aade644bd44932266`
+remain coherent; V1 metadata is
+`f978582304645bcd45265179733aeafcf321c9b33f8b3c113cdea195d360a038`
+and its CodeView body is
+`f459c83d7e7b36aa7795a1b7307eebc48045fbef9468e55879e76194f3198782`.
+
+Zero collateral also fails independently. Although the 27-function,
+30-COMDAT and seven-linker universes remain identical, the non-target code
+receipt changes from
+`44a18f419ba32abff832700c409c06ad7fc0eba7f6493f2f662adc8393e4dce5`
+to
+`b12f836a3bb6f72e117dffd1b6a5ded6bf7bcfbfe08544b932502392fa4d4440`.
+Ten other functions change: `ClearScreen`, `Create`, `SetPalette`,
+`VTable0x28`, `DrawTransparentRLE`, `Display`, `VTable0x44`,
+`CreateCursorSurface`, `VTable0x24`, and `VTable0x2c`; `SetPalette` also
+changes length and relocation layout. Consequently the accepted-object
+equality gate cannot be reached by this natural donor.
+
+The fail-closed result is `result.json` SHA-256
+`91f519773904dfcc0d45196d0c4909a0a58584715af785c3e47a9da967248fba`;
+C0 and V1 compile receipts are
+`2f020ca103fe2cb66947e0d3ab5fde1387ee347dc4ac704c839584ee80ba9a42`
+and
+`175c29cd2200870e63f1797fa023913b5ea983c63eb9f23606c3e8f1b7c9c7b0`.
+Exactly two compiler launches were used, both returned zero with empty
+stderr, both private prefixes were drained, and the final global Wine/CL
+census is empty. There was no retry, alternate seed, third cell, link,
+reccmp, build, source edit, manifest edit, or object mutation.
+
+**Seal:** do not replay seed `834469891`, this exact header/name/path state,
+or another generic `declaration_shape(2,10)` crossover. Preserve the existing
+13-range exact hybrid. Reopen only for authenticated final-release
+source/PDB/PCH/object/compiler-state evidence, or a genuinely new
+independently predicted deterministic axis that first emits the complete
+natural 811-byte body `9fba51eb...`, preserves relocations at `+98` and
+`+780`, all 44 line rows and the parsed FPO/CodeView closure, retains the
+27-function/30-COMDAT/seven-linker universe, changes no non-target runtime or
+data body, and proves body-only composition byte-equal to accepted object
+`4e936c27ce8514cf2dda71a043629e47178ee174de964140996ae9832475ea94`.
+Do not replace this hybrid with another instruction mosaic.
