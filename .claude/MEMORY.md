@@ -3576,3 +3576,81 @@ relocation-zeroed retail COFF body
 at `nd=0`, with the exact four semantic relocations, six line rows, coherent
 same-output `.debug$S`/`.debug$F` closure, and zero non-target runtime or linker
 collateral. Otherwise this singleton retail register colouring remains sealed.
+
+## `0x1002a1b0 _Tree<LegoCacheSoundEntry>::_Erase` natural-body static seal (2026-08-17)
+
+The authoritative linked winner remains the natural definition in
+`legosoundmanager.cpp.obj`. Its section-47 body is 82 bytes with SHA-256
+`9720bd3af1d36c2598302f2284f0ae993161a7ad753bc965d326960ed6433b56`;
+retail is also 82 bytes, with image SHA-256
+`43a530842b3c7bf18e4cae42a5049476f933cc088de76af2ff5d9328681a7973`.
+After masking the five semantic relocation fields, current is `nd=10` at
+offsets `[6,11,13,23,34,36,41,56,66,68]`. The relocations occupy
+`[14,29,49,58,69]` and target `_Nil`, self, `operator delete`,
+`operator delete`, `_Nil`; the section has seven line rows. Its complete
+associative closure is 270-byte section-48 `.debug$S`
+`c4bc1e35c0ea2fd2b6b34d611aeb1142e226b8b19d54236b85a1eb6cc1c2c32c`
+plus 16-byte section-49 `.debug$F`
+`c664c0c6bb1eb573a4c9c455ec697313b5d8bf16817b417ae850167815d19ef1`.
+
+The scoped retained campaign census covers 25,620 definitions and eleven
+natural bodies; none is exact. The floor is the 82-byte body
+`edfd1f0a110b986b8a051431310774debf2a690120c913293b8ddbf780c8ee47`
+at `nd=9`, with residue `[4,6,11,13,26,36,41,56,66]` and the same five
+relocation seats and seven line rows. Its representative object is
+`95ce6b114296ce1b0e29dfc3b86142ec1673be6b5d079eb72c72f661f80ca5e2`;
+the target remains at section 47 with 270-byte section-48 `.debug$S`
+`50f58f07aef8582387effcc687e2582cbaca3b46276e07b2459f6b3813f4ad3b`
+and the same 16-byte `.debug$F`. The object keeps the ordinary 21-function /
+25-COMDAT universe. A deliberately broader filesystem rescan found 26,912
+definitions and fifteen bodies, still with no exact state. The extra scope is
+only duplicated later runs plus four derivative 65-byte destructor-lift body
+families, all at `nd>=53`; it supplies no new whole-body orbit. The broad
+census receipt is `/private/tmp/sound-erase-retained-census.json`, SHA-256
+`4c33559bed5d97bae2775b9bc7bfe4c203f0309a20d20670583f9194eea5fe25`.
+
+The complete 256-report upstream entropy census is also negative. Of those
+reports, 241 retain raw score `0.7058823529411765`, fourteen reach
+`0.7352941176470589`, and only seed `834469895` reaches the maximum
+`0.7647058823529411`. Its authentic LF `entropy7.h` is 1,788 bytes/72 lines,
+SHA-256
+`d116aa5bbb8e2e7c6a144a4c304809adc177e3f648e3c10368fe45a3b575805f`,
+with eight classes and 46 inline methods distributed
+`[1,8,8,10,3,4,4,8]`. This is not a causal exact-path lead: historical
+disassembly gives the node the correct EBX role but rotates `this` and the
+cursor to EDI/ESI and moves the argument load within the prologue. It is a
+different three-register colouring, not retail's complete EBX/EDI allocation.
+The already-retained current `shape-8-46` analogue emits 82-byte body
+`989b85dd7613d3d449c8a96a112a71040dd2dc66f7b65b7ae7351325883d5ec1`
+at `nd=11`, worse than both current and the floor. The exact generated names
+and historical path are absent from retained source and headers, but name/path
+novelty without a mechanism spanning the full residue does not justify a
+compiler cell. The upstream census receipt is
+`/private/tmp/sound-erase-upstream-census.tsv`, SHA-256
+`07c37e8d83cc7b5b32a33c6c8f22be5613541a02202adfca9b0a087716fa3f19`.
+
+Source provenance closes the remaining authentic lanes. Every reachable Git
+revision preserves the same `set<LegoCacheSoundEntry,...>` instantiation and
+vendor `<XTREE>` `_Erase` algorithm. Header changes are annotations, unrelated
+manager declarations, redundant `inline` removal, or the unrelated
+`GetString0x48` to `GetUnknown0x48` constructor rename; none changes the node
+lifetime, recursion order, destructor condition, key type, or comparator.
+The owning source at upstream commit `31bd20de...` differs from today's clean
+source only by one blank line before `DECOMP_SIZE_ASSERT`. The BETA PDB
+independently confirms the identical mangled template in both owning TUs;
+BETA's `/Od` natural definitions are 133/134 bytes and cannot supply the
+retail-release body or closure.
+
+**Seal:** there is no bounded `READY` experiment. No compiler, Wine, source or
+manifest edit, link, reccmp, object mutation, or target composition was used
+in this audit. Do not replay seed `834469895`, substitute another tied entropy
+name, repeat flat/stacked declaration carriers, use the destructor-lift
+derivatives, or accept an instruction/register mosaic. Reopen only for
+authenticated final-release source/PDB/PCH/preprocessed/object evidence that
+identifies a genuinely new instantiation, lifetime/order, or compiler-state
+mechanism, or for a fresh natural intact compiler output. That output must
+emit the complete relocation-zeroed 82-byte retail body
+`e13600d94e02475a2c016a6cdbd9b97317d259565707e9c00e2757f0e5ae71e4`
+at `nd=0`, all five ordered retail semantic relocations, seven line rows, and
+a coherent same-output `.debug$S`/`.debug$F` closure, while preserving the
+full function/COMDAT universes and every non-target runtime and linker byte.
