@@ -1456,6 +1456,12 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                             byte_identity.compose_retail_exact_instruction_mosaic(
                                 composed, donor_objects[function["donor"]],
                                 function, retail_body,
+                                {
+                                    item["donor"]:
+                                        donor_objects[item["donor"]]
+                                    for item in
+                                    function.get("donor_variants", [])
+                                },
                             )
                         )
                     byte_identity.validate_donor_object_excluded(

@@ -14528,6 +14528,89 @@
     "reason": "Closes 22 row(s) in LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "roi",
+   "source": "LEGO1/lego/sources/roi/legolod.cpp",
+   "source_sha256": "e50d4a99181693358d65b2a49dc7573981c5634fafb3f113d5c37af0bafe8986",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_537fce2fd771",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 4,
+      "functions": 12,
+      "generated_header_sha256": "537fce2fd771a7dbdef3ed6e8664cb2eb1c7830576a1dbefe49c2bce88a01455",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?SetTextureInfo@LegoLOD@@QAEJPAVLegoTextureInfo@@@Z",
+     "expected_body_length": 105,
+     "expected_body_sha256": "7dc0252fcfb40760254959c87db77a00afbad077c317a4fc9c6415e88ee9548d",
+     "expected_changed_offsets": [
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_537fce2fd771"
+    },
+    {
+     "mangled": "?GetTextureInfo@LegoLOD@@QAEJAAPAVLegoTextureInfo@@@Z",
+     "expected_body_length": 83,
+     "expected_body_sha256": "2c3ee7be5e356558bbc7d769316c76aad0e424bb13e975bc83bc0f3e2ff03d48",
+     "expected_changed_offsets": [
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_537fce2fd771"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 2 row(s) in LEGO1/lego/sources/roi/legolod.cpp from generated declaration-only carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -31405,9 +31488,9 @@
    },
    {
     "path": "LEGO1/lego/sources/roi/legolod.cpp",
-    "clean": "4e2c0fd88bd7f3f3a5ce1391e2811bcd549131036e94f26cc626e56bd67098ab",
-    "effective": "e54865d98010a7fac1a53b957bfb56fc80d0103c540964e05030b8f6a56f4408",
-    "size": 14480,
+    "clean": "b77151e01006b673458202f0509cc7daab80d64b744172fd4ca62f62c0f47fb9",
+    "effective": "e50d4a99181693358d65b2a49dc7573981c5634fafb3f113d5c37af0bafe8986",
+    "size": 14458,
     "ops": [
      {
       "op": "insert",

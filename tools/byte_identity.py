@@ -13484,6 +13484,10 @@ def validate_manifest(
                         mosaic_keys |= {
                             "donor_variants",
                             "expected_mosaic_donor_body_sha256",
+                            "expected_donor_body_length",
+                            "expected_donor_line_count",
+                            "expected_seed_metadata_sha256",
+                            "expected_donor_metadata_sha256",
                         }
                     exact_keys(function, mosaic_keys, function_context)
                     if "target_source_refactor" not in function:
@@ -13552,9 +13556,33 @@ def validate_manifest(
                                         f"{function_context}.{name}")
                     variant_ids = set()
                     if "donor_variants" in function:
-                        require("target_source_refactor" in function,
-                                f"{function_context}: donor variants require "
-                                "a source-permutation mosaic")
+                        # Additional same-COMDAT donor states.  Either the
+                        # source-permutation mosaic or the ordinary
+                        # declaration-carrier mosaic may name them; the FPO
+                        # identity classes and self-permutations may not.
+                        require("ordinary_fpo_identity" not in function
+                                and "source_fpo_identity" not in function
+                                and "instruction_self_permutation"
+                                not in function,
+                                f"{function_context}: donor variants are "
+                                "restricted to the ordinary and "
+                                "source-permutation mosaics")
+                        if "target_source_refactor" not in function:
+                            require(type(function.get(
+                                        "expected_donor_body_length")) is int
+                                    and function["expected_donor_body_length"]
+                                    == function["expected_body_length"]
+                                    and type(function.get(
+                                        "expected_donor_line_count")) is int
+                                    and function["expected_donor_line_count"]
+                                    == function["expected_line_count"],
+                                    f"{function_context}: ordinary mosaic "
+                                    "donor variants require equal donor "
+                                    "length/line pins")
+                            for name in ("expected_seed_metadata_sha256",
+                                         "expected_donor_metadata_sha256"):
+                                require_sha(function.get(name),
+                                            f"{function_context}.{name}")
                         variants = function.get("donor_variants")
                         require(isinstance(variants, list)
                                 and 1 <= len(variants) <= 8,
@@ -21609,14 +21637,47 @@ def compose_retail_exact_instruction_mosaic(
     donor_bytes: bytes,
     function: dict,
     retail_body: bytes,
+    additional_donor_bytes: dict[str, bytes] | None = None,
 ) -> tuple[bytes, dict]:
-    """Compose a declaration-carrier instruction mosaic."""
+    """Compose a declaration-carrier instruction mosaic.
+
+    With ``donor_variants`` the mosaic may draw its same-offset complete
+    instructions from several freshly compiled declaration-carrier states of
+    the same translation unit.  Every variant is authenticated against the
+    seed exactly like the main donor (seat, section census, function and
+    COMDAT identity sets, relocation semantics, closure, pinned body and
+    metadata) before its instructions enter the combined donor view, and the
+    combined view is then handed to the unchanged single-donor composer.
+    """
     require("target_source_refactor" not in function,
             "source-permutation mosaic requires its source-proof composer")
-    return _compose_retail_exact_instruction_mosaic_core(
-        seed_bytes, donor_bytes, function, retail_body,
+    variant_detail = {}
+    effective_donor = donor_bytes
+    effective_function = function
+    if function.get("donor_variants"):
+        require(instruction_mosaic_metadata_sha256(
+                    CoffObject(seed_bytes),
+                    CoffObject(seed_bytes).function_section(
+                        function["mangled"]))
+                == function["expected_seed_metadata_sha256"],
+                "instruction-mosaic seed metadata differs from its pin")
+        effective_donor, variant_detail = (
+            _compose_instruction_mosaic_variant_object(
+                seed_bytes, donor_bytes, additional_donor_bytes or {},
+                function,
+            )
+        )
+        effective_function = dict(function)
+        effective_function["expected_donor_body_sha256"] = (
+            function["expected_mosaic_donor_body_sha256"])
+    else:
+        require(not additional_donor_bytes,
+                "instruction mosaic names undeclared donor variants")
+    composed, detail = _compose_retail_exact_instruction_mosaic_core(
+        seed_bytes, effective_donor, effective_function, retail_body,
         source_permutation=False,
     )
+    return composed, {**detail, **variant_detail}
 
 
 def compose_retail_exact_source_instruction_mosaic(
