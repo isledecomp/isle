@@ -495,6 +495,26 @@ and the donor object is excluded from the link. The confirmation gate raised
 LEGO1 from 4869/4934 to 4870/4934 with exactly this gain and zero losses; ISLE
 remains 172/172 and CONFIG 111/111.
 
+### 8.1 Multi-donor declaration-carrier mosaics (2026-08-18)
+
+Rule 3 already allowed several donors to contribute disjoint ranges, but the
+schema bound `donor_variants` to the source-permutation branch. The ordinary
+declaration-carrier mosaic may now name up to eight `donor_variants` too. Each
+variant is a fresh compiler output of the unchanged translation unit under its
+own manifest-declared non-emitting carrier, and it is authenticated against
+the seed exactly as the main donor is (seat, section census, function and
+primary-COMDAT identity sets, relocation semantics, closure, pinned body and
+metadata) before its instructions enter the combined donor view; the seed's
+metadata and the main donor's length/line/metadata are pinned in the function
+entry. The combined view is then handed to the unchanged single-donor
+composer, so every range still names its donor, the closed donor set must be
+used exactly, and the output keeps the seed's tables and every non-target
+byte. The FPO identity classes and self-permutations remain single-donor. No
+manifest entry uses the branch yet: its first candidate,
+`0x10062e20 LegoAnimationManager::FUN_10062e20`, was refused on inspection
+because the two covering carrier states share residue at 392--401 and their
+relocation offsets differ from the seed's.
+
 ## 9. Class F — `retail_exact_source_target_closure`
 
 This class covers a donor-private, manifest-declared source permutation whose
