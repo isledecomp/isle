@@ -749,6 +749,84 @@ after every bounded panel or full gate.
   authenticated current-source state naturally emits the entire retail COMDAT
   and same-TU closure without accepted-row loss.
 
+- Exact-name upstream entropy crossover is negative and sealed for
+  `0x1007ca30 LegoPartPresenter::Read`. All 256 reports from upstream run
+  `31911463768` at commit
+  `31bd20de79df0a2d2d26b63f734e155ddd17e8ae` were rescanned. Exactly eight
+  seeds tie at the true maximum `0.9964912280701754`; the two minimal headers
+  are seeds `834472712` (matrix 11/build 8) and `834473735` (matrix 15/build
+  7). Their parsed 4,928-row linked reports are identical in every entry, not
+  merely at this target. The sole selected seed was the lower/first tie,
+  `834472712`: an authentic 279-byte/15-LF declaration-only header with two
+  classes and six empty inline methods distributed `5,1`, exact names
+  `ClassStyvyc`/`ClassEajlve`, and SHA-256
+  `b8385444add93817b99047efbf7b79e2dea8bb2945750bbe27febdf1e04a6487`.
+  It was force-included at the provenance-exact logical `entropy8.h` seat
+  immediately before SmartHeap. The 32-argument command receipt is
+  `f8ac506b1d971e7d63647547986ea69cd15626de217ed5905ee1c1696c0fc611`.
+
+  Current clean `legopartpresenter.cpp` is byte-identical to upstream 31bd,
+  6,044 bytes/SHA-256
+  `2b79bf0207973d4b4a98eb038b5b54eeeccc4cccbece43cc6888db15e09ee7d7`.
+  The current effective source adds only the existing nine
+  `MxUnkRecordPP000..008` forward declarations and is 6,265 bytes/SHA-256
+  `3fb8094f1b5b6943d6998663d889caf3bf371fd2780e5bcf412c1eece0468408`;
+  the 3,677-byte `Read` definition itself remains SHA-256
+  `f55c580cd065b548c0630e60fc01c9a9cdcf13cc2b669dcaa02cdf4352119e31`.
+  Exhaustive retained receipt/header/source searches found neither minimal
+  seed, either exact header digest, nor any of their class/function names on
+  this current effective source, so this was a genuine source-by-state cross.
+
+  The retained authenticated natural C0 object is 95,503 bytes/SHA-256
+  `240acd97e45b75364974d66133c64de126f40f218a89623027eeee5b56d52835`.
+  Section 14 is 2,633 bytes/body
+  `58a7295c9cdca19eba9290024fc846d798d65d96a773f69a0f8144ab3347978b`,
+  111 relocations, 81 line records, selection 1, with nd=4 at
+  `[1143,1216,2397,2401]`. Its closure is exactly `.debug$S + .xdata$x`:
+  878 bytes/48 relocations/body
+  `0b6ab68bb4ac17c1d90ba011ee1b84fb059a6962c60fb6c0d2dca861f902b79c`
+  and 200 bytes/22 relocations/body
+  `c6cf4d9d6f9381ea187902fcb110875d477bbd4583ed1ebb5ed42114afe6f28f`.
+  Function/primary-COMDAT/linker-payload universes are 47/64/50 with receipts
+  `344bb122b01bfe6064b815f8698152ede744e5e60d5427e5df479a0161ec6510`,
+  `0efbfe833fb2b3b2250defd2734f654e36ddffd95ffaa3b979cd402b5d3f72c1`,
+  and `e7d57c98dcae6e95ecd2e28a4a6a58930c911ace2bb99afdd25290c15399ab6e`.
+
+  The sole authorized seed cell emitted object SHA-256
+  `d5c0db8348baebdfaa7b012dfad3dcc5448d97fe2880575af5bd0bb119a616cd`.
+  Its target retained the exact 2,633-byte/111-relocation/81-line topology but
+  emitted body
+  `1d4777c6bd9e09f12334581ab82dfce3f32c99e75bd792cc97270bdd84d44bbf`:
+  still nd=4, merely rotating the residual to
+  `[1143,1216,1448,1452]` instead of reaching retail-masked body
+  `306ae0e7a0a4637507670b630ec045246a3c64852b2aa31b189b5bd07208f9ca`.
+  The line table and xdata are exact; `.debug$S` keeps the same topology and
+  normalized relocation semantics but changes body/metadata. The target raw
+  relocation-table SHA-256 changes from
+  `4bcd79e0b73312f220ae3a5af98485a65ca6c377086377c1f969feffbbcb7c8e`
+  to `d09b05dc988ababaf685d4ee68abe29e843d4561c14ec86ce933718bcf938e9f`:
+  offsets and ordinary symbol identities remain, but eight internal target
+  section seats permute and local `$L/$T` ordinals rename, so the strict
+  same-section semantic-relocation gate also fails. All 47/64/50 identity
+  universes above remain exact and linker payload is unchanged. The strict
+  collateral audit flags ten non-target COMDATs: nine retain their bodies but
+  permute internal resolved section seats, while
+  `LegoPartPresenter::Store` changes body/topology. Final compiler census was
+  empty. Evidence is
+  `/private/tmp/codex-legopart-read-seed834472712.llytzq8k/result.json`,
+  SHA-256
+  `1011d0f5e42d82e0e531aa2fcc09579e17922f3e648dd950db080c8cdfdef6b7`.
+  No control compile, alternate seed, third cell, link, reccmp, or shared
+  source edit ran.
+
+  Do not replay seed `834472712`, the historically identical minimal alternate
+  `834473735`, or any of the other six maximum-score seeds on this effective
+  source. The existing four-instruction mosaic remains necessary. Reopen only
+  for an authenticated new source/compiler/PCH/runtime state that naturally
+  emits the complete retail-masked 2,633-byte body while preserving all 111
+  relocation identities, 81 line records, the coherent 878-byte `.debug$S` +
+  200-byte `.xdata$x` closure, identity universes, and acceptable collateral.
+
 - Accepted canonical gate: LEGO1 4881/4934, ISLE 172/172, CONFIG 111/111.
   The latest gain is `0x1002bff0` path-actor tree `erase`. The canonical
   `legoextraactor.cpp` winner is 1,104 bytes; its existing same-TU
