@@ -2907,3 +2907,125 @@ natural 811-byte body `9fba51eb...`, preserves relocations at `+98` and
 data body, and proves body-only composition byte-equal to accepted object
 `4e936c27ce8514cf2dda71a043629e47178ee174de964140996ae9832475ea94`.
 Do not replace this hybrid with another instruction mosaic.
+
+## `0x100c3750 MxRegion::AddRect` exact-name/current-source seal (2026-08-17)
+
+The final high-value exact-name/current-source crossover is negative. The
+authoritative target is `?AddRect@MxRegion@@UAEXAAVMxRect32@@@Z` at
+`0x100c3750`; `0x100c3660` is `MxRegion::IsEmpty`. Latest upstream run
+`31911463768` at commit
+`31bd20de79df0a2d2d26b63f734e155ddd17e8ae` has exactly three maximum
+`AddRect` rows at `0.9817232375979112`. All three have the same seven early
+EBX/ESI-colour differences. The sole admitted cell was the smallest and
+lowest-collateral maximum, matrix 6/build 14, seed `834471438`; no tied seed,
+retry, or generic substitute was admitted. Its exact 1,285-byte/53-LF,
+six-class/32-method header has method distribution `[3,3,2,10,6,8]` and
+SHA-256
+`0614f61d289f063c292a39b7beb94bda200d5ef96273597d814f2a93494542f3`.
+The authenticated upstream report and target-row receipts are respectively
+`2a4ffce32ff4f681b67a718d7d6940fa488807a02367aa0029768579bcbf1f27`
+and
+`7b37f02d73b28a89d3c58d0025024e705b05a0d396531f3a850ba1fcba0070a7`.
+All 38 exact generated identifiers were absent from the repository, effective
+tree, retained probe corpus, and upstream report corpus before this test.
+
+Current effective `mxregion.cpp` was pinned at 10,780 bytes/SHA-256
+`5ffed36a4b6c4d4300ae60913ee60b5b6dfb463def109de661d9af2f9401cddb`;
+its authenticated AddRect marker window is 1,356 bytes/SHA-256
+`f4da4fc999b250c1d8e1cff0cb637cf7bbca91c9752e76dcab3f992cbd9d8bdf`.
+Compile database, selected-row, and raw-command receipts are
+`3fdddd396124fe1b4ca04cb1616ac97205ee6c652a44e539a36a60f4149bedfa`,
+`afd9b26d63b30f0faa7ba9675b393f92e22566b7b4a9c113a295ed62c204c405`,
+and
+`589cdd429727aee430d140d2e5d401a3236a133b8be78d1504eb7640a6ea0a8b`.
+C0's NUL-argv receipt is
+`88c9b441a19f76cbc5a849c9398d93712c3817690e248b45233b10e92b514e45`.
+The sole V1 differs only by the exact logical
+`/FI/Users/foxtacles/Projects/isle-build-lean/src/entropy14.h` token at seat
+22 immediately before SmartHeap; its NUL-argv receipt is
+`14427a771254013e6a785cc813b69c045597462977c93e50f2837d15b8534931`.
+
+The strict paired panel root is
+`/private/tmp/codex-addrect-exactpath-seed834471438.qwt8a_51`. Fresh C0
+started as PID/PGID `86158/86158` and compiled cleanly to the 76,303-byte
+object
+`b9329084f3181bf856a4a8b82003a83b9544adc65340aec4bf229843ac9af3f1`.
+It authenticated the canonical natural 1,157-byte body
+`ae20a674ba6da84f1034813bfb8a91c1f1cc85aa20d87da80859ed8a0b8b1749`,
+relocation-masked distance 10, exactly 38 semantic relocations, 38 normalized
+line rows, target section 63 of 233, and metadata receipt
+`ad0dd3528d68bb9de7ee5b0020929e6f99451dad6e3759842cdc2afdfda7f35d`.
+The normalized line-table receipt is
+`a8dd7f63c2094671b8f20144b5bb55790d3832eecb4b5177215dd11080e943ff`.
+Its exact selection-5 closure associated with section 63 is `.debug$S`
+section 68, 388 bytes/24 relocations/body
+`d4d50687afe15f944034ad664f4f3b36b2382c511f7f862d77e4171d22dd846a`,
+and `.xdata$x` section 64, 112 bytes/11 relocations/body
+`7fa021f7ddb2edfe1e76294ec628bcbda89f8fe699d962c826736bad0e4bd242`.
+
+The sole V1 then started as PID/PGID `86257/86257` and compiled cleanly to
+the 76,411-byte object
+`c465a7bba2c5cfde5e8d1578515afccec008a35f0927dbf90e12a41753a7e157`.
+It did not emit the required natural retail-exact body
+`47e2dde224a70c58bc989f2d440c6145a2c7ff2d28fd5d49f1f52fb42efa9143`.
+Instead it reproduced the already-retained generic `shape-6-32` target body
+exactly:
+`dc99a5e9c70270576f9299482b603d27be9300a14c3a7916cf124af4b6968d4a`,
+1,157 bytes with relocation-masked distance 41. The complete residual offset
+set is
+`217,221,286,289,297,329,344,348,353,362,366,369,403,405,499,502,510,542,557,561,566,575,579,582,597,600,987,988,990,991,993,994,995,996,998,1002,1007,1008,1010,1013,1014`.
+The retained generic object's SHA-256 is
+`9c42bfce0e635446d32db103dcd8357a586d5b7b7f47935afaa12fae0bdc8c24`;
+although its declaration distribution and names differ, its AddRect body and
+associated `.debug$S` body are byte-identical to V1. This proves that the
+historical exact names add no target state beyond the already-censused
+six-class/32-method structural carrier.
+
+The negative is independently collateral-complete. V1 preserves all 38
+target semantic relocations, the full normalized 38-row line table, the
+233-section shape receipt
+`7b05a2ae59ff424e68bbf247b914554c491cb9e645e396d24d44e8fc03748314`,
+and the 71-function, 88-primary-COMDAT, and 60-linker universes with receipts
+`21bb51b2167849b45133b1cd7b520c326f7e74690f3a6d117045782670ee6a50`,
+`86455f00ed019d152596fdf32df0eecfa25951181fc01c1c38109ab28ba0354b`,
+and
+`76abc9e0252c02c58c1269b7e77daf0626b7ab0ce51a12e090e39e916427e578`.
+The `.xdata$x` body and both closure relocation semantics remain exact, and
+the non-emitting declaration gate passes with no generated COFF-symbol leak.
+However, target `.debug$S` changes to
+`6e257492da0398c703293ec77fea9e3c5eecc00cd930a77f0205cf13e6c77671`
+and target metadata changes to
+`44c734605e0400c1976f61bd7c88107caa8f981e67b1b68d290ae3ecfab3bca1`.
+More importantly, the 70-entry non-target runtime-code receipt changes from
+`06993931f63ded4f4bd98c8a979525c8a5c66accc5102e8a74c916f3133b2687`
+to
+`c1637a106846e7d9aa71e0781f44dce655e761f109429adf2c63643c0de9beff`.
+Six other runtime functions change: `MxRegionCursor::MxRegionCursor`,
+`MxSpan::MxSpan(MxRect32&)`, `MxSpan::AddSegment`, `MxSpan::Clone`,
+`MxRegionCursor::Next`, and `MxRegionCursor::PrevSpan`. The natural-body,
+closure, and zero-collateral gates therefore all reject V1.
+
+The fail-closed result and runner receipts are
+`b294d043def46cd7893d42b3acf8960575fbe468efe95ef175673c7b5f189119`
+and
+`86f840bfecc78b2ca1e52bd2ce1e9946cf4a250077436bb55c7f319ad2a9d069`.
+C0 and V1 compile receipts are
+`bbec38f2e733341a5e61d47af92e0ed411c80cefb6d296b6aa39747f75c5d1f3`
+and
+`a5e8ba2d2879efc8a80ec2688201766b828ca3e352be6619925a8f7a23c4aed8`.
+Exactly two compiler launches were used; both returned zero with empty
+stderr, both private prefixes drained, and the final global Wine/CL census is
+empty. There was no retry, alternate maximum, third cell, link, reccmp,
+build, source edit, manifest edit, or object mutation.
+
+**Seal:** do not replay seed `834471438`, this exact header/name/path state,
+either tied maximum, or another generic `shape-6-32` crossover against the
+current effective `mxregion.cpp`. Preserve the existing ten-range exact
+instruction mosaic. Reopen only for authenticated final-release
+source/PDB/PCH/object/compiler-state evidence, or a genuinely new,
+independently predicted deterministic axis whose first result is the complete
+natural 1,157-byte body `47e2dde2...`, retains all 38 semantic relocations and
+38 normalized line rows, preserves the `.debug$S + .xdata$x` closure and the
+71-function/88-COMDAT/60-linker universes, and changes no non-target runtime,
+data, or linker payload. Do not replace the current hybrid with another
+instruction mosaic.
