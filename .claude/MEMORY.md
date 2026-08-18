@@ -2561,3 +2561,111 @@ state, or a genuinely new independently predicted axis that first produces a
 natural 1,494-byte body `f682280d...` while preserving all 32 ordered semantic
 relocations, 87 line rows, the exact `.debug$S + .xdata$x` closure, and the
 complete function/COMDAT/linker/non-target-code collateral universes.
+
+## `0x10084030 LegoCharacterManager::CreateActorROI` exact entropy12 semantic seal (2026-08-17)
+
+The final authentic upstream entropy-name crossover is decisively negative on
+today's effective source. The sole tested variant was latest upstream commit
+`31bd20de79df0a2d2d26b63f734e155ddd17e8ae`, matrix 10/build 12, seed
+`834472460`, and logical `entropy12.h`. Its exact 2,267-byte/88-LF,
+nine-class/57-inline-method header is SHA-256
+`bdc658e16f679d8e32130433058a51cd4cbad67821dfa5ab7df30b697db5872a`;
+the authentic upstream report is SHA-256
+`fe858303ff2c6475960f166f843d4ddd66a5f3028cb95cc75a7253df243e8dd8`.
+The row is the unique maximum at `0.998487` among 256 rows, but its only moved
+instruction is `mov edx,[esi+4]`. Today's whole effective source is SHA-256
+`3ef8f161d9b10ab7f8d26a5d283c36875d169610de8526ddf80081bc17e4012b`;
+the clean/effective target function is 4,854 bytes/151 LF/SHA-256
+`518e168c6cfde0e00f89ef9b53f8578b7f48cce1e88b5aa36ba562a3169d63b0`.
+
+Two launch receipts precede the valid panel and are infrastructure failures,
+not semantic compiler cells. First,
+`/private/tmp/codex-createactor-seed834472460.3zw7gvjj/receipt.json`
+(SHA-256
+`6f521d452a2a93eb43087f9fed0a52c453d272f8074910c8c924fdaf960ea9f6`)
+records PID/PGID `83002/83002`, RC 53, and `could not load kernel32.dll`
+after a registry-only rather than full-runtime prefix copy. Second,
+`/private/tmp/codex-createactor-seed834472460-corrected.6o8k0p4b/receipt.json`
+(SHA-256
+`5d8b3cc380c67397244848544a0be547189e621aa13bbddcf2b56e5e8840175c`)
+records PID/PGID `83193/83193`, RC 53, and failure to open Wine-visible
+`CL.EXE` because the copied prefix retained its seed-local `z:` link. In both
+cases `CL.EXE` never opened, no object was emitted, and no V1 was launched.
+
+The corrected final preflight copied the full pinned 1,847-file/183-directory/
+four-symlink runtime prefix and explicitly reseated `dosdevices/z:` to `/`.
+Its kernel32 and Wine-visible `CL.EXE` hashes are respectively
+`27257c4a268244c7f77d127d74c5b448e7999810e1bdce4e7ba1d9df18f99261`
+and
+`c5bf7ad84482e8a54d5753fcbd3e648d8a1192f5ca8b8cf1f5d23b651750585f`.
+The C0 and V1 NUL-argv receipts are
+`a9730602e3c181fb0e83600ad70a8c7596de68f88e53c04edeb4007bb45ea185`
+and
+`a1d59ad3ddbe2c1460734edc66d13e3b9f6a4840ec8efe2bcfcd6a7a53f2bb10`;
+the logical historical-path V1 receipt is
+`022aed436f3bc5981078c145bc92b035df21765fea3988c02cfa08948b1119cb`.
+The actual private `/FI` token is the exact header bytes at argv seat 26,
+immediately before SmartHeap, so no shared source or manifest was edited.
+
+Fresh C0 started as PID/PGID `83387/83387`, returned RC 0 with no timeout or
+stderr, and emitted object SHA-256
+`31f2d30c7d8a8a71b45f940224fad8ce2bd600f3a854d667299ebce07a26391f`.
+Section 78 authenticated the expected 2,294-byte target/body
+`f714d3f918110dff131de950c51411d061c6eb023ffdc8d9dbe8321ed86cd0a9`,
+83 relocations, 84 line rows, and relocation-masked retail distance 80. Its
+four constructor calls are all `Vector2` at `+77,+101,+1192,+1220`; the
+relocation and line-table hashes are respectively
+`e7dca55dacbe8558b04c2655a24fd6170a0cfd51f6272e0f6ea8b2060308d077`
+and
+`ee1813f0e8e5af87725e28878b21f88b349773eb7ed3a79a190f084b4f07309a`.
+
+The sole V1 started as PID/PGID `83478/83478`, also returned RC 0 with no
+timeout or stderr, and emitted object SHA-256
+`37b955c102e73d3bc9de1d4f4fe05d1402156d6183800a6e3c983f09c9d87b49`.
+The target remains 2,294 bytes in section 78, but changes to body
+`5f6f2f9bc1c35608d7487b6c03103ff25ceaa58792a15165261f06f29d1679e6`
+and masked distance 49. This numerical improvement is semantically useless:
+the signature remains `Vector2,Vector2,Vector2,Vector2` at the same four seats.
+All 83 ordered relocation semantics are unchanged, so neither required
+`+101 Vector2->Vector3` nor `+1220 Vector2->Vector3` transition occurs. The V1
+relocation and line-table hashes are
+`1052e74234ac64fafec956de488bd1159b34c7a785742c92c45504fec8d13662`
+and
+`f7dbb221b891531866237e882a0dccfd3d9cbe528472b3f133bbad93ec5bb8c3`.
+
+Complete-closure comparison also rejects the variant. C0's 630-byte/
+14-relocation `.debug$S` child is
+`b44a04f3e3e5534d2c4ee8a9443eef0652ddc13430951a1b7502c379e7172496`;
+V1 changes it to
+`9ba09dfaa628da50982fae678db1e38239b65d385d93312ef90bee57cf1ae1ed`.
+The 64-byte/five-relocation `.xdata$x` child alone stays at
+`c877aed1868b9af8b522583b8dab407d63573cbf07c25f47a60a1aaaee5e317f`.
+The collateral census compared all 132 function names/instances and found 32
+non-identical functions. Three of the five manifest-accepted functions change:
+`?GetActorROI@LegoCharacterManager@@QAEPAVLegoROI@@PBDE@Z`,
+`?SwitchSound@LegoCharacterManager@@QAEEPAVLegoROI@@@Z`, and the accepted
+`map<char*,LegoCharacter*>::erase(iterator)` specialization. The header emits
+none of its entropy declaration symbols, so this is compiler-state collateral,
+not a required link payload.
+
+The retained final receipts are
+`/private/tmp/codex-createactor-seed834472460-final.awd0m571/preflight.json`
+(SHA-256
+`6348dc1c95bc44b614fbfa2eb88b2483505644506878bf725ab3e18c3ac638b3`),
+`receipt.json` (SHA-256
+`0e886f331a3f889d5d040f0bc16959e5a0f7e73e9c2078e642723d75c4469072`),
+and `analysis.json` (SHA-256
+`a9e268511180d4a520d26445789b5167dd7f4027c2d33a4f0474899aad90baf8`).
+The two valid compiler cells and both pre-CL receipts are drained; the final
+global Wine/CL process census is empty. There was no retry, alternate seed,
+third semantic cell, link, reccmp, build, or shared source/manifest edit.
+
+**Seal:** do not replay seed `834472460`, this exact nine-class/57-method
+header, its exact name set/path seat, or the already-covered generic inline
+ladder/repeat-two families against the current effective source. Reopen only
+for authenticated final-release source/PDB/PCH, original vendor C2/TU/object
+state, or a genuinely new independently predicted axis that first emits a
+natural 2,294-byte relocation-masked-distance-zero body with `Vector2` at
+`+77/+1192`, `Vector3` at `+101/+1220`, all other 81 ordered relocation
+semantics unchanged, all 84 line rows and the exact `.debug$S + .xdata$x`
+closure coherent, and no accepted-row collateral.
