@@ -3336,3 +3336,110 @@ CodeView/xdata closure, and preserves every one of the other 23 runtime bodies,
 the full function/COMDAT universes, and all non-target linker payload. Any
 future dynamic test still requires a fresh campaign-normalized exact control
 before one sole candidate cell; no target composition or retry is admissible.
+
+## `0x10058c30 LegoOmni::Destroy` synthetic map-alias / entropy negative seal (2026-08-17)
+
+The current authority is still the natural 568-byte section-33 body
+`9b704d00a26f606e56ccba6341c3b4b733d03fe5553d54b4fd5c7e0a9e9a8f4d`:
+both retained current build seats emit it with 23 semantic relocations, 43 line
+rows, metadata `77f339bf0f49be3e943709d77ecae162432ef38927e88defd386f66968172666`,
+and the two-child `.debug$S` / `.xdata$x` closure. The effective source is
+`6aa2be8d518f02e58f0daa1f9382276ef335e180e5ac218d0593e1c4cf54ae74`;
+the manifest changes only its declaration carrier and does not compose this
+target. The current report remains `0.9826589595375722`; retail is 571 bytes
+with image-body SHA-256
+`101b85ca7d24e070274664d85605f8e53fa081d6138f751cd6fe63ce144bbc91`.
+
+The retained fresh panel
+`/private/tmp/legoomni-destroy-alias.5bBQhI/result.json`, SHA-256
+`65d06d947bed34883df7d73b6f31b5350d04c3f42d9d6e2297ccb732a106b8e6`,
+reproduced that exact control in object
+`78b93efbb8fd075118764df7c458e8caf3d578179de1dbdbc918b35ee0a48446`.
+Its sole compiled variant was a synthetic header spelling: inside
+`LegoContainer<T>::Clear`, declare
+`LegoContainerInfo<T>& map = m_map` and use `map.begin()/map.end()` while
+retaining the for-init iterator and postfix increment. Variant-header SHA-256
+is `54f7350fa89bbbab1e49aa93dd1de61b107016fe41a28ccb7b79f2a744f90b52`;
+object SHA-256 is
+`acfd5cdc808fc7b8db0172cdb4dda20a43e3737d1ed8abcde5989a220237cec5`.
+This is a genuine complete compiler body, and it narrowly supersedes old
+wording that retail length was unreachable: the target naturally grows to
+571 bytes, body
+`0d807bdedeef19fccc35b49fbde1b0502f45d11ee0f8afad7b0d8c3fa979ae1d`,
+and emits retail's `add edi,8` hoist at body `+0xf4`.
+
+It is nevertheless exactly `nd=1`, not a natural retail emitter. At the
+instruction starting at body `+0xfc`, the alias body has `3b c8`
+(`cmp ecx,eax`) while retail has `3b c1` (`cmp eax,ecx`); only the ModRM byte
+at `+0xfd` differs and both feed the same `je`. The expected relocation-zeroed
+retail COFF body is
+`afefa6680a444aa0b66cdc84e3f45d5b7c71a6a9faef25cbb6600e3feb116598`.
+All 23 target relocations remain semantically ordered and move coherently from
+control offsets
+`[2,12,20,40,56,93,99,155,161,266,272,287,297,412,427,490,495,508,518,540,551,556,564]`
+to
+`[2,12,20,40,56,93,99,155,161,269,275,290,300,415,430,493,498,511,521,543,554,559,567]`.
+The closure stays `[2,[".debug$S",".xdata$x"]]`: alias `.debug$S` is seat 36,
+125 bytes/six relocations with body
+`23177c20aa605bb8a8a86ce4aea63cdc6e60d96ab2e0f61aec4697633c2f9f4b`,
+and `.xdata$x` is seat 34, 40 bytes/two relocations with unchanged body
+`2d1be37fbfa859d8d31be303c41b476f80b7c6145b767ab164f6f6751fb67dd3`.
+
+This header state is not a zero-collateral landing. Function/COMDAT counts
+remain 81/120 and their identity receipts plus the 287-section shape receipt
+are conserved, but the non-target runtime receipt changes from
+`7050716170216756212fab3e3adeb3ca7c3b447f0fe2355d0e87015ee0fb5bac`
+to `2de930e681184fc825d044c1de63bb392cbf70f1b3b0b1445741968ddd512ef6`.
+Seventy non-target runtime records differ; nine non-target `.text` bodies
+really change, including `LegoOmni::Create`, map/tree/list destructors,
+`_Tree::erase` (1,103 to 1,095 bytes), `RegisterWorlds`, and `GetWorldId`.
+The linker-payload receipt also changes from
+`a0b1810afa23dc1a2f184c52a227eb2ce136cdfc6130fcabdb30eb38ccdcf1ec`
+to `f2f4dee6f54bfe10a7fc42fa1e8678a78354da7173ac30dc34d38c711328666a`.
+The panel therefore correctly records `SEALED_NEGATIVE` with failures
+`target_body`, `retail_nd0`, and `non_target_runtime`.
+
+There is no authentic-source provenance for the alias. Across every Git
+revision that changed `legocontainer.h`, `Clear` is absent in the eight
+pre-implementation revisions and has one unchanged fragment in all five
+revisions since `939c0913`: direct `m_map`, `it != m_map.end()`, postfix
+increment, fragment SHA-256
+`d906a9e314e004754c91bc8b517560a8d053ff550cfe500ef46913b2030c56fd`.
+No all-ref search contains the alias or a reversed `Clear` condition, and the
+BETA10 function is explicitly only a stub. The older five-form `Clear` panel
+already rejected declaration-hoist+reference, prefix, named-value, while, and
+declaration-hoist forms. Although `map.end() != it` looks like a one-byte
+hypothesis after the new `nd=1` result, controlled MSVC 4.2 integer and STL
+iterator-loop panels already show `!=` operand reversal canonicalized or
+target-inert. The staged reference-prefix and pointer aliases have neither
+provenance nor an independent causal prediction; do not promote them to a
+cell.
+
+The exact-name entropy lane also supplies no crossover. The target function
+fragment and `legocontainer.h` at upstream commit
+`31bd20de79df0a2d2d26b63f734e155ddd17e8ae` are byte-identical to today's
+function/header. Static aggregation of all 256 reports in each retained root
+found zero exact cells. In `/private/tmp/isle-upstream-entropy.SJNkJ8`, the
+five score/count buckets are `0.9226361031518625/36`,
+`0.9283667621776505/42`, `0.9653179190751445/92`,
+`0.9710982658959537/42`, and `0.976878612716763/44`; in
+`/private/tmp/isle-upstream-entropy-prev.2vG4FN` they are respectively
+`36,46,92,35,47`. Thus 512 historical exact-name cells all remain below the
+current `0.9826589595375722`; the 91 maxima still omit the same `add edi,8`
+and retain the wrong compare direction. No exact name is uniquely predictive,
+and the post-`85861d11` 399,996-object refresh already found this same alias
+body as the closest sealed `nd=1` result.
+
+**Seal:** no one-cell `READY` packet exists. Do not repeat the alias, patch its
+compare byte, compile an alias/reversed-condition product, run the staged
+pointer/prefix variants, cross an arbitrary historical name with the current
+carrier, or accept a body-only/hybrid hit. Reopen only for authenticated final-
+release source/PDB/PCH/preprocessed/object evidence that identifies a genuinely
+different owning-header source or compiler-state mechanism, or for a newly
+demonstrated independently causal axis. Its first single bounded cell must
+naturally emit the complete 571-byte COFF body
+`afefa6680a444aa0b66cdc84e3f45d5b7c71a6a9faef25cbb6600e3feb116598`
+at `nd=0`, with all 23 semantic relocations at the retail seats and a coherent
+same-output 43-line CodeView/xdata closure, while preserving all non-target
+runtime and linker payload. No compiler, Wine, link, reccmp, source/manifest
+edit, object mutation, or target composition was used in this static audit.
