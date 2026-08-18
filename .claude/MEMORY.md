@@ -3029,3 +3029,123 @@ natural 1,157-byte body `47e2dde2...`, retains all 38 semantic relocations and
 71-function/88-COMDAT/60-linker universes, and changes no non-target runtime,
 data, or linker payload. Do not replace the current hybrid with another
 instruction mosaic.
+
+## `0x100c6fa0 MxDSBuffer::FUN_100c6fa0` natural-body seal (2026-08-17)
+
+The remaining one-range hybrid has no static whole-natural-body replacement.
+Current clean `LEGO1/omni/src/stream/mxdsbuffer.cpp` is 12,581 bytes/SHA-256
+`a8b32a03f348cc3023337b38bd541ae6d6424beaf10bc66a1b543d181eff1cfa`;
+the effective 12,772-byte TU, after its three forward declarations and eight
+empty classes, is SHA-256
+`06199991151200e8907af46396418b245ce2e7442102fae34f9d0d56ef3e2fec`.
+The production object body is 234 bytes and literally equal to retail, SHA-256
+`689e0a7113d9d96a3b3c3fd7c00b35ea0800efb5d0fa363f8b12e62f10ed647c`,
+only because the manifest replaces seed range `[161,169)`. The natural seed
+body is
+`1c1cdb906a714349ef642cf5637504de39e7b2915834598f697f81ae1d58af99`;
+its only raw differences are offsets 161, 162, 165 and 166. At `+0xa1` it
+emits `cmp [esp+0x0c],edx` before `mov eax,[esp+0x0c]` at `+0xa5`, while
+retail emits those two independent four-byte instructions in the opposite
+order. The target has zero relocations. The private 225-byte donor
+`9284be4f680820270195ba2adefe67ca7ebecae38f978fdb40ac18acccaeb288`
+has the desired local schedule only by merging away the seed's dedicated
+unequal-case return epilogue; its raw length-aware distance is ten and it is
+not a whole-body candidate.
+
+Git history supplies no missing natural source. The final functional rewrite
+is commit `ae9d1cbb2b48f4b3f6277ab70c53d06b9d7759aa`; the only earlier target
+commits are initial implementation `5a2be934`, brace-only `9e686e2a`, and
+default-argument fix `a131f892`. The marker-to-next-marker range is 824
+bytes/38 LF/SHA-256
+`f5c35d69b76b902dea5039f5c93fbd5b3c1c730baf30694d552c1ad61c97763e`
+at `ae9d1cbb`, latest upstream entropy commit
+`31bd20de79df0a2d2d26b63f734e155ddd17e8ae`, and current HEAD. Its parent
+instead has the older 758-byte range
+`96d17010206fe4623f057ce03217d9df2fd2d5ef821cf82411ec1188d28cbe63`.
+Thus the upstream entropy corpus compiled the exact current function on its
+owning TU; today's additional declaration carriers do not reveal a new source
+body.
+
+All 256 latest-run owner builds were inspected, not merely the aggregate or
+maximum. Their score distribution is 173 at `0.9882352941176471`, 15 at
+`0.9647058823529412`, and 68 at `0.9411764705882353`. They collapse to four
+normalized instruction states: 173 copies of natural body `1c1cdb90...`, 46
+of `0536555999445327a29cab133cf193d5d6d1977d6e1147be646dfebfb43eb310`,
+22 of `497d33a58ee8c675b3f419ea2449dbf279cee3aa2e379259ea315b52c4b20275`,
+and 15 of
+`81a70d194668c6d1d27c0192931e3f4ad53fcb45f4f12b3996e79ec8712a1532`.
+Every one retains the central compare-before-load inversion; the other three
+states merely add earlier compare/load changes. The ordered target-row receipt
+is
+`f7ba519f9b923a62ac57744274bbf9d63a8be68640804e44e82958e9a9ed8abd`;
+the ordered 256-report receipt is
+`5ac3556dd5e425d299e137229b38e935f03ea4896477545c1e17ef5e93b9a3f5`.
+There is no entropy state that causally covers `[161,169)`, so no historical
+header/current-effective-source replay is authorized.
+
+The retained same-symbol census is independently exhaustive. Static index
+`/private/tmp/codex-mosaic-body-index.json` (SHA-256
+`14ae4a3ec57568ed10c26ab4a9fa1792a9378428ac1d5c5ed4bb7859f108575e`)
+considered 345,799 objects. A fresh parse of its 6,789 unique symbol-hit paths
+found 6,782 definitions, seven reference-only objects, and 40 length/body
+states. Exactly 6,011 definitions are 234 bytes: 4,583 natural `1c1cdb90...`,
+763 `05365559...`, 345 `497d33a5...`, 317 `81a70d19...`, one source-mutated
+`923a9ce92c2d8de641a2d26b92b7921c8bf57079b718428e8a607c83a7a96c2a`,
+and two retail-exact `689e0a71...`. Those last two are only the current build
+and terminal composer outputs (object SHA-256 values
+`c31bd8132bcba75a0dd4da6cee53853f1a8fdaa9769dbdecd165378b7161183a`
+and
+`0ea7ce2b8d57392fd27e3dbb2208b62519e76214264111cb0997cfb18f7be007`),
+not compiler-emitted natural bodies. The index predates composition and had
+recorded those same two paths as natural `1c1cdb90...`, which authenticates
+their overwrite provenance. An independent post-index walk considered
+403,398 current `.obj` files, parsed 63 newer same-symbol definitions across
+16 states, and again found no exact body except those same two mosaics.
+
+Retained source panels close the apparent near leads. The S66 control is the
+234-byte `1c1cdb90...` residue; tail/case-goto forms shrink to 225 bytes and a
+comma snapshot grows to 236 bytes. Twenty-two forward-declaration carriers in
+schedule panel 5 yield only four 225-byte bodies at raw length-aware distances
+10--15. Most importantly, schedule panel 2's 237-byte results are a
+normalization artifact, not an exact retail prefix plus padding. Although its
+JSON reports distance three with no mismatch offsets, direct raw COFF-vs-retail
+comparison of representative body
+`704f514c026f5804b6529def6bbbf77e5a4b2a01e66653cb6f375d716992a158`
+finds 64 overlapping byte differences plus the three-byte length excess, raw
+distance 67. The other 237-byte states have raw distances 67 or 70, and the
+246-byte state has raw distance 73. They merge control flow and add a real
+self-store; none is a natural exact body or closure-preserving lead.
+
+The strict replacement gate is the current owner-TU seed closure, not body
+score alone. A candidate must occupy `.text` section 72 of 81, remain 234
+bytes with zero relocations and 19 line rows, and reproduce line-table SHA-256
+`623c31b68c90c7464fec83a5291147a1000ed5838ad94b7b405ddfd3a860e82b`.
+Its exact selection-5 closure is `.debug$S` section 73, 127 bytes/two semantic
+relocations/body
+`d536b141742e9982b7080969fbd62a73c01cb261e0a4214f5bd3cd34ebd86b17`,
+and `.debug$F` section 74, 16 bytes/one semantic relocation/body
+`01d6058b1008fd575a46bf2b61b4edc074f46de05b4afb45b5ec14c729474eb8`.
+The FPO record fixes `cbProcSize=234`, one local, one parameter, prolog 12,
+three saved registers, and no SEH/BP/frame; CodeView fixes procedure size 234,
+debug start 12 and debug end 225. The complete seed metadata receipt is
+`b1117573a98ab22881c84a058bdfb3002c0d955ae979f7bf8011831945991f47`.
+It must also preserve the 24-function receipt
+`0f50580a0d199c8214bf03a8ced59057ac55920f85df7ab1df2e31f49ff290a3`,
+30-COMDAT receipt
+`08970d74bef6b42d2cc99a57c8ca595ce537b78d6547c6b4ae5928f6e927004d`,
+81-section-shape receipt
+`2f8d98c4b47555cfb5565fee3185b78276962e5047992cc435f4876c6371feaf`,
+11-entry linker receipt
+`b5f10f3c4cd4de0021fc03267fd87a5c814e985916bb3256ec4c254444dd4d09`,
+and all 23 non-target runtime bodies and relocation semantics.
+
+**Seal:** preserve the existing exact one-range hybrid. No compiler, Wine,
+link, reccmp, source edit, manifest edit, or object mutation was used in this
+static audit. Do not replay the 256 entropy headers, repeat the retained source
+panels, accept a normalized/length-only near hit, or replace the current mosaic
+with another mosaic. Reopen only for an authenticated original/final-release
+source, PDB, PCH, object or compiler-state artifact containing the complete
+compiler-emitted natural 234-byte body `689e0a71...`, or for a genuinely new,
+independently predicted deterministic source axis whose first result emits
+that whole body and passes the exact line/FPO/CodeView, function/COMDAT/section/
+linker, and zero-non-target-collateral gates above.
