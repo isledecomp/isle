@@ -3443,3 +3443,79 @@ at `nd=0`, with all 23 semantic relocations at the retail seats and a coherent
 same-output 43-line CodeView/xdata closure, while preserving all non-target
 runtime and linker payload. No compiler, Wine, link, reccmp, source/manifest
 edit, object mutation, or target composition was used in this static audit.
+
+## `0x10080be0 LegoCarRaceActor::CalculateSpline` allocator-colour decisive seal (2026-08-17)
+
+The checked-in `legoracespecial.cpp` authority is SHA-256
+`7308d4147160bb6a5260954b30568342155bf95c0555ed5b5148de7440f8f114`.
+The authoritative current function is the natural 779-byte body
+`c39c83ac40a4b4eab6f0e1b9ba667ad93425ce7c23c60d2c81ac8f7b8949b412`;
+retail `LEGO1.DLL` at `0x10080be0` is 778 bytes. The residual has one exact
+root. Immediately after `HandleJump`, retail retains the virtual-base-adjusted
+object base in `eax` and at body `+0x40` emits the accumulator short form
+`05 c0 00 00 00` (`add eax,0xc0`, five bytes). Current code retains that base
+in `edx` and emits `81 c2 c0 00 00 00` (`add edx,0xc0`, six bytes). The later
+register renaming and branch-displacement changes are consequences of that
+single byte. Both bodies contain 242 instructions with the same mnemonic and
+instruction multiset; the independent wave-7 analysis records SHAPE 100.00
+and STRUCT 100.00. This is allocator colour, not a missing source operation,
+different frame, or lifetime extent.
+
+The current target has 13 relocations and 23 line rows. Its semantic relocation
+seats are the two edge calls at `+102/+127`, six `Mx3DPointFloat` vtable seats,
+four shared float-literal seats, and the final `Vector3` vtable seat; there is
+no relocation at or near the `+0x2c..+0x45` root. Its only ordinary closure is
+associated `.debug$S` plus `.debug$F`, with no EH/xdata child. CodeView records
+`cbProc=779`, `dbgStart=12`, and `dbgEnd=772`; FPO records a 779-byte procedure,
+108 local bytes, 12-byte prologue, four saved registers, BP use, and no SEH.
+Those payload/range facts are invariant across all ten admissible natural
+779-byte body states. COMDAT selection is unchanged, and the current target is
+the canonical TU output rather than a manifest-composed body.
+
+A fresh retained-object census parsed 5,697 definitions with 29 distinct raw
+body hashes. The complete length histogram is 779 bytes x 5,676, 783 x 4,
+785 x 1, 786 x 1, and 789 x 15: there are zero natural 778-byte bodies. Of the
+5,676 779-byte definitions, 5,675 preserve the normal 13-relocation/23-line
+topology. The sole exception is the already-tested pointer-to-pointer spelling,
+which remains 779 bytes with 13 relocations but grows to 24 line rows and also
+changes four non-target runtime functions. It is a decisive negative, not a
+donor or landing candidate. Every longer state is a semantically invalid
+volatile positive control.
+
+The retained inside-function panel at
+`/private/tmp/claude-501/-Users-foxtacles-Projects-isle/3233884b-d405-46dd-ab8c-ee0c06400055/scratchpad/fresh3/bodysweep-spline/results.json`
+exercises 305 cells across 24 statement boundaries. All 282 semantic carriers
+-- empty compound scopes of multiple depths and `d = d + 0` after `d` enters
+scope -- reproduce the identical 779-byte
+`c39c83ac40a4b4eab6f0e1b9ba667ad93425ce7c23c60d2c81ac8f7b8949b412`
+body. Twenty-three volatile controls prove that the harness had purchase, but
+they only emit invalid 783/785/786/789-byte bodies. This independently closes
+the authentic local scope/lifetime/order perturbation axis in addition to the
+retained file-scope carrier families.
+
+Git/BETA history supplies no hidden source mechanism. Thirty-one commits touch
+the TU, 30 contain the function, and their nine exact function-source fragments
+are semantic modernization/rename states. Every address-bearing revision keeps
+the same order and lifetime around `HandleJump`, the saved boundary, and
+`SwitchBoundary`. BETA10 verifies the local names and semantic operation order;
+its debug-only error block is inert in retail release. The only historical
+spellings not replayed in this final audit are older pointer-call and explicit
+cast forms after the `+0x40` root. They cannot causally select the preceding
+virtual-base register, lack a zero-collateral prediction, and do not justify a
+compiler cell. The prior pointer-to-pointer result, retained source/object
+census, COMDAT/relocation topology, and invariant CodeView/FPO closure jointly
+exclude an intact natural whole-body donor or a source-level escape.
+
+**Seal:** no one-cell `READY` packet exists, and no compiler, source edit, Wine,
+link, reccmp, manifest edit, object mutation, or target composition was used in
+this audit. Do not replay pointer-to-pointer, scope/no-op carriers, historical
+cast spellings, arbitrary include/declaration entropy, byte patching, or hybrid
+composition; do not accept a 779-byte recolour or a body-only hit. Reopen only
+for authenticated final-release source/PDB/PCH/preprocessed/object evidence
+that identifies a genuinely new compiler-state or lifetime/order/type mechanism,
+or for an independently causal natural source spelling. Its first bounded cell
+must emit the complete 778-byte retail body byte-for-byte at `0x10080be0`, with
+retail relocation seats and coherent same-output 23-line CodeView/FPO closure,
+while preserving every non-target runtime body, the function/COMDAT universes,
+and all linker payload. Otherwise this row remains permanently sealed as an
+unreachable one-byte allocator-colour residual.
