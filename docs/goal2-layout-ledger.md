@@ -647,3 +647,37 @@ copies are byte-identical (`matching` 1.0) — only the position differs.
 That is the correction this pass owes the project: goal 2 was being worked as a
 link-input-order problem (class b), and the measurement says its mass is
 **intra-object COMDAT order** (class a), concentrated in a handful of objects.
+
+
+# Third pass (2026-08-18) — the list composer is landed
+
+`compose_restore_comdat_group_order` (tools/byte_identity.py) is the list form
+of the pair swap: `group_order` names `.text` COMDAT primaries in retail's
+first-to-last order; every text group in the spanned section window must be
+listed (fail-closed), other section kinds inside the window keep their own
+relative order and are reseated after the listed groups, children move with
+their primaries, and the closing checks prove the section/symbol/definition
+mapping, that no unlisted contribution moved under any section name and that
+listed children follow the group order. It is exposed two ways: unit mode
+`restore_comdat_group_order` (no donors) and an optional `group_order` list on
+`compose_equal_body_comdat` units, applied after every body composition (this
+sidesteps the one-unit-per-owner blocker). Tests:
+`RestoreComdatGroupOrderTests`.
+
+Authoring (`scratchpad/layout_author.py`): a `/MAP` relink of the current
+objects attributes contributed functions; per object, the contributed functions
+with retail addresses are permuted into retail order inside the minimal window,
+discarded/unknown-position groups keep their slots. 27 objects had 1,160
+inversions; all 27 compose in dry-run and were landed in one gate: 11 new
+`restore_comdat_group_order` units (helicopter, legoinputmanager,
+legosoundmanager, legostorage, legotree, mxdsaction, mxdsparallelaction,
+mxdsserialaction, mxramstreamprovider, mxutilities, viewroi) and 16 `group_order`
+extensions on existing units (act3actors, legoanim, legocachesoundmanager,
+legolod, legomain, legopartpresenter, legopathactor, legopathcontroller,
+legoracespecial, legoroi, legoworld, mxdsaction… tglrl40, viewlodlist,
+viewmanager, orientableroi, mxmain).
+
+Result: LEGO1 rows unchanged at 4887/4934 (zero losses), ISLE/CONFIG identical,
+address-aligned LEGO1 rows **2772 → 3063**, terminal LEGO1 distance 389,541.
+The remaining .text displacement is class (b)/(c)/(d) plus the discarded/unknown
+groups this pass deliberately left in place.

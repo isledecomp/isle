@@ -11782,7 +11782,8 @@ def validate_manifest(
     for unit_index, unit in enumerate(translation_units):
         context = f"translation_units[{unit_index}]"
         require(isinstance(unit, dict), f"{context} must be an object")
-        if unit.get("mode") == "swap_comdat_group_order":
+        if unit.get("mode") in ("swap_comdat_group_order",
+                                "restore_comdat_group_order"):
             exact_audit_keys(
                 unit,
                 {
@@ -11797,9 +11798,25 @@ def validate_manifest(
                 {
                     "target", "source", "source_sha256", "mode",
                     "command_policy", "donors", "functions", "completion",
+                    "group_order",
                 },
                 context,
+                optional={"group_order"},
             )
+            if "group_order" in unit:
+                # Optional retail-anchored whole-group text order restoration
+                # applied after every body composition of this unit.  It is
+                # body-inert: only section ordinals and associations move.
+                group_order = unit["group_order"]
+                require(isinstance(group_order, list)
+                        and 2 <= len(group_order) <= 512,
+                        f"{context}.group_order must list 2..512 names")
+                for index, value in enumerate(group_order):
+                    require(isinstance(value, str) and value.startswith("?")
+                            and len(value) >= 8,
+                            f"{context}.group_order[{index}] is invalid")
+                require(len(set(group_order)) == len(group_order),
+                        f"{context}.group_order names must be distinct")
         target = unit.get("target")
         require(isinstance(target, str) and TARGET_RE.fullmatch(target) is not None,
                 f"{context}.target is invalid")
@@ -11832,7 +11849,8 @@ def validate_manifest(
         require(
             mode in ("compose_equal_linked_span_fpo",
                      "compose_equal_body_comdat",
-                     "swap_comdat_group_order")
+                     "swap_comdat_group_order",
+                     "restore_comdat_group_order")
             or (
                 mode == "pass_through"
                 and diagnostic_policy == NATIVE_DIAGNOSTIC_MANIFEST_POLICY
@@ -11862,18 +11880,29 @@ def validate_manifest(
         folded_forbidden = {item.casefold() for item in forbidden_prefixes}
         require({"/gl", "-gl", "/z7", "-z7"}.issubset(folded_forbidden),
                 f"{context} must forbid alternate code/debug modes")
-        if mode == "swap_comdat_group_order":
+        if mode in ("swap_comdat_group_order", "restore_comdat_group_order"):
             group_order = unit.get("group_order")
-            require(isinstance(group_order, dict)
-                    and set(group_order) == {"first", "second"},
-                    f"{context}.group_order must name first/second")
-            for role in ("first", "second"):
-                value = group_order.get(role)
-                require(isinstance(value, str) and value.startswith("?")
-                        and len(value) >= 8,
-                        f"{context}.group_order.{role} is invalid")
-            require(group_order["first"] != group_order["second"],
-                    f"{context}.group_order names must differ")
+            if mode == "swap_comdat_group_order":
+                require(isinstance(group_order, dict)
+                        and set(group_order) == {"first", "second"},
+                        f"{context}.group_order must name first/second")
+                for role in ("first", "second"):
+                    value = group_order.get(role)
+                    require(isinstance(value, str) and value.startswith("?")
+                            and len(value) >= 8,
+                            f"{context}.group_order.{role} is invalid")
+                require(group_order["first"] != group_order["second"],
+                        f"{context}.group_order names must differ")
+            else:
+                require(isinstance(group_order, list)
+                        and 2 <= len(group_order) <= 512,
+                        f"{context}.group_order must list 2..512 names")
+                for index, value in enumerate(group_order):
+                    require(isinstance(value, str) and value.startswith("?")
+                            and len(value) >= 8,
+                            f"{context}.group_order[{index}] is invalid")
+                require(len(set(group_order)) == len(group_order),
+                        f"{context}.group_order names must be distinct")
             completion = unit.get("completion")
             require(isinstance(completion, dict),
                     f"{context}.completion must be an object")
@@ -22356,6 +22385,197 @@ def compose_swap_comdat_group_order(
         "first": specification["first"],
         "second": specification["second"],
         "window": [low, high],
+        "symbol_section_writes": symbol_writes,
+        "association_writes": association_writes,
+    }
+
+
+def compose_restore_comdat_group_order(
+    seed_bytes: bytes,
+    specification: dict,
+) -> tuple[bytes, dict]:
+    """Restore the link-visible order of several complete compiler-produced
+    `.text` COMDAT groups (primary + associated children) inside one object.
+
+    This is the list form of :func:`compose_swap_comdat_group_order`: the
+    ``group_order`` list names `.text` COMDAT primaries in the desired
+    (retail-anchored) first-to-last order.  The permutation window is the
+    contiguous section-number range spanned by the listed groups.  Every
+    `.text` COMDAT group inside that window must be listed (fail-closed), so
+    the transform is a pure whole-group permutation of text contributions.
+    Sections of any other kind that sit inside the window (string literals,
+    data, vftables and their children) keep their own relative order and are
+    reseated after the listed groups, so no other link-visible contribution
+    order changes.  Only section ordinals and associations are renumbered;
+    no raw code, relocation, xdata, data, line, or debug payload byte moves
+    and every symbol keeps its exact raw contribution.
+    """
+    order = specification["group_order"]
+    require(isinstance(order, list) and 2 <= len(order) <= 512
+            and len(set(order)) == len(order),
+            "group_order must be a list of 2..512 distinct names")
+    seed = CoffObject(seed_bytes)
+    definitions = section_definitions(seed)
+
+    def group(primary: dict) -> list[int]:
+        children = [
+            section["number"]
+            for section in seed.sections
+            if definitions.get(section["number"], {}).get("selection") == 5
+            and definitions[section["number"]]["associated"]
+            == primary["number"]
+        ]
+        return [primary["number"], *children]
+
+    groups = []
+    listed = set()
+    for name in order:
+        primary = seed.function_section(name)
+        members = group(primary)
+        require(not set(members) & listed, f"COMDAT groups overlap: {name}")
+        listed.update(members)
+        groups.append((name, primary, members))
+    low = min(min(members) for _, _, members in groups)
+    high = max(max(members) for _, _, members in groups)
+    window_numbers = list(range(low, high + 1))
+    # Every text COMDAT group inside the window must be listed; other
+    # section kinds may float but keep their relative order.
+    text_primaries = {
+        symbol["section"]
+        for symbol in seed.symbols.values()
+        if symbol["section"] > 0 and symbol["value"] == 0
+        and symbol["type"] == 0x20 and symbol["storage"] in (2, 3)
+        and seed.sections[symbol["section"] - 1]["name"].startswith(".text")
+        and definitions.get(symbol["section"], {}).get("selection") != 5
+    }
+    unlisted = [number for number in window_numbers if number not in listed]
+    for number in unlisted:
+        section = seed.sections[number - 1]
+        require(number not in text_primaries,
+                f"unlisted text COMDAT group inside the window: "
+                f"section {number}")
+        require(not section["name"].startswith(".text"),
+                f"unlisted text contribution inside the window: "
+                f"section {number}")
+        definition = definitions.get(number)
+        if definition is not None and definition.get("selection") == 5:
+            require(definition["associated"] not in listed,
+                    f"orphaned associated section inside the window: "
+                    f"section {number}")
+    new_order = [number for _, _, members in groups for number in members]
+    new_order += unlisted
+    require(sorted(new_order) == window_numbers,
+            "group window is not a permutation")
+    old_to_new = {
+        old: window_numbers[index] for index, old in enumerate(new_order)
+    }
+    require(any(old != new for old, new in old_to_new.items()),
+            "the requested group order already holds")
+
+    def mapped(number: int) -> int:
+        return old_to_new.get(number, number)
+
+    work = bytearray(seed_bytes)
+    original_headers = {
+        number: seed_bytes[20 + (number - 1) * 40:20 + number * 40]
+        for number in window_numbers
+    }
+    for old, new in old_to_new.items():
+        start = 20 + (new - 1) * 40
+        work[start:start + 40] = original_headers[old]
+    symbol_writes = 0
+    association_writes = 0
+    for index, symbol in seed.symbols.items():
+        if symbol["section"] > 0 and mapped(symbol["section"]) != symbol["section"]:
+            offset = seed.symbol_offset + index * 18 + 12
+            work[offset:offset + 2] = mapped(symbol["section"]).to_bytes(
+                2, "little", signed=True)
+            symbol_writes += 1
+        definition = definitions.get(symbol["section"])
+        if (definition is not None
+                and symbol["storage"] == 3
+                and symbol["aux_count"]
+                and symbol["name"]
+                == seed.sections[symbol["section"] - 1]["name"]
+                and definition["selection"] == 5
+                and mapped(definition["associated"])
+                != definition["associated"]):
+            aux = seed.symbol_offset + (index + 1) * 18
+            parent = mapped(definition["associated"])
+            work[aux + 12:aux + 14] = (parent & 0xFFFF).to_bytes(2, "little")
+            work[aux + 16:aux + 18] = (parent >> 16).to_bytes(2, "little")
+            association_writes += 1
+
+    composed = bytes(work)
+    require(len(composed) == len(seed_bytes), "object size changed")
+    checked = CoffObject(composed)
+    checked_definitions = section_definitions(checked)
+    section_fields = (
+        "name", "raw_size", "raw_offset", "relocation_offset",
+        "relocation_count", "line_offset", "line_count", "characteristics",
+    )
+    for section in seed.sections:
+        peer = checked.sections[mapped(section["number"]) - 1]
+        require(all(section[field] == peer[field]
+                    for field in section_fields),
+                f"semantic section changed: old {section['number']}")
+    require(seed.symbols.keys() == checked.symbols.keys(),
+            "symbol index set changed")
+    for index, symbol in seed.symbols.items():
+        peer = checked.symbols[index]
+        require(
+            all(symbol[field] == peer[field]
+                for field in ("name", "value", "type", "storage",
+                              "aux_count"))
+            and peer["section"] == mapped(symbol["section"]),
+            f"symbol identity changed at {index}",
+        )
+    for old_number, definition in definitions.items():
+        peer = checked_definitions.get(mapped(old_number))
+        require(peer is not None
+                and peer["selection"] == definition["selection"]
+                and peer["associated"] == mapped(definition["associated"]),
+                f"section definition mapping changing: {old_number}")
+    final_numbers = [checked.function_section(name)["number"]
+                     for name in order]
+    require(final_numbers == sorted(final_numbers),
+            "target group order was not restored")
+    # Link-visible contribution order: only the listed text groups (each
+    # primary with its associated children, which the compiler emits with it)
+    # may move relative to one another; every section outside the listed
+    # groups keeps its relative order under every section name.
+    listed_offsets = {
+        seed.sections[number - 1]["raw_offset"]
+        for _, _, members in groups for number in members
+    }
+    for name in sorted({
+        section["name"] for section in seed.sections
+        if not section["name"].startswith(".debug$")
+    }):
+        before = [section["raw_offset"] for section in seed.sections
+                  if section["name"] == name]
+        after = [section["raw_offset"] for section in checked.sections
+                 if section["name"] == name]
+        require(sorted(before) == sorted(after),
+                f"{name} contribution set changed")
+        require([offset for offset in before if offset not in listed_offsets]
+                == [offset for offset in after if offset not in listed_offsets],
+                f"an unlisted {name} contribution moved")
+        if not name.startswith(".text"):
+            # Children move exactly with their primaries: the order of the
+            # listed children under this name must follow the group order.
+            group_rank = {}
+            for rank, (_, _, members) in enumerate(groups):
+                for number in members:
+                    group_rank[seed.sections[number - 1]["raw_offset"]] = rank
+            ranks = [group_rank[offset] for offset in after
+                     if offset in listed_offsets]
+            require(ranks == sorted(ranks),
+                    f"listed {name} children do not follow the group order")
+    return composed, {
+        "group_order": list(order),
+        "window": [low, high],
+        "unlisted_reseated": len(unlisted),
         "symbol_section_writes": symbol_writes,
         "association_writes": association_writes,
     }

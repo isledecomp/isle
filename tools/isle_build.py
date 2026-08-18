@@ -808,10 +808,18 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
 
         donor_objects = {}
         donor_sources = {}
-        if unit["mode"] == "swap_comdat_group_order":
-            composed, detail = byte_identity.compose_swap_comdat_group_order(
-                seed_bytes, unit["group_order"]
-            )
+        if unit["mode"] in ("swap_comdat_group_order",
+                            "restore_comdat_group_order"):
+            if unit["mode"] == "swap_comdat_group_order":
+                composed, detail = (
+                    byte_identity.compose_swap_comdat_group_order(
+                        seed_bytes, unit["group_order"]))
+                verb = "swapped"
+            else:
+                composed, detail = (
+                    byte_identity.compose_restore_comdat_group_order(
+                        seed_bytes, {"group_order": unit["group_order"]}))
+                verb = "restored"
             byte_identity.validate_first_party_object_directive(
                 composed, "composed object"
             )
@@ -822,7 +830,7 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
             "unit_sha": unit_sha,
             }, indent=1) + "\n")
             return unit["target"], (
-                f"[isle_build] swapped COMDAT group order in "
+                f"[isle_build] {verb} COMDAT group order in "
                 f"{unit['target']}:{unit['source']}"
             )
         if unit["mode"] == "compose_equal_linked_span_fpo":
@@ -1580,6 +1588,10 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                             composed, donor_objects[function["donor"]],
                             function,
                         ))
+        if unit.get("group_order"):
+            composed, detail = (
+                byte_identity.compose_restore_comdat_group_order(
+                    composed, {"group_order": unit["group_order"]}))
         byte_identity.validate_first_party_object_directive(
             composed, "composed object"
         )

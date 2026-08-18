@@ -2482,3 +2482,62 @@ class SourceOverlayRelocationPolicyTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RestoreComdatGroupOrderTests(unittest.TestCase):
+    """The list-form COMDAT group order composer (goal-2 class (a))."""
+
+    def test_restores_listed_order_and_keeps_every_payload(self):
+        seed_bytes = make_two_fpo_coff()
+        seed = byte_identity.CoffObject(seed_bytes)
+        first = seed.function_section(TARGET_SYMBOL)
+        second = seed.function_section(SECOND_TARGET_SYMBOL)
+        self.assertLess(first["number"], second["number"])
+        composed, detail = byte_identity.compose_restore_comdat_group_order(
+            seed_bytes, {"group_order": [SECOND_TARGET_SYMBOL, TARGET_SYMBOL]}
+        )
+        self.assertEqual(len(composed), len(seed_bytes))
+        checked = byte_identity.CoffObject(composed)
+        new_first = checked.function_section(TARGET_SYMBOL)
+        new_second = checked.function_section(SECOND_TARGET_SYMBOL)
+        self.assertLess(new_second["number"], new_first["number"])
+        # every text body and its closure moved intact
+        for name in (TARGET_SYMBOL, SECOND_TARGET_SYMBOL):
+            before = seed.function_section(name)
+            after = checked.function_section(name)
+            self.assertEqual(byte_identity.coff_body(seed, before),
+                             byte_identity.coff_body(checked, after))
+            self.assertEqual(
+                [(row["offset"], row["target"], row["type"])
+                 for row in byte_identity.detailed_relocations(seed, before)],
+                [(row["offset"], row["target"], row["type"])
+                 for row in byte_identity.detailed_relocations(checked, after)],
+            )
+            self.assertEqual(byte_identity._comdat_child_closure(seed, before),
+                             byte_identity._comdat_child_closure(checked, after))
+        self.assertEqual(detail["group_order"],
+                         [SECOND_TARGET_SYMBOL, TARGET_SYMBOL])
+        # the reverse request on the composed object restores the seed
+        restored, _ = byte_identity.compose_restore_comdat_group_order(
+            composed, {"group_order": [TARGET_SYMBOL, SECOND_TARGET_SYMBOL]}
+        )
+        self.assertEqual(restored, seed_bytes)
+
+    def test_refuses_identity_unknown_and_short_lists(self):
+        seed_bytes = make_two_fpo_coff()
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            byte_identity.compose_restore_comdat_group_order(
+                seed_bytes, {"group_order": [TARGET_SYMBOL, SECOND_TARGET_SYMBOL]}
+            )
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            byte_identity.compose_restore_comdat_group_order(
+                seed_bytes, {"group_order": [SECOND_TARGET_SYMBOL, "?Missing@@YAXXZ"]}
+            )
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            byte_identity.compose_restore_comdat_group_order(
+                seed_bytes, {"group_order": [SECOND_TARGET_SYMBOL]}
+            )
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            byte_identity.compose_restore_comdat_group_order(
+                seed_bytes, {"group_order": [SECOND_TARGET_SYMBOL, SECOND_TARGET_SYMBOL]}
+            )
