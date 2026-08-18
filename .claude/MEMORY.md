@@ -1880,6 +1880,116 @@ source-expressible global cause. Otherwise retain the C2-instrument seal. No
 compiler, Wine, link, reccmp, source edit, or shared-state mutation was used
 for this audit.
 
+## `0x10038380 Pizza::StopActions` exact-path seal (2026-08-17)
+
+The final authentic upstream-name crossover is negative. The sole tested
+variant was latest upstream run `31911463768`, commit
+`31bd20de79df0a2d2d26b63f734e155ddd17e8ae`, matrix 14/build 13, seed
+`834473485`, at the historical logical include seat
+`${PROJECT_SOURCE_DIR}/entropy13.h`. Its 80-byte/7-LF one-class/one-method
+header (`ClassYaaswg::FunctionOzcpvtmh`) is SHA-256
+`52174a9b3262c3c581f3cc8cf32a3ecdc304074b3fccf86c66be08d19780ef03`.
+The authentic report is
+`8b1a57933548794528684726bd225c6dde053166d662b5b0a59717d6073545e4`;
+its target-row receipt is
+`ea768f90a9ea20eea5f6d642064f8966930db28c252a750b2ea9cbd6decd5fd1`
+and records raw score `0.8604651162790697` at recomp `0x10038330`.
+Both 256-cell latest and previous upstream grids contain only 87 rows at that
+score and 169 at `0.7441860465116279`, with zero exact rows.
+
+The effective current source stayed 21,035 bytes/SHA-256
+`d0b1d4b64411d98d04faaab216be523f46e58e4949c2e934e48d763e8c4731de`.
+Its complete brace-balanced target window is 441 bytes/13 LF/SHA-256
+`af67e8c98cb717c975ccfeefdc6899271df8fd4fe4b1df7bc7854b7464cea8b3`;
+the signature-through-brace range is 411 bytes/12 LF/SHA-256
+`d83110ce2beb8bb474ae405d403512375ceffc6c45de78f08194a5015582b465`.
+The old, latest-upstream and current target function text is identical. Across
+2,803 retained target sources, the exact class, function and seed text is
+absent. Of 2,792 candidate objects, 2,791 parse as definitions and one BETA
+object lacks the symbol. There are only two natural 110-byte bodies: 2,408
+base/current copies at
+`0fd6e79f5f0ea9a8ae873d9a27bb44ae7cc83e573c86f83a8c21dc4f6ebfea8f`
+(relocation-masked distance 15), and 383 generic one-class/one-method copies
+at
+`446d62402d2aa92d9b6bc8b2a6c6381200d150b6c467f5b609c2843b8b653fe1`
+(distance 11). No retained object emits normalized retail body
+`8aa66a0ba0337ebbe7297a3672347f6c17f8c5a225c24ae795ce071d075f137c`.
+
+The compile-command, row and raw-command receipts are respectively
+`3fdddd396124fe1b4ca04cb1616ac97205ee6c652a44e539a36a60f4149bedfa`,
+`ea2b4e6fb608c76308f2158ae84414652ee35eb82a035b6e00cc4e28e75ba1b8`
+and
+`f975c33ddab39b52a67558c083b9c04be15e1a2a81a8fc09d2c70fa20293bdad`.
+Canonical compact-JSON/NUL argv receipts are
+`c9dec81576b3a620b51345637bf23e6514ee80a6b32c655a5145c1775c03d04d` /
+`d0264b017a151f42487463081ccd9ec8c306f0ddf9d5d7b6520454082a093c93`
+for C0 and
+`d489c1419744ee2a00730c05c57d052cf504a8dc27ec875f401f36c28fc4ad7f` /
+`4f1b8dc0ec5d7c21659b61f564ab4bce10c01e8adf0badf1b680f59e13718b9c`
+for V1. V1 differs only by the exact `/FI.../entropy13.h` token at index 26,
+immediately before SmartHeap.
+
+Fresh C0 started as PID/PGID `37139/37139`, returned cleanly with no stderr,
+and emitted object
+`883ae9ad003e7751dc4a055f303e9b214ff735829e09d6563ad479eb3b65cbbf`.
+It authenticated target section 103/207: the 110-byte base body above,
+metadata
+`11abdf917459b9cc414124fcbde99d1b0a2e9ded8a811ae8cc114a0c0d5137ec`,
+six semantic relocations, eight line rows, 61 functions and 80 primary
+COMDATs. The relocations are the three `g_isleScript` DIR32 operands at
+`+14,+30,+75` and three `InvokeAction` REL32 operands at `+22,+44,+92`.
+The complete closure is `.debug$F + .debug$S`: the 16-byte FPO child is
+`d0cd847fa93faacfee243df56d90901323e79af9847269c7024663f0e5a3eb1a`
+with `procSize=110` and its one semantic relocation; the 99-byte CodeView child
+is
+`5dee1b5f2718ac2b0e68302960ba816f6462639e377bac795eadbe0ba2486984`
+with the exact two procedure relocations.
+
+The sole V1 started as PID/PGID `37240/37240`, returned cleanly with no
+stderr, and emitted object
+`2c4e1f8b72ff7471772c13e46f8aeb58974488281b61715b9f9f1cfdd27036b7`.
+It reproduced the already-known generic one-class/one-method body
+`446d6240...`, distance 11, rather than the required `8aa66a0b...` exact body.
+Its target metadata is
+`b74e149805e8d1e3aa5bfbe0421b2b1312af820bc8c5419645d09d95cec489fa`;
+the FPO child remains byte-identical and the CodeView child remains 99 bytes
+with the same two semantic procedure relocations but body
+`cbf15984b08cd3c3a89c0d3783f79cd65efa537ff8cc9536ce32d6d902fc8986`.
+Function and primary-COMDAT identity universes remain unchanged, but the
+zero-collateral gates independently fail: section-shape receipt changes from
+`610161b4174e2dcab1d42f1abd827b7143e83cfb01c01f009f5522d6089ef789`
+to
+`3f24344b762dee4a19788f8ea5c9e930b67e7dd6fee18969f4614e306603f173`,
+linker receipt from
+`2cf98b8a927f6b76b0e4aa370c02e6e7ea24056c7075678ccddfd7c4c980cc7c`
+to
+`509d1c2b9c2da6097b5f013f47e7fe3d9f659559d0b2e23b3b8998653985fb0b`,
+and non-target-code receipt from
+`d269f7257e1395605c9fcc0657d575fb6a30e854a10e08d693c1f9fa6fea4de3`
+to
+`7185a65c16a825fc587764a25ccc296520222c89e7872327565f529f51b138bc`.
+`HandleEndAction` grows from 1,232 to 1,252 bytes and `HandlePathStruct`
+shrinks from 937 to 933 bytes.
+
+The final receipt is
+`/private/tmp/codex-pizza-stopactions-exactpath-seed834473485.p92xvxgw/result.json`
+(SHA-256
+`1b9b554ca1fa59729ff3ac8a6a910e6365f5e5a483c01cb11f67f8ae46acf13b`);
+the runner is
+`232de0167a56f3e3596f4b29b7f4b1a858fb04f1166dc15fa6721a120563fbef`.
+Exactly two of two launches were consumed, both isolated prefixes drained,
+and the final census was empty. There was no retry, alternate, third cell,
+link, reccmp, build or shared source/manifest edit.
+
+**Seal:** the exact historical names and header basename/path on today's
+effective source are non-causal and must not be replayed. The exhaustive
+upstream grids, retained source/object corpus and this exact-name cell close
+the remaining authentic declaration-header crossover. Reopen only for a
+genuinely new authenticated natural same-symbol current-source carrier that
+emits exact body `8aa66a0b...`, preserves all six semantic relocations, eight
+line rows and complete `.debug$F + .debug$S` closure, and passes exact
+zero-collateral section/function/COMDAT/linker/code universes.
+
 ## `0x100ba7f0 MxDisplaySurface::Create` whole-body FPO dehybridization (2026-08-17)
 
 `Create` is no longer an instruction mosaic. Its sole former `489..501`
