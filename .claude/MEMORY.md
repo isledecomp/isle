@@ -3519,3 +3519,60 @@ retail relocation seats and coherent same-output 23-line CodeView/FPO closure,
 while preserving every non-target runtime body, the function/COMDAT universes,
 and all linker payload. Otherwise this row remains permanently sealed as an
 unreachable one-byte allocator-colour residual.
+
+## `0x10057180 _Tree<LegoAnimPresenter*>::_Erase` exact-path entropy negative seal (2026-08-17)
+
+The 57-byte retail body has image SHA-256
+`7f9a77d7c8ffb2908c086e6f8aee7a9b64fbc7304e2e13d3df6d96cd6b171d49`.
+Across the bounded 18,044-definition retained census, exactly nine natural
+bodies occur and none is exact. The floor remains body
+`a2e823ee592453f92e06290122429d7bab4f9c077ba9cd9ebe71837fb4496638`
+at `nd=7`: retail keeps `this` in ESI and the node walker in EBX, while the
+floor swaps those roles over the whole body. Its seven non-relocation residue
+bytes are `[4,10,20,23,31,34,44]`. Every one of the nine bodies retains the
+same section-34 topology: four semantic relocations at `[13,26,36,45]` to
+`_Nil`, self, `operator delete`, `_Nil`; six line rows; and associated
+282-byte `.debug$S` plus 16-byte `.debug$F` children.
+
+The sole remaining exact-name/current-source crossover was run once in the
+private full-runtime fake-Z root
+`/private/tmp/codex-anim-erase-exactpath-seed834470659.jvanrccn`. It used the
+authentic upstream seed `834470659` header at its historical logical
+`/Users/foxtacles/Projects/isle-build-lean/src/entropy3.h` path and `/FI` seat
+immediately before SmartHeap. The 115-byte LF header has SHA-256
+`8b0ed950c4acf5d15588d8cd18c426f246d437d700d37d9faba6ebb8c2d55821`
+and contains one class with two inline methods. The current effective source
+was pinned at
+`08fbe68c492e4b9f0ad804cfa0fa8b87a9612df07fed748ad3c77e94e7d00c95`;
+the retained current object was reused as comparator authority, so no control
+compiler cell ran.
+
+The one compiler launch, PID/PGID `94037/94037`, completed in 4.788 seconds
+and drained cleanly. It emitted object
+`24d9ed0f11b7a18b28b8e4dfdc122a392734bdee9c332de6f4157d20078121ed`.
+The target is still 57 bytes with coherent four-relocation/six-line
+`.debug$S`/`.debug$F` closure, unchanged function/COMDAT identity universes,
+and no generated-identifier symbol leak. It is not retail: body
+`40636e5139494c7957d2c2e166704af22a6fc35fc25b8bc1a31caa8caa3514dc`
+is `nd=9` at offsets `[4,10,11,20,23,31,34,43,44]`, exactly the already
+retained `shape-1-2` state (209 retained definitions), and worse than the
+natural `nd=7` floor. Thirty-two non-target primary code records also differ
+from the retained current comparator. Final `result.json` has SHA-256
+`f9f7c4fba368b3230ecfa3fc85963a36051954c205aeb3cb66929e34998ed238`;
+the compile receipt has SHA-256
+`078572f083a112695c4b56d7f671c214a1ccd2f1b7c8815e4a7dab658528069c`.
+
+**Seal:** this exact-path crossover is a decisive negative. Exactly one
+variant compiler cell ran; there was no new control, alternate, retry, link,
+reccmp, target splice, shared source/object/manifest edit, or production
+mutation. Do not replay seed `834470659`, another tied historical entropy name,
+the already-tested iterator lifetime/order crosses, or any of the nine retained
+body states. Reopen only for authenticated final-release
+source/PDB/PCH/preprocessed/object evidence that identifies a genuinely new
+owning-source or compiler-state mechanism outside the censused and replayed
+axes. Its first single bounded cell must naturally emit the complete
+relocation-zeroed retail COFF body
+`7dc28c7c261766a264253ce9cfe25177c56b03f75de1c48d08d8f4ec2406e3dd`
+at `nd=0`, with the exact four semantic relocations, six line rows, coherent
+same-output `.debug$S`/`.debug$F` closure, and zero non-target runtime or linker
+collateral. Otherwise this singleton retail register colouring remains sealed.
