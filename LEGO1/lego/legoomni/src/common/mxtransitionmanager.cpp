@@ -552,8 +552,6 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 		y = loc.GetY();
 		MxU32 x = loc.GetX();
 
-		MxS32 i;
-
 		MxS32 height = m_waitIndicator->GetHeight();
 		MxS32 width = m_waitIndicator->GetWidth();
 
@@ -575,7 +573,7 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 		// Copy into the copy buffer
 		MxU8* dst = m_copyBuffer;
 
-		for (i = 0; i < (m_copyRect.bottom - m_copyRect.top + 1); i++) {
+		for (MxS32 i = 0; i < (m_copyRect.bottom - m_copyRect.top + 1); i++) {
 			memcpy(dst, src, copyPitch);
 			src += p_ddsc->lPitch;
 			dst += copyPitch;
@@ -584,9 +582,8 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 
 	// Setup display surface
 	if ((m_waitIndicator->GetAction()->GetFlags() & MxDSAction::c_bit5) != 0) {
-		MxDisplaySurface* displaySurface = VideoManager()->GetDisplaySurface();
 		MxBool und = FALSE;
-		displaySurface->VTable0x2c(
+		VideoManager()->GetDisplaySurface()->VTable0x2c(
 			p_ddsc,
 			m_waitIndicator->GetBitmap(),
 			0,
@@ -599,8 +596,7 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 		);
 	}
 	else {
-		MxDisplaySurface* displaySurface = VideoManager()->GetDisplaySurface();
-		displaySurface->VTable0x24(
+		VideoManager()->GetDisplaySurface()->VTable0x24(
 			p_ddsc,
 			m_waitIndicator->GetBitmap(),
 			0,

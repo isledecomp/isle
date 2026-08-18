@@ -11371,7 +11371,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/mxtransitionmanager.cpp",
-   "source_sha256": "5b013a0d9969e22aeaef48488105250630c8e790b4572ba32a78d68cf86c3814",
+   "source_sha256": "2f55d1572f12eaa839fc06e11995643816e70358a3b0972488df41366f108fa4",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -11387,7 +11387,7 @@
    },
    "donors": [
     {
-     "id": "d_34f9d09eb563",
+     "id": "d_4e403d42e250",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -11398,8 +11398,8 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/common/mxtransitionmanager.cpp",
-        "clean_sha256": "2cdda8ecd8e30f15345719b90a8a8d0610b3e482e6bc8a18aa5970d762ac8a50",
-        "rendered_sha256": "8656ec16f3f0943cda97e6521beb22acb2157045fa22a9c054ea1a15af5d206e",
+        "clean_sha256": "1bfd24819ebcbe45e5e130f2481000bedf7069c003dd3c2154d776bf5bff2259",
+        "rendered_sha256": "ebfb0b7923a2811a8fc4bd6a80d9bf49871bfaa344f8889482b57d00b32f4e03",
         "operations": [
          {
           "op": "replace",
@@ -11440,14 +11440,14 @@
       "canonical_overlay_replay": "owning_translation_unit_v1",
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "A typed fixed-array shuffle compiles a pointer countdown over the same pinned array extent; only authenticated complete target instructions may supplement the seed object, whose metadata and all non-target bytes remain authoritative.",
-      "rendering_identity_sha256": "34f9d09eb5634ca58d8e1b63193708cd18a59139a3b846b6a9a933a69707c49c"
+      "rendering_identity_sha256": "4e403d42e250c62e0a02da38782adfb12232cfe169dd13e6046571f9a8b5b487"
      }
     }
    ],
    "functions": [
     {
      "mangled": "?DissolveTransition@MxTransitionManager@@AAEXXZ",
-     "donor": "d_34f9d09eb563",
+     "donor": "d_4e403d42e250",
      "splice_class": "retail_exact_source_equal_body",
      "expected_section_number": 55,
      "expected_section_count": 79,
@@ -11462,7 +11462,7 @@
      "expected_seed_body_sha256": "9850d0b4a91610ecea9aacf0e0822b7fcd26e98f8ed7ceebf9a0ad031efc65b6",
      "expected_donor_body_sha256": "d8dcb9786d75ee60e3a18e12920ebc47cf8835c9fa9e9faf3572c8eec4bc61ac",
      "expected_seed_metadata_sha256": "50dde037ef93311085caf36fc80f7da9db67deaa447ce6c5fd7f7ae47225beae",
-     "expected_donor_metadata_sha256": "427ca9c51f423b36608cd1a0cc97fe2ea57afa70b3f1fc3c0f307fdda4780de7",
+     "expected_donor_metadata_sha256": "b23fde16f42d54f92317e53b47c73008d2addd1b762fe18a3d93ba4461672ff9",
      "expected_body_sha256": "d8dcb9786d75ee60e3a18e12920ebc47cf8835c9fa9e9faf3572c8eec4bc61ac",
      "expected_changed_offsets": [
       61,
@@ -11524,7 +11524,7 @@
        "selection": 5,
        "associated": 55,
        "expected_seed_body_sha256": "bf1ad5e24a165698b4331c9a5933f267fb208d77dc2cfe8778a3ea3bbb117f3c",
-       "expected_donor_body_sha256": "d1698ca625e650283391f357e21d0951ce3674308c6a7929e72c155d8d90abd2",
+       "expected_donor_body_sha256": "3b89806be5ed98d65a6940b78028cb6076595c790506fb80afcb83ca98217210",
        "expected_seed_relocation_sha256": "d8e74b20e9a894c57724aaae3fa300b890bf1dabc63775e042540dd252dacaa6",
        "expected_donor_relocation_sha256": "07ef049c6ddc18fe99b689f9490bba24729e321f4173bd3cc59512cc27fbeaf1",
        "expected_common_prefix_sha256": "f695facd0abc6ea90ebefd9958eda462415d16da771c2fd94687a2b47e144228",
@@ -11533,7 +11533,7 @@
        "expected_dbg_start": 15,
        "expected_dbg_end": 430,
        "expected_seed_tail_sha256": "9f226463a6d31c1993c4eac23f02f0098f6b51eb3ae503eb5b073ecdd657a27d",
-       "expected_donor_tail_sha256": "3a386cd4d4b318231cc9af331ad63a57a9339a3fe8dd80c001dbb7fcf59fa86d"
+       "expected_donor_tail_sha256": "54895e952602cbd811d35f1be86e245b4ad1e2849bf79411b548acf3a9dc4097"
       }
      },
      "retail_oracle": {
@@ -22861,9 +22861,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/mxtransitionmanager.cpp",
-    "clean": "2cdda8ecd8e30f15345719b90a8a8d0610b3e482e6bc8a18aa5970d762ac8a50",
-    "effective": "5b013a0d9969e22aeaef48488105250630c8e790b4572ba32a78d68cf86c3814",
-    "size": 15969,
+    "clean": "1bfd24819ebcbe45e5e130f2481000bedf7069c003dd3c2154d776bf5bff2259",
+    "effective": "2f55d1572f12eaa839fc06e11995643816e70358a3b0972488df41366f108fa4",
+    "size": 15857,
     "ops": [
      {
       "op": "insert",
