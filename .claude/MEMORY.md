@@ -2182,3 +2182,88 @@ same-mangled natural 561-byte current-source carrier that emits body
 `01949ffd...`, preserves all 11 semantic relocations, 28 line rows and the
 complete `.debug$F + .debug$S` closure, and passes exact zero-collateral
 function/COMDAT/linker/code universes.
+
+## `0x1002f770 LegoPathActor::UpdatePlane` source×carrier decisive seal (2026-08-17)
+
+No retained evidence supports a nonlinear crossover between the synthetic
+public-member spelling and a body-changing carrier. The current effective
+`legopathactor.cpp` is 20,184 bytes/SHA-256
+`6cc4cac87deb7186c914a26daa142fd43dc7a375aa723af8015807dad336c2ea`.
+The prior direct panel changed only
+`p_namedPlane.SetPosition(GetWorldPosition())` to the logic-equivalent
+`p_namedPlane.m_position = GetWorldPosition()`, producing source SHA-256
+`9d8e1d9914f91f8667e36d3822cf099e660cb1aa672ab609f5c238795de90148`
+and object SHA-256
+`97c2f6747c8243d19685f98f89315375d8ebe0b374582817ef4b4d620c6dadd2`.
+That source form exists in the retained corpus only in the panel projection
+and its recipe/receipt; it is absent from checked-in source, all reachable Git
+history, and the unreachable Git-blob source census.
+
+The direct-member target is byte-identical to control: section 397, selection
+1, exactly 188 bytes/body
+`6a97acb19f8a66ada8547c1bcc9dfd369d8575257763d23792106ba606e18473`,
+four semantic relocations at `+25,+37,+87,+137`, six line records, and exactly
+the `.debug$F + .debug$S` closure. The closure child bodies are respectively
+16 bytes/
+`27d8b02260855517267e0bd231098822ba5fd29e6094d606722f106d58105b47`
+and 104 bytes/
+`902a2832e1280fb5bec095281e74f89b447ee14391095e121813dfe060d088f2`.
+Retail is also 188 bytes/body
+`17843300165e9e744850fb040c5167656e62b6c7ee8f57b3de71897a25209664`.
+After relocation normalization, its five differences are exactly
+`+59:47→4f`, `+61:b9→b8`, `+72:10→11`, `+74:c0→c1`, and
+`+76:49→48`: one coherent EAX/ECX role exchange in the three-float
+position copy, with no instruction, schedule, branch, call, frame, relocation,
+line, or closure difference.
+
+Both named best carriers retain the checked-in `SetPosition` source and emit
+that same target byte-for-byte. `nm/probes/lpa-full/extern-0-1` has source
+SHA-256
+`0965733f3d40d35e48651069ef94b26b66e7adb015384accacc40c3f457e5a07`
+and object SHA-256
+`b428d5d8c5d8f1ea439723e353276f4ddacf747da6f4db107366ef3b26df9090`;
+the independent `stl/fresh2/rederive-all2-legopathactor-fwdL-6` has source
+SHA-256
+`aba6cbe29c52f5555e709a30d44d75fb04eca1be8b6155c203e63aa65bb2a6b7`
+and object SHA-256
+`d3e6e406eff7684b69ddb30c23a6bd11356eb54442c439c3c8f83f3758a56d41`.
+The earlier 653-state `lpa-full` sweep and later 1,024-cell last-TU rectangle
+also floor the row at the same five bytes. Thus the member source has never
+been paired with a *body-changing* optimized carrier in the audited corpus,
+because that corpus contains no such carrier.
+
+The exhaustive retained same-symbol census found 17,267 object paths: 10,455
+definitions, 6,812 undefined references, and zero parse errors. All 10,451
+optimized 188-byte definitions, across differing section seats and whole-object
+hashes, have the single body `6a97acb1...`, the same four relocations and six
+lines. The four structurally different definitions cannot be crossover
+carriers: two `/Od` wrap-census objects and the BETA10 ordinary-text build use
+one 116-byte body
+`be32743a0e61d405a20ed93aa4f064bca82d44e50adad25ad5296418f4748176`;
+the sole exact-local-name experiment is 193 bytes/body
+`d3512db2e709998b4c43d8b668c8338f7f951a9edae1da576dd3757aec52590a`.
+That last cell names a reference `position`, pushes EBP, grows to seven line
+records, and shifts the four relocation seats to `+29,+41,+91,+141`; it is a
+wrong-topology source perturbation, not a carrier capable of the five-byte
+residual.
+
+Git provides no missing authentic source form. Across 99 path-touching
+commits there are 86 unique reachable `legopathactor.cpp` blobs: 37 pre-body
+blobs, one `TODO` body, and 48 implemented bodies. Those 48 comprise only two
+`SetPosition` states (34 direct-name expressions and 14 cached-name
+expressions), with zero public-member states. Commit
+`1badadebaad512bb3a7fc738855a8941b4b585d7` introduced the implemented
+`SetPosition` form. The 1,155 unreachable blobs add one duplicate current
+source body and zero public-member bodies.
+
+**Seal:** do not run the unsubstantiated member-spelling × `extern-0-1`,
+`fwdL-6`, forward/extern/shape/pad/include/rectangle, or exact-local-name
+crossover; none has demonstrated target-body-changing capacity, and the
+complete optimized object corpus has only one body. Reopen only for
+authenticated final-release source/PDB evidence of a different position-copy
+lifetime, or authenticated original C2/PCH/TU/environment evidence that
+naturally selects the retail EAX/ECX tie while preserving the exact 188-byte
+body topology, four ordered semantic relocations at `+25,+37,+87,+137`, six
+line records, selection 1, and the complete `.debug$F + .debug$S` closure. No
+compiler, Wine, link, reccmp, source edit, or shared-state mutation was used
+for this audit.
