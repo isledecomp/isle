@@ -681,3 +681,26 @@ Result: LEGO1 rows unchanged at 4887/4934 (zero losses), ISLE/CONFIG identical,
 address-aligned LEGO1 rows **2772 → 3063**, terminal LEGO1 distance 389,541.
 The remaining .text displacement is class (b)/(c)/(d) plus the discarded/unknown
 groups this pass deliberately left in place.
+
+Second landing the same day: the composer now accepts any COMDAT kind (new
+`comdat_primary_section` finder), a unit may carry several `group_order` lists
+(applied in sequence, e.g. `.text` then `.rdata`), and the five old
+`swap_comdat_group_order` units were converted to `restore_comdat_group_order`
+lists (their post-swap window order). 20 vftable (.rdata) restorations were
+authored from the report's type-5 rows with unknown-position .rdata COMDATs
+(strings, floats) keeping their slots: 6 new units + 14 extensions. Gate: rows
+4887 unchanged, ISLE/CONFIG identical, vtable displacement runs 141 -> 39,
+terminal LEGO1 distance 389,541 -> 387,153. Terminal section deltas now: .text
+291,042 / .rdata 30,542 / .data 35,167 / .idata 549 / .rsrc 0 / .reloc 29,847
+differing bytes; almost all of .rdata/.data/.reloc differences are pointers into
+the displaced .text.
+
+The remaining .text trajectory (`scratchpad/layout_eval.py`): rows 0x10001000..
+0x1003ceb0 are at delta 0 (1,485 rows); the persistent shifts are the
+FUN_10061010 size defect (-16) cancelled by our extra out-of-line
+`MxListEntry<LegoTranInfo*>` ctor (+16), then the libcmt member block
+(0x1008bae0..0x10098fb0: pull order scrambled and +896 net bytes), then -16 from
+LegoEdge (misc.lib member order legospline/legotree/legoanim), the mxmain/
+mxobjectfactory/mxutilities/mxthread region (-48 and the MxDSFile/MxSemaphore
+supplier displacements) and smackw32/mxramstreamprovider at the end. Moving
+`smackw32.lib` on the link line before or after `omni.lib` changed nothing.

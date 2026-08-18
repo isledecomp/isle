@@ -11804,19 +11804,27 @@ def validate_manifest(
                 optional={"group_order"},
             )
             if "group_order" in unit:
-                # Optional retail-anchored whole-group text order restoration
+                # Optional retail-anchored whole-group order restoration(s)
                 # applied after every body composition of this unit.  It is
                 # body-inert: only section ordinals and associations move.
+                # One list names COMDATs of one section kind; a list of lists
+                # applies several restorations (e.g. .text then .rdata).
                 group_order = unit["group_order"]
-                require(isinstance(group_order, list)
-                        and 2 <= len(group_order) <= 512,
-                        f"{context}.group_order must list 2..512 names")
-                for index, value in enumerate(group_order):
-                    require(isinstance(value, str) and value.startswith("?")
-                            and len(value) >= 8,
-                            f"{context}.group_order[{index}] is invalid")
-                require(len(set(group_order)) == len(group_order),
-                        f"{context}.group_order names must be distinct")
+                require(isinstance(group_order, list) and group_order,
+                        f"{context}.group_order must be a non-empty list")
+                lists = (group_order if isinstance(group_order[0], list)
+                         else [group_order])
+                for list_index, names in enumerate(lists):
+                    list_context = f"{context}.group_order[{list_index}]"
+                    require(isinstance(names, list)
+                            and 2 <= len(names) <= 512,
+                            f"{list_context} must list 2..512 names")
+                    for index, value in enumerate(names):
+                        require(isinstance(value, str) and value.startswith("?")
+                                and len(value) >= 8,
+                                f"{list_context}[{index}] is invalid")
+                    require(len(set(names)) == len(names),
+                            f"{list_context} names must be distinct")
         target = unit.get("target")
         require(isinstance(target, str) and TARGET_RE.fullmatch(target) is not None,
                 f"{context}.target is invalid")
@@ -11894,15 +11902,21 @@ def validate_manifest(
                 require(group_order["first"] != group_order["second"],
                         f"{context}.group_order names must differ")
             else:
-                require(isinstance(group_order, list)
-                        and 2 <= len(group_order) <= 512,
-                        f"{context}.group_order must list 2..512 names")
-                for index, value in enumerate(group_order):
-                    require(isinstance(value, str) and value.startswith("?")
-                            and len(value) >= 8,
-                            f"{context}.group_order[{index}] is invalid")
-                require(len(set(group_order)) == len(group_order),
-                        f"{context}.group_order names must be distinct")
+                require(isinstance(group_order, list) and group_order,
+                        f"{context}.group_order must be a non-empty list")
+                lists = (group_order if isinstance(group_order[0], list)
+                         else [group_order])
+                for list_index, names in enumerate(lists):
+                    list_context = f"{context}.group_order[{list_index}]"
+                    require(isinstance(names, list)
+                            and 2 <= len(names) <= 512,
+                            f"{list_context} must list 2..512 names")
+                    for index, value in enumerate(names):
+                        require(isinstance(value, str) and value.startswith("?")
+                                and len(value) >= 8,
+                                f"{list_context}[{index}] is invalid")
+                    require(len(set(names)) == len(names),
+                            f"{list_context} names must be distinct")
             completion = unit.get("completion")
             require(isinstance(completion, dict),
                     f"{context}.completion must be an object")
@@ -15763,6 +15777,30 @@ class CoffObject:
         require(section["characteristics"] & 0x1000,
                 f"{mangled!r} is not in a COMDAT section")
         return section
+
+
+def comdat_primary_section(coff: CoffObject, name: str) -> dict:
+    """Return the unique COMDAT primary section defined by symbol ``name``.
+
+    Unlike :meth:`CoffObject.function_section` this accepts any section kind
+    (``.text`` functions, ``.rdata`` vftables and literals, ``.data``); the
+    symbol must be an external or static definition at offset 0 of a COMDAT
+    section that is not an associated (selection 5) child.
+    """
+    matches = [
+        symbol for symbol in coff.symbols.values()
+        if symbol["name"] == name and symbol["section"] > 0
+        and symbol["value"] == 0 and symbol["storage"] in (2, 3)
+    ]
+    require(len(matches) == 1,
+            f"expected one definition of {name!r}, found {len(matches)}")
+    section = coff.sections[matches[0]["section"] - 1]
+    require(section["characteristics"] & 0x1000,
+            f"{name!r} is not in a COMDAT section")
+    definition = section_definitions(coff).get(section["number"])
+    require(definition is not None and definition.get("selection") != 5,
+            f"{name!r} is not a COMDAT primary")
+    return section
 
 
 def coff_body(coff: CoffObject, section: dict) -> bytes:
@@ -22414,6 +22452,8 @@ def compose_restore_comdat_group_order(
     require(isinstance(order, list) and 2 <= len(order) <= 512
             and len(set(order)) == len(order),
             "group_order must be a list of 2..512 distinct names")
+    require(all(isinstance(name, str) and name for name in order),
+            "group_order names must be non-empty strings")
     seed = CoffObject(seed_bytes)
     definitions = section_definitions(seed)
 
@@ -22429,33 +22469,28 @@ def compose_restore_comdat_group_order(
 
     groups = []
     listed = set()
+    kinds = set()
     for name in order:
-        primary = seed.function_section(name)
+        primary = comdat_primary_section(seed, name)
         members = group(primary)
         require(not set(members) & listed, f"COMDAT groups overlap: {name}")
         listed.update(members)
+        kinds.add(primary["name"].split("$")[0])
         groups.append((name, primary, members))
+    require(len(kinds) == 1,
+            "group_order must name COMDATs of one section kind")
+    kind = next(iter(kinds))
     low = min(min(members) for _, _, members in groups)
     high = max(max(members) for _, _, members in groups)
     window_numbers = list(range(low, high + 1))
-    # Every text COMDAT group inside the window must be listed; other
-    # section kinds may float but keep their relative order.
-    text_primaries = {
-        symbol["section"]
-        for symbol in seed.symbols.values()
-        if symbol["section"] > 0 and symbol["value"] == 0
-        and symbol["type"] == 0x20 and symbol["storage"] in (2, 3)
-        and seed.sections[symbol["section"] - 1]["name"].startswith(".text")
-        and definitions.get(symbol["section"], {}).get("selection") != 5
-    }
+    # Every contribution of the listed kind inside the window must belong to
+    # a listed group; other section kinds may float but keep their relative
+    # order.
     unlisted = [number for number in window_numbers if number not in listed]
     for number in unlisted:
         section = seed.sections[number - 1]
-        require(number not in text_primaries,
-                f"unlisted text COMDAT group inside the window: "
-                f"section {number}")
-        require(not section["name"].startswith(".text"),
-                f"unlisted text contribution inside the window: "
+        require(section["name"].split("$")[0] != kind,
+                f"unlisted {kind} contribution inside the window: "
                 f"section {number}")
         definition = definitions.get(number)
         if definition is not None and definition.get("selection") == 5:
@@ -22536,7 +22571,7 @@ def compose_restore_comdat_group_order(
                 and peer["selection"] == definition["selection"]
                 and peer["associated"] == mapped(definition["associated"]),
                 f"section definition mapping changing: {old_number}")
-    final_numbers = [checked.function_section(name)["number"]
+    final_numbers = [comdat_primary_section(checked, name)["number"]
                      for name in order]
     require(final_numbers == sorted(final_numbers),
             "target group order was not restored")
@@ -22561,7 +22596,7 @@ def compose_restore_comdat_group_order(
         require([offset for offset in before if offset not in listed_offsets]
                 == [offset for offset in after if offset not in listed_offsets],
                 f"an unlisted {name} contribution moved")
-        if not name.startswith(".text"):
+        if name.split("$")[0] != kind:
             # Children move exactly with their primaries: the order of the
             # listed children under this name must follow the group order.
             group_rank = {}

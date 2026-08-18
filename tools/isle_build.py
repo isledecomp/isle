@@ -816,9 +816,16 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                         seed_bytes, unit["group_order"]))
                 verb = "swapped"
             else:
-                composed, detail = (
-                    byte_identity.compose_restore_comdat_group_order(
-                        seed_bytes, {"group_order": unit["group_order"]}))
+                composed = seed_bytes
+                orders = unit["group_order"]
+                if orders and isinstance(orders[0], list):
+                    lists = orders
+                else:
+                    lists = [orders]
+                for names in lists:
+                    composed, detail = (
+                        byte_identity.compose_restore_comdat_group_order(
+                            composed, {"group_order": names}))
                 verb = "restored"
             byte_identity.validate_first_party_object_directive(
                 composed, "composed object"
@@ -1589,9 +1596,12 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                             function,
                         ))
         if unit.get("group_order"):
-            composed, detail = (
-                byte_identity.compose_restore_comdat_group_order(
-                    composed, {"group_order": unit["group_order"]}))
+            orders = unit["group_order"]
+            lists = orders if isinstance(orders[0], list) else [orders]
+            for names in lists:
+                composed, detail = (
+                    byte_identity.compose_restore_comdat_group_order(
+                        composed, {"group_order": names}))
         byte_identity.validate_first_party_object_directive(
             composed, "composed object"
         )
