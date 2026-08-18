@@ -2455,3 +2455,109 @@ body topology, four ordered semantic relocations at `+25,+37,+87,+137`, six
 line records, selection 1, and the complete `.debug$F + .debug$S` closure. No
 compiler, Wine, link, reccmp, source edit, or shared-state mutation was used
 for this audit.
+
+## `0x1009a8c0 LegoWEGEdge::LinkEdgesAndFaces` exact-path seal (2026-08-17)
+
+The final authentic upstream entropy-name crossover is decisively negative.
+The sole tested variant was latest upstream run `31911463768`, commit
+`31bd20de79df0a2d2d26b63f734e155ddd17e8ae`, matrix 2/build 12, seed
+`834470412`, at the historical logical include seat
+`${PROJECT_SOURCE_DIR}/entropy12.h`. Its exact 876-byte/39-LF, five-class/
+21-function header is SHA-256
+`77add0a7929df2cea1edc8f73f351cdf9e4fa48a9a71b0714cdc82f0180fce19`;
+the authentic report and target-row receipts are respectively
+`7bb6aa53b3a7343182c7a9a0491586cb10bdd028912d9fecd0974d63711359ff`
+and
+`d50b201994e89d935c292d0c2590b693a1b0099c49f97bc87ca7917e32d0f19d`.
+The other two tied `.9960629921259843` maxima have the same five-class/
+21-function shape and byte-identical 4,928-row report data, so the minimum
+numeric seed was the deterministic sole cell rather than an evidence-ranked
+alternative.
+
+The current effective source remained 6,665 bytes/SHA-256
+`9c083f7994466ddc9db88f62e4dae6ee5da39741fbc25603036c3427d7a1cf8b`.
+The clean, effective and upstream target function text is identical at 3,732
+bytes/171 LF/SHA-256
+`d243c0932abfda47997ebab0a647fa248026d0ca13084bcf994f192591534b71`;
+the authenticated current identity window is
+`bfe4fe09a941f585e2fa3363f0897abc630a14b299634fca9f42257c1a16335c`.
+The canonical C0 and sole V1 NUL-argv receipts are
+`adfc17ccfcdcf8a8a5755b7dc3608db45b8816e1c35b82113a9a035d4d0b2080`
+and
+`630f56cf3b29651a0cfed9309fcb6037cc0567d0536ead4e5b642f1aab7007c0`;
+V1 differs only by the exact `/FI.../entropy12.h` token at argv seat 22,
+immediately before SmartHeap.
+
+Fresh C0 started as PID/PGID `73437/73437`, returned cleanly with no stderr,
+and emitted the 52,630-byte object
+`7ac2c24af87e2bf604cd1a10c3bed66629c68883f5f460031c44e3842b327dfd`.
+It authenticated section 207/220 and the canonical natural target: exactly
+1,494 bytes/body
+`5b9d3273253cf498ddc1f5b2e4f66b551210e6146836d064b95fa7b485144a95`,
+relocation-masked retail distance four, metadata
+`f4882e262eeded75f20e2b65f5a7a8d2fa2c48405f293915599c3fc4ce415163`,
+32 semantic relocations, 87 line rows and section-shape receipt
+`ad2b75b7f029e08060d77ef60ed38aa8bd43d0fd1fbbc9666ecbfcd0e27cf594`.
+Its complete closure is a 432-byte/eight-relocation `.debug$S` child at
+`249edf57f609db4aecdce04e55287f29bb32641aa7723bc3a9e724a6ae9964fb`
+plus a 48-byte/three-relocation `.xdata$x` child at
+`4477d3a0381ab5ef46d388b39cfdadd9d25fed3f49b5fb5fd0ecfa40767524fc`.
+
+The sole V1 started as PID/PGID `75160/75160`, also returned cleanly with no
+stderr, and emitted the 52,709-byte object
+`8c06b4c75c0a3c1a855d88b255916755bd9d26ed044b92e214391548c3e0c674`.
+It did not produce the required natural 1,494-byte exact body
+`f682280da62601a19ed118acb354abfb3bfb15a99632a6be0e518a8a15371a2c`.
+Instead the target contracted to 1,485 bytes/body
+`e09432166b0de03c9de38a8fe7c9aa9ea3a0db0dc2dd5caa4833ed7951aff4f4`
+at masked distance 923, with metadata
+`4e67161291ebaaa68dd3b7cd29f8593439ffe8892d5ab222f380a765e337120d`
+and section-shape receipt
+`0c7cafd8d05e05f9137e5a2a0af214fbdc939f7a7f0ff8d66f34f17a25e977bd`.
+Section 207 retained 32 relocations and 87 line rows, but relocation seats
+shift from `+560` onward and the EH end label moves from 1471 to 1462. The
+`.debug$S` child shrinks to 430 bytes/body
+`98ae77ac499841e1ec9c52fdf3d049840088faf14b59d5e0418310356015f6dd`,
+while `.xdata$x` alone remains identical. This independently fails target
+topology and complete-closure identity.
+
+The V1 target is byte-identical to the retained current-effective generic
+`shape-5-21/o.obj` carrier (whole-object SHA-256
+`aaab89cfd09daec5bf8d4b131f8e889585ce255bc5874fc31fed352f1e2a58dd`).
+Thus the authentic names and exact historical path collapse to the already
+covered total five-class/21-function carrier state; they are not a new entropy
+axis on today's source. The collateral gate also fails. Function and primary
+COMDAT universes remain 70 and 76 with receipts
+`122342e59de8bd2ea4b46f695fc700d071c24d653e8eebccd2f3d62bcd9a3f94`
+and
+`904ecdaa4913605d034ffa4cf6c5d87941195f38bbf405b45a7e8d9a8c322a65`,
+but the 13-entry linker receipt changes from
+`3954b5fe07072213e59ca8e27d8851c89deedd22c9cdf605a1baf510575268aa`
+to
+`6e7d7e1e2683df45b6a0f691222c18784c04bf73e15766891171004a333fe366`,
+and the 69-body non-target-code receipt changes from
+`3a940201c453683965f93ecb0e13ec516cfa361f5ff02d14dd8303d18c609f9c`
+to
+`dd0304f38d88fae7a80053de8b4e3708138b35a0fe89acc8f6aa41f6c2ca25ec`.
+Thirteen meaningful non-target bodies change, spanning Vector2/3/4 arithmetic
+and dot/product helpers plus `LegoWEGEdge::ValidateFacePlanarity`.
+
+The final receipt is
+`/private/tmp/codex-linkedges-exactpath-seed834470412.hibjl_lt/result.json`
+(SHA-256
+`05d89ce76e3314055e6461037765cd773cdb3a556214da48fb36bf40fa9f94b9`);
+the runner is SHA-256
+`a8900ac57ac37fdbf192bdc24dae01cb137408a9c8efe1910c394e93e67ce950`.
+Exactly two of two compiler launches were consumed, both independent Wine
+prefixes drained, and the final global process census was empty. There was no
+retry, alternate tied seed, third cell, link, reccmp, build, or shared source/
+manifest edit.
+
+**Seal:** do not replay seed `834470412`, either tied five-class/21-function
+upstream name set, the exact `entropy12.h` path, or another generic shape-5-21
+carrier. Preserve the existing composed exact hybrid. Reopen only for
+authenticated final-release source/PDB/PCH or original vendor C2/TU/object
+state, or a genuinely new independently predicted axis that first produces a
+natural 1,494-byte body `f682280d...` while preserving all 32 ordered semantic
+relocations, 87 line rows, the exact `.debug$S + .xdata$x` closure, and the
+complete function/COMDAT/linker/non-target-code collateral universes.
