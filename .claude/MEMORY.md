@@ -2669,3 +2669,125 @@ natural 2,294-byte relocation-masked-distance-zero body with `Vector2` at
 `+77/+1192`, `Vector3` at `+101/+1220`, all other 81 ordered relocation
 semantics unchanged, all 84 line rows and the exact `.debug$S + .xdata$x`
 closure coherent, and no accepted-row collateral.
+
+## `0x100b26f0 MxVideoPresenter::AlphaMask::IsHit` natural-body seal (2026-08-17)
+
+The proposed historical seed premise was incorrect. Seed `834471173` is
+`0x31bd0505`, matrix 5/build 5 under the authentic formula
+`(GITHUB_SHA[0:8] & 0xffff0000) + (matrix << 8) + build`; it is not a maximum.
+At upstream commit `31bd20de79df0a2d2d26b63f734e155ddd17e8ae`, the whole-tree entropy
+workflow generated the exact 255-byte/12-LF, one-class/six-method header
+`b0e35f3c658f88f43305e121db4427dd9bcac76b1a130b0fa81f8f16a03b7af9`
+and compiled it on the owning `mxvideopresenter.cpp` TU. The authenticated
+owner report is
+`/private/tmp/isle-upstream-entropy-prev.2vG4FN/Win32-Entropy-5/LEGO1PROGRESS5.json`
+(SHA-256
+`afd2a35c0ea27a6843888ad96f88cd9a1855efe842099b66eb98fa36371ce7c8`),
+where `IsHit` scores only `0.8043478260869565` and undergoes a broad register
+reshuffle. The same exact header was later replayed immediately before
+SmartHeap on a different current-context TU,
+`LegoTexturePresenter::map::_Insert`; retained result
+`/private/tmp/codex-legotex-insert-seed.FemstV/v1/result.json` is SHA-256
+`872d871d8e9fc1e4e3a951971e08338bf272ab4a46ce13cb7539bbc64573c55a`.
+That target stayed nonexact and 26 non-target runtime bodies plus linker
+payload changed. Thus this seed has both a historical owning-TU replay and a
+recent other-TU exact-path replay, but no replay on today's effective owning
+TU; neither result supports spending that cell.
+
+The true historical maximum is a nine-seed tie at
+`0.9782608695652174`: matrix/build/seed coordinates are
+`1/4/834470148`, `2/11/834470411`, `4/14/834470926`,
+`6/10/834471434`, `6/14/834471438`, `9/6/834472198`,
+`10/1/834472449`, `12/9/834472969`, and `13/2/834473218`.
+Their exact generated-header SHA-256 values, in that order, are
+`bc3083d87168c492752faa83092536fe36e1d74d31cbba56364a76fcc32e64bf`,
+`260cb6922dd5f365dc1aacb772b273714db105159508b45f2a082b90dfb9a8a6`,
+`9a2008b360dee4b673f3c7c987aabba463885a4de2677bb938670010480d6675`,
+`1f90d3bc9ea02a981a0725060dd8455690ea0cc9ae2ed7f5c30db6147bc33d75`,
+`0614f61d289f063c292a39b7beb94bda200d5ef96273597d814f2a93494542f3`,
+`c6de11f20bb39cda9d55b2b0076113537f29fa53385ecf69984f5de41925740d`,
+`930f7d6dd4099c652362d9a662f7f04c4b3df7e3d1ca56913cfb7aec74d2c791`,
+`3e8d3ce2083f4f5460c0645dda17062af00dd8bd6a0622939d20cc4fc34f0e91`,
+and
+`f2455d8ae899b987823e9ac608420219f2249cec4901f4bad4f0096c4c873ae2`;
+the ordered concatenation receipt is
+`f4b655a700a5a873d0c006504eeccbebd076067bb8cda66f5e6c78c4321bbc4e`.
+The nine corresponding report files have ordered raw-byte receipt
+`ad92c0a13ef976b0aba841ca622898fa88cd14c2b7cc21b990778b950eb6beb0`.
+
+All nine headers were already compiled on the historical owning TU by the
+whole-tree workflow. Every report has the same 101-byte target state and the
+same sole residue: retail emits `mov edx,[esp+0x14]` at byte 17 before
+`xor edi,edi`, while the candidate emits the independent XOR first and the
+load at byte 19. This is the retained natural body
+`4f5244c45248b468a140fad7af68adc877f09f6136f47eeca4640d72bcefc7d4`,
+whose only difference range is `[17,23)` and whose nonrelocation distance is
+six, not the retail body
+`396edefeaa6433477d701b4f0ad053572ddffb7739f54dc4f8ffeb5444a06864`.
+The smallest tied header, seed `834470148`, is only 139 bytes/11 LF with two
+classes and two methods, but it still emits exactly this residue. The maxima
+therefore define the remaining `nd6`; none causally covers it.
+
+Current source novelty does not change that conclusion. Historical commit
+`31bd20de` has whole source SHA-256
+`ca75c296d62e6ac4db305c10a43877badaa96d68098b902c244b1a4d0cb0aa56`;
+today's clean and effective source hashes are respectively
+`f23f253f557092a315d2f25163e255455f4f187d06f610b7ff691aef97565808`
+and
+`cfebe04b7fece495ed6d046d1fa69a62d200959bfb5d15222ae939ad84b0b9cf`.
+The exact `IsHit` function range is nevertheless byte-identical across all
+three: 245 bytes/11 LF/SHA-256
+`f46ba847e103371e63b43764dea267ae389b592769a8212e13700eb9f7c7773a`.
+An exact maximum header crossed with today's complete effective TU is
+technically untested because today's other declaration carriers differ, but
+it is not a causally new axis: all nine exact-name historical owner compiles
+converge on the already-censused `4f5244c4...` body. No exact-name/current-
+effective-source compiler cell is authorized.
+
+The retained natural-body census independently seals the search. The broad
+static same-symbol index
+`/private/tmp/codex-mosaic-body-index.json` (SHA-256
+`14ae4a3ec57568ed10c26ab4a9fa1792a9378428ac1d5c5ed4bb7859f108575e`)
+considered 345,799 objects and records 9,781 compiler-emitted 101-byte
+`IsHit` definitions across 18 body hashes. It contains 316 copies of
+`4f5244c4...` and zero copies of natural retail body `396edefe...`.
+The independent S110 census (SHA-256
+`7fc3298333f3bd1ff1a59f5b273b1332bcd196d9240bc7db0225e6d4923d31e3`)
+scanned 73,158 objects/74,839 definitions with 30 parse errors, found nine
+natural `IsHit` semantic states and no exact state; `4f5244c4...` is again
+best, with 27 retained paths and only `[17,23)` different. The exhaustive
+S72 owner sweep (SHA-256
+`5b79883bfcd58367f60321d52a956e10e0997aebe9aa7a2478d3d900b1f9047d`)
+tested all 505 declaration shapes, observed 14 target body hashes, and found
+zero exact; 24 shapes emit `4f5244c4...`. The current retail-exact production
+body is a typed instruction mosaic, so it is excluded from this natural-body
+census and cannot authenticate a whole-body replacement.
+
+The admission gate remains whole-function and whole-closure exactness. A
+natural replacement must be exactly 101 bytes/body `396edefe...`, have zero
+semantic relocations and six line records with seed line-table SHA-256
+`df6527690ab79f28f7dbc7b3463201ba04c461a5ceec54ba8d1ff49cc64200c8`,
+and preserve the ordinary FPO record (`cbProcSize=101`, two params, prolog 7,
+three saved registers, no SEH/BP/frame) plus its associated `.debug$F` body
+`4a23dcb4...` and `.debug$S` body `19b530b0...`. It must also preserve the
+19-function receipt
+`b821f04c7a4975aad76a090c10c304a85c98ce1cb9cef75f3ec50222139bbd1a`,
+20-COMDAT receipt
+`63746eb56885aed59ccc1edbd8d85ca7e261fc2def4112973e6916ede62a6cdf`,
+61-section shape
+`469428bf54eaae600476e1f7159cd2ccf86516ac797c23116827159aa8f17d0b`,
+five-entry linker receipt
+`7893a112afbd4cda848d521a6efb811d8e293527e40f5ad7d1a2deb76e078cb3`,
+and zero non-target runtime/linker collateral.
+
+**Seal:** do not replay seed `834471173`, any of the nine maximum headers,
+their exact historical names/path seats, or another declaration-shape/name
+crossover against current `mxvideopresenter.cpp`. No compiler, Wine, link,
+reccmp, source edit, or object mutation was used for this static audit.
+Preserve the existing exact hybrid. Reopen only for an authenticated original
+or final-release object/PDB/PCH/source/compiler-state artifact that contains a
+compiler-emitted whole natural body `396edefe...`, or for a genuinely new,
+independently predicted deterministic axis that specifically moves the stack
+load before the XOR while retaining every other body byte and passes the full
+line/FPO/CodeView, function/COMDAT/section/linker, and zero-collateral gates.
+Do not replace the hybrid with another instruction mosaic.
