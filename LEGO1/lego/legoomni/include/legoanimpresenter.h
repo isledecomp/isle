@@ -13,11 +13,11 @@ class MxMatrix;
 class Vector3;
 
 struct LegoAnimStructComparator {
-	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
+	MxBool operator()(const char* p_a, const char* p_b) const { return strcmp(p_a, p_b) < 0; }
 };
 
 struct LegoAnimSubstComparator {
-	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
+	MxBool operator()(const char* p_a, const char* p_b) const { return strcmp(p_a, p_b) < 0; }
 };
 
 // SIZE 0x08
@@ -266,7 +266,7 @@ private:
 class LegoPathBoundary;
 
 struct LegoHideAnimStructComparator {
-	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
+	MxBool operator()(const char* p_a, const char* p_b) const { return strcmp(p_a, p_b) < 0; }
 };
 
 // SIZE 0x08

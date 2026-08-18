@@ -1843,6 +1843,8 @@ class SourceInstructionHybridResizeTests(unittest.TestCase):
             if function.get("splice_class")
             == byte_identity.SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS
         ]
+        if not matches:
+            self.skipTest("no live source instruction-hybrid instance")
         self.assertEqual(len(matches), 1)
         function = matches[0]
         self.assertEqual(len(function["instruction_ranges"]), 11)
@@ -2644,6 +2646,11 @@ class SourcePermutationTests(unittest.TestCase):
                     if item["source"] == self.SOURCE)
         function = next(item for item in unit["functions"]
                         if item["mangled"].startswith("?GetActorROI@"))
+        if "target_source_refactor" not in function:
+            # GetActorROI closed from a plain declaration carrier once the
+            # comparator signatures were corrected (2026-08-18); the
+            # single-evaluation permutation mechanism stays fixture-tested.
+            self.skipTest("no live single-evaluation source permutation")
         donor = next(item for item in unit["donors"]
                      if item["id"] == function["donor"])
         function = copy.deepcopy(function)
@@ -2760,6 +2767,11 @@ class SourcePermutationTests(unittest.TestCase):
                 "instruction_donor_source_refactor", {}
             ).get("kind") == "discarded_postfix_increment_v1"
         ]
+        if not matches:
+            # The live discarded-increment hybrid was retired on 2026-08-18
+            # when BuildROIMap's loop was corrected in source (BETA10
+            # 0x1004f976); the mechanism stays implemented and fixture-tested.
+            self.skipTest("no live discarded_postfix_increment_v1 instance")
         self.assertEqual(len(matches), 1)
         unit, function = matches[0]
         donor = next(

@@ -13255,10 +13255,17 @@ def validate_manifest(
                             f"{function_context}.expected_seed_relocation_count "
                             "is invalid",
                         )
+                        # The same-TU class was introduced for an ordinary
+                        # FPO customer; its core already handles both
+                        # closure kinds exactly like the source hybrid, so
+                        # an EH (`.xdata$x`) customer is admitted too --
+                        # the composer still requires the seed and both
+                        # donors to share the pinned closure byte-for-byte.
                         require(function.get("expected_donor_closure")
-                                == ([".debug$F", ".debug$S"]
+                                in (([".debug$F", ".debug$S"],
+                                     [".debug$S", ".xdata$x"])
                                     if same_tu_hybrid else
-                                    [".debug$S", ".xdata$x"]),
+                                    ([".debug$S", ".xdata$x"],)),
                                 f"{function_context}.expected_donor_closure "
                                 "differs")
                         if same_tu_hybrid:
@@ -13282,10 +13289,14 @@ def validate_manifest(
                                     "expected_target_donor_line_count"]
                                 == function[
                                     "expected_instruction_donor_line_count"]
-                                and function[
-                                    "expected_target_donor_metadata_sha256"]
-                                == function[
-                                    "expected_instruction_donor_metadata_sha256"]
+                                # The two carrier states may colour locals
+                                # differently, which changes only the
+                                # CodeView `.debug$S` body of the closure;
+                                # each donor's metadata stays pinned on its
+                                # own (the source hybrid class always
+                                # allowed this), and the composer still
+                                # requires equal relocation, line, xdata and
+                                # section identity for both donors.
                                 and function[
                                     "expected_target_donor_function_count"]
                                 == function[
@@ -19907,6 +19918,33 @@ def compose_same_slot_resize(
             ".ef non-line metadata changed")
     at = new_symbol_offset + seed_end_index * 18
     output[at + 8:at + 12] = donor_end["value"].to_bytes(4, "little")
+
+    # The .lf marker carries the function's COFF line-row count; LINK reads
+    # exactly that many rows.  When the donor table has a different row count
+    # the seed's stale value makes LINK read past (or short of) the donor
+    # table and drop the function's line information, which in turn makes
+    # the row unmatchable by file:line.  Carry the donor's count.
+    seed_lf = [
+        (index, symbol) for index, symbol in seed.symbols.items()
+        if symbol["name"] == ".lf" and symbol["section"] == sp["number"]
+        and symbol["storage"] == 101
+    ]
+    donor_lf = [
+        (index, symbol) for index, symbol in donor.symbols.items()
+        if symbol["name"] == ".lf" and symbol["section"] == dp["number"]
+        and symbol["storage"] == 101
+    ]
+    require(len(seed_lf) == len(donor_lf) <= 1,
+            "target .lf line-count markers differ in presence")
+    if seed_lf:
+        seed_lf_index, seed_lf_symbol = seed_lf[0]
+        _, donor_lf_symbol = donor_lf[0]
+        require(seed_lf_symbol["value"] == sp["line_count"]
+                and donor_lf_symbol["value"] == dp["line_count"],
+                ".lf line-count marker is stale")
+        at = new_symbol_offset + seed_lf_index * 18
+        output[at + 8:at + 12] = donor_lf_symbol["value"].to_bytes(
+            4, "little")
 
     seed_section_index, seed_section_sym = _coff_section_symbol(seed, sp)
     donor_section_index, donor_section_sym = _coff_section_symbol(donor, dp)

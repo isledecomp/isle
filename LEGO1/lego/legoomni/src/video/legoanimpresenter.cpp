@@ -439,7 +439,7 @@ void LegoAnimPresenter::BuildROIMap()
 	m_roiMap = new LegoROI*[anims.size() + 1];
 	memset(m_roiMap, 0, (anims.size() + 1) * sizeof(*m_roiMap));
 
-	for (LegoAnimStructMap::iterator it = anims.begin(); it != anims.end();) {
+	for (LegoAnimStructMap::iterator it = anims.begin(); it != anims.end(); ++it, m_roiMapSize++) {
 		MxU32 index = (*it).second.m_index;
 		m_roiMap[index] = (*it).second.m_roi;
 
@@ -455,8 +455,6 @@ void LegoAnimPresenter::BuildROIMap()
 		}
 
 		delete[] const_cast<char*>((*it).first);
-		it++;
-		m_roiMapSize++;
 	}
 }
 

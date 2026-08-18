@@ -13,10 +13,7 @@
 #pragma warning(disable : 4237)
 
 struct LegoContainerInfoComparator {
-	LegoBool operator()(const char* const& p_key0, const char* const& p_key1) const
-	{
-		return strcmp(p_key0, p_key1) > 0;
-	}
+	LegoBool operator()(const char* p_key0, const char* p_key1) const { return strcmp(p_key0, p_key1) > 0; }
 };
 
 // SIZE 0x10

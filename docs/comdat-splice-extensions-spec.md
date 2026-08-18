@@ -848,6 +848,41 @@ and verdict SHA-256 is
 The final manifest SHA-256 is
 `ca98ce3721d3cfd7e54787e47c1843ec69ab771a30ed16cf01f23fb7c4a80176`.
 
+### 14.1 Second customer and two 2026-08-18 amendments
+
+`0x10069b10 LegoAnimPresenter::BuildROIMap` is the second customer. Its loop is
+now the BETA10-attested `for (...; ++it, m_roiMapSize++)` form (BETA10
+0x1004f976), so the earlier source-permutation hybrid (Class H with a
+`discarded_postfix_increment_v1` proof) is retired. On the re-dialed
+legoanimpresenter seed (an EOF forward run of 347 declarations, chosen because
+it is the only measured state where both open map `erase` rows sit at their
+retail lengths) BuildROIMap is 622 bytes; two mixed carriers with the same
+single after-include extern and 33 / 4 prefix declarations emit 617-byte bodies
+whose residues are disjoint (`{304,534,540}` and `{471,481}`); three
+line-certified instructions move from the second into the first, and the
+hybrid is retail-exact.
+
+Two validator amendments were needed, both consistent with Class H precedent:
+
+- The closure may be the EH pair `.debug$S`/`.xdata$x` as well as the FPO pair
+  `.debug$F`/`.debug$S`. The composer core already handled both (Class H used
+  the EH pair from the start); the seed and both donors must still share the
+  pinned closure byte-for-byte and the same-slot composer still proves xdata.
+- The two donors' `expected_*_metadata_sha256` pins no longer have to be
+  equal. Differently coloured carrier states differ in the CodeView
+  `.debug$S` body (register records for locals) and in nothing else; each
+  donor's metadata stays pinned on its own, and length, section seat and
+  count, relocation and line counts, function and COMDAT censuses and the
+  closure remain required equal.
+
+A `same_slot_resize` correctness fix landed at the same time: when the donor
+line table has a different row count than the seed's (the split
+`expected_seed_line_count` / `expected_donor_line_count` pins), the seed's
+`.lf` line-count marker is now rewritten to the donor's count. LINK reads
+exactly `.lf` rows, so a stale marker made it drop the function's whole line
+table (observed on `LegoAnimPresenter::ParseExtra`, 61 -> 60 rows), which in
+turn made reccmp unable to match the row by file:line.
+
 ## 15. Class E ordinary-FPO branch
 
 The ordinary same-TU instruction mosaic has one additional, deliberately

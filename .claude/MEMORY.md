@@ -827,8 +827,36 @@ after every bounded panel or full gate.
   relocation identities, 81 line records, the coherent 878-byte `.debug$S` +
   200-byte `.xdata$x` closure, identity universes, and acceptable collateral.
 
-- Accepted canonical gate: LEGO1 4881/4934, ISLE 172/172, CONFIG 111/111.
-  The latest gain is `0x1002bff0` path-actor tree `erase`. The canonical
+- Accepted canonical gate: LEGO1 4887/4934, ISLE 172/172, CONFIG 111/111.
+  The latest gain (2026-08-18, +6 / -0) is the whole open map `_Tree::_Insert`
+  family (`0x1004f9b0`, `0x1006a7a0`, `0x1006c200`, `0x1006e720`,
+  `0x10083890`) plus `0x10085500` `insert`, closed by two authentic source
+  corrections proven against BETA10's /Od bodies (`tools/beta_disasm.py`):
+  the five legoomni STL comparators (`LegoAnimStructComparator`,
+  `LegoAnimSubstComparator`, `LegoHideAnimStructComparator`,
+  `LegoCharacterComparator`, `LegoContainerInfoComparator`) take `const char*`
+  BY VALUE, not `const char* const&` (BETA10 `0x1007be80` and siblings pass
+  the pointers, not their addresses); and `LegoAnimPresenter::BuildROIMap`
+  iterates as `for (...; ++it, m_roiMapSize++)` (BETA10 `0x1004f976`).
+  Collateral was re-derived from freshly generated carrier states: units
+  legocharactermanager / legoanimpresenter / legopartpresenter / legoroi were
+  rebuilt and legotexturepresenter / legoutils / legomodelpresenter added;
+  GetActorROI's `target_source_refactor` and BuildROIMap's
+  `discarded_postfix_increment_v1` source permutations are RETIRED (plain
+  carriers now emit GetActorROI; BuildROIMap is a same-TU hybrid of two
+  mixed-carrier 617-byte states; LegoPartPresenter::Read is a one-donor
+  mosaic). Framework: `compose_same_slot_resize` now rewrites the seed's
+  `.lf` line-count marker to the donor's count (LINK dropped ParseExtra's
+  line table otherwise); the same-TU hybrid validator admits the EH closure
+  and unequal donor `.debug$S` metadata pins (spec §14.1). Manifest SHA-256
+  `20a434e9d071d93eb95ed8a1f69a9cca89a889d12c7aaec47c8cc633441a7dca`,
+  accepted-row identity
+  `c82766bd0179146ed1d370f4a13cac5ed59fc4d42d5829c26960cfc36ade673d`.
+  Lesson recorded: the "_Tree family is not text-channel" verdict was a
+  claim, not a fact — the family fell to a signature correction that every
+  earlier screen had judged unreachable.
+
+  The preceding gain is `0x1002bff0` path-actor tree `erase`. The canonical
   `legoextraactor.cpp` winner is 1,104 bytes; its existing same-TU
   declaration-shape carrier supplies the 1,096-byte owner topology. A freshly
   compiled `legopathboundary.cpp` current-effective-source donor, rendered
