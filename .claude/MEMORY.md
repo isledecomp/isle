@@ -3241,3 +3241,98 @@ line table, and a coherent same-output CodeView/FPO closure with procedure
 size 1,102. It must also pass the ordinary whole-body same-slot topology,
 source provenance, exclusion and zero-loss gates. No compiler, Wine, link,
 reccmp, source/manifest edit or object mutation was used in this static audit.
+
+## `0x1003d170 LegoCacheSoundManager::FindSoundByKey` scoped-entry paired-control negative seal (2026-08-17)
+
+The previously `CONTROL_INVALID` scoped-entry candidate has now received its
+one admissible paired run and is **sealed negative**. The tested source is the
+same pinned, logic-neutral spelling described above: SHA-256
+`606d4c151ed4982473a75973d80b058cbadc481a20d71509c72eaccf6769359a`,
+with target segment
+`7a108e7e953bdfeffdbbcf8972fc465fb6d8e3c5b7e352f5410814c48bb0b0bd`.
+It declares the iterator outside an inner scope, constructs named
+`LegoCacheSoundEntry entry(NULL, key)` before `strcpy`, performs `find(entry)`
+after the copy, and destroys the entry immediately after `find`. The private
+canonical-guest-path root is
+`/private/tmp/codex-findsound-fakez.il0310ws`; runner SHA-256 is
+`075e365a6f45a6be9cfc1277f13936e4e2d2d5955536199826b3514cb2133584`.
+
+The fresh fake-Z control is valid under the campaign's normalized composition
+gate. Compiler PID/PGID `88643/88643` emitted raw object
+`ec089434438c137955ae1b13720d6930308ec14c1e8ebc03d529964a9796d9f4`.
+Its target naturally reproduced the canonical 282-byte body
+`1ea542d85bfc6ffc9bc2595839886cf36367f477bd4a2b41972da95ae47418f2`,
+masked `nd=182`, all 12 semantic relocations, and the exact target closure.
+The raw object also reproduced the expected natural 187-byte `Stop` and
+274-byte manager-destructor bodies. Applying only the manifest's two existing
+non-target replacements (`Stop` 187-to-181 same-slot resize and destructor
+274-to-258 retail-exact relocation-divergent compose) yielded object
+`d47c42de6fdf8bad6ded58dd2291f95560cd18f9eb718c39cd928af5a4771803`.
+Against canonical composed object
+`e0e62782fa137e63dbe6c813521427475163218a51c83bd1dc5e73cafd5c3470`,
+all 24 runtime records, complete function identity universe, linker receipt,
+78-section/402-symbol geometry, target body, semantic relocations, and target
+closure are exact. The only 17 raw byte differences lie outside every runtime
+and linker closure: three COFF timestamp bytes, ten global `.debug$S` type-
+index bytes, and four global `.debug$T` PDB identity/signature/age bytes.
+`composition-proof.json` has SHA-256
+`7bf5082c18d90ebc46b328bfcd986e0cf95f4bc4f6afccf5990eaea1932a1f11`.
+
+Only after that proof did the sole variant launch, as PID/PGID `90410/90410`.
+It drained cleanly and emitted raw object
+`04bc14f39bc071f869ee0f56634b8f636707c08f7c8e9a740d853964e57862cd`.
+The target is 276 bytes, not retail's 281, with body
+`576ba0d215aa389a61f3fb2726cebb79394cee756f56e712717cb44e2e9f22a4`
+and masked `nd=200`, not zero. It retains 12 relocations and the same semantic
+target sequence, but relocation compatibility fails because the seats move
+from control offsets
+`2,12,20,53,118,133,155,181,248,265,270,278` to
+`2,12,20,50,114,129,151,177,243,259,264,272`. Its associated closure remains
+structurally coherent: `.xdata$x` is the same 40-byte raw body
+`2d1be37fbfa859d8d31be303c41b476f80b7c6145b767ab164f6f6751fb67dd3`
+with local offsets coherently shifted, while target `.debug$S` grows from 173
+to 189 bytes and the target line count grows from seven to nine.
+
+Applying the identical two pre-existing non-target replacements to V1 yields
+private object
+`e4fbae67b44616401f03885a89f7810d484f3781d6f886d150a151a39294ba79`.
+The function and COMDAT identity universes and all non-target linker payload
+remain exact, but zero runtime collateral fails in two functions.
+`ManageSoundEntry` remains 436 bytes but changes from body
+`c353034fd9eed29e81c25a4f96c75a86b99ac639371c2aae86d3369c9a0a4e2c`
+to
+`8dda50429d613f4ea6d9d5ffae688e00887ca8fa2e633f00c7e6f2bfd0f60003`
+(28 raw code bytes at offsets 33--60). The set tree's `_Insert` grows from
+653-byte body
+`7b6b420b452a0f36351c5c24f43374a41846470cd7656db57aaff4b13e1f5417`
+to 656-byte body
+`8944caf7f6422d27250c403bb4f363c70c86b0eda2dd8e6bdc6e7fe02ba47c35`;
+its last two `_Nil` relocation seats move from 433/518 to 436/521. These are
+real runtime deltas, not timestamp or debug identity noise.
+
+The compiler completed before the first post-analysis process encountered a
+stale frozen-backend helper reference
+(`comdat_primary_identity_multiset` was absent there). Post-analysis was
+corrected offline to use the current canonical composer/helper and rerun only
+against the retained V1 object; no compiler retry occurred. Final
+`result.json` is SHA-256
+`92924b7804b04d94cfeec0a28bd55a8bb33e06b0d11b12771f0ab6450ba51f7d`
+and records `SEALED_NEGATIVE`. Exactly two compiler cells ran: one control and
+one variant. There was no third cell, link, reccmp, target splice, shared
+source/object/manifest edit, or production mutation, and the final
+compiler/Wine census is empty.
+
+**Seal:** supersede the earlier `CONTROL_INVALID` status only for this exact
+scoped-entry spelling; it is now a decisive candidate negative. Do not repeat
+it, mix it with the already-sealed fused-allocation, iterator-first, or named-
+entry-after-copy panels, or accept its coherent-but-nonexact closure. Reopen
+only for authenticated final-release source/PDB/PCH/preprocessed/object or
+compiler-state evidence that supplies a genuinely different lifetime/order
+mechanism, or for a new independently predicted natural source spelling whose
+first bounded result emits the complete 281-byte retail body
+`9cc3f9e2c4b48c35fd351b4cf817e70e1270f16e65982a7a0c5e631e5317d6d9`,
+passes `nd=0` with all 12 semantic relocations and a coherent same-output
+CodeView/xdata closure, and preserves every one of the other 23 runtime bodies,
+the full function/COMDAT universes, and all non-target linker payload. Any
+future dynamic test still requires a fresh campaign-normalized exact control
+before one sole candidate cell; no target composition or retry is admissible.
