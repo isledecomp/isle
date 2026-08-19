@@ -827,7 +827,23 @@ after every bounded panel or full gate.
   relocation identities, 81 line records, the coherent 878-byte `.debug$S` +
   200-byte `.xdata$x` closure, identity universes, and acceptable collateral.
 
-- Accepted canonical gate: LEGO1 4889/4934, ISLE 172/172, CONFIG 111/111
+- Accepted canonical gate: LEGO1 4894/4934, ISLE 172/172, CONFIG 111/111
+  (commit 7be414d6, 2026-08-18 night; accepted-set pin 4894 /
+  `5f4739afc79ac15806ac990aca2cfb0b929a4380703246985c4b0a00ca6066ed`).
+  Night gains (4889 -> 4894): `0x100170e0 CarRace::HandlePathStruct` (BETA10 `MxS32
+  index` form, b778d7d5); `0x100035e0 Helicopter::HandleControl` (single-donor
+  instruction mosaic, 6aaead03); `0x1003f540 WriteDefaultTexture` (`LegoPaletteEntry*
+  palette` local + legoutils seed extern_run ops, equal-body donor, b3f5c02e);
+  `0x10055a60 LegoNavController::Notify` (seed suffix fwd VC x11 + strict single-donor
+  mosaic, 8d7288dc); `0x10062e20 FUN_10062e20` (COMBINED carrier: forward_run_with_shape
+  VC13 suffix + shape 1x2 colours both g_characters windows — no 1-D state does; 7be414d6).
+  Framework: E-perm (`relocation_order`), E-reseat (`relocation_reseat` ranges with output
+  table/metadata pins, plain + ordinary-FPO), general flat IA-32 length decoder (0 mismatch
+  vs capstone on 325k instructions). Refuted tonight: FindSoundByKey `e_F_fsk_b` (header
+  ripple costs legopathactor CalculateTransform; legopathactor.cpp includes the header
+  unused — remove first), Clone clc1/3/4, AlphaMask am7-10, LegoROI::Read colour-init
+  orders, SetupCopyRect scr_c-f, seed-op route for FUN_10062e20 (loses FUN_10064b50 912 B).
+- Accepted canonical gate (previous): LEGO1 4889/4934, ISLE 172/172, CONFIG 111/111
   (commit d280813c, 2026-08-18 late; accepted-set pin 4889 /
   `c712f5b749b51bbebaa6a00997d5464d59c2b15a99a145ea4ccc77b7bb90b508`).
   Late gain: `0x100a12a0 TglImpl::TextureImpl::SetImage` (+1) — the `appData` local

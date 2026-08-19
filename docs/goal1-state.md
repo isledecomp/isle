@@ -1,7 +1,7 @@
 # State of goal 1 — every open row, with its disposition
 
 Generated in the main loop by joining the four screens plus the coverage
-matrix against the live reccmp report. **LEGO1 4889/4934 — 45 open rows.**
+matrix against the live reccmp report. **LEGO1 4894/4934 — 40 open rows.**
 ISLE is 172/172 and CONFIG is 111/111. Current terminal measurement keeps
 ISLE and CONFIG byte-identical; the last LEGO1 terminal measurement (before
 the two latest exact-function mosaics) was equal-sized with 595,723 differing
@@ -31,6 +31,15 @@ legoutils, legomodelpresenter added); GetActorROI no longer needs its source
 permutation and BuildROIMap no longer needs its discarded-increment
 permutation. The "text channel is not indicated for the _Tree family" verdict
 was wrong: BETA10 signature/statement-order evidence closed it.
+
+**2026-08-18 night update (4889 -> 4894, zero losses):** CarRace::HandlePathStruct
+(BETA10 `MxS32 index` score block), Helicopter::HandleControl (single-donor instruction
+mosaic), WriteDefaultTexture (palette-pointer local + seed extern_run carriers),
+LegoNavController::Notify (seed suffix forward run + strict single-donor mosaic) and
+LegoAnimationManager::FUN_10062e20 (a COMBINED carrier state — forward_run_with_shape —
+colours both g_characters store windows; no 1-D carrier state does). Framework gained
+the permuted relocation order and relocation-reseat mosaic modes and a complete flat
+IA-32 length decoder for line-certified (FPO) mosaics.
 
 This exists because the evidence is spread across `slot-reachability`,
 `register-colour`, `scheduling-residue`, `cmpdir-census` and
@@ -108,11 +117,8 @@ eligible when they carry a fail-closed proof and a concrete target.
 
 | disposition | score | address | name | slot | register | schedule | cmpdir | note |
 |---|---:|---|---|---|---|---|---|---|
-| AMBIGUOUS | 0.9907 | `0x100035e0` | Helicopter::HandleControl | AMBIGUOUS | IDENTITY | INTRA-BLOCK | NONE |  |
 | SCHEDULE/ENCODING | 0.9891 | `0x100334b0` | Act1State::Act1State | SLOT-CLEAN | IDENTITY | INTRA-BLOCK | NONE |  |
 | LENGTH-UNREACHABLE | 0.9827 | `0x10058c30` | LegoOmni::Destroy | AMBIGUOUS | AMBIGUOUS | DIFFERENT | LENGTH |  |
-| SCHEDULE/ENCODING | 0.9818 | `0x10055a60` | LegoNavController::Notify | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
-| SCHEDULE/ENCODING | 0.9752 | `0x100170e0` | CarRace::HandlePathStruct | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
 | SCHEDULE/ENCODING | 0.9725 | `0x10031820` | Isle::Enable | SLOT-CLEAN | IDENTITY | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9682 | `0x10084030` | LegoCharacterManager::CreateActorROI | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE | masked object nd 0 is not a row win: gated score .9969, wrong relocation targets/address; reverted |
 | ALLOCATOR (no idiom) | 0.9636 | `0x1007b770` | LegoVideoManager::Tickle | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
@@ -130,11 +136,9 @@ eligible when they carry a fail-closed proof and a concrete target.
 | ALLOCATOR (no idiom) | 0.9212 | `0x10029d50` | _Tree<LegoCacheSoundEntry,LegoCacheSoundEn | SLOT-CLEAN | REGIONAL | DIFFERENT | MIXED |  |
 | ALLOCATOR (no idiom) | 0.9101 | `0x10051ac0` | LegoAct2::SpawnBricks | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9048 | `0x100b2a70` | MxVideoPresenter::PutFrame | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
-| ALLOCATOR (no idiom) | 0.9015 | `0x1003f540` | WriteDefaultTexture | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
 | AMBIGUOUS | 0.8994 | `0x100a84a0` | LegoROI::Read | AMBIGUOUS | AMBIGUOUS | DIFFERENT | MIXED |  |
 | LENGTH-UNREACHABLE | 0.8966 | `0x1006ed90` | Infocenter::Create | AMBIGUOUS | AMBIGUOUS | DIFFERENT | LENGTH |  |
 | ALLOCATOR (no idiom) | 0.8893 | `0x10073a90` | Act3::Enable | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
-| AMBIGUOUS | 0.8856 | `0x10062e20` | LegoAnimationManager::FUN_10062e20 | AMBIGUOUS | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.8791 | `0x100b27b0` | MxVideoPresenter::Destroy(unsigned char) | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | AMBIGUOUS | 0.8787 | `0x100998e0` | LegoTextureContainer::GetCached | AMBIGUOUS | IDENTITY | DIFFERENT | MIXED |  |
 | ALLOCATOR (no idiom) | 0.8780 | `0x100a7960` | _Tree<char const *,pair<char const * const | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE |  |
