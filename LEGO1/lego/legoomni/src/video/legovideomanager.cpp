@@ -352,7 +352,6 @@ MxResult LegoVideoManager::Tickle()
 		}
 	}
 	else if (m_fullScreenMovie) {
-		MxPresenter* presenter;
 		MxPresenterListCursor cursor(m_presenters);
 
 		if (cursor.Last(presenter)) {

@@ -17356,7 +17356,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legovideomanager.cpp",
-   "source_sha256": "7ebd7823de5c84a9f2d87e76cfd7010b6085de7cb478d9c61f6283f39887bf4c",
+   "source_sha256": "48815b50840e4771e3ab9392274c91496a840d808f530dea2534b5992be73a84",
    "mode": "restore_comdat_group_order",
    "command_policy": {
     "required_flags": [
@@ -36311,9 +36311,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/video/legovideomanager.cpp",
-    "clean": "8b387116229dfe2129f60cb9d56cbcbed9adbc429db2a8c221d5e4dfa1e69eaf",
-    "effective": "7ebd7823de5c84a9f2d87e76cfd7010b6085de7cb478d9c61f6283f39887bf4c",
-    "size": 20520,
+    "clean": "5c3fb23801a1c148075099204593c26d0bc6a89166fa99447a8eb74a3fe7bb5e",
+    "effective": "48815b50840e4771e3ab9392274c91496a840d808f530dea2534b5992be73a84",
+    "size": 20516,
     "ops": [
      {
       "op": "insert",
@@ -36323,7 +36323,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 25,
+       "lines": 26,
        "items": [
         {
          "k": "lines",
@@ -36371,6 +36371,11 @@
          "k": "fwd",
          "id": "MxUnkRecordLV0",
          "line": 24
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordLW0",
+         "line": 25
         }
        ]
       }
