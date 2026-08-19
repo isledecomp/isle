@@ -302,13 +302,30 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/stream/mxdsfile.cpp
     LEGO1/omni/src/stream/mxio.cpp
     LEGO1/omni/src/action/mxdsstreamingaction.cpp
-    LEGO1/omni/src/stream/mxramstreamprovider.cpp
-    LEGO1/omni/src/stream/mxdiskstreamprovider.cpp
   )
   list(APPEND list_targets omni${ARG_SUFFIX})
   set_property(TARGET omni${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "omni$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
   target_include_directories(omni${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
-  target_link_libraries(omni${ARG_SUFFIX} PRIVATE dsound winmm Smacker::Smacker)
+
+  # The two stream providers were NOT members of the library that holds the
+  # stream controllers. LINK 4.20 pulls library members per library, to a
+  # fixpoint, in link-line order (measured with synthetic archives), so a
+  # member referenced by an already-pulled member of the same library lands
+  # inside that library's block. MxDiskStreamController::Open and
+  # MxRAMStreamController::Open call the provider constructors, yet retail
+  # seats both provider objects AFTER smackw32.obj (0x100d0730..0x100d1ec0,
+  # smackw32 at 0x100cd782): they came from a library scanned after
+  # smackw32.lib. Keeping them in their own archive, linked behind Smacker,
+  # reproduces that block; in omni.lib they land 13,392 bytes early and drag
+  # smackw32 6,832 bytes late.
+  add_library(streamprovider${ARG_SUFFIX} STATIC
+    LEGO1/omni/src/stream/mxramstreamprovider.cpp
+    LEGO1/omni/src/stream/mxdiskstreamprovider.cpp
+  )
+  list(APPEND list_targets streamprovider${ARG_SUFFIX})
+  set_property(TARGET streamprovider${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "streamprovider$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
+  target_include_directories(streamprovider${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
+  target_link_libraries(omni${ARG_SUFFIX} PRIVATE dsound winmm Smacker::Smacker streamprovider${ARG_SUFFIX})
 
   add_library(${NAME} SHARED
     LEGO1/res/lego1.rc
@@ -441,13 +458,18 @@ function(add_lego_libraries NAME)
     geom${ARG_SUFFIX}
     mxdirectx${ARG_SUFFIX}
     anim${ARG_SUFFIX}
+    # shape.lib was scanned BEFORE the libraries that reference it (roi/3dmanager
+    # via LegoLOD::Read / LegoROI::Read): retail seats its five objects in the
+    # linker's second pass, behind the second-pass LIBCMT members (LegoBox::Read
+    # at 0x100d3740, after _strnicmp/_strupr/_vsprintf/87ctran/strstr/threadex).
+    # Listed after omni it is pulled in the first pass, 19,648 bytes early.
+    shape${ARG_SUFFIX}
     tglrl${ARG_SUFFIX}
     realtime${ARG_SUFFIX}
     viewmanager${ARG_SUFFIX}
     roi${ARG_SUFFIX}
     3dmanager${ARG_SUFFIX}
     omni${ARG_SUFFIX}
-    shape${ARG_SUFFIX}
     Vec::Vec
   )
 
@@ -467,7 +489,14 @@ endfunction()
 
 set(lego1_link_libraries )
 if (ISLE_USE_SMARTHEAP)
-  list(APPEND lego1_link_libraries SmartHeap::SmartHeap libcmt)
+  # OLDNAMES.LIB directly behind LIBCMT: the game's own objects call the
+  # pre-ANSI names strnicmp/strupr, which only OLDNAMES resolves (to the
+  # LIBCMT members __strnicmp/__strupr). Left to the compiler's /DEFAULTLIB
+  # directive, OLDNAMES is scanned last, so those two LIBCMT members are queued
+  # after _vsprintf/__CIpow/_strstr/__beginthreadex in the second LIBCMT pass.
+  # Retail has them FIRST in that pass (0x100d1ed0, 0x100d1fd0): OLDNAMES was
+  # scanned right after LIBCMT's first pass, ahead of the game's libraries.
+  list(APPEND lego1_link_libraries SmartHeap::SmartHeap libcmt oldnames)
 endif()
 
 # 1997 scanned the OS/DirectX import libraries BEFORE the game's own static

@@ -529,6 +529,15 @@
    ]
   },
   {
+   "target": "streamprovider",
+   "allowed_force_includes": [
+    {
+     "path": "3rdparty/smartheap/SMRTHEAP.HPP",
+     "sha256": "a1217eb2a0dd61218962341d74bf028f9215c92855c0e8753b9b79c513d520ad"
+    }
+   ]
+  },
+  {
    "target": "tglrl",
    "allowed_force_includes": [
     {
@@ -17203,7 +17212,7 @@
    }
   },
   {
-   "target": "omni",
+   "target": "streamprovider",
    "source": "LEGO1/omni/src/stream/mxramstreamprovider.cpp",
    "source_sha256": "2bcf5c74aa4fe3dfa6dc712d1c98aec513681f5005edc5a1c313cf91047fde73",
    "mode": "restore_comdat_group_order",
@@ -20663,7 +20672,7 @@
    }
   },
   {
-   "target": "omni",
+   "target": "streamprovider",
    "source": "LEGO1/omni/src/stream/mxdiskstreamprovider.cpp",
    "source_sha256": "1c5a5c87f34c504353e441cb37250840cb26d68b751a33d9c66bf7b9de64ed46",
    "mode": "compose_equal_body_comdat",
