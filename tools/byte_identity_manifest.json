@@ -1273,7 +1273,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/worlds/isle.cpp",
-   "source_sha256": "fcfe9ce78755b64c7b3d2298951d463e023aaa24846c47068793b95342b95223",
+   "source_sha256": "f43ab9065ebc088419c8dfc0b8f214860021fb339d079e22f0c84d12bedfb042",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -20069,8 +20069,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4896,
-    "accepted_row_identity_sha256": "27e69e494e368ce51b1006320fbf065b936f24a7b45baf994243d0c9ab5eafab",
+    "exact_raw_1_0_count": 4897,
+    "accepted_row_identity_sha256": "3ee699760ee1e4656a2c5c9f767d733f3dd432823ed45d4df013f17a835246d3",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -35847,8 +35847,8 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/worlds/isle.cpp",
-    "clean": "1aec33c74ea73688783f63020e802f377c7c07dc12edf1d53b21cedcd2f7fae1",
-    "effective": "fcfe9ce78755b64c7b3d2298951d463e023aaa24846c47068793b95342b95223",
+    "clean": "5bfd1536c36ff0163435e84758f7e4a5e93ac39172f8f74ac85bd2a474bc3a22",
+    "effective": "f43ab9065ebc088419c8dfc0b8f214860021fb339d079e22f0c84d12bedfb042",
     "size": 50398,
     "ops": [
      {
