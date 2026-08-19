@@ -709,7 +709,8 @@ MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 
 			if (!m_state->HasRegistered()) {
 				m_bookAnimationTimer = 1;
-				return 1;
+				result = 1;
+				break;
 			}
 			break;
 		case InfocenterState::e_introCancelled:
