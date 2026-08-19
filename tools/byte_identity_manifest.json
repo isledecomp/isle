@@ -16762,6 +16762,38 @@
    }
   },
   {
+   "target": "omni",
+   "source": "LEGO1/omni/src/action/mxdsobject.cpp",
+   "source_sha256": "ca6554ccf3eb5e727fb639ae7eb49e39371c6eef83c66d6a15f6234489c1e719",
+   "mode": "restore_comdat_group_order",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "group_order": [
+    "??1MxDSSource@@UAE@XZ",
+    "?ReadToBuffer@MxDSSource@@UAEJPAVMxDSBuffer@@@Z",
+    "?GetLengthInDWords@MxDSSource@@UAEJXZ",
+    "?GetBuffer@MxDSSource@@UAEPAIXZ",
+    "?ClassName@MxDSSource@@UBEPBDXZ",
+    "?IsA@MxDSSource@@UBEEPBD@Z",
+    "??_GMxDSSource@@UAEPAXI@Z"
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Restores the retail-anchored .text COMDAT group order of the MxDSSource inline virtuals emitted by LEGO1/omni/src/action/mxdsobject.cpp (whole-group permutation, body-inert).",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
    "target": "roi",
    "source": "LEGO1/viewmanager/viewroi.cpp",
    "source_sha256": "fcbc1c942be83c348896f8a6a3890904f70237dbdb98b547d0d8c37f8620c784",
@@ -38746,14 +38778,14 @@
    },
    {
     "path": "LEGO1/omni/src/action/mxdsobject.cpp",
-    "clean": "69eeb8e7914e7381aedd3c392464c4529c11880fffe1f1d8cd5858fa67f74747",
-    "effective": "54e3002a4907919f56cf512b63275ace7d8a92ac1e3a534a1d99f01f0a8f6c7c",
-    "size": 6153,
+    "clean": "a1fad7af2656c2e4d71e6bf5fa45c4ff29e4cb13d9643495335fcfa1b7898af9",
+    "effective": "ca6554ccf3eb5e727fb639ae7eb49e39371c6eef83c66d6a15f6234489c1e719",
+    "size": 6154,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "ee6fbde33905f4889a5b4e68cf939649ea3a2cd8fb31b756c77e4d902040087a",
+       "ctx": "650a37d5dddf50b9fb9244e045da7a469b6b7053030ded2e1c59e110f582ac86",
        "b": 0,
        "at": "start"
       },
