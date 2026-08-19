@@ -12185,7 +12185,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/video/mxvideopresenter.cpp",
-   "source_sha256": "cfebe04b7fece495ed6d046d1fa69a62d200959bfb5d15222ae939ad84b0b9cf",
+   "source_sha256": "02fcf61ff1eeb3f08e9d6ffa8e08be3585204685159eb0957f3d0fa2144c7c90",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -12201,17 +12201,17 @@
    },
    "donors": [
     {
-     "id": "d_ca26c639e8d7",
+     "id": "d_e5f44f6a786e",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "extern_run_pair",
       "header_prefix": "g_h",
-      "header_count": 100,
+      "header_count": 10,
       "seat_prefix": "g_p",
       "seat_count": 8,
       "width": 2,
-      "generated_header_sha256": "ca26c639e8d786f9a92e505595f29b18d83f7967427149eadec9bd5d1b68ccb2",
+      "generated_header_sha256": "e5f44f6a786e0263062f9b409b3c2263b22cfff0bc7c9b8df5d51f2b2e1bce76",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -12224,7 +12224,7 @@
    "functions": [
     {
      "mangled": "?IsHit@AlphaMask@MxVideoPresenter@@QAEHII@Z",
-     "donor": "d_ca26c639e8d7",
+     "donor": "d_e5f44f6a786e",
      "splice_class": "retail_exact_instruction_mosaic",
      "expected_section_number": 16,
      "expected_section_count": 61,
@@ -12232,18 +12232,18 @@
      "expected_relocation_count": 0,
      "expected_line_count": 6,
      "expected_seed_body_sha256": "ec6893ea59a4fc048fb1970eed084894946845988b6aa42a61e6abbffabf80fb",
-     "expected_donor_body_sha256": "4f5244c45248b468a140fad7af68adc877f09f6136f47eeca4640d72bcefc7d4",
+     "expected_donor_body_sha256": "ee2be416333fcbe7d697f869f256d7fe0d30690106242449921694eab91f15b4",
      "expected_body_sha256": "396edefeaa6433477d701b4f0ad053572ddffb7739f54dc4f8ffeb5444a06864",
-     "expected_seed_metadata_sha256": "17a504d8cef16386af35fb1b1637f396780c93fc2a953a0dd642c10d4615ae8f",
-     "expected_donor_metadata_sha256": "c4eebb9baf1400ba16275934e60132505f2c144a19f22bb2d5558da79fc52093",
+     "expected_seed_metadata_sha256": "c45f88b6f763cc57d8206fc6779c5c4021bdde81f1c99842453e4798dced9600",
+     "expected_donor_metadata_sha256": "d1edcfed57c74a2dfd0f49239fd982f739c51eb8db50d441b22ca0f1064bc7c7",
      "ordinary_fpo_identity": {
       "kind": "seed_authoritative_fpo_codeview_v1",
       "expected_primary_characteristics": 1615859744,
       "expected_primary_selection": 1,
       "expected_function_count": 19,
       "expected_comdat_count": 20,
-      "expected_seed_line_sha256": "df6527690ab79f28f7dbc7b3463201ba04c461a5ceec54ba8d1ff49cc64200c8",
-      "expected_donor_line_sha256": "965013466d706e5d41e9e7270d13b1d341b34d34feabd586cac3fe6d900100f4",
+      "expected_seed_line_sha256": "f4cbb2368c7fed4365a09ec550082319a00463b865f2228c216f78fe6ddd8db4",
+      "expected_donor_line_sha256": "d497d90964b293f4e8f99ec28df20e630e45f14d0af7e93c5590b313e2d30478",
       "debug_f": {
        "section_number": 18,
        "raw_size": 16,
@@ -12369,18 +12369,18 @@
        "kind": "extern_run_pair_v1",
        "placement": "after_includes_and_eof_v1",
        "header_prefix": "g_h",
-       "header_count": 100,
+       "header_count": 10,
        "seat_prefix": "g_p",
        "seat_count": 8,
        "width": 2,
-       "generated_declarations_sha256": "ca26c639e8d786f9a92e505595f29b18d83f7967427149eadec9bd5d1b68ccb2"
+       "generated_declarations_sha256": "e5f44f6a786e0263062f9b409b3c2263b22cfff0bc7c9b8df5d51f2b2e1bce76"
       },
-      "clean_source_sha256": "f23f253f557092a315d2f25163e255455f4f187d06f610b7ff691aef97565808",
-      "effective_source_sha256": "cfebe04b7fece495ed6d046d1fa69a62d200959bfb5d15222ae939ad84b0b9cf",
-      "rendered_source_sha256": "6f7e8599b183918708053155cad4753389bf2de63c34e885d8ddbbabcf44b9b8",
-      "rendered_source_size": 14351,
-      "function_range_sha256": "f46ba847e103371e63b43764dea267ae389b592769a8212e13700eb9f7c7773a",
-      "function_range_size": 245,
+      "clean_source_sha256": "5a2bdc427311e9686aaaa810c4b26057dbbfc63b32eeea67fe2adf10ac5dbb1b",
+      "effective_source_sha256": "02fcf61ff1eeb3f08e9d6ffa8e08be3585204685159eb0957f3d0fa2144c7c90",
+      "rendered_source_sha256": "398e9963339423a7c530ffa73bac1cc18c2645928bbbbbf6354506dd7dc71083",
+      "rendered_source_size": 12776,
+      "function_range_sha256": "d24dce710c2cb222c06bc8765053825283307e9841bd461f20dd3f92531964a6",
+      "function_range_size": 244,
       "function_range_line_count": 11,
       "owner_header": {
        "path": "LEGO1/omni/include/mxvideopresenter.h",
@@ -20329,8 +20329,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4901,
-    "accepted_row_identity_sha256": "53a97b189e089beb8ce3129ea8ece745d622897f0924203b7f4384ec3d336942",
+    "exact_raw_1_0_count": 4902,
+    "accepted_row_identity_sha256": "bc2897445023d01ce81febd8af77ebe2f701ae12b24dbcde91ce7ceea24586bc",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -42853,9 +42853,9 @@
    },
    {
     "path": "LEGO1/omni/src/video/mxvideopresenter.cpp",
-    "clean": "f23f253f557092a315d2f25163e255455f4f187d06f610b7ff691aef97565808",
-    "effective": "cfebe04b7fece495ed6d046d1fa69a62d200959bfb5d15222ae939ad84b0b9cf",
-    "size": 12407,
+    "clean": "5a2bdc427311e9686aaaa810c4b26057dbbfc63b32eeea67fe2adf10ac5dbb1b",
+    "effective": "02fcf61ff1eeb3f08e9d6ffa8e08be3585204685159eb0957f3d0fa2144c7c90",
+    "size": 12452,
     "ops": [
      {
       "op": "insert",
@@ -42892,7 +42892,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "cf48de17d7ee0cd63ebc09e84d1f86e1d13f190851008f2d52bcff666885f76e",
+       "ctx": "8b93a26f4fbcac97bf9c58d6254bd733b2f293c9b08d398dbc612361dcc69557",
        "b": 24,
        "at": "before_token"
       },

@@ -5379,7 +5379,7 @@ def make_fpo_self_permutation_coff(*, donor=False):
 class OrdinaryFpoSelfPermutationTests(unittest.TestCase):
     """An ordinary carrier may feed only one closed commuting permutation."""
 
-    DONOR_ID = "d_ca26c639e8d7"
+    DONOR_ID = "d_e5f44f6a786e"
 
     def live_records(self):
         manifest = json.loads(

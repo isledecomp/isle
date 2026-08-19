@@ -13,7 +13,8 @@ DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0x0c);
 // FUNCTION: LEGO1 0x100b24f0
 MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 {
-	m_width = p_bitmap.GetBmiWidth();
+	BITMAPINFOHEADER* header = p_bitmap.GetBmiHeader();
+	m_width = header->biWidth;
 	m_height = p_bitmap.GetBmiHeightAbs();
 
 	MxS32 size = ((m_width * m_height) / 8) + 1;
@@ -79,12 +80,12 @@ MxVideoPresenter::AlphaMask::~AlphaMask()
 // FUNCTION: LEGO1 0x100b26f0
 MxS32 MxVideoPresenter::AlphaMask::IsHit(MxU32 p_x, MxU32 p_y)
 {
-	if (p_x >= m_width || p_y >= m_height) {
-		return 0;
+	if (p_x < m_width && p_y < m_height) {
+		MxS32 pos = p_y * m_width + p_x;
+		return m_bitmask[pos / 8] & (1 << (pos % 8)) ? 1 : 0;
 	}
 
-	MxS32 pos = p_y * m_width + p_x;
-	return m_bitmask[pos / 8] & (1 << (pos % 8)) ? 1 : 0;
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x100b2760
