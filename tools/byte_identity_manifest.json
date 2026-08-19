@@ -22056,8 +22056,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4902,
-    "accepted_row_identity_sha256": "bc2897445023d01ce81febd8af77ebe2f701ae12b24dbcde91ce7ceea24586bc",
+    "exact_raw_1_0_count": 4903,
+    "accepted_row_identity_sha256": "360e06d60fc38d350f5ebb6d58c47d5e4bd27edac8ad1a704574f4aaa2c57f76",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -24269,9 +24269,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/actors/towtrack.cpp",
-    "clean": "e22e563a6e0dd9a29a081a5bfe4c71e7e349f31c1514e993f00db0a73d9d3eb5",
-    "effective": "6c668824f96c7e2a61d85c04dea6453ae512fccf66d637fed86d53a52650f8d4",
-    "size": 18447,
+    "clean": "3d87bbd21de096f31b37fa7e825a76a496a9de302499224546cb80e3f7008e33",
+    "effective": "ccc224897a31a37262428692f2e81b591532685b1a831e67a663462239b4e00a",
+    "size": 18455,
     "ops": [
      {
       "op": "insert",

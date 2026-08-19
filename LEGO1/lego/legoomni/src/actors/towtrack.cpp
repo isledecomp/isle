@@ -296,6 +296,7 @@ MxLong TowTrack::HandleEndAction(MxEndActionNotificationParam& p_param)
 // FUNCTION: BETA10 0x100f74c0
 MxLong TowTrack::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 {
+	MxLong time;
 	MxDSAction action;
 
 	// 0x168 corresponds to the path at the gas station
@@ -307,12 +308,14 @@ MxLong TowTrack::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 		return 0;
 	}
 
-	if (m_state->m_state == TowTrackMissionState::e_hookedUp &&
+	MxU32 state = m_state->m_state;
+
+	if (state == TowTrackMissionState::e_hookedUp &&
 		((p_param.GetTrigger() == LegoPathStruct::c_camAnim && (p_param.GetData() == 9 || p_param.GetData() == 8)) ||
 		 (p_param.GetTrigger() == LegoPathStruct::c_missionFinalWaypoint && p_param.GetData() == 0x169))) {
 		m_state->m_state = TowTrackMissionState::e_none;
 
-		MxLong time = Timer()->GetTime() - m_state->m_startTime;
+		time = Timer()->GetTime() - m_state->m_startTime;
 		Leave();
 
 		if (time < 200000) {
@@ -325,7 +328,7 @@ MxLong TowTrack::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 			PlayFinalAnimation(IsleScript::c_wgs097nu_RunAnim);
 		}
 	}
-	else if (m_state->m_state == TowTrackMissionState::e_started && p_param.GetTrigger() == LegoPathStruct::c_camAnim && p_param.GetData() == 0x37) {
+	else if (state == TowTrackMissionState::e_started && p_param.GetTrigger() == LegoPathStruct::c_camAnim && p_param.GetData() == 0x37) {
 		m_state->m_state = TowTrackMissionState::e_hookingUp;
 		StopActions();
 
@@ -336,7 +339,7 @@ MxLong TowTrack::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 		Leave();
 		PlayFinalAnimation(IsleScript::c_wrt060bm_RunAnim);
 	}
-	else if (p_param.GetTrigger() == LegoPathStruct::c_missionFinalWaypoint && m_state->m_state == TowTrackMissionState::e_started) {
+	else if (p_param.GetTrigger() == LegoPathStruct::c_missionFinalWaypoint && state == TowTrackMissionState::e_started) {
 		if (p_param.GetData() == 0x15f) {
 			if (m_treeBlockageTriggered == 0) {
 				m_treeBlockageTriggered = 1;
