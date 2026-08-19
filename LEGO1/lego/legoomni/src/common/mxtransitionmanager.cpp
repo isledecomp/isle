@@ -531,6 +531,7 @@ void MxTransitionManager::SubmitCopyRect(LPDDSURFACEDESC p_ddsc)
 // FUNCTION: LEGO1 0x1004c580
 void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 {
+	MxS32 i;
 	MxS32 y;
 	// Check if the copy rect is setup
 	if (m_copyFlags.m_bit0 == FALSE || m_waitIndicator == NULL) {
@@ -550,10 +551,10 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 		MxPoint32 loc;
 		loc = m_waitIndicator->GetLocation();
 		y = loc.GetY();
-		MxU32 x = loc.GetX();
 
 		MxS32 height = m_waitIndicator->GetHeight();
 		MxS32 width = m_waitIndicator->GetWidth();
+		MxU32 x = loc.GetX();
 
 		m_copyRect.left = x;
 		m_copyRect.top = y;
@@ -573,7 +574,7 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 		// Copy into the copy buffer
 		MxU8* dst = m_copyBuffer;
 
-		for (MxS32 i = 0; i < (m_copyRect.bottom - m_copyRect.top + 1); i++) {
+		for (i = 0; i < (m_copyRect.bottom - m_copyRect.top + 1); i++) {
 			memcpy(dst, src, copyPitch);
 			src += p_ddsc->lPitch;
 			dst += copyPitch;

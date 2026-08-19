@@ -449,7 +449,8 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				m_opponent1Laps++;
 
 				if (g_lapsCount == m_opponent1Laps) {
-					((LegoPathActor*) p_param.GetSender())->SetMaxLinearVel(0.1);
+					LegoPathActor* actor = (LegoPathActor*) p_param.GetSender();
+					actor->SetMaxLinearVel(0.1);
 				}
 			}
 
@@ -468,7 +469,8 @@ MxLong JetskiRace::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 				m_opponent2Laps++;
 
 				if (g_lapsCount == m_opponent2Laps) {
-					((LegoPathActor*) p_param.GetSender())->SetMaxLinearVel(0.1);
+					LegoPathActor* actor = (LegoPathActor*) p_param.GetSender();
+					actor->SetMaxLinearVel(0.1);
 				}
 			}
 

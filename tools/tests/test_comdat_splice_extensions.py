@@ -5999,7 +5999,7 @@ class OrdinaryFpoSelfPermutationTests(unittest.TestCase):
 class SourceFpoInstructionMosaicTests(unittest.TestCase):
     """A typed source refactor may feed only its isolated FPO composer."""
 
-    DONOR_ID = "d_4e403d42e250"
+    DONOR_ID = "d_613e82f21601"
 
     def live_records(self):
         manifest = json.loads(
@@ -6679,7 +6679,7 @@ class SourceFpoInstructionMosaicTests(unittest.TestCase):
         _, _, donor, function = self.live_records()
         self.assertEqual(
             donor["recipe"]["rendering_identity_sha256"],
-            "4e403d42e250c62e0a02da38782adfb12232cfe169dd13e6046571f9a8b5b487")
+            "613e82f21601cbcd402434a74805e45b6491dc88e45f8957bc0297872678c5bc")
         self.assertEqual(
             function["splice_class"],
             byte_identity.RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS)

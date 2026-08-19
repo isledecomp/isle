@@ -4812,6 +4812,22 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_ff1a14b2c16d",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "pad_shape",
+      "classes": 10,
+      "functions_per_class": 4,
+      "generated_header_sha256": "ff1a14b2c16d31698db9a340a879d194c18b90adee66ee02cb4a76243fb9ce23",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -4957,6 +4973,47 @@
       52
      ],
      "donor": "d_a355635e0061"
+    },
+    {
+     "mangled": "?SetShadingModel@MeshImpl@TglImpl@@UAE?AW4Result@Tgl@@W4ShadingModel@4@@Z",
+     "expected_body_length": 108,
+     "expected_body_sha256": "894a34eff3cd5216147df7153bcbf389d738e77b57a1227b4549a3fc6d45cbb7",
+     "expected_changed_offsets": [
+      1,
+      60,
+      63,
+      66,
+      68
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       15,
+       "L"
+      ],
+      [
+       88,
+       "L"
+      ],
+      [
+       92,
+       "L"
+      ],
+      [
+       96,
+       "L"
+      ],
+      [
+       100,
+       "L"
+      ],
+      [
+       104,
+       "L"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_ff1a14b2c16d"
     }
    ],
    "completion": {
@@ -11710,7 +11767,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/mxtransitionmanager.cpp",
-   "source_sha256": "2f55d1572f12eaa839fc06e11995643816e70358a3b0972488df41366f108fa4",
+   "source_sha256": "86c4bdd31cbdc2bae7db761a481f1230e5d8fe49d2061976ba322d6a3b789c41",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -11726,7 +11783,7 @@
    },
    "donors": [
     {
-     "id": "d_4e403d42e250",
+     "id": "d_613e82f21601",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -11737,8 +11794,8 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/common/mxtransitionmanager.cpp",
-        "clean_sha256": "1bfd24819ebcbe45e5e130f2481000bedf7069c003dd3c2154d776bf5bff2259",
-        "rendered_sha256": "ebfb0b7923a2811a8fc4bd6a80d9bf49871bfaa344f8889482b57d00b32f4e03",
+        "clean_sha256": "7ab03caf1e9093306072edc9d4d648a07bbcb99e04cca12d22d8da9db0130bf3",
+        "rendered_sha256": "b139d1413c56ecf17a945474821f5b4ead807eb4506f40c0d7d89d674bacdbd6",
         "operations": [
          {
           "op": "replace",
@@ -11779,14 +11836,32 @@
       "canonical_overlay_replay": "owning_translation_unit_v1",
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "A typed fixed-array shuffle compiles a pointer countdown over the same pinned array extent; only authenticated complete target instructions may supplement the seed object, whose metadata and all non-target bytes remain authoritative.",
-      "rendering_identity_sha256": "4e403d42e250c62e0a02da38782adfb12232cfe169dd13e6046571f9a8b5b487"
+      "rendering_identity_sha256": "613e82f21601cbcd402434a74805e45b6491dc88e45f8957bc0297872678c5bc"
+     }
+    },
+    {
+     "id": "d_fdf46c0a8c85",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "prefix": "MxUnkRecVC",
+      "count": 34,
+      "width": 3,
+      "placement": "suffix",
+      "generated_header_sha256": "fdf46c0a8c8564ab9f1216284fd882bf147d893701f6ce565da36529291d7c23",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
    "functions": [
     {
      "mangled": "?DissolveTransition@MxTransitionManager@@AAEXXZ",
-     "donor": "d_4e403d42e250",
+     "donor": "d_613e82f21601",
      "splice_class": "retail_exact_source_equal_body",
      "expected_section_number": 55,
      "expected_section_count": 79,
@@ -12060,6 +12135,16 @@
        "op_dissolve_fixed_array_shuffle_countdown"
       ]
      }
+    },
+    {
+     "mangled": "?SetupCopyRect@MxTransitionManager@@AAEXPAU_DDSURFACEDESC@@@Z",
+     "expected_body_length": 412,
+     "expected_body_sha256": "0d2c639f28cc559005f5b0aed55abe8250b2e8dc9463dd0df0631cb0f33241a4",
+     "expected_changed_offsets": [
+      128
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_fdf46c0a8c85"
     }
    ],
    "completion": {
@@ -20066,6 +20151,81 @@
     "reason": "Closes rows in LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/race/legorace.cpp",
+   "source_sha256": "c0d13dfcdbf38329c1b6874341a8a4857298e338893bcec0a314e5c4ebd5488c",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_64170b368cd0",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 10,
+      "generated_header_sha256": "64170b368cd078afe0fa772b365dbf71d613408f23f6ab3b53dc8f7bf9ec31a1",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?HandlePathStruct@JetskiRace@@UAEJAAVLegoPathStructNotificationParam@@@Z",
+     "expected_body_length": 645,
+     "expected_body_sha256": "a9c421e059b6af0ce01a94d06b3b690287a0359a0f2ee2191227450362745227",
+     "expected_changed_offsets": [
+      242,
+      243,
+      261,
+      262
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       102,
+       "T"
+      ],
+      [
+       133,
+       "T"
+      ],
+      [
+       141,
+       "T"
+      ],
+      [
+       147,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_64170b368cd0"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/race/legorace.cpp from generated declaration-only carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -20140,8 +20300,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4898,
-    "accepted_row_identity_sha256": "0e05f91b801d47840b2b8b340495916fe87f536d2bb559fd962ca9a5dcc94dc5",
+    "exact_raw_1_0_count": 4901,
+    "accepted_row_identity_sha256": "53a97b189e089beb8ce3129ea8ece745d622897f0924203b7f4384ec3d336942",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -26979,9 +27139,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/mxtransitionmanager.cpp",
-    "clean": "1bfd24819ebcbe45e5e130f2481000bedf7069c003dd3c2154d776bf5bff2259",
-    "effective": "2f55d1572f12eaa839fc06e11995643816e70358a3b0972488df41366f108fa4",
-    "size": 15857,
+    "clean": "7ab03caf1e9093306072edc9d4d648a07bbcb99e04cca12d22d8da9db0130bf3",
+    "effective": "86c4bdd31cbdc2bae7db761a481f1230e5d8fe49d2061976ba322d6a3b789c41",
+    "size": 15861,
     "ops": [
      {
       "op": "insert",

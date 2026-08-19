@@ -1600,7 +1600,7 @@ inline Result MeshBuilderImpl::GetBoundingBox(float min[3], float max[3]) const
 inline MeshBuilder* MeshBuilderImpl::Clone()
 {
 	MeshBuilderImpl* mesh = new MeshBuilderImpl();
-	int ret = m_data->Clone(0, IID_IDirect3DRMMesh, (void**) &mesh->m_data);
+	int ret = m_data->Clone(0, IID_IDirect3DRMMesh, (void**) &mesh->ImplementationData());
 	if (ret < 0) {
 		delete mesh;
 		mesh = NULL;
