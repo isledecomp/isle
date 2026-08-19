@@ -2410,9 +2410,7 @@ class SameTuInstructionHybridResizeTests(unittest.TestCase):
             (TOOLS / "byte_identity_manifest.json").read_text())
         unit = next(
             item for item in manifest["translation_units"]
-            if any(function.get("splice_class")
-                   == byte_identity.SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
-                   for function in item.get("functions", [])))
+            if item["source"] == "LEGO1/viewmanager/viewmanager.cpp")
         overlay = byte_identity.validate_source_overlay(
             manifest["source_overlay"], ROOT)
         source = overlay["rendered_by_path"][unit["source"]]
@@ -2427,7 +2425,7 @@ class SameTuInstructionHybridResizeTests(unittest.TestCase):
                     donor["recipe"], source, "fixture")
             )
         self.assertEqual(set(generated), {
-            "d_48d777a4dafa", "d_cfe57010c383"})
+            "d_02c3090ca79b", "d_282491eaa62c"})
         function = next(
             item for item in unit["functions"]
             if item.get("splice_class")
@@ -2552,10 +2550,12 @@ class SameTuInstructionHybridResizeTests(unittest.TestCase):
             function for unit in manifest["translation_units"]
             for function in unit.get("functions", [])
             if function.get("splice_class")
-            == byte_identity.SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS)
-        self.assertEqual(len(function["instruction_ranges"]), 1)
-        self.assertEqual((function["instruction_ranges"][0]["target_start"],
-                          function["instruction_ranges"][0]["target_end"]),
+            == byte_identity.SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
+            and function["mangled"].startswith(
+                "?ManageVisibilityAndDetailRecursively@ViewManager@@"))
+        self.assertEqual(len(function["instruction_ranges"]), 3)
+        self.assertEqual((function["instruction_ranges"][-1]["target_start"],
+                          function["instruction_ranges"][-1]["target_end"]),
                          (516, 518))
         self.assertEqual(len(function["retail_relocations"]), 11)
         self.assertEqual(function["expected_hybrid_body_sha256"],

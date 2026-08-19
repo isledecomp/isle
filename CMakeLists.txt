@@ -130,8 +130,10 @@ function(add_lego_libraries NAME)
   target_include_directories(realtime${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
   target_link_libraries(realtime${ARG_SUFFIX} PRIVATE Vec::Vec)
 
+  # ViewLOD::~ViewLOD lives in viewmanager.cpp: retail seats it directly before
+  # ViewManager::ViewManager and ViewLOD's vtable group (LODObject dtor/sdd,
+  # AveragePolyArea, NVerts, ViewLOD sdd) in viewmanager's COMDAT tail.
   add_library(viewmanager${ARG_SUFFIX} STATIC
-    LEGO1/viewmanager/viewlod.cpp
     LEGO1/viewmanager/viewmanager.cpp
     LEGO1/viewmanager/viewlodlist.cpp
   )

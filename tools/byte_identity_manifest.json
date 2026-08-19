@@ -6941,398 +6941,6 @@
    }
   },
   {
-   "target": "viewmanager",
-   "source": "LEGO1/viewmanager/viewmanager.cpp",
-   "source_sha256": "fc31fc1941e365f33716912a128a3e14cd5ff618de52ad3f16018ba11aedd773",
-   "mode": "compose_equal_body_comdat",
-   "command_policy": {
-    "required_flags": [
-     "/Zi",
-     "-c"
-    ],
-    "forbidden_prefixes": [
-     "/GL",
-     "-GL",
-     "/Z7",
-     "-Z7"
-    ]
-   },
-   "donors": [
-    {
-     "id": "d_6a529ee42428",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "declaration_shape",
-      "classes": 1,
-      "functions": 5,
-      "generated_header_sha256": "6a529ee42428a533a29271f0e2d7cebf4ef0898dbd6d3e746c919f92c419d645",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_48d777a4dafa",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "prefix_forward_after_includes_extern",
-      "forward_prefix": "MxUnkRecVA",
-      "forward_count": 34,
-      "forward_width": 3,
-      "extern_prefix": "g_h",
-      "extern_count": 3,
-      "extern_width": 2,
-      "seat_proof": {
-       "kind": "prefix_and_after_last_include_seats_v1",
-       "prefix_offset": 0,
-       "prefix_input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-       "prefix_following_line_sha256": "e06ea25e209bda1888507af36106c33b38ac712486be51cf179571df63c31a81",
-       "prefix_context_sha256": "f4ce73349aa4bcf48d3e2d63b794dd7b356903ff061f4911b8b3394b63231069",
-       "after_includes_offset": 243,
-       "preceding_line_sha256": "a2a0ab598d7ec03434aabc7f31607e7857a1acf9af8527b547c69d26c9e983e1",
-       "following_line_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
-       "centered_context_sha256": "51ab2d6f9c607cefcbec9d7dad54793fd614d8071f1d16ddcd575d1b2007e840"
-      },
-      "generated_header_sha256": "48d777a4dafa1fb61498060e776fe06c98680a965d0349400c6e30020fabdf2e",
-      "rendered_source_sha256": "6c332e14176da429d2e0c7f10a078416787e7422055f826973053aaabe78b153",
-      "rendered_source_size": 21848,
-      "rendered_source_line_count": 927,
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated typed forward and extern declarations occupy two authenticated source seats; they emit no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_cfe57010c383",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "prefix_forward_after_includes_extern",
-      "forward_prefix": "MxUnkRecVA",
-      "forward_count": 64,
-      "forward_width": 3,
-      "extern_prefix": "g_h",
-      "extern_count": 3,
-      "extern_width": 2,
-      "seat_proof": {
-       "kind": "prefix_and_after_last_include_seats_v1",
-       "prefix_offset": 0,
-       "prefix_input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-       "prefix_following_line_sha256": "e06ea25e209bda1888507af36106c33b38ac712486be51cf179571df63c31a81",
-       "prefix_context_sha256": "f4ce73349aa4bcf48d3e2d63b794dd7b356903ff061f4911b8b3394b63231069",
-       "after_includes_offset": 243,
-       "preceding_line_sha256": "a2a0ab598d7ec03434aabc7f31607e7857a1acf9af8527b547c69d26c9e983e1",
-       "following_line_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
-       "centered_context_sha256": "51ab2d6f9c607cefcbec9d7dad54793fd614d8071f1d16ddcd575d1b2007e840"
-      },
-      "generated_header_sha256": "cfe57010c38323a82745b16df6d48cb4b1f0591f479f07afa3319da03523a6ed",
-      "rendered_source_sha256": "4469354015dce10e97278981701abdcf78837581dab7ae67203dc44cad575381",
-      "rendered_source_size": 22478,
-      "rendered_source_line_count": 957,
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated typed forward and extern declarations occupy two authenticated source seats; they emit no code, data, strings, vtables, or linker directives."
-     }
-    }
-   ],
-   "functions": [
-    {
-     "mangled": "?IsBoundingBoxInFrustum@ViewManager@@QAEIABVBoundingBox@@@Z",
-     "expected_body_length": 173,
-     "expected_body_sha256": "0610aef1b0e7d5c72709c00b85d3e33e50abaa6beb5c021f7fb2e3f0c9cbb29d",
-     "expected_changed_offsets": [
-      83,
-      85,
-      89,
-      95,
-      105,
-      121,
-      123,
-      129,
-      133
-     ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
-      [
-       33,
-       "S"
-      ],
-      [
-       70,
-       "T"
-      ]
-     ],
-     "expected_xdata_rename_offsets": [],
-     "donor": "d_6a529ee42428"
-    },
-    {
-     "mangled": "?ManageVisibilityAndDetailRecursively@ViewManager@@QAEXPAVViewROI@@H@Z",
-     "donor": "d_48d777a4dafa",
-     "instruction_donor": "d_cfe57010c383",
-     "splice_class": "retail_exact_same_tu_instruction_hybrid_resize",
-     "expected_seed_length": 557,
-     "expected_donor_length": 561,
-     "expected_linked_span": 576,
-     "expected_seed_section_number": 116,
-     "expected_seed_section_count": 250,
-     "expected_seed_relocation_count": 11,
-     "expected_seed_line_count": 28,
-     "expected_seed_body_sha256": "16300543c75a31d452e84dc234d07ac490195a5a4f0519e2dd077dd70f7d373c",
-     "expected_seed_metadata_sha256": "493eabda5fd960b6f42343f590244f063897489f79dadcf95bc26ea342d5f69c",
-     "expected_seed_function_count": 80,
-     "expected_seed_comdat_count": 85,
-     "expected_target_donor_section_number": 116,
-     "expected_target_donor_section_count": 250,
-     "expected_target_donor_relocation_count": 11,
-     "expected_target_donor_line_count": 28,
-     "expected_target_donor_body_sha256": "b1271a13524dc400bf0305b25b45d49fc8b9cff06bf5f4376cbf5c4b7bb97f2b",
-     "expected_target_donor_metadata_sha256": "8fe7fc060ead11a7da4fb639b26a853b85bc8010a3d7660964f1524b1ffcfe81",
-     "expected_target_donor_function_count": 80,
-     "expected_target_donor_comdat_count": 85,
-     "expected_instruction_donor_length": 561,
-     "expected_instruction_donor_section_number": 116,
-     "expected_instruction_donor_section_count": 250,
-     "expected_instruction_donor_relocation_count": 11,
-     "expected_instruction_donor_line_count": 28,
-     "expected_instruction_donor_body_sha256": "a3e8fd96e27f02f4ede351f764216c2361969b3552d423b2a2fc3362f529321e",
-     "expected_instruction_donor_metadata_sha256": "8fe7fc060ead11a7da4fb639b26a853b85bc8010a3d7660964f1524b1ffcfe81",
-     "expected_instruction_donor_function_count": 80,
-     "expected_instruction_donor_comdat_count": 85,
-     "expected_donor_closure": [
-      ".debug$F",
-      ".debug$S"
-     ],
-     "expected_hybrid_body_sha256": "01949ffd3e0c851db40055f6a1c5978091144dea8b2de977502762fe061c76e8",
-     "same_tu_source_identity": {
-      "kind": "same_tu_function_source_identity_v1",
-      "selector": "brace_balanced_function_physical_line_v1",
-      "start_marker": "// FUNCTION: LEGO1 0x100a66f0",
-      "source_owner_mangled": "?ManageVisibilityAndDetailRecursively@ViewManager@@QAEXPAVViewROI@@H@Z",
-      "range_pin": {
-       "baseline_sha256": "3f8d821b0aaa7867b8249d2da0b8e66fa359bd41d857bb70d182338f76150f40",
-       "baseline_size": 1732,
-       "baseline_line_count": 58,
-       "baseline_significant_token_sha256": "b7a57242e9e14c0677fa924c32bbda8782e8ce2ca0be927abf0d929a2adbdfbe"
-      }
-     },
-     "instruction_ranges": [
-      {
-       "kind": "same_tu_source_identical_complete_x86_instruction_v1",
-       "target_start": 516,
-       "target_end": 518,
-       "target_bytes": "3bc8",
-       "target_sha256": "656489db5162c68c01e330bcd0d40e22deaebf16a8c369fb63229a200aee42c3",
-       "instruction_donor_start": 516,
-       "instruction_donor_end": 518,
-       "instruction_donor_bytes": "3bc1",
-       "instruction_donor_sha256": "70f85b85192c68f24fa3bd821065345d7a8b2c754d9568987f179b40874f3baf"
-      }
-     ],
-     "retail_oracle": {
-      "image": "LEGO1.DLL",
-      "address": "0x100a66f0",
-      "verdict": "MATCH",
-      "length": 561
-     },
-     "retail_image_target": "lego1",
-     "retail_relocations": [
-      {
-       "offset": 86,
-       "type": 20,
-       "addend": 0,
-       "target": "?ProjectedSize@ViewManager@@QAEMABVBoundingSphere@@@Z",
-       "target_section": 244,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x100a6dc0"
-      },
-      {
-       "offset": 102,
-       "type": 6,
-       "addend": 0,
-       "target": "?g_viewDistance@@3MA",
-       "target_section": 3,
-       "target_value": 12,
-       "target_type": 0,
-       "target_storage": 2,
-       "retail_target": "0x1010105c"
-      },
-      {
-       "offset": 145,
-       "type": 6,
-       "addend": 0,
-       "target": "?g_userMaxLodPower@@3MA",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 0,
-       "target_storage": 2,
-       "retail_target": "0x10109598"
-      },
-      {
-       "offset": 250,
-       "type": 6,
-       "addend": 0,
-       "target": "?g_minLODThreshold@@3MA",
-       "target_section": 3,
-       "target_value": 4,
-       "target_type": 0,
-       "target_storage": 2,
-       "retail_target": "0x10101054"
-      },
-      {
-       "offset": 311,
-       "type": 6,
-       "addend": 0,
-       "target": "?g_maxLODLevels@@3HA",
-       "target_section": 3,
-       "target_value": 8,
-       "target_type": 0,
-       "target_storage": 2,
-       "retail_target": "0x10101058"
-      },
-      {
-       "offset": 344,
-       "type": 6,
-       "addend": 0,
-       "target": "?g_LODScaleFactor@@3MA",
-       "target_section": 3,
-       "target_value": 0,
-       "target_type": 0,
-       "target_storage": 2,
-       "retail_target": "0x10101050"
-      },
-      {
-       "offset": 355,
-       "type": 6,
-       "addend": 0,
-       "target": "?g_maxLODLevels@@3HA",
-       "target_section": 3,
-       "target_value": 8,
-       "target_type": 0,
-       "target_storage": 2,
-       "retail_target": "0x10101058"
-      },
-      {
-       "offset": 415,
-       "type": 20,
-       "addend": 0,
-       "target": "?ManageVisibilityAndDetailRecursively@ViewManager@@QAEXPAVViewROI@@H@Z",
-       "target_section": 116,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x100a66f0"
-      },
-      {
-       "offset": 462,
-       "type": 20,
-       "addend": 0,
-       "target": "?UpdateROIDetailBasedOnLOD@ViewManager@@QAEXPAVViewROI@@H@Z",
-       "target_section": 110,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x100a65b0"
-      },
-      {
-       "offset": 489,
-       "type": 20,
-       "addend": 0,
-       "target": "?RemoveROIDetailFromScene@ViewManager@@QAEXPAVViewROI@@@Z",
-       "target_section": 113,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x100a66a0"
-      },
-      {
-       "offset": 532,
-       "type": 20,
-       "addend": 0,
-       "target": "?ManageVisibilityAndDetailRecursively@ViewManager@@QAEXPAVViewROI@@H@Z",
-       "target_section": 116,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x100a66f0"
-      }
-     ]
-    }
-   ],
-   "completion": {
-    "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 2 row(s) in LEGO1/viewmanager/viewmanager.cpp from generated carrier states over the rendered current source.",
-    "may_replace_compiler_output": true
-   },
-   "group_order": [
-    "??_GViewManager@@UAEPAXI@Z",
-    "??1?$List@PAVROI@@@@QAE@XZ",
-    "??1?$Vector@PBVROI@@@@QAE@XZ",
-    "??1ViewManager@@UAE@XZ",
-    "?IsBoundingBoxInFrustum@ViewManager@@QAEIABVBoundingBox@@@Z",
-    "?FlushBuffers@ViewManager@@UAEHXZ",
-    "?Remove@ViewManager@@QAEXPAVViewROI@@@Z",
-    "?FlushFrameBuffers@@YAHPAUIDirect3DRMFrame2@@@Z",
-    "?RemoveAll@ViewManager@@QAEXPAVViewROI@@@Z",
-    "?UpdateROIDetailBasedOnLOD@ViewManager@@QAEXPAVViewROI@@H@Z",
-    "?RemoveROIDetailFromScene@ViewManager@@QAEXPAVViewROI@@@Z",
-    "?ManageVisibilityAndDetailRecursively@ViewManager@@QAEXPAVViewROI@@H@Z",
-    "?Update@ViewManager@@QAEXMM@Z",
-    "?UpdateViewTransformations@ViewManager@@QAEXXZ",
-    "?SetResolution@ViewManager@@QAEXHH@Z",
-    "?SetFrustrum@ViewManager@@QAEXMMM@Z",
-    "?LenSquared@Vector3@@UBEMXZ",
-    "?SetData@Vector2@@MAEXPAM@Z",
-    "?GetData@Vector2@@UAEPAMXZ",
-    "?GetData@Vector2@@UBEPBMXZ",
-    "?Dot@Vector2@@UBEMPBM0@Z",
-    "?Dot@Vector2@@UBEMABV1@0@Z",
-    "?Dot@Vector2@@UBEMPBMABV1@@Z",
-    "?Dot@Vector2@@UBEMABV1@PBM@Z",
-    "?Unitize@Vector2@@UAEHXZ",
-    "??YVector2@@UAEXM@Z",
-    "??YVector2@@UAEXPBM@Z",
-    "??YVector2@@UAEXABV0@@Z",
-    "??ZVector2@@UAEXPBM@Z",
-    "??ZVector2@@UAEXABV0@@Z",
-    "??XVector2@@UAEXPBM@Z",
-    "??XVector2@@UAEXABV0@@Z",
-    "??XVector2@@UAEXABM@Z",
-    "??_0Vector2@@UAEXABM@Z",
-    "??4Vector2@@UAEXPBM@Z",
-    "??4Vector2@@UAEXABV0@@Z",
-    "?EqualsCrossImpl@Vector3@@MAEXPBM0@Z",
-    "?EqualsCross@Vector3@@UAEXABV1@0@Z",
-    "?EqualsCross@Vector3@@UAEXABV1@PBM@Z",
-    "?EqualsCross@Vector3@@UAEXPBMABV1@@Z",
-    "?AddImpl@Vector3@@MAEXPBM@Z",
-    "?AddImpl@Vector3@@MAEXM@Z",
-    "?SubImpl@Vector3@@MAEXPBM@Z",
-    "?MulImpl@Vector3@@MAEXPBM@Z",
-    "?MulImpl@Vector3@@MAEXABM@Z",
-    "?DivImpl@Vector3@@MAEXABM@Z",
-    "?DotImpl@Vector3@@MBEMPBM0@Z",
-    "?EqualsImpl@Vector3@@MAEXPBM@Z",
-    "?Clear@Vector3@@UAEXXZ",
-    "?Fill@Vector3@@UAEXABM@Z",
-    "??4Mx3DPointFloat@@UAEXABVVector3@@@Z",
-    "?SetPOVSource@ViewManager@@QAEXPBVOrientableROI@@@Z",
-    "?ProjectedSize@ViewManager@@QAEMABVBoundingSphere@@@Z",
-    "?Pick@ViewManager@@QAEPAVViewROI@@PAVView@Tgl@@KK@Z",
-    "??1?$vector@PBVROI@@V?$allocator@PBVROI@@@@@@QAE@XZ",
-    "??1MxStopWatch@@QAE@XZ"
-   ]
-  },
-  {
    "target": "realtime",
    "source": "LEGO1/realtime/orientableroi.cpp",
    "source_sha256": "82bb7442d040bfc482c3b47a156eb85f90d6499314eb1c6ae8e37f643afcd7d5",
@@ -21286,6 +20894,505 @@
     "??1OrientableROI@@UAE@XZ",
     "??_GROI@@UAEPAXI@Z",
     "??1ROI@@UAE@XZ"
+   ]
+  },
+  {
+   "target": "viewmanager",
+   "source": "LEGO1/viewmanager/viewmanager.cpp",
+   "source_sha256": "4e069f75acc13070f5562c572006985fd34198790b5a756e64f57ba1d5229b7b",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_23fd1e63a4ad",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "pad_shape",
+      "classes": 11,
+      "functions_per_class": 9,
+      "generated_header_sha256": "23fd1e63a4ad1fb634b773ccc1807766cda3372f427ee656da162d7006cacce1",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_2e371b6d532b",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 10,
+      "functions": 100,
+      "generated_header_sha256": "2e371b6d532b6ed1fe9828bbd5d1846fc288e3750445296e3a4531c929e7fbab",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_02c3090ca79b",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "prefix_forward_after_includes_extern",
+      "forward_prefix": "MxUnkRecVA",
+      "forward_count": 245,
+      "forward_width": 3,
+      "extern_prefix": "g_h",
+      "extern_count": 5,
+      "extern_width": 2,
+      "seat_proof": {
+       "kind": "prefix_and_after_last_include_seats_v1",
+       "prefix_offset": 0,
+       "prefix_input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+       "prefix_following_line_sha256": "e06ea25e209bda1888507af36106c33b38ac712486be51cf179571df63c31a81",
+       "prefix_context_sha256": "f4ce73349aa4bcf48d3e2d63b794dd7b356903ff061f4911b8b3394b63231069",
+       "after_includes_offset": 243,
+       "preceding_line_sha256": "a2a0ab598d7ec03434aabc7f31607e7857a1acf9af8527b547c69d26c9e983e1",
+       "following_line_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+       "centered_context_sha256": "51ab2d6f9c607cefcbec9d7dad54793fd614d8071f1d16ddcd575d1b2007e840"
+      },
+      "generated_header_sha256": "02c3090ca79b2e1fa163ca2bb102fceacf96a5462820ffc8216790581103567b",
+      "rendered_source_sha256": "372bd29bcf7fcd7096ebfb0cae73927a902b3910299ad5336242a84f00511a04",
+      "rendered_source_size": 26492,
+      "rendered_source_line_count": 1150,
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated typed forward and extern declarations occupy two authenticated source seats; they emit no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_282491eaa62c",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "prefix_forward_after_includes_extern",
+      "forward_prefix": "MxUnkRecVA",
+      "forward_count": 252,
+      "forward_width": 3,
+      "extern_prefix": "g_h",
+      "extern_count": 5,
+      "extern_width": 2,
+      "seat_proof": {
+       "kind": "prefix_and_after_last_include_seats_v1",
+       "prefix_offset": 0,
+       "prefix_input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+       "prefix_following_line_sha256": "e06ea25e209bda1888507af36106c33b38ac712486be51cf179571df63c31a81",
+       "prefix_context_sha256": "f4ce73349aa4bcf48d3e2d63b794dd7b356903ff061f4911b8b3394b63231069",
+       "after_includes_offset": 243,
+       "preceding_line_sha256": "a2a0ab598d7ec03434aabc7f31607e7857a1acf9af8527b547c69d26c9e983e1",
+       "following_line_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+       "centered_context_sha256": "51ab2d6f9c607cefcbec9d7dad54793fd614d8071f1d16ddcd575d1b2007e840"
+      },
+      "generated_header_sha256": "282491eaa62c3247329b0ba255fce8b2bc2d1eeb6d2562f6904de3db3a64b672",
+      "rendered_source_sha256": "5982d0076c1403f0c7c7cfd5b63953c831b5d695231350c0647c744b08596eb9",
+      "rendered_source_size": 26639,
+      "rendered_source_line_count": 1157,
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated typed forward and extern declarations occupy two authenticated source seats; they emit no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "??1?$vector@PBVROI@@V?$allocator@PBVROI@@@@@@QAE@XZ",
+     "expected_body_length": 54,
+     "expected_body_sha256": "d2e376e47f1154cd660ab9e694ecee32543be5eb0d75e5ad17c9158e95646120",
+     "expected_changed_offsets": [
+      2,
+      3,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      16,
+      19,
+      22
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_23fd1e63a4ad"
+    },
+    {
+     "mangled": "?IsBoundingBoxInFrustum@ViewManager@@QAEIABVBoundingBox@@@Z",
+     "expected_body_length": 173,
+     "expected_body_sha256": "0610aef1b0e7d5c72709c00b85d3e33e50abaa6beb5c021f7fb2e3f0c9cbb29d",
+     "expected_changed_offsets": [
+      83,
+      85,
+      89,
+      95,
+      105,
+      121,
+      123,
+      129,
+      133
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       33,
+       "S"
+      ],
+      [
+       70,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_23fd1e63a4ad"
+    },
+    {
+     "mangled": "?Update@ViewManager@@QAEXMM@Z",
+     "expected_body_sha256": "a51233307930d4527ee51f69691f10ce22c8533498a0611ba2b399957a2c1b51",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 614,
+     "expected_donor_length": 600,
+     "expected_linked_span": 608,
+     "donor": "d_23fd1e63a4ad"
+    },
+    {
+     "mangled": "?RemoveAll@ViewManager@@QAEXPAVViewROI@@@Z",
+     "expected_body_length": 222,
+     "expected_body_sha256": "962f53efffd763944caa50e863516e542c5a9eccadbbecffb64ba23613dd6b3c",
+     "expected_changed_offsets": [
+      208
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_2e371b6d532b"
+    },
+    {
+     "mangled": "?ManageVisibilityAndDetailRecursively@ViewManager@@QAEXPAVViewROI@@H@Z",
+     "donor": "d_02c3090ca79b",
+     "instruction_donor": "d_282491eaa62c",
+     "splice_class": "retail_exact_same_tu_instruction_hybrid_resize",
+     "expected_seed_length": 549,
+     "expected_donor_length": 561,
+     "expected_linked_span": 576,
+     "expected_seed_section_number": 116,
+     "expected_seed_section_count": 270,
+     "expected_seed_relocation_count": 11,
+     "expected_seed_line_count": 28,
+     "expected_seed_body_sha256": "040d4b183aaa4d36f6fb55944fe382845e681cf1a9fc4732b2c889de49d57368",
+     "expected_seed_metadata_sha256": "2dae92ed56cea86d767659211877208c612abfcf28684e098b0dd9e76a6e9196",
+     "expected_seed_function_count": 86,
+     "expected_seed_comdat_count": 93,
+     "expected_target_donor_section_number": 116,
+     "expected_target_donor_section_count": 270,
+     "expected_target_donor_relocation_count": 11,
+     "expected_target_donor_line_count": 28,
+     "expected_target_donor_body_sha256": "71ee7d1bbe5ab0f467857b687b7b5b65b7891f609928a4b911b650afc08ee4ee",
+     "expected_target_donor_metadata_sha256": "8fe7fc060ead11a7da4fb639b26a853b85bc8010a3d7660964f1524b1ffcfe81",
+     "expected_target_donor_function_count": 86,
+     "expected_target_donor_comdat_count": 93,
+     "expected_instruction_donor_length": 561,
+     "expected_instruction_donor_section_number": 116,
+     "expected_instruction_donor_section_count": 270,
+     "expected_instruction_donor_relocation_count": 11,
+     "expected_instruction_donor_line_count": 28,
+     "expected_instruction_donor_body_sha256": "2a806448b76a422fbf49726d0c10636ebdfa7ebc46822063f40d64edf3c3e9f9",
+     "expected_instruction_donor_metadata_sha256": "8fe7fc060ead11a7da4fb639b26a853b85bc8010a3d7660964f1524b1ffcfe81",
+     "expected_instruction_donor_function_count": 86,
+     "expected_instruction_donor_comdat_count": 93,
+     "expected_donor_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "expected_hybrid_body_sha256": "01949ffd3e0c851db40055f6a1c5978091144dea8b2de977502762fe061c76e8",
+     "same_tu_source_identity": {
+      "kind": "same_tu_function_source_identity_v1",
+      "selector": "brace_balanced_function_physical_line_v1",
+      "start_marker": "// FUNCTION: LEGO1 0x100a66f0",
+      "source_owner_mangled": "?ManageVisibilityAndDetailRecursively@ViewManager@@QAEXPAVViewROI@@H@Z",
+      "range_pin": {
+       "baseline_sha256": "3f8d821b0aaa7867b8249d2da0b8e66fa359bd41d857bb70d182338f76150f40",
+       "baseline_size": 1732,
+       "baseline_line_count": 58,
+       "baseline_significant_token_sha256": "b7a57242e9e14c0677fa924c32bbda8782e8ce2ca0be927abf0d929a2adbdfbe"
+      }
+     },
+     "instruction_ranges": [
+      {
+       "kind": "same_tu_source_identical_complete_x86_instruction_v1",
+       "target_start": 203,
+       "target_end": 205,
+       "target_bytes": "3bc1",
+       "target_sha256": "70f85b85192c68f24fa3bd821065345d7a8b2c754d9568987f179b40874f3baf",
+       "instruction_donor_start": 203,
+       "instruction_donor_end": 205,
+       "instruction_donor_bytes": "3bc8",
+       "instruction_donor_sha256": "656489db5162c68c01e330bcd0d40e22deaebf16a8c369fb63229a200aee42c3"
+      },
+      {
+       "kind": "same_tu_source_identical_complete_x86_instruction_v1",
+       "target_start": 238,
+       "target_end": 240,
+       "target_bytes": "3bf1",
+       "target_sha256": "10777e1c6012d0c94873c97f8b8e2797ab0eb50a52ed52f23cd24ffe55676208",
+       "instruction_donor_start": 238,
+       "instruction_donor_end": 240,
+       "instruction_donor_bytes": "3bce",
+       "instruction_donor_sha256": "b95169b2d64305eb1ce384390adc0f2521ef45e26cbe760358d88ad308d7b852"
+      },
+      {
+       "kind": "same_tu_source_identical_complete_x86_instruction_v1",
+       "target_start": 516,
+       "target_end": 518,
+       "target_bytes": "3bc8",
+       "target_sha256": "656489db5162c68c01e330bcd0d40e22deaebf16a8c369fb63229a200aee42c3",
+       "instruction_donor_start": 516,
+       "instruction_donor_end": 518,
+       "instruction_donor_bytes": "3bc1",
+       "instruction_donor_sha256": "70f85b85192c68f24fa3bd821065345d7a8b2c754d9568987f179b40874f3baf"
+      }
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100a66f0",
+      "verdict": "MATCH",
+      "length": 561
+     },
+     "retail_image_target": "lego1",
+     "retail_relocations": [
+      {
+       "offset": 86,
+       "type": 20,
+       "addend": 0,
+       "target": "?ProjectedSize@ViewManager@@QAEMABVBoundingSphere@@@Z",
+       "target_section": 244,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a6dc0"
+      },
+      {
+       "offset": 102,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_viewDistance@@3MA",
+       "target_section": 3,
+       "target_value": 12,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x1010105c"
+      },
+      {
+       "offset": 145,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_userMaxLodPower@@3MA",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10109598"
+      },
+      {
+       "offset": 250,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_minLODThreshold@@3MA",
+       "target_section": 3,
+       "target_value": 4,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101054"
+      },
+      {
+       "offset": 311,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_maxLODLevels@@3HA",
+       "target_section": 3,
+       "target_value": 8,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101058"
+      },
+      {
+       "offset": 344,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_LODScaleFactor@@3MA",
+       "target_section": 3,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101050"
+      },
+      {
+       "offset": 355,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_maxLODLevels@@3HA",
+       "target_section": 3,
+       "target_value": 8,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101058"
+      },
+      {
+       "offset": 415,
+       "type": 20,
+       "addend": 0,
+       "target": "?ManageVisibilityAndDetailRecursively@ViewManager@@QAEXPAVViewROI@@H@Z",
+       "target_section": 116,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a66f0"
+      },
+      {
+       "offset": 462,
+       "type": 20,
+       "addend": 0,
+       "target": "?UpdateROIDetailBasedOnLOD@ViewManager@@QAEXPAVViewROI@@H@Z",
+       "target_section": 110,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a65b0"
+      },
+      {
+       "offset": 489,
+       "type": 20,
+       "addend": 0,
+       "target": "?RemoveROIDetailFromScene@ViewManager@@QAEXPAVViewROI@@@Z",
+       "target_section": 113,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a66a0"
+      },
+      {
+       "offset": 532,
+       "type": 20,
+       "addend": 0,
+       "target": "?ManageVisibilityAndDetailRecursively@ViewManager@@QAEXPAVViewROI@@H@Z",
+       "target_section": 116,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a66f0"
+      }
+     ]
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 4 row(s) in LEGO1/viewmanager/viewmanager.cpp from generated declaration-only carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   },
+   "group_order": [
+    "?addDestroyCallback@@YAXPAUIDirect3DRMObject@@PAX@Z",
+    "?userVisualCallback@@YAHPAUIDirect3DRMUserVisual@@PAXW4_D3DRMUSERVISUALREASON@@PAUIDirect3DRMDevice@@PAUIDirect3DRMViewport@@@Z",
+    "??1ViewLOD@@UAE@XZ",
+    "??0ViewManager@@QAE@PAVRenderer@Tgl@@PAVGroup@2@PBVOrientableROI@@@Z",
+    "??1?$list@PAVROI@@V?$allocator@PAVROI@@@@@@QAE@XZ",
+    "??4MxMatrix@@UAEXABV0@@Z",
+    "??4MxMatrix@@UAEXABVMatrix4@@@Z",
+    "?FromQuaternion@Matrix4@@UAEHABVVector4@@@Z",
+    "?ToQuaternion@Matrix4@@UAEXAAVVector4@@@Z",
+    "?Product@Matrix4@@UAEXABV1@0@Z",
+    "?Product@Matrix4@@UAEXPAY03M0@Z",
+    "?SetTranslation@Matrix4@@UAEXABM00@Z",
+    "?TranslateBy@Matrix4@@UAEXABM00@Z",
+    "??YMatrix4@@UAEAAV0@PAY03M@Z",
+    "??4Matrix4@@UAEXABV0@@Z",
+    "?SetIdentity@Matrix4@@UAEXXZ",
+    "?Clear@Matrix4@@UAEXXZ",
+    "?Element@Matrix4@@UBEPBMHH@Z",
+    "?Element@Matrix4@@UAEPAMHH@Z",
+    "?GetData@Matrix4@@UBEPAY03MXZ",
+    "?GetData@Matrix4@@UAEPAY03MXZ",
+    "?SetData@Matrix4@@UAEXAAUUnknownMatrixType@@@Z",
+    "?SetData@Matrix4@@UAEXPAY03M@Z",
+    "?CopyFrom@Matrix4@@UAEXABV1@@Z",
+    "?CopyFrom@Matrix4@@UAEXPAY03M@Z",
+    "??_GViewManager@@UAEPAXI@Z",
+    "??1?$List@PAVROI@@@@QAE@XZ",
+    "??1?$Vector@PBVROI@@@@QAE@XZ",
+    "??1ViewManager@@UAE@XZ",
+    "?IsBoundingBoxInFrustum@ViewManager@@QAEIABVBoundingBox@@@Z",
+    "?FlushBuffers@ViewManager@@UAEHXZ",
+    "?FlushFrameBuffers@@YAHPAUIDirect3DRMFrame2@@@Z",
+    "?Remove@ViewManager@@QAEXPAVViewROI@@@Z",
+    "?RemoveAll@ViewManager@@QAEXPAVViewROI@@@Z",
+    "?UpdateROIDetailBasedOnLOD@ViewManager@@QAEXPAVViewROI@@H@Z",
+    "?RemoveROIDetailFromScene@ViewManager@@QAEXPAVViewROI@@@Z",
+    "?ManageVisibilityAndDetailRecursively@ViewManager@@QAEXPAVViewROI@@H@Z",
+    "?Update@ViewManager@@QAEXMM@Z",
+    "?UpdateViewTransformations@ViewManager@@QAEXXZ",
+    "??4Mx3DPointFloat@@UAEXABVVector3@@@Z",
+    "?Fill@Vector3@@UAEXABM@Z",
+    "?Clear@Vector3@@UAEXXZ",
+    "?EqualsImpl@Vector3@@MAEXPBM@Z",
+    "?DotImpl@Vector3@@MBEMPBM0@Z",
+    "?DivImpl@Vector3@@MAEXABM@Z",
+    "?MulImpl@Vector3@@MAEXABM@Z",
+    "?MulImpl@Vector3@@MAEXPBM@Z",
+    "?SubImpl@Vector3@@MAEXPBM@Z",
+    "?AddImpl@Vector3@@MAEXM@Z",
+    "?AddImpl@Vector3@@MAEXPBM@Z",
+    "?EqualsCross@Vector3@@UAEXPBMABV1@@Z",
+    "?EqualsCross@Vector3@@UAEXABV1@PBM@Z",
+    "?EqualsCross@Vector3@@UAEXABV1@0@Z",
+    "?EqualsCrossImpl@Vector3@@MAEXPBM0@Z",
+    "??4Vector2@@UAEXABV0@@Z",
+    "??4Vector2@@UAEXPBM@Z",
+    "??_0Vector2@@UAEXABM@Z",
+    "??XVector2@@UAEXABM@Z",
+    "??XVector2@@UAEXABV0@@Z",
+    "??XVector2@@UAEXPBM@Z",
+    "??ZVector2@@UAEXABV0@@Z",
+    "??ZVector2@@UAEXPBM@Z",
+    "??YVector2@@UAEXABV0@@Z",
+    "??YVector2@@UAEXPBM@Z",
+    "??YVector2@@UAEXM@Z",
+    "?Unitize@Vector2@@UAEHXZ",
+    "?Dot@Vector2@@UBEMABV1@PBM@Z",
+    "?Dot@Vector2@@UBEMPBMABV1@@Z",
+    "?Dot@Vector2@@UBEMABV1@0@Z",
+    "?Dot@Vector2@@UBEMPBM0@Z",
+    "?GetData@Vector2@@UBEPBMXZ",
+    "?GetData@Vector2@@UAEPAMXZ",
+    "?SetData@Vector2@@MAEXPAM@Z",
+    "?LenSquared@Vector3@@UBEMXZ",
+    "?SetResolution@ViewManager@@QAEXHH@Z",
+    "?SetFrustrum@ViewManager@@QAEXMMM@Z",
+    "?SetPOVSource@ViewManager@@QAEXPBVOrientableROI@@@Z",
+    "?ProjectedSize@ViewManager@@QAEMABVBoundingSphere@@@Z",
+    "?Pick@ViewManager@@QAEPAVViewROI@@PAVView@Tgl@@KK@Z",
+    "??1LODObject@@UAE@XZ",
+    "??_GLODObject@@UAEPAXI@Z",
+    "?AveragePolyArea@ViewLOD@@UBENXZ",
+    "?NVerts@ViewLOD@@UBEHXZ",
+    "??_GViewLOD@@UAEPAXI@Z",
+    "??1?$vector@PBVROI@@V?$allocator@PBVROI@@@@@@QAE@XZ",
+    "??1MxStopWatch@@QAE@XZ"
    ]
   }
  ],
@@ -44595,9 +44702,9 @@
    },
    {
     "path": "LEGO1/viewmanager/viewmanager.cpp",
-    "clean": "61d70c384293c2b302f9708c62681201c9133b47a86d685750da66cbad3ec2d5",
-    "effective": "fc31fc1941e365f33716912a128a3e14cd5ff618de52ad3f16018ba11aedd773",
-    "size": 21080,
+    "clean": "d92602614843a26d16d02d77ee4ae6bda807f3e86baeaaa979144bb55209f0ef",
+    "effective": "4e069f75acc13070f5562c572006985fd34198790b5a756e64f57ba1d5229b7b",
+    "size": 21257,
     "ops": [
      {
       "op": "insert",
@@ -44763,7 +44870,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "d218cefb2d0328f27c735f349f2a36faab07fe3fe489ac30878e97e36c329f82",
+       "ctx": "08f3f1a5f5b845332a7d4a77427eccd63a0235651457f465eb578a37efcb224e",
        "a": 0,
        "at": "end"
       },
@@ -44775,7 +44882,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "d218cefb2d0328f27c735f349f2a36faab07fe3fe489ac30878e97e36c329f82",
+       "ctx": "08f3f1a5f5b845332a7d4a77427eccd63a0235651457f465eb578a37efcb224e",
        "a": 0,
        "at": "end"
       },
