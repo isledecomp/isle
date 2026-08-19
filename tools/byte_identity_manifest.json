@@ -2683,6 +2683,22 @@
       "rendering_identity_sha256": "f25718287df2d3162b6d7d1832672bfeb6ed5fd2716a639b58e581b4c94d3e0b",
       "authenticity_rationale": "Donor-private rendering of the checked-in header and translation unit by typed operations only: the member signature generator emits the declaration and the qualified definition header from identifiers that exist in the checked-in source, and the body is an authenticated relocated range of that same source. The donor object is a byte source only and never enters the link; the shipped tree keeps the inline definition untouched, which is why no includer is perturbed."
      }
+    },
+    {
+     "id": "d_d0ab83fa4e6b",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "pad_shape",
+      "classes": 5,
+      "functions_per_class": 4,
+      "generated_header_sha256": "d0ab83fa4e6bfe5c904556e3f15001fc4ac845297e90c3ec5f56e887b04069eb",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -2865,6 +2881,19 @@
        "retail_target": "0x1002a2f0"
       }
      ]
+    },
+    {
+     "mangled": "?insert@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@QAE?AU?$pair@Viterator@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@H@@ABULegoCacheSoundEntry@@@Z",
+     "expected_body_length": 660,
+     "expected_body_sha256": "c79da92fce9cad582f9f46e98fa081e22d896374210e55818fe0edad8e76edb8",
+     "expected_changed_offsets": [
+      24,
+      73,
+      303,
+      362
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_d0ab83fa4e6b"
     }
    ],
    "completion": {
@@ -22693,157 +22722,6 @@
          "id": "RkC1",
          "line": 4
         }
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "path": "LEGO1/lego/legoomni/src/audio/legocachesoundlist.cpp",
-    "effective": "15c394875a111a4b715d8993934615b3d3d23536af5424928677785d837eb98c",
-    "size": 1518,
-    "ops": [
-     {
-      "op": "append",
-      "id": "op_0006_supplier_tu",
-      "gen": {
-       "k": "template_supplier",
-       "container_alias": {
-        "identifier": "CacheSoundEntryTree",
-        "type": "_Tree<LegoCacheSoundEntry, LegoCacheSoundEntry, Set100d6b4c::_Kfn, Set100d6b4cComparator, allocator<LegoCacheSoundEntry>>"
-       },
-       "include_identity": "legocachesoundmanager.h",
-       "logical_path": "LEGO1/lego/legoomni/src/audio/legocachesoundlist.cpp",
-       "prefix_declarations": {
-        "empty_class_identifiers": [],
-        "forward_class_identifiers": [],
-        "range_class_identifiers": {
-         "kind": "identifier_run",
-         "stem": "LegoSoundRange",
-         "first": 0,
-         "count": 5,
-         "width": 1
-        },
-        "value_counter_class_identifiers": {
-         "kind": "identifier_run",
-         "stem": "LegoSoundCounter",
-         "first": 0,
-         "count": 3,
-         "width": 1
-        },
-        "enum_declarations": [
-         {
-          "identifier": "LegoSoundFlag0",
-          "enumerator": "c_legoSoundFlag0",
-          "value": {
-           "kind": "left_shift",
-           "lhs": 1,
-           "rhs": 0
-          }
-         }
-        ]
-       },
-       "probes": [
-        {
-         "base_type": "CacheSoundEntryTree",
-         "member_pointer": {
-          "alias_identifier": "Fn",
-          "kind": "member_function_pointer",
-          "method_const": false,
-          "owner_type": "CacheSoundEntryTree",
-          "parameters": [
-           {
-            "type": "const value_type&"
-           }
-          ],
-          "return_type": "_Pairib"
-         },
-         "probe_identifier": "CacheSoundEntryInsertProbe",
-         "target_qualified_identifier": [
-          "CacheSoundEntryTree",
-          "insert"
-         ]
-        }
-       ],
-       "lines": 100,
-       "at": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        22,
-        23,
-        24,
-        25,
-        26,
-        27,
-        28,
-        30,
-        31,
-        32,
-        33,
-        34,
-        35,
-        36,
-        37,
-        39,
-        40,
-        41,
-        42,
-        43,
-        44,
-        45,
-        46,
-        48,
-        49,
-        50,
-        51,
-        52,
-        53,
-        54,
-        55,
-        57,
-        58,
-        59,
-        60,
-        61,
-        62,
-        63,
-        64,
-        66,
-        67,
-        68,
-        69,
-        71,
-        83,
-        84,
-        85,
-        86,
-        87,
-        88,
-        89,
-        92,
-        93,
-        94,
-        95,
-        97,
-        98,
-        99,
-        100
        ]
       }
      }
@@ -44456,122 +44334,116 @@
   "graph": {
    "generated_tus": [
     {
-     "path": "LEGO1/lego/legoomni/src/audio/legocachesoundlist.cpp",
-     "ordinal": 46,
-     "after": "LEGO1/lego/legoomni/src/common/legogamestate.cpp",
-     "before": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp"
-    },
-    {
      "path": "LEGO1/lego/legoomni/src/paths/legoanimpresenterset.cpp",
-     "ordinal": 60,
+     "ordinal": 59,
      "after": "LEGO1/lego/legoomni/src/paths/legopathactorsetiterator.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathctrledge.cpp",
-     "ordinal": 55,
+     "ordinal": 54,
      "after": "LEGO1/lego/legoomni/src/common/legophoneme.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathctrledgeset.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathctrledgeset.cpp",
-     "ordinal": 56,
+     "ordinal": 55,
      "after": "LEGO1/lego/legoomni/src/paths/legopathctrledge.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathactorset.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathactorset.cpp",
-     "ordinal": 57,
+     "ordinal": 56,
      "after": "LEGO1/lego/legoomni/src/paths/legopathctrledgeset.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathactorsetcompare.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathactorsetcompare.cpp",
-     "ordinal": 58,
+     "ordinal": 57,
      "after": "LEGO1/lego/legoomni/src/paths/legopathactorset.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathactorsetiterator.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathactorsetiterator.cpp",
-     "ordinal": 59,
+     "ordinal": 58,
      "after": "LEGO1/lego/legoomni/src/paths/legopathactorsetcompare.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legoanimpresenterset.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legoboundaryedge.cpp",
-     "ordinal": 62,
+     "ordinal": 61,
      "after": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathctrledgeiterator.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathctrledgeiterator.cpp",
-     "ordinal": 63,
+     "ordinal": 62,
      "after": "LEGO1/lego/legoomni/src/paths/legoboundaryedge.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathctrledgecompare.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathctrledgecompare.cpp",
-     "ordinal": 64,
+     "ordinal": 63,
      "after": "LEGO1/lego/legoomni/src/paths/legopathctrledgeiterator.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathcontrollerlist.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathcontrollerlist.cpp",
-     "ordinal": 65,
+     "ordinal": 64,
      "after": "LEGO1/lego/legoomni/src/paths/legopathctrledgecompare.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp",
-     "ordinal": 66,
+     "ordinal": 65,
      "after": "LEGO1/lego/legoomni/src/paths/legopathcontrollerlist.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp",
-     "ordinal": 67,
+     "ordinal": 66,
      "after": "LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legobewithmidpointcomparator.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legobewithmidpointcomparator.cpp",
-     "ordinal": 68,
+     "ordinal": 67,
      "after": "LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp",
      "before": "LEGO1/lego/legoomni/src/audio/lego3dwavepresenter.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legoanimpresentercontainer.cpp",
-     "ordinal": 81,
+     "ordinal": 80,
      "after": "LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathboundary.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad1.cpp",
-     "ordinal": 118,
+     "ordinal": 117,
      "after": "LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legordatapad2.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad2.cpp",
-     "ordinal": 119,
+     "ordinal": 118,
      "after": "LEGO1/lego/legoomni/src/paths/legordatapad1.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legordatapad3.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad3.cpp",
-     "ordinal": 120,
+     "ordinal": 119,
      "after": "LEGO1/lego/legoomni/src/paths/legordatapad2.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legordatapad4.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad4.cpp",
-     "ordinal": 121,
+     "ordinal": 120,
      "after": "LEGO1/lego/legoomni/src/paths/legordatapad3.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legorelocpad.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legorelocpad.cpp",
-     "ordinal": 122,
+     "ordinal": 121,
      "after": "LEGO1/lego/legoomni/src/paths/legordatapad4.cpp"
     }
    ],
