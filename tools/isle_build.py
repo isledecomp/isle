@@ -1624,8 +1624,12 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
     ) as pool:
         futures = [pool.submit(compose_unit, unit) for unit in units]
         try:
-            for future in futures:
-                target, message = future.result()
+            for future, unit in zip(futures, units):
+                try:
+                    target, message = future.result()
+                except byte_identity.ByteIdentityError as error:
+                    fail(f"composition refused for {unit['target']}:"
+                         f"{unit['source']}: {error}")
                 if message:
                     print(message)
                 if target:

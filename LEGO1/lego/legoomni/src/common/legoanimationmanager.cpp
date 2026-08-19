@@ -311,6 +311,12 @@ float g_unk0x100f74b0[6][3] = {
 // GLOBAL: LEGO1 0x100f74f8
 MxS32 g_legoAnimationManagerConfig = 1;
 
+// Unreferenced in both builds (retail .data 0x100f74fc and BETA10 0x101e2398
+// hold this zero dword between the table/config and g_unk0x100f7500).
+// GLOBAL: LEGO1 0x100f74fc
+// GLOBAL: BETA10 0x101e2398
+undefined4 g_unk0x100f74fc = 0;
+
 // GLOBAL: LEGO1 0x100f7500
 float g_unk0x100f7500 = 0.1f;
 

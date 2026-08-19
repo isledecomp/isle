@@ -1,6 +1,9 @@
 #include "modeldb.h"
 
 #include <assert.h>
+#include <conio.h>
+#include <io.h>
+#include <stdlib.h>
 
 DECOMP_SIZE_ASSERT(ModelDbWorld, 0x18)
 DECOMP_SIZE_ASSERT(ModelDbPart, 0x18)
@@ -282,4 +285,63 @@ void FreeModelDbWorlds(ModelDbWorld*& p_worlds, MxS32 p_numWorlds)
 
 	delete[] p_worlds;
 	p_worlds = NULL;
+}
+
+// The writer half continues past FreeModelDbWorlds: BETA10 carries the
+// part-file packer at 0x100e65f0 (with a model-file twin at 0x100e681a and
+// the texture/part archive copier at 0x100e6a43) plus its two inline error
+// helpers (0x100e7900, 0x100e7970). Retail dropped every caller, so /OPT:REF
+// discarded the bodies -- but their references are why LINK pulled _file.obj,
+// fclose.obj, getch.obj, crt0dat.obj (exit), ftell.obj and fopen.obj out of
+// LIBCMT immediately after fread.obj (modeldb.obj is the first object that
+// names them; the symbol table lists a function's externals in reverse order
+// of last use, which puts stdout's "Error opening" block -- laid out after the
+// loop's fclose -- first).
+
+// FUNCTION: BETA10 0x100e7900
+inline void CheckRead(MxS32 p_result, MxS32 p_expected, const char* p_name)
+{
+	if (p_expected != p_result) {
+		fprintf(stdout, "Error reading from file %s\n", p_name);
+		printf("press any key\n");
+		_getch();
+		exit(-1);
+	}
+}
+
+// FUNCTION: BETA10 0x100e7970
+inline void CheckWrite(MxS32 p_result, MxS32 p_expected)
+{
+	if (p_expected != p_result) {
+		fprintf(stdout, "Error writing to db file\n");
+		printf("press any key\n");
+		_getch();
+		exit(-1);
+	}
+}
+
+// FUNCTION: BETA10 0x100e65f0
+void WriteModelDbParts(FILE* p_file, ModelDbPartList* p_list)
+{
+	MxString path("q:\\lego\\media\\model\\part\\");
+	ModelDbPartListCursor cursor(p_list);
+	ModelDbPart* part;
+
+	while (cursor.Next(part)) {
+		MxString name = path + part->m_roiName + ".prt";
+		FILE* f = fopen(name.GetData(), "rb");
+		if (!f) {
+			fprintf(stdout, "Error opening %s\n", name.GetData());
+			continue;
+		}
+
+		part->m_partDataOffset = ftell(p_file);
+		part->m_partDataLength = filelength(fileno(f));
+		char* buf = new char[part->m_partDataLength];
+		assert(buf);
+		CheckRead(fread(buf, part->m_partDataLength, 1, f), 1, part->m_roiName.GetData());
+		CheckWrite(fwrite(buf, part->m_partDataLength, 1, p_file), 1);
+		delete[] buf;
+		fclose(f);
+	}
 }

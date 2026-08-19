@@ -2041,7 +2041,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-   "source_sha256": "c25a4583c9dce438461498a39316b6f98b3260e59a22781ddfa061407b8a4af4",
+   "source_sha256": "996ca96ba4dde20e9e71c378486aab45726604362bd0600452cd1cbad7e8e605",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -2057,14 +2057,16 @@
    },
    "donors": [
     {
-     "id": "d_0c040894bbd5",
+     "id": "d_3f506816ab09",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "declaration_shape",
-      "classes": 4,
-      "functions": 32,
-      "generated_header_sha256": "0c040894bbd506378615541f461808a98ad5223baa12ae447e3cc6697be41ae3",
+      "kind": "forward_declaration_run",
+      "prefix": "MxUnkRecVB",
+      "count": 31,
+      "width": 3,
+      "placement": "after_includes",
+      "generated_header_sha256": "3f506816ab094553adce52c8cae7a59a9f4683c78dba4114631802c3ea9734ec",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -2073,17 +2075,36 @@
      }
     },
     {
-     "id": "d_f8ae8200acb5",
+     "id": "d_0bd7161aec8e",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "extern_run_pair",
       "header_prefix": "g_h",
-      "header_count": 6,
+      "header_count": 4,
+      "seat_prefix": "g_p",
+      "seat_count": 17,
+      "width": 2,
+      "generated_header_sha256": "0bd7161aec8e959ecb925bdc4cf5180e37a9aea04926278bc2cc86c43908afc8",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_5379d7760cfc",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 5,
       "seat_prefix": "g_p",
       "seat_count": 6,
       "width": 2,
-      "generated_header_sha256": "f8ae8200acb56cbb6089659bca108dffe8a10a3ee12fbbfbf1978ea2da9c01d4",
+      "generated_header_sha256": "5379d7760cfce07b81ac086915761711a40f50f62762fa488241328612bea32c",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -2093,6 +2114,149 @@
     }
    ],
    "functions": [
+    {
+     "mangled": "?Tickle@LegoAnimationManager@@UAEJXZ",
+     "expected_body_length": 1095,
+     "expected_body_sha256": "e8b2ece54eb7a9658d3f345b68b19fc5fe3b4095dbd1f9786c2c0406c94a27e6",
+     "expected_changed_offsets": [
+      862,
+      863,
+      864,
+      865,
+      866,
+      867,
+      868,
+      869
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       583,
+       "S"
+      ],
+      [
+       942,
+       "T"
+      ],
+      [
+       961,
+       "T"
+      ],
+      [
+       971,
+       "T"
+      ],
+      [
+       987,
+       "T"
+      ],
+      [
+       1037,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_3f506816ab09"
+    },
+    {
+     "mangled": "?FUN_10064380@LegoAnimationManager@@AAEJPBD0HMHMIHIHM@Z",
+     "expected_body_length": 746,
+     "expected_body_sha256": "ed5f3d54cb293b053cd22b39265a4a2a385f47059e9126eb044e0fe57f62c88a",
+     "expected_changed_offsets": [
+      12,
+      14,
+      58,
+      88,
+      90,
+      110,
+      112,
+      116,
+      122,
+      134,
+      151,
+      158,
+      168,
+      175,
+      183,
+      198,
+      202,
+      228,
+      238,
+      295,
+      313,
+      325,
+      359,
+      362,
+      369,
+      382,
+      386,
+      393,
+      438,
+      510,
+      565,
+      569,
+      576,
+      621,
+      625,
+      632,
+      704,
+      705,
+      706,
+      707,
+      710,
+      711,
+      712,
+      713,
+      716,
+      717,
+      718,
+      719,
+      722
+     ],
+     "splice_class": "equal_body_eh_reloc_layout",
+     "expected_relocation_moves": [
+      [
+       706,
+       707
+      ],
+      [
+       712,
+       713
+      ],
+      [
+       718,
+       719
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_3f506816ab09"
+    },
+    {
+     "mangled": "?FUN_10064880@LegoAnimationManager@@QAEJPBDHH@Z",
+     "expected_body_length": 110,
+     "expected_body_sha256": "56acde105dc693bb96afd2bd76154952d1796aa6cd3900824e499f212e1f6328",
+     "expected_changed_offsets": [
+      65,
+      67,
+      68,
+      69,
+      71,
+      72,
+      74,
+      79,
+      86,
+      87,
+      88,
+      89,
+      90,
+      92,
+      93,
+      94,
+      95
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_3f506816ab09"
+    },
     {
      "mangled": "?LoadWorldInfo@LegoAnimationManager@@QAEJW4World@LegoOmni@@@Z",
      "expected_body_length": 1733,
@@ -2132,119 +2296,25 @@
       108,
       116
      ],
-     "donor": "d_0c040894bbd5"
+     "donor": "d_0bd7161aec8e"
     },
     {
      "mangled": "?FUN_10064b50@LegoAnimationManager@@AAEXJ@Z",
-     "expected_body_length": 912,
      "expected_body_sha256": "bc020d8dbf54db1aebec21a9d5bf907479f7042d0d42709cc13b9dd72ebddfff",
-     "expected_changed_offsets": [
-      21,
-      27,
-      66,
-      72,
-      80,
-      86,
-      88,
-      89,
-      90,
-      91,
-      92,
-      93,
-      94,
-      95,
-      96,
-      97,
-      98,
-      103,
-      104,
-      105,
-      106,
-      107,
-      108,
-      109,
-      110,
-      111,
-      112,
-      500,
-      506,
-      527,
-      535,
-      815
-     ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
-      [
-       182,
-       "T"
-      ],
-      [
-       229,
-       "T"
-      ],
-      [
-       239,
-       "T"
-      ],
-      [
-       311,
-       "T"
-      ],
-      [
-       375,
-       "T"
-      ],
-      [
-       381,
-       "T"
-      ],
-      [
-       398,
-       "T"
-      ],
-      [
-       408,
-       "T"
-      ],
-      [
-       438,
-       "T"
-      ],
-      [
-       476,
-       "T"
-      ],
-      [
-       607,
-       "T"
-      ],
-      [
-       625,
-       "T"
-      ],
-      [
-       645,
-       "T"
-      ]
-     ],
-     "expected_xdata_rename_offsets": [],
-     "donor": "d_f8ae8200acb5"
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 913,
+     "expected_donor_length": 912,
+     "expected_linked_span": 912,
+     "expected_seed_line_count": 23,
+     "expected_donor_line_count": 22,
+     "donor": "d_5379d7760cfc"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes 5 row(s) in LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
-   },
-   "group_order": [
-    "??_7LegoTranInfoList@@6B@",
-    "??_7?$MxCollection@PAULegoTranInfo@@@@6B@",
-    "??_7?$MxList@PAULegoTranInfo@@@@6B@",
-    "??_7?$MxPtrList@ULegoTranInfo@@@@6B@",
-    "??_7?$MxListCursor@PAULegoTranInfo@@@@6B@",
-    "??_7?$MxPtrListCursor@ULegoTranInfo@@@@6B@",
-    "??_7LegoTranInfoListCursor@@6B@"
-   ]
+   }
   },
   {
    "target": "lego1",
@@ -9205,7 +9275,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/modeldb/modeldb.cpp",
-   "source_sha256": "fb4b09a3528b2427d2c09710813b1571bb2979d5573576bb6e0325a044b972f9",
+   "source_sha256": "4b3a3d68cb49bba6dd45f1637004933a2eeb8634c0112d9156024613bcdd97c3",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -9221,31 +9291,83 @@
    },
    "donors": [
     {
-     "id": "d_72176ada34d8",
+     "id": "d_09d2a0054d35",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "extern_run_pair",
-      "header_prefix": "g_h",
-      "header_count": 72,
-      "seat_prefix": "g_p",
-      "seat_count": 72,
-      "width": 2,
-      "generated_header_sha256": "72176ada34d8526d48b826dd8605723d0e468b70e2ab045267f0227ca9acf2ae",
+      "kind": "pad_shape",
+      "classes": 5,
+      "functions_per_class": 7,
+      "generated_header_sha256": "09d2a0054d35750c2acf6b803ac34dd65bb7c74d8d23b5d4499fcb82e2168e31",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+      "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_efdd957979e4",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "pad_shape",
+      "classes": 5,
+      "functions_per_class": 10,
+      "generated_header_sha256": "efdd957979e4d25361ed3c825f5dcce733901e7167e8e5affd5602cf096bb205",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
    "functions": [
     {
+     "mangled": "?FreeModelDbWorlds@@YAXAAPAUModelDbWorld@@H@Z",
+     "expected_body_length": 381,
+     "expected_body_sha256": "92870e6f31ff496a55c056d3c12af6bfbb39f8440ea9c97a6afd4642fdb0ae90",
+     "expected_changed_offsets": [
+      227,
+      229,
+      232,
+      237,
+      238,
+      240,
+      251
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       364,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60
+     ],
+     "donor": "d_09d2a0054d35"
+    },
+    {
      "mangled": "?ReadModelDbWorlds@@YAJPAU_iobuf@@AAPAUModelDbWorld@@AAH@Z",
      "expected_body_length": 802,
      "expected_body_sha256": "73b818cab851c21e3de0bdab156e6d40e465735e4828e94639200562cfe5dc06",
      "expected_changed_offsets": [
+      25,
+      31,
+      37,
+      44,
+      53,
+      59,
       444,
       449,
       489,
@@ -9261,8 +9383,14 @@
       619,
       621,
       623,
-      635,
-      639
+      645,
+      648,
+      654,
+      656,
+      658,
+      659,
+      660,
+      661
      ],
      "splice_class": "equal_body_eh_structural_local",
      "expected_code_renames": [
@@ -9285,18 +9413,14 @@
       76,
       84
      ],
-     "donor": "d_72176ada34d8"
+     "donor": "d_efdd957979e4"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 1 row(s) in LEGO1/modeldb/modeldb.cpp from a generated carrier state over the rendered current source; a pure register-colouring residue that only the long extern grid (72x72, far outside the historical 8x17 box) reaches.",
+    "reason": "Closes 2 row(s) in LEGO1/modeldb/modeldb.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
-   },
-   "group_order": [
-    "??_7?$MxListCursor@PAUModelDbPart@@@@6B@",
-    "??_7ModelDbPartListCursor@@6B@"
-   ]
+   }
   },
   {
    "target": "omni",
@@ -19142,9 +19266,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-    "clean": "e5d9e961d7cf62f7e05f33637d558d13f52bdbc0773be0bd9db6443b66c46730",
-    "effective": "c25a4583c9dce438461498a39316b6f98b3260e59a22781ddfa061407b8a4af4",
-    "size": 75260,
+    "clean": "07e62cfd87aa41a69cc490c7da68477b4e1c67f2101bda743ca4fd804b5f94c4",
+    "effective": "996ca96ba4dde20e9e71c378486aab45726604362bd0600452cd1cbad7e8e605",
+    "size": 75499,
     "ops": [
      {
       "op": "insert",
@@ -33294,14 +33418,14 @@
    },
    {
     "path": "LEGO1/modeldb/modeldb.cpp",
-    "clean": "e3d4630c2f5badd11098d91b8fe73be038c0b84919ff0764c805f99dcee89ea5",
-    "effective": "fb4b09a3528b2427d2c09710813b1571bb2979d5573576bb6e0325a044b972f9",
-    "size": 7095,
+    "clean": "80ec349c6e1bc64360a46ce8c1a9455422546c36a368b845c66010ed5dba1cd1",
+    "effective": "4b3a3d68cb49bba6dd45f1637004933a2eeb8634c0112d9156024613bcdd97c3",
+    "size": 9112,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "f67a184593d9e92c30461ed9cafdc5d7e096b4892e913a37460c87aa4082aba7",
+       "ctx": "f117826f8c84449b4107a86e6c4ae120bc566edae0b0927288c2fce1ae687d53",
        "b": 0,
        "at": "start"
       },

@@ -602,7 +602,7 @@
 // __FPinit
 
 // GLOBAL: LEGO1 0x100fc8f0
-// __iob
+// _iob
 
 // GLOBAL: LEGO1 0x100fcb70
 // __cflush

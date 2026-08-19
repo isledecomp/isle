@@ -32,6 +32,11 @@ const char* g_varDUNEFUEL = "duneFUEL";
 // STRING: LEGO1 0x100f7634
 const char* g_varDBFRFNY4 = "C_DBFRFNY4";
 
+// Unreferenced zero dword that retail keeps between g_varDBFRFNY4 and the
+// "DuneCarHorn_Sound" literal in this object's .data.
+// GLOBAL: LEGO1 0x100f7664
+undefined4 g_unk0x100f7664 = 0;
+
 // FUNCTION: LEGO1 0x10067bb0
 DuneBuggy::DuneBuggy()
 {
@@ -219,3 +224,9 @@ void DuneBuggy::ActivateSceneActions()
 		);
 	}
 }
+
+// Unreferenced dword that retail keeps right after this object's
+// "DuneCarHorn_Sound" literal in .data (before legoanimpresenter's map statics),
+// initialised to 1.
+// GLOBAL: LEGO1 0x100f767c
+undefined4 g_unk0x100f767c = 1;
