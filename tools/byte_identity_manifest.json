@@ -843,7 +843,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legopathactor.cpp",
-   "source_sha256": "37e32c90e22435d9203da340abbadab7c537b97af54f5b6ae8ef97bc906a2158",
+   "source_sha256": "561e66514ef9fc505cbfcbe2fb996c7fec547456650dee93e1ac2ba875889d8f",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -20069,8 +20069,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4895,
-    "accepted_row_identity_sha256": "649a6b335f8b7315cd05389d12c86f66b4f5f2d9064048dd87a9e3234d412a54",
+    "exact_raw_1_0_count": 4896,
+    "accepted_row_identity_sha256": "27e69e494e368ce51b1006320fbf065b936f24a7b45baf994243d0c9ab5eafab",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -29154,9 +29154,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/paths/legopathactor.cpp",
-    "clean": "6d022442f5a98b4d55f7500d906bc6a7c28e30d0aa43482c01ffc58763b72b19",
-    "effective": "37e32c90e22435d9203da340abbadab7c537b97af54f5b6ae8ef97bc906a2158",
-    "size": 20435,
+    "clean": "167e5725f99b70c5310a7281ed09ff12c3aed8560543d7909706c66cbec7b818",
+    "effective": "561e66514ef9fc505cbfcbe2fb996c7fec547456650dee93e1ac2ba875889d8f",
+    "size": 20514,
     "ops": [
      {
       "op": "insert",
@@ -29185,7 +29185,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "5a5388d0e47592fad5e6eca51064fca3087a45bcb876b48b5ed02f10fff95847",
+       "ctx": "b573f5a5a470eaaa9fd32b60cc3af287127d1635aee7779d744f23bbf9b1086b",
        "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
        "line_after": "665556187ae3aa300dea0688ac4638b1f0466a56ebcc144d0755fae249676954"
       },

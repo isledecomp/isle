@@ -185,7 +185,8 @@ MxResult LegoPathActor::SetTransformAndDestinationFromPoints(
 	float p_destScale
 )
 {
-	assert(p_destEdge);
+	// BETA10 asserts p_destEdge here; the retail compile has no statement at this seat
+	assertIfBeta10(p_destEdge);
 
 	Vector3* v3 = p_destEdge->CWVertex(*p_boundary);
 	// LINE: LEGO1 0x1002de35
@@ -195,7 +196,6 @@ MxResult LegoPathActor::SetTransformAndDestinationFromPoints(
 
 	Mx3DPointFloat end, destNormal, endDirection;
 
-	// LINE: LEGO1 0x1002de8f
 	end = *v4;
 	end -= *v3;
 	end *= p_destScale;
@@ -240,12 +240,13 @@ MxResult LegoPathActor::SetTransformAndDestinationFromPoints(
 		endDirection.EqualsCross(*p_boundary->GetUp(), destNormal);
 		endDirection.Unitize();
 
-		if (SetSpline(p_start, p_direction, end, endDirection) != SUCCESS) {
+		if (SetSpline(p_start, p_direction, end, endDirection) == SUCCESS) {
+			m_boundary->AddActor(this);
+		}
+		else {
 			MxTrace("Warning: m_BADuration = %g, roi = %s\n", m_BADuration, m_roi->GetName());
 			return FAILURE;
 		}
-
-		m_boundary->AddActor(this);
 	}
 
 	m_local2World = m_roi->GetLocal2World();
