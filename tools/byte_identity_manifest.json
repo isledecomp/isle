@@ -9924,7 +9924,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/actors/pizza.cpp",
-   "source_sha256": "d0b1d4b64411d98d04faaab216be523f46e58e4949c2e934e48d763e8c4731de",
+   "source_sha256": "f432987730c93dba68c59f6cdaacd82b53d30c1f2f92fd4bcc3d35f4e97e89e9",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -16723,8 +16723,8 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/common/mxutilities.cpp",
-   "source_sha256": "f079885c0ae51634d94feec446b28744ccc48e213a1691af9df2388ba3d62133",
-   "mode": "restore_comdat_group_order",
+   "source_sha256": "60ce86949411d335921aa13d0fc577da594fd997f5aa2286439de7f5289814cc",
+   "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
      "/Zi",
@@ -16737,15 +16737,59 @@
      "-Z7"
     ]
    },
+   "donors": [
+    {
+     "id": "d_a5e141be1f71",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "pad_shape",
+      "classes": 1,
+      "functions_per_class": 8,
+      "generated_header_sha256": "a5e141be1f71d245eaee205b044a89760fffea955eb5a5bc75bc0106c087dc90",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?GetRectIntersection@@YAEHHHHPAH00000@Z",
+     "expected_body_length": 427,
+     "expected_body_sha256": "d6bc013c0bc2d851b6e6a7ab86a6a3fa14337aa798c9306c6948fabd2372cd5a",
+     "expected_changed_offsets": [
+      144,
+      148,
+      150,
+      154,
+      156,
+      160,
+      169,
+      170,
+      174,
+      180,
+      184,
+      193,
+      194,
+      198,
+      204,
+      208,
+      212,
+      214
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_a5e141be1f71"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row(s) in LEGO1/omni/src/common/mxutilities.cpp from generated declaration-only carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   },
    "group_order": [
-    "?ApplyMask@@YAXPAVMxDSAction@@IE@Z",
-    "?ReadToBuffer@MxDSSource@@UAEJPAVMxDSBuffer@@@Z",
-    "?GetLengthInDWords@MxDSSource@@UAEJXZ",
-    "?GetBuffer@MxDSSource@@UAEPAIXZ",
-    "??_GMxDSSource@@UAEPAXI@Z",
-    "?ClassName@MxDSFile@@UBEPBDXZ",
-    "?IsA@MxDSSource@@UBEEPBD@Z",
-    "??_GMxDSFile@@UAEPAXI@Z",
     "?GetRectIntersection@@YAEHHHHPAH00000@Z",
     "??0?$MxRect@H@@QAE@ABV?$MxPoint@H@@ABV?$MxSize@H@@@Z",
     "?MakeSourceName@@YAXPADPBD@Z",
@@ -16753,13 +16797,8 @@
     "?ContainsPresenter@@YAEAAVMxCompositePresenterList@@PAVMxPresenter@@@Z",
     "?OmniError@@YAXPBDH@Z",
     "?SetOmniUserMessage@@YAXP6AXPBDH@Z@Z",
-    "?IsA@MxDSFile@@UBEEPBD@Z"
-   ],
-   "completion": {
-    "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Restores the retail-anchored .text COMDAT group order of LEGO1/omni/src/common/mxutilities.cpp (whole-group permutation, body-inert).",
-    "may_replace_compiler_output": true
-   }
+    "?ApplyMask@@YAXPAVMxDSAction@@IE@Z"
+   ]
   },
   {
    "target": "omni",
@@ -20101,8 +20140,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4897,
-    "accepted_row_identity_sha256": "3ee699760ee1e4656a2c5c9f767d733f3dd432823ed45d4df013f17a835246d3",
+    "exact_raw_1_0_count": 4898,
+    "accepted_row_identity_sha256": "0e05f91b801d47840b2b8b340495916fe87f536d2bb559fd962ca9a5dcc94dc5",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -22132,9 +22171,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/actors/pizza.cpp",
-    "clean": "dfc7d4e3a08febbdefd8c416b2349cb6c6a1173a12a6032b28e0cb833b64eb8a",
-    "effective": "d0b1d4b64411d98d04faaab216be523f46e58e4949c2e934e48d763e8c4731de",
-    "size": 21035,
+    "clean": "fc0893c98ffc70ea8562fc165238abf7fb5f1987219d175ebd717788a35cc40e",
+    "effective": "f432987730c93dba68c59f6cdaacd82b53d30c1f2f92fd4bcc3d35f4e97e89e9",
+    "size": 21042,
     "ops": [
      {
       "op": "insert",
@@ -39873,157 +39912,6 @@
          "k": "empty_class",
          "id": "MxUnkRecordYM",
          "line": 4
-        }
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "path": "LEGO1/omni/src/common/mxutilities.cpp",
-    "clean": "09b93bcfc079611a0c5e1a0ff478ead047463f2146d07f6dc474276ccaa5bce9",
-    "effective": "f079885c0ae51634d94feec446b28744ccc48e213a1691af9df2388ba3d62133",
-    "size": 4266,
-    "ops": [
-     {
-      "op": "insert",
-      "anchor": {
-       "ctx": "2fd0635fae9a2a7684f5b79b6b3164cabbb82aeb2e28a96f77fd9a1944cfc6ad",
-       "b": 0,
-       "at": "start"
-      },
-      "gen": {
-       "k": "seq",
-       "lines": 24,
-       "items": [
-        {
-         "k": "lines",
-         "n": 4,
-         "line": 1
-        },
-        {
-         "k": "class",
-         "id": "MxUnkRecordPE",
-         "members": [
-          "Record"
-         ],
-         "access": [
-          {
-           "access": "public",
-           "before_member_index": 0
-          }
-         ],
-         "line": 5
-        },
-        {
-         "k": "class",
-         "id": "MxUnkRecordPF",
-         "members": [
-          "Record"
-         ],
-         "access": [
-          {
-           "access": "public",
-           "before_member_index": 0
-          }
-         ],
-         "line": 10
-        },
-        {
-         "k": "class",
-         "id": "MxUnkRecordPG",
-         "members": [
-          "Record"
-         ],
-         "access": [
-          {
-           "access": "public",
-           "before_member_index": 0
-          }
-         ],
-         "line": 15
-        },
-        {
-         "k": "class",
-         "id": "MxUnkRecordPH",
-         "members": [
-          "Record"
-         ],
-         "access": [
-          {
-           "access": "public",
-           "before_member_index": 0
-          }
-         ],
-         "line": 20
-        }
-       ]
-      }
-     },
-     {
-      "op": "insert",
-      "anchor": {
-       "ctx": "ca7fe66e25049eb3ba2b4b8e58d18722c651df122cd2c21285a3e2d486473dd3",
-       "line_before": "4f772bb3ac885f5dae253c572c46fd5bfc8f923cd55c219db342ed48b24e5ac2",
-       "line_after": "237a31fc3e865e93230799f511047463a974e421ed1a04032869656da38d6625"
-      },
-      "gen": {
-       "k": "seq",
-       "lines": 6,
-       "items": [
-        {
-         "k": "lines",
-         "n": 2,
-         "line": 1
-        },
-        {
-         "k": "empty_class",
-         "id": "RkC0",
-         "line": 3
-        },
-        {
-         "k": "empty_class",
-         "id": "RkC1",
-         "line": 4
-        },
-        {
-         "k": "empty_class",
-         "id": "RkC2",
-         "line": 5
-        }
-       ]
-      }
-     },
-     {
-      "op": "insert",
-      "anchor": {
-       "ctx": "03907b4d685260b6419cb87e0eb0a09c44564bd45bc591c697dad8b7bf06821e",
-       "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-       "line_after": "bf8de6c3529db06e4f3cf6dda2c01f6603f60f6b1b1542ee4adfc96d64f473a2"
-      },
-      "gen": {
-       "k": "seq",
-       "lines": 8,
-       "items": [
-        {
-         "k": "lines",
-         "n": 4,
-         "line": 1
-        },
-        {
-         "k": "fwd",
-         "id": "MxUnkRecordPI",
-         "line": 5
-        },
-        {
-         "k": "fwd",
-         "id": "MxUnkRecordPJ",
-         "line": 6
-        },
-        {
-         "k": "fwd",
-         "id": "MxUnkRecordPK",
-         "line": 7
         }
        ]
       }

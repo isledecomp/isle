@@ -3,7 +3,6 @@
 #include "mxcompositepresenter.h"
 #include "mxdsaction.h"
 #include "mxdsactionlist.h"
-#include "mxdsfile.h"
 #include "mxdsmultiaction.h"
 #include "mxdsobject.h"
 #include "mxgeometry.h"

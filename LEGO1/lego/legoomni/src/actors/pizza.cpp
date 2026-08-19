@@ -234,12 +234,13 @@ void Pizza::Reset()
 // FUNCTION: LEGO1 0x10038380
 void Pizza::StopActions()
 {
+	MxS32 i;
 	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_pns050p1_RunAnim, NULL);
 	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_wns050p1_RunAnim, NULL);
 
-	PizzaMissionState::Mission* mission = m_mission;
-	if (mission != NULL) {
-		for (MxS32 i = 0; i < mission->m_numActions; i++) {
+	if (m_mission != NULL) {
+		PizzaMissionState::Mission* mission = m_mission;
+		for (i = 0; i < mission->m_numActions; i++) {
 			InvokeAction(Extra::e_stop, *g_isleScript, mission->GetActions()[i], NULL);
 		}
 	}
