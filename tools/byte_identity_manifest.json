@@ -10071,7 +10071,7 @@
    "target": "omni",
    "source": "LEGO1/omni/src/video/mxvideomanager.cpp",
    "source_sha256": "fe354e00c514511debd097bccc8b114b64f7f248efff2e9eac8659e5e6dba26e",
-   "mode": "restore_comdat_group_order",
+   "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
      "/Zi",
@@ -10090,9 +10090,53 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Restores the retail-anchored .text COMDAT group order of LEGO1/omni/src/video/mxvideomanager.cpp (whole-group permutation, body-inert).",
+    "reason": "Closes rows in LEGO1/omni/src/video/mxvideomanager.cpp from generated declaration-only carrier states over the rendered current source; keeps the retail-anchored COMDAT group order.",
     "may_replace_compiler_output": true
-   }
+   },
+   "donors": [
+    {
+     "id": "d_ff2aa7ff0129",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 5,
+      "seat_prefix": "g_p",
+      "seat_count": 5,
+      "width": 2,
+      "generated_header_sha256": "ff2aa7ff0129529e2e80e101661eae831f225f9389faafad05b9a9e9c252c762",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?UpdateRegion@MxVideoManager@@QAEXXZ",
+     "expected_body_length": 95,
+     "expected_body_sha256": "2eb8020237a43fc1d73e74cae44f9a362985e7d2163c28a2283b946ceb249e27",
+     "expected_changed_offsets": [
+      21,
+      30,
+      34,
+      36,
+      42,
+      46,
+      75,
+      78,
+      84,
+      85,
+      86,
+      87
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_ff2aa7ff0129"
+    }
+   ]
   },
   {
    "target": "omni",
@@ -10113,25 +10157,107 @@
    },
    "donors": [
     {
-     "id": "d_1044c277ee35",
+     "id": "d_da1547df0cb0",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "forward_declaration_run",
-      "placement": "prefix",
-      "prefix": "MxUnkRecVA",
-      "count": 44,
-      "width": 3,
-      "generated_header_sha256": "1044c277ee35cedd2498ea5275139c45616d61006efcebb3e548e4a695a862cb",
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 2,
+      "seat_prefix": "g_p",
+      "seat_count": 2,
+      "width": 2,
+      "generated_header_sha256": "da1547df0cb0b88327b49916ae8d151cbe32c88609b33166defd580ec2103efc",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_d1709d4d9a4a",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 5,
+      "seat_prefix": "g_p",
+      "seat_count": 3,
+      "width": 2,
+      "generated_header_sha256": "d1709d4d9a4a323ac0a5c9c491ad5f8305588a492e5870427e0168fc6cf7cdfe",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
    "functions": [
+    {
+     "mangled": "??1MxDiskStreamController@@UAE@XZ",
+     "expected_body_sha256": "33facaebd007ef9400ad15d230bfed99f7bd79b95739d87a0cb23dd14af58bae",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 613,
+     "expected_donor_length": 603,
+     "expected_linked_span": 608,
+     "donor": "d_da1547df0cb0"
+    },
+    {
+     "mangled": "?FUN_100c7db0@MxDiskStreamController@@AAEPAVMxDSStreamingAction@@XZ",
+     "expected_body_length": 318,
+     "expected_body_sha256": "66e1205feea07a800a96013c397b66f418b22959639302d74f6940a34760e5bd",
+     "expected_changed_offsets": [
+      60,
+      142
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       301,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36
+     ],
+     "donor": "d_da1547df0cb0"
+    },
+    {
+     "mangled": "?FUN_100c8670@MxDiskStreamController@@QAEXPAVMxDSStreamingAction@@@Z",
+     "expected_body_length": 174,
+     "expected_body_sha256": "e7a1eb7305c1fb5f4879b6bb3bbfc6200c0459a27c5a5daab4c2125e23eccc0f",
+     "expected_changed_offsets": [
+      64,
+      75,
+      85,
+      94,
+      104
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       157,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36
+     ],
+     "donor": "d_da1547df0cb0"
+    },
     {
      "mangled": "?FUN_100c8540@MxDiskStreamController@@AAEXXZ",
      "expected_body_sha256": "ab4e73c673ccd8d87e4d3bc9131d7eb970bee4d0b471139bac876793f848b548",
@@ -10139,7 +10265,7 @@
      "expected_seed_length": 236,
      "expected_donor_length": 245,
      "expected_linked_span": 256,
-     "donor": "d_1044c277ee35"
+     "donor": "d_d1709d4d9a4a"
     }
    ],
    "completion": {
@@ -20533,6 +20659,254 @@
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
     "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/race/legorace.cpp from generated declaration-only carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/stream/mxdiskstreamprovider.cpp",
+   "source_sha256": "1c5a5c87f34c504353e441cb37250840cb26d68b751a33d9c66bf7b9de64ed46",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_fda456ae26e3",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 4,
+      "seat_prefix": "g_p",
+      "seat_count": 15,
+      "width": 2,
+      "generated_header_sha256": "fda456ae26e311e66592d2130fb21874ff77d24fe6ed826085ca00fb77e7acdb",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?SetResourceToGet@MxDiskStreamProvider@@UAEJPAVMxStreamController@@@Z",
+     "expected_body_length": 526,
+     "expected_body_sha256": "47ccf1e33f3b1d30d8c0bc02585a0c563dc09f2a27c4251e03e239e435876abf",
+     "expected_changed_offsets": [
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      59,
+      61,
+      62,
+      63,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80
+     ],
+     "splice_class": "equal_body_eh_reloc_layout",
+     "expected_relocation_moves": [
+      [
+       50,
+       60
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60,
+      68,
+      76,
+      84,
+      92
+     ],
+     "donor": "d_fda456ae26e3"
+    },
+    {
+     "mangled": "?WaitForWorkToComplete@MxDiskStreamProvider@@QAEJXZ",
+     "expected_body_length": 46,
+     "expected_body_sha256": "e04bf4c3101e5b1f1a737ed13ac7a12892003f03146aa5dc99d157a37efeb517",
+     "expected_changed_offsets": [
+      7,
+      11,
+      16,
+      23,
+      29,
+      36
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_fda456ae26e3"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes ?SetResourceToGet@MxDiskStreamProvider@@ from a generated declaration-only carrier state over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/system/mxticklethread.cpp",
+   "source_sha256": "32c041a712692b9339baa99eb4fa7be0b5a93558a9ac4a39a9f078d2441bbaf3",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_f967d9bb7ecc",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 3,
+      "seat_prefix": "g_p",
+      "seat_count": 17,
+      "width": 2,
+      "generated_header_sha256": "f967d9bb7ecca28a2409a60a1c7329865c4da46cf1f44d981129328d5c45b1a4",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?Run@MxTickleThread@@UAEJXZ",
+     "expected_body_length": 105,
+     "expected_body_sha256": "e856f5d9e6a9c083bff0a0669b86be06a15346631a5f395db4caa06a37075290",
+     "expected_changed_offsets": [
+      5,
+      12,
+      14,
+      17,
+      19,
+      25,
+      31,
+      39,
+      45,
+      48,
+      52,
+      55,
+      57,
+      60,
+      62,
+      68,
+      71,
+      81,
+      88,
+      94
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_f967d9bb7ecc"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes ?Run@MxTickleThread@@UAEJXZ from a generated declaration-only carrier state over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/audio/mxmusicmanager.cpp",
+   "source_sha256": "a652eb7e3c4b52349effd462b596f43fa3b188dd7922b4169779dfb66b837139",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_f967d9bb7ecc",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 3,
+      "seat_prefix": "g_p",
+      "seat_count": 17,
+      "width": 2,
+      "generated_header_sha256": "f967d9bb7ecca28a2409a60a1c7329865c4da46cf1f44d981129328d5c45b1a4",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?InitializeMIDI@MxMusicManager@@QAEJPAEH@Z",
+     "expected_body_length": 352,
+     "expected_body_sha256": "de7589df3d430572e2de48977c1c6e7243ca5d95a530ee78c020f7742550c996",
+     "expected_changed_offsets": [
+      47,
+      49,
+      53,
+      71,
+      85,
+      91
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_f967d9bb7ecc"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes ?InitializeMIDI@MxMusicManager@@QAEJPAEH from a generated declaration-only carrier state over the rendered current source.",
     "may_replace_compiler_output": true
    }
   }
