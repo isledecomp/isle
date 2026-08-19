@@ -7537,8 +7537,21 @@
     "may_replace_compiler_output": true
    },
    "group_order": [
-    "??_7LegoState@@6B@",
-    "??_7GasStationState@@6B@"
+    [
+     "??_7LegoState@@6B@",
+     "??_7GasStationState@@6B@"
+    ],
+    [
+     "??_C@_09CIO@LegoWorld?$AA@",
+     "??_C@_0L@COBD@LegoEntity?$AA@",
+     "??_C@_08HLLF@MxEntity?$AA@",
+     "??_C@_06BFJB@MxCore?$AA@",
+     "??_C@_09CBIH@Act1State?$AA@",
+     "??_C@_0L@JMMA@GasStation?$AA@",
+     "??_C@_0BA@GCHJ@GasStationState?$AA@",
+     "??_C@_0BB@IODA@MxStillPresenter?$AA@",
+     "??_C@_0BA@MJBL@TrackLed_Bitmap?$AA@"
+    ]
    ]
   },
   {
@@ -17219,6 +17232,119 @@
      "??_8LegoAnimActor@@7B@",
      "??_7LegoAnimActor@@6BLegoPathActor@@@",
      "??_7LegoAnimActor@@6B0@@"
+    ],
+    [
+     "??_C@_05FMBE@Score?$AA@",
+     "??_C@_09CIO@LegoWorld?$AA@",
+     "??_C@_0L@COBD@LegoEntity?$AA@",
+     "??_C@_08HLLF@MxEntity?$AA@",
+     "??_C@_06BFJB@MxCore?$AA@",
+     "??_C@_0L@JCNK@ScoreState?$AA@",
+     "??_C@_0N@KINJ@CarRaceState?$AA@",
+     "??_C@_0BA@HKKL@JetskiRaceState?$AA@",
+     "??_C@_0BF@FDGL@TowTrackMissionState?$AA@",
+     "??_C@_0BC@HCJA@PizzaMissionState?$AA@",
+     "??_C@_0BG@DPNI@AmbulanceMissionState?$AA@",
+     "??_C@_0O@KFLK@LegoPathActor?$AA@",
+     "??_C@_09POFG@LegoActor?$AA@",
+     "??_C@_0L@OPFI@Helicopter?$AA@",
+     "??_C@_04LEO@Act3?$AA@",
+     "??_C@_0BA@OHH@HelicopterState?$AA@",
+     "??_C@_09CBIH@Act1State?$AA@",
+     "??_C@_0L@JMMA@GasStation?$AA@",
+     "??_C@_0BA@GCHJ@GasStationState?$AA@",
+     "??_C@_09DAGH@LegoState?$AA@",
+     "??_C@_08PKGL@RaceSkel?$AA@",
+     "??_C@_0L@IFJD@JailEntity?$AA@",
+     "??_C@_0L@BFCP@CaveEntity?$AA@",
+     "??_C@_0O@OEAG@Act3Brickster?$AA@",
+     "??_C@_07HAIM@Act3Cop?$AA@",
+     "??_C@_09FOEH@Motocycle?$AA@",
+     "??_C@_0N@NCAI@Act2GenActor?$AA@",
+     "??_C@_09FBFG@Act2Actor?$AA@",
+     "??_C@_0BF@KAMB@LegoJetskiBuildState?$AA@",
+     "??_C@_0BG@EOEP@LegoDuneCarBuildState?$AA@",
+     "??_C@_0BF@OICJ@LegoCopterBuildState?$AA@",
+     "??_C@_0BG@HCJE@LegoRaceCarBuildState?$AA@",
+     "??_C@_08HAOO@LegoAct2?$AA@",
+     "??_C@_0BD@EHDI@LegoMeterPresenter?$AA@",
+     "??_C@_0N@KAFG@JukeBoxState?$AA@",
+     "??_C@_07OLDO@JukeBox?$AA@",
+     "??_C@_0BK@NGDG@MxCompositeMediaPresenter?$AA@",
+     "??_C@_0O@GIID@JukeBoxEntity?$AA@",
+     "??_C@_06BFNF@Jetski?$AA@",
+     "??_C@_0BB@NMBG@RaceStandsEntity?$AA@",
+     "??_C@_0BB@IKCH@BeachHouseEntity?$AA@",
+     "??_C@_0N@FDNF@PoliceEntity?$AA@",
+     "??_C@_0P@OLOK@HospitalEntity?$AA@",
+     "??_C@_0BB@HIEB@GasStationEntity?$AA@",
+     "??_C@_0BB@GFMD@InfoCenterEntity?$AA@",
+     "??_C@_0O@FGEO@PizzeriaState?$AA@",
+     "??_C@_08GHHG@Pizzeria?$AA@",
+     "??_C@_05PIGB@Pizza?$AA@",
+     "??_C@_08CCJB@BumpBouy?$AA@",
+     "??_C@_09DMAL@Act3Shark?$AA@",
+     "??_C@_09MEPG@Act3Actor?$AA@",
+     "??_C@_08OKJG@TowTrack?$AA@",
+     "??_C@_09EHIG@Ambulance?$AA@",
+     "??_C@_04BNEK@Bike?$AA@",
+     "??_C@_05NHGB@Doors?$AA@",
+     "??_C@_09KMH@Act3State?$AA@",
+     "??_C@_0BC@CBLP@Act2PoliceStation?$AA@",
+     "??_C@_09BBCB@DuneBuggy?$AA@",
+     "??_C@_0L@PJCK@SkateBoard?$AA@",
+     "??_C@_0O@KJFG@LegoAct2State?$AA@",
+     "??_C@_09NCHI@Act2Brick?$AA@",
+     "??_C@_0M@PGDB@PoliceState?$AA@",
+     "??_C@_06KJAF@Police?$AA@",
+     "??_C@_04CMIL@Isle?$AA@",
+     "??_C@_09MINJ@AnimState?$AA@",
+     "??_C@_0BE@MOFF@LegoAnimMMPresenter?$AA@",
+     "??_C@_0O@MJON@HospitalState?$AA@",
+     "??_C@_08IINP@Hospital?$AA@",
+     "??_C@_0P@LPPM@InfocenterDoor?$AA@",
+     "??_C@_0P@HMH@ElevatorBottom?$AA@",
+     "??_C@_0M@NCNK@HistoryBook?$AA@",
+     "??_C@_0BB@LBFE@RegistrationBook?$AA@",
+     "??_C@_07OKEK@RaceCar?$AA@",
+     "??_C@_0BA@LBIB@InfocenterState?$AA@",
+     "??_C@_0L@ODGK@Infocenter?$AA@",
+     "??_C@_0L@GIIH@RadioState?$AA@",
+     "??_C@_0N@IMFN@LegoCarBuild?$AA@",
+     "??_C@_0BD@MIOO@MxControlPresenter?$AA@",
+     "??_C@_07LNBA@CarRace?$AA@",
+     "??_C@_0L@MOOJ@JetskiRace?$AA@",
+     "??_C@_0L@IIBN@LegoJetski?$AA@",
+     "??_C@_0M@CMNH@LegoRaceCar?$AA@",
+     "??_C@_0BE@FLLO@LegoJetskiRaceActor?$AA@",
+     "??_C@_0BB@JPAJ@LegoCarRaceActor?$AA@",
+     "??_C@_0O@DANJ@LegoAnimActor?$AA@",
+     "??_C@_0BE@EOCF@Lego3DWavePresenter?$AA@",
+     "??_C@_0BM@MGPA@LegoLoadCacheSoundPresenter?$AA@",
+     "??_C@_0BL@DCKP@LegoActionControlPresenter?$AA@",
+     "??_C@_0BC@DJNB@LegoPartPresenter?$AA@",
+     "??_C@_0BK@NAD@LegoCarBuildAnimPresenter?$AA@",
+     "??_C@_0BD@CHJE@LegoWorldPresenter?$AA@",
+     "??_C@_0BF@GPNE@LegoPalettePresenter?$AA@",
+     "??_C@_0BI@GAJJ@LegoFlcTexturePresenter?$AA@",
+     "??_C@_0BF@IFBD@LegoPhonemePresenter?$AA@",
+     "??_C@_0BF@DDHF@LegoTexturePresenter?$AA@",
+     "??_C@_0BD@BCJP@LegoModelPresenter?$AA@",
+     "??_C@_0BC@PLMO@LegoPathPresenter?$AA@",
+     "??_C@_0BD@KCPL@LegoActorPresenter?$AA@",
+     "??_C@_0BE@IGIE@LegoEntityPresenter?$AA@",
+     "??_C@_0BG@CFPB@LegoHideAnimPresenter?$AA@",
+     "??_C@_0BM@OJKO@LegoLocomotionAnimPresenter?$AA@",
+     "??_C@_0BJ@IPCL@LegoLoopingAnimPresenter?$AA@",
+     "??_C@_0BC@NOEF@LegoAnimPresenter?$AA@",
+     "??_C@_0BA@EFDM@MxObjectFactory?$AA@",
+     "??_C@_0M@PMFK@MxPresenter?$AA@",
+     "??_C@_0BB@DEIE@MxMediaPresenter?$AA@",
+     "??_C@_0BB@LNOM@MxVideoPresenter?$AA@",
+     "??_C@_0BF@MMDH@MxCompositePresenter?$AA@",
+     "??_C@_0BB@PPAL@MxAudioPresenter?$AA@",
+     "??_C@_0BB@ENGM@MxSoundPresenter?$AA@",
+     "??_C@_0BA@GBCM@MxWavePresenter?$AA@"
     ]
    ],
    "completion": {
@@ -21504,6 +21630,82 @@
      "??_7MxMatrix@@6B@"
     ]
    ]
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/worlds/score.cpp",
+   "source_sha256": "8350480349c789ceaeac6f92480594512a6d0c15a04358a3bdc5657692520971",
+   "mode": "restore_comdat_group_order",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "group_order": [
+    [
+     "??_C@_0N@KINJ@CarRaceState?$AA@",
+     "??_C@_0BA@HKKL@JetskiRaceState?$AA@",
+     "??_C@_0BF@FDGL@TowTrackMissionState?$AA@",
+     "??_C@_0BC@HCJA@PizzaMissionState?$AA@"
+    ]
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Restores the retail-anchored .data string-literal COMDAT order of LEGO1/lego/legoomni/src/worlds/score.cpp (whole-group permutation, body-inert).",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/common/mxobjectfactory.cpp",
+   "source_sha256": "dc0cd6e18bcbc223e09f6b1dd144b2420fe95f5e17748a27572956da5c60b1d0",
+   "mode": "restore_comdat_group_order",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "group_order": [
+    [
+     "??_C@_06BFJB@MxCore?$AA@",
+     "??_C@_0BB@IODA@MxStillPresenter?$AA@",
+     "??_C@_0BA@EFDM@MxObjectFactory?$AA@",
+     "??_C@_0M@PMFK@MxPresenter?$AA@",
+     "??_C@_0BB@DEIE@MxMediaPresenter?$AA@",
+     "??_C@_0BB@LNOM@MxVideoPresenter?$AA@",
+     "??_C@_0BF@MMDH@MxCompositePresenter?$AA@",
+     "??_C@_0BB@PPAL@MxAudioPresenter?$AA@",
+     "??_C@_0BB@ENGM@MxSoundPresenter?$AA@",
+     "??_C@_0BA@GBCM@MxWavePresenter?$AA@",
+     "??_C@_0P@JPDD@MxFlcPresenter?$AA@",
+     "??_C@_0BB@GHMN@MxEventPresenter?$AA@",
+     "??_C@_0BH@DMDO@MxLoopingMIDIPresenter?$AA@",
+     "??_C@_0BA@BJAK@MxMIDIPresenter?$AA@",
+     "??_C@_0BG@DLHP@MxLoopingSmkPresenter?$AA@",
+     "??_C@_0BG@KLAK@MxLoopingFlcPresenter?$AA@",
+     "??_C@_0P@PEG@MxSmkPresenter?$AA@",
+     "??_C@_0BB@OCOD@MxMusicPresenter?$AA@"
+    ]
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Restores the retail-anchored .data string-literal COMDAT order of LEGO1/omni/src/common/mxobjectfactory.cpp (whole-group permutation, body-inert).",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
