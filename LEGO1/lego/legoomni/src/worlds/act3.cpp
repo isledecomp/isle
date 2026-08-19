@@ -904,6 +904,8 @@ void Act3::DisableHelicopterDot()
 // FUNCTION: LEGO1 0x10073a90
 void Act3::Enable(MxBool p_enable)
 {
+	MxS32 i;
+
 	if ((MxBool) m_disabledObjects.empty() == p_enable) {
 		return;
 	}
@@ -911,6 +913,8 @@ void Act3::Enable(MxBool p_enable)
 	LegoWorld::Enable(p_enable);
 
 	if (p_enable) {
+		MxS32 j;
+
 		if (GameState()->m_previousArea == LegoGameState::e_infomain) {
 			GameState()->StopArea(LegoGameState::e_infomain);
 		}
@@ -947,7 +951,6 @@ void Act3::Enable(MxBool p_enable)
 			m_shark->SetActorTime(m_shark->GetActorTime() + delta);
 			m_shark->SetUnknown0x2c(m_shark->GetUnknown0x2c() + delta);
 
-			MxS32 i;
 			for (i = 0; i < (MxS32) sizeOfArray(m_pizzas); i++) {
 				if (m_pizzas[i].IsValid()) {
 					m_pizzas[i].SetTransformTime(m_pizzas[i].GetTransformTime() + delta);
@@ -956,11 +959,11 @@ void Act3::Enable(MxBool p_enable)
 				}
 			}
 
-			for (i = 0; i < (MxS32) sizeOfArray(m_donuts); i++) {
-				if (m_donuts[i].IsValid()) {
-					m_donuts[i].SetTransformTime(m_donuts[i].GetTransformTime() + delta);
-					m_donuts[i].SetActorTime(m_donuts[i].GetActorTime() + delta);
-					m_donuts[i].SetRotateTimeout(m_donuts[i].GetRotateTimeout() + delta);
+			for (j = 0; j < MAX_DONUTS; j++) {
+				if (m_donuts[j].IsValid()) {
+					m_donuts[j].SetTransformTime(m_donuts[j].GetTransformTime() + delta);
+					m_donuts[j].SetActorTime(m_donuts[j].GetActorTime() + delta);
+					m_donuts[j].SetRotateTimeout(m_donuts[j].GetRotateTimeout() + delta);
 				}
 			}
 

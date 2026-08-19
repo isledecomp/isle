@@ -16146,7 +16146,7 @@
   {
    "target": "roi",
    "source": "LEGO1/lego/sources/roi/legolod.cpp",
-   "source_sha256": "e50d4a99181693358d65b2a49dc7573981c5634fafb3f113d5c37af0bafe8986",
+   "source_sha256": "abe44094b439581ff8036b8d2dce6793cbcd9e2c2e09ee2eae929c426e5f84a2",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -35306,9 +35306,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/worlds/act3.cpp",
-    "clean": "c131415a3486ef173725c1449b5b94c4155b7e3a72f4299053595f3e451a3f66",
-    "effective": "223dd3204f6dca303283703e56f4f1d1e0f1d3ba18272facd1eb727e1a7dfcf4",
-    "size": 26872,
+    "clean": "fff8de64324ad1cb804f101d4d9d02e9bf54f6db9f0f27c81f0f79e0d2bad5fe",
+    "effective": "777847813812b5e3357f79b1b11e8a048babb96d0e7b05795d389d3551d17adf",
+    "size": 26864,
     "ops": [
      {
       "op": "insert",
@@ -37134,9 +37134,9 @@
    },
    {
     "path": "LEGO1/lego/sources/roi/legolod.cpp",
-    "clean": "b77151e01006b673458202f0509cc7daab80d64b744172fd4ca62f62c0f47fb9",
-    "effective": "e50d4a99181693358d65b2a49dc7573981c5634fafb3f113d5c37af0bafe8986",
-    "size": 14458,
+    "clean": "c45eddb4384002ced9e25a9ebf715c0c14d0b91ce79e3f8916f2a42cd59322ae",
+    "effective": "abe44094b439581ff8036b8d2dce6793cbcd9e2c2e09ee2eae929c426e5f84a2",
+    "size": 14406,
     "ops": [
      {
       "op": "insert",
