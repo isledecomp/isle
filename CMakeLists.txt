@@ -166,9 +166,14 @@ function(add_lego_libraries NAME)
   target_include_directories(roi${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
   target_link_libraries(roi${ARG_SUFFIX} PRIVATE viewmanager${ARG_SUFFIX} Vec::Vec)
 
+  # legospline.cpp lives in the geom library: retail's LEGO1 pulls it after
+  # legoanim.cpp and before legoweedge.cpp, which the linker's library search
+  # can only produce if the spline sits in a library searched after anim
+  # (see docs/goal2-layout-ledger.md, fourth pass).
   add_library(geom${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/geom/legoweedge.cpp
     LEGO1/lego/sources/geom/legowegedge.cpp
+    LEGO1/lego/sources/misc/legospline.cpp
   )
   list(APPEND list_targets geom${ARG_SUFFIX})
   set_property(TARGET geom${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "geom$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
@@ -196,7 +201,6 @@ function(add_lego_libraries NAME)
 
   add_library(misc${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/misc/legotexture.cpp
-    LEGO1/lego/sources/misc/legospline.cpp
     LEGO1/lego/sources/misc/legostorage.cpp
     LEGO1/lego/sources/misc/legoimage.cpp
     LEGO1/lego/sources/misc/legocontainer.cpp
@@ -433,9 +437,9 @@ function(add_lego_libraries NAME)
     ${ARG_LINK_LIBRARIES}
     dinput
     misc${ARG_SUFFIX}
+    anim${ARG_SUFFIX}
     geom${ARG_SUFFIX}
     mxdirectx${ARG_SUFFIX}
-    anim${ARG_SUFFIX}
     tglrl${ARG_SUFFIX}
     realtime${ARG_SUFFIX}
     viewmanager${ARG_SUFFIX}
