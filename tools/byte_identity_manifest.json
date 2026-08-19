@@ -2140,22 +2140,39 @@
      }
     },
     {
-     "id": "d_0bd7161aec8e",
+     "id": "d_415ce3dbf62d",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "extern_run_pair",
-      "header_prefix": "g_h",
-      "header_count": 4,
-      "seat_prefix": "g_p",
-      "seat_count": 17,
-      "width": 2,
-      "generated_header_sha256": "0bd7161aec8e959ecb925bdc4cf5180e37a9aea04926278bc2cc86c43908afc8",
+      "kind": "forward_run_with_shape",
+      "prefix": "MxUnkRecVC",
+      "count": 13,
+      "width": 3,
+      "classes": 1,
+      "functions": 2,
+      "placement": "suffix",
+      "generated_header_sha256": "415ce3dbf62dab975734dfc11276f9ea54abe7cbfcba29e7e0992f1b930864ed",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: a forward-declaration run seated at the stated placement plus a declaration shape rendered as a force-include; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_d312dda6c573",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "pad_shape",
+      "classes": 4,
+      "functions_per_class": 11,
+      "generated_header_sha256": "d312dda6c573b2dfa8861895655c5d98075f5d96fe75a4531608aff6fef0a3c7",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
     },
     {
@@ -2323,6 +2340,117 @@
      "donor": "d_3f506816ab09"
     },
     {
+     "mangled": "?FUN_10062e20@LegoAnimationManager@@AAEEPAVLegoROI@@PAVLegoAnimPresenter@@@Z",
+     "expected_body_length": 1098,
+     "expected_body_sha256": "e40ae73531d341bb782b6031117bee6a7989fb38496c13c3dd10f1d37fe4b09c",
+     "expected_changed_offsets": [
+      169,
+      176,
+      185,
+      201,
+      203,
+      211,
+      225,
+      242,
+      266,
+      268,
+      273,
+      290,
+      329,
+      336,
+      345,
+      355,
+      364,
+      375,
+      390,
+      391,
+      392,
+      393,
+      394,
+      395,
+      397,
+      398,
+      399,
+      400,
+      401,
+      402,
+      404,
+      405,
+      406,
+      527,
+      536,
+      545,
+      634,
+      635,
+      636,
+      637,
+      638,
+      639,
+      643,
+      644,
+      645,
+      646,
+      647,
+      648,
+      651,
+      652,
+      653,
+      655,
+      703,
+      704,
+      706,
+      707,
+      711,
+      712,
+      714,
+      730,
+      731,
+      733,
+      734,
+      735,
+      736,
+      737,
+      738,
+      739,
+      740,
+      741,
+      742,
+      748,
+      907,
+      951,
+      959,
+      971,
+      990,
+      997,
+      1016,
+      1030,
+      1033,
+      1037,
+      1041
+     ],
+     "splice_class": "equal_body_eh_reloc_layout",
+     "expected_relocation_moves": [
+      [
+       395,
+       392
+      ],
+      [
+       402,
+       399
+      ],
+      [
+       639,
+       635
+      ],
+      [
+       644,
+       640
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_415ce3dbf62d"
+    },
+    {
      "mangled": "?LoadWorldInfo@LegoAnimationManager@@QAEJW4World@LegoOmni@@@Z",
      "expected_body_length": 1733,
      "expected_body_sha256": "9658b167a71b425e104ac0c6be56de7fefdb92b69356ead39d35407272d255d3",
@@ -2361,7 +2489,7 @@
       108,
       116
      ],
-     "donor": "d_0bd7161aec8e"
+     "donor": "d_d312dda6c573"
     },
     {
      "mangled": "?FUN_10064b50@LegoAnimationManager@@AAEXJ@Z",
@@ -2377,7 +2505,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 5 row(s) in LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp from generated declaration-only carrier states over the rendered current source.",
+    "reason": "Closes 6 row(s) in LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -19941,8 +20069,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4893,
-    "accepted_row_identity_sha256": "deb81fb9aacd42213e3855a28aa4a60a80949d9c30fb1d8f1a004a4bd48367eb",
+    "exact_raw_1_0_count": 4894,
+    "accepted_row_identity_sha256": "5f4739afc79ac15806ac990aca2cfb0b929a4380703246985c4b0a00ca6066ed",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
