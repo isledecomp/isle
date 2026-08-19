@@ -827,9 +827,13 @@ after every bounded panel or full gate.
   relocation identities, 81 line records, the coherent 878-byte `.debug$S` +
   200-byte `.xdata$x` closure, identity universes, and acceptable collateral.
 
-- Accepted canonical gate: LEGO1 4894/4934, ISLE 172/172, CONFIG 111/111
-  (commit 7be414d6, 2026-08-18 night; accepted-set pin 4894 /
-  `5f4739afc79ac15806ac990aca2cfb0b929a4380703246985c4b0a00ca6066ed`).
+- Accepted canonical gate: LEGO1 4895/4934, ISLE 172/172, CONFIG 111/111
+  (commit 67ba372b, 2026-08-18 night; accepted-set pin 4895 /
+  `649a6b335f8b7315cd05389d12c86f66b4f5f2d9064048dd87a9e3234d412a54`).
+  Latest: `0x1006fda0 Infocenter::HandleKeyPress` (+1): `result = 1; break;` instead of
+  `return 1;` in the e_playCutscene early exit — identical behaviour; retail keeps m_state in
+  eax, the shared constant 1 in ecx and rematerialises the return (272 B incl. jump-table pad).
+  Lens for other early-return length rows: `result = X; break;`.
   Night gains (4889 -> 4894): `0x100170e0 CarRace::HandlePathStruct` (BETA10 `MxS32
   index` form, b778d7d5); `0x100035e0 Helicopter::HandleControl` (single-donor
   instruction mosaic, 6aaead03); `0x1003f540 WriteDefaultTexture` (`LegoPaletteEntry*

@@ -1,7 +1,7 @@
 # State of goal 1 — every open row, with its disposition
 
 Generated in the main loop by joining the four screens plus the coverage
-matrix against the live reccmp report. **LEGO1 4894/4934 — 40 open rows.**
+matrix against the live reccmp report. **LEGO1 4895/4934 — 39 open rows.**
 ISLE is 172/172 and CONFIG is 111/111. Current terminal measurement keeps
 ISLE and CONFIG byte-identical; the last LEGO1 terminal measurement (before
 the two latest exact-function mosaics) was equal-sized with 595,723 differing
@@ -39,7 +39,8 @@ LegoNavController::Notify (seed suffix forward run + strict single-donor mosaic)
 LegoAnimationManager::FUN_10062e20 (a COMBINED carrier state — forward_run_with_shape —
 colours both g_characters store windows; no 1-D carrier state does). Framework gained
 the permuted relocation order and relocation-reseat mosaic modes and a complete flat
-IA-32 length decoder for line-certified (FPO) mosaics.
+IA-32 length decoder for line-certified (FPO) mosaics. Later: Infocenter::HandleKeyPress
+(`result = 1; break;` in the cutscene early exit — the same behaviour, retail's IL).
 
 This exists because the evidence is spread across `slot-reachability`,
 `register-colour`, `scheduling-residue`, `cmpdir-census` and
@@ -149,7 +150,6 @@ eligible when they carry a fail-closed proof and a concrete target.
 | AMBIGUOUS | 0.8446 | `0x1004ebd0` | LegoTexturePresenter::Read | AMBIGUOUS | AMBIGUOUS | DIFFERENT | MIXED |  |
 | LENGTH-UNREACHABLE | 0.8176 | `0x100a3840` | TglImpl::MeshBuilderImpl::CreateMesh | SLOT-CLEAN | SCATTERED | DIFFERENT | LENGTH |  |
 | PERMUTATION (measured families exhausted) | 0.7971 | `0x100a3b40` | TglImpl::MeshBuilderImpl::Clone | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |
-| LENGTH-UNREACHABLE | 0.7933 | `0x1006fda0` | Infocenter::HandleKeyPress | SLOT-CLEAN | REGIONAL | DIFFERENT | LENGTH |  |
 | LENGTH-UNREACHABLE | 0.7538 | `0x1006b140` | LegoAnimPresenter::CopyTransform | REACHABLE | SCATTERED | DIFFERENT | LENGTH |  |
 | ALLOCATOR (no idiom) | 0.7470 | `0x100bd020` | MxBitmap::BitBltTransparent | SLOT-CLEAN | SCATTERED | AMBIGUOUS | NONE |  |
 | OTHER | 0.7442 | `0x10038380` | Pizza::StopActions | NO-SLOTS | REGIONAL | AMBIGUOUS | NONE |  |
