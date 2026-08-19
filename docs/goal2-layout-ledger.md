@@ -704,3 +704,51 @@ LegoEdge (misc.lib member order legospline/legotree/legoanim), the mxmain/
 mxobjectfactory/mxutilities/mxthread region (-48 and the MxDSFile/MxSemaphore
 supplier displacements) and smackw32/mxramstreamprovider at the end. Moving
 `smackw32.lib` on the link line before or after `omni.lib` changed nothing.
+
+# Fourth pass (2026-08-18 evening) — the LIBCMT block is retail-ordered
+
+Two facts settle the CRT member order:
+
+1. **MSVC 4.2 emits a function's external symbols into the COFF symbol table in
+   reverse order of their last relocation** (416/442 functions across the first
+   120 lego1 objects follow the rule exactly; the exceptions are symbols already
+   assigned by an earlier section such as a vftable). Functions themselves are
+   in emission order; inline and template COMDATs come late. LINK pulls library
+   members in the order the undefined symbols appear across the .rsp objects
+   (`linksim4.py --entry __DllMainCRTStartup@12` now reproduces our own map
+   completely once the entry symbol is queued after the objects).
+2. Retail's order after `fread.obj` — `_file.obj (_iob), fclose.obj,
+   crt0dat.obj (exit), ftell.obj, fopen.obj`, with `chkstk.obj` landing right
+   after `_freebuf.obj` — is therefore one function whose last uses run
+   `fopen < ftell < getch/exit < fclose < stdout`. That is BETA10's part-file
+   packer at 0x100e65f0 once its two inline error helpers (0x100e7900,
+   0x100e7970: fprintf(stdout) / printf("press any key") / _getch / exit(-1))
+   are inlined and the loop's `if (!f) { fprintf(stdout, "Error opening %s\n") ;
+   continue; }` block is laid out after `fclose`. `chkstk.obj` is getch.obj's
+   `__alloca_probe` dependency, which fixes the reference as `_getch`
+   (`__getch`), not the OLDNAMES `getch`.
+
+Landed in `71cb221e` as `WriteModelDbParts` + `CheckRead`/`CheckWrite` in
+`LEGO1/modeldb/modeldb.cpp` (dead code; /OPT:REF discards it, exactly as the
+Dump/Write restoration before it). The link simulation matches retail's whole
+LIBCMT block; address-aligned rows 3063 → 3216.
+
+The .data side: with the CRT block ordered, its .data sat 16 bytes early
+(`__iob` 0x100fc8e0 vs 0x100fc8f0) and reccmp lost three rows — reccmp does
+**not** mask interior/past-the-end absolute data addresses (`__lock_file`
+compares `_iob + 0x260`, `GetActorInfo` compares the end of `g_actorInfo`), so
+data displacement CAN cost rows. Byte-diffing `.data` against retail (image
+pointers masked) found three unreferenced 4-byte globals retail keeps and we
+lacked: `legoanimationmanager` 0x100f74fc `= 0` (BETA10 0x101e2398 has it,
+also unreferenced), `dunebuggy` 0x100f7664 `= 0` (after g_varDBFRFNY4) and
+0x100f767c `= 1` (after the "DuneCarHorn_Sound" literal, before
+legoanimpresenter's map `_Nil` statics — placed at the end of dunebuggy.cpp
+because putting it at the head of legoanimpresenter.cpp perturbed BuildROIMap).
+Restored as `undefined4 g_unk0x...`; modeldb's `"rb"` literal now also seats
+early (retail proof of `fopen(name, "rb")`). `.data` symbols from `_iob` through
+`__nstream` are now at delta 0.
+
+Remaining libcmt diffs: the tail `strnicmp/strupr/vsprintf/87ctran/strstr/
+threadex` (queued with viewlod/smackw32) and the object-order items
+(legocachesoundmanager, legopathcontroller, legoanim/legospline, viewlod,
+legolod, smackw32).
