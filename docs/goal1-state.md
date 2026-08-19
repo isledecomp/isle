@@ -1,7 +1,7 @@
 # State of goal 1 — every open row, with its disposition
 
 Generated in the main loop by joining the four screens plus the coverage
-matrix against the live reccmp report. **LEGO1 4887/4934 — 47 open rows.**
+matrix against the live reccmp report. **LEGO1 4888/4934 — 46 open rows.**
 ISLE is 172/172 and CONFIG is 111/111. Current terminal measurement keeps
 ISLE and CONFIG byte-identical; the last LEGO1 terminal measurement (before
 the two latest exact-function mosaics) was equal-sized with 595,723 differing
@@ -125,7 +125,6 @@ eligible when they carry a fail-closed proof and a concrete target.
 | AMBIGUOUS | 0.9472 | `0x100417c0` | Act3Brickster::FUN_100417c0 | AMBIGUOUS | SCATTERED | DIFFERENT | MIXED |  |
 | LENGTH-UNREACHABLE | 0.9426 | `0x1002de10` | LegoPathActor::SetTransformAndDestinationF | SLOT-CLEAN | IDENTITY | DIFFERENT | LENGTH |  |
 | ALLOCATOR (no idiom) | 0.9417 | `0x100720d0` | Act3List::RemoveByObjectIdOrFirst | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
-| ALLOCATOR (no idiom) | 0.9315 | `0x1002f770` | LegoPathActor::UpdatePlane | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9302 | `0x10072ad0` | Act3::TriggerHitSound | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | LENGTH-UNREACHABLE | 0.9251 | `0x100ba2c0` | MxStillPresenter::Clone | AMBIGUOUS | AMBIGUOUS | DIFFERENT | LENGTH |  |
 | ALLOCATOR (no idiom) | 0.9212 | `0x10029d50` | _Tree<LegoCacheSoundEntry,LegoCacheSoundEn | SLOT-CLEAN | REGIONAL | DIFFERENT | MIXED |  |
@@ -142,7 +141,7 @@ eligible when they carry a fail-closed proof and a concrete target.
 | AMBIGUOUS | 0.8696 | `0x100a46b0` | OrientableROI::UpdateTransformationRelativ | AMBIGUOUS | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.8675 | `0x100166a0` | JetskiRace::HandlePathStruct | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | AMBIGUOUS | 0.8629 | `0x10048310` | LegoPathController::FindPath | AMBIGUOUS | SCATTERED | DIFFERENT | MIXED |  |
-| LENGTH-UNREACHABLE | 0.8495 | `0x1004c580` | MxTransitionManager::SetupCopyRect | SLOT-CLEAN | SCATTERED | DIFFERENT | LENGTH |  |
+| ALLOCATOR (no idiom) | 0.9164 | `0x1004c580` | MxTransitionManager::SetupCopyRect | SLOT-CLEAN | SCATTERED | DIFFERENT | NONE | length now 412 (for-init counter, direct display-surface calls); residue = rigid vptr register pair 98/100 |
 | AMBIGUOUS | 0.8446 | `0x1004ebd0` | LegoTexturePresenter::Read | AMBIGUOUS | AMBIGUOUS | DIFFERENT | MIXED |  |
 | LENGTH-UNREACHABLE | 0.8176 | `0x100a3840` | TglImpl::MeshBuilderImpl::CreateMesh | SLOT-CLEAN | SCATTERED | DIFFERENT | LENGTH |  |
 | PERMUTATION (measured families exhausted) | 0.7971 | `0x100a3b40` | TglImpl::MeshBuilderImpl::Clone | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |

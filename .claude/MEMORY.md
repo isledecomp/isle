@@ -827,7 +827,19 @@ after every bounded panel or full gate.
   relocation identities, 81 line records, the coherent 878-byte `.debug$S` +
   200-byte `.xdata$x` closure, identity universes, and acceptable collateral.
 
-- Accepted canonical gate: LEGO1 4887/4934, ISLE 172/172, CONFIG 111/111.
+- Accepted canonical gate: LEGO1 4888/4934, ISLE 172/172, CONFIG 111/111
+  (commit a5f3d93b, 2026-08-18 evening; accepted-set pin 4888 /
+  `96719bb71038ba1b4861b5ee4ba6849b900b765c5465613487f29f1e15038ad6`).
+  Evening gains: `0x1002f770 UpdatePlane` (+1) — the 2026-08-17 "source×carrier
+  decisive seal" below was WRONG: `p_namedPlane.m_name = m_boundary->GetName();`
+  (drop the `name` local, direct member) is exact in all 557 carrier states; the
+  refuted seal only tested the `m_position` half. `0x1004c580 SetupCopyRect` moved
+  .849 -> .916 (for-init counter + direct `VideoManager()->GetDisplaySurface()->`
+  calls); its residue is the rigid vptr register pair at 98/100 (esi vs eax for
+  the GetWidth vcall), unreachable in 557 states, 128 type/form variants and the
+  interior axis. Goal 2: LIBCMT block retail-ordered (text + .data) via the
+  BETA10 modeldb part packer restoration + three dead .data globals (`71cb221e`).
+- Accepted canonical gate (previous): LEGO1 4887/4934, ISLE 172/172, CONFIG 111/111.
   The latest gain (2026-08-18, +6 / -0) is the whole open map `_Tree::_Insert`
   family (`0x1004f9b0`, `0x1006a7a0`, `0x1006c200`, `0x1006e720`,
   `0x10083890`) plus `0x10085500` `insert`, closed by two authentic source
@@ -2399,7 +2411,7 @@ same-mangled natural 561-byte current-source carrier that emits body
 complete `.debug$F + .debug$S` closure, and passes exact zero-collateral
 function/COMDAT/linker/code universes.
 
-## `0x1002f770 LegoPathActor::UpdatePlane` source×carrier decisive seal (2026-08-17)
+## `0x1002f770 LegoPathActor::UpdatePlane` source×carrier decisive seal (2026-08-17) — REFUTED 2026-08-18 (row closed by the direct `m_name` assignment, commit a5f3d93b)
 
 No retained evidence supports a nonlinear crossover between the synthetic
 public-member spelling and a body-changing carrier. The current effective
