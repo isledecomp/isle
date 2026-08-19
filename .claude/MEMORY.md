@@ -827,9 +827,15 @@ after every bounded panel or full gate.
   relocation identities, 81 line records, the coherent 878-byte `.debug$S` +
   200-byte `.xdata$x` closure, identity universes, and acceptable collateral.
 
-- Accepted canonical gate: LEGO1 4895/4934, ISLE 172/172, CONFIG 111/111
-  (commit 67ba372b, 2026-08-18 night; accepted-set pin 4895 /
-  `649a6b335f8b7315cd05389d12c86f66b4f5f2d9064048dd87a9e3234d412a54`).
+- Accepted canonical gate: LEGO1 4896/4934, ISLE 172/172, CONFIG 111/111
+  (commit c19a90b4, 2026-08-19 00:40; accepted-set pin 4896 /
+  `27e69e494e368ce51b1006320fbf065b936f24a7b45baf994243d0c9ab5eafab`).
+  `0x1002de10 STADFromPoints` (+1): success/else tail form + `assertIfBeta10(p_destEdge)`.
+  KEY MECHANISM: the inline set follows a per-function statement-UNIT count — release
+  `assert` (`((void)0)`), else blocks and empty `{}` cost one unit each; the else-form alone
+  inlines the Vector ctors (696 B), removing one release assert restores the retail set and
+  the whole TU's arena (zero collateral). Try ±1-unit edits on every inline-set-difference row.
+  (Not universal: FUN_10061010 is inert to 1-8 scopes.) Also removed a wrong upstream LINE pin.
   Latest: `0x1006fda0 Infocenter::HandleKeyPress` (+1): `result = 1; break;` instead of
   `return 1;` in the e_playCutscene early exit — identical behaviour; retail keeps m_state in
   eax, the shared constant 1 in ecx and rematerialises the return (272 B incl. jump-table pad).

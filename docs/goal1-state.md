@@ -1,7 +1,7 @@
 # State of goal 1 — every open row, with its disposition
 
 Generated in the main loop by joining the four screens plus the coverage
-matrix against the live reccmp report. **LEGO1 4895/4934 — 39 open rows.**
+matrix against the live reccmp report. **LEGO1 4896/4934 — 38 open rows.**
 ISLE is 172/172 and CONFIG is 111/111. Current terminal measurement keeps
 ISLE and CONFIG byte-identical; the last LEGO1 terminal measurement (before
 the two latest exact-function mosaics) was equal-sized with 595,723 differing
@@ -40,7 +40,11 @@ LegoAnimationManager::FUN_10062e20 (a COMBINED carrier state — forward_run_wit
 colours both g_characters store windows; no 1-D carrier state does). Framework gained
 the permuted relocation order and relocation-reseat mosaic modes and a complete flat
 IA-32 length decoder for line-certified (FPO) mosaics. Later: Infocenter::HandleKeyPress
-(`result = 1; break;` in the cutscene early exit — the same behaviour, retail's IL).
+(`result = 1; break;` in the cutscene early exit — the same behaviour, retail's IL), and
+LegoPathActor::SetTransformAndDestinationFromPoints: the success/else tail form plus ONE
+release-mode statement fewer (`assert(p_destEdge)` -> `assertIfBeta10`): MSVC 4.2's inline set
+follows a per-function statement-unit count — a release `assert` (`((void)0)`), an else block
+and an empty `{}` each cost one unit — and the two changes cancel, leaving the TU state intact.
 
 This exists because the evidence is spread across `slot-reachability`,
 `register-colour`, `scheduling-residue`, `cmpdir-census` and
@@ -130,7 +134,6 @@ eligible when they carry a fail-closed proof and a concrete target.
 | AMBIGUOUS | 0.9498 | `0x10081840` | LegoCarRaceActor::CheckPresenterAndActorIn | AMBIGUOUS | AMBIGUOUS | DIFFERENT | NONE |  |
 | AMBIGUOUS | 0.9476 | `0x10054050` | Act3Ammo::Animate | AMBIGUOUS | SCATTERED | DIFFERENT | NONE |  |
 | AMBIGUOUS | 0.9472 | `0x100417c0` | Act3Brickster::FUN_100417c0 | AMBIGUOUS | SCATTERED | DIFFERENT | MIXED |  |
-| LENGTH-UNREACHABLE | 0.9426 | `0x1002de10` | LegoPathActor::SetTransformAndDestinationF | SLOT-CLEAN | IDENTITY | DIFFERENT | LENGTH |  |
 | ALLOCATOR (no idiom) | 0.9417 | `0x100720d0` | Act3List::RemoveByObjectIdOrFirst | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | ALLOCATOR (no idiom) | 0.9302 | `0x10072ad0` | Act3::TriggerHitSound | SLOT-CLEAN | REGIONAL | DIFFERENT | NONE |  |
 | LENGTH-UNREACHABLE | 0.9251 | `0x100ba2c0` | MxStillPresenter::Clone | AMBIGUOUS | AMBIGUOUS | DIFFERENT | LENGTH |  |
