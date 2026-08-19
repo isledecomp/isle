@@ -13538,7 +13538,8 @@ def validate_manifest(
                         and item.get("relocation_reseat")
                     ]
                     if reseat_ranges or (
-                            "expected_output_relocation_sha256" in function):
+                            "expected_output_relocation_sha256" in function
+                            or "expected_output_metadata_sha256" in function):
                         mosaic_keys.add("expected_output_relocation_sha256")
                         require_sha(
                             function.get("expected_output_relocation_sha256"),
@@ -13548,16 +13549,30 @@ def validate_manifest(
                             reseat_ranges and not any(
                                 key in function for key in (
                                     "target_source_refactor",
-                                    "ordinary_fpo_identity",
                                     "source_fpo_identity",
                                     "instruction_self_permutation",
                                     "relocation_order",
                                 )
                             ),
                             f"{function_context}: relocation reseat ranges "
-                            "require the plain declaration-carrier mosaic "
-                            "class and its output relocation table pin",
+                            "require the plain or ordinary-FPO declaration-"
+                            "carrier mosaic class and its output relocation "
+                            "table pin",
                         )
+                        if "ordinary_fpo_identity" in function:
+                            mosaic_keys.add("expected_output_metadata_sha256")
+                            require_sha(
+                                function.get(
+                                    "expected_output_metadata_sha256"),
+                                f"{function_context}."
+                                "expected_output_metadata_sha256")
+                        else:
+                            require(
+                                "expected_output_metadata_sha256"
+                                not in function,
+                                f"{function_context}: output metadata pin "
+                                "belongs to the ordinary FPO reseat only",
+                            )
                     if "relocation_order" in function:
                         mosaic_keys.add("relocation_order")
                         require(
@@ -21744,13 +21759,17 @@ def _compose_retail_exact_instruction_mosaic_core(
     ]
     reseated = bool(reseat_windows)
     require(not reseated or not (
-                ordinary_fpo or source_fpo or self_permutation
+                source_fpo or self_permutation
                 or source_permutation or permuted_relocations),
-            "relocation reseat requires the plain declaration-carrier "
-            "mosaic class")
+            "relocation reseat requires the plain or ordinary-FPO "
+            "declaration-carrier mosaic class")
     require(reseated == ("expected_output_relocation_sha256" in function),
             "relocation reseat requires exactly its output relocation "
             "table pin")
+    require((reseated and ordinary_fpo)
+            == ("expected_output_metadata_sha256" in function),
+            "ordinary FPO relocation reseat requires exactly its output "
+            "metadata pin")
     permutation = (
         validate_instruction_self_permutation(
             function["instruction_self_permutation"],
@@ -22204,7 +22223,9 @@ def _compose_retail_exact_instruction_mosaic_core(
     if ordinary_fpo or source_fpo:
         require(
             instruction_mosaic_metadata_sha256(checked, cp)
-            == function["expected_seed_metadata_sha256"],
+            == function[
+                "expected_output_metadata_sha256" if reseated
+                else "expected_seed_metadata_sha256"],
             "FPO instruction-mosaic output metadata changed",
         )
     require(function_multiset(checked) == function_multiset(seed),

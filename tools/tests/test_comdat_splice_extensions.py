@@ -4823,18 +4823,44 @@ class OrdinaryFpoInstructionMosaicTests(unittest.TestCase):
 
     ROLE = byte_identity.ORDINARY_FPO_MOSAIC_ROLE_POLICY
 
-    def fixture(self):
-        seed = make_fpo_instruction_mosaic_coff()
-        donor = make_fpo_instruction_mosaic_coff(donor=True)
+    @staticmethod
+    def _reseat_fpo_objects():
+        """Seed/donor whose [16,24) window carries the same DIR32 record at
+        offset 20 (seed: nop nop mov ecx,[disp32]) and 18 (donor: mov
+        ecx,[disp32] nop nop); the compiler line row anchors at 16."""
+        objects = []
+        for donor in (False, True):
+            data = bytearray(make_fpo_instruction_mosaic_coff(donor=donor))
+            coff = byte_identity.CoffObject(bytes(data))
+            primary = coff.function_section(TARGET_SYMBOL)
+            at = primary["raw_offset"] + 16
+            data[at:at + 8] = (bytes.fromhex("8b0d0000000090" "90") if donor
+                               else bytes.fromhex("90908b0d00000000"))
+            struct.pack_into("<I", data, primary["line_offset"] + 6, 16)
+            if donor:
+                struct.pack_into("<I", data,
+                                 primary["relocation_offset"] + 20, 18)
+            objects.append(bytes(data))
+        return objects
+
+    def fixture(self, *, reseat=False):
+        if reseat:
+            seed, donor = self._reseat_fpo_objects()
+        else:
+            seed = make_fpo_instruction_mosaic_coff()
+            donor = make_fpo_instruction_mosaic_coff(donor=True)
         seed_coff = byte_identity.CoffObject(seed)
         donor_coff = byte_identity.CoffObject(donor)
         sp = seed_coff.function_section(TARGET_SYMBOL)
         dp = donor_coff.function_section(TARGET_SYMBOL)
         seed_body = byte_identity.coff_body(seed_coff, sp)
         donor_body = byte_identity.coff_body(donor_coff, dp)
+        window = (16, 24) if reseat else (24, 28)
         hybrid = bytearray(seed)
-        hybrid[sp["raw_offset"] + 24:sp["raw_offset"] + 28] = (
-            donor_body[24:28])
+        hybrid[sp["raw_offset"] + window[0]:sp["raw_offset"] + window[1]] = (
+            donor_body[window[0]:window[1]])
+        if reseat:
+            struct.pack_into("<I", hybrid, sp["relocation_offset"] + 20, 18)
         hybrid = bytes(hybrid)
         hybrid_coff = byte_identity.CoffObject(hybrid)
         hybrid_body = byte_identity.coff_body(
@@ -4924,13 +4950,15 @@ class OrdinaryFpoInstructionMosaicTests(unittest.TestCase):
             "ordinary_fpo_identity": identity,
             "instruction_ranges": [{
                 "kind": "same_offset_complete_x86_instruction_sequence_v1",
-                "start": 24, "end": 28,
-                "seed_bytes": seed_body[24:28].hex(),
-                "seed_sha256": hashlib.sha256(seed_body[24:28]).hexdigest(),
-                "donor_bytes": donor_body[24:28].hex(),
-                "donor_sha256": hashlib.sha256(donor_body[24:28]).hexdigest(),
-                "seed_instruction_lengths": [3, 1],
-                "donor_instruction_lengths": [3, 1],
+                "start": window[0], "end": window[1],
+                "seed_bytes": seed_body[window[0]:window[1]].hex(),
+                "seed_sha256": hashlib.sha256(
+                    seed_body[window[0]:window[1]]).hexdigest(),
+                "donor_bytes": donor_body[window[0]:window[1]].hex(),
+                "donor_sha256": hashlib.sha256(
+                    donor_body[window[0]:window[1]]).hexdigest(),
+                "seed_instruction_lengths": [1, 1, 6] if reseat else [3, 1],
+                "donor_instruction_lengths": [6, 1, 1] if reseat else [3, 1],
             }],
             "retail_oracle": {
                 "image": "LEGO1.DLL", "address": "0x1003cf20",
@@ -4939,6 +4967,19 @@ class OrdinaryFpoInstructionMosaicTests(unittest.TestCase):
             "retail_relocations": relocation_oracle_for(
                 hybrid, retail_body_for(hybrid)),
         }
+        if reseat:
+            function["instruction_ranges"][0].update({
+                "relocation_reseat": True,
+                "seed_relocation_offsets": [20],
+                "donor_relocation_offsets": [18],
+            })
+            hybrid_primary = hybrid_coff.function_section(TARGET_SYMBOL)
+            function["expected_output_relocation_sha256"] = hashlib.sha256(
+                byte_identity._coff_table_bytes(
+                    hybrid_coff, hybrid_primary, "relocations")).hexdigest()
+            function["expected_output_metadata_sha256"] = (
+                byte_identity.instruction_mosaic_metadata_sha256(
+                    hybrid_coff, hybrid_primary))
         return seed, donor, function, retail_body_for(hybrid), hybrid
 
     def compose(self, fixture, function=None, seed=None, donor=None,
@@ -4950,6 +4991,39 @@ class OrdinaryFpoInstructionMosaicTests(unittest.TestCase):
             expected if function is None else function,
             oracle if retail is None else retail,
         )
+
+    def test_fpo_reseat_moves_the_operand_seat_and_pins_output_metadata(self):
+        fixture = self.fixture(reseat=True)
+        composed, detail = self.compose(fixture)
+        seed, donor, function, _, hybrid = fixture
+        checked = byte_identity.CoffObject(composed)
+        primary = checked.function_section(TARGET_SYMBOL)
+        expected = byte_identity.CoffObject(hybrid)
+        self.assertEqual(
+            byte_identity.coff_body(checked, primary),
+            byte_identity.coff_body(
+                expected, expected.function_section(TARGET_SYMBOL)))
+        rows = byte_identity.detailed_relocations(checked, primary)
+        self.assertEqual([row["offset"] for row in rows], [4, 12, 18])
+        self.assertEqual(detail["relocation_reseats"][0]["output_offset"], 18)
+        self.assertTrue(detail["ordinary_fpo_identity"])
+        # the seed pins alone (no output metadata pin) are refused
+        unpinned = copy.deepcopy(function)
+        unpinned.pop("expected_output_metadata_sha256")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "output metadata pin"):
+            self.compose(fixture, function=unpinned)
+        wrong = copy.deepcopy(function)
+        wrong["expected_output_metadata_sha256"] = "0" * 64
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "output metadata changed"):
+            self.compose(fixture, function=wrong)
+        # a plain (EH) mosaic may not carry the FPO output metadata pin
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "output metadata pin"):
+            plain = copy.deepcopy(function)
+            plain.pop("ordinary_fpo_identity")
+            self.compose(fixture, function=plain)
 
     def test_positive_conserves_seed_metadata_and_omits_donor_collateral(self):
         fixture = self.fixture()
