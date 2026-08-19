@@ -21706,6 +21706,282 @@
     "reason": "Restores the retail-anchored .data string-literal COMDAT order of LEGO1/omni/src/common/mxobjectfactory.cpp (whole-group permutation, body-inert).",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/actors/act2actor.cpp",
+   "source_sha256": "26269cdb4688b58f85a630779c8d09766f9b49c24c2bb7a5a76b39d586111f4d",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_e4be0bb0a4aa",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 2,
+      "functions": 10,
+      "generated_header_sha256": "e4be0bb0a4aa26c221c29d7e14e6f3ae7d1034d1d3b891b26b26e1c8724933fd",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_38445dc9f002",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "prefix": "MxUnkRecVC",
+      "count": 70,
+      "width": 3,
+      "placement": "suffix",
+      "generated_header_sha256": "38445dc9f00267af14e6765759f15dd045580dce1e256aecd8ea2ab56572cf38",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?InitializeNextShot@Act2Actor@@QAEXXZ",
+     "expected_body_length": 100,
+     "expected_body_sha256": "59b98747a317c9f076f8a38d189497b4e6e9b4bd253202a3cddac4cfd77ea82f",
+     "expected_changed_offsets": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16,
+      74,
+      79,
+      84,
+      97
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       2,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_e4be0bb0a4aa"
+    },
+    {
+     "mangled": "?Animate@Act2Actor@@UAEXM@Z",
+     "expected_body_length": 1562,
+     "expected_body_sha256": "256702f9d0510936269ed95ae80516990b92b584fad58fffc1a17c1bb0aea4b2",
+     "expected_changed_offsets": [
+      1193,
+      1215,
+      1218,
+      1221,
+      1317,
+      1323,
+      1326,
+      1329,
+      1381,
+      1390,
+      1393,
+      1396
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       222,
+       "T"
+      ],
+      [
+       284,
+       "T"
+      ],
+      [
+       308,
+       "T"
+      ],
+      [
+       420,
+       "T"
+      ],
+      [
+       515,
+       "T"
+      ],
+      [
+       626,
+       "T"
+      ],
+      [
+       705,
+       "T"
+      ],
+      [
+       1093,
+       "T"
+      ],
+      [
+       1116,
+       "T"
+      ],
+      [
+       1170,
+       "T"
+      ],
+      [
+       1244,
+       "T"
+      ],
+      [
+       1452,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_e4be0bb0a4aa"
+    },
+    {
+     "mangled": "?FindPath@Act2Actor@@QAEXI@Z",
+     "expected_body_length": 588,
+     "expected_body_sha256": "610812b462f96b22b9e4d43a91e7b13023260f2021346540e7a07523042a0f7f",
+     "expected_changed_offsets": [
+      56,
+      57,
+      60,
+      62,
+      63,
+      64,
+      65,
+      66,
+      68,
+      69,
+      71,
+      72,
+      75,
+      78,
+      79,
+      80,
+      81,
+      261,
+      262,
+      263,
+      264,
+      265,
+      266,
+      267,
+      269,
+      270,
+      271,
+      397,
+      398,
+      399,
+      400,
+      401,
+      402,
+      403,
+      404,
+      427,
+      428,
+      429,
+      433,
+      434,
+      435
+     ],
+     "splice_class": "equal_body_eh_reloc_layout",
+     "expected_relocation_moves": [
+      [
+       268,
+       265
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60,
+      68
+     ],
+     "donor": "d_38445dc9f002"
+    },
+    {
+     "mangled": "?UpdateShot@Act2Actor@@QAEIM@Z",
+     "expected_body_length": 749,
+     "expected_body_sha256": "b66ffb98f1009a087cf9435e688fe17907837478a965e6d218e3937bbb7cfa67",
+     "expected_changed_offsets": [
+      437,
+      438,
+      440,
+      441,
+      442,
+      443,
+      444,
+      445,
+      446,
+      447,
+      448,
+      449,
+      450,
+      451
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       257,
+       "T"
+      ],
+      [
+       375,
+       "T"
+      ],
+      [
+       496,
+       "T"
+      ],
+      [
+       519,
+       "T"
+      ],
+      [
+       584,
+       "T"
+      ],
+      [
+       607,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_38445dc9f002"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 4 row(s) in LEGO1/lego/legoomni/src/actors/act2actor.cpp from generated declaration-only carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -22627,14 +22903,14 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/actors/act2actor.cpp",
-    "clean": "d7fe9b80bf08ecd7dd28293106cda5e52af492ee1bfacedd43344e65f7a6eb42",
-    "effective": "18e39b86a4c7c5968a4e46f73886fc141245d68982ae1b64d17a914cfe08fabc",
-    "size": 21902,
+    "clean": "aad4d9b834435b9f0ea0cd9d2c9824af8cd682e1b643b517e25f81e98a785a94",
+    "effective": "26269cdb4688b58f85a630779c8d09766f9b49c24c2bb7a5a76b39d586111f4d",
+    "size": 22370,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "84cc9350677adb452c6e86a602e37e18332f8cb070931f5ead01b00fe2a0b216",
+       "ctx": "2dc6326302d6ec1948fc0bbacf9a4a273c307bf74fc04b54d59cb0b911fc3841",
        "at": "before_token"
       },
       "gen": {
@@ -45220,79 +45496,79 @@
    "generated_tus": [
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathctrledge.cpp",
-     "ordinal": 54,
+     "ordinal": 53,
      "after": "LEGO1/lego/legoomni/src/common/legophoneme.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legoboundaryedge.cpp",
-     "ordinal": 56,
+     "ordinal": 55,
      "after": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathctrledgeiterator.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathctrledgeiterator.cpp",
-     "ordinal": 57,
+     "ordinal": 56,
      "after": "LEGO1/lego/legoomni/src/paths/legoboundaryedge.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathctrledgecompare.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathctrledgecompare.cpp",
-     "ordinal": 58,
+     "ordinal": 57,
      "after": "LEGO1/lego/legoomni/src/paths/legopathctrledgeiterator.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathcontrollerlist.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathcontrollerlist.cpp",
-     "ordinal": 59,
+     "ordinal": 58,
      "after": "LEGO1/lego/legoomni/src/paths/legopathctrledgecompare.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp",
-     "ordinal": 60,
+     "ordinal": 59,
      "after": "LEGO1/lego/legoomni/src/paths/legopathcontrollerlist.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp",
-     "ordinal": 61,
+     "ordinal": 60,
      "after": "LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legobewithmidpointcomparator.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legobewithmidpointcomparator.cpp",
-     "ordinal": 62,
+     "ordinal": 61,
      "after": "LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp",
      "before": "LEGO1/lego/legoomni/src/audio/lego3dwavepresenter.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad1.cpp",
-     "ordinal": 111,
+     "ordinal": 110,
      "after": "LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legordatapad2.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad2.cpp",
-     "ordinal": 112,
+     "ordinal": 111,
      "after": "LEGO1/lego/legoomni/src/paths/legordatapad1.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legordatapad3.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad3.cpp",
-     "ordinal": 113,
+     "ordinal": 112,
      "after": "LEGO1/lego/legoomni/src/paths/legordatapad2.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legordatapad4.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad4.cpp",
-     "ordinal": 114,
+     "ordinal": 113,
      "after": "LEGO1/lego/legoomni/src/paths/legordatapad3.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legorelocpad.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legorelocpad.cpp",
-     "ordinal": 115,
+     "ordinal": 114,
      "after": "LEGO1/lego/legoomni/src/paths/legordatapad4.cpp"
     }
    ],

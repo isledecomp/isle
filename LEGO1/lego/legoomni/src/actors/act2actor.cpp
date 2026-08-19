@@ -16,6 +16,8 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "mxdebug.h"
+#include "mxmisc.h"
+#include "mxtimer.h"
 #include "roi/legoroi.h"
 #include "viewmanager/viewmanager.h"
 
@@ -110,6 +112,25 @@ MxU32 g_nextBehindWavIndex;
 // GLOBAL: LEGO1 0x10102b24
 // GLOBAL: BETA10 0x10209f68
 MxU32 g_nextInterruptWavIndex;
+
+// FUNCTION: LEGO1 0x10018740
+// FUNCTION: BETA10 0x1000c7a0
+MxResult Act2GenActor::HitActor(LegoPathActor* p_actor, MxBool)
+{
+	MxLong time = Timer()->GetTime();
+	MxLong diff = time - g_lastHitActorTime;
+
+	if (strcmp(p_actor->GetROI()->GetName(), "pepper")) {
+		return SUCCESS;
+	}
+
+	g_lastHitActorTime = time;
+	if (diff > 1000) {
+		SoundManager()->GetCacheSoundManager()->Play("hitactor", NULL, FALSE);
+	}
+
+	return SUCCESS;
+}
 
 // FUNCTION: LEGO1 0x100187e0
 // FUNCTION: BETA10 0x1000c7fb
