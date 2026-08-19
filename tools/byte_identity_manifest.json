@@ -22056,8 +22056,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4903,
-    "accepted_row_identity_sha256": "360e06d60fc38d350f5ebb6d58c47d5e4bd27edac8ad1a704574f4aaa2c57f76",
+    "exact_raw_1_0_count": 4904,
+    "accepted_row_identity_sha256": "a198e41a8ce30fc33967e76c7d5ba5ea2ab6bc3e1820471a45ad48a09d548977",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -36379,9 +36379,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/worlds/act3.cpp",
-    "clean": "fff8de64324ad1cb804f101d4d9d02e9bf54f6db9f0f27c81f0f79e0d2bad5fe",
-    "effective": "777847813812b5e3357f79b1b11e8a048babb96d0e7b05795d389d3551d17adf",
-    "size": 26864,
+    "clean": "4e2fdfdec250b4d18173a547bb9f4efb1379afd5dfd0b36f62a20082eecfa203",
+    "effective": "07a0f6459e39fb41f915f3b04701ef940d254778be00dadde30d0077a58e0bb1",
+    "size": 26889,
     "ops": [
      {
       "op": "insert",
@@ -36494,17 +36494,12 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 3,
+       "lines": 2,
        "items": [
         {
          "k": "fwd",
          "id": "MxUnkRecordNZ",
          "line": 1
-        },
-        {
-         "k": "fwd",
-         "id": "MxUnkRecordOA",
-         "line": 2
         }
        ]
       }
