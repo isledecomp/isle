@@ -136,16 +136,16 @@ Result ViewportPickImpl(
 Result TextureImpl::SetImage(IDirect3DRMTexture* pSelf, Image* pImage)
 {
 	Result result;
-	void* appData;
+	LPD3DRM_APPDATA appData;
 
-	appData = pImage;
+	appData = (LPD3DRM_APPDATA) pImage;
 	assert(reinterpret_cast<Image*>(appData) == pImage);
 
 	if (TextureGetImage(pSelf)) {
 		assert(0);
 	}
 
-	result = ResultVal(pSelf->SetAppData((LPD3DRM_APPDATA) appData));
+	result = ResultVal(pSelf->SetAppData(appData));
 	assert(Succeeded(result));
 
 	if (Succeeded(result) && pImage) {
