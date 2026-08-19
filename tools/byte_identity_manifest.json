@@ -16690,7 +16690,7 @@
   {
    "target": "misc",
    "source": "LEGO1/lego/sources/misc/legotree.cpp",
-   "source_sha256": "44824c59661d31402434e43c26362368a75d10999428ccd84ac723c09c5353f2",
+   "source_sha256": "bee62f56e84f29548c85aeb02778d90f8d4be3c3140d96bf035f4e8e39a49a81",
    "mode": "restore_comdat_group_order",
    "command_policy": {
     "required_flags": [
@@ -38146,8 +38146,8 @@
    {
     "path": "LEGO1/lego/sources/misc/legotree.cpp",
     "clean": "95ca047f1f9617bb1a02812fc98749613c57b86546f20f0dedf5ccbcb6b88a46",
-    "effective": "44824c59661d31402434e43c26362368a75d10999428ccd84ac723c09c5353f2",
-    "size": 2542,
+    "effective": "bee62f56e84f29548c85aeb02778d90f8d4be3c3140d96bf035f4e8e39a49a81",
+    "size": 2602,
     "ops": [
      {
       "op": "insert",
@@ -38194,6 +38194,34 @@
          "k": "fwd",
          "id": "MxUnkRecord005",
          "line": 10
+        }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "anchor": {
+       "ctx": "4bcee6a3ddab41678cf04e0b14f00e7bcf5e173e8cef14b6c0b3b3b1130103a2",
+       "a": 0,
+       "at": "end"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 6,
+       "items": [
+        {
+         "k": "lines",
+         "n": 1,
+         "line": 1
+        },
+        {
+         "k": "local_probe",
+         "function_identifier": "LegoTreeNodeDataRecord",
+         "local_identifier": "data",
+         "local_type": "LegoTreeNodeData",
+         "operation": "emit_local_object_destructor",
+         "lines": 4,
+         "line": 2
         }
        ]
       }

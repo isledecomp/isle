@@ -216,6 +216,7 @@ SOURCE_OVERLAY_LEAN_KINDS = {
     "local_ids": "local_symbol_id_carrier_v1",
     "member_probe": "qualified_member_comdat_emission_probe_v1",
     "cursor_probe": "list_cursor_delete_emission_probe_v1",
+    "local_probe": "local_object_emission_probe_v1",
     "console_pull": "discarded_console_crt_pull_v1",
     "import_probe": "discarded_import_library_probe_v1",
     "texture_probe": "recursive_frame_texture_refresh_probe_v1",
@@ -349,6 +350,9 @@ SOURCE_OVERLAY_KIND_POLICIES = {
     ),
     "list_cursor_delete_emission_probe_v1": (
         "discarded_emission_probe", "list_cursor_delete_emission"
+    ),
+    "local_object_emission_probe_v1": (
+        "discarded_emission_probe", "local_object_destructor_emission"
     ),
     "literal_first_use_alias_v1": (
         "compiler_state_only", "literal_first_use_reseat"
@@ -4808,6 +4812,10 @@ def source_overlay_expected_identifier_roles(
             params["container_type"], params["cursor_type"],
             params["element_type"],
         ))
+    elif kind == "local_object_emission_probe_v1":
+        definition(params["function_identifier"])
+        declared.add(params["local_identifier"])
+        referenced.add(params["local_type"])
     elif kind == "qualified_member_comdat_emission_probe_v1":
         definition(params["function_identifier"])
         referenced.update(
@@ -6832,6 +6840,20 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
         }
         require(params == expected, f"{param_context} list cursor profile differs")
         normalized = dict(expected)
+    elif kind == "local_object_emission_probe_v1":
+        exact_audit_keys(params, {
+            "function_identifier", "local_identifier", "local_type",
+            "operation",
+        }, param_context)
+        expected = {
+            "function_identifier": "LegoTreeNodeDataRecord",
+            "local_identifier": "data",
+            "local_type": "LegoTreeNodeData",
+            "operation": "emit_local_object_destructor",
+        }
+        require(params == expected,
+                f"{param_context} local object probe profile differs")
+        normalized = dict(expected)
     elif kind == "recursive_frame_texture_refresh_probe_v1":
         exact_audit_keys(params, {
             "function_identifier", "parameter_type", "pull_identity",
@@ -7794,6 +7816,17 @@ def render_source_overlay_generator(
                 lines.append(f"\t{stem}Sink({successor});")
             lines.append("}")
         result = ("\n".join(lines) + "\n").encode("ascii")
+    elif kind == "local_object_emission_probe_v1":
+        # An unreferenced function whose only statement is a local object of
+        # the named type: it forces this translation unit to emit that type's
+        # destructor COMDAT, and /OPT:REF removes the function itself, so the
+        # shipped image gains the destructor and nothing else.
+        result = (
+            f'void {params["function_identifier"]}()\n'
+            '{\n'
+            f'\t{params["local_type"]} {params["local_identifier"]};\n'
+            '}\n'
+        ).encode("ascii")
     elif kind == "list_cursor_delete_emission_probe_v1":
         result = (
             f'void {params["function_identifier"]}('
