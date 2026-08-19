@@ -843,7 +843,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legopathactor.cpp",
-   "source_sha256": "e75f88b82a234875246651a58f547276a0b9b032cfd2b8708e68ac1be04cc24d",
+   "source_sha256": "37e32c90e22435d9203da340abbadab7c537b97af54f5b6ae8ef97bc906a2158",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -859,95 +859,160 @@
    },
    "donors": [
     {
-     "id": "d_3856333840b7",
+     "id": "d_c15e6e4702a9",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "declaration_shape",
-      "classes": 9,
-      "functions": 88,
-      "generated_header_sha256": "3856333840b7d1b6296472f1fd5f28567411c458942859f199469cab0bdb134c",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_31e36d131642",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "declaration_shape",
-      "classes": 2,
-      "functions": 16,
-      "generated_header_sha256": "31e36d131642decc78958672d6c6b512ff487efd79b9aa76b97f0b0e497957db",
+      "kind": "forward_declaration_run",
+      "prefix": "MxUnkRecVC",
+      "count": 2,
+      "width": 3,
+      "placement": "suffix",
+      "generated_header_sha256": "c15e6e4702a930e5cbe3c3c4467268942873ee70bb9c2beffe9c3648347125b1",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_b202525d7170",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 3,
+      "seat_prefix": "g_p",
+      "seat_count": 6,
+      "width": 2,
+      "generated_header_sha256": "b202525d71707cab4b648e2aeff4504b36020da81217407bd9617fafdf8e58da",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_b74bad824e52",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "pad_shape",
+      "classes": 3,
+      "functions_per_class": 12,
+      "generated_header_sha256": "b74bad824e522e70c91c30f7747b4cfb373afd04c549b5225d0fea85fa41c40a",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
     {
-     "mangled": "?CheckIntersections@LegoPathActor@@UAEHAAVVector3@@00@Z",
-     "splice_class": "equal_body_eh_reloc_layout",
-     "expected_body_length": 485,
-     "expected_body_sha256": "610f8d81b83a0dd850669571d972350ddb51379b4de3bc7ef21b64f1491689ff",
+     "mangled": "?SetTransformAndDestinationFromEdge@LegoPathActor@@UAEJPAVLegoPathBoundary@@MAAULegoEdge@@MAAULegoOrientedEdge@@M@Z",
+     "expected_body_length": 1016,
+     "expected_body_sha256": "1fce9debd5b436cd0a85d21d3be2f9da110c3a3eb034e7357d558c89ad567037",
      "expected_changed_offsets": [
-      41,
-      42,
-      43,
-      44,
-      45,
-      46,
-      47,
-      48,
-      49,
-      50,
-      51,
-      91,
-      94,
-      243,
-      244,
-      245,
-      246,
-      248,
-      249,
-      250,
-      251,
-      252,
-      254,
-      255,
-      256,
-      257,
-      258,
-      259,
-      260,
-      261,
-      262,
-      263,
-      264,
-      265,
-      357,
+      337,
+      338,
+      339,
+      340,
+      343,
+      344,
+      345,
+      346,
+      349,
+      350,
+      351,
+      352,
+      369,
+      370,
+      371,
       372,
-      377
+      375,
+      376,
+      377,
+      378,
+      379,
+      380,
+      382,
+      383,
+      384,
+      385,
+      386,
+      389
      ],
-     "expected_relocation_moves": [
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
       [
-       48,
-       44
+       465,
+       "T"
+      ],
+      [
+       488,
+       "T"
+      ],
+      [
+       876,
+       "T"
+      ],
+      [
+       899,
+       "T"
       ]
      ],
-     "expected_xdata_rename_offsets": [
-      8,
-      36,
-      44
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_c15e6e4702a9"
+    },
+    {
+     "mangled": "?CalculateTransform@LegoPathActor@@UAEHMAAVMatrix4@@@Z",
+     "expected_body_sha256": "1a7f7eebe46d96f264ad33e7c14ee48681539d556084182825e86a590337cda5",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1593,
+     "expected_donor_length": 1590,
+     "expected_linked_span": 1600,
+     "donor": "d_c15e6e4702a9"
+    },
+    {
+     "mangled": "?insert@?$list@PAVLegoPathBoundary@@V?$allocator@PAVLegoPathBoundary@@@@@@QAE?AViterator@1@V21@ABQAVLegoPathBoundary@@@Z",
+     "expected_body_length": 78,
+     "expected_body_sha256": "be36b0a1c3006e8f572c0eaab2bf0a7f4afc625543da359867feacf4e78323da",
+     "expected_changed_offsets": [
+      6,
+      12,
+      23,
+      27,
+      29,
+      42
      ],
-     "donor": "d_3856333840b7"
+     "splice_class": "equal_body_strict",
+     "donor": "d_c15e6e4702a9"
+    },
+    {
+     "mangled": "?CheckIntersectionBothFaces@LegoPathActor@@IAEIAAV?$List@PAVLegoPathBoundary@@@@PAVLegoPathBoundary@@AAVVector3@@2MM2H@Z",
+     "expected_body_length": 317,
+     "expected_body_sha256": "1047f6a152b38d38971d26faf7d4ba47d31e277f116a71f2c3dbce7e54d1959e",
+     "expected_changed_offsets": [
+      224,
+      238,
+      245
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_c15e6e4702a9"
+    },
+    {
+     "mangled": "?CheckIntersections@LegoPathActor@@UAEHAAVVector3@@00@Z",
+     "expected_body_sha256": "610f8d81b83a0dd850669571d972350ddb51379b4de3bc7ef21b64f1491689ff",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 490,
+     "expected_donor_length": 485,
+     "expected_linked_span": 496,
+     "donor": "d_b202525d7170"
     },
     {
      "mangled": "?CheckPresenterAndActorIntersections@LegoPathActor@@UAEIPAVLegoPathBoundary@@AAVVector3@@1MM1@Z",
@@ -974,12 +1039,12 @@
       44,
       52
      ],
-     "donor": "d_31e36d131642"
+     "donor": "d_b74bad824e52"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes LegoPathActor::CheckIntersections 0x1002ebe0 from a generated declaration-shape carrier state over the rendered current source.",
+    "reason": "Closes 6 row(s) in LEGO1/lego/legoomni/src/paths/legopathactor.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    },
    "group_order": [
@@ -16189,8 +16254,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4887,
-    "accepted_row_identity_sha256": "c82766bd0179146ed1d370f4a13cac5ed59fc4d42d5829c26960cfc36ade673d",
+    "exact_raw_1_0_count": 4888,
+    "accepted_row_identity_sha256": "96719bb71038ba1b4861b5ee4ba6849b900b765c5465613487f29f1e15038ad6",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -25209,9 +25274,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/paths/legopathactor.cpp",
-    "clean": "6cc4cac87deb7186c914a26daa142fd43dc7a375aa723af8015807dad336c2ea",
-    "effective": "e75f88b82a234875246651a58f547276a0b9b032cfd2b8708e68ac1be04cc24d",
-    "size": 20465,
+    "clean": "6d022442f5a98b4d55f7500d906bc6a7c28e30d0aa43482c01ffc58763b72b19",
+    "effective": "37e32c90e22435d9203da340abbadab7c537b97af54f5b6ae8ef97bc906a2158",
+    "size": 20435,
     "ops": [
      {
       "op": "insert",

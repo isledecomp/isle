@@ -864,8 +864,7 @@ void LegoPathActor::ApplyLocal2World()
 // FUNCTION: LEGO1 0x1002f770
 void LegoPathActor::UpdatePlane(LegoNamedPlane& p_namedPlane)
 {
-	const LegoChar* name = m_boundary->GetName();
-	p_namedPlane.SetName(name);
+	p_namedPlane.m_name = m_boundary->GetName();
 	p_namedPlane.SetPosition(GetWorldPosition());
 	p_namedPlane.SetDirection(GetWorldDirection());
 	p_namedPlane.SetUp(GetWorldUp());
