@@ -1774,7 +1774,7 @@ class CrossTuInstructionHybridResizeTests(unittest.TestCase):
         with self.assertRaisesRegex(byte_identity.ByteIdentityError,
                                     "unsupported"):
             byte_identity.supported_ia32_instruction_length(
-                b"\x90", "unsupported fixture")
+                b"\x0f\x38\x00\xc0", "unsupported fixture")
 
     def test_line_sentinel_must_name_the_unique_exact_definition(self):
         for section_number, message in (
@@ -5016,24 +5016,42 @@ class OrdinaryFpoInstructionMosaicTests(unittest.TestCase):
             byte_identity.require_manifest_source_refactor_role_preflight(
                 manifest, "fixture", ROOT)
 
-    def test_decoder_accepts_only_the_closed_live_extensions(self):
+    def test_decoder_covers_the_flat_ia32_maps_and_fails_closed(self):
         accepted = {
-            "41": 1, "43": 1, "45": 1,
-            "7400": 2, "7c00": 2, "7d00": 2, "7f00": 2,
-            "eb00": 2, "01c8": 2, "03c8": 2, "2bc8": 2,
-            "f7d8": 2, "0fafc1": 3,
+            "41": 1, "43": 1, "45": 1, "90": 1, "99": 1, "c3": 1,
+            "7400": 2, "7c00": 2, "7d00": 2, "7f00": 2, "7200": 2,
+            "eb00": 2, "01c8": 2, "03c8": 2, "2bc8": 2, "32c0": 2,
+            "f7d8": 2, "f7d0": 2, "f7c000000000": 6, "f7d100": 2,
+            "f6c001": 3, "66f7c00000": 5,
+            "0fafc1": 3, "0fb6c0": 3, "0f8400000000": 6, "0f94c0": 3,
+            "c6830700000000": 7, "c744c13c00000000": 8, "c20800": 3,
+            "8b442454": 4, "8d048500000000": 7, "d9ee": 2, "dd442404": 4,
+            "e800000000": 5, "a100000000": 5, "6800000000": 5, "6a00": 2,
+            "c1e802": 3, "d1e8": 2, "6bc00c": 3, "69c000010000": 6,
+            "b800000000": 5, "66b80000": 4, "668b00": 3, "b000": 2,
+            "c8000000": 4, "0fbae005": 4, "f3ab": 2, "f3a5": 2, "f2ae": 2,
+            "0f1f4000": 4, "8f00": 2, "8b048500000000": 7,
         }
         for encoded, length in accepted.items():
             with self.subTest(encoded=encoded):
                 self.assertEqual(
                     byte_identity.supported_ia32_instruction_length(
                         bytes.fromhex(encoded), "fixture"), length)
-        for encoded in ("90", "f7d0", "0fae", "0f"):
+        for encoded in (
+            "0f", "0f38", "0f3a00", "0f19", "0fae", "66", "6666", "6667",
+            "f0f0", "d6", "f1", "8b", "8b04", "e8000000", "0f840000",
+            "c700000000", "b8000000", "26262626268b00", "0f0500",
+            "f7c100",
+        ):
             with self.subTest(encoded=encoded), self.assertRaisesRegex(
                     byte_identity.ByteIdentityError,
-                    "unsupported|truncated"):
+                    "unsupported|truncated|ModRM|SIB|prefix"):
                 byte_identity.supported_ia32_instruction_length(
                     bytes.fromhex(encoded), "fixture")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "not one complete"):
+            byte_identity.require_supported_complete_ia32_instruction(
+                bytes.fromhex("9090"), "fixture")
 
     def test_line_certificate_rejects_partial_endpoints_and_wrong_partition(self):
         seed, _, function, _, _ = self.fixture()
@@ -5586,11 +5604,11 @@ class OrdinaryFpoSelfPermutationTests(unittest.TestCase):
                     donor, primary, body, [claim], "donor", TARGET_SYMBOL,
                     "fixture")
 
-    def test_decoder_adds_only_the_live_short_branch(self):
+    def test_decoder_refuses_a_truncated_short_branch(self):
         self.assertEqual(
             byte_identity.supported_ia32_instruction_length(
                 bytes.fromhex("7300"), "fixture"), 2)
-        for raw in (bytes.fromhex("73"), bytes.fromhex("7200")):
+        for raw in (bytes.fromhex("73"), bytes.fromhex("e9000000")):
             with self.subTest(raw=raw.hex()), self.assertRaisesRegex(
                     byte_identity.ByteIdentityError,
                     "truncated|unsupported"):
@@ -6381,7 +6399,7 @@ class SourceFpoInstructionMosaicTests(unittest.TestCase):
             byte_identity.require_manifest_source_refactor_role_preflight(
                 manifest, "fixture", ROOT)
 
-    def test_decoder_accepts_only_closed_shuffle_extensions(self):
+    def test_decoder_accepts_shuffle_encodings_and_fails_closed(self):
         accepted = {
             "8d7e36": 3, "668b6ffe": 4, "66894ffe": 4,
             "e800000000": 5, "99": 1, "4b": 1, "4f": 1,
@@ -6392,11 +6410,11 @@ class SourceFpoInstructionMosaicTests(unittest.TestCase):
                     byte_identity.supported_ia32_instruction_length(
                         bytes.fromhex(encoded), "fixture"), length)
         for encoded in (
-            "66", "66668b00", "668d00", "e80000", "8d", "90",
+            "66", "66668b00", "e80000", "8d", "9090", "8d7e3690",
         ):
             with self.subTest(encoded=encoded), self.assertRaisesRegex(
                     byte_identity.ByteIdentityError,
-                    "unsupported|truncated|prefix|ModRM"):
+                    "unsupported|truncated|prefix|ModRM|not one complete"):
                 byte_identity.require_supported_complete_ia32_instruction(
                     bytes.fromhex(encoded), "fixture")
 

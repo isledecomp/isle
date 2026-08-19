@@ -17095,84 +17095,248 @@ def require_target_bound_retail_image(
     return expected
 
 
+_IA32_PREFIXES = {0x26, 0x2E, 0x36, 0x3E, 0x64, 0x65, 0x66, 0xF0, 0xF2, 0xF3}
+
+# One-byte opcode map (flat 32-bit code segment).  Each entry is a tuple of
+# operand tokens: M = ModRM (with SIB/displacement), Ib/Iw/Iz = immediates
+# (z = 4 bytes, 2 under an operand-size prefix), Jb/Jz = relative branches,
+# Ov = 32-bit moffs, Ap = far pointer.  Absent opcodes (prefixes, the 0F
+# escape and undefined slots) are refused.
+def _ia32_one_byte_table() -> dict:
+    table = {}
+    for base in range(0x00, 0x40, 8):
+        if base in (0x00, 0x08, 0x10, 0x18, 0x20, 0x28, 0x30, 0x38):
+            table[base] = ("M",)
+            table[base + 1] = ("M",)
+            table[base + 2] = ("M",)
+            table[base + 3] = ("M",)
+            table[base + 4] = ("Ib",)
+            table[base + 5] = ("Iz",)
+    for opcode in (0x06, 0x07, 0x0E, 0x16, 0x17, 0x1E, 0x1F,
+                   0x27, 0x2F, 0x37, 0x3F):
+        table[opcode] = ()
+    for opcode in range(0x40, 0x62):
+        table[opcode] = ()
+    table[0x62] = ("M",)
+    table[0x63] = ("M",)
+    table[0x68] = ("Iz",)
+    table[0x69] = ("M", "Iz")
+    table[0x6A] = ("Ib",)
+    table[0x6B] = ("M", "Ib")
+    for opcode in range(0x6C, 0x70):
+        table[opcode] = ()
+    for opcode in range(0x70, 0x80):
+        table[opcode] = ("Jb",)
+    table[0x80] = ("M", "Ib")
+    table[0x81] = ("M", "Iz")
+    table[0x82] = ("M", "Ib")
+    table[0x83] = ("M", "Ib")
+    for opcode in range(0x84, 0x90):
+        table[opcode] = ("M",)
+    for opcode in range(0x90, 0x9A):
+        table[opcode] = ()
+    table[0x9A] = ("Ap",)
+    for opcode in range(0x9B, 0xA0):
+        table[opcode] = ()
+    for opcode in range(0xA0, 0xA4):
+        table[opcode] = ("Ov",)
+    for opcode in range(0xA4, 0xA8):
+        table[opcode] = ()
+    table[0xA8] = ("Ib",)
+    table[0xA9] = ("Iz",)
+    for opcode in range(0xAA, 0xB0):
+        table[opcode] = ()
+    for opcode in range(0xB0, 0xB8):
+        table[opcode] = ("Ib",)
+    for opcode in range(0xB8, 0xC0):
+        table[opcode] = ("Iz",)
+    table[0xC0] = ("M", "Ib")
+    table[0xC1] = ("M", "Ib")
+    table[0xC2] = ("Iw",)
+    table[0xC3] = ()
+    table[0xC4] = ("M",)
+    table[0xC5] = ("M",)
+    table[0xC6] = ("M", "Ib")
+    table[0xC7] = ("M", "Iz")
+    table[0xC8] = ("Iw", "Ib")
+    table[0xC9] = ()
+    table[0xCA] = ("Iw",)
+    table[0xCB] = ()
+    table[0xCC] = ()
+    table[0xCD] = ("Ib",)
+    table[0xCE] = ()
+    table[0xCF] = ()
+    for opcode in range(0xD0, 0xD4):
+        table[opcode] = ("M",)
+    table[0xD4] = ("Ib",)
+    table[0xD5] = ("Ib",)
+    table[0xD7] = ()
+    for opcode in range(0xD8, 0xE0):
+        table[opcode] = ("M",)
+    for opcode in range(0xE0, 0xE4):
+        table[opcode] = ("Jb",)
+    for opcode in range(0xE4, 0xE8):
+        table[opcode] = ("Ib",)
+    table[0xE8] = ("Jz",)
+    table[0xE9] = ("Jz",)
+    table[0xEA] = ("Ap",)
+    table[0xEB] = ("Jb",)
+    for opcode in range(0xEC, 0xF0):
+        table[opcode] = ()
+    table[0xF4] = ()
+    table[0xF5] = ()
+    table[0xF6] = ("M", "F6")
+    table[0xF7] = ("M", "F7")
+    for opcode in range(0xF8, 0xFE):
+        table[opcode] = ()
+    table[0xFE] = ("M",)
+    table[0xFF] = ("M",)
+    return table
+
+
+def _ia32_two_byte_table() -> dict:
+    table = {}
+    for opcode in (0x00, 0x01, 0x02, 0x03, 0x0D, 0x18, 0x1F):
+        table[opcode] = ("M",)
+    for opcode in (0x06, 0x08, 0x09, 0x0B, 0x30, 0x31, 0x32, 0x33,
+                   0x77, 0xA0, 0xA1, 0xA2, 0xA8, 0xA9, 0xAA):
+        table[opcode] = ()
+    for opcode in range(0x10, 0x18):
+        table[opcode] = ("M",)
+    for opcode in range(0x20, 0x24):
+        table[opcode] = ("M",)
+    for opcode in range(0x28, 0x30):
+        table[opcode] = ("M",)
+    for opcode in range(0x40, 0x50):
+        table[opcode] = ("M",)
+    for opcode in range(0x50, 0x70):
+        table[opcode] = ("M",)
+    table[0x70] = ("M", "Ib")
+    table[0x71] = ("M", "Ib")
+    table[0x72] = ("M", "Ib")
+    table[0x73] = ("M", "Ib")
+    for opcode in range(0x74, 0x77):
+        table[opcode] = ("M",)
+    table[0x7E] = ("M",)
+    table[0x7F] = ("M",)
+    for opcode in range(0x80, 0x90):
+        table[opcode] = ("Jz",)
+    for opcode in range(0x90, 0xA0):
+        table[opcode] = ("M",)
+    table[0xA3] = ("M",)
+    table[0xA4] = ("M", "Ib")
+    table[0xA5] = ("M",)
+    table[0xAB] = ("M",)
+    table[0xAC] = ("M", "Ib")
+    table[0xAD] = ("M",)
+    table[0xAE] = ("M",)
+    table[0xAF] = ("M",)
+    for opcode in range(0xB0, 0xB8):
+        table[opcode] = ("M",)
+    table[0xB9] = ("M",)
+    table[0xBA] = ("M", "Ib")
+    for opcode in range(0xBB, 0xC2):
+        table[opcode] = ("M",)
+    table[0xC2] = ("M", "Ib")
+    table[0xC3] = ("M",)
+    table[0xC4] = ("M", "Ib")
+    table[0xC5] = ("M", "Ib")
+    table[0xC6] = ("M", "Ib")
+    table[0xC7] = ("M",)
+    for opcode in range(0xC8, 0xD0):
+        table[opcode] = ()
+    for opcode in range(0xD0, 0x100):
+        table[opcode] = ("M",)
+    return table
+
+
+IA32_ONE_BYTE_OPCODES = _ia32_one_byte_table()
+IA32_TWO_BYTE_OPCODES = _ia32_two_byte_table()
+
+
 def supported_ia32_instruction_length(
     encoded: bytes, context: str,
 ) -> int:
-    """Decode one closed IA-32 instruction family used by instruction mosaics.
+    """Decode the length of one flat 32-bit IA-32 instruction.
 
-    This is intentionally a fail-closed length decoder, not a disassembler.
-    It accepts only the register/memory operations, immediates, branches, and
-    one-byte register operations traversed by current instruction donors and
-    their closed boundary-regression tests. ModRM, SIB, displacement, prefix,
-    and immediate widths are derived from the bytes; unsupported prefixes,
-    opcodes, and truncated or concatenated encodings fail.
+    This is a fail-closed length decoder, not a disassembler: it knows the
+    legacy prefixes, the complete one-byte opcode map and the two-byte 0F map
+    of the 32-bit code the 1997 compiler emits, and derives ModRM, SIB,
+    displacement and immediate widths from the bytes.  Repeated or address-
+    size prefixes, undefined opcode slots, three-byte escapes and truncated
+    encodings fail.  Every accepted length is cross-checked against an
+    independent disassembler by the boundary-regression tests.
     """
     require(isinstance(encoded, bytes) and encoded,
             f"{context}: instruction encoding is missing")
-    prefix_size = 0
-    opcode = encoded[0]
-    if opcode == 0x66:
-        require(len(encoded) >= 2 and encoded[1] in {0x8B, 0x89},
-                f"{context}: unsupported or truncated operand-size prefix")
-        prefix_size = 1
-        opcode = encoded[1]
-    if opcode in {0x41, 0x43, 0x45, 0x46, 0x47, 0x4B, 0x4F}:
-        require(prefix_size == 0,
-                f"{context}: unsupported prefixed register operation")
-        return 1
-    if opcode in {0x73, 0x74, 0x75, 0x76, 0x7C, 0x7D, 0x7F, 0xEB}:
-        require(prefix_size == 0 and len(encoded) >= 2,
-                f"{context}: short branch is truncated")
-        return 2
-    if 0xB8 <= opcode <= 0xBF:
-        require(prefix_size == 0 and len(encoded) >= 5,
-                f"{context}: register immediate move is truncated")
-        return 5
-    if opcode == 0xE8:
-        require(prefix_size == 0 and len(encoded) >= 5,
-                f"{context}: relative call is truncated")
-        return 5
-    if opcode == 0x99:
-        require(prefix_size == 0,
-                f"{context}: unsupported prefixed sign extension")
-        return 1
-    opcode_size = prefix_size + 1
+    cursor = 0
+    operand_size_16 = False
+    seen_prefixes = set()
+    while cursor < len(encoded) and encoded[cursor] in _IA32_PREFIXES:
+        prefix = encoded[cursor]
+        require(prefix not in seen_prefixes,
+                f"{context}: unsupported repeated instruction prefix")
+        seen_prefixes.add(prefix)
+        if prefix == 0x66:
+            operand_size_16 = True
+        cursor += 1
+    require(cursor < len(encoded),
+            f"{context}: unsupported or truncated instruction prefix")
+    require(cursor <= 4, f"{context}: unsupported instruction prefix run")
+    opcode = encoded[cursor]
+    cursor += 1
     if opcode == 0x0F:
-        require(prefix_size == 0 and len(encoded) >= 2
-                and encoded[1] == 0xAF,
-                f"{context}: unsupported or truncated two-byte IA-32 opcode")
-        opcode_size = 2
-    require(opcode in {
-                0x01, 0x03, 0x0F, 0x2B, 0x33, 0x39, 0x3B,
-                0x80, 0x83, 0x89, 0x8A, 0x8B, 0x8D, 0xF7, 0xFF,
-            },
-            f"{context}: unsupported IA-32 instruction opcode")
-    require(len(encoded) >= opcode_size + 1,
-            f"{context}: IA-32 instruction lacks ModRM")
-    cursor = opcode_size + 1
-    modrm = encoded[opcode_size]
-    if opcode == 0xF7:
-        require((modrm >> 3) & 7 == 3,
-                f"{context}: unsupported F7 group operation")
-    mode = modrm >> 6
-    rm = modrm & 7
-    if mode != 3 and rm == 4:
         require(cursor < len(encoded),
-                f"{context}: IA-32 instruction lacks SIB")
-        sib = encoded[cursor]
+                f"{context}: unsupported or truncated two-byte IA-32 opcode")
+        opcode = encoded[cursor]
         cursor += 1
-        if mode == 0 and (sib & 7) == 5:
+        operands = IA32_TWO_BYTE_OPCODES.get(opcode)
+        require(operands is not None,
+                f"{context}: unsupported two-byte IA-32 opcode")
+    else:
+        operands = IA32_ONE_BYTE_OPCODES.get(opcode)
+        require(operands is not None,
+                f"{context}: unsupported IA-32 instruction opcode")
+    for token in operands:
+        if token == "M":
+            require(cursor < len(encoded),
+                    f"{context}: IA-32 instruction lacks ModRM")
+            modrm = encoded[cursor]
+            cursor += 1
+            mode = modrm >> 6
+            rm = modrm & 7
+            if mode != 3 and rm == 4:
+                require(cursor < len(encoded),
+                        f"{context}: IA-32 instruction lacks SIB")
+                sib = encoded[cursor]
+                cursor += 1
+                if mode == 0 and (sib & 7) == 5:
+                    cursor += 4
+            elif mode == 0 and rm == 5:
+                cursor += 4
+            if mode == 1:
+                cursor += 1
+            elif mode == 2:
+                cursor += 4
+        elif token in ("F6", "F7"):
+            # group 3: TEST carries an immediate, the other members do not
+            if (modrm >> 3) & 7 in (0, 1):
+                cursor += 1 if token == "F6" else (2 if operand_size_16 else 4)
+        elif token in ("Ib", "Jb"):
+            cursor += 1
+        elif token == "Iw":
+            cursor += 2
+        elif token in ("Iz", "Jz"):
+            cursor += 2 if operand_size_16 else 4
+        elif token == "Ov":
             cursor += 4
-    elif mode == 0 and rm == 5:
-        cursor += 4
-    if mode == 1:
-        cursor += 1
-    elif mode == 2:
-        cursor += 4
-    if opcode in {0x80, 0x83}:
-        cursor += 1
+        elif token == "Ap":
+            cursor += 6
+        else:  # pragma: no cover - table integrity
+            raise ByteIdentityError(f"{context}: decoder table error")
     require(cursor <= len(encoded),
             f"{context}: supported IA-32 instruction is truncated")
+    require(cursor <= 15, f"{context}: IA-32 instruction exceeds 15 bytes")
     return cursor
 
 
