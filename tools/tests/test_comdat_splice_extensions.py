@@ -735,6 +735,166 @@ class RetailExactInstructionMosaicTests(unittest.TestCase):
                                     "unknown relocation order"):
             self.compose(seed, permuted, function, retail)
 
+    def reseat_fixture(self, *, donor_offset=6, window=(3, 10)):
+        """A donor whose first relocation operand moved from offset 4 to
+        ``donor_offset`` inside ``window`` (the call re-ordered against
+        its neighbours); the operand bytes (addend) are unchanged."""
+        seed = make_divergent_coff()
+        seed_coff = byte_identity.CoffObject(seed)
+        section = seed_coff.function_section(TARGET_SYMBOL)
+        seed_body = byte_identity.coff_body(seed_coff, section)
+        start, end = window
+        replacement = bytearray(value ^ 0x41
+                                for value in seed_body[start:end])
+        replacement[donor_offset - start:donor_offset - start + 4] = (
+            seed_body[4:8])
+        donor = _patched_target_body(seed, [(start, bytes(replacement))])
+        donor = bytearray(donor)
+        struct.pack_into("<I", donor, section["relocation_offset"],
+                         donor_offset)
+        donor = bytes(donor)
+        donor_coff = byte_identity.CoffObject(donor)
+        donor_body = byte_identity.coff_body(
+            donor_coff, donor_coff.function_section(TARGET_SYMBOL))
+        mosaic = bytearray(seed_body)
+        mosaic[start:end] = donor_body[start:end]
+        mosaic = bytes(mosaic)
+        output_rows = byte_identity.detailed_relocations(donor_coff, donor_coff.function_section(TARGET_SYMBOL))
+        retail = bytearray(mosaic)
+        for record in output_rows:
+            offset, width = record["offset"], record["width"]
+            retail[offset:offset + width] = bytes(
+                (0xB0 + offset + index) & 0xFF for index in range(width))
+        retail = bytes(retail)
+        # the output table: seed records, first one reseated
+        expected_table = bytearray(byte_identity._coff_table_bytes(
+            seed_coff, section, "relocations"))
+        struct.pack_into("<I", expected_table, 0, donor_offset)
+        function = {
+            "mangled": TARGET_SYMBOL,
+            "donor": "d_fixture",
+            "splice_class": "retail_exact_instruction_mosaic",
+            "expected_section_number": section["number"],
+            "expected_section_count": len(seed_coff.sections),
+            "expected_body_length": len(seed_body),
+            "expected_relocation_count": section["relocation_count"],
+            "expected_line_count": section["line_count"],
+            "expected_seed_body_sha256": hashlib.sha256(seed_body).hexdigest(),
+            "expected_donor_body_sha256": hashlib.sha256(donor_body).hexdigest(),
+            "expected_body_sha256": hashlib.sha256(mosaic).hexdigest(),
+            "expected_output_relocation_sha256":
+                hashlib.sha256(bytes(expected_table)).hexdigest(),
+            "instruction_ranges": [{
+                "kind": "same_offset_complete_x86_instruction_v1",
+                "start": start,
+                "end": end,
+                "seed_bytes": seed_body[start:end].hex(),
+                "seed_sha256": hashlib.sha256(seed_body[start:end]).hexdigest(),
+                "donor_bytes": donor_body[start:end].hex(),
+                "donor_sha256": hashlib.sha256(donor_body[start:end]).hexdigest(),
+                "relocation_reseat": True,
+                "seed_relocation_offsets": [4],
+                "donor_relocation_offsets": [donor_offset],
+            }],
+            "retail_oracle": {
+                "image": "LEGO1.DLL", "address": "0x1003cf20",
+                "verdict": "MATCH", "length": len(seed_body),
+            },
+            "retail_relocations": relocation_oracle_for(donor, retail),
+        }
+        return seed, donor, function, retail, mosaic, output_rows
+
+    def test_reseat_moves_only_the_declared_operand_seat(self):
+        seed, donor, function, retail, mosaic, output_rows = (
+            self.reseat_fixture())
+        composed, detail = self.compose(seed, donor, function, retail)
+        checked = byte_identity.CoffObject(composed)
+        section = checked.function_section(TARGET_SYMBOL)
+        self.assertEqual(byte_identity.coff_body(checked, section), mosaic)
+        rows = byte_identity.detailed_relocations(checked, section)
+        self.assertEqual([row["offset"] for row in rows], [6, 12, 20])
+        seed_rows = byte_identity.detailed_relocations(
+            byte_identity.CoffObject(seed),
+            byte_identity.CoffObject(seed).function_section(TARGET_SYMBOL))
+        self.assertEqual([row["symbol_index"] for row in rows],
+                         [row["symbol_index"] for row in seed_rows])
+        self.assertEqual(detail["relocation_reseats"], [{
+            "range": 0, "ordinal": 0, "seed_offset": 4,
+            "output_offset": 6, "target": seed_rows[0]["target"]}])
+        self.assertEqual(detail["body_changed_offsets"],
+                         [3, 4, 5, 8, 9])
+
+    def test_reseat_requires_its_declaration_and_pin(self):
+        seed, donor, function, retail, _, _ = self.reseat_fixture()
+        undeclared = copy.deepcopy(function)
+        item = undeclared["instruction_ranges"][0]
+        for key in ("relocation_reseat", "seed_relocation_offsets",
+                    "donor_relocation_offsets"):
+            item.pop(key)
+        undeclared.pop("expected_output_relocation_sha256")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "relocation offset/type/addend differs"):
+            self.compose(seed, donor, undeclared, retail)
+        unpinned = copy.deepcopy(function)
+        unpinned.pop("expected_output_relocation_sha256")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "output relocation table pin"):
+            self.compose(seed, donor, unpinned, retail)
+        wrong_pin = copy.deepcopy(function)
+        wrong_pin["expected_output_relocation_sha256"] = "0" * 64
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "reseated relocation table differs"):
+            self.compose(seed, donor, wrong_pin, retail)
+        wrong_offsets = copy.deepcopy(function)
+        wrong_offsets["instruction_ranges"][0]["donor_relocation_offsets"] = [5]
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "differ from the declared reseat"):
+            self.compose(seed, donor, wrong_offsets, retail)
+
+    def test_reseat_refuses_an_operand_that_leaves_its_window(self):
+        seed, donor, function, retail, _, _ = self.reseat_fixture()
+        # narrow the declared window so the donor operand (6..10) escapes it
+        item = function["instruction_ranges"][0]
+        item["end"] = 9
+        item["seed_bytes"] = item["seed_bytes"][:12]
+        item["donor_bytes"] = item["donor_bytes"][:12]
+        item["seed_sha256"] = hashlib.sha256(
+            bytes.fromhex(item["seed_bytes"])).hexdigest()
+        item["donor_sha256"] = hashlib.sha256(
+            bytes.fromhex(item["donor_bytes"])).hexdigest()
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            self.compose(seed, donor, function, retail)
+
+    def test_reseat_refuses_a_changed_addend(self):
+        seed, donor, function, retail, _, _ = self.reseat_fixture()
+        parsed = byte_identity.CoffObject(donor)
+        section = parsed.function_section(TARGET_SYMBOL)
+        changed = bytearray(donor)
+        changed[section["raw_offset"] + 6] ^= 1
+        changed_coff = byte_identity.CoffObject(bytes(changed))
+        seed_coff = byte_identity.CoffObject(seed)
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "differs from the seed"):
+            byte_identity.require_instruction_mosaic_semantic_relocations(
+                seed_coff, seed_coff.function_section(TARGET_SYMBOL),
+                changed_coff, changed_coff.function_section(TARGET_SYMBOL),
+                "fixture", reseat_windows=[(3, 10)])
+
+    def test_reseat_schema_requires_a_moved_operand(self):
+        _, _, function, _, _, _ = self.reseat_fixture()
+        item = copy.deepcopy(function["instruction_ranges"][0])
+        item["donor_relocation_offsets"] = [4]
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "does not move a relocation operand"):
+            byte_identity.validate_instruction_mosaic_ranges(
+                [item], "fixture", function["expected_body_length"])
+        item = copy.deepcopy(function["instruction_ranges"][0])
+        item.pop("seed_relocation_offsets")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "incomplete"):
+            byte_identity.validate_instruction_mosaic_ranges(
+                [item], "fixture", function["expected_body_length"])
+
     def test_rejects_donor_relocation_semantic_drift(self):
         seed, donor, function, retail, _ = self.fixture()
         parsed = byte_identity.CoffObject(donor)

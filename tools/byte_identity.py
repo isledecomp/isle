@@ -13532,6 +13532,32 @@ def validate_manifest(
                             "expected_seed_metadata_sha256",
                             "expected_donor_metadata_sha256",
                         }
+                    reseat_ranges = [
+                        item for item in function.get("instruction_ranges")
+                        or [] if isinstance(item, dict)
+                        and item.get("relocation_reseat")
+                    ]
+                    if reseat_ranges or (
+                            "expected_output_relocation_sha256" in function):
+                        mosaic_keys.add("expected_output_relocation_sha256")
+                        require_sha(
+                            function.get("expected_output_relocation_sha256"),
+                            f"{function_context}."
+                            "expected_output_relocation_sha256")
+                        require(
+                            reseat_ranges and not any(
+                                key in function for key in (
+                                    "target_source_refactor",
+                                    "ordinary_fpo_identity",
+                                    "source_fpo_identity",
+                                    "instruction_self_permutation",
+                                    "relocation_order",
+                                )
+                            ),
+                            f"{function_context}: relocation reseat ranges "
+                            "require the plain declaration-carrier mosaic "
+                            "class and its output relocation table pin",
+                        )
                     if "relocation_order" in function:
                         mosaic_keys.add("relocation_order")
                         require(
@@ -16282,6 +16308,12 @@ def validate_retail_relocation_oracle(
 INSTRUCTION_MOSAIC_RANGE_KEYS = {
     "kind", "start", "end", "seed_bytes", "seed_sha256",
     "donor_bytes", "donor_sha256", "donor",
+    "relocation_reseat", "seed_relocation_offsets",
+    "donor_relocation_offsets",
+}
+INSTRUCTION_MOSAIC_RANGE_OPTIONAL_KEYS = {
+    "donor", "relocation_reseat", "seed_relocation_offsets",
+    "donor_relocation_offsets",
 }
 INSTRUCTION_MOSAIC_SEQUENCE_RANGE_KEYS = INSTRUCTION_MOSAIC_RANGE_KEYS | {
     "seed_instruction_lengths", "donor_instruction_lengths",
@@ -18008,10 +18040,12 @@ def validate_instruction_mosaic_ranges(
         kind = item.get("kind")
         if kind == "same_offset_complete_x86_instruction_v1":
             exact_audit_keys(item, INSTRUCTION_MOSAIC_RANGE_KEYS,
-                             item_context, optional={"donor"})
+                             item_context,
+                             optional=INSTRUCTION_MOSAIC_RANGE_OPTIONAL_KEYS)
         elif kind == "same_offset_complete_x86_instruction_sequence_v1":
             exact_audit_keys(item, INSTRUCTION_MOSAIC_SEQUENCE_RANGE_KEYS,
-                             item_context, optional={"donor"})
+                             item_context,
+                             optional=INSTRUCTION_MOSAIC_RANGE_OPTIONAL_KEYS)
         else:
             raise ByteIdentityError(f"{item_context}.kind differs")
         start = require_exact_int(
@@ -18058,6 +18092,29 @@ def validate_instruction_mosaic_ranges(
                     and re.fullmatch(r"d_[0-9a-f]{12}", donor_id),
                     f"{item_context}.donor is invalid")
             normalized_item["donor"] = donor_id
+        reseat_keys = {"relocation_reseat", "seed_relocation_offsets",
+                       "donor_relocation_offsets"}
+        if reseat_keys & set(item):
+            require(item.get("relocation_reseat") is True
+                    and reseat_keys <= set(item),
+                    f"{item_context} relocation reseat declaration is "
+                    "incomplete")
+            offsets = {}
+            for role in ("seed", "donor"):
+                values = item.get(f"{role}_relocation_offsets")
+                require(isinstance(values, list) and 1 <= len(values) <= 16
+                        and all(type(v) is int and start <= v
+                                and v + 4 <= end for v in values)
+                        and values == sorted(set(values)),
+                        f"{item_context}.{role}_relocation_offsets differ")
+                offsets[role] = list(values)
+            require(len(offsets["seed"]) == len(offsets["donor"])
+                    and offsets["seed"] != offsets["donor"],
+                    f"{item_context} relocation reseat does not move a "
+                    "relocation operand")
+            normalized_item["relocation_reseat"] = True
+            normalized_item["seed_relocation_offsets"] = offsets["seed"]
+            normalized_item["donor_relocation_offsets"] = offsets["donor"]
         if kind == "same_offset_complete_x86_instruction_sequence_v1":
             for role in ("seed", "donor"):
                 lengths = item.get(f"{role}_instruction_lengths")
@@ -18957,6 +19014,49 @@ def _require_permuted_instruction_mosaic_relocations(
     return renames
 
 
+def _require_reseat_instruction_mosaic_relocations(
+    seed: CoffObject,
+    seed_section: dict,
+    donor: CoffObject,
+    donor_section: dict,
+    reseat_windows: list[tuple[int, int]],
+    context: str,
+) -> list[tuple[int, str]]:
+    """The ``relocation_reseat`` relocation rule.
+
+    Records pair by ordinal exactly as under the strict rule; the only
+    relaxation is that a paired record may carry its operand at another
+    offset when both the seed's and the donor's operand lie inside the same
+    declared reseat window.  Everything else about the pair (type, width,
+    addend, target identity and structure, COMDAT seat) is the strict rule.
+    """
+    left = detailed_relocations(seed, seed_section)
+    right = detailed_relocations(donor, donor_section)
+    require(len(left) == len(right), f"{context}: relocation counts differ")
+    renames = []
+    for index, (a, b) in enumerate(zip(left, right)):
+        if a["offset"] != b["offset"]:
+            window = next(
+                ((start, end) for start, end in reseat_windows
+                 if start <= a["offset"] and a["offset"] + a["width"] <= end),
+                None,
+            )
+            require(
+                window is not None
+                and window[0] <= b["offset"]
+                and b["offset"] + b["width"] <= window[1],
+                f"{context}: relocation {index} moves outside a declared "
+                "reseat window",
+            )
+            b = dict(b)
+            b["offset"] = a["offset"]
+        ok, rename = _mosaic_relocation_pair_rename(seed, donor, a, b)
+        require(ok, f"{context}: relocation {index} differs from the seed")
+        if rename is not None:
+            renames.append(rename)
+    return renames
+
+
 def require_instruction_mosaic_semantic_relocations(
     seed: CoffObject,
     seed_section: dict,
@@ -18965,8 +19065,14 @@ def require_instruction_mosaic_semantic_relocations(
     context: str,
     *,
     permuted_ranges: list[tuple[int, int]] | None = None,
+    reseat_windows: list[tuple[int, int]] | None = None,
 ) -> list[tuple[int, str]]:
     """Compare mosaic relocations while permitting benign COMDAT reseating.
+
+    With ``reseat_windows`` (the declared ``relocation_reseat`` ranges) the
+    ordinal rule still applies to every record, but a paired record may stand
+    at another offset when both operands lie inside the same declared window
+    (``_require_reseat_instruction_mosaic_relocations``).
 
     With ``permuted_ranges`` (the imported instruction ranges of a mosaic
     declared ``relocation_order: permuted_outside_ranges``) the offset-free
@@ -18979,9 +19085,16 @@ def require_instruction_mosaic_semantic_relocations(
     same primary COMDAT identity.  Compiler-local symbols remain under the
     stricter ordinary mosaic rule.
     """
+    require(permuted_ranges is None or reseat_windows is None,
+            f"{context}: relocation permutation and reseat are exclusive")
     if permuted_ranges is not None:
         return _require_permuted_instruction_mosaic_relocations(
             seed, seed_section, donor, donor_section, permuted_ranges,
+            context,
+        )
+    if reseat_windows is not None:
+        return _require_reseat_instruction_mosaic_relocations(
+            seed, seed_section, donor, donor_section, reseat_windows,
             context,
         )
     renames = _normalized_relocation_renames(
@@ -21256,6 +21369,7 @@ def _validate_instruction_mosaic_source_variant(
     function: dict,
     variant: dict,
     context: str,
+    reseat_windows: list[tuple[int, int]] | None = None,
 ) -> tuple[CoffObject, dict, bytes]:
     """Authenticate one independently compiled same-COMDAT donor variant."""
     donor = CoffObject(donor_bytes)
@@ -21300,7 +21414,8 @@ def _validate_instruction_mosaic_source_variant(
         require_same_semantic_relocations(
             seed, left, donor, right, f"{context} {child_name}")
     require_instruction_mosaic_semantic_relocations(
-        seed, seed_primary, donor, primary, f"{context} code")
+        seed, seed_primary, donor, primary, f"{context} code",
+        reseat_windows=reseat_windows or None)
     body = coff_body(donor, primary)
     require(sha256_bytes(body) == variant["expected_body_sha256"],
             f"{context} body differs from its pin")
@@ -21347,26 +21462,31 @@ def _compose_instruction_mosaic_variant_object(
     }
     objects = {function["donor"]: main_donor_bytes,
                **additional_donor_bytes}
+    ranges = validate_instruction_mosaic_ranges(
+        function["instruction_ranges"], "instruction mosaic ranges",
+        function["expected_body_length"],
+    )
+    reseat_windows = [
+        (item["start"], item["end"]) for item in ranges
+        if item.get("relocation_reseat")
+    ]
     parsed = {}
     for donor_id, record in records.items():
         parsed[donor_id] = _validate_instruction_mosaic_source_variant(
             seed, seed_primary, objects[donor_id], function, record,
             f"instruction-mosaic variant {donor_id}",
+            reseat_windows=reseat_windows,
         )
 
     main = parsed[function["donor"]]
     hybrid = bytearray(main_donor_bytes)
-    ranges = validate_instruction_mosaic_ranges(
-        function["instruction_ranges"], "instruction mosaic ranges",
-        function["expected_body_length"],
-    )
     used = set()
     for index, item in enumerate(ranges):
         donor_id = item.get("donor")
         require(donor_id in parsed,
                 f"instruction-mosaic range {index} donor is not declared")
         used.add(donor_id)
-        _, primary, body = parsed[donor_id]
+        variant_coff, primary, body = parsed[donor_id]
         start, end = item["start"], item["end"]
         require(end <= len(body),
                 f"instruction-mosaic range {index} leaves its donor")
@@ -21375,6 +21495,16 @@ def _compose_instruction_mosaic_variant_object(
                 f"instruction-mosaic range {index} donor provenance differs")
         at = main[1]["raw_offset"] + start
         hybrid[at:at + end - start] = body[start:end]
+        if item.get("relocation_reseat") and donor_id != function["donor"]:
+            # the combined view carries the main donor's relocation table;
+            # a reseat range supplied by another variant brings that
+            # variant's operand seats for the records it moved
+            for row in detailed_relocations(variant_coff, primary):
+                if start <= row["offset"] and row["offset"] + row["width"] <= end:
+                    record_offset = (main[1]["relocation_offset"]
+                                     + 10 * row["ordinal"])
+                    hybrid[record_offset:record_offset + 4] = (
+                        row["offset"].to_bytes(4, "little"))
     require(used == set(records),
             "instruction-mosaic donor variant is unused")
     hybrid = bytes(hybrid)
@@ -21444,6 +21574,19 @@ def _compose_retail_exact_instruction_mosaic_core(
         function.get("instruction_ranges"), "instruction mosaic ranges",
         expected_length,
     )
+    reseat_windows = [
+        (item["start"], item["end"]) for item in ranges
+        if item.get("relocation_reseat")
+    ]
+    reseated = bool(reseat_windows)
+    require(not reseated or not (
+                ordinary_fpo or source_fpo or self_permutation
+                or source_permutation or permuted_relocations),
+            "relocation reseat requires the plain declaration-carrier "
+            "mosaic class")
+    require(reseated == ("expected_output_relocation_sha256" in function),
+            "relocation reseat requires exactly its output relocation "
+            "table pin")
     permutation = (
         validate_instruction_self_permutation(
             function["instruction_self_permutation"],
@@ -21625,11 +21768,14 @@ def _compose_retail_exact_instruction_mosaic_core(
                 [(item["start"], item["end"]) for item in ranges]
                 if permuted_relocations else None
             ),
+            reseat_windows=reseat_windows if reseated else None,
         )
     )
 
     mosaic = bytearray(seed_body)
     range_detail = []
+    output_rows = [dict(row) for row in seed_rows]
+    reseat_detail = []
     for index, item in enumerate(ranges):
         start, end = item["start"], item["end"]
         require(end <= len(donor_body),
@@ -21677,6 +21823,16 @@ def _compose_retail_exact_instruction_mosaic_core(
             require(not contained[0],
                     f"source FPO instruction-mosaic range {index} overlaps "
                     "a relocation operand")
+        reseat = bool(item.get("relocation_reseat"))
+        if reseat:
+            require(
+                [seed_rows[o]["offset"] for o in contained[0]]
+                == item["seed_relocation_offsets"]
+                and [donor_rows[o]["offset"] for o in contained[1]]
+                == item["donor_relocation_offsets"],
+                f"instruction-mosaic range {index} relocation operands "
+                "differ from the declared reseat",
+            )
         for seed_ordinal, donor_ordinal in pairs:
             left, right = seed_rows[seed_ordinal], donor_rows[donor_ordinal]
             strict_fields = (
@@ -21684,10 +21840,23 @@ def _compose_retail_exact_instruction_mosaic_core(
                 "target_section", "target_value", "target_type",
                 "target_storage",
             )
+            if reseat:
+                # the record itself is identical; only its operand seat
+                # inside this range follows the donor's instruction order
+                strict_fields = strict_fields[1:]
             require(all(left[field] == right[field]
                         for field in strict_fields),
                     f"instruction-mosaic range {index} contains a changed "
                     "relocation")
+            if reseat:
+                output_rows[seed_ordinal]["offset"] = right["offset"]
+                reseat_detail.append({
+                    "range": index, "ordinal": seed_ordinal,
+                    "seed_offset": left["offset"],
+                    "output_offset": right["offset"],
+                    "target": left["target"],
+                })
+                continue
             operand_start, width = left["offset"], left["width"]
             require(seed_body[operand_start:operand_start + width]
                     == donor_body[operand_start:operand_start + width],
@@ -21771,15 +21940,23 @@ def _compose_retail_exact_instruction_mosaic_core(
     pinned_length = function["retail_oracle"]["length"]
     require(len(retail_body) == pinned_length == expected_length,
             "instruction-mosaic retail body length changed")
+    if reseated:
+        require(reseat_detail,
+                "relocation reseat ranges reseat no relocation")
+        require(
+            all(a["offset"] + a["width"] <= b["offset"]
+                for a, b in zip(output_rows, output_rows[1:])),
+            "reseated relocation table is not in ascending operand order",
+        )
     semantic_detail = require_retail_relocation_oracle(
-        seed_rows, bytes(retail_body),
+        output_rows, bytes(retail_body),
         int(function["retail_oracle"]["address"], 16),
         function["retail_relocations"],
         "instruction-mosaic retail relocation oracle",
     )
     masked_mosaic = bytearray(mosaic)
     masked_retail = bytearray(retail_body)
-    for row in seed_rows:
+    for row in output_rows:
         start, width = row["offset"], row["width"]
         masked_mosaic[start:start + width] = b"\0" * width
         masked_retail[start:start + width] = b"\0" * width
@@ -21802,6 +21979,15 @@ def _compose_retail_exact_instruction_mosaic_core(
             for item in permutation["moves"]
         )
         replacements.sort(key=lambda item: item[0])
+    reseat_file_offsets = set()
+    for entry in reseat_detail:
+        record_offset = sp["relocation_offset"] + 10 * entry["ordinal"]
+        replacements.append((
+            record_offset, record_offset + 4,
+            entry["output_offset"].to_bytes(4, "little"),
+        ))
+        reseat_file_offsets.update(range(record_offset, record_offset + 4))
+    replacements.sort(key=lambda item: item[0])
     output = apply_replacements(seed_bytes, replacements)
     require(len(output) == len(seed_bytes),
             "instruction-mosaic object size changed")
@@ -21820,6 +22006,7 @@ def _compose_retail_exact_instruction_mosaic_core(
             for item in permutation["moves"]
             for offset in range(item["target_start"], item["target_end"])
         )
+    allowed_file_offsets |= reseat_file_offsets
     require(changed_file_offsets and changed_file_offsets <= allowed_file_offsets,
             "instruction mosaic changed a non-target byte")
     if self_permutation:
@@ -21834,8 +22021,19 @@ def _compose_retail_exact_instruction_mosaic_core(
     cp = checked.function_section(mangled)
     require(coff_body(checked, cp) == mosaic,
             "instruction-mosaic output body differs")
-    require(detailed_relocations(checked, cp) == seed_rows,
+    require(detailed_relocations(checked, cp) == output_rows,
             "instruction-mosaic seed relocations changed")
+    if reseated:
+        require(
+            sha256_bytes(_coff_table_bytes(checked, cp, "relocations"))
+            == function["expected_output_relocation_sha256"],
+            "instruction-mosaic reseated relocation table differs from "
+            "its pin",
+        )
+    else:
+        require(_coff_table_bytes(checked, cp, "relocations")
+                == _coff_table_bytes(seed, sp, "relocations"),
+                "instruction-mosaic seed relocation table changed")
     require(_coff_table_bytes(checked, cp, "lines")
             == _coff_table_bytes(seed, sp, "lines"),
             "instruction-mosaic seed line table changed")
@@ -21863,8 +22061,10 @@ def _compose_retail_exact_instruction_mosaic_core(
         "instruction_ranges": range_detail,
         "instruction_self_permutation": permutation_detail,
         "body_changed_offsets": sorted(
-            offset - sp["raw_offset"] for offset in changed_file_offsets),
+            offset - sp["raw_offset"]
+            for offset in changed_file_offsets - reseat_file_offsets),
         "relocations": len(seed_rows),
+        "relocation_reseats": reseat_detail,
         "line_count": cp["line_count"],
         "closure": list(closure[1]),
         "ordinary_fpo_identity": ordinary_fpo,
