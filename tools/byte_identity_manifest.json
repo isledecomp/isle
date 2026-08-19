@@ -23537,9 +23537,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/actors/act3ammo.cpp",
-    "clean": "9ab7d52089fe920e074a00366d914aefb19841883dee392ae651c76b3f8ba19a",
-    "effective": "3e322f5b445f9413f79acbf249e1521afa522aff039d8178992c8cf19e2653c8",
-    "size": 11204,
+    "clean": "ba38f89cb56b92619fa2c362806856b09744952dcc4d00272b62d8b1dc665bfc",
+    "effective": "118a8fb842aeb44e42cc3a58ce3ac445215d40f70be93eb5bfa7f892df70cc09",
+    "size": 11837,
     "ops": [
      {
       "op": "insert",
@@ -23563,6 +23563,59 @@
          "first": 0,
          "count": 3,
          "line": 3
+        }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "anchor": {
+       "ctx": "9474d8b771ecc325b6239fa6c0ce038067946cae282b3da068317f4d9e1f9ac6",
+       "at": "before_token"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 16,
+       "items": [
+        {
+         "k": "lines",
+         "n": 1,
+         "line": 1
+        },
+        {
+         "k": "fwd_run",
+         "stem": "MxUnkRecHD",
+         "first": 0,
+         "count": 15,
+         "width": 3,
+         "line": 2
+        }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "anchor": {
+       "ctx": "2c71fd8667d2c1fb5f40041f8fe54b5bf44ecb3e0b328b56ed4bb068863fea72",
+       "a": 0,
+       "at": "end"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 16,
+       "items": [
+        {
+         "k": "lines",
+         "n": 1,
+         "line": 1
+        },
+        {
+         "k": "fwd_run",
+         "stem": "MxUnkRecVC",
+         "first": 0,
+         "count": 15,
+         "width": 3,
+         "line": 2
         }
        ]
       }

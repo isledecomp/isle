@@ -310,8 +310,10 @@ void Act3Ammo::Animate(float p_time)
 	MxU32 reachedTarget = FALSE;
 
 	if (f >= p_time) {
-		m_actorTime = (p_time - m_transformTime) * m_worldSpeed + m_actorTime;
-		m_traveledDistance = (p_time - m_transformTime) * m_worldSpeed + m_traveledDistance;
+		float delta = p_time - m_transformTime;
+
+		m_actorTime = delta * m_worldSpeed + m_actorTime;
+		m_traveledDistance = delta * m_worldSpeed + m_traveledDistance;
 		m_transformTime = p_time;
 	}
 	else {
