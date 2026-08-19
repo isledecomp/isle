@@ -6720,7 +6720,38 @@
     "state": "object_composition_enabled_final_gates_incomplete",
     "reason": "Closes 1 row(s) in LEGO1/omni/src/action/mxdsselectaction.cpp from generated carrier states over the rendered current source.",
     "may_replace_compiler_output": true
-   }
+   },
+   "group_order": [
+    "?SetDuration@MxDSParallelAction@@UAEXJ@Z",
+    "?IsA@MxCore@@UBEEPBD@Z",
+    "?ClassName@MxCore@@UBEPBDXZ",
+    "?Tickle@MxCore@@UAEJXZ",
+    "?Compare@?$MxCollection@VMxString@@@@UAECVMxString@@0@Z",
+    "??1?$MxCollection@VMxString@@@@UAE@XZ",
+    "?Destroy@?$MxCollection@VMxString@@@@SAXVMxString@@@Z",
+    "??1?$MxList@VMxString@@@@UAE@XZ",
+    "??_G?$MxCollection@VMxString@@@@UAEPAXI@Z",
+    "??_G?$MxList@VMxString@@@@UAEPAXI@Z",
+    "?ClassName@MxDSSelectAction@@UBEPBDXZ",
+    "?IsA@MxDSSelectAction@@UBEEPBD@Z",
+    "??_GMxDSSelectAction@@UAEPAXI@Z",
+    "??_GMxStringList@@UAEPAXI@Z",
+    "??1MxDSSelectAction@@UAE@XZ",
+    "?CopyFrom@MxDSSelectAction@@QAEXAAV1@@Z",
+    "?Append@?$MxList@VMxString@@@@QAEXVMxString@@@Z",
+    "??_GMxStringListCursor@@UAEPAXI@Z",
+    "??1?$MxListCursor@VMxString@@@@UAE@XZ",
+    "??_G?$MxListCursor@VMxString@@@@UAEPAXI@Z",
+    "??1MxStringListCursor@@UAE@XZ",
+    "??0MxDSSelectAction@@QAE@AAV0@@Z",
+    "??4MxDSSelectAction@@QAEAAV0@AAV0@@Z",
+    "?Clone@MxDSSelectAction@@UAEPAVMxDSAction@@XZ",
+    "?GetSizeOnDisk@MxDSSelectAction@@UAEIXZ",
+    "?Deserialize@MxDSSelectAction@@UAEXAAPAEF@Z",
+    "?InsertEntry@?$MxList@VMxString@@@@IAEPAV?$MxListEntry@VMxString@@@@VMxString@@PAV2@1@Z",
+    "??0?$MxListEntry@VMxString@@@@QAE@VMxString@@PAV0@1@Z",
+    "?GetValue@?$MxListEntry@VMxString@@@@QAE?AVMxString@@XZ"
+   ]
   },
   {
    "target": "omni",
@@ -10339,16 +10370,74 @@
     "may_replace_compiler_output": true
    },
    "group_order": [
-    [
-     "??1?$MxCollection@PAVMxVariable@@@@UAE@XZ",
-     "?Hash@?$MxHashTable@PAVMxVariable@@@@UAEIPAVMxVariable@@@Z",
-     "?Destroy@?$MxCollection@PAVMxVariable@@@@SAXPAVMxVariable@@@Z",
-     "?Compare@?$MxCollection@PAVMxVariable@@@@UAECPAVMxVariable@@0@Z"
-    ],
-    [
-     "??_7MxVariableTable@@6B@",
-     "??_7?$MxHashTable@PAVMxVariable@@@@6B@"
-    ]
+    "??0MxOmni@@QAE@XZ",
+    "?IsPaused@MxOmni@@UAEEXZ",
+    "?IsA@MxCore@@UBEEPBD@Z",
+    "?ClassName@MxCore@@UBEPBDXZ",
+    "?Tickle@MxCore@@UAEJXZ",
+    "?AddToWorld@MxOmni@@UAEPAVMxEntity@@PBDHPAVMxPresenter@@@Z",
+    "?NotifyCurrentEntity@MxOmni@@UAEXABVMxNotificationParam@@@Z",
+    "??_GMxOmni@@UAEPAXI@Z",
+    "??1MxOmni@@UAE@XZ",
+    "?Init@MxOmni@@UAEXXZ",
+    "?SetInstance@MxOmni@@SAXPAV1@@Z",
+    "?Create@MxOmni@@UAEJAAVMxOmniCreateParam@@@Z",
+    "??1_Lockit@@QAE@XZ",
+    "??1?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@QAE@XZ",
+    "?_Inc@iterator@?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@QAEXXZ",
+    "?erase@?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@QAE?AViterator@1@V21@@Z",
+    "?_Erase@?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@IAEXPAU_Node@1@@Z",
+    "??1?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@QAE@XZ",
+    "??1?$List@PAVMxTickleClient@@@@QAE@XZ",
+    "??_GMxTickleManager@@UAEPAXI@Z",
+    "??1?$list@PAVMxTickleClient@@V?$allocator@PAVMxTickleClient@@@@@@QAE@XZ",
+    "?Compare@?$MxCollection@PAVMxVariable@@@@UAECPAVMxVariable@@0@Z",
+    "??1?$MxCollection@PAVMxVariable@@@@UAE@XZ",
+    "?Destroy@?$MxCollection@PAVMxVariable@@@@SAXPAVMxVariable@@@Z",
+    "??_G?$MxCollection@PAVMxVariable@@@@UAEPAXI@Z",
+    "?Destroy@MxVariableTable@@SAXPAVMxVariable@@@Z",
+    "?Hash@?$MxHashTable@PAVMxVariable@@@@UAEIPAVMxVariable@@@Z",
+    "??_GMxVariableTable@@UAEPAXI@Z",
+    "??1?$Set@PAVMxAtom@@UMxAtomCompare@@@@QAE@XZ",
+    "?Destroy@MxOmni@@UAEXXZ",
+    "?Start@MxOmni@@UAEJPAVMxDSAction@@@Z",
+    "?DeleteObject@MxOmni@@UAEXAAVMxDSAction@@@Z",
+    "?CreatePresenter@MxOmni@@UAEJPAVMxStreamController@@AAVMxDSAction@@@Z",
+    "??_GMxActionNotificationParam@@UAEPAXI@Z",
+    "?Clone@MxActionNotificationParam@@UBEPAVMxNotificationParam@@XZ",
+    "??1MxActionNotificationParam@@UAE@XZ",
+    "??1MxNotificationParam@@UAE@XZ",
+    "??_GMxNotificationParam@@UAEPAXI@Z",
+    "?Clone@MxNotificationParam@@UBEPAV1@XZ",
+    "??_GMxParam@@UAEPAXI@Z",
+    "??1MxParam@@UAE@XZ",
+    "??_GMxStartActionNotificationParam@@UAEPAXI@Z",
+    "??1MxStartActionNotificationParam@@UAE@XZ",
+    "??_GMxType4NotificationParam@@UAEPAXI@Z",
+    "??1MxType4NotificationParam@@UAE@XZ",
+    "?GetInstance@MxOmni@@SAPAV1@XZ",
+    "?DestroyInstance@MxOmni@@SAXXZ",
+    "?ActionSourceEquals@MxOmni@@SAEPAVMxDSAction@@PBD@Z",
+    "??1MxDSActionListCursor@@UAE@XZ",
+    "??_G?$MxListCursor@PAVMxDSAction@@@@UAEPAXI@Z",
+    "??1?$MxListCursor@PAVMxDSAction@@@@UAE@XZ",
+    "??_GMxDSActionListCursor@@UAEPAXI@Z",
+    "?Notify@MxOmni@@UAEJAAVMxParam@@@Z",
+    "?HandleEndAction@MxOmni@@QAEJAAVMxParam@@@Z",
+    "?GetHD@MxOmni@@SAPBDXZ",
+    "?SetHD@MxOmni@@SAXPBD@Z",
+    "?GetCD@MxOmni@@SAPBDXZ",
+    "?SetCD@MxOmni@@SAXPBD@Z",
+    "?IsSound3D@MxOmni@@SAEXZ",
+    "?SetSound3D@MxOmni@@SAXE@Z",
+    "?DoesEntityExist@MxOmni@@UAEEAAVMxDSAction@@@Z",
+    "?Pause@MxOmni@@UAEXXZ",
+    "?Resume@MxOmni@@UAEXXZ",
+    "??0MxOmniCreateFlags@@QAE@XZ",
+    "??_GMxOmniCreateParam@@UAEPAXI@Z",
+    "??0MxOmniCreateParam@@QAE@PBDPAUHWND__@@AAVMxVideoParam@@VMxOmniCreateFlags@@@Z",
+    "??1?$MxHashTable@PAVMxVariable@@@@UAE@XZ",
+    "??_G?$MxHashTable@PAVMxVariable@@@@UAEPAXI@Z"
    ]
   },
   {
@@ -13392,172 +13481,6 @@
    }
   },
   {
-   "target": "roi",
-   "source": "LEGO1/lego/sources/roi/legoroi.cpp",
-   "source_sha256": "c958ea968f69bbf9a7bcb6d2bbafeaa2ae35d7dd8d3c8106791c431e9b82d27d",
-   "mode": "compose_equal_body_comdat",
-   "command_policy": {
-    "required_flags": [
-     "/Zi",
-     "-c"
-    ],
-    "forbidden_prefixes": [
-     "/GL",
-     "-GL",
-     "/Z7",
-     "-Z7"
-    ]
-   },
-   "donors": [
-    {
-     "id": "d_640a7103ae6e",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "forward_declaration_run",
-      "prefix": "MxUnkRecVB",
-      "count": 30,
-      "width": 3,
-      "placement": "after_includes",
-      "generated_header_sha256": "640a7103ae6e5aa5aac2dac730d4bc78b3ae131d154fd8e7fc0379f6e6e736f1",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_3d572fd742b2",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "forward_declaration_run",
-      "prefix": "MxUnkRecVC",
-      "count": 159,
-      "width": 3,
-      "placement": "suffix",
-      "generated_header_sha256": "3d572fd742b28bc8677da221b319463cba73750748a21c926d71fd8215138d59",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    }
-   ],
-   "functions": [
-    {
-     "mangled": "?SetTextureInfo@LegoROI@@QAEJPAVLegoTextureInfo@@@Z",
-     "expected_body_length": 133,
-     "expected_body_sha256": "f076d9bdb2687fd03fb64c5fd98635a1805ed77a1644f890be42997fa77f84c5",
-     "expected_changed_offsets": [
-      89
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_640a7103ae6e"
-    },
-    {
-     "mangled": "?GetTextureInfo@LegoROI@@QAEJAAPAVLegoTextureInfo@@@Z",
-     "expected_body_length": 140,
-     "expected_body_sha256": "5396e3122ca7004d8970a95315a5d4dfeea5ad21e69b6256f4bfb3379abe02ff",
-     "expected_changed_offsets": [
-      87
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_640a7103ae6e"
-    },
-    {
-     "mangled": "??1LegoROI@@UAE@XZ",
-     "expected_body_sha256": "49d1589a8bf434bb26700af4274236802a07a6e8a81810333604e290121fee6d",
-     "splice_class": "same_slot_resize",
-     "expected_seed_length": 206,
-     "expected_donor_length": 210,
-     "expected_linked_span": 224,
-     "donor": "d_3d572fd742b2"
-    }
-   ],
-   "completion": {
-    "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 3 row(s) in LEGO1/lego/sources/roi/legoroi.cpp from generated declaration-only carrier states over the rendered current source.",
-    "may_replace_compiler_output": true
-   },
-   "group_order": [
-    "??_GLegoROI@@UAEPAXI@Z",
-    "??0LegoROI@@QAE@PAVRenderer@Tgl@@PAVViewLODList@@@Z",
-    "??1LegoROI@@UAE@XZ",
-    "??1ROI@@UAE@XZ",
-    "??_GROI@@UAEPAXI@Z",
-    "?Read@LegoROI@@QAEJPAVOrientableROI@@PAVRenderer@Tgl@@PAVViewLODListManager@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
-    "?CreateLocalTransform@LegoROI@@SAJPAVLegoAnimNodeData@@JAAVMatrix4@@@Z",
-    "?FindChildROI@LegoROI@@QAEPAV1@PBDPAV1@@Z",
-    "??1?$list@PAVROI@@V?$allocator@PAVROI@@@@@@QAE@XZ",
-    "?ApplyChildAnimationTransformation@LegoROI@@QAEJPAVLegoTreeNode@@ABVMatrix4@@JPAV1@@Z",
-    "?ApplyAnimationTransformation@LegoROI@@SAXPAVLegoTreeNode@@AAVMatrix4@@JPAPAV1@@Z",
-    "?ApplyTransform@LegoROI@@SAXPAVLegoTreeNode@@AAVMatrix4@@JPAPAV1@@Z",
-    "?SetFrame@LegoROI@@QAEJPAVLegoAnim@@J@Z",
-    "?CopyFrom@Matrix4@@UAEXPAY03M@Z",
-    "?CopyFrom@Matrix4@@UAEXABV1@@Z",
-    "?SetData@Matrix4@@UAEXPAY03M@Z",
-    "?SetData@Matrix4@@UAEXAAUUnknownMatrixType@@@Z",
-    "?GetData@Matrix4@@UAEPAY03MXZ",
-    "?GetData@Matrix4@@UBEPAY03MXZ",
-    "?Element@Matrix4@@UAEPAMHH@Z",
-    "?Element@Matrix4@@UBEPBMHH@Z",
-    "?Clear@Matrix4@@UAEXXZ",
-    "?SetIdentity@Matrix4@@UAEXXZ",
-    "??YMatrix4@@UAEAAV0@PAY03M@Z",
-    "?TranslateBy@Matrix4@@UAEXABM00@Z",
-    "?SetTranslation@Matrix4@@UAEXABM00@Z",
-    "?Product@Matrix4@@UAEXPAY03M0@Z",
-    "?Product@Matrix4@@UAEXABV1@0@Z",
-    "?ToQuaternion@Matrix4@@UAEXAAVVector4@@@Z",
-    "?FromQuaternion@Matrix4@@UAEHABVVector4@@@Z",
-    "??4MxMatrix@@UAEXABVMatrix4@@@Z",
-    "??4MxMatrix@@UAEXABV0@@Z",
-    "?SetLodColor@LegoROI@@QAEJMMMM@Z",
-    "?SetTextureInfo@LegoROI@@QAEJPAVLegoTextureInfo@@@Z",
-    "?GetTextureInfo@LegoROI@@QAEJAAPAVLegoTextureInfo@@@Z",
-    "?SetColor@LegoROI@@QAEJMMMM@Z",
-    "?SetLodColor@LegoROI@@QAEJPBD@Z",
-    "?SetColorByName@LegoROI@@QAEJPBD@Z",
-    "?Intersect@LegoROI@@QAEKAAVVector3@@0MM0E@Z",
-    "??4Vector4@@QAEAAV0@ABV0@@Z",
-    "??0TimeROI@@QAE@PAVRenderer@Tgl@@PAVViewLODList@@J@Z",
-    "??_GTimeROI@@UAEPAXI@Z",
-    "?AddImpl@Vector4@@MAEXPBM@Z",
-    "?AddImpl@Vector4@@MAEXM@Z",
-    "?SubImpl@Vector4@@MAEXPBM@Z",
-    "?MulImpl@Vector4@@MAEXPBM@Z",
-    "?MulImpl@Vector4@@MAEXABM@Z",
-    "?DivImpl@Vector4@@MAEXABM@Z",
-    "?DotImpl@Vector4@@MBEMPBM0@Z",
-    "?EqualsImpl@Vector4@@MAEXPBM@Z",
-    "?SetMatrixProduct@Vector4@@UAEXPBM0@Z",
-    "?SetMatrixProduct@Vector4@@UAEXABV1@PBM@Z",
-    "?Clear@Vector4@@UAEXXZ",
-    "?LenSquared@Vector4@@UBEMXZ",
-    "?Fill@Vector4@@UAEXABM@Z",
-    "?NormalizeQuaternion@Vector4@@UAEHXZ",
-    "?EqualsHamiltonProduct@Vector4@@UAEHABV1@0@Z",
-    "??4Vector3@@QAEAAV0@ABV0@@Z",
-    "??0Mx4DPointFloat@@QAE@XZ",
-    "??4Mx4DPointFloat@@UAEXABVVector4@@@Z",
-    "??_H@YGXPAXIHP6EX0@Z@Z",
-    "?CalculateWorldVelocity@TimeROI@@QAEXAAVMatrix4@@J@Z",
-    "?GetRGBAColor@LegoROI@@SAEPBDAAM111@Z",
-    "?ColorAliasLookup@LegoROI@@SAEPBDAAM111@Z",
-    "?GetPaletteEntries@LegoROI@@SAEPBDPAEK@Z",
-    "?SetColorOverride@LegoROI@@SAXP6AEPBDPADI@Z@Z",
-    "?SetName@LegoROI@@QAEXPBD@Z",
-    "?ClearMeshOffset@LegoROI@@QAEXXZ",
-    "?SetDisplayBB@LegoROI@@QAEXH@Z",
-    "??1ViewROI@@UAE@XZ",
-    "??_GViewROI@@UAEPAXI@Z",
-    "??1OrientableROI@@UAE@XZ"
-   ]
-  },
-  {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legopartpresenter.cpp",
    "source_sha256": "bbf282deadcf5970b447dff278acfcacf020d169cec7be847d169721910694a8",
@@ -16235,25 +16158,25 @@
     "may_replace_compiler_output": true
    },
    "group_order": [
-    [
-     "??1LODObject@@UAE@XZ",
-     "??_GLODObject@@UAEPAXI@Z",
-     "?AveragePolyArea@ViewLOD@@UBENXZ",
-     "?NVerts@ViewLOD@@UBEHXZ",
-     "??_GViewLOD@@UAEPAXI@Z",
-     "??0LegoLOD@@QAE@PAVRenderer@Tgl@@@Z",
-     "??_GLegoLOD@@UAEPAXI@Z",
-     "??1LegoLOD@@UAE@XZ",
-     "?SetLightSupport@ViewROI@@SAEE@Z",
-     "?Read@LegoLOD@@QAEJPAVRenderer@Tgl@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
-     "?NumPolys@LegoLOD@@UBEHXZ",
-     "?VTable0x10@LegoLOD@@UAEMXZ"
-    ],
-    [
-     "??_7ViewLOD@@6B@",
-     "??_7LODObject@@6B@",
-     "??_7LegoLOD@@6B@"
-    ]
+    "??1LODObject@@UAE@XZ",
+    "??_GLODObject@@UAEPAXI@Z",
+    "?AveragePolyArea@ViewLOD@@UBENXZ",
+    "?NVerts@ViewLOD@@UBEHXZ",
+    "??_GViewLOD@@UAEPAXI@Z",
+    "??0LegoLOD@@QAE@PAVRenderer@Tgl@@@Z",
+    "??_GLegoLOD@@UAEPAXI@Z",
+    "??1LegoLOD@@UAE@XZ",
+    "?SetLightSupport@ViewROI@@SAEE@Z",
+    "?Read@LegoLOD@@QAEJPAVRenderer@Tgl@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
+    "?Clone@LegoLOD@@QAEPAV1@PAVRenderer@Tgl@@@Z",
+    "?SetColor@LegoLOD@@QAEJMMMM@Z",
+    "?SetTextureInfo@LegoLOD@@QAEJPAVLegoTextureInfo@@@Z",
+    "?UpdateTextureInfo@LegoLOD@@QAEJPAVLegoTextureInfo@@@Z",
+    "?GetTextureInfo@LegoLOD@@QAEJAAPAVLegoTextureInfo@@@Z",
+    "?HasInhPrefix@LegoLOD@@SAEPBD@Z",
+    "?ClearMeshOffset@LegoLOD@@QAEXXZ",
+    "?NumPolys@LegoLOD@@UBEHXZ",
+    "?VTable0x10@LegoLOD@@UAEMXZ"
    ]
   },
   {
@@ -17142,11 +17065,72 @@
     ]
    },
    "group_order": [
-    "?SetDuration@MxDSAction@@UAEXJ@Z",
-    "??_GMxDSAction@@UAEPAXI@Z",
+    "??0MxDSAction@@QAE@XZ",
+    "??4Mx3DPointFloat@@UAEXABVVector3@@@Z",
+    "?Fill@Vector3@@UAEXABM@Z",
+    "?Clear@Vector3@@UAEXXZ",
+    "?EqualsImpl@Vector3@@MAEXPBM@Z",
+    "?DotImpl@Vector3@@MBEMPBM0@Z",
+    "?DivImpl@Vector3@@MAEXABM@Z",
+    "?MulImpl@Vector3@@MAEXABM@Z",
+    "?MulImpl@Vector3@@MAEXPBM@Z",
+    "?SubImpl@Vector3@@MAEXPBM@Z",
+    "?AddImpl@Vector3@@MAEXM@Z",
+    "?AddImpl@Vector3@@MAEXPBM@Z",
+    "?EqualsCross@Vector3@@UAEXPBMABV1@@Z",
+    "?EqualsCross@Vector3@@UAEXABV1@PBM@Z",
+    "?EqualsCross@Vector3@@UAEXABV1@0@Z",
+    "?EqualsCrossImpl@Vector3@@MAEXPBM0@Z",
+    "??4Vector2@@UAEXABV0@@Z",
+    "??4Vector2@@UAEXPBM@Z",
+    "??_0Vector2@@UAEXABM@Z",
+    "??XVector2@@UAEXABM@Z",
+    "??XVector2@@UAEXABV0@@Z",
+    "??XVector2@@UAEXPBM@Z",
+    "??ZVector2@@UAEXABV0@@Z",
+    "??ZVector2@@UAEXPBM@Z",
+    "??YVector2@@UAEXABV0@@Z",
+    "??YVector2@@UAEXPBM@Z",
+    "??YVector2@@UAEXM@Z",
+    "?Unitize@Vector2@@UAEHXZ",
+    "?LenSquared@Vector2@@UBEMXZ",
+    "?Dot@Vector2@@UBEMABV1@PBM@Z",
+    "?Dot@Vector2@@UBEMPBMABV1@@Z",
+    "?Dot@Vector2@@UBEMABV1@0@Z",
+    "?Dot@Vector2@@UBEMPBM0@Z",
+    "?Clear@Vector2@@UAEXXZ",
+    "?GetData@Vector2@@UBEPBMXZ",
+    "?GetData@Vector2@@UAEPAMXZ",
+    "?EqualsImpl@Vector2@@MAEXPBM@Z",
+    "?SetData@Vector2@@MAEXPAM@Z",
+    "?DotImpl@Vector2@@MBEMPBM0@Z",
+    "?DivImpl@Vector2@@MAEXABM@Z",
+    "?MulImpl@Vector2@@MAEXABM@Z",
+    "?MulImpl@Vector2@@MAEXPBM@Z",
+    "?SubImpl@Vector2@@MAEXPBM@Z",
+    "?AddImpl@Vector2@@MAEXM@Z",
+    "?AddImpl@Vector2@@MAEXPBM@Z",
+    "?SetAtomId@MxDSObject@@UAEXVMxAtomId@@@Z",
+    "?Tickle@MxCore@@UAEJXZ",
     "?GetDuration@MxDSAction@@UAEJXZ",
+    "?SetDuration@MxDSAction@@UAEXJ@Z",
     "?HasId@MxDSAction@@UAEEI@Z",
-    "?IsA@MxDSAction@@UBEEPBD@Z"
+    "?ClassName@MxDSAction@@UBEPBDXZ",
+    "?IsA@MxDSAction@@UBEEPBD@Z",
+    "?SetTimeStarted@MxDSAction@@UAEXJ@Z",
+    "?GetTimeStarted@MxDSAction@@UAEJXZ",
+    "??_GMxDSAction@@UAEPAXI@Z",
+    "??1MxDSAction@@UAE@XZ",
+    "?CopyFrom@MxDSAction@@QAEXAAV1@@Z",
+    "??0MxDSAction@@QAE@AAV0@@Z",
+    "?VTable0x14@MxDSAction@@UAEIXZ",
+    "?GetSizeOnDisk@MxDSAction@@UAEIXZ",
+    "??4MxDSAction@@QAEAAV0@AAV0@@Z",
+    "?Clone@MxDSAction@@UAEPAV1@XZ",
+    "?GetElapsedTime@MxDSAction@@UAEJXZ",
+    "?MergeFrom@MxDSAction@@UAEXAAV1@@Z",
+    "?AppendExtra@MxDSAction@@QAEXGPBD@Z",
+    "?Deserialize@MxDSAction@@UAEXAAPAEF@Z"
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
@@ -17172,9 +17156,24 @@
     ]
    },
    "group_order": [
-    "??_GMxDSParallelAction@@UAEPAXI@Z",
+    "??0MxDSParallelAction@@QAE@XZ",
+    "?Tickle@MxCore@@UAEJXZ",
     "?SetDuration@MxDSParallelAction@@UAEXJ@Z",
-    "?IsA@MxDSParallelAction@@UBEEPBD@Z"
+    "?ClassName@MxDSParallelAction@@UBEPBDXZ",
+    "?IsA@MxDSParallelAction@@UBEEPBD@Z",
+    "??_GMxDSParallelAction@@UAEPAXI@Z",
+    "??1MxDSParallelAction@@UAE@XZ",
+    "?CopyFrom@MxDSParallelAction@@QAEXAAV1@@Z",
+    "??0MxDSParallelAction@@QAE@AAV0@@Z",
+    "??4MxDSParallelAction@@QAEAAV0@AAV0@@Z",
+    "?Clone@MxDSParallelAction@@UAEPAVMxDSAction@@XZ",
+    "?GetDuration@MxDSParallelAction@@UAEJXZ",
+    "??1MxDSActionListCursor@@UAE@XZ",
+    "??_G?$MxListCursor@PAVMxDSAction@@@@UAEPAXI@Z",
+    "??1?$MxListCursor@PAVMxDSAction@@@@UAE@XZ",
+    "??_GMxDSActionListCursor@@UAEPAXI@Z",
+    "?IsA@MxCore@@UBEEPBD@Z",
+    "?ClassName@MxCore@@UBEPBDXZ"
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
@@ -17200,10 +17199,24 @@
     ]
    },
    "group_order": [
-    "??1MxDSSerialAction@@UAE@XZ",
-    "??_GMxDSSerialAction@@UAEPAXI@Z",
+    "??0MxDSSerialAction@@QAE@XZ",
+    "??_G?$MxListCursor@PAVMxDSAction@@@@UAEPAXI@Z",
+    "??1?$MxListCursor@PAVMxDSAction@@@@UAE@XZ",
+    "??_GMxDSActionListCursor@@UAEPAXI@Z",
+    "?IsA@MxCore@@UBEEPBD@Z",
+    "?ClassName@MxCore@@UBEPBDXZ",
+    "?Tickle@MxCore@@UAEJXZ",
     "?SetDuration@MxDSSerialAction@@UAEXJ@Z",
-    "?IsA@MxDSSerialAction@@UBEEPBD@Z"
+    "?ClassName@MxDSSerialAction@@UBEPBDXZ",
+    "?IsA@MxDSSerialAction@@UBEEPBD@Z",
+    "??_GMxDSSerialAction@@UAEPAXI@Z",
+    "??1MxDSSerialAction@@UAE@XZ",
+    "?CopyFrom@MxDSSerialAction@@QAEXAAV1@@Z",
+    "??0MxDSSerialAction@@QAE@AAV0@@Z",
+    "??4MxDSSerialAction@@QAEAAV0@AAV0@@Z",
+    "?Clone@MxDSSerialAction@@UAEPAVMxDSAction@@XZ",
+    "?GetDuration@MxDSSerialAction@@UAEJXZ",
+    "??1MxDSActionListCursor@@UAE@XZ"
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
@@ -17229,19 +17242,35 @@
     ]
    },
    "group_order": [
-    "?VTable0x20@MxStreamProvider@@UAEXPAVMxDSAction@@@Z",
+    "??_GMxDSFile@@UAEPAXI@Z",
+    "?IsA@MxDSFile@@UBEEPBD@Z",
+    "?ClassName@MxDSFile@@UBEPBDXZ",
+    "??_GMxDSSource@@UAEPAXI@Z",
+    "?GetBuffer@MxDSSource@@UAEPAIXZ",
+    "?GetLengthInDWords@MxDSSource@@UAEJXZ",
+    "?ReadToBuffer@MxDSSource@@UAEJPAVMxDSBuffer@@@Z",
+    "?IsA@MxDSSource@@UBEEPBD@Z",
+    "?ClassName@MxDSSource@@UBEPBDXZ",
+    "??1MxDSSource@@UAE@XZ",
+    "?Tickle@MxCore@@UAEJXZ",
+    "??1MxDSFile@@UAE@XZ",
+    "??0MxRAMStreamProvider@@QAE@XZ",
     "?SetResourceToGet@MxStreamProvider@@UAEJPAVMxStreamController@@@Z",
-    "??_GMxStreamProvider@@UAEPAXI@Z",
+    "?VTable0x20@MxStreamProvider@@UAEXPAVMxDSAction@@@Z",
+    "?ClassName@MxStreamProvider@@UBEPBDXZ",
     "?IsA@MxStreamProvider@@UBEEPBD@Z",
+    "??_GMxStreamProvider@@UAEPAXI@Z",
     "??1MxStreamProvider@@UAE@XZ",
-    "?ClassName@MxRAMStreamProvider@@UBEPBDXZ",
-    "?GetStreamBuffersNum@MxRAMStreamProvider@@UAEHXZ",
-    "??_GMxRAMStreamProvider@@UAEPAXI@Z",
     "?GetFileSize@MxRAMStreamProvider@@UAEIXZ",
+    "?GetStreamBuffersNum@MxRAMStreamProvider@@UAEHXZ",
     "?GetLengthInDWords@MxRAMStreamProvider@@UAEIXZ",
     "?GetBufferForDWords@MxRAMStreamProvider@@UAEPAIXZ",
+    "?ClassName@MxRAMStreamProvider@@UBEPBDXZ",
+    "?IsA@MxRAMStreamProvider@@UBEEPBD@Z",
+    "??_GMxRAMStreamProvider@@UAEPAXI@Z",
     "??1MxRAMStreamProvider@@UAE@XZ",
-    "?IsA@MxRAMStreamProvider@@UBEEPBD@Z"
+    "?SetResourceToGet@MxRAMStreamProvider@@UAEJPAVMxStreamController@@@Z",
+    "?ReadData@@YAIPAEI@Z"
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
@@ -17358,35 +17387,6 @@
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
     "reason": "Restores the retail-anchored .text COMDAT group order of the MxDSSource inline virtuals emitted by LEGO1/omni/src/action/mxdsobject.cpp (whole-group permutation, body-inert).",
-    "may_replace_compiler_output": true
-   }
-  },
-  {
-   "target": "roi",
-   "source": "LEGO1/viewmanager/viewroi.cpp",
-   "source_sha256": "fcbc1c942be83c348896f8a6a3890904f70237dbdb98b547d0d8c37f8620c784",
-   "mode": "restore_comdat_group_order",
-   "command_policy": {
-    "required_flags": [
-     "/Zi",
-     "-c"
-    ],
-    "forbidden_prefixes": [
-     "/GL",
-     "-GL",
-     "/Z7",
-     "-Z7"
-    ]
-   },
-   "group_order": [
-    "?GetGeometry@ViewROI@@UAEPAVGroup@Tgl@@XZ",
-    "?GetGeometry@ViewROI@@UBEPBVGroup@Tgl@@XZ",
-    "?UpdateWorldDataWithTransformAndChildren@ViewROI@@MAEXABVMatrix4@@@Z",
-    "?IntrinsicImportance@ViewROI@@UBEMXZ"
-   ],
-   "completion": {
-    "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Restores the retail-anchored .text COMDAT group order of LEGO1/viewmanager/viewroi.cpp (whole-group permutation, body-inert).",
     "may_replace_compiler_output": true
    }
   },
@@ -20918,6 +20918,375 @@
     "reason": "Closes ?InitializeMIDI@MxMusicManager@@QAEJPAEH from a generated declaration-only carrier state over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/stream/mxstreamer.cpp",
+   "source_sha256": "b2796b1a888e3bbb249b8902da4687a24fc59a94e0b1c39c326819fab844c589",
+   "mode": "restore_comdat_group_order",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "group_order": [
+    "??1MxNotificationParam@@UAE@XZ",
+    "??_GMxNotificationParam@@UAEPAXI@Z",
+    "?Clone@MxNotificationParam@@UBEPAV1@XZ",
+    "??_GMxParam@@UAEPAXI@Z",
+    "??1MxParam@@UAE@XZ",
+    "?Clone@MxStreamerNotification@@UBEPAVMxNotificationParam@@XZ",
+    "??_GMxStreamerNotification@@UAEPAXI@Z",
+    "??1MxStreamerNotification@@UAE@XZ"
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Restores the retail-anchored .text COMDAT group order of LEGO1/omni/src/stream/mxstreamer.cpp (whole-group permutation, body-inert).",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
+   "target": "roi",
+   "source": "LEGO1/lego/sources/roi/legoroi.cpp",
+   "source_sha256": "3de9abdd4500c3a2a07cad38a1970364cef1879a36509a149040fe2a619a4bd4",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_489aa284a388",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 8,
+      "seat_prefix": "g_p",
+      "seat_count": 1,
+      "width": 2,
+      "generated_header_sha256": "489aa284a388f77ba879909ea7188fbe186d6e06f09d540679db5be5e5b646cd",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_79cee655282a",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "prefix": "MxUnkRecVC",
+      "count": 13,
+      "width": 3,
+      "placement": "suffix",
+      "generated_header_sha256": "79cee655282af0764786ea4d8bd6fc99eef37ed67bb5fd83cb318af87252c82e",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "??1LegoROI@@UAE@XZ",
+     "expected_body_sha256": "49d1589a8bf434bb26700af4274236802a07a6e8a81810333604e290121fee6d",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 206,
+     "expected_donor_length": 210,
+     "expected_linked_span": 224,
+     "donor": "d_489aa284a388"
+    },
+    {
+     "mangled": "??1ViewROI@@UAE@XZ",
+     "expected_body_length": 133,
+     "expected_body_sha256": "9ed85b6bacbb164c9099c05174ffc52ad1a9ac34d1ec2d1f9581a04b4af2fece",
+     "expected_changed_offsets": [
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      47,
+      51,
+      55,
+      57
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       116,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36
+     ],
+     "donor": "d_79cee655282a"
+    },
+    {
+     "mangled": "?FindChildROI@LegoROI@@QAEPAV1@PBDPAV1@@Z",
+     "expected_body_length": 182,
+     "expected_body_sha256": "3f1333c85ca7ce0b7b26973fdb2f897f1fc1dd152bee8c8efc1b016e2f37211a",
+     "expected_changed_offsets": [
+      79,
+      130
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_79cee655282a"
+    },
+    {
+     "mangled": "?Intersect@LegoROI@@QAEKAAVVector3@@0MM0E@Z",
+     "expected_body_length": 1553,
+     "expected_body_sha256": "fb8815d45c5c5a002428fe7083e4f1f07083fc6746058e5bd925246cd1160210",
+     "expected_changed_offsets": [
+      152,
+      153,
+      154,
+      155,
+      156,
+      157,
+      158,
+      159,
+      160,
+      163,
+      164,
+      165,
+      166,
+      167,
+      168,
+      178,
+      179,
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      508,
+      509,
+      510,
+      511,
+      512,
+      513,
+      581,
+      582,
+      583,
+      584,
+      585,
+      586
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       766,
+       "T"
+      ],
+      [
+       847,
+       "T"
+      ],
+      [
+       872,
+       "T"
+      ],
+      [
+       916,
+       "T"
+      ],
+      [
+       1067,
+       "T"
+      ],
+      [
+       1237,
+       "T"
+      ],
+      [
+       1274,
+       "T"
+      ],
+      [
+       1293,
+       "T"
+      ],
+      [
+       1323,
+       "T"
+      ],
+      [
+       1337,
+       "T"
+      ],
+      [
+       1367,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_79cee655282a"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 4 row(s) in LEGO1/lego/sources/roi/legoroi.cpp from generated declaration-only carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   },
+   "group_order": [
+    "?WrappedUpdateWorldData@OrientableROI@@UAEXXZ",
+    "??4Mx3DPointFloat@@UAEXABVVector3@@@Z",
+    "?Fill@Vector3@@UAEXABM@Z",
+    "?Clear@Vector3@@UAEXXZ",
+    "?EqualsImpl@Vector3@@MAEXPBM@Z",
+    "?DotImpl@Vector3@@MBEMPBM0@Z",
+    "?DivImpl@Vector3@@MAEXABM@Z",
+    "?MulImpl@Vector3@@MAEXABM@Z",
+    "?MulImpl@Vector3@@MAEXPBM@Z",
+    "?SubImpl@Vector3@@MAEXPBM@Z",
+    "?AddImpl@Vector3@@MAEXM@Z",
+    "?AddImpl@Vector3@@MAEXPBM@Z",
+    "?EqualsCross@Vector3@@UAEXPBMABV1@@Z",
+    "?EqualsCross@Vector3@@UAEXABV1@PBM@Z",
+    "?EqualsCross@Vector3@@UAEXABV1@0@Z",
+    "?EqualsCrossImpl@Vector3@@MAEXPBM0@Z",
+    "??4Vector2@@UAEXABV0@@Z",
+    "??4Vector2@@UAEXPBM@Z",
+    "??_0Vector2@@UAEXABM@Z",
+    "??XVector2@@UAEXABM@Z",
+    "??XVector2@@UAEXABV0@@Z",
+    "??XVector2@@UAEXPBM@Z",
+    "??ZVector2@@UAEXABV0@@Z",
+    "??ZVector2@@UAEXPBM@Z",
+    "??YVector2@@UAEXABV0@@Z",
+    "??YVector2@@UAEXPBM@Z",
+    "??YVector2@@UAEXM@Z",
+    "?Unitize@Vector2@@UAEHXZ",
+    "?LenSquared@Vector2@@UBEMXZ",
+    "?Dot@Vector2@@UBEMABV1@PBM@Z",
+    "?Dot@Vector2@@UBEMPBMABV1@@Z",
+    "?Dot@Vector2@@UBEMABV1@0@Z",
+    "?Dot@Vector2@@UBEMPBM0@Z",
+    "?Clear@Vector2@@UAEXXZ",
+    "?GetData@Vector2@@UBEPBMXZ",
+    "?GetData@Vector2@@UAEPAMXZ",
+    "?EqualsImpl@Vector2@@MAEXPBM@Z",
+    "?SetData@Vector2@@MAEXPAM@Z",
+    "?DotImpl@Vector2@@MBEMPBM0@Z",
+    "?DivImpl@Vector2@@MAEXABM@Z",
+    "?MulImpl@Vector2@@MAEXABM@Z",
+    "?MulImpl@Vector2@@MAEXPBM@Z",
+    "?SubImpl@Vector2@@MAEXPBM@Z",
+    "?AddImpl@Vector2@@MAEXM@Z",
+    "?AddImpl@Vector2@@MAEXPBM@Z",
+    "?LenSquared@Vector3@@UBEMXZ",
+    "??_GLegoROI@@UAEPAXI@Z",
+    "??0LegoROI@@QAE@PAVRenderer@Tgl@@PAVViewLODList@@@Z",
+    "??1LegoROI@@UAE@XZ",
+    "??1?$list@PAVROI@@V?$allocator@PAVROI@@@@@@QAE@XZ",
+    "?Read@LegoROI@@QAEJPAVOrientableROI@@PAVRenderer@Tgl@@PAVViewLODListManager@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
+    "?CreateLocalTransform@LegoROI@@SAJPAVLegoAnimNodeData@@JAAVMatrix4@@@Z",
+    "?FindChildROI@LegoROI@@QAEPAV1@PBDPAV1@@Z",
+    "?ApplyChildAnimationTransformation@LegoROI@@QAEJPAVLegoTreeNode@@ABVMatrix4@@JPAV1@@Z",
+    "??4MxMatrix@@UAEXABV0@@Z",
+    "??4MxMatrix@@UAEXABVMatrix4@@@Z",
+    "?FromQuaternion@Matrix4@@UAEHABVVector4@@@Z",
+    "?ToQuaternion@Matrix4@@UAEXAAVVector4@@@Z",
+    "?Product@Matrix4@@UAEXABV1@0@Z",
+    "?Product@Matrix4@@UAEXPAY03M0@Z",
+    "?SetTranslation@Matrix4@@UAEXABM00@Z",
+    "?TranslateBy@Matrix4@@UAEXABM00@Z",
+    "??YMatrix4@@UAEAAV0@PAY03M@Z",
+    "?SetIdentity@Matrix4@@UAEXXZ",
+    "?Clear@Matrix4@@UAEXXZ",
+    "?Element@Matrix4@@UBEPBMHH@Z",
+    "?Element@Matrix4@@UAEPAMHH@Z",
+    "?GetData@Matrix4@@UBEPAY03MXZ",
+    "?GetData@Matrix4@@UAEPAY03MXZ",
+    "?SetData@Matrix4@@UAEXAAUUnknownMatrixType@@@Z",
+    "?SetData@Matrix4@@UAEXPAY03M@Z",
+    "?CopyFrom@Matrix4@@UAEXABV1@@Z",
+    "?CopyFrom@Matrix4@@UAEXPAY03M@Z",
+    "?ApplyAnimationTransformation@LegoROI@@SAXPAVLegoTreeNode@@AAVMatrix4@@JPAPAV1@@Z",
+    "?ApplyTransform@LegoROI@@SAXPAVLegoTreeNode@@AAVMatrix4@@JPAPAV1@@Z",
+    "?SetFrame@LegoROI@@QAEJPAVLegoAnim@@J@Z",
+    "?SetLodColor@LegoROI@@QAEJMMMM@Z",
+    "?SetTextureInfo@LegoROI@@QAEJPAVLegoTextureInfo@@@Z",
+    "?GetTextureInfo@LegoROI@@QAEJAAPAVLegoTextureInfo@@@Z",
+    "?SetColor@LegoROI@@QAEJMMMM@Z",
+    "?SetLodColor@LegoROI@@QAEJPBD@Z",
+    "?SetColorByName@LegoROI@@QAEJPBD@Z",
+    "?Intersect@LegoROI@@QAEKAAVVector3@@0MM0E@Z",
+    "??_H@YGXPAXIHP6EX0@Z@Z",
+    "??4Mx4DPointFloat@@UAEXABVVector4@@@Z",
+    "??0Mx4DPointFloat@@QAE@XZ",
+    "??4Vector3@@QAEAAV0@ABV0@@Z",
+    "?EqualsHamiltonProduct@Vector4@@UAEHABV1@0@Z",
+    "?NormalizeQuaternion@Vector4@@UAEHXZ",
+    "?Fill@Vector4@@UAEXABM@Z",
+    "?LenSquared@Vector4@@UBEMXZ",
+    "?Clear@Vector4@@UAEXXZ",
+    "?SetMatrixProduct@Vector4@@UAEXABV1@PBM@Z",
+    "?SetMatrixProduct@Vector4@@UAEXPBM0@Z",
+    "?EqualsImpl@Vector4@@MAEXPBM@Z",
+    "?DotImpl@Vector4@@MBEMPBM0@Z",
+    "?DivImpl@Vector4@@MAEXABM@Z",
+    "?MulImpl@Vector4@@MAEXABM@Z",
+    "?MulImpl@Vector4@@MAEXPBM@Z",
+    "?SubImpl@Vector4@@MAEXPBM@Z",
+    "?AddImpl@Vector4@@MAEXM@Z",
+    "?AddImpl@Vector4@@MAEXPBM@Z",
+    "??4Vector4@@QAEAAV0@ABV0@@Z",
+    "??0TimeROI@@QAE@PAVRenderer@Tgl@@PAVViewLODList@@J@Z",
+    "??_GTimeROI@@UAEPAXI@Z",
+    "?CalculateWorldVelocity@TimeROI@@QAEXAAVMatrix4@@J@Z",
+    "?GetRGBAColor@LegoROI@@SAEPBDAAM111@Z",
+    "?ColorAliasLookup@LegoROI@@SAEPBDAAM111@Z",
+    "?GetPaletteEntries@LegoROI@@SAEPBDPAEK@Z",
+    "?SetColorOverride@LegoROI@@SAXP6AEPBDPADI@Z@Z",
+    "?SetName@LegoROI@@QAEXPBD@Z",
+    "?ClearMeshOffset@LegoROI@@QAEXXZ",
+    "?SetDisplayBB@LegoROI@@QAEXH@Z",
+    "??1ViewROI@@UAE@XZ",
+    "?IntrinsicImportance@ViewROI@@UBEMXZ",
+    "?GetGeometry@ViewROI@@UAEPAVGroup@Tgl@@XZ",
+    "?GetGeometry@ViewROI@@UBEPBVGroup@Tgl@@XZ",
+    "?UpdateWorldDataWithTransformAndChildren@ViewROI@@MAEXABVMatrix4@@@Z",
+    "?UpdateWorldDataWithTransform@ViewROI@@UAEXABVMatrix4@@@Z",
+    "?SetLocal2WorldWithWorldDataUpdate@ViewROI@@UAEXABVMatrix4@@@Z",
+    "?UpdateWorldData@ViewROI@@UAEXXZ",
+    "??_GViewROI@@UAEPAXI@Z",
+    "??1OrientableROI@@UAE@XZ",
+    "??_GROI@@UAEPAXI@Z",
+    "??1ROI@@UAE@XZ"
+   ]
   }
  ],
  "archives": [
@@ -37284,9 +37653,9 @@
    },
    {
     "path": "LEGO1/lego/sources/roi/legoroi.cpp",
-    "clean": "e9de3c1f550e8bcd43e48ac3c06345405025338495144cab3ee8a658648cb097",
-    "effective": "c958ea968f69bbf9a7bcb6d2bbafeaa2ae35d7dd8d3c8106791c431e9b82d27d",
-    "size": 22499,
+    "clean": "1f4c5a32dd783fd0ac8f5b69ad38795db66c30536586298051d94c01216b6ba4",
+    "effective": "3de9abdd4500c3a2a07cad38a1970364cef1879a36509a149040fe2a619a4bd4",
+    "size": 23949,
     "ops": [
      {
       "op": "insert",
