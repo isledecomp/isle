@@ -649,6 +649,92 @@ class RetailExactInstructionMosaicTests(unittest.TestCase):
                                     "encoding/hash"):
             self.compose(seed, donor, function, retail)
 
+    def _swap_donor_relocation_symbols(self, donor, first, second):
+        """Return the donor with the symbols of two target relocations
+        exchanged, i.e. two constant stores emitted in the other order."""
+        parsed = byte_identity.CoffObject(donor)
+        section = parsed.function_section(TARGET_SYMBOL)
+        rows = byte_identity.detailed_relocations(parsed, section)
+        swapped = bytearray(donor)
+        base = section["relocation_offset"]
+        struct.pack_into("<I", swapped, base + 10 * first + 4,
+                         rows[second]["symbol_index"])
+        struct.pack_into("<I", swapped, base + 10 * second + 4,
+                         rows[first]["symbol_index"])
+        return bytes(swapped)
+
+    def test_strict_order_rejects_a_permuted_donor_relocation_table(self):
+        seed, donor, function, retail, _ = self.fixture()
+        permuted = self._swap_donor_relocation_symbols(donor, 0, 1)
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "non-local relocation rename"):
+            self.compose(seed, permuted, function, retail)
+
+    def test_permuted_order_imports_reloc_free_instructions_and_keeps_seed_table(self):
+        seed, donor, function, retail, mosaic = self.fixture()
+        permuted = self._swap_donor_relocation_symbols(donor, 0, 1)
+        function["relocation_order"] = "permuted_outside_ranges"
+        composed, detail = self.compose(seed, permuted, function, retail)
+        checked = byte_identity.CoffObject(composed)
+        section = checked.function_section(TARGET_SYMBOL)
+        self.assertEqual(byte_identity.coff_body(checked, section), mosaic)
+        self.assertEqual(detail["body_changed_offsets"], [0, 1, 2])
+        self.assertEqual(detail["relocation_order"],
+                         "permuted_outside_ranges")
+        seed_coff = byte_identity.CoffObject(seed)
+        self.assertEqual(
+            byte_identity.detailed_relocations(checked, section),
+            byte_identity.detailed_relocations(
+                seed_coff, seed_coff.function_section(TARGET_SYMBOL)),
+        )
+
+    def test_permuted_order_refuses_an_unpermuted_donor(self):
+        seed, donor, function, retail, _ = self.fixture()
+        function["relocation_order"] = "permuted_outside_ranges"
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "permutation is empty"):
+            self.compose(seed, donor, function, retail)
+
+    def test_permuted_order_refuses_a_permuted_record_inside_a_range(self):
+        seed, donor, function, retail, _ = self.fixture(
+            donor_range=(3, 8), donor_extra=(24, 27),
+            preserve_relocation_operands=True,
+        )
+        permuted = self._swap_donor_relocation_symbols(donor, 0, 1)
+        function["relocation_order"] = "permuted_outside_ranges"
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "lies inside an imported range"):
+            self.compose(seed, permuted, function, retail)
+
+    def test_permuted_order_refuses_a_changed_relocation_multiset(self):
+        seed, donor, function, retail, _ = self.fixture()
+        parsed = byte_identity.CoffObject(donor)
+        section = parsed.function_section(TARGET_SYMBOL)
+        rows = byte_identity.detailed_relocations(parsed, section)
+        changed = bytearray(donor)
+        # both ordinary relocations now name the same callee: a multiset
+        # change, not a permutation
+        struct.pack_into("<I", changed, section["relocation_offset"] + 4,
+                         rows[1]["symbol_index"])
+        function["relocation_order"] = "permuted_outside_ranges"
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "not a permutation"):
+            self.compose(seed, bytes(changed), function, retail)
+
+    def test_permuted_order_is_confined_to_the_plain_mosaic_class(self):
+        seed, donor, function, retail, _ = self.fixture()
+        permuted = self._swap_donor_relocation_symbols(donor, 0, 1)
+        function["relocation_order"] = "permuted_outside_ranges"
+        function["donor_variants"] = []
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "plain single-donor"):
+            self.compose(seed, permuted, function, retail)
+        function.pop("donor_variants")
+        function["relocation_order"] = "anything_goes"
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "unknown relocation order"):
+            self.compose(seed, permuted, function, retail)
+
     def test_rejects_donor_relocation_semantic_drift(self):
         seed, donor, function, retail, _ = self.fixture()
         parsed = byte_identity.CoffObject(donor)

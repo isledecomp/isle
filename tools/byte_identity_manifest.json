@@ -12565,7 +12565,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legoutils.cpp",
-   "source_sha256": "e8731575a9d4436eec60b94f90364c4002b42cbe911c50208920a76ac8f3628d",
+   "source_sha256": "0518b2d4e1be2f9b6d4daef057a75d8a4398ab2a56dcd9c9492e28de1bf6e260",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -12581,14 +12581,14 @@
    },
    "donors": [
     {
-     "id": "d_02ef959f1d99",
+     "id": "d_c9f525be0840",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "pad_shape",
-      "classes": 4,
-      "functions_per_class": 3,
-      "generated_header_sha256": "02ef959f1d99d5eb583ee973b4ddf7f0f7685564ceca0d6cded51cf22946687e",
+      "classes": 7,
+      "functions_per_class": 2,
+      "generated_header_sha256": "c9f525be0840b1f77f7adec23b6df9860f9ba14572ef9d159179567900f7f4d9",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -12599,20 +12599,52 @@
    ],
    "functions": [
     {
-     "mangled": "?LoadFromNamedTexture@@YAXPAVLegoNamedTexture@@@Z",
-     "expected_body_length": 219,
-     "expected_body_sha256": "4cd6dd140f55789ff5ee13e738c1b6dcc8b9cd7de7d9fa67481874a70c68c7a6",
+     "mangled": "?SpheresIntersect@@YAEABVBoundingSphere@@0@Z",
+     "expected_body_length": 67,
+     "expected_body_sha256": "969f1da00c9a2961006985b68c3d43b114652722041669bc64e995c74073d1e8",
      "expected_changed_offsets": [
-      31,
-      96
+      14,
+      20,
+      23,
+      26
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_02ef959f1d99"
+     "donor": "d_c9f525be0840"
+    },
+    {
+     "mangled": "?WriteDefaultTexture@@YAXPAVLegoStorage@@PBD@Z",
+     "expected_body_length": 854,
+     "expected_body_sha256": "2c8213ea09297974fd2bdbd1d5dcaf520ef96fba1484d1bb497824c3a5accb57",
+     "expected_changed_offsets": [
+      64,
+      128,
+      466,
+      472
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       837,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60
+     ],
+     "donor": "d_c9f525be0840"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/common/legoutils.cpp from generated declaration-only carrier states over the rendered current source.",
+    "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/common/legoutils.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -16918,8 +16950,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4891,
-    "accepted_row_identity_sha256": "7647f6718a4f95a60e91991645ee93a213727caa6b0d6a72295ec0623acf7744",
+    "exact_raw_1_0_count": 4892,
+    "accepted_row_identity_sha256": "f85540ac81751e13f903dd0ad8635d620648f0e5f5a2c7e11a79a898a2a3aef0",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -23370,9 +23402,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legoutils.cpp",
-    "clean": "504593eb3c69bea1ada76bccfad7fee73a18aa3f3ba5ff85378a187d8ce0c739",
-    "effective": "e8731575a9d4436eec60b94f90364c4002b42cbe911c50208920a76ac8f3628d",
-    "size": 21348,
+    "clean": "21653254247d296bb1c9adbae2e11f30bc1aff7f4438bf6722182b6605d15c56",
+    "effective": "0518b2d4e1be2f9b6d4daef057a75d8a4398ab2a56dcd9c9492e28de1bf6e260",
+    "size": 21360,
     "ops": [
      {
       "op": "insert",
@@ -23507,6 +23539,49 @@
          "k": "fwd",
          "id": "LuRec001",
          "line": 2
+        }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "anchor": {
+       "ctx": "c0223ad43b4fa5407302e4c4ba5650e9460aa1be746a456a66717c63993c1be7",
+       "b": 32,
+       "line_before": "16a179aee3eb4b57dadbda2eb4f261e91c17415f6c8fb2bca1578b030a3c543e",
+       "line_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 1,
+       "items": [
+        {
+         "k": "extern_run",
+         "prefix": "g_h",
+         "count": 1,
+         "width": 2,
+         "line": 1
+        }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "anchor": {
+       "ctx": "c1dbb7be91415b5412fb3291f5e1a4c84e86ee4d5182e98e185e76d19e345954",
+       "a": 0,
+       "at": "end"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 2,
+       "items": [
+        {
+         "k": "extern_run",
+         "prefix": "g_p",
+         "count": 2,
+         "width": 2,
+         "line": 1
         }
        ]
       }

@@ -834,8 +834,8 @@ void WriteDefaultTexture(LegoStorage* p_storage, const char* p_name)
 					image->SetCount(i);
 
 					if (i > 0) {
-						// Note: this appears to be a bug. size should be i * sizeof(LegoPaletteEntry)
-						memcpy(image->GetPalette(), paletteEntries, i);
+						LegoPaletteEntry* palette = image->GetPalette();
+						memcpy(palette, paletteEntries, i);
 					}
 
 					LegoTexture texture;

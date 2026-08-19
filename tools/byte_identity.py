@@ -13532,6 +13532,24 @@ def validate_manifest(
                             "expected_seed_metadata_sha256",
                             "expected_donor_metadata_sha256",
                         }
+                    if "relocation_order" in function:
+                        mosaic_keys.add("relocation_order")
+                        require(
+                            function["relocation_order"]
+                            == MOSAIC_PERMUTED_RELOCATION_ORDER
+                            and not any(
+                                key in function for key in (
+                                    "target_source_refactor",
+                                    "ordinary_fpo_identity",
+                                    "source_fpo_identity",
+                                    "instruction_self_permutation",
+                                    "donor_variants",
+                                )
+                            ),
+                            f"{function_context}.relocation_order must be "
+                            f"{MOSAIC_PERMUTED_RELOCATION_ORDER!r} on the "
+                            "plain single-donor mosaic class",
+                        )
                     exact_keys(function, mosaic_keys, function_context)
                     if "target_source_refactor" not in function:
                         require_instruction_mosaic_donor_recipe(
@@ -18818,14 +18836,142 @@ def require_same_semantic_relocations(
     return renames
 
 
+MOSAIC_PERMUTED_RELOCATION_ORDER = "permuted_outside_ranges"
+
+
+def _mosaic_relocation_pair_rename(
+    seed: CoffObject, donor: CoffObject, a: dict, b: dict,
+) -> tuple[bool, tuple[int, str] | None]:
+    """Judge one same-offset seed/donor relocation pair under the strict
+    instruction-mosaic rule (``require_instruction_mosaic_semantic_relocations``
+    plus ``_normalized_relocation_renames``) without raising.
+
+    Returns ``(ok, rename)`` where ``rename`` is the recorded local
+    ``$L``/``$T`` serial rename, if any."""
+    if (a["offset"], a["type"], a["addend"], a["width"]) != (
+            b["offset"], b["type"], b["addend"], b["width"]):
+        return False, None
+    if a["target"] == b["target"]:
+        if any(a[field] != b[field]
+               for field in ("target_value", "target_type",
+                             "target_storage")):
+            return False, None
+        if a["target_section"] == b["target_section"]:
+            return True, None
+        if (local_symbol_kind(a["target"]) is not None
+                or a["target_section"] <= 0 or b["target_section"] <= 0):
+            return False, None
+        seed_target = seed.sections[a["target_section"] - 1]
+        donor_target = donor.sections[b["target_section"] - 1]
+        return (comdat_primary_identity(seed, seed_target)
+                == comdat_primary_identity(donor, donor_target)), None
+    kind = local_symbol_kind(a["target"])
+    if kind is None:
+        # the strict mosaic rule refuses every ordinary-symbol rename
+        # (including function-static ``$S`` serials)
+        return False, None
+    if kind != local_symbol_kind(b["target"]):
+        return False, None
+    if (a["target_section"] != b["target_section"]
+            or any(a["target_" + field] != b["target_" + field]
+                   for field in ("value", "type", "storage"))):
+        return False, None
+    return True, (a["offset"], kind)
+
+
+def _permuted_relocation_key(row: dict) -> tuple:
+    """Offset-free identity of one relocation record for the multiset rule.
+
+    Compiler-local ``$L``/``$T`` serials are reduced to their kind; their
+    structural target (section seat, value, type, storage) stays literal."""
+    kind = local_symbol_kind(row["target"])
+    target = row["target"] if kind is None else "$" + kind
+    return (row["width"], row["type"], row["addend"], target,
+            row["target_section"], row["target_value"],
+            row["target_type"], row["target_storage"])
+
+
+def _require_permuted_instruction_mosaic_relocations(
+    seed: CoffObject,
+    seed_section: dict,
+    donor: CoffObject,
+    donor_section: dict,
+    permuted_ranges: list[tuple[int, int]],
+    context: str,
+) -> list[tuple[int, str]]:
+    """The ``permuted_outside_ranges`` relocation-order rule.
+
+    A declaration-only carrier may re-order otherwise identical constant
+    stores, so the donor's relocation records outside the imported ranges may
+    stand at other offsets and in another order.  The output still retains
+    the seed relocation table verbatim; the donor only proves that it is the
+    same compiler output of the same source: every same-offset pair obeys the
+    strict rule, and the remaining records are an exact offset-free multiset
+    permutation of each other that touches no imported range.  A donor that
+    satisfies the strict rule must be declared under it (an empty permutation
+    is refused), so this mode is never a silent relaxation.
+    """
+    left = detailed_relocations(seed, seed_section)
+    right = detailed_relocations(donor, donor_section)
+    require(len(left) == len(right), f"{context}: relocation counts differ")
+    right_by_offset = {}
+    for index, row in enumerate(right):
+        require(row["offset"] not in right_by_offset,
+                f"{context}: donor relocation offsets collide")
+        right_by_offset[row["offset"]] = index
+    renames = []
+    unmatched_left = []
+    matched_right = set()
+    for a in left:
+        index = right_by_offset.get(a["offset"])
+        if index is not None and index not in matched_right:
+            ok, rename = _mosaic_relocation_pair_rename(
+                seed, donor, a, right[index])
+            if ok:
+                matched_right.add(index)
+                if rename is not None:
+                    renames.append(rename)
+                continue
+        unmatched_left.append(a)
+    unmatched_right = [row for index, row in enumerate(right)
+                       if index not in matched_right]
+    require(unmatched_left,
+            f"{context}: relocation permutation is empty; the strict "
+            "relocation order applies")
+    require(
+        sorted(_permuted_relocation_key(row) for row in unmatched_left)
+        == sorted(_permuted_relocation_key(row) for row in unmatched_right),
+        f"{context}: relocations outside the imported ranges are not a "
+        "permutation of the seed's",
+    )
+    for role, rows in (("seed", unmatched_left), ("donor", unmatched_right)):
+        for row in rows:
+            operand_start = row["offset"]
+            operand_end = operand_start + row["width"]
+            require(
+                all(operand_end <= start or operand_start >= end
+                    for start, end in permuted_ranges),
+                f"{context}: permuted {role} relocation at offset "
+                f"{operand_start} lies inside an imported range",
+            )
+    return renames
+
+
 def require_instruction_mosaic_semantic_relocations(
     seed: CoffObject,
     seed_section: dict,
     donor: CoffObject,
     donor_section: dict,
     context: str,
+    *,
+    permuted_ranges: list[tuple[int, int]] | None = None,
 ) -> list[tuple[int, str]]:
     """Compare mosaic relocations while permitting benign COMDAT reseating.
+
+    With ``permuted_ranges`` (the imported instruction ranges of a mosaic
+    declared ``relocation_order: permuted_outside_ranges``) the offset-free
+    multiset rule of ``_require_permuted_instruction_mosaic_relocations``
+    applies instead of the ordinal rule.
 
     A declaration-only carrier can reorder otherwise identical vtable/data
     COMDATs.  The output retains the seed relocation table, so a same-named
@@ -18833,6 +18979,11 @@ def require_instruction_mosaic_semantic_relocations(
     same primary COMDAT identity.  Compiler-local symbols remain under the
     stricter ordinary mosaic rule.
     """
+    if permuted_ranges is not None:
+        return _require_permuted_instruction_mosaic_relocations(
+            seed, seed_section, donor, donor_section, permuted_ranges,
+            context,
+        )
     renames = _normalized_relocation_renames(
         seed, seed_section, donor, donor_section, context
     )
@@ -21276,6 +21427,16 @@ def _compose_retail_exact_instruction_mosaic_core(
                 and "same_function_source_identity" in function),
             "instruction self-permutation requires its isolated ordinary "
             "FPO source-authentic class")
+    permuted_relocations = "relocation_order" in function
+    require(not permuted_relocations
+            or function["relocation_order"]
+            == MOSAIC_PERMUTED_RELOCATION_ORDER,
+            "instruction mosaic names an unknown relocation order")
+    require(not permuted_relocations or not (
+                ordinary_fpo or source_fpo or self_permutation
+                or source_permutation or "donor_variants" in function),
+            "permuted relocation order requires the plain single-donor "
+            "declaration-carrier mosaic class")
     expected_length = function["expected_body_length"]
     donor_expected_length = function.get(
         "expected_donor_body_length", expected_length)
@@ -21459,7 +21620,11 @@ def _compose_retail_exact_instruction_mosaic_core(
 
     code_relocation_renames = (
         require_instruction_mosaic_semantic_relocations(
-            seed, sp, donor, dp, "instruction-mosaic code"
+            seed, sp, donor, dp, "instruction-mosaic code",
+            permuted_ranges=(
+                [(item["start"], item["end"]) for item in ranges]
+                if permuted_relocations else None
+            ),
         )
     )
 
@@ -21493,15 +21658,27 @@ def _compose_retail_exact_instruction_mosaic_core(
                         f"a {role} relocation operand")
                 ordinals.append(ordinal)
             contained.append(ordinals)
-        require(contained[0] == contained[1],
-                f"instruction-mosaic range {index} contains unpaired "
-                "relocation operands")
+        if permuted_relocations:
+            # ordinals may differ outside the ranges; inside a range the
+            # records are paired by offset and must be identical
+            require(len(contained[0]) == len(contained[1]),
+                    f"instruction-mosaic range {index} contains unpaired "
+                    "relocation operands")
+            pairs = list(zip(
+                sorted(contained[0], key=lambda o: seed_rows[o]["offset"]),
+                sorted(contained[1], key=lambda o: donor_rows[o]["offset"]),
+            ))
+        else:
+            require(contained[0] == contained[1],
+                    f"instruction-mosaic range {index} contains unpaired "
+                    "relocation operands")
+            pairs = [(ordinal, ordinal) for ordinal in contained[0]]
         if source_fpo:
             require(not contained[0],
                     f"source FPO instruction-mosaic range {index} overlaps "
                     "a relocation operand")
-        for ordinal in contained[0]:
-            left, right = seed_rows[ordinal], donor_rows[ordinal]
+        for seed_ordinal, donor_ordinal in pairs:
+            left, right = seed_rows[seed_ordinal], donor_rows[donor_ordinal]
             strict_fields = (
                 "offset", "width", "type", "addend", "target",
                 "target_section", "target_value", "target_type",
@@ -21694,6 +21871,9 @@ def _compose_retail_exact_instruction_mosaic_core(
         "source_fpo_identity": source_fpo,
         "code_relocation_renames": code_relocation_renames,
         "closure_relocation_renames": closure_relocation_renames,
+        "relocation_order": (
+            MOSAIC_PERMUTED_RELOCATION_ORDER if permuted_relocations
+            else "ordinal"),
         "retail_exact": True,
         **semantic_detail,
     }
