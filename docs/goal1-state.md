@@ -1,7 +1,7 @@
 # State of goal 1 — every open row, with its disposition
 
 Generated in the main loop by joining the four screens plus the coverage
-matrix against the live reccmp report. **LEGO1 4888/4934 — 46 open rows.**
+matrix against the live reccmp report. **LEGO1 4889/4934 — 45 open rows.**
 ISLE is 172/172 and CONFIG is 111/111. Current terminal measurement keeps
 ISLE and CONFIG byte-identical; the last LEGO1 terminal measurement (before
 the two latest exact-function mosaics) was equal-sized with 595,723 differing
@@ -151,6 +151,5 @@ eligible when they carry a fail-closed proof and a concrete target.
 | OTHER | 0.7442 | `0x10038380` | Pizza::StopActions | NO-SLOTS | REGIONAL | AMBIGUOUS | NONE |  |
 | LENGTH-UNREACHABLE | 0.7268 | `0x100aa510` | LegoLOD::Read | UNREACHABLE | SCATTERED | AMBIGUOUS | LENGTH |  |
 | PERMUTATION (measured families exhausted) | 0.7059 | `0x1002a1b0` | _Tree<LegoCacheSoundEntry,LegoCacheSoundEn | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |
-| PERMUTATION (measured families exhausted) | 0.6667 | `0x100a12a0` | TglImpl::TextureImpl::SetImage | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |
 | PERMUTATION (measured families exhausted) | 0.6522 | `0x10057180` | _Tree<LegoAnimPresenter *,LegoAnimPresente | SLOT-CLEAN | PERMUTATION | AMBIGUOUS | NONE |  |
 | ROUTED | 0.5411 | `0x10061010` | LegoAnimationManager::FUN_10061010 | AMBIGUOUS | AMBIGUOUS | AMBIGUOUS | LENGTH | retail inlines the MxListEntry ctor; an 8-state C1 planner-cost panel flips that bit but every accepted state is the same wrong 720 B (retail 731), so frame/allocation state remains |
