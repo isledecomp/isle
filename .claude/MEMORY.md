@@ -827,9 +827,12 @@ after every bounded panel or full gate.
   relocation identities, 81 line records, the coherent 878-byte `.debug$S` +
   200-byte `.xdata$x` closure, identity universes, and acceptable collateral.
 
-- Accepted canonical gate: LEGO1 4888/4934, ISLE 172/172, CONFIG 111/111
-  (commit a5f3d93b, 2026-08-18 evening; accepted-set pin 4888 /
-  `96719bb71038ba1b4861b5ee4ba6849b900b765c5465613487f29f1e15038ad6`).
+- Accepted canonical gate: LEGO1 4889/4934, ISLE 172/172, CONFIG 111/111
+  (commit d280813c, 2026-08-18 late; accepted-set pin 4889 /
+  `c712f5b749b51bbebaa6a00997d5464d59c2b15a99a145ea4ccc77b7bb90b508`).
+  Late gain: `0x100a12a0 TglImpl::TextureImpl::SetImage` (+1) — the `appData` local
+  must be `LPD3DRM_APPDATA` (cast at the assignment, none at the call): retail loads
+  pImage before the TextureGetImage call; `void*` sinks the load. Sub-agent lead.
   Evening gains: `0x1002f770 UpdatePlane` (+1) — the 2026-08-17 "source×carrier
   decisive seal" below was WRONG: `p_namedPlane.m_name = m_boundary->GetName();`
   (drop the `name` local, direct member) is exact in all 557 carrier states; the
