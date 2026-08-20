@@ -1779,7 +1779,7 @@
      "expected_seed_relocation_count": 16,
      "expected_seed_line_count": 80,
      "expected_seed_body_sha256": "967ef93fb97c19b47ebf82b150b37f92b7ddf1b63079f6c32bfc17ca5063e7be",
-     "expected_seed_metadata_sha256": "d2aaea26e0aae21941b2384dc7d8567b57e7724e48536769024de09b9c5d0283",
+     "expected_seed_metadata_sha256": "c8b0db1ed10c0330abb1b90ee9d8d98cf32cb90df82d39e2c0aa8e1a98beafa0",
      "expected_seed_function_count": 81,
      "expected_seed_comdat_count": 120,
      "expected_target_donor_section_number": 130,
@@ -13729,7 +13729,7 @@
      "expected_comdat_count": 28,
      "expected_seed_body_sha256": "9850d0b4a91610ecea9aacf0e0822b7fcd26e98f8ed7ceebf9a0ad031efc65b6",
      "expected_donor_body_sha256": "d8dcb9786d75ee60e3a18e12920ebc47cf8835c9fa9e9faf3572c8eec4bc61ac",
-     "expected_seed_metadata_sha256": "50dde037ef93311085caf36fc80f7da9db67deaa447ce6c5fd7f7ae47225beae",
+     "expected_seed_metadata_sha256": "8660e91a76b0a8eb0534b1602f7959c0b775095cef1c713399b48e3bf54b8423",
      "expected_donor_metadata_sha256": "b23fde16f42d54f92317e53b47c73008d2addd1b762fe18a3d93ba4461672ff9",
      "expected_body_sha256": "d8dcb9786d75ee60e3a18e12920ebc47cf8835c9fa9e9faf3572c8eec4bc61ac",
      "expected_changed_offsets": [
@@ -13791,7 +13791,7 @@
        "characteristics": 1108349000,
        "selection": 5,
        "associated": 55,
-       "expected_seed_body_sha256": "bf1ad5e24a165698b4331c9a5933f267fb208d77dc2cfe8778a3ea3bbb117f3c",
+       "expected_seed_body_sha256": "e845d17075f1893acc823749773d217058f4940704184ae3ac3be361db692c2e",
        "expected_donor_body_sha256": "3b89806be5ed98d65a6940b78028cb6076595c790506fb80afcb83ca98217210",
        "expected_seed_relocation_sha256": "d8e74b20e9a894c57724aaae3fa300b890bf1dabc63775e042540dd252dacaa6",
        "expected_donor_relocation_sha256": "07ef049c6ddc18fe99b689f9490bba24729e321f4173bd3cc59512cc27fbeaf1",
@@ -13800,7 +13800,7 @@
        "expected_cb_proc": 438,
        "expected_dbg_start": 15,
        "expected_dbg_end": 430,
-       "expected_seed_tail_sha256": "9f226463a6d31c1993c4eac23f02f0098f6b51eb3ae503eb5b073ecdd657a27d",
+       "expected_seed_tail_sha256": "f84d5d5d55bd4f9a70c7df500912ff3e3a6e8d9b01da0ceb33355c8810d55644",
        "expected_donor_tail_sha256": "54895e952602cbd811d35f1be86e245b4ad1e2849bf79411b548acf3a9dc4097"
       }
      },

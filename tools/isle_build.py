@@ -800,9 +800,28 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                 return None, None
         # The object on disk is not attested as this unit's fresh seed (it
         # may hold a previous composition), so recompile it in place first.
-        run(child, timeout_seconds=compile_timeout, cwd=cwd,
-            env=build_environment(compiler),
-            log=build.parent / f"{marker.stem}-seed.log")
+        # The PDB is removed first: MSVC 4.2 /Zi carries CodeView type
+        # indices that depend on what the PDB already holds, so a seed
+        # compiled against an accumulated PDB (one this build dir happens to
+        # have polluted with earlier donor-carrier types) produces different
+        # `.debug$S` bytes -- and therefore a different pinned seed metadata
+        # digest -- from the identical compile in a clean tree.  Starting
+        # from no PDB makes the seed a function of the source alone, which is
+        # what a pin has to be if a cold checkout is to reproduce it.
+        stale_pdb = seed_pdb.read_bytes() if seed_pdb.is_file() else None
+        if stale_pdb is not None:
+            seed_pdb.unlink()
+        try:
+            run(child, timeout_seconds=compile_timeout, cwd=cwd,
+                env=build_environment(compiler),
+                log=build.parent / f"{marker.stem}-seed.log")
+        except BaseException:
+            # An interrupted seed compile must not leave the tree without a
+            # PDB: the next link would fail with LNK1202 on an object CMake
+            # still considers up to date.
+            if stale_pdb is not None and not seed_pdb.is_file():
+                seed_pdb.write_bytes(stale_pdb)
+            raise
         seed_bytes = seed_object.read_bytes()
         seed_sha = hashlib.sha256(seed_bytes).hexdigest()
 
