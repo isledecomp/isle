@@ -1128,7 +1128,6 @@ inline Result CreateMesh(
 	MeshImpl::MeshDataType& rpMesh
 )
 {
-	unsigned short* faceIndices = (unsigned short*) p_faceIndices;
 	D3DRMGROUPINDEX groupIndex = 0;
 	int faceCount = p_numFaces * 3;
 	int count = 0;
@@ -1142,13 +1141,13 @@ inline Result CreateMesh(
 	rpMesh->groupMesh = pD3DRM;
 
 	for (int i = 0; i < faceCount; i++) {
-		if (((faceIndices[2 * i + 1]) >> 0x0f) & 0x01) {
-			unsigned long j = 3 * faceIndices[2 * i];
+		if (((((unsigned short*) p_faceIndices)[2 * i + 1]) >> 0x0f) & 0x01) {
+			unsigned long j = 3 * ((unsigned short*) p_faceIndices)[2 * i];
 			vertices[count].position.x = p_positions[j];
 			vertices[count].position.y = p_positions[j + 1];
 			vertices[count].position.z = p_positions[j + 2];
 
-			int k = 3 * (faceIndices[2 * i + 1] & MAXSHORT);
+			int k = 3 * (((unsigned short*) p_faceIndices)[2 * i + 1] & MAXSHORT);
 			vertices[count].normal.x = p_normals[k];
 			vertices[count].normal.y = p_normals[k + 1];
 			vertices[count].normal.z = p_normals[k + 2];
@@ -1163,18 +1162,19 @@ inline Result CreateMesh(
 			count++;
 		}
 		else {
-			fData[i] = faceIndices[2 * i];
+			fData[i] = ((unsigned short*) p_faceIndices)[2 * i];
 		}
 	}
 
 	assert(count == (int) p_numVertices);
 
+	int numVertices = p_numVertices;
 	Result result;
-	result = ResultVal(pD3DRM->AddGroup(p_numVertices, p_numFaces, 3, fData, &groupIndex));
+	result = ResultVal(pD3DRM->AddGroup(numVertices, p_numFaces, 3, fData, &groupIndex));
 
 	if (Succeeded(result)) {
 		rpMesh->groupIndex = groupIndex;
-		result = ResultVal(pD3DRM->SetVertices(groupIndex, 0, p_numVertices, vertices));
+		result = ResultVal(pD3DRM->SetVertices(groupIndex, 0, numVertices, vertices));
 	}
 
 	if (!Succeeded(result)) {

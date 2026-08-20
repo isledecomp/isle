@@ -5015,7 +5015,7 @@
   {
    "target": "tglrl",
    "source": "LEGO1/tgl/d3drm/tglrl40.cpp",
-   "source_sha256": "9d8aab008379290b5b9f75b324d86cb9f0423c9011d5f507a5aa34cd68c88381",
+   "source_sha256": "8825a9c917ea8df272c3ddcf93e171516da602dbc3b9ea6b904dd2a5eb6ba4ed",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -5081,6 +5081,65 @@
       },
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_5fb95a4722f1",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_run_triple",
+      "width": 3,
+      "pre_prefix": "MxUnkRecTA",
+      "pre_count": 8,
+      "post_prefix": "MxUnkRecTB",
+      "post_count": 8,
+      "eof_prefix": "MxUnkRecTC",
+      "eof_count": 16,
+      "generated_header_sha256": "5fb95a4722f1c1878ff1a0560c8f3aa1a8f04e851208065bd2e32d3b97f06a6e",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declarations are seated at file start, after the final include and at physical EOF; they emit no code, data, strings, vtables, linker payload, or retained object input and are confined to one exact EH-closure instruction self-permutation.",
+      "role_policy": "retail_exact_instruction_permutation_eh_closure_only_v1"
+     }
+    },
+    {
+     "id": "d_de36cb77a02c",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 1,
+      "seat_prefix": "g_p",
+      "seat_count": 7,
+      "width": 2,
+      "generated_header_sha256": "de36cb77a02cb89e258ae91ff9af7071dbaf8a51ac001ab28401df44be9adaea",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_6df9b54bdfba",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "prefix": "MxUnkRecVA",
+      "count": 8,
+      "width": 3,
+      "placement": "prefix",
+      "generated_header_sha256": "6df9b54bdfba7fa7d30c13e444700ff13567cebe3dfb3adb6268019600280ee1",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
@@ -5268,6 +5327,808 @@
      ],
      "expected_xdata_rename_offsets": [],
      "donor": "d_ff1a14b2c16d"
+    },
+    {
+     "mangled": "?CreateMesh@MeshBuilderImpl@TglImpl@@UAEPAVMesh@Tgl@@KKPAY02M0PAY01MPAY02K2W4ShadingModel@4@@Z",
+     "donor": "d_5fb95a4722f1",
+     "splice_class": "retail_exact_instruction_mosaic",
+     "expected_section_number": 302,
+     "expected_section_count": 364,
+     "expected_body_length": 664,
+     "expected_relocation_count": 19,
+     "expected_line_count": 6,
+     "expected_seed_body_sha256": "147e15a85cf1cabe5872d786ff13c29bb765ace5d461b7fc78a980b9628eb0c6",
+     "expected_donor_body_sha256": "d894d2fb451f2eff5cf93e01df58772b9b73e68551999fe600447b9eecb1da6e",
+     "expected_body_sha256": "5e08a0a93a12d9376d1d6e94db0c2bff9db0307da7eabfe0a5c3658f0327c262",
+     "expected_seed_metadata_sha256": "ff91958f1f7282887e8d041e14211ae507c10c85872ccc010e466e315b665bde",
+     "expected_donor_metadata_sha256": "0214b2b4cdf050e542193e6bbb9b1216fe6373bd90b989614df39508aea08061",
+     "instruction_ranges": [
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 242,
+       "end": 245,
+       "donor": "d_de36cb77a02c",
+       "seed_instruction_lengths": [
+        3
+       ],
+       "donor_instruction_lengths": [
+        3
+       ],
+       "seed_bytes": "8b7de4",
+       "seed_sha256": "6191a8af8fd93cfd7d236f142aed442e30573c4d85e029092e2ffa33d96a5ab4",
+       "donor_bytes": "8b55e4",
+       "donor_sha256": "244fac4ef613bd7ccdc8a386f6531964c21b524da88770fbaaee01014f3ae0d9"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 248,
+       "end": 251,
+       "donor": "d_de36cb77a02c",
+       "seed_instruction_lengths": [
+        3
+       ],
+       "donor_instruction_lengths": [
+        3
+       ],
+       "seed_bytes": "8b5520",
+       "seed_sha256": "5d58e665b27834779d49dc8db6edef9498dd59540f0f51153f2ef5f7a658b9c1",
+       "donor_bytes": "8b5d20",
+       "donor_sha256": "17dd7ce5b1cbc0533c0985a515daad77e8981363096680bc2567c8c279cd2e91"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 251,
+       "end": 254,
+       "donor": "d_de36cb77a02c",
+       "seed_instruction_lengths": [
+        3
+       ],
+       "donor_instruction_lengths": [
+        3
+       ],
+       "seed_bytes": "8b5d1c",
+       "seed_sha256": "8876b46585c71034a9bc7a8be339d169e6e9f36ec86275e51332de20df846745",
+       "donor_bytes": "8b7d1c",
+       "donor_sha256": "23ef9a032594175b6d4e1ddef5b1750c343928138b9a79534cbf3a87d267eb5f"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 254,
+       "end": 257,
+       "donor": "d_de36cb77a02c",
+       "seed_instruction_lengths": [
+        3
+       ],
+       "donor_instruction_lengths": [
+        3
+       ],
+       "seed_bytes": "83c302",
+       "seed_sha256": "9b4141d9282f2a101c39b979be807859d4a2443e50dcba9cbfaf8344f8631600",
+       "donor_bytes": "83c702",
+       "donor_sha256": "6b047ad9c8a69e1656229be37a3b40d80eb54d454b4c19feb284bd81777bca48"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 260,
+       "end": 264,
+       "donor": "d_de36cb77a02c",
+       "seed_instruction_lengths": [
+        4
+       ],
+       "donor_instruction_lengths": [
+        4
+       ],
+       "seed_bytes": "f6430180",
+       "seed_sha256": "90d0a7581f72c830e4bf65ea5d7dcc5039c9c23308c5d6f3a0e3199ad1cf6276",
+       "donor_bytes": "f6470180",
+       "donor_sha256": "ff8c89b554e24ae934cbb45d29ed1effa401f84c89635d317496bf2a46b2bb63"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 268,
+       "end": 275,
+       "donor": "d_de36cb77a02c",
+       "seed_instruction_lengths": [
+        3,
+        4
+       ],
+       "donor_instruction_lengths": [
+        3,
+        4
+       ],
+       "seed_bytes": "8b7510668b43fe",
+       "seed_sha256": "0e001818ae4b592de33f789a15f134073df9403d1a5ef6d72cbb2e9558ce4346",
+       "donor_bytes": "8b7510668b47fe",
+       "donor_sha256": "c3994821821858ed3cc7f04afb0ec2db9faf7704daf43bbce7d6958faf643467"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 299,
+       "end": 302,
+       "donor": "d_de36cb77a02c",
+       "seed_instruction_lengths": [
+        3
+       ],
+       "donor_instruction_lengths": [
+        3
+       ],
+       "seed_bytes": "668b03",
+       "seed_sha256": "cc8381d5c691877abb4e1d6e8c08927891687a5c05e1a4381f17f19d7f01c41e",
+       "donor_bytes": "668b07",
+       "donor_sha256": "5141965975137f9ba14e4fed0f1184410b8cb8204413168a993ad9d06543bae7"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 345,
+       "end": 347,
+       "donor": "d_6df9b54bdfba",
+       "seed_instruction_lengths": [
+        2
+       ],
+       "donor_instruction_lengths": [
+        2
+       ],
+       "seed_bytes": "8b32",
+       "seed_sha256": "245776e7794d6c1342d6b78eb8a4bdafc16c9d43fdf250b70ba8a2c110a02f65",
+       "donor_bytes": "8b33",
+       "donor_sha256": "5732a38bd260409e3e1532c15d783d51ca38c2240b8379c16ae6d22a0ed3b937"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 370,
+       "end": 372,
+       "donor": "d_de36cb77a02c",
+       "seed_instruction_lengths": [
+        2
+       ],
+       "donor_instruction_lengths": [
+        2
+       ],
+       "seed_bytes": "8907",
+       "seed_sha256": "6cb2225c36f21f14c55347f008ff7a0b6e03dd96a83345d8b116d91805aa20ce",
+       "donor_bytes": "8902",
+       "donor_sha256": "ed32d7788f90c5945e4ff8bbbec974bfdff3949948304fb2a7e07f7eecb33376"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 379,
+       "end": 383,
+       "donor": "d_de36cb77a02c",
+       "seed_instruction_lengths": [
+        4
+       ],
+       "donor_instruction_lengths": [
+        4
+       ],
+       "seed_bytes": "668b43fe",
+       "seed_sha256": "2fe2f4b483e849a365367237abf1ad01d31333e66b4e05d8fd87c93aa32ad0ed",
+       "donor_bytes": "668b47fe",
+       "donor_sha256": "0036e366259a80ddd0f396a44896beb55958f1abd153c1cf80c66cec4f8d3a87"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 383,
+       "end": 385,
+       "donor": "d_de36cb77a02c",
+       "seed_instruction_lengths": [
+        2
+       ],
+       "donor_instruction_lengths": [
+        2
+       ],
+       "seed_bytes": "8907",
+       "seed_sha256": "6cb2225c36f21f14c55347f008ff7a0b6e03dd96a83345d8b116d91805aa20ce",
+       "donor_bytes": "8902",
+       "donor_sha256": "ed32d7788f90c5945e4ff8bbbec974bfdff3949948304fb2a7e07f7eecb33376"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 385,
+       "end": 388,
+       "donor": "d_de36cb77a02c",
+       "seed_instruction_lengths": [
+        3
+       ],
+       "donor_instruction_lengths": [
+        3
+       ],
+       "seed_bytes": "83c704",
+       "seed_sha256": "8ed3cae3724ac45b3472b0a3876a462c3c0ea2885f3ee2a1385f0b560c8b404c",
+       "donor_bytes": "83c204",
+       "donor_sha256": "3858273cf877d2a15f98ad0ea0801c5b893b820c3d4b2466e55e02a281ad1e1f"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 388,
+       "end": 391,
+       "donor": "d_de36cb77a02c",
+       "seed_instruction_lengths": [
+        3
+       ],
+       "donor_instruction_lengths": [
+        3
+       ],
+       "seed_bytes": "83c204",
+       "seed_sha256": "3858273cf877d2a15f98ad0ea0801c5b893b820c3d4b2466e55e02a281ad1e1f",
+       "donor_bytes": "83c304",
+       "donor_sha256": "816144185c1fcdf6eb7ecc21cd7002b7a0f8b005f0e2face12d5efe329cc9525"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 391,
+       "end": 394,
+       "donor": "d_de36cb77a02c",
+       "seed_instruction_lengths": [
+        3
+       ],
+       "donor_instruction_lengths": [
+        3
+       ],
+       "seed_bytes": "83c304",
+       "seed_sha256": "816144185c1fcdf6eb7ecc21cd7002b7a0f8b005f0e2face12d5efe329cc9525",
+       "donor_bytes": "83c704",
+       "donor_sha256": "8ed3cae3724ac45b3472b0a3876a462c3c0ea2885f3ee2a1385f0b560c8b404c"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 415,
+       "end": 417,
+       "donor": "d_5fb95a4722f1",
+       "seed_instruction_lengths": [
+        2
+       ],
+       "donor_instruction_lengths": [
+        2
+       ],
+       "seed_bytes": "8b39",
+       "seed_sha256": "71da1cfb4243af7a1862c31904cd8f179892b60a6f6f95c22ae5572317e6886a",
+       "donor_bytes": "8b31",
+       "donor_sha256": "52c1e3e1f2e947c163b56957b64413ccb0d0c3486283960b1974b03377b8f216"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 428,
+       "end": 433,
+       "donor": "d_5fb95a4722f1",
+       "seed_instruction_lengths": [
+        5
+       ],
+       "donor_instruction_lengths": [
+        5
+       ],
+       "seed_bytes": "be01000000",
+       "seed_sha256": "bce257e988d5cf159b57a7b1e2b2a4d627f25434f74ae88d7e83a2d9560a38b9",
+       "donor_bytes": "bf01000000",
+       "donor_sha256": "b9d7f44bf15b9548c00ba1847adfd13bedfcfeac25bd22374209ef912e52ee18"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 435,
+       "end": 438,
+       "donor": "d_5fb95a4722f1",
+       "seed_instruction_lengths": [
+        3
+       ],
+       "donor_instruction_lengths": [
+        3
+       ],
+       "seed_bytes": "ff5738",
+       "seed_sha256": "f23a165751cffb3ac0355b47805dae831d1c6273d18f78023fb1ab39ff9ac5ca",
+       "donor_bytes": "ff5638",
+       "donor_sha256": "2c5d4d533249dfcd12c25823b95ef3b315585706eea25bcda151f30a41e50222"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 442,
+       "end": 444,
+       "donor": "d_5fb95a4722f1",
+       "seed_instruction_lengths": [
+        2
+       ],
+       "donor_instruction_lengths": [
+        2
+       ],
+       "seed_bytes": "33f6",
+       "seed_sha256": "52ee7bc49cb2b8661e54f8103f068838ea4bf5089db7626cad08a85a8a6dce66",
+       "donor_bytes": "33ff",
+       "donor_sha256": "1770ae2694dfffb5381d1db167ea14ea806e849f7c886fc876528fc8e197f9ce"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 444,
+       "end": 447,
+       "donor": "d_5fb95a4722f1",
+       "seed_instruction_lengths": [
+        3
+       ],
+       "donor_instruction_lengths": [
+        3
+       ],
+       "seed_bytes": "83fe01",
+       "seed_sha256": "fb07f5cc7a3b1e50a47ac6289018e6c59a4f114e92980d08f8d64971b7a8ee8c",
+       "donor_bytes": "83ff01",
+       "donor_sha256": "2641b6054cfd8b36bca1d8deaaa118a13b9a1b74b5c0663922c9e416df2b035c"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 474,
+       "end": 479,
+       "donor": "d_5fb95a4722f1",
+       "seed_instruction_lengths": [
+        5
+       ],
+       "donor_instruction_lengths": [
+        5
+       ],
+       "seed_bytes": "be01000000",
+       "seed_sha256": "bce257e988d5cf159b57a7b1e2b2a4d627f25434f74ae88d7e83a2d9560a38b9",
+       "donor_bytes": "bf01000000",
+       "donor_sha256": "b9d7f44bf15b9548c00ba1847adfd13bedfcfeac25bd22374209ef912e52ee18"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 481,
+       "end": 484,
+       "donor": "d_5fb95a4722f1",
+       "seed_instruction_lengths": [
+        3
+       ],
+       "donor_instruction_lengths": [
+        3
+       ],
+       "seed_bytes": "ff573c",
+       "seed_sha256": "616aa3e7d3fbd6ce17f305e696ddf9ea06dcfa6e70015c3640835c7a4fc7e48f",
+       "donor_bytes": "ff563c",
+       "donor_sha256": "e99e6fa327310126d1f05c4ffb7e2c2bddfda3380c781b060d8060c7fecc8b13"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 488,
+       "end": 490,
+       "donor": "d_5fb95a4722f1",
+       "seed_instruction_lengths": [
+        2
+       ],
+       "donor_instruction_lengths": [
+        2
+       ],
+       "seed_bytes": "33f6",
+       "seed_sha256": "52ee7bc49cb2b8661e54f8103f068838ea4bf5089db7626cad08a85a8a6dce66",
+       "donor_bytes": "33ff",
+       "donor_sha256": "1770ae2694dfffb5381d1db167ea14ea806e849f7c886fc876528fc8e197f9ce"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 490,
+       "end": 493,
+       "donor": "d_5fb95a4722f1",
+       "seed_instruction_lengths": [
+        3
+       ],
+       "donor_instruction_lengths": [
+        3
+       ],
+       "seed_bytes": "83fe01",
+       "seed_sha256": "fb07f5cc7a3b1e50a47ac6289018e6c59a4f114e92980d08f8d64971b7a8ee8c",
+       "donor_bytes": "83ff01",
+       "donor_sha256": "2641b6054cfd8b36bca1d8deaaa118a13b9a1b74b5c0663922c9e416df2b035c"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 540,
+       "end": 545,
+       "donor": "d_5fb95a4722f1",
+       "seed_instruction_lengths": [
+        5
+       ],
+       "donor_instruction_lengths": [
+        5
+       ],
+       "seed_bytes": "be01000000",
+       "seed_sha256": "bce257e988d5cf159b57a7b1e2b2a4d627f25434f74ae88d7e83a2d9560a38b9",
+       "donor_bytes": "bf01000000",
+       "donor_sha256": "b9d7f44bf15b9548c00ba1847adfd13bedfcfeac25bd22374209ef912e52ee18"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 555,
+       "end": 557,
+       "donor": "d_5fb95a4722f1",
+       "seed_instruction_lengths": [
+        2
+       ],
+       "donor_instruction_lengths": [
+        2
+       ],
+       "seed_bytes": "33f6",
+       "seed_sha256": "52ee7bc49cb2b8661e54f8103f068838ea4bf5089db7626cad08a85a8a6dce66",
+       "donor_bytes": "33ff",
+       "donor_sha256": "1770ae2694dfffb5381d1db167ea14ea806e849f7c886fc876528fc8e197f9ce"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "start": 593,
+       "end": 595,
+       "donor": "d_5fb95a4722f1",
+       "seed_instruction_lengths": [
+        2
+       ],
+       "donor_instruction_lengths": [
+        2
+       ],
+       "seed_bytes": "85f6",
+       "seed_sha256": "8ab1132e0f39300a69111599262ce5db7c26e24b7eb3cc9ae866e97c67ff49bd",
+       "donor_bytes": "85ff",
+       "donor_sha256": "b463fde2f176b10c0e80b1f97881ca31237a98500f6a80da7581395d4c0fc86d"
+      }
+     ],
+     "instruction_self_permutation": {
+      "kind": "commuting_independent_register_write_pair_v1",
+      "source_start": 403,
+      "source_end": 409,
+      "target_start": 403,
+      "target_end": 409,
+      "source_instruction_lengths": [
+       3,
+       3
+      ],
+      "target_instruction_lengths": [
+       3,
+       3
+      ],
+      "moves": [
+       {
+        "target_start": 403,
+        "target_end": 406,
+        "target_bytes": "8b4de0",
+        "target_sha256": "58a23661e9d6be21825b44d33948e4adbc12d893b96c89bbbf521312998909df",
+        "donor_start": 406,
+        "donor_end": 409,
+        "donor_bytes": "8b4de0",
+        "donor_sha256": "58a23661e9d6be21825b44d33948e4adbc12d893b96c89bbbf521312998909df"
+       },
+       {
+        "target_start": 406,
+        "target_end": 409,
+        "target_bytes": "8b5d0c",
+        "target_sha256": "b5840c7f6e8eb2f24104e2820296a38058a09dbebd6339fe01dc4e6d0e35e163",
+        "donor_start": 403,
+        "donor_end": 406,
+        "donor_bytes": "8b5d0c",
+        "donor_sha256": "b5840c7f6e8eb2f24104e2820296a38058a09dbebd6339fe01dc4e6d0e35e163"
+       }
+      ],
+      "expected_changed_offsets": [
+       243,
+       249,
+       252,
+       255,
+       261,
+       273,
+       301,
+       346,
+       371,
+       381,
+       384,
+       386,
+       389,
+       392,
+       404,
+       405,
+       407,
+       408,
+       416,
+       428,
+       436,
+       443,
+       445,
+       474,
+       482,
+       489,
+       491,
+       540,
+       556,
+       594
+      ],
+      "expected_function_multiset_sha256": "edc06ad254df1684130dbef43de92c83aaa33d71f9c8abcbb09314d38cab64a7",
+      "expected_comdat_multiset_sha256": "e9bf7c8517048a936cd2b4e2340f5df516098595f8b8018a0ad154391b6e98c4",
+      "expected_section_shape_sha256": "4c0eafe927ff3135b1bff49c5e40c47d0b0eb93627155dda5b5eb7fbfa6702e3",
+      "expected_linker_payload_count": 67,
+      "expected_linker_payload_sha256": "cfd4f920c9c263b17dd5b35e0a2f9ecff16e4838d04372da0616fcfd1ccfc79e"
+     },
+     "same_function_source_identity": {
+      "kind": "same_function_declaration_carrier_source_v1",
+      "selector": "owner_header_brace_balanced_function_with_trailing_blank_line_v1",
+      "start_marker": "// FUNCTION: LEGO1 0x100a3840",
+      "source_owner_mangled": "?CreateMesh@MeshBuilderImpl@TglImpl@@UAEPAVMesh@Tgl@@KKPAY02M0PAY01MPAY02K2W4ShadingModel@4@@Z",
+      "carrier": {
+       "kind": "declaration_run_triple_v1",
+       "placement": "start_after_includes_and_eof_v1",
+       "width": 3,
+       "pre_prefix": "MxUnkRecTA",
+       "pre_count": 8,
+       "post_prefix": "MxUnkRecTB",
+       "post_count": 8,
+       "eof_prefix": "MxUnkRecTC",
+       "eof_count": 16,
+       "generated_declarations_sha256": "5fb95a4722f1c1878ff1a0560c8f3aa1a8f04e851208065bd2e32d3b97f06a6e"
+      },
+      "clean_source_sha256": "38ff05034357d0e1cb58ccac5f1af2b49831db21c483a04828f1f6dada40efb2",
+      "effective_source_sha256": "8825a9c917ea8df272c3ddcf93e171516da602dbc3b9ea6b904dd2a5eb6ba4ed",
+      "rendered_source_sha256": "673193639d75f304213237cbf4da2cbfe0db8c1a71422a4370a1f4e5db37f737",
+      "rendered_source_size": 12979,
+      "include_chain": [
+       {
+        "path": "LEGO1/tgl/d3drm/tglrl40.h",
+        "overlaid": true,
+        "source_sha256": "a1d7a1e3eafe0064e7c237b3cc4e3188e2fbd9e462756d4e3960d5d496ba6caf",
+        "source_size": 38498,
+        "include_line": {
+         "baseline_sha256": "444066771c7ce6a4ca93a7b7c2dd6eeb2fe211fd0ae83a8a84512943076934c4",
+         "baseline_size": 21,
+         "baseline_line_count": 1,
+         "baseline_significant_token_sha256": "862e3e2e6f7feb695e8505becf2bdfc550b1193e6b6c7248555d4999cb016376"
+        }
+       }
+      ],
+      "owner_header": {
+       "path": "LEGO1/tgl/d3drm/tglimpl.h",
+       "source_sha256": "7995b26c92cc161d88f11e5b10fbf7b4bfbbd9dd28562df4c37657ba7841381a",
+       "source_size": 46053,
+       "owner_marker": "// VTABLE: LEGO1 0x100dbb18",
+       "owner_range_sha256": "7bf1d6d6d720cfd0ce1708600556addcef46d26d23901c1ce1b4c0c5ecafafdf",
+       "owner_range_size": 1348,
+       "include_line": {
+        "baseline_sha256": "eb8c1ac2d9932d542506a9582389ba66040eb5c685aaa632545e3c6f643fef2a",
+        "baseline_size": 21,
+        "baseline_line_count": 1,
+        "baseline_significant_token_sha256": "0ccd990447e0d0a191f58c484f301911952ffdc4feab0ef5be7964e9a08e51d2"
+       },
+       "declaration_sha256": "1a8fc1c4ad68e8b2e7dccbc27448ce5724465a86d4daff695ee0fd7f7c44a7ff",
+       "declaration_size": 275,
+       "declaration_prefix_trim": 1,
+       "declaration_significant_token_sha256": "7ba9bd2748c6817dfb1109f61c449f6ac4fce26427b08a7aebf231188fe9f5b7"
+      },
+      "function_range_sha256": "17880260614e3cf5b60f9c27de0dff943af49b529daf780259b675a68f82286d",
+      "function_range_size": 651,
+      "function_range_line_count": 34
+     },
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100a3840",
+      "verdict": "MATCH",
+      "length": 664
+     },
+     "retail_relocations": [
+      {
+       "offset": 2,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 12,
+       "type": 6,
+       "addend": 0,
+       "target": "$L41178",
+       "target_section": 302,
+       "target_value": 641,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x100a3ac1"
+      },
+      {
+       "offset": 20,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 35,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 62,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Object@Tgl@@6B@",
+       "target_section": 44,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100db980"
+      },
+      {
+       "offset": 75,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mesh@Tgl@@6B@",
+       "target_section": 305,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100dbbb0"
+      },
+      {
+       "offset": 87,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7MeshImpl@TglImpl@@6B@",
+       "target_section": 304,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100dbb88"
+      },
+      {
+       "offset": 97,
+       "type": 20,
+       "addend": 0,
+       "target": "??1Object@Tgl@@UAE@XZ",
+       "target_section": 47,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a2240"
+      },
+      {
+       "offset": 105,
+       "type": 20,
+       "addend": 0,
+       "target": "??1Mesh@Tgl@@UAE@XZ",
+       "target_section": 310,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a3e10"
+      },
+      {
+       "offset": 164,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 185,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 216,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 507,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 568,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 586,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 628,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 642,
+       "type": 6,
+       "addend": 0,
+       "target": "$T41294",
+       "target_section": 303,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100e8918"
+      },
+      {
+       "offset": 647,
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "offset": 656,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      }
+     ],
+     "expected_donor_body_length": 664,
+     "expected_donor_line_count": 6,
+     "expected_mosaic_donor_body_sha256": "1a361136ce7b61e8b17bb76621499f8e0dd684f325194e6fe313224da0b7900f",
+     "donor_variants": [
+      {
+       "donor": "d_de36cb77a02c",
+       "expected_body_length": 664,
+       "expected_line_count": 6,
+       "expected_body_sha256": "bcc0bc7774eb9770c4a063bd71a3b26575b1c3e83d9017b26aa09973e3735761",
+       "expected_metadata_sha256": "a23e393e603f6d6668694a1801d967ad1fca739b3e1c319b5875e21169287004"
+      },
+      {
+       "donor": "d_6df9b54bdfba",
+       "expected_body_length": 664,
+       "expected_line_count": 6,
+       "expected_body_sha256": "1379395c5e52d5abe13d4463da189a724c9932098a0b94ce06b29d6262e01ce4",
+       "expected_metadata_sha256": "c72d5a9df3d275630f8559cda46e1fcac11b570966da7f00283f376ff6565d93"
+      }
+     ]
     }
    ],
    "completion": {
@@ -22608,8 +23469,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4905,
-    "accepted_row_identity_sha256": "56cc3923a53c3fbfa84c6bd82331ab9f1f7ee20d253076499e7718108e772242",
+    "exact_raw_1_0_count": 4906,
+    "accepted_row_identity_sha256": "62d7ea58de3439dc4aa79730bb9447a0b926cea408093e3458eef94e4285dc68",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -45239,8 +46100,8 @@
    {
     "path": "LEGO1/tgl/d3drm/tglrl40.cpp",
     "clean": "38ff05034357d0e1cb58ccac5f1af2b49831db21c483a04828f1f6dada40efb2",
-    "effective": "9d8aab008379290b5b9f75b324d86cb9f0423c9011d5f507a5aa34cd68c88381",
-    "size": 11901,
+    "effective": "8825a9c917ea8df272c3ddcf93e171516da602dbc3b9ea6b904dd2a5eb6ba4ed",
+    "size": 12307,
     "ops": [
      {
       "op": "insert",
@@ -45344,13 +46205,13 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 161,
+       "lines": 190,
        "items": [
         {
          "k": "fwd_run",
          "stem": "TgP",
          "first": 0,
-         "count": 160,
+         "count": 189,
          "line": 1,
          "width": 3
         }
@@ -45518,9 +46379,9 @@
    },
    {
     "path": "LEGO1/tgl/d3drm/tglrl40.h",
-    "clean": "a0c4666bc192bd10c74ce2034e10689ed58c911cef454305454c7cf6a2038e8e",
-    "effective": "1e1b3d1eeef199ddca21864e9a4f5837f5645cc39f4a7578f573fb59b52c8ec2",
-    "size": 38444,
+    "clean": "4efd8920de81a528b875d52d0f1622d96ad49c919c8cd6b1215d02bf248741cd",
+    "effective": "a1d7a1e3eafe0064e7c237b3cc4e3188e2fbd9e462756d4e3960d5d496ba6caf",
+    "size": 38498,
     "ops": [
      {
       "op": "insert",

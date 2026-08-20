@@ -5926,8 +5926,11 @@ class OrdinaryFpoSelfPermutationTests(unittest.TestCase):
         fixture = self.fixture()
         bad = copy.deepcopy(fixture[2])
         bad.pop("ordinary_fpo_identity")
+        # The permutation op now also serves the plain EH closure, so
+        # dropping the FPO identity record no longer changes the op -- it
+        # claims the OTHER closure class, which this FPO fixture is not.
         with self.assertRaisesRegex(byte_identity.ByteIdentityError,
-                                    "isolated ordinary FPO"):
+                                    "closure class differs"):
             self.compose(fixture, function=bad)
 
         original = byte_identity.apply_replacements
@@ -5982,8 +5985,9 @@ class OrdinaryFpoSelfPermutationTests(unittest.TestCase):
                 manifest, "fixture", ROOT)
         unit["functions"].pop()
         function.pop("ordinary_fpo_identity")
-        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
-                                    "ordinary FPO mosaic|bound exactly once"):
+        with self.assertRaisesRegex(
+                byte_identity.ByteIdentityError,
+                "role policy does not match its closure class"):
             byte_identity.require_manifest_source_refactor_role_preflight(
                 manifest, "fixture", ROOT)
 
@@ -6817,3 +6821,362 @@ class SourceFpoInstructionMosaicTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CommutingInstructionPairTests(unittest.TestCase):
+    """The closed decoder that makes a self-permutation provable."""
+
+    def test_decodes_the_supported_register_and_memory_forms(self):
+        cases = {
+            "33ff": ({"edi"}, {"edi", "flags"}, False),
+            "33c9": ({"ecx"}, {"ecx", "flags"}, False),
+            "8b542414": ({"esp"}, {"edx"}, True),
+            "8b5d0c": ({"ebp"}, {"ebx"}, True),
+            "8b4de0": ({"ebp"}, {"ecx"}, True),
+            "8bc8": ({"eax"}, {"ecx"}, False),
+            "8b0485a0000000": ({"eax"}, {"eax"}, True),
+            "8b1d10203040": (set(), {"ebx"}, True),
+        }
+        for encoded, (reads, writes, memory) in cases.items():
+            with self.subTest(encoded=encoded):
+                decoded = byte_identity.decode_commutable_ia32_instruction(
+                    bytes.fromhex(encoded), "case")
+                self.assertEqual(decoded["reads"], reads)
+                self.assertEqual(decoded["writes"], writes)
+                self.assertEqual(decoded["reads_memory"], memory)
+                self.assertFalse(decoded["writes_memory"])
+
+    def test_refuses_everything_outside_the_closed_subset(self):
+        cases = [
+            ("", "too short"),
+            ("8b", "too short"),
+            ("90", "too short"),
+            ("8945fc", "outside the commutable"),   # mov [ebp-4],eax
+            ("668b5d0c", "outside the commutable"),  # operand-size prefix
+            ("8b5d0cff", "encoding is not exact"),   # trailing byte
+            ("8b5d", "encoding is not exact"),       # truncated disp8
+            ("8b5424", "encoding is not exact"),     # truncated SIB form
+        ]
+        for encoded, message in cases:
+            with self.subTest(encoded=encoded), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                byte_identity.decode_commutable_ia32_instruction(
+                    bytes.fromhex(encoded), "case")
+
+    def test_accepts_only_provably_independent_pairs(self):
+        accepted = [
+            ("33ff", "8b542414"),      # the historical FPO pair
+            ("8b5d0c", "8b4de0"),      # two independent frame loads
+            ("8b4de0", "8b5d0c"),
+        ]
+        for first, second in accepted:
+            with self.subTest(pair=(first, second)):
+                detail = byte_identity.require_commuting_ia32_instruction_pair(
+                    bytes.fromhex(first), bytes.fromhex(second), "case")
+                self.assertEqual(
+                    set(detail), {
+                        "first_reads", "first_writes",
+                        "second_reads", "second_writes",
+                    })
+        refused = [
+            ("8b5d0c", "8b5de0", "write the same location"),
+            ("33ff", "33c9", "write the same location"),   # both write flags
+            ("8b5d0c", "8b4b04", "register dependency"),   # reads ebx
+            ("8b4b04", "8b5d0c", "register dependency"),
+            ("8bd8", "8b03", "register dependency"),
+        ]
+        for first, second, message in refused:
+            with self.subTest(pair=(first, second)), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                byte_identity.require_commuting_ia32_instruction_pair(
+                    bytes.fromhex(first), bytes.fromhex(second), "case")
+
+    def test_permutation_kinds_and_their_encoding_obligations(self):
+        self.assertEqual(
+            byte_identity.SELF_PERMUTATION_KINDS,
+            {byte_identity.ORDINARY_FPO_SELF_PERMUTATION_KIND,
+             byte_identity.INDEPENDENT_PAIR_SELF_PERMUTATION_KIND},
+        )
+        self.assertEqual(
+            byte_identity.SELF_PERMUTATION_ROLE_POLICIES,
+            {byte_identity.ORDINARY_FPO_SELF_PERMUTATION_ROLE_POLICY,
+             byte_identity.EH_CLOSURE_SELF_PERMUTATION_ROLE_POLICY},
+        )
+
+        def permutation(kind, first, second):
+            first_raw = bytes.fromhex(first)
+            second_raw = bytes.fromhex(second)
+            width = len(first_raw) + len(second_raw)
+            return {
+                "kind": kind,
+                "source_start": 100, "source_end": 100 + width,
+                "target_start": 100, "target_end": 100 + width,
+                "source_instruction_lengths": [
+                    len(first_raw), len(second_raw)],
+                "target_instruction_lengths": [
+                    len(second_raw), len(first_raw)],
+                "moves": [
+                    {
+                        "target_start": 100,
+                        "target_end": 100 + len(second_raw),
+                        "target_bytes": second,
+                        "target_sha256": hashlib.sha256(
+                            second_raw).hexdigest(),
+                        "donor_start": 100 + len(first_raw),
+                        "donor_end": 100 + width,
+                        "donor_bytes": second,
+                        "donor_sha256": hashlib.sha256(
+                            second_raw).hexdigest(),
+                    },
+                    {
+                        "target_start": 100 + len(second_raw),
+                        "target_end": 100 + width,
+                        "target_bytes": first,
+                        "target_sha256": hashlib.sha256(
+                            first_raw).hexdigest(),
+                        "donor_start": 100,
+                        "donor_end": 100 + len(first_raw),
+                        "donor_bytes": first,
+                        "donor_sha256": hashlib.sha256(
+                            first_raw).hexdigest(),
+                    },
+                ],
+                "expected_changed_offsets": list(range(100, 100 + width)),
+                "expected_function_multiset_sha256": "1" * 64,
+                "expected_comdat_multiset_sha256": "2" * 64,
+                "expected_section_shape_sha256": "3" * 64,
+                "expected_linker_payload_count": 4,
+                "expected_linker_payload_sha256": "5" * 64,
+            }
+
+        normalized = byte_identity.validate_instruction_self_permutation(
+            permutation(
+                byte_identity.INDEPENDENT_PAIR_SELF_PERMUTATION_KIND,
+                "8b5d0c", "8b4de0"),
+            "case", 664)
+        self.assertEqual(
+            normalized["commuting_pair_independence"]["first_writes"],
+            ["ebx"])
+
+        # The historical kind still names its exact encodings, so it cannot
+        # silently widen into the general class.
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "closed XOR-zero"):
+            byte_identity.validate_instruction_self_permutation(
+                permutation(
+                    byte_identity.ORDINARY_FPO_SELF_PERMUTATION_KIND,
+                    "8b5d0c", "8b4de0"),
+                "case", 664)
+        # ... and the general kind still needs a provably independent pair.
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "write the same location"):
+            byte_identity.validate_instruction_self_permutation(
+                permutation(
+                    byte_identity.INDEPENDENT_PAIR_SELF_PERMUTATION_KIND,
+                    "8b5d0c", "8b5de0"),
+                "case", 664)
+
+
+class OwnerHeaderDefinedSourceIdentityTests(unittest.TestCase):
+    """A carrier-source proof for a function defined in an included header."""
+
+    OWNER = (
+        b"// VTABLE: LEGO1 0x100dbb18\n"
+        b"class Widget {\n"
+        b"public:\n"
+        b"\tint Build(\n"
+        b"\t\tint first,\n"
+        b"\t\tint second\n"
+        b"\t);\n"
+        b"};\n"
+        b"\n"
+        b"// FUNCTION: LEGO1 0x100a3840\n"
+        b"inline int Widget::Build(int first, int second)\n"
+        b"{\n"
+        b"\treturn first + second;\n"
+        b"}\n"
+        b"\n"
+    )
+    MID = b'#include "own.h"\n\nclass Other;\n'
+    UNIT = b'#include "mid.h"\n\nint g_unit = 1;\n'
+
+    @staticmethod
+    def _sha(data):
+        return hashlib.sha256(data).hexdigest()
+
+    @classmethod
+    def _range_pin(cls, data):
+        return {
+            "baseline_sha256": cls._sha(data),
+            "baseline_size": len(data),
+            "baseline_line_count": data.count(b"\n"),
+            "baseline_significant_token_sha256":
+                byte_identity.source_overlay_significant_sha256(data),
+        }
+
+    def _tree(self):
+        root = Path(tempfile.mkdtemp()).resolve(strict=True)
+        self.addCleanup(lambda: __import__("shutil").rmtree(root))
+        (root / "src").mkdir()
+        for name, data in (("own.h", self.OWNER), ("mid.h", self.MID),
+                           ("unit.cpp", self.UNIT)):
+            (root / "src" / name).write_bytes(data)
+        return root
+
+    def _identity(self, root, *, mid_overlaid=False, mid_effective=None):
+        carrier = {
+            "kind": "extern_run_pair_v1",
+            "placement": "after_includes_and_eof_v1",
+            "header_prefix": "g_h", "header_count": 2,
+            "seat_prefix": "g_p", "seat_count": 3, "width": 2,
+        }
+        generated = b"".join(
+            byte_identity.entropy_generator.generate_extern_run(
+                prefix, count, 2).encode("ascii")
+            for prefix, count in (("g_h", 2), ("g_p", 3))
+        )
+        carrier["generated_declarations_sha256"] = self._sha(generated)
+        rendered = byte_identity.render_donor_source_compiler_state_carrier(
+            self.UNIT, carrier)
+        mid = mid_effective if mid_overlaid else self.MID
+        window = self.OWNER[self.OWNER.index(b"// FUNCTION:"):]
+        window = window[:window.index(b"}\n\n") + 3]
+        declaration = self.OWNER[
+            self.OWNER.index(b"\tint Build("):
+            self.OWNER.index(b"\t);\n") + 4]
+        trimmed = declaration.lstrip(b"\t")
+        trim = len(declaration) - len(trimmed)
+        owner_range = self.OWNER[
+            self.OWNER.index(b"// VTABLE"):self.OWNER.index(b"};\n") + 2]
+        return {
+            "kind": byte_identity.SAME_FUNCTION_CARRIER_SOURCE_IDENTITY_KIND,
+            "selector": byte_identity.SAME_FUNCTION_OWNER_HEADER_SELECTOR,
+            "start_marker": "// FUNCTION: LEGO1 0x100a3840",
+            "source_owner_mangled": "?Build@Widget@Toolkit@@QAEHHH@Z",
+            "carrier": carrier,
+            "clean_source_sha256": self._sha(self.UNIT),
+            "effective_source_sha256": self._sha(self.UNIT),
+            "rendered_source_sha256": self._sha(rendered),
+            "rendered_source_size": len(rendered),
+            "function_range_sha256": self._sha(window),
+            "function_range_size": len(window),
+            "function_range_line_count": window.count(b"\n"),
+            "include_chain": [{
+                "path": "src/mid.h",
+                "overlaid": mid_overlaid,
+                "source_sha256": self._sha(mid),
+                "source_size": len(mid),
+                "include_line": self._range_pin(b'#include "mid.h"\n'),
+            }],
+            "owner_header": {
+                "path": "src/own.h",
+                "source_sha256": self._sha(self.OWNER),
+                "source_size": len(self.OWNER),
+                "owner_marker": "// VTABLE: LEGO1 0x100dbb18",
+                "owner_range_sha256": self._sha(owner_range),
+                "owner_range_size": len(owner_range),
+                "declaration_sha256": self._sha(trimmed),
+                "declaration_size": len(trimmed),
+                "declaration_prefix_trim": trim,
+                "declaration_significant_token_sha256":
+                    byte_identity.source_overlay_significant_sha256(trimmed),
+                "include_line": self._range_pin(b'#include "own.h"\n'),
+            },
+        }
+
+    @staticmethod
+    def _recipe():
+        generated = b"".join(
+            byte_identity.entropy_generator.generate_extern_run(
+                prefix, count, 2).encode("ascii")
+            for prefix, count in (("g_h", 2), ("g_p", 3))
+        )
+        return {
+            "kind": "extern_run_pair",
+            "header_prefix": "g_h", "header_count": 2,
+            "seat_prefix": "g_p", "seat_count": 3, "width": 2,
+            "generated_header_sha256": hashlib.sha256(generated).hexdigest(),
+            "emission_policy": "non_emitting_declarations_only",
+            "role_policy":
+                byte_identity.EH_CLOSURE_SELF_PERMUTATION_ROLE_POLICY,
+        }
+
+    def _run(self, root, identity, overlaid_paths=frozenset(),
+             rendered_by_path=None):
+        normalized = (
+            byte_identity.validate_same_function_carrier_source_identity(
+                identity, "case")
+        )
+        return byte_identity.require_same_function_carrier_source_identity(
+            root, "src/unit.cpp", self.UNIT, self.UNIT, self._recipe(),
+            normalized, set(overlaid_paths), "case",
+            rendered_by_path=rendered_by_path or {},
+        )
+
+    def test_accepts_a_transitively_included_multi_line_declaration(self):
+        root = self._tree()
+        detail = self._run(root, self._identity(root))
+        self.assertEqual(detail["carrier_identifiers"][:2], ["g_h00", "g_h01"])
+        self.assertEqual(detail["target_source_sha256"],
+                         detail["function_range_sha256"])
+
+    def test_an_overlaid_hop_is_read_from_its_rendered_effective_view(self):
+        root = self._tree()
+        effective = self.MID + b"class Extra;\n"
+        identity = self._identity(root, mid_overlaid=True,
+                                  mid_effective=effective)
+        detail = self._run(root, identity, overlaid_paths={"src/mid.h"},
+                           rendered_by_path={"src/mid.h": effective})
+        self.assertEqual(len(detail["include_chain"]), 1)
+        # The declared overlay state must agree with the manifest overlay.
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "declared overlay state differs"):
+            self._run(root, identity, overlaid_paths=set(),
+                      rendered_by_path={"src/mid.h": effective})
+        # The clean bytes are not a substitute for the rendered ones.
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "differs from its pin"):
+            self._run(root, self._identity(root, mid_overlaid=True,
+                                           mid_effective=self.MID),
+                      overlaid_paths={"src/mid.h"},
+                      rendered_by_path={"src/mid.h": effective})
+
+    def test_broken_chain_marker_and_pin_drift_all_fail(self):
+        root = self._tree()
+        base = self._identity(root)
+
+        broken = copy.deepcopy(base)
+        broken["include_chain"] = []
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "must hold 1..4 pinned headers"):
+            self._run(root, broken)
+
+        broken = copy.deepcopy(base)
+        broken["include_chain"][0]["include_line"]["baseline_sha256"] = (
+            "0" * 64)
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "authenticated input-range pins"):
+            self._run(root, broken)
+
+        (root / "src" / "mid.h").write_bytes(b"class Other;\n")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "differs from its pin"):
+            self._run(root, base)
+        (root / "src" / "mid.h").write_bytes(self.MID)
+
+        broken = copy.deepcopy(base)
+        broken["selector"] = byte_identity.SAME_FUNCTION_UNIT_SELECTOR
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "function marker is absent"):
+            self._run(root, broken)
+
+        marked = self.UNIT + b"// FUNCTION: LEGO1 0x100a3840\n"
+        normalized = (
+            byte_identity.validate_same_function_carrier_source_identity(
+                copy.deepcopy(base), "case")
+        )
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "clean/effective translation-unit"):
+            byte_identity.require_same_function_carrier_source_identity(
+                root, "src/unit.cpp", marked, marked, self._recipe(),
+                normalized, set(), "case", rendered_by_path={})
