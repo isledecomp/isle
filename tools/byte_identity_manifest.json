@@ -23489,8 +23489,8 @@
   {
    "target": "roi",
    "source": "LEGO1/lego/sources/roi/legolod.cpp",
-   "source_sha256": "abe44094b439581ff8036b8d2dce6793cbcd9e2c2e09ee2eae929c426e5f84a2",
-   "mode": "restore_comdat_group_order",
+   "source_sha256": "e8f5d4768f452711d20748881691c98ef62a715d4c22ce7d43411e360f98c566",
+   "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
      "/Zi",
@@ -23502,6 +23502,196 @@
      "/Z7",
      "-Z7"
     ]
+   },
+   "donors": [
+    {
+     "id": "d_2e371b6d532b",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 10,
+      "functions": 100,
+      "generated_header_sha256": "2e371b6d532b6ed1fe9828bbd5d1846fc288e3750445296e3a4531c929e7fbab",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_8ac6b4ca0987",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 2,
+      "functions": 2,
+      "generated_header_sha256": "8ac6b4ca098707dc7bedc9b71b551721555a9190abf0b72a3c05f21b9418da2d",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?Clone@LegoLOD@@QAEPAV1@PAVRenderer@Tgl@@@Z",
+     "expected_body_length": 245,
+     "expected_body_sha256": "741dc3923fb01168bc4fad842ca7df99769662c550e457442d1d1c0db6f15b55",
+     "expected_changed_offsets": [
+      30,
+      31,
+      32,
+      33,
+      34,
+      74,
+      76,
+      91,
+      94,
+      111,
+      117,
+      122,
+      125,
+      140,
+      150,
+      153,
+      167,
+      172,
+      175,
+      178,
+      181,
+      184,
+      187,
+      190,
+      193,
+      196,
+      198,
+      200,
+      201,
+      202,
+      203,
+      204,
+      205,
+      206,
+      207,
+      208,
+      209,
+      213
+     ],
+     "splice_class": "equal_body_eh_reloc_layout",
+     "expected_relocation_moves": [
+      [
+       210,
+       209
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36
+     ],
+     "donor": "d_2e371b6d532b"
+    },
+    {
+     "mangled": "?SetColor@LegoLOD@@QAEJMMMM@Z",
+     "expected_body_length": 78,
+     "expected_body_sha256": "1dd6960d01299a6db582d69004d67ddf67a6f642ce103c5447ddaead17342ecb",
+     "expected_changed_offsets": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      10,
+      15,
+      16,
+      24,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      61,
+      63,
+      65
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_2e371b6d532b"
+    },
+    {
+     "mangled": "?UpdateTextureInfo@LegoLOD@@QAEJPAVLegoTextureInfo@@@Z",
+     "expected_body_length": 66,
+     "expected_body_sha256": "f3298974c565aed6dcf92d8b3914ac3f72032eea9a85e6cd7d16c77f0bc14e44",
+     "expected_changed_offsets": [
+      5,
+      10,
+      15,
+      16,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      49,
+      51,
+      53
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_2e371b6d532b"
+    },
+    {
+     "mangled": "?GetTextureInfo@LegoLOD@@QAEJAAPAVLegoTextureInfo@@@Z",
+     "expected_body_length": 83,
+     "expected_body_sha256": "2c3ee7be5e356558bbc7d769316c76aad0e424bb13e975bc83bc0f3e2ff03d48",
+     "expected_changed_offsets": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      10,
+      15,
+      16,
+      22,
+      26,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      54,
+      56,
+      58
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_8ac6b4ca0987"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 4 row(s) in LEGO1/lego/sources/roi/legolod.cpp from generated declaration-only carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
    },
    "group_order": [
     "??_GLegoLOD@@UAEPAXI@Z",
@@ -23517,12 +23707,7 @@
     "?ClearMeshOffset@LegoLOD@@QAEXXZ",
     "?NumPolys@LegoLOD@@UBEHXZ",
     "?VTable0x10@LegoLOD@@UAEMXZ"
-   ],
-   "completion": {
-    "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Restores the retail-anchored .text COMDAT group order of LEGO1/lego/sources/roi/legolod.cpp (whole-group permutation, body-inert): retail emits NumPolys and VTable0x10 as the object's last two .text COMDATs.",
-    "may_replace_compiler_output": true
-   }
+   ]
   }
  ],
  "archives": [
@@ -39889,8 +40074,8 @@
    {
     "path": "LEGO1/lego/sources/roi/legolod.cpp",
     "clean": "c45eddb4384002ced9e25a9ebf715c0c14d0b91ce79e3f8916f2a42cd59322ae",
-    "effective": "abe44094b439581ff8036b8d2dce6793cbcd9e2c2e09ee2eae929c426e5f84a2",
-    "size": 14406,
+    "effective": "e8f5d4768f452711d20748881691c98ef62a715d4c22ce7d43411e360f98c566",
+    "size": 15434,
     "ops": [
      {
       "op": "insert",
@@ -39933,7 +40118,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 14,
+       "lines": 59,
        "items": [
         {
          "k": "lines",
@@ -39963,7 +40148,7 @@
          "k": "fwd_run",
          "stem": "MxUnkRecordLD",
          "first": 0,
-         "count": 3,
+         "count": 48,
          "line": 11
         }
        ]
