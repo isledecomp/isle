@@ -21,13 +21,23 @@ REPORT = Path("/Users/foxtacles/Projects/isle-build-lean/LEGO1-report.json")
 # Every .rdata row therefore reads 88 bytes high here and must be corrected,
 # or the alignment count is wrong by the whole .rdata population.
 RDATA_BASE = 0x100d0000
+# The /debug link's .rdata head carries an 88-byte debug directory.  That shifts
+# lego1's own .rdata by 88, but only by 80 from the CRT block onward: the
+# 16-byte section alignment absorbs 8 of it.  Using a blanket 88 under-reports
+# every library row by 8.
+CRT_RDATA_BASE = 0x100daa70
 DEBUG_DIRECTORY_BYTES = 88
+CRT_DEBUG_DIRECTORY_BYTES = 80
 
 
 def terminal_delta(retail_va: int, our_va: int) -> int:
     """(our - retail) as the byte-identical image will see it."""
     delta = our_va - retail_va
-    return delta - DEBUG_DIRECTORY_BYTES if retail_va >= RDATA_BASE else delta
+    if retail_va >= CRT_RDATA_BASE:
+        return delta - CRT_DEBUG_DIRECTORY_BYTES
+    if retail_va >= RDATA_BASE:
+        return delta - DEBUG_DIRECTORY_BYTES
+    return delta
 
 args = [a for a in sys.argv[1:]]
 save = vs = None

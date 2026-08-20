@@ -18,13 +18,23 @@ HERE = Path(__file__).resolve().parent
 # than the terminal image's (an 88-byte debug directory sits at its head), so
 # every .rdata displacement read straight from the report is 88 bytes high.
 RDATA_BASE = 0x100d0000
+# The /debug link's .rdata head carries an 88-byte debug directory.  That shifts
+# lego1's own .rdata by 88, but only by 80 from the CRT block onward: the
+# 16-byte section alignment absorbs 8 of it.  Using a blanket 88 under-reports
+# every library row by 8.
+CRT_RDATA_BASE = 0x100daa70
 DEBUG_DIRECTORY_BYTES = 88
+CRT_DEBUG_DIRECTORY_BYTES = 80
 
 
 def terminal_delta(retail_va: int, our_va: int) -> int:
     """(our - retail) as the byte-identical image will see it."""
     delta = our_va - retail_va
-    return delta - DEBUG_DIRECTORY_BYTES if retail_va >= RDATA_BASE else delta
+    if retail_va >= CRT_RDATA_BASE:
+        return delta - CRT_DEBUG_DIRECTORY_BYTES
+    if retail_va >= RDATA_BASE:
+        return delta - DEBUG_DIRECTORY_BYTES
+    return delta
 
 
 rep = json.loads(Path("/Users/foxtacles/Projects/isle-build-lean/"

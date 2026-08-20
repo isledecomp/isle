@@ -194,6 +194,9 @@ SOURCE_OVERLAY_LEAN_ACTIONS = {
 }
 
 
+CONSTANT_POOL_INCLUDE_IDENTITIES = ("legopathboundary.h", "legotextureinfo.h")
+
+
 SOURCE_OVERLAY_LEAN_BOUNDARIES = {
     "start": "file_start", "end": "file_end",
     "before_token": "before_next_token", "after_token": "after_previous_token",
@@ -6916,17 +6919,25 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
         }
     elif kind == "synthetic_constant_pool_tu_v1":
         exact_audit_keys(params, {"include_identity", "logical_path"}, param_context)
-        require(params.get("include_identity") == "legopathboundary.h",
+        # The whole translation unit is one quoted include and nothing else.
+        # MSVC 4.2 emits this project's two internal-linkage header constants
+        # unconditionally on inclusion, so the include identity chooses the
+        # size of the emitted pool and nothing else: `legopathboundary.h`
+        # reaches both constants (20 bytes), `legotextureinfo.h` reaches only
+        # `Pi` (8 bytes).  The enum stays closed -- a pool unit may never name
+        # an arbitrary header.
+        require(params.get("include_identity")
+                in CONSTANT_POOL_INCLUDE_IDENTITIES,
                 f"{param_context}.include_identity differs")
         logical_path = source_overlay_relative_path(
             params.get("logical_path"), param_context + ".logical_path"
         )
         require(re.fullmatch(
-            r"LEGO1/lego/legoomni/src/paths/legordatapad[1-4]\.cpp",
+            r"LEGO1/lego/legoomni/src/paths/legordatapad([1-9]|1[0-9])\.cpp",
             logical_path,
         ) is not None, f"{param_context}.logical_path differs")
         normalized = {
-            "include_identity": "legopathboundary.h",
+            "include_identity": params["include_identity"],
             "logical_path": logical_path,
         }
     elif kind == "synthetic_discarded_relocation_ring_v1":
