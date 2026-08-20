@@ -9934,6 +9934,22 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_6a529ee42428",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 5,
+      "generated_header_sha256": "6a529ee42428a533a29271f0e2d7cebf4ef0898dbd6d3e746c919f92c419d645",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -10503,11 +10519,132 @@
      ],
      "splice_class": "equal_body_strict",
      "donor": "d_e33827d593cc"
+    },
+    {
+     "mangled": "?_Erase@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@IAEXPAU_Node@1@@Z",
+     "donor": "d_6a529ee42428",
+     "splice_class": "retail_exact_register_bijection",
+     "expected_section_number": 34,
+     "expected_section_count": 230,
+     "expected_body_length": 57,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 2,
+     "expected_relocation_count": 4,
+     "expected_seed_line_count": 6,
+     "expected_donor_line_count": 6,
+     "expected_function_count": 74,
+     "expected_comdat_count": 78,
+     "expected_seed_body_sha256": "f4db8cfb7a8242f361426ffe34fba676681c877ea2dad949ae6ab835e99d33de",
+     "expected_donor_body_sha256": "7dba54f1c147d535023347d216a46167950f9ef7785788c8481b05a6a464dc30",
+     "expected_body_sha256": "7dc28c7c261766a264253ce9cfe25177c56b03f75de1c48d08d8f4ec2406e3dd",
+     "expected_seed_metadata_sha256": "f3f2eede466ae309de39ade08aa972fb6cb7c07fdeda7d0253b26f42c95d8041",
+     "expected_donor_metadata_sha256": "58172fa6820945e2bbd6b801bbd72008d3e602ea12d6d6aabcbc888b3b470c31",
+     "expected_changed_offsets": [
+      6,
+      10,
+      11,
+      12,
+      20,
+      31,
+      32,
+      34,
+      43,
+      44
+     ],
+     "expected_code_renames": [],
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10057180",
+      "verdict": "MATCH",
+      "length": 57
+     },
+     "retail_relocations": [
+      {
+       "offset": 13,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@1PAU_Node@1@A",
+       "target_section": 7,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f3200"
+      },
+      {
+       "offset": 26,
+       "type": 20,
+       "addend": 0,
+       "target": "?_Erase@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@IAEXPAU_Node@1@@Z",
+       "target_section": 34,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10057180"
+      },
+      {
+       "offset": 36,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 45,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@1PAU_Node@1@A",
+       "target_section": 7,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f3200"
+      }
+     ],
+     "register_bijection": {
+      "kind": "callee_saved_register_bijection_v1",
+      "mapping": {
+       "ebx": "edi",
+       "edi": "ebx"
+      },
+      "region_start": 3,
+      "region_end": 51,
+      "expected_region_instruction_count": 16,
+      "expected_instruction_count": 23,
+      "expected_rewritten_offsets": [
+       6,
+       10,
+       12,
+       20,
+       31,
+       32,
+       34,
+       44
+      ],
+      "debug_s_register_map": [
+       {
+        "name": "_Y",
+        "record_offset": 267,
+        "donor_register": "edi",
+        "image_register": "ebx"
+       }
+      ],
+      "expected_seed_debug_s_sha256": "997b8b6f0747a047f086ffddc807681c64399347c6542f616fbdc53dd4ee8317",
+      "expected_image_debug_s_sha256": "e0496ea973d86c450b869698f4fabae55b6f8066295069cc1191df44dfec6e63",
+      "authenticity_rationale": "A bijective renaming of general registers proved dead-on-entry and dead-on-exit for the region, applied to this donor compile of the same translation unit; the composition is refused unless the image equals the pinned retail oracle under the relocation mask."
+     }
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 7 row(s) in LEGO1/lego/legoomni/src/paths/legopathboundary.cpp from generated carrier and source-permutation states over the rendered current source.",
+    "reason": "Closes 8 row(s) in LEGO1/lego/legoomni/src/paths/legopathboundary.cpp from generated carrier, source-permutation and register-bijection states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -24354,8 +24491,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4911,
-    "accepted_row_identity_sha256": "604f8214a85c9c021c73e74b5ab1631b242889d028ea83a1589619307118707a",
+    "exact_raw_1_0_count": 4912,
+    "accepted_row_identity_sha256": "65d710aa5f07cc835c88842c3314b1de48730416f1da42997be50a0528641ce1",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

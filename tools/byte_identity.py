@@ -14074,7 +14074,8 @@ def validate_manifest(
                                          CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
                                          SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS,
                                          SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
-                                         CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS),
+                                         CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS,
+                                         REGISTER_BIJECTION_CLASS),
                         f"{function_context}: unsupported splice class")
                 if splice_class == RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS:
                     source_equal_keys = {
@@ -14280,6 +14281,134 @@ def validate_manifest(
                         ),
                     )
                     normalized_functions.append(normalized_function)
+                    continue
+                if splice_class == REGISTER_BIJECTION_CLASS:
+                    bijection_keys = {
+                        "mangled", "donor", "splice_class",
+                        "expected_section_number", "expected_section_count",
+                        "expected_body_length", "expected_characteristics",
+                        "expected_selection", "expected_relocation_count",
+                        "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                        "expected_seed_body_sha256",
+                        "expected_donor_body_sha256",
+                        "expected_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_donor_metadata_sha256",
+                        "expected_changed_offsets", "expected_code_renames",
+                        "expected_closure", "retail_oracle",
+                        "retail_relocations", "register_bijection",
+                    }
+                    exact_keys(function, bijection_keys, function_context)
+                    for name in (
+                        "expected_section_number", "expected_section_count",
+                        "expected_body_length", "expected_characteristics",
+                        "expected_selection", "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                    ):
+                        require(type(function.get(name)) is int
+                                and function[name] > 0,
+                                f"{function_context}.{name} is invalid")
+                    require(type(function.get("expected_relocation_count"))
+                            is int
+                            and function["expected_relocation_count"] >= 0,
+                            f"{function_context}.expected_relocation_count "
+                            "is invalid")
+                    for name in (
+                        "expected_seed_body_sha256",
+                        "expected_donor_body_sha256",
+                        "expected_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_donor_metadata_sha256",
+                    ):
+                        require_sha(function.get(name),
+                                    f"{function_context}.{name}")
+                    # The installed body is sigma's image, so it must differ
+                    # from the compiler-produced pre-image; a class that
+                    # installed the donor unchanged would be an ordinary
+                    # equal-body splice wearing this class's name.
+                    require(
+                        function["expected_body_sha256"]
+                        != function["expected_donor_body_sha256"]
+                        and function["expected_body_sha256"]
+                        != function["expected_seed_body_sha256"],
+                        f"{function_context}: the image pin does not move "
+                        "the donor body",
+                    )
+                    changed = function.get("expected_changed_offsets")
+                    require(
+                        isinstance(changed, list) and changed
+                        and changed == sorted(set(changed))
+                        and all(type(offset) is int
+                                and 0 <= offset
+                                < function["expected_body_length"]
+                                for offset in changed),
+                        f"{function_context}.expected_changed_offsets "
+                        "is invalid",
+                    )
+                    renames = function.get("expected_code_renames")
+                    require(
+                        isinstance(renames, list)
+                        and all(isinstance(item, list) and len(item) == 2
+                                and type(item[0]) is int and item[0] >= 0
+                                and item[1] in ("L", "T", "S")
+                                for item in renames)
+                        and renames == sorted(renames),
+                        f"{function_context}.expected_code_renames "
+                        "is invalid",
+                    )
+                    require(
+                        function.get("expected_closure")
+                        == [".debug$F", ".debug$S"],
+                        f"{function_context}.expected_closure differs",
+                    )
+                    retail = function.get("retail_oracle")
+                    require(isinstance(retail, dict),
+                            f"{function_context}.retail_oracle must be an "
+                            "object")
+                    exact_keys(retail, {
+                        "image", "address", "verdict", "length",
+                    }, f"{function_context}.retail_oracle")
+                    require_target_bound_retail_image(
+                        manifest.get("images"), target, retail.get("image"),
+                        f"{function_context}.retail_oracle",
+                    )
+                    require(
+                        isinstance(retail.get("address"), str)
+                        and ADDRESS_RE.fullmatch(retail["address"])
+                        is not None
+                        and retail.get("verdict") == "MATCH"
+                        and retail.get("length")
+                        == function["expected_body_length"],
+                        f"{function_context}.retail_oracle differs",
+                    )
+                    validate_retail_relocation_oracle(
+                        function.get("retail_relocations"),
+                        f"{function_context}.retail_relocations",
+                        function["expected_body_length"],
+                        allow_empty=(
+                            function["expected_relocation_count"] == 0
+                        ),
+                    )
+                    bijection = validate_register_bijection(
+                        function.get("register_bijection"),
+                        f"{function_context}.register_bijection",
+                        function["expected_body_length"],
+                    )
+                    # Every rewritten byte must also be a declared changed
+                    # byte of the composition: sigma may not touch a byte the
+                    # unit does not already account for.
+                    require(
+                        set(bijection["expected_rewritten_offsets"])
+                        <= set(changed),
+                        f"{function_context}: the bijection rewrites a byte "
+                        "outside the declared changed set",
+                    )
+                    normalized_functions.append({
+                        **function, "register_bijection": bijection,
+                    })
                     continue
                 if (splice_class
                         == CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS):
@@ -26824,3 +26953,827 @@ def validate_complete_reccmp_report(data: bytes, image_gate: dict) -> dict:
         f"final reccmp report is not exactly {required}/{required} raw-exact",
     )
     return result
+
+
+# ---------------------------------------------------------------------------
+# retail_exact_register_bijection: a register-renaming CERTIFICATE
+# ---------------------------------------------------------------------------
+#
+# WHY THIS CLASS IS A CERTIFICATE AND NOT A GENERATOR
+#
+# Every other retail-exact class installs bytes some compile of the project's
+# own source produced.  This class installs bytes derived from such a body by
+# one bijective renaming of general registers -- so it must earn its place by
+# proving, instruction by instruction, that the renaming is a *semantics-
+# preserving* rewriting of an authenticated compiler-produced body, and then
+# by REFUSING unless the rewritten body is byte-identical to the pinned retail
+# oracle under the relocation mask.  It can therefore only ever install
+# retail's own code; it can never invent a body, and it can never be used to
+# nudge an arbitrary object towards an arbitrary target.
+#
+# That is the same epistemic class as `instruction_self_permutation`, which
+# reorders two closed, provably independent compiler-produced instructions and
+# is likewise gated on retail equality.  The obligations below are the ones
+# that make the claim honest; each is a `require` in this module, not a
+# comment:
+#
+#  1  provenance       the pre-image is a freshly compiled, census-pinned seed
+#                      or donor COMDAT of the same mangled function
+#  2  bijection        sigma is a bijection on the 8 general registers whose
+#                      support excludes ESP and EBP, so no ModRM/SIB escape
+#                      encoding (mod 0 rm 5, rm 4, index 4, base 5) can be
+#                      created or destroyed and every length is preserved
+#  3  frame invariance the region excludes the prologue and epilogue, whose
+#                      bytes are required to be untouched: the callee-saved
+#                      SET is what the ABI fixes, and it is unchanged
+#  4  total decode     the whole body decodes to complete instructions with
+#                      the fail-closed table, ends exactly on the last byte,
+#                      and every COFF line-table row lands on a boundary
+#  5  closed forms     every instruction in the body is in a closed semantic
+#                      table that names its register fields and its implicit
+#                      operands; anything else -- prefixes, implicit-operand
+#                      forms (MUL/DIV/CDQ/string/shift-by-CL), indirect
+#                      control flow -- is refused
+#  6  relocations      no rewritten byte may overlap a relocation, and the
+#                      relocation table is the seed's own, unmoved
+#  7  liveness         every register in sigma's support is dead on entry to
+#                      the region and dead on every edge leaving it, proved by
+#                      a backward liveness fixpoint over the body's own CFG
+#                      with an ABI-conservative call and return model
+#  8  retail equality  the image must equal the retail oracle exactly under
+#                      the relocation mask, or the composition is refused
+#  9  debug fidelity   the CodeView S_REGISTER records that name which
+#                      register holds a local are mapped through sigma, and
+#                      the record stream is re-parsed to exhaustion with an
+#                      unchanged record identity/size list
+# 10  scope            one named COMDAT, one sigma, one pinned oracle, and the
+#                      ordinary output-conservation proof of the equal-body
+#                      primitive, which this class delegates to unchanged
+
+
+REGISTER_BIJECTION_CLASS = "retail_exact_register_bijection"
+
+
+REGISTER_BIJECTION_KIND = "callee_saved_register_bijection_v1"
+
+
+IA32_GENERAL_REGISTER_NAMES = (
+    "eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi",
+)
+
+
+_IA32_REGISTER_NUMBERS = {
+    name: number for number, name in enumerate(IA32_GENERAL_REGISTER_NAMES)
+}
+
+
+# The two registers whose encodings carry structural meaning in ModRM/SIB:
+# rm == 4 selects a SIB byte, rm == 5 with mod == 0 selects disp32, index == 4
+# means "no index" and base == 5 with mod == 0 means "no base".  A sigma whose
+# support avoids them cannot change any instruction's length or addressing
+# form, which is obligation 2.
+_IA32_STRUCTURAL_REGISTERS = frozenset({"esp", "ebp"})
+
+
+# cdecl/thiscall on this toolchain: EAX/ECX/EDX are call-clobbered, the rest
+# are callee-saved.  The call model reads the clobbered set as well, which is
+# the conservative direction for a liveness proof (it can only make a register
+# look MORE live, never less).
+_IA32_CALL_CLOBBERED = frozenset({"eax", "ecx", "edx"})
+
+
+_IA32_RETURN_LIVE = frozenset({
+    "eax", "ebx", "esi", "edi", "ebp", "esp",
+})
+
+
+# CodeView 4 x86 register numbers, for the S_REGISTER records that name which
+# register holds a source local.
+CODEVIEW_X86_REGISTER_NUMBERS = {
+    "eax": 17, "ecx": 18, "edx": 19, "ebx": 20,
+    "esp": 21, "ebp": 22, "esi": 23, "edi": 24,
+}
+
+
+CODEVIEW_REGISTER_RECORD_TYPE = 0x0002
+
+
+def _bijection_form(
+    *, modrm: bool = False, reg: str | None = None,
+    reg_read: bool = False, reg_write: bool = False,
+    rm_read: bool = False, rm_write: bool = False,
+    ext_no_write: frozenset = frozenset(),
+    opreg: str | None = None,
+    reads: frozenset = frozenset(), writes: frozenset = frozenset(),
+    flow: str = "fall", displacement: int = 0,
+) -> dict:
+    return {
+        "modrm": modrm, "reg": reg, "reg_read": reg_read,
+        "reg_write": reg_write, "rm_read": rm_read, "rm_write": rm_write,
+        "ext_no_write": ext_no_write, "opreg": opreg,
+        "reads": reads, "writes": writes, "flow": flow,
+        "displacement": displacement,
+    }
+
+
+def _ia32_bijection_table() -> dict:
+    """The closed semantic table this class will rewrite.
+
+    An opcode is admitted only when its register fields and its *complete*
+    implicit-operand set are known exactly.  Everything outside the table --
+    including every form with an implicit general-register operand, every
+    prefixed form and every indirect branch -- is refused rather than guessed.
+    """
+    table = {}
+    stack = frozenset({"esp"})
+    # 31 /r XOR r/m32, r32 ; 33 /r XOR r32, r/m32
+    table[0x31] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                  rm_read=True, rm_write=True)
+    table[0x33] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                  reg_write=True, rm_read=True)
+    # 39 /r CMP r/m32, r32 ; 3B /r CMP r32, r/m32 ; 85 /r TEST r/m32, r32
+    table[0x39] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                  rm_read=True)
+    table[0x3B] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                  rm_read=True)
+    table[0x85] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                  rm_read=True)
+    # 89 /r MOV r/m32, r32 ; 8B /r MOV r32, r/m32 ; 8D /r LEA r32, m
+    table[0x89] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                  rm_write=True)
+    table[0x8B] = _bijection_form(modrm=True, reg="gpr", reg_write=True,
+                                  rm_read=True)
+    table[0x8D] = _bijection_form(modrm=True, reg="gpr", reg_write=True)
+    # 83 /n group 1 with imm8: every member reads r/m and writes it except
+    # /7 CMP, which only reads.
+    table[0x83] = _bijection_form(modrm=True, reg="ext", rm_read=True,
+                                  rm_write=True, ext_no_write=frozenset({7}))
+    # 50+r PUSH r32 ; 58+r POP r32
+    for index in range(8):
+        table[0x50 + index] = _bijection_form(
+            opreg="read", reads=stack, writes=stack)
+        table[0x58 + index] = _bijection_form(
+            opreg="write", reads=stack, writes=stack)
+    # 74/75 Jcc rel8, EB JMP rel8, E9 JMP rel32, E8 CALL rel32
+    table[0x74] = _bijection_form(flow="jcc", displacement=1)
+    table[0x75] = _bijection_form(flow="jcc", displacement=1)
+    table[0xEB] = _bijection_form(flow="jmp", displacement=1)
+    table[0xE9] = _bijection_form(flow="jmp", displacement=4)
+    table[0xE8] = _bijection_form(
+        flow="call", displacement=4,
+        reads=_IA32_CALL_CLOBBERED | stack,
+        writes=_IA32_CALL_CLOBBERED)
+    # C2 iw / C3 RET
+    table[0xC2] = _bijection_form(flow="ret", reads=_IA32_RETURN_LIVE)
+    table[0xC3] = _bijection_form(flow="ret", reads=_IA32_RETURN_LIVE)
+    return table
+
+
+IA32_BIJECTION_FORMS = _ia32_bijection_table()
+
+
+def decode_ia32_bijection_instruction(
+    body: bytes, offset: int, context: str,
+) -> dict:
+    """Decode one instruction into register fields, operands and control flow.
+
+    Returns the encoding's general-register fields as `(byte, shift)` pairs so
+    a bijection can rewrite them in place, together with the exact set of
+    general registers the instruction reads and writes -- explicit operands
+    and the table's implicit ones alike.
+    """
+    require(0 <= offset < len(body), f"{context}: instruction offset is out "
+            "of range")
+    window = body[offset:]
+    length = supported_ia32_instruction_length(window, context)
+    encoded = body[offset:offset + length]
+    require(len(encoded) == length,
+            f"{context}: instruction is truncated")
+    require(encoded[0] not in _IA32_PREFIXES,
+            f"{context}: prefixed instructions are outside the "
+            "register-bijection table")
+    opcode = encoded[0]
+    form = IA32_BIJECTION_FORMS.get(opcode)
+    require(form is not None,
+            f"{context}: opcode 0x{opcode:02x} is outside the "
+            "register-bijection table")
+    cursor = 1
+    fields = []
+    reads = set(form["reads"])
+    writes = set(form["writes"])
+    names = IA32_GENERAL_REGISTER_NAMES
+    if form["opreg"] is not None:
+        fields.append((offset, 0))
+        name = names[opcode & 7]
+        if form["opreg"] == "read":
+            reads.add(name)
+        else:
+            writes.add(name)
+    if form["modrm"]:
+        require(cursor < length, f"{context}: instruction lacks ModRM")
+        modrm_at = offset + cursor
+        modrm = encoded[cursor]
+        cursor += 1
+        mode = modrm >> 6
+        rm = modrm & 7
+        register_field = (modrm >> 3) & 7
+        rm_write = form["rm_write"]
+        if form["reg"] == "gpr":
+            fields.append((modrm_at, 3))
+            name = names[register_field]
+            if form["reg_read"]:
+                reads.add(name)
+            if form["reg_write"]:
+                writes.add(name)
+        else:
+            require(form["reg"] == "ext",
+                    f"{context}: ModRM register field role is undeclared")
+            if register_field in form["ext_no_write"]:
+                rm_write = False
+        if mode == 3:
+            fields.append((modrm_at, 0))
+            name = names[rm]
+            if form["rm_read"]:
+                reads.add(name)
+            if rm_write:
+                writes.add(name)
+        else:
+            # A memory operand: the base and index registers are read for the
+            # address computation; the memory cell itself is irrelevant to
+            # general-register liveness.
+            if rm == 4:
+                require(cursor < length, f"{context}: instruction lacks SIB")
+                sib_at = offset + cursor
+                sib = encoded[cursor]
+                cursor += 1
+                base = sib & 7
+                index = (sib >> 3) & 7
+                if not (mode == 0 and base == 5):
+                    fields.append((sib_at, 0))
+                    reads.add(names[base])
+                if index != 4:
+                    fields.append((sib_at, 3))
+                    reads.add(names[index])
+            elif not (mode == 0 and rm == 5):
+                fields.append((modrm_at, 0))
+                reads.add(names[rm])
+        require(form["reg"] != "gpr" or not (form["reg_write"]
+                                             and form["rm_write"]),
+                f"{context}: instruction form writes two operands")
+    target = None
+    if form["flow"] in ("jcc", "jmp", "call"):
+        width = form["displacement"]
+        relative = int.from_bytes(
+            encoded[length - width:], "little", signed=True)
+        target = offset + length + relative
+    # The XOR-zero idiom is an exact, closed special case: `xor r, r` does not
+    # read r, it defines it.  Recognising it is required for a sound liveness
+    # answer, and it is recognised by the encoding, never by a heuristic.
+    if opcode in (0x31, 0x33) and form["modrm"]:
+        modrm = encoded[1]
+        if modrm >> 6 == 3 and (modrm & 7) == ((modrm >> 3) & 7):
+            zeroed = names[modrm & 7]
+            reads.discard(zeroed)
+            writes.add(zeroed)
+    return {
+        "offset": offset, "length": length, "opcode": opcode,
+        "fields": fields, "reads": frozenset(reads),
+        "writes": frozenset(writes), "flow": form["flow"], "target": target,
+    }
+
+
+def decode_ia32_bijection_body(body: bytes, context: str) -> list[dict]:
+    """Decode a whole COMDAT body to exhaustion with the closed table."""
+    require(isinstance(body, (bytes, bytearray)) and body,
+            f"{context}: body is empty")
+    body = bytes(body)
+    instructions = []
+    offset = 0
+    while offset < len(body):
+        instruction = decode_ia32_bijection_instruction(
+            body, offset, f"{context} at {offset}")
+        instructions.append(instruction)
+        offset += instruction["length"]
+    require(offset == len(body),
+            f"{context}: body does not decode to exhaustion")
+    starts = {item["offset"] for item in instructions}
+    for item in instructions:
+        if item["target"] is not None:
+            require(item["target"] in starts,
+                    f"{context}: branch at {item['offset']} does not target "
+                    "an instruction boundary in this body")
+    return instructions
+
+
+def _register_bijection_live_sets(
+    instructions: list[dict], context: str,
+) -> list[frozenset]:
+    """Backward liveness over the body's own control-flow graph.
+
+    Successors are the fall-through and the decoded branch target; `ret` has
+    none and instead reads the ABI's live-out set, so the epilogue's `pop`s
+    kill exactly the callee-saved registers they restore.  The fixpoint is
+    monotone and bounded by the eight registers, so it terminates.
+    """
+    index_of = {item["offset"]: index for index, item in enumerate(
+        instructions)}
+    successors = []
+    for index, item in enumerate(instructions):
+        edges = []
+        if item["flow"] in ("fall", "jcc", "call"):
+            if index + 1 < len(instructions):
+                edges.append(index + 1)
+            else:
+                require(item["flow"] != "fall",
+                        f"{context}: body falls off its end")
+        if item["flow"] in ("jcc", "jmp"):
+            edges.append(index_of[item["target"]])
+        successors.append(edges)
+    live = [frozenset() for _ in instructions]
+    for _ in range(len(instructions) * 8 + 8):
+        changed = False
+        for index in reversed(range(len(instructions))):
+            item = instructions[index]
+            out = frozenset().union(
+                *[live[edge] for edge in successors[index]]) \
+                if successors[index] else frozenset()
+            value = (out - item["writes"]) | item["reads"]
+            if value != live[index]:
+                live[index] = value
+                changed = True
+        if not changed:
+            break
+    else:  # pragma: no cover - the lattice is finite and monotone
+        raise ByteIdentityError(f"{context}: liveness did not converge")
+    return live, successors
+
+
+def apply_register_bijection(
+    body: bytes, mapping: dict, region: tuple[int, int],
+    relocation_offsets: frozenset, context: str,
+) -> tuple[bytes, dict]:
+    """Rewrite one region's general-register fields under a proved bijection.
+
+    Every obligation this class rests on is checked here: total decode, closed
+    forms, structural-register exclusion, relocation disjointness, the
+    liveness proof for the region's boundary, and length preservation verified
+    by re-decoding the image.
+    """
+    body = bytes(body)
+    start, end = region
+    instructions = decode_ia32_bijection_body(body, context)
+    boundaries = {item["offset"] for item in instructions}
+    boundaries.add(len(body))
+    require(start in boundaries and end in boundaries and start < end,
+            f"{context}: region does not span whole instructions")
+    numbers = {}
+    for source, destination in mapping.items():
+        require(source in _IA32_REGISTER_NUMBERS
+                and destination in _IA32_REGISTER_NUMBERS,
+                f"{context}: mapping names an unknown register")
+        numbers[_IA32_REGISTER_NUMBERS[source]] = (
+            _IA32_REGISTER_NUMBERS[destination])
+    support = set(mapping) | set(mapping.values())
+    require(len(set(mapping.values())) == len(mapping)
+            and set(mapping.values()) == set(mapping),
+            f"{context}: mapping is not a bijection of one register set")
+    require(all(source != destination
+                for source, destination in mapping.items()),
+            f"{context}: mapping fixes a register it names")
+    require(not (support & _IA32_STRUCTURAL_REGISTERS),
+            f"{context}: mapping touches ESP or EBP, whose encodings carry "
+            "ModRM/SIB structure")
+
+    live, successors = _register_bijection_live_sets(instructions, context)
+    inside = [item for item in instructions
+              if start <= item["offset"] < end]
+    require(inside, f"{context}: region contains no instruction")
+    require(inside[-1]["offset"] + inside[-1]["length"] == end,
+            f"{context}: region does not end on an instruction boundary")
+    entry = instructions.index(inside[0])
+    for index, item in enumerate(instructions):
+        for edge in successors[index]:
+            crosses_in = (not (start <= item["offset"] < end)
+                          and start <= instructions[edge]["offset"] < end)
+            if crosses_in:
+                require(edge == entry,
+                        f"{context}: control enters the region other than at "
+                        "its first instruction")
+    dead_in = support & set(live[entry])
+    require(not dead_in,
+            f"{context}: {sorted(dead_in)} is live on entry to the region")
+    for index, item in enumerate(instructions):
+        if not (start <= item["offset"] < end):
+            continue
+        for edge in successors[index]:
+            if start <= instructions[edge]["offset"] < end:
+                continue
+            leaking = support & set(live[edge])
+            require(not leaking,
+                    f"{context}: {sorted(leaking)} is live on an edge "
+                    f"leaving the region at {item['offset']}")
+        if item["flow"] == "ret":
+            leaking = support & set(item["reads"])
+            require(not leaking,
+                    f"{context}: {sorted(leaking)} is live at the region's "
+                    "return")
+
+    image = bytearray(body)
+    rewritten = []
+    for item in inside:
+        for byte_index, shift in item["fields"]:
+            value = (image[byte_index] >> shift) & 7
+            if value not in numbers:
+                continue
+            require(byte_index not in relocation_offsets,
+                    f"{context}: a rewritten byte overlaps a relocation")
+            image[byte_index] = (
+                (image[byte_index] & ~(7 << shift))
+                | (numbers[value] << shift)
+            ) & 0xFF
+            rewritten.append(byte_index)
+    require(rewritten, f"{context}: the bijection rewrites nothing")
+    image = bytes(image)
+    require(len(image) == len(body),
+            f"{context}: the image changed the body length")
+    image_instructions = decode_ia32_bijection_body(
+        image, f"{context} image")
+    require(
+        [(item["offset"], item["length"]) for item in image_instructions]
+        == [(item["offset"], item["length"]) for item in instructions],
+        f"{context}: the image changed an instruction boundary",
+    )
+    for left, right in zip(image_instructions, instructions):
+        # `+r` forms encode their register in the opcode's low three bits, so
+        # the bijection legitimately moves those three bits and nothing else.
+        opreg = IA32_BIJECTION_FORMS[right["opcode"]]["opreg"] is not None
+        mask = 0xF8 if opreg else 0xFF
+        require(
+            left["opcode"] & mask == right["opcode"] & mask
+            and left["flow"] == right["flow"]
+            and left["target"] == right["target"],
+            f"{context}: the image changed an opcode or a branch",
+        )
+    for left, right in zip(image_instructions, instructions):
+        expected_reads = frozenset(
+            mapping.get(name, name) if start <= right["offset"] < end
+            else name for name in right["reads"])
+        expected_writes = frozenset(
+            mapping.get(name, name) if start <= right["offset"] < end
+            else name for name in right["writes"])
+        require(left["reads"] == expected_reads
+                and left["writes"] == expected_writes,
+                f"{context}: the image's operand set at {right['offset']} is "
+                "not the bijection's image")
+    changed = sorted({index for index in range(len(body))
+                      if body[index] != image[index]})
+    require(changed == sorted(set(rewritten)),
+            f"{context}: the image changed a byte the bijection did not name")
+    return image, {
+        "rewritten_offsets": changed,
+        "region_instruction_count": len(inside),
+        "instruction_count": len(instructions),
+    }
+
+
+def apply_codeview_register_bijection(
+    stream: bytes, mapping: dict, declared: list[dict], context: str,
+) -> bytes:
+    """Map the S_REGISTER records that name a bijected register.
+
+    Obligation 9.  The stream is parsed to exhaustion before and after with
+    the module's closed record table, only the two-byte register field of a
+    declared record changes, and the resulting record identity/size list must
+    be unchanged -- so debug information continues to name the register the
+    installed code actually uses.
+    """
+    records = parse_codeview_symbol_stream(stream, context)
+    image = bytearray(stream)
+    seen = []
+    for record in records:
+        if record["type"] != CODEVIEW_REGISTER_RECORD_TYPE:
+            continue
+        field_at = record["offset"] + 4 + 2
+        require(field_at + 2 <= record["offset"] + record["size"],
+                f"{context}: S_REGISTER record has no register field")
+        number = int.from_bytes(image[field_at:field_at + 2], "little")
+        name = next((key for key, value in CODEVIEW_X86_REGISTER_NUMBERS.items()
+                     if value == number), None)
+        require(name is not None,
+                f"{context}: S_REGISTER names a non-general register")
+        if name not in mapping:
+            continue
+        seen.append({
+            "name": record["name"], "record_offset": record["offset"],
+            "donor_register": name, "image_register": mapping[name],
+        })
+        image[field_at:field_at + 2] = CODEVIEW_X86_REGISTER_NUMBERS[
+            mapping[name]].to_bytes(2, "little")
+    require(seen == declared,
+            f"{context}: the S_REGISTER map differs from its declaration")
+    image = bytes(image)
+    require(
+        [(item["offset"], item["size"], item["type"], item["name"])
+         for item in parse_codeview_symbol_stream(
+             image, f"{context} image")]
+        == [(item["offset"], item["size"], item["type"], item["name"])
+            for item in records],
+        f"{context}: the mapped stream is not the same record list",
+    )
+    return image
+
+
+def validate_register_bijection(
+    value: object, context: str, body_length: int,
+) -> dict:
+    """Validate one register-bijection certificate declaration."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "mapping", "region_start", "region_end",
+        "expected_region_instruction_count", "expected_instruction_count",
+        "expected_rewritten_offsets", "debug_s_register_map",
+        "expected_seed_debug_s_sha256", "expected_image_debug_s_sha256",
+        "authenticity_rationale",
+    }, context)
+    require(value.get("kind") == REGISTER_BIJECTION_KIND,
+            f"{context}.kind differs")
+    mapping = value.get("mapping")
+    require(isinstance(mapping, dict) and 2 <= len(mapping) <= 8
+            and all(isinstance(key, str) and isinstance(item, str)
+                    and key in _IA32_REGISTER_NUMBERS
+                    and item in _IA32_REGISTER_NUMBERS
+                    for key, item in mapping.items()),
+            f"{context}.mapping is invalid")
+    require(set(mapping) == set(mapping.values())
+            and len(set(mapping.values())) == len(mapping)
+            and all(key != item for key, item in mapping.items()),
+            f"{context}.mapping is not a fixed-point-free bijection")
+    require(not (set(mapping) & _IA32_STRUCTURAL_REGISTERS),
+            f"{context}.mapping touches ESP or EBP")
+    start = require_exact_int(value.get("region_start"),
+                              f"{context}.region_start",
+                              minimum=1, maximum=body_length - 1)
+    end = require_exact_int(value.get("region_end"),
+                            f"{context}.region_end",
+                            minimum=2, maximum=body_length - 1)
+    require(start < end,
+            f"{context}: region is empty")
+    require(
+        require_exact_int(value.get("expected_region_instruction_count"),
+                          f"{context}.expected_region_instruction_count",
+                          minimum=1)
+        <= require_exact_int(value.get("expected_instruction_count"),
+                             f"{context}.expected_instruction_count",
+                             minimum=2),
+        f"{context}: region instruction count exceeds the body's",
+    )
+    offsets = value.get("expected_rewritten_offsets")
+    require(isinstance(offsets, list) and offsets
+            and offsets == sorted(set(offsets))
+            and all(type(offset) is int and start <= offset < end
+                    for offset in offsets),
+            f"{context}.expected_rewritten_offsets is invalid")
+    declared = value.get("debug_s_register_map")
+    require(isinstance(declared, list) and len(declared) <= 8,
+            f"{context}.debug_s_register_map is invalid")
+    normalized_map = []
+    for index, item in enumerate(declared):
+        item_context = f"{context}.debug_s_register_map[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "name", "record_offset", "donor_register", "image_register",
+        }, item_context)
+        require(isinstance(item.get("name"), str) and item["name"],
+                f"{item_context}.name is invalid")
+        require(item.get("donor_register") in mapping
+                and mapping[item["donor_register"]] == item.get(
+                    "image_register"),
+                f"{item_context} is not the declared mapping")
+        normalized_map.append({
+            "name": item["name"],
+            "record_offset": require_exact_int(
+                item.get("record_offset"), f"{item_context}.record_offset",
+                minimum=0),
+            "donor_register": item["donor_register"],
+            "image_register": item["image_register"],
+        })
+    rationale = value.get("authenticity_rationale")
+    require(isinstance(rationale, str) and len(rationale) >= 40,
+            f"{context}.authenticity_rationale is missing")
+    return {
+        "kind": REGISTER_BIJECTION_KIND,
+        "mapping": dict(sorted(mapping.items())),
+        "region_start": start, "region_end": end,
+        "expected_region_instruction_count":
+            value["expected_region_instruction_count"],
+        "expected_instruction_count": value["expected_instruction_count"],
+        "expected_rewritten_offsets": list(offsets),
+        "debug_s_register_map": normalized_map,
+        "expected_seed_debug_s_sha256": require_sha(
+            value.get("expected_seed_debug_s_sha256"),
+            f"{context}.expected_seed_debug_s_sha256"),
+        "expected_image_debug_s_sha256": require_sha(
+            value.get("expected_image_debug_s_sha256"),
+            f"{context}.expected_image_debug_s_sha256"),
+        "authenticity_rationale": rationale,
+    }
+
+
+def compose_retail_exact_register_bijection(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Install sigma(donor body) after proving it is retail's own code.
+
+    See the class comment above: this is a certificate.  The donor is an
+    ordinary, census-pinned carrier compile of the same translation unit; the
+    bijection is proved sound against the body's own control flow; and the
+    result is refused unless it equals the pinned retail oracle under the
+    relocation mask.  Body installation itself is delegated, unchanged, to the
+    equal-body primitive, so output conservation is proved by the same code
+    every other equal-body class uses.
+    """
+    require(function.get("splice_class") == REGISTER_BIJECTION_CLASS,
+            "splice class is not retail_exact_register_bijection")
+    require("target_source_refactor" not in function,
+            "register-bijection functions carry no source refactor")
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+    spec = function["register_bijection"]
+    seed = CoffObject(seed_bytes)
+    donor = CoffObject(donor_bytes)
+    mangled = function["mangled"]
+    sp = seed.function_section(mangled)
+    dp = donor.function_section(mangled)
+    require(sp["number"] == dp["number"]
+            == function["expected_section_number"],
+            "register-bijection target section seat changed")
+    require(len(seed.sections) == len(donor.sections)
+            == function["expected_section_count"],
+            "register-bijection global section count changed")
+    seed_functions = function_multiset(seed)
+    donor_functions = function_multiset(donor)
+    require(seed_functions == donor_functions
+            and sum(seed_functions.values())
+            == function["expected_function_count"],
+            "register-bijection donor function set differs")
+    seed_comdats = comdat_primary_identity_multiset(seed)
+    donor_comdats = comdat_primary_identity_multiset(donor)
+    require(seed_comdats == donor_comdats
+            and sum(seed_comdats.values())
+            == function["expected_comdat_count"],
+            "register-bijection donor COMDAT identity set differs")
+    require(
+        sp["raw_size"] == dp["raw_size"] == function["expected_body_length"]
+        and sp["relocation_count"] == dp["relocation_count"]
+        == function["expected_relocation_count"]
+        and sp["line_count"] == function["expected_seed_line_count"]
+        and dp["line_count"] == function["expected_donor_line_count"]
+        and sp["name"] == dp["name"]
+        and sp["characteristics"] == dp["characteristics"]
+        == function["expected_characteristics"],
+        "register-bijection target header/count pins changed",
+    )
+    require(
+        section_definitions(seed)[sp["number"]]["selection"]
+        == section_definitions(donor)[dp["number"]]["selection"]
+        == function["expected_selection"],
+        "register-bijection COMDAT selection changed",
+    )
+    expected_closure = tuple(function["expected_closure"])
+    require(_comdat_child_closure(seed, sp)
+            == _comdat_child_closure(donor, dp)
+            == (len(expected_closure), expected_closure)
+            == (2, (".debug$F", ".debug$S")),
+            "register-bijection target closure changed")
+    require(instruction_mosaic_metadata_sha256(seed, sp)
+            == function["expected_seed_metadata_sha256"]
+            and instruction_mosaic_metadata_sha256(donor, dp)
+            == function["expected_donor_metadata_sha256"],
+            "register-bijection metadata differs from its pin")
+    seed_body = coff_body(seed, sp)
+    donor_body = coff_body(donor, dp)
+    require(sha256_bytes(seed_body) == function["expected_seed_body_sha256"]
+            and sha256_bytes(donor_body)
+            == function["expected_donor_body_sha256"],
+            "register-bijection seed/donor body differs from its pin")
+    code_renames = require_instruction_mosaic_semantic_relocations(
+        seed, sp, donor, dp, "register-bijection code")
+    require([[offset, kind] for offset, kind in code_renames]
+            == function["expected_code_renames"],
+            "register-bijection code rename set changed")
+    seed_rows = detailed_relocations(seed, sp)
+    donor_rows = detailed_relocations(donor, dp)
+    require([(row["offset"], row["type"], row["addend"]) for row in seed_rows]
+            == [(row["offset"], row["type"], row["addend"])
+                for row in donor_rows],
+            "register-bijection donor relocation layout differs from the seed")
+    relocation_offsets = frozenset(
+        row["offset"] + byte
+        for row in seed_rows for byte in range(row["width"]))
+
+    image, proof = apply_register_bijection(
+        donor_body, spec["mapping"],
+        (spec["region_start"], spec["region_end"]),
+        relocation_offsets, "register-bijection image",
+    )
+    require(proof["rewritten_offsets"] == spec["expected_rewritten_offsets"]
+            and proof["region_instruction_count"]
+            == spec["expected_region_instruction_count"]
+            and proof["instruction_count"]
+            == spec["expected_instruction_count"],
+            "register-bijection image differs from its declaration")
+    require(donor_body[:spec["region_start"]] == image[:spec["region_start"]]
+            and donor_body[spec["region_end"]:] == image[spec["region_end"]:],
+            "register-bijection changed the prologue or epilogue")
+    require(sha256_bytes(image) == function["expected_body_sha256"],
+            "register-bijection image differs from its pin")
+    require(image != donor_body,
+            "register-bijection image does not move the donor body")
+
+    pinned_length = function["retail_oracle"]["length"]
+    require(len(retail_body) == pinned_length == len(image),
+            "register-bijection retail length changed")
+    semantic_detail = require_retail_relocation_oracle(
+        seed_rows, bytes(retail_body),
+        int(function["retail_oracle"]["address"], 16),
+        function["retail_relocations"],
+        "register-bijection retail relocation oracle",
+    )
+    masked_image = bytearray(image)
+    masked_retail = bytearray(retail_body)
+    for row in seed_rows:
+        start, width = row["offset"], row["width"]
+        masked_image[start:start + width] = b"\0" * width
+        masked_retail[start:start + width] = b"\0" * width
+    differing = sum(left != right
+                    for left, right in zip(masked_image, masked_retail))
+    require(differing == 0,
+            f"register-bijection output is not retail-exact: {differing} "
+            "byte(s) differ under the relocation mask")
+
+    # The image is installed through the unchanged equal-body primitive by
+    # handing it the authenticated donor object carrying the proved image.
+    derived = bytearray(donor_bytes)
+    derived[dp["raw_offset"]:dp["raw_offset"] + dp["raw_size"]] = image
+    derived = bytes(derived)
+    effective = {
+        "mangled": mangled,
+        "splice_class": "equal_body_strict",
+        "expected_body_length": function["expected_body_length"],
+        "expected_body_sha256": function["expected_body_sha256"],
+        "expected_changed_offsets": function["expected_changed_offsets"],
+    }
+    composed, detail = compose_equal_body_comdat(seed_bytes, derived, effective)
+
+    checked = CoffObject(composed)
+    cp = checked.function_section(mangled)
+    require(coff_body(checked, cp) == image,
+            "register-bijection composed body differs from the image")
+    require(detailed_relocations(checked, cp) == seed_rows
+            and _coff_table_bytes(checked, cp, "lines")
+            == _coff_table_bytes(seed, sp, "lines"),
+            "register-bijection output changed seed relocation/line bytes")
+
+    debug_child = _comdat_child(checked, cp, ".debug$S")
+    debug_stream = coff_body(checked, debug_child)
+    require(sha256_bytes(debug_stream)
+            == spec["expected_seed_debug_s_sha256"],
+            "register-bijection debug$S differs from its pin")
+    debug_image = apply_codeview_register_bijection(
+        debug_stream, spec["mapping"], spec["debug_s_register_map"],
+        "register-bijection debug$S",
+    )
+    require(sha256_bytes(debug_image)
+            == spec["expected_image_debug_s_sha256"],
+            "register-bijection mapped debug$S differs from its pin")
+    composed = bytearray(composed)
+    composed[debug_child["raw_offset"]:
+             debug_child["raw_offset"] + debug_child["raw_size"]] = debug_image
+    composed = bytes(composed)
+    final = CoffObject(composed)
+    fp = final.function_section(mangled)
+    require(coff_body(final, fp) == image
+            and coff_body(final, _comdat_child(final, fp, ".debug$F"))
+            == coff_body(seed, _comdat_child(seed, sp, ".debug$F")),
+            "register-bijection output changed the installed body or FPO")
+    allowed = set(range(sp["raw_offset"], sp["raw_offset"] + sp["raw_size"]))
+    allowed |= set(range(debug_child["raw_offset"],
+                         debug_child["raw_offset"] + debug_child["raw_size"]))
+    require({index for index in range(len(seed_bytes))
+             if seed_bytes[index] != composed[index]} <= allowed,
+            "register-bijection changed bytes outside its own COMDAT")
+    return composed, {
+        **detail,
+        "splice_class": REGISTER_BIJECTION_CLASS,
+        "register_bijection": dict(sorted(spec["mapping"].items())),
+        "region": [spec["region_start"], spec["region_end"]],
+        "rewritten_offsets": proof["rewritten_offsets"],
+        "region_instruction_count": proof["region_instruction_count"],
+        "instruction_count": proof["instruction_count"],
+        "debug_s_register_map": spec["debug_s_register_map"],
+        "retail_exact": True,
+        **semantic_detail,
+    }
