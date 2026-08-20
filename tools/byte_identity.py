@@ -244,13 +244,21 @@ SOURCE_OVERLAY_LEAN_KINDS = {
     ),
     "inclusive_extent": "inclusive_extent_assignment_v1",
     "discarded_increment": "discarded_postfix_increment_v1",
+    "ctor_alloc_lift": "constructor_allocation_lift_v1",
     "extern_run": "extern_declaration_run_v1",
 }
 
 
 # A7b: a CLOSED enum.  Adding a kind here is a specification amendment, never
-# an implementation detail.
-MEMBER_SIGNATURE_KINDS = frozenset({"destructor"})
+# an implementation detail.  "constructor" is such an amendment.  It exists so
+# one donor-private rendering can declare and define a fresh constructor from
+# a closed typed parameter list; it carries its own INVERTED A7a (the class
+# must exist AND the exact overload must not already exist -- see
+# source_overlay_member_is_declared and
+# source_overlay_constructor_overload_count) and it joins the source-refactor
+# recipe census, so a constructor signature can only ever be rendered inside a
+# donor that carries an authenticated ``target_source_refactor`` proof.
+MEMBER_SIGNATURE_KINDS = frozenset({"destructor", "constructor"})
 
 # A7f: also CLOSED, with exactly two members.  The donor needs two texts from
 # the same three identifiers -- the in-class declaration for the header seat
@@ -321,6 +329,9 @@ SOURCE_OVERLAY_KIND_POLICIES = {
         "inline_default_constructor_dead_local_updates",
     ),
     "line_reservation_v1": ("source_layout_only", "physical_line_reservation"),
+    "constructor_allocation_lift_v1": (
+        "logic_equivalent_source_refactor", "constructor_allocation_lift"
+    ),
     "member_signature_v1": (
         "non_emitting_declaration", "member_signature_only"
     ),
@@ -805,11 +816,24 @@ def _source_overlay_anchor_seat_index(
 def source_overlay_member_is_declared(
     data: bytes, class_identifier: str, member_identifier: str, kind: str,
 ) -> bool:
-    """A7a: is `member_identifier` present on `class_identifier` in this source?
+    """A7a: does this checked-in source authorise the signature's seat?
 
     Comments are stripped first so a mention inside prose cannot authorise a
     signature.  Only the class's own brace-balanced body is searched, so a
     member of some *other* class never satisfies the check.
+
+    The question the answer must be is a function of the kind:
+
+    * ``destructor`` -- "is the member already declared on the class?".  A
+      class has at most one destructor, so an existing declaration is exactly
+      what authorises re-emitting its signature text.
+    * ``constructor`` -- that question is VACUOUS, because a class that
+      declares any constructor at all trivially contains ``Name (``.  Here the
+      existential half only asks "does the class exist in this source?"; the
+      load-bearing half of A7a is the FRESHNESS obligation in
+      ``source_overlay_constructor_overload_count``, which the caller applies
+      to every clean input.  Splitting it this way keeps A7a a real gate for
+      constructors instead of turning it into a hole.
     """
     require(kind in MEMBER_SIGNATURE_KINDS,
             f"member signature kind {kind!r} is outside the closed enum")
@@ -818,7 +842,7 @@ def source_overlay_member_is_declared(
         r"\b(?:struct|class)\s+" + re.escape(class_identifier)
         + r"\b[^{;]*\{"
     )
-    wanted = "~" + member_identifier          # destructor is the only kind
+    wanted = "~" + member_identifier
     for match in opening.finditer(clean):
         depth, index = 0, match.end() - 1
         while index < len(clean):
@@ -831,9 +855,134 @@ def source_overlay_member_is_declared(
                     break
             index += 1
         body = clean[match.end():index]
+        if kind == "constructor":
+            # A7a(i): the class this signature names must EXIST in checked-in
+            # source.  Its overload freshness is a separate, universal
+            # obligation and is never satisfied by an existential scan.
+            return True
         if re.search(r"(?<![\w~])" + re.escape(wanted) + r"\s*\(", body):
             return True
     return False
+
+
+def source_overlay_class_scope_declarator_parameters(
+    data: bytes, class_identifier: str,
+) -> list[list[list[str]]]:
+    """Every class-scope ``Name(...)`` declarator's parameter TYPE sequences.
+
+    Comments are excluded and nested scopes are skipped, so only declarators
+    at depth one of the named class's own brace-balanced body are returned.
+    A trailing parameter identifier is dropped from each parameter: two
+    declarations that differ only in parameter spelling are the SAME overload
+    to the language, so freshness has to be asked about types.
+    """
+    tokens = _semantic_significant_tokens(data)
+    declarators = []
+    for index in range(len(tokens) - 2):
+        if (tokens[index][0] not in {"class", "struct"}
+                or tokens[index + 1][0] != class_identifier):
+            continue
+        opening = next(
+            (cursor for cursor in range(index + 2, len(tokens))
+             if tokens[cursor][0] in {"{", ";"}),
+            None,
+        )
+        if opening is None or tokens[opening][0] != "{":
+            continue
+        depth = 1
+        closing = None
+        for cursor in range(opening + 1, len(tokens)):
+            if tokens[cursor][0] == "{":
+                depth += 1
+            elif tokens[cursor][0] == "}":
+                depth -= 1
+                if depth == 0:
+                    closing = cursor
+                    break
+        if closing is None:
+            continue
+        depth = 1
+        for cursor in range(opening + 1, closing):
+            token = tokens[cursor][0]
+            if (depth == 1 and token == class_identifier
+                    and tokens[cursor - 1][0] != "~"
+                    and cursor + 1 < closing
+                    and tokens[cursor + 1][0] == "("):
+                inner = 0
+                stop = None
+                for scan in range(cursor + 1, closing):
+                    if tokens[scan][0] == "(":
+                        inner += 1
+                    elif tokens[scan][0] == ")":
+                        inner -= 1
+                        if inner == 0:
+                            stop = scan
+                            break
+                if stop is not None:
+                    declarators.append(
+                        _split_declarator_parameter_types(
+                            [item[0] for item in tokens[cursor + 2:stop]]))
+            if token == "{":
+                depth += 1
+            elif token == "}":
+                depth -= 1
+    return declarators
+
+
+def _split_declarator_parameter_types(tokens: list[str]) -> list[list[str]]:
+    """Split one parameter-list token run into per-parameter type runs."""
+    groups: list[list[str]] = []
+    current: list[str] = []
+    depth = 0
+    for token in tokens:
+        if token in {"(", "[", "<"}:
+            depth += 1
+        elif token in {")", "]", ">"}:
+            depth -= 1
+        if token == "," and depth == 0:
+            groups.append(current)
+            current = []
+            continue
+        current.append(token)
+    if current:
+        groups.append(current)
+    stripped = []
+    for group in groups:
+        if (len(group) > 1
+                and SOURCE_OVERLAY_IDENTIFIER_RE.fullmatch(group[-1])
+                is not None):
+            group = group[:-1]
+        stripped.append(group)
+    return stripped
+
+
+def source_overlay_constructor_signature_parameter_types(
+    parameters: list[dict],
+) -> list[list[str]]:
+    """The per-parameter type token runs one constructor overload occupies."""
+    return [
+        [token for token, _, _ in source_overlay_tokens(
+            render_source_overlay_cpp_type(item["type"]).encode("ascii"))]
+        for item in parameters
+    ]
+
+
+def source_overlay_constructor_overload_count(
+    data: bytes, class_identifier: str, parameters: list[dict],
+) -> int:
+    """A7a(ii): how many times does this exact overload already exist here?
+
+    Zero is the only value that authorises a fresh constructor signature.  A
+    non-zero count means the manifest is re-declaring something checked-in
+    source already declares, which would be a redefinition rather than the
+    donor-private addition the class was amended for.
+    """
+    wanted = source_overlay_constructor_signature_parameter_types(parameters)
+    return sum(
+        1 for item in source_overlay_class_scope_declarator_parameters(
+            data, class_identifier)
+        if item == wanted
+    )
 
 
 def source_overlay_strip_comments_preserve_lines(data: bytes) -> bytes:
@@ -1246,6 +1395,116 @@ def validate_fixed_array_shuffle_semantic_witness(
         normalized[name] = normalized_item
     require(len({normalized[name]["path"] for name in header_keys}) == 3,
             f"{context}: shuffle semantic witness headers must be distinct")
+    return normalized
+
+
+def validate_constructor_allocation_lift_semantic_witness(
+    value: object, context: str,
+) -> dict:
+    """Validate the closed declarations behind a constructor allocation lift.
+
+    Like every other semantic witness in this module the witness is
+    source-shaped rather than prose-shaped: it names the entry class, the
+    buffer member that receives the allocation, the members the lifted body
+    nulls, the checked-in constructor whose argument roles make the two forms
+    equivalent, and the destructor whose ownership guard makes the temporary's
+    lifetime unchanged.  Every one of those is then proved by exact token
+    range out of the pinned checked-in header.
+    """
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "source_owner", "entry_class", "buffer_member", "buffer_member_type",
+        "null_members", "null_argument_position",
+        "baseline_constructor_parameter_identifiers", "owner_header",
+        "target_parameter_range_pin",
+    }, context)
+    buffer_member_type = validate_source_overlay_cpp_type(
+        value.get("buffer_member_type"), context + ".buffer_member_type")
+    require(buffer_member_type["indirection"] == ["pointer"]
+            and not buffer_member_type["trailing_const"],
+            f"{context}.buffer_member_type is not a single mutable pointer")
+    raw_null_members = value.get("null_members")
+    require(isinstance(raw_null_members, list)
+            and len(raw_null_members) == 1,
+            f"{context}.null_members must name exactly one nulled member")
+    null_members = []
+    for index, item in enumerate(raw_null_members):
+        item_context = f"{context}.null_members[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {"identifier", "type"}, item_context)
+        null_members.append({
+            "identifier": _source_overlay_identifier(
+                item.get("identifier"), item_context + ".identifier"),
+            "type": validate_source_overlay_cpp_type(
+                item.get("type"), item_context + ".type"),
+        })
+    parameter_identifiers = _source_overlay_identifier_list(
+        value.get("baseline_constructor_parameter_identifiers"),
+        context + ".baseline_constructor_parameter_identifiers",
+        minimum=len(null_members) + 1, maximum=len(null_members) + 1,
+    )
+    require(len(set(parameter_identifiers)) == len(parameter_identifiers),
+            f"{context}.baseline_constructor_parameter_identifiers must be "
+            "distinct")
+    normalized = {
+        "source_owner": _source_overlay_identifier(
+            value.get("source_owner"), context + ".source_owner"),
+        "entry_class": _source_overlay_identifier(
+            value.get("entry_class"), context + ".entry_class"),
+        "buffer_member": _source_overlay_identifier(
+            value.get("buffer_member"), context + ".buffer_member"),
+        "buffer_member_type": buffer_member_type,
+        "null_members": null_members,
+        "null_argument_position": require_exact_int(
+            value.get("null_argument_position"),
+            context + ".null_argument_position",
+            minimum=0, maximum=len(null_members),
+        ),
+        "baseline_constructor_parameter_identifiers": parameter_identifiers,
+        "target_parameter_range_pin": validate_source_overlay_range_pin(
+            value.get("target_parameter_range_pin"),
+            context + ".target_parameter_range_pin",
+        ),
+    }
+    members = {normalized["buffer_member"]} | {
+        item["identifier"] for item in null_members
+    }
+    require(len(members) == len(null_members) + 1
+            and not members.intersection(parameter_identifiers),
+            f"{context}: member and parameter identities collide")
+    header_keys = {
+        "path", "source_sha256", "unit_include_range_pin",
+        "class_body_range_pin", "buffer_member_declaration_range_pin",
+        "null_member_declaration_range_pins",
+        "baseline_constructor_range_pin", "destructor_body_range_pin",
+    }
+    item_context = f"{context}.owner_header"
+    item = value.get("owner_header")
+    require(isinstance(item, dict), f"{item_context} must be an object")
+    exact_audit_keys(item, header_keys, item_context)
+    header = {
+        "path": source_overlay_relative_path(
+            item.get("path"), item_context + ".path"),
+        "source_sha256": require_sha(
+            item.get("source_sha256"), item_context + ".source_sha256"),
+    }
+    for key in ("unit_include_range_pin", "class_body_range_pin",
+                "buffer_member_declaration_range_pin",
+                "baseline_constructor_range_pin",
+                "destructor_body_range_pin"):
+        header[key] = validate_source_overlay_range_pin(
+            item.get(key), f"{item_context}.{key}")
+    pins = item.get("null_member_declaration_range_pins")
+    require(isinstance(pins, list) and len(pins) == len(null_members),
+            f"{item_context}.null_member_declaration_range_pins must pin "
+            "every nulled member")
+    header["null_member_declaration_range_pins"] = [
+        validate_source_overlay_range_pin(
+            entry,
+            f"{item_context}.null_member_declaration_range_pins[{index}]")
+        for index, entry in enumerate(pins)
+    ]
+    normalized["owner_header"] = header
     return normalized
 
 
@@ -1802,6 +2061,7 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         "fixed_array_shuffle_pointer_countdown_v1",
         "inclusive_extent_assignment_v1",
         "discarded_postfix_increment_v1",
+        "constructor_allocation_lift_v1",
     }:
         required_keys = {
             "kind", "selector", "start_marker", "source_owner_mangled",
@@ -1815,6 +2075,8 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
             required_keys.add("semantic_witness")
         if kind == "discarded_postfix_increment_v1":
             required_keys.add("semantic_witness")
+        if kind == "constructor_allocation_lift_v1":
+            required_keys |= {"semantic_witness", "constructor_signature"}
         exact_audit_keys(value, required_keys, context)
         require(value.get("selector")
                 == "brace_balanced_function_after_marker_v1",
@@ -1867,6 +2129,10 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         require(len(operation_ids) == 1,
                 f"{context}.operation_ids must name one discarded-increment "
                 "replacement")
+    if kind == "constructor_allocation_lift_v1":
+        require(len(operation_ids) == 4,
+                f"{context}.operation_ids must name the four bound "
+                "allocation-lift roles")
     normalized = {
         "kind": kind,
         **markers,
@@ -1885,6 +2151,7 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
         "fixed_array_shuffle_pointer_countdown_v1",
         "inclusive_extent_assignment_v1",
         "discarded_postfix_increment_v1",
+        "constructor_allocation_lift_v1",
     }:
         normalized.update({
             "selector": value["selector"],
@@ -1918,7 +2185,44 @@ def validate_target_source_refactor_proof(value: object, context: str) -> dict:
                 context + ".semantic_witness",
             )
         )
+    if kind == "constructor_allocation_lift_v1":
+        normalized["semantic_witness"] = (
+            validate_constructor_allocation_lift_semantic_witness(
+                value.get("semantic_witness"),
+                context + ".semantic_witness",
+            )
+        )
+        # The PROOF, not either generator instance, is the single authority on
+        # the new member's identity; the recipe policy then requires both
+        # member_signature_v1 operations to be equal to it, so the
+        # declaration and the definition header cannot drift apart.
+        normalized["constructor_signature"] = (
+            validate_member_constructor_signature(
+                value.get("constructor_signature"),
+                context + ".constructor_signature",
+            )
+        )
+        require(
+            normalized["constructor_signature"]["class_identifier"]
+            == normalized["semantic_witness"]["entry_class"],
+            f"{context}.constructor_signature names a different class than "
+            "its semantic witness",
+        )
     return normalized
+
+
+def validate_member_constructor_signature(
+    value: object, context: str,
+) -> dict:
+    """Validate the closed identity of a refactor's new constructor."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {"class_identifier", "parameters"}, context)
+    return {
+        "class_identifier": _source_overlay_identifier(
+            value.get("class_identifier"), context + ".class_identifier"),
+        "parameters": validate_member_signature_parameters(
+            value.get("parameters"), context + ".parameters"),
+    }
 
 
 def select_source_permutation_window(
@@ -1944,6 +2248,7 @@ def select_source_permutation_window(
                 "fixed_array_shuffle_pointer_countdown_v1",
                 "inclusive_extent_assignment_v1",
                 "discarded_postfix_increment_v1",
+                "constructor_allocation_lift_v1",
             }
             and proof["selector"]
             == "brace_balanced_function_after_marker_v1",
@@ -2200,6 +2505,91 @@ def render_discarded_postfix_increment_output(params: dict) -> bytes:
     return (
         f'{params["declaration_indent"]}++{params["identifier"]};\n'
     ).encode("ascii")
+
+
+def render_constructor_allocation_lift_arguments(params: dict) -> str:
+    """Render the checked-in call's argument list from one closed field.
+
+    ``null_argument_position`` says which argument carried the null pointer;
+    the other carries the caller's own buffer.  There is no free text here and
+    no way for the two roles to disagree about which is which.
+    """
+    position = params["null_argument_position"]
+    return ", ".join(
+        "NULL" if index == position else params["caller_result_identifier"]
+        for index in range(len(params["null_members"]) + 1)
+    )
+
+
+def render_constructor_allocation_lift_input(params: dict) -> bytes:
+    """Reconstruct the checked-in caller statements a lift removes.
+
+    This and ``render_constructor_allocation_lift_constructor_body`` are two
+    renderings of ONE parameter set: the allocation is named once
+    (``element_type``, ``extent_function``, ``copy_function``,
+    ``parameter_identifier``) and the two texts differ only in the store
+    destination.  There is no field from which they could disagree, so "the
+    constructor body is the caller's statements with the buffer substituted"
+    is structural rather than asserted.
+    """
+    indent = params["declaration_indent"]
+    element = render_source_overlay_cpp_type(params["element_type"])
+    return (
+        f'{indent}{element}* {params["caller_result_identifier"]} = '
+        f'new {element}[{params["extent_function"]}'
+        f'({params["parameter_identifier"]}) + 1];\n'
+        f'{indent}{params["copy_function"]}'
+        f'({params["caller_result_identifier"]}, '
+        f'{params["parameter_identifier"]});\n'
+        f'\n'
+        f'{indent}{render_source_overlay_cpp_type(params["iterator_type"])} '
+        f'{params["iterator_identifier"]} = '
+        f'{params["container_identifier"]}.{params["find_member"]}'
+        f'({params["class_identifier"]}'
+        f'({render_constructor_allocation_lift_arguments(params)}));\n'
+    ).encode("ascii")
+
+
+def render_constructor_allocation_lift_call_site(params: dict) -> bytes:
+    """Render the one statement that replaces the removed caller statements."""
+    indent = params["declaration_indent"]
+    return (
+        f'{indent}{render_source_overlay_cpp_type(params["iterator_type"])} '
+        f'{params["iterator_identifier"]} = '
+        f'{params["container_identifier"]}.{params["find_member"]}'
+        f'({params["class_identifier"]}'
+        f'({params["parameter_identifier"]}));\n'
+    ).encode("ascii")
+
+
+def render_constructor_allocation_lift_constructor_body(
+    params: dict,
+) -> bytes:
+    """Render the lifted body: the same allocation, stored into the member."""
+    element = render_source_overlay_cpp_type(params["element_type"])
+    cast = render_source_overlay_cpp_type(params["buffer_cast_type"])
+    lines = [
+        f'\t{params["buffer_member"]} = new {element}'
+        f'[{params["extent_function"]}({params["parameter_identifier"]})'
+        f' + 1];',
+        f'\t{params["copy_function"]}(({cast}) {params["buffer_member"]}, '
+        f'{params["parameter_identifier"]});',
+    ]
+    lines += [f'\t{member} = NULL;' for member in params["null_members"]]
+    # The trailing blank line is part of the closed form, not a separate
+    # operation: a lifted definition is always followed by exactly one blank
+    # line, so the seat it shares with its definition header renders one
+    # complete, separated definition and nothing else.
+    return ("\n{\n" + "\n".join(lines) + "\n}\n\n").encode("ascii")
+
+
+def render_constructor_allocation_lift_output(params: dict) -> bytes:
+    """Dispatch the two bound output roles of one closed parameter set."""
+    if params["role"] == "call_site":
+        return render_constructor_allocation_lift_call_site(params)
+    require(params["role"] == "constructor_body",
+            "constructor allocation lift role differs")
+    return render_constructor_allocation_lift_constructor_body(params)
 
 
 def decorated_member_owner_identifier(mangled: str, context: str) -> str:
@@ -2871,6 +3261,314 @@ def require_fixed_array_shuffle_semantic_identity(
             "index": index_detail,
             "next_overwrite": next_detail,
         })),
+    }
+
+
+def _class_scope_member_declaration_tokens(member: dict) -> list[str]:
+    """The exact class-scope token run one plain data member occupies."""
+    return (
+        [token for token, _, _ in source_overlay_tokens(
+            render_source_overlay_cpp_type(member["type"]).encode("ascii"))]
+        + [member["identifier"], ";"]
+    )
+
+
+def _constructor_allocation_lift_argument_members(witness: dict) -> list[dict]:
+    """Map each checked-in constructor argument position to its member.
+
+    ``null_argument_position`` names the position that carried the null
+    pointer; the remaining position carries the buffer.  With exactly one
+    nulled member this mapping is total and unambiguous, and it is the fact
+    that makes ``m_sound = NULL;`` plus ``m_name = <allocation>;`` have the
+    same state effect as the removed two-argument temporary.
+    """
+    members = []
+    remaining = list(witness["null_members"])
+    for position in range(len(witness["null_members"]) + 1):
+        if position == witness["null_argument_position"]:
+            members.append(remaining.pop(0))
+        else:
+            members.append({
+                "identifier": witness["buffer_member"],
+                "type": witness["buffer_member_type"],
+            })
+    return members
+
+
+def _constructor_allocation_lift_called_identifiers(data: bytes) -> set[str]:
+    """Identifiers this rendered text applies as a function or constructor."""
+    tokens = [item[0] for item in source_overlay_tokens(data)]
+    return {
+        token for index, token in enumerate(tokens)
+        if SOURCE_OVERLAY_IDENTIFIER_RE.fullmatch(token)
+        and index + 1 < len(tokens) and tokens[index + 1] == "("
+    }
+
+
+def require_constructor_allocation_lift_semantic_identity(
+    root, unit_source: str, unit_data: bytes, target_source: bytes,
+    expected_input: bytes, proof: dict, params: dict, context: str,
+) -> dict:
+    """Prove the lifted constructor equals the caller statements it replaces.
+
+    The equality of the two rendered texts is structural (one parameter set,
+    two renderers).  What this adds is everything the rendering cannot know:
+    that the members exist with the pinned types on the pinned class, that the
+    checked-in constructor's argument roles are what the lift assumes, that
+    the temporary's destructor still frees the buffer at the same point, that
+    the removed local escapes nowhere, and that the lifted body calls nothing
+    the checked-in statements did not already call.
+    """
+    witness = proof["semantic_witness"]
+    require(
+        witness["entry_class"] == params["class_identifier"]
+        and witness["buffer_member"] == params["buffer_member"]
+        and witness["null_argument_position"]
+        == params["null_argument_position"]
+        and [item["identifier"] for item in witness["null_members"]]
+        == params["null_members"],
+        f"{context}: allocation-lift roles differ from their witness",
+    )
+    require(
+        {**witness["buffer_member_type"], "base_const": False}
+        == params["buffer_cast_type"],
+        f"{context}: the buffer cast is not a const strip of the pinned "
+        "member type",
+    )
+    require(
+        decorated_member_owner_identifier(
+            proof["source_owner_mangled"], context)
+        == witness["source_owner"],
+        f"{context}: allocation-lift source owner differs",
+    )
+
+    tokens = _semantic_significant_tokens(target_source)
+    opening = next((index for index, item in enumerate(tokens)
+                    if item[0] == "{"), None)
+    require(opening is not None,
+            f"{context}: allocation-lift source owner has no body")
+    qualifiers = [
+        index for index, item in enumerate(tokens[:opening])
+        if item[0] == "::" and index > 0
+    ]
+    require(qualifiers
+            and tokens[qualifiers[-1] - 1][0] == witness["source_owner"],
+            f"{context}: allocation-lift source owner is not exact")
+
+    # (d) second half: the substituted identifier must be the target
+    # function's OWN parameter, proved from the declarator's parameter list.
+    open_paren = next(
+        (index for index in range(opening - 1, -1, -1)
+         if tokens[index][0] == "("), None)
+    require(open_paren is not None,
+            f"{context}: allocation-lift target has no parameter list")
+    depth = 0
+    close_paren = None
+    for index in range(open_paren, opening):
+        if tokens[index][0] == "(":
+            depth += 1
+        elif tokens[index][0] == ")":
+            depth -= 1
+            if depth == 0:
+                close_paren = index
+                break
+    require(close_paren is not None,
+            f"{context}: allocation-lift target parameter list is unbalanced")
+    parameter_tokens = [
+        item[0] for item in tokens[open_paren + 1:close_paren]
+    ]
+    require(parameter_tokens.count(params["parameter_identifier"]) == 1,
+            f"{context}: substituted identifier is not the target function's "
+            "own parameter")
+    parameter_detail = _pinned_source_line(
+        target_source,
+        (tokens[open_paren][1], tokens[close_paren][2]),
+        witness["target_parameter_range_pin"],
+        context + " target parameter list",
+    )
+
+    # (d) first half: the removed local must occur only inside the removed
+    # range, so deleting its declaration can leave no dangling use.
+    require(target_source.count(expected_input) == 1,
+            f"{context}: canonical allocation-lift input is absent or "
+            "ambiguous")
+    input_start = target_source.index(expected_input)
+    input_end = input_start + len(expected_input)
+    caller_result = params["caller_result_identifier"]
+    expected_count = sum(
+        token == caller_result
+        for token, _, _ in _semantic_significant_tokens(expected_input)
+    )
+    occurrences = [
+        start for token, start, _ in tokens if token == caller_result
+    ]
+    require(expected_count > 0 and len(occurrences) == expected_count
+            and all(input_start <= start < input_end
+                    for start in occurrences),
+            f"{context}: removed local {caller_result} is shadowed or "
+            "escapes its authenticated range")
+
+    source_root = Path(root).resolve(strict=True)
+    owner_path, owner_data = _read_pinned_semantic_source(
+        source_root, witness["owner_header"], context + " owner header")
+    include_detail = _require_unique_quoted_include_edge(
+        source_root, unit_source, unit_data, owner_path,
+        witness["owner_header"]["unit_include_range_pin"],
+        context + " unit-to-owner")
+
+    owner_tokens = _semantic_significant_tokens(owner_data)
+    class_index, class_open, class_close = _unique_class_body(
+        owner_tokens, witness["entry_class"], context)
+    class_body_detail = require_source_overlay_range_pin(
+        owner_data[
+            owner_data.rfind(b"\n", 0, owner_tokens[class_index][1]) + 1:
+            owner_data.find(b"\n", owner_tokens[class_close][2]) + 1
+        ],
+        witness["owner_header"]["class_body_range_pin"],
+        context + " entry class body",
+    )
+
+    buffer_detail = _pinned_source_line(
+        owner_data,
+        _unique_class_level_token_range(
+            owner_tokens, class_open, class_close,
+            _class_scope_member_declaration_tokens({
+                "identifier": witness["buffer_member"],
+                "type": witness["buffer_member_type"],
+            }),
+            context + " buffer member"),
+        witness["owner_header"]["buffer_member_declaration_range_pin"],
+        context + " buffer member declaration",
+    )
+    null_details = [
+        _pinned_source_line(
+            owner_data,
+            _unique_class_level_token_range(
+                owner_tokens, class_open, class_close,
+                _class_scope_member_declaration_tokens(member),
+                context + f" nulled member {member['identifier']}"),
+            pin, context + f" nulled member {member['identifier']}"
+                            " declaration",
+        )
+        for member, pin in zip(
+            witness["null_members"],
+            witness["owner_header"]["null_member_declaration_range_pins"],
+        )
+    ]
+
+    # (c)(1): the checked-in constructor's argument roles, as one exact
+    # class-scope token run including its complete mem-init list.
+    argument_members = _constructor_allocation_lift_argument_members(witness)
+    parameter_identifiers = witness[
+        "baseline_constructor_parameter_identifiers"]
+    wanted = [witness["entry_class"], "("]
+    for position, member in enumerate(argument_members):
+        if position:
+            wanted.append(",")
+        wanted += [
+            token for token, _, _ in source_overlay_tokens(
+                render_source_overlay_cpp_type(
+                    member["type"]).encode("ascii"))
+        ]
+        wanted.append(parameter_identifiers[position])
+    wanted.append(")")
+    wanted.append(":")
+    for position, member in enumerate(argument_members):
+        if position:
+            wanted.append(",")
+        wanted += [member["identifier"], "(",
+                   parameter_identifiers[position], ")"]
+    wanted += ["{", "}"]
+    constructor_detail = _pinned_source_line(
+        owner_data,
+        _unique_class_level_token_range(
+            owner_tokens, class_open, class_close, wanted,
+            context + " baseline constructor"),
+        witness["owner_header"]["baseline_constructor_range_pin"],
+        context + " baseline constructor",
+    )
+
+    # (c)(3): ownership is unchanged -- the temporary is still built with the
+    # nulled member null, so its destructor still frees the buffer.
+    destructor_start, _ = _unique_class_level_token_range(
+        owner_tokens, class_open, class_close,
+        ["~", witness["entry_class"], "(", ")"],
+        context + " entry destructor")
+    body_open = next(
+        (index for index, item in enumerate(owner_tokens)
+         if item[1] >= destructor_start and item[0] == "{"), None)
+    require(body_open is not None,
+            f"{context}: entry destructor has no body")
+    depth = 0
+    body_close = None
+    for index in range(body_open, class_close):
+        if owner_tokens[index][0] == "{":
+            depth += 1
+        elif owner_tokens[index][0] == "}":
+            depth -= 1
+            if depth == 0:
+                body_close = index
+                break
+    require(body_close is not None,
+            f"{context}: entry destructor body is unbalanced")
+    guard = [item[0] for item in owner_tokens[body_open + 1:body_close]]
+    nulled = witness["null_members"][0]["identifier"]
+    expected_guard = (
+        ["if", "(", nulled, "==", "NULL", "&&", witness["buffer_member"],
+         "!=", "NULL", ")", "{", "delete", "[", "]", "const_cast", "<"]
+        + [token for token, _, _ in source_overlay_tokens(
+            render_source_overlay_cpp_type(
+                params["buffer_cast_type"]).encode("ascii"))]
+        + [">", "(", witness["buffer_member"], ")", ";", "}"]
+    )
+    require(guard == expected_guard,
+            f"{context}: entry destructor does not free the buffer under the "
+            "nulled-member guard")
+    destructor_detail = require_source_overlay_range_pin(
+        owner_data[owner_tokens[body_open][1]:owner_tokens[body_close][2]],
+        witness["owner_header"]["destructor_body_range_pin"],
+        context + " entry destructor body",
+    )
+
+    # (7): the overload the signature generators mint must not already exist
+    # on the pinned class.
+    require(
+        source_overlay_constructor_overload_count(
+            owner_data, witness["entry_class"],
+            proof["constructor_signature"]["parameters"]) == 0,
+        f"{context}: the lifted constructor overload already exists on "
+        f"{witness['entry_class']}",
+    )
+
+    # (c)(4): no new external dependency -- the rendered body may apply only
+    # identifiers the pinned checked-in statements already applied.
+    body = render_constructor_allocation_lift_constructor_body(params)
+    introduced = (
+        _constructor_allocation_lift_called_identifiers(body)
+        - _constructor_allocation_lift_called_identifiers(expected_input)
+    )
+    require(not introduced,
+            f"{context}: lifted body introduces a called identifier the "
+            f"checked-in statements do not call: {sorted(introduced)}")
+
+    return {
+        "allocation_lift_source_owner": witness["source_owner"],
+        "allocation_lift_entry_class": witness["entry_class"],
+        "allocation_lift_buffer_member": witness["buffer_member"],
+        "allocation_lift_nulled_members": [
+            item["identifier"] for item in witness["null_members"]
+        ],
+        "constructor_allocation_lift_witness_sha256": sha256_bytes(
+            canonical_json_bytes({
+                "include": include_detail,
+                "class_body": class_body_detail,
+                "buffer_member": buffer_detail,
+                "null_members": null_details,
+                "baseline_constructor": constructor_detail,
+                "destructor_body": destructor_detail,
+                "target_parameters": parameter_detail,
+            })
+        ),
     }
 
 
@@ -3715,6 +4413,211 @@ def render_captured_pointer_tail_return_output(params: dict) -> bytes:
     ).encode("ascii")
 
 
+CONSTRUCTOR_ALLOCATION_LIFT_ROLES = frozenset({
+    "class_declaration", "definition_header", "constructor_body", "call_site",
+})
+
+
+def _bind_constructor_allocation_lift_role(
+    operation: dict, clean: bytes, logical_path: str, proof: dict,
+    roles: dict, seen: set, operation_index: int | None, context: str,
+) -> None:
+    """Bind one operation to exactly one role of an allocation-lift proof.
+
+    The role is DERIVED from the typed generator, never declared: a
+    constructor member signature is the class declaration or the definition
+    header according to its form, and an allocation lift is the call site or
+    the constructor body according to its role field.  The mapping is a
+    bijection, so a manifest cannot label an operation as something it is not.
+    """
+    operation_id = operation["id"]
+    generators = list(_source_overlay_generators(operation["generator"]))
+    require(len(generators) == 1,
+            f"{context}: allocation-lift operation {operation_id} must carry "
+            "exactly one generator")
+    generator = generators[0]
+    params = generator["params"]
+    if generator["kind"] == "member_signature_v1":
+        require(params["kind"] == "constructor",
+                f"{context}: allocation-lift operation {operation_id} must "
+                "emit a constructor signature")
+        role = ("class_declaration"
+                if params["form"] == "in_class_declaration"
+                else "definition_header")
+    elif generator["kind"] == "constructor_allocation_lift_v1":
+        role = params["role"]
+    else:
+        raise ByteIdentityError(
+            f"{context}: allocation-lift operation {operation_id} uses an "
+            f"unbound generator: {generator['kind']}"
+        )
+    require(role not in roles and operation_id not in seen,
+            f"{context}: allocation-lift role {role} is bound twice")
+    require((role == "class_declaration") == (operation_index is None),
+            f"{context}: allocation-lift role {role} is rendered into the "
+            "wrong file")
+    expected_action = "replace" if role == "call_site" else "insert"
+    require(operation["action"] == expected_action,
+            f"{context}: allocation-lift role {role} action differs")
+    start = resolve_source_overlay_anchor(
+        clean, operation["start_anchor"], context + f" allocation-lift {role}",
+        logical_path=logical_path,
+    )
+    end = start
+    if expected_action == "replace":
+        end = resolve_source_overlay_anchor(
+            clean, operation["end_anchor"],
+            context + f" allocation-lift {role} end",
+            logical_path=logical_path,
+        )
+    roles[role] = {
+        "operation": operation,
+        "operation_id": operation_id,
+        "params": params,
+        "start": start,
+        "end": end,
+        "index": operation_index,
+    }
+    seen.add(operation_id)
+
+
+def constructor_allocation_lift_declared_locals(
+    params: dict, rendered: bytes,
+) -> set[str]:
+    """Which of the closed form's two locals this rendering declares.
+
+    Derived from the rendered bytes, not asserted: a local is declared when
+    the text contains its typed initialising declaration.  The input renderer
+    declares the caller's buffer and the iterator; the call-site renderer
+    declares only the iterator.
+    """
+    declared = set()
+    for type_key, identifier_key in (
+        ("caller_result_type", "caller_result_identifier"),
+        ("iterator_type", "iterator_identifier"),
+    ):
+        needle = (
+            render_source_overlay_cpp_type(params[type_key]) + " "
+            + params[identifier_key] + " = "
+        ).encode("ascii")
+        if needle in rendered:
+            declared.add(params[identifier_key])
+    return declared
+
+
+def require_constructor_allocation_lift_role_set(
+    roles: dict, proof: dict, root, unit_source: str, clean: bytes,
+    target_range: bytes, target_start: int, target_end: int,
+    header_clean: bytes, local_set_delta: dict | None, context: str,
+) -> dict:
+    """Close the four bound roles of one constructor allocation lift."""
+    require(set(roles) == CONSTRUCTOR_ALLOCATION_LIFT_ROLES,
+            f"{context}: allocation-lift role set is incomplete")
+    witness = proof["semantic_witness"]
+    signature = proof["constructor_signature"]
+
+    # Both signature seats must render the SAME closed identity, and that
+    # identity is the proof's, not either generator's.
+    for role in ("class_declaration", "definition_header"):
+        params = roles[role]["params"]
+        require(params["class_identifier"] == signature["class_identifier"]
+                and params["member_identifier"]
+                == signature["class_identifier"]
+                and params["parameters"] == signature["parameters"],
+                f"{context}: allocation-lift {role} signature differs from "
+                "the proof's constructor signature")
+    require("specifiers" not in roles["class_declaration"]["params"],
+            f"{context}: an in-class declaration carries no specifiers")
+    require(roles["definition_header"]["params"].get("specifiers")
+            == ["inline"],
+            f"{context}: the out-of-class definition header must be inline, "
+            "or the donor grows a constructor COMDAT the seed does not have")
+
+    call_site = roles["call_site"]["params"]
+    body = roles["constructor_body"]["params"]
+    require({**call_site, "role": None} == {**body, "role": None},
+            f"{context}: the allocation-lift call site and constructor body "
+            "are not two renderings of one parameter set")
+
+    require(len(signature["parameters"]) == 1
+            and signature["parameters"][0]["identifier"]
+            == call_site["parameter_identifier"]
+            and signature["parameters"][0]["type"]
+            == witness["buffer_member_type"],
+            f"{context}: the lifted constructor's parameter is not the "
+            "pinned buffer member type bound to the substituted identifier")
+
+    # The declaration must seat inside the pinned class's own body.
+    header_tokens = _semantic_significant_tokens(header_clean)
+    _, class_open, class_close = _unique_class_body(
+        header_tokens, witness["entry_class"], context + " header")
+    seat = roles["class_declaration"]["start"]
+    require(header_tokens[class_open][2] <= seat
+            <= header_tokens[class_close][1],
+            f"{context}: the allocation-lift declaration seats outside its "
+            "class body")
+
+    definition = roles["definition_header"]
+    constructor_body = roles["constructor_body"]
+    require(definition["start"] == constructor_body["start"],
+            f"{context}: the allocation-lift definition header and body do "
+            "not share one seat")
+    require(definition["index"] < constructor_body["index"],
+            f"{context}: the allocation-lift body is rendered before its "
+            "definition header")
+    # An insert seats text BEFORE the byte at its offset, so a seat at
+    # target_start lands entirely above the target window's first byte and
+    # cannot alter one byte of it.  `<=` is therefore exactly "outside the
+    # target"; anything strictly greater would be inside it.
+    require(definition["start"] <= target_start,
+            f"{context}: the allocation-lift definition seats inside its "
+            "target")
+
+    start = roles["call_site"]["start"]
+    end = roles["call_site"]["end"]
+    require(target_start <= start < end <= target_end,
+            f"{context}: refactor operation leaves its target")
+    expected_input = render_constructor_allocation_lift_input(call_site)
+    removed = clean[start:end]
+    require(removed == expected_input,
+            f"{context}: refactor input statement differs")
+    pin = roles["call_site"]["operation"]["baseline_input_range"]
+    require(sha256_bytes(removed) == pin["baseline_sha256"]
+            and len(removed) == pin["baseline_size"],
+            f"{context}: refactor input pin differs")
+
+    if local_set_delta is not None:
+        # D1 obligation (7).  This is the binding that stops the manifest
+        # naming an arbitrary debug record: the object-level removal set must
+        # be EXACTLY the locals this refactor's input renderer declares and
+        # its output renderer does not.  It is discharged here because this is
+        # the one place that holds both the object-level pin and the typed
+        # generator parameters.
+        removed_locals = (
+            constructor_allocation_lift_declared_locals(
+                call_site, expected_input)
+            - constructor_allocation_lift_declared_locals(
+                call_site,
+                render_constructor_allocation_lift_call_site(call_site))
+        )
+        require(
+            {item["identifier"]
+             for item in local_set_delta["removed_records"]}
+            == removed_locals,
+            f"{context}: the pinned local-set delta is not the set of locals "
+            "this refactor removes from its target",
+        )
+    detail = require_constructor_allocation_lift_semantic_identity(
+        root, unit_source, clean, target_range, expected_input, proof,
+        call_site, context + " allocation-lift witness",
+    )
+    return {
+        **detail,
+        "allocation_lift_declaration_seat": seat,
+        "allocation_lift_definition_seat": definition["start"],
+    }
+
+
 def require_target_source_refactor_recipe_policy(
     recipe: dict, function: dict, root, unit_source: str, context: str,
     canonical_operations: list[dict] | None = None,
@@ -3776,6 +4679,19 @@ def require_target_source_refactor_recipe_policy(
         require(not witness_paths.intersection(overlaid_paths),
                 f"{context}: inclusive-extent semantic witness header has "
                 "an effective source overlay")
+    if proof["kind"] == "constructor_allocation_lift_v1":
+        require(function.get("splice_class")
+                == "retail_exact_reloc_divergent",
+                f"{context}: a constructor allocation lift belongs to the "
+                "retail-exact divergent class")
+        require(isinstance(overlaid_paths, set),
+                f"{context}: allocation-lift overlay census is missing")
+        require(
+            proof["semantic_witness"]["owner_header"]["path"]
+            not in overlaid_paths,
+            f"{context}: allocation-lift semantic witness header has an "
+            "effective source overlay",
+        )
     if proof["kind"] == "discarded_postfix_increment_v1":
         require(isinstance(overlaid_paths, set),
                 f"{context}: discarded-increment overlay census is missing")
@@ -3792,9 +4708,41 @@ def require_target_source_refactor_recipe_policy(
         recipe, root, seed_outputs_touched=False,
         canonical_operations=canonical_operations,
     )
-    require(len(validated["renderings"]) == 1
-            and validated["renderings"][0]["path"] == unit_source,
-            f"{context}: refactor donor may render only its own TU")
+    allocation_lift = proof["kind"] == "constructor_allocation_lift_v1"
+    header_rendering = None
+    header_clean = b""
+    if allocation_lift:
+        # The lift is the one refactor whose text cannot live in a single
+        # file: the constructor it introduces must be DECLARED on the class,
+        # which lives in a header.  The second rendering is therefore
+        # admitted, and immediately re-closed: it must be exactly the header
+        # the semantic witness pins, it may carry exactly ONE operation, and
+        # that operation must be a bound role of this proof.  No entropy, no
+        # whole-file append, no second op.
+        require(len(validated["renderings"]) == 2,
+                f"{context}: an allocation-lift donor renders its own TU and "
+                "the class's owning header, and nothing else")
+        unit_renderings = [item for item in validated["renderings"]
+                           if item["path"] == unit_source]
+        other_renderings = [item for item in validated["renderings"]
+                            if item["path"] != unit_source]
+        require(len(unit_renderings) == 1 and len(other_renderings) == 1,
+                f"{context}: an allocation-lift donor must render its own TU")
+        header_rendering = other_renderings[0]
+        require(
+            header_rendering["path"]
+            == proof["semantic_witness"]["owner_header"]["path"],
+            f"{context}: allocation-lift header rendering is not the pinned "
+            "owner header",
+        )
+        require(len(header_rendering["operations"]) == 1,
+                f"{context}: the allocation-lift header rendering may carry "
+                "exactly one bound operation")
+        header_clean = (Path(root) / header_rendering["path"]).read_bytes()
+    else:
+        require(len(validated["renderings"]) == 1
+                and validated["renderings"][0]["path"] == unit_source,
+                f"{context}: refactor donor may render only its own TU")
     source = Path(root) / unit_source
     clean = source.read_bytes()
     start_marker = proof["start_marker"].encode("ascii")
@@ -3821,12 +4769,29 @@ def require_target_source_refactor_recipe_policy(
     require(len(canonical_by_id) == len(canonical_operations or []),
             f"{context}: canonical source operations are duplicated")
     canonical_seen = set()
-    rendering = validated["renderings"][0]
-    for operation in rendering["operations"]:
+    lift_roles: dict[str, dict] = {}
+    rendering = unit_renderings[0] if allocation_lift else (
+        validated["renderings"][0])
+    if allocation_lift:
+        header_operation = header_rendering["operations"][0]
+        require(header_operation["id"] in expected,
+                f"{context}: the allocation-lift header operation is not a "
+                "bound role of this proof")
+        _bind_constructor_allocation_lift_role(
+            header_operation, header_clean, header_rendering["path"],
+            proof, lift_roles, seen, None, context,
+        )
+    for operation_index, operation in enumerate(rendering["operations"]):
         operation_id = operation["id"]
         generators = list(_source_overlay_generators(operation["generator"]))
         require(generators, f"{context}: empty generator tree")
         if operation_id in expected:
+            if allocation_lift:
+                _bind_constructor_allocation_lift_role(
+                    operation, clean, unit_source, proof, lift_roles, seen,
+                    operation_index, context,
+                )
+                continue
             if proof["kind"] == "captured_pointer_tail_return_v1":
                 require(len(generators) == 1
                         and generators[0]["kind"]
@@ -4083,6 +5048,12 @@ def require_target_source_refactor_recipe_policy(
                         f"{context}: donor declaration is repeated: "
                         f"{identifier}")
                 introduced_identifiers.add(identifier)
+    if allocation_lift:
+        semantic_detail = require_constructor_allocation_lift_role_set(
+            lift_roles, proof, root, unit_source, clean, target_range,
+            target_start, target_end, header_clean,
+            function.get("local_set_delta"), context,
+        )
     if proof["kind"] == "captured_pointer_tail_return_v1":
         require(set(tail_fragments) == CAPTURED_POINTER_TAIL_RETURN_ROLES,
                 f"{context}: captured tail-return role set is incomplete")
@@ -4700,6 +5671,37 @@ def render_source_overlay_parameter(value: dict) -> str:
     return rendered
 
 
+def validate_member_signature_parameters(
+    value: object, context: str,
+) -> list[dict]:
+    """Validate one closed, bounded, fully named member parameter list.
+
+    Both member-signature forms render the SAME list, which is what keeps a
+    single list authoritative for the declaration and the definition header.
+    Every element must therefore carry its own identifier, and the identifiers
+    must be pairwise distinct so the rendered definition header is a legal
+    parameter list on its own.
+    """
+    require(isinstance(value, list) and 1 <= len(value) <= 4,
+            f"{context} must be one to four parameters")
+    parameters = [
+        validate_source_overlay_parameter(item, f"{context}[{index}]")
+        for index, item in enumerate(value)
+    ]
+    identifiers = [item.get("identifier") for item in parameters]
+    require(all(identifiers),
+            f"{context} parameters must each name their identifier")
+    require(len(set(identifiers)) == len(identifiers),
+            f"{context} parameter identifiers must be distinct")
+    return parameters
+
+
+def render_member_signature_parameters(parameters: list[dict]) -> str:
+    return ", ".join(
+        render_source_overlay_parameter(item) for item in parameters
+    )
+
+
 def validate_source_overlay_identifier_run(value: object, context: str) -> dict:
     require(isinstance(value, dict), f"{context} must be an object")
     exact_audit_keys(value, {"kind", "stem", "first", "count", "width"}, context)
@@ -4882,6 +5884,21 @@ def source_overlay_expected_identifier_roles(
         )
     elif kind == "discarded_postfix_increment_v1":
         referenced.add(params["identifier"])
+    elif kind == "constructor_allocation_lift_v1":
+        # The refactor REMOVES a local and adds no file-scope declaration, so
+        # nothing is declared here.  `emitted` stays empty deliberately: the
+        # claim that the lifted inline constructor emits no COMDAT is not
+        # asserted in the manifest, it is proved by the composer's
+        # function_multiset(seed) == function_multiset(donor) obligation.
+        referenced.update(
+            token for token, _, _ in source_overlay_tokens(
+                render_constructor_allocation_lift_output(params))
+            if SOURCE_OVERLAY_IDENTIFIER_RE.fullmatch(token)
+        )
+        for name in ("buffer_cast_type", "element_type",
+                     "caller_result_type", "iterator_type"):
+            referenced.update(
+                source_overlay_named_type_identities(params[name]))
     elif kind == "extern_declaration_run_v1":
         declared.update(
             params["prefix"] + str(index).zfill(params["width"])
@@ -4907,6 +5924,11 @@ def source_overlay_expected_identifier_roles(
     elif kind == "member_signature_v1":
         referenced.add(params["class_identifier"])
         referenced.add(params["member_identifier"])
+        for parameter in params.get("parameters", ()):
+            referenced.update(
+                source_overlay_named_type_identities(parameter["type"]))
+            if "identifier" in parameter:
+                referenced.add(parameter["identifier"])
     elif kind == "inline_budget_noop_statements_v1":
         referenced.add(params["assignment_target"])
     elif kind == "dead_local_linear_updates_v1":
@@ -5540,18 +6562,29 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
             "style": params["style"],
         }
     elif kind == "member_signature_v1":
-        # A7: {class_identifier, member_identifier, kind} and nothing else.
-        # A7c is structural -- there is no return type, parameter list or body
-        # in the parameter set, so none can be emitted.
-        exact_audit_keys(params, {
-            "class_identifier", "member_identifier", "kind", "form",
-        }, param_context)
+        # A7: {class_identifier, member_identifier, kind, form} and, for the
+        # constructor kind only, one closed typed parameter list plus an
+        # optional one-element specifier enum.  A7c stays structural -- there
+        # is still no return-type key and no body key anywhere in the
+        # parameter set, so neither can be emitted, and every parameter is
+        # routed through the existing closed cpp-type grammar, so a parameter
+        # can never become free-form text.
         require(params.get("kind") in MEMBER_SIGNATURE_KINDS,
                 f"{param_context}.kind is outside the closed enum "
                 f"{sorted(MEMBER_SIGNATURE_KINDS)}")
         require(params.get("form") in MEMBER_SIGNATURE_FORMS,
                 f"{param_context}.form is outside the closed enum "
                 f"{sorted(MEMBER_SIGNATURE_FORMS)}")
+        signature_keys = {
+            "class_identifier", "member_identifier", "kind", "form",
+        }
+        if params["kind"] == "constructor":
+            signature_keys.add("parameters")
+        optional_keys = (
+            {"specifiers"} if params["kind"] == "constructor" else set()
+        )
+        exact_audit_keys(params, signature_keys | optional_keys,
+                         param_context, optional=optional_keys)
         normalized = {
             "class_identifier": _source_overlay_identifier(
                 params.get("class_identifier"),
@@ -5564,6 +6597,27 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
             "kind": params["kind"],
             "form": params["form"],
         }
+        if params["kind"] == "constructor":
+            # The name is not free: a constructor is named by its class, so
+            # the generator cannot mint an arbitrary member name.
+            require(normalized["member_identifier"]
+                    == normalized["class_identifier"],
+                    f"{param_context}.member_identifier must equal the class "
+                    "identifier for a constructor signature")
+            normalized["parameters"] = validate_member_signature_parameters(
+                params.get("parameters"), param_context + ".parameters")
+            if "specifiers" in params:
+                # A one-element closed enum, not text.  `inline` is
+                # load-bearing for the out-of-class definition header and has
+                # no meaning on an in-class declaration, so it is admitted on
+                # exactly one form.
+                require(params.get("specifiers") == ["inline"],
+                        f"{param_context}.specifiers must be exactly "
+                        '["inline"]')
+                require(params["form"] == "qualified_definition_header",
+                        f"{param_context}.specifiers is admitted only on the "
+                        "qualified definition header form")
+                normalized["specifiers"] = ["inline"]
     elif kind == "single_evaluation_binding_source_permutation_v1":
         require(not layout,
                 f"{context}: a bind-once source permutation cannot carry "
@@ -5780,6 +6834,92 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
                 params.get("count"), param_context + ".count",
                 minimum=2, maximum=4096,
             ),
+            "declaration_indent": indentation,
+        }
+    elif kind == "constructor_allocation_lift_v1":
+        require(not layout,
+                f"{context}: a constructor allocation lift cannot carry "
+                "layout overrides")
+        exact_audit_keys(params, {
+            "role", "class_identifier", "parameter_identifier",
+            "buffer_member", "buffer_cast_type", "element_type",
+            "extent_function", "copy_function", "null_members",
+            "caller_result_identifier", "caller_result_type",
+            "null_argument_position", "iterator_type",
+            "iterator_identifier", "container_identifier", "find_member",
+            "declaration_indent",
+        }, param_context)
+        require(params.get("role") in {"call_site", "constructor_body"},
+                f"{param_context}.role is outside the closed enum")
+        identifiers = {
+            name: _source_overlay_identifier(
+                params.get(name), f"{param_context}.{name}")
+            for name in (
+                "class_identifier", "parameter_identifier", "buffer_member",
+                "extent_function", "copy_function",
+                "caller_result_identifier", "iterator_identifier",
+                "container_identifier", "find_member",
+            )
+        }
+        null_members = _source_overlay_identifier_list(
+            params.get("null_members"), param_context + ".null_members",
+            minimum=1, maximum=4,
+        )
+        require(len(set(null_members)) == len(null_members),
+                f"{param_context}.null_members must be distinct")
+        require(
+            len(set(identifiers.values()) | set(null_members))
+            == len(identifiers) + len(null_members),
+            f"{param_context}: allocation-lift roles must be distinct",
+        )
+        element_type = validate_source_overlay_cpp_type(
+            params.get("element_type"), param_context + ".element_type")
+        require(not element_type["base_const"]
+                and not element_type["indirection"]
+                and not element_type["trailing_const"]
+                and render_source_overlay_cpp_type(element_type)
+                in FIXED_ARRAY_FILL_ELEMENT_TYPE_SPELLINGS,
+                f"{param_context}.element_type is not a closed integral "
+                "value type")
+        buffer_cast_type = validate_source_overlay_cpp_type(
+            params.get("buffer_cast_type"),
+            param_context + ".buffer_cast_type")
+        require(buffer_cast_type == {**element_type,
+                                     "indirection": ["pointer"]},
+                f"{param_context}.buffer_cast_type is not the element type "
+                "plus exactly one pointer")
+        caller_result_type = validate_source_overlay_cpp_type(
+            params.get("caller_result_type"),
+            param_context + ".caller_result_type")
+        require(caller_result_type == buffer_cast_type,
+                f"{param_context}.caller_result_type differs from the buffer "
+                "cast type")
+        iterator_type = validate_source_overlay_cpp_type(
+            params.get("iterator_type"), param_context + ".iterator_type")
+        require(not iterator_type["base_const"]
+                and not iterator_type["indirection"]
+                and not iterator_type["trailing_const"]
+                and iterator_type["base"]["kind"] == "named",
+                f"{param_context}.iterator_type is not a plain named type")
+        null_argument_position = require_exact_int(
+            params.get("null_argument_position"),
+            param_context + ".null_argument_position",
+            minimum=0, maximum=len(null_members),
+        )
+        indentation = params.get("declaration_indent")
+        require(isinstance(indentation, str) and indentation.isascii()
+                and 1 <= len(indentation) <= 32
+                and set(indentation) <= {" ", "\t"},
+                f"{param_context}.declaration_indent differs")
+        normalized = {
+            "role": params["role"],
+            **identifiers,
+            "buffer_cast_type": buffer_cast_type,
+            "element_type": element_type,
+            "null_members": null_members,
+            "caller_result_type": caller_result_type,
+            "null_argument_position": null_argument_position,
+            "iterator_type": iterator_type,
             "declaration_indent": indentation,
         }
     elif kind == "inclusive_extent_assignment_v1":
@@ -7710,9 +8850,10 @@ def render_source_overlay_generator(
             f'#include {quote_open}{params["basename"]}{quote_close}\n'
         ).encode("ascii")
     elif kind == "member_signature_v1":
-        # A7c: signature text ONLY.  A destructor has no return type and no
-        # parameters, and the body is supplied by the authenticated
-        # relocated-range mechanism -- never by this generator.
+        # A7c: signature text ONLY.  Neither kind has a return type, and no
+        # kind has a body: a destructor body comes from the authenticated
+        # relocated-range mechanism and a constructor body from
+        # constructor_allocation_lift_v1, never from this generator.
         require(params["kind"] in MEMBER_SIGNATURE_KINDS,
                 f"member signature kind {params['kind']!r} is outside the "
                 f"closed enum")
@@ -7722,7 +8863,24 @@ def render_source_overlay_generator(
         # Neither form carries indentation or a line break: the seat's own
         # clean source supplies those, so the generator emits exactly the
         # signature the specification names and nothing else.
-        if params["form"] == "in_class_declaration":
+        if params["kind"] == "constructor":
+            rendered_parameters = render_member_signature_parameters(
+                params["parameters"])
+            if params["form"] == "in_class_declaration":
+                result = (
+                    f'{params["member_identifier"]}({rendered_parameters});'
+                ).encode("ascii")
+            else:
+                # qualified_definition_header: no terminator -- the body
+                # follows from constructor_allocation_lift_v1, never here.
+                specifiers = "".join(
+                    item + " " for item in params.get("specifiers", ())
+                )
+                result = (
+                    f'{specifiers}{params["class_identifier"]}::'
+                    f'{params["member_identifier"]}({rendered_parameters})'
+                ).encode("ascii")
+        elif params["form"] == "in_class_declaration":
             result = f'~{params["member_identifier"]}();'.encode("ascii")
         else:
             # qualified_definition_header: no terminator -- the body follows
@@ -7741,6 +8899,8 @@ def render_source_overlay_generator(
         result = render_inclusive_extent_assignment_output(params)
     elif kind == "discarded_postfix_increment_v1":
         result = render_discarded_postfix_increment_output(params)
+    elif kind == "constructor_allocation_lift_v1":
+        result = render_constructor_allocation_lift_output(params)
     elif kind == "extern_declaration_run_v1":
         result = entropy_generator.generate_extern_run(
             params["prefix"], params["count"], params["width"]
@@ -12273,8 +13433,7 @@ def validate_manifest(
                             if overlay_output is not None else None),
                     )
                     if any(
-                        generator["kind"] in
-                        SOURCE_REFACTOR_GENERATOR_KINDS
+                        source_overlay_generator_is_source_refactor(generator)
                         for generator in _source_overlay_generators(
                             validated_recipe
                         )
@@ -14162,6 +15321,8 @@ def validate_manifest(
                             "the retail-exact divergent class",
                         )
                         divergent_keys.add("target_source_refactor")
+                        if "local_set_delta" in function:
+                            divergent_keys.add("local_set_delta")
                     split_lines = (
                         "expected_seed_line_count" in function
                         or "expected_donor_line_count" in function
@@ -14237,6 +15398,19 @@ def validate_manifest(
                             f"{function_context}.target_source_refactor",
                         )
                         normalized_function["target_source_refactor"] = proof
+                        if "local_set_delta" in function:
+                            require(
+                                proof["kind"]
+                                in LOCAL_SET_DELTA_REFACTOR_KINDS,
+                                f"{function_context}: local_set_delta is "
+                                "outside its closed source-refactor kinds",
+                            )
+                            normalized_function["local_set_delta"] = (
+                                validate_local_set_delta(
+                                    function.get("local_set_delta"),
+                                    f"{function_context}.local_set_delta",
+                                )
+                            )
                         bound_refactor_recipe_ids.append(donor_id)
                         require(local_recipe_kinds[donor_id]
                                 == "donor_source_overlay",
@@ -16727,7 +17901,26 @@ SOURCE_REFACTOR_GENERATOR_KINDS = frozenset({
     "fixed_array_shuffle_pointer_countdown_v1",
     "inclusive_extent_assignment_v1",
     "discarded_postfix_increment_v1",
+    "constructor_allocation_lift_v1",
 })
+
+
+def source_overlay_generator_is_source_refactor(generator: dict) -> bool:
+    """Does this generator make its recipe a source-refactor recipe?
+
+    Membership in ``SOURCE_REFACTOR_GENERATOR_KINDS`` is the ordinary answer.
+    A ``member_signature_v1`` with ``kind == "constructor"`` is the other one:
+    it introduces a member the checked-in tree does not declare, so it must be
+    subject to the same census as any other source permutation.  Because
+    ``require_source_refactor_donor_bindings`` then demands that the recipe be
+    bound EXACTLY ONCE to a source-aware composer, a constructor signature can
+    only ever exist inside a donor carrying a validated
+    ``target_source_refactor`` proof.
+    """
+    if generator["kind"] in SOURCE_REFACTOR_GENERATOR_KINDS:
+        return True
+    return (generator["kind"] == "member_signature_v1"
+            and generator["params"].get("kind") == "constructor")
 
 
 def render_cross_tu_complete_target_source(
@@ -17091,7 +18284,7 @@ def raw_manifest_source_refactor_recipe_ids(
                         f"[{operation_index}].gen",
                     )
                     if any(
-                        item["kind"] in SOURCE_REFACTOR_GENERATOR_KINDS
+                        source_overlay_generator_is_source_refactor(item)
                         for item in _source_overlay_generators(generator)
                     ):
                         result.add(recipe_id)
@@ -19051,6 +20244,225 @@ def require_retail_relocation_oracle(
     return {"semantic_relocation_count": len(donor_rows)}
 
 
+# D1.  A CLOSED set: a pinned local-set delta on a target's `.debug$S`
+# closure child is admitted for exactly the source-refactor kinds listed here,
+# and for no other function in the manifest.
+LOCAL_SET_DELTA_REFACTOR_KINDS = frozenset({"constructor_allocation_lift_v1"})
+
+
+def validate_local_set_delta(value: object, context: str) -> dict:
+    """Validate one pinned, removal-only `.debug$S` local-set delta."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "expected_seed_debug_size", "expected_donor_debug_size",
+        "removed_records",
+    }, context)
+    require(value.get("kind") == "removed_caller_locals_v1",
+            f"{context}.kind is unsupported")
+    seed_size = require_exact_int(
+        value.get("expected_seed_debug_size"),
+        context + ".expected_seed_debug_size", minimum=1, maximum=1 << 20)
+    donor_size = require_exact_int(
+        value.get("expected_donor_debug_size"),
+        context + ".expected_donor_debug_size", minimum=1, maximum=1 << 20)
+    require(seed_size > donor_size,
+            f"{context} must remove locals, never add them")
+    raw = value.get("removed_records")
+    require(isinstance(raw, list) and 1 <= len(raw) <= 8,
+            f"{context}.removed_records must name one to eight records")
+    records = []
+    previous = -1
+    for index, item in enumerate(raw):
+        item_context = f"{context}.removed_records[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "seed_offset", "size", "record_type", "identifier",
+        }, item_context)
+        seed_offset = require_exact_int(
+            item.get("seed_offset"), item_context + ".seed_offset",
+            minimum=0, maximum=seed_size)
+        require(seed_offset > previous,
+                f"{item_context}.seed_offset is unsorted or repeated")
+        previous = seed_offset
+        record_type = item.get("record_type")
+        require(record_type in CODEVIEW_REMOVED_LOCAL_RECORD_TYPES,
+                f"{item_context}.record_type is outside the closed local "
+                "record types")
+        records.append({
+            "seed_offset": seed_offset,
+            "size": require_exact_int(
+                item.get("size"), item_context + ".size",
+                minimum=4, maximum=seed_size),
+            "record_type": record_type,
+            "identifier": _source_overlay_identifier(
+                item.get("identifier"), item_context + ".identifier"),
+        })
+    identifiers = [item["identifier"] for item in records]
+    require(len(set(identifiers)) == len(identifiers),
+            f"{context}.removed_records identifiers must be distinct")
+    require(seed_size - donor_size == sum(item["size"] for item in records),
+            f"{context} sizes do not account for the whole debug$S change")
+    return {
+        "kind": "removed_caller_locals_v1",
+        "expected_seed_debug_size": seed_size,
+        "expected_donor_debug_size": donor_size,
+        "removed_records": records,
+    }
+
+
+# Only the record types a caller-local removal can legitimately delete.
+CODEVIEW_REMOVED_LOCAL_RECORD_TYPES = frozenset({0x0002, 0x0200})
+
+
+# The byte offset of the length-prefixed name inside each admitted CodeView
+# symbol record's payload; None means the record carries no name.
+CODEVIEW_SYMBOL_NAME_OFFSETS = {
+    0x0002: 4,      # S_REGISTER: typind u16, reg u16
+    0x0006: None,   # S_END
+    0x0200: 6,      # S_BPREL32: off i32, typind u16
+    0x0204: 33,     # S_GPROC32
+    0x0205: 33,     # S_LPROC32
+    0x0209: 7,      # S_LABEL32: off u32, seg u16, flags u8
+}
+
+
+CODEVIEW_PROCEDURE_RECORD_TYPES = frozenset({0x0204, 0x0205})
+
+
+CODEVIEW_END_RECORD_TYPE = 0x0006
+
+
+def parse_codeview_symbol_stream(data: bytes, context: str) -> list[dict]:
+    """Parse one object-file `.debug$S` symbol-record stream to exhaustion.
+
+    Every record is `reclen:u16, rectyp:u16, payload[reclen-2]`, and every
+    record type must be one this module knows how to name.  A stream that does
+    not parse exactly, or that carries a record type outside the table, is
+    refused rather than approximated.
+    """
+    records = []
+    offset = 0
+    while offset < len(data):
+        require(offset + 4 <= len(data),
+                f"{context}: symbol record header is truncated")
+        length = int.from_bytes(data[offset:offset + 2], "little")
+        total = length + 2
+        require(length >= 2 and offset + total <= len(data),
+                f"{context}: symbol record length is out of range")
+        record_type = int.from_bytes(data[offset + 2:offset + 4], "little")
+        require(record_type in CODEVIEW_SYMBOL_NAME_OFFSETS,
+                f"{context}: symbol record type 0x{record_type:04x} is "
+                "outside the closed table")
+        payload = data[offset + 4:offset + total]
+        name_offset = CODEVIEW_SYMBOL_NAME_OFFSETS[record_type]
+        if name_offset is None:
+            require(not payload,
+                    f"{context}: terminator record carries a payload")
+            name = ""
+        else:
+            require(len(payload) > name_offset,
+                    f"{context}: symbol record has no name field")
+            count = payload[name_offset]
+            require(len(payload) == name_offset + 1 + count,
+                    f"{context}: symbol record name length is inconsistent")
+            name = payload[name_offset + 1:].decode("latin1")
+        records.append({
+            "offset": offset, "size": total, "type": record_type,
+            "name": name,
+        })
+        offset += total
+    require(offset == len(data),
+            f"{context}: symbol stream does not parse to exhaustion")
+    return records
+
+
+def codeview_symbol_identity(record: dict) -> tuple[int, str]:
+    """A record's (type, name) with compiler-local serials collapsed.
+
+    `$L`/`$T` serials are per-compile counters, exactly as they are for
+    relocation targets -- `local_symbol_kind` is the same classifier the
+    divergent relocation comparison already uses.  Collapsing them is what
+    makes the two streams comparable at all; every other name is compared
+    literally.
+    """
+    kind = local_symbol_kind(record["name"])
+    return record["type"], ("$" + kind if kind is not None
+                            else record["name"])
+
+
+def require_removed_caller_locals_delta(
+    seed_stream: bytes, donor_stream: bytes, relocation_offsets: list[int],
+    delta: dict, context: str,
+) -> tuple[dict, bytes]:
+    """D1: prove a `.debug$S` size change is exactly a pinned local removal.
+
+    The equality this replaces was a same-function sanity proxy, not an
+    output-integrity check -- no donor `.debug$S` byte has ever reached the
+    output.  What stands in its place is strictly more: the removal is pinned
+    record by record, it is proved to be a removal and never an addition, it
+    may not touch any relocated span, the surviving record sequence must equal
+    the donor's, and the composed output DROPS the removed records instead of
+    keeping a stale local the installed body does not have.
+    """
+    seed_records = parse_codeview_symbol_stream(seed_stream, context + " seed")
+    donor_records = parse_codeview_symbol_stream(
+        donor_stream, context + " donor")
+    for records, role in ((seed_records, "seed"), (donor_records, "donor")):
+        require(records
+                and records[0]["type"] in CODEVIEW_PROCEDURE_RECORD_TYPES
+                and records[-1]["type"] == CODEVIEW_END_RECORD_TYPE,
+                f"{context}: {role} symbol stream is not one bounded "
+                "procedure record")
+    removed = delta["removed_records"]
+    require(len(seed_stream) == delta["expected_seed_debug_size"]
+            and len(donor_stream) == delta["expected_donor_debug_size"],
+            f"{context}: debug$S sizes differ from their local-set pins")
+    require(len(seed_stream) - len(donor_stream)
+            == sum(item["size"] for item in removed),
+            f"{context}: the pinned local-set delta does not account for the "
+            "whole debug$S size change")
+
+    guard = max(relocation_offsets, default=-4) + 4
+    by_offset = {record["offset"]: record for record in seed_records}
+    for item in removed:
+        record = by_offset.get(item["seed_offset"])
+        require(record is not None
+                and record["size"] == item["size"]
+                and record["type"] == item["record_type"]
+                and record["name"] == item["identifier"],
+                f"{context}: pinned removed record at "
+                f"{item['seed_offset']} is not the seed's "
+                f"{item['identifier']!r}")
+        require(item["seed_offset"] >= guard,
+                f"{context}: a removed record overlaps a relocated span, so "
+                "debug$S relocation offsets would move")
+
+    removed_offsets = {item["seed_offset"] for item in removed}
+    surviving = [record for record in seed_records
+                 if record["offset"] not in removed_offsets]
+    require([codeview_symbol_identity(item) for item in surviving]
+            == [codeview_symbol_identity(item) for item in donor_records],
+            f"{context}: the seed symbol stream minus its pinned removals is "
+            "not the donor's symbol sequence")
+    removed_identifiers = {item["identifier"] for item in removed}
+    require(not removed_identifiers.intersection(
+                record["name"] for record in donor_records),
+            f"{context}: a pinned removed local still exists in the donor's "
+            "symbol stream")
+
+    reduced = b"".join(
+        seed_stream[record["offset"]:record["offset"] + record["size"]]
+        for record in surviving
+    )
+    require(len(reduced) == len(donor_stream),
+            f"{context}: the reduced seed symbol stream has the wrong size")
+    return {
+        "local_set_removed_records": len(removed),
+        "local_set_removed_identifiers": sorted(removed_identifiers),
+        "local_set_debug_size_delta": len(reduced) - len(seed_stream),
+    }, reduced
+
+
 def local_symbol_kind(name: str) -> str | None:
     if len(name) > 2 and name[0] == "$" and name[1] in "LT" and name[2:].isdigit():
         return name[1]
@@ -20923,12 +22335,44 @@ def compose_same_slot_resize(
     dd = _comdat_child(donor, dp, ".debug$S")
     require(sx["number"] == dx["number"] and sd["number"] == dd["number"],
             "closure section seats changed")
-    for left, right, name in ((sx, dx, "xdata"), (sd, dd, "debug$S")):
+    # D1.  `raw_size` equality on the `.debug$S` closure child is a
+    # same-function sanity proxy: no donor `.debug$S` byte ever reaches the
+    # output.  A source refactor that removes a caller local legitimately
+    # shortens that child, so the equality may be replaced -- but ONLY by a
+    # pinned, source-bound local-set delta that proves record by record what
+    # was removed, proves it is a removal, proves it moves no relocated span,
+    # proves the surviving record sequence is the donor's, and makes the
+    # composed output drop the stale records.  Every other field of the tuple,
+    # and the whole tuple for the sibling child, is unchanged.
+    local_set_delta = function.get("local_set_delta")
+    local_set_detail = {}
+    reduced_debug_raw = None
+    debug_shape_keys = ("name", "raw_size", "relocation_count", "line_count",
+                        "characteristics")
+    if local_set_delta is not None:
+        require("target_source_refactor" in function
+                and function["target_source_refactor"]["kind"]
+                in LOCAL_SET_DELTA_REFACTOR_KINDS,
+                "local-set delta is outside its closed source-refactor kinds")
+        debug_shape_keys = ("name", "relocation_count", "line_count",
+                            "characteristics")
+    for left, right, name, keys in (
+        (sx, dx, "xdata",
+         ("name", "raw_size", "relocation_count", "line_count",
+          "characteristics")),
+        (sd, dd, "debug$S", debug_shape_keys),
+    ):
         require(
-            all(left[key] == right[key] for key in
-                ("name", "raw_size", "relocation_count", "line_count",
-                 "characteristics")),
+            all(left[key] == right[key] for key in keys),
             f"{name} section shape changed",
+        )
+    if local_set_delta is not None:
+        local_set_detail, reduced_debug_raw = (
+            require_removed_caller_locals_delta(
+                coff_body(seed, sd), coff_body(donor, dd),
+                [item["offset"] for item in detailed_relocations(seed, sd)],
+                local_set_delta, "debug$S local-set delta",
+            )
         )
     if fpo_closure:
         # The donor's FPO record describes the donor body; adopt it whole
@@ -21063,7 +22507,8 @@ def compose_same_slot_resize(
     require(donor_cbproc == dp["raw_size"]
             and 0 <= donor_dbgstart <= donor_dbgend < donor_cbproc,
             "donor debug procedure range is stale")
-    expected_debug_raw = bytearray(seed_debug_raw)
+    expected_debug_raw = bytearray(
+        seed_debug_raw if reduced_debug_raw is None else reduced_debug_raw)
     expected_debug_raw[16:28] = donor_debug_raw[16:28]
 
     old_end = sp["raw_offset"] + sp["raw_size"]
@@ -21075,6 +22520,13 @@ def compose_same_slot_resize(
             donor_lines,
         ),
     ]
+    if reduced_debug_raw is not None:
+        # D1 obligation (8): the composed object stops claiming a local its
+        # installed body does not have.
+        replacements.append((
+            sd["raw_offset"], sd["raw_offset"] + sd["raw_size"],
+            bytes(expected_debug_raw),
+        ))
     if appended_relocations:
         # B7: the donor carries relocations the seed's table has no room for,
         # so the table is rebuilt rather than overwritten in place.  Paired
@@ -21117,6 +22569,10 @@ def compose_same_slot_resize(
             if appended_relocations:
                 output[header + 32:header + 34] = (
                     dp["relocation_count"].to_bytes(2, "little"))
+        if (reduced_debug_raw is not None
+                and section["number"] == sd["number"]):
+            output[header + 16:header + 20] = len(
+                expected_debug_raw).to_bytes(4, "little")
         for field, relative in (("raw_offset", 20),
                                 ("relocation_offset", 24),
                                 ("line_offset", 28)):
@@ -21218,6 +22674,16 @@ def compose_same_slot_resize(
     at = new_symbol_offset + (seed_section_index + 1) * 18
     output[at:at + 18] = coff_auxiliary(donor, donor_section_index,
                                         donor_section_sym)
+    if reduced_debug_raw is not None:
+        # The section header is not the only place that states the child's
+        # size: its COMDAT section symbol's auxiliary Length must agree, or
+        # the composed object would still claim the removed record through
+        # the symbol table.  Relocation and line counts are untouched by a
+        # local-set removal, so only Length moves.
+        debug_section_index, _ = _coff_section_symbol(seed, sd)
+        aux_at = new_symbol_offset + (debug_section_index + 1) * 18
+        output[aux_at:aux_at + 4] = len(expected_debug_raw).to_bytes(
+            4, "little")
 
     debug_output = shifted(sd["raw_offset"])
     output[debug_output:debug_output + len(expected_debug_raw)] = (
@@ -21243,6 +22709,16 @@ def compose_same_slot_resize(
             "output xdata/FPO record differs from its policy source")
     require(coff_body(checked, cd) == bytes(expected_debug_raw),
             "output debug$S policy differs")
+    if reduced_debug_raw is not None:
+        checked_debug_index, checked_debug_symbol = _coff_section_symbol(
+            checked, cd)
+        require(
+            int.from_bytes(
+                coff_auxiliary(checked, checked_debug_index,
+                               checked_debug_symbol)[:4], "little")
+            == cd["raw_size"] == len(expected_debug_raw),
+            "output debug$S section symbol still claims the removed locals",
+        )
     require(function_multiset(checked) == function_multiset(seed),
             "output function set changed")
     require(checked.symbol_count == seed.symbol_count + len(imported_symbols)
@@ -21308,6 +22784,7 @@ def compose_same_slot_resize(
         "substituted_relocations": len(substitutions),
         "imported_undefined_symbols": [item[0] for item in imported_symbols],
         "retail_exact": bool(divergent),
+        **local_set_detail,
         **topology_detail,
         **semantic_detail,
     }
@@ -21592,14 +23069,33 @@ def validate_donor_source_overlay_recipe(
         params = generator["params"]
         class_identifier = params["class_identifier"]
         member_identifier = params["member_identifier"]
+        spelling = (
+            f"{class_identifier}::~{member_identifier}"
+            if params["kind"] == "destructor"
+            else f"{class_identifier}::{member_identifier}"
+        )
         require(
             any(source_overlay_member_is_declared(
                 data, class_identifier, member_identifier, params["kind"])
                 for data in clean_inputs),
             f"{op_context}: member signature "
-            f"{class_identifier}::~{member_identifier} is not declared in any "
+            f"{spelling} is not declared in any "
             f"checked-in source this recipe renders from",
         )
+        if params["kind"] == "constructor":
+            # A7a(ii) -- the freshness half, and the half that keeps A7a a
+            # gate for constructors.  It is UNIVERSAL over the recipe's clean
+            # inputs: no rendered input may already declare this overload at
+            # class scope, so the generator can only ever ADD a constructor
+            # the checked-in tree does not have, never restate or shadow one.
+            for data in clean_inputs:
+                require(
+                    source_overlay_constructor_overload_count(
+                        data, class_identifier, params["parameters"]) == 0,
+                    f"{op_context}: member signature "
+                    f"{spelling} already declares this parameter type "
+                    f"sequence in checked-in source this recipe renders from",
+                )
     normalized_lane = {"required_define": lane["required_define"]}
     if "include_projection" in lane:
         normalized_lane["include_projection"] = lane["include_projection"]

@@ -2924,6 +2924,316 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_e8400b52f9f4",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "donor_source_overlay",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "renderings": [
+       {
+        "path": "LEGO1/lego/legoomni/include/legocachesoundmanager.h",
+        "clean_sha256": "0c5840f7e7f9535a7dadc5433faf5a56fc8dc8cedf05969e430337521942078b",
+        "rendered_sha256": "1d79bb25154f0ed7c4de97eec5652c519b348ed5f90397fd39d05fc85c81348b",
+        "operations": [
+         {
+          "op": "insert",
+          "id": "op_lcs_ctor_declare",
+          "anchor": {
+           "ctx": "eb75007928d9884911ce2d0105e1fbd510ad2a27869c79528c4a65b901a8b116",
+           "line_before": "5dc8df36ace4c3c18369c80bdabea1bfedae2f3b2903bedb148a48b79d5923cf",
+           "line_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "gen": {
+           "k": "member_sig",
+           "class_identifier": "LegoCacheSoundEntry",
+           "member_identifier": "LegoCacheSoundEntry",
+           "kind": "constructor",
+           "form": "in_class_declaration",
+           "parameters": [
+            {
+             "type": "const char*",
+             "identifier": "p_key"
+            }
+           ],
+           "indent": [
+            [
+             1,
+             [
+              {
+               "unit": "tab",
+               "count": 1
+              }
+             ]
+            ]
+           ]
+          }
+         }
+        ]
+       },
+       {
+        "path": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
+        "clean_sha256": "35488e2d5e531223235582721a54cde31b4d5775268bf76a1054f2be1df10c50",
+        "rendered_sha256": "62c48d1faf930491a35c20563a361ca3bbbebedc0b381ce743073be77d965cf4",
+        "operations": [
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "0a7c90f578fd0474bf09c54e2bcce742ab9be911532485ebac75a8b780af7992",
+           "b": 0,
+           "at": "start"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 6,
+           "items": [
+            {
+             "k": "lines",
+             "n": 4,
+             "line": 1
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecordJY",
+             "line": 5
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "2c0d43387189baf756baca2af2b8116c40977ec1e187a02862d71018e636a788",
+           "b": 9,
+           "at": "before_token"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 27,
+           "items": [
+            {
+             "k": "lines",
+             "n": 2,
+             "line": 1
+            },
+            {
+             "k": "enum",
+             "id": "RkE0",
+             "members": [
+              "rke0_0"
+             ],
+             "line": 3
+            },
+            {
+             "k": "enum",
+             "id": "RkE1",
+             "members": [
+              "rke1_0"
+             ],
+             "line": 6
+            },
+            {
+             "k": "enum",
+             "id": "RkE2",
+             "members": [
+              "rke2_0"
+             ],
+             "line": 9
+            },
+            {
+             "k": "enum",
+             "id": "RkE3",
+             "members": [
+              "rke3_0"
+             ],
+             "line": 12
+            },
+            {
+             "k": "enum",
+             "id": "RkE4",
+             "members": [
+              "rke4_0"
+             ],
+             "line": 15
+            },
+            {
+             "k": "enum",
+             "id": "RkE5",
+             "members": [
+              "rke5_0"
+             ],
+             "line": 18
+            },
+            {
+             "k": "enum",
+             "id": "RkE6",
+             "members": [
+              "rke6_0"
+             ],
+             "line": 21
+            },
+            {
+             "k": "enum",
+             "id": "RkE7",
+             "members": [
+              "rke7_0"
+             ],
+             "line": 24
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "a936115a43770489e768473374567a15e510cc475ddb255cfc445c2dd3e8a3d9",
+           "b": 21,
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "dae9eb0f0e3b0d7b494366d76a500266543bdb4d6757c0a9c8ef11eba58983cd"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 6,
+           "items": [
+            {
+             "k": "lines",
+             "n": 4,
+             "line": 1
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecordJX",
+             "line": 5
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "id": "op_lcs_ctor_define",
+          "anchor": {
+           "ctx": "4011b77826267112611ecb8be46e6c3e246c56a8c300a9d52f566311fc2e5147",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "c4efef06f5b2b0a26f6d1ca52756d581c41c258986e60b417b6eaa0ecef14d6f"
+          },
+          "gen": {
+           "k": "member_sig",
+           "class_identifier": "LegoCacheSoundEntry",
+           "member_identifier": "LegoCacheSoundEntry",
+           "kind": "constructor",
+           "form": "qualified_definition_header",
+           "specifiers": [
+            "inline"
+           ],
+           "parameters": [
+            {
+             "type": "const char*",
+             "identifier": "p_key"
+            }
+           ],
+           "nl": false
+          }
+         },
+         {
+          "op": "insert",
+          "id": "op_lcs_ctor_body",
+          "anchor": {
+           "ctx": "4011b77826267112611ecb8be46e6c3e246c56a8c300a9d52f566311fc2e5147",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "c4efef06f5b2b0a26f6d1ca52756d581c41c258986e60b417b6eaa0ecef14d6f"
+          },
+          "gen": {
+           "k": "ctor_alloc_lift",
+           "class_identifier": "LegoCacheSoundEntry",
+           "parameter_identifier": "p_key",
+           "buffer_member": "m_name",
+           "buffer_cast_type": "char*",
+           "element_type": "char",
+           "extent_function": "strlen",
+           "copy_function": "strcpy",
+           "null_members": [
+            "m_sound"
+           ],
+           "caller_result_identifier": "key",
+           "caller_result_type": "char*",
+           "null_argument_position": 0,
+           "iterator_type": "Set100d6b4c::iterator",
+           "iterator_identifier": "it",
+           "container_identifier": "m_set",
+           "find_member": "find",
+           "declaration_indent": "\t",
+           "role": "constructor_body"
+          }
+         },
+         {
+          "op": "replace",
+          "id": "op_lcs_find_key",
+          "from": {
+           "ctx": "f16c9af0f3c96d8690562f01e9b21f4e828b64c7dd0255afaa2ad8ce90c29301",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "b87ad1a3481f23f0ee3ac7eaabdbc8b3ae652810272d984a526da36ff7770d98"
+          },
+          "to": {
+           "ctx": "6ba97622c5a4dbd5872a8e60a1a955035e53c300df66ab712b3f3d1ed50e7774",
+           "line_before": "93dc50a3134f7555c7b3537789a4440bc3d3eaa60e0f260ae74110d20c4807f4",
+           "line_after": "630df0ea22afb45cc44bbcfd21aa8c7f7a5f07f20a1d289df73e9ee10b7259b8"
+          },
+          "removed": {
+           "sha256": "888a50c9ed8f90cace77f303ea6e9feb4813cdd26b7995d44f794e418e2e667b",
+           "size": 136
+          },
+          "gen": {
+           "k": "ctor_alloc_lift",
+           "class_identifier": "LegoCacheSoundEntry",
+           "parameter_identifier": "p_key",
+           "buffer_member": "m_name",
+           "buffer_cast_type": "char*",
+           "element_type": "char",
+           "extent_function": "strlen",
+           "copy_function": "strcpy",
+           "null_members": [
+            "m_sound"
+           ],
+           "caller_result_identifier": "key",
+           "caller_result_type": "char*",
+           "null_argument_position": 0,
+           "iterator_type": "Set100d6b4c::iterator",
+           "iterator_identifier": "it",
+           "container_identifier": "m_set",
+           "find_member": "find",
+           "declaration_indent": "\t",
+           "role": "call_site"
+          }
+         },
+         {
+          "op": "append",
+          "id": "op_lcs_ctor_carrier",
+          "gen": {
+           "k": "seq",
+           "lines": 45,
+           "items": [
+            {
+             "k": "fwd_run",
+             "stem": "MxUnkRecUS",
+             "first": 0,
+             "count": 45,
+             "width": 3,
+             "line": 1
+            }
+           ]
+          }
+         }
+        ]
+       }
+      ],
+      "emission_policy": "donor_private_rendering_only",
+      "rendering_identity_sha256": "e8400b52f9f49b5bbfe411adb99448b4debd1b426b413b68af713a13da9f38de",
+      "authenticity_rationale": "Donor-private rendering of the checked-in header and translation unit by typed operations only: the member signature generator emits one fresh constructor declaration and its qualified inline definition header from a closed typed parameter list, and the constructor body plus its one call site are two renderings of a single closed parameter set whose inverse reconstructs the checked-in statements byte for byte. The donor object is a byte source only and never enters the link; the shipped tree keeps the caller's allocation untouched, which is why no includer is perturbed."
+     }
     }
    ],
    "functions": [
@@ -3119,6 +3429,268 @@
      ],
      "splice_class": "equal_body_strict",
      "donor": "d_d0ab83fa4e6b"
+    },
+    {
+     "mangled": "?FindSoundByKey@LegoCacheSoundManager@@QAEPAVLegoCacheSound@@PBD@Z",
+     "donor": "d_e8400b52f9f4",
+     "splice_class": "retail_exact_reloc_divergent",
+     "expected_seed_length": 282,
+     "expected_donor_length": 281,
+     "expected_linked_span": 288,
+     "expected_seed_line_count": 7,
+     "expected_donor_line_count": 5,
+     "expected_body_sha256": "3607615894b7f9ae176b14ac792631d9d030171acbf9b25ab447d38246adeaa5",
+     "local_set_delta": {
+      "kind": "removed_caller_locals_v1",
+      "expected_seed_debug_size": 173,
+      "expected_donor_debug_size": 161,
+      "removed_records": [
+       {
+        "seed_offset": 157,
+        "size": 12,
+        "record_type": 2,
+        "identifier": "key"
+       }
+      ]
+     },
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x1003d170",
+      "verdict": "MATCH",
+      "length": 281
+     },
+     "retail_relocations": [
+      {
+       "offset": 2,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 12,
+       "type": 6,
+       "addend": 0,
+       "target": "$L66708",
+       "target_section": 36,
+       "target_value": 263,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x1003d277"
+      },
+      {
+       "offset": 20,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 53,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 117,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 9,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 132,
+       "type": 20,
+       "addend": 0,
+       "target": "_strcmpi",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008c110"
+      },
+      {
+       "offset": 154,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 9,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 180,
+       "type": 20,
+       "addend": 0,
+       "target": "_strcmpi",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008c110"
+      },
+      {
+       "offset": 247,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 264,
+       "type": 6,
+       "addend": 0,
+       "target": "$T66891",
+       "target_section": 37,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100e26e0"
+      },
+      {
+       "offset": 269,
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "offset": 277,
+       "type": 20,
+       "addend": 0,
+       "target": "??1LegoCacheSoundEntry@@QAE@XZ",
+       "target_section": 39,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1003d030"
+      }
+     ],
+     "target_source_refactor": {
+      "kind": "constructor_allocation_lift_v1",
+      "selector": "brace_balanced_function_after_marker_v1",
+      "start_marker": "// FUNCTION: LEGO1 0x1003d170",
+      "source_owner_mangled": "?FindSoundByKey@LegoCacheSoundManager@@QAEPAVLegoCacheSound@@PBD@Z",
+      "seed_range_pin": {
+       "baseline_sha256": "69dc94e45b249b22e5a3c0cd630cccb084c7dec0f63884ab5afef8dc2d522bec",
+       "baseline_size": 444,
+       "baseline_line_count": 16,
+       "baseline_significant_token_sha256": "1393aa3a44b9338866ffbc61a68d2bbdbd8dd0c02ddb3b948699e6fed24596b7"
+      },
+      "donor_range_pin": {
+       "baseline_sha256": "02fc981a49b009d540b63d9cdfa11eaa241f38ef3e6d3e5c37b8d4be18d1f34b",
+       "baseline_size": 376,
+       "baseline_line_count": 13,
+       "baseline_significant_token_sha256": "44d04600f07359bc52ded4999ac9bf50f9e9af25b6dcb9cce2c5835a5da6703b"
+      },
+      "operation_ids": [
+       "op_lcs_ctor_declare",
+       "op_lcs_ctor_define",
+       "op_lcs_ctor_body",
+       "op_lcs_find_key"
+      ],
+      "constructor_signature": {
+       "class_identifier": "LegoCacheSoundEntry",
+       "parameters": [
+        {
+         "type": "const char*",
+         "identifier": "p_key"
+        }
+       ]
+      },
+      "semantic_witness": {
+       "source_owner": "LegoCacheSoundManager",
+       "entry_class": "LegoCacheSoundEntry",
+       "buffer_member": "m_name",
+       "buffer_member_type": "const char*",
+       "null_members": [
+        {
+         "identifier": "m_sound",
+         "type": "LegoCacheSound*"
+        }
+       ],
+       "null_argument_position": 0,
+       "baseline_constructor_parameter_identifiers": [
+        "p_sound",
+        "p_name"
+       ],
+       "owner_header": {
+        "path": "LEGO1/lego/legoomni/include/legocachesoundmanager.h",
+        "source_sha256": "0c5840f7e7f9535a7dadc5433faf5a56fc8dc8cedf05969e430337521942078b",
+        "unit_include_range_pin": {
+         "baseline_sha256": "a0163b1978908c222b02f4321787b2d131b006eecd524a9d16d297dbb94e6eb0",
+         "baseline_size": 35,
+         "baseline_line_count": 1,
+         "baseline_significant_token_sha256": "a13e711b85cef1c10dd2b9fae941a0c166d87731753e09e13f244ba18840c271"
+        },
+        "class_body_range_pin": {
+         "baseline_sha256": "e685d63e7789defbe7bb1565a35e486db1b22b11a9e691a21c859c4ae25d079a",
+         "baseline_size": 789,
+         "baseline_line_count": 25,
+         "baseline_significant_token_sha256": "f5ba47b28502e1412677c76977ea89129f218bba5b591c9f49d911c1aae3daae"
+        },
+        "buffer_member_declaration_range_pin": {
+         "baseline_sha256": "76fd8863c2c1f59d942428ad45ec417a30486a73b48c45a77e76a58b2c02c338",
+         "baseline_size": 34,
+         "baseline_line_count": 1,
+         "baseline_significant_token_sha256": "a33f01115888f202b92be0e71f5a6a3bc30c0bd8016f35cda515aada32121284"
+        },
+        "null_member_declaration_range_pins": [
+         {
+          "baseline_sha256": "0b30258f4f91874547282bdbd373aad2e8c3fd0d5bba4ff44fd95b55da1ecc7f",
+          "baseline_size": 34,
+          "baseline_line_count": 1,
+          "baseline_significant_token_sha256": "f186cba06f6a0c121af9ba689f23b416319a4668328f72ba3306c3a95a62c6be"
+         }
+        ],
+        "baseline_constructor_range_pin": {
+         "baseline_sha256": "f3e7f2b28373dda9723e70d1b21aff1047516bafc2a977a87bbeb0e2fd1ab16d",
+         "baseline_size": 104,
+         "baseline_line_count": 1,
+         "baseline_significant_token_sha256": "a5f12618de8f83a3a9f270775b4fc5416b7c514c6106b7b74e71b6eec447041b"
+        },
+        "destructor_body_range_pin": {
+         "baseline_sha256": "0e3ba2f8dd2977993c8a83dbf35cc63563fa7f5d863f39628383562c071c2591",
+         "baseline_size": 90,
+         "baseline_line_count": 4,
+         "baseline_significant_token_sha256": "18471962cb581ad8909423289c9700cbca719eaf81a17bfd1c3261e107cddbe3"
+        }
+       },
+       "target_parameter_range_pin": {
+        "baseline_sha256": "a9d9f7d8141b4fc5f17a031de528146f3d4f06e7fd6a0ebeec89d62a8a1b53e0",
+        "baseline_size": 73,
+        "baseline_line_count": 1,
+        "baseline_significant_token_sha256": "99f18ffec6886d6e74b58e9d08a8def6f28ab88d949fbe6f4e3a44c26698bfa2"
+       }
+      }
+     }
     }
    ],
    "completion": {
@@ -23782,8 +24354,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4908,
-    "accepted_row_identity_sha256": "7de63235feb444e6af6dbe98ad306c8e5eb4315308a9e96a1790013abe1b7607",
+    "exact_raw_1_0_count": 4909,
+    "accepted_row_identity_sha256": "97b5adcf27b584bf8fee55c0e13261666117bc9d738f61b97266b030a531edf5",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

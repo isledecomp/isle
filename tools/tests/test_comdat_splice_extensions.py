@@ -90,6 +90,7 @@ def make_divergent_coff(
     other_symbol=OTHER,
     debug_tail_extra=0,
     debug_label_relocations=False,
+    debug_stream=None,
 ):
     """One classic-i386 COFF with a complete EH COMDAT closure.
 
@@ -105,7 +106,11 @@ def make_divergent_coff(
     local_name = "$T200" if donor else "$T100"
 
     xdata = bytes(bytearray(16))
-    debug_s = bytearray(40 + debug_tail_extra)
+    # debug_stream lets a caller supply a WELL-FORMED CodeView symbol record
+    # stream (the local-set-delta tests need one); the default keeps the
+    # historical opaque blob every other test in this module relies on.
+    debug_s = bytearray(debug_stream if debug_stream is not None
+                        else bytes(40 + debug_tail_extra))
     struct.pack_into("<H", debug_s, 2, 0x0205)
     struct.pack_into("<III", debug_s, 16, size, 2 if donor else 1,
                      size - 2)
@@ -4344,7 +4349,10 @@ class MemberSignatureGeneratorTests(unittest.TestCase):
             byte_identity.validate_source_overlay_generator(generator, "gen")
 
     def test_a7b_rejects_a_kind_outside_the_closed_enum(self):
-        for kind in ("constructor", "method", "operator", "function"):
+        # "constructor" left this list by specification amendment; it is a
+        # member of the closed enum now and carries its own closed schema,
+        # exercised by ConstructorMemberSignatureTests below.
+        for kind in ("method", "operator", "function", "conversion"):
             with self.subTest(kind=kind):
                 with self.assertRaisesRegex(byte_identity.ByteIdentityError,
                                             "closed enum"):
