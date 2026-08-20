@@ -14,7 +14,20 @@ from collections import Counter
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-REPORT = Path("/Users/foxtacles/Projects/isle-build-fin1/LEGO1-report.json")
+REPORT = Path("/Users/foxtacles/Projects/isle-build-lean/LEGO1-report.json")
+
+# The reccmp report scores the /debug link, which carries an 88-byte debug
+# directory at the head of .rdata; the terminal (no-/debug) image does not.
+# Every .rdata row therefore reads 88 bytes high here and must be corrected,
+# or the alignment count is wrong by the whole .rdata population.
+RDATA_BASE = 0x100d0000
+DEBUG_DIRECTORY_BYTES = 88
+
+
+def terminal_delta(retail_va: int, our_va: int) -> int:
+    """(our - retail) as the byte-identical image will see it."""
+    delta = our_va - retail_va
+    return delta - DEBUG_DIRECTORY_BYTES if retail_va >= RDATA_BASE else delta
 
 args = [a for a in sys.argv[1:]]
 save = vs = None
@@ -45,7 +58,7 @@ for r in rows:
     a, b = addr(r, "recomp"), addr(r, "address")
     if a is None or b is None:
         continue
-    pairs[b] = a - b
+    pairs[b] = terminal_delta(b, a)
 
 print(f"{len(pairs)} rows with both addresses")
 c = Counter(pairs.values())

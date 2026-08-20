@@ -13,7 +13,21 @@ from collections import Counter
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-rep = json.loads(Path("/Users/foxtacles/Projects/isle-build-fin1/"
+
+# The reccmp report scores the /debug link, whose .rdata starts 88 bytes later
+# than the terminal image's (an 88-byte debug directory sits at its head), so
+# every .rdata displacement read straight from the report is 88 bytes high.
+RDATA_BASE = 0x100d0000
+DEBUG_DIRECTORY_BYTES = 88
+
+
+def terminal_delta(retail_va: int, our_va: int) -> int:
+    """(our - retail) as the byte-identical image will see it."""
+    delta = our_va - retail_va
+    return delta - DEBUG_DIRECTORY_BYTES if retail_va >= RDATA_BASE else delta
+
+
+rep = json.loads(Path("/Users/foxtacles/Projects/isle-build-lean/"
                       "LEGO1-report.json").read_text())["data"]
 rows = sorted(((int(r["address"], 16), int(r["recomp"], 16),
                 r.get("name", "?"), r.get("matching", 0.0))
@@ -28,7 +42,7 @@ for line in open(HERE / "maplink" / "LEGO1.map", errors="replace"):
 
 bounds = []
 for i, ((ra, oa, na, ma), (rb, ob, nb, mb)) in enumerate(zip(rows, rows[1:])):
-    da, db = oa - ra, ob - rb
+    da, db = terminal_delta(ra, oa), terminal_delta(rb, ob)
     if da != db:
         bounds.append((i, db - da, ra, rb, na, nb,
                        pub.get(oa, "?"), pub.get(ob, "?"), ma, mb))

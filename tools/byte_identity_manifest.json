@@ -23485,6 +23485,44 @@
     "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/video/legophonemepresenter.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "roi",
+   "source": "LEGO1/lego/sources/roi/legolod.cpp",
+   "source_sha256": "abe44094b439581ff8036b8d2dce6793cbcd9e2c2e09ee2eae929c426e5f84a2",
+   "mode": "restore_comdat_group_order",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "group_order": [
+    "??_GLegoLOD@@UAEPAXI@Z",
+    "??1LegoLOD@@UAE@XZ",
+    "?SetLightSupport@ViewROI@@SAEE@Z",
+    "?Read@LegoLOD@@QAEJPAVRenderer@Tgl@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
+    "?Clone@LegoLOD@@QAEPAV1@PAVRenderer@Tgl@@@Z",
+    "?SetColor@LegoLOD@@QAEJMMMM@Z",
+    "?SetTextureInfo@LegoLOD@@QAEJPAVLegoTextureInfo@@@Z",
+    "?UpdateTextureInfo@LegoLOD@@QAEJPAVLegoTextureInfo@@@Z",
+    "?GetTextureInfo@LegoLOD@@QAEJAAPAVLegoTextureInfo@@@Z",
+    "?HasInhPrefix@LegoLOD@@SAEPBD@Z",
+    "?ClearMeshOffset@LegoLOD@@QAEXXZ",
+    "?NumPolys@LegoLOD@@UBEHXZ",
+    "?VTable0x10@LegoLOD@@UAEMXZ"
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Restores the retail-anchored .text COMDAT group order of LEGO1/lego/sources/roi/legolod.cpp (whole-group permutation, body-inert): retail emits NumPolys and VTable0x10 as the object's last two .text COMDATs.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
