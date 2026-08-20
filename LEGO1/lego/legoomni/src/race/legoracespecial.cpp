@@ -446,9 +446,9 @@ inline MxU32 LegoCarRaceActor::CheckPresenterAndActorIntersections(
 						if (co) {
 							assert(co->size() == 2);
 
-							LegoROI* firstROI = (LegoROI*) co->front();
+							roi = (LegoROI*) co->front();
 
-							if (firstROI->Intersect(
+							if (roi->Intersect(
 									p_rayOrigin,
 									p_rayDirection,
 									p_rayLength,
@@ -466,9 +466,9 @@ inline MxU32 LegoCarRaceActor::CheckPresenterAndActorIntersections(
 								}
 							}
 
-							LegoROI* lastROI = (LegoROI*) co->back();
+							roi = (LegoROI*) co->back();
 
-							if (lastROI->Intersect(
+							if (roi->Intersect(
 									p_rayOrigin,
 									p_rayDirection,
 									p_rayLength,

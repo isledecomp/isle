@@ -4865,7 +4865,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/race/legoracespecial.cpp",
-   "source_sha256": "70e033ae64c91e6e0352c2da0d89bb8027918bcaf6580ff482ffec1d6f54b4ac",
+   "source_sha256": "3cc4e1e473a31df68e74540bf6527e7c2f30648a431f52546264d49f93eb0cfd",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4881,52 +4881,44 @@
    },
    "donors": [
     {
-     "id": "d_6d3dd9e3e989",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "declaration_shape",
-      "classes": 1,
-      "functions": 2,
-      "generated_header_sha256": "6d3dd9e3e989656da5af44acb35b5567f490c45f9e577d74f06ff9e7380f0437",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_4b4e3e889d48",
+     "id": "d_fd5ee69dfee7",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "forward_declaration_run",
-      "placement": "suffix",
       "prefix": "MxUnkRecVC",
-      "count": 4,
+      "count": 15,
       "width": 3,
-      "generated_header_sha256": "4b4e3e889d488688604f0e14a093acd7ade1159f44e570d64798c844c3aa698f",
+      "placement": "suffix",
+      "generated_header_sha256": "fd5ee69dfee70ee814c15fe1aa4e4fc66b53b06b94c8c591bd0307bcd5346708",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_05cd9c5c4213",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 2,
+      "seat_prefix": "g_p",
+      "seat_count": 1,
+      "width": 2,
+      "generated_header_sha256": "05cd9c5c421336caa835011efa2fdbcf6760f0156bef58871303f178d24e929a",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
-    {
-     "mangled": "?lower_bound@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@QBE?AVconst_iterator@1@ABQAVLegoPathActor@@@Z",
-     "expected_body_length": 51,
-     "expected_body_sha256": "5adffe7f327d2cb555cecca540ba8bb06fa1b8f89c96814e28cc9ea9fa808704",
-     "expected_changed_offsets": [
-      6,
-      34
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_6d3dd9e3e989"
-    },
     {
      "mangled": "?HandleJump@LegoCarRaceActor@@UAEHPAVLegoPathBoundary@@PAULegoEdge@@@Z",
      "expected_body_length": 1024,
@@ -4957,12 +4949,51 @@
       ]
      ],
      "expected_xdata_rename_offsets": [],
-     "donor": "d_4b4e3e889d48"
+     "donor": "d_fd5ee69dfee7"
+    },
+    {
+     "mangled": "?lower_bound@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@QBE?AVconst_iterator@1@ABQAVLegoPathActor@@@Z",
+     "expected_body_length": 51,
+     "expected_body_sha256": "5adffe7f327d2cb555cecca540ba8bb06fa1b8f89c96814e28cc9ea9fa808704",
+     "expected_changed_offsets": [
+      6,
+      34
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_fd5ee69dfee7"
+    },
+    {
+     "mangled": "?CheckPresenterAndActorIntersections@LegoJetskiRaceActor@@UAEIPAVLegoPathBoundary@@AAVVector3@@1MM1@Z",
+     "expected_body_length": 709,
+     "expected_body_sha256": "b8d1ea0caabf54b3d5456e6640c10c6dd164f5d53df5432416eae13c289a849a",
+     "expected_changed_offsets": [
+      390
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_donor_section_number": 404,
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60
+     ],
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       692,
+       "T"
+      ]
+     ],
+     "donor": "d_05cd9c5c4213"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/race/legoracespecial.cpp from generated carrier states over the rendered current source.",
+    "reason": "Closes 3 row(s) in LEGO1/lego/legoomni/src/race/legoracespecial.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    },
    "group_order": [
@@ -23528,8 +23559,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4907,
-    "accepted_row_identity_sha256": "b6f7c75004cbfc093cb621092c8cf273a2ade9b8819cf84b124f5a10e27787a3",
+    "exact_raw_1_0_count": 4908,
+    "accepted_row_identity_sha256": "7de63235feb444e6af6dbe98ad306c8e5eb4315308a9e96a1790013abe1b7607",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -36063,9 +36094,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/race/legoracespecial.cpp",
-    "clean": "7308d4147160bb6a5260954b30568342155bf95c0555ed5b5148de7440f8f114",
-    "effective": "70e033ae64c91e6e0352c2da0d89bb8027918bcaf6580ff482ffec1d6f54b4ac",
-    "size": 14636,
+    "clean": "6615d9416feafb1c6880662daaecb91acd0f3014b632f9eccc43afb20eef2e17",
+    "effective": "3cc4e1e473a31df68e74540bf6527e7c2f30648a431f52546264d49f93eb0cfd",
+    "size": 15755,
     "ops": [
      {
       "op": "insert",
@@ -36342,6 +36373,28 @@
           }
          ],
          "line": 5
+        }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "anchor": {
+       "ctx": "433ab41d71fc23518f2ccf1a2b970e26898c2488bbb49461c9383ac2e4f1a41f",
+       "a": 0,
+       "at": "end"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 55,
+       "items": [
+        {
+         "k": "fwd_run",
+         "stem": "MxUnkRecHZ",
+         "first": 0,
+         "count": 55,
+         "line": 1,
+         "width": 3
         }
        ]
       }

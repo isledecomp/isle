@@ -20,7 +20,7 @@ class SourceOverlayIntegrationTests(unittest.TestCase):
         self.assertEqual(len(normalized["outputs"]), 165)
         self.assertEqual(
             sum(len(output["operations"]) for output in normalized["outputs"]),
-            415,
+            416,
         )
         self.assertEqual(
             len(normalized["graph"]["generated_translation_units"]), 13
