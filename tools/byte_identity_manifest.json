@@ -24354,8 +24354,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4909,
-    "accepted_row_identity_sha256": "97b5adcf27b584bf8fee55c0e13261666117bc9d738f61b97266b030a531edf5",
+    "exact_raw_1_0_count": 4910,
+    "accepted_row_identity_sha256": "8ca198626abfc5d982e6ed0fec3d62e25bb13ac74f5bf8e17fc7b99e32eef6eb",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -45636,9 +45636,9 @@
    },
    {
     "path": "LEGO1/omni/src/video/mxbitmap.cpp",
-    "clean": "c2b233d093bf77ff93a8270d3ca84868544e40cc9bfa91f81b105382b656f31c",
-    "effective": "8b158e3565064f5b5b0def3cf0b7d77a1a68aa101748fbb7bbda5ecb33bf060a",
-    "size": 9761,
+    "clean": "cc905e2594e979f55f67d4b15855a0e5eefbe792e7e2fbf4fb500a42877f4c35",
+    "effective": "513d13b5e350475d67d05467a5d9907d214bfa28486f9f7065cda6494a39f30b",
+    "size": 10939,
     "ops": [
      {
       "op": "insert",
@@ -45728,7 +45728,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 12,
+       "lines": 53,
        "items": [
         {
          "k": "lines",
@@ -45752,6 +45752,36 @@
           "Record"
          ],
          "line": 9
+        },
+        {
+         "k": "fwd_run",
+         "stem": "MxUnkRecVD",
+         "first": 0,
+         "count": 40,
+         "width": 3,
+         "line": 13
+        }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "anchor": {
+       "ctx": "17873416cd1b447b1e35e3e2a9eec4f97a9a8c81ed052ccc458d066102769849",
+       "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+       "line_after": "477859defbe313a9f18f4034f941cc90e0a1986cf7fcfc2d090e2172f9b5173d"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 17,
+       "items": [
+        {
+         "k": "fwd_run",
+         "stem": "MxUnkRecVE",
+         "first": 0,
+         "count": 16,
+         "width": 3,
+         "line": 1
         }
        ]
       }
