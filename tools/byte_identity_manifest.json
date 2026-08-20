@@ -24354,8 +24354,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4910,
-    "accepted_row_identity_sha256": "8ca198626abfc5d982e6ed0fec3d62e25bb13ac74f5bf8e17fc7b99e32eef6eb",
+    "exact_raw_1_0_count": 4911,
+    "accepted_row_identity_sha256": "604f8214a85c9c021c73e74b5ab1631b242889d028ea83a1589619307118707a",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -46291,9 +46291,9 @@
    },
    {
     "path": "LEGO1/omni/src/video/mxstillpresenter.cpp",
-    "clean": "3a44fb5622d472bb18248330a6c090c1eb2bccb35bec494e8e636d8c7c5d75bf",
-    "effective": "58234cff279671936cdbc48bd4172d145e9a4c932b92a15dd33243ff6f509265",
-    "size": 6612,
+    "clean": "a6fa00f4064e3ddacc08da941e949d334862a79627b70ce9c94745b1243ae33e",
+    "effective": "16c0abaf500e00b1e23892615ff3bc356995a2b6226c3beb1f8bb7f2fe58a7ef",
+    "size": 6669,
     "ops": [
      {
       "op": "insert",
