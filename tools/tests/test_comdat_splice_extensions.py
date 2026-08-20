@@ -1644,6 +1644,9 @@ class CrossTuInstructionHybridResizeTests(unittest.TestCase):
             if function.get("splice_class")
             == byte_identity.CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
         ]
+        if not matches:
+            self.skipTest(
+                "no cross-TU instruction hybrid is live in the manifest")
         self.assertEqual(len(matches), 1)
         unit, function = matches[0]
         donor = next(
@@ -2506,16 +2509,24 @@ class SameTuInstructionHybridResizeTests(unittest.TestCase):
     def test_live_manifest_preflight_rejects_unbound_and_ordinary_reuse(self):
         original = json.loads(
             (TOOLS / "byte_identity_manifest.json").read_text())
-        unit_index = next(
-            index for index, unit in enumerate(original["translation_units"])
-            if any(function.get("splice_class")
-                   == byte_identity.SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
-                   for function in unit.get("functions", [])))
-        function = next(
-            item for item in original["translation_units"][unit_index][
-                "functions"]
+        # "must be bound exactly once" is the census rule for the MIXED
+        # declaration carrier, a recipe kind reserved to this class.  A
+        # same-TU hybrid built from stacked forward-run carriers is covered
+        # by test_stacked_carrier_hybrid_rejects_reuse instead, because that
+        # kind is also an ordinary equal-body donor and may go unbound.
+        def carrier_kinds(unit, function):
+            by_id = {donor["id"]: donor["recipe"].get("kind")
+                     for donor in unit.get("donors", [])}
+            return {by_id.get(function.get("donor")),
+                    by_id.get(function.get("instruction_donor"))}
+        unit_index, function = next(
+            (index, item)
+            for index, unit in enumerate(original["translation_units"])
+            for item in unit.get("functions", [])
             if item.get("splice_class")
-            == byte_identity.SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS)
+            == byte_identity.SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
+            and carrier_kinds(unit, item)
+            == {byte_identity.SAME_TU_DECLARATION_CARRIER_RECIPE})
         mutations = []
         unbound = copy.deepcopy(original)
         unbound["translation_units"][unit_index]["functions"] = [
@@ -2542,6 +2553,114 @@ class SameTuInstructionHybridResizeTests(unittest.TestCase):
                         byte_identity.ByteIdentityError, message):
                     byte_identity.validate_manifest(
                         manifest_path, ROOT, build_dir)
+
+    def test_stacked_carrier_hybrid_rejects_reuse(self):
+        """A stacked carrier bound to a hybrid may hold no other role."""
+        bound = ["d_aaaaaaaaaaaa", "d_bbbbbbbbbbbb"]
+        byte_identity.require_stacked_carrier_hybrid_bindings(
+            bound, bound[:1], bound[1:], "fixture")
+        for primary, nonprimary, message in (
+            (bound, bound, "ordinary, repeated, or other non-primary use"),
+            (bound[:1] + bound, bound[1:], "ordinary, repeated"),
+            ([], bound[1:], "ordinary, repeated"),
+        ):
+            with self.subTest(message=message), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                byte_identity.require_stacked_carrier_hybrid_bindings(
+                    bound, primary, nonprimary, "fixture")
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "only one same-TU hybrid role"):
+            byte_identity.require_stacked_carrier_hybrid_bindings(
+                bound + bound[:1], bound[:1] + bound, bound[1:], "fixture")
+
+    def test_live_manifest_stacked_carrier_hybrid_is_axis_disjoint(self):
+        """The live stacked-carrier pair differs only in its run count."""
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        found = 0
+        for unit in manifest["translation_units"]:
+            by_id = {donor["id"]: donor["recipe"]
+                     for donor in unit.get("donors", [])}
+            for function in unit.get("functions", []):
+                if (function.get("splice_class")
+                        != byte_identity
+                        .SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
+                    continue
+                target = by_id[function["donor"]]
+                instruction = by_id[function["instruction_donor"]]
+                self.assertEqual(target["kind"], instruction["kind"])
+                self.assertIn(
+                    target["kind"],
+                    byte_identity.SAME_TU_HYBRID_CARRIER_RECIPE_KINDS)
+                shared, run_axis = (
+                    byte_identity.SAME_TU_HYBRID_CARRIER_AXES[
+                        target["kind"]])
+                for name in shared:
+                    self.assertEqual(target[name], instruction[name], name)
+                self.assertNotEqual(target[run_axis], instruction[run_axis])
+                if target["kind"] == "forward_run_with_shape":
+                    found += 1
+                    proof = function["same_tu_source_identity"]
+                    self.assertEqual(
+                        proof["carrier_layout"], "forward_run_placement_v1")
+                    self.assertEqual(
+                        proof["kind"],
+                        byte_identity
+                        .SAME_TU_TEMPLATE_INSTANTIATION_IDENTITY_KIND)
+        self.assertGreaterEqual(found, 1)
+
+    def test_forward_run_placement_complement_is_structural(self):
+        """The seed must survive verbatim under one seated generated run."""
+        seed = b'#include "a.h"\n\nvoid f() {}\n'
+        run = b"class MxUnkRecVC000;\nclass MxUnkRecVC001;\n"
+        for donor in (run + seed,
+                      b"\n".join(seed.split(b"\n")
+                                 + run.rstrip(b"\n").split(b"\n"))):
+            self.assertEqual(
+                byte_identity.require_forward_run_placement_complement(
+                    seed, donor, "fixture"), 2)
+        for donor, message in (
+            (seed, "carries no seated run"),
+            (run + seed.replace(b"void f", b"void g"),
+             "not the seed plus one seated run"),
+            (run + seed + b"int stray;\n",
+             "not the seed plus one seated run"),
+        ):
+            with self.subTest(message=message), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                byte_identity.require_forward_run_placement_complement(
+                    seed, donor, "fixture")
+
+    def test_template_instantiation_identity_requires_a_template_owner(self):
+        """The whole-TU selector is confined to template instantiations."""
+        pin = {"baseline_sha256": hashlib.sha256(b"x").hexdigest(),
+               "baseline_size": 1, "baseline_line_count": 0,
+               "baseline_significant_token_sha256":
+                   hashlib.sha256(b"x").hexdigest()}
+        proof = {
+            "kind": byte_identity
+            .SAME_TU_TEMPLATE_INSTANTIATION_IDENTITY_KIND,
+            "selector": byte_identity
+            .SAME_TU_TEMPLATE_INSTANTIATION_SELECTOR,
+            "carrier_layout": "forward_run_placement_v1",
+            "source_owner_mangled": "?erase@?$_Tree@PBD@@QAEXXZ",
+            "range_pin": pin,
+        }
+        byte_identity.validate_same_tu_source_identity_proof(
+            proof, "fixture")
+        for mutation, message in (
+            ({"source_owner_mangled": "?Ordinary@Class@@QAEXXZ"},
+             "not a template instantiation"),
+            ({"carrier_layout": "invented_layout_v1"},
+             "not a closed carrier layout"),
+            ({"selector": "brace_balanced_function_physical_line_v1"},
+             "selector differs"),
+        ):
+            with self.subTest(message=message), self.assertRaisesRegex(
+                    byte_identity.ByteIdentityError, message):
+                byte_identity.validate_same_tu_source_identity_proof(
+                    {**proof, **mutation}, "fixture")
+
 
     def test_live_manifest_pins_one_range_eleven_relocs_and_right_image(self):
         manifest = json.loads(

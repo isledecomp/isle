@@ -1510,7 +1510,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/main/legomain.cpp",
-   "source_sha256": "6aa2be8d518f02e58f0daa1f9382276ef335e180e5ac218d0593e1c4cf54ae74",
+   "source_sha256": "b471e98b412d06d84178cf6446e4d398f360bbf990aaffb0586cf5b3bfb7d905",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -1526,74 +1526,105 @@
    },
    "donors": [
     {
-     "id": "d_8ac6b4ca0987",
+     "id": "d_018836eac997",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "declaration_shape",
-      "classes": 2,
-      "functions": 2,
-      "generated_header_sha256": "8ac6b4ca098707dc7bedc9b71b551721555a9190abf0b72a3c05f21b9418da2d",
+      "kind": "forward_run_with_shape",
+      "prefix": "MxUnkRecVC",
+      "count": 97,
+      "width": 3,
+      "classes": 7,
+      "functions": 70,
+      "placement": "suffix",
+      "generated_header_sha256": "018836eac9974c0e259c5a2cf35ad3479f4d10fb5e7677a4eccd43193d366d1f",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: a forward-declaration run seated at the stated placement plus a declaration shape rendered as a force-include; it contributes no code, data, strings, vtables, or linker directives."
      }
     },
     {
-     "id": "d_aa8cbbfdb45d",
+     "id": "d_8c1ed42ea30a",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "forward_declaration_run",
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 3,
+      "seat_prefix": "g_p",
+      "seat_count": 7,
+      "width": 2,
+      "generated_header_sha256": "8c1ed42ea30a6aa39d17ce79928954761b4bc02f5d5879b8f568edc9fc0b2133",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_34a49559a5a2",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_run_with_shape",
       "placement": "suffix",
       "prefix": "MxUnkRecVC",
-      "count": 7,
+      "count": 124,
       "width": 3,
-      "generated_header_sha256": "aa8cbbfdb45ddb848b44334040ef71cc44d6c2b982525bc5c08858d0d032242f",
+      "classes": 10,
+      "functions": 50,
+      "generated_header_sha256": "34a49559a5a2bfa84bc74b0cf4ae19dff00b8a769d19b850061d0c0cb27970f0",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated forward-declaration run appended after the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
+      "authenticity_rationale": "Framework-generated forward-declaration run seated in the translation unit plus a force-included declaration shape; both halves emit no code, data, strings, vtables, or linker directives."
      }
     },
     {
-     "id": "d_5ac567aa39eb",
+     "id": "d_71ae851dbcdf",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "forward_declaration_run",
+      "kind": "forward_run_with_shape",
       "placement": "suffix",
       "prefix": "MxUnkRecVC",
-      "count": 311,
+      "count": 60,
       "width": 3,
-      "generated_header_sha256": "5ac567aa39eb2d817519cb6667d02d9c9b8ea8f08f4ebc06c77233605bdd4ccd",
+      "classes": 10,
+      "functions": 50,
+      "generated_header_sha256": "71ae851dbcdf6eaeeb94f334e5a753483baa2b4a0d89df7ffabb99935d1be24f",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated forward-declaration run appended after the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_b06a38d253e5",
-     "status": "compiler_generated_current_source",
-     "authenticity": "checked_in_source_only",
-     "recipe": {
-      "kind": "clean_current_source_cross_tu",
-      "donor_source": "LEGO1/lego/sources/misc/legocontainer.cpp",
-      "source_sha256": "b06a38d253e51a1e7c3e08037a02d374b424b7b833e1c0e600dbac112bc750ce",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "unmodified_checked_in_translation_unit_only",
-      "authenticity_rationale": "Checked-in translation unit compiled without a private rendering or declaration carrier through its own manifest-selected command lane; only a pinned instruction from the exact same mangled COMDAT may be consumed."
+      "authenticity_rationale": "Framework-generated forward-declaration run seated in the translation unit plus a force-included declaration shape; both halves emit no code, data, strings, vtables, or linker directives."
      }
     }
    ],
    "functions": [
+    {
+     "mangled": "?Create@LegoOmni@@UAEJAAVMxOmniCreateParam@@@Z",
+     "expected_body_sha256": "87770c6e3e5401e62c6049749a6a92f3809c43a10bae847a9ccb87fd069b44c5",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 2620,
+     "expected_donor_length": 2648,
+     "expected_linked_span": 2656,
+     "donor": "d_018836eac997"
+    },
+    {
+     "mangled": "??1?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAE@XZ",
+     "expected_body_length": 196,
+     "expected_body_sha256": "9c345cdbf40d9328871a42c7375face5a8711a49c3819607d4e1c26b55a4e877",
+     "expected_changed_offsets": [
+      44
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_8c1ed42ea30a"
+    },
     {
      "mangled": "??1?$list@U?$pair@PAVLegoTextureInfo@@H@@V?$allocator@U?$pair@PAVLegoTextureInfo@@H@@@@@@QAE@XZ",
      "expected_body_length": 100,
@@ -1603,46 +1634,197 @@
       62
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_8ac6b4ca0987"
+     "donor": "d_8c1ed42ea30a"
     },
     {
-     "mangled": "?Create@LegoOmni@@UAEJAAVMxOmniCreateParam@@@Z",
-     "expected_body_sha256": "87770c6e3e5401e62c6049749a6a92f3809c43a10bae847a9ccb87fd069b44c5",
-     "splice_class": "same_slot_resize",
-     "expected_seed_length": 2616,
-     "expected_donor_length": 2648,
-     "expected_linked_span": 2656,
-     "donor": "d_aa8cbbfdb45d"
+     "mangled": "?AddWorld@LegoOmni@@QAEXPAVLegoWorld@@@Z",
+     "expected_body_length": 144,
+     "expected_body_sha256": "4fea9f21b77fcaf921a4698625526ba3566d3a93136d42fa8d53a074225b7473",
+     "expected_changed_offsets": [
+      31,
+      36,
+      73,
+      86,
+      90,
+      94,
+      99,
+      100,
+      101,
+      102,
+      103,
+      106,
+      107,
+      108,
+      117
+     ],
+     "splice_class": "equal_body_eh_reloc_layout",
+     "expected_relocation_moves": [
+      [
+       102,
+       104
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36
+     ],
+     "donor": "d_8c1ed42ea30a"
+    },
+    {
+     "mangled": "?FindWorld@LegoOmni@@QAEPAVLegoWorld@@ABVMxAtomId@@H@Z",
+     "expected_body_length": 270,
+     "expected_body_sha256": "b1ca00e70209169869819e210deb7b1d2374d212430edf32eb1e80e1bb1e5f45",
+     "expected_changed_offsets": [
+      73,
+      76,
+      153,
+      161,
+      166
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       253,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60
+     ],
+     "donor": "d_8c1ed42ea30a"
+    },
+    {
+     "mangled": "?FindROI@LegoOmni@@QAEPAVLegoROI@@PBD@Z",
+     "expected_body_length": 124,
+     "expected_body_sha256": "781872ae4ce4f915bd7d5be6d1e7108ad2be4d1ba0a680774188b416f43ef004",
+     "expected_changed_offsets": [
+      16,
+      20,
+      26,
+      29,
+      33,
+      38,
+      44,
+      73,
+      98
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_8c1ed42ea30a"
+    },
+    {
+     "mangled": "?NotifyCurrentEntity@LegoOmni@@UAEXABVMxNotificationParam@@@Z",
+     "expected_body_length": 28,
+     "expected_body_sha256": "357f5e245b7e1e6897ebc4ea11c59a3a9f07cca524609006c068c5e461b9dd94",
+     "expected_changed_offsets": [
+      1,
+      4,
+      8,
+      11,
+      12
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_8c1ed42ea30a"
+    },
+    {
+     "mangled": "?Start@LegoOmni@@UAEJPAVMxDSAction@@@Z",
+     "expected_body_length": 60,
+     "expected_body_sha256": "b4fa49c5377b375a63eaf8880316a5ad4cda9101a60ed58509a15a4345debaac",
+     "expected_changed_offsets": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      16,
+      18,
+      36,
+      37,
+      38,
+      39,
+      40,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      54
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_8c1ed42ea30a"
     },
     {
      "mangled": "?erase@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAE?AViterator@1@V21@@Z",
-     "donor": "d_5ac567aa39eb",
-     "instruction_donor": "d_b06a38d253e5",
-     "splice_class": "retail_exact_cross_tu_instruction_hybrid_resize",
-     "expected_seed_length": 1103,
+     "donor": "d_34a49559a5a2",
+     "instruction_donor": "d_71ae851dbcdf",
+     "splice_class": "retail_exact_same_tu_instruction_hybrid_resize",
+     "expected_seed_length": 1096,
      "expected_donor_length": 1102,
      "expected_linked_span": 1104,
+     "expected_seed_section_number": 130,
+     "expected_seed_section_count": 287,
+     "expected_seed_relocation_count": 16,
+     "expected_seed_line_count": 80,
+     "expected_seed_body_sha256": "967ef93fb97c19b47ebf82b150b37f92b7ddf1b63079f6c32bfc17ca5063e7be",
+     "expected_seed_metadata_sha256": "d2aaea26e0aae21941b2384dc7d8567b57e7724e48536769024de09b9c5d0283",
+     "expected_seed_function_count": 81,
+     "expected_seed_comdat_count": 120,
      "expected_target_donor_section_number": 130,
      "expected_target_donor_section_count": 287,
      "expected_target_donor_relocation_count": 16,
      "expected_target_donor_line_count": 80,
      "expected_target_donor_body_sha256": "c600bf89a868f041db33c3ca1c2b1ee9718c8a1a1be0c1bf1ac893e85ddd46ca",
-     "expected_instruction_donor_length": 1104,
-     "expected_instruction_donor_section_number": 31,
-     "expected_instruction_donor_section_count": 52,
+     "expected_target_donor_metadata_sha256": "651930041deb6d9bebd1c7b63d12b90b28d6b93cfb7f39d1f38c8c761b8f0a5a",
+     "expected_target_donor_function_count": 81,
+     "expected_target_donor_comdat_count": 120,
+     "expected_instruction_donor_length": 1102,
+     "expected_instruction_donor_section_number": 130,
+     "expected_instruction_donor_section_count": 287,
      "expected_instruction_donor_relocation_count": 16,
      "expected_instruction_donor_line_count": 80,
-     "expected_instruction_donor_body_sha256": "18aa8de3a8bd6ef6fdfa9e7393066ea40d0c2e01cd53522aa4c4b77b751ccd14",
+     "expected_instruction_donor_body_sha256": "382e9214086c2a70d9121404a797a92e9883d47d973c5c4836aebc676aca3f3f",
+     "expected_instruction_donor_metadata_sha256": "651930041deb6d9bebd1c7b63d12b90b28d6b93cfb7f39d1f38c8c761b8f0a5a",
+     "expected_instruction_donor_function_count": 81,
+     "expected_instruction_donor_comdat_count": 120,
+     "expected_donor_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
      "expected_hybrid_body_sha256": "851f0e9a57984afaf02ecf6d1e52c5ad0daae945e12b8cd820e58759e2c6787a",
+     "same_tu_source_identity": {
+      "kind": "same_tu_template_instantiation_source_identity_v1",
+      "selector": "declaration_carrier_seat_complement_v1",
+      "carrier_layout": "forward_run_placement_v1",
+      "source_owner_mangled": "?erase@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAE?AViterator@1@V21@@Z",
+      "range_pin": {
+       "baseline_sha256": "b471e98b412d06d84178cf6446e4d398f360bbf990aaffb0586cf5b3bfb7d905",
+       "baseline_size": 19726,
+       "baseline_line_count": 869,
+       "baseline_significant_token_sha256": "38edc3cdafb292647f3344b1eb8f458ee3957e01669aa5498793041dd8fb8f44"
+      }
+     },
      "instruction_ranges": [
       {
-       "kind": "cross_tu_same_mangled_complete_x86_instruction_v1",
+       "kind": "same_tu_source_identical_complete_x86_instruction_v1",
        "target_start": 151,
        "target_end": 155,
        "target_bytes": "3b4c2410",
        "target_sha256": "8a64c6665b692fc845511d9a0970094d9126a2643b73e17929e2cc0fb53d2ee8",
-       "instruction_donor_start": 145,
-       "instruction_donor_end": 149,
+       "instruction_donor_start": 151,
+       "instruction_donor_end": 155,
        "instruction_donor_bytes": "394c2410",
        "instruction_donor_sha256": "93ec95ce15ae7d64dc6682d844a672c9add8fe01439c4383a5720c83f1f46f18"
       }
@@ -1653,6 +1835,7 @@
       "verdict": "MATCH",
       "length": 1102
      },
+     "retail_image_target": "lego1",
      "retail_relocations": [
       {
        "offset": 22,
@@ -1835,7 +2018,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 3 rows in LEGO1/lego/legoomni/src/main/legomain.cpp: two from generated carrier states, and one from a fresh target-TU resize donor whose sole non-retail instruction is replaced by the pinned complete instruction from a clean current-source same-mangled COMDAT in legocontainer.cpp.",
+    "reason": "Closes 8 row(s) in LEGO1/lego/legoomni/src/main/legomain.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    },
    "group_order": [
@@ -12591,7 +12774,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legocharactermanager.cpp",
-   "source_sha256": "3ef8f161d9b10ab7f8d26a5d283c36875d169610de8526ddf80081bc17e4012b",
+   "source_sha256": "f35ed96abbdad0078279eea1dc920f9385fde327e1ceec2698c39d427874aabc",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -12607,92 +12790,59 @@
    },
    "donors": [
     {
-     "id": "d_b9bf52241ac5",
+     "id": "d_6c0f08bd52a4",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "forward_declaration_run",
-      "prefix": "MxUnkRecVA",
-      "count": 66,
-      "width": 3,
-      "placement": "prefix",
-      "generated_header_sha256": "b9bf52241ac58acf2ee5e0ece531f10f330b5fcb1c3eb02eb37c128e015b8cae",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_193ae7e1cdcd",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "forward_declaration_run",
+      "kind": "forward_run_with_shape",
       "prefix": "MxUnkRecVC",
-      "count": 93,
+      "count": 33,
       "width": 3,
+      "classes": 8,
+      "functions": 16,
       "placement": "suffix",
-      "generated_header_sha256": "193ae7e1cdcdb0c05b7c5c0a7536e438a7978e16864fdc960f014759b74c9bed",
+      "generated_header_sha256": "6c0f08bd52a452a1ca17ecb2bc0ac9cb8f0a24ba8a12c679b24379b448fdafca",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: a forward-declaration run seated at the stated placement plus a declaration shape rendered as a force-include; it contributes no code, data, strings, vtables, or linker directives."
      }
     },
     {
-     "id": "d_79c209d1d442",
+     "id": "d_08e2ed256d35",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "extern_run_pair",
-      "header_prefix": "g_h",
-      "header_count": 0,
-      "seat_prefix": "g_p",
-      "seat_count": 14,
-      "width": 2,
-      "generated_header_sha256": "79c209d1d442ce7abafee35e993b12f117e48e6f99ba2cc933d2a1b247e529af",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_3063600532b3",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "forward_declaration_run",
-      "prefix": "MxUnkRecVB",
-      "count": 36,
+      "kind": "forward_run_with_shape",
+      "prefix": "MxUnkRecVC",
+      "count": 16,
       "width": 3,
-      "placement": "after_includes",
-      "generated_header_sha256": "3063600532b30aad8b086bd0bbcbae6799e685454c0eeead459f7b39867a6469",
+      "classes": 9,
+      "functions": 90,
+      "placement": "suffix",
+      "generated_header_sha256": "08e2ed256d35de6b1340251784090cf9e93987e069c70a345d885c111d80c7bc",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: a forward-declaration run seated at the stated placement plus a declaration shape rendered as a force-include; it contributes no code, data, strings, vtables, or linker directives."
      }
     },
     {
-     "id": "d_25f1c91cdff5",
+     "id": "d_0032b4128a1b",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "extern_pair_with_shape",
       "header_prefix": "g_h",
-      "header_count": 15,
+      "header_count": 5,
       "seat_prefix": "g_p",
-      "seat_count": 22,
+      "seat_count": 6,
       "width": 2,
-      "classes": 8,
-      "functions": 45,
-      "generated_header_sha256": "25f1c91cdff519fa19f223b6f67c3f8975a1aa87d0dab13f0cf28431464dc037",
+      "classes": 3,
+      "functions": 9,
+      "generated_header_sha256": "0032b4128a1bacf75a09a0f5726d7520944da4ed96d0858ab6118f201fa08f36",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -12701,99 +12851,250 @@
      }
     },
     {
-     "id": "d_c5c9c748309d",
+     "id": "d_27342945adb3",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "forward_declaration_run",
-      "prefix": "MxUnkRecVB",
-      "count": 52,
+      "kind": "forward_run_with_shape",
+      "prefix": "MxUnkRecVC",
+      "count": 3,
       "width": 3,
-      "placement": "after_includes",
-      "generated_header_sha256": "c5c9c748309d9610bacc90734936cdef64f63cf78b235d36ac5c061e1d460f25",
+      "classes": 6,
+      "functions": 6,
+      "placement": "suffix",
+      "generated_header_sha256": "27342945adb31d8b8a5dafaf00777205154443b4f95c87b013701f7bfd52fb96",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: a forward-declaration run seated at the stated placement plus a declaration shape rendered as a force-include; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_00246b28928e",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_run_with_shape",
+      "prefix": "MxUnkRecVC",
+      "count": 33,
+      "width": 3,
+      "classes": 5,
+      "functions": 10,
+      "placement": "suffix",
+      "generated_header_sha256": "00246b28928ee4d8e74fe1af52545c8f2bbe5b0fb4eb9e62113ac206aecb1f07",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: a forward-declaration run seated at the stated placement plus a declaration shape rendered as a force-include; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_de2d378c876f",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_pair_with_shape",
+      "header_prefix": "g_h",
+      "header_count": 4,
+      "seat_prefix": "g_p",
+      "seat_count": 12,
+      "width": 2,
+      "classes": 10,
+      "functions": 10,
+      "generated_header_sha256": "de2d378c876fcf3651bf06ddd05318973d802be46d84080850432d23de27658b",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: two extern-declaration runs at the translation unit's two record seats plus a declaration shape force-included. None of the three halves contributes code, data, strings, vtables or linker directives; the count lattice is 2-D, so the seats and the shape can each fix a different byte."
+     }
+    },
+    {
+     "id": "d_5f372cda6df4",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 2,
+      "seat_prefix": "g_p",
+      "seat_count": 14,
+      "width": 2,
+      "generated_header_sha256": "5f372cda6df4056d40284d3a7f0fd84b07fe59604bcf4af44b121a1c62c20a52",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
    "functions": [
     {
-     "mangled": "?Exists@LegoCharacterManager@@QAEEPBD@Z",
-     "expected_body_length": 148,
-     "expected_body_sha256": "f3b39d7bd983a995687d261e07c6d518bb898c9436165b3315b065998547c155",
-     "expected_changed_offsets": [
-      25,
-      63
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_b9bf52241ac5"
+     "mangled": "?erase@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@QAE?AViterator@1@V21@@Z",
+     "expected_body_sha256": "a38ab886edb249227cbac1e79799db5104e2bc8dbb2c1a510fd8b944e156ea81",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1099,
+     "expected_donor_length": 1096,
+     "expected_linked_span": 1104,
+     "donor": "d_6c0f08bd52a4"
     },
     {
-     "mangled": "?ReleaseActor@LegoCharacterManager@@QAEXPBD@Z",
-     "expected_body_length": 375,
-     "expected_body_sha256": "6db6198aa5c26d715f3fb721f744ceb006ca67d663d893845583cfbc3657ed23",
-     "expected_changed_offsets": [
-      118,
-      119,
-      120,
-      121,
-      122,
-      123
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_b9bf52241ac5"
-    },
-    {
-     "mangled": "?FindChildROI@LegoCharacterManager@@AAEPAVLegoROI@@PAV2@PBD@Z",
-     "expected_body_length": 84,
-     "expected_body_sha256": "bc99328eef3912247545cda2ccb4eeff1f5b992e8ae9bdd1d68bfda17c81006d",
-     "expected_changed_offsets": [
-      22
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_b9bf52241ac5"
-    },
-    {
-     "mangled": "?SwitchSound@LegoCharacterManager@@QAEEPAVLegoROI@@@Z",
-     "expected_body_length": 47,
-     "expected_body_sha256": "04b476fc7978c99ba0b079ec380b265bc974e4bdb135d54691b8e48c9d4a665a",
-     "expected_changed_offsets": [
-      24,
-      30
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_b9bf52241ac5"
-    },
-    {
-     "mangled": "?insert@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@QAE?AU?$pair@Viterator@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@H@@ABU?$pair@QADPAULegoCharacter@@@@@Z",
-     "expected_body_length": 653,
-     "expected_body_sha256": "a9c8dd098e6cd40096d5dcca229b491439a76094425b822feecdee77fede5191",
-     "expected_changed_offsets": [
-      24,
-      69,
-      298,
-      356
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_b9bf52241ac5"
+     "mangled": "?GetActorROI@LegoCharacterManager@@QAEPAVLegoROI@@PBDE@Z",
+     "expected_body_sha256": "a574d9690310e6f37896d160f1e68625f56e297ffbb21012f033ef2d8339e5d5",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 825,
+     "expected_donor_length": 822,
+     "expected_linked_span": 832,
+     "donor": "d_08e2ed256d35"
     },
     {
      "mangled": "?_Dec@iterator@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@QAEXXZ",
-     "expected_body_length": 75,
      "expected_body_sha256": "cedee5098e198259efb8f9ad4626b5785972e53c9810cbdebef880b62c53a9cd",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 71,
+     "expected_donor_length": 75,
+     "expected_linked_span": 80,
+     "donor": "d_0032b4128a1b"
+    },
+    {
+     "mangled": "?CreateActorROI@LegoCharacterManager@@AAEPAVLegoROI@@PBD@Z",
+     "expected_body_length": 2294,
+     "expected_body_sha256": "dbf9956fc4e864f0620dfe54157a4630fb4243958e532a794683d7d9bffa6f46",
      "expected_changed_offsets": [
-      25,
-      27,
-      35,
-      38,
-      46,
-      51
+      325,
+      326,
+      327,
+      328,
+      329,
+      330,
+      331,
+      332,
+      333,
+      334,
+      335
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       2272,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60
+     ],
+     "donor": "d_27342945adb3"
+    },
+    {
+     "mangled": "?UpdateBoundingSphereAndBox@LegoCharacterManager@@QAEJPAVLegoROI@@@Z",
+     "expected_body_sha256": "be91be6742210e52467e6e9eb5dd70a570ae442d0193c84217349246dad34e1f",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 515,
+     "expected_donor_length": 519,
+     "expected_linked_span": 528,
+     "donor": "d_00246b28928e"
+    },
+    {
+     "mangled": "?Write@LegoCharacterManager@@QAEJPAVLegoStorage@@@Z",
+     "expected_body_length": 216,
+     "expected_body_sha256": "5f77a33da6b22c227ffce7556b88d4b541f3b0804cf26c21868cac46195dbdbb",
+     "expected_changed_offsets": [
+      9,
+      15,
+      19,
+      26,
+      30,
+      44,
+      48,
+      62,
+      66,
+      80,
+      84,
+      94,
+      98,
+      108,
+      112,
+      122,
+      129,
+      139,
+      146,
+      156,
+      163,
+      173,
+      180,
+      188,
+      194
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_193ae7e1cdcd"
+     "donor": "d_de2d378c876f"
+    },
+    {
+     "mangled": "?Read@LegoCharacterManager@@QAEJPAVLegoStorage@@@Z",
+     "expected_body_length": 216,
+     "expected_body_sha256": "6b7eb257cb2372d90e22d1961b7ec4e4e0a7edd1e8b182bc976acfbfde3d1bcc",
+     "expected_changed_offsets": [
+      9,
+      15,
+      19,
+      26,
+      30,
+      44,
+      48,
+      62,
+      66,
+      80,
+      84,
+      94,
+      98,
+      108,
+      112,
+      122,
+      129,
+      139,
+      146,
+      156,
+      163,
+      173,
+      180,
+      188,
+      194
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_de2d378c876f"
+    },
+    {
+     "mangled": "?_Insert@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QADPAULegoCharacter@@@@@Z",
+     "expected_body_length": 653,
+     "expected_body_sha256": "c375569da4acefcbcb114dc21a36d0974a2639fcd85248dd0f638fb009c17cca",
+     "expected_changed_offsets": [
+      86,
+      144,
+      238,
+      417
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_de2d378c876f"
+    },
+    {
+     "mangled": "?GetRefCount@LegoCharacterManager@@QAEIPAVLegoROI@@@Z",
+     "expected_body_length": 108,
+     "expected_body_sha256": "0385f1338479d711fe7a7df0f6f1ede9dcff5affb27afc32250d8428565316d0",
+     "expected_changed_offsets": [
+      84
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_de2d378c876f"
     },
     {
      "mangled": "?ReleaseAutoROI@LegoCharacterManager@@QAEXPAVLegoROI@@@Z",
@@ -12803,17 +13104,22 @@
       19
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_193ae7e1cdcd"
+     "donor": "d_de2d378c876f"
     },
     {
-     "mangled": "??1?$list@PAVROI@@V?$allocator@PAVROI@@@@@@QAE@XZ",
-     "expected_body_length": 100,
-     "expected_body_sha256": "6bb8b587649799c8cbae1debfa7bc57028a3fe57d7e8f6f82d55db2e042410eb",
+     "mangled": "?GetActorInfo@LegoCharacterManager@@QAEPAULegoActorInfo@@PBD@Z",
+     "expected_body_length": 78,
+     "expected_body_sha256": "04595214e95573bcbbc880f295703b28378b95ca506c81b2ab7453980a5be6cc",
      "expected_changed_offsets": [
-      19
+      3,
+      11,
+      14,
+      16,
+      31,
+      38
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_79c209d1d442"
+     "donor": "d_de2d378c876f"
     },
     {
      "mangled": "?SwitchVariant@LegoCharacterManager@@QAEEPAVLegoROI@@@Z",
@@ -12827,76 +13133,67 @@
       409
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_79c209d1d442"
+     "donor": "d_de2d378c876f"
     },
     {
-     "mangled": "?GetActorROI@LegoCharacterManager@@QAEPAVLegoROI@@PBDE@Z",
-     "expected_body_length": 822,
-     "expected_body_sha256": "a574d9690310e6f37896d160f1e68625f56e297ffbb21012f033ef2d8339e5d5",
+     "mangled": "?SwitchSound@LegoCharacterManager@@QAEEPAVLegoROI@@@Z",
+     "expected_body_length": 47,
+     "expected_body_sha256": "04b476fc7978c99ba0b079ec380b265bc974e4bdb135d54691b8e48c9d4a665a",
      "expected_changed_offsets": [
-      162,
-      357,
-      360,
-      362,
-      363,
-      371,
-      373,
-      402,
-      407,
-      408,
-      409,
-      432,
-      433,
-      451,
-      464,
-      474,
-      475,
-      530,
-      531
-     ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
-      [
-       12,
-       "L"
-      ],
-      [
-       779,
-       "T"
-      ]
-     ],
-     "expected_xdata_rename_offsets": [
-      8,
-      36,
-      44
-     ],
-     "donor": "d_3063600532b3"
-    },
-    {
-     "mangled": "?erase@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@QAE?AViterator@1@V21@@Z",
-     "expected_body_sha256": "a38ab886edb249227cbac1e79799db5104e2bc8dbb2c1a510fd8b944e156ea81",
-     "splice_class": "same_slot_resize",
-     "expected_seed_length": 1104,
-     "expected_donor_length": 1096,
-     "expected_linked_span": 1104,
-     "donor": "d_25f1c91cdff5"
-    },
-    {
-     "mangled": "?_Insert@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QADPAULegoCharacter@@@@@Z",
-     "expected_body_length": 653,
-     "expected_body_sha256": "c375569da4acefcbcb114dc21a36d0974a2639fcd85248dd0f638fb009c17cca",
-     "expected_changed_offsets": [
-      86,
-      238,
-      417
+      24,
+      30
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_c5c9c748309d"
+     "donor": "d_de2d378c876f"
+    },
+    {
+     "mangled": "??1?$list@PAVROI@@V?$allocator@PAVROI@@@@@@QAE@XZ",
+     "expected_body_length": 100,
+     "expected_body_sha256": "6bb8b587649799c8cbae1debfa7bc57028a3fe57d7e8f6f82d55db2e042410eb",
+     "expected_changed_offsets": [
+      19,
+      62
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_5f372cda6df4"
+    },
+    {
+     "mangled": "?_Rrotate@?$_Tree@PADU?$pair@QADPAULegoCharacter@@@@U_Kfn@?$map@PADPAULegoCharacter@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@ULegoCharacterComparator@@V?$allocator@PAULegoCharacter@@@@@@IAEXPAU_Node@1@@Z",
+     "expected_body_length": 88,
+     "expected_body_sha256": "12f6bc4f2d3ea85e33b83e518a3d9d8afc1da7d5128626a0cf4e25648432a6ac",
+     "expected_changed_offsets": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      6,
+      8,
+      11,
+      13,
+      24,
+      27,
+      30,
+      39,
+      43,
+      49,
+      53,
+      55,
+      58,
+      65,
+      67,
+      70,
+      77,
+      79,
+      82
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_5f372cda6df4"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 12 row(s) in LEGO1/lego/legoomni/src/common/legocharactermanager.cpp from generated declaration-only carrier states over the rendered current source.",
+    "reason": "Closes 15 row(s) in LEGO1/lego/legoomni/src/common/legocharactermanager.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -12919,14 +13216,14 @@
    },
    "donors": [
     {
-     "id": "d_791f203f9a1a",
+     "id": "d_b4929852163b",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "pad_shape",
-      "classes": 6,
-      "functions_per_class": 6,
-      "generated_header_sha256": "791f203f9a1a41201a2b2dd0a43af58c02857b6e711388b769bdeaffdd11aaef",
+      "classes": 8,
+      "functions_per_class": 4,
+      "generated_header_sha256": "b4929852163b00e79d9c20a8cb6ce469d96029766f7f3517cc0410db6c050127",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -12959,7 +13256,7 @@
       281
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_791f203f9a1a"
+     "donor": "d_b4929852163b"
     },
     {
      "mangled": "?_Insert@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QBDPAVLegoTextureInfo@@@@@Z",
@@ -12968,7 +13265,7 @@
      "expected_seed_length": 681,
      "expected_donor_length": 679,
      "expected_linked_span": 688,
-     "donor": "d_791f203f9a1a"
+     "donor": "d_b4929852163b"
     }
    ],
    "completion": {
@@ -13001,14 +13298,14 @@
    },
    "donors": [
     {
-     "id": "d_c9f525be0840",
+     "id": "d_6eeec9ae3dfd",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "pad_shape",
-      "classes": 7,
-      "functions_per_class": 2,
-      "generated_header_sha256": "c9f525be0840b1f77f7adec23b6df9860f9ba14572ef9d159179567900f7f4d9",
+      "classes": 6,
+      "functions_per_class": 8,
+      "generated_header_sha256": "6eeec9ae3dfdd8fbba1ad9b57b4981c428659cc4799785fa75f87a9f2a548f50",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -13019,52 +13316,39 @@
    ],
    "functions": [
     {
-     "mangled": "?SpheresIntersect@@YAEABVBoundingSphere@@0@Z",
-     "expected_body_length": 67,
-     "expected_body_sha256": "969f1da00c9a2961006985b68c3d43b114652722041669bc64e995c74073d1e8",
+     "mangled": "?CalculateViewFromAnimation@@YAXPAVLegoAnimPresenter@@@Z",
+     "expected_body_length": 686,
+     "expected_body_sha256": "a8b1a80613ad7c178a0a94f70544a9ca3ca0ae200be41c32ea7847f8992469ee",
      "expected_changed_offsets": [
-      14,
-      20,
-      23,
-      26
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_c9f525be0840"
-    },
-    {
-     "mangled": "?WriteDefaultTexture@@YAXPAVLegoStorage@@PBD@Z",
-     "expected_body_length": 854,
-     "expected_body_sha256": "2c8213ea09297974fd2bdbd1d5dcaf520ef96fba1484d1bb497824c3a5accb57",
-     "expected_changed_offsets": [
-      64,
-      128,
-      466,
-      472
+      24,
+      48,
+      51,
+      54,
+      56,
+      74,
+      101,
+      108,
+      222,
+      225
      ],
      "splice_class": "equal_body_eh_structural_local",
      "expected_code_renames": [
       [
-       12,
-       "L"
+       488,
+       "T"
       ],
       [
-       837,
+       511,
        "T"
       ]
      ],
-     "expected_xdata_rename_offsets": [
-      8,
-      36,
-      44,
-      52,
-      60
-     ],
-     "donor": "d_c9f525be0840"
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_6eeec9ae3dfd"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/common/legoutils.cpp from generated declaration-only carrier states over the rendered current source.",
+    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/common/legoutils.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -13087,19 +13371,19 @@
    },
    "donors": [
     {
-     "id": "d_9954d4a6e17e",
+     "id": "d_b9e308c27cda",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "pad_shape",
-      "classes": 5,
-      "functions_per_class": 6,
-      "generated_header_sha256": "9954d4a6e17ea5ad88e68fc8631c32e16b51ce815d41ccdec1d13a5bdf88900d",
+      "kind": "declaration_shape",
+      "classes": 9,
+      "functions": 45,
+      "generated_header_sha256": "b9e308c27cda94453543f0b9d9f01de8f78a24ed4f7b9fcc00b1d7f5c55371a1",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
@@ -13112,7 +13396,9 @@
       1105,
       1169,
       1385,
-      1458
+      1458,
+      1704,
+      1708
      ],
      "splice_class": "equal_body_eh_structural_local",
      "expected_code_renames": [
@@ -13136,21 +13422,12 @@
       84,
       92
      ],
-     "donor": "d_9954d4a6e17e"
-    },
-    {
-     "mangled": "?CreateROI@LegoModelPresenter@@QAEJPAVMxDSChunk@@PAVLegoEntity@@EPAVLegoWorld@@@Z",
-     "expected_body_sha256": "4a70997cf352d5afdb11783849a8385717e0c090bf6e087f476bc354d620e38f",
-     "splice_class": "same_slot_resize",
-     "expected_seed_length": 222,
-     "expected_donor_length": 220,
-     "expected_linked_span": 224,
-     "donor": "d_9954d4a6e17e"
+     "donor": "d_b9e308c27cda"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp from generated declaration-only carrier states over the rendered current source.",
+    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -13173,36 +13450,110 @@
    },
    "donors": [
     {
-     "id": "d_d0ab83fa4e6b",
+     "id": "d_c5a04b2cc129",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "pad_shape",
-      "classes": 5,
-      "functions_per_class": 4,
-      "generated_header_sha256": "d0ab83fa4e6bfe5c904556e3f15001fc4ac845297e90c3ec5f56e887b04069eb",
+      "kind": "extern_pair_with_shape",
+      "header_prefix": "g_h",
+      "header_count": 4,
+      "seat_prefix": "g_p",
+      "seat_count": 12,
+      "width": 2,
+      "classes": 2,
+      "functions": 16,
+      "generated_header_sha256": "c5a04b2cc129d94eacdaf707108681cbc0aaac27a0e146ebc7db5eaf781012a9",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: two extern-declaration runs at the translation unit's two record seats plus a declaration shape force-included. None of the three halves contributes code, data, strings, vtables or linker directives; the count lattice is 2-D, so the seats and the shape can each fix a different byte."
+     }
+    },
+    {
+     "id": "d_691637b9b349",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "prefix": "MxUnkRecVA",
+      "count": 5,
+      "width": 3,
+      "placement": "prefix",
+      "generated_header_sha256": "691637b9b349ac321ef15bb887e4c168b5d7c6fb1548e7c64471de58a5d9503f",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
    "functions": [
     {
+     "mangled": "?Store@LegoPartPresenter@@QAEXXZ",
+     "expected_body_length": 577,
+     "expected_body_sha256": "e89769cd0f6f167212ff6b6022a9a47be5de69ec1ff704273b97da1083f06c01",
+     "expected_changed_offsets": [
+      396,
+      399,
+      402
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       560,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60,
+      68,
+      76,
+      84,
+      92
+     ],
+     "donor": "d_c5a04b2cc129"
+    },
+    {
      "mangled": "?Read@LegoPartPresenter@@QAEJAAVMxDSChunk@@@Z",
-     "donor": "d_d0ab83fa4e6b",
+     "donor": "d_691637b9b349",
      "splice_class": "retail_exact_instruction_mosaic",
      "expected_section_number": 14,
      "expected_section_count": 163,
      "expected_body_length": 2633,
      "expected_relocation_count": 111,
      "expected_line_count": 81,
-     "expected_seed_body_sha256": "58a7295c9cdca19eba9290024fc846d798d65d96a773f69a0f8144ab3347978b",
-     "expected_donor_body_sha256": "bc2b6f3fc5b314cb06ad0be66a4734772cdd7088abcdeef26f4b596e70d9f7c0",
+     "expected_seed_body_sha256": "d30b1e9f23a01e9bdc3c3709c9fa929d0d346d0d39e740a6ec679dee770bdea4",
+     "expected_donor_body_sha256": "948d88e2a89082301293da68da78eceed7910f5391783befd172b8a871470955",
      "expected_body_sha256": "306ae0e7a0a4637507670b630ec045246a3c64852b2aa31b189b5bd07208f9ca",
      "instruction_ranges": [
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 667,
+       "end": 673,
+       "seed_bytes": "390d00000000",
+       "seed_sha256": "3c2646ffd44e559446031ffe19ac3a7f57eb02892a8aad645b1bd56491eef4e5",
+       "donor_bytes": "3b0d00000000",
+       "donor_sha256": "ffc46294cb0d1ba26016dec449dfb2e5e773f9c9a0aa12e9cebd724e0fb9f040"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 731,
+       "end": 737,
+       "seed_bytes": "390d00000000",
+       "seed_sha256": "3c2646ffd44e559446031ffe19ac3a7f57eb02892a8aad645b1bd56491eef4e5",
+       "donor_bytes": "3b0d00000000",
+       "donor_sha256": "ffc46294cb0d1ba26016dec449dfb2e5e773f9c9a0aa12e9cebd724e0fb9f040"
+      },
       {
        "kind": "same_offset_complete_x86_instruction_v1",
        "start": 1143,
@@ -13223,21 +13574,192 @@
       },
       {
        "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 2397,
-       "end": 2400,
-       "seed_bytes": "3945a0",
-       "seed_sha256": "19277adc09b4c0df325d1cb8e3f7096ef955d81f424b2c9b489ab7d17e6e0896",
-       "donor_bytes": "3b45a0",
-       "donor_sha256": "c1bb4c5e97200848ce12a7594c32e661104be8afb2df72e339e45332cde2706d"
+       "start": 1448,
+       "end": 1451,
+       "seed_bytes": "3b459c",
+       "seed_sha256": "9f23a724d901a2a5db6784abebfeb4a525a4159a9c11ace5593b9f34cbab1717",
+       "donor_bytes": "39459c",
+       "donor_sha256": "690c897fb3e852d180c976e6ba2e3027f578f7e59f8803f596584d902c055980"
       },
       {
        "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 2400,
-       "end": 2406,
-       "seed_bytes": "0f8754fdffff",
-       "seed_sha256": "799ddf021dd2f9e4c90cd1d39d2f9f0f65894f997f78410dfe248db3cb26ce9e",
-       "donor_bytes": "0f8254fdffff",
-       "donor_sha256": "9fdd059884d05803140b74b0a64d7592da7dc235ee21a82dd03efa80cea0da65"
+       "start": 1451,
+       "end": 1457,
+       "seed_bytes": "0f82effaffff",
+       "seed_sha256": "e4f6b392ffef76476542b45f326bc3ef313fbfb3be2b1c457052da8d09ac0f70",
+       "donor_bytes": "0f87effaffff",
+       "donor_sha256": "54796ddeed5a933cc36708be61a1f2c473dcd11391d0e072382ca13bf49bc282"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 1545,
+       "end": 1547,
+       "seed_bytes": "8bc6",
+       "seed_sha256": "a877e825fd2694f4366f111f399f658ab47e47fcb1e179501160d0a4dc61c935",
+       "donor_bytes": "8bce",
+       "donor_sha256": "516d98b8f7e112c7ab40cf0397e0c0231765f39a38298f43fccc3f60a7f096e1"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 1671,
+       "end": 1673,
+       "seed_bytes": "33c0",
+       "seed_sha256": "72fb562c9d90dfcc008e5b0a391395fd2a244bb6bc231e2621a8ec6860d21fa3",
+       "donor_bytes": "33c9",
+       "donor_sha256": "6b3abe7b30d64eef0441e29f68b0eabf17526b476fa2495d67f1a901e3e73ec5"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 1673,
+       "end": 1676,
+       "seed_bytes": "8b4dc0",
+       "seed_sha256": "541d6f71610a416116b96988a83744323a2c2a954d542551c3672481bfb32d46",
+       "donor_bytes": "8b45c0",
+       "donor_sha256": "33045f60775c1bcf62d91980d10fc66dc5c5e67067de54cef721cc715eaaa4e8"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 1682,
+       "end": 1685,
+       "seed_bytes": "894150",
+       "seed_sha256": "1f228aa463b2b1bc99c55f712a1579237efb0f6531d9e06543db55a498c5a5fc",
+       "donor_bytes": "894850",
+       "donor_sha256": "3b2fc6fa3e3e3c2e90e50f86a1421706d7b21cc946e7a894cdc3a230d39ed623"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 1685,
+       "end": 1688,
+       "seed_bytes": "8d45a0",
+       "seed_sha256": "30847b70707e353e676e74ccade0ec9bd86a4dd6cae85efa9d380e7d611be45e",
+       "donor_bytes": "8d4da0",
+       "donor_sha256": "a335b5ce850fc5f7573f782ba6fa6eb8ea4026999b5d7dd97b2947abd3eaebea"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 1688,
+       "end": 1689,
+       "seed_bytes": "50",
+       "seed_sha256": "5c62e091b8c0565f1bafad0dad5934276143ae2ccef7a5381e8ada5b1a8d26d2",
+       "donor_bytes": "51",
+       "donor_sha256": "4ae81572f06e1b88fd5ced7a1a000945432e83e1551e6f721ee9c00b8cc33260"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 2292,
+       "end": 2295,
+       "seed_bytes": "8b4dc0",
+       "seed_sha256": "541d6f71610a416116b96988a83744323a2c2a954d542551c3672481bfb32d46",
+       "donor_bytes": "8b45c0",
+       "donor_sha256": "33045f60775c1bcf62d91980d10fc66dc5c5e67067de54cef721cc715eaaa4e8"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 2297,
+       "end": 2300,
+       "seed_bytes": "8b5950",
+       "seed_sha256": "b85483cc7f40f7fc428c921cf5508955c4c924ea2f06b0abaa6eacc575615714",
+       "donor_bytes": "8b7050",
+       "donor_sha256": "637eabc6803b8c329eef3120ac1f787a7f1115cd6d3656eef5290e541b49f07f"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 2304,
+       "end": 2307,
+       "seed_bytes": "8b7314",
+       "seed_sha256": "6547e3b0ccf00779118055ddb49169e36d80ba64d467593e2264f839588e8d31",
+       "donor_bytes": "8b5e14",
+       "donor_sha256": "b3a9e31a70027107fdc17474a7c8e9968343adf23c3038a196bd44ce0ad6f5be"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 2340,
+       "end": 2343,
+       "seed_bytes": "897704",
+       "seed_sha256": "86403b152354a831cf49676ed21de24002722ccb977f14ad7ad56d3cd7850c14",
+       "donor_bytes": "895f04",
+       "donor_sha256": "a3f5367caf5dd490c7a4ae2057bb5bbcc5ccc414fe94bdd2c153cf9f58a50327"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 2354,
+       "end": 2356,
+       "seed_bytes": "85f6",
+       "seed_sha256": "8ab1132e0f39300a69111599262ce5db7c26e24b7eb3cc9ae866e97c67ff49bd",
+       "donor_bytes": "85db",
+       "donor_sha256": "d86cc2c9a5f786ea67d140d62c02cb1f9f227c637412c5c7fe0791c7c13a0ddf"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 2358,
+       "end": 2361,
+       "seed_bytes": "894608",
+       "seed_sha256": "995a716ace44c577c9fcd179dea3bf872b080863bcf849b56d4dc9d370b63bb9",
+       "donor_bytes": "894308",
+       "donor_sha256": "e78b77f60f9db7683037303ae4f1c81c02dcf56f6ad17a62cdfade7499809dc9"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 2363,
+       "end": 2366,
+       "seed_bytes": "894310",
+       "seed_sha256": "7e297793a82b65b8df36367f9eac736fb877a780a5b7c4434b91dd41d86dd0d2",
+       "donor_bytes": "894610",
+       "donor_sha256": "d2de32eddb3799151cd9f3dab33e481e29dae99586221f67a31ee9a5d3352649"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 2369,
+       "end": 2372,
+       "seed_bytes": "894314",
+       "seed_sha256": "4ed5408c1c854ff7a48952d5b9347afc36fac844b2c38e840978417da5a8246f",
+       "donor_bytes": "894614",
+       "donor_sha256": "2185aa1d2fb434c557a1a955fb35755ceabc54a788fdada91c6de63551cf9d6f"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 2373,
+       "end": 2376,
+       "seed_bytes": "ff4308",
+       "seed_sha256": "11fa63af711f3eba657af6d67724005ffd891a2d3452b09ac682d309d9a32ced",
+       "donor_bytes": "ff4608",
+       "donor_sha256": "25e2e980411fb72c8a18dfcd1a2a587db0ca1f8141906fffcdda699f5bcbd349"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 2437,
+       "end": 2440,
+       "seed_bytes": "8b4dc0",
+       "seed_sha256": "541d6f71610a416116b96988a83744323a2c2a954d542551c3672481bfb32d46",
+       "donor_bytes": "8b45c0",
+       "donor_sha256": "33045f60775c1bcf62d91980d10fc66dc5c5e67067de54cef721cc715eaaa4e8"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 2440,
+       "end": 2443,
+       "seed_bytes": "8b4950",
+       "seed_sha256": "d0567cc61b11470740962846bca932b0d035fda34697eef3b7e74b455c371970",
+       "donor_bytes": "8b4850",
+       "donor_sha256": "8436362c549631632227473df37a2122ce63704e44e25cfab41e7e2376e4e77a"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 2453,
+       "end": 2456,
+       "seed_bytes": "8b4dc0",
+       "seed_sha256": "541d6f71610a416116b96988a83744323a2c2a954d542551c3672481bfb32d46",
+       "donor_bytes": "8b45c0",
+       "donor_sha256": "33045f60775c1bcf62d91980d10fc66dc5c5e67067de54cef721cc715eaaa4e8"
+      },
+      {
+       "kind": "same_offset_complete_x86_instruction_v1",
+       "start": 2456,
+       "end": 2463,
+       "seed_bytes": "c7415000000000",
+       "seed_sha256": "171477b20087ff4623e4a5fb5e690fa00132a87fe48c1e6cb7ecee54dcd6b886",
+       "donor_bytes": "c7405000000000",
+       "donor_sha256": "14c7f3dc98994db9a57bc5f975bdf66e3414a27c4eddff59c1c0857b8249da01"
       }
      ],
      "retail_oracle": {
@@ -13262,7 +13784,7 @@
        "offset": 12,
        "type": 6,
        "addend": 0,
-       "target": "$L64263",
+       "target": "$L64261",
        "target_section": 14,
        "target_value": 2615,
        "target_type": 0,
@@ -14439,7 +14961,7 @@
        "offset": 2616,
        "type": 6,
        "addend": 0,
-       "target": "$T65212",
+       "target": "$T65210",
        "target_section": 15,
        "target_value": 0,
        "target_type": 0,
@@ -14473,7 +14995,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes rows in LEGO1/lego/legoomni/src/video/legopartpresenter.cpp from generated declaration-only carrier states over the rendered current source.",
+    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/video/legopartpresenter.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    },
    "group_order": [
@@ -15748,110 +16270,6 @@
     "reason": "Closes 22 row(s) in LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
-  },
-  {
-   "target": "roi",
-   "source": "LEGO1/lego/sources/roi/legolod.cpp",
-   "source_sha256": "abe44094b439581ff8036b8d2dce6793cbcd9e2c2e09ee2eae929c426e5f84a2",
-   "mode": "compose_equal_body_comdat",
-   "command_policy": {
-    "required_flags": [
-     "/Zi",
-     "-c"
-    ],
-    "forbidden_prefixes": [
-     "/GL",
-     "-GL",
-     "/Z7",
-     "-Z7"
-    ]
-   },
-   "donors": [
-    {
-     "id": "d_537fce2fd771",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "declaration_shape",
-      "classes": 4,
-      "functions": 12,
-      "generated_header_sha256": "537fce2fd771a7dbdef3ed6e8664cb2eb1c7830576a1dbefe49c2bce88a01455",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    }
-   ],
-   "functions": [
-    {
-     "mangled": "?SetTextureInfo@LegoLOD@@QAEJPAVLegoTextureInfo@@@Z",
-     "expected_body_length": 105,
-     "expected_body_sha256": "7dc0252fcfb40760254959c87db77a00afbad077c317a4fc9c6415e88ee9548d",
-     "expected_changed_offsets": [
-      28,
-      29,
-      30,
-      31,
-      32,
-      33,
-      34,
-      35,
-      36,
-      37,
-      38
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_537fce2fd771"
-    },
-    {
-     "mangled": "?GetTextureInfo@LegoLOD@@QAEJAAPAVLegoTextureInfo@@@Z",
-     "expected_body_length": 83,
-     "expected_body_sha256": "2c3ee7be5e356558bbc7d769316c76aad0e424bb13e975bc83bc0f3e2ff03d48",
-     "expected_changed_offsets": [
-      28,
-      29,
-      30,
-      31,
-      32,
-      33,
-      34,
-      35,
-      36,
-      37,
-      38
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_537fce2fd771"
-    }
-   ],
-   "completion": {
-    "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 2 row(s) in LEGO1/lego/sources/roi/legolod.cpp from generated declaration-only carrier states over the rendered current source.",
-    "may_replace_compiler_output": true
-   },
-   "group_order": [
-    "??1LODObject@@UAE@XZ",
-    "??_GLODObject@@UAEPAXI@Z",
-    "?AveragePolyArea@ViewLOD@@UBENXZ",
-    "?NVerts@ViewLOD@@UBEHXZ",
-    "??_GViewLOD@@UAEPAXI@Z",
-    "??0LegoLOD@@QAE@PAVRenderer@Tgl@@@Z",
-    "??_GLegoLOD@@UAEPAXI@Z",
-    "??1LegoLOD@@UAE@XZ",
-    "?SetLightSupport@ViewROI@@SAEE@Z",
-    "?Read@LegoLOD@@QAEJPAVRenderer@Tgl@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
-    "?Clone@LegoLOD@@QAEPAV1@PAVRenderer@Tgl@@@Z",
-    "?SetColor@LegoLOD@@QAEJMMMM@Z",
-    "?SetTextureInfo@LegoLOD@@QAEJPAVLegoTextureInfo@@@Z",
-    "?UpdateTextureInfo@LegoLOD@@QAEJPAVLegoTextureInfo@@@Z",
-    "?GetTextureInfo@LegoLOD@@QAEJAAPAVLegoTextureInfo@@@Z",
-    "?HasInhPrefix@LegoLOD@@SAEPBD@Z",
-    "?ClearMeshOffset@LegoLOD@@QAEXXZ",
-    "?NumPolys@LegoLOD@@UBEHXZ",
-    "?VTable0x10@LegoLOD@@UAEMXZ"
-   ]
   },
   {
    "target": "lego1",
@@ -20824,21 +21242,24 @@
      }
     },
     {
-     "id": "d_79cee655282a",
+     "id": "d_43c3d39f582e",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "forward_declaration_run",
-      "prefix": "MxUnkRecVC",
-      "count": 13,
-      "width": 3,
-      "placement": "suffix",
-      "generated_header_sha256": "79cee655282af0764786ea4d8bd6fc99eef37ed67bb5fd83cb318af87252c82e",
+      "kind": "extern_pair_with_shape",
+      "header_prefix": "g_h",
+      "header_count": 4,
+      "seat_prefix": "g_p",
+      "seat_count": 8,
+      "width": 2,
+      "classes": 3,
+      "functions": 3,
+      "generated_header_sha256": "43c3d39f582e3ab4069b0db7b58b218a874a640c10c973e3968a6e70888008fb",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: two extern-declaration runs at the translation unit's two record seats plus a declaration shape force-included. None of the three halves contributes code, data, strings, vtables or linker directives; the count lattice is 2-D, so the seats and the shape can each fix a different byte."
      }
     }
    ],
@@ -20853,48 +21274,84 @@
      "donor": "d_489aa284a388"
     },
     {
-     "mangled": "??1ViewROI@@UAE@XZ",
-     "expected_body_length": 133,
-     "expected_body_sha256": "9ed85b6bacbb164c9099c05174ffc52ad1a9ac34d1ec2d1f9581a04b4af2fece",
+     "mangled": "?FindChildROI@LegoROI@@QAEPAV1@PBDPAV1@@Z",
+     "expected_body_length": 182,
+     "expected_body_sha256": "3f1333c85ca7ce0b7b26973fdb2f897f1fc1dd152bee8c8efc1b016e2f37211a",
      "expected_changed_offsets": [
+      130
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_43c3d39f582e"
+    },
+    {
+     "mangled": "?ApplyChildAnimationTransformation@LegoROI@@QAEJPAVLegoTreeNode@@ABVMatrix4@@JPAV1@@Z",
+     "expected_body_length": 223,
+     "expected_body_sha256": "9c258eb61f75fa70ab5d8652273e3223d257557966c698fcb2ad455e9ed89aab",
+     "expected_changed_offsets": [
+      8,
+      9,
+      11,
+      14,
+      16,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
       40,
       41,
       42,
       43,
       44,
       45,
-      47,
-      51,
+      46,
+      53,
       55,
-      57
+      67,
+      74,
+      78,
+      113,
+      118,
+      121,
+      124,
+      126,
+      150,
+      153,
+      158,
+      163,
+      166,
+      170,
+      177,
+      182,
+      191,
+      197
      ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
+     "splice_class": "equal_body_eh_reloc_layout",
+     "expected_relocation_moves": [
       [
-       12,
-       "L"
-      ],
-      [
-       116,
-       "T"
+       34,
+       27
       ]
      ],
-     "expected_xdata_rename_offsets": [
-      8,
-      36
-     ],
-     "donor": "d_79cee655282a"
-    },
-    {
-     "mangled": "?FindChildROI@LegoROI@@QAEPAV1@PBDPAV1@@Z",
-     "expected_body_length": 182,
-     "expected_body_sha256": "3f1333c85ca7ce0b7b26973fdb2f897f1fc1dd152bee8c8efc1b016e2f37211a",
-     "expected_changed_offsets": [
-      79,
-      130
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_79cee655282a"
+     "expected_xdata_rename_offsets": [],
+     "donor": "d_43c3d39f582e"
     },
     {
      "mangled": "?Intersect@LegoROI@@QAEKAAVVector3@@0MM0E@Z",
@@ -20986,7 +21443,7 @@
       ]
      ],
      "expected_xdata_rename_offsets": [],
-     "donor": "d_79cee655282a"
+     "donor": "d_43c3d39f582e"
     }
    ],
    "completion": {
@@ -21635,7 +22092,7 @@
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/worlds/score.cpp",
    "source_sha256": "8350480349c789ceaeac6f92480594512a6d0c15a04358a3bdc5657692520971",
-   "mode": "restore_comdat_group_order",
+   "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
      "/Zi",
@@ -21648,6 +22105,46 @@
      "-Z7"
     ]
    },
+   "donors": [
+    {
+     "id": "d_bd4f5c3defa3",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 2,
+      "functions": 6,
+      "generated_header_sha256": "bd4f5c3defa361043a8f0919dba6c3b514dc3db9aed412bb25a6936dc0926885",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?FillArea@Score@@QAEXHHF@Z",
+     "expected_body_length": 275,
+     "expected_body_sha256": "2a46f734c2fdc3f8e96a2c6931921d679717e9653f3b5e738e952c7a95f51552",
+     "expected_changed_offsets": [
+      184,
+      199,
+      223,
+      249,
+      256,
+      262
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_bd4f5c3defa3"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/worlds/score.cpp from generated declaration-only carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   },
    "group_order": [
     [
      "??_C@_0N@KINJ@CarRaceState?$AA@",
@@ -21655,12 +22152,7 @@
      "??_C@_0BF@FDGL@TowTrackMissionState?$AA@",
      "??_C@_0BC@HCJA@PizzaMissionState?$AA@"
     ]
-   ],
-   "completion": {
-    "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Restores the retail-anchored .data string-literal COMDAT order of LEGO1/lego/legoomni/src/worlds/score.cpp (whole-group permutation, body-inert).",
-    "may_replace_compiler_output": true
-   }
+   ]
   },
   {
    "target": "omni",
@@ -21982,6 +22474,66 @@
     "reason": "Closes 4 row(s) in LEGO1/lego/legoomni/src/actors/act2actor.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/video/legophonemepresenter.cpp",
+   "source_sha256": "9d058f2d1708cb8506cbd0b7932910b7e869cbb0edd2b9981563d626485cc395",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_2f8f2752868e",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 7,
+      "seat_prefix": "g_p",
+      "seat_count": 12,
+      "width": 2,
+      "generated_header_sha256": "2f8f2752868ea0a8047a4d21bbe82a966368e06218499e687ccd638bbc4f9277",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?LoadFrame@LegoPhonemePresenter@@UAEXPAVMxStreamChunk@@@Z",
+     "expected_body_length": 61,
+     "expected_body_sha256": "319acac87019b1572756f2e9c263327393818b8d37b4b9e12e22d843725cb75b",
+     "expected_changed_offsets": [
+      9,
+      16,
+      23,
+      26,
+      33
+     ],
+     "splice_class": "equal_body_strict",
+     "donor": "d_2f8f2752868e"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/video/legophonemepresenter.cpp from generated declaration-only carrier states over the rendered current source.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -22056,8 +22608,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4904,
-    "accepted_row_identity_sha256": "a198e41a8ce30fc33967e76c7d5ba5ea2ab6bc3e1820471a45ad48a09d548977",
+    "exact_raw_1_0_count": 4905,
+    "accepted_row_identity_sha256": "56cc3923a53c3fbfa84c6bd82331ab9f1f7ee20d253076499e7718108e772242",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -26020,8 +26572,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/common/legocharactermanager.cpp",
     "clean": "0acb7af321c2bbcec086a2d3394bcf2d0f79989030fa29acfd16c2302f62ccf6",
-    "effective": "3ef8f161d9b10ab7f8d26a5d283c36875d169610de8526ddf80081bc17e4012b",
-    "size": 29317,
+    "effective": "f35ed96abbdad0078279eea1dc920f9385fde327e1ceec2698c39d427874aabc",
+    "size": 29254,
     "ops": [
      {
       "op": "insert",
@@ -26234,19 +26786,12 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 7,
+       "lines": 4,
        "items": [
         {
          "k": "lines",
          "n": 3,
          "line": 1
-        },
-        {
-         "k": "fwd_run",
-         "stem": "MxUnkRecZ",
-         "first": 2200,
-         "count": 3,
-         "line": 4
         }
        ]
       }
@@ -29851,8 +30396,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/main/legomain.cpp",
     "clean": "7eef0d07b176b1eb3757800b01105e9b753185e06315a95626b6ce373c41ea59",
-    "effective": "6aa2be8d518f02e58f0daa1f9382276ef335e180e5ac218d0593e1c4cf54ae74",
-    "size": 19701,
+    "effective": "b471e98b412d06d84178cf6446e4d398f360bbf990aaffb0586cf5b3bfb7d905",
+    "size": 19726,
     "ops": [
      {
       "op": "insert",
@@ -30123,7 +30668,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 100,
+       "lines": 101,
        "items": [
         {
          "k": "lines",
@@ -30134,7 +30679,7 @@
          "k": "fwd_run",
          "stem": "MxUnkRecordSW",
          "first": 7000,
-         "count": 97,
+         "count": 98,
          "line": 4
         }
        ]

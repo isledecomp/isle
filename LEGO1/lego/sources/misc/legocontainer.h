@@ -46,10 +46,12 @@ public:
 
 	void Clear()
 	{
+		LegoContainerInfo<T>& map = m_map;
+
 #ifdef COMPAT_MODE
-		for (typename LegoContainerInfo<T>::iterator it = m_map.begin(); it != m_map.end(); it++)
+		for (typename LegoContainerInfo<T>::iterator it = map.begin(); !(it == map.end()); it++)
 #else
-		for (LegoContainerInfo<T>::iterator it = m_map.begin(); it != m_map.end(); it++)
+		for (LegoContainerInfo<T>::iterator it = map.begin(); !(it == map.end()); it++)
 #endif
 		{
 			delete (*it).second;

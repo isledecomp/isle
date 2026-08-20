@@ -1547,32 +1547,154 @@ def require_target_source_range_identity(
     }
 
 
+SAME_TU_TEMPLATE_INSTANTIATION_IDENTITY_KIND = (
+    "same_tu_template_instantiation_source_identity_v1"
+)
+
+
+SAME_TU_TEMPLATE_INSTANTIATION_SELECTOR = (
+    "declaration_carrier_seat_complement_v1"
+)
+
+
+GENERATED_DECLARATION_LINE = re.compile(
+    rb"^(?:class|struct)[ ]+[A-Za-z_][A-Za-z0-9_]*[0-9]{2,};$"
+    rb"|^extern[ ]int[ ]+[A-Za-z_][A-Za-z0-9_]*[0-9]{2,};$"
+)
+
+
+def require_declaration_carrier_seat_complement(
+    seed_source: bytes, donor_source: bytes, context: str,
+) -> tuple[int, int]:
+    """Prove one rendering is the seed plus two generated declaration blocks.
+
+    `render_same_tu_declaration_carrier` writes a forward-declaration block at
+    offset zero and an extern block directly after the last `#include` line,
+    and changes nothing else.  This inverts that rule structurally: the donor
+    must split into a generated prefix block, the seed's own lines up to and
+    including its last `#include`, a generated block, and the seed's remaining
+    lines -- every inserted line matching the closed generated grammar.  The
+    seed's own lines are compared literally, so a declaration the seed already
+    carries can never be masked.
+    """
+    seed_lines = seed_source.split(b"\n")
+    include_rows = [index for index, line in enumerate(seed_lines)
+                    if line.startswith(b"#include")]
+    require(include_rows, f"{context} seed lacks an include seat")
+    insert_at = include_rows[-1] + 1
+    head, tail = seed_lines[:insert_at], seed_lines[insert_at:]
+    require(head and tail, f"{context} seed include seat is degenerate")
+    donor_lines = donor_source.split(b"\n")
+    require(
+        len(donor_lines) > len(tail)
+        and donor_lines[len(donor_lines) - len(tail):] == tail,
+        f"{context} rendering does not retain the seed tail",
+    )
+    rest = donor_lines[:len(donor_lines) - len(tail)]
+    splits = [
+        index for index in range(len(rest) - len(head) + 1)
+        if rest[index:index + len(head)] == head
+        and all(GENERATED_DECLARATION_LINE.match(line)
+                for line in rest[:index])
+        and all(GENERATED_DECLARATION_LINE.match(line)
+                for line in rest[index + len(head):])
+    ]
+    require(len(splits) == 1,
+            f"{context} rendering is not the seed plus two carrier blocks")
+    index = splits[0]
+    return index, len(rest) - index - len(head)
+
+
+def require_forward_run_placement_complement(
+    seed_source: bytes, donor_source: bytes, context: str,
+) -> int:
+    """Prove one rendering is the seed plus one seated generated run.
+
+    `render_forward_run_with_shape_carrier` writes a forward-declaration run
+    either at offset zero or as whole appended lines, and changes nothing
+    else.  This inverts that rule structurally: the donor must be the seed's
+    own lines, in order and contiguous, with one block of generated
+    declaration lines at exactly one end.  The seed's lines are compared
+    literally, so a declaration the seed already carries is never masked.
+    """
+    seed_lines = seed_source.split(b"\n")
+    donor_lines = donor_source.split(b"\n")
+    require(len(donor_lines) > len(seed_lines),
+            f"{context} rendering carries no seated run")
+    extra = len(donor_lines) - len(seed_lines)
+    prefix_seated = (
+        donor_lines[extra:] == seed_lines
+        and all(GENERATED_DECLARATION_LINE.match(line)
+                for line in donor_lines[:extra])
+    )
+    suffix_seated = (
+        donor_lines[:len(seed_lines)] == seed_lines
+        and all(GENERATED_DECLARATION_LINE.match(line)
+                for line in donor_lines[len(seed_lines):])
+    )
+    require(prefix_seated or suffix_seated,
+            f"{context} rendering is not the seed plus one seated run")
+    return extra
+
+
 def validate_same_tu_source_identity_proof(
     value: object, context: str,
 ) -> dict:
-    """Validate a complete brace-balanced same-TU function source pin."""
+    """Validate a complete same-TU function or instantiation source pin."""
     require(isinstance(value, dict), f"{context} must be an object")
+    kind = value.get("kind")
+    require(
+        kind in ("same_tu_function_source_identity_v1",
+                 SAME_TU_TEMPLATE_INSTANTIATION_IDENTITY_KIND),
+        f"{context} kind differs",
+    )
+    owner = value.get("source_owner_mangled")
+    require(
+        isinstance(owner, str) and owner.startswith("?") and len(owner) >= 8,
+        f"{context}.source_owner_mangled is invalid",
+    )
+    if kind == SAME_TU_TEMPLATE_INSTANTIATION_IDENTITY_KIND:
+        exact_audit_keys(value, {
+            "kind", "selector", "carrier_layout", "source_owner_mangled",
+            "range_pin",
+        }, context)
+        require(
+            value.get("selector")
+            == SAME_TU_TEMPLATE_INSTANTIATION_SELECTOR,
+            f"{context} selector differs",
+        )
+        layout = value.get("carrier_layout")
+        require(
+            layout in set(SAME_TU_HYBRID_CARRIER_LAYOUTS.values()),
+            f"{context}.carrier_layout is not a closed carrier layout",
+        )
+        require(
+            "@?$" in owner,
+            f"{context}.source_owner_mangled is not a template instantiation",
+        )
+        return {
+            "kind": SAME_TU_TEMPLATE_INSTANTIATION_IDENTITY_KIND,
+            "selector": SAME_TU_TEMPLATE_INSTANTIATION_SELECTOR,
+            "carrier_layout": layout,
+            "source_owner_mangled": owner,
+            "range_pin": validate_source_overlay_range_pin(
+                value.get("range_pin"), context + ".range_pin"),
+        }
     exact_audit_keys(value, {
         "kind", "selector", "start_marker", "source_owner_mangled",
         "range_pin",
     }, context)
     require(
-        value.get("kind") == "same_tu_function_source_identity_v1"
-        and value.get("selector")
+        value.get("selector")
         == "brace_balanced_function_physical_line_v1",
-        f"{context} kind or selector differs",
+        f"{context} selector differs",
     )
     marker = value.get("start_marker")
-    owner = value.get("source_owner_mangled")
     require(
         isinstance(marker, str) and marker.isascii()
         and 8 <= len(marker) <= 256
         and not any(character in marker for character in "\0\r\n"),
         f"{context}.start_marker is invalid",
-    )
-    require(
-        isinstance(owner, str) and owner.startswith("?") and len(owner) >= 8,
-        f"{context}.source_owner_mangled is invalid",
     )
     return {
         "kind": "same_tu_function_source_identity_v1",
@@ -1626,14 +1748,28 @@ def require_same_tu_source_identity(
             seed_source, target_donor_source, instruction_donor_source)),
         f"{context} source renderings are missing",
     )
-    selected = [
-        select_same_tu_source_identity_window(data, proof, context + role)
-        for data, role in (
-            (seed_source, " seed"),
-            (target_donor_source, " target donor"),
-            (instruction_donor_source, " instruction donor"),
-        )
-    ]
+    if proof.get("kind") == SAME_TU_TEMPLATE_INSTANTIATION_IDENTITY_KIND:
+        layout = proof["carrier_layout"]
+        for data, role in ((target_donor_source, "target donor"),
+                           (instruction_donor_source, "instruction donor")):
+            if layout == "declaration_carrier_seats_v1":
+                blocks = sum(require_declaration_carrier_seat_complement(
+                    seed_source, data, f"{context} {role}"))
+            else:
+                blocks = require_forward_run_placement_complement(
+                    seed_source, data, f"{context} {role}")
+            require(blocks > 0,
+                    f"{context} {role} carries no declaration carrier")
+        selected = [seed_source, seed_source, seed_source]
+    else:
+        selected = [
+            select_same_tu_source_identity_window(data, proof, context + role)
+            for data, role in (
+                (seed_source, " seed"),
+                (target_donor_source, " target donor"),
+                (instruction_donor_source, " instruction donor"),
+            )
+        ]
     for role, data in zip(("seed", "target donor", "instruction donor"),
                           selected):
         require_source_overlay_range_pin(
@@ -12347,6 +12483,14 @@ def validate_manifest(
                             f"{donor_context} stacked-carrier parameters: "
                             f"{error}"
                         ) from error
+                    if not present_cross_tu_keys:
+                        # The shape half is force-included; only the run is
+                        # seated in the unit's own text, so a same-TU hybrid
+                        # can prove its two donors share that text.
+                        local_recipe_rendered_sources[recipe_id] = (
+                            render_forward_run_with_shape_carrier(
+                                effective_source_bytes, recipe,
+                                f"{donor_context}.recipe"))
                     if present_cross_tu_keys:
                         donor_relative = source_overlay_relative_path(
                             recipe.get("donor_source"),
@@ -12703,6 +12847,7 @@ def validate_manifest(
         bound_refactor_recipe_ids = []
         bound_instruction_refactor_recipe_ids = []
         bound_same_tu_target_donor_ids = []
+        bound_stacked_carrier_donor_ids = []
         bound_same_tu_instruction_donor_ids = []
         bound_ordinary_fpo_mosaic_donor_ids = []
         bound_ordinary_fpo_self_permutation_donor_ids = []
@@ -13219,13 +13364,18 @@ def validate_manifest(
                             "is not a donor-private source rendering",
                         )
                     elif same_tu_hybrid:
+                        proof_value = function.get("same_tu_source_identity")
+                        proof_layout_expected = (
+                            proof_value.get("carrier_layout")
+                            if isinstance(proof_value, dict) else None)
+                        carrier_kind = local_recipe_kinds[donor_id]
                         require(
-                            local_recipe_kinds[donor_id]
-                            == SAME_TU_DECLARATION_CARRIER_RECIPE
-                            and local_recipe_kinds[instruction_donor_id]
-                            == SAME_TU_DECLARATION_CARRIER_RECIPE,
+                            carrier_kind
+                            == local_recipe_kinds[instruction_donor_id]
+                            and carrier_kind
+                            in SAME_TU_HYBRID_CARRIER_RECIPE_KINDS,
                             f"{function_context}: same-TU hybrid donors are "
-                            "not the closed mixed declaration carrier",
+                            "not one closed declaration carrier kind",
                         )
                         target_recipe = local_recipes[donor_id]
                         instruction_recipe = local_recipes[
@@ -13234,25 +13384,34 @@ def validate_manifest(
                             instruction_recipe,
                             f"{function_context} instruction donor recipe",
                         )
+                        shared_axes, run_axis = (
+                            SAME_TU_HYBRID_CARRIER_AXES[carrier_kind])
                         require(
                             all(
                                 target_recipe[name]
                                 == instruction_recipe[name]
-                                for name in (
-                                    "forward_prefix", "forward_width",
-                                    "extern_prefix", "extern_count",
-                                    "extern_width", "seat_proof",
-                                    "compile_lane", "emission_policy",
-                                )
+                                for name in shared_axes
                             )
-                            and target_recipe["forward_count"]
-                            != instruction_recipe["forward_count"],
+                            and target_recipe[run_axis]
+                            != instruction_recipe[run_axis],
                             f"{function_context}: same-TU hybrid carrier "
-                            "axes differ outside the forward count",
+                            f"axes differ outside the {run_axis}",
                         )
-                        bound_same_tu_target_donor_ids.append(donor_id)
-                        bound_same_tu_instruction_donor_ids.append(
-                            instruction_donor_id)
+                        require(
+                            proof_layout_expected is None
+                            or proof_layout_expected
+                            == SAME_TU_HYBRID_CARRIER_LAYOUTS[carrier_kind],
+                            f"{function_context}: same-TU source identity "
+                            "carrier layout differs from its donors",
+                        )
+                        if carrier_kind == SAME_TU_DECLARATION_CARRIER_RECIPE:
+                            bound_same_tu_target_donor_ids.append(donor_id)
+                            bound_same_tu_instruction_donor_ids.append(
+                                instruction_donor_id)
+                        else:
+                            bound_stacked_carrier_donor_ids.append(donor_id)
+                            bound_stacked_carrier_donor_ids.append(
+                                instruction_donor_id)
                     else:
                         require(
                             local_recipe_kinds[instruction_donor_id]
@@ -14320,6 +14479,12 @@ def validate_manifest(
             primary_donor_ids,
             non_primary_donor_ids,
             bound_cross_tu_complete_target_donor_ids,
+            context,
+        )
+        require_stacked_carrier_hybrid_bindings(
+            bound_stacked_carrier_donor_ids,
+            primary_donor_ids,
+            non_primary_donor_ids,
             context,
         )
         all_primary_donor_ids.extend(primary_donor_ids)
@@ -16440,6 +16605,35 @@ SAME_TU_DECLARATION_CARRIER_RECIPE = (
 )
 
 
+FORWARD_RUN_WITH_SHAPE_RECIPE = "forward_run_with_shape"
+
+
+SAME_TU_HYBRID_CARRIER_RECIPE_KINDS = frozenset({
+    SAME_TU_DECLARATION_CARRIER_RECIPE,
+    FORWARD_RUN_WITH_SHAPE_RECIPE,
+})
+
+
+SAME_TU_HYBRID_CARRIER_AXES = {
+    SAME_TU_DECLARATION_CARRIER_RECIPE: (
+        ("forward_prefix", "forward_width", "extern_prefix", "extern_count",
+         "extern_width", "seat_proof", "compile_lane", "emission_policy"),
+        "forward_count",
+    ),
+    FORWARD_RUN_WITH_SHAPE_RECIPE: (
+        ("prefix", "width", "classes", "functions", "placement",
+         "compile_lane", "emission_policy"),
+        "count",
+    ),
+}
+
+
+SAME_TU_HYBRID_CARRIER_LAYOUTS = {
+    SAME_TU_DECLARATION_CARRIER_RECIPE: "declaration_carrier_seats_v1",
+    FORWARD_RUN_WITH_SHAPE_RECIPE: "forward_run_placement_v1",
+}
+
+
 CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE = "clean_current_source_cross_tu"
 
 
@@ -16619,6 +16813,35 @@ def require_same_tu_hybrid_carrier_bindings(
         f"{context}: same-TU instruction carriers may not have a variant, "
         "repeated, or other non-primary use",
     )
+
+
+def require_stacked_carrier_hybrid_bindings(
+    bound_donor_ids: list[str],
+    primary_donor_ids: list[str],
+    non_primary_donor_ids: list[str],
+    context: str,
+) -> None:
+    """Confine every stacked carrier bound to a same-TU hybrid to that role.
+
+    Unlike the mixed declaration carrier, this recipe kind is also an
+    ordinary equal-body donor, so the census cannot demand that *every*
+    stacked carrier be bound.  What it does demand is the same
+    no-reuse property for the ones that are: a carrier that donates a body
+    or an instruction to a same-TU hybrid may hold no other role anywhere
+    in its translation unit.
+    """
+    bound_counts = Counter(bound_donor_ids)
+    require(all(count == 1 for count in bound_counts.values()),
+            f"{context}: a stacked carrier may fill only one same-TU "
+            "hybrid role")
+    primary_counts = Counter(primary_donor_ids)
+    non_primary_counts = Counter(non_primary_donor_ids)
+    for recipe_id in bound_counts:
+        require(
+            primary_counts[recipe_id] + non_primary_counts[recipe_id] == 1,
+            f"{context}: same-TU hybrid stacked carrier {recipe_id} has an "
+            "ordinary, repeated, or other non-primary use",
+        )
 
 
 def require_ordinary_fpo_mosaic_donor_bindings(
@@ -16801,6 +17024,28 @@ def raw_manifest_source_refactor_recipe_ids(
     return result
 
 
+def raw_manifest_recipe_kinds(manifest: dict) -> dict:
+    """Map every donor id to its recipe kind before host-dependent gates."""
+    kinds = {}
+    units = manifest.get("translation_units")
+    if not isinstance(units, list):
+        return kinds
+    for unit in units:
+        if not isinstance(unit, dict):
+            continue
+        donors = unit.get("donors")
+        if not isinstance(donors, list):
+            continue
+        for donor in donors:
+            if not isinstance(donor, dict):
+                continue
+            recipe = donor.get("recipe")
+            recipe_id = donor.get("id")
+            if isinstance(recipe, dict) and isinstance(recipe_id, str):
+                kinds[recipe_id] = recipe.get("kind")
+    return kinds
+
+
 def raw_manifest_same_tu_carrier_recipe_ids(manifest: dict) -> set[str]:
     """Inventory mixed same-TU carriers before host-dependent validation."""
     result = set()
@@ -16919,9 +17164,11 @@ def require_manifest_source_refactor_role_preflight(
     non_primary_donor_ids = []
     bound_same_tu_target_donor_ids = []
     bound_same_tu_instruction_donor_ids = []
+    bound_stacked_carrier_donor_ids = []
     bound_ordinary_fpo_mosaic_donor_ids = []
     bound_ordinary_fpo_self_permutation_donor_ids = []
     bound_cross_tu_complete_target_donor_ids = []
+    manifest_recipe_kinds = raw_manifest_recipe_kinds(manifest)
     overlay = manifest.get("source_overlay")
     overlay_outputs = (
         overlay.get("outputs") if isinstance(overlay, dict) else None
@@ -17040,7 +17287,11 @@ def require_manifest_source_refactor_role_preflight(
                     bound_refactor_recipe_ids.append(donor_id)
                 if (function.get("splice_class")
                         == SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
-                    bound_same_tu_target_donor_ids.append(donor_id)
+                    if (manifest_recipe_kinds.get(donor_id)
+                            == SAME_TU_DECLARATION_CARRIER_RECIPE):
+                        bound_same_tu_target_donor_ids.append(donor_id)
+                    else:
+                        bound_stacked_carrier_donor_ids.append(donor_id)
                 if ("ordinary_fpo_identity" in function
                         and "instruction_self_permutation" not in function):
                     bound_ordinary_fpo_mosaic_donor_ids.append(donor_id)
@@ -17065,8 +17316,13 @@ def require_manifest_source_refactor_role_preflight(
                         instruction_donor)
                 if (function.get("splice_class")
                         == SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS):
-                    bound_same_tu_instruction_donor_ids.append(
-                        instruction_donor)
+                    if (manifest_recipe_kinds.get(instruction_donor)
+                            == SAME_TU_DECLARATION_CARRIER_RECIPE):
+                        bound_same_tu_instruction_donor_ids.append(
+                            instruction_donor)
+                    else:
+                        bound_stacked_carrier_donor_ids.append(
+                            instruction_donor)
             complete_donor = function.get("complete_donor")
             if isinstance(complete_donor, str):
                 non_primary_donor_ids.append(complete_donor)
@@ -17095,6 +17351,12 @@ def require_manifest_source_refactor_role_preflight(
         non_primary_donor_ids,
         bound_same_tu_target_donor_ids,
         bound_same_tu_instruction_donor_ids,
+        context,
+    )
+    require_stacked_carrier_hybrid_bindings(
+        bound_stacked_carrier_donor_ids,
+        primary_donor_ids,
+        non_primary_donor_ids,
         context,
     )
     require_ordinary_fpo_mosaic_donor_bindings(
@@ -17657,6 +17919,33 @@ def render_same_tu_declaration_carrier(
     insert_at = include_rows[-1] + 1
     return forward + b"\n".join(
         lines[:insert_at] + extern + lines[insert_at:])
+
+
+def render_forward_run_with_shape_carrier(
+    source: bytes, recipe: dict, context: str,
+) -> bytes:
+    """Render the source half of one stacked forward-run carrier.
+
+    The declaration shape half of this recipe is force-included and never
+    touches the translation unit, so only the forward run is seated here --
+    at offset zero for `prefix`, or as whole appended lines for `suffix`.
+    This mirrors the build's own rendering exactly.
+    """
+    require(recipe.get("kind") == FORWARD_RUN_WITH_SHAPE_RECIPE,
+            f"{context}.kind differs")
+    try:
+        forward = entropy_generator.generate_forward_run(
+            recipe["prefix"], recipe["count"], recipe["width"],
+        ).encode("ascii")
+    except (KeyError, ValueError) as error:
+        raise ByteIdentityError(
+            f"{context} forward run is invalid: {error}") from error
+    placement = recipe.get("placement")
+    if placement == "prefix":
+        return forward + source
+    require(placement == "suffix", f"{context}.placement differs")
+    return b"\n".join(
+        source.split(b"\n") + forward.rstrip(b"\n").split(b"\n"))
 
 
 def validate_same_tu_declaration_carrier_recipe(

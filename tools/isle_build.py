@@ -1253,6 +1253,10 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                         rendered_source = b"\n".join(lines + decls)
                     (probe / "s.cpp").write_bytes(rendered_source)
                     (probe / "run.h").write_bytes(shape_run)
+                    # A same-TU instruction hybrid may pair two of these
+                    # stacked carriers, and its source-identity proof needs
+                    # the rendering they actually compiled.
+                    donor_sources[donor["id"]] = rendered_source
                     force_include = ["/FIrun.h"]
                 elif placement in ("extern_pair_with_shape",
                                    "extern_pair_with_pad"):
