@@ -18703,7 +18703,7 @@
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp",
    "source_sha256": "8f7b7adf16c981403d21044d4dd707235808150aaaae4604374331698ddf12ec",
-   "mode": "restore_comdat_group_order",
+   "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
      "/Zi",
@@ -18716,6 +18716,160 @@
      "-Z7"
     ]
    },
+   "donors": [
+    {
+     "id": "d_ba68e8998543",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 3,
+      "generated_header_sha256": "ba68e899854373abf86fd4f93e9c17cda6d6b11e14c19eed055a3c4a74870ca5",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?_Erase@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@IAEXPAU_Node@1@@Z",
+     "donor": "d_ba68e8998543",
+     "splice_class": "retail_exact_register_bijection",
+     "expected_section_number": 47,
+     "expected_section_count": 71,
+     "expected_body_length": 82,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 2,
+     "expected_relocation_count": 5,
+     "expected_seed_line_count": 7,
+     "expected_donor_line_count": 7,
+     "expected_function_count": 21,
+     "expected_comdat_count": 25,
+     "expected_seed_body_sha256": "9720bd3af1d36c2598302f2284f0ae993161a7ad753bc965d326960ed6433b56",
+     "expected_donor_body_sha256": "9720bd3af1d36c2598302f2284f0ae993161a7ad753bc965d326960ed6433b56",
+     "expected_body_sha256": "e13600d94e02475a2c016a6cdbd9b97317d259565707e9c00e2757f0e5ae71e4",
+     "expected_seed_metadata_sha256": "db57ebb72007ba6b3cd2bc670d9f51f3ae8aae395b64f663eb0c820e3ef4ea09",
+     "expected_donor_metadata_sha256": "2b0b569bdc4ea563f5d4b02438b0696f27dbae711cafe38a61d28b5e95726d49",
+     "expected_changed_offsets": [
+      6,
+      11,
+      13,
+      23,
+      34,
+      36,
+      41,
+      56,
+      66,
+      68
+     ],
+     "expected_code_renames": [],
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x1002a1b0",
+      "verdict": "MATCH",
+      "length": 82
+     },
+     "retail_relocations": [
+      {
+       "offset": 14,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 29,
+       "type": 20,
+       "addend": 0,
+       "target": "?_Erase@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@IAEXPAU_Node@1@@Z",
+       "target_section": 47,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1002a1b0"
+      },
+      {
+       "offset": 49,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 58,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 69,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      }
+     ],
+     "register_bijection": {
+      "kind": "callee_saved_register_bijection_v1",
+      "mapping": {
+       "ebx": "edi",
+       "edi": "ebx"
+      },
+      "region_start": 3,
+      "region_end": 75,
+      "expected_region_instruction_count": 26,
+      "expected_instruction_count": 34,
+      "expected_rewritten_offsets": [
+       6,
+       11,
+       13,
+       23,
+       34,
+       36,
+       41,
+       56,
+       66,
+       68
+      ],
+      "debug_s_register_map": [
+       {
+        "name": "_Y",
+        "record_offset": 255,
+        "donor_register": "ebx",
+        "image_register": "edi"
+       }
+      ],
+      "expected_seed_debug_s_sha256": "c4bc1e35c0ea2fd2b6b34d611aeb1142e226b8b19d54236b85a1eb6cc1c2c32c",
+      "expected_image_debug_s_sha256": "566606d3dd862f1a42829d32e3ef5582936bfecfda5d981b7751cc4358b2f002",
+      "authenticity_rationale": "A bijective renaming of general registers proved dead-on-entry and dead-on-exit for the region, applied to this donor compile of the same translation unit; the composition is refused unless the image equals the pinned retail oracle under the relocation mask."
+     }
+    }
+   ],
    "group_order": [
     "??1?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@QAE@XZ",
     "??1?$Set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@@@QAE@XZ",
@@ -18723,7 +18877,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Restores the retail-anchored .text COMDAT group order of LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp (whole-group permutation, body-inert).",
+    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp from a register-bijection certificate over a generated declaration-only carrier state of the rendered current source, and restores the retail-anchored .text COMDAT group order (whole-group permutation, body-inert).",
     "may_replace_compiler_output": true
    }
   },
@@ -24491,8 +24645,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4912,
-    "accepted_row_identity_sha256": "65d710aa5f07cc835c88842c3314b1de48730416f1da42997be50a0528641ce1",
+    "exact_raw_1_0_count": 4913,
+    "accepted_row_identity_sha256": "6a1db0ef9ad2c46019923f9f402c4b436c0d79a8d3ac08ca338ec5b660ec47d7",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
