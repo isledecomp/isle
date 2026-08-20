@@ -14061,7 +14061,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp",
-   "source_sha256": "85cf2b741215b93d2356ba7fcee301fe483f2ea43b3e880ee1b7238f5610c388",
+   "source_sha256": "a651706f27da1d7d99691f12878a649b06a87bc778aa4d2fea85c9d5d005a927",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -14077,23 +14077,91 @@
    },
    "donors": [
     {
-     "id": "d_b4929852163b",
+     "id": "d_6a529ee42428",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "pad_shape",
-      "classes": 8,
-      "functions_per_class": 4,
-      "generated_header_sha256": "b4929852163b00e79d9c20a8cb6ce469d96029766f7f3517cc0410db6c050127",
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 5,
+      "generated_header_sha256": "6a529ee42428a533a29271f0e2d7cebf4ef0898dbd6d3e746c919f92c419d645",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated padded declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_f4dfd3637891",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 3,
+      "functions": 6,
+      "generated_header_sha256": "f4dfd3637891d93d0b2f55570707d327d3af7fae7a7742e7861a9225880fb575",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
    "functions": [
+    {
+     "mangled": "?Store@LegoTexturePresenter@@QAEJXZ",
+     "expected_body_length": 611,
+     "expected_body_sha256": "7977ee1d4a2462b70ed1abe158cb722acef00c7f0b5747500999812e5dfd2cd0",
+     "expected_changed_offsets": [
+      165,
+      168,
+      181,
+      202,
+      257,
+      268,
+      290,
+      312
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       594,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60
+     ],
+     "donor": "d_6a529ee42428"
+    },
+    {
+     "mangled": "?_Dec@iterator@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAEXXZ",
+     "expected_body_sha256": "0e273b32340c3a32c075d15b4765cccad21be92afb54bc1a1441a12ee8ddee71",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 71,
+     "expected_donor_length": 75,
+     "expected_linked_span": 80,
+     "donor": "d_6a529ee42428"
+    },
+    {
+     "mangled": "?_Insert@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QBDPAVLegoTextureInfo@@@@@Z",
+     "expected_body_sha256": "8fb9dfb92a7a519869e37ca6ccf1eca9ab50fabc7e6c376659c776303c9d7cff",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 682,
+     "expected_donor_length": 679,
+     "expected_linked_span": 688,
+     "donor": "d_6a529ee42428"
+    },
     {
      "mangled": "?insert@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAE?AU?$pair@Viterator@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@H@@ABU?$pair@QBDPAVLegoTextureInfo@@@@@Z",
      "expected_body_length": 347,
@@ -14117,21 +14185,12 @@
       281
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_b4929852163b"
-    },
-    {
-     "mangled": "?_Insert@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QBDPAVLegoTextureInfo@@@@@Z",
-     "expected_body_sha256": "8fb9dfb92a7a519869e37ca6ccf1eca9ab50fabc7e6c376659c776303c9d7cff",
-     "splice_class": "same_slot_resize",
-     "expected_seed_length": 681,
-     "expected_donor_length": 679,
-     "expected_linked_span": 688,
-     "donor": "d_b4929852163b"
+     "donor": "d_f4dfd3637891"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp from generated declaration-only carrier states over the rendered current source.",
+    "reason": "Closes 4 row(s) in LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    },
    "group_order": [
@@ -23469,8 +23528,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4906,
-    "accepted_row_identity_sha256": "62d7ea58de3439dc4aa79730bb9447a0b926cea408093e3458eef94e4285dc68",
+    "exact_raw_1_0_count": 4907,
+    "accepted_row_identity_sha256": "b6f7c75004cbfc093cb621092c8cf273a2ade9b8819cf84b124f5a10e27787a3",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -37488,10 +37547,32 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp",
-    "clean": "a02af8c52d7d69de9ca8900ab4af65857b5933ce81e9bdac8eee7c05f8a83c98",
-    "effective": "85cf2b741215b93d2356ba7fcee301fe483f2ea43b3e880ee1b7238f5610c388",
-    "size": 4345,
+    "clean": "5cafc5ee6400af67ca2459e1acaec9e18dcd5b94bab24e50b2f1899a517ff05f",
+    "effective": "a651706f27da1d7d99691f12878a649b06a87bc778aa4d2fea85c9d5d005a927",
+    "size": 5374,
     "ops": [
+     {
+      "op": "insert",
+      "anchor": {
+       "ctx": "8ac77bb7f7124c58e53e27cc51856c5fdd8d7682187570785617caccde9a704e",
+       "b": 0,
+       "at": "start"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 27,
+       "items": [
+        {
+         "k": "fwd_run",
+         "stem": "MxUnkRecPA",
+         "first": 0,
+         "count": 27,
+         "line": 1,
+         "width": 3
+        }
+       ]
+      }
+     },
      {
       "op": "insert",
       "anchor": {
@@ -37762,6 +37843,28 @@
          "k": "fwd",
          "id": "RkTF1",
          "line": 8
+        }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "anchor": {
+       "ctx": "8d3957e870efba0a12afd9a5f10f6c80c851af17df1c2d4dc1f32021c98cf0c5",
+       "a": 0,
+       "at": "end"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 22,
+       "items": [
+        {
+         "k": "fwd_run",
+         "stem": "MxUnkRecVC",
+         "first": 0,
+         "count": 22,
+         "line": 1,
+         "width": 3
         }
        ]
       }

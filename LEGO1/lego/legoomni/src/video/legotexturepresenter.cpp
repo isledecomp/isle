@@ -30,9 +30,9 @@ MxResult LegoTexturePresenter::AddToManager()
 // FUNCTION: LEGO1 0x1004ebd0
 MxResult LegoTexturePresenter::Read(MxDSChunk& p_chunk)
 {
+	MxResult result = FAILURE;
 	LegoMemory storage(p_chunk.GetData());
 	LegoChar* textureName = NULL;
-	MxResult result = FAILURE;
 	LegoS32 hardwareMode = VideoManager()->GetDirect3D()->AssignedDevice()->GetHardwareMode();
 
 	m_textures = new LegoNamedTextureList();
