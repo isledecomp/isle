@@ -24951,8 +24951,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/actors/act3ammo.cpp",
     "clean": "ba38f89cb56b92619fa2c362806856b09744952dcc4d00272b62d8b1dc665bfc",
-    "effective": "118a8fb842aeb44e42cc3a58ce3ac445215d40f70be93eb5bfa7f892df70cc09",
-    "size": 11837,
+    "effective": "0e6a85c48606625788a1a3290c6404ccef2935288eefedc691ba77cc5359a27c",
+    "size": 12635,
     "ops": [
      {
       "op": "insert",
@@ -25015,7 +25015,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 16,
+       "lines": 54,
        "items": [
         {
          "k": "lines",
@@ -25026,7 +25026,7 @@
          "k": "fwd_run",
          "stem": "MxUnkRecVC",
          "first": 0,
-         "count": 15,
+         "count": 53,
          "width": 3,
          "line": 2
         }
