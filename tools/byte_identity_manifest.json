@@ -32867,8 +32867,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4923,
-    "accepted_row_identity_sha256": "5647f233ffc54233475e27aaf85824b02b9656befbf296d069f7097405f53243",
+    "exact_raw_1_0_count": 4924,
+    "accepted_row_identity_sha256": "65ad1a587c84a587dc62b0e24de92118e24afd3b4f2accd1904fd494cf29b133",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

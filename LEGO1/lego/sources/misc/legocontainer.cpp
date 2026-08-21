@@ -24,7 +24,7 @@ LegoTextureInfo* LegoTextureContainer::GetCached(LegoTextureInfo* p_textureInfo)
 
 	LPDIRECTDRAWSURFACE surface = p_textureInfo->m_surface;
 
-	if (surface->Lock(NULL, &desc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
+	if (p_textureInfo->m_surface->Lock(NULL, &desc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
 		width = desc.dwWidth;
 		height = desc.dwHeight;
 		surface->Unlock(desc.lpSurface);
@@ -41,7 +41,7 @@ LegoTextureInfo* LegoTextureContainer::GetCached(LegoTextureInfo* p_textureInfo)
 
 				if (surface->Lock(NULL, &newDesc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
 					BOOL und = FALSE;
-					if (newDesc.dwHeight == height && newDesc.dwWidth == width) {
+					if (newDesc.dwWidth == width && newDesc.dwHeight == height) {
 						und = TRUE;
 					}
 
@@ -75,8 +75,8 @@ LegoTextureInfo* LegoTextureContainer::GetCached(LegoTextureInfo* p_textureInfo)
 	if (VideoManager()->GetDirect3D()->DirectDraw()->CreateSurface(&newDesc, &textureInfo->m_surface, NULL) == DD_OK) {
 		RECT rect;
 		rect.left = 0;
-		rect.right = newDesc.dwWidth - 1;
 		rect.top = 0;
+		rect.right = newDesc.dwWidth - 1;
 		rect.bottom = newDesc.dwHeight - 1;
 
 		textureInfo->m_surface->SetPalette(textureInfo->m_palette);
@@ -97,7 +97,8 @@ LegoTextureInfo* LegoTextureContainer::GetCached(LegoTextureInfo* p_textureInfo)
 			}
 			else {
 				textureInfo->m_texture->SetAppData((DWORD) textureInfo);
-				m_cached.push_back(LegoCachedTexture(textureInfo, TRUE));
+				LegoCachedTexture entry(textureInfo, TRUE);
+				m_cached.push_back(entry);
 
 				textureInfo->m_texture->AddRef();
 
