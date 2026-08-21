@@ -1629,6 +1629,27 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                     byte_identity.validate_donor_object_excluded(
                         composed, [donor_objects[function["donor"]]])
                 elif (function["splice_class"]
+                        == byte_identity.WEB_RECOLOUR_CLASS):
+                    # The web-recolour certificate: one def-use web is
+                    # renamed on the SEED's own compiler-produced body, after
+                    # any declared reordering, having proved the image
+                    # register carries no live value over the web's range --
+                    # the coalesce obligation.  The donor is a provenance
+                    # witness and is required to reproduce the seed's body.
+                    retail = function["retail_oracle"]
+                    composed, detail = (
+                        byte_identity
+                        .compose_retail_exact_web_recolour(
+                            composed, donor_objects[function["donor"]],
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16), retail["length"],
+                            ),
+                        ))
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [donor_objects[function["donor"]]])
+                elif (function["splice_class"]
                         == byte_identity.REGISTER_BIJECTION_CLASS):
                     # The register-bijection certificate: sigma is applied to
                     # this donor's own compiler-produced body and the result

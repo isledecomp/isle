@@ -14076,6 +14076,7 @@ def validate_manifest(
                                          SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
                                          CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS,
                                          REGISTER_BIJECTION_CLASS,
+                                         WEB_RECOLOUR_CLASS,
                                          INSTRUCTION_SCHEDULE_CLASS),
                         f"{function_context}: unsupported splice class")
                 if splice_class == RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS:
@@ -14482,6 +14483,110 @@ def validate_manifest(
                     )
                     normalized_functions.append({
                         **function, "instruction_schedule": schedule,
+                    })
+                    continue
+                if splice_class == WEB_RECOLOUR_CLASS:
+                    recolour_keys = {
+                        "mangled", "donor", "splice_class",
+                        "expected_section_number", "expected_section_count",
+                        "expected_body_length", "expected_characteristics",
+                        "expected_selection", "expected_relocation_count",
+                        "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                        "expected_seed_body_sha256",
+                        "expected_donor_body_sha256",
+                        "expected_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_donor_metadata_sha256",
+                        "expected_changed_offsets", "expected_closure",
+                        "retail_oracle", "retail_relocations",
+                        "web_recolour",
+                    }
+                    exact_keys(function, recolour_keys, function_context)
+                    for name in (
+                        "expected_section_number", "expected_section_count",
+                        "expected_body_length", "expected_characteristics",
+                        "expected_selection", "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                        "expected_relocation_count",
+                    ):
+                        require_exact_int(function.get(name),
+                                          f"{function_context}.{name}",
+                                          minimum=0)
+                    for name in ("expected_seed_body_sha256",
+                                 "expected_donor_body_sha256",
+                                 "expected_body_sha256",
+                                 "expected_seed_metadata_sha256",
+                                 "expected_donor_metadata_sha256"):
+                        require_sha(function.get(name),
+                                    f"{function_context}.{name}")
+                    # The pre-image is the seed's own body, so the donor is a
+                    # provenance witness and must reproduce it: the two body
+                    # pins are required to be the SAME hash here, before the
+                    # composer measures the objects.
+                    require(function["expected_seed_body_sha256"]
+                            == function["expected_donor_body_sha256"],
+                            f"{function_context}: the web-recolour donor must "
+                            "reproduce the seed's body")
+                    changed = function.get("expected_changed_offsets")
+                    require(
+                        isinstance(changed, list) and changed
+                        and changed == sorted(set(changed))
+                        and all(type(offset) is int
+                                and 0 <= offset
+                                < function["expected_body_length"]
+                                for offset in changed),
+                        f"{function_context}.expected_changed_offsets "
+                        "is invalid",
+                    )
+                    require(
+                        function.get("expected_closure")
+                        == INSTRUCTION_SCHEDULE_FPO_CLOSURE,
+                        f"{function_context}.expected_closure differs",
+                    )
+                    retail = function.get("retail_oracle")
+                    require(isinstance(retail, dict),
+                            f"{function_context}.retail_oracle must be an "
+                            "object")
+                    exact_keys(retail, {
+                        "image", "address", "verdict", "length",
+                    }, f"{function_context}.retail_oracle")
+                    require_target_bound_retail_image(
+                        manifest.get("images"), target,
+                        retail.get("image"),
+                        f"{function_context}.retail_oracle",
+                    )
+                    require(
+                        isinstance(retail.get("address"), str)
+                        and ADDRESS_RE.fullmatch(retail["address"])
+                        is not None
+                        and retail.get("verdict") == "MATCH"
+                        and retail.get("length")
+                        == function["expected_body_length"],
+                        f"{function_context}.retail_oracle differs",
+                    )
+                    validate_retail_relocation_oracle(
+                        function.get("retail_relocations"),
+                        f"{function_context}.retail_relocations",
+                        function["expected_body_length"],
+                        allow_empty=(
+                            function["expected_relocation_count"] == 0
+                        ),
+                    )
+                    recolour = validate_web_recolour(
+                        function.get("web_recolour"),
+                        f"{function_context}.web_recolour",
+                        function["expected_body_length"],
+                    )
+                    require(
+                        recolour["expected_changed_offsets"] == changed,
+                        f"{function_context}: the recolour's changed set "
+                        "differs from the composition's",
+                    )
+                    normalized_functions.append({
+                        **function, "web_recolour": recolour,
                     })
                     continue
                 if splice_class == REGISTER_BIJECTION_CLASS:
@@ -28119,6 +28224,48 @@ def decode_ia32_bijection_body(
     return instructions
 
 
+def _ia32_backward_liveness(
+    instructions: list[dict], successors: list[list[int]], context: str,
+    blind: dict | None = None,
+) -> list[frozenset]:
+    """Backward atom liveness over a supplied control-flow graph.
+
+    The lattice is the sub-register ATOM set, so a partial definition
+    (`fnstsw ax`, `mov al, m`) kills exactly the bits it defines and no more.
+    The fixpoint is monotone and bounded by the twenty atoms, so it
+    terminates.  `blind`, when given, maps an instruction index to atoms
+    subtracted from its READ set -- the way to ask "would this register still
+    be live here if this particular consumer did not exist", which is how the
+    web certificate proves a value has no consumer outside its own web.
+    """
+    blind = blind or {}
+    live = [frozenset() for _ in instructions]
+    for _ in range(len(instructions) * 20 + 20):
+        changed = False
+        for index in reversed(range(len(instructions))):
+            item = instructions[index]
+            out = frozenset().union(
+                *[live[edge] for edge in successors[index]]) \
+                if successors[index] else frozenset()
+            reads = item["read_atoms"] - blind.get(index, frozenset())
+            value = (out - item["write_atoms"]) | reads
+            if value != live[index]:
+                live[index] = value
+                changed = True
+        if not changed:
+            break
+    else:  # pragma: no cover - the lattice is finite and monotone
+        raise ByteIdentityError(f"{context}: liveness did not converge")
+    return live
+
+
+def _ia32_live_out(live: list[frozenset], successors: list[list[int]],
+                   index: int) -> frozenset:
+    """The union of the live sets on an instruction's outgoing edges."""
+    return frozenset().union(*[live[edge] for edge in successors[index]]) \
+        if successors[index] else frozenset()
+
+
 def _register_bijection_live_sets(
     instructions: list[dict], context: str,
 ) -> list[frozenset]:
@@ -28126,10 +28273,7 @@ def _register_bijection_live_sets(
 
     Successors are the fall-through and the decoded branch target; `ret` has
     none and instead reads the ABI's live-out set, so the epilogue's `pop`s
-    kill exactly the callee-saved registers they restore.  The lattice is the
-    sub-register ATOM set, so a partial definition (`fnstsw ax`, `mov al, m`)
-    kills exactly the bits it defines and no more.  The fixpoint is monotone
-    and bounded by the twenty atoms, so it terminates.
+    kill exactly the callee-saved registers they restore.
     """
     index_of = {item["offset"]: index for index, item in enumerate(
         instructions)}
@@ -28148,23 +28292,8 @@ def _register_bijection_live_sets(
         if item["flow"] in ("jcc", "jmp"):
             edges.append(index_of[item["target"]])
         successors.append(edges)
-    live = [frozenset() for _ in instructions]
-    for _ in range(len(instructions) * 20 + 20):
-        changed = False
-        for index in reversed(range(len(instructions))):
-            item = instructions[index]
-            out = frozenset().union(
-                *[live[edge] for edge in successors[index]]) \
-                if successors[index] else frozenset()
-            value = (out - item["write_atoms"]) | item["read_atoms"]
-            if value != live[index]:
-                live[index] = value
-                changed = True
-        if not changed:
-            break
-    else:  # pragma: no cover - the lattice is finite and monotone
-        raise ByteIdentityError(f"{context}: liveness did not converge")
-    return live, successors
+    return _ia32_backward_liveness(instructions, successors, context), \
+        successors
 
 
 def apply_register_bijection(
@@ -29096,7 +29225,25 @@ def _ia32_schedule_flag_table() -> dict:
     for opcode in (0x1A, 0x1B):
         table[opcode] = (True, True)            # SBB reads and writes CF
     table[0xF6] = (False, True)                 # /0 TEST, /2 NOT, /3 NEG
+    for index in range(8):
+        table[0x50 + index] = (False, False)    # PUSH r32 touches no flag
     return table
+
+
+# The stack obligation, ruled on by the owner.  On Win32 there is no red zone,
+# so memory strictly BELOW esp is volatile and can hold no live value: a
+# `push`'s store at [esp-4] cannot alias a live cell, and it is therefore
+# admitted into a window without a memory descriptor.  But a push also
+# MODIFIES esp, so moving one across an esp-relative access changes that
+# access's effective address.  This class admits only the first branch of the
+# ruling -- a window that carries a push may carry NO esp-relative memory
+# operand at all.  The second branch (track the stack delta instruction by
+# instruction and prove esp equal at every esp-relative access) is
+# deliberately not implemented, so a window that would need it refuses.
+# `pop` is NOT admitted: it READS [esp], which is live memory, and the
+# below-esp axiom says nothing about it.  Two pushes can never be reordered
+# relative to each other because both read and write esp, which is an edge.
+_IA32_SCHEDULE_STACK_PUSH_OPCODES = frozenset(range(0x50, 0x58))
 
 
 IA32_SCHEDULE_FLAG_EFFECTS = _ia32_schedule_flag_table()
@@ -29126,6 +29273,7 @@ def ia32_schedule_instruction_facts(instruction: dict, context: str) -> dict:
     return {
         "offset": instruction["offset"],
         "length": instruction["length"],
+        "opcode": opcode,
         "reads": instruction["reads"],
         "writes": instruction["writes"],
         "reads_flags": effect[0],
@@ -29166,6 +29314,17 @@ def ia32_schedule_dependence_edges(
     facts = [ia32_schedule_instruction_facts(item, f"{context} at "
                                              f"{item['offset']}")
              for item in instructions]
+    # The stack obligation, stated in its own right rather than inherited
+    # from the displacement rule below.
+    if any(item["opcode"] in _IA32_SCHEDULE_STACK_PUSH_OPCODES
+           for item in facts):
+        offending = sorted(
+            item["offset"] for item in facts
+            if item["memory"] is not None and item["memory"]["base"] == "esp")
+        require(not offending,
+                f"{context}: a push shares the window with the esp-relative "
+                f"memory operand at {offending[:1]}, whose address the push's "
+                "own esp delta would move")
     written = set()
     for item in facts:
         written |= set(item["writes"])
@@ -29234,27 +29393,47 @@ _IA32_SCHEDULE_INTERIOR_PREFIXES = (
 )
 
 
+# A COMDAT that ends in a compiler-emitted switch table carries DATA after its
+# last instruction, and decoding that data as instructions is nonsense.
+# `code_length` pins where the code ends -- recovered from the dispatch's own
+# `jmp dword ptr [reg*4 + BASE]` relocation, never from a walk that runs off
+# the end -- and the tail is PROVED unreachable rather than assumed: the code
+# must decode to exactly the pin with no straddling instruction, and its last
+# instruction may not fall through into the tail.  These are the opcodes that
+# end a basic block without falling through; anything else refuses.
+_IA32_SCHEDULE_TERMINAL_OPCODES = frozenset({0xC2, 0xC3, 0xCA, 0xCB,
+                                             0xE9, 0xEB})
+
+
 def ia32_schedule_body_walk(
     body: bytes, relocations: dict | None, context: str,
+    code_length: int | None = None,
+    internal_targets: frozenset | None = None,
 ) -> tuple[list[tuple[int, int]], set]:
     """Boundaries and interior branch targets of a whole COMDAT body."""
     require(isinstance(body, (bytes, bytearray)) and body,
             f"{context}: body is empty")
     body = bytes(body)
     relocations = relocations or {}
+    limit = len(body) if code_length is None else code_length
+    require(isinstance(limit, int) and not isinstance(limit, bool)
+            and 0 < limit <= len(body),
+            f"{context}: code length is out of range")
+    code = body[:limit]
     spans = []
     targets = set()
+    computed = []
     offset = 0
-    while offset < len(body):
+    while offset < len(code):
         length = supported_ia32_instruction_length(
-            body[offset:], f"{context} at {offset}")
+            code[offset:], f"{context} at {offset}")
         spans.append((offset, length))
         cursor = offset
-        while body[cursor] in _IA32_SCHEDULE_INTERIOR_PREFIXES:
+        while code[cursor] in _IA32_SCHEDULE_INTERIOR_PREFIXES:
             cursor += 1
             require(cursor < offset + length,
                     f"{context}: instruction at {offset} is only prefixes")
-        opcode = body[cursor]
+        opcode = code[cursor]
         width = 0
         if opcode in range(0x70, 0x80) or opcode in (0xEB, 0xE0, 0xE1,
                                                      0xE2, 0xE3):
@@ -29262,49 +29441,90 @@ def ia32_schedule_body_walk(
         elif opcode in (0xE9, 0xE8):
             width = 4
         elif opcode == 0x0F and cursor + 1 < offset + length \
-                and 0x80 <= body[cursor + 1] <= 0x8F:
+                and 0x80 <= code[cursor + 1] <= 0x8F:
             width = 4
         elif opcode == 0xFF:
             require(cursor + 1 < offset + length,
                     f"{context}: FF form at {offset} lacks its ModRM")
-            extension = (body[cursor + 1] >> 3) & 7
-            require(extension not in (3, 4, 5),
-                    f"{context}: an indirect or far jump at {offset} makes "
-                    "the window's entry set unknowable")
+            extension = (code[cursor + 1] >> 3) & 7
+            require(extension not in (3, 5),
+                    f"{context}: a far jump at {offset} makes the window's "
+                    "entry set unknowable")
+            if extension == 4:
+                computed.append(offset)
         if width:
             displacement_at = offset + length - width
             row = relocations.get(displacement_at)
             if row is None or row.get("width") != width:
                 relative = int.from_bytes(
-                    body[displacement_at:offset + length],
+                    code[displacement_at:offset + length],
                     "little", signed=True)
                 targets.add(offset + length + relative)
         offset += length
-    require(offset == len(body),
+    require(offset == len(code),
             f"{context}: body does not decode to exhaustion")
     starts = {start for start, _ in spans}
-    for target in targets:
+    for target in sorted(targets):
         require(target in starts,
                 f"{context}: a branch targets {target}, which is not an "
                 "instruction boundary of this body")
+    if limit < len(body):
+        last_at, last_length = spans[-1]
+        cursor = last_at
+        while code[cursor] in _IA32_SCHEDULE_INTERIOR_PREFIXES:
+            cursor += 1
+        opcode = code[cursor]
+        terminal = opcode in _IA32_SCHEDULE_TERMINAL_OPCODES
+        if opcode == 0xFF:
+            terminal = ((code[cursor + 1] >> 3) & 7) == 4
+        require(terminal,
+                f"{context}: code falls through into the body's data tail")
+    # A computed jump has no decodable successors, so the window's entry set
+    # cannot be closed from the decoded graph alone.  The relocated in-body
+    # label set -- every target a relocation in this body names inside this
+    # same COMDAT -- closes it, and it must be SUPPLIED: a body with a
+    # computed jump and no such set is refused rather than proved on an
+    # incomplete graph.  Every one of those targets that lies inside the CODE
+    # must be an instruction boundary of it; one that lies inside the pinned
+    # data tail is the dispatch's own table base, which no control transfer
+    # reaches, and is kept in the set anyway so the caller's entry check stays
+    # conservative.
+    if computed:
+        require(internal_targets is not None,
+                f"{context}: a computed jump at {computed[0]} makes the "
+                "window's entry set unknowable without the relocated in-body "
+                "target set")
+        stray = sorted(target for target in internal_targets
+                       if target < limit and target not in starts)
+        require(not stray,
+                f"{context}: the relocated in-body target {stray[:1]} is not "
+                "an instruction boundary of this body")
+        targets |= set(internal_targets)
     return spans, targets
 
 
 def apply_instruction_schedule(
     body: bytes, windows: list[dict], relocation_offsets: frozenset,
     context: str, relocations: dict | None = None,
+    code_length: int | None = None,
+    internal_targets: frozenset | None = None,
 ) -> tuple[bytes, dict]:
     """Reorder each declared window under a proved dependence DAG.
 
     Obligations 2 through 6 are checked here, and the result is re-decoded to
     exhaustion so that every claim about the image is measured on the image.
+
+    `code_length` pins where a switch-table body's code ends; the tail is
+    never decoded, never inside a window and never rewritten.
     """
     body = bytes(body)
-    spans, targets = ia32_schedule_body_walk(body, relocations, context)
+    limit = len(body) if code_length is None else code_length
+    spans, targets = ia32_schedule_body_walk(
+        body, relocations, context, code_length, internal_targets)
     instructions = [
         {"offset": start, "length": length} for start, length in spans]
     boundaries = {start for start, _ in spans}
-    boundaries.add(len(body))
+    boundaries.add(limit)
     image = bytearray(body)
     detail = []
     previous_end = 0
@@ -29314,6 +29534,9 @@ def apply_instruction_schedule(
         require(start >= previous_end,
                 f"{window_context}: windows are unsorted or overlapping")
         previous_end = end
+        require(end <= limit,
+                f"{window_context}: the window reaches into the body's data "
+                "tail")
         require(start in boundaries and end in boundaries and start < end,
                 f"{window_context}: the window does not span whole "
                 "instructions")
@@ -29463,7 +29686,8 @@ def apply_instruction_schedule(
         require(len(image_relocations) == len(relocations or {}),
                 f"{context}: the reseat collides two relocation records")
     image_spans, _ = ia32_schedule_body_walk(
-        image, image_relocations, f"{context} image")
+        image, image_relocations, f"{context} image", code_length,
+        internal_targets)
     image_instructions = [
         {"offset": start, "length": length} for start, length in image_spans]
     window_spans = [(item["start"], item["end"]) for item in windows]
@@ -29500,6 +29724,7 @@ def apply_instruction_schedule(
         "instruction_count": len(instructions),
         "changed_offsets": changed,
         "relocation_reseat": reseat,
+        "code_length": limit,
     }
 
 
@@ -29515,6 +29740,8 @@ def require_instruction_schedule_debug_fidelity(
     coff: "CoffObject", section: dict, image: bytes, windows: list[dict],
     spec: dict, mangled: str, context: str,
     relocations: dict | None = None,
+    code_length: int | None = None,
+    internal_targets: frozenset | None = None,
 ) -> dict:
     """Obligation 7: re-derive the line rows and the debug ranges.
 
@@ -29526,9 +29753,10 @@ def require_instruction_schedule_debug_fidelity(
     a code symbol whose value falls inside one.
     """
     spans, _ = ia32_schedule_body_walk(image, relocations,
-                                       f"{context} image")
+                                       f"{context} image", code_length,
+                                       internal_targets)
     boundaries = {start for start, _ in spans}
-    boundaries.add(len(image))
+    boundaries.add(len(image) if code_length is None else code_length)
     index_of = {start: position for position, (start, _) in enumerate(spans)}
     line_bytes = _coff_table_bytes(coff, section, "lines")
     require(len(line_bytes) == section["line_count"] * 6
@@ -29622,21 +29850,16 @@ def require_instruction_schedule_debug_fidelity(
     }
 
 
-def validate_instruction_schedule(
-    value: object, context: str, body_length: int,
-) -> dict:
-    """Validate one instruction-schedule certificate declaration."""
-    require(isinstance(value, dict), f"{context} must be an object")
-    exact_audit_keys(value, {
-        "kind", "windows", "expected_instruction_count",
-        "expected_changed_offsets", "expected_procedure_range",
-        "expected_code_symbol_references", "authenticity_rationale",
-    }, context)
-    require(value.get("kind") == INSTRUCTION_SCHEDULE_KIND,
-            f"{context}.kind differs")
-    windows = value.get("windows")
-    require(isinstance(windows, list) and 1 <= len(windows) <= 32,
-            f"{context}.windows must contain 1..32 windows")
+def _validate_schedule_windows(
+    windows: list, context: str, body_length: int,
+    code_length: int | None = None, targets: list | None = None,
+) -> list[dict]:
+    """Normalise a list of reordering windows.
+
+    Shared by the instruction-schedule certificate and the web-recolour
+    certificate, which applies the same reordering primitive before its own
+    proof.
+    """
     normalized_windows = []
     previous_end = 0
     for index, window in enumerate(windows):
@@ -29656,6 +29879,13 @@ def validate_instruction_schedule(
         require(start >= previous_end and start < end,
                 f"{window_context}: windows are unsorted, empty or "
                 "overlapping")
+        require(code_length is None or end <= code_length,
+                f"{window_context}: the window reaches past the declared "
+                "code length")
+        require(targets is None
+                or not any(start < item < end for item in targets),
+                f"{window_context}: a relocated in-body target enters the "
+                "window's interior")
         previous_end = end
         lengths = window.get("source_instruction_lengths")
         require(isinstance(lengths, list) and 2 <= len(lengths) <= 64
@@ -29724,6 +29954,389 @@ def validate_instruction_schedule(
         if normalized_reseat is not None:
             normalized_window["relocation_reseat"] = normalized_reseat
         normalized_windows.append(normalized_window)
+    return normalized_windows
+
+
+
+def validate_web_recolour(
+    value: object, context: str, body_length: int,
+) -> dict:
+    """Validate one web-recolour certificate declaration."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "windows", "webs", "expected_instruction_count",
+        "expected_changed_offsets", "expected_procedure_range",
+        "expected_code_symbol_references", "expected_debug_s_registers",
+        "expected_code_length", "expected_internal_relocation_targets",
+        "authenticity_rationale",
+    }, context, optional={"windows", "expected_code_length",
+                          "expected_internal_relocation_targets"})
+    require(value.get("kind") == WEB_RECOLOUR_KIND,
+            f"{context}.kind differs")
+    code_length = value.get("expected_code_length")
+    if code_length is not None:
+        code_length = require_exact_int(
+            code_length, f"{context}.expected_code_length",
+            minimum=2, maximum=body_length)
+    targets = value.get("expected_internal_relocation_targets")
+    if targets is not None:
+        require(isinstance(targets, list)
+                and targets == sorted(set(targets))
+                and all(type(item) is int and 0 <= item < body_length
+                        for item in targets),
+                f"{context}.expected_internal_relocation_targets is invalid")
+    normalized_windows = []
+    if value.get("windows") is not None:
+        windows = value["windows"]
+        require(isinstance(windows, list) and 1 <= len(windows) <= 32,
+                f"{context}.windows must contain 1..32 windows")
+        normalized_windows = _validate_schedule_windows(
+            windows, context, body_length, code_length, targets)
+    webs = value.get("webs")
+    require(isinstance(webs, list) and 1 <= len(webs) <= 4,
+            f"{context}.webs must contain 1..4 webs")
+    normalized_webs = []
+    rewritten = []
+    for index, web in enumerate(webs):
+        web_context = f"{context}.webs[{index}]"
+        require(isinstance(web, dict), f"{web_context} must be an object")
+        exact_audit_keys(web, {
+            "source_register", "image_register", "definitions", "uses",
+            "expected_rewritten_offsets",
+        }, web_context)
+        source = web.get("source_register")
+        image_register = web.get("image_register")
+        require(source in _IA32_REGISTER_NUMBERS
+                and image_register in _IA32_REGISTER_NUMBERS
+                and source != image_register,
+                f"{web_context} does not name two distinct general registers")
+        require(not ({source, image_register} & _IA32_STRUCTURAL_REGISTERS),
+                f"{web_context} touches ESP or EBP")
+        for role in ("definitions", "uses"):
+            entries = web.get(role)
+            require(isinstance(entries, list) and entries
+                    and entries == sorted(set(entries))
+                    and all(type(item) is int
+                            and 0 <= item < (code_length or body_length)
+                            for item in entries),
+                    f"{web_context}.{role} is invalid")
+        require(not (set(web["definitions"]) & set(web["uses"])),
+                f"{web_context}: an instruction is both a definition and a "
+                "use")
+        offsets = web.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and offsets
+                and offsets == sorted(set(offsets))
+                and len(offsets) == len(web["definitions"]) + len(web["uses"])
+                and all(type(item) is int
+                        and 0 <= item < (code_length or body_length)
+                        for item in offsets),
+                f"{web_context}.expected_rewritten_offsets is invalid")
+        rewritten.extend(offsets)
+        normalized_webs.append({
+            "source_register": source, "image_register": image_register,
+            "definitions": list(web["definitions"]),
+            "uses": list(web["uses"]),
+            "expected_rewritten_offsets": list(offsets),
+        })
+    changed = value.get("expected_changed_offsets")
+    require(isinstance(changed, list) and changed
+            and changed == sorted(set(changed))
+            and all(type(offset) is int
+                    and (offset in rewritten
+                         or any(item["start"] <= offset < item["end"]
+                                for item in normalized_windows))
+                    for offset in changed),
+            f"{context}.expected_changed_offsets is invalid")
+    require(set(rewritten) <= set(changed),
+            f"{context}.expected_changed_offsets omits a recoloured byte")
+    procedure = value.get("expected_procedure_range")
+    require(isinstance(procedure, list) and len(procedure) == 3
+            and all(type(item) is int and item >= 0 for item in procedure)
+            and procedure[0] == body_length
+            and procedure[1] <= procedure[2] <= body_length,
+            f"{context}.expected_procedure_range is invalid")
+    references = value.get("expected_code_symbol_references")
+    require(isinstance(references, list)
+            and all(isinstance(item, list) and len(item) == 3
+                    and isinstance(item[0], str) and isinstance(item[1], str)
+                    and type(item[2]) is int and 0 <= item[2] <= body_length
+                    for item in references),
+            f"{context}.expected_code_symbol_references is invalid")
+    registers = value.get("expected_debug_s_registers")
+    require(isinstance(registers, list)
+            and all(isinstance(item, list) and len(item) == 3
+                    and isinstance(item[0], str)
+                    and type(item[1]) is int and item[1] >= 0
+                    and item[2] in CODEVIEW_X86_REGISTER_NUMBERS
+                    for item in registers),
+            f"{context}.expected_debug_s_registers is invalid")
+    rationale = value.get("authenticity_rationale")
+    require(isinstance(rationale, str) and len(rationale) >= 40,
+            f"{context}.authenticity_rationale is missing")
+    normalized = {
+        "kind": WEB_RECOLOUR_KIND,
+        "webs": normalized_webs,
+        "expected_instruction_count": require_exact_int(
+            value.get("expected_instruction_count"),
+            f"{context}.expected_instruction_count", minimum=2),
+        "expected_changed_offsets": list(changed),
+        "expected_procedure_range": list(procedure),
+        "expected_code_symbol_references": [list(item)
+                                            for item in references],
+        "expected_debug_s_registers": [list(item) for item in registers],
+        "authenticity_rationale": rationale,
+    }
+    if normalized_windows:
+        normalized["windows"] = normalized_windows
+    if code_length is not None:
+        normalized["expected_code_length"] = code_length
+    if targets is not None:
+        normalized["expected_internal_relocation_targets"] = list(targets)
+    return normalized
+
+
+def compose_retail_exact_web_recolour(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Install a recoloured def-use web after proving it is retail's own code.
+
+    See the class comment above.  The pre-image is the SEED's own
+    compiler-produced body -- no donor bytes are installed, and the donor the
+    manifest names is required to reproduce that body exactly, which is what
+    makes it a provenance witness rather than decoration.  A declared
+    reordering is applied first through the unchanged
+    `apply_instruction_schedule` primitive; every web obligation is then
+    measured on the reordered body.  The result is refused unless it equals
+    the pinned retail oracle under the relocation mask, and installation is
+    delegated, unchanged, to the equal-body primitive.
+    """
+    require(function.get("splice_class") == WEB_RECOLOUR_CLASS,
+            "splice class is not retail_exact_web_recolour")
+    require("target_source_refactor" not in function,
+            "web-recolour functions carry no source refactor")
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+    spec = function["web_recolour"]
+    seed = CoffObject(seed_bytes)
+    donor = CoffObject(donor_bytes)
+    mangled = function["mangled"]
+    sp = seed.function_section(mangled)
+    dp = donor.function_section(mangled)
+    require(sp["number"] == dp["number"]
+            == function["expected_section_number"],
+            "web-recolour target section seat changed")
+    require(len(seed.sections) == len(donor.sections)
+            == function["expected_section_count"],
+            "web-recolour global section count changed")
+    seed_functions = function_multiset(seed)
+    require(seed_functions == function_multiset(donor)
+            and sum(seed_functions.values())
+            == function["expected_function_count"],
+            "web-recolour donor function set differs")
+    seed_comdats = comdat_primary_identity_multiset(seed)
+    require(seed_comdats == comdat_primary_identity_multiset(donor)
+            and sum(seed_comdats.values())
+            == function["expected_comdat_count"],
+            "web-recolour donor COMDAT identity set differs")
+    require(
+        sp["raw_size"] == dp["raw_size"] == function["expected_body_length"]
+        and sp["relocation_count"] == dp["relocation_count"]
+        == function["expected_relocation_count"]
+        and sp["line_count"] == function["expected_seed_line_count"]
+        and dp["line_count"] == function["expected_donor_line_count"]
+        and sp["name"] == dp["name"]
+        and sp["characteristics"] == dp["characteristics"]
+        == function["expected_characteristics"],
+        "web-recolour target header/count pins changed",
+    )
+    require(
+        section_definitions(seed)[sp["number"]]["selection"]
+        == section_definitions(donor)[dp["number"]]["selection"]
+        == function["expected_selection"],
+        "web-recolour COMDAT selection changed",
+    )
+    expected_closure = tuple(function["expected_closure"])
+    require(_comdat_child_closure(seed, sp)
+            == _comdat_child_closure(donor, dp)
+            == (len(expected_closure), expected_closure),
+            "web-recolour target closure changed")
+    require(list(expected_closure) == INSTRUCTION_SCHEDULE_FPO_CLOSURE,
+            "web-recolour closure pin names no installation delegate")
+    require(instruction_mosaic_metadata_sha256(seed, sp)
+            == function["expected_seed_metadata_sha256"]
+            and instruction_mosaic_metadata_sha256(donor, dp)
+            == function["expected_donor_metadata_sha256"],
+            "web-recolour metadata differs from its pin")
+    seed_body = coff_body(seed, sp)
+    donor_body = coff_body(donor, dp)
+    require(sha256_bytes(seed_body) == function["expected_seed_body_sha256"]
+            and sha256_bytes(donor_body)
+            == function["expected_donor_body_sha256"],
+            "web-recolour seed/donor body differs from its pin")
+    # The donor is a provenance WITNESS: an independent compiler state that
+    # emits this same body.  It is never installed, so it must reproduce the
+    # seed's body exactly or the pin it carries means nothing.
+    require(donor_body == seed_body,
+            "web-recolour donor does not reproduce the seed's body")
+
+    seed_rows = detailed_relocations(seed, sp)
+    relocation_offsets = frozenset(
+        row["offset"] + byte
+        for row in seed_rows for byte in range(row["width"]))
+    relocation_symbols = {
+        row["offset"]: {"width": row["width"], "target": row["target"]}
+        for row in seed_rows}
+    internal_targets = frozenset(
+        row["target_value"] for row in seed_rows
+        if row["target_section"] == sp["number"])
+    declared_targets = spec.get("expected_internal_relocation_targets")
+    if declared_targets is not None:
+        require(sorted(internal_targets) == declared_targets,
+                "web-recolour in-body relocated target set changed")
+    code_length = spec.get("expected_code_length")
+
+    windows = spec.get("windows") or []
+    image = seed_body
+    schedule_detail = []
+    if windows:
+        image, schedule_proof = apply_instruction_schedule(
+            image, windows, relocation_offsets, "web-recolour schedule",
+            relocation_symbols, code_length, internal_targets)
+        require(not schedule_proof["relocation_reseat"],
+                "web-recolour refuses to move a relocation")
+        schedule_detail = schedule_proof["windows"]
+    image, proof = apply_web_recolour(
+        image, spec["webs"], relocation_offsets, "web-recolour image",
+        relocation_symbols, code_length, internal_targets)
+    require(proof["code_length"] == (code_length or len(seed_body)),
+            "web-recolour code length differs from its pin")
+    require(proof["instruction_count"] == spec["expected_instruction_count"],
+            "web-recolour instruction count differs from its declaration")
+    changed = sorted(index for index in range(len(seed_body))
+                     if seed_body[index] != image[index])
+    require(changed == spec["expected_changed_offsets"],
+            "web-recolour image differs from its declaration")
+    require(sha256_bytes(image) == function["expected_body_sha256"],
+            "web-recolour image differs from its pin")
+    require(changed == function["expected_changed_offsets"],
+            "web-recolour changed offsets differ from their pin")
+
+    # Obligation 7, measured on the IMAGE with the SEED's own tables -- which
+    # are the tables this composition installs, unchanged.
+    debug_detail = require_instruction_schedule_debug_fidelity(
+        seed, sp, image, windows, spec, mangled,
+        "web-recolour debug fidelity", relocation_symbols, code_length,
+        internal_targets,
+    )
+    debug_registers = require_web_recolour_debug_registers(
+        coff_body(seed, _comdat_child(seed, sp, ".debug$S")),
+        spec["expected_debug_s_registers"], "web-recolour debug registers")
+
+    pinned_length = function["retail_oracle"]["length"]
+    require(len(retail_body) == pinned_length == len(image),
+            "web-recolour retail length changed")
+    semantic_detail = require_retail_relocation_oracle(
+        seed_rows, bytes(retail_body),
+        int(function["retail_oracle"]["address"], 16),
+        function["retail_relocations"],
+        "web-recolour retail relocation oracle",
+    )
+    masked_image = bytearray(image)
+    masked_retail = bytearray(retail_body)
+    for row in seed_rows:
+        start, width = row["offset"], row["width"]
+        masked_image[start:start + width] = b"\0" * width
+        masked_retail[start:start + width] = b"\0" * width
+    differing = sum(left != right
+                    for left, right in zip(masked_image, masked_retail))
+    require(differing == 0,
+            f"web-recolour output is not retail-exact: {differing} byte(s) "
+            "differ under the relocation mask")
+
+    derived = bytearray(seed_bytes)
+    derived[sp["raw_offset"]:sp["raw_offset"] + sp["raw_size"]] = image
+    effective = {
+        "mangled": mangled,
+        "splice_class": "equal_body_strict",
+        "expected_body_length": function["expected_body_length"],
+        "expected_body_sha256": function["expected_body_sha256"],
+        "expected_changed_offsets": function["expected_changed_offsets"],
+    }
+    composed, detail = compose_equal_body_comdat(
+        seed_bytes, bytes(derived), effective)
+
+    checked = CoffObject(composed)
+    cp = checked.function_section(mangled)
+    require(coff_body(checked, cp) == image,
+            "web-recolour composed body differs from the image")
+    require(detailed_relocations(checked, cp) == seed_rows
+            and _coff_table_bytes(checked, cp, "relocations")
+            == _coff_table_bytes(seed, sp, "relocations")
+            and _coff_table_bytes(checked, cp, "lines")
+            == _coff_table_bytes(seed, sp, "lines"),
+            "web-recolour output changed seed relocation/line bytes")
+    for child_name in expected_closure:
+        require(coff_body(checked, _comdat_child(checked, cp, child_name))
+                == coff_body(seed, _comdat_child(seed, sp, child_name)),
+                f"web-recolour output changed its {child_name} child")
+    allowed = set(range(sp["raw_offset"], sp["raw_offset"] + sp["raw_size"]))
+    require({index for index in range(len(seed_bytes))
+             if seed_bytes[index] != composed[index]} <= allowed,
+            "web-recolour changed bytes outside its own COMDAT")
+    return composed, {
+        **detail,
+        "splice_class": WEB_RECOLOUR_CLASS,
+        "instruction_schedule": schedule_detail,
+        "web_recolour": proof["webs"],
+        "instruction_count": proof["instruction_count"],
+        "changed_offsets": changed,
+        "debug_fidelity": debug_detail,
+        "debug_s_registers": debug_registers,
+        "retail_exact": True,
+        **semantic_detail,
+    }
+
+
+def validate_instruction_schedule(
+    value: object, context: str, body_length: int,
+) -> dict:
+    """Validate one instruction-schedule certificate declaration."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "windows", "expected_instruction_count",
+        "expected_changed_offsets", "expected_procedure_range",
+        "expected_code_symbol_references", "authenticity_rationale",
+        "expected_code_length", "expected_internal_relocation_targets",
+    }, context, optional={"expected_code_length",
+                          "expected_internal_relocation_targets"})
+    require(value.get("kind") == INSTRUCTION_SCHEDULE_KIND,
+            f"{context}.kind differs")
+    # A COMDAT that ends in a compiler-emitted switch table carries DATA after
+    # its last instruction.  `expected_code_length` pins where the code ends;
+    # the tail is never decoded, never inside a window and never rewritten,
+    # and `ia32_schedule_body_walk` proves the code cannot fall through into
+    # it.  The in-body relocated target set is what closes the "no branch
+    # enters a window's interior" obligation for a computed jump.
+    code_length = value.get("expected_code_length")
+    if code_length is not None:
+        code_length = require_exact_int(
+            code_length, f"{context}.expected_code_length",
+            minimum=2, maximum=body_length)
+    targets = value.get("expected_internal_relocation_targets")
+    if targets is not None:
+        require(isinstance(targets, list)
+                and targets == sorted(set(targets))
+                and all(type(item) is int and 0 <= item < body_length
+                        for item in targets),
+                f"{context}.expected_internal_relocation_targets is invalid")
+    windows = value.get("windows")
+    require(isinstance(windows, list) and 1 <= len(windows) <= 32,
+            f"{context}.windows must contain 1..32 windows")
+    normalized_windows = _validate_schedule_windows(
+        windows, context, body_length, code_length, targets)
     changed = value.get("expected_changed_offsets")
     require(isinstance(changed, list) and changed
             and changed == sorted(set(changed))
@@ -29748,7 +30361,7 @@ def validate_instruction_schedule(
     rationale = value.get("authenticity_rationale")
     require(isinstance(rationale, str) and len(rationale) >= 40,
             f"{context}.authenticity_rationale is missing")
-    return {
+    normalized = {
         "kind": INSTRUCTION_SCHEDULE_KIND,
         "windows": normalized_windows,
         "expected_instruction_count": require_exact_int(
@@ -29760,6 +30373,437 @@ def validate_instruction_schedule(
                                             for item in references],
         "authenticity_rationale": rationale,
     }
+    if code_length is not None:
+        normalized["expected_code_length"] = code_length
+    if targets is not None:
+        normalized["expected_internal_relocation_targets"] = list(targets)
+    return normalized
+
+
+# ---------------------------------------------------------------------------
+# The web-recolour CERTIFICATE.
+#
+# `retail_exact_register_bijection` proves its case by permuting the register
+# FILE: a bijection sigma is an isomorphism of machine states, so once sigma's
+# support is dead at the region's boundary every instruction's semantics carry
+# over for free.  Retail sometimes differs from us by a map that is NOT a
+# bijection -- one architectural register's occurrences go to a register that
+# another value already occupies elsewhere.  That is a live-range COALESCE,
+# not a relabelling, and the bijection's argument does not reach it: two
+# distinct live ranges become one, which is sound only if they are provably
+# NON-OVERLAPPING.
+#
+# So this class proves exactly that, and nothing weaker.  It renames one
+# def-use WEB -- a set of definitions and the uses they reach, closed in both
+# directions under the body's own control flow -- from a source register to an
+# image register, having first proved:
+#
+#   W1  the body decodes to exhaustion under the closed semantic table, its
+#       control-flow graph is complete (a computed jump is admitted only
+#       against the pinned relocated in-body target set), and EVERY
+#       instruction is reachable from the entry, so no part of the function is
+#       analysed on a disconnected graph;
+#   W2  neither register is esp/ebp, no rewritten field is a sub-register
+#       field, and each rewritten instruction names the source register in
+#       EXACTLY ONE register field -- so every appearance of it in that
+#       instruction's read/write sets traces to the field being rewritten;
+#   W3  the web is DERIVED, not declared: every use a declared definition
+#       reaches is declared, and every definition that reaches a declared use
+#       is declared.  A partial (sub-register) redefinition inside the range
+#       refuses, and a use the function's entry reaches -- an undefined value
+#       -- refuses;
+#   W4  THE COALESCE OBLIGATION.  Over the web's whole live range the image
+#       register carries no live value: it is dead on every out-edge of every
+#       definition, and no instruction strictly inside the range reads it,
+#       writes it, or has it live on entry.  The two ranges therefore ABUT and
+#       never overlap, which is what makes merging them sound;
+#   W5  with the web's own uses blinded, the source register is dead on every
+#       out-edge of every definition -- so the web has no consumer outside
+#       itself and removing its definitions strands nothing;
+#   W6  no rewritten byte overlaps a relocation operand;
+#   W7  the image re-decodes to the same instruction boundaries, opcodes,
+#       flow and branch targets, and each rewritten instruction's read/write
+#       sets are exactly the source sets with the rename applied;
+#   W8  the `.debug$S` S_REGISTER record list is pinned and unchanged.  W4 and
+#       W5 together are what make that sound rather than an author's claim: no
+#       value of EITHER register is live across the web's range, so no named
+#       register local can be the web, and none can survive a definition.
+#
+# A reordering may be declared alongside, and is applied FIRST through the
+# unchanged `apply_instruction_schedule` primitive -- because a coalesce is
+# often only legal AFTER the schedule that separates the two ranges.  Every
+# web obligation is then measured on the reordered body, which is the body the
+# composition installs.  If neither order has a legal intermediate, the class
+# refuses; that is the correct answer and it is what retires a candidate.
+#
+# The pre-image is the SEED's own compiler-produced body: this class installs
+# no donor bytes at all.  The donor the manifest names is a provenance witness
+# and is required to reproduce the seed's body exactly.
+# ---------------------------------------------------------------------------
+
+WEB_RECOLOUR_CLASS = "retail_exact_web_recolour"
+WEB_RECOLOUR_KIND = "web_recolour_v1"
+
+
+def ia32_web_control_flow(
+    instructions: list[dict], context: str,
+    internal_targets: frozenset | None = None,
+) -> list[list[int]]:
+    """The body's complete control-flow graph, or a refusal.
+
+    Successors are the fall-through and the decoded branch target.  A computed
+    jump has no decodable successors, so it is admitted only against the
+    relocated in-body target set, whose in-code members become its successors.
+    `ret` and a relocated tail-jump out of the COMDAT have none.  Every
+    instruction must then be reachable from the entry: an unreachable block
+    would make every reaching-definition statement about it vacuous.
+    """
+    index_of = {item["offset"]: index
+                for index, item in enumerate(instructions)}
+    successors = []
+    for index, item in enumerate(instructions):
+        edges = []
+        if item["flow"] in ("fall", "jcc", "call"):
+            if index + 1 < len(instructions):
+                edges.append(index + 1)
+            else:
+                require(item["flow"] != "fall",
+                        f"{context}: body falls off its end")
+        if item["flow"] in ("jcc", "jmp") and item["target"] is not None:
+            edges.append(index_of[item["target"]])
+        if item["indirect"]:
+            require(internal_targets is not None,
+                    f"{context}: a computed jump at {item['offset']} requires "
+                    "the relocated in-body target set")
+            edges.extend(index_of[target] for target in sorted(internal_targets)
+                         if target in index_of)
+        successors.append(sorted(set(edges)))
+    seen = set()
+    stack = [0]
+    while stack:
+        index = stack.pop()
+        if index in seen:
+            continue
+        seen.add(index)
+        stack.extend(successors[index])
+    unreachable = sorted(instructions[index]["offset"]
+                         for index in range(len(instructions))
+                         if index not in seen)
+    require(not unreachable,
+            f"{context}: the instruction at {unreachable[:1]} is unreachable "
+            "from the entry, so the control-flow graph is incomplete")
+    return successors
+
+
+def _ia32_web_predecessors(successors: list[list[int]]) -> list[list[int]]:
+    predecessors = [[] for _ in successors]
+    for index, edges in enumerate(successors):
+        for edge in edges:
+            predecessors[edge].append(index)
+    return predecessors
+
+
+def _ia32_web_reached_uses(
+    instructions: list[dict], successors: list[list[int]],
+    definitions: list[int], atoms: frozenset, context: str,
+) -> tuple[set, set]:
+    """Every reader of `atoms` a definition reaches, and the range between.
+
+    Traversal stops at a full redefinition.  A PARTIAL redefinition inside the
+    range refuses: the value would be half the web's and half something else,
+    which no rename can express.
+    """
+    reached = set()
+    interior = set()
+    stack = [edge for index in definitions for edge in successors[index]]
+    while stack:
+        index = stack.pop()
+        if index in interior:
+            continue
+        interior.add(index)
+        item = instructions[index]
+        if atoms & item["read_atoms"]:
+            reached.add(index)
+        overlap = atoms & item["write_atoms"]
+        if overlap:
+            require(atoms <= item["write_atoms"],
+                    f"{context}: the instruction at {item['offset']} "
+                    "partially redefines the web's register inside its range")
+            continue
+        stack.extend(successors[index])
+    return reached, interior
+
+
+def _ia32_web_reaching_definitions(
+    instructions: list[dict], predecessors: list[list[int]],
+    uses: list[int], atoms: frozenset, context: str,
+) -> tuple[set, set]:
+    """Every definition of `atoms` that reaches one of `uses`.
+
+    Also returns the backward cone -- every instruction that can reach a use
+    without passing a redefinition.  Intersected with the forward cone that
+    is the web's LIVE RANGE, and nothing outside it is the coalesce's concern.
+    """
+    reaching = set()
+    seen = set()
+    stack = list(uses)
+    while stack:
+        index = stack.pop()
+        if index in seen:
+            continue
+        seen.add(index)
+        require(index != 0 or index in uses,
+                f"{context}: the function's entry reaches a declared use, so "
+                "the web's value is not defined on every path")
+        for previous in predecessors[index]:
+            item = instructions[previous]
+            if atoms & item["write_atoms"]:
+                require(atoms <= item["write_atoms"],
+                        f"{context}: the instruction at {item['offset']} "
+                        "partially defines the web's register")
+                reaching.add(previous)
+            else:
+                stack.append(previous)
+        require(predecessors[index] or index in uses,
+                f"{context}: the instruction at {instructions[index]['offset']}"
+                " has no predecessor, so a use is reached by no definition")
+    return reaching, seen
+
+
+def apply_web_recolour(
+    body: bytes, webs: list[dict], relocation_offsets: frozenset,
+    context: str, relocations: dict | None = None,
+    code_length: int | None = None,
+    internal_targets: frozenset | None = None,
+) -> tuple[bytes, dict]:
+    """Recolour each declared web, proving W1..W7 on the body it is given.
+
+    Webs are applied in order and each one's proof is measured on the body the
+    previous ones produced, so a certificate that declares several is a
+    composition of individually proved steps.
+    """
+    body = bytes(body)
+    image = bytes(body)
+    detail = []
+    rewritten_all = []
+    instruction_count = None
+    for position, web in enumerate(webs):
+        web_context = f"{context} web {position}"
+        instructions = decode_ia32_bijection_body(
+            image, web_context, relocations, code_length)
+        instruction_count = len(instructions)
+        successors = ia32_web_control_flow(
+            instructions, web_context, internal_targets)
+        predecessors = _ia32_web_predecessors(successors)
+        index_of = {item["offset"]: index
+                    for index, item in enumerate(instructions)}
+        source = web["source_register"]
+        target = web["image_register"]
+        # W2.
+        require(source in _IA32_REGISTER_NUMBERS
+                and target in _IA32_REGISTER_NUMBERS and source != target,
+                f"{web_context}: the recolour names an unknown register")
+        require(not ({source, target} & _IA32_STRUCTURAL_REGISTERS),
+                f"{web_context}: the recolour touches ESP or EBP, whose "
+                "encodings carry ModRM/SIB structure")
+        source_atoms = ia32_register_atoms({source})
+        target_atoms = ia32_register_atoms({target})
+        source_number = _IA32_REGISTER_NUMBERS[source]
+        target_number = _IA32_REGISTER_NUMBERS[target]
+        for role in ("definitions", "uses"):
+            for offset in web[role]:
+                require(offset in index_of,
+                        f"{web_context}: {role} names {offset}, which is not "
+                        "an instruction boundary of this body")
+        definitions = [index_of[offset] for offset in web["definitions"]]
+        uses = [index_of[offset] for offset in web["uses"]]
+        require(not (set(definitions) & set(uses)),
+                f"{web_context}: an instruction is both a definition and a "
+                "use of the web")
+        for index in definitions:
+            item = instructions[index]
+            require(source_atoms <= item["write_atoms"],
+                    f"{web_context}: the declared definition at "
+                    f"{item['offset']} does not define the whole register")
+            # A definition that also READS the source register consumes some
+            # other value of it, so which occurrence belongs to the web is not
+            # decidable and the rename would change what the instruction
+            # computes.
+            require(not (source_atoms & item["read_atoms"]),
+                    f"{web_context}: the declared definition at "
+                    f"{item['offset']} also reads the source register")
+            require(target not in item["writes"],
+                    f"{web_context}: the declared definition at "
+                    f"{item['offset']} already writes the image register")
+        for index in uses:
+            item = instructions[index]
+            require(source_atoms <= item["read_atoms"]
+                    and not (source_atoms & item["write_atoms"]),
+                    f"{web_context}: the declared use at {item['offset']} "
+                    "does not read the whole register without defining it")
+            # A use that already names the image register would, after the
+            # rename, read one value where it read two.
+            require(target not in item["reads"]
+                    and target not in item["writes"],
+                    f"{web_context}: the declared use at {item['offset']} "
+                    "already names the image register")
+        # W3.  Both closure directions, derived from the graph.
+        reached, forward = _ia32_web_reached_uses(
+            instructions, successors, definitions, source_atoms, web_context)
+        require(reached == set(uses),
+                f"{web_context}: the definitions reach the uses at "
+                f"{sorted(instructions[index]['offset'] for index in reached)}"
+                ", which is not the declared use set")
+        reaching, backward = _ia32_web_reaching_definitions(
+            instructions, predecessors, uses, source_atoms, web_context)
+        require(reaching == set(definitions),
+                f"{web_context}: the uses are reached by the definitions at "
+                f"{sorted(instructions[index]['offset'] for index in reaching)}"
+                ", which is not the declared definition set")
+        # The live range: on a path from a definition to a use, both cones.
+        interior = (forward & backward) | set(uses)
+        # W4.  The coalesce obligation, on the web's own live range.
+        live = _ia32_backward_liveness(instructions, successors, web_context)
+        for index in definitions:
+            leaking = target_atoms & _ia32_live_out(live, successors, index)
+            require(not leaking,
+                    f"{web_context}: {_ia32_atom_registers(leaking)} is live "
+                    f"on an out-edge of the definition at "
+                    f"{instructions[index]['offset']}, so the two live ranges "
+                    "overlap and cannot be coalesced")
+        for index in sorted(interior):
+            item = instructions[index]
+            if index in uses:
+                require(not (target_atoms & item["write_atoms"]),
+                        f"{web_context}: the use at {item['offset']} defines "
+                        "the image register")
+                continue
+            touching = target_atoms & (item["read_atoms"] | item["write_atoms"])
+            require(not touching,
+                    f"{web_context}: the instruction at {item['offset']} "
+                    f"names {_ia32_atom_registers(touching)} inside the web's "
+                    "live range")
+            leaking = target_atoms & live[index]
+            require(not leaking,
+                    f"{web_context}: {_ia32_atom_registers(leaking)} is live "
+                    f"at {item['offset']}, inside the web's live range")
+        # W5.  With the web's own uses blinded, the source register must be
+        # dead out of every definition -- so the web has no outside consumer.
+        blind = _ia32_backward_liveness(
+            instructions, successors, web_context,
+            {index: source_atoms for index in uses})
+        for index in definitions:
+            leaking = source_atoms & _ia32_live_out(blind, successors, index)
+            require(not leaking,
+                    f"{web_context}: {_ia32_atom_registers(leaking)} still has"
+                    f" a consumer outside the web at "
+                    f"{instructions[index]['offset']}")
+        # W2 (encoding) and W6.
+        buffer = bytearray(image)
+        rewritten = []
+        for index in sorted(definitions + uses):
+            item = instructions[index]
+            blocked = {source, target} & set(item.get("frozen", frozenset()))
+            require(not blocked,
+                    f"{web_context}: {sorted(blocked)} is named by a "
+                    f"sub-register field at {item['offset']} that the "
+                    "recolour cannot rewrite")
+            hits = [(byte_index, shift)
+                    for byte_index, shift in item["fields"]
+                    if (buffer[byte_index] >> shift) & 7 == source_number]
+            require(len(hits) == 1,
+                    f"{web_context}: the instruction at {item['offset']} names "
+                    f"{source} in {len(hits)} register fields, so which "
+                    "occurrence belongs to the web is not decidable")
+            byte_index, shift = hits[0]
+            require(byte_index not in relocation_offsets,
+                    f"{web_context}: a rewritten byte overlaps a relocation")
+            buffer[byte_index] = (
+                (buffer[byte_index] & ~(7 << shift))
+                | (target_number << shift)) & 0xFF
+            rewritten.append(byte_index)
+        require(rewritten, f"{web_context}: the recolour rewrites nothing")
+        candidate = bytes(buffer)
+        require(len(candidate) == len(image),
+                f"{web_context}: the recolour changed the body length")
+        # W7.  Every claim about the image is measured on the image.
+        image_instructions = decode_ia32_bijection_body(
+            candidate, f"{web_context} image", relocations, code_length)
+        require(
+            [(item["offset"], item["length"]) for item in image_instructions]
+            == [(item["offset"], item["length"]) for item in instructions],
+            f"{web_context}: the image changed an instruction boundary")
+        mapping = {source: target}
+        for left, right in zip(image_instructions, instructions):
+            opreg = _bijection_form_for(right["opcode"])["opreg"] is not None
+            mask = 0xF8 if opreg else 0xFFFF
+            require(left["opcode"] & mask == right["opcode"] & mask
+                    and left["flow"] == right["flow"]
+                    and left["target"] == right["target"],
+                    f"{web_context}: the image changed an opcode or a branch")
+            recoloured = right["offset"] in web["definitions"] \
+                or right["offset"] in web["uses"]
+            expected_reads = frozenset(
+                mapping.get(name, name) if recoloured else name
+                for name in right["reads"])
+            expected_writes = frozenset(
+                mapping.get(name, name) if recoloured else name
+                for name in right["writes"])
+            require(left["reads"] == expected_reads
+                    and left["writes"] == expected_writes,
+                    f"{web_context}: the image's operand set at "
+                    f"{right['offset']} is not the recolour's image")
+        changed = sorted({index for index in range(len(image))
+                          if image[index] != candidate[index]})
+        require(changed == sorted(set(rewritten)),
+                f"{web_context}: the image changed a byte the recolour did "
+                "not name")
+        require(changed == list(web["expected_rewritten_offsets"]),
+                f"{web_context}: the rewritten offset set {changed} differs "
+                "from its declaration")
+        detail.append({
+            "source_register": source, "image_register": target,
+            "definitions": list(web["definitions"]),
+            "uses": list(web["uses"]),
+            "live_range": sorted(instructions[index]["offset"]
+                                 for index in interior),
+            "rewritten_offsets": changed,
+        })
+        rewritten_all.extend(changed)
+        image = candidate
+    require(image != body, f"{context}: the recolour moves nothing")
+    return image, {
+        "webs": detail,
+        "instruction_count": instruction_count,
+        "rewritten_offsets": sorted(set(rewritten_all)),
+        "code_length": len(body) if code_length is None else code_length,
+    }
+
+
+def require_web_recolour_debug_registers(
+    stream: bytes, declared: list, context: str,
+) -> list:
+    """W8.  Pin the `.debug$S` S_REGISTER record list.
+
+    The recolour leaves the stream alone.  That is sound rather than
+    optimistic because of W4 and W5: no value of the image register is live
+    anywhere in the web's range, and no value of the source register survives
+    a definition, so no named register local can BE the web and none can span
+    it.  What is pinned here is that the record list has not changed -- a
+    different allocation would produce a different one and must be re-proved.
+    """
+    records = parse_codeview_symbol_stream(stream, context)
+    measured = []
+    for record in records:
+        if record["type"] != CODEVIEW_REGISTER_RECORD_TYPE:
+            continue
+        field_at = _codeview_register_field(record, context)
+        measured.append([record["name"], record["offset"],
+                         _codeview_register_name(stream, field_at, context)])
+    require(measured == [list(item) for item in declared],
+            f"{context}: the S_REGISTER record list {measured} differs from "
+            "its declaration")
+    return measured
 
 
 INSTRUCTION_SCHEDULE_EDGE_REASONS = frozenset({
@@ -29884,11 +30928,26 @@ def compose_retail_exact_instruction_schedule(
     relocation_symbols = {
         row["offset"]: {"width": row["width"], "target": row["target"]}
         for row in seed_rows}
+    # Every label this body's own relocations name inside this same COMDAT.
+    # The installed BODY is the donor's, so its control flow is the donor's
+    # and the set is read there; a computed jump can reach only these, so this
+    # is what discharges the window-entry obligation for one.
+    internal_targets = frozenset(
+        row["target_value"] for row in donor_rows
+        if row["target_section"] == dp["number"])
+    declared_targets = spec.get("expected_internal_relocation_targets")
+    if declared_targets is not None:
+        require(sorted(internal_targets) == declared_targets,
+                "instruction-schedule in-body relocated target set changed")
 
     image, proof = apply_instruction_schedule(
         donor_body, spec["windows"], relocation_offsets,
         "instruction-schedule image", relocation_symbols,
+        spec.get("expected_code_length"), internal_targets,
     )
+    require(proof["code_length"]
+            == (spec.get("expected_code_length") or len(donor_body)),
+            "instruction-schedule code length differs from its pin")
     require(proof["changed_offsets"] == spec["expected_changed_offsets"]
             and proof["instruction_count"]
             == spec["expected_instruction_count"],
@@ -29937,6 +30996,7 @@ def compose_retail_exact_instruction_schedule(
     debug_detail = require_instruction_schedule_debug_fidelity(
         seed, sp, image, spec["windows"], spec, mangled,
         "instruction-schedule debug fidelity", image_relocation_symbols,
+        spec.get("expected_code_length"), internal_targets,
     )
 
     pinned_length = function["retail_oracle"]["length"]

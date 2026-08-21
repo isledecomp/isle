@@ -126,16 +126,30 @@ SYMBOL_SHAPE = (
 
 
 def make_coff(*, body=BODY, relocations=RELOCATIONS, debug_stream=None,
-              line_rows=LINE_ROWS):
-    """One classic-i386 COFF with an ordinary FPO COMDAT closure."""
+              line_rows=LINE_ROWS, code_relocations=()):
+    """One classic-i386 COFF with an ordinary FPO COMDAT closure.
+
+    `code_relocations` is a list of `(offset, label, value)` triples.  Each
+    adds a static symbol in the target's OWN section at `value` and a DIR32
+    relocation naming it at `offset` -- the shape a compiler-emitted switch
+    dispatch and its jump table have, and the only shape from which the
+    relocated in-body target set can be read.
+    """
     debug_s = debug_stream if debug_stream is not None else codeview_stream()
     fpo = struct.pack("<IIIHBB", 0, len(body), 2, 1, 2, 0x10)
     target_index = 4
     nil_index = 10
+    label_base = 25
+    label_index = {}
+    for position, (_, label, _) in enumerate(code_relocations):
+        label_index.setdefault(label, label_base + len(label_index))
     lines = bytearray(struct.pack("<IH", target_index, 0))
     for offset, line in line_rows:
         lines.extend(struct.pack("<IH", offset, line))
     reloc_rows = [(offset, nil_index, 0x0006) for offset in relocations]
+    reloc_rows += [(offset, label_index[label], 0x0006)
+                   for offset, label, _ in code_relocations]
+    reloc_rows.sort()
     section_inputs = [
         {"name": ".text", "raw": bytes(body), "relocations": reloc_rows,
          "lines": bytes(lines), "characteristics": 0x60501020},
@@ -190,6 +204,13 @@ def make_coff(*, body=BODY, relocations=RELOCATIONS, debug_stream=None,
         (".ef", 8, 4, 0, 101, _marker_aux(71)),
         (".drectve", 0, 5, 0, 3, _section_aux(len(DIRECTIVE), 0, 0, 0)),
     ]
+    seen = {}
+    for _, label, value in code_relocations:
+        if label not in seen:
+            seen[label] = value
+            symbols.append((label, value, 1, 0, 3, None))
+    assert all(label_index[label] == label_base + position
+               for position, label in enumerate(seen))
     string_offsets = {}
     strings = bytearray(b"\0\0\0\0")
 
@@ -224,6 +245,27 @@ def make_coff(*, body=BODY, relocations=RELOCATIONS, debug_stream=None,
     header = struct.pack("<HHIIIHH", 0x14C, len(sections), 0x1234,
                          cursor, count, 0, 0)
     return bytes(header + headers + payload + table + strings)
+
+
+# A body that ends in a compiler-emitted switch table: the same window, then
+# the dispatch `jmp dword ptr [eax*4 + $Ltable]`, then two 4-byte table entries
+# which are DATA and must never be decoded.
+#
+#     0:  53 56 33 f6                 prologue, outside the window
+#     4:  ...                         the window, unchanged
+#    19:  ff 24 85 <$Ltable>          the dispatch -- terminal, no fall-through
+#    26:  <$Lcase0> <$Lcase1>         the table
+SWITCH_DISPATCH = bytes.fromhex("ff2485") + struct.pack("<I", 0)
+SWITCH_CODE = PROLOGUE + WINDOW_SOURCE + SWITCH_DISPATCH
+SWITCH_CODE_LENGTH = len(SWITCH_CODE)
+SWITCH_BODY = SWITCH_CODE + struct.pack("<II", 0, 0)
+SWITCH_IMAGE = reordered(SWITCH_BODY)
+SWITCH_RELOCATIONS = (
+    (22, "$Ltable", SWITCH_CODE_LENGTH),
+    (26, "$Lcase0", 0),
+    (30, "$Lcase1", 19),
+)
+SWITCH_TARGETS = frozenset({0, 19, SWITCH_CODE_LENGTH})
 
 
 def window_declaration(start=WINDOW[0], end=WINDOW[1], order=None,
@@ -364,6 +406,35 @@ class DisambiguationTests(unittest.TestCase):
                 self.decode(body), "dag")
         self.assertIn("is written inside the window", str(caught.exception))
 
+    def test_two_pushes_can_never_be_reordered(self):
+        # both read AND write esp, so every pair of pushes carries an edge
+        decoded = [
+            byte_identity.decode_ia32_bijection_instruction(
+                bytes.fromhex("5051"), offset, "decode")
+            for offset in (0, 1)
+        ]
+        _, edges = byte_identity.ia32_schedule_dependence_edges(
+            decoded, "dag")
+        self.assertEqual([edge[:2] for edge in edges], [[0, 1]])
+        self.assertEqual(edges[0][2],
+                         ["register_raw", "register_war", "register_waw"])
+
+    def test_a_push_transposes_with_an_esp_free_instruction(self):
+        # `lea ecx, [esi+0x4220]` accesses no memory and names no esp, so it
+        # is independent of `push eax` -- the one pairing the stack ruling
+        # admits without a delta proof
+        raw = bytes.fromhex("8d8e20420000" "50")
+        decoded = [
+            byte_identity.decode_ia32_bijection_instruction(
+                raw, offset, "decode")
+            for offset in (0, 6)
+        ]
+        _, edges = byte_identity.ia32_schedule_dependence_edges(
+            decoded, "dag")
+        self.assertEqual(edges, [])
+        byte_identity.require_topological_instruction_order(
+            2, edges, [1, 0], "order")
+
     def test_flags_are_a_dependence(self):
         # `test eax, eax` then `sbb eax, [esp+16]`: the second reads CF
         decoded = [
@@ -452,8 +523,23 @@ class WindowImageTests(unittest.TestCase):
         self.assertIn("outside the instruction-schedule table",
                       str(caught.exception))
 
-    def test_a_push_inside_the_window_is_refused(self):
+    def test_a_push_beside_an_esp_relative_operand_is_refused(self):
+        # the fixture's window stores to [esp+24] and [esp+28]; a push moved
+        # across either would change the address it names, and the second
+        # branch of the stack ruling (prove the delta) is not implemented
         body = (PROLOGUE + bytes.fromhex("50") + WINDOW_SOURCE[4:]
+                + EPILOGUE)
+        windows = [window_declaration(end=12, lengths=[1, 3, 4],
+                                      order=[1, 2, 0], line_rows=[])]
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.apply(body, windows)
+        self.assertIn("whose address the push's own esp delta would move",
+                      str(caught.exception))
+
+    def test_a_pop_is_still_outside_the_table(self):
+        # `pop` READS [esp], which is live memory; the below-esp axiom says
+        # nothing about it, so it is not admitted
+        body = (PROLOGUE + bytes.fromhex("58") + WINDOW_SOURCE[4:]
                 + EPILOGUE)
         windows = [window_declaration(end=12, lengths=[1, 3, 4],
                                       order=[1, 2, 0], line_rows=[])]
@@ -624,6 +710,231 @@ class ScheduleCompositionTests(unittest.TestCase):
             byte_identity.instruction_schedule_delegate(
                 [".debug$S", ".xdata$x"], []),
             "equal_body_eh_structural_local")
+
+
+class SwitchTableTailTests(unittest.TestCase):
+    """The `expected_code_length` pin, and the tail it proves unreachable.
+
+    Without the pin a COMDAT that ends in a compiler-emitted switch table is
+    walked as if the table were code -- and the table's bytes usually DO
+    decode, so the walk succeeds and every claim after it is nonsense.  The
+    pin says where code ends; the tail is then never decoded, never inside a
+    window and never rewritten, and the walk proves the code cannot fall
+    through into it.  A computed jump is admitted only against the relocated
+    in-body target set, which is what bounds where control can re-enter.
+    """
+
+    def walk(self, body=SWITCH_BODY, code_length=SWITCH_CODE_LENGTH,
+             targets=SWITCH_TARGETS, relocations=None):
+        return byte_identity.ia32_schedule_body_walk(
+            body, relocations, "walk", code_length, targets)
+
+    def test_the_pinned_code_decodes_and_the_tail_does_not(self):
+        spans, targets = self.walk()
+        self.assertEqual(spans[-1], (19, len(SWITCH_DISPATCH)))
+        self.assertEqual(sum(length for _, length in spans),
+                         SWITCH_CODE_LENGTH)
+        self.assertLessEqual(SWITCH_TARGETS, targets)
+
+    def test_a_computed_jump_without_the_target_set_is_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.walk(targets=None)
+        self.assertIn("makes the window's entry set unknowable",
+                      str(caught.exception))
+
+    def test_a_relocated_target_off_an_instruction_boundary_is_refused(self):
+        # 5 is inside the window's first instruction, so a computed jump that
+        # could reach it means the decode itself is wrong
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.walk(targets=frozenset({0, 5, SWITCH_CODE_LENGTH}))
+        self.assertIn("is not an instruction boundary of this body",
+                      str(caught.exception))
+
+    def test_a_pin_that_straddles_an_instruction_is_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.walk(code_length=SWITCH_CODE_LENGTH - 1)
+        self.assertIn("truncated", str(caught.exception))
+
+    def test_a_pin_out_of_range_is_refused(self):
+        for length in (0, len(SWITCH_BODY) + 1):
+            with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+                self.walk(code_length=length)
+            self.assertIn("code length is out of range",
+                          str(caught.exception))
+
+    def test_code_that_falls_through_into_the_tail_is_refused(self):
+        # `xor esi, esi` at 2 is the last instruction before the pin, and it
+        # falls through -- so the bytes after it are reachable and are not a
+        # data tail at all
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.walk(code_length=4)
+        self.assertIn("falls through into the body's data tail",
+                      str(caught.exception))
+
+    def test_the_unpinned_walk_decodes_the_table_as_code(self):
+        # the control this whole pin exists for: the tail decodes, so an
+        # unpinned walk reports a longer, meaningless instruction list
+        spans, _ = byte_identity.ia32_schedule_body_walk(
+            SWITCH_BODY, None, "walk", None, SWITCH_TARGETS)
+        self.assertGreater(len(spans), 8)
+        self.assertEqual(sum(length for _, length in spans),
+                         len(SWITCH_BODY))
+
+    def test_a_window_that_reaches_into_the_tail_is_refused(self):
+        windows = [window_declaration(end=SWITCH_CODE_LENGTH + 4,
+                                      lengths=LENGTHS + [7, 4],
+                                      order=[1, 3, 0, 2, 4, 5],
+                                      line_rows=[])]
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_instruction_schedule(
+                SWITCH_BODY, windows, frozenset(), "image", None,
+                SWITCH_CODE_LENGTH, SWITCH_TARGETS)
+        self.assertIn("reaches into the body's data tail",
+                      str(caught.exception))
+
+    def test_a_relocated_target_entering_a_window_is_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_instruction_schedule(
+                SWITCH_BODY, [window_declaration()], frozenset(), "image",
+                None, SWITCH_CODE_LENGTH,
+                frozenset({0, 8, SWITCH_CODE_LENGTH}))
+        self.assertIn("targets the window interior", str(caught.exception))
+
+    def test_the_window_is_reordered_and_the_tail_is_untouched(self):
+        image, proof = byte_identity.apply_instruction_schedule(
+            SWITCH_BODY, [window_declaration()], frozenset(), "image", None,
+            SWITCH_CODE_LENGTH, SWITCH_TARGETS)
+        self.assertEqual(image, SWITCH_IMAGE)
+        self.assertEqual(image[SWITCH_CODE_LENGTH:],
+                         SWITCH_BODY[SWITCH_CODE_LENGTH:])
+        self.assertEqual(proof["code_length"], SWITCH_CODE_LENGTH)
+        self.assertEqual(proof["instruction_count"], 8)
+
+
+def switch_spec(**overrides):
+    spec = schedule_spec(
+        expected_instruction_count=8,
+        expected_changed_offsets=sorted(
+            index for index in range(len(SWITCH_BODY))
+            if SWITCH_BODY[index] != SWITCH_IMAGE[index]),
+        expected_procedure_range=[len(SWITCH_BODY), 2, 19],
+        expected_code_length=SWITCH_CODE_LENGTH,
+        expected_internal_relocation_targets=sorted(SWITCH_TARGETS),
+    )
+    spec.update(overrides)
+    return spec
+
+
+class SwitchTableSchemaTests(unittest.TestCase):
+    """The pins are declared in the manifest before they are measured."""
+
+    def validate(self, **overrides):
+        return byte_identity.validate_instruction_schedule(
+            switch_spec(**overrides), "schedule", len(SWITCH_BODY))
+
+    def test_the_switch_declaration_validates(self):
+        normalized = self.validate()
+        self.assertEqual(normalized["expected_code_length"],
+                         SWITCH_CODE_LENGTH)
+        self.assertEqual(normalized["expected_internal_relocation_targets"],
+                         sorted(SWITCH_TARGETS))
+
+    def test_a_window_past_the_declared_code_length_is_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.validate(expected_code_length=12)
+        self.assertIn("reaches past the declared code length",
+                      str(caught.exception))
+
+    def test_a_declared_target_inside_a_window_is_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.validate(expected_internal_relocation_targets=[0, 8, 26])
+        self.assertIn("enters the window's interior", str(caught.exception))
+
+    def test_an_unsorted_target_set_is_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            self.validate(expected_internal_relocation_targets=[26, 0, 19])
+
+    def test_the_pins_stay_optional(self):
+        normalized = byte_identity.validate_instruction_schedule(
+            schedule_spec(), "schedule", SIZE)
+        self.assertNotIn("expected_code_length", normalized)
+        self.assertNotIn("expected_internal_relocation_targets", normalized)
+
+
+class SwitchTableCompositionTests(unittest.TestCase):
+    """The whole certificate, on a body that ends in a switch table."""
+
+    def setUp(self):
+        stream = codeview_stream(size=len(SWITCH_BODY), debug_start=2,
+                                 debug_end=19)
+        self.seed = make_coff(body=SWITCH_BODY, debug_stream=stream,
+                              code_relocations=SWITCH_RELOCATIONS)
+        self.donor = make_coff(body=SWITCH_BODY, debug_stream=stream,
+                               code_relocations=SWITCH_RELOCATIONS)
+        coff = byte_identity.CoffObject(self.seed)
+        rows = byte_identity.detailed_relocations(
+            coff, coff.function_section(TARGET_SYMBOL))
+        oracle = []
+        for row in rows:
+            raw = int.from_bytes(
+                SWITCH_IMAGE[row["offset"]:row["offset"] + 4], "little")
+            oracle.append({
+                field: row[field] for field in (
+                    "offset", "type", "addend", "target", "target_section",
+                    "target_value", "target_type", "target_storage")})
+            oracle[-1]["retail_target"] = "0x%08x" % (
+                (raw - row["addend"]) & 0xFFFFFFFF)
+        self.record = function_record(
+            self.seed, self.donor, SWITCH_IMAGE,
+            instruction_schedule=switch_spec(),
+            retail_relocations=oracle)
+
+    def test_the_certificate_composes_retails_own_code(self):
+        composed, detail = (
+            byte_identity.compose_retail_exact_instruction_schedule(
+                self.seed, self.donor, self.record, SWITCH_IMAGE))
+        coff = byte_identity.CoffObject(composed)
+        section = coff.function_section(TARGET_SYMBOL)
+        self.assertEqual(byte_identity.coff_body(coff, section), SWITCH_IMAGE)
+        self.assertTrue(detail["retail_exact"])
+        self.assertEqual(detail["instruction_count"], 8)
+
+    def test_a_code_length_that_differs_from_its_pin_is_refused(self):
+        record = copy.deepcopy(self.record)
+        record["instruction_schedule"]["expected_code_length"] = 12
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.compose_retail_exact_instruction_schedule(
+                self.seed, self.donor, record, SWITCH_IMAGE)
+        self.assertIn("data tail", str(caught.exception))
+
+    def test_a_missing_code_length_pin_is_refused(self):
+        # without the pin the table is walked as code, the dispatch's own
+        # relocated operand is read as a branch displacement, and the
+        # composition no longer describes the body it installs
+        record = copy.deepcopy(self.record)
+        del record["instruction_schedule"]["expected_code_length"]
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.compose_retail_exact_instruction_schedule(
+                self.seed, self.donor, record, SWITCH_IMAGE)
+        self.assertIn("differs from its declaration", str(caught.exception))
+
+    def test_a_target_set_that_differs_from_its_pin_is_refused(self):
+        record = copy.deepcopy(self.record)
+        record["instruction_schedule"][
+            "expected_internal_relocation_targets"] = [0, 19]
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.compose_retail_exact_instruction_schedule(
+                self.seed, self.donor, record, SWITCH_IMAGE)
+        self.assertIn("in-body relocated target set changed",
+                      str(caught.exception))
+
+    def test_an_image_that_is_not_the_oracle_is_refused(self):
+        oracle = bytearray(SWITCH_IMAGE)
+        oracle[5] ^= 0x01
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.compose_retail_exact_instruction_schedule(
+                self.seed, self.donor, self.record, bytes(oracle))
+        self.assertIn("is not retail-exact", str(caught.exception))
 
 
 if __name__ == "__main__":  # pragma: no cover

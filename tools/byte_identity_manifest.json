@@ -19202,11 +19202,334 @@
       ]
      ],
      "expected_xdata_rename_offsets": []
+    },
+    {
+     "mangled": "?TriggerHitSound@Act3@@QAEXI@Z",
+     "donor": "d_b891b819d0af",
+     "splice_class": "retail_exact_web_recolour",
+     "expected_section_number": 189,
+     "expected_section_count": 315,
+     "expected_body_length": 348,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 16,
+     "expected_seed_line_count": 31,
+     "expected_donor_line_count": 31,
+     "expected_function_count": 96,
+     "expected_comdat_count": 118,
+     "expected_seed_body_sha256": "1e79a9f0f9883a7824c7d9723d187a0981607f50be1279edfb70285f82c9546a",
+     "expected_donor_body_sha256": "1e79a9f0f9883a7824c7d9723d187a0981607f50be1279edfb70285f82c9546a",
+     "expected_body_sha256": "38ab56dc64d102d51f823d4f05e8b1a5b23b24d3337af7269549a03e3f7b431c",
+     "expected_seed_metadata_sha256": "de146f37c3ea6d766a3466afe5ab4abbb5a2861ba2cf6cfc2d432811a5a1b7dd",
+     "expected_donor_metadata_sha256": "0977eeba02e234e72f3906b522a218d94db2ff79db2041aaed8c9cb075b71105",
+     "expected_changed_offsets": [
+      64,
+      110,
+      153,
+      196,
+      239,
+      247,
+      248,
+      249,
+      250,
+      251,
+      253
+     ],
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10072ad0",
+      "verdict": "MATCH",
+      "length": 348
+     },
+     "retail_relocations": [
+      {
+       "offset": 4,
+       "type": 20,
+       "addend": 0,
+       "target": "?Timer@@YAPAVMxTimer@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100aced0"
+      },
+      {
+       "offset": 25,
+       "type": 6,
+       "addend": 0,
+       "target": "$L80085",
+       "target_section": 189,
+       "target_value": 324,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x10072c14"
+      },
+      {
+       "offset": 66,
+       "type": 6,
+       "addend": 0,
+       "target": "_g_pizzaHitSounds$S72810",
+       "target_section": 3,
+       "target_value": 24,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100d94f8"
+      },
+      {
+       "offset": 112,
+       "type": 6,
+       "addend": 0,
+       "target": "_g_pizzaMissSounds$S72811",
+       "target_section": 3,
+       "target_value": 88,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100d9538"
+      },
+      {
+       "offset": 155,
+       "type": 6,
+       "addend": 0,
+       "target": "_g_copDonutSounds$S72813",
+       "target_section": 3,
+       "target_value": 112,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100d9550"
+      },
+      {
+       "offset": 198,
+       "type": 6,
+       "addend": 0,
+       "target": "_g_donutMissSounds$S72814",
+       "target_section": 3,
+       "target_value": 144,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100d9570"
+      },
+      {
+       "offset": 241,
+       "type": 6,
+       "addend": 0,
+       "target": "_g_islanderSounds$S72815",
+       "target_section": 3,
+       "target_value": 168,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100d9588"
+      },
+      {
+       "offset": 255,
+       "type": 20,
+       "addend": 0,
+       "target": "?Insert@Act3List@@QAEXHW4InsertMode@Act3ListElement@@@Z",
+       "target_section": 5,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10071d40"
+      },
+      {
+       "offset": 303,
+       "type": 6,
+       "addend": 0,
+       "target": "_g_bricksterDonutSounds$S72816",
+       "target_section": 3,
+       "target_value": 248,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100d95d8"
+      },
+      {
+       "offset": 315,
+       "type": 20,
+       "addend": 0,
+       "target": "?Insert@Act3List@@QAEXHW4InsertMode@Act3ListElement@@@Z",
+       "target_section": 5,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10071d40"
+      },
+      {
+       "offset": 324,
+       "type": 6,
+       "addend": 0,
+       "target": "$L72992",
+       "target_section": 189,
+       "target_value": 29,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x10072aed"
+      },
+      {
+       "offset": 328,
+       "type": 6,
+       "addend": 0,
+       "target": "$L72994",
+       "target_section": 189,
+       "target_value": 75,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x10072b1b"
+      },
+      {
+       "offset": 332,
+       "type": 6,
+       "addend": 0,
+       "target": "$L72996",
+       "target_section": 189,
+       "target_value": 118,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x10072b46"
+      },
+      {
+       "offset": 336,
+       "type": 6,
+       "addend": 0,
+       "target": "$L72998",
+       "target_section": 189,
+       "target_value": 161,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x10072b71"
+      },
+      {
+       "offset": 340,
+       "type": 6,
+       "addend": 0,
+       "target": "$L73000",
+       "target_section": 189,
+       "target_value": 204,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x10072b9c"
+      },
+      {
+       "offset": 344,
+       "type": 6,
+       "addend": 0,
+       "target": "$L73002",
+       "target_section": 189,
+       "target_value": 263,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x10072bd7"
+      }
+     ],
+     "web_recolour": {
+      "kind": "web_recolour_v1",
+      "expected_code_length": 323,
+      "expected_internal_relocation_targets": [
+       29,
+       75,
+       118,
+       161,
+       204,
+       263,
+       324
+      ],
+      "windows": [
+       {
+        "start": 247,
+        "end": 254,
+        "source_instruction_lengths": [
+         6,
+         1
+        ],
+        "target_order": [
+         1,
+         0
+        ],
+        "expected_dependence_edges": [],
+        "expected_line_rows": []
+       }
+      ],
+      "webs": [
+       {
+        "source_register": "eax",
+        "image_register": "ecx",
+        "definitions": [
+         63,
+         109,
+         152,
+         195,
+         238
+        ],
+        "uses": [
+         247
+        ],
+        "expected_rewritten_offsets": [
+         64,
+         110,
+         153,
+         196,
+         239,
+         247
+        ]
+       }
+      ],
+      "expected_instruction_count": 78,
+      "expected_changed_offsets": [
+       64,
+       110,
+       153,
+       196,
+       239,
+       247,
+       248,
+       249,
+       250,
+       251,
+       253
+      ],
+      "expected_procedure_range": [
+       348,
+       1,
+       319
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$F",
+        "?TriggerHitSound@Act3@@QAEXI@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?TriggerHitSound@Act3@@QAEXI@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?TriggerHitSound@Act3@@QAEXI@Z",
+        0
+       ]
+      ],
+      "expected_debug_s_registers": [
+       [
+        "this",
+        59,
+        "esi"
+       ],
+       [
+        "objectId",
+        91,
+        "eax"
+       ]
+      ],
+      "authenticity_rationale": "Retail's body differs from ours by ONE def-use web: the sound-id loaded at each of five case blocks, and pushed once at the join, lives in ecx rather than eax.  The map is not a bijection -- at each definition the SIB index stays ecx while the destination becomes ecx -- so it is a live-range coalesce, admissible only because the index's range ends at the very instruction the web's range begins.  The coalesce is legal only after the join's `lea ecx, [esi+0x4220]` moves BELOW the push, which is an independent topological reordering of a two-instruction window; the reordering is applied first and every web obligation is measured on its result.  Our own second case tail already emits retail's exact form at 0x117, and 295 of 295 donor states leave these bytes untouched."
+     }
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/worlds/act3.cpp from a register-bijection certificate over a generated declaration-only carrier state of the rendered current source.",
+    "reason": "Closes 2 row(s) in LEGO1/lego/legoomni/src/worlds/act3.cpp: a register-bijection certificate and a web-recolour certificate, both over a generated declaration-only carrier state of the rendered current source.",
     "may_replace_compiler_output": true
    }
   },
@@ -30296,8 +30619,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4918,
-    "accepted_row_identity_sha256": "a91ffe97a5fd0594f2c54f6a5afc0b4a16da2f3411782671bb2f5efb546ec4c5",
+    "exact_raw_1_0_count": 4919,
+    "accepted_row_identity_sha256": "4c17be6d12136f24382dd7a9135b04dfc1d39a627ecbbf7eab3ffa6297ce6aab",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
