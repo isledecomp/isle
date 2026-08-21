@@ -15322,7 +15322,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/race/legoracespecial.cpp",
-   "source_sha256": "3cc4e1e473a31df68e74540bf6527e7c2f30648a431f52546264d49f93eb0cfd",
+   "source_sha256": "1756da462d54b2e64231aa6b2e8e1d4378743a9479870420e26a4791d6e20c67",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -15338,16 +15338,16 @@
    },
    "donors": [
     {
-     "id": "d_fd5ee69dfee7",
+     "id": "d_79cee655282a",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "forward_declaration_run",
       "prefix": "MxUnkRecVC",
-      "count": 15,
+      "count": 13,
       "width": 3,
       "placement": "suffix",
-      "generated_header_sha256": "fd5ee69dfee70ee814c15fe1aa4e4fc66b53b06b94c8c591bd0307bcd5346708",
+      "generated_header_sha256": "79cee655282af0764786ea4d8bd6fc99eef37ed67bb5fd83cb318af87252c82e",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -15406,7 +15406,7 @@
       ]
      ],
      "expected_xdata_rename_offsets": [],
-     "donor": "d_fd5ee69dfee7"
+     "donor": "d_79cee655282a"
     },
     {
      "mangled": "?lower_bound@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@QBE?AVconst_iterator@1@ABQAVLegoPathActor@@@Z",
@@ -15417,7 +15417,7 @@
       34
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_fd5ee69dfee7"
+     "donor": "d_79cee655282a"
     },
     {
      "mangled": "?CheckPresenterAndActorIntersections@LegoJetskiRaceActor@@UAEIPAVLegoPathBoundary@@AAVVector3@@1MM1@Z",
@@ -32867,8 +32867,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4924,
-    "accepted_row_identity_sha256": "65ad1a587c84a587dc62b0e24de92118e24afd3b4f2accd1904fd494cf29b133",
+    "exact_raw_1_0_count": 4925,
+    "accepted_row_identity_sha256": "7fc3c96b9a5290a07d2ca1bff4e205b44f11315c54236e2ee358cb505c970ac2",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -45385,9 +45385,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/race/legoracespecial.cpp",
-    "clean": "6615d9416feafb1c6880662daaecb91acd0f3014b632f9eccc43afb20eef2e17",
-    "effective": "3cc4e1e473a31df68e74540bf6527e7c2f30648a431f52546264d49f93eb0cfd",
-    "size": 15755,
+    "clean": "f5b4d1bd7641729702411c41a1f85336d33b2aad4da38e2fd5a1cacf75ecdcee",
+    "effective": "1756da462d54b2e64231aa6b2e8e1d4378743a9479870420e26a4791d6e20c67",
+    "size": 15815,
     "ops": [
      {
       "op": "insert",
@@ -45677,13 +45677,13 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 55,
+       "lines": 57,
        "items": [
         {
          "k": "fwd_run",
          "stem": "MxUnkRecHZ",
          "first": 0,
-         "count": 55,
+         "count": 57,
          "line": 1,
          "width": 3
         }

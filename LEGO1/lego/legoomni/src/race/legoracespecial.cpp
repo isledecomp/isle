@@ -257,7 +257,9 @@ MxResult LegoCarRaceActor::CalculateSpline()
 		Mx3DPointFloat endDirection;
 
 		d->GetFaceNormal(*b, startEdgeNormal);
-		m_destEdge->GetFaceNormal(*m_boundary, endEdgeNormal);
+		d = m_destEdge;
+		b = m_boundary;
+		d->GetFaceNormal(*b, endEdgeNormal);
 
 		startDirection.EqualsCross(startEdgeNormal, *m_boundary->GetUp());
 		endDirection.EqualsCross(*m_boundary->GetUp(), endEdgeNormal);
