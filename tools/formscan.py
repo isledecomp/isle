@@ -57,6 +57,17 @@ classified, because only one of the four is a real obstacle:
 
 THE SCREEN IS: the walk completes AND `other == 0`.
 
+WHAT IT DOES NOT SEE: the walk is in LOCKSTEP, so it has no model of a
+TRANSPOSITION.  Two instructions exchanged are tolerated only when they share a
+form -- they are then reported as two `other` steps, which is correct but
+understates them as one reordering -- and a transposition that exchanges
+different forms STOPS the walk outright.  `0x10051ac0` shows both in one body:
+two same-form load pairs at 0x1ca and 0x313 are walked through and counted,
+while the `mov`/`lea` pair at 0x323 ends the walk.  So "walked N, then
+diverges" is a LOWER bound on agreement for any row whose residue is
+scheduling, and such a row should be screened with the instruction-schedule
+composition (`BI-composeobj.py`) as well as with this.
+
 Validation: `0x100a7960` at its carrier minimum reports `{branch: 8,
 reencode: 2}` and closed on the re-encoding certificate; `0x100a46b0` reports
 537 instructions walked, no form divergence, and `{other: 86}` -- independently
