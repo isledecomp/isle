@@ -106,6 +106,7 @@ public:
 	// FUNCTION: BETA10 0x1005ab00
 	void SetRoiTransform(Matrix4* p_roiTransform) { m_roiTransform = p_roiTransform; }
 
+	// FUNCTION: BETA10 0x10028490
 	LegoAnim* GetAnimation() { return m_anim; }
 
 protected:
