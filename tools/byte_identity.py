@@ -13119,6 +13119,8 @@ def validate_manifest(
     all_bound_ordinary_fpo_self_permutation_donor_ids = []
     all_cross_tu_complete_target_recipe_ids = set()
     all_bound_cross_tu_complete_target_donor_ids = []
+    all_cross_tu_instruction_source_recipe_ids = set()
+    all_bound_cross_tu_instruction_source_donor_ids = []
     for unit_index, unit in enumerate(translation_units):
         context = f"translation_units[{unit_index}]"
         require(isinstance(unit, dict), f"{context} must be an object")
@@ -13292,6 +13294,7 @@ def validate_manifest(
         ordinary_fpo_mosaic_recipe_ids = set()
         ordinary_fpo_self_permutation_recipe_ids = set()
         cross_tu_complete_target_recipe_ids = set()
+        cross_tu_instruction_source_recipe_ids = set()
         for donor_index, donor in enumerate(donors):
             donor_context = f"{context}.donors[{donor_index}]"
             require(isinstance(donor, dict), f"{donor_context} must be an object")
@@ -13318,6 +13321,11 @@ def validate_manifest(
             expected_authenticity = (
                 "checked_in_source_only"
                 if kind == CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE
+                # The overlaid sibling is neither synthetic nor the clean
+                # checked-in text: it is the checked-in text as this build's
+                # own typed overlay renders it.  It says so.
+                else "effective_checked_in_source_only"
+                if kind == CROSS_TU_INSTRUCTION_SOURCE_RECIPE
                 else "synthetic_baseline_only"
             )
             require(
@@ -13339,6 +13347,10 @@ def validate_manifest(
                     == CROSS_TU_COMPLETE_TARGET_RECIPE_POLICY):
                 cross_tu_complete_target_recipe_ids.add(recipe_id)
                 all_cross_tu_complete_target_recipe_ids.add(recipe_id)
+            if (recipe.get("role_policy")
+                    == CROSS_TU_INSTRUCTION_SOURCE_RECIPE_POLICY):
+                cross_tu_instruction_source_recipe_ids.add(recipe_id)
+                all_cross_tu_instruction_source_recipe_ids.add(recipe_id)
             if mode == "compose_equal_body_comdat":
                 require(
                     kind in ("forward_declaration_run", "declaration_shape",
@@ -13348,6 +13360,7 @@ def validate_manifest(
                              "declaration_run_triple",
                              SAME_TU_DECLARATION_CARRIER_RECIPE,
                              "donor_source_overlay",
+                             CROSS_TU_INSTRUCTION_SOURCE_RECIPE,
                              CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE),
                     f"{donor_context}: equal-body donors require a "
                     "generated declaration recipe",
@@ -13381,6 +13394,38 @@ def validate_manifest(
                     source_identity = validated_recipe["source_sha256"]
                     require(recipe_id == f"d_{source_identity[:12]}",
                             f"{donor_context}.id is not the checked-in "
+                            "source content ID")
+                    existing_recipe = recipe_registry.get(recipe_id)
+                    if existing_recipe is None:
+                        recipe_registry[recipe_id] = {
+                            "id": recipe_id, "recipe": validated_recipe,
+                            "header_output": None, "users": [],
+                        }
+                        recipe_order.append(recipe_id)
+                    else:
+                        require(existing_recipe["recipe"] == validated_recipe,
+                                f"duplicate recipe definition differs: "
+                                f"{recipe_id}")
+                    local_recipes[recipe_id] = validated_recipe
+                    normalized_donors.append({
+                        **donor,
+                        "recipe": validated_recipe,
+                        "header_output": None,
+                    })
+                    continue
+                if kind == CROSS_TU_INSTRUCTION_SOURCE_RECIPE:
+                    validated_recipe = (
+                        validate_overlaid_cross_tu_instruction_source_recipe(
+                            recipe, source_dir, source_relative,
+                            source_overlay_by_path,
+                            source_overlay.get("rendered_by_path", {}),
+                            f"{donor_context}.recipe",
+                        )
+                    )
+                    source_identity = validated_recipe[
+                        "donor_effective_source_sha256"]
+                    require(recipe_id == f"d_{source_identity[:12]}",
+                            f"{donor_context}.id is not the effective "
                             "source content ID")
                     existing_recipe = recipe_registry.get(recipe_id)
                     if existing_recipe is None:
@@ -14029,6 +14074,7 @@ def validate_manifest(
         bound_cross_tu_complete_target_donor_ids = []
         primary_donor_ids = []
         clean_cross_tu_instruction_donor_ids = []
+        cross_tu_instruction_source_donor_ids = []
         non_primary_donor_ids = []
         allowed_function_keys = {
             "mangled", "donor", "splice_class", "expected_section_number",
@@ -14077,6 +14123,7 @@ def validate_manifest(
                                          CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS,
                                          REGISTER_BIJECTION_CLASS,
                                          WEB_RECOLOUR_CLASS,
+                                         RELATIONAL_FORM_CLASS,
                                          INSTRUCTION_SCHEDULE_CLASS),
                         f"{function_context}: unsupported splice class")
                 if splice_class == RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS:
@@ -14587,6 +14634,155 @@ def validate_manifest(
                     )
                     normalized_functions.append({
                         **function, "web_recolour": recolour,
+                    })
+                    continue
+                if splice_class == RELATIONAL_FORM_CLASS:
+                    relational_keys = {
+                        "mangled", "donor", "splice_class",
+                        "expected_section_number", "expected_section_count",
+                        "expected_body_length", "expected_characteristics",
+                        "expected_selection", "expected_relocation_count",
+                        "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                        "expected_seed_body_sha256",
+                        "expected_donor_body_sha256",
+                        "expected_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_donor_metadata_sha256",
+                        "expected_changed_offsets", "expected_code_renames",
+                        "expected_closure", "retail_oracle",
+                        "retail_relocations", "relational_form",
+                    }
+                    entry_delegate = relational_form_delegate(
+                        function.get("expected_closure") or [],
+                        function.get("expected_code_renames"),
+                    )
+                    if entry_delegate != "equal_body_strict":
+                        relational_keys = relational_keys | {
+                            "expected_xdata_rename_offsets"}
+                    exact_keys(function, relational_keys, function_context)
+                    for name in (
+                        "expected_section_number", "expected_section_count",
+                        "expected_body_length", "expected_characteristics",
+                        "expected_selection", "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                    ):
+                        require(type(function.get(name)) is int
+                                and function[name] > 0,
+                                f"{function_context}.{name} is invalid")
+                    require(type(function.get("expected_relocation_count"))
+                            is int
+                            and function["expected_relocation_count"] >= 0,
+                            f"{function_context}.expected_relocation_count "
+                            "is invalid")
+                    for name in (
+                        "expected_seed_body_sha256",
+                        "expected_donor_body_sha256",
+                        "expected_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_donor_metadata_sha256",
+                    ):
+                        require_sha(function.get(name),
+                                    f"{function_context}.{name}")
+                    # The installed body is the reversal's image, so it must
+                    # differ from the compiler-produced pre-image.
+                    require(
+                        function["expected_body_sha256"]
+                        != function["expected_donor_body_sha256"]
+                        and function["expected_body_sha256"]
+                        != function["expected_seed_body_sha256"],
+                        f"{function_context}: the image pin does not move "
+                        "the donor body",
+                    )
+                    changed = function.get("expected_changed_offsets")
+                    require(
+                        isinstance(changed, list) and changed
+                        and changed == sorted(set(changed))
+                        and all(type(offset) is int
+                                and 0 <= offset
+                                < function["expected_body_length"]
+                                for offset in changed),
+                        f"{function_context}.expected_changed_offsets "
+                        "is invalid",
+                    )
+                    renames = function.get("expected_code_renames")
+                    require(
+                        isinstance(renames, list)
+                        and all(isinstance(item, list) and len(item) == 2
+                                and type(item[0]) is int and item[0] >= 0
+                                and item[1] in ("L", "T", "S")
+                                for item in renames)
+                        and renames == sorted(renames),
+                        f"{function_context}.expected_code_renames "
+                        "is invalid",
+                    )
+                    require(
+                        function.get("expected_closure")
+                        in (RELATIONAL_FORM_FPO_CLOSURE,
+                            RELATIONAL_FORM_EH_CLOSURE),
+                        f"{function_context}.expected_closure differs",
+                    )
+                    if entry_delegate != "equal_body_strict":
+                        xdata = function.get(
+                            "expected_xdata_rename_offsets")
+                        require(
+                            isinstance(xdata, list)
+                            and xdata == sorted(set(xdata))
+                            and all(type(offset) is int and offset >= 0
+                                    for offset in xdata),
+                            f"{function_context}"
+                            ".expected_xdata_rename_offsets is invalid",
+                        )
+                    retail = function.get("retail_oracle")
+                    require(isinstance(retail, dict),
+                            f"{function_context}.retail_oracle must be an "
+                            "object")
+                    exact_keys(retail, {
+                        "image", "address", "verdict", "length",
+                    }, f"{function_context}.retail_oracle")
+                    require_target_bound_retail_image(
+                        manifest.get("images"), target, retail.get("image"),
+                        f"{function_context}.retail_oracle",
+                    )
+                    require(
+                        isinstance(retail.get("address"), str)
+                        and ADDRESS_RE.fullmatch(retail["address"])
+                        is not None
+                        and retail.get("verdict") == "MATCH"
+                        and retail.get("length")
+                        == function["expected_body_length"],
+                        f"{function_context}.retail_oracle differs",
+                    )
+                    validate_retail_relocation_oracle(
+                        function.get("retail_relocations"),
+                        f"{function_context}.retail_relocations",
+                        function["expected_body_length"],
+                        allow_empty=(
+                            function["expected_relocation_count"] == 0
+                        ),
+                    )
+                    relational = validate_relational_form(
+                        function.get("relational_form"),
+                        f"{function_context}.relational_form",
+                        function["expected_body_length"],
+                    )
+                    # Every rewritten byte must also be a declared changed
+                    # byte of the composition: the reversal may not touch a
+                    # byte the unit does not already account for.  Unlike the
+                    # bijection there is no seed-restoring exception -- the
+                    # rewrite is on an opcode byte, and a rewrite that landed
+                    # back on the seed's own byte would mean the seed already
+                    # carried the image's direction.
+                    require(
+                        set(relational["expected_rewritten_offsets"])
+                        <= set(changed),
+                        f"{function_context}: the reversal rewrites a byte "
+                        "outside the declared changed set",
+                    )
+                    normalized_functions.append({
+                        **function, "relational_form": relational,
                     })
                     continue
                 if splice_class == REGISTER_BIJECTION_CLASS:
@@ -15100,14 +15296,32 @@ def validate_manifest(
                             bound_stacked_carrier_donor_ids.append(
                                 instruction_donor_id)
                     else:
+                        # Two sibling-TU provenance objects may supply the
+                        # pinned instruction bytes of this class: an
+                        # unmodified CLEAN checked-in TU, and -- under its own
+                        # named role, with the overlay declared and pinned --
+                        # an OVERLAID one.  Nothing else.
                         require(
                             local_recipe_kinds[instruction_donor_id]
-                            == CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE,
+                            in (CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE,
+                                CROSS_TU_INSTRUCTION_SOURCE_RECIPE),
                             f"{function_context}: instruction donor is not a "
                             "clean current-source cross-TU recipe",
                         )
-                        clean_cross_tu_instruction_donor_ids.append(
-                            instruction_donor_id)
+                        if (local_recipe_kinds[instruction_donor_id]
+                                == CROSS_TU_INSTRUCTION_SOURCE_RECIPE):
+                            require(
+                                local_recipes[instruction_donor_id].get(
+                                    "role_policy")
+                                == CROSS_TU_INSTRUCTION_SOURCE_RECIPE_POLICY,
+                                f"{function_context}: overlaid cross-TU "
+                                "instruction source role policy differs",
+                            )
+                            cross_tu_instruction_source_donor_ids.append(
+                                instruction_donor_id)
+                        else:
+                            clean_cross_tu_instruction_donor_ids.append(
+                                instruction_donor_id)
                     non_primary_donor_ids.append(instruction_donor_id)
                     positive_ints = (
                         "expected_seed_length", "expected_donor_length",
@@ -16197,6 +16411,13 @@ def validate_manifest(
             bound_cross_tu_complete_target_donor_ids,
             context,
         )
+        require_cross_tu_instruction_source_bindings(
+            cross_tu_instruction_source_recipe_ids,
+            primary_donor_ids,
+            non_primary_donor_ids,
+            cross_tu_instruction_source_donor_ids,
+            context,
+        )
         require_stacked_carrier_hybrid_bindings(
             bound_stacked_carrier_donor_ids,
             primary_donor_ids,
@@ -16218,6 +16439,8 @@ def validate_manifest(
             bound_ordinary_fpo_self_permutation_donor_ids)
         all_bound_cross_tu_complete_target_donor_ids.extend(
             bound_cross_tu_complete_target_donor_ids)
+        all_bound_cross_tu_instruction_source_donor_ids.extend(
+            cross_tu_instruction_source_donor_ids)
 
         completion = unit.get("completion")
         require(isinstance(completion, dict), f"{context}.completion must be an object")
@@ -16299,6 +16522,13 @@ def validate_manifest(
         all_bound_cross_tu_complete_target_donor_ids,
         "manifest",
     )
+    require_cross_tu_instruction_source_bindings(
+        all_cross_tu_instruction_source_recipe_ids,
+        all_primary_donor_ids,
+        all_non_primary_donor_ids,
+        all_bound_cross_tu_instruction_source_donor_ids,
+        "manifest",
+    )
 
     for recipe_id, registered in recipe_registry.items():
         if (registered["recipe"].get("kind")
@@ -16320,6 +16550,13 @@ def validate_manifest(
             require(
                 len(registered["users"]) == 1,
                 f"cross-TU complete-target recipe {recipe_id} must be "
+                "declared and consumed by exactly one translation unit",
+            )
+        if (registered["recipe"].get("role_policy")
+                == CROSS_TU_INSTRUCTION_SOURCE_RECIPE_POLICY):
+            require(
+                len(registered["users"]) == 1,
+                f"overlaid cross-TU instruction source {recipe_id} must be "
                 "declared and consumed by exactly one translation unit",
             )
 
@@ -18360,6 +18597,14 @@ CROSS_TU_COMPLETE_TARGET_RECIPE_POLICY = (
 )
 
 
+CROSS_TU_INSTRUCTION_SOURCE_RECIPE = "overlaid_cross_tu_instruction_source"
+
+
+CROSS_TU_INSTRUCTION_SOURCE_RECIPE_POLICY = (
+    "cross_tu_instruction_source_only_v1"
+)
+
+
 SAME_TU_DECLARATION_CARRIER_RECIPE = (
     "prefix_forward_after_includes_extern"
 )
@@ -18518,6 +18763,42 @@ def require_clean_current_source_cross_tu_bindings(
         and all(count == 1 for count in instruction_counts.values()),
         f"{context}: every clean current-source cross-TU recipe must be "
         "consumed exactly once as a hybrid instruction donor",
+    )
+
+
+def require_cross_tu_instruction_source_bindings(
+    recipe_ids: set[str],
+    primary_donor_ids: list[str],
+    non_primary_donor_ids: list[str],
+    bound_instruction_donor_ids: list[str],
+    context: str,
+) -> None:
+    """Confine each overlaid sibling to one instruction-donor consumer.
+
+    The role exists to supply pinned instruction bytes and nothing else.
+    These donors are never primary/link candidates, may not be a whole-body
+    (complete-target) source, and may not hold a second non-primary role.
+    """
+    protected = set(recipe_ids)
+    primary_counts = Counter(primary_donor_ids)
+    non_primary_counts = Counter(non_primary_donor_ids)
+    bound_counts = Counter(bound_instruction_donor_ids)
+    require(
+        set(bound_counts) == protected
+        and all(count == 1 for count in bound_counts.values()),
+        f"{context}: every overlaid cross-TU instruction source must be "
+        "consumed exactly once as a hybrid instruction donor",
+    )
+    require(
+        all(primary_counts[recipe_id] == 0 for recipe_id in protected),
+        f"{context}: overlaid cross-TU instruction sources may not be "
+        "primary donors",
+    )
+    require(
+        all(non_primary_counts[recipe_id] == bound_counts[recipe_id]
+            for recipe_id in protected),
+        f"{context}: overlaid cross-TU instruction sources may not have "
+        "another non-primary role",
     )
 
 
@@ -18955,6 +19236,35 @@ def raw_manifest_cross_tu_complete_target_recipe_ids(
     return result
 
 
+def raw_manifest_cross_tu_instruction_source_recipe_ids(
+    manifest: dict,
+) -> set[str]:
+    """Inventory overlaid sibling instruction sources before host gates."""
+    result = set()
+    units = manifest.get("translation_units")
+    if not isinstance(units, list):
+        return result
+    for unit in units:
+        if not isinstance(unit, dict):
+            continue
+        donors = unit.get("donors")
+        if not isinstance(donors, list):
+            continue
+        for donor in donors:
+            if not isinstance(donor, dict):
+                continue
+            recipe = donor.get("recipe")
+            if (isinstance(recipe, dict)
+                    and recipe.get("role_policy")
+                    == CROSS_TU_INSTRUCTION_SOURCE_RECIPE_POLICY):
+                recipe_id = donor.get("id")
+                require(isinstance(recipe_id, str),
+                        "overlaid cross-TU instruction source donor id is "
+                        "invalid")
+                result.add(recipe_id)
+    return result
+
+
 def require_manifest_source_refactor_role_preflight(
     manifest: dict, context: str, root=None,
 ) -> None:
@@ -18969,6 +19279,7 @@ def require_manifest_source_refactor_role_preflight(
     bound_ordinary_fpo_mosaic_donor_ids = []
     bound_ordinary_fpo_self_permutation_donor_ids = []
     bound_cross_tu_complete_target_donor_ids = []
+    bound_cross_tu_instruction_source_donor_ids = []
     manifest_recipe_kinds = raw_manifest_recipe_kinds(manifest)
     manifest_role_policies = raw_manifest_recipe_role_policies(manifest)
     overlay = manifest.get("source_overlay")
@@ -18994,6 +19305,9 @@ def require_manifest_source_refactor_role_preflight(
     )
     cross_tu_complete_target_recipe_ids = (
         raw_manifest_cross_tu_complete_target_recipe_ids(manifest)
+    )
+    cross_tu_instruction_source_recipe_ids = (
+        raw_manifest_cross_tu_instruction_source_recipe_ids(manifest)
     )
     units = manifest.get("translation_units")
     if not isinstance(units, list):
@@ -19121,6 +19435,16 @@ def require_manifest_source_refactor_role_preflight(
             instruction_donor = function.get("instruction_donor")
             if isinstance(instruction_donor, str):
                 non_primary_donor_ids.append(instruction_donor)
+                if (manifest_role_policies.get(instruction_donor)
+                        == CROSS_TU_INSTRUCTION_SOURCE_RECIPE_POLICY):
+                    require(
+                        function.get("splice_class")
+                        == CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
+                        f"{context}: an overlaid cross-TU instruction source "
+                        "may supply only cross-TU hybrid instruction bytes",
+                    )
+                    bound_cross_tu_instruction_source_donor_ids.append(
+                        instruction_donor)
                 if "instruction_donor_source_refactor" in function:
                     bound_instruction_refactor_recipe_ids.append(
                         instruction_donor)
@@ -19188,6 +19512,13 @@ def require_manifest_source_refactor_role_preflight(
         primary_donor_ids,
         non_primary_donor_ids,
         bound_cross_tu_complete_target_donor_ids,
+        context,
+    )
+    require_cross_tu_instruction_source_bindings(
+        cross_tu_instruction_source_recipe_ids,
+        primary_donor_ids,
+        non_primary_donor_ids,
+        bound_cross_tu_instruction_source_donor_ids,
         context,
     )
 
@@ -23440,6 +23771,178 @@ def validate_clean_current_source_cross_tu_recipe(
         **recipe,
         "donor_source": source,
         "source_sha256": source_sha,
+        "compile_lane": {"required_define": lane["required_define"]},
+    }
+
+
+def validate_overlaid_cross_tu_instruction_source_recipe(
+    recipe: object,
+    root,
+    owner_source: str,
+    source_overlay_by_path: dict,
+    rendered_by_path: dict,
+    context: str,
+) -> dict:
+    """Validate an OVERLAID sibling translation unit as an instruction source.
+
+    The framework already admits an overlaid sibling as a donor: the
+    ``cross_tu_complete_target_only_v1`` policy lets one supply an entire
+    COMDAT body, pinned by ``donor_source`` plus
+    ``donor_effective_source_sha256``.  This role is that same provenance
+    object confined to a strictly smaller transfer -- the manifest-pinned
+    instruction bytes of a cross-TU instruction hybrid -- and it may never
+    supply a whole body.
+
+    What it must never become is the thing the *clean* cross-TU recipe
+    forbids: a pin naming the checked-in text as the origin of bytes the
+    overlay produced.  So the overlay is not merely tolerated here, it is
+    **declared**: the recipe carries the donor path's clean sha, its
+    effective sha, size and line count, every one of them checked against
+    the manifest's own validated ``source_overlay`` record and against the
+    rendering the overlay actually produced.  An overlaid donor whose
+    overlay is not declared refuses; a declared overlay that does not match
+    the rendering refuses; and a donor path with no overlay at all refuses,
+    because that case is the clean recipe's and keeps its own bar.
+    """
+    require(isinstance(recipe, dict), f"{context} must be an object")
+    exact_audit_keys(recipe, {
+        "kind", "donor_source", "donor_source_overlay",
+        "donor_effective_source_sha256", "rendered_source_sha256",
+        "rendered_source_size", "rendered_source_line_count",
+        "compile_lane", "emission_policy", "role_policy",
+        "authenticity_rationale",
+    }, context)
+    require(recipe.get("kind") == CROSS_TU_INSTRUCTION_SOURCE_RECIPE,
+            f"{context}.kind differs")
+    require(recipe.get("role_policy")
+            == CROSS_TU_INSTRUCTION_SOURCE_RECIPE_POLICY,
+            f"{context}.role_policy differs")
+    source = source_overlay_relative_path(
+        recipe.get("donor_source"), context + ".donor_source")
+    require(PurePosixPath(source).suffix.casefold()
+            in {".c", ".cc", ".cpp", ".cxx"},
+            f"{context}.donor_source is not a translation unit")
+    require(source != owner_source,
+            f"{context}.donor_source is not cross-translation-unit")
+
+    declaration = recipe.get("donor_source_overlay")
+    require(isinstance(declaration, dict), f"{context}.donor_source_overlay "
+            "must be an object")
+    exact_audit_keys(declaration, {
+        "declared", "clean_source_sha256", "effective_source_sha256",
+        "effective_source_size", "effective_source_line_count",
+    }, context + ".donor_source_overlay")
+    require(declaration.get("declared") is True,
+            f"{context}: the donor translation unit's effective source "
+            "overlay is not declared")
+    clean_sha = require_sha(
+        declaration.get("clean_source_sha256"),
+        context + ".donor_source_overlay.clean_source_sha256")
+    effective_sha = require_sha(
+        declaration.get("effective_source_sha256"),
+        context + ".donor_source_overlay.effective_source_sha256")
+    effective_size = require_exact_int(
+        declaration.get("effective_source_size"),
+        context + ".donor_source_overlay.effective_source_size", minimum=1)
+    effective_lines = require_exact_int(
+        declaration.get("effective_source_line_count"),
+        context + ".donor_source_overlay.effective_source_line_count",
+        minimum=1)
+
+    overlay_output = source_overlay_by_path.get(source)
+    require(
+        overlay_output is not None,
+        f"{context}.donor_source has no effective source overlay to declare",
+    )
+    overlay_clean = (overlay_output.get("clean") or {}).get("baseline_sha256")
+    overlay_effective = overlay_output.get("effective") or {}
+    require(
+        clean_sha == overlay_clean
+        and effective_sha == overlay_effective.get("baseline_sha256")
+        and effective_size == overlay_effective.get("baseline_size")
+        and effective_lines == overlay_effective.get("baseline_line_count"),
+        f"{context}: the declared donor overlay differs from the manifest's "
+        "effective rendering",
+    )
+
+    donor_effective_sha = require_sha(
+        recipe.get("donor_effective_source_sha256"),
+        context + ".donor_effective_source_sha256")
+    rendered_sha = require_sha(
+        recipe.get("rendered_source_sha256"),
+        context + ".rendered_source_sha256")
+    rendered_size = require_exact_int(
+        recipe.get("rendered_source_size"),
+        context + ".rendered_source_size", minimum=1)
+    rendered_lines = require_exact_int(
+        recipe.get("rendered_source_line_count"),
+        context + ".rendered_source_line_count", minimum=1)
+    require(
+        donor_effective_sha == effective_sha
+        and rendered_sha == effective_sha
+        and rendered_size == effective_size
+        and rendered_lines == effective_lines,
+        f"{context}: the donor rendering is not the unmodified effective "
+        "translation unit",
+    )
+    rendered = rendered_by_path.get(source)
+    if rendered is not None:
+        require(
+            sha256_bytes(rendered) == rendered_sha
+            and len(rendered) == rendered_size
+            and rendered.count(b"\n") == rendered_lines,
+            f"{context}: the donor rendering differs from the overlay's own "
+            "output",
+        )
+
+    canonical_root = Path(root).resolve(strict=True)
+    source_path = source_overlay_logical_path(canonical_root, source)
+    try:
+        metadata = source_path.lstat()
+        resolved_source = source_path.resolve(strict=True)
+    except OSError as error:
+        raise ByteIdentityError(
+            f"{context}.donor_source is absent or redirected: {error}"
+        ) from error
+    require(
+        stat.S_ISREG(metadata.st_mode)
+        and not source_path.is_symlink()
+        and resolved_source == source_path
+        and resolved_source.is_relative_to(canonical_root),
+        f"{context}.donor_source is redirected or non-regular",
+    )
+    require(sha256_file(source_path) == clean_sha,
+            f"{context}.donor_source differs from its checked-in pin")
+
+    lane = recipe.get("compile_lane")
+    require(isinstance(lane, dict)
+            and set(lane) == {"required_define"}
+            and isinstance(lane.get("required_define"), str)
+            and lane["required_define"],
+            f"{context}.compile_lane differs")
+    require(recipe.get("emission_policy")
+            == "unmodified_effective_translation_unit_only",
+            f"{context}.emission_policy differs")
+    rationale = recipe.get("authenticity_rationale")
+    require(isinstance(rationale, str) and len(rationale) >= 32,
+            f"{context}.authenticity_rationale is too weak")
+    serialized = json.dumps(recipe, sort_keys=True).casefold()
+    require(not any(word in serialized for word in FORBIDDEN_RECIPE_WORDS),
+            f"{context} contains forbidden provenance")
+    return {
+        **recipe,
+        "donor_source": source,
+        "donor_source_overlay": {
+            "declared": True,
+            "clean_source_sha256": clean_sha,
+            "effective_source_sha256": effective_sha,
+            "effective_source_size": effective_size,
+            "effective_source_line_count": effective_lines,
+        },
+        "donor_effective_source_sha256": donor_effective_sha,
+        "rendered_source_sha256": rendered_sha,
+        "rendered_source_size": rendered_size,
+        "rendered_source_line_count": rendered_lines,
         "compile_lane": {"required_define": lane["required_define"]},
     }
 
@@ -31089,6 +31592,1021 @@ def compose_retail_exact_instruction_schedule(
         "changed_offsets": proof["changed_offsets"],
         "debug_fidelity": debug_detail,
         "relocation_reseat": proof["relocation_reseat"],
+        "retail_exact": True,
+        **semantic_detail,
+    }
+
+
+# ---------------------------------------------------------------------------
+# retail_exact_relational_form: a comparison-DIRECTION CERTIFICATE
+# ---------------------------------------------------------------------------
+#
+# WHY THIS CLASS IS A CERTIFICATE AND NOT A GENERATOR
+#
+# MSVC 4.2 emits both directions of the same comparison -- `cmp r, m` (opcode
+# 3B) and `cmp m, r` (opcode 39) -- at different sites of one translation
+# unit, and which one a site gets is not a source lever: it has been refuted
+# as one four separate times, and it flips by itself when an unrelated
+# declaration changes.  So the difference has to be discharged as a PROOF
+# about two instructions, not searched for.
+#
+# The rewriting is: exchange the compare's two operands by flipping the
+# direction bit of its opcode -- the ModRM, SIB and displacement bytes are
+# left BYTE-IDENTICAL, which is what makes "the same two operands, the other
+# way round" a structural fact rather than an author's claim -- and replace
+# the condition of the branch that consumes its flags by the condition's
+# MIRROR.  Both instructions keep their length; nothing moves.
+#
+# Its obligations are strictly WEAKER than the landed register bijection's --
+# no register changes role, no live range moves, no length can change -- with
+# one exception, and the exception is the whole of the interesting work:
+#
+#     `cmp a, b` and `cmp b, a` do NOT leave the same flags.
+#
+# ZF is the only flag the reversal preserves.  CF, PF, AF, SF and OF all
+# change.  That is MEASURED, not asserted: `$SCRATCH/BD-flags.py` enumerates
+# every ordered pair of a closed domain and reports which flags survive, and
+# an x86 binary built by this project's own MSVC 4.2 and run under Wine
+# reproduces the same six counts on hardware (65280 / 43520 / 61440 / 0 /
+# 65024 / 256 changed pairs of 65536 for CF/PF/AF/ZF/SF/OF).  The same two
+# instruments derive the mirror table below by exhaustion over all 16x16
+# condition pairs, at byte and at dword width: exactly ten conditions have a
+# mirror, each mirror is unique, the map is an involution, and the six
+# sign/overflow/parity conditions have NO mirror at all and are refused.
+#
+# THE TWO-TIER DECODE, and why this class reaches bodies the others cannot.
+#
+# The register-bijection certificate proves its case by REWRITING register
+# fields, so it needs a complete semantic decode of every instruction in the
+# body.  That decode refuses 17 of the 19 rows on the current board -- a
+# `rep movsd`, a 66-prefixed form, a `shl`, a `nop` is enough.  This class
+# rewrites nothing but two opcode bytes, so it needs only:
+#
+#   A  the body's instruction BOUNDARIES and its CONTROL FLOW, from the same
+#      length decoder the instruction-schedule certificate already trusts
+#      whole-body, plus a closed flow classification; and
+#   B  the full semantic table on the two rewritten instructions ALONE.
+#
+# The flag model on tier A is FAIL-CLOSED and that is what makes the gap
+# sound: an opcode whose flag effect is not in the table READS every flag and
+# WRITES none.  Over-claiming a read and under-claiming a write can only make
+# a flag look MORE live, never less, so an unmodelled instruction can only
+# cause a REFUSAL.  Where the effect depends on the ModRM extension digit the
+# digit is read from the encoding, so those forms are exact rather than the
+# union/intersection an opcode-granular table would have to take.
+#
+# THE OBLIGATIONS, in the order the composer checks them:
+#
+#  1  provenance     the pre-image is a census-pinned, compiler-produced seed
+#                    or donor COMDAT of the same mangled function, with the
+#                    same section seat, section count, function and COMDAT
+#                    multisets, header counts, selection, closure and pinned
+#                    metadata -- the identical battery the bijection uses.
+#  2  total decode   the body decodes to exhaustion on tier A, every decoded
+#                    branch lands on an instruction boundary, no far
+#                    transfer, no LOCK, no unclassifiable flow, and every
+#                    instruction is reachable from the entry OR from a
+#                    DERIVED external entry point.  The external entry set is
+#                    every in-body target a relocation of this COMDAT or of
+#                    its closure children names -- which is exactly the C++
+#                    EH unwind funclet heads in `.xdata$x` -- and it is pinned
+#                    in the manifest, so a body whose funclet set changed
+#                    refuses instead of being proved on a partial graph.
+#  3  the pair       at each site the instruction is a two-operand `cmp` in
+#                    one of the four admitted encodings (38/3A byte, 39/3B
+#                    word or dword), the NEXT instruction by offset is a Jcc
+#                    (short 7x or near 0F 8x), and the branch's ONLY
+#                    predecessor in the graph is that compare.  A compare
+#                    against an immediate has no reversed form and refuses; a
+#                    branch another edge can reach refuses, because that path
+#                    would consume flags this compare did not produce.
+#  4  the mirror     the image condition is the CLOSED table's mirror of the
+#                    seed condition, and the declaration must reproduce it.
+#                    `o/no/s/ns/p/np` are absent from the table and refuse.
+#  5  flag deadness  a backward per-flag liveness fixpoint over the body's own
+#                    control-flow graph -- the SAME fixpoint the register and
+#                    web certificates use, with flags as its atoms -- proves
+#                    that none of the five flags the reversal CHANGES is live
+#                    on any out-edge of any rewritten branch, nor at any
+#                    external entry point.  ZF may be live: it is the one flag
+#                    the reversal provably preserves, and admitting it is the
+#                    refinement the measurement earns.  Any successor that
+#                    reads a flag the reversal changes REFUSES.
+#  6  length         the image re-decodes on tier A to exactly the same
+#                    boundaries, the same flow classification and the same
+#                    branch targets, and it differs from the pre-image in
+#                    exactly the declared bytes: one opcode byte per compare
+#                    and one condition byte per branch, with every ModRM, SIB,
+#                    displacement and immediate byte untouched.
+#  7  relocations    no rewritten byte overlaps a relocation operand, and the
+#                    relocation table is the seed's own, unmoved.  Nothing in
+#                    this class can move one.
+#  8  retail equality  the image must equal the pinned retail oracle under the
+#                    relocation mask, or the composition is REFUSED.
+#  9  debug fidelity  no instruction moves and no register changes role, so
+#                    `.debug$S` and the COFF line table are required to be
+#                    BYTE-IDENTICAL, and every line row is re-checked against
+#                    the image's own boundaries.
+# 10  scope         one named COMDAT, one pinned oracle, and the ordinary
+#                    output-conservation proof of the equal-body primitive,
+#                    which this class delegates to unchanged and selects from
+#                    the manifest's own `expected_closure` pin.
+
+
+RELATIONAL_FORM_CLASS = "retail_exact_relational_form"
+
+
+RELATIONAL_FORM_KIND = "mirrored_relational_form_v1"
+
+
+RELATIONAL_FORM_FPO_CLOSURE = [".debug$F", ".debug$S"]
+RELATIONAL_FORM_EH_CLOSURE = [".debug$S", ".xdata$x"]
+
+
+# The six arithmetic flags.  DF is deliberately absent: no Jcc reads it and no
+# operand reversal can change it, so modelling it would add nothing.
+IA32_ARITHMETIC_FLAGS = frozenset({"cf", "pf", "af", "zf", "sf", "of"})
+
+
+# MEASURED (`$SCRATCH/BD-flags.py`, and on hardware by `$SCRATCH/fp.c` /
+# `fp32.c` built with this project's own MSVC 4.2 and run under Wine): ZF is
+# the only flag `cmp a,b` and `cmp b,a` agree on for every ordered pair.
+IA32_RELATIONAL_PRESERVED_FLAGS = frozenset({"zf"})
+IA32_RELATIONAL_CHANGED_FLAGS = IA32_ARITHMETIC_FLAGS - \
+    IA32_RELATIONAL_PRESERVED_FLAGS
+
+
+# The condition each Jcc consumes, by its 4-bit condition code.
+IA32_CONDITION_FLAGS = {
+    0x0: frozenset({"of"}),                 # o
+    0x1: frozenset({"of"}),                 # no
+    0x2: frozenset({"cf"}),                 # b / c / nae
+    0x3: frozenset({"cf"}),                 # ae / nb / nc
+    0x4: frozenset({"zf"}),                 # e / z
+    0x5: frozenset({"zf"}),                 # ne / nz
+    0x6: frozenset({"cf", "zf"}),           # be / na
+    0x7: frozenset({"cf", "zf"}),           # a / nbe
+    0x8: frozenset({"sf"}),                 # s
+    0x9: frozenset({"sf"}),                 # ns
+    0xA: frozenset({"pf"}),                 # p / pe
+    0xB: frozenset({"pf"}),                 # np / po
+    0xC: frozenset({"sf", "of"}),           # l / nge
+    0xD: frozenset({"sf", "of"}),           # ge / nl
+    0xE: frozenset({"zf", "sf", "of"}),     # le / ng
+    0xF: frozenset({"zf", "sf", "of"}),     # g / nle
+}
+
+
+IA32_CONDITION_NAMES = {
+    0x0: "o", 0x1: "no", 0x2: "b", 0x3: "ae", 0x4: "e", 0x5: "ne",
+    0x6: "be", 0x7: "a", 0x8: "s", 0x9: "ns", 0xA: "p", 0xB: "np",
+    0xC: "l", 0xD: "ge", 0xE: "le", 0xF: "g",
+}
+
+
+IA32_CONDITION_CODES = {name: code
+                        for code, name in IA32_CONDITION_NAMES.items()}
+
+
+# THE CLOSED MIRROR TABLE.  Derived by exhaustion, never by hand: for every
+# ordered pair (a, b) of a closed domain, `cond C` after `cmp a,b` was
+# compared against `cond D` after `cmp b,a` for all 16x16 (C, D).  Exactly
+# these ten pairs agree on the whole domain; each mirror is unique; the map is
+# an involution; and `o`, `no`, `s`, `ns`, `p`, `np` have NO agreeing
+# condition at all, which is why they are absent and refuse.  Confirmed on
+# hardware at byte width (all 65536 pairs) and at dword width (160000
+# boundary-lattice pairs).
+IA32_RELATIONAL_MIRROR = {
+    "b": "a", "a": "b",
+    "ae": "be", "be": "ae",
+    "e": "e", "ne": "ne",
+    "l": "g", "g": "l",
+    "ge": "le", "le": "ge",
+}
+
+
+# The four admitted two-operand `cmp` encodings, as the pairs the direction
+# bit exchanges.  38/39 are `cmp r/m, r`; 3A/3B are `cmp r, r/m`.  The ModRM
+# byte means exactly the same thing in both members of a pair, so flipping the
+# opcode -- and NOTHING else -- is precisely the operand exchange.  Forms with
+# an immediate operand (80 /7, 81 /7, 83 /7, 3C, 3D) have no reversed encoding
+# and are absent.
+IA32_RELATIONAL_COMPARE_PAIRS = {0x38: 0x3A, 0x3A: 0x38,
+                                 0x39: 0x3B, 0x3B: 0x39}
+
+
+# Instruction prefixes tier A walks through.  F2/F3 are admitted only in front
+# of a string opcode, which is the only thing they can prefix on a 386/486
+# target; anything else refuses.
+_IA32_RELATIONAL_PREFIXES = frozenset({0x26, 0x2E, 0x36, 0x3E,
+                                       0x64, 0x65, 0x66})
+_IA32_RELATIONAL_REPEAT_PREFIXES = frozenset({0xF2, 0xF3})
+_IA32_RELATIONAL_STRING_QUIET = frozenset({0x6C, 0x6D, 0x6E, 0x6F,
+                                           0xA4, 0xA5, 0xAA, 0xAB,
+                                           0xAC, 0xAD})
+_IA32_RELATIONAL_STRING_COMPARE = frozenset({0xA6, 0xA7, 0xAE, 0xAF})
+# Opcodes that make the graph unknowable or the body unmodellable.
+_IA32_RELATIONAL_REFUSED_OPCODES = frozenset({
+    0x9A, 0xEA,                             # far call / far jump
+    0xCC, 0xCD, 0xCE, 0xCF,                 # int / into / iret
+    0xF0, 0xF1, 0xF4,                       # lock / icebp / hlt
+})
+
+
+def _ia32_relational_flag_table() -> dict:
+    """Flag effect by opcode for the forms whose effect is opcode-determined.
+
+    Everything absent falls back to the fail-closed default (reads every
+    flag, writes none), which can only cause a refusal.
+    """
+    quiet = (frozenset(), frozenset())
+    table = {}
+    for opcode in (0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E,
+                   0xA0, 0xA1, 0xA2, 0xA3, 0xC6, 0xC7,
+                   0x86, 0x87, 0x98, 0x99, 0xC8, 0xC9,
+                   0x60, 0x61, 0x68, 0x6A,
+                   0x06, 0x0E, 0x16, 0x1E, 0x07, 0x17, 0x1F,
+                   0xFC, 0xFD):                       # cld / std touch DF only
+        table[opcode] = quiet
+    for opcode in range(0xB0, 0xC0):                  # mov r, imm
+        table[opcode] = quiet
+    for opcode in range(0x50, 0x60):                  # push / pop r32
+        table[opcode] = quiet
+    for opcode in range(0x90, 0x98):                  # nop / xchg eax, r32
+        table[opcode] = quiet
+    for opcode in range(0xD8, 0xE0):                  # x87: no EFLAGS
+        table[opcode] = quiet
+    for opcode in _IA32_RELATIONAL_STRING_QUIET:      # movs / stos / lods
+        table[opcode] = quiet
+    for base in (0x00, 0x08, 0x20, 0x28, 0x30, 0x38):  # add or and sub xor cmp
+        for step in range(6):
+            table[base + step] = (frozenset(), IA32_ARITHMETIC_FLAGS)
+    for base in (0x10, 0x18):                         # adc / sbb read CF
+        for step in range(6):
+            table[base + step] = (frozenset({"cf"}), IA32_ARITHMETIC_FLAGS)
+    for opcode in (0x84, 0x85, 0xA8, 0xA9):           # test
+        table[opcode] = (frozenset(), IA32_ARITHMETIC_FLAGS)
+    for opcode in _IA32_RELATIONAL_STRING_COMPARE:    # cmps / scas
+        table[opcode] = (frozenset(), IA32_ARITHMETIC_FLAGS)
+    for opcode in range(0x40, 0x50):                  # inc / dec preserve CF
+        table[opcode] = (frozenset(), IA32_ARITHMETIC_FLAGS - {"cf"})
+    for opcode in (0x69, 0x6B, 0x0FAF):               # imul
+        table[opcode] = (frozenset(), frozenset({"cf", "of"}))
+    for opcode in (0x0FB6, 0x0FB7, 0x0FBE, 0x0FBF):   # movzx / movsx
+        table[opcode] = quiet
+    for opcode in (0x0FA3, 0x0FAB, 0x0FB3, 0x0FBB):   # bt / bts / btr / btc
+        table[opcode] = (frozenset(), frozenset({"cf"}))
+    for opcode in (0x0FBC, 0x0FBD):                   # bsf / bsr
+        table[opcode] = (frozenset(), frozenset({"zf"}))
+    for code in range(16):
+        table[0x0F90 | code] = (IA32_CONDITION_FLAGS[code], frozenset())
+        table[0x0F40 | code] = (IA32_CONDITION_FLAGS[code], frozenset())
+    table[0x9C] = (IA32_ARITHMETIC_FLAGS, frozenset())          # pushfd
+    table[0x9D] = (frozenset(), IA32_ARITHMETIC_FLAGS)          # popfd
+    table[0x9E] = (frozenset(), IA32_ARITHMETIC_FLAGS - {"of"})  # sahf
+    table[0x9F] = (IA32_ARITHMETIC_FLAGS - {"of"}, frozenset())  # lahf
+    table[0xF5] = (frozenset({"cf"}), frozenset({"cf"}))        # cmc
+    table[0xF8] = (frozenset(), frozenset({"cf"}))              # clc
+    table[0xF9] = (frozenset(), frozenset({"cf"}))              # stc
+    return table
+
+
+IA32_RELATIONAL_FLAG_EFFECTS = _ia32_relational_flag_table()
+
+
+def _ia32_relational_group_table() -> dict:
+    """Flag effect by (opcode, ModRM extension digit).
+
+    Reading the digit off the encoding makes these forms EXACT.  An
+    opcode-granular table would have to take the union of the members' reads
+    and the intersection of their writes -- sound, but it leaves CF live
+    across every `cmp m, imm` in the body because ADC and SBB share the
+    opcode, and that alone turned a provable site into a refusal.
+    """
+    group1 = {digit: (frozenset({"cf"}) if digit in (2, 3) else frozenset(),
+                      IA32_ARITHMETIC_FLAGS)
+              for digit in range(8)}
+    group3 = {
+        0: (frozenset(), IA32_ARITHMETIC_FLAGS),        # test r/m, imm
+        1: (frozenset(), IA32_ARITHMETIC_FLAGS),        # test (alias)
+        2: (frozenset(), frozenset()),                  # not: no flag at all
+        3: (frozenset(), IA32_ARITHMETIC_FLAGS),        # neg
+        4: (frozenset(), frozenset({"cf", "of"})),      # mul
+        5: (frozenset(), frozenset({"cf", "of"})),      # imul
+        6: (frozenset(), frozenset()),                  # div: all undefined
+        7: (frozenset(), frozenset()),                  # idiv: all undefined
+    }
+    group5 = {digit: (frozenset(),
+                      IA32_ARITHMETIC_FLAGS - {"cf"} if digit in (0, 1)
+                      else frozenset())
+              for digit in range(8)}
+    # Shift/rotate BY ONE: the count is fixed, so the write set is guaranteed.
+    shift_one = {digit: (frozenset({"cf"}) if digit in (2, 3) else frozenset(),
+                         frozenset({"cf", "of"}))
+                 for digit in range(8)}
+    # Shift/rotate by imm8 or by CL: a count of zero leaves every flag
+    # untouched, so NOTHING is guaranteed to be written.
+    shift_var = {digit: (frozenset({"cf"}) if digit in (2, 3) else frozenset(),
+                         frozenset())
+                 for digit in range(8)}
+    return {
+        0x80: group1, 0x81: group1, 0x83: group1,
+        0xF6: group3, 0xF7: group3,
+        0xFE: group5, 0xFF: group5,
+        0xD0: shift_one, 0xD1: shift_one,
+        0xC0: shift_var, 0xC1: shift_var, 0xD2: shift_var, 0xD3: shift_var,
+    }
+
+
+IA32_RELATIONAL_GROUP_FLAG_EFFECTS = _ia32_relational_group_table()
+
+
+def relational_form_delegate(
+    expected_closure: object, expected_code_renames: object,
+) -> str:
+    """Name the installation delegate from the PINS alone.
+
+    Identical in spirit to `register_bijection_delegate`, minus its relocation
+    branch: this class can never move a relocation, so
+    `equal_body_eh_reloc_layout` is unreachable and is not offered.
+    """
+    if (list(expected_closure) == RELATIONAL_FORM_FPO_CLOSURE
+            and not expected_code_renames):
+        return "equal_body_strict"
+    return "equal_body_eh_structural_local"
+
+
+def ia32_relational_flow_walk(
+    body: bytes, relocations: dict | None, context: str,
+    code_length: int | None = None,
+    external_entries: frozenset | None = None,
+) -> tuple[list[dict], list[list[int]], list[int]]:
+    """Tier A: boundaries, closed flow classification, CFG and flag facts.
+
+    Obligation 2.  Returns `(items, successors, entry_indices)`.  Every item
+    carries `reads_flags` / `writes_flags`; an opcode outside the table reads
+    every flag and writes none, so an unmodelled instruction can only make a
+    flag look MORE live.
+    """
+    require(isinstance(body, (bytes, bytearray)) and body,
+            f"{context}: body is empty")
+    body = bytes(body)
+    relocations = relocations or {}
+    limit = len(body) if code_length is None else code_length
+    require(isinstance(limit, int) and not isinstance(limit, bool)
+            and 0 < limit <= len(body),
+            f"{context}: code length is out of range")
+    code = body[:limit]
+    items = []
+    offset = 0
+    while offset < len(code):
+        length = supported_ia32_instruction_length(
+            code[offset:], f"{context} at {offset}")
+        cursor = offset
+        repeated = False
+        while (code[cursor] in _IA32_RELATIONAL_PREFIXES
+               or code[cursor] in _IA32_RELATIONAL_REPEAT_PREFIXES):
+            if code[cursor] in _IA32_RELATIONAL_REPEAT_PREFIXES:
+                require(cursor + 1 < offset + length
+                        and (code[cursor + 1] in _IA32_RELATIONAL_STRING_QUIET
+                             or code[cursor + 1]
+                             in _IA32_RELATIONAL_STRING_COMPARE),
+                        f"{context}: the repeat prefix at {offset} does not "
+                        "prefix a string opcode")
+                repeated = True
+            cursor += 1
+            require(cursor < offset + length,
+                    f"{context}: instruction at {offset} is only prefixes")
+        opcode = code[cursor]
+        require(opcode not in _IA32_RELATIONAL_REFUSED_OPCODES,
+                f"{context}: opcode 0x{opcode:02x} at {offset} is outside the "
+                "relational-form flow table")
+        if opcode == 0x0F:
+            require(cursor + 1 < offset + length,
+                    f"{context}: truncated two-byte opcode at {offset}")
+            opcode = 0x0F00 | code[cursor + 1]
+        flow, target, condition = "fall", None, None
+        if 0x70 <= opcode <= 0x7F:
+            flow, condition = "jcc", opcode & 0xF
+            target = offset + length + int.from_bytes(
+                code[offset + length - 1:offset + length], "little",
+                signed=True)
+        elif 0x0F80 <= opcode <= 0x0F8F:
+            flow, condition = "jcc", opcode & 0xF
+            target = offset + length + int.from_bytes(
+                code[offset + length - 4:offset + length], "little",
+                signed=True)
+        elif opcode in (0xEB, 0xE9):
+            flow = "jmp"
+            width = 1 if opcode == 0xEB else 4
+            target = offset + length + int.from_bytes(
+                code[offset + length - width:offset + length], "little",
+                signed=True)
+        elif opcode == 0xE8:
+            flow = "call"
+        elif opcode in (0xC2, 0xC3):
+            flow = "ret"
+        elif opcode in (0xE0, 0xE1, 0xE2, 0xE3):
+            # loop / loopz / loopnz / jecxz: two successors, and the two
+            # `loopz` forms read ZF -- which the reversal preserves.
+            flow = "jcc"
+            target = offset + length + int.from_bytes(
+                code[offset + length - 1:offset + length], "little",
+                signed=True)
+        elif opcode == 0xFF:
+            require(cursor + 1 < offset + length,
+                    f"{context}: FF form at {offset} lacks its ModRM")
+            extension = (code[cursor + 1] >> 3) & 7
+            require(extension not in (3, 5),
+                    f"{context}: a far transfer at {offset} makes the "
+                    "control-flow graph unknowable")
+            if extension == 2:
+                flow = "call"
+            elif extension == 4:
+                raise ByteIdentityError(
+                    f"{context}: a computed jump at {offset} makes the "
+                    "control-flow graph unknowable")
+        if (flow in ("jmp", "jcc")
+                and (opcode == 0xE9 or 0x0F80 <= opcode <= 0x0F8F)
+                and relocations.get(offset + length - 4, {}).get("width") == 4):
+            # A relocated rel32 transfer leaves this COMDAT.  No calling
+            # convention on this toolchain reads a flag, so it consumes none.
+            flow, target, condition = "exit", None, None
+        if flow == "jcc" and condition is not None:
+            reads = IA32_CONDITION_FLAGS[condition]
+            writes = frozenset()
+        elif flow in ("jcc", "jmp", "call", "ret", "exit"):
+            # loop/jecxz read no arithmetic flag except ZF for the two `loopz`
+            # forms; a call, a return and a tail transfer read none, because
+            # no calling convention on this toolchain passes or returns one.
+            reads = (frozenset({"zf"}) if opcode in (0xE0, 0xE1)
+                     else frozenset())
+            writes = frozenset()
+        elif opcode in IA32_RELATIONAL_GROUP_FLAG_EFFECTS:
+            digit = (code[cursor + 1] >> 3) & 7
+            reads, writes = IA32_RELATIONAL_GROUP_FLAG_EFFECTS[opcode][digit]
+        else:
+            reads, writes = IA32_RELATIONAL_FLAG_EFFECTS.get(
+                opcode, (IA32_ARITHMETIC_FLAGS, frozenset()))
+            if repeated and opcode in _IA32_RELATIONAL_STRING_COMPARE:
+                reads = reads | {"zf"}
+        items.append({
+            "offset": offset, "length": length, "opcode": opcode,
+            "opcode_at": cursor, "flow": flow, "target": target,
+            "condition": condition,
+            "reads_flags": frozenset(reads), "writes_flags": frozenset(writes),
+        })
+        offset += length
+    require(offset == len(code),
+            f"{context}: body does not decode to exhaustion")
+    starts = {item["offset"] for item in items}
+    for item in items:
+        require(item["target"] is None or item["target"] in starts,
+                f"{context}: the branch at {item['offset']} does not target "
+                "an instruction boundary of this body")
+    index_of = {item["offset"]: index for index, item in enumerate(items)}
+    successors = []
+    for index, item in enumerate(items):
+        edges = []
+        if item["flow"] in ("fall", "jcc", "call"):
+            if index + 1 < len(items):
+                edges.append(index + 1)
+            else:
+                require(item["flow"] != "fall",
+                        f"{context}: body falls off its end")
+        if item["flow"] in ("jcc", "jmp") and item["target"] is not None:
+            edges.append(index_of[item["target"]])
+        successors.append(sorted(set(edges)))
+    external = sorted(external_entries or ())
+    for target in external:
+        require(target in index_of,
+                f"{context}: the external entry {target} is not an "
+                "instruction boundary of this body")
+    entries = [0] + [index_of[target] for target in external if target != 0]
+    seen, stack = set(), list(entries)
+    while stack:
+        index = stack.pop()
+        if index in seen:
+            continue
+        seen.add(index)
+        stack.extend(successors[index])
+    unreachable = sorted(items[index]["offset"]
+                         for index in range(len(items)) if index not in seen)
+    require(not unreachable,
+            f"{context}: the instruction at {unreachable[:1]} is reachable "
+            "neither from the entry nor from a declared external entry, so "
+            "the control-flow graph is incomplete")
+    return items, successors, entries
+
+
+def ia32_relational_flag_liveness(
+    items: list[dict], successors: list[list[int]], context: str,
+) -> list[frozenset]:
+    """Backward per-flag liveness, on the SAME fixpoint the register and web
+    certificates use -- the flags are simply its atoms."""
+    shim = [{"read_atoms": item["reads_flags"],
+             "write_atoms": item["writes_flags"]} for item in items]
+    return _ia32_backward_liveness(shim, successors, context)
+
+
+def apply_relational_form(
+    body: bytes, sites: list, relocation_offsets: frozenset, context: str,
+    relocations: dict | None = None, code_length: int | None = None,
+    external_entries: frozenset | None = None,
+) -> tuple[bytes, dict]:
+    """Reverse each declared compare and mirror its branch, or refuse.
+
+    Obligations 2 through 7 are discharged here; the composer adds
+    provenance, retail equality and debug fidelity around it.
+    """
+    require(isinstance(body, (bytes, bytearray)) and body,
+            f"{context}: body is empty")
+    body = bytes(body)
+    require(isinstance(sites, list) and sites,
+            f"{context}: no site is declared")
+    items, successors, entries = ia32_relational_flow_walk(
+        body, relocations, context, code_length, external_entries)
+    index_of = {item["offset"]: index for index, item in enumerate(items)}
+    predecessors = [[] for _ in items]
+    for index, edges in enumerate(successors):
+        for edge in edges:
+            predecessors[edge].append(index)
+    live = ia32_relational_flag_liveness(items, successors, context)
+
+    image = bytearray(body)
+    rewritten = []
+    proved = []
+    for ordinal, site in enumerate(sites):
+        site_context = f"{context} site {ordinal}"
+        compare_at = site["compare_offset"]
+        branch_at = site["branch_offset"]
+        require(compare_at in index_of and branch_at in index_of,
+                f"{site_context}: an offset is not an instruction boundary")
+        compare_index = index_of[compare_at]
+        branch_index = index_of[branch_at]
+        compare = items[compare_index]
+        branch = items[branch_index]
+        # Obligation 3: the pair, and only the pair.
+        require(branch_index == compare_index + 1,
+                f"{site_context}: the branch does not immediately follow the "
+                "compare")
+        require(compare["opcode"] in IA32_RELATIONAL_COMPARE_PAIRS,
+                f"{site_context}: the instruction at {compare_at} is not a "
+                "two-operand cmp with a reversible encoding")
+        require(compare["flow"] == "fall",
+                f"{site_context}: the compare is a control transfer")
+        require(branch["flow"] == "jcc" and branch["condition"] is not None,
+                f"{site_context}: the instruction at {branch_at} is not a "
+                "conditional branch this table can mirror")
+        require(predecessors[branch_index] == [compare_index],
+                f"{site_context}: the branch has a predecessor other than "
+                "its compare, so another path would consume flags this "
+                "compare did not produce")
+        # The full semantic table on the pair alone (tier B): this is what
+        # proves the compare really is the two-operand form the direction bit
+        # exchanges, with its operands named.
+        decoded = decode_ia32_bijection_instruction(
+            body, compare_at, f"{site_context} compare", relocations)
+        require(decoded["opcode"] == compare["opcode"]
+                and decoded["length"] == compare["length"],
+                f"{site_context}: the two decoders disagree about the compare")
+        decode_ia32_bijection_instruction(
+            body, branch_at, f"{site_context} branch", relocations)
+        # Obligation 4: the mirror, from the closed table.
+        seed_name = IA32_CONDITION_NAMES[branch["condition"]]
+        require(seed_name in IA32_RELATIONAL_MIRROR,
+                f"{site_context}: condition 'j{seed_name}' has no mirror -- "
+                "it reads a flag whose value under the reversal is not a "
+                "function of the original flags")
+        image_name = IA32_RELATIONAL_MIRROR[seed_name]
+        require(site["seed_condition"] == seed_name
+                and site["image_condition"] == image_name,
+                f"{site_context}: the declared condition pair is not the "
+                "closed table's mirror")
+        # Obligation 5: flag deadness at both successors.
+        out = frozenset().union(*[live[edge] for edge in successors[
+            branch_index]]) if successors[branch_index] else frozenset()
+        offending = sorted(out & IA32_RELATIONAL_CHANGED_FLAGS)
+        require(not offending,
+                f"{site_context}: the reversal changes {offending} and a "
+                "successor of the branch reads it")
+        # Obligation 7: no rewritten byte is a relocation operand.
+        compare_byte = compare["opcode_at"]
+        branch_byte = branch["opcode_at"] + (
+            1 if branch["opcode"] >= 0x0F00 else 0)
+        require(compare_byte not in relocation_offsets
+                and branch_byte not in relocation_offsets,
+                f"{site_context}: a rewritten byte overlaps a relocation")
+        image[compare_byte] = IA32_RELATIONAL_COMPARE_PAIRS[compare["opcode"]]
+        image[branch_byte] = (image[branch_byte] & 0xF0) | \
+            IA32_CONDITION_CODES[image_name]
+        rewritten.extend([compare_byte, branch_byte])
+        proved.append({
+            "compare_offset": compare_at, "branch_offset": branch_at,
+            "seed_condition": seed_name, "image_condition": image_name,
+            "seed_compare_opcode": compare["opcode"],
+            "image_compare_opcode":
+                IA32_RELATIONAL_COMPARE_PAIRS[compare["opcode"]],
+            "changed_flags": sorted(IA32_RELATIONAL_CHANGED_FLAGS),
+            "flags_live_out": sorted(out),
+        })
+    # Obligation 5 (continued): an external entry point is entered by the
+    # runtime, not by a decoded edge, so nothing proves what flag state it
+    # was given.  Requiring the changed flags dead there is what makes an EH
+    # funclet unable to observe the reversal.
+    for entry in entries[1:]:
+        offending = sorted(live[entry] & IA32_RELATIONAL_CHANGED_FLAGS)
+        require(not offending,
+                f"{context}: the external entry at {items[entry]['offset']} "
+                f"has {offending} live, and the reversal changes it")
+    image = bytes(image)
+    require(image != body, f"{context}: the image does not move the body")
+    rewritten = sorted(set(rewritten))
+    require(len(rewritten) == 2 * len(sites),
+            f"{context}: two sites rewrite the same byte")
+    require({index for index in range(len(body)) if body[index] != image[index]}
+            <= set(rewritten),
+            f"{context}: the image changed a byte no site declares")
+    # Obligation 6: the image re-decodes to the same shape.
+    image_items, image_successors, image_entries = ia32_relational_flow_walk(
+        image, relocations, f"{context} image", code_length, external_entries)
+    require(len(image_items) == len(items)
+            and all(left["offset"] == right["offset"]
+                    and left["length"] == right["length"]
+                    and left["flow"] == right["flow"]
+                    and left["target"] == right["target"]
+                    for left, right in zip(items, image_items))
+            and image_successors == successors
+            and image_entries == entries,
+            f"{context}: the image does not re-decode to the same "
+            "boundaries, flow and branch targets")
+    for site in proved:
+        item = image_items[index_of[site["branch_offset"]]]
+        require(IA32_CONDITION_NAMES[item["condition"]]
+                == site["image_condition"],
+                f"{context}: the image branch is not the mirrored condition")
+    # Every claim about the image is measured ON the image.  The mirrored
+    # condition can read a flag the seed's did not (`jg` reads ZF where `jl`
+    # does not), so the deadness proof is re-run on the rewritten body and the
+    # image's own live sets are recorded in the proof.
+    image_live = ia32_relational_flag_liveness(
+        image_items, image_successors, f"{context} image")
+    for site in proved:
+        branch_index = index_of[site["branch_offset"]]
+        edges = image_successors[branch_index]
+        out = frozenset().union(*[image_live[edge] for edge in edges]) \
+            if edges else frozenset()
+        offending = sorted(out & IA32_RELATIONAL_CHANGED_FLAGS)
+        require(not offending,
+                f"{context}: after the rewrite a successor of the branch at "
+                f"{site['branch_offset']} reads {offending}")
+        site["image_flags_live_out"] = sorted(out)
+    for entry in image_entries[1:]:
+        offending = sorted(image_live[entry] & IA32_RELATIONAL_CHANGED_FLAGS)
+        require(not offending,
+                f"{context}: after the rewrite the external entry at "
+                f"{image_items[entry]['offset']} has {offending} live")
+    return image, {
+        "kind": RELATIONAL_FORM_KIND,
+        "sites": proved,
+        "instruction_count": len(items),
+        "rewritten_offsets": rewritten,
+        "external_entries": [items[index]["offset"] for index in entries[1:]],
+        "preserved_flags": sorted(IA32_RELATIONAL_PRESERVED_FLAGS),
+        "changed_flags": sorted(IA32_RELATIONAL_CHANGED_FLAGS),
+    }
+
+
+def relational_form_external_entries(
+    obj: "CoffObject", section: dict, context: str,
+) -> frozenset:
+    """Every in-body offset a relocation of this COMDAT or of its closure
+    children names.
+
+    On a C++ EH function these are exactly the unwind funclet heads the
+    `.xdata$x` table hands to the runtime -- code no decoded edge reaches.
+    Deriving them (rather than letting an author declare them) is what makes
+    obligation 2's reachability requirement closable without weakening it.
+    """
+    number = section["number"]
+    entries = {row["target_value"] for row in detailed_relocations(obj, section)
+               if row.get("target_section") == number}
+    count, names = _comdat_child_closure(obj, section)
+    require(count == len(names), f"{context}: malformed COMDAT closure")
+    for child_name in names:
+        child = _comdat_child(obj, section, child_name)
+        entries |= {row["target_value"]
+                    for row in detailed_relocations(obj, child)
+                    if row.get("target_section") == number}
+    entries.discard(0)
+    return frozenset(entries)
+
+
+def validate_relational_form(
+    value: object, context: str, body_length: int,
+) -> dict:
+    """Validate one relational-form certificate declaration."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "sites", "expected_instruction_count",
+        "expected_rewritten_offsets", "expected_external_entries",
+        "expected_seed_debug_s_sha256", "authenticity_rationale",
+        "expected_code_length",
+    }, context, optional={"expected_code_length"})
+    require(value.get("kind") == RELATIONAL_FORM_KIND,
+            f"{context}.kind differs")
+    sites = value.get("sites")
+    require(isinstance(sites, list) and 1 <= len(sites) <= 64,
+            f"{context}.sites is invalid")
+    normalized_sites = []
+    previous = -1
+    for index, site in enumerate(sites):
+        site_context = f"{context}.sites[{index}]"
+        require(isinstance(site, dict), f"{site_context} must be an object")
+        exact_audit_keys(site, {
+            "compare_offset", "branch_offset",
+            "seed_condition", "image_condition",
+        }, site_context)
+        compare_at = require_exact_int(
+            site.get("compare_offset"), f"{site_context}.compare_offset",
+            minimum=0, maximum=body_length - 2)
+        branch_at = require_exact_int(
+            site.get("branch_offset"), f"{site_context}.branch_offset",
+            minimum=1, maximum=body_length - 1)
+        require(compare_at > previous,
+                f"{site_context}: sites are unsorted or overlapping")
+        require(compare_at < branch_at,
+                f"{site_context}: the branch does not follow the compare")
+        previous = branch_at
+        seed_condition = site.get("seed_condition")
+        require(seed_condition in IA32_RELATIONAL_MIRROR,
+                f"{site_context}.seed_condition has no mirror in the closed "
+                "table")
+        require(site.get("image_condition")
+                == IA32_RELATIONAL_MIRROR[seed_condition],
+                f"{site_context}.image_condition is not the closed table's "
+                "mirror")
+        normalized_sites.append({
+            "compare_offset": compare_at, "branch_offset": branch_at,
+            "seed_condition": seed_condition,
+            "image_condition": IA32_RELATIONAL_MIRROR[seed_condition],
+        })
+    offsets = value.get("expected_rewritten_offsets")
+    require(isinstance(offsets, list)
+            and len(offsets) == 2 * len(normalized_sites)
+            and offsets == sorted(set(offsets))
+            and all(type(offset) is int and 0 <= offset < body_length
+                    for offset in offsets),
+            f"{context}.expected_rewritten_offsets is invalid")
+    external = value.get("expected_external_entries")
+    require(isinstance(external, list)
+            and external == sorted(set(external))
+            and all(type(item) is int and 0 < item < body_length
+                    for item in external),
+            f"{context}.expected_external_entries is invalid")
+    rationale = value.get("authenticity_rationale")
+    require(isinstance(rationale, str) and len(rationale) >= 40,
+            f"{context}.authenticity_rationale is missing")
+    normalized = {
+        "kind": RELATIONAL_FORM_KIND,
+        "sites": normalized_sites,
+        "expected_instruction_count": require_exact_int(
+            value.get("expected_instruction_count"),
+            f"{context}.expected_instruction_count", minimum=2),
+        "expected_rewritten_offsets": list(offsets),
+        "expected_external_entries": list(external),
+        "expected_seed_debug_s_sha256": require_sha(
+            value.get("expected_seed_debug_s_sha256"),
+            f"{context}.expected_seed_debug_s_sha256"),
+        "authenticity_rationale": rationale,
+    }
+    code_length = value.get("expected_code_length")
+    if code_length is not None:
+        normalized["expected_code_length"] = require_exact_int(
+            code_length, f"{context}.expected_code_length",
+            minimum=2, maximum=body_length)
+    return normalized
+
+
+def compose_retail_exact_relational_form(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Install the reversed compares after proving they are retail's own code.
+
+    See the class comment: this is a certificate.  The pre-image is an
+    ordinary census-pinned compile of the same translation unit; the reversal
+    is proved sound against the body's own control flow with a per-flag
+    liveness fixpoint; and the result is REFUSED unless it equals the pinned
+    retail oracle under the relocation mask.  Body installation delegates,
+    unchanged, to the equal-body primitive.
+    """
+    require(function.get("splice_class") == RELATIONAL_FORM_CLASS,
+            "splice class is not retail_exact_relational_form")
+    require("target_source_refactor" not in function,
+            "relational-form functions carry no source refactor")
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+    spec = function["relational_form"]
+    seed = CoffObject(seed_bytes)
+    donor = CoffObject(donor_bytes)
+    mangled = function["mangled"]
+    sp = seed.function_section(mangled)
+    dp = donor.function_section(mangled)
+    # Obligation 1: the provenance battery, identical to the bijection's.
+    require(sp["number"] == dp["number"]
+            == function["expected_section_number"],
+            "relational-form target section seat changed")
+    require(len(seed.sections) == len(donor.sections)
+            == function["expected_section_count"],
+            "relational-form global section count changed")
+    seed_functions = function_multiset(seed)
+    donor_functions = function_multiset(donor)
+    require(seed_functions == donor_functions
+            and sum(seed_functions.values())
+            == function["expected_function_count"],
+            "relational-form donor function set differs")
+    seed_comdats = comdat_primary_identity_multiset(seed)
+    donor_comdats = comdat_primary_identity_multiset(donor)
+    require(seed_comdats == donor_comdats
+            and sum(seed_comdats.values())
+            == function["expected_comdat_count"],
+            "relational-form donor COMDAT identity set differs")
+    require(
+        sp["raw_size"] == dp["raw_size"] == function["expected_body_length"]
+        and sp["relocation_count"] == dp["relocation_count"]
+        == function["expected_relocation_count"]
+        and sp["line_count"] == function["expected_seed_line_count"]
+        and dp["line_count"] == function["expected_donor_line_count"]
+        and sp["name"] == dp["name"]
+        and sp["characteristics"] == dp["characteristics"]
+        == function["expected_characteristics"],
+        "relational-form target header/count pins changed",
+    )
+    require(
+        section_definitions(seed)[sp["number"]]["selection"]
+        == section_definitions(donor)[dp["number"]]["selection"]
+        == function["expected_selection"],
+        "relational-form COMDAT selection changed",
+    )
+    expected_closure = tuple(function["expected_closure"])
+    require(_comdat_child_closure(seed, sp)
+            == _comdat_child_closure(donor, dp)
+            == (len(expected_closure), expected_closure),
+            "relational-form target closure changed")
+    require(list(expected_closure) in (RELATIONAL_FORM_FPO_CLOSURE,
+                                       RELATIONAL_FORM_EH_CLOSURE),
+            "relational-form closure pin names no installation delegate")
+    delegate = relational_form_delegate(function["expected_closure"],
+                                        function["expected_code_renames"])
+    require(instruction_mosaic_metadata_sha256(seed, sp)
+            == function["expected_seed_metadata_sha256"]
+            and instruction_mosaic_metadata_sha256(donor, dp)
+            == function["expected_donor_metadata_sha256"],
+            "relational-form metadata differs from its pin")
+    seed_body = coff_body(seed, sp)
+    donor_body = coff_body(donor, dp)
+    require(sha256_bytes(seed_body) == function["expected_seed_body_sha256"]
+            and sha256_bytes(donor_body)
+            == function["expected_donor_body_sha256"],
+            "relational-form seed/donor body differs from its pin")
+    seed_rows = detailed_relocations(seed, sp)
+    donor_rows = detailed_relocations(donor, dp)
+    code_renames = require_instruction_mosaic_semantic_relocations(
+        seed, sp, donor, dp, "relational-form code")
+    require([[offset, kind] for offset, kind in code_renames]
+            == function["expected_code_renames"],
+            "relational-form code rename set changed")
+    # Obligation 7: this class can never move a relocation.
+    require(len(seed_rows) == len(donor_rows)
+            and [(row["offset"], row["type"], row["addend"])
+                 for row in seed_rows]
+            == [(row["offset"], row["type"], row["addend"])
+                for row in donor_rows],
+            "relational-form donor relocation layout differs from the seed")
+    require([row["target"] for row in seed_rows if row["type"] == 0x0014]
+            == [row["target"] for row in donor_rows if row["type"] == 0x0014],
+            "relational-form donor call/branch relocation targets differ "
+            "from the seed")
+    installed_rows = [{**left, "offset": right["offset"]}
+                      for left, right in zip(seed_rows, donor_rows)]
+    relocation_offsets = frozenset(
+        row["offset"] + byte
+        for row in installed_rows for byte in range(row["width"]))
+    relocation_symbols = {
+        row["offset"]: {"width": row["width"], "target": row["target"]}
+        for row in installed_rows}
+    # Obligation 2's external entry set is DERIVED from both objects and must
+    # equal the pin: a body whose EH funclet set moved refuses here rather
+    # than being proved on a partial graph.
+    external = relational_form_external_entries(
+        seed, sp, "relational-form seed")
+    require(external == relational_form_external_entries(
+                donor, dp, "relational-form donor"),
+            "relational-form donor external entry set differs from the seed")
+    require(sorted(external) == spec["expected_external_entries"],
+            "relational-form external entry set changed")
+
+    image, proof = apply_relational_form(
+        donor_body, spec["sites"], relocation_offsets, "relational-form image",
+        relocation_symbols, spec.get("expected_code_length"), external,
+    )
+    require(proof["rewritten_offsets"] == spec["expected_rewritten_offsets"]
+            and proof["instruction_count"]
+            == spec["expected_instruction_count"],
+            "relational-form image differs from its declaration")
+    require(sha256_bytes(image) == function["expected_body_sha256"],
+            "relational-form image differs from its pin")
+
+    # Obligation 8.
+    pinned_length = function["retail_oracle"]["length"]
+    require(len(retail_body) == pinned_length == len(image),
+            "relational-form retail length changed")
+    semantic_detail = require_retail_relocation_oracle(
+        installed_rows, bytes(retail_body),
+        int(function["retail_oracle"]["address"], 16),
+        function["retail_relocations"],
+        "relational-form retail relocation oracle",
+    )
+    masked_image = bytearray(image)
+    masked_retail = bytearray(retail_body)
+    for row in installed_rows:
+        start, width = row["offset"], row["width"]
+        masked_image[start:start + width] = b"\0" * width
+        masked_retail[start:start + width] = b"\0" * width
+    differing = sum(left != right
+                    for left, right in zip(masked_image, masked_retail))
+    require(differing == 0,
+            f"relational-form output is not retail-exact: {differing} "
+            "byte(s) differ under the relocation mask")
+
+    derived = bytearray(donor_bytes)
+    derived[dp["raw_offset"]:dp["raw_offset"] + dp["raw_size"]] = image
+    derived = bytes(derived)
+    effective = {
+        "mangled": mangled,
+        "splice_class": delegate,
+        "expected_body_length": function["expected_body_length"],
+        "expected_body_sha256": function["expected_body_sha256"],
+        "expected_changed_offsets": function["expected_changed_offsets"],
+    }
+    if delegate == "equal_body_eh_structural_local":
+        effective["expected_code_renames"] = function["expected_code_renames"]
+        effective["expected_xdata_rename_offsets"] = function[
+            "expected_xdata_rename_offsets"]
+    composed, detail = compose_equal_body_comdat(seed_bytes, derived, effective)
+
+    checked = CoffObject(composed)
+    cp = checked.function_section(mangled)
+    require(coff_body(checked, cp) == image,
+            "relational-form composed body differs from the image")
+    composed_rows = detailed_relocations(checked, cp)
+    require(composed_rows == installed_rows
+            and [row["symbol_index"] for row in composed_rows]
+            == [row["symbol_index"] for row in seed_rows]
+            and _coff_table_bytes(checked, cp, "relocations")
+            == _coff_table_bytes(seed, sp, "relocations")
+            and _coff_table_bytes(checked, cp, "lines")
+            == _coff_table_bytes(seed, sp, "lines"),
+            "relational-form output changed seed relocation/line bytes")
+    # Obligation 9.  Nothing moves and no register changes role, so every
+    # closure child -- `.debug$S` included, which the bijection has to map --
+    # must come out byte-identical to the seed's.
+    debug_child = _comdat_child(checked, cp, ".debug$S")
+    require(sha256_bytes(coff_body(checked, debug_child))
+            == spec["expected_seed_debug_s_sha256"],
+            "relational-form debug$S differs from its pin")
+    for child_name in expected_closure:
+        require(coff_body(checked, _comdat_child(checked, cp, child_name))
+                == coff_body(seed, _comdat_child(seed, sp, child_name)),
+                f"relational-form output changed its {child_name} child")
+    # Every COFF line row still lands on an instruction boundary of the image.
+    boundaries = {item["offset"] for item in ia32_relational_flow_walk(
+        image, relocation_symbols, "relational-form image lines",
+        spec.get("expected_code_length"), external)[0]}
+    if cp["line_count"] > 1:
+        line_table = coff_table(checked, cp, "lines")
+        for index in range(1, cp["line_count"]):
+            row_offset, row_line = struct.unpack_from("<IH", line_table,
+                                                      index * 6)
+            require(row_line != 0 and row_offset in boundaries,
+                    f"relational-form line row at {row_offset} does not land "
+                    "on an image instruction boundary")
+    allowed = set(range(sp["raw_offset"], sp["raw_offset"] + sp["raw_size"]))
+    require({index for index in range(len(seed_bytes))
+             if seed_bytes[index] != composed[index]} <= allowed,
+            "relational-form changed bytes outside its own COMDAT")
+    return composed, {
+        **detail,
+        "splice_class": RELATIONAL_FORM_CLASS,
+        "relational_form": proof["sites"],
+        "instruction_count": proof["instruction_count"],
+        "rewritten_offsets": proof["rewritten_offsets"],
+        "external_entries": proof["external_entries"],
+        "preserved_flags": proof["preserved_flags"],
+        "changed_flags": proof["changed_flags"],
         "retail_exact": True,
         **semantic_detail,
     }

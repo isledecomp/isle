@@ -5798,6 +5798,52 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_39ad1d59abe6",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_run_with_shape",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVC",
+      "count": 4,
+      "width": 3,
+      "classes": 5,
+      "functions": 40,
+      "generated_header_sha256": "39ad1d59abe6782c5205f43067d89892cab59fc72f2b57f11870700a84b35d39",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier over this translation unit's own effective source; it contributes no code, data, strings, vtables, or linker directives, and its object is a byte source excluded from the link."
+     }
+    },
+    {
+     "id": "d_28d0a0987183",
+     "status": "compiler_generated_current_source",
+     "authenticity": "effective_checked_in_source_only",
+     "recipe": {
+      "kind": "overlaid_cross_tu_instruction_source",
+      "donor_source": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
+      "donor_source_overlay": {
+       "declared": true,
+       "clean_source_sha256": "35488e2d5e531223235582721a54cde31b4d5775268bf76a1054f2be1df10c50",
+       "effective_source_sha256": "28d0a0987183d1a6f15e89693819e2bb168a0b7bf54e6072c9b3065abf93a040",
+       "effective_source_size": 5046,
+       "effective_source_line_count": 253
+      },
+      "donor_effective_source_sha256": "28d0a0987183d1a6f15e89693819e2bb168a0b7bf54e6072c9b3065abf93a040",
+      "rendered_source_sha256": "28d0a0987183d1a6f15e89693819e2bb168a0b7bf54e6072c9b3065abf93a040",
+      "rendered_source_size": 5046,
+      "rendered_source_line_count": 253,
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "unmodified_effective_translation_unit_only",
+      "role_policy": "cross_tu_instruction_source_only_v1",
+      "authenticity_rationale": "The sibling ordinary translation unit that emits the same multiply-defined COMDAT, compiled from this build's own declared and pinned effective rendering of its checked-in source through that unit's ordinary command; only manifest-pinned instruction bytes are imported and its object is excluded from the link."
+     }
     }
    ],
    "functions": [
@@ -5934,6 +5980,235 @@
       "expected_image_debug_s_sha256": "566606d3dd862f1a42829d32e3ef5582936bfecfda5d981b7751cc4358b2f002",
       "authenticity_rationale": "A bijective renaming of general registers proved dead-on-entry and dead-on-exit for the region, applied to this donor compile of the same translation unit; the composition is refused unless the image equals the pinned retail oracle under the relocation mask."
      }
+    },
+    {
+     "mangled": "?erase@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@QAE?AViterator@1@V21@@Z",
+     "donor": "d_39ad1d59abe6",
+     "instruction_donor": "d_28d0a0987183",
+     "splice_class": "retail_exact_cross_tu_instruction_hybrid_resize",
+     "expected_seed_length": 1117,
+     "expected_donor_length": 1119,
+     "expected_linked_span": 1120,
+     "expected_target_donor_section_number": 44,
+     "expected_target_donor_section_count": 71,
+     "expected_target_donor_relocation_count": 17,
+     "expected_target_donor_line_count": 81,
+     "expected_target_donor_body_sha256": "840d7d008af9b3356b593edff5ed7906b6d7d3ed2fdd3ea9cc69bd407015854a",
+     "expected_instruction_donor_length": 1118,
+     "expected_instruction_donor_section_number": 8,
+     "expected_instruction_donor_section_count": 78,
+     "expected_instruction_donor_relocation_count": 17,
+     "expected_instruction_donor_line_count": 81,
+     "expected_instruction_donor_body_sha256": "5a30e80beb7426c1c19af5db539fc9c98f9cfa7a7c6a1b3eb122afe0a0734036",
+     "expected_hybrid_body_sha256": "ee66e4b52f83ccd3f74688d40d8478084de824c52a3348f4058557bf7fea50dc",
+     "instruction_ranges": [
+      {
+       "kind": "cross_tu_same_mangled_complete_x86_instruction_v1",
+       "target_start": 145,
+       "target_end": 149,
+       "target_bytes": "3b7c2410",
+       "target_sha256": "48c8c177d6fc0a9845a568760276da6a8434408470f1abfa36edf9ccac817ea5",
+       "instruction_donor_start": 145,
+       "instruction_donor_end": 149,
+       "instruction_donor_bytes": "397c2410",
+       "instruction_donor_sha256": "d2130ec00b11dff90acd96547d5df3b8662b59c798b34656d5697e2a4c678bdc"
+      }
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10029d50",
+      "verdict": "MATCH",
+      "length": 1119
+     },
+     "retail_relocations": [
+      {
+       "offset": 22,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 32,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 91,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 104,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 114,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 201,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 215,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 258,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 273,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 476,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 590,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 728,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 824,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 921,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 1010,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@1PAU_Node@1@A",
+       "target_section": 33,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f31cc"
+      },
+      {
+       "offset": 1080,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 1089,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      }
+     ]
     }
    ],
    "group_order": [
@@ -30619,8 +30894,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4919,
-    "accepted_row_identity_sha256": "4c17be6d12136f24382dd7a9135b04dfc1d39a627ecbbf7eab3ffa6297ce6aab",
+    "exact_raw_1_0_count": 4920,
+    "accepted_row_identity_sha256": "123b336585da434a3760451fcd21bfad1e045ea50abbc17de044b98d496bbc4a",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

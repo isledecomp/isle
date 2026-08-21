@@ -1649,27 +1649,40 @@ class CrossTuInstructionHybridResizeTests(unittest.TestCase):
             if function.get("splice_class")
             == byte_identity.CROSS_TU_INSTRUCTION_HYBRID_RESIZE_CLASS
         ]
-        if not matches:
-            self.skipTest(
-                "no cross-TU instruction hybrid is live in the manifest")
-        self.assertEqual(len(matches), 1)
-        unit, function = matches[0]
-        donor = next(
-            item for item in unit["donors"]
-            if item["id"] == function["instruction_donor"])
         overlaid = {
             item["path"] for item in manifest["source_overlay"]["outputs"]
         }
-        normalized = (
-            byte_identity.validate_clean_current_source_cross_tu_recipe(
-                donor["recipe"], ROOT, unit["source"], overlaid, "fixture")
-        )
-        self.assertNotEqual(normalized["donor_source"], unit["source"])
-        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
-                                    "effective source overlay"):
-            byte_identity.validate_clean_current_source_cross_tu_recipe(
-                donor["recipe"], ROOT, unit["source"],
-                overlaid | {normalized["donor_source"]}, "fixture")
+        # A cross-TU instruction donor is one of exactly two provenance
+        # objects: the CLEAN checked-in sibling (this test), or the OVERLAID
+        # sibling under its own declared role (whose bar is fixed in
+        # test_overlaid_cross_tu_instruction_source.py).  Whichever is live,
+        # the clean recipe's own refusal of an overlaid path is unchanged.
+        clean = [
+            (unit, function) for unit, function in matches
+            if next(item for item in unit["donors"]
+                    if item["id"] == function["instruction_donor"]
+                    )["recipe"]["kind"]
+            == byte_identity.CLEAN_CURRENT_SOURCE_CROSS_TU_RECIPE
+        ]
+        if not clean:
+            self.skipTest(
+                "no clean cross-TU instruction hybrid is live in the "
+                "manifest")
+        for unit, function in clean:
+            donor = next(
+                item for item in unit["donors"]
+                if item["id"] == function["instruction_donor"])
+            normalized = (
+                byte_identity.validate_clean_current_source_cross_tu_recipe(
+                    donor["recipe"], ROOT, unit["source"], overlaid,
+                    "fixture")
+            )
+            self.assertNotEqual(normalized["donor_source"], unit["source"])
+            with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                        "effective source overlay"):
+                byte_identity.validate_clean_current_source_cross_tu_recipe(
+                    donor["recipe"], ROOT, unit["source"],
+                    overlaid | {normalized["donor_source"]}, "fixture")
 
     def test_clean_cross_tu_role_binding_accepts_one_instruction_use(self):
         byte_identity.require_clean_current_source_cross_tu_bindings(

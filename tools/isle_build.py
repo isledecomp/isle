@@ -952,6 +952,71 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                     donor_objects[donor["id"]] = (
                         probe / "o.obj").read_bytes()
                     continue
+                if (recipe["kind"]
+                        == byte_identity
+                        .CROSS_TU_INSTRUCTION_SOURCE_RECIPE):
+                    # The overlaid sibling.  Same shape as the clean cross-TU
+                    # donor above -- that TU's own ordinary command, only /Fo
+                    # and /Fd redirected, so the compile happens at the real
+                    # shadow path in the real arena -- but the text it pins is
+                    # the EFFECTIVE rendering, declared as such by the recipe,
+                    # because that is the text this build actually compiles
+                    # for that unit.  Pinning the checked-in text here would
+                    # be a false statement about which source produced the
+                    # bytes, and is what the clean recipe rightly refuses.
+                    donor_relative = recipe["donor_source"]
+                    donor_source_path = (shadow / donor_relative).resolve()
+                    rendered = donor_source_path.read_bytes()
+                    rendered_sha = hashlib.sha256(rendered).hexdigest()
+                    if (rendered_sha
+                            != recipe["donor_effective_source_sha256"]):
+                        fail(f"overlaid cross-TU instruction donor source "
+                             f"differs from its effective pin: "
+                             f"{donor_relative}")
+                    if (rendered_sha != recipe["rendered_source_sha256"]
+                            or len(rendered)
+                            != recipe["rendered_source_size"]
+                            or rendered.count(b"\n")
+                            != recipe["rendered_source_line_count"]):
+                        fail(f"overlaid cross-TU instruction donor rendering "
+                             f"differs from its pins: {donor_relative}")
+                    donor_entries = commands.get(donor_source_path)
+                    if not donor_entries:
+                        fail(f"no compile command for donor source: "
+                             f"{donor_relative}")
+                    define = recipe["compile_lane"]["required_define"]
+                    lane_entry = lane(
+                        lambda command: f"-D{define}" in shlex.split(command),
+                        define, donor_entries,
+                    )
+                    lane_child = shlex.split(lane_entry["command"])
+                    lane_parsed = byte_identity.validate_compile_arguments(
+                        lane_child)
+                    lane_source = Path(lane_parsed["source_token"])
+                    if not lane_source.is_absolute():
+                        lane_source = Path(lane_entry["directory"]) / lane_source
+                    if lane_source.resolve() != donor_source_path:
+                        fail(f"overlaid cross-TU donor command source "
+                             f"differs: {donor_relative}")
+                    probe = (build.parent / "donors"
+                             / f"{marker.stem}-{donor['id']}")
+                    shutil.rmtree(probe, ignore_errors=True)
+                    probe.mkdir(parents=True)
+                    donor_command = []
+                    for token in lane_child:
+                        if token.startswith(("/Fo", "-Fo")):
+                            donor_command.append("/Foo.obj")
+                        elif token.startswith(("/Fd", "-Fd")):
+                            donor_command.append("/Fdo.pdb")
+                        else:
+                            donor_command.append(token)
+                    run(donor_command, timeout_seconds=compile_timeout,
+                        cwd=probe, env=build_environment(compiler),
+                        log=build.parent
+                        / f"{marker.stem}-{donor['id']}.log")
+                    donor_objects[donor["id"]] = (
+                        probe / "o.obj").read_bytes()
+                    continue
                 if recipe["kind"] == "donor_source_overlay":
                     # Extension A.  Render the donor's private copies of the
                     # checked-in paths, stage them where ONLY this compile can
@@ -1640,6 +1705,27 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                     composed, detail = (
                         byte_identity
                         .compose_retail_exact_web_recolour(
+                            composed, donor_objects[function["donor"]],
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16), retail["length"],
+                            ),
+                        ))
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [donor_objects[function["donor"]]])
+                elif (function["splice_class"]
+                        == byte_identity.RELATIONAL_FORM_CLASS):
+                    # The relational-form certificate: each declared compare
+                    # is reversed and its branch condition replaced by the
+                    # closed table's mirror, after a per-flag liveness
+                    # fixpoint has proved that no flag the reversal changes
+                    # is live at either successor, and the result is refused
+                    # unless it equals the pinned retail oracle.
+                    retail = function["retail_oracle"]
+                    composed, detail = (
+                        byte_identity
+                        .compose_retail_exact_relational_form(
                             composed, donor_objects[function["donor"]],
                             function,
                             byte_identity.retail_image_body(
